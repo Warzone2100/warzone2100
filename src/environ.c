@@ -56,7 +56,7 @@ void	environUpdate			( void );
 UDWORD	environGetValue			( UDWORD x, UDWORD y );
 UDWORD	environGetData			( UDWORD x, UDWORD y );
 extern UDWORD map_MistValue		( UDWORD x, UDWORD y );
-FUNCINLINE UDWORD map_TileMistValue( UDWORD x, UDWORD y );
+UDWORD map_TileMistValue( UDWORD x, UDWORD y );
 
 // -------------------------------------------------------------------------------
 BOOL	waterOnMap(void)
@@ -344,7 +344,7 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 
 // -------------------------------------------------------------------------------
 /* Return height of tile at x,y */
-FUNCINLINE UDWORD map_TileMistValue(UDWORD x, UDWORD y)
+UDWORD map_TileMistValue(UDWORD x, UDWORD y)
 {
     x = x >= (mapWidth) ? (mapWidth-1) : x;
 	y = y >= (mapHeight) ? (mapHeight-1) : y;

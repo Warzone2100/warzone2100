@@ -37,7 +37,6 @@ BOOL	fpathDoMessage;
 #include "action.h"
 #include "formation.h"
 
-#define DEFINE_MAPINLINE
 #include "fpath.h"
 
 /* minimum height difference for VTOL blocking tile */
