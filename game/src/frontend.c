@@ -12,19 +12,19 @@
 ~	=	Triangle
 */
 
-#include "stdio.h"
-#include "Frame.h"
-#include "winMain.h"
-#include "Objects.h"
+#include <stdio.h>
+#include "frame.h"
+#include "winmain.h"
+#include "objects.h"
 #include "display.h"
 #include "widget.h"
 /* Includes direct access to render library */
 #include "ivisdef.h"
-#include "pieState.h"
-#ifdef WIN32
+#include "piestate.h"
+#ifndef PSX
 #include "keyedit.h"
-#include "pieFunc.h"
-#include "warzoneConfig.h"
+#include "piefunc.h"
+#include "warzoneconfig.h"
 #endif
 #include "vid.h"
 
@@ -32,7 +32,7 @@
 #include "intdisplay.h"
 #include "audio.h"					// for sound.
 #include "audio_id.h"				// for sound..
-#ifdef WIN32
+#ifndef PSX
 #include "cdaudio.h"
 #include "mixer.h"
 #include "config.h"
@@ -41,22 +41,22 @@
 #include "design.h"					// for intadddesign
 #include "hci.h"					// for intShowPower
 #include "text.h"					// to get at string resources.
-#include "FrontEnd.h"
-#include "Console.h"
+#include "frontend.h"
+#include "console.h"
 #include "wrappers.h"
 #include "component.h"
 #include "loadsave.h"
-#include "CSnap.h"
+#include "csnap.h"
 //#include "wrappers.h"				// for bUsingKeyboard.
-#include "Frend.h"
+#include "frend.h"
 #include "game.h"
-#include "Init.h"
+#include "init.h"
 #include "difficulty.h"
-#include "InGameOp.h"
+#include "ingameop.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "advvis.h"
-#include "seqDisp.h"
+#include "seqdisp.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "multilimit.h"
@@ -66,11 +66,11 @@
 
 #ifdef PSX
 #include "initpsx.h"
-#include "Primatives.h"
+#include "primatives.h"
 #include "ctrlpsx.h"
-#include "VPad.h"
-#include "Frend16.h"
-#include "IntLoadSave.h"
+#include "vpad.h"
+#include "frend16.h"
+#include "intloadsave.h"
 #include "locale.h"
 #include "assert.h"
 
@@ -98,7 +98,7 @@ int StartWithGame = 1;	// New game starts in Cam 1.
 char OnString[]={"On "};
 char OffString[]={"Off"};
 
-#ifdef WIN32
+#ifndef PSX
 STRING	strFog[MAX_STR_LENGTH];
 STRING	strTrans[MAX_STR_LENGTH];
 #endif
@@ -238,12 +238,13 @@ BOOL CancelPressed(VOID)
 }
 // ////////////////////////////////////////////////////////////////////////////
 // for cursorsnap stuff on pc
-#ifdef WIN32
+#ifndef PSX
 VOID processFrontendSnap(BOOL bHideCursor)
 {
 	static POINT point,opoint;	
 	
-	GetCursorPos(&point);
+	point.x = mouseX();
+	point.y = mouseY();
 
 	if(point.x != opoint.x ||  point.y  != opoint.y)
 	{
@@ -282,13 +283,13 @@ VOID processFrontendSnap(BOOL bHideCursor)
 		if(keyPressed(KEY_RETURN) )
 		{
 			bUsingKeyboard = TRUE;
-			SendMessage(frameGetWinHandle(),WM_LBUTTONDOWN,MK_LBUTTON,MAKELONG(mouseX(),mouseY()));
+			setMouseDown(MOUSE_LMB);
 		}
 
 		if(keyReleased(KEY_RETURN) )
 		{
 			bUsingKeyboard = TRUE;
-			SendMessage(frameGetWinHandle(),WM_LBUTTONUP,MK_LBUTTON,MAKELONG(mouseX(),mouseY()));
+			setMouseUp(MOUSE_LMB);
 		}
 	}
 
@@ -297,7 +298,8 @@ VOID processFrontendSnap(BOOL bHideCursor)
 		bUsingKeyboard = FALSE;
 	}
 
-	GetCursorPos(&opoint);
+	opoint.x = mouseX();
+	opoint.y = mouseY();
 }
 #endif
 
@@ -327,7 +329,7 @@ VOID changeTitleMode(tMode mode)
 	case GAME:
 		startGameOptionsMenu();
 		break;
-#ifdef WIN32
+#ifndef PSX
 	case GAME2:
 		startGameOptions2Menu();
 		break;
@@ -336,7 +338,7 @@ VOID changeTitleMode(tMode mode)
 		startTutorialMenu();
 		break;
 	case OPTIONS:
-//#ifdef WIN32
+//#ifndef PSX
 		startOptionsMenu();
 //#else
 //		startGameOptionsMenu();
@@ -345,7 +347,7 @@ VOID changeTitleMode(tMode mode)
 	case TITLE:
 		startTitleMenu();
 		break;
-#ifdef WIN32
+#ifndef PSX
 
 //	case GRAPHICS:
 //		startGraphicsOptionsMenu();
@@ -421,7 +423,7 @@ BOOL startTitleMenu(VOID)
 	addBottomForm();
 
 
-#ifdef WIN32
+#ifndef PSX
 	#ifdef COVERMOUNT	// no multiplayer								
 		addTextButton(FRONTEND_TUTORIAL,	FRONTEND_POS2X,FRONTEND_POS2Y, "Demo" ,FALSE,FALSE);
 	#ifdef  MULTIDEMO
@@ -470,7 +472,7 @@ BOOL startTitleMenu(VOID)
 #endif
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,strresGetString(psStringRes, STR_FE_SIDEMAIN));
 
-#ifdef WIN32
+#ifndef PSX
 	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS2Y);
 	SnapToID(&InterfaceSnap,4);
 #endif
@@ -478,7 +480,7 @@ BOOL startTitleMenu(VOID)
 	return TRUE;
 }
 
-#ifdef WIN32
+#ifndef PSX
 static void frontEndCDOK( void )
 {
 	changeTitleMode( g_tModeNext );
@@ -536,20 +538,20 @@ BOOL runTitleMenu(VOID)
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
 
-#ifdef WIN32
+#ifndef PSX
 	if ( !cdspan_ProcessCDChange(id) )
 #endif
 	{
 		switch(id)
 		{
 			case FRONTEND_QUIT:
-#ifdef WIN32
+#ifndef PSX
 			changeTitleMode(CREDITS);
 #else
 			changeTitleMode(QUIT);
 #endif
 			break;
-#ifdef WIN32
+#ifndef PSX
 		case FRONTEND_MULTIPLAYER:
 			frontEndCheckCD(MULTI, DISC_EITHER);
 			break;
@@ -561,14 +563,14 @@ BOOL runTitleMenu(VOID)
 			changeTitleMode(OPTIONS);
 			break;
 		case FRONTEND_PLAYINTRO:
-#ifdef WIN32
+#ifndef PSX
 			frontEndCheckCD(SHOWINTRO, DISC_ONE);
 #else
 			changeTitleMode(SHOWINTRO);
 #endif
 			break;
 		case FRONTEND_TUTORIAL:
-#ifdef WIN32
+#ifndef PSX
 			frontEndCheckCD(TUTORIAL, DISC_ONE);
 #else
 //			changeTitleMode(TUTORIAL);
@@ -607,7 +609,7 @@ BOOL startTutorialMenu(VOID)
 	addTopForm();
 	addBottomForm();
 	
-#ifdef WIN32
+#ifndef PSX
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_TUT),FALSE,FALSE);
 	addTextButton(FRONTEND_FASTPLAY, FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_FASTPLAY),FALSE,FALSE);
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,strresGetString(psStringRes,STR_FE_SIDETUT));
@@ -856,7 +858,7 @@ VOID startSinglePlayerMenu(VOID)
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
-#ifdef WIN32
+#ifndef PSX
 
 #ifdef COVERMOUNT						// reduce single player options
 	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS5X,FRONTEND_POS5Y,	strresGetString(psStringRes,STR_FE_NEW) ,FALSE,TRUE);
@@ -912,7 +914,7 @@ void frontEndNewGame( void )
 		case 1:
 			strcpy(pLevelName,DEFAULT_LEVEL);
 			seq_ClearSeqList();
-		#ifdef WIN32
+		#ifndef PSX
 			seq_AddSeqToList("CAM1\\c001.rpl",NULL,"CAM1\\c001.txa",FALSE,0);
 			/*
 			seq_AddTextForVideo("Dawn, July 4th, 2066", 20, 432, 0, 299);
@@ -953,7 +955,7 @@ void frontEndNewGame( void )
 
 void loadOK( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	if(strlen(sRequestResult))
 	{
 		strcpy(saveGameName,sRequestResult);
@@ -969,7 +971,7 @@ BOOL runSinglePlayerMenu(VOID)
 
 	processFrontendSnap(TRUE);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(FALSE))// check for file name.
@@ -985,7 +987,7 @@ BOOL runSinglePlayerMenu(VOID)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* GJ to TC - this call processes the CD change widget box */
 	if ( !cdspan_ProcessCDChange(id) )
 #endif
@@ -993,7 +995,7 @@ BOOL runSinglePlayerMenu(VOID)
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
-#ifdef WIN32		   // ffs
+#ifndef PSX		   // ffs
 				if ( cdspan_CheckCDPresent( getCDForCampaign(1) ) )
 				{
 					frontEndNewGame();
@@ -1085,7 +1087,7 @@ BOOL runSinglePlayerMenu(VOID)
 				break;
 #endif
 
-//#ifdef WIN32		// ffs tc
+//#ifndef PSX		// ffs tc
 			case FRONTEND_LOADGAME:
 #ifdef PSX
 				endSinglePlayerMenu();
@@ -1190,7 +1192,7 @@ BOOL runSinglePlayerMenu(VOID)
 
 	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
-#ifdef WIN32
+#ifndef PSX
 	if(!bLoadSaveUp)										// if save/load screen is up
 	{
 		widgDisplayScreen(psWScreen);						// show the widgets currently running
@@ -1231,7 +1233,7 @@ BOOL startDemoMenu(VOID)
 #endif
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	addTextButton(FRONTEND_DEMO1,	FRONTEND_POS2X,FRONTEND_POS2Y, "Rocky Mountains",FALSE,FALSE);
 	addTextButton(FRONTEND_DEMO2,   FRONTEND_POS3X,FRONTEND_POS3Y, "New Paradigm HQ",FALSE,FALSE);
 	addTextButton(FRONTEND_DEMO3,	FRONTEND_POS4X,FRONTEND_POS4Y, "City Dam",FALSE,FALSE);
@@ -1240,7 +1242,7 @@ BOOL startDemoMenu(VOID)
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 #else
 	addTextButton(FRONTEND_QUIT,FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_RETURN),TRUE,FALSE);
@@ -1307,7 +1309,7 @@ BOOL runDemoMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
 
-#ifdef WIN32
+#ifndef PSX
 BOOL startMultiPlayerMenu(VOID)
 {
 	addBackdrop();
@@ -1464,7 +1466,7 @@ BOOL startOptionsMenu(VOID)
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
-#ifdef WIN32
+#ifndef PSX
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, strresGetString(psStringRes, STR_FE_SIDEOPTIONS));
 	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_GRAPHICS),FALSE,FALSE);
 	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_GAME),FALSE,FALSE);
@@ -1496,7 +1498,7 @@ BOOL runOptionsMenu(VOID)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
 	switch(id)
 	{
-#ifdef WIN32
+#ifndef PSX
 	case FRONTEND_GAMEOPTIONS:
 		changeTitleMode(GAME);
 		break;
@@ -1583,7 +1585,7 @@ BOOL runOptionsMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options Menu
 /*
-#ifdef WIN32
+#ifndef PSX
 BOOL startGraphicsOptionsMenu(VOID)
 {
 	addBackdrop();
@@ -1707,7 +1709,7 @@ BOOL runGraphicsOptionsMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options Menu
 
-#ifdef WIN32
+#ifndef PSX
 BOOL startVideoOptionsMenu(VOID)
 {
 	addBackdrop();
@@ -1806,7 +1808,7 @@ BOOL runVideoOptionsMenu(VOID)
 #endif
 */
 
-#ifdef WIN32
+#ifndef PSX
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu 2!
 BOOL startGameOptions2Menu(VOID)
@@ -2097,7 +2099,7 @@ BOOL startGameOptionsMenu(VOID)
 	addTopForm();
 	addBottomForm();
 
-#ifdef WIN32
+#ifndef PSX
 	// difficulty
 	addTextButton(FRONTEND_DIFFICULTY,  FRONTEND_POS2X-25,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_DIFFICULTY),TRUE,FALSE);
 	switch(getDifficultyLevel())
@@ -2129,11 +2131,11 @@ BOOL startGameOptionsMenu(VOID)
 /*	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		//gamma
-		if(gamma>3)	   gamma = (float)2.9;
-		if(gamma<0.5)  gamma = (float).5;
+		if(gammaValue>3)	   gammaValue = (float)2.9;
+		if(gammaValue<0.5)  gammaValue = (float).5;
 	
 		addTextButton(FRONTEND_GAMMA, FRONTEND_POS6X-25,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_GAMMA),TRUE,FALSE);
-		addFESlider(FRONTEND_GAMMA_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5, 60, (UDWORD)(gamma*25),FRONTEND_GAMMA );
+		addFESlider(FRONTEND_GAMMA_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5, 60, (UDWORD)(gammaValue*25),FRONTEND_GAMMA );
 	}
 */
 
@@ -2218,7 +2220,7 @@ BOOL startGameOptionsMenu(VOID)
 //22	SetCurrentSnapID(&InterfaceSnap,FRONTEND_QUIT);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	//add some text down the side of the form
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, strresGetString(psStringRes, STR_FE_SIDEOPTIONS));
 #endif
@@ -2235,7 +2237,7 @@ BOOL runGameOptionsMenu(VOID)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
 	switch(id)
 	{
-#ifdef WIN32
+#ifndef PSX
 //	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
 	case FRONTEND_FX:
@@ -2281,9 +2283,9 @@ BOOL runGameOptionsMenu(VOID)
 
 /*	case FRONTEND_GAMMA_SL:
 		// gamma range = 0.4 - 3 
-		gamma = (float)( widgGetSliderPos(psWScreen,FRONTEND_GAMMA_SL) )/25  ;
-		if(gamma<0.5)  gamma = (float).5;
-		pie_SetGammaValue(gamma);
+		gammaValue = (float)( widgGetSliderPos(psWScreen,FRONTEND_GAMMA_SL) )/25  ;
+		if(gammaValue<0.5)  gammaValue = (float).5;
+		pie_SetGammaValue(gammaValue);
 		break;
 */
 	case FRONTEND_SCROLLSPEED_SL:
@@ -2314,7 +2316,7 @@ BOOL runGameOptionsMenu(VOID)
 //		changeTitleMode(VIDEO);
 //		break;
 
-#ifdef WIN32
+#ifndef PSX
 	case FE_P0:
 		widgSetButtonState(psWScreen, FE_P0, WBUT_LOCK);		
 //		widgSetButtonState(psWScreen, FE_P1, 0);		
@@ -2433,7 +2435,7 @@ VOID addBottomForm(VOID)
 	sFormInit.y = FRONTEND_BOTFORMY;
 	sFormInit.width = FRONTEND_BOTFORMW;
 	sFormInit.height = FRONTEND_BOTFORMH;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.pDisplay = intOpenPlainForm;
 	sFormInit.disableChildren = TRUE;
 #else
@@ -2462,7 +2464,7 @@ VOID addTopForm(VOID)
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_TOPFORM;
 	sFormInit.style = WFORM_PLAIN;
-#ifdef WIN32
+#ifndef PSX
 	if(titleMode == MULTIOPTION)
 	{
 		sFormInit.x		= FRONTEND_TOPFORM_WIDEX;
@@ -2515,7 +2517,7 @@ VOID addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign
 	{
 		sButInit.style = WBUT_PLAIN;
 		sButInit.width = (short)(iV_GetTextWidth(txt)+10);//FRONTEND_BUTWIDTH;
-#ifdef WIN32
+#ifndef PSX
 		sButInit.x+=35;
 #endif
 	}
@@ -2545,7 +2547,7 @@ VOID addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign
 VOID addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID )
 {
 	W_SLDINIT		sSldInit;
-#ifdef WIN32
+#ifndef PSX
 	attachID;
 
 	memset(&sSldInit, 0, sizeof(W_SLDINIT));
@@ -2591,7 +2593,7 @@ VOID addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 // ////////////////////////////////////////////////////////////////////////////
 VOID addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
 {
-#if defined(WIN32) || defined(ROTATEDTEXT)
+#if !defined(PSX) || defined(ROTATEDTEXT)
 	W_LABINIT	sLabInit;
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 #ifdef PSX
@@ -2604,7 +2606,7 @@ VOID addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
 	sLabInit.y = (short) PosY;
 	sLabInit.width = 30;
 	sLabInit.height = FRONTEND_BOTFORMH;
-#ifdef WIN32
+#ifndef PSX
 	sLabInit.FontID = FEFont;
 #else
 	sLabInit.FontID = FEFont;
@@ -2660,7 +2662,7 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
-#ifdef WIN32
+#ifndef PSX
 
 	switch(war_GetRendMode())
 	{
@@ -2718,7 +2720,7 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 VOID displayLogo(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {   
 	UNUSEDPARAMETER(pColours);
-#ifdef WIN32
+#ifndef PSX
 	iV_DrawTransImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 #else
 	iV_SetOTIndex_PSX(OT2D_FARFORE);
@@ -2914,7 +2916,7 @@ VOID displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 // ////////////////////////////////////////////////////////////////////////////
-#if defined(WIN32) || defined(ROTATEDTEXT)
+#if !defined(PSX) || defined(ROTATEDTEXT)
 
 // show text written on its side.
 VOID displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
@@ -2925,7 +2927,7 @@ VOID displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	UNUSEDPARAMETER(yOffset);
 
 	psLab = (W_LABEL *)psWidget;
-#ifdef WIN32
+#ifndef PSX
 	iV_SetFont(FEFont);
 #else
 	iV_SetFont(FEFont);
@@ -2935,7 +2937,7 @@ VOID displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	iV_SetTextColour(PIE_TEXT_WHITE);
 
 	fx = xOffset + psWidget->x;
-#ifdef WIN32
+#ifndef PSX
 	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;		
 #else
 	fy = psWidget->y + PSXToHeight(WidthToPSX(iV_GetTextWidth(psLab->aText)));		
@@ -2956,7 +2958,7 @@ static VOID displayBigSlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yO
 	SWORD sx;
 	UNUSEDPARAMETER(pColours);
 
-#ifdef WIN32
+#ifndef PSX
 	iV_DrawTransImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
 	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.

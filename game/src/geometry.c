@@ -1,23 +1,23 @@
 /* Geometry.c - holds trig/vector deliverance specific stuff for 3D */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
-#include "Frame.h"
+#include "frame.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef WIN32		// not wanted for PSX
+#ifndef PSX		// not wanted for PSX
 #include <math.h>
 #endif
 
 #include "ivisdef.h" //ivis matrix code
 #include "geo.h" //ivis matrix code
 
-#include "ObjectDef.h"
-#include "Map.h"
-#include "Display3D.h"
-#include "Geometry.h"
-#include "GTime.h"
-#include "HCI.h"
+#include "objectdef.h"
+#include "map.h"
+#include "display3d.h"
+#include "geometry.h"
+#include "gtime.h"
+#include "hci.h"
 #include "display.h"
 
 #ifdef PSX
@@ -46,7 +46,7 @@ UBYTE	sineHeightTable[SIZE_SINE_TABLE];
 //UDWORD	screenShakeStarted = 0;
 //UDWORD	screenShakeLength = 0;
 
-#ifdef WIN32	// uses nasty maths functions
+#ifndef PSX	// uses nasty maths functions
 
 
 void initBulletTable( void )
@@ -157,7 +157,7 @@ SDWORD	calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 
 #endif
 
-#ifdef PSX
+#ifndef WIN32
 #define max(a,b) (((a)>(b))?(a):(b))
 #define min(a,b) (((a)<(b))?(a):(b))
 #endif
@@ -265,7 +265,7 @@ SDWORD directionDiff(SDWORD a, SDWORD b)
 	return diff;
 }
 
-#ifdef WIN32
+#ifndef PSX
 
 void WorldPointToScreen( iPoint *worldPt, iPoint *screenPt )
 {

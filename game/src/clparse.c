@@ -5,26 +5,28 @@
  *
  */
 
-#include "Direct.h"
+#ifdef WIN32
+#include <direct.h>
+#endif
 
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 
-#include "WinMain.h"
-#include "FrontEnd.h"
+#include "winmain.h"
+#include "frontend.h"
 
-#include "PieClip.h"
-#include "warzoneConfig.h"
+#include "pieclip.h"
+#include "warzoneconfig.h"
 
-#include "clParse.h"
-#include "pieState.h"
+#include "clparse.h"
+#include "piestate.h"
 #include "loadsave.h"
-#include "Objects.h"
-#include "AdvVis.h"
+#include "objects.h"
+#include "advvis.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "netplay.h"
-#include "Wrappers.h"
+#include "wrappers.h"
 #include "cheat.h"
 
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);

@@ -10,7 +10,7 @@
 
 #include "frame.h"
 
-#include "Objmem.h"
+#include "objmem.h"
 #include "statsdef.h"
 #include "droiddef.h"
 #include "textdraw.h"
@@ -35,10 +35,10 @@
 #include "wrappers.h"
 #include "intimage.h"
 #include "data.h"
-#include "Script.h"
-#include "ScriptTabs.h"
+#include "script.h"
+#include "scripttabs.h"
 
-#include "Netplay.h"
+#include "netplay.h"
 #include "multiplay.h"
 #include "multijoin.h"
 #include "multirecv.h"

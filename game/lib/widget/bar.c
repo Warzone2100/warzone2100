@@ -5,13 +5,13 @@
  */
 
 
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Tip.h"
-#include "Form.h"
-#include "Bar.h"
-#include "Vid.h"
-#include "PiePalette.h"
+#include "widget.h"
+#include "widgint.h"
+#include "tip.h"
+#include "form.h"
+#include "bar.h"
+#include "vid.h"
+#include "piepalette.h"
 
 /* The widget heap */
 OBJ_HEAP	*psBarHeap;

@@ -35,7 +35,7 @@ extern HANDLE		hWndMain;
 
 /* Initialise the double buffered display */
 
-#ifdef WIN32
+#ifndef PSX
 extern BOOL screenInitialise(UDWORD		width,			// Display width
 							 UDWORD		height,			// Display height
 							 UDWORD		bitDepth,		// Display bit depth
@@ -139,7 +139,7 @@ typedef enum _flip_state
 } FLIP_STATE;
 extern FLIP_STATE	screenFlipState;
 
-#ifdef WIN32
+#ifndef PSX
 // The critical section for the screen flipping
 extern CRITICAL_SECTION sScreenFlipCritical;
 

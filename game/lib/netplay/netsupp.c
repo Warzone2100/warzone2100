@@ -9,7 +9,7 @@
 
 // ////////////////////////////////////////////////////////////////////////
 // Includes
-//#include "frame.h"
+#include "frame.h"
 #include "netplay.h"
 #include "netsupp.h"
 

@@ -8,7 +8,7 @@
 #include <assert.h>
 
 
-#include "Frame.h"
+#include "frame.h"
 //render library
 #include "piedef.h"
 #include "piestate.h"
@@ -16,40 +16,40 @@
 #include "pcx.h"
 #include "bitimage.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "texture.h"
-#include "warzoneConfig.h"
+#include "warzoneconfig.h"
 #endif
 #include "tex.h"
 #include "textdraw.h"
 
-#include "FrameResource.h"
-#include "Stats.h"
-#include "Structure.h"
-#include "Feature.h"
+#include "frameresource.h"
+#include "stats.h"
+#include "structure.h"
+#include "feature.h"
 #include "research.h"
-#include "Data.h"
-#include "Text.h"
+#include "data.h"
+#include "text.h"
 #include "droid.h"
 #include "function.h"
 #include "message.h"
-#include "Script.h"
-#include "ScriptVals.h"
+#include "script.h"
+#include "scriptvals.h"
 #include "display3d.h"
 #include "game.h"
-#include "Objects.h"
+#include "objects.h"
 #include "display.h"
 #include "audio.h"
 #include "anim.h"
 #include "parser.h"
-#include "Levels.h"
-#include "Mechanics.h"
-#include "Display3d.h"
-#include "Display3ddef.h"
-#include "Init.h"
+#include "levels.h"
+#include "mechanics.h"
+#include "display3d.h"
+#include "display3ddef.h"
+#include "init.h"
 
 #ifdef PSX
-#include "Display3D_psx.h"	
+#include "display3d_psx.h"	
 #include "locale.h"
 #else
 #include "multiplay.h"
@@ -68,7 +68,7 @@ BOOL	bTilesPCXLoaded = FALSE;
 BOOL	saveFlag = FALSE;
 extern STRING	aCurrResDir[255];		// Arse
 
-#ifdef WIN32
+#ifndef PSX
 UDWORD	cheatHash[CHEAT_MAXCHEAT];
 #endif
 
@@ -77,7 +77,7 @@ UDWORD	cheatHash[CHEAT_MAXCHEAT];
  * Source
  *
  *********************************************************/
-#ifdef WIN32
+#ifndef PSX
 
 void calcCheatHash(UBYTE *pBuffer, UDWORD size, UDWORD cheat)
 {
@@ -117,7 +117,7 @@ void dataClearSaveFlag(void)
 /* Load the body stats */
 BOOL bufferSBODYLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SBODY);
 #endif
 	if (!loadBodyStats((SBYTE*)pBuffer, size))
@@ -147,7 +147,7 @@ void dataReleaseStats(void *pData)
 /* Load the weapon stats */
 BOOL bufferSWEAPONLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size, CHEAT_SWEAPON);
 #endif
 	if (!loadWeaponStats((SBYTE*)pBuffer, size))
@@ -168,7 +168,7 @@ BOOL bufferSWEAPONLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the constructor stats */
 BOOL bufferSCONSTRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SCONSTR);
 #endif
 	if (!loadConstructStats((SBYTE*)pBuffer, size))
@@ -189,7 +189,7 @@ BOOL bufferSCONSTRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the ECM stats */
 BOOL bufferSECMLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SECM);
 #endif
 
@@ -211,7 +211,7 @@ BOOL bufferSECMLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Propulsion stats */
 BOOL bufferSPROPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SPROP);
 #endif
 
@@ -233,7 +233,7 @@ BOOL bufferSPROPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Sensor stats */
 BOOL bufferSSENSORLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SSENSOR);
 #endif
 
@@ -255,7 +255,7 @@ BOOL bufferSSENSORLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Repair stats */
 BOOL bufferSREPAIRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SREPAIR);
 #endif
 
@@ -277,7 +277,7 @@ BOOL bufferSREPAIRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Brain stats */
 BOOL bufferSBRAINLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SBRAIN);
 #endif
 
@@ -317,7 +317,7 @@ BOOL bufferSBRAINLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the PropulsionType stats */
 BOOL bufferSPROPTYPESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SPROPTY);
 #endif
 
@@ -362,7 +362,7 @@ BOOL bufferSSPECABILLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the STERRTABLE stats */
 BOOL bufferSTERRTABLELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_STERRT);
 #endif
 
@@ -408,7 +408,7 @@ BOOL bufferSWEAPSNDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Weapon Effect modifier stats */
 BOOL bufferSWEAPMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SWEAPMOD);
 #endif
 
@@ -427,7 +427,7 @@ BOOL bufferSWEAPMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Template stats */
 BOOL bufferSTEMPLLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_STEMP);
 #endif
 
@@ -454,7 +454,7 @@ void dataSTEMPLRelease(void *pData)
 /* Load the Template weapons stats */
 BOOL bufferSTEMPWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_STEMPWEAP);
 #endif
 
@@ -486,7 +486,7 @@ BOOL bufferSTEMPWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure stats */
 BOOL bufferSSTRUCTLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SSTRUCT);
 #endif
 
@@ -517,7 +517,7 @@ void dataSSTRUCTRelease(void *pData)
 /* Load the Structure Weapons stats */
 BOOL bufferSSTRWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SSTRWEAP);
 #endif
 
@@ -535,7 +535,7 @@ BOOL bufferSSTRWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure Functions stats */
 BOOL bufferSSTRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_STRFUNC);
 #endif
 
@@ -553,7 +553,7 @@ BOOL bufferSSTRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure strength modifier stats */
 BOOL bufferSSTRMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SSTRMOD);
 #endif
 
@@ -571,7 +571,7 @@ BOOL bufferSSTRMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL bufferSFEATLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SFEAT);
 #endif
 
@@ -597,7 +597,7 @@ void dataSFEATRelease(void *pData)
 /* Load the Functions stats */
 BOOL bufferSFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SFUNC);
 #endif
 
@@ -634,7 +634,7 @@ void dataRESCHRelease(void *pData)
 /* Load the Research stats */
 BOOL bufferRESCHLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RESCH);
 #endif
 
@@ -662,7 +662,7 @@ BOOL bufferRESCHLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research pre-requisites */
 BOOL bufferRPREREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RPREREQ);
 #endif
 
@@ -694,7 +694,7 @@ BOOL bufferRPREREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research components made redundant */
 BOOL bufferRCOMPREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRED);
 #endif
 
@@ -713,7 +713,7 @@ BOOL bufferRCOMPREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL bufferRCOMPRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRES);
 #endif
 
@@ -732,7 +732,7 @@ BOOL bufferRCOMPRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL bufferRSTRREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 		
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RSTRREQ);
 #endif
 
@@ -751,7 +751,7 @@ BOOL bufferRSTRREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL bufferRSTRREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 		
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRED);
 #endif
 
@@ -769,7 +769,7 @@ BOOL bufferRSTRREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL bufferRSTRRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRES);
 #endif
 
@@ -788,7 +788,7 @@ BOOL bufferRSTRRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL bufferRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 		
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_RFUNC);
 #endif
 
@@ -927,7 +927,7 @@ BOOL dataIMDBufferLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 
 
-#ifdef WIN32	// PC Specific IMGPAGE loader.
+#ifndef PSX	// PC Specific IMGPAGE loader.
 
 BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
@@ -1612,7 +1612,7 @@ void dataISpriteRelease(void *pData)
 /* Release a texPage */
 void dataTexPageRelease(void *pData)
 {
-#ifdef WIN32
+#ifndef PSX
 	TEXTUREPAGE *Tpage;
 
 	Tpage=(TEXTUREPAGE *)pData;
@@ -1633,7 +1633,7 @@ void dataTexPageRelease(void *pData)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 
 
 
@@ -1694,7 +1694,7 @@ BOOL dataAudioCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 }
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 /* Load an anim file */
 BOOL dataAnimLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 {
@@ -1919,7 +1919,7 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	BLOCK_HEAP		*psHeap;
 	BOOL			printHack = FALSE;
 	
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
 #endif
 
@@ -2057,7 +2057,7 @@ BOOL dataScriptLoadVals(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
 	
-#ifdef WIN32
+#ifndef PSX
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPTVAL);
 #endif
 
@@ -2212,7 +2212,7 @@ static RES_TYPE_MIN ResourceTypes[]=
 /* Pass all the data loading functions to the framework library */
 BOOL dataInitLoadFuncs(void)
 {
-#ifdef WIN32
+#ifndef PSX
 
 	RES_TYPE_MIN *CurrentType;
 //	UDWORD	i;

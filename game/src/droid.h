@@ -7,7 +7,7 @@
 #ifndef _droid_h
 #define _droid_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 
@@ -122,7 +122,7 @@ BOOL templateIsIDF(DROID_TEMPLATE *psTemplate);
 BOOL idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-#ifdef WIN32
+#ifndef PSX
 extern BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass);
 #else
 extern BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass);
@@ -293,7 +293,7 @@ extern void	setSelectedGroup(UDWORD groupNumber);
 extern UDWORD	getSelectedCommander( void );
 extern void	setSelectedCommander(UDWORD commander);
 
-#ifdef WIN32
+#ifndef PSX
 extern BOOL getDroidResourceName(STRING *pName);
 #endif
 

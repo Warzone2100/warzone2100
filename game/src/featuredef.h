@@ -73,7 +73,7 @@ typedef struct _feature
 									  wrecked droids and structures */
 	UDWORD			body;			/* current body points */
 	UWORD			gfxScaling;			// how much to scale the graphic by - for variation - spice of life 'n all that
-#ifdef WIN32
+#ifndef PSX
 	UDWORD			timeLastHit;
 	BOOL			bTargetted;
 #endif

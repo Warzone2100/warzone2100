@@ -19,44 +19,44 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include "Frame.h"
+#include "frame.h"
 #include "ivisdef.h" //ivis matrix code
 #include "piedef.h" //ivis matrix code
-#include "pieState.h"
+#include "piestate.h"
 #include "geo.h" //ivis matrix code
-#include "GTime.h"
-#include "Display3d.h"
-#include "Map.h"
-#include "Bucket3D.h"
-#ifdef WIN32
-#include "pieMode.h"
-#include "Mission.h"
+#include "gtime.h"
+#include "display3d.h"
+#include "map.h"
+#include "bucket3d.h"
+#ifndef PSX
+#include "piemode.h"
+#include "mission.h"
 #endif
 
 /*Remove this one!!! :-( */
-#include "MiscImd.h"
-#include "Effects.h"
+#include "miscimd.h"
+#include "effects.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "HCI.h"
-#include "Lighting.h"
-#include "Console.h"
-#include "Loop.h"
+#include "hci.h"
+#include "lighting.h"
+#include "console.h"
+#include "loop.h"
 #ifdef PSX
 #include "vid.h"
 #include "vpsx.h"
 #include "primatives.h"
-#include "drawIMD_psx.h"
+#include "drawimd_psx.h"
 #include <inline_c.h>
 #include <gtemac.h>
 #else
-#include "MultiPlay.h"
+#include "multiplay.h"
 #endif
 
-#include "Game.h"
+#include "game.h"
 //#define COUNTOFFSCREEN
 
-#ifdef WIN32
+#ifndef PSX
 #define DOLIGHTS
 #endif
 
@@ -720,7 +720,7 @@ void	updateWaypoint(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	updateFirework(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 UDWORD	height;
 UDWORD	xDif,yDif,radius,val;
 iVector	dv;
@@ -893,13 +893,13 @@ LIGHT	light;
 
 
 		/* Now, add the column of light */
-#ifdef WIN32
+#ifndef PSX
 		for(i=startHeight; i<endHeight; i+=56)
 #else
 		for(i=startHeight; i<endHeight; i+=56*4)
 #endif
 		{
-#ifdef WIN32
+#ifndef PSX
 			radius = 80;
 			/* Add 36 around in a circle..! */
 			for(val = 0; val<=180; val+=30)
@@ -962,7 +962,7 @@ UDWORD	percent;
 UDWORD	range;
 FRACT	scaling;
 
-#ifdef WIN32	
+#ifndef PSX	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
 #endif
@@ -998,7 +998,7 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 		processLight(&light);
 //#endif
 	}
-#ifdef WIN32	
+#ifndef PSX	
 }
 #endif
 
@@ -1063,7 +1063,7 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 
 	if(!gamePaused())
 	{
-#ifdef WIN32
+#ifndef PSX
 		/* Tesla explosions are the only ones that rise, or indeed move */
 		if(psEffect->type == EXPLOSION_TYPE_TESLA)
 		{
@@ -1096,7 +1096,7 @@ void	updateBlood(EFFECT *psEffect)
 		}
 	}
 	/* Move it about in the world */
-#ifdef WIN32
+#ifndef PSX
 	psEffect->position.x += (psEffect->velocity.x * fraction);
 	psEffect->position.y += (psEffect->velocity.y * fraction);
 	psEffect->position.z += (psEffect->velocity.z * fraction);
@@ -1146,7 +1146,7 @@ void	updatePolySmoke(EFFECT *psEffect)
 	}
 
 	/* Update position */
-#if WIN32
+#ifndef PSX
 	psEffect->position.x += (psEffect->velocity.x * fraction);
 	psEffect->position.y += (psEffect->velocity.y * fraction);
 	psEffect->position.z += (psEffect->velocity.z * fraction);
@@ -1180,7 +1180,7 @@ iVector	dv;
 UDWORD	groundHeight;
 MAPTILE	*psTile;
 
-#ifdef WIN32	
+#ifndef PSX	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
 #endif
@@ -1196,7 +1196,7 @@ LIGHT	light;
 		processLight(&light);
 	}
 #endif
-#ifdef WIN32	
+#ifndef PSX	
 }
 #endif
 
@@ -1206,7 +1206,7 @@ LIGHT	light;
 		return;
 	}
 	/* Move it about in the world */
-	#ifdef WIN32
+	#ifndef PSX
 		psEffect->position.x += (psEffect->velocity.x * fraction);
 		psEffect->position.y += (psEffect->velocity.y * fraction);			
 		psEffect->position.z += (psEffect->velocity.z * fraction);
@@ -1303,7 +1303,7 @@ LIGHT	light;
 			{
 				psEffect->specific++;
 				/* Half it's velocity */
-#ifdef WIN32
+#ifndef PSX
 //				psEffect->velocity.x/=(FRACT)(2);
 				psEffect->velocity.y/=(FRACT)(-2); // only y gets flipped
 //				psEffect->velocity.z/=(FRACT)(2);
@@ -1348,7 +1348,7 @@ UDWORD	range;
 FRACT	div;
 UDWORD	height;
 
-#ifdef WIN32	
+#ifndef PSX	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
 #endif
@@ -1381,7 +1381,7 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 	}
 	processLight(&light);
 #endif
-#ifdef WIN32	
+#ifndef PSX	
 }
 #endif
 
@@ -1550,7 +1550,7 @@ void	updateConstruction(EFFECT *psEffect)
 	}
 
 	/* Move it about in the world */
-#ifdef WIN32
+#ifndef PSX
 	psEffect->position.x += (psEffect->velocity.x * fraction);
 	psEffect->position.y += (psEffect->velocity.y * fraction);
 	psEffect->position.z += (psEffect->velocity.z * fraction);
@@ -1587,7 +1587,7 @@ iVector	pos;
 LIGHT	light;
 UDWORD	percent;
 
-#ifdef WIN32	
+#ifndef PSX	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
 #endif
@@ -1604,7 +1604,7 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 	light.colour = LIGHT_RED;
 	processLight(&light);
 #endif
-#ifdef WIN32	
+#ifndef PSX	
 }
 #endif
 	
@@ -1727,7 +1727,7 @@ void	renderEffect(EFFECT *psEffect)
 /* drawing func for wapypoints . AJL. */
 void	renderWaypointEffect(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 iVector		dv;
 SDWORD		rx,rz;
 UDWORD brightness, specular;
@@ -1765,7 +1765,7 @@ UDWORD brightness, specular;
 // ----------------------------------------------------------------------------------------
 void	renderFirework(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 iVector		dv;
 SDWORD		rx,rz;
 UDWORD brightness, specular;
@@ -1819,7 +1819,7 @@ UDWORD brightness, specular;
 /* drawing func for blood. */
 void	renderBloodEffect(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 iVector		dv;
 SDWORD		rx,rz;
 UDWORD brightness, specular;
@@ -1858,7 +1858,7 @@ UDWORD brightness, specular;
 // ----------------------------------------------------------------------------------------
 void	renderDestructionEffect(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 iVector	dv;
 SDWORD	rx,rz;
 FRACT	div;
@@ -1940,7 +1940,7 @@ UDWORD	timeSlice;
 /* Renders the standard explosion effect */
 void	renderExplosionEffect(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 	iVector		dv;
 	SDWORD		rx,rz;
 	SDWORD	percent;
@@ -2070,7 +2070,7 @@ void	renderExplosionEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	renderGravitonEffect(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 iVector	vec;
 SDWORD	rx,rz;
 UDWORD  brightness, specular;
@@ -2133,7 +2133,7 @@ renderConstructionEffect:-
 Renders the standard construction effect */
 void	renderConstructionEffect(EFFECT *psEffect)
 {
-#ifdef WIN32		// not on psx yet
+#ifndef PSX		// not on psx yet
 iVector	vec,null;
 SDWORD	rx,rz;
 SDWORD	percent;
@@ -2230,7 +2230,7 @@ Renders the standard smoke effect - it is now scaled in real-time as well
 */
 void	renderSmokeEffect(EFFECT *psEffect)
 {
-#ifdef WIN32		// not on psx yet
+#ifndef PSX		// not on psx yet
 UDWORD	percent;
 UDWORD	transparency;
 iVector	vec;
@@ -2271,7 +2271,7 @@ UDWORD brightness, specular;
 
 	if(TEST_SCALED(psEffect))
 	{
-#ifdef WIN32
+#ifndef PSX
 		if (pie_Hardware())
 		{
 #ifdef HARDWARE_TEST//test additive
@@ -2377,7 +2377,7 @@ UDWORD brightness, specular;
 // ----------------------------------------------------------------------------------------
 void	effectSetUpFirework(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 UDWORD	camExtra;
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
@@ -2691,7 +2691,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 		psEffect->frameDelay = (UWORD)EXPLOSION_FRAME_DELAY;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC;
@@ -2852,7 +2852,7 @@ iVector	pos;
 	base.y = y;
 	base.z = z;
 
-#ifdef WIN32
+#ifndef PSX
 	varStart = pImd->xmin -16;
 	varEnd = pImd->xmax + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
@@ -2897,7 +2897,7 @@ iVector	pos;
 
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	varStart = pImd->zmin - 16;
 	varEnd = pImd->zmax + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
@@ -2952,7 +2952,7 @@ UDWORD	getNumEffects( void )
 // ----------------------------------------------------------------------------------------
 UDWORD EffectGetNumFrames(EFFECT *psEffect)
 {
-#ifdef WIN32
+#ifndef PSX
 	return psEffect->imd->numFrames;
 #else
 	if(psEffect->imd->flags & iV_IMD_XEFFECT) {
@@ -2969,7 +2969,7 @@ UDWORD EffectGetNumFrames(EFFECT *psEffect)
 
 UDWORD IMDGetNumFrames(iIMDShape *Shape)
 {
-#ifdef WIN32
+#ifndef PSX
 	return Shape->numFrames;
 #else
 	if(Shape->flags & iV_IMD_XEFFECT) {
@@ -2986,7 +2986,7 @@ UDWORD IMDGetNumFrames(iIMDShape *Shape)
 
 UDWORD IMDGetAnimInterval(iIMDShape *Shape)
 {
-#ifdef WIN32
+#ifndef PSX
 	return Shape->animInterval;
 #else
 	if(Shape->flags & iV_IMD_XEFFECT) {
@@ -3091,7 +3091,7 @@ BOOL		active;
 					lastUpdateStructures[partition] = gameTime;
 					// -------------------------------------------------------------------------------
 					/* Factories puff out smoke, power stations puff out tesla stuff */
-#ifdef WIN32
+#ifndef PSX
 				 	if( (psStructure->pStructureType->type == REF_FACTORY) OR
 						(psStructure->pStructureType->type == REF_POWER_GEN) )
 					if( (bMultiPlayer && isHumanPlayer(psStructure->player))
@@ -3116,7 +3116,7 @@ BOOL		active;
 								eventPos.z = psStructure->y-psStructure->sDisplay.imd->connectors->y;
 								eventPos.y = psStructure->z+psStructure->sDisplay.imd->connectors->z;
 								addEffect(&eventPos,EFFECT_SMOKE,SMOKE_TYPE_STEAM,FALSE,NULL,0);
-#ifdef WIN32
+#ifndef PSX
 
 								if(selectedPlayer == psStructure->player)
 								{
@@ -3167,7 +3167,7 @@ BOOL		active;
 								eventPos.y = psStructure->z + 48;
 								addEffect(&eventPos,EFFECT_EXPLOSION,
 										EXPLOSION_TYPE_TESLA,FALSE,NULL,0);
-#ifdef WIN32
+#ifndef PSX
 								if(selectedPlayer == psStructure->player)
 								{
 									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_SPARK );
@@ -3178,7 +3178,7 @@ BOOL		active;
 								hack and I'm not proud of it, but it needs to done. Honest. AM
 							*/
 							//if(capacity)
-#ifdef WIN32
+#ifndef PSX
 						}
 #endif
 #ifdef PSX

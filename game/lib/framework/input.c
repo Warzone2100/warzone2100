@@ -7,25 +7,27 @@
 
 #include <stdio.h>
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #include <ddraw.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
 /* The input buffer printf's */
 //#define DEBUG_GROUP1
-#include "Types.h"
-#include "Debug.h"
-#include "Input.h"
-#include "Screen.h"
+#include "types.h"
+#include "debug.h"
+#include "input.h"
+#include "screen.h"
 #include "frameint.h"
-#include "Fractions.h"
-#include "Frame.h"
+#include "fractions.h"
+#include "frame.h"
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -64,7 +66,7 @@ static SDWORD			dragX, dragY;
 /* The current mouse button state */
 static KEY_STATE aMouseState[3];
 
-#ifdef WIN32
+#ifndef PSX
 /* The size of the input buffer */
 #define INPUT_MAXSTR	512
 
@@ -74,7 +76,7 @@ static UDWORD	*pStartBuffer, *pEndBuffer;
 
 void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 {
-#ifdef PSX
+#ifndef WIN32
 	DBPRINTF(("keyscantostring ... not installed\n"));
 #else
 	if(code == KEY_MAXSCAN)
@@ -178,6 +180,7 @@ UDWORD inputGetKey(void)
 /* Deal with windows messages to maintain the state of the keyboard and mouse */
 void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 {
+#ifdef WIN32
 	UDWORD	code,i, repeat, vk;
 	FRACT	divX,divY;
 	UDWORD	scrX,scrY;
@@ -238,7 +241,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 			DBPRINTF(("WM_KEYDOWN %x %x\n",vk,repeat));
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 			DBP1(("Code: %x\n", vk));
 			inputAddBuffer(vk, repeat);
 #endif
@@ -446,7 +449,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 		repeat = lParam & 0xf;
 		/* Store the repeat count number of characters
 		   while there is space in the buffer */
-#ifdef WIN32
+#ifndef PSX
 		inputAddBuffer(wParam, repeat);
 #endif
 #ifdef PSX
@@ -456,6 +459,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 	default:
 		break;
 	}
+#endif
 }
 
 /* This is called once a frame so that the system can tell
@@ -465,7 +469,7 @@ void inputNewFrame(void)
 {
 	UDWORD i;
 
-#ifdef WIN32
+#ifndef PSX
 	/* Do the keyboard */
 	for (i=0; i< KEY_MAXSCAN; i++)
 	{
@@ -601,3 +605,94 @@ BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 
 	return FALSE;
 }
+
+void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
+{
+	POINT	point;
+	FRACT	divX,divY;
+	UDWORD	scrX,scrY;
+	UDWORD	mXPos,mYPos;
+
+	if(bRunningUnderGlide)
+	{
+#ifdef WIN32
+		scrX = GetSystemMetrics(SM_CXFULLSCREEN);
+		scrY = GetSystemMetrics(SM_CYFULLSCREEN);
+
+		divX = MAKEFRACT(x) / pie_GetVideoBufferWidth();
+		divY = MAKEFRACT(y) / pie_GetVideoBufferHeight();
+	
+		mXPos = MAKEINT(divX*scrX);
+		mYPos = MAKEINT(divY*scrY);
+		SetCursorPos(mXPos,mYPos);
+#endif
+	}
+	else
+	{
+#ifdef WIN32
+		point.x = x;
+		point.y = y;
+		ClientToScreen(frameGetWinHandle(),&point);
+		SetCursorPos(point.x,point.y);
+#endif
+	}
+}
+
+/* Sets the state of the mouse key to down */
+void setMouseDown(MOUSE_KEY_CODE code)
+{
+#ifdef WIN32
+	UINT message;
+	WPARAM button;
+	switch(code)
+	{
+		case MOUSE_LMB:
+			message = WM_LBUTTONDOWN;
+			button = MK_LBUTTON;
+			break;
+		case MOUSE_MMB:
+			message = WM_MBUTTONDOWN;
+			button = MK_MBUTTON;
+			break;
+		case MOUSE_RMB:
+			message = WM_RBUTTONDOWN;
+			button = MK_RBUTTON;
+			break;
+		default:
+			message = WM_LBUTTONDOWN;
+			button = MK_LBUTTON;
+			break;
+	}
+	SendMessage(frameGetWinHandle(),message,button,MAKELONG(mouseX(),mouseY()));
+#endif
+}
+
+/* Sets the state of the mouse key to up */
+void setMouseUp(MOUSE_KEY_CODE code)
+{
+#ifdef WIN32
+	UINT message;
+	WPARAM button;
+	switch(code)
+	{
+		case MOUSE_LMB:
+			message = WM_LBUTTONUP;
+			button = MK_LBUTTON;
+			break;
+		case MOUSE_MMB:
+			message = WM_MBUTTONUP;
+			button = MK_MBUTTON;
+			break;
+		case MOUSE_RMB:
+			message = WM_RBUTTONUP;
+			button = MK_RBUTTON;
+			break;
+		default:
+			message = WM_LBUTTONUP;
+			button = MK_LBUTTON;
+			break;
+	}
+	SendMessage(frameGetWinHandle(),message,button,MAKELONG(mouseX(),mouseY()));
+#endif
+}
+

@@ -33,7 +33,7 @@
 typedef struct
 {
 	iTexture	tex;
-#ifdef WIN32
+#ifndef PSX
 	uint8		type;
 	char		name[80];
 	int			textPage3dfx;	// what page number is it on 3dfx - not the same thing
@@ -64,7 +64,9 @@ extern BOOL iV_TexSizeIsLegal(UDWORD Width,UDWORD Height);
 extern BOOL iV_IsPower2(UDWORD Value);
 
 
+#ifdef PSX
 BOOL GenerateTEXPAGE(char *Filename, RECT *VramArea, UDWORD Mode, UWORD Clut);
+#endif
 BOOL FindTextureNumber(UDWORD TexNum,int* TexPage);
 
 #endif

@@ -4,14 +4,14 @@
  * Functions for the edit box widget.
  */
 
-#include "Frame.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "EditBox.h"
-#include "Form.h"
-#include "Vid.h"
+#include "frame.h"
+#include "widget.h"
+#include "widgint.h"
+#include "editbox.h"
+#include "form.h"
+#include "vid.h"
 #ifdef PSX
-#include "Primatives.h"
+#include "primatives.h"
 #endif
 
 /* Pixel gap between edge of edit box and text */
@@ -331,7 +331,7 @@ static void fitStringEnd(STRING *pBuffer, UDWORD boxWidth,
 /* Run an edit box widget */
 void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 {
-#ifdef WIN32
+#ifndef PSX
 	UDWORD	key, len, editState;
 	UDWORD	pos;
 	STRING	*pBuffer;
@@ -586,7 +586,7 @@ void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			fitStringEnd(psWidget->aText, psWidget->width,
 				&psWidget->printStart, &psWidget->printChars, &psWidget->printWidth);
 
-#ifdef WIN32
+#ifndef PSX
 			/* Clear the input buffer */
 			inputClearBuffer();
 #endif
@@ -613,7 +613,7 @@ void editBoxFocusLost(W_EDITBOX *psWidget)
 	psWidget->printStart = 0;
 	fitStringStart(psWidget->aText,psWidget->width,
 				   &psWidget->printChars, &psWidget->printWidth);
-#ifdef WIN32
+#ifndef PSX
 	widgSetReturn((WIDGET *)psWidget);
 #endif
 }
@@ -717,7 +717,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 //	}
 	*pInsPoint = ch;
 
-#ifdef WIN32
+#ifndef PSX
 	/* Display the cursor if editing */
 #if CURSOR_BLINK
 	blink = (GetTickCount()/WEDB_BLINKRATE) % 2;

@@ -7,8 +7,8 @@
 #ifndef _combat_h
 #define _combat_h
 
-#include "Frame.h"
-#include "Objects.h"
+#include "frame.h"
+#include "objects.h"
 
 /* The range out of which the random number for the to hit should be taken */
 #define HIT_DICE	100

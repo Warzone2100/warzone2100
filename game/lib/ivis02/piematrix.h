@@ -9,7 +9,7 @@
 #ifndef _pieMatrix_h
 #define _pieMatrix_h
 
-#include "pieDef.h"
+#include "piedef.h"
 
 /***************************************************************************/
 /*
@@ -30,7 +30,7 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#ifdef WIN32
+#ifndef PSX
 #define SIN(X)					aSinTable[(uint16)(X) >> 4]
 #define COS(X)					aSinTable[((uint16)(X) >> 4) + 1024]
 #else
@@ -106,7 +106,7 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#ifdef WIN32
+#ifndef PSX
 extern void pie_MatInit(void);
 #else//tim you may want to rename the playstation function aswell
 extern void _iv_geo_setup(void);
@@ -129,7 +129,7 @@ extern void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
 extern BOOL pie_Clockwise(iVertex *s);
 extern void pie_SetGeometricOffset(int x, int y);
 
-#ifdef WIN32
+#ifndef PSX
 // PIEVERTEX structure contains much infomation that is not required on the playstation ... and hence is not currently used
 extern BOOL pie_PieClockwise(PIEVERTEX *s);	
 #endif

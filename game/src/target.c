@@ -5,9 +5,9 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include <frame.h>
-#include <gtime.h>
-#include <animobj.h>
+#include "frame.h"
+#include "gtime.h"
+#include "animobj.h"
 
 #include "statsdef.h"
 #include "base.h"
@@ -16,7 +16,7 @@
 #include "structuredef.h"
 #include "display.h"
 #include "visibility.h"
-#include "ObjectDef.h"
+#include "objectdef.h"
 #include "droid.h"
 
 #include "geo.h"
@@ -127,7 +127,7 @@ void targetSetTargetable(UWORD DroidType)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 void	targetAdd(BASE_OBJECT *psObj)
 {
 	UNUSEDPARAMETER(psObj);

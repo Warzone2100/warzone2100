@@ -6,21 +6,21 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 #include "deliverance.h"
-#include "Fractions.h"
+#include "fractions.h"
 
-#ifdef WIN32
-#include "PieState.h"
-#include "PieClip.h"
+#ifndef PSX
+#include "piestate.h"
+#include "pieclip.h"
 #endif
 
 #ifdef PSX
-#include "CtrlPSX.h"
+#include "ctrlpsx.h"
 #endif
 
-#include "CSnap.h"
+#include "csnap.h"
 #include "audio_id.h"
 
 #define V_BIAS 8
@@ -85,42 +85,6 @@ void snapInitVars(void)
 {
 	EnabledFormID = 0;
 }
-
-
-#ifdef WIN32
-void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
-{
-	POINT	point;
-	FRACT	divX,divY;
-	UDWORD	scrX,scrY;
-	UDWORD	mXPos,mYPos;
-
-	UNUSEDPARAMETER(nowt);
-	if(pie_GetRenderEngine()==ENGINE_GLIDE)
-	{
-		scrX = GetSystemMetrics(SM_CXFULLSCREEN);
-		scrY = GetSystemMetrics(SM_CYFULLSCREEN);
-
-		divX = MAKEFRACT(x) / pie_GetVideoBufferWidth();
-		divY = MAKEFRACT(y) / pie_GetVideoBufferHeight();
-	
-		mXPos = MAKEINT(divX*scrX);
-		mYPos = MAKEINT(divY*scrY);
-		SetCursorPos(mXPos,mYPos);
-	}
-	else
-	{
-		point.x = x;
-		point.y = y;
-		ClientToScreen(frameGetWinHandle(),&point);
-		SetCursorPos(point.x,point.y);
-	}
-
-
-}
-#endif
-
-
 
 
 void AllocateSnapBuffer(CURSORSNAP *SnapBuffer,UWORD MaxSnaps)

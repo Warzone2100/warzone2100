@@ -53,7 +53,7 @@ void iV_Debug(char *string, ...)
 void iV_DisplayLogFile(void)
 
 {
-#ifdef WIN32
+#ifndef PSX
 	FILE *fp;
 	int c;
 

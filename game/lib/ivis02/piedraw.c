@@ -14,25 +14,27 @@
 #include "imd.h"
 #include "rendmode.h"
 //#include "d3dmode.h"
-#include "pieFunc.h"
-#include "pieMatrix.h"
+#include "piefunc.h"
+#include "piematrix.h"
 #include "tex.h"
 
 #include "piedef.h"
-#include "pieState.h"
-#include "pieTexture.h"
-#include "pieClip.h"
+#include "piestate.h"
+#include "pietexture.h"
+#include "pieclip.h"
 
-#include "d3d.h"
+#ifdef WIN32
+#include <d3d.h>
 #include "d3drender.h"
-
-#ifdef INC_GLIDE
-	#include "dGlide.h"
-	#include "3dfxFunc.h"
-	#include "3dfxText.h"
 #endif
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifdef INC_GLIDE
+	#include "dglide.h"
+	#include "3dfxfunc.h"
+	#include "3dfxtext.h"
+#endif
+
+#ifndef PIEPSX		// was #ifndef PSX
 #define MIST
 
 /***************************************************************************/
@@ -396,6 +398,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 
 	if(weHave3DNow())  // call alex m's AMD detection stuff - uses _emit?!?!?
 	{
+#ifdef _MSC_VER
 		// Mike Goddard's funky code replacement.
 		_asm {
 			FEMMS
@@ -507,6 +510,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		tloop_done:
 			FEMMS
 		}
+#endif // _MSC_VER
 	}
 	else	// run the intel one
 	//--
@@ -594,7 +598,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				imdPoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (imdPoly.flags > 0)
@@ -635,7 +639,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				piePoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (piePoly.flags > 0)
@@ -897,7 +901,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				imdPoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (imdPoly.flags > 0)
@@ -938,7 +942,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				piePoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (piePoly.flags > 0)
@@ -1268,7 +1272,7 @@ void pie_Draw3DNowShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWOR
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				imdPoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (imdPoly.flags > 0)
@@ -1305,7 +1309,7 @@ void pie_Draw3DNowShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWOR
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				piePoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (piePoly.flags > 0)
@@ -1659,7 +1663,7 @@ int	uFrame, vFrame, j, framesPerLine;
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 		if (poly->pTexAnim != NULL)
 		{
 			if (poly->pTexAnim->nFrames >=0)
@@ -1865,7 +1869,7 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 		if (poly->pTexAnim != NULL)
 		{
 			if (poly->pTexAnim->nFrames >=0)

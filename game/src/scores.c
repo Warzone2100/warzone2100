@@ -1,33 +1,33 @@
-#ifdef WIN32
+#ifndef PSX
 /* 
 	Scores.c Deals with all the mission results gubbins.
 	Alex W. McLean
 */
 
 // --------------------------------------------------------------------
-#include "Frame.h"
-#include "GTime.h"
-#include "Console.h"
-#include "Scores.h"
-#include "pieDef.h"
-#include "pieFunc.h"
-#include "pieMode.h"
-#include "pieState.h"
-#include "RendMode.h"
-#include "Objects.h"
-#include "DroidDef.h"
-#include "Base.h"
-#include "StatsDef.h"
-#include "HCI.h"
-#include "Text.h"
-#include "MiscImd.h"
-#include "Geo.h"
-#include "Display3d.h"
-#include "Mission.h"
-#include "Game.h"
-#include "Audio.h"
-#include "Audio_id.h"
-#include "IntImage.h"
+#include "frame.h"
+#include "gtime.h"
+#include "console.h"
+#include "scores.h"
+#include "piedef.h"
+#include "piefunc.h"
+#include "piemode.h"
+#include "piestate.h"
+#include "rendmode.h"
+#include "objects.h"
+#include "droiddef.h"
+#include "base.h"
+#include "statsdef.h"
+#include "hci.h"
+#include "text.h"
+#include "miscimd.h"
+#include "geo.h"
+#include "display3d.h"
+#include "mission.h"
+#include "game.h"
+#include "audio.h"
+#include "audio_id.h"
+#include "intimage.h"
 
 #define	BAR_CRAWL_TIME	(GAME_TICKS_PER_SEC*3)
 
@@ -38,6 +38,9 @@
 #define MAX_BAR_LENGTH	100
 #define LC_UPPER	100
 
+#ifndef WIN32
+#define max(a,b) (((a)>(b))?(a):(b))
+#endif
 
 #define LC_X	32
 #define RC_X	320+32

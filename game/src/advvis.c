@@ -2,18 +2,18 @@
 /* Experiment - possibly only for the faster configurations */
 /* Makes smooth transitions for terrain visibility */
 
-#ifdef WIN32
+#ifndef PSX
 #include "frame.h"
-#include "Objects.h"
-#include "Base.h"
-#include "Map.h"
-#include "GTime.h"
-#include "Display3d.h"
-#include "AdvVis.h"
-#include "HCI.h"
-#include "PieState.h"
-#include "Component.h"
-#include "Geometry.h"
+#include "objects.h"
+#include "base.h"
+#include "map.h"
+#include "gtime.h"
+#include "display3d.h"
+#include "advvis.h"
+#include "hci.h"
+#include "piestate.h"
+#include "component.h"
+#include "geometry.h"
 
 /* This uses oodles of memory and so can only be done on the PC */
 

@@ -11,7 +11,7 @@
 /***************************************************************************/
 
 #ifdef WIN32
-#include "dsound.h"
+#include <dsound.h>
 #endif
 
 #include "track.h"
@@ -73,9 +73,7 @@ void	sound_Update( void );
 
 UDWORD	sound_GetGameTime( void );
 
-#ifdef WIN32
 LPDIRECTSOUND	sound_GetDirectSoundObj( void );
-#endif
 
 /***************************************************************************/
 

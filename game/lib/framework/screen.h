@@ -14,6 +14,7 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define INIT_GUID
 #define WIN32_LEAN_AND_MEAN
@@ -21,6 +22,7 @@
 #include <windows.h>
 #include <ddraw.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #include "types.h"
 
@@ -40,6 +42,18 @@ extern DDPIXELFORMAT *screenGetFrontBufferPixelFormat(void);
 
 /* Return a pointer to the back buffer pixel format */
 extern DDPIXELFORMAT *screenGetBackBufferPixelFormat(void);
+
+/* Return a bit depth of the Front buffer */
+extern UDWORD screenGetFrontBufferBitDepth(void);
+
+/* Return a bit depth of the Back buffer */
+extern UDWORD screenGetBackBufferBitDepth(void);
+
+/* Return a pixel masks of the Front buffer */
+extern BOOL screenGetFrontBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask);
+
+/* Return a pixel masks of the Back buffer */
+extern BOOL screenGetBackBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask);
 
 /* Flip back and front buffers */
 extern void screenFlip(BOOL clearBackBuffer);

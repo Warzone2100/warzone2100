@@ -12,8 +12,8 @@
 
 /***************************************************************************/
 
-#include "Deliverance.h"
-#include "DisplayDef.h"
+#include "deliverance.h"
+#include "displaydef.h"
 
 #define TURRET_ROTATION_RATE    360
 /***************************************************************************/

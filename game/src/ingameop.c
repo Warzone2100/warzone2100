@@ -6,36 +6,36 @@
 
 #include "frame.h"
 #include "widget.h"
-#include "Display3d.h"
-#include "intDisplay.h"
-#include "HCI.h"			// for wFont def.& intmode.
+#include "display3d.h"
+#include "intdisplay.h"
+#include "hci.h"			// for wFont def.& intmode.
 #include "loop.h"
 #include "text.h"
 #include "piestate.h"		// for getrendertype
 #include "resource.h"
-//#include "display.h"		// for gamma.
+//#include "display.h"		// for gammaValue.
 #include "frontend.h"		// for textdisplay function
-#include "loadSave.h"		// for textdisplay function
+#include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
 
-#include "ScriptExtern.h"	// for tutorial 
+#include "scriptextern.h"	// for tutorial 
 #include "rendmode.h"
-#include "keyBind.h"
+#include "keybind.h"
 
 #include "audio.h"					// for sound.
-#ifdef WIN32
+#ifndef PSX
 #include "cdaudio.h"
 #include "mixer.h"
 #include "multiplay.h"
 #endif
 
 #include "csnap.h"
-#include "inGameOp.h"
+#include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
 #include "netplay.h"
 #ifdef PSX
-#include "Primatives.h"
+#include "primatives.h"
 #include "ctrlpsx.h"
 #include "vpad.h"
 #include "dcache.h"
@@ -109,7 +109,7 @@ static BOOL addQuitOptions(VOID)
 	sFormInit.x			= (SWORD)INTINGAMEOP3_X;
 	sFormInit.y			= (SWORD)INTINGAMEOP3_Y;
 	sFormInit.height	= INTINGAMEOP3_H;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 #else
@@ -159,7 +159,7 @@ static BOOL _addSlideOptions()
 	sFormInit.y			= (SWORD)INTINGAMEOP2_Y;
 	sFormInit.width		= INTINGAMEOP2_W;
 	sFormInit.height	= INTINGAMEOP2_H;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 #else
@@ -207,7 +207,7 @@ static BOOL _addSlideOptions()
 
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_3_Y,STR_GAME_RESUME,WBUT_PLAIN);
 
 	// fx vol
@@ -284,16 +284,16 @@ static BOOL _addSlideOptions()
 #endif
 
 	/*
-#ifdef WIN32
+#ifndef PSX
 	// gamma
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		addIGTextButton(INTINGAMEOP_GAMMA,INTINGAMEOP_3_Y,STR_FE_GAMMA,WBUT_PLAIN);
 		
-		if(gamma>3)	   gamma = (float)2.9;
-		if(gamma<0.5)  gamma = (float).5;
+		if(gammaValue>3)	   gammaValue = (float)2.9;
+		if(gammaValue<0.5)  gammaValue = (float).5;
 	
-		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gamma*25),INTINGAMEOP_GAMMA );
+		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gammaValue*25),INTINGAMEOP_GAMMA );
 
 	}
 #endif
@@ -349,7 +349,7 @@ static BOOL _intAddInGameOptions(void)
 	UWORD WindowWidth;
 	W_FORMINIT		sFormInit;			
 
-#ifdef WIN32
+#ifndef PSX
 	audio_StopAll();
 
     //clear out any mission widgets - timers etc that may be on the screen
@@ -414,7 +414,7 @@ static BOOL _intAddInGameOptions(void)
 	sFormInit.y			= (SWORD)INTINGAMEOP_Y;
 	sFormInit.height	= INTINGAMEOP_H;
 
-#ifdef WIN32
+#ifndef PSX
     if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
 	}
@@ -424,7 +424,7 @@ static BOOL _intAddInGameOptions(void)
 	}
 #endif
 
-#ifdef WIN32	
+#ifndef PSX	
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 #else
@@ -433,7 +433,7 @@ static BOOL _intAddInGameOptions(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	// add 'quit' text
-#ifdef WIN32
+#ifndef PSX
 // #ifdef COVERMOUNT
  #if 0
 	addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
@@ -461,7 +461,7 @@ static BOOL _intAddInGameOptions(void)
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS,INTINGAMEOP_2_Y,STR_FE_OPTIONS,OPALIGN);
 
-#ifdef WIN32		
+#ifndef PSX		
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{		// add 'load'
 		addIGTextButton(INTINGAMEOP_LOAD,INTINGAMEOP_3_Y,STR_MISC_LOADGAME,OPALIGN);
@@ -597,7 +597,7 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 // In Game Options house keeping stuff.
 BOOL intRunInGameOptions(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	processFrontendSnap(FALSE);
 #endif
 	return TRUE;
@@ -639,7 +639,7 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(FALSE, TRUE);
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 //	case INTINGAMEOP_REPLAY:
 //		intCloseInGameOptions(TRUE, FALSE);
 //		if(0!=strcmp(getLevelName(),"CAM_1A"))
@@ -666,7 +666,7 @@ void intProcessInGameOptions(UDWORD id)
 		SetMousePos(0,INTINGAMEOP2_X+INTINGAMEOP_MID+5 ,mouseY());	// move mouse
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 	case INTINGAMEOP_FXVOL_S:	
 		mixer_SetWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_FXVOL_S));
 		break;
@@ -675,9 +675,9 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	
 //	case INTINGAMEOP_GAMMA_S:
-//		gamma = (float)(widgGetSliderPos(psWScreen,INTINGAMEOP_GAMMA_S))/25  ;
-//		if(gamma<0.5)  gamma = (float).5;
-//		pie_SetGammaValue(gamma);
+//		gammaValue = (float)(widgGetSliderPos(psWScreen,INTINGAMEOP_GAMMA_S))/25  ;
+//		if(gammaValue<0.5)  gammaValue = (float).5;
+//		pie_SetGammaValue(gammaValue);
 //		break;
 #endif
 	

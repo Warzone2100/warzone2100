@@ -11,38 +11,38 @@
 //#define DEBUG_GROUP1
 // order recieved printf's
 //#define DEBUG_GROUP2
-#include "Frame.h"
-#include "Objects.h"
-#include "Order.h"
-#include "Action.h"
-#include "Map.h"
-#include "FormationDef.h"
-#include "Formation.h"
-#include "Geometry.h"
-#include "Projectile.h"
+#include "frame.h"
+#include "objects.h"
+#include "order.h"
+#include "action.h"
+#include "map.h"
+#include "formationdef.h"
+#include "formation.h"
+#include "geometry.h"
+#include "projectile.h"
 #include "effects.h"	// for waypoint display
-#include "GTime.h"
-#include "intOrder.h"
+#include "gtime.h"
+#include "intorder.h"
 #include "orderdef.h"	
-#include "Transporter.h"
+#include "transporter.h"
 #include "group.h"
-#include "CmdDroid.h"
+#include "cmddroid.h"
 #include "script.h"
 #include "scripttabs.h"
-#include "scriptCB.h"
-#ifdef WIN32
-#include "Multiplay.h"  //ajl
+#include "scriptcb.h"
+#ifndef PSX
+#include "multiplay.h"  //ajl
 #else
 extern UDWORD selectedPlayer;
 #endif
-#include "Mission.h"
-#include "HCI.h"
-#include "Visibility.h"
-#include "Display.h"
+#include "mission.h"
+#include "hci.h"
+#include "visibility.h"
+#include "display.h"
 #include "ai.h"
 #include "warcam.h"
 #include "audio_id.h"
-#include "FPath.h"
+#include "fpath.h"
 #include "display3d.h"
 #include "combat.h"
 
@@ -347,12 +347,12 @@ void orderUpdateDroid(DROID *psDroid)
 			psObj = checkForRepairRange(psDroid,NULL);
 			if (psObj)
 			{
-#ifdef WIN32
+#ifndef PSX
 if(!bMultiPlayer || myResponsibility(psDroid->player))
 {
 #endif
 				orderDroidObj(psDroid, DORDER_DROIDREPAIR, psObj);
-#ifdef WIN32
+#ifndef PSX
 }
 #endif
 			}
@@ -368,12 +368,12 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 			psObj = checkForDamagedStruct(psDroid,NULL);
 			if (psObj)
 			{
-#ifdef WIN32
+#ifndef PSX
 if(!bMultiPlayer || myResponsibility(psDroid->player))
 {
 #endif
 				orderDroidObj(psDroid, DORDER_REPAIR, psObj);
-#ifdef WIN32
+#ifndef PSX
 }
 #endif
 			}
@@ -1183,7 +1183,7 @@ void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	ASSERT((PTRVALID(psGroup, sizeof(DROID_GROUP)),
 		"cmdUnitOrderGroupBase: invalid unit group"));
 
-#ifdef WIN32
+#ifndef PSX
 	if (bMultiPlayer && SendCmdGroup(psGroup, psData->x,	psData->y,	psData->psObj) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(TRUE);
@@ -1227,7 +1227,7 @@ void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 
 // check the position of units giving fire support to this unit and tell
 // them to pull back if the sensor is going to move through them
-#ifdef WIN32
+#ifndef PSX
 void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
@@ -1799,7 +1799,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			actionDroidObj(psDroid, DACTION_FIRESUPPORT, psOrder->psObj);
 		}
-#ifdef WIN32
+#ifndef PSX
 		if ( psDroid->player == selectedPlayer )
 		{
 			orderPlayFireSupportAudio( psOrder->psObj );
@@ -1829,7 +1829,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_RTB:
 		// send vtols back to their return pos
-#ifdef WIN32
+#ifndef PSX
 		if (vtolDroid(psDroid) && !bMultiPlayer && psDroid->player != selectedPlayer)
 #else
 		if (vtolDroid(psDroid) && psDroid->player != selectedPlayer)
@@ -1869,7 +1869,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			}
 		}
 		// no HQ go to the landing zone
-/*#ifdef WIN32
+/*#ifndef PSX
 		if (!bMultiPlayer && selectedPlayer == 0)
 #else
 		if (selectedPlayer == 0)
@@ -1975,7 +1975,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		else
 		{
 			// no repair facility or HQ go to the landing zone
-#ifdef WIN32
+#ifndef PSX
 			if (!bMultiPlayer && selectedPlayer == 0)
 #else
 			if (selectedPlayer == 0)
@@ -2150,7 +2150,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 	sOrder.order = order;
 	orderDroidBase(psDroid, &sOrder);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		SendDroidInfo(psDroid,  order,  0,  0, NULL);
@@ -2175,7 +2175,7 @@ BOOL orderState(DROID *psDroid, DROID_ORDER order)
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
-//#ifdef WIN32
+//#ifndef PSX
 //	BOOL bTemp = FALSE;
 //#endif
 //#warning memory report here !!!!!
@@ -2199,7 +2199,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 
 	orderClearDroidList(psDroid);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer) //ajl
 	{
 		SendDroidInfo(psDroid,  order,  x,  y, NULL);
@@ -2272,7 +2272,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 
 	orderClearDroidList(psDroid);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer) //ajl
 	{
 		SendDroidInfo(psDroid,  order, 0,0, psObj);
@@ -2530,7 +2530,7 @@ BOOL bOrderEffectDisplayed = FALSE;
 // add an order to a droids order list
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
-#ifdef WIN32
+#ifndef PSX
 	iVector		position;
 
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
@@ -2591,7 +2591,7 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 // do the next order from a droids order list
 BOOL orderDroidList(DROID *psDroid)
 {
-#ifdef WIN32
+#ifndef PSX
 	DROID_ORDER_DATA	sOrder;
 
 	if (psDroid->listSize > 0)
@@ -2653,7 +2653,7 @@ BOOL orderDroidList(DROID *psDroid)
 // clear all the orders from the list
 void orderClearDroidList(DROID *psDroid)
 {
-#ifdef WIN32		// ffs je
+#ifndef PSX		// ffs je
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
 #endif
@@ -2662,7 +2662,7 @@ void orderClearDroidList(DROID *psDroid)
 // check all the orders in the list for died objects
 void orderCheckList(DROID *psDroid)
 {
-#ifdef WIN32
+#ifndef PSX
 	SDWORD	i;
 
 	i=0;
@@ -2821,7 +2821,7 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		return;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,x,y,NULL) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(TRUE);
@@ -3200,7 +3200,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	DROID		*psCurr, *psDemolish;
 	DROID_ORDER	order;
 
-#ifdef WIN32
+#ifndef PSX
 	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,0,0,psObj) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(TRUE);
@@ -3614,7 +3614,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	BOOL		retVal, bMultiPlayGame;
 	DROID		*psTransport, *psCurr, *psNext;
 
-#ifdef WIN32
+#ifndef PSX
 
 	if(bMultiPlayer)
 	{	
@@ -3931,7 +3931,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 
 	psDroid->secondaryOrder = CurrState;
 
-#ifdef WIN32
+#ifndef PSX
 	turnOffMultiMsg(FALSE);
 #endif
 
@@ -4070,7 +4070,7 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 
 /*
 // ajl 18thsep98, pulled from psx version. (no interface and not big enough move list.
-#ifdef WIN32
+#ifndef PSX
 // append a new point to a droid's list.
 BOOL orderAddWayPoint(DROID *psDroid ,UDWORD dX,UDWORD dY)
 {
@@ -4171,7 +4171,7 @@ void orderSelectedWaypoint(UDWORD player, UDWORD x, UDWORD y)
 	iVector		position;
 	FORMATION	*psFormation = NULL;
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		SendDroidWaypoint((UBYTE)player,x,y);

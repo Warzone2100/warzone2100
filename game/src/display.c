@@ -7,79 +7,79 @@
 
 
 
-#include "Frame.h"
-#include "Display.h"
-#include "Map.h"
-#include "Disp2D.h"
-#include "Loop.h"
-#ifdef WIN32
-#include "Atmos.h"	// temporary only for here
-#include "CSnap.h"
+#include "frame.h"
+#include "display.h"
+#include "map.h"
+#include "disp2d.h"
+#include "loop.h"
+#ifndef PSX
+#include "atmos.h"	// temporary only for here
+#include "csnap.h"
 #endif
 /* Includes direct access to render library */
 #include "piedef.h"
-#include "pieState.h"
+#include "piestate.h"
 
 #include "vid.h"
 //#include "ivisheap.h"//make a call for this
 
 #include "tex.h"//make a call for this
-#include "Component.h"
-#include "Display3D.h"
+#include "component.h"
+#include "display3d.h"
 #include "resource.h"
-#include "HCI.h"
+#include "hci.h"
 #include "text.h"
-#include "Edit3D.h"
-#include "Geometry.h"
-#include "GTime.h"
+#include "edit3d.h"
+#include "geometry.h"
+#include "gtime.h"
 #include "audio.h"
 #include "audio_id.h"
 #include "radar.h"
-#include "MiscImd.h"
-#include "Lighting.h"
+#include "miscimd.h"
+#include "lighting.h"
 #include "fractions.h"
-#include "Console.h"
-#include "Order.h"
-#include "Wrappers.h"
+#include "console.h"
+#include "order.h"
+#include "wrappers.h"
 #include "power.h"
-#include "Map.h"
+#include "map.h"
 #include "keymap.h"
-#include "intImage.h"
+#include "intimage.h"
 #include "mechanics.h"
-#include "InGameOp.h"
-#include "oPrint.h"
-#include "WarCAM.h"
-#include "KeyBind.h"
-#include "KeyMap.h"
-#include "Projectile.h"
+#include "ingameop.h"
+#include "oprint.h"
+#include "warcam.h"
+#include "keybind.h"
+#include "keymap.h"
+#include "projectile.h"
 #include "message.h"
 #include "effects.h"
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptExtern.h"
-#include "ScriptCB.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptextern.h"
+#include "scriptcb.h"
 #include "target.h"
 #include "drive.h"
-#include "CmdDroid.h"
-#include "Gateway.h"
-#include "Selection.h"
-#include "Transporter.h"
-#include "intOrder.h"
+#include "cmddroid.h"
+#include "gateway.h"
+#include "selection.h"
+#include "transporter.h"
+#include "intorder.h"
 
 
 //#ifdef THREEDFX
-//#include "3dfxFunc.h"
+//#include "3dfxfunc.h"
 //#endif
-#ifdef WIN32
-#include "pieClip.h"		// ffs am
+#ifndef PSX
+#include "pieclip.h"		// ffs am
 #include "multiplay.h"
 #endif
 #ifdef PSX
-#include "DCache.h"
+#include "dcache.h"
 #include "primatives.h"
-#include "VPad.h"
-#include "CtrlPSX.h"
-#include "drawIMD_psx.h"
+#include "vpad.h"
+#include "ctrlpsx.h"
+#include "drawimd_psx.h"
 #include "group.h"
 extern BOOL EnableVibration;
 #endif
@@ -273,7 +273,7 @@ BOOL	ignoreRMBC	= TRUE;
 BOOL	bigBlueInWorld = FALSE;
 BOOL	missionComplete = FALSE;
 UWORD	RadarZoomLevel = 0;
-float	gamma = (float)1.0;
+float	gammaValue = (float)1.0;
 DROID	*psSelectedVtol;
 DROID	*psDominantSelected;
 
@@ -296,7 +296,7 @@ SDWORD	screenShakeTable[100] =
 1,0,-1,-1,-2,-1,1,0,1,0
 };
 
-#ifdef WIN32
+#ifndef PSX
 PALETTEENTRY	gamePalette[255];		// another game palette (yawn)
 #endif
 
@@ -350,7 +350,7 @@ void	setShakeStatus( BOOL val )
 
 void shakeStart(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if(bShakingPermitted)
 	{
 		if(!bScreenShakeActive)
@@ -421,7 +421,7 @@ void shakeUpdate(void)
 BOOL LoadLevelGraphics(UBYTE LevelNumber)
 {
 
-#ifdef WIN32
+#ifndef PSX
 	(void)LevelNumber;
 #else
 //	InstallLevelTextures(LevelNumber);	// Playstation texture for level load & install into VRAM
@@ -439,7 +439,7 @@ BOOL dispInitialise(void)
 	UDWORD i;*/
 
 
-#ifdef WIN32
+#ifndef PSX
 	/*	Build the transparency table that's
 		used for the rgb filter rectangle plotter in ivis */
 	iV_SetTransFilter(TRANS_BLUE,0);		// set the table.
@@ -515,7 +515,7 @@ void ProcessRadarInput(void)
 		{
 			mouseOverRadar = TRUE;
 
-#ifdef WIN32
+#ifndef PSX
    			if (mousePressed(MOUSE_LMB))
 #else
 //			if(VPadTriggered(VPAD_MOUSELB))
@@ -534,7 +534,7 @@ void ProcessRadarInput(void)
 					CalcRadarPosition(x,y,(UDWORD *)&PosX,(UDWORD *)&PosY);
 					if(mouseOverRadar)
 					{
-#ifdef WIN32
+#ifndef PSX
 					//	requestRadarTrack(PosX*TILE_UNITS,PosY*TILE_UNITS);
 						// MARKER
 						// Send all droids to that location
@@ -555,7 +555,7 @@ void ProcessRadarInput(void)
    			}
 
 
-#ifdef WIN32
+#ifndef PSX
 			if(mouseDrag(MOUSE_RMB,&temp1,&temp2) AND !rotActive)
 			{
    				CalcRadarPosition(x,y,(UDWORD*)&PosX,(UDWORD*)&PosY);
@@ -690,7 +690,7 @@ void processInput(void)
 #endif
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 
 	/* Process all of our key mappings */
 //	keyProcessMappings();	// done later - see below.
@@ -785,7 +785,7 @@ void processInput(void)
 //		selectAttempt = TRUE;
 //	}
 //
-//#ifdef WIN32
+//#ifndef PSX
 //	if(mouseDown(MOUSE_RMB) AND	rotActive)
 //	{
 //  		if(abs(mX-rotX)>8)
@@ -839,7 +839,7 @@ void CheckFinishedDrag(void)
 				{
 					//if(((STRUCTURE_STATS *)sBuildDetails.psStats)->type >= REF_WALLH AND
 					//	((STRUCTURE_STATS *)sBuildDetails.psStats)->type <= REF_WALLV)
-#ifdef WIN32
+#ifndef PSX
 			    	if( ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL ||
 			    		(((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE))
 #else           
@@ -868,7 +868,7 @@ void CheckFinishedDrag(void)
                 //if invalid location keep looking for a valid one
                 if (buildState == BUILD3D_VALID OR buildState == BUILD3D_FINISHED)
                 {
-#ifdef WIN32    
+#ifndef PSX    
 			    	if( ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL ||
 			    		(((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE))
 #else           
@@ -882,7 +882,7 @@ void CheckFinishedDrag(void)
 			    }
             }
 
-#ifdef WIN32
+#ifndef PSX
 			/* Only clear if shift isn't down - this is for the drag selection box for units*/
 			if(!keyDown(KEY_LCTRL) AND !keyDown(KEY_RCTRL) 
 				AND !keyDown(KEY_LSHIFT) AND !keyDown(KEY_RSHIFT) AND wallDrag.status==DRAG_INACTIVE)
@@ -937,7 +937,7 @@ void CheckStartWallDrag(void)
 		{
 			//if(((STRUCTURE_STATS *)sBuildDetails.psStats)->type >= REF_WALLH AND
 			//	((STRUCTURE_STATS *)sBuildDetails.psStats)->type <= REF_WALLV)
-#ifdef WIN32
+#ifndef PSX
 			if( (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL) ||
 				(((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE) )
 #else
@@ -975,7 +975,7 @@ BOOL CheckFinishedFindPosition(void)
 		{
 			if (buildState == BUILD3D_VALID)
 			{
-#ifdef WIN32
+#ifndef PSX
 				if ( ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL ||
 					 (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE))
 #else
@@ -1021,7 +1021,7 @@ void HandleDrag(void)
 		if(mouseDown(MOUSE_LMB)) {
 			if(buildState == BUILD3D_VALID)
 			{
-#ifdef WIN32
+#ifndef PSX
 				if( ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL ||
 					(((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE))
 #else
@@ -1059,7 +1059,7 @@ void HandleDrag(void)
 
 		if(buildState == BUILD3D_VALID)
 		{
-#ifdef WIN32
+#ifndef PSX
 			if( ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL ||
 				(((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE))
 #else
@@ -1122,7 +1122,7 @@ void processMouseClickInput(void)
 
 	CheckFinishedDrag();
 //
-#ifdef WIN32
+#ifndef PSX
 	if ((mouseReleased(MOUSE_LMB) /*|| keyPressed(KEY_RCTRL)*/) AND !OverRadar AND 
 		dragBox3D.status!=DRAG_RELEASED AND !ignoreOrder AND !mouseOverConsole AND !bDisplayMultiJoiningStatus)
 	{
@@ -1159,7 +1159,7 @@ void processMouseClickInput(void)
 	//			printf("Cancel Wall Drag\n");
 				bRadarDragging = FALSE;
 				dealWithRMB();
-#ifdef WIN32
+#ifndef PSX
 				// Why?
 				if(getWarCamStatus())
 				{
@@ -1372,7 +1372,7 @@ void processMouseClickInput(void)
 }
 
 
-#ifdef WIN32	// playstation version is handled differently in display3d_psx.c
+#ifndef PSX	// playstation version is handled differently in display3d_psx.c
 void scroll(void)
 {
 	float	radians;
@@ -1769,7 +1769,7 @@ void displayWorld(void)
 //	}
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #ifndef NON_INTERACT
 	if(mouseDown(MOUSE_RMB) AND	rotActive)
 	{
@@ -1951,7 +1951,7 @@ UDWORD		dispX,dispY,dispR;
 
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
-//#ifdef WIN32
+//#ifndef PSX
 			dispR = psDroid->sDisplay.screenR;
 //#else
 //			dispR = psDroid->sDisplay.screenR*4;
@@ -2467,7 +2467,7 @@ void displayInitVars(void)
 //
 void StartDeliveryPosition(OBJECT_POSITION	*psLocation,BOOL driveActive)
 {
-#ifdef WIN32
+#ifndef PSX
 	FLAG_POSITION	*psFlagPos;
 	UNUSEDPARAMETER(driveActive);
 	/* clear the selection */
@@ -2542,7 +2542,7 @@ void StartDeliveryPosition(OBJECT_POSITION	*psLocation,BOOL driveActive)
 //
 void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData)
 {
-#ifdef WIN32
+#ifndef PSX
 	//This deals with adding waypoints and moving the primary
 	processDeliveryPoint(((FLAG_POSITION*)UserData)->player,
 		xPos<<TILE_SHIFT, yPos<<TILE_SHIFT);
@@ -2765,7 +2765,7 @@ BOOL droidHasLeader(DROID *psDroid)
 // deal with selecting a droid
 void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 {
-#ifdef WIN32
+#ifndef PSX
 	DROID	*psD;
 	BOOL	bGotGroup;
 	SDWORD	groupNumber;
@@ -2972,7 +2972,7 @@ char buffer[80];
 				intHandleDroidLMB((DROID*)psClickedOn);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 				if (ctrlShiftDown())
 				{
 					// select/deselect etc. the droid
@@ -2982,7 +2982,7 @@ char buffer[80];
 #endif
 				if (psDroid->droidType == DROID_TRANSPORTER)
 				{
-#ifdef WIN32
+#ifndef PSX
 					if (selection == SC_INVALID)
 					{
                         //in multiPlayer mode we RMB to get the interface up
@@ -3080,7 +3080,7 @@ char buffer[80];
 				// Clicked on a damaged unit? Will repair it.
 				else if (droidIsDamaged(psDroid) AND repairDroidSelected(selectedPlayer))
 				{
-#ifdef WIN32
+#ifndef PSX
 					assignDestTarget();
 #endif
 					orderSelectedObjAdd(selectedPlayer, psClickedOn, ctrlShiftDown());
@@ -3145,7 +3145,7 @@ char buffer[80];
                     //cannot have LasSat struct and Droid selected
                     bLasSatStruct = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
 					// select/deselect etc. the droid
  					if(!ctrlShiftDown())
 					{
@@ -3218,7 +3218,7 @@ char buffer[80];
 // We don't actually wan't to select structures, just inform the interface we've clicked on it,
 // might wan't to do this on PC as well as it fixes the problem with the interface locking multiple
 // buttons in the object window.
-#ifdef WIN32
+#ifndef PSX
 					if (selection == SC_INVALID)
 					{
 						/* Clear old building selection(s) - should only be one */
@@ -3241,7 +3241,7 @@ char buffer[80];
 				else if ( (psStructure->status==SS_BUILT) AND (psStructure->pStructureType->type == 
 					REF_RESOURCE_EXTRACTOR) )
 				{
-#ifdef WIN32
+#ifndef PSX
 					if (selection == SC_INVALID)
 					{
 						/* Clear old building selection(s) - should only be one */
@@ -3355,7 +3355,7 @@ char buffer[80];
 						{
 							if(!fireOnLocation(psFeature->x,psFeature->y))
 							{
-#ifdef WIN32
+#ifndef PSX
                                 if (ctrlShiftDown())
                                 {
                                     orderDroidStatsLocAdd(psDroid, DORDER_BUILD, 
@@ -3400,7 +3400,7 @@ char buffer[80];
 				{
 				case FEAT_GEN_ARTE:
 				case FEAT_OIL_DRUM:
-//#ifdef WIN32
+//#ifndef PSX
   					psNearestUnit = getNearestDroid(mouseTileX*TILE_UNITS+TILE_UNITS/2,
 												   mouseTileY*TILE_UNITS+TILE_UNITS/2,TRUE);
 					/* If so then find the nearest unit! */
@@ -3423,7 +3423,7 @@ char buffer[80];
 //#endif
 					break;
 /*				case FEAT_OIL_DRUM:
-#ifdef WIN32
+#ifndef PSX
    					psNearestUnit = getNearestDroid(mouseTileX*TILE_UNITS+TILE_UNITS/2,
 												   mouseTileY*TILE_UNITS+TILE_UNITS/2,TRUE);
 					// If so then find the nearest unit! 
@@ -3519,7 +3519,7 @@ char buffer[80];
 			addEffect(&Pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 			/* We've just clicked on an area of terrain. A 'send to' operation */
 			/* We need to establish the world coordinates */
 /*			if(keyDown(KEY_LALT) || keyDown(KEY_RALT))		// shift clicked a destination, add a waypoint.
@@ -3540,7 +3540,7 @@ char buffer[80];
 				/* Otherwise send them all */
 				orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
 //DBPRINTF(("orderSelectedLoc(%d,%d,%d)\n",selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2));
-#ifdef WIN32
+#ifndef PSX
 				if(getNumDroidsSelected())
 				{
 					assignDestTarget();
@@ -3779,7 +3779,7 @@ void dealWithRMB( void )
                         }
                     }
 				}
-#ifdef WIN32
+#ifndef PSX
 				else
 				{
 					if(bMultiPlayer)
@@ -3813,7 +3813,7 @@ void dealWithRMB( void )
 // We don't actually wan't to select structures, just inform the interface weve clicked on it,
 // might wan't to do this on PC as well as it fixes the problem with the interface locking multiple
 // buttons in the object window.
-#ifdef WIN32
+#ifndef PSX
 //					clearSelection();
 					/* Clear old building selection(s) - should only be one */
 					for(psSLoop = apsStructLists[selectedPlayer]; psSLoop; psSLoop = psSLoop->psNext)

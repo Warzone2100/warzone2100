@@ -7,7 +7,7 @@
 #ifndef _gateway_h
 #define _gateway_h
 
-#include "GatewayDef.h"
+#include "gatewaydef.h"
 
 // the list of gateways on the current map
 extern GATEWAY		*psGateways;

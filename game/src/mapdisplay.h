@@ -1,7 +1,7 @@
 #ifndef _mapdisplay_h
 #define _mapdisplay_h
 
-#include "pieTypes.h"
+#include "pietypes.h"
 
 /* MapDisplay.h */
 
@@ -29,7 +29,7 @@ extern iSurface* setUpMapSurface(UDWORD width, UDWORD height);
 // Render a Map Surface to display memory.
 extern void renderMapSurface(struct iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height);
 
-#ifdef WIN32
+#ifndef PSX
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map */
 extern void renderIMDToBuffer(struct iSurface *pSurface, struct iIMDShape *pIMD,
 							  struct iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,

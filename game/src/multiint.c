@@ -7,26 +7,28 @@
  */
 
 #include <stdio.h>		// get rid of a couple of warnings.
+#ifdef WIN32
 #include <direct.h>		//dito
+#endif
 
 #include "frame.h"
 #include "frameint.h"
 #include "widget.h"
 
 #include "winmain.h"
-#include "Objects.h"
+#include "objects.h"
 #include "display.h"// pal stuff
 #include "display3d.h"
 
 /* Includes direct access to render library */
 #include "piedef.h"
-#include "pieState.h"
-#include "pieClip.h"
+#include "piestate.h"
+#include "pieclip.h"
 #include "vid.h"
 #include "objmem.h"
 #include "gateway.h"
-#include "time.h"
-#include "GTime.h"
+#include <time.h>
+#include "gtime.h"
 #include "text.h"
 #include "config.h"
 #include "intdisplay.h"
@@ -42,13 +44,13 @@
 #include "frend.h"
 #include "advvis.h"
 //#include "editbox.h"
-#include "FrontEnd.h"
+#include "frontend.h"
 //#include "texture.h"
 #include "data.h"
 #include "script.h"
 #include "keymap.h"
 
-#include "Netplay.h"
+#include "netplay.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "multijoin.h"
@@ -58,10 +60,12 @@
 
 #include "levels.h"
 
+#ifdef WIN32
 #include <initguid.h>
 // GUID for MPlayer service provider. Will This Change???
 //{D8D29744-208A-11d0-BC9D-00A0242967B6}
 DEFINE_GUID(SPGUID_MPLAYER,0xd8d29744,0x208a,0x11d0,0xbc,0x9d,0x0,0xa0,0x24,0x29,0x67,0xb6);
+#endif
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -194,7 +198,6 @@ void loadMapPreview(void)
 	UBYTE			scale,col,coltab[16],bitDepth=8;
 	MAPTILE			*psTile,*WTile;
 	iSprite			backDropSprite;
-	DDPIXELFORMAT	*pDDPixelFormat;
 
 	if(psMapTiles)
 	{
@@ -231,8 +234,7 @@ void loadMapPreview(void)
 	}
 	else
 	{
-		pDDPixelFormat = screenGetBackBufferPixelFormat();
-		if( pDDPixelFormat->dwRGBBitCount == 16 )
+		if( screenGetBackBufferBitDepth() == 16 )
 		{
 			bitDepth = 16;
 		}
@@ -610,6 +612,7 @@ BOOL startConnectionScreen(VOID)
 // add connections
 static void addConnections(UDWORD begin)
 {
+#ifdef WIN32
 	UDWORD			i;
 	UDWORD			numproto;
 	UDWORD			pos;
@@ -661,10 +664,12 @@ static void addConnections(UDWORD begin)
 		}
 		pos+=40;
 	}
+#endif
 }
 	
 VOID runConnectionScreen(void )
 {
+#ifdef WIN32
 	UDWORD id,i;
 	static UDWORD chosenproto,com,baud;
 	static char	  addr[128];
@@ -910,6 +915,7 @@ VOID runConnectionScreen(void )
 	}
 
 	DrawEnd();
+#endif
 }
 
 
@@ -976,6 +982,7 @@ static void addGames()
 
 void runGameFind(void )
 {
+#ifdef WIN32
 	UDWORD id;
 	static UDWORD lastupdate=0;
 	
@@ -1056,6 +1063,7 @@ FAIL:
 
 	DrawEnd();
 
+#endif
 }
 
 
@@ -3611,6 +3619,7 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 // ////////////////////////////////////////////////////////////////////////////
 void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
+#ifdef WIN32
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	BOOL Hilight = FALSE;
@@ -3705,6 +3714,7 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 				(SWORD)(x+(psWidget->width/2)),
 				(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 
+#endif
 }
 
 

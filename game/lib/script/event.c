@@ -10,10 +10,10 @@
 #define DEBUG_GROUP0
 // display tested triggers
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "Interp.h"
-#include "Script.h"
-#include "Event.h"
+#include "frame.h"
+#include "interp.h"
+#include "script.h"
+#include "event.h"
 
 // array to store release functions
 static VAL_CREATE_FUNC		*asCreateFuncs;

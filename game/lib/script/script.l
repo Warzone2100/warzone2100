@@ -22,13 +22,13 @@ static int fprintf(FILE* f,char* c,...)
 }
 #endif
 
-#include "Frame.h"
-#include "Interp.h"
-#include "Parse.h"
-#include "Script.h"
+#include "frame.h"
+#include "interp.h"
+#include "parse.h"
+#include "script.h"
 
 /* Get the Yacc definitions */
-#include "Script_y.h"
+#include "script_y.h"
 
 /* Turn off a couple of warnings that the lex generated code gives */
 #pragma warning ( disable : 4102 4305 )

@@ -21,7 +21,7 @@
 #include "multirecv.h"
 #include "multistat.h"
 #include "multiint.h"
-#include "FPath.h"
+#include "fpath.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 //  Force defs.
@@ -577,7 +577,7 @@ BOOL setMultiStats(DWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 {
 	STRING				fileName[255]="";
-	DWORD				size;
+	UDWORD				size;
 	UBYTE				*pFileData;
 	FILE				*pFileHandle;
 	PLAYERSTATS			blankstats = {0}; 
@@ -600,7 +600,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 		fclose(pFileHandle);
 	}
 
-	loadFile(fileName,&pFileData,&((UDWORD)size));
+	loadFile(fileName,&pFileData,&size);
 	codedst = ((SAVEDPLAYERSTATS*)pFileData);
 
 	//decode packet;

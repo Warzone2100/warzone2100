@@ -20,11 +20,14 @@ static DWORD	g_iCurPlayFrom = 0;
 static DWORD	g_iCurPlayTo   = 0;
 static DWORD	g_dwPlayFlags;
 
+#ifdef WIN32
 static WNDPROC	fnOldWinProc = NULL;
+#endif
 
 /***************************************************************************/
 /* cdAudio Subclass procedure */
 
+#ifdef WIN32
 LRESULT APIENTRY cdAudio_CheckTrackFinished( HWND hWnd, UINT uMsg, 
 											 WPARAM wParam, LPARAM lParam )
 { 
@@ -35,6 +38,7 @@ LRESULT APIENTRY cdAudio_CheckTrackFinished( HWND hWnd, UINT uMsg,
  
     return CallWindowProc( fnOldWinProc, hWnd, uMsg, wParam, lParam ); 
 } 
+#endif
 
 /***************************************************************************/
 

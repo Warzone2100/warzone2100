@@ -4,12 +4,12 @@
 /* Texture Handling Functions for a 3dfx card */
 /* Alex McLean, Pumpkin Studios, 1997 */
 
-#include "Frame.h"
-#include "stdlib.h"
-#include "dGlide.h"
-#include "stdio.h"
-#include "3dfxText.h"
-#include "pieState.h"
+#include "frame.h"
+#include <stdlib.h>
+#include "dglide.h"
+#include <stdio.h>
+#include "3dfxtext.h"
+#include "piestate.h"
 #include "bug.h"
 #include "tex.h"
 

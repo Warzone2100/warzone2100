@@ -7,7 +7,7 @@
 #ifndef _objmem_h
 #define _objmem_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define     NOT_CURRENT_LIST        1

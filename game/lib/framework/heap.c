@@ -12,13 +12,13 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "Types.h"
-#include "Debug.h"
-#include "Mem.h"
-#include "Heap.h"
-#include "Treap.h"
-#include "TreapInt.h"
-#include "Block.h"
+#include "types.h"
+#include "debug.h"
+#include "mem.h"
+#include "heap.h"
+#include "treap.h"
+#include "treapint.h"
+#include "block.h"
 
 // Control whether a heap usage report is printed out when a heap is destroyed
 #define HEAP_USAGE_REPORT	FALSE

@@ -8,17 +8,17 @@
 /* extra structures required for demo */
 //#define DEMO
 
-#include "Frame.h"
-#include "Mechanics.h"
-#include "Stats.h"
-#include "Structure.h"
+#include "frame.h"
+#include "mechanics.h"
+#include "stats.h"
+#include "structure.h"
 #include "game.h"
 #include "power.h"
 #include "projectile.h"
-#include "Move.h"
+#include "move.h"
 #include "message.h"
 #include "deliverance.h"
-#include "AStar.h"
+#include "astar.h"
 #include "visibility.h"
 
 BOOL gameStatStart(void);

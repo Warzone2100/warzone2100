@@ -1,21 +1,21 @@
 #ifdef INC_GLIDE
 #include "ivi.h"
-#include "piePalette.h"
-#include "pieState.h"
-#include "pieTexture.h"
-#include "Frame.h"
-#include "BitImage.h"
+#include "piepalette.h"
+#include "piestate.h"
+#include "pietexture.h"
+#include "frame.h"
+#include "bitimage.h"
 #include "3dfxfunc.h"
 #include "3dfxmode.h"
-#include "3dfxText.h"
-#include "stdio.h"
-#include "string.h"
-#include "assert.h"
-#include "dGlide.h"
+#include "3dfxtext.h"
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#include "dglide.h"
 #include "imd.h"
 #include "rendmode.h"
-#include "PieClip.h"
-#include "pieMatrix.h"
+#include "pieclip.h"
+#include "piematrix.h"
 
 #define SNAP_BIAS ((float)0.0)
 //#define SNAP_BIAS ((float)(3<<18))

@@ -34,8 +34,8 @@ extern	BOOL		cdspan_initialCDcheck();
 extern	BOOL		cdspan_DontTest( void );
 extern	STRING *	cdspan_GetDiskLabel( CD_INDEX cdIndex );
 
-extern	void		cdspan_PlayInGameAudio( char szFileName[], SDWORD iVol );
-extern	BOOL		cdspan_GetCDLetter( char szDriveName[], CD_INDEX index );
+extern	void		cdspan_PlayInGameAudio( STRING szFileName[], SDWORD iVol );
+extern	BOOL		cdspan_GetCDLetter( STRING szDriveName[], CD_INDEX index );
 extern	BOOL		cdspan_CheckCDAvailable( void );
 
 #endif

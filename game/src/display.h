@@ -11,7 +11,7 @@
 #define _display_h
 
 #include "base.h"
-#include "Structure.h"
+#include "structure.h"
 
 #ifdef PSX
 void tboxInitialise(void);
@@ -69,7 +69,7 @@ extern	void	setRadarJump(BOOL	val);
 extern void displayWorld(void);
 
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
-#ifdef WIN32
+#ifndef PSX
 #define ILLUMINATION_NONE (13)
 #else
 #define ILLUMINATION_NONE (128)
@@ -195,7 +195,7 @@ BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
 extern BOOL CheckScrollLimits(void);
 //extern BOOL	widgetsOn;
 extern BOOL	rotActive;
-extern float	gamma;
+extern float	gammaValue;
 //extern BOOL	forceWidgetsOn;
 
 BASE_OBJECT	*mouseTarget( void );

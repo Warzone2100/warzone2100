@@ -5,10 +5,10 @@
  */
 
 
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Slider.h"
-#include "Vid.h"
+#include "widget.h"
+#include "widgint.h"
+#include "slider.h"
+#include "vid.h"
 
 /* The widget heaps */
 OBJ_HEAP	*psSldHeap;

@@ -6,12 +6,12 @@
 #ifndef _script_h
 #define _script_h
 
-#include "Interp.h"
-#include "Stack.h"
-#include "CodePrint.h"
-#include "Parse.h"
-#include "Event.h"
-#include "EvntSave.h"
+#include "interp.h"
+#include "stack.h"
+#include "codeprint.h"
+#include "parse.h"
+#include "event.h"
+#include "evntsave.h"
 
 
 /* Whether to include debug info when compiling */

@@ -10,10 +10,13 @@
 // ////////////////////////////////////////////////////////////////////////
 // Include this file in your game to add multiplayer facilities.
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #include <dplay.h>
 #include <dplobby.h>
+#include <dsound.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #define IDIRECTPLAY2_OR_GREATER
 
@@ -24,7 +27,6 @@
 #define ConnectionSize		255					// max size of a connection description.
 #define MaxProtocols		12					// max number of returnable protocols.
 #define MaxGames			12					// max number of concurrently playable games to allow.
-typedef	unsigned	int		UDWORD;				// for similarity to warzone
 //#define USE_DIRECTPLAY_PROTOCOL				// use DX6 protocol.
 
 //typedef struct {								//Available game storage... JUST FOR REFERENCE!
@@ -179,7 +181,7 @@ extern BOOL		NETstartAudioCapture	(VOID);
 extern BOOL		NETshutdownAudioCapture	(VOID);
 extern BOOL		NETinitAudioCapture		(VOID);
 
-extern BOOL		NETinitPlaybackBuffer	(VOID *pDs);					// playback
+extern BOOL		NETinitPlaybackBuffer	(LPDIRECTSOUND pDs);					// playback
 extern VOID		NETplayIncomingAudio	(NETMSG *pMsg);
 extern BOOL		NETqueueIncomingAudio	(LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream);
 extern BOOL		NETshutdownAudioPlayback(VOID);
@@ -190,7 +192,7 @@ extern NETMSG*  NETmanglePacket			(NETMSG *msg);
 extern VOID		NETunmanglePacket		(NETMSG *msg);
 extern BOOL		NETmangleData			(long *input, long *result, UDWORD dataSize);
 extern BOOL		NETunmangleData			(long *input, long *result, UDWORD dataSize);
-extern UDWORD	NEThashFile				(char *pFileName);
+extern UDWORD	NEThashFile				(STRING *pFileName);
 extern UCHAR	NEThashVal				(UDWORD value);
 extern UDWORD	NEThashBuffer			(unsigned char *pData, UDWORD size);
 

@@ -7,10 +7,10 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "MapGrid.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "mapgrid.h"
 
 
 // The number of world units per grid
@@ -223,7 +223,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 {
     gridCalcCoverage(psObj, (SDWORD)psObj->x, (SDWORD)psObj->y, GRID_REMOVEOBJECT);
 
-#if defined(DEBUG) && defined(WIN32)
+#if defined(DEBUG) && !defined(PSX)
 	{
 		GRID_ARRAY		*psCurr;
 		SDWORD			i,x,y;

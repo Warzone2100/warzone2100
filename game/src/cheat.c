@@ -1,10 +1,10 @@
 /* Handles cheat codes for Warzone */
 /* Alex M 19th - Jan. 1999 */
 
-#include "Frame.h"
-#include "Cheat.h"
-#include "Console.h"
-#include "Keybind.h"
+#include "frame.h"
+#include "cheat.h"
+#include "console.h"
+#include "keybind.h"
 
 static	BOOL	bAllowCheatCodes = TRUE;
 

@@ -9,7 +9,7 @@
 #include "frame.h"
 #include "netplay.h"
 #include "netsupp.h"
-#include "time.h"			//for stats
+#include <time.h>			//for stats
 
 // ////////////////////////////////////////////////////////////////////////
 // Variables 

@@ -8,22 +8,22 @@
 
 /* Includes direct access to matrix code */
 #include "piedef.h"
-#include "pieState.h"
+#include "piestate.h"
 #include "rendmode.h"
 #include "geo.h"//matrix code
 /* Includes from PUMPKIN stuff */
-#include "Frame.h"
-#include "ObjectDef.h"
+#include "frame.h"
+#include "objectdef.h"
 #include "map.h"
-#include "Display3D.h"
-#include "MiscImd.h"
-#include "Effects.h"
-#include "Component.h"
-#include "bucket3D.h"
+#include "display3d.h"
+#include "miscimd.h"
+#include "effects.h"
+#include "component.h"
+#include "bucket3d.h"
 #include "message.h"
-#include "Console.h"
-#ifdef WIN32
-#include "Atmos.h"
+#include "console.h"
+#ifndef PSX
+#include "atmos.h"
 #endif
 
 
@@ -162,7 +162,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 			z = bucketCalculateZ(objectType, pObject);
 		}
 
-#ifdef WIN32
+#ifndef PSX
 //		else if(objectType == RENDER_PARTICLE)
 //		{
 //			z = bucketCalculateZ(objectType, pObject);
@@ -257,7 +257,7 @@ extern BOOL bucketRenderCurrentList(void)
 		{
 			switch(thisTag->objectType)
 			{
-#ifdef WIN32
+#ifndef PSX
 				case RENDER_PARTICLE:
 	  				renderParticle((ATPART*)thisTag->pObject);
 				break;
@@ -286,7 +286,7 @@ extern BOOL bucketRenderCurrentList(void)
 #endif
 				break;
 				case RENDER_TILE:
-#ifdef WIN32
+#ifndef PSX
 					if (pie_Hardware())
 					{
 					
@@ -362,7 +362,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 	switch(objectType)
 	{
-#ifdef WIN32
+#ifndef PSX
 		case RENDER_PARTICLE:
 	   		px = player.p.x & (TILE_UNITS-1);
 	   		pz = player.p.z & (TILE_UNITS-1);

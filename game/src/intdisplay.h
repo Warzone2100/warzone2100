@@ -1,15 +1,15 @@
 #ifndef _intdisplay_h
 #define _intdisplay_h
 
-#include "Widget.h"
-#include "WidgInt.h"
+#include "widget.h"
+#include "widgint.h"
 #include "bar.h"
 #include "form.h"
 #include "label.h"
 #include "button.h"
 #include "editbox.h"
 #include "slider.h"
-#include "IntImage.h"
+#include "intimage.h"
 #include "droid.h"
 
 #define NUM_OBJECTSURFACES		(10)
@@ -19,7 +19,7 @@
 #define NUM_OBJECTBUFFERS		(NUM_OBJECTSURFACES*4)
 #define NUM_STATBUFFERS			(NUM_STATSURFACES*4)
 #define NUM_TOPICBUFFERS		(NUM_TOPICSURFACES*4)
-#ifdef WIN32
+#ifndef PSX
 #define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*8)
 #else
 #define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*4)

@@ -6,7 +6,7 @@
  *
  */
 
-#ifdef WIN32
+#ifndef PSX
 #include <stdio.h>
 #else
 /* A few definitions so the lex generated code will compile on the PSX.
@@ -26,12 +26,12 @@ static int fprintf(FILE* f,char* c,...)
 }
 #endif
 
-#include "Frame.h"
-#include "Script.h"
-#include "ScriptVals.h"
+#include "frame.h"
+#include "script.h"
+#include "scriptvals.h"
 
 /* Get the Yacc definitions */
-#include "ScriptVals_y.h"
+#include "scriptvals_y.h"
 
 /* Turn off a couple of warnings that the lex generated code gives */
 #pragma warning ( disable : 4102 4305 )

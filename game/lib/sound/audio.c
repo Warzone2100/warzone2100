@@ -14,7 +14,7 @@
 
 #define	NO_SAMPLE				-2
 
-#ifdef WIN32
+#ifndef PSX
 #define	AUDIO_SAMPLE_HEAP_INIT	1000
 #else
 #define	AUDIO_SAMPLE_HEAP_INIT	100			// 100 allocates approx 8.4k   ... 1000 allocated 84k
@@ -63,7 +63,9 @@ static AUDIO_SAMPLE	g_sPreviousSample = { NO_SAMPLE,
 
 static SDWORD	g_i3DVolume = AUDIO_VOL_MAX;
 
+#ifdef WIN32
 static CRITICAL_SECTION		critSecAudio;
+#endif
 
 /***************************************************************************/
 
@@ -100,7 +102,9 @@ audio_Init( HWND hWnd, BOOL bEnabled, AUDIO_CALLBACK pStopTrackCallback )
 
 		sound_SetStoppedCallback( pStopTrackCallback );
 		
+#ifdef WIN32
 		InitializeCriticalSection( &critSecAudio );
+#endif
 
 		return TRUE;
 	}
@@ -124,14 +128,16 @@ audio_Shutdown()
 		return TRUE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	sound_StopAll();
 #endif
 
 	bOK = sound_Shutdown();
 
 	/* empty sample heap */
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 
 	/* empty sample list */
 	psSample = g_psSampleList;
@@ -151,7 +157,9 @@ audio_Shutdown()
 		psSample = psSampleTemp;
 	}
 
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 
 	/* free sample heap */
 	HEAP_DESTROY( g_psSampleHeap );
@@ -159,7 +167,9 @@ audio_Shutdown()
 	g_psSampleList  = NULL;
 	g_psSampleQueue = NULL;
 
+#ifdef WIN32
 	DeleteCriticalSection( &critSecAudio );
+#endif
 
 	return bOK;
 }
@@ -201,7 +211,9 @@ audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 static void
 audio_AddSampleToHead( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 {
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 	psSample->psNext = (*ppsSampleList);
 	psSample->psPrev = NULL;
 	if ( (*ppsSampleList) != NULL )
@@ -209,7 +221,9 @@ audio_AddSampleToHead( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 		(*ppsSampleList)->psPrev = psSample;
 	}
 	(*ppsSampleList) = psSample;
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 }
 
 /***************************************************************************/
@@ -219,7 +233,9 @@ audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 {
 	AUDIO_SAMPLE	*psSampleTail = NULL;
 
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 
 	if ( (*ppsSampleList) == NULL )
 	{
@@ -237,7 +253,9 @@ audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 		psSample->psNext = NULL;
 	}
 
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 }
 
 /***************************************************************************/
@@ -256,7 +274,9 @@ audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 		return;
 	}
 
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 	if ( psSample == (*ppsSampleList) )
 	{
 		/* first sample in list */
@@ -278,7 +298,9 @@ audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 	psSample->psPrev = NULL;
 	psSample->psNext = NULL;
 
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 }
 
 /***************************************************************************/
@@ -649,7 +671,7 @@ BOOL
 audio_SetTrackVals( char szFileName[], BOOL bLoop, int *piID, int iVol,
 						int iPriority, int iAudibleRadius, int VagID )
 {
-#ifdef WIN32		// F.F.S.
+#ifndef PSX		// F.F.S.
 	TRACK	*psTrack;
 
 	/* if audio not enabled return TRUE to carry on game without audio */
@@ -703,7 +725,7 @@ BOOL
 audio_SetTrackValsHashName( UDWORD hash, BOOL bLoop, int iTrack, int iVol,
 							int iPriority, int iAudibleRadius, int VagID )
 {
-#ifdef WIN32		// F.F.S.
+#ifndef PSX		// F.F.S.
 	TRACK	*psTrack;
 
 	/* if audio not enabled return TRUE to carry on game without audio */
@@ -932,7 +954,7 @@ BOOL
 audio_PlayStream( char szFileName[], SDWORD iVol,
 					AUDIO_CALLBACK pUserCallback )
 {
-#ifdef WIN32
+#ifndef PSX
 	AUDIO_SAMPLE	*psSample;
 
 	/* if audio not enabled return TRUE to carry on game without audio */
@@ -1112,7 +1134,7 @@ audio_PauseAll( void )
 
 	g_bAudioPaused = TRUE;
 
-#ifdef WIN32
+#ifndef PSX
 	sound_PauseAll();
 #endif
 }
@@ -1130,7 +1152,7 @@ audio_ResumeAll( void )
 
 	g_bAudioPaused = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
 	sound_ResumeAll();
 #endif
 }
@@ -1148,7 +1170,7 @@ audio_StopAll( void )
 		return;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	DBPRINTF( ("audio_StopAll called\n") );
 
 	g_bStopAll = TRUE;
@@ -1189,7 +1211,6 @@ audio_CheckAllUnloaded()
 
 /***************************************************************************/
 
-#ifdef WIN32
 LPDIRECTSOUND
 audio_GetDirectSoundObj( void )
 {
@@ -1201,7 +1222,6 @@ audio_GetDirectSoundObj( void )
 
 	return sound_GetDirectSoundObj();
 }
-#endif
 
 /***************************************************************************/
 

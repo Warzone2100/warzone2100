@@ -323,7 +323,7 @@ extern	int	strres_mapch	YY_ARGS((int delim, int escape));
  * Lex file for parsing string resource files
  */
 
-#ifdef WIN32
+#ifndef PSX
 #include <stdio.h>
 #else
 /* A few definitions so the lex generated code will compile on the PSX.
@@ -349,11 +349,11 @@ static int fprintf(FILE* f,char* c,...)
 #include "mem.h"
 #include "heap.h"
 #include "treap.h"
-#include "StrRes.h"
-#include "StrResLY.h"
+#include "strres.h"
+#include "strresly.h"
 
 /* Get the Yacc definitions */
-#include "StrRes_y.h"
+#include "strres_y.h"
 
 /* Turn off a couple of warnings that the lex generated code gives */
 #pragma warning ( disable : 4102 4305 )

@@ -3,31 +3,31 @@
  *
  */
 #include <direct.h>
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 #include "script.h"
-#include "Init.h"
-#include "Loop.h"
-#include "Objects.h"
-#include "Display.h"
-#include "pieState.h"
-#include "GTime.h"
-#include "WinMain.h"
-#include "Wrappers.h"
-#include "scriptTabs.h"
+#include "init.h"
+#include "loop.h"
+#include "objects.h"
+#include "display.h"
+#include "piestate.h"
+#include "gtime.h"
+#include "winmain.h"
+#include "wrappers.h"
+#include "scripttabs.h"
 #include "deliverance.h"
 #include "frontend.h"
 #include "seqdisp.h"
 #include "audio.h"
-#include "Console.h"
-#include "RendMode.h"
-#include "pieMode.h"
-#include "dGlide.h"
-#include "Levels.h"
+#include "console.h"
+#include "rendmode.h"
+#include "piemode.h"
+#include "dglide.h"
+#include "levels.h"
 #include "research.h"
-#include "warzoneConfig.h"
-#include "clParse.h"
-#include "cdSpan.h"
+#include "warzoneconfig.h"
+#include "clparse.h"
+#include "cdspan.h"
 #include "config.h"
 #include "multiplay.h"
 #include "netplay.h"
@@ -38,7 +38,7 @@
 #include "lighting.h"
 #include "mixer.h"
 #include "wdg.h"
-#include "MultiWDG.h"
+#include "multiwdg.h"
 
 
 // Warzone 2100 . Pumpkin Studios
@@ -544,7 +544,7 @@ init://jump here from the end if re_initialising
 								quit = TRUE;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 								if(NetPlay.bLobbyLaunched)
 								{
 //									changeTitleMode(QUIT);

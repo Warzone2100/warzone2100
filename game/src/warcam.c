@@ -6,41 +6,41 @@
 	get it working the way it used to, should anything get broken. 
 	I really hope that no further changes are needed here...:-(
 	Alex M. */
-#include "stdio.h"
-#include "Frame.h"
+#include <stdio.h>
+#include "frame.h"
 #include "geo.h"
 #include "piedef.h" //ivis matrix code
-#include "Objects.h"
-#include "WarCAM.h"
-#include "Display.h"
-#include "Display3d.h"
-#include "HCI.h"
-#include "Console.h"
-#include "GTime.h"
-#include "Effects.h"
-#include "Map.h"
-#include "Geometry.h"
+#include "objects.h"
+#include "warcam.h"
+#include "display.h"
+#include "display3d.h"
+#include "hci.h"
+#include "console.h"
+#include "gtime.h"
+#include "effects.h"
+#include "map.h"
+#include "geometry.h"
 #include "oprint.h"
-#include "MiscImd.h"
-#include "Loop.h"
+#include "miscimd.h"
+#include "loop.h"
 #include "drive.h"
-#include "Move.h"
-#include "Order.h"
-#include "Action.h"
-#include "IntDisplay.h"
-#include "E3Demo.h"
-#include "RayCast.h"
-#include "Display3d.h"
+#include "move.h"
+#include "order.h"
+#include "action.h"
+#include "intdisplay.h"
+#include "e3demo.h"
+#include "raycast.h"
+#include "display3d.h"
 #ifndef PAUL
-#include "Selection.h"
+#include "selection.h"
 #endif
 #ifdef PSX
-#include "drawIMD_psx.h"
-#include "VPad.h"
+#include "drawimd_psx.h"
+#include "vpad.h"
 #include "ctrlpsx.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #define MODFRACT(value,mod) \
 	while((value) < 0)	{ (value) += (mod); } \
 	while((value) > (mod)) { (value) -= (mod); }
@@ -76,7 +76,7 @@ SDWORD	presAvAngle = 0;;
 /*	These are the DEFAULT offsets that make us track _behind_ a droid and allow
 	it to be pretty far _down_ the screen, so we can see more 
 */
-#ifdef WIN32
+#ifndef PSX
 #define	CAM_DEFAULT_X_OFFSET	-400
 #define CAM_DEFAULT_Y_OFFSET	-400	
 #define	MINCAMROTX	-20
@@ -254,7 +254,7 @@ BOOL Status = TRUE;
 					trackingCamera.status = CAM_RESET;
 				}
 			}
-#ifdef WIN32
+#ifndef PSX
 		processLeaderSelection();
 #endif
 		break;
@@ -435,7 +435,7 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 //-----------------------------------------------------------------------------------
 
 
-#ifdef WIN32
+#ifndef PSX
 
 
 //-----------------------------------------------------------------------------------
@@ -1418,7 +1418,7 @@ SDWORD	getPresAngle( void )
 }
 //-----------------------------------------------------------------------------------
 
-#ifdef WIN32
+#ifndef PSX
 //-----------------------------------------------------------------------------------
 UDWORD	getNumDroidsSelected( void )
 {
@@ -2320,7 +2320,7 @@ BOOL	retVal;
 /* Displays a spinning MTV style logo in the top right of the screen */
 void	dispWarCamLogo( void )
 {
-#ifdef WIN32
+#ifndef PSX
 //iVector		dv;
 //
 //	if(gamePaused())

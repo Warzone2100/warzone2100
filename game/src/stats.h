@@ -7,7 +7,7 @@
 #ifndef _stats_h
 #define _stats_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 /**************************************************************************************
  *
  * Function prototypes and data storage for the stats

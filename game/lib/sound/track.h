@@ -74,7 +74,7 @@ typedef struct TRACK
 	UDWORD		iNumPlaying;
 	BOOL		bMemBuffer;				/* memory buffer flag       */
 	BOOL		bCompressed;			/* compression data flag    */
-#ifdef WIN32
+#ifndef PSX
 	void *		pMem;					/* pointer to audio data    */
 	STRING		*pName;					// resource name of the track
 	UDWORD		resID;					// hashed name of the WAV

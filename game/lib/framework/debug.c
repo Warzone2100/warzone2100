@@ -12,12 +12,13 @@
 #include <libsn.h>
 #endif
 
-
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
-#include <Windows.h>
+#include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #include "frame.h"
 #include "frameint.h"
@@ -33,7 +34,7 @@ char DBGstring[256];
 static FILE *pDebugFile = NULL;
 static BOOL StringOut = TRUE;
 
-
+#ifdef WIN32
 // message and assert callbacks
 static DB_MBCALLBACK	mbCallback = NULL;
 static DB_MBCALLBACK	errorCallback = NULL;
@@ -57,7 +58,7 @@ void dbg_SetAssertCallback(DB_MBCALLBACK callback)
 {
 	assertCallback = callback;
 }
-
+#endif // WIN32
 
 /*
  * dbg_printf
@@ -83,7 +84,11 @@ void dbg_printf(SBYTE *pFormat, ...)
 	/* Output it */
 	if (StringOut)
 	{
+#ifdef WIN32
 		OutputDebugString(aBuffer);
+#else
+		fprintf(stderr, "%s", aBuffer); fflush(stderr);
+#endif
 	}
 
 	/* If there is a debugging file open, send text to that too */
@@ -166,11 +171,13 @@ void dbg_MessageBox(SBYTE *pFormat, ...)
 	/* Print out the string */
 	(void)vsprintf(aBuffer, pFormat, pArgs);
 
+	/* Output it */
+	dbg_printf("MB: %s\n", aBuffer);
+
+#ifdef WIN32
 	/* Ensure the box can be seen */
 	screenFlipToGDI();
 
-	/* Output it */
-	dbg_printf("MB: %s\n", aBuffer);
 	retVal = DBR_USE_WINDOWS_MB;
 	if (mbCallback)
 	{
@@ -180,6 +187,7 @@ void dbg_MessageBox(SBYTE *pFormat, ...)
 	{
 		(void)MessageBox(frameGetWinHandle(), aBuffer, "Debugging Message", MB_OK);
 	}
+#endif
 }
 
 /*
@@ -193,6 +201,7 @@ static SBYTE aErrorFile[DEBUG_STR_MAX]=ERROR_DEFAULT_FILE;
 static UDWORD ErrorLine;
 void dbg_ErrorPosition(SBYTE *pFile, UDWORD Line)
 {
+#ifdef WIN32
 	if (pFile == NULL)
 	{
 		/* Ensure the box can be seen */
@@ -216,6 +225,7 @@ void dbg_ErrorPosition(SBYTE *pFile, UDWORD Line)
 		strcpy(aErrorFile, pFile);
 		ErrorLine = Line;
 	}
+#endif // WIN32
 }
 
 /*
@@ -241,11 +251,13 @@ void dbg_ErrorBox(SBYTE *pFormat, ...)
 	/* Print out the string */
 	(void)vsprintf(aBuffer + strlen(aBuffer), pFormat, pArgs);
 
+	/* Output it */
+	dbg_printf("ErrorBox: %s\n", aBuffer);
+
+#ifdef WIN32
 	/* Ensure the box can be seen */
 	screenFlipToGDI();
 
-	/* Output it */
-	dbg_printf("ErrorBox: %s\n", aBuffer);
 	retVal = DBR_USE_WINDOWS_MB;
 	if (errorCallback)
 	{
@@ -255,6 +267,7 @@ void dbg_ErrorBox(SBYTE *pFormat, ...)
 	{
 		(void)MessageBox(frameGetWinHandle(), aBuffer, "Error", MB_OK | MB_ICONWARNING);
 	}
+#endif
 }
 
 /*
@@ -375,7 +388,7 @@ void dbg_Assert(BOOL Expression, SBYTE *pFormat, ...)
 	if (!Expression)
 	{
 		DBPRINTF(("\n\nAssertion failed , File: %s\nLine: %d\n\n", pAssertFile, AssertLine));
-		PSYQpause();
+		exit(1);
 	}
 }
 #endif

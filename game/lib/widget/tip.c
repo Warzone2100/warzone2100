@@ -5,17 +5,17 @@
  *
  */
 
-#include "Frame.h"
-#include "FrameInt.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Tip.h"
-#include "Vid.h"
+#include "frame.h"
+#include "frameint.h"
+#include "widget.h"
+#include "widgint.h"
+#include "tip.h"
+#include "vid.h"
 
 #ifdef PSX
-#include "PiePalette.h"
+#include "piepalette.h"
 #include "ivis02.h"
-#include "Primatives.h"
+#include "primatives.h"
 #endif
 
 
@@ -60,7 +60,7 @@ void tipInitialise(void)
 // Set the global toop tip text colour.
 void widgSetTipColour(W_SCREEN *psScreen, UBYTE red, UBYTE green, UBYTE blue)
 {
-#ifdef WIN32 
+#ifndef PSX 
 	TipColour = -1;					// use bitmap colourings.
 #else
 //	TipColour = screenGetCacheColour(red,green,blue);
@@ -119,7 +119,7 @@ void tipStop(WIDGET *psSource)
 	}
 }
 
-#ifdef WIN32
+#ifndef PSX
 #define RIGHTBORDER		(0)
 #define BOTTOMBORDER	(0)
 #else

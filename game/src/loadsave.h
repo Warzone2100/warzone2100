@@ -57,7 +57,7 @@ BOOL saveInMissionRes(void);
 // return whether the save screen was displayed in the middle of a mission
 BOOL saveMidMission(void);
 
-#ifdef WIN32
+#ifndef PSX
 extern void deleteSaveGame(char* saveGameName);
 #endif
-#endif/_loadsave_h
+#endif //_loadsave_h

@@ -7,26 +7,26 @@
 
 /* Droid attack printf's */
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "FindPath.h"
-#include "Visibility.h"
-#include "GTime.h"
-#include "Combat.h"
-#include "HCI.h"
-#include "Player.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "findpath.h"
+#include "visibility.h"
+#include "gtime.h"
+#include "combat.h"
+#include "hci.h"
+#include "player.h"
 #include "power.h"
-#include "Geometry.h"
-#include "Order.h"
-#include "Action.h"
-#include "MapGrid.h"
-#include "Drive.h"
-#include "Projectile.h"
-#include "CmdDroid.h"
+#include "geometry.h"
+#include "order.h"
+#include "action.h"
+#include "mapgrid.h"
+#include "drive.h"
+#include "projectile.h"
+#include "cmddroid.h"
 #include "group.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
@@ -664,7 +664,7 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = FALSE;
 	}
-#ifdef WIN32		// ffs je
+#ifndef PSX		// ffs je
 	// don't look for a target if there are any queued orders
 	if (psDroid->listSize > 0)
 	{
@@ -689,7 +689,7 @@ void aiUpdateDroid(DROID *psDroid)
 		lookForTarget = FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player)) 
 	{
 		lookForTarget = FALSE;
@@ -716,7 +716,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	// only computer senosr droids in the single player game aquire targets
 	if ((psDroid->droidType == DROID_SENSOR && psDroid->player == selectedPlayer)
-#ifdef WIN32
+#ifndef PSX
 		&& !bMultiPlayer
 #endif
 		)

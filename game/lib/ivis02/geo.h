@@ -1,6 +1,6 @@
 #ifndef _geo_
 #define _geo_
 
-#include "pieMatrix.h"
+#include "piematrix.h"
 
 #endif

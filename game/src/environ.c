@@ -2,13 +2,13 @@
 Environ.c - handles the enviroment stuff that's stored in tables
 used for the mist and water effects. These are preprocessed.
 */
-#ifdef WIN32
+#ifndef PSX
 
 // -------------------------------------------------------------------------------
-#include "Frame.h"
-#include "Map.h"
-#include "Display3D.h"
-#include "GTime.h"
+#include "frame.h"
+#include "map.h"
+#include "display3d.h"
+#include "gtime.h"
 
 // -------------------------------------------------------------------------------
 #define RANDOMLY_ONE_OR_MINUS_ONE	(rand()%2 ? -1 : 1)
@@ -56,7 +56,7 @@ void	environUpdate			( void );
 UDWORD	environGetValue			( UDWORD x, UDWORD y );
 UDWORD	environGetData			( UDWORD x, UDWORD y );
 extern UDWORD map_MistValue		( UDWORD x, UDWORD y );
-FUNCINLINE UDWORD map_TileMistValue( UDWORD x, UDWORD y );
+UDWORD map_TileMistValue( UDWORD x, UDWORD y );
 
 // -------------------------------------------------------------------------------
 BOOL	waterOnMap(void)
@@ -344,11 +344,11 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 
 // -------------------------------------------------------------------------------
 /* Return height of tile at x,y */
-FUNCINLINE UDWORD map_TileMistValue(UDWORD x, UDWORD y)
+UDWORD map_TileMistValue(UDWORD x, UDWORD y)
 {
     x = x >= (mapWidth) ? (mapWidth-1) : x;
 	y = y >= (mapHeight) ? (mapHeight-1) : y;
-#ifdef WIN32
+#ifndef PSX
 	ASSERT((x < mapWidth,
 		"mapTile: x coordinate bigger than map width"));
 	ASSERT((y < mapHeight,

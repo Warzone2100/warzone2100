@@ -7,16 +7,16 @@
 
 #include <time.h>
 
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "GTime.h"
-#include "Objects.h"
-#include "HCI.h"
-#include "Message.h"
-#include "IntelMap.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "gtime.h"
+#include "objects.h"
+#include "hci.h"
+#include "message.h"
+#include "intelmap.h"
 #include "map.h"
 #include "player.h"
 #include "structure.h"
@@ -27,19 +27,19 @@
 #include "audio_id.h"
 #include "power.h"
 #include "console.h"
-#include "ScriptFuncs.h"
-#include "Geometry.h"
-#include "Visibility.h"
-#include "Gateway.h"
+#include "scriptfuncs.h"
+#include "geometry.h"
+#include "visibility.h"
+#include "gateway.h"
 #include "drive.h"
 #include "display.h"
 #include "component.h"
-#include "ScriptExtern.h"
-#include "seqDisp.h"
+#include "scriptextern.h"
+#include "seqdisp.h"
 
 #include "fpath.h"
-#ifdef WIN32
-#include "warzoneConfig.h"
+#ifndef PSX
+#include "warzoneconfig.h"
 #include "lighting.h"
 #include "atmos.h"
 #include "cdaudio.h"
@@ -50,20 +50,20 @@
 #include "multilimit.h"
 #include "advvis.h"
 #endif
-#include "pieState.h"
+#include "piestate.h"
 #include "wrappers.h"
-#include "Order.h"
-#include "orderDef.h"
-#include "Mission.h"
-#include "Loop.h"
-#include "FrontEnd.h"
-#include "Group.h"
-#include "Transporter.h"
-#include "Radar.h"
+#include "order.h"
+#include "orderdef.h"
+#include "mission.h"
+#include "loop.h"
+#include "frontend.h"
+#include "group.h"
+#include "transporter.h"
+#include "radar.h"
 #include "levels.h"
 #include "mission.h"
 #include "projectile.h"
-#include "Cluster.h"
+#include "cluster.h"
 
 #ifdef PSX
 #include "dcache.h"
@@ -1087,7 +1087,7 @@ BOOL scrEnableStructure(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // -----------------------------------------------------------------------------------------
 // Check if a structure can be built.
 // currently PC skirmish only.
@@ -1225,7 +1225,7 @@ BOOL scrAddReticuleButton(void)
 	return(TRUE);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	//set the appropriate flag to 'draw' the button
 	switch (val)
 	{
@@ -1269,11 +1269,11 @@ BOOL scrAddReticuleButton(void)
 BOOL scrRemoveReticuleButton(void)
 {
 	SDWORD	val;
-#ifdef WIN32
+#ifndef PSX
 	BOOL	bReset;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
 		return FALSE;
@@ -1285,7 +1285,7 @@ BOOL scrRemoveReticuleButton(void)
 		return FALSE;
 	}
 #endif
-#ifdef WIN32
+#ifndef PSX
 	if(bInTutorial)
 	{
 		if(bReset)	// not always desirable
@@ -1512,7 +1512,7 @@ BOOL scrBuildDroid(void)
 	//check building the right sort of droid for the factory
 	if (!validTemplateForFactory(psTemplate, psFactory))
 	{
-#ifdef WIN32
+#ifndef PSX
 		ASSERT((FALSE, "scrBuildUnit: invalid template - %s for factory - %s",
 			&psTemplate->aName, psFactory->pStructureType->pName));
 #else
@@ -2065,7 +2065,7 @@ BOOL scrStructureBeingBuilt(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // -----------------------------------------------------------------------------------------
 // multiplayer skirmish only for now.
 // returns TRUE if a specific struct is complete. I know it's like the previous func, 
@@ -2785,14 +2785,14 @@ BOOL scrSetStructureLimits(void)
 
 	psStructLimits = asStructLimits[player];
 	psStructLimits[structInc].limit = (UBYTE)limit;
-#ifdef WIN32
+#ifndef PSX
 	psStructLimits[structInc].globalLimit = (UBYTE)limit;
 #endif
 	return TRUE;
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // -----------------------------------------------------------------------------------------
 // multiplayer limit handler.
 BOOL scrApplyLimitSet()
@@ -2916,7 +2916,7 @@ BOOL scrAddConsoleText(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // -----------------------------------------------------------------------------------------
 /* add a text message to the top of the screen for the selected player - without clearing whats there*/
 BOOL scrTagConsoleText(void)
@@ -2948,7 +2948,7 @@ BOOL scrTagConsoleText(void)
 #endif
 
 // -----------------------------------------------------------------------------------------
-#ifdef WIN32
+#ifndef PSX
 BOOL	scrClearConsole(void)
 {
 	flushConsoleMessages();
@@ -3108,7 +3108,7 @@ BOOL scrGameOver(void)
 
     /*this function will only be called with gameOver = TRUE when at the end of 
     the game so we'll just hard-code what happens!*/
-#ifdef WIN32
+#ifndef PSX
     //don't want this in multiplayer...
     if (!bMultiPlayer)
 #endif
@@ -3119,7 +3119,7 @@ BOOL scrGameOver(void)
 		    setScriptWinLoseVideo(PLAY_WIN);
 
     	    seq_ClearSeqList();
-#ifdef WIN32
+#ifndef PSX
 	        seq_AddSeqToList("outro.rpl",NULL,"outro.txa", FALSE,0);
 	        seq_StartNextFullScreenVideo();
 #else
@@ -3240,7 +3240,7 @@ BOOL scrPlayBackgroundAudio(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	cdspan_PlayInGameAudio(pText, iVol);
 #endif
 
@@ -3259,9 +3259,9 @@ BOOL scrPlayCDAudio(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_PlayTrack( iTrack );	
 #endif
 //#ifdef PSX
@@ -3275,8 +3275,8 @@ BOOL scrPlayCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrStopCDAudio(void)
 {
-#ifdef WIN32
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#ifndef PSX
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Stop();
 #endif
 #endif	// Playstation CD audio no hardcoded.
@@ -3286,7 +3286,7 @@ BOOL scrStopCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrPauseCDAudio(void)
 {
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Pause();
 #endif
 	return TRUE;
@@ -3295,7 +3295,7 @@ BOOL scrPauseCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrResumeCDAudio(void)
 {
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Resume();
 #endif
 	return TRUE;
@@ -3599,7 +3599,7 @@ BOOL scrSetSnow(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(bState)
 	{
 		atmosSetWeatherType(WT_SNOWING);
@@ -3623,7 +3623,7 @@ BOOL scrSetRain(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(bState)
 	{
 		atmosSetWeatherType(WT_RAINING);
@@ -3646,7 +3646,7 @@ BOOL scrSetBackgroundFog(void)
 	{
 		return FALSE;
 	}
-#ifdef WIN32
+#ifndef PSX
 	//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
 	{
@@ -3717,7 +3717,7 @@ BOOL scrSetDepthFog(void)
 	{
 		return FALSE;
 	}
-#ifdef WIN32		// ffs am
+#ifndef PSX		// ffs am
 //jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
 	{
@@ -3789,7 +3789,7 @@ BOOL scrSetFogColour(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 //	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 //	{
 		red &= 0xff;	
@@ -3821,7 +3821,7 @@ BOOL scrRefTest(void)
 
 // -----------------------------------------------------------------------------------------
 // is player a human or computer player? (multiplayer only)
-#ifdef WIN32
+#ifndef PSX
 BOOL scrIsHumanPlayer(void)
 {
 	SDWORD	player;
@@ -3869,7 +3869,7 @@ BOOL scrCreateAlliance(void)
 	formAlliance((UBYTE)player1, (UBYTE)player2,TRUE,FALSE);
 
 /*
-#ifdef WIN32	
+#ifndef PSX	
 	if(bMultiPlayer) 
 	{
 
@@ -3895,7 +3895,7 @@ BOOL scrCreateAlliance(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // -----------------------------------------------------------------------------------------
 // offer an alliance
 BOOL scrOfferAlliance(void)
@@ -3976,7 +3976,7 @@ if(bMultiPlayer)
 // returns true if 2 or more players are in alliance.
 BOOL scrAllianceExists(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	UDWORD i,j;
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -4063,7 +4063,7 @@ BOOL scrPlayerInAlliance(void)
 BOOL scrDominatingAlliance(void)
 {
 	UDWORD i,j;
-#ifdef WIN32
+#ifndef PSX
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		for(j=0;j<MAX_PLAYERS;j++)
@@ -4101,7 +4101,7 @@ BOOL scrMyResponsibility(void)
 	{
 		return FALSE;
 	}
-#ifdef WIN32
+#ifndef PSX
 	if(	myResponsibility(player) )
 	{
 		if (!stackPushResult(VAL_BOOL, TRUE))
@@ -4313,7 +4313,7 @@ BOOL scrCompleteResearch(void)
 
 	researchResult(researchIndex, (UBYTE)player, FALSE);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && (gameTime > 2 ))
 	{
 		SendResearch((UBYTE)player,researchIndex );
@@ -4334,7 +4334,7 @@ BOOL scrFlashOn(void)
 	{
 		return FALSE;
 	}
-#ifdef WIN32
+#ifndef PSX
 	// For the time being ... we will perform the old code for the reticule ...
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
@@ -4361,7 +4361,7 @@ BOOL scrFlashOff(void)
 	{
 		return FALSE;
 	}
-#ifdef WIN32
+#ifndef PSX
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
 		stopReticuleButtonFlash((UDWORD)button);
@@ -4645,7 +4645,7 @@ BOOL scrSetMissionTime(void)
 	}
 	//store the value
 	mission.time = time;
-#ifdef WIN32		// ffs ab    ... but shouldn't this be on the psx ?
+#ifndef PSX		// ffs ab    ... but shouldn't this be on the psx ?
     setMissionCountDown();
 #endif
 
@@ -4730,7 +4730,7 @@ BOOL scrSetReinforcementTime(void)
     //make sure the timer is not there if the reinforcement time has been set to < 0
     if (time < 0)
     {
-#ifdef WIN32
+#ifndef PSX
         intRemoveTransporterTimer();
 #endif
         /*only remove the launch if haven't got a transporter droid since the 
@@ -4791,7 +4791,7 @@ BOOL scrSetAllStructureLimits(void)
 	for (i = 0; i < numStructureStats; i++)
 	{
 		psStructLimits[i].limit = (UBYTE)limit;
-#ifdef WIN32
+#ifndef PSX
 		psStructLimits[i].globalLimit = (UBYTE)limit;
 #endif
 	}
@@ -5093,7 +5093,7 @@ UDWORD	tileNum;
 		return(FALSE);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(tileNum > 96)
 	{
 		ASSERT((FALSE,"SCRIPT : Water tile number too high in scrSetWaterTile"));
@@ -5115,7 +5115,7 @@ UDWORD	tileNum;
 		return(FALSE);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(tileNum > 96)
 	{
 		ASSERT((FALSE,"SCRIPT : Rubble tile number too high in scrSetWaterTile"));
@@ -5137,13 +5137,13 @@ UDWORD	campaignNumber;
 		return(FALSE);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	setCampaignNumber(campaignNumber);
 #endif
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------------
-#ifdef WIN32
+#ifndef PSX
 BOOL	scrGetUnitCount( void )
 {
 	return TRUE;
@@ -6122,7 +6122,7 @@ BOOL scrSetPlayCountDown(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
     setPlayCountDown((UBYTE)bState);
 #endif
 
@@ -6309,7 +6309,7 @@ BOOL scrResetLimboMission(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // skirmish only.
 BOOL scrIsVtol(void)
 {
@@ -6336,7 +6336,7 @@ BOOL scrIsVtol(void)
 
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 // do the setting up of the template list for the tutorial.
 BOOL scrTutorialTemplates(void)
 {

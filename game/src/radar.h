@@ -1,7 +1,7 @@
 #ifndef _radar_h
 #define _radar_h
 
-#ifdef WIN32
+#ifndef PSX
 extern void	calcRadarColour(iBitmap *tileBitmap, UDWORD tileNumber);
 #else
 extern void	calcRadarColour(iBitmap *tileBitmap,UWORD *tileClut, UDWORD tileNumber);
@@ -9,7 +9,7 @@ extern void	calcRadarColour(iBitmap *tileBitmap,UWORD *tileClut, UDWORD tileNumb
 
 
 #define RGB_ENTRIES	3
-#ifdef WIN32
+#ifndef PSX
 #define MAX_RADARZOOM 2
 #else
 #define MAX_RADARZOOM 1

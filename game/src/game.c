@@ -4,58 +4,60 @@
 
 /* Standard library headers */
 #include <stdio.h>
+#ifdef WIN32
 #include <direct.h>	   
+#endif
 #include <assert.h>
 
 /* Warzone src and library headers */
-#include "Frame.h"
-#include "FrameInt.h"
+#include "frame.h"
+#include "frameint.h"
 #include "ivis02.h"
-#include "Script.h"
-#include "GTime.h"
-#include "Map.h"
+#include "script.h"
+#include "gtime.h"
+#include "map.h"
 #include "edit2d.h"
 #include "droid.h"
 #include "action.h"
 #include "game.h"
 #include "research.h"
 #include "power.h"
-#include "Player.h"
+#include "player.h"
 #include "projectile.h"
-#include "LoadSave.h"
+#include "loadsave.h"
 #include "text.h"
 #include "message.h"
-#include "HCI.h"
-#include "Display.h"
-#include "Display3d.h"
-#include "Map.h"
-#include "Effects.h"
+#include "hci.h"
+#include "display.h"
+#include "display3d.h"
+#include "map.h"
+#include "effects.h"
 #include "init.h"
 #include "mission.h"
-#include "pieState.h"
-#include "Scores.h"
+#include "piestate.h"
+#include "scores.h"
 #include "audio_id.h"
 #include "anim_id.h"
 #include "design.h"
 #include "lighting.h"
-#include "Component.h"
-#include "Radar.h"
-#include "CmdDroid.h"
-#include "Formation.h"
-#include "FormationDef.h"
-#include "warzoneConfig.h"		
-#include "MultiPlay.h"
-#include "NetPlay.h"
-#include "FrontEnd.h"
-#include "Levels.h"
-#include "Mission.h"
-#include "Geometry.h"
+#include "component.h"
+#include "radar.h"
+#include "cmddroid.h"
+#include "formation.h"
+#include "formationdef.h"
+#include "warzoneconfig.h"		
+#include "multiplay.h"
+#include "netplay.h"
+#include "frontend.h"
+#include "levels.h"
+#include "mission.h"
+#include "geometry.h"
 #include "audio.h"
-#include "Gateway.h"
-#include "ScriptTabs.h"
-#include "ScriptExtern.h"
+#include "gateway.h"
+#include "scripttabs.h"
+#include "scriptextern.h"
 #include "multistat.h"
-#include "Wrappers.h"
+#include "wrappers.h"
 
 
 #define ALLOWSAVE
@@ -1320,7 +1322,7 @@ error:
 	/* Start the game clock */
 	gameTimeStart();
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
@@ -1737,7 +1739,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	//before loading the data - turn power off so don't get any power low warnings
 	powerCalculated = FALSE;
 	/* Load in the chosen file data */
-/*#ifdef WIN32
+/*#ifndef PSX
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
@@ -2070,7 +2072,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 /*		aFileName[fileExten] = '\0';
 		strcat(aFileName, "gates.txt");
 		// Load in the chosen file data
-#ifdef WIN32
+#ifndef PSX
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 		{
@@ -2118,7 +2120,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resState.bjo");
 		// Load in the chosen file data 
-//#ifdef WIN32
+//#ifndef PSX
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 		{
@@ -2719,7 +2721,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	//after the clock has been reset need to check if any res_extractors are active
 	checkResExtractorsActive();
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
@@ -2795,7 +2797,7 @@ error:
 
 	/* Start the game clock */
 	gameTimeStart();
-//#ifdef WIN32
+//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.

@@ -7,12 +7,12 @@
 
 #if 0
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "Cluster.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "cluster.h"
 
-#include "BuildPos.h"
+#include "buildpos.h"
 
 
 // the directions for placing structures

@@ -77,7 +77,7 @@ typedef struct {int x0, y0, x1, y1;} iBox;
 
 //*************************************************************************
 
-#ifdef WIN32
+#ifndef PSX
 extern iError	_iVERROR;
 #endif
 

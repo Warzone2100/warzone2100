@@ -6,18 +6,18 @@
 #include <ctype.h>
 #include "frame.h"
 #include "ivisdef.h"
-#include "pieState.h"
+#include "piestate.h"
 #ifdef WIN32
-#include "dx6TexMan.h"
+#include "dx6texman.h"
 #endif
 #include "tex.h"
 #include "rendmode.h"
 #include "pcx.h"
-#include "piePalette.h"
+#include "piepalette.h"
 #include "bug.h"
 #include "ivispatch.h"
 #ifdef INC_GLIDE
-#include "3dfxText.h"
+#include "3dfxtext.h"
 #endif
 #ifdef WIN32
 #include "d3drender.h"
@@ -111,7 +111,7 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 {
 	int				i3d;
 	int				i;
-#ifdef WIN32
+#ifndef PSX
 	/* Get next available texture page */
 	i = _TEX_INDEX;
 	/* Have we used up too many? */
@@ -207,7 +207,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* If it's not a resource - use old way!  - PSX does not need this check because it MUST have been loaded allready by the resource loader */
 	if(!resPresent("TEXPAGE",filename))
 	{
@@ -236,7 +236,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* Ensure upper case for tex file names */
 	ASSERT ((strlen(filename)<MAX_FILE_PATH,"Texture file path too long"));
 
@@ -443,9 +443,9 @@ int iV_TexLoad( char *path, char *filename, int type,
 //
 //  currently only for PSX but would make sense for the PC (?)
 //
+#ifdef PSX
 BOOL GenerateTEXPAGE(char *Filename, RECT *VramArea, UDWORD Mode, UWORD Clut)
 {
-#ifdef PSX
 		int i;
 		UWORD TPage;
 
@@ -464,9 +464,10 @@ BOOL GenerateTEXPAGE(char *Filename, RECT *VramArea, UDWORD Mode, UWORD Clut)
 		_TEX_PAGE[i].tex.num	= GetTextureNumber(Filename);		// base on the name e.g.     Page-16-  will return 16
 		_TEX_PAGE[i].tex.tpage = TPage;
 		_TEX_PAGE[i].tex.clut = Clut;		// Not really used ...
-#endif
+
 		return(TRUE);
-}		
+}
+#endif		
 
 #ifdef PSX
 // Scan through the loaded tex pages to see if this one is loaded. Returns TRUE and TexPage points to the loaded entry
@@ -530,7 +531,7 @@ SBYTE GetTextureNumber(char *Name)
 void pie_TexShutDown(void)
 
 {
-#ifdef WIN32
+#ifndef PSX
 	int i,j;
 
 	i = 0;
@@ -563,7 +564,7 @@ void pie_TexShutDown(void)
 
 void pie_TexInit(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	int i;
 
 	i = 0;

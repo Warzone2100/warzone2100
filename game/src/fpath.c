@@ -12,7 +12,7 @@
 // gateway route printf's
 //#define DEBUG_GROUP2
 
-#include "Frame.h"
+#include "frame.h"
 
 BOOL	fpathDoMessage;
 #undef DBP2
@@ -20,25 +20,24 @@ BOOL	fpathDoMessage;
 	if (fpathDoMessage) \
 		DBPRINTF( x )
 
-#include "Objects.h"
-#include "Map.h"
-#include "RayCast.h"
-#include "Geometry.h"
-#include "HCI.h"
-#include "Order.h"
+#include "objects.h"
+#include "map.h"
+#include "raycast.h"
+#include "geometry.h"
+#include "hci.h"
+#include "order.h"
 
 #ifdef TEST_BED
 #include "main.h"
 #endif
-#include "AStar.h"
-#include "LOSRoute.h"
-#include "Gateway.h"
-#include "GatewayRoute.h"
-#include "Action.h"
-#include "Formation.h"
+#include "astar.h"
+#include "losroute.h"
+#include "gateway.h"
+#include "gatewayroute.h"
+#include "action.h"
+#include "formation.h"
 
-#define DEFINE_MAPINLINE
-#include "FPath.h"
+#include "fpath.h"
 
 /* minimum height difference for VTOL blocking tile */
 #define	LIFT_BLOCK_HEIGHT_LIGHTBODY		  30
@@ -158,7 +157,7 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	}
 */
 
-//#ifdef WIN32 // Must have to do this on PSX as well?
+//#ifndef PSX // Must have to do this on PSX as well?
 /*  This god awful hack RIP - John 15.2.99
 	if(TILE_HAS_FEATURE(psTile))
 	{

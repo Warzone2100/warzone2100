@@ -1,10 +1,12 @@
 /***************************************************************************/
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
-#include "Frame.h"
+#include "frame.h"
 
 #include "tracklib.h"
 #include "priority.h"
@@ -39,6 +41,7 @@ static AUDIO_CALLBACK g_pStopTrackCallback = NULL;
 BOOL
 sound_CheckDevice( void )
 {
+#ifdef WIN32
 	WAVEOUTCAPS	waveCaps;
 	MMRESULT	mmRes;
 
@@ -69,6 +72,7 @@ sound_CheckDevice( void )
 		DBPRINTF( ("sound_CheckDevice: wave out device doesn't support volume changes\n") );
 		return FALSE;
 	}
+#endif
 }
 
 /***************************************************************************/
@@ -180,7 +184,7 @@ sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack, SDWORD iVol,
 		psTrack->iTimeLastFinished = 0;
 		psTrack->iNumPlaying       = 0;
 
-#ifdef WIN32
+#ifndef PSX
 		VagID;
 #else
 		psTrack->VAGid=VagID;	// set the vag id for the playstation
@@ -226,7 +230,7 @@ sound_AddTrack( TRACK *pTrack )
 void *
 sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 {
-#ifdef WIN32
+#ifndef PSX
 	TRACK *	pTrack;
 
 	/* allocate track */
@@ -277,7 +281,7 @@ sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 BOOL
 sound_LoadTrackFromFile( char szFileName[] )
 {
-#ifdef WIN32
+#ifndef PSX
 	TRACK *	pTrack;
 
 	/* allocate track */
@@ -462,7 +466,7 @@ sound_GetTrackName( SDWORD iTrack )
 {
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
-#ifdef WIN32
+#ifndef PSX
 	return g_apTrack[iTrack]->pName;
 #else
 	DBERROR(("sound_GetTrackName: not valid on PSX"));
@@ -477,7 +481,7 @@ sound_GetTrackHashName( SDWORD iTrack )
 {
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
-#ifdef WIN32
+#ifndef PSX
 	return g_apTrack[iTrack]->resID;
 #else
 	DBERROR(("sound_GetTrackHashName: not valid on PSX"));
@@ -653,6 +657,7 @@ sound_GetAvailableID( void )
 SDWORD
 sound_GetGlobalVolume( void )
 {
+#ifdef WIN32
 	MMRESULT	mmRes;
 	SDWORD		iVol;
 	SDWORD		iGlobVol = AUDIO_VOL_MAX;
@@ -671,6 +676,7 @@ sound_GetGlobalVolume( void )
 	}
 
 	return iGlobVol;
+#endif
 }
 
 /***************************************************************************/
@@ -678,6 +684,7 @@ sound_GetGlobalVolume( void )
 void
 sound_SetGlobalVolume( SDWORD iVol )
 {
+#ifdef WIN32
 	MMRESULT	mmRes;
 	SDWORD		iNewVol, iWinVol;
 
@@ -692,6 +699,7 @@ sound_SetGlobalVolume( SDWORD iVol )
 			DBPRINTF( ("sound_GetGlobalVolume: waveOutSetVolume failed\n") );
 		}
 	}
+#endif
 }
 
 /***************************************************************************/

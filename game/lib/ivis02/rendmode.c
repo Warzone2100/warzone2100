@@ -1,30 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#ifdef WIN32
 #include <dos.h>
-#include "rendmode.h"
-#ifdef WIN32
-#include "pieClip.h"
 #endif
-#ifdef WIN32
+#include "rendmode.h"
+#ifndef PSX
+#include "pieclip.h"
+#endif
+#ifndef PSX
 #include "d3dmode.h"
 #include "v4101.h"
 #endif
-#include "rendFunc.h"
+#include "rendfunc.h"
 #include "vsr.h"
 //#include "3dfxfunc.h"
-//#include "rendFunc.h"
-#include "textDraw.h"
+//#include "rendfunc.h"
+#include "textdraw.h"
 
 #include "bug.h"
-#include "piePalette.h"
-#include "pieState.h"
+#include "piepalette.h"
+#include "piestate.h"
 #include "ivispatch.h"
 #include "fractions.h"
 
-#ifdef WIN32
+#ifndef PSX
 #ifdef INC_GLIDE
-#include "dGlide.h"
+#include "dglide.h"
 #include "3dfxfunc.h"
 #endif
 #else
@@ -46,7 +48,7 @@ static int	g_mode = REND_UNDEFINED;
 
 //*************************************************************************
 
-#ifdef WIN32
+#ifndef PSX
 static uint8	*_VIDEO_MEM;
 static int32	_VIDEO_SIZE;
 static iBool	_VIDEO_LOCK;
@@ -68,7 +70,7 @@ void (*iV_ppBitmapColourTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow,
 //*
 //******
 
-#ifdef WIN32
+#ifndef PSX
 static BOOL	bHas3DNow;
 BOOL	weHave3DNow( void )
 {
@@ -83,6 +85,7 @@ BOOL	b3DNow;
 	/* As of yet - we haven't found an AMD 3DNow! equipped processor */
 	b3DNow = FALSE;
 
+#ifdef _MSC_VER
 	_asm
 	{
 		push	ebx
@@ -132,11 +135,12 @@ has_3d_now:
 		pop		edx
 		pop		ebx
 	}
+#endif // _MSC_VER
 	return(b3DNow);
 }
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 int32 iV_VideoMemorySize(int mode)
 
 {
@@ -270,12 +274,12 @@ uint8 *iV_VideoMemoryAlloc(int mode)
 void _iv_vid_setup(void)
 {
 	int i;
-#ifdef WIN32
+#ifndef PSX
 	pie_SetRenderEngine(ENGINE_UNDEFINED);
 #endif
 	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 	rendSurface.buffer = NULL;
 #endif
 	rendSurface.size = 0;
@@ -290,7 +294,7 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	AREA *SurfaceVram;
 #endif
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 	assert(buffer!=NULL);	// on playstation this MUST be null
 #else
 //	assert(buffer==NULL);	// Commented out by Paul as a temp measure to make it work.
@@ -318,7 +322,7 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	s->width = width;
 	s->height = height;
 	s->size = width * height;
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 	s->buffer = buffer;
 	for (i=0; i<iV_SCANTABLE_MAX; i++)
 		s->scantable[i] = i * width;
@@ -491,7 +495,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
 
-#ifdef WIN32
+#ifndef PSX
 	bHas3DNow = cpuHas3DNow();	// do some funky stuff to see if we have an AMD
 #endif
 	/* Force to 3dfx if glide included */
@@ -519,7 +523,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 
 	switch (mode) {
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 		case iV_MODE_SURFACE:
 			_clear_sr(0);
 //			pie_Draw3DShape				= pie_Draw3DIntelShape;
@@ -1011,7 +1015,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 
 
 	iV_DEBUG0("vid[RenderAssign] = assigned renderer :\n");
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 	iV_DEBUG5("usr %d\nflags %x\nxcentre, ycentre %d\nbuffer %p\n",
 			s->usr,s->flags,s->xcentre,s->ycentre,s->buffer);
 #endif

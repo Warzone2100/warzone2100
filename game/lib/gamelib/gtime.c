@@ -8,10 +8,10 @@
 #include <time.h>
 
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "GTime.h"
+#include "frame.h"
+#include "gtime.h"
 
-#ifdef WIN32
+#ifndef PSX
 #define TIME_FIX
 #endif
 //#define RATE_LIMIT
@@ -30,7 +30,7 @@ UDWORD gameTime2;
 /* The time for the last frame (never stops)*/
 UDWORD frameTime2;
 
-#ifdef WIN32
+#ifndef PSX
 // the current clock modifier
 static FRACT	modifier;
 #endif
@@ -63,7 +63,7 @@ BOOL gameTimeInit(void)
 	timeOffset2 = 0;
 	baseTime2 = baseTime;
 
-#ifdef WIN32
+#ifndef PSX
 	modifier = FRACTCONST(1,1);
 #endif
 
@@ -95,7 +95,7 @@ UDWORD	div1,div2;
 void gameTimeUpdate(void)
 {
 	UDWORD				currTime, fpMod;
-#ifdef WIN32
+#ifdef TIME_FIX
 	unsigned __int64	newTime;
 	unsigned __int64	extraTime;
 #else
@@ -118,7 +118,7 @@ void gameTimeUpdate(void)
 	//don't update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
-#ifdef WIN32
+#ifndef PSX
 		// Calculate the new game time
 		newTime = currTime - baseTime;
 
@@ -191,7 +191,7 @@ void gameTimeUpdate(void)
 	gameTime2 = (UDWORD)newTime;
 }
 
-#ifdef WIN32
+#ifndef PSX
 // reset the game time modifiers
 void gameTimeResetMod(void)
 {
@@ -264,7 +264,7 @@ void gameTimeReset(UDWORD time)
 	baseTime = GetTickCount();//used from save game only so GetTickCount is as valid as anything
 	baseTime2 = GetTickCount();
 
-#ifdef WIN32
+#ifndef PSX
 	modifier = FRACTCONST(1,1);
 #endif
 }

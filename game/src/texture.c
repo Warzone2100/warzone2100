@@ -1,16 +1,16 @@
-#ifdef WIN32
+#ifndef PSX
 /* Texture stuff. Calls 3dfxText functions in the 3dfx cases */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
 
-#include "Frame.h"
-#include "pieTypes.h"
-#include "pieState.h"
-#include "dx6TexMan.h"
-#include "pieTexture.h"
-#include "piePalette.h"
-#include "display3Ddef.h"
-#include "Texture.h"
-#include "Radar.h"
+#include "frame.h"
+#include "pietypes.h"
+#include "piestate.h"
+#include "dx6texman.h"
+#include "pietexture.h"
+#include "piepalette.h"
+#include "display3ddef.h"
+#include "texture.h"
+#include "radar.h"
 #include "tex.h"
 
 /* Can fit at most 32 texture pages into a 2meg texture memory */

@@ -14,9 +14,9 @@
 
 #include <assert.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "wdg.h"
-#include "MultiWDG.h"
+#include "multiwdg.h"
 
 #ifdef PSX
 #include "cdpsx.h"
@@ -569,7 +569,7 @@ BOOL FILE_ShutdownCache(void)
 		}
 		Cache.IsCacheDataMalloced=FALSE;
 	}
-#if defined(WIN32) && defined(PRIMCATALOG)
+#if !defined(PSX) && defined(PRIMCATALOG)
 
 	if (PrimBufferCatalog)
 	{

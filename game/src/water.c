@@ -1,7 +1,7 @@
-#ifdef WIN32
+#ifndef PSX
 
-#include "Map.h"
-#include "Frame.h"
+#include "map.h"
+#include "frame.h"
 
 
 // This whole file can be kicked out if Paul's water method is used...

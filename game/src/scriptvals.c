@@ -6,15 +6,15 @@
  */
 
 
-#include "Frame.h"
-#include "Script.h"
-#include "Objects.h"
+#include "frame.h"
+#include "script.h"
+#include "objects.h"
 #include "base.h"
-#include "ScriptTabs.h"
-#include "ScriptVals.h"
-#include "GTime.h"
+#include "scripttabs.h"
+#include "scriptvals.h"
+#include "gtime.h"
 #include "text.h"
-#include "Group.h"
+#include "group.h"
 
 // Keep all the loaded script contexts
 typedef struct _scrv_store

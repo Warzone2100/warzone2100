@@ -14,11 +14,13 @@
 // defines the inline functions in this module
 #define DEFINE_INLINE
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #include <stdio.h>
 #include <time.h>
@@ -311,7 +313,7 @@ void frameSetCursor(HCURSOR hNewCursor)
 	SetCursor(hCursor);
 }
 
-#ifdef WIN32	// not on PSX
+#ifndef PSX	// not on PSX
 
 
 
@@ -368,7 +370,7 @@ void frameSetCursorFromRes(WORD resID)
 
 
 
-
+#ifdef WIN32
 /*
  * Wndproc
  *
@@ -542,7 +544,7 @@ static long FAR PASCAL Wndproc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	// No extra window procedure set, use the default one
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
-
+#endif
 
 /* The default window procedure for the library.
  * This is initially set to the standard DefWindowProc, but can be changed
@@ -560,7 +562,7 @@ extern void frameSetWindowProc(DEFWINPROCTYPE winProc)
  * Do that Windows initialization thang...
  */
 
-
+#ifdef WIN32
 static BOOL WinInitGlide(HANDLE hInstance, char *name, int width, int height, BOOL maximize)
 {
 	WNDCLASS cls;
@@ -706,7 +708,7 @@ static BOOL winInitApp(HANDLE hInstance,	// Instance handle for the program
     return TRUE;
 
 } 
-
+#endif
 
 /*
  * frameInitialise
@@ -836,6 +838,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
  */
 FRAME_STATUS frameUpdate(void)
 {
+#ifdef WIN32
 	MSG				sMsg;
 	FRAME_STATUS	retVal;
 
@@ -898,6 +901,7 @@ FRAME_STATUS frameUpdate(void)
 	}
 
 	return retVal;
+#endif
 }
 
 
@@ -912,7 +916,9 @@ void frameShutDown(void)
 	}
 	else
 	{
+#ifdef WIN32
 		RELEASE(psDD);
+#endif
 	}
 
 	/* Free the default cursor */
@@ -939,7 +945,7 @@ void frameShutDown(void)
 
 }
 
-#else // ifdef WIN32 - here are the PSX version of the routines
+#else // ifndef PSX - here are the PSX version of the routines
 
 
 void frameSetCursorFromRes(WORD resID)
@@ -1089,7 +1095,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 #endif
 
 // Not needed in a PSX FINALBUILD.
-#if defined(WIN32) || !defined(FINALBUILD)
+#if !defined(PSX) || !defined(FINALBUILD)
 	pFileHandle = fopen(pFileName, "rb");
 	if (pFileHandle == NULL)
 	{
@@ -1152,11 +1158,12 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 	return TRUE;
 }
 
-#ifdef WIN32
+#ifndef PSX
 
 // load a file from disk into a fixed memory buffer
 BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
+#ifdef WIN32
 	HANDLE	hFile;
 	DWORD	bytesRead;
 	BOOL	retVal;
@@ -1214,11 +1221,13 @@ BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, 
 	}
 
 	return TRUE;
+#endif
 }
 
 // as above but returns quietly if no file found
 BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
+#ifdef WIN32
 	HANDLE	hFile;
 	DWORD	bytesRead;
 	BOOL	retVal;
@@ -1269,6 +1278,7 @@ BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 	}
 
 	return TRUE;
+#endif
 }
 #endif
 
@@ -1289,7 +1299,7 @@ BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize)
 
 	if (fwrite(pFileData, fileSize, 1, pFile) != 1)
 	{
-#ifdef WIN32	// ffs
+#ifndef PSX	// ffs
 		DBERROR(("Write failed for %s: %s", pFileName, winErrorToString(GetLastError()) ));
 #else
 		DBERROR(("Write failed for %s", pFileName ));

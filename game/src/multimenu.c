@@ -7,8 +7,8 @@
 #include "frame.h"
 #include "widget.h"
 
-#include "Display3d.h"
-#include "intDisplay.h"
+#include "display3d.h"
+#include "intdisplay.h"
 #include "text.h"
 #include "vid.h"
 #include "piedef.h"
@@ -17,7 +17,7 @@
 #include "levels.h"
 #include "objmem.h"		 	//for droid lists.
 #include "component.h"		// for disaplycomponentobj.
-#include "HCI.h"			// for wFont def.& intmode.
+#include "hci.h"			// for wFont def.& intmode.
 //#include "intfac.h"		// for images.
 #include "power.h"
 #include "loadsave.h"		// for drawbluebox
@@ -290,6 +290,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	}
 	strcat(ToFind,ToFindb);
 
+#ifdef WIN32
 	// count buttons.
 	dir =FindFirstFile(ToFind,&found);
 	if(dir != INVALID_HANDLE_VALUE)
@@ -304,6 +305,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 		}
 	}
 	FindClose(dir);
+#endif
 
 	
 	if(mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
@@ -400,6 +402,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	sButInit.pDisplay	= displayRequestOption; 
 	sButInit.FontID		= WFont;
 
+#ifdef WIN32
 	dir =FindFirstFile(ToFind,&found);
 	if(dir != INVALID_HANDLE_VALUE)
 	{
@@ -468,6 +471,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 		}
 	}
 	FindClose(dir);
+#endif
 
 	if(mode == MULTIOP_MAP)		
 	{

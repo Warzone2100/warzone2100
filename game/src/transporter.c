@@ -3,39 +3,39 @@
  *
  * code to deal with loading/unloading, interface and flight
 */
-#include "Widget.h"
+#include "widget.h"
 
-#include "Stats.h"
-#include "HCI.h"
-#include "intDisplay.h"
-#include "ObjMem.h"
-#include "Transporter.h"
-#include "Group.h"
-#include "Text.h"
-#include "Display3d.h"
-#include "Mission.h"
-#include "Objects.h"
+#include "stats.h"
+#include "hci.h"
+#include "intdisplay.h"
+#include "objmem.h"
+#include "transporter.h"
+#include "group.h"
+#include "text.h"
+#include "display3d.h"
+#include "mission.h"
+#include "objects.h"
 #include "display.h"
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "Order.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "order.h"
 #include "action.h"
-#include "GTime.h"
-#include "Console.h"
-#include "BitImage.h"
-#include "warCam.h"
+#include "gtime.h"
+#include "console.h"
+#include "bitimage.h"
+#include "warcam.h"
 #include "selection.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "pieMatrix.h"
-#include "MapGrid.h"
-#ifdef WIN32
-#include "Multiplay.h"
+#include "piematrix.h"
+#include "mapgrid.h"
+#ifndef PSX
+#include "multiplay.h"
 #endif
 #ifdef PSX
 #include "dcache.h"
-#include "Primatives.h"
-#include "DrawIMD_psx.h"
+#include "primatives.h"
+#include "drawimd_psx.h"
 #endif
 #include "csnap.h"
 
@@ -114,7 +114,7 @@ extern CURSORSNAP InterfaceSnap;
 #define HEAVY_DROID					1//3
 
 //max that can be available from home
-#ifdef WIN32
+#ifndef PSX
 #define MAX_DROIDS					80
 #else
 #define MAX_DROIDS					40
@@ -268,7 +268,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 		Animate = FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(intIsRefreshing()) {
 		Animate = FALSE;
 	}
@@ -310,7 +310,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 ////	SetMouseFormPosition(&sFormInit);
 //#endif
 	
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDTRANS_FORM;
@@ -373,7 +373,7 @@ BOOL intAddTransporterContents(void)
 		AlreadyUp = TRUE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(intIsRefreshing()) {
 		Animate = FALSE;
 	}
@@ -415,7 +415,7 @@ BOOL intAddTransporterContents(void)
 ////	SetMouseFormPosition(&sFormInit);
 //#endif
 	
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDTRANS_CONTENTFORM;
@@ -448,7 +448,7 @@ BOOL intAddTransporterContents(void)
 		sLabInit.formID = IDTRANS_CONTENTFORM;
 		sLabInit.id = IDTRANS_CAPACITY;
 		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
-	#ifdef WIN32
+	#ifndef PSX
 		sLabInit.x = STAT_SLDX + STAT_SLDWIDTH + 4;
 		sLabInit.y = STAT_SLDY + 3;
 	#else
@@ -467,7 +467,7 @@ BOOL intAddTransporterContents(void)
 	}*/
 
 	//add the Launch button - if on a mission, or all the time on the PSX
-#ifdef WIN32
+#ifndef PSX
 	if (onMission)
 #endif
 	{
@@ -479,7 +479,7 @@ BOOL intAddTransporterContents(void)
 		sButFInit.id = IDTRANS_LAUNCH;
 //		sButFInit.style = WBUT_PLAIN;
 		sButFInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
-#ifdef WIN32
+#ifndef PSX
 		sButFInit.x = OBJ_STARTX;
 		sButFInit.y = (UWORD)(STAT_SLDY - 1);
 #else
@@ -492,7 +492,7 @@ BOOL intAddTransporterContents(void)
 		//sButInit.pText = "Launch";
 //		sButFInit.FontID = WFont;
 		sButFInit.pDisplay = intDisplayImageHilight;
-#ifdef WIN32
+#ifndef PSX
 		sButFInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
 #else
 		sButFInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHHI,IMAGE_LAUNCHUP);
@@ -541,7 +541,7 @@ BOOL intAddTransporterContents(void)
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
 BOOL intAddTransporterLaunch(DROID *psDroid)
 {
-#ifdef WIN32
+#ifndef PSX
 	//W_BUTINIT		sButInit;
 	W_FORMINIT		sButInit;		//needs to be a clickable form now
 	W_LABINIT		sLabInit;
@@ -936,7 +936,7 @@ BOOL intAddDroidsAvailForm(void)
 		Animate = FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(intIsRefreshing()) {
 		Animate = FALSE;
 	}
@@ -980,7 +980,7 @@ BOOL intAddDroidsAvailForm(void)
 ////	SetMouseFormPosition(&sFormInit);
 //#endif
 	
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDTRANS_DROIDS;
@@ -1012,7 +1012,7 @@ BOOL intAddDroidsAvailForm(void)
 
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.majorSize = (OBJ_TABWIDTH/2);
 #else
 	sFormInit.majorSize = OBJ_TABWIDTH;
@@ -1054,7 +1054,7 @@ BOOL intAddDroidsAvailForm(void)
 	}
 
 	sFormInit.pFormDisplay = intDisplayObjectForm;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.pUserData = (void*)&SmallTab;
 #else
 	sFormInit.pUserData = (void*)&StandardTab;
@@ -2051,7 +2051,7 @@ void processLaunchTransporter(void)
             {
                 formSetClickState(psForm, WBUT_LOCK);
             }
-#ifdef WIN32
+#ifndef PSX
             //disable the form so can't add any more droids into the transporter
             psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANTIMER_BUTTON);
             if (psForm)
@@ -2081,7 +2081,7 @@ UDWORD	angle;
 	// it will not 'bounce' off the top _and_ bottom of
 	// it's movemment arc.
 
-#ifdef WIN32
+#ifndef PSX
 	angle = gameTime%4320;
 	val = angle/12;
 	val = 10 * (SIN(DEG(val)));
@@ -2097,7 +2097,7 @@ UDWORD	angle;
 /*causes one of the mission buttons (Launch Button or Mission Timer) to start flashing*/
 void flashMissionButton(UDWORD buttonID)
 {
-#ifdef WIN32
+#ifndef PSX
 	W_TABFORM	*psForm;
 
 	//get the button from the id
@@ -2124,7 +2124,7 @@ void flashMissionButton(UDWORD buttonID)
 /*stops one of the mission buttons (Launch Button or Mission Timer) flashing*/
 void stopMissionButtonFlash(UDWORD buttonID)
 {
-#ifdef WIN32
+#ifndef PSX
 	W_TABFORM	*psForm;
 
 	//get the button from the id

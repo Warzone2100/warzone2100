@@ -4,26 +4,26 @@
  * Store PlayerPower and other power related stuff!
  *
  */
-#include "ObjectDef.h"
+#include "objectdef.h"
 #include "power.h"
-#include "HCI.h"
-#include "GTime.h"
+#include "hci.h"
+#include "gtime.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "ObjMem.h"
-#include "Frontend.h"
-#ifdef WIN32
-#include "MultiPlay.h"
-#include "MultiInt.h"
+#include "objmem.h"
+#include "frontend.h"
+#ifndef PSX
+#include "multiplay.h"
+#include "multiint.h"
 #endif
-#include "Feature.h"
-#include "Structure.h"
+#include "feature.h"
+#include "structure.h"
 #include "mission.h"
-#include "Research.h"
-#include "intDisplay.h"
+#include "research.h"
+#include "intdisplay.h"
 #include "action.h"
 #include "difficulty.h"
-#include "PowerCrypt.h"
+#include "powercrypt.h"
 
 
 #define EXTRACT_POINTS	    1
@@ -479,7 +479,7 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	}
 }*/
 
-#ifdef WIN32
+#ifndef PSX
 // only used in multiplayer games.
 void setPower(UDWORD player, UDWORD avail)
 {
@@ -937,7 +937,7 @@ BOOL droidUsesPower(DROID *psDroid)
 }
 
 //won't bother with this on PSX unless starts being used too much!
-#ifdef WIN32
+#ifndef PSX
 //this is a check cos there is a problem with the power but not sure where!!
 void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 {
@@ -1261,7 +1261,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 	asPower[player]->availablePower = 0;
 	
 	// add multiplayer allowances if a multiplayer game.
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && (game.dmatch || game.base == CAMP_CLEAN))
 	{
 		asPower[player]->availablePower = game.power+RESIDUAL_POW;		

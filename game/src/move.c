@@ -19,8 +19,8 @@
 //#define DEBUG_GROUP6
 
 #include <stdio.h>
-#include <Math.h>
-#include "Frame.h"
+#include <math.h>
+#include "frame.h"
 
 //#define DEBUG_DRIVE_SPEED
 #ifdef DEBUG
@@ -32,34 +32,34 @@ BOOL	moveDoMessage;
 #endif
 
 
-#include "Objects.h"
-#include "Move.h"
-#include "FindPath.h"
-#include "Visibility.h"
-#include "Map.h"
-#include "FPath.h"
-#include "Loop.h"
-#include "GTime.h"
+#include "objects.h"
+#include "move.h"
+#include "findpath.h"
+#include "visibility.h"
+#include "map.h"
+#include "fpath.h"
+#include "loop.h"
+#include "gtime.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "Geometry.h"
+#include "geometry.h"
 #include "animobj.h"
 #include "anim_id.h"
-#include "FormationDef.h"
-#include "Formation.h"
+#include "formationdef.h"
+#include "formation.h"
 #include "action.h"
 #include "display3d.h"
 #include "order.h"
 #include "astar.h"
-#include "Combat.h"
-#include "MapGrid.h"
+#include "combat.h"
+#include "mapgrid.h"
 #include "display.h"	// needed for widgetsOn flag.
-#include "Effects.h"
+#include "effects.h"
 #include "fractions.h"
 #include "power.h"
-#include "Scores.h"
-#ifdef WIN32
-#include "OptimisePath.h"
+#include "scores.h"
+#ifndef PSX
+#include "optimisepath.h"
 #endif
 //#include "multigifts.h"
 #include "drive.h"
@@ -68,14 +68,14 @@ BOOL	moveDoMessage;
 #include "arrow.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #include "netplay.h"
-#include "MultiPlay.h"
+#include "multiplay.h"
 #include "multigifts.h"
 #endif
 
 #ifdef PSX
-#include "VPad.h"
+#include "vpad.h"
 #include "dcache.h"
 #endif
 
@@ -84,14 +84,14 @@ BOOL	moveDoMessage;
 
 
 /* system definitions */
-#ifdef WIN32
+#ifndef PSX
 #define	DROID_RUN_SOUND			1
 #else
 #define	DROID_RUN_SOUND			0	// No droid movement sounds on PSX.
 #endif
 
 // get rid of the fast rounding for the movement code
-#ifdef WIN32
+#ifndef PSX
 #define MAKEINT(x) ((SDWORD)(x))
 #endif
 
@@ -293,7 +293,7 @@ typedef enum MOVESOUNDTYPE	{ MOVESOUNDSTART, MOVESOUNDIDLE, MOVESOUNDMOVEOFF,
 
 extern UDWORD	selectedPlayer;
 
-#ifdef WIN32
+#ifndef PSX
 static BOOL	g_bFormationSpeedLimitingOn = TRUE;
 #else
 static BOOL	g_bFormationSpeedLimitingOn = FALSE;
@@ -379,7 +379,7 @@ BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
 		"moveUnitTo: Invalid unit pointer"));
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && (psDroid->sMove.Status != MOVEWAITROUTE))
 	{
 		if(SendDroidMove(psDroid,x,y,bFormation) == FALSE)
@@ -435,7 +435,7 @@ BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		psDroid->sMove.Position=0;
 		psDroid->sMove.fx = MAKEFRACT(psDroid->x);
 		psDroid->sMove.fy = MAKEFRACT(psDroid->y);
-#ifdef WIN32
+#ifndef PSX
 		psDroid->sMove.fz = MAKEFRACT(psDroid->z);
 #endif
 
@@ -811,7 +811,7 @@ void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDWORD sy)
 	psDroid->sMove.Position = 0;
 	psDroid->sMove.fx = MAKEFRACT(psDroid->x);
 	psDroid->sMove.fy = MAKEFRACT(psDroid->y);
-#ifdef WIN32
+#ifndef PSX
 	psDroid->sMove.fz = MAKEFRACT(psDroid->z);
 #endif
 	moveCalcBoundary(psDroid);
@@ -1040,7 +1040,7 @@ void updateDroidOrientation(DROID *psDroid)
 static FRACT vectorToAngle(FRACT vx, FRACT vy)
 {
 	FRACT	angle;	// Angle in degrees (0->360)
-#ifdef WIN32
+#ifndef PSX
 	angle = (float)(TRIG_DEGREES * atan2(-vy,vx) / PI / 2);
 	angle += TRIG_DEGREES/4;
 	if (angle < 0)
@@ -1123,7 +1123,7 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 	}								// that integer angle to turn per frame is less than 1
 
 
-#ifdef WIN32
+#ifndef PSX
 	DBP2(("change : %f\n", change));
 #else
 	DBP2(("change : $%x\n", change));
@@ -1177,7 +1177,7 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 		*pCurr -= MKF(TRIG_DEGREES);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	DBP2(("path %d: diff %f\n", path, diff));
 #else
 	DBP2(("path %d: diff $%x\n", path, diff));
@@ -1389,7 +1389,7 @@ static SDWORD moveObjRadius(BASE_OBJECT *psObj)
 	FRACT		xdiff,ydiff, distSq;
 	NAYBOR_INFO	*psInfo;
 	SDWORD		distSq1;
-#ifndef WIN32
+#ifdef PSX
 	SDWORD		x1,y1;
 #endif
 
@@ -1412,7 +1412,7 @@ static SDWORD moveObjRadius(BASE_OBJECT *psObj)
 
 		xdiff = MAKEFRACT(psDroid->x) + mx - MAKEFRACT(psInfo->psObj->x);
 		ydiff = MAKEFRACT(psDroid->y) + my - MAKEFRACT(psInfo->psObj->y);
-#ifdef WIN32
+#ifndef PSX
 
 		distSq = FRACTmul(xdiff,xdiff) + FRACTmul(ydiff,ydiff);
 		distSq1 = MAKEINT(distSq);
@@ -1560,7 +1560,7 @@ BOOL moveBlocked(DROID *psDroid)
 
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ( (
-#ifdef WIN32
+#ifndef PSX
 			  bMultiPlayer ||
 #endif
 			  (psDroid->player == selectedPlayer)) &&
@@ -2552,7 +2552,7 @@ void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 	}
 }
 
-#ifdef WIN32
+#ifndef PSX
 // get an obstacle avoidance vector
 void moveGetObstVector3(DROID *psDroid, FRACT *pX, FRACT *pY)
 {
@@ -3081,7 +3081,7 @@ static void moveGetDirection(DROID *psDroid, FRACT *pX, FRACT *pY)
 	SDWORD	mag;
 	FRACT	root;
 	BOOL	bNoVector;
-#ifdef WIN32
+#ifndef PSX
 	SDWORD	ndx,ndy, ntx,nty, nmag;
 	FRACT	nroot;
 #endif
@@ -3096,7 +3096,7 @@ static void moveGetDirection(DROID *psDroid, FRACT *pX, FRACT *pY)
 	mag = dx*dx + dy*dy;
 
 	bNoVector = TRUE;
-#ifdef WIN32
+#ifndef PSX
 	// fade in the next target point if we arn't at the end of the waypoints
 	if ((psDroid->sMove.Position != psDroid->sMove.numPoints) &&
 		(mag < WAYPOINT_DSQ))
@@ -3130,7 +3130,7 @@ static void moveGetDirection(DROID *psDroid, FRACT *pX, FRACT *pY)
 	if (bNoVector)
 #endif
 	{
-#ifdef WIN32
+#ifndef PSX
 		root = fSQRT(MAKEFRACT(mag));
 		*pX = FRACTdiv(MKF(dx), root);
 		*pY = FRACTdiv(MKF(dy), root);
@@ -3174,7 +3174,7 @@ static void moveGetDirection(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if ( psDroid->droidType != DROID_TRANSPORTER )
 	{
 		moveGetObstVector4(psDroid, pX,pY);
@@ -3273,7 +3273,7 @@ BOOL moveReachedWayPoint(DROID *psDroid)
 	{
 		if ( psDroid->droidType == DROID_TRANSPORTER )
 		{
-#ifdef WIN32
+#ifndef PSX
 			iRange = TILE_UNITS/4;
 #else
 			iRange = TILE_UNITS*2;
@@ -3353,7 +3353,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 		speed /= 2;
 	}*/
 
-#ifdef WIN32
+#ifndef PSX
 	pitch = psDroid->pitch;
 	if (pitch > MAX_SPEED_PITCH)
 	{
@@ -3374,7 +3374,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 //#endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	// slow down damaged droids
 	damLevel = PERCENT(psDroid->body, psDroid->originalBody);
 	if (damLevel < HEAVY_DAMAGE_LEVEL)
@@ -3986,7 +3986,7 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 // on the psx we remove the animation totally, and reallocate it when it is next needed
 //    ... this is so we can allow the playstation to use far fewer animation entries
 
-#ifdef WIN32
+#ifndef PSX
 			psDroid->psCurAnim->bVisible = FALSE;
 #else
 			bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
@@ -4027,7 +4027,7 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 
 	//set the droid height here so other routines can use it
 	psDroid->z = map_Height(psDroid->x, psDroid->y);//jps 21july96
-#ifdef WIN32
+#ifndef PSX
 	psDroid->sMove.fz = MAKEFRACT(psDroid->z);
 #endif
 
@@ -4124,7 +4124,7 @@ void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
 	SDWORD	iDroidDir, iDZ, iDroidZ, iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
-#ifdef WIN32
+#ifndef PSX
 	FRACT	fDZ, fDroidZ, fMapZ;
 #endif
 
@@ -4182,7 +4182,7 @@ void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	iMapZ = map_Height(psDroid->x, psDroid->y);
 
 	/* do vertical movement */
-#ifdef WIN32
+#ifndef PSX
 	fDZ = (FRACT)(psDroid->sMove.iVertSpeed * (SDWORD)frameTime) / GAME_TICKS_PER_SEC;
 	fDroidZ = psDroid->sMove.fz;
 	fMapZ = (FRACT) map_Height(psDroid->x, psDroid->y);
@@ -4373,7 +4373,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 			psDroid->sMove.iVertSpeed = (SWORD)-CYBORG_VERTICAL_SPEED;
 		}
 
-#ifdef WIN32
+#ifndef PSX
 		psDroid->sMove.fz = MAKEFRACT(psDroid->z);
 #endif
 	}
@@ -4475,7 +4475,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 
 BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
 {
-#ifdef WIN32
+#ifndef PSX
 	if ( psDroid->z > iMapHeight )
 #else
 	// Hack to stop it going into the ground.
@@ -4503,7 +4503,7 @@ BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
 	}
 }
 
-#ifdef WIN32
+#ifndef PSX
 BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
@@ -4537,7 +4537,7 @@ BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 }
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 void movePlayDroidMoveAudio( DROID *psDroid )
 {
 	SDWORD				iAudioID = NO_SOUND;
@@ -4584,7 +4584,7 @@ void movePlayDroidMoveAudio( DROID *psDroid )
 }
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 {
 	DROID				*psDroid;
@@ -4612,7 +4612,7 @@ BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 }
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, SDWORD iMoveSpeed )
 {
 	UBYTE				propType;
@@ -4724,7 +4724,7 @@ static void checkLocalFeatures(DROID *psDroid)
 			continue;
 		}
 
-#ifdef WIN32
+#ifndef PSX
 		if(bMultiPlayer && (psObj->player == ANYPLAYER))
 		{
 			giftPower(ANYPLAYER,selectedPlayer,TRUE);			// give power and tell everyone.
@@ -4836,7 +4836,7 @@ void moveUpdateDroid(DROID *psDroid)
 					psDroid->id, psDroid->player, psDroid->sMove.bumpTime, gameTime));
 				psNextRouteDroid = psDroid;
 			}
-#ifdef WIN32
+#ifndef PSX
 			else if (bMultiPlayer &&
 					 (psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime))
 			{
@@ -4869,7 +4869,7 @@ void moveUpdateDroid(DROID *psDroid)
 		{
 			psDroid->sMove.fx = MAKEFRACT(psDroid->x);
 			psDroid->sMove.fy = MAKEFRACT(psDroid->y);
-#ifdef WIN32
+#ifndef PSX
 			psDroid->sMove.fz = MAKEFRACT(psDroid->z);
 #endif
 //			psDroid->sMove.bumpTime = 0;
@@ -4942,7 +4942,7 @@ void moveUpdateDroid(DROID *psDroid)
 //		moveCalcVector(psDroid, tarX,tarY, &psDroid->sMove.dx,&psDroid->sMove.dy)
 		psDroid->sMove.fx = MAKEFRACT(psDroid->x);
 		psDroid->sMove.fy = MAKEFRACT(psDroid->y);
-#ifdef WIN32
+#ifndef PSX
 		psDroid->sMove.fz = MAKEFRACT(psDroid->z);
 #endif
 
@@ -5236,7 +5236,7 @@ void moveUpdateDroid(DROID *psDroid)
 		moveUpdateGroundModel(psDroid,moveSpeed,moveDir);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if ((SDWORD)oldx >> TILE_SHIFT != psDroid->x >> TILE_SHIFT ||
 		(SDWORD)oldy >> TILE_SHIFT != psDroid->y >> TILE_SHIFT)
 #else
@@ -5284,7 +5284,7 @@ void moveUpdateDroid(DROID *psDroid)
 //		"moveUpdateUnit (end): unit at (0,0)"));
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* If it's sitting in water then it's got to go with the flow! */
 	if(TERRAIN_TYPE(mapTile(psDroid->x/TILE_UNITS,psDroid->y/TILE_UNITS)) == TER_WATER)
 	{
@@ -5302,7 +5302,7 @@ void moveUpdateDroid(DROID *psDroid)
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 #if DROID_RUN_SOUND
 	movePlayAudio( psDroid, bStarted, bStopped, moveSpeed );
 #endif

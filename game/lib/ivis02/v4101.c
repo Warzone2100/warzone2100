@@ -11,19 +11,19 @@
 #include "rendmode.h"
 #include "piemode.h"
 #include "bug.h"
-#include "piePalette.h"
-#include "pieMatrix.h" // clockwise check
-#include "pieClip.h"
+#include "piepalette.h"
+#include "piematrix.h" // clockwise check
+#include "pieclip.h"
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 
 
 
 #ifdef iV_DDX
-	#include <Wtypes.h>
+	#include <wtypes.h>
 	#include <ddraw.h>
-	#include "Frame.h"
-	#include "FrameInt.h"
+	#include "frame.h"
+	#include "frameint.h"
 #endif
 
 char	colour = 0;

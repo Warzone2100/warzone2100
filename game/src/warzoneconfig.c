@@ -8,8 +8,8 @@
 /***************************************************************************/
 
 #include "frame.h"
-#include "warzoneConfig.h"
-#include "pieState.h"
+#include "warzoneconfig.h"
+#include "piestate.h"
 
 
 /***************************************************************************/

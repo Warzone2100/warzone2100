@@ -9,7 +9,7 @@
 
 
 // maximum number of WRF/WDG files
-#ifdef WIN32
+#ifndef PSX
 #define LEVEL_MAXFILES	9
 #else
 #define LEVEL_MAXFILES	8
@@ -49,7 +49,7 @@ typedef UDWORD LEVEL_TYPE;
 // the WRF/WDG files needed for a particular level
 // the WRF/WDG files needed for a particular level
 
-#ifdef WIN32
+#ifndef PSX
 typedef struct _level_dataset
 {
 	SWORD	type;							// type of map

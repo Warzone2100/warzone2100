@@ -1,39 +1,39 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Frame.h"
-#include "Widget.h"
-#include "Objects.h"
-#include "Loop.h"
-#include "Edit2D.h"
-#include "Map.h"
+#include "frame.h"
+#include "widget.h"
+#include "objects.h"
+#include "loop.h"
+#include "edit2d.h"
+#include "map.h"
 #include "bitimage.h"//bitmap routines
 
 #ifdef PSX
-#include "Primatives.h"
+#include "primatives.h"
 #include "csnap.h"
 #include "dcache.h"
 extern CURSORSNAP InterfaceSnap;
 #endif
 
-#include "Display3d.h"
-#include "HCI.h"
+#include "display3d.h"
+#include "hci.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "WidgInt.h"
+#include "widgint.h"
 #include "bar.h"
 #include "form.h"
 #include "label.h"
 #include "button.h"
 #include "editbox.h"
 #include "slider.h"
-#include "Order.h"
-#include "IntImage.h"
-#include "IntDisplay.h"
-#include "IntOrder.h"
-#include "Text.h"
-#ifdef WIN32
-#include "ScriptExtern.h"
+#include "order.h"
+#include "intimage.h"
+#include "intdisplay.h"
+#include "intorder.h"
+#include "text.h"
+#ifndef PSX
+#include "scriptextern.h"
 #endif
 
 
@@ -46,7 +46,7 @@ extern CURSORSNAP InterfaceSnap;
 #define ORDER_BUTGAP	4
 #define ORDER_BOTTOMY	318	+ E_H
 
-#ifdef WIN32
+#ifndef PSX
 #define MAX_SELECTED_DROIDS	100	// Max size of selected droids list.
 #else
 #define MAX_SELECTED_DROIDS	16	// Max size of selected droids list.
@@ -194,7 +194,7 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		{STR_DORD_FIREDES,	0,	0},
 		{DSS_FIREDES_SET,	0,	0}
 	},
-#ifdef WIN32	// No patrol button on PSX.
+#ifndef PSX	// No patrol button on PSX.
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_PATROL,
@@ -232,7 +232,7 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
 		IDORDER_RETURN,
 		3,0,
-#ifdef WIN32
+#ifndef PSX
 		{IMAGE_ORD_RTRUP,	IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_EMBARKUP},
 		{IMAGE_ORD_RTRUP,	IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_EMBARKUP},
 #else
@@ -480,7 +480,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
     DROID       *Droid;
     STRUCTURE   *psStructure;
 
-#ifdef WIN32
+#ifndef PSX
 	if(bInTutorial)
 	{
 		// No RMB orders in tutorial!!
@@ -601,7 +601,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 	WidgSetOTIndex(OT2D_FARFORE);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	// Add the close button.
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDORDER_FORM;

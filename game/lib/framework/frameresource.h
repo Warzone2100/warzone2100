@@ -32,7 +32,7 @@ typedef void (*RESLOAD_CALLBACK)(void);
 
 typedef struct res_data
 {
-#ifdef WIN32
+#ifndef PSX
 	// aID[]  is not initialised ... but for debug reasons it should be valid for PC WRF loading .... PLEASE WRITE THE CODE SOON !!!!
 	// This is for debug use only !!!!!!!!!!
 #ifdef DEBUG
@@ -57,7 +57,7 @@ typedef struct _res_type
 {
 
 	// type is still needed on psx ... strings are defined in source - data.c (yak!)
-#ifdef WIN32
+#ifndef PSX
 	STRING			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only aplicable when loading from wrf (not wdg)
 #else
 	UBYTE *aType;		// Arse
@@ -70,7 +70,7 @@ typedef struct _res_type
 	// we must have a pointer to the data here so that we can do a resGetData();
 	RES_DATA		*psRes;		// Linked list of data items of this type
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
-#ifdef WIN32	
+#ifndef PSX	
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
 	struct _res_type	*psNext;
 #endif

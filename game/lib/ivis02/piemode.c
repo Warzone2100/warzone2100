@@ -9,18 +9,22 @@
 
 #include "frame.h"
 #include "piedef.h"
-#include "pieState.h"
-#include "pieMode.h"
-#include "pieMatrix.h"
-#include "pieFunc.h"
+#include "piestate.h"
+#include "piemode.h"
+#include "piematrix.h"
+#include "piefunc.h"
 #include "tex.h"
+#ifdef WIN32
 #include "d3dmode.h"
+#endif
 #include "v4101.h"
-#include "vSR.h"
-#include "3dfxFunc.h"
+#include "vsr.h"
+#ifdef WIN32
+#include "3dfxfunc.h"
 #include "texd3d.h"
+#endif
 #include "rendmode.h"
-#include "Pieclip.h"
+#include "pieclip.h"
 
 /***************************************************************************/
 /*
@@ -33,7 +37,7 @@
  *	Local Variables
  */
 /***************************************************************************/
-#ifdef WIN32
+#ifndef PSX
 	int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
 #endif
 
@@ -70,9 +74,13 @@ BOOL pie_CheckForDX6(void)
 {
 	UDWORD	DXVersion, DXPlatform;
 
+#ifdef WIN32
 	GetDXVersion(&DXVersion, &DXPlatform);
 
 	return (DXVersion >= 0x600);
+#else
+	return TRUE;
+#endif
 }
 
 BOOL pie_Initialise(SDWORD mode)
@@ -137,7 +145,7 @@ BOOL pie_Initialise(SDWORD mode)
 		r = _mode_4101();	// we always want success as jon's stuff does the init
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if (r)
 	{
 		pie_SetDefaultStates();

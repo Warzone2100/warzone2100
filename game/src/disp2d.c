@@ -17,28 +17,28 @@
 //#define DEBUG_GROUP1
 /* Surf recreate bitmap */
 //#define DEBUG_GROUP2
-#include "Frame.h"
-#include "FrameInt.h"
-#include "Map.h"
-#include "Disp2D.h"
-#include "Objects.h"
-#include "Display.h"
-#include "Loop.h"
-#include "GTime.h"
-#include "Findpath.h"
-#include "Display3D.h"
-#include "Edit2D.h"
-#include "HCI.h"
-#include "Player.h"
-#include "Order.h"
-#include "Geometry.h"
-#include "Component.h"
-#include "Projectile.h"
+#include "frame.h"
+#include "frameint.h"
+#include "map.h"
+#include "disp2d.h"
+#include "objects.h"
+#include "display.h"
+#include "loop.h"
+#include "gtime.h"
+#include "findpath.h"
+#include "display3d.h"
+#include "edit2d.h"
+#include "hci.h"
+#include "player.h"
+#include "order.h"
+#include "geometry.h"
+#include "component.h"
+#include "projectile.h"
 
-//#ifdef WIN32
+//#ifndef PSX
 //#include "netplay.h"
-//#include "MultiPlay.h"
-//#include "MultiStat.h"
+//#include "multiplay.h"
+//#include "multistat.h"
 //#endif
 
 // hack to display the collsion box

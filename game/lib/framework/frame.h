@@ -7,9 +7,11 @@
 #ifndef _frame_h
 #define _frame_h
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #ifdef PSX		// If Playstation version then compile lean version.
 
@@ -26,24 +28,30 @@
 #include "debug.h"
 #include "mem.h"
 #include "screen.h"
-#include "ddraw.h"
-#include "dderror.h"
-#include "input.h"
-#include "surface.h"
-#include "Image.h"
-#include "Font.h"
-#include "Heap.h"
-#include "Treap.h"
-#include "w95trace.h"
-#include "Fractions.h"
-#include "Trig.h"
-#include "FrameResource.h"
-#include "StrRes.h"
 #ifdef WIN32
-#include "DXInput.h"
+#include <ddraw.h>
+#include "dderror.h"
 #endif
-#include "Block.h"
-#include "ListMacs.h"
+#include "input.h"
+#ifdef WIN32
+#include "surface.h"
+#include "image.h"
+#endif
+#include "font.h"
+#include "heap.h"
+#include "treap.h"
+#ifdef WIN32
+#include "w95trace.h"
+#endif
+#include "fractions.h"
+#include "trig.h"
+#include "frameresource.h"
+#include "strres.h"
+#ifdef WIN32
+#include "dxinput.h"
+#endif
+#include "block.h"
+#include "listmacs.h"
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance
@@ -140,7 +148,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 /* Save the data in the buffer into the given file */
 extern BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize);
 
-#ifdef WIN32
+#ifndef PSX
 // load a file from disk into a fixed memory buffer
 extern BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 // as above but returns quietly if no file found

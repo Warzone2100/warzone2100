@@ -6,8 +6,8 @@
 #ifndef _widget_h
 #define _widget_h
 
-#include "Frame.h"
-#include "WidgBase.h"
+#include "frame.h"
+#include "widgbase.h"
 
 /***********************************************************************************
  *
@@ -242,7 +242,7 @@ typedef struct _w_sldinit
 /***********************************************************************************/
 
 /* The maximum lenth of strings for the widget system */
-#ifdef WIN32
+#ifndef PSX
 #define WIDG_MAXSTR		80
 #else
 #define WIDG_MAXSTR		40

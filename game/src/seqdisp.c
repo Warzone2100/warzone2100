@@ -4,28 +4,28 @@
  * Functions for the display of the Escape Sequences
  *
  */
-#include "Frame.h"
-#include "Widget.h"
-#include "rendMode.h"
-#include "seqDisp.h"
+#include "frame.h"
+#include "widget.h"
+#include "rendmode.h"
+#include "seqdisp.h"
 #include "sequence.h"
 #include "loop.h"
 #include "piedef.h"
-#include "pieFunc.h"
-#include "pieState.h"
-#include "HCI.h"//for font
+#include "piefunc.h"
+#include "piestate.h"
+#include "hci.h"//for font
 #include "audio.h"
-#include "cdAudio.h"
-#include "Deliverance.h"
-#include "WarzoneConfig.h"
+#include "cdaudio.h"
+#include "deliverance.h"
+#include "warzoneconfig.h"
 
 #include "multiplay.h"
 #include "gtime.h"
 #include "mission.h"
 #include "script.h"
-#include "scriptTabs.h"
+#include "scripttabs.h"
 #include "design.h"
-#include "Wrappers.h"
+#include "wrappers.h"
 
 /***************************************************************************/
 /*
@@ -396,6 +396,7 @@ void seq_SetVideoPath(void)
 	if (!bHardPath)
 	{
 		strcpy(aHardPath, "sequences\\");
+#ifdef WIN32
 		fileHandle = FindFirstFile("sequences\\*.rpl",&findData);
 		if (fileHandle == INVALID_HANDLE_VALUE)
 		{
@@ -406,6 +407,7 @@ void seq_SetVideoPath(void)
 			bHardPath = TRUE;
 			FindClose(fileHandle);
 		}
+#endif
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Lighting.h - Alex */
-#include "pieTypes.h"
+#include "pietypes.h"
 
 #define FOG_FLAGS		7	
 #define FOG_BACKGROUND	1	

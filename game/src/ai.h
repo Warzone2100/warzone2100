@@ -7,7 +7,7 @@
 #ifndef _ai_h
 #define _ai_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 
 #define ALLIANCE_BROKEN		0			// states of alliance between players
 #define ALLIANCE_REQUESTED	1

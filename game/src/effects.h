@@ -8,7 +8,7 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
 #include "piedef.h"
-#include "pieTypes.h"
+#include "pietypes.h"
 
 /* All the effect groups */
 typedef enum 
@@ -103,7 +103,7 @@ typedef enum
 	LL_OUTER
 }LAND_LIGHT_SPEC;
 
-#ifdef WIN32
+#ifndef PSX
 #define MAX_EFFECTS	2500
 #else
 #define MAX_EFFECTS	150

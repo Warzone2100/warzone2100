@@ -9,27 +9,33 @@
 
 #include "frame.h"
 #include <time.h>
-#include "pieBlitFunc.h"
-#include "dx6TexMan.h"
+#include "pieblitfunc.h"
+#ifdef WIN32
+#include "dx6texman.h"
+#endif
 #include "bug.h"
 #include "piedef.h"
-#include "pieMode.h"
-#include "pieState.h"
-#include "3dfxFunc.h"
-#include "rendFunc.h"
-#include "rendMode.h"
+#include "piemode.h"
+#include "piestate.h"
+#ifdef WIN32
+#include "3dfxfunc.h"
+#endif
+#include "rendfunc.h"
+#include "rendmode.h"
+#ifdef WIN32
 #include "texd3d.h"
+#endif
 #include "pcx.h"
-#include "pieClip.h"
-#include "pieFunc.h"
-#include "pieMatrix.h"
+#include "pieclip.h"
+#include "piefunc.h"
+#include "piematrix.h"
 #ifndef PIEPSX
 /***************************************************************************/
 /*
  *	Local Definitions
  */
 /***************************************************************************/
-#ifdef WIN32
+#ifndef PSX
 UWORD	backDropBmp[BACKDROP_WIDTH * BACKDROP_HEIGHT * 2];
 SDWORD gSurfaceOffsetX;
 SDWORD gSurfaceOffsetY;
@@ -933,8 +939,7 @@ UBYTE	paletteIndex;
 UWORD	newColour;
 UWORD	gun;
 UDWORD	i;
-DDPIXELFORMAT	*DDPixelFormat;
-ULONG			mask;
+ULONG			mask, amask, rmask, gmask, bmask;
 BYTE			ap = 0,	ac = 0, rp = 0,	rc = 0, gp = 0,	gc = 0, bp = 0, bc = 0;
 iColour*		psPalette;
 UDWORD			size;
@@ -953,16 +958,16 @@ UDWORD			size;
 	}
 	else
 	{
-		DDPixelFormat = screenGetBackBufferPixelFormat();
 		/*
 		// Cannot playback if not 16bit mode 
 		*/
-		if( DDPixelFormat->dwRGBBitCount == 16 )
+		if( screenGetBackBufferBitDepth() == 16 )
 		{
+			screenGetBackBufferPixelFormatMasks(&amask, &rmask, &gmask, &bmask);
 			/*
 			// Find out the RGB type of the surface and tell the codec...
 			*/
-			mask = DDPixelFormat->dwRGBAlphaBitMask;
+			mask = amask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -977,7 +982,7 @@ UDWORD			size;
 				ac++;
 			}
 
-			mask = DDPixelFormat->dwRBitMask;
+			mask = rmask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -992,7 +997,7 @@ UDWORD			size;
 				rc++;
 			}
 
-			mask = DDPixelFormat->dwGBitMask;
+			mask = gmask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -1007,7 +1012,7 @@ UDWORD			size;
 				gc++;
 			}
 
-			mask = DDPixelFormat->dwBBitMask;
+			mask = bmask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -1065,7 +1070,6 @@ void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX)
 {
 iSprite backDropSprite;
 iBitmap	tempBmp[BACKDROP_WIDTH*BACKDROP_HEIGHT];
-DDPIXELFORMAT	*pDDPixelFormat;
 UDWORD	chooser0,chooser1;
 CHAR	backd[128];
 SDWORD	bitDepth;
@@ -1076,8 +1080,7 @@ SDWORD	bitDepth;
 	}
 	else
 	{
-		pDDPixelFormat = screenGetBackBufferPixelFormat();
-		if( pDDPixelFormat->dwRGBBitCount == 16 )
+		if( screenGetBackBufferBitDepth() == 16 )
 		{
 			bitDepth = 16;
 		}

@@ -9,7 +9,7 @@
 #ifndef _bullet_h
 #define _bullet_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 
 /* The active bullets */
 PROJ_OBJECT   *psActiveBullets;

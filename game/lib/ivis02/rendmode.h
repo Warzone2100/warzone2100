@@ -4,15 +4,15 @@
 #include "ivisdef.h"
 #include "v4101.h"
 #include "vsr.h"
-#ifdef WIN32
-#include "pieBlitFunc.h"
+#ifndef PSX
+#include "pieblitfunc.h"
 #endif
 //#include "ivid3d.h"
-#include "BitImage.h"
+#include "bitimage.h"
 #ifdef PSX
 #include "vpsx.h"
 #endif
-#include "TextDraw.h"
+#include "textdraw.h"
 
 //*************************************************************************
 //patch
@@ -132,7 +132,7 @@ extern iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, i
 
 extern int iV_GetDisplayWidth(void);
 extern int iV_GetDisplayHeight(void);
-#ifdef WIN32
+#ifndef PSX
 extern BOOL	weHave3DNow( void );	// called whenever - returns a boolean
 
 #endif

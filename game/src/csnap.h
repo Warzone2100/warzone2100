@@ -69,10 +69,6 @@ void SnapToID(CURSORSNAP *SnapBuffer,UWORD snp);
 
 void SnapCursorTo(UWORD x,UWORD y);
 
-#ifdef WIN32
-extern void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y);
-#endif
-
 extern void intSetCurrentCursorPosition(CURSORSNAP *Snap,UDWORD id);
 
 #endif

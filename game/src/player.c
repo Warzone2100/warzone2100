@@ -6,16 +6,16 @@
  */
 
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "Player.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "player.h"
 #include "game.h"
-#include "Order.h"
-#include "ObjectDef.h"
+#include "order.h"
+#include "objectdef.h"
 
-#ifdef WIN32
-#include "MultiPlay.h"
+#ifndef PSX
+#include "multiplay.h"
 #endif
 
 /* The position for the computer players to attack */
@@ -169,7 +169,7 @@ void playerUpdate(UDWORD player)
 //	DROID		*psCurr;
 //	STRUCTURE	*psStruct;
 
-#ifdef WIN32
+#ifndef PSX
 	if ((!bMultiPlayer) && (player ==0))		// this'll have to come out to allow p1 AI
 	{											// currently stops the whole thing crashing. 
 		return;
@@ -242,7 +242,7 @@ void playerNewDroid(DROID *psDroid)
 	// Check it isn't the human player
 	player = psDroid->player;
 
-#ifdef WIN32
+#ifndef PSX
 	if( (!bMultiPlayer) && (player == 0))
 	{
 		return;
@@ -413,7 +413,7 @@ void attackLocation(UDWORD x, UDWORD y, UDWORD player)
 	DROID	*psDroid, *psCurr;
 	SDWORD	xdiff, ydiff, radSquared;
 
-#ifdef WIN32
+#ifndef PSX
 	if( (!bMultiPlayer) && (player == 0))
 	{
 		return;

@@ -71,10 +71,10 @@ typedef struct yyTypedRules_tag {	/* Typed rule table */
 #include <limits.h>
 #include <stdio.h>
 
-#include "Frame.h"
-#include "Interp.h"
-#include "Parse.h"
-#include "Script.h"
+#include "frame.h"
+#include "interp.h"
+#include "parse.h"
+#include "script.h"
 
 /* Error return codes for code generation functions */
 typedef enum _code_error

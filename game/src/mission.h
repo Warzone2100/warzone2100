@@ -32,7 +32,7 @@ extern void missionDestroyObjects(void);
 //this is called everytime the game is quit
 extern void releaseMission(void);
 
-#ifdef WIN32
+#ifndef PSX
 /*on the PC - sets the countdown played flag*/
 extern void setMissionCountDown(void);
 #endif
@@ -112,7 +112,7 @@ the display*/
 extern void addMissionTimerInterface(void);
 extern void intRemoveMissionTimer(void);
 
-#ifdef WIN32
+#ifndef PSX
 //access functions for bPlayCountDown flag
 extern void setPlayCountDown(UBYTE set);
 extern BOOL getPlayCountDown(void);
@@ -179,7 +179,7 @@ extern void placeLimboDroids(void);
 //bCheating = TRUE == start of cheat, bCheating = FALSE == end of cheat
 extern void setMissionCheatTime(BOOL bCheating);
 
-#ifdef WIN32
+#ifndef PSX
 
  #define		MISSIONRES_X			20	// pos & size of box.
  #define		MISSIONRES_Y			380	

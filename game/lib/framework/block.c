@@ -16,18 +16,18 @@
 #define DEBUG_GROUP0
 
 #include "types.h"
-#include "Debug.h"
-#include "Mem.h"
-#include "Heap.h"
-#include "Treap.h"
-#include "TreapInt.h"
-#include "MemInt.h"
-#include "ListMacs.h"
+#include "debug.h"
+#include "mem.h"
+#include "heap.h"
+#include "treap.h"
+#include "treapint.h"
+#include "memint.h"
+#include "listmacs.h"
 
-#include "Block.h"
+#include "block.h"
 
 /* What functions to use for the real malloc and free */
-#ifdef WIN32
+#ifndef PSX
 #define RMALLOC		malloc
 #define RFREE		free
 #else

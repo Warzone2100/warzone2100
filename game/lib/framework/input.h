@@ -103,7 +103,7 @@ typedef enum _key_code
 	KEY_KP_FULLSTOP =0x53,
 	KEY_F11         =0x57,
 	KEY_F12         =0x58,
-#ifdef WIN32
+#ifndef PSX
 	KEY_RCTRL           =0x11D,
 	KEY_KP_BACKSLASH    =0x135,
 	KEY_RALT            =0x138,
@@ -132,7 +132,7 @@ typedef enum _key_code
 
 /* The largest possible scan code (probably a lot less than this but ...) */
 //      but ...    it's not as if it's got to fit into 2meg of mem or anything is it ...
-#ifdef WIN32
+#ifndef PSX
 #define KEY_MAXSCAN  512
 #else
 #define KEY_MAXSCAN  (0x5b)		// see input.h for the max value
@@ -188,6 +188,15 @@ extern BOOL mouseReleased(MOUSE_KEY_CODE code);
 
 /* Check for a mouse drag, return the drag start coords if dragging */
 extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
+
+/* Warps the mouse to the given position */
+extern void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y);
+
+/* Sets the state of the mouse key to down */
+extern void setMouseDown(MOUSE_KEY_CODE code);
+
+/* Sets the state of the mouse key to up */
+extern void setMouseUp(MOUSE_KEY_CODE code);
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		0x010000

@@ -4,8 +4,8 @@
  * A few general functions for the script library
  */
 
-#include "Frame.h"
-#include "Script.h"
+#include "frame.h"
+#include "script.h"
 #include <assert.h>
 							
 

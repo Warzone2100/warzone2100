@@ -5,12 +5,11 @@
   3dfx non-dll test prog
 
 */
-#include <windows.h>
 #include "frame.h"
 
 #define dllName "glide2x.dll"
 
-#include "Dglide.h"		// new glide.h - old glide.h MUST be renamed glideold.h!
+#include "dglide.h"		// new glide.h - old glide.h MUST be renamed glideold.h!
 
 
 
@@ -304,7 +303,7 @@ FUNC3DFX Functions3DFX[]=
 
 BOOL InitGlideDLL(void)
 {
-
+#ifdef WIN32
 	FUNC3DFX *pFunc;
 
 
@@ -339,16 +338,20 @@ BOOL InitGlideDLL(void)
 		pFunc++;	// Next entry
 	}
 
-
    return TRUE;
+#else
+   return FALSE;
+#endif
 }
 
 
 
 BOOL ShutdownGlideDLL(void)
 {
+#ifdef WIN32
  	if (dllHandle!=NULL)
 		FreeLibrary(dllHandle);
+#endif
 
 	dllHandle=NULL;
 	return TRUE;

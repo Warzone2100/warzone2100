@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#ifdef WIN32
 #include <dos.h>
+#endif
 #include "rendmode.h"
 #include "bug.h"
-#include "piePalette.h"
+#include "piepalette.h"
 #include "pcx.h"
 #include "tex.h"
 #include "ivispatch.h"
 
-#ifdef WIN32
+#ifndef PSX
 
 #ifdef INC_GLIDE
 	#include "tex.h"
-	#include "3dfxText.h"
+	#include "3dfxtext.h"
 	#include "3dfxfunc.h"
 #endif
 
@@ -24,13 +26,13 @@
 
 #endif
 
-#include "BitImage.h"
+#include "bitimage.h"
 
 
 
 
 
-#ifdef WIN32
+#ifndef PSX
 static BOOL LoadTextureFile(char *FileName,iSprite *TPage,int *TPageID);
 
 #else
@@ -43,7 +45,7 @@ static UWORD LoadClutFile(UBYTE *FileName,UWORD *ClutIDs);
 UWORD iV_GetImageWidth(IMAGEFILE *ImageFile,UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-#ifdef WIN32
+#ifndef PSX
 	return ImageFile->ImageDefs[ID].Width;
 #else
 	return PSXToWidth(ImageFile->ImageDefs[ID].Width);	// /2;
@@ -53,7 +55,7 @@ UWORD iV_GetImageWidth(IMAGEFILE *ImageFile,UWORD ID)
 UWORD iV_GetImageHeight(IMAGEFILE *ImageFile,UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-#ifdef WIN32
+#ifndef PSX
 	return ImageFile->ImageDefs[ID].Height;
 #else
 	return PSXToHeight(ImageFile->ImageDefs[ID].Height);	// /2;
@@ -82,7 +84,7 @@ UWORD iV_GetImageHeightNoCC(IMAGEFILE *ImageFile,UWORD ID)
 SWORD iV_GetImageXOffset(IMAGEFILE *ImageFile,UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-#ifdef WIN32
+#ifndef PSX
 	return ImageFile->ImageDefs[ID].XOffset;
 #else
 	return PSXToX(ImageFile->ImageDefs[ID].XOffset);	// /2;
@@ -92,7 +94,7 @@ SWORD iV_GetImageXOffset(IMAGEFILE *ImageFile,UWORD ID)
 SWORD iV_GetImageYOffset(IMAGEFILE *ImageFile,UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-#ifdef WIN32
+#ifndef PSX
 	return ImageFile->ImageDefs[ID].YOffset;
 #else
 	return PSXToY(ImageFile->ImageDefs[ID].YOffset);	// /2;
@@ -102,7 +104,7 @@ SWORD iV_GetImageYOffset(IMAGEFILE *ImageFile,UWORD ID)
 UWORD iV_GetImageCenterX(IMAGEFILE *ImageFile,UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-#ifdef WIN32
+#ifndef PSX
 	return ImageFile->ImageDefs[ID].XOffset + ImageFile->ImageDefs[ID].Width/2;
 #else
 	return PSXToX(ImageFile->ImageDefs[ID].XOffset + ImageFile->ImageDefs[ID].Width/2);	// /2;
@@ -112,14 +114,14 @@ UWORD iV_GetImageCenterX(IMAGEFILE *ImageFile,UWORD ID)
 UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile,UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-#ifdef WIN32
+#ifndef PSX
 	return ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2;
 #else
 	return PSXToY(ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2);	// /2;
 #endif
 }
 
-#ifdef WIN32
+#ifndef PSX
 
 IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 {

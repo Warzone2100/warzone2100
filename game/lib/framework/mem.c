@@ -16,11 +16,11 @@
 #include "types.h"
 #include "mem.h"
 #include "debug.h"
-#include "Heap.h"
-#include "Treap.h"
-#include "TreapInt.h"
-#include "MemInt.h"
-#include "Block.h"
+#include "heap.h"
+#include "treap.h"
+#include "treapint.h"
+#include "memint.h"
+#include "block.h"
 
 #include <assert.h>
 
@@ -34,7 +34,7 @@
 #define SHOW_KB_LIMIT	(0x400)
 
 /* What functions to use for the real malloc and free */
-#ifdef WIN32
+#ifndef PSX
 #define RMALLOC		malloc
 #define RFREE		free
 #else

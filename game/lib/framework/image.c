@@ -5,7 +5,7 @@
  *
  */
 
-#ifdef WIN32
+#ifndef PSX
 
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
@@ -17,10 +17,10 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "Types.h"
-#include "Debug.h"
-#include "Mem.h"
-#include "Image.h"
+#include "types.h"
+#include "debug.h"
+#include "mem.h"
+#include "image.h"
 
 // Define this if you want to generate pictures (for tools ?)
 #define WRITEIMAGES
@@ -543,4 +543,4 @@ BOOL imageCreateBMP(UBYTE			*pImageData,		// Original file
 
 #endif
 
-#endif	// End of #ifdef WIN32
+#endif	// End of #ifndef PSX

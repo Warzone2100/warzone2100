@@ -39,7 +39,7 @@ extern void scrvSetInputBuffer(UBYTE *pBuffer, UDWORD size);
 extern void scrvGetErrorData(int *pLine, char **ppText);
 
 /* A simple error reporting routine */
-#ifdef WIN32
+#ifndef PSX
 extern void scrv_error(char *pMessage,...);
 #else
 	#ifndef FINALBUILD

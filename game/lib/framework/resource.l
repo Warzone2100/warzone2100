@@ -5,7 +5,7 @@
  * Lex file for parsing res files
  */
 
-#ifdef WIN32
+#ifndef PSX
 #include <stdio.h>
 #else
 /* A few definitions so the lex generated code will compile on the PSX.
@@ -28,7 +28,7 @@ static int fprintf(FILE* f,char* c,...)
 #include <string.h>
 #include "types.h"
 #include "debug.h"
-#include "ResLY.h"
+#include "resly.h"
 
 /* Get the Yacc definitions */
 #include "resource_y.h"

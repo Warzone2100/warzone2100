@@ -52,9 +52,9 @@ extern void startSensorDisplay(void);
 
 
 
-#ifdef WIN32
+#ifndef PSX
 // fast test for whether obj2 is in range of obj1
-__inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
+extern __inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
 {
 	SDWORD	xdiff,ydiff, distSq, rangeSq;
 

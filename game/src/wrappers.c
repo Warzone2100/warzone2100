@@ -6,26 +6,26 @@
 
 #include <stdio.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "ivisdef.h" //ivis palette code
-#include "pieState.h"
+#include "piestate.h"
 #include "textdraw.h" //ivis text code
 
-#ifdef WIN32
+#ifndef PSX
 #include "piemode.h"
-#include "pieMatrix.h"
-#include "pieFunc.h"
+#include "piematrix.h"
+#include "piefunc.h"
 #endif
 
 #include "hci.h"		// access to widget screen.
 #include "widget.h"
-#include "Wrappers.h"
-#include "WinMain.h"
-#include "Objects.h"
-#include "Display.h"
-#include "Display3d.h"
-#include "FrontEnd.h"
-#include "Frend.h"		// display logo.
+#include "wrappers.h"
+#include "winmain.h"
+#include "objects.h"
+#include "display.h"
+#include "display3d.h"
+#include "frontend.h"
+#include "frend.h"		// display logo.
 #include "console.h"
 #include "intimage.h"
 #include "text.h"
@@ -34,19 +34,19 @@
 #include "audio_id.h"		
 #include "gtime.h"
 #include "ingameop.h"
-#include "KeyMap.h"
+#include "keymap.h"
 #include "mission.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "keyedit.h"
-#include "SeqDisp.h"
+#include "seqdisp.h"
 #include "3dfxfunc.h"
 #include "vid.h"
 #include "config.h"
 #include "resource.h"
-#include "netPlay.h"	// multiplayer 
+#include "netplay.h"	// multiplayer 
 #include "multiplay.h"
-#include "Multiint.h"				
+#include "multiint.h"				
 #include "multistat.h"
 #include "multilimit.h"
 #endif
@@ -56,10 +56,10 @@
 #include "display3d_psx.h"
 #include "libsn.h"
 #include "vid.h"
-#include "Primatives.h"
-#include "VPad.h"
-#include "CtrlPSX.h"
-#include "InitPSX.h"
+#include "primatives.h"
+#include "vpad.h"
+#include "ctrlpsx.h"
+#include "initpsx.h"
 
 /* callback type for res pre-load callback*/
 typedef void (*SPECIALVBLCALLBACK)(void);
@@ -73,7 +73,7 @@ extern BOOL IsMouseDrawEnabled(void);
 
 #endif
 
-#ifdef WIN32   
+#ifndef PSX   
 
 
 extern void frontEndCheckCD( tMode tModeNext, CD_INDEX cdIndex );
@@ -88,7 +88,7 @@ typedef struct _star
 STAR	stars[30];	// quick hack for loading stuff
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #define LOADBARY	460		// position of load bar.
 #define LOADBARY2	470
 #define LOAD_BOX_SHADES	6
@@ -114,7 +114,7 @@ void	runCreditsScreen	( void );
 UDWORD	lastTick=0;
 
 
-#ifdef WIN32
+#ifndef PSX
 void	initStars( void )
 {
 UDWORD	i;
@@ -131,7 +131,7 @@ UDWORD	i;
 BOOL frontendInitVars(void)
 {
 	firstcall = TRUE;
-#ifdef WIN32
+#ifndef PSX
 	initStars();
 #endif
 
@@ -142,7 +142,7 @@ BOOL frontendInitVars(void)
 // play the intro if first EVER boot.
 BOOL playIntroOnInstall( VOID )
 {
-#ifdef WIN32
+#ifndef PSX
 	DWORD result;
 
 	if(!openWarzoneKey())
@@ -181,7 +181,7 @@ TITLECODE titleLoop(void)
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	pie_GlobalRenderBegin();
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
@@ -206,7 +206,7 @@ TITLECODE titleLoop(void)
 
 		pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);			// reset cursor (hw)
 
-#ifdef WIN32
+#ifndef PSX
 
 		frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
@@ -260,7 +260,7 @@ TITLECODE titleLoop(void)
 	switch(titleMode)								// run relevant title screen code.
 	{
 
-#ifdef WIN32										// MULTIPLAYER screens
+#ifndef PSX										// MULTIPLAYER screens
 		case PROTOCOL:
 			runConnectionScreen();					// multiplayer connection screen.
 			break;
@@ -296,7 +296,7 @@ TITLECODE titleLoop(void)
 			runTutorialMenu();
 			break;
 
-#ifdef WIN32
+#ifndef PSX
 //		case GRAPHICS:
 //			runGraphicsOptionsMenu();
 //			break;
@@ -319,7 +319,7 @@ TITLECODE titleLoop(void)
 			runGameOptionsMenu();
 			break;
 
-#ifdef WIN32
+#ifndef PSX
 		case GAME2:
 			runGameOptions2Menu();
 			break;
@@ -331,7 +331,7 @@ TITLECODE titleLoop(void)
 		
 		case STARTGAME:	
 		case LOADSAVEGAME:
-#ifdef WIN32
+#ifndef PSX
 			initLoadingScreen(TRUE,TRUE);//render active
 #endif
   			if (titleMode == LOADSAVEGAME)
@@ -342,7 +342,7 @@ TITLECODE titleLoop(void)
 			{
 				RetCode = TITLECODE_STARTGAME;
 			}
-#ifdef WIN32
+#ifndef PSX
 			pie_GlobalRenderEnd(TRUE);//force to black
 #endif
 			return RetCode;			// don't flip!
@@ -367,7 +367,7 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 
-#ifdef WIN32			
+#ifndef PSX			
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(!bUsingKeyboard)
@@ -379,7 +379,7 @@ TITLECODE titleLoop(void)
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
-//#ifdef WIN32
+//#ifndef PSX
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&	/* Check for toggling display mode */
 		keyPressed(KEY_RETURN) AND pie_GetRenderEngine()!=ENGINE_GLIDE)
 	{
@@ -406,7 +406,7 @@ TITLECODE titleLoop(void)
 // Loading Screen.
 
 
-#ifdef WIN32
+#ifndef PSX
 
 //loadbar update
 void loadingScreenCallback(void)
@@ -762,7 +762,7 @@ void closeLoadingScreen(void)
 BOOL displayGameOver(BOOL bDidit)
 {
 
-#ifdef WIN32
+#ifndef PSX
 // AlexL says take this out......
 //	setConsolePermanence(TRUE,TRUE);
 //	flushConsoleMessages( );

@@ -6,18 +6,18 @@
 */
 
 // -------------------------------------------------------------------------
-#include "Frame.h"
-#include "Base.h"
-#include "Move.h"
-#include "Map.h"
-#include "Weapons.h"
-#include "StatsDef.h"
-#include "DroidDef.h"
-#include "PieTypes.h"
-#include "OptimisePath.h"
-#include "RayCast.h"
-#include "FPath.h"
-#include "Effects.h"
+#include "frame.h"
+#include "base.h"
+#include "move.h"
+#include "map.h"
+#include "weapons.h"
+#include "statsdef.h"
+#include "droiddef.h"
+#include "pietypes.h"
+#include "optimisepath.h"
+#include "raycast.h"
+#include "fpath.h"
+#include "effects.h"
 
 // -------------------------------------------------------------------------
 /* Where to slide a path point according to bisecting angle */

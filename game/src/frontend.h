@@ -38,7 +38,7 @@ tMode titleMode;					// the global case
 //#define DEFAULT_LEVEL	"CAM_2A"
 #define TUTORIAL_LEVEL	"TUTORIAL3"
 
-#ifdef WIN32
+#ifndef PSX
 #define MAX_LEVEL_NAME_SIZE	(256)
 #else
 #define MAX_LEVEL_NAME_SIZE	(22)
@@ -79,7 +79,7 @@ extern void	displayTextOption		(struct _widget *psWidget, UDWORD xOffset, UDWORD
 
 extern void loadOK					(void);
 extern BOOL CancelPressed			(VOID);
-#ifdef WIN32
+#ifndef PSX
 BOOL		runGameOptions2Menu		(VOID);
 #endif
 
@@ -98,7 +98,7 @@ void processCentreScreen(UDWORD id);
 #define FRONTEND_BACKDROP		20000
 
 #define FRONTEND_TOPFORM		20001
-#ifdef WIN32
+#ifndef PSX
 #define FRONTEND_TOPFORMX		80
 #define FRONTEND_TOPFORMY		10
 #define FRONTEND_TOPFORMW		480
@@ -117,7 +117,7 @@ void processCentreScreen(UDWORD id);
 
 
 #define FRONTEND_BOTFORM		20002
-#ifdef WIN32
+#ifndef PSX
 #define FRONTEND_BOTFORMX		80
 #define FRONTEND_BOTFORMY		170
 #define FRONTEND_BOTFORMW		480
@@ -132,7 +132,7 @@ void processCentreScreen(UDWORD id);
 #define FRONTEND_BUTWIDTH		FRONTEND_BOTFORMW-40 // text button sizes.
 #define FRONTEND_BUTHEIGHT		30
 
-#ifdef WIN32
+#ifndef PSX
 #define FRONTEND_POS1X			20				// button positions
 #define FRONTEND_POS1Y			10
 #define FRONTEND_POS1M			290
@@ -310,7 +310,7 @@ void processCentreScreen(UDWORD id);
 #define FRONTEND_MFLIP			20095
 #define FRONTEND_MFLIP_R		20096
 
-#ifdef WIN32
+#ifndef PSX
 #define FRONTEND_SEQUENCE		20097
 #define FRONTEND_SEQUENCE_R		20098
 #else

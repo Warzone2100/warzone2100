@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <math.h>
 #include "ivi.h"
-#include "pieState.h"
-#include "piePalette.h"
+#include "piestate.h"
+#include "piepalette.h"
 #include "rendmode.h"
 #include "bug.h"
 #include "fractions.h"
 #ifdef INC_GLIDE
-#include "dGlide.h"
+#include "dglide.h"
 #endif
 
 #define RED_CHROMATICITY	1
@@ -26,7 +26,7 @@ void pie_SetColourDefines(void);
 
 
 
-#ifdef WIN32	// whole file is split into 2 parts now !!!!
+#ifndef PSX	// whole file is split into 2 parts now !!!!
 /*
 
 
@@ -41,7 +41,7 @@ PALETTEENTRY*		psWinPal = NULL;
 uint8				palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 bPaletteInitialised = FALSE;
 uint8	 colours[16];
-#ifdef WIN32
+#ifndef PSX
 /* Look up table for transparency */
 /*	entry[x][y] tells you what colour to poke in when you're writing
 	x over y
@@ -52,20 +52,17 @@ UWORD	palette16Bit[PALETTE_SIZE];	//16 bit version of the present palette
 
 BOOL	pal_Make16BitPalette(void)
 {
-DDPIXELFORMAT* DDPixelFormat;
 iColour* psPal;
 UDWORD	i;
 UWORD	alpha, red,green,blue;
 BYTE				ap = 0,	ac = 0, rp = 0,	rc = 0, gp = 0,	gc = 0, bp = 0, bc = 0;
-ULONG				mask;
+ULONG				mask, amask, rmask, gmask, bmask;
 
 	/*
 	// Cannot convert iof not 16bit mode 
 	*/
 
-	DDPixelFormat =  screenGetFrontBufferPixelFormat();	
-
-	if (DDPixelFormat == NULL)
+	if ( ! screenGetFrontBufferPixelFormatMasks(&amask, &rmask, &gmask, &bmask))
 	{
 		return FALSE;
 	}
@@ -77,12 +74,12 @@ ULONG				mask;
 	/*
 	// Cannot playback if not 16bit mode 
 	*/
-	if( DDPixelFormat->dwRGBBitCount == 16 )
+	if( screenGetFrontBufferBitDepth() == 16 )
 	{
 		/*
 		// Find out the RGB type of the surface and tell the codec...
 		*/
-		mask = DDPixelFormat->dwRGBAlphaBitMask;
+		mask = amask;
 
 		if(mask!=0)
 		{
@@ -99,7 +96,7 @@ ULONG				mask;
 			ac++;
 		}
 
-		mask = DDPixelFormat->dwRBitMask;
+		mask = rmask;
 
 		if(mask!=0)
 		{
@@ -116,7 +113,7 @@ ULONG				mask;
 			rc++;
 		}
 
-		mask = DDPixelFormat->dwGBitMask;
+		mask = gmask;
 
 		if(mask!=0)
 		{
@@ -133,7 +130,7 @@ ULONG				mask;
 			gc++;
 		}
 
-		mask = DDPixelFormat->dwBBitMask;
+		mask = bmask;
 
 		if(mask!=0)
 		{
@@ -155,7 +152,6 @@ ULONG				mask;
 		//if not 16 bit use blue 5 only so we know the problem
 		bc = 5;
 	}
-
 
 	alpha = 0;
 
@@ -393,7 +389,7 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 	return ((uint8) best_colour);
 }
 
-#ifdef WIN32
+#ifndef PSX
 void	pie_BuildSoftwareTransparency( void )
 {
 int	i,j;
@@ -544,7 +540,7 @@ void pal_SelectPalette(int n)
 // Called from data.c by the PSXPAL resource
 void pal_SetgamePalette(UBYTE *pFileData)
 {
-#ifdef WIN32
+#ifndef PSX
 	UDWORD i;
 
 	for(i=0; i<256; i++) 

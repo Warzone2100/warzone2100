@@ -5,9 +5,9 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Projectile.h"
+#include "frame.h"
+#include "objects.h"
+#include "projectile.h"
 #include "console.h"
 #include "oprint.h"
 

@@ -266,7 +266,7 @@ extern	int	audp_mapch	YY_ARGS((int delim, int escape));
 #line 1 ".\parser.l"
 
 
-#ifdef WIN32
+#ifndef PSX
 #include <stdio.h>
 #else
 /* A few definitions so the lex generated code will compile on the PSX.

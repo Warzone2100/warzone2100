@@ -5,14 +5,14 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "CmdDroidDef.h"
-#include "CmdDroid.h"
-#include "GTime.h"
-#include "Group.h"
-#include "Order.h"
-#ifdef WIN32
+#include "frame.h"
+#include "objects.h"
+#include "cmddroiddef.h"
+#include "cmddroid.h"
+#include "gtime.h"
+#include "group.h"
+#include "order.h"
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
@@ -93,7 +93,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
 	}
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if(bMultiPlayer && myResponsibility(psDroid->player) )
 //	{
 //		sendCommandDroid(psCommander,psDroid);
@@ -160,7 +160,7 @@ SDWORD cmdDroidGetLevel(DROID *psCommander)
 {
 	SDWORD	numKills = psCommander->numKills;
 
-#ifdef WIN32
+#ifndef PSX
 	// commanders do not need as much experience in multiplayer
 	if (bMultiExpBoost)
 	{

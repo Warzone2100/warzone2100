@@ -7,8 +7,8 @@
 #ifndef _group_h
 #define _group_h
 
-#include "Order.h"
-#include "OrderDef.h"
+#include "order.h"
+#include "orderdef.h"
 
 typedef enum _group_type
 {

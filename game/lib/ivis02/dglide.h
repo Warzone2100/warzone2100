@@ -1,5 +1,8 @@
 // New glide headers
 
+#ifndef dglide_h_
+#define dglide_h_
+
 #define FX_GLIDE_NO_FUNC_PROTO
 #include "glide.h"	
 
@@ -539,4 +542,4 @@ extern guTexMemReset_fpt	guTexMemReset;
 extern guTexSource_fpt	guTexSource;
 
 
-
+#endif // dglide_h_

@@ -41,13 +41,13 @@
 	} \
 }
 
-#include "TypeDefs.h"
+#include "typedefs.h"
 
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#include "GateInterface.h"
-#include "DebugPrint.h"
+#include "gateinterface.h"
+#include "debugprint.h"
 
 #else
 
@@ -55,14 +55,14 @@
 //#define DEBUG_GROUP0
 // water gate printf's
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "Map.h"
-#include "Astar.h"
-#include "FPath.h"
-#include "Wrappers.h"
+#include "frame.h"
+#include "map.h"
+#include "astar.h"
+#include "fpath.h"
+#include "wrappers.h"
 #endif
 
-#include "Gateway.h"
+#include "gateway.h"
 
 // the list of gateways on the current map
 GATEWAY		*psGateways;
@@ -382,7 +382,7 @@ static void gwCalcZoneCenter(SDWORD zone, SDWORD *px, SDWORD *py)
 }
 
 // check all the zones are of reasonable sizes
-#ifdef WIN32
+#ifndef PSX
 void gwCheckZoneSizes(void)
 {
 	SDWORD		zone, xsum,ysum, numtiles, inzone;
@@ -856,7 +856,7 @@ BOOL gwLinkGateways(void)
 						psLink->x1,psLink->y1, psLink->x2,psLink->y2));
 					psCurr->psLinks[link].psGateway = psLink;
 					psCurr->psLinks[link].flags = 0;
-#ifdef WIN32
+#ifndef PSX
 					psCurr->psLinks[link].dist = (SWORD)gwRouteLength(psCurr, psLink);
 #else
 					x = (psLink->x1 + psLink->x2)/2;

@@ -8,8 +8,8 @@
 #ifndef _block_h
 #define _block_h
 
-#include "Mem.h"
-#include "MemInt.h"
+#include "mem.h"
+#include "memint.h"
 
 // control whether the debugging block malloc is used
 #if DEBUG_MALLOC

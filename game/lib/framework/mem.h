@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include "types.h"
-#include "Debug.h"
+#include "debug.h"
 
 /* DEBUG_MALLOC == TRUE uses debugging malloc and free
    DEBUG_MALLOC == FALSE uses normal malloc and free */

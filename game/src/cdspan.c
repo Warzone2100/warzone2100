@@ -1,19 +1,19 @@
 /* Handles the two CD issue */
 /* Alex McLean */
 
-#include "Frame.h"
-#include "pieDef.h"
-#include "pieFunc.h"
-#include "pieMode.h"
-#include "pieState.h"
-#include "Text.h"
-#include "DisplayDef.h"
-#include "RendMode.h"
-#include "HCI.h"
+#include "frame.h"
+#include "piedef.h"
+#include "piefunc.h"
+#include "piemode.h"
+#include "piestate.h"
+#include "text.h"
+#include "displaydef.h"
+#include "rendmode.h"
+#include "hci.h"
 #include "intdisplay.h"
 #include "audio.h"
 #include "cdaudio.h"
-#include "CDSpan.h"
+#include "cdspan.h"
 
 // turn on/off checks
 #if 1
@@ -55,6 +55,7 @@ static STRING		g_szCurDriveName[MAX_STR] = "";
 BOOL
 cdspan_GetDriveName( BOOL bCheckAny, STRING szDriveName[], ... )
 {
+#ifdef WIN32
 	UINT		uiRet;
 	STRING		szDrives[MAX_STR],
 				szVolNameList[MAX_VOL_NAMES][MAX_STR],
@@ -149,6 +150,10 @@ cdspan_GetDriveName( BOOL bCheckAny, STRING szDriveName[], ... )
 		strcpy( szDriveName, "" );
 		return FALSE;
 	}
+#else
+	strcpy( szDriveName, "" );
+	return FALSE;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -197,6 +202,7 @@ cdspan_PlayInGameAudio( STRING szFileName[], SDWORD iVol )
 static BOOL
 cdspan_GetCDLabel( STRING *szLabel )
 {
+#ifdef WIN32
 	char	szVolName[MAX_STR], szSysName[MAX_STR];
 	DWORD	dwVolSerialNum, dwFlags, dwMaxlen;
 
@@ -213,6 +219,10 @@ cdspan_GetCDLabel( STRING *szLabel )
 	}
 
 	return TRUE;
+#else
+	strcpy( szLabel, "" );
+	return FALSE;
+#endif
 }
 
 // -----------------------------------------------------------------------

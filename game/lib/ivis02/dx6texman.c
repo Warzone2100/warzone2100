@@ -9,10 +9,10 @@
 
 #include "frame.h"
 #include "piedef.h"
-#include "pieState.h"
-#include "piePalette.h"
-#include "d3dRender.h"
-#include "dx6TexMan.h"
+#include "piestate.h"
+#include "piepalette.h"
+#include "d3drender.h"
+#include "dx6texman.h"
 #include "tex.h"
 
 

@@ -5,10 +5,14 @@
  *
  */
 
-#include "Frame.h"
+#include "frame.h"
 #include "wdg.h"
-#include "multiWDG.h"
+#include "multiwdg.h"
 
+#ifndef WIN32  /* POSIX directory handling */
+# include <sys/types.h>
+# include <dirent.h>
+#endif
 // the list of file catalogs for all the current WDGs
 WDGCACHE	*psWDGCache;
 WDGCACHE	*psWDGCacheRev;
@@ -157,13 +161,20 @@ BOOL wdgCheckDependancies(void)
 // load all the WDG catalogs
 BOOL wdgLoadAllWDGCatalogs(void)
 {
+#ifdef WIN32
 	WIN32_FIND_DATA		sFindData;
 	HANDLE				hFindHandle;
+#else
+	DIR *dir;
+	struct dirent *dirent;
+	char *ptr;
+#endif
 
 	// set the catalogs to the static arrays to load them
 	WDG_SetCurrentWDGCatalog("", 0, WRFCatalog);
 	WDG_SetCurrentWRFFileCatalog(0, WRFfilesCatalog);
 
+#ifdef WIN32
 	// now load the catalog for every WDG file in the current directory
 	memset(&sFindData, 0, sizeof(WIN32_FIND_DATA));
 	hFindHandle = FindFirstFile("*.wdg", &sFindData);
@@ -179,7 +190,22 @@ BOOL wdgLoadAllWDGCatalogs(void)
 			hFindHandle = INVALID_HANDLE_VALUE;
 		}
 	}
-
+#else
+	dir = opendir(".");
+	while ( (dirent = readdir(dir)) != NULL)
+	{
+		ptr = strrchr(dirent->d_name, '.');
+		if (ptr != NULL && strcmp(".wdg", ptr) == 0)
+		{
+			if (!wdgLoadCompleteCatalog(dirent->d_name))
+			{
+				closedir(dir);
+				return FALSE;
+			}
+		}
+	}
+        closedir(dir);
+#endif
 	// now check the dependancies
 	if (!wdgCheckDependancies())
 	{

@@ -18,8 +18,8 @@
 #include "csnap.h"
 #include "intimage.h"
 #include "bitimage.h"
-#include "IntDisplay.h"
-#include "Audio_id.h"
+#include "intdisplay.h"
+#include "audio_id.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines

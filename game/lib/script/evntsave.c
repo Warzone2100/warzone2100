@@ -5,9 +5,9 @@
  *
  */
 
-#include "Frame.h"
-#include "Script.h"
-#include "EvntSave.h"
+#include "frame.h"
+#include "script.h"
+#include "evntsave.h"
 
 
 // the event save file header

@@ -5,35 +5,35 @@
  *
  */
 #include <time.h>
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 /* Includes direct access to render library */
 #include "piedef.h"
 #include "rendmode.h"
 
 //#include "geo.h"
-#include "Display3D.h"
+#include "display3d.h"
 #include "map.h"
-#include "IntDisplay.h"
-#include "Objects.h"
+#include "intdisplay.h"
+#include "objects.h"
 #include "display.h"
 #include "design.h"
-#include "Message.h"
-#include "HCI.h"
-#include "IntelMap.h"
-#include "mapDisplay.h"
+#include "message.h"
+#include "hci.h"
+#include "intelmap.h"
+#include "mapdisplay.h"
 #include "audio.h"
-#include "Text.h"
-#include "Console.h"
+#include "text.h"
+#include "console.h"
 #include "research.h"
 #include "gtime.h"
 #include "loop.h"
 #include "script.h"
-#include "scriptTabs.h"
+#include "scripttabs.h"
 
-#include "seqDisp.h"
+#include "seqdisp.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #include "cdaudio.h"
 #endif
@@ -43,9 +43,9 @@
 #include "component.h"
 #include "primatives.h"
 #include "dcache.h"
-#include "VPad.h"
-#include "CtrlPSX.h"
-#include "DrawIMD_PSX.H"
+#include "vpad.h"
+#include "ctrlpsx.h"
+#include "drawimd_psx.h"
 #include "locale.h"
 #include "initpsx.h"
 #include "movie.h"
@@ -66,7 +66,7 @@ extern CURSORSNAP InterfaceSnap;
 
 
 //Height to view the world from in Intelligence Screen
-/*#ifdef WIN32
+/*#ifndef PSX
 #define INTELMAP_VIEWHEIGHT		2250		
 #else
 #define INTELMAP_VIEWHEIGHT		(2250)
@@ -118,10 +118,10 @@ extern CURSORSNAP InterfaceSnap;
 #define	INTEL_TXT_LIFE			2000
 
 //define the 3D View sizes and positions that are required - relative to INTMAP_FORM
-//#ifdef WIN32
+//#ifndef PSX
 #define	INTMAP_RESEARCHX		(100 + D_W)
 #define INTMAP_RESEARCHY		(30	+ D_H)
-#ifdef WIN32
+#ifndef PSX
 #define	INTMAP_RESEARCHWIDTH	440
 #define INTMAP_RESEARCHHEIGHT	288
 #else
@@ -161,7 +161,7 @@ extern CURSORSNAP InterfaceSnap;
 
 /*dimensions for Title view section relative to IDINTMAP_MSGVIEW*/
 /*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
-#ifdef WIN32
+#ifndef PSX
 #define	INTMAP_TITLEX			0
 #define INTMAP_TITLEY			0	
 #define	INTMAP_TITLEWIDTH		INTMAP_RESEARCHWIDTH
@@ -184,7 +184,7 @@ extern CURSORSNAP InterfaceSnap;
 #define	INTMAP_FLICWIDTH		192
 #define INTMAP_FLICHEIGHT		170
 /*dimensions for TEXT view section relative to IDINTMAP_MSGVIEW*/
-#ifdef WIN32
+#ifndef PSX
 #define	INTMAP_TEXTX			0
 #define INTMAP_TEXTY			200	
 #define	INTMAP_TEXTWIDTH		INTMAP_RESEARCHWIDTH
@@ -203,7 +203,7 @@ extern CURSORSNAP InterfaceSnap;
 
 
 //position for text on full screen video
-#ifdef WIN32
+#ifndef PSX
 #define VIDEO_TEXT_TOP_X				20
 #define VIDEO_TEXT_TOP_Y				20
 #define VIDEO_TEXT_BOTTOM_X				20
@@ -304,7 +304,7 @@ MESSAGE			*psCurrentMsg = NULL;
 TEXT_DISPLAY	currentTextDisplay;
 
 
-#ifdef WIN32
+#ifndef PSX
 
 #define PAUSE_DISPLAY_CONDITION (!bMultiPlayer)
 #define PAUSEMESSAGE_YOFFSET (0)
@@ -542,7 +542,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		switch (psMessage->type)
 		{
 			case MSG_RESEARCH:
-#ifdef WIN32
+#ifndef PSX
 				psResearch =  getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 				if (psResearch)
 				{
@@ -706,7 +706,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 #ifdef PSX
 	WidgSetOTIndex(OT2D_FARFORE);
 #endif
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close box */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDINTMAP_MSGVIEW;
@@ -740,7 +740,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return FALSE;
 	}*/
 
-#ifdef WIN32
+#ifndef PSX
 	/*add the Label for the title box*/
 	memset(&sLabInit,0,sizeof(W_LABINIT));
 	sLabInit.id = IDINTMAP_TITLELABEL;
@@ -785,7 +785,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	/*Add the Flic box */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -805,7 +805,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 
 	/*Add the text box*/
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.formID = IDINTMAP_MSGVIEW;
 #else
 	sFormInit.formID = 0;	//IDINTMAP_MSGVIEW;
@@ -838,7 +838,7 @@ void intProcessIntelMap(UDWORD id)
 	{
 		intIntelButtonPressed(TRUE, id);
 	}*/
-#ifdef WIN32
+#ifndef PSX
 	else if (id == IDINTMAP_CLOSE)
 	{
 		//if close button pressed on 3D View then close the view only
@@ -912,7 +912,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		 	seq_StartNextFullScreenVideo();
 		}
 	}
-#ifdef WIN32	// No research movies on PSX.
+#ifndef PSX	// No research movies on PSX.
 	else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
 	{
 		VIEW_RESEARCH		*psViewReplay;
@@ -1043,7 +1043,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		}
 		else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
 		{
-#ifdef WIN32
+#ifndef PSX
 			//this must be for the blind
 			//with forsight this information was removed from the meassage text
 /*
@@ -1229,7 +1229,7 @@ void intRemoveMessageView(BOOL animated)
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
 	if(Form) 
 	{
-#ifdef WIN32
+#ifndef PSX
 		//stop the video
 		psViewResearch = (VIEW_RESEARCH *)Form->pUserData;
 		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName, 
@@ -1238,7 +1238,7 @@ void intRemoveMessageView(BOOL animated)
 
 		if (animated)
 		{
-#ifdef WIN32
+#ifndef PSX
 			widgDelete(psWScreen, IDINTMAP_CLOSE);
 #endif
 #ifdef PSX
@@ -1371,7 +1371,7 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 	{
 		if (image > 0)
 		{
-#ifdef WIN32
+#ifndef PSX
 			if(MovieButton) {
 				// draw the button with the relevant image, don't add Down to the image ID if it's
 				// a movie button.
@@ -1426,7 +1426,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD			x0,y0,x1,y1;
 	VIEW_RESEARCH	*psViewResearch;
 	SWORD			image = -1;
-//#ifdef WIN32
+//#ifndef PSX
     RESEARCH        *psResearch;
 //#endif
 #ifdef PSX
@@ -1448,7 +1448,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		x1 = x0 + Form->width;
 		y1 = y0 + Form->height;
 
-#ifdef WIN32
+#ifndef PSX
 		//moved from after close render
 		RenderWindowFrame(&FrameNormal,x0-1,y0-1,x1-x0+2,y1-y0+2);
 #endif
@@ -1466,7 +1466,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		//render an object
 		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 
-#ifdef WIN32
+#ifndef PSX
 // 3DFX version does it straight to the display.
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
 		//renderIMDToBuffer(pIntelMapSurface, psViewResearch->pIMD, 
@@ -1510,7 +1510,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 					  UDWORD *pColours)
 {
-#ifdef WIN32
+#ifndef PSX
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
 	UDWORD			x0,y0,x1,y1;
@@ -1545,7 +1545,7 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		}
 		//render a frame of the current movie
 		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
-//#ifdef WIN32
+//#ifndef PSX
 		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName, 
 			gameTime2, SEQUENCE_HOLD);
 		//download to screen now
@@ -1584,7 +1584,7 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	y1 = y0 + Form->height;
 	ty = y0;
 
-#ifdef WIN32
+#ifndef PSX
 	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
 #endif
 	if (psMessage)
@@ -1597,7 +1597,7 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		ty+=3;
 		/* Fix for spacing.... */
 
-#ifdef WIN32
+#ifndef PSX
 		iV_SetTextColour(iV_PaletteNearestColour(255, 255, 255));
 		//add each message
 		for (i = 0; i < ((VIEWDATA *)psMessage->pViewData)->numText; i++)
@@ -1687,7 +1687,7 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 #endif
 }
 
-#ifdef WIN32
+#ifndef PSX
 
 //adds text to full screen video		
 void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
@@ -1772,7 +1772,7 @@ DBPRINTF(("[%s]\n",TextString));
 		viewHeight = player.p.y;
 		//rotate to top down view
 		player.r.x = DEG(-90);
-#ifdef WIN32
+#ifndef PSX
 		player.p.y = INTELMAP_VIEWHEIGHT;
 #else
 		camera.p.y = INTELMAP_VIEWHEIGHT;
@@ -2205,7 +2205,7 @@ void setCurrentMsg(void)
 void setIntelligencePauseState(void)
 {
 
-#ifdef WIN32
+#ifndef PSX
 	if (!bMultiPlayer)
 	{
 #endif
@@ -2218,7 +2218,7 @@ void setIntelligencePauseState(void)
 		}
 		setScrollPause(TRUE);
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif
 
@@ -2227,7 +2227,7 @@ void setIntelligencePauseState(void)
 /*resets the pause states */
 void resetIntelligencePauseState(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if (!bMultiPlayer)
 	{
 #endif
@@ -2239,7 +2239,7 @@ void resetIntelligencePauseState(void)
 		setConsolePause(FALSE);
 		gameTimeStart();
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif
 }

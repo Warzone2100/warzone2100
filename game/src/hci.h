@@ -7,12 +7,12 @@
 #define _hci_h
 
 #include "widget.h"
-#include "Message.h"
-#ifdef WIN32
+#include "message.h"
+#ifndef PSX
 #include "cdspan.h"
-#include "PieClip.h"
+#include "pieclip.h"
 #endif
-//#include "IntImage.h"
+//#include "intimage.h"
 
 // store the objects that are being used for the object bar
 #define			MAX_OBJECTS		15//10 we need at least 15 for the 3 different types of factory
@@ -21,7 +21,7 @@
 #define	BASE_COORDS_X	(640)
 #define	BASE_COORDS_Y	(480)
 
-#ifdef WIN32
+#ifndef PSX
 #define	BASE_COORDS_X	(640)
 #define	BASE_COORDS_Y	(480)
 #define E_W (DISP_WIDTH - BASE_COORDS_X)
@@ -197,7 +197,7 @@
 
 #define OBJ_BUTWIDTH		60		// Button width.
 #define OBJ_BUTHEIGHT		46		// Button height.
-#ifdef WIN32
+#ifndef PSX
 #define OBJ_TEXTX			2
 #else
 #define OBJ_TEXTX			4
@@ -210,7 +210,7 @@
 #define STAT_SLD_OX	(0)			// Stat window slider offset.
 #define STAT_SLD_OY	(0)
 #define STAT_SLDSTOPS		10	// Slider number of stops.
-#ifdef WIN32
+#ifndef PSX
 #define STAT_PROGBARX			3
 #define STAT_PROGBARY			36
 #define STAT_PROGBARWIDTH		(OBJ_BUTWIDTH-8)
@@ -252,7 +252,7 @@
 
 typedef enum {
 	INT_NORMAL,		// Standard mode (just the reticule)
-#ifdef WIN32
+#ifndef PSX
 	INT_OPTION,		// Option screen
 	INT_EDIT,		// Edit mode
 #endif
@@ -274,11 +274,11 @@ typedef enum {
 } INTMODE;
 
 //NOT ANYMORE! 10/08/98 AB
-//#ifdef WIN32
+//#ifndef PSX
 //#define INCLUDE_PRODSLIDER	// Include quantity slider in manufacture window.
 //#endif
 
-//#ifdef WIN32
+//#ifndef PSX
 #define INCLUDE_FACTORYLISTS
 //#endif
 
@@ -329,7 +329,7 @@ as big as Pie View in Research Msg now*/
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
 
-#ifdef WIN32
+#ifndef PSX
 extern UBYTE	*DisplayBuffer;
 extern SDWORD	displayBufferSize;
 #endif
@@ -432,7 +432,7 @@ extern STRUCTURE* interfaceStructList(void);
 //sets up the Transporter Screen as far as the interface is concerned
 extern void addTransporterInterface(DROID *psSelected, BOOL onMission);
 
-#ifdef WIN32
+#ifndef PSX
 /* CD change box */
 extern void addCDChangeInterface( CD_INDEX CDrequired,
 		CDSPAN_CALLBACK fpOKCallback, CDSPAN_CALLBACK fpCancelCallback );

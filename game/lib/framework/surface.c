@@ -7,8 +7,8 @@
 
 // surfRecreate pix format stuff 
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "FrameInt.h"
+#include "frame.h"
+#include "frameint.h"
 
 #define NUM_8BIT_PAL_ENTRIES	256
 

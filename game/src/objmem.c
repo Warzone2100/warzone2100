@@ -6,17 +6,17 @@
  */
 
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "Objects.h"
-#include "Deliverance.h"
-#include "GTime.h"
-#include "HCI.h"
-#include "Map.h"
+#include "frame.h"
+#include "objects.h"
+#include "deliverance.h"
+#include "gtime.h"
+#include "hci.h"
+#include "map.h"
 #include "power.h"
-#include "Script.h"
-#include "ScriptVals.h"
-#include "ScriptTabs.h"
-#include "ScriptCB.h"
+#include "script.h"
+#include "scriptvals.h"
+#include "scripttabs.h"
+#include "scriptcb.h"
 #include "mission.h"
 
 /* Allocation sizes for the droid, structure and feature heaps */
@@ -91,7 +91,7 @@ FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 BASE_OBJECT		*psDestroyedObj=NULL;
 
 
-#if defined(DEBUG) && defined(WIN32)
+#if defined(DEBUG) && !defined(PSX)
 // store a record of units that recently died
 typedef struct _morgue
 {

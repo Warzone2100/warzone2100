@@ -7,15 +7,15 @@
 
 
 //#define DEBUG_GROUP0
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "AStar.h"
-#include "FPath.h"
-#include "Geometry.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "astar.h"
+#include "fpath.h"
+#include "geometry.h"
 
-#include "FormationDef.h"
-#include "Formation.h"
+#include "formationdef.h"
+#include "formation.h"
 
 
 // radius for the different body sizes

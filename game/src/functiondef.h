@@ -7,7 +7,7 @@
 #ifndef _functiondef_h
 #define _functiondef_h
 
-#include "StatsDef.h"
+#include "statsdef.h"
 
 
 enum FUNCTION_TYPES

@@ -7,15 +7,15 @@
  */
 
 #include "frame.h"
-#include "Map.h"
+#include "map.h"
 
-#include "Stats.h"									// for templates.
+#include "stats.h"									// for templates.
 #include "game.h"									// for loading maps
-#include "HCI.h"
+#include "hci.h"
 
-#include "time.h"									// for recording ping times.
-#include "Research.h"
-#include "Display3D.h"								// for changing the viewpoint
+#include <time.h>									// for recording ping times.
+#include "research.h"
+#include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
 #include "power.h"
 #include "text.h"
@@ -33,7 +33,7 @@
 #include "gtime.h"
 #include "keybind.h"
 
-#include "Netplay.h"								// the netplay library.
+#include "netplay.h"								// the netplay library.
 #include "multiplay.h"								// warzone net stuff.	
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
@@ -617,6 +617,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 // Required by the net library. It's the system message handler..
 BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 {
+#ifdef WIN32
 	switch( ((LPDPMSG_GENERIC)mg)->dwType )
 	{
 	case DPSYS_DESTROYPLAYERORGROUP:	// player leaving the game
@@ -639,6 +640,7 @@ BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 		break;
 	}
 
+#endif
 	return (TRUE);
 }
 
@@ -958,13 +960,14 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL b
 {
 	NETMSG m;
 	UDWORD nil =0;
+	UWORD start = (UBYTE)bStart;
 	if(!myResponsibility(player) || gameTime <5 )
 	{
 		return TRUE;	
 	}
 
 	NetAdd(m,0,player);				// player researching
-	NetAdd(m,1,((UBYTE)bStart) );	// start stop..	
+	NetAdd(m,1,start);	// start stop..	
 	if(psBuilding)
 	{
 		NetAdd(m,2,psBuilding->id);	// res lab.

@@ -12,8 +12,8 @@
 
 
 #include "frame.h"	// just for the typedef's
-#include "pieTypes.h"
-#include "pieMatrix.h"
+#include "pietypes.h"
+#include "piematrix.h"
 #include "ivisdef.h"// this can have the #define for BSPIMD in it
 #include "imd.h"// this has the #define for BSPPOLYID_TERMINATE
 #include "ivi.h"
@@ -111,7 +111,7 @@ _inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
 	This is the main BSP Traversal routine. It Zaps through the tree (recursively) - and draws all the polygons
 	for the IMD in the correct order ... pretty clever eh ..
 */
-#ifdef WIN32
+#ifndef PSX
 static void TraverseTreeAndRender( PSBSPTREENODE psNode)
 {
 	/* is viewer on same side? */

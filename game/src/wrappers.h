@@ -37,7 +37,7 @@ extern void			setPlayerHasWon		    ( BOOL val );
 extern void         setScriptWinLoseVideo   ( UBYTE val );
 extern UBYTE        getScriptWinLoseVideo   ( void );
 
-#ifdef WIN32
+#ifndef PSX
 // PC version calls the loading bar code directly.
 //#define LOADBARCALLBACK() loadingScreenCallback()
 #define LOADBARCALLBACK() 

@@ -11,16 +11,16 @@
 #include "game.h"			// for loading maps
 #include "message.h"		// for clearing messages.
 #include "winmain.h"
-#include "Display3D.h"		// for changing the viewpoint
+#include "display3d.h"		// for changing the viewpoint
 #include "power.h"
 #include "widget.h"
 #include "gtime.h"
-#include "NetPlay.h"
-#include "HCI.h"
+#include "netplay.h"
+#include "hci.h"
 #include "config.h"			// lobby cfg.
 #include "clparse.h"
 #include "piestate.h"
-#include "dGlide.h"
+#include "dglide.h"
 #include "component.h"
 #include "console.h"
 #include "multiplay.h"
@@ -34,13 +34,14 @@
 #include "multigifts.h"
 // ////////////////////////////////////////////////////////////////////////////
 // GUID for warzone lobby and MPATH stuff.  i hate this stuff.
-#include <INITGUID.h>
+#ifdef WIN32
+#include <initguid.h>
 
 //old guid {7B706E40-5A7E-11d1-94F6-006097B8260B}"
 
 DEFINE_GUID(WARZONEGUID,0x48ab0b01,0xfec0,0x11d1,0x98,0xc,0x0,0xa0,0x24,0x38,0x70,0xa8);
 // also change S_WARZONEGUID in multiplay.h
-
+#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -530,7 +531,9 @@ BOOL multiInitialise(VOID)
 {
 	// NET AUDIO CAPTURE 
 	NETinitAudioCapture();
+#ifdef WIN32
 	NETinitPlaybackBuffer(audio_GetDirectSoundObj());			// pass in a dsound pointer to use.
+#endif
 
 	return TRUE;  // use the menus dumbass.
 }
@@ -542,10 +545,11 @@ BOOL multiInitialise(VOID)
 BOOL sendLeavingMsg(VOID)
 {	
 	NETMSG m;
+        UBYTE bHost = (UBYTE)NetPlay.bHost;
 	// send a leaving message, This resolves a problem with tcpip which
 	// occasionally doesn't automatically notice a player leaving.
 	NetAdd(m,0,player2dpid[selectedPlayer]);
-	NetAdd(m,4,((UBYTE)NetPlay.bHost));
+	NetAdd(m,4,bHost);
 	m.size = 5;
 	m.type = NET_LEAVING ;
 	NETbcast(&m,TRUE);

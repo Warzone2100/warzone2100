@@ -12,98 +12,103 @@
 #include <string.h>
 /* Includes direct access to render library */
 #include "piedef.h"
-#include "pieState.h"
-#include "pieTexture.h"
-#include "pieClip.h"
-#include "piePalette.h"
-#include "pieMatrix.h"
-#include "pieMode.h"
-#include "pieFunc.h"
-#include "rendMode.h"
+#include "piestate.h"
+#include "pietexture.h"
+#include "pieclip.h"
+#include "piepalette.h"
+#include "piematrix.h"
+#include "piemode.h"
+#include "piefunc.h"
+#include "rendmode.h"
 #include "bspfunc.h"
-#include "E3Demo.h"	// on the psx?
-#include "Loop.h"
-#ifdef WIN32					
-#include "Atmos.h"
-#include "RayCast.h"
-#include "Levels.h"
+#include "e3demo.h"	// on the psx?
+#include "loop.h"
+#ifndef PSX					
+#include "atmos.h"
+#include "raycast.h"
+#include "levels.h"
 #ifdef JEREMY
-#include "groundMist.h"
+#include "groundmist.h"
 #endif
 #endif
 /* Includes from PUMPKIN stuff */
-#include "Frame.h"
-#include "Map.h"
-#include "Move.h"
-#include "Visibility.h"
-#include "Findpath.h"
-#include "Disp2D.h"
-#include "Geometry.h"
-#include "GTime.h"
+#include "frame.h"
+#include "map.h"
+#include "move.h"
+#include "visibility.h"
+#include "findpath.h"
+#include "disp2d.h"
+#include "geometry.h"
+#include "gtime.h"
 #include "resource.h"
-#include "MessageDef.h"
-#include "MiscImd.h"
-#include "Effects.h"
-#include "Edit3D.h"
-#include "Feature.h"
-#include "HCI.h"
-#include "Display.h"
-#include "intDisplay.h"
-#include "Radar.h"
-#include "Display3D.h"
+#include "messagedef.h"
+#include "miscimd.h"
+#include "effects.h"
+#include "edit3d.h"
+#include "feature.h"
+#include "hci.h"
+#include "display.h"
+#include "intdisplay.h"
+#include "radar.h"
+#include "display3d.h"
 #include "fractions.h"
-#include "Lighting.h"
-#include "Console.h"
+#include "lighting.h"
+#include "console.h"
 #include "animobj.h"
 #include "projectile.h"
 #include "bucket3d.h"
 #include "intelmap.h"
 #include "mapdisplay.h"
 #include "message.h"
-#include "Component.h"
-#include "Bridge.h"
-#include "WarCAM.h"
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptExtern.h"
-#include "ScriptCB.h"
+#include "component.h"
+#include "bridge.h"
+#include "warcam.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptextern.h"
+#include "scriptcb.h"
 #include "target.h"
 #include "keymap.h"
 #include "drive.h"
 #include "fpath.h"
 #include "gateway.h"
-#include "Transporter.h"
-#include "WarZoneConfig.h"
+#include "transporter.h"
+#include "warzoneconfig.h"
 #include "audio.h"
 #include "audio_id.h"
 #include "action.h"
-#include "KeyBind.h"
-#include "Combat.h"
+#include "keybind.h"
+#include "combat.h"
 #include "order.h"
 
-#ifdef WIN32
-#include "Scores.h"
+#ifndef PSX
+#include "scores.h"
 #endif
 #ifdef ARROWS
 #include "arrow.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 
 #include "environ.h"
-#include "AdvVis.h"
+#include "advvis.h"
 
 #endif
 
-#include "Texture.h"
+#include "texture.h"
 //#ifdef THREEDFX
-//#include "Glide.h"
+//#include "glide.h"
 //#endif
 
 #include "anim_id.h"
 
-#include "CmdDroid.h"
+#include "cmddroid.h"
+
+#ifndef WIN32
+#define max(a,b) (((a)>(b))?(a):(b))
+#define min(a,b) (((a)<(b))?(a):(b))
+#endif
 
 #define SPOTLIGHT
 
@@ -459,7 +464,7 @@ BOOL		bPlayerHasHQ = FALSE;
 
 	bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if(radarOnScreen AND (bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) ))
 //#else
 	if(radarOnScreen AND bPlayerHasHQ)
@@ -1017,7 +1022,7 @@ void drawTiles(iView *camera, iView *player)
 	}
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	processEffects();
-#ifdef WIN32
+#ifndef PSX
 	atmosUpdateSystem();
 	if(waterOnMap())
 	{
@@ -1089,7 +1094,7 @@ void drawTiles(iView *camera, iView *player)
 	display3DProjectiles();//bucket render implemented
 
 	drawEffects();
-#ifdef WIN32
+#ifndef PSX
 	atmosDrawParticles();
 #endif
 #ifdef BUCKET
@@ -1128,7 +1133,7 @@ BOOL	init3DView(void)
 	gridCentreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 
 
-	pie_SetGammaValue(gamma);
+	pie_SetGammaValue(gammaValue);
 
 	edgeTile.texture = 0;
 
@@ -1168,7 +1173,7 @@ BOOL	init3DView(void)
 	/* Initialise the effects system */
   //	initEffectsSystem();
 
-#ifdef WIN32
+#ifndef PSX
 	atmosInitSystem();
 #endif
 
@@ -1597,7 +1602,7 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 			brightness = pie_MAX_BRIGHT_LEVEL;
 		}
 
-#ifdef WIN32
+#ifndef PSX
 		if(getRevealStatus() && !godMode)
 		{
 			brightness = avGetObjLightLevel((BASE_OBJECT*)psParentObj,brightness);
@@ -1890,7 +1895,7 @@ void displayStaticObjects( void )
 								pFunctionality)->active)
 							{
 								displayAnimation( psAnimObj, FALSE );
-#ifdef WIN32
+#ifndef PSX
 								if(selectedPlayer == psStructure->player)
 								{
 									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
@@ -1901,7 +1906,7 @@ void displayStaticObjects( void )
 							{
 								/* hold anim on first frame */
 								displayAnimation( psAnimObj, TRUE );
-#ifdef WIN32
+#ifndef PSX
 								audio_StopObjTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
 #endif
 							}
@@ -2240,7 +2245,7 @@ BOOL		bForceDraw;
 		}
 
 
-#ifdef WIN32
+#ifndef PSX
 		if(godMode OR demoGetStatus() OR bForceDraw)
 		{
 			brightness = 200;
@@ -2439,7 +2444,7 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 
 	// -------------------------------------------------------------------------------
 	/* Power stations and factories have pulsing lights  */
-#ifdef WIN32	// not on the playstation they dont
+#ifndef PSX	// not on the playstation they dont
 	if(psStructure->sDisplay.imd->numFrames > 0)
 	{
         /*OK, so we've got a hack for a new structure - its a 2x2 wall but 
@@ -2524,7 +2529,7 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 			buildingBrightness = 200+brightVar;
 		}
 		
-#ifdef WIN32
+#ifndef PSX
 		if(godMode OR demoGetStatus())
 		{
 			buildingBrightness = buildingBrightness;
@@ -2885,7 +2890,7 @@ SDWORD			brightVar;
 
 			buildingBrightness = 200 + brightVar;
 		}
-#ifdef WIN32
+#ifndef PSX
 		if(godMode OR demoGetStatus())
 		{
 			buildingBrightness = buildingBrightness;
@@ -3206,7 +3211,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 			buildingBrightness = 200 + brightVar;
 		}
 
-	#ifdef WIN32
+	#ifndef PSX
 		if(godMode OR demoGetStatus())
 		{
 			/* NOP */

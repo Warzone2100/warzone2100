@@ -7,17 +7,17 @@
 #ifndef _objects_h
 #define _objects_h
 
-#include "ObjectDef.h"
-#include "Droid.h"
-#include "Structure.h"
-#include "Feature.h"
-#include "Bullet.h"
-#include "ObjMem.h"
+#include "objectdef.h"
+#include "droid.h"
+#include "structure.h"
+#include "feature.h"
+#include "bullet.h"
+#include "objmem.h"
 
-#include "AI.h"
-#include "Move.h"
-#include "Function.h"
-#include "Stats.h"
+#include "ai.h"
+#include "move.h"
+#include "function.h"
+#include "stats.h"
 
 /* Initialise the object system */
 extern BOOL objInitialise(void);

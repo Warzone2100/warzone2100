@@ -9,8 +9,8 @@
 
 
 // ------------------------------------------------------------------------------------
-#include "Frame.h"
-#include "Difficulty.h"
+#include "frame.h"
+#include "difficulty.h"
 // ------------------------------------------------------------------------------------
 DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
 FRACT				fDifPlayerModifier;
@@ -37,7 +37,7 @@ void setModifiers(FRACT Player,FRACT Enemy)
 void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 {
 
-#ifdef WIN32
+#ifndef PSX
 	switch(lev)
 	{
 	case	DL_EASY:

@@ -11,7 +11,7 @@
 
 #ifdef iV_DEBUG
 
-#ifdef WIN32
+#ifndef PSX
 
 #define iV_DEBUG0(S)										iV_Debug((S))
 #define iV_DEBUG1(S,A)									iV_Debug((S),(A))

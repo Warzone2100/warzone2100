@@ -29,7 +29,7 @@
 #include "multirecv.h"
 #include "multiint.h"
 #include "multilimit.h"
-#include "pieMode.h"
+#include "piemode.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // externs
@@ -122,7 +122,7 @@ BOOL startLimitScreen(void)
 			return FALSE;
 		}
 
-		pie_GlobalRenderBegin(TRUE);//force to black
+		pie_GlobalRenderBegin();//force to black
 		bForceEditorLoaded = TRUE;
 		closeLoadingScreen();
 	}

@@ -9,66 +9,66 @@
 
 /* loop position printf's */
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "Loop.h"
+#include "frame.h"
+#include "loop.h"
 #include "rendmode.h"
-#include "pieState.h" //ivis render code
-#include "pieMode.h"
+#include "piestate.h" //ivis render code
+#include "piemode.h"
 #include "vid.h" //ivis render code
-#include "Objects.h"
-#include "Display.h"
-#include "Map.h"
-#include "Disp2D.h"
-#include "HCI.h"
+#include "objects.h"
+#include "display.h"
+#include "map.h"
+#include "disp2d.h"
+#include "hci.h"
 #include "audio.h"
 #include "ingameop.h"
-#include "Player.h"
-#include "GTime.h"
-#include "MiscImd.h"
-#include "Effects.h"
-#include "Radar.h"
+#include "player.h"
+#include "gtime.h"
+#include "miscimd.h"
+#include "effects.h"
+#include "radar.h"
 #include "projectile.h"
-#include "Console.h"
-#include "Power.h"
+#include "console.h"
+#include "power.h"
 #include "animobj.h"
-#include "Message.h"
+#include "message.h"
 #include "bucket3d.h"
-#include "Display3d.h"
-#include "3dfxFunc.h"
-#include "MultiPlay.h" //ajl
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "Levels.h"
-#include "Visibility.h"
+#include "display3d.h"
+#include "3dfxfunc.h"
+#include "multiplay.h" //ajl
+#include "script.h"
+#include "scripttabs.h"
+#include "levels.h"
+#include "visibility.h"
 #include "multimenu.h"
-#include "IntelMap.h"
+#include "intelmap.h"
 #include "loadsave.h"
 #include "game.h"
 #include "text.h"
 
-#include "IntImage.h"
-#include "Resource.h"
-#include "SeqDisp.h"
-#include "cdAudio.h"
-#include "Mission.h"
-#include "WarCam.h"
-#include "Lighting.h"
-#include "MapGrid.h"
-#include "Edit3D.h"
+#include "intimage.h"
+#include "resource.h"
+#include "seqdisp.h"
+#include "cdaudio.h"
+#include "mission.h"
+#include "warcam.h"
+#include "lighting.h"
+#include "mapgrid.h"
+#include "edit3d.h"
 #include "drive.h"
 #include "target.h"
 #include "csnap.h"
 #include "fpath.h"
-#include "ScriptExtern.h"
-#include "Cluster.h"
+#include "scriptextern.h"
+#include "cluster.h"
 #include "mixer.h"
-#include "cmdDroid.h"
-#include "keyBind.h"
+#include "cmddroid.h"
+#include "keybind.h"
 #include "wrappers.h"
-#include "PowerCrypt.h"
+#include "powercrypt.h"
 
 #ifdef DEBUG
-#include "objMem.h"
+#include "objmem.h"
 #endif
 
 #define MISSION_COMPLETE_DELAY	4000
@@ -534,7 +534,7 @@ GAMECODE gameLoop(void)
 		{
 			scroll();
 		}
-#ifdef WIN32
+#ifndef PSX
 		if(InGameOpUp)		// ingame options menu up, run it!
 		{
 			intRunInGameOptions();
@@ -701,7 +701,7 @@ GAMECODE gameLoop(void)
 			pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 			pie_SetFogStatus(FALSE);
 
-#ifdef WIN32
+#ifndef PSX
 			if(bMultiPlayer)
 			{
 //				if((game.type == DMATCH) && !MultiMenuUp)
@@ -1114,7 +1114,7 @@ static BOOL bActiveBackDrop = FALSE;
 	/* restore volume after video quit */
 	if ( bVolKilled == TRUE )
 	{
-#ifdef WIN32
+#ifndef PSX
 		mixer_SetWavVolume( g_iGlobalVol );
 #else
 		sound_SetGlobalVolume( g_iGlobalVol );

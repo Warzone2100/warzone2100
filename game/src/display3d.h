@@ -4,9 +4,9 @@
 #define _display3d_h
 
 #include "display3ddef.h"	// This should be the only place including this file on the PC ... display3d_psx.h on the playstation
-#include "PieTypes.h"
-#include "PieDef.h"
-#include "ObjectDef.h"
+#include "pietypes.h"
+#include "piedef.h"
+#include "objectdef.h"
 #include "message.h"
 
 extern BOOL	xInOrder,yInOrder,yBeforeX,spinScene;
@@ -113,7 +113,7 @@ extern BOOL bRender3DOnly;
 
 extern UDWORD visibleXTiles;
 extern UDWORD visibleYTiles;
-#ifdef WIN32
+#ifndef PSX
 
 // Expanded PIEVERTEX.
 typedef struct {
@@ -138,7 +138,7 @@ extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128
 
-#ifdef WIN32	
+#ifndef PSX	
 #define CLOSING_TIME	800
 #define LINE_TIME		600
 #define DOT_TIME		200

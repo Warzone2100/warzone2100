@@ -7,13 +7,13 @@
 
 */
 
-#include "dGlide.h"
-#include "Frame.h"
-#include "3dfxText.h"
+#include "dglide.h"
+#include "frame.h"
+#include "3dfxtext.h"
 #include "3dfxmode.h"
 #include "rendmode.h"
-#include "pieState.h"
-#include "pieClip.h"
+#include "piestate.h"
+#include "pieclip.h"
 
 GrScreenResolution_t	getGlideResDescriptor( UDWORD resWidth );
 #define	MAX_3DFX_WIDTH	800
@@ -25,6 +25,7 @@ static long FPUControlWord;
 //
 static void SetFPUPrecision(void)
 {
+#ifdef _MSC_VER
 	long memvar;
 
 	_asm {
@@ -38,18 +39,21 @@ static void SetFPUPrecision(void)
 		fldcw memvar;			// Load control word back to FPU
 		fwait;					// Wait for operation to complete
 	}
+#endif // _MSC_VER
 }
 
 // Restore FPU precision.
 //
 static void RestoreFPUPrecision(void)
 {
+#ifdef _MSC_VER
 	_asm {
 		finit;					// Initialise the FPU
 		fwait;					// Wait for operation to complete
 		fldcw FPUControlWord;	// Load FPU control word
 		fwait;					// Wait for operation to complete
 	}
+#endif // _MSC_VER
 }
 
 

@@ -4,7 +4,7 @@
  * intra/internet audio
  */
 
-#include "dsound.h"
+#include <dsound.h>
 #include "frame.h"
 #include "netplay.h"
 
@@ -38,7 +38,7 @@ static VOID sendAudioComplete		(VOID);
 
 static BOOL	setupPlayBuffer			(VOID);
 static BOOL	setupSoundPlay			(VOID);
-BOOL		NETinitPlaybackBuffer	(VOID *pDs);
+BOOL		NETinitPlaybackBuffer	(LPDIRECTSOUND pDs);
 static VOID stopIncomingAudio		(VOID);
 VOID		NETplayIncomingAudio	(NETMSG *pMsg);
 BOOL		NETqueueIncomingAudio	(LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream);

@@ -6,8 +6,8 @@
  */
 
 
-#include "Frame.h"
-#include "Objects.h"
+#include "frame.h"
+#include "objects.h"
 
 
 /* Initialise the object system */

@@ -21,9 +21,9 @@
 #include "audio.h"
 #include "audio_id.h"			// for samples.
 #include "wrappers.h"			// for gameover..
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptCB.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptcb.h"
 
 #include "netplay.h"
 #include "multiplay.h"
@@ -579,6 +579,7 @@ VOID  technologyGiveAway(STRUCTURE *pS)
 {
 	UDWORD	i;
 	UDWORD	x,y;
+	UWORD	nx,ny;
 	FEATURE	*pF=NULL;
 	SDWORD	type = FEAT_GEN_ARTE;
 	NETMSG	m;
@@ -607,10 +608,12 @@ VOID  technologyGiveAway(STRUCTURE *pS)
 		NetAdd(m,m.size,type);
 		m.size += sizeof(type);
 
-		NetAdd(m,m.size,((UWORD)x));
+		nx = (UWORD)x;
+		NetAdd(m,m.size,nx);
 		m.size += sizeof(UWORD);
 
-		NetAdd(m,m.size,((UWORD)y));
+		ny = (UWORD)y;
+		NetAdd(m,m.size,ny);
 		m.size += sizeof(UWORD);
 		
 		NetAdd(m,m.size,pF->id);
@@ -641,6 +644,7 @@ void addLoserGifts(void)
 //	iVector			position;
 	static UDWORD	lastgift=0;
 	UDWORD			i,x,y,quantity,count;
+	UWORD			nx,ny;
 	NETMSG			m;
 	FEATURE			*pF;
 	SDWORD			type = FEAT_OIL_DRUM;
@@ -690,8 +694,10 @@ void addLoserGifts(void)
 
 			pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);	
 		
-			NetAdd(m,m.size,((UWORD)x));		m.size += sizeof(UWORD);
-			NetAdd(m,m.size,((UWORD)y));		m.size += sizeof(UWORD);
+			nx = (UWORD)x;
+			ny = (UWORD)y;
+			NetAdd(m,m.size,x);			m.size += sizeof(UWORD);
+			NetAdd(m,m.size,x);			m.size += sizeof(UWORD);
 			NetAdd(m,m.size,pF->id);			m.size += sizeof(pF->id);
 
 			m.body[m.size]  = ONEPLAYER;
@@ -760,6 +766,7 @@ VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 	FEATURE	*pF;
 	UDWORD i,count;
 	UDWORD	x,y;
+	UWORD	nx,ny;
 
 	m.type  = NET_ARTIFACTS;
 	m.size  = 1;
@@ -784,9 +791,11 @@ VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 
 		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);	
 		
-		NetAdd(m,m.size,((UWORD)x));
+		nx = (UWORD)x;
+		ny = (UWORD)y;
+		NetAdd(m,m.size,nx);
 		m.size += sizeof(UWORD);
-		NetAdd(m,m.size,((UWORD)y));
+		NetAdd(m,m.size,ny);
 		m.size += sizeof(UWORD);
 
 		NetAdd(m,m.size,pF->id);

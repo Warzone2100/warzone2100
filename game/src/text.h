@@ -80,7 +80,7 @@ enum _fixed_str_id
 	STR_INT_POWERACCRUED,
     STR_INT_POWER,
 
-#ifdef WIN32		// PSX ... non!
+#ifndef PSX		// PSX ... non!
 	// multiplayer strings
 	STR_MUL_PHONENO,	
 	STR_MUL_IPADDR,	

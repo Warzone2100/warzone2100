@@ -11,12 +11,12 @@
 #ifndef _heap_h
 #define _heap_h
 
-#include "Types.h"
-#include "Debug.h"
+#include "types.h"
+#include "debug.h"
  /* Include Mem.h to get the DEBUG_MALLOC #define - this controls whether
   * normal or debugging memory management is used.
   */
-#include "Mem.h"
+#include "mem.h"
 
 /* structure used to store the list of free heap objects */
 typedef struct _free_object

@@ -5,26 +5,26 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
+#include "frame.h"
+#include "objects.h"
 
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptObj.h"
-#include "Group.h"
-#include "GTime.h"
-#include "Cluster.h"
-#include "MessageDef.h"
-#include "Message.h"
-#include "ResearchDef.h"
-#include "Audio.h"
-#ifdef WIN32
-#include "Multiplay.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptobj.h"
+#include "group.h"
+#include "gtime.h"
+#include "cluster.h"
+#include "messagedef.h"
+#include "message.h"
+#include "researchdef.h"
+#include "audio.h"
+#ifndef PSX
+#include "multiplay.h"
 #endif
-#include "Text.h"
-#include "Levels.h"
-#include "ScriptVals.h"
-#include "Research.h"
+#include "text.h"
+#include "levels.h"
+#include "scriptvals.h"
+#include "research.h"
 
 // Get values from a base object
 BOOL scrBaseObjGet(UDWORD index)
@@ -379,7 +379,7 @@ BOOL scrGroupObjGet(UDWORD index)
 	return TRUE;
 }
 
-#ifdef WIN32
+#ifndef PSX
 // get the name from a stat pointer
 STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
 {

@@ -2,24 +2,24 @@
 
 #include <math.h>
 #include <stdio.h>
-#include "Objects.h"
+#include "objects.h"
 #include "map.h"
-#include "Loop.h"
-#include "RayCast.h"
-#include "Geometry.h"
-#include "HCI.h"
-#include "GTime.h"
-#include "MapGrid.h"
-#include "Cluster.h"
+#include "loop.h"
+#include "raycast.h"
+#include "geometry.h"
+#include "hci.h"
+#include "gtime.h"
+#include "mapgrid.h"
+#include "cluster.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "ScriptExtern.h"
+#include "scriptextern.h"
 #include "structure.h"
 
-#include "Visibility.h"
-#ifdef WIN32
+#include "visibility.h"
+#ifndef PSX
 #include "multiplay.h"
-#include "AdvVis.h"
+#include "advvis.h"
 #endif
 
 #ifdef PSX
@@ -197,7 +197,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Not true visibility - done on sensor range */
 
 	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
-#ifdef WIN32
+#ifndef PSX
 		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
 #endif
 		dist = 1;
@@ -224,7 +224,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	
 		// new - ask Alex M
 	/* Not true visibility - done on sensor range */
-#ifdef WIN32
+#ifndef PSX
 		if(getRevealStatus())
 		{
 			if( ((UDWORD)rayPlayer == selectedPlayer) OR
@@ -258,7 +258,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 			"rayLOSCallback: coords off map"));
 
 /*	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
-#ifdef WIN32
+#ifndef PSX
 		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
 #endif
 		dist = 1;
@@ -754,7 +754,7 @@ found:
 }*/
 
 
-//#ifdef WIN32
+//#ifndef PSX
 //
 //void processVisibility(BASE_OBJECT *psObj)
 //{
@@ -1180,7 +1180,7 @@ MAPTILE		*psTile;
 	{
 		for (j = 0; j < breadth; j++)
 		{
-#ifdef WIN32
+#ifndef PSX
 			/* Slow fade up */
 			if(getRevealStatus())
 			{

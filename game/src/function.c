@@ -6,16 +6,16 @@
  */
 #include <stdio.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "function.h"
-#include "Stats.h"
+#include "stats.h"
 #include "structure.h"
 #include "text.h"
 #include "research.h"
 #include "droid.h"
 #include "group.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
@@ -414,7 +414,7 @@ BOOL loadProduction(SBYTE *pData)
 
 	if (!getBodySize(bodySize, (UBYTE*)&psFunction->capacity))
 	{
-#ifdef WIN32
+#ifndef PSX
 		ASSERT((FALSE, "loadProduction: unknown body size for %s",psFunction->pName));
 #else
 		ASSERT((FALSE, "loadProduction: unknown body size for %x",psFunction->NameHash));
@@ -429,7 +429,7 @@ BOOL loadProduction(SBYTE *pData)
 	}
 	else
 	{
-#ifdef WIN32
+#ifndef PSX
 		ASSERT((FALSE, "loadProduction: production Output too big for %s",psFunction->pName));
 #else
 		ASSERT((FALSE, "loadProduction: production Output too big for %x",psFunction->NameHash));
@@ -1074,7 +1074,7 @@ BOOL loadPowerGenFunction(SBYTE *pData)
 		&psFunction->criticalMassChance, &psFunction->criticalMassRadius,
 		&psFunction->criticalMassDamage, &psFunction->radiationDecayTime);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		modifyResources(psFunction);

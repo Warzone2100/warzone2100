@@ -7,8 +7,8 @@
 #ifndef _move_h
 #define _move_h
 
-#include "ObjectDef.h"
-#include "FindPath.h"
+#include "objectdef.h"
+#include "findpath.h"
 #include "audio.h"
 
 /* The base movement speed */
@@ -59,7 +59,7 @@ extern void moveSetFormationSpeedLimiting( BOOL );
 extern void moveToggleFormationSpeedLimiting( void );
 extern BOOL moveFormationSpeedLimitingOn( void );
 
-#ifdef WIN32
+#ifndef PSX
 /* audio callback used to kill movement sounds */
 extern BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample );
 #endif
