@@ -769,7 +769,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	BarWidth = BarGraph->width;
 #if	DRAW_POWER_BAR_TEXT && !defined(PSX)
     iV_SetFont(WFont);
-	itoa( realPower, szVal, 10 );
+	sprintf( szVal, "%d", realPower );
 	textWidth = iV_GetTextWidth( szVal );
 	BarWidth -= textWidth;
 #endif
@@ -4806,7 +4806,7 @@ void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	/* draw text value */
 #if	DRAW_BAR_TEXT && !defined(PSX)
-	itoa( BarGraph->iValue, szVal, 10 );
+	sprintf( szVal, "%d", BarGraph->iValue );
 	iV_SetTextColour(-1);
 	iV_DrawText( szVal, x0, iY );
 #endif
@@ -4921,7 +4921,7 @@ void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
 
 	/* draw text value */
 #if	DRAW_BAR_TEXT && !defined(PSX)
-	itoa( BarGraph->iValue, szVal, 10 );
+	sprintf( szVal, "%d", BarGraph->iValue );
 	iV_SetTextColour(-1);
 	iV_DrawText( szVal, x0, iY );
 #endif
