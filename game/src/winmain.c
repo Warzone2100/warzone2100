@@ -130,6 +130,9 @@ int WINAPI WinMain(
 	clStartWindowed = FALSE;
 	clIntroVideo = FALSE;
 
+	// save debugging info to disk
+	DBOUTPUTFILE("debug.txt");
+
 	if (!pie_CheckForDX6())
 	{
 		DBERROR(("Unable to create DirectX 6 interface.\nPlease ensure DirectX 6 or later is installed."));
