@@ -637,3 +637,62 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 #endif
 	}
 }
+
+/* Sets the state of the mouse key to down */
+void setMouseDown(MOUSE_KEY_CODE code)
+{
+#ifdef WIN32
+	UINT message;
+	WPARAM button;
+	switch(code)
+	{
+		case MOUSE_LMB:
+			message = WM_LBUTTONDOWN;
+			button = MK_LBUTTON;
+			break;
+		case MOUSE_MMB:
+			message = WM_MBUTTONDOWN;
+			button = MK_MBUTTON;
+			break;
+		case MOUSE_RMB:
+			message = WM_RBUTTONDOWN;
+			button = MK_RBUTTON;
+			break;
+		default:
+			message = WM_LBUTTONDOWN;
+			button = MK_LBUTTON;
+			break;
+	}
+	SendMessage(frameGetWinHandle(),message,button,MAKELONG(mouseX(),mouseY()));
+#endif
+}
+
+/* Sets the state of the mouse key to up */
+void setMouseUp(MOUSE_KEY_CODE code)
+{
+#ifdef WIN32
+	UINT message;
+	WPARAM button;
+	switch(code)
+	{
+		case MOUSE_LMB:
+			message = WM_LBUTTONUP;
+			button = MK_LBUTTON;
+			break;
+		case MOUSE_MMB:
+			message = WM_MBUTTONUP;
+			button = MK_MBUTTON;
+			break;
+		case MOUSE_RMB:
+			message = WM_RBUTTONUP;
+			button = MK_RBUTTON;
+			break;
+		default:
+			message = WM_LBUTTONUP;
+			button = MK_LBUTTON;
+			break;
+	}
+	SendMessage(frameGetWinHandle(),message,button,MAKELONG(mouseX(),mouseY()));
+#endif
+}
+
