@@ -3764,7 +3764,7 @@ static UWORD MaxDroidsAllowedPerPlayer[MAX_PLAYERS]={40,50,50,50};
 static UWORD MaxStructsAllowedPerPlayer[MAX_PLAYERS]={100,150,150,150};
 #else
 static UWORD MaxDroidsAllowedPerPlayer[MAX_PLAYERS]={100,999,999,999,999,999,999,999};
-static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={100,100,100,100,100,100,100,100};
+static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={300,300,300,300,300,300,300,300};
 //static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={10,10,10,10,10,10,10,10};
 
 #endif
