@@ -22,7 +22,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				AdditionalIncludeDirectories="..\lib\Framework;..\lib\GameLib;..\lib\Ivis02;..\lib\Netplay;..\lib\Script;..\lib\Sequence;..\lib\Sound;..\lib\Widget;..\lib\glide\src\include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;YY_STATIC"
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
@@ -37,6 +38,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ddraw.lib dsound.lib dplayx.lib dInput.lib dxguid.lib winmm.lib"
 				OutputFile=".\Release/Warzone.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
