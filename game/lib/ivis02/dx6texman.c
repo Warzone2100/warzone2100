@@ -285,7 +285,7 @@ BOOL dtm_Initialise(void)
 				//that failed so free them and try for MED textures
 				for (j= 0; (j < i); j++)
 				{
-					aTextures[i].psSurface4->lpVtbl->Release(aTextures[i].psSurface4);
+					aTextures[j].psSurface4->lpVtbl->Release(aTextures[j].psSurface4);
 				}
 				if (texSize == FULL_8BIT)
 				{
@@ -339,7 +339,7 @@ BOOL dtm_Initialise(void)
 				//that failed so free them and try for MED textures
 				for (j= 0; (j < i); j++)
 				{
-					aTextures[i].psSurface4->lpVtbl->Release(aTextures[i].psSurface4);
+					aTextures[j].psSurface4->lpVtbl->Release(aTextures[j].psSurface4);
 				}
 				texSize = LOW_16BIT;
 			}
@@ -365,7 +365,7 @@ BOOL dtm_Initialise(void)
 				//that failed so free them and try for MED textures
 				for (j= 0; (j < i); j++)
 				{
-					aTextures[i].psSurface4->lpVtbl->Release(aTextures[i].psSurface4);
+					aTextures[j].psSurface4->lpVtbl->Release(aTextures[j].psSurface4);
 				}
 				texSize = LOW_16BIT;
 			}
