@@ -284,7 +284,7 @@ extern void mapSaveTexture(void);
 extern void	mapWaterProcess( void );
 
 
-#ifndef PSX
+#ifdef WIN32
 #define FUNCINLINE _inline
 #else
 
