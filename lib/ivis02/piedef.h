@@ -96,8 +96,8 @@
 #define pie_GLOW_BLUE			0xc000
 #define pie_GLOW_STRENGTH		63
 
-#define pie_MAX_POINTS	256
-#define pie_MAX_POLYS	256
+#define pie_MAX_POINTS	512
+#define pie_MAX_POLYS	512
 #define pie_MAX_POLY_VERTS 10
 
 #define pie_FILLRED 16
