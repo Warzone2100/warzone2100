@@ -419,56 +419,49 @@ void SetLastHashName(UDWORD HashName)
 // load a file from disk into a fixed memory buffer
 BOOL resLoadFromDisk(STRING *pFileName, UBYTE **ppBuffer, UDWORD *pSize)
 {
-#ifdef WIN32
-	HANDLE	hFile;
-	DWORD	bytesRead;
-	BOOL	retVal;
+	FILE	*pFileHandle;
 
 	*ppBuffer = pFileBuffer;
 
-	// try and open the file
-	hFile = CreateFile(pFileName,
-					   GENERIC_READ,
-					   FILE_SHARE_READ,
-					   NULL,
-					   OPEN_EXISTING,
-					   FILE_FLAG_SEQUENTIAL_SCAN,
-					   NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+	pFileHandle = fopen(pFileName, "rb");
+	if (pFileHandle == NULL)
 	{
-		DBERROR(("Couldn't open %s\n%s",
-			pFileName, winErrorToString(GetLastError())));
+		DBERROR(("Couldn't open %s", pFileName));
 		return FALSE;
 	}
 
-	// get the size of the file
-	*pSize = GetFileSize(hFile, NULL);
+	/* Get the length of the file */
+	if (fseek(pFileHandle, 0, SEEK_END) != 0)
+	{
+		DBERROR(("SEEK_END failed for %s", pFileName));
+		return FALSE;
+	}
+	*pSize = ftell(pFileHandle);
+	if (fseek(pFileHandle, 0, SEEK_SET) != 0)
+	{
+		DBERROR(("SEEK_SET failed for %s", pFileName));
+		return FALSE;
+	}
 	if (*pSize >= (UDWORD)fileBufferSize)
 	{
 		DBERROR(("file too big !!:%s size %d\n", pFileName, *pSize));
 		return FALSE;
 	}
-
-	// load the file into the buffer
-	retVal = ReadFile(hFile, pFileBuffer, *pSize, &bytesRead, NULL);
-	if (!retVal || *pSize != bytesRead)
+	/* Load the file data */
+	if (fread(pFileBuffer, 1, *pSize, pFileHandle) != *pSize)
 	{
-		DBERROR(("Couldn't read data from %s\n%s",
-			pFileName, winErrorToString(GetLastError())));
+		DBERROR(("Read failed for %s", pFileName));
 		return FALSE;
 	}
 	pFileBuffer[*pSize] = 0;
 
-	retVal = CloseHandle(hFile);
-	if (!retVal)
+	if (fclose(pFileHandle) != 0)
 	{
-		DBERROR(("Couldn't close %s\n%s",
-			pFileName, winErrorToString(GetLastError())));
+		DBERROR(("Close failed for %s", pFileName));
 		return FALSE;
 	}
 
 	return TRUE;
-#endif
 }
 
 #endif
