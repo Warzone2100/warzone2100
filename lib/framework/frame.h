@@ -13,6 +13,30 @@
 #pragma warning (default : 4201 4214 4115)
 #endif
 
+/* Linux specific stuff */
+
+#ifndef PSX
+#ifndef WIN32
+
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+char* unix_path(char* path);
+FILE* unix_fopen(char* filename, char* mode);
+
+#define fopen unix_fopen
+
+#define InitializeCriticalSection(x)
+#define DeleteCriticalSection(x)
+#define EnterCriticalSection(x)
+#define LeaveCriticalSection(x)
+
+#endif
+#endif
+
 #ifdef PSX		// If Playstation version then compile lean version.
 
 #ifdef FINALBUILD

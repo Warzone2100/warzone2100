@@ -25,19 +25,19 @@ typedef	signed		char	SBYTE;
 typedef signed		char	STRING;
 typedef	unsigned	short	UWORD;
 typedef	signed		short	SWORD;
-typedef	unsigned	int		UDWORD;
-typedef	signed		int		SDWORD;
+typedef	unsigned	int	UDWORD;
+typedef	signed		int	SDWORD;
 
 #ifndef WIN32
 
 // win32 functions to POSIX
 #define stricmp(a,b) strcasecmp((a),(b))
-#define CreateDirectory(dir, ptr) mkdir((dir), 0777)
+#define CreateDirectory(dir, ptr) mkdir(unix_path(dir), 0777)
 #define wsprintf sprintf
 #define GetCurrentDirectory(size,buf) getcwd((buf),(size))
-#define _chdir(d) chdir((d))
-#define DeleteFile(file) remove((file))
-#define RemoveDirectory(dir) remove((dir))
+#define _chdir(d) chdir(unix_path(d))
+#define DeleteFile(file) remove(unix_path(file))
+#define RemoveDirectory(dir) remove(unix_path(dir))
 
 #define D3DVAL(val)             ((float)(val))
 #define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))

@@ -121,6 +121,8 @@ SRC_FILES=	ai.c \
 
 EXE=		warzone
 
+EXT_LIBS=	openal
+
 LIBS=		framework \
 		gamelib \
 		ivis02 \

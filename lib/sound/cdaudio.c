@@ -1,5 +1,9 @@
 /***************************************************************************/
 
+#ifndef WIN32
+#include <SDL.h>
+#endif
+
 #include "frame.h"
 #include "audio.h"
 #include "cdaudio.h"
@@ -14,14 +18,16 @@
 
 /***************************************************************************/
 
-static UINT		g_wDeviceID;
+#ifdef WIN32
+static UINT	g_wDeviceID;
 static SDWORD	g_iCurTrack    = CD_NO_TRACK_SELECTED;
 static DWORD	g_iCurPlayFrom = 0;
 static DWORD	g_iCurPlayTo   = 0;
 static DWORD	g_dwPlayFlags;
 
-#ifdef WIN32
 static WNDPROC	fnOldWinProc = NULL;
+#else
+SDL_CD *cdAudio_dev;
 #endif
 
 /***************************************************************************/
@@ -29,7 +35,7 @@ static WNDPROC	fnOldWinProc = NULL;
 
 #ifdef WIN32
 LRESULT APIENTRY cdAudio_CheckTrackFinished( HWND hWnd, UINT uMsg, 
-											 WPARAM wParam, LPARAM lParam )
+					     WPARAM wParam, LPARAM lParam )
 { 
 	if ( uMsg == MM_MCINOTIFY && wParam == (WPARAM) MCI_NOTIFY_SUCCESSFUL )
 	{
@@ -46,6 +52,35 @@ BOOL
 cdAudio_Open( void )
 { 
 #ifndef WIN32
+	if(!SDL_CDNumDrives()) {
+		printf("No CDROM devices available\n");
+		return FALSE;
+	}
+
+	cdAudio_dev = SDL_CDOpen(0);
+
+	if(!cdAudio_dev){
+		printf("Couldn't open drive: %s\n", SDL_GetError());
+		return FALSE;
+	}
+
+	SDL_CDStatus(cdAudio_dev);
+
+	/* Print Volume info */
+	/*
+	{
+		int cur_track;
+		int min, sec, frame;
+
+		printf("Name: %s\n", SDL_CDName(0));
+		printf("Tracks: %d\n", cdAudio_dev->numtracks);
+		for(cur_track=0; cur_track < cdAudio_dev->numtracks; cur_track++){
+			FRAMES_TO_MSF(cdAudio_dev->track[cur_track].length, &min, &sec, &frame);
+			printf("\tTrack %d: Length %d:%d\n", cur_track, min, sec);
+		}
+	}
+	*/
+
 	return TRUE;
 #else
 	DWORD				dwReturn;
@@ -85,7 +120,11 @@ cdAudio_Open( void )
 BOOL
 cdAudio_Close( void )
 { 
-#ifdef WIN32
+#ifndef WIN32
+	if (cdAudio_dev != NULL) {
+		SDL_CDClose(cdAudio_dev);
+	}
+#else
 	MCI_GENERIC_PARMS	mciParams;
 
 	mciSendCommand( g_wDeviceID, MCI_CLOSE, 0, (DWORD) &mciParams );
@@ -103,9 +142,12 @@ BOOL
 cdAudio_PlayTrack( SDWORD iTrack )
 { 
 #ifndef WIN32
+	if (cdAudio_dev != NULL) {
+		SDL_CDPlayTracks(cdAudio_dev, iTrack-1, 0, 1, 0);
+	}
 	return TRUE;
 #else
-	DWORD				dwReturn;
+	DWORD			dwReturn;
 	MCI_PLAY_PARMS		mciPlayParms;
 	MCI_GENERIC_PARMS	mciParams;
 	MCI_STATUS_PARMS	mciStatusParams;
@@ -169,6 +211,9 @@ BOOL
 cdAudio_Stop( void )
 { 
 #ifndef WIN32
+	if (cdAudio_dev != NULL) {
+		SDL_CDStop(cdAudio_dev);
+	}
 	return TRUE;
 #else
 	DWORD				dwReturn;
@@ -191,6 +236,9 @@ BOOL
 cdAudio_Pause( void )
 { 
 #ifndef WIN32
+	if (cdAudio_dev != NULL) {
+		SDL_CDPause(cdAudio_dev);
+	}
 	return TRUE;
 #else
 	DWORD				dwReturn;
@@ -229,6 +277,9 @@ BOOL
 cdAudio_Resume( void )
 { 
 #ifndef WIN32
+	if (cdAudio_dev != NULL) {
+		SDL_CDResume(cdAudio_dev);
+	}
 	return TRUE;
 #else
 	DWORD			dwReturn;
@@ -254,3 +305,13 @@ cdAudio_Resume( void )
 } 
 
 /***************************************************************************/
+
+void cdAudio_SetVolume( SDWORD iVol )
+{
+}
+
+/***************************************************************************/
+
+void cdAudio_Update() {
+}
+

@@ -27,6 +27,41 @@
 #include "SDL.h"
 #include "cursors.c"
 
+/* Linux specific stuff */
+
+#ifndef PSX
+#ifndef WIN32
+
+#undef fopen
+
+char* unix_path(char* path) {
+	static char returnval[512];
+	unsigned int i;
+
+	for (i = 0; path[i] != '\0'; ++i) {
+		if (path[i] >= 'A' && path[i] <= 'Z') {
+			returnval[i] = path[i]-'A'+'a';
+		} else if (path[i] == '\\') {
+			returnval[i] = '/';
+		} else {
+			returnval[i] = path[i];
+		}
+	}
+	for(;returnval[i-1] == '/'; --i);
+	returnval[i] = '\0';
+
+	return returnval;
+}
+
+FILE* unix_fopen(char* filename, char* mode) {
+	return fopen(unix_path(filename), mode);
+}
+
+#define fopen unix_fopen
+
+#endif
+#endif
+
 
 /* Handle for the main window */
 HANDLE	hWndMain;

@@ -1,7 +1,7 @@
 SRC_FILES=	audio.c \
 		cdaudio.c \
 		mixer_stub.c \
-		qstrack_stub.c \
+		openal_track.c \
 		track.c
 
 LIBS=framework gamelib ivis02

@@ -6,6 +6,10 @@
  * these don't actually do any loading or saving, but just
  * return a filename to use for the ops.
  */
+
+#include <string.h>
+#include <unistd.h>
+
 #include "frame.h"
 #include "widget.h"
 #include "piepalette.h"		// for predefined colours.
@@ -20,6 +24,11 @@
 #include "winmain.h"
 #include "display3d.h"
 #include "display.h"
+#ifndef WIN32
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
 #endif
 #include "netplay.h"
 #include "loop.h"
@@ -326,6 +335,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	slotCount = 0;
 
 	sprintf(sTemp,"%s*.%s",sSearchPath,sExtension);		// form search string.
+#ifndef PSX
 	strcpy(sPath,sSearchPath);							// setup locals.
 	strcpy(sExt,sExtension);
 #ifdef WIN32
@@ -351,6 +361,36 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 		}
 	}
 	FindClose(dir);
+#else
+	{
+		DIR *d = opendir(unix_path(sSearchPath));
+		struct dirent *entry;
+		unsigned int ext_l = strlen(sExtension);
+
+		if (d) while ((entry = readdir(d)) != NULL) {
+			char* filename = entry->d_name;
+			unsigned int name_l = strlen(filename);
+
+			if (   name_l > ext_l+1
+			    && filename[name_l-ext_l-1] == '.'
+			    && !strcmp(filename + name_l - ext_l, sExtension)) {
+				filename[name_l-ext_l-1] = '\0';
+				
+				strcpy(sSlots[slotCount], filename);		//store it!
+				
+				((W_BUTTON *)widgGetFromID(psRequestScreen,LOADENTRY_START+slotCount))->pTip = sSlots[slotCount];
+				((W_BUTTON *)widgGetFromID(psRequestScreen,LOADENTRY_START+slotCount))->pText = sSlots[slotCount];
+					
+				slotCount++;		// goto next but.
+				if(slotCount == 10 )	// only show upto 10 entrys.
+				{
+					break;
+				}
+			}
+		}
+		closedir(d);
+	}
+#endif
 #endif
 	bLoadSaveUp = TRUE;
 	return TRUE;
@@ -437,11 +477,11 @@ void deleteSaveGame(char* saveGameName)
 	
 	saveGameName[strlen(saveGameName)-3] = '\0';// strip extension
 
+#ifdef WIN32
 	// if it's a save game, delete the other files.
 	// check for a directory and remove that too.
 	sprintf(sTemp2,"%s\\*.*",saveGameName);
 
-#ifdef WIN32
 	dir =FindFirstFile(sTemp2,&found);			// remove other files
 	if(dir != INVALID_HANDLE_VALUE)
 	{
@@ -454,6 +494,18 @@ void deleteSaveGame(char* saveGameName)
 		}
 	}
 	FindClose(dir);	
+#else
+	{
+		DIR *d = opendir(unix_path(saveGameName));
+		struct dirent *entry;
+		static char tmp_buf[1024];
+
+		if (d) while ((entry = readdir(d)) != NULL) {
+			DeleteFile(entry->d_name);
+		}
+
+		closedir(d);
+	}
 #endif
 
 	RemoveDirectory(saveGameName);
