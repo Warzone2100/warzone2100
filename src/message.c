@@ -532,7 +532,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 						imdName2[MAX_NAME_SIZE];
 	STRING				audioName[MAX_STR_LENGTH];
 	SDWORD				LocX,LocY,LocZ, proxType, audioID;
-
+        int cnt;
 	//keep the start so we release it at the end
 	//pData = pViewMsgData;
 
@@ -567,7 +567,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf1(&pViewMsgData,"%[^','],%d,",&name, &numText);
+		sscanf(pViewMsgData,"%[^','],%d%n",&name, &numText,&cnt);
+                pViewMsgData += cnt;
 
 		//check not loading up too many text strings
 		if (numText > MAX_DATA)
@@ -598,7 +599,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 		{
 			name[0] = '\0';
 			//sscanf(pViewMsgData,"%[^',']", &name);
-			sscanf1(&pViewMsgData,"%[^','],",&name);
+			sscanf(pViewMsgData,",%[^',']%n",&name,&cnt);
+                        pViewMsgData += cnt;
 
 #ifndef PSX
 			//get the ID for the string
@@ -616,7 +618,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 		}
 
 		//sscanf(pViewMsgData,"%d", &psViewData->type);
-		sscanf1(&pViewMsgData,"%d,", &psViewData->type);
+		sscanf(pViewMsgData,",%d%n", &psViewData->type,&cnt);
+                pViewMsgData += cnt;
 
 		//allocate data according to type
 		switch (psViewData->type)
@@ -634,8 +637,9 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 			audioName[0] = '\0';
 			//sscanf(pViewMsgData, "%[^','],%[^','],%[^','],%[^','],%d", 
 			//	&imdName, &imdName2, &string, &audioName, &numFrames);
-			sscanf1(&pViewMsgData,"%[^','],%[^','],%[^','],%[^','],%d,", 
-				&imdName, &imdName2, &string, &audioName, &numFrames);
+			sscanf(pViewMsgData,",%[^','],%[^','],%[^','],%[^','],%d%n", 
+				&imdName, &imdName2, &string, &audioName, &numFrames,&cnt);
+                        pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
 			psViewRes->pIMD = (iIMDShape *) resGetData("IMD", imdName);
 			if (psViewRes->pIMD == NULL)
@@ -690,7 +694,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 
 			//read in number of sequences for this message
 			//sscanf(pViewMsgData, "%d", &psViewReplay->numSeq);
-			sscanf1(&pViewMsgData, "%d,", &count);
+			sscanf(pViewMsgData, ",%d%n", &count,&cnt);
+                        pViewMsgData += cnt;
 
 			if (count > MAX_DATA)
 			{
@@ -711,7 +716,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 				//load extradat for extended type only
 				if (psViewData->type == VIEW_RPL)
 				{
-					sscanf1(&pViewMsgData, "%[^','],%d,", &name, &count);
+					sscanf(pViewMsgData, ",%[^','],%d%n", &name, &count,&cnt);
+                                        pViewMsgData += cnt;
 					if (count > MAX_DATA)
 					{
 						DBERROR(("loadViewData: too many strings for %s", psViewData->pName));
@@ -723,7 +729,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 				}
 				else //extended type
 				{
-					sscanf1(&pViewMsgData, "%[^','],%d,%d,", &name, &count,	&count2);
+					sscanf(pViewMsgData, ",%[^','],%d,%d%n", &name, &count,	&count2,&cnt);
+                                        pViewMsgData += cnt;
 					if (count > MAX_DATA)
 					{
 						DBERROR(("loadViewData: invalid video playback flag %s", 
@@ -754,7 +761,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 					seqInc++)
 				{
 					name[0] = '\0';
-					sscanf1(&pViewMsgData,"%[^','],", &name);
+					sscanf(pViewMsgData,",%[^',']%n", &name,&cnt);
+                                        pViewMsgData += cnt;
 					//get the ID for the string
 					if (!strresGetIDNum(psStringRes, name, &id))
 					{
@@ -774,8 +782,8 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 
 				}
 				//get the audio text string
-				sscanf1(&pViewMsgData,"%[^','], %d,", &audioName, 
-					&count);
+				sscanf(pViewMsgData,",%[^','],%d%n", &audioName, &count,&cnt);
+                                pViewMsgData += cnt;
 
 				ASSERT((count < UWORD_MAX, "loadViewData: numFrames too high for ", name));
 
@@ -811,8 +819,9 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 		
 #ifndef PSX
 			audioName[0] = '\0';
-			sscanf1(&pViewMsgData, "%d,%d,%d,%[^','],%d", &LocX, &LocY, &LocZ, 
-				&audioName,&proxType);
+			sscanf(pViewMsgData, ",%d,%d,%d,%[^','],%d%n", &LocX, &LocY, &LocZ, 
+				&audioName,&proxType,&cnt);
+                        pViewMsgData += cnt;
 
 			//allocate audioID
 			if ( strcmp( audioName, "0" ) == 0 )
@@ -837,8 +846,9 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 				}
 			}
 #else
-			sscanf1(&pViewMsgData, "%d,%d,%d,%d,%d", &LocX, &LocY, &LocZ, 
-				&audioID,&proxType);
+			sscanf(pViewMsgData, ",%d,%d,%d,%d,%d%n", &LocX, &LocY, &LocZ, 
+				&audioID,&proxType,&cnt);
+                        pViewMsgData += cnt;
  #ifdef DEBUG
 			if ( ((audioID < 0) || (audioID >= ID_MAX_SOUND)) &&
 				 (audioID != NO_SOUND) )

@@ -76,57 +76,6 @@ void strlwr(char *String)
 #endif
 
 
-#ifdef WIN32
-// psx version is in sscanf.c
-
-int __cdecl _input (FILE *infile, const char *format, va_list arglist );
-
-// Special re-mix of sscanf that moves the string pointer along
-int __cdecl sscanf1 (
-        char **stringPos,
-        const char *format,
-        ...
-        )
-/*
- * 'S'tring 'SCAN', 'F'ormatted
- */
-{
-        va_list arglist;
-        FILE str;
-        FILE *infile = &str;
-        int retval;
-		char *string;
-
-		string=*stringPos;
-
-        va_start(arglist, format);
-
-//        _ASSERTE(string != NULL);
-//        _ASSERTE(format != NULL);
-
-        infile->_flag = _IOREAD|_IOSTRG|_IOMYBUF;
-        infile->_ptr = infile->_base = (char *) string;
-//        infile->_cnt = strlen(string);		// This is wrong ... what if the string isn't zero terminated it'll take forwever (and it does!)
-		infile->_cnt = 32768;		// dummy length ... to see if it will fail
-
-        retval = (_input(infile,format,arglist));
-
-		*stringPos=infile->_ptr;
-
-        return(retval);
-}
-#endif
-
-char GetCh1(UBYTE **data)
-{
-	char Byte;
-	char *pointer;
-	pointer=*data;
-	Byte=*pointer++;
-	*data=pointer;
-	return Byte;
-}
-
 
 BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 {
@@ -284,6 +233,8 @@ iIMDShape *LoadEffectIMD(UBYTE **ppFileData)
 	
 	iIMDShapeEffect *Effect;
 	IMAGEDEF *Image;
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 
 	UDWORD flags;
 	UDWORD firstframe,numframes,xsize,ysize;
@@ -299,10 +250,11 @@ iIMDShape *LoadEffectIMD(UBYTE **ppFileData)
 		return(NULL);
 	}
 
-	if (sscanf1(ppFileData,"%s",String) != 1) {
+	if (sscanf(pFileData,"%s%n",String,&cnt) != 1) {
 		iV_Error(0xff,"(IMDLoad) PSX Effect error ( Image File Name )");
 		return NULL;
 	}
+        pFileData += cnt;
 
 #ifndef PIETOOL // when creating binary pies, do not do a resgetdata
 	
@@ -313,11 +265,12 @@ iIMDShape *LoadEffectIMD(UBYTE **ppFileData)
 	}
 #endif
 
-	if (sscanf1(ppFileData,"%x %s %d %d %d",&flags,String,&numframes,&xsize,&ysize) != 5) 
+	if (sscanf(pFileData,"%x %s %d %d %d%n",&flags,String,&numframes,&xsize,&ysize,&cnt) != 5) 
 	{
 		iV_Error(0xff,"(IMDLoad) PSX Effect error");
 		return NULL;
 	}
+        pFileData += cnt;
 
 
 
@@ -367,6 +320,7 @@ iIMDShape *LoadEffectIMD(UBYTE **ppFileData)
 	Effect->xsize=(UWORD)xsize;
 	Effect->ysize=(UWORD)ysize;
 
+        *ppFileData = pFileData;
 	return((iIMDShape *)Effect);
 
 }
@@ -374,6 +328,8 @@ iIMDShape *LoadEffectIMD(UBYTE **ppFileData)
 iIMDShape *LoadProjectileIMD(UBYTE **ppFileData)
 {
 	
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	iIMDShapeProjectile *Projectile;
 
 	int Flags;
@@ -385,16 +341,17 @@ iIMDShape *LoadProjectileIMD(UBYTE **ppFileData)
 		return(NULL);
 	}
 
-	if (sscanf1(ppFileData,"%x %d %d %d %d %d %d %d %d %d",
+	if (sscanf(pFileData,"%x %d %d %d %d %d %d %d %d %d%n",
 				&Flags,
 				&Type,
 				&Radius,
 				&Seperation,
 				&LRed,&LGreen,&LBlue,
-				&TRed,&TGreen,&TBlue ) != 10) {
+				&TRed,&TGreen,&TBlue,&cnt ) != 10) {
 		iV_Error(0xff,"(IMDLoad) PSX Projectile error.");
 		return NULL;
 	}
+        pFileData += cnt;
 
 	Projectile->flags = Flags | iV_IMD_XEFFECT | iV_IMD_XEFFECT_PROJECTILE;
 	Projectile->Type = Type;
@@ -407,6 +364,7 @@ iIMDShape *LoadProjectileIMD(UBYTE **ppFileData)
 	Projectile->TGreen = TGreen;
 	Projectile->TBlue = TBlue;
 
+        *ppFileData = pFileData;
 	return((iIMDShape *)Projectile);
 }
 #endif
@@ -427,6 +385,8 @@ char *GetLastLoadedTexturePage(void)
 // ppFileData is incremented to the end of the file on exit!
 iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath, UBYTE *PCXpath,iBool palkeep)
 {
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	char		buffer[MAX_FILE_PATH],  texType[MAX_FILE_PATH], ch; //, *str;
 	int			i, nlevels, ptype, pwidth, pheight, texpage;
 	iIMDShape	*s, *psShape;
@@ -441,12 +401,13 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 	IMDcount++;
 
 
-	if (sscanf1(ppFileData,"%s %d",buffer,&_IMD_VER) != 2) 
+	if (sscanf(pFileData,"%s %d%n",buffer,&_IMD_VER,&cnt) != 2) 
 	{
 		iV_Error(0xff,"(IMDLoad) file corrupt -A");
 		assert(2+2==5);		// always fail
 		return NULL;
 	}
+        pFileData += cnt;
 
 	if ((strcmp(IMD_NAME,buffer) !=0) && (strcmp(PIE_NAME,buffer) !=0)) 
 	{
@@ -460,11 +421,11 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 //	IMD type of 9 - This is for the playstation effects pie !
 	if (_IMD_VER == 9)
 	{
-		return (LoadEffectIMD(ppFileData));
+		return (LoadEffectIMD(&pFileData));
 	}
 	if (_IMD_VER == 10)
 	{
-		return (LoadProjectileIMD(ppFileData));
+		return (LoadProjectileIMD(&pFileData));
 	}
 #endif
 
@@ -479,11 +440,12 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 
 
 
-	if (sscanf1(ppFileData,"%s %x",buffer,&_IMD_FLAGS) != 2) 
+	if (sscanf(pFileData,"%s %x%n",buffer,&_IMD_FLAGS,&cnt) != 2) 
 	{
 		iV_Error(0xff,"(IMDLoad) file corrupt -B");
 		return NULL;
 	}
+        pFileData += cnt;
 
 
 	texpage = -1;
@@ -494,11 +456,12 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 #ifdef PSX		// psx fscanf support %t which loads crappy filenames with spaces
 		if (_IMD_VER == 1 || _IMD_VER==2)
 		{
-			if (sscanf1(ppFileData,"%s %d %t %d %d",buffer,&ptype,&texfile,&pwidth,&pheight) != 5) 
+			if (sscanf(pFileData,"%s %d %t %d %d%n",buffer,&ptype,&texfile,&pwidth,&pheight,&cnt) != 5) 
 			{
 				iV_Error(0xff,"(IMDLoad) file corrupt -C");
 				return NULL;
 			}
+                        pFileData += cnt;
 			if (strcmp(buffer,"TEXTURE") != 0) 
 			{
 				iV_Error(0xff,"(IMDLoad) expecting 'TEXTURE' directive");
@@ -510,11 +473,12 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 #else	// we definately don't want any of this bollocks on the Playstation thank you very much
 		if (_IMD_VER == 1)
 		{
-			if (sscanf1(ppFileData,"%s %d %s %d %d",buffer,&ptype,&texfile,&pwidth,&pheight) != 5) 
+			if (sscanf(pFileData,"%s %d %s %d %d%n",buffer,&ptype,&texfile,&pwidth,&pheight,&cnt) != 5) 
 			{
 				iV_Error(0xff,"(IMDLoad) file corrupt -C");
 				return NULL;
 			}
+                        pFileData += cnt;
 			if (strcmp(buffer,"TEXTURE") != 0) 
 			{
 				iV_Error(0xff,"(IMDLoad) expecting 'TEXTURE' directive");
@@ -524,27 +488,29 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 		}
 		else//version 2 copes with long file names
 		{
-			if (sscanf1(ppFileData,"%s %d", buffer, &ptype) != 2)
+			if (sscanf(pFileData,"%s %d%n", buffer, &ptype,&cnt) != 2)
 			{
 				iV_Error(0xff,"(IMDLoad) file corrupt -D");
 				return NULL;
 			}
+                        pFileData += cnt;
 
 			if (strcmp(buffer,"TEXTURE") == 0)
 			{
 
-				ch = GetCh1(ppFileData);
+				ch = *pFileData++;
 
-				for( i = 0; (i < 80) &&  ((ch = GetCh1(ppFileData)) != EOF) && (ch != '.'); i++ )	// yummy
+				for( i = 0; (i < 80) &&  ((ch = *pFileData++) != EOF) && (ch != '.'); i++ )	// yummy
 				{
  					texfile[i] = (char)ch;
 				}
 
-				if (sscanf1(ppFileData,"%s", texType) != 1)
+				if (sscanf(pFileData,"%s%n", texType,&cnt) != 1)
 				{
 					iV_Error(0xff,"(IMDLoad) file corrupt -E");
 					return NULL;
 				}
+                                pFileData += cnt;
 
 				if (strcmp(texType,"pcx") != 0)
 				{
@@ -556,21 +522,23 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 
 				strcat(texfile,".pcx");
 
-				if (sscanf1(ppFileData,"%d %d", &pwidth, &pheight) != 2)
+				if (sscanf(pFileData,"%d %d%n", &pwidth, &pheight,&cnt) != 2)
 				{
 					iV_Error(0xff,"(IMDLoad) file corrupt -G");
 					return NULL;
 				}
+                                pFileData += cnt;
 				bTextured = TRUE;
 
 			}
 			else if (strcmp(buffer,"NOTEXTURE") == 0)
 			{
-				if (sscanf1(ppFileData,"%s %d %d",&texfile,&pwidth,&pheight) != 3)
+				if (sscanf(pFileData,"%s %d %d%n",&texfile,&pwidth,&pheight,&cnt) != 3)
 				{
 					iV_Error(0xff,"(IMDLoad) file corrupt -H");
 					return NULL;
 				}
+                                pFileData += cnt;
 			}
 			else
 			{
@@ -627,11 +595,12 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 #endif
 	}
 
-	if (sscanf1(ppFileData,"%s %d",buffer,&nlevels) !=2) 
+	if (sscanf(pFileData,"%s %d%n",buffer,&nlevels,&cnt) !=2) 
 	{
 		iV_Error(0xff,"(IMDLoad) file corrupt -I");
 		return NULL;
 	}
+        pFileData += cnt;
 
 	if (strcmp(buffer,"LEVELS") != 0) 
 	{
@@ -641,10 +610,11 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 
 #ifdef BSPIMD
 // if we might have BSP then we need to preread the LEVEL directive
-		if (sscanf1(ppFileData,"%s %d",buffer,&level) != 2) {
+		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
 			iV_Error(0xff,"(_load_level) file corrupt -J");
 			return NULL;
 		}
+                pFileData += cnt;
 
 		if (strcmp(buffer,"LEVEL") != 0) {
 			iV_Error(0xff,"(_load_level) expecting 'LEVEL' directive");
@@ -654,7 +624,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 
 
 
-	s = _imd_load_level(ppFileData,FileDataEnd,nlevels,texpage);
+	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
 
 
 #ifdef POST_LEVEL_TEXTURELOAD
@@ -694,6 +664,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 
 	if (s) iV_DEBUG0("imd[IMDLoad] = ********** successful *********\n");
 
+        *ppFileData = pFileData;
 	return (s);
 }
 
@@ -714,6 +685,8 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 
 static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s)
 {
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	int i, j; //, anim;
 	iVector p0, p1, p2, *points;
 	iIMDPoly *poly;
@@ -743,10 +716,11 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 			{
 				UDWORD flags,npnts;
 
-				if (sscanf1(ppFileData,"%x %d",&flags,&npnts) != 2) 
+				if (sscanf(pFileData,"%x %d%n",&flags,&npnts,&cnt) != 2) 
 				{
 					iV_Error(0xff,"(_load_polys) [poly %d] error loading flags and npoints",i);
 				}
+                                pFileData += cnt;
 
 				poly->flags=flags;
 
@@ -775,13 +749,14 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 					int NewID;
 
 
-					if (sscanf1(ppFileData,"%d",&NewID) != 1)
+					if (sscanf(pFileData,"%d%n",&NewID,&cnt) != 1)
 					{
 						DBPRINTF(("failed poly %d. point %d [%s]\n",i,j,_IMD_NAME));
 						
 						iV_Error(0xff,"(_load_polys) [poly %d] error reading poly indices",i);
 						return FALSE;
 					}
+                                        pFileData += cnt;
 					poly->pindex[j]=vertexTable[NewID];
 				}
 			} else {
@@ -826,15 +801,16 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 				}
 #endif
 				// even the psx needs to skip the data
-				if (sscanf1(ppFileData,"%d %d %d %d",
+				if (sscanf(pFileData,"%d %d %d %d%n",
 						&nFrames,
 						&pbRate,
 						&tWidth,
-						&tHeight)	!= 4) 
+						&tHeight,&cnt)	!= 4) 
 				{
 					iV_Error(0xff,"(_load_polys) [poly %d] error reading texanim data",i);
 					return FALSE;
 				}
+                                pFileData += cnt;
 
 #ifndef PIEPSX   // was #ifndef PSX
 				ASSERT( (tWidth>0, "_imd_load_polys: texture width = %i", tWidth) );
@@ -866,11 +842,12 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 				for (j=0; j<poly->npnts; j++)
 				{
 					int32 VertexU,VertexV;
-					if (sscanf1(ppFileData,"%d %d",&VertexU,&VertexV) != 2) 
+					if (sscanf(pFileData,"%d %d%n",&VertexU,&VertexV,&cnt) != 2) 
 					{
 						iV_Error(0xff,"(_load_polys) [poly %d] error reading tex outline",i);
 						return FALSE;
 					}
+                                        pFileData += cnt;
 
 
 					poly->vrt[j].u=VertexU;
@@ -904,13 +881,14 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 				//     - this probably was carried over from MAX, or maybe the PC-IMD code needed it.
 				for (j=0; j<poly->npnts; j++)
 				{
-					if (sscanf1(ppFileData,"%d %d",&VertexU,&VertexV) != 2) 
+					if (sscanf(pFileData,"%d %d%n",&VertexU,&VertexV,&cnt) != 2) 
 					{
 						iV_Error(0xff,"(_load_polys) [poly %d] error reading tex outline",i);
 
 						DBPRINTF(("IMD name=%s poly %d  point %d\n",_IMD_NAME,i,j));
 						return FALSE;
 					}
+                                        pFileData += cnt;
 
 /*
 	
@@ -1020,6 +998,7 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 	} else
 		return FALSE;
 
+        *ppFileData = pFileData;
 	return TRUE;
 }
 
@@ -1033,6 +1012,8 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 
 static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s, UWORD BSPNodeCount)
 {
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	UWORD Node;
 	PSBSPTREENODE NodeList;	// An pointer to an array of  nodes
 	iIMDPoly *IMDTri;			// pointer to a polygon ... for handling the link list in the bsp
@@ -1062,21 +1043,23 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 
 		InitNode(psNode);
 	
-		if (sscanf1(ppFileData,"%d",&NodeID) != 1)	// Check that we read 1 parameter ok
+		if (sscanf(pFileData,"%d%n",&NodeID,&cnt) != 1)	// Check that we read 1 parameter ok
 		{
 			iV_Error(0xff,"(_load_bsp) - needed a left node!");
 			return FALSE;
 		}
+                pFileData += cnt;
 		psNode->link[LEFT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node 
 
 		// Get forward facing polygon list - never empty apart from root node 
 		while(1)
 		{
-			if (sscanf1(ppFileData,"%d",&PolygonID) != 1) 	// Get a valid polygon number
+			if (sscanf(pFileData,"%d%n",&PolygonID,&cnt) != 1) 	// Get a valid polygon number
 			{
 				iV_Error(0xff,"(_load_bsp) - needed a polygon number");
 				return FALSE;
 			}
+                        pFileData += cnt;
 
 					
 			if (PolygonID==-1)	break;
@@ -1114,11 +1097,12 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 		// Get reverse facing polygon list - frequently empty
 		while(1)
 		{
-			if (sscanf1(ppFileData,"%d",&PolygonID) != 1) 	// Get a valid polygon number
+			if (sscanf(pFileData,"%d%n",&PolygonID,&cnt) != 1) 	// Get a valid polygon number
 			{
 				iV_Error(0xff,"(_load_bsp) - needed a polygon number");
 				return FALSE;
 			}
+                        pFileData += cnt;
 		
 			if (PolygonID==-1)	break;
 			if ((PolygonID<0) || (PolygonID >= s->npolys))
@@ -1141,11 +1125,12 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 //			list_Add( psNode->psTriOppoDir , &(s->polys[PolygonID]) );
 		}
 
-		if (sscanf1(ppFileData,"%d",&NodeID) != 1)	// Check that we read 1 parameter ok
+		if (sscanf(pFileData,"%d%n",&NodeID,&cnt) != 1)	// Check that we read 1 parameter ok
 		{
 			iV_Error(0xff,"(_load_bsp) - needed a right node!");
 			return FALSE;
 		}
+                pFileData += cnt;
 		psNode->link[RIGHT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node 
 	}
 
@@ -1186,6 +1171,8 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 
 	iV_DEBUG0("BSP Loaded AOK\n");
 
+        *ppFileData = pFileData;
+        return TRUE;
 }
 #endif
 
@@ -1193,6 +1180,8 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 
 BOOL ReadPoints(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s)
 {
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	int i;
 	iVector *p;
 	int lastPoint,match,j;
@@ -1205,11 +1194,12 @@ BOOL ReadPoints(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s)
 
 	for (i=0; i<s->npoints; i++) 
 	{
-		if (sscanf1(ppFileData,"%ld %ld %ld",&(newX),&(newY),&(newZ)) != 3) 
+		if (sscanf(pFileData,"%ld %ld %ld%n",&(newX),&(newY),&(newZ),&cnt) != 3) 
 		{
 			iV_Error(0xff,"(_load_points) file corrupt -K");
 			return FALSE;
 		}
+                pFileData += cnt;
 		
 //		DBPRINTF(("%d) x=%d y=%x z=%d\n",i,newX,newY,newZ));
 		//check for duplicate points
@@ -1258,6 +1248,7 @@ BOOL ReadPoints(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s)
 	s->npoints = lastPoint;
 
 
+        *ppFileData = pFileData;
 	return(TRUE);
 	
 
@@ -1688,6 +1679,8 @@ static iBool _imd_load_points(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape 
 
 static iBool _imd_load_connectors(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s)
 {
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	int i;
 	iVector *p;
 	SDWORD newX,newY,newZ;
@@ -1705,16 +1698,18 @@ static iBool _imd_load_connectors(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDSh
 
 	for (i=0; i<s->nconnectors; i++, p++) 
 	{
-		if (sscanf1(ppFileData,"%ld %ld %ld",&(newX),&(newY),&(newZ)) != 3) 
+		if (sscanf(pFileData,"%ld %ld %ld%n",&(newX),&(newY),&(newZ),&cnt) != 3) 
 		{
 			iV_Error(0xff,"(_load_connectors) file corrupt -M");
 			return FALSE;
 		}
+                pFileData += cnt;
 		p->x=newX;
 		p->y=newY;
 		p->z=newZ;
 	}
 
+        *ppFileData = pFileData;
 	return TRUE;
 }
 
@@ -1739,6 +1734,8 @@ static iBool _imd_load_connectors(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDSh
 
 static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nlevels, int texpage)
 {
+        UBYTE *pFileData = *ppFileData;
+        int cnt;
 	iIMDShape *s;
 	char buffer[MAX_FILE_PATH];
 //	int level;
@@ -1769,10 +1766,11 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 
 // if we can be sure that there is no bsp ... the we check for level number at this point
 #ifndef BSPIMD
-		if (sscanf1(ppFileData,"%s %d",buffer,&level) != 2) {
+		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
 			iV_Error(0xff,"(_load_level) file corrupt");
 			return NULL;
 		}
+                pFileData += cnt;
 
 		if (strcmp(buffer,"LEVEL") != 0) {
 			iV_Error(0xff,"(_load_level) expecting 'LEVEL' directive");
@@ -1784,10 +1782,11 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 		s->texpage = texpage;
 
 
-		if (sscanf1(ppFileData,"%s %d",buffer,&n) != 2) {
+		if (sscanf(pFileData,"%s %d%n",buffer,&n,&cnt) != 2) {
 			iV_Error(0xff,"(_load_level) file corrupt");
 			return NULL;
 		}
+                pFileData += cnt;
 
 		// load texture anims if specified
 
@@ -1812,13 +1811,14 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 		// There was no check / error handling!
 		//
 
-		_imd_load_points(ppFileData,FileDataEnd,s);
+		_imd_load_points(&pFileData,FileDataEnd,s);
 
 
-		if (sscanf1(ppFileData,"%s %d",buffer,&npolys) != 2) {
+		if (sscanf(pFileData,"%s %d%n",buffer,&npolys,&cnt) != 2) {
 			iV_Error(0xff,"(_load_level) file corrupt");
 			return NULL;
 		}
+                pFileData += cnt;
 
 		s->npolys=npolys;
 	
@@ -1830,7 +1830,7 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 		}
 
 //			DBPRINTF(("loading polygons - %d\n",s->npolys));
-		_imd_load_polys(ppFileData,FileDataEnd,s);
+		_imd_load_polys(&pFileData,FileDataEnd,s);
 
 
 //NOW load optional stuff
@@ -1851,18 +1851,19 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 //				DBPRINTF(("current file pos = %p (%x)(%x)(%x)  - endoffile = %p\n",*ppFileData,**ppFileData,*((*ppFileData)+1),*((*ppFileData)+2),FileDataEnd));
 
 				// check for end of file (give or take white space)
-				if (AtEndOfFile(*ppFileData,FileDataEnd)==TRUE)
+				if (AtEndOfFile(*&pFileData,FileDataEnd)==TRUE)
 				{
 					OptionalsCompleted=TRUE;
 					break;
 				}
 
 				// Scans in the line ... if we don't get 2 parameters then quit
-				if (sscanf1(ppFileData,"%s %d",buffer,&n) != 2)
+				if (sscanf(pFileData,"%s %d%n",buffer,&n,&cnt) != 2)
 				{
 					OptionalsCompleted=TRUE;
 					break;
 				}
+                                pFileData += cnt;
 
 
 				// check for next level ... or might be a BSP      - This should handle an imd if it has a BSP tree attached to it
@@ -1870,19 +1871,19 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 				if (strcmp(buffer,"LEVEL") == 0)
 				{
 					iV_DEBUG2("imd[_load_level] = npoints %d, npolys %d\n",s->npoints,s->npolys);
-					s->next = _imd_load_level(ppFileData,FileDataEnd,nlevels-1,texpage);
+					s->next = _imd_load_level(&pFileData,FileDataEnd,nlevels-1,texpage);
 				}
 #ifdef BSPIMD
 				else if (strcmp(buffer,"BSP") == 0)
 				{
-					_imd_load_bsp(ppFileData,FileDataEnd,s,(UWORD)n);
+					_imd_load_bsp(&pFileData,FileDataEnd,s,(UWORD)n);
 				}
 #endif
 				else if (strcmp(buffer,"CONNECTORS") == 0)
 				{
 					//load connector stuff
 					s->nconnectors = n;
-					_imd_load_connectors(ppFileData,FileDataEnd,s);
+					_imd_load_connectors(&pFileData,FileDataEnd,s);
 				}
 				else
 				{
@@ -1896,6 +1897,7 @@ static iIMDShape *_imd_load_level(UBYTE **ppFileData, UBYTE *FileDataEnd, int nl
 			}
 		}
 	}
+        *ppFileData = pFileData;
 	return s;
 }
 

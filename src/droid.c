@@ -3062,6 +3062,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 {
 	SBYTE				*pStartDroidData;
+        int cnt;
 	UDWORD				NumDroids = 0, i, player;
 	STRING				componentName[MAX_NAME_SIZE], droidName[MAX_NAME_SIZE];
 	BOOL				found = FALSE; //,EndOfFile;
@@ -3106,10 +3107,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 		//read the data into the storage - the data is delimeted using comma's
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],%d,",&componentName, &templateID);
-		//pDroidData += (strlen(componentName)+1);
-//		DBPRINTF(("%s\n",componentName);
-		sscanf1(&pDroidData,"%[^','],%d,",&componentName, &templateID);
+		sscanf(pDroidData,"%[^','],%d,%n",&componentName, &templateID,&cnt);
+                pDroidData += cnt;
 
 // Hideous mishmash of ifdef's ... sorry about that
 #ifdef HASH_NAMES
@@ -3169,9 +3168,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 		//read in Body Name
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 
 		found = FALSE;
 		//get the Body stats pointer
@@ -3216,9 +3214,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Brain Name
 		found = FALSE;
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 		
 		//get the Brain stats pointer
 		if (!strcmp(componentName,"0"))
@@ -3262,9 +3259,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Construct Name
 		found = FALSE;
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 
 		//get the Construct stats pointer
 		if (!strcmp(componentName,"0"))
@@ -3307,9 +3303,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Ecm Name
 		found = FALSE;
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 		
 		//get the Ecm stats pointer
 		if (!strcmp(componentName,"0"))
@@ -3350,9 +3345,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in player id - Access decides the order -crap hey?
-		//sscanf(pDroidData, "%d,", &player);
-		//pDroidData += 2;
-		sscanf1(&pDroidData, "%d,", &player);
+		sscanf(pDroidData, "%d,%n", &player,&cnt);
+                pDroidData += cnt;
 
 #ifdef PSX
 		player=RemapPlayerNumber(player);	// remap player id for PSX version
@@ -3362,9 +3356,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Propulsion Name
 		found = FALSE;
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 
 		//get the Propulsion stats pointer
 		if (!strcmp(componentName,"0"))
@@ -3407,9 +3400,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Repair Name
 		found = FALSE;
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 
 		//get the Repair stats pointer
 		if (!strcmp(componentName,"0"))
@@ -3451,8 +3443,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 		//read in droid type - only interested if set to PERSON
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 		if (!strcmp(componentName, "PERSON"))
 		{
 			pDroidDesign->droidType = DROID_PERSON;
@@ -3487,9 +3479,8 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Sensor Name
 		found = FALSE;
 		componentName[0] = '\0';
-		//sscanf(pDroidData,"%[^','],",&componentName);
-		//pDroidData += (strlen(componentName)+1);
-		sscanf1(&pDroidData,"%[^','],",&componentName);
+		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+                pDroidData += cnt;
 
 		//get the Sensor stats pointer
 		if (!strcmp(componentName,"0"))
