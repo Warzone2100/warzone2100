@@ -7,7 +7,7 @@
 #ifndef _gatewayroute_h
 #define _gatewayroute_h
 
-#include "Gateway.h"
+#include "gateway.h"
 
 // what type of terrain the unit can move over
 enum _gwr_terrain_types

@@ -11,7 +11,7 @@
 #define _display_h
 
 #include "base.h"
-#include "Structure.h"
+#include "structure.h"
 
 #ifdef PSX
 void tboxInitialise(void);

@@ -9,18 +9,18 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "Frame.h"
+#include "frame.h"
 
-#include "Objects.h"
-#include "Map.h"
+#include "objects.h"
+#include "map.h"
 
-#include "RayCast.h"
-#include "Display3d.h"
+#include "raycast.h"
+#include "display3d.h"
 //#ifdef ALEXM
-#include "Effects.h"
+#include "effects.h"
 //#endif
 #ifdef PSX
-#include "DCache.h"
+#include "dcache.h"
 #endif
 
 // accuracy for the raycast lookup tables

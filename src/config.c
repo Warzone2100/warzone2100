@@ -10,7 +10,7 @@
 #include "track.h"		// audio
 #include "cdaudio.h"	// audio
 #include "piestate.h"	// setgamma.
-#include "warzoneConfig.h"	// renderMode
+#include "warzoneconfig.h"	// renderMode
 #include "component.h"
 #include "text.h"
 #include "seqdisp.h"
@@ -19,10 +19,10 @@
 #include "display3d.h"
 #include "multiplay.h"
 #include "ai.h"
-#include "AdvVis.h"
+#include "advvis.h"
 #include "mixer.h"
-#include "HCI.h"
-#include "Fpath.h"
+#include "hci.h"
+#include "fpath.h"
 #include "d3drender.h"
 
 // ////////////////////////////////////////////////////////////////////////////

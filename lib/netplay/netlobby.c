@@ -8,7 +8,7 @@
 
 #include <windowsx.h>
 #include "frame.h"				// for dbprintf
-#include "Netplay.h"
+#include "netplay.h"
 //#include "netlobby.h"
 
 // note registry entries should be set by the installation routine. 

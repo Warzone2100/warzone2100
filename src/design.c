@@ -8,40 +8,40 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 
-#include "Objects.h"
-#include "Loop.h"
-#include "Edit2D.h"
-#include "Map.h"
+#include "objects.h"
+#include "loop.h"
+#include "edit2d.h"
+#include "map.h"
 
 /* Includes direct access to render library */
 #include "ivisdef.h"
 #include "vid.h"
-#include "pieMatrix.h"//matrix code
-#include "pieState.h"
+#include "piematrix.h"//matrix code
+#include "piestate.h"
 
 #ifdef PSX
-#include "Primatives.h"
-#include "DrawIMD_psx.h"
-#include "InitPSX.h"	// for DISPLAYMODE_PAL & DISPLAYMODE_NTSC.
+#include "primatives.h"
+#include "drawimd_psx.h"
+#include "initpsx.h"	// for DISPLAYMODE_PAL & DISPLAYMODE_NTSC.
 #endif
 
-#include "Display3d.h"
-#include "Edit3D.h"
-#include "Disp2D.h"
-#include "Structure.h"
-#include "Research.h"
-#include "Function.h"
-#include "GTime.h"
-#include "HCI.h"
-#include "Stats.h"
+#include "display3d.h"
+#include "edit3d.h"
+#include "disp2d.h"
+#include "structure.h"
+#include "research.h"
+#include "function.h"
+#include "gtime.h"
+#include "hci.h"
+#include "stats.h"
 #include "game.h"
 #include "power.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "WidgInt.h"
+#include "widgint.h"
 #include "bar.h"
 #include "form.h"
 #include "label.h"
@@ -49,35 +49,35 @@
 #include "editbox.h"
 #include "slider.h"
 #include "fractions.h"
-#include "Order.h"
-#include "Projectile.h"
+#include "order.h"
+#include "projectile.h"
 
-#include "IntImage.h"
-#include "IntDisplay.h"
-#include "Design.h"
-#include "Text.h"
+#include "intimage.h"
+#include "intdisplay.h"
+#include "design.h"
+#include "text.h"
 #include "component.h"
-#include "Script.h"
-#include "scriptTabs.h"
-#include "WinMain.h"
-#include "Objects.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "winmain.h"
+#include "objects.h"
 #include "display.h"
-#include "Console.h"
-#include "CmdDroid.h"
-#include "ScriptExtern.h"
+#include "console.h"
+#include "cmddroid.h"
+#include "scriptextern.h"
 #ifdef PSX
-#include "StringEntry.h"
+#include "stringentry.h"
 #include "csnap.h"
 #include "dcache.h"
-#include "VPad.h"
-#include "CtrlPSX.h"
+#include "vpad.h"
+#include "ctrlpsx.h"
 #include "mission.h"
 extern CURSORSNAP InterfaceSnap;
 #endif
 
 #ifdef WIN32
 
-#include "MultiPlay.h"
+#include "multiplay.h"
 #include "multistat.h"
 
 #define FLASH_BUTTONS		// Enable flashing body part buttons.

@@ -5,10 +5,10 @@ used for the mist and water effects. These are preprocessed.
 #ifdef WIN32
 
 // -------------------------------------------------------------------------------
-#include "Frame.h"
-#include "Map.h"
-#include "Display3D.h"
-#include "GTime.h"
+#include "frame.h"
+#include "map.h"
+#include "display3d.h"
+#include "gtime.h"
 
 // -------------------------------------------------------------------------------
 #define RANDOMLY_ONE_OR_MINUS_ONE	(rand()%2 ? -1 : 1)

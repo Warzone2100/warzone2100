@@ -5,12 +5,12 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Group.h"
-#include "OrderDef.h"
+#include "frame.h"
+#include "objects.h"
+#include "group.h"
+#include "orderdef.h"
 #ifdef WIN32
-#include "multiPlay.h"
+#include "multiplay.h"
 #endif
 // sizes for the group heap
 #define GRP_HEAP_INIT	45

@@ -4,13 +4,13 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997
 	*/
 
-#include "Frame.h"
-#include "Map.h"
-#include "Edit3D.h"
-#include "Display3D.h"
-#include "Objects.h"
-#include "Display.h"
-#include "HCI.h"
+#include "frame.h"
+#include "map.h"
+#include "edit3d.h"
+#include "display3d.h"
+#include "objects.h"
+#include "display.h"
+#include "hci.h"
 
 /*
 Definition of a tile to highlight - presently more than is required

@@ -11,38 +11,38 @@
 //#define DEBUG_GROUP1
 // order recieved printf's
 //#define DEBUG_GROUP2
-#include "Frame.h"
-#include "Objects.h"
-#include "Order.h"
-#include "Action.h"
-#include "Map.h"
-#include "FormationDef.h"
-#include "Formation.h"
-#include "Geometry.h"
-#include "Projectile.h"
+#include "frame.h"
+#include "objects.h"
+#include "order.h"
+#include "action.h"
+#include "map.h"
+#include "formationdef.h"
+#include "formation.h"
+#include "geometry.h"
+#include "projectile.h"
 #include "effects.h"	// for waypoint display
-#include "GTime.h"
-#include "intOrder.h"
+#include "gtime.h"
+#include "intorder.h"
 #include "orderdef.h"	
-#include "Transporter.h"
+#include "transporter.h"
 #include "group.h"
-#include "CmdDroid.h"
+#include "cmddroid.h"
 #include "script.h"
 #include "scripttabs.h"
-#include "scriptCB.h"
+#include "scriptcb.h"
 #ifdef WIN32
-#include "Multiplay.h"  //ajl
+#include "multiplay.h"  //ajl
 #else
 extern UDWORD selectedPlayer;
 #endif
-#include "Mission.h"
-#include "HCI.h"
-#include "Visibility.h"
-#include "Display.h"
+#include "mission.h"
+#include "hci.h"
+#include "visibility.h"
+#include "display.h"
 #include "ai.h"
 #include "warcam.h"
 #include "audio_id.h"
-#include "FPath.h"
+#include "fpath.h"
 #include "display3d.h"
 #include "combat.h"
 

@@ -29,7 +29,7 @@
 #include "multirecv.h"
 #include "multiint.h"
 #include "multilimit.h"
-#include "pieMode.h"
+#include "piemode.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // externs

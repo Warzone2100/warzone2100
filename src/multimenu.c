@@ -7,8 +7,8 @@
 #include "frame.h"
 #include "widget.h"
 
-#include "Display3d.h"
-#include "intDisplay.h"
+#include "display3d.h"
+#include "intdisplay.h"
 #include "text.h"
 #include "vid.h"
 #include "piedef.h"
@@ -17,7 +17,7 @@
 #include "levels.h"
 #include "objmem.h"		 	//for droid lists.
 #include "component.h"		// for disaplycomponentobj.
-#include "HCI.h"			// for wFont def.& intmode.
+#include "hci.h"			// for wFont def.& intmode.
 //#include "intfac.h"		// for images.
 #include "power.h"
 #include "loadsave.h"		// for drawbluebox

@@ -7,7 +7,7 @@
 #define _messageDef_h
 
 #include "deliverance.h"
-#include "pieTypes.h"
+#include "pietypes.h"
 	
 typedef enum _message_type
 {

@@ -8,42 +8,42 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 
-#include "Objects.h"
-#include "Loop.h"
-#include "Edit2D.h"
-#include "Map.h"
+#include "objects.h"
+#include "loop.h"
+#include "edit2d.h"
+#include "map.h"
 /* Includes direct access to render library */
 #include "ivisdef.h"
-#include "pieState.h"
+#include "piestate.h"
 
 #ifdef WIN32
-#include "pieMode.h"
+#include "piemode.h"
 #endif
 
 #include "vid.h"
-#include "BitImage.h"
+#include "bitimage.h"
 
 #ifdef PSX
 #include "primatives.h"
 #endif
 
-#include "Display3d.h"
-#include "Edit3D.h"
-#include "Disp2D.h"
-#include "Structure.h"
-#include "Research.h"
-#include "Function.h"
-#include "GTime.h"
-#include "HCI.h"
-#include "Stats.h"
+#include "display3d.h"
+#include "edit3d.h"
+#include "disp2d.h"
+#include "structure.h"
+#include "research.h"
+#include "function.h"
+#include "gtime.h"
+#include "hci.h"
+#include "stats.h"
 #include "game.h"
 #include "power.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "WidgInt.h"
+#include "widgint.h"
 #include "bar.h"
 #include "form.h"
 #include "label.h"
@@ -51,10 +51,10 @@
 #include "editbox.h"
 #include "slider.h"
 #include "fractions.h"
-#include "Order.h"
-#include "WinMain.h"
+#include "order.h"
+#include "winmain.h"
 
-#include "IntImage.h"
+#include "intimage.h"
 
 
 #define TRANSRECT

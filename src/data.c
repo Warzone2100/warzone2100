@@ -8,7 +8,7 @@
 #include <assert.h>
 
 
-#include "Frame.h"
+#include "frame.h"
 //render library
 #include "piedef.h"
 #include "piestate.h"
@@ -18,38 +18,38 @@
 
 #ifdef WIN32
 #include "texture.h"
-#include "warzoneConfig.h"
+#include "warzoneconfig.h"
 #endif
 #include "tex.h"
 #include "textdraw.h"
 
-#include "FrameResource.h"
-#include "Stats.h"
-#include "Structure.h"
-#include "Feature.h"
+#include "frameresource.h"
+#include "stats.h"
+#include "structure.h"
+#include "feature.h"
 #include "research.h"
-#include "Data.h"
-#include "Text.h"
+#include "data.h"
+#include "text.h"
 #include "droid.h"
 #include "function.h"
 #include "message.h"
-#include "Script.h"
-#include "ScriptVals.h"
+#include "script.h"
+#include "scriptvals.h"
 #include "display3d.h"
 #include "game.h"
-#include "Objects.h"
+#include "objects.h"
 #include "display.h"
 #include "audio.h"
 #include "anim.h"
 #include "parser.h"
-#include "Levels.h"
-#include "Mechanics.h"
-#include "Display3d.h"
-#include "Display3ddef.h"
-#include "Init.h"
+#include "levels.h"
+#include "mechanics.h"
+#include "display3d.h"
+#include "display3ddef.h"
+#include "init.h"
 
 #ifdef PSX
-#include "Display3D_psx.h"	
+#include "display3d_psx.h"	
 #include "locale.h"
 #else
 #include "multiplay.h"

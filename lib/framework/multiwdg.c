@@ -5,9 +5,9 @@
  *
  */
 
-#include "Frame.h"
+#include "frame.h"
 #include "wdg.h"
-#include "multiWDG.h"
+#include "multiwdg.h"
 
 // the list of file catalogs for all the current WDGs
 WDGCACHE	*psWDGCache;

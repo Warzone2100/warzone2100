@@ -349,11 +349,11 @@ static int fprintf(FILE* f,char* c,...)
 #include "mem.h"
 #include "heap.h"
 #include "treap.h"
-#include "StrRes.h"
-#include "StrResLY.h"
+#include "strres.h"
+#include "strresly.h"
 
 /* Get the Yacc definitions */
-#include "StrRes_y.h"
+#include "strres_y.h"
 
 /* Turn off a couple of warnings that the lex generated code gives */
 #pragma warning ( disable : 4102 4305 )

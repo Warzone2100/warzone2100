@@ -25,8 +25,8 @@ static int printf(char* c, ...)
 //#define DEBUG_GROUP1
 #include "types.h"
 #include "debug.h"
-#include "ResLY.h"
-#include "FrameResource.h"
+#include "resly.h"
+#include "frameresource.h"
 
 /* Turn off a couple of warnings that the yacc generated code gives */
 #pragma warning ( disable : 4305 4102)

@@ -9,11 +9,11 @@
 #define FRAME_LIB_INCLUDE
 
 #include <assert.h>
-#include "Types.h"
-#include "Debug.h"
-#include "Mem.h"
-#include "Fractions.h"
-#include "Trig.h"
+#include "types.h"
+#include "debug.h"
+#include "mem.h"
+#include "fractions.h"
+#include "trig.h"
 
 #define PI 3.141592654
 

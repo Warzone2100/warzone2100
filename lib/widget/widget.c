@@ -5,25 +5,25 @@
  */
 
 
-#include "Frame.h"
-#include "FrameInt.h"
+#include "frame.h"
+#include "frameint.h"
 
-#include "Widget.h"
-#include "WidgInt.h"
+#include "widget.h"
+#include "widgint.h"
 
-#include "Form.h"
-#include "Label.h"
-#include "Button.h"
-#include "EditBox.h"
-#include "Bar.h"
-#include "Slider.h"
+#include "form.h"
+#include "label.h"
+#include "button.h"
+#include "editbox.h"
+#include "bar.h"
+#include "slider.h"
 
-#include "Tip.h"
+#include "tip.h"
 
 #ifdef PSX
 #include "ivis02.h"
-#include "Primatives.h"
-#include "DCache.h"
+#include "primatives.h"
+#include "dcache.h"
 #endif
 
 #include <assert.h>

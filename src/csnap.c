@@ -6,21 +6,21 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Frame.h"
-#include "Widget.h"
+#include "frame.h"
+#include "widget.h"
 #include "deliverance.h"
-#include "Fractions.h"
+#include "fractions.h"
 
 #ifdef WIN32
-#include "PieState.h"
-#include "PieClip.h"
+#include "piestate.h"
+#include "pieclip.h"
 #endif
 
 #ifdef PSX
-#include "CtrlPSX.h"
+#include "ctrlpsx.h"
 #endif
 
-#include "CSnap.h"
+#include "csnap.h"
 #include "audio_id.h"
 
 #define V_BIAS 8

@@ -8,22 +8,22 @@
 
 /* Includes direct access to matrix code */
 #include "piedef.h"
-#include "pieState.h"
+#include "piestate.h"
 #include "rendmode.h"
 #include "geo.h"//matrix code
 /* Includes from PUMPKIN stuff */
-#include "Frame.h"
-#include "ObjectDef.h"
+#include "frame.h"
+#include "objectdef.h"
 #include "map.h"
-#include "Display3D.h"
-#include "MiscImd.h"
-#include "Effects.h"
-#include "Component.h"
-#include "bucket3D.h"
+#include "display3d.h"
+#include "miscimd.h"
+#include "effects.h"
+#include "component.h"
+#include "bucket3d.h"
 #include "message.h"
-#include "Console.h"
+#include "console.h"
 #ifdef WIN32
-#include "Atmos.h"
+#include "atmos.h"
 #endif
 
 

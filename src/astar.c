@@ -13,18 +13,18 @@
 //#define DEBUG_GROUP2
 #include <assert.h>
 
-#include "Frame.h"
+#include "frame.h"
 
-#include "Objects.h"
-#include "Map.h"
-#include "RayCast.h"
-#include "FPath.h"
+#include "objects.h"
+#include "map.h"
+#include "raycast.h"
+#include "fpath.h"
 
 #ifdef TEST_BED
 #include "main.h"
 #endif
 
-#include "AStar.h"
+#include "astar.h"
 
 // open list storage methods :
 // binary tree - 0

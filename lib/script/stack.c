@@ -6,11 +6,11 @@
 
 #include <stdarg.h>
 
-#include "Frame.h"
-#include "Interp.h"
-#include "Stack.h"
-#include "CodePrint.h"
-#include "Script.h"
+#include "frame.h"
+#include "interp.h"
+#include "stack.h"
+#include "codeprint.h"
+#include "script.h"
 
 /* number of values in each stack chunk */
 #define INIT_SIZE		15

@@ -1,7 +1,7 @@
 /* Geometry.c - holds trig/vector deliverance specific stuff for 3D */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
-#include "Frame.h"
+#include "frame.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,12 +12,12 @@
 #include "ivisdef.h" //ivis matrix code
 #include "geo.h" //ivis matrix code
 
-#include "ObjectDef.h"
-#include "Map.h"
-#include "Display3D.h"
-#include "Geometry.h"
-#include "GTime.h"
-#include "HCI.h"
+#include "objectdef.h"
+#include "map.h"
+#include "display3d.h"
+#include "geometry.h"
+#include "gtime.h"
+#include "hci.h"
 #include "display.h"
 
 #ifdef PSX

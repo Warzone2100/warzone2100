@@ -7,7 +7,7 @@
 #ifndef _droid_h
 #define _droid_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 

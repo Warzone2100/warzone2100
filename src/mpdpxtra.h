@@ -150,7 +150,7 @@ typedef unsigned long MPPLAYERID;
 
 ----------------------------------------------------------------------------*/
 
-#include "dplay.h"
+#include <dplay.h>
 
 #ifdef __BORLANDC
 #pragma option -a8					// Pack on 8 byte boundaries for Borland

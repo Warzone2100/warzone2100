@@ -19,13 +19,13 @@
 
 /* The input buffer printf's */
 //#define DEBUG_GROUP1
-#include "Types.h"
-#include "Debug.h"
-#include "Input.h"
-#include "Screen.h"
+#include "types.h"
+#include "debug.h"
+#include "input.h"
+#include "screen.h"
 #include "frameint.h"
-#include "Fractions.h"
-#include "Frame.h"
+#include "fractions.h"
+#include "frame.h"
 
 /* The possible states for keys */
 typedef enum _key_state

@@ -6,27 +6,27 @@
  */
 
 
-#include "Frame.h"
+#include "frame.h"
 #include "widget.h"
-#include "Objects.h"
-#include "Script.h"
-#include "ScriptTabs.h"
+#include "objects.h"
+#include "script.h"
+#include "scripttabs.h"
 
 // Get all the function prototypes
-#include "ScriptFuncs.h"
-#include "ScriptExtern.h"
-#include "ScriptObj.h"
-#include "ScriptVals.h"
-#include "ScriptCB.h"
-#include "ScriptAI.h"
+#include "scriptfuncs.h"
+#include "scriptextern.h"
+#include "scriptobj.h"
+#include "scriptvals.h"
+#include "scriptcb.h"
+#include "scriptai.h"
 
 #include "droid.h"
-#include "HCI.h"
+#include "hci.h"
 #include "message.h"
 //#include "mission.h"
 #include "levels.h"
-#include "Order.h"
-#include "GTime.h"
+#include "order.h"
+#include "gtime.h"
 #include "mission.h"
 
 #include "design.h"			// for the iddes_...

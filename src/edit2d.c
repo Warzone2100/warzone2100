@@ -11,15 +11,15 @@
 //#define DEBUG_GROUP2
 /* Selection flip and rotate printf's */
 //#define DEBUG_GROUP3
-#include "Frame.h"
-#include "FrameInt.h"
+#include "frame.h"
+#include "frameint.h"
 
-#include "GTime.h"
-#include "Map.h"
+#include "gtime.h"
+#include "map.h"
 #include "ivi.h"
-#include "Display3d.h"
-#include "Disp2D.h"
-#include "Edit2D.h"
+#include "display3d.h"
+#include "disp2d.h"
+#include "edit2d.h"
 
 /* Whether to show the terrain type on the map */
 BOOL			showTerrain = FALSE;

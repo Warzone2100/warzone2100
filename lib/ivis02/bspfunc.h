@@ -2,7 +2,7 @@
 #define _bspfunc_h_
 
 #include "ivisdef.h"
-#include "bspImd.h"
+#include "bspimd.h"
 
 /***************************************************************************/
 

@@ -2,23 +2,23 @@
 /* Calculates the shading values for the terrain world. */
 /* The terrain intensity values are calculated at map load/creation time. */
 
-#include "Frame.h"
+#include "frame.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "ivisdef.h" //ivis matrix code
-#include "pieState.h" //ivis matrix code
-#include "pieFunc.h" //ivis matrix code
+#include "piestate.h" //ivis matrix code
+#include "piefunc.h" //ivis matrix code
 #include "geo.h" //ivis matrix code
-#include "Map.h"
-#include "Lighting.h"
-#include "Display3D.h"
-#include "Effects.h"
-#include "Atmos.h"
-#include "Environ.h"
-#include "GTime.h"
-#include "Console.h"
-#include "Arrow.h"
+#include "map.h"
+#include "lighting.h"
+#include "display3d.h"
+#include "effects.h"
+#include "atmos.h"
+#include "environ.h"
+#include "gtime.h"
+#include "console.h"
+#include "arrow.h"
 
 /*	The vector that holds the sun's lighting direction - planar */
 iVector	theSun;

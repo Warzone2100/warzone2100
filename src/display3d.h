@@ -4,9 +4,9 @@
 #define _display3d_h
 
 #include "display3ddef.h"	// This should be the only place including this file on the PC ... display3d_psx.h on the playstation
-#include "PieTypes.h"
-#include "PieDef.h"
-#include "ObjectDef.h"
+#include "pietypes.h"
+#include "piedef.h"
+#include "objectdef.h"
 #include "message.h"
 
 extern BOOL	xInOrder,yInOrder,yBeforeX,spinScene;

@@ -60,4 +60,4 @@ BOOL saveMidMission(void);
 #ifdef WIN32
 extern void deleteSaveGame(char* saveGameName);
 #endif
-#endif/_loadsave_h
+#endif //_loadsave_h

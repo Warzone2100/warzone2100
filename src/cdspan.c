@@ -1,19 +1,19 @@
 /* Handles the two CD issue */
 /* Alex McLean */
 
-#include "Frame.h"
-#include "pieDef.h"
-#include "pieFunc.h"
-#include "pieMode.h"
-#include "pieState.h"
-#include "Text.h"
-#include "DisplayDef.h"
-#include "RendMode.h"
-#include "HCI.h"
+#include "frame.h"
+#include "piedef.h"
+#include "piefunc.h"
+#include "piemode.h"
+#include "piestate.h"
+#include "text.h"
+#include "displaydef.h"
+#include "rendmode.h"
+#include "hci.h"
 #include "intdisplay.h"
 #include "audio.h"
 #include "cdaudio.h"
-#include "CDSpan.h"
+#include "cdspan.h"
 
 // turn on/off checks
 #if 1

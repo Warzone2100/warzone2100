@@ -8,7 +8,7 @@
 #define _SeqDisp_h
 
 #ifdef WIN32			// ffs js (bastard)
-#include "pieMode.h"
+#include "piemode.h"
 #endif
 /***************************************************************************/
 /*

@@ -5,20 +5,20 @@
  *
  */
 
-#include "Frame.h"
-#include "Map.h"
+#include "frame.h"
+#include "map.h"
 
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptExtern.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptextern.h"
 
 #ifdef WIN32
 #include "multiplay.h"
 #endif
 
-#include "WinMain.h"
-#include "HCI.h"
-#include "GTime.h"
+#include "winmain.h"
+#include "hci.h"
+#include "gtime.h"
 
 
 // current game level

@@ -8,8 +8,8 @@
 #include <time.h>
 
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "GTime.h"
+#include "frame.h"
+#include "gtime.h"
 
 #ifdef WIN32
 #define TIME_FIX

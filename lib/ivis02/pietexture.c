@@ -8,13 +8,13 @@
 /***************************************************************************/
 
 #include "frame.h"
-#include "pieTexture.h"
+#include "pietexture.h"
 #include "piedef.h"
-#include "pieState.h"
-#include "dx6TexMan.h"
+#include "piestate.h"
+#include "dx6texman.h"
 #include "tex.h"
 #ifdef INC_GLIDE
-	#include "3dfxText.h"
+	#include "3dfxtext.h"
 #endif
 
 

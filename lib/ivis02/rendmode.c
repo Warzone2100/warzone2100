@@ -4,27 +4,27 @@
 #include <dos.h>
 #include "rendmode.h"
 #ifdef WIN32
-#include "pieClip.h"
+#include "pieclip.h"
 #endif
 #ifdef WIN32
 #include "d3dmode.h"
 #include "v4101.h"
 #endif
-#include "rendFunc.h"
+#include "rendfunc.h"
 #include "vsr.h"
 //#include "3dfxfunc.h"
-//#include "rendFunc.h"
-#include "textDraw.h"
+//#include "rendfunc.h"
+#include "textdraw.h"
 
 #include "bug.h"
-#include "piePalette.h"
-#include "pieState.h"
+#include "piepalette.h"
+#include "piestate.h"
 #include "ivispatch.h"
 #include "fractions.h"
 
 #ifdef WIN32
 #ifdef INC_GLIDE
-#include "dGlide.h"
+#include "dglide.h"
 #include "3dfxfunc.h"
 #endif
 #else

@@ -7,16 +7,16 @@
  */
 /***************************************************************************/
 
-#include "pieClip.h"
+#include "pieclip.h"
 #include "frame.h"
-#include "pieDef.h"
-#include "pieState.h"
+#include "piedef.h"
+#include "piestate.h"
 #include "rendmode.h"
 #include "d3drender.h"
 #ifdef INC_GLIDE
-	#include "dGlide.h"
-//	#include "3dfxFunc.h"
-//	#include "3dfxText.h"
+	#include "dglide.h"
+//	#include "3dfxfunc.h"
+//	#include "3dfxtext.h"
 #endif
 
 /***************************************************************************/

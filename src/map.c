@@ -14,29 +14,29 @@
 /* map line printf's */
 //#define DEBUG_GROUP1
 #include <assert.h>
-#include "Frame.h"
-#include "FrameInt.h"
+#include "frame.h"
+#include "frameint.h"
 #define DEFINE_MAPINLINE	// defines the inline functions in this module
-#include "Map.h"
-#include "GTime.h"
-#include "HCI.h"
+#include "map.h"
+#include "gtime.h"
+#include "hci.h"
 #include "projectile.h"
 // chnaged line	- alex
-#include "Display3D.h"
-#include "Lighting.h"
+#include "display3d.h"
+#include "lighting.h"
 // end of chnage - alex
 #include "game.h"
 #ifdef WIN32
-#include "Environ.h"
-#include "AdvVis.h"
+#include "environ.h"
+#include "advvis.h"
 #endif
 #ifdef PSX
 #include "utils.h"	// getdword()
-#include "Levels.h"
-#include "Mission.h"
+#include "levels.h"
+#include "mission.h"
 #endif
-#include "Gateway.h"
-#include "Wrappers.h"
+#include "gateway.h"
+#include "wrappers.h"
 
 #include "fractions.h"
 

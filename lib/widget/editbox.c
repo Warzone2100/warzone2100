@@ -4,14 +4,14 @@
  * Functions for the edit box widget.
  */
 
-#include "Frame.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "EditBox.h"
-#include "Form.h"
-#include "Vid.h"
+#include "frame.h"
+#include "widget.h"
+#include "widgint.h"
+#include "editbox.h"
+#include "form.h"
+#include "vid.h"
 #ifdef PSX
-#include "Primatives.h"
+#include "primatives.h"
 #endif
 
 /* Pixel gap between edge of edit box and text */

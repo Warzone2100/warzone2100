@@ -28,7 +28,7 @@ static int fprintf(FILE* f,char* c,...)
 #include <string.h>
 #include "types.h"
 #include "debug.h"
-#include "ResLY.h"
+#include "resly.h"
 
 /* Get the Yacc definitions */
 #include "resource_y.h"

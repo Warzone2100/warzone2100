@@ -8,7 +8,7 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
 #include "piedef.h"
-#include "pieTypes.h"
+#include "pietypes.h"
 
 /* All the effect groups */
 typedef enum 

@@ -14,19 +14,19 @@
 #include "widget.h"
 
 #include "winmain.h"
-#include "Objects.h"
+#include "objects.h"
 #include "display.h"// pal stuff
 #include "display3d.h"
 
 /* Includes direct access to render library */
 #include "piedef.h"
-#include "pieState.h"
-#include "pieClip.h"
+#include "piestate.h"
+#include "pieclip.h"
 #include "vid.h"
 #include "objmem.h"
 #include "gateway.h"
-#include "time.h"
-#include "GTime.h"
+#include <time.h>
+#include "gtime.h"
 #include "text.h"
 #include "config.h"
 #include "intdisplay.h"
@@ -42,13 +42,13 @@
 #include "frend.h"
 #include "advvis.h"
 //#include "editbox.h"
-#include "FrontEnd.h"
+#include "frontend.h"
 //#include "texture.h"
 #include "data.h"
 #include "script.h"
 #include "keymap.h"
 
-#include "Netplay.h"
+#include "netplay.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "multijoin.h"

@@ -14,22 +14,22 @@
 #include "imd.h"
 #include "rendmode.h"
 //#include "d3dmode.h"
-#include "pieFunc.h"
-#include "pieMatrix.h"
+#include "piefunc.h"
+#include "piematrix.h"
 #include "tex.h"
 
 #include "piedef.h"
-#include "pieState.h"
-#include "pieTexture.h"
-#include "pieClip.h"
+#include "piestate.h"
+#include "pietexture.h"
+#include "pieclip.h"
 
-#include "d3d.h"
+#include <d3d.h>
 #include "d3drender.h"
 
 #ifdef INC_GLIDE
-	#include "dGlide.h"
-	#include "3dfxFunc.h"
-	#include "3dfxText.h"
+	#include "dglide.h"
+	#include "3dfxfunc.h"
+	#include "3dfxtext.h"
 #endif
 
 #ifndef PIEPSX		// was #ifdef WIN32

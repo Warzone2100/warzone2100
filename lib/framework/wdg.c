@@ -14,9 +14,9 @@
 
 #include <assert.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "wdg.h"
-#include "MultiWDG.h"
+#include "multiwdg.h"
 
 #ifdef PSX
 #include "cdpsx.h"

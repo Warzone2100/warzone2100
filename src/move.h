@@ -7,8 +7,8 @@
 #ifndef _move_h
 #define _move_h
 
-#include "ObjectDef.h"
-#include "FindPath.h"
+#include "objectdef.h"
+#include "findpath.h"
 #include "audio.h"
 
 /* The base movement speed */

@@ -7,11 +7,11 @@
 
 /* Control the execution trace printf's */
 #define DEBUG_GROUP0
-#include "Frame.h"
-#include "Interp.h"
-#include "Stack.h"
-#include "CodePrint.h"
-#include "Script.h"
+#include "frame.h"
+#include "interp.h"
+#include "stack.h"
+#include "codeprint.h"
+#include "script.h"
 
 
 // the maximum number of instructions to execute before assuming

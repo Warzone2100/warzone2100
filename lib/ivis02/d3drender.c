@@ -5,14 +5,14 @@
 #include "ivi.h"
 #include "rendmode.h"
 #include "tex.h"
-#include "piePalette.h"
-#include "pieState.h"
-#include "pieClip.h"
+#include "piepalette.h"
+#include "piestate.h"
+#include "pieclip.h"
 #include "frameint.h"
 
 #include "d3drender.h"
 #include "texd3d.h"
-#include "dx6TexMan.h"
+#include "dx6texman.h"
 
 #ifndef PIEPSX		// was #ifdef WIN32
 

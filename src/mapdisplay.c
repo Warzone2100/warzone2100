@@ -12,7 +12,7 @@
 
 /* ----------------------------------------------------------------------------------------- */
 /* Included files */
-#include "stdio.h"
+#include <stdio.h>
 
 /* Includes direct access to render library */
 #include "ivisdef.h"
@@ -22,28 +22,28 @@
 #include "piemode.h"
 #include "pietexture.h"
 #endif
-#include "pieMatrix.h"
+#include "piematrix.h"
 #include "vid.h"
 
-#include "Map.h"
-#include "MapDisplay.h"
-#include "Component.h"
-#include "Disp2D.h"
-#include "Display3d.h"
-#include "HCI.h"
+#include "map.h"
+#include "mapdisplay.h"
+#include "component.h"
+#include "disp2d.h"
+#include "display3d.h"
+#include "hci.h"
 #include "intelmap.h"
-#include "IntImage.h"
+#include "intimage.h"
 #ifdef WIN32
-//#include "dGlide.h"
-#include "Texture.h"
-#include "IntDisplay.h"
+//#include "dglide.h"
+#include "texture.h"
+#include "intdisplay.h"
 #endif
 
 
 #ifdef PSX
 #include "component.h"
 #include "primatives.h"
-#include "DrawIMD_psx.h"
+#include "drawimd_psx.h"
 #endif
 
 #ifdef WIN32		// whole file is going on PSX !!!!!!!

@@ -12,19 +12,19 @@
 ~	=	Triangle
 */
 
-#include "stdio.h"
-#include "Frame.h"
-#include "winMain.h"
-#include "Objects.h"
+#include <stdio.h>
+#include "frame.h"
+#include "winmain.h"
+#include "objects.h"
 #include "display.h"
 #include "widget.h"
 /* Includes direct access to render library */
 #include "ivisdef.h"
-#include "pieState.h"
+#include "piestate.h"
 #ifdef WIN32
 #include "keyedit.h"
-#include "pieFunc.h"
-#include "warzoneConfig.h"
+#include "piefunc.h"
+#include "warzoneconfig.h"
 #endif
 #include "vid.h"
 
@@ -41,22 +41,22 @@
 #include "design.h"					// for intadddesign
 #include "hci.h"					// for intShowPower
 #include "text.h"					// to get at string resources.
-#include "FrontEnd.h"
-#include "Console.h"
+#include "frontend.h"
+#include "console.h"
 #include "wrappers.h"
 #include "component.h"
 #include "loadsave.h"
-#include "CSnap.h"
+#include "csnap.h"
 //#include "wrappers.h"				// for bUsingKeyboard.
-#include "Frend.h"
+#include "frend.h"
 #include "game.h"
-#include "Init.h"
+#include "init.h"
 #include "difficulty.h"
-#include "InGameOp.h"
+#include "ingameop.h"
 
 #ifdef WIN32
 #include "advvis.h"
-#include "seqDisp.h"
+#include "seqdisp.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "multilimit.h"
@@ -66,11 +66,11 @@
 
 #ifdef PSX
 #include "initpsx.h"
-#include "Primatives.h"
+#include "primatives.h"
 #include "ctrlpsx.h"
-#include "VPad.h"
-#include "Frend16.h"
-#include "IntLoadSave.h"
+#include "vpad.h"
+#include "frend16.h"
+#include "intloadsave.h"
 #include "locale.h"
 #include "assert.h"
 

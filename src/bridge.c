@@ -1,14 +1,14 @@
-#include "Frame.h"
-#include "Map.h"
-#include "HCI.h"
-#include "MapDisplay.h"
-#include "Display3D.h"
+#include "frame.h"
+#include "map.h"
+#include "hci.h"
+#include "mapdisplay.h"
+#include "display3d.h"
 #include "ivisdef.h" //ivis matrix code
 #include "piedef.h" //pie render
 #include "geo.h" //ivis matrix code
-#include "MiscImd.h"
-#include "Effects.h"
-#include "Bridge.h"
+#include "miscimd.h"
+#include "effects.h"
+#include "bridge.h"
 /* 
 Bridge.c
 Alex McLean, Pumpkin Studios EIDOS Interactive, 1998.

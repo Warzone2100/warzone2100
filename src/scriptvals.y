@@ -22,18 +22,18 @@
 
 #include <stdio.h>
 
-#include "Frame.h"
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptVals.h"
-#include "Objects.h"
-#include "GTime.h"
+#include "frame.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptvals.h"
+#include "objects.h"
+#include "gtime.h"
 #include "droid.h"
 #include "structure.h"
 #include "message.h"
 #include "audio.h"
 #include "levels.h"
-#include "Research.h"
+#include "research.h"
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;

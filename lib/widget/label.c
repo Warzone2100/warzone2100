@@ -5,12 +5,12 @@
  */
 
 
-#include "Frame.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Label.h"
-#include "Form.h"
-#include "Tip.h"
+#include "frame.h"
+#include "widget.h"
+#include "widgint.h"
+#include "label.h"
+#include "form.h"
+#include "tip.h"
 #include "vid.h"
 
 /* The widget heaps */

@@ -6,16 +6,16 @@
  */
 
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "Player.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "player.h"
 #include "game.h"
-#include "Order.h"
-#include "ObjectDef.h"
+#include "order.h"
+#include "objectdef.h"
 
 #ifdef WIN32
-#include "MultiPlay.h"
+#include "multiplay.h"
 #endif
 
 /* The position for the computer players to attack */

@@ -6,21 +6,21 @@
 	units selected according to specified criteria.
 */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Base.h"
-#include "DroidDef.h"
-#include "StatsDef.h"
+#include "frame.h"
+#include "objects.h"
+#include "base.h"
+#include "droiddef.h"
+#include "statsdef.h"
 #include "text.h"
-#include "Geometry.h"
-#include "Console.h"
-#include "Selection.h"
-#include "HCI.h"
-#include "Map.h"
-#include "Selection.h"
-#include "Display3d.h"
-#include "WarCam.h"
-#include "Display.h"
+#include "geometry.h"
+#include "console.h"
+#include "selection.h"
+#include "hci.h"
+#include "map.h"
+#include "selection.h"
+#include "display3d.h"
+#include "warcam.h"
+#include "display.h"
 
 // ---------------------------------------------------------------------
 // EXTERNALLY REFERENCED FUNCTIONS

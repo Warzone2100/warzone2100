@@ -6,16 +6,16 @@
  */
 #include <stdio.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "message.h"
 #include "stats.h"
 #include "text.h"
-#include "Console.h"
+#include "console.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "HCI.h"
+#include "hci.h"
 #include "piedef.h"
-#include "objMem.h"
+#include "objmem.h"
 #include "map.h"
 #ifdef WIN32
 #include "multiplay.h"

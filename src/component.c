@@ -5,17 +5,17 @@
 	
 */
 
-#include "Frame.h"
-#include "Base.h"
-#include "Droid.h"
+#include "frame.h"
+#include "base.h"
+#include "droid.h"
 #include "action.h"
 #include "order.h"
-#include "Component.h"
+#include "component.h"
 #include "ivisdef.h" //ivis matrix code
 #include "geo.h" //ivis matrix code
 #include "piedef.h" //ivis matrix code
-#include "pieState.h" //ivis render code
-#include "Lighting.h"
+#include "piestate.h" //ivis render code
+#include "lighting.h"
 
 
 #define TESTLOWPOLY
@@ -28,22 +28,22 @@
 #define GetRadius(x) ((x)->radius)
 #endif
 
-#include "Stats.h"
+#include "stats.h"
 #ifdef WIN32
-#include "PieMode.h"
+#include "piemode.h"
 #endif
-#include "Objects.h"
-#include "Display.h"
-#include "Geometry.h"
-#include "Display3d.h"
-#include "Map.h"
-#include "GTime.h"
-#include "IntDisplay.h"
-#include "MiscImd.h"
-#include "Effects.h"
-#include "E3Demo.h"
-#include "Transporter.h"
-#include "Projectile.h"
+#include "objects.h"
+#include "display.h"
+#include "geometry.h"
+#include "display3d.h"
+#include "map.h"
+#include "gtime.h"
+#include "intdisplay.h"
+#include "miscimd.h"
+#include "effects.h"
+#include "e3demo.h"
+#include "transporter.h"
+#include "projectile.h"
 #ifdef PSX
 #include "drawimd_psx.h"
 #include "primatives.h"

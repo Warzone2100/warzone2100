@@ -11,7 +11,7 @@
 /***************************************************************************/
 
 #ifdef WIN32
-#include "dsound.h"
+#include <dsound.h>
 #endif
 
 #include "track.h"

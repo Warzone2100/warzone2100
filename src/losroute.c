@@ -11,18 +11,18 @@
 //#define DEBUG_GROUP0
 // optimise printf's
 #define DEBUG_GROUP1
-#include "Frame.h"
+#include "frame.h"
 
-#include "Objects.h"
-#include "Map.h"
-#include "RayCast.h"
+#include "objects.h"
+#include "map.h"
+#include "raycast.h"
 
 #ifdef TEST_BED
 #include "main.h"
 #endif
 
-#include "LOSRoute.h"
-#include "FPath.h"
+#include "losroute.h"
+#include "fpath.h"
 
 // General findpath routing point
 typedef struct _fp_point

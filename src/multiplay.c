@@ -7,15 +7,15 @@
  */
 
 #include "frame.h"
-#include "Map.h"
+#include "map.h"
 
-#include "Stats.h"									// for templates.
+#include "stats.h"									// for templates.
 #include "game.h"									// for loading maps
-#include "HCI.h"
+#include "hci.h"
 
-#include "time.h"									// for recording ping times.
-#include "Research.h"
-#include "Display3D.h"								// for changing the viewpoint
+#include <time.h>									// for recording ping times.
+#include "research.h"
+#include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
 #include "power.h"
 #include "text.h"
@@ -33,7 +33,7 @@
 #include "gtime.h"
 #include "keybind.h"
 
-#include "Netplay.h"								// the netplay library.
+#include "netplay.h"								// the netplay library.
 #include "multiplay.h"								// warzone net stuff.	
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff

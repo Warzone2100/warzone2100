@@ -9,47 +9,47 @@
 #include <math.h>
 #include <assert.h>
 
-#include "Frame.h"
-//#include "Widget.h"
+#include "frame.h"
+//#include "widget.h"
 
-#include "Objects.h"
-#include "Loop.h"
-#include "Edit2D.h"
-#include "Map.h"
+#include "objects.h"
+#include "loop.h"
+#include "edit2d.h"
+#include "map.h"
 #include "radar.h"
 /* Includes direct access to render library */
 #include "ivisdef.h"
-#include "pieState.h"
+#include "piestate.h"
 #ifdef WIN32
-#include "pieMode.h"			// ffs
-#include "pieClip.h"			// ffs 
-#include "pieBlitFunc.h"
+#include "piemode.h"			// ffs
+#include "pieclip.h"			// ffs 
+#include "pieblitfunc.h"
 #endif
 #include "vid.h"
 #include "geo.h"
 
-#include "Display3d.h"
-#include "Edit3D.h"
-#include "Disp2D.h"
-#include "Structure.h"
-#include "Research.h"
-#include "Function.h"
-#include "GTime.h"
-#include "HCI.h"
-#include "Stats.h"
+#include "display3d.h"
+#include "edit3d.h"
+#include "disp2d.h"
+#include "structure.h"
+#include "research.h"
+#include "function.h"
+#include "gtime.h"
+#include "hci.h"
+#include "stats.h"
 #include "game.h"
 #include "power.h"
 #include "audio.h"
 #include "audio_id.h"
 #include "fractions.h"
-#include "Order.h"
+#include "order.h"
 #include "frontend.h"
-#include "IntImage.h"
-#include "IntDisplay.h"
-#include "Component.h"
-#include "Console.h"
-#include "CmdDroid.h"
-#include "Group.h"
+#include "intimage.h"
+#include "intdisplay.h"
+#include "component.h"
+#include "console.h"
+#include "cmddroid.h"
+#include "group.h"
 #include "csnap.h"
 #include "text.h"
 #include "transporter.h"
@@ -57,7 +57,7 @@
 
 #ifdef PSX
 #include "primatives.h"
-#include "drawIMD_psx.h"
+#include "drawimd_psx.h"
 #include "vpad.h"
 extern CURSORSNAP InterfaceSnap;
 

@@ -6,7 +6,7 @@
 #ifndef _widgbase_h
 #define _widgbase_h
 
-#include "Frame.h"
+#include "frame.h"
 
 /* The different base types of widget */
 typedef enum _widget_type

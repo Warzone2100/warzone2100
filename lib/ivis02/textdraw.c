@@ -3,24 +3,24 @@
 #include <math.h>
 #include <dos.h>
 #include "ivisdef.h"
-#include "pieState.h"
+#include "piestate.h"
 #include "rendmode.h"
 #include "rendfunc.h"
 #ifdef WIN32
-#include "pieClip.h"
+#include "pieclip.h"
 #endif
 #include <ddraw.h>
 
 #ifdef WIN32
-#include "pieBlitFunc.h"
-//#include "Intfac.h"			// ffs am
+#include "pieblitfunc.h"
+//#include "intfac.h"			// ffs am
 #endif
 
 #include "bug.h"
-#include "piePalette.h"
+#include "piepalette.h"
 #include "ivispatch.h"
-#include "TextDraw.h"
-#include "BitImage.h"
+#include "textdraw.h"
+#include "bitimage.h"
 
 extern	void	pie_DrawTextNew(unsigned char *string, int x, int y);
 extern SDWORD DisplayXFactor;

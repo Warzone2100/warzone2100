@@ -4,7 +4,7 @@
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
 
-#include "Frame.h"
+#include "frame.h"
 
 #include "tracklib.h"
 #include "priority.h"

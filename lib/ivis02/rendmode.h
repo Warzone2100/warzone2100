@@ -5,14 +5,14 @@
 #include "v4101.h"
 #include "vsr.h"
 #ifdef WIN32
-#include "pieBlitFunc.h"
+#include "pieblitfunc.h"
 #endif
 //#include "ivid3d.h"
-#include "BitImage.h"
+#include "bitimage.h"
 #ifdef PSX
 #include "vpsx.h"
 #endif
-#include "TextDraw.h"
+#include "textdraw.h"
 
 //*************************************************************************
 //patch

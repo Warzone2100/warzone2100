@@ -7,79 +7,79 @@
 
 
 
-#include "Frame.h"
-#include "Display.h"
-#include "Map.h"
-#include "Disp2D.h"
-#include "Loop.h"
+#include "frame.h"
+#include "display.h"
+#include "map.h"
+#include "disp2d.h"
+#include "loop.h"
 #ifdef WIN32
-#include "Atmos.h"	// temporary only for here
-#include "CSnap.h"
+#include "atmos.h"	// temporary only for here
+#include "csnap.h"
 #endif
 /* Includes direct access to render library */
 #include "piedef.h"
-#include "pieState.h"
+#include "piestate.h"
 
 #include "vid.h"
 //#include "ivisheap.h"//make a call for this
 
 #include "tex.h"//make a call for this
-#include "Component.h"
-#include "Display3D.h"
+#include "component.h"
+#include "display3d.h"
 #include "resource.h"
-#include "HCI.h"
+#include "hci.h"
 #include "text.h"
-#include "Edit3D.h"
-#include "Geometry.h"
-#include "GTime.h"
+#include "edit3d.h"
+#include "geometry.h"
+#include "gtime.h"
 #include "audio.h"
 #include "audio_id.h"
 #include "radar.h"
-#include "MiscImd.h"
-#include "Lighting.h"
+#include "miscimd.h"
+#include "lighting.h"
 #include "fractions.h"
-#include "Console.h"
-#include "Order.h"
-#include "Wrappers.h"
+#include "console.h"
+#include "order.h"
+#include "wrappers.h"
 #include "power.h"
-#include "Map.h"
+#include "map.h"
 #include "keymap.h"
-#include "intImage.h"
+#include "intimage.h"
 #include "mechanics.h"
-#include "InGameOp.h"
-#include "oPrint.h"
-#include "WarCAM.h"
-#include "KeyBind.h"
-#include "KeyMap.h"
-#include "Projectile.h"
+#include "ingameop.h"
+#include "oprint.h"
+#include "warcam.h"
+#include "keybind.h"
+#include "keymap.h"
+#include "projectile.h"
 #include "message.h"
 #include "effects.h"
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptExtern.h"
-#include "ScriptCB.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptextern.h"
+#include "scriptcb.h"
 #include "target.h"
 #include "drive.h"
-#include "CmdDroid.h"
-#include "Gateway.h"
-#include "Selection.h"
-#include "Transporter.h"
-#include "intOrder.h"
+#include "cmddroid.h"
+#include "gateway.h"
+#include "selection.h"
+#include "transporter.h"
+#include "intorder.h"
 
 
 //#ifdef THREEDFX
-//#include "3dfxFunc.h"
+//#include "3dfxfunc.h"
 //#endif
 #ifdef WIN32
-#include "pieClip.h"		// ffs am
+#include "pieclip.h"		// ffs am
 #include "multiplay.h"
 #endif
 #ifdef PSX
-#include "DCache.h"
+#include "dcache.h"
 #include "primatives.h"
-#include "VPad.h"
-#include "CtrlPSX.h"
-#include "drawIMD_psx.h"
+#include "vpad.h"
+#include "ctrlpsx.h"
+#include "drawimd_psx.h"
 #include "group.h"
 extern BOOL EnableVibration;
 #endif

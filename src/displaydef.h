@@ -9,7 +9,7 @@
 
 #include "imd.h"
 #ifdef WIN32			// ffs am
-#include "pieClip.h"
+#include "pieclip.h"
 #endif
 #ifdef WIN32
 #define DISP_WIDTH		(pie_GetVideoBufferWidth()) 

@@ -9,8 +9,8 @@
 
 
 // ------------------------------------------------------------------------------------
-#include "Frame.h"
-#include "Difficulty.h"
+#include "frame.h"
+#include "difficulty.h"
 // ------------------------------------------------------------------------------------
 DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
 FRACT				fDifPlayerModifier;

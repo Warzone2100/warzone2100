@@ -5,13 +5,13 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "CmdDroidDef.h"
-#include "CmdDroid.h"
-#include "GTime.h"
-#include "Group.h"
-#include "Order.h"
+#include "frame.h"
+#include "objects.h"
+#include "cmddroiddef.h"
+#include "cmddroid.h"
+#include "gtime.h"
+#include "group.h"
+#include "order.h"
 #ifdef WIN32
 #include "multiplay.h"
 #endif

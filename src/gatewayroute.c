@@ -8,7 +8,7 @@
 // print out the final route
 //#define DEBUG_GROUP1
 
-#include "Frame.h"
+#include "frame.h"
 
 BOOL	gwrDoMessage;
 #undef DBP0
@@ -17,10 +17,10 @@ BOOL	gwrDoMessage;
 		DBPRINTF( x )
 
 
-#include "Map.h"
-#include "Gateway.h"
-#include "GatewayRoute.h"
-#include "Fpath.h"
+#include "map.h"
+#include "gateway.h"
+#include "gatewayroute.h"
+#include "fpath.h"
 
 // the open list
 static GATEWAY	*psOpenList;

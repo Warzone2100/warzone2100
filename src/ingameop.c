@@ -6,21 +6,21 @@
 
 #include "frame.h"
 #include "widget.h"
-#include "Display3d.h"
-#include "intDisplay.h"
-#include "HCI.h"			// for wFont def.& intmode.
+#include "display3d.h"
+#include "intdisplay.h"
+#include "hci.h"			// for wFont def.& intmode.
 #include "loop.h"
 #include "text.h"
 #include "piestate.h"		// for getrendertype
 #include "resource.h"
 //#include "display.h"		// for gamma.
 #include "frontend.h"		// for textdisplay function
-#include "loadSave.h"		// for textdisplay function
+#include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
 
-#include "ScriptExtern.h"	// for tutorial 
+#include "scriptextern.h"	// for tutorial 
 #include "rendmode.h"
-#include "keyBind.h"
+#include "keybind.h"
 
 #include "audio.h"					// for sound.
 #ifdef WIN32
@@ -30,12 +30,12 @@
 #endif
 
 #include "csnap.h"
-#include "inGameOp.h"
+#include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
 #include "netplay.h"
 #ifdef PSX
-#include "Primatives.h"
+#include "primatives.h"
 #include "ctrlpsx.h"
 #include "vpad.h"
 #include "dcache.h"

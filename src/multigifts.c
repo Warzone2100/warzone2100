@@ -21,9 +21,9 @@
 #include "audio.h"
 #include "audio_id.h"			// for samples.
 #include "wrappers.h"			// for gameover..
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptCB.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptcb.h"
 
 #include "netplay.h"
 #include "multiplay.h"

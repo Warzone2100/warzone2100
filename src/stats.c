@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Stats.h"
-#include "Map.h"
-#include "WinMain.h"
+#include "frame.h"
+#include "objects.h"
+#include "stats.h"
+#include "map.h"
+#include "winmain.h"
 #include "audio_id.h"
-#include "Projectile.h"
+#include "projectile.h"
 #include "text.h"
 #define WEAPON_TIME		100
 

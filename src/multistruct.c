@@ -7,19 +7,19 @@
  */
 
 #include "frame.h"
-#include "Droid.h"					
-#include "DroidDef.h"
-#include "Base.h"					
+#include "droid.h"					
+#include "droiddef.h"
+#include "base.h"					
 #include "power.h"	
 #include "geometry.h"								// for gettilestructure
 #include "anim_id.h"
-#include "Stats.h"
-#include "Map.h"
+#include "stats.h"
+#include "map.h"
 #include "console.h"
 #include "action.h"
-#include "Order.h"
+#include "order.h"
 #include "projectile.h"
-#include "Netplay.h"								// the netplay library.					
+#include "netplay.h"								// the netplay library.					
 #include "multiplay.h"
 #include "multigifts.h"
 #include "audio_id.h"

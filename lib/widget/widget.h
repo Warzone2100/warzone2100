@@ -6,8 +6,8 @@
 #ifndef _widget_h
 #define _widget_h
 
-#include "Frame.h"
-#include "WidgBase.h"
+#include "frame.h"
+#include "widgbase.h"
 
 /***********************************************************************************
  *

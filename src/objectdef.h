@@ -9,20 +9,20 @@
 #define _objectdef_h
 
 #include "frame.h"
-#include "pieTypes.h"
+#include "pietypes.h"
 
-#include "AIDef.h"
-#include "FunctionDef.h"
-#include "MoveDef.h"
-#include "StatsDef.h"
-#include "ResearchDef.h"
-#include "Weapons.h"
+#include "aidef.h"
+#include "functiondef.h"
+#include "movedef.h"
+#include "statsdef.h"
+#include "researchdef.h"
+#include "weapons.h"
 
-#include "Base.h"
-#include "DroidDef.h"
-#include "StructureDef.h"
-#include "BulletDef.h"
-#include "FeatureDef.h"
+#include "base.h"
+#include "droiddef.h"
+#include "structuredef.h"
+#include "bulletdef.h"
+#include "featuredef.h"
 
 #endif
 

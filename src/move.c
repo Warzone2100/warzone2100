@@ -19,8 +19,8 @@
 //#define DEBUG_GROUP6
 
 #include <stdio.h>
-#include <Math.h>
-#include "Frame.h"
+#include <math.h>
+#include "frame.h"
 
 //#define DEBUG_DRIVE_SPEED
 #ifdef DEBUG
@@ -32,34 +32,34 @@ BOOL	moveDoMessage;
 #endif
 
 
-#include "Objects.h"
-#include "Move.h"
-#include "FindPath.h"
-#include "Visibility.h"
-#include "Map.h"
-#include "FPath.h"
-#include "Loop.h"
-#include "GTime.h"
+#include "objects.h"
+#include "move.h"
+#include "findpath.h"
+#include "visibility.h"
+#include "map.h"
+#include "fpath.h"
+#include "loop.h"
+#include "gtime.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "Geometry.h"
+#include "geometry.h"
 #include "animobj.h"
 #include "anim_id.h"
-#include "FormationDef.h"
-#include "Formation.h"
+#include "formationdef.h"
+#include "formation.h"
 #include "action.h"
 #include "display3d.h"
 #include "order.h"
 #include "astar.h"
-#include "Combat.h"
-#include "MapGrid.h"
+#include "combat.h"
+#include "mapgrid.h"
 #include "display.h"	// needed for widgetsOn flag.
-#include "Effects.h"
+#include "effects.h"
 #include "fractions.h"
 #include "power.h"
-#include "Scores.h"
+#include "scores.h"
 #ifdef WIN32
-#include "OptimisePath.h"
+#include "optimisepath.h"
 #endif
 //#include "multigifts.h"
 #include "drive.h"
@@ -70,12 +70,12 @@ BOOL	moveDoMessage;
 
 #ifdef WIN32
 #include "netplay.h"
-#include "MultiPlay.h"
+#include "multiplay.h"
 #include "multigifts.h"
 #endif
 
 #ifdef PSX
-#include "VPad.h"
+#include "vpad.h"
 #include "dcache.h"
 #endif
 

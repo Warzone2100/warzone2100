@@ -5,21 +5,21 @@
 	At present, the water effects are part of the atmos 
 	system and aren't properly implemented in the software mode 
 */
-#include "Frame.h"
-#include "PieDef.h"
-#include "PieState.h"
-#include "Display3D.h"
-#include "Display3dDef.h"
-#include "GTime.h"
-#include "MiscImd.h"
-#include "Map.h"
-#include "Atmos.h"
-#include "Loop.h"
-#include "Geo.h"
-#include "Effects.h"
+#include "frame.h"
+#include "piedef.h"
+#include "piestate.h"
+#include "display3d.h"
+#include "display3ddef.h"
+#include "gtime.h"
+#include "miscimd.h"
+#include "map.h"
+#include "atmos.h"
+#include "loop.h"
+#include "geo.h"
+#include "effects.h"
 #include "lighting.h"
 #include "bucket3d.h"
-#include "HCI.h"
+#include "hci.h"
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

@@ -21,23 +21,23 @@
 #define MALLOC(a) malloc(a)
 #define FREE(a) free(a); a = NULL;
 
-#include "TypeDefs.h"
+#include "typedefs.h"
 
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#include "GateInterface.h"
-#include "DebugPrint.h"
+#include "gateinterface.h"
+#include "debugprint.h"
 
 #else
 
-#include "Frame.h"
-#include "Map.h"
+#include "frame.h"
+#include "map.h"
 
 #endif
 
-#include "assert.h"
-#include "Gateway.h"
+#include <assert.h>
+#include "gateway.h"
 
 // Structures and defines for SeedFill().
 typedef int Pixel;		/* 1-channel frame buffer assumed */

@@ -11,11 +11,11 @@
  */
 
 #include "frame.h"
-#include "Stats.h"
+#include "stats.h"
 #include "gtime.h"
-#include "Map.h"
-#include "Objects.h"
-#include "Display.h"								// for checking if droid in view.
+#include "map.h"
+#include "objects.h"
+#include "display.h"								// for checking if droid in view.
 #include "order.h"
 #include "action.h"
 #include "hci.h"									// for byte packing funcs.

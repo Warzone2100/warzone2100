@@ -14,8 +14,8 @@
 #include <ddraw.h>
 #pragma warning (default : 4201 4214 4115)
 
-#include "Frame.h"
-#include "Frameint.h"
+#include "frame.h"
+#include "frameint.h"
 
 /* Control Whether the back buffer is in system memory for full screen */
 #define FULL_SCREEN_SYSTEM	TRUE

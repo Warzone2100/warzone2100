@@ -16,7 +16,7 @@
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
-#include <Windows.h>
+#include <windows.h>
 #pragma warning (default : 4201 4214 4115)
 
 #include "frame.h"

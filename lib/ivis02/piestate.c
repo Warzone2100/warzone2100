@@ -8,17 +8,17 @@
 /***************************************************************************/
 
 #include "frame.h"
-#include "pieState.h"
+#include "piestate.h"
 #include "piedef.h"
-#include "d3dRender.h"
-#include "dx6TexMan.h"
+#include "d3drender.h"
+#include "dx6texman.h"
 #include "tex.h"
 #include "texd3d.h"
 #ifdef INC_GLIDE
 	#include "rendfunc.h"
-	#include "dGlide.h"
-	#include "3dfxFunc.h"
-	#include "3dfxText.h"
+	#include "dglide.h"
+	#include "3dfxfunc.h"
+	#include "3dfxtext.h"
 #endif
 
 

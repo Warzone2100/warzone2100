@@ -26,24 +26,24 @@
 #include "debug.h"
 #include "mem.h"
 #include "screen.h"
-#include "ddraw.h"
+#include <ddraw.h>
 #include "dderror.h"
 #include "input.h"
 #include "surface.h"
-#include "Image.h"
-#include "Font.h"
-#include "Heap.h"
-#include "Treap.h"
+#include "image.h"
+#include "font.h"
+#include "heap.h"
+#include "treap.h"
 #include "w95trace.h"
-#include "Fractions.h"
-#include "Trig.h"
-#include "FrameResource.h"
-#include "StrRes.h"
+#include "fractions.h"
+#include "trig.h"
+#include "frameresource.h"
+#include "strres.h"
 #ifdef WIN32
-#include "DXInput.h"
+#include "dxinput.h"
 #endif
-#include "Block.h"
-#include "ListMacs.h"
+#include "block.h"
+#include "listmacs.h"
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance

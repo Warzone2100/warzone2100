@@ -10,11 +10,11 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "Types.h"
-#include "Debug.h"
-#include "Mem.h"
-#include "Heap.h"
-#include "Treap.h"
+#include "types.h"
+#include "debug.h"
+#include "mem.h"
+#include "heap.h"
+#include "treap.h"
 
 /* Position of the last call */
 static SDWORD	cLine;

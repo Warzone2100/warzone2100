@@ -6,9 +6,9 @@
  */
 #include <stdio.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "function.h"
-#include "Stats.h"
+#include "stats.h"
 #include "structure.h"
 #include "text.h"
 #include "research.h"

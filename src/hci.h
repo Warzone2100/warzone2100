@@ -7,12 +7,12 @@
 #define _hci_h
 
 #include "widget.h"
-#include "Message.h"
+#include "message.h"
 #ifdef WIN32
 #include "cdspan.h"
-#include "PieClip.h"
+#include "pieclip.h"
 #endif
-//#include "IntImage.h"
+//#include "intimage.h"
 
 // store the objects that are being used for the object bar
 #define			MAX_OBJECTS		15//10 we need at least 15 for the 3 different types of factory

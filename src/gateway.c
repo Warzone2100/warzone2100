@@ -41,13 +41,13 @@
 	} \
 }
 
-#include "TypeDefs.h"
+#include "typedefs.h"
 
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#include "GateInterface.h"
-#include "DebugPrint.h"
+#include "gateinterface.h"
+#include "debugprint.h"
 
 #else
 
@@ -55,14 +55,14 @@
 //#define DEBUG_GROUP0
 // water gate printf's
 //#define DEBUG_GROUP1
-#include "Frame.h"
-#include "Map.h"
-#include "Astar.h"
-#include "FPath.h"
-#include "Wrappers.h"
+#include "frame.h"
+#include "map.h"
+#include "astar.h"
+#include "fpath.h"
+#include "wrappers.h"
 #endif
 
-#include "Gateway.h"
+#include "gateway.h"
 
 // the list of gateways on the current map
 GATEWAY		*psGateways;

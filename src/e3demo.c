@@ -7,23 +7,23 @@
 */
 // -------------------------------------------------------------------------
 
-#include "Frame.h"
+#include "frame.h"
 
 // -------------------------------------------------------------------------
 
 #if defined(WIN32) || defined(E3DEMO)
 
-#include "GTime.h"
-#include "Objects.h"
-#include "Map.h"
-#include "HCI.h"
-#include "WarCam.h"
-#include "Order.h"
-#include "Display3d.h"
-#include "Map.h"
-#include "Geometry.h"
-#include "Action.h"
-#include "Console.h"
+#include "gtime.h"
+#include "objects.h"
+#include "map.h"
+#include "hci.h"
+#include "warcam.h"
+#include "order.h"
+#include "display3d.h"
+#include "map.h"
+#include "geometry.h"
+#include "action.h"
+#include "console.h"
 // -------------------------------------------------------------------------
 #define DC_ISACTIVE	99
 #define DC_INACTIVE	101

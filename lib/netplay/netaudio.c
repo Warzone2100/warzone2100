@@ -4,7 +4,7 @@
  * intra/internet audio
  */
 
-#include "dsound.h"
+#include <dsound.h>
 #include "frame.h"
 #include "netplay.h"
 

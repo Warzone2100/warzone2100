@@ -11,7 +11,7 @@
 #define _ivisdef_h
 
 #include "frame.h"
-#include "pieTypes.h"
+#include "pietypes.h"
 
 // on the psx we need piepsx defined ... on the pc we need it when creating binary pie's
 #ifdef PSX

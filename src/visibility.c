@@ -2,24 +2,24 @@
 
 #include <math.h>
 #include <stdio.h>
-#include "Objects.h"
+#include "objects.h"
 #include "map.h"
-#include "Loop.h"
-#include "RayCast.h"
-#include "Geometry.h"
-#include "HCI.h"
-#include "GTime.h"
-#include "MapGrid.h"
-#include "Cluster.h"
+#include "loop.h"
+#include "raycast.h"
+#include "geometry.h"
+#include "hci.h"
+#include "gtime.h"
+#include "mapgrid.h"
+#include "cluster.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "ScriptExtern.h"
+#include "scriptextern.h"
 #include "structure.h"
 
-#include "Visibility.h"
+#include "visibility.h"
 #ifdef WIN32
 #include "multiplay.h"
-#include "AdvVis.h"
+#include "advvis.h"
 #endif
 
 #ifdef PSX

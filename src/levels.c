@@ -5,26 +5,26 @@
  *
  */
 
-#include "ctype.h"
+#include <ctype.h>
 
 // levLoadData printf's
 #define DEBUG_GROUP0
-#include "Frame.h"
-#include "Init.h"
-#include "Objects.h"
-#include "HCI.h"
-#include "Levels.h"
-#include "Mission.h"
-#include "LevelInt.h"
-#include "Game.h"
-#include "Lighting.h"
-#include "pieState.h"
-#include "Data.h"
-#include "MultiWDG.h"
+#include "frame.h"
+#include "init.h"
+#include "objects.h"
+#include "hci.h"
+#include "levels.h"
+#include "mission.h"
+#include "levelint.h"
+#include "game.h"
+#include "lighting.h"
+#include "piestate.h"
+#include "data.h"
+#include "multiwdg.h"
 
 //#ifdef DEBUG
 #include "script.h"
-#include "ScriptTabs.h"
+#include "scripttabs.h"
 //#endif
 
 // semi hack to get the playstation to load resources from the WDG

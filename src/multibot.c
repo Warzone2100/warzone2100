@@ -6,25 +6,25 @@
  */
 #include "frame.h"
 
-#include "Droid.h"						// for droid sending and ordering.
-#include "DroidDef.h"
-#include "Base.h"						// for sending WHOLE droids.
-#include "Stats.h"
+#include "droid.h"						// for droid sending and ordering.
+#include "droiddef.h"
+#include "base.h"						// for sending WHOLE droids.
+#include "stats.h"
 #include "move.h"						// for ordering droids
-#include "Objmem.h"
+#include "objmem.h"
 #include "power.h"						// for powercalculated
-#include "Order.h"
+#include "order.h"
 #include "geometry.h"					// for formations.
 #include "map.h"
 #include "group.h"
-#include "Formation.h"
-#include "Netplay.h"					// the netplay library.
+#include "formation.h"
+#include "netplay.h"					// the netplay library.
 #include "multiplay.h"					// warzone net stuff.
 #include "multijoin.h"
-#include "cmdDroid.h"					// command droids
-#include "Action.h"
+#include "cmddroid.h"					// command droids
+#include "action.h"
 #include "console.h"
-#include "mapGrid.h"
+#include "mapgrid.h"
 
 #define ANYPLAYER	99
 #define UNKNOWN		99

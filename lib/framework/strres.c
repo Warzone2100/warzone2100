@@ -12,13 +12,13 @@
 
 // Report unused strings
 //#define DEBUG_GROUP0
-#include "Types.h"
-#include "Debug.h"
-#include "Mem.h"
+#include "types.h"
+#include "debug.h"
+#include "mem.h"
 #include "heap.h"
-#include "Treap.h"
-#include "StrRes.h"
-#include "StrResLY.h"
+#include "treap.h"
+#include "strres.h"
+#include "strresly.h"
 
 /* The string resource currently being loaded */
 STR_RES	*psCurrRes;

@@ -1,39 +1,39 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Frame.h"
-#include "Widget.h"
-#include "Objects.h"
-#include "Loop.h"
-#include "Edit2D.h"
-#include "Map.h"
+#include "frame.h"
+#include "widget.h"
+#include "objects.h"
+#include "loop.h"
+#include "edit2d.h"
+#include "map.h"
 #include "bitimage.h"//bitmap routines
 
 #ifdef PSX
-#include "Primatives.h"
+#include "primatives.h"
 #include "csnap.h"
 #include "dcache.h"
 extern CURSORSNAP InterfaceSnap;
 #endif
 
-#include "Display3d.h"
-#include "HCI.h"
+#include "display3d.h"
+#include "hci.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "WidgInt.h"
+#include "widgint.h"
 #include "bar.h"
 #include "form.h"
 #include "label.h"
 #include "button.h"
 #include "editbox.h"
 #include "slider.h"
-#include "Order.h"
-#include "IntImage.h"
-#include "IntDisplay.h"
-#include "IntOrder.h"
-#include "Text.h"
+#include "order.h"
+#include "intimage.h"
+#include "intdisplay.h"
+#include "intorder.h"
+#include "text.h"
 #ifdef WIN32
-#include "ScriptExtern.h"
+#include "scriptextern.h"
 #endif
 
 

@@ -7,8 +7,8 @@
 #ifndef _structure_h
 #define _structure_h
 
-#include "ObjectDef.h"
-#include "StructureDef.h"
+#include "objectdef.h"
+#include "structuredef.h"
 
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000

@@ -21,7 +21,7 @@
 #include "multirecv.h"
 #include "multistat.h"
 #include "multiint.h"
-#include "FPath.h"
+#include "fpath.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 //  Force defs.

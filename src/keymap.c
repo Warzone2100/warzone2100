@@ -1,10 +1,10 @@
-#include "Frame.h"
-#include "GTime.h"
+#include "frame.h"
+#include "gtime.h"
 #include "text.h"
-#include "KeyMap.h"
-#include "Console.h"
-#include "KeyBind.h"
-#include "Display3d.h"
+#include "keymap.h"
+#include "console.h"
+#include "keybind.h"
+#include "display3d.h"
 #ifdef WIN32
 #include "keyedit.h"
 #endif

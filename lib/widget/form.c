@@ -4,13 +4,13 @@
  * Functionality for the form widget.
  */
 
-#include "Frame.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Form.h"
-#include "Tip.h"
-#include "Vid.h"
-#include "PiePalette.h"
+#include "frame.h"
+#include "widget.h"
+#include "widgint.h"
+#include "form.h"
+#include "tip.h"
+#include "vid.h"
+#include "piepalette.h"
 
 /* The widget heaps */
 OBJ_HEAP	*psFormHeap;

@@ -11,8 +11,8 @@
 
 
 #include "piedef.h"
-#include "pieMatrix.h"
-#include "rendMode.h"
+#include "piematrix.h"
+#include "rendmode.h"
 #include "bug.h"
 
 /***************************************************************************/

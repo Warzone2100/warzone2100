@@ -4,8 +4,8 @@
  * String management functions
  */
 
-#include "Frame.h"
-#include "Text.h"
+#include "frame.h"
+#include "text.h"
 
 /* The numbers of strings that will be loaded */
 #define STRING_INIT		20

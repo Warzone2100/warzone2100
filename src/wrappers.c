@@ -6,26 +6,26 @@
 
 #include <stdio.h>
 
-#include "Frame.h"
+#include "frame.h"
 #include "ivisdef.h" //ivis palette code
-#include "pieState.h"
+#include "piestate.h"
 #include "textdraw.h" //ivis text code
 
 #ifdef WIN32
 #include "piemode.h"
-#include "pieMatrix.h"
-#include "pieFunc.h"
+#include "piematrix.h"
+#include "piefunc.h"
 #endif
 
 #include "hci.h"		// access to widget screen.
 #include "widget.h"
-#include "Wrappers.h"
-#include "WinMain.h"
-#include "Objects.h"
-#include "Display.h"
-#include "Display3d.h"
-#include "FrontEnd.h"
-#include "Frend.h"		// display logo.
+#include "wrappers.h"
+#include "winmain.h"
+#include "objects.h"
+#include "display.h"
+#include "display3d.h"
+#include "frontend.h"
+#include "frend.h"		// display logo.
 #include "console.h"
 #include "intimage.h"
 #include "text.h"
@@ -34,19 +34,19 @@
 #include "audio_id.h"		
 #include "gtime.h"
 #include "ingameop.h"
-#include "KeyMap.h"
+#include "keymap.h"
 #include "mission.h"
 
 #ifdef WIN32
 #include "keyedit.h"
-#include "SeqDisp.h"
+#include "seqdisp.h"
 #include "3dfxfunc.h"
 #include "vid.h"
 #include "config.h"
 #include "resource.h"
-#include "netPlay.h"	// multiplayer 
+#include "netplay.h"	// multiplayer 
 #include "multiplay.h"
-#include "Multiint.h"				
+#include "multiint.h"				
 #include "multistat.h"
 #include "multilimit.h"
 #endif
@@ -56,10 +56,10 @@
 #include "display3d_psx.h"
 #include "libsn.h"
 #include "vid.h"
-#include "Primatives.h"
-#include "VPad.h"
-#include "CtrlPSX.h"
-#include "InitPSX.h"
+#include "primatives.h"
+#include "vpad.h"
+#include "ctrlpsx.h"
+#include "initpsx.h"
 
 /* callback type for res pre-load callback*/
 typedef void (*SPECIALVBLCALLBACK)(void);

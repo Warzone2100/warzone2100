@@ -4,26 +4,26 @@
  * Store PlayerPower and other power related stuff!
  *
  */
-#include "ObjectDef.h"
+#include "objectdef.h"
 #include "power.h"
-#include "HCI.h"
-#include "GTime.h"
+#include "hci.h"
+#include "gtime.h"
 #include "audio.h"
 #include "audio_id.h"
-#include "ObjMem.h"
-#include "Frontend.h"
+#include "objmem.h"
+#include "frontend.h"
 #ifdef WIN32
-#include "MultiPlay.h"
-#include "MultiInt.h"
+#include "multiplay.h"
+#include "multiint.h"
 #endif
-#include "Feature.h"
-#include "Structure.h"
+#include "feature.h"
+#include "structure.h"
 #include "mission.h"
-#include "Research.h"
-#include "intDisplay.h"
+#include "research.h"
+#include "intdisplay.h"
 #include "action.h"
 #include "difficulty.h"
-#include "PowerCrypt.h"
+#include "powercrypt.h"
 
 
 #define EXTRACT_POINTS	    1

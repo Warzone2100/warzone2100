@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 
-#include "Frame.h"
-#include "FrameInt.h"
+#include "frame.h"
+#include "frameint.h"
 
 #ifdef PSX
 #include "utils.h"	// prototypes for GetWord()

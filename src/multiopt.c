@@ -11,16 +11,16 @@
 #include "game.h"			// for loading maps
 #include "message.h"		// for clearing messages.
 #include "winmain.h"
-#include "Display3D.h"		// for changing the viewpoint
+#include "display3d.h"		// for changing the viewpoint
 #include "power.h"
 #include "widget.h"
 #include "gtime.h"
-#include "NetPlay.h"
-#include "HCI.h"
+#include "netplay.h"
+#include "hci.h"
 #include "config.h"			// lobby cfg.
 #include "clparse.h"
 #include "piestate.h"
-#include "dGlide.h"
+#include "dglide.h"
 #include "component.h"
 #include "console.h"
 #include "multiplay.h"
@@ -34,7 +34,7 @@
 #include "multigifts.h"
 // ////////////////////////////////////////////////////////////////////////////
 // GUID for warzone lobby and MPATH stuff.  i hate this stuff.
-#include <INITGUID.h>
+#include <initguid.h>
 
 //old guid {7B706E40-5A7E-11d1-94F6-006097B8260B}"
 

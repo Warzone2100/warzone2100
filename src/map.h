@@ -8,8 +8,8 @@
 #define _map_h
 
 #include <stdio.h>
-#include "Frame.h"
-#include "Objects.h"
+#include "frame.h"
+#include "objects.h"
 
 
 #define	TIB_VIS0		=	0x1,	// Visibility bits - can also be accessed as a byte (as a whole).

@@ -1,15 +1,15 @@
 #ifndef _intdisplay_h
 #define _intdisplay_h
 
-#include "Widget.h"
-#include "WidgInt.h"
+#include "widget.h"
+#include "widgint.h"
 #include "bar.h"
 #include "form.h"
 #include "label.h"
 #include "button.h"
 #include "editbox.h"
 #include "slider.h"
-#include "IntImage.h"
+#include "intimage.h"
 #include "droid.h"
 
 #define NUM_OBJECTSURFACES		(10)

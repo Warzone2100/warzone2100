@@ -9,7 +9,7 @@
 #ifndef _pieMatrix_h
 #define _pieMatrix_h
 
-#include "pieDef.h"
+#include "piedef.h"
 
 /***************************************************************************/
 /*

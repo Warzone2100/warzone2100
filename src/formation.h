@@ -7,7 +7,7 @@
 #ifndef _formation_h
 #define _formation_h
 
-#include "FormationDef.h"
+#include "formationdef.h"
 
 typedef enum _formation_type
 {

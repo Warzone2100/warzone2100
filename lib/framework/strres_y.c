@@ -75,8 +75,8 @@ static int printf(char* c, ...)
 #include "mem.h"
 #include "heap.h"
 #include "treap.h"
-#include "StrRes.h"
-#include "StrResLY.h"
+#include "strres.h"
+#include "strresly.h"
 
 /* Turn off a couple of warnings that the yacc generated code gives */
 #pragma warning ( disable : 4305 4102)

@@ -3,25 +3,25 @@
 #include <stdarg.h>
 #include <time.h>
 #include "ivisdef.h"
-#include "pieState.h"
+#include "piestate.h"
 //#include "ivi.h"
 //#include "v3d.h"
 #include "rendmode.h"
 #ifdef WIN32
-#include "pieMode.h"
+#include "piemode.h"
 #endif
 //#include "geo.h"
 #include "bug.h"
 //#include "pio.h"
-#include "piePalette.h"
-#include "pieMatrix.h"
+#include "piepalette.h"
+#include "piematrix.h"
 //#include "kyb.h"
 #include "tex.h"
 //#include "pdv.h"
 #include "ivispatch.h"
 #ifdef INC_GLIDE
 	#include "3dfxmode.h"
-	#include "3dfxText.h"
+	#include "3dfxtext.h"
 #endif
 
 //*************************************************************************

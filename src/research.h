@@ -7,7 +7,7 @@
 #ifndef _research_h
 #define _research_h
 
-#include "ObjectDef.h"
+#include "objectdef.h"
 
 //used for loading in the research stats into the appropriate list
 enum

@@ -6,13 +6,13 @@
  */
 
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Script.h"
-#include "ScriptTabs.h"
-#include "ScriptCB.h"
-#include "Projectile.h"
-#include "HCI.h"
+#include "frame.h"
+#include "objects.h"
+#include "script.h"
+#include "scripttabs.h"
+#include "scriptcb.h"
+#include "projectile.h"
+#include "hci.h"
 #include "group.h"
 #include "transporter.h"
 #include "mission.h"

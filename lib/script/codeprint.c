@@ -5,11 +5,11 @@
  * Routines for displaying compiled scripts
  */
 
-#include "Frame.h"
-#include "Interp.h"
-#include "Parse.h"
-#include "CodePrint.h"
-#include "Script.h"
+#include "frame.h"
+#include "interp.h"
+#include "parse.h"
+#include "codeprint.h"
+#include "script.h"
 
 /* Display a value type */
 void cpPrintType(INTERP_TYPE type)

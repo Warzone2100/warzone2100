@@ -24,7 +24,7 @@
 ----------------------------------------------------------------------------*/
 #pragma warning (disable : 4201 4214 4514 4115)
 
-#include "Mpdpxtra.h"
+#include "mpdpxtra.h"
 
 
 /******** DEFINITIONS ********/

@@ -9,20 +9,20 @@
 
 #include "frame.h"
 #include <time.h>
-#include "pieBlitFunc.h"
-#include "dx6TexMan.h"
+#include "pieblitfunc.h"
+#include "dx6texman.h"
 #include "bug.h"
 #include "piedef.h"
-#include "pieMode.h"
-#include "pieState.h"
-#include "3dfxFunc.h"
-#include "rendFunc.h"
-#include "rendMode.h"
+#include "piemode.h"
+#include "piestate.h"
+#include "3dfxfunc.h"
+#include "rendfunc.h"
+#include "rendmode.h"
 #include "texd3d.h"
 #include "pcx.h"
-#include "pieClip.h"
-#include "pieFunc.h"
-#include "pieMatrix.h"
+#include "pieclip.h"
+#include "piefunc.h"
+#include "piematrix.h"
 #ifndef PIEPSX
 /***************************************************************************/
 /*

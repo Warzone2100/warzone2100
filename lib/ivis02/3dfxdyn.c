@@ -10,7 +10,7 @@
 
 #define dllName "glide2x.dll"
 
-#include "Dglide.h"		// new glide.h - old glide.h MUST be renamed glideold.h!
+#include "dglide.h"		// new glide.h - old glide.h MUST be renamed glideold.h!
 
 
 

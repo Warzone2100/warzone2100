@@ -7,17 +7,17 @@
 #ifndef _mechanics_h
 #define _mechanics_h
 
-#include "Frame.h"
-#include "Combat.h"
-#include "FindPath.h"
-#include "GTime.h"
-#include "Map.h"
-#include "Mechanics.h"
-#include "Move.h"
-#include "Stats.h"
-#include "Function.h"
-#include "Research.h"
-#include "Visibility.h"
+#include "frame.h"
+#include "combat.h"
+#include "findpath.h"
+#include "gtime.h"
+#include "map.h"
+#include "mechanics.h"
+#include "move.h"
+#include "stats.h"
+#include "function.h"
+#include "research.h"
+#include "visibility.h"
 
 /* Initialise the mechanics system */
 //extern BOOL mechInitialise(void);

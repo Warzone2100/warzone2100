@@ -16,16 +16,16 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "Types.h"
-#include "Debug.h"
-#include "Mem.h"
-#include "Surface.h"
-#include "Screen.h"
-#include "Input.h"
-#include "DDError.h"
-#include "DXInput.h"
-#include "FrameInt.h"
-#include "Cursor.h"
+#include "types.h"
+#include "debug.h"
+#include "mem.h"
+#include "surface.h"
+#include "screen.h"
+#include "input.h"
+#include "dderror.h"
+#include "dxinput.h"
+#include "frameint.h"
+#include "cursor.h"
 
 // The size of the cursor save buffer
 #define CURSOR_SAVEWIDTH		32

@@ -5,17 +5,17 @@
  *
  */
 
-#include "Frame.h"
-#include "FrameInt.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Tip.h"
-#include "Vid.h"
+#include "frame.h"
+#include "frameint.h"
+#include "widget.h"
+#include "widgint.h"
+#include "tip.h"
+#include "vid.h"
 
 #ifdef PSX
-#include "PiePalette.h"
+#include "piepalette.h"
 #include "ivis02.h"
-#include "Primatives.h"
+#include "primatives.h"
 #endif
 
 

@@ -7,10 +7,10 @@
  *
  */
 
-#include "Frame.h"
-#include "Objects.h"
-#include "Map.h"
-#include "MapGrid.h"
+#include "frame.h"
+#include "objects.h"
+#include "map.h"
+#include "mapgrid.h"
 
 
 // The number of world units per grid

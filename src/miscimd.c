@@ -1,10 +1,10 @@
 
 #include <assert.h>
-#include "Frame.h"
-#include "Effects.h"
+#include "frame.h"
+#include "effects.h"
 #include "structure.h"
-#include "MessageDef.h"
-#include "miscImd.h"
+#include "messagedef.h"
+#include "miscimd.h"
 
 /* Our great big array of imds */
 MISC_IMD	miscImds[] = 

@@ -4,13 +4,13 @@
  * Functions for the button widget
  */
 
-#include "Frame.h"
-#include "FrameInt.h"
-#include "Widget.h"
-#include "WidgInt.h"
-#include "Button.h"
-#include "Form.h"
-#include "Tip.h"
+#include "frame.h"
+#include "frameint.h"
+#include "widget.h"
+#include "widgint.h"
+#include "button.h"
+#include "form.h"
+#include "tip.h"
 #include "vid.h"
 
 /* The widget heap */

@@ -18,7 +18,7 @@ typedef struct {
 	SDWORD YOffset;	// Y offset for drawing.
 } IMAGE;
 #else
-#include "ImagePSX.h"
+#include "imagepsx.h"
 #include "gamefx.h"
 #endif
 

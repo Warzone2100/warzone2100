@@ -7,13 +7,13 @@
 
 */
 
-#include "dGlide.h"
-#include "Frame.h"
-#include "3dfxText.h"
+#include "dglide.h"
+#include "frame.h"
+#include "3dfxtext.h"
 #include "3dfxmode.h"
 #include "rendmode.h"
-#include "pieState.h"
-#include "pieClip.h"
+#include "piestate.h"
+#include "pieclip.h"
 
 GrScreenResolution_t	getGlideResDescriptor( UDWORD resWidth );
 #define	MAX_3DFX_WIDTH	800

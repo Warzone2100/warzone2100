@@ -5,9 +5,9 @@
  *
  */
 
-#include "Frame.h"
-#include "FrameInt.h"
-#include "DXInput.h"
+#include "frame.h"
+#include "frameint.h"
+#include "dxinput.h"
 
 // The direct input object
 LPDIRECTINPUT  psDI = NULL; 

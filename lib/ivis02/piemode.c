@@ -9,18 +9,18 @@
 
 #include "frame.h"
 #include "piedef.h"
-#include "pieState.h"
-#include "pieMode.h"
-#include "pieMatrix.h"
-#include "pieFunc.h"
+#include "piestate.h"
+#include "piemode.h"
+#include "piematrix.h"
+#include "piefunc.h"
 #include "tex.h"
 #include "d3dmode.h"
 #include "v4101.h"
-#include "vSR.h"
-#include "3dfxFunc.h"
+#include "vsr.h"
+#include "3dfxfunc.h"
 #include "texd3d.h"
 #include "rendmode.h"
-#include "Pieclip.h"
+#include "pieclip.h"
 
 /***************************************************************************/
 /*

@@ -7,7 +7,7 @@
 #ifndef _transporter_h
 #define _transporter_h
 
-#include "Widget.h"
+#include "widget.h"
 
 #define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CONTENTFORM		9003	//The Transporter Contents form

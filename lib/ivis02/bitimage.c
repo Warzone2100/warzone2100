@@ -4,7 +4,7 @@
 #include <dos.h>
 #include "rendmode.h"
 #include "bug.h"
-#include "piePalette.h"
+#include "piepalette.h"
 #include "pcx.h"
 #include "tex.h"
 #include "ivispatch.h"
@@ -13,7 +13,7 @@
 
 #ifdef INC_GLIDE
 	#include "tex.h"
-	#include "3dfxText.h"
+	#include "3dfxtext.h"
 	#include "3dfxfunc.h"
 #endif
 
@@ -24,7 +24,7 @@
 
 #endif
 
-#include "BitImage.h"
+#include "bitimage.h"
 
 
 
