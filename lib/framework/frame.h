@@ -31,7 +31,9 @@
 #ifdef WIN32
 #include <ddraw.h>
 #include "dderror.h"
+#endif
 #include "input.h"
+#ifdef WIN32
 #include "surface.h"
 #include "image.h"
 #endif
