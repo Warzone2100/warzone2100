@@ -12,7 +12,9 @@
 #include "piedef.h"
 #include "piestate.h"
 #include "rendmode.h"
+#ifdef WIN32
 #include "d3drender.h"
+#endif
 #ifdef INC_GLIDE
 	#include "dglide.h"
 //	#include "3dfxfunc.h"

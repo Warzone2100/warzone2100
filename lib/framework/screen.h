@@ -14,6 +14,7 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define INIT_GUID
 #define WIN32_LEAN_AND_MEAN
@@ -21,6 +22,7 @@
 #include <windows.h>
 #include <ddraw.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #include "types.h"
 

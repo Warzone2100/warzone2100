@@ -73,9 +73,7 @@ void	sound_Update( void );
 
 UDWORD	sound_GetGameTime( void );
 
-#ifdef PSX
 LPDIRECTSOUND	sound_GetDirectSoundObj( void );
-#endif
 
 /***************************************************************************/
 

@@ -282,13 +282,17 @@ VOID processFrontendSnap(BOOL bHideCursor)
 		if(keyPressed(KEY_RETURN) )
 		{
 			bUsingKeyboard = TRUE;
+#ifdef WIN32
 			SendMessage(frameGetWinHandle(),WM_LBUTTONDOWN,MK_LBUTTON,MAKELONG(mouseX(),mouseY()));
+#endif
 		}
 
 		if(keyReleased(KEY_RETURN) )
 		{
 			bUsingKeyboard = TRUE;
+#ifdef WIN32
 			SendMessage(frameGetWinHandle(),WM_LBUTTONUP,MK_LBUTTON,MAKELONG(mouseX(),mouseY()));
+#endif
 		}
 	}
 

@@ -7,8 +7,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef WIN32
 #include <conio.h>
 #include <dos.h>
+#endif
 #include "rendmode.h"
 #include "piemode.h"
 #include "bug.h"

@@ -34,13 +34,14 @@
 #include "multigifts.h"
 // ////////////////////////////////////////////////////////////////////////////
 // GUID for warzone lobby and MPATH stuff.  i hate this stuff.
+#ifdef WIN32
 #include <initguid.h>
 
 //old guid {7B706E40-5A7E-11d1-94F6-006097B8260B}"
 
 DEFINE_GUID(WARZONEGUID,0x48ab0b01,0xfec0,0x11d1,0x98,0xc,0x0,0xa0,0x24,0x38,0x70,0xa8);
 // also change S_WARZONEGUID in multiplay.h
-
+#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -530,7 +531,9 @@ BOOL multiInitialise(VOID)
 {
 	// NET AUDIO CAPTURE 
 	NETinitAudioCapture();
+#ifdef WIN32
 	NETinitPlaybackBuffer(audio_GetDirectSoundObj());			// pass in a dsound pointer to use.
+#endif
 
 	return TRUE;  // use the menus dumbass.
 }

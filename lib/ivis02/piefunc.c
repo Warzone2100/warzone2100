@@ -17,8 +17,10 @@
 #include "pietexture.h"
 #include "pieclip.h"
 
+#ifdef WIN32
 #include <d3d.h>
 #include "d3drender.h"
+#endif
 
 #ifdef INC_GLIDE
 	#include "dglide.h"
@@ -666,6 +668,7 @@ UDWORD	radius;
 //use outside of D3D sceen only
 void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
 {
+#ifdef WIN32
 	DDSURFACEDESC2	DD_sd; 
 	HRESULT			hRes;
 	int i, j, surfaceSkip, srcSkip;
@@ -709,6 +712,7 @@ void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX
 	}
 	// We can unlock the surface now as we have finished with it, 
 	lpDDS4->lpVtbl->Unlock(lpDDS4, DD_sd.lpSurface );
+#endif
 }
 
 

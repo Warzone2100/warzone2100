@@ -1,8 +1,10 @@
 /***************************************************************************/
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #include "frame.h"
 
@@ -39,6 +41,7 @@ static AUDIO_CALLBACK g_pStopTrackCallback = NULL;
 BOOL
 sound_CheckDevice( void )
 {
+#ifdef WIN32
 	WAVEOUTCAPS	waveCaps;
 	MMRESULT	mmRes;
 
@@ -69,6 +72,7 @@ sound_CheckDevice( void )
 		DBPRINTF( ("sound_CheckDevice: wave out device doesn't support volume changes\n") );
 		return FALSE;
 	}
+#endif
 }
 
 /***************************************************************************/
@@ -653,6 +657,7 @@ sound_GetAvailableID( void )
 SDWORD
 sound_GetGlobalVolume( void )
 {
+#ifdef WIN32
 	MMRESULT	mmRes;
 	SDWORD		iVol;
 	SDWORD		iGlobVol = AUDIO_VOL_MAX;
@@ -671,6 +676,7 @@ sound_GetGlobalVolume( void )
 	}
 
 	return iGlobVol;
+#endif
 }
 
 /***************************************************************************/
@@ -678,6 +684,7 @@ sound_GetGlobalVolume( void )
 void
 sound_SetGlobalVolume( SDWORD iVol )
 {
+#ifdef WIN32
 	MMRESULT	mmRes;
 	SDWORD		iNewVol, iWinVol;
 
@@ -692,6 +699,7 @@ sound_SetGlobalVolume( SDWORD iVol )
 			DBPRINTF( ("sound_GetGlobalVolume: waveOutSetVolume failed\n") );
 		}
 	}
+#endif
 }
 
 /***************************************************************************/

@@ -14,11 +14,13 @@
 // defines the inline functions in this module
 #define DEFINE_INLINE
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #include <stdio.h>
 #include <time.h>
@@ -368,7 +370,7 @@ void frameSetCursorFromRes(WORD resID)
 
 
 
-
+#ifdef WIN32
 /*
  * Wndproc
  *
@@ -542,7 +544,7 @@ static long FAR PASCAL Wndproc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	// No extra window procedure set, use the default one
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
-
+#endif
 
 /* The default window procedure for the library.
  * This is initially set to the standard DefWindowProc, but can be changed
@@ -560,7 +562,7 @@ extern void frameSetWindowProc(DEFWINPROCTYPE winProc)
  * Do that Windows initialization thang...
  */
 
-
+#ifdef WIN32
 static BOOL WinInitGlide(HANDLE hInstance, char *name, int width, int height, BOOL maximize)
 {
 	WNDCLASS cls;
@@ -706,7 +708,7 @@ static BOOL winInitApp(HANDLE hInstance,	// Instance handle for the program
     return TRUE;
 
 } 
-
+#endif
 
 /*
  * frameInitialise
@@ -836,6 +838,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
  */
 FRAME_STATUS frameUpdate(void)
 {
+#ifdef WIN32
 	MSG				sMsg;
 	FRAME_STATUS	retVal;
 
@@ -898,6 +901,7 @@ FRAME_STATUS frameUpdate(void)
 	}
 
 	return retVal;
+#endif
 }
 
 
@@ -912,7 +916,9 @@ void frameShutDown(void)
 	}
 	else
 	{
+#ifdef WIN32
 		RELEASE(psDD);
+#endif
 	}
 
 	/* Free the default cursor */
@@ -1157,6 +1163,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 // load a file from disk into a fixed memory buffer
 BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
+#ifdef WIN32
 	HANDLE	hFile;
 	DWORD	bytesRead;
 	BOOL	retVal;
@@ -1214,11 +1221,13 @@ BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, 
 	}
 
 	return TRUE;
+#endif
 }
 
 // as above but returns quietly if no file found
 BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
+#ifdef WIN32
 	HANDLE	hFile;
 	DWORD	bytesRead;
 	BOOL	retVal;
@@ -1269,6 +1278,7 @@ BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 	}
 
 	return TRUE;
+#endif
 }
 #endif
 

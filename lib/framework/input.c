@@ -7,12 +7,14 @@
 
 #include <stdio.h>
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #include <ddraw.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -178,6 +180,7 @@ UDWORD inputGetKey(void)
 /* Deal with windows messages to maintain the state of the keyboard and mouse */
 void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 {
+#ifdef WIN32
 	UDWORD	code,i, repeat, vk;
 	FRACT	divX,divY;
 	UDWORD	scrX,scrY;
@@ -456,6 +459,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 	default:
 		break;
 	}
+#endif
 }
 
 /* This is called once a frame so that the system can tell

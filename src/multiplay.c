@@ -617,6 +617,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 // Required by the net library. It's the system message handler..
 BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 {
+#ifdef WIN32
 	switch( ((LPDPMSG_GENERIC)mg)->dwType )
 	{
 	case DPSYS_DESTROYPLAYERORGROUP:	// player leaving the game
@@ -639,6 +640,7 @@ BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 		break;
 	}
 
+#endif
 	return (TRUE);
 }
 

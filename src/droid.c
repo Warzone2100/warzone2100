@@ -2057,7 +2057,7 @@ static void droidAddWeldSound( iVector iVecEffect )
 {
 	SDWORD		iAudioID;
 
-#if WIN32
+#ifndef PSX
 	iAudioID = ID_SOUND_CONSTRUCTION_1 + (rand()%4);
 #else
 	if(ONEINTWO)

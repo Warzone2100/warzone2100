@@ -15,6 +15,9 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#ifdef WIN32
+# include <windows.h>
+#endif
 
 /* Basic numeric types */
 typedef unsigned	char	UBYTE;
@@ -24,8 +27,6 @@ typedef	unsigned	short	UWORD;
 typedef	signed		short	SWORD;
 typedef	unsigned	int		UDWORD;
 typedef	signed		int		SDWORD;
-
-typedef	int	BOOL;
 
 /* Numeric size defines */
 #define UBYTE_MAX	0xff

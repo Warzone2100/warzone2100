@@ -10,15 +10,21 @@
 #include "frame.h"
 #include <time.h>
 #include "pieblitfunc.h"
+#ifdef WIN32
 #include "dx6texman.h"
+#endif
 #include "bug.h"
 #include "piedef.h"
 #include "piemode.h"
 #include "piestate.h"
+#ifdef WIN32
 #include "3dfxfunc.h"
+#endif
 #include "rendfunc.h"
 #include "rendmode.h"
+#ifdef WIN32
 #include "texd3d.h"
+#endif
 #include "pcx.h"
 #include "pieclip.h"
 #include "piefunc.h"
@@ -957,6 +963,7 @@ UDWORD			size;
 		/*
 		// Cannot playback if not 16bit mode 
 		*/
+#ifdef WIN32
 		if( DDPixelFormat->dwRGBBitCount == 16 )
 		{
 			/*
@@ -1022,6 +1029,7 @@ UDWORD			size;
 				bc++;
 			}
 		}
+#endif
 	}
 
 	/*
@@ -1077,6 +1085,7 @@ SDWORD	bitDepth;
 	else
 	{
 		pDDPixelFormat = screenGetBackBufferPixelFormat();
+#ifdef WIN32
 		if( pDDPixelFormat->dwRGBBitCount == 16 )
 		{
 			bitDepth = 16;
@@ -1085,6 +1094,7 @@ SDWORD	bitDepth;
 		{
 			bitDepth = 8;
 		}
+#endif
 	}
 
 	//randomly load in a backdrop piccy.

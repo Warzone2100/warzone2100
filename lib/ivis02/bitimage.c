@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#ifdef WIN32
 #include <dos.h>
+#endif
 #include "rendmode.h"
 #include "bug.h"
 #include "piepalette.h"

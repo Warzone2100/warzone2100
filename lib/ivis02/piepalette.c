@@ -77,6 +77,7 @@ ULONG				mask;
 	/*
 	// Cannot playback if not 16bit mode 
 	*/
+#ifdef WIN32
 	if( DDPixelFormat->dwRGBBitCount == 16 )
 	{
 		/*
@@ -155,7 +156,7 @@ ULONG				mask;
 		//if not 16 bit use blue 5 only so we know the problem
 		bc = 5;
 	}
-
+#endif
 
 	alpha = 0;
 

@@ -98,6 +98,7 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 	UNUSEDPARAMETER(nowt);
 	if(pie_GetRenderEngine()==ENGINE_GLIDE)
 	{
+#ifdef WIN32
 		scrX = GetSystemMetrics(SM_CXFULLSCREEN);
 		scrY = GetSystemMetrics(SM_CYFULLSCREEN);
 
@@ -107,13 +108,16 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 		mXPos = MAKEINT(divX*scrX);
 		mYPos = MAKEINT(divY*scrY);
 		SetCursorPos(mXPos,mYPos);
+#endif
 	}
 	else
 	{
+#ifdef WIN32
 		point.x = x;
 		point.y = y;
 		ClientToScreen(frameGetWinHandle(),&point);
 		SetCursorPos(point.x,point.y);
+#endif
 	}
 
 

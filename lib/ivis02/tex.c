@@ -443,9 +443,9 @@ int iV_TexLoad( char *path, char *filename, int type,
 //
 //  currently only for PSX but would make sense for the PC (?)
 //
+#ifdef PSX
 BOOL GenerateTEXPAGE(char *Filename, RECT *VramArea, UDWORD Mode, UWORD Clut)
 {
-#ifdef PSX
 		int i;
 		UWORD TPage;
 
@@ -464,9 +464,10 @@ BOOL GenerateTEXPAGE(char *Filename, RECT *VramArea, UDWORD Mode, UWORD Clut)
 		_TEX_PAGE[i].tex.num	= GetTextureNumber(Filename);		// base on the name e.g.     Page-16-  will return 16
 		_TEX_PAGE[i].tex.tpage = TPage;
 		_TEX_PAGE[i].tex.clut = Clut;		// Not really used ...
-#endif
+
 		return(TRUE);
-}		
+}
+#endif		
 
 #ifdef PSX
 // Scan through the loaded tex pages to see if this one is loaded. Returns TRUE and TexPage points to the loaded entry

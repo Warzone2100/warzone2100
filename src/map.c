@@ -6,11 +6,6 @@
  */
 #include <stdio.h>
 
-#pragma warning (disable : 4201 4214 4115 4514)
-#include <windows.h>
-#pragma warning (default : 4201 4214 4115)
-
-
 /* map line printf's */
 //#define DEBUG_GROUP1
 #include <assert.h>

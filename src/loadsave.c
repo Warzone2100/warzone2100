@@ -328,6 +328,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	sprintf(sTemp,"%s*.%s",sSearchPath,sExtension);		// form search string.
 	strcpy(sPath,sSearchPath);							// setup locals.
 	strcpy(sExt,sExtension);
+#ifdef WIN32
 	dir =FindFirstFile(sTemp,&found);
 	if(dir != INVALID_HANDLE_VALUE)
 	{
@@ -350,6 +351,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 		}
 	}
 	FindClose(dir);
+#endif
 	bLoadSaveUp = TRUE;
 	return TRUE;
 }
@@ -439,6 +441,7 @@ void deleteSaveGame(char* saveGameName)
 	// check for a directory and remove that too.
 	sprintf(sTemp2,"%s\\*.*",saveGameName);
 
+#ifdef WIN32
 	dir =FindFirstFile(sTemp2,&found);			// remove other files
 	if(dir != INVALID_HANDLE_VALUE)
 	{
@@ -451,6 +454,7 @@ void deleteSaveGame(char* saveGameName)
 		}
 	}
 	FindClose(dir);	
+#endif
 
 	RemoveDirectory(saveGameName);
 	return;

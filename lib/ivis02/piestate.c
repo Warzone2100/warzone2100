@@ -10,10 +10,14 @@
 #include "frame.h"
 #include "piestate.h"
 #include "piedef.h"
+#ifdef WIN32
 #include "d3drender.h"
 #include "dx6texman.h"
+#endif
 #include "tex.h"
+#ifdef WIN32
 #include "texd3d.h"
+#endif
 #ifdef INC_GLIDE
 	#include "rendfunc.h"
 	#include "dglide.h"
@@ -266,6 +270,7 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 		rendStates.depthBuffer = depthMode;
 		if (rendStates.rendEngine == ENGINE_D3D)
 		{
+#ifdef WIN32
 			switch(depthMode)
 			{
 				case DEPTH_CMP_LEQ_WRT_ON:
@@ -285,6 +290,7 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 					D3DSetDepthWrite(FALSE);
 					break;
 			}
+#endif
 		}
 		else if (rendStates.rendEngine == ENGINE_GLIDE)
 		{ 

@@ -7,9 +7,11 @@
 #ifndef _frame_h
 #define _frame_h
 
+#ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
 #include <windows.h>
 #pragma warning (default : 4201 4214 4115)
+#endif
 
 #ifdef PSX		// If Playstation version then compile lean version.
 
@@ -26,15 +28,19 @@
 #include "debug.h"
 #include "mem.h"
 #include "screen.h"
+#ifdef WIN32
 #include <ddraw.h>
 #include "dderror.h"
 #include "input.h"
 #include "surface.h"
 #include "image.h"
+#endif
 #include "font.h"
 #include "heap.h"
 #include "treap.h"
+#ifdef WIN32
 #include "w95trace.h"
+#endif
 #include "fractions.h"
 #include "trig.h"
 #include "frameresource.h"

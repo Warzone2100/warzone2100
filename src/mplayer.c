@@ -28,6 +28,7 @@
 // submit score routines.
 BOOL mplayerSubmit(void)
 {
+#ifdef WIN32
 	PLAYERSTATS stats,stats2;
 	MPPLAYERID	mpID;
 
@@ -82,5 +83,6 @@ BOOL mplayerSubmit(void)
 		MPDPXTRA_Destroy();
 	}
 
+#endif
 	return TRUE;
 }

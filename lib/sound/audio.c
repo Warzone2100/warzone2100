@@ -63,7 +63,9 @@ static AUDIO_SAMPLE	g_sPreviousSample = { NO_SAMPLE,
 
 static SDWORD	g_i3DVolume = AUDIO_VOL_MAX;
 
+#ifdef WIN32
 static CRITICAL_SECTION		critSecAudio;
+#endif
 
 /***************************************************************************/
 
@@ -100,7 +102,9 @@ audio_Init( HWND hWnd, BOOL bEnabled, AUDIO_CALLBACK pStopTrackCallback )
 
 		sound_SetStoppedCallback( pStopTrackCallback );
 		
+#ifdef WIN32
 		InitializeCriticalSection( &critSecAudio );
+#endif
 
 		return TRUE;
 	}
@@ -131,7 +135,9 @@ audio_Shutdown()
 	bOK = sound_Shutdown();
 
 	/* empty sample heap */
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 
 	/* empty sample list */
 	psSample = g_psSampleList;
@@ -151,7 +157,9 @@ audio_Shutdown()
 		psSample = psSampleTemp;
 	}
 
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 
 	/* free sample heap */
 	HEAP_DESTROY( g_psSampleHeap );
@@ -159,7 +167,9 @@ audio_Shutdown()
 	g_psSampleList  = NULL;
 	g_psSampleQueue = NULL;
 
+#ifdef WIN32
 	DeleteCriticalSection( &critSecAudio );
+#endif
 
 	return bOK;
 }
@@ -201,7 +211,9 @@ audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 static void
 audio_AddSampleToHead( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 {
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 	psSample->psNext = (*ppsSampleList);
 	psSample->psPrev = NULL;
 	if ( (*ppsSampleList) != NULL )
@@ -209,7 +221,9 @@ audio_AddSampleToHead( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 		(*ppsSampleList)->psPrev = psSample;
 	}
 	(*ppsSampleList) = psSample;
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 }
 
 /***************************************************************************/
@@ -219,7 +233,9 @@ audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 {
 	AUDIO_SAMPLE	*psSampleTail = NULL;
 
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 
 	if ( (*ppsSampleList) == NULL )
 	{
@@ -237,7 +253,9 @@ audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 		psSample->psNext = NULL;
 	}
 
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 }
 
 /***************************************************************************/
@@ -256,7 +274,9 @@ audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 		return;
 	}
 
+#ifdef WIN32
 	EnterCriticalSection( &critSecAudio );
+#endif
 	if ( psSample == (*ppsSampleList) )
 	{
 		/* first sample in list */
@@ -278,7 +298,9 @@ audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 	psSample->psPrev = NULL;
 	psSample->psNext = NULL;
 
+#ifdef WIN32
 	LeaveCriticalSection( &critSecAudio );
+#endif
 }
 
 /***************************************************************************/
@@ -1189,7 +1211,6 @@ audio_CheckAllUnloaded()
 
 /***************************************************************************/
 
-#ifndef PSX
 LPDIRECTSOUND
 audio_GetDirectSoundObj( void )
 {
@@ -1201,7 +1222,6 @@ audio_GetDirectSoundObj( void )
 
 	return sound_GetDirectSoundObj();
 }
-#endif
 
 /***************************************************************************/
 

@@ -396,6 +396,7 @@ void seq_SetVideoPath(void)
 	if (!bHardPath)
 	{
 		strcpy(aHardPath, "sequences\\");
+#ifdef WIN32
 		fileHandle = FindFirstFile("sequences\\*.rpl",&findData);
 		if (fileHandle == INVALID_HANDLE_VALUE)
 		{
@@ -406,6 +407,7 @@ void seq_SetVideoPath(void)
 			bHardPath = TRUE;
 			FindClose(fileHandle);
 		}
+#endif
 	}
 }
 

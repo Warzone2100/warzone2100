@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#ifdef WIN32
 #include <dos.h>
+#endif
 #include "ivisdef.h"
 #include "piestate.h"
 #include "rendmode.h"
@@ -9,7 +11,9 @@
 #ifndef PSX
 #include "pieclip.h"
 #endif
+#ifdef WIN32
 #include <ddraw.h>
+#endif
 
 #ifndef PSX
 #include "pieblitfunc.h"
@@ -1141,6 +1145,7 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 
 void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, int XPos, int YPos)
 {
+#ifdef WIN32
 	int Index;
 	UWORD ImageID;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
@@ -1209,6 +1214,7 @@ void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, i
 	// We can unlock the suurface now as we have finished with it, 
 	// until the next decode is required
 	lpDDSF->lpVtbl->Unlock(lpDDSF, DD_sd.lpSurface );
+#endif
 }
 #endif 
 

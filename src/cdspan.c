@@ -55,6 +55,7 @@ static STRING		g_szCurDriveName[MAX_STR] = "";
 BOOL
 cdspan_GetDriveName( BOOL bCheckAny, STRING szDriveName[], ... )
 {
+#ifdef WIN32
 	UINT		uiRet;
 	STRING		szDrives[MAX_STR],
 				szVolNameList[MAX_VOL_NAMES][MAX_STR],
@@ -149,6 +150,10 @@ cdspan_GetDriveName( BOOL bCheckAny, STRING szDriveName[], ... )
 		strcpy( szDriveName, "" );
 		return FALSE;
 	}
+#else
+	strcpy( szDriveName, "" );
+	return FALSE;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -197,6 +202,7 @@ cdspan_PlayInGameAudio( STRING szFileName[], SDWORD iVol )
 static BOOL
 cdspan_GetCDLabel( STRING *szLabel )
 {
+#ifdef WIN32
 	char	szVolName[MAX_STR], szSysName[MAX_STR];
 	DWORD	dwVolSerialNum, dwFlags, dwMaxlen;
 
@@ -213,6 +219,10 @@ cdspan_GetCDLabel( STRING *szLabel )
 	}
 
 	return TRUE;
+#else
+	strcpy( szLabel, "" );
+	return FALSE;
+#endif
 }
 
 // -----------------------------------------------------------------------

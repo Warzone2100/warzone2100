@@ -14,11 +14,15 @@
 #include "piematrix.h"
 #include "piefunc.h"
 #include "tex.h"
+#ifdef WIN32
 #include "d3dmode.h"
+#endif
 #include "v4101.h"
 #include "vsr.h"
+#ifdef WIN32
 #include "3dfxfunc.h"
 #include "texd3d.h"
+#endif
 #include "rendmode.h"
 #include "pieclip.h"
 

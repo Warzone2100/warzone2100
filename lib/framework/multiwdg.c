@@ -164,6 +164,7 @@ BOOL wdgLoadAllWDGCatalogs(void)
 	WDG_SetCurrentWDGCatalog("", 0, WRFCatalog);
 	WDG_SetCurrentWRFFileCatalog(0, WRFfilesCatalog);
 
+#ifdef WIN32
 	// now load the catalog for every WDG file in the current directory
 	memset(&sFindData, 0, sizeof(WIN32_FIND_DATA));
 	hFindHandle = FindFirstFile("*.wdg", &sFindData);
@@ -179,6 +180,7 @@ BOOL wdgLoadAllWDGCatalogs(void)
 			hFindHandle = INVALID_HANDLE_VALUE;
 		}
 	}
+#endif
 
 	// now check the dependancies
 	if (!wdgCheckDependancies())

@@ -23,7 +23,9 @@
 #include "mixer.h"
 #include "hci.h"
 #include "fpath.h"
+#ifdef WIN32
 #include "d3drender.h"
+#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -682,6 +684,7 @@ BOOL saveConfig()
 
 BOOL openWarzoneKey()
 {
+#ifdef WIN32
 	DWORD	result,ghGameDisp;						// key created or opened
 	char	keyname[256] = "SOFTWARE\\Pumpkin Studios\\Warzone2100\\";
 
@@ -702,21 +705,29 @@ BOOL openWarzoneKey()
 		return TRUE;
 	}
 	return FALSE;
+#else
+	return TRUE;
+#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL closeWarzoneKey()
 {
+#ifdef WIN32
 	if( RegCloseKey(ghWarzoneKey) == ERROR_SUCCESS)
 	{
 		return TRUE;
 	}
 	return FALSE;
+#else
+	return TRUE;
+#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL getWarzoneKeyNumeric	(STRING *pName,DWORD *val)
 {
+#ifdef WIN32
 	UCHAR	result[16];			// buffer
 	DWORD	resultsize=16;		// buffersize
 	DWORD	type;				// type of reg entry.
@@ -736,11 +747,15 @@ BOOL getWarzoneKeyNumeric	(STRING *pName,DWORD *val)
 	{
 		return FALSE;
 	}
+#else
+	return FALSE;
+#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL getWarzoneKeyString	(STRING *pName,STRING *pString)
 {
+#ifdef WIN32
 	UCHAR	result[255];		// buffer
 	DWORD	resultsize=255;		// buffersize
 	DWORD	type;				// type of reg entry.
@@ -760,11 +775,15 @@ BOOL getWarzoneKeyString	(STRING *pName,STRING *pString)
 	{
 		return FALSE;
 	}
+#else
+	return FALSE;
+#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL getWarzoneKeyBinary	(STRING *pName,UCHAR *pData,UDWORD *pSize)
 {
+#ifdef WIN32
 	UCHAR	result[2048];		// buffer
 	DWORD	resultsize=2048;	// buffersize
 	DWORD	type;				// type of reg entry.
@@ -787,6 +806,9 @@ BOOL getWarzoneKeyBinary	(STRING *pName,UCHAR *pData,UDWORD *pSize)
 		pSize = 0;
 		return FALSE;
 	}
+#else
+	return FALSE;
+#endif
 }
 
 
@@ -795,21 +817,33 @@ BOOL getWarzoneKeyBinary	(STRING *pName,UCHAR *pData,UDWORD *pSize)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL setWarzoneKeyNumeric(STRING *pName,DWORD val)
 {
+#ifdef WIN32
 
 	RegSetValueEx(ghWarzoneKey, pName ,0,REG_DWORD ,(UBYTE*) &val, sizeof(val) );
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL setWarzoneKeyString(STRING *pName, STRING *pString)
 {
+#ifdef WIN32
 	RegSetValueEx(ghWarzoneKey, pName ,0, REG_SZ, (UBYTE*)pString, strlen(pString) );
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL setWarzoneKeyBinary(STRING *pName, VOID *pData, UDWORD size)
 {
+#ifdef WIN32
 	RegSetValueEx(ghWarzoneKey, pName ,0, REG_BINARY, pData, size );
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }

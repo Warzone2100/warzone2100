@@ -23,8 +23,10 @@
 #include "pietexture.h"
 #include "pieclip.h"
 
+#ifdef WIN32
 #include <d3d.h>
 #include "d3drender.h"
+#endif
 
 #ifdef INC_GLIDE
 	#include "dglide.h"

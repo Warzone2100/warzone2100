@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef WIN32
 #include <dos.h>
 #include <io.h>
+#endif
 
 #ifdef PSX
 #include "file_psx.h"

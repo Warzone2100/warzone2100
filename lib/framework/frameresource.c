@@ -419,6 +419,7 @@ void SetLastHashName(UDWORD HashName)
 // load a file from disk into a fixed memory buffer
 BOOL resLoadFromDisk(STRING *pFileName, UBYTE **ppBuffer, UDWORD *pSize)
 {
+#ifdef WIN32
 	HANDLE	hFile;
 	DWORD	bytesRead;
 	BOOL	retVal;
@@ -467,6 +468,7 @@ BOOL resLoadFromDisk(STRING *pFileName, UBYTE **ppBuffer, UDWORD *pSize)
 	}
 
 	return TRUE;
+#endif
 }
 
 #endif
