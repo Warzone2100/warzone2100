@@ -13,7 +13,7 @@
 #include "text.h"
 #include "piestate.h"		// for getrendertype
 #include "resource.h"
-//#include "display.h"		// for gamma.
+//#include "display.h"		// for gammaValue.
 #include "frontend.h"		// for textdisplay function
 #include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
@@ -290,10 +290,10 @@ static BOOL _addSlideOptions()
 	{
 		addIGTextButton(INTINGAMEOP_GAMMA,INTINGAMEOP_3_Y,STR_FE_GAMMA,WBUT_PLAIN);
 		
-		if(gamma>3)	   gamma = (float)2.9;
-		if(gamma<0.5)  gamma = (float).5;
+		if(gammaValue>3)	   gammaValue = (float)2.9;
+		if(gammaValue<0.5)  gammaValue = (float).5;
 	
-		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gamma*25),INTINGAMEOP_GAMMA );
+		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gammaValue*25),INTINGAMEOP_GAMMA );
 
 	}
 #endif
@@ -675,9 +675,9 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	
 //	case INTINGAMEOP_GAMMA_S:
-//		gamma = (float)(widgGetSliderPos(psWScreen,INTINGAMEOP_GAMMA_S))/25  ;
-//		if(gamma<0.5)  gamma = (float).5;
-//		pie_SetGammaValue(gamma);
+//		gammaValue = (float)(widgGetSliderPos(psWScreen,INTINGAMEOP_GAMMA_S))/25  ;
+//		if(gammaValue<0.5)  gammaValue = (float).5;
+//		pie_SetGammaValue(gammaValue);
 //		break;
 #endif
 	

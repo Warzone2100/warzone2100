@@ -6,7 +6,7 @@
 #include "frame.h"
 
 #include "objmem.h"
-#include "display.h"	// gamma
+#include "display.h"	// gammaValue
 #include "track.h"		// audio
 #include "cdaudio.h"	// audio
 #include "piestate.h"	// setgamma.
@@ -98,15 +98,15 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	// gamma
 	if(getWarzoneKeyNumeric("gamma",&val))		
 	{
-		gamma = (float)val/(float)25;
-		if(gamma<0.5)  gamma = (float).5;
-		pie_SetGammaValue(gamma);
+		gammaValue = (float)val/(float)25;
+		if(gammaValue<0.5)  gammaValue = (float).5;
+		pie_SetGammaValue(gammaValue);
 	}
 	else
 	{
-		gamma = (float)DEFAULTGAMMA/(float)25;
-		pie_SetGammaValue(gamma);
-		if(gamma<0.5)  gamma = (float).5;
+		gammaValue = (float)DEFAULTGAMMA/(float)25;
+		pie_SetGammaValue(gammaValue);
+		if(gammaValue<0.5)  gammaValue = (float).5;
 		setWarzoneKeyNumeric("gamma",DEFAULTGAMMA);		
 	}
 	
@@ -634,7 +634,7 @@ BOOL saveConfig()
 		setDifficultyLevel(DL_NORMAL);
 	}
 	setWarzoneKeyNumeric(	"allowSubtitles",(DWORD)bAllowSubtitles			);
-	setWarzoneKeyNumeric(	"gamma",		(DWORD)(gamma*25)				);			// gamma
+	setWarzoneKeyNumeric(	"gamma",		(DWORD)(gammaValue*25)				);			// gamma
 	setWarzoneKeyNumeric(	"scroll",		(DWORD)scroll_speed_accel		);			// scroll
 	setWarzoneKeyNumeric(	"difficulty",	getDifficultyLevel()			);			// level	
 	setWarzoneKeyNumeric(	"barmode",		(DWORD)barMode							);			//energybars		

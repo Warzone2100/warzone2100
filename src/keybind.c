@@ -469,15 +469,15 @@ void	kf_RaiseGamma( void )
 #ifndef PSX
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
-		if(gamma<(float)5.0)
+		if(gammaValue<(float)5.0)
 		{
-			gamma = gamma+(float)0.1;
-			pie_SetGammaValue(gamma);
+			gammaValue = gammaValue+(float)0.1;
+			pie_SetGammaValue(gammaValue);
 			addConsoleMessage("Gamma correction altered",DEFAULT_JUSTIFY);
 		}
 		else
 		{
-			gamma = (float)0.2;
+			gammaValue = (float)0.2;
 		}
 	}
 #endif
@@ -491,10 +491,10 @@ void	kf_LowerGamma( void )
 #ifndef PSX
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
-		if(gamma>(float)0.2)
+		if(gammaValue>(float)0.2)
 		{
-			gamma = gamma-(float)0.1;
-			pie_SetGammaValue(gamma);
+			gammaValue = gammaValue-(float)0.1;
+			pie_SetGammaValue(gammaValue);
 			addConsoleMessage("Gamma correction lowered",DEFAULT_JUSTIFY);
 		}
 		else

@@ -2133,11 +2133,11 @@ BOOL startGameOptionsMenu(VOID)
 /*	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		//gamma
-		if(gamma>3)	   gamma = (float)2.9;
-		if(gamma<0.5)  gamma = (float).5;
+		if(gammaValue>3)	   gammaValue = (float)2.9;
+		if(gammaValue<0.5)  gammaValue = (float).5;
 	
 		addTextButton(FRONTEND_GAMMA, FRONTEND_POS6X-25,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_GAMMA),TRUE,FALSE);
-		addFESlider(FRONTEND_GAMMA_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5, 60, (UDWORD)(gamma*25),FRONTEND_GAMMA );
+		addFESlider(FRONTEND_GAMMA_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5, 60, (UDWORD)(gammaValue*25),FRONTEND_GAMMA );
 	}
 */
 
@@ -2285,9 +2285,9 @@ BOOL runGameOptionsMenu(VOID)
 
 /*	case FRONTEND_GAMMA_SL:
 		// gamma range = 0.4 - 3 
-		gamma = (float)( widgGetSliderPos(psWScreen,FRONTEND_GAMMA_SL) )/25  ;
-		if(gamma<0.5)  gamma = (float).5;
-		pie_SetGammaValue(gamma);
+		gammaValue = (float)( widgGetSliderPos(psWScreen,FRONTEND_GAMMA_SL) )/25  ;
+		if(gammaValue<0.5)  gammaValue = (float).5;
+		pie_SetGammaValue(gammaValue);
 		break;
 */
 	case FRONTEND_SCROLLSPEED_SL:

@@ -1128,7 +1128,7 @@ BOOL	init3DView(void)
 	gridCentreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 
 
-	pie_SetGammaValue(gamma);
+	pie_SetGammaValue(gammaValue);
 
 	edgeTile.texture = 0;
 

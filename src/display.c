@@ -273,7 +273,7 @@ BOOL	ignoreRMBC	= TRUE;
 BOOL	bigBlueInWorld = FALSE;
 BOOL	missionComplete = FALSE;
 UWORD	RadarZoomLevel = 0;
-float	gamma = (float)1.0;
+float	gammaValue = (float)1.0;
 DROID	*psSelectedVtol;
 DROID	*psDominantSelected;
 
