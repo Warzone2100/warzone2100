@@ -27,7 +27,6 @@
 #define ConnectionSize		255					// max size of a connection description.
 #define MaxProtocols		12					// max number of returnable protocols.
 #define MaxGames			12					// max number of concurrently playable games to allow.
-typedef	unsigned	int		UDWORD;				// for similarity to warzone
 //#define USE_DIRECTPLAY_PROTOCOL				// use DX6 protocol.
 
 //typedef struct {								//Available game storage... JUST FOR REFERENCE!
