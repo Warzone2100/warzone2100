@@ -960,13 +960,14 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL b
 {
 	NETMSG m;
 	UDWORD nil =0;
+	UWORD start = (UBYTE)bStart;
 	if(!myResponsibility(player) || gameTime <5 )
 	{
 		return TRUE;	
 	}
 
 	NetAdd(m,0,player);				// player researching
-	NetAdd(m,1,((UBYTE)bStart) );	// start stop..	
+	NetAdd(m,1,start);	// start stop..	
 	if(psBuilding)
 	{
 		NetAdd(m,2,psBuilding->id);	// res lab.

@@ -672,6 +672,7 @@ static BOOL sendStructureCheck(VOID)
 	static UDWORD	lastSent=0;					// last time a struct was sent.
 	NETMSG			m;
 	STRUCTURE		*pS;
+        UBYTE capacity;
 
 	if(lastSent > gameTime)lastSent= 0;
 	if((gameTime-lastSent) < STRUCT_FREQUENCY)	// only send a struct send if not done recently.
@@ -700,20 +701,23 @@ static BOOL sendStructureCheck(VOID)
 		// functionality.
 		if (pS->pStructureType->type == REF_RESEARCH)
 		{	
-			NetAdd(m,19, ((UBYTE)((RESEARCH_FACILITY*)pS->pFunctionality)->capacity ));
+			capacity = (UBYTE)((RESEARCH_FACILITY*)pS->pFunctionality)->capacity;
+			NetAdd(m,19,capacity);
 			m.size +=1;
 		}
 		if (pS->pStructureType->type == REF_FACTORY OR
 //			pS->pStructureType->type == REF_CYBORG_FACTORY OR
 			pS->pStructureType->type == REF_VTOL_FACTORY)
 		{	
-			NetAdd(m,19,((UBYTE)((FACTORY*)pS->pFunctionality)->capacity ) );
+			capacity = (UBYTE)((FACTORY*)pS->pFunctionality)->capacity;
+			NetAdd(m,19,capacity);
 			m.size +=1;
 
 		}
 		if (pS->pStructureType->type == REF_POWER_GEN)
 		{
-			NetAdd(m,19,((UBYTE)((POWER_GEN*)pS->pFunctionality)->capacity) );
+			capacity = (UBYTE)((POWER_GEN*)pS->pFunctionality)->capacity;
+			NetAdd(m,19,capacity);
 			m.size +=1;
 		}
 		

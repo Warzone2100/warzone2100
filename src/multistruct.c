@@ -74,13 +74,16 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 {
 	NETMSG	msg;
 	UDWORD zero=0;
-	NetAdd(msg,0,((UBYTE)psDroid->player));			//player
+	UWORD player,order;
+	player = (UBYTE)psDroid->player;
+	order = (UBYTE)psDroid->order;
+	NetAdd(msg,0,player);			//player
 	NetAdd(msg,1,psDroid->psTarStats->ref);	//id of thing to build
 	NetAdd(msg,5,psDroid->orderX);					// x 
 	NetAdd(msg,7,psDroid->orderY);					// y
 	NetAdd(msg,11,psDroid->id);						// droid to order to build it
 	NetAdd(msg,15,psStruct->id);					// building id to create
-	NetAdd(msg,19,((UBYTE)psDroid->order));			// building id to create
+	NetAdd(msg,19,order);			// building id to create
 
 	if(psDroid->psTarget && (psDroid->psTarget->type == OBJ_STRUCTURE))
 	{
