@@ -141,10 +141,6 @@ SOURCE=.\BuildPos.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\Cdaudio.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\CDSpan.c
 # End Source File
 # Begin Source File
@@ -642,10 +638,6 @@ SOURCE=.\Bullet.h
 # Begin Source File
 
 SOURCE=.\BulletDef.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Cdaudio.h
 # End Source File
 # Begin Source File
 

@@ -89,6 +89,10 @@ SOURCE=.\Audio.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\CDaudio.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\Mixer.c
 # End Source File
 # Begin Source File
@@ -110,6 +114,10 @@ SOURCE=.\Aud.h
 # Begin Source File
 
 SOURCE=.\Audio.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CDaudio.h
 # End Source File
 # Begin Source File
 
