@@ -396,6 +396,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 
 	if(weHave3DNow())  // call alex m's AMD detection stuff - uses _emit?!?!?
 	{
+#ifdef _MSC_VER
 		// Mike Goddard's funky code replacement.
 		_asm {
 			FEMMS
@@ -507,6 +508,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		tloop_done:
 			FEMMS
 		}
+#endif // _MSC_VER
 	}
 	else	// run the intel one
 	//--

@@ -222,7 +222,7 @@ typedef float FRACT_D;
 #define FRACTdiv_D(x,y) ((x)/(y))
 #define fSQRT_D(x) ((FRACT)sqrt(x))
 
-//#define MAKEINT_D(x) ((SDWORD)(x))
+#ifdef _MSC_VER
 __inline SDWORD MAKEINT_D (float f)
 {
 	SDWORD i;
@@ -230,10 +230,11 @@ __inline SDWORD MAKEINT_D (float f)
 	__asm fistp i;
 	return i;
 }
+#else
+#define MAKEINT_D(x) ((SDWORD)(x))
+#endif
 
-//changed definitions
-//#define MAKEINT(x) ((SDWORD)(x))
-//#define MAKEINT(x) (ftol(x))
+#ifdef _MSC_VER
 __inline SDWORD MAKEINT (float f)
 {
 	SDWORD i;
@@ -241,6 +242,11 @@ __inline SDWORD MAKEINT (float f)
 	__asm fistp i;
 	return i;
 }
+#else
+//changed definitions
+#define MAKEINT(x) ((SDWORD)(x))
+//#define MAKEINT(x) (ftol(x))
+#endif
 
 
 //#define fastRoot(x,y) (sqrt(x * x + y * y))

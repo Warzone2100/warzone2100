@@ -25,6 +25,7 @@ static long FPUControlWord;
 //
 static void SetFPUPrecision(void)
 {
+#ifdef _MSC_VER
 	long memvar;
 
 	_asm {
@@ -38,18 +39,21 @@ static void SetFPUPrecision(void)
 		fldcw memvar;			// Load control word back to FPU
 		fwait;					// Wait for operation to complete
 	}
+#endif // _MSC_VER
 }
 
 // Restore FPU precision.
 //
 static void RestoreFPUPrecision(void)
 {
+#ifdef _MSC_VER
 	_asm {
 		finit;					// Initialise the FPU
 		fwait;					// Wait for operation to complete
 		fldcw FPUControlWord;	// Load FPU control word
 		fwait;					// Wait for operation to complete
 	}
+#endif // _MSC_VER
 }
 
 

@@ -83,6 +83,7 @@ BOOL	b3DNow;
 	/* As of yet - we haven't found an AMD 3DNow! equipped processor */
 	b3DNow = FALSE;
 
+#ifdef _MSC_VER
 	_asm
 	{
 		push	ebx
@@ -132,6 +133,7 @@ has_3d_now:
 		pop		edx
 		pop		ebx
 	}
+#endif // _MSC_VER
 	return(b3DNow);
 }
 #endif
