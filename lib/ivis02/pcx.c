@@ -16,7 +16,7 @@
 
 //*************************************************************************
 
-#ifdef WIN32
+#ifndef PSX
 
 #define PCX_BUFFER_SIZE		65536
 //#define PCX_PIXEL(s,x,y)	(* ((uint8 *) ((s)->bmp + (x) + ((y) * (s)->width))))

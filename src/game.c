@@ -1320,7 +1320,7 @@ error:
 	/* Start the game clock */
 	gameTimeStart();
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
@@ -1737,7 +1737,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	//before loading the data - turn power off so don't get any power low warnings
 	powerCalculated = FALSE;
 	/* Load in the chosen file data */
-/*#ifdef WIN32
+/*#ifndef PSX
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
@@ -2070,7 +2070,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 /*		aFileName[fileExten] = '\0';
 		strcat(aFileName, "gates.txt");
 		// Load in the chosen file data
-#ifdef WIN32
+#ifndef PSX
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 		{
@@ -2118,7 +2118,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resState.bjo");
 		// Load in the chosen file data 
-//#ifdef WIN32
+//#ifndef PSX
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 		{
@@ -2719,7 +2719,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	//after the clock has been reset need to check if any res_extractors are active
 	checkResExtractorsActive();
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
@@ -2795,7 +2795,7 @@ error:
 
 	/* Start the game clock */
 	gameTimeStart();
-//#ifdef WIN32
+//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.

@@ -629,7 +629,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 
 		if(GetGameMode() == GS_NORMAL) 
 		{
-#ifdef WIN32
+#ifndef PSX
 			psStats->pMuzzleGraphic = (iIMDShape *) resGetData("IMD", muzzleGfx);
 			if (psStats->pMuzzleGraphic == NULL)
 			{
@@ -1898,7 +1898,7 @@ BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
         //check its not 0 since we will be dividing by it at a later stage
         if (psStats->time == 0)
         {
-#ifdef WIN32
+#ifndef PSX
             ASSERT((FALSE, "loadRepairStats: the delay time cannot be zero for %s", 
                 psStats->pName));
 #else
@@ -2537,7 +2537,7 @@ BOOL loadBodyPropulsionIMDs(SBYTE *pData, UDWORD bufferSize)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 static BOOL
 statsGetAudioIDFromString( STRING *szStatName, STRING *szWavName, SDWORD *piWavID )
 {
@@ -2577,7 +2577,7 @@ BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	SDWORD			NumRecords = 0, i, weaponSoundID, explosionSoundID, inc, iDum;
 	STRING			WeaponName[MAX_NAME_SIZE];
-#ifdef WIN32
+#ifndef PSX
 	STRING			szWeaponWav[MAX_NAME_SIZE],	szExplosionWav[MAX_NAME_SIZE];
 #endif
 
@@ -2593,7 +2593,7 @@ BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
 	for (i=0; i < NumRecords; i++)
 	{
 		WeaponName[0]     = '\0';
-#ifdef WIN32	// Ladidadidah weapon id's as strings :(
+#ifndef PSX	// Ladidadidah weapon id's as strings :(
 		szWeaponWav[0]    = '\0';
 		szExplosionWav[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
@@ -2753,7 +2753,7 @@ BOOL loadPropulsionSounds(SBYTE *pPropSoundData, UDWORD bufferSize)
 
 	for (i=0; i < NumRecords; i++)
 	{
-#ifdef WIN32
+#ifndef PSX
 		propulsionName[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pPropSoundData,"%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%d",

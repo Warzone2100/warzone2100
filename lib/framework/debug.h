@@ -85,7 +85,7 @@
 #include <stdarg.h>
 #include "types.h"
 
-#ifdef WIN32
+#ifndef PSX
 /* Include the mono printing stuff */
 #include "mono.h"
 #else
@@ -160,7 +160,7 @@ extern char DBGstring[256];
  * to be used :
  *		DBPRINTF(("Example output string with a variable: %d\n", Variable));
  */
-#ifdef WIN32
+#ifndef PSX
 #define DBPRINTF(x)				dbg_printf x
 #else
 /*#define DBPRINTF(x) \
@@ -252,7 +252,7 @@ extern char DBGstring[256];
  * Mono monitor output macros
  *
  */
-#if defined(WIN32) && defined(MONODEBUG)
+#if !defined(PSX) && defined(MONODEBUG)
 
 /*
  *
@@ -438,7 +438,7 @@ extern char DBGstring[256];
 #else
 
 /* No Debugging output required */
-#ifdef WIN32
+#ifndef PSX
 #define DBPRINTF(x)
 #else	// currently we want DBPRINTF to work on the PSX even on release build
 #define DBPRINTF(x) printf x;

@@ -60,7 +60,7 @@ static char *_imd_get_path(char *filename, char *path);
 iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath, UBYTE *PCXpath,iBool palkeep);
 BOOL CheckColourKey( iIMDShape *psShape );
 
-#ifdef PSX
+#ifndef WIN32
 // convert a string to lower case... by Tim ... dedicated to JS ... with love
 void strlwr(char *String)
 {
@@ -580,7 +580,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 		}
 #endif	// psx/pc TEXTURE command
 
-#ifdef WIN32
+#ifndef PSX
 #ifndef PIETOOL		// The BSP tool should not reduce the texture page name down (please)
 		// Super scrummy hack to reduce texture page names down to the page id
 		if (bTextured)
@@ -661,7 +661,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 	// load texture page if specified
 	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX) )
 	{
-#ifdef WIN32
+#ifndef PSX
 		bColourKey = TRUE;// CheckColourKey( s );//TRUE not the only imd using this texture
 #endif
 		if(bTextured)
@@ -818,7 +818,7 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 
 				
 				IMDTexAnims++;
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				if ((poly->pTexAnim = (iTexAnim *)iV_HeapAlloc(sizeof(iTexAnim))) == NULL)
 				{
 					iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)",i);
@@ -836,7 +836,7 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 					return FALSE;
 				}
 
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				ASSERT( (tWidth>0, "_imd_load_polys: texture width = %i", tWidth) );
 				ASSERT( (tHeight>0, "_imd_load_polys: texture height = %i", tHeight) );
 
@@ -857,7 +857,7 @@ static iBool _imd_load_polys(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *
 			}
 			else
 			{
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				poly->pTexAnim = NULL;	
 #endif
 			}

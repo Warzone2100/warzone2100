@@ -17,7 +17,7 @@
 #include "structure.h"
 
 #include "visibility.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #include "advvis.h"
 #endif
@@ -197,7 +197,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Not true visibility - done on sensor range */
 
 	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
-#ifdef WIN32
+#ifndef PSX
 		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
 #endif
 		dist = 1;
@@ -224,7 +224,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	
 		// new - ask Alex M
 	/* Not true visibility - done on sensor range */
-#ifdef WIN32
+#ifndef PSX
 		if(getRevealStatus())
 		{
 			if( ((UDWORD)rayPlayer == selectedPlayer) OR
@@ -258,7 +258,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 			"rayLOSCallback: coords off map"));
 
 /*	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
-#ifdef WIN32
+#ifndef PSX
 		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
 #endif
 		dist = 1;
@@ -754,7 +754,7 @@ found:
 }*/
 
 
-//#ifdef WIN32
+//#ifndef PSX
 //
 //void processVisibility(BASE_OBJECT *psObj)
 //{
@@ -1180,7 +1180,7 @@ MAPTILE		*psTile;
 	{
 		for (j = 0; j < breadth; j++)
 		{
-#ifdef WIN32
+#ifndef PSX
 			/* Slow fade up */
 			if(getRevealStatus())
 			{

@@ -158,7 +158,7 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	}
 */
 
-//#ifdef WIN32 // Must have to do this on PSX as well?
+//#ifndef PSX // Must have to do this on PSX as well?
 /*  This god awful hack RIP - John 15.2.99
 	if(TILE_HAS_FEATURE(psTile))
 	{

@@ -23,7 +23,7 @@
 #include "bspfunc.h"
 #include "e3demo.h"	// on the psx?
 #include "loop.h"
-#ifdef WIN32					
+#ifndef PSX					
 #include "atmos.h"
 #include "raycast.h"
 #include "levels.h"
@@ -81,14 +81,14 @@
 #include "combat.h"
 #include "order.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "scores.h"
 #endif
 #ifdef ARROWS
 #include "arrow.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 
 #include "environ.h"
@@ -459,7 +459,7 @@ BOOL		bPlayerHasHQ = FALSE;
 
 	bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if(radarOnScreen AND (bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) ))
 //#else
 	if(radarOnScreen AND bPlayerHasHQ)
@@ -1017,7 +1017,7 @@ void drawTiles(iView *camera, iView *player)
 	}
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	processEffects();
-#ifdef WIN32
+#ifndef PSX
 	atmosUpdateSystem();
 	if(waterOnMap())
 	{
@@ -1089,7 +1089,7 @@ void drawTiles(iView *camera, iView *player)
 	display3DProjectiles();//bucket render implemented
 
 	drawEffects();
-#ifdef WIN32
+#ifndef PSX
 	atmosDrawParticles();
 #endif
 #ifdef BUCKET
@@ -1168,7 +1168,7 @@ BOOL	init3DView(void)
 	/* Initialise the effects system */
   //	initEffectsSystem();
 
-#ifdef WIN32
+#ifndef PSX
 	atmosInitSystem();
 #endif
 
@@ -1597,7 +1597,7 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 			brightness = pie_MAX_BRIGHT_LEVEL;
 		}
 
-#ifdef WIN32
+#ifndef PSX
 		if(getRevealStatus() && !godMode)
 		{
 			brightness = avGetObjLightLevel((BASE_OBJECT*)psParentObj,brightness);
@@ -1890,7 +1890,7 @@ void displayStaticObjects( void )
 								pFunctionality)->active)
 							{
 								displayAnimation( psAnimObj, FALSE );
-#ifdef WIN32
+#ifndef PSX
 								if(selectedPlayer == psStructure->player)
 								{
 									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
@@ -1901,7 +1901,7 @@ void displayStaticObjects( void )
 							{
 								/* hold anim on first frame */
 								displayAnimation( psAnimObj, TRUE );
-#ifdef WIN32
+#ifndef PSX
 								audio_StopObjTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
 #endif
 							}
@@ -2240,7 +2240,7 @@ BOOL		bForceDraw;
 		}
 
 
-#ifdef WIN32
+#ifndef PSX
 		if(godMode OR demoGetStatus() OR bForceDraw)
 		{
 			brightness = 200;
@@ -2439,7 +2439,7 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 
 	// -------------------------------------------------------------------------------
 	/* Power stations and factories have pulsing lights  */
-#ifdef WIN32	// not on the playstation they dont
+#ifndef PSX	// not on the playstation they dont
 	if(psStructure->sDisplay.imd->numFrames > 0)
 	{
         /*OK, so we've got a hack for a new structure - its a 2x2 wall but 
@@ -2524,7 +2524,7 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 			buildingBrightness = 200+brightVar;
 		}
 		
-#ifdef WIN32
+#ifndef PSX
 		if(godMode OR demoGetStatus())
 		{
 			buildingBrightness = buildingBrightness;
@@ -2885,7 +2885,7 @@ SDWORD			brightVar;
 
 			buildingBrightness = 200 + brightVar;
 		}
-#ifdef WIN32
+#ifndef PSX
 		if(godMode OR demoGetStatus())
 		{
 			buildingBrightness = buildingBrightness;
@@ -3206,7 +3206,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 			buildingBrightness = 200 + brightVar;
 		}
 
-	#ifdef WIN32
+	#ifndef PSX
 		if(godMode OR demoGetStatus())
 		{
 			/* NOP */

@@ -5,7 +5,7 @@
  * Lex file for parsing string resource files
  */
 
-#ifdef WIN32
+#ifndef PSX
 #include <stdio.h>
 #else
 /* A few definitions so the lex generated code will compile on the PSX.

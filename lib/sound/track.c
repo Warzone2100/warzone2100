@@ -180,7 +180,7 @@ sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack, SDWORD iVol,
 		psTrack->iTimeLastFinished = 0;
 		psTrack->iNumPlaying       = 0;
 
-#ifdef WIN32
+#ifndef PSX
 		VagID;
 #else
 		psTrack->VAGid=VagID;	// set the vag id for the playstation
@@ -226,7 +226,7 @@ sound_AddTrack( TRACK *pTrack )
 void *
 sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 {
-#ifdef WIN32
+#ifndef PSX
 	TRACK *	pTrack;
 
 	/* allocate track */
@@ -277,7 +277,7 @@ sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 BOOL
 sound_LoadTrackFromFile( char szFileName[] )
 {
-#ifdef WIN32
+#ifndef PSX
 	TRACK *	pTrack;
 
 	/* allocate track */
@@ -462,7 +462,7 @@ sound_GetTrackName( SDWORD iTrack )
 {
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
-#ifdef WIN32
+#ifndef PSX
 	return g_apTrack[iTrack]->pName;
 #else
 	DBERROR(("sound_GetTrackName: not valid on PSX"));
@@ -477,7 +477,7 @@ sound_GetTrackHashName( SDWORD iTrack )
 {
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
-#ifdef WIN32
+#ifndef PSX
 	return g_apTrack[iTrack]->resID;
 #else
 	DBERROR(("sound_GetTrackHashName: not valid on PSX"));

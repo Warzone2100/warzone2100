@@ -18,7 +18,7 @@
 #include "message.h"
 #include "researchdef.h"
 #include "audio.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 #include "text.h"
@@ -379,7 +379,7 @@ BOOL scrGroupObjGet(UDWORD index)
 	return TRUE;
 }
 
-#ifdef WIN32
+#ifndef PSX
 // get the name from a stat pointer
 STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
 {

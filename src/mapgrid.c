@@ -223,7 +223,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 {
     gridCalcCoverage(psObj, (SDWORD)psObj->x, (SDWORD)psObj->y, GRID_REMOVEOBJECT);
 
-#if defined(DEBUG) && defined(WIN32)
+#if defined(DEBUG) && !defined(PSX)
 	{
 		GRID_ARRAY		*psCurr;
 		SDWORD			i,x,y;

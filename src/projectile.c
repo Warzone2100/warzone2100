@@ -32,7 +32,7 @@
 #include "piematrix.h"
 
 #include "scores.h"
-#ifdef WIN32
+#ifndef PSX
 #include "display3d.h"
 #include "display.h"
 #include "multiplay.h"
@@ -46,7 +46,7 @@
  * Table of nearest primes in Binstock+Rex, "Practical Algorithms" p 91.
  */
 
-#ifdef WIN32
+#ifndef PSX
 #define	PROJ_HASH_TABLE_SIZE	97
 #define PROJ_INIT				200
 #else
@@ -91,7 +91,7 @@ static void	proj_MachineGunInFlightFunc( PROJ_OBJECT *psObj );
 
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 									FIRE_BOX *pFireBox );
-#ifdef WIN32
+#ifndef PSX
 static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass);
 #else
 static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass);
@@ -224,7 +224,7 @@ void proj_UpdateKills(PROJ_OBJECT *psObj)
 		return;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{	
 		sendDestroyExtra(psObj->psDest,psObj->psSource);
@@ -378,7 +378,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	/* roll never set */
 	psObj->roll = 0;
 
-#ifdef WIN32
+#ifndef PSX
 	fR = (FRACT_D) atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
@@ -397,7 +397,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	if ( proj_Direct(psObj->psWStats) ||
 		 (!proj_Direct(psWeapStats) && (iRadSq <= iMinSq)) )
 	{
-#ifdef WIN32
+#ifndef PSX
 		fR = (FRACT_D) atan2(dz, fR);
 		if ( fR < 0.0 )
 		{
@@ -456,7 +456,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			/* get floating point square root */
 			fS = trigIntSqrt( MAKEINT_D(fS) );
 
-#ifdef WIN32
+#ifndef PSX
 			fT = (FRACT_D) atan2(fR+fS, 2*fA);
 			/* make sure angle positive */
 			if ( fT < 0 )
@@ -535,7 +535,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 
 		if ( psObj->psWStats->iAudioFireID != NO_SOUND )
 		{
-#ifdef WIN32
+#ifndef PSX
             if (psObj->psSource)
             {
 				/* firing sound emitted from source */
@@ -642,7 +642,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 	*/
 
-#ifdef WIN32			// ffs 
+#ifndef PSX			// ffs 
 //	rad = fastRoot(dx,dy);
 	rad = (SDWORD)iSQRT( dx*dx + dy*dy );
 #else
@@ -796,7 +796,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	dx = (SDWORD)psObj->tarX-(SDWORD)psObj->startX;
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 
-#ifdef WIN32			// ffs 
+#ifndef PSX			// ffs 
 	iRad = fastRoot(dx,dy);
 #else
 	iRad = iSQRT( dx*dx + dy*dy );
@@ -829,7 +829,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 
 //DBPRINTF(("missile: dist=%d time=%d x=%d y=%d z=%d vxy=%d\n",iDist,iTime,psObj->x,psObj->y,psObj->z,psObj->vXY);
 
-#ifdef WIN32
+#ifndef PSX
 	fVVert = MAKEFRACT(psObj->vZ - (iTime*ACC_GRAVITY/GAME_TICKS_PER_SEC));
 	psObj->pitch = (SWORD)( RAD_TO_DEG(atan2(fVVert, psObj->vXY)) );
 #else
@@ -967,7 +967,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		{
 
 	// ID_SOUND_RICOCHET_1 is -1 on PSX so code below must be PC only.
-	#ifdef WIN32
+	#ifndef PSX
 			/* play richochet if MG */
 			if ( psObj->psDest != NULL && psObj->psWStats->weaponSubClass == WSC_MGUN
 					&& ONEINTHREE )
@@ -1069,7 +1069,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			}
 		}
 		else
-#ifdef WIN32		// No water hit effects on PSX for now.
+#ifndef PSX		// No water hit effects on PSX for now.
 		if(TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER)
 		{
 			if(psStats->facePlayer)
@@ -1163,7 +1163,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			{
 				/* Just assume a direct fire weapon hits the target */
 				
-	#ifdef WIN32
+	#ifndef PSX
 				damage = calcDamage(weaponDamage(psStats,psObj->player), psStats->weaponEffect, psObj->psDest);
 				if(bMultiPlayer)
 				{
@@ -1182,7 +1182,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				DBP1(("Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player));
 				/*the damage depends on the weapon effect and the target propulsion type or structure strength*/
-#ifdef WIN32			
+#ifndef PSX			
 	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass);
 #else
 			bKilled = objectDamage(psObj->psDest, calcDamage(
@@ -1191,7 +1191,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 #endif
 	
-	//#ifdef WIN32
+	//#ifndef PSX
 	//			if(bMultiTemp) 
 	//			{
 	//				bMultiPlayer = TRUE;
@@ -1226,7 +1226,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				((SDWORD)psObj->psDest->y >= (SDWORD)psObj->y - TILE_UNITS) &&
 				((SDWORD)psObj->psDest->y <= (SDWORD)psObj->y + TILE_UNITS)))
 			{
-#ifdef WIN32
+#ifndef PSX
 				damage = calcDamage(weaponDamage(
 							psStats, psObj->player),
 							psStats->weaponEffect, psObj->psDest);
@@ -1256,7 +1256,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 					//psStats->damage, psStats->weaponEffect, psObj->psDest),
 					weaponDamage(psStats,psObj->player), psStats->
 					weaponEffect, psObj->psDest), psStats->weaponClass);*/
-#ifdef WIN32
+#ifndef PSX
 				bKilled = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass);
 #else
 		bKilled = objectDamage(psObj->psDest, calcDamage(
@@ -1264,7 +1264,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 					weaponEffect, psObj->psDest), psStats->weaponClass);
 
 #endif
-//#ifdef WIN32
+//#ifndef PSX
 //				if(bMultiTemp)
 //				{
 //					bMultiPlayer = TRUE;
@@ -1292,7 +1292,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;//jps
 		scatter.x = psStats->radius; scatter.y = 0;	scatter.z = psStats->radius;
 
-#ifdef WIN32		// No water hit effects on PSX for now.
+#ifndef PSX		// No water hit effects on PSX for now.
 		if(TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER)
 		{
 			if(psStats->facePlayer)
@@ -1390,7 +1390,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						{
 							DBP1(("Damage to object %d, player %d\n",
 									psCurrD->id, psCurrD->player));
-#ifdef WIN32
+#ifndef PSX
 							damage = calcDamage(
 										weaponRadDamage(psStats, psObj->player), 
 										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
@@ -1411,7 +1411,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								weaponRadDamage(psStats,psObj->player), 
 								psStats->weaponEffect, 
 								(BASE_OBJECT *)psCurrD), psStats->weaponClass);*/
-#ifdef WIN32
+#ifndef PSX
 							bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass);
 #else
 					bKilled = droidDamage(psCurrD, calcDamage(
@@ -1456,7 +1456,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						   	psStats, psObj->player), 
 										psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
 
-#ifdef WIN32
+#ifndef PSX
 							if(bMultiPlayer)
 							{
 								if(psObj->psSource && myResponsibility(psObj->psSource->player))
@@ -1479,7 +1479,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				else if(ptInStructure(psCurrS,psObj->x,psObj->y) AND (BASE_OBJECT*)psCurrS!=psObj->psDest)
 				{
 					damage = NOMINAL_DAMAGE;
-#ifdef WIN32
+#ifndef PSX
 				  	if(bMultiPlayer)
 					{
 				   		if(psObj->psSource && myResponsibility(psObj->psSource->player))
@@ -1732,7 +1732,7 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 						DBP1(("Burn damage of %d to object %d, player %d\n",
 								damageToDo, psCurr->id, psCurr->player));
 
-//#ifdef WIN32
+//#ifndef PSX
 //						if(bMultiPlayer)
 //						{
 //							bMultiPlayer = FALSE;
@@ -1745,7 +1745,7 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 //#endif
 						
 						//bKilled = psCurr->damage(psCurr, damageToDo, psStats->weaponClass);
-#ifdef WIN32
+#ifndef PSX
 	  					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass);
 #else
 					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass);
@@ -1753,7 +1753,7 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 #endif
 						psCurr->burnDamage += damageToDo;
 
-//#ifdef WIN32
+//#ifndef PSX
 //						if(bMultiTemp)
 //						{
 //							bMultiPlayer = TRUE;
@@ -1808,7 +1808,7 @@ SDWORD proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz)
 	return (SDWORD)psStats->longRange;
 }
 
-#ifdef PSX
+#ifndef WIN32
 #define max(a,b) ((a)>(b)) ? (a) :(b)
 #endif
 
@@ -1922,7 +1922,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 	return damage;
 }
 
-#ifdef WIN32
+#ifndef PSX
 BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass)
 {
 	switch (psObj->type)
@@ -1963,7 +1963,7 @@ BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass)
 
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #define HIT_THRESHOLD	(GAME_TICKS_PER_SEC/6)	// got to be over 5 frames per sec.
 /* Returns true if an object has just been hit by an electronic warfare weapon*/
 BOOL	justBeenHitByEW( BASE_OBJECT *psObj )

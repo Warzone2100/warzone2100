@@ -91,7 +91,7 @@ extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect,
 extern BOOL gfxVisible(PROJ_OBJECT *psObj);	
 
 /***************************************************************************/
-#ifdef WIN32
+#ifndef PSX
 extern BOOL	justBeenHitByEW		( BASE_OBJECT *psObj );
 extern void	objectShimmy	( BASE_OBJECT *psObj );
 

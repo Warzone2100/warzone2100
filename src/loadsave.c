@@ -1,4 +1,4 @@
-#ifdef WIN32
+#ifndef PSX
 /*
  * loadsave.c
  * load and save Popup screens.
@@ -12,7 +12,7 @@
 #include "rendmode.h"		// for boxfill
 #include "hci.h"
 #include "loadsave.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #include "game.h"
 #include "audio_id.h"
@@ -42,7 +42,7 @@ extern CURSORSNAP InterfaceSnap;
 
 #define MAX_SAVE_NAME			60
 
-#ifdef WIN32
+#ifndef PSX
 #define LOADSAVE_HGAP			5
 #define LOADSAVE_VGAP			5
 #define LOADSAVE_BANNER_DEPTH	25
@@ -170,14 +170,14 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	static STRING	sSlots[10][64];
 	STRING			sTemp[255];
 
-#ifdef WIN32
+#ifndef PSX
 	WIN32_FIND_DATA	found;	
 	HANDLE			dir;
 #endif
 	
 	mode = bLoad;
 
-#ifdef WIN32
+#ifndef PSX
 	if(GetCurrentDirectory(255,(char*)&sTemp) == 0)
 	{
 		return FALSE;										// failed, directory probably didn't exist.
@@ -271,7 +271,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 
 	// add cancel.
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
-#ifdef WIN32
+#ifndef PSX
 	sButInit.formID = LOADSAVE_BANNER;
 	sButInit.x = 4;
 	sButInit.y = 3;
@@ -417,7 +417,7 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
+#ifndef PSX
 void deleteSaveGame(char* saveGameName)
 {
 	CHAR			sTemp2[MAX_STR_LENGTH],	sToDel[MAX_STR_LENGTH];
@@ -724,7 +724,7 @@ static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 		col = COL_RED;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	iV_BoxFill(x,y,x+psWidget->width,y+psWidget->height,col);
 	iV_BoxFill(x+2,y+2,x+psWidget->width-2,y+psWidget->height-2,COL_BLUE);
 #else
@@ -751,7 +751,7 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()+1);
 	}
 #endif
-#ifdef WIN32
+#ifndef PSX
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 #endif
 	if(((W_BUTTON *)psWidget)->pTip )
@@ -788,7 +788,7 @@ static void displayLoadSaveEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD
 	UDWORD  h = psWidget->height;
 	UNUSEDPARAMETER(pColours);
 
-#ifdef WIN32
+#ifndef PSX
 	iV_BoxFill(x,y,x+w,y+h,COL_RED);
 	iV_BoxFill(x+1,y+1,x+w-1,y+h-1,COL_BLUE);
 #else

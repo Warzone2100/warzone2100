@@ -26,7 +26,7 @@
 #include "lighting.h"
 // end of chnage - alex
 #include "game.h"
-#ifdef WIN32
+#ifndef PSX
 #include "environ.h"
 #include "advvis.h"
 #endif
@@ -58,7 +58,7 @@ typedef struct _map_save_header
 	UDWORD		height;
 } MAP_SAVEHEADER;
 
-#ifdef WIN32
+#ifndef PSX
 #define SAVE_MAP_V2 \
 	UWORD		texture; \
 	UBYTE		height
@@ -115,7 +115,7 @@ typedef struct _zonemap_save_header {
 //
 // - I couldn't bring myself to rewrite John's execellent fixed/floating point code
 //
-#ifdef WIN32
+#ifndef PSX
 typedef float AAFLOAT;
 #elif defined(PSX)
 typedef SDWORD AAFLOAT;
@@ -129,7 +129,7 @@ typedef SDWORD AAFLOAT;
 #define SAVE_TILE_SIZEV2	3
 
 /* Floating point constants for aaLine */
-#ifdef WIN32
+#ifndef PSX
 /* Windows fpu version */
 #define AA_ZERO				0.0F
 #define AA_ONE				1.0F
@@ -215,13 +215,13 @@ static int orth_pixinc[4];
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
 
-#ifdef WIN32
+#ifndef PSX
 #define GETTILE_TEXTURE(tile) (tile->texture)
 #else
 #define GETTILE_TEXTURE(tile) (GetDword(&tile->texture))
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #define GETTILE_TEXTURE2(tile) (tile->texture)
 #else
 #define GETTILE_TEXTURE2(tile) (GetWord(&tile->texture))
@@ -338,7 +338,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		psTile++;
 	}
 	*/
-#ifdef WIN32
+#ifndef PSX
 	//environInit();
     environReset();
 #else
@@ -408,7 +408,7 @@ BOOL mapLoadV2(UBYTE *pFileData, UDWORD fileSize)
 	psTileData = (MAP_SAVETILEV2 *)(pFileData + SAVE_HEADER_SIZE);
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
-#ifdef WIN32
+#ifndef PSX
 		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);  
 #else
 		{
@@ -467,7 +467,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 	psTileData = (MAP_SAVETILEV2 *)(pFileData + SAVE_HEADER_SIZE);
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
-#ifdef WIN32
+#ifndef PSX
 		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);  
 #else
 		{
@@ -509,7 +509,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 		psGate++;
 	}
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if (!gwProcessMap())
 //	{
 //		return FALSE;
@@ -603,7 +603,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 
-#if defined(DEBUG) && defined(WIN32)
+#if defined(DEBUG) && !defined(PSX)
 	gwCheckZoneSizes();
 #endif
 
@@ -784,7 +784,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 	pLoadMapFunc(pFileData, fileSize);
 
 //	mapPixTblInit();
-#ifdef WIN32
+#ifndef PSX
   	//environInit();
     environReset();
 #else
@@ -864,7 +864,7 @@ BOOL mapSave(UBYTE **ppFileData, UDWORD *pFileSize)
 	psTile = psMapTiles;
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
-#ifdef WIN32
+#ifndef PSX
 		// don't save the noblock flag as it gets set again when the objects are loaded
 		psTileData->texture = (UWORD)(psTile->texture & (UWORD)~TILE_NOTBLOCKING);
 #else
@@ -988,7 +988,7 @@ BOOL mapSaveMission(UBYTE **ppFileData, UDWORD *pFileSize)
 	psTile = psMapTiles;
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
-#ifdef WIN32
+#ifndef PSX
 		psTileData->texture = psTile->texture;
 #else
 		{
@@ -1451,7 +1451,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	ox = (x & (TILE_UNITS-1));
 	oy = (y & (TILE_UNITS-1));
 
-#ifdef WIN32
+#ifndef PSX
 	if(TERRAIN_TYPE(mapTile(tileX,tileY)) == TER_WATER)
 	{
 		bWaterTile = TRUE;
@@ -1648,7 +1648,7 @@ UDWORD GetHeightOfMap(void)
 	return mapHeight;
 }
 
-#ifdef WIN32
+#ifndef PSX
 // -----------------------------------------------------------------------------------
 /* This will save out the visibility data */
 BOOL	writeVisibilityData( STRING *pFileName )

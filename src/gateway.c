@@ -382,7 +382,7 @@ static void gwCalcZoneCenter(SDWORD zone, SDWORD *px, SDWORD *py)
 }
 
 // check all the zones are of reasonable sizes
-#ifdef WIN32
+#ifndef PSX
 void gwCheckZoneSizes(void)
 {
 	SDWORD		zone, xsum,ysum, numtiles, inzone;
@@ -856,7 +856,7 @@ BOOL gwLinkGateways(void)
 						psLink->x1,psLink->y1, psLink->x2,psLink->y2));
 					psCurr->psLinks[link].psGateway = psLink;
 					psCurr->psLinks[link].flags = 0;
-#ifdef WIN32
+#ifndef PSX
 					psCurr->psLinks[link].dist = (SWORD)gwRouteLength(psCurr, psLink);
 #else
 					x = (psLink->x1 + psLink->x2)/2;

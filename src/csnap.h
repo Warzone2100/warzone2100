@@ -69,7 +69,7 @@ void SnapToID(CURSORSNAP *SnapBuffer,UWORD snp);
 
 void SnapCursorTo(UWORD x,UWORD y);
 
-#ifdef WIN32
+#ifndef PSX
 extern void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y);
 #endif
 

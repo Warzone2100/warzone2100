@@ -72,7 +72,7 @@ static allowNewMessages;
 /* What's the default justification */
 static CONSOLE_TEXT_JUSTIFICATION	defJustification;
 
-#ifdef WIN32
+#ifndef PSX
 static UDWORD	messageId;	// unique ID
 #endif
 
@@ -208,7 +208,7 @@ CONSOLE_MESSAGE	*psMessage;
 	/* Is the string too long? */
 	textLength = strlen(messageText);
 
-#ifdef WIN32
+#ifndef PSX
 	ASSERT(( textLength<MAX_CONSOLE_STRING_LENGTH,
 		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH"));
 #else
@@ -257,7 +257,7 @@ CONSOLE_MESSAGE	*psMessage;
 	/* This is the present newest message */
 	consoleStorage[messageIndex].psNext = NULL;
 
-#ifdef WIN32
+#ifndef PSX
 	consoleStorage[messageIndex].id = 0;
 #endif
 
@@ -355,7 +355,7 @@ void	updateConsoleMessages( void )
 	/* Time to kill the top one ?*/
 	if(gameTime2 - consoleMessages->timeAdded > messageDuration)
 	{
-#ifdef WIN32
+#ifndef PSX
 		consoleMessages->id = messageId++;
 #endif
 		/* Is this the only message? */
@@ -414,7 +414,7 @@ void	flushConsoleMessages( void )
 {
 	consoleMessages = NULL;
 	numActiveMessages = 0;
-#ifdef WIN32
+#ifndef PSX
 	messageId = 0;
 #endif
 }
@@ -450,13 +450,13 @@ UDWORD	exceed;
 	/* Get the travel to the next line */
 	linePitch = iV_GetTextLineSize();
 
-#ifdef WIN32
+#ifndef PSX
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
 #endif
 	iV_SetTextColour(-1);
 
-#ifdef WIN32
+#ifndef PSX
 	drop = 0;
 	if(bConsoleDropped)
 	{
@@ -469,7 +469,7 @@ UDWORD	exceed;
 	}
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	/* Do we want a box under it? */
 	if(bTextBoxActive)
 	{
@@ -559,7 +559,7 @@ UDWORD	exceed;
 #endif
 }
 
-#ifdef WIN32
+#ifndef PSX
 /* Do up to the last 8 messages.... Returns how many it did... */
 UDWORD	displayOldMessages( void )
 {
@@ -756,7 +756,7 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 	mainConsole.width = width;
 
 	/* Should be done below */
-#ifdef WIN32
+#ifndef PSX
 	mainConsole.textDepth = 8;
 #else
 	mainConsole.textDepth = iV_GetTextLineSize();

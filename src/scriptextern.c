@@ -12,7 +12,7 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
@@ -31,7 +31,7 @@ BOOL		bInTutorial = FALSE;
 BOOL		bExtraVictoryFlag = FALSE;
 BOOL		bExtraFailFlag = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
 
 // whether or not to track the player's transporter as it comes
 // into an offworld mission.
@@ -129,7 +129,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 
 
-#ifdef WIN32
+#ifndef PSX
 	case EXTID_MULTIGAMETYPE:		// multiplayer variable..
 		type = VAL_INT;
 		val = game.type;

@@ -9,7 +9,7 @@
 #include "objects.h"
 #include "group.h"
 #include "orderdef.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 // sizes for the group heap
@@ -275,7 +275,7 @@ void grpReset(DROID_GROUP *psGroup)
 //	ASSERT((PTRVALID(psGroup, sizeof(DROID_GROUP)),
 //		"orderGroupBase: invalid droid group"));
 //
-//#ifdef WIN32
+//#ifndef PSX
 //	if (bMultiPlayer && SendGroupOrder(	psGroup, psData->x,	psData->y,	psData->psObj) )
 //	{	// turn off multiplay messages,since we've send a group one instead.
 //		bMultiPlayer =FALSE;
@@ -288,7 +288,7 @@ void grpReset(DROID_GROUP *psGroup)
 //		orderDroidBase(psCurr, psData);
 //	}
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if( usedgrouporder)
 //	{
 //		bMultiPlayer = TRUE;

@@ -12,7 +12,7 @@
 #define	RADBRX		(RADTLX + RADWIDTH)	-1
 #define	RADBRY		(RADTLY + RADHEIGHT) -1
 //assigned to variable visibleXtiles, visibleYTiles 25/02/98 AB
-#ifdef WIN32
+#ifndef PSX
 #define VISIBLE_XTILES	32	
 #define VISIBLE_YTILES	32
 

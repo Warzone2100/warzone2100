@@ -7,7 +7,7 @@
 #define _raycast_h
 
 #define NUM_RAYS		360
-#ifdef WIN32
+#ifndef PSX
 #define RAY_ANGLE		((float)(2*PI/NUM_RAYS))
 #else
 #define RAY_ANGLE		((4096/NUM_RAYS))

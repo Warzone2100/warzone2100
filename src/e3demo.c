@@ -11,7 +11,7 @@
 
 // -------------------------------------------------------------------------
 
-#if defined(WIN32) || defined(E3DEMO)
+#if !defined(PSX) || defined(E3DEMO)
 
 #include "gtime.h"
 #include "objects.h"

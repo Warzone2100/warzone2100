@@ -78,7 +78,7 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
 
-/*#ifdef WIN32	// Extra tile info bits.... WIN32 only
+/*#ifndef PSX	// Extra tile info bits.... WIN32 only
 #define	EXTRA_BITS_SENSOR	0x1
 #define	EXTRA_BITS_2		0x2
 #define	EXTRA_BITS_3		0x4
@@ -107,7 +107,7 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #define TILE_HAS_SMALLSTRUCTURE(x)	(x->tileInfoBits & BITS_SMALLSTRUCTURE)
 
 /*
-#ifdef WIN32		// I've even set them up for you...:-)
+#ifndef PSX		// I've even set them up for you...:-)
 #define TILE_IN_SENSORRANGE(x)	(x->tileExtraBits & EXTRA_BITS_SENSOR)
 #define TILE_EXTRA_BIT2_SET(x)	(x->tileExtraBits & EXTRA_BITS_2)
 #define TILE_EXTRA_BIT3_SET(x)	(x->tileExtraBits & EXTRA_BITS_3)
@@ -134,7 +134,7 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #define CLEAR_TILE_SMALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_SMALLSTRUCTURE)))
 
 /*
-#ifdef WIN32	// again, done for you again!
+#ifndef PSX	// again, done for you again!
 #define SET_TILE_SENSOR(x)	(x->tileExtraBits = (UBYTE)((x)->tileExtraBits | EXTRA_BITS_SENSOR))
 #define CLEAR_TILE_SENSOR(x)	(x->tileExtraBits = (UBYTE)((x)->tileExtraBits & (~EXTRA_BITS_SENSOR)))
 #define SET_TILE_BIT2(x)	(x->tileExtraBits = (UBYTE)((x)->tileExtraBits | EXTRA_BITS_2))
@@ -168,7 +168,7 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 /* Set a tile to be visible for a player */
 #define SET_TILE_VISIBLE(p,t) t->tileVisBits = (UBYTE)(t->tileVisBits | (1<<p))
 
-/*#ifdef WIN32
+/*#ifndef PSX
 #define SET_TILE_DOOR(p,t) t->tileDoorBits = (UBYTE) (t->tileDoorBits | (1<<p))
 #define CLEAR_TILE_DOOR(p,t) t->tileDoorBits = (UBYTE) (t->tileDoorBits & (~(1<<p))) // check logic
 // Is there a door here for the player?
@@ -176,7 +176,7 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #endif*/
 /* Arbitrary maximum number of terrain textures - used in look up table for terrain type */
 
-#ifdef WIN32
+#ifndef PSX
 #define MAX_TILE_TEXTURES	255
 #else
 #define MAX_TILE_TEXTURES	81
@@ -193,17 +193,17 @@ typedef struct _maptile
 {
 
 	UBYTE			tileInfoBits;
-/*#ifdef WIN32
+/*#ifndef PSX
 	UBYTE			tileExtraBits;	// We've got more than you... We've got more than you..;-)
 #endif*/
 	UBYTE			tileVisBits;	// COMPRESSED - bit per player
-/*#ifdef WIN32
+/*#ifndef PSX
 	UBYTE			tileDoorBits;   // same thing - bit per player
 #endif*/
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
-#ifdef WIN32
+#ifndef PSX
 	UBYTE			bMaxed;
 	UBYTE			level;
 
@@ -223,7 +223,7 @@ typedef struct _maptile
 
 
 /* The maximum map size */
-#ifdef WIN32
+#ifndef PSX
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 #define MAP_MAXAREA		(256*256)
@@ -284,7 +284,7 @@ extern void mapSaveTexture(void);
 extern void	mapWaterProcess( void );
 
 
-#ifdef WIN32
+#ifndef PSX
 #define FUNCINLINE _inline
 #else
 
@@ -301,7 +301,7 @@ extern void	mapWaterProcess( void );
 /* Return a pointer to the tile structure at x,y */
 FUNCINLINE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
-#ifdef WIN32
+#ifndef PSX
 	ASSERT((x < mapWidth,
 		"mapTile: x coordinate bigger than map width"));
 	ASSERT((y < mapHeight,
@@ -327,7 +327,7 @@ FUNCINLINE SWORD map_TileHeight(UDWORD x, UDWORD y)
 {
     x = x >= (mapWidth) ? (mapWidth-1) : x;
 	y = y >= (mapHeight) ? (mapHeight-1) : y;
-#ifdef WIN32
+#ifndef PSX
 	ASSERT((x < mapWidth,
 		"mapTile: x coordinate bigger than map width"));
 	ASSERT((y < mapHeight,
@@ -346,7 +346,7 @@ FUNCINLINE SWORD map_TileHeight(UDWORD x, UDWORD y)
 /*sets the tile height */
 FUNCINLINE void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 {
-#ifdef WIN32
+#ifndef PSX
 	ASSERT((x < mapWidth,
 		"mapTile: x coordinate bigger than map width"));
 	ASSERT((y < mapHeight,

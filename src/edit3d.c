@@ -33,7 +33,7 @@ void Edit3DInitVars(void)
 
 
 
-#ifdef WIN32
+#ifndef PSX
 /* Raises a tile by a #defined height */
 void	raiseTile(UDWORD tile3dX, UDWORD tile3dY)
 {

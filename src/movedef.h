@@ -69,7 +69,7 @@ typedef struct _move_control
 	UWORD	iAttackRuns;
 
 	// added for vtol movement
-#ifdef WIN32
+#ifndef PSX
 	FRACT	fz;
 #endif
 

@@ -75,7 +75,7 @@
 #include "console.h"
 #include "loadsave.h"
 #include "wrappers.h"
-#ifdef WIN32
+#ifndef PSX
 #include "seqdisp.h"
 #include "multiplay.h"
 #include "multistat.h"
@@ -258,7 +258,7 @@ BOOL ClosingTransDroids = FALSE;
 BOOL ReticuleUp = FALSE;
 BOOL Refreshing = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
 UBYTE	*DisplayBuffer;
 SDWORD	displayBufferSize;
 #endif
@@ -404,7 +404,7 @@ static STRING	*apPlayerTip[] =
 	"Select Player 1",
 	"Select Player 2",
 	"Select Player 3",
-#ifdef WIN32
+#ifndef PSX
 	"Select Player 4",
 	"Select Player 5",
 	"Select Player 6",
@@ -894,7 +894,7 @@ BOOL intInitialise(void)
 	}
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* Initialise the edit module */
 #ifdef DISP2D
 	if (!ed2dInitialise())
@@ -1009,7 +1009,7 @@ BOOL intInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-#ifdef WIN32
+#ifndef PSX
 	/*Initialise the video playback buffer*/
 	if (!seq_SetupVideoBuffers())
 	{
@@ -1080,7 +1080,7 @@ void intShutDown(void)
 #endif
 //	fontFree(psWFont);
 
-#ifdef WIN32
+#ifndef PSX
 #ifdef DISP2D
 	ed2dShutDown();
 #endif
@@ -1105,7 +1105,7 @@ void intShutDown(void)
 	//release the message buffer
 	releaseMapSurface(pIntelMapSurface);
 
-#ifdef WIN32
+#ifndef PSX
 	//release the video buffers
 	seq_ReleaseVideoBuffers();
 #endif
@@ -1128,7 +1128,7 @@ VOID intRefreshScreen(VOID)
 
 void intSetCurrentCursorPosition(CURSORSNAP *Snap,UDWORD id)
 {
-#ifdef WIN32
+#ifndef PSX
 	UNUSEDPARAMETER(id);
 	UNUSEDPARAMETER(Snap);
 #endif
@@ -1336,7 +1336,7 @@ void intResetScreen(BOOL NoAnim)
 	/* Remove whatever extra screen was displayed */
 	switch (intMode)
 	{
-#ifdef WIN32
+#ifndef PSX
 	case INT_OPTION:
 		intRemoveOptions();
 		break;
@@ -1416,7 +1416,7 @@ void intResetScreen(BOOL NoAnim)
 //		}
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 	case INT_MULTIMENU:
 		if(NoAnim) {
 			intCloseMultiMenuNoAnim();
@@ -1435,7 +1435,7 @@ void intResetScreen(BOOL NoAnim)
 			eventFireCallbackTrigger(CALL_DESIGN_QUIT);
 		}
 
-#ifdef WIN32						// pc
+#ifndef PSX						// pc
 		if(!bMultiPlayer)
 		{
 			gameTimeStart();
@@ -1458,12 +1458,12 @@ void intResetScreen(BOOL NoAnim)
 			intRemoveIntelMap();
 		}
 		intHidePowerBar();
-#ifdef WIN32
+#ifndef PSX
 		if(!bMultiPlayer)
 		{
 #endif
 			gameTimeStart();
-#ifdef WIN32
+#ifndef PSX
 		}
 #endif
 		break;
@@ -1472,12 +1472,12 @@ void intResetScreen(BOOL NoAnim)
 		//remove 3dView
 		intRemoveMessageView();
 
-#ifdef WIN32
+#ifndef PSX
 		if(!bMultiPlayer)
 		{
 #endif
 			gameTimeStart();
-#ifdef WIN32
+#ifndef PSX
 		}
 #endif
 		break;*/
@@ -1493,7 +1493,7 @@ void intResetScreen(BOOL NoAnim)
 		}
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 	case INT_CDCHANGE:
 		cdspan_RemoveChangeCDBox();
 		break;
@@ -1718,7 +1718,7 @@ INT_RETVAL intRunWidgets(void)
 	}
 	objectsChanged = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(TRUE))// check for file name.
@@ -1765,7 +1765,7 @@ INT_RETVAL intRunWidgets(void)
 #endif
 	}
 	
-#ifdef WIN32
+#ifndef PSX
 	/* Run the current set of widgets */
 	if(!bLoadSaveUp)
 	{
@@ -1905,7 +1905,7 @@ INT_RETVAL intRunWidgets(void)
 		intRunOrder();
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(MultiMenuUp)
 	{
 		intRunMultiMenu();
@@ -1976,7 +1976,7 @@ INT_RETVAL intRunWidgets(void)
 		break;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	case IDRET_OPTIONS:
 //19 #ifdef PSX
 //19 		ButType = widgGetUserData2(psWScreen,IDRET_OPTIONS);
@@ -2219,7 +2219,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 		quitting = TRUE;
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 	case ID_WIDG_CDSPAN_BUTTON_CANCEL:		// cd span box cancel
 		cdspan_ProcessCDChange(retID);
 		intResetScreen(FALSE);
@@ -2253,7 +2253,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 	default:
 		switch (intMode)
 		{
-#ifdef WIN32
+#ifndef PSX
 		case INT_OPTION:
 			intProcessOptions(retID);
 			break;
@@ -2285,11 +2285,11 @@ DBPRINTF(("HCI Quit %d\n",retID));
 			break;
 
 		case INT_INGAMEOP:
-#ifdef WIN32
+#ifndef PSX
 			intProcessInGameOptions(retID);
 #endif
 			break;
-#ifdef WIN32
+#ifndef PSX
 		case INT_MULTIMENU:
 			intProcessMultiMenu(retID);
 			break;
@@ -2313,7 +2313,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 		case INT_TRANSPORTER:
 			intProcessTransporter(retID);
 			break;
-#ifdef WIN32
+#ifndef PSX
 		case INT_CDCHANGE:
 			cdspan_ProcessCDChange(retID);
 			break;
@@ -2330,7 +2330,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 
 	if (!quitting && !retID)
 	{
-#ifdef WIN32
+#ifndef PSX
 		if (intMode == INT_EDIT)
 		{
 			/* Including the edit mode here is pretty nasty - but it will get
@@ -2384,7 +2384,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 					}
 				}
 				
-#ifdef WIN32
+#ifndef PSX
 				// put the build menu up again after the structure position has been chosen
 				//or ctrl/shift is down and we're queing the build orders
 #ifdef DISABLE_BUILD_QUEUE
@@ -2457,7 +2457,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 //					DeSelectDroid((DROID*)psObjSelected);
 //				}
 
-#ifdef WIN32
+#ifndef PSX
 				// put the build menu up again after the structure position has been chosen
                 //or ctrl/shift is down and we're queuing the build orders
 #ifdef DISABLE_BUILD_QUEUE
@@ -2564,7 +2564,7 @@ DBPRINTF(("INT_QUIT 1\n"));
 	{
 		retCode = INT_INTELNOSCROLL;
 	}*/
-#ifdef WIN32
+#ifndef PSX
 	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgOverID != 0)
 	{
 		retCode = INT_INTERCEPT;
@@ -2577,7 +2577,7 @@ DBPRINTF(("INT_QUIT 1\n"));
 	}
 #endif
 
-//#ifdef WIN32
+//#ifndef PSX
 //	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgGetMouseOver(psWScreen) != 0)
 //	{
 //		retCode = INT_INTERCEPT;
@@ -2589,7 +2589,7 @@ DBPRINTF(("INT_QUIT 1\n"));
 //	}
 //#endif
 
-#ifdef WIN32
+#ifndef PSX
 	if(	(testPlayerHasLost() OR (testPlayerHasWon() AND !bMultiPlayer)) AND // yeah yeah yeah - I know....
         (intMode != INT_MISSIONRES) AND !getDebugMappingStatus())	
 #else
@@ -2761,7 +2761,7 @@ void intAddEditStructures(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 /* Process return codes from the Options screen */
 static void intProcessOptions(UDWORD id)
 {
@@ -2780,7 +2780,7 @@ static void intProcessOptions(UDWORD id)
 		switch (id)
 		{
 #ifdef EDIT_OPTIONS
-#ifdef WIN32
+#ifndef PSX
 		case IDOPT_MAPLOAD:
 #ifdef DISP2D
 			if (ed2dLoadMapFile())
@@ -3112,7 +3112,7 @@ static void intRunStats(void)
 	STRUCTURE			*psStruct;
 	FACTORY				*psFactory;
 
-#ifdef WIN32 // No looped production on PSX.
+#ifndef PSX // No looped production on PSX.
 	if(intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE) 
 	{
 		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_LOOP_LABEL);
@@ -3468,7 +3468,7 @@ static void intProcessObject(UDWORD id)
 							    {
 								    getPlayerPos((SDWORD*)&asJumpPos[butIndex].x, (SDWORD*)&asJumpPos[butIndex].y);
 
-#ifdef WIN32
+#ifndef PSX
     								setPlayerPos(psObj->x, psObj->y);
 	    							if(getWarCamStatus())
 		    						{
@@ -3486,7 +3486,7 @@ static void intProcessObject(UDWORD id)
 			    				}
 				    			else
 					    		{
-#ifdef WIN32
+#ifndef PSX
 						    		setPlayerPos(asJumpPos[butIndex].x, asJumpPos[butIndex].y);
 							    	if(getWarCamStatus())
 								    {
@@ -3540,7 +3540,7 @@ static void intProcessObject(UDWORD id)
 		{
 			/* Find the object that the stats ID refers to */
 			psObj = intGetObject(id);
-#ifdef WIN32
+#ifndef PSX
 			intResetWindows(psObj);
 #else
 			intResetWindows(psObj);
@@ -3906,7 +3906,7 @@ static void intProcessStats(UDWORD id)
 		}
 	}
 #endif
-#ifdef WIN32 // No looped production on PSX.
+#ifndef PSX // No looped production on PSX.
 	else if(id == IDSTAT_LOOP_BUTTON) 
 	{
 		// Process the loop button.
@@ -4529,7 +4529,7 @@ void intDisplayWidgets(void)
 	/* Including the edit mode here is pretty nasty - but it will get
 	 * ripped out for the final version.
 	 */
-#ifdef WIN32
+#ifndef PSX
 	if (intMode == INT_EDIT)
 	{
 #ifdef DISP2D
@@ -4538,7 +4538,7 @@ void intDisplayWidgets(void)
 	}
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	// God only knows...
 	if(ReticuleUp AND !bInTutorial) {
 		intCheckReticuleButtons();
@@ -4551,14 +4551,14 @@ void intDisplayWidgets(void)
 	/*draw the background for the design screen and the Intelligence screen*/
 	if (intMode == INT_DESIGN OR intMode == INT_INTELMAP)
 	{
-#ifdef WIN32 // When will they ever learn!!!!
+#ifndef PSX // When will they ever learn!!!!
 		if (!bMultiPlayer)
 #endif
 		{
 			DrawBegin();
 
 
-#ifdef WIN32
+#ifndef PSX
 	//		software and glide
 	//		turn off the backdrop
 			if (pie_GetRenderEngine() != ENGINE_D3D)
@@ -4593,7 +4593,7 @@ void intDisplayWidgets(void)
 			bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
 
 			
-//#ifdef WIN32
+//#ifndef PSX
 //			if(bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) )
 //#else
 			if(bPlayerHasHQ)
@@ -4624,7 +4624,7 @@ void intDisplayWidgets(void)
 //19 #endif
 	widgDisplayScreen(psWScreen);
 
-#ifdef WIN32
+#ifndef PSX
 	if(bLoadSaveUp)
 	{
 		displayLoadSave();
@@ -4838,7 +4838,7 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 			if ((STRUCTURE *)psObj == psBuilding)
 			{
 				intSetStats(structureID + IDOBJ_STATSTART, NULL);
-#ifdef WIN32 // No looped production on PSX.
+#ifndef PSX // No looped production on PSX.
         		//clear the loop button if interface is up
 				if (widgGetFromID(psWScreen,IDSTAT_LOOP_BUTTON))
 				{
@@ -5150,7 +5150,7 @@ BOOL _intAddReticule(void)
 			return FALSE;
 		}
 
-#ifdef WIN32
+#ifndef PSX
 		/* Cancel button */
 		sButInit.style = WBUT_PLAIN;
 		sButInit.id = IDRET_CANCEL;
@@ -5257,7 +5257,7 @@ BOOL intAddPower(void)
 	sBarInit.sCol.blue = POW_CLICKBARMAJORBLUE;
 	sBarInit.pDisplay = intDisplayPowerBar;
 	sBarInit.iRange = POWERBAR_SCALE;
-#ifdef WIN32
+#ifndef PSX
 	sBarInit.pTip = strresGetString(psStringRes, STR_INT_POWER);
 #endif
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -5287,7 +5287,7 @@ void intSetShadowPower(UDWORD quantity)
 	ManuPower = quantity;
 }
 
-#ifdef WIN32
+#ifndef PSX
 /* Add the options widgets to the widget screen */
 BOOL _intAddOptions(void)
 {
@@ -5342,7 +5342,7 @@ BOOL _intAddOptions(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close box */
 	sButInit.formID = IDOPT_FORM;
 	sButInit.id = IDOPT_CLOSE;
@@ -5851,7 +5851,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 				psSelected = psFirst;
 			}
 		}
-//#ifdef WIN32
+//#ifndef PSX
 		//make sure this matches in game once decided - DON'T!
 		//clearSelection();
 		//psSelected->selected = TRUE;
@@ -5897,7 +5897,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 	WidgSetOTIndex(OT2D_FARFORE);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDOBJ_FORM;
@@ -6080,7 +6080,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 					}
 				}
 	//				sBFormInit.pTip = ((DROID *)psObj)->pName;
-#ifdef WIN32
+#ifndef PSX
 				sBFormInit.pTip = droidGetName((DROID *)psObj);
 #else
 				sBFormInit.pTip = getDroidName((DROID *)psObj);
@@ -6431,7 +6431,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 // We don't want to be locking the button for command droids.
 //		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 // Don't want it to automaticly open order screen on PSX.
-#ifdef WIN32
+#ifndef PSX
         //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
 		//intAddOrder((DROID *)psSelected);
         intAddOrder(psSelected);
@@ -6750,7 +6750,7 @@ void HandleClosingWindows(void)
 	//	}
 	//}	
 
-#ifdef WIN32
+#ifndef PSX
 	if(ClosingMultiMenu) {
 		Widg = widgGetFromID(psWScreen,MULTIMENU_FORM);
 		if(Widg) {
@@ -7190,7 +7190,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE) 
 	{
-#ifdef WIN32	// No delivery point button on PSX.
+#ifndef PSX	// No delivery point button on PSX.
 		//add the Factory DP button
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
@@ -7214,7 +7214,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	//#endif
 #endif
 
-#ifdef WIN32	// No looped production on PSX thank you.
+#ifndef PSX	// No looped production on PSX thank you.
 		//add the Factory Loop button!
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
@@ -7249,7 +7249,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.formID = IDSTAT_FORM;
 		sLabInit.id = IDSTAT_LOOP_LABEL;
 		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
-//#ifdef WIN32
+//#ifndef PSX
 		sLabInit.x = (UWORD)(sButInit.x - 15);
 		sLabInit.y = sButInit.y;
 //#else
@@ -7265,14 +7265,14 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		{
 			return FALSE;
 		}
-#endif // End of WIN32 specific LOOPED production interface code.
+#endif // End of !PSX specific LOOPED production interface code.
 
 		/* store the common values for the text labels for the quantity 
 		to produce (on each button).*/
 		memset(&sLabInit,0,sizeof(W_LABINIT));
 		sLabInit.id = IDSTAT_PRODSTART;
 		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
-#ifdef WIN32
+#ifndef PSX
 		sLabInit.x = STAT_BUTWIDTH-12;
 		sLabInit.y = 2;
 #else
@@ -7293,7 +7293,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	WidgSetOTIndex(OT2D_FARFORE);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDSTAT_FORM;
@@ -7487,7 +7487,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			sLabInit.formID = sBFormInit.id ;
 			sLabInit.id = IDSTAT_RESICONSTART+(sBFormInit.id - IDSTAT_START);
 			sLabInit.style = WLAB_PLAIN;
-#ifdef WIN32
+#ifndef PSX
 			sLabInit.x = STAT_BUTWIDTH - 16;
 			sLabInit.y = 3;
 #else
@@ -8189,7 +8189,7 @@ static BOOL intAddBuild(DROID *psSelected)
 	objMode = IOBJ_BUILD;
 	
 	/* Create the object screen with the required data */
-#ifdef WIN32
+#ifndef PSX
 	return intAddObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],
 						(BASE_OBJECT *)psSelected,TRUE);
 #else
@@ -8234,7 +8234,7 @@ static BOOL intAddManufacture(STRUCTURE *psSelected)
 
 	/* Create the object screen with the required data */
 	//return intAddObject((BASE_OBJECT *)apsStructLists[selectedPlayer],
-#ifdef WIN32
+#ifndef PSX
 	return intAddObject((BASE_OBJECT *)interfaceStructList(),
 				(BASE_OBJECT *)psSelected,TRUE);
 #else
@@ -8278,7 +8278,7 @@ static BOOL intAddResearch(STRUCTURE *psSelected)
 
 	/* Create the object screen with the required data */
 	//return intAddObject((BASE_OBJECT *)apsStructLists[selectedPlayer],
-#ifdef WIN32
+#ifndef PSX
 	return intAddObject((BASE_OBJECT *)interfaceStructList(),
 						(BASE_OBJECT *)psSelected,TRUE);
 #else
@@ -8322,7 +8322,7 @@ static BOOL intAddCommand(DROID *psSelected)
 
 	/* Create the object screen with the required data */
 	//return intAddObject((BASE_OBJECT *)apsStructLists[selectedPlayer],
-#ifdef WIN32
+#ifndef PSX
 	return intAddObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],
 						(BASE_OBJECT *)psSelected,TRUE);
 #else
@@ -8425,12 +8425,12 @@ static void intStatsRMBPressed(UDWORD id)
 		// open up the design screen
 		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 
-/*#ifdef WIN32
+/*#ifndef PSX
 		if( !bMultiPlayer)
 		{
 #endif
 		gameTimeStop();
-#ifdef WIN32
+#ifndef PSX
 		}
 #endif*/
 
@@ -8486,7 +8486,7 @@ static void intObjStatRMBPressed(UDWORD id)
 	psObj = intGetObject(id);
 	if (psObj)
 	{
-//#ifdef WIN32
+//#ifndef PSX
 		intResetWindows(psObj);
 //#else
 //		intAddObjectStats(psObj, id);
@@ -8541,7 +8541,7 @@ static void intObjStatRMBPressed(UDWORD id)
 //void addIntelScreen(BOOL playImmediate)
 void addIntelScreen(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	BOOL	radOnScreen;
 #endif
 
@@ -8552,13 +8552,13 @@ void addIntelScreen(void)
 
 	intResetScreen(FALSE);
 
-/*#ifdef WIN32
+/*#ifndef PSX
 	if(!bMultiPlayer)
 	{
 #endif
 		gameTimeStop();
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif*/
 
@@ -8571,7 +8571,7 @@ void addIntelScreen(void)
 	intShowPowerBar();
 
 	//get the background image for the Intelligence screen
-#ifdef WIN32
+#ifndef PSX
 	// Only do this in main game.
 	if((GetGameMode() == GS_NORMAL) && !bMultiPlayer) 
 	{	
@@ -8633,7 +8633,7 @@ void addTransporterInterface(DROID *psSelected, BOOL onMission)
     }
 }
 
-#ifdef WIN32
+#ifndef PSX
 void addCDChangeInterface( CD_INDEX CDrequired,
 	CDSPAN_CALLBACK fpOKCallback, CDSPAN_CALLBACK fpCancelCallback )
 {
@@ -8662,7 +8662,7 @@ STRUCTURE* interfaceStructList(void)
 /*causes a reticule button to start flashing*/
 void flashReticuleButton(UDWORD buttonID)
 {
-#ifdef WIN32
+#ifndef PSX
 	W_TABFORM		*psButton;
 	UDWORD			flash;
 
@@ -8681,7 +8681,7 @@ void flashReticuleButton(UDWORD buttonID)
 // stop a reticule button flashing
 void stopReticuleButtonFlash(UDWORD buttonID)
 {
-#ifdef WIN32
+#ifndef PSX
 	WIDGET	*psButton;
 	UBYTE	DownTime;
 	UBYTE	Index;
@@ -8829,7 +8829,7 @@ void processProximityButtons(UDWORD id)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
 
-#ifdef WIN32
+#ifndef PSX
 	if(!doWeDrawProximitys())
 	{
 		return;
@@ -8976,7 +8976,7 @@ void intCheckReticuleButtons(void)
 	DROID	*psDroid;
 	int i;
 
-//#ifdef WIN32
+//#ifndef PSX
 	ReticuleEnabled[RETBUT_CANCEL].Enabled = TRUE;
 //#endif
 	ReticuleEnabled[RETBUT_FACTORY].Enabled = FALSE;
@@ -10036,7 +10036,7 @@ BASE_OBJECT * getCurrentSelected(void)
 //
 // Stack friendly wrappers for those greedy interface initialisation functions.
 //
-#ifdef WIN32
+#ifndef PSX
 BOOL intAddOptions(void)
 {
 //#ifdef PSX

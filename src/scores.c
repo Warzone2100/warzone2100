@@ -1,4 +1,4 @@
-#ifdef WIN32
+#ifndef PSX
 /* 
 	Scores.c Deals with all the mission results gubbins.
 	Alex W. McLean

@@ -45,7 +45,7 @@
 
 
 //*************************************************************************
-#ifdef WIN32
+#ifndef PSX
 void iV_IMDDrawTextureRaise(iIMDShape *shape, float scale);
 void iV_IMDDrawTexturedHeightScaled(iIMDShape *shape, float scale);
 #endif
@@ -434,7 +434,7 @@ iBool iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 
 void iV_IMDDebug(iIMDShape *s)
 {
-#ifdef WIN32
+#ifndef PSX
 	iIMDShape *sp;
 	iIMDPoly *poly;
 	int nlevel, i, j, d;
@@ -543,7 +543,7 @@ void iV_IMDRelease(iIMDShape *s)
 	      if (s->polys) {
 	         for (i=0; i<s->npolys; i++) {
 	            if (s->polys[i].pindex) iV_HeapFree(s->polys[i].pindex,s->polys[i].npnts * sizeof(int));
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 	            if (s->polys[i].pTexAnim) iV_HeapFree(s->polys[i].pTexAnim,sizeof(iTexAnim));
 #endif
 				if (s->polys[i].vrt) iV_HeapFree(s->polys[i].vrt,s->polys[i].npnts * sizeof(iVertex));

@@ -1,4 +1,4 @@
-#ifdef WIN32
+#ifndef PSX
 /* Texture stuff. Calls 3dfxText functions in the 3dfx cases */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
 

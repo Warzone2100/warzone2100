@@ -6,12 +6,12 @@
 #include "piestate.h"
 #include "rendmode.h"
 #include "rendfunc.h"
-#ifdef WIN32
+#ifndef PSX
 #include "pieclip.h"
 #endif
 #include <ddraw.h>
 
-#ifdef WIN32
+#ifndef PSX
 #include "pieblitfunc.h"
 //#include "intfac.h"			// ffs am
 #endif
@@ -26,7 +26,7 @@ extern	void	pie_DrawTextNew(unsigned char *string, int x, int y);
 extern SDWORD DisplayXFactor;
 #ifndef PIETOOL	// if we are in the pie tool then don't compile any of this
 
-#ifdef WIN32
+#ifndef PSX
 #include "3dfxfunc.h"
 #else
 
@@ -245,7 +245,7 @@ int iV_GetTextWidth(unsigned char *String)
 		if(Index != ASCII_COLOURMODE) {
 			if(Index != ASCII_SPACE) {
 				ImageID = (UWORD)Font->AsciiTable[Index];
-	#ifdef WIN32
+	#ifndef PSX
 				MaxX += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
 	#else
 				MaxX += iV_GetImageWidth(Font->FontFile,ImageID) + 2;
@@ -253,7 +253,7 @@ int iV_GetTextWidth(unsigned char *String)
 
 			} else {
 
-#ifdef WIN32
+#ifndef PSX
 				MaxX += Font->FontSpaceSize;
 #else
 				MaxX += PSXToWidth(Font->FontSpaceSize);
@@ -284,7 +284,7 @@ BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *Y
 		if(Index != ASCII_SPACE) {
 			ImageID = (UWORD)Font->AsciiTable[Index];
 
-	#ifdef WIN32
+	#ifndef PSX
 			*Width = iV_GetImageWidth(Font->FontFile,ImageID) ;
 			*Height = iV_GetImageHeight(Font->FontFile,ImageID);
 			*YOffset = iV_GetImageYOffset(Font->FontFile,ImageID);
@@ -333,7 +333,7 @@ int iV_GetCharWidth(unsigned char Char)
 		if(Index != ASCII_SPACE) {
 			ImageID = (UWORD)Font->AsciiTable[Index];
 
-	#ifdef WIN32
+	#ifndef PSX
 			Width = iV_GetImageWidth(Font->FontFile,ImageID) + 1;
 	#else
 			Width = iV_GetImageWidth(Font->FontFile,ImageID) + 2;
@@ -341,7 +341,7 @@ int iV_GetCharWidth(unsigned char Char)
 		} else {
 
 
-	#ifdef WIN32
+	#ifndef PSX
 		   Width = Font->FontSpaceSize;
 	#else
 			Width=PSXToWidth(Font->FontSpaceSize);
@@ -845,7 +845,7 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 				}
 			}
 		} else if(Index == ASCII_SPACE) {
-#ifdef WIN32
+#ifndef PSX
 			x += Font->FontSpaceSize;
 #else
 			x += PSXToWidth(Font->FontSpaceSize);
@@ -855,7 +855,7 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 			ImageID = (UWORD)Font->AsciiTable[Index];
 			pie_TextRender(Font->FontFile,ImageID,x,y);
 
-#ifdef WIN32
+#ifndef PSX
 			x += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
 #else
 			x += iV_GetImageWidth(Font->FontFile,ImageID) + 2;
@@ -864,7 +864,7 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 
 // Don't use this any more, If the text needs to wrap then use
 // pie_DrawFormattedText() defined above.
-#ifdef WIN32
+#ifndef PSX
 		/* New bit to make text wrap */
 		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
 		{
@@ -909,7 +909,7 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 //				for the front end and one for in game. We can start to use an
 //				array index if we need more. 
 //			*/
-//#ifdef WIN32
+//#ifndef PSX
 //			if(Font->bGameFont)
 //			{
 //				imageID = textJumpTableGame[presChar];	// Presently only for in game
@@ -928,14 +928,14 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 //
 //			/* Draw the character */
 //			pie_TextRender(Font->FontFile,imageID,x,y);
-//#ifdef WIN32
+//#ifndef PSX
 // 			x += iV_GetImageWidth(Font->FontFile,imageID) + 1;
 //#else
 // 			x += iV_GetImageWidth(Font->FontFile,imageID) + 2;	// legacy?
 //#endif																
 //			
 //		}
-//#ifdef WIN32
+//#ifndef PSX
 //		/* New bit to make text wrap */
 //		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
 //		{
@@ -976,7 +976,7 @@ void pie_DrawText(unsigned char *String,int XPos,int YPos)
 				ImageID = (UWORD)(Font->FontStartID + Index);
 				pie_TextRender(Font->FontFile,ImageID,XPos,YPos);
 
-	#ifdef WIN32
+	#ifndef PSX
 				XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
 	#else
 				XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 2;
@@ -990,14 +990,14 @@ void pie_DrawText(unsigned char *String,int XPos,int YPos)
 
 				pie_TextRender(Font->FontFile,ImageID,XPos,YPos);
 
-	#ifdef WIN32
+	#ifndef PSX
 				XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
 	#else
 				XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 2;
 	#endif
 			}
 			else if(Index == -1) {
-	//#ifdef WIN32
+	//#ifndef PSX
 				XPos += Font->FontSpaceSize;
 	//#else
 	//			XPos += Font->FontSpaceSize*2;
@@ -1028,7 +1028,7 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 //draw Blue tinted bitmap
 void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow)
 {
@@ -1213,7 +1213,7 @@ void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, i
 #endif 
 
 
-#if defined(WIN32) || defined(ROTATEDTEXT)
+#if !defined(PSX) || defined(ROTATEDTEXT)
 
 void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 {
@@ -1221,7 +1221,7 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 	UWORD ImageID;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
-#ifdef WIN32
+#ifndef PSX
 	if (pie_Hardware())
 #endif
 	{
@@ -1238,7 +1238,7 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 			ImageID = (UWORD)Font->AsciiTable[Index];
 			pie_TextRender270(Font->FontFile,ImageID,XPos,YPos);
 
-#ifdef WIN32
+#ifndef PSX
 			YPos -= (iV_GetImageWidth(Font->FontFile,ImageID) +1) ;
 #else
 			YPos -= (iV_GetImageWidth(Font->FontFile,ImageID) +2) ;
@@ -1258,7 +1258,7 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 //	int Index;
 //	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 //
-//#ifdef WIN32
+//#ifndef PSX
 //	if (pie_Hardware())
 //#endif
 //	{
@@ -1275,7 +1275,7 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 //		{			
 //			pie_TextRender270(Font->FontFile,(UWORD)(Index+Font->FontStartID),XPos,YPos);
 //
-//#ifdef WIN32
+//#ifndef PSX
 //			YPos -= (iV_GetImageWidth(Font->FontFile,(UWORD)(Index+Font->FontStartID)) +1) ;
 //#else
 //			YPos -= (iV_GetImageWidth(Font->FontFile,(UWORD)(Index+Font->FontStartID)) +2) ;
@@ -1285,7 +1285,7 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 //		}
 //		else if(Index == -1)
 //		{
-////#ifdef WIN32
+////#ifndef PSX
 //			YPos -= (Font->FontSpaceSize);
 ////#else
 ////			YPos -= (Font->FontSpaceSize)*2;
@@ -1295,7 +1295,7 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 //	}
 //}
 
-#ifdef WIN32
+#ifndef PSX
 void pie_BeginTextRender(SWORD ColourIndex)
 {
 	switch (pie_GetRenderEngine())
@@ -1399,7 +1399,7 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 {		
 	int w,h,i,j,Modulus;

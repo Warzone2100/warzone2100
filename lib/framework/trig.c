@@ -26,7 +26,7 @@
 #define SQRT_ACCBITS	12
 
 /* The trig functions */
-#ifdef WIN32
+#ifndef PSX
 #define SINFUNC		(FRACT)sin
 #define COSFUNC		(FRACT)cos
 #define ASINFUNC	(FRACT)asin
@@ -42,7 +42,7 @@ FRACT ArcCos(FRACT Input);
 
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 static FRACT	*aSin;
 static FRACT	*aCos;
 static FRACT	*aInvCos;
@@ -54,7 +54,7 @@ static FRACT	*aInvSin;
 /* Initialise the Trig tables */
 BOOL trigInitialise(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	FRACT	val, inc;
 	UDWORD	count;
 
@@ -83,7 +83,7 @@ BOOL trigInitialise(void)
 	}
 
 
-//#ifdef WIN32
+//#ifndef PSX
 	aSqrt=MALLOC(sizeof(FRACT) * SQRT_ACCURACY);
 	if (!aSqrt)
 	{
@@ -110,7 +110,7 @@ BOOL trigInitialise(void)
 		val += inc;
 	}
 
-//#ifdef WIN32
+//#ifndef PSX
 	// Build the sqrt table
 	for(count=0; count < SQRT_ACCURACY; count++)
 	{
@@ -132,7 +132,7 @@ BOOL trigInitialise(void)
 /* Shutdown the trig tables */
 void trigShutDown(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	FREE(aSin);
 	FREE(aCos);
 	FREE(aInvSin);
@@ -268,7 +268,7 @@ FRACT trigInvCos(FRACT val)
 /* Fast lookup sqrt */
 FRACT trigIntSqrt(UDWORD val)
 {
-#ifdef WIN32
+#ifndef PSX
 	UDWORD	exp, mask;
 #endif
 
@@ -277,7 +277,7 @@ FRACT trigIntSqrt(UDWORD val)
 		return FRACTCONST(0,1);
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	// find the exponent of the number
 	mask = 0x80000000;		// set the msb in the mask
 	for(exp=32; exp!=0; exp--)

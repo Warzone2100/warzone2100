@@ -5,7 +5,7 @@
 #include "console.h"
 #include "keybind.h"
 #include "display3d.h"
-#ifdef WIN32
+#ifndef PSX
 #include "keyedit.h"
 #endif
 
@@ -46,7 +46,7 @@ extern BOOL	bAllowDebugMode;
 
 // ----------------------------------------------------------------------------------
 /* WIN 32 specific */
-#ifdef WIN32
+#ifndef PSX
 BOOL	checkQwertyKeys			( void );
 UDWORD	asciiKeyCodeToTable		( KEY_CODE code );
 KEY_CODE	getQwertyKey		( void );
@@ -73,7 +73,7 @@ KEY_MAPPING	*psMapping,*psReturn;
 }
 // ----------------------------------------------------------------------------------
 /* Some win32 specific stuff allowing the user to add key mappings themselves */
-#ifdef WIN32
+#ifndef PSX
 #define	NUM_QWERTY_KEYS	26
 typedef	struct	_keymap_Marker
 {
@@ -101,7 +101,7 @@ static BOOL	bKeyProcessing = TRUE;
 // ----------------------------------------------------------------------------------
 // Adding a mapped function ? add a save pointer! Thank AlexL.
 // don't bugger around with the order either. new ones go at the end! DEBUG in debug section..
-#ifdef WIN32
+#ifndef PSX
 //typedef void (*_keymapsave)(void);
 _keymapsave keyMapSaveTable[] =
 {
@@ -239,7 +239,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	bKeyProcessing = TRUE;
 	processDebugMappings(FALSE);
 
-#ifdef WIN32
+#ifndef PSX
 	for(i=0; i<NUM_QWERTY_KEYS; i++)
 	{
 		qwertyKeyMappings[i].psMapping = NULL;
@@ -542,7 +542,7 @@ BLOCK_HEAP  *psHeap;
 
 	/* Plus one for the terminator */
 
-#ifdef WIN32
+#ifndef PSX
 
 	newMapping->pName = (STRING*)MALLOC(strlen(name)+1);
 	ASSERT(((int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping"));
@@ -709,7 +709,7 @@ BOOL		bKeyProcessed;
 		return;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 
 	/* Jump out if we've got a new mapping */
   	(void) checkQwertyKeys();
@@ -741,7 +741,7 @@ BOOL		bKeyProcessed;
 		{
 			break;
 		}
-#ifdef WIN32
+#ifndef PSX
 		if(keyToProcess->subKeyCode == KEY_MAXSCAN)
 		{
 			continue;
@@ -825,7 +825,7 @@ BOOL		bKeyProcessed;
 }
 
 // ----------------------------------------------------------------------------------
-#ifdef WIN32
+#ifndef PSX
 /* Allows _new_ mappings to be made at runtime */
 BOOL	checkQwertyKeys( void )
 {
@@ -864,7 +864,7 @@ BOOL		aquired;
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 // ----------------------------------------------------------------------------------
 // this function isn't really module static - should be removed - debug only
 void	keyShowMappings( void )
@@ -952,7 +952,7 @@ void	keySetMappingStatus(KEY_MAPPING *psMapping, BOOL state)
 	psMapping->active = state;
 }
 
-#ifdef WIN32
+#ifndef PSX
 /* Returns the key code of the first ascii key that its finds has been PRESSED */
 KEY_CODE	getQwertyKey( void )
 {

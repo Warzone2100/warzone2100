@@ -22,14 +22,14 @@
 
 #define GAME2PSX(x) (((x)*4096)/360)
 
-#ifdef WIN32
+#ifndef PSX
 #define GetRadius(x) ((x)->sradius)
 #else
 #define GetRadius(x) ((x)->radius)
 #endif
 
 #include "stats.h"
-#ifdef WIN32
+#ifndef PSX
 #include "piemode.h"
 #endif
 #include "objects.h"
@@ -95,7 +95,7 @@ static UWORD ComponentTransMode;
 UDWORD	droidScale = 100;
 void displayComponentTemplate(DROID_TEMPLATE *psTemplate);
 //void displayComponentObject(BASE_OBJECT *psObj);
-#ifdef WIN32
+#ifndef PSX
 static void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton);
 #else
 // Returns false if nothing rendered.
@@ -165,7 +165,7 @@ void updateLightLevels(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ)
 {
 	
@@ -317,7 +317,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	return COMPONENT_RADIUS;
 #else
 	return PSX_BUTTON_SCALE;		// ffs 
@@ -340,7 +340,7 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 }
 
 
-//#ifdef WIN32
+//#ifndef PSX
 UDWORD getStructureSize(STRUCTURE *psStructure)
 {
 	UDWORD size;
@@ -371,7 +371,7 @@ UDWORD getStructureRadius(STRUCTURE *psStructure)
 //#endif
 
 
-//#ifdef WIN32
+//#ifndef PSX
 UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 {
 	UDWORD size;
@@ -412,7 +412,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 {
     if (psStat->pIMD)
     {
-#ifdef WIN32
+#ifndef PSX
         return (psStat->pIMD->ymax - psStat->pIMD->ymin);
 #else
         return (psStat->pIMD->ymax);
@@ -437,7 +437,7 @@ void displayIMDButton(iIMDShape *IMDShape,
 
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	pie_SetFogStatus(FALSE);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0); // ajl changed 0 to selectedPlayer
 #else
@@ -464,14 +464,14 @@ void displayStructureButton(STRUCTURE *psStructure,
     if (psStructure->pStructureType->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND 
         getStructureHeight(psStructure) > TOWER_HEIGHT)
     {
-#ifdef WIN32
+#ifndef PSX
         Position->y -= 20;
 #else
         Position->y += 20;	// Not sure why but need to negate it on PSX.
 #endif
     }
 
-#ifdef WIN32
+#ifndef PSX
 	SetBSPObjectPos(0,0,0);
 #endif
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
@@ -483,7 +483,7 @@ void displayStructureButton(STRUCTURE *psStructure,
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
-#ifdef WIN32
+#ifndef PSX
 	if(baseImd!=NULL) {
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);		// ajl changed 0 to selectedPlayer
 	}
@@ -559,7 +559,7 @@ void displayStructureButton(STRUCTURE *psStructure,
 void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
 {
-#ifdef WIN32
+#ifndef PSX
 	iIMDShape		*baseImd,*strImd,*mountImd,*weaponImd;
 	iVector TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
@@ -729,7 +729,7 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 
 
 
-#ifdef WIN32
+#ifndef PSX
 	if(MountIMD)
 	{
 		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);// ajl changed 0 to selectedPlayer
@@ -790,13 +790,13 @@ void displayResearchButton(BASE_STATS *Stat,
 #endif
 
 		if(MountIMD) {
-#ifdef WIN32
+#ifndef PSX
 			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);	// ajl, added colourthing using selectedPlayer
 #else
 			DrawPie(MountIMD,&PieParams);
 #endif
 		}
-#ifdef WIN32
+#ifndef PSX
 		pie_Draw3DShape(ResearchIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);		//ajl, added colourthing using selectedPlayer
 #else
 		DrawPie(ResearchIMD,&PieParams);
@@ -890,7 +890,7 @@ void displayComponentButtonObject(DROID *psDroid,
 
 
 
-#ifdef WIN32	// Start of PC version.
+#ifndef PSX	// Start of PC version.
 
 /* Assumes matrix context is already set */
 void displayComponentObject(BASE_OBJECT *psObj)

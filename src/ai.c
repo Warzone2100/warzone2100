@@ -26,7 +26,7 @@
 #include "cmddroid.h"
 #include "group.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
@@ -664,7 +664,7 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = FALSE;
 	}
-#ifdef WIN32		// ffs je
+#ifndef PSX		// ffs je
 	// don't look for a target if there are any queued orders
 	if (psDroid->listSize > 0)
 	{
@@ -689,7 +689,7 @@ void aiUpdateDroid(DROID *psDroid)
 		lookForTarget = FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player)) 
 	{
 		lookForTarget = FALSE;
@@ -716,7 +716,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	// only computer senosr droids in the single player game aquire targets
 	if ((psDroid->droidType == DROID_SENSOR && psDroid->player == selectedPlayer)
-#ifdef WIN32
+#ifndef PSX
 		&& !bMultiPlayer
 #endif
 		)

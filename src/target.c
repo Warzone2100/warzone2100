@@ -127,7 +127,7 @@ void targetSetTargetable(UWORD DroidType)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 void	targetAdd(BASE_OBJECT *psObj)
 {
 	UNUSEDPARAMETER(psObj);

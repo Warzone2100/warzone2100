@@ -1,6 +1,6 @@
 
 
-#ifdef WIN32
+#ifndef PSX
  #define DRIVEFUNCINLINE _inline
 
 #else

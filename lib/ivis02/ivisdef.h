@@ -74,7 +74,7 @@ typedef struct iSurface {
 	int xpshift;
 	int ypshift;
 	iClip clip;
-#ifdef WIN32
+#ifndef PSX
 	uint8 *buffer;
 	int32 scantable[iV_SCANTABLE_MAX];	// currently uses 4k per structure (!)
 #else
@@ -121,7 +121,7 @@ typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon stru
 #endif
 
 
-#ifndef PIEPSX	// for normal WIN32 use ...
+#ifndef PIEPSX	// for normal non PSX use ...
 typedef struct {
 	uint32 flags;
 	int32 zcentre;

@@ -6,7 +6,7 @@
 #define FILLBLUE 128
 #define FILLTRANS 128
 
-#ifdef WIN32
+#ifndef PSX
 // Sprite image structure.
 typedef struct {
 	UDWORD BMPNum;	// Source bitmap index.
@@ -93,11 +93,11 @@ extern IMAGEFRAME FrameText;
 // A few useful defined tabs.
 extern TABDEF StandardTab;
 extern TABDEF SystemTab;
-#ifdef WIN32
+#ifndef PSX
 extern TABDEF SmallTab;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #include "intfac.h"		// Interface image id's.
 #else
 #include "intpsx.h"

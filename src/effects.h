@@ -103,7 +103,7 @@ typedef enum
 	LL_OUTER
 }LAND_LIGHT_SPEC;
 
-#ifdef WIN32
+#ifndef PSX
 #define MAX_EFFECTS	2500
 #else
 #define MAX_EFFECTS	150

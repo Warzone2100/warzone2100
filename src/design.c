@@ -75,7 +75,7 @@
 extern CURSORSNAP InterfaceSnap;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 
 #include "multiplay.h"
 #include "multistat.h"
@@ -165,7 +165,7 @@ typedef enum _des_propmode
 DES_PROPMODE desPropMode;
 
 
-#ifdef WIN32
+#ifndef PSX
 #define STRING_BUFFER_SIZE (32 * MAX_NAME_SIZE)
 char StringBuffer[STRING_BUFFER_SIZE];
 #endif
@@ -289,7 +289,7 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define DES_SYSTEMBUTTON_Y		10
 
 // Stat bar y positions.
-#ifdef WIN32
+#ifndef PSX
 #define	DES_STATBAR_Y1	(DES_CLICKBARY)
 #define	DES_STATBAR_Y2	(DES_CLICKBARY+DES_CLICKBARHEIGHT + DES_CLICKGAP)
 #define	DES_STATBAR_Y3	(DES_CLICKBARY+(DES_CLICKBARHEIGHT + DES_CLICKGAP)*2)
@@ -479,7 +479,7 @@ BOOL _intAddDesign( BOOL bShowCentreScreen )
 	//set which states are to be paused while design screen is up
 	setDesignPauseState();
 
-#ifdef WIN32
+#ifndef PSX
 	if((GetGameMode() == GS_NORMAL) && !bMultiPlayer)
 	{	// Only do this in main game.
 		BOOL radOnScreen = radarOnScreen;
@@ -534,7 +534,7 @@ BOOL _intAddDesign( BOOL bShowCentreScreen )
 #ifdef PSX
 	WidgSetOTIndex(OT2D_BACK);
 #endif
-#ifdef WIN32
+#ifndef PSX
 	sEdInit.formID = IDDES_FORM;
 	sEdInit.id = IDDES_NAMEBOX;
 	sEdInit.style = WEDB_PLAIN;
@@ -630,7 +630,7 @@ BOOL _intAddDesign( BOOL bShowCentreScreen )
 #else
 	sButInit.pDisplay = intDisplayButtonHilight;
 #endif
-#ifdef WIN32
+#ifndef PSX
 	sButInit.pUserData = (void*)PACKDWORD_TRI(1, IMAGE_DES_BODYH, IMAGE_DES_BODY);
 #else
 	sButInit.pUserData = (void*)PACKDWORD_TRI(1, IMAGE_DES_WIDEHILIGHT, IMAGE_DES_BODY);
@@ -656,7 +656,7 @@ BOOL _intAddDesign( BOOL bShowCentreScreen )
 #else
 	sButInit.pDisplay = intDisplayButtonHilight;
 #endif
-#ifdef WIN32
+#ifndef PSX
 	sButInit.pUserData = (void*)PACKDWORD_TRI(1, IMAGE_DES_PROPULSIONH, IMAGE_DES_PROPULSION);
 #else
 	sButInit.pUserData = (void*)PACKDWORD_TRI(1, IMAGE_DES_WIDEHILIGHT, IMAGE_DES_PROPULSION);
@@ -683,7 +683,7 @@ BOOL _intAddDesign( BOOL bShowCentreScreen )
 #else
 	sButInit.pDisplay = intDisplayButtonHilight;
 #endif
-#ifdef WIN32
+#ifndef PSX
 	sButInit.pUserData = (void*)PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 #else
 	sButInit.pUserData = (void*)PACKDWORD_TRI(1, IMAGE_DES_WIDEHILIGHT, IMAGE_DES_TURRET);
@@ -704,7 +704,7 @@ BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.pTip = strresGetString(psStringRes, STR_DES_DEL);
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayButtonHilight;
-#ifdef WIN32
+#ifndef PSX
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_BINH, IMAGE_DES_BIN);
 #else
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_WIDEHILIGHT, IMAGE_DES_BIN);
@@ -1125,7 +1125,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	STRING			aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD			BufferID;
 	UDWORD			i;
-#ifdef WIN32
+#ifndef PSX
 	char TempString[256];
 	int BufferPos = 0;
 #endif
@@ -1199,7 +1199,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 			sBarInit.size = (UWORD)(psTempl->powerPoints  / POWERPOINTS_DROIDDIV);
 			if(sBarInit.size > WBAR_SCALE) sBarInit.size = WBAR_SCALE;
 
-#ifdef WIN32
+#ifndef PSX
 			sprintf(TempString,"%s - %d",strresGetString(psStringRes, STR_DES_POWERUSE),psTempl->powerPoints);
 			ASSERT((BufferPos+strlen(TempString)+1 < STRING_BUFFER_SIZE,"String Buffer Overrun"));
 			strcpy(&StringBuffer[BufferPos],TempString);
@@ -1653,7 +1653,7 @@ STRING *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 {
 #if SHOWTEMPLATENAME
-#ifdef WIN32
+#ifndef PSX
 	widgSetString(psWScreen, IDDES_NAMEBOX, getStatName(psTemplate));
 #endif
 #else
@@ -1670,7 +1670,7 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 		GetDefaultTemplateName(psTemplate);
 	}
 	
-#ifdef WIN32
+#ifndef PSX
 	widgSetString(psWScreen, IDDES_NAMEBOX, aCurrName);
 #endif
 #endif
@@ -4142,7 +4142,7 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 // ajl. above function is static. A quick wrapper for the net stuff
 BOOL  MultiPlayValidTemplate(DROID_TEMPLATE *psTempl)
 {
@@ -4171,7 +4171,7 @@ void intRemoveDesign(void)
 	newTemplate = FALSE;
 
 	widgDelete(psWScreen, IDDES_POWERFORM);
-#ifdef WIN32
+#ifndef PSX
 	widgDelete(psWScreen, IDDES_NAMEBOX);
 #endif
 	widgDelete(psWScreen, IDDES_TEMPLFORM);
@@ -4266,7 +4266,7 @@ void intProcessDesign(UDWORD id)
 //19		}
 //19	#endif
 
-#ifdef WIN32
+#ifndef PSX
 //	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 //	{
 		/* Dirty hack to allow screen dumps from the 3dfx during design!!! */
@@ -4744,7 +4744,7 @@ void intProcessDesign(UDWORD id)
 			if ( psTempl )
 			{
 
-#ifdef WIN32
+#ifndef PSX
 				if (bMultiPlayer)		//ajl. inform others of template destruction.
 				{
 					SendDestroyTemplate(psTempl);
@@ -5173,7 +5173,7 @@ void intDisplayStatForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	DrawBegin();
 
-#ifdef WIN32
+#ifndef PSX
 	iV_DrawImage(IntImages,(UWORD)(IMAGE_DES_STATBACKLEFT),x0,y0);
 	iV_DrawImageRect(IntImages,IMAGE_DES_STATBACKMID,
 				x0+iV_GetImageWidth(IntImages,IMAGE_DES_STATBACKLEFT),y0,
@@ -5323,7 +5323,7 @@ void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	if(CurrentStatsTemplate) {
 
-#ifdef WIN32
+#ifndef PSX
 		pie_SetGeometricOffset(  (DES_CENTERFORMX+DES_3DVIEWX) + (DES_3DVIEWWIDTH/2),
 								(DES_CENTERFORMY+DES_3DVIEWY) + (DES_3DVIEWHEIGHT/4) + 32);
 #else
@@ -5340,7 +5340,7 @@ void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		iRY += (BUTTONOBJ_ROTSPEED*frameTime2) / GAME_TICKS_PER_SEC;
 		iRY %= 360;
 
-#ifdef WIN32
+#ifndef PSX
 		//fixed depth scale the pie
 		Position.x = 0;
 		Position.y = -100;
@@ -5550,7 +5550,7 @@ BOOL saveTemplate(void)
 		stored = TRUE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if (stored)
 	{
 		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
@@ -5657,7 +5657,7 @@ void runTemplateShadowStats(UDWORD id)
 void setDesignPauseState(void)
 {
 
-#ifdef WIN32
+#ifndef PSX
 	if (!bMultiPlayer)
 	{
 #endif
@@ -5666,7 +5666,7 @@ void setDesignPauseState(void)
 		setGameUpdatePause(TRUE);
 		setScrollPause(TRUE);
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif
 
@@ -5675,7 +5675,7 @@ void setDesignPauseState(void)
 /*resets the pause states */
 void resetDesignPauseState(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if (!bMultiPlayer)
 	{
 #endif
@@ -5684,7 +5684,7 @@ void resetDesignPauseState(void)
 		setScrollPause(FALSE);
 		gameTimeStart();
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif
 }

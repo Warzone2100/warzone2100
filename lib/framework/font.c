@@ -14,7 +14,7 @@
 #include "utils.h"	// prototypes for GetWord()
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 
 /* The header on a font file */
 typedef struct _font_savehdr
@@ -149,7 +149,7 @@ void fontPrint(SDWORD x, SDWORD y, STRING *pFormat, ...)
 	PROP_CHAR	*psChar;
 
 
-#ifdef WIN32
+#ifndef PSX
 	va_start(pArgs, pFormat);
 	vsprintf(aTxtBuff, pFormat, pArgs);
 #else
@@ -556,7 +556,7 @@ BOOL fontLoad(UBYTE *pFileData, UDWORD fileSize, PROP_FONT **ppsFont)
 		psLoadC = (PROP_CHAR *)pLoad;
 
 		// These are word width ... accessed on a odd-byte boundry ... the Playstation does not like this at all ... so we have to write special code
-#ifdef WIN32
+#ifndef PSX
 		psCurrC->width = psLoadC->width;
 		psCurrC->pitch = psLoadC->pitch;
 #else
@@ -637,7 +637,7 @@ void fontFree(PROP_FONT *psFont)
 }
 
 
-#ifdef WIN32		// don't want this on the psx
+#ifndef PSX		// don't want this on the psx
 UBYTE aFontData[PRINTABLE_CHARS][FONT_HEIGHT] =
 {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, },

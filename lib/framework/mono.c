@@ -5,7 +5,7 @@
  *
  */
 
-#ifdef WIN32
+#ifndef PSX
 
 #include <stdio.h>
 #include <string.h>

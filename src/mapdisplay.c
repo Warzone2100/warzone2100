@@ -18,7 +18,7 @@
 #include "ivisdef.h"
 #include "piedef.h"
 #include "piestate.h"
-#ifdef WIN32
+#ifndef PSX
 #include "piemode.h"
 #include "pietexture.h"
 #endif
@@ -33,7 +33,7 @@
 #include "hci.h"
 #include "intelmap.h"
 #include "intimage.h"
-#ifdef WIN32
+#ifndef PSX
 //#include "dglide.h"
 #include "texture.h"
 #include "intdisplay.h"
@@ -46,7 +46,7 @@
 #include "drawimd_psx.h"
 #endif
 
-#ifdef WIN32		// whole file is going on PSX !!!!!!!
+#ifndef PSX		// whole file is going on PSX !!!!!!!
 
 
 
@@ -164,7 +164,7 @@ void	releaseMapSurface(iSurface *pSurface)
 	/* Free up old alloaction if necessary */
 	if(pSurface!=NULL)
 	{
-#ifdef WIN32
+#ifndef PSX
 		/* Free up old buffer if necessary */
 		if(pSurface->buffer!=NULL)
 		{
@@ -176,7 +176,7 @@ void	releaseMapSurface(iSurface *pSurface)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 
 /* Draws the world into the current surface - set using 
    iV_RenderAssign(iV_MODE_SURFACE,pSurface) */
@@ -398,7 +398,7 @@ void	drawMapTile(SDWORD i, SDWORD j)
 {
 	UDWORD		surfaceWidth, extraWidth, height, width;
 	UDWORD		*toClear;
-#ifdef WIN32
+#ifndef PSX
 	toClear = (UDWORD *)surface->buffer;
 	//make sure width is multiple of 4
 	surfaceWidth = surface->width & 0xfffc;
@@ -683,7 +683,7 @@ void	tileLayouts(int texture)
 // Render a Map Surface to display memory.
 void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height)
 {
-#ifdef WIN32
+#ifndef PSX
 	if (!pie_Hardware())
 	{
 		pie_LocalRenderBegin();
@@ -695,7 +695,7 @@ void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWO
 #endif
 }
 
-#ifdef WIN32
+#ifndef PSX
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map 
 THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
 /*void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD, iIMDShape *pIMD2,
@@ -1033,7 +1033,7 @@ void renderIntelIMD(iIMDShape *pIMD,iIMDShape *pIMD2,SWORD OriginX,SWORD OriginY
 	Position.x = 0;
 	Position.y = 0;
 
-#ifdef WIN32
+#ifndef PSX
 
 	Position.z = pIMD->sradius*8;
 #ifdef LIMITBUTZ

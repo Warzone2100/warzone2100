@@ -73,7 +73,7 @@ void	sound_Update( void );
 
 UDWORD	sound_GetGameTime( void );
 
-#ifdef WIN32
+#ifdef PSX
 LPDIRECTSOUND	sound_GetDirectSoundObj( void );
 #endif
 

@@ -24,7 +24,7 @@
 #include "component.h"
 #include "geometry.h"
 #include "radar.h"
-#ifdef WIN32
+#ifndef PSX
 #include "cheat.h"
 #include "e3demo.h"	// will this be on PSX?
 #include "netplay.h"
@@ -80,7 +80,7 @@ STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
 STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
 
-#ifdef WIN32
+#ifndef PSX
 int fogCol = 0;//start in nicks mode
 #endif
 
@@ -216,7 +216,7 @@ void	kf_BuildInfo( void )
 /* Toggles whether the windows surface gets updated */
 void	kf_UpdateWindow( void )
 {
- #ifdef WIN32
+ #ifndef PSX
 	 	updateVideoCard = !updateVideoCard;
 #endif
 		addConsoleMessage("Windows surface update toggled",DEFAULT_JUSTIFY);
@@ -301,7 +301,7 @@ void	kf_SetToughUnitsLevel( void )
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-#ifdef WIN32
+#ifndef PSX
 
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
@@ -431,7 +431,7 @@ void	kf_ToggleOutline( void )
 /* Toggles infinite power on/off */
 void	kf_TogglePower( void )
 {
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer)
 {
@@ -466,7 +466,7 @@ void	kf_RecalcLighting( void )
 /* Raises the 3dfx gamma value */
 void	kf_RaiseGamma( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(gamma<(float)5.0)
@@ -488,7 +488,7 @@ void	kf_RaiseGamma( void )
 /* Lowers the threedfx gamma value */
 void	kf_LowerGamma( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(gamma>(float)0.2)
@@ -526,7 +526,7 @@ void	kf_ScreenDump( void )
 void	kf_AllAvailable( void )
 {
 
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
@@ -564,7 +564,7 @@ iVector	pos;
 // --------------------------------------------------------------------------
 void	kf_ToggleBackgroundFog( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	static BOOL bEnabled  = TRUE;//start in nicks mode
 	
 		if (bEnabled)//true, so go to false
@@ -591,7 +591,7 @@ void	kf_ToggleBackgroundFog( void )
 
 extern void	kf_ToggleDistanceFog( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	static BOOL bEnabled  = TRUE;//start in nicks mode
 	
 		if (bEnabled)//true, so go to false
@@ -618,7 +618,7 @@ extern void	kf_ToggleDistanceFog( void )
 
 void	kf_ToggleMistFog( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	static BOOL bEnabled  = TRUE;//start in nicks mode
 	
 		if (bEnabled)//true, so go to false
@@ -645,7 +645,7 @@ void	kf_ToggleMistFog( void )
 
 void	kf_ToggleFogColour( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	fogCol++;
 	if (fogCol>4)
 		fogCol = 0;
@@ -674,7 +674,7 @@ void	kf_ToggleFogColour( void )
 
 void	kf_ToggleFog( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	static BOOL fogEnabled = FALSE;
 	
 		if (fogEnabled)
@@ -728,7 +728,7 @@ void	kf_ToggleCamera( void )
 /*
 void	kf_SimCloseDown( void )
 {
-#ifdef WIN32
+#ifndef PSX
   		bScreenClose = TRUE;
 		audio_PlayTrack( ID_SOUND_THX_SHUTDOWN );
 
@@ -745,7 +745,7 @@ void	kf_SimCloseDown( void )
 /* Toggles on/off gouraud shading */
 void	kf_ToggleGouraud( void )
 {
-#ifdef WIN32
+#ifndef PSX
  	gouraudShading = !gouraudShading;
  	addConsoleMessage("Gouraud shading toggled",DEFAULT_JUSTIFY);
 	texPage++;
@@ -774,7 +774,7 @@ void	kf_LowerTile( void )
 /* Quick game exit */
 void	kf_SystemClose( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	if(pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		grSstControl(GR_CONTROL_DEACTIVATE);
@@ -1013,7 +1013,7 @@ void	kf_ShowMappings( void )
 void	kf_SelectPlayer( void )
 {
     UDWORD	playerNumber, prevPlayer;
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
@@ -1043,7 +1043,7 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 }
 // --------------------------------------------------------------------------
 
-#ifdef WIN32
+#ifndef PSX
 
 /* Selects the player's groups 1..9 */
 void	kf_SelectGrouping( void )
@@ -1170,7 +1170,7 @@ void	kf_AssignGrouping( void )
 {
 UDWORD	groupNumber;
 
-#ifdef WIN32
+#ifndef PSX
 	groupNumber = (getLastSubKey()-KEY_1) + 1;	
 #else
 	groupNumber = (getLastSubKey()-KEY_1) + 1;
@@ -1187,7 +1187,7 @@ void	kf_SelectCommander( void )
 {
 SDWORD	cmdNumber;
 
-#ifdef WIN32
+#ifndef PSX
 	cmdNumber = (getLastSubKey()-KEY_1) + 1;	
 #else
 	cmdNumber = (getLastSubKey()-KEY_1) + 1;
@@ -1206,7 +1206,7 @@ void	kf_SelectMoveGrouping( void )
 {
 UDWORD	groupNumber;
 
-#ifdef WIN32
+#ifndef PSX
 	groupNumber = (getLastSubKey()-KEY_1) + 1;
 #else
 	groupNumber = (getLastSubKey()-KEY_A) + 1;
@@ -1228,7 +1228,7 @@ void	kf_addInGameOptions( void )
 /* Tell the scripts to start a mission*/
 void	kf_AddMissionOffWorld( void )
 {
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer)
 {
@@ -1243,7 +1243,7 @@ if(bMultiPlayer)
 /* Tell the scripts to end a mission*/
 void	kf_EndMissionOffWorld( void )
 {
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer)
 {
@@ -1257,7 +1257,7 @@ if(bMultiPlayer)
 /* Initialise the player power levels*/
 void	kf_NewPlayerPower( void )
 {
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer)
 {
@@ -1272,7 +1272,7 @@ if(bMultiPlayer)
 // Display multiplayer guff.
 void	kf_addMultiMenu(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		intAddMultiMenu();
@@ -1282,7 +1282,7 @@ void	kf_addMultiMenu(void)
 
 // --------------------------------------------------------------------------
 // start/stop capturing audio for multiplayer
-#ifdef WIN32
+#ifndef PSX
 void kf_multiAudioStart(void)
 {
 	if(bMultiPlayer							// multiplayer game
@@ -1308,7 +1308,7 @@ void kf_multiAudioStop(void)
 
 void	kf_JumpToMapMarker( void )
 {
-#ifdef WIN32
+#ifndef PSX
 UDWORD	entry;
 	if(!getRadarTrackingStatus())
 	{
@@ -1331,7 +1331,7 @@ UDWORD	entry;
 /* Raises the G Offset */
 void	kf_UpGeoOffset( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	geoOffset++;
 #endif
 }
@@ -1339,7 +1339,7 @@ void	kf_UpGeoOffset( void )
 /* Lowers the geoOffset */
 void	kf_DownGeoOffset( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	geoOffset--;
 #endif
 }
@@ -1368,7 +1368,7 @@ void	kf_TogglePowerBar( void )
 /* Toggles whether we process debug key mappings */
 void	kf_ToggleDebugMappings( void )
 {
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
@@ -1393,7 +1393,7 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 			CONPRINTF(ConsoleString,(ConsoleString,"ALL Debug Key Mappings - PERMITTED"));
 			CONPRINTF(ConsoleString,(ConsoleString,"DISCLAIMER: YOU HAVE NOW CHEATED"));
 		}
-#ifdef WIN32
+#ifndef PSX
 		if(bMultiPlayer)
 		{
 			sendTextMessage("Presses Debug. CHEAT",TRUE);
@@ -1407,7 +1407,7 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 
 void	kf_ToggleGodMode( void )
 {
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
@@ -1448,7 +1448,7 @@ void	kf_SeekNorth( void )
 void	kf_TogglePauseMode( void )
 {
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && (NetPlay.bComms != 0) )
 	{
 		return;
@@ -1509,7 +1509,7 @@ void	kf_FinishResearch( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleEnergyBars( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	toggleEnergyBars();
 	CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_ENERGY ) ));
 #endif
@@ -1517,7 +1517,7 @@ void	kf_ToggleEnergyBars( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleReloadBars( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	toggleReloadBarDisplay();
 	CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_ENERGY ) ));
 #endif
@@ -1555,7 +1555,7 @@ void	kf_ChooseOptions( void )
 	intAddOptions();
 }
 
-#ifdef WIN32
+#ifndef PSX
 // --------------------------------------------------------------------------
 void	kf_ToggleBlips( void )
 {
@@ -1939,7 +1939,7 @@ void kf_KillSelected(void)
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
 
-#ifdef WIN32
+#ifndef PSX
 #ifndef DEBUG
 if(bMultiPlayer)
 {
@@ -1997,7 +1997,7 @@ void kf_ShowGridInfo(void)
 // --------------------------------------------------------------------------
 void kf_GiveTemplateSet(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	addTemplateSet(4,0);
 	addTemplateSet(4,1);
 	addTemplateSet(4,2);
@@ -2009,7 +2009,7 @@ void kf_GiveTemplateSet(void)
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTextMessage(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	CHAR	ch;									
 
 	if(/*bMultiPlayer || */!bAllowOtherKeyPresses OR getCheatCodeStatus()) 
@@ -2491,7 +2491,7 @@ UDWORD		xJump,yJump;
 
 void kf_ToggleFormationSpeedLimiting( void )
 {
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		return;

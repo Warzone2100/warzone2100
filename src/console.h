@@ -1,7 +1,7 @@
 #ifndef _console_h
 #define _console_h
 
-#ifdef WIN32
+#ifndef PSX
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
@@ -43,7 +43,7 @@ STRING	text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
 UDWORD	timeAdded;								// When was it added to our list?
 //UDWORD	screenIndex;							// Info for justification
 UDWORD JustifyType;
-#ifdef WIN32
+#ifndef PSX
 UDWORD	id;
 #endif
 struct _console_message *psNext;

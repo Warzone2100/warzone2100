@@ -9,7 +9,7 @@
 
 // limit the number of iterations for astar
 #define FPATH_MAX_ROUTE_INIT	400
-#ifdef WIN32
+#ifndef PSX
 extern SDWORD	astarMaxRoute;
 #  ifdef DEBUG
 #    define FPATH_LOOP_LIMIT	(astarMaxRoute / 2)
@@ -66,7 +66,7 @@ extern void fpathSetDirectRoute( BASE_OBJECT *psObj,
 							SDWORD targetX, SDWORD targetY );
 
 /*
-#ifdef WIN32
+#ifndef PSX
 #define FPATH_INLINE _inline
 #else
 

@@ -12,7 +12,7 @@
 #include "audio_id.h"
 #include "objmem.h"
 #include "frontend.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #include "multiint.h"
 #endif
@@ -479,7 +479,7 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	}
 }*/
 
-#ifdef WIN32
+#ifndef PSX
 // only used in multiplayer games.
 void setPower(UDWORD player, UDWORD avail)
 {
@@ -937,7 +937,7 @@ BOOL droidUsesPower(DROID *psDroid)
 }
 
 //won't bother with this on PSX unless starts being used too much!
-#ifdef WIN32
+#ifndef PSX
 //this is a check cos there is a problem with the power but not sure where!!
 void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 {
@@ -1261,7 +1261,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 	asPower[player]->availablePower = 0;
 	
 	// add multiplayer allowances if a multiplayer game.
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer && (game.dmatch || game.base == CAMP_CLEAN))
 	{
 		asPower[player]->availablePower = game.power+RESIDUAL_POW;		

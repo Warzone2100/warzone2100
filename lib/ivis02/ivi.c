@@ -7,7 +7,7 @@
 //#include "ivi.h"
 //#include "v3d.h"
 #include "rendmode.h"
-#ifdef WIN32
+#ifndef PSX
 #include "piemode.h"
 #endif
 //#include "geo.h"
@@ -28,7 +28,7 @@
 
 //*************************************************************************
 
-#ifdef WIN32
+#ifndef PSX
 iError	_iVERROR;
 #endif
 
@@ -54,7 +54,7 @@ void iV_Initialise(void)
 // pass in true to reset the palette too.
 void iV_Reset(int bPalReset)
 {
-#ifdef WIN32
+#ifndef PSX
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		reset3dfx();
@@ -76,12 +76,12 @@ void iV_ShutDown(void)
 #endif
 
 	iV_DEBUG0("4\n");
-#ifdef WIN32
+#ifndef PSX
 	pie_ShutDown();
 #endif
 	iV_DEBUG0("5\n");
 
-	#ifdef WIN32
+	#ifndef PSX
 	iV_VideoMemoryUnlock();
 	#endif
 

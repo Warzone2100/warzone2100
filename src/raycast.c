@@ -53,7 +53,7 @@ static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 #define angle_PSX2WORLD(ang) ((((ang)%4096)*360)/4096)
 
 /* Initialise the ray tables */
-#ifdef WIN32
+#ifndef PSX
 BOOL rayInitialise(void)
 {
 	SDWORD	i;
@@ -242,7 +242,7 @@ BOOL rayInitialise(void)
 
 //void rayC(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback);
 //
-////#ifdef WIN32
+////#ifndef PSX
 //
 //void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
 //{
@@ -508,7 +508,7 @@ UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	xdiff = x2 - x1;
 	ydiff = y1 - y2;
 
-#ifdef WIN32
+#ifndef PSX
 	angle = (SDWORD)((NUM_RAYS/2) * atan2(xdiff, ydiff) / PI);
 #else
 	angle = (SDWORD)ratan2(xdiff, ydiff);
@@ -675,7 +675,7 @@ iVector	pos;
 			}
 
 			/* Work out the angle to this point from start point */
-#ifdef WIN32
+#ifndef PSX
 			newPitch = RAD_TO_DEG(atan2(MAKEFRACT(heightDif),MAKEFRACT(dist)));
 #else
 			newPitch = MAKEFRACT((SDWORD)angle_PSX2World( ratan2(heightDif, dist) ));

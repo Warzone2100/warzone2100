@@ -3,7 +3,7 @@
  * Only needed for map preprocessing.
  *
  */
-#ifdef WIN32
+#ifndef PSX
 // segment printf's
 //#define DEBUG_GROUP1
 // stack printf's
@@ -75,7 +75,7 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y);
 // generate the zone equivalence tables
 BOOL gwGenerateZoneEquiv(SDWORD numZones);
 
-#ifdef WIN32
+#ifndef PSX
 #define ENABLEFILL		// disable this on the psx 
 #endif
 
@@ -95,7 +95,7 @@ void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
 #ifdef ENABLEFILL
     int l, x1, x2, dy;
     Pixel ov;							/* old pixel value */
-#ifdef WIN32
+#ifndef PSX
     struct Segment stack[MAX], *sp = stack;	/* stack of filled segments */
 #endif
     ov = gwGetZone(x, y);		/* read pv at seed point */
@@ -510,7 +510,7 @@ BOOL gwCreateBlankZoneMap(void)
 	}
 	for(i=0; i< gwMapHeight(); i++)
 	{
-#ifdef WIN32
+#ifndef PSX
 		apRLEZones[i] = MALLOC(gwMapWidth() * 2);
 #else
 		apRLEZones[i] = MALLOC(1 * 2);		// we need to get some memory back

@@ -40,7 +40,7 @@
 #include "widgint.h"
 #include "console.h"
 #include "droid.h"
-#ifdef WIN32
+#ifndef PSX
 #include "data.h"
 #include "multiplay.h"
 #include "rendmode.h"		// for downloadbuffer
@@ -58,12 +58,12 @@
 #include "scores.h"
 #include "keymap.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "cdspan.h"
 #include "cdaudio.h"
 #endif
 //#include "texture.h"	   // ffs 
-#ifdef WIN32
+#ifndef PSX
 #include "texture.h"
 #endif
 #ifdef PSX
@@ -96,7 +96,7 @@ extern CURSORSNAP InterfaceSnap;
 #define		IDMISSIONRES_TITLE		11014
 
 /*mission timer position*/
-#ifdef WIN32
+#ifndef PSX
 
 #define		TIMER_X					(568 + E_W)
 //#define		TIMER_Y					22
@@ -139,7 +139,7 @@ extern CURSORSNAP InterfaceSnap;
 
 
 
-#ifdef WIN32
+#ifndef PSX
 
 #define		MISSION_1_X				5						// pos of text options in box.
 #define		MISSION_1_Y				15
@@ -170,7 +170,7 @@ extern CURSORSNAP InterfaceSnap;
 #endif
 
 //these are used for mission countdown
-#ifdef WIN32
+#ifndef PSX
 #define TEN_MINUTES         (10 * 60 * GAME_TICKS_PER_SEC)
 #define FIVE_MINUTES        (5 * 60 * GAME_TICKS_PER_SEC)
 #define FOUR_MINUTES        (4 * 60 * GAME_TICKS_PER_SEC)
@@ -226,7 +226,7 @@ static BOOL				g_bMissionResult;
 // return positions for vtols
 POINT	asVTOLReturnPos[MAX_PLAYERS];
 
-#ifdef WIN32
+#ifndef PSX
 static UBYTE   missionCountDown;
 //flag to indicate whether the coded mission countdown is played
 static UBYTE   bPlayCountDown;
@@ -393,7 +393,7 @@ DBPRINTF(("***Init Mission ***\n"));
 	}
 	offWorldKeepLists = FALSE;
 	mission.time = -1;
-#ifdef WIN32			// ffs ab
+#ifndef PSX			// ffs ab
     setMissionCountDown();
 #endif
 	mission.ETA = -1;
@@ -419,7 +419,7 @@ DBPRINTF(("***Init Mission ***\n"));
 
     bDroidsToSafety = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
     setPlayCountDown(TRUE);
 #endif
 
@@ -502,7 +502,7 @@ BOOL missionShutDown(void)
 	return TRUE;
 }
 
-#ifdef WIN32
+#ifndef PSX
 /*on the PC - sets the countdown played flag*/
 void setMissionCountDown(void)
 {
@@ -651,7 +651,7 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 			{
 				//play the cam 2 video
 				seq_ClearSeqList();
-			#ifdef WIN32
+			#ifndef PSX
 				seq_AddSeqToList("CAM2\\c002.rpl",NULL,"CAM2\\c002.txa",FALSE);
 			#else
 				seq_AddSeqToList("CAM2\\C002.STR","1656f");
@@ -662,7 +662,7 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 			{
 				//play the cam 3 video
 				seq_ClearSeqList();
-			#ifdef WIN32
+			#ifndef PSX
 				seq_AddSeqToList("CAM2\\cam2out.rpl",NULL,NULL,FALSE);
 				seq_AddSeqToList("CAM3\\c003.rpl",NULL,"CAM3\\c003.txa",FALSE);
 			#else
@@ -776,7 +776,7 @@ void addTransporterTimerInterface(void)
 {
 	DROID	        *psDroid, *psTransporter;
     BOOL            bAddInterface = FALSE;
-#ifdef WIN32
+#ifndef PSX
     W_CLICKFORM     *psForm;
 #endif
 
@@ -811,7 +811,7 @@ void addTransporterTimerInterface(void)
             if (psDroid)*/
             {
                 bAddInterface = TRUE;
-#ifdef WIN32
+#ifndef PSX
 	    		//check timer is not already on the screen
 		    	if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON))
     			{
@@ -826,7 +826,7 @@ void addTransporterTimerInterface(void)
 #endif
 				//set the data for the transporter timer
 				widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)psTransporter);
-#ifdef WIN32
+#ifndef PSX
                 //lock the button if necessary
                 if (transporterFlying(psTransporter))
                 {
@@ -950,7 +950,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    iDx = iLandX - iX;
 			    iDy = iLandY - iY;
                 
-#ifdef WIN32    
+#ifndef PSX    
 			    fR = (FRACT_D) atan2(iDx, iDy);
 			    if ( fR < 0.0 )
 			    {
@@ -988,7 +988,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    /* set fly-in order */
 			    orderDroidLoc( psTransporter, DORDER_TRANSPORTIN,
 			    				iLandX, iLandY );
-#ifdef WIN32
+#ifndef PSX
 				audio_PlayObjDynamicTrack( psTransporter, ID_SOUND_BLIMP_FLIGHT,
 									moveCheckDroidMovingAndVisible );
 #endif
@@ -1275,7 +1275,7 @@ void restoreMissionData(void)
 
 	resetRadarRedraw();
 
-#ifdef WIN32
+#ifndef PSX
     //reset the environ map back to the homebase settings
     environReset();
 #endif
@@ -1624,7 +1624,7 @@ BOOL startMissionOffClear(STRING *pGame)
 
 	//this gets set when the timer is added in scriptFuncs
 	//mission.startTime = gameTime;
-#ifdef WIN32			// ffs ab
+#ifndef PSX			// ffs ab
     //the message should have been played at the between stage
     missionCountDown &= ~NOT_PLAYED_ACTIVATED;
 #endif
@@ -1650,7 +1650,7 @@ BOOL startMissionOffKeep(STRING *pGame)
 
 	//this gets set when the timer is added in scriptFuncs
 	//mission.startTime = gameTime;
-#ifdef WIN32		// ffs ab
+#ifndef PSX		// ffs ab
     //the message should have been played at the between stage
     missionCountDown &= ~NOT_PLAYED_ACTIVATED;
 #endif
@@ -1823,7 +1823,7 @@ void processMission()
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 #define MAXLIMBODROIDS (999)
 #else
 #define MAXLIMBODROIDS (10)
@@ -2078,7 +2078,7 @@ void endMission(void)
     //make sure the cheat time is not set for the next mission
     mission.cheatTime = 0;
 
-#ifdef WIN32
+#ifndef PSX
     //reset the bSetPlayCountDown flag
     setPlayCountDown(TRUE);
 #endif
@@ -2256,7 +2256,7 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
                     psResFacility->timeStarted)) / GAME_TICKS_PER_SEC; 
 
 				//check if Research is complete
-#ifdef WIN32
+#ifndef PSX
 				//if ((pointsToAdd + pPlayerRes->currentPoints) > psResFacility->
 				//	timeToResearch)
                 if ((pointsToAdd + pPlayerRes->currentPoints) > (
@@ -2899,7 +2899,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 		    addTransporterTimerInterface();
    			//set the data for the transporter timer label
     		widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)psTransporter);
-#ifdef WIN32
+#ifndef PSX
             //make sure the button is enabled
             psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANTIMER_BUTTON);
             if (psForm)
@@ -3045,7 +3045,7 @@ BOOL intAddMissionTimer(void)
 //add the Transporter timer into the top left hand corner of the screen
 BOOL intAddTransporterTimer(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
@@ -3119,7 +3119,7 @@ BOOL intAddTransporterTimer(void)
 //add the Transporter timer into the top left hand corner of the screen
 BOOL intAddTransporterTimer(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 	W_BUTINIT		sButInit;
@@ -3322,7 +3322,7 @@ void intUpdateMissionTimer(struct _widget *psWidget, struct _w_context *psContex
     //make sure its visible
     Label->style &= ~WIDG_HIDDEN;
 
-#ifdef WIN32
+#ifndef PSX
     //make timer flash if time remaining < 5 minutes
     if (timeRemaining < FIVE_MINUTES)
     {
@@ -3431,7 +3431,7 @@ void intUpdateTransporterTimer(struct _widget *psWidget, struct _w_context *psCo
 		if(missionCanReEnforce()) { // ((mission.type == LDS_MKEEP) || (mission.type == LDS_MCLEAR)) & (mission.ETA >= 0) ) {
 			fillTimeDisplay(Label->aText, ETA, FALSE);
 		} else {
-#ifdef WIN32
+#ifndef PSX
 			fillTimeDisplay(Label->aText, 0, FALSE);
 #else
 			fillTimeDisplay(Label->aText, LZ_COMPROMISED_TIME, FALSE);
@@ -3468,7 +3468,7 @@ void intRemoveMissionTimer(void)
 /* Remove the Transporter Timer widgets from the screen*/
 void intRemoveTransporterTimer(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	//remove main screen
 	if(widgGetFromID(psWScreen,IDTRANTIMER_BUTTON) != NULL) 
 	{	
@@ -3483,7 +3483,7 @@ void intRemoveTransporterTimer(void)
 // mission result functions for the interface.
 
 
-#ifdef WIN32
+#ifndef PSX
 void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UNUSEDPARAMETER(pColours);
@@ -3800,7 +3800,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
 
-#ifdef WIN32
+#ifndef PSX
 
 	// add some funky beats
 	cdAudio_PlayTrack(2);	// 2= frontend music.
@@ -3853,7 +3853,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sFormInit.disableChildren = TRUE;
 	sFormInit.pDisplay		= intOpenPlainForm;	//intDisplayPlainForm;
 // removed for more space
-//#ifndef WIN32
+//#ifdef PSX
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;
@@ -3893,7 +3893,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sLabInit.height = 16;
 	if(result)
 	{	
-#ifdef WIN32
+#ifndef PSX
         //don't bother adding the text if haven't played the audio
         if (bPlaySuccess)
         {
@@ -3920,7 +3920,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	}
 	sLabInit.FontID = WFont;
 //removed for more space
-//#ifndef WIN32
+//#ifdef PSX
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -3985,7 +3985,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	}
 	else
 	{
-#ifdef WIN32
+#ifndef PSX
 #ifndef COVERMOUNT
 		//load
 		sButInit.id			= IDMISSIONRES_LOAD;
@@ -4014,7 +4014,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	intMode		= INT_MISSIONRES;
 	MissionResUp = TRUE;
 
-#ifdef WIN32
+#ifndef PSX
 	/* play result audio */
 	if ( result == TRUE AND bPlaySuccess)
 	{
@@ -4056,7 +4056,7 @@ void intRemoveMissionResultNoAnim(void)
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);		
 
-#ifdef WIN32
+#ifndef PSX
 	 cdAudio_Stop();
 #else
 	StopBackdropDisplay();
@@ -4097,7 +4097,7 @@ void intRunMissionResult()
 	frameSetCursorFromRes(IDC_DEFAULT);
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(FALSE))// check for file name.
@@ -4105,7 +4105,7 @@ void intRunMissionResult()
 			if(strlen(sRequestResult))
 			{
 				DBPRINTF(("Returned %s",sRequestResult));
-#ifdef WIN32 // bRequestLoad is not set up correctly on the psx ... so we'll take it out this check (we will always save)
+#ifndef PSX // bRequestLoad is not set up correctly on the psx ... so we'll take it out this check (we will always save)
 
 				if(bRequestLoad)
 				{
@@ -4189,18 +4189,18 @@ void missionContineButtonPressed( void )
 void intProcessMissionResult(UDWORD id)
 {
 	W_BUTINIT	sButInit;
-#ifdef WIN32
+#ifndef PSX
 	CD_INDEX	CDrequired;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	/* GJ to TC - this call processes the CD change widget box */
 	if ( !cdspan_ProcessCDChange(id) )
 #endif
 	switch(id)
 	{
 
-#ifdef WIN32
+#ifndef PSX
 	case IDMISSIONRES_LOAD:
 		// throw up some filerequester
 		addLoadSave(LOAD_MISSIONEND,"savegame\\","gam",strresGetString(psStringRes,STR_MR_LOAD_GAME)/*"Load Game"*/);
@@ -4260,7 +4260,7 @@ void intProcessMissionResult(UDWORD id)
 		break;
 
 	case IDMISSIONRES_CONTINUE:
-#ifdef WIN32
+#ifndef PSX
 		if(bLoadSaveUp)
 		{
 			closeLoadSave();				// close save interface if it's up.
@@ -4273,7 +4273,7 @@ void intProcessMissionResult(UDWORD id)
 		{
 			missionContineButtonPressed();
 		}
-#ifdef WIN32
+#ifndef PSX
 		else
 		{
 			widgDelete(psWScreen, IDMISSIONRES_TITLE);
@@ -4337,7 +4337,7 @@ void launchMission(void)
 	}
 }
 
-#ifdef WIN32
+#ifndef PSX
 void intCDOK( void )
 {
 //#ifdef PSX
@@ -4361,7 +4361,7 @@ void intCDCancel( void )
 //BOOL setUpMission(MISSION_TYPE type)
 BOOL setUpMission(UDWORD type)
 {
-/*#ifdef WIN32
+/*#ifndef PSX
 	CD_INDEX	CDrequired;
 #endif*/
 
@@ -4501,7 +4501,7 @@ void adjustMissionPower(void)
 game needs to be paused*/
 void setMissionPauseState(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if (!bMultiPlayer)
 	{
 #endif
@@ -4512,7 +4512,7 @@ void setMissionPauseState(void)
 		setScriptPause(TRUE);
 		setConsolePause(TRUE);
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif
 }
@@ -4520,7 +4520,7 @@ void setMissionPauseState(void)
 /*resets the pause states */
 void resetMissionPauseState(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if (!bMultiPlayer)
 	{
 #endif
@@ -4531,7 +4531,7 @@ void resetMissionPauseState(void)
 		setConsolePause(FALSE);
 		gameTimeStart();
 
-#ifdef WIN32
+#ifndef PSX
 	}
 #endif
 }
@@ -4584,7 +4584,7 @@ void setLandingZone(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2)
 		sLandingZone[0].y2 = y2;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 		if(pie_Hardware())
 		{
 			addLandingLights(getLandingX(0)+64,getLandingY(0)+64);
@@ -4619,7 +4619,7 @@ void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 		sLandingZone[area].y2 = y2;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 		if(area==0 AND pie_Hardware())
 		{
 			addLandingLights(getLandingX(area)+64,getLandingY(area)+64);
@@ -4953,7 +4953,7 @@ BOOL getDroidsToSafetyFlag(void)
     return bDroidsToSafety;
 }
 
-#ifdef WIN32
+#ifndef PSX
 //access functions for bPlayCountDown flag - TRUE = play coded mission count down
 void setPlayCountDown(UBYTE set)
 {
@@ -5021,7 +5021,7 @@ void clearMissionWidgets(void)
     {
         intRemoveMissionTimer();
     }
-#ifdef WIN32
+#ifndef PSX
     if (missionCanReEnforce())
     {
         intRemoveTransporterTimer();
@@ -5041,7 +5041,7 @@ void resetMissionWidgets(void)
         //make sure its not flashing when added
         stopMissionButtonFlash(IDTIMER_FORM);
     }
-#ifdef WIN32
+#ifndef PSX
     if (missionCanReEnforce())
     {
         addTransporterTimerInterface();

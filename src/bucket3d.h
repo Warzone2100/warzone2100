@@ -3,7 +3,7 @@
 #ifndef _bucket3d_h
 #define _bucket3d_h
 
-#ifdef WIN32
+#ifndef PSX
 #define		BUCKET
 #else
 // not working for the playstation yet

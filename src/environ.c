@@ -2,7 +2,7 @@
 Environ.c - handles the enviroment stuff that's stored in tables
 used for the mist and water effects. These are preprocessed.
 */
-#ifdef WIN32
+#ifndef PSX
 
 // -------------------------------------------------------------------------------
 #include "frame.h"
@@ -348,7 +348,7 @@ FUNCINLINE UDWORD map_TileMistValue(UDWORD x, UDWORD y)
 {
     x = x >= (mapWidth) ? (mapWidth-1) : x;
 	y = y >= (mapHeight) ? (mapHeight-1) : y;
-#ifdef WIN32
+#ifndef PSX
 	ASSERT((x < mapWidth,
 		"mapTile: x coordinate bigger than map width"));
 	ASSERT((y < mapHeight,

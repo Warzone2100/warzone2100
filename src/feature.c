@@ -27,7 +27,7 @@
 #include "effects.h"
 #include "geometry.h"
 #include "scores.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h" 
 #include "advvis.h"
 #endif
@@ -679,7 +679,7 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass,
 			psFeature->body -= 1;
 		}
 	}
-#ifdef WIN32
+#ifndef PSX
 //	if(psFeature->sDisplay.imd->ymax > 300)
 //	{
 		psFeature->timeLastHit = gameTime;
@@ -789,13 +789,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
 	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
-#ifdef WIN32
+#ifndef PSX
 	psFeature->bTargetted = FALSE;
 	psFeature->timeLastHit = 0;
 #endif
 
 
-#ifdef WIN32	
+#ifndef PSX	
 	if(getRevealStatus())
 	{
 		vis = 0;
@@ -830,7 +830,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	// set up the imd for the feature
 	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
 	{
-#ifdef WIN32
+#ifndef PSX
 //		psFeature->sDisplay.imd = wreckageImds[rand()%MAX_WRECKAGE];
 		psFeature->sDisplay.imd = getRandomWreckageImd();
 #else
@@ -853,7 +853,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		for (breadth = 0; breadth <= psStats->baseBreadth; breadth++)
 		{
 			//check not outside of map - for load save game
-#ifdef WIN32
+#ifndef PSX
 			ASSERT(((mapX+width) < mapWidth,
 				"x coord bigger than map width - %s, id = %d",
 				getName(psFeature->psStats->pName), psFeature->id));
@@ -969,7 +969,7 @@ void removeFeature(FEATURE *psDel)
 		return;
 	}
 
-#ifdef WIN32	// dont send if starting up, all players do this anyway.
+#ifndef PSX	// dont send if starting up, all players do this anyway.
 	if(bMultiPlayer && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
@@ -1025,7 +1025,7 @@ void removeFeature(FEATURE *psDel)
 
 	killFeature(psDel);
 
-#ifdef WIN32	// No wrecks on PSX please.
+#ifndef PSX	// No wrecks on PSX please.
 	//once a feature of type FEAT_BUILDING is destroyed - it leaves a wrecked 
 	//struct FEATURE in its place - ?!
 	if (psDel->psStats->subType == FEAT_BUILDING)
@@ -1149,7 +1149,7 @@ void destroyFeature(FEATURE *psDel)
 		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,FALSE,NULL,0);
 
 		//play sound
-#ifdef WIN32		// ffs gj
+#ifndef PSX		// ffs gj
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
 			audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_BUILDING_FALL );

@@ -304,7 +304,7 @@ anim_SetVals( char szFileName[], UWORD uwAnimID )
 }
 
 /***************************************************************************/
-#ifdef WIN32
+#ifndef PSX
 // the playstation version uses sscanf's ... see animload.c
 BASEANIM *
 anim_LoadFromBuffer( UBYTE *pBuffer, UDWORD size )

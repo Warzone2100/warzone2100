@@ -40,7 +40,7 @@
 #include "ctrlpsx.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #define MODFRACT(value,mod) \
 	while((value) < 0)	{ (value) += (mod); } \
 	while((value) > (mod)) { (value) -= (mod); }
@@ -76,7 +76,7 @@ SDWORD	presAvAngle = 0;;
 /*	These are the DEFAULT offsets that make us track _behind_ a droid and allow
 	it to be pretty far _down_ the screen, so we can see more 
 */
-#ifdef WIN32
+#ifndef PSX
 #define	CAM_DEFAULT_X_OFFSET	-400
 #define CAM_DEFAULT_Y_OFFSET	-400	
 #define	MINCAMROTX	-20
@@ -254,7 +254,7 @@ BOOL Status = TRUE;
 					trackingCamera.status = CAM_RESET;
 				}
 			}
-#ifdef WIN32
+#ifndef PSX
 		processLeaderSelection();
 #endif
 		break;
@@ -435,7 +435,7 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 //-----------------------------------------------------------------------------------
 
 
-#ifdef WIN32
+#ifndef PSX
 
 
 //-----------------------------------------------------------------------------------
@@ -1418,7 +1418,7 @@ SDWORD	getPresAngle( void )
 }
 //-----------------------------------------------------------------------------------
 
-#ifdef WIN32
+#ifndef PSX
 //-----------------------------------------------------------------------------------
 UDWORD	getNumDroidsSelected( void )
 {
@@ -2320,7 +2320,7 @@ BOOL	retVal;
 /* Displays a spinning MTV style logo in the top right of the screen */
 void	dispWarCamLogo( void )
 {
-#ifdef WIN32
+#ifndef PSX
 //iVector		dv;
 //
 //	if(gamePaused())

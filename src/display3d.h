@@ -113,7 +113,7 @@ extern BOOL bRender3DOnly;
 
 extern UDWORD visibleXTiles;
 extern UDWORD visibleYTiles;
-#ifdef WIN32
+#ifndef PSX
 
 // Expanded PIEVERTEX.
 typedef struct {
@@ -138,7 +138,7 @@ extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128
 
-#ifdef WIN32	
+#ifndef PSX	
 #define CLOSING_TIME	800
 #define LINE_TIME		600
 #define DOT_TIME		200

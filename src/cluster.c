@@ -90,7 +90,7 @@ void clustInitialise(void)
 
 
 // check the cluster usage
-#ifdef WIN32
+#ifndef PSX
 void clustValidateUsage()
 {
 	SDWORD		cluster, player, droidUsage, structUsage;
@@ -443,7 +443,7 @@ SDWORD clustFindUnused(void)
 // display the current clusters
 void clustDisplay(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	SDWORD	cluster, map, player;
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;

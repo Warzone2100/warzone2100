@@ -17,7 +17,7 @@
 #include "piedef.h"
 #include "objmem.h"
 #include "map.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 /* Allocation sizes for the message heaps */
@@ -330,7 +330,7 @@ void viewDataHeapShutDown(void)
 //	 else
 //	 {
 //		 //make the reticule button flash as long as not prox msg or multiplayer game.
-//#ifdef WIN32
+//#ifndef PSX
 //		if (player == selectedPlayer && !bMultiPlayer)
 //#else
 //		if (player == selectedPlayer )
@@ -600,7 +600,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 			//sscanf(pViewMsgData,"%[^',']", &name);
 			sscanf1(&pViewMsgData,"%[^','],",&name);
 
-#ifdef WIN32
+#ifndef PSX
 			//get the ID for the string
 			if (!strresGetIDNum(psStringRes, name, &id))
 			{
@@ -761,7 +761,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 						DBERROR(("Cannot find the view data string id %s ", name));
 						return NULL;
 					}
-#ifdef WIN32
+#ifndef PSX
 					//get the string from the id
 					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetString(psStringRes, id);
 #else
@@ -809,7 +809,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 				return NULL;
 			}
 		
-#ifdef WIN32
+#ifndef PSX
 			audioName[0] = '\0';
 			sscanf1(&pViewMsgData, "%d,%d,%d,%[^','],%d", &LocX, &LocY, &LocZ, 
 				&audioName,&proxType);

@@ -107,7 +107,7 @@ audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 	*piY = player.p.z + ((visibleYTiles/2) << TILE_SHIFT);
 	*piZ = player.p.y;
 
-#ifdef WIN32		// What a drag !
+#ifndef PSX		// What a drag !
 	/* invert y to match QSOUND axes */
 	*piY = (GetHeightOfMap() << TILE_SHIFT) - *piY;
 #endif
@@ -324,7 +324,7 @@ audio_GetClusterIDFromObj( void *psClusterObj )
 
 /***************************************************************************/
 
-#ifdef WIN32
+#ifndef PSX
 BOOL
 audio_GetIDFromStr( STRING *pWavStr, SDWORD *piID )
 {
@@ -336,7 +336,7 @@ audio_GetIDFromStr( STRING *pWavStr, SDWORD *piID )
 
 /***************************************************************************/
 
-#ifdef WIN32
+#ifndef PSX
 UDWORD
 sound_GetGameTime( void )
 {

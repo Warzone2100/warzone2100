@@ -64,7 +64,7 @@ static SDWORD			dragX, dragY;
 /* The current mouse button state */
 static KEY_STATE aMouseState[3];
 
-#ifdef WIN32
+#ifndef PSX
 /* The size of the input buffer */
 #define INPUT_MAXSTR	512
 
@@ -238,7 +238,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 			DBPRINTF(("WM_KEYDOWN %x %x\n",vk,repeat));
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 			DBP1(("Code: %x\n", vk));
 			inputAddBuffer(vk, repeat);
 #endif
@@ -310,7 +310,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 			/* store the current mouse position */
 			mouseXPos = LOWORD(lParam);
 			mouseYPos = HIWORD(lParam);
-	#ifdef WIN32		// ffs am
+	#ifndef PSX		// ffs am
 			if(bRunningUnderGlide)
 			{
 				scrX = GetSystemMetrics(SM_CXFULLSCREEN);
@@ -446,7 +446,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 		repeat = lParam & 0xf;
 		/* Store the repeat count number of characters
 		   while there is space in the buffer */
-#ifdef WIN32
+#ifndef PSX
 		inputAddBuffer(wParam, repeat);
 #endif
 #ifdef PSX
@@ -465,7 +465,7 @@ void inputNewFrame(void)
 {
 	UDWORD i;
 
-#ifdef WIN32
+#ifndef PSX
 	/* Do the keyboard */
 	for (i=0; i< KEY_MAXSCAN; i++)
 	{

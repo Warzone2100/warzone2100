@@ -7,7 +7,7 @@
 #ifndef _SeqDisp_h
 #define _SeqDisp_h
 
-#ifdef WIN32			// ffs js (bastard)
+#ifndef PSX			// ffs js (bastard)
 #include "piemode.h"
 #endif
 /***************************************************************************/
@@ -44,7 +44,7 @@ extern BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOf
 //full screen render
 //extern BOOL seq_PlayVideo(char* pSeq, char* pAudio);
 //extern BOOL seq_StartFullScreenVideo(char* sequenceFile, char* audioFile);//start videos through seqList 
-#ifdef WIN32
+#ifndef PSX
 extern BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *bClear);
 #else
 extern BOOL seq_UpdateFullScreenVideo(void);
@@ -70,7 +70,7 @@ extern BOOL seq_GetSubtitles(void);
 
 
 
-#ifdef WIN32
+#ifndef PSX
 /*returns the next sequence in the list to play*/
 extern void seq_StartNextFullScreenVideo(void);
 #else

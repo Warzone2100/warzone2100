@@ -14,7 +14,7 @@
 #include "texd3d.h"
 #include "dx6texman.h"
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 
 
 /***************************************************************************/

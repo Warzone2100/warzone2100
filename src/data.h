@@ -15,7 +15,7 @@ extern void dataIMGPAGERelease(void *pData);
 extern void dataSetSaveFlag(void);
 extern void dataClearSaveFlag(void);
 
-#ifdef WIN32
+#ifndef PSX
 // multiplayer cheat code.
 #define CHEAT_SWEAPON	0
 #define CHEAT_SBODY		1

@@ -8,10 +8,10 @@
 #define _displaydef_h
 
 #include "imd.h"
-#ifdef WIN32			// ffs am
+#ifndef PSX			// ffs am
 #include "pieclip.h"
 #endif
-#ifdef WIN32
+#ifndef PSX
 #define DISP_WIDTH		(pie_GetVideoBufferWidth()) 
 #define DISP_HEIGHT		(pie_GetVideoBufferHeight())
 #else
@@ -20,7 +20,7 @@
 #endif
 #define DISP_HARDBITDEPTH	(16)
 #define DISP_BITDEPTH	(8)
-#ifdef WIN32
+#ifndef PSX
 #define	BOUNDARY_X			(16)
 #define BOUNDARY_Y			(16)
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
@@ -32,7 +32,7 @@
 #define	BOUNDARY_Y		(32)
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 typedef struct _screen_disp_data
 {
 	//UDWORD		dummy;

@@ -111,7 +111,7 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 {
 	int				i3d;
 	int				i;
-#ifdef WIN32
+#ifndef PSX
 	/* Get next available texture page */
 	i = _TEX_INDEX;
 	/* Have we used up too many? */
@@ -207,7 +207,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* If it's not a resource - use old way!  - PSX does not need this check because it MUST have been loaded allready by the resource loader */
 	if(!resPresent("TEXPAGE",filename))
 	{
@@ -236,7 +236,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	/* Ensure upper case for tex file names */
 	ASSERT ((strlen(filename)<MAX_FILE_PATH,"Texture file path too long"));
 
@@ -530,7 +530,7 @@ SBYTE GetTextureNumber(char *Name)
 void pie_TexShutDown(void)
 
 {
-#ifdef WIN32
+#ifndef PSX
 	int i,j;
 
 	i = 0;
@@ -563,7 +563,7 @@ void pie_TexShutDown(void)
 
 void pie_TexInit(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	int i;
 
 	i = 0;

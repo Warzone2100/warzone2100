@@ -59,7 +59,7 @@ extern void moveSetFormationSpeedLimiting( BOOL );
 extern void moveToggleFormationSpeedLimiting( void );
 extern BOOL moveFormationSpeedLimitingOn( void );
 
-#ifdef WIN32
+#ifndef PSX
 /* audio callback used to kill movement sounds */
 extern BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample );
 #endif

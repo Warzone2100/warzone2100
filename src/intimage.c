@@ -19,7 +19,7 @@
 #include "ivisdef.h"
 #include "piestate.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "piemode.h"
 #endif
 
@@ -68,7 +68,7 @@ IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 // Form frame definitions.
 IMAGEFRAME FrameNormal = {
 	0,0, 0,0,
@@ -310,7 +310,7 @@ void DrawEnableLocks(BOOL Enable)
 
 void DrawBegin(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if(EnableLocks) {
 		if(LockRefs == 0) {
 			pie_LocalRenderBegin();
@@ -324,7 +324,7 @@ void DrawBegin(void)
 
 void DrawEnd(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if(EnableLocks) {
 		LockRefs--;
 
@@ -415,7 +415,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Masked = TRUE;
 					}
 
-#ifdef WIN32
+#ifndef PSX
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Rect->TLXOffset,
@@ -455,7 +455,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifdef WIN32
+#ifndef PSX
 
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
@@ -486,7 +486,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifdef WIN32
+#ifndef PSX
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Width-INCEND+Rect->TLXOffset,
@@ -516,7 +516,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifdef WIN32
+#ifndef PSX
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Rect->TLXOffset,
@@ -548,7 +548,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifdef WIN32
+#ifndef PSX
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Rect->TLXOffset,

@@ -24,11 +24,11 @@
 #include "frend.h"		// frontend ids.
 #include "intimage.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 //#include "intfac.h"		// Interface image id's.
 #else
 //#include "intpsx.h"
@@ -48,7 +48,7 @@ RESEARCH                *psCBLastResearch;
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
 //changing above a UBYTE size will require changes throughout research - put the designers off if you can!
 //PC and PSX are different because of the multiplayer research trees
-#ifdef WIN32
+#ifndef PSX
 //#define MAX_RESEARCH        (216 + 20)
 //#define MAX_RESEARCH        (255)
 //new levels required for Patch
@@ -59,7 +59,7 @@ RESEARCH                *psCBLastResearch;
 
 //need to define max's for each of the lists associated with the research - these 
 //values have been chosen based on the current research stats - 21/12/98
-#ifdef WIN32
+#ifndef PSX
 //#define MAX_RESEARCH_PR             (280 + 20)
 /*#define MAX_RESEARCH_PR             (400)
 #define MAX_RESEARCH_STRUCT_PR      (24 + 5)
@@ -101,7 +101,7 @@ UWORD               *pResearchStructRes;
 COMP_BASE_STATS	    **pResearchArteRes;
 COMP_BASE_STATS	    **pResearchArteRep;
 
-#ifdef WIN32
+#ifndef PSX
 UWORD               numResearchPR;
 #else
 UBYTE               numResearchPR;
@@ -665,7 +665,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
             pResearch->pPRList = pResearchPR + numResearchPR;
             //pResearchPR += pResearch->numPRRequired;
             //keep track on how many are being allocated
-#ifdef WIN32
+#ifndef PSX
             numResearchPR = (UWORD)(numResearchPR + pResearch->numPRRequired);
 #else
             numResearchPR = (UBYTE)(numResearchPR + pResearch->numPRRequired);
@@ -1389,7 +1389,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			}
 		}
 
-#ifdef WIN32
+#ifndef PSX
 		//if single player mode and key topic, then ignore cos can't do it!
 		if (!bMultiPlayer)
 #endif
@@ -2234,7 +2234,7 @@ BOOL ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding)
 {
-#ifdef WIN32
+#ifndef PSX
 	RESEARCH_FACILITY		*psResFac;
 
 	ASSERT((psBuilding->pStructureType->type == REF_RESEARCH, 
@@ -2338,7 +2338,7 @@ void cancelResearch(STRUCTURE *psBuilding)
         }
 		else
 		{
-#ifdef WIN32		// only PC version saves these
+#ifndef PSX		// only PC version saves these
 			/*store the points - need to keep this so can add points after the topic 
 			has been cancelled and restarted*/
 			pPlayerRes->currentPoints += (psResFac->researchPoints * (gameTime - 

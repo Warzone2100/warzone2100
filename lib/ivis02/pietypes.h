@@ -62,7 +62,7 @@ typedef struct {int8 x, y;} iPoint8;
 typedef struct {int16 x, y;} iPoint16;
 typedef struct {int32 x, y;} iPoint32;
 
-#ifndef PIEPSX			// was    #ifdef WIN32
+#ifndef PIEPSX			// was    #ifndef PSX
 	typedef struct {int32 x, y, z;} iVector;
 	typedef struct {double x, y, z;} iVectorf;
 	typedef struct {int xshift, width, height; iBitmap *bmp;

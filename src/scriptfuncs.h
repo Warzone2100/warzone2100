@@ -181,7 +181,7 @@ extern BOOL scrSetStructureLimits(void);
 // Sets all structure limits for a player to a specified value
 extern BOOL scrSetAllStructureLimits(void);
 
-#ifdef WIN32
+#ifndef PSX
 //multiplayer limit handler
 extern BOOL scrApplyLimitSet(void);
 #endif
@@ -200,7 +200,7 @@ extern BOOL scrAddConsoleText(void);
 // same as above - but it doesn't clear what's there and isn't permanent
 extern	BOOL scrShowConsoleText(void);
 
-#ifdef WIN32
+#ifndef PSX
 /* Adds console text without clearing old */
 extern BOOL scrTagConsoleText(void);
 #endif

@@ -33,7 +33,7 @@
 #include "drive.h"
 #include "mission.h"
 #include "audio_id.h"
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 #include "formation.h"
@@ -629,7 +629,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		/* get target distance */
 		fR = trigIntSqrt( dx*dx + dy*dy );
 
-#ifdef WIN32
+#ifndef PSX
 		targetPitch = (SDWORD)( RAD_TO_DEG(atan2(dz, fR)));
 #else
 		targetPitch = angle_PSX2World(ratan2(dz, fR));
@@ -1501,7 +1501,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 
 
-#ifdef WIN32
+#ifndef PSX
 #ifndef COVERMOUNT
 				if ( psDroid->player == selectedPlayer )
 				{
@@ -2907,7 +2907,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 /* Give a droid an action */
 void actionDroid(DROID *psDroid, DROID_ACTION action)
 {
@@ -3123,7 +3123,7 @@ void moveToRearm(DROID *psDroid)
 		orderDroid( psDroid, DORDER_RTB );
 		chosen =3;
 	}
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		sendVtolRearm(psDroid,psStruct,chosen);

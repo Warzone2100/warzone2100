@@ -15,7 +15,7 @@ typedef struct _astar_route
 } ASTAR_ROUTE;
 
 // Sizes for the node heap
-#ifdef WIN32
+#ifndef PSX
 #define FPATH_NODEINIT		600
 #define FPATH_NODEEXT		0
 #else

@@ -91,7 +91,7 @@ FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 BASE_OBJECT		*psDestroyedObj=NULL;
 
 
-#if defined(DEBUG) && defined(WIN32)
+#if defined(DEBUG) && !defined(PSX)
 // store a record of units that recently died
 typedef struct _morgue
 {

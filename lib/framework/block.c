@@ -27,7 +27,7 @@
 #include "block.h"
 
 /* What functions to use for the real malloc and free */
-#ifdef WIN32
+#ifndef PSX
 #define RMALLOC		malloc
 #define RFREE		free
 #else

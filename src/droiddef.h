@@ -90,7 +90,7 @@ typedef struct _droid_template
 	// on the PSX the NameHash entry is used. If it is database generated template, the hashed version of the short name of the template is stored. If it is a user generated template NULL is stored.
 	STATS_BASE;						/* basic stats */ 
 
-#ifdef WIN32
+#ifndef PSX
 	// on the PC this contains the full editable ascii name of the template
 	// on the PSX this is not used, the full name is NON-EDITABLE and is generated from the template components e.g. Viper Mk I
 	STRING			aName[DROID_MAXNAME];	 
@@ -117,7 +117,7 @@ typedef struct _droid_template
 	//UDWORD			asProgs[DROID_MAXPROGS];	/* program indices*/
 
 	DROID_TYPE		droidType;					// The type of droid
-//#ifdef WIN32
+//#ifndef PSX
 	UDWORD			multiPlayerID;				// multiplayer unique descriptor(cant use id's for templates)
 												// used for save games as well now - AB 29/10/98
 //#endif
@@ -131,7 +131,7 @@ typedef struct _droid
 	/* The common structure elements for all objects */
 	BASE_ELEMENTS(struct _droid);
 
-#ifdef WIN32
+#ifndef PSX
 	//Ascii name of the droid - This is generated from the droid template and can not be changed by the game player after creation.
 	STRING		aName[DROID_MAXNAME];			
 #else
@@ -195,7 +195,7 @@ typedef struct _droid
                                                     //for vtols its the rearming pad
 
 	// queued orders
-#ifdef WIN32
+#ifndef PSX
 	SDWORD			listSize;
 	ORDER_LIST		asOrderList[ORDER_LIST_MAX];
 #endif
@@ -205,7 +205,7 @@ typedef struct _droid
 	SDWORD				order;
 	UWORD				orderX,orderY;
 	UWORD				orderX2,orderY2;
-#ifdef WIN32
+#ifndef PSX
 // 	struct _base_object	*psLastAttacker;
 	UDWORD				lastHitWeapon;
 	UDWORD				timeLastHit;
@@ -218,7 +218,7 @@ typedef struct _droid
 	// secondary order data
 	UDWORD				secondaryOrder;
 
-#ifdef WIN32
+#ifndef PSX
 	UDWORD				lastSync;			// multiplayer synchronisation value.
 #endif
 
@@ -245,7 +245,7 @@ typedef struct _droid
 	/* anim data */
 	ANIM_OBJECT			*psCurAnim;			
 
-#ifdef WIN32
+#ifndef PSX
 	SDWORD				iAudioID;
 #endif
 }

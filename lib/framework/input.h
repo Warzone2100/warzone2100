@@ -103,7 +103,7 @@ typedef enum _key_code
 	KEY_KP_FULLSTOP =0x53,
 	KEY_F11         =0x57,
 	KEY_F12         =0x58,
-#ifdef WIN32
+#ifndef PSX
 	KEY_RCTRL           =0x11D,
 	KEY_KP_BACKSLASH    =0x135,
 	KEY_RALT            =0x138,
@@ -132,7 +132,7 @@ typedef enum _key_code
 
 /* The largest possible scan code (probably a lot less than this but ...) */
 //      but ...    it's not as if it's got to fit into 2meg of mem or anything is it ...
-#ifdef WIN32
+#ifndef PSX
 #define KEY_MAXSCAN  512
 #else
 #define KEY_MAXSCAN  (0x5b)		// see input.h for the max value

@@ -31,7 +31,7 @@
 
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
-#ifdef WIN32
+#ifndef PSX
 #define MAX_PROD_RUN	20
 
 #else

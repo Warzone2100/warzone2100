@@ -32,7 +32,7 @@
 	#include "3dfxtext.h"
 #endif
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 #define MIST
 
 /***************************************************************************/
@@ -594,7 +594,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				imdPoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (imdPoly.flags > 0)
@@ -635,7 +635,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				piePoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (piePoly.flags > 0)
@@ -897,7 +897,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				imdPoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (imdPoly.flags > 0)
@@ -938,7 +938,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				piePoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (piePoly.flags > 0)
@@ -1268,7 +1268,7 @@ void pie_Draw3DNowShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWOR
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				imdPoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (imdPoly.flags > 0)
@@ -1305,7 +1305,7 @@ void pie_Draw3DNowShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWOR
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 				piePoly.pTexAnim = pPolys->pTexAnim;
 #endif
 				if (piePoly.flags > 0)
@@ -1659,7 +1659,7 @@ int	uFrame, vFrame, j, framesPerLine;
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 		if (poly->pTexAnim != NULL)
 		{
 			if (poly->pTexAnim->nFrames >=0)
@@ -1865,7 +1865,7 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
-#ifndef PIEPSX   // was #ifdef WIN32
+#ifndef PIEPSX   // was #ifndef PSX
 		if (poly->pTexAnim != NULL)
 		{
 			if (poly->pTexAnim->nFrames >=0)

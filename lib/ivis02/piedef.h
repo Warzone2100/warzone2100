@@ -54,7 +54,7 @@
 #define INV_TEX_SIZE			(0.00390625f)
 
 
-#ifdef WIN32
+#ifndef PSX
 
 #define MAX_FILE_PATH		256
 #define pie_MAX_POLY_SIZE	16
@@ -139,7 +139,7 @@ typedef struct {UBYTE b,g,r,a;} PIELIGHTBYTES; //for byte fields in a DWORD
 typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
 typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT; 
 typedef struct {SDWORD sx, sy, sz; UWORD tu, tv; PIELIGHT light, specular;} PIEVERTEX;
-#ifdef WIN32 
+#ifndef PSX 
 typedef struct {float d3dx, d3dy, d3dz;} PIEPIXEL; 
 #endif
 typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
@@ -156,7 +156,7 @@ typedef struct
 	iPalette *Palette;
 } TEXTUREPAGE;
 
-#ifdef WIN32
+#ifndef PSX
 	typedef struct {
 		UDWORD flags;
 		SDWORD nVrts;

@@ -269,7 +269,7 @@ DROID	*psDroid;
 // Selects all units the same as the one(s) selected
 UDWORD	selSelectAllSame( UDWORD player, BOOL bOnScreen)
 {
-#ifdef WIN32
+#ifndef PSX
 
 DROID	*psDroid;
 UDWORD	count;
@@ -293,7 +293,7 @@ UDWORD	count;
 // sub-function - selects all units with same name as one passed in
 UDWORD	selNameSelect( STRING *droidName, UDWORD player, BOOL bOnScreen )
 {
-#ifdef WIN32
+#ifndef PSX
 DROID	*psDroid;
 UDWORD	count;
 
@@ -321,7 +321,7 @@ UDWORD	count;
 	return 0;
 #endif
 }
-#ifdef WIN32
+#ifndef PSX
 // ffs am
 // ---------------------------------------------------------------------
 void	selNextSpecifiedUnit(UDWORD unitType)
@@ -705,7 +705,7 @@ void selCommander(SDWORD n)
 
 				// this horrible bit of code is taken from activateGroupAndMove
 				// and sets the camera position to that of the commander
-#ifdef WIN32
+#ifndef PSX
 				if(getWarCamStatus())
 				{
 					camToggleStatus();			 // messy - fix this

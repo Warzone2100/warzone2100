@@ -31,7 +31,7 @@
 
 #include "design.h"			// for the iddes_...
 #include "display.h"		// for the MT_...  
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #include "intfac.h"
 #else
@@ -1039,7 +1039,7 @@ VAR_SYMBOL asExternTable[] =
 
 
 
-#ifdef WIN32	
+#ifndef PSX	
 	{ "multiPlayerGameType",VAL_INT,	ST_EXTERN,	0,	EXTID_MULTIGAMETYPE,
 		scrGenExternGet,			NULL },
 
@@ -1312,7 +1312,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "IMAGE_CURSOR_SELECT", VAL_INT,	0,		IMAGE_CURSOR_SELECT,	0 },
 	{ "IMAGE_CURSOR_ATTACK", VAL_INT,	0,  	IMAGE_CURSOR_ATTACK,	0 },
 	{ "IMAGE_CURSOR_MOVE",	 VAL_INT,	0,		IMAGE_CURSOR_MOVE,		0 },
-#ifdef WIN32
+#ifndef PSX
 	{ "IMAGE_CURSOR_ECM",	 VAL_INT,	0, 		IMAGE_CURSOR_ECM,		0 },
 	{ "IMAGE_CURSOR_REPAIR", VAL_INT,	0,		IMAGE_CURSOR_REPAIR, 0 },
 #else
@@ -1332,11 +1332,11 @@ CONST_SYMBOL asConstantTable[] =
 
 	// game mode types  (possible values for intMode)
 	{ "INT_NORMAL",			VAL_INT,	0,		INT_NORMAL,	0 },		// Standard mode (just the reticule)
-#ifdef WIN32
+#ifndef PSX
 	{ "INT_OPTION",			VAL_INT,	0,		INT_OPTION,0 },	// Option screen
 #endif
 	{ "INT_EDITSTAT",		VAL_INT,	0,		INT_EDITSTAT,0 },	// Stat screen up for placing objects
-#ifdef WIN32
+#ifndef PSX
 	{ "INT_EDIT",			VAL_INT,	0,		INT_EDIT,0 },		// Edit mode
 #endif
 	{ "INT_OBJECT",			VAL_INT,	0,		INT_OBJECT,0 },	// Object screen
@@ -1417,7 +1417,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DT_HOVER",		VAL_INT,	0,	SCR_DT_HOVER,		0 },
 
 	// multiplayer
-#ifdef WIN32		
+#ifndef PSX		
 //	{ "DMATCH",				VAL_INT,	0,		DMATCH,					0 },
 	{ "CAMPAIGN",			VAL_INT,	0,		CAMPAIGN,				0 },
 	{ "TEAMPLAY",			VAL_INT,	0,		TEAMPLAY,				0 },

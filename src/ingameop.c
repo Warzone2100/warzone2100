@@ -23,7 +23,7 @@
 #include "keybind.h"
 
 #include "audio.h"					// for sound.
-#ifdef WIN32
+#ifndef PSX
 #include "cdaudio.h"
 #include "mixer.h"
 #include "multiplay.h"
@@ -109,7 +109,7 @@ static BOOL addQuitOptions(VOID)
 	sFormInit.x			= (SWORD)INTINGAMEOP3_X;
 	sFormInit.y			= (SWORD)INTINGAMEOP3_Y;
 	sFormInit.height	= INTINGAMEOP3_H;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 #else
@@ -159,7 +159,7 @@ static BOOL _addSlideOptions()
 	sFormInit.y			= (SWORD)INTINGAMEOP2_Y;
 	sFormInit.width		= INTINGAMEOP2_W;
 	sFormInit.height	= INTINGAMEOP2_H;
-#ifdef WIN32
+#ifndef PSX
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 #else
@@ -207,7 +207,7 @@ static BOOL _addSlideOptions()
 
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_3_Y,STR_GAME_RESUME,WBUT_PLAIN);
 
 	// fx vol
@@ -284,7 +284,7 @@ static BOOL _addSlideOptions()
 #endif
 
 	/*
-#ifdef WIN32
+#ifndef PSX
 	// gamma
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
@@ -349,7 +349,7 @@ static BOOL _intAddInGameOptions(void)
 	UWORD WindowWidth;
 	W_FORMINIT		sFormInit;			
 
-#ifdef WIN32
+#ifndef PSX
 	audio_StopAll();
 
     //clear out any mission widgets - timers etc that may be on the screen
@@ -414,7 +414,7 @@ static BOOL _intAddInGameOptions(void)
 	sFormInit.y			= (SWORD)INTINGAMEOP_Y;
 	sFormInit.height	= INTINGAMEOP_H;
 
-#ifdef WIN32
+#ifndef PSX
     if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
 	}
@@ -424,7 +424,7 @@ static BOOL _intAddInGameOptions(void)
 	}
 #endif
 
-#ifdef WIN32	
+#ifndef PSX	
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 #else
@@ -433,7 +433,7 @@ static BOOL _intAddInGameOptions(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	// add 'quit' text
-#ifdef WIN32
+#ifndef PSX
 // #ifdef COVERMOUNT
  #if 0
 	addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
@@ -461,7 +461,7 @@ static BOOL _intAddInGameOptions(void)
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS,INTINGAMEOP_2_Y,STR_FE_OPTIONS,OPALIGN);
 
-#ifdef WIN32		
+#ifndef PSX		
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{		// add 'load'
 		addIGTextButton(INTINGAMEOP_LOAD,INTINGAMEOP_3_Y,STR_MISC_LOADGAME,OPALIGN);
@@ -597,7 +597,7 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 // In Game Options house keeping stuff.
 BOOL intRunInGameOptions(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	processFrontendSnap(FALSE);
 #endif
 	return TRUE;
@@ -639,7 +639,7 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(FALSE, TRUE);
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 //	case INTINGAMEOP_REPLAY:
 //		intCloseInGameOptions(TRUE, FALSE);
 //		if(0!=strcmp(getLevelName(),"CAM_1A"))
@@ -666,7 +666,7 @@ void intProcessInGameOptions(UDWORD id)
 		SetMousePos(0,INTINGAMEOP2_X+INTINGAMEOP_MID+5 ,mouseY());	// move mouse
 		break;
 
-#ifdef WIN32
+#ifndef PSX
 	case INTINGAMEOP_FXVOL_S:	
 		mixer_SetWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_FXVOL_S));
 		break;

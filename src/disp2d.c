@@ -35,7 +35,7 @@
 #include "component.h"
 #include "projectile.h"
 
-//#ifdef WIN32
+//#ifndef PSX
 //#include "netplay.h"
 //#include "multiplay.h"
 //#include "multistat.h"

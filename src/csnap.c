@@ -11,7 +11,7 @@
 #include "deliverance.h"
 #include "fractions.h"
 
-#ifdef WIN32
+#ifndef PSX
 #include "piestate.h"
 #include "pieclip.h"
 #endif
@@ -87,7 +87,7 @@ void snapInitVars(void)
 }
 
 
-#ifdef WIN32
+#ifndef PSX
 void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 {
 	POINT	point;

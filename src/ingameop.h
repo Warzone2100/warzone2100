@@ -28,7 +28,7 @@ extern BOOL	bSubtitles;
 // position info for window.
 
 // game options
-#ifdef WIN32
+#ifndef PSX
 // initial options
 #define INTINGAMEOP_W			120	 
 
@@ -78,7 +78,7 @@ extern BOOL	bSubtitles;
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
 #endif
 
-#ifdef WIN32
+#ifndef PSX
  #define PAUSEMESSAGE_YOFFSET (0)
 #else
  #define PAUSEMESSAGE_YOFFSET (32)
@@ -119,7 +119,7 @@ extern BOOL	bSubtitles;
 #define INTINGAMEOP_SUBTITLES		(INTINGAMEOP+23)
 #define INTINGAMEOP_SUBTITLES_BT	(INTINGAMEOP+24)
 
-#ifdef WIN32
+#ifndef PSX
 // positions within option boxes.
 #define INTINGAMEOP_1_X		5
 #define INTINGAMEOP_MID		100

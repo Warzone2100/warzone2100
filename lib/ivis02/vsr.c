@@ -13,7 +13,7 @@
 #include "piemode.h"
 #include "bug.h"
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 
 //*************************************************************************
 

@@ -544,7 +544,7 @@ init://jump here from the end if re_initialising
 								quit = TRUE;
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 								if(NetPlay.bLobbyLaunched)
 								{
 //									changeTitleMode(QUIT);

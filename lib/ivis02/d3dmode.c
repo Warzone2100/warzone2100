@@ -16,7 +16,7 @@
 #define SIZE_D3D		(WIDTH_D3D * HEIGHT_D3D)
 
 // whole file is not needed when using PSX data
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 
 /***************************************************************************/
 

@@ -105,7 +105,7 @@ void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
 
 
 
-#ifdef WIN32
+#ifndef PSX
 
 
 
@@ -356,7 +356,7 @@ void pie_SetGeometricOffset(int x, int y)
 
 
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 // all these routines use the PC format of iVertex ... and are not used on the PSX
 //*************************************************************************
 
@@ -399,7 +399,7 @@ void pie_VectorInverseRotate0(iVector *v1, iVector *v2)
 //*
 //******
 
-#ifdef WIN32
+#ifndef PSX
 void pie_MatInit(void)
 {
 	unsigned i, scsize;

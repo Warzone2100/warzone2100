@@ -82,7 +82,7 @@ STR_ID asFixedID[STR_MAX_ID] =
 	STR_INT_POWERACCRUED,			"INT_POWERACCRUED",
 	STR_INT_POWER,		            "INT_POWER",	
 
-#ifdef WIN32		// PSX ... non!
+#ifndef PSX		// PSX ... non!
 	// multiplayer strings
 	STR_MUL_PHONENO,				"MUL_PHONENO",	
 	STR_MUL_IPADDR,					"MUL_IPADDR",	
@@ -238,7 +238,7 @@ STR_ID asFixedID[STR_MAX_ID] =
 	STR_HARD,							"HARD",
 
 
-#ifdef WIN32		// PSX ... non!																					  
+#ifndef PSX		// PSX ... non!																					  
 	// Ingame MultiPlayer Announcements.
 	STR_MUL_LEAVE,						"MUL_LEAVE",
 	STR_MUL_JOINING,					"MUL_JOINING",

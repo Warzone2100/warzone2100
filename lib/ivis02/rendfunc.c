@@ -8,7 +8,7 @@
 #include "piepalette.h"
 #include "ivispatch.h"
 #include "fractions.h"
-#ifdef WIN32
+#ifndef PSX
 #include "pieclip.h"
 #endif
 //#ifdef INC_GLIDE
@@ -24,7 +24,7 @@
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 #include "3dfxfunc.h"
 #else
 
@@ -38,7 +38,7 @@
  */
 /***************************************************************************/
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 UBYTE		aTransTable[256];
 UBYTE		aTransTable2[256];		// 2 trans tabels so we can have 2 transparancy colours without slowdown.
 UBYTE		aTransTable3[256];		// 3 trans tabels so we can have 3 transparancy colours without slowdown.
@@ -93,7 +93,7 @@ void pie_Set2DClip(int x0, int y0, int x1, int y1)
 #endif
 
 
-#if(1) 	//#ifndef PIEPSX		// was #ifdef WIN32
+#if(1) 	//#ifndef PIEPSX		// was #ifndef PSX
 
 //*************************************************************************
 //*** line plot 2D line - clipped
@@ -611,7 +611,7 @@ UDWORD iV_GetMouseFrame(void)
 	return MouseImageID;
 }
 
-#ifdef WIN32
+#ifndef PSX
 
 void iV_DrawMousePointer(int x,int y)
 {
@@ -663,7 +663,7 @@ void DownLoadRadar(unsigned char *buffer)
 //
 void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 {
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 	UDWORD *Source = (UDWORD*) rendSurface.buffer;
 	UDWORD *Dest = (UDWORD*)DisplayBuffer;
 	UDWORD Size = rendSurface.size / 4;
@@ -682,7 +682,7 @@ void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 /*
 void DownloadDisplayBuffer(UBYTE *DisplayBuffer)
 {
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 	UDWORD *Source = (UDWORD*)DisplayBuffer;
 	UDWORD *Dest = (UDWORD*) rendSurface.buffer;
 	UDWORD Size = rendSurface.size / 4;
@@ -698,7 +698,7 @@ void DownloadDisplayBuffer(UBYTE *DisplayBuffer)
  */
 
 
-#ifdef WIN32
+#ifndef PSX
 //*************************************************************************
 
 void	DownloadDisplayBuffer(UBYTE *DisplayBuffer)
@@ -758,7 +758,7 @@ void ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int Sca
 
 void	iVBlitPixelTransRect(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 {
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 UBYTE	*screen;
 UBYTE	present;
 UDWORD	i,j;

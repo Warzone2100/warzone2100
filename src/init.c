@@ -32,7 +32,7 @@
 
 #include "piedef.h"
 #include "piestate.h" 
-#ifdef WIN32
+#ifndef PSX
 #include "config.h"
 #include "piemode.h"
 #include "tex.h"
@@ -43,7 +43,7 @@
 #include "group.h"
 #include "wrappers.h"
 #include "display3d.h"
-#ifdef WIN32
+#ifndef PSX
 #include "atmos.h"
 #include "environ.h"
 #include "warzoneconfig.h"
@@ -65,7 +65,7 @@
 #include "arrow.h"
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 #include "texture.h"
 #endif
 
@@ -85,7 +85,7 @@
 #include "formationdef.h"
 #include "formation.h"
 
-#ifdef WIN32
+#ifndef PSX
 //#include "glide.h"
 #include "cdaudio.h"
 #include "mixer.h"
@@ -120,7 +120,7 @@ extern void	initMiscVars( void );
 
 
 
-#ifdef WIN32
+#ifndef PSX
 
  // the sizes for the game block heap
  #define GAMEBLOCK_INIT		(2*1024*1024)
@@ -179,7 +179,7 @@ BLOCK_HEAP	*psMissionHeap;
 // Ascii to font image id lookup table for frontend font.
 // Same for WIN32 and PSX.
 //
-#ifdef WIN32
+#ifndef PSX
 UWORD FEAsciiLookup[256] = 
 //#else
 //// We can use bytes as long as we ensure the font images are the 1st 256 in the image file.
@@ -448,7 +448,7 @@ UWORD FEAsciiLookup[256] =
 // Ascii to font image id lookup table for in game font.
 // Same for WIN32 and PSX.
 //
-//#ifdef WIN32
+//#ifndef PSX
 //UWORD AsciiLookup[256] = 
 //#else
 //// We can use bytes as long as we ensure the font images are the 1st 256 in the image file.
@@ -462,7 +462,7 @@ UWORD AsciiLookup[256] =
 	IMAGE_ASCII63,	//4
 	IMAGE_ASCII63,	//5
 	IMAGE_ASCII63,	//6
-#ifdef WIN32
+#ifndef PSX
 	IMAGE_ASCII42,	//7		//weird mapping - an asterisk mapping
 #else
 	IMAGE_ASCII63,	//8
@@ -501,7 +501,7 @@ UWORD AsciiLookup[256] =
 	IMAGE_ASCII39,	//39	'
 	IMAGE_ASCII40,	//40	(
 	IMAGE_ASCII41,	//41	)
-#ifdef WIN32
+#ifndef PSX
 	IMAGE_ASTERISK,	//42	*
 #else
 	IMAGE_ASCII42,	//42	*
@@ -1085,7 +1085,7 @@ BOOL systemInitialise(void)
 	
 	// Setup the sizes of the widget heaps , using code to setup a structure that calls a routine that tells a library how much memory it should allocate (hmmm...)
 	memset(&sWInit, 0, sizeof(sWInit));
-#ifdef WIN32
+#ifndef PSX
 	sWInit.barInit = 40;
 	sWInit.barExt = 5;
 	sWInit.butInit = 50;		// was 30 ... but what about the virtual keyboard
@@ -1126,7 +1126,7 @@ BOOL systemInitialise(void)
 	}
 
 
-#ifdef WIN32
+#ifndef PSX
 	// load up the level discription file
 	// used for the script stuff .... !
 	// loop through all addon.lev files loading each one
@@ -1245,7 +1245,7 @@ BOOL systemInitialise(void)
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
  #ifdef AUDIO_DISABLED
 	if (!audio_Init(frameGetWinHandle(), FALSE, droidAudioTrackStopped))	// audio.
  #else
@@ -1262,12 +1262,12 @@ BOOL systemInitialise(void)
 	}
 #endif
 
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Open();
 	mixer_Open();
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	if (!bDisableLobby && !multiInitialise())			// ajl. Init net stuff
 	{
 		return FALSE;
@@ -1305,7 +1305,7 @@ BOOL systemInitialise(void)
 	initPlayerColours();
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	loadConfig(FALSE);			// get favourite settings from the registry
 #endif
 
@@ -1331,7 +1331,7 @@ BOOL systemInitialise(void)
 	arrowInit();
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	iV_Reset(TRUE);								// Reset the IV library.
 	initLoadingScreen(TRUE, FALSE);
 #endif
@@ -1364,7 +1364,7 @@ BOOL systemShutdown(void)
 	BLOCK_DESTROY(psMapHeap);
 	BLOCK_DESTROY(psMissionHeap);
 
-#ifdef WIN32
+#ifndef PSX
 	if (!bDisableLobby &&	!multiShutdown())		// ajl. init net stuff
 	{
 		return FALSE;
@@ -1372,20 +1372,20 @@ BOOL systemShutdown(void)
 #endif
 
 
-#ifdef WIN32
+#ifndef PSX
 	if ( audio_Disabled() == FALSE && !audio_Shutdown() )
 	{
 		return FALSE;
 	}
 #endif
 
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Stop();
 	cdAudio_Close();
 	mixer_Close();
 #endif
 
-#ifdef WIN32
+#ifndef PSX
 	FREE(DisplayBuffer);
 #endif
 
@@ -1435,8 +1435,8 @@ init_ObjectDead( void * psObj )
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-// WIN32 Version. Called At Frontend Startup.
-#ifdef WIN32
+// !PSX Version. Called At Frontend Startup.
+#ifndef PSX
 BOOL frontendInitialise(char *ResourceFile)
 {
 	DBPRINTF(("Initialising frontend : %s\n",ResourceFile));
@@ -1545,7 +1545,7 @@ BOOL frontendInitialise(char *ResourceFile)
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-// WIN32 version. Called at frontend Shutdown, before game runs.
+// !PSX version. Called at frontend Shutdown, before game runs.
 //
 BOOL frontendShutdown(void)
 {
@@ -1696,7 +1696,7 @@ BOOL frontendInitialise(char *ResourceFile)
 //	FEBigFont = iV_CreateFont(FrontImages16,AsciiLookup,4);
 
 
-#ifdef WIN32
+#ifndef PSX
 	screenSetPalette(0, 256, gamePalette);			// setup game palette.
 	iV_PaletteSelect(iV_PaletteAdd(&gamePal[0]));
 #endif
@@ -1755,7 +1755,7 @@ BOOL frontendShutdown(void)
 
 BOOL stageOneInitialise(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	BLOCK_HEAP	*psHeap;
 #endif
 
@@ -1808,7 +1808,7 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	// debug mode only so use normal MALLOC
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
@@ -1868,7 +1868,7 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
     if (!environInit())
     {
         return FALSE;
@@ -1904,7 +1904,7 @@ BOOL stageOneShutDown(void)
 {
 	DBPRINTF(("stageOneShutDown\n"));
 
-#ifdef WIN32		// ffs
+#ifndef PSX		// ffs
 	//do this before shutting down the iV library
 //	D3DFreeTexturePages();
 
@@ -1945,7 +1945,7 @@ BOOL stageOneShutDown(void)
 
 	scrShutDown();
 
-#ifdef WIN32
+#ifndef PSX
     environShutDown();
 #endif
 
@@ -1961,7 +1961,7 @@ BOOL stageOneShutDown(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 #ifdef DISP2D
 	if (!disp2DShutdown())
 	{
@@ -2002,7 +2002,7 @@ BOOL stageTwoInitialise(void)
 {
 	DBPRINTF(("stageTwoInitalise\n"));
 
-#ifdef WIN32
+#ifndef PSX
 	if(bMultiPlayer)
 	{
 		if (!multiTemplateSetup())
@@ -2081,14 +2081,14 @@ BOOL stageTwoInitialise(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if (!gwInitialise())
 	{
 		return FALSE;
 	}
 #endif
 	
-#ifdef WIN32
+#ifndef PSX
 	// keymappings
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 	keyClearMappings();
@@ -2136,7 +2136,7 @@ BOOL stageTwoShutDown(void)
 	DBPRINTF(("stageTwoShutDown\n"));
 
 
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Stop();
 #endif
 
@@ -2161,7 +2161,7 @@ BOOL stageTwoShutDown(void)
 		return FALSE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if(!ShutdownRadar()) {
 		return FALSE;
 	}
@@ -2243,7 +2243,7 @@ BOOL stageThreeInitialise(void)
 
 	loopMissionState = LMS_NORMAL;
 
-#ifdef WIN32
+#ifndef PSX
 	// reset the clock to normal speed
 	gameTimeResetMod();
 #endif
@@ -2257,7 +2257,7 @@ BOOL stageThreeInitialise(void)
 	//initLighting();
     initLighting(0, 0, mapWidth, mapHeight);
 
-#ifdef WIN32
+#ifndef PSX
 
 	if(bMultiPlayer)
 	{
@@ -2291,7 +2291,7 @@ BOOL stageThreeInitialise(void)
 		intRemoveMissionResultNoAnim();
 	}
 
-//#ifdef WIN32
+//#ifndef PSX
 //	if(bMultiPlayer)
 //	{
 //		multiGameInit();
@@ -2342,7 +2342,7 @@ BOOL stageThreeInitialise(void)
 //	}
 #endif
 
-#ifdef WIN32		// ffs JS   (and its a global!)
+#ifndef PSX		// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 #endif
 	{
@@ -2382,7 +2382,7 @@ BOOL stageThreeShutDown(void)
 	// make sure any button tips are gone.
 	widgReset();
 
-#ifdef WIN32
+#ifndef PSX
 	audio_StopAll();
 
 	saveConfig();					// save options to registry (may have changed in game).
@@ -2433,7 +2433,7 @@ BOOL stageThreeShutDown(void)
 	resetVTOLLandingPos();
 
 // Restore player colours since the scripts might of changed them.
-#ifdef WIN32
+#ifndef PSX
 	if(!bMultiPlayer)
 	{
 		int temp = getPlayerColour(selectedPlayer);
@@ -2481,7 +2481,7 @@ BOOL saveGameReset(void)
 //#ifdef MISSION_S
 	DBPRINTF(("saveGameReset\n"));
 
-#if defined(WIN32) && !defined(I_LIKE_LISTENING_TO_CDS)
+#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
 	cdAudio_Stop();
 #endif
 
@@ -2524,7 +2524,7 @@ BOOL newMapInitialise(void)
 //	initViewPosition();
 
 // initialise the gateway stuff
-//#ifdef WIN32
+//#ifndef PSX
 	// this no longer necessary when RLE map zones are loaded
 //	gwProcessMap();	// now loaded with map.
 
@@ -2551,7 +2551,7 @@ void	initMiscVars( void )
 	godMode = TRUE;
 #endif
 
-#ifdef WIN32	// ffs am
+#ifndef PSX	// ffs am
 //#ifdef ALEXM
 //   	setBlipDraw(TRUE);
 //	setProximityDraw(FALSE);
@@ -2564,7 +2564,7 @@ void	initMiscVars( void )
 	radarOnScreen = TRUE;
 	enableConsoleDisplay(TRUE);
 
-#ifdef WIN32
+#ifndef PSX
 	setEnergyBarDisplay(TRUE);
 #endif
 

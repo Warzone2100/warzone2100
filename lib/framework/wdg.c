@@ -569,7 +569,7 @@ BOOL FILE_ShutdownCache(void)
 		}
 		Cache.IsCacheDataMalloced=FALSE;
 	}
-#if defined(WIN32) && defined(PRIMCATALOG)
+#if !defined(PSX) && defined(PRIMCATALOG)
 
 	if (PrimBufferCatalog)
 	{

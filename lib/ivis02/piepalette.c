@@ -26,7 +26,7 @@ void pie_SetColourDefines(void);
 
 
 
-#ifdef WIN32	// whole file is split into 2 parts now !!!!
+#ifndef PSX	// whole file is split into 2 parts now !!!!
 /*
 
 
@@ -41,7 +41,7 @@ PALETTEENTRY*		psWinPal = NULL;
 uint8				palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 bPaletteInitialised = FALSE;
 uint8	 colours[16];
-#ifdef WIN32
+#ifndef PSX
 /* Look up table for transparency */
 /*	entry[x][y] tells you what colour to poke in when you're writing
 	x over y
@@ -393,7 +393,7 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 	return ((uint8) best_colour);
 }
 
-#ifdef WIN32
+#ifndef PSX
 void	pie_BuildSoftwareTransparency( void )
 {
 int	i,j;
@@ -544,7 +544,7 @@ void pal_SelectPalette(int n)
 // Called from data.c by the PSXPAL resource
 void pal_SetgamePalette(UBYTE *pFileData)
 {
-#ifdef WIN32
+#ifndef PSX
 	UDWORD i;
 
 	for(i=0; i<256; i++) 

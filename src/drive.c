@@ -57,7 +57,7 @@
 #define MINPITCH (768)
 #define PITCHCHANGE (512)
 
-#ifdef WIN32
+#ifndef PSX
 #include "multiplay.h"
 #endif
 
@@ -911,7 +911,7 @@ void driveUpdate(void)
 	if(DirectControl) {
 		if(psDrivenDroid != NULL) {
 
-	#ifdef WIN32
+	#ifndef PSX
 			if(bMultiPlayer && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
 				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->x,psDrivenDroid->y, NULL);
@@ -1425,7 +1425,7 @@ void driveRestoreDriving(void)
 //
 void driveProcessAquireButton(void)
 {
-#ifdef WIN32
+#ifndef PSX
 	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S)) {
 		BASE_OBJECT	*psObj;
 //		psObj = targetAquireNext(TARGET_TYPE_ANY);

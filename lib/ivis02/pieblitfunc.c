@@ -29,7 +29,7 @@
  *	Local Definitions
  */
 /***************************************************************************/
-#ifdef WIN32
+#ifndef PSX
 UWORD	backDropBmp[BACKDROP_WIDTH * BACKDROP_HEIGHT * 2];
 SDWORD gSurfaceOffsetX;
 SDWORD gSurfaceOffsetY;

@@ -2,7 +2,7 @@
 /* Experiment - possibly only for the faster configurations */
 /* Makes smooth transitions for terrain visibility */
 
-#ifdef WIN32
+#ifndef PSX
 #include "frame.h"
 #include "objects.h"
 #include "base.h"

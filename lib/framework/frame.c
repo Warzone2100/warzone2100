@@ -311,7 +311,7 @@ void frameSetCursor(HCURSOR hNewCursor)
 	SetCursor(hCursor);
 }
 
-#ifdef WIN32	// not on PSX
+#ifndef PSX	// not on PSX
 
 
 
@@ -939,7 +939,7 @@ void frameShutDown(void)
 
 }
 
-#else // ifdef WIN32 - here are the PSX version of the routines
+#else // ifndef PSX - here are the PSX version of the routines
 
 
 void frameSetCursorFromRes(WORD resID)
@@ -1089,7 +1089,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 #endif
 
 // Not needed in a PSX FINALBUILD.
-#if defined(WIN32) || !defined(FINALBUILD)
+#if !defined(PSX) || !defined(FINALBUILD)
 	pFileHandle = fopen(pFileName, "rb");
 	if (pFileHandle == NULL)
 	{
@@ -1152,7 +1152,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 	return TRUE;
 }
 
-#ifdef WIN32
+#ifndef PSX
 
 // load a file from disk into a fixed memory buffer
 BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
@@ -1289,7 +1289,7 @@ BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize)
 
 	if (fwrite(pFileData, fileSize, 1, pFile) != 1)
 	{
-#ifdef WIN32	// ffs
+#ifndef PSX	// ffs
 		DBERROR(("Write failed for %s: %s", pFileName, winErrorToString(GetLastError()) ));
 #else
 		DBERROR(("Write failed for %s", pFileName ));

@@ -140,7 +140,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 /* Save the data in the buffer into the given file */
 extern BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize);
 
-#ifdef WIN32
+#ifndef PSX
 // load a file from disk into a fixed memory buffer
 extern BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 // as above but returns quietly if no file found

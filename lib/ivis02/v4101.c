@@ -15,7 +15,7 @@
 #include "piematrix.h" // clockwise check
 #include "pieclip.h"
 
-#ifndef PIEPSX		// was #ifdef WIN32
+#ifndef PIEPSX		// was #ifndef PSX
 
 
 

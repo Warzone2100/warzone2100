@@ -33,7 +33,7 @@
  *	Local Variables
  */
 /***************************************************************************/
-#ifdef WIN32
+#ifndef PSX
 	int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
 #endif
 
@@ -137,7 +137,7 @@ BOOL pie_Initialise(SDWORD mode)
 		r = _mode_4101();	// we always want success as jon's stuff does the init
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	if (r)
 	{
 		pie_SetDefaultStates();

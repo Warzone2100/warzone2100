@@ -14,7 +14,7 @@
 
 #define	NO_SAMPLE				-2
 
-#ifdef WIN32
+#ifndef PSX
 #define	AUDIO_SAMPLE_HEAP_INIT	1000
 #else
 #define	AUDIO_SAMPLE_HEAP_INIT	100			// 100 allocates approx 8.4k   ... 1000 allocated 84k
@@ -124,7 +124,7 @@ audio_Shutdown()
 		return TRUE;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	sound_StopAll();
 #endif
 
@@ -649,7 +649,7 @@ BOOL
 audio_SetTrackVals( char szFileName[], BOOL bLoop, int *piID, int iVol,
 						int iPriority, int iAudibleRadius, int VagID )
 {
-#ifdef WIN32		// F.F.S.
+#ifndef PSX		// F.F.S.
 	TRACK	*psTrack;
 
 	/* if audio not enabled return TRUE to carry on game without audio */
@@ -703,7 +703,7 @@ BOOL
 audio_SetTrackValsHashName( UDWORD hash, BOOL bLoop, int iTrack, int iVol,
 							int iPriority, int iAudibleRadius, int VagID )
 {
-#ifdef WIN32		// F.F.S.
+#ifndef PSX		// F.F.S.
 	TRACK	*psTrack;
 
 	/* if audio not enabled return TRUE to carry on game without audio */
@@ -932,7 +932,7 @@ BOOL
 audio_PlayStream( char szFileName[], SDWORD iVol,
 					AUDIO_CALLBACK pUserCallback )
 {
-#ifdef WIN32
+#ifndef PSX
 	AUDIO_SAMPLE	*psSample;
 
 	/* if audio not enabled return TRUE to carry on game without audio */
@@ -1112,7 +1112,7 @@ audio_PauseAll( void )
 
 	g_bAudioPaused = TRUE;
 
-#ifdef WIN32
+#ifndef PSX
 	sound_PauseAll();
 #endif
 }
@@ -1130,7 +1130,7 @@ audio_ResumeAll( void )
 
 	g_bAudioPaused = FALSE;
 
-#ifdef WIN32
+#ifndef PSX
 	sound_ResumeAll();
 #endif
 }
@@ -1148,7 +1148,7 @@ audio_StopAll( void )
 		return;
 	}
 
-#ifdef WIN32
+#ifndef PSX
 	DBPRINTF( ("audio_StopAll called\n") );
 
 	g_bStopAll = TRUE;
@@ -1189,7 +1189,7 @@ audio_CheckAllUnloaded()
 
 /***************************************************************************/
 
-#ifdef WIN32
+#ifndef PSX
 LPDIRECTSOUND
 audio_GetDirectSoundObj( void )
 {
