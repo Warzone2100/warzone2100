@@ -38,6 +38,9 @@
 #define MAX_BAR_LENGTH	100
 #define LC_UPPER	100
 
+#ifndef WIN32
+#define max(a,b) (((a)>(b))?(a):(b))
+#endif
 
 #define LC_X	32
 #define RC_X	320+32

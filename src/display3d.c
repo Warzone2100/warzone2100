@@ -105,6 +105,11 @@
 
 #include "cmddroid.h"
 
+#ifndef WIN32
+#define max(a,b) (((a)>(b))?(a):(b))
+#define min(a,b) (((a)<(b))?(a):(b))
+#endif
+
 #define SPOTLIGHT
 
 #define ENABLE_WATER			// Enable transparent water.

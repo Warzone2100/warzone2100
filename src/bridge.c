@@ -9,6 +9,12 @@
 #include "miscimd.h"
 #include "effects.h"
 #include "bridge.h"
+
+#ifndef WIN32
+#define max(a,b) (((a)>(b))?(a):(b))
+#define min(a,b) (((a)<(b))?(a):(b))
+#endif
+
 /* 
 Bridge.c
 Alex McLean, Pumpkin Studios EIDOS Interactive, 1998.
