@@ -96,7 +96,7 @@ BOOL checkDisableLobby(void)
 
 int main(int argc, char *argv[])
 {
-	FRAME_STATUS	frameRet;
+	FRAME_STATUS		frameRet;
 	BOOL			quit = FALSE;
 	BOOL			Restart = FALSE;
 	BOOL			paused = FALSE;//, firstTime = TRUE;

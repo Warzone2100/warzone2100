@@ -41,7 +41,7 @@ BOOL	bAllowDebugMode = FALSE;
 
 
 // note that render mode must come before resolution flag.
-BOOL ParseCommandLine( LPSTR psCmdLine, BOOL bGlideDllPresent)
+BOOL ParseCommandLine(int argc, char** argv)
 {
 	char			seps[] = " ,\t\n";
 	char			*tokenType;
@@ -50,18 +50,19 @@ BOOL ParseCommandLine( LPSTR psCmdLine, BOOL bGlideDllPresent)
 	char			seps2[] ="\"";
 	char			cl[255];
 	char			cl2[255];
-	unsigned char	*pXor;
+	unsigned char		*pXor;
+	int i;
 
-	/* get first token: */
-	tokenType = strtok( psCmdLine, seps );
 	// for cheating
 	sprintf(cl,"%s","VR^\\WZ^KVQXL\\^SSFH^XXZM");
 	pXor = xorString(cl);
 	sprintf(cl2,"%s%s","-",cl);
 
 	/* loop through command line */
-	while( tokenType != NULL )
+	for( i = 1; i < argc; ++i)
 	{
+		tokenType = argv[i];
+
 		if ( stricmp( tokenType, "-window" ) == 0 )
 		{
 #ifdef	_DEBUG
@@ -83,19 +84,6 @@ BOOL ParseCommandLine( LPSTR psCmdLine, BOOL bGlideDllPresent)
 			pie_SetVideoBufferWidth(640);
 			pie_SetVideoBufferHeight(480);
 
-		}
-		else if ( stricmp( tokenType, "-3DFX" ) == 0 )
-		{
-			if (!bGlideDllPresent)
-			{
-				ASSERT((FALSE,"Glide DLL not found, unable to run in -3DFX mode"));
-			}
-			else
-			{
-				war_SetRendMode(REND_MODE_GLIDE);
-			}
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
 		}
 		else if ( stricmp( tokenType, "-D3D" ) == 0 )
 		{
@@ -151,7 +139,7 @@ BOOL ParseCommandLine( LPSTR psCmdLine, BOOL bGlideDllPresent)
 		else if ( stricmp( tokenType, "-game" ) == 0 )
 		{
 			// find the game name
-			token = strtok( NULL, seps );
+			token = argv[++i];
 			if (token == NULL)
 			{
 				DBERROR( ("Unrecognised -game name\n") );
@@ -163,7 +151,7 @@ BOOL ParseCommandLine( LPSTR psCmdLine, BOOL bGlideDllPresent)
 		else if ( stricmp( tokenType, "-savegame" ) == 0 )
 		{
 			// find the game name
-			token = strtok( NULL, seps );
+			token = argv[++i];
 			if (token == NULL)
 			{
 				DBERROR( ("Unrecognised -savegame name\n") );
@@ -177,7 +165,7 @@ BOOL ParseCommandLine( LPSTR psCmdLine, BOOL bGlideDllPresent)
 		else if ( stricmp( tokenType, "-datapath" ) == 0 )
 		{
 			// find the quoted path name
-			token = strtok( NULL, seps );
+			token = argv[++i];
 			if (token == NULL)
 			{
 				DBERROR( ("Unrecognised datapath\n") );

@@ -12,7 +12,7 @@ extern BOOL	clStartWindowed;
 // whether to play the intro video
 extern BOOL	clIntroVideo;
 // parse the commandline
-extern BOOL ParseCommandLine( LPSTR psCmdLineBOOL, BOOL bGlideDllPresent);
+extern BOOL ParseCommandLine( int argc, char** argv );
 
 
 #endif
