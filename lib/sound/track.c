@@ -464,6 +464,9 @@ sound_GetTrackAudibleRadius( SDWORD iTrack )
 char *
 sound_GetTrackName( SDWORD iTrack )
 {
+	if (iTrack == SAMPLE_NOT_FOUND)
+		return NULL;
+
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
 #ifndef PSX
@@ -479,6 +482,9 @@ sound_GetTrackName( SDWORD iTrack )
 UDWORD
 sound_GetTrackHashName( SDWORD iTrack )
 {
+	if (iTrack == SAMPLE_NOT_FOUND)
+		return 0;
+
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
 #ifndef PSX
