@@ -1,3 +1,5 @@
+.SUFFIXES: .o
+
 ifeq ($(EMUL), yes)
 CFLAGS=-m32
 LDFLAGS=-m32
