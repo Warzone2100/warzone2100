@@ -74,9 +74,13 @@ BOOL pie_CheckForDX6(void)
 {
 	UDWORD	DXVersion, DXPlatform;
 
+#ifdef WIN32
 	GetDXVersion(&DXVersion, &DXPlatform);
 
 	return (DXVersion >= 0x600);
+#else
+	return TRUE;
+#endif
 }
 
 BOOL pie_Initialise(SDWORD mode)
