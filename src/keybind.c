@@ -24,6 +24,7 @@
 #include "component.h"
 #include "geometry.h"
 #include "radar.h"
+
 #ifndef PSX
 #include "cheat.h"
 #include "e3demo.h"	// will this be on PSX?
@@ -31,11 +32,14 @@
 #include "multiplay.h"
 #include "multimenu.h"
 #include "atmos.h"
-#include "dglide.h"
 #include "raycast.h"
 #include "advvis.h"
 #include "game.h"
 #include "difficulty.h"
+#endif
+
+#ifdef INC_GLIDE
+#include "dglide.h"
 #endif
 
 #include "intorder.h"
@@ -302,7 +306,7 @@ void	kf_SetToughUnitsLevel( void )
 void	kf_FrameRate( void )
 {
 #ifndef PSX
-
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(weHave3DNow())
@@ -321,7 +325,9 @@ void	kf_FrameRate( void )
 		DBPRINTF(("GLIDE fps - %d; PIEs - %d; polys - %d; Terr. polys - %d; States %d;",
 			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
 	}
-	else if (pie_GetRenderEngine() == ENGINE_D3D)
+	else
+#endif
+	if (pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		if(weHave3DNow())
 		{
@@ -467,6 +473,7 @@ void	kf_RecalcLighting( void )
 void	kf_RaiseGamma( void )
 {
 #ifndef PSX
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(gammaValue<(float)5.0)
@@ -481,6 +488,7 @@ void	kf_RaiseGamma( void )
 		}
 	}
 #endif
+#endif
 }
 
 // --------------------------------------------------------------------------
@@ -489,6 +497,7 @@ void	kf_RaiseGamma( void )
 void	kf_LowerGamma( void )
 {
 #ifndef PSX
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(gammaValue>(float)0.2)
@@ -503,6 +512,7 @@ void	kf_LowerGamma( void )
 		}
 	}
 #endif
+#endif
 }	
 
 // --------------------------------------------------------------------------
@@ -510,11 +520,13 @@ void	kf_LowerGamma( void )
 /* Sends the 3dfx screen buffer to disk */
 void	kf_ScreenDump( void )
 {
+#ifdef INC_GLIDE
 	if(pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,"3dfx 24 bit raw screen dump written to working directory : %s",iV_ScreenDumpToDisk()));
 	}
 	else
+#endif
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,"Screen dump function presently only works on 3dfx based cards."));
 	}
@@ -775,6 +787,7 @@ void	kf_LowerTile( void )
 void	kf_SystemClose( void )
 {
 #ifndef PSX
+#ifdef INC_GLIDE
 	if(pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		grSstControl(GR_CONTROL_DEACTIVATE);
@@ -782,6 +795,7 @@ void	kf_SystemClose( void )
 
 //	ExitProcess(4);
 	loopFastExit();
+#endif
 #endif
 }
 
@@ -1043,18 +1057,14 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 }
 // --------------------------------------------------------------------------
 
-#ifndef PSX
-
 /* Selects the player's groups 1..9 */
-void	kf_SelectGrouping( void )
+void	kf_SelectGrouping( UDWORD	groupNumber)
 {
-UDWORD	groupNumber;
-BOOL	bAlreadySelected;
-DROID	*psDroid;
-BOOL	Selected;
+	BOOL	bAlreadySelected;
+	DROID	*psDroid;
+	BOOL	Selected;
 
 	bAlreadySelected = FALSE;
-	groupNumber = (getLastSubKey()-KEY_1) + 1;	
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid!=NULL; psDroid = psDroid->psNext)
 	{
 		/* Wipe out the ones in the wrong group */
@@ -1093,113 +1103,28 @@ BOOL	Selected;
 #endif
 }
 
-#else	// Start of PSX version.
-
-/* Selects the player's groups 1..9 */
-void	kf_SelectGrouping( void )
-{
-	UDWORD	groupNumber;
-	BOOL	bAlreadySelected;
-	DROID	*psDroid;
-	BOOL	Selected = FALSE;
-
-	bAlreadySelected = FALSE;
-	groupNumber = (getLastSubKey()-KEY_Q) + 1;
-
-	printf("G# %d ",groupNumber);
-	if(groupNumber <= 2) {	// Only allow 2 groups on L1&L2, R1&R2 reserved for droid cycle and cluster selection.
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid!=NULL; psDroid = psDroid->psNext)
-		{
-			/* Wipe out the ones in the wrong group */
-			if(psDroid->selected AND psDroid->group!=groupNumber)
-			{
-				psDroid->selected = FALSE;
-			}
-			/* Get the right ones */
-			if(psDroid->group == groupNumber)
-			{
-				if(psDroid->selected)
-				{
-					bAlreadySelected = TRUE;
-				}
-			}
-		}
-		if(bAlreadySelected)
-		{
-			Selected = activateGroupAndMove(selectedPlayer,groupNumber);
-		}
-		else
-		{
-			Selected = activateGroup(selectedPlayer,groupNumber);
-		}
-		printf("Selected %d\n",Selected);
-	}
-
-	// Did'nt get anything?
-	if(!Selected) {
-		switch(groupNumber) {
-			case	1:
-			case	2:
-			case	3:
-				intGotoNextDroidType(DROID_ANY);
-				// Tell the driving system that the selection may have changed.
-				driveSelectionChanged();
-				break;
-			case	4:
-				if(driveModeActive()) {
-					intSelectDroidsInDroidCluster(driveGetDriven());
-				}	// Need to make this work in point'n'click mode as well.
-				break;
-		}
-	} else {
-		// Tell the driving system that the selection may have changed.
-		driveSelectionChanged();
-	}
-}
-
-#endif	// End of PSX version.
-
 // --------------------------------------------------------------------------
 
-#ifdef PSX
-extern BOOL IgnoreNextMouseClick;
-#endif
+#define DEFINE_NUMED_KF(x) \
+	void	kf_SelectGrouping_##x( ) { \
+		kf_SelectGrouping(x); \
+	} \
+	void	kf_AssignGrouping_##x( void ) { \
+		assignDroidsToGroup(selectedPlayer, x); \
+	} \
+	void	kf_SelectCommander_##x( void ) { \
+		selCommander(x); \
+	}
 
-
-void	kf_AssignGrouping( void )
-{
-UDWORD	groupNumber;
-
-#ifndef PSX
-	groupNumber = (getLastSubKey()-KEY_1) + 1;	
-#else
-	groupNumber = (getLastSubKey()-KEY_1) + 1;
-	IgnoreNextMouseClick = TRUE;
-//	IgnoreNextMouseRelease();	// Tell framework to ignore the next mouse button released message.
-	dragBox3D.status = DRAG_INACTIVE;
-#endif
-	assignDroidsToGroup(selectedPlayer,groupNumber);
-}
-
-// --------------------------------------------------------------------------
-
-void	kf_SelectCommander( void )
-{
-SDWORD	cmdNumber;
-
-#ifndef PSX
-	cmdNumber = (getLastSubKey()-KEY_1) + 1;	
-#else
-	cmdNumber = (getLastSubKey()-KEY_1) + 1;
-	IgnoreNextMouseClick = TRUE;
-//	IgnoreNextMouseRelease();	// Tell framework to ignore the next mouse button released message.
-	dragBox3D.status = DRAG_INACTIVE;
-#endif
-
-	// now select the appropriate commander
-	selCommander(cmdNumber);
-}
-
+DEFINE_NUMED_KF(1)
+DEFINE_NUMED_KF(2)
+DEFINE_NUMED_KF(3)
+DEFINE_NUMED_KF(4)
+DEFINE_NUMED_KF(5)
+DEFINE_NUMED_KF(6)
+DEFINE_NUMED_KF(7)
+DEFINE_NUMED_KF(8)
+DEFINE_NUMED_KF(9)
 
 // --------------------------------------------------------------------------
 void	kf_SelectMoveGrouping( void )

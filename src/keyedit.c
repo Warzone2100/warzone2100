@@ -59,8 +59,8 @@ BOOL		runKeyMapEditor		(void);
 static BOOL keyMapToString		(STRING *pStr, KEY_MAPPING *psMapping);
 VOID		displayKeyMap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 BOOL		startKeyMapEditor	(BOOL first);
-BOOL		saveKeyMap			(void);
-BOOL		loadKeyMap			(void);
+BOOL		saveKeyMap		(void);
+BOOL		loadKeyMap		(void);
 static BOOL	pushedKeyMap		(UDWORD key);
 
 extern char	buildTime[8];
@@ -195,7 +195,7 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 static UDWORD scanKeyBoardForBinding()
 {
 	UDWORD i;
-	for(i = KEY_1; i <= KEY_DELETE; i++)
+	for(i = 0; i <= KEY_MAXSCAN; i++)
 	{
 		if(keyPressed(i))
 		{
@@ -249,7 +249,7 @@ BOOL runKeyMapEditor(void)
 	
 	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
+	widgDisplayScreen(psWScreen);				// show the widgets currently running
 	DrawEnd();
 
 	return TRUE;
@@ -383,22 +383,22 @@ BOOL startKeyMapEditor(BOOL first)
 
 	// add tab form..
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID			= KM_FORM;	
-	sFormInit.id				= KM_FORM_TABS;
-	sFormInit.style				= WFORM_TABBED;
-	sFormInit.x					= 50;
-	sFormInit.y					= 10;
-	sFormInit.width				= KM_W- 100;	
-	sFormInit.height			= KM_H- 4;	
-	sFormInit.numMajor			= numForms(mapcount, BUTTONSPERKEYMAPPAGE);
-	sFormInit.majorPos			= WFORM_TABTOP;
-	sFormInit.minorPos			= WFORM_TABNONE;
-	sFormInit.majorSize			= OBJ_TABWIDTH+3; 
+	sFormInit.formID		= KM_FORM;	
+	sFormInit.id			= KM_FORM_TABS;
+	sFormInit.style			= WFORM_TABBED;
+	sFormInit.x			= 50;
+	sFormInit.y			= 10;
+	sFormInit.width			= KM_W- 100;	
+	sFormInit.height		= KM_H- 4;	
+	sFormInit.numMajor		= numForms(mapcount, BUTTONSPERKEYMAPPAGE);
+	sFormInit.majorPos		= WFORM_TABTOP;
+	sFormInit.minorPos		= WFORM_TABNONE;
+	sFormInit.majorSize		= OBJ_TABWIDTH+3; 
 	sFormInit.majorOffset		= OBJ_TABOFFSET;
 	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT/2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
+	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
 	sFormInit.pFormDisplay		= intDisplayObjectForm;	
-	sFormInit.pUserData			= (void*)&StandardTab;
+	sFormInit.pUserData		= (void*)&StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
@@ -413,15 +413,16 @@ BOOL startKeyMapEditor(BOOL first)
 	sButInit.width    = KM_ENTRYW;
 	sButInit.height	  = KM_ENTRYH;
 	sButInit.pDisplay = displayKeyMap;
-	sButInit.x		  = 2;
-	sButInit.y		  = 16;
-	sButInit.id	 	  = KM_START;
+	sButInit.x	  = 2;
+	sButInit.y	  = 16;
+	sButInit.id	  = KM_START;
 
 
 	/* Add our first mapping to the form */
 	sButInit.pUserData= (VOID*)psPresent;
 	widgAddButton(psWScreen, &sButInit);
 	sButInit.id++;
+	sButInit.y +=  KM_ENTRYH +3;
 
 	/* Now add the others... */
 	bubbleCount = 0;

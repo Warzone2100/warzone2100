@@ -117,8 +117,24 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleReloadBars,
 	kf_ScreenDump ,
 	kf_MoveToLastMessagePos,
-	kf_AssignGrouping,
-	kf_SelectGrouping,
+	kf_AssignGrouping_1,
+	kf_AssignGrouping_2,
+	kf_AssignGrouping_3,
+	kf_AssignGrouping_4,
+	kf_AssignGrouping_5,
+	kf_AssignGrouping_6,
+	kf_AssignGrouping_7,
+	kf_AssignGrouping_8,
+	kf_AssignGrouping_9,
+	kf_SelectGrouping_1,
+	kf_SelectGrouping_2,
+	kf_SelectGrouping_3,
+	kf_SelectGrouping_4,
+	kf_SelectGrouping_5,
+	kf_SelectGrouping_6,
+	kf_SelectGrouping_7,
+	kf_SelectGrouping_8,
+	kf_SelectGrouping_9,
 	kf_addMultiMenu,
 	kf_multiAudioStart,
 	kf_multiAudioStop,
@@ -178,7 +194,15 @@ _keymapsave keyMapSaveTable[] =
 	kf_SelectNextPowerStation,
 	kf_SelectNextCyborgFactory,
 	kf_ToggleConsoleDrop,
-	kf_SelectCommander,
+	kf_SelectCommander_1,
+	kf_SelectCommander_2,
+	kf_SelectCommander_3,
+	kf_SelectCommander_4,
+	kf_SelectCommander_5,
+	kf_SelectCommander_6,
+	kf_SelectCommander_7,
+	kf_SelectCommander_8,
+	kf_SelectCommander_9,
 	kf_FaceNorth,
 	kf_FaceSouth,
 	kf_FaceWest,
@@ -268,47 +292,47 @@ void	keyInitMappings( BOOL bForceDefaults )
    	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F6,KEYMAP_PRESSED,kf_ChooseCommand,			strresGetString(psStringRes,STR_RET_COMMAND));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F7,KEYMAP_PRESSED,kf_ToggleRadar,			strresGetString(psStringRes,STR_BIND_TOGRAD));
   	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F8,KEYMAP_PRESSED,kf_ToggleConsole,			strresGetString(psStringRes,STR_BIND_TOGCON));
-  	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F9,KEYMAP_PRESSED,kf_ToggleEnergyBars,		strresGetString(psStringRes,STR_BIND_BARS));
+  	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F9,KEYMAP_PRESSED,kf_ToggleEnergyBars,			strresGetString(psStringRes,STR_BIND_BARS));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F10,KEYMAP_PRESSED,kf_ScreenDump,				strresGetString(psStringRes,STR_BIND_SHOT));
 //	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F10,KEYMAP_PRESSED,kf_ScreenDump,				strresGetString(psStringRes,STR_BIND_SHOT));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F11,KEYMAP_PRESSED,kf_ToggleFormationSpeedLimiting,			strresGetString(psStringRes,STR_BIND_SPLIM));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F12,KEYMAP_PRESSED,kf_MoveToLastMessagePos,	strresGetString(psStringRes,STR_BIND_PREV));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F12,KEYMAP_PRESSED,kf_MoveToLastMessagePos, strresGetString(psStringRes,STR_BIND_PREV));
 	//                                **********************************
 	//                                **********************************
 	//										ASSIGN GROUPS
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_1,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS1));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_2,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS2));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_3,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS3));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_4,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS4));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_5,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS5));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_6,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS6));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_7,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS7));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_8,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS8));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LCTRL,KEY_9,KEYMAP_PRESSED,kf_AssignGrouping,				strresGetString(psStringRes,STR_BIND_AS9));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_1,KEYMAP_PRESSED,kf_AssignGrouping_1,				strresGetString(psStringRes,STR_BIND_AS1));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_2,KEYMAP_PRESSED,kf_AssignGrouping_2,				strresGetString(psStringRes,STR_BIND_AS2));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_3,KEYMAP_PRESSED,kf_AssignGrouping_3,				strresGetString(psStringRes,STR_BIND_AS3));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_4,KEYMAP_PRESSED,kf_AssignGrouping_4,				strresGetString(psStringRes,STR_BIND_AS4));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_5,KEYMAP_PRESSED,kf_AssignGrouping_5,				strresGetString(psStringRes,STR_BIND_AS5));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_6,KEYMAP_PRESSED,kf_AssignGrouping_6,				strresGetString(psStringRes,STR_BIND_AS6));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_7,KEYMAP_PRESSED,kf_AssignGrouping_7,				strresGetString(psStringRes,STR_BIND_AS7));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_8,KEYMAP_PRESSED,kf_AssignGrouping_8,				strresGetString(psStringRes,STR_BIND_AS8));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_9,KEYMAP_PRESSED,kf_AssignGrouping_9,				strresGetString(psStringRes,STR_BIND_AS9));
 	//                                **********************************
 	//                                **********************************
 	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_1,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR1));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_2,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR2));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_3,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR3));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_4,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR4));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_5,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR5));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_6,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR6));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_7,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR7));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_8,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR8));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_9,KEYMAP_PRESSED,kf_SelectGrouping,				strresGetString(psStringRes,STR_BIND_GR9));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_1,KEYMAP_PRESSED,kf_SelectGrouping_1,				strresGetString(psStringRes,STR_BIND_GR1));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_2,KEYMAP_PRESSED,kf_SelectGrouping_2,				strresGetString(psStringRes,STR_BIND_GR2));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_3,KEYMAP_PRESSED,kf_SelectGrouping_3,				strresGetString(psStringRes,STR_BIND_GR3));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_4,KEYMAP_PRESSED,kf_SelectGrouping_4,				strresGetString(psStringRes,STR_BIND_GR4));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_5,KEYMAP_PRESSED,kf_SelectGrouping_5,				strresGetString(psStringRes,STR_BIND_GR5));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_6,KEYMAP_PRESSED,kf_SelectGrouping_6,				strresGetString(psStringRes,STR_BIND_GR6));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_7,KEYMAP_PRESSED,kf_SelectGrouping_7,				strresGetString(psStringRes,STR_BIND_GR7));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_8,KEYMAP_PRESSED,kf_SelectGrouping_8,				strresGetString(psStringRes,STR_BIND_GR8));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_9,KEYMAP_PRESSED,kf_SelectGrouping_9,				strresGetString(psStringRes,STR_BIND_GR9));
 	//                                **********************************
 	//                                **********************************
 	//	SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_1,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD1));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_2,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD2));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_3,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD3));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_4,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD4));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_5,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD5));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_6,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD6));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_7,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD7));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_8,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD8));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_LALT,KEY_9,KEYMAP_PRESSED,kf_SelectCommander,				strresGetString(psStringRes,STR_BIND_CMD9));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_1,KEYMAP_PRESSED,kf_SelectCommander_1,				strresGetString(psStringRes,STR_BIND_CMD1));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_2,KEYMAP_PRESSED,kf_SelectCommander_2,				strresGetString(psStringRes,STR_BIND_CMD2));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_3,KEYMAP_PRESSED,kf_SelectCommander_3,				strresGetString(psStringRes,STR_BIND_CMD3));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_4,KEYMAP_PRESSED,kf_SelectCommander_4,				strresGetString(psStringRes,STR_BIND_CMD4));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_5,KEYMAP_PRESSED,kf_SelectCommander_5,				strresGetString(psStringRes,STR_BIND_CMD5));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_6,KEYMAP_PRESSED,kf_SelectCommander_6,				strresGetString(psStringRes,STR_BIND_CMD6));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_7,KEYMAP_PRESSED,kf_SelectCommander_7,				strresGetString(psStringRes,STR_BIND_CMD7));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_8,KEYMAP_PRESSED,kf_SelectCommander_8,				strresGetString(psStringRes,STR_BIND_CMD8));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_9,KEYMAP_PRESSED,kf_SelectCommander_9,				strresGetString(psStringRes,STR_BIND_CMD9));
 	//                                **********************************
 	//                                **********************************
 	//	MULTIPLAYER 
@@ -546,7 +570,6 @@ BLOCK_HEAP  *psHeap;
 
 	newMapping->pName = (STRING*)MALLOC(strlen(name)+1);
 	ASSERT(((int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping"));
-
 #else
 
 	if (strlen(name)==0)
@@ -568,7 +591,7 @@ BLOCK_HEAP  *psHeap;
 	/* Fill up our entries, first the ones that activate it */
 	newMapping->metaKeyCode	= metaCode;
 	newMapping->subKeyCode	= subCode;
-	newMapping->status		= status;
+	newMapping->status	= status;
 
 	/* When it was last called - needed? */
 	newMapping->lastCalled	= gameTime;
@@ -578,7 +601,7 @@ BLOCK_HEAP  *psHeap;
 	newMapping->function	= pKeyMapFunc;
 
 	/* Is it functional on the key being down or just pressed */
-	newMapping->action		= action;
+	newMapping->action	= action;
 
 	newMapping->altMetaKeyCode = KEY_IGNORE;
 
