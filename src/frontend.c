@@ -243,7 +243,8 @@ VOID processFrontendSnap(BOOL bHideCursor)
 {
 	static POINT point,opoint;	
 	
-	GetCursorPos(&point);
+	point.x = mouseX();
+	point.y = mouseY();
 
 	if(point.x != opoint.x ||  point.y  != opoint.y)
 	{
@@ -282,17 +283,13 @@ VOID processFrontendSnap(BOOL bHideCursor)
 		if(keyPressed(KEY_RETURN) )
 		{
 			bUsingKeyboard = TRUE;
-#ifdef WIN32
-			SendMessage(frameGetWinHandle(),WM_LBUTTONDOWN,MK_LBUTTON,MAKELONG(mouseX(),mouseY()));
-#endif
+			setMouseDown(MOUSE_LMB);
 		}
 
 		if(keyReleased(KEY_RETURN) )
 		{
 			bUsingKeyboard = TRUE;
-#ifdef WIN32
-			SendMessage(frameGetWinHandle(),WM_LBUTTONUP,MK_LBUTTON,MAKELONG(mouseX(),mouseY()));
-#endif
+			setMouseUp(MOUSE_LMB);
 		}
 	}
 
@@ -301,7 +298,8 @@ VOID processFrontendSnap(BOOL bHideCursor)
 		bUsingKeyboard = FALSE;
 	}
 
-	GetCursorPos(&opoint);
+	opoint.x = mouseX();
+	opoint.y = mouseY();
 }
 #endif
 
