@@ -84,7 +84,11 @@ void dbg_printf(SBYTE *pFormat, ...)
 	/* Output it */
 	if (StringOut)
 	{
+#ifdef WIN32
 		OutputDebugString(aBuffer);
+#else
+		fprintf(stderr, "%s", aBuffer); fflush(stderr);
+#endif
 	}
 
 	/* If there is a debugging file open, send text to that too */
