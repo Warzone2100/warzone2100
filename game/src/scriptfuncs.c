@@ -6387,3 +6387,66 @@ BOOL scrTutorialTemplates(void)
 	return TRUE;
 }
 #endif
+
+static	UDWORD			playerToEnumDroid;
+static	UDWORD			playerVisibleDroid;
+static	UDWORD			enumDroidCount;
+
+/* Prepare the droid iteration */
+BOOL scrInitEnumDroids(void)
+{
+	SDWORD	targetplayer,playerVisible;
+	
+	if ( !stackPopParams(2,  VAL_INT, &targetplayer, VAL_INT, &playerVisible) )
+	{
+		//DbgMsg("scrInitEnumDroids() - failed to pop params");
+		return FALSE;
+	}
+
+	playerToEnumDroid	= (UDWORD)targetplayer;
+	playerVisibleDroid	= (UDWORD)playerVisible;
+	enumDroidCount = 0;		//returned 0 droids so far
+	return TRUE;
+}
+
+/* Get next droid */
+BOOL scrEnumDroid(void)
+{
+	UDWORD			count;
+	DROID		 *psDroid;
+	BOOL			found;
+
+	count = 0;
+	for(psDroid=apsDroidLists[playerToEnumDroid];psDroid && count<enumDroidCount;count++)
+	{
+		psDroid = psDroid->psNext;
+	}
+
+	
+	//search the players' list of droid to see if one exists and is visible
+	found = FALSE;
+	while(psDroid)
+	{
+		if(psDroid->visible[playerVisibleDroid])
+		{
+			if (!stackPushResult(ST_DROID,(UDWORD) psDroid))			//	push result
+			{
+				return FALSE;
+			}
+
+			enumDroidCount++;
+			return TRUE;
+		}
+
+		enumDroidCount++;
+		psDroid = psDroid->psNext;
+	}
+
+	// push NULLDROID, since didn't find any
+	if (!stackPushResult(ST_DROID, (UDWORD)NULL))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}

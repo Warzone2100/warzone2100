@@ -368,6 +368,11 @@ FUNC_SYMBOL asFuncTable[] =
  */
 FUNC_SYMBOL asFuncTable[] =
 {
+	{ "InitEnumDroids",			scrInitEnumDroids,		VAL_VOID,
+		2, { VAL_INT, VAL_INT } },
+	{ "EnumDroid",			scrEnumDroid,		ST_DROID,
+		0, { VAL_VOID } },
+
 	// These functions are part of the script library
 	{ "traceOn",				interpTraceOn,			VAL_VOID,
 		0, { VAL_VOID } },
@@ -1114,6 +1119,8 @@ VAR_SYMBOL asObjTable[] =
 		scrGroupObjGet,			NULL },
 	{ "health",			VAL_INT,	ST_OBJECT,	ST_GROUP,		GROUPID_HEALTH,
 		scrGroupObjGet,			NULL },
+
+
 
 	/* This entry marks the end of the variable list */
 	{ NULL, VAL_VOID, ST_OBJECT, VAL_VOID, 0, NULL, NULL }
