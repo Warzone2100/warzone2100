@@ -189,6 +189,9 @@ extern BOOL mouseReleased(MOUSE_KEY_CODE code);
 /* Check for a mouse drag, return the drag start coords if dragging */
 extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
+/* Warps the mouse to the given position */
+extern void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y);
+
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		0x010000
 #define INPBUF_RIGHT	0x020000

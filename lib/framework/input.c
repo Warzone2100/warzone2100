@@ -76,7 +76,7 @@ static UDWORD	*pStartBuffer, *pEndBuffer;
 
 void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 {
-#ifdef PSX
+#ifndef WIN32
 	DBPRINTF(("keyscantostring ... not installed\n"));
 #else
 	if(code == KEY_MAXSCAN)
@@ -313,7 +313,7 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 			/* store the current mouse position */
 			mouseXPos = LOWORD(lParam);
 			mouseYPos = HIWORD(lParam);
-	#ifndef PSX		// ffs am
+	#ifdef WIN32		// ffs am
 			if(bRunningUnderGlide)
 			{
 				scrX = GetSystemMetrics(SM_CXFULLSCREEN);
@@ -604,4 +604,36 @@ BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	}
 
 	return FALSE;
+}
+
+void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
+{
+	POINT	point;
+	FRACT	divX,divY;
+	UDWORD	scrX,scrY;
+	UDWORD	mXPos,mYPos;
+
+	if(bRunningUnderGlide)
+	{
+#ifdef WIN32
+		scrX = GetSystemMetrics(SM_CXFULLSCREEN);
+		scrY = GetSystemMetrics(SM_CYFULLSCREEN);
+
+		divX = MAKEFRACT(x) / pie_GetVideoBufferWidth();
+		divY = MAKEFRACT(y) / pie_GetVideoBufferHeight();
+	
+		mXPos = MAKEINT(divX*scrX);
+		mYPos = MAKEINT(divY*scrY);
+		SetCursorPos(mXPos,mYPos);
+#endif
+	}
+	else
+	{
+#ifdef WIN32
+		point.x = x;
+		point.y = y;
+		ClientToScreen(frameGetWinHandle(),&point);
+		SetCursorPos(point.x,point.y);
+#endif
+	}
 }
