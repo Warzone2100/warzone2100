@@ -6452,6 +6452,8 @@ SDWORD	rx,rz;
 UDWORD	colour;
 UDWORD	specular;
 UDWORD	trans;
+
+trans = 0; //Defining the variable trans to eleminate a runtime debug error
 //SDWORD	centreX,centreZ;
 
 	null.x = null.y = null.z = 0;
