@@ -429,6 +429,9 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	FILE	*pFileHandle;
 	bHoldSeqForAudio = FALSE;
 
+#ifndef WIN32
+return TRUE; // NOID
+#endif
 	frameSkip = 1;
 	switch(war_GetSeqMode())
 	{

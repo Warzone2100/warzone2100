@@ -28,6 +28,134 @@ typedef	signed		short	SWORD;
 typedef	unsigned	int		UDWORD;
 typedef	signed		int		SDWORD;
 
+#ifndef WIN32
+
+// win32 functions to POSIX
+#define stricmp(a,b) strcasecmp((a),(b))
+#define CreateDirectory(dir, ptr) mkdir((dir), 0777)
+#define wsprintf sprintf
+#define GetCurrentDirectory(size,buf) getcwd((buf),(size))
+#define _chdir(d) chdir((d))
+#define DeleteFile(file) remove((file))
+#define RemoveDirectory(dir) remove((dir))
+
+#define D3DVAL(val)             ((float)(val))
+#define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
+
+#define WARZONEGUID 0
+#define VER_PLATFORM_WIN32_WINDOWS 1
+
+
+#define DRIVE_CDROM  5
+#define INVALID_HANDLE_VALUE       0
+
+#define REG_OPTION_NON_VOLATILE       0
+#define KEY_ALL_ACCESS       0
+#define ERROR_SUCCESS       0
+#define REG_DWORD       0
+#define REG_SZ       0
+#define REG_BINARY       0
+#define HKEY_LOCAL_MACHINE       0
+
+#define APIENTRY
+#define cdecl
+
+#define __int64 long long 
+
+typedef void * LPDIRECTSOUND;
+typedef void * LPDIRECTDRAWSURFACE4;
+typedef void * LPDIRECTDRAW4;
+typedef void * LPDIRECTDRAW;
+typedef void * LPDIRECTDRAWPALETTE;
+typedef void * LPDIRECTDRAWCLIPPER;
+typedef int DDPIXELFORMAT;
+typedef int DDDEVICEIDENTIFIER;
+typedef int DDSURFACEDESC2;
+typedef int IDirectDrawSurface4;
+
+typedef int DPID;
+typedef void * LPDIRECTPLAY4;
+typedef void * LPDIRECTPLAY4A;
+typedef void * LPDIRECTPLAYLOBBY3;
+typedef void * LPDIRECTPLAYLOBBYA;
+
+typedef void * HKEY;
+typedef int GUID;
+typedef void * LPGUID;
+typedef int CRITICAL_SECTION;
+typedef int HWND;
+typedef void * HANDLE;
+typedef int HINSTANCE;
+typedef int HRESULT;
+typedef int LRESULT;
+typedef int HCURSOR;
+typedef int WPARAM;
+typedef int LPARAM;
+
+typedef int     BOOL;
+typedef char CHAR;
+typedef unsigned char UCHAR;
+typedef unsigned char BYTE;
+typedef short SHORT;
+typedef unsigned short USHORT;
+typedef signed short WORD;
+typedef unsigned int UINT;
+typedef signed int DWORD;
+typedef long LONG;
+typedef unsigned long ULONG;
+typedef unsigned char * LPBYTE;
+typedef signed int * LPDWORD;
+typedef char  * LPSTR;
+typedef void  * LPVOID;
+
+typedef int D3DVALUE;
+typedef int D3DCOLOR;
+typedef struct {
+    D3DVALUE    sx;
+    D3DVALUE    sy;
+    D3DVALUE    sz;
+    D3DVALUE    rhw;
+    D3DCOLOR    color;
+    D3DCOLOR    specular;
+    D3DVALUE    tu;
+    D3DVALUE    tv;
+} D3DTLVERTEX, *LPD3DTLVERTEX;
+
+typedef struct
+{
+    CHAR      cFileName[260];
+} WIN32_FIND_DATA;
+
+typedef struct
+{
+    GUID  guidInstance;
+    DWORD dwSize;
+    DWORD dwFlags;
+    DWORD dwMaxPlayers;
+    DWORD dwCurrentPlayers;
+} DPSESSIONDESC2;
+
+typedef struct {
+  UBYTE peRed;
+  UBYTE peGreen;
+  UBYTE peBlue;
+  UBYTE peFlags;
+} PALETTEENTRY;
+
+typedef struct
+{
+  long  x;
+  long  y;
+} POINT;
+
+#endif /* !WIN32 */
+
+#define _inline inline
+#define __inline inline
+
+/* missing define - only used in Screen.c */
+#define DDGDI_GETHOSTIDENTIFIER 1
+
 /* Numeric size defines */
 #define UBYTE_MAX	0xff
 #define SBYTE_MIN	(-128) //(0x80)
