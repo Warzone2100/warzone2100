@@ -1282,6 +1282,36 @@ DDPIXELFORMAT *screenGetFrontBufferPixelFormat(void)
 	}
 }
 
+/* Return a bit depth of the Front buffer */
+UDWORD screenGetFrontBufferBitDepth(void)
+{
+	if (psDD)
+	{
+		return sFrontBufferPixelFormat.dwRGBBitCount;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/* Return a pixel masks of the Front buffer */
+BOOL screenGetFrontBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask)
+{
+	if (psDD)
+	{
+		*amask = sFrontBufferPixelFormat.dwRGBAlphaBitMask;
+		*rmask = sFrontBufferPixelFormat.dwRBitMask;
+		*gmask = sFrontBufferPixelFormat.dwGBitMask;
+		*bmask = sFrontBufferPixelFormat.dwBBitMask;
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
 /* Return a pointer to the back buffer pixel format */
 DDPIXELFORMAT *screenGetBackBufferPixelFormat(void)
 {
@@ -1292,6 +1322,36 @@ DDPIXELFORMAT *screenGetBackBufferPixelFormat(void)
 	else
 	{
 		return NULL;
+	}
+}
+
+/* Return a bit depth of the Back buffer */
+UDWORD screenGetBackBufferBitDepth(void)
+{
+	if (psDD)
+	{
+		return sBackBufferPixelFormat.dwRGBBitCount;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/* Return a pixel masks of the Back buffer */
+BOOL screenGetBackBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask)
+{
+	if (psDD)
+	{
+		*amask = sBackBufferPixelFormat.dwRGBAlphaBitMask;
+		*rmask = sBackBufferPixelFormat.dwRBitMask;
+		*gmask = sBackBufferPixelFormat.dwGBitMask;
+		*bmask = sBackBufferPixelFormat.dwBBitMask;
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
 	}
 }
 

@@ -198,7 +198,6 @@ void loadMapPreview(void)
 	UBYTE			scale,col,coltab[16],bitDepth=8;
 	MAPTILE			*psTile,*WTile;
 	iSprite			backDropSprite;
-	DDPIXELFORMAT	*pDDPixelFormat;
 
 	if(psMapTiles)
 	{
@@ -235,8 +234,7 @@ void loadMapPreview(void)
 	}
 	else
 	{
-		pDDPixelFormat = screenGetBackBufferPixelFormat();
-		if( pDDPixelFormat->dwRGBBitCount == 16 )
+		if( screenGetBackBufferBitDepth() == 16 )
 		{
 			bitDepth = 16;
 		}

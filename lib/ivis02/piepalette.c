@@ -52,20 +52,17 @@ UWORD	palette16Bit[PALETTE_SIZE];	//16 bit version of the present palette
 
 BOOL	pal_Make16BitPalette(void)
 {
-DDPIXELFORMAT* DDPixelFormat;
 iColour* psPal;
 UDWORD	i;
 UWORD	alpha, red,green,blue;
 BYTE				ap = 0,	ac = 0, rp = 0,	rc = 0, gp = 0,	gc = 0, bp = 0, bc = 0;
-ULONG				mask;
+ULONG				mask, amask, rmask, gmask, bmask;
 
 	/*
 	// Cannot convert iof not 16bit mode 
 	*/
 
-	DDPixelFormat =  screenGetFrontBufferPixelFormat();	
-
-	if (DDPixelFormat == NULL)
+	if ( ! screenGetFrontBufferPixelFormatMasks(&amask, &rmask, &gmask, &bmask))
 	{
 		return FALSE;
 	}
@@ -77,13 +74,12 @@ ULONG				mask;
 	/*
 	// Cannot playback if not 16bit mode 
 	*/
-#ifdef WIN32
-	if( DDPixelFormat->dwRGBBitCount == 16 )
+	if( screenGetFrontBufferBitDepth() == 16 )
 	{
 		/*
 		// Find out the RGB type of the surface and tell the codec...
 		*/
-		mask = DDPixelFormat->dwRGBAlphaBitMask;
+		mask = amask;
 
 		if(mask!=0)
 		{
@@ -100,7 +96,7 @@ ULONG				mask;
 			ac++;
 		}
 
-		mask = DDPixelFormat->dwRBitMask;
+		mask = rmask;
 
 		if(mask!=0)
 		{
@@ -117,7 +113,7 @@ ULONG				mask;
 			rc++;
 		}
 
-		mask = DDPixelFormat->dwGBitMask;
+		mask = gmask;
 
 		if(mask!=0)
 		{
@@ -134,7 +130,7 @@ ULONG				mask;
 			gc++;
 		}
 
-		mask = DDPixelFormat->dwBBitMask;
+		mask = bmask;
 
 		if(mask!=0)
 		{
@@ -156,7 +152,6 @@ ULONG				mask;
 		//if not 16 bit use blue 5 only so we know the problem
 		bc = 5;
 	}
-#endif
 
 	alpha = 0;
 

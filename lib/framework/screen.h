@@ -43,6 +43,18 @@ extern DDPIXELFORMAT *screenGetFrontBufferPixelFormat(void);
 /* Return a pointer to the back buffer pixel format */
 extern DDPIXELFORMAT *screenGetBackBufferPixelFormat(void);
 
+/* Return a bit depth of the Front buffer */
+extern UDWORD screenGetFrontBufferBitDepth(void);
+
+/* Return a bit depth of the Back buffer */
+extern UDWORD screenGetBackBufferBitDepth(void);
+
+/* Return a pixel masks of the Front buffer */
+extern BOOL screenGetFrontBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask);
+
+/* Return a pixel masks of the Back buffer */
+extern BOOL screenGetBackBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask);
+
 /* Flip back and front buffers */
 extern void screenFlip(BOOL clearBackBuffer);
 

@@ -939,8 +939,7 @@ UBYTE	paletteIndex;
 UWORD	newColour;
 UWORD	gun;
 UDWORD	i;
-DDPIXELFORMAT	*DDPixelFormat;
-ULONG			mask;
+ULONG			mask, amask, rmask, gmask, bmask;
 BYTE			ap = 0,	ac = 0, rp = 0,	rc = 0, gp = 0,	gc = 0, bp = 0, bc = 0;
 iColour*		psPalette;
 UDWORD			size;
@@ -959,17 +958,16 @@ UDWORD			size;
 	}
 	else
 	{
-		DDPixelFormat = screenGetBackBufferPixelFormat();
 		/*
 		// Cannot playback if not 16bit mode 
 		*/
-#ifdef WIN32
-		if( DDPixelFormat->dwRGBBitCount == 16 )
+		if( screenGetBackBufferBitDepth() == 16 )
 		{
+			screenGetBackBufferPixelFormatMasks(&amask, &rmask, &gmask, &bmask);
 			/*
 			// Find out the RGB type of the surface and tell the codec...
 			*/
-			mask = DDPixelFormat->dwRGBAlphaBitMask;
+			mask = amask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -984,7 +982,7 @@ UDWORD			size;
 				ac++;
 			}
 
-			mask = DDPixelFormat->dwRBitMask;
+			mask = rmask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -999,7 +997,7 @@ UDWORD			size;
 				rc++;
 			}
 
-			mask = DDPixelFormat->dwGBitMask;
+			mask = gmask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -1014,7 +1012,7 @@ UDWORD			size;
 				gc++;
 			}
 
-			mask = DDPixelFormat->dwBBitMask;
+			mask = bmask;
 			if(mask!=0)
 			{
 				while(!(mask & 1))
@@ -1029,7 +1027,6 @@ UDWORD			size;
 				bc++;
 			}
 		}
-#endif
 	}
 
 	/*
@@ -1073,7 +1070,6 @@ void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX)
 {
 iSprite backDropSprite;
 iBitmap	tempBmp[BACKDROP_WIDTH*BACKDROP_HEIGHT];
-DDPIXELFORMAT	*pDDPixelFormat;
 UDWORD	chooser0,chooser1;
 CHAR	backd[128];
 SDWORD	bitDepth;
@@ -1084,9 +1080,7 @@ SDWORD	bitDepth;
 	}
 	else
 	{
-		pDDPixelFormat = screenGetBackBufferPixelFormat();
-#ifdef WIN32
-		if( pDDPixelFormat->dwRGBBitCount == 16 )
+		if( screenGetBackBufferBitDepth() == 16 )
 		{
 			bitDepth = 16;
 		}
@@ -1094,7 +1088,6 @@ SDWORD	bitDepth;
 		{
 			bitDepth = 8;
 		}
-#endif
 	}
 
 	//randomly load in a backdrop piccy.
