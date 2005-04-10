@@ -73,6 +73,10 @@ BOOL ParseCommandLine(int argc, char** argv)
 #endif
 #endif
 		}
+		else if ( stricmp( tokenType, "-fullscreen" ) == 0 )
+		{
+			clStartWindowed = FALSE;
+		}
 		else if ( stricmp( tokenType, "-intro" ) == 0 )
 		{
 			SetGameMode(GS_VIDEO_MODE);
@@ -214,6 +218,21 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			pie_SetVideoBufferWidth(1280);
 			pie_SetVideoBufferHeight(1024);
+		}
+		else if( stricmp( tokenType,"-1280x960") == 0)
+		{
+			pie_SetVideoBufferWidth(1280);
+			pie_SetVideoBufferHeight(960);
+		}
+		else if( stricmp( tokenType,"-1400") == 0)
+		{
+			pie_SetVideoBufferWidth(1400);
+			pie_SetVideoBufferHeight(1050);
+		}
+		else if( stricmp( tokenType,"-1600") == 0)
+		{
+			pie_SetVideoBufferWidth(1600);
+			pie_SetVideoBufferHeight(1200);
 		}
 		else if( stricmp( tokenType,"-noTranslucent") == 0)
 		{

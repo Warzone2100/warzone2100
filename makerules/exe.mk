@@ -21,7 +21,7 @@ $(EXE): $(OBJ_FILES) $(LIBS:%=../lib/lib%.a)
 	$(CPP) $(CFLAGS) -c -o $@ $(<)
 
 clean:
-	rm -f $(EXE) $(OBJ_FILES) *~
+	rm -f $(EXE) *.o *~
 
 -include make.depend
 

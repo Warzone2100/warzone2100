@@ -22,7 +22,7 @@ $(LIB_FILE): $(OBJ_FILES)
 	$(CPP) $(CFLAGS) -c -o $@ $(<)
 
 clean:
-	rm -f $(LIB_FILE) $(OBJ_FILES) *~
+	rm -f $(LIB_FILE) *.o *~
 
 -include make.depend
 

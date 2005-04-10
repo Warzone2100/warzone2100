@@ -12,6 +12,19 @@ else
 SUBDIRS+=ivis02
 endif
 
-all clean dep:
+SUBDIRS_CLEAN=	framework \
+		gamelib \
+		netplay \
+		script \
+		sequence \
+		sound \
+		widget \
+		ivis02 \
+		ivis_opengl
+
+all dep:
 	@for i in $(SUBDIRS); do (cd $$i; $(MAKE) $@); done
+
+clean:
+	@for i in $(SUBDIRS_CLEAN); do (cd $$i; $(MAKE) $@); done
 
