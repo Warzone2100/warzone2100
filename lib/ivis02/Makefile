@@ -1,8 +1,4 @@
-SRC_FILES=	3dfxdyn.c \
-		3dfxfunc.c \
-		3dfxmode.c \
-		3dfxtext.c \
-		bitimage.c \
+SRC_FILES=	bitimage.c \
 		bspimd.c \
 		bug.c \
 		fbf.c \
@@ -21,6 +17,7 @@ SRC_FILES=	3dfxdyn.c \
 		pietexture.c \
 		rendfunc.c \
 		rendmode.c \
+		screen.c \
 		stubs.c \
 		tex.c \
 		textdraw.c \

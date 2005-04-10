@@ -4,7 +4,7 @@ LIB_FILE=$(LIB:%=../lib%.a)
 include $(MAKERULES)/common.mk
 
 CFLAGS+=`$(SDLCONFIG) --cflags` -I . $(LIBS:%=-I ../%) \
-	-I ../glide/Src/Include -I ../../src
+	-I ../../src
 
 all: $(LIB_FILE)
 

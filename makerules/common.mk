@@ -10,5 +10,5 @@ endif
 
 CPP=gcc
 CFLAGS+=-Wall -g
-CFLAGS+=-gstabs -DINC_GLIDE -DYY_STATIC
+CFLAGS+=-gstabs -DYY_STATIC
 

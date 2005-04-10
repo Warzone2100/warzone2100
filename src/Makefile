@@ -118,19 +118,24 @@ SRC_FILES=	ai.c \
 		target.c \
 		warzoneconfig.c
 
-
 EXE=		warzone
-
-EXT_LIBS=	openal
 
 LIBS=		framework \
 		gamelib \
-		ivis02 \
 		netplay \
 		script \
 		sequence \
 		sound \
 		widget
+
+EXT_LIBS=	openal
+
+ifeq ($(GFX), opengl)
+LIBS+=ivis_opengl
+EXT_LIBS+=GL jpeg
+else
+LIBS+=ivis02
+endif
 
 MAKERULES=../makerules
 include $(MAKERULES)/exe.mk

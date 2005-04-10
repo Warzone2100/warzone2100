@@ -32,6 +32,12 @@
 
 #define MATRIX_MAX	8
 
+void pie_PerspectiveBegin() {
+}
+
+void pie_PerspectiveEnd() {
+}
+
 
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX	*psMatrix = &aMatrixStack[0];

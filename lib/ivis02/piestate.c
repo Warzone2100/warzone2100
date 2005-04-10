@@ -205,11 +205,13 @@ void pie_ResetStates(void)//Sets all states
 void pie_SetRenderEngine(REND_ENGINE rendEngine)
 {
 	rendStates.rendEngine = rendEngine;
+#ifdef INC_GLIDE
 	if ((rendEngine == ENGINE_GLIDE) || (rendEngine == ENGINE_D3D))
 	{
 		rendStates.bHardware = TRUE;
 	}
 	else
+#endif
 	{
 		rendStates.bHardware = FALSE;
 	}
@@ -292,6 +294,7 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 			}
 #endif
 		}
+#ifdef INC_GLIDE
 		else if (rendStates.rendEngine == ENGINE_GLIDE)
 		{ 
 			switch(depthMode)
@@ -314,6 +317,7 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 					break;
 			}
 		}
+#endif
 	}
 #endif
 }
@@ -434,11 +438,13 @@ void pie_SetFogStatus(BOOL val)
 		if (rendStates.fog != val)
 		{
 			rendStates.fog = val;
+#ifdef INC_GLIDE
 			if (pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
 				pieStateCount++;
 				gl_SetFogStatus(val);
 			}
+#endif
 		}
 	}
 	else
@@ -447,11 +453,13 @@ void pie_SetFogStatus(BOOL val)
 		if (rendStates.fog != FALSE)
 		{
 			rendStates.fog = FALSE;
+#ifdef INC_GLIDE
 			if (pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
 				pieStateCount++;
 				gl_SetFogStatus(FALSE);
 			}
+#endif
 		}
 	}
 }
@@ -506,11 +514,14 @@ void pie_SetTexturePage(SDWORD num)
 		}
 		else
 		{
+#ifdef INC_GLIDE
 			if (rendStates.rendEngine == ENGINE_GLIDE)
 			{
 				gl_SelectTexturePage(num);
 			}
-			else if (rendStates.rendEngine == ENGINE_D3D)
+			else
+#endif
+			if (rendStates.rendEngine == ENGINE_D3D)
 			{
 				dtm_SetTexturePage(num);
 			}
@@ -613,12 +624,15 @@ void pie_SetColourKeyedBlack(BOOL keyingOn)
 	{
 		rendStates.keyingOn = keyingOn;
 		pieStateCount++;
+#ifdef INC_GLIDE
 		if (rendStates.rendEngine == ENGINE_GLIDE)
 		{
 			grChromakeyMode(keyingOn);
 			grChromakeyValue(0x00000000);
 		}
-		else if (rendStates.rendEngine == ENGINE_D3D)
+		else
+#endif
+		if (rendStates.rendEngine == ENGINE_D3D)
 		{
 			D3DSetColourKeying(keyingOn);
 		}
@@ -634,6 +648,7 @@ void pie_SetBilinear(BOOL bilinearOn)
 	{
 		rendStates.bilinearOn = bilinearOn;
 		pieStateCount++;
+#ifdef INC_GLIDE
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			if (bilinearOn == TRUE)
@@ -649,7 +664,9 @@ void pie_SetBilinear(BOOL bilinearOn)
 								 GR_TEXTUREFILTER_POINT_SAMPLED );
 			}
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else
+#endif
+		if (pie_GetRenderEngine() == ENGINE_D3D)
 		{
 			dx6_SetBilinear(bilinearOn);
 		}
@@ -675,6 +692,7 @@ static void pie_SetColourCombine(COLOUR_MODE colCombMode)
 	{
 		rendStates.colourCombine = colCombMode;
 		pieStateCount++;
+#ifdef INC_GLIDE
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			switch (colCombMode)
@@ -710,7 +728,9 @@ static void pie_SetColourCombine(COLOUR_MODE colCombMode)
 					break;
 			}
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else
+#endif
+		if (pie_GetRenderEngine() == ENGINE_D3D)
 		{
 			switch (colCombMode)
 			{
@@ -742,6 +762,7 @@ static void pie_SetTexCombine(TEX_MODE texCombMode)
 			case TEX_LOCAL:
 			case TEX_NONE:
 			default:
+#ifdef INC_GLIDE
 				if (pie_GetRenderEngine() == ENGINE_GLIDE)
 				{
 					grTexCombine( GR_TMU0,
@@ -751,6 +772,7 @@ static void pie_SetTexCombine(TEX_MODE texCombMode)
 								  GR_COMBINE_FACTOR_NONE,
 								  FXFALSE, FXFALSE );
 				}
+#endif
 				break;
 		}
 	}
@@ -765,6 +787,7 @@ static void pie_SetAlphaCombine(ALPHA_MODE alphaCombMode)
 	{
 		rendStates.alphaCombine = alphaCombMode;
 		pieStateCount++;
+#ifdef INC_GLIDE
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			switch (alphaCombMode)
@@ -786,6 +809,7 @@ static void pie_SetAlphaCombine(ALPHA_MODE alphaCombMode)
 					break;
 			}
 		}
+#endif
 	}
 #endif
 }
@@ -798,6 +822,7 @@ static void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 	{
 		rendStates.transMode = transMode;
 		pieStateCount++;
+#ifdef INC_GLIDE
 		if (rendStates.rendEngine == ENGINE_GLIDE)
 		{
 			switch (transMode)
@@ -835,7 +860,9 @@ static void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 					break;
 			}
 		}
-		else if (rendStates.rendEngine == ENGINE_D3D)
+		else
+#endif
+		if (rendStates.rendEngine == ENGINE_D3D)
 		{
 			D3DSetTranslucencyMode(transMode);
 			rendStates.transMode = transMode;
@@ -854,10 +881,12 @@ void pie_SetColour(UDWORD colour)
 	{
 		rendStates.colour = colour;
 		pieStateCount++;
+#ifdef INC_GLIDE
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			grConstantColorValue(colour);
 		}
+#endif
 	}
 }
 
@@ -873,21 +902,24 @@ UDWORD pie_GetColour(void)
 void pie_SetGammaValue(float val)
 {
 	pieStateCount++;
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		gl_SetGammaValue(val);
 	}
+#endif
 }
 
 /***************************************************************************/
 void pie_DrawMouse(SDWORD x,SDWORD y)
 {
 #ifndef PIEPSX
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		iV_DrawMousePointer(x, y);
 	}
-
+#endif
 #endif
 #ifdef PSX
 	iV_DrawMousePointer(x, y);
@@ -899,10 +931,12 @@ UWORD	presentMouseID;
 void pie_SetMouse(IMAGEFILE *psImageFile,UWORD ImageID)
 {
 #ifndef PIEPSX
+#ifdef GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		iV_SetMousePointer(psImageFile,ImageID);
 	}
+#endif
 #endif
 #ifdef PSX
 	iV_SetMousePointer(psImageFile,ImageID);		// Let's not forget the Playstation eh.

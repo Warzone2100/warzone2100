@@ -55,10 +55,12 @@ void iV_Initialise(void)
 void iV_Reset(int bPalReset)
 {
 #ifndef PSX
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		reset3dfx();
 	}
+#endif
 #endif
 	_TEX_INDEX = 0;
 	iV_ClearFonts();		// Initialise the IVIS font module.

@@ -5,22 +5,25 @@
 #include "frame.h"
 #include "pietypes.h"
 #include "piestate.h"
-#include "dx6texman.h"
 #include "pietexture.h"
 #include "piepalette.h"
 #include "display3ddef.h"
 #include "texture.h"
 #include "radar.h"
 #include "tex.h"
+#ifdef WIN32
+#include "dx6texman.h"
+#endif
 
 /* Can fit at most 32 texture pages into a 2meg texture memory */
 #define MAX_TEXTURE_PAGES	32
 #define MAX_TERRAIN_PAGES	20
-#define TEXTURE_PAGE_SIZE	65536	// 256 * 256
-#define PAGE_WIDTH	256
-#define PAGE_HEIGHT	256
+#define PAGE_WIDTH		256
+#define PAGE_HEIGHT		256
+#define PAGE_DEPTH		4
+#define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
 
-#define NUM_OTHER_PAGES	19
+#define NUM_OTHER_PAGES		19
 
 iSprite	tempTexStore;
 iPalette	tempPal;
@@ -221,13 +224,13 @@ iSprite	sprite;
 			getRectFromPage(tileWidth,tileHeight,src,srcWidth,tileStorage);
 			putRectIntoPage(tileWidth,tileHeight,presentLoc,PAGE_WIDTH,tileStorage);
 			tilesProcessed++;
-			presentLoc+=tileWidth;
-			src+=tileWidth;
+			presentLoc+=tileWidth*PAGE_DEPTH;
+			src+=tileWidth*PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
 			if((tilesProcessed == tilesPerSource))	// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
 			{
 //			   	pie_Download8bitTexturePage(texturePage,PAGE_WIDTH,PAGE_HEIGHT);
-				pageId[pageNumber] = pie_AddBMPtoTexPages( 	&sprite, "terrain", 0, TRUE, FALSE);
+				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
 				goto exit;
 			}
 
@@ -235,7 +238,7 @@ iSprite	sprite;
 			if(tilesProcessed%tilesPerPage == 0)
 			{
 				/* If so, download this one and reset to start again */
-				pageId[pageNumber] = pie_AddBMPtoTexPages( 	&sprite, "terrain", 0, TRUE, FALSE);
+				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
 				sprite.bmp = MALLOC(TEXTURE_PAGE_SIZE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
@@ -244,10 +247,10 @@ iSprite	sprite;
 			{
 				/* Right hand side of texture page */
 				/* So go to one tile down */
-				presentLoc+= ( (tileHeight-1) * PAGE_WIDTH);
+				presentLoc+= ( (tileHeight-1) * PAGE_WIDTH)*PAGE_DEPTH;
 			}
 		}
-		src+=( (tileHeight-1) * srcWidth);
+		src+=( (tileHeight-1) * srcWidth)*PAGE_DEPTH;
 	}
 
 	numTexturePages = pageNumber;
@@ -296,8 +299,8 @@ SDWORD  index;
 			getRectFromPage(tileWidth,tileHeight,src,srcWidth,tileStorage);
 			putRectIntoPage(tileWidth,tileHeight,presentLoc,PAGE_WIDTH,tileStorage);
 			tilesProcessed++;
-			presentLoc+=tileWidth;
-			src+=tileWidth;
+			presentLoc+=tileWidth*PAGE_DEPTH;
+			src+=tileWidth*PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
 			if((tilesProcessed == tilesPerSource))// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
 			{
@@ -337,10 +340,10 @@ SDWORD  index;
 			{
 				/* Right hand side of texture page */
 				/* So go to one tile down */
-				presentLoc+= ( (tileHeight-1) * PAGE_WIDTH);
+				presentLoc+= ( (tileHeight-1) * PAGE_WIDTH)*PAGE_DEPTH;
 			}
 		}
-		src+=( (tileHeight-1) * srcWidth);
+		src+=( (tileHeight-1) * srcWidth)*PAGE_DEPTH;
 	}
 
 	//check numTexturePages == pageNumber;
@@ -449,11 +452,11 @@ UDWORD	i,j;
 
 	for (i=0; i<height; i++)
 	{
-		for(j=0; j<width; j++)
+		for(j=0; j<width*PAGE_DEPTH; j++)
 		{
 			*dest++ = *src++;
 		}
-		src+=(bufWidth-width);
+		src+=(bufWidth-width)*PAGE_DEPTH;
 	}
 }
 
@@ -464,11 +467,11 @@ UDWORD	i,j;
 
 	for(i=0; i<height; i++)
 	{
-		for(j=0; j<width; j++)
+		for(j=0; j<width*PAGE_DEPTH; j++)
 		{
 			*dest++ = *src++;
 		}
-		dest+=(bufWidth-width);
+		dest+=(bufWidth-width)*PAGE_DEPTH;
 	}
 }
 

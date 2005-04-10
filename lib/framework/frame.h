@@ -51,7 +51,6 @@ FILE* unix_fopen(char* filename, char* mode);
 #include "types.h"
 #include "debug.h"
 #include "mem.h"
-#include "screen.h"
 #ifdef WIN32
 #include <ddraw.h>
 #include "dderror.h"

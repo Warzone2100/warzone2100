@@ -155,6 +155,7 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 	}
 
 	/* Now some extra stuff if we're running on a 3dfx? */
+#ifdef INC_GLIDE
 	if(rendSurface.usr == REND_GLIDE_3DFX)
 	{
 		if(iV_TexSizeIsLegal(s->width,s->height)) {
@@ -170,16 +171,19 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 		_TEX_PAGE[i].textPage3dfx = i3d;
 	}
 #endif
+#endif
 	/* Send back the texpage number so we can store it in the IMD */
 
 	_TEX_INDEX++;
 
 #ifndef PIEPSX
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		return(i3d);
 	}
 	else
+#endif
 #endif
 	{
 		return (i);
@@ -270,11 +274,13 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 #endif
 		{
 			/* Send back 3dfx texpage number if we're on 3dfx - they're NOT the same */
+#ifdef INC_GLIDE
 		 	if(rendSurface.usr == REND_GLIDE_3DFX)
 			{
 				return(_TEX_PAGE[i].textPage3dfx);
 			}
 			else
+#endif
 			{
 				/* Otherwise send back the software one */
 				return i;
@@ -357,11 +363,14 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 	pie_PCXLoadMemToBuffer(pBuffer,&s,NULL); 
 
 #ifndef PSX
+#ifdef INC_GLIDE
  	if(pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		gl_Reload8bitTexturePage(s.bmp,(UWORD)s.width,(UWORD)s.height,_TEX_PAGE[i].textPage3dfx);
 	}
-	else if(pie_GetRenderEngine() == ENGINE_D3D)
+	else
+#endif
+	if(pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		dtm_LoadTexSurface(&_TEX_PAGE[i].tex, i);
 	}
@@ -552,10 +561,12 @@ void pie_TexShutDown(void)
 		i++;
 	}
 
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		free3dfxTexMemory();
 	}
+#endif
 
 
 	DBPRINTF(("pie_TexShutDown successful - freed %d texture pages\n",j));

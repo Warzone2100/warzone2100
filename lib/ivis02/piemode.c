@@ -20,7 +20,9 @@
 #include "v4101.h"
 #include "vsr.h"
 #ifdef WIN32
+#ifdef INC_GLIDE
 #include "3dfxfunc.h"
+#endif
 #include "texd3d.h"
 #endif
 #include "rendmode.h"
@@ -109,6 +111,7 @@ BOOL pie_Initialise(SDWORD mode)
 	_TEX_INDEX = 0;
 
 	//mode specific initialisation
+#ifdef INC_GLIDE
 	if (mode == REND_GLIDE_3DFX)
 	{
 		pie_SetRenderEngine(ENGINE_GLIDE);
@@ -118,7 +121,9 @@ BOOL pie_Initialise(SDWORD mode)
 		pie_SetFogColour(0x00B08f5f);//nicks colour
 #endif
 	}
-	else if (mode == REND_D3D_HAL)
+	else
+#endif
+	if (mode == REND_D3D_HAL)
 	{
 		iV_RenderAssign(REND_D3D_HAL,&rendSurface);
 		pie_SetRenderEngine(ENGINE_D3D);
@@ -178,9 +183,11 @@ void pie_ShutDown(void)
 	case ENGINE_SR:
 		_close_sr();
 		break;
+#ifdef INC_GLIDE
 	case ENGINE_GLIDE:
 		gl_VideoClose();
 		break;
+#endif
 	case ENGINE_D3D:
 		_close_D3D();
 		break;
@@ -234,6 +241,7 @@ void pie_ScreenFlip(CLEAR_MODE clearMode)
 			break;
 		}
 		break;
+#ifdef INC_GLIDE
 	case ENGINE_GLIDE:
 		if (clearMode == CLEAR_OFF OR clearMode == CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
 		{
@@ -271,6 +279,7 @@ void pie_ScreenFlip(CLEAR_MODE clearMode)
 			}
 		}
 		break;
+#endif
 	case ENGINE_SR:
 	default:
 		break;
@@ -301,6 +310,7 @@ void pie_GlobalRenderBegin(void)
 {
 	switch (pie_GetRenderEngine())
 	{
+#ifdef INC_GLIDE
 	case ENGINE_GLIDE:
 		if (pie_GetFogEnabled())
 		{
@@ -312,6 +322,7 @@ void pie_GlobalRenderBegin(void)
 //			gl_SetFogColour(pie_GetFogColour(0));
 		}
 		break;
+#endif
 	case ENGINE_D3D:
 		if (d3dActive == 0)
 		{
@@ -328,6 +339,7 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack)
 {
 	switch (pie_GetRenderEngine())
 	{
+#ifdef INC_GLIDE
 	case ENGINE_GLIDE:
 		if ((fogColourSet) && (bForceClearToBlack))
 		{
@@ -335,6 +347,7 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack)
 			fogColourSet = FALSE;
 		}
 		break;
+#endif
 	case ENGINE_D3D:
 		if (d3dActive != 0)
 		{

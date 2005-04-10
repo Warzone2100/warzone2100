@@ -1317,11 +1317,13 @@ void pie_BeginTextRender(SWORD ColourIndex)
 		pie_SetRendMode(REND_TEXT);
 		pie_SetBilinear(FALSE); 
 		break;
+#ifdef INC_GLIDE
 	case ENGINE_GLIDE:
 		TextColourIndex = ColourIndex;
 		pie_SetRendMode(REND_TEXT);
 		pie_SetBilinear(FALSE); 
 		break;
+#endif
 	default:
 		break;
 	}
@@ -1350,9 +1352,11 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 		case ENGINE_SR:
 			DrawTransColourImage(ImageFile,ID,x,y,TextColourIndex);
 			break;
+#ifdef INC_GLIDE
 		case ENGINE_GLIDE:
 			gl_DrawTransColourImage(ImageFile,ID,x,y,TextColourIndex);
 			break;
+#endif
 		case ENGINE_D3D:
 			if (TextColourIndex == PIE_TEXT_WHITE)
 			{
@@ -1478,9 +1482,11 @@ void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 		case ENGINE_SR:
 			TextRender270( ImageFile, ImageID, x, y);
 			break;
+#ifdef INC_GLIDE
 		case ENGINE_GLIDE:
 			gl_TextRender270( ImageFile, ImageID, x, y);
 			break;
+#endif
 		case ENGINE_D3D:
 			Image = &(ImageFile->ImageDefs[ImageID]);
 			//not coloured yet

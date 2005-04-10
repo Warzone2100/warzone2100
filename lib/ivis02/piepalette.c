@@ -220,6 +220,7 @@ BOOL pal_AddNewPalette(iColour *pal)
 	}
 #ifndef   PIETOOL			// ffs
 	/* If we're adding a palette and running on a 3dfx, then bang it down to the card */
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		for(i=0; i<PALETTE_SIZE; i++)
@@ -238,6 +239,7 @@ BOOL pal_AddNewPalette(iColour *pal)
 			grTexDownloadTable(GR_TMU0, GR_TEXTABLE_PALETTE, &cardPal);
 		}
 	}
+#endif
 #endif
 	p = psGamePal;
 	w = psWinPal;

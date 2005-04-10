@@ -13,6 +13,7 @@
 
 #include "frame.h"
 #include "frameint.h"
+#include "screen.h"
 #include "widget.h"
 
 #include "winmain.h"
@@ -312,7 +313,7 @@ void loadMapPreview(void)
 		bufferTo16Bit(tempBmp, backDropBmp,(pie_GetRenderEngine() == ENGINE_GLIDE));		// convert
 	}
 
-	screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
+	//screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
 	hideTime = gameTime;
 	mapShutdown();
 	return;

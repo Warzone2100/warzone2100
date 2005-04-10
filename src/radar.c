@@ -1,6 +1,4 @@
-//#include <stdio.h>
 #include "frame.h"
-/* Includes direct access to render library */
 #include "piedef.h"
 #include "rendmode.h"
 #include "piematrix.h"
@@ -21,9 +19,12 @@
 #include "display.h"
 #include "gtime.h"
 #include "mission.h"
+
 #ifndef PSX
-#include "multiplay.h"
+#ifdef INC_GLIDE
 #include "3dfxfunc.h"
+#endif
+#include "multiplay.h"
 #include "piefunc.h"
 #endif
 

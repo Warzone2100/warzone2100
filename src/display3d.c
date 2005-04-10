@@ -453,7 +453,9 @@ BOOL		bPlayerHasHQ = FALSE;
 		dragQuad.coords[3].y = dragBox3D.y2;
 	}
 
+	pie_PerspectiveBegin();
    	displayTerrain();
+	pie_PerspectiveEnd();
 	updateLightLevels();	
 	drawDroidSelections();
 	/* Show the selected delivery point */

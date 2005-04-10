@@ -2,8 +2,7 @@ OBJ_FILES=$(SRC_FILES:%.c=%.o)
 
 include $(MAKERULES)/common.mk
 
-CFLAGS+=-I . -I ../lib/glide/Src/Include `$(SDLCONFIG) --cflags` \
-	$(LIBS:%=-I ../lib/%)
+CFLAGS+=-I . `$(SDLCONFIG) --cflags` $(LIBS:%=-I ../lib/%)
 LDFLAGS+=-L ../lib $(LIBS:%=-l%)  $(EXT_LIBS:%=-l%)\
 	`$(SDLCONFIG) --libs`
 

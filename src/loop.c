@@ -34,7 +34,9 @@
 #include "message.h"
 #include "bucket3d.h"
 #include "display3d.h"
+#ifdef INC_GLIDE
 #include "3dfxfunc.h"
+#endif
 #include "multiplay.h" //ajl
 #include "script.h"
 #include "scripttabs.h"
@@ -610,6 +612,7 @@ GAMECODE gameLoop(void)
 			//quitting from the game to the front end
 			//so get a new backdrop
 			quitting = TRUE;
+#ifdef INC_GLIDE
 			if (pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
 #ifdef COVERMOUNT
@@ -619,6 +622,7 @@ GAMECODE gameLoop(void)
 #endif
 			}
 			else
+#endif
 			{
 #ifdef COVERMOUNT
 				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
@@ -724,6 +728,7 @@ GAMECODE gameLoop(void)
 			pie_SetFogStatus(TRUE);
 //			}
 
+#ifdef INC_GLIDE
 			if(pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
 				if(!driveModeActive()) {
@@ -741,6 +746,7 @@ GAMECODE gameLoop(void)
 					}
 				}
 			}
+#endif
 	//#endif
 		}										   
 		/*else if (!quitting)
@@ -1013,10 +1019,12 @@ static BOOL bActiveBackDrop = FALSE;
 #endif
 //		clearCount = 0;
 		pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
+#ifdef INC_GLIDE
 		if(pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 		}
+#endif
 		if (bActiveBackDrop)
 		{
  			screen_RestartBackDrop();
@@ -1038,10 +1046,12 @@ static BOOL bActiveBackDrop = FALSE;
 		if (seq_AnySeqLeft())
 		{
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
+#ifdef INC_GLIDE
 			if(pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
 				pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 			}
+#endif
 			if (bActiveBackDrop)
 			{
 				screen_RestartBackDrop();
@@ -1070,10 +1080,12 @@ static BOOL bActiveBackDrop = FALSE;
 #endif
 //		    clearCount = 0;
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
+#ifdef INC_GLIDE
 			if(pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
 				pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 			}
+#endif
     		if (bActiveBackDrop)
 	    	{
 		    	screen_RestartBackDrop();

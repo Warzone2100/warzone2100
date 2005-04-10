@@ -107,15 +107,15 @@ extern UDWORD		screenDepth;
 /* Which modes the library can run in */
 typedef enum _display_modes
 {
-	MODE_BOTH,			// Can run both windowed and full screen
+	MODE_BOTH,		// Can run both windowed and full screen
 	MODE_WINDOWED,		// Can only run windowed, not full screen
 	MODE_FULLSCREEN,	// Can only run full screen not windowed
 	MODE_8BITFUDGE,		// Runs 8 bit full screen, then true colour windowed
-						// blitting the 8 bit back buffer to the windows display
+				// blitting the 8 bit back buffer to the windows display
 } DISPLAY_MODES;
 
 /* The current screen mode (full screen/windowed) */
-extern SCREEN_MODE		screenMode;
+// extern SCREEN_MODE		screenMode;
 
 /* Which mode (of operation) the library is running in */
 extern DISPLAY_MODES	displayMode;

@@ -30,7 +30,6 @@
 #include "3dfxfunc.h"
 #endif
 #else
-
 #include "vpsx.h"
 #include "psxvram.h"
 #endif
@@ -733,6 +732,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 */
 			break;
 
+#ifdef INC_GLIDE
 		case REND_GLIDE_3DFX:
  //			pie_Draw3DShape					= pie_Draw3DIntelShape;
 //			pie_VideoShutDown 		 		= gl_VideoClose;
@@ -836,6 +836,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 //			iV_SetFogStatus			= gl_SetFogStatus;
 
 			break;
+#endif
  
 		case REND_D3D_RGB:
 		case REND_D3D_HAL:

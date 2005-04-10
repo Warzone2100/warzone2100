@@ -38,9 +38,11 @@
 #include "mission.h"
 
 #ifndef PSX
+#ifdef INC_GLIDE
+#include "3dfxfunc.h"
+#endif
 #include "keyedit.h"
 #include "seqdisp.h"
-#include "3dfxfunc.h"
 #include "vid.h"
 #include "config.h"
 #include "resource.h"
@@ -368,6 +370,7 @@ TITLECODE titleLoop(void)
 	audio_Update();
 
 #ifndef PSX			
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		if(!bUsingKeyboard)
@@ -375,6 +378,7 @@ TITLECODE titleLoop(void)
 			pie_DrawMouse(mouseX(),mouseY());  //iV_DrawMousePointer(mouseX(),mouseY());
 		}
 	}
+#endif
 	pie_GlobalRenderEnd(TRUE);//force to black
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
@@ -528,11 +532,13 @@ void startCreditsScreen( BOOL bRenderActive)
 
 	lastChange = gameTime;
 	// fill buffers
+#ifdef INC_GLIDE
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		pie_LoadBackDrop(screen,TRUE);
 	}
 	else
+#endif
 	{
 		pie_LoadBackDrop(screen,FALSE);
 	}
@@ -593,11 +599,13 @@ void	runCreditsScreen( void )
 			return;
 			break;
 		}		
+#ifdef INC_GLIDE
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			pie_LoadBackDrop(screen,TRUE);
 		}
 		else
+#endif
 		{
 			pie_LoadBackDrop(screen,FALSE);
 		}

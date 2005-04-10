@@ -9,7 +9,6 @@ SRC_FILES=	block.c \
 		multiwdg.c \
 		resource_l.c \
 		resource_y.c \
-		screen_stub.c \
 		strres.c \
 		strres_l.c \
 		strres_y.c \

@@ -6,10 +6,16 @@
  */
 
 #include <stdio.h>
-#include "SDL.h"
+#include <stdint.h>
+#include <string.h>
+#include <SDL.h>
+#include <GL/gl.h>
+#include <jpeglib.h>
+#include <setjmp.h>
 
 #include "frame.h"
 #include "frameint.h"
+#include "screen.h"
 
 /* Control Whether the back buffer is in system memory for full screen */
 #define FULL_SCREEN_SYSTEM	TRUE
@@ -78,90 +84,95 @@ DWORD	fogColour = 0;
 
 
 /* flag forcing buffers into video memory */
-static BOOL					g_bVidMem;
+static BOOL	g_bVidMem;
 
 static UDWORD	backDropWidth = BACKDROP_WIDTH;
 static UDWORD	backDropHeight = BACKDROP_HEIGHT;
+static GLint	backDropTexture = -1;
 
-
-SDL_Surface *screenGetSDL()
-{
+SDL_Surface *screenGetSDL() {
         return screen;
 }
 
-
-
-
 /* Initialise the double buffered display */
-BOOL screenInitialise(UDWORD		width,			// Display width
-					  UDWORD		height,			// Display height
-					  UDWORD		bitDepth,		// Display bit depth
-					  BOOL			fullScreen,		// Whether to start windowed
-													// or full screen.
-					  BOOL			bVidMem,		// Whether to put surfaces in
-													// video memory
-					  BOOL			bDDraw,			// Whether to create ddraw surfaces												// video memory
-					  HANDLE		hWindow)		// The main windows handle
+BOOL screenInitialise(	UDWORD		width,		// Display width
+			UDWORD		height,		// Display height
+			UDWORD		bitDepth,	// Display bit depth
+			BOOL		fullScreen,	// Whether to start windowed
+							// or full screen.
+			BOOL		bVidMem,	// Whether to put surfaces in
+							// video memory
+			BOOL		bDDraw,		// Whether to create ddraw surfaces
+			HANDLE		hWindow)	// The main windows handle
 {
-	UDWORD				i,j,k, index;
-
 	/* Store the screen information */
 	screenWidth = width;
 	screenHeight = height;
-	screenDepth = bitDepth;
+	screenDepth = 24;
 
 	/* store vidmem flag */
 	g_bVidMem = bVidMem;
 
-	screen = SDL_SetVideoMode(screenWidth, screenHeight, screenDepth, SDL_HWPALETTE | SDL_HWSURFACE | SDL_DOUBLEBUF);
-
-
-	/* If we're going to run in a palettised mode initialise the palette */
-	if (bitDepth == PALETTISED_BITDEPTH)
 	{
-		memset(asPalEntries, 0, sizeof(*asPalEntries) * PAL_MAX);
+		static int video_flags = 0;
 
-		/* Bash in a range of colours */
-		for(i=0; i<=4; i++)
-		{
-			for(j=0; j<=4; j++)
-			{
-				for(k=0; k<=4; k++)
-				{
-					index = i*25 + j*5 + k;
-					asPalEntries[index].r = (UBYTE)(i*63);
-					asPalEntries[index].g = (UBYTE)(j*63);
-					asPalEntries[index].b = (UBYTE)(k*63);
-				}
+		// Calculate the common flags for windowed and fullscreen modes.
+		if (video_flags == 0) {
+			const SDL_VideoInfo* video_info;
+
+			// Fetch the video info.
+			video_info = SDL_GetVideoInfo( );
+
+			if (!video_info) {
+				return FALSE;
 			}
+
+			// The flags to pass to SDL_SetVideoMode.
+			video_flags  = SDL_OPENGL;          // Enable OpenGL in SDL.
+			video_flags |= SDL_ANYFORMAT;       // Don't emulate requested BPP if not available.
+			video_flags |= SDL_HWPALETTE;       // Store the palette in hardware.
+
+			// This checks to see if surfaces can be stored in memory.
+			if (video_info->hw_available) {
+				video_flags |= SDL_HWSURFACE;
+			} else {
+				video_flags |= SDL_SWSURFACE;
+			}
+
+			// This checks if hardware blits can be done.
+			if (video_info->blit_hw) {
+				video_flags |= SDL_HWACCEL;
+			}
+
+			SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+			SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+			SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+			SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
+			SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+			SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
+
+    			// Set the double buffer OpenGL attribute.
+			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		}
 
-		/* Fill in a grey scale */
-		for(i=0; i<64; i++)
-		{
-			asPalEntries[i+125].r = (UBYTE)(i<<2);
-			asPalEntries[i+125].g = (UBYTE)(i<<2);
-			asPalEntries[i+125].b = (UBYTE)(i<<2);
+		if (fullScreen) {
+			screen = SDL_SetVideoMode(width, height, screenDepth, video_flags|SDL_FULLSCREEN);
+			screenMode = SCREEN_FULLSCREEN;
+		} else {
+			screen = SDL_SetVideoMode(width, height, screenDepth, video_flags/*|SDL_RESIZABLE*/);
+			screenMode = SCREEN_WINDOWED;
 		}
-
-		/* Colour 0 is always black */
-		asPalEntries[0].r = 0;
-		asPalEntries[0].g = 0;
-		asPalEntries[0].b = 0;
-
-		/* Colour 255 is always white */
-		asPalEntries[255].r = 0xff;
-		asPalEntries[255].g = 0xff;
-		asPalEntries[255].b = 0xff;
-
-		SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, asPalEntries, 0, 256);
 	}
 
-	screenMode = SCREEN_WINDOWED;
-	if (fullScreen)
-	{
-		screenToggleMode();
-	}
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, 1, -1);
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1/256.0, 1/256.0, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	return TRUE;
 }
@@ -192,7 +203,7 @@ BOOL screenReInit( void )
 	screenShutDown();
 
 	return screenInitialise( screenWidth, screenHeight, screenDepth, bFullScreen,
-								g_bVidMem, TRUE, hWndMain );
+				 g_bVidMem, TRUE, hWndMain );
 }
 
 /* Return a pointer to the Direct Draw 2 object */
@@ -264,12 +275,93 @@ void screenRestoreSurfaces(void)
 	/* nothing to do */
 }
 
-void screen_SetBackDrop(UWORD* newBackDropBmp, UDWORD width, UDWORD height)
+struct my_error_mgr {
+  struct jpeg_error_mgr pub;
+  jmp_buf setjmp_buffer;
+};
+
+typedef struct my_error_mgr * my_error_ptr;
+
+void my_error_exit(j_common_ptr cinfo)
 {
-	bBackDrop = TRUE;
-	pBackDropData = newBackDropBmp;
-	backDropWidth = width;
-	backDropHeight = height;
+  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+  longjmp(myerr->setjmp_buffer, 1);
+}
+
+void screen_SetBackDropFromFile(char* filename) {
+	static JSAMPARRAY buffer = NULL;
+	static unsigned int buffer_size = 0;
+
+	struct jpeg_decompress_struct cinfo;
+	struct my_error_mgr jerr;
+	FILE * infile;
+	int row_stride;
+	int image_size;
+	uintptr_t tmp;
+	JSAMPARRAY ptr[1];
+
+	if ((infile = fopen(filename, "rb")) == NULL) {
+		printf("can't open %s\n", filename);
+		return;
+	}
+
+	cinfo.err = jpeg_std_error(&jerr.pub);
+	jerr.pub.error_exit = my_error_exit;
+
+	if (setjmp(jerr.setjmp_buffer)) {
+		jpeg_destroy_decompress(&cinfo);
+		fclose(infile);
+		return;
+	}
+	jpeg_create_decompress(&cinfo);
+	jpeg_stdio_src(&cinfo, infile);
+	jpeg_read_header(&cinfo, TRUE);
+
+	cinfo.out_color_space = JCS_RGB;
+	cinfo.quantize_colors = FALSE;
+	cinfo.scale_num   = 1;
+	cinfo.scale_denom = 1;
+	cinfo.dct_method = JDCT_FASTEST;
+	cinfo.do_fancy_upsampling = FALSE;
+
+	jpeg_calc_output_dimensions(&cinfo);
+
+	row_stride = cinfo.output_width * cinfo.output_components;
+	image_size = row_stride * cinfo.output_height;
+
+	if (buffer_size < image_size) {
+		if (buffer != NULL) {
+			free(buffer);
+		}
+		buffer = malloc(image_size);
+		buffer_size = image_size;
+	}
+
+	jpeg_start_decompress(&cinfo);
+
+	tmp = (uintptr_t)buffer;
+	while (cinfo.output_scanline < cinfo.output_height) {
+		ptr[0] = (JSAMPARRAY)tmp;
+		jpeg_read_scanlines(&cinfo, ptr, 1);
+		tmp += row_stride;
+	}
+	jpeg_finish_decompress(&cinfo);
+	jpeg_destroy_decompress(&cinfo);
+	fclose(infile);
+
+	if (backDropTexture == -1) {
+		glGenTextures(1, &backDropTexture);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+		     cinfo.output_width, cinfo.output_height,
+		     0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
 void screen_StopBackDrop(void)
@@ -282,68 +374,28 @@ void screen_RestartBackDrop(void)
 	bBackDrop = TRUE;
 }
 
-UWORD* screen_GetBackDrop(void)
+BOOL screen_GetBackDrop(void)
 {
-	if (bBackDrop == TRUE)
-	{
-		return pBackDropData;
-	}
-	return NULL;
+	return bBackDrop;
 }
 
-UDWORD screen_GetBackDropWidth(void)
-{
-	if (bBackDrop == TRUE)
-	{
-		return backDropWidth;
-	}
-	return 0;
-}
+void screen_Upload() {
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	glColor3f(1, 1, 1);
 
-void screen_Upload(UWORD* newBackDropBmp)
-{
-	UDWORD		y;
-	UBYTE		*p8Src;
-	UWORD		*p16Src;
-	UBYTE		*p8Dest;
-	UWORD		*p16Dest;
-
-        if (SDL_LockSurface(screen) != 0)
-	{
-		DBERROR(("Back buffer lock failed:\n"));
-		return;
-	}
-
-        switch (screen->format->BitsPerPixel)
-        {
-	case 8: //assume src bmp is palettised to same palette
-		p8Src  = (UBYTE *)newBackDropBmp;
-		p8Dest= ((UBYTE *)screen->pixels);
-		for(y=0; (y<screenHeight); y++)
-		{
-			memcpy(p8Dest,p8Src,screenWidth);
-			p8Src += screen->pitch;
-			p8Dest += screenWidth;
-		}
-		break;
-	case 16:
-		p16Src  = newBackDropBmp;
-		p16Dest= (UWORD *)((UBYTE *)screen->pixels);
-		for(y=0; (y<screenHeight); y++)
-		{
-			memcpy(p16Dest,p16Src,screenWidth * 2);
-			p16Src += screen->pitch/2;
-			p16Dest += screenWidth;
-		}
-		break;
-	case 24:
-	case 32:
-	default:
-		DBPRINTF(("Upload not implemented for this bit depth"));
-		break;
-        }
-
-        SDL_UnlockSurface(screen);
+	glBegin(GL_TRIANGLE_STRIP);
+	glTexCoord2f(0, 0);
+	glVertex2f(0, 0);
+	glTexCoord2f(255, 0);
+	glVertex2f(screenWidth, 0);
+	glTexCoord2f(0, 255);
+	glVertex2f(0, screenHeight);
+	glTexCoord2f(255, 255);
+	glVertex2f(screenWidth, screenHeight);
+	glEnd();
 }
 
 void screen_SetFogColour(UDWORD newFogColour)
@@ -380,22 +432,6 @@ void screen_SetFogColour(UDWORD newFogColour)
 		currentFogColour = newFogColour;
 	}
 	return;
-}
-
-/* Flip back and front buffers */
-//always clears or renders backdrop
-void screenFlip(BOOL clearBackBuffer)
-{
-	SDL_Flip(screen);
-	if ((bBackDrop) && (pBackDropData != NULL) AND clearBackBuffer)
-	{
-		// copy back drop
-                screen_Upload(pBackDropData);
-	}
-	else if (clearBackBuffer)
-	{
-		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-	}
 }
 
 /* Swap between windowed and full screen mode */
