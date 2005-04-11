@@ -150,7 +150,7 @@ init://jump here from the end if re_initialising
 
 	loadRenderMode();//get the registry entry for clRendMode
 
-	bDisableLobby = TRUE;
+	bDisableLobby = FALSE;
 
 	// parse the command line
 //	if (bDisableLobby || !NetPlay.bLobbyLaunched)

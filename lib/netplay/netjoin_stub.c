@@ -46,6 +46,13 @@ BOOL NEThostGame(LPSTR SessionName, LPSTR PlayerName,	DWORD one,		// flags.
 														DWORD four,
 														UDWORD plyrs)	// # of players.
 {
+	if(!NetPlay.bComms)
+	{
+		NetPlay.dpidPlayer		= 1;
+		NetPlay.bHost			= TRUE;
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
@@ -75,5 +82,10 @@ DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
 // Set a game flag
 BOOL NETsetGameFlags(UDWORD flag,DWORD value)
 {		
+	if(!NetPlay.bComms)
+	{
+		return TRUE;
+	}
+
 	return FALSE;
 }

@@ -28,7 +28,42 @@ typedef struct{					// data regarding the last one second or so.
 // setup stuff
 BOOL NETinit(GUID g,BOOL bFirstCall)
 {
-	return FALSE;
+	UDWORD			i;
+
+//	NEThashFile("warzonedebug.exe");
+
+	if(bFirstCall)
+	{
+		DBPRINTF(("NETPLAY: Init called, MORNIN' \n "));
+		
+		NetPlay.bLobbyLaunched		= FALSE;				// clean up 
+		NetPlay.lpDirectPlay4A		= NULL;				
+		NetPlay.hPlayerEvent		= NULL;				
+		NetPlay.dpidPlayer		= 0;				
+		NetPlay.bHost			= 0;
+		NetPlay.bComms			= FALSE; // was TRUE
+
+		NetPlay.bEncryptAllPackets	= FALSE;
+		NETsetKey(0x2fe8f810, 0xb72a5, 0x114d0, 0x2a7);	// j-random key to get us started
+
+		NetPlay.bAllowCaptureRecord	= FALSE;
+		NetPlay.bAllowCapturePlay	= FALSE;
+		NetPlay.bCaptureInUse		= FALSE;
+
+
+		for(i=0;i<MaxNumberOfPlayers;i++)
+		{
+			memset(&NetPlay.protocols[i], 0, sizeof(PROTO));
+			memset(&NetPlay.players[i], 0, sizeof(PLAYER));
+			memset(&NetPlay.games[i], 0, sizeof(GAMESTRUCT));
+		}
+		//GAME_GUID = g;	
+
+		NETuseNetwork(FALSE);
+		NETstartLogging();
+	}
+	
+	return TRUE;
 }
 
 

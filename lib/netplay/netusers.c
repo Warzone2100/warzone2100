@@ -196,14 +196,14 @@ BOOL FAR PASCAL Playercounter(DPID dpId,DWORD dwPlayerType,LPCDPNAME lpName,DWOR
 UDWORD NETplayerInfo(LPGUID guidinstance)
 {
 	
-	NetPlay.playercount =0;													// reset player counter
+	NetPlay.playercount =0;		// reset player counter
 
 	if(!NetPlay.bComms)
 	{
-		NetPlay.playercount				= 1;
-		NetPlay.players[0].bHost		= TRUE;
+		NetPlay.playercount		= 1;
+		NetPlay.players[0].bHost	= TRUE;
 		NetPlay.players[0].bSpectator	= FALSE;
-		NetPlay.players[0].dpid			= 1;
+		NetPlay.players[0].dpid		= 1;
 		return 1;
 	}
 
