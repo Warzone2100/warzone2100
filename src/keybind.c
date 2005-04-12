@@ -2514,93 +2514,70 @@ void	kf_ToggleShakeStatus( void )
 }
 // --------------------------------------------------------------------------
 
+FRACT available_speed[] = {
+	FRACTCONST(1, 8),
+	FRACTCONST(1, 4),
+	FRACTCONST(1, 2),
+	FRACTCONST(3, 4),
+	FRACTCONST(1, 1),
+	FRACTCONST(3, 2),
+	FRACTCONST(2, 1),
+	FRACTCONST(5, 2),
+	FRACTCONST(3, 1)
+};
+unsigned int nb_available_speeds = 9;
+
 void kf_SpeedUp( void )
 {
-	FRACT	mod, fast1,fast2;
-
-	if (getDebugMappingStatus())
-	{
-		fast1 = FRACTCONST(3,2);
-		fast2 = FRACTCONST(2,1);
-	}
-	else
-	{
-		fast1 = FRACTCONST(5,4);
-		fast2 = FRACTCONST(3,2);
-	}
+	FRACT	mod;
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
+		int i;
+
 		// get the current modifier
 		gameTimeGetMod(&mod);
 
-		// increase it
-		if (mod < FRACTCONST(1,2))
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SPEED_UP),FRACTCONST(1,2)));
-			mod = FRACTCONST(1,2);
+		for (i = 1; i < nb_available_speeds; ++i) {
+			if (mod < available_speed[i]) {
+				mod = available_speed[i];
+
+				if (mod == FRACTCONST(1, 1)) {
+					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
+				} else {
+					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SPEED_UP),mod));
+				}
+				gameTimeSetMod(mod);
+				break;
+			}
 		}
-		else if (mod < FRACTCONST(1,1))
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
-			mod = FRACTCONST(1,1);
-		}
-		else if (mod < fast1)
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SPEED_UP),fast1));
-			mod = fast1;
-		}
-		else if (mod < fast2)
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SPEED_UP),fast2));
-			mod = fast2;
-		}
-		gameTimeSetMod(mod);
 	}
 }
 
 void kf_SlowDown( void )
 {
-	FRACT	mod, fast1,fast2;
+	FRACT	mod;
 
-	if (getDebugMappingStatus())
+	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
-		fast1 = FRACTCONST(3,2);
-		fast2 = FRACTCONST(2,1);
-	}
-	else
-	{
-		fast1 = FRACTCONST(5,4);
-		fast2 = FRACTCONST(3,2);
-	}
+		int i;
 
-	if ( (!bMultiPlayer || (NetPlay.bComms==0)) && !bInTutorial )
-	{
 		// get the current modifier
 		gameTimeGetMod(&mod);
 
-		// decrease it
-		if (mod > fast1)
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SLOW_DOWN),fast1));
-			mod = fast1;
+		for (i = nb_available_speeds-2; i >= 0; --i) {
+			if (mod > available_speed[i]) {
+				mod = available_speed[i];
+
+				if (mod == FRACTCONST(1, 1)) {
+					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
+				} else {
+					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SLOW_DOWN),mod));
+				}
+				gameTimeSetMod(mod);
+				break;
+			}
 		}
-		else if (mod > FRACTCONST(1,1))
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
-			mod = FRACTCONST(1,1);
-		}
-		else if (mod > FRACTCONST(1,2))
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SLOW_DOWN),FRACTCONST(1,2)));
-			mod = FRACTCONST(1,2);
-		}
-		else if (mod > FRACTCONST(1,3))
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SLOW_DOWN),FRACTCONST(1,3)));
-			mod = FRACTCONST(1,3);
-		}
-		gameTimeSetMod(mod);
 	}
 }
 

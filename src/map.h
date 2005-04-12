@@ -325,21 +325,9 @@ FUNCINLINE MAPTILE *mapTile(UDWORD x, UDWORD y)
 //FUNCINLINE SDWORD map_TileHeight(UDWORD x, UDWORD y)
 FUNCINLINE SWORD map_TileHeight(UDWORD x, UDWORD y)
 {
-    x = x >= (mapWidth) ? (mapWidth-1) : x;
-	y = y >= (mapHeight) ? (mapHeight-1) : y;
-#ifndef PSX
-	ASSERT((x < mapWidth,
-		"mapTile: x coordinate bigger than map width"));
-	ASSERT((y < mapHeight,
-		"mapTile: y coordinate bigger than map height"));
-#else
 	if((x>=mapWidth) || (y>=mapHeight)) {
-		printf("mapTileHeight: invalid XY (%d,%d)\n",x,y);
 		return 0;
 	}
-#endif
-
-//	return ((psMapTiles[x + (y << mapShift)].height) * ELEVATION_SCALE);//width no longer a power of 2
 	return (SWORD)((psMapTiles[x + (y * mapWidth)].height) * ELEVATION_SCALE);
 }
 
