@@ -156,7 +156,6 @@ static void _colorize_image(iBitmap *bmp, long size, unsigned int depth, iPalett
 			bmp[i] = p[c].r;
 			bmp[i+1] = p[c].g;
 			bmp[i+2] = p[c].b;
-			bmp[i+3] = 255;
 		}
 	} else if (depth == 4) {
 		for (i = 0; i < size; i += 4) {
@@ -347,7 +346,6 @@ iBool iV_PCXLoadMem(int8 *pcximge, iSprite *s, iColour *pal) {
 		_load_image(s->bmp, bsize, 4);
 		_load_palette_mem(p);
 		_colorize_image(s->bmp, bsize, 4, p);
-
 	}
 
 	//iV_DEBUG1("pcx[iV_PCXLoadMEM] = mem %p %dx%d load successful\n",_PCX_MI, s->width,s->height);
