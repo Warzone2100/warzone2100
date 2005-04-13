@@ -49,6 +49,8 @@ extern char OffString[];
 extern BOOL bShakingPermitted;
 #endif
 
+extern char	SaveGamePath[];
+
 //extern W_SCREEN *psWScreen;
 extern CURSORSNAP InterfaceSnap;
 extern void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State);
@@ -651,11 +653,11 @@ void intProcessInGameOptions(UDWORD id)
 //		break;
 	case INTINGAMEOP_LOAD:
 		intCloseInGameOptions(TRUE, FALSE);
-		addLoadSave(LOAD_INGAME,"savegame\\","gam",strresGetString(psStringRes,STR_MR_LOAD_GAME));	// change mode when loadsave returns//		if(runLoadSave())// check for file name.
+		addLoadSave(LOAD_INGAME,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_LOAD_GAME));	// change mode when loadsave returns//		if(runLoadSave())// check for file name.
 		break;
 	case INTINGAMEOP_SAVE:
 		intCloseInGameOptions(TRUE, FALSE);
-		addLoadSave(SAVE_INGAME,"savegame\\","gam", strresGetString(psStringRes,STR_MR_SAVE_GAME) );
+		addLoadSave(SAVE_INGAME,SaveGamePath,"gam", strresGetString(psStringRes,STR_MR_SAVE_GAME) );
 		break;
 #endif
 

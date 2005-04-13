@@ -149,6 +149,8 @@ BOOL GetInFastPlay(void)
 
 //extern W_SCREEN		*psWScreen;					//The widget screen
 
+extern char	SaveGamePath[];
+
 extern BOOL firstcall;
 extern IMAGEFILE *FrontImages;
 #ifdef PSX
@@ -1127,7 +1129,7 @@ BOOL runSinglePlayerMenu(VOID)
 					startSinglePlayerMenu();
 				}
 #else
-				addLoadSave(LOAD_FRONTEND,"savegame\\","gam",strresGetString(psStringRes,STR_MR_LOAD_GAME));	// change mode when loadsave returns
+				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_LOAD_GAME));	// change mode when loadsave returns
 #endif
 				break;
 //#endif

@@ -62,7 +62,13 @@ BOOL	frontendInitialised = FALSE;
 BOOL	reInit = FALSE;
 BOOL	bGlideFound=FALSE;		
 BOOL	bDisableLobby;
+char	SaveGamePath[255];
 
+#ifndef WIN32
+#ifndef PSX
+char	UnixRegFilePath[255];
+#endif
+#endif
 
 // Some prototypes because I can't be arse to create a .h file
 BOOL InitGlideDLL(void);
@@ -108,6 +114,27 @@ int main(int argc, char *argv[])
 	iColour*		psPaletteBuffer;
 	SDWORD			pSize;
 
+#ifndef WIN32
+#ifndef PSX
+	char	UnixUserPath[255];
+#endif
+#endif
+
+#ifdef WIN32
+	strcpy(SaveGamePath,"savegame\\");
+#else
+ #ifdef PSX
+	strcpy(SaveGamePath,"savegame\\");
+ #else
+	strcpy(UnixUserPath,(char *)getenv("HOME"));
+	strcat(UnixUserPath,"/.warzone2100/");
+	CreateDirectory(UnixUserPath,NULL);
+	strcpy(SaveGamePath,UnixUserPath);
+	strcat(SaveGamePath,"savegame/");
+	strcpy(UnixRegFilePath,UnixUserPath);
+	strcat(UnixRegFilePath,"config");
+ #endif
+#endif
 
 	// initialise all the command line states
 	clStartWindowed = TRUE;  // NOID changed from FALSE

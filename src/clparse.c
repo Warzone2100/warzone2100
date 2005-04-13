@@ -31,6 +31,8 @@
 
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
+extern char	SaveGamePath[];
+
 // whether to start windowed
 BOOL	clStartWindowed;
 // whether to play the intro video
@@ -161,7 +163,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				DBERROR( ("Unrecognised -savegame name\n") );
 				return FALSE;
 			}
-			strcpy(saveGameName, "savegame\\");
+			strcpy(saveGameName, SaveGamePath);
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}

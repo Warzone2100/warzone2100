@@ -780,6 +780,8 @@ typedef struct regkey_t {
 
 regkey_t *registry[REGISTRY_HASH_SIZE] = { NULL };
 
+char UnixRegFilePath[];
+
 void registry_clear() {
 	unsigned int i;
 
@@ -912,28 +914,13 @@ BOOL registry_save(char* filename) {
 	return FALSE;
 }
 
-char* warzoneRegistryFile() {
-	static BOOL created = FALSE;
-	static char path[1024];
-
-	if (created == FALSE) {
-		path[0] = '\0';
-		strcpy(path, getenv("HOME"));
-		strcat(path, "/.warzone2100");
-		mkdir(path, 0755);
-		strcat(path, "/config");
-		created = TRUE;
-	}
-
-	return path;
-}
-
+//////////////////////////////////////////////////////////////////////////////
 BOOL openWarzoneKey()
 {
 	static BOOL done = FALSE;
 
 	if (done == FALSE) {
-		registry_load(warzoneRegistryFile());
+		registry_load(UnixRegFilePath);
 		done = TRUE;
 	}
 	return TRUE;
@@ -942,7 +929,7 @@ BOOL openWarzoneKey()
 //////////////////////////////////////////////////////////////////////////////
 BOOL closeWarzoneKey()
 {
-	registry_save(warzoneRegistryFile());
+	registry_save(UnixRegFilePath);
 	return TRUE;
 }
 

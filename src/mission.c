@@ -186,6 +186,9 @@ extern CURSORSNAP InterfaceSnap;
 #endif
 
 //EXTERNALS*************
+
+extern char	SaveGamePath[];
+
 MISSION		mission;
 
 BOOL		offWorldKeepLists;
@@ -4203,10 +4206,10 @@ void intProcessMissionResult(UDWORD id)
 #ifndef PSX
 	case IDMISSIONRES_LOAD:
 		// throw up some filerequester
-		addLoadSave(LOAD_MISSIONEND,"savegame\\","gam",strresGetString(psStringRes,STR_MR_LOAD_GAME)/*"Load Game"*/);
+		addLoadSave(LOAD_MISSIONEND,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_LOAD_GAME)/*"Load Game"*/);
 		break;
 	case IDMISSIONRES_SAVE:
-		addLoadSave(SAVE_MISSIONEND,"savegame\\","gam",strresGetString(psStringRes,STR_MR_SAVE_GAME)/*"Save Game"*/);
+		addLoadSave(SAVE_MISSIONEND,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_SAVE_GAME)/*"Save Game"*/);
 
 		if (widgGetFromID(psWScreen, IDMISSIONRES_QUIT) == NULL)
 		{
@@ -4247,7 +4250,7 @@ void intProcessMissionResult(UDWORD id)
 		resetMissionPauseState();		// Don't ask.
 		intAddMissionResult(TRUE, TRUE);
 #else
-		addLoadSave(FALSE,"savegame\\","gam",strresGetString(psStringRes,STR_MR_SAVE_GAME)/*"Save Game"*/);
+		addLoadSave(FALSE,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_SAVE_GAME)/*"Save Game"*/);
 #endif
 		break;
 #endif
