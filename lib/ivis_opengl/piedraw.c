@@ -644,6 +644,11 @@ int	uFrame, vFrame, j, framesPerLine;
 		}
 		poly->flags |= PIE_NO_CULL;//dont check culling again for this poly
 	}
+	if (poly->flags & PIE_COLOURKEYED) {
+		pie_SetColourKeyedBlack(TRUE);
+	} else {
+		pie_SetColourKeyedBlack(FALSE);
+	}
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0)) {
 		if (poly->pTexAnim != NULL) {
@@ -782,6 +787,8 @@ static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip) {
 
 		if (poly->flags & PIE_COLOURKEYED) {
 			pie_SetColourKeyedBlack(TRUE);
+		} else {
+			pie_SetColourKeyedBlack(FALSE);
 		}
 		glBegin(GL_TRIANGLE_FAN);
 		for (i = 0; i < poly->npnts; ++i) {
@@ -902,12 +909,11 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
   	if(((aVrts[1].sy - aVrts[0].sy) * (aVrts[2].sx - aVrts[1].sx)) <= ((aVrts[1].sx - aVrts[0].sx) * (aVrts[2].sy - aVrts[1].sy)) ) {
 		bClockwise = TRUE;
 	} else {
-		//return;
+		return;
 	}
-	glDisable(GL_CULL_FACE);
 
 	tileCount++;
-	//pie_SetTexturePage(texPage);
+	pie_SetTexturePage(texPage);
 	pie_SetFogStatus(TRUE);
 	if (psEffects == NULL)//jps 15apr99 translucent water code
 	{
