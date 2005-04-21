@@ -82,6 +82,9 @@ BOOL    bUpload = FALSE;
 //fog
 DWORD	fogColour = 0;
 
+char screendump_filename[20];
+unsigned int screendump_num = 0;
+unsigned int screendump_required = 0;
 
 /* flag forcing buffers into video memory */
 static BOOL	g_bVidMem;
@@ -457,6 +460,58 @@ void screenToggleMode(void)
 	}
 }
 
+void vertical_flip(SDL_Surface* image) {
+	char* buf = malloc(image->pitch);
+	int i1;
+
+	// Copy the buffer into the SDL surface while flipping it vertically.
+	for (i1 = 0; i1 < image->h >> 1; ++i1) {
+		int i2 = image->h-i1-1;
+
+		if (i1 != i2) {
+			memcpy(buf, ((char *)image->pixels) + image->pitch*i1, image->pitch);
+			memcpy(((char *)image->pixels) + image->pitch*i1,
+			       ((char *)image->pixels) + image->pitch*i2, image->pitch);
+			memcpy(((char *)image->pixels) + image->pitch*i2, buf, image->pitch);
+		}
+	}
+
+	free(buf);
+}
+
+void screenDoDumpToDiskIfRequired() {
+	// The surface that will be used to save the BMP file.
+	SDL_Surface *image;
+
+	if (screendump_required == 0) return;
+
+	screendump_required = 0;
+
+	// Create an SDL surface to hold the image.
+	image = SDL_CreateRGBSurface(SDL_SWSURFACE, screen->w, screen->h, 24,
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+				    0x000000FF, 0x0000FF00, 0x00FF0000, 0
+#else
+				    0x00FF0000, 0x0000FF00, 0x000000FF, 0
+#endif
+				   );
+
+	// Return if surface creation failed.
+	if (image == NULL) return;
+
+	// Read the image into the buffer.
+	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+	vertical_flip(image);
+
+	// Save the surface into BMP file.
+	SDL_SaveBMP(image, screendump_filename);
+
+	// Free the surface.
+	SDL_FreeSurface(image);
+}
+
+
 /* Swap between windowed and full screen mode */
 BOOL screenToggleVideoPlaybackMode(void)
 {
@@ -738,6 +793,23 @@ UBYTE screenGetPalEntry(UBYTE red, UBYTE green, UBYTE blue)
 	}
 
 	return colour;
+}
+
+char* screenDumpToDisk() {
+	while (1) {
+		FILE* f;
+
+		sprintf(screendump_filename, "wz2100_shot_%03i.bmp", ++screendump_num);
+		if ((f = fopen(screendump_filename, "r")) != NULL) {
+			fclose(f);
+		} else {
+			break;
+		}
+	}
+
+	screendump_required = 1;
+
+	return screendump_filename;
 }
 
 /* Output text to the display screen at location x,y.

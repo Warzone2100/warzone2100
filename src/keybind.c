@@ -520,16 +520,7 @@ void	kf_LowerGamma( void )
 /* Sends the 3dfx screen buffer to disk */
 void	kf_ScreenDump( void )
 {
-#ifdef INC_GLIDE
-	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,"3dfx 24 bit raw screen dump written to working directory : %s",iV_ScreenDumpToDisk()));
-	}
-	else
-#endif
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,"Screen dump function presently only works on 3dfx based cards."));
-	}
+	CONPRINTF(ConsoleString,(ConsoleString,"Screen dump written to working directory : %s", screenDumpToDisk()));
 }
 
 // --------------------------------------------------------------------------

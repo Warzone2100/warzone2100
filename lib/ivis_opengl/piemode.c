@@ -46,6 +46,7 @@ static BOOL bDither = FALSE;
 /***************************************************************************/
 //okay just this once
 extern void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform);
+extern void screenDoDumpToDiskIfRequired();
 
 /***************************************************************************/
 /*
@@ -132,6 +133,7 @@ void pie_ShutDown(void) {
 void pie_ScreenFlip(CLEAR_MODE clearMode) {
 	UWORD* bd;
 
+	screenDoDumpToDiskIfRequired();
 	SDL_GL_SwapBuffers();
 	switch (clearMode) {
 		case CLEAR_BLACK:

@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 #endif
 
 	// initialise all the command line states
-	clStartWindowed = TRUE;  // NOID changed from FALSE
+	clStartWindowed = FALSE;  // NOID changed from FALSE
 	clIntroVideo = FALSE;
 
 //	if (!pie_CheckForDX6())

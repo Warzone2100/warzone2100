@@ -41,9 +41,8 @@ extern int	pie_PolyClip2D(int npoints, iVertex *points, iVertex *clip);
 extern int	pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip, BOOL bSpecular);
 extern int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PIEVERTEX *clipped, BOOL bSpecular);
 extern int	pie_ClipFlat2dLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
-extern BOOL	pie_SetVideoBufferWidth	( UDWORD width );
-extern BOOL	pie_SetVideoBufferHeight	( UDWORD height );
-extern UDWORD	pie_GetVideoBufferWidth	( void );
-extern UDWORD	pie_GetVideoBufferHeight	( void );
+extern BOOL	pie_SetVideoBuffer(UDWORD width, UDWORD height);
+extern UDWORD	pie_GetVideoBufferWidth( void );
+extern UDWORD	pie_GetVideoBufferHeight( void );
 
 #endif // _pieclip_h

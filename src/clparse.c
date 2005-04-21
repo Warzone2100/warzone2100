@@ -53,6 +53,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 	char			cl[255];
 	char			cl2[255];
 	unsigned char		*pXor;
+	unsigned int		w, h;
 	int i;
 
 	// for cheating
@@ -87,8 +88,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_SetRendMode(REND_MODE_SOFTWARE);
 			war_SetFog(FALSE);
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
+			pie_SetVideoBuffer(640, 480);
 
 		}
 		else if ( stricmp( tokenType, "-D3D" ) == 0 )
@@ -97,8 +97,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 			war_SetRendMode(REND_MODE_HAL);
 			pie_SetDirect3DDeviceName("Direct3D HAL");
 //			bCrippleD3D = TRUE;
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
+			pie_SetVideoBuffer(640, 480);
 		}
 
 		else if ( stricmp( tokenType, "-MMX" ) == 0 )
@@ -106,8 +105,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 #ifndef COVERMOUNT
 			war_SetRendMode(REND_MODE_RGB);
 			pie_SetDirect3DDeviceName("RGB Emulation");
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
+			pie_SetVideoBuffer(640, 480);
 #else
 			war_SetRendMode(REND_MODE_SOFTWARE);
 			war_SetFog(FALSE);
@@ -118,8 +116,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 #ifndef COVERMOUNT
 			war_SetRendMode(REND_MODE_RGB);
 			pie_SetDirect3DDeviceName("RGB Emulation");
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
+			pie_SetVideoBuffer(640, 480);
 #else
 			war_SetRendMode(REND_MODE_SOFTWARE);
 			war_SetFog(FALSE);
@@ -130,8 +127,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 #ifndef COVERMOUNT
 			war_SetRendMode(REND_MODE_REF);
 			pie_SetDirect3DDeviceName("Reference Rasterizer");
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
+			pie_SetVideoBuffer(640, 480);
 #else
 			war_SetRendMode(REND_MODE_SOFTWARE);
 			war_SetFog(FALSE);
@@ -191,50 +187,9 @@ BOOL ParseCommandLine(int argc, char** argv)
 			bAllowDebugMode =TRUE;
 		}
 //#endif
-		else if( stricmp( tokenType,"-640") == 0)// Temporary - this will be switchable in game
+		else if( sscanf(tokenType,"-%ix%i", &w, &h) == 2)
 		{
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
-		}
-		else if( stricmp( tokenType,"-800") == 0)
-		{
-			pie_SetVideoBufferWidth(800);
-			pie_SetVideoBufferHeight(600);
-		}
-		else if( stricmp( tokenType,"-960") == 0)
-		{
-			pie_SetVideoBufferWidth(960);
-			pie_SetVideoBufferHeight(720);
-		}
-		else if( stricmp( tokenType,"-1024") == 0)
-		{
-			pie_SetVideoBufferWidth(1024);
-			pie_SetVideoBufferHeight(768);
-		}
-		else if( stricmp( tokenType,"-1152") == 0)
-		{
-			pie_SetVideoBufferWidth(1152);
-			pie_SetVideoBufferHeight(864);
-		}
-		else if( stricmp( tokenType,"-1280") == 0)
-		{
-			pie_SetVideoBufferWidth(1280);
-			pie_SetVideoBufferHeight(1024);
-		}
-		else if( stricmp( tokenType,"-1280x960") == 0)
-		{
-			pie_SetVideoBufferWidth(1280);
-			pie_SetVideoBufferHeight(960);
-		}
-		else if( stricmp( tokenType,"-1400") == 0)
-		{
-			pie_SetVideoBufferWidth(1400);
-			pie_SetVideoBufferHeight(1050);
-		}
-		else if( stricmp( tokenType,"-1600") == 0)
-		{
-			pie_SetVideoBufferWidth(1600);
-			pie_SetVideoBufferHeight(1200);
+			pie_SetVideoBuffer(w, h);
 		}
 		else if( stricmp( tokenType,"-noTranslucent") == 0)
 		{
@@ -316,8 +271,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 	/* Hack to disable higher resolution requests in d3d for the demo */
 	if(bCrippleD3D)
 	{
-		pie_SetVideoBufferWidth(640);
-		pie_SetVideoBufferHeight(480);
+		pie_SetVideoBuffer(640, 480);
 	}
 
 	// look for any gamespy flags in the command line.

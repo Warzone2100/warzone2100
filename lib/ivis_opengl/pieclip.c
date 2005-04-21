@@ -47,50 +47,9 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip);
  *	Source
  */
 /***************************************************************************/
-BOOL pie_SetVideoBufferWidth(UDWORD	width)
+BOOL pie_SetVideoBuffer(UDWORD width, UDWORD height)
 {
-	switch(width)
-	{
-		case	640:
-		case	800:
-		case	960:
-		case	1024:
-		case	1152:
-		case	1280:
-		case	1400:
-		case	1600:
-			break;
-		default:
-			ASSERT((FALSE,"Warning: width not supported"));
-			width = 640;
-			videoBufferHeight = 480;
-			break;
-	}
 	videoBufferWidth = width;
-	return(TRUE);
-}
-/***************************************************************************/
-BOOL pie_SetVideoBufferHeight(UDWORD height)
-{
-	switch(height)
-	{
-		case	480:
-		case	600:
-		case	720:
-		case	768:
-		case	864:
-		case	960:
-		case	1024:
-		case	1050:
-		case	1200:
-			break;
-		default:
-			ASSERT((FALSE,"Warning: height not supported"));
-			videoBufferWidth = 640;
-			height = 480;
-			break;
-	}
-
 	videoBufferHeight = height;
 	return(TRUE);
 }

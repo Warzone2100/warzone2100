@@ -375,8 +375,6 @@ void (*iV_TransTriangle)(iVertex *vrt);
 //void (*iV_Box)(int x0,int y0, int x1, int y1, uint32 colour);
 //void (*iV_BoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
 
-char* (*iV_ScreenDumpToDisk)(void);
-
 //void (*iV_DownloadDisplayBuffer)(UBYTE *DisplayBuffer);
 //void (*pie_DownLoadRadar)(unsigned char *buffer);
 

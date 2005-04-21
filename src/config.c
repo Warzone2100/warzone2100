@@ -441,7 +441,9 @@ BOOL loadConfig(BOOL bResourceAvailable)
 
 BOOL loadRenderMode()
 {
-	DWORD	val;
+	char str[32];
+	DWORD val;
+	unsigned int w, h;
 
 	if(!openWarzoneKey())
 	{
@@ -472,68 +474,10 @@ BOOL loadRenderMode()
 
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
-	if(getWarzoneKeyNumeric("resolution", &val))
+	if (   getWarzoneKeyString("resolution", str)
+	    && sscanf(str, "%ix%i", &w, &h) == 2)
 	{	
-		switch(val)
-		{
-		case 640:
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
-			break;
-		case 800:
-			pie_SetVideoBufferWidth(800);
-			pie_SetVideoBufferHeight(600);
-			break;
-		case 960:
-			pie_SetVideoBufferWidth(960);
-			pie_SetVideoBufferHeight(720);
-			break;
-		case 1024:
-			pie_SetVideoBufferWidth(1024);
-			pie_SetVideoBufferHeight(768);
-			break;
-		case 1152:
-			pie_SetVideoBufferWidth(1152);
-			pie_SetVideoBufferHeight(864);
-			break;
-		case 1280:
-			pie_SetVideoBufferWidth(1280);
-			pie_SetVideoBufferHeight(1024);
-			break;
-		}
-	}
-
-	// now load the desired res..
-	// note that we only do this if we havent changed renderer..
-	if(getWarzoneKeyNumeric("resolution", &val))
-	{	
-		switch(val)
-		{
-		case 640:
-			pie_SetVideoBufferWidth(640);
-			pie_SetVideoBufferHeight(480);
-			break;
-		case 800:
-			pie_SetVideoBufferWidth(800);
-			pie_SetVideoBufferHeight(600);
-			break;
-		case 960:
-			pie_SetVideoBufferWidth(960);
-			pie_SetVideoBufferHeight(720);
-			break;
-		case 1024:
-			pie_SetVideoBufferWidth(1024);
-			pie_SetVideoBufferHeight(768);
-			break;
-		case 1152:
-			pie_SetVideoBufferWidth(1152);
-			pie_SetVideoBufferHeight(864);
-			break;
-		case 1280:
-			pie_SetVideoBufferWidth(1280);
-			pie_SetVideoBufferHeight(1024);
-			break;
-		}
+		pie_SetVideoBuffer(w, h);
 	}
 
 #ifdef INC_DIRECTX
@@ -576,7 +520,14 @@ BOOL saveConfig()
 	}
 
 	// res.
-	setWarzoneKeyNumeric("resolution", pie_GetVideoBufferWidth());
+	{
+		char buf[32];
+
+		sprintf(buf, "%ix%i",
+			      pie_GetVideoBufferWidth(),
+				 pie_GetVideoBufferHeight());
+		setWarzoneKeyString("resolution", buf);
+	}
 
 
 	// dont save out the cheat mode.
