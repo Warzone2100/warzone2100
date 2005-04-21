@@ -538,7 +538,19 @@ BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 
 void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 {
-	SDL_WarpMouse(x, y);
+	static int mousewarp = -1;
+
+	if (mousewarp == -1) {
+		int val;
+
+		mousewarp = 1;
+		if (getWarzoneKeyNumeric("nomousewarp", &val)) {
+			if (val) {
+				mousewarp = 0;
+			}
+		}
+	}
+	if (mousewarp) SDL_WarpMouse(x, y);
 }
 
 /* Sets the state of the mouse key to down */

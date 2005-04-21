@@ -184,7 +184,7 @@ static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD
 #endif
 
 void
-pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts) {
+pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset) {
 	SDWORD i;
 
 	if (numVerts < 1) {
@@ -198,7 +198,7 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts) {
 	}
 	for (i = 0; i < numVerts; i++) {
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
-		glTexCoord2f(pVrts[i].tu, pVrts[i].tv);
+		glTexCoord2f(pVrts[i].tu, pVrts[i].tv+texture_offset);
 		//d3dVrts[i].specular = pVrts[i].specular.argb;
 		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz * INV_MAX_Z);
 	}
@@ -512,7 +512,7 @@ void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	pieVrts[3].light.argb = style->colour.argb;
 	pieVrts[3].specular.argb = style->specular.argb;
 
-	pie_Polygon(4, pieVrts);
+	pie_Polygon(4, pieVrts, 0.0);
 }
 
 /***************************************************************************
@@ -622,11 +622,11 @@ static void pie_PiePoly(PIEPOLY *poly, BOOL bClip)
 	}
 	if (poly->nVrts >= 3) {
 		if (poly->flags & PIE_COLOURKEYED) {
-			//pie_SetColourKeyedBlack(TRUE);
+			pie_SetColourKeyedBlack(TRUE);
 		} else {
-			//pie_SetColourKeyedBlack(FALSE);
+			pie_SetColourKeyedBlack(FALSE);
 		}
-		pie_Polygon(poly->nVrts, poly->pVrts);
+		pie_Polygon(poly->nVrts, poly->pVrts, 0.0);
 	}
 }
 
@@ -900,6 +900,7 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 	iIMDPoly	imdPoly;
 	BOOL		bClockwise;
 	UBYTE		alpha, *psAlpha;
+	FRACT		offset = 0;
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the
 		polygons.
@@ -918,17 +919,20 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 	if (psEffects == NULL)//jps 15apr99 translucent water code
 	{
 		pie_SetRendMode(REND_GOURAUD_TEX);//jps 15apr99 old solid water code
+		pie_SetColourKeyedBlack(TRUE);
 	}
 	else//jps 15apr99 translucent water code
 	{
 		pie_SetRendMode(REND_ALPHA_TEX);//jps 15apr99 old solid water code
+		pie_SetColourKeyedBlack(FALSE);
+		offset = *((float*)psEffects);
 	}
 	pie_SetBilinear(TRUE);
 
 	nVrts = pie_ClipTextured(numVrts, &aVrts[0], &clippedVrts[0], TRUE);
 
 	if (nVrts >= 3) {
-		pie_Polygon(nVrts, clippedVrts);
+		pie_Polygon(nVrts, clippedVrts, offset);
 	}
 }
 
@@ -953,7 +957,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 	nVrts = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0], FALSE);
 
 	if (nVrts >= 3) {
-		pie_Polygon(nVrts, clippedVrts);
+		pie_Polygon(nVrts, clippedVrts, 0.0);
 	}
 }
 //#endif

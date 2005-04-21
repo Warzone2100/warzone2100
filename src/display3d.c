@@ -5642,51 +5642,39 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)	//hardware only
 		offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64);
 
 		tileScreenInfo[i+0][j+0].tu = (UWORD)(offset.x + 1);
-		tileScreenInfo[i+0][j+0].tv = (UWORD)(offset.y + vOffset);
+		tileScreenInfo[i+0][j+0].tv = (UWORD)(offset.y);
 
 		tileScreenInfo[i+0][j+1].tu = (UWORD)(offset.x + 63);
-		tileScreenInfo[i+0][j+1].tv = (UWORD)(offset.y + vOffset);
+		tileScreenInfo[i+0][j+1].tv = (UWORD)(offset.y);
 			
 		tileScreenInfo[i+1][j+1].tu = (UWORD)(offset.x + 63);
-		tileScreenInfo[i+1][j+1].tv = (UWORD)(offset.y + 31 + vOffset);
+		tileScreenInfo[i+1][j+1].tv = (UWORD)(offset.y + 31);
 
 		tileScreenInfo[i+1][j+0].tu = (UWORD)(offset.x + 1);
-		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + 31 + vOffset);
+		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + 31);
 
 		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 		aVrts[0].sx = tileScreenInfo[i+0][j+0].wx;
 		aVrts[0].sy = tileScreenInfo[i+0][j+0].wy;
 		aVrts[0].sz = tileScreenInfo[i+0][j+0].wz - WATER_ZOFFSET;
 		aVrts[0].light = tileScreenInfo[i+0][j+0].wlight;
-		aVrts[0].light.byte.a = pie_ByteScale((UBYTE)WATER_ALPHA_LEVEL,
-			(UBYTE)(255-tileScreenInfo[i+0][j+0].light.byte.a));
+		aVrts[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
 		aVrts[1].sx = tileScreenInfo[i+0][j+1].wx;
 		aVrts[1].sy = tileScreenInfo[i+0][j+1].wy;
 		aVrts[1].sz = tileScreenInfo[i+0][j+1].wz - WATER_ZOFFSET;
 		aVrts[1].light = tileScreenInfo[i+0][j+1].wlight;
-		aVrts[1].light.byte.a = pie_ByteScale((UBYTE)WATER_ALPHA_LEVEL,
-			(UBYTE)(255-tileScreenInfo[i+0][j+1].light.byte.a));
+		aVrts[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
 		aVrts[2].sx = tileScreenInfo[i+1][j+1].wx;
 		aVrts[2].sy = tileScreenInfo[i+1][j+1].wy;
 		aVrts[2].sz = tileScreenInfo[i+1][j+1].wz - WATER_ZOFFSET;
 		aVrts[2].light = tileScreenInfo[i+1][j+1].wlight;
-		aVrts[2].light.byte.a = pie_ByteScale((UBYTE)WATER_ALPHA_LEVEL,
-			(UBYTE)(255-tileScreenInfo[i+1][j+1].light.byte.a));
+		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,WATER_TRANS_MODE,WATER_ALPHA_LEVEL);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterAlphaValue);//jps 15 apr99
-		}
-
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
 		memcpy(&aVrts[1],&aVrts[2],sizeof(PIEVERTEX));
 
@@ -5695,18 +5683,9 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)	//hardware only
 		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
 		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_ZOFFSET;
 		aVrts[2].light = tileScreenInfo[i+1][j+0].wlight;
-		aVrts[2].light.byte.a = pie_ByteScale((UBYTE)WATER_ALPHA_LEVEL,
-			(UBYTE)(255-tileScreenInfo[i+1][j+0].light.byte.a));
+		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,WATER_TRANS_MODE,WATER_ALPHA_LEVEL);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterAlphaValue);//jps 15 apr99
-		}
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
 		if( (psTile->texture & TILE_NUMMASK) != WaterTileID) {
 			drawTerrainWEdgeTile(i,j);
