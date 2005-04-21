@@ -460,55 +460,54 @@ void screenToggleMode(void)
 	}
 }
 
-void vertical_flip(SDL_Surface* image) {
-	char* buf = malloc(image->pitch);
-	int i1;
-
-	// Copy the buffer into the SDL surface while flipping it vertically.
-	for (i1 = 0; i1 < image->h >> 1; ++i1) {
-		int i2 = image->h-i1-1;
-
-		if (i1 != i2) {
-			memcpy(buf, ((char *)image->pixels) + image->pitch*i1, image->pitch);
-			memcpy(((char *)image->pixels) + image->pitch*i1,
-			       ((char *)image->pixels) + image->pitch*i2, image->pitch);
-			memcpy(((char *)image->pixels) + image->pitch*i2, buf, image->pitch);
-		}
-	}
-
-	free(buf);
-}
-
 void screenDoDumpToDiskIfRequired() {
-	// The surface that will be used to save the BMP file.
-	SDL_Surface *image;
+	static char* buffer = NULL;
+	static unsigned int buffer_size = 0;
+	struct jpeg_compress_struct cinfo;
+	struct jpeg_error_mgr jerr;
+	FILE * outfile;	
+	JSAMPROW row_pointer[1];
+	int row_stride = screen->w * 3;
 
 	if (screendump_required == 0) return;
 
+	if (row_stride * screen->h > buffer_size) {
+		if (buffer != NULL) {
+			free(buffer);
+		}
+		buffer_size = row_stride * screen->h;
+		buffer = malloc(buffer_size);
+	}
+	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
 	screendump_required = 0;
 
-	// Create an SDL surface to hold the image.
-	image = SDL_CreateRGBSurface(SDL_SWSURFACE, screen->w, screen->h, 24,
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN
-				    0x000000FF, 0x0000FF00, 0x00FF0000, 0
-#else
-				    0x00FF0000, 0x0000FF00, 0x000000FF, 0
-#endif
-				   );
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_compress(&cinfo);
 
-	// Return if surface creation failed.
-	if (image == NULL) return;
+	if ((outfile = fopen(screendump_filename, "wb")) == NULL) {
+		return;
+	}
+	jpeg_stdio_dest(&cinfo, outfile);
 
-	// Read the image into the buffer.
-	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+	cinfo.image_width = screen->w; 
+	cinfo.image_height = screen->h;
+	cinfo.input_components = 3;
+	cinfo.in_color_space = JCS_RGB;
 
-	vertical_flip(image);
+	jpeg_set_defaults(&cinfo);
+	jpeg_set_quality(&cinfo, 75, TRUE);
 
-	// Save the surface into BMP file.
-	SDL_SaveBMP(image, screendump_filename);
+	jpeg_start_compress(&cinfo, TRUE);
 
-	// Free the surface.
-	SDL_FreeSurface(image);
+	while (cinfo.next_scanline < cinfo.image_height) {
+		row_pointer[0] = & buffer[(screen->h-cinfo.next_scanline-1) * row_stride];
+		jpeg_write_scanlines(&cinfo, row_pointer, 1);
+	}
+
+	jpeg_finish_compress(&cinfo);
+	fclose(outfile);
+	jpeg_destroy_compress(&cinfo);
 }
 
 
@@ -799,7 +798,7 @@ char* screenDumpToDisk() {
 	while (1) {
 		FILE* f;
 
-		sprintf(screendump_filename, "wz2100_shot_%03i.bmp", ++screendump_num);
+		sprintf(screendump_filename, "wz2100_shot_%03i.jpg", ++screendump_num);
 		if ((f = fopen(screendump_filename, "r")) != NULL) {
 			fclose(f);
 		} else {

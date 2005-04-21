@@ -520,7 +520,8 @@ void	kf_LowerGamma( void )
 /* Sends the 3dfx screen buffer to disk */
 void	kf_ScreenDump( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString,"Screen dump written to working directory : %s", screenDumpToDisk()));
+	//CONPRINTF(ConsoleString,(ConsoleString,"Screen dump written to working directory : %s", screenDumpToDisk()));
+	screenDumpToDisk();
 }
 
 // --------------------------------------------------------------------------
