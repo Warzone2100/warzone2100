@@ -24,6 +24,7 @@
 #include "component.h"
 #include "geometry.h"
 #include "radar.h"
+#include "screen.h"
 
 #ifndef PSX
 #include "cheat.h"
@@ -83,6 +84,7 @@ extern BOOL	bAllowDebugMode;
 STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
 STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
+extern char	ScreenDumpPath[];
 
 #ifndef PSX
 int fogCol = 0;//start in nicks mode
@@ -521,7 +523,7 @@ void	kf_LowerGamma( void )
 void	kf_ScreenDump( void )
 {
 	//CONPRINTF(ConsoleString,(ConsoleString,"Screen dump written to working directory : %s", screenDumpToDisk()));
-	screenDumpToDisk();
+	screenDumpToDisk(ScreenDumpPath);
 }
 
 // --------------------------------------------------------------------------

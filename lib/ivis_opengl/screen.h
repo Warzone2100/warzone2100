@@ -66,7 +66,7 @@ extern BOOL screen_GetBackDrop(void);
 extern void screen_Upload();
 
 /* screendump */
-char* screenDumpToDisk();
+char* screenDumpToDisk(char* path);
 
 /* fog */
 void screen_SetFogColour(UDWORD newFogColour);

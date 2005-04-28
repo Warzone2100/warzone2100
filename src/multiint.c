@@ -71,6 +71,10 @@ DEFINE_GUID(SPGUID_MPLAYER,0xd8d29744,0x208a,0x11d0,0xbc,0x9d,0x0,0xa0,0x24,0x29
 
 // ////////////////////////////////////////////////////////////////////////////
 // vars 
+extern char	MultiForcesPath[255];
+extern char	MultiCustomMapsPath[255];
+extern char	MultiPlayersPath[255];
+
 extern IMAGEFILE			*FrontImages;
 extern CURSORSNAP			InterfaceSnap;
 extern BOOL					bSendingMap;
@@ -371,7 +375,7 @@ static void decideWRF(void)
 	HANDLE pFileHandle;
 
 	// try and load it from the maps directory first,
-	strcpy(pLevelName, "multiplay\\customMaps\\");			
+	strcpy(pLevelName, MultiCustomMapsPath);			
 	strcat(pLevelName, game.map);
 	strcat(pLevelName, ".wrf");	
 	
@@ -2024,7 +2028,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgDelete(psWScreen,MULTIOP_PLAYERS);
 			widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
 
-			addMultiRequest("\\multiplay\\customMaps\\*.wrf",MULTIOP_MAP,1);
+			strcpy(tmp,MultiCustomMapsPath);
+			strcat(tmp,"*.wrf");
+			addMultiRequest(tmp,MULTIOP_MAP,1);
 			break;
 	
 //		case MULTIOP_ARENA:										// turn on arena game	
@@ -2315,7 +2321,9 @@ static void processMultiopWidgets(UDWORD id)
 	case MULTIOP_FNAME_ICON:
 		widgDelete(psWScreen,MULTIOP_PLAYERS);
 		widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
-		addMultiRequest("\\multiplay\\forces\\*.for",MULTIOP_FNAME,0);
+		strcpy(tmp,MultiForcesPath);
+		strcat(tmp,"*.for");
+		addMultiRequest(tmp,MULTIOP_FNAME,0);
 		break;
 	
 	case MULTIOP_PNAME:			
@@ -2346,7 +2354,9 @@ static void processMultiopWidgets(UDWORD id)
 		widgDelete(psWScreen,MULTIOP_PLAYERS);
 		widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
 
-		addMultiRequest("\\multiplay\\players\\*.sta",MULTIOP_PNAME,0);
+		strcpy(tmp,MultiPlayersPath);
+		strcat(tmp,"*.sta");
+		addMultiRequest(tmp,MULTIOP_PNAME,0);
 		break;
 
 	case MULTIOP_HOST:
@@ -3293,11 +3303,11 @@ VOID runForceSelect(VOID)
 			break;
 
 		case FORCE_LOAD:	
-			addLoadSave(LOAD_FORCE,"multiplay\\Forces\\","For",strresGetString(psStringRes,STR_MUL_LOAD) );
+			addLoadSave(LOAD_FORCE,MultiForcesPath,"For",strresGetString(psStringRes,STR_MUL_LOAD) );
 			break;
 
 		case FORCE_SAVE:	
-			addLoadSave(SAVE_FORCE,"multiplay\\Forces\\","For",strresGetString(psStringRes,STR_MUL_SAVE) );
+			addLoadSave(SAVE_FORCE,MultiForcesPath,"For",strresGetString(psStringRes,STR_MUL_SAVE) );
 			break;
 
 		default:

@@ -38,6 +38,8 @@
 
 W_SCREEN  *psRScreen;			// requester stuff.
 
+extern char	MultiCustomMapsPath[255];
+
 extern CURSORSNAP InterfaceSnap;
 //extern W_SCREEN *psWScreen;
 extern IMAGEFILE *FrontImages;
@@ -561,6 +563,8 @@ void closeMultiRequester()
 
 BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValue)
 {
+	char tmp[255];
+
 	if( id==M_REQUEST_CLOSE)							// close
 	{
 		closeMultiRequester();
@@ -582,20 +586,22 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValu
 		return TRUE;
 	}
 
+	strcpy(tmp,MultiCustomMapsPath);
+	strcat(tmp,"*.wrf");
 	if( id == M_REQUEST_C1)
 	{
 		closeMultiRequester();
-		addMultiRequest("\\multiplay\\customMaps\\*.wrf",MULTIOP_MAP,1);
+		addMultiRequest(tmp,MULTIOP_MAP,1);
 	}
 	if( id == M_REQUEST_C2)
 	{
 		closeMultiRequester();
-		addMultiRequest("\\multiplay\\customMaps\\*.wrf",MULTIOP_MAP,2);
+		addMultiRequest(tmp,MULTIOP_MAP,2);
 	}
 	if( id == M_REQUEST_C3)
 	{
 		closeMultiRequester();
-		addMultiRequest("\\multiplay\\customMaps\\*.wrf",MULTIOP_MAP,3);
+		addMultiRequest(tmp,MULTIOP_MAP,3);
 	}
 //	if( id == M_REQUEST_CA)
 //	{

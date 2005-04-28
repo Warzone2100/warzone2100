@@ -63,6 +63,10 @@ BOOL	reInit = FALSE;
 BOOL	bGlideFound=FALSE;		
 BOOL	bDisableLobby;
 char	SaveGamePath[255];
+char	ScreenDumpPath[255];
+char	MultiForcesPath[255];
+char	MultiCustomMapsPath[255];
+char	MultiPlayersPath[255];
 
 #ifndef WIN32
 #ifndef PSX
@@ -122,6 +126,10 @@ int main(int argc, char *argv[])
 
 #ifdef WIN32
 	strcpy(SaveGamePath,"savegame\\");
+	strcpy(MultiForcesPath,"multiplay\\forces\\");
+	strcpy(MultiCustomMapsPath,"multiplay\\custommaps\\");
+	strcpy(MultiPlayersPath,"multiplay\\players\\");
+	strcpy(ScreenDumpPath,"");
 #else
  #ifdef PSX
 	strcpy(SaveGamePath,"savegame\\");
@@ -129,8 +137,19 @@ int main(int argc, char *argv[])
 	strcpy(UnixUserPath,(char *)getenv("HOME"));
 	strcat(UnixUserPath,"/.warzone2100/");
 	CreateDirectory(UnixUserPath,NULL);
+	strcpy(ScreenDumpPath,UnixUserPath);
+	strcat(ScreenDumpPath,"screendumps/");
+	CreateDirectory(ScreenDumpPath,NULL);
 	strcpy(SaveGamePath,UnixUserPath);
 	strcat(SaveGamePath,"savegame/");
+	strcpy(MultiPlayersPath,UnixUserPath);
+	strcat(MultiPlayersPath,"multiplay/");
+	CreateDirectory(MultiPlayersPath,NULL);
+	strcat(MultiPlayersPath,"players/");
+	strcpy(MultiForcesPath,UnixUserPath);
+	strcat(MultiForcesPath,"multiplay/forces/");
+	strcpy(MultiCustomMapsPath,UnixUserPath);
+	strcat(MultiCustomMapsPath,"multiplay/custommaps/");
 	strcpy(UnixRegFilePath,UnixUserPath);
 	strcat(UnixRegFilePath,"config");
  #endif

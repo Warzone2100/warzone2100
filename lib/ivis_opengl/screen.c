@@ -82,7 +82,7 @@ BOOL    bUpload = FALSE;
 //fog
 DWORD	fogColour = 0;
 
-char screendump_filename[20];
+char screendump_filename[255];
 unsigned int screendump_num = 0;
 unsigned int screendump_required = 0;
 
@@ -794,11 +794,11 @@ UBYTE screenGetPalEntry(UBYTE red, UBYTE green, UBYTE blue)
 	return colour;
 }
 
-char* screenDumpToDisk() {
+char* screenDumpToDisk(char* path) {
 	while (1) {
 		FILE* f;
 
-		sprintf(screendump_filename, "wz2100_shot_%03i.jpg", ++screendump_num);
+		sprintf(screendump_filename, "%swz2100_shot_%03i.jpg", path, ++screendump_num);
 		if ((f = fopen(screendump_filename, "r")) != NULL) {
 			fclose(f);
 		} else {

@@ -48,6 +48,8 @@ DEFINE_GUID(WARZONEGUID,0x48ab0b01,0xfec0,0x11d1,0x98,0xc,0x0,0xa0,0x24,0x38,0x7
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
 
+extern char	MultiForcesPath[255];
+
 extern char	buildTime[8];
 extern BOOL mplayerSubmit(void);
 extern VOID	stopJoining(void);
@@ -660,7 +662,7 @@ BOOL multiTemplateSetup()
 
 	if(game.type == CAMPAIGN && game.base == CAMP_WALLS)
 	{
-		strcpy(sTemp, "multiplay\\Forces\\");			
+		strcpy(sTemp, MultiForcesPath);			
 		strcat(sTemp, sForceName);	
 		strcat(sTemp,".For");	
 	

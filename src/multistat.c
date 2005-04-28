@@ -23,6 +23,8 @@
 #include "multiint.h"
 #include "fpath.h"
 
+extern char	MultiPlayersPath[255];
+
 // ////////////////////////////////////////////////////////////////////////////
 //  Force defs.
 
@@ -584,7 +586,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	SAVEDPLAYERSTATS	st,*codedst;
 	UDWORD				tmp[4];
 
-	strcpy(fileName,"multiplay\\Players\\");
+	strcpy(fileName,MultiPlayersPath);
 	CreateDirectory(fileName,NULL);			// make dir, no problem if fails!
 	strcat(fileName,sPlayerName);
 	strcat(fileName,".sta");
@@ -654,7 +656,7 @@ BOOL saveMultiStats(STRING *sFileName, STRING *sPlayerName,PLAYERSTATS *playerSt
 	NETmangleData(&st,&codedst,sizeof(SAVEDPLAYERSTATS));	
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
-	strcpy(fileName,"multiplay\\Players\\");
+	strcpy(fileName,MultiPlayersPath);
 	strcat(fileName,sFileName);
 	strcat(fileName,".sta");
 	saveFile(fileName,(UBYTE*)&codedst,sizeof(SAVEDPLAYERSTATS));
