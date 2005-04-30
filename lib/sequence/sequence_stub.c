@@ -17,12 +17,12 @@
 #include "rpl_reader.h"
 #include "sequence.h"
 
-#ifdef WIN32
+#ifdef INC_DIRECTX
 // Direct Draw and Sound Include files
 #include <ddraw.h>
 #define SEQUENCE_SOUND
 #ifdef SEQUENCE_SOUND
-	#include <dsound.h>
+#include <dsound.h>
 #endif
 #endif
 

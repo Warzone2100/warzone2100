@@ -7,7 +7,14 @@ SRC_FILES=	bar.c \
 		tip.c \
 		widget.c
 
-LIBS=framework ivis02
+LIBS=framework
+
+ifeq ($(GFX), opengl)
+LIBS+=ivis_opengl
+else
+LIBS+=ivis02
+endif
+
 
 LIB=widget
 

@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include <ddraw.h>
 #include <dsound.h>
 #endif

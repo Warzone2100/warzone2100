@@ -128,11 +128,11 @@ LIBS=		framework \
 		sound \
 		widget
 
-EXT_LIBS=	openal
+EXT_LIBS=	$(OPENAL_LIB)
 
 ifeq ($(GFX), opengl)
 LIBS+=ivis_opengl
-EXT_LIBS+=GL jpeg
+EXT_LIBS+=$(OPENGL_LIB) jpeg
 else
 LIBS+=ivis02
 endif

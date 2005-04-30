@@ -39,7 +39,6 @@ typedef	signed		int	SDWORD;
 #define DeleteFile(file) remove(unix_path(file))
 #define RemoveDirectory(dir) remove(unix_path(dir))
 
-#define D3DVAL(val)             ((float)(val))
 #define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
 
 #define WARZONEGUID 0
@@ -61,23 +60,6 @@ typedef	signed		int	SDWORD;
 #define cdecl
 
 #define __int64 long long 
-
-typedef void * LPDIRECTSOUND;
-typedef void * LPDIRECTDRAWSURFACE4;
-typedef void * LPDIRECTDRAW4;
-typedef void * LPDIRECTDRAW;
-typedef void * LPDIRECTDRAWPALETTE;
-typedef void * LPDIRECTDRAWCLIPPER;
-typedef int DDPIXELFORMAT;
-typedef int DDDEVICEIDENTIFIER;
-typedef int DDSURFACEDESC2;
-typedef int IDirectDrawSurface4;
-
-typedef int DPID;
-typedef void * LPDIRECTPLAY4;
-typedef void * LPDIRECTPLAY4A;
-typedef void * LPDIRECTPLAYLOBBY3;
-typedef void * LPDIRECTPLAYLOBBYA;
 
 typedef void * HKEY;
 typedef int GUID;
@@ -108,32 +90,10 @@ typedef signed int * LPDWORD;
 typedef char  * LPSTR;
 typedef void  * LPVOID;
 
-typedef int D3DVALUE;
-typedef int D3DCOLOR;
-typedef struct {
-    D3DVALUE    sx;
-    D3DVALUE    sy;
-    D3DVALUE    sz;
-    D3DVALUE    rhw;
-    D3DCOLOR    color;
-    D3DCOLOR    specular;
-    D3DVALUE    tu;
-    D3DVALUE    tv;
-} D3DTLVERTEX, *LPD3DTLVERTEX;
-
 typedef struct
 {
     CHAR      cFileName[260];
 } WIN32_FIND_DATA;
-
-typedef struct
-{
-    GUID  guidInstance;
-    DWORD dwSize;
-    DWORD dwFlags;
-    DWORD dwMaxPlayers;
-    DWORD dwCurrentPlayers;
-} DPSESSIONDESC2;
 
 typedef struct {
   UBYTE peRed;
@@ -149,6 +109,48 @@ typedef struct
 } POINT;
 
 #endif /* !WIN32 */
+
+#ifndef INC_DIRECTX
+typedef void * LPDIRECTSOUND;
+typedef void * LPDIRECTDRAWSURFACE4;
+typedef void * LPDIRECTDRAW4;
+typedef void * LPDIRECTDRAW;
+typedef void * LPDIRECTDRAWPALETTE;
+typedef void * LPDIRECTDRAWCLIPPER;
+typedef int DDPIXELFORMAT;
+typedef int DDDEVICEIDENTIFIER;
+typedef int DDSURFACEDESC2;
+typedef int IDirectDrawSurface4;
+
+typedef int DPID;
+typedef void * LPDIRECTPLAY4;
+typedef void * LPDIRECTPLAY4A;
+typedef void * LPDIRECTPLAYLOBBY3;
+typedef void * LPDIRECTPLAYLOBBYA;
+
+#define D3DVAL(val)             ((float)(val))
+typedef int D3DVALUE;
+typedef int D3DCOLOR;
+typedef struct {
+    D3DVALUE    sx;
+    D3DVALUE    sy;
+    D3DVALUE    sz;
+    D3DVALUE    rhw;
+    D3DCOLOR    color;
+    D3DCOLOR    specular;
+    D3DVALUE    tu;
+    D3DVALUE    tv;
+} D3DTLVERTEX, *LPD3DTLVERTEX;
+
+typedef struct
+{
+    GUID  guidInstance;
+    DWORD dwSize;
+    DWORD dwFlags;
+    DWORD dwMaxPlayers;
+    DWORD dwCurrentPlayers;
+} DPSESSIONDESC2;
+#endif
 
 #define _inline inline
 #define __inline inline

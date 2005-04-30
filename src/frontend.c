@@ -84,7 +84,7 @@ extern BOOL QACheatMode;
 extern BOOL bShakingPermitted;
 #endif
 
-#define VERSION_STRING	"VER 1.10a"
+#define VERSION_STRING	"VER CP0.1"
 
 extern BOOL bSubtitles;
 

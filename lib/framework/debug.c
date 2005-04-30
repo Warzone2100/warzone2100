@@ -325,7 +325,7 @@ void dbg_AssertPosition(SBYTE *pFile, UDWORD Line)
  * DebugBreak is used to jump into the debugger.
  *
  */
-#ifdef WIN32
+#ifdef WIN32_DEBUG //WIN32
 void dbg_Assert(BOOL Expression, SBYTE *pFormat, ...)
 {
 	va_list		pArgs;

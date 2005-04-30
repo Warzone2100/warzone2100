@@ -11,7 +11,7 @@
 #include "texture.h"
 #include "radar.h"
 #include "tex.h"
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include "dx6texman.h"
 #endif
 

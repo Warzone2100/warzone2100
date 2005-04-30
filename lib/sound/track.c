@@ -41,7 +41,7 @@ static AUDIO_CALLBACK g_pStopTrackCallback = NULL;
 BOOL
 sound_CheckDevice( void )
 {
-#ifdef WIN32
+#ifdef WIN32MM
 	WAVEOUTCAPS	waveCaps;
 	MMRESULT	mmRes;
 
@@ -663,7 +663,7 @@ sound_GetAvailableID( void )
 SDWORD
 sound_GetGlobalVolume( void )
 {
-#ifdef WIN32
+#ifdef WIN32MM
 	MMRESULT	mmRes;
 	SDWORD		iVol;
 	SDWORD		iGlobVol = AUDIO_VOL_MAX;
@@ -690,7 +690,7 @@ sound_GetGlobalVolume( void )
 void
 sound_SetGlobalVolume( SDWORD iVol )
 {
-#ifdef WIN32
+#ifdef WIN32MM
 	MMRESULT	mmRes;
 	SDWORD		iNewVol, iWinVol;
 

@@ -4,7 +4,13 @@ SRC_FILES=	audio.c \
 		openal_track.c \
 		track.c
 
-LIBS=framework gamelib ivis02
+LIBS=framework gamelib
+
+ifeq ($(GFX), opengl)
+LIBS+=ivis_opengl
+else
+LIBS+=ivis02
+endif
 
 LIB=sound
 

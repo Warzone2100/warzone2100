@@ -7,7 +7,7 @@
  */
 
 #include <stdio.h>		// get rid of a couple of warnings.
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include <direct.h>		//dito
 #endif
 
@@ -61,7 +61,7 @@
 
 #include "levels.h"
 
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include <initguid.h>
 // GUID for MPlayer service provider. Will This Change???
 //{D8D29744-208A-11d0-BC9D-00A0242967B6}
@@ -617,7 +617,7 @@ BOOL startConnectionScreen(VOID)
 // add connections
 static void addConnections(UDWORD begin)
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	UDWORD			i;
 	UDWORD			numproto;
 	UDWORD			pos;
@@ -674,7 +674,7 @@ static void addConnections(UDWORD begin)
 	
 VOID runConnectionScreen(void )
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	UDWORD id,i;
 	static UDWORD chosenproto,com,baud;
 	static char	  addr[128];
@@ -987,7 +987,7 @@ static void addGames()
 
 void runGameFind(void )
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	UDWORD id;
 	static UDWORD lastupdate=0;
 	
@@ -3630,7 +3630,7 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 // ////////////////////////////////////////////////////////////////////////////
 void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	BOOL Hilight = FALSE;

@@ -35,12 +35,12 @@
 #include "mixer.h"
 #include "wdg.h"
 #include "multiwdg.h"
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include "d3drender.h"
 #include "dx6texman.h"
+#endif
 #ifdef INC_GLIDE
 #include "dglide.h"
-#endif
 #endif
 
 

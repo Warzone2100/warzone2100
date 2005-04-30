@@ -62,8 +62,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 	sprintf(cl2,"%s%s","-",cl);
 
 	/* loop through command line */
-	for( i = 1; i < argc; ++i)
-	{
+	for( i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
 		if ( stricmp( tokenType, "-window" ) == 0 )
@@ -263,9 +262,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		//	DBERROR( ("Unrecognised command-line token %s\n", tokenType) );
 		//	return FALSE;
 		}
-
-		/* Get next token: */
-		tokenType = strtok( NULL, seps );
 	}
 	
 	/* Hack to disable higher resolution requests in d3d for the demo */

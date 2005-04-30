@@ -3,7 +3,8 @@
 
 // stuff by alex l 1998 to get compiling withoug devkit
 #define	MPDPXTRAERR_OK						0
-#define mpcdecl cdecl
+//#define mpcdecl cdecl
+#define mpcdecl
 #define REG_KEY_MPLAYER         "Software\\Mpath\\Mplayer"      // in HKEY_LOCAL_MACHINE
 typedef unsigned long MPPLAYERID;
 
@@ -150,7 +151,7 @@ typedef unsigned long MPPLAYERID;
 
 ----------------------------------------------------------------------------*/
 
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include <dplay.h>
 #endif
 

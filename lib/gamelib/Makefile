@@ -7,7 +7,13 @@ SRC_FILES=	anim.c \
 		pqueue.c \
 		ptrlist.c
 
-LIBS=framework ivis02 sound
+LIBS=framework sound
+
+ifeq ($(GFX), opengl)
+LIBS+=ivis_opengl
+else
+LIBS+=ivis02
+endif
 
 LIB=gamelib
 

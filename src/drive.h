@@ -1,15 +1,16 @@
 
 
-#ifdef WIN32
- #define DRIVEFUNCINLINE _inline
+#ifdef MSVC
+
+#define DRIVEFUNCINLINE _inline
 
 #else
 
- #ifdef DEFINE_DRIVE_INLINE
- #define DRIVEFUNCINLINE 
- #else
- #define DRIVEFUNCINLINE __inline extern
- #endif
+#ifdef DEFINE_DRIVE_INLINE
+#define DRIVEFUNCINLINE 
+#else
+#define DRIVEFUNCINLINE __inline extern
+#endif
 
 #endif
 
@@ -116,3 +117,4 @@ SDWORD driveGetMoveSpeed(void);
 SDWORD driveGetMoveDir(void);
 BOOL driveSetDirectControl(BOOL Control);
 BOOL driveSetWasDriving(BOOL Driving);
+

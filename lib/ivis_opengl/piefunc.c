@@ -275,7 +275,7 @@ UDWORD	radius;
 //use outside of D3D sceen only
 void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	DDSURFACEDESC2	DD_sd; 
 	HRESULT			hRes;
 	int i, j, surfaceSkip, srcSkip;

@@ -28,7 +28,7 @@
 // submit score routines.
 BOOL mplayerSubmit(void)
 {
-#ifdef WIN32
+#ifdef INC_MPLAYER
 	PLAYERSTATS stats,stats2;
 	MPPLAYERID	mpID;
 

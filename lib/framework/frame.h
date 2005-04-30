@@ -29,13 +29,13 @@ FILE* unix_fopen(char* filename, char* mode);
 
 #define fopen unix_fopen
 
+#endif
+#endif
+
 #define InitializeCriticalSection(x)
 #define DeleteCriticalSection(x)
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
-
-#endif
-#endif
 
 #ifdef PSX		// If Playstation version then compile lean version.
 
@@ -51,15 +51,14 @@ FILE* unix_fopen(char* filename, char* mode);
 #include "types.h"
 #include "debug.h"
 #include "mem.h"
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include <ddraw.h>
 #include "dderror.h"
-#endif
-#include "input.h"
-#ifdef WIN32
 #include "surface.h"
 #include "image.h"
+#include "dxinput.h"
 #endif
+#include "input.h"
 #include "font.h"
 #include "heap.h"
 #include "treap.h"
@@ -70,9 +69,6 @@ FILE* unix_fopen(char* filename, char* mode);
 #include "trig.h"
 #include "frameresource.h"
 #include "strres.h"
-#ifdef WIN32
-#include "dxinput.h"
-#endif
 #include "block.h"
 #include "listmacs.h"
 

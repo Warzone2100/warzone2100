@@ -8,6 +8,14 @@ else
 SDLCONFIG=sdl-config
 endif
 
+ifeq ($(OSTYPE), msys)
+OPENGL_LIB=opengl32
+OPENAL_LIB=openal32
+else
+OPENGL_LIB=GL
+OPENAL_LIB=openal
+endif
+
 CPP=gcc
 CFLAGS+=-Wall -g
 CFLAGS+=-gstabs -DYY_STATIC

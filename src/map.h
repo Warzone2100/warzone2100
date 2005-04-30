@@ -284,7 +284,7 @@ extern void mapSaveTexture(void);
 extern void	mapWaterProcess( void );
 
 
-#ifdef WIN32
+#ifdef MSVC
 #define FUNCINLINE _inline
 #else
 
@@ -294,7 +294,6 @@ extern void	mapWaterProcess( void );
 #else
 #define FUNCINLINE __inline extern
 #endif
-
 
 #endif
 

@@ -45,7 +45,7 @@
 // globals.
 BOOL						bMultiPlayer				= FALSE;	// true when more than 1 player.
 STRING						sForceName[256]				= "Default";
-DPID						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8playerS)
+DWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8playerS)
 //UDWORD						arenaPlayersReceived=0;
 BOOL						openchannels[MAX_PLAYERS]={TRUE};
 UBYTE						bDisplayMultiJoiningStatus;
@@ -617,7 +617,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 // Required by the net library. It's the system message handler..
 BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	switch( ((LPDPMSG_GENERIC)mg)->dwType )
 	{
 	case DPSYS_DESTROYPLAYERORGROUP:	// player leaving the game

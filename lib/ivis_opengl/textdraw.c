@@ -754,7 +754,7 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 
 void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, int XPos, int YPos)
 {
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	int Index;
 	UWORD ImageID;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
