@@ -76,6 +76,7 @@ sound_Update( void ) {
 				break;
 			default:
 				sound_FinishedCallback( i->curr );
+				alDeleteSources(1, &(i->curr->iSample));
 				*tmp = i->next;
 				free(i);
 				break;

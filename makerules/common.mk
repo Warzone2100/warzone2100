@@ -17,6 +17,11 @@ OPENAL_LIB=openal
 endif
 
 CPP=gcc
-CFLAGS+=-Wall -g
 CFLAGS+=-gstabs -DYY_STATIC
+
+ifeq ($(MODE), prod)
+CFLAGS+=-Wall -O2
+else
+CFLAGS+=-Wall -g
+endif
 

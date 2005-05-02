@@ -119,9 +119,15 @@ void	pie_DrawViewingWindow(iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y
 		PIELIGHT c;
 
 		c.argb = colour;
+		glBegin(GL_TRIANGLE_FAN);
+		glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a >> 1);
+		for (i = 0; i < clip; i++) {
+			glVertex2f(clippedVrts[i].sx, clippedVrts[i].sy);
+		}
+		glEnd();
 		glBegin(GL_LINE_STRIP);
 		glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
-		for (i = 0; i < (clip - 1); i++) {
+		for (i = 0; i < clip; i++) {
 			glVertex2f(clippedVrts[i].sx, clippedVrts[i].sy);
 		}
 		glVertex2f(clippedVrts[0].sx, clippedVrts[0].sy);
