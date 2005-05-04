@@ -7,7 +7,7 @@
  */
 /***************************************************************************/
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <GL/gl.h>
 
 #include "frame.h"

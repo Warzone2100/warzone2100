@@ -138,6 +138,8 @@ static void insertChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
 	STRING	*pSrc, *pDest;
 	UDWORD	len, count;
 
+	if (ch == '\0') return;
+
 	ASSERT((*pPos <= strlen(pBuffer),
 		"insertChar: Invalid insertion point"));
 
@@ -171,6 +173,8 @@ static void overwriteChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
 {
 	STRING	*pDest;
 	UDWORD	len;
+
+	if (ch == '\0') return;
 
 	ASSERT((*pPos <= strlen(pBuffer),
 		"insertChar: Invalid insertion point"));
@@ -371,7 +375,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 
 	/* Loop through the characters in the input buffer */
 	done = FALSE;
-	for(key = inputGetKey(); key != 0 && !done; key = inputGetKey())
+	for (key = inputGetKey(); key != 0 && !done; key = inputGetKey())
 	{
 		/* Deal with all the control keys, assume anything else is a printable character */
 		switch (key)
@@ -504,11 +508,11 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			/* Dealt with everything else this must be a printable character */
 			if (editState == WEDBS_INSERT)
 			{
-				insertChar(pBuffer, &pos, (STRING)key);
+				insertChar(pBuffer, &pos, inputGetCharKey());
 			}
 			else
 			{
-				overwriteChar(pBuffer, &pos, (STRING)key);
+				overwriteChar(pBuffer, &pos, inputGetCharKey());
 			}
 
 			/* Update the printable chars */

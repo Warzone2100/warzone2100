@@ -138,7 +138,21 @@ void	pie_DrawViewingWindow(iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y
 /* ---------------------------------------------------------------------------------- */
 void pie_TransColouredTriangle(PIEVERTEX *vrt, UDWORD rgb, UDWORD trans)
 {
-}
+        PIELIGHT c;
+	UDWORD i;
+
+	c.argb = rgb;
+
+	pie_SetTexturePage(-1);
+	pie_SetRendMode(REND_ALPHA_ITERATED);
+
+        glBegin(GL_TRIANGLE_FAN);
+        glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
+        for (i = 0; i < 3; ++i)
+        {
+		glVertex2f(vrt[i].sx, vrt[i].sy);
+	}
+        glEnd();}
 
 /* ---------------------------------------------------------------------------------- */
 /* Returns number of buffers pending */

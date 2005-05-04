@@ -6,7 +6,7 @@
  */
 
 #include <stdio.h>
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 #include "frame.h"
 #include "frameint.h"

@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <SDL/SDL.h>
 
 // window focus messages 
 //#define DEBUG_GROUP1
@@ -24,7 +25,6 @@
 
 #include <assert.h>
 
-#include "SDL.h"
 #include "cursors.c"
 
 /* Linux specific stuff */

@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <jpeglib.h>
 #include <setjmp.h>

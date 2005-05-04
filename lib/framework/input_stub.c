@@ -6,7 +6,7 @@
  */
 
 #include <stdio.h>
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -65,6 +65,10 @@ static KEY_STATE aMouseState[3];
 static UDWORD	pInputBuffer[INPUT_MAXSTR];
 static UDWORD	*pStartBuffer, *pEndBuffer;
 
+static char	pCharInputBuffer[INPUT_MAXSTR];
+static char	*pCharStartBuffer, *pCharEndBuffer;
+static char	currentChar;
+
 
 static KEY_CODE sdlKeyToKeyCode(SDLKey key)
 {
@@ -106,36 +110,47 @@ void inputInitialise(void)
 
 	pStartBuffer = pInputBuffer;
 	pEndBuffer = pInputBuffer;
+	pCharStartBuffer = pCharInputBuffer;
+	pCharEndBuffer = pCharInputBuffer;
 
 	dragX = mouseXPos = screenWidth/2;
 	dragY = mouseYPos = screenHeight/2;
 	dragKey = MOUSE_LMB;
+
+	SDL_EnableUNICODE(1);
 }
 
 /* add count copies of the characater code to the input buffer */
-void inputAddBuffer(UDWORD code, UDWORD count)
+void inputAddBuffer(UDWORD code, char char_code, UDWORD count)
 {
 	UDWORD	*pNext;
+	char	*pCharNext;
 
 	/* Calculate what pEndBuffer will be set to next */
 	pNext = pEndBuffer + 1;
+	pCharNext = pCharEndBuffer + 1;
 	if (pNext >= pInputBuffer + INPUT_MAXSTR)
 	{
 		pNext = pInputBuffer;
+		pCharNext = pCharInputBuffer;
 	}
 
 	while (pNext != pStartBuffer && count > 0)
 	{
 		/* Store the character */
 		*pEndBuffer = code;
+		*pCharEndBuffer = char_code;
 		pEndBuffer = pNext;
+		pCharEndBuffer = pCharNext;
 		count -= 1;
 
 		/* Calculate what pEndBuffer will be set to next */
 		pNext = pEndBuffer + 1;
+		pCharNext = pCharEndBuffer + 1;
 		if (pNext >= pInputBuffer + INPUT_MAXSTR)
 		{
 			pNext = pInputBuffer;
+			pCharNext = pCharInputBuffer;
 		}
 	}
 }
@@ -146,6 +161,8 @@ void inputClearBuffer(void)
 {
 	pStartBuffer = pInputBuffer;
 	pEndBuffer = pInputBuffer;
+	pCharStartBuffer = pCharInputBuffer;
+	pCharEndBuffer = pCharInputBuffer;
 }
 
 
@@ -161,11 +178,14 @@ UDWORD inputGetKey(void)
 	if (pStartBuffer != pEndBuffer)
 	{
 		retVal = *pStartBuffer;
+		currentChar = *pCharStartBuffer;
 		pStartBuffer += 1;
+		pCharStartBuffer += 1;
 
 		if (pStartBuffer >= pInputBuffer + INPUT_MAXSTR)
 		{
 			pStartBuffer = pInputBuffer;
+			pCharStartBuffer = pCharInputBuffer;
 		}
 	}
 	else
@@ -175,19 +195,23 @@ UDWORD inputGetKey(void)
 
 	return retVal;
 }
+
+char inputGetCharKey(void) {
+	return currentChar;
+}
+
 #endif
 
 /* Deal with windows messages to maintain the state of the keyboard and mouse */
 void inputProcessEvent(SDL_Event *event)
 {
-	UDWORD	code,i, repeat, vk;
+	UDWORD	code,i, vk;
 	FRACT	divX,divY;
 	UDWORD	scrX,scrY;
 
 	switch(event->type)
 	{
 		case SDL_KEYDOWN:
-			repeat = 1;
 			//printf("keydown %s (%i)\n", SDL_GetKeyName(code), event->key.keysym.sym);
 			switch (event->key.keysym.sym)
 			{
@@ -222,23 +246,25 @@ void inputProcessEvent(SDL_Event *event)
 					vk = INPBUF_PGDN;
 					break;
 				default:
-					if ((int) event->key.keysym.sym <= 127)
-						vk = event->key.keysym.sym;
-					else
-						/* no useful data for the buffer so set repeat to 0 */
-						repeat = 0;
+					vk = event->key.keysym.sym;
 					break;
 			}
 
-			if (repeat > 0)
 			{
 #ifdef PSX
-				DBPRINTF(("WM_KEYDOWN %x %x\n",vk,repeat));
+				DBPRINTF(("WM_KEYDOWN %x %x\n", vk, 1));
 #endif
 
 #ifndef PSX
 				DBP1(("Code: %x\n", vk));
-				inputAddBuffer(vk, repeat);
+
+				unsigned char char_code = event->key.keysym.unicode;
+
+				if (   (char_code < 32)
+				    || (char_code > 150)) {
+					char_code = 0;
+				}
+				inputAddBuffer(vk, char_code, 1);
 #endif
 			}
 

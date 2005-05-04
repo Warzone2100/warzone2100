@@ -1,8 +1,6 @@
 /***************************************************************************/
 
-#ifndef WIN32
-#include <SDL.h>
-#endif
+#include <SDL/SDL.h>
 
 #include "frame.h"
 #include "audio.h"

@@ -13,7 +13,7 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include "types.h"
 
 /* The defines for all the key codes */
@@ -133,7 +133,7 @@ extern void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize);
 extern void inputInitialise(void);
 
 /* Add a key press to the key buffer */
-extern void inputAddBuffer(UDWORD code, UDWORD count);
+extern void inputAddBuffer(UDWORD code, char char_code, UDWORD count);
 
 /* This returns true if the key is currently depressed */
 extern BOOL keyDown(KEY_CODE code);
@@ -198,7 +198,7 @@ extern void setMouseUp(MOUSE_KEY_CODE code);
 #define INPBUF_PGDN		0x0a0000
 
 /* Some defines for keys that map into the normal character space */
-#define INPBUF_BKSPACE	0x000008
+#define INPBUF_BKSPACE		0x000008
 #define INPBUF_TAB		0x000009
 #define INPBUF_CR		0x00000D
 #define INPBUF_ESC		0x00001b
@@ -209,6 +209,8 @@ extern void setMouseUp(MOUSE_KEY_CODE code);
  * All key presses are buffered up (including windows auto repeat).
  */
 extern UDWORD inputGetKey(void);
+
+extern char inputGetCharKey(void);
 
 /* Clear the input buffer */
 extern void inputClearBuffer(void);
