@@ -39,12 +39,13 @@
 #define LAND_YGRD	(VISIBLE_YTILES + 1)
 #ifdef PSX
 #define DISTANCE	1716
+#define MINDISTANCE	(DISTANCE - DISTANCE/3)
 #else
-#define DISTANCE	(2600)
-#define START_DISTANCE	(2000)
+#define DISTANCE	(4500)
+#define MINDISTANCE	(1500)
+#define START_DISTANCE	(2500)
 #endif
 
-#define MINDISTANCE	(DISTANCE - DISTANCE/3)
 
 #define NUM_TILES	100		//5 pages of 16 tiles.
 

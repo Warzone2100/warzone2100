@@ -68,7 +68,7 @@
 #include "selection.h"
 #include "difficulty.h"
 
-#define	MAP_ZOOM_RATE	(500)
+#define	MAP_ZOOM_RATE	(1000)
 
 
 #define PITCH_SCALING	(360*DEG_1)
