@@ -92,7 +92,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		}
 		else if ( stricmp( tokenType, "-D3D" ) == 0 )
 		{
-
 			war_SetRendMode(REND_MODE_HAL);
 			pie_SetDirect3DDeviceName("Direct3D HAL");
 //			bCrippleD3D = TRUE;
@@ -243,16 +242,15 @@ BOOL ParseCommandLine(int argc, char** argv)
 		}*/
 
 	// gamespy flags
-		else if( stricmp( tokenType,	"+host"		 ) == 0			// host a multiplayer.
-			   ||stricmp( tokenType,	"+connect"	 ) == 0
-			   ||stricmp( tokenType,	"+name"		 ) == 0
-			   ||stricmp( tokenType,	"+ip"		 ) == 0
-			   ||stricmp( tokenType,	"+maxplayers") == 0
-			   ||stricmp( tokenType,	"+hostname"	 ) == 0
-				)
+		else if (   stricmp(tokenType, "+host") == 0		// host a multiplayer.
+			 || stricmp(tokenType, "+connect") == 0
+			 || stricmp(tokenType, "+name") == 0
+			 || stricmp(tokenType, "+ip") == 0
+			 || stricmp(tokenType, "+maxplayers") == 0
+			 || stricmp(tokenType, "+hostname") == 0)
 		{
-			token = strtok( NULL, seps2 );
-			scanGameSpyFlags(tokenType,token);
+			token = argv[++i];
+			scanGameSpyFlags(tokenType, token);
 		}	
 	// end of gamespy
 

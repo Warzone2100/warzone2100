@@ -491,7 +491,7 @@ void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID)
 			radarBitmap[j++] = 255;
 		}
 	}
-	glBindTexture(GL_TEXTURE_2D, radarTexture);
+	pie_SetTexturePage(radarTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0,
 		     GL_RGBA, GL_UNSIGNED_BYTE, radarBitmap);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

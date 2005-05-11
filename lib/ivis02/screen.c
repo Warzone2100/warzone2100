@@ -697,6 +697,10 @@ UBYTE screenGetPalEntry(UBYTE red, UBYTE green, UBYTE blue)
 	return colour;
 }
 
+char* screenDumpToDisk(char* path) {
+	return NULL;
+}
+
 /* Output text to the display screen at location x,y.
  * The remaining arguments are as printf.
  */

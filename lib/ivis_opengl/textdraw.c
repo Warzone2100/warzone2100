@@ -949,7 +949,7 @@ void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 	*/
 }
 
-void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
+void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 {
 	UDWORD Red;
 	UDWORD Green;
@@ -958,48 +958,36 @@ void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 	IMAGEDEF *Image;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-	PIESTYLE	rendStyle;
+	PIESTYLE rendStyle;
 	iColour* psPalette;
 
-		switch (pie_GetRenderEngine())
-		{
-		case ENGINE_4101:
-		case ENGINE_SR:
-			TextRender270( ImageFile, ImageID, x, y);
-			break;
-		case ENGINE_D3D:
-			Image = &(ImageFile->ImageDefs[ImageID]);
-			//not coloured yet
-			if (TextColourIndex == PIE_TEXT_WHITE) {
-				pie_SetColour(PIE_TEXT_WHITE_COLOUR & 0x80ffffff);//special case semi transparent for rotated text
-				pie_SetRendMode(REND_ALPHA_TEXT);
-			} else if (TextColourIndex == PIE_TEXT_LIGHTBLUE) {
-				pie_SetColour(PIE_TEXT_LIGHTBLUE_COLOUR);
-			} else if (TextColourIndex == PIE_TEXT_DARKBLUE) {
-				pie_SetColour(PIE_TEXT_DARKBLUE_COLOUR);
-			} else {
-				psPalette = pie_GetGamePal();
-				Red  = psPalette[TextColourIndex].r;
-				Green= psPalette[TextColourIndex].g;
-				Blue = psPalette[TextColourIndex].b;
-				pie_SetColour(((Alpha<<24) | (Red<<16) | (Green<<8) | Blue));
-			}
-			pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
-			pieImage.tu = Image->Tu;
-			pieImage.tv = Image->Tv;
-			pieImage.tw = Image->Width;
-			pieImage.th = Image->Height;
-			dest.x = x+Image->YOffset;
-			dest.y = y+Image->XOffset - Image->Width;
-			dest.w = Image->Width;
-			dest.h = Image->Height;
-			pie_SetColourKeyedBlack(TRUE);
-			pie_DrawImage270(&pieImage, &dest, &rendStyle);
-			pie_SetColourKeyedBlack(FALSE);
-			break;
-		default:
-			break;
-		}
-
+	Image = &(ImageFile->ImageDefs[ImageID]);
+	//not coloured yet
+	if (TextColourIndex == PIE_TEXT_WHITE) {
+		pie_SetColour(PIE_TEXT_WHITE_COLOUR & 0x80ffffff);//special case semi transparent for rotated text
+	} else if (TextColourIndex == PIE_TEXT_LIGHTBLUE) {
+		pie_SetColour(PIE_TEXT_LIGHTBLUE_COLOUR);
+	} else if (TextColourIndex == PIE_TEXT_DARKBLUE) {
+		pie_SetColour(PIE_TEXT_DARKBLUE_COLOUR);
+	} else {
+		psPalette = pie_GetGamePal();
+		Red  = psPalette[TextColourIndex].r;
+		Green= psPalette[TextColourIndex].g;
+		Blue = psPalette[TextColourIndex].b;
+		pie_SetColour(((Alpha<<24) | (Red<<16) | (Green<<8) | Blue));
+	}
+	pie_SetRendMode(REND_ALPHA_TEXT);
+	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
+	pieImage.tu = Image->Tu;
+	pieImage.tv = Image->Tv;
+	pieImage.tw = Image->Width;
+	pieImage.th = Image->Height;
+	dest.x = x+Image->YOffset;
+	dest.y = y+Image->XOffset - Image->Width;
+	dest.w = Image->Width;
+	dest.h = Image->Height;
+	pie_SetColourKeyedBlack(TRUE);
+	pie_DrawImage270(&pieImage, &dest, &rendStyle);
+	pie_SetColourKeyedBlack(FALSE);
 }
 

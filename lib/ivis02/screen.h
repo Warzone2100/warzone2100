@@ -66,6 +66,9 @@ extern UWORD* screen_GetBackDrop(void);
 extern UDWORD screen_GetBackDropWidth(void);
 extern void screen_Upload(UWORD* newBackDropBmp);
 
+/* screendump */
+char* screenDumpToDisk(char* path);
+
 /* fog */
 void screen_SetFogColour(UDWORD newFogColour);
 

@@ -356,7 +356,7 @@ void screen_SetBackDropFromFile(char* filename) {
 		glGenTextures(1, &backDropTexture);
 	}
 
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	pie_SetTexturePage(backDropTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
 		     cinfo.output_width, cinfo.output_height,
 		     0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
@@ -386,7 +386,7 @@ void screen_Upload() {
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	pie_SetTexturePage(backDropTexture);
 	glColor3f(1, 1, 1);
 
 	glBegin(GL_TRIANGLE_STRIP);
