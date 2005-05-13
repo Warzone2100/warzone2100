@@ -14,16 +14,14 @@
 #include "piematrix.h"
 #include "piefunc.h"
 #include "tex.h"
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include "d3dmode.h"
+#include "texd3d.h"
 #endif
 #include "v4101.h"
 #include "vsr.h"
-#ifdef WIN32
 #ifdef INC_GLIDE
 #include "3dfxfunc.h"
-#endif
-#include "texd3d.h"
 #endif
 #include "rendmode.h"
 #include "pieclip.h"
@@ -76,7 +74,7 @@ BOOL pie_CheckForDX6(void)
 {
 	UDWORD	DXVersion, DXPlatform;
 
-#ifdef WIN32
+#ifdef INC_DIRECTX
 	GetDXVersion(&DXVersion, &DXPlatform);
 
 	return (DXVersion >= 0x600);

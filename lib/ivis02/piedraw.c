@@ -13,7 +13,6 @@
 
 #include "imd.h"
 #include "rendmode.h"
-//#include "d3dmode.h"
 #include "piefunc.h"
 #include "piematrix.h"
 #include "tex.h"
@@ -23,7 +22,7 @@
 #include "pietexture.h"
 #include "pieclip.h"
 
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include <d3d.h>
 #include "d3drender.h"
 #endif

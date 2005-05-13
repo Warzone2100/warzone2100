@@ -12,7 +12,7 @@
 #include "piedef.h"
 #include "piestate.h"
 #include "rendmode.h"
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include "d3drender.h"
 #endif
 #ifdef INC_GLIDE

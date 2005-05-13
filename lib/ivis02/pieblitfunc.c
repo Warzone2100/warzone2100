@@ -10,25 +10,24 @@
 #include "frame.h"
 #include <time.h>
 #include "pieblitfunc.h"
-#ifdef WIN32
+#ifdef INC_DIRECTX
 #include "dx6texman.h"
+#include "texd3d.h"
 #endif
 #include "bug.h"
 #include "piedef.h"
 #include "piemode.h"
 #include "piestate.h"
-#ifdef WIN32
+#ifdef INC_GLIDE
 #include "3dfxfunc.h"
 #endif
 #include "rendfunc.h"
 #include "rendmode.h"
-#ifdef WIN32
-#include "texd3d.h"
-#endif
 #include "pcx.h"
 #include "pieclip.h"
 #include "piefunc.h"
 #include "piematrix.h"
+
 #ifndef PIEPSX
 /***************************************************************************/
 /*

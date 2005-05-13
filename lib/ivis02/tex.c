@@ -7,9 +7,6 @@
 #include "frame.h"
 #include "ivisdef.h"
 #include "piestate.h"
-#ifdef WIN32
-#include "dx6texman.h"
-#endif
 #include "tex.h"
 #include "rendmode.h"
 #include "pcx.h"
@@ -19,7 +16,8 @@
 #ifdef INC_GLIDE
 #include "3dfxtext.h"
 #endif
-#ifdef WIN32
+#ifdef DIRECTX
+#include "dx6texman.h"
 #include "d3drender.h"
 #endif
 
