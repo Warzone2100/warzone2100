@@ -600,7 +600,7 @@ GAMECODE gameLoop(void)
 			}
 		}
 #endif
-
+	SDL_Delay(20);	//Added to prevent busy loop, and get CPU time back when paused!
 	}
 
 	/* Check for quit */

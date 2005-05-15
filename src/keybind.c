@@ -140,7 +140,14 @@ void	kf_ToggleDimension( void )
 }
 
 // --------------------------------------------------------------------------
-
+//===================================================
+void kf_ToggleSensorDisplay( void )
+{
+	if(rangeOnScreen) addConsoleMessage("Fine, sensor display is OFF!",LEFT_JUSTIFY);	//added this message... Yeah, its lame. :)
+	else	addConsoleMessage("Lets us see what you see!",LEFT_JUSTIFY);			//added this message... Yeah, its lame. :)
+	rangeOnScreen =~rangeOnScreen;							//toggle...  HMm  -Q 5-10-05
+}
+//===================================================
 /* Halves all the heights of the map tiles */
 void	kf_HalveHeights( void )
 {

@@ -207,7 +207,7 @@ void	showDroidSensorRanges(void);
 void	showSensorRange1(DROID *psDroid);
 void	showSensorRange2(BASE_OBJECT *psObj);
 void	debugToggleSensorDisplay( void );
-BOOL	bSensorDisplay = FALSE;
+BOOL	bSensorDisplay = TRUE;		//was FALSE	**COUGH and I spend 2 days making my own. LOL -Q 5-10-05
 BOOL	doWeDrawRadarBlips( void );
 BOOL	doWeDrawProximitys( void );
 void	drawDroidRank(DROID *psDroid);
@@ -272,6 +272,8 @@ UDWORD	tile3dX,tile3dY;
 UDWORD	xOffset=CLIP_BORDER,yOffset=CLIP_BORDER;
 /* Do we want the radar to be rendered */
 BOOL	radarOnScreen=FALSE;
+/* Show unit/building gun/sensor range*/
+BOOL  rangeOnScreen=FALSE;  // For now, most likely will change later!  -Q 5-10-05
 /* Are we highlighting a tile area - used for building placement */
 BOOL	tileHighlight = TRUE;
 /* Current cursur design */
@@ -651,11 +653,11 @@ BOOL		bPlayerHasHQ = FALSE;
 	processSensorTarget();
 	processDestinationTarget();
 	
-	testEffect();
+	testEffect();				//this does squat, but leave it for now I guess -Q
 
 	if(bSensorDisplay)
 	{
-		showDroidSensorRanges();
+		showDroidSensorRanges();		//shows sensor data for units/droids/whatever...-Q 5-10-05
 	}
 
 }
@@ -3829,14 +3831,14 @@ FRACT		mulH;
 				health = (((width*10000)/100)*health)/10000;
 				health*=2;
 				if(pie_Hardware())
-				{
-					pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
+				{	pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
 					pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, longPowerCol);
 				}
 				else
 				{
 //					pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
 //					pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
+				//	printf("==>2b drawc %f, %f, %f\n",psStruct->x,psStruct->y,psStruct->z);
 					pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
 					pie_BoxFillIndex(scrX - scrR,scrY,scrX - scrR+health,scrY+1,powerCol);
 
@@ -6123,9 +6125,11 @@ void	showDroidSensorRanges(void)
 DROID		*psDroid;
 STRUCTURE	*psStruct;
 
+	if(rangeOnScreen)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
+	{
 	for(psDroid= apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
-//		if(psDroid->selected)
+		if(psDroid->selected)
 		{
 			showSensorRange2((BASE_OBJECT*)psDroid);
 		}
@@ -6133,14 +6137,15 @@ STRUCTURE	*psStruct;
 
 	for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
-//		if(psStruct->selected)
+		if(psStruct->selected)
 		{
 			showSensorRange2((BASE_OBJECT*)psStruct);
 		}
 	}
+	}//end if we want to display...
 }
 
-void	showSensorRange1(DROID *psDroid)
+void	showSensorRange1(DROID *psDroid)		//this one doesn't do a circle, it displays 30 or so units at a time
 {
 SDWORD	val;
 SDWORD	radius;
@@ -6189,7 +6194,7 @@ BOOL	bBuilding=FALSE;
 			sensorRange = psStruct->sensorRange;
 			bBuilding = TRUE;
 		}
-
+//		printf("sensorRange=%d\n",sensorRange);
 		radius = sensorRange;
 		xDif = radius * (SIN(DEG(i)));
 		yDif = radius * (COS(DEG(i)));

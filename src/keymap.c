@@ -215,7 +215,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleReopenBuildMenu,
 	kf_SensorDisplayOn,
 	kf_SensorDisplayOff,
-
+	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
 //#ifdef DEBUG	// debug mappings only
 	kf_AllAvailable,
 	kf_ToggleDebugMappings,
@@ -236,7 +236,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ShowMappings,
 	kf_GiveTemplateSet,
 	kf_ToggleVisibility,
-//	kf_ToggleSensorDisplay,
+//	kf_ToggleSensorDisplay,		//  Was commented out.  Re-enabled see above! --Q 5/10/05
 	kf_FinishResearch,
 	kf_LowerTile,
 	kf_ToggleDemoMode,
@@ -297,6 +297,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 //	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F10,KEYMAP_PRESSED,kf_ScreenDump,				strresGetString(psStringRes,STR_BIND_SHOT));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F11,KEYMAP_PRESSED,kf_ToggleFormationSpeedLimiting,			strresGetString(psStringRes,STR_BIND_SPLIM));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F12,KEYMAP_PRESSED,kf_MoveToLastMessagePos, strresGetString(psStringRes,STR_BIND_PREV));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_F12,KEYMAP_PRESSED,kf_ToggleSensorDisplay,"Toggle Sensor display"); //Which key should we use? --Re enabled see below! -Q 5-10-05
 	//                                **********************************
 	//                                **********************************
 	//										ASSIGN GROUPS
@@ -416,7 +417,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextPowerStation,strresGetString(psStringRes,STR_BIND_SELPOWER));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,strresGetString(psStringRes,STR_BIND_SELCYBORG));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
-
+	
 #ifndef DEBUG
 if(bAllowDebugMode)
 {
