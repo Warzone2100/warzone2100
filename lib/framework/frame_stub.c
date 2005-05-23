@@ -352,7 +352,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 		mouseOn = FALSE;
 		displayMouse = FALSE;
 	}
-	hInstance = hInst;
+//	hInstance = hInst;
 	bActiveDDraw = !bGlide;
 
 //	/* Initialise the memory system */
@@ -722,16 +722,16 @@ BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize)
 
 
 
-static UBYTE *WDGCacheStart=NULL;
-static UDWORD WDGCacheSize=0;
+//static UBYTE *WDGCacheStart=NULL;
+//static UDWORD WDGCacheSize=0;
 
 
 #define MAXWDGDIRSIZE (7300)
 
-static UBYTE WDGDirectory[MAXWDGDIRSIZE];	// Directory for current WDG file (MALLOCed)
+//static UBYTE WDGDirectory[MAXWDGDIRSIZE];	// Directory for current WDG file (MALLOCed)
 
-static SDWORD WDGCacheStartPos=-1;
-static SDWORD WDGCacheEndPos=-1;
+//static SDWORD WDGCacheStartPos=-1;
+//static SDWORD WDGCacheEndPos=-1;
 
 
 /* next four used in HashPJW */

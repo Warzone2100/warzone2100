@@ -7,7 +7,6 @@ libframework_a_SOURCES = \
 	heap.c \
 	input_stub.c \
 	mem.c \
-	mono.c \
 	multiwdg.c \
 	resource_l.c \
 	resource_y.c \

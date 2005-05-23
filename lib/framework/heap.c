@@ -58,10 +58,10 @@ void heapSetCallPos(STRING *pFileName, SDWORD lineNumber)
 static void heapCreateFreeList(OBJ_HEAP *psHeap)
 {
 	UDWORD		size = psHeap->objSize;
-	UDWORD		init = psHeap->initAlloc;
+//	UDWORD		init = psHeap->initAlloc;
 	UDWORD		ext = psHeap->extAlloc;
 	UDWORD		i, extSize;
-	FREE_OBJECT	*psCurr;
+	FREE_OBJECT	*psCurr = NULL;
 	UBYTE		*pBase;
 	HEAP_EXTENSION	*psExt;
 
@@ -230,7 +230,7 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 {
 	HEAP_EXTENSION		*psNew;
 	UDWORD		i;
-	FREE_OBJECT	*psCurr;
+	FREE_OBJECT	*psCurr = NULL;
 	UBYTE		*pBase;
 	BLOCK_HEAP	*psCurrBlk;
 #if DEBUG_HEAP

@@ -163,7 +163,9 @@ void dbg_MessageBox(SBYTE *pFormat, ...)
 {
 	SBYTE		aBuffer[DEBUG_STR_MAX];   // Output string buffer
     va_list		pArgs;					  // Format arguments
+#ifdef WIN32
 	DB_MBRETVAL	retVal;
+#endif
 	
 	/* Initialise the argument list */
 	va_start(pArgs, pFormat);
@@ -237,7 +239,9 @@ void dbg_ErrorBox(SBYTE *pFormat, ...)
 {
 	SBYTE		aBuffer[DEBUG_STR_MAX] = "";	// Output string buffer
     va_list		pArgs;							// Format arguments
+#ifdef WIN32
 	DB_MBRETVAL	retVal;
+#endif
 	
 	/* Initialise the argument list */
 	va_start(pArgs, pFormat);

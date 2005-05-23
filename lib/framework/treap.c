@@ -106,6 +106,7 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 	(*ppsTreap)->pFile = pCFile;
 	(*ppsTreap)->line = cLine;
 #endif
+	return TRUE;
 }
 
 /* Rotate a tree to the right
@@ -175,7 +176,7 @@ BOOL treapAdd(TREAP *psTreap, UDWORD key, void *pObj)
 {
 	TREAP_NODE	*psNew;
 
-	if (!HEAP_ALLOC(psTreap->psNodes, &psNew))
+	if (!HEAP_ALLOC(psTreap->psNodes, (void*)&psNew))
 	{
 		return FALSE;
 	}
@@ -262,6 +263,7 @@ TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, UDWORD key,
 		ASSERT((FALSE, "treapDelRec: invalid return from comparison"));
 		break;
 	}
+	return NULL;
 }
 
 
@@ -311,6 +313,7 @@ void *treapFindRec(TREAP_NODE *psRoot, UDWORD key, TREAP_CMP cmp)
 		ASSERT((FALSE, "treapFindRec: invalid return from comparison"));
 		break;
 	}
+	return NULL;
 }
 
 

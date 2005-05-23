@@ -13,6 +13,7 @@
 /** include files **/
 
 #include <assert.h>
+#include <ctype.h>
 
 #include "frame.h"
 #include "wdg.h"
@@ -255,7 +256,7 @@ BOOL WDG_SetCurrentWDG(char *filename)
 }
 
 
-
+#if 0
 static BOOL CheckCurrentWDGforWRF(char *wrfname,WDGINFO ** WRFentry)
 {
 	BOOL		FoundWRF;
@@ -292,6 +293,7 @@ static BOOL CheckCurrentWDGforWRF(char *wrfname,WDGINFO ** WRFentry)
 	}
 	return FoundWRF;
 }
+#endif
 
 BOOL LoadWRFCatalog(WDGINFO *CurrentWRF, FILE *pFileHandle)
 {
@@ -665,8 +667,8 @@ BOOL FILE_InitialiseCache(SDWORD CacheSize)
 		UDWORD BufferUsed;
 #endif
 
-		UBYTE *CacheStart;
-		UDWORD CacheSize;
+		UBYTE *CacheStart = NULL;
+		UDWORD CacheSize = 0;
 
 		Cache.IsCacheDataMalloced=FALSE;
 

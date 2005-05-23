@@ -19,6 +19,7 @@
 #include "fractions.h"
 #include "frame.h"
 #include "frameint.h"
+#include "src/config.h"
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -37,7 +38,7 @@ typedef enum _key_state
 static KEY_STATE aKeyState[KEY_MAXSCAN];
 
 /* Mouse wheel stuff */
-static	UDWORD	oldWheelPos = 0;
+//static	UDWORD	oldWheelPos = 0;
 static	BOOL	bMouseWheelForward = FALSE;
 static	BOOL	bMouseWheelBackwards = FALSE;
 static	BOOL	bMouseWheelStatic = TRUE;
@@ -206,8 +207,8 @@ char inputGetCharKey(void) {
 void inputProcessEvent(SDL_Event *event)
 {
 	UDWORD	code,i, vk;
-	FRACT	divX,divY;
-	UDWORD	scrX,scrY;
+//	FRACT	divX,divY;
+//	UDWORD	scrX,scrY;
 
 	switch(event->type)
 	{

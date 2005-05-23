@@ -72,6 +72,10 @@ FILE* unix_fopen(char* filename, char* mode);
 #include "block.h"
 #include "listmacs.h"
 
+#ifndef WIN32
+DWORD GetTickCount();
+#endif
+
 /* Initialise the frame work library */
 extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance
 					 STRING *pWindowName,	// The text to appear in the window title bar
