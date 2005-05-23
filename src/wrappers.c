@@ -402,6 +402,7 @@ TITLECODE titleLoop(void)
 
  	EndScene();		// finalise the primative for this frame (start drawing)
 #endif // End of ifdef PSX
+	SDL_Delay(30);	//To fix ALL menus to be less CPU hogging. -Q 5-14-05
 	return RetCode;
 }
 
