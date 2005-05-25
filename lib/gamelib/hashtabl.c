@@ -260,7 +260,7 @@ hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
 	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
 
 	/* get node from heap */
-	HEAP_ALLOC( psTable->psNodeHeap, &psNode );
+	HEAP_ALLOC( psTable->psNodeHeap, (void*) &psNode );
 
 	/* set node elements */
 	psNode->iKey1     = iKey1;

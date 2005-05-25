@@ -156,7 +156,7 @@ typedef struct regkey_t {
 
 regkey_t *registry[REGISTRY_HASH_SIZE] = { NULL };
 
-char UnixRegFilePath[];
+char UnixRegFilePath[255];
 
 void registry_clear() {
 	unsigned int i;

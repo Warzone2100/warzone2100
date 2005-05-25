@@ -181,7 +181,7 @@ typedef struct
 
 /* locale types */
 
-#define LOCAL                   static
+//#define LOCAL                   static
 #define STATIC                  static
 #define REGISTER                register
 #define FAST                    register

@@ -63,7 +63,7 @@ POINT		rectVerts[4];
 /***************************************************************************/
 void pie_Line(int x0, int y0, int x1, int y1, uint32 colour)
 {
-	PIELIGHT light;
+//	PIELIGHT light;
 
 	pie_SetRendMode(REND_FLAT);
 	pie_SetColour(colour);
@@ -79,8 +79,8 @@ void pie_Line(int x0, int y0, int x1, int y1, uint32 colour)
 
 void pie_Box(int x0,int y0, int x1, int y1, uint32 colour)
 {
-	PIELIGHT light;
-	iColour* psPalette;
+//	PIELIGHT light;
+//	iColour* psPalette;
 
 	pie_SetRendMode(REND_FLAT);
 	pie_SetColour(colour);
@@ -206,13 +206,13 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, 
 void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
-	iBitmap *bmp;
-	UDWORD modulus;
+//	iBitmap *bmp;
+//	UDWORD modulus;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-	SDWORD width;
-	SDWORD height;
-	SDWORD delta;
+//	SDWORD width;
+//	SDWORD height;
+//	SDWORD delta;
 
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];
@@ -247,14 +247,14 @@ BOOL	pie_GetAdditiveSprites( void ) {
 void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
-	iBitmap *bmp;
-	UDWORD modulus;
+//	iBitmap *bmp;
+//	UDWORD modulus;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-	SDWORD width;
-	SDWORD height;
-	SDWORD delta;
-	SDWORD div,wave;
+//	SDWORD width;
+//	SDWORD height;
+//	SDWORD delta;
+//	SDWORD div,wave;
 
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];

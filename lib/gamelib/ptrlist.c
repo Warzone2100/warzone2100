@@ -178,7 +178,7 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 			"ptrList_InsertElement: element pointer invalid\n") );
 
 	/* get node from heap */
-	HEAP_ALLOC( ptrList->psNodeHeap, &psNode );
+	HEAP_ALLOC( ptrList->psNodeHeap, (void*) &psNode );
 
 	/* set node elements */
 	psNode->sdwKey    = sdwKey;

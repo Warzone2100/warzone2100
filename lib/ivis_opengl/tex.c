@@ -62,7 +62,7 @@ static int _tex_get_top_bit(uint32 n)
 */
 
 int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource) {
-	int				i3d;
+//	int				i3d;
 	int				i;
 
 	/* Get next available texture page */

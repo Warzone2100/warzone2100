@@ -246,7 +246,7 @@ static int _xtclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip)
 
 {
 #ifndef PIEPSX
-	register n, dx;
+	int n, dx;
 	int32 t;
 
 	n = 1;
@@ -365,7 +365,7 @@ static int _xtclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip)
 static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 {
-	register n, dx;
+	int n, dx;
 	int32 t;
 
 	n = 1;
@@ -523,7 +523,7 @@ static int _ytclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip)
 
 {
 #ifndef PIEPSX
-	register int n, dy;
+	int n, dy;
 	int32 t;
 
 
@@ -644,7 +644,7 @@ static int _ytclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip)
 static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 {
-	register int n, dy;
+	int n, dy;
 	int32 t;
 
 
@@ -805,7 +805,7 @@ static int _xclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip)
 
 {
 #ifndef PIEPSX
-	register n, dx;
+	int n, dx;
 
 	n = 1;
 
@@ -892,7 +892,7 @@ static int _yclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip)
 
 {
 #ifndef PIEPSX
-	register int n, dy;
+	int n, dy;
 
 
 	n = 1;

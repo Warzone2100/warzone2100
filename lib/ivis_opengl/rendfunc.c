@@ -23,7 +23,7 @@ UBYTE		aTransTable3[256];		// 3 trans tabels so we can have 3 transparancy colou
 UBYTE		aTransTable4[256];		// 4 trans tabels so we can have 4 transparancy colours without slowdown.
 /* Set default transparency filter to green pass */
 UDWORD		transFilter = TRANS_GREY;
-static int	g_mode = REND_UNDEFINED;
+//static int	g_mode = REND_UNDEFINED;
 static IMAGEFILE *MouseImageFile;
 static UWORD MouseImageID;
 
@@ -64,7 +64,7 @@ void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
 void line(int x0, int y0, int x1, int y1, uint32 colour)
 
 {
-	register code1, code2, code;
+	int code1, code2, code;
 	int x, y;
 
 

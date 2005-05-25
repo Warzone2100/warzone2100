@@ -181,8 +181,8 @@ void pie_MatEnd(void)
 void pie_MatRotY(int y)
 
 {
-	register t;
-	register cra, sra;
+	int t;
+	int cra, sra;
 
 	if (y != 0) {
    	cra = COS(y);
@@ -211,8 +211,8 @@ void pie_MatRotY(int y)
 void pie_MatRotZ(int z)
 
 {
-	register t;
-	register cra, sra;
+	int t;
+	int cra, sra;
 
 	if (z != 0) {
 		cra = COS(z);
@@ -241,8 +241,8 @@ void pie_MatRotZ(int z)
 void pie_MatRotX(int x)
 
 {
-	register int cra, sra;
-	register int t;
+	int cra, sra;
+	int t;
 
 	if (x != 0) {
 		cra = COS(x);

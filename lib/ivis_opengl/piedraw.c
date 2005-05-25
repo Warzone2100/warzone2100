@@ -39,7 +39,7 @@
 static PIEPIXEL		scrPoints[pie_MAX_POINTS];
 static PIEVERTEX	pieVrts[pie_MAX_POLY_VERTS];
 static PIEVERTEX	clippedVrts[pie_MAX_POLY_VERTS];
-static D3DTLVERTEX	d3dVrts[pie_MAX_POLY_VERTS];
+//static D3DTLVERTEX	d3dVrts[pie_MAX_POLY_VERTS];
 static iVertex		imdVrts[pie_MAX_POLY_VERTS];
 static SDWORD		pieCount = 0;
 static SDWORD		tileCount = 0;
@@ -56,7 +56,7 @@ static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip);
 static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL bClip);
 //d3d draw poly (low level) D3D mode only
 void pie_D3DPoly(PIED3DPOLY *poly);
-static void pie_D3DPolyFrame(PIED3DPOLY *poly, SDWORD frame);
+//static void pie_D3DPolyFrame(PIED3DPOLY *poly, SDWORD frame);
 //pievertex draw poly (low level) //all modes from PIEVERTEX data
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
 static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
@@ -217,11 +217,11 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 {
 
 	// needed for AMD
-	int amd_scale = 0x3a800000;				// 2^-10
-	int amd_pie_RAISE_SCALE = 0x3b800000;	// 2^-8
-	int amd_sign = 0x80000000;
-	int amd_RAISE = 0;
-	int amd_HEIGHT_SCALED = 0x3f800000;
+//	int amd_scale = 0x3a800000;				// 2^-10
+//	int amd_pie_RAISE_SCALE = 0x3b800000;	// 2^-8
+//	int amd_sign = 0x80000000;
+//	int amd_RAISE = 0;
+//	int amd_HEIGHT_SCALED = 0x3f800000;
 
 	// needed for intel
 	int32		rx, ry, rz;
@@ -233,10 +233,10 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	PIEPIXEL	*pPixels;
 	iIMDPoly	*pPolys;
 	PIEPOLY		piePoly;
-	iIMDPoly	imdPoly;
+//	iIMDPoly	imdPoly;
 	VERTEXID	*index;
 	PIELIGHT	colour, specular;
-	UBYTE		alpha;
+//	UBYTE		alpha;
 
 	pieCount++;
 
@@ -558,7 +558,7 @@ void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 
 void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOOL bClip)
 {
-	SDWORD swap;
+//	SDWORD swap;
 	PIELIGHT c;
 	polyCount++;
 
@@ -604,7 +604,7 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip)
 {
 	SDWORD n;
-	static BOOL bBilinear;
+//	static BOOL bBilinear;
 
 	polyCount++;
 	// handle texture animated polygons
@@ -759,7 +759,7 @@ static void pie_D3DPolyFrame(PIED3DPOLY *poly, int frame) {
 static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip) {
 	int c;
 	iVertex clip[iV_POLY_MAX_POINTS+4];
-	BOOL bBilinear;
+//	BOOL bBilinear;
 
 	polyCount++;
 
@@ -868,7 +868,8 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 //ivis style draw function
 void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint *offset)
 {
-	UDWORD	n, f, i;
+	UDWORD	n, i;
+//	UDWORD f;
 	iVertex clip[iV_POLY_MAX_POINTS];
 
    	if ( !pie_CLOCKWISE( pv[0].x, pv[0].y, pv[1].x, pv[1].y, pv[2].x, pv[2].y ) ) {
@@ -896,10 +897,11 @@ void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture*
 
 
 void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects) {
-	SDWORD		i, nVrts;
-	iIMDPoly	imdPoly;
+//	SDWORD		i;
+	SDWORD		nVrts;
+//	iIMDPoly	imdPoly;
 	BOOL		bClockwise;
-	UBYTE		alpha, *psAlpha;
+//	UBYTE		alpha, *psAlpha;
 	FRACT		offset = 0;
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the
@@ -939,10 +941,11 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 //#ifdef NECROMANCER
 void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3, SDWORD texPage)
 {
-	SDWORD i, nVrts;
-	DWORD	colour, specular;
-	iIMDPoly imdPoly;
-	PIEVERTEX *pv;
+//	SDWORD i;
+	SDWORD nVrts;
+//	DWORD	colour, specular;
+//	iIMDPoly imdPoly;
+//	PIEVERTEX *pv;
 
 	tileCount++;
 

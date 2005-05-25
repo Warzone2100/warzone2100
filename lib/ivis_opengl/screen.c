@@ -15,6 +15,7 @@
 
 #include "frame.h"
 #include "frameint.h"
+#include "piestate.h"
 #include "screen.h"
 
 /* Control Whether the back buffer is in system memory for full screen */
@@ -45,7 +46,7 @@ LPDIRECTDRAWSURFACE4	psFront = NULL;
 LPDIRECTDRAWSURFACE4	psBack = NULL;
 
 /* The palette for palettised modes */
-static LPDIRECTDRAWPALETTE	psPalette = NULL;
+//static LPDIRECTDRAWPALETTE	psPalette = NULL;
 
 /* The actual palette entries for the display palette */
 #define PAL_MAX				256
@@ -89,8 +90,8 @@ unsigned int screendump_required = 0;
 /* flag forcing buffers into video memory */
 static BOOL	g_bVidMem;
 
-static UDWORD	backDropWidth = BACKDROP_WIDTH;
-static UDWORD	backDropHeight = BACKDROP_HEIGHT;
+//static UDWORD	backDropWidth = BACKDROP_WIDTH;
+//static UDWORD	backDropHeight = BACKDROP_HEIGHT;
 static GLint	backDropTexture = -1;
 
 SDL_Surface *screenGetSDL() {

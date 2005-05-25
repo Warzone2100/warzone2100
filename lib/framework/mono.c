@@ -18,7 +18,7 @@
 #include "types.h"
 
 /* Turn off some warnings as I can't be bothered sorting it out properly */
-#pragma warning (disable : 4244 4057)
+//#pragma warning (disable : 4244 4057)
 
 #define	MONO_SCREEN_ADDR	0xB0000
 

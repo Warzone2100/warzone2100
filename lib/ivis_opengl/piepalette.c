@@ -192,9 +192,10 @@ int pal_AddNewPalette(iColour *pal)
 {
 // PSX version dos'nt use palettes as such, SetRGBLookup sets up a global palette instead which is generally
 // just used for colour index to RGB conversions.
-	int i, rg;
-	long	entry;
-	long	cardPal[256];
+	int i;
+//	int rg;
+//	long	entry;
+//	long	cardPal[256];
 	iColour *p;
 	PALETTEENTRY *w;
 

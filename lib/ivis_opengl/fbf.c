@@ -153,7 +153,7 @@ void iV_FileClose(int fd)
 			fwrite(fbf[fd].buffer,sizeof(int8),fbf[fd].n,fbf[fd].fp);
 
 		if (fbf[fd].buffer) {
-			iV_HeapFree((void *) fbf[fd].buffer,fbf[fd].buffersize);
+			iV_HeapFree(fbf[fd].buffer,fbf[fd].buffersize);
 			fbf[fd].buffer = NULL;
 		}
 
@@ -264,7 +264,7 @@ int32 iV_FileSize(char *filename)
 
 	size = -1;
 
-	if (fd = iV_FileOpen(filename,iV_FBF_MODE_R,iV_FBF_DEFAULT_BUFFER) < 0)
+	if ((fd = iV_FileOpen(filename,iV_FBF_MODE_R,iV_FBF_DEFAULT_BUFFER)) < 0)
 		return -1;
 
 	size = iV_FileSizeOpen(fd);

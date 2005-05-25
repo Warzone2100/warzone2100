@@ -29,7 +29,7 @@ ANIMGLOBALS	g_animGlobals;
 /***************************************************************************/
 /* local functions */
 
-static UINT	anim_HashFunction( int iKey1, int iKey2 );
+//static UINT	anim_HashFunction( int iKey1, int iKey2 );
 
 /***************************************************************************/
 /*

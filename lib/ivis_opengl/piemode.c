@@ -19,6 +19,7 @@
 #include "tex.h"
 #include "rendmode.h"
 #include "pieclip.h"
+#include "screen.h"
 
 /***************************************************************************/
 /*
@@ -35,8 +36,8 @@
 int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
 #endif
 
-static BOOL fogColourSet = FALSE;
-static SDWORD d3dActive = 0;
+//static BOOL fogColourSet = FALSE;
+//static SDWORD d3dActive = 0;
 static BOOL bDither = FALSE;
 
 /***************************************************************************/
@@ -66,14 +67,14 @@ void	pie_SetDitherStatus( BOOL val )
 
 BOOL pie_CheckForDX6(void)
 {
-	UDWORD	DXVersion, DXPlatform;
+//	UDWORD	DXVersion, DXPlatform;
 
 	return TRUE;
 }
 
 BOOL pie_Initialise(SDWORD mode)
 {
-	BOOL r;//result
+//	BOOL r;//result
 	int i;
 
 	pie_InitMaths();
@@ -163,7 +164,7 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack) {
 
 /***************************************************************************/
 UDWORD	pie_GetResScalingFactor( void ) {
-	UDWORD	resWidth;	//n.b. resolution width implies resolution height...!
+//	UDWORD	resWidth;	//n.b. resolution width implies resolution height...!
 
 	return pie_GetVideoBufferWidth() * 0.16;
 }
