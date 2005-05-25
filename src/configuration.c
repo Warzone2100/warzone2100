@@ -40,7 +40,8 @@
 extern  char	sForceName[256];
 extern	UBYTE	sPlayer[128];
 
-BOOL	bAllowSubtitles=FALSE;
+BOOL bAllowSubtitles = FALSE;
+BOOL playAudioCDs = FALSE;
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(BOOL bResourceAvailable)
@@ -79,6 +80,10 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	if(getWarzoneKeyNumeric("cdvol", &val))
 	{
 		mixer_SetCDVolume((SDWORD)val);
+	}
+	
+	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
+		playAudioCDs = val;
 	}
 
 	// //////////////////////////
@@ -499,6 +504,7 @@ BOOL saveConfig()
 	// fxvol and cdvol
 	setWarzoneKeyNumeric("fxvol", mixer_GetWavVolume());
 	setWarzoneKeyNumeric("cdvol", mixer_GetCDVolume());
+	setWarzoneKeyNumeric("playaudiocds", playAudioCDs);
 
 	// note running rendermode
 	// ENGINE_GLIDE etc.

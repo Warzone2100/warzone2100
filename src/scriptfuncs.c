@@ -37,6 +37,7 @@
 #include "scriptextern.h"
 #include "seqdisp.h"
 
+#include "configuration.h"
 #include "fpath.h"
 #ifndef PSX
 #include "warzoneconfig.h"
@@ -3261,9 +3262,9 @@ BOOL scrPlayCDAudio(void)
 
 #ifndef PSX
 
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_PlayTrack( iTrack );	
-#endif
+	if (playAudioCDs) {
+		cdAudio_PlayTrack( iTrack );
+	}
 //#ifdef PSX
 //	cdAudio_PlayTrack( iTrack );	
 //
@@ -3276,9 +3277,9 @@ BOOL scrPlayCDAudio(void)
 BOOL scrStopCDAudio(void)
 {
 #ifndef PSX
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Stop();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Stop();
+	}
 #endif	// Playstation CD audio no hardcoded.
 	return TRUE;
 }
@@ -3286,18 +3287,18 @@ BOOL scrStopCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrPauseCDAudio(void)
 {
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Pause();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Pause();
+	}
 	return TRUE;
 }
 
 // -----------------------------------------------------------------------------------------
 BOOL scrResumeCDAudio(void)
 {
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Resume();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Resume();
+	}
 	return TRUE;
 }
 

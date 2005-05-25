@@ -17,6 +17,7 @@
 
 #include "pieclip.h"
 #include "warzoneconfig.h"
+#include "configuration.h"
 
 #include "clparse.h"
 #include "piestate.h"
@@ -204,6 +205,12 @@ BOOL ParseCommandLine(int argc, char** argv)
 		else if( stricmp( tokenType,"-greyFog") == 0)
 		{
 			pie_SetFogCap(FOG_CAP_GREY);
+		}
+		else if (stricmp(tokenType, "-CDA") == 0) {
+			playAudioCDs = TRUE;
+		}
+		else if (stricmp(tokenType, "-noCDA") == 0) {
+			playAudioCDs = FALSE;
 		}
 		else if( stricmp( tokenType,"-2meg") == 0)
 		{

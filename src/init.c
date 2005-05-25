@@ -1262,10 +1262,10 @@ BOOL systemInitialise(void)
 	}
 #endif
 
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Open();
-	mixer_Open();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Open();
+		mixer_Open();
+	}
 
 #ifndef PSX
 	if (!bDisableLobby && !multiInitialise())			// ajl. Init net stuff
@@ -1379,11 +1379,11 @@ BOOL systemShutdown(void)
 	}
 #endif
 
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Stop();
-	cdAudio_Close();
-	mixer_Close();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Stop();
+		cdAudio_Close();
+		mixer_Close();
+	}
 
 #ifndef PSX
 	FREE(DisplayBuffer);
@@ -2136,9 +2136,9 @@ BOOL stageTwoShutDown(void)
 	DBPRINTF(("stageTwoShutDown\n"));
 
 
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Stop();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Stop();
+	}
 
 	/* in stageThreeSgutDown now
 	if (!missionShutDown())
@@ -2481,9 +2481,9 @@ BOOL saveGameReset(void)
 //#ifdef MISSION_S
 	DBPRINTF(("saveGameReset\n"));
 
-#if !defined(PSX) && !defined(I_LIKE_LISTENING_TO_CDS)
-	cdAudio_Stop();
-#endif
+	if (playAudioCDs) {
+		cdAudio_Stop();
+	}
 
 	/* in stageThreeSgutDown now
 	if (!missionShutDown())
