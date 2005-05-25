@@ -3,14 +3,14 @@
 #include "mixer.h"
 
 /***************************************************************************/
-
+#if 0
 static BOOL
 mixer_GetVolumeControlID( DWORD dwComponentType, DWORD *pdwControlID,
 							DWORD *piVolRange )
 {
 	return TRUE;
 }
-
+#endif
 /***************************************************************************/
 
 void
@@ -55,7 +55,7 @@ mixer_Close( void )
 }
 
 /***************************************************************************/
-
+#if 0
 static SDWORD
 mixer_GetVolume( DWORD dwControlID, DWORD iVolRange )
 {
@@ -69,12 +69,13 @@ mixer_SetVolume( DWORD dwControlID, DWORD iVolRange, SDWORD iVol )
 {
 	return;
 }
-
+#endif
 /***************************************************************************/
 
 SDWORD
 mixer_GetCDVolume( void )
 {
+	return 0;
 }
 
 /***************************************************************************/
@@ -89,6 +90,7 @@ mixer_SetCDVolume( SDWORD iVol )
 SDWORD
 mixer_GetWavVolume( void )
 {
+	return 0;
 }
 
 /***************************************************************************/

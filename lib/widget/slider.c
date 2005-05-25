@@ -63,7 +63,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	*ppsWidget = (W_SLIDER *)MALLOC(sizeof(W_SLIDER));
 	if (*ppsWidget == NULL)
 #else
-	if (!HEAP_ALLOC(psSldHeap, ppsWidget))
+	if (!HEAP_ALLOC(psSldHeap, (void*) ppsWidget))
 #endif
 	{
 		ASSERT((FALSE, "sliderCreate: Out of memory"));

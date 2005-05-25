@@ -242,6 +242,8 @@ void tipDisplay(void)
 		iV_DrawText(pTip,fx,fy);
 #endif
 		break;
+	default:
+		break;
 	}
 }
 

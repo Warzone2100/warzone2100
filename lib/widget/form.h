@@ -105,6 +105,8 @@ typedef struct _w_clickform
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 } W_CLICKFORM;
 
+extern void formClearFlash(W_FORM *psWidget);
+
 /* Create a form widget data structure */
 extern BOOL formCreate(W_FORM **ppsWidget, W_FORMINIT *psInit);
 

@@ -151,7 +151,7 @@ void widgShutDown(void)
 /* Get a string from the string heap */
 BOOL widgAllocString(STRING **ppStr)
 {
-	if (!HEAP_ALLOC(psStrHeap, ppStr))
+	if (!HEAP_ALLOC(psStrHeap, (void*) ppStr))
 	{
 		return FALSE;
 	}
@@ -181,7 +181,7 @@ void widgCopyString(STRING *pDest, STRING *pSrc)
  */
 BOOL widgAllocCopyString(STRING **ppDest, STRING *pSrc)
 {
-	if (!HEAP_ALLOC(psStrHeap, ppDest))
+	if (!HEAP_ALLOC(psStrHeap, (void*) ppDest))
 	{
 		*ppDest = NULL;
 		return FALSE;
@@ -1141,6 +1141,7 @@ UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 	{
 		ASSERT((FALSE, "widgGetButtonState: Couldn't find button/click form from ID"));
 	}
+	return 0;
 }
 
 

@@ -347,7 +347,7 @@ AUDIO_SAMPLE *
 audio_QueueSample( SDWORD iTrack )
 {
 	AUDIO_SAMPLE	*psSample = NULL;
-	SDWORD			iSameSamples = 0;
+//	SDWORD			iSameSamples = 0;
 
 	printf("audio_queuesample called - track=%d\n",iTrack);
 
@@ -371,7 +371,7 @@ audio_QueueSample( SDWORD iTrack )
 #ifdef PSX
 	KeyOnSFX(iTrack,0);	// play sfx to try it out
 #else
-	HEAP_ALLOC( g_psSampleHeap, &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void*) &psSample );
 
 	if ( psSample != NULL )
 	{
@@ -846,7 +846,7 @@ audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack,
 		return FALSE;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void*) &psSample );
 	if ( psSample == NULL )
 	{
 		return FALSE;
@@ -963,7 +963,7 @@ audio_PlayStream( char szFileName[], SDWORD iVol,
 		return FALSE;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void*) &psSample );
 
 	if ( psSample != NULL )
 	{
@@ -1040,7 +1040,7 @@ void audio_PlayTrack( int iTrack )
 	KeyOnSFX(iTrack,0);	// play sfx to try it out
 #else
 
-	HEAP_ALLOC( g_psSampleHeap, &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void*) &psSample );
 	if ( psSample != NULL )
 	{
 		/* setup sample */
@@ -1073,7 +1073,7 @@ audio_StopTrack( int iTrack )
 		return;
 	}
 
-	iTrack;
+//	iTrack;
 }
 
 /***************************************************************************/
@@ -1087,8 +1087,8 @@ audio_SetTrackPan( int iTrack, int iPan )
 		return;
 	}
 
-	iTrack;
-	iPan;
+//	iTrack;
+//	iPan;
 }
 
 /***************************************************************************/
@@ -1102,8 +1102,8 @@ audio_SetTrackVol( int iTrack, int iVol )
 		return;
 	}
 
-	iTrack;
-	iVol;
+//	iTrack;
+//	iVol;
 }
 
 /***************************************************************************/
@@ -1117,8 +1117,8 @@ audio_SetTrackFreq( int iTrack, int iFreq )
 		return;
 	}
 
-	iTrack;
-	iFreq;
+//	iTrack;
+//	iFreq;
 }
 
 /***************************************************************************/

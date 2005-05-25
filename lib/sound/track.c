@@ -26,7 +26,7 @@ static TRACK **	g_apTrack;
 static SDWORD	g_iCurTracks = 0;
 
 static SDWORD	g_iSamples = 0;
-static SDWORD	g_iMaxSamples;
+//static SDWORD	g_iMaxSamples;
 static SDWORD	g_iMaxSameSamples;
 
 /* flag set when system is active (for callbacks etc) */
@@ -73,6 +73,7 @@ sound_CheckDevice( void )
 		return FALSE;
 	}
 #endif
+	return TRUE;
 }
 
 /***************************************************************************/
@@ -86,7 +87,7 @@ sound_Init( HWND hWnd, SDWORD iMaxSameSamples )
 
 	SDWORD	i;
 
-	hWnd;
+//	hWnd;
 	g_iMaxSameSamples = iMaxSameSamples;
 
 	g_iCurTracks = 0;
@@ -185,7 +186,7 @@ sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack, SDWORD iVol,
 		psTrack->iNumPlaying       = 0;
 
 #ifndef PSX
-		VagID;
+//		VagID;
 #else
 		psTrack->VAGid=VagID;	// set the vag id for the playstation
 #endif
@@ -395,7 +396,7 @@ sound_CheckSample( AUDIO_SAMPLE *psSample )
 			  "sound_CheckSample: sample %i out of range\n",
 			  psSample->iSample ) );
 
-	psSample;
+//	psSample;
 }
 
 /***************************************************************************/
@@ -683,6 +684,7 @@ sound_GetGlobalVolume( void )
 
 	return iGlobVol;
 #endif
+	return 0;
 }
 
 /***************************************************************************/

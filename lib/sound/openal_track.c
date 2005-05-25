@@ -113,7 +113,7 @@ sound_QueueSamplePlaying( void ) {
 static void
 sound_SaveTrackData( TRACK *psTrack, ALuint buffer) {
 	/* save data pointer in track */
-	psTrack->pMem = buffer;
+	psTrack->pMem = (void*) buffer;
 }
 
 /***************************************************************************/

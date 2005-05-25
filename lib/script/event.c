@@ -284,7 +284,7 @@ STRING *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 {
 	SCRIPT_CODE *psCode = psTrigger->psContext->psCode;
-	BOOL		debugInfo = psCode->psDebug != NULL;
+//	BOOL		debugInfo = psCode->psDebug != NULL;
 	STRING		*pTrigLab, *pEventLab;
 
 	// find the debug info for the trigger
@@ -366,7 +366,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 		"eventNewContext: Invalid code pointer"));
 
 	// Get a new context
-	if (!HEAP_ALLOC(psContHeap, &psContext))
+	if (!HEAP_ALLOC(psContHeap, (void*) &psContext))
 	{
 		return FALSE;
 	}
@@ -389,7 +389,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	}
 	while (val >= 0)
 	{
-		if (!HEAP_ALLOC(psValHeap, &psNewChunk))
+		if (!HEAP_ALLOC(psValHeap, (void*) &psNewChunk))
 		{
 			for(psNewChunk=psContext->psGlobals; psNewChunk; psNewChunk = psNextChunk)
 			{
@@ -761,7 +761,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	}
 
 	// Get a trigger object
-	if (!HEAP_ALLOC(psTrigHeap, &psNewTrig))
+	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
 	{
 		return FALSE;
 	}
@@ -795,7 +795,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 		"eventLoadTrigger: Trigger out of range"));
 
 	// Get a trigger object
-	if (!HEAP_ALLOC(psTrigHeap, &psNewTrig))
+	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
 	{
 		DBERROR(("eventLoadTrigger: out of memory"));
 		return FALSE;
@@ -827,7 +827,7 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 		"eventAddTrigger: Event out of range"));
 
 	// Get a trigger object
-	if (!HEAP_ALLOC(psTrigHeap, &psNewTrig))
+	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
 	{
 		return FALSE;
 	}
