@@ -395,6 +395,14 @@ void inputProcessEvent(SDL_Event *event)
 				}
 			}
 			// TODO: double click
+			if (event->button.button == SDL_BUTTON_WHEELUP)
+			{
+				bMouseWheelForward = TRUE;
+			}
+			if (event->button.button == SDL_BUTTON_WHEELDOWN)
+			{
+				bMouseWheelBackwards = TRUE;
+			}
 			break;
 		case SDL_ACTIVEEVENT:
 			/* Lost the window focus, have to take this as a global key up */
@@ -515,6 +523,14 @@ BOOL	mouseWheelBackwards( void)
 BOOL	mouseWheelStatic( void)
 {
 	return(bMouseWheelStatic);
+}
+
+
+/* Reset bMouseWheelForward and bMouseWheelBackwards */
+void	mouseWheelProcessed(void)
+{
+	bMouseWheelForward = FALSE;
+	bMouseWheelBackwards = FALSE;
 }
 
 

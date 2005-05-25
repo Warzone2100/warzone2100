@@ -644,6 +644,7 @@ void processInput(void)
 {
 	UDWORD	x,y;
 	BOOL	mOverR = FALSE;
+	int	WheelZoomIterator;
 
 	x = mouseX();
 	y = mouseY();
@@ -705,6 +706,20 @@ void processInput(void)
 	if(mousePressed(MOUSE_LMB) AND !mOverR AND getRadarTrackingStatus())
 	{
 		camToggleStatus();
+	}
+
+	if(mouseWheelForward())
+	{
+		for (WheelZoomIterator=0;WheelZoomIterator<20;WheelZoomIterator++)
+			kf_ZoomIn();
+		mouseWheelProcessed();
+	}
+
+	if(mouseWheelBackwards())
+	{
+		for (WheelZoomIterator=0;WheelZoomIterator<20;WheelZoomIterator++)
+			kf_ZoomOut();
+		mouseWheelProcessed();
 	}
 
 	if(intMode != INT_DESIGN)

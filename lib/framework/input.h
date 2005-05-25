@@ -159,6 +159,7 @@ extern SDWORD mouseY(void);
 extern	BOOL	mouseWheelForward( void);
 extern	BOOL	mouseWheelBackwards( void);
 extern	BOOL	mouseWheelStatic( void);
+extern	void	mouseWheelProcessed(void);
 
 
 /* This returns true if the mouse key is currently depressed */
