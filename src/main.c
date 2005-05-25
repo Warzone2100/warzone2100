@@ -26,7 +26,7 @@
 #include "warzoneconfig.h"
 #include "clparse.h"
 #include "cdspan.h"
-#include "config.h"
+#include "configuration.h"
 #include "multiplay.h"
 #include "netplay.h"
 #include "loadsave.h"

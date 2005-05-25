@@ -1,4 +1,5 @@
 SRC_FILES=	block.c \
+		configfile.c \
 		debug.c \
 		frame_stub.c \
 		frameresource.c \

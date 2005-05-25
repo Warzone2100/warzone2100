@@ -44,7 +44,7 @@
 #include "keyedit.h"
 #include "seqdisp.h"
 #include "vid.h"
-#include "config.h"
+#include "configuration.h"
 #include "resource.h"
 #include "netplay.h"	// multiplayer 
 #include "multiplay.h"

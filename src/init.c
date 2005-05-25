@@ -33,7 +33,7 @@
 #include "piedef.h"
 #include "piestate.h" 
 #ifndef PSX
-#include "config.h"
+#include "configuration.h"
 #include "piemode.h"
 #include "tex.h"
 #endif

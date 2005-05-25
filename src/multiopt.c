@@ -17,7 +17,7 @@
 #include "gtime.h"
 #include "netplay.h"
 #include "hci.h"
-#include "config.h"			// lobby cfg.
+#include "configuration.h"			// lobby cfg.
 #include "clparse.h"
 #include "piestate.h"
 #ifdef INC_GLIDE

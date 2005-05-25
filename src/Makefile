@@ -92,7 +92,7 @@ SRC_FILES=	ai.c \
 		audio_id.c \
 		bucket3d.c \
 		clparse.c \
-		config.c \
+		configuration.c \
 		csnap.c \
 		display3d.c \
 		drive.c \

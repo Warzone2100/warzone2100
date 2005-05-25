@@ -19,7 +19,7 @@
 #include "fractions.h"
 #include "frame.h"
 #include "frameint.h"
-#include "src/config.h"
+#include "configfile.h"
 
 /* The possible states for keys */
 typedef enum _key_state

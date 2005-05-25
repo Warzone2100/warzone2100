@@ -35,7 +35,7 @@
 #ifndef PSX
 #include "cdaudio.h"
 #include "mixer.h"
-#include "config.h"
+#include "configuration.h"
 #endif
 
 #include "design.h"					// for intadddesign

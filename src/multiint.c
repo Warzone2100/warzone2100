@@ -31,7 +31,7 @@
 #include <time.h>
 #include "gtime.h"
 #include "text.h"
-#include "config.h"
+#include "configuration.h"
 #include "intdisplay.h"
 #include "design.h"
 #include "hci.h"
