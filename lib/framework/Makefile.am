@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libframework.a
 libframework_a_SOURCES = \
 	block.c \
+	configfile.c \
 	debug.c \
 	frame_stub.c \
 	frameresource.c \
