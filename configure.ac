@@ -108,7 +108,7 @@ case $host_os in
           * ) MINGW32=no;;
 esac
 if test x"$MINGW32" = "xyes"; then
-  AC_DEFINE(OPENGL, 1, [Windows build])
+  AC_DEFINE(WIN32, 1, [Windows build])
 fi
 
 AC_CONFIG_FILES([Makefile
