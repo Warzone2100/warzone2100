@@ -20,6 +20,8 @@
 #include "bitimage.h"
 #include "intdisplay.h"
 #include "audio_id.h"
+#include "pieblitfunc.h"
+#include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -290,7 +292,7 @@ VOID displayKeyMap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	UDWORD		h = psWidget->height; 
 	KEY_MAPPING *psMapping = (KEY_MAPPING*)psWidget->pUserData;
 	STRING		sKey[MAX_NAME_SIZE];// was just 40
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 	
 	
 	if(psMapping == selectedKeyMap)
@@ -618,7 +620,7 @@ BOOL loadKeyMap(void)
 		fclose(pFileHandle);
 		return FALSE;
 	}
-	if(strncmp(&ver,buildTime,8) != 0)	// check 
+	if (strncmp(&ver[0] ,buildTime, 8) != 0)	// check 
 	{
 		fclose(pFileHandle);
 		return FALSE;	

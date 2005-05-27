@@ -1,5 +1,9 @@
 #ifndef _advvis_h
 #define _advvis_h
+
+#include "types.h"
+#include "base.h"
+
 extern void	avInformOfChange(SDWORD x, SDWORD y);
 extern void	avUpdateTiles( void );
 extern UDWORD avGetObjLightLevel( BASE_OBJECT *psObj, UDWORD origLevel);

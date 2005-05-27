@@ -93,7 +93,7 @@ UBYTE						buildTime[8]	 = __TIME__ ;
 static BOOL					bColourChooserUp= FALSE;
 static SWORD				SettingsUp		= 0;
 static UBYTE				InitialProto	= 0;
-static W_SCREEN				*psConScreen;
+//static W_SCREEN				*psConScreen;
 static DWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
 static BOOL					safeSearch		= FALSE;				// allow auto game finding.
@@ -145,11 +145,11 @@ VOID		runGameFind				(VOID);
 VOID		startGameFind			(VOID);
 
 // Connection option functions
-static BOOL	OptionsUnknown			(UDWORD);
-static BOOL	OptionsIPX				(UDWORD);
-static BOOL	Options					(UDWORD);	
-static BOOL	OptionsInet				(UDWORD);
-static BOOL	OptionsCable			(UDWORD);	
+//static BOOL	OptionsUnknown			(UDWORD);
+//static BOOL	OptionsIPX				(UDWORD);
+//static BOOL	Options					(UDWORD);	
+//static BOOL	OptionsInet				(UDWORD);
+//static BOOL	OptionsCable			(UDWORD);	
 static VOID addConnections			(UDWORD);
 VOID		runConnectionScreen		(VOID);
 BOOL		startConnectionScreen	(VOID);
@@ -157,12 +157,10 @@ BOOL		startConnectionScreen	(VOID);
 // Game option functions
 static	VOID	addOkBut			(VOID);
 static	VOID	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
-UDWORD	addPlayerBox		(BOOL);				// players (mid) box
 static	VOID	addChatBox			(VOID);
 static	VOID	disableMultiButs	(VOID);
 static	VOID	processMultiopWidgets(UDWORD);
 static	VOID	SendFireUp			(VOID);
-VOID	kickPlayer			(DPID dpid);
 VOID			runMultiOptions		(VOID);
 BOOL			startMultiOptions	(BOOL);
 VOID			frontendMultiMessages(VOID);
@@ -395,10 +393,10 @@ static void decideWRF(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Connection Options Screen.
 
-
+#if 0
 static BOOL OptionsUnknown(UDWORD parentID)
 {
-	UNUSEDPARAMETER(parentID);
+//	UNUSEDPARAMETER(parentID);
 	SettingsUp = -1;
 	return TRUE;
 }
@@ -406,7 +404,7 @@ static BOOL OptionsUnknown(UDWORD parentID)
 
 static BOOL OptionsIPX(UDWORD parentID)											//ipx Options
 {	
-	UNUSEDPARAMETER(parentID);
+//	UNUSEDPARAMETER(parentID);
 	SettingsUp = -1;
 
 	return TRUE;
@@ -418,7 +416,7 @@ static BOOL OptionsModem(UDWORD parentID)											//modem options
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
-	UNUSEDPARAMETER(parentID);
+//	UNUSEDPARAMETER(parentID);
 
 	if(ingame.bHostSetup)
 	{
@@ -484,7 +482,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
-	UNUSEDPARAMETER(parentID);
+//	UNUSEDPARAMETER(parentID);
 
 	if(ingame.bHostSetup)
 	{
@@ -548,7 +546,7 @@ static BOOL OptionsCable(UDWORD parentID)			// serial connection cable options
 {
 	W_FORMINIT		sFormInit;
 
-	UNUSEDPARAMETER(parentID);
+//	UNUSEDPARAMETER(parentID);
 
 	widgCreateScreen(&psConScreen);		
 	widgSetTipFont(psConScreen,WFont);
@@ -589,6 +587,7 @@ static BOOL OptionsCable(UDWORD parentID)			// serial connection cable options
 	SettingsUp = 1;
 	return TRUE;
 }
+#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // Draw the connections screen.
@@ -2559,7 +2558,7 @@ void frontendMultiMessages(void)
 			{
 				addWhiteBoard();
 			}
-			memcpy(&whiteBoard[msg.body[0]], &msg.body[1], NUMWHITE*2);
+			memcpy(&whiteBoard[(int) msg.body[0]], &msg.body[1], NUMWHITE*2);
 			
 			break;
 
@@ -3505,7 +3504,7 @@ BOOL runWhiteBoard()
 	return TRUE;
 }
 
-BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = D_W+xOffset+psWidget->x;
 	UDWORD	y = D_H+yOffset+psWidget->y;
@@ -3516,7 +3515,7 @@ BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UBYTE	j,col;
 	UWORD	oldPoint,newPoint,oldx,oldy,newx,newy;
 	
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 	
 	// white poly
 //	pie_BoxFillIndex(x,y,x+w,y+h,COL_WHITE);
@@ -3580,8 +3579,6 @@ BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	
 	// overlay close widget.
 	iV_DrawTransImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
-	
-	return TRUE;
 }
 
 // add whiteboard
@@ -3615,7 +3612,7 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
-	UNUSEDPARAMETER(pColours);	
+//	UNUSEDPARAMETER(pColours);	
 	iV_Line(x, y, x+psWidget->width , y, iV_PaletteNearestColour(100,100,160) );
 
 	AddCursorSnap(&InterfaceSnap,
@@ -3762,7 +3759,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	UDWORD		j;
 	UDWORD		i,eval;
 	PLAYERSTATS stat;
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
@@ -4005,7 +4002,7 @@ void intDisplayFeBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	UDWORD	w = psWidget->width;
 	UDWORD	h = psWidget->height; 
 
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 	
 	drawBlueBox(x,y,w,h);
 
@@ -4018,7 +4015,7 @@ void displayMultiEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 	UWORD	im = (UWORD)((UDWORD)psWidget->pUserData);
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
 	drawBlueBox(x+psWidget->width,y,psWidget->height,psWidget->height);	// box on end.
@@ -4052,7 +4049,7 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	BOOL	usehl = ((UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData)));
 //	BOOL	snap = 1;
 	
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 	
 
 	//evaluate
@@ -4253,7 +4250,7 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	brx = x+58;
 	bry = y+23;
 
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 
 
 	pie_BoxFill(tlx,	tly,	brx,	bry, 0x006067a0);	

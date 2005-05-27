@@ -7,6 +7,7 @@
  * return a filename to use for the ops.
  */
 
+#include <ctype.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -180,8 +181,8 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	STRING			sTemp[255];
 
 #ifndef PSX
-	WIN32_FIND_DATA	found;	
-	HANDLE			dir;
+//	WIN32_FIND_DATA	found;	
+//	HANDLE			dir;
 #endif
 	
 	mode = bLoad;
@@ -462,9 +463,9 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 #ifndef PSX
 void deleteSaveGame(char* saveGameName)
 {
-	CHAR			sTemp2[MAX_STR_LENGTH],	sToDel[MAX_STR_LENGTH];
-	WIN32_FIND_DATA	found;	
-	HANDLE			dir;
+//	CHAR			sTemp2[MAX_STR_LENGTH],	sToDel[MAX_STR_LENGTH];
+//	WIN32_FIND_DATA	found;	
+//	HANDLE			dir;
 
 	ASSERT((strlen(saveGameName) < MAX_STR_LENGTH,"deleteSaveGame; save game name too long"));
 
@@ -498,7 +499,7 @@ void deleteSaveGame(char* saveGameName)
 	{
 		DIR *d = opendir(unix_path(saveGameName));
 		struct dirent *entry;
-		static char tmp_buf[1024];
+//		static char tmp_buf[1024];
 
 		if (d) while ((entry = readdir(d)) != NULL) {
 			DeleteFile(entry->d_name);
@@ -769,7 +770,7 @@ static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 
 	if(psWidget->pUserData)
 	{
@@ -795,11 +796,11 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
-	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
+//	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
+//	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	STRING  butString[64];
 
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 #ifdef PSX
 	if(((W_BUTTON*)psWidget)->state & WBUTS_HILITE)	{
 		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
@@ -842,7 +843,7 @@ static void displayLoadSaveEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD
 	UDWORD	y = yOffset+psWidget->y;
 	UDWORD	w = psWidget->width;
 	UDWORD  h = psWidget->height;
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 
 #ifndef PSX
 	iV_BoxFill(x,y,x+w,y+h,COL_RED);

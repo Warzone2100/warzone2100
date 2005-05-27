@@ -35,6 +35,7 @@
 #include "mixer.h"
 #include "wdg.h"
 #include "multiwdg.h"
+#include "screen.h"
 #ifdef INC_DIRECTX
 #include "d3drender.h"
 #include "dx6texman.h"
@@ -114,7 +115,7 @@ int main(int argc, char *argv[])
 	BOOL			bVidMem = FALSE;
 	SDWORD			dispBitDepth = DISP_BITDEPTH;
 	SDWORD			introVideoControl = 3;
-	GAMECODE		loopStatus;
+	GAMECODE		loopStatus = 0;
 	iColour*		psPaletteBuffer;
 	SDWORD			pSize;
 
@@ -480,6 +481,8 @@ init://jump here from the end if re_initialising
 			case FRAME_QUIT:
 				quit = TRUE;
 				Restart = TRUE;
+				break;
+			default:
 				break;
 			}
 

@@ -87,7 +87,7 @@ static void	proj_InFlightIndirectFunc( PROJ_OBJECT *psObj );
 static void	proj_ImpactFunc( PROJ_OBJECT *psObj );
 static void	proj_PostImpactFunc( PROJ_OBJECT *psObj );
 
-static void	proj_MachineGunInFlightFunc( PROJ_OBJECT *psObj );
+//static void	proj_MachineGunInFlightFunc( PROJ_OBJECT *psObj );
 
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 									FIRE_BOX *pFireBox );
@@ -354,7 +354,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		case	OBJ_STRUCTURE:
 			heightVariance = (rand()%psTarget->sDisplay.imd->ymax);
 			break;
-
+		default:
+			break;
 		}
 		tarHeight = psTarget->z + heightVariance;
 	}
@@ -1804,7 +1805,7 @@ BOOL proj_Direct(WEAPON_STATS *psStats)
 // return the maximum range for a weapon
 SDWORD proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz)
 {
-	dz;
+//	dz;
 	return (SDWORD)psStats->longRange;
 }
 
@@ -1840,6 +1841,8 @@ FEATURE		*psFeat;
 //			radius = TILE_UNITS/4;	// how will we arrive at this?
 			psFeat = (FEATURE *)psTarget;
 			radius = ((max(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth)) * TILE_UNITS)/2;
+			break;
+		default:
 			break;
 		}
 	}

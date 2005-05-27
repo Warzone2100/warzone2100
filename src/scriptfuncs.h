@@ -367,7 +367,7 @@ extern BOOL scrSetRadarZoom(void);
 extern BOOL scrSetReinforcementTime(void);
 
 //set how long an offworld mission can last -1 = no limit
-extern scrSetMissionTime(void);
+extern BOOL scrSetMissionTime(void);
 
 // this returns how long is left for the current mission time is 1/100th sec - same units as passed in
 extern BOOL scrMissionTimeRemaining(void);

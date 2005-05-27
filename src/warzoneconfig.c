@@ -10,7 +10,7 @@
 #include "frame.h"
 #include "warzoneconfig.h"
 #include "piestate.h"
-
+#include "advvis.h"
 
 /***************************************************************************/
 /*

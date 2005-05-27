@@ -115,7 +115,7 @@ void releasePlayerPower(void)
 /*check the current power - if enough return true, else return false */
 BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
 {
-    UNUSEDPARAMETER(playAudio);
+//    UNUSEDPARAMETER(playAudio);
 
 	//if not doing a check on the power - just return TRUE
 	if (!powerCalculated)
@@ -397,11 +397,11 @@ void updatePlayerPower(UDWORD player)
 		return;
 	}
 
-	/*may need to order the structures so that the Power Gen with the highest 
-	multiplier is used first so that the player gets maximum power output. For now
-	all multiplier are the same*/
+	//may need to order the structures so that the Power Gen with the highest 
+	//multiplier is used first so that the player gets maximum power output. For now
+	//all multiplier are the same
 
-	/*for (psStruct = apsStructLists[player]; psStruct != NULL AND 
+	for (psStruct = apsStructLists[player]; psStruct != NULL AND 
 		asPower[player]->extractedPower != 0; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN AND psStruct->

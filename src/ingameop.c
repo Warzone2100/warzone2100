@@ -74,7 +74,7 @@ void ResetMaxStringWidth(void);
 static BOOL addQuitOptions(VOID)
 {
 	W_FORMINIT		sFormInit;		
-	UWORD WindowWidth;	
+//	UWORD WindowWidth;	
 
 	DisableCursorSnapsExcept(INTINGAMEOP);
 
@@ -348,7 +348,7 @@ UDWORD GetMaxStringWidth(void)
 
 static BOOL _intAddInGameOptions(void)
 {
-	UWORD WindowWidth;
+//	UWORD WindowWidth;
 	W_FORMINIT		sFormInit;			
 
 #ifndef PSX

@@ -830,19 +830,19 @@ BOOL loadStructureStats(SBYTE *pStructData, UDWORD bufferSize)
 		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
 			%d,%d",
-			&StructureName, &type, &techLevel, &strength, &psStructure->terrainType, 
-			&psStructure->baseWidth, &psStructure->baseBreadth, &foundation, 
-			&psStructure->buildPoints, &psStructure->height, 
-			&psStructure->armourValue, &psStructure->bodyPoints, 
-			&psStructure->repairSystem, &psStructure->powerToBuild, 
+			&StructureName[0], &type[0], &techLevel[0], &strength[0], &psStructure->terrainType,
+			&psStructure->baseWidth, &psStructure->baseBreadth, &foundation[0],
+			&psStructure->buildPoints, &psStructure->height,
+			&psStructure->armourValue, &psStructure->bodyPoints,
+			&psStructure->repairSystem, &psStructure->powerToBuild,
 			//&psStructure->minimumPower, &psStructure->resistance, 
             &dummyVal, &psStructure->resistance, 
 			//&psStructure->quantityLimit, &psStructure->sizeModifier, 
             &dummyVal, &psStructure->sizeModifier, 
 			//&ecmType, &sensorType, &psStructure->weaponSlots, &GfxFile,
-            &ecmType, &sensorType, &weapSlots, &GfxFile,
+            &ecmType[0], &sensorType[0], &weapSlots, &GfxFile[0],
 			//&baseIMD, &psStructure->numFuncs, &psStructure->numWeaps);
-            &baseIMD, &psStructure->numFuncs, &numWeaps);
+            &baseIMD[0], &psStructure->numFuncs, &numWeaps);
 
 //		DBPRINTF(("%s: height %d\n", StructureName, psStructure->height));
 
@@ -1194,7 +1194,7 @@ BOOL loadStructureWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		StructureName[0] = '\0';
 		WeaponName[0] = '\0';
-		sscanf(pWeaponData,"%[^','],%[^','],%*d", &StructureName, &WeaponName);
+		sscanf(pWeaponData, "%[^','],%[^','],%*d", &StructureName[0], &WeaponName[0]);
 	
 		if (!getResourceName(StructureName))
 		{
@@ -1294,7 +1294,7 @@ BOOL loadStructureFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		StructureName[0] = '\0';
 		FunctionName[0] = '\0';
-		sscanf(pFunctionData,"%[^','],%[^','],%*d", &StructureName, &FunctionName);
+		sscanf(pFunctionData, "%[^','],%[^','],%*d", &StructureName[0], &FunctionName[0]);
 		functionFound = structureFound = FALSE;
 	
 		if (!getResourceName(StructureName))
@@ -1435,7 +1435,7 @@ BOOL loadStructureStrengthModifiers(SBYTE *pStrengthModData, UDWORD bufferSize)
 	{
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pStrengthModData,"%[^','],%[^','],%d",
-			&weaponEffectName, &strengthName, &modifier);
+			&weaponEffectName[0], &strengthName[0], &modifier);
 
 		//get the weapon effect inc
 		effectInc = getWeaponEffect(weaponEffectName);
@@ -1516,7 +1516,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 {
 	UDWORD		penDamage, armourDamage;
 
-	UNUSEDPARAMETER(weaponClass);
+//	UNUSEDPARAMETER(weaponClass);
 
 	ASSERT((PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"structureDamage: Invalid Structure pointer"));
@@ -1924,7 +1924,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 	UDWORD		width, breadth, weapon, capacity, bodyDiff = 0;
 	SDWORD		wallType = 0, preScrollMinX, preScrollMinY, preScrollMaxX, preScrollMaxY;
 	MAPTILE		*psTile;
-	BOOL		bUpgraded,bTemp=FALSE;
+	BOOL		bUpgraded;
+//	BOOL bTemp=FALSE;
 	UDWORD		min,max;
 
 //#ifdef FILTER_WALLS
@@ -2403,11 +2404,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
 
+/*
 //		memset(psBuilding->visible, 0, sizeof(psBuilding->visible));
-		/* Not sure about above line - it concerns me, so... 
+		// Not sure about above line - it concerns me, so... 
 		memset(psBuilding->visible, 0, (sizeof(UBYTE) * MAX_PLAYERS) );
 
-		/* Structure is trivially visible to the builder (owner) 
+		// Structure is trivially visible to the builder (owner) 
 		psBuilding->visible[player] = UBYTE_MAX;
 		
 		if (player == selectedPlayer)
@@ -2426,8 +2428,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
  //		}
 
 		// Reveal any tiles that can be seen by the structure
-		visTilesUpdate((BASE_OBJECT *)psBuilding,FALSE);*/
-
+		visTilesUpdate((BASE_OBJECT *)psBuilding,FALSE);
+*/
 		gridAddObject((BASE_OBJECT *)psBuilding);
 
 		clustNewStruct(psBuilding);
@@ -3148,23 +3150,25 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 	return TRUE;
 }
 
+/*
 //this is surplus to requirements now!
 // Using pickATile - find the nearest best tile to the one we've specified.
-/*void	getNearestBestValidTile(UDWORD *x, UDWORD *y)
+void	getNearestBestValidTile(UDWORD *x, UDWORD *y)
 {
 BOOL	gotPos;
 UBYTE	iterations;
 
-	/* PickAtile - will succeed even for 0 iterations if tile is valid 
+	// PickAtile - will succeed even for 0 iterations if tile is valid 
 	iterations = 0;
 	gotPos = 0;
-	/* Keep going until we get it 
+	// Keep going until we get it 
 	while(!gotPos)
 	{
-		/* Have another go...
+		// Have another go...
 		gotPos = pickATileGen(x,y,iterations++,normalPAT);
 	}
-}*/
+}
+*/
 
 // Set the command droid that factory production should go to
 void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
@@ -3775,7 +3779,7 @@ UDWORD getMaxStructures(UDWORD PlayerNumber)
 #ifdef PSX
 	return MaxStructsAllowedPerPlayer[PlayerNumber];
 #else
-    UNUSEDPARAMETER(PlayerNumber);
+//    UNUSEDPARAMETER(PlayerNumber);
 	// PC currently doesn't limit number of structures a player can build, so just
 	// return an absurdly large number.
 	return 99999;
@@ -3796,7 +3800,7 @@ BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 
 	return FALSE;
 #else
-    UNUSEDPARAMETER(PlayerNumber);
+//    UNUSEDPARAMETER(PlayerNumber);
 	// PC currently doesn't limit number of structures a player can build.
 	return FALSE;
 #endif
@@ -6813,8 +6817,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		pos.y = map_Height((UWORD)pos.x,(UWORD)pos.z);
 
 //--------------------------------------- Do we add a fire?
-		/* Set off a fire, 
-		/* Provide dimensions for the fire */
+		// Set off a fire, provide dimensions for the fire
 		if(bMinor)
 		{
 	   	 	effectGiveAuxVar( (psDel->pStructureType->baseWidth<<TILE_SHIFT)/4 );
@@ -8605,8 +8608,7 @@ BOOL electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
         bRewarded = TRUE;
 		break;
 	default:
-		//ASSERT((FALSE, "electronic Reward for a building not catered for - \
-		//	CANCEL will continue the game!"));
+		//ASSERT((FALSE, "electronic Reward for a building not catered for - CANCEL will continue the game!"));
         bRewarded = FALSE;
 	}
 

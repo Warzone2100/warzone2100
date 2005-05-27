@@ -25,6 +25,8 @@
 #include "frontend.h"
 #include "audio.h"
 #include "audio_id.h"
+#include "levels.h"
+#include "selection.h"
 
 #include "multiwdg.h"
 
@@ -1358,7 +1360,7 @@ BOOL sendDestroyExtra(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller)
 	NETMSG		m;
 	UDWORD		n=0;
 	
-	UNUSEDPARAMETER(psKilled);
+//	UNUSEDPARAMETER(psKilled);
 /*	if(psKilled != NULL)
 	{
 		NetAdd(m,4,psKilled->id);	// id of thing killed
@@ -1449,7 +1451,7 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 {
 	char mapStr[128],mapName[128];
 
-	pMsg;
+//	pMsg;
 
 	// another player is requesting the map
 	if(!NetPlay.bHost)

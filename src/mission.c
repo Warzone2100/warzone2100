@@ -208,7 +208,7 @@ static BOOL BackdropActive = FALSE;
 #endif
 
 /**********TEST************/
-static  UDWORD      addCount = 0;
+//static  UDWORD      addCount = 0;
 
 //#ifdef COVERMOUNT
 //BOOL		DemoStart;
@@ -285,7 +285,7 @@ BOOL MissionResUp		= FALSE;
 BOOL ClosingMissionRes	= FALSE;
 
 static SDWORD		g_iReinforceTime = 0;
-static DROID_GROUP	*g_CurrentScriptGroup = NULL;
+//static DROID_GROUP	*g_CurrentScriptGroup = NULL;
 
 /* Which campaign are we dealing with? */
 static	UDWORD	camNumber = 1;
@@ -2500,7 +2500,7 @@ void missionResetDroids()
 	UDWORD			player;
 	DROID			*psDroid, *psNext;
 	STRUCTURE		*psStruct;
-	FACTORY			*psFactory;
+	FACTORY			*psFactory = NULL;
 //	UDWORD			mapX, mapY;
 	BOOL			placed;
 	UDWORD			x, y;
@@ -3290,7 +3290,7 @@ void intUpdateMissionTimer(struct _widget *psWidget, struct _w_context *psContex
 	UDWORD		timeElapsed;//, calcTime;
 	SDWORD		timeRemaining;
 
-	UNUSEDPARAMETER(psContext);
+//	UNUSEDPARAMETER(psContext);
 
     //take into account cheating with the mission timer
     //timeElapsed = gameTime - mission.startTime;
@@ -3385,7 +3385,7 @@ void intUpdateTransporterTimer(struct _widget *psWidget, struct _w_context *psCo
 	SDWORD		timeRemaining;
 	SDWORD		ETA;
 
-	UNUSEDPARAMETER(psContext);
+//	UNUSEDPARAMETER(psContext);
 
 	ETA = mission.ETA;
 	if(ETA < 0) {
@@ -3489,7 +3489,7 @@ void intRemoveTransporterTimer(void)
 #ifndef PSX
 void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		// need to do some funky rejigging of the buffer to get upto 16bit+alpha
@@ -3497,9 +3497,9 @@ void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD 
 	}
 	else
 	{
-		UNUSEDPARAMETER(yOffset);
-		UNUSEDPARAMETER(xOffset);
-		UNUSEDPARAMETER(psWidget);
+//		UNUSEDPARAMETER(yOffset);
+//		UNUSEDPARAMETER(xOffset);
+//		UNUSEDPARAMETER(psWidget);
 //		iV_DownloadDisplayBuffer(pMissionBackDrop->bmp);
 	}
 	scoreDataToScreen();
@@ -3796,7 +3796,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 	W_BUTINIT		sButInit;
-	UDWORD			fileSize=0;
+//	UDWORD			fileSize=0;
 
 	missionResetInGameState();
 

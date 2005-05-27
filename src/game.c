@@ -1168,15 +1168,15 @@ static UDWORD			validityKey = 0;
 static UDWORD	savedGameTime;
 static UDWORD	savedObjId;
 
-static UDWORD			HashedName;
-static STRUCTURE *psStructList;
-static FEATURE *psFeatureList;
-static FLAG_POSITION **ppsCurrentFlagPosLists;
+//static UDWORD			HashedName;
+//static STRUCTURE *psStructList;
+//static FEATURE *psFeatureList;
+//static FLAG_POSITION **ppsCurrentFlagPosLists;
 static SDWORD	startX, startY;
 static UDWORD   width, height;
 static UDWORD	gameType;
 static BOOL IsScenario;
-static BOOL LoadGameFromWDG;
+//static BOOL LoadGameFromWDG;
 /***************************************************************************/
 /*
  *	Local ProtoTypes
@@ -1300,7 +1300,7 @@ BOOL loadGameInit(STRING *pGameToLoad,BOOL GameIsLevelStart )
 
 	/* Load in the chosen file data */
 
-	UNUSEDPARAMETER(GameIsLevelStart);
+//	UNUSEDPARAMETER(GameIsLevelStart);
 
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(pGameToLoad, pFileData, displayBufferSize, &fileSize))
@@ -2860,16 +2860,17 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	{
 		goto error;
 	}
-
+/*
     //we do this later on!!!!
 	//create the production filename
-	/*aFileName[fileExtension] = '\0';
+	// aFileName[fileExtension] = '\0';
 	strcat(aFileName, "prod.bjo");
-	/*Write the data to the file
+	//Write the data to the file
 	if (!writeProductionFile(aFileName))
 	{
 		goto error;
-	}*/
+	}
+*/
 
 	//create the templates filename
 	aFileName[fileExtension] = '\0';
@@ -4164,7 +4165,7 @@ BOOL loadSaveDroidInitV2(UBYTE *pFileData, UDWORD filesize,UDWORD quantity)
 
 
 
-	UNUSEDPARAMETER(filesize);
+//	UNUSEDPARAMETER(filesize);
 
 	pDroidInit = (SAVE_DROIDINIT*)pFileData;
 
@@ -4240,7 +4241,7 @@ DROID_TEMPLATE *FindDroidTemplate(STRING *name,UDWORD player)
 	DROID_TEMPLATE *Template;
 	UDWORD			id;
 
-	UNUSEDPARAMETER(player);
+//	UNUSEDPARAMETER(player);
 
 /*#ifdef RESOURCE_NAMES
 
@@ -4706,7 +4707,7 @@ DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	SDWORD					compInc;
 	UDWORD					burnTime;
 
-	version;
+//	version;
 
 	psTemplate = &sTemplate;
 
@@ -4931,9 +4932,9 @@ DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		if (psDroid->sMove.psFormation != NULL)
 		{
 			psDroid->sMove.psFormation = NULL;
-			psSaveDroid->formationDir;
-			psSaveDroid->formationX;
-			psSaveDroid->formationY;
+//			psSaveDroid->formationDir;
+//			psSaveDroid->formationX;
+//			psSaveDroid->formationY;
 			// join a formation if it exists at the destination
 			if (formationFind(&psDroid->sMove.psFormation, psSaveDroid->formationX, psSaveDroid->formationY))
 			{
@@ -7551,7 +7552,7 @@ BOOL loadSaveFeatureV(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, UDW
 	BOOL					found;
 	UDWORD					sizeOfSaveFeature;
 
-	version;
+//	version;
 
 	sizeOfSaveFeature = sizeof(SAVE_FEATURE);
 	
@@ -7815,7 +7816,7 @@ BOOL loadSaveTemplateV7(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		if (!HEAP_ALLOC(psTemplateHeap, &psTemplate))
+		if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTemplate))
 		{
 			DBERROR(("Out of memory"));
 			goto error;
@@ -7938,7 +7939,7 @@ BOOL loadSaveTemplateV14(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		if (!HEAP_ALLOC(psTemplateHeap, &psTemplate))
+		if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTemplate))
 		{
 			DBERROR(("Out of memory"));
 			goto error;
@@ -8092,7 +8093,7 @@ BOOL loadSaveTemplateV(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		if (!HEAP_ALLOC(psTemplateHeap, &psTemplate))
+		if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTemplate))
 		{
 			DBERROR(("Out of memory"));
 			goto error;
@@ -8582,7 +8583,7 @@ BOOL loadSaveCompListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 	UDWORD				i;
 	SDWORD				compInc;
 
-	version;
+//	version;
 
 	if ((sizeof(SAVE_COMPLIST) * numRecords + COMPLIST_HEADER_SIZE) > 
 		filesize)
@@ -9287,7 +9288,7 @@ BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 	VIEWDATA		*psViewData;
 	UDWORD			i, height;
 
-    UNUSEDPARAMETER(version);
+//    UNUSEDPARAMETER(version);
 
 	//clear any messages put in during level loads	
 	//freeMessages();
@@ -9674,7 +9675,7 @@ BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ve
 	STRUCTURE*		psStruct;
 	UDWORD			factoryToFind;
 	UDWORD			sizeOfSaveFlag;
-	version;//unreferenced
+//	version;//unreferenced
 
 	//clear any flags put in during level loads	
 	freeAllFlagPositions();
@@ -9983,7 +9984,7 @@ BOOL loadSaveProductionV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 	SAVE_PRODUCTION	*psSaveProduction;
 	PRODUCTION_RUN	*psCurrentProd;
 	UDWORD			factoryType,factoryNum,runNum;
-	version;//unreferenced
+//	version;//unreferenced
 
 	
 	//check file
@@ -10619,7 +10620,7 @@ BOOL getSaveObjectName(STRING *pName)
 #else
 
 	//don't do anything with the name
-	UNUSEDPARAMETER(pName);
+//	UNUSEDPARAMETER(pName);
 
 #endif
 

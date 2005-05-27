@@ -4123,7 +4123,8 @@ void moveMakeVtolHover( DROID *psDroid )
 void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
-	SDWORD	iDroidDir, iDZ, iDroidZ, iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
+	SDWORD	iDroidDir, iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
+//	SDWORD iDZ, iDroidZ;
 #ifndef PSX
 	FRACT	fDZ, fDroidZ, fMapZ;
 #endif
@@ -4741,7 +4742,7 @@ static void checkLocalFeatures(DROID *psDroid)
 }
 
 
-static UDWORD LastMoveFrame;
+//static UDWORD LastMoveFrame;
 
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)

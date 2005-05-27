@@ -130,7 +130,7 @@ void targetSetTargetable(UWORD DroidType)
 #ifndef PSX
 void	targetAdd(BASE_OBJECT *psObj)
 {
-	UNUSEDPARAMETER(psObj);
+//	UNUSEDPARAMETER(psObj);
 }
 #else
 // Call to add an object to the target list.
@@ -328,7 +328,7 @@ void targetAdd(BASE_OBJECT *psObj)
 //
 void targetKilledObject(BASE_OBJECT *psObj)
 {
-	UNUSEDPARAMETER(psObj);
+//	UNUSEDPARAMETER(psObj);
 }
 
 

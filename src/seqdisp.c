@@ -18,6 +18,7 @@
 #include "cdaudio.h"
 #include "deliverance.h"
 #include "warzoneconfig.h"
+#include "screen.h"
 
 #include "multiplay.h"
 #include "gtime.h"
@@ -128,7 +129,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 	BOOL state = TRUE;
 	FILE	*pFileHandle;
 	DDPIXELFORMAT *pDDPixelFormat;
-	UNUSEDPARAMETER(pSurface);
+//	UNUSEDPARAMETER(pSurface);
 
 	if (seqCommand == SEQUENCE_KILL)
 	{
@@ -377,8 +378,8 @@ BOOL seq_SetupVideoBuffers(void)
 void seq_SetVideoPath(void)
 {
 	char	aCDDrive[256] = "";
-	WIN32_FIND_DATA findData;
-	HANDLE	fileHandle;
+//	WIN32_FIND_DATA findData;
+//	HANDLE	fileHandle;
 	/* set up the CD path */
 	if (!bCDPath)
 	{
@@ -417,7 +418,7 @@ void seq_SetVideoPath(void)
 
 BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 {
-	psSample;
+//	psSample;
 	bAudioPlaying = FALSE;
 	dbg_printf("************* briefing ended **************\n");
 
@@ -1022,9 +1023,9 @@ BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 {
 	UBYTE *pTextBuffer, *pCurrentLine, *pText;
 	UDWORD fileSize;
-	HANDLE	fileHandle;
-	WIN32_FIND_DATA findData;
-	BOOL endOfFile = FALSE;
+//	HANDLE	fileHandle;
+//	WIN32_FIND_DATA findData;
+//	BOOL endOfFile = FALSE;
 	SDWORD xOffset, yOffset, startFrame, endFrame;
 	UBYTE* seps	= "\n";
 

@@ -24,6 +24,7 @@
 #include "script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
+#include "loop.h"
 
 #include "netplay.h"
 #include "multiplay.h"

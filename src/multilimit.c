@@ -30,6 +30,7 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "piemode.h"
+#include "script.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // externs
@@ -420,7 +421,7 @@ VOID displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	
 	UDWORD scale,Radius;
 
-	UNUSEDPARAMETER(pColours);
+//	UNUSEDPARAMETER(pColours);
 	
 	drawBlueBox(x,y,w,h);
 

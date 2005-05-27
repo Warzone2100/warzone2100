@@ -26,6 +26,9 @@ extern	BOOL	addMultiBut				(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, 
 extern  char	sForceName[256];
 extern	UBYTE	sPlayer[128];
 
+VOID    kickPlayer                      (DPID dpid);
+UDWORD  addPlayerBox            (BOOL);                         // players (mid) box
+void loadMapPreview(void);
 
 // ////////////////////////////////////////////////////////////////
 // Force Select Screen

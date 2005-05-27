@@ -94,6 +94,8 @@ extern BOOL levParse(UBYTE *pBuffer, SDWORD size);
 // shutdown the level system
 extern void levShutDown(void);
 
+extern BOOL levInitialise(void);
+
 // load up the base data set for a level (used by savegames)
 extern BOOL levLoadBaseData(STRING *pName);
 
