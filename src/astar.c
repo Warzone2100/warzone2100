@@ -20,10 +20,6 @@
 #include "raycast.h"
 #include "fpath.h"
 
-#ifdef TEST_BED
-#include "main.h"
-#endif
-
 #include "astar.h"
 
 // open list storage methods :
@@ -60,13 +56,8 @@ typedef struct _fp_node
 FP_NODE		*psOpen;
 
 // Size of closed hash table
-#ifndef PSX
 //#define FPATH_TABLESIZE		20671
 #define FPATH_TABLESIZE		4091
-#else
-#define FPATH_TABLESIZE		4091
-#endif
-
 
 #if OPEN_LIST == 2
 // Hash table for closed nodes
@@ -779,10 +770,6 @@ FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 	psNode->psRoute = psRoute;
 	psNode->type = NT_OPEN;
 
-#ifdef TEST_BED
-//	mapTile(x,y)->tileInfoBits |= HUG;
-#endif
-
 	return psNode;
 }
 
@@ -919,9 +906,6 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 	SDWORD		tileSX,tileSY,tileFX,tileFY;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		index;
-#ifdef DEBUG_GROUP2
-	SDWORD		count, maxuse, hashUse, hashLists;
-#endif
 	SDWORD		numPoints;
 
 /*	firstHit=0;
@@ -1054,13 +1038,6 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 				psCurr->x,psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est));
 	}
 
-#ifdef TEST_BED
-	for(psCurr=psRoute; psCurr; psCurr = psCurr->psRoute)
-	{
-//		mapTile(psCurr->x, psCurr->y)->tileInfoBits |= ROUTE;
-	}
-#endif
-
 	// optimise the route if one was found
 	if (psRoute)
 	{
@@ -1098,52 +1075,6 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 		psMoveCntl->MovementList[0].YCoordinate = -1;
 	}
 
-#ifdef DEBUG_GROUP2
-	maxuse = 0;
-	hashUse = 0;
-	hashLists = 0;
-	for(index=0; index<FPATH_TABLESIZE; index++)
-	{
-		count = 0;
-		if (apsOpen[index])
-		{
-			hashLists += 1;
-		}
-		for(psCurr=apsOpen[index]; psCurr; psCurr=psCurr->psNext)
-		{
-			count += 1;
-		}
-		hashUse += count;
-		if (count > maxuse)
-		{
-			maxuse = count;
-		}
-	}
-	DBP2(("openMax: %d\nopenUse: %d\nopenLists %d\n", maxuse, hashUse, hashLists));
-	maxuse = 0;
-	hashUse = 0;
-	hashLists = 0;
-	for(index=0; index<FPATH_TABLESIZE; index++)
-	{
-		count = 0;
-		if (apsClosed[index])
-		{
-			hashLists += 1;
-		}
-		for(psCurr=apsClosed[index]; psCurr; psCurr=psCurr->psNext)
-		{
-			count += 1;
-		}
-		hashUse += count;
-		if (count > maxuse)
-		{
-			maxuse = count;
-		}
-	}
-	DBP2(("closedMax: %d\nclosedUse: %d\nclosedLists %d\nheapMax: %d\n",
-		maxuse, hashUse, hashLists, psFPNodeHeap->maxUsage));
-#endif
-
 	fpathHashReset();
 //	fpathOpenReset();
 
@@ -1168,10 +1099,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		index;
 	SDWORD		retval;
-
-#ifdef DEBUG_GROUP2
-	SDWORD		count, maxuse, hashUse, hashLists;
-#endif
 
 /*	firstHit=0;
 	secondHit=0;
@@ -1321,14 +1248,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 //	DBPRINTF(("Astar fin astarOuter=%d astarInner=%d\n",astarOuter,astarInner);
 
 
-
-#ifdef TEST_BED
-	for(psCurr=psRoute; psCurr; psCurr = psCurr->psRoute)
-	{
-//		mapTile(psCurr->x, psCurr->y)->tileInfoBits |= ROUTE;
-	}
-#endif
-
 	retval = ASR_OK;
 
 	// return the nearest route if no actual route was found
@@ -1376,31 +1295,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 	{
 		retval = ASR_FAILED;
 	}
-
-#ifdef DEBUG_GROUP2
-	maxuse = 0;
-	hashUse = 0;
-	hashLists = 0;
-	for(index=0; index<FPATH_TABLESIZE; index++)
-	{
-		count = 0;
-		if (apsNodes[index])
-		{
-			hashLists += 1;
-		}
-		for(psCurr=apsNodes[index]; psCurr; psCurr=psCurr->psNext)
-		{
-			count += 1;
-		}
-		hashUse += count;
-		if (count > maxuse)
-		{
-			maxuse = count;
-		}
-	}
-	DBP2(("nodesMax: %d\nnodesUse: %d\nnodesLists %d\nheapMax: %d\n",
-		maxuse, hashUse, hashLists, psFPNodeHeap->maxUsage));
-#endif
 
 	fpathHashReset();
 //	fpathOpenReset();

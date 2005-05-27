@@ -1,16 +1,9 @@
 #ifndef _console_h
 #define _console_h
 
-#ifndef PSX
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
-#else
-#define MAX_CONSOLE_MESSAGES			(5)
-#define MAX_CONSOLE_STRING_LENGTH		(255)
-#define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
-#endif
-
 
 #define	DEFAULT_MESSAGE_DURATION		GAME_TICKS_PER_SEC * 3
 
@@ -43,9 +36,7 @@ STRING	text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
 UDWORD	timeAdded;								// When was it added to our list?
 //UDWORD	screenIndex;							// Info for justification
 UDWORD JustifyType;
-#ifndef PSX
 UDWORD	id;
-#endif
 struct _console_message *psNext;
 } CONSOLE_MESSAGE;
 

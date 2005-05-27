@@ -22,16 +22,10 @@
 
 #define GAME2PSX(x) (((x)*4096)/360)
 
-#ifndef PSX
 #define GetRadius(x) ((x)->sradius)
-#else
-#define GetRadius(x) ((x)->radius)
-#endif
 
 #include "stats.h"
-#ifndef PSX
 #include "piemode.h"
-#endif
 #include "objects.h"
 #include "display.h"
 #include "geometry.h"
@@ -44,29 +38,6 @@
 #include "e3demo.h"
 #include "transporter.h"
 #include "projectile.h"
-#ifdef PSX
-#include "drawimd_psx.h"
-#include "primatives.h"
-#include <inline_c.h>
-#include <gtemac.h>
-
-extern void psxPushMatrix(void);
-extern void psxPopMatrix(void);
-extern void psxSaveMatrix(void);
-extern void psxRestoreMatrix(void);
-extern void psxiV_MatrixBegin(void);
-extern void psxiV_ITRANSLATE(SDWORD x, SDWORD y, SDWORD z);
-extern void psxiV_MatrixRotateZ(SWORD IVISangle );
-extern void psxiV_MatrixRotateX(SWORD angle );
-extern void psxiV_MatrixRotateY(SWORD angle );
-extern void psxiV_RotateZMatrix(SWORD angle );
-extern void psxiV_RotateXMatrix(SWORD angle );
-extern void psxiV_RotateYMatrix(SWORD angle );
-extern void psxiV_TRANSLATE(SDWORD x, SDWORD y, SDWORD z);
-
-UWORD SelectedThisFrame;
-
-#endif
 
 void unsetMatrix(void);
 void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ);
@@ -80,27 +51,10 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 
 #define	DROID_EMP_SPREAD	(20 - rand()%40)
 
-#ifdef PSX
-#define NO_VTOL_TURRETS 	// don't draw turret if it's not a VTOL because they look crap.
-
-static PIE PieParams;
-static SDWORD ShadowSizeX=0;
-static SDWORD ShadowSizeZ=0;
-static BOOL bDrawShadow=TRUE;
-static BOOL bInButton;
-static BOOL ComponentTransparent;
-static UWORD ComponentTransMode;
-#endif
-
 UDWORD	droidScale = 100;
 void displayComponentTemplate(DROID_TEMPLATE *psTemplate);
 //void displayComponentObject(BASE_OBJECT *psObj);
-#ifndef PSX
 static void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton);
-#else
-// Returns false if nothing rendered.
-static BOOL displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton);
-#endif
 static iIMDShape *getLeftPropulsionIMD(DROID *psDroid);
 static iIMDShape *getRightPropulsionIMD(DROID *psDroid);
 
@@ -165,7 +119,6 @@ void updateLightLevels(void)
 }
 
 
-#ifndef PSX
 void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ)
 {
 	
@@ -211,66 +164,6 @@ void unsetMatrix(void)
 {
 	pie_MatEnd();
 }
-#else
-
-static UWORD ButtonOTIndex = ORDERING_BUTTONRENDERING;
-
-
-void setComponentButtonOTIndex(UWORD OTIndex)
-{
-	ButtonOTIndex = OTIndex;
-}
-
-
-void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ)
-{
-	iVector BSPCameraPos;
-	OBJPOS Camera = {0,0,0};
-
-	Camera.pitch=-45;
-	Camera.yaw=0;
-
-//	Rotation->y=0;
-
-	GetRealCameraPos(&Camera,Position->z,&BSPCameraPos);
-//	SetBSPCameraPos(BSPCameraPos.x,BSPCameraPos.y,BSPCameraPos.z);	
-	// Fixes BSP drawing in buttons. eg Player HQ.
-	SetBSPCameraPos(BSPCameraPos.x,500,BSPCameraPos.z);	
-	SetBSPObjectPos(0,0,0);			// For imd button the bsp is sourced at 0,0,0
-
-
-	SetBSPObjectRot(GAME2PSX(-Rotation->y),0);								// Droid rotation
-
-	psxPushMatrix();
-	psxiV_MatrixBegin();
-	psxiV_MatrixAspectCorrect();
-
-	geomTranslate(Position);
-//	psxiV_TRANSLATE(Position->x,Position->y,Position->z);
-
-	if(RotXYZ) {
-		geomRotateMatrixYXZDeg(Rotation);
-//		psxiV_MatrixRotateY(DEG(Rotation->y));
-//		psxiV_MatrixRotateX(DEG(Rotation->x));
-//		psxiV_MatrixRotateZ(DEG(Rotation->z));
-	} else {
-		geomRotateMatrixXYZDeg(Rotation);
-//		psxiV_MatrixRotateX(DEG(Rotation->x));
-//		psxiV_MatrixRotateY(DEG(Rotation->y));
-//		psxiV_MatrixRotateZ(DEG(Rotation->z));
-	}
-
-	psxiv_SetIMDZ(ButtonOTIndex);
-	psxUseMatrix();
-}
-
-
-void unsetMatrix(void)
-{
-	psxPopMatrix();
-}
-#endif
-
 
 
 UDWORD getComponentDroidRadius(DROID *psDroid)
@@ -317,11 +210,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
 	}
 
-#ifndef PSX
 	return COMPONENT_RADIUS;
-#else
-	return PSX_BUTTON_SCALE;		// ffs 
-#endif
 }
 
 
@@ -340,7 +229,6 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 }
 
 
-//#ifndef PSX
 UDWORD getStructureSize(STRUCTURE *psStructure)
 {
 	UDWORD size;
@@ -353,7 +241,7 @@ UDWORD getStructureSize(STRUCTURE *psStructure)
 	}
 	return (size);
 }
-//#else
+
 UDWORD getStructureRadius(STRUCTURE *psStructure)
 {
 	iIMDShape *baseImd;
@@ -368,10 +256,8 @@ UDWORD getStructureRadius(STRUCTURE *psStructure)
 
 	return Radius;
 }
-//#endif
 
 
-//#ifndef PSX
 UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 {
 	UDWORD size;
@@ -384,7 +270,7 @@ UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 	}
 	return (size);
 }
-//#else
+
 UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player)
 {
 	iIMDShape *baseImd;
@@ -401,7 +287,7 @@ UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player)
 
 	return Radius;
 }
-//#endif
+
 
 UDWORD getStructureHeight(STRUCTURE *psStructure)
 {
@@ -412,11 +298,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 {
     if (psStat->pIMD)
     {
-#ifndef PSX
         return (psStat->pIMD->ymax - psStat->pIMD->ymin);
-#else
-        return (psStat->pIMD->ymax);
-#endif
     }
     return 0;
 }
@@ -429,22 +311,9 @@ void displayIMDButton(iIMDShape *IMDShape,
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	scaleMatrix(scale);
-#ifdef PSX
-	
-	psxUseMatrix();
 
-
-
-#endif
-
-#ifndef PSX
 	pie_SetFogStatus(FALSE);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0); // ajl changed 0 to selectedPlayer
-#else
-	if(IMDShape) {
-		DrawPie(IMDShape,NULL);
-	}
-#endif
 	unsetMatrix();
 }
 
@@ -464,26 +333,16 @@ void displayStructureButton(STRUCTURE *psStructure,
     if (psStructure->pStructureType->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND 
         getStructureHeight(psStructure) > TOWER_HEIGHT)
     {
-#ifndef PSX
         Position->y -= 20;
-#else
-        Position->y += 20;	// Not sure why but need to negate it on PSX.
-#endif
     }
 
-#ifndef PSX
 	SetBSPObjectPos(0,0,0);
-#endif
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	scaleMatrix(scale);
-#ifdef PSX
-	psxUseMatrix();
-#endif
 
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
-#ifndef PSX
 	if(baseImd!=NULL) {
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);		// ajl changed 0 to selectedPlayer
 	}
@@ -544,22 +403,12 @@ void displayStructureButton(STRUCTURE *psStructure,
 			iV_MatrixEnd();
 		}
 	} 
-#else	// PSX version.
-	renderStructureConnectors(psStructure,NULL,TRUE);
-	if(psStructure->sDisplay.imd) {
-		DrawPie(psStructure->sDisplay.imd,NULL);
-	}
-	if(baseImd!=NULL) {
-		DrawPie(baseImd,NULL);
-	}
-#endif
 	unsetMatrix();
 }
 
 void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
 {
-#ifndef PSX
 	iIMDShape		*baseImd,*strImd,*mountImd,*weaponImd;
 	iVector TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
@@ -647,46 +496,6 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 	} 
 
 	unsetMatrix();
-#else
- 	iIMDShape		*baseImd;
-	iVector TmpCamPos = {0,0,0};
-
-	UNUSEDPARAMETER(Player);
-
-    /*HACK HACK HACK! 
-    if its a 'tall thin (ie tower)' structure stat with something on the top - offset the 
-    position to show the object on top*/
-    if (Stats->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND 
-        getStructureStatHeight(Stats) > TOWER_HEIGHT)
-    {
-        Position->y += 20;
-    }
-
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
-
-	psxUseMatrix();
-
-
-	/* Draw the building's base first */
-	baseImd = Stats->pBaseIMD;
-
-	PieParams.Flags = 0;
-	if(ComponentTransparent) {
-		PieParams.Flags |= PIE_TRANSPARENT;
-		PieParams.TransMode = ComponentTransMode;
-	}
-
-	if(Stats->pIMD) {
-		renderStructureStatConnectors(Stats);
-		DrawPie(Stats->pIMD,&PieParams);
-	}
-	if(baseImd!=NULL) {
-		DrawPie(baseImd,&PieParams);
-	}
-
-	unsetMatrix();
-#endif
 }
 
 
@@ -703,9 +512,6 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	scaleMatrix(scale);
-#ifdef PSX
-	psxUseMatrix();
-#endif
 
 	compID = StatIsComponent(Stat);
 	if (compID > 0)	{
@@ -729,7 +535,6 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 
 
 
-#ifndef PSX
 	if(MountIMD)
 	{
 		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);// ajl changed 0 to selectedPlayer
@@ -738,28 +543,6 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 	{
 		pie_Draw3DShape(ComponentIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);// ajl changed 0 to selectedPlayer
 	}
-#else
-//	if( (Rotation->y % 360 > 270) || (Rotation->y % 360 < 90) ) {
-		PieParams.Flags = 0;
-		if(ComponentTransparent) {
-			PieParams.Flags |= PIE_TRANSPARENT;
-			PieParams.TransMode = ComponentTransMode;
-		}
-
-		if(ComponentIMD) {
-			DrawPie(ComponentIMD,&PieParams);
-		}
-		if(MountIMD) {
-			DrawPie(MountIMD,&PieParams);
-		}
-//	} else {
-//		if(MountIMD) {
-//			DrawPie(MountIMD,NULL);
-//		}
-//		DrawPie(ComponentIMD,NULL);
-//	}
-
-#endif
 
 	unsetMatrix();
 }
@@ -779,28 +562,11 @@ void displayResearchButton(BASE_STATS *Stat,
 	{
 		setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 		scaleMatrix(scale);
-#ifdef PSX
-		psxUseMatrix();
-
-		PieParams.Flags = 0;
-		if(ComponentTransparent) {
-			PieParams.Flags |= PIE_TRANSPARENT;
-			PieParams.TransMode = ComponentTransMode;
-		}
-#endif
 
 		if(MountIMD) {
-#ifndef PSX
 			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);	// ajl, added colourthing using selectedPlayer
-#else
-			DrawPie(MountIMD,&PieParams);
-#endif
 		}
-#ifndef PSX
 		pie_Draw3DShape(ResearchIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);		//ajl, added colourthing using selectedPlayer
-#else
-		DrawPie(ResearchIMD,&PieParams);
-#endif
 
 		unsetMatrix();
 	}
@@ -825,9 +591,6 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	scaleMatrix(scale);
-#ifdef PSX
-	psxUseMatrix();
-#endif
 
 // Decide how to sort it.
 
@@ -865,9 +628,6 @@ void displayComponentButtonObject(DROID *psDroid,
 	
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	scaleMatrix(scale);
-#ifdef PSX
-	psxUseMatrix();
-#endif
 
 // Decide how to sort it.
 	difference = Rotation->y%360;
@@ -889,8 +649,6 @@ void displayComponentButtonObject(DROID *psDroid,
 }
 
 
-
-#ifndef PSX	// Start of PC version.
 
 /* Assumes matrix context is already set */
 void displayComponentObject(BASE_OBJECT *psObj)
@@ -1533,1303 +1291,6 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 	}
 	*/
 }
-
-#else	// Start of the PSX version.
-
-static BOOL DoLight = FALSE;
-static SDWORD LightDx,LightDz;
-static SVECTOR ZeroVector={0,0,0};
-
-UWORD TransporterOTZ = 64;
-
-/* Assumes matrix context is already set */
-BOOL displayComponentObject(BASE_OBJECT *psObj)
-{
-	DROID		*psDroid;
-	iVector		position,rotation,mountRotation;
-	int32		xShift,zShift;
-	UDWORD		worldAngle;
-	SDWORD		difference;
-	SDWORD		frame;
-	SWORD		OTz;
-	BOOL		Return = FALSE;
-
-	/* Cast the droid pointer */
-	psDroid = (DROID *)psObj;
-
-	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
-	difference = (worldAngle-psObj->direction);
-
-	if((difference>0 AND difference <180) OR difference<-180)
-	{
-		leftFirst = FALSE;
-	}
-	else
-	{
-		leftFirst = TRUE;
-	}
-
-	/* Get the real position */
-	position.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
-	position.z = terrainMidY*TILE_UNITS - (psDroid->y - player.p.z);
-	position.y = psDroid->z;
-
-	DoLight = TRUE;
-	LightDx = position.x;
-	LightDz = position.z;
-
-	if(psDroid->droidType == DROID_TRANSPORTER)
-	{
-		position.y += bobTransporterHeight();
-	}
-
-	/* Get all the pitch,roll,yaw info */
-	rotation.y = -(SDWORD)psDroid->direction;
-	rotation.x = psDroid->pitch;
-	rotation.z = psDroid->roll;
-
-	/* Get rotation info for the mounting too (holds the gun */
-	mountRotation.y = -(SDWORD)psDroid->turretRotation;
-	mountRotation.x = psDroid->turretPitch;
-	mountRotation.z = 0;
-
-
-// debug code to test turret angles
-//	mountRotation.y = (frameGetFrameNumber())%360;		// yaw
-//	mountRotation.x = 45;								// pitch
-  
-
-	if (godMode || (psDroid->visible[selectedPlayer] == UBYTE_MAX) OR demoGetStatus())
-	{
-		/* Push the matrix */
-		psxPushMatrix();
-
-		/* Get internal tile units coordinates */
-		xShift = player.p.x & (TILE_UNITS-1);
-		zShift = player.p.z & (TILE_UNITS-1);
-
-		/* Mask out to tile_units resolution */
-		psxiV_TRANSLATE(xShift,0,-zShift);
-		SetBSPObjectPos(psDroid->x,-psDroid->z,psDroid->y);	// world x,y,z coord of droid - middle value is height above map
-//		SetBSPObjectPos(position.x,position.y,position.z);	// world x,y,z coord of droid - middle value is height above map
-		SetBSPObjectRot(GAME2PSX(psDroid->direction),0);								// Droid rotation
-		/* Translate origin */
-		psxiV_TRANSLATE(position.x,-position.y,position.z);
-
-		/* Rotate for droid */
-		psxiV_RotateYMatrix(-DEG(rotation.y));
-		psxiV_RotateXMatrix(-DEG(rotation.x));
-		psxiV_RotateZMatrix(-DEG(rotation.z));
-
-		scaleMatrix(DROID_SCALE);
-
-		psxUseMatrix();
-
-		psxiv_SetZBias(-4);
-		gte_ldv0(&ZeroVector);
-    	gte_rtps();
-		gte_stszotz(&OTz);
-
-		if(psDroid->droidType == DROID_TRANSPORTER) {
-//			SetIMDRenderingMode(USE_MAXZ,0);
-//			SetIMDRenderingMode(USE_MINZ,0);
-			TransporterOTZ = OTz-32;
-			SetIMDRenderingMode(USE_FIXEDZ,OTz-32);
-			psxiv_SetIMDZ(OTz-32);
-		} else {
-			OTz -= 8;
-			SetIMDRenderingMode(USE_FIXEDZ,OTz);
-			psxiv_SetIMDZ(OTz);
-		}
-
-		Return = displayCompObj(psObj,&mountRotation, FALSE);
-
-		SetIMDRenderingMode(USE_MAXZ,0);
-//		psxiv_SetZBias(-4);
-		psxPopMatrix();
-	}
-	else
-	{
-//		frame = (gameTime/(3*UBYTE_MAX - psDroid->visible[selectedPlayer]));
-		frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
-		rendMultiPIERot(getImdFromIndex(MI_BLIP),frame,&position,&rotation,NULL,100,NULL);
-
-		/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-		calcScreenCoords(psDroid);
-	}
-
-	return Return;
-}
-
-
-extern UBYTE IMDdebug;
-
-#define NUM_LIGHTJETS	3
-#define NUM_MEDIUMJETS	3
-#define NUM_HEAVYJETS	5
-
-iVector vtolLightJetOffsets[NUM_LIGHTJETS] = {
-	{-25,0,12},
-	{25,0,12},
-	{0,-14,36},
-};
-
-iVector vtolMediumJetOffsets[NUM_MEDIUMJETS] = {
-	{-39,0,7},
-	{39,0,7},
-	{0,-18,67},
-};
-
-iVector vtolHeavyJetOffsets[NUM_HEAVYJETS] = {
-	{-45,0,24},
-	{45,0,24},
-	{-37,0,-23},
-	{37,0,-23},
-	{0,-31,67},
-};
-
-extern void rend2DEffect(iIMDShape *Shape,UWORD frameNumber,iVector *Offset,UDWORD Scale,PIE *Params);
-extern void GetMeshRGB(UDWORD xPos,UDWORD zPos,UBYTE *DstRGB);
-
-
-void compSetTransMode(BOOL Transparent,UWORD TransMode)
-{
-	ComponentTransparent = Transparent;
-	ComponentTransMode = TransMode;
-}
-
-
-#if(1)
-
-extern QUAD dragQuad;
-
-
-// Render a shadow for a ground unit.
-//
-void displayShadow(void)
-{
-	// Draw a shadow for the droid based on the size of the body
-	if (ShadowSizeZ>10) {
-	 	DrawShadow(ShadowSizeX,ShadowSizeZ);
-	}
-}
-
-
-// Render a shadow for a vtol.
-//
-void displayVTolShadow(void)
-{
-}
-
-
-// Render a shadow for a transporter.
-//
-void displayTransporterShadow(void)
-{
-}
-
-
-// Render Vtol jet exhaust effects.
-//
-void displayVtolJets(DROID *psDroid)
-{
-	iIMDShape	*psJet;
-	iVector 	*JetOffsets;
-	UWORD 		NumJets,i;
-
-	/* show flame if above ground */
-	if(!bInButton) {
-		if(psDroid->sMove.Status != MOVEINACTIVE) {
-			psJet = NULL;
-			JetOffsets = NULL;
-/*
-			switch ( (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size )
-			{
-				case SIZE_LIGHT:
-					psJet = getImdFromIndex(MI_VTOL_LIGHT);
-					JetOffsets = vtolLightJetOffsets;
-					NumJets = NUM_LIGHTJETS;
-					break;
-				case SIZE_MEDIUM:
-					psJet = getImdFromIndex(MI_VTOL_MEDIUM);
-					JetOffsets = vtolMediumJetOffsets;
-					NumJets = NUM_MEDIUMJETS;
-					break;
-				case SIZE_HEAVY:
-					psJet = getImdFromIndex(MI_VTOL_HEAVY);
-					JetOffsets = vtolHeavyJetOffsets;
-					NumJets = NUM_HEAVYJETS;
-					break;
-			}
-*/
-			/* draw flame if found  */
-			if ( psJet != NULL )
-			{
-				static PIE PieParams;
-
-				PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT | PIE_OTZ;
-				PieParams.ColourRGB[0] = 
-				PieParams.ColourRGB[1] = 
-				PieParams.ColourRGB[2] = 64;
-				PieParams.TransMode = TRANSMODE_ADDITIVE;
-				PieParams.OtZ = psxiv_GetIMDZ()+2;
-				for(i=0; i<NumJets; i++) {
-					rend2DEffect(psJet,rand()%IMDGetNumFrames(psJet),&JetOffsets[i],50,&PieParams);
-				}
-			}
-		}
-	}
-}
-
-
-// Render units propulsion.
-//
-void displayPropulsionFirst(DROID *psDroid)
-{
-	iIMDShape	*psShape;
-
-	psShape = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
-	if(psShape != NULL) {
-		if(psShape->xmax>ShadowSizeX) ShadowSizeX = psShape->xmax;
-		if(psShape->zmax>ShadowSizeZ) ShadowSizeZ = psShape->zmax;
-		DrawPie(psShape,&PieParams);
-	}
-}
-
-
-// Render units propulsion.
-//
-void displayPropulsionLast(DROID *psDroid)
-{
-	iIMDShape	*psShape;
-
-	psShape = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
-	if(psShape != NULL) {
-		if(psShape->xmax>ShadowSizeX) ShadowSizeX = psShape->xmax;
-		if(psShape->zmax>ShadowSizeZ) ShadowSizeZ = psShape->zmax;
-		DrawPie(psShape,&PieParams);
-	}
-}
-
-
-// Render units body.
-//
-void displayBody(DROID *psDroid)
-{
-	iIMDShape	*psShape;
-
-	// Draw the body.
-	psShape = BODY_IMD(psDroid,psDroid->player);
-	if(psShape != NULL) {
-		if(psShape->xmax>ShadowSizeX) ShadowSizeX = psShape->xmax;
-		if(psShape->zmax>ShadowSizeZ) ShadowSizeZ = psShape->zmax;
-		DrawPie(psShape,&PieParams);
-	}
-}
-
-
-// Render units turret.
-//
-void displayTurret(DROID *psDroid,iVector *mountRotation,iIMDShape *psMount,iIMDShape *psTool)
-{
-	iIMDShape	*psShape;
-
-	psxPushMatrix();
-
-	psShape = BODY_IMD(psDroid,psDroid->player);
-
-	// If no connectors on the body then just return.
-	if(psShape->nconnectors == 0) {
-		return;
-	}
-
-	if(psShape->nconnectors) {
-		psxiV_TRANSLATE(psShape->connectors->x,-psShape->connectors->z,psShape->connectors->y);
-		psxiV_RotateYMatrix(-DEG(mountRotation->y));
-		psxiV_RotateXMatrix(-DEG(mountRotation->x));
-	}
-
-	if(!bInButton) {
-		// If it's a sensor then rotate the turret.
-		if( (!gameTimeIsStopped()) && (psDroid->droidType == DROID_SENSOR) ) {
-			psxiV_RotateYMatrix(DEG(getStaticTimeValueRange(7920,360)));
-		}
-	}
-
-	psxUseMatrix();
-
-	if(psTool) {
-		DrawPie(psTool,&PieParams);
-	}
-
-	if(psMount)	{
-		DrawPie(psMount,&PieParams);
-	}
-
-	psxPopMatrix();
-	psxUseMatrix();
-}
-
-
-// Render a units turret with a weapon and any relevant recoil and muzzle flash.
-//
-void displayWeaponTurret(DROID *psDroid,iVector *mountRotation,
-						iIMDShape *psMount,iIMDShape *psWeapon,UWORD Connector)
-{
-	iIMDShape	*psShape;
-
-	psShape = BODY_IMD(psDroid,psDroid->player);
-
-	// If no connectors on the body then just return.
-	if(psShape->nconnectors == 0) {
-		return;
-	}
-
-	psxPushMatrix();
-
-	if(Connector > psShape->nconnectors-1) {
-		DBPRINTF(("displayWeaponTurret : Bad connector %d %d\n",Connector,psShape->nconnectors));
-		Connector = 0;
-	}
-
-	if(psShape->nconnectors) {
-		psxiV_TRANSLATE(psShape->connectors[Connector].x,
-						-psShape->connectors[Connector].z,
-						psShape->connectors[Connector].y);
-
-		psxiV_RotateYMatrix(-DEG(mountRotation->y));		// Turret direction.
-//		psxiV_RotateXMatrix(-DEG(mountRotation->x));		// Turret pitch.
-
-		// If using second connector then assume it's a VTOL and invert the mount
-		if(Connector > 0) {
-			psxiV_RotateZMatrix( DEG_360/2 );
-		}
-	}
-
-	// Push the mount's matrix, now gets drawn at the end which is better for sorting.
-	psxPushMatrix();
-
-	// Do recoil.
-	if(!bInButton) {
-		if( (psDroid->droidType == DROID_WEAPON) && psDroid->asWeaps[0].nStat > 0 ) {
-			psxiV_TRANSLATE(0,0,(psDroid->asWeaps[0].recoilValue*DROID_SCALE)/100);
-		}
-	}
-
-	// Barrel pitch.
-	psxiV_RotateXMatrix(-DEG(mountRotation->x));
-
-	psxUseMatrix();
-
-	// Draw the weapon.
-	if(psWeapon) {
-		// Translate for weapon mount point if cyborg.
-		if( (psDroid->droidType == DROID_CYBORG ||
-			 psDroid->droidType == DROID_CYBORG_SUPER) &&
-			 psMount->nconnectors )
-		{
-				psxiV_TRANSLATE(psMount->connectors[0].x,
-								-psMount->connectors[0].z,
-								psMount->connectors[0].y);
-				psxUseMatrix();
-		}
-
-		DrawPie(psWeapon,&PieParams);
-
-		// Draw muzzle flash if needed.
-		if( (!bInButton) && psWeapon->nconnectors) {
-			iIMDShape *psFlashShape=NULL;
-/*
-			psFlashShape = getImdFromIndex(MI_VTOL_LIGHT);
-*/
-			if(psFlashShape)
-			{
-				UDWORD AnimInt;
-				SDWORD frame;
-
-				AnimInt= IMDGetAnimInterval(psFlashShape);
-				if (AnimInt==0) AnimInt=1;	// Dummy Value !!!!
-
-				frame = (gameTime - psDroid->asWeaps->lastFired)/AnimInt;
-				if (frame < IMDGetNumFrames(psFlashShape))
-				{
-					PIE PieParams;
-
-					/* Now we need to move to the end of the barrel */
-					psxiV_TRANSLATE(psWeapon->connectors[0].x,
-									-psWeapon->connectors[0].z,
-									psWeapon->connectors[0].y);
-					psxUseMatrix();
-
-					PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT | PIE_OTZ;
-					PieParams.ColourRGB[0] = 128;
-					PieParams.ColourRGB[1] = 128;
-					PieParams.ColourRGB[2] = 0;
-					PieParams.TransMode = TRANSMODE_ADDITIVE;
-					PieParams.OtZ = psxiv_GetIMDZ();
-					rend2DEffect(psFlashShape,frame%AnimInt,NULL,50,&PieParams);
-				}
-			}
-		}
-	}
-
-	psxPopMatrix();
-	psxUseMatrix();
-
-	// Draw the mount.
-	if(psMount)	{
-		DrawPie(psMount,&PieParams);
-	}
-
-	psxPopMatrix();
-	psxUseMatrix();
-}
-
-
-UDWORD Reject0;
-
-
-void ClearSelectedThisFrame(void)
-{
-	SelectedThisFrame = 0;
-}
-
-// Update a droids screen info and check for drag box selection.
-// Returns TRUE if on screen.
-//
-BOOL updateDroidScreenInfo(DROID *psDroid)
-{
-	SDWORD dummyZ;
-	UWORD ScrCoord[2];
-	POINT pt;
-
-	// If not being rendered in a button then update it's screen coords and
-	// check for drag box selection.
-	if(!bInButton) {
-		// Get the objects screen x,y and z.
-		gte_ldv0(&ZeroVector);
-	   	gte_rtps();
-		gte_stsxy((long *)&ScrCoord[0]);
-		gte_stszotz(&dummyZ);
-
-		psDroid->sDisplay.screenX = PSXToX(ScrCoord[0]);
-		psDroid->sDisplay.screenY = PSXToY(ScrCoord[1]);
-		psDroid->sDisplay.screenR = 22;
-
-		// Is it on screen?
-		if( (ScrCoord[0] > ((UWORD)GetDisplayWidth())) ||
-			(ScrCoord[1] > ((UWORD)GetDisplayHeight())) ) {
-			Reject0++;
-			return FALSE;
-		}
-
-		// Don't do selection check if it's a transporter
-		if(psDroid->droidType == DROID_TRANSPORTER) {
-			return TRUE;
-		}
-
-		if(psDroid->player == selectedPlayer) {
-			if(SelectedThisFrame < MAX_GROUP_SIZE) {
-				if(dragBox3D.status == DRAG_RELEASED) {
-					pt.x = psDroid->sDisplay.screenX;
-					pt.y = psDroid->sDisplay.screenY;
-					if(inQuad(&pt,&dragQuad) AND psDroid->player == selectedPlayer) {
-	//					psDroid->selected = TRUE;
-						SelectDroid(psDroid);
-						SelectedThisFrame++;
-					}
-				}
-			}
-		}
-	}
-
-	return TRUE;
-}
-
-
-// Render a normal unit, ie weapon droid, construction droid etc.
-//
-BOOL displayDefaultUnit(DROID *psDroid,iVector *mountRotation,UBYTE PropType)
-{
-	iIMDShape *psShape;
-	iIMDShape *psMount;
-	iIMDShape *psTool;
-
-//	if(!updateDroidScreenInfo(psDroid)) {
-//		return FALSE;
-//	}
-
-	// Render mounts,weapons etc.
-	switch(psDroid->droidType) {
-		case DROID_CONSTRUCT:	// Constructor droid
-			// Draw turret and tipper thing..
-			displayTurret(psDroid,mountRotation,
-							CONSTRUCT_MOUNT_IMD(psDroid,psDroid->player),
-							CONSTRUCT_IMD(psDroid,psDroid->player));
-			break;
-
-		case DROID_DEFAULT:		// Default droid
-		case DROID_COMMAND:		// Command droid
-		case DROID_WEAPON:		// Weapon droid
-			// Draw turret and weapon.
-			displayWeaponTurret(psDroid,mountRotation,
-							WEAPON_MOUNT_IMD(psDroid,psDroid->player),
-							WEAPON_IMD(psDroid,psDroid->player),0);
-			break;
-
-		case DROID_SENSOR:		// Sensor droid
-			// Draw turret and sensor.
-			displayTurret(psDroid,mountRotation,
-							SENSOR_MOUNT_IMD(psDroid,psDroid->player),
-							SENSOR_IMD(psDroid,psDroid->player));
-			break;
-
-		case DROID_ECM:			// ECM droid
-			// Draw turret and ecm.
-			displayTurret(psDroid,mountRotation,
-							ECM_MOUNT_IMD(psDroid,psDroid->player),
-							ECM_IMD(psDroid,psDroid->player));
-			break;
-
-		case DROID_REPAIR:		// Repair droid
-			// Draw turret and repairer.
-			displayTurret(psDroid,mountRotation,
-							REPAIR_MOUNT_IMD(psDroid,psDroid->player),
-							REPAIR_IMD(psDroid,psDroid->player));
-			break;
-
-		default:
-			DBPRINTF(("displayDefaultUnit : Bad droid type %d\n",psDroid->droidType));
-	}
-
-	// Render body and propulsion. Shuffle the order of body and propulsion
-	// if it's a hover droid so it still sorts ok.
-	if(PropType == HOVER) {
-		// Draw the body.
-		displayBody(psDroid);
-
-		// Draw first propulsion.
-		displayPropulsionFirst(psDroid);
-
-		// Draw second propulsion.
-		displayPropulsionLast(psDroid);
-	} else {
-		// Draw first propulsion.
-		displayPropulsionFirst(psDroid);
-
-		// Draw the body.
-		displayBody(psDroid);
-
-		// Draw second propulsion.
-		displayPropulsionLast(psDroid);
-
-		displayShadow();
-	}
-
-	return TRUE;
-}
-
-
-// Render a VTOL unit
-//
-BOOL displayVTolUnit(DROID *psDroid,iVector *mountRotation)
-{
-	iIMDShape *psShape;
-
-//	if(!updateDroidScreenInfo(psDroid)) {
-//		return FALSE;
-//	}
-
-	// Draw first propulsion.
-	displayPropulsionFirst(psDroid);
-
-	// Draw the body.
-	displayBody(psDroid);
-
-	// Draw second propulsion.
-	displayPropulsionLast(psDroid);
-
-	// Draw the jet exhaust effects.
-	displayVtolJets(psDroid);
-
-	// Render mounts,weapons etc.
-	switch(psDroid->droidType) {
-		case DROID_WEAPON:		// Weapon droid
-			// Draw turret and weapon.
-			displayWeaponTurret(psDroid,mountRotation,
-							WEAPON_MOUNT_IMD(psDroid,psDroid->player),
-							WEAPON_IMD(psDroid,psDroid->player),1);
-			// Draw the vtol's shadow.
-			displayVTolShadow();
-			break;
-
-		case DROID_TRANSPORTER:	// Transporter
-			// Draw turret and weapon.
-			displayWeaponTurret(psDroid,mountRotation,
-							WEAPON_MOUNT_IMD(psDroid,psDroid->player),
-							WEAPON_IMD(psDroid,psDroid->player),1);
-			// Draw the transporter's shadow.
-			displayTransporterShadow();
-			break;
-
-		default:
-			DBPRINTF(("displayVTolUnit : Bad droid type %d\n",psDroid->droidType));
-	}
-
-	return TRUE;
-}
-
-
-// Render a persion unit
-//
-BOOL displayPersonUnit(DROID *psDroid,iVector *mountRotation)
-{
-	iIMDShape	*psShape;
-
-//	if(!updateDroidScreenInfo(psDroid)) {
-//		return FALSE;
-//	}
-
-	psShape = BODY_IMD(psDroid,psDroid->player);
-
-	if(psShape != NULL) {
-		// Draw body if not animating.
-		if( psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == FALSE )
-		{
-			DrawPie(psShape,&PieParams);
-		}
-	}
-	
-	return TRUE;
-}
-
-
-// Render a cyborgn unit
-//
-BOOL displayCyborgUnit(DROID *psDroid,iVector *mountRotation,UBYTE PropType)
-{
-	iIMDShape	*psShape;
-
-//	if(!updateDroidScreenInfo(psDroid)) {
-//		return FALSE;
-//	}
-
-	psShape = BODY_IMD(psDroid,psDroid->player);
-
-	if(psShape != NULL) {
-		// Problem with jumping cyborgs, could just render weapon without the mount, but really
-		// needs to be fixed in stats\pies, why don't we just scrap them since there useless anyway.
-		if(PropType == JUMP) {
-		} else {
-			// Draw turret and weapon.
-			displayWeaponTurret(psDroid,mountRotation,
-							WEAPON_MOUNT_IMD(psDroid,psDroid->player),
-							WEAPON_IMD(psDroid,psDroid->player),0);
-		}
-
-		// Draw body if not animating.
-		if( psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == FALSE ) {
-			DrawPie(psShape,&PieParams);
-		}
-	}
-
-	return TRUE;
-}
-
-
-BOOL displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
-{
-	DROID *psDroid = (DROID*)psObj;
-	PROPULSION_STATS *psPropStats;
-	UDWORD Brightness;
-
-	bInButton = bButton;
-
-	if(!updateDroidScreenInfo(psDroid)) {
-		return FALSE;
-	}
-
-	// Setup unit lighting.
-	if(DoLight && !bInButton) {
-		PieParams.Flags = PIE_PALETTEID | PIE_COLOURED | PIE_CULLBLACK;
-		Brightness = GetObjectMapBrightness(psObj);
-		PieParams.ColourRGB[0] = 
-		PieParams.ColourRGB[1] = 
-		PieParams.ColourRGB[2] = DoIllumination(Brightness,LightDx,LightDz);
-		DoLight = FALSE;
-	} else {
-		PieParams.Flags = PIE_PALETTEID;
-	}
-
-	// Was transparency set.
-	if(ComponentTransparent) {
-		PieParams.Flags |= PIE_TRANSPARENT;
-		PieParams.TransMode = ComponentTransMode;
-	}
-
-	// Set the palette ID from the player ID.
-	PieParams.PaletteID = getPlayerColour(psDroid->player);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-
-	// Reset shadow size.
-	ShadowSizeX = 0;
-	ShadowSizeZ = 0;
-	// And default to shadow enabled.
-	bDrawShadow = TRUE;
-
-	switch(psDroid->droidType) {
-		case DROID_WEAPON:		// Weapon droid
-		case DROID_SENSOR:		// Sensor droid
-		case DROID_ECM:			// ECM droid
-		case DROID_CONSTRUCT:	// Constructor droid
-		case DROID_COMMAND:		// Command droid
-		case DROID_REPAIR:		// Repair droid
-		case DROID_DEFAULT:		// Default droid
-			if(psPropStats->propulsionType == LIFT) {
-				return displayVTolUnit(psDroid,mountRotation);
-			} else {
-				return displayDefaultUnit(psDroid,mountRotation,psPropStats->propulsionType);
-			}
-			break;
-
-		case DROID_TRANSPORTER:		// Transporter
-			return displayVTolUnit(psDroid,mountRotation);
-			break;
-
-		case DROID_PERSON:		// Person
-			return displayPersonUnit(psDroid,mountRotation);
-			break;
-
-		case DROID_CYBORG:		// Cyborg
-        case DROID_CYBORG_CONSTRUCT:
-        case DROID_CYBORG_SUPER:
-        case DROID_CYBORG_REPAIR:
-			return displayCyborgUnit(psDroid,mountRotation,psPropStats->propulsionType);
-			break;
-
-		default:
-			DBPRINTF(("displayCompObj : Unknown Droid Type\n"));
-	}
-}
-
-#else
-
-/* Assumes matrix context is already set - PSX Version */
-void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
-{
-	DROID		*psDroid;
-	iIMDShape	*psShape;
-//	iIMDShape	*psShape1;
-//	iVector		position,rotation;	//,null;	//,mountRotation,null;
-//	iPoint		screenCoords;
-	SDWORD		dummyZ, iConnector;
-//	int32		xShift,zShift;
-//	UDWORD		worldAngle;
-//	SDWORD		difference;
-	PROPULSION_STATS	*psPropStats;
-	iIMDShape	*psJet;
-	iVector 	*JetOffsets;
-	UWORD 		NumJets,i;
-	SDWORD		frame;
-	UDWORD		Brightness;
-
-	static PIE PieParams;
-	SDWORD ShadowSizeX=0;
-	SDWORD ShadowSizeZ=0;
-	BOOL bDrawShadow=TRUE;
-
-	if (bButton==TRUE) bDrawShadow=FALSE;
-
-	/* Cast the droid pointer */
-	psDroid = (DROID *)psObj;
-
-	if(DoLight) {
-#ifdef USEMESHRGB
-		UBYTE MeshRGB[3];
-
-		PieParams.Flags = PIE_PALETTEID | PIE_COLOURED | PIE_CULLBLACK;
-		GetMeshRGB(psDroid->x,psDroid->y,MeshRGB);
-		DoIlluminationRGB(MeshRGB,PieParams.ColourRGB,LightDx,LightDz);
-#else
-		PieParams.Flags = PIE_PALETTEID | PIE_COLOURED | PIE_CULLBLACK;
-		Brightness = GetObjectMapBrightness(psObj);
-		PieParams.ColourRGB[0] = 
-		PieParams.ColourRGB[1] = 
-		PieParams.ColourRGB[2] = DoIllumination(Brightness,LightDx,LightDz);
-#endif
-	} else {
-		PieParams.Flags = PIE_PALETTEID;
-	}
-	if(ComponentTransparent) {
-		PieParams.Flags |= PIE_TRANSPARENT;
-		PieParams.TransMode = ComponentTransMode;
-	}
-	PieParams.PaletteID = psDroid->player;
-	DoLight = FALSE;
-
-//	/* No auxilliary rotation */
-//	null.x = null.y = null.z = 0;
-
-	// Check to see if droid data is set up ... if all zero then it's probably from the button rendering stuff 
-	// and so alot of the droid data is not set up ... we need to skip the screen coord stuff at least!
-	
-	//don't change the screen coords of an object if drawing it in a button
-//	please check this - AB 27/05/98
-	if (!bButton)
-	{
-		if ((psDroid->x | psDroid->y | psDroid->z)!= 0)
-		{
-			/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-			calcScreenCoords(psDroid);
-		}
-	}
-
-
-	/* We've got a z value here _and_ screen coords of origin */
-//	dummyZ = psxiV_RotateProject(&null,&screenCoords);
-	gte_ldv0(&ZeroVector);
-   	gte_rtps();
-	gte_stszotz(&dummyZ);
-
-	/* Draw the propulsion and body imds here */
-	/* Establish the propulsion - this is more complex if two parts */
-
-	/* get propulsion stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( (PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
-			"moveUpdateUnit: invalid propulsion stats pointer") );
-
-	/* render vtol jet if flying - horrible hack - GJ */
-	if (((psPropStats->propulsionType == LIFT) &&
-		//(psDroid->droidType != DROID_CYBORG)) && (!bButton))
-        (!cyborgDroid(psDroid)) && (!bButton))
-	{
-
-		bDrawShadow=FALSE;
-
-		/* show flame if above ground */
-		if ( psDroid->sMove.Status != MOVEINACTIVE )
- 		{
-			psJet = NULL;
-			JetOffsets = NULL;
-/*
-			switch ( (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size )
-			{
-				case SIZE_LIGHT:
-					psJet = getImdFromIndex(MI_VTOL_LIGHT);
-					JetOffsets = vtolLightJetOffsets;
-					NumJets = NUM_LIGHTJETS;
-					break;
-				case SIZE_MEDIUM:
-					psJet = getImdFromIndex(MI_VTOL_MEDIUM);
-					JetOffsets = vtolMediumJetOffsets;
-					NumJets = NUM_MEDIUMJETS;
-					break;
-				case SIZE_HEAVY:
-					psJet = getImdFromIndex(MI_VTOL_HEAVY);
-					JetOffsets = vtolHeavyJetOffsets;
-					NumJets = NUM_HEAVYJETS;
-					break;
-			}
-*/
-			/* draw flame if found  */
-			if ( psJet != NULL )
-			{
-				static PIE PieParams;
-
-				PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT | PIE_OTZ;
-				PieParams.ColourRGB[0] = 
-				PieParams.ColourRGB[1] = 
-				PieParams.ColourRGB[2] = 64;
-				PieParams.TransMode = TRANSMODE_ADDITIVE;
-				PieParams.OtZ = psxiv_GetIMDZ()+2;
-				for(i=0; i<NumJets; i++) {
-					rend2DEffect(psJet,rand()%IMDGetNumFrames(psJet),&JetOffsets[i],50,&PieParams);
-				}
-			}
-		}
-	}
-
-	// For the constructor droid we always draw the constructiopn spade first (and hence on top of all other graphics)
-	//
-	// What used to happed was the propulsions were being drawn on top of the side of the spade. This will fix it
-	if (psDroid->droidType==DROID_CONSTRUCT)
-	{
-		psxPushMatrix();
-
-// Get into the context of the body connectors - horrible, this all need rethinking
-		psShape = BODY_IMD(psDroid,psDroid->player);
-		if(psShape->nconnectors)
-		{
-			psxiV_TRANSLATE(psShape->connectors->x,-psShape->connectors->z,psShape->connectors->y);
-
-			psxiV_RotateYMatrix(-DEG(mountRotation->y));
-			psxiV_RotateXMatrix(-DEG(mountRotation->x));
-		}
-
-		psxUseMatrix();
-
-		/*	Get the mounting graphic - we've already moved to the right position 
-		Allegedly - all droids will have a mount graphic so this shouldn't
-		fall on it's arse......*/
-		psShape = CONSTRUCT_MOUNT_IMD(psDroid,psDroid->player);
-		/* Draw it */
-		if(psShape)	DrawPie(psShape,&PieParams);
-		
-		/* Get the construct graphic assuming it's there */
-		psShape = CONSTRUCT_IMD(psDroid,psDroid->player);
-		/* Draw it */
-		if(psShape)	DrawPie(psShape,&PieParams);
-
-		psxPopMatrix();
-		psxUseMatrix();
-
-	}
-
-
-// moved to the end for the mo...
-	psShape = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
-	if(psShape!=NULL)
-	{
-		if (psShape->xmax>ShadowSizeX) ShadowSizeX=psShape->xmax;
-		if (psShape->zmax>ShadowSizeZ) ShadowSizeZ=psShape->zmax;
-		DrawPie(psShape,&PieParams);
-	}
-
-	/* Indenting here is only to show new matrix context */
-	{
-		psShape = BODY_IMD(psDroid,psDroid->player);
-
-		psxPushMatrix();
-
- 
-		/* vtol weapons attach to connector 2 (underneath);
-		 * all others to connector 1 */
-		if ( (psPropStats->propulsionType == LIFT) &&
-			  psDroid->droidType == DROID_WEAPON )
-		{
-			iConnector = 1;
-		}
-		else
-		{
-			iConnector = 0;
-		}
-
-//		iV_MatrixBegin();
-#ifdef NO_VTOL_TURRETS
-		if((psShape->nconnectors) && (iConnector == 0))
-#else
-		if(psShape->nconnectors)
-#endif
-		{
-
-			psxiV_TRANSLATE(psShape->connectors[iConnector].x,
-							-psShape->connectors[iConnector].z,
-							psShape->connectors[iConnector].y);
-
-			psxiV_RotateYMatrix(-DEG(mountRotation->y));
-//			psxiV_RotateXMatrix(-DEG(mountRotation->x));
-//			psxiV_RotateZMatrix(-iV_DEG(mountRotation->z));
-
-//			/* vtol weapons inverted */
-//			if ( iConnector == 1 )
-//			{
-//				//pitch the barrel down
-//				psxiV_RotateYMatrix(-DEG(-mountRotation->x));
-//			}
-//			else
-//			{
-//				//pitch the barrel up
-//				psxiV_RotateYMatrix(-DEG(mountRotation->x));
-//			}
-//
-//			/* vtol weapons inverted */
-//			if ( iConnector == 1 )
-//			{
-//				psxiV_RotateZMatrix( DEG_360/2 );//this might affect gun rotation
-//			}
-
-			//if( (psDroid->droidType == DROID_WEAPON) && psDroid->numWeaps ) {
-            if( (psDroid->droidType == DROID_WEAPON) && psDroid->asWeaps[0].nStat > 0 ) {
-				psxiV_TRANSLATE(0,0,(psDroid->asWeaps[0].recoilValue*DROID_SCALE)/100);
-			}
-
-			psxUseMatrix();
-
-
-		//SEPERATE Mount IMDs now...
-		/*	Get the mounting graphic - we've already moved to the right position 
-			Allegedly - all droids will have a mount graphic so this shouldn't
-			fall on it's arse......*/
-		//psShape = MOUNT_IMD(psDroid,psDroid->player);
-		/* Draw it */
-			switch(psDroid->droidType)
-			{
-			case DROID_DEFAULT:
-			case DROID_TRANSPORTER:
-			case DROID_CYBORG:
-			case DROID_CYBORG_SUPER:
-			case DROID_WEAPON:
-			case DROID_COMMAND:		// command droids have a weapon to store all the graphics
-				/*	Get the mounting graphic - we've already moved to the right position 
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-                if(psDroid->asWeaps[0].nStat > 0)
-				{
-					psShape = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
-					/* Draw it */
-					if(psShape)
-					{
-//						if( psDroid->droidType != DROID_CYBORG) {
-							DrawPie(psShape,&PieParams);
-//						}
-					}
-								
-					/* vtol weapons inverted */
-					if ( iConnector == 1 )
-					{
-						//pitch the barrel down
-						psxiV_RotateYMatrix(-DEG(-mountRotation->x));
-						psxiV_RotateZMatrix( DEG_360/2 );//this might affect gun rotation
-					}
-					else
-					{
-						//pitch the barrel up
-						psxiV_RotateYMatrix(-DEG(mountRotation->x));
-					}
-
-					/* translate for weapon mount point if cyborg */
-					//if( psDroid->droidType == DROID_CYBORG &&
-                    if (cyborgDroid(psDroid) &&
-						psShape && psShape->nconnectors )
-					{
-						psxiV_TRANSLATE(psShape->connectors[0].x,
-										-psShape->connectors[0].z,
-										psShape->connectors[0].y);
-					}
-
-					psxUseMatrix();
-
-					/* Get the weapon (gun?) graphic */
-					psShape = WEAPON_IMD(psDroid,psDroid->player);
-					/* Draw it */
-					if(psShape)	{
-						DrawPie(psShape,&PieParams);
-					}			
-
-					if( psShape && psShape->nconnectors )
-					{
-						iIMDShape *psFlashShape;
-
-//						psxPushMatrix();
-//
-//						/* Now we need to move to the end fo the barrel */
-//						psxiV_TRANSLATE(psShape->connectors[0].x,
-//										-psShape->connectors[0].z,
-//										psShape->connectors[0].y);
-//						psxUseMatrix();
-						//and draw the muzzle flash
-						//animate for the duration of the flash only
-						psFlashShape = getImdFromIndex(MI_VTOL_LIGHT);	//MUZZLE_FLASH_PIE(psDroid,psDroid->player);
-						if(psFlashShape)
-						{
-
-							UDWORD AnimInt;
-
-							AnimInt= IMDGetAnimInterval(psFlashShape);
-
-							if (AnimInt==0) AnimInt=1;	// Dummy Value !!!!
-
-							frame = (gameTime - psDroid->asWeaps->lastFired)/AnimInt;
-							if (frame < IMDGetNumFrames(psFlashShape))
-							{
-								PIE PieParams;
-
-								psxPushMatrix();
-
-								/* Now we need to move to the end of the barrel */
-								psxiV_TRANSLATE(psShape->connectors[0].x,
-												-psShape->connectors[0].z,
-												psShape->connectors[0].y);
-								psxUseMatrix();
-
-								PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT | PIE_OTZ;
-								PieParams.ColourRGB[0] = 128;
-								PieParams.ColourRGB[1] = 128;
-								PieParams.ColourRGB[2] = 0;
-								PieParams.TransMode = TRANSMODE_ADDITIVE;
-								PieParams.OtZ = psxiv_GetIMDZ();
-								rend2DEffect(psFlashShape,frame%AnimInt,NULL,50,&PieParams);
-
-								psxPopMatrix();
-								psxUseMatrix();
-							}
-						}
-
-//						psxPopMatrix();
-//						psxUseMatrix();
-					}
-				}
-				break;
-
-			case DROID_SENSOR:
-				/*	Get the mounting graphic - we've already moved to the right position 
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				psShape = SENSOR_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)	{
-					DrawPie(psShape,&PieParams);
-				}			
-
-				
-				/* Get the sensor graphic, assuming it's there */
-				psShape = SENSOR_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape) 				{
-					DrawPie(psShape,&PieParams);
-				}			
-
-				break;
-
-			case DROID_CONSTRUCT:
-            case DROID_CYBORG_CONSTRUCT:
-#if(0)	// now moved so that the spade is drawn first !
-				/*	Get the mounting graphic - we've already moved to the right position 
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				psShape = CONSTRUCT_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)	
-				{
-					DrawPie(psShape,&PieParams);
-				}
-				
-				/* Get the construct graphic assuming it's there */
-				psShape = CONSTRUCT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)
-				{
-					DrawPie(psShape,&PieParams);
-				}			
-#endif		
-				break;
-			case DROID_ECM:
-				/*	Get the mounting graphic - we've already moved to the right position 
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				psShape = ECM_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)	
-				{
-					DrawPie(psShape,&PieParams);
-				}			
-
-				
-				/* Get the ECM graphic assuming it's there.... */
-				psShape = ECM_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)	{
-					DrawPie(psShape,&PieParams);
-				}			
-
-  				break;
-			case DROID_REPAIR:
-            case DROID_CYBORG_REPAIR:
-				/*	Get the mounting graphic - we've already moved to the right position 
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				psShape = REPAIR_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)	
-				{
-					DrawPie(psShape,&PieParams);
-				}			
-
-				
-				/* Get the Repair graphic assuming it's there.... */
-				psShape = REPAIR_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)	{
-					DrawPie(psShape,&PieParams);
-				}			
-
-  				break;
-			default:
-				DBERROR(("Whoa! Weirdy type of droid found in drawComponentObject!!!"));
-				break;
-			}
-		}
-		/*	We've also got a handle on the psShape here for the weapon which has a connector to point to
-			muzzle flash attachment points - just grab it from psShape->connectors->[x|y|z] */
-		/* Pop Matrix */
-		psxPopMatrix();
-	} // end of illustrative indentation - see above
-
-	psxUseMatrix();
-
-
-
-
-
-	/* Get the body graphic now*/
-	psShape = BODY_IMD(psDroid,psDroid->player);
-
-	if(psShape!=NULL)
-	{
-		if (psShape->xmax>ShadowSizeX) ShadowSizeX=psShape->xmax;
-		if (psShape->zmax>ShadowSizeZ) ShadowSizeZ=psShape->zmax;
-
-		if ( psDroid->droidType == DROID_PERSON)
-		{
-			/* draw body if not animating */
-			if ( psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == FALSE )
-			{
-//				scaleMatrix(75);
-				DrawPie(psShape,&PieParams);
-//				pie_Draw3DShape(psShape, 0, psDroid->player-6, brightness, specular, pieFlag | pie_NO_BILINEAR, iPieData);
-			}
-		}
-		//else if( psDroid->droidType == DROID_CYBORG)
-        else if (cyborgDroid(psDroid))
-		{
-
-			if ( psDroid->psCurAnim != NULL && psDroid->psCurAnim->bVisible != FALSE )
-//			if ( psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == FALSE )
-			{
-				DrawPie(psShape,&PieParams);
-//				pie_Draw3DShape(psShape, 0, getPlayerColour(psDroid->player), brightness, specular, pieFlag | pie_NO_BILINEAR, iPieData);
-			}
-		}
-		else
-		{
-			DrawPie(psShape,&PieParams);
-		}
-//		if (psShape->xmax>ShadowSizeX) ShadowSizeX=psShape->xmax;
-//		if (psShape->zmax>ShadowSizeZ) ShadowSizeZ=psShape->zmax;
-//		DrawPie(psShape,&PieParams);
-	}
-
-	psShape = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
-	if(psShape!=NULL)
-	{
-		if (psShape->xmax>ShadowSizeX) ShadowSizeX=psShape->xmax;
-		if (psShape->zmax>ShadowSizeZ) ShadowSizeZ=psShape->zmax;
-		DrawPie(psShape,&PieParams);
-	}
-
-	// Now draw a shadow for the droid based on the size of the body
-	if (bDrawShadow==TRUE)
-	{
-		if (ShadowSizeZ>10)
-		 	DrawShadow(ShadowSizeX,ShadowSizeZ);
-	}
-
-}
-#endif
-
-#endif	// End of PSX version.
 
 
 void	destroyFXDroid(DROID	*psDroid)

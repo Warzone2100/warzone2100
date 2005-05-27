@@ -2,7 +2,6 @@
 /* Experiment - possibly only for the faster configurations */
 /* Makes smooth transitions for terrain visibility */
 
-#ifndef PSX
 #include "frame.h"
 #include "objects.h"
 #include "base.h"
@@ -26,13 +25,6 @@ UDWORD	avCalculated;
 UDWORD	avIgnored;
 
 // ------------------------------------------------------------------------------------
-/*
-#ifdef ALEXM
-static	bRevealActive = TRUE;
-#else
-static	bRevealActive = FALSE;
-#endif
-*/
 BOOL	bRevealActive = FALSE;
 // ------------------------------------------------------------------------------------
 void	avInformOfChange(SDWORD x, SDWORD y);
@@ -245,5 +237,3 @@ STRUCTURE	*psStruct;
 
 }
 // ------------------------------------------------------------------------------------
-
-#endif

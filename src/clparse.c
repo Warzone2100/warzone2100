@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef WIN32
-#include <direct.h>
-#endif
-
 #include "frame.h"
 #include "widget.h"
 

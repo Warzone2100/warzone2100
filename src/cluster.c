@@ -18,10 +18,6 @@
 #include "scripttabs.h"
 #include "scriptcb.h"
 
-#ifdef PSX
-#include "dcache.h"
-#endif
-
 // distance between units for them to be in the same cluster
 #define CLUSTER_DIST	(TILE_UNITS*8)
 
@@ -90,7 +86,6 @@ void clustInitialise(void)
 
 
 // check the cluster usage
-#ifndef PSX
 void clustValidateUsage()
 {
 	SDWORD		cluster, player, droidUsage, structUsage;
@@ -139,7 +134,6 @@ void clustValidateUsage()
 		}
 	}
 }
-#endif
 
 
 // update routine for the cluster system
@@ -260,23 +254,6 @@ void _clustAddDroid(DROID *psDroid, SDWORD cluster)
 
 void clustAddDroid(DROID *psDroid, SDWORD cluster)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static DROID *_psDroid;
-		static SDWORD _cluster;
-
-		_psDroid = psDroid;
-		_cluster = cluster;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_clustAddDroid(_psDroid,_cluster);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 	_clustAddDroid(psDroid,cluster);
 }
 
@@ -342,23 +319,6 @@ void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 
 void clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static STRUCTURE *_psStruct;
-		static SDWORD _cluster;
-
-		_psStruct = psStruct;
-		_cluster = cluster;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_clustAddStruct(_psStruct,_cluster);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 	_clustAddStruct(psStruct,cluster);
 }
 
@@ -443,7 +403,6 @@ SDWORD clustFindUnused(void)
 // display the current clusters
 void clustDisplay(void)
 {
-#ifndef PSX
 	SDWORD	cluster, map, player;
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
@@ -523,7 +482,6 @@ void clustDisplay(void)
 			}
 		}
 	}
-#endif
 }
 
 // update the cluster information for an object

@@ -35,11 +35,9 @@
 #include "component.h"
 #include "projectile.h"
 
-//#ifndef PSX
 //#include "netplay.h"
 //#include "multiplay.h"
 //#include "multistat.h"
-//#endif
 
 // hack to display the collsion box
 //extern 	QUAD	sBox;

@@ -11,14 +11,8 @@
 #include "deliverance.h"
 #include "fractions.h"
 
-#ifndef PSX
 #include "piestate.h"
 #include "pieclip.h"
-#endif
-
-#ifdef PSX
-#include "ctrlpsx.h"
-#endif
 
 #include "csnap.h"
 #include "audio_id.h"
@@ -221,9 +215,6 @@ BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
 //
 void SetCurrentSnapFormID(CURSORSNAP *SnapBuffer,UDWORD FormID)
 {
-#ifdef PSX
-	if(GetControllerType(0) != CON_MOUSE)
-#endif
 	{
 		int x,y,w,h;
 		SnapBuffer->NewCurrentFormID = FormID;
@@ -243,9 +234,6 @@ void SetCurrentSnapFormID(CURSORSNAP *SnapBuffer,UDWORD FormID)
 //
 void SetCurrentSnapID(CURSORSNAP *SnapBuffer,UDWORD ID)
 {
-#ifdef PSX
-	if(GetControllerType(0) != CON_MOUSE)
-#endif
 	{
 		int x,y,w,h;
 

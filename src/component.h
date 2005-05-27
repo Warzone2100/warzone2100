@@ -15,21 +15,9 @@ extern UDWORD getComponentDroidRadius(DROID *psDroid);
 extern UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid);
 extern UDWORD getComponentRadius(BASE_STATS *psComponent);
 extern UDWORD getResearchRadius(BASE_STATS *Stat);
-#ifndef PSX
 extern UDWORD getStructureSize(STRUCTURE *psStructure);
 extern UDWORD getStructureStatSize(STRUCTURE_STATS *Stats);
-#else
-extern UDWORD getStructureRadius(STRUCTURE *psStructure);
-extern UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player);
-#endif
-#ifdef PSX
-extern void setComponentButtonOTIndex(UWORD OTIndex);
-#endif
-#ifdef PSX
-#define PSX_BUTTON_SCALE	 (100)
-#endif
 
-//#ifndef PSX
 #define OBJECT_RADIUS				(128)
 #define COMPONENT_RADIUS			(64)
 #define DESIGN_DROID_SCALE			(200)
@@ -40,7 +28,6 @@ extern void setComponentButtonOTIndex(UWORD OTIndex);
 #define SMALL_STRUCT_SCALE			(55)
 #define MED_STRUCT_SCALE			(25)//reduced from 30 to fit command centre in window
 #define LARGE_STRUCT_SCALE			(25)
-//#endif
 
 #define TOWER_HEIGHT    100
 extern UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat);
@@ -59,12 +46,7 @@ extern void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 									iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
 extern void displayComponentButtonObject(DROID *psDroid,
 								  iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-#ifndef PSX
 extern void	displayComponentObject(BASE_OBJECT *psObj);
-#else
-// Returns false if nothing rendered.
-extern BOOL	displayComponentObject(BASE_OBJECT *psObj);
-#endif
 
 extern void	compPersonToBits(DROID *psDroid);
 

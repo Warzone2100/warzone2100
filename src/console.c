@@ -9,10 +9,6 @@
 #include "scriptextern.h"
 #include "audio_id.h"
 #include "audio.h"
-#ifdef PSX
-#include "primatives.h"
-#include "dcache.h"
-#endif
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
@@ -72,9 +68,7 @@ static allowNewMessages;
 /* What's the default justification */
 static CONSOLE_TEXT_JUSTIFICATION	defJustification;
 
-#ifndef PSX
 static UDWORD	messageId;	// unique ID
-#endif
 
 // Global string for new console messages.
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
@@ -208,16 +202,8 @@ CONSOLE_MESSAGE	*psMessage;
 	/* Is the string too long? */
 	textLength = strlen(messageText);
 
-#ifndef PSX
 	ASSERT(( textLength<MAX_CONSOLE_STRING_LENGTH,
 		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH"));
-#else
-	if(textLength >= MAX_CONSOLE_STRING_LENGTH) {
-		addConsoleMessage("bad length",jusType);
-		return TRUE;
-	}
-#endif
- 
 
 	/* Are we using a defualt justification? */
 	if(jusType == DEFAULT_JUSTIFY)
@@ -257,9 +243,7 @@ CONSOLE_MESSAGE	*psMessage;
 	/* This is the present newest message */
 	consoleStorage[messageIndex].psNext = NULL;
 
-#ifndef PSX
 	consoleStorage[messageIndex].id = 0;
-#endif
 
 	/* Are there no messages? */
 	if(consoleMessages == NULL)
@@ -293,17 +277,6 @@ CONSOLE_MESSAGE	*psMessage;
 
 BOOL addConsoleMessage(STRING *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _addConsoleMessage(messageText,jusType);
-		SetSpAltNormal();
-		return ret;
-	}
-#endif
 	return _addConsoleMessage(messageText,jusType);
 }
 
@@ -355,9 +328,7 @@ void	updateConsoleMessages( void )
 	/* Time to kill the top one ?*/
 	if(gameTime2 - consoleMessages->timeAdded > messageDuration)
 	{
-#ifndef PSX
 		consoleMessages->id = messageId++;
-#endif
 		/* Is this the only message? */
 		if(consoleMessages->psNext == NULL)
 		{
@@ -414,9 +385,7 @@ void	flushConsoleMessages( void )
 {
 	consoleMessages = NULL;
 	numActiveMessages = 0;
-#ifndef PSX
 	messageId = 0;
-#endif
 }
 
 /* Displays all the console messages */
@@ -450,13 +419,10 @@ UDWORD	exceed;
 	/* Get the travel to the next line */
 	linePitch = iV_GetTextLineSize();
 
-#ifndef PSX
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
-#endif
 	iV_SetTextColour(-1);
 
-#ifndef PSX
 	drop = 0;
 	if(bConsoleDropped)
 	{
@@ -467,9 +433,7 @@ UDWORD	exceed;
 	{
 		return;
 	}
-#endif
 
-#ifndef PSX
 	/* Do we want a box under it? */
 	if(bTextBoxActive)
 	{
@@ -526,40 +490,8 @@ UDWORD	exceed;
 		/* Move on */
 		numProcessed++;
 	}
-#else // PSX version does it backwords.
-	iV_SetOTIndex_PSX(OT2D_EXTREMEFORE);
-
-	/* Stop when we've drawn enough or we're at the end */
-	pie_StartTextExtents();
-	MesY = mainConsole.topY;
-	for(psMessage = consoleMessages; psMessage AND numProcessed<consoleVisibleLines; 
-		psMessage = psMessage->psNext)
-	{
- 		/* Draw the text string */
-		MesY = pie_DrawFormattedText(psMessage->text,
-									mainConsole.topX,MesY,
-									mainConsole.width,
-									psMessage->JustifyType,TRUE);
-		/* Move on */
-		numProcessed++;
-	}
-
-	pie_FillTextExtents(0,16,16,128,TRUE);
-	/* Do we want a box under it? */
-//	if(bTextBoxActive)
-//	{
-//		/* How big a box is necessary? */
-//		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
-//		/* GET RID OF THE MAGIC NUMBERS BELOW */
-//		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,
-//						mainConsole.topY-mainConsole.textDepth+iV_GetTextBelowBase()-CON_BORDER_HEIGHT,
-//						mainConsole.topX+mainConsole.width ,
-//						mainConsole.topY+(boxDepth*linePitch)+iV_GetTextBelowBase()+CON_BORDER_HEIGHT);
-//	}
-#endif
 }
 
-#ifndef PSX
 /* Do up to the last 8 messages.... Returns how many it did... */
 UDWORD	displayOldMessages( void )
 {
@@ -708,7 +640,6 @@ UDWORD	MesY;
 	}
 	return(count);
 }
-#endif
 
 
 /* Allows toggling of the box under the console text */
@@ -747,20 +678,12 @@ void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
 /* Allows positioning of the console on screen */
 void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 {
-#ifdef PSX
-	y += 32;
-#endif
-
 	mainConsole.topX = x;
 	mainConsole.topY = y;
 	mainConsole.width = width;
 
 	/* Should be done below */
-#ifndef PSX
 	mainConsole.textDepth = 8;
-#else
-	mainConsole.textDepth = iV_GetTextLineSize();
-#endif
 	flushConsoleMessages();	
 }
 

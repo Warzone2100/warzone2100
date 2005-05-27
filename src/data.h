@@ -15,7 +15,6 @@ extern void dataIMGPAGERelease(void *pData);
 extern void dataSetSaveFlag(void);
 extern void dataClearSaveFlag(void);
 
-#ifndef PSX
 // multiplayer cheat code.
 #define CHEAT_SWEAPON	0
 #define CHEAT_SBODY		1
@@ -52,8 +51,6 @@ extern void dataClearSaveFlag(void);
 extern void resetCheatHash();
 
 extern UDWORD cheatHash[CHEAT_MAXCHEAT];
-#endif
-
 
 #endif
 

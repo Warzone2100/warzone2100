@@ -1,4 +1,3 @@
-#ifndef PSX
 /* Atmos.c - Handles atmospherics such as snow and rain */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 /* 
@@ -400,5 +399,3 @@ WT_CLASS	atmosGetWeatherType( void )
 {
 	return(weather);
 }
-
-#endif

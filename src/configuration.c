@@ -25,9 +25,6 @@
 #include "mixer.h"
 #include "hci.h"
 #include "fpath.h"
-#ifdef INC_DIRECTX
-#include "d3drender.h"
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -473,19 +470,6 @@ BOOL loadRenderMode()
 	{	
 		pie_SetVideoBuffer(w, h);
 	}
-
-#ifdef INC_DIRECTX
-	// NVidia texel offset hacks
-	if(getWarzoneKeyNumeric("TexelOffsetOn", &val))
-	{
-		D3DSetTexelOffsetState(val);
-	}
-	else
-	{
-		D3DSetTexelOffsetState(TRUE);
-		setWarzoneKeyNumeric("TexelOffsetOn", 1);
-	}
-#endif
 
 	return closeWarzoneKey();
 }	

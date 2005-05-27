@@ -3,11 +3,7 @@
 #ifndef _bucket3d_h
 #define _bucket3d_h
 
-#ifndef PSX
 #define		BUCKET
-#else
-// not working for the playstation yet
-#endif
 
 typedef enum _render_type
 {

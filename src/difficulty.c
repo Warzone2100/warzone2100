@@ -37,7 +37,6 @@ void setModifiers(FRACT Player,FRACT Enemy)
 void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 {
 
-#ifndef PSX
 	switch(lev)
 	{
 	case	DL_EASY:
@@ -64,38 +63,6 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		DBERROR(("Invalid difficulty level selected - forcing NORMAL"));
 		break;
 	}
-#else
-	switch(lev)
-	{
-	case	DL_EASY:
-		fDifPlayerModifier = FRACTCONST(190,100);
-		fDifEnemyModifier = FRACTCONST(100,115);
-		break;
-	case	DL_NORMAL:
-		fDifPlayerModifier = FRACTCONST(130,100);
-		fDifEnemyModifier = FRACTCONST(100,115);
-		break;
-	case	DL_HARD:
-		fDifPlayerModifier = FRACTCONST(110,100);	// was (125,100)
-		fDifEnemyModifier = FRACTCONST(100,115);
-		break;
-//	case	DL_EASY:
-//		fDifPlayerModifier = FRACTCONST(150,100);
-//		fDifEnemyModifier = FRACTCONST(100,115);
-//		break;
-//	case	DL_NORMAL:
-//		fDifPlayerModifier = FRACTCONST(110,100);	// was (125,100)
-//		fDifEnemyModifier = FRACTCONST(100,115);
-//		break;
-//	case	DL_HARD:
-//		fDifPlayerModifier = FRACTCONST(100,100);
-//		fDifEnemyModifier = FRACTCONST(100,100);
-//		break;
-	default:
-		DBERROR(("Invalid difficulty level selected - forcing NORMAL"));
-		break;
-	}
-#endif
 
 	presDifLevel = lev;
 }

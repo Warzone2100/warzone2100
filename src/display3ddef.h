@@ -12,7 +12,6 @@
 #define	RADBRX		(RADTLX + RADWIDTH)	-1
 #define	RADBRY		(RADTLY + RADHEIGHT) -1
 //assigned to variable visibleXtiles, visibleYTiles 25/02/98 AB
-#ifndef PSX
 #define VISIBLE_XTILES	32	
 #define VISIBLE_YTILES	32
 
@@ -22,29 +21,12 @@
 #define MIN_TILE_Y		(VISIBLE_YTILES/4)
 #define MAX_TILE_Y		((3*VISIBLE_YTILES)/4)
 
-#else
-#define VISIBLE_XTILES	22	// This will break on the psx if you change it to any other value !!!!!!
-#define VISIBLE_YTILES	22
-
-#define MIN_TILE_X		(VISIBLE_XTILES/4)
-#define MAX_TILE_X		((3*VISIBLE_XTILES)/4)
-
-#define MIN_TILE_Y		(VISIBLE_YTILES/4)
-#define MAX_TILE_Y		((3*VISIBLE_YTILES)/4)
-#endif
-
-
 
 #define LAND_XGRD	(VISIBLE_XTILES + 1)
 #define LAND_YGRD	(VISIBLE_YTILES + 1)
-#ifdef PSX
-#define DISTANCE	1716
-#define MINDISTANCE	(DISTANCE - DISTANCE/3)
-#else
 #define DISTANCE	(4500)
 #define MINDISTANCE	(1500)
 #define START_DISTANCE	(2500)
-#endif
 
 
 #define NUM_TILES	100		//5 pages of 16 tiles.
