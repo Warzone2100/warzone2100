@@ -1273,7 +1273,7 @@ SDWORD	getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen )
 DROID	*psDroid;
 FRACT	xShift,yShift;
 FRACT	xTotal,yTotal;
-FRACT	averageAngleFloat;
+FRACT	averageAngleFloat = 0;
 SDWORD	droidCount, averageAngle;
 SDWORD	retVal;
 
@@ -1345,7 +1345,7 @@ SDWORD	getAverageTrackAngle( BOOL bCheckOnScreen )
 DROID	*psDroid;
 FRACT	xShift,yShift;
 FRACT	xTotal,yTotal;
-FRACT	averageAngleFloat;
+FRACT	averageAngleFloat = 0;
 SDWORD	droidCount, averageAngle;
 SDWORD	retVal;
 
@@ -2157,12 +2157,12 @@ printf("camTrackCamera : NO\n");
 
 void camSetOldView(int x,int y,int z,int rx,int ry,int dist)
 {
-	UNUSEDPARAMETER(x);
-	UNUSEDPARAMETER(y);
-	UNUSEDPARAMETER(z);
-	UNUSEDPARAMETER(rx);
-	UNUSEDPARAMETER(ry);
-	UNUSEDPARAMETER(dist);
+//	UNUSEDPARAMETER(x);
+//	UNUSEDPARAMETER(y);
+//	UNUSEDPARAMETER(z);
+//	UNUSEDPARAMETER(rx);
+//	UNUSEDPARAMETER(ry);
+//	UNUSEDPARAMETER(dist);
 
 //DBPRINTF(("camSetOldView(%d %d %d %d %d %d)\n",x,y,z,rx,ry,dist));
 //DBPRINTF(("%d %d %d %d %d %d\n",player.p.x,player.p.y,player.r.x,player.r.y,getViewDistance()));

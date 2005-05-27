@@ -336,7 +336,7 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 {
 	int c ;
 	int32 distance_r, distance_g, distance_b, squared_distance;
-	int32 best_colour, best_squared_distance;
+	int32 best_colour = 0, best_squared_distance;
 
 	ASSERT((bPaletteInitialised,"pal_GetNearestColour, palette not initialised."));
 

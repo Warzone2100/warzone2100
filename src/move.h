@@ -46,6 +46,8 @@ extern void moveReallyStopDroid(DROID *psDroid);
 /* Get a droid to do a frame's worth of moving */
 extern void moveUpdateDroid(DROID *psDroid);
 
+SDWORD moveCalcDroidSpeed(DROID *psDroid);
+
 /* Frame update for the movement of a tracked droid */
 extern void moveUpdateTracked(DROID *psDroid);
 

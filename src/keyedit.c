@@ -330,7 +330,7 @@ BOOL startKeyMapEditor(BOOL first)
 	UDWORD		i,mapcount =0;
 	UDWORD		bubbleCount;
 	BOOL		bAtEnd,bGotOne;
-	KEY_MAPPING	*psPresent,*psNext;
+	KEY_MAPPING	*psPresent = NULL, *psNext;
 	char		test[255];
 	addBackdrop();
 	addSideText	(FRONTEND_SIDETEXT ,KM_X-2,KM_Y,strresGetString(psStringRes, STR_KM_KEYMAP_SIDE));

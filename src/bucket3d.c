@@ -388,7 +388,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			break;
 		case RENDER_PROJECTILE://not depth sorted 
 		case RENDER_PROJECTILE_TRANSPARENT:
-			((PROJ_OBJECT*)pObject)->psWStats;
+//			((PROJ_OBJECT*)pObject)->psWStats;
 			/* these guys should never be added to the list anyway */
 			if(((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_FLAME OR 
                 ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_COMMAND OR

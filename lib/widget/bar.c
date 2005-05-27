@@ -258,7 +258,7 @@ void barGraphHiLiteLost(W_BARGRAPH *psWidget)
 void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 							UDWORD *pColours)
 {
-	SDWORD		x0,y0, x1,y1;
+	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 	W_BARGRAPH	*psBGraph;
 
 	psBGraph = (W_BARGRAPH *)psWidget;
@@ -305,7 +305,7 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 								  UDWORD *pColours)
 {
-	SDWORD		x0,y0, x1,y1, x2,y2, x3,y3;
+	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
 	W_BARGRAPH	*psBGraph;
 
 	psBGraph = (W_BARGRAPH *)psWidget;
@@ -390,8 +390,8 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 							UDWORD *pColours)
 {
-	SDWORD		x0,y0, x1,y1;		// Position of the bar
-	SDWORD		tx0,ty0, tx1,ty1;	// Position of the trough
+	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
+	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
 	W_BARGRAPH	*psBGraph;
 	BOOL		showBar=TRUE, showTrough=TRUE;
 

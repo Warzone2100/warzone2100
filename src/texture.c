@@ -312,7 +312,7 @@ SDWORD  index;
 				}
 				else //D3D
 				{
-					dtm_LoadTexSurface(&_TEX_PAGE[pageId[pageNumber]].tex, pageId[pageNumber]);
+//					dtm_LoadTexSurface(&_TEX_PAGE[pageId[pageNumber]].tex, pageId[pageNumber]);
 				}
 				goto exit;
 			}
@@ -330,7 +330,7 @@ SDWORD  index;
 				else //D3D
 				{
 					/* If so, download this one and reset to start again */
-					dtm_LoadTexSurface(&_TEX_PAGE[pageId[pageNumber]].tex, pageId[pageNumber]);
+//					dtm_LoadTexSurface(&_TEX_PAGE[pageId[pageNumber]].tex, pageId[pageNumber]);
 				}
 				pageNumber++;
 				sprite.bmp = _TEX_PAGE[pageId[pageNumber]].tex.bmp;

@@ -1426,8 +1426,8 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	UBYTE			*pFileData = NULL;
 	UDWORD			player, inc, i, j;
     DROID           *psCurr;
-    UWORD           missionScrollMinX, missionScrollMinY, missionScrollMaxX, 
-                    missionScrollMaxY;
+    UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
+		    missionScrollMaxX = 0, missionScrollMaxY = 0;
 
 	DBPRINTF(("loadGame\n"));
 
@@ -3261,7 +3261,7 @@ BOOL gameLoad(UBYTE *pFileData, UDWORD filesize)
 BOOL getCampaignV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_GAME		*psSaveGame;
-	UDWORD			sizeOfSaveGame;
+	UDWORD			sizeOfSaveGame = 0;
 	UDWORD			campaign;
 
 	psSaveGame = (SAVE_GAME *) pFileData;
@@ -3488,7 +3488,7 @@ BOOL gameLoadV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 	UBYTE			inc;
 	SDWORD			i, j;
 	static	SAVE_POWER	powerSaved[MAX_PLAYERS];
-	UDWORD			sizeOfSaveGame;
+	UDWORD			sizeOfSaveGame = 0;
 	UDWORD			player;
 	char			date[MAX_STR_LENGTH];
 
@@ -5104,7 +5104,7 @@ BOOL loadSaveDroidV11(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 	DROID_GROUP				*psCurrentTransGroup;
 	UDWORD					count;
 	UDWORD					NumberOfSkippedDroids=0;
-	UDWORD					sizeOfSaveDroid;
+	UDWORD					sizeOfSaveDroid = 0;
 	DROID_GROUP				*psGrp;
 
 	psCurrentTransGroup = NULL;
@@ -5200,7 +5200,7 @@ BOOL loadSaveDroidV19(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 	DROID_GROUP				*psCurrentTransGroup;
 	UDWORD					count;
 	UDWORD					NumberOfSkippedDroids=0;
-	UDWORD					sizeOfSaveDroid;
+	UDWORD					sizeOfSaveDroid = 0;
 	DROID_GROUP				*psGrp;
 
 	psCurrentTransGroup = NULL;
@@ -5307,7 +5307,7 @@ BOOL loadSaveDroidV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD 
 	DROID_GROUP				*psCurrentTransGroup;
 	UDWORD					count;
 	UDWORD					NumberOfSkippedDroids=0;
-	UDWORD					sizeOfSaveDroid;
+	UDWORD					sizeOfSaveDroid = 0;
 //	DROID_GROUP				*psGrp;
 
 	psCurrentTransGroup = NULL;
@@ -6528,23 +6528,23 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 	UDWORD					NumberOfSkippedStructures=0;
 	UDWORD					burnTime;
 	UDWORD					i;
-	UDWORD					sizeOfSaveStruture;
+	UDWORD					sizeOfSaveStructure = 0;
 	UDWORD					researchId;
 
 
 
 	if (version <= VERSION_20)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V20);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V20);
 	}
 	else if (version <= CURRENT_VERSION_NUM)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE);
 	}
 
 	psSaveStructure = &sSaveStructure;
 
-	if ((sizeOfSaveStruture * numStructures + STRUCT_HEADER_SIZE) > 
+	if ((sizeOfSaveStructure * numStructures + STRUCT_HEADER_SIZE) > 
 		filesize)
 	{
 		DBERROR(("structureLoad: unexpected end of file"));
@@ -6552,9 +6552,9 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 	}
 
 	/* Load in the structure data */
-	for (count = 0; count < numStructures; count ++, pFileData += sizeOfSaveStruture)
+	for (count = 0; count < numStructures; count ++, pFileData += sizeOfSaveStructure)
 	{
-		memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
+		memcpy(psSaveStructure, pFileData, sizeOfSaveStructure);
 
 		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
@@ -9285,7 +9285,7 @@ BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 {
 	SAVE_MESSAGE	*psSaveMessage;
 	MESSAGE			*psMessage;
-	VIEWDATA		*psViewData;
+	VIEWDATA		*psViewData = NULL;
 	UDWORD			i, height;
 
 //    UNUSEDPARAMETER(version);
@@ -9673,7 +9673,7 @@ BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ve
 	FLAG_POSITION	*psflag;
 	UDWORD			i;
 	STRUCTURE*		psStruct;
-	UDWORD			factoryToFind;
+	UDWORD			factoryToFind = 0;
 	UDWORD			sizeOfSaveFlag;
 //	version;//unreferenced
 

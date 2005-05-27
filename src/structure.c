@@ -1922,7 +1922,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 	//MESSAGE		*psMessage;
 	UDWORD		mapX, mapY, mapH;
 	UDWORD		width, breadth, weapon, capacity, bodyDiff = 0;
-	SDWORD		wallType = 0, preScrollMinX, preScrollMinY, preScrollMaxX, preScrollMaxY;
+	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 	MAPTILE		*psTile;
 	BOOL		bUpgraded;
 //	BOOL bTemp=FALSE;

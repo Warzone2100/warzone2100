@@ -51,7 +51,7 @@ static SDWORD			numTestObjects = 0;
 static BASE_OBJECT		*apsRayObjects[MAX_RAYOBJ];
 static SDWORD			aRayObjDist[MAX_RAYOBJ];
 static SDWORD			numRayObjects = 0;
-static BOOL				gotRayObjects = FALSE;
+//static BOOL				gotRayObjects = FALSE;
 // which object is being considered by the callback
 static SDWORD			currObj;
 

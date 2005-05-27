@@ -354,7 +354,7 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 	int WWidth;
 	BOOL GotSpace;
 	BOOL NewLine;
-	BOOL AddLeadingSpace;
+	BOOL AddLeadingSpace = FALSE;
 	int t;
 	int TWidth;
 

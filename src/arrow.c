@@ -59,7 +59,7 @@ arrowAdd( SDWORD iBaseX, SDWORD iBaseY, SDWORD iBaseZ,
 {
 	ARROW	*psArrow;
 
-	if ( !HEAP_ALLOC( g_psArrowHeap, &psArrow) )
+	if ( !HEAP_ALLOC( g_psArrowHeap, (void*) &psArrow) )
 	{
 		return FALSE;
 	}
@@ -78,6 +78,7 @@ arrowAdd( SDWORD iBaseX, SDWORD iBaseY, SDWORD iBaseZ,
 	/* add to list */
 	psArrow->psNext = g_psArrowList;
 	g_psArrowList   = psArrow;
+	return TRUE;
 }
 
 /***************************************************************************/

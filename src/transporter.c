@@ -137,7 +137,7 @@ static  UWORD           objMajor = 0, objMinor = 0;
 
 /**********TEST************/
 //static  UDWORD      addCount = 0;
-static  UDWORD      removeCount = 0;
+//static  UDWORD      removeCount = 0;
 
 /*functions */
 static BOOL intAddTransporterContents(void);
@@ -1109,7 +1109,7 @@ BOOL intAddDroidsAvailForm(void)
 		//don't add Transporter Droids!
 		if (psDroid->droidType != DROID_TRANSPORTER)
 		{
-			/* Set the tip and add the button 
+			// Set the tip and add the button 
 			sBFormInit.pTip = psDroid->pName;
 			BufferID = GetSystem0Buffer();
 			ASSERT((BufferID >= 0,"Unable to acquire stat buffer."));
@@ -1123,7 +1123,7 @@ BOOL intAddDroidsAvailForm(void)
 				return FALSE;
 			}
 
-			/* Update the init struct for the next button 
+			// Update the init struct for the next button 
 			sBFormInit.id += 1;
 			ASSERT((sBFormInit.id < IDTRANS_DROIDEND,"Too many Droids Built buttons"));
 
@@ -1357,7 +1357,7 @@ void intUpdateTransCapacity(struct _widget *psWidget, struct _w_context *psConte
 //	UDWORD		capacity = TRANSPORTER_CAPACITY;
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 
-	UNUSEDPARAMETER(psContext);
+//	UNUSEDPARAMETER(psContext);
 
 	intSetTransCapacityLabel(Label->aText);
 
@@ -2172,7 +2172,7 @@ void resetTransporter(DROID *psTransporter)
      W_CLICKFORM *psForm;
 
      //not sure if we want this for something else
-     UNUSEDPARAMETER(psTransporter);
+//     UNUSEDPARAMETER(psTransporter);
 
      //enable the form so can add more droids into the transporter
      psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANS_LAUNCH);

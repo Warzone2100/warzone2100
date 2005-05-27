@@ -41,6 +41,7 @@
 #include "display3d.h"
 #include "console.h"
 #include "text.h"
+#include "intdisplay.h"
 
 // all the bollox needed for script callbacks
 #include "interp.h"				// needed to define types in scripttabs.h

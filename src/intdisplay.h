@@ -284,6 +284,7 @@ BOOL DroidGoingToBuild(DROID *Droid);
 BASE_STATS *DroidGetBuildStats(DROID *Droid);
 iIMDShape *DroidGetIMD(DROID *Droid);
 UDWORD DroidGetIMDIndex(DROID *Droid);
+BOOL DroidIsDemolishing(DROID *Droid);
 
 BOOL StructureIsManufacturing(STRUCTURE *Structure);
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);

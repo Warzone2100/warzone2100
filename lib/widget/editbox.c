@@ -336,7 +336,7 @@ static void fitStringEnd(STRING *pBuffer, UDWORD boxWidth,
 void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 {
 #ifndef PSX
-	UDWORD	key, len, editState;
+	UDWORD	key, len = 0, editState;
 	UDWORD	pos;
 	STRING	*pBuffer;
 	BOOL	done;

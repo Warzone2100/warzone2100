@@ -10,6 +10,7 @@
 #include "ivisdef.h" //ivis palette code
 #include "piestate.h"
 #include "textdraw.h" //ivis text code
+#include "screen.h"
 
 #ifndef PSX
 #include "piemode.h"
@@ -44,7 +45,7 @@
 #include "keyedit.h"
 #include "seqdisp.h"
 #include "vid.h"
-#include "configuration.h"
+#include "configfile.h"
 #include "resource.h"
 #include "netplay.h"	// multiplayer 
 #include "multiplay.h"
@@ -402,7 +403,6 @@ TITLECODE titleLoop(void)
 
  	EndScene();		// finalise the primative for this frame (start drawing)
 #endif // End of ifdef PSX
-	SDL_Delay(30);	//To fix ALL menus to be less CPU hogging. -Q 5-14-05
 	return RetCode;
 }
 
@@ -562,7 +562,7 @@ void startCreditsScreen( BOOL bRenderActive)
 /* This function does nothing - since it's already been drawn */
 void	runCreditsScreen( void )
 {
-	static UBYTE quitstage=0;
+//	static UBYTE quitstage=0;
 #ifdef COVERMOUNT
 	SCREENTYPE	screen;
 #endif

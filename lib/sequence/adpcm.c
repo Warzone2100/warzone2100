@@ -52,7 +52,7 @@ short adpcm_decode_sample(char code) {
 	}
 
 	/* Find new step_size index value */
-	step_idx += index_adjust[code];
+	step_idx += index_adjust[(int) code];
 
 	if (step_idx < 0) {
 		step_idx = 0;

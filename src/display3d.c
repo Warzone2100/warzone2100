@@ -122,7 +122,7 @@
 static UWORD WaterTileID = WATER_TILE;
 static UWORD RiverBedTileID = BED_TILE;
 static FRACT	waterRealValue = (FRACT)0;
-static SDWORD	waterAlphaValue = 168;//jps 15Apr99 for d3d only
+//static SDWORD	waterAlphaValue = 168;//jps 15Apr99 for d3d only
 #define WAVE_SPEED 4
 static SWORD vOffset = 1;
 #define	MAX_FIRE_STAGE	32
@@ -312,14 +312,14 @@ UDWORD	rubbleTile = 67;//WATER_TILE;
 UDWORD geoOffset;
 static	UDWORD	numTilesAveraged;
 static	UDWORD	averageCentreTerrainHeight;
-static	UDWORD	effectsProcessed = 0;
+//static	UDWORD	effectsProcessed = 0;
 
 static	BOOL	bReloadBars = TRUE;
 static	BOOL	bEnergyBars = TRUE;
 static	BOOL	bTinyBars	= FALSE;
 static	MAPTILE	edgeTile;
 // THIS HAS GOT TO BE UPDATED EACH TIME
-static char disclaimer[]="v e r s i o n g i v e n t o q a";
+//static char disclaimer[]="v e r s i o n g i v e n t o q a";
 // THIS HAS GOT TO BE UPDATED EACH TIME
 
 UDWORD	lastTargetAssignation = 0;
@@ -757,12 +757,12 @@ void drawTiles(iView *camera, iView *player)
 	UDWORD	specular;
 	UDWORD	tilesRejected;
 	UDWORD	edgeX,edgeY;
-	BOOL IsWaterTile;
-	BOOL PushedDown;
+	BOOL IsWaterTile = FALSE;
+	BOOL PushedDown = FALSE;
 	UBYTE TileIllum;
 	UWORD TextNum;
-	UDWORD	shiftVal;
-	UDWORD	altVal;
+	UDWORD	shiftVal = 0;
+	UDWORD	altVal = 0;
 	FRACT	fraction;
 	UDWORD	realX,realY;
 	BOOL	bEdgeTile;
@@ -2260,11 +2260,11 @@ BOOL		bForceDraw;
 
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 {
-	UDWORD			msgX,msgY;	
+	UDWORD			msgX = 0, msgY = 0;
 	iVector			dv;
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r;
-	iIMDShape		*proxImd;
+	iIMDShape		*proxImd = NULL;
 //	SDWORD		centreX,centreZ;
 	UDWORD		brightness, specular;
 
@@ -2394,7 +2394,7 @@ UDWORD			buildingBrightness, specular;
 iVector			dv;
 SDWORD			i;
 iIMDShape		*lImd,*imd;
-iVector			*temp;
+iVector			*temp = NULL;
 SDWORD			brightVar;
 BOOL			bHitByElectronic = FALSE;
 SDWORD			yVar;
@@ -3069,7 +3069,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 {
 	iVector			dv;
 	SDWORD			x, y, r;
-	iVector			*temp;
+	iVector			*temp = NULL;
 //	SDWORD			centreX, centreZ;
 	SDWORD			buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
@@ -3291,6 +3291,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 
 		return(TRUE);
 	}
+	return FALSE;
 }
 
 /* renderShadow: draws shadow under droid */
@@ -3570,8 +3571,8 @@ void	drawStructureSelections( void )
 {
 STRUCTURE	*psStruct;
 SDWORD		scrX,scrY,scrR;
-UDWORD		longPowerCol;
-UBYTE		powerCol;
+UDWORD		longPowerCol = 0;
+UBYTE		powerCol = 0;
 UDWORD		health,width;
 UDWORD		scale;
 UDWORD		i;
@@ -3984,8 +3985,8 @@ void	drawDroidSelections( void )
 SDWORD			scrX,scrY,scrR;
 DROID			*psDroid;
 UDWORD			damage;
-UBYTE			powerCol;
-UDWORD			longPowerCol;
+UBYTE			powerCol = 0;
+UDWORD			longPowerCol = 0;
 UBYTE			boxCol;
 UDWORD			longBoxCol;
 BASE_OBJECT		*psClickedOn;

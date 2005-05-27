@@ -371,7 +371,7 @@ BOOL loadProduction(SBYTE *pData)
 	functionName[0] = '\0';
 	//propulsionType[0] = '\0';
 	bodySize[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%d", &functionName[0], &bodySize[0],
+	sscanf(pData, "%[^','],%[^','],%d", functionName, bodySize,
 		&productionOutput);
 
 	//allocate storage for the name

@@ -30,7 +30,7 @@ static BOOL eventSaveContext(UBYTE *pBuffer, UDWORD *pSize)
 	UBYTE				*pPos;
 //not hashed	STRING				*pScriptID;
 	UDWORD				hashedName;
-	UWORD				*pValSize;
+	UWORD				*pValSize = NULL;
 
 
 	size = 0;

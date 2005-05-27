@@ -65,7 +65,7 @@ void line(int x0, int y0, int x1, int y1, uint32 colour)
 
 {
 	int code1, code2, code;
-	int x, y;
+	int x = 0, y = 0;
 
 
 	code1 = code2 = 0;
@@ -733,7 +733,7 @@ void	pie_BuildTransTable(UDWORD tableNo)
 	return;
 #else
 UDWORD	i;
-UBYTE	red,green,blue;
+UBYTE	red = 0, green = 0, blue = 0;
 iColour* psPalette = pie_GetGamePal();
 
 	// Step through all the palette entries for the currently selected iVPALETTE
