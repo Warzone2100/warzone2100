@@ -378,8 +378,8 @@ BOOL seq_SetupVideoBuffers(void)
 void seq_SetVideoPath(void)
 {
 	char	aCDDrive[256] = "";
-//	WIN32_FIND_DATA findData;
-//	HANDLE	fileHandle;
+	WIN32_FIND_DATA findData;
+	HANDLE	fileHandle;
 	/* set up the CD path */
 	if (!bCDPath)
 	{
