@@ -661,6 +661,11 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = FALSE;
 	}
+	// don't look for a target if there are any queued orders
+	if (psDroid->listSize > 0)
+	{
+		lookForTarget = FALSE;
+	}
 	// horrible check to stop droids looking for a target if
 	// they would switch to the guard order in the order update loop
 	if ((psDroid->order == DORDER_NONE) &&
@@ -678,6 +683,12 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = FALSE;
 	}
+
+	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player)) 
+	{
+		lookForTarget = FALSE;
+	}
+
 
 	// do not choose another target if doing anything while guarding
 	if (orderState(psDroid, DORDER_GUARD) &&
@@ -698,6 +709,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	// only computer senosr droids in the single player game aquire targets
 	if ((psDroid->droidType == DROID_SENSOR && psDroid->player == selectedPlayer)
+		&& !bMultiPlayer
 		)
 	{
 		lookForTarget = FALSE;
