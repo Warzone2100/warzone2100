@@ -830,8 +830,8 @@ BOOL loadStructureStats(SBYTE *pStructData, UDWORD bufferSize)
 		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
 			%d,%d",
-			&StructureName[0], &type[0], &techLevel[0], &strength[0], &psStructure->terrainType,
-			&psStructure->baseWidth, &psStructure->baseBreadth, &foundation[0],
+			StructureName, type, techLevel, strength, &psStructure->terrainType,
+			&psStructure->baseWidth, &psStructure->baseBreadth, foundation,
 			&psStructure->buildPoints, &psStructure->height,
 			&psStructure->armourValue, &psStructure->bodyPoints,
 			&psStructure->repairSystem, &psStructure->powerToBuild,
@@ -840,9 +840,9 @@ BOOL loadStructureStats(SBYTE *pStructData, UDWORD bufferSize)
 			//&psStructure->quantityLimit, &psStructure->sizeModifier, 
             &dummyVal, &psStructure->sizeModifier, 
 			//&ecmType, &sensorType, &psStructure->weaponSlots, &GfxFile,
-            &ecmType[0], &sensorType[0], &weapSlots, &GfxFile[0],
+            ecmType, sensorType, &weapSlots, GfxFile,
 			//&baseIMD, &psStructure->numFuncs, &psStructure->numWeaps);
-            &baseIMD[0], &psStructure->numFuncs, &numWeaps);
+            baseIMD, &psStructure->numFuncs, &numWeaps);
 
 //		DBPRINTF(("%s: height %d\n", StructureName, psStructure->height));
 
@@ -1194,7 +1194,7 @@ BOOL loadStructureWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		StructureName[0] = '\0';
 		WeaponName[0] = '\0';
-		sscanf(pWeaponData, "%[^','],%[^','],%*d", &StructureName[0], &WeaponName[0]);
+		sscanf(pWeaponData, "%[^','],%[^','],%*d", StructureName, WeaponName);
 	
 		if (!getResourceName(StructureName))
 		{
@@ -1294,7 +1294,7 @@ BOOL loadStructureFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		StructureName[0] = '\0';
 		FunctionName[0] = '\0';
-		sscanf(pFunctionData, "%[^','],%[^','],%*d", &StructureName[0], &FunctionName[0]);
+		sscanf(pFunctionData, "%[^','],%[^','],%*d", StructureName, FunctionName);
 		functionFound = structureFound = FALSE;
 	
 		if (!getResourceName(StructureName))
@@ -1435,7 +1435,7 @@ BOOL loadStructureStrengthModifiers(SBYTE *pStrengthModData, UDWORD bufferSize)
 	{
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pStrengthModData,"%[^','],%[^','],%d",
-			&weaponEffectName[0], &strengthName[0], &modifier);
+			weaponEffectName, strengthName, &modifier);
 
 		//get the weapon effect inc
 		effectInc = getWeaponEffect(weaponEffectName);

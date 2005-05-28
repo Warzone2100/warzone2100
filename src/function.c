@@ -114,7 +114,7 @@ BOOL loadFunctionStats(SBYTE *pFunctionData, UDWORD bufferSize)
 	{
 		//read the data into the storage - the data is delimeted using comma's
 		FunctionType[0] = '\0';
-		sscanf(pFunctionData, "%[^',']", &FunctionType[0]);
+		sscanf(pFunctionData, "%[^',']", FunctionType);
 		type = functionType(FunctionType);
 		pFunctionData += (strlen(FunctionType)+1);
 
@@ -469,7 +469,7 @@ BOOL loadProductionUpgradeFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d", &functionName[0], &factory,
+	sscanf(pData, "%[^','],%d,%d,%d,%d", functionName, &factory,
 		&cyborg, &vtol,&outputModifier);
 
 
@@ -533,7 +533,7 @@ BOOL loadResearchFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName[0], &psFunction->researchPoints);
+	sscanf(pData, "%[^','],%d", functionName, &psFunction->researchPoints);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -566,7 +566,7 @@ BOOL loadReArmFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName[0], &psFunction->reArmPoints);
+	sscanf(pData, "%[^','],%d", functionName, &psFunction->reArmPoints);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -673,7 +673,7 @@ BOOL loadUpgradeFunction(SBYTE *pData, UBYTE type)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName[0], &modifier);
+	sscanf(pData, "%[^','],%d", functionName, &modifier);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -718,7 +718,7 @@ BOOL loadDroidBodyUpgradeFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d,%d,%d", &functionName[0], &modifier, 
+	sscanf(pData, "%[^','],%d,%d,%d,%d,%d,%d", functionName, &modifier, 
 		&body, &armourKinetic,	&armourHeat, &droid, &cyborg);
 
 	//allocate storage for the name
@@ -784,7 +784,7 @@ BOOL loadDroidSensorUpgradeFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d", &functionName[0], &modifier, &range);
+	sscanf(pData, "%[^','],%d,%d", functionName, &modifier, &range);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -833,8 +833,8 @@ BOOL loadWeaponUpgradeFunction(SBYTE *pData)
 	//read the data in
 	functionName[0] = '\0';
 	weaponSubClass[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%d,%d,%d,%d,%d,%d,%d", &functionName[0],
-		&weaponSubClass[0], &firePause, &shortHit, &longHit, &damage, &radiusDamage,
+	sscanf(pData, "%[^','],%[^','],%d,%d,%d,%d,%d,%d,%d", functionName,
+		weaponSubClass, &firePause, &shortHit, &longHit, &damage, &radiusDamage,
 		&incenDamage, &radiusHit);
 
 	//allocate storage for the name
@@ -901,7 +901,7 @@ BOOL loadStructureUpgradeFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d", &functionName[0], &armour, &body, &resistance);
+	sscanf(pData, "%[^','],%d,%d,%d", functionName, &armour, &body, &resistance);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -950,7 +950,7 @@ BOOL loadWallDefenceUpgradeFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d", &functionName[0], &armour, &body);
+	sscanf(pData, "%[^','],%d,%d", functionName, &armour, &body);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -1069,7 +1069,7 @@ BOOL loadPowerGenFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d,%d,%d", &functionName[0], 
+	sscanf(pData, "%[^','],%d,%d,%d,%d,%d,%d", functionName, 
 		&psFunction->powerOutput, &psFunction->powerMultiplier, 
 		&psFunction->criticalMassChance, &psFunction->criticalMassRadius,
 		&psFunction->criticalMassDamage, &psFunction->radiationDecayTime);
@@ -1113,7 +1113,7 @@ BOOL loadResourceFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName[0], &psFunction->maxPower);
+	sscanf(pData, "%[^','],%d", functionName, &psFunction->maxPower);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -1218,7 +1218,7 @@ BOOL loadRepairDroidFunction(SBYTE *pData)
 	
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName[0],
+	sscanf(pData, "%[^','],%d", functionName,
 		&psFunction->repairPoints);
 
 	//allocate storage for the name
@@ -1548,7 +1548,7 @@ BOOL loadWallFunction(SBYTE *pData)
 	//read the data in
 	functionName[0] = '\0';
 	structureName[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%*d", &functionName[0], &structureName[0]);
+	sscanf(pData, "%[^','],%[^','],%*d", functionName, structureName);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);

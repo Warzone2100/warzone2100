@@ -475,7 +475,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 #else	// we definately don't want any of this bollocks on the Playstation thank you very much
 		if (_IMD_VER == 1)
 		{
-			if (sscanf(pFileData,"%s %d %s %d %d%n", buffer, &ptype, &texfile[0], &pwidth, &pheight, &cnt) != 5) 
+			if (sscanf(pFileData,"%s %d %s %d %d%n", buffer, &ptype, texfile, &pwidth, &pheight, &cnt) != 5) 
 			{
 				iV_Error(0xff,"(IMDLoad) file corrupt -C");
 				return NULL;
@@ -535,7 +535,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 			}
 			else if (strcmp(buffer,"NOTEXTURE") == 0)
 			{
-				if (sscanf(pFileData,"%s %d %d%n", &texfile[0], &pwidth, &pheight, &cnt) != 3)
+				if (sscanf(pFileData,"%s %d %d%n", texfile, &pwidth, &pheight, &cnt) != 3)
 				{
 					iV_Error(0xff,"(IMDLoad) file corrupt -H");
 					return NULL;
