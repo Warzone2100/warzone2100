@@ -180,9 +180,10 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	static STRING	sSlots[10][64];
 	STRING			sTemp[255];
 
-#ifndef PSX
-//	WIN32_FIND_DATA	found;	
-//	HANDLE			dir;
+#ifndef PSX		//This is NOT for PSX, it is for windows!
+
+	WIN32_FIND_DATA	found;	
+	HANDLE			dir;
 #endif
 	
 	mode = bLoad;
@@ -463,9 +464,9 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 #ifndef PSX
 void deleteSaveGame(char* saveGameName)
 {
-//	CHAR			sTemp2[MAX_STR_LENGTH],	sToDel[MAX_STR_LENGTH];
-//	WIN32_FIND_DATA	found;	
-//	HANDLE			dir;
+	CHAR			sTemp2[MAX_STR_LENGTH],	sToDel[MAX_STR_LENGTH];
+	WIN32_FIND_DATA	found;	
+	HANDLE			dir;
 
 	ASSERT((strlen(saveGameName) < MAX_STR_LENGTH,"deleteSaveGame; save game name too long"));
 
