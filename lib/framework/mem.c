@@ -34,13 +34,10 @@
 #define SHOW_KB_LIMIT	(0x400)
 
 /* What functions to use for the real malloc and free */
-#ifndef PSX
+
 #define RMALLOC		malloc
 #define RFREE		free
-#else
-#define RMALLOC		malloc3
-#define RFREE		free3
-#endif
+
 
 /* The root of the memory treap */
 static MEM_NODE		*psMemRoot = NULL;
@@ -260,30 +257,11 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 	(void)LineNumber;
 	(void)pFileName;
 
-#ifdef PSX
 
-	#ifdef DEBUG
-
-		if (pFileName==NULL)
-		{
-			DBPRINTF(("No filename passed to mem_Free\n"));
-		}
-
-		if (pMemToFree==NULL)
-		{
-			DBPRINTF(("Attempt to free NULL pointer, called by:\nFile: %s\nLine: %d\n", pFileName, LineNumber));
-			assert(2+2==5);
-			
-		}
-
-	#endif
-	
-
-#else
 	ASSERT(((pFileName != NULL), "No filename passed to mem_Free"));
 	ASSERT(((pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
 								  "File: %s\nLine: %d", pFileName, LineNumber));
-#endif
+
 
 	// see if the pointer was allocated in a block
 	psBlock = blkFind(pMemToFree);
@@ -304,13 +282,7 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psMemRoot,
 										(UDWORD)&sNode, memBlockCmp);
 
-#ifdef PSX
-	if (psDeleted==NULL)
-	  {
-		DBPRINTF(("Invalid pointer passed to mem_Free by:\nFile: %s\nLine: %d\n\nAttempt to free already freed pointer?\n",
-			pFileName, LineNumber));
-	  }
-#endif
+
 	ASSERT((psDeleted != NULL,
 			"Invalid pointer passed to mem_Free by:\n"
 			"File: %s\nLine: %d\n\n"

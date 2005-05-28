@@ -85,12 +85,11 @@
 #include <stdarg.h>
 #include "types.h"
 
-#ifndef PSX
+
 /* Include the mono printing stuff */
 #include "mono.h"
-#else
-#include "printf.h"
-#endif
+
+
 
 /****************************************************************************************
  *
@@ -160,20 +159,9 @@ extern char DBGstring[256];
  * to be used :
  *		DBPRINTF(("Example output string with a variable: %d\n", Variable));
  */
-#ifndef PSX
-#define DBPRINTF(x)				dbg_printf x
-#else
-/*#define DBPRINTF(x) \
-	printf("DBPRINTF @ %s,%d:\n",__FILE__,__LINE__);\
-	printf x;\
-	printf("\n") */
 
-//	#ifdef FINALBUILD
-//		#define DBPRINTF(x);
-//	#else
-		#define DBPRINTF(x) printf x;
-//	#endif
-#endif
+#define DBPRINTF(x)				dbg_printf x
+
 
 /*
  *
@@ -239,13 +227,11 @@ extern char DBGstring[256];
  *
  * Arguments as for printf
  */
-#ifdef PSX
-#define DBERROR(x) printf x; printf("\n...DBERROR in line %d of %s\n",__LINE__,__FILE__);
-#else				   
+			   
 #define DBERROR(x) \
 	dbg_ErrorPosition(__FILE__, __LINE__), \
 	dbg_ErrorBox x
-#endif
+
 
 /****************************************************************************************
  *
@@ -438,11 +424,8 @@ extern char DBGstring[256];
 #else
 
 /* No Debugging output required */
-#ifndef PSX
 #define DBPRINTF(x)
-#else	// currently we want DBPRINTF to work on the PSX even on release build
-#define DBPRINTF(x) printf x;
-#endif
+
 
 #define DBOUTPUTFILE(x)
 #define DBNOOUTPUTFILE()
@@ -460,11 +443,9 @@ extern char DBGstring[256];
 
 
 
-#ifdef PSX
-#define DBERROR(x)	printf x; printf("\n...DBERROR in line %d of %s\n",__LINE__,__FILE__)
-#else				   
+				   
 #define DBERROR(x)	dbg_ErrorBox x
-#endif
+
 
 
 #define DBMONOPRINTF(x)

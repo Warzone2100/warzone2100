@@ -33,11 +33,6 @@
 
 #include "fractions.h"
 
-#ifdef	 PSX
-#include  "CtrlPSX.h"
-#endif
-
-
 #include <assert.h>
 
 #define MAX_CURSORS 26 
@@ -312,10 +307,6 @@ void frameSetCursor(HCURSOR hNewCursor)
 	hCursor = hNewCursor;
 	SetCursor(hCursor);
 }
-
-#ifndef PSX	// not on PSX
-
-
 
 /* Set the current cursor from a Resource ID */
 void frameSetCursorFromRes(WORD resID)
@@ -945,220 +936,10 @@ void frameShutDown(void)
 
 }
 
-#else // ifndef PSX - here are the PSX version of the routines
-
-
-void frameSetCursorFromRes(WORD resID)
-{
-//	SetPSXCursorFrame(resID);
-}
-
-/*
- * frameInitialise
- *
- * Initialise the framework library. - PSX Version
- */
-BOOL frameInitialise(HANDLE hInst,			// The windows application instance
-					 STRING *pWindowName,	// The text to appear in the window title bar
-					 UDWORD	width,			// The display width
-					 UDWORD height,			// The display height
-					 UDWORD bitDepth,		// The display bit depth
-					 BOOL	fullScreen,		// Whether to start full screen or windowed
-					 BOOL	bVidMem,	 	// Whether to put surfaces in video memory
-					 BOOL	bGlide )		// Whether to create surfaces
-{
-	winQuit = FALSE;
-	focusState = FOCUS_IN;
-	focusLast = FOCUS_IN;
-	mouseOn = TRUE;
-	displayMouse = TRUE;
-	hInstance = hInst;
-
-	if (!memInitialise())
-	{
-		return FALSE;
-	}
-
-
-	if (!blkInitialise())
-	{
-		return FALSE;
-	}
-
-	/* Initialise the windows stuff and open a window - windows stuff */
-//	if (!winInitApp(hInstance, pWindowName, width, height))
-//	{
-//		return FALSE;
-//	}
-
-
-
-	/* Initialise the Direct Draw Buffers */
-	if (!screenInitialise(width, height, bitDepth, fullScreen, hWndMain))
-	{
-		return FALSE;
-	}
-
-	/* Initialise the input system */
-//	inputInitialise();
-
-	/* Initialise the frame rate stuff */
-	InitFrameStuff();
-
-
-	/* Initialise the trig stuff ... must go after the PSX hard init (uses SQRT)*/
-	if (!trigInitialise())
-	{
-		return FALSE;
-	}
-
-	// Initialise the resource stuff
-	if (!resInitialise())
-	{
-		return FALSE;
-	}
-
-
-
-
 	return TRUE;
 }
 
 
-
-
-
-/*
- * frameUpdate
- *
- * Call this each cycle to allow the framework to deal with
- * windows messages, and do general house keeping.
- *
- * Returns FRAME_STATUS.
- */
-FRAME_STATUS frameUpdate(void)
-{
-	/* Tell the input system about the start of another frame */
-	inputNewFrame();
-
-	MaintainFrameStuff();
-
-	return NULL;
-}
-
-
-
-void frameShutDown(void)
-{
-}
-
-
-
-#endif
-
-BOOL loadFile(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize)
-{
-	return(loadFile2(pFileName,ppFileData,pFileSize,TRUE));
-}
-
-
-/* Load the file with name pointed to by pFileName into a memory buffer. */
-// if allocate mem is true then the memory is allocated ... else it is already in ppFileData, and the max size is in pFileSize ... this is adjusted to the actual loaded file size
-//   
-BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL AllocateMem )
-{
-	FILE	*pFileHandle;
-	UDWORD FileSize;
-
-	BOOL res;
-
-	// First we try to see if we can load the file from the freedata section of the current WDG
-
-	
-	res=loadFileFromWDG(pFileName, ppFileData, pFileSize,WDG_ALLOCATEMEM);	// loaded from WDG file, and allocate memory for it
-	if (res==TRUE)	return TRUE;
-
-	// Not in WDG so we try to load it the old fashion way !
-	// This will never work on the final build of the PSX because we can *ONLY* load files
-	// directly from CD, i.e. from the WDG's normal fopen/fread calls will never work!
-#ifdef DEBUG
-	DBPRINTF(("FOPEN ! %s\n",pFileName));
- #ifdef PSX_USECD
-	assert(2+2==5);		// no fopens when using CD code !!!
- #endif
-
-#endif
-
-
-#ifdef FINALBUILD
-	return FALSE;
-#endif
-
-// Not needed in a PSX FINALBUILD.
-#if !defined(PSX) || !defined(FINALBUILD)
-	pFileHandle = fopen(pFileName, "rb");
-	if (pFileHandle == NULL)
-	{
-		DBERROR(("Couldn't open %s", pFileName));
-		return FALSE;
-	}
-
-	/* Get the length of the file */
-	if (fseek(pFileHandle, 0, SEEK_END) != 0)
-	{
-		DBERROR(("SEEK_END failed for %s", pFileName));
-		return FALSE;
-	}
-	FileSize = ftell(pFileHandle);
-	if (fseek(pFileHandle, 0, SEEK_SET) != 0)
-	{
-		DBERROR(("SEEK_SET failed for %s", pFileName));
-		return FALSE;
-	}
-
-
-	if (AllocateMem==TRUE)
-	{
-		/* Allocate a buffer to store the data and a terminating zero */
-// we don't want this popping up in the tools (makewdg)
-//		DBPRINTF(("#############FILELOAD MALLOC - size=%d\n",(FileSize)+1));
-		*ppFileData = (UBYTE *)MALLOC((FileSize) + 1);
-		if (*ppFileData == NULL)
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}
-	}
-	else
-	{
-		if (FileSize > *pFileSize)
-		{
-			DBERROR(("no room for file"));
-			return FALSE;
-		}
-		assert(*ppFileData!=NULL);
-	}
-	/* Load the file data */
-	if (fread(*ppFileData, 1, FileSize, pFileHandle) != FileSize)
-	{
-		DBERROR(("Read failed for %s", pFileName));
-		return FALSE;
-	}
-
-	if (fclose(pFileHandle) != 0)
-	{
-		DBERROR(("Close failed for %s", pFileName));
-		return FALSE;
-	}
-
-	// Add the terminating zero
-	*((*ppFileData) + FileSize) = 0;
-	*pFileSize=FileSize;	// always set to correct size
-#endif
-	return TRUE;
-}
-
-#ifndef PSX
 
 // load a file from disk into a fixed memory buffer
 BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
@@ -1280,7 +1061,7 @@ BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 	return TRUE;
 #endif
 }
-#endif
+
 
 
 
@@ -1299,11 +1080,8 @@ BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize)
 
 	if (fwrite(pFileData, fileSize, 1, pFile) != 1)
 	{
-#ifndef PSX	// ffs
 		DBERROR(("Write failed for %s: %s", pFileName, winErrorToString(GetLastError()) ));
-#else
-		DBERROR(("Write failed for %s", pFileName ));
-#endif	
+	
 		return FALSE;
 	}
 

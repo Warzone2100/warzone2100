@@ -14,8 +14,6 @@
 #endif
 
 /* Linux specific stuff */
-
-#ifndef PSX
 #ifndef WIN32
 
 #include <ctype.h>
@@ -30,23 +28,13 @@ FILE* unix_fopen(char* filename, char* mode);
 #define fopen unix_fopen
 
 #endif
-#endif
+
 
 #define InitializeCriticalSection(x)
 #define DeleteCriticalSection(x)
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
 
-#ifdef PSX		// If Playstation version then compile lean version.
-
-#ifdef FINALBUILD
-#define scrv_error(a...) ;	// don't want the yackky errors on final version
-#endif
-
-#define FRAMEWORK_LEAN_AND_MEAN
-#include "cfunc.h"	// redefines memset & cpy to fast version - calls cfunc.lib
-#include "printf.h"	// in framepsx
-#endif
 
 #include "types.h"
 #include "debug.h"
@@ -171,7 +159,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 /* Save the data in the buffer into the given file */
 extern BOOL saveFile(STRING *pFileName, UBYTE *pFileData, UDWORD fileSize);
 
-#ifndef PSX
+
 // load a file from disk into a fixed memory buffer
 extern BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 // as above but returns quietly if no file found
@@ -180,7 +168,7 @@ extern BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWOR
 extern SDWORD ftol(float f);
 extern BOOL	bRunningUnderGlide;
 
-#endif
+
 
 UINT HashString( char *String );
 UINT HashStringIgnoreCase( char *String );

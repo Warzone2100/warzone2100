@@ -66,7 +66,7 @@ static SDWORD			dragX, dragY;
 /* The current mouse button state */
 static KEY_STATE aMouseState[3];
 
-#ifndef PSX
+
 /* The size of the input buffer */
 #define INPUT_MAXSTR	512
 
@@ -176,7 +176,7 @@ UDWORD inputGetKey(void)
 
 	return retVal;
 }
-#endif
+
 /* Deal with windows messages to maintain the state of the keyboard and mouse */
 void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -237,14 +237,10 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		if (repeat > 0)
 		{
-#ifdef PSX
-			DBPRINTF(("WM_KEYDOWN %x %x\n",vk,repeat));
-#endif
 
-#ifndef PSX
 			DBP1(("Code: %x\n", vk));
 			inputAddBuffer(vk, repeat);
-#endif
+
 		}
 
 
@@ -252,10 +248,6 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 		/* NO BREAK HERE as keydown gives normal key presses as well */
 		/*************************************************************/
 	case WM_SYSKEYDOWN:
-
-#ifdef PSX
-		DBPRINTF(("WM_KEYDOWN %d\n",code));
-#endif
 
 		if ((aKeyState[code] == KEY_UP) ||
 			(aKeyState[code] == KEY_RELEASED) ||
@@ -291,10 +283,6 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 	   */
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
-
-#ifdef PSX
-		DBPRINTF(("WM_KEYUP %d\n",code));
-#endif
 
 		if (aKeyState[code] == KEY_PRESSED)
 		{
@@ -449,12 +437,10 @@ void inputProcessMessages(UINT message, WPARAM wParam, LPARAM lParam)
 		repeat = lParam & 0xf;
 		/* Store the repeat count number of characters
 		   while there is space in the buffer */
-#ifndef PSX
+
 		inputAddBuffer(wParam, repeat);
-#endif
-#ifdef PSX
-		DBPRINTF(("WM_CHAR  %d %d\n",wParam,repeat));
-#endif
+
+
 		break;
 	default:
 		break;
@@ -469,7 +455,6 @@ void inputNewFrame(void)
 {
 	UDWORD i;
 
-#ifndef PSX
 	/* Do the keyboard */
 	for (i=0; i< KEY_MAXSCAN; i++)
 	{
@@ -483,13 +468,7 @@ void inputNewFrame(void)
 			aKeyState[i] = KEY_UP;
 		}
 	}
-#else
-	/* Do the keyboard */
-	for (i=0; i< KEY_MAXSCAN; i++)
-	{
-		aKeyState[i] = KEY_UP;
-	}
-#endif
+
 
 	/* Do the mouse */
 	for(i=0; i<3; i++)

@@ -66,11 +66,6 @@ static void heapCreateFreeList(OBJ_HEAP *psHeap)
 	HEAP_EXTENSION	*psExt;
 
 
-#ifdef PSX
-	assert((size&3) == 0);	// The size MUST be on a 4 byte boundry
-#endif
-
-
 	// Set up the main memory block
 #if DEBUG_HEAP
 	// Initialise the memory to a fixed value to check for memory overwrites
@@ -244,11 +239,6 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 	{
 		if (psHeap->extAlloc == 0)
 		{
-#ifdef PSX
- #ifdef DEBUG
-			prnt(1,"Heap Full\n",0,0);
- #endif
-#endif
 			// heap doesn't expand
 #if DEBUG_HEAP && COPY_FILE_STRING
 			FREE(pCFile);
@@ -259,28 +249,22 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 		/* No objects left - need to add a heap extension */
 		psCurrBlk = memGetBlockHeap();
 		memSetBlockHeap(psHeap->psBlkHeap);
-#ifdef PSX
-		prnt(1,"Heap Extended\n",0,0);
-#else
+
  #if DEBUG_HEAP
 		DBPRINTF(("Heap %s, line %d extended. Max use: %d\n", psHeap->pFile, psHeap->line, psHeap->maxUsage));
  #endif
-#endif
+
 		psNew = (HEAP_EXTENSION *)MALLOC(sizeof(HEAP_EXTENSION));
 		if (psNew == NULL)
 		{
-#ifdef PSX
-			prnt(1,"OOM (ha2)\n",0,0);
-#endif
+
 			/* Out of memory */
 			return FALSE;
 		}
 		psNew->pMemory = (UBYTE *)MALLOC(psHeap->objSize * psHeap->extAlloc);
 		if (psNew->pMemory == NULL)
 		{
-#ifdef PSX
-			prnt(1,"OOM (ha3)\n",0,0);
-#endif
+
 			/* Out of memory */
 			FREE(psNew);
 			return FALSE;

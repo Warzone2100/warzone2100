@@ -8,9 +8,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#ifdef PSX
-#include <libsn.h>
-#endif
 
 #ifdef WIN32
 #pragma warning (disable : 4201 4214 4115 4514)
@@ -22,11 +19,6 @@
 
 #include "frame.h"
 #include "frameint.h"
-
-#ifdef PSX
-char DBGstring[256];
-#endif
-
 
 
 #define DEBUG_STR_MAX 1000  // Maximum length of a debugging output string

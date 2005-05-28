@@ -5,7 +5,7 @@
  *
  */
 
-#ifndef PSX
+
 
 #include <stdio.h>
 #include <string.h>
@@ -487,4 +487,4 @@ static UBYTE	DBug_CheckFormatChar(UBYTE	ub_percentchar)
 	return (ub_isformatchar);
 }
 
-#endif
+

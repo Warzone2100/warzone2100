@@ -35,7 +35,7 @@ extern HANDLE		hWndMain;
 
 /* Initialise the double buffered display */
 
-#ifndef PSX
+
 extern BOOL screenInitialise(UDWORD		width,			// Display width
 							 UDWORD		height,			// Display height
 							 UDWORD		bitDepth,		// Display bit depth
@@ -47,17 +47,10 @@ extern BOOL screenInitialise(UDWORD		width,			// Display width
 							 HANDLE		hWindow);		// The main windows handle
 
 
-#else
-							 // ffs js
-extern BOOL screenInitialise(UDWORD		width,			// Display width
-							 UDWORD		height,			// Display height
-							 UDWORD		bitDepth,		// Display bit depth
-							 BOOL		fullScreen,		// Whether to start windowed
-														// or full screen.
-							 HANDLE		hWindow);		// The main windows handle
 
 
-#endif
+
+
 
 /* Release the DD objects */
 extern void screenShutDown(void);
@@ -139,13 +132,13 @@ typedef enum _flip_state
 } FLIP_STATE;
 extern FLIP_STATE	screenFlipState;
 
-#ifndef PSX
+
 // The critical section for the screen flipping
 extern CRITICAL_SECTION sScreenFlipCritical;
 
 // The semaphore for the screen flipping
 extern HANDLE	hScreenFlipSemaphore;
-#endif
+
 
 #endif
 

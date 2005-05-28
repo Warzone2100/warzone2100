@@ -9,11 +9,9 @@
 
 /* The size of saftey buffer to leave before and after any malloc'ed memory.
    Can use this to check writing over end of buffers */
-#ifndef PSX
+
 #define SAFETY_ZONE_SIZE	(32)
-#else
-#define SAFETY_ZONE_SIZE	(8)	// 32 is just too big an overhead for the PSX ... every allocation adds *2 this amount... When we were allocating lots of little amounts (e.g. 4 bytes) it was getting a bit silly
-#endif
+
 
 /* The character used to initialise malloc'ed memory, or to trash memory before
    freeing it */

@@ -29,7 +29,7 @@
 
 /* Linux specific stuff */
 
-#ifndef PSX
+
 #ifndef WIN32
 
 #undef fopen
@@ -60,7 +60,7 @@ FILE* unix_fopen(char* filename, char* mode) {
 #define fopen unix_fopen
 
 #endif
-#endif
+
 
 
 /* Handle for the main window */

@@ -19,22 +19,13 @@
 #include "wdg.h"
 #include "multiwdg.h"
 
-#ifdef PSX
-#include "cdpsx.h"
-#include "file_psx.h"
-#endif
 
 /** local definitions **/
 
-#ifdef PSX
+// Note the below was commented out, and I guess never used? -Q
 //#define	PRIMCATALOG		// define this if we want to use the primative buffer to store the wdg catalogs - frees up 29k (!)
-#else
-//#define	PRIMCATALOG		// define this if we want to use the primative buffer to store the wdg catalogs - frees up 29k (!)
-#endif
 
 
-
-#ifndef PSX_USECD
 
 #define MAX_STR (256)
 
@@ -49,18 +40,6 @@ int freadpos(UDWORD filepos,UBYTE *buffer, UDWORD bytescount, FILE *handle)
 	fseek(handle,filepos,SEEK_SET);
 	return (fread(buffer,1,bytescount,handle));
 }
-
-#else
-// This is for PSX CD code only 
-typedef UDWORD DISK_FILE;		// this isn't used !
-
-#define DISK_OpenFile(name)								OpenCDfile(name)
-#define DISK_ReadPos(filepos,buffer,bytecount,handle)	ReadCDdata(filepos,buffer,bytecount)	
-#define DISK_Close(handle)								CloseCDfile()
-
-#define MAX_STR (32)
-#endif
-
 
 
 /* default settings */
@@ -491,14 +470,7 @@ BOOL WDG_ProcessWRF(char *WRFname,BOOL UseDataFromWDG )
 
 		UBYTE *pRetreivedFile;
 
-#ifdef PSX
-extern UDWORD MouseIn2;
 
-	if (MouseIn2 == 1)
-	{
-		zrintf("file =%d",File);
-	}
-#endif
 		CurrentFile = WRFfilesCatalog + File;
 
 		if (CurrentFile->offset == UDWORD_MAX)
@@ -663,27 +635,14 @@ BOOL FILE_InitialiseCache(SDWORD CacheSize)
 	}
 	else if (CacheSize==0)
 	{
-#ifdef PSX
-		UDWORD BufferUsed;
-#endif
+
 
 		UBYTE *CacheStart = NULL;
 		UDWORD CacheSize = 0;
 
 		Cache.IsCacheDataMalloced=FALSE;
 
-#ifdef PSX
 
-	// Calculate where the cache is on the playstation
-		BufferUsed=GetPrimBufferAllocatedSize();
-		DBPRINTF(("InitialiseCache - %d bytes already allocated in the primative buffer\n",BufferUsed));
-
-
-		GetPrimBufferMem(&CacheStart, &CacheSize);
-		// adjust the values by the amount allocated
-		CacheStart+=BufferUsed;
-		CacheSize-=BufferUsed;
-#endif
 
 // if we are loading the catalog data from the primative buffer add in the size and setup the pointers now
 #ifdef	PRIMCATALOG
@@ -1018,86 +977,6 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 //	char name[32];
 //	UDWORD pos;
 
-/*	THIS IS ALL DONE BY THE MULTIWDG STUFF NOW - JOHN
-
-	if (CurrentWDGname[0]==0) return FALSE;			// no wdg open
-
-	DBPRINTF(("loadfilefromwdg = %s %d\n",pFileName,MemAllocationMode));
-
-//	prnt(1,pFileName,0,0);
-
-	// if the cache has become invalid then reload it
-	//
-	// The cache also holds the wrf/wdg catalog infomation ... this needs to be reloaded before we can continue to load a wrf
-	if ( FILE_IsCatalogValid()==FALSE)
-	{
-////#ifdef PSX
-//		prnt(1,"RELOADING CATALOG INFOMATION !! \n",0,0);
-//#endif
-		FILE_RestoreCache();
-	}
-
-
-	FoundWRF=CheckCurrentWDGforWRF("MISCDATA",&CurrentWRF);
-
-	if (FoundWRF==FALSE)
-	{
-	
-		// There is no MISCDATA section in the current WDG
-		return FALSE;
-	}
-
-
-	// Now read in the catalog for the MISCDATA section
-	// If it's already loaded then we shouldn't really re-load it  ... but what the fuck it's saturday
-	pFileHandle=DISK_OpenFile(CurrentWDGname);	// tries to open the WDG on the HD (pc) or CD  (psx)
-	if (pFileHandle==NULL)
-	{
-		DBPRINTF(("WDG_ProcessWRF unable to open %s\n",CurrentWDGname));
-		return FALSE;	
-	}
-
-	CatalogLoadedOK=LoadWRFCatalog(CurrentWRF,pFileHandle);
-	if (CatalogLoadedOK==FALSE)
-	{
-		DISK_Close(pFileHandle);
-		return FALSE;			// error ... problem loading WRF catalog
-	}
-
-
-	
-	// Generate the Hash value for the required file
-	RequiredFileHash=HashStringIgnoreCase(pFileName);
-	
-	// Now we'll just go through all the files in the MISCDATA section looking for the required file
-	FoundFileInWRF=FALSE;
-#ifdef PRIMCATALOG
-	assert(PrimBufferCatalog);	// make sure the cache is valid
-	assert(PrimBufferCatalog->Check1==CHECK1);
-	assert(PrimBufferCatalog->Check2==CHECK2);
-	CurrentFile=PrimBufferCatalog->primWRFfilesCatalog;	// Start at the begining of the catalog
-#else
-	CurrentFile=WRFfilesCatalog;	// Start at the begining of the catalog
-#endif
-
-	for (File=0;File<CurrentWRF->filecount;File++)
-	{
-		if (CurrentFile->name==RequiredFileHash)
-		{
-			FoundFileInWRF=TRUE;
-			break;
-		}
-
-		CurrentFile++;		
-	}
-
-	if (FoundFileInWRF==FALSE)
-	{
-		// The file we want is not stored in the MISCDATA section of the WDG
-		DISK_Close(pFileHandle);
-		return FALSE;
-	}
-	THIS IS ALL DONE BY THE MULTIWDG STUFF NOW - JOHN */
 
 	// get the file offset from the find file structure
 	CurrentWRF = psFindFile->psCurrCache->asWRFCatalog + psFindFile->currWRFIndex;

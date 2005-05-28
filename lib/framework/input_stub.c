@@ -58,7 +58,7 @@ static SDWORD			dragX, dragY;
 /* The current mouse button state */
 static KEY_STATE aMouseState[3];
 
-#ifndef PSX
+
 /* The size of the input buffer */
 #define INPUT_MAXSTR	512
 
@@ -201,7 +201,7 @@ char inputGetCharKey(void) {
 	return currentChar;
 }
 
-#endif
+
 
 /* Deal with windows messages to maintain the state of the keyboard and mouse */
 void inputProcessEvent(SDL_Event *event)
@@ -252,11 +252,9 @@ void inputProcessEvent(SDL_Event *event)
 			}
 
 			{
-#ifdef PSX
-				DBPRINTF(("WM_KEYDOWN %x %x\n", vk, 1));
-#endif
 
-#ifndef PSX
+
+
 				DBP1(("Code: %x\n", vk));
 
 				unsigned char char_code = event->key.keysym.unicode;
@@ -266,7 +264,7 @@ void inputProcessEvent(SDL_Event *event)
 					char_code = 0;
 				}
 				inputAddBuffer(vk, char_code, 1);
-#endif
+
 			}
 
 			code = sdlKeyToKeyCode(event->key.keysym.sym);
@@ -434,7 +432,7 @@ void inputNewFrame(void)
 {
 	UDWORD i;
 
-#ifndef PSX
+
 	/* Do the keyboard */
 	for (i=0; i< KEY_MAXSCAN; i++)
 	{
@@ -448,13 +446,7 @@ void inputNewFrame(void)
 			aKeyState[i] = KEY_UP;
 		}
 	}
-#else
-	/* Do the keyboard */
-	for (i=0; i< KEY_MAXSCAN; i++)
-	{
-		aKeyState[i] = KEY_UP;
-	}
-#endif
+
 
 	/* Do the mouse */
 	for(i=0; i<3; i++)

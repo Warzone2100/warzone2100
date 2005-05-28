@@ -10,11 +10,8 @@
 #include "frame.h"
 #include "frameint.h"
 
-#ifdef PSX
-#include "utils.h"	// prototypes for GetWord()
-#endif
 
-#ifndef PSX
+
 
 /* The header on a font file */
 typedef struct _font_savehdr
@@ -149,15 +146,10 @@ void fontPrint(SDWORD x, SDWORD y, STRING *pFormat, ...)
 	PROP_CHAR	*psChar;
 
 
-#ifndef PSX
+
 	va_start(pArgs, pFormat);
 	vsprintf(aTxtBuff, pFormat, pArgs);
-#else
-	strcpy(aTxtBuff,pFormat);	// playstation does not support parameters
 
-//	fontSet(psWFont);	// always use this font on playstation
-
-#endif
 
 	ASSERT((PTRVALID(psCurrFont, sizeof(PROP_FONT)),
 		"fontPrint: Invalid font pointer"));
@@ -556,13 +548,9 @@ BOOL fontLoad(UBYTE *pFileData, UDWORD fileSize, PROP_FONT **ppsFont)
 		psLoadC = (PROP_CHAR *)pLoad;
 
 		// These are word width ... accessed on a odd-byte boundry ... the Playstation does not like this at all ... so we have to write special code
-#ifndef PSX
 		psCurrC->width = psLoadC->width;
 		psCurrC->pitch = psLoadC->pitch;
-#else
-		psCurrC->width = GetWord(&psLoadC->width);
-		psCurrC->pitch = GetWord(&psLoadC->pitch);
-#endif
+
 
 //		DBPRINTF(("(%dof%d) font data size %d\n",	i,(*ppsFont)->numChars,(*ppsFont)->height * psCurrC->pitch));
 		psCurrC->pData = (UBYTE *)MALLOC((*ppsFont)->height * psCurrC->pitch);
@@ -637,7 +625,7 @@ void fontFree(PROP_FONT *psFont)
 }
 
 
-#ifndef PSX		// don't want this on the psx
+
 UBYTE aFontData[PRINTABLE_CHARS][FONT_HEIGHT] =
 {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, },
@@ -739,6 +727,6 @@ UBYTE aFontData[PRINTABLE_CHARS][FONT_HEIGHT] =
 	{ 0x00, 0x00, 0x8e, 0xdb, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, },
 	{ 0x00, 0x00, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, },
 };
-#endif
 
-#endif
+
+

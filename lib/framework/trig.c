@@ -26,35 +26,25 @@
 #define SQRT_ACCBITS	12
 
 /* The trig functions */
-#ifndef PSX
 #define SINFUNC		(FRACT)sin
 #define COSFUNC		(FRACT)cos
 #define ASINFUNC	(FRACT)asin
 #define ACOSFUNC	(FRACT)acos
-#else
-// for PSX
-#define SINFUNC		_mathstub
-#define COSFUNC		_mathstub
-#define ASINFUNC	_mathstub
-#define ACOSFUNC	_mathstub
 
-FRACT ArcCos(FRACT Input);
 
-#endif
 
-#ifndef PSX
 static FRACT	*aSin;
 static FRACT	*aCos;
 static FRACT	*aInvCos;
 /* Square root table - not needed on PSX cos there is a fast hardware sqrt */
 static FRACT	*aSqrt;
 static FRACT	*aInvSin;
-#endif
+
 
 /* Initialise the Trig tables */
 BOOL trigInitialise(void)
 {
-#ifndef PSX
+
 	FRACT	val, inc;
 	UDWORD	count;
 
@@ -120,11 +110,7 @@ BOOL trigInitialise(void)
 //#endif
 
 
-#else
 
-
-
-#endif
 	return TRUE;
 }
 
@@ -132,88 +118,16 @@ BOOL trigInitialise(void)
 /* Shutdown the trig tables */
 void trigShutDown(void)
 {
-#ifndef PSX
+
 	FREE(aSin);
 	FREE(aCos);
 	FREE(aInvSin);
 	FREE(aInvCos);
 	FREE(aSqrt);
-#endif
-}
 
-#ifdef PSX
-
-#define angle_WORLD2PSX(ang) ((((ang)%360)*4096)/360)
-#define angle_PSX2WORLD(ang) ((((ang)%4096)*360)/4096)
-
-
-FRACT trigSin(SDWORD angle)
-{
-	return(rsin(angle_WORLD2PSX(angle)));
-}
-
-FRACT trigCos(SDWORD angle)
-{
-	return(rcos(angle_WORLD2PSX(angle)));
 }
 
 
-FRACT trigInvSin(FRACT val)
-{
-	assert(FALSE);
-	return(0);
-}
-
-
-FRACT trigInvCos(FRACT val)
-{
-
-	if (val>=0) return ArcCos(val);
-
-	return (MAKEFRACT(180) - ArcCos(-val));
-	
-
-/*
-	SDWORD index;
-
-	index = MAKEINT(FRACTmul(val, MAKEFRACT((TRIG_ACCURACY-1)/2)))
-				+ (TRIG_ACCURACY-1)/2;
-
-	return aInvCos[index & TRIG_ACCMASK];
-*/
-}
-
-
-
-
-// Okay, Many thanks to our resedant maths wizard Jeremey.
-//
-//
-//  invcos(val)  =   invtan( ( SQRT(1-(VAL*VAL))  ) / (VAL) )
-/*
-FRACT CALCtrigInvCos(FRACT val)
-{
-
-	FRACT ValSq,a,b,c;
-
-	if(val==0) return(MAKEFRACT(90));
-
-	ValSq=FRACTmul(val,val);
-	a=MAKEFRACT(1) - ValSq;
-	b=fSQRT(a);
-	c=FRACTdiv(b,val);
-	if (c==0)
-	{
-		return(MAKEFRACT(90));
-		  
-	}
-	else
-	{
-		return(angle_PSX2WORLD(catan(c)));  
-	}
-}
-*/
-#else
 
 /* Access the trig tables */
 FRACT trigSin(SDWORD angle)
@@ -264,20 +178,19 @@ FRACT trigInvCos(FRACT val)
 }
 
 
-#endif
+
 /* Fast lookup sqrt */
 FRACT trigIntSqrt(UDWORD val)
 {
-#ifndef PSX
+
 	UDWORD	exp, mask;
-#endif
+
 
 	if (val == 0)
 	{
 		return FRACTCONST(0,1);
 	}
 
-#ifndef PSX
 	// find the exponent of the number
 	mask = 0x80000000;		// set the msb in the mask
 	for(exp=32; exp!=0; exp--)
@@ -310,14 +223,7 @@ FRACT trigIntSqrt(UDWORD val)
 	ASSERT((val < SQRT_ACCURACY,
 		"trigIntSqrt: aargh - table index out of range"));
 	return aSqrt[val] * (FRACT)((UDWORD)1 << ((UDWORD)exp/2));
-#else
 
-// ffs - jeremy if you touch psx only code again, I will break your legs
-//	return(fSQRT(val));		// is this ok ? or does iSQRT really return a UDWORD ?
-
-	return(MAKEFRACT(iSQRT(val)));		// is this ok ? or does iSQRT really return a UDWORD ?
-
-#endif
 }
 
 
@@ -329,49 +235,7 @@ FRACT trigIntSqrt(UDWORD val)
 
 /* */
 
-#ifdef PSX
 
-UDWORD ArcCosTab[DIVCNT+1]=
-{
-	0x5a000,0x58358,0x566aa,0x549ee,0x52d1b,0x5102b,0x4f316,0x4d5d4,
-	0x4b85c,0x49aa4,0x47ca4,0x45e4f,0x43f9c,0x4207d,0x400e3,0x3e0bf,
-	0x3c000,0x39e8f,0x37c56,0x35939,0x33515,0x30fc4,0x2e914,0x2c0c7,
-	0x2968d,0x269ff,0x23a8b,0x20763,0x1cf47,0x19020,0x145d3,0xe5c8,0
-};
-
-
-
-FRACT ArcCos(FRACT Input)
-{
-	FRACT Ratio;
-	FRACT X1;
-	FRACT	Theta1 ,Theta2;
-	FRACT Theta,value;
-	FRACT *pTab;
-
-	assert(Input>=0);
-	assert(Input<=4096);
-
-
-	X1 = Input /ARCGAP;			 // first table entry
-	Ratio = (((Input & ARCMASK)*4096)/ARCGAP);
-
-	pTab=(ArcCosTab+X1);
-
-	Theta1=*pTab++;
-	Theta2=*pTab;
-
-	if (Ratio==0) return Theta1;
-
-	value=FRACTmul(Ratio , (Theta1-Theta2));
-
-	Theta= Theta1 - value;
-
-	return Theta;
-
-}
-
-#endif
 
 
 

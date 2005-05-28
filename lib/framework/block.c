@@ -27,13 +27,10 @@
 #include "block.h"
 
 /* What functions to use for the real malloc and free */
-#ifndef PSX
+
 #define RMALLOC		malloc
 #define RFREE		free
-#else
-#define RMALLOC		malloc3
-#define RFREE		free3	         
-#endif
+
 
 /* Whether allocated memory is initialised to a value and whether the memory
  * is trashed before it is freed.
@@ -102,14 +99,6 @@ BOOL blkCreate(BLOCK_HEAP **ppsHeap, SDWORD init, SDWORD ext)
 	(*ppsHeap)->psBlocks->pMem = RMALLOC(init);
 	if (!(*ppsHeap)->psBlocks->pMem)
 	{
-#ifdef PSX
-#ifdef FINALBUILD
-	char buf[32];
-	sprintf(buf,"block nomem -%d\n",init);
-	prnt(1,buf,0,0);	// out of mem in block area ... increase in init.c
-#endif
-		DBPRINTF(("block nomem -%d\n",init));
-#endif
 
 		DBERROR(("blkCreate: Out of memory"));
 		return FALSE;
@@ -187,43 +176,7 @@ void blkPrintDetails(BLOCK_HEAP *psHeap)
 void blkReport(void)
 {
 
-#ifdef PSX
-#ifdef FINALBUILD
-{	 
-	BLOCK_HEAP *psCurHeap;
-	char	Buffer[256];
-	psCurHeap=psBlockList;
 
-	sprintf(Buffer,"BlockReport (MISSIONBLOCK) -used %d of %d\n",
-		((UDWORD)psCurHeap->psBlocks->pFree)-
-		(UDWORD)psCurHeap->psBlocks->pMem,
-		psCurHeap->psBlocks->size
-				);	// out of mem in block area ... increase in init.c
-	prnt(1,Buffer,0,0);
-
-	psCurHeap=psCurHeap->psNext;
-
-	sprintf(Buffer,"BlockReport (MAPBLOCK) -used %d of %d\n",
-		((UDWORD)psCurHeap->psBlocks->pFree)-
-		(UDWORD)psCurHeap->psBlocks->pMem,
-		psCurHeap->psBlocks->size
-				);	// out of mem in block area ... increase in init.c
-	prnt(1,Buffer,0,0);
-
-	psCurHeap=psCurHeap->psNext;
-
-	sprintf(Buffer,"BlockReport (GAMEBLOCK) -used %d of %d\n",
-		((UDWORD)psCurHeap->psBlocks->pFree)-
-		(UDWORD)psCurHeap->psBlocks->pMem,
-		psCurHeap->psBlocks->size
-				);	// out of mem in block area ... increase in init.c
-	prnt(1,Buffer,0,0);
-
-
-
-}	
-#endif
-#endif
 	
 #ifdef DEBUG
 	UDWORD BlockNumber=0;
@@ -346,12 +299,10 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 		if (!psNew)
 		{
 			ASSERT((FALSE, "blkAlloc: warning out of memory"));
-#ifdef PSX			// need to force an error message here !!!
-			goto NoMemChk;
-#else
+
 			// Out of memory
 			return NULL;
-#endif
+
 		}
 		if (size < psHeap->ext)
 		{
@@ -385,12 +336,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 	if (!pAlloc)
 	{
 		// failed to allocate the memory
-#ifdef PSX
 
-
-		DBPRINTF(("[%s - %d] %d bytes\n",pCallFileName,callLine, size));
-		blkReport();
-#endif
 		ASSERT((FALSE, "Warning: malloc returning NULL - [%s - %d] %d bytes",pCallFileName,callLine, size));
 		return NULL;
 	}
@@ -428,19 +374,6 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 ///* - error trapping an out-of-mem allocation !!!
 
 //NoMemChk:
-#ifdef PSX
-#ifdef FINALBUILD
-	if (pAlloc==NULL)
-	{
-		char buf[32];
-		sprintf(buf,"BlockOutOfMem (%d)(%d)\n",size,psHeap->init);
-		prnt(1,buf,0,0);	// out of mem in block area ... increase in init.c
-		blkReport();
-	}
-#endif
-#endif
-
-
 	return pAlloc;
 }
 //*/
@@ -471,13 +404,6 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 	/* Get the node for the memory block */
 	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psHeap->psMemTreap,
 										(UDWORD)&sNode, memBlockCmp);
-#ifdef PSX
-	if (psDeleted==NULL)
-	  {
-		DBPRINTF(("Invalid pointer passed to blkFree by:\nFile: %s\nLine: %d\n\nAttempt to free already freed pointer?\n",
-			pCallFileName, callLine));
-	  }
-#endif
 	ASSERT((psDeleted != NULL,
 			"Invalid pointer passed to mem_Free by:\n"
 			"File: %s\nLine: %d\n\n"
@@ -499,18 +425,7 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 				InvalidTop++;
 			}
 		}
-#ifdef PSX
-	if (!(!InvalidBottom && !InvalidTop)) {
-		DBPRINTF(("Safety zone on memory overwritten.\n"
-				"%d Invalid bytes (of %d) found below memory buffer.\n"
-				"%d Invalid bytes (of %d) found above memory buffer.\n\n",
-				InvalidBottom, SAFETY_ZONE_SIZE, InvalidTop, SAFETY_ZONE_SIZE));
-		DBPRINTF(("Memory allocated by:\nFile: %s\nLine: %d\n"
-				"Memory freed by:\nFile: %s\nLine: %d\n\n",
-				psDeleted->pFile, psDeleted->line,
-				pCallFileName, callLine));
-	}
-#endif
+
 		ASSERT(( !InvalidBottom && !InvalidTop,
 				"Safety zone on memory overwritten.\n"
 				"%d Invalid bytes (of %d) found below memory buffer.\n"
