@@ -1,4 +1,3 @@
-#ifndef PSX
 /*
  * loadsave.c
  * load and save Popup screens.
@@ -17,7 +16,6 @@
 #include "rendmode.h"		// for boxfill
 #include "hci.h"
 #include "loadsave.h"
-#ifndef PSX
 #include "multiplay.h"
 #include "game.h"
 #include "audio_id.h"
@@ -30,19 +28,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
-#endif
 #include "netplay.h"
 #include "loop.h"
 #include "intdisplay.h"
 #include "text.h"
 #include "mission.h"
 #include "gtime.h"
-#ifdef PSX
-#include "primatives.h"
-#include "csnap.h"
-#include "dcache.h"
-extern CURSORSNAP InterfaceSnap;
-#endif
+
 
 // ////////////////////////////////////////////////////////////////////////////
 #define LOADSAVE_X				130	+ D_W
@@ -52,15 +44,11 @@ extern CURSORSNAP InterfaceSnap;
 
 #define MAX_SAVE_NAME			60
 
-#ifndef PSX
+
 #define LOADSAVE_HGAP			5
 #define LOADSAVE_VGAP			5
 #define LOADSAVE_BANNER_DEPTH	25
-#else
-#define LOADSAVE_HGAP			(4+22)
-#define LOADSAVE_VGAP			4
-#define LOADSAVE_BANNER_DEPTH	24
-#endif
+
 
 #define LOADENTRY_W				(LOADSAVE_W -(3 * LOADSAVE_HGAP)) /2
 #define LOADENTRY_H				(LOADSAVE_H -(6 * LOADSAVE_VGAP )- (LOADSAVE_BANNER_DEPTH+LOADSAVE_VGAP) ) /5
@@ -102,9 +90,6 @@ LOADSAVE_MODE		bLoadSaveMode;
 static CHAR			sPath[255];
 static CHAR			sExt[4];
 
-#ifdef PSX
-void displayHilightPulseBox(SWORD x0,SWORD y0,SWORD x1,SWORD y1);	// defined in frontend.c
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -143,29 +128,6 @@ BOOL bLoad;
 		break;
 	}
 
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL _bLoad;
-		static CHAR *_sSearchPath;
-		static CHAR *_sExtension;
-		static CHAR *_title;
-		static BOOL ret;
-
-		_bLoad = bLoad;
-		_sSearchPath = sSearchPath;
-		_sExtension = sExtension;
-		_title = title;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _addLoadSave(bLoad,sSearchPath,sExtension,title);
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
-
 	return _addLoadSave(bLoad,sSearchPath,sExtension,title);
 }
 
@@ -188,7 +150,6 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	
 	mode = bLoad;
 
-#ifndef PSX
 	if(GetCurrentDirectory(255,(char*)&sTemp) == 0)
 	{
 		return FALSE;										// failed, directory probably didn't exist.
@@ -230,13 +191,9 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	}
 
 	CreateDirectory(sSearchPath,NULL);			// create the directory required... fails if already there, so no problem.
-#endif
+
 	widgCreateScreen(&psRequestScreen);			// init the screen.
 	widgSetTipFont(psRequestScreen,WFont);
-#ifdef PSX
-	DisableCursorSnapsExcept(LOADSAVE_FORM);
-	WidgSetOTIndex(OT2D_FORE);
-#endif
 
 	/* add a form to place the tabbed form on */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -263,9 +220,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	sFormInit.pUserData = (VOID *)bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	// Add Banner Label
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 	sLabInit.formID = LOADSAVE_BANNER;
@@ -282,21 +237,13 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 
 	// add cancel.
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
-#ifndef PSX
 	sButInit.formID = LOADSAVE_BANNER;
 	sButInit.x = 4;
 	sButInit.y = 3;
 	sButInit.width		= iV_GetImageWidth(IntImages,IMAGE_NRUTER);
 	sButInit.height		= iV_GetImageHeight(IntImages,IMAGE_NRUTER);
 	sButInit.pUserData	= (void*)PACKDWORD_TRI(0,IMAGE_NRUTER , IMAGE_NRUTER);
-#else
-	sButInit.formID = LOADSAVE_FORM;
-	sButInit.x = 6;
-	sButInit.y = 6;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-#endif
+
 	sButInit.id = LOADSAVE_CANCEL;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
@@ -337,7 +284,6 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	slotCount = 0;
 
 	sprintf(sTemp,"%s*.%s",sSearchPath,sExtension);		// form search string.
-#ifndef PSX
 	strcpy(sPath,sSearchPath);							// setup locals.
 	strcpy(sExt,sExtension);
 #ifdef WIN32
@@ -393,7 +339,6 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 		closedir(d);
 	}
 #endif
-#endif
 	bLoadSaveUp = TRUE;
 	return TRUE;
 }
@@ -444,27 +389,14 @@ void loadSaveCDCancel( void )
 // ////////////////////////////////////////////////////////////////////////////
 BOOL runLoadSave(BOOL bResetMissionWidgets)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
-
-		SetSpAlt();
-		ret = _runLoadSave(bResetMissionWidgets);
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _runLoadSave(bResetMissionWidgets);
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
-#ifndef PSX
 void deleteSaveGame(char* saveGameName)
 {
-#ifdef WIN32
+#ifdef WIN32		//added to help linux guys out :) -Q
 	CHAR			sTemp2[MAX_STR_LENGTH],	sToDel[MAX_STR_LENGTH];
 	WIN32_FIND_DATA	found;	
 	HANDLE			dir;
@@ -514,7 +446,7 @@ void deleteSaveGame(char* saveGameName)
 	RemoveDirectory(saveGameName);
 	return;
 }
-#endif
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // Returns TRUE if cancel pressed or a valid game slot was selected.
@@ -783,13 +715,9 @@ static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 		col = COL_RED;
 	}
 
-#ifndef PSX
 	iV_BoxFill(x,y,x+psWidget->width,y+psWidget->height,col);
 	iV_BoxFill(x+2,y+2,x+psWidget->width-2,y+psWidget->height-2,COL_BLUE);
-#else
-	iV_BoxFill(x+2,y+2,x+psWidget->width-2,y+psWidget->height-2,COL_BLUE);
-	iV_BoxFill(x,y,x+psWidget->width,y+psWidget->height,col);
-#endif
+
 
 }
 // ////////////////////////////////////////////////////////////////////////////
@@ -803,16 +731,9 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	STRING  butString[64];
 
 //	UNUSEDPARAMETER(pColours);
-#ifdef PSX
-	if(((W_BUTTON*)psWidget)->state & WBUTS_HILITE)	{
-		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-		displayHilightPulseBox(x-4,y-4,x+psWidget->width+4,y+psWidget->height+4);
-		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()+1);
-	}
-#endif
-#ifndef PSX
+
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
-#endif
+
 	if(((W_BUTTON *)psWidget)->pTip )
 	{
 		strcpy(butString,((W_BUTTON *)psWidget)->pTip);
@@ -828,15 +749,9 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 		//draw text								
 		iV_DrawText( butString, x+4, y+17);
 
-#ifdef PSX
-		AddCursorSnap(&InterfaceSnap,
-						x+(psWidget->width/2),
-						y+(psWidget->height/2),psWidget->formID,psWidget->id,NULL);
-#endif
+
 	}
-#ifdef PSX
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
-#endif
+
 }
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSaveEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
@@ -847,13 +762,9 @@ static void displayLoadSaveEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD
 	UDWORD  h = psWidget->height;
 //	UNUSEDPARAMETER(pColours);
 
-#ifndef PSX
 	iV_BoxFill(x,y,x+w,y+h,COL_RED);
 	iV_BoxFill(x+1,y+1,x+w-1,y+h-1,COL_BLUE);
-#else
-	iV_BoxFill(x+1,y+1,x+w-1,y+h-1,COL_BLUE);
-	iV_BoxFill(x,y,x+w,y+h,COL_RED);
-#endif
+
 
 }
 
@@ -867,4 +778,4 @@ void drawBlueBox(UDWORD x,UDWORD y, UDWORD w, UDWORD h)
 	pie_BoxFillIndex(x-1,y-1,x+w+1,y+h+1,light);	
 	pie_BoxFillIndex(x,y,x+w,y+h,dark);
 }
-#endif
+
