@@ -88,42 +88,7 @@ extern	UDWORD	getTestAngle(void);
 void	updateTestAngle( void );
 #define BEHIND_DROID_DIRECTION(d)	  (360-((d->direction+180)%360))
 
-#ifdef PSX
 
-// View modes.
-enum {
-	CAMMODE_INACTIVE,		// Inactive.
-	CAMMODE_BEHIND,			// Behind the target object, overiden by control modes.
-	CAMMODE_TOPDOWN,		// Above the target object, overiden by control modes.
-	CAMMODE_ORBIT,			// Orbiting the target, overiden by control modes.
-	CAMMODE_PANTOLOCATION,	// Pan to a specified location.
-	CAMMODE_TURNTOROTATION,	// Turn to a specified rotation.
-	CAMMODE_TURNTOVIEW,		// Turn and pan to a specified view.
-	CAMMODE_RESTORE,		// Restoring to default game view.
-};
-
-// Control mode flags.
-#define CAMCONMODE_PITCH	0x0001		// User can control pitch.
-#define CAMCONMODE_YAW		0x0002		// User can control yaw.
-#define CAMCONMODE_POSITION	0x0004		// User can control position.
-#define CAMCONMODE_DISTANCE	0x0008		// User can control distance.
-
-void camInitVars(void);
-void camResetDamping(void);
-void camSetDamping(int PosDamp,int RotDamp,int DistDamp);
-void camGetDamping(int *PosDamp,int *RotDamp,int *DistDamp);
-
-void camPanToLocation(int x,int y);
-void camTurnToRotation(int rx,int ry);
-void camTurnToView(int x,int y,int rx,int ry,int dist);
-
-void camSetMode(UWORD CamMode);
-void camSetControlMode(UWORD CamConMode);
-UWORD camGetControlMode(void);
-UWORD camGetMode(void);
-BOOL camViewControlsActive(void);
-
-#endif
 
 
 

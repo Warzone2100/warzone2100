@@ -2396,9 +2396,6 @@ UDWORD functionType(char* pType)
 		return HQ_TYPE;
 	}*/
 
-#ifdef PSX
-	DBPRINTF(("Unknown Function Type : %s\n",pType));
-#endif
 	ASSERT((FALSE, "Unknown Function Type"));
 	return 0;
 }

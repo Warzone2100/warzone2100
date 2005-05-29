@@ -211,9 +211,7 @@ extern DROID *FindATransporter(void);
 a defined range*/
 extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 
-#ifdef PSX
-extern BOOL turnOffMultiMsg(BOOL bDummy);	// dummy func for psx only.
-#endif
+
 // do a health check for a droid
 extern void orderHealthCheck(DROID *psDroid);
 

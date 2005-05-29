@@ -143,8 +143,6 @@ extern BOOL	bSubtitles;
 #define	INTINGAMEOP_8_Y		300	//140
 #endif
 
-#ifdef PSX
-#define OPALIGN		(WBUT_PLAIN)
-#else
+
 #define OPALIGN		(WBUT_PLAIN | WBUT_TXTCENTRE)
-#endif
+

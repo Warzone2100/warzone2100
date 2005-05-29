@@ -20,23 +20,7 @@
 #include "mission.h"
 
 /* Allocation sizes for the droid, structure and feature heaps */
-#ifdef PSX
 
-#define DROID_INIT		150		// scream !
-#define STRUCTURE_INIT	150		// Must include walls ... ekkk ! +350 for 1c (!)
-
-#define DROID_EXT		15
-#define STRUCTURE_EXT	15
-#define STRUCTFUNC_INIT	50
-#define STRUCTFUNC_EXT	5
-#define FEATURE_INIT	145		// Surely this can be reduced.
-#define FEATURE_EXT		15
-#define FLAGPOS_INIT	20
-#define FLAGPOS_EXT		5
-#define TEMPLATE_INIT	120		// was 40 but this there is 116 templates in template.txt alone ... Arse ... 84 bytes each as well ... arse ...
-#define TEMPLATE_EXT	10
-
-#else
 
 #define DROID_INIT		400
 #define STRUCTURE_INIT	200
@@ -52,7 +36,7 @@
 #define TEMPLATE_INIT	120		// was 40 but this there is 116 templates in template.txt alone ... Arse ... 84 bytes each as well ... arse ...
 #define TEMPLATE_EXT	10
 
-#endif
+
 
 
 /* The memory heaps for the different object types */

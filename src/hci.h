@@ -129,13 +129,10 @@
 #define OBJ_STATSTARTY	0
 
 //slider bar positions
-#ifdef PSX
-#define STAT_SLDX			4	// Slider x.
-#define STAT_SLDY			8	// Slider y.
-#else
+
 #define STAT_SLDX			8	// Slider x.
 #define STAT_SLDY			4	// Slider y.
-#endif
+
 #define STAT_SLDWIDTH		70	// Slider width.
 #define STAT_SLDHEIGHT		12	//4	// Slider height.
 
@@ -465,14 +462,7 @@ extern void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 /* Allows us to fool the widgets with a keypress */
 void	setKeyButtonMapping( UDWORD	val );
 
-#ifdef PSX
-void SetMouseFormPosition(W_FORMINIT *sFormInit);
 
-void intDestroyStructure(STRUCTURE *psStruct);
-void intDestroyDroid(DROID *psDroid);
-
-void intInitObjectCycle(void);
-#endif
 
 STRUCTURE *intFindAStructure(void);
 STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDrive);

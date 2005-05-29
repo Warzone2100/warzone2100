@@ -23,11 +23,9 @@ extern BOOL stageOneInitialise(void);
 extern BOOL stageOneShutDown(void);
 extern BOOL stageTwoInitialise(void);
 extern BOOL stageTwoShutDown(void);
-#ifdef PSX
-extern BOOL stageThreeInitialise(BOOL FromLoad);
-#else
+
 extern BOOL stageThreeInitialise(void);
-#endif
+
 extern BOOL stageThreeShutDown(void);
 extern BOOL gameReset(void);
 extern BOOL newMapInitialise(void);

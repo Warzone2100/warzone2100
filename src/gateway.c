@@ -706,9 +706,7 @@ BOOL gwLinkGateways(void)
 	SDWORD		x,y, gwX,gwY, zone1Links,zone2Links, link, zone, otherZone;
 	SDWORD		zoneLinks;
 	BOOL		bZone1, bAddLink;
-#ifdef PSX
-	SDWORD 		xdiff,ydiff;
-#endif
+
 
 	// note which zones have a gateway
 	aZoneReachable = MALLOC( sizeof(UBYTE) * gwNumZones );

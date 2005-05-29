@@ -24,9 +24,6 @@ BOOL intRefreshOrder(void);
 //new function added to bring up the RMB order form for Factories as well as droids
 extern void intAddFactoryOrder(STRUCTURE *psStructure);
 
-#ifdef PSX
-UWORD GetOrderCenterX(void);
-UWORD GetOrderCenterY(void);
-#endif
+
 
 #endif

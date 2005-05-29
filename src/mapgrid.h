@@ -23,11 +23,9 @@ typedef struct _grid_array
 
 
 // The number of tiles per grid
-#ifdef PSX
-#define GRID_SIZE	16
-#else
+
 #define GRID_SIZE	8
-#endif
+
 
 #define GRID_MAXAREA (MAP_MAXAREA/(GRID_SIZE*GRID_SIZE))
 

@@ -23,31 +23,18 @@
 #include "keybind.h"
 
 #include "audio.h"					// for sound.
-#ifndef PSX
+
 #include "cdaudio.h"
 #include "mixer.h"
 #include "multiplay.h"
-#endif
+
 
 #include "csnap.h"
 #include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
 #include "netplay.h"
-#ifdef PSX
-#include "primatives.h"
-#include "ctrlpsx.h"
-#include "vpad.h"
-#include "dcache.h"
-#include "initpsx.h"
-#include "locale.h"
 
-extern BOOL	DirectControl;
-extern BOOL	EnableVibration;
-extern char OnString[];
-extern char OffString[];
-extern BOOL bShakingPermitted;
-#endif
 
 extern char	SaveGamePath[];
 
@@ -85,25 +72,9 @@ static BOOL addQuitOptions(VOID)
 
 	memset(&sFormInit,0, sizeof(W_FORMINIT));	
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
 
-
-/*
-
-	Calc the max width of the strings used in the option menu  - so that it will work in any language
-
-*/
-	ResetMaxStringWidth();
-	AddMaxStringWidth(psStringRes,STR_GAME_RESUME);
-	AddMaxStringWidth(psStringRes,STR_GAME_QUIT);
-	WindowWidth=GetMaxStringWidth()+40;
-	if (WindowWidth<INTINGAMEOP3_W) WindowWidth=INTINGAMEOP3_W;	  // set the min value
-	sFormInit.width=WindowWidth;
-
-#else
 	sFormInit.width		= INTINGAMEOP3_W;
-#endif
+
 	// add form
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
@@ -111,12 +82,10 @@ static BOOL addQuitOptions(VOID)
 	sFormInit.x			= (SWORD)INTINGAMEOP3_X;
 	sFormInit.y			= (SWORD)INTINGAMEOP3_Y;
 	sFormInit.height	= INTINGAMEOP3_H;
-#ifndef PSX
+
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
-#else
-	sFormInit.pDisplay	= intDisplayPlainForm;
-#endif
+
 	widgAddForm(psWScreen, &sFormInit);
 
 	//resume
@@ -137,10 +106,7 @@ static BOOL addQuitOptions(VOID)
 static BOOL _addSlideOptions()
 {
 	W_FORMINIT		sFormInit;			
-#ifdef PSX
-	char *StateString;
-	int bx;
-#endif
+
 	DisableCursorSnapsExcept(INTINGAMEOP);
 
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
@@ -150,9 +116,7 @@ static BOOL _addSlideOptions()
 
 	memset(&sFormInit,0, sizeof(W_FORMINIT));	
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	// add form
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
@@ -161,55 +125,15 @@ static BOOL _addSlideOptions()
 	sFormInit.y			= (SWORD)INTINGAMEOP2_Y;
 	sFormInit.width		= INTINGAMEOP2_W;
 	sFormInit.height	= INTINGAMEOP2_H;
-#ifndef PSX
+
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
-#else
-	sFormInit.pDisplay	= intDisplayPlainForm;
-#endif
+
 	widgAddForm(psWScreen, &sFormInit);
 
-#ifdef PSX
-	addIGTextButton(FRONTEND_CENTRESCREEN,INTINGAMEOP_7_Y,STR_FE_CENTRESCREEN,WBUT_PLAIN);
-	addCentreScreen(INTINGAMEOP,
-					INTINGAMEOP_1_X+iV_GetTextWidth(strresGetString(psStringRes, STR_FE_CENTRESCREEN)) + 16,
-					INTINGAMEOP_7_Y-5);	//-10);
-	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_8_Y,STR_GAME_RESUME,WBUT_PLAIN);
 
-	// fx vol
-	addIGTextButton(INTINGAMEOP_FXVOL,INTINGAMEOP_1_Y,STR_FE_FX,WBUT_PLAIN);
-	// cd vol
-	addIGTextButton(INTINGAMEOP_CDVOL,INTINGAMEOP_2_Y,STR_FE_MUSIC,WBUT_PLAIN);
-	// cursor speed
-	addIGTextButton(INTINGAMEOP_CURSOR_S,INTINGAMEOP_3_Y,STR_FE_CURSORSPEED,WBUT_PLAIN);
 
-	bx = INTINGAMEOP_1_X+128;
-	{
-		if( (GetCurrentLanguage() == LANGUAGE_SPANISH) ||
-			(GetCurrentLanguage() == LANGUAGE_ITALIAN) ) {
-			bx += 64;
-		}
-	}
 
- #if COUNTRY == COUNTRY_GERMAN
-	addFESlider(FRONTEND_FX_SL, INTINGAMEOP , INTINGAMEOP_1_X + 128+64, INTINGAMEOP_1_Y,	//-5,
-				AUDIO_VOL_MAX/2,sound_GetGlobalVolume()/2,INTINGAMEOP_FXVOL);
-	addFESlider(FRONTEND_MUSIC_SL,INTINGAMEOP , INTINGAMEOP_1_X + 128+64,INTINGAMEOP_2_Y,	//-5,
-				AUDIO_VOL_MAX/2,cdAudio_GetVolume()/2,INTINGAMEOP_CDVOL);
-	addFESlider(FRONTEND_CURSOR_SL,INTINGAMEOP , INTINGAMEOP_1_X + 128+64,INTINGAMEOP_3_Y,	//-5,
-				getCursorSpeedRange(),getCursorSpeedModifier(),INTINGAMEOP_CURSOR_S);
- #else
-	addFESlider(FRONTEND_FX_SL, INTINGAMEOP , bx, INTINGAMEOP_1_Y,	//-5,
-				AUDIO_VOL_MAX/2,sound_GetGlobalVolume()/2,INTINGAMEOP_FXVOL);
-	addFESlider(FRONTEND_MUSIC_SL,INTINGAMEOP , bx,INTINGAMEOP_2_Y,	//-5,
-				AUDIO_VOL_MAX/2,cdAudio_GetVolume()/2,INTINGAMEOP_CDVOL);
-	addFESlider(FRONTEND_CURSOR_SL,INTINGAMEOP , bx,INTINGAMEOP_3_Y,	//-5,
-				getCursorSpeedRange(),getCursorSpeedModifier(),INTINGAMEOP_CURSOR_S);
- #endif
-
-#endif
-
-#ifndef PSX
 	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_3_Y,STR_GAME_RESUME,WBUT_PLAIN);
 
 	// fx vol
@@ -221,69 +145,11 @@ static BOOL _addSlideOptions()
 	addIGTextButton(INTINGAMEOP_CDVOL,INTINGAMEOP_2_Y,STR_FE_MUSIC,WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_2_Y-5,
 				AUDIO_VOL_MAX,mixer_GetCDVolume(),INTINGAMEOP_CDVOL);
-#endif
+
 
 	SetCurrentSnapID(&InterfaceSnap,INTINGAMEOP_RESUME);
 
-#ifdef PSX
-	//Screen shake?
-	addIGTextButton(FRONTEND_SCREENSHAKE,INTINGAMEOP_4_Y,STR_FE_SCREENSHAKE,WBUT_PLAIN);
-	if(bShakingPermitted) {
-		StateString = OnString;
-	} else {
-		StateString = OffString;
-	}
- #if COUNTRY == COUNTRY_FRENCH
-	addText(WFont,INTINGAMEOP,INTINGAMEOP_SCREENSHAKE_BT, INTINGAMEOP_1_X+128+32,INTINGAMEOP_4_Y-9,	//14,
-			StateString,FRONTEND_SCREENSHAKE,&bShakingPermitted);
- #else
-	bx = INTINGAMEOP_1_X+128;
-	{
-		if( GetCurrentLanguage() == LANGUAGE_SPANISH) {
-			bx += 96;
-		}
-	}
-	addText(WFont,INTINGAMEOP,INTINGAMEOP_SCREENSHAKE_BT, bx,INTINGAMEOP_4_Y-9,	//14,
-			StateString,FRONTEND_SCREENSHAKE,&bShakingPermitted);
- #endif
 
-	//Screen shake?
-	addIGTextButton(FRONTEND_SUBTITLES,INTINGAMEOP_5_Y,STR_FE_SUBTITLES,WBUT_PLAIN);
-	if(bSubtitles) {
-		StateString = OnString;
-	} else {
-		StateString = OffString;
-	}
- #if COUNTRY == COUNTRY_FRENCH
-	addText(WFont,INTINGAMEOP,INTINGAMEOP_SUBTITLES_BT, INTINGAMEOP_1_X+128+32,INTINGAMEOP_5_Y-9,	//14,
-			StateString,FRONTEND_SUBTITLES,&bSubtitles);
- #else
-	addText(WFont,INTINGAMEOP,INTINGAMEOP_SUBTITLES_BT, INTINGAMEOP_1_X+128,INTINGAMEOP_5_Y-9,	//14,
-			StateString,FRONTEND_SUBTITLES,&bSubtitles);
- #endif
-
- #ifdef LIBPAD
-
-	if( (GetProtocolType(0) == PADPROT_EXPANDED) ) {
-		//Dual Shock Vibration?
-		addIGTextButton(FRONTEND_VIBRO,INTINGAMEOP_6_Y,STR_FE_VIBRATION,WBUT_PLAIN);
-		if(EnableVibration) {
-			StateString = OnString;
-		} else {
-			StateString = OffString;
-		}
- #if COUNTRY == COUNTRY_FRENCH
-		addText(WFont,INTINGAMEOP,INTINGAMEOP_VIBRATION_BT, INTINGAMEOP_1_X+128+32,INTINGAMEOP_6_Y-9,	//-14,
-				StateString,FRONTEND_VIBRO,&EnableVibration);
- #else
-		addText(WFont,INTINGAMEOP,INTINGAMEOP_VIBRATION_BT, INTINGAMEOP_1_X+128,INTINGAMEOP_6_Y-9,	//-14,
-				StateString,FRONTEND_VIBRO,&EnableVibration);
- #endif
-		intSetVibroOnID(INTINGAMEOP_VIBRATION);
-	}
-
- #endif
-#endif
 
 	/*
 #ifndef PSX
@@ -307,19 +173,7 @@ static BOOL _addSlideOptions()
 
 static BOOL addSlideOptions(void)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _addSlideOptions();
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _addSlideOptions();
 }
 
@@ -370,44 +224,20 @@ static BOOL _intAddInGameOptions(void)
 
 	intResetScreen(FALSE);
 
-#ifdef PSX
-	// Store current option settings in case they cancel.
-	StoreGameOptions();
-	setGamePauseStatus(TRUE);		
-	gameTimeStop();
-	if(driveModeActive()) {
-		driveDisableControl();
-	}
-	// Enable interface snap.
-	StartInterfaceSnap();
-#else
+
 	// Pause the game.
 	if(!gamePaused())
 	{
 		kf_TogglePauseMode();
 	}
-#endif
+
 
 	memset(&sFormInit,0, sizeof(W_FORMINIT));	
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-/*
 
-	Calc the max width of the strings used in the option menu  - so that it will work in any language
-
-*/
-	ResetMaxStringWidth();
-	AddMaxStringWidth(psStringRes,STR_FE_OPTIONS);
-	AddMaxStringWidth(psStringRes,STR_GAME_RESUME);
-	AddMaxStringWidth(psStringRes,STR_GAME_QUIT);
-	WindowWidth=GetMaxStringWidth()+40;
-	if (WindowWidth<INTINGAMEOP_W) WindowWidth=INTINGAMEOP_W;	  // set the min value
-	sFormInit.width=WindowWidth;
-#else
 
 	sFormInit.width		= INTINGAMEOP_W;
-#endif
+
 	// add form
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
@@ -485,19 +315,7 @@ static BOOL _intAddInGameOptions(void)
 
 BOOL intAddInGameOptions(void)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddInGameOptions();
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _intAddInGameOptions();
 }
 
@@ -507,28 +325,14 @@ void ProcessOptionFinished(void)
 {
 	intMode		= INT_NORMAL;
 
-#ifdef PSX
-	CancelInterfaceSnap();
-	// Unpause the game.
-//	setGameUpdatePause(FALSE);
-	setGamePauseStatus(FALSE);
-	gameTimeStart();
-	if(driveModeActive()) {
-		driveEnableControl();
-	}
 
-	if(DirectControl) {
-		StartCameraMode();
-	} else {
-		StopCameraMode();
-	}
-#else
+
 	//unpause.
 	if(gamePaused())
 	{
 		kf_TogglePauseMode();
 	}
-#endif
+
 
 	EnableAllCursorSnaps();
 }
@@ -552,9 +356,7 @@ void intCloseInGameOptionsNoAnim(BOOL bResetMissionWidgets)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 {
-#ifdef PSX
-	intCloseInGameOptionsNoAnim(bResetMissionWidgets);
-#else
+
 	W_TABFORM	*Form;
 	WIDGET		*widg;
 
@@ -591,7 +393,7 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
         //put any widgets back on for the missions
         resetMissionWidgets();
     }
-#endif
+
     return TRUE;
 }
 
@@ -609,18 +411,7 @@ BOOL intRunInGameOptions(void)
 // process clicks made by user.
 void intProcessInGameOptions(UDWORD id)
 {
-#ifdef PSX
-	if(CancelPressed()) {
-		RestoreGameOptions();
-		intCloseInGameOptions(FALSE, TRUE);
-		return;
-	}
-	if(VPadTriggered(VPAD_PAUSE)) {
-		VPadClearTrig(VPAD_PAUSE);
-		intCloseInGameOptions(FALSE, TRUE);
-		return;
-	}
-#endif
+
 
 	switch(id)
 	{
@@ -687,10 +478,6 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	}
 
-#ifdef PSX
-	processSliderOptions(id);
-	processToggleOptions(id);
-	processCentreScreen(id);
-#endif
+
 }
 

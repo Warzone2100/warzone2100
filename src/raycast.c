@@ -19,9 +19,7 @@
 //#ifdef ALEXM
 #include "effects.h"
 //#endif
-#ifdef PSX
-#include "dcache.h"
-#endif
+
 
 // accuracy for the raycast lookup tables
 #define RAY_ACC		12

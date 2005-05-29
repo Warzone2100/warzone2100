@@ -132,9 +132,7 @@ int main(int argc, char *argv[])
 	strcpy(MultiPlayersPath,"multiplay\\players\\");
 	strcpy(ScreenDumpPath,"");
 #else
- #ifdef PSX
-	strcpy(SaveGamePath,"savegame\\");
- #else
+
 	strcpy(UnixUserPath,(char *)getenv("HOME"));
 	strcat(UnixUserPath,"/.warzone2100/");
 	CreateDirectory(UnixUserPath,NULL);
@@ -153,7 +151,7 @@ int main(int argc, char *argv[])
 	strcat(MultiCustomMapsPath,"multiplay/custommaps/");
 	strcpy(UnixRegFilePath,UnixUserPath);
 	strcat(UnixRegFilePath,"config");
- #endif
+
 #endif
 
 	// initialise all the command line states

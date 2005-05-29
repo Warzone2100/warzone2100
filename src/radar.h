@@ -33,12 +33,6 @@ extern	void	downloadAtStartOfFrame( void );
 
 //#define RADAR_ROT	1
 
-#ifdef PSX
-extern BOOL InitRadar_PSX(UWORD Width,UWORD Height);
-extern void ReleaseRadar_PSX(void);
-extern void UpdateRadar_PSX(UWORD mapWidth,UWORD mapHeight);
-extern void DrawRadar_PSX(void);
-extern void DrawRadarExtras_PSX(void);
-#endif
+
 
 #endif

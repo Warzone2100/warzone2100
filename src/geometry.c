@@ -20,10 +20,7 @@
 #include "hci.h"
 #include "display.h"
 
-#ifdef PSX
-#include <inline_c.h>
-#include <gtemac.h>
-#endif
+
 
 
 void testAngles(void);
@@ -639,12 +636,7 @@ SDWORD	dX,dY;
 	return(FALSE);
 }
 
-#ifdef PSX
-void	processImpact(UDWORD worldX, UDWORD worldY, UBYTE severity, UDWORD tilesAcross)
-{
-	DBPRINTF(("processImpact not on PSX!\n"));
-}
-#else
+
 void	processImpact(UDWORD worldX, UDWORD worldY, UBYTE severity, UDWORD tilesAcross)
 {
 //MAPTILE	*psTile;
@@ -705,4 +697,4 @@ UDWORD	maxDistance;
 		}
 	}
 }
-#endif
+

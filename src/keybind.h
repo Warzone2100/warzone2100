@@ -204,12 +204,7 @@ void kf_NormalSpeed( void );
 #define	SECS_PER_SPIN	2
 #define MAP_SPIN_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
-#ifdef PSX
-extern void kf_SelectNaybors(void);
-extern void kf_NextUnit(void);
-extern void kf_NextGroup(void);
-extern void kf_PrevGroup(void);
-#endif
+
 
 extern int fogCol;
 

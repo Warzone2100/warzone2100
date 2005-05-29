@@ -23,10 +23,7 @@
 #include "imd.h"
 #include "vid.h"
 
-#ifdef PSX
-#include "vpsx.h"
-#include "primatives.h"
-#endif
+
 
 #include "target.h"
 
@@ -540,9 +537,7 @@ void targetMarkCurrent(void)
 		Offset = 16;
 	}
 
-#ifdef PSX
-	iV_SetOTIndex_PSX(OT2D_EXTREMEBACK);
-#endif
+
 
 	x0 = (SWORD)(x-Offset);
 	y0 = (SWORD)(y-Offset);

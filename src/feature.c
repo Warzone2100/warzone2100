@@ -35,9 +35,7 @@
 #include "display3d.h"
 #include "gateway.h"
 
-#ifdef PSX
-extern  BOOL EnableVibration;
-#endif
+
 
 /* The statistics for the features */
 FEATURE_STATS	*asFeatureStats;

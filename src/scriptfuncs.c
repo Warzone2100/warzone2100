@@ -39,7 +39,7 @@
 
 #include "configuration.h"
 #include "fpath.h"
-#ifndef PSX
+
 #include "warzoneconfig.h"
 #include "lighting.h"
 #include "atmos.h"
@@ -50,7 +50,7 @@
 #include "multigifts.h"
 #include "multilimit.h"
 #include "advvis.h"
-#endif
+
 #include "piestate.h"
 #include "wrappers.h"
 #include "order.h"
@@ -66,9 +66,7 @@
 #include "projectile.h"
 #include "cluster.h"
 
-#ifdef PSX
-#include "dcache.h"
-#endif
+
 
 //used in the set nogoArea and LandingZone functions - use the ones defined in Map.h
 //#define MAX_MAP_WIDTH		192
@@ -3091,10 +3089,7 @@ BOOL scrGameOverMessage(void)
 }
 
 
-#ifdef PSX
-UBYTE OutroMovie[] = "misc\\outro.str";
-UBYTE OutroText[] = "misc\\outro.txa";
-#endif
+
 
 // -----------------------------------------------------------------------------------------
 //function to call when the game is over
@@ -4610,12 +4605,7 @@ BOOL scrSetRadarZoom(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	if (level == 2)
-	{
-		level = 1;
-	}
-#endif
+
 
 	SetRadarZoom((UWORD)level);
 
@@ -5402,10 +5392,7 @@ BOOL scrAddTemplate(void)
 	{
 		return FALSE;
 	}
-#ifdef PSX
-	ASSERT((FALSE,"ScrAddTemplate: Not on PSX"));
-	stackPushResult(VAL_BOOL,FALSE);
-#else
+
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT((FALSE, "scrAddTemplate:player number is too high"));
@@ -5428,7 +5415,7 @@ BOOL scrAddTemplate(void)
 			return FALSE;
 		}
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -5680,9 +5667,7 @@ BOOL scrGetGameStatus(void)
 
 		case STATUS_BattleMapViewEnabled:
 //			if (driveTacticalActive()==TRUE) result=TRUE;
-#ifdef PSX
-			if (driveWasDriving()==TRUE) result=TRUE;
-#endif 
+
 
 			if (result==TRUE)
 			{

@@ -103,9 +103,7 @@ MI_DEBRIS4,
 #ifndef PSX
 MI_FIREWORK,
 #endif
-#ifdef PSX
-MI_MODULE,  
-#endif
+
 MI_TOO_MANY  
 };
 

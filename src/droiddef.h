@@ -24,10 +24,7 @@
 //used to get a location next to a droid - withinh one tile
 #define LOOK_NEXT_TO_DROID		8
 
-#ifdef PSX
-//#define DROID_SCALE	133	// Percentage scale for droids on PSX.
-#define DROID_SCALE	100	// Percentage scale for droids on PSX.
-#endif
+
 
 /* The different types of droid */
 // NOTE, if you add to, or change this list then you'll need

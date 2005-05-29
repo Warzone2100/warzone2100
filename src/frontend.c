@@ -21,22 +21,22 @@
 /* Includes direct access to render library */
 #include "ivisdef.h"
 #include "piestate.h"
-#ifndef PSX
+
 #include "keyedit.h"
 #include "piefunc.h"
 #include "warzoneconfig.h"
-#endif
+
 #include "vid.h"
 
 #include "display3d.h"
 #include "intdisplay.h"
 #include "audio.h"					// for sound.
 #include "audio_id.h"				// for sound..
-#ifndef PSX
+
 #include "cdaudio.h"
 #include "mixer.h"
 #include "configuration.h"
-#endif
+
 
 #include "design.h"					// for intadddesign
 #include "hci.h"					// for intShowPower
@@ -54,7 +54,7 @@
 #include "difficulty.h"
 #include "ingameop.h"
 
-#ifndef PSX
+
 #include "advvis.h"
 #include "seqdisp.h"
 #include "multiplay.h"
@@ -62,27 +62,9 @@
 #include "multilimit.h"
 #include "multistat.h"
 #include "netplay.h"
-#endif
 
-#ifdef PSX
-#include "initpsx.h"
-#include "primatives.h"
-#include "ctrlpsx.h"
-#include "vpad.h"
-#include "frend16.h"
-#include "intloadsave.h"
-#include "locale.h"
-#include "assert.h"
 
-#define IMAGE_RETURN	IMAGE_7
-#define IMAGE_RETURN_HI	IMAGE_8
-extern VOID processFrontendSnap(BOOL bHideCursor);
-extern VOID intUpdateOptionSlider(struct _widget *psWidget, struct _w_context *psContext);
-extern BOOL	DirectControl;
-extern BOOL	EnableVibration;
-extern BOOL QACheatMode;
-extern BOOL bShakingPermitted;
-#endif
+
 
 #define VERSION_STRING	"VER CP0.1"
 
@@ -103,12 +85,7 @@ STRING	strFog[MAX_STR_LENGTH];
 STRING	strTrans[MAX_STR_LENGTH];
 #endif
 
-#ifdef PSX
-#define PSX_DIFFICULTY_MENU		// Enable difficulty levels on PSX.
 
-UWORD OptionMenuDepth = 0;
-UWORD StartMenuDepth = 0;
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Definitions
@@ -136,11 +113,9 @@ static BOOL		bInFastPlay = FALSE;
 // Currently just returns FALSE on the PC.
 BOOL GetInFastPlay(void)
 {
-#ifdef PSX
-	return bInFastPlay;
-#else
+
 	return FALSE;
-#endif
+
 }
 
 
@@ -153,9 +128,7 @@ extern char	SaveGamePath[];
 
 extern BOOL firstcall;
 extern IMAGEFILE *FrontImages;
-#ifdef PSX
-extern IMAGEFILE *FrontImages16;
-#endif
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // Function Definitions
@@ -202,39 +175,18 @@ VOID		displayTextAt270		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 static VOID	displayBigSlider		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 
-#ifdef PSX
-void addSelectHelp(void)
-{
-//	addText(WFont,FRONTEND_BOTFORM, FRONTENDHELP_SELECT,
-//			16, FRONTEND_POS6Y+24,
-//			strresGetString(psStringRes, STR_FE_SELECT), 0,NULL);
-}
 
-void addCancelHelp(void)
-{
-//	addText(WFont,FRONTEND_BOTFORM, FRONTENDHELP_CANCEL,
-//			348, FRONTEND_POS6Y+24,
-//			strresGetString(psStringRes, STR_FE_CANCEL), 0,NULL);
-}
-#endif
 
 
 // Returns TRUE if escape key pressed on PC or close button pressed on Playstation.
 //
 BOOL CancelPressed(VOID)
 {
-#ifdef PSX
-	// If close button pressed then return from this menu.
-//	if(VPadPressed(VPAD_CLOSE)) {
-//	if(VPadPressed(VPAD_CANCEL)) {
-	if(VPadTriggered(VPAD_CANCEL)) {
-		return TRUE;
-	}
-#else
+
 	if(keyPressed(KEY_ESC)) {
 		return TRUE;
 	}
-#endif
+
 
 	return FALSE;
 }
@@ -413,9 +365,7 @@ VOID changeTitleMode(tMode mode)
 // Title Screen
 BOOL startTitleMenu(VOID)
 {	
-#ifdef PSX
-	bInFastPlay = FALSE;
-#endif
+
 
 //	widgDelete(psWScreen,1);	// close reticule if it's open. MAGIC NUMBERS?
 	intRemoveReticule();
@@ -619,15 +569,7 @@ BOOL startTutorialMenu(VOID)
 #endif
 	SetCurrentSnapID(&InterfaceSnap,FRONTEND_FASTPLAY);
 
-#ifdef PSX 	//psx.
-	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS3X,FRONTEND_POS2Y, strresGetString(psStringRes,STR_FE_TUT),FALSE,FALSE);
-	addTextButton(FRONTEND_FASTPLAY, FRONTEND_POS4X,FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_FASTPLAY),FALSE,FALSE);
-	addTextButton(FRONTEND_QUIT,     FRONTEND_POS6X,FRONTEND_POS5Y,strresGetString(psStringRes,STR_FE_RETURN),FALSE,FALSE);
-	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,strresGetString(psStringRes,STR_FE_SIDETUT));
-	addSelectHelp();
-	addCancelHelp();
-	SetCurrentSnapID(&InterfaceSnap,FRONTEND_FASTPLAY);
-#endif
+
 
 	return TRUE;
 }
@@ -643,25 +585,13 @@ BOOL runTutorialMenu(VOID)
 		case FRONTEND_TUTORIAL:
 			strcpy(pLevelName,TUTORIAL_LEVEL);
 			changeTitleMode(STARTGAME);
-#ifdef PSX
- #ifdef LOADINGBACKDROPS
-			AddLoadingBackdrop(TRUE);
- #else
-			initLoadingScreen(TRUE,TRUE);
- #endif
-#endif
+
 			break;
 
 		case FRONTEND_FASTPLAY:
 			strcpy(pLevelName,"FASTPLAY");
 			changeTitleMode(STARTGAME);
-#ifdef PSX
- #ifdef LOADINGBACKDROPS
-			AddLoadingBackdrop(TRUE);
- #else
-			initLoadingScreen(TRUE,TRUE);
- #endif
-#endif
+
 			break;
 
 		case FRONTEND_QUIT:
@@ -685,177 +615,14 @@ BOOL runTutorialMenu(VOID)
 
 }
 
-#ifdef PSX
 
-// ////////////////////////////////////////////////////////////////////////////
-// Difficulty Menu
-
- #ifdef PSX_DIFFICULTY_MENU
-
-void startDifficultyMenu(void)
-{
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-	addTextButton(FRONTEND_NEWGAME_EASY,  FRONTEND_POS2X,FRONTEND_POS2Y,strresGetString(psStringRes,STR_EASY) ,FALSE,FALSE);
-	addTextButton(FRONTEND_NEWGAME_NORMAL,  FRONTEND_POS2X,FRONTEND_POS3Y,strresGetString(psStringRes,STR_NORMAL) ,FALSE,FALSE);
-	addTextButton(FRONTEND_NEWGAME_HARD,  FRONTEND_POS2X,FRONTEND_POS4Y,strresGetString(psStringRes,STR_HARD) ,FALSE,FALSE);
-	addTextButton(FRONTEND_QUIT,     FRONTEND_POS6X,FRONTEND_POS6Y,strresGetString(psStringRes,STR_FE_RETURN),FALSE,FALSE);
-
-	SetCurrentSnapID(&InterfaceSnap,FRONTEND_NEWGAME_NORMAL);
-}
-
- #endif
-
-
-void startSoundOptionsMenu(void)
-{
-	char *StateString;
-	UDWORD	w,h;
-
-	// Need to store the current game option settings so they can be
-	// restored if cancel is pressed.
-	StoreGameOptions();
-
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-	addTextButton(FRONTEND_FX, FRONTEND_POS2X,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_FX),TRUE,FALSE);
-	addFESlider(FRONTEND_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5,
-				AUDIO_VOL_MAX/2	,sound_GetGlobalVolume()/2,FRONTEND_FX);
-
-	addTextButton(FRONTEND_MUSIC, FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_MUSIC),TRUE,FALSE);
-	addFESlider(FRONTEND_MUSIC_SL,FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5,
-				AUDIO_VOL_MAX/2	,cdAudio_GetVolume()/2,FRONTEND_MUSIC);
-
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_RETURN),TRUE,FALSE);
-
-	SetCurrentSnapID(&InterfaceSnap,FRONTEND_FX);
-}
-
-
-void startControlOptionsMenu(void)
-{
-	char *StateString;
-	UDWORD	w,h;
-
-	// Need to store the current game option settings so they can be
-	// restored if cancel is pressed.
-	StoreGameOptions();
-
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-#if COUNTRY == COUNTRY_GERMAN
-	addTextButton(FRONTEND_CURSOR, FRONTEND_POS1X,FRONTEND_POS1Y, strresGetString(psStringRes,STR_FE_CURSORSPEED),TRUE,FALSE);
-	addFESlider(FRONTEND_CURSOR_SL,FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5,
-				getCursorSpeedRange(),getCursorSpeedModifier(),FRONTEND_CURSOR);
-#else
-	addTextButton(FRONTEND_CURSOR, FRONTEND_POS2X,FRONTEND_POS2Y, strresGetString(psStringRes,STR_FE_CURSORSPEED),TRUE,FALSE);
-	addFESlider(FRONTEND_CURSOR_SL,FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5,
-				getCursorSpeedRange(),getCursorSpeedModifier(),FRONTEND_CURSOR);
-#endif
-
-	if( (GetProtocolType(0) == PADPROT_EXPANDED) ) {
-		addTextButton(FRONTEND_VIBRO, FRONTEND_POS3X,FRONTEND_POS3Y,
-						strresGetString(psStringRes,STR_FE_VIBRATION),TRUE,FALSE);
-		if(EnableVibration) {
-			StateString = OnString;
-		} else {
-			StateString = OffString;
-		}
-		addText(FEFont,FRONTEND_BOTFORM,FRONTEND_VIBRO_BT, FRONTEND_POS3M,FRONTEND_POS3Y,
-				StateString,FRONTEND_VIBRO,&EnableVibration);
-		intSetVibroOnID(FRONTEND_VIBRO);
-	}
-
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_RETURN),TRUE,FALSE);
-
-	SetCurrentSnapID(&InterfaceSnap,FRONTEND_CURSOR);
-}
-
-
-void startDisplayOptionsMenu(void)
-{
-	char *StateString;
-	UDWORD	w,h;
-
-	// Need to store the current game option settings so they can be
-	// restored if cancel is pressed.
-	StoreGameOptions();
-
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-	addTextButton(FRONTEND_SCREENSHAKE, FRONTEND_POS3X,FRONTEND_POS3Y,
-					strresGetString(psStringRes, STR_FE_SCREENSHAKE),TRUE,FALSE);
-	if(bShakingPermitted) {
-		StateString = OnString;
-	} else {
-		StateString = OffString;
-	}
-
-#if COUNTRY == COUNTRY_GERMAN
-	addTextButton(FRONTEND_CENTRESCREEN,FRONTEND_POS4X,FRONTEND_POS1Y, strresGetString(psStringRes, STR_FE_CENTRESCREEN),TRUE,FALSE);
-	addCentreScreen(FRONTEND_BOTFORM,
-					FRONTEND_POS2X+iV_GetTextWidth(strresGetString(psStringRes, STR_FE_CENTRESCREEN))/2 + 64,
-					FRONTEND_POS2Y);
-#else
-	if( GetCurrentLanguage() == LANGUAGE_SPANISH) {
-		addTextButton(FRONTEND_CENTRESCREEN,FRONTEND_POS4X,FRONTEND_POS1Y, strresGetString(psStringRes, STR_FE_CENTRESCREEN),TRUE,FALSE);
-		addCentreScreen(FRONTEND_BOTFORM,
-						FRONTEND_POS2X+iV_GetTextWidth(strresGetString(psStringRes, STR_FE_CENTRESCREEN))/2 + 64,
-						FRONTEND_POS2Y);
-		addText(FEFont,FRONTEND_BOTFORM,FRONTEND_SCREENSHAKE_BT, FRONTEND_POS3M+64,FRONTEND_POS3Y,
-				StateString,FRONTEND_SCREENSHAKE,&bShakingPermitted);
-	} else {
-		addTextButton(FRONTEND_CENTRESCREEN,FRONTEND_POS4X,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_CENTRESCREEN),TRUE,FALSE);
-		addCentreScreen(FRONTEND_BOTFORM,
-						FRONTEND_POS2X+iV_GetTextWidth(strresGetString(psStringRes, STR_FE_CENTRESCREEN)) + 16,
-						FRONTEND_POS2Y);
-		addText(FEFont,FRONTEND_BOTFORM,FRONTEND_SCREENSHAKE_BT, FRONTEND_POS3M,FRONTEND_POS3Y,
-				StateString,FRONTEND_SCREENSHAKE,&bShakingPermitted);
-	}
-#endif
-
-	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS4X,FRONTEND_POS4Y,
-					strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,FALSE);
-	if(bSubtitles) {
-		StateString = OnString;
-	} else {
-		StateString = OffString;
-	}
-	addText(FEFont,FRONTEND_BOTFORM,FRONTEND_SUBTITLES_BT, FRONTEND_POS4M,FRONTEND_POS4Y,
-			StateString,FRONTEND_SUBTITLES,&bSubtitles);
-
-
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS6X,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_RETURN),TRUE,FALSE);
-
-	SetCurrentSnapID(&InterfaceSnap,FRONTEND_CENTRESCREEN);
-}
-
-
-void endMenu(void)
-{
-	removeTopForm();
-	removeBottomForm();
-	removeBackdrop();
-}
-
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // Single Player Menu
 
 VOID startSinglePlayerMenu(VOID)
 {
-#ifdef PSX
-	SWORD YOffset;
-#endif
+
 
 	addBackdrop();
 	addTopForm();
@@ -1022,38 +789,7 @@ BOOL runSinglePlayerMenu(VOID)
 
 				break;
 
-#ifdef PSX
- #ifdef PSX_DIFFICULTY_MENU
-			case FRONTEND_NEWGAME_EASY:
-				setDifficultyLevel(DL_EASY);
-				frontEndNewGame();
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(TRUE);
- #else
-				initLoadingScreen(TRUE,TRUE);
- #endif
-				break;
 
-			case FRONTEND_NEWGAME_NORMAL:
-				setDifficultyLevel(DL_NORMAL);
-				frontEndNewGame();
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(TRUE);
- #else
-				initLoadingScreen(TRUE,TRUE);
- #endif
-				break;
-
-			case FRONTEND_NEWGAME_HARD:
-				setDifficultyLevel(DL_HARD);
-				frontEndNewGame();
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(TRUE);
- #else
-				initLoadingScreen(TRUE,TRUE);
- #endif
-				break;
- #endif
 			case FRONTEND_LOADCAM2:
  #ifdef PSX_DIFFICULTY_MENU
 				StartMenuDepth = 1;
@@ -1087,67 +823,21 @@ BOOL runSinglePlayerMenu(VOID)
  #endif
  #endif
 				break;
-#endif
+
 
 //#ifndef PSX		// ffs tc
 			case FRONTEND_LOADGAME:
-#ifdef PSX
-				endSinglePlayerMenu();
-//				UnloadBackdrop();	// do it now cause the load game needs the primative buffer.
-				StopBackdropDisplay();
-				if(intDoLoadSave(FALSE) == LSRC_LOADGAME) {
-					// At this point the game being loaded is sitting in
-					// the primitive buffer waiting to be processed. Lets hope
-					// nothing overwrites it before it's used.
-					changeTitleMode(LOADSAVEGAME);
 
- #ifdef LOADINGBACKDROPS
-					{
-						UBYTE *Buffer;
-						
-						assert(GetSaveGameStart() != NULL);
-
-						Buffer = MALLOC(GetSaveGameSize());
-						// Store the save game data that's currently in the prim buffer.
-						memcpy(Buffer,GetSaveGameStart(),GetSaveGameSize());
-						// Backdrop code needs a contiguous primitave buffer.
-						ResetPrimBuffers();
-						// Add the loading screen.
-						AddLoadingBackdrop(TRUE);
-						// Re-allocate space in the prim buffer for the save game.
-						AllocInPrimBuffers(GetSaveGameSize());
-						// Restore the save game data that's into the prim buffer.
-						memcpy(GetSaveGameStart(),Buffer,GetSaveGameSize());
-						FREE(Buffer);
-					}
- #else
-					initLoadingScreen(TRUE,TRUE);//render active
- #endif
-				} else {
-//					LoadBackdrop("frontend.tim",FALSE);
-					StartBackdropDisplay();
-					startSinglePlayerMenu();
-				}
-#else
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_LOAD_GAME));	// change mode when loadsave returns
-#endif
+
 				break;
 //#endif
 
-#ifdef PSX
-			case FRONTEND_QUIT:
-				if(StartMenuDepth == 0) {
-					changeTitleMode(TITLE);
-				} else {
-					StartMenuDepth = 0;
-					changeTitleMode(SINGLE);
-				}
-				break;
-#else
+
 			case FRONTEND_QUIT:
 				changeTitleMode(TITLE);
 				break;
-#endif
+
 
 #if defined(PSX) && defined(COVERMOUNT)
 			case FRONTEND_TUTORIAL:
@@ -1178,16 +868,9 @@ BOOL runSinglePlayerMenu(VOID)
 
 	if(CancelPressed()) 
 	{
-#ifdef PSX
-		if(StartMenuDepth == 0) {
-			changeTitleMode(TITLE);
-		} else {
-			StartMenuDepth = 0;
-			changeTitleMode(SINGLE);
-		}
-#else
+
 		changeTitleMode(TITLE);
-#endif
+
 	}
 
 	}
@@ -1205,9 +888,7 @@ BOOL runSinglePlayerMenu(VOID)
 	}
 #endif
 
-#ifdef PSX	// reversed on the psx
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
-#endif
+
 
 
 	DrawEnd();
@@ -1420,44 +1101,7 @@ BOOL runMultiPlayerMenu(VOID)
 
 
 
-#ifdef PSX
 
-static UDWORD	OldFXVolume;
-static UDWORD	OldCDVolume;
-static UDWORD	OldCursorSpeed;
-static BOOL	OldShakingPermitted;
-static BOOL	OldEnableVibration;
-static BOOL	OldSubtitles;
-static SWORD	OldScreenX,OldScreenY;
-
-// Store current game options.
-//
-void StoreGameOptions(void)
-{
-	OldFXVolume = sound_GetGlobalVolume();
-	OldCDVolume = cdAudio_GetVolume();
-	OldCursorSpeed = getCursorSpeedModifier();
-	OldShakingPermitted = bShakingPermitted;
-	OldSubtitles = bSubtitles;
-	OldEnableVibration = EnableVibration;
-	GetDisplayPos(&OldScreenX,&OldScreenY);
-}
-
-
-// Restore current game options.
-//
-void RestoreGameOptions(void)
-{
-	sound_SetGlobalVolume(OldFXVolume);
-	cdAudio_SetVolume(OldCDVolume);
-	setCursorSpeedModifier(OldCursorSpeed);
-	bShakingPermitted = OldShakingPermitted;
-	bSubtitles = OldSubtitles;
-	EnableVibration = OldEnableVibration;
-	SetDisplayPos(OldScreenX,OldScreenY);
-}
-
-#endif
 
 
 
@@ -1553,26 +1197,14 @@ BOOL runOptionsMenu(VOID)
 		break;
 	}
 
-#ifdef PSX
-	processSliderOptions(id);
-	processToggleOptions(id);
-	processCentreScreen(id);
-#endif
+
 
 	// If close button pressed then return from this menu.
 	if(CancelPressed()) {
 
-#ifdef PSX
-		if(OptionMenuDepth == 0) {
-			changeTitleMode(TITLE);
-		} else {
-			OptionMenuDepth = 0;
-			RestoreGameOptions();
-			changeTitleMode(OPTIONS);
-		}
-#else
+
 		changeTitleMode(TITLE);
-#endif
+
 	}
 
 	DrawBegin();
@@ -2086,16 +1718,10 @@ BOOL runGameOptions2Menu(VOID)
 // Game Options Menu
 BOOL startGameOptionsMenu(VOID)
 {
-#ifdef PSX
-	char *StateString;
-#endif
+
 	UDWORD	w,h;
 
-#ifdef PSX
-	// Need to store the current game option settings so they can be
-	// restored if cancel is pressed.
-	StoreGameOptions();
-#endif
+
 
 	addBackdrop();
 	addTopForm();
@@ -2427,9 +2053,7 @@ VOID addBottomForm(VOID)
 {
 	W_FORMINIT		sFormInit;			
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_BOTFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -2460,9 +2084,7 @@ VOID addTopForm(VOID)
 	W_FORMINIT		sFormInit;			
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_TOPFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -2507,9 +2129,7 @@ VOID addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign
 {
 	W_BUTINIT		sButInit;
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.id = id;
 	sButInit.x = (short)PosX;
@@ -2598,9 +2218,7 @@ VOID addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
 #if !defined(PSX) || defined(ROTATEDTEXT)
 	W_LABINIT	sLabInit;
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	sLabInit.formID = FRONTEND_BACKDROP;
 	sLabInit.id = id;
 	sLabInit.style = WLAB_PLAIN;
@@ -2627,9 +2245,7 @@ VOID addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRI
 
 DBPRINTF(("addText : %s\n",txt));
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFARFORE);
-#endif
+
 	sLabInit.formID = FormID;
 	sLabInit.id = id;
 	sLabInit.style = WLAB_PLAIN;
@@ -2733,104 +2349,7 @@ VOID displayLogo(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 }
 
 
-#ifdef PSX
-int HiQuadXY[]={
-	0,0,	320,0,		0,240,		320,240,
-};
-int HiQuadRGB[]={
-	0,0,0,	0,0,196,	0,0,196,	0,0,0,
-};
-int HiQuadDir[]={1,1,1,1};
 
-
-int GHiQuadXY[]={
-
-0,0,		320,0,		0,240,		320,240,
-};
-int GHiQuadRGB[]={
-0,0,0,	128,128,128,	128,128,128,	0,0,0,
-};
-int GHiQuadDir[]={1,1,1,1};
-
-
-void PulseValue(int *Value,int *Dir,int Min,int Max)
-{
-	if(*Dir > 0) {
-		if(*Value + *Dir > Max) {
-			*Dir = -*Dir;
-		}
-	} else if(*Dir < 0) {
-		if(*Value + *Dir < Min) {
-			*Dir = -*Dir;
-		}
-	}
-
-	*Value += *Dir;
-}
-
-void displayNormalPulseBox(SWORD x0,SWORD y0,SWORD x1,SWORD y1)
-{
-//	static int del = 0;
-//	static int ox=8,oy=8;
-
-//	iV_Box(	x0-ox,y0-oy, x1+ox,y1+oy, iV_PaletteNearestColour(0,0,255));
-//	iV_Box(	x0-ox-2,y0-oy-2, x1+ox+2,y1+oy+2, iV_PaletteNearestColour(0,0,128));
-
-	DrawBox(x0,y0,x1,y1,0,0,255);
-//	DrawBox(x0-2,y0-2,x1+2,y1+2,0,0,128);
-
-	PulseValue(&HiQuadRGB[2],&HiQuadDir[0],0,196);
-	PulseValue(&HiQuadRGB[5],&HiQuadDir[1],0,196);
-	PulseValue(&HiQuadRGB[8],&HiQuadDir[2],0,196);
-	PulseValue(&HiQuadRGB[11],&HiQuadDir[3],0,196);
-
-	HiQuadXY[0] = x0;	HiQuadXY[1] = y0;
-	HiQuadXY[2] = x1;	HiQuadXY[3] = y0;
-	HiQuadXY[4] = x0;	HiQuadXY[5] = y1;
-	HiQuadXY[6] = x1;	HiQuadXY[7] = y1;
-	DrawShadedQuad(HiQuadXY,HiQuadRGB);
-
-//	iV_Box(	x0,y0, x1,y1, iV_PaletteNearestColour(0,0,255));
-//	iV_Box(	x0-2,y0-2, x1+2,y1+2, iV_PaletteNearestColour(0,0,128));
-//	iV_Box(	x0,y0, x1,y1, iV_PaletteNearestColour(128,128,128));
-
-//	del--;
-//	if(del < 0) {
-//		del = 4;
-//		ox-=2;
-//		if(ox < 4) ox = 8;
-//		oy-=2;
-//		if(oy < 4) oy = 8;
-//	}
-}
-
-
-void displayHilightPulseBox(SWORD x0,SWORD y0,SWORD x1,SWORD y1)
-{
-	DrawBox(x0,y0,x1,y1,0,0,255);
-//	DrawBox(x0-2,y0-2,x1+2,y1+2,0,0,128);
-
-	PulseValue(&GHiQuadRGB[0],&GHiQuadDir[0],0,128);
-	PulseValue(&GHiQuadRGB[1],&GHiQuadDir[0],0,128);
-	PulseValue(&GHiQuadRGB[2],&GHiQuadDir[0],0,128);
-	PulseValue(&GHiQuadRGB[3],&GHiQuadDir[1],0,128);
-	PulseValue(&GHiQuadRGB[4],&GHiQuadDir[1],0,128);
-	PulseValue(&GHiQuadRGB[5],&GHiQuadDir[1],0,128);
-	PulseValue(&GHiQuadRGB[6],&GHiQuadDir[2],0,128);
-	PulseValue(&GHiQuadRGB[7],&GHiQuadDir[2],0,128);
-	PulseValue(&GHiQuadRGB[8],&GHiQuadDir[2],0,128);
-	PulseValue(&GHiQuadRGB[9],&GHiQuadDir[3],0,128);
-	PulseValue(&GHiQuadRGB[10],&GHiQuadDir[3],0,128);
-	PulseValue(&GHiQuadRGB[11],&GHiQuadDir[3],0,128);
-
-	GHiQuadXY[0] = x0;	GHiQuadXY[1] = y0;
-	GHiQuadXY[2] = x1;	GHiQuadXY[3] = y0;
-	GHiQuadXY[4] = x0;	GHiQuadXY[5] = y1;
-	GHiQuadXY[6] = x1;	GHiQuadXY[7] = y1;
-	DrawShadedQuad(GHiQuadXY,GHiQuadRGB);
-}
-
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
@@ -2884,22 +2403,7 @@ VOID displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	iV_DrawText( psBut->pText, fx, fy);
 
-#ifdef PSX
-//		DrawBox(xOffset + psWidget->x,yOffset + psWidget->y,
-//				xOffset + psWidget->x+psWidget->width,yOffset + psWidget->y+psWidget->height,
-//				255,255,255);
 
-		if(hilight)													// hilight
-		{	
-			displayHilightPulseBox( fx-4,fy+iV_GetTextAboveBase()-iV_GetTextBelowBase(),
-									fx+fw,fy+iV_GetTextBelowBase());
-		}
-		else
-		{
-			displayNormalPulseBox( fx-4,fy+iV_GetTextAboveBase()-iV_GetTextBelowBase(),
-									fx+fw,fy+iV_GetTextBelowBase());
-		}
-#endif
 
 	if(!greyOut)													// dont snap to unavailable buttons.
 	{
@@ -2996,26 +2500,19 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
 	W_BUTINIT sButInit;
 
 	memset(&sButInit, 0, sizeof(W_BUTINIT ));
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFARFORE);
-#endif
+
 	//resume
 	sButInit.formID		= INTINGAMEOP;
 	sButInit.id			= id;
 	sButInit.style		= Style;
 //	SetTextButtonExt(&sButInit,INTINGAMEOP_1_X,y,StringID);
-#ifdef PSX
-	// You might want to do this on the PC as well.
-	sButInit.x = INTINGAMEOP_1_X;
-	sButInit.y = y;
-	sButInit.width = iV_GetTextWidth(strresGetString(psStringRes,StringID))+2;
-	sButInit.height = iV_GetTextLineSize();
-#else
+
+
 	sButInit.x			= INTINGAMEOP_1_X;
 	sButInit.y			= y;
 	sButInit.width		= INTINGAMEOP_OP_W;
 	sButInit.height		= INTINGAMEOP_OP_H;
-#endif
+
 	sButInit.FontID		= WFont;
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.pText		= strresGetString(psStringRes,StringID);
@@ -3025,168 +2522,4 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
 }
 
 
-#ifdef PSX
 
-#define BUT_WIDTH	36
-#define BUT_HEIGHT	26
-
-BOOL addCentreScreen(UDWORD FormID,UDWORD x,UDWORD y)
-{
-	W_BUTINIT sButInit;
-
-	WidgSetOTIndex(OT2D_FARFARFORE);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	sButInit.formID = FormID;
-	sButInit.style = WBUT_PLAIN | WBUT_SECONDARY;
-	sButInit.FontID = WFont;
-	sButInit.width = (UWORD)iV_GetImageWidth(IntImages,IMAGE_SELECT1);
-	sButInit.height = (UWORD)iV_GetImageHeight(IntImages,IMAGE_SELECT1);
-	sButInit.pDisplay = intDisplayAltButtonHilight;
-
-	sButInit.id = FRONTEND_PADUP;
-	sButInit.x = x;
-	sButInit.y = y;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MBHILIGHT,IMAGE_PADUP);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	sButInit.id = FRONTEND_PADDOWN;
-	sButInit.x += sButInit.width+8;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MBHILIGHT,IMAGE_PADDOWN);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	sButInit.id = FRONTEND_PADLEFT;
-	sButInit.x += sButInit.width+8;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MBHILIGHT,IMAGE_PADLEFT);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	sButInit.id = FRONTEND_PADRIGHT;
-	sButInit.x += sButInit.width+8;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MBHILIGHT,IMAGE_PADRIGHT);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-}
-
-
-void processSliderOptions(UDWORD id)
-{
-	switch(id) {
-		case FRONTEND_FX_SL:
-			sound_SetGlobalVolume(widgGetSliderPos(psWScreen,FRONTEND_FX_SL)*2);
-			audio_PlayTrack( ID_SOUND_SELECT );
-			break;
-
-		case FRONTEND_MUSIC_SL:
-			cdAudio_SetVolume(widgGetSliderPos(psWScreen,FRONTEND_MUSIC_SL)*2);
-			audio_PlayTrack( ID_SOUND_SELECT );
-			break;
-
-		case FRONTEND_CURSOR_SL:
-			setCursorSpeedModifier(widgGetSliderPos(psWScreen,FRONTEND_CURSOR_SL));
-			break;
-	}
-}
-
-
-void processToggleOptions(UDWORD id)
-{
-	switch(id) {
- #ifdef LIBPAD
-		case	FRONTEND_VIBRO:
-			EnableVibration = !EnableVibration;
-			if(EnableVibration) {
-				SetVibro1(0,200,512);
-			}
-			break;
- #endif
-
-		case	FRONTEND_SCREENSHAKE:
-			bShakingPermitted = !bShakingPermitted;
-			break;
-
-		case	FRONTEND_SUBTITLES:
-			bSubtitles = !bSubtitles;
-			break;
-	}
-}
-
-
-void processCentreScreen(UDWORD id)
-{
-	SWORD x,y;
-	SWORD MinX,MinY;
-	SWORD MaxX,MaxY;
-
-#ifdef DISPLAYMODE_PAL
-	if(GetDisplayWidth() == 512) {
-		MinX = -18;
-		MinY = 0;
-		MaxX = 18;
-		MaxY = 24;
-	} else {
-		MinX = -12;
-		MinY = 0;
-		MaxX = 12;
-		MaxY = 12+18;
-	}
-#else
-	if(GetDisplayWidth() == 512) {
-		MinX = -24;
-		MinY = 0;
-		MaxX = 24;
-		MaxY = 24;
-	} else {
-		MinX = -12;
-		MinY = 0;
-		MaxX = 12;
-		MaxY = 12;
-	}
-#endif
-
-	GetDisplayPos(&x,&y);
-
-	switch(id) {
-		case 	FRONTEND_CENTRESCREEN:
-			ResetDisplayPos();
-			GetDisplayPos(&x,&y);
-//			DBPRINTF(("Reset %d %d\n",x,y));
-			return;
-			break;
-
-		case	FRONTEND_PADUP:
-			y--;
-			if(y < MinY) y = MinY;
-			break;
-
-		case	FRONTEND_PADDOWN:
-			y++;
-			if(y > MaxY) y = MaxY;
-			break;
-
-		case	FRONTEND_PADLEFT:
-			x--;
-			if(x < MinX) x = MinX;
-			break;
-
-		case	FRONTEND_PADRIGHT:
-			x++;
-			if(x > MaxX) x = MaxX;
-			break;
-	}
-
-//	DBPRINTF(("%d %d\n",x,y));
-	SetDisplayPos(x,y);
-}
-
-
-#endif

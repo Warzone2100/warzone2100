@@ -17,18 +17,12 @@
 #include "structure.h"
 
 #include "visibility.h"
-#ifndef PSX
+
 #include "multiplay.h"
 #include "advvis.h"
-#endif
 
-#ifdef PSX
-#include "dcache.h"
-#include "profile.h"
 
-#define _OLD_PSX_VISIBILITY_METHOD_	// PC visibility code is still too slow so use cutdown PSX version.
 
-#endif
 
 // accuracy for the height gradient
 #define GRAD_MUL	10000
@@ -186,13 +180,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 	psTile = mapTile(x >> TILE_SHIFT, y >> TILE_SHIFT);
 
-#ifdef PSX
-	// Already seen this tile then just return, could cause false visiblilty results because
-	// wew no updateing currG if the tile is already visible.
-	if(TEST_TILE_VISIBLE(rayPlayer,psTile)) {
-		return TRUE;
-	}
-#endif
+
 
 	/* Not true visibility - done on sensor range */
 

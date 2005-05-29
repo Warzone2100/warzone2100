@@ -40,13 +40,7 @@ extern void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 
 extern void	releaseMapSurface(struct iSurface *pSurface);
 
-#ifdef PSX
 
-extern void renderIntelIMD(struct iIMDShape *pIMD,struct iIMDShape *pIMD2,SWORD OriginX,SWORD OriginY, BOOL SpinMe);
-
-extern void renderIntelWorld(iVector *location, iVector *viewVector,
-						  UDWORD distance,SWORD OriginX,SWORD OriginY);
-#endif
 
 #endif
 

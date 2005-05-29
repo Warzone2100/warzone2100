@@ -58,14 +58,11 @@
 #define MINPITCH (768)
 #define PITCHCHANGE (512)
 
-#ifndef PSX
-#include "multiplay.h"
-#endif
 
-#ifdef PSX
-#include "vpad.h"
-#include "ctrlpsx.h"
-#endif
+#include "multiplay.h"
+
+
+
 
 #include "target.h"
 #include "drive.h"
@@ -128,10 +125,7 @@ void driveInitVars(BOOL Restart)
 		TacticalActive = FALSE;
 		ControlMode = CONTROLMODE_DRIVE;
 		TargetFeatures = FALSE;
-#ifdef PSX
-		EnableMouseDraw(TRUE);
-		MouseMovement(TRUE);
-#endif
+
 	} else {
 		DBPRINTF(("driveInitVars: Driving\n"));
 		DrivingAudioTrack=-1;
@@ -145,10 +139,7 @@ void driveInitVars(BOOL Restart)
 		ControlMode = CONTROLMODE_DRIVE;
 		TargetFeatures = FALSE;
 		WasDriving = FALSE;
-#ifdef PSX
-		EnableMouseDraw(FALSE);
-		MouseMovement(FALSE);
-#endif
+
 	}
 }
 
@@ -237,13 +228,7 @@ BOOL StartDriverMode(DROID *psOldDroid)
 		driveDir = psDrivenDroid->direction % 360;
 		driveSpeed = 0;
 		driveBumpTime = gameTime;
-#ifdef PSX
-#ifdef DRIVENOISE
-		DrivingAudioTrack=audio2_StartTrack(ID_SOUND_CONSTRUCTOR_MOVE,ENGINEVOL,ENGINEVOL,0);
-#endif
-	DBPRINTF(("Starting driving noise\n"));
-		MouseMovement(FALSE);
-#endif
+
 		setDrivingStatus(TRUE);
 
 		if(DriveInterfaceEnabled) {
@@ -258,34 +243,10 @@ DBPRINTF(("camAllignWithTarget\n"));
 			camAllignWithTarget((BASE_OBJECT*)psDrivenDroid);
 		}
 
-#ifdef PSX
-		// If we were orbiting because there were no droids then cancel the orbit.
-		if(OrbitIsValid()) {
-			CancelObjectOrbit();
-		}
-#endif
+
 		return TRUE;
 	} else {
-#ifdef PSX
-		if(!OrbitIsValid()) {
-	DBPRINTF(("no droids, find a structure\n"));
-			if(StartObjectOrbit((BASE_OBJECT*)intFindAStructure())) {
-				camSetMode(CAMMODE_ORBIT);
-				MouseMovement(FALSE);
-				setDrivingStatus(TRUE);
 
-				if(DriveInterfaceEnabled) {
-					DBPRINTF(("Interface enabled2 ! Disabling drive control\n"));
-					DriveControlEnabled = FALSE;
-				} else {
-					DriveControlEnabled = TRUE;
-				}
-			} else {
-	DBPRINTF(("no structures, must be game over!\n"));
-				StopDriverMode();
-			}
-		}
-#endif
 	}
 
 	return FALSE;
@@ -293,11 +254,7 @@ DBPRINTF(("camAllignWithTarget\n"));
 
 void StopEngineNoise(void)
 {
-#ifdef PSX		
-#ifdef DRIVENOISE
-	audio2_StopTrack(DrivingAudioTrack);
-#endif
-#endif
+
 	DrivingAudioTrack=-1;
 }
 
@@ -308,9 +265,7 @@ void ChangeDriver(void)
 
 	if(psDrivenDroid != NULL) {
 		DBPRINTF(("Driver Changed\n"));
-#ifdef PSX		
-		StopEngineNoise();
-#endif
+
 //		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
 //		psDrivenDroid = NULL;
@@ -340,12 +295,7 @@ void StopDriverMode(void)
 
 	if(psDrivenDroid != NULL) {
 		DBPRINTF(("Drive mode canceled\n"));
-#ifdef PSX		
-#ifdef DRIVENOISE
-		audio2_StopTrack(DrivingAudioTrack);
-#endif
-		DrivingAudioTrack=-1;
-#endif
+
 //		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
 		psDrivenDroid = NULL;
@@ -359,9 +309,7 @@ void StopDriverMode(void)
 		}
 	}
 
-	#ifdef PSX
-//29	MouseMovement(TRUE);
-	#endif
+
 	setDrivingStatus(FALSE);
 	DriveControlEnabled = FALSE;
 }
@@ -485,9 +433,7 @@ BOOL driveDroidIsBusy(DROID *psDroid)
 void driveSelectionChanged(void)
 {
 	if(driveModeActive()) {
-	#ifdef PSX
-		CancelObjectOrbit();
-	#endif
+
 		if(psDrivenDroid) {
 	//		StopDriverMode();
 			ChangeDriver();
@@ -541,236 +487,7 @@ void driveNextDriver(void)
 }
 
 
-#ifdef PSX	// Playstation version.
-
-static BOOL driveControl(DROID *psDroid)
-{
-	BOOL Input = FALSE;
-	BOOL AllowDrive = DriveControlEnabled;
-	SDWORD MaxSpeed =  moveCalcDroidSpeed(psDroid);
-	SDWORD dirVel;
-	SDWORD accVel;
-	PROPULSION_STATS *psPropStats;
-	UDWORD AccVal;
-	UDWORD TurnVal;
-	static lastTime = 0;
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-
-	// Don't allow user control of a droid if interface is up.
-//	if(DriveInterfaceEnabled) {
-//		AllowDrive = FALSE;
-//	}
-
-	// Don't allow user control of a droid if interface is up or Tactical mode is active.
-	AllowDrive = driveAllowControl();
-
-	// Don't allow user control if it's a transporter or a vtol.
-	if( (psDroid->droidType == DROID_TRANSPORTER) ||
-		//((psPropStats->propulsionType == LIFT) && (psDroid->droidType != DROID_CYBORG)) ) {
-        ((psPropStats->propulsionType == LIFT) && !cyborgDroid(psDroid)) ) {
-		AllowDrive = FALSE;
-	}
-
-	// Don't allow user control of a droid if it's busy or orbiting a structure.
-//	if((OrbitIsValid() || DroidIsBuilding(psDroid) || DroidGoingToBuild(psDroid) ||	DroidIsDemolishing(psDroid)) &&
-	if( (OrbitIsValid() || driveDroidIsBusy(psDroid)) &&
-		!DeliveryReposValid() && !TacticalActive && !StructurePosValid()) {
-
-		AllowDrive = FALSE;
-		// If the droid is busy then orbit.
-		camSetMode(CAMMODE_ORBIT);
-	} else {
-//		if(!OrbitIsValid() && !DeliveryReposValid() && (gameTime < IdleTime)) {
-		if(!OrbitIsValid() && !DeliveryReposValid() && !TacticalActive && !StructurePosValid()) {
-			// Otherwise, follow from behind.
-			camSetMode(CAMMODE_BEHIND);
-		} else {
-			if(!DeliveryReposValid() && !TacticalActive && !StructurePosValid()) {
-				camSetMode(CAMMODE_ORBIT);
-			}
-		}
-	}
-
-	// Don't allow drive control if were orbiting a building.
-	if(OrbitIsValid()) {
-		AllowDrive = FALSE;
-	} else {
-//		if(VPadTriggered(VPAD_MOUSESB) && DriveControlEnabled) {
-//		if(VPadTriggered(VPAD_CYCLELEADER) && !TacticalActive && DriveControlEnabled) {
-		if(VPadTriggered(VPAD_CYCLELEADER) && DriveControlEnabled) {
-			driveNextDriver();
-		}
-	}
-	dirVel = accVel = 0;
-
-	if(VPadTriggered(VPAD_SELECTNAYBORS)) 
-	{
-		if (bInTutorial) eventFireCallbackTrigger(CALL_ALL_ONSCREEN_DROIDS_SELECTED);
-
-#ifndef MOUSE_EMULATION_ALLOWED
-		// If were in tactical mode then select the unit under the cursor
-		if(TacticalActive) {
-			DROID *psClickedOn;
-
-			psClickedOn = mouseTarget();
-			if(psClickedOn != NULL) {
-				dealWithDroidSelect(psClickedOn,FALSE);
-				psDrivenDroid = psClickedOn;
-				driveSelectionChanged();
-			}
-		}
-#endif
-		intSelectDroidsInDroidCluster(driveGetDriven());
-	}
-
-
-	AccVal =   (gameTime - lastTime);
-	AccVal *= 4096;
-	AccVal /= 80;
-	AccVal *= DRIVE_ACCELERATE;
-	AccVal /= 4096;
-
-	TurnVal =   (gameTime - lastTime);
-	TurnVal *= 4096;
-	TurnVal /= 80;
-	TurnVal *= DRIVE_TURNSPEED;
-	TurnVal /= 4096;
-
-	if(AllowDrive) {
-		if(GetControllerType(0) == CON_ANALOG) {
-			ANALOGDAT *Analog = GetAnalogData(0);
-
-			dirVel = -((SWORD)Analog->joyx0)/DRIVE_TURNDAMP;
-
-			if(dirVel > 0) {
-				dirVel = TurnVal;
-			} else if(dirVel < 0) {
-				dirVel = -TurnVal;
-			}
-
-			accVel = -((SWORD)Analog->joyy0);
-			if(accVel > 0) {
-				accVel = AccVal;
-			} else if(accVel < 0) {
-				accVel = -AccVal;
-			}
-
-			if(dirVel || accVel) {
-				Input = TRUE;
-			}
-		} //else {
-			if(!camViewControlsActive()) {
-				if(VPadDown(VPAD_MOUSELEFT)) {
-					dirVel = TurnVal;	//DRIVE_TURNSPEED;
-					Input = TRUE;
-				} else if(VPadDown(VPAD_MOUSERIGHT)) {
-					dirVel = -TurnVal;	//DRIVE_TURNSPEED;
-					Input = TRUE;
-				} 
-
-				if(VPadDown(VPAD_MOUSEUP)) {
-					accVel = TurnVal;	//DRIVE_ACCELERATE;
-					Input = TRUE;
-				} else if(VPadDown(VPAD_MOUSEDOWN)) {
-					accVel = -TurnVal;	//DRIVE_ACCELERATE;
-					Input = TRUE;
-				}
-			}
-//		}
-	}
-
-	if(dirVel > 0) {
-		driveDir += dirVel;
-	} else if(dirVel < 0) {
-		driveDir += dirVel;
-		if(driveDir < 0) {
-			driveDir += 360;
-		}
-	} 
-
-	driveDir = driveDir % 360;
-
-	if(accVel > 0) {
-		if(driveSpeed >= 0) {
-			driveSpeed += AccVal;
-			if(driveSpeed > MaxSpeed) {
-				driveSpeed = MaxSpeed;
-			}
-		} else {
-			driveSpeed += AccVal;	//DRIVE_BRAKE;
-			if(driveSpeed > 0) {
-				driveSpeed = 0;
-			}
-		}
-	} else if(accVel < 0) {
-		if(driveSpeed <= 0) {
-			driveSpeed -= AccVal;
-			if(driveSpeed < -MaxSpeed) {
-				driveSpeed = -MaxSpeed;
-			}
-		} else {
-			driveSpeed -= AccVal;	//DRIVE_BRAKE;
-			if(driveSpeed < 0) {
-				driveSpeed = 0;
-			}
-		}
-	} else {
-		if(driveSpeed > 0) {
-			driveSpeed -= DRIVE_DECELERATE;
-			if(driveSpeed < 0) {
-				driveSpeed = 0;
-			}
-		} else {
-			driveSpeed += DRIVE_DECELERATE;
-			if(driveSpeed > 0) {
-				driveSpeed = 0;
-			}
-		}
-	}
-
-
-//#ifdef DEBUG_DRIVE_SPEED
-//	printf("%d %d %d",gameTime - lastTime,AccVal,TurnVal);
-//	printf(": %d %d %d\n",MaxSpeed,driveSpeed,MAKEINT(psDroid->sMove.speed));
-//#endif
-
-	lastTime = gameTime;
-
-//	{
-//		static SDWORD lastSpeed;
-//		if(psDroid->sMove.speed != lastSpeed) {
-//			printf("Fighting\n");
-//		}
-//		lastSpeed = psDroid->sMove.speed;
-//	}
-
-
-#ifdef DRIVENOISE
-	if (DrivingAudioTrack!=-1)
-	{
-		UDWORD Pitch;
-
-		if(MaxSpeed) {
-			Pitch= ((ABS(driveSpeed))*PITCHCHANGE)/MaxSpeed;
-		} else {
-			Pitch = 0;
-		}
-		Pitch+=MINPITCH;
-
-		audio2_Track_SetPitch(DrivingAudioTrack, Pitch);
-		
-	}
-#endif
-	if(Input) {
-		IdleTime = gameTime + MAX_IDLE;
-	}
-
-	return Input;
-}
-
-
-#else	// PC Version...
+	// PC Version...
 
 static BOOL driveControl(DROID *psDroid)
 {
@@ -841,7 +558,7 @@ static BOOL driveControl(DROID *psDroid)
 	return Input;
 }
 
-#endif
+
 
 
 static BOOL driveInDriverRange(DROID *psDroid)
@@ -1050,9 +767,7 @@ void driveEnableInterface(BOOL AddReticule)
 	if(AddReticule) {
 		intAddReticule();
 	}
-#ifdef PSX
-	StartInterfaceSnap();
-#endif
+
 	DriveInterfaceEnabled = TRUE;
 }
 
@@ -1063,9 +778,7 @@ void driveDisableInterface(void)
 {
 	intResetScreen(FALSE);
 	intRemoveReticule();
-#ifdef PSX
-	CancelInterfaceSnap();
-#endif
+
 	DriveInterfaceEnabled = FALSE;
 }
 
@@ -1074,9 +787,7 @@ void driveDisableInterface(void)
 //
 void driveDisableInterface2(void)
 {
-#ifdef PSX
-	CancelInterfaceSnap();
-#endif
+
 	DriveInterfaceEnabled = FALSE;
 }
 
@@ -1089,337 +800,7 @@ BOOL driveInterfaceEnabled(void)
 }
 
 
-#ifdef PSX
 
-extern BOOL ReticuleUp;
-
-// Incremetaly close windows, returns TRUE if all windows including the reticule are closed.
-//
-BOOL IncrementalClose(void)
-{
-	DBPRINTF(("IncrementalClose : intMode == %d\n",intMode));
-
-	if(intMode == INT_DESIGN) {
-		// Remove the design screen.
-		intRemoveDesign();
-	} else if(intMode == INT_INTELMAP) {
-		// Remove the intelligence screen.
-		intRemoveIntelMapNoAnim();
-	} else if(intMode == INT_STAT) {
-		// Remove the object & stats windows.
-		intRemoveStats();
-		intRemoveObject();
-	} else if(intMode == INT_OBJECT) {
-		// Remove the object window.
-		intRemoveObject();
-	} else if(intMode == INT_ORDER) {
-		// Remove the order window.
-		intRemoveOrder();
-		if(!ReticuleUp) {
-			if( driveModeActive() || driveWasDriving() ) {
-				driveEnableControl();
-				driveDisableInterface();
-			}
-			if(!driveModeActive()) {
-				EnableMouseDraw(TRUE);
-				MouseMovement(TRUE);
-			}
-			intMode = INT_NORMAL;
-		}
-	} else if(intMode == INT_CMDORDER) {
-		// Remove the order window.
-		intRemoveOrder();
-		intRemoveObject();
-	} else if(intMode == INT_TRANSPORTER) {
-		// Remove the transporter windows.
-		intRemoveTrans();
-	} else {
-		// Remove the reticule.
-
-		if( driveModeActive() || driveWasDriving() ) {
-			driveEnableControl();
-			driveDisableInterface();
-		}
-		if(!driveModeActive()) {
-			EnableMouseDraw(TRUE);
-			MouseMovement(TRUE);
-		}
-		intMode = INT_NORMAL;
-
-		return TRUE;
-	}
-
-	intMode = INT_NORMAL;
-
-	return FALSE;
-}
-
-
-void driveProcessInterfaceButtons(void)
-{
-	if(intMode != INT_MISSIONRES) {
-//	if(!DeliveryReposValid()) {
-//	printf("%d %d\n",DriveInterfaceEnabled,DriveControlEnabled);
-		if(DriveControlEnabled) {
-//			if(VPadPressed(VPAD_MOUSERB)) {		// Pressing PAD_RU opens reticule in drive mode.
-			if(VPadPressed(VPAD_RETICULE)) {		// Pressing PAD_RU opens reticule in drive mode.
-				if(tryingToGetLocation()) {
-					kill3DBuilding();
-				} else {
-					tboxInitialise();					// Get rid of selection box if it's up.
-					driveDisableControl();
-					driveEnableInterface(TRUE);
-				}
-				VPadClearTrig(VPAD_RETICULE);		// Invalidate it for this frame.
-			}
-		} else {
-			if(VPadPressed(VPAD_RETICULE)) {
-				VPadClearTrig(VPAD_RETICULE);		// Invalidate it for this frame.
-//				if(tryingToGetLocation()) {
-//					kill3DBuilding();
-//				} else {
-					if(IncrementalClose()) {
-						driveEnableControl();
-						driveDisableInterface();
-					}
-//				}
-			}
-		}
-
-//		if( (!TacticalActive) && (!DriveInterfaceEnabled) &&
-//			(!StructurePosValid()) && (!DeliveryReposValid()) ) {
-		if( (!TacticalActive) &&
-//			(!StructurePosValid()) &&
-			(!DeliveryReposValid()) ) {
-
-			if(VPadTriggered(VPAD_BATTLEVIEW)) {
-#ifdef MOUSE_EMULATION_ALLOWED
-				// Switch to point'n'click mode.
-				driveDisableDriving();
-				kill3DBuilding();
-				VPadClearTrig(VPAD_BATTLEVIEW);			// Invalidate it for this frame.
-#else
-				// Switch to battle view.
-				kill3DBuilding();
-				driveEnableTactical();
-#endif
-			}
-		} else {
-		 	if(VPadTriggered(VPAD_BATTLEVIEW) && !tboxValid()) {
-#ifdef MOUSE_EMULATION_ALLOWED
-//				kill3DBuilding();
-#else
-				// Switch out of battle view.
-		 		driveDisableTactical();
-				kill3DBuilding();
-#endif
-//				CancelDeliveryRepos();
-//				CancelStructurePosition();
-			}
-		}
-	}
-}
-
-
-// Do drive specific button processing when in battle view (point'n'click mode).
-//
-void driveProcessInterfaceButtons2(void)
-{
-	if(intMode != INT_MISSIONRES) {
-
-		// If reticule not there then open it.
-		if( (intReticuleIsUp() == FALSE) && (intMode != INT_ORDER) ) {
-//		if(DriveControlEnabled) {
-			if(VPadPressed(VPAD_RETICULE)) {		// Pressing PAD_RU opens reticule.
-				VPadClearTrig(VPAD_RETICULE);		// Invalidate it for this frame.
-				if(tryingToGetLocation()) {
-					kill3DBuilding();
-				} else {
-					tboxInitialise();					// Get rid of selection box if it's up.
-					driveDisableControl();
-					driveEnableInterface(TRUE);
-					EnableMouseDraw(FALSE);
-					MouseMovement(FALSE);
-				}
-			}
-		} else {
-			// Otherwise, incrementle close.
-			if(VPadPressed(VPAD_RETICULE)) {
-				VPadClearTrig(VPAD_RETICULE);		// Invalidate it for this frame.
-				IncrementalClose();
-			}
-		}
-	}
-
-	if(!DriveInterfaceEnabled) {
-		if(!GetMouseOverRadar())
-		{
-			if(VPadTriggered(VPAD_SELECTNAYBORS)) 
-			{
-				DROID *psClickedOn;
-
-				if (bInTutorial) eventFireCallbackTrigger(CALL_ALL_ONSCREEN_DROIDS_SELECTED);
-
-				// Select the unit under the cursor
-
-		  		psClickedOn = mouseTarget();
-		  		if(psClickedOn != NULL) {
-					if( ((BASE_OBJECT*)psClickedOn)->type == OBJ_DROID) {
-						clearSel();
-			  			dealWithDroidSelect(psClickedOn,FALSE);
-			  			psDrivenDroid = psClickedOn;
-			//			driveSelectionChanged();
-						intSelectDroidsInDroidCluster(psClickedOn);
-						audio_PlayTrack(ID_SOUND_SELECT);
-					} else {
-						clearSel();
-					}
-				} else {
-					clearSel();
-				}
-			}
-		} else {
-			if(VPadTriggered(VPAD_SELECTNAYBORS)) 
-			{
-				SDWORD PosX,PosY;
-
-				// clicking on the radar orders all selected droids
-				// to move to this position.
-				CalcRadarPosition(mouseX(),mouseY(),(UDWORD *)&PosX,(UDWORD *)&PosY);
-				orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS,PosY*TILE_UNITS);
-				audio_PlayTrack(ID_SOUND_SELECT);
-			}
-		}
-	}
-}
-
-
-// Returns TRUE if we were in driving mode but it was disabled by
-// pressing triangle to go into battle view.
-//
-BOOL driveWasDriving(void)
-{
-	return WasDriving;
-}
-
-
-BOOL driveSetDirectControl(BOOL Control)
-{
-	DirectControl = Control;
-}
-
-
-BOOL driveSetWasDriving(BOOL Driving)
-{
-	WasDriving = Driving;
-}
-
-
-// Disable drive mode and go into point'n'click mode.
-//
-void driveDisableDriving(void)
-{
-	DBPRINTF(("Disable Driving Mode\n"));
-	DirectControl = FALSE;
-	WasDriving = TRUE;
-	StopDriverMode();
-	driveDisableControl();
-
-	// Need to set sensible camera distance and angle.
-	camSetMode(CAMMODE_RESTORE);
-
-	if(DriveInterfaceEnabled) {
-		MouseMovement(FALSE);
-		EnableMouseDraw(FALSE);
-	} else {
-		SetMousePos(0,iV_GetDisplayWidth()/2,iV_GetDisplayHeight()/2);
-		MouseMovement(TRUE);
-		EnableMouseDraw(TRUE);
-	}
-
-	// Make sure the scroll values are zero'd
-	scrollInitVars();
-
-	CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_BATTLEACTIVE)));
-}
-
-
-// Restore driving mode.
-//
-void driveRestoreDriving(void)
-{
-	DBPRINTF(("Restore Driving Mode\n"));
-	DirectControl = TRUE;
-	WasDriving = FALSE;
-	StartCameraMode();
-	if(DriveInterfaceEnabled) {
-		driveDisableControl();
-	} else {
-		driveEnableControl();
-	}
-	MouseMovement(FALSE);
-	EnableMouseDraw(FALSE);
-
-	// Selection may have changed.
-	driveSelectionChanged();
-
-	CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_BATTLEDEACTIVE)));
-}
-
-
-//DROID DummyDroid;
-//
-// Automaticly enable/dissable driving mode dependant on if war cam is active.
-//
-// This function needs re-writing / scraping.
-//
-//void driveAutoToggle(void)
-//{
-//#ifdef PSX
-//	if(DirectControl) {
-//#else
-//	{
-//#endif
-//		// Start and stop drive mode depending on war cam active status.
-//	#ifdef E3DEMO
-//		if( (getWarCamStatus() == TRUE)  &&
-//			(driveModeActive() == FALSE) &&
-//			(demoGetStatus() == FALSE) )
-//	#else
-//		if( (getWarCamStatus() == TRUE)  &&
-//			(driveModeActive() == FALSE) )
-//	#endif
-//		{
-//			DBPRINTF(("AutoToggle -> on\n"));
-//			if(StartDriverMode(NULL)) {
-////				intResetScreen(FALSE);
-////				intRemoveReticule();
-//			} else {
-//// problem, no droids so psDrivenDroid == NULL, ok so we set up a structure orbit but
-//// driveModeActive continues to return FALSE cause psDrivenDroid == NULL.....
-//				if(StartObjectOrbit((BASE_OBJECT*)intFindAStructure())) {
-//					MouseMovement(FALSE);
-//					setDrivingStatus(TRUE);
-//					DriveControlEnabled = TRUE;
-////					psDrivenDroid = &DummyDroid;	// Yukity Yuk Yuk Yuk.
-//				} else {
-//					DBPRINTF(("** Failed to start drive mode **\n"));
-//				}
-//			}
-//		} 
-//		else if( (getWarCamStatus() == FALSE) && (driveModeActive() == TRUE) ) 
-//		{
-//			DBPRINTF(("AutoToggle -> off\n"));
-//			if(!StartObjectOrbit((BASE_OBJECT*)intFindAStructure())) {
-////				intAddReticule();
-//		//		widgetsOn = TRUE;
-//				StopDriverMode();
-//			}
-//		}
-//	}
-//}
-//
-#endif
 
 
 // Check for and process a user request for a new target.
@@ -1469,33 +850,14 @@ void driveProcessAquireButton(void)
 }
 
 
-#ifdef PSX
-// Display targeting graphics.
-//
-void driveMarkTarget(void)
-{
-	if(camGetMode() == CAMMODE_BEHIND) {
-		BASE_OBJECT *psObj = targetGetCurrent();
-		if(psObj != NULL) {
-			if(driveAllowControl()) {
-				MouseMovement(FALSE);
-				targetMarkCurrent();
-				SetMousePos(0,psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-				pie_DrawMouse(psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-			}
-		}
-	}
-}
-#endif
+
 
 
 // Start structure placement for drive mode.
 //
 void driveStartBuild(void)
 {
-#ifdef PSX
-	CancelInterfaceSnap();
-#endif
+
 	intRemoveReticule();
 	DriveInterfaceEnabled = FALSE;
 //	driveDisableInterface();
@@ -1505,9 +867,7 @@ void driveStartBuild(void)
 
 void driveStartDemolish(void)
 {
-#ifdef PSX
-	CancelInterfaceSnap();
-#endif
+
 	intRemoveReticule();
 	DriveInterfaceEnabled = FALSE;
 	driveEnableControl();
@@ -1525,18 +885,11 @@ void driveStopBuild(void)
 //
 BOOL driveAllowControl(void)
 {
-#ifdef PSX
-	if( TacticalActive ||
-		DriveInterfaceEnabled ||
-		DeliveryReposValid() ||
-		StructurePosValid() ||
-		(camGetMode() == CAMMODE_ORBIT) ||
-		(!DriveControlEnabled) ) {
-#else
+
 	if( TacticalActive ||
 		DriveInterfaceEnabled ||
 		(!DriveControlEnabled) ) {
-#endif
+
 //		if( TacticalActive )	DBPRINTF(("TacticalActive\n");
 //		if( DriveInterfaceEnabled )	DBPRINTF(("DriveInterfaceEnabled\n");
 //		if( DeliveryReposValid() ) DBPRINTF(("DeliveryReposValid\n");
@@ -1558,9 +911,7 @@ void driveEnableTactical(void)
 //	SetMouseRange(0,RADTLX,RADTLY,RADTLX+RADWIDTH,RADTLY+RADHEIGHT);
 //	SetMousePos(0,RADTLX+RADWIDTH/2,RADTLY+RADHEIGHT/2);
 
-#ifdef PSX
-	CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_BATTLEACTIVE)));
-#endif
+
 	StartTacticalScroll(TRUE);
 	TacticalActive = TRUE;
 	DBPRINTF(("Tactical Mode Activated\n"));
@@ -1572,9 +923,7 @@ void driveEnableTactical(void)
 void driveDisableTactical(void)
 {
 	if(driveModeActive() && TacticalActive) {
-#ifdef PSX
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_BATTLEDEACTIVE)));
-#endif
+
 		CancelTacticalScroll();
 	//	MouseMovement(FALSE);
 	//	SetMouseRange(0,16,16,639-16,479-16);

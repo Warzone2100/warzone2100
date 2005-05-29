@@ -19,16 +19,14 @@
 #include "ivisdef.h"
 #include "piestate.h"
 
-#ifndef PSX
+
 #include "piemode.h"
-#endif
+
 
 #include "vid.h"
 #include "bitimage.h"
 
-#ifdef PSX
-#include "primatives.h"
-#endif
+
 
 #include "display3d.h"
 #include "edit3d.h"
@@ -63,9 +61,7 @@ static BOOL	EnableLocks = TRUE;
 static SDWORD LockRefs = 0;
 
 IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
-#ifdef PSX
-//IMAGEFILE *EffectImages;
-#endif
+
 
 
 #ifndef PSX
@@ -208,35 +204,7 @@ IMAGEFRAME FrameNormal = {
 //	{FR_IGNORE, 0,0, 0,0 ,0}},
 //};
 
-#ifdef PSX
-// Tab definitions, defines graphics to use for major and minor tabs.
-TABDEF	StandardTab = {
-	IMAGE_TAB1,		  	// Major tab normal.
-	IMAGE_TABSELECTED,	// Major tab clicked.
-	IMAGE_TABHILIGHT,	// Major tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Major tab currently selected.
 
-	IMAGE_TAB1,			// Minor tab tab Normal.
-	IMAGE_TABSELECTED,	// Minor tab clicked.
-	IMAGE_TABHILIGHT,	// Minor tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Minor tab currently selected.
-};
-TABDEF SystemTab = {
-	IMAGE_DES_WEAPONS,
-	IMAGE_DES_WEAPONS,
-	IMAGE_DES_EXTRAHI,
-	IMAGE_DES_WEAPONS,
-
-	/*IMAGE_TAB1,
-	IMAGE_TAB1DOWN,
-	IMAGE_TABHILIGHT,
-	IMAGE_TABSELECTED,*/
-	IMAGE_SIDETAB,
-	IMAGE_SIDETABDOWN,
-	IMAGE_SIDETABHI,
-	IMAGE_SIDETABSEL,
-};
-#else
 // Tab definitions, defines graphics to use for major and minor tabs.
 TABDEF	StandardTab = {
 	IMAGE_TAB1,			// Major tab normal.
@@ -276,7 +244,7 @@ TABDEF	SmallTab = {
 	IMAGE_TABHILIGHT_SM,	// Minor tab hilighted by mouse.
 	IMAGE_TAB1SELECTED_SM,	// Minor tab currently selected.
 };
-#endif
+
 
 
 
@@ -285,12 +253,7 @@ TABDEF	SmallTab = {
 BOOL imageInitBitmaps(void)
 {
   	IntImages = (IMAGEFILE*)resGetData("IMG","intfac.img");
-#ifdef PSX
-//  	EffectImages = (IMAGEFILE*)resGetData("IMG","gamefx.img");
-	if(GetGameMode() == GS_NORMAL) {
-		InitRadar_PSX(RADWIDTH/2,RADHEIGHT/2);
-	}
-#endif
+
 //	IntImages = iV_LoadImageFile("intpc.img");
 
 	return TRUE;
@@ -351,32 +314,7 @@ void RenderOpaqueWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD 
 
 #define INCEND	(0)
 
-#ifdef PSX
 
-// Much smaller PSX version without the legacy stuff.
-
-void RenderBorder(UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
-{
-	iV_Line(x,y,x+Width,y,COL_BLACK);
-	iV_Line(x+Width,y,x+Width,y+Height,COL_BLACK);
-	iV_Line(x+Width,y+Height,x,y+Height,COL_BLACK);
-	iV_Line(x,y+Height,x,y,COL_BLACK);
-}
-
-void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height,BOOL Opaque)
-{
-	RenderBorder(x,y,Width,Height);
-
-	if(Opaque)
-	{
-		iV_BoxFill( x,y,x+Width,y+Height,190);
-	}
-	else
-	{
-		iV_TransBoxFill( x,y,x+Width,y+Height );
-	}
-}
-#else
 
 // Render a window frame.
 //
@@ -435,17 +373,12 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 				}
 				else
 				{
-#ifdef PSX
-					iV_BoxFill( x+Rect->TLXOffset,
-								y+Rect->TLYOffset,
-								x+Width-INCEND+Rect->BRXOffset,
-								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
-#else
+
 					pie_BoxFillIndex( x+Rect->TLXOffset,
 								y+Rect->TLYOffset,
 								x+Width-INCEND+Rect->BRXOffset,
 								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
-#endif
+
 				}
 				break;
 
@@ -579,9 +512,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 
 	DrawBegin();
 
-#ifdef PSX
-	iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-#endif
+
 
 	if(Frame->TopLeft >= 0) {
 		WTopLeft = (SWORD)iV_GetImageWidth(IntImages,Frame->TopLeft);
@@ -682,4 +613,4 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 	DrawEnd();
 }
 
-#endif
+

@@ -12,11 +12,11 @@
 #include "textdraw.h" //ivis text code
 #include "screen.h"
 
-#ifndef PSX
+
 #include "piemode.h"
 #include "piematrix.h"
 #include "piefunc.h"
-#endif
+
 
 #include "hci.h"		// access to widget screen.
 #include "widget.h"
@@ -38,10 +38,8 @@
 #include "keymap.h"
 #include "mission.h"
 
-#ifndef PSX
-#ifdef INC_GLIDE
-#include "3dfxfunc.h"
-#endif
+
+
 #include "keyedit.h"
 #include "seqdisp.h"
 #include "vid.h"
@@ -52,29 +50,9 @@
 #include "multiint.h"				
 #include "multistat.h"
 #include "multilimit.h"
-#endif
-
-#ifdef PSX
-#include "map.h"
-#include "display3d_psx.h"
-#include "libsn.h"
-#include "vid.h"
-#include "primatives.h"
-#include "vpad.h"
-#include "ctrlpsx.h"
-#include "initpsx.h"
-
-/* callback type for res pre-load callback*/
-typedef void (*SPECIALVBLCALLBACK)(void);
-
-void SetSpecialVblCallback( SPECIALVBLCALLBACK routine);
 
 
-extern BOOL fastExit;
-extern BOOL IsMouseDrawEnabled(void);
 
-
-#endif
 
 #ifndef PSX   
 
@@ -175,25 +153,15 @@ BOOL playIntroOnInstall( VOID )
 TITLECODE titleLoop(void)
 {
 	TITLECODE RetCode = TITLECODE_CONTINUE;
-#ifdef PSX
-	StartScene();	// Setup all the primative handling for this frame
-#ifdef DEBUG
-	pollhost();
-#endif
-	iV_SetScaleFlags_PSX(IV_SCALE_POSITION | IV_SCALE_SIZE);
-#endif
 
 
-#ifndef PSX
+
+
 	pie_GlobalRenderBegin();
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
 	screen_RestartBackDrop();
-#else
-	if(GetControllerType(0) == CON_MOUSE) {
-		EnableMouseDraw(TRUE);
-	}
-#endif
+
 
 	if(firstcall)
 	{	
@@ -209,7 +177,7 @@ TITLECODE titleLoop(void)
 
 		pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);			// reset cursor (hw)
 
-#ifndef PSX
+
 
 		frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
@@ -257,13 +225,13 @@ TITLECODE titleLoop(void)
 				changeTitleMode(GAMEFIND);
 			}
 		}
-#endif
+
 	}
 
 	switch(titleMode)								// run relevant title screen code.
 	{
 
-#ifndef PSX										// MULTIPLAYER screens
+										// MULTIPLAYER screens
 		case PROTOCOL:
 			runConnectionScreen();					// multiplayer connection screen.
 			break;
@@ -285,7 +253,7 @@ TITLECODE titleLoop(void)
 		case KEYMAP:
 			runKeyMapEditor();
 			break;
-#endif
+
 
 		case TITLE:
 			runTitleMenu();
@@ -299,7 +267,7 @@ TITLECODE titleLoop(void)
 			runTutorialMenu();
 			break;
 
-#ifndef PSX
+
 //		case GRAPHICS:
 //			runGraphicsOptionsMenu();
 //			break;
@@ -307,7 +275,7 @@ TITLECODE titleLoop(void)
 		case CREDITS:
 			runCreditsScreen();
 			break;
-#endif
+
 //		case DEMOMODE:
 //			runDemoMenu();
 //			break;
@@ -322,11 +290,11 @@ TITLECODE titleLoop(void)
 			runGameOptionsMenu();
 			break;
 
-#ifndef PSX
+
 		case GAME2:
 			runGameOptions2Menu();
 			break;
-#endif
+
 
 		case QUIT:
 			RetCode = TITLECODE_QUITGAME;
@@ -334,9 +302,9 @@ TITLECODE titleLoop(void)
 		
 		case STARTGAME:	
 		case LOADSAVEGAME:
-#ifndef PSX
+
 			initLoadingScreen(TRUE,TRUE);//render active
-#endif
+
   			if (titleMode == LOADSAVEGAME)
 			{
 				RetCode = TITLECODE_SAVEGAMELOAD;
@@ -345,21 +313,18 @@ TITLECODE titleLoop(void)
 			{
 				RetCode = TITLECODE_STARTGAME;
 			}
-#ifndef PSX
+
 			pie_GlobalRenderEnd(TRUE);//force to black
-#endif
+
 			return RetCode;			// don't flip!
 			break;
 
 		case SHOWINTRO:
-#ifdef PSX		// ffs js
-			screenFlip(TRUE);//flip to clear screen but not here//reshow intro video.
-	  		screenFlip(TRUE);//flip to clear screen but not here
-#else
+
 			pie_SetFogStatus(FALSE);
 			pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here//reshow intro video.
 	  		pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here
-#endif
+
 			changeTitleMode(TITLE);
 			RetCode = TITLECODE_SHOWINTRO;
 			break;
@@ -817,16 +782,7 @@ BOOL displayGameOver(BOOL bDidit)
 	else
 #endif
 	{
-#ifdef PSX
-		if(bDidit)
-		{
-			setPlayerHasWon(TRUE);	// quit to frontend..
-		}
-		else
-		{
-			setPlayerHasLost(TRUE);
-		}
-#endif
+
         //clear out any mission widgets - timers etc that may be on the screen
         clearMissionWidgets();
 		intAddMissionResult(bDidit, TRUE);

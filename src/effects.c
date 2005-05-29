@@ -28,10 +28,10 @@
 #include "display3d.h"
 #include "map.h"
 #include "bucket3d.h"
-#ifndef PSX
+
 #include "piemode.h"
 #include "mission.h"
-#endif
+
 
 /*Remove this one!!! :-( */
 #include "miscimd.h"
@@ -42,23 +42,16 @@
 #include "lighting.h"
 #include "console.h"
 #include "loop.h"
-#ifdef PSX
-#include "vid.h"
-#include "vpsx.h"
-#include "primatives.h"
-#include "drawimd_psx.h"
-#include <inline_c.h>
-#include <gtemac.h>
-#else
+
 #include "multiplay.h"
-#endif
+
 
 #include "game.h"
 //#define COUNTOFFSCREEN
 
-#ifndef PSX
+
 #define DOLIGHTS
-#endif
+
 
 
 extern UWORD OffScreenEffects;
@@ -346,12 +339,7 @@ UDWORD	i;
 BOOL	bSmoke;
 
 	aeCalls++;
-#ifdef PSX
-#warning "EXPLOSION_TYPE_SHOCKWAVE NOT IMPLEMENTED YET"
-	if(type == EXPLOSION_TYPE_SHOCKWAVE) {
-		return;
-	}
-#endif
+
 
 	if(gamePaused())
 	{
@@ -548,12 +536,7 @@ BOOL	validatePie(EFFECT_GROUP group, EFFECT_TYPE type, iIMDShape *pie)
 			/* Ok in these cases */
 			return(TRUE);
 		}
-#ifdef PSX
-		if(type == EXPLOSION_TYPE_POWERMODULE OR type == EXPLOSION_TYPE_RESEARCHMODULE)
-		{
-			return(TRUE);
-		}
-#endif
+
 		return(FALSE);
 	}
 	else
@@ -635,15 +618,7 @@ UDWORD	i;
 				bucketAddTypeToList(RENDER_EFFECT,&asEffectsList[i]);
 #endif
 			}
-#ifdef PSX
-			else
-			{
-				if(!essentialEffect(asEffectsList[i].group,asEffectsList[i].type)) {
-					Reject1++;
-					KILL_EFFECT(&(asEffectsList[i]));
-				}
-			}
-#endif
+
 		}
 	}
 }
@@ -2612,18 +2587,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 			psEffect->size = TESLA_SIZE;
 			psEffect->velocity.y = MAKEFRACT(TESLA_SPEED);
 			break;
-#ifdef PSX
-		case EXPLOSION_TYPE_POWERMODULE:
-			psEffect->imd = getImdFromIndex(MI_MODULE);
-			psEffect->size = TESLA_SIZE;
-			psEffect->velocity.y = MAKEFRACT(TESLA_SPEED);
-			break;
-		case EXPLOSION_TYPE_RESEARCHMODULE:
-			psEffect->imd = getImdFromIndex(MI_MODULE);
-			psEffect->size = TESLA_SIZE;
-			psEffect->velocity.y = MAKEFRACT(TESLA_SPEED);
-			break;
-#endif
+
 		case EXPLOSION_TYPE_KICKUP:
 			psEffect->imd = getImdFromIndex(MI_KICK);
 			psEffect->size = 100;
@@ -2665,18 +2629,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 		psEffect->frameDelay = EXPLOSION_TESLA_FRAME_DELAY;
 	}
 	else
-#ifdef PSX
-	if(psEffect->type==EXPLOSION_TYPE_POWERMODULE)
-	{
-		psEffect->frameDelay = EXPLOSION_POWERMODULE_FRAME_DELAY;
-	}
-	else
-	if(psEffect->type==EXPLOSION_TYPE_RESEARCHMODULE)
-	{
-		psEffect->frameDelay = EXPLOSION_RESEARCHMODULE_FRAME_DELAY;
-	}
-	else
-#endif
+
 	if(psEffect->type==EXPLOSION_TYPE_PLASMA)
 	{
 		psEffect->frameDelay = EXPLOSION_PLASMA_FRAME_DELAY;
@@ -3066,11 +3019,7 @@ STRUCTURE	*psStructure;
 iVector		eventPos;
 UDWORD		capacity;
 POWER_GEN	*psPowerGen;
-#ifdef PSX
-RESEARCH_FACILITY *psResearch;
-int j;
-iVector	secPos;
-#endif
+
 BOOL		active;
 
 	
@@ -3091,17 +3040,12 @@ BOOL		active;
 					lastUpdateStructures[partition] = gameTime;
 					// -------------------------------------------------------------------------------
 					/* Factories puff out smoke, power stations puff out tesla stuff */
-#ifndef PSX
+
 				 	if( (psStructure->pStructureType->type == REF_FACTORY) OR
 						(psStructure->pStructureType->type == REF_POWER_GEN) )
 					if( (bMultiPlayer && isHumanPlayer(psStructure->player))
 						|| (psStructure->player == 0) )
-#else
-				 	if( (psStructure->pStructureType->type == REF_FACTORY) OR
-						(psStructure->pStructureType->type == REF_POWER_GEN) OR
-						(psStructure->pStructureType->type == REF_RESEARCH) )
-					if(psStructure->player == 0)
-#endif
+
 					if(psStructure->status==SS_BUILT)
 					if(psStructure->visible[selectedPlayer])
 					{
@@ -3116,13 +3060,13 @@ BOOL		active;
 								eventPos.z = psStructure->y-psStructure->sDisplay.imd->connectors->y;
 								eventPos.y = psStructure->z+psStructure->sDisplay.imd->connectors->z;
 								addEffect(&eventPos,EFFECT_SMOKE,SMOKE_TYPE_STEAM,FALSE,NULL,0);
-#ifndef PSX
+
 
 								if(selectedPlayer == psStructure->player)
 								{
 									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_STEAM );
 								}
-#endif
+
 							}
 						}
 						else if(psStructure->pStructureType->type == REF_POWER_GEN)
@@ -3167,59 +3111,22 @@ BOOL		active;
 								eventPos.y = psStructure->z + 48;
 								addEffect(&eventPos,EFFECT_EXPLOSION,
 										EXPLOSION_TYPE_TESLA,FALSE,NULL,0);
-#ifndef PSX
+
 								if(selectedPlayer == psStructure->player)
 								{
 									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_SPARK );
 								}
-#endif
+
 							}
 							/*	Work out how many spires it has. This is a particularly unpleasant
 								hack and I'm not proud of it, but it needs to done. Honest. AM
 							*/
 							//if(capacity)
-#ifndef PSX
-						}
-#endif
-#ifdef PSX
-							if (capacity)
-							{
-								eventPos.y = psStructure->z;
 
-								/* Now add effects over the other spires - for connected (and 
-									active) ones - always add effect now 9/6/98 AB*/
-								for(j=0; j<capacity; j++)
-								{
-									secPos.x = eventPos.x + powerHack[j].x;
-									secPos.z = eventPos.z + powerHack[j].y;
-									secPos.y = eventPos.y;
-										addEffect(&secPos,EFFECT_EXPLOSION,
-													EXPLOSION_TYPE_POWERMODULE,FALSE,NULL,0);
-								}
-							}
 						}
-						else if(psStructure->pStructureType->type == REF_RESEARCH)
-						{
-							psResearch = (RESEARCH_FACILITY*)psStructure->pFunctionality; 
-							eventPos.x = psStructure->x;
-							eventPos.z = psStructure->y;
-							eventPos.y = psStructure->z;	//+psStructure->sDisplay.imd->connectors->z;
-							capacity = psResearch->capacity;
-							if (capacity)
-							{
-								/* Now add effects over the other spires - for connected (and 
-									active) ones - always add effect now 9/6/98 AB*/
-								for(j=0; j<capacity; j++)
-								{
-									secPos.x = eventPos.x + powerHack[j].x;
-									secPos.z = eventPos.z + powerHack[j].y;
-									secPos.y = eventPos.y;
-									addEffect(&secPos,EFFECT_EXPLOSION,
-												EXPLOSION_TYPE_RESEARCHMODULE,FALSE,NULL,0);
-								}
-							}
-						}
-#endif
+
+
+
 					}
 				}
 			}
@@ -3449,525 +3356,4 @@ void	addFireworksEffect( void )
 
 
 // ----------------------------------------------------------------------------------------
-#ifdef PSX	// PSX specific effect renderer.
 
-// Render an effect.
-//
-// Assumes world matrix context already set up.
-//
-// psEffect		Pointer to effect to render.
-// Scale		Percentage scale.
-// TransRate	Transparency rate ( Currently renders all 2d effects transparent and 3d effects solid)
-//
-void rendEffect(EFFECT *psEffect,UDWORD Scale,PIE *Params)
-{
-	iVector	vec;
-
-	/* Establish world position */
-	vec.x = (MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	vec.y = MAKEINT(psEffect->position.y);
-	vec.z = terrainMidY * TILE_UNITS - (MAKEINT(psEffect->position.z) - player.p.z);
-
-	rendMultiPIERot(psEffect->imd,psEffect->frameNumber,
-					&vec,&psEffect->rotation,NULL,
-					Scale,Params);
-}
-
-
-// Render any one of a number of different PIE types.
-//
-// Assumes world matrix context already set up.
-// Sets up local transformation and rotation.
-//
-// Shape		Pointer to the PIE to render.
-// frameNumber	Frame number , only used for 2d sprite type PIE's
-// Position		Position in the world.
-// Rotation		The pie's rotation, only used for 3d IMD tyoe PIE's
-// 				If Position or Rotation = NULL then uses current matrix context.
-// Scale		Percentage scale.
-//
-//
-void rendMultiPIERot(iIMDShape *Shape,UWORD frameNumber,
-				iVector *Position,iVector *Rotation,iVector *Offset,UDWORD Scale,PIE *Params)
-{
-	iVector	vec;
-	SDWORD	rx,rz;
-
-	SVECTOR CurPoint;
-	SWORD sxy[4*2];
-	SDWORD Zed,Flag;
-	SDWORD OtZ;
-	
-	ORDERTAB *pOrderingTable;
-	UBYTE *pPrimBuffer;
-	POLY_FT4 *Poly;
-	IMAGEDEF *Image;
-	UWORD Width;
-	UWORD Height;
-	UWORD Tu;
-	UWORD Tv;
-	UWORD ImageID;
-	SDWORD Ratio;
-	SDWORD XOffset,YOffset;
-	iVector VOffset;
-
-	if(Shape == NULL) {
-		DBPRINTF(("rendMultiPIERot : Shape == NULL\n"));
-		return;
-	}
-//	assert(Shape);		// Make sure that the suplied IMD is not zero , (cause it is on my machine!)
-
-	if((Rotation != NULL) && (Position != NULL)) {
-		iVector CamVec;
-		
-		// Save the current matrix.
-		psxSaveMatrix();
-
-		// Set position and camera pos.
-		CamVec.x = player.p.x & (TILE_UNITS-1);
-		CamVec.y = 0;
-		CamVec.z = player.p.z & (TILE_UNITS-1);
-		geomTranslatePosCam(Position,&CamVec);
-
-//		/* Establish world position */
-//		vec.x = Position->x;
-//		vec.y = -Position->y;
-//		vec.z = Position->z;
-//
-//		// Save the current matrix.
-//		psxSaveMatrix();
-//
-//		// Position the effect in the world.
-//		psxiV_TRANSLATE(vec.x,vec.y,vec.z);
-//
-//		/* Offset from camera */
-//		rx = player.p.x & (TILE_UNITS-1);
-//		rz = player.p.z & (TILE_UNITS-1);
-//
-//		/* Move to camera reference */
-//		psxiV_TRANSLATE(rx,0,-rz);
-	}
-
-	if(Shape->flags & iV_IMD_XEFFECT) {
-		// It's a 2d IMAGE type effect mapped onto a POLY_FT4.
-		iIMDShapeEffect *ShapeEffect = (iIMDShapeEffect*)Shape;
-
-		assert(!(ShapeEffect->flags & iV_IMD_XEFFECT_PROJECTILE));
-
-//		ShapeEffect->flags = 1 | iV_IMD_XEFFECT_WPLANE;	// For Testing.
-
-		if((Rotation != NULL) && (Position != NULL)) {
-			// Do objects local rotation.
-			if(ShapeEffect->flags & iV_IMD_XEFFECT_VPLANE) {
-				// Always face the viewer.
-				geomRotateMatrixXY(-player.r.x,-player.r.y);
-//				psxiV_MatrixRotateX(-player.r.x);
-//				psxiV_MatrixRotateY(-player.r.y);
-			}	// Else Parallel to world plane so don't rotate it.
-
-			psxUseMatrix();
-		}
-
-		frameNumber = frameNumber % ShapeEffect->numframes;
-
-		// Get the ratio of the 3d size to the 2d size.
-		Ratio = (ShapeEffect->xsize * 256) / ShapeEffect->ysize;
-		Scale = (Scale * Ratio) / 256;
-
-		ImageID = ShapeEffect->firstframe + frameNumber;
-
-		assert(ImageID < ((IMAGEFILE*)ShapeEffect->ImageFile)->Header.NumImages);
-		Image = &((IMAGEFILE*)ShapeEffect->ImageFile)->ImageDefs[ImageID];
-
-		// Calculate 3d width ,height and offset.
-		Width = (Image->Width*Scale)/100;
-		Height = (Image->Height*Scale)/100;
-		XOffset = (Image->XOffset*(SDWORD)Scale)/100;
-		YOffset = (Image->YOffset*(SDWORD)Scale)/100;
-
-		if(Offset != NULL) {
-			VOffset = *Offset;
-		} else {
-			VOffset.x = VOffset.y = VOffset.z = 0;
-		}
-
-	 	// Transform.
-		if(ShapeEffect->flags & iV_IMD_XEFFECT_VPLANE) {
-			CurPoint.vx = VOffset.x + XOffset;
-			CurPoint.vy = VOffset.y + YOffset;
-			CurPoint.vz = VOffset.z + 0;
-//			RotTransPers(&CurPoint,(long *)&sxy[0],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-			CurPoint.vx += Width;
-        	gte_stsxy((long *)&sxy[0]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-//			gte_stszotz(&OtZ);
-//			CurPoint.vx += Width;
-//			RotTransPers(&CurPoint,(long *)&sxy[2],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-			CurPoint.vy += Height;
-        	gte_stsxy((long *)&sxy[2]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-//			gte_stszotz(&OtZ);
-//			CurPoint.vy += Height;
-//			RotTransPers(&CurPoint,(long *)&sxy[4],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-			CurPoint.vx = VOffset.x + XOffset;
-        	gte_stsxy((long *)&sxy[4]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-//			gte_stszotz(&OtZ);
-//			CurPoint.vx = VOffset.x + XOffset;
-//			OtZ = RotTransPers(&CurPoint,(long *)&sxy[6],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-        	gte_stsxy((long *)&sxy[6]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-			gte_stszotz(&OtZ);
-		} else {
-			CurPoint.vx = VOffset.x + XOffset;
-			CurPoint.vz = VOffset.z + YOffset;
-			CurPoint.vy = VOffset.y + 0;
-//			RotTransPers(&CurPoint,(long *)&sxy[0],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-			CurPoint.vx += Width;
-        	gte_stsxy((long *)&sxy[0]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-//			gte_stszotz(&OtZ);
-//			CurPoint.vx += Width;
-//			RotTransPers(&CurPoint,(long *)&sxy[2],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-			CurPoint.vz += Height;
-        	gte_stsxy((long *)&sxy[2]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-//			gte_stszotz(&OtZ);
-//			CurPoint.vz += Height;
-//			RotTransPers(&CurPoint,(long *)&sxy[4],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-			CurPoint.vx = VOffset.x + XOffset;
-        	gte_stsxy((long *)&sxy[4]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-//			gte_stszotz(&OtZ);
-//			CurPoint.vx = VOffset.x + XOffset;
-//			OtZ = RotTransPers(&CurPoint,(long *)&sxy[6],&Zed,&Flag);	// Generate the screen coords 
-			gte_ldv0(&CurPoint);
-    	    gte_rtps();
-        	gte_stsxy((long *)&sxy[6]);
-//	        gte_stdp(r3);
-//			gte_stflg(&Flag);
-			gte_stszotz(&OtZ);
-		}
-
-
-//DBPRINTF(("%d\n",OtZ);
-		if(OtZ < 0) {
-			// Behind the view plane.
-			if((Rotation != NULL) && (Position != NULL)) {
-				// Restore the current matrix.
-				psxRestoreMatrix();
-			}
-			return;
-		}
-
-
-		if( ( PointOffScreen(sxy[0],sxy[1]) ) && 
-			( PointOffScreen(sxy[2],sxy[3]) ) && 
-			( PointOffScreen(sxy[4],sxy[5]) ) && 
-			( PointOffScreen(sxy[6],sxy[7]) ) ) {
-
-#ifdef COUNTOFFSCREEN
-			OffScreenEffects ++;
-#endif
-			// Off screen.
-			if((Rotation != NULL) && (Position != NULL)) {
-				// Restore the current matrix.
-				psxRestoreMatrix();
-			}
-			return;
-		}
-
-		if(Params != NULL) {
-			if(Params->Flags & PIE_OTZ) {
-				OtZ = Params->OtZ;
-			}
-		}
-
-		OtZ = psxiv_LimitZ(OtZ);
-
-		// Draw.
-		GetCurrentOT(&pOrderingTable);
-		GetPrimBufferPos(&pPrimBuffer);
-
-		Poly = (POLY_FT4*)pPrimBuffer;
-
-		if(DoesPrimFit(Poly,sizeof(POLY_FT4))==TRUE) {
-			Poly->clut=Image->PalID;
-			Poly->tpage=Image->TPageID;
-
-			_setXY4(Poly, sxy[0],sxy[2],sxy[6],sxy[4]);
-//			setXY4(Poly, sxy[0],sxy[1],
-//						sxy[2],sxy[3],
-//						sxy[6],sxy[7],
-//						sxy[4],sxy[5]);
-
-			Tu = Image->Tu;
-			Tv = Image->Tv;
-			Width = Image->Width-1;		// Subtracting 1 gets rid of those nasty edge artefacts.
-			Height = Image->Height-1;
-
-			setUV4(Poly, Tu,Tv,
-						Tu+Width,Tv,
-						Tu,Tv+Height,
-						Tu+Width,Tv+Height);
-
-//			setPolyFT4(Poly);
-
-			if(Params != NULL) {
-				if(Params->Flags & PIE_COLOURED) {
-					_setRGB0(Poly,Params->ColourRGB[0]);
-//					setRGB0(Poly,Params->ColourRGB[0],Params->ColourRGB[1],Params->ColourRGB[2]);
-					setShadeTex(Poly,0);
-				} else {
-					setShadeTex(Poly,1);
-				}
-
-				setPolyFT4(Poly);
-
-				if(Params->Flags & PIE_TRANSPARENT) {
-					setSemiTrans(Poly,1);
-					setTransType(Poly,Params->TransMode);
-				} else {
-					setSemiTrans(Poly,0);
-				}
-			} else {
-				setPolyFT4(Poly);
-				setSemiTrans(Poly,0);
-				setShadeTex(Poly,1);
-			}
-
-			OtZ = psxiv_DoZBias(OtZ);
-//			psxiv_DoZBias(&OtZ);
-//			if(OtZ < OT2D_SIZE) {
-//				OtZ = OT2D_SIZE + 1;
-//			}
-
-//			setPolyFT4(Poly);
-			addPrim( pOrderingTable + OtZ, Poly);
-
-			SetPrimBufferPos(pPrimBuffer+sizeof(POLY_FT4));
-		}
-	} else {
-		// It's a 3d model type effect.
-		SWORD dummyscreen[2];
-		static SVECTOR ZeroVector={0,0,0};
-//		PIE PieParams;
-
-		if((Rotation != NULL) && (Position != NULL)) {
-			geomRotateMatrixYXZ(DEG(Rotation->x),DEG(Rotation->y),DEG(Rotation->z));
-//			psxiV_MatrixRotateY(DEG(Rotation->y));
-//		   	psxiV_MatrixRotateX(DEG(Rotation->x));
-//		   	psxiV_MatrixRotateZ(DEG(Rotation->z));
-
-			psxUseMatrix();
-
-			SetBSPObjectPos(Position->x,Position->y,Position->z);
-		}
-
-//		SetBSPObjectPos(Position->x,Position->y,Position->z);
-
-//		psxiv_SetIMDZ(psxiV_RotateProject(&ZeroVector,dummyscreen));
-  		gte_ldv0(&ZeroVector);
-   	  	gte_rtps();
-		gte_stszotz(&OtZ);
-		psxiv_SetIMDZ(OtZ);
-
-		if(Params != NULL) {
-			if( !(Params->Flags & PIE_PALETTEID) ) {
-				Params->Flags = PIE_PALETTEID;
-				Params->PaletteID = 0;
-			}
-		}
-		DrawPie(Shape,Params);
-	}
-
-	if((Rotation != NULL) && (Position != NULL)) {
-		// Restore the current matrix.
-		psxRestoreMatrix();
-	}
-}
-
-
-#define PERSMUL	(256)
-
-void rend2DEffect(iIMDShape *Shape,UWORD frameNumber,
-				iVector *Offset,UDWORD Scale,PIE *Params)
-{
-	iVector	vec;
-	SDWORD	rx,rz;
-
-	SVECTOR CurPoint;
-	SWORD sxy[4*2];
-	SDWORD Zed;	//,Flag;
-	SDWORD OtZ;
-
-	ORDERTAB *pOrderingTable;
-	UBYTE *pPrimBuffer;
-	POLY_FT4 *Poly;
-	IMAGEDEF *Image;
-	UWORD Width;
-	UWORD Height;
-	UWORD Tu;
-	UWORD Tv;
-	UWORD ImageID;
-	SDWORD Ratio;
-	SDWORD XOffset,YOffset;
-	iVector VOffset;
-
-
-	if(Shape->flags & iV_IMD_XEFFECT) {
-		// It's a 2d IMAGE type effect mapped onto a POLY_FT4.
-		iIMDShapeEffect *ShapeEffect = (iIMDShapeEffect*)Shape;
-
-		assert(!(ShapeEffect->flags & iV_IMD_XEFFECT_PROJECTILE));
-
-		frameNumber = frameNumber % ShapeEffect->numframes;
-
-		// Get the ratio of the 3d size to the 2d size.
-		Ratio = (ShapeEffect->xsize * 256) / ShapeEffect->ysize;
-		Scale = (Scale * Ratio) / 256;
-
-		ImageID = ShapeEffect->firstframe + frameNumber;
-
-		assert(ImageID < ((IMAGEFILE*)ShapeEffect->ImageFile)->Header.NumImages);
-		Image = &((IMAGEFILE*)ShapeEffect->ImageFile)->ImageDefs[ImageID];
-
-		// Calculate 3d width ,height and offset.
-		Width = (Image->Width*Scale)/100;
-		Height = (Image->Height*Scale)/100;
-		XOffset = (Image->XOffset*(SDWORD)Scale)/100;
-		YOffset = (Image->YOffset*(SDWORD)Scale)/100;
-
-		if(Offset != NULL) {
-			VOffset = *Offset;
-		} else {
-			VOffset.x = VOffset.y = VOffset.z = 0;
-		}
-
-//		OtZ = RotTransPers(&VOffset,(long *)&sxy[0],&Zed,&Flag);	// Generate the screen coords 
-		gte_ldv0(&VOffset);
-        gte_rtps();
-        gte_stsxy((long *)&sxy[0]);
-//        gte_stdp(r3);
-//        gte_stflg(&Flag);
-		gte_stszotz(&OtZ);
-
-		// Apply perspective.
-		if(OtZ > 0) {
-			Width = (Width*PERSMUL)/OtZ;
-			Height = (Height*PERSMUL)/OtZ;
-			XOffset = (XOffset*PERSMUL)/OtZ;
-			YOffset = (YOffset*PERSMUL)/OtZ;
-		} else {
-			// Behind the view plane.
-			return;
-		}
-
-		if(Params != NULL) {
-			if(Params->Flags & PIE_OTZ) {
-				OtZ = Params->OtZ;
-			}
-		}
-
-//		OtZ = psxiv_LimitZ(OtZ);
-
-		sxy[0] += XOffset;
-		sxy[1] += YOffset;
-
-		sxy[2] = sxy[0]+Width;
-		sxy[3] = sxy[1];
-
-		sxy[4] = sxy[0]+Width;
-		sxy[5] = sxy[1]+Height;
-
-		sxy[6] = sxy[0];
-		sxy[7] = sxy[1]+Height;
-
-		// Draw.
-		GetCurrentOT(&pOrderingTable);
-		GetPrimBufferPos(&pPrimBuffer);
-
-		Poly = (POLY_FT4*)pPrimBuffer;
-
-		if(DoesPrimFit(Poly,sizeof(POLY_FT4))==TRUE) {
-			Poly->clut=Image->PalID;
-			Poly->tpage=Image->TPageID;
-
-			_setXY4(Poly, sxy[0],sxy[2],sxy[6],sxy[4]);
-//			setXY4(Poly, sxy[0],sxy[1],
-//						sxy[2],sxy[3],
-//						sxy[6],sxy[7],
-//						sxy[4],sxy[5]);
-
-			Tu = Image->Tu;
-			Tv = Image->Tv;
-			Width = Image->Width;
-			Height = Image->Height;
-
-			setUV4(Poly, Tu,Tv,
-						Tu+Width,Tv,
-						Tu,Tv+Height,
-						Tu+Width,Tv+Height);
-
-//			setPolyFT4(Poly);
-
-			if(Params != NULL) {
-				if(Params->Flags & PIE_COLOURED) {
-					_setRGB0(Poly,Params->ColourRGB[0]);
-//					setRGB0(Poly,Params->ColourRGB[0],Params->ColourRGB[1],Params->ColourRGB[2]);
-					setShadeTex(Poly,0);
-				} else {
-					setShadeTex(Poly,1);
-				}
-
-				setPolyFT4(Poly);
-
-				if(Params->Flags & PIE_TRANSPARENT) {
-					setSemiTrans(Poly,1);
-					setTransType(Poly,Params->TransMode);
-				} else {
-					setSemiTrans(Poly,0);
-				}
-			} else {
-				setPolyFT4(Poly);
-				setSemiTrans(Poly,0);
-				setShadeTex(Poly,1);
-			}
-
-//			setPolyFT4(Poly);
-
-			OtZ = psxiv_DoZBias(OtZ);
-//			psxiv_DoZBias(&OtZ);
-//			if(OtZ < OT2D_SIZE) {
-//				OtZ = OT2D_SIZE + 1;
-//			}
-
-			addPrim( pOrderingTable + OtZ, Poly);
-
-			SetPrimBufferPos(pPrimBuffer+sizeof(POLY_FT4));
-		}
-	}
-}
-
-#endif

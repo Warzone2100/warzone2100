@@ -1183,48 +1183,4 @@ void addOilResourceProximities(void)
 
 
 
-#ifdef PSX
 
-void PlayAllMessages(void)
-{
-	VIEWDATA_LIST *CurrentMessage;
-	STRING String[256];
-
-// Now we loop through all the messages in order
-
-	DBPRINTF(("Starting messages\n"));
-	CurrentMessage=apsViewData;
-
-	while(CurrentMessage!=NULL)
-	{
-		UDWORD MessageCnt;
-		UDWORD Message;
-
-		 MessageCnt=CurrentMessage->numViewData;
-		 for (Message=0;Message<MessageCnt;Message++)
-		 {
-			VIEWDATA *mess;
-			MESSAGE psMessage;
-
-
-			mess=&CurrentMessage->psViewData[Message];
-#ifdef PSX
-			sprintf(String,"Message %d of %d [%s] type=%d\n",Message,MessageCnt-1,mess->pName, mess->type);
-			prnt(1,String,0,0);
-#endif
-
-			psMessage.type=MSG_MISSION;
-			psMessage.pViewData=mess;
-			psMessage.psNext=NULL;
-			StartMessageSequences(&psMessage,TRUE);
-			seq_WaitSequenceListEmpty();
-			
-		 }														 
-
-
-		CurrentMessage=CurrentMessage->psNext;
-	}
-
-}
-
-#endif

@@ -21,15 +21,11 @@
 #include "lighting.h"
 // end of chnage - alex
 #include "game.h"
-#ifndef PSX
+
 #include "environ.h"
 #include "advvis.h"
-#endif
-#ifdef PSX
-#include "utils.h"	// getdword()
-#include "levels.h"
-#include "mission.h"
-#endif
+
+
 #include "gateway.h"
 #include "wrappers.h"
 
@@ -188,9 +184,7 @@ static UDWORD		maxLinePoints = 0;
 
 /* The sqrt(1/(1+x*x)) table for aaLine */
 AAFLOAT		*aAARootTbl;
-#ifdef PSX
-UDWORD		aaRootShift;			// Shift on input values to the root table
-#endif
+
 
 /* pixel increment values for aaLine                        */
 /*   -- assume PIXINC(dx,dy) is a macro such that:          */
@@ -280,9 +274,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	}
 	*/
 
-#ifdef PSX
-	DBPRINTF(("mapNew: width=%d height=%d\n",width,height));
-#endif
+
 	psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
 	if (psMapTiles == NULL)
 	{
@@ -708,31 +700,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 	/* Allocate the memory for the map */
 	if (mapAlloc)
 	{
-#ifdef PSX
-		DBPRINTF(("\nmapLoad: width=%d height=%d\n",width,height));
-		DBPRINTF(("psMapTiles == %p\n",psMapTiles));
 
-		// If it's an offworld mission and were not going back to the main campaign map
-		// ie SUB_1_D then don't allocate more memory for the mission map, just load it
-		// in over the existing one.
-		if(getLevelLoadFlags() & LDF_CAMEND) 
-		{
-			psMapTiles = mission.psMapTiles;
-			DBPRINTF(("Overwriting existing map @ %p\n",psMapTiles));
-			memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
-		} else {
-			DBPRINTF(("Allocating new map\n"));
-			psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
-			if (psMapTiles == NULL)
-			{
-				DBERROR(("mapLoad: Out of memory"));
-				return FALSE;
-			}
-			memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
-		}
-
-		DBPRINTF(("psMapTiles == %p\n\n",psMapTiles));
-#else
 
 		psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
 		if (psMapTiles == NULL)
@@ -741,7 +709,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 			return FALSE;
 		}
 		memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
-#endif
+
 	 
 
 		mapWidth = width;
@@ -1227,9 +1195,7 @@ void mapRootTblInit(void)
 
 	tablecells = (1 << tablebits) + 1;
 	
-#ifdef PSX
-	aaRootShift = AA_FRACBITS - tablebits;
-#endif
+
 
 	/* Allocate the table */
 	aAARootTbl = MALLOC( tablecells * sizeof(AAFLOAT) );

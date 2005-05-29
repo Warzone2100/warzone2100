@@ -86,11 +86,7 @@ BOOL		runGameOptions2Menu		(VOID);
 extern BOOL GetInFastPlay(void);
 
 BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
-#ifdef PSX
-BOOL addCentreScreen(UDWORD FormID,UDWORD x,UDWORD y);
-void processToggleOptions(UDWORD id);
-void processCentreScreen(UDWORD id);
-#endif
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines.

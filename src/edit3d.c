@@ -144,12 +144,6 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 void	kill3DBuilding		( void )
 {
 	CancelDeliveryRepos();
-#ifdef PSX
-	if(buildState != BUILD3D_NONE) {
-		intBuildCancel();
-	}
-	CancelStructurePosition();
-#endif
     //cancel the drag boxes
     dragBox3D.status = DRAG_INACTIVE;
     wallDrag.status = DRAG_INACTIVE;

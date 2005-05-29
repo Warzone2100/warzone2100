@@ -58,18 +58,7 @@ typedef struct yyTypedRules_tag {	/* Typed rule table */
  */
 
 
-#ifdef PSX
-/* A few definitions so the yacc generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
 
-//static int printf(char* c, ...)
-//{
-//	return 0;
-//}
-
-#endif
 
 #include <stdio.h>
 
@@ -1031,14 +1020,7 @@ case YYr7: {	/* script_name :  SCRIPT QTEXT */
 						{
 							psCurrScript=resGetData("SCRIPT",stringname);				
 						}
-#ifdef PSX
-						else
-						{
-							// change extension to "blo"
-							stringname[extpos]='b';
-							psCurrScript=resGetData("BLO",stringname);				
-						}
-#endif
+
 					}
 
 					if (!psCurrScript)
@@ -1461,19 +1443,7 @@ case YYr11: {	/* var_init :  var_entry TYPE var_value */
 						}
 						break;
 					case ST_SOUND:
-#ifdef PSX
-						if (yypvt[0].sInit.type != IT_INDEX)
-						{
-							scrv_error("Typemismatch for variable %d", yypvt[-2].vindex);
-							YYABORT;
-						}
-						if (!eventSetContextVar(psCurrContext, yypvt[-2].vindex, yypvt[-1].tval, (UDWORD) yypvt[0].sInit.index))
-						{
-							scrv_error("Set Value Failed for %s", yypvt[-2].vindex );
-							YYABORT;
-						}
-		
-#else
+
 
 						if (yypvt[0].sInit.type != IT_STRING)
 						{
@@ -1493,7 +1463,7 @@ case YYr11: {	/* var_init :  var_entry TYPE var_value */
 							scrv_error("Set Value Failed for %s", yypvt[-2].vindex);
 							YYABORT;
 						}
-#endif
+
 						break;
 					case ST_RESEARCH:
 						if (yypvt[0].sInit.type != IT_STRING)

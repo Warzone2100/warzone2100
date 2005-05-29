@@ -66,13 +66,7 @@
 #include "edit3d.h"
 #include "scores.h"
 #include "research.h"
-#ifdef PSX
-#include "geo_psx.h"
-#include "dcache.h"
-#include "profile.h"
 
-extern BOOL EnableVibration;
-#endif
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -145,185 +139,7 @@ BOOL droidInit(void)
 /* Do damage to a droid.
  * Returns TRUE if the droid is destroyed
  */
-#ifdef PSX
-BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass)
-{
-	UDWORD		penDamage, armourDamage;
-	BOOL		penetrated = FALSE;
-	UDWORD		armour=0;
-	SDWORD		state;
-	SDWORD		level, cmdLevel;
 
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"unitDamage: Invalid Unit pointer"));
-
-	DBP1(("unitDamage(%d): body %d armour %d damage: %d\n",
-		psDroid->id, psDroid->body, psDroid->armour[WC_KINETIC], damage));
-
-
-//	if(selectedPlayer==0)
-	if(psDroid->player != selectedPlayer)
-	{	
-		// Player inflicting damage on enemy.
-		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,TRUE);
-	} else {
-		// Enemy inflicting damage on player.
-		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,FALSE);
-	}
-
-	// reset the attack level
-	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
-	{
-		if (state == DSS_ALEV_ATTACKED)
-		{
-			secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
-		}
-	}
-
-	switch (weaponClass)
-	{
-		case WC_KINETIC:
-		//case WC_EXPLOSIVE:
-			if (damage > psDroid->armour[WC_KINETIC])
-			{
-				penetrated = TRUE;
-			}
-			armour = psDroid->armour[WC_KINETIC];
-			break;
-		case WC_HEAT:
-		//case WC_MISC:
-			if (damage > psDroid->armour[WC_HEAT])
-			{
-				penetrated = TRUE;
-			}
-			armour = psDroid->armour[WC_HEAT];
-			break;
-	}
-
-	clustObjectAttacked((BASE_OBJECT *)psDroid);
-
-//	if (damage > psDroid->armour[WC_KINETIC])
-	if (penetrated)
-	{
-		/* Damage has penetrated - reduce armour and body points */
-		//penDamage = damage - psDroid->armour;
-		penDamage = damage - armour;
-
-		level = getDroidLevel(psDroid);
-		cmdLevel = cmdGetCommanderLevel(psDroid);
-		if (level > cmdLevel)
-		{
-			//penDamage = (penDamage * (100 - 5 * level)) / 100;
-			penDamage = (penDamage * (100 - 6 * level)) / 100;
-		}
-		else
-		{
-			//penDamage = (penDamage * (100 - 5 * cmdLevel)) / 100;
-			penDamage = (penDamage * (100 - 6 * cmdLevel)) / 100;
-		}
-
-		DBP1(("        penetrated: %d\n", penDamage));
-		if (penDamage >= psDroid->body)
-		{
-            //hack to prevent Transporter's being blown up
-            if (psDroid->droidType == DROID_TRANSPORTER)
-            {
-                psDroid->body = 1;
-                return FALSE;
-            }
-			/* Droid destroyed */
-			DBP1(("        DESTROYED\n"));
-			if(psDroid->player == selectedPlayer)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_UNITLOST)));
-				scoreUpdateVar(WD_UNITS_LOST);				
-			}
-			else
-			{
-				scoreUpdateVar(WD_UNITS_KILLED);				
-			}
-			if(psDroid->droidType == DROID_PERSON AND weaponClass == WC_HEAT)
-			{
-				droidBurn(psDroid);
-			}
-			else
-			{
-	  			destroyDroid(psDroid);
-			}
-			return TRUE;
-		}
-		else
-		{
-			psDroid->body -= penDamage;
-		}
-
-		/* Do damage to armour */
-//		armourDamage = (damage / PEN_ARMOUR_DAMAGE_FACTOR) + 1;
-
-//		DBP1(("penetrated: %d, armour: %d\n", penDamage, armourDamage));
-	}
-	else
-	{
-		/* Damage didn't penetrate - only reduce armour */
-		armourDamage = (damage / ARMOUR_DAMAGE_FACTOR) + 1;
-
-		/* Do one point of damage to body */
-		DBP1(("        not penetrated - 1 point damage\n"));
-		if(psDroid->droidType == DROID_PERSON AND weaponClass == WC_HEAT)
-		{
-			droidBurn(psDroid);
-		}
-		if (psDroid->body == 1)
-		{
-            //hack to prevent Transporter's being blown up
-            if (psDroid->droidType == DROID_TRANSPORTER)
-            {
-                return FALSE;
-            }
-
-            if(psDroid->player == selectedPlayer)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_UNITLOST)));
-				scoreUpdateVar(WD_UNITS_LOST);				
-			}
-			else
-			{
-				scoreUpdateVar(WD_UNITS_KILLED);				
-			}	
-  			destroyDroid(psDroid);
-			DBP1(("        DESTROYED\n"));
-			return TRUE;
-		}
-		else
-		{
-			psDroid->body -= 1;
-		}
-
-//		DBP1(("armour: %d\n", armourDamage));
-	}
-
-	/* Actually reduce the droids armour */
-/*	if (armourDamage >= psDroid->armour)
-	{
-		psDroid->armour = 0;
-	}
-	else
-	{
-		psDroid->armour -= armourDamage;
-	}*/
-
-	DBP1(("        body left: %d armour left: %d\n",
-		psDroid->body, psDroid->armour));
-
-	/* now check for auto return on droid's secondary orders */
-	secondaryCheckDamageLevel(psDroid);
-    /* now check for scripted run-away based on health */
-    orderHealthCheck(psDroid);
-
-	return FALSE;
-
-}
-#else
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
 BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass)
 {
@@ -350,14 +166,14 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
     }
 
 	
-#ifndef PSX
+
     //only overwrite if the last weapon to hit was not an EMP - need the time value for this
     if (psDroid->lastHitWeapon != WSC_EMP)
     {
     	psDroid->timeLastHit = gameTime;
 	    psDroid->lastHitWeapon = weaponSubClass;
     }
-#endif
+
 
 
 //	if(selectedPlayer==0)
@@ -542,20 +358,20 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
     /* now check for scripted run-away based on health */
     orderHealthCheck(psDroid);
 
-#ifndef PSX
+
     //only overwrite if the last weapon to hit was not an EMP - need the time value for this
     if (psDroid->lastHitWeapon != WSC_EMP)
     {
     	psDroid->timeLastHit = gameTime;
 	    psDroid->lastHitWeapon = weaponSubClass;
     }
-#endif
+
 	return FALSE;
 
 }
 
 
-#endif
+
 
 void droidDeleteName(DROID *psDroid)
 {
@@ -664,13 +480,9 @@ void	removeDroidBase(DROID *psDel)
 	DROID_GROUP	*psGroup;
 	STRUCTURE	*psStruct;
 
-#ifdef PSX
-	intDestroyDroid(psDel);		// Tell the interface it's gone
-#endif
+
 	if(!driveDroidKilled(psDel)) {	// Tell the driver system it's gone.
-#ifdef PSX
-		intAddReticule();	// driving mode canceled so ensure reticule is up.
-#endif
+
 	}
 
 	//tell the power system its gone
@@ -962,13 +774,9 @@ void destroyDroid(DROID *psDel)
 	DROID_GROUP	*psGroup;
 	STRUCTURE	*psStruct;
 
-#ifdef PSX
-	intDestroyDroid(psDel);		// Tell the interface it's gone
-#endif
+
 	if(!driveDroidKilled(psDel)) {	// Tell the driver system it's gone.
-#ifdef PSX
-		intAddReticule();	// driving mode canceled so ensure reticule is up.
-#endif
+
 	}
 
 	if (psDel->died)
@@ -1175,13 +983,8 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
 //	BOOL	bRet;
 
-#ifdef PSX
-	intDestroyDroid(psDroid);	// Tell the interface it's gone.
-#endif
 	if(!driveDroidKilled(psDroid)) {	// Tell the driver system it's gone.
-#ifdef PSX
-		intAddReticule();	// driving mode canceled so ensure reticule is up.
-#endif
+
 	}
 	
 	//tell the power system its gone
@@ -1453,9 +1256,7 @@ void droidGetNaybors(DROID *psDroid)
 	CurrentNaybors = psDroid;
 	nayborTime = gameTime;
 
-#ifdef PSX
-	PROFILE_START(1);
-#endif
+
 
 	// reset the naybor array
 	numNaybors = 0;
@@ -1502,9 +1303,7 @@ void droidGetNaybors(DROID *psDroid)
 		}
 	}
 
-#ifdef PSX
-	PROFILE_END(1);
-#endif
+
 }
 
 
@@ -1549,10 +1348,7 @@ void droidUpdate(DROID *psDroid)
 	BASE_OBJECT	*psBeingTargetted = NULL;
 	SDWORD	damageToDo;
 
-#ifdef PSX
-	static DROID *psTmpDroid;
-	psTmpDroid = psDroid;
-#endif
+
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
 		"unitUpdate: Invalid unit pointer"));
 
@@ -3348,9 +3144,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		sscanf(pDroidData, "%d,%n", &player,&cnt);
                 pDroidData += cnt;
 
-#ifdef PSX
-		player=RemapPlayerNumber(player);	// remap player id for PSX version
-#endif
+
 
 	
 		//read in Propulsion Name
@@ -3881,11 +3675,9 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 
 	if (SkippedWeaponCount > 0)
 	{
-#ifdef PSX
-		DBPRINTF(("Illegal player number in %d droid weapons\n",SkippedWeaponCount));
-#else
+
 		DBERROR(("Illegal player number in %d droid weapons",SkippedWeaponCount));
-#endif
+
 	}
 
 //	FREE(pStartWeaponData);
@@ -4825,9 +4617,7 @@ void templateSetParts(DROID *psDroid,DROID_TEMPLATE *psTemplate)
 {
 //	UDWORD inc;
 
-#ifdef PSX
-	psTemplate->NameHash=0;
-#endif
+
 	psTemplate->droidType = psDroid->droidType;
 
     //can only have one weapon now
@@ -5502,25 +5292,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
   return TRUE;
 }
 
-#ifdef PSX 
-void dumpDroids( void )
-{
-DROID	*psDroid;
-UDWORD	clan;
-	
-	/* Need to go through all the droid lists */
-	for(clan = 0; clan < MAX_PLAYERS; clan++)
-	{
-		for(psDroid = apsDroidLists[clan]; psDroid != NULL;
-			psDroid = psDroid->psNext)
-		{
-			DBPRINTF(("clan %d - droid [%p] height =%d\n",clan,psDroid,psDroid->z));
-			if (PTRVALID(psDroid,sizeof(DROID))!=TRUE) DBPRINTF((" ... non valid pointer\n"));
 
-		} // end for
-	} // end for clan
-} // end Fn
-#endif
 
 /* IF YOU USE THIS FUNCTION - NOTE THAT selectedPlayer's TEMPLATES ARE NOT USED!!!!
    gets a template from its name - relies on the name being unique (or it will 

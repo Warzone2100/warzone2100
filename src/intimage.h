@@ -72,9 +72,7 @@ typedef struct {
 } TABDEF;
 
 extern IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
-#ifdef PSX
-//extern IMAGEFILE *EffectImages;
-#endif
+
 
 // A few useful defined frames.
 extern IMAGEFRAME FrameNormal;
