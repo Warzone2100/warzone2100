@@ -11,9 +11,9 @@
 #include "frame.h"
 #include "gtime.h"
 
-#ifndef PSX
+
 #define TIME_FIX
-#endif
+
 //#define RATE_LIMIT
 
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)		
@@ -30,10 +30,10 @@ UDWORD gameTime2;
 /* The time for the last frame (never stops)*/
 UDWORD frameTime2;
 
-#ifndef PSX
+
 // the current clock modifier
 static FRACT	modifier;
-#endif
+
 
 // the amount of game time before the last time clock speed was set
 static UDWORD	timeOffset;
@@ -63,9 +63,9 @@ BOOL gameTimeInit(void)
 	timeOffset2 = 0;
 	baseTime2 = baseTime;
 
-#ifndef PSX
+
 	modifier = FRACTCONST(1,1);
-#endif
+
 
 	stopCount = 0;
 
@@ -118,7 +118,7 @@ void gameTimeUpdate(void)
 	//don't update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
-#ifndef PSX
+
 		// Calculate the new game time
 		newTime = currTime - baseTime;
 
@@ -149,26 +149,7 @@ void gameTimeUpdate(void)
 
 		// Store the game time
 		gameTime = (UDWORD)newTime;
-#else
-		// Calculate the new game time
-		newTime = currTime - baseTime;
 
-		newTime += timeOffset;
-
-		// Calculate the time for this frame
-		frameTime = newTime - gameTime;
-
-		// Limit the frame time
-		if (frameTime > GTIME_MAXFRAME)
-		{
-			baseTime += frameTime - GTIME_MAXFRAME;
-			newTime = gameTime + GTIME_MAXFRAME;
-			frameTime = GTIME_MAXFRAME;
-		}
-
-		// Store the game time
-		gameTime = newTime;
-#endif
 	}
 
 	// now update gameTime2 which does not pause
@@ -191,7 +172,7 @@ void gameTimeUpdate(void)
 	gameTime2 = (UDWORD)newTime;
 }
 
-#ifndef PSX
+
 // reset the game time modifiers
 void gameTimeResetMod(void)
 {
@@ -216,7 +197,7 @@ void gameTimeGetMod(FRACT *pMod)
 {
 	*pMod = modifier;
 }
-#endif
+
 
 BOOL gameTimeIsStopped(void)
 {
@@ -264,9 +245,9 @@ void gameTimeReset(UDWORD time)
 	baseTime = GetTickCount();//used from save game only so GetTickCount is as valid as anything
 	baseTime2 = GetTickCount();
 
-#ifndef PSX
+
 	modifier = FRACTCONST(1,1);
-#endif
+
 }
 
 void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds)
