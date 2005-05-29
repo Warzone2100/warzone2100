@@ -74,13 +74,11 @@ typedef struct TRACK
 	UDWORD		iNumPlaying;
 	BOOL		bMemBuffer;				/* memory buffer flag       */
 	BOOL		bCompressed;			/* compression data flag    */
-#ifndef PSX
+
 	void *		pMem;					/* pointer to audio data    */
 	STRING		*pName;					// resource name of the track
 	UDWORD		resID;					// hashed name of the WAV
-#else
-	SDWORD		VAGid;			// on the playstation all we need is the VAG id
-#endif
+
 }
 TRACK;
 

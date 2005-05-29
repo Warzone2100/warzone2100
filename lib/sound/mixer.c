@@ -23,9 +23,7 @@ static BOOL
 mixer_GetVolumeControlID( DWORD dwComponentType, DWORD *pdwControlID,
 							DWORD *piVolRange )
 {
-#ifdef PSX
-	return TRUE;
-#else
+
 	MMRESULT			mmRes;
 	UINT				i;
 	MIXERLINE			mixerLine;
@@ -92,7 +90,7 @@ mixer_GetVolumeControlID( DWORD dwComponentType, DWORD *pdwControlID,
 	}
 
 	return bControlFound;
-#endif
+
 }
 
 /***************************************************************************/
@@ -100,10 +98,10 @@ mixer_GetVolumeControlID( DWORD dwComponentType, DWORD *pdwControlID,
 void
 mixer_SaveWinVols()
 {
-#ifndef PSX
+
 	g_iWinVolWav = mixer_GetWavVolume();
 	g_iWinVolCD  = mixer_GetCDVolume();
-#endif
+
 }
 
 /***************************************************************************/
@@ -111,11 +109,11 @@ mixer_SaveWinVols()
 void
 mixer_RestoreWinVols()
 {
-#ifndef PSX
+
 	/* restore Windows volumes */
 	mixer_SetWavVolume( g_iWinVolWav );
 	mixer_SetCDVolume(  g_iWinVolCD );
-#endif
+
 }
 
 /***************************************************************************/
@@ -123,10 +121,9 @@ mixer_RestoreWinVols()
 void
 mixer_SaveIngameVols()
 {
-#ifndef PSX
 	g_iInGameVolWav = mixer_GetWavVolume();
 	g_iInGameVolCD  = mixer_GetCDVolume();
-#endif
+
 }
 
 /***************************************************************************/
@@ -134,10 +131,10 @@ mixer_SaveIngameVols()
 void
 mixer_RestoreIngameVols()
 {
-#ifndef PSX
+
 	mixer_SetWavVolume( g_iInGameVolWav );
 	mixer_SetCDVolume(  g_iInGameVolCD );
-#endif
+
 }
 
 /***************************************************************************/
@@ -145,9 +142,7 @@ mixer_RestoreIngameVols()
 BOOL
 mixer_Open( void )
 {
-#ifdef PSX
-	return TRUE;
-#else
+
 	MIXERCAPS			mixerCaps;
 	MMRESULT			mmRes;
 
@@ -186,7 +181,7 @@ mixer_Open( void )
 	mixer_SaveWinVols();
 
 	return TRUE;
-#endif
+
 }
 
 /***************************************************************************/
@@ -194,14 +189,14 @@ mixer_Open( void )
 void
 mixer_Close( void )
 {
-#ifndef PSX
+
 	mixer_RestoreWinVols();
 
 	if ( bMixerOK == TRUE )
 	{
 		mixerClose( g_hMixer );
 	}
-#endif
+
 }
 
 /***************************************************************************/
@@ -209,9 +204,7 @@ mixer_Close( void )
 static SDWORD
 mixer_GetVolume( DWORD dwControlID, DWORD iVolRange )
 {
-#ifdef PSX
-	return 100;
-#else
+
 	SDWORD							iVol = 0;
 	MMRESULT						mmRes;
 	MIXERCONTROLDETAILS				mixerCntlDetails;
@@ -236,7 +229,7 @@ mixer_GetVolume( DWORD dwControlID, DWORD iVolRange )
 	}
 
 	return iVol;
-#endif
+
 }
 
 /***************************************************************************/
@@ -244,9 +237,7 @@ mixer_GetVolume( DWORD dwControlID, DWORD iVolRange )
 static void
 mixer_SetVolume( DWORD dwControlID, DWORD iVolRange, SDWORD iVol )
 {
-#ifdef PSX
-	return;
-#else
+
 	MMRESULT						mmRes;
 	MIXERCONTROLDETAILS				mixerCntlDetails;
 	MIXERCONTROLDETAILS_UNSIGNED	mxCntrlDetUnSigned;
@@ -271,7 +262,7 @@ mixer_SetVolume( DWORD dwControlID, DWORD iVolRange, SDWORD iVol )
 			return;
 		}
 	}
-#endif
+
 }
 
 /***************************************************************************/
@@ -279,9 +270,9 @@ mixer_SetVolume( DWORD dwControlID, DWORD iVolRange, SDWORD iVol )
 SDWORD
 mixer_GetCDVolume( void )
 {
-#ifndef PSX
+
 	return mixer_GetVolume( g_dwCDControlID, g_iVolRangeCD );
-#endif
+
 }
 
 /***************************************************************************/
@@ -289,9 +280,9 @@ mixer_GetCDVolume( void )
 void
 mixer_SetCDVolume( SDWORD iVol )
 {
-#ifndef PSX
+
 	mixer_SetVolume( g_dwCDControlID, g_iVolRangeCD, iVol );
-#endif
+
 }
 
 /***************************************************************************/
@@ -299,9 +290,8 @@ mixer_SetCDVolume( SDWORD iVol )
 SDWORD
 mixer_GetWavVolume( void )
 {
-#ifndef PSX
 	return mixer_GetVolume( g_dwWavControlID, g_iVolRangeWav );
-#endif
+
 }
 
 /***************************************************************************/
@@ -309,9 +299,9 @@ mixer_GetWavVolume( void )
 void
 mixer_SetWavVolume( SDWORD iVol )
 {
-#ifndef PSX
+
 	mixer_SetVolume( g_dwWavControlID, g_iVolRangeWav, iVol );
-#endif
+
 }
 
 /***************************************************************************/

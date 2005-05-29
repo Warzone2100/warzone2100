@@ -185,11 +185,9 @@ sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack, SDWORD iVol,
 		psTrack->iTimeLastFinished = 0;
 		psTrack->iNumPlaying       = 0;
 
-#ifndef PSX
+//I didn't comment the below value out, so I guess NOT needed. -Q
 //		VagID;
-#else
-		psTrack->VAGid=VagID;	// set the vag id for the playstation
-#endif
+
 
 		/* set global */
 		g_apTrack[iTrack] = psTrack;
@@ -231,7 +229,7 @@ sound_AddTrack( TRACK *pTrack )
 void *
 sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 {
-#ifndef PSX
+
 	TRACK *	pTrack;
 
 	/* allocate track */
@@ -272,9 +270,7 @@ sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 			return pTrack;
 		}
 	}
-#else
-	printf("sound_LoadTrackFromBuffer() called\n");
-#endif
+
 }
 
 /***************************************************************************/
@@ -282,7 +278,7 @@ sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 BOOL
 sound_LoadTrackFromFile( char szFileName[] )
 {
-#ifndef PSX
+
 	TRACK *	pTrack;
 
 	/* allocate track */
@@ -309,9 +305,7 @@ sound_LoadTrackFromFile( char szFileName[] )
 	}
 
 	return FALSE;
-#else
-	printf("sound_LoadTrackFromFile() called\n");
-#endif
+
 }
 
 /***************************************************************************/
@@ -470,12 +464,9 @@ sound_GetTrackName( SDWORD iTrack )
 
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
-#ifndef PSX
+
 	return g_apTrack[iTrack]->pName;
-#else
-	DBERROR(("sound_GetTrackName: not valid on PSX"));
-	return NULL;
-#endif
+
 }
 
 /***************************************************************************/
@@ -488,12 +479,9 @@ sound_GetTrackHashName( SDWORD iTrack )
 
 	ASSERT((g_apTrack[iTrack] != NULL,
 		"sound_GetTrackName: unallocated track"));
-#ifndef PSX
+
 	return g_apTrack[iTrack]->resID;
-#else
-	DBERROR(("sound_GetTrackHashName: not valid on PSX"));
-	return 0;
-#endif
+
 }
 
 /***************************************************************************/
