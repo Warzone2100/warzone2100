@@ -97,9 +97,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	(*ppsWidget)->y = psInit->y;
 	(*ppsWidget)->width = psInit->width;
 	(*ppsWidget)->height = psInit->height;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
+
 	if (psInit->pDisplay)
 	{
 		(*ppsWidget)->display = psInit->pDisplay;

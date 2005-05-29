@@ -115,9 +115,7 @@ static BOOL formCreatePlain(W_FORM **ppsWidget, W_FORMINIT *psInit)
 	(*ppsWidget)->y = psInit->y;
 	(*ppsWidget)->width = psInit->width;
 	(*ppsWidget)->height = psInit->height;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
+
 	if (psInit->pDisplay)
 	{
 		(*ppsWidget)->display = psInit->pDisplay;
@@ -184,9 +182,7 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 	(*ppsWidget)->callback = psInit->pCallback;
 	(*ppsWidget)->pUserData = psInit->pUserData;
 	(*ppsWidget)->UserData = psInit->UserData;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
+
 	(*ppsWidget)->AudioCallback = WidgGetAudioCallback();
 	(*ppsWidget)->HilightAudioID = WidgGetHilightAudioID();
 	(*ppsWidget)->ClickedAudioID = WidgGetClickedAudioID();
@@ -365,9 +361,7 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	(*ppsWidget)->minorPos = psInit->minorPos;
 	(*ppsWidget)->pTabDisplay = psInit->pTabDisplay;
 	(*ppsWidget)->pFormDisplay = psInit->pFormDisplay;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
+
 	formSetDefaultColours((W_FORM *)(*ppsWidget));
 
 	/* Set up the tab data.

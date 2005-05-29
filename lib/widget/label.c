@@ -69,9 +69,7 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 	(*ppsWidget)->y = psInit->y;
 	(*ppsWidget)->width = psInit->width;
 	(*ppsWidget)->height = psInit->height;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
+
 	if (psInit->pDisplay)
 	{
 		(*ppsWidget)->display = psInit->pDisplay;

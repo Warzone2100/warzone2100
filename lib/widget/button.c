@@ -105,9 +105,6 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	(*ppsWidget)->callback = psInit->pCallback;
 	(*ppsWidget)->pUserData = psInit->pUserData;
 	(*ppsWidget)->UserData = psInit->UserData;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
 	(*ppsWidget)->AudioCallback = WidgGetAudioCallback();
 	(*ppsWidget)->HilightAudioID = WidgGetHilightAudioID();
 	(*ppsWidget)->ClickedAudioID = WidgGetClickedAudioID();
@@ -353,9 +350,6 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	{
 		/* Display the button down */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-#ifdef PSX
-		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-#endif
 		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_DARK));
 		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_DARK));
 		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_LIGHT));
@@ -389,9 +383,6 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	{
 		/* Display the disabled button */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-#ifdef PSX
-		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-#endif
 		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_LIGHT));
 		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_LIGHT));
 		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_DARK));
@@ -422,9 +413,6 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	{
 		/* Display the button up */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-#ifdef PSX
-		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-#endif
 		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_LIGHT));
 		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_LIGHT));
 		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_DARK));

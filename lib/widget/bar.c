@@ -88,9 +88,7 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 	(*ppsWidget)->majorSize = psInit->size;
 	(*ppsWidget)->minorSize = psInit->minorSize;
 	(*ppsWidget)->iRange = psInit->iRange;
-#ifdef PSX
-	(*ppsWidget)->OTIndex = WidgGetOTIndex();
-#endif
+
 
 	/* Set the display function */
 	if (psInit->pDisplay)
