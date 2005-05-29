@@ -115,9 +115,7 @@ int iV_CreateFontIndirect(IMAGEFILE *ImageFile, UWORD *AsciiTable, int SpaceSize
 		Index = (UWORD)AsciiTable[c];
 		Above = iV_GetImageYOffset(Font->FontFile,Index);
 		Below = Above + iV_GetImageHeight(Font->FontFile,Index);
-#ifdef PSX
-		Above += 2;
-#endif
+
 		Height = abs(Above) + abs(Below);
 
 		if(Above  < Font->FontAbove) {

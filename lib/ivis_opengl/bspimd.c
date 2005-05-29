@@ -27,10 +27,7 @@
 
 #include "bspimd.h"
 
-#ifdef PSX
-#include "drawimd_psx.h"	// for the scrvertex structure
-#include "dcache.h"
-#endif
+
 
 #include "bspfunc.h"
 
@@ -112,7 +109,7 @@ _inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
 	This is the main BSP Traversal routine. It Zaps through the tree (recursively) - and draws all the polygons
 	for the IMD in the correct order ... pretty clever eh ..
 */
-#ifndef PSX
+
 static void TraverseTreeAndRender( PSBSPTREENODE psNode)
 {
 	/* is viewer on same side? */
@@ -148,45 +145,7 @@ static void TraverseTreeAndRender( PSBSPTREENODE psNode)
 	}
 }
 
-#else // psx
-static void TraverseTreeAndRender( PSBSPTREENODE psNode)
-{
-	/* is viewer on same side? */
-// On the playstation we need the list in reverse order (front most polygon first)
-// so we just do the list the opposite way around - this affects the BACKFACE culling as well 
-	if ( IsPointOnPlane( &psNode->Plane, BSPScrPos ) == OPPOSITE_SIDE )
-	{
-		/* recurse on opposite side, render this node on same side, 
-		 * recurse on same side.
-		 */
 
-		if (psNode->link[LEFT]!=NULL) TraverseTreeAndRender( psNode->link[LEFT]);				 
-
-		if(NoCullBSP) {
-//#ifndef BSP_BACKFACECULL
-			if (psNode->TriSameDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriSameDir);
-		}
-//#endif
-		if (psNode->TriOppoDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriOppoDir);
-		if (psNode->link[RIGHT]!=NULL) TraverseTreeAndRender( psNode->link[RIGHT]);
-	}
-	else
-	/* viewer in plane or on opposite side */
-	{
-		/* recurse on same side, render this node on opposite side
-		 * recurse on opposite side.
-		 */
-		if (psNode->link[RIGHT]!=NULL) TraverseTreeAndRender( psNode->link[RIGHT]);
-//#ifndef BSP_BACKFACECULL
-		if(NoCullBSP) {
-			if (psNode->TriOppoDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriOppoDir);
-		}
-//#endif
-		if (psNode->TriSameDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriSameDir);
-		if (psNode->link[LEFT]!=NULL) 	TraverseTreeAndRender( psNode->link[LEFT]);
-	}
-}
-#endif
 
 
 
@@ -321,16 +280,7 @@ static FRACT GetDist( PSTRIANGLE psTri, int pA, int pB )
 	vy = MAKEFRACT( IMDvec(psTri->pindex[pA])->y - IMDvec(psTri->pindex[pB])->y);
 	vz = MAKEFRACT( IMDvec(psTri->pindex[pA])->z - IMDvec(psTri->pindex[pB])->z);
 	
-#ifdef PSX
-	#define MAXFRACTSQUARE (MAKEFRACT(723))
-	// check that the value will not overflow
-	if (abs(vx) > MAXFRACTSQUARE || abs(vy) > MAXFRACTSQUARE || abs(vz) > MAXFRACTSQUARE )
-	{
-		vx /= 256; 
-		vy /= 256;
-		vz /= 256;
-	}
-#endif
+
 
 	sum_square = (FRACTmul(vx,vx)+FRACTmul(vy,vy)+FRACTmul(vz,vz) );
 	dist = fSQRT(sum_square);
@@ -380,16 +330,7 @@ static iVectorf *iNormalise(iVectorf * v)
         return v;
 	}
 
-#ifdef PSX
-#define MAXFRACTSQUARE (MAKEFRACT(723))
-	// check that the value will not overflow
-	if (abs(vx) > MAXFRACTSQUARE || abs(vy) > MAXFRACTSQUARE || abs(vz) > MAXFRACTSQUARE )
-	{
-		vx /= 256; 
-		vy /= 256;
-		vz /= 256;
-	}
-#endif
+
 	sum_square = (FRACTmul(vx,vx)+FRACTmul(vy,vy)+FRACTmul(vz,vz) );
 	mod = fSQRT(sum_square);
 

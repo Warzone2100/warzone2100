@@ -138,10 +138,6 @@ extern void dbg_SetAssertCallback(DB_MBCALLBACK callback);
 /*lint -printf(1,dbg_printf,dbg_MessageBox,dbg_ErrorBox) */
 /*lint -printf(2,dbg_Assert) */
 
-#ifdef PSX
-extern char DBGstring[256];
-#endif
-
 #ifdef DEBUG
 /* Debugging output required */
 

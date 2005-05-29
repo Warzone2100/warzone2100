@@ -30,15 +30,9 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#ifndef PSX
 #define SIN(X)					aSinTable[(uint16)(X) >> 4]
 #define COS(X)					aSinTable[((uint16)(X) >> 4) + 1024]
-#else
 
-#define SIN(X)				   rsin(angle_IVIS2PSX(X))
-#define COS(X)				   rcos(angle_IVIS2PSX(X))
-
-#endif
 #define pie_INVTRANSX(X)		psMatrix->j = (X)<<FP12_SHIFT
 #define pie_INVTRANSY(Y)		psMatrix->k = (Y)<<FP12_SHIFT
 #define pie_INVTRANSZ(Z)		psMatrix->l = (Z)<<FP12_SHIFT
@@ -106,11 +100,9 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#ifndef PSX
+
 extern void pie_MatInit(void);
-#else//tim you may want to rename the playstation function aswell
-extern void _iv_geo_setup(void);
-#endif
+
 
 //*************************************************************************
 

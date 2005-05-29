@@ -46,8 +46,8 @@ extern void		pal_PaletteSet(void);
 extern BOOL		pal_Make16BitPalette(void);
 extern iColour*	pie_GetGamePal(void);
 extern PALETTEENTRY*	pie_GetWinPal(void);
-#ifndef PSX
+
 extern void	pie_BuildSoftwareTransparency( void );
-#endif
+
 
 #endif

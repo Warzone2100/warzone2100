@@ -21,11 +21,6 @@ UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile,UWORD ID);
 IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize);
 void iV_FreeImageFile(IMAGEFILE *ImageFile);
 
-#ifdef PSX
-// Load a tim format texture page to VRAM.
-BOOL iV_LoadTexturePage_PSX(void *Data,RECT *StoredArea,int *TextureMode,CLUTCALLBACK ClutCallback);
-BOOL iV_ReLoadTexturePage_PSX(void *Data,RECT *StoredArea,CLUTCALLBACK ClutCallback);
-#endif
 
 // Load a clut file into VRAM.
 BOOL iV_LoadClut_PSX(UBYTE *Data,CLUTLIST **ClutList,BOOL HalfBright);

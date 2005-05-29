@@ -32,9 +32,9 @@
  *	Local Variables
  */
 /***************************************************************************/
-#ifndef PSX
+
 int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
-#endif
+
 
 //static BOOL fogColourSet = FALSE;
 //static SDWORD d3dActive = 0;

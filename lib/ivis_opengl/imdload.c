@@ -16,9 +16,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef PSX
-#define PIEPSX	// define all the time for the psx ... only for the binary util on the pc
-#endif
+//#ifdef PSX		//Note, what do they mean by comment below? The util is run with PSX flag ON (defined)!?!? -Q
+//#define PIEPSX	// define all the time for the psx ... only for the binary util on the pc
+//#endif
 
 #include "frame.h"
 #include "piematrix.h" //for surface normals
@@ -29,10 +29,7 @@
 #include "bug.h"
 #include "tex.h"		// texture page loading
 
-#ifdef PSX
-#include "file_psx.h"
-#include "drawimd_psx.h"	// for the scrvertex structure
-#endif
+
 
 #include "bspfunc.h"	// for imd functions
 
@@ -112,15 +109,11 @@ BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 
 BOOL TESTDEBUG=FALSE;
 
-#ifdef PSX
-#define PRE_LEVEL_TEXTURELOAD				// 	 load the texture then load the polygon level   ... needed for the playstation
-#else
-#define POST_LEVEL_TEXTURELOAD			// load the polygon level ... then load the texture     .... Gareths code
-#endif
 
-#ifdef PSX
-#define ALLOW_NONTEXTURED		// if we can't load the texture ... draw it flat shaded
-#endif
+#define POST_LEVEL_TEXTURELOAD			// load the polygon level ... then load the texture     .... Gareths code
+
+
+
 
 iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
 {
@@ -455,24 +448,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 	// get texture page if specified
 	if (_IMD_FLAGS & iV_IMD_XTEX)
 	{
-#ifdef PSX		// psx fscanf support %t which loads crappy filenames with spaces
-		if (_IMD_VER == 1 || _IMD_VER==2)
-		{
-			if (sscanf(pFileData,"%s %d %t %d %d%n",buffer,&ptype,&texfile,&pwidth,&pheight,&cnt) != 5) 
-			{
-				iV_Error(0xff,"(IMDLoad) file corrupt -C");
-				return NULL;
-			}
-                        pFileData += cnt;
-			if (strcmp(buffer,"TEXTURE") != 0) 
-			{
-				iV_Error(0xff,"(IMDLoad) expecting 'TEXTURE' directive");
-				return NULL;
-			}
-			bTextured = TRUE;
 
-		}
-#else	// we definately don't want any of this bollocks on the Playstation thank you very much
 		if (_IMD_VER == 1)
 		{
 			if (sscanf(pFileData,"%s %d %s %d %d%n", buffer, &ptype, texfile, &pwidth, &pheight, &cnt) != 5) 
@@ -548,9 +524,9 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 				return NULL;
 			}
 		}
-#endif	// psx/pc TEXTURE command
 
-#ifndef PSX
+
+
 #ifndef PIETOOL		// The BSP tool should not reduce the texture page name down (please)
 		// Super scrummy hack to reduce texture page names down to the page id
 		if (bTextured)
@@ -569,7 +545,7 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 			}
 		}
 #endif
-#endif
+
 
 #ifdef PRE_LEVEL_TEXTURELOAD
 		if (bTextured)
@@ -633,9 +609,9 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 	// load texture page if specified
 	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX) )
 	{
-#ifndef PSX
+
 		bColourKey = TRUE;// CheckColourKey( s );//TRUE not the only imd using this texture
-#endif
+
 		if(bTextured) {
 			//printf("loading texture %s\n", texfile);
 			/* Note call to new texture page loader that doesn't actually load!!!!!!!!!! */
@@ -1995,26 +1971,26 @@ static int32 _imd_find_scale(int32 value, int32 limit)
 */
 
 iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath, UBYTE *PCXpath,iBool palkeep)
-{
-#ifdef PSX
-#ifdef DEBUG
-	DBPRINTF(("Text PIE files are not supported in the version!\n"));
-#else
-	DBPRINTF(("NO TEXT PIES! %s\n",GetLastResourceFilename()));
-#endif
-#endif
+{	//Note, dunno why we return NULL for win32/linux but got debug info for PSX? Looks like they goofed? -Q
+//#ifdef PSX
+//#ifdef DEBUG
+//	DBPRINTF(("Text PIE files are not supported in the version!\n"));
+//#else
+//	DBPRINTF(("NO TEXT PIES! %s\n",GetLastResourceFilename()));
+//#endif
+//#endif
 	return(NULL);
 }	
 
 iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
-{
-#ifdef PSX
-#ifdef DEBUG
-	DBPRINTF(("Text PIE files are not supported in the version!\n"));
-#else
-	DBPRINTF(("NO TEXT PIES! %s\n",filename));
-#endif
-#endif
+{	//Note, dunno why we return NULL for win32/linux but got debug info for PSX? Looks like they goofed? -Q
+//#ifdef PSX
+//#ifdef DEBUG
+//	DBPRINTF(("Text PIE files are not supported in the version!\n"));
+//#else
+//	DBPRINTF(("NO TEXT PIES! %s\n",filename));
+//#endif
+//#endif
 	return(NULL);
 }	
 

@@ -1,4 +1,3 @@
-#ifndef PSX
 /***************************************************************************/
 /*
  * pieBlitFunc.h
@@ -81,24 +80,3 @@ typedef enum _screenType
 extern void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX);
 extern void pie_ResetBackDrop(void);
 #endif // 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif

@@ -557,44 +557,14 @@ UDWORD iV_GetMouseFrame(void)
 	return MouseImageID;
 }
 
-#ifndef PSX
+
 
 void iV_DrawMousePointer(int x,int y)
 {
 	iV_DrawImage(MouseImageFile,MouseImageID,x,y);
 }
 
-#else
 
-static SWORD MousePulse = 0;
-
-void iV_SetMousePulseColour(SWORD Pulse)
-{
-	if(Pulse > 127) {
-		Pulse = 127;
-	}
-
-	MousePulse = Pulse;
-}
-
-
-void iV_DrawMousePointer(int x,int y)
-{
-	PIE PieParams;
-
-	PieParams.Flags = PIE_COLOURED;
-	PieParams.ColourRGB[0] = 128+MousePulse;
-	PieParams.ColourRGB[1] = 128+MousePulse;
-	PieParams.ColourRGB[2] = 128+MousePulse;
-
-	if(MousePulse > 0) {
-		MousePulse -= 16;
-	}
-
-	DrawImageParam_PSX(MouseImageFile,MouseImageID,x,y,&PieParams);
-}
-
-#endif
 //*************************************************************************
 
 // Software version does nothing.
@@ -644,7 +614,7 @@ void DownloadDisplayBuffer(UBYTE *DisplayBuffer)
  */
 
 
-#ifndef PSX
+
 //*************************************************************************
 
 void	DownloadDisplayBuffer(UBYTE *DisplayBuffer)
@@ -694,7 +664,7 @@ void ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int Sca
 		Ptr++;
 	}
 }
-#endif
+
 
 //*************************************************************************
 //

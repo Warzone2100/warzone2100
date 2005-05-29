@@ -23,17 +23,9 @@ typedef enum _scr_debugtype
 
 
 // If this is defined we save out the compiled scripts
-#ifdef PSX
-#define SAVECOMPILEDSCRIPTS
-#define LOADCOMPILEDSCRIPTS
-// currently all versions MUST use mode SCR_DEBUGINFO, to get the variable names
 #define SCRIPTTYPE SCR_DEBUGINFO
 
-#else
 
-#define SCRIPTTYPE SCR_DEBUGINFO
-
-#endif
 
 // Initialise the script library
 extern BOOL scriptInitialise(EVENT_INIT *psInit);

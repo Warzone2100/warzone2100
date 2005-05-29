@@ -6,10 +6,6 @@
 #include <io.h>
 #endif
 
-#ifdef PSX
-#include "file_psx.h"
-#endif
-
 #include "fbf.h"
 #include "ivispatch.h"
 #include "frame.h"

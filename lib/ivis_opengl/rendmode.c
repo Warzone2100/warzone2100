@@ -24,11 +24,11 @@ static int	g_mode = REND_UNDEFINED;
 
 //*************************************************************************
 
-#ifndef PSX
+
 static uint8	*_VIDEO_MEM;
 static int32	_VIDEO_SIZE;
 static iBool	_VIDEO_LOCK;
-#endif
+
 
 //*************************************************************************
 //temporary definition
@@ -46,7 +46,7 @@ void (*iV_ppBitmapColourTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow,
 //*
 //******
 
-#ifndef PSX
+
 static BOOL	bHas3DNow;
 BOOL	weHave3DNow( void )
 {
@@ -114,9 +114,9 @@ has_3d_now:
 #endif // _MSC_VER
 	return(b3DNow);
 }
-#endif
 
-#ifndef PSX
+
+
 int32 iV_VideoMemorySize(int mode)
 
 {
@@ -229,37 +229,19 @@ uint8 *iV_VideoMemoryAlloc(int mode)
 
 	return _VIDEO_MEM;
 }
-#endif
+
 
 //*************************************************************************
 //***
 //*
 //*
 //******
-#ifdef PSX
-void _iv_vid_setup(void)
-{
-	int i;
-#ifndef PSX
-	printf("coucou\n");
-	pie_SetRenderEngine(ENGINE_D3D);
-#endif
-	rendSurface.usr = REND_UNDEFINED;
-	rendSurface.flags = REND_SURFACE_UNDEFINED;
-#ifndef PIEPSX		// was #ifndef PSX
-	rendSurface.buffer = NULL;
-#endif
-	rendSurface.size = 0;
-}
-#endif
 
 iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, uint8 *buffer)
 {
 	iSurface *s;
 	int i;
-#ifdef PSX
-	AREA *SurfaceVram;
-#endif
+
 
 #ifndef PIEPSX		// was #ifndef PSX
 	assert(buffer!=NULL);	// on playstation this MUST be null
@@ -270,17 +252,7 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	if ((s = (iSurface *) iV_HeapAlloc(sizeof(iSurface))) == NULL)
 		return NULL;
 
-#ifdef PSX
-	SurfaceVram=AllocTexture(width,height,2,0);	// allocate some 32k colour texture ram
-	if (SurfaceVram==NULL) return NULL;
 
-	s->VRAMLocation.x=SurfaceVram->area_x0;
-	s->VRAMLocation.y=SurfaceVram->area_y0;
-	s->VRAMLocation.w=width;
-	s->VRAMLocation.h=height;
-
-	ClearImage(&s->VRAMLocation,0,0,0);	// clear the area to black.
-#endif
 	s->flags = flags;
 	s->xcentre = width>>1;
 	s->ycentre = height>>1;

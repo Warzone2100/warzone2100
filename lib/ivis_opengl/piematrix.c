@@ -105,7 +105,7 @@ void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
 
 
 
-#ifndef PSX
+
 
 
 
@@ -434,4 +434,4 @@ void pie_MatInit(void)
 	iV_DEBUG0("geo[_geo_setup] = setup successful\n");
 }
 
-#endif
+

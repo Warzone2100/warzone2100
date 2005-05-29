@@ -18,17 +18,9 @@
 /***************************************************************************/
 
 /* allocation sizes for anim object table */
-#ifdef PSX
-
-#define	ANIM_OBJ_INIT		20
-#define	ANIM_OBJ_EXT		0
-
-#else
-
 #define	ANIM_OBJ_INIT		100
 #define	ANIM_OBJ_EXT		20
 
-#endif
 
 /* max number of slots in hash table - prime numbers are best because hash
  * function used here is modulous of object pointer with table size -

@@ -324,10 +324,6 @@ anim_LoadFromBuffer( UBYTE *pBuffer, UDWORD size )
 UWORD
 anim_GetAnimID( char *szName )
 {
-#ifdef PSX
-		DBERROR( ("anim_GetAnimID: Not on PDC\n") );
-		return NO_ANIM;
-#else
 	BASEANIM	*psAnim;
 	char		*cPos = strstr( szName, ".ani" );
 
@@ -353,7 +349,7 @@ anim_GetAnimID( char *szName )
 	{
 		return NO_ANIM;
 	}
-#endif
+
 }
 
 /***************************************************************************/

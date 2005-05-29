@@ -77,15 +77,12 @@ typedef struct {int x0, y0, x1, y1;} iBox;
 
 //*************************************************************************
 
-#ifndef PSX
+
 extern iError	_iVERROR;
-#endif
+
 
 //*************************************************************************
 
-#ifdef PSX
-extern void iV_Initialise(void);
-#endif
 extern void iV_Reset(int bResetPal );
 extern void iV_ShutDown(void);
 extern void iV_Stop(char *string, ...);
