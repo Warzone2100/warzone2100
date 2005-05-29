@@ -17,16 +17,9 @@
 #include "pietexture.h"
 #include "pieclip.h"
 
-#ifdef INC_DIRECTX
-#include <d3d.h>
-#include "d3drender.h"
-#endif
 
-#ifdef INC_GLIDE
-	#include "dglide.h"
-	#include "3dfxfunc.h"
-	#include "3dfxtext.h"
-#endif
+
+
 
 /***************************************************************************/
 /*
@@ -59,13 +52,7 @@ static UBYTE	aByteScale[256][256];
 
 void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWORD srcWidth,UDWORD srcHeight,UDWORD srcStride)
 {
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		gl_BufferTo3dfx(pSrcData, destX, destY, srcWidth, srcHeight, srcStride);
-	}
-	else
-#endif
+
 	if (pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		pie_D3DSetupRenderForFlip(destX, destY, pSrcData, srcWidth, srcHeight, srcStride);
@@ -83,13 +70,7 @@ void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWOR
 /***************************************************************************/
 void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour)
 {
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		iV_UniTransBoxFill(x0, y0, x1, y1, (colour & 0x00ffffff), colour >> 24);
-	}
-	else
-#endif
+
 	{
 		iV_TransBoxFill(x0, y0, x1, y1);
 	}
@@ -100,9 +81,7 @@ void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour)
 void	pie_CornerBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour,
 					  UBYTE a, UBYTE b, UBYTE c, UBYTE d)
 {
-#ifdef INC_GLIDE
-	gl_TransBoxFillCorners(x0,y0,x1,y1,colour,a,b,c,d);
-#endif
+
 }
 
 /* ---------------------------------------------------------------------------------- */
@@ -110,25 +89,14 @@ void	pie_CornerBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour,
 #ifndef D3D_VIEW_WINDOW
 void	pie_DrawViewingWindow( iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2,UDWORD colour)
 {
-#ifdef INC_GLIDE
-	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		gl_DrawViewingWindow(v,x1,y1,x2,y2,colour);
-	}
-#endif
+
 }
 #else
 void	pie_DrawViewingWindow(iVector *v,UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD colour)
 {
 	SDWORD clip, i;
 
-#ifdef INC_GLIDE
-	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		gl_DrawViewingWindow(v,x1,y1,x2,y2,colour);
-	}
-   	else// if (pie_GetRenderEngine() == ENGINE_D3D)
-#endif
+
 	{
 		pie_SetTexturePage(-1);
 		pie_SetRendMode(REND_ALPHA_FLAT);
@@ -189,21 +157,7 @@ void	pie_TransColouredTriangle(PIEVERTEX *vrt, UDWORD rgb, UDWORD trans)
 {
 UDWORD	clip;
 
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		vrt[0].light.argb = trans << 24;
 
-		clip = pie_ClipTexturedTriangleFast(&vrt[0],&vrt[1],&vrt[2],&clippedVrts[0], FALSE);
-		if(clip >= 3)
-		{
-				pie_SetRendMode(REND_FILTER_ITERATED);
-				pie_SetColour(rgb);
-				gl_PIEPolygon(clip,clippedVrts);
-		}
-	}
-	else
-#endif
 	if (pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		// Give us a D3D version jezza!
@@ -224,12 +178,7 @@ UDWORD	clip;
 int pie_Num3dfxBuffersPending( void )
 {
 int	retVal=0;
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		retVal = grBufferNumPending();
-	}	
-#endif
+
 
 	return(retVal);
 }
@@ -404,12 +353,7 @@ void pie_Blit(SDWORD texPage, SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 		d3dVrts[i].color = (D3DCOLOR)((255 << 24) + (255 << 16) + (255 << 8) + 255);
 		d3dVrts[i].specular = 0;
 	}
-#ifdef INC_GLIDE
-	if ((rendSurface.usr == iV_MODE_4101) || (rendSurface.usr == REND_GLIDE_3DFX))
-	{
-	}
-	else
-#endif
+
 	{
 		renderPoly.flags = PIE_NO_CULL | PIE_TEXTURED;
 		renderPoly.nVrts = 4;
@@ -686,51 +630,7 @@ UDWORD	radius;
 //use outside of D3D sceen only
 void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
 {
-#ifdef INC_DIRECTX
-	DDSURFACEDESC2	DD_sd; 
-	HRESULT			hRes;
-	int i, j, surfaceSkip, srcSkip;
-	UWORD *pSurface, *pSrc;
-	SDWORD surfaceStride;
 
-	// We lock the surface before blitting video to it.
-	DD_sd.dwSize = sizeof( DD_sd );
-	if ( lpDDS4->lpVtbl->GetSurfaceDesc(lpDDS4, &DD_sd ) != DD_OK )
-	{
-		DBERROR(("pie_RenderImageToSurface GetSurfaceDesc failed:\n"));
-		return;
-	}
-	
-	hRes = lpDDS4->lpVtbl->Lock(lpDDS4, NULL, &DD_sd,DDLOCK_WAIT, NULL);
-	if (hRes != DD_OK)
-	{
-		DBERROR(("pie_RenderImageToSurface buffer lock failed:\n%s", DDErrorToString(hRes)));
-	}
-
-	pSurface = (WORD*)DD_sd.lpSurface;
-	pSrc = pSrcData;
-
-	//word strides
-	surfaceStride = DD_sd.lPitch/2;
-	srcStride /= 2;
-
-	pSurface += (surfaceOffsetX + surfaceOffsetY * surfaceStride);
-
-	surfaceSkip = surfaceStride -srcWidth;
-	srcSkip = srcStride -srcWidth;
-
-	for (i=0; i<srcHeight; i++)
-	{
-		for (j=0; j<srcWidth; j++)
-		{
-			*pSurface++ = *pSrc++;
-		}
-		pSurface += surfaceSkip;
-		pSrc += srcSkip;
-	}
-	// We can unlock the surface now as we have finished with it, 
-	lpDDS4->lpVtbl->Unlock(lpDDS4, DD_sd.lpSurface );
-#endif
 }
 
 

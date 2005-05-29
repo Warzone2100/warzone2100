@@ -14,15 +14,10 @@
 #include "piematrix.h"
 #include "piefunc.h"
 #include "tex.h"
-#ifdef INC_DIRECTX
-#include "d3dmode.h"
-#include "texd3d.h"
-#endif
+
 #include "v4101.h"
 #include "vsr.h"
-#ifdef INC_GLIDE
-#include "3dfxfunc.h"
-#endif
+
 #include "rendmode.h"
 #include "pieclip.h"
 
@@ -37,9 +32,9 @@
  *	Local Variables
  */
 /***************************************************************************/
-#ifndef PSX
+
 	int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
-#endif
+
 
 static BOOL fogColourSet = FALSE;
 static SDWORD d3dActive = 0;
@@ -74,13 +69,9 @@ BOOL pie_CheckForDX6(void)
 {
 	UDWORD	DXVersion, DXPlatform;
 
-#ifdef INC_DIRECTX
-	GetDXVersion(&DXVersion, &DXPlatform);
 
-	return (DXVersion >= 0x600);
-#else
 	return TRUE;
-#endif
+
 }
 
 BOOL pie_Initialise(SDWORD mode)
@@ -109,18 +100,7 @@ BOOL pie_Initialise(SDWORD mode)
 	_TEX_INDEX = 0;
 
 	//mode specific initialisation
-#ifdef INC_GLIDE
-	if (mode == REND_GLIDE_3DFX)
-	{
-		pie_SetRenderEngine(ENGINE_GLIDE);
-		r = gl_VideoOpen();
-#if 1 //FOG ON from Start
-		pie_EnableFog(TRUE);
-		pie_SetFogColour(0x00B08f5f);//nicks colour
-#endif
-	}
-	else
-#endif
+
 	if (mode == REND_D3D_HAL)
 	{
 		iV_RenderAssign(REND_D3D_HAL,&rendSurface);
@@ -148,12 +128,12 @@ BOOL pie_Initialise(SDWORD mode)
 		r = _mode_4101();	// we always want success as jon's stuff does the init
 	}
 
-#ifndef PSX
+
 	if (r)
 	{
 		pie_SetDefaultStates();
 	}
-#endif
+
 
 	if (r)
 	{
@@ -181,11 +161,7 @@ void pie_ShutDown(void)
 	case ENGINE_SR:
 		_close_sr();
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_VideoClose();
-		break;
-#endif
+
 	case ENGINE_D3D:
 		_close_D3D();
 		break;
@@ -239,45 +215,7 @@ void pie_ScreenFlip(CLEAR_MODE clearMode)
 			break;
 		}
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		if (clearMode == CLEAR_OFF OR clearMode == CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
-		{
-			gl_ScreenFlip(FALSE,TRUE);
-		}
-		else if (clearMode == CLEAR_FOG)
-		{
-			backDrop = screen_GetBackDrop();
-			if (backDrop != NULL)
-			{
-				gl_ScreenFlip(TRUE,TRUE);
-	   		}
-			else
-			{
-				gl_ScreenFlip(TRUE,FALSE);
-			}
-		}
-		else
-		{
-			pie_SetFogStatus(FALSE);
-			gl_ScreenFlip(TRUE,TRUE);
-		}
-		
-		backDrop = screen_GetBackDrop();
 
-		if (backDrop != NULL AND clearMode!=CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
-		{
-			if (screen_GetBackDropWidth() == 640)
-			{
-		   		gl_Download640Buffer(backDrop);	// note the change!!! (centered)
-			}
-			else
-			{
-		   		gl_DownloadDisplayBuffer(backDrop);	// note the change!!! (centered)
-			}
-		}
-		break;
-#endif
 	case ENGINE_SR:
 	default:
 		break;
@@ -308,19 +246,7 @@ void pie_GlobalRenderBegin(void)
 {
 	switch (pie_GetRenderEngine())
 	{
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		if (pie_GetFogEnabled())
-		{
-			gl_SetFogColour(pie_GetFogColour());
-			fogColourSet = TRUE;
-		}
-		else
-		{
-//			gl_SetFogColour(pie_GetFogColour(0));
-		}
-		break;
-#endif
+
 	case ENGINE_D3D:
 		if (d3dActive == 0)
 		{
@@ -337,15 +263,7 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack)
 {
 	switch (pie_GetRenderEngine())
 	{
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		if ((fogColourSet) && (bForceClearToBlack))
-		{
-			gl_SetFogColour(0);
-			fogColourSet = FALSE;
-		}
-		break;
-#endif
+
 	case ENGINE_D3D:
 		if (d3dActive != 0)
 		{

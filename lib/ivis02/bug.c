@@ -5,17 +5,7 @@
 #include "bug.h"
 
 
-#ifdef PSX
 
-#define NO_IV_DEBUG_PRINTF	// if defined then NEVER do the printf ... if not defined then it depends on iV_DEBUG
-
-#include "file_psx.h"	// special PSX handling of 'FILE'
-
-#ifdef iV_DEBUG
-char dbgbuffer[MAXDBGSIZE];	// global for debugging buffer
-#endif
-
-#endif
 
 //*************************************************************************
 
@@ -53,7 +43,7 @@ void iV_Debug(char *string, ...)
 void iV_DisplayLogFile(void)
 
 {
-#ifndef PSX
+
 	FILE *fp;
 	int c;
 
@@ -64,7 +54,5 @@ void iV_DisplayLogFile(void)
 			DBPRINTF(("%c",c));
 		fclose(fp);
 	}
-#else
-	DBPRINTF(("iv_debug output\n"));
-#endif
+
 }

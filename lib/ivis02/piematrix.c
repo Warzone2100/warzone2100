@@ -111,7 +111,7 @@ void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
 
 
 
-#ifndef PSX
+
 
 
 
@@ -405,7 +405,7 @@ void pie_VectorInverseRotate0(iVector *v1, iVector *v2)
 //*
 //******
 
-#ifndef PSX
+
 void pie_MatInit(void)
 {
 	unsigned i, scsize;
@@ -433,36 +433,6 @@ void pie_MatInit(void)
 	iV_DEBUG0("geo[_geo_setup] = setup successful\n");
 }
 
-#else
-
-void _iv_geo_setup(void)
-
-{
-	unsigned i, scsize;
-	FRACT conv,v;
-
-	// sin/cos table
-
-	scsize = SC_TABLESIZE + (SC_TABLESIZE / 4);
-
-  	conv = (PSX360 / SC_TABLESIZE);
-	for (i=0; i<scsize; i++) {
-		v = rsin(i * conv) * FP12_MULTIPLIER;
-
-		if (v >= 0)
-			_iVSIN_TABLE[i] = (int32)((v + (FIXEDVAL/2))/FIXEDVAL);
-		else
-			_iVSIN_TABLE[i] = (int32)((v - (FIXEDVAL/2))/FIXEDVAL);
-	}
-
-	// init matrix/quat stack
-
-	pie_MatReset();
 
 
-	iV_DEBUG0("geo[_geo_setup] = setup successful\n");
-}
 
-#endif
-
-#endif

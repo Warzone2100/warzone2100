@@ -5,13 +5,13 @@
 #include <dos.h>
 #endif
 #include "rendmode.h"
-#ifndef PSX
+
 #include "pieclip.h"
-#endif
-#ifndef PSX
+
+
 #include "d3dmode.h"
 #include "v4101.h"
-#endif
+
 #include "rendfunc.h"
 #include "vsr.h"
 //#include "3dfxfunc.h"
@@ -24,15 +24,7 @@
 #include "ivispatch.h"
 #include "fractions.h"
 
-#ifndef PSX
-#ifdef INC_GLIDE
-#include "dglide.h"
-#include "3dfxfunc.h"
-#endif
-#else
-#include "vpsx.h"
-#include "psxvram.h"
-#endif
+
 
 //*************************************************************************
 //*************************************************************************
@@ -47,11 +39,11 @@ static int	g_mode = REND_UNDEFINED;
 
 //*************************************************************************
 
-#ifndef PSX
+
 static uint8	*_VIDEO_MEM;
 static int32	_VIDEO_SIZE;
 static iBool	_VIDEO_LOCK;
-#endif
+
 
 //*************************************************************************
 //temporary definition
@@ -69,7 +61,7 @@ void (*iV_ppBitmapColourTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow,
 //*
 //******
 
-#ifndef PSX
+
 static BOOL	bHas3DNow;
 BOOL	weHave3DNow( void )
 {
@@ -137,9 +129,9 @@ has_3d_now:
 #endif // _MSC_VER
 	return(b3DNow);
 }
-#endif
 
-#ifndef PSX
+
+
 int32 iV_VideoMemorySize(int mode)
 
 {
@@ -262,20 +254,20 @@ uint8 *iV_VideoMemoryAlloc(int mode)
 
 	return _VIDEO_MEM;
 }
-#endif
+
 
 //*************************************************************************
 //***
 //*
 //*
 //******
-#ifdef PSX
+//NOTE check this [may 28] -Q
 void _iv_vid_setup(void)
 {
 	int i;
-#ifndef PSX
+
 	pie_SetRenderEngine(ENGINE_UNDEFINED);
-#endif
+
 	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
 #ifndef PIEPSX		// was #ifndef PSX
@@ -283,15 +275,11 @@ void _iv_vid_setup(void)
 #endif
 	rendSurface.size = 0;
 }
-#endif
 
 iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, uint8 *buffer)
 {
 	iSurface *s;
 	int i;
-#ifdef PSX
-	AREA *SurfaceVram;
-#endif
 
 #ifndef PIEPSX		// was #ifndef PSX
 	assert(buffer!=NULL);	// on playstation this MUST be null
@@ -302,17 +290,6 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	if ((s = (iSurface *) iV_HeapAlloc(sizeof(iSurface))) == NULL)
 		return NULL;
 
-#ifdef PSX
-	SurfaceVram=AllocTexture(width,height,2,0);	// allocate some 32k colour texture ram
-	if (SurfaceVram==NULL) return NULL;
-
-	s->VRAMLocation.x=SurfaceVram->area_x0;
-	s->VRAMLocation.y=SurfaceVram->area_y0;
-	s->VRAMLocation.w=width;
-	s->VRAMLocation.h=height;
-
-	ClearImage(&s->VRAMLocation,0,0,0);	// clear the area to black.
-#endif
 	s->flags = flags;
 	s->xcentre = width>>1;
 	s->ycentre = height>>1;
@@ -373,31 +350,6 @@ void rend_AssignScreen(void)
 {
 	iV_RenderAssign(rendSurface.usr,&rendSurface);
 }
-
-
-#ifdef PSX
-iBool iV_VideoOpen(int mode)
-{
-	iBool r;
-
-	switch (mode) {
-		case REND_PSX:
-			r = _mode_psx();
-			break;
-		default:
-			r = FALSE;
-
-	}
-
-
-	if (r) {
-		iV_RenderAssign(mode,&rendSurface);
-		pal_Init();
-	}
-
-	return r;
-}
-#endif
 
 
 int iV_GetDisplayWidth(void)
@@ -493,31 +445,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 {
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
-
-#ifndef PSX
 	bHas3DNow = cpuHas3DNow();	// do some funky stuff to see if we have an AMD
-#endif
-	/* Force to 3dfx if glide included */
-/*#ifdef INC_GLIDE
-	mode = REND_GLIDE_3DFX;
-//	if(iV_Line == gl_Line)
-//	{
-//		// Don't reassign if it's already done
-//		return;
-//	}
-//
-#endif
-*/
-#ifdef PSX
-// If psx version then always force mode to iV_MODE_PSX.
-	mode = REND_PSX;
-
-	rendSurface.width = 640;
-	rendSurface.height = 480;
-	pie_Set2DClip(0,0,rendSurface.width,rendSurface.height);
-
-#endif
-
 	g_mode = mode;
 
 	switch (mode) {
@@ -732,112 +660,6 @@ void iV_RenderAssign(int mode, iSurface *s)
 */
 			break;
 
-#ifdef INC_GLIDE
-		case REND_GLIDE_3DFX:
- //			pie_Draw3DShape					= pie_Draw3DIntelShape;
-//			pie_VideoShutDown 		 		= gl_VideoClose;
-			iV_VSync 			 		= gl_VSync;
-//			iV_Clear 			 		= gl_Clear;
-//			iV_RenderEnd 				= gl_RenderEnd;
-//			iV_RenderBegin 				= gl_RenderBegin;
-//			iV_Palette 			 		= gl_Palette;
-//			iV_Pixel 			 		= gl_Pixel;
-//			iV_pPixel 			 		= gl_pPixel;
-			iV_pLine 			 		= gl_pLine;
-//			iV_pHLine 			 		= gl_pHLine;
-//			iV_pVLine 			 		= gl_pVLine;
-//			iV_pCircle 			 		= gl_pCircle;
-//			iV_pCircleFill 	 			= gl_pCircleFill;
-//			iV_pPolygon 		 		= gl_pPolygon;
-//			iV_pQuad				 	= gl_Quad;  
-//			iV_pTriangle 		 		= gl_pTriangle;
-//			iV_tTriangle				= gl_tTriangle;
-//			iV_tgTriangle				= gl_tgTriangle;
-//			iV_tPolygon					= gl_tPolygon;
-//			iV_tgPolygon				= gl_tgPolygon;
-			iV_pBox 				 	= gl_pBox; 
-			iV_pBoxFill 		 		= gl_pBoxFill;
-//			iV_ppBitmap 		 		= gl_ppBitmap;//not called on 3dfx
-//			iV_pBitmap			 		= gl_pBitmap;
-//			iV_pBitmapResize 	 		= gl_pBitmapResize;
-//			iV_pBitmapResizeRot90 		= gl_BitmapResizeRot90;
-//			iV_pBitmapResizeRot180		= gl_BitmapResizeRot180;
-//			iV_pBitmapResizeRot270		= gl_BitmapResizeRot270;
-//			iV_pBitmapGet 				= gl_pBitmapGet;
-//			iV_ppBitmapTrans			= gl_ppBitmapTrans;
-//			iV_pBitmapTrans				= gl_pBitmapTrans;
-//			iV_ppBitmapShadow			= gl_ppBitmapShadow;
-//			iV_pBitmapShadow			= gl_pBitmapShadow;
-//			iV_ppBitmapRot90			= gl_ppBitmapRot90;
-//			iV_pBitmapRot90				= gl_pBitmapRot90;
-//			iV_ppBitmapRot180			= gl_ppBitmapRot180;
-//			iV_pBitmapRot180			= gl_pBitmapRot180;
-//			iV_ppBitmapRot270			= gl_ppBitmapRot270;
-//			iV_pBitmapRot270			= gl_pBitmapRot270;
-//			iV_MousePointer				= gl_DrawMousePointer;
-//			iV_Line 					= gl_Line;
-//			iV_HLine 					= gl_HLine;
-//			iV_VLine 					= gl_VLine;
-//			iV_Circle 					= gl_Circle;
-//			iV_CircleFill 				= gl_CircleFill;
-//			iV_Polygon 					= gl_Polygon;
-//			iV_Quad						= gl_Quad;
-//			iV_Triangle 				= gl_Triangle;
-//			iV_Box 						= gl_Box;
-//			iV_BoxFill 					= gl_BoxFill;
-//			iV_Bitmap 					= gl_Bitmap;
-//			iV_BitmapResize 			= gl_BitmapResize;
-//			iV_BitmapResizeRot90		= gl_BitmapResizeRot90;
-//			iV_BitmapResizeRot180		= gl_BitmapResizeRot180;
-//			iV_BitmapResizeRot270 		= gl_BitmapResizeRot270;
-//			iV_BitmapGet 				= gl_BitmapGet;
-//			iV_BitmapTrans				= gl_BitmapTrans;
-//			iV_BitmapShadow				= gl_BitmapShadow;
-//			iV_BitmapRot90				= gl_BitmapRot90;
-//			iV_BitmapRot180				= gl_BitmapRot180;
-//			iV_BitmapRot270				= gl_BitmapRot270;
-			iV_SetTransFilter  			= gl_SetTransFilter;
-//			iV_TransBoxFill	   			= gl_TransBoxFill;
-//			iV_UniTransBoxFill			= gl_IntelTransBoxFill;
-//			iV_UniBitmapDepth			= gl_IntelBitmapDepth;
-//			pie_DownLoadRadar			= gl_DownLoadRadar;
-//			iV_DownLoadTexture			= gl_DownLoadTexture;
-//			iV_DownLoadTextureAbs		= gl_DownLoadTextureAbs;
-//			iV_TexPolygonLevel				= gl_tPolygonLevel;
-//			iV_TexTriangleLevel			= gl_tTriangleLevel;
-			iV_ScreenDumpToDisk			= gl_ScreenDump;
-//			iV_DrawRadar				= gl_DrawRadar;
-//			iV_DrawImageDef			= gl_DrawImageDef;
-//			iV_DrawSemiTransImageDef = gl_DrawSemiTransImageDef;
-//			iV_DrawImage			= gl_DrawImage;
-//			iV_DrawImageRect		= gl_DrawImageRect;
-//			iV_DrawTransImage		= gl_DrawTransImage;
-//			iV_DrawTransImageRect	= gl_DrawTransImageRect;
-//			iV_DrawColourImage		= gl_DrawColourImage;
-//			iV_DrawColourTransImage	= gl_DrawTransColourImage;
-//			iV_DrawStretchImage		= gl_DrawStretchImage;
-
-//			iV_BeginTextRender		= gl_BeginTextRender;
-//			iV_TextRender270		= gl_TextRender270;
-//			iV_TextRender			= gl_TextRender;
-//			iV_EndTextRender		= gl_EndTextRender;
-
-//			iV_TestTransparency			= gl_TestTransparency;
-//			iV_UniTransBitmap			= gl_IntelTransBitmap;
-//			iV_TransTriangle			= gl_TransTriangle;
-//			iV_TransPolygon				= gl_TransPolygon;
-//			iV_SetGammaValue			= gl_SetGammaValue;
-
-//			iV_UploadDisplayBuffer	= gl_UploadDisplayBuffer;
-//			iV_DownloadDisplayBuffer = gl_DownloadDisplayBuffer;
-//			iV_ScaleBitmapRGB		= gl_ScaleBitmapRGB;
-//			iV_AdditiveTransparency = gl_AdditiveTransparency;
-//			iV_SetFogTable			= gl_SetFogTable;
-//			iV_SetFogStatus			= gl_SetFogStatus;
-
-			break;
-#endif
- 
 		case REND_D3D_RGB:
 		case REND_D3D_HAL:
 		case REND_D3D_REF:

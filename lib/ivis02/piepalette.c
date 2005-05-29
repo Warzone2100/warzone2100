@@ -6,9 +6,7 @@
 #include "rendmode.h"
 #include "bug.h"
 #include "fractions.h"
-#ifdef INC_GLIDE
-#include "dglide.h"
-#endif
+
 
 #define RED_CHROMATICITY	1
 #define GREEN_CHROMATICITY	1
@@ -26,7 +24,7 @@ void pie_SetColourDefines(void);
 
 
 
-#ifndef PSX	// whole file is split into 2 parts now !!!!
+
 /*
 
 
@@ -41,13 +39,13 @@ PALETTEENTRY*		psWinPal = NULL;
 uint8				palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 bPaletteInitialised = FALSE;
 uint8	 colours[16];
-#ifndef PSX
+
 /* Look up table for transparency */
 /*	entry[x][y] tells you what colour to poke in when you're writing
 	x over y
 */
 uint8				transLookup[PALETTE_SIZE][PALETTE_SIZE];
-#endif
+
 UWORD	palette16Bit[PALETTE_SIZE];	//16 bit version of the present palette
 
 BOOL	pal_Make16BitPalette(void)
@@ -220,26 +218,7 @@ BOOL pal_AddNewPalette(iColour *pal)
 	}
 #ifndef   PIETOOL			// ffs
 	/* If we're adding a palette and running on a 3dfx, then bang it down to the card */
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		for(i=0; i<PALETTE_SIZE; i++)
-		{
-			entry = 0;
-			entry = pal[i].r;
-			entry = entry<<8;
-			entry = entry | (long)pal[i].g;
-			entry = entry<<8;
-			entry = entry | (long)pal[i].b;
-			cardPal[i] = (long)entry;
-		}
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			/* Make sure we send our palette to the 3dfx card via a glide call */
-			grTexDownloadTable(GR_TMU0, GR_TEXTABLE_PALETTE, &cardPal);
-		}
-	}
-#endif
+
 #endif
 	p = psGamePal;
 	w = psWinPal;
@@ -391,7 +370,7 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 	return ((uint8) best_colour);
 }
 
-#ifndef PSX
+
 void	pie_BuildSoftwareTransparency( void )
 {
 int	i,j;
@@ -408,7 +387,7 @@ int	red,green,blue;
 		}
 	}
 }
-#endif
+
 
 void pal_BuildAdjustedShadeTable( void )
 {
@@ -474,253 +453,3 @@ PALETTEENTRY*	pie_GetWinPal(void)
 
 
 
-#else
-
-
-
-
-
-/*
-
-
-	Start of PSX Version 
-
-
-*/
-
-//*************************************************************************
-
-uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
-uint8		colours[16];	// common primary colours - point to which entry in gamePal that is used for each colour
-iColour		gamePal[256];			// This is the one 256 colour palette that is used by the game. It is set 
-
-
-// ffs //PALETTEENTRY	winPal[256];			// This is the one 256 colour palette that is used by the game. It is set 
-
-
-
-
-//*************************************************************************
-//*** add a new palette
-//*
-//* params	pal = pointer to palette to add
-//*
-//* returns slot number of added palette or -1 if error
-//*
-//******
-
-int pal_AddNewPalette(iColour *pal)
-{
-	return 0;
-}
-
-//*************************************************************************
-//***
-//*
-//******
-
-iBool iV_PaletteRemove(void)
-
-{
-	return(TRUE);
-	
-}
-
-
-//*************************************************************************
-//***
-//*
-//******
-
-void pal_SelectPalette(int n)
-
-{
-}
-
-
-
-// Called from data.c by the PSXPAL resource
-void pal_SetgamePalette(UBYTE *pFileData)
-{
-#ifndef PSX
-	UDWORD i;
-
-	for(i=0; i<256; i++) 
-	{
-		gamePal[i].r = pFileData[i*4];
-		gamePal[i].g = pFileData[i*4+1];
-		gamePal[i].b = pFileData[i*4+2];
-	}
-#else
-	// Playstation version, rather ironically uses a microsoft RIFF format palette file.
-	UDWORD i;
-	UBYTE *Pal = pFileData + 0x18;	// skip the header.
-
-	for(i=0; i<256; i++) 
-	{
-		gamePal[i].r = Pal[i*4];
-		gamePal[i].g = Pal[i*4+1];
-		gamePal[i].b = Pal[i*4+2];
-	}
-#endif
-	pie_SetColourDefines();
-	pal_BuildAdjustedShadeTable();
-}	
-
-
-//*************************************************************************
-//***
-//*
-//******
-
-void pal_SetPalette(void)
-
-{
-}
-
-
-//*************************************************************************
-//***
-//*
-//******
-
-//*************************************************************************
-//*** calculate primary colours for current palette (store in COL_ ..
-//*
-//* on exit	_iVCOLS[0..15] contain colour values matched
-//*			COL_.. below access _iVCOLS[0..15]
-//******
-
-static void pie_SetColourDefines(void)
-{
-	COL_BLACK 			= pal_GetNearestColour(  1,  1, 1);
-	COL_RED 			= pal_GetNearestColour( 128,  0, 0);
-	COL_GREEN 			= pal_GetNearestColour(  0, 128, 0);
- 	COL_BLUE 			= pal_GetNearestColour(  0,  0, 128);
-	COL_CYAN 			= pal_GetNearestColour(  0, 128, 128);
-	COL_MAGENTA 		= pal_GetNearestColour( 128,  0, 128);
-	COL_BROWN 			= pal_GetNearestColour( 128, 64,  0);
-	COL_DARKGREY 		= pal_GetNearestColour( 32, 32, 32);
-	COL_GREY			= pal_GetNearestColour( 128, 128, 128);
-	COL_LIGHTRED 		= pal_GetNearestColour( 255,  0,  0);
-	COL_LIGHTGREEN 		= pal_GetNearestColour(  0, 255,  0);
-	COL_LIGHTBLUE		= pal_GetNearestColour(  0,  0, 255);
-	COL_LIGHTCYAN 		= pal_GetNearestColour(  0, 255, 255);
-	COL_LIGHTMAGENTA	= pal_GetNearestColour( 255,  0, 255);
-	COL_YELLOW	  		= pal_GetNearestColour( 255, 255,  0);
-	COL_WHITE 			= pal_GetNearestColour( 255, 255, 255);
-}
-
-
-//*************************************************************************
-//*** init palette (sets default palette and calc primary colours)
-//*
-//* on exit	psCurrentPalette = pointer to default palette (palette 0)
-//******
-
-void pal_Init(void)
-{
-
-	iV_DEBUG0("pal[_palette_initialise] = init successful\n");
-}
-
-
-uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
-{
-	int c ;
-	int32 distance_r, distance_g, distance_b, squared_distance;
-	int32 best_colour, best_squared_distance;
-	iColour *psPal = &gamePal;
-
-	best_squared_distance = 0x10000;
-
-	for (c = 0; c < 256; c++, psPal++) {
-
-		distance_r = r -  psPal->r;
-		distance_g = g -  psPal->g;
-		distance_b = b -  psPal->b;
-
-		squared_distance =  distance_r * distance_r + distance_g * distance_g + distance_b * distance_b;
-
-		if (squared_distance < best_squared_distance)
-		{
-				best_squared_distance = squared_distance;
-				best_colour = c;
-		}
-	}
-	if (best_colour == 0)
-	{
-		best_colour = 1;
-	}
-	return ((uint8) best_colour);
-}
-
-//*************************************************************************
-//*** create shading table 256 x PALETTE_SHADE_LEVEL shades for
-//* specified colour
-//*
-//* params	col = colour to shade to
-//*
-//* on exit	_iVSHADE_TABLE[] contains 256 x PALETTE_SHADE_LEVEL entries
-//*
-//******
-
-
-static void pal_BuildAdjustedShadeTable( void )
-{
-	UDWORD	redFraction, greenFraction, blueFraction;
-	int		seekRed, seekGreen,seekBlue;
-	int		numColours;
-	UDWORD	numShades;
-
-	for(numColours = 0; numColours<255; numColours++)
-	{
-		redFraction =	(((UDWORD)gamePal[numColours].r)<<16) / 16;
-		greenFraction = (((UDWORD)gamePal[numColours].g)<<16) / 16;
-		blueFraction =	(((UDWORD)gamePal[numColours].b)<<16) / 16;
-
-		for(numShades = COLOUR_BALANCE; numShades < 16+COLOUR_BALANCE; numShades++)
-		{
-			seekRed =	(numShades * redFraction) >> 16;
-			seekGreen = (numShades * greenFraction) >> 16;
-			seekBlue =	(numShades * blueFraction) >> 16;
-
-			if(seekRed >255) seekRed = 255;
-			if(seekGreen >255) seekGreen = 255;
-			if(seekBlue >255) seekBlue = 255;
-
-			palShades[(numColours * PALETTE_SHADE_LEVEL) + (numShades-COLOUR_BALANCE)] = 
-				pal_GetNearestColour((uint8) seekRed, (uint8) seekGreen, (uint8) seekBlue);
-
-//			DBPRINTF(("%d %d %d : %d\n",seekRed,seekGreen,seekBlue,iV_SHADE_TABLE[(numColours * iV_PALETTE_SHADE_LEVEL) + (numShades-COLOUR_BALANCE)]));
-		}
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif

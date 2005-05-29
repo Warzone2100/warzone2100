@@ -13,19 +13,6 @@
 #include "piepalette.h"
 #include "bug.h"
 #include "ivispatch.h"
-#ifdef INC_GLIDE
-#include "3dfxtext.h"
-#endif
-#ifdef DIRECTX
-#include "dx6texman.h"
-#include "d3drender.h"
-#endif
-
-#ifdef PSX
-void UploadPCXClut(UBYTE *Pal,UWORD VRAMx, UWORD VRAMy);
-#endif
-
-
 //*************************************************************************
 
 iTexPage _TEX_PAGE[iV_TEX_MAX];
@@ -109,7 +96,6 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 {
 	int				i3d;
 	int				i;
-#ifndef PSX
 	/* Get next available texture page */
 	i = _TEX_INDEX;
 	/* Have we used up too many? */
@@ -152,43 +138,18 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 		}
 	}
 
-	/* Now some extra stuff if we're running on a 3dfx? */
-#ifdef INC_GLIDE
-	if(rendSurface.usr == REND_GLIDE_3DFX)
-	{
-		if(iV_TexSizeIsLegal(s->width,s->height)) {
-			/* Bang it down to the card if we're on a 3dfx */
-			i3d = gl_downLoad8bitTexturePage(s->bmp,(UWORD)s->width,(UWORD)s->height);
-			/* Update 'real' texpage number in texpage structure */
-		} else {
-// If it's an illegal texture page size then chuck a message and default to TPage 1.
-			DBERROR(("Illegal size for texture. [%s , (%d,%d)]\n",
-					filename,s->width,s->height));
-			i3d = 1;
-		}
-		_TEX_PAGE[i].textPage3dfx = i3d;
-	}
-#endif
 #endif
 	/* Send back the texpage number so we can store it in the IMD */
 
 	_TEX_INDEX++;
 
 #ifndef PIEPSX
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		return(i3d);
-	}
-	else
-#endif
+
 #endif
 	{
 		return (i);
 	}
-#else
-	assert(2+2==5);
-#endif
+
 }
 
 
@@ -209,7 +170,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 #endif
 
 
-#ifndef PSX
+
 	/* If it's not a resource - use old way!  - PSX does not need this check because it MUST have been loaded allready by the resource loader */
 	if(!resPresent("TEXPAGE",filename))
 	{
@@ -217,28 +178,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 		return(iV_TexLoad( path, filename, type,
 					palkeep, bColourKeyed ));
 	}
-#endif
 
-
-#ifdef PSX
-	{
-		UDWORD TexNum;
-		BOOL TextureLoaded;
-
-		TexNum=GetTextureNumber(filename);		// which texture number does this page use
-		TextureLoaded=FindTextureNumber(TexNum,&i);
-		if(TextureLoaded==FALSE)
-		{
-			DBERROR(("iV_TexLoadNew : Texture was not in resources; %s.\n",	filename));
-			return (-1);
-		}
-//	DBPRINTF(("Matched [%s] (%d) @ %d\n",filename,TexNum,i));
-		return(i);
-	}
-#endif
-
-
-#ifndef PSX
 	/* Ensure upper case for tex file names */
 	ASSERT ((strlen(filename)<MAX_FILE_PATH,"Texture file path too long"));
 
@@ -247,11 +187,9 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 
 	for (i = 0; i < (int)strlen(filename); i++)
 	{
-#ifdef PSX
-		fname[i] = tolower(filename[i]);	// PSX MUST convert to lower case to match .wrf entry names (all lower) to .pie names (some upper, some lower)
-#else
+
 		fname[i] = filename[i];
-#endif
+
 	  
 	}
 
@@ -265,20 +203,11 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 	/* Have we already loaded this one then? */
 	while (i<_TEX_INDEX) 
 	{
-#ifdef PSX
-		if (strcmp(fname,_TEX_PAGE[i].name) == 0)
-#else
+
 		if (stricmp(fname,_TEX_PAGE[i].name) == 0)
-#endif
+
 		{
-			/* Send back 3dfx texpage number if we're on 3dfx - they're NOT the same */
-#ifdef INC_GLIDE
-		 	if(rendSurface.usr == REND_GLIDE_3DFX)
-			{
-				return(_TEX_PAGE[i].textPage3dfx);
-			}
-			else
-#endif
+
 			{
 				/* Otherwise send back the software one */
 				return i;
@@ -302,13 +231,11 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 
 #endif
 
-
-#endif
 }
 
 int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 {
-#ifndef PSX
+
 	char			fname[MAX_FILE_PATH];
 	int				i;
 	iSprite			s;
@@ -320,11 +247,9 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 	// if we convert it to upper case ... the resource loading will not work
 	for (i = 0; i < (int)strlen(filename); i++)
 	{
-#ifdef PSX
-		fname[i] = tolower(filename[i]);	// PSX MUST convert to lower case to match .wrf entry names (all lower) to .pie names (some upper, some lower)
-#else
+
 		fname[i] = filename[i];
-#endif
+
 	}
 	/* Terminate it */
 	fname[i] = '\0';
@@ -332,17 +257,7 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 	/* Back to beginning */
 	i = 0;
 	/* Have we already loaded this one then? */
-#ifdef PSX
-	while (strcmp(fname,_TEX_PAGE[i].name) != 0)
-	{
-		i++;
-		if (i>=_TEX_INDEX) 
-		{
-				DBPRINTF(("pie_TexReload [%s] was not found in texpage list\n",filename));
-				return -1;
-		}
-	}
-#else
+
 	while (stricmp(fname,_TEX_PAGE[i].name) != 0)
 	{
 		i++;
@@ -352,7 +267,7 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 				return -1;
 		}
 	}
-#endif
+
 	//got the old texture page so load bmp straight in
 	s.width = _TEX_PAGE[i].tex.width;
 	s.height = _TEX_PAGE[i].tex.height;
@@ -360,29 +275,19 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 
 	pie_PCXLoadMemToBuffer(pBuffer,&s,NULL); 
 
-#ifndef PSX
-#ifdef INC_GLIDE
- 	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		gl_Reload8bitTexturePage(s.bmp,(UWORD)s.width,(UWORD)s.height,_TEX_PAGE[i].textPage3dfx);
-	}
-	else
-#endif
+
 	if(pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		dtm_LoadTexSurface(&_TEX_PAGE[i].tex, i);
 	}
-
-#endif
-
 	return i;
-#endif
+
 }
 
 int iV_TexLoad( char *path, char *filename, int type,
 					iBool palkeep, iBool bColourKeyed )
 {
-#ifndef PSX
+
 	int				i;
 	char			buffer[MAX_FILE_PATH], fname[MAX_FILE_PATH];
 	iSprite			s;
@@ -439,7 +344,7 @@ int iV_TexLoad( char *path, char *filename, int type,
 			iV_DEBUG1("tex[TexLoad] = unrecognised texture page type %d\n",type);
 			return -1;
 	}
-#endif
+
 	return -1;
 }
 
@@ -450,54 +355,6 @@ int iV_TexLoad( char *path, char *filename, int type,
 //
 //  currently only for PSX but would make sense for the PC (?)
 //
-#ifdef PSX
-BOOL GenerateTEXPAGE(char *Filename, RECT *VramArea, UDWORD Mode, UWORD Clut)
-{
-		int i;
-		UWORD TPage;
-
-		i=_TEX_INDEX;
-
-		/* Have we used up too many? */
-		if (++_TEX_INDEX > iV_TEX_MAX) 
-		{
-			iV_DEBUG0("Resource TexPageLoad ... too many texture pages\n");
-			return FALSE;
-		}
-
-		/* Store away all the info */
-	 	TPage = GetTPage(Mode,0,VramArea->x,VramArea->y);
-		memcpy(&_TEX_PAGE[i].tex.VRAMpos,VramArea,sizeof(RECT));
-		_TEX_PAGE[i].tex.num	= GetTextureNumber(Filename);		// base on the name e.g.     Page-16-  will return 16
-		_TEX_PAGE[i].tex.tpage = TPage;
-		_TEX_PAGE[i].tex.clut = Clut;		// Not really used ...
-
-		return(TRUE);
-}
-#endif		
-
-#ifdef PSX
-// Scan through the loaded tex pages to see if this one is loaded. Returns TRUE and TexPage points to the loaded entry
-BOOL FindTextureNumber(UDWORD TexNum,int* TexPage)
-{
-	int i;
-
-	i = 0;
-
-	while (i < _TEX_INDEX) 
-	{
-		if(_TEX_PAGE[i].tex.num==TexNum)
-		{
-			*TexPage=i;
-//			*TexPage=&_TEX_PAGE[i];
-			return TRUE;
-		}
-		i++;
-	}
-	return FALSE;	
-}
-
-#endif
 
 SBYTE GetTextureNumber(char *Name)
 {
@@ -538,7 +395,6 @@ SBYTE GetTextureNumber(char *Name)
 void pie_TexShutDown(void)
 
 {
-#ifndef PSX
 	int i,j;
 
 	i = 0;
@@ -559,21 +415,13 @@ void pie_TexShutDown(void)
 		i++;
 	}
 
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		free3dfxTexMemory();
-	}
-#endif
-
-
 	DBPRINTF(("pie_TexShutDown successful - freed %d texture pages\n",j));
-#endif
+
 }
 
 void pie_TexInit(void)
 {
-#ifndef PSX
+
 	int i;
 
 	i = 0;
@@ -586,7 +434,7 @@ void pie_TexInit(void)
 		_TEX_PAGE[i].tex.xshift = 0;
 		i++;
 	}
-#endif
+
 }
 
 // Check that a texture is  <= 256x256 and 2^n x 2^n in size.

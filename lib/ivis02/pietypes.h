@@ -12,10 +12,6 @@
 
 #include "frame.h"
 
-#ifdef PSX
-#define PIEPSX
-//#define FAT_N_FAST_IMD	// pad out iVector with extra word to make it compatible with SVECTOR.
-#endif
 /***************************************************************************/
 /***************************************************************************/
 /*

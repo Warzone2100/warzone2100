@@ -8,17 +8,15 @@
 #include "piestate.h"
 #include "rendmode.h"
 #include "rendfunc.h"
-#ifndef PSX
-#include "pieclip.h"
-#endif
-#ifdef INC_DIRECTX
-#include <ddraw.h>
-#endif
 
-#ifndef PSX
+#include "pieclip.h"
+
+
+
+
 #include "pieblitfunc.h"
 //#include "intfac.h"			// ffs am
-#endif
+
 
 #include "bug.h"
 #include "piepalette.h"
@@ -30,13 +28,9 @@ extern	void	pie_DrawTextNew(unsigned char *string, int x, int y);
 extern SDWORD DisplayXFactor;
 #ifndef PIETOOL	// if we are in the pie tool then don't compile any of this
 
-#ifndef PSX
-#include "3dfxfunc.h"
-#else
 
-#include "vpsx.h"
-#include "psxvram.h"
-#endif
+//	#include "3dfxfunc.h"		//NOTE why does PSX defined load 3dfx stuff also? -Q
+
 
 /***************************************************************************/
 /*
@@ -136,9 +130,7 @@ int iV_CreateFontIndirect(IMAGEFILE *ImageFile,UWORD *AsciiTable,int SpaceSize)
 		Index = (UWORD)AsciiTable[c];
 		Above = iV_GetImageYOffset(Font->FontFile,Index);
 		Below = Above + iV_GetImageHeight(Font->FontFile,Index);
-#ifdef PSX
-		Above += 2;
-#endif
+
 		Height = abs(Above) + abs(Below);
 
 		if(Above  < Font->FontAbove) {
@@ -249,20 +241,15 @@ int iV_GetTextWidth(unsigned char *String)
 		if(Index != ASCII_COLOURMODE) {
 			if(Index != ASCII_SPACE) {
 				ImageID = (UWORD)Font->AsciiTable[Index];
-	#ifndef PSX
+	
 				MaxX += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-	#else
-				MaxX += iV_GetImageWidth(Font->FontFile,ImageID) + 2;
-	#endif
+
 
 			} else {
 
-#ifndef PSX
-				MaxX += Font->FontSpaceSize;
-#else
-				MaxX += PSXToWidth(Font->FontSpaceSize);
 
-#endif
+				MaxX += Font->FontSpaceSize;
+
 			}
 		}
 
@@ -288,22 +275,11 @@ BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *Y
 		if(Index != ASCII_SPACE) {
 			ImageID = (UWORD)Font->AsciiTable[Index];
 
-	#ifndef PSX
+
 			*Width = iV_GetImageWidth(Font->FontFile,ImageID) ;
 			*Height = iV_GetImageHeight(Font->FontFile,ImageID);
 			*YOffset = iV_GetImageYOffset(Font->FontFile,ImageID);
-	#else
-			{
-				IMAGEDEF *Image;
-				Image=	  &( Font->FontFile->ImageDefs[ImageID]);
-				*Width = Image->Width;
-				*Height = Image->Height;
-				*YOffset = Image->YOffset;
-				*U=	  Image->Tu;
-				*V=	Image->Tv;
-				*TpageID=Image->TPageID;
-			}
-	#endif
+
 			return TRUE;
 		}
 		else 
@@ -337,19 +313,15 @@ int iV_GetCharWidth(unsigned char Char)
 		if(Index != ASCII_SPACE) {
 			ImageID = (UWORD)Font->AsciiTable[Index];
 
-	#ifndef PSX
+	
 			Width = iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-	#else
-			Width = iV_GetImageWidth(Font->FontFile,ImageID) + 2;
-	#endif
+
 		} else {
 
 
-	#ifndef PSX
+	
 		   Width = Font->FontSpaceSize;
-	#else
-			Width=PSXToWidth(Font->FontSpaceSize);
-	#endif
+
 		}
 	}
 
@@ -479,35 +451,6 @@ UDWORD pie_GetFormattedTextFlags(void)
 	return FFlags;
 }
 
-#ifdef PSX
-void pie_StartTextExtents(void)
-{
-	RecordExtents = EXTENTS_START;
-}
-
-
-void pie_FillTextExtents(int BorderThickness,UBYTE r,UBYTE g,UBYTE b,BOOL Alpha)
-{
-
-//DBPRINTF(("fillextents sx=%d ex=%d\n",ExtentsStartX,ExtentsEndX));
-
-	if(Alpha) {
-		TransBoxFillRGB_psx(ExtentsStartX-BorderThickness,ExtentsStartY-BorderThickness,
-							ExtentsEndX+BorderThickness,ExtentsEndY+BorderThickness,
-							r,g,b);
-	} else {
-		DBPRINTF(("pie_FillTextExtents : NON ALPHA NOT IMPLEMENTED\n"));
-//		BoxFillRGB_psx(ExtentsStartX-BorderThickness,ExtentsStartY-BorderThickness,
-//						ExtentsEndX+BorderThickness,ExtentsEndY+BorderThickness,
-//						r,g,b);
-	}
-
-	RecordExtents = EXTENTS_NONE;
-}
-
-#endif
-
-
 
 static RENDERTEXT_CALLBACK Indirect_pie_DrawText=pie_DrawText;
 
@@ -626,13 +569,7 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 
 			while( (String[si] != 0) && (String[si] != ' ') && (WWidth <= Width)) {
 				// Check for new line character.
-#ifdef PSX
-				if(String[si] == ASCII_NEWLINE) {
-					NewLine = TRUE;
-					si++;
-					break;
-				}
-#endif
+
 				if(String[si] == ASCII_COLOURMODE) {	// If it's a colour mode toggle char then just add it to the word.
 					FWord[i] = String[si];
    					i++;
@@ -849,26 +786,21 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 				}
 			}
 		} else if(Index == ASCII_SPACE) {
-#ifndef PSX
-			x += Font->FontSpaceSize;
-#else
-			x += PSXToWidth(Font->FontSpaceSize);
 
-#endif
+			x += Font->FontSpaceSize;
+
 		} else {
 			ImageID = (UWORD)Font->AsciiTable[Index];
 			pie_TextRender(Font->FontFile,ImageID,x,y);
 
-#ifndef PSX
+
 			x += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-#else
-			x += iV_GetImageWidth(Font->FontFile,ImageID) + 2;
-#endif
+
 		}
 
 // Don't use this any more, If the text needs to wrap then use
 // pie_DrawFormattedText() defined above.
-#ifndef PSX
+
 		/* New bit to make text wrap */
 		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
 		{
@@ -876,7 +808,7 @@ void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
 			x = 0;
 			y += iV_GetTextLineSize();
 		}
-#endif
+
 		string++;
 	}
 }
@@ -1032,7 +964,7 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 #endif
 
 
-#ifndef PSX
+
 //draw Blue tinted bitmap
 void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow)
 {
@@ -1145,78 +1077,9 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 
 void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, int XPos, int YPos)
 {
-#ifdef INC_DIRECTX
-	int Index;
-	UWORD ImageID;
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
-	UDWORD* lpSurface;
-	DDSURFACEDESC2	DD_sd; 
-	HRESULT			hRes;
 
-//	pie_BeginTextRender(Font->FontColourIndex);
-	// We lock the surface before blitting video to it.
-	DD_sd.dwSize = sizeof( DD_sd );
-	if ( lpDDSF->lpVtbl->GetSurfaceDesc(lpDDSF, &DD_sd ) != DD_OK )
-	{
-		DBERROR(("Sequence player text GetSurfaceDesc failed:"));
-		return;
-	}
-
-	hRes = lpDDSF->lpVtbl->Lock(lpDDSF, NULL, &DD_sd,DDLOCK_WAIT, NULL);
-	if (hRes != DD_OK)
-	{
-		DBERROR(("Sequence player text draw buffer lock failed:\n%s", DDErrorToString(hRes)));
-		return;
-	}
-
-	if (DD_sd.ddpfPixelFormat.dwRGBBitCount != 16)
-	{
-		// We can unlock the suurface now as we have finished with it, 
-		// until the next decode is required
-		lpDDSF->lpVtbl->Unlock(lpDDSF, DD_sd.lpSurface );
-		return;
-	}
-
-	lpSurface = (UDWORD*)DD_sd.lpSurface; 
-	
-	while (*String!=0) 
-	{
-		Index = *String;
-		if(Index!=ASCII_SPACE)
-		{
-			ImageID = (UWORD)Font->AsciiTable[Index];
-			pie_RenderCharToSurface(lpSurface, DD_sd.lPitch, Font->FontFile, ImageID, XPos, YPos, 0xffff);
-			XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-		}
-		else
-		{
-			XPos += Font->FontSpaceSize;
-		}
-	
-		String++;
-		//	Index = ( *String - '!' );
-
-	//	if((Index >= 0) && (Index <= Font->FontEndID - Font->FontStartID))
-	//	{
-	//		ImageID = (UWORD)(Font->FontStartID + Index);
-
-	//		pie_RenderCharToSurface(lpSurface, DD_sd.lPitch, Font->FontFile, ImageID, XPos, YPos, 0xffff);
-
-	//		XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-
-	//}
-	//	else if(Index == -1)
-	//	{
-	//		XPos += Font->FontSpaceSize;
-	//	}
-
-	}
-	// We can unlock the suurface now as we have finished with it, 
-	// until the next decode is required
-	lpDDSF->lpVtbl->Unlock(lpDDSF, DD_sd.lpSurface );
-#endif
 }
-#endif 
+
 
 
 #if !defined(PSX) || defined(ROTATEDTEXT)
@@ -1227,9 +1090,9 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 	UWORD ImageID;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
-#ifndef PSX
+
 	if (pie_Hardware())
-#endif
+
 	{
 		YPos += iV_GetImageWidth(Font->FontFile,(UWORD)Font->AsciiTable[33]) + 1;
 	}
@@ -1244,11 +1107,9 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 			ImageID = (UWORD)Font->AsciiTable[Index];
 			pie_TextRender270(Font->FontFile,ImageID,XPos,YPos);
 
-#ifndef PSX
+
 			YPos -= (iV_GetImageWidth(Font->FontFile,ImageID) +1) ;
-#else
-			YPos -= (iV_GetImageWidth(Font->FontFile,ImageID) +2) ;
-#endif
+
 
 		} else {
 			YPos -= (Font->FontSpaceSize);
@@ -1301,7 +1162,6 @@ void pie_DrawText270(unsigned char *String,int XPos,int YPos)
 //	}
 //}
 
-#ifndef PSX
 void pie_BeginTextRender(SWORD ColourIndex)
 {
 	switch (pie_GetRenderEngine())
@@ -1317,13 +1177,7 @@ void pie_BeginTextRender(SWORD ColourIndex)
 		pie_SetRendMode(REND_TEXT);
 		pie_SetBilinear(FALSE); 
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		TextColourIndex = ColourIndex;
-		pie_SetRendMode(REND_TEXT);
-		pie_SetBilinear(FALSE); 
-		break;
-#endif
+
 	default:
 		break;
 	}
@@ -1352,11 +1206,7 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 		case ENGINE_SR:
 			DrawTransColourImage(ImageFile,ID,x,y,TextColourIndex);
 			break;
-#ifdef INC_GLIDE
-		case ENGINE_GLIDE:
-			gl_DrawTransColourImage(ImageFile,ID,x,y,TextColourIndex);
-			break;
-#endif
+
 		case ENGINE_D3D:
 			if (TextColourIndex == PIE_TEXT_WHITE)
 			{
@@ -1388,28 +1238,10 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 }
 
 
-#else//PSX
-
-void pie_BeginTextRender(SWORD ColourIndex)
-{
-	TextColourIndex = ColourIndex;
-}
-
-void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
-{
-	if(TextColourIndex >= 0)
-	{
-		DrawTransColourImage_PSX(ImageFile,ID,x,y,TextColourIndex);
-	}
-	else
-	{
-		DrawTransImage_PSX(ImageFile,ID,x,y);
-	}
-}
-#endif
 
 
-#ifndef PSX
+
+
 void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 {		
 	int w,h,i,j,Modulus;
@@ -1482,11 +1314,7 @@ void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 		case ENGINE_SR:
 			TextRender270( ImageFile, ImageID, x, y);
 			break;
-#ifdef INC_GLIDE
-		case ENGINE_GLIDE:
-			gl_TextRender270( ImageFile, ImageID, x, y);
-			break;
-#endif
+
 		case ENGINE_D3D:
 			Image = &(ImageFile->ImageDefs[ImageID]);
 			//not coloured yet
@@ -1529,22 +1357,9 @@ void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 
 }
 
-#else
 
-#ifdef ROTATEDTEXT
-void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
-{		
-	y -= iV_GetImageWidth(ImageFile,ImageID);	//*2;
 
-	if(TextColourIndex >= 0) {
-		DrawColourImage270_PSX(ImageFile,ImageID,x,y,TextColourIndex);
-	} else {
-		DrawImage270_PSX(ImageFile,ImageID,x,y);
-	}
-}
-#endif
 
-#endif
 
 
 #endif

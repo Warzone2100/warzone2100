@@ -1,4 +1,3 @@
-#ifndef PSX
 /***************************************************************************/
 /*
  * pieBlitFunc.h
@@ -88,17 +87,3 @@ extern void pie_ResetBackDrop(void);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif

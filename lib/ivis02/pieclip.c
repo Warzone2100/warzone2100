@@ -12,14 +12,7 @@
 #include "piedef.h"
 #include "piestate.h"
 #include "rendmode.h"
-#ifdef INC_DIRECTX
-#include "d3drender.h"
-#endif
-#ifdef INC_GLIDE
-	#include "dglide.h"
-//	#include "3dfxfunc.h"
-//	#include "3dfxtext.h"
-#endif
+
 
 /***************************************************************************/
 /*

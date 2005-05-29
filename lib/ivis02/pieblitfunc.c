@@ -10,17 +10,12 @@
 #include "frame.h"
 #include <time.h>
 #include "pieblitfunc.h"
-#ifdef INC_DIRECTX
-#include "dx6texman.h"
-#include "texd3d.h"
-#endif
+
 #include "bug.h"
 #include "piedef.h"
 #include "piemode.h"
 #include "piestate.h"
-#ifdef INC_GLIDE
-#include "3dfxfunc.h"
-#endif
+
 #include "rendfunc.h"
 #include "rendmode.h"
 #include "pcx.h"
@@ -34,7 +29,7 @@
  *	Local Definitions
  */
 /***************************************************************************/
-#ifndef PSX
+
 UWORD	backDropBmp[BACKDROP_WIDTH * BACKDROP_HEIGHT * 2];
 SDWORD gSurfaceOffsetX;
 SDWORD gSurfaceOffsetY;
@@ -42,7 +37,7 @@ UWORD* pgSrcData = NULL;
 SDWORD gSrcWidth;
 SDWORD gSrcHeight;
 SDWORD gSrcStride;
-#endif
+
 
 #define COLOURINTENSITY 0xffffffff
 /***************************************************************************/
@@ -80,11 +75,7 @@ void pie_Line(int x0, int y0, int x1, int y1, uint32 colour)
 	case ENGINE_SR:
 		line(x0, y0, x1, y1, colour);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_Line(x0, y0, x1, y1, colour);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		/* Get our colour values from the ivis palette */
 		psPalette = pie_GetGamePal();
@@ -127,14 +118,7 @@ void pie_Box(int x0,int y0, int x1, int y1, uint32 colour)
 	case ENGINE_SR:
 		box(x0,y0,x1,y1,colour);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_Line(x0, y0, x1, y0, colour);
-		gl_Line(x1, y0, x1, y1, colour);
-		gl_Line(x1, y1, x0, y1, colour);
-		gl_Line(x0, y1, x0, y0, colour);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		psPalette = pie_GetGamePal();
 		/* Get our colour values from the ivis palette */
@@ -181,11 +165,7 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 	case ENGINE_SR:
 		iV_pBoxFill(x0,y0,x1,y1,colour);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_BoxFill(x0, y0, x1, y1, colour);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		/* Get our colour values from the ivis palette */
 		psPalette = pie_GetGamePal();
@@ -227,11 +207,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, uint32 colour)
 		light.argb = colour;
 		iV_pBoxFill(x0,y0,x1,y1,pal_GetNearestColour(light.byte.r,  light.byte.g, light.byte.b));
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_IntelTransBoxFill(x0,y0,x1,y1,colour, MAX_UB_LIGHT);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		/* Get our colour values from the ivis palette */
 		light.argb = colour;
@@ -281,18 +257,7 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, 
 	case ENGINE_SR:
 		TransBoxFill(x0,y0,x1,y1);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		if(pie_SwirlyBoxes())
-		{
-			pie_doWeirdBoxFX(x0,y0,x1,y1,rgb);
-		}
-		else
-		{
-			gl_IntelTransBoxFill(x0, y0, x1, y1, rgb, transparency);
-		}
-		break;
-#endif
+
 	case ENGINE_D3D:
 		if (transparency == 0 )
 		{
@@ -392,12 +357,7 @@ void pie_DrawImageFileID(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 
 		iV_ppBitmapTrans(bmp,x,y,width,height,modulus);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-			gl_IntelBitmap(ImageFile->TPageIDs[Image->TPageID], Image->Tu, Image->Tv, Image->Width, Image->Height, 
-					x+Image->XOffset, y+Image->YOffset, Image->Width, Image->Height);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 		pieImage.tu = Image->Tu;
@@ -533,30 +493,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 
 		iV_ppBitmapTrans(bmp,x,y,width,height,modulus);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-	   	if(pie_WaveBlit())
-	  	{
-			wave = getTimeValueRange(2880,360);
-			div =	96*SIN(DEG(wave));
-			div = div/4096;
-			div =	96+div;
-		 //	gl_IntelBitmap(ImageFile->TPageIDs[Image->TPageID], Image->Tu, Image->Tv, Image->Width, Image->Height, 
-		 //			x+Image->XOffset-wave/2, y+Image->YOffset-wave/2, Image->Width+wave, Image->Height+wave);
-			
-			gl_DrawStretchImage(ImageFile, ID, x+Image->XOffset-div/2,y+Image->YOffset , 
-				Image->Width+div, Image->Height);
-	  	}
-	 	else
-	  	{
-		 	gl_IntelBitmap(ImageFile->TPageIDs[Image->TPageID], Image->Tu, Image->Tv, Image->Width, Image->Height, 
-					x+Image->XOffset, y+Image->YOffset, Image->Width, Image->Height);
-			//gl_DrawStretchImage(ImageFile, ID, x+Image->XOffset,y+Image->YOffset , 
-			//	Image->Width, Image->Height);
-	  	}
 
-		break;
-#endif
 	case ENGINE_D3D:
 		pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 		pieImage.tu = Image->Tu;
@@ -603,11 +540,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0
 	case ENGINE_SR:
 		DrawImageRect(ImageFile, ID, x, y, x0, y0, Width, Height);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_DrawImageRect(ImageFile, ID, x, y, x0, y0, Width, Height);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 		pieImage.tu = Image->Tu;
@@ -697,11 +630,7 @@ void pie_ImageFileIDStretch(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int Width,
 	case ENGINE_4101:
 	case ENGINE_SR:
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_DrawStretchImage(ImageFile, ID, x, y, Width, Height);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 		pieImage.tu = Image->Tu;
@@ -739,12 +668,7 @@ void pie_ImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,BOOL b
 		iV_ppBitmapTrans(Bmp,x+Image->XOffset,y+Image->YOffset,
 			   		Image->Width,Image->Height,Modulus);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_IntelBitmap(Image->TPageID, Image->Tu, Image->Tv, Image->Width, Image->Height, 
-					x+Image->XOffset, y+Image->YOffset, Image->Width, Image->Height);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		pieImage.texPage = Image->TPageID;
 		pieImage.tu = Image->Tu;
@@ -776,12 +700,7 @@ void pie_UploadDisplayBuffer(UBYTE *DisplayBuffer)
 	case ENGINE_SR:
 		UploadDisplayBuffer(DisplayBuffer);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_UploadDisplayBuffer(DisplayBuffer);
-		screen_SetBackDrop(DisplayBuffer, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight());
-		break;
-#endif
+
 	case ENGINE_D3D:
 		//only call inside D3D render
 		pie_GlobalRenderEnd(FALSE);
@@ -801,11 +720,7 @@ void pie_DownloadDisplayBuffer(UBYTE *DisplayBuffer)
 	case ENGINE_SR:
 		DownloadDisplayBuffer(DisplayBuffer);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_DownloadDisplayBuffer((UWORD*)DisplayBuffer);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		//screen_SetBackDropFullWidth();//set when background sets
 	default:
@@ -821,11 +736,7 @@ void pie_ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int
 	case ENGINE_SR:
 		ScaleBitmapRGB(DisplayBuffer, Width, Height, ScaleR, ScaleG, ScaleB);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_ScaleBitmapRGB(DisplayBuffer, Width, Height, ScaleR, ScaleG, ScaleB);
-		break;
-#endif
+
 	case ENGINE_D3D:
 	default:
 		break;
@@ -839,10 +750,7 @@ BOOL pie_InitRadar(void)
 	case ENGINE_4101:
 	case ENGINE_SR:
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		break;
-#endif
+
 	case ENGINE_D3D:
 	default:
 		break;
@@ -857,10 +765,7 @@ BOOL pie_ShutdownRadar(void)
 	case ENGINE_4101:
 	case ENGINE_SR:
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		break;
-#endif
+
 	case ENGINE_D3D:
 	default:
 		break;
@@ -877,11 +782,7 @@ void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID)
 	case ENGINE_SR:
 		DownLoadRadar(buffer);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		gl_DownLoadRadar(buffer,texPageID);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		dtm_LoadRadarSurface(buffer);
 	default:
@@ -900,11 +801,7 @@ void pie_RenderRadar(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y)
 	case ENGINE_SR:
 		pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		pie_ImageDef(Image,Bmp,Modulus,x,y,TRUE);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		pie_SetBilinear(TRUE);
 		pie_SetRendMode(REND_GOURAUD_TEX);
@@ -938,11 +835,7 @@ void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,in
 	case ENGINE_SR:
 		pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
 		break;
-#ifdef INC_GLIDE
-	case ENGINE_GLIDE:
-		pie_ImageDef(Image,Bmp,Modulus,x,y,TRUE);
-		break;
-#endif
+
 	case ENGINE_D3D:
 		pie_SetBilinear(TRUE);
 		pie_SetRendMode(REND_GOURAUD_TEX);

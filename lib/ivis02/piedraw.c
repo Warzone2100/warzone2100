@@ -22,16 +22,9 @@
 #include "pietexture.h"
 #include "pieclip.h"
 
-#ifdef INC_DIRECTX
-#include <d3d.h>
-#include "d3drender.h"
-#endif
 
-#ifdef INC_GLIDE
-	#include "dglide.h"
-	#include "3dfxfunc.h"
-	#include "3dfxtext.h"
-#endif
+
+
 
 #ifndef PIEPSX		// was #ifndef PSX
 #define MIST
@@ -266,13 +259,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 // WARZONE light as byte passed in colour so expand
 	if (col <= MAX_UB_LIGHT)
 	{
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			colour.byte.a = 0;//no fog
-		}
-		else
-#endif
+
 		{
 			colour.byte.a = 255;//no fog
 		}
@@ -314,15 +301,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	{
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			alpha = 255-colour.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-		}
-		else
-#endif
+
 		if (pie_GetRenderEngine() == ENGINE_D3D)
 		{
 			alpha = 255-specular.byte.a;
@@ -343,15 +322,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	{
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			alpha = 255-colour.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-		}
-		else
-#endif
+
 		if (pie_GetRenderEngine() == ENGINE_D3D)
 		{
 			alpha = 255-specular.byte.a;
@@ -697,13 +668,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 // WARZONE light as byte passed in colour so expand
 	if (col <= MAX_UB_LIGHT)
 	{
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			colour.byte.a = 0;//no fog
-		}
-		else
-#endif
+
 		{
 			colour.byte.a = 255;//no fog
 		}
@@ -745,15 +710,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	{
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			alpha = 255-colour.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-		}
-		else
-#endif
+
 		if (pie_GetRenderEngine() == ENGINE_D3D)
 		{
 			alpha = 255-specular.byte.a;
@@ -774,15 +731,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	{
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			alpha = 255-colour.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-		}
-		else
-#endif
+
 		if (pie_GetRenderEngine() == ENGINE_D3D)
 		{
 			alpha = 255-specular.byte.a;
@@ -1402,12 +1351,7 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	{
 		D3D_PIEPolygon(4, pieVrts);
 	}
-#ifdef INC_GLIDE
-	else if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		gl_PIEPolygon(4, pieVrts);
-	}
-#endif
+
 }
 
 /***************************************************************************
@@ -1468,12 +1412,7 @@ void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	{
 		D3D_PIEPolygon(4, pieVrts);
 	}
-#ifdef INC_GLIDE
-	else if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		gl_PIEPolygon(4, pieVrts);
-	}
-#endif
+
 }
 
 /***************************************************************************
@@ -1627,22 +1566,7 @@ static BOOL bBilinear;
 		}
 	}
 
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		if (bClip)
-		{
-			n = pie_ClipTextured(poly->nVrts,poly->pVrts,&clippedVrts[0],FALSE);
-			poly->nVrts = n;
-			poly->pVrts = &clippedVrts[0];
-		}
-		if (poly->nVrts >= 3)
-		{
-			gl_PIEPolygon(poly->nVrts,poly->pVrts);
-		}
-	}
-	else
-#endif
+
 	if (pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		if (bClip)
@@ -1960,16 +1884,7 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 	*/
 	n = pie_PolyClipTex2D(3,pv,&clip[0]);
 	if(n==0) return;
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		for(f=0;f<n;f++)
-		{
-			clip[f].u += offset->x;
-			clip[f].v += offset->y;
-		}
-	}
-#endif
+
 /*	else
 	{
 		//temp d3d hack
@@ -2054,22 +1969,7 @@ void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture*
 		}
 	}
 
-#ifdef INC_GLIDE
-	if(n==3)
-	{
-	if (rendSurface.usr == REND_GLIDE_3DFX)
-		{
-  			gl_PIETriangle(clippedVrts);
-		}
-	}
-	else 
-	{
-	 	if (rendSurface.usr == REND_GLIDE_3DFX)
-		{
-			gl_PIEPolygon(n,clippedVrts);
-		}
-   	}
-#endif
+
 }
 
 
@@ -2123,17 +2023,7 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 		imdPoly.vrt = &imdVrts[0];
 		pie_IvisPoly(texPage, &imdPoly, TRUE);	   // draw the polygon ... this is an inline function
 	}
-#ifdef INC_GLIDE
-	else if (pie_GetRenderEngine() == ENGINE_GLIDE)//d3d and glide 
-	{
-		renderPoly.nVrts = pie_ClipTextured(3, &aVrts[0], &clippedVrts[0], FALSE);
-		if (renderPoly.nVrts >= 3)
-		{
-			gl_PIEPolygon(renderPoly.nVrts, &clippedVrts[0]);
-		}
-		//lines not drawn
-	}
-#endif
+
 	else//d3d 
 	{
 		renderPoly.nVrts = pie_ClipTextured(numVrts, &aVrts[0], &clippedVrts[0], TRUE);
@@ -2221,16 +2111,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 			imdVrts[i].g  = (255 + pv->light.byte.r + pv->light.byte.g + pv->light.byte.b)>>2;
 		}
 	}
-#ifdef INC_GLIDE
-	else if (pie_GetRenderEngine() == ENGINE_GLIDE)//d3d and glide 
-	{
-		memcpy(&pieVrts[0],pv0,sizeof(PIEVERTEX));
-		memcpy(&pieVrts[1],pv1,sizeof(PIEVERTEX));
-		memcpy(&pieVrts[2],pv2,sizeof(PIEVERTEX));
-		memcpy(&pieVrts[3],pv3,sizeof(PIEVERTEX));
-		renderPoly.nVrts = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0], FALSE);
-	}
-#endif
+
 	else//d3d 
 	{
 		memcpy(&pieVrts[0],pv0,sizeof(PIEVERTEX));
@@ -2271,20 +2152,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 		imdPoly.vrt = &imdVrts[2];
 		pie_IvisPoly(texPage, &imdPoly, TRUE);	   // draw the polygon ... this is an inline function
 	}
-#ifdef INC_GLIDE
-	else if (rendSurface.usr == REND_GLIDE_3DFX)//glide 
-	{
-		if (renderPoly.nVrts == 3)
-		{
-			gl_PIETriangle(&clippedVrts[0]);
-		}
-		else if (renderPoly.nVrts > 3)
-		{
-			gl_PIEPolygon(renderPoly.nVrts, &clippedVrts[0]);
-		}
-		//lines not drawn
-	}
-#endif
+
 	else//d3d
 	{
 		pie_D3DPoly(&renderPoly);	   // draw the polygon ... this is an inline function

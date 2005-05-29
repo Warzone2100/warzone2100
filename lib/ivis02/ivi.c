@@ -7,9 +7,9 @@
 //#include "ivi.h"
 //#include "v3d.h"
 #include "rendmode.h"
-#ifndef PSX
+
 #include "piemode.h"
-#endif
+
 //#include "geo.h"
 #include "bug.h"
 //#include "pio.h"
@@ -19,49 +19,25 @@
 #include "tex.h"
 //#include "pdv.h"
 #include "ivispatch.h"
-#ifdef INC_GLIDE
-	#include "3dfxmode.h"
-	#include "3dfxtext.h"
-#endif
+
 
 //*************************************************************************
 
 //*************************************************************************
 
-#ifndef PSX
+
 iError	_iVERROR;
-#endif
+
 
 //*************************************************************************
 
-#ifdef PSX
-void iV_Initialise(void)
-{
-#ifdef iV_DEBUG
-
-	iV_DEBUG_CREATE_LOG;
-
-#endif
-	_iv_vid_setup();
-	_TEX_INDEX = 0;
-//	_iv_heap_setup();
-
-	iV_DEBUG0("iVi[Initialise] = successful\n");
-}
-#endif
 
 //*************************************************************************
 // pass in true to reset the palette too.
 void iV_Reset(int bPalReset)
 {
-#ifndef PSX
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		reset3dfx();
-	}
-#endif
-#endif
+
+
 	_TEX_INDEX = 0;
 	iV_ClearFonts();		// Initialise the IVIS font module.
 }
@@ -78,14 +54,14 @@ void iV_ShutDown(void)
 #endif
 
 	iV_DEBUG0("4\n");
-#ifndef PSX
+
 	pie_ShutDown();
-#endif
+
 	iV_DEBUG0("5\n");
 
-	#ifndef PSX
+
 	iV_VideoMemoryUnlock();
-	#endif
+
 
 	iV_DEBUG0("6\n");
 

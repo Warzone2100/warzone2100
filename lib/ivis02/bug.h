@@ -11,7 +11,7 @@
 
 #ifdef iV_DEBUG
 
-#ifndef PSX
+
 
 #define iV_DEBUG0(S)										iV_Debug((S))
 #define iV_DEBUG1(S,A)									iV_Debug((S),(A))
@@ -29,24 +29,6 @@
 #define iV_DEBUG_CREATE_LOG							_debug_create_log()
 #define iV_ASSERT(A)										assert((A))
 
-#else
-
-#define MAXDBGSIZE (256)
-extern char dbgbuffer[MAXDBGSIZE];
-
-#define iV_DEBUG0(S)							iV_Debug((S))
-#define iV_DEBUG1(S,A)  { sprintf(dbgbuffer,(S),(A)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG2(S,A,b)  { sprintf(dbgbuffer,(S),(A),(b)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG3(S,A,b,c)  { sprintf(dbgbuffer,(S),(A),(b),(c)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG4(S,A,b,c,d)  { sprintf(dbgbuffer,(S),(A),(b),(c),(d)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG5(S,A,b,c,d,e)  { sprintf(dbgbuffer,(S),(A),(b),(c),(d),(e)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG6(S,A,b,c,d,e,f)  { sprintf(dbgbuffer,(S),(A),(b),(c),(d),(e),(f)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG7(S,A,b,c,d,e,f,g)  { sprintf(dbgbuffer,(S),(A),(b),(c),(d),(e),(f),(g)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG12(S,A,b,c,d,e,f,g,h,i,j,k,l)  { sprintf(dbgbuffer,(S),(A),(b),(c),(d),(e),(f),(g),(h),(i),(j),(k),(l)); iV_Debug(dbgbuffer); }
-#define iV_DEBUG_CREATE_LOG							_debug_create_log()
-#define iV_ASSERT(A)										assert((A))
-
-#endif
 
 #else
 

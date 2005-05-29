@@ -14,9 +14,7 @@
 #include "pietypes.h"
 
 // on the psx we need piepsx defined ... on the pc we need it when creating binary pie's
-#ifdef PSX
-#define PIEPSX
-#endif
+
 
 /***************************************************************************/
 /***************************************************************************/
@@ -74,12 +72,10 @@ typedef struct iSurface {
 	int xpshift;
 	int ypshift;
 	iClip clip;
-#ifndef PSX
+
 	uint8 *buffer;
 	int32 scantable[iV_SCANTABLE_MAX];	// currently uses 4k per structure (!)
-#else
-	RECT VRAMLocation;	// where in the PlayStation Video Memory is this surface allocated its memory
-#endif
+
 	int width;
 	int height;
 	int32 size;

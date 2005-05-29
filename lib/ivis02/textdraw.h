@@ -27,11 +27,9 @@ extern void iV_SetTextColour(SWORD Index);
 
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE		('@')
-#ifndef PSX
+
 #define ASCII_COLOURMODE	('#')
-#else
-#define ASCII_COLOURMODE	('^')
-#endif
+
 
 
 // Valid values for "Justify" argument of pie_DrawFormattedText().
