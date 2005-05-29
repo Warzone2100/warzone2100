@@ -11,7 +11,7 @@
 #include "pietexture.h"
 #include "piedef.h"
 #include "piestate.h"
-#include "dx6texman.h"
+//#include "dx6texman.h"
 #include "tex.h"
 
 
