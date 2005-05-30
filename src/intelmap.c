@@ -33,27 +33,13 @@
 
 #include "seqdisp.h"
 
-#ifndef PSX
+
 #include "multiplay.h"
 #include "cdaudio.h"
-#endif
+
 #include "scriptextern.h"
 
-#ifdef PSX
-#include "component.h"
-#include "primatives.h"
-#include "dcache.h"
-#include "vpad.h"
-#include "ctrlpsx.h"
-#include "drawimd_psx.h"
-#include "locale.h"
-#include "initpsx.h"
-#include "movie.h"
 
-extern void setTerrainDrawSize(int32 SizeX,int32 SizeY);
-extern BOOL	doDisplayWorld;
-UBYTE *ResearchStrings = NULL;
-#endif
 
 #include "csnap.h"
 extern CURSORSNAP InterfaceSnap;
@@ -324,9 +310,7 @@ BOOL _intAddIntelMap(void)
 	W_LABINIT		sLabInit;
 	BOOL			Animate = TRUE;
 
-#ifdef PSX
-	HideMissionTimer();
-#endif
+
 
 	//check playCurrent with psCurrentMsg
 	if (psCurrentMsg == NULL)
@@ -349,13 +333,9 @@ BOOL _intAddIntelMap(void)
 		audio_StopAll();
 	}
 
-#ifdef PSX
-	// Since were loading the strings from CD we need to stop the CD audio.
-	cdAudio_StopTrack();
-	LoadResearchStrings();
-#else
+
 	cdAudio_Pause();
-#endif
+
 
 	//add message to indicate game is paused - single player mode
 	if(PAUSE_DISPLAY_CONDITION)
@@ -385,9 +365,7 @@ BOOL _intAddIntelMap(void)
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
 	// Add the main Intelligence Map form 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 	sFormInit.formID = 0;
 	sFormInit.id = IDINTMAP_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -423,11 +401,7 @@ BOOL _intAddIntelMap(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	if(GetControllerType(0) == CON_MOUSE) {
-		intRemoveMouseInterface();
-	}
-#endif
+
 
 	return TRUE;
 }
@@ -503,9 +477,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		return FALSE;
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	/* Add the message buttons */
 	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
 	sBFormInit.formID = IDINTMAP_MSGFORM;
@@ -644,9 +616,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		Animate = FALSE;
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 	/* Add the base form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = 0;
@@ -704,10 +674,8 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return FALSE;
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
-#ifndef PSX
+
+
 	/* Add the close box */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDINTMAP_MSGVIEW;
@@ -724,7 +692,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		return FALSE;
 	}
-#endif
+
 
 	/*Add the Title box*/
 	/*memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -875,13 +843,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 		seq_ClearSeqList();
-#ifdef PSX
-	{
-		STRING String[256];
-		sprintf(String,"%d sequences to be played\n",psViewReplay->numSeq);
-		prnt(1,String,0,0);
-	}
-#endif
+
 		//add any sequences to the list to be played when the first one is finished
 		for (Sequence = 0; Sequence < psViewReplay->numSeq; Sequence++)
 
@@ -1027,18 +989,9 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		// If its a video sequence then play it anyway
 		if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
 		{
-#ifdef PSX
-			// Need to unload the research strings because the movies need the memory.
-			UnloadResearchStrings();
-#endif
+
 			StartMessageSequences(psMessage,TRUE);
-#ifdef PSX
-			// Wait for the movies to finish, this should do the trick.
-			seq_WaitSequenceListEmpty();
-//			while(videoLoop() != GAMECODE_CONTINUE);
-			// Then reload the research strings.
-			LoadResearchStrings();
-#endif
+
 		}
 		else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
 		{
@@ -1097,9 +1050,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 			{
 				intAddMessageView(psMessage);
 			}
-#ifdef PSX
-		PSXSequencesCountdown=3;		// whilst this is >0 we dont start the sequences
-#endif
+
 
 		}
 	}
@@ -1123,16 +1074,9 @@ void intCleanUpIntelMap(void)
 	resetIntelligencePauseState();
 	immediateMessage = FALSE;
 
-#ifdef PSX
-	if(GetControllerType(0) == CON_MOUSE) {
-		intAddMouseInterface();
-	}
-	UnloadResearchStrings();
-	// Restart the CD audio.
-	cdAudio_RestartTrack();
-#else
+
 	cdAudio_Resume();
-#endif
+
 }
 
 
@@ -1167,9 +1111,7 @@ void intRemoveIntelMap(void)
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
 	intCleanUpIntelMap();
-#ifdef PSX
-	RevealMissionTimer();
-#endif
+
 
 //	//remove any research messages that have been read
 //	for (psMessage = apsMessages[selectedPlayer]; psMessage != NULL; psMessage = 
@@ -1210,9 +1152,7 @@ void intRemoveIntelMapNoAnim(void)
 
 	intCleanUpIntelMap();
 
-#ifdef PSX
-	RevealMissionTimer();
-#endif
+
 //	resetIntelligencePauseState();
 //
 //	immediateMessage = FALSE;
@@ -1237,12 +1177,10 @@ void intRemoveMessageView(BOOL animated)
 
 		if (animated)
 		{
-#ifndef PSX
+
 			widgDelete(psWScreen, IDINTMAP_CLOSE);
-#endif
-#ifdef PSX
-			widgDelete(psWScreen, IDINTMAP_TEXTVIEW);
-#endif
+
+
 			// Start the window close animation.
 			Form->display = intClosePlainForm;
 			Form->disableChildren = TRUE;
@@ -1253,9 +1191,7 @@ void intRemoveMessageView(BOOL animated)
 		{
 			//remove without the animating close window
 			widgDelete(psWScreen, IDINTMAP_MSGVIEW);
-#ifdef PSX
-			widgDelete(psWScreen, IDINTMAP_TEXTVIEW);
-#endif
+
 		}
 	}
 }
@@ -1389,27 +1325,18 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 
 	// Draw the button.
 	RenderButton(psWidget,psBuffer, xOffset+psButton->x, yOffset+psButton->y, TOPBUTTON,Down);
-#ifdef PSX
-	AddCursorSnap(&InterfaceSnap,
-					xOffset+psButton->x+psButton->width/2,
-					yOffset+psButton->y+psButton->height/2,
-					psWidget->formID,psWidget->id,NULL);
-#endif
+
 
 	CloseButtonRender();
 
 	if (Hilight)
 	{
-#ifdef PSX
-		iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-#endif
+
 		iV_DrawTransImage(IntImages,IMAGE_BUT_HILITE,xOffset+psButton->x,
 			yOffset+psButton->y);
 	}
 
-#ifdef PSX
-	SetImagePalMode(PALMODE_NORMAL);
-#endif
+
 }
 
 
@@ -1425,10 +1352,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 //#ifndef PSX
     RESEARCH        *psResearch;
 //#endif
-#ifdef PSX
-	RECT			DrawArea;
-	UWORD			OTIndex;
-#endif
+
 
 	//shouldn't have any proximity messages here...
 	if (psMessage->type == MSG_PROXIMITY)
@@ -1476,17 +1400,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 		CloseButtonRender();
 
-#ifdef PSX
-		{
-			int x;
-			char *Name = getStatName(psResearch);
 
-			if(Name != NULL) {
-				x = 320-iV_GetTextWidth(Name)/2;
-				iV_DrawText(Name, x, y0 - 16);
-			}
-		}
-#endif
 
 		//draw image icon in top left of window
 		image = (SWORD)getResearchForMsg((VIEWDATA *)psMessage->pViewData)->iconID;
@@ -1675,9 +1589,7 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 #endif
 	}
 
-#ifdef PSX
-	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
-#endif
+
 }
 
 #ifndef PSX
@@ -2255,35 +2167,11 @@ void _displayImmediateMessage(MESSAGE *psMessage)
 		DBPRINTF(("\n\n\n\n\n\nDisplayImmedMessage\n\n\n\n\n"));
 
 		// Need to unload the research strings because the movies need the memory.
-#ifdef PSX
-		if (ResearchStrings != NULL)
-		{
-			ResearchStringsAreLoaded=TRUE;
-		}
-		else
-		{
-			ResearchStringsAreLoaded=FALSE;
-		}
 
-
-		if (ResearchStringsAreLoaded==TRUE)
-		{
-			UnloadResearchStrings();
-		}
-#endif
 
 		StartMessageSequences(psMessage,TRUE);
 
-#ifdef PSX
 
-		// Wait for the movies to finish, this should do the trick.
-		seq_WaitSequenceListEmpty();
-
-		if (ResearchStringsAreLoaded==TRUE)
-		{
-			LoadResearchStrings();
-		}
-#endif
 
 
 }
@@ -2291,21 +2179,7 @@ void _displayImmediateMessage(MESSAGE *psMessage)
 
 void displayImmediateMessage(MESSAGE *psMessage)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static MESSAGE *_psMessage;
 
-		_psMessage = psMessage;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_displayImmediateMessage(_psMessage);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 
 	_displayImmediateMessage(psMessage);
 }
@@ -2326,42 +2200,14 @@ void setMessageImmediate(BOOL state)
 
 BOOL intAddIntelMap(void)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddIntelMap();
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _intAddIntelMap();
 }
 
 
 void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL _proxMsg;
-		static UDWORD _id;
 
-		_proxMsg = proxMsg;
-		_id = id;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_intIntelButtonPressed(_proxMsg,_id);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 
 	_intIntelButtonPressed(proxMsg,id);
 }
@@ -2369,236 +2215,4 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 
 
 
-#ifdef PSX
 
-#define ROTATE_ANGLE	2
-
-void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch, 
-                            UDWORD OriginX, UDWORD OriginY)
-{
-	static UDWORD   angle = 0;
-    
-    BASE_STATS      *psResGraphic;
-    UDWORD          compID, IMDType;
-	iVector         Rotation,Position;
-	UDWORD          basePlateSize, Radius;
-    SDWORD          scale;
-	UDWORD			OldBias;
-	
-	SetIMDRenderingMode(USE_FIXEDZ,0);			// When rendering buttons we need to write to a constant entry in the OT ... this is set by the second param
-	setComponentButtonOTIndex(OT2D_FARFARFORE);	// Force draw depth to foreground.
-
-	// Stop the renderer playing with the OTZ.
-	OldBias = psxiv_GetZBias();		// Store the current Z Bias.
-	psxiv_SetZBias(0);				// Don't want the renderer to add anything to the OtZ.
-	psxiv_EnableZCheck(FALSE);		// Rendering over the 2d so don't check for this in the renderer.
-
-	// Flush the current TPageID at this OT index.
-	UpdateTPageID(0,OT2D_FARFARFORE);	
-
-	SetGeomOffset(XToPSX(OriginX),YToPSX(OriginY+10));
-
-    // Rotate round
-	angle += ROTATE_ANGLE;
-	if (angle > 360)
-	{
-		angle -= 360;
-	}
-	
-    Position.x = 0;
-	Position.y = 0;
-	Position.z = BUTTON_DEPTH;
-
-    // Rotate round
-	Rotation.x = -30;
-	Rotation.y = angle;
-	Rotation.z = 0;
-
-    //draw the IMD for the research
-    if (psResearch->psStat)
-    {
-        //we have a Stat associated with this research topic
-        if  (StatIsStructure(psResearch->psStat))
-        {
-            //this defines how the button is drawn
-			IMDType = IMDTYPE_STRUCTURESTAT;
-            psResGraphic = psResearch->psStat;
-            //set up the scale
-			basePlateSize= getStructureStatSize((STRUCTURE_STATS*)psResearch->psStat);
-			if(basePlateSize == 1)
-			{
-				scale = RESEARCH_COMPONENT_SCALE / 2;
-                /*HACK HACK HACK! 
-                if its a 'tall thin (ie tower)' structure stat with something on 
-                the top - offset the position to show the object on top*/
-                if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors AND 
-                    getStructureStatHeight((STRUCTURE_STATS*)psResearch->psStat) > TOWER_HEIGHT)
-                {
-                    Position.y += 40;
-                }
-			}
-			else if(basePlateSize == 2)
-			{
-				scale = RESEARCH_COMPONENT_SCALE / 4;
-			}
-			else
-			{
-				scale = RESEARCH_COMPONENT_SCALE / 5;
-			}
-        }
-        else
-        {
-            compID = StatIsComponent(psResearch->psStat);
-			if (compID != COMP_UNKNOWN)
-			{
-                //this defines how the button is drawn
-	    		IMDType = IMDTYPE_COMPONENT;
-                psResGraphic = psResearch->psStat;
-		    	scale = RESEARCH_COMPONENT_SCALE;
-		    }
-            else
-            {
-                ASSERT((FALSE, "intDisplayMessageButton: invalid stat"));
-                IMDType = IMDTYPE_RESEARCH;
-                psResGraphic = (BASE_STATS *)psResearch;
-            }
-        }
-    }
-    else
-    {
-        //no Stat for this research topic so use the research topic to define what is drawn
-        psResGraphic = (BASE_STATS *)psResearch;
-        IMDType = IMDTYPE_RESEARCH;
-    }
-
-    //scale the research according to size of IMD
-    if (IMDType == IMDTYPE_RESEARCH)
-    {
-       	Radius = getResearchRadius((BASE_STATS*)psResGraphic);
-		if(Radius <= 100)
-		{
-			scale = RESEARCH_COMPONENT_SCALE / 2;
-		}
-		else if(Radius <= 128)
-		{
-			scale = RESEARCH_COMPONENT_SCALE / 3;
-		}
-		else if(Radius <= 256)
-		{
-			scale = RESEARCH_COMPONENT_SCALE / 4;
-		}
-		else
-		{
-			scale = RESEARCH_COMPONENT_SCALE / 5;
-		}
-    }
-
-
-	compSetTransMode(TRUE,TRANSMODE_TRANSLUCENT);
-
-	/* display the IMDs */
-	if(IMDType == IMDTYPE_COMPONENT) {
-		displayComponentButton(psResGraphic,&Rotation,&Position,TRUE, scale);
-	} else if(IMDType == IMDTYPE_RESEARCH) {
-		displayResearchButton(psResGraphic,&Rotation,&Position,TRUE, scale);
-	} else if(IMDType == IMDTYPE_STRUCTURESTAT) {
-		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic,selectedPlayer,&Rotation,
-            &Position,TRUE, scale);
-	} else {
-		ASSERT((FALSE, "renderResearchToBuffer: Unknown PIEType"));
-	}
-
-	compSetTransMode(FALSE,0);
-
-	SetGeomOffset(GetDisplayWidth()/2,GetDisplayHeight()/2);
-
-	psxiv_SetZBias(OldBias);			// Restore the renderers z bias.
-	psxiv_EnableZCheck(TRUE);			// And re-enable OtZ range checks
-	SetIMDRenderingMode(USE_MAXZ,0); 	// Set OT position calculation back to using the max Z value
-	setComponentButtonOTIndex(ORDERING_BUTTONRENDERING);	// Restore draw depth for button rendering.
-}
-
-#define RESSTRINGSIZE (64*1024) //should be enough.
-//#define RESSTRINGNAME "messages\\strings\\ResStrings.txr"
-
-#define RESSTRINGDIR "messages\\strings"
-#define RESSTRINGFILE "\\ResStrings.txr"
-
-// Load up the research strings for the intelligence screen.
-//
-BOOL LoadResearchStrings(void)
-{
-	UBYTE *FileData = NULL;
-	UDWORD FileSize;
-	UBYTE *FileStart;
-	BOOL Result;
-	SBYTE TextResourceID;
-#ifndef FINALBUILD
-	BOOL FromFile = FALSE;
-#endif
-	CHAR ResourceName[64];
-
-	DBPRINTF(("Loading Research Strings\n"));
-	// Were going to use the primitive buffer both for the WDG load and to store the
-	// strings so ensure anything being drawn has finished before continuing.
-	DrawSync(0);
-
-	strcpy(ResourceName,RESSTRINGDIR);
-	AddLanguageSuffix(ResourceName);
-	strcat(ResourceName,RESSTRINGFILE);
-	// Load it from the WDG.
-	Result = loadFileFromWDG(ResourceName, &FileData, &FileSize, WDG_RETURNCACHE);
-#ifndef FINALBUILD
-	if(Result == FALSE) {
-		// File not in WDG loading from file.
-		if (!loadFile(ResourceName, &FileData, &FileSize))
-		{
-			DBPRINTF(("Error loading %s\n",ResourceName));
-			FileData = NULL;
-			return FALSE;
-		}
-		FromFile = TRUE;
-	}
-#else
-	if(Result == FALSE) {
-		// A short error message "Research Strings Load Failed".
-		prnt(1,"RSLF\n",0,0);
-		return FALSE;
-	}
-#endif
-	// Now allocate memory in the prim buffer and copy the strings there.
-	FileStart=FileData;
-	FileData=AllocInPrimBuffers(RESSTRINGSIZE);
-	// memmove must be used because both are in the primative buffer area ... it should get sorted out though
-	memmove(FileData,FileStart,RESSTRINGSIZE);	   // copy the data from the cache into the start of the primative buffer
-#ifndef FINALBUILD
-	// If loaded it from a file then free up the memory allocated by loadFile2().
-	if(FromFile) {
-		FREE(FileStart);
-	}
-#endif
-
-	ResearchStrings = FileData;
-
-	return TRUE;
-}
-
-
-// Free up the research strings.
-//
-BOOL UnloadResearchStrings(void)
-{
-	DBPRINTF(("Un-Loading Research Strings\n"));
-	DrawSync(0);
-	ResetPrimBuffers();
-	ResearchStrings = NULL;
-}
-
-
-void intRunIntelMap(void)
-{
-	intProcessTabs();
-}
-
-
-#endif
