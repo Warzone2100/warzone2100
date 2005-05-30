@@ -7,9 +7,6 @@
 #ifndef _init_h
 #define _init_h
 
-#ifdef PSX
-#define DEFAULT_TO_DRIVE	FALSE
-#endif
 
 // the size of the file loading buffer
 #define FILE_LOAD_BUFF_SIZE		(1024*1024)

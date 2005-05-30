@@ -23,10 +23,7 @@
 #include "piestate.h"
 #include "vid.h"
 
-#ifdef PSX
-#include "scriptcb.h"
-#include "primatives.h"
-#endif
+
 
 #include "display3d.h"
 #include "edit3d.h"
@@ -91,66 +88,10 @@
 #define	MAX_INTERFACE_SNAPS	64
 #define	MAX_RADAR_SNAPS 1
 
-#ifdef PSX
-#include "vpad.h"
-#include "ctrlpsx.h"
-#include "stringentry.h"
-#include "dcache.h"
-
-//#define EDIT_OPTIONS		// Include edit options in options dialog.
-
-//CURSORSNAP ReticuleSnap;
-CURSORSNAP RadarSnap;
-SWORD RetMousePosX;
-SWORD RetMousePosY;
-BASE_OBJECT *ObjectSnap = NULL;
-static BOOL SnapEnabled = FALSE;
-
-#ifdef PSX
-#define IMAGE_LOOP_DOWN	IMAGE_7
-#define IMAGE_LOOP_HI	IMAGE_8
-#define IMAGE_LOOP_UP	IMAGE_9
-
-//#define OBJECT_BUTTONS_DO_JUMP
-#endif
 
 
 
-
-
-enum {
-	SNAP_TO_STRUCTURES,
-	SNAP_TO_DROIDS,
-};
-
-UWORD SnapType;
-
-extern BOOL	mouseAtBottom,mouseAtTop,mouseAtRight,mouseAtLeft;
-
-void GotoNextObject(void);
-void GotoPrevObject(void);
-//CURSORSNAP InterfaceSnap;
-#endif
-
-#ifdef PSX
-
-#define RETXOFFSET (4)	// Reticule button offset
-#define RETYOFFSET (0)
-#define NUMRETBUTS	9	// Number of reticule buttons.
-
-enum {					// Reticule button indecies.
-	RETBUT_CANCEL,
-	RETBUT_FACTORY,
-	RETBUT_RESEARCH,
-	RETBUT_BUILD,
-	RETBUT_DESIGN,
-	RETBUT_INTELMAP,
-	RETBUT_COMMAND,
-	RETBUT_TRANSPORTER,
-	RETBUT_ORDER,
-};
-
-#else	// Win32 version.
+// Win32 version.
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -166,7 +107,7 @@ enum {				  // Reticule button indecies.
 	RETBUT_COMMAND,
 };
 
-#endif
+
 
 typedef struct {
 	UDWORD id;
@@ -181,33 +122,7 @@ typedef struct {
 } BUTOFFSET;
 
 
-#ifdef PSX
-
-BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
-	{51,53},	// RETBUT_CANCEL,
-	{51,9},		// RETBUT_FACTORY,
-	{86,23},	// RETBUT_RESEARCH,
-	{96,53},	// RETBUT_BUILD,
-	{86,83},	// RETBUT_DESIGN,
-	{51,97},	// RETBUT_INTELMAP,
-	{6,53},		// RETBUT_COMMAND,
-	{17,83},	// RETBUT_TRANSPORTER
-	{16,23},	// RETBUT_ORDER,
-};
-
-BUTSTATE ReticuleEnabled[NUMRETBUTS] = {	// Reticule button enable states.
-	{IDRET_CANCEL,FALSE,FALSE},
-	{IDRET_MANUFACTURE,FALSE,FALSE},
-	{IDRET_RESEARCH,FALSE,FALSE},
-	{IDRET_BUILD,FALSE,FALSE},
-	{IDRET_DESIGN,FALSE,FALSE},
-	{IDRET_INTEL_MAP,FALSE,FALSE},
-	{IDRET_COMMAND,FALSE,FALSE},
-	{IDRET_TRANSPORTER,FALSE,FALSE},
-	{IDRET_ORDER,FALSE,FALSE},
-};
-
-#else	// Win32 version.
+// Win32 version.
 
 BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
 	{48,49},	// RETBUT_CANCEL,
@@ -229,7 +144,7 @@ BUTSTATE ReticuleEnabled[NUMRETBUTS] = {	// Reticule button enable states.
 	{IDRET_COMMAND,FALSE,FALSE},
 };
 
-#endif
+
 
 
 // Set the x,y members of a button widget initialiser given a reticule button index.
@@ -258,10 +173,10 @@ BOOL ClosingTransDroids = FALSE;
 BOOL ReticuleUp = FALSE;
 BOOL Refreshing = FALSE;
 
-#ifndef PSX
+
 UBYTE	*DisplayBuffer;
 SDWORD	displayBufferSize;
-#endif
+
 
 //hides the power bar from the display - NB static function now
 static void intHidePowerBar(void);
@@ -404,26 +319,21 @@ static STRING	*apPlayerTip[] =
 	"Select Player 1",
 	"Select Player 2",
 	"Select Player 3",
-#ifndef PSX
 	"Select Player 4",
 	"Select Player 5",
 	"Select Player 6",
 	"Select Player 7",
-#endif
+
 };
 
 /* The widget screen */
 W_SCREEN		*psWScreen;
-#ifdef PSX
-W_SCREEN		*psKeyScreen;
-#endif
+
 
 /* the widget font */
 //PROP_FONT	*psWFont;
 int WFont;	// Ivis Font ID.
-#ifdef PSX
-int SmallWFont;
-#endif
+
 
 /* The current player */
 UDWORD				selectedPlayer=0;
@@ -690,10 +600,7 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY);
 //adds the transporter screen when a Transporter is clicked on
 static void addTransporter(void);
 
-#ifdef PSX
-void ProcessCursorSnap(void);
-BOOL InterfaceIsUp(UWORD Type);
-#endif
+
 
 static STRUCTURE *CurrentStruct = NULL;
 static SWORD CurrentStructType = 0;
@@ -757,9 +664,7 @@ SDWORD intNumSelectedDroids(UDWORD droidType);
 //}
 
 extern UWORD AsciiLookup[256];
-#ifdef PSX
-extern UWORD SmallAsciiLookup[256];
-#endif
+
 
 /***************************GAME CODE ****************************/
 /* Initialise the in game interface */
@@ -771,11 +676,7 @@ BOOL intInitialise(void)
 
 	AllocateSnapBuffer(&InterfaceSnap,MAX_INTERFACE_SNAPS);
 
-#ifdef PSX
-	AllocateSnapBuffer(&RadarSnap,MAX_RADAR_SNAPS);
-	SnapEnabled = FALSE;
-//	StartCursorSnap(&InterfaceSnap);
-#endif
+
 
 	intInitialiseReticule();																	
 
@@ -836,11 +737,7 @@ BOOL intInitialise(void)
 	if(GetGameMode() == GS_NORMAL) {
 		//load up the 'blank' template imd
 
-//#ifdef PSX
-//		pNewDesignIMD = (iIMDShape *)resGetData("IMD", "TRON.PIE");		//	 yak
-//#else
-//		pNewDesignIMD = (iIMDShape *)resGetData("IMD", "TRON.IMD");    // old pc code
-//#endif
+
 /*
 		if (pNewDesignIMD == NULL)
 		{
@@ -922,13 +819,9 @@ BOOL intInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-#ifdef PSX
+
 	WFont = iV_CreateFontIndirect(IntImages,AsciiLookup,4);
-	SmallWFont = iV_CreateFontIndirect(IntImages,SmallAsciiLookup,4);
-	iV_SetFont(WFont);
-#else
-	WFont = iV_CreateFontIndirect(IntImages,AsciiLookup,4);
-#endif
+
 
 	if (!widgCreateScreen(&psWScreen))
 	{
@@ -939,21 +832,13 @@ BOOL intInitialise(void)
 	widgSetTipFont(psWScreen, WFont);
 
 	if(GetGameMode() == GS_NORMAL) {
-#ifdef PSX
-		if(GetControllerType(0) == CON_MOUSE) {
-			if (!intAddReticule())
-			{
-				DBERROR(("intInitialise: Couldn't create reticule widgets (Out of memory ?)"));
-				return FALSE;
-			}
-		}
-#else
+
 		if (!intAddReticule())
 		{
 			DBERROR(("intInitialise: Couldn't create reticule widgets (Out of memory ?)"));
 			return FALSE;
 		}
-#endif
+
 		if (!intAddPower())
 		{
 			DBERROR(("intInitialise: Couldn't create power Bar widget(Out of memory ?)"));
@@ -964,18 +849,7 @@ BOOL intInitialise(void)
 	/* Initialise the screen to be run */
 	widgStartScreen(psWScreen);
 
-#ifdef PSX
-	if (!widgCreateScreen(&psKeyScreen))
-	{
-		DBERROR(("intInitialise: Couldn't create widget screen (Out of memory ?)"));
-		return FALSE;
-	}
 
-	widgSetTipFont(psKeyScreen, WFont);
-
-	/* Initialise the screen to be run */
-	widgStartScreen(psKeyScreen);
-#endif
 
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
@@ -993,14 +867,9 @@ BOOL intInitialise(void)
 //	PBarColour2 = screenGetCacheColour(255,255,0);	// Power available.
 //	PBarColour3 = screenGetCacheColour(200,0,0);	// Power needed to manufacture.
 
-//#ifdef PSX
-//##warning test button code initialised --- psx only
-//#	InitialiseTestButton(32,26);	// width,height
-//##endif
 
-#ifdef PSX
-	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
-#endif
+
+
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
@@ -1043,9 +912,7 @@ BOOL intInitialise(void)
 		}
 	}
 
-#ifdef PSX
-	intInitObjectCycle();
-#endif
+
 	
 	return TRUE;
 }
@@ -1075,9 +942,7 @@ void intShutDown(void)
 {
 //	widgEndScreen(psWScreen);
 	widgReleaseScreen(psWScreen);
-#ifdef PSX
-	widgReleaseScreen(psKeyScreen);
-#endif
+
 //	fontFree(psWFont);
 
 #ifndef PSX
@@ -1087,9 +952,7 @@ void intShutDown(void)
 #endif
 
 	ReleaseSnapBuffer(&InterfaceSnap);
-#ifdef PSX
-	ReleaseSnapBuffer(&RadarSnap);
-#endif
+
 
 	FREE(apsStructStatsList);
 	FREE(ppResearchList);
@@ -1133,9 +996,7 @@ void intSetCurrentCursorPosition(CURSORSNAP *Snap,UDWORD id)
 	UNUSEDPARAMETER(Snap);
 #endif
 	if(!Refreshing) {
-#ifdef PSX
-		SetCurrentSnapID(Snap,id);
-#endif
+
 	}
 }
 
@@ -1321,10 +1182,7 @@ void intResetScreen(BOOL NoAnim)
 		widgSetButtonState(psWScreen, IDRET_INTEL_MAP, 0);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, 0);
 		widgSetButtonState(psWScreen, IDRET_DESIGN, 0);
-#ifdef PSX
-		widgSetButtonState(psWScreen, IDRET_TRANSPORTER, 0);
-		widgSetButtonState(psWScreen, IDRET_ORDER, 0);
-#endif
+
 	}
 
 //19 #ifdef PSX
@@ -1506,33 +1364,7 @@ void intResetScreen(BOOL NoAnim)
 }
 
 
-#ifdef PSX
-INT_RETVAL intRunPauseWidgets(void)
-{
-	UDWORD			retID;
 
-	if(InGameOpUp){
-		intRunInGameOptions();
-		processFrontendSnap(FALSE);
-		retID = widgRunScreen(psWScreen);
-		intProcessInGameOptions(retID);
-	}
-
-//	DBPRINTF(("retID=%d\n",retID);
-
-	if (retID==INTINGAMEOP_QUIT_CONFIRM)
-	{
-DBPRINTF(("retID==INTINGAMEOP_QUIT_CONFIRM\n"));
-		retID=INT_QUIT;			   
-	}
-	else		// this time stay fixed! ....     - this fixes the "clicking on the build icon quits the game" problem
-	{
-		retID=INT_NONE;
-	}
-	return retID;
-}
-
-#endif
 
 
 // calulate the center world coords for a structure stat given
@@ -1569,10 +1401,7 @@ BOOL AllowWidgetIntercept(UDWORD id)
 INT_RETVAL intRunWidgets(void)
 {
 	UDWORD			retID;
-#ifdef PSX
-	UDWORD			retKeyID;
-	UDWORD			ButType;
-#endif
+
 	INT_RETVAL		retCode;
 	BOOL			quitting = FALSE;
 	UDWORD			structX,structY, structX2,structY2;
@@ -1583,35 +1412,16 @@ INT_RETVAL intRunWidgets(void)
 	UDWORD			widgOverID;
 
 	//WIDGET			*psWidget;
-#ifdef PSX
-	UDWORD RetSnapTime;
-#endif
 
-#ifdef PSX		// If no controller plugged in then pause game ( Sony requirement ).
-	if((GetControllerType(0) == CON_NONE) && (intMode != INT_MISSIONRES)) {
-		intAddInGameOptions();
-	}
-#endif
+
+
 
 	intDoScreenRefresh();
 
 // Handle window closing animations.
 //	HandleClosingWindows();	// now done in loop_psx.c, need to add to loop.c on PC.
 
-#ifdef PSX
-	if(driveModeActive()) {			// In drive mode?
-		driveProcessInterfaceButtons();
-	} else if(driveWasDriving()) {	// In Battle View mode?
-		driveProcessInterfaceButtons2();
-	}
 
-	if(InterfaceSnapEnabled()) {
-		if(VPadTriggered(VPAD_CYCLELEADER)) {
-			intJumpToButton(TRUE);
-		}
-	}
-	intRunMouse();	// Run the mouse interface.
-#endif
 
 	// If the widgets are turned off then why bother to process them?
 //	if(!widgetsOn) {
@@ -1760,9 +1570,7 @@ INT_RETVAL intRunWidgets(void)
 
 	if(MissionResUp){
 		intRunMissionResult();
-#ifdef PSX
-		processFrontendSnap(FALSE);
-#endif
+
 	}
 	
 #ifndef PSX
@@ -1786,104 +1594,7 @@ INT_RETVAL intRunWidgets(void)
 	}
 #endif
 
-#ifdef PSX
-//19 	if(KeyboardIsActive()) {
-//19 		retKeyID = widgRunScreen(psKeyScreen);
-//19 		retID = 0;
-//19 	} else {
-		retID = widgRunScreen(psWScreen);
-		// Filter out the power bar.
-//		if(retID == IDPOW_POWERBAR_T) {
-//printf("PowerBar\n");
-//			retID = 0;
-//		}
-		retKeyID = 0;
-//19 	}
 
-//	if(retID || retKeyID) {
-//		DBPRINTF(("retID %d, retKeyID %d\n",retID,retKeyID);
-//	}
-
-// Close button pressed but not in the mission result screen ?
-	if(intMode != INT_MISSIONRES) {
-
-		if(driveModeActive()) {
-			if(VPadPressed(VPAD_CLOSE)) {
-				// Close all windows.
-				intResetScreen(TRUE);
-				// Center the mouse in the screen.
-//				SetMouseRange(0,16,16,639-16,479-16);
-//				SetMousePos(0,iV_GetDisplayWidth()/2,iV_GetDisplayHeight()/2);
-				retID = 0;
-			}
-		} else {
-//			if(VPadTriggered(VPAD_CLOSE)) {
-#ifdef MOUSE_EMULATION_ALLOWED
-				if(driveWasDriving()) {
-					if(VPadTriggered(VPAD_BATTLEVIEW)) {
-						// Weve come from driving mode using battle view button so that's
-						// where we want to go back to.
-//						CancelInterfaceSnap();
-//						intResetScreen(FALSE);
-						kill3DBuilding();
-						driveRestoreDriving();
-						retID = 0;
-					}
-				} else {
-					if(VPadTriggered(VPAD_CLOSE)) {
-						// If interface active then just cancel that.
-						if(SnapEnabled) {
-							CancelInterfaceSnap();
-						} else {
-						// Otherwise close all windows and cancel any selections.
-							clearSelection();
-							intResetScreen(FALSE);
-						}
-						// Center the mouse in the screen.
-						SetMouseRange(0,16,16,639-16,479-16);
-						SetMousePos(0,iV_GetDisplayWidth()/2,iV_GetDisplayHeight()/2);
-						retID = 0;
-					}
-				}
-#else
-				if(VPadTriggered(VPAD_CLOSE)) {
-					// If interface active then just cancel that.
-					if(SnapEnabled) {
-						CancelInterfaceSnap();
-					} else {
-					// Otherwise close all windows and cancel any selections.
-						clearSelection();
-						intResetScreen(FALSE);
-					}
-					// Center the mouse in the screen.
-					SetMouseRange(0,16,16,639-16,479-16);
-					SetMousePos(0,iV_GetDisplayWidth()/2,iV_GetDisplayHeight()/2);
-					retID = 0;
-				}
-#endif
-//			}
-		}
-	}
-
-// Process the virtual keyboard. ( For testing purposes ).
-//19 	if(KeyboardIsActive()) {
-//19 		if(intMode != INT_DESIGN) {
-//19 			ProcessCursorSnap();
-//19 			intProcessStringEntry(retKeyID);
-//19 			return INT_NONE;
-//19 		}
-//19 	}
-
-	ProcessCursorSnap();
-
-// Check if the current snap object is still alive.
-	if(ObjectSnap) {
-		if(ObjectSnap->died) {
-			ObjectSnap = NULL;
-		}
-	}
-
-#endif
 
 	intLastWidget = retID;
 	if (bInTutorial && retID != 0)
@@ -1931,15 +1642,9 @@ INT_RETVAL intRunWidgets(void)
 		intRunDesign();
 	}
 
-#ifdef PSX
-	if(intMode == INT_INTELMAP)	{
-		intRunIntelMap();
-	}
-#endif
 
-#ifdef PSX	//defined(PSX) && defined(MOUSEYMOUSEY)
-	intProcessMouseInterface(retID);
-#endif
+
+
 
 	/* Deal with any clicks */
 	switch (retID)
@@ -1949,32 +1654,7 @@ INT_RETVAL intRunWidgets(void)
 		break;
 		/*****************  Reticule buttons  *****************/
 
-#ifdef PSX
-	case IDRET_TRANSPORTER:
-		if(ReticuleEnabled[RETBUT_TRANSPORTER].Enabled) {			// A hack this is..
-			ButType = widgGetUserData2(psWScreen,IDRET_TRANSPORTER);
-			if(ButType == VPAD_MOUSELB) {
-				//if( ((mission.type == LDS_MKEEP) || (mission.type == LDS_MCLEAR)) & (mission.ETA >= 0) ) {
-		        if(missionCanReEnforce() ) {
-					addTransporterInterface(NULL, TRUE);
-				} else {
-					addTransporterInterface(NULL, FALSE);
-				}
-			}
-		}
-		break;
 
-	case IDRET_ORDER:
-		if(!OrderUp) {
-			ButType = widgGetUserData2(psWScreen,IDRET_ORDER);
-			if(ButType == VPAD_MOUSELB) {
-				intResetScreen(FALSE);
-				intAddOrder(NULL);
-				intMode = INT_ORDER;
-			}
-		}
-		break;
-#endif
 
 #ifndef PSX
 	case IDRET_OPTIONS:
@@ -1996,53 +1676,15 @@ INT_RETVAL intRunWidgets(void)
 #endif
 
 	case IDRET_COMMAND:
-#ifdef PSX
-		ButType = widgGetUserData2(psWScreen,IDRET_COMMAND);
-		if(ButType == VPAD_MOUSELB) {
-//			intGotoNextDroidType(DROID_COMMAND);
-//		} else if(ButType == VPAD_MOUSESB) {
-//		} else if(ButType == VPAD_MOUSELB) {
-			intResetScreen(FALSE);
-			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
-			intAddCommand(NULL);
-		}
-#else
+
 		intResetScreen(FALSE);
 		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
 		intAddCommand(NULL);
-#endif
+
 		break;
 
 	case IDRET_BUILD:
-#ifdef PSX
-		ButType = widgGetUserData2(psWScreen,IDRET_BUILD);
-		if(ButType == VPAD_MOUSERB) {
-//			intGotoNextDroidType(NULL,DROID_CONSTRUCT,TRUE);
-//		} else if(ButType == VPAD_MOUSESB) {
-		} else if(ButType == VPAD_MOUSELB) {
-			// If drive mode active then make sure weve got a construction droid selected.
-//			if(driveModeActive()) {
-//				if(driveGetDriven()->droidType != DROID_CONSTRUCT) {
-//					intGotoNextDroidType(DROID_CONSTRUCT);
-//					driveSelectionChanged();
-//					driveDisableControl();
-//				}
-//			}
-			intResetScreen(FALSE);
-			widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
 
-			// If there's a construction unit selected then
-			psDroid = constructorDroidSelected(selectedPlayer);
-			if(psDroid != NULL) {
-				// Open both windows
-				intAddBuildBoth(psDroid);
-			} else {
-				// Otherwise just open the object window.
-				(void)intAddBuild(NULL);
-			}
-//			(void)intAddBuild(NULL);
-		}
-#else
 		//intResetScreen(FALSE);
         intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
@@ -2053,48 +1695,14 @@ INT_RETVAL intRunWidgets(void)
 		(void)intAddBuild(NULL);
 //		intMode = INT_OBJECT;
 	#endif
-#endif
+
 		break;
 
 	case IDRET_MANUFACTURE:
 //		OrderDroidsToEmbark();
 //		missionDestroyObjects();
 
-#ifdef PSX
-		ButType = widgGetUserData2(psWScreen,IDRET_MANUFACTURE);
-		if(ButType == VPAD_MOUSERB) {
-//			intGotoNextStructureType(REF_FACTORY,TRUE,FALSE);
-//		} else if(ButType == VPAD_MOUSESB) {
-//			FLAG_POSITION *psCurrFlag;
-//			STRUCTURE *Struct;
-//			BOOL driveActive = driveModeActive();
-//
-//			Struct = intGotoNextStructureType(REF_FACTORY,FALSE,FALSE);
-//
-//			if(Struct) 
-//			{
-//				// Find the factories delivery point.
-//				psCurrFlag = FindFactoryDelivery(Struct);
-//				if(psCurrFlag  != NULL)
-//				{
-//					if(driveActive)
-//					{
-////						driveDisableInterface();
-////						StartDeliveryPosition(psCurrFlag,driveActive);
-//					}
-//					else
-//					{
-//						// And position the camera there.
-//						intSetMapPos(psCurrFlag->coords.x, psCurrFlag->coords.y);
-//					}
-//				}
-//			}
-		} else if(ButType == VPAD_MOUSELB) {
-			intResetScreen(FALSE);
-			widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-			(void)intAddManufacture(NULL);
-		}
-#else
+
 		//intResetScreen(FALSE);
         intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
@@ -2105,21 +1713,11 @@ INT_RETVAL intRunWidgets(void)
 		(void)intAddManufacture(NULL);
 //		intMode = INT_OBJECT;
 	#endif
-#endif
+
 		break;
 
 	case IDRET_RESEARCH:
-#ifdef PSX
-		ButType = widgGetUserData2(psWScreen,IDRET_RESEARCH);
-		if(ButType == VPAD_MOUSERB) {
-//			intGotoNextStructureType(REF_RESEARCH,TRUE,FALSE);
-//		} else if(ButType == VPAD_MOUSESB) {
-		} else if(ButType == VPAD_MOUSELB) {
-			intResetScreen(FALSE);
-			widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
-			(void)intAddResearch(NULL);
-		}
-#else
+
 		//intResetScreen(FALSE);
         intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
@@ -2130,30 +1728,11 @@ INT_RETVAL intRunWidgets(void)
 		(void)intAddResearch(NULL);
 //		intMode = INT_OBJECT;
 	#endif
-#endif
+
 		break;
 
 	case IDRET_INTEL_MAP:
-#ifdef PSX
-		if(intMode != INT_INTELMAP) {
-			ButType = widgGetUserData2(psWScreen,IDRET_INTEL_MAP);
-			if(ButType == VPAD_MOUSELB) {
-		//		intResetScreen(FALSE);
-		//		//check if RMB was clicked
-				if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
-				{
-					//set the current message to be the last non-proximity message added
-					setCurrentMsg();
-					setMessageImmediate(TRUE);
-				}
-				else
-				{
-					psCurrentMsg = NULL;
-				}
-				addIntelScreen();
-			}
-		}
-#else
+
 //		intResetScreen(FALSE);
 //		//check if RMB was clicked
 		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
@@ -2167,32 +1746,18 @@ INT_RETVAL intRunWidgets(void)
 			psCurrentMsg = NULL;
 		}
 		addIntelScreen();
-#endif
+
 		break;
 
 	case IDRET_DESIGN:
-#ifdef PSX
-		if(ReticuleEnabled[RETBUT_DESIGN].Enabled) {			// A hack this is..
-			if(intMode != INT_DESIGN) {
-				ButType = widgGetUserData2(psWScreen,IDRET_DESIGN);
-				if(ButType == VPAD_MOUSELB) {
-					intResetScreen(TRUE);
-					widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
-					/*add the power bar - for looks! */
-					intShowPowerBar();
-					(void)intAddDesign( FALSE );
-					intMode = INT_DESIGN;
-				}
-			}
-		}
-#else
+
 		intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 		/*add the power bar - for looks! */
 		intShowPowerBar();
 		(void)intAddDesign( FALSE );
 		intMode = INT_DESIGN;
-#endif
+
 		break;
 
 	case IDRET_CANCEL:
@@ -2296,13 +1861,9 @@ DBPRINTF(("HCI Quit %d\n",retID));
 #endif
 
 		case INT_DESIGN:
-#ifdef PSX
-//19 			if(!KeyboardIsActive()) {
-				intProcessDesign(retID);
-//19 			}
-#else
+
 			intProcessDesign(retID);
-#endif
+
 			break;
 		case INT_INTELMAP:
 			intProcessIntelMap(retID);
@@ -2363,9 +1924,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 					structY2 = (structY2 << TILE_SHIFT) + TILE_UNITS/2;
 
 					if(IsPlayerStructureLimitReached(selectedPlayer)) {
-#ifdef PSX
-						BeepMessage(STR_GAM_MAXSTRUCTSREACHED);
-#endif
+
 					} else {
 						// Set the droid order
 						if ( (intNumSelectedDroids(DROID_CONSTRUCT) == 0) &&
@@ -2431,9 +1990,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 
 					if(CanBuild) {
 						if(IsPlayerStructureLimitReached(selectedPlayer)) {
-#ifdef PSX
-							BeepMessage(STR_GAM_MAXSTRUCTSREACHED);
-#endif
+
 						} else {
 							// Set the droid order
 							if ( (intNumSelectedDroids(DROID_CONSTRUCT) == 0) &&
@@ -3310,9 +2867,7 @@ static void intResetWindows(BASE_OBJECT *psObj)
 			intAddManufacture((STRUCTURE *)psObj);
 			break;
 		case IOBJ_COMMAND:
-//#ifdef PSX
-//			intSelectDroid(psObj);
-//#endif
+
 			intAddCommand((DROID *)psObj);
 			break;
 		}
@@ -3396,50 +2951,7 @@ static void intProcessObject(UDWORD id)
 				//Only do this if not offworld - only check if a structure
 				//if (!offWorldKeepLists)
 				{
-#ifdef PSX
-					if(psObj->type == OBJ_STRUCTURE AND !offWorldKeepLists)
-					{
-						FLAG_POSITION *psCurrFlag = FindFactoryDelivery((STRUCTURE*)psObj);
 
-						if(psCurrFlag) {
-							if(driveModeActive() && StructIsFactory((STRUCTURE*)psObj))
-							{
-								driveDisableInterface();
-						 		driveDisableTactical();
-								StartDeliveryPosition(psCurrFlag,TRUE);
-								IsDeliveryRepos = TRUE;
-							}
-							else
-							{
-#ifdef OBJECT_BUTTONS_DO_JUMP
-								/* Deselect old buildings */
-								for(psStruct = apsStructLists[selectedPlayer]; 
-									psStruct; psStruct=psStruct->psNext)
-								{
-									psStruct->selected = FALSE;
-								}
-		
-								/* Select new one */
-								((STRUCTURE*)psObj)->selected = TRUE;
-#else
-								StartDeliveryPosition(psCurrFlag,FALSE);
-								if(driveWasDriving()) {
-									driveEnableControl();
-									driveDisableInterface2();
-								}
-								intRemoveStats();
-								intRemoveObject();
-								if(GetControllerType(0) != CON_MOUSE) {
-									intRemoveReticule();
-								}
-								EnableMouseDraw(TRUE);
-								MouseMovement(TRUE);
-								IsDeliveryRepos = TRUE;
-#endif
-							}
-						}
-					}
-#else
 					if(psObj->type == OBJ_STRUCTURE AND !offWorldKeepLists)
 					{
 						/* Deselect old buildings */
@@ -3452,7 +2964,7 @@ static void intProcessObject(UDWORD id)
 						/* Select new one */
 						((STRUCTURE*)psObj)->selected = TRUE;
 					}
-#endif			
+			
 					if(!driveModeActive()) 
                     {
                         //don't do this if offWorld and a structure object has been selected
@@ -3517,12 +3029,7 @@ static void intProcessObject(UDWORD id)
 				if(psObj->type == OBJ_DROID) {			// If it's a droid...
 					intSelectDroid(psObj);
 					psObjSelected = psObj;
-#ifdef PSX
-					if(((DROID*)psObj)->droidType == DROID_COMMAND) {
-						intRemoveOrder();
-					}
-//					intSetMapPos(psObj->x,psObj->y);
-#endif
+
 				}
 			}
 		}
@@ -3755,9 +3262,7 @@ static void intProcessStats(UDWORD id)
 					// call the tutorial callback if necessary
 					if (bInTutorial && objMode == IOBJ_BUILD)
 					{
-#ifdef PSX
-						CancelInterfaceSnap();
-#endif
+
 						eventFireCallbackTrigger(CALL_BUILDGRID);
 					}
 
@@ -3807,59 +3312,17 @@ static void intProcessStats(UDWORD id)
 						driveStartBuild();
 						intRemoveObject();
 					}
-#ifdef PSX	// Started placing a structure so on PSX get rid of interface.
-					else
-					{
-						if(driveWasDriving()) {
-							driveEnableControl();
-							driveDisableInterface2();
-						}
-						intRemoveObject();
-						if(GetControllerType(0) != CON_MOUSE) {
-							intRemoveReticule();
-						}
-						EnableMouseDraw(TRUE);
-						MouseMovement(TRUE);
-//						intMode = INT_NORMAL;
-					}
-#else
+
 					intRemoveObject();
                     //hack to stop the stats window re-opening in demolish mode
                     if (objMode == IOBJ_DEMOLISHSEL)
                     {
                         IntRefreshPending = FALSE;
                     }
-#endif
+
 				}
 
-#ifdef PSX
-				if (objMode == IOBJ_DEMOLISHSEL) {
-					if(driveModeActive()) {
-                        if(driveGetDriven()->droidType != DROID_CONSTRUCT AND
-                            (driveGetDriven()->droidType != DROID_CYBORG_CONSTRUCT)) {
-							intGotoNextDroidType(NULL,DROID_CONSTRUCT,TRUE);
-							driveSelectionChanged();
-							driveDisableControl();
-						}
-				 		driveDisableTactical();
-						driveStartDemolish();
-						intRemoveObject();
-						intMode = INT_NORMAL;
-					} else {
-						if(driveWasDriving()) {
-							driveEnableControl();
-							driveDisableInterface2();
-						}
-						intRemoveObject();
-						if(GetControllerType(0) != CON_MOUSE) {
-							intRemoveReticule();
-						}
-						EnableMouseDraw(TRUE);
-						MouseMovement(TRUE);
-						intMode = INT_NORMAL;
-					}
-				}
-#endif
+
 			}
 		}
 	}
@@ -3974,57 +3437,7 @@ void intSetMapPos(UDWORD x, UDWORD y)
 }
 
 
-#ifdef PSX
-void driveUpReticule(void)
-{
-	if(driveWasDriving()) {
-		// Ensure the reticule is up and 
-		driveDisableControl();
-		driveEnableInterface(TRUE);
-		EnableMouseDraw(FALSE);
-		MouseMovement(FALSE);
-	}
-}
 
-
-void intHandleDroidLMB(DROID *psDroid,SELECTION_TYPE Selection)
-{
-	// Left clicking on an already selected truck opens the build menu, any other
-	// kind of droid opens the order menu.
-	if(Selection != SC_INVALID) {
-		if( (psDroid->selected) && (psDroid->droidType != DROID_TRANSPORTER) ) {
-			if( psDroid->droidType == DROID_CONSTRUCT OR
-                psDroid->droidType == DROID_CYBORG_CONSTRUCT) {
-				intResetScreen(FALSE);
-				driveUpReticule();
-				intAddBuildBoth(psDroid);
-			} else if( psDroid->droidType == DROID_COMMAND) {
-				intResetScreen(FALSE);
-				driveUpReticule();
-				intAddCommand(psDroid);
-			} else {
-				intResetScreen(FALSE);
-	//			driveDisableControl();
-	//			driveEnableInterface(FALSE);
-	//			EnableMouseDraw(FALSE);
-	//			MouseMovement(FALSE);
-				driveUpReticule();
-                //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-				//intAddOrder(psDroid);
-                intAddOrder((BASE_OBJECT *)psDroid);
-				intMode = INT_ORDER;
-			}
-		}
-	} else {
-		if (psDroid->droidType == DROID_TRANSPORTER) {
-			intResetScreen(FALSE);
-			driveUpReticule();
-			addTransporterInterface(psDroid,FALSE);
-		}
-	}
-}
-
-#endif
 
 
 /* Sync the interface to an object */
@@ -4064,15 +3477,7 @@ void intObjectSelected(BASE_OBJECT *psObj)
 //			intAddOrder((DROID *)psObj);
 //			intMode = INT_ORDER;
 
-#ifdef PSX
-			// Right clicking on a droid selects it's cluster.
-			if (bInTutorial) eventFireCallbackTrigger(CALL_ALL_ONSCREEN_DROIDS_SELECTED);
-	  		if(psObj) {
-				clearSel();
-				intSelectDroidsInDroidCluster((DROID *)psObj);
-				audio_PlayTrack(ID_SOUND_SELECT);
-			}
-#else
+
 			if(!OrderUp) 
 			{
 				intResetScreen(FALSE);
@@ -4087,7 +3492,7 @@ void intObjectSelected(BASE_OBJECT *psObj)
 				//intAddOrder((DROID *)psObj);
                 intAddOrder(psObj);
 			}
-#endif
+
 
 			break;
 
@@ -4107,22 +3512,16 @@ void intObjectSelected(BASE_OBJECT *psObj)
 					((STRUCTURE *)psObj)->pStructureType->type == REF_CYBORG_FACTORY OR
 					((STRUCTURE *)psObj)->pStructureType->type == REF_VTOL_FACTORY)
 				{
-#ifdef PSX
-					driveUpReticule();
-					intAddManufactureBoth((STRUCTURE *)psObj);
-#else
+
 					intAddManufacture((STRUCTURE *)psObj);
-#endif
+
 					//widgHide(psWScreen, IDOBJ_FORM);
 				}
 				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
 				{
-#ifdef PSX
-					driveUpReticule();
-					intAddResearchBoth((STRUCTURE *)psObj);
-#else
+
 					intAddResearch((STRUCTURE *)psObj);
-#endif
+
 					//widgHide(psWScreen, IDOBJ_FORM);
 				}
 //		  		for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct=psStruct->psNext)
@@ -4169,23 +3568,13 @@ extern void FinishStructurePosition(UDWORD xPos,UDWORD yPos,void *UserData);
 //static void intStartStructPosition(UDWORD width, UDWORD height)
 static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid)
 {
-#ifdef PSX
-	if(driveModeActive() && psDroid != NULL) {
-//		driveDisableInterface();	// NONONONONONONO...NO
- 		driveDisableTactical();
-		StartStructurePosition(psDroid);
-//DBPRINTF(("Start struct pos\n");
-		init3DBuilding(psStats,FinishStructurePosition,NULL);
-	} else {
-		init3DBuilding(psStats,NULL,NULL);
-	}
-#else
+
 	
 	UNUSEDPARAMETER(psDroid);
 
 	init3DBuilding(psStats,NULL,NULL);
 
-#endif
+
 
 #ifdef DISP2D
 	disp2DStartStructPosition(psStats);
@@ -4271,252 +3660,7 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
 	return retVal;
 }
 
-#ifdef PSX
 
-iPoint16 BGQuadXY[]={
-{0,0},		{320,0},  	{640,0},
-{0,240},  	{320,240},	{640,240},
-{0,480},  	{320,480},	{640,480},
-};
-
-iRGB8 BGQuadRGBInit[]={
-{0,0,0,0},	{0,0,32,0}, 	{0,0,0,0},
-{0,0,32,0},	{0,0,196,0},	{0,0,32,0},
-{0,0,0,0},	{0,0,32,0}, 	{0,0,0,0},
-};
-
-iRGB8 BGQuadRGB1[]={
-{0,0,0,0},	{0,0,32,0}, 	{0,0,0,0},
-{0,0,32,0},	{0,0,196,0},	{0,0,32,0},
-{0,0,0,0},	{0,0,32,0}, 	{0,0,0,0},
-};
-
-//iRGB8 BGQuadRGB2[]={
-//{0, 0,0,0},	{32, 0,0,0}, 	{0, 0,0,0},
-//{32,0,0,0},	{196,0,0,0},	{32,0,0,0},
-//{0, 0,0,0},	{32, 0,0,0}, 	{0, 0,0,0},
-//};
-
-iRGB8 *BGQuadRGB;
-
-int BGQuadDir[]={
-1,1,1,
-1,1,1,
-1,1,1
-};
-
-int BGQuad1I[]={
-0,1,3,4,	// XY indecies
-0,1,3,4		// RGB indecies
-};
-
-int BGQuad2I[]={
-1,2,4,5,
-1,2,4,5,
-};
-
-int BGQuad3I[]={
-3,4,6,7,
-3,4,6,7,
-};
-
-int BGQuad4I[]={
-4,5,7,8,
-4,5,7,8,
-};
-
-extern void PulseValue(int *Value,int *Dir,int Min,int Max);
-
-
-// Calculate delta values needed to get from one triple to another.
-// Sets DeltaTriple in fixed point 20:12 format.
-//
-void CalcTripleDelta(SDWORD *CurrTriple,SDWORD *TargTriple,SDWORD *DeltaTriple)
-{
-	SDWORD Delta;
-	SDWORD da = TargTriple[0] - CurrTriple[0];
-	SDWORD db = TargTriple[1] - CurrTriple[1];
-	SDWORD dc = TargTriple[2] - CurrTriple[2];
-
-	if(abs(da) > abs(db)) {
-		Delta = da;
-	} else {
-		Delta = db;
-	}
-
-	if(abs(Delta) > abs(dc)) {
-		Delta = dc;
-	}
-
-	DeltaTriple[0] = (da<<12)/Delta;
-	DeltaTriple[1] = (db<<12)/Delta;
-	DeltaTriple[2] = (dc<<12)/Delta;
-}
-
-
-// Add a delta to a triple, returns TRUE if target reached.
-// CurrTriple & DeltaTriple are in fixed point 20:12 format.
-//
-BOOL AddTripleDelta(SDWORD *CurrTriple,SDWORD *TargTriple,SDWORD *DeltaTriple)
-{
-	CurrTriple[0] += DeltaTriple[0];
-	CurrTriple[1] += DeltaTriple[1];
-	CurrTriple[2] += DeltaTriple[2];
-
-	if( (CurrTriple[0]>>12 == TargTriple[0]) &&
-		(CurrTriple[1]>>12 == TargTriple[1]) &&
-		(CurrTriple[2]>>12 == TargTriple[2]) ) {
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-
-int PulseRGB(iRGB8 *rgb,int *Dir,int Min,int Max)
-{
-	int Negd = 0;
-
-	if(*Dir > 0) {
-		if(rgb->b + *Dir > Max) {
-			*Dir = -*Dir;
-			Negd = 1;
-		}
-	} else if(*Dir < 0) {
-		if(rgb->b + *Dir < Min) {
-			*Dir = -*Dir;
-			Negd = 1;
-		}
-	}
-
-	rgb->b += *Dir;
-//	rgb->r = rgb->b/2;
-//	rgb->g = rgb->b/2;
-
-	return Negd;
-}
-
-
-void ClearWashColour(UBYTE r,UBYTE g,UBYTE b)
-{
-	int i;
-
-//	ResetBlueWash();
-	for(i=0; i<9; i++) {
-		BGQuadRGB1[i].r = r;
-		BGQuadRGB1[i].g = g;
-		BGQuadRGB1[i].b = b;
-	}
-	StartScene();
-	ClearBlueWash(FALSE);
-  	EndScene();
-	StartScene();
-	ClearBlueWash(FALSE);
-  	EndScene();
-	DrawSync(0);
-	VSync(0);
-}
-
-
-void ClearWash(void)
-{
-	ResetBlueWash();
-	StartScene();
-	ClearBlueWash(FALSE);
-  	EndScene();
-	StartScene();
-	ClearBlueWash(FALSE);
-  	EndScene();
-	DrawSync(0);
-	VSync(0);
-}
-
-
-void ResetBlueWash(void)
-{
-	int i;
-
-	for(i=0; i<9; i++) {
-		BGQuadDir[i] = 1;
-	}
-	memcpy(BGQuadRGB1,BGQuadRGBInit,sizeof(iRGB8)*9);
-}
-
-
-void ClearBlueWash(BOOL Animate)		
-{
-	int i;
-	UWORD dh = 0;
-
-	for(i=0; i<3; i++) {
-
-		BGQuadXY[i*3].x = 0;
-		BGQuadXY[i*3+1].x = 640/2;
-		BGQuadXY[i*3+2].x = 640;
-
-		BGQuadXY[i*3].y = dh;
-		BGQuadXY[i*3+1].y = dh;
-		BGQuadXY[i*3+2].y = dh;
-
-		dh += 480/2;
-	}
-
-	iV_SetOTIndex_PSX(OT2D_EXTREMEBACK);
-//	iV_DrawImageRect(IntImages,IMAGE_DES_BACK,0,0,0,0,DISP_WIDTH,GetDisplayHeight()*2);
-
-	BGQuadRGB = BGQuadRGB1;
-
-	if(Animate) {
-		for(i=0; i<9; i++) {
-			PulseRGB(&BGQuadRGB[i],&BGQuadDir[i],0,196);
-		}
-	}
-
-	DrawShadedIndexedQuad(BGQuad1I,BGQuadXY,BGQuadRGB);
-	DrawShadedIndexedQuad(BGQuad2I,BGQuadXY,BGQuadRGB);
-	DrawShadedIndexedQuad(BGQuad3I,BGQuadXY,BGQuadRGB);
-	DrawShadedIndexedQuad(BGQuad4I,BGQuadXY,BGQuadRGB);
-}
-
-
-void BoxBlueWash(UWORD x,UWORD y,UWORD w,UWORD h,BOOL Animate)
-{
-	UWORD i;
-	UWORD dh = 0;
-
-	for(i=0; i<3; i++) {
-
-		BGQuadXY[i*3].x = x;
-		BGQuadXY[i*3+1].x = x+w/2;
-		BGQuadXY[i*3+2].x = x+w;
-
-		BGQuadXY[i*3].y = y+dh;
-		BGQuadXY[i*3+1].y = y+dh;
-		BGQuadXY[i*3+2].y = y+dh;
-
-		dh += h/2;
-	}
-
-
-	iV_EnableSemiTrans_PSX(TRUE);
-	iV_SetOTIndex_PSX(OT2D_EXTREMEBACK);
-
-	BGQuadRGB = BGQuadRGB1;
-
-	if(Animate) {
-		for(i=0; i<9; i++) {
-			PulseRGB(&BGQuadRGB[i],&BGQuadDir[i],0,196);
-		}
-	}
-
-	DrawShadedIndexedQuad(BGQuad1I,BGQuadXY,BGQuadRGB);
-	DrawShadedIndexedQuad(BGQuad2I,BGQuadXY,BGQuadRGB);
-	DrawShadedIndexedQuad(BGQuad3I,BGQuadXY,BGQuadRGB);
-	DrawShadedIndexedQuad(BGQuad4I,BGQuadXY,BGQuadRGB);
-
-	iV_EnableSemiTrans_PSX(FALSE);
-}
-#endif
 
 
 /* Display the widgets for the in game interface */
@@ -4933,73 +4077,7 @@ UWORD numForms(UDWORD total, UDWORD perForm)
 //
 BOOL intAddReticuleExtras(void)
 {
-#ifdef PSX
-	W_BUTINIT sButInit;
-	W_LABINIT sLabInit;
 
-//DBPRINTF(("intAddReticuleExtras\n");
-	sButInit.formID = IDRET_FORM;
-	sButInit.style = WBUT_PLAIN;
-	sButInit.id = IDRET_TRANSPORTER;
-	SetReticuleButPos(RETBUT_TRANSPORTER,&sButInit);
-	sButInit.width = RET_BUTWIDTH;
-	sButInit.height = RET_BUTHEIGHT;
-	sButInit.FontID = WFont;
-	sButInit.pTip = strresGetString(psStringRes, STR_RET_TRANSPORTER);
-	sButInit.pDisplay = intDisplayReticuleButton;
-	sButInit.pCallback = intUpdateReticuleButtonNoSB;
-	sButInit.pUserData = (void*)IMAGE_TRANSPORTER_UP;
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	sButInit.style = WBUT_PLAIN;
-	sButInit.id = IDRET_ORDER;
-	SetReticuleButPos(RETBUT_ORDER,&sButInit);
-	sButInit.pTip = strresGetString(psStringRes, STR_RET_ORDERS);
-	sButInit.pUserData = (void*)IMAGE_ORDER_UP;
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	if(GetControllerType(0) == CON_MOUSE) {
-		/* Cancel button */
-		sButInit.style = WBUT_PLAIN;
-		sButInit.id = IDRET_CANCEL;
-		SetReticuleButPos(RETBUT_CANCEL,&sButInit);
-		sButInit.width = RET_BUTWIDTH + 10;
-		sButInit.height = RET_BUTHEIGHT + 8;
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_CLOSE);
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pCallback = intUpdateReticuleButtonNoSB;
-		sButInit.pUserData = (void*)IMAGE_CANCEL_UP;
-	//#ifdef PSX
-	//	sButInit.pCallback = intUpdateReticuleButton;
-	//#endif
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return FALSE;
-		}
-	} else {
-		memset(&sLabInit, 0, sizeof(W_LABINIT));
-		sLabInit.formID = IDRET_FORM;
-		sLabInit.id = IDRET_CANCEL;
-		sLabInit.style = WLAB_PLAIN;
-		sLabInit.width = 16;
-		sLabInit.height = 16;
-		sLabInit.x = 66;
-		sLabInit.y = 66;
-		sLabInit.pTip = "";
-		sLabInit.pDisplay = intDisplayImage;
-		sLabInit.pUserData = (void*)IMAGE_LOGO2;
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return TRUE;
-		}
-	}
-#endif
 	return TRUE;
 }
 
@@ -5012,9 +4090,7 @@ BOOL _intAddReticule(void)
 		W_BUTINIT		sButInit;
 
 		/* Create the basic form */
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FORE);
-	#endif
+
 		memset(&sFormInit, 0, sizeof(W_FORMINIT));
 		sFormInit.formID = 0;
 		sFormInit.id = IDRET_FORM;
@@ -5030,9 +4106,7 @@ BOOL _intAddReticule(void)
 		}
 
 		/* Now add the buttons */
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FARFORE);
-	#endif
+
 		//set up default button data 
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDRET_FORM;
@@ -5052,9 +4126,7 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_COMMAND);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_COMMANDDROID_UP;
-	#ifdef PSX
-		sButInit.pCallback = intUpdateReticuleButtonNoSB;
-	#endif
+
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5070,9 +4142,7 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_INTELLIGENCE);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_INTELMAP_UP;
-	#ifdef PSX
-		sButInit.pCallback = intUpdateReticuleButtonNoSB;
-	#endif
+
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5088,9 +4158,7 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_MANUFACTURE);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_MANUFACTURE_UP;
-	#ifdef PSX
-		sButInit.pCallback = intUpdateReticuleButton;
-	#endif
+
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5106,9 +4174,7 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_DESIGN);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_DESIGN_UP;
-	//#ifdef PSX
-	//	sButInit.pCallback = intUpdateReticuleButtonNoSB;
-	//#endif
+
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5124,9 +4190,7 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_RESEARCH);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_RESEARCH_UP;
-	#ifdef PSX
-		sButInit.pCallback = intUpdateReticuleButtonNoSB;
-	#endif
+
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5142,9 +4206,7 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_BUILD);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_BUILD_UP;
-	#ifdef PSX
-		sButInit.pCallback = intUpdateReticuleButtonNoSB;
-	#endif
+
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5172,23 +4234,15 @@ BOOL _intAddReticule(void)
 		}
 #endif
 
-#ifdef PSX
-		intAddReticuleExtras();
-#endif
 
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FORE);
-	#endif
+
+
 
 	//	intCheckReticuleButtons();
 
 		ReticuleUp = TRUE;
 
-#ifdef PSX
-		if(GetControllerType(0) == CON_MOUSE) {
-			intAddMouseInterface();
-		}
-#endif
+
 	}
 
 	return TRUE;
@@ -5207,9 +4261,7 @@ void intRemoveReticule(void)
 	if(ReticuleUp == TRUE) {
 		widgDelete(psWScreen,IDRET_FORM);		// remove reticule
 		ReticuleUp = FALSE;
-#ifdef PSX
-		intRemoveMouseInterface();
-#endif
+
 	}
 #endif
 }
@@ -5306,9 +4358,7 @@ BOOL _intAddOptions(void)
 	memset(&sEdInit, 0, sizeof(W_EDBINIT));
 
 	/* Add the option form */
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 	sFormInit.formID = 0;
 	sFormInit.id = IDOPT_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -5324,9 +4374,6 @@ BOOL _intAddOptions(void)
 	// set the interface mode
 	intMode = INT_OPTION;
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
 	/* Add the Option screen label */
 	sLabInit.formID = IDOPT_FORM;
 	sLabInit.id = IDOPT_LABEL;
@@ -5578,9 +4625,7 @@ BOOL _intAddOptions(void)
 //	widgStartScreen(psWScreen);
 	widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 
 	return TRUE;
 }
@@ -5863,9 +4908,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 	psObjList = psObjects;
 
 	/* Create the basic form */
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 	sFormInit.formID = 0;
 	sFormInit.id = IDOBJ_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -5893,9 +4936,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 //	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
 //#endif
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 
 #ifndef PSX
 	/* Add the close button */
@@ -6045,13 +5086,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 	sLabInitCmdExp.height = 16;
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
 	sLabInitCmdExp.FontID = WFont;
-#ifdef PSX
-	sLabInit.pDisplay = intDisplayNum;
-	sLabIntObjText.pDisplay = intDisplayNum;
-	sLabInitCmdExp.pDisplay = intDisplayNum;
-	sLabInitCmdFac.pDisplay = intDisplayNum;
-	sLabInitCmdFac2.pDisplay = intDisplayNum;
-#endif
+
 
 	displayForm = 0;
 	for(i=0; i<(UDWORD)numObjects; i++)
@@ -6146,17 +5181,13 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 			sBFormInit.pUserData = (void*)&TopicBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayObjectButton;
 
-	#ifdef PSX
-			WidgSetOTIndex(OT2D_FARFARFORE);
-	#endif
+
 			if (!widgAddForm(psWScreen, &sBFormInit))
 			{
 				return FALSE;
 			}
 
-	#ifdef PSX
-			WidgSetOTIndex(OT2D_EXTREMEFORE);
-	#endif
+
 			if (IsFactory)
 			{
 				// Add a text label for the factory Inc.
@@ -6264,9 +5295,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 
 			sBFormInit2.pDisplay = intDisplayStatusButton;
 
-	#ifdef PSX
-			WidgSetOTIndex(OT2D_FARFORE);
-	#endif
+
 			if (!widgAddForm(psWScreen, &sBFormInit2))
 			{
 				return FALSE;
@@ -6277,9 +5306,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 				widgSetButtonState(psWScreen, sBFormInit2.id, WBUT_CLICKLOCK);
 			}
 
-		#ifdef PSX
-			WidgSetOTIndex(OT2D_FARFARFORE);
-		#endif
+
 
 			if ( psObj->type != OBJ_DROID ||
 				 (((DROID *)psObj)->droidType == DROID_CONSTRUCT OR
@@ -6446,9 +5473,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 		intSetCurrentCursorPosition(&InterfaceSnap,statID);
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 
 	if (objMode == IOBJ_BUILD || objMode == IOBJ_MANUFACTURE || objMode == IOBJ_RESEARCH)
 	{
@@ -6489,13 +5514,7 @@ static BOOL _intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOO
 
 static BOOL _intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
-#ifdef PSX
-// Is the stats form up?
-	if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
-		intRemoveStatsNoAnim();
-//		DBPRINTF(("Removing stats form\n");
-	}
-#endif
+
 
 	_intAddObjectWindow(psObjects,psSelected,bForceStats);
 
@@ -6506,9 +5525,7 @@ static BOOL _intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL b
 /* Remove the build widgets from the widget screen */
 void intRemoveObject(void)
 {
-#ifdef PSX
-	intRemoveObjectNoAnim();
-#else
+
 	W_TABFORM *Form;
 
 	widgDelete(psWScreen, IDOBJ_TABFORM);
@@ -6523,9 +5540,7 @@ void intRemoveObject(void)
 		ClosingObject = TRUE;
 	}
 
-#ifdef PSX
-	RemoveCursorSnap(&InterfaceSnap,IDOBJ_FORM);
-#endif
+
 
 	ClearObjectBuffers();
 	ClearTopicBuffers();
@@ -6537,7 +5552,7 @@ void intRemoveObject(void)
 		DBPRINTF(("Go with object close callback!\n"));
 	 	eventFireCallbackTrigger(CALL_OBJECTCLOSE);
 	}
-#endif
+
 }
 
 
@@ -6548,9 +5563,7 @@ static void intRemoveObjectNoAnim(void)
 	widgDelete(psWScreen, IDOBJ_CLOSE);
 	widgDelete(psWScreen, IDOBJ_FORM);
 
-#ifdef PSX
-	RemoveCursorSnap(&InterfaceSnap,IDOBJ_FORM);
-#endif
+
 
 	ClearObjectBuffers();
 	ClearTopicBuffers();
@@ -6569,9 +5582,6 @@ static void intRemoveObjectNoAnim(void)
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats(void)
 {
-#ifdef PSX
-	intRemoveStatsNoAnim();
-#else
 	W_TABFORM *Form;
 
 #ifdef INCLUDE_PRODSLIDER
@@ -6595,7 +5605,7 @@ void intRemoveStats(void)
 	StatsUp = FALSE;
 	psStatsScreenOwner = NULL;
 //DBPRINTF(("intRemoveStats\n");
-#endif
+
 }
 
 
@@ -6872,9 +5882,7 @@ static void _intSetStats(UDWORD id, BASE_STATS *psStats)
 	sLabInit.height = 16;
 	sLabInit.pText = "10";
 	sLabInit.FontID = WFont;
-#ifdef PSX
-	sLabInit.pDisplay = intDisplayNum;
-#endif
+
 
 	if (psStats)
 	{
@@ -6935,12 +5943,7 @@ static void _intSetStats(UDWORD id, BASE_STATS *psStats)
 
 	sFormInit.pDisplay = intDisplayStatusButton;
 
-//#ifdef PSX
-//	WidgSetOTIndex(OT2D_BACK);
-//#endif
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	widgAddForm(psWScreen, &sFormInit);
 	// Set the colour for the production run size text.
 	widgSetColour(psWScreen, sFormInit.id, WCOL_TEXT,
@@ -6948,9 +5951,7 @@ static void _intSetStats(UDWORD id, BASE_STATS *psStats)
 	widgSetColour(psWScreen, sFormInit.id, WCOL_BKGRND, 
 							STAT_PROGBARTROUGHRED,STAT_PROGBARTROUGHGREEN,STAT_PROGBARTROUGHBLUE);
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFARFORE);
-#endif
+
 	widgAddLabel(psWScreen, &sLabInit);
 	widgAddBarGraph(psWScreen, &sBarInit);
 
@@ -6960,9 +5961,7 @@ static void _intSetStats(UDWORD id, BASE_STATS *psStats)
 		widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-#endif
+
 }
 
 
@@ -7045,9 +6044,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	widgEndScreen(psWScreen);
 
 	/* Create the basic form */
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = 0;
 	sFormInit.id = IDSTAT_FORM;
@@ -7074,38 +6071,12 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 //	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
 //#endif
 
-#ifdef PSX
-	if(objMode == IOBJ_MANUFACTURE) {
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FARFORE);
-	#endif
-		//add the unit limits label
-		memset(&sLabInit,0,sizeof(W_LABINIT));
-		sLabInit.formID = IDSTAT_FORM;
-		sLabInit.id = IDSTAT_MANULIMITS;
-		sLabInit.style = WLAB_PLAIN;
-		sLabInit.x = 8;	//(SWORD)(STAT_SLDX + STAT_SLDWIDTH + sButInit.width + 2);
-		sLabInit.y = 8-4;	//STAT_SLDY + 3;
-		sLabInit.width = 16;
-		sLabInit.height = 16;
-		sLabInit.pText = "10/40";
-		sLabInit.FontID = WFont;
-		sLabInit.pCallback = intUpdateManufactureLimits;
-		sLabInit.pDisplay = intDisplayNum;
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return FALSE;
-		}
-	}
-#endif
 
 
 #ifdef INCLUDE_PRODSLIDER
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE) {
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FARFARFORE);
-	#endif
+
 		//add the non stop production button
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
@@ -7144,9 +6115,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			return FALSE;
 		}
 
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FARFORE);
-	#endif
+
 		memset(&sSldInit, 0, sizeof(W_SLDINIT));
 		sSldInit.formID = IDSTAT_FORM;
 		sSldInit.id = IDSTAT_SLIDER;
@@ -7174,9 +6143,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				}
 			}
 		}
-#ifdef PSX
-		sSldInit.pCallback = intUpdateQuantitySlider;
-#endif
+
 		sSldInit.pDisplay = intDisplaySlider;
 		if (!widgAddSlider(psWScreen, &sSldInit))
 		{
@@ -7283,15 +6250,11 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.height = 15;
 		sLabInit.FontID = WFont;
 		sLabInit.pCallback = intAddProdQuantity;
-#ifdef PSX
-		sLabInit.pDisplay = intDisplayNum;
-#endif
+
 	}
 #endif
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 
 #ifndef PSX
 	/* Add the close button */
@@ -7421,21 +6384,13 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sBFormInit.pUserData = (void*)&StatBuffers[BufferID];
 		sBFormInit.pDisplay = intDisplayStatsButton;
 
-	#ifdef PSX
-		WidgSetOTIndex(OT2D_FARFORE);
-	#endif
+
 		if (!widgAddForm(psWScreen, &sBFormInit))
 		{
 			return FALSE;
 		}
 		widgSetColour(psWScreen, sBFormInit.id, WCOL_BKGRND, 0,0,0);
-	#ifdef PSX
-		if( (psSelected == NULL) && (sBFormInit.majorID == 0) && (sBFormInit.minorID == 0) ) {
-			intSetCurrentCursorPosition(&InterfaceSnap,sBFormInit.id);
-		}
 
-		WidgSetOTIndex(OT2D_FARFARFORE);
-	#endif
 		//Stat = ppsStatsList[i];
 		if (Stat->ref >= REF_STRUCTURE_START && 
 			Stat->ref < REF_STRUCTURE_START + REF_RANGE) {		// It's a structure.
@@ -7590,10 +6545,7 @@ donelab:
 		intSetCurrentCursorPosition(&InterfaceSnap,statID);
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FORE);
-//	DBPRINTF(("Added stats form\n");
-#endif
+
 
 	StatsUp = TRUE;
 
@@ -8198,25 +7150,7 @@ static BOOL intAddBuild(DROID *psSelected)
 #endif
 }
 
-#ifdef PSX
-/* Add the build and the stats screens */
-/* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddBuildBoth(DROID *psSelected)
-{
-	/* Store the correct stats list for future reference */
-	ppsStatsList = (BASE_STATS **)apsStructStatsList;
 
-	objSelectFunc = selectConstruction;
-	objGetStatsFunc = getConstructionStats;
-	objSetStatsFunc = setConstructionStats;
-
-	/* Set the sub mode */
-	objMode = IOBJ_BUILD;
-	
-	return intAddObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],
-						(BASE_OBJECT *)psSelected,TRUE);
-}
-#endif
 
 /* Add the manufacture widgets to the widget screen */
 /* If psSelected != NULL it specifies which factory should be hilited */
@@ -8243,25 +7177,7 @@ static BOOL intAddManufacture(STRUCTURE *psSelected)
 #endif
 }
 
-#ifdef PSX
-/* Add the manufacture and the stats screens */
-/* If psSelected != NULL it specifies which factory should be hilited */
-static BOOL intAddManufactureBoth(STRUCTURE *psSelected)
-{
-	/* Store the correct stats list for future reference */
-	ppsStatsList = (BASE_STATS**)apsTemplateList;
 
-	objSelectFunc = selectManufacture;
-	objGetStatsFunc = getManufactureStats;
-	objSetStatsFunc = setManufactureStats;
-
-	/* Set the sub mode */
-	objMode = IOBJ_MANUFACTURE;
-
-	return intAddObject((BASE_OBJECT *)interfaceStructList(),
-				(BASE_OBJECT *)psSelected,TRUE);
-}
-#endif
 
 /* Add the research widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
@@ -8287,25 +7203,7 @@ static BOOL intAddResearch(STRUCTURE *psSelected)
 #endif
 }
 
-#ifdef PSX
-/* Add the research and the stats screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddResearchBoth(STRUCTURE *psSelected)
-{
-	ppsStatsList = (BASE_STATS **)ppResearchList;
 
-	objSelectFunc = selectResearch;
-	objGetStatsFunc = getResearchStats;
-	objSetStatsFunc = setResearchStats;
-
-	/* Set the sub mode */
-	objMode = IOBJ_RESEARCH;
-
-	/* Create the object screen with the required data */
-	return intAddObject((BASE_OBJECT *)interfaceStructList(),
-						(BASE_OBJECT *)psSelected,TRUE);
-}
-#endif
 
 /* Add the command droid widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
@@ -8801,18 +7699,7 @@ static BOOL _intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 /* Add the Proximity message buttons */
 BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddProximityButton(psProxDisp, inc);
-		SetSpAltNormal();
-		return ret;
-	}
-#endif
 
 	return _intAddProximityButton(psProxDisp, inc);
 }
@@ -8985,21 +7872,7 @@ void intCheckReticuleButtons(void)
 	ReticuleEnabled[RETBUT_DESIGN].Enabled = FALSE;
 	ReticuleEnabled[RETBUT_INTELMAP].Enabled = TRUE;
 	ReticuleEnabled[RETBUT_COMMAND].Enabled = FALSE;
-#ifdef PSX
-	ReticuleEnabled[RETBUT_TRANSPORTER].Enabled = FALSE;
-	ReticuleEnabled[RETBUT_ORDER].Enabled = FALSE;
 
-	if (mission.ETA >= 0) {
-		DROID *psTransporter = GetCurrTransporter();
-		ReticuleEnabled[RETBUT_TRANSPORTER].Enabled = TRUE;
-		if(psTransporter) {
-			if (psTransporter->action == DACTION_TRANSPORTIN ||
-				psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN ) {
-				ReticuleEnabled[RETBUT_TRANSPORTER].Enabled = FALSE;
-			}
-		}
-	}
-#endif
 
 	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct = 
 		psStruct->psNext)
@@ -9039,21 +7912,9 @@ void intCheckReticuleButtons(void)
 				ReticuleEnabled[RETBUT_COMMAND].Enabled = TRUE;
 
 				break;
-#ifdef PSX
-			case DROID_TRANSPORTER:
-				if( (psDroid->action == DACTION_NONE) &&
-					(psDroid->sMove.Status == MOVEINACTIVE))
-				{
-					ReticuleEnabled[RETBUT_TRANSPORTER].Enabled = TRUE;
-				}
-				break;
-#endif
+
 		}
-#ifdef PSX
-		if(psDroid->selected) {
-			ReticuleEnabled[RETBUT_ORDER].Enabled = TRUE;
-		}
-#endif
+
 	}
 
 	for (i=0; i<NUMRETBUTS; i++) {
@@ -9712,185 +8573,7 @@ void GotoPrevObject(void)
 }
 #endif
 
-#ifdef PSX
 
-//void SetMouseFormPosition(W_FORMINIT *sFormInit)
-//{
-//// Position the mouse in the center of this form.
-//	RetMousePosX = sFormInit->x+(sFormInit->width/2);
-//	RetMousePosY = sFormInit->y+(sFormInit->height/2);
-//	SetMousePos(0,RetMousePosX,RetMousePosY);
-//}
-
-
-void processFrontendSnap(BOOL bNotUsed)
-{
-	UNUSEDPARAMETER(bNotUsed);
-
-	if(GetControllerType(0) != CON_MOUSE) {
-		MouseMovement(FALSE);
-
-		if(VPadPressed(VPAD_MOUSERIGHT)) {
-			GotoDirectionalSnap(&InterfaceSnap,SNAP_RIGHT,0,0);
-		} else if(VPadPressed(VPAD_MOUSELEFT)) {
-			GotoDirectionalSnap(&InterfaceSnap,SNAP_LEFT,0,0);
-		} else if(VPadPressed(VPAD_MOUSEUP)) {
-			GotoDirectionalSnap(&InterfaceSnap,SNAP_UP,0,0);
-		} else if(VPadPressed(VPAD_MOUSEDOWN)) {
-			GotoDirectionalSnap(&InterfaceSnap,SNAP_DOWN,0,0);
-		}
-
-		GotoSnap(&InterfaceSnap);
-	}
-}
-
-
-void StartInterfaceSnap(void)
-{
-#ifdef PSX
-	if(GetControllerType(0) != CON_MOUSE) {
-		if(!SnapEnabled) {
-			MouseMovement(FALSE);
-			if(!driveModeActive()) {
-				EnableMouseDraw(FALSE);
-			}
-			GetMousePos(0,&RetMousePosX,&RetMousePosY);
-			GotoSnap(&InterfaceSnap);
-			SnapEnabled = TRUE;
-			sliderEnableDrag(FALSE);	// Dissable slider dragging in widget library.
-		}
-	}
-#else
-	if(!SnapEnabled) {
-		MouseMovement(FALSE);
-		GetMousePos(0,&RetMousePosX,&RetMousePosY);
-		GotoSnap(&InterfaceSnap);
-		SnapEnabled = TRUE;
-		sliderEnableDrag(FALSE);	// Dissable slider dragging in widget library.
-	}
-#endif
-}
-
-
-void CancelInterfaceSnap(void)
-{
-	if(SnapEnabled) {
-		SetMousePos(0,RetMousePosX,RetMousePosY);
-//29		MouseMovement(TRUE);
-#ifdef PSX
-		if(!driveModeActive()) {
-			EnableMouseDraw(TRUE);
-			MouseMovement(TRUE);
-		}
-printf("CancelInterfaceSnap\n");
-#endif
-		SnapEnabled = FALSE;
-		sliderEnableDrag(TRUE);		// Dissable slider dragging in widget library.
-	}
-}
-
-
-BOOL InterfaceSnapEnabled(void)
-{
-	return SnapEnabled;
-}
-
-
-void ProcessCursorSnap(void)
-{
-	if(GetControllerType(0) != CON_MOUSE) {
-		static SWORD NewSnapValid = 0;
-		static UWORD NewSnapX,NewSnapY;
-
-	//PD	if(driveModeActive()) {
-	//PD//		driveProcessCursorSnap();
-	//PD	} else if(VPadPressed(VPAD_RETICULE)) {
-	//PD		StartInterfaceSnap();
-	//PD	} else if(VPadPressed(VPAD_RADAR)) {
-	//PD		CancelInterfaceSnap();
-	//PD		SetMouseRange(0,RADTLX,RADTLY,RADTLX+RADWIDTH,RADTLY+RADHEIGHT);
-	//PD		SetMousePos(0,RADTLX+RADWIDTH/2,RADTLY+RADHEIGHT/2);
-	//PD	} else if(VPadPressed(VPAD_ORDER)) {
-	//PD		StartInterfaceSnap();
-	//PD		if(!OrderUp) {
-	//PD			intResetScreen(FALSE);
-	//PD		}
-	//PD		if(!intAddOrder(NULL)) {
-	//PD			CancelInterfaceSnap();
-	//PD		} else {
-	//PD			NewSnapX = GetOrderCenterX();
-	//PD			NewSnapY = GetOrderCenterY();
-	//PD			NewSnapValid = 2;
-	//PD			intMode = INT_ORDER;
-	//PD		}
-	//PD	} //else if(VPadPressed(VPAD_TARGET)) {
-	//		AquireNextTarget(
-	//		BASE_OBJECT *psObj;
-	//BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
-	//BOOL aiChooseTarget(BASE_OBJECT *psObj,
-	//					BASE_OBJECT **ppsTarget)
-	//		orderSelectedObj(selectedPlayer,psClickedOn);	// Tell the droid to attack it.
-	//	}
-
-
-	#ifdef PSX
-		// Haaaaaaaaaacccccccccccccccccccccckkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk! Oh Yes!
-		if( (ReticuleUp == TRUE) && (SnapEnabled == FALSE) ) {
-			DBPRINTF(("Uh oh, reticule up but no cursor snap so fix it.\n"));
-			// Uh oh, reticule up but no cursor snap so fix it.
-			SnapEnabled = TRUE;
-		}
-	#endif
-
-		if(SnapEnabled) {
-			MouseMovement(FALSE);
-			if(SnapEnabled && (NewSnapValid > 0)) {
-				SetMousePos(0,NewSnapX,NewSnapY);
-				GotoDirectionalSnap(&InterfaceSnap,SNAP_NEAREST,NewSnapX,NewSnapY);
-				NewSnapValid --;
-			} else {
-				if(VPadPressed(VPAD_MOUSERIGHT))
-				{
-	#ifdef PSX
-					audio_PlayTrack(ID_SOUND_SELECT);
-	#endif
-					GotoDirectionalSnap(&InterfaceSnap,SNAP_RIGHT,0,0);
-				}
-				else if(VPadPressed(VPAD_MOUSELEFT)) 
-				{
-	#ifdef PSX
-					audio_PlayTrack(ID_SOUND_SELECT);
-	#endif
-					GotoDirectionalSnap(&InterfaceSnap,SNAP_LEFT,0,0);
-				}
-				else if(VPadPressed(VPAD_MOUSEUP)) 
-				{
-	#ifdef PSX
-					audio_PlayTrack(ID_SOUND_SELECT);
-	#endif
-					GotoDirectionalSnap(&InterfaceSnap,SNAP_UP,0,0);
-				}
-				else if(VPadPressed(VPAD_MOUSEDOWN)) 
-				{
-	#ifdef PSX
-					audio_PlayTrack(ID_SOUND_SELECT);
-	#endif
-					GotoDirectionalSnap(&InterfaceSnap,SNAP_DOWN,0,0);
-				}
-				else 
-				{
-					GotoDirectionalSnap(&InterfaceSnap,SNAP_NEAREST,mouseX(),mouseY());
-				}
-			}
-
-			GotoSnap(&InterfaceSnap);
-		} else {
-	//29		MouseMovement(TRUE);
-		}
-	}
-}
-
-#endif
 
 
 
@@ -10057,18 +8740,7 @@ BOOL intAddOptions(void)
 
 BOOL intAddReticule(void)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddReticule();
-		SetSpAltNormal();
-		return ret;
-	}
-#endif
 #ifdef NON_INTERACT
 	return TRUE;
 #endif
@@ -10078,75 +8750,21 @@ BOOL intAddReticule(void)
 
 static BOOL intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
-		static BASE_OBJECT *_psObjects;
-		static BASE_OBJECT *_psSelected;
-		static BOOL _bForceStats;
 
-		_psObjects = psObjects;
-		_psSelected = psSelected;
-		_bForceStats = bForceStats;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddObject(_psObjects, _psSelected,_bForceStats);
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _intAddObject(psObjects, psSelected,bForceStats);
 }
 
 
 static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
-		static BASE_OBJECT *_psObjects;
-		static BASE_OBJECT *_psSelected;
-		static BOOL _bForceStats;
 
-		_psObjects = psObjects;
-		_psSelected = psSelected;
-		_bForceStats = bForceStats;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intUpdateObject(_psObjects, _psSelected,_bForceStats);
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _intUpdateObject(psObjects, psSelected,bForceStats);
 }
 
 
 static void intSetStats(UDWORD id, BASE_STATS *psStats)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static UWORD _id;
-		static BASE_STATS *_psStats;
 
-		_id = id;
-		_psStats = psStats;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_intSetStats(_id,_psStats);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 	_intSetStats(id, psStats);
 }
 
@@ -10154,171 +8772,9 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats, 
 						BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static BOOL ret;
-		static BASE_STATS **_ppsStatsList;
-		static UDWORD _numStats;
-		static BASE_STATS *_psSelected;
-		static BASE_OBJECT *_psOwner;
 
-		_ppsStatsList = ppsStatsList;
-		_numStats = numStats;
-		_psSelected = psSelected;
-		_psOwner = psOwner;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddStats(_ppsStatsList, _numStats, _psSelected, _psOwner);
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
 	return _intAddStats(ppsStatsList, numStats, psSelected, psOwner);
 }
 
 
-#ifdef PSX
 
-
-
-// Get a pointer to a tabbed form given the current snap id.
-//
-W_TABFORM *intGetTabForm(void)
-{
-	WIDGET *Widg;
-	W_TABFORM *TabForm = NULL;
-
-	// Get the form from the snap id,
-	Widg = (WIDGET*)widgGetFromID(psWScreen,SnapGetID(&InterfaceSnap));
-	// Does it really exist.
-	if(Widg == NULL) {
-		return NULL;
-	}
-
-	// Is it a form?
-	if(Widg->type == WIDG_FORM) {
-		// Is it a tabbed form?
-		if( ((W_FORM*)Widg)->style & WFORM_TABBED) {
-			TabForm = (W_TABFORM*)Widg;
-		}
-	}
-	
-	if(TabForm == NULL) {
-		// No, then get the form from the snap form id.
-		Widg = (WIDGET*)widgGetFromID(psWScreen,SnapGetFormID(&InterfaceSnap));
-		// Does it really exist.
-		if(Widg == NULL) {
-			return NULL;
-		}
-
-		// Is it a form?
-		if(Widg->type == WIDG_FORM) {
-			// Is it a tabbed form?
-			if( ((W_FORM*)Widg)->style & WFORM_TABBED) {
-				TabForm = (W_TABFORM*)Widg;
-			}
-		}
-	}
-
-	return TabForm;
-}
-
-// Cycle left or right through a tab forms major tabs.
-//
-void intCycleTab(BOOL Forward)
-{
-	SWORD Major, Minor, oldMajor;
-	W_TABFORM *TabForm = NULL;
-	UDWORD FormID;
-
-	TabForm = intGetTabForm();
-
-	// Got one ok?
-	if(TabForm == NULL) {
-		return;
-	}
-
-	FormID = TabForm->id;
-
-	widgGetTabs(psWScreen, FormID, &Major, &Minor);
-
-//	DBPRINTF(("%d %d %d\n",Major,Minor,TabForm->numMajor));
-
-	oldMajor = Major;
-
-	if(Forward) {
-		Major++;
-		if(Major > TabForm->numMajor-1) {
-			Major = TabForm->numMajor-1;	//0;
-		}
-	} else {
-		Major--;
-		if(Major < 0) {
-			Major = 0;	//TabForm->numMajor-1;
-		}
-	}
-
-	if(Major != oldMajor) {
-		widgSetTabs(psWScreen, FormID, Major, Minor);
-		intJumpToButton(FALSE);
-//		SetCurrentSnapFormID(&InterfaceSnap,FormID);
-	}
-}
-
-
-// Jump to first or last button in a tabbed form.
-//
-void intJumpToButton(BOOL Last)
-{
-	SWORD Major, Minor;
-	W_TABFORM *TabForm = NULL;
-	UDWORD FormID;
-	WIDGET	*psCurr;
-	UDWORD FirstID = 0;
-	UDWORD LastID = 0;
-
-	TabForm = intGetTabForm();
-
-	// Got one ok?
-	if(TabForm == NULL) {
-		return;
-	}
-
-	FormID = TabForm->id;
-
-	widgGetTabs(psWScreen, FormID, &Major, &Minor);
-
-	for(psCurr = formGetWidgets(TabForm); psCurr; psCurr = psCurr->psNext)
-	{
-		if(LastID == 0) {
-			LastID = psCurr->id;
-		}
-		FirstID = psCurr->id;
-	}
-
-	if(Last && LastID) {
-		SetCurrentSnapID(&InterfaceSnap,LastID);
-	} else if(FirstID) {
-		SetCurrentSnapID(&InterfaceSnap,FirstID);
-	}
-}
-
-
-void intProcessTabs(void)
-{
-	if(VPadTriggered(VPAD_GROUPNEXT)) {
-		intCycleTab(FALSE);
-	} else if(VPadTriggered(VPAD_OBJECTNEXT)) {
-		intCycleTab(TRUE);
-	} else if(VPadTriggered(VPAD_GROUPPREV)) {
-		intJumpToButton(FALSE);
-	} else if(VPadTriggered(VPAD_CYCLELEADER)) {
-		intJumpToButton(TRUE);
-	}
-}
-
-
-#endif
