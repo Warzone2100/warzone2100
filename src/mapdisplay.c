@@ -18,10 +18,10 @@
 #include "ivisdef.h"
 #include "piedef.h"
 #include "piestate.h"
-#ifndef PSX
+
 #include "piemode.h"
 #include "pietexture.h"
-#endif
+
 #include "piematrix.h"
 #include "vid.h"
 
@@ -33,18 +33,14 @@
 #include "hci.h"
 #include "intelmap.h"
 #include "intimage.h"
-#ifndef PSX
+
 //#include "dglide.h"
 #include "texture.h"
 #include "intdisplay.h"
-#endif
 
 
-#ifdef PSX
-#include "component.h"
-#include "primatives.h"
-#include "drawimd_psx.h"
-#endif
+
+
 
 #ifndef PSX		// whole file is going on PSX !!!!!!!
 
@@ -129,9 +125,7 @@ iSurface*	setUpMapSurface(UDWORD width, UDWORD height)
 void		*bufSpace;
 iSurface	*pMapSurface;
 
-#ifdef PSX
-	return NULL;
-#endif
+
 	/*	Release the old buffer if necessary - we may use many different intel maps
 		before resetting the game back to init/close */
 	//releaseIntelMap();
@@ -164,19 +158,19 @@ void	releaseMapSurface(iSurface *pSurface)
 	/* Free up old alloaction if necessary */
 	if(pSurface!=NULL)
 	{
-#ifndef PSX
+
 		/* Free up old buffer if necessary */
 		if(pSurface->buffer!=NULL)
 		{
 			FREE(pSurface->buffer);
 		}
-#endif
+
 		FREE(pSurface);
 	}
 }
 
 
-#ifndef PSX
+
 
 /* Draws the world into the current surface - set using 
    iV_RenderAssign(iV_MODE_SURFACE,pSurface) */
@@ -279,119 +273,7 @@ void	drawMapTile(SDWORD i, SDWORD j)
     	 		tileScreenCoords[i+0][j+0].x,tileScreenCoords[i+0][j+0].y,255); 
 }
 */
-#else
 
-// PSX version.
-
-/* Draws the world into the current surface - set using 
-   iV_RenderAssign(iV_MODE_SURFACE,pSurface) */
-//void	drawMapWorld(iSurface *pSurface)
-void	drawMapWorld(void)
-{
-	SDWORD i,j;
-	MAPTILE *psTile;
-	iVector tileCoords;
-	iVector BSPCamera;
-	static UDWORD angle = 0;
-
-	/* How many tiles to draw on grid - calculate */
-	mapGridWidth	= BUFFER_GRIDX;
-	mapGridHeight	= BUFFER_GRIDY;
-
-	/* Mid point tiles? */
-	mapGridMidX		= (mapGridWidth>>1);
-	mapGridMidY		= (mapGridHeight>>1);
-
-	/* Where are we positioned? */
-	mapGridX = mapPos.x>>TILE_SHIFT;
-	mapGridZ = mapPos.z>>TILE_SHIFT;
-
-	/* Pixel position inside tile */
-	gridDivX = mapPos.x & (TILE_UNITS-1);
-	gridDivZ = mapPos.z & (TILE_UNITS-1);
-
-	CalcBSPCameraPos(&BSPCamera);
-	SetBSPCameraPos(BSPCamera.x,BSPCamera.y,BSPCamera.z);
-
-	/* Set up context */
-	psxiV_MatrixBegin();
-
-	/* Translate for the camera position */
-	psxiV_ITRANSLATE(0,0,elevation);
-	
-	/* Rotate for the view angle */
-	psxiV_MatrixRotateZ(mapView.z);
-	psxiV_MatrixRotateY(mapView.y);
-	psxiV_MatrixRotateX(mapView.x);
-
-	/* Translate to our location */
-	psxiV_TRANSLATE(-gridDivX,-mapPos.y,gridDivZ);
-
-	/* Rotate round */
-	angle += ROTATE_ANGLE;
-	if (angle > 360)
-	{
-		angle -= 360;
-	}
-	psxiV_MatrixRotateY(DEG(angle) + mapPos.y);
-
-	/* Now we're in camera and viewer context */
-	psxUseMatrix();
-
-	for(i=0; i<mapGridWidth+1; i++)
-	{
-		for (j=0; j<mapGridHeight+1; j++)
-		{
-			psTile = mapTile(mapGridX+j,mapGridZ+i);
-			tileCoords.x	= ((j - mapGridMidX)<<TILE_SHIFT);
-			tileCoords.y	= psTile->height;
-			tileCoords.z	= ((mapGridMidY-i)<<TILE_SHIFT);
-			/* Rotate and project the tile to get its screen coords and distance away */
-//			psxiV_RotateProject(&tileXYZ,&(ScreenVertexMesh[(i*(terrainSizeY+1))+j].Primative.x) );
-			tileScreenCoords[i][j].z = psxiV_RotateProject(&tileCoords,(iPoint *)&tileScreenCoords[i][j]);
-		}
-	}
-	
-	for(i=0; i<mapGridWidth; i++)
-	{
-		for (j=0; j<mapGridHeight; j++)
-		{
-//			drawMapTile2(i,j);
-		}
-	}
-
-	doBucket = FALSE;
-//	displayFeatures();
-//	displayStaticObjects();
-//	displayDynamicObjects();
-	//don't show proximity messages in this view
-	//don't show Delivery Points in this view
-	doBucket = TRUE;
-
-	/* Close matrix context */
-//	iV_MatrixEnd();
-}
-
-/*
-void	drawMapTile(SDWORD i, SDWORD j)
-{
-#ifdef PSX
-		iV_SetOTIndex_PSX(OT2D_EXTREMEBACK);
-		DBPRINTF(("drawMapTile called\n");
-#endif
-
-		 iV_Line(tileScreenCoords[i+0][j+0].x,tileScreenCoords[i+0][j+0].y,
-    	 		tileScreenCoords[i+0][j+1].x,tileScreenCoords[i+0][j+1].y,255);
-    	 iV_Line(tileScreenCoords[i+0][j+1].x,tileScreenCoords[i+0][j+1].y,
-		 		tileScreenCoords[i+1][j+1].x,tileScreenCoords[i+1][j+1].y,255);
-    	 iV_Line(tileScreenCoords[i+1][j+1].x,tileScreenCoords[i+1][j+1].y,
-    	 		tileScreenCoords[i+1][j+0].x,tileScreenCoords[i+1][j+0].y,255);
-    	 iV_Line(tileScreenCoords[i+1][j+0].x,tileScreenCoords[i+1][j+0].y,
-    	 		tileScreenCoords[i+0][j+0].x,tileScreenCoords[i+0][j+0].y,255); 
-}
-*/
-
-#endif
 
 /* Clears the map buffer prior to drawing in it */
 /*void	clearMapBuffer(iSurface *surface)
@@ -447,9 +329,7 @@ void	drawMapTile(SDWORD i, SDWORD j)
 /*fills the map buffer with a bitmap*/
 void	fillMapBufferWithBitmap(iSurface *surface)
 {
-#ifdef PSX
-	DBPRINTF(("fillMapBufferWithBitmap not defined on psx\n");
-#else
+
 	UBYTE		*toFill;
 	UDWORD		x, y, extraWidth, surfaceWidth, surfaceHeight, 
 				bitmapWidth, bitmapHeight, xSource, ySource,
@@ -487,7 +367,7 @@ void	fillMapBufferWithBitmap(iSurface *surface)
 		}
 		toFill += extraWidth;
 	}
-#endif
+
 }
 
 //clear text message background with gray fill
@@ -517,9 +397,7 @@ void	fillMapBufferWithBitmap(iSurface *surface)
 /* This draws the tile regardless of whether the tile should be VISIBLE */
 void	drawMapTile2(SDWORD i, SDWORD j)
 {
-#ifdef PSX
-	DBPRINTF(("drawmaptile2 not defined on psx\n");
-#else
+
 UDWORD	renderFlag;
 UDWORD	realX, realY;
 UDWORD	tileNumber;
@@ -640,7 +518,7 @@ iPoint	offset;
 
 		}
 		pie_DrawTriangle(p, &texturePage, renderFlag, &offset);	
-#endif
+
 }
 
 

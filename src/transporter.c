@@ -29,14 +29,10 @@
 #include "audio_id.h"
 #include "piematrix.h"
 #include "mapgrid.h"
-#ifndef PSX
+
 #include "multiplay.h"
-#endif
-#ifdef PSX
-#include "dcache.h"
-#include "primatives.h"
-#include "drawimd_psx.h"
-#endif
+
+
 #include "csnap.h"
 
 extern CURSORSNAP InterfaceSnap;
@@ -179,19 +175,7 @@ void initTransporters(void)
 BOOL intRefreshTransporter(void)
 {
 //printf("intRefreshTransporter\n");
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-	   static BOOL res;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		res = _intRefreshTransporter();
-		SetSpAltNormal();
-
-		return res;
-	}
-#endif
 	return _intRefreshTransporter();
 }
 
@@ -215,25 +199,7 @@ static BOOL _intRefreshTransporter(void)
 
 BOOL intAddTransporter(DROID *psSelected, BOOL offWorld)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
 
-	   static 	DROID *_psSelected;
-	   static  BOOL _offWorld;
-	   static BOOL res;
-
-		_psSelected=psSelected;
-		_offWorld=offWorld;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		res = _intAddTransporter(_psSelected,_offWorld);
-		SetSpAltNormal();
-
-		return res;
-	}
-#endif
 	return(_intAddTransporter(psSelected,offWorld));
 }
 
@@ -268,19 +234,15 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 		Animate = FALSE;
 	}
 
-#ifndef PSX
+
 	if(intIsRefreshing()) {
 		Animate = FALSE;
 	}
-#else
-	Animate = FALSE;
-#endif
+
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANS_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -305,10 +267,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 		return FALSE;
 	}
 
-//#ifdef PSX
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-////	SetMouseFormPosition(&sFormInit);
-//#endif
+
 	
 #ifndef PSX
 	/* Add the close button */
@@ -357,9 +316,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 BOOL intAddTransporterContents(void)
 {
 	W_FORMINIT		sFormInit;
-#ifdef PSX
-	W_LABINIT		sLabInit;
-#endif
+
 	W_BUTINIT		sButInit;
 	W_FORMINIT		sButFInit;
 	BOOL			Animate = TRUE;
@@ -373,19 +330,15 @@ BOOL intAddTransporterContents(void)
 		AlreadyUp = TRUE;
 	}
 
-#ifndef PSX
+
 	if(intIsRefreshing()) {
 		Animate = FALSE;
 	}
-#else
-	Animate = FALSE;
-#endif
+
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANS_CONTENTFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -410,12 +363,9 @@ BOOL intAddTransporterContents(void)
 		return FALSE;
 	}
 
-//#ifdef PSX
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-////	SetMouseFormPosition(&sFormInit);
-//#endif
+
 	
-#ifndef PSX
+
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDTRANS_CONTENTFORM;
@@ -433,7 +383,7 @@ BOOL intAddTransporterContents(void)
 	{
 		return FALSE;
 	}
-#endif
+
 
 //	Now done further down.
 //	if (!intAddTransContentsForm())
@@ -467,25 +417,20 @@ BOOL intAddTransporterContents(void)
 	}*/
 
 	//add the Launch button - if on a mission, or all the time on the PSX
-#ifndef PSX
+
 	if (onMission)
-#endif
+
 	{
-#ifdef PSX
-		WidgSetOTIndex(OT2D_FORE);
-#endif
+
 		memset(&sButFInit, 0, sizeof(W_FORMINIT));
 		sButFInit.formID = IDTRANS_CONTENTFORM;
 		sButFInit.id = IDTRANS_LAUNCH;
 //		sButFInit.style = WBUT_PLAIN;
 		sButFInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
-#ifndef PSX
+
 		sButFInit.x = OBJ_STARTX;
 		sButFInit.y = (UWORD)(STAT_SLDY - 1);
-#else
-		sButFInit.x = OBJ_STARTX;
-		sButFInit.y = (UWORD)(STAT_SLDY - 4);
-#endif
+
 		sButFInit.width = iV_GetImageWidth(IntImages,IMAGE_LAUNCHUP);
 		sButFInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
 		sButFInit.pTip = strresGetString(psStringRes, STR_INT_TRANSLAUNCH);
@@ -504,30 +449,9 @@ BOOL intAddTransporterContents(void)
 		if(!AlreadyUp) {
 			intSetCurrentCursorPosition(&InterfaceSnap,sButFInit.id);
 		}
-#ifdef PSX
-		//add the capacity label
-		memset(&sLabInit,0,sizeof(W_LABINIT));
-		sLabInit.formID = IDTRANS_CONTENTFORM;
-		sLabInit.id = IDTRANS_CAPACITY;
-		sLabInit.style = WLAB_PLAIN;
-		sLabInit.x = sButFInit.x + 48;
-		sLabInit.y = sButFInit.y + 4;
-		sLabInit.width = 16;
-		sLabInit.height = 16;
-		sLabInit.pText = "00/10";
-		intSetTransCapacityLabel(sLabInit.pText);
-		sLabInit.FontID = WFont;
-		sLabInit.pCallback = intUpdateTransCapacity;
-		sLabInit.pDisplay = intDisplayNum;
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return FALSE;
-		}
-#endif
 
-#ifdef PSX
-		WidgSetOTIndex(OT2D_BACK);
-#endif
+
+
 	}
 
 	if (!intAddTransContentsForm())
@@ -696,9 +620,7 @@ BOOL intAddTransButtonForm(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 	/* Add the transporter and status buttons */
 	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
 	memset(&sBFormInit2, 0, sizeof(W_FORMINIT));
@@ -739,12 +661,7 @@ BOOL intAddTransButtonForm(void)
 			sBFormInit.pUserData = (void*)&TopicBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayObjectButton;
 
-#ifdef PSX
-			WidgSetOTIndex(OT2D_FARFARFORE);
-//			AddCursorSnap(&InterfaceSnap,
-//					FormX+sBFormInit.x+sBFormInit.width/2,
-//					FormY+sBFormInit.y+sBFormInit.height/2,sBFormInit.formID);
-#endif
+
 			if (!widgAddForm(psWScreen, &sBFormInit))
 			{
 				return FALSE;
@@ -769,12 +686,7 @@ BOOL intAddTransButtonForm(void)
 			sBFormInit2.pUserData = (void*)&ObjectBuffers[BufferID];
 			sBFormInit2.pDisplay = intDisplayStatusButton;
 
-#ifdef PSX
-			WidgSetOTIndex(OT2D_FARFORE);
-//			AddCursorSnap(&InterfaceSnap,
-//					FormX+sBFormInit2.x+sBFormInit2.width/2,
-//					FormY+sBFormInit2.y+sBFormInit2.height/2,sBFormInit2.formID);
-#endif
+
 			if (!widgAddForm(psWScreen, &sBFormInit2))
 			{
 				return FALSE;
@@ -853,9 +765,7 @@ BOOL intAddTransContentsForm(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 
 	/* Add the transporter contents buttons */
 	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
@@ -944,9 +854,7 @@ BOOL intAddDroidsAvailForm(void)
 	Animate = FALSE;
 #endif
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 
 	/* Add the droids available form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -975,10 +883,7 @@ BOOL intAddDroidsAvailForm(void)
 		return FALSE;
 	}
 
-//#ifdef PSX
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-////	SetMouseFormPosition(&sFormInit);
-//#endif
+
 	
 #ifndef PSX
 	/* Add the close button */
@@ -1066,9 +971,7 @@ BOOL intAddDroidsAvailForm(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 
 	/* Add the droids available buttons */
 	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
@@ -1394,22 +1297,7 @@ void intUpdateTransCapacity(struct _widget *psWidget, struct _w_context *psConte
 /* Process return codes from the Transporter Screen*/
 void intProcessTransporter(UDWORD id)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
 
-	   static UDWORD _id;
-
-		_id = id;
-
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_intProcessTransporter(_id);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 	_intProcessTransporter(id);
 }
 
@@ -1501,9 +1389,7 @@ static void _intProcessTransporter(UDWORD id)
 /* Remove the Transporter widgets from the screen */
 void intRemoveTrans(void)
 {
-#ifdef PSX
-	intRemoveTransNoAnim();
-#else
+
 	W_TABFORM *Form;
 
 	// Start the window close animation.
@@ -1516,7 +1402,7 @@ void intRemoveTrans(void)
 	intRemoveTransContent();
 	intRemoveTransDroidsAvail();
 	intMode = INT_NORMAL;
-#endif
+
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
@@ -1532,9 +1418,7 @@ void intRemoveTransNoAnim(void)
 /* Remove the Transporter Content widgets from the screen */
 void intRemoveTransContent(void)
 {
-#ifdef PSX
-	intRemoveTransContentNoAnim();
-#else
+
 	W_TABFORM *Form;
 
 	// Start the window close animation.
@@ -1546,7 +1430,7 @@ void intRemoveTransContent(void)
 		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
 		ClosingTransCont = TRUE;
 	}
-#endif
+
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
@@ -1559,9 +1443,7 @@ void intRemoveTransContentNoAnim(void)
 /* Remove the Transporter Droids Avail widgets from the screen */
 void intRemoveTransDroidsAvail(void)
 {
-#ifdef PSX
-	intRemoveTransDroidsAvailNoAnim();
-#else
+
 	W_TABFORM *Form;
 
 	// Start the window close animation.
@@ -1575,7 +1457,7 @@ void intRemoveTransDroidsAvail(void)
         //remember which tab we were on
         widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
 	}
-#endif
+
 }
 
 /* Remove the Transporter Droids Avail widgets from the screen w/o animation!*/
@@ -1879,9 +1761,7 @@ BOOL launchTransporter(DROID *psTransporter)
 		//deselect all droids/structs etc
 		//clearSelection(); - we're deselecting 3 lines below!?
 
-#ifdef PSX
-		CancelTacticalScroll();	// Cancel tactical view if active.
-#endif
+
 
 		//automatic from the script call to startMission now AB 12/05/97
 		//launchMission();

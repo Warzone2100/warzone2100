@@ -9,12 +9,7 @@
 #include "map.h"
 #include "bitimage.h"//bitmap routines
 
-#ifdef PSX
-#include "primatives.h"
-#include "csnap.h"
-#include "dcache.h"
-extern CURSORSNAP InterfaceSnap;
-#endif
+
 
 #include "display3d.h"
 #include "hci.h"
@@ -32,9 +27,9 @@ extern CURSORSNAP InterfaceSnap;
 #include "intdisplay.h"
 #include "intorder.h"
 #include "text.h"
-#ifndef PSX
+
 #include "scriptextern.h"
-#endif
+
 
 
 #define ORDER_X			23
@@ -46,11 +41,9 @@ extern CURSORSNAP InterfaceSnap;
 #define ORDER_BUTGAP	4
 #define ORDER_BOTTOMY	318	+ E_H
 
-#ifndef PSX
+
 #define MAX_SELECTED_DROIDS	100	// Max size of selected droids list.
-#else
-#define MAX_SELECTED_DROIDS	16	// Max size of selected droids list.
-#endif
+
 #define MAX_AVAILABLE_ORDERS 16	// Max available orders list.
 #define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
@@ -424,21 +417,7 @@ static AVORDER AvailableOrders[MAX_AVAILABLE_ORDERS];
 static BOOL CheckObjectOrderList(void);
 static BOOL intRefreshOrderButtons(void);
 
-#ifdef PSX
-static UWORD OrderCenterX;
-static UWORD OrderCenterY;
 
-UWORD GetOrderCenterX(void)
-{															 
-	return OrderCenterX;
-}
-
-
-UWORD GetOrderCenterY(void)
-{
-	return OrderCenterY;
-}
-#endif
 
 
 BOOL OrderUp = FALSE;
@@ -524,9 +503,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
         psStructure =  NULL;
     }
 
-#ifdef PSX
-	Animate = FALSE;
-#endif
+
 
   //	intResetScreen(TRUE);
 	setWidgetsStatus(TRUE);
@@ -572,9 +549,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 	widgEndScreen(psWScreen);
 
 	/* Create the basic form */
-#ifdef PSX
-	WidgSetOTIndex(OT2D_BACK);
-#endif
+
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = 0;
 	sFormInit.id = IDORDER_FORM;
@@ -595,11 +570,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 	{
 		return FALSE;
 	}
-#ifdef PSX
-//	// Position the mouse in the center of this form.
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-	WidgSetOTIndex(OT2D_FARFORE);
-#endif
+
 
 #ifndef PSX
 	// Add the close button.
@@ -814,13 +785,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 
 			if (!bHidden)
 			{
-#ifdef PSX
-				// bit of a hack this, don't want to set the recycle confirm
-				// button as the current snap since it's greyed out to start with.
-				if(sButInit.id != IDORDER_RECYCLE+1) {
-					intSetCurrentCursorPosition(&InterfaceSnap,sButInit.id);
-				}
-#endif
+
 				sButInit.x = (SWORD)(sButInit.x + sButInit.width + ORDER_BUTGAP);
 			}
 			sButInit.id++;
@@ -840,10 +805,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 	Form->height = (UWORD)(Height + CLOSE_HEIGHT + ORDER_BUTGAP);
 	Form->y = (SWORD)(ORDER_BOTTOMY-Form->height);
 
-#ifdef PSX
-	OrderCenterX = Form->x + Form->width/2;
-	OrderCenterY = Form->y + Form->height/2;
-#endif
+
 
 	OrderUp = TRUE;
 
@@ -1063,19 +1025,7 @@ static BOOL _intRefreshOrder(void)
 BOOL intRefreshOrder(void)
 {
 //	DBPRINTF(("intRefreshOrder\n"));
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-	   static BOOL res;
 
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		res = _intRefreshOrder();
-		SetSpAltNormal();
-
-		return res;
-	}
-#endif
 	return _intRefreshOrder();
 }
 
@@ -1084,21 +1034,7 @@ BOOL intRefreshOrder(void)
 //BOOL intAddOrder(DROID *Droid)
 BOOL intAddOrder(BASE_OBJECT *psObj)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static DROID *_Droid;
-		static BOOL ret;
 
-		_Droid = Droid;
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		ret = _intAddOrder(_Droid);
-		SetSpAltNormal();
-
-		return ret;
-	}
-#endif
     //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
 	//return _intAddOrder(Droid);
     return _intAddOrder(psObj);
@@ -1106,20 +1042,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 
 void intProcessOrder(UDWORD id)
 {
-#ifdef PSX
-	// If the stacks in the dcache then..
-	if(SpInDCache()) {
-		static UWORD _id;
 
-		_id = id;
-		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-		SetSpAlt();
-		_intProcessOrder(_id);
-		SetSpAltNormal();
-
-		return;
-	}
-#endif
 	_intProcessOrder(id);
 }
 
@@ -1128,9 +1051,7 @@ void intProcessOrder(UDWORD id)
 //
 void intRemoveOrder(void)
 {
-#ifdef PSX
-	intRemoveOrderNoAnim();
-#else
+
 	W_TABFORM *Form;
 
 	widgDelete(psWScreen, IDORDER_CLOSE);
@@ -1146,7 +1067,7 @@ void intRemoveOrder(void)
 		NumSelectedDroids = 0;
         psSelectedFactory = NULL;
     }
-#endif
+
 }
 
 

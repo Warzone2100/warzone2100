@@ -20,30 +20,18 @@
 #include "gtime.h"
 #include "mission.h"
 
-#ifndef PSX
-#ifdef INC_GLIDE
-#include "3dfxfunc.h"
-#endif
+
+
 #include "multiplay.h"
 #include "piefunc.h"
-#endif
 
-#ifdef PSX
-#include "initpsx.h"
-#include "primatives.h"
-#include "psxvram.h"
-#include "vpsx.h"		// box drawing code
-#include "dcache.h"
-#include "profile.h"
-#include "drawimd_psx.h"
-#endif
+
+
 
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
 
-#ifdef PSX
-//#define TESTRADAR			// Set godmode so that radar shows all.
-#endif
+
 
 //#define CHECKBUFFER		// Do assertions for buffer overun\underun
 
@@ -161,19 +149,7 @@ void resetRadarRedraw(void)
 }
 
 
-#ifdef PSX
-// Now allocated in system initialise 
-void AllocateRadarArea(void)
-{
-	radarBuffer=MALLOC(RADWIDTH*RADHEIGHT);
-}
 
-UBYTE *getRadarBuffer(void)
-{
-	return radarBuffer;
-}
-
-#endif
 
 BOOL InitRadar(void)
 {
@@ -202,17 +178,7 @@ BOOL InitRadar(void)
 	colGrey = COL_DARKGREY;
 	colWhite = COL_WHITE;
 
-#ifdef PSX
-	{
-		int i;
-		for(i=0; i<4; i++) {
-			clanColours[i][0] = (UDWORD)iV_PaletteNearestColour(48,236,104);
-			clanColours[i][1] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-			clanColours[i][2] = (UDWORD)iV_PaletteNearestColour(223,62,98);
-			clanColours[i][3] = (UDWORD)iV_PaletteNearestColour(47,62,238);
-		}
-	}
-#else
+
 //	clanColours[0] = (UDWORD)iV_PaletteNearestColour(255,255,0);
 //	clanColours[1] = (UDWORD)iV_PaletteNearestColour(255,255,0);
 //	clanColours[2] = (UDWORD)iV_PaletteNearestColour(255,255,0);
@@ -221,7 +187,7 @@ BOOL InitRadar(void)
 //	clanColours[5] = (UDWORD)iV_PaletteNearestColour(255,255,0);
 //	clanColours[6] = (UDWORD)iV_PaletteNearestColour(255,255,0);
 //	clanColours[7] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-#endif
+
 
 #ifndef PSX
 	pie_InitRadar();
@@ -501,9 +467,7 @@ void drawRadar(void)
 	scrollMaxY = scrollMinY+127;
 #endif
 
-#ifdef PSX
-	DrawRadar_PSX();
-#else
+
 
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
@@ -542,7 +506,7 @@ void drawRadar(void)
 	UpdateRadar(boxSizeH,boxSizeV);
 
 	RadarRedraw = FALSE;
-#endif // End of #ifdef PSX ... else
+
 }
 
 void	downloadAtStartOfFrame( void )
@@ -584,14 +548,10 @@ static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSize
 	UNUSEDPARAMETER(boxSizeH);
 	UNUSEDPARAMETER(boxSizeV);
 
-#ifdef PSX
-	Modulus /= 2;
-	RadWidth = RadarWidth/2;
-	RadHeight = RadarHeight/2;
-#else
+
 	RadWidth = RadarWidth;
 	RadHeight = RadarHeight;
-#endif
+
 
 	Scr = screen;
 	for(i=0; i<RadWidth; i++) {
@@ -624,16 +584,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	SDWORD OffsetY;
 	UBYTE ShadeDiv = 0;
 
-#ifdef PSX
-	Modulus /= 2;
-	SizeH = boxSizeH / 2;
-	SizeV = boxSizeV / 2;
-	VisWidth = RadVisWidth / 2;
-	VisHeight = RadVisHeight / 2;
-	SweepPos = (sweep - RadarOffsetY) / 2;
-	OffsetX = RadarOffsetX / 2;
-	OffsetY = RadarOffsetY / 2;
-#else
+
 	SizeH = boxSizeH;
 	SizeV = boxSizeV;
 	VisWidth = RadVisWidth;
@@ -641,7 +592,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	SweepPos = sweep - RadarOffsetY;
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
-#endif
+
 
 	ASSERT(( (SizeV!=0) && (SizeV!=0) ,"Zero pixel size" ));
 
@@ -786,16 +737,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	UBYTE				camNum;
 	
 
-#ifdef PSX
-	Modulus = Modulus / 2;
-	SizeH = boxSizeH / 2 ;
-	SizeV = boxSizeV / 2;
-	VisWidth = RadVisWidth / 2;
-	VisHeight = RadVisHeight / 2;
-//	SweepPos = (sweep - RadarOffsetY) / 2;
-	OffsetX = RadarOffsetX / 2;
-	OffsetY = RadarOffsetY / 2;
-#else
+
 	SizeH = boxSizeH;
 	SizeV = boxSizeV;
 	VisWidth = RadVisWidth;
@@ -803,7 +745,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 //	SweepPos = sweep - RadarOffsetY;
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
-#endif
+
 
 	SweepPos = sweep - RadarOffsetY;
 
@@ -841,10 +783,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 				y *= boxSizeV;
 
 				if(TRUE || (RadarRedraw)) {
-#ifdef PSX
-					x = x >> 1;
-					y = y >> 1;
-#endif
+
 					if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
 #ifndef PSX	// 	
@@ -922,15 +861,10 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 				y = y&(~(boxSizeV-1));
 
 //				if( ((y >= sweep) && (y <= sweep+(bh*boxSizeV))) || (RadarRedraw) ) {
-#ifdef PSX
-					x >>= 1;
-					y >>= 1;
-					SSizeH = (SWORD)(boxSizeH*bh) >> 1;
-					SSizeV = (SWORD)(boxSizeV*bw) >> 1;
-#else
+
 					SSizeH = (SWORD)boxSizeH*bh;
 					SSizeV = (SWORD)boxSizeV*bw;
-#endif
+
 
 // Clip the structure box.
 					if(x < 0) {
@@ -1019,10 +953,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 		y *= boxSizeV;
 
 		if(TRUE) {
-#ifdef PSX
-			x = x >> 1;
-			y = y >> 1;
-#endif
+
 			psProxDisp->radarX = 0;
 			psProxDisp->radarY = 0;
 			if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) 
@@ -1167,9 +1098,7 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 	SDWORD	offsetX,offsetY;
 	iVector v[3],tv[3],ov;
 
-#ifdef PSX
-	iV_SetOTIndex_PSX(OT2D_FARFORE);
-#endif
+
 
 	offsetX = 
 	offsetY = 
@@ -1198,54 +1127,19 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 			}	
 		}
 		*/
-#ifdef PSX
-		// Draw the sweep line.
-		iV_Line(RADTLX,RADTLY+sweep,
-			RADTLX+RadarWidth,RADTLY+sweep,
-			boxPulseColours[sweepStrobeIndex]);
-#endif
+
 	}
 
 
-#ifdef PSX
-		// Make sure box stays within radar window.
-		if(viewX < 0) viewX = 0;
-		if(viewY < 0) viewY = 0;
-		if(viewX+(visibleXTiles*boxSizeH) > RADWIDTH) viewX = RADWIDTH-(visibleXTiles*boxSizeH);
-		if(viewY+(visibleYTiles*boxSizeV) > RADHEIGHT) viewY = RADHEIGHT-(visibleYTiles*boxSizeV);
-#endif
 
-#ifndef PSX
+
+
   		drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
 		DrawEnableLocks(FALSE);
 		RenderWindowFrame(&FrameRadar,RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
 		DrawEnableLocks(TRUE);
 
-#else
-		// Nicely tidied(NOT) ,deleted the bloody PSX radar view box! ffs am
-	 	iV_Box(	RADTLX+viewX,RADTLY+viewY,
-			RADTLX+viewX+(visibleXTiles*boxSizeH)-1,RADTLY+viewY+(visibleYTiles*boxSizeV)-1,
-			COL_WHITE);
 
-		ov.x = RADTLX+viewX+(visibleXTiles*boxSizeH)/2;       
-		ov.y = RADTLY+viewY+(visibleYTiles*boxSizeV)/2;       
-
-		v[0].x = 0;
-		v[0].y = -boxSizeV*RADAR_TRIANGLE_HEIGHT/2;
-
-		v[1].x = boxSizeH*RADAR_TRIANGLE_WIDTH/2;
-		v[1].y = boxSizeV*RADAR_TRIANGLE_HEIGHT/2;
-
-		v[2].x = -boxSizeH*RADAR_TRIANGLE_WIDTH/2;
-		v[2].y = boxSizeV*RADAR_TRIANGLE_HEIGHT/2;
-
-		RotateVector2D(v,tv,&ov,player.r.y,3);
-
-   		iV_Line(tv[0].x,tv[0].y,tv[1].x,tv[1].y,colWhite);
-		iV_Line(tv[1].x,tv[1].y,tv[2].x,tv[2].y,colWhite);
-		iV_Line(tv[2].x,tv[2].y,tv[0].x,tv[0].y,colWhite);
-		RenderBorder(RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
-#endif
 		// Draw the radar border.
 }
 
@@ -1385,178 +1279,4 @@ void	calcRadarColour(UBYTE *tileBitmap,UWORD *tileClut, UDWORD tileNumber)
 #endif // End of psx version (calcRadarColour).
 
 
-#ifdef PSX
 
-static void radUpdate_PSX(UWORD mapWidth,UWORD mapHeight);
-static RECT RadarVRAM;
-
-// Allocate system memory and vram areas for radar.
-//
-// If this is defined we hardwire the radars vram location to the bottom right corner of VRAM
-#define HARDWIRE_RADARVRAM
-
-
-BOOL InitRadar_PSX(UWORD Width,UWORD Height)
-{
-	AREA *VRAMArea;
-	UWORD Palette[256];
-	UWORD i,r,g,b;
-	RECT ClutVRAM;
-	iColour *RGBTab;
-
-// Allocate a Width x Height x 8 texture.
-#ifdef HARDWIRE_RADARVRAM
-//	AREA HardWire={1024-(64/2),512-64-32,32,64};
-	AREA HardWire={1024-64,512-64-32,32,64};
-
-	VRAMArea=&HardWire;
-
-#else
-
-	VRAMArea = AllocTexture(Width,Height, 1,0);
-	if (VRAMArea==NULL)	{
-		DBPRINTF(("Unable to allocate radar VRAM!\n"));
-	 	return FALSE;
-	}
-#endif
-
-	RadarVRAM.x = VRAMArea->area_x0;
-	RadarVRAM.y = VRAMArea->area_y0;
-	RadarVRAM.w = Width/2;
-	RadarVRAM.h = Height;
-
-	RadarImage.Tu = 0;
-//	RadarImage.Tu = (VRAMArea->area_x0&0x7f)*2;
-	RadarImage.Tv = VRAMArea->area_y0&0xff;
-
-
-	DBPRINTF(("vram (%d,%d) uv=(%d,%d)\n",
-		VRAMArea->area_x0,
-		VRAMArea->area_y0,
-		RadarImage.Tu,
-		RadarImage.Tv));
-
-	RadarImage.Width = Width;
-	RadarImage.Height = Height;
-#ifdef ALPHABLEND_RADAR
-	RadarImage.TPageID = GetTPage(1,BLEND_RATE,VRAMArea->area_x0,VRAMArea->area_y0);
-#else
-	RadarImage.TPageID = GetTPage(1,0,VRAMArea->area_x0,VRAMArea->area_y0);
-#endif
-
-	DBPRINTF(("Radar VRAM allocated at x %d y %d TPageID %04x\n",VRAMArea->area_x0,VRAMArea->area_y0,RadarImage.TPageID));
-
-	VRAMArea = AllocCLUT(256);
-	if (VRAMArea==NULL)	{
-		DBPRINTF(("Unable to allocate radar CLUT!\n"));
-	 	return FALSE;
-	}
-
-	RadarImage.PalID = GetClut(VRAMArea->area_x0,VRAMArea->area_y0);
-	RadarImage.XOffset = 0;
-	RadarImage.YOffset = 0;
-
-DBPRINTF(("Radar Pal = (%d,%d) = %d\n",VRAMArea->area_x0,VRAMArea->area_y0,RadarImage.PalID));
-
-	RGBTab = gamePal;
-	for(i=0; i<256; i++) {
-		r = RGBTab[i].r;
-		g = RGBTab[i].g;
-		b = RGBTab[i].b;
-		Palette[i] = ((r>>3)&0x1f) | (((g>>3)&0x1f)<<5) | (((b>>3)&0x1f)<<10);
-#ifdef ALPHABLEND_RADAR
-		if(i!=0) {
-			Palette[i] |= 0x8000;
-		} else {
-			Palette[i] = 0;
-		}
-		
-#else
-//		if(Palette[i] == 0) Palette[i] |= 0x8000;
-#endif
-	}
-
-	ClutVRAM.x = VRAMArea->area_x0;
-	ClutVRAM.y = VRAMArea->area_y0;
-	ClutVRAM.w = 256;
-	ClutVRAM.h = 1;
-
-	DrawSync(0);
-	LoadImage(&ClutVRAM,(void*)Palette);
-
-//PD	UpdateRadar_PSX(64,64);
-
-	return TRUE;
-}
-
-
-void ReleaseRadar_PSX(void)
-{
-}
-
-
-
-void UpdateRadar_PSX(UWORD mapWidth,UWORD mapHeight)
-{
-	// Stack in the DCache.
-//	SetSpDCache();
-	radUpdate_PSX(0,0);
-//	SetSpNormal();
-}
-
-static void radUpdate_PSX(UWORD mapWidth,UWORD mapHeight)
-{
-	UDWORD	boxSizeH,boxSizeV;
-
-	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
-	CalcRadarScroll(boxSizeH,boxSizeV);
-
-	if(RadarRedraw) {
-		if((RadVisWidth != RadarWidth) || (RadVisHeight != RadarHeight)) {
-			ClearRadar(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
-		}
-	}
-
-	DrawRadarTiles(radarBuffer,RadarWidth,boxSizeH,boxSizeV);
-	DrawRadarObjects(radarBuffer,RadarWidth,boxSizeH,boxSizeV);
-
-	RadarRedraw = FALSE;
-
-	DrawSync(0);
-	LoadImage(&RadarVRAM,(void*)radarBuffer);
-
-	UpdateRadar(boxSizeH,boxSizeV);
-}
-
-
-extern void TransBoxFillRGB_psx(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1,UBYTE Red,UBYTE Green,UBYTE Blue);
-
-void DrawRadar_PSX(void)
-{
-	UDWORD	boxSizeH,boxSizeV;
-
-
-
-	iV_SetOTIndex_PSX(OT2D_FORE);
-
-#ifdef ALPHABLEND_RADAR
-	iV_EnableSemiTrans_PSX(TRUE);
-#endif
-
-//  Display the radar (twice to give the right amount of transparency cause crappy old
-//  Playstation dos'nt do vairable transparency rates).
-	DrawImageFitDef_PSX(&RadarImage,RADTLX,RADTLY,RADWIDTH,RADHEIGHT);
-#ifdef ALPHABLEND_RADAR
-	DrawImageFitDef_PSX(&RadarImage,RADTLX,RADTLY,RADWIDTH,RADHEIGHT);
-	iV_EnableSemiTrans_PSX(FALSE);
-#endif
-
-	iV_TransBoxFill( RADTLX,RADTLY,
-						RADTLX+RADWIDTH+2,RADTLY+RADHEIGHT+2);
-
-	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
-	CalcRadarScroll(boxSizeH,boxSizeV);
-	DrawRadarExtras(boxSizeH,boxSizeV);
-}
-
-#endif

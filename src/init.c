@@ -32,23 +32,23 @@
 
 #include "piedef.h"
 #include "piestate.h" 
-#ifndef PSX
+
 #include "configuration.h"
 #include "piemode.h"
 #include "tex.h"
-#endif
+
 #include "resource.h"
 #include "rendmode.h"
 #include "ivi.h"
 #include "group.h"
 #include "wrappers.h"
 #include "display3d.h"
-#ifndef PSX
+
 #include "atmos.h"
 #include "environ.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
-#endif
+
 #include "script.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
@@ -65,16 +65,13 @@
 #include "arrow.h"
 #endif
 
-#ifndef PSX
+
 #include "texture.h"
-#endif
+
 
 #include "frend.h"
 
-#ifdef PSX
-#include "frend16.h"
-#include	"locale.h"
-#endif
+
 
 #include "intimage.h"
 #include "power.h"
@@ -105,10 +102,7 @@
 #include "gateway.h"
 #include "lighting.h"
 
-#ifdef PSX
-#include "vpad.h"
-#include "ctrlpsx.h"
-#endif
+
 
 extern void statsInitVars(void);
 extern void	structureInitVars(void);
@@ -722,283 +716,13 @@ UWORD AsciiLookup[256] =
 };
 
 
-#ifdef PSX
-UWORD SmallAsciiLookup[256] = 
-{
-	IMAGE_S_ASCII63,	//0		0..32 are all mapped to question marks
-	IMAGE_S_ASCII63,	//1
-	IMAGE_S_ASCII63,	//2
-	IMAGE_S_ASCII63,	//3
-	IMAGE_S_ASCII63,	//4
-	IMAGE_S_ASCII63,	//5
-	IMAGE_S_ASCII63,	//6
-	IMAGE_S_ASCII63,	//7
-	IMAGE_S_ASCII63,	//8
-	IMAGE_S_ASCII63,	//9
-	IMAGE_S_ASCII63,	//10
-	IMAGE_S_ASCII63,	//11
-	IMAGE_S_ASCII63,	//12
-	IMAGE_S_ASCII63,	//13
-	IMAGE_S_ASCII63,	//14
-	IMAGE_S_ASCII63,	//15
-	IMAGE_S_ASCII63,	//16
-	IMAGE_S_ASCII63,	//17
-	IMAGE_S_ASCII63,	//18
-	IMAGE_S_ASCII63,	//19
-	IMAGE_S_ASCII63,	//20
-	IMAGE_S_ASCII63,	//21
-	IMAGE_S_ASCII63,	//22
-	IMAGE_S_ASCII63,	//23
-	IMAGE_S_ASCII63,	//24
-	IMAGE_S_ASCII63,	//25
-	IMAGE_S_ASCII63,	//26
-	IMAGE_S_ASCII63,	//27
-	IMAGE_S_ASCII63,	//28
-	IMAGE_S_ASCII63,	//29
-	IMAGE_S_ASCII63,	//30
-	IMAGE_S_ASCII63,	//31
-	IMAGE_S_ASCII63,	//32	// space is skipped and not drawn anyway
-	IMAGE_S_ASCII33,	//33	!
-	IMAGE_S_ASCII34,	//34	"
-	IMAGE_S_ASCII35,	//35	#
-	IMAGE_S_ASCII63,	//36	$
-	IMAGE_S_ASCII37,	//37	
-	IMAGE_S_ASCII38,	//38	&
-	IMAGE_S_ASCII39,	//39	'
-	IMAGE_S_ASCII40,	//40	(
-	IMAGE_S_ASCII41,	//41	)
-	IMAGE_S_ASCII42,	//42	*
-	IMAGE_S_ASCII43,	//43	+
-	IMAGE_S_ASCII44,	//44	,
-	IMAGE_S_ASCII45,	//45	-
-	IMAGE_S_ASCII46,	//46	.
-	IMAGE_S_ASCII47,	//47	/
-	IMAGE_S_ASCII48,	//48	0
-	IMAGE_S_ASCII49,	//49	1
-	IMAGE_S_ASCII50,	//50	2
-	IMAGE_S_ASCII51,	//51	3
-	IMAGE_S_ASCII52,	//52	4
-	IMAGE_S_ASCII53,	//53	5
-	IMAGE_S_ASCII54,	//54	6
-	IMAGE_S_ASCII55,	//55	7
-	IMAGE_S_ASCII56,	//56	8
-	IMAGE_S_ASCII57,	//57	9
-	IMAGE_S_ASCII58,	//58	:
-	IMAGE_S_ASCII59,	//59	;
-	IMAGE_S_ASCII60,	//60	<
-	IMAGE_S_ASCII61,	//61	=
-	IMAGE_S_ASCII62,	//62	>
-	IMAGE_S_ASCII63,	//63	?
-	IMAGE_S_ASCII63,	//64	@
-	IMAGE_S_ASCII65,	//65	A
-	IMAGE_S_ASCII66,	//66	B
-	IMAGE_S_ASCII67,	//67	C
-	IMAGE_S_ASCII68,	//68	D
-	IMAGE_S_ASCII69,	//69	E
-	IMAGE_S_ASCII70,	//70	F
-	IMAGE_S_ASCII71,	//71	G
-	IMAGE_S_ASCII72,	//72	H
-	IMAGE_S_ASCII73,	//73	I
-	IMAGE_S_ASCII74,	//74	J
-	IMAGE_S_ASCII75,	//75	K
-	IMAGE_S_ASCII76,	//76	L
-	IMAGE_S_ASCII77,	//77	M
-	IMAGE_S_ASCII78,	//78	N
-	IMAGE_S_ASCII79,	//79	O
-	IMAGE_S_ASCII80,	//80	P
-	IMAGE_S_ASCII81,	//81	Q
-	IMAGE_S_ASCII82,	//82	R
-	IMAGE_S_ASCII83,	//83	S
-	IMAGE_S_ASCII84,	//84	T
-	IMAGE_S_ASCII85,	//85	U
-	IMAGE_S_ASCII86,	//86	V
-	IMAGE_S_ASCII87,	//87	W
-	IMAGE_S_ASCII88,	//88	X
-	IMAGE_S_ASCII89,	//89	Y
-	IMAGE_S_ASCII90,	//90	Z
-	IMAGE_S_ASCII63,	//91	[
-	IMAGE_S_ASCII92,	//92	slash top left to bot right
-	IMAGE_S_ASCII63,	//93	]
-	IMAGE_S_ASCII94,	//94	hat
-	IMAGE_S_ASCII95,	//95	_
-	IMAGE_S_ASCII96,	//96	`
-	IMAGE_S_ASCII97,	//97	a
-	IMAGE_S_ASCII98,	//98	b
-	IMAGE_S_ASCII99,	//99	c
-	IMAGE_S_ASCII100,	//100	d
-	IMAGE_S_ASCII101,	//101	e
-	IMAGE_S_ASCII102,	//102	f
-	IMAGE_S_ASCII103,	//103	g
-	IMAGE_S_ASCII104,	//104	h
-	IMAGE_S_ASCII105,	//105	i
-	IMAGE_S_ASCII106,	//106	j
-	IMAGE_S_ASCII107,	//107	k
-	IMAGE_S_ASCII108,	//108	l
-	IMAGE_S_ASCII109,	//109	m
-	IMAGE_S_ASCII110,	//110	n
-	IMAGE_S_ASCII111,	//111	o
-	IMAGE_S_ASCII112,	//112	p
-	IMAGE_S_ASCII113,	//113	q
-	IMAGE_S_ASCII114,	//114	r
-	IMAGE_S_ASCII115,	//115	s
-	IMAGE_S_ASCII116,	//116	t
-	IMAGE_S_ASCII117,	//117	u
-	IMAGE_S_ASCII118,	//118	v
-	IMAGE_S_ASCII119,	//119	w
-	IMAGE_S_ASCII120,	//120	x
-	IMAGE_S_ASCII121,	//121	y
-	IMAGE_S_ASCII122,	//122	z
-	IMAGE_S_ASCII63,	//123	{
-	IMAGE_S_ASCII63,	//124	|
-	IMAGE_S_ASCII63,	//125	}
-	IMAGE_S_ASCII63,	//126	~
-	IMAGE_S_ASCII63,	//127	box1
-	IMAGE_S_ASCII63,	//128	box2
-	IMAGE_S_ASCII63,	//129	box3
-	IMAGE_S_ASCII63,	//130	,
-	IMAGE_S_ASCII63,	//131	Fn
-	IMAGE_S_ASCII63,	//132	lower quotes
-	IMAGE_S_ASCII63,	//133	ellipsis
-	IMAGE_S_ASCII63,	//134	cross
-	IMAGE_S_ASCII63,	//135	double cross
-	IMAGE_S_ASCII63,	//136	power of
-	IMAGE_S_ASCII63,	//137	zero over double zero
-	IMAGE_S_ASCII63,	//138	big S with a crown on it
-	IMAGE_S_ASCII63,	//139	weird <
-	IMAGE_S_ASCII63,	//140	OE or is it CE
-	IMAGE_S_ASCII63,	//141	box4
-	IMAGE_S_ASCII63,	//142	box5
-	IMAGE_S_ASCII63,	//143	box6
-	IMAGE_S_ASCII63,	//144	box7
-	IMAGE_S_ASCII63,	//145	left single quote
-	IMAGE_S_ASCII63,	//146	right single quote
-	IMAGE_S_ASCII63,	//147	left double quote
-	IMAGE_S_ASCII63,	//148	right double quote
-	IMAGE_S_ASCII63,	//149	big full stop
-	IMAGE_S_ASCII63,	//150	big minus sign
-	IMAGE_S_ASCII63,	//151	even bigger minus sign
-	IMAGE_S_ASCII63,	//152	tilda
-	IMAGE_S_ASCII63,	//153	TM
-	IMAGE_S_ASCII63,	//154	little s with a crown on it
-	IMAGE_S_ASCII63,	//155	weird >
-	IMAGE_S_ASCII63,	//156	oe
-	IMAGE_S_ASCII63,	//157	box8
-	IMAGE_S_ASCII63,	//158	box9
-	IMAGE_S_ASCII63,	//159   Big Y with umlaut
-	IMAGE_S_ASCII63,	//160  
-	IMAGE_S_ASCII161,	//161   upside down !
-	IMAGE_S_ASCII63,	//162   little c with a slash thru it
-	IMAGE_S_ASCII63,	//163  pound sign	
-	IMAGE_S_ASCII63,	//164   circle with crosses thru it	
-	IMAGE_S_ASCII63,	//165   Big Y with two lines thru it	
-	IMAGE_S_ASCII63,	//166   Broken 'pipe' sign	
-	IMAGE_S_ASCII63,	//167   Ornate 's'	
-	IMAGE_S_ASCII63,	//168   umlaut	
-	IMAGE_S_ASCII63,	//169   copyright	
-	IMAGE_S_ASCII63,	//170   little tiny 'a'	
-	IMAGE_S_ASCII63,	//171   double <<	
-	IMAGE_S_ASCII63,	//172   	
-	IMAGE_S_ASCII63,	//173   
-	IMAGE_S_ASCII63,	//174   registered
-	IMAGE_S_ASCII63,	//175   
-	IMAGE_S_ASCII63,	//176   
-	IMAGE_S_ASCII63,	//177   
-	IMAGE_S_ASCII63,	//178   
-	IMAGE_S_ASCII63,	//179   
-	IMAGE_S_ASCII63,	//180   
-	IMAGE_S_ASCII63,	//181   
-	IMAGE_S_ASCII63,	//182  
-	IMAGE_S_ASCII63,	//183   
-	IMAGE_S_ASCII63,	//184   
-	IMAGE_S_ASCII63,	//185   
-	IMAGE_S_ASCII63,	//186   
-	IMAGE_S_ASCII63,	//187   
-	IMAGE_S_ASCII63,	//188   ¼
-	IMAGE_S_ASCII63,	//189	½   
-	IMAGE_S_ASCII63,	//190   
-	IMAGE_S_ASCII191,	//191   
-	IMAGE_S_ASCII192,	//192   
-	IMAGE_S_ASCII193,	//193   
-	IMAGE_S_ASCII194,	//194   
-	IMAGE_S_ASCII195,	//195   
-	IMAGE_S_ASCII196,	//196   
-	IMAGE_S_ASCII197,	//197   
-	IMAGE_S_ASCII198,	//198   
-	IMAGE_S_ASCII63,	//199   
-	IMAGE_S_ASCII200,	//200   
-	IMAGE_S_ASCII201,	//201   
-	IMAGE_S_ASCII202,	//202   
-	IMAGE_S_ASCII203,	//203   
-	IMAGE_S_ASCII204,	//204   
-	IMAGE_S_ASCII205,	//205   
-	IMAGE_S_ASCII206,	//206   
-	IMAGE_S_ASCII207,	//207   
-	IMAGE_S_ASCII63,	//208   Ð
-	IMAGE_S_ASCII63,	//209   
-	IMAGE_S_ASCII210,	//210   
-	IMAGE_S_ASCII211,	//211   
-	IMAGE_S_ASCII212,	//212   
-	IMAGE_S_ASCII213,	//213   
-	IMAGE_S_ASCII214,	//214   
-	IMAGE_S_ASCII63,	//215   
-	IMAGE_S_ASCII216,	//216   
-	IMAGE_S_ASCII217,	//217   
-	IMAGE_S_ASCII218,	//218   
-	IMAGE_S_ASCII219,	//219   
-	IMAGE_S_ASCII220,	//220   
-	IMAGE_S_ASCII221,	//221   
-	IMAGE_S_ASCII63,	//222   
-	IMAGE_S_ASCII223,	//223   
-	IMAGE_S_ASCII224,	//224   
-	IMAGE_S_ASCII225,	//225   
-	IMAGE_S_ASCII226,	//226   
-	IMAGE_S_ASCII227,	//227   
-	IMAGE_S_ASCII228,	//228   
-	IMAGE_S_ASCII229,	//229   
-	IMAGE_S_ASCII230,	//230   
-	IMAGE_S_ASCII231,	//231   
-	IMAGE_S_ASCII232,	//232   
-	IMAGE_S_ASCII233,	//233   
-	IMAGE_S_ASCII234,	//234   
-	IMAGE_S_ASCII235,	//235   
-	IMAGE_S_ASCII236,	//236   
-	IMAGE_S_ASCII237,	//237   
-	IMAGE_S_ASCII238,	//238   
-	IMAGE_S_ASCII239,	//239   
-	IMAGE_S_ASCII63,	//240   
-	IMAGE_S_ASCII241,	//241   
-	IMAGE_S_ASCII242,	//242   
-	IMAGE_S_ASCII243,	//243   
-	IMAGE_S_ASCII244,	//244   
-	IMAGE_S_ASCII245,	//245   
-	IMAGE_S_ASCII246,	//246   
-	IMAGE_S_ASCII63,	//247   
-	IMAGE_S_ASCII248,	//248   
-	IMAGE_S_ASCII249,	//249   
-	IMAGE_S_ASCII250,	//250   
-	IMAGE_S_ASCII251,	//251   
-	IMAGE_S_ASCII252,	//252   
-	IMAGE_S_ASCII253,	//253   
-	IMAGE_S_ASCII63,	//254   
-	IMAGE_S_ASCII63		//255
-};
-#endif
+
 
 IMAGEFILE *FrontImages;
-#ifdef PSX
 
-BOOL DirectControl = DEFAULT_TO_DRIVE;
-IMAGEFILE *FrontImages16;
-BOOL EnableVibration = TRUE;
-
-#define	MIN_CDAUDIO_TRACK	1
-#define	MAX_CDAUDIO_TRACK	3
-UWORD NextCDAudioTrack = MIN_CDAUDIO_TRACK;
-
-#else
 BOOL DirectControl = FALSE;
 
-#endif
+
 
 extern int FEFont;
 //extern int FEBigFont;
@@ -1031,47 +755,7 @@ BOOL InitialiseGlobals(void)
 	return TRUE;
 }
 
-#ifdef PSX
 
-/*
-	cam1.wrf contains vidmem,basic,audio,stats.wrf from the PC
-*/
-/*
-char gamedev_lev[]=
-{
-"
-campaign	CAM_1
-data		\"cam1.wrf\"
-
-camstart	CAM_1_START
-dataset		CAM_1
-game		\"cam1strt.gam\"
-data		\"cam1strt.wrf\"
-
-expand		CAM_1A
-dataset		CAM_1						   
-game		\"cam1a.gam\"				   
-data		\"cam1a.wrf\"
-
-expand		CAM_1B
-dataset		CAM_1
-game		\"cam1b.gam\"
-data		\"cam1b.wrf\"
-
-miss_keep	SUB_1_1
-dataset		CAM_1
-game		\"sub1-1.gam\"
-data		\"sub1-1.wrf\"
-
-expand		CAM_1C
-dataset		CAM_1
-game		\"cam1c.gam\"
-data		\"cam1c.wrf\"
-"
-
-};
-*/
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1174,14 +858,7 @@ BOOL systemInitialise(void)
 #endif
 
 
-#ifdef PSX
-	//This needs to be called for _TEX_PAGE initialisation BEFORE the resources are loaded
-	/* Initialise DOMARKS Library and global variables */
-	iV_Initialise();
 
-	iV_RenderAssign(REND_PSX,&rendSurface);
-//	InitPrimatives();			// now done in	InitialisePSXHardware ... we need it early because we are using the primative buffer for other things
-#else
 	//initialize render engine
 	switch (war_GetRendMode())
 	{
@@ -1242,7 +919,7 @@ BOOL systemInitialise(void)
 		DBERROR(("Unable to allocate memory for display buffer"));
 		return FALSE;
 	}
-#endif
+
 
 
 #ifndef PSX
@@ -1267,20 +944,15 @@ BOOL systemInitialise(void)
 		mixer_Open();
 	}
 
-#ifndef PSX
+
 	if (!bDisableLobby && !multiInitialise())			// ajl. Init net stuff
 	{
 		return FALSE;
 	}
 
-#endif
 
-#ifdef PSX
-	keyInitMappings(FALSE);
 
-	AllocateRadarArea();
 
-#endif
 	
 	if (!dataInitLoadFuncs())				// Pass all the data loading functions to the framework library 
 	{
@@ -1301,13 +973,11 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	initPlayerColours();
-#endif
 
-#ifndef PSX
+
+
 	loadConfig(FALSE);			// get favourite settings from the registry
-#endif
+
 
 	// create a block heap for the game data
 	if (!BLOCK_CREATE(&psGameHeap, GAMEBLOCK_INIT, GAMEBLOCK_EXT))
@@ -1352,9 +1022,7 @@ BOOL systemShutdown(void)
 	keyClearMappings();
 	fpathShutDown();
 	
-#ifdef PSX	// Just free's up the memory allocated for the radar in systemInitialise().
-	ShutdownRadar();
-#endif
+
 
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
@@ -1598,9 +1266,7 @@ BOOL frontendShutdown(void)
 */
 	pie_TexShutDown();
 
-#ifdef PSX
-	FreeAreas();	// Shutdown VRAM allocation system.
-#endif
+
 
 	// reset the block heap
 	BLOCK_RESET(psGameHeap);
@@ -1701,10 +1367,7 @@ BOOL frontendInitialise(char *ResourceFile)
 	iV_PaletteSelect(iV_PaletteAdd(&gamePal[0]));
 #endif
 
-#ifdef PSX
-	// May need to change this to load frontend specific vab.
-	UploadVab();
-#endif
+
 
 //	SetFormAudioIDs(FE_AUDIO_WINDOWOPEN,FE_AUDIO_WINDOWCLOSE);
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
@@ -1771,10 +1434,7 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-#ifdef PSX
-	NextCDAudioTrack = MIN_CDAUDIO_TRACK;
-	InitAreas();				// Initialise VRAM allocation system.
-#endif
+
 
 	iV_Reset(FALSE);			// Reset the IV library. (but not the palette)
 
@@ -1970,19 +1630,11 @@ BOOL stageOneShutDown(void)
 #endif
 #endif
 
-#ifdef PSX
-	if (!dispShutdown())
-	{
-		return FALSE;
-	}
-#endif
+
 
 	pie_TexShutDown();
 
-#ifdef PSX
-	FreeAreas();	// Shutdown VRAM allocation system.
 
-#endif
 
 	viewDataHeapShutDown();
 
@@ -2101,9 +1753,7 @@ BOOL stageTwoInitialise(void)
 //	drawRadar3dfx(64,64);
 //	iV_DownLoadRadar(radarBuffer3dfx);
 
-#ifdef PSX
-	UploadVab();
-#endif
+
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 	
@@ -2117,10 +1767,7 @@ BOOL stageTwoInitialise(void)
 //	intSetMapPos(43 << TILE_SHIFT, 43 << TILE_SHIFT);
 
 
-#ifdef PSX
-	iV_SetScaleFlags_PSX(IV_SCALE_POSITION | IV_SCALE_SIZE);
-	InitialisePIECluts();		// clan colouring stuff
-#endif
+
 
 	DBPRINTF(("stageTwoInitialise: done\n"));
 
@@ -2226,11 +1873,8 @@ void SetScrollLimitsTilesVisible(void)
 // to stageThreeInitialise when loading a saved game so don't close the
 // loading screen, onlyt relevant on PSX.
 //
-#ifdef PSX
-BOOL stageThreeInitialise(BOOL FromLoad)
-#else
+
 BOOL stageThreeInitialise(void)
-#endif
 {
 //MAPTILE	*psTile;
 //UDWORD	i,j;
@@ -2312,16 +1956,7 @@ BOOL stageThreeInitialise(void)
 
 	// Re-inititialise some static variables.
 
-#ifdef PSX
-	if(GetControllerType(0) == CON_MOUSE) {
-		EnableMouseDraw(TRUE);
-	} else {
-		EnableMouseDraw(FALSE);
-	}
-	camInitVars();
-	SoundEnable(TRUE);				// re-enable the sound - this was disabled in main.c
 
-#endif
 	snapInitVars();
 	driveInitVars(FALSE);
 	displayInitVars();
@@ -2329,18 +1964,7 @@ BOOL stageThreeInitialise(void)
 	setAllPauseStates(FALSE);
 
 
-#ifdef PSX
-	if(!FromLoad) {
-		closeLoadingScreen();			// reset the loading screen.
-	}
 
-//	DBPRINTF(("Playing XA Music Track %d\n",NextCDAudioTrack));
-//	cdAudio_PlayTrack(NextCDAudioTrack);	// Range 1-3
-//	NextCDAudioTrack++;
-//	if(NextCDAudioTrack > MAX_CDAUDIO_TRACK) {
-//		NextCDAudioTrack = MIN_CDAUDIO_TRACK;
-//	}
-#endif
 
 #ifndef PSX		// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
@@ -2353,19 +1977,7 @@ BOOL stageThreeInitialise(void)
 }
 
 
-#ifdef PSX
-void LoadFinished(void)
-{
-//	closeLoadingScreen();			// reset the loading screen.
 
-	DBPRINTF(("Playing XA Music Track %d\n",NextCDAudioTrack));
-	cdAudio_PlayTrack(NextCDAudioTrack);	// Range 1-3
-	NextCDAudioTrack++;
-	if(NextCDAudioTrack > MAX_CDAUDIO_TRACK) {
-		NextCDAudioTrack = MIN_CDAUDIO_TRACK;
-	}
-}
-#endif
 
 
 /*****************************************************************************/
@@ -2375,9 +1987,7 @@ BOOL stageThreeShutDown(void)
 {
 	DBPRINTF(("stageThreeShutDown\n"));
 
-#ifdef PSX
-	cdAudio_StopTrack();
-#endif
+
 
 	// make sure any button tips are gone.
 	widgReset();
@@ -2424,11 +2034,7 @@ BOOL stageThreeShutDown(void)
 // Now done in mission state loop.
 //	missionDestroyObjects();	
 
-#ifdef PSX
-	CancelObjectOrbit();
-	// the previous game may have left the pause state true ie, if the player died.
-	setGamePauseStatus(FALSE);
-#endif
+
 
 	resetVTOLLandingPos();
 
