@@ -516,9 +516,6 @@ void	downloadAtStartOfFrame( void )
 
 static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
 {
-	UNUSEDPARAMETER(boxSizeH);
-	UNUSEDPARAMETER(boxSizeV);
-
 	if(!gamePaused())
 	{
 		sweep += boxSizeV;
@@ -545,9 +542,6 @@ static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSize
 	SDWORD i,j;
 	UBYTE *Scr,*WScr;
 	SDWORD RadWidth,RadHeight;
-	UNUSEDPARAMETER(boxSizeH);
-	UNUSEDPARAMETER(boxSizeV);
-
 
 	RadWidth = RadarWidth;
 	RadHeight = RadarHeight;
@@ -718,7 +712,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 {
 	SDWORD				c,d;
 	UBYTE				clan;
-	SDWORD				x,y;
+	SDWORD				x = 0, y = 0;
 	DROID				*psDroid;
 	STRUCTURE			*psStruct;
 	PROXIMITY_DISPLAY	*psProxDisp;
@@ -1039,7 +1033,7 @@ iVector	v[4],tv[4],centre;
 UDWORD	shortX,longX,yDrop,yDropVar;
 SDWORD	dif = getDistanceAdjust();
 SDWORD	dif2 = getLengthAdjust();
-UDWORD	colour;
+UDWORD	colour = 0;
 UDWORD	camNumber;
 
 	shortX = ((visibleXTiles/4)-(dif/3)) * boxSizeH;
@@ -1096,9 +1090,6 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 //	UDWORD	viewX,viewY;
 	SDWORD	viewX,viewY;
 	SDWORD	offsetX,offsetY;
-	iVector v[3],tv[3],ov;
-
-
 
 	offsetX = 
 	offsetY = 

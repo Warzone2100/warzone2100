@@ -72,28 +72,14 @@ typedef struct _droid_action_data
 	(psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEHOVER || \
 	 psDroid->sMove.Status == MOVESHUFFLE)
 
-#define NUM_DIR		8
-// Convert a direction into an offset
-// dir 0 => x = 0, y = -1
-static POINT aDirOffset[NUM_DIR] =
-{
-	 0, 1,
-	-1, 1,
-	-1, 0,
-	-1,-1,
-	 0,-1,
-	 1,-1,
-	 1, 0,
-	 1, 1,
-};
-
 // choose a landing position for a VTOL when it goes to rearm
 BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
 /* Check if a target is at correct range to attack */
 BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj)
 {
-	SDWORD			dx, dy, dz, radSq, rangeSq, longRange, state;
+	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
+	SECONDARY_STATE state;
 	WEAPON_STATS	*psStats;
 
 	//if (psDroid->numWeaps == 0)
@@ -319,7 +305,7 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj)
 void actionAlignTurret(BASE_OBJECT *psObj)
 {
 	UDWORD				rotation;
-	UWORD				tRot, tPitch, nearest;
+	UWORD				tRot, tPitch, nearest = 0;
 	//get the maximum rotation this frame
 
 	//rotation = (psDroid->turretRotRate * frameTime) / (4 * GAME_TICKS_PER_SEC);
@@ -447,7 +433,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	BOOL	onTarget = FALSE;
 	FRACT	fR;
 	SDWORD	pitchLowerLimit, pitchUpperLimit;
-	DROID	*psDroid;
+	DROID	*psDroid = NULL;
 //	iVector	muzzle;
 
     //these are constants now and can be set up at the start of the function
@@ -1083,11 +1069,12 @@ void actionUpdateDroid(DROID *psDroid)
 	BASE_OBJECT			*psTarget = psDroid->psTarget;//, *psObj;
 	WEAPON_STATS		*psWeapStats;
 	SDWORD				targetDir, dirDiff, pbx,pby;
-	SDWORD				xdiff,ydiff, rangeSq, state;
+	SDWORD				xdiff,ydiff, rangeSq;
+	SECONDARY_STATE			state;
 	PROPULSION_STATS	*psPropStats;
 	BOOL				bChaseBloke, bInvert;
 	FEATURE				*psNextWreck;
-	BOOL				(*actionUpdateFunc)(DROID *psDroid);
+	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
 	SDWORD				moveAction;
 	BOOL				bDoHelpBuild;
 	MAPTILE				*psTile;
@@ -2498,7 +2485,7 @@ void actionUpdateDroid(DROID *psDroid)
 /* Overall action function that is called by the specific action functions */
 static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 {
-	SDWORD			state;
+	SECONDARY_STATE			state;
 	SDWORD			pbx,pby;
 	WEAPON_STATS	*psWeapStats;
 	UDWORD			droidX,droidY;

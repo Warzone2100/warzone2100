@@ -192,7 +192,7 @@ void	preProcessVisibility( void )
 {
 UDWORD		i,j;
 MAPTILE		*psTile;
-STRUCTURE	*psStruct;
+//STRUCTURE	*psStruct;
 //FEATURE		*psFeature;
 
 	for(i=0; i<mapWidth;i++)

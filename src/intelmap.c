@@ -237,11 +237,10 @@ extern CURSORSNAP InterfaceSnap;
 extern W_SCREEN		*psWScreen;
 
 /* Static variables ********************/
-static SDWORD			viewAngle;
-static SDWORD			viewHeight;
+//static SDWORD			viewAngle;
+//static SDWORD			viewHeight;
 static UDWORD			messageID;
 static BOOL				immediateMessage = FALSE;
-static UWORD			PSXSequencesCountdown;
 
 
 //How many proximity messages are currently being displayed
@@ -283,7 +282,7 @@ appropriate sized image for the view*/
 //static void displayIntelligenceMessage(MESSAGE *psMessage);
 
 /* Remove the Message View from the Intelligence screen without animation*/
-static void intRemoveMessageViewNoAnim(BOOL animated);
+//static void intRemoveMessageViewNoAnim(BOOL animated);
 
 static void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 					  UDWORD *pColours);
@@ -559,6 +558,8 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 				break;
 			case MSG_MISSION:
 				sBFormInit.pTip = strresGetString(psStringRes, STR_INT_MISMESSAGE);
+				break;
+			default:
 				break;
 		}
 
@@ -956,8 +957,6 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 //	char aAudioName[MAX_STR_LENGTH];	// made static to reduce stack usage.
 	RESEARCH		*psResearch;
 
-	UNUSEDPARAMETER(proxMsg);
-
 	ASSERT((proxMsg = TRUE, 
 		"intIntelButtonPressed: Shouldn't be able to get a proximity message!"));
 
@@ -1276,9 +1275,6 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
     BASE_STATS      *psResGraphic = NULL;
 	BOOL MovieButton = FALSE;
 
-
-	pColours;
-
 	OpenButtonRender((UWORD)(xOffset+psButton->x), (UWORD)(yOffset+psButton->y),
 		psButton->width, psButton->height);
 
@@ -1433,7 +1429,6 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	RECT			DrawArea;
 	UWORD			OTIndex;
 #endif
-	UNUSEDPARAMETER(pColours);
 
 	//shouldn't have any proximity messages here...
 	if (psMessage->type == MSG_PROXIMITY)
@@ -1519,7 +1514,6 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 //	RECT			DrawArea;
 //	UWORD			OTIndex;
 //#endif
-	UNUSEDPARAMETER(pColours);
 
 	//shouldn't have any proximity messages here...
 	if (psMessage->type == MSG_PROXIMITY)
@@ -1576,7 +1570,6 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
 	UDWORD			x0, y0, x1, y1, i, linePitch;
 	UDWORD			ty;
-	UNUSEDPARAMETER(pColours);
 
 	x0 = xOffset+Form->x;
 	y0 = yOffset+Form->y;
@@ -1829,7 +1822,7 @@ appropriate sized image for the view*/
 	y = INTMAP_TEXTY + INTMAP_TEXTHEIGHT + indent;
 
 	//size and position depends on the type of message
-	/*switch (psMessage->type)
+	//switch (psMessage->type)
 	{
 	case MSG_RESEARCH:
 		x1 = INTMAP_RESEARCHX;
@@ -2247,7 +2240,6 @@ void resetIntelligencePauseState(void)
 
 
 
-static BOOL ResearchStringsAreLoaded=FALSE;	 // this really doesn't need to be a static ..
 // play this message immediately, but definitely donot tell the intelligence screen to start 
 
 

@@ -248,7 +248,6 @@ UDWORD	val;
 
 void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 {
-UDWORD	normalsFound = 0;
 iVector	corner1,corner2,corner3;
 MAPTILE	*psTile, *tileRight, *tileDownRight, *tileDown;
 SDWORD	rMod,drMod,dMod,nMod;
@@ -781,7 +780,7 @@ PIELIGHT lighting, specular, fogColour;
 SDWORD	depth = 0; 
 SDWORD	colour;	
 SDWORD	fog = 0;
-SDWORD	mist = 0;
+//SDWORD	mist = 0;
  
 	distance = (SDWORD) (sqrt(dx*dx+dz*dz));
 

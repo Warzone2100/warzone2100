@@ -241,6 +241,7 @@ SDWORD	sum;
 	{
 		return(UDWORD)(sum-360);
 	}
+	return 0;
 }
 
 /* Return a signed difference in direction : a - b
@@ -561,6 +562,7 @@ BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y)
 		/* Send back structure pointer */
 		return( (BASE_OBJECT *) getTileStructure(x,y) );
 	}
+	return NULL;
 }
 
 /* Will return the player who presently has a structure on the specified tile */

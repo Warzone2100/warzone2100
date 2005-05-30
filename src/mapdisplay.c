@@ -99,7 +99,7 @@ void		tileLayouts(int texture);
 static	iTexture texturePage = {6, 64, 64, NULL};
 SDWORD	elevation;
 iVector mapPos, mapView;
-static	iVector	oldPos, oldView;
+//static	iVector	oldPos, oldView;
 static	SDWORD mapGridWidth, mapGridHeight, mapGridMidX, mapGridMidY;
 static	SDWORD mapGridX, mapGridZ;
 static	SDWORD gridDivX, gridDivZ;
@@ -659,7 +659,7 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
     UDWORD          compID, IMDType;
 	iVector         Rotation,Position;
 	UDWORD          basePlateSize, Radius;
-    SDWORD          scale;
+    SDWORD          scale = 0;
 	
 	if(!pie_Hardware())
 	{

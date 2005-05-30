@@ -105,7 +105,6 @@ BOOL			bUsingKeyboard = FALSE;		// to disable mouse pointer when using keys.
 BOOL			bUsingSlider   = FALSE;
 
 static tMode	g_tModeNext;
-static BOOL		bInFastPlay = FALSE;
 
 
 // This is used on the PSX so that things like the mission result screen
@@ -1906,6 +1905,8 @@ BOOL runGameOptionsMenu(VOID)
 			setDifficultyLevel(DL_EASY);
 			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, strresGetString(psStringRes,STR_EASY));
 			break;
+		default: // DL_TOUGH and DL_KILLER
+			break;
 		}
 		break;
 
@@ -2170,7 +2171,6 @@ VOID addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 {
 	W_SLDINIT		sSldInit;
 #ifndef PSX
-	attachID;
 
 	memset(&sSldInit, 0, sizeof(W_SLDINIT));
 	sSldInit.formID		= parent;
@@ -2271,12 +2271,6 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 {
 	STRING	sTmp[128];
 
-	UNUSEDPARAMETER(pColours);
-	UNUSEDPARAMETER(yOffset);
-	UNUSEDPARAMETER(xOffset);
-	UNUSEDPARAMETER(psWidget);
-
-
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
@@ -2337,7 +2331,6 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 // show warzone logo
 VOID displayLogo(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {   
-	UNUSEDPARAMETER(pColours);
 #ifndef PSX
 	iV_DrawTransImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 #else
@@ -2360,7 +2353,6 @@ VOID displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	BOOL			hilight = FALSE;
 	BOOL			greyOut = (BOOL) psWidget->pUserData;			// if option is unavailable.
 
-	UNUSEDPARAMETER(pColours);
 	psBut = (W_BUTTON *)psWidget;
 	iV_SetFont(psBut->FontID);
 
@@ -2429,8 +2421,6 @@ VOID displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 {
 	SDWORD		fx,fy;
 	W_LABEL		*psLab;
-	UNUSEDPARAMETER(pColours);
-	UNUSEDPARAMETER(yOffset);
 
 	psLab = (W_LABEL *)psWidget;
 #ifndef PSX
@@ -2462,7 +2452,6 @@ static VOID displayBigSlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yO
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	SWORD sx;
-	UNUSEDPARAMETER(pColours);
 
 #ifndef PSX
 	iV_DrawTransImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop

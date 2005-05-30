@@ -47,6 +47,8 @@
 #include "loadsave.h"
 #include "game.h"
 #include "text.h"
+#include "screen.h"
+#include "multijoin.h"
 
 #include "intimage.h"
 #include "resource.h"

@@ -230,12 +230,6 @@ void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize
 		address += structureSize;
 		pStatList = (COMP_BASE_STATS *) address;
 	}
-
-#else 
-
-	UNUSEDPARAMETER(listSize);
-	UNUSEDPARAMETER(structureSize);
-
 #endif
 	
 	FREE (pStats);
@@ -2156,8 +2150,6 @@ BOOL loadPropulsionTypes(SBYTE *pPropTypeData, UDWORD bufferSize)
 	UDWORD				NumTypes = 0, i, multiplier, type;
 	STRING				PropulsionName[MAX_NAME_SIZE], flightName[MAX_NAME_SIZE];
 
-	UNUSEDPARAMETER(bufferSize);
-
 	//keep the start so we can release it at the end
 	//pData = pPropTypeData;
 
@@ -2596,7 +2588,7 @@ BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
 		szExplosionWav[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pSoundData,"%[^','],%[^','],%[^','],%d",
-			&WeaponName, &szWeaponWav, &szExplosionWav, &iDum);
+			WeaponName, szWeaponWav, szExplosionWav, &iDum);
 
 		if ( statsGetAudioIDFromString( WeaponName, szWeaponWav, &weaponSoundID ) == FALSE )
 		{
@@ -2755,7 +2747,7 @@ BOOL loadPropulsionSounds(SBYTE *pPropSoundData, UDWORD bufferSize)
 		propulsionName[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pPropSoundData,"%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%d",
-			&propulsionName, &szStart, &szIdle, &szMoveOff, &szMove, &szHiss, &szShutDown,&iDum);
+			propulsionName, szStart, szIdle, szMoveOff, szMove, szHiss, szShutDown, &iDum);
 
 		if ( statsGetAudioIDFromString( propulsionName, szStart, &startID ) == FALSE )
 		{
@@ -3527,10 +3519,7 @@ BOOL getResourceName(STRING *pName)
 	strcpy(pName, strresGetString(psStringRes, id));
 
 #endif
-
-	UNUSEDPARAMETER(pName);
 	return TRUE;
-
 }
 
 
@@ -3983,6 +3972,8 @@ UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
 		return (psStats->armourValue[WC_HEAT] + (psStats->
 			armourValue[WC_HEAT] * asBodyUpgrade[player][bodyType].
 			armourValue[WC_HEAT])/100);
+		break;
+	default:
 		break;
 	}
 

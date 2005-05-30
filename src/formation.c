@@ -115,7 +115,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 	SDWORD		i;
 
 	// get a heap structure
-	if (!HEAP_ALLOC(psFHeap, &psNew))
+	if (!HEAP_ALLOC(psFHeap, (void*) &psNew))
 	{
 		return FALSE;
 	}
@@ -238,8 +238,6 @@ void formationUpdateSpeed( FORMATION *psFormation, BASE_OBJECT *psNew )
 void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj)
 {
 	SDWORD	rankDist, size;
-
-	UNUSEDPARAMETER(psObj);
 
 	ASSERT((PTRVALID(psFormation, sizeof(FORMATION)),
 		"formationJoin: invalid formation"));

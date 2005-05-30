@@ -89,14 +89,14 @@ static POINT aDirOffset[NUM_DIR] =
 // dir 0 => x = 0, y = -1
 static POINT aDirOffset[NUM_DIR] =
 {
-	 0, 1,
-	-1, 1,
-	-1, 0,
-	-1,-1,
-	 0,-1,
-	 1,-1,
-	 1, 0,
-	 1, 1,
+	{ 0, 1},
+	{-1, 1},
+	{-1, 0},
+	{-1,-1},
+	{ 0,-1},
+	{ 1,-1},
+	{ 1, 0},
+	{ 1, 1},
 };
 
 
@@ -661,7 +661,7 @@ void fpathOpenAdd(FP_NODE *psNode)
 // Get the nearest entry in the open list
 FP_NODE *fpathOpenGet(void)
 {
-	FP_NODE	*psNode, *psCurr, *psPrev, *psParent;
+	FP_NODE	*psNode, *psCurr, *psPrev, *psParent = NULL;
 	SDWORD	comp;
 
 	if (psOpen == NULL)
@@ -759,7 +759,7 @@ FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 {
 	FP_NODE	*psNode;
 
-	if (!HEAP_ALLOC(psFPNodeHeap, &psNode))
+	if (!HEAP_ALLOC(psFPNodeHeap, (void*) &psNode))
 	{
 		return NULL;
 	}

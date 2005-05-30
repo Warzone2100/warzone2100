@@ -174,6 +174,7 @@ cdspan_GetCDLetter( STRING szDriveName[], CD_INDEX index )
 		case DISC_INVALID:
 			return cdspan_GetDriveName( TRUE, szDriveName, "" );
 	}
+	return FALSE;
 }
 
 // -----------------------------------------------------------------------

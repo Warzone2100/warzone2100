@@ -407,7 +407,7 @@ void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 	}
 
 	// allocate a new array chunk
-	if (!HEAP_ALLOC(psGridHeap, &psNew))
+	if (!HEAP_ALLOC(psGridHeap, (void*) &psNew))
 	{
         DBPRINTF(("help - %d\n", psObj->id));
 		return;
@@ -517,7 +517,6 @@ void gridCompactArray(SDWORD x, SDWORD y)
 // Display all the grid's an object is a member of
 void gridDisplayCoverage(BASE_OBJECT *psObj)
 {
-	UNUSEDPARAMETER(psObj);
 #ifdef DEBUG
 	{
 		SDWORD		x,y, i;

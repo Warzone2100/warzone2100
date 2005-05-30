@@ -57,7 +57,7 @@ void gwrOpenAdd(GATEWAY *psGate)
 GATEWAY *gwrOpenGet(void)
 {
 	SDWORD		minDist, dist;
-	GATEWAY		*psCurr, *psPrev, *psParent, *psFound;
+	GATEWAY		*psCurr, *psPrev, *psParent = NULL, *psFound = NULL;
 
 	if (psOpenList == NULL)
 	{
@@ -112,8 +112,6 @@ BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
 //	SDWORD	pos;
 	BOOL	blocked;
 	MAPTILE	*psTile;
-
-	UNUSEDPARAMETER(player);
 
 	blocked = FALSE;
 

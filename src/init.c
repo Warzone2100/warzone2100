@@ -926,7 +926,7 @@ BOOL systemInitialise(void)
  #ifdef AUDIO_DISABLED
 	if (!audio_Init(frameGetWinHandle(), FALSE, droidAudioTrackStopped))	// audio.
  #else
-	if (!audio_Init(frameGetWinHandle(), TRUE, droidAudioTrackStopped))
+	if (!audio_Init((HWND) frameGetWinHandle(), TRUE, droidAudioTrackStopped))
  #endif
 	{
 		DBERROR( ("Couldn't initialise audio system: continuing without audio\n") );

@@ -108,5 +108,7 @@ extern void iV_IMDDrawTextureRaise(iIMDShape *shape, float scale);
 extern void iV_IMDDrawTexturedShade(iIMDShape *shape, int lightLevel);
 */
 
+void tpInit(void);
+void tpAddPIE(char *FileName,iIMDShape *pIMD);
 
 #endif

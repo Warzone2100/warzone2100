@@ -285,8 +285,8 @@ static FRACT vectorToAngle(FRACT vx, FRACT vy);
 #define Fdiv(x,y)	FRACTdiv(x,y)
 #define Fabs(x)		FRACTabs(x)
 
-typedef enum MOVESOUNDTYPE	{ MOVESOUNDSTART, MOVESOUNDIDLE, MOVESOUNDMOVEOFF,
-								MOVESOUNDMOVE, MOVESOUNDSTOPHISS, MOVESOUNDSHUTDOWN };
+//typedef enum MOVESOUNDTYPE	{ MOVESOUNDSTART, MOVESOUNDIDLE, MOVESOUNDMOVEOFF,
+//								MOVESOUNDMOVE, MOVESOUNDSTOPHISS, MOVESOUNDSHUTDOWN };
 
 extern UDWORD	selectedPlayer;
 
@@ -1213,7 +1213,7 @@ static void movePeekNextTarget(DROID *psDroid, SDWORD *pX, SDWORD *pY)
 	}
 }*/
 
-static	mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
+static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
 
 // Get the radius of a base object for collision
 static SDWORD moveObjRadius(BASE_OBJECT *psObj)
@@ -2631,8 +2631,6 @@ void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 	if (numObst > 0)
 	{
-		static BOOL		bTest = TRUE;
-
 		distTot /= numObst;
 
 		// Create the avoid vector
@@ -2876,8 +2874,6 @@ void moveGetObstVector5(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 	if (numObst > 0)
 	{
-		static BOOL		bTest = TRUE;
-
 		fDistTot /= numObst;
 
 		// Create the avoid vector

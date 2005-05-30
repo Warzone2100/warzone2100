@@ -37,9 +37,6 @@
 
 #define	EXPLOSION_AUDIO	0
 
-/* The buffer to store LOS points */
-static TILE_COORD	*aLOSPoints;
-
 /* Number of tiles that missed bullets scatter from target */
 //#define DIRECT_SCATTERDIST 3
 //#define INDIRECT_SCATTERDIST 2
@@ -99,7 +96,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	UDWORD			firePause;
 	SDWORD			targetDir,dirDiff;
 	SDWORD			longRange;
-	DROID			*psDroid;
+	DROID			*psDroid = NULL;
 	SDWORD			level, cmdLevel;
 	BOOL			bMissVisible;
 

@@ -70,15 +70,13 @@ extern CURSORSNAP InterfaceSnap;
 
 // Is a clickable form widget hilited, either because the cursor is over it or it is flashing.
 //
-//#define formIsHilite(p) ( (((W_CLICKFORM*)p)->state & WCLICK_HILITE) || \
-//						  (((W_CLICKFORM*)p)->state & WCLICK_FLASHON) )
+//#define formIsHilite(p) ( (((W_CLICKFORM*)p)->state & WCLICK_HILITE) || (((W_CLICKFORM*)p)->state & WCLICK_FLASHON) )
 #define formIsHilite(p) 	(((W_CLICKFORM*)p)->state & WCLICK_HILITE)
 #define formIsFlashing(p)	(((W_CLICKFORM*)p)->state & WCLICK_FLASHON)
 
 // Is a button widget hilited, either because the cursor is over it or it is flashing.
 //
-//#define buttonIsHilite(p) ( (((W_BUTTON*)p)->state & WBUTS_HILITE) ||	\
-//						    (((W_BUTTON*)p)->state & WBUTS_FLASHON) )
+//#define buttonIsHilite(p) ( (((W_BUTTON*)p)->state & WBUTS_HILITE) ||	(((W_BUTTON*)p)->state & WBUTS_FLASHON) )
 #define buttonIsHilite(p) 	(((W_BUTTON*)p)->state & WBUTS_HILITE)
 #define buttonIsFlashing(p)  (((W_BUTTON*)p)->state & WBUTS_FLASHON)
 
@@ -231,8 +229,6 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 	PLAYER_RESEARCH		*pPlayerRes;
 	UDWORD				BuildPoints,Range, BuildPower;
 	W_BARGRAPH			*BarGraph = (W_BARGRAPH*)psWidget;
-
-	UNUSEDPARAMETER(psContext);
 
 	psObj = (BASE_OBJECT*)BarGraph->pUserData;	// Get the object associated with this widget.
 
@@ -422,8 +418,6 @@ void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
 	W_LABEL			*Label = (W_LABEL*)psWidget;
 	UDWORD			Quantity, Remaining;
 
-	UNUSEDPARAMETER(psContext);
-
 	psObj = (BASE_OBJECT*)Label->pUserData;	// Get the object associated with this widget.
 	Structure = (STRUCTURE*)psObj;
 
@@ -477,8 +471,6 @@ void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext)
 	STRUCTURE			*Structure;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
 
-	UNUSEDPARAMETER(psContext);
-
 	// Get the object associated with this widget.
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
@@ -516,8 +508,6 @@ void intAddProdQuantity(struct _widget *psWidget, struct _w_context *psContext)
 	BASE_OBJECT			*psObj = NULL;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
 	UDWORD				quantity = 0;
-
-	UNUSEDPARAMETER(psContext);
 
 	// Get the object associated with this widget.
 	psStat = (BASE_STATS *)Label->pUserData;
@@ -558,8 +548,6 @@ void intAddLoopQuantity(struct _widget *psWidget, struct _w_context *psContext)
 {
 	FACTORY				*psFactory = NULL;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
-
-	UNUSEDPARAMETER(psContext);
 
 	//loop depends on the factory
 	if (Label->pUserData != NULL)
@@ -604,8 +592,6 @@ void intUpdateCommandSize(struct _widget *psWidget, struct _w_context *psContext
 	DROID				*psDroid;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
 
-	UNUSEDPARAMETER(psContext);
-
 	// Get the object associated with this widget.
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
@@ -637,8 +623,6 @@ void intUpdateCommandExp(struct _widget *psWidget, struct _w_context *psContext)
 	DROID				*psDroid;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
 	SDWORD				i, numStars;
-
-	UNUSEDPARAMETER(psContext);
 
 	// Get the object associated with this widget.
 	psObj = (BASE_OBJECT*)Label->pUserData;
@@ -677,8 +661,6 @@ void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext
 	DROID				*psDroid;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
 	SDWORD				i,cIndex, start;
-
-	UNUSEDPARAMETER(psContext);
 
 	// Get the object associated with this widget.
 	psObj = (BASE_OBJECT*)Label->pUserData;
@@ -748,7 +730,6 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	static char		szVal[8];
 #endif
 		//SDWORD Used,Avail,ManPow;
-	UNUSEDPARAMETER(pColours);
 
 //	asPower[selectedPlayer]->availablePower+=32;	// temp to test.
 
@@ -975,7 +956,6 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	UDWORD              Player = selectedPlayer;			// changed by AJL for multiplayer.
 	void                *Object;
 	BOOL	            bOnHold = FALSE;
-	UNUSEDPARAMETER(pColours);
 
 	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)Form->height);
 
@@ -1231,9 +1211,7 @@ void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	BOOL Hilight = FALSE;
 	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	UDWORD IMDType = 0;
-	UDWORD IMDIndex = 0;
 	void *Object;
-	UNUSEDPARAMETER(pColours);
 
 	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)(Form->height+9));
 
@@ -1345,10 +1323,9 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 	BOOL            Hilight = FALSE;
 	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	UDWORD          IMDType = 0;
-	UDWORD          IMDIndex = 0;
+//	UDWORD          IMDIndex = 0;
 	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
 	void            *Object;
-	UNUSEDPARAMETER(pColours);
 
 	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)Form->height);
 
@@ -1653,10 +1630,6 @@ void intDisplayObjectForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 {
 //	W_TABFORM *Form = (W_TABFORM*)psWidget;
 //	UDWORD x0,y0,x1,y1;
-	UNUSEDPARAMETER(psWidget);
-	UNUSEDPARAMETER(xOffset);
-	UNUSEDPARAMETER(yOffset);
-	UNUSEDPARAMETER(pColours);
 //
 //	x0 = xOffset+Form->x;
 //	y0 = yOffset+Form->y;
@@ -1680,7 +1653,6 @@ void intOpenPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	UDWORD		Duration;
 	UDWORD		APos;
 	SDWORD		Ay0,Ay1;
-	UNUSEDPARAMETER(pColours);
 
 	Tx0 = xOffset+Form->x;
 	Ty0 = yOffset+Form->y;
@@ -1750,7 +1722,6 @@ void intClosePlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD Range;
 	UDWORD Duration;
 	UDWORD APos;
-	UNUSEDPARAMETER(pColours);
 
 	Tx0 = xOffset+Form->x;
 	Tx1 = Tx0 + Form->width;
@@ -1801,7 +1772,6 @@ void intDisplayPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
-	UNUSEDPARAMETER(pColours);
 
 	x0 = xOffset+Form->x;
 	y0 = yOffset+Form->y;
@@ -1816,7 +1786,6 @@ void intDisplayStatsForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
-	UNUSEDPARAMETER(pColours);
 
 	x0 = xOffset+Form->x;
 	y0 = yOffset+Form->y;
@@ -1835,7 +1804,6 @@ void intDisplayImage(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	UNUSEDPARAMETER(pColours);
 
 	iV_DrawTransImage(IntImages,(UWORD)(UDWORD)psWidget->pUserData,x,y);
 }
@@ -1848,8 +1816,6 @@ void intDisplayMissionClock(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	UDWORD  y = yOffset+psWidget->y;
     UDWORD  flash;
 
-	UNUSEDPARAMETER(pColours);
-    
     //draw the background image
     iV_DrawTransImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
 	//need to flash the timer when < 5 minutes remaining, but > 4 minutes
@@ -1870,7 +1836,6 @@ void intDisplayImageHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	UDWORD y = yOffset+psWidget->y, flash;
 	UWORD ImageID;
 	BOOL Hilight = FALSE;
-	UNUSEDPARAMETER(pColours);
 
 	switch(psWidget->type) {
 		case WIDG_FORM:
@@ -2013,7 +1978,6 @@ void intDisplayButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yO
 	BOOL Grey = FALSE;
 	UDWORD Down = 0;
 	UWORD ImageID;
-	UNUSEDPARAMETER(pColours);
 
 	GetButtonState(psWidget,&Hilight,&Down,&Grey);
 
@@ -2118,7 +2082,6 @@ void intDisplayAltButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD
 	BOOL Grey = FALSE;
 	UDWORD Down = 0;
 	UWORD ImageID;
-	UNUSEDPARAMETER(pColours);
 
 	GetButtonState(psWidget,&Hilight,&Down,&Grey);
 
@@ -2179,10 +2142,8 @@ void intDisplayButtonFlash(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	BOOL Hilight = FALSE;
-	BOOL Grey = FALSE;
 	UDWORD Down = 0;
 	UWORD ImageID;
-	UNUSEDPARAMETER(pColours);
 
 	ASSERT((psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button"));
 
@@ -2243,7 +2204,6 @@ void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 	UBYTE	flashing = (UBYTE)UNPACKDWORD_QUAD_A((UDWORD)psWidget->pUserData);
 	UBYTE	flashTime = (UBYTE)UNPACKDWORD_QUAD_B((UDWORD)psWidget->pUserData);
 	UWORD	ImageID;
-	UNUSEDPARAMETER(pColours);
 
 	ASSERT((psWidget->type == WIDG_BUTTON,"intDisplayReticuleButton : Not a button"));
 
@@ -2369,11 +2329,6 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 #ifdef PSX
 	UWORD ImageID;
 #endif
-
-	UNUSEDPARAMETER(Position);
-	UNUSEDPARAMETER(Width);
-	UNUSEDPARAMETER(Height);
-    UNUSEDPARAMETER(Number);
 
 //	ASSERT((Number < 4,"intDisplayTab : Too many tabs."));
     //Number represents which tab we are on but not interested since they all look the same now - AB 25/01/99
@@ -2535,8 +2490,6 @@ void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
 	UBYTE		Hilight = 0;
 	UWORD		ImageID;
 
-	UNUSEDPARAMETER(pColours);
-
 	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		ImageID = (UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData));
@@ -2594,8 +2547,6 @@ void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 	UDWORD		y = yOffset+psButton->y;
 	UBYTE		hilight = 0, down = 0;
 	UWORD		imageID;
-
-	UNUSEDPARAMETER(pColours);
 
 	psStruct = psButton->pUserData;
 	if (psStruct)
@@ -2673,7 +2624,6 @@ void intDisplaySlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	SWORD sx;
 	//SWORD x0,y0, x1;
 
-	UNUSEDPARAMETER(pColours);
 	iV_DrawTransImage(IntImages,IMAGE_SLIDER_BACK,x+STAT_SLD_OX,y+STAT_SLD_OY);
 
 /*	x0 = (SWORD)(Slider->x + xOffset + Slider->barSize/2);
@@ -2714,8 +2664,6 @@ void intDisplayEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD		iX, iY, iDX, iXRight;
 	UDWORD		iXLeft = xOffset + psWidget->x,
 				iYLeft = yOffset + psWidget->y;
-
-	UNUSEDPARAMETER(pColours);
 
 	if ( psEditBox->state & WEDBS_HILITE )
 	{
@@ -2838,8 +2786,6 @@ void intDisplayNumber(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	STRUCTURE	*psStruct;
 	FACTORY		*psFactory;
 
-	UNUSEDPARAMETER(pColours);
-	
 	//Quantity depends on the factory
 	Quantity = 1;
 	if (Label->pUserData != NULL)
@@ -2913,9 +2859,9 @@ void intDeleteGraphics(void)
 //#endif
 
 
-static RENDERED_BUTTON *CurrentOpenButton=NULL;
-
 #ifdef PSX
+
+static RENDERED_BUTTON *CurrentOpenButton=NULL;
 
 void StartButtonRendering(void)
 {
@@ -3374,8 +3320,6 @@ void CloseButtonRender(void)
 //
 void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType)
 {
-    UNUSEDPARAMETER(Size);
-
 	if(Down)
 	{
 //		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(Size*2)+(buttonType*6)),ButXPos,ButYPos);
@@ -4223,7 +4167,6 @@ void RenderButton(struct _widget *psWidget,RENDERED_BUTTON *Buffer,UDWORD x,UDWO
 
 	BUTTON_SURFACE *ButSurf = Buffer->ButSurf;
 	UWORD ImageID;
-	UNUSEDPARAMETER(psWidget);
 
 	if(!pie_Hardware())
 	{
@@ -4554,8 +4497,6 @@ BOOL StatIsTemplate(BASE_STATS *Stat)
 //BOOL StatIsComponent(BASE_STATS *Stat)
 SDWORD StatIsComponent(BASE_STATS *Stat)
 {
-	SDWORD		compID = -1;
-
 	if(Stat->ref >= REF_BODY_START &&
 				 Stat->ref < REF_BODY_START + REF_RANGE) {
 		//return TRUE;
@@ -4778,8 +4719,6 @@ void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	SDWORD			x0, y0, iX, iY;
 	static char		szVal[6], szCheckWidth[6] = "00000";
 
-	UNUSEDPARAMETER(pColours);
-
 	x0 = xOffset + BarGraph->x;
 	y0 = yOffset + BarGraph->y;
 
@@ -4867,9 +4806,6 @@ void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
     UDWORD          width, barWidth;
 	static char		szVal[6], szCheckWidth[6] = "00000";
     UBYTE           arbitaryOffset;
-
-	UNUSEDPARAMETER(pColours);
-
 
 	x0 = xOffset + BarGraph->x;
 	y0 = yOffset + BarGraph->y;
@@ -5034,8 +4970,6 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 	RENDERED_BUTTON		*Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	DROID				*psDroid = NULL;
     UDWORD              gfxId;
-
-	UNUSEDPARAMETER(pColours);
 
 	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,
 		(UWORD)Form->height);
@@ -5375,13 +5309,9 @@ void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 	MESSAGE				*psMsg = psProxDisp->psMessage;
 	//BOOL				Hilight = FALSE;
 //	UWORD				imageID;
-	UDWORD				delay = 100;
+//	UDWORD				delay = 100;
 	//VIEW_PROXIMITY		*pViewProximity;
-	SDWORD				x, y;
-
-	UNUSEDPARAMETER(pColours);
-	UNUSEDPARAMETER(xOffset);
-	UNUSEDPARAMETER(yOffset);
+	SDWORD				x = 0, y = 0;
 
 	ASSERT((psMsg->type == MSG_PROXIMITY, "Invalid message type"));
 
@@ -5486,7 +5416,6 @@ static UWORD sliderMouseUnit(W_SLIDER *Slider)
 void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psContext)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UNUSEDPARAMETER(psContext);
 
 	if(Slider->state & SLD_HILITE) 
 	{
@@ -5514,8 +5443,6 @@ void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psCont
 
 void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext)
 {
-	UNUSEDPARAMETER( psWidget );
-	UNUSEDPARAMETER( psContext );
 }
 
 #else
@@ -5701,12 +5628,9 @@ void intUpdateReticuleButton(struct _widget *psWidget, struct _w_context *psCont
 void intDisplayResSubGroup(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
-	UDWORD		i = 0;
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 	RESEARCH    *psResearch = (RESEARCH *)Label->pUserData;
-
-    UNUSEDPARAMETER(pColours);
 
     if (psResearch->subGroup != NO_RESEARCH_ICON)
     {
@@ -5717,11 +5641,10 @@ void intDisplayResSubGroup(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 void intDisplayAllyIcon(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_LABEL		*Label =  (W_LABEL*)psWidget;
-	UDWORD		i = Label->pUserData;
+//	UDWORD		i = Label->pUserData;
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 //	char		str[2];
-    UNUSEDPARAMETER(pColours);
 
     iV_DrawTransImage(IntImages,IMAGE_DES_BODYPOINTS,x,y);
 

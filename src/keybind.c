@@ -1836,7 +1836,7 @@ void	kf_KillEnemy( void )
 {
 UDWORD	player;
 DROID	*psCDroid,*psNDroid;
-STRUCTURE	*psCStruct, *psNStruct;
+//STRUCTURE	*psCStruct, *psNStruct;
 
 
 	for(player = 0; player<MAX_PLAYERS AND !bMultiPlayer; player++)
@@ -1982,7 +1982,7 @@ void kf_SendTextMessage(void)
 			}		
 			else							 						// display
 			{
-				sprintf(sTextToSend,"%s%c\0",sTextToSend,ch);
+				sprintf(sTextToSend,"%s%c",sTextToSend,ch);
 			}	
 
 			ch = (CHAR)inputGetKey();
@@ -2171,7 +2171,6 @@ DROID	*psDroid;
 // --------------------------------------------------------------------------
 void	kfsf_SelectAllSameProp( PROPULSION_TYPE propType )
 {
-    UNUSEDPARAMETER(propType);
 	/*
 PROPULSION_STATS	*psPropStats;
 DROID	*psDroid;
@@ -2215,8 +2214,6 @@ DROID	*psDroid;
 // --------------------------------------------------------------------------
 void	kfsf_SelectAllSameName( STRING *droidName )
 {
-    UNUSEDPARAMETER(droidName);
-
 	/*
 DROID	*psDroid;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
@@ -2378,7 +2375,7 @@ void	kf_CentreOnBase( void )
 {
 STRUCTURE	*psStruct;
 BOOL		bGotHQ;
-UDWORD		xJump,yJump;
+UDWORD		xJump = 0, yJump = 0;
 
 	/* Got through our buildings */
 	for(psStruct = apsStructLists[selectedPlayer],bGotHQ = FALSE;	// start
@@ -2437,7 +2434,7 @@ void kf_ToggleFormationSpeedLimiting( void )
 // --------------------------------------------------------------------------
 void	kf_RightOrderMenu( void )
 {
-DROID	*psDroid,*psGotOne;
+DROID	*psDroid,*psGotOne = NULL;
 BOOL	bFound;
 
 	// if menu open, then close it!

@@ -252,7 +252,7 @@ void freeStructureLists(void)
 BOOL gameStatStart(void)
 {
 //	UDWORD			inc, comp, stat;
-	BOOL			builtRes = FALSE, builtGen = FALSE;
+//	BOOL			builtRes = FALSE, builtGen = FALSE;
 #if 0
 	STRUCTURE		*psStructure;
 	DROID_TEMPLATE	*pTemplate;

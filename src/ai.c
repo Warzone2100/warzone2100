@@ -559,8 +559,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 
             tarDist = SDWORD_MAX;
             psTarget = NULL;
-            /*just go through the list of droids/structures for the oppositions 
-            and get the nearest target. This might be REAL slow...*
+            // just go through the list of droids/structures for the oppositions 
+            // and get the nearest target. This might be REAL slow...
             for (player = 0; player < MAX_PLAYERS; player++)
             {
                 //ignore the Sensor Structure's objects
@@ -642,7 +642,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 void aiUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT	*psTarget;
-	SDWORD		state;
+	SECONDARY_STATE		state;
 	BOOL		lookForTarget;
 //	BOOL		bTemp;
 

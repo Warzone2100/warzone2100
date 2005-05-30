@@ -41,9 +41,6 @@ void cmdDroidShutDown(void)
 // Make new command droids available
 void cmdDroidAvailable(BRAIN_STATS *psBrainStats, SDWORD player)
 {
-	UNUSEDPARAMETER(psBrainStats);
-	UNUSEDPARAMETER(player);
-
 }
 
 
@@ -263,9 +260,6 @@ void cmdDroidSetAvailable(SDWORD player, SDWORD num)
 		"cmdUnitSetAvailable: invalid player number"));
 	ASSERT(((num > 0) && (num < MAX_CMDDROIDS),
 		"cmdUnitSetAvailable: invalid player number"));
-
-	UNUSEDPARAMETER(player);
-	UNUSEDPARAMETER(num);
 }
 
 

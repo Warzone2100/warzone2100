@@ -16,6 +16,8 @@
 #include "piedef.h" //ivis matrix code
 #include "piestate.h" //ivis render code
 #include "lighting.h"
+#include "bspfunc.h"
+#include "loop.h"
 
 
 #define TESTLOWPOLY
@@ -168,16 +170,12 @@ void unsetMatrix(void)
 
 UDWORD getComponentDroidRadius(DROID *psDroid)
 {
-	UNUSEDPARAMETER(psDroid);
-
 	return 100;
 }
 
 
 UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid)
 {
-	UNUSEDPARAMETER(psDroid);
-
 	return 100;
 }
 
@@ -275,8 +273,6 @@ UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player)
 {
 	iIMDShape *baseImd;
 	SDWORD Radius = GetRadius(Stats->pIMD);
-
-	UNUSEDPARAMETER(Player);
 
 	baseImd = Stats->pBaseIMD;
 	if(baseImd!=NULL) {
@@ -412,8 +408,6 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 	iIMDShape		*baseImd,*strImd,*mountImd,*weaponImd;
 	iVector TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
-
-	UNUSEDPARAMETER(Player);
 
     /*HACK HACK HACK! 
     if its a 'tall thin (ie tower)' structure stat with something on the top - offset the 
@@ -1296,7 +1290,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 void	destroyFXDroid(DROID	*psDroid)
 {
 UDWORD	i;
-iIMDShape	*psImd;
+iIMDShape	*psImd = NULL;
 SDWORD	widthScatter,breadthScatter,heightScatter;
 iVector	pos;
 
