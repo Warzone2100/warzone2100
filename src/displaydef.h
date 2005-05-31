@@ -8,31 +8,25 @@
 #define _displaydef_h
 
 #include "imd.h"
-#ifndef PSX			// ffs am
+		// ffs am
 #include "pieclip.h"
-#endif
-#ifndef PSX
+
+
 #define DISP_WIDTH		(pie_GetVideoBufferWidth()) 
 #define DISP_HEIGHT		(pie_GetVideoBufferHeight())
-#else
-#define DISP_WIDTH		(640)
-#define DISP_HEIGHT		(480)
-#endif
+
 #define DISP_HARDBITDEPTH	(16)
 #define DISP_BITDEPTH	(8)
-#ifndef PSX
+
 #define	BOUNDARY_X			(16)
 #define BOUNDARY_Y			(16)
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
 //#define	BOUNDARY_Y		(DISP_WIDTH/16)
 //#define	BOUNDARY_X		(24)
 //#define	BOUNDARY_Y		(24)
-#else	// PSX version.
-#define	BOUNDARY_X		(32)
-#define	BOUNDARY_Y		(32)
-#endif
 
-#ifndef PSX
+
+
 typedef struct _screen_disp_data
 {
 	//UDWORD		dummy;
@@ -47,15 +41,7 @@ typedef struct _screen_disp_data
 	UDWORD		screenR; 
 } SCREEN_DISP_DATA;
 
-#else		// playstation uses the cutdown version
-typedef struct _screen_disp_data
-{
-	iIMDShape	*imd;
-	UDWORD		frameNumber;
-	UWORD		screenX,screenY;
-	UWORD		screenR; 
-} SCREEN_DISP_DATA;
-#endif
+
 
 
 #endif

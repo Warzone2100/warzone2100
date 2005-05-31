@@ -8,10 +8,10 @@
 
 #include "widget.h"
 #include "message.h"
-#ifndef PSX
+
 #include "cdspan.h"
 #include "pieclip.h"
-#endif
+
 //#include "intimage.h"
 
 // store the objects that are being used for the object bar
@@ -21,19 +21,14 @@
 #define	BASE_COORDS_X	(640)
 #define	BASE_COORDS_Y	(480)
 
-#ifndef PSX
+
 #define	BASE_COORDS_X	(640)
 #define	BASE_COORDS_Y	(480)
 #define E_W (DISP_WIDTH - BASE_COORDS_X)
 #define E_H (DISP_HEIGHT - BASE_COORDS_Y)
 #define	D_W	((DISP_WIDTH - BASE_COORDS_X)/2)
 #define	D_H ((DISP_HEIGHT - BASE_COORDS_Y)/2)
-#else
-#define	D_W (0)
-#define	D_H	(0)
-#define E_W (0)
-#define E_H (0)
-#endif
+
 
 #define IDRET_FORM				1		// The reticule form
 #define IDRET_OPTIONS			2		// option button
@@ -194,11 +189,9 @@
 
 #define OBJ_BUTWIDTH		60		// Button width.
 #define OBJ_BUTHEIGHT		46		// Button height.
-#ifndef PSX
+
 #define OBJ_TEXTX			2
-#else
-#define OBJ_TEXTX			4
-#endif
+
 #define OBJ_T1TEXTY			2
 #define OBJ_T2TEXTY			14
 #define OBJ_T3TEXTY			26
@@ -207,7 +200,7 @@
 #define STAT_SLD_OX	(0)			// Stat window slider offset.
 #define STAT_SLD_OY	(0)
 #define STAT_SLDSTOPS		10	// Slider number of stops.
-#ifndef PSX
+
 #define STAT_PROGBARX			3
 #define STAT_PROGBARY			36
 #define STAT_PROGBARWIDTH		(OBJ_BUTWIDTH-8)
@@ -216,16 +209,7 @@
 #define STAT_TIMEBARY			(OBJ_BUTHEIGHT-STAT_PROGBARHEIGHT-3)
 #define STAT_POWERBARX			3
 #define STAT_POWERBARY			(OBJ_BUTHEIGHT-STAT_PROGBARHEIGHT-6)
-#else
-#define STAT_PROGBARX			4
-#define STAT_PROGBARY			34
-#define STAT_PROGBARWIDTH		(OBJ_BUTWIDTH-12)
-#define STAT_PROGBARHEIGHT		4
-#define STAT_TIMEBARX			4
-#define STAT_TIMEBARY			(OBJ_BUTHEIGHT-STAT_PROGBARHEIGHT-8)
-#define STAT_POWERBARX			4
-#define STAT_POWERBARY			(OBJ_BUTHEIGHT-STAT_PROGBARHEIGHT-6)
-#endif
+
 #define STAT_PROGBARMAJORRED	255//0xcc
 #define STAT_PROGBARMAJORGREEN	235//0
 #define STAT_PROGBARMAJORBLUE	19//0
@@ -249,10 +233,10 @@
 
 typedef enum {
 	INT_NORMAL,		// Standard mode (just the reticule)
-#ifndef PSX
+
 	INT_OPTION,		// Option screen
 	INT_EDIT,		// Edit mode
-#endif
+
 	INT_EDITSTAT,	// Stat screen up for placing objects
 	INT_OBJECT,		// Object screen
 	INT_STAT,		// Object screen with stat screen
@@ -326,10 +310,10 @@ as big as Pie View in Research Msg now*/
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
 
-#ifndef PSX
+
 extern UBYTE	*DisplayBuffer;
 extern SDWORD	displayBufferSize;
-#endif
+
 
 extern BOOL ClosingMessageView;
 extern BOOL ClosingIntelMap;
@@ -429,11 +413,11 @@ extern STRUCTURE* interfaceStructList(void);
 //sets up the Transporter Screen as far as the interface is concerned
 extern void addTransporterInterface(DROID *psSelected, BOOL onMission);
 
-#ifndef PSX
+
 /* CD change box */
 extern void addCDChangeInterface( CD_INDEX CDrequired,
 		CDSPAN_CALLBACK fpOKCallback, CDSPAN_CALLBACK fpCancelCallback );
-#endif
+
 
 /*causes a reticule button to start flashing*/
 extern void flashReticuleButton(UDWORD buttonID);

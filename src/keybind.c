@@ -26,7 +26,7 @@
 #include "radar.h"
 #include "screen.h"
 
-#ifndef PSX
+
 #include "cheat.h"
 #include "e3demo.h"	// will this be on PSX?
 #include "netplay.h"
@@ -37,11 +37,9 @@
 #include "advvis.h"
 #include "game.h"
 #include "difficulty.h"
-#endif
 
-#ifdef INC_GLIDE
-#include "dglide.h"
-#endif
+
+
 
 #include "intorder.h"
 #include "widget.h"
@@ -86,9 +84,9 @@ extern		void shakeStop(void);
 STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
 extern char	ScreenDumpPath[];
 
-#ifndef PSX
+
 int fogCol = 0;//start in nicks mode
-#endif
+
 
 /* Support functions to minimise code size */
 void	kfsf_SelectAllSameProp	( PROPULSION_TYPE propType );
@@ -229,9 +227,9 @@ void	kf_BuildInfo( void )
 /* Toggles whether the windows surface gets updated */
 void	kf_UpdateWindow( void )
 {
- #ifndef PSX
+
 	 	updateVideoCard = !updateVideoCard;
-#endif
+
 		addConsoleMessage("Windows surface update toggled",DEFAULT_JUSTIFY);
 }
 
@@ -314,28 +312,8 @@ void	kf_SetToughUnitsLevel( void )
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-#ifndef PSX
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		if(weHave3DNow())
-		{
-		CONPRINTF(ConsoleString,(ConsoleString,"GLIDE (With AMD 3DNow!) fps - %d; PIEs - %d; polys - %d; Terr. polys - %d; States %d",
-				frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
-		}
-		else
-		{
- 	 	 	CONPRINTF(ConsoleString,(ConsoleString,"GLIDE fps - %d; PIEs - %d; polys - %d; Terr. polys - %d; States %d",
-				frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
-		}
-//		ASSERT((war_GetFog(),"Fog is Disabled"));
-//		ASSERT((war_GetTranslucent(),"Transparency is Disabled"));
-//		ASSERT((war_GetAdditive(),"Additive Transpaency is Disabled"));
-		DBPRINTF(("GLIDE fps - %d; PIEs - %d; polys - %d; Terr. polys - %d; States %d;",
-			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
-	}
-	else
-#endif
+
+
 	if (pie_GetRenderEngine() == ENGINE_D3D)
 	{
 		if(weHave3DNow())
@@ -378,7 +356,7 @@ void	kf_FrameRate( void )
 
 		CONPRINTF(ConsoleString,(ConsoleString,"Built at %s on %s",__TIME__,__DATE__));
 //		addConsoleMessage("Game statistics display toggled",DEFAULT_JUSTIFY);
-#endif
+
 }
 
 // --------------------------------------------------------------------------
@@ -446,14 +424,14 @@ void	kf_ToggleOutline( void )
 /* Toggles infinite power on/off */
 void	kf_TogglePower( void )
 {
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer)
 {
 	return;
 }
 #endif
-#endif
+
 		powerCalculated = !powerCalculated;
 		if (powerCalculated)
 		{
@@ -481,23 +459,7 @@ void	kf_RecalcLighting( void )
 /* Raises the 3dfx gamma value */
 void	kf_RaiseGamma( void )
 {
-#ifndef PSX
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		if(gammaValue<(float)5.0)
-		{
-			gammaValue = gammaValue+(float)0.1;
-			pie_SetGammaValue(gammaValue);
-			addConsoleMessage("Gamma correction altered",DEFAULT_JUSTIFY);
-		}
-		else
-		{
-			gammaValue = (float)0.2;
-		}
-	}
-#endif
-#endif
+
 }
 
 // --------------------------------------------------------------------------
@@ -505,23 +467,7 @@ void	kf_RaiseGamma( void )
 /* Lowers the threedfx gamma value */
 void	kf_LowerGamma( void )
 {
-#ifndef PSX
-#ifdef INC_GLIDE
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		if(gammaValue>(float)0.2)
-		{
-			gammaValue = gammaValue-(float)0.1;
-			pie_SetGammaValue(gammaValue);
-			addConsoleMessage("Gamma correction lowered",DEFAULT_JUSTIFY);
-		}
-		else
-		{
-			addConsoleMessage("Gamma correction at MINIMUM",DEFAULT_JUSTIFY);
-		}
-	}
-#endif
-#endif
+
 }	
 
 // --------------------------------------------------------------------------
@@ -539,14 +485,14 @@ void	kf_ScreenDump( void )
 void	kf_AllAvailable( void )
 {
 
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
 	return;
 }
 #endif
-#endif
+
 
 
 //		addConsoleMessage("All items made available",DEFAULT_JUSTIFY);
@@ -577,7 +523,7 @@ iVector	pos;
 // --------------------------------------------------------------------------
 void	kf_ToggleBackgroundFog( void )
 {
-#ifndef PSX
+
 	static BOOL bEnabled  = TRUE;//start in nicks mode
 	
 		if (bEnabled)//true, so go to false
@@ -599,12 +545,12 @@ void	kf_ToggleBackgroundFog( void )
 			}
 			fogStatus |= FOG_BACKGROUND;//set lowest bit of 3
 		}
-#endif
+
 }
 
 extern void	kf_ToggleDistanceFog( void )
 {
-#ifndef PSX
+
 	static BOOL bEnabled  = TRUE;//start in nicks mode
 	
 		if (bEnabled)//true, so go to false
@@ -626,12 +572,12 @@ extern void	kf_ToggleDistanceFog( void )
 			}
 			fogStatus |= FOG_DISTANCE;//set lowest bit of 3
 		}
-#endif
+
 }
 
 void	kf_ToggleMistFog( void )
 {
-#ifndef PSX
+
 	static BOOL bEnabled  = TRUE;//start in nicks mode
 	
 		if (bEnabled)//true, so go to false
@@ -653,12 +599,12 @@ void	kf_ToggleMistFog( void )
 			}
 			fogStatus |= FOG_GROUND;//set highest bit of 3
 		}
-#endif
+
 }
 
 void	kf_ToggleFogColour( void )
 {
-#ifndef PSX
+
 	fogCol++;
 	if (fogCol>4)
 		fogCol = 0;
@@ -682,12 +628,12 @@ void	kf_ToggleFogColour( void )
 			//pie_SetFogColour(0x0078684f);//(nicks colour + 404040)/2
 		break;
 	}
-#endif
+
 }
 
 void	kf_ToggleFog( void )
 {
-#ifndef PSX
+
 	static BOOL fogEnabled = FALSE;
 	
 		if (fogEnabled)
@@ -703,7 +649,7 @@ void	kf_ToggleFog( void )
 			pie_EnableFog(fogEnabled);
 //			addConsoleMessage("Fog On",DEFAULT_JUSTIFY);
 		}
-#endif
+
 }
 
 // --------------------------------------------------------------------------
@@ -758,11 +704,11 @@ void	kf_SimCloseDown( void )
 /* Toggles on/off gouraud shading */
 void	kf_ToggleGouraud( void )
 {
-#ifndef PSX
+
  	gouraudShading = !gouraudShading;
  	addConsoleMessage("Gouraud shading toggled",DEFAULT_JUSTIFY);
 	texPage++;
-#endif
+
 }
 
 // --------------------------------------------------------------------------
@@ -787,17 +733,7 @@ void	kf_LowerTile( void )
 /* Quick game exit */
 void	kf_SystemClose( void )
 {
-#ifndef PSX
-#ifdef INC_GLIDE
-	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		grSstControl(GR_CONTROL_DEACTIVATE);
-	}
 
-//	ExitProcess(4);
-	loopFastExit();
-#endif
-#endif
 }
 
 // --------------------------------------------------------------------------
@@ -1028,14 +964,14 @@ void	kf_ShowMappings( void )
 void	kf_SelectPlayer( void )
 {
     UDWORD	playerNumber, prevPlayer;
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
 	return;
 }
 #endif
-#endif
+
     //store the current player
     prevPlayer = selectedPlayer;
 
@@ -1132,11 +1068,9 @@ void	kf_SelectMoveGrouping( void )
 {
 UDWORD	groupNumber;
 
-#ifndef PSX
+
 	groupNumber = (getLastSubKey()-KEY_1) + 1;
-#else
-	groupNumber = (getLastSubKey()-KEY_A) + 1;
-#endif
+
 	activateGroupAndMove(selectedPlayer,groupNumber);
 }
 // --------------------------------------------------------------------------
@@ -1154,14 +1088,14 @@ void	kf_addInGameOptions( void )
 /* Tell the scripts to start a mission*/
 void	kf_AddMissionOffWorld( void )
 {
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer)
 {
 	return;
 }
 #endif
-#endif
+
 	game_SetValidityKey(VALIDITYKEY_CTRL_M);
 	eventFireCallbackTrigger(CALL_MISSION_START);
 }
@@ -1169,28 +1103,28 @@ if(bMultiPlayer)
 /* Tell the scripts to end a mission*/
 void	kf_EndMissionOffWorld( void )
 {
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer)
 {
 	return;
 }
 #endif
-#endif
+
 	eventFireCallbackTrigger(CALL_MISSION_END);
 }
 // --------------------------------------------------------------------------
 /* Initialise the player power levels*/
 void	kf_NewPlayerPower( void )
 {
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer)
 {
 	return;
 }
 #endif
-#endif
+
 	newGameInitPower();
 }
 
@@ -1198,17 +1132,17 @@ if(bMultiPlayer)
 // Display multiplayer guff.
 void	kf_addMultiMenu(void)
 {
-#ifndef PSX
+
 	if(bMultiPlayer)
 	{
 		intAddMultiMenu();
 	}
-#endif
+
 }
 
 // --------------------------------------------------------------------------
 // start/stop capturing audio for multiplayer
-#ifndef PSX
+
 void kf_multiAudioStart(void)
 {
 	if(bMultiPlayer							// multiplayer game
@@ -1229,12 +1163,12 @@ void kf_multiAudioStop(void)
 	}
 	return;
 }
-#endif
+
 // --------------------------------------------------------------------------
 
 void	kf_JumpToMapMarker( void )
 {
-#ifndef PSX
+
 UDWORD	entry;
 	if(!getRadarTrackingStatus())
 	{
@@ -1249,7 +1183,7 @@ UDWORD	entry;
 			camToggleStatus();
 		}
 	}
-#endif
+
 }
 
 
@@ -1257,17 +1191,17 @@ UDWORD	entry;
 /* Raises the G Offset */
 void	kf_UpGeoOffset( void )
 {
-#ifndef PSX
+
 	geoOffset++;
-#endif
+
 }
 // --------------------------------------------------------------------------
 /* Lowers the geoOffset */
 void	kf_DownGeoOffset( void )
 {
-#ifndef PSX
+
 	geoOffset--;
-#endif
+
 }
 // --------------------------------------------------------------------------
 /* Ups the droid scale */
@@ -1294,14 +1228,14 @@ void	kf_TogglePowerBar( void )
 /* Toggles whether we process debug key mappings */
 void	kf_ToggleDebugMappings( void )
 {
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
 	return;
 }
 #endif
-#endif
+
 
 #ifndef DEBUG
 	if(bAllowDebugMode)
@@ -1319,12 +1253,12 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 			CONPRINTF(ConsoleString,(ConsoleString,"ALL Debug Key Mappings - PERMITTED"));
 			CONPRINTF(ConsoleString,(ConsoleString,"DISCLAIMER: YOU HAVE NOW CHEATED"));
 		}
-#ifndef PSX
+
 		if(bMultiPlayer)
 		{
 			sendTextMessage("Presses Debug. CHEAT",TRUE);
 		}
-#endif
+
 
 	}
 }
@@ -1333,14 +1267,14 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 
 void	kf_ToggleGodMode( void )
 {
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
 	return;
 }
 #endif
-#endif
+
 
 	if(godMode)
 	{
@@ -1374,12 +1308,12 @@ void	kf_SeekNorth( void )
 void	kf_TogglePauseMode( void )
 {
 
-#ifndef PSX
+
 	if(bMultiPlayer && (NetPlay.bComms != 0) )
 	{
 		return;
 	}
-#endif
+
 
 	/* Is the game running? */
 	if(gamePaused() == FALSE)
@@ -1435,18 +1369,18 @@ void	kf_FinishResearch( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleEnergyBars( void )
 {
-#ifndef PSX
+
 	toggleEnergyBars();
 	CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_ENERGY ) ));
-#endif
+
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleReloadBars( void )
 {
-#ifndef PSX
+
 	toggleReloadBarDisplay();
 	CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_ENERGY ) ));
-#endif
+
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleDemoMode( void )
@@ -1481,7 +1415,7 @@ void	kf_ChooseOptions( void )
 	intAddOptions();
 }
 
-#ifndef PSX
+
 // --------------------------------------------------------------------------
 void	kf_ToggleBlips( void )
 {
@@ -1865,14 +1799,14 @@ void kf_KillSelected(void)
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
 
-#ifndef PSX
+
 #ifndef DEBUG
 if(bMultiPlayer)
 {
 	return;
 }
 #endif
-#endif
+
 
 	for(psCDroid=apsDroidLists[selectedPlayer]; psCDroid; psCDroid=psNDroid)
 	{
@@ -1892,7 +1826,7 @@ if(bMultiPlayer)
 		}
 	}
 }
-#endif
+
 
 // --------------------------------------------------------------------------
 // display the grid info for all the selected objects
@@ -1923,19 +1857,19 @@ void kf_ShowGridInfo(void)
 // --------------------------------------------------------------------------
 void kf_GiveTemplateSet(void)
 {
-#ifndef PSX
+
 	addTemplateSet(4,0);
 	addTemplateSet(4,1);
 	addTemplateSet(4,2);
 	addTemplateSet(4,3);
-#endif
+
 }
 
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTextMessage(void)
 {
-#ifndef PSX
+
 	CHAR	ch;									
 
 	if(/*bMultiPlayer || */!bAllowOtherKeyPresses OR getCheatCodeStatus()) 
@@ -2051,7 +1985,7 @@ void kf_SendTextMessage(void)
 //		iV_DrawText(sTextToSend,16+D_W,RADTLY+D_H-16);
 		return;
 	}
-#endif
+
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleConsole( void )
@@ -2414,12 +2348,12 @@ UDWORD		xJump = 0, yJump = 0;
 
 void kf_ToggleFormationSpeedLimiting( void )
 {
-#ifndef PSX
+
 	if(bMultiPlayer)
 	{
 		return;
 	}
-#endif
+
 	if ( moveFormationSpeedLimitingOn() )
 	{
 		addConsoleMessage(strresGetString(psStringRes,STR_GAM_FORMATION_OFF),LEFT_JUSTIFY);

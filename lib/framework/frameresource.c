@@ -17,13 +17,10 @@
 
 
 // control how data files are loaded
-#ifndef PSX   // I don't know what this is ... but it certainly doesn't work on the playstation  ... (it sounds like the .WDG cacheing to me!)
+  // I don't know what this is ... but it certainly doesn't work on the playstation  ... (it sounds like the .WDG cacheing to me!)
 #define SINGLE_BUFFER_LOAD
 
-#else
-#include "cdpsx.h"
 
-#endif
 
 							  
 extern void InitWDG(char *WdgFileName);

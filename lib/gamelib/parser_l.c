@@ -266,25 +266,9 @@ extern	int	audp_mapch	YY_ARGS((int delim, int escape));
 #line 1 ".\parser.l"
 
 
-#ifndef PSX
+
 #include <stdio.h>
-#else
-/* A few definitions so the lex generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-#ifndef _FILE_
-typedef signed int FILE;
-#define _FILE_
-#endif
-#define stderr 0
-#define stdin  0
-#define stdout 0
-static int fprintf(FILE* f,char* c,...)
-{
-	return 0;
-}
-#endif
+
 
 /* Turn off a couple of warnings that the lex generated code gives */
 #pragma warning ( disable : 4102 4129 4305 )

@@ -87,7 +87,7 @@ extern CURSORSNAP InterfaceSnap;
 #define		IDMISSIONRES_TITLE		11014
 
 /*mission timer position*/
-#ifndef PSX
+
 
 #define		TIMER_X					(568 + E_W)
 //#define		TIMER_Y					22
@@ -101,21 +101,7 @@ extern CURSORSNAP InterfaceSnap;
 #define		TRAN_FORM_WIDTH			75
 #define		TRAN_FORM_HEIGHT		25
 
-#else
-// Mission timer.
-#define		TIMER_X					(320+32)
-#define		TIMER_Y					(20+32)
-#define		TIMER_WIDTH				56
-#define		TIMER_HEIGHT			20
-#define		TIMER_LABELX			15
-#define		TIMER_LABELY			0
-// Transporter loading.
-#define		TRAN_FORM_X				(320-64)
-#define		TRAN_FORM_Y				(20+32)
-#define		TRAN_FORM_WIDTH			84
-#define		TRAN_FORM_HEIGHT		25
 
-#endif
 
 /*Transporter Timer position */
 #define		TRAN_TIMER_X			4
@@ -130,7 +116,7 @@ extern CURSORSNAP InterfaceSnap;
 
 
 
-#ifndef PSX
+
 
 #define		MISSION_1_X				5						// pos of text options in box.
 #define		MISSION_1_Y				15
@@ -142,26 +128,10 @@ extern CURSORSNAP InterfaceSnap;
 #define		MISSION_TEXT_W			MISSIONRES_W-10
 #define		MISSION_TEXT_H			16
 
-#else	// PSX version
 
-#define		MISSION_1_X				5						// pos of text options in box.
-#define		MISSION_1_Y				(15+8)
-#ifdef COVERMOUNT
- #define		MISSION_2_X				5
- #define		MISSION_2_Y				(MISSION_1_Y+16)
-#else
- #define		MISSION_2_X				5
- #define		MISSION_2_Y				(MISSION_1_Y+48)
-#endif
-#define		MISSION_3_X				5
-#define		MISSION_3_Y				(MISSION_1_Y+48*2)
-#define		MISSION_TEXT_W			MISSIONRES_W-10
-#define		MISSION_TEXT_H			16
-
-#endif
 
 //these are used for mission countdown
-#ifndef PSX
+
 #define TEN_MINUTES         (10 * 60 * GAME_TICKS_PER_SEC)
 #define FIVE_MINUTES        (5 * 60 * GAME_TICKS_PER_SEC)
 #define FOUR_MINUTES        (4 * 60 * GAME_TICKS_PER_SEC)
@@ -174,7 +144,7 @@ extern CURSORSNAP InterfaceSnap;
 #define NOT_PLAYED_FIVE         0x08
 #define NOT_PLAYED_TEN          0x10
 #define NOT_PLAYED_ACTIVATED    0x20
-#endif
+
 
 //EXTERNALS*************
 
@@ -215,11 +185,11 @@ static BOOL				g_bMissionResult;
 // return positions for vtols
 POINT	asVTOLReturnPos[MAX_PLAYERS];
 
-#ifndef PSX
+
 static UBYTE   missionCountDown;
 //flag to indicate whether the coded mission countdown is played
 static UBYTE   bPlayCountDown;
-#endif
+
 
 //FUNCTIONS**************
 static void addLandingLights( UDWORD x, UDWORD y);
@@ -365,9 +335,9 @@ DBPRINTF(("***Init Mission ***\n"));
 	}
 	offWorldKeepLists = FALSE;
 	mission.time = -1;
-#ifndef PSX			// ffs ab
+			// ffs ab
     setMissionCountDown();
-#endif
+
 	mission.ETA = -1;
 	mission.startTime = 0;
 	mission.psGateways = NULL;
@@ -391,9 +361,9 @@ DBPRINTF(("***Init Mission ***\n"));
 
     bDroidsToSafety = FALSE;
 
-#ifndef PSX
+
     setPlayCountDown(TRUE);
-#endif
+
 
     //start as not cheating!
     mission.cheatTime = 0;
@@ -474,7 +444,7 @@ BOOL missionShutDown(void)
 	return TRUE;
 }
 
-#ifndef PSX
+
 /*on the PC - sets the countdown played flag*/
 void setMissionCountDown(void)
 {
@@ -511,7 +481,7 @@ void setMissionCountDown(void)
         missionCountDown &= ~NOT_PLAYED_ONE;
     }
 }
-#endif
+
 
 //BOOL startMission(MISSION_TYPE missionType, STRING *pGame)
 BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
@@ -748,9 +718,9 @@ void addTransporterTimerInterface(void)
 {
 	DROID	        *psDroid, *psTransporter;
     BOOL            bAddInterface = FALSE;
-#ifndef PSX
+
     W_CLICKFORM     *psForm;
-#endif
+
 
 	//check if reinforcements are allowed
 	if (mission.ETA >= 0)
@@ -783,22 +753,16 @@ void addTransporterTimerInterface(void)
             if (psDroid)*/
             {
                 bAddInterface = TRUE;
-#ifndef PSX
+
 	    		//check timer is not already on the screen
 		    	if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON))
     			{
 	    			intAddTransporterTimer();
 		    	}
-#else
-	    		//check timer is not already on the screen
-		    	if (!widgGetFromID(psWScreen, IDTIMER_FORM))
-    			{
-	    			intAddMissionTimer();
-		    	}
-#endif
+
 				//set the data for the transporter timer
 				widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)psTransporter);
-#ifndef PSX
+
                 //lock the button if necessary
                 if (transporterFlying(psTransporter))
                 {
@@ -809,7 +773,7 @@ void addTransporterTimerInterface(void)
                         formSetClickState(psForm, WBUT_LOCK);
                     }
                 }
-#endif
+
 		    }
 	    }
     }
@@ -922,21 +886,14 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    iDx = iLandX - iX;
 			    iDy = iLandY - iY;
                 
-#ifndef PSX    
+   
 			    fR = (FRACT_D) atan2(iDx, iDy);
 			    if ( fR < 0.0 )
 			    {
 			    	fR += (FRACT_D) (2*PI);
 			    }
 			    psTransporter->direction = (UWORD)( RAD_TO_DEG(fR) );
-#else           
-			    {
-			    	SWORD direction;
-			    	direction = angle_PSX2World(ratan2(iDx, iDy));
-			    	if (direction < 0) direction+=360;
-			    	psTransporter->direction = (UWORD) direction;
-			    }
-#endif          
+        
                 
 				// Camera track requested and it's the selected player.
 			    if ( ( bTrackTransporter == TRUE ) && (iPlayer == (SDWORD)selectedPlayer) )
@@ -960,10 +917,10 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    /* set fly-in order */
 			    orderDroidLoc( psTransporter, DORDER_TRANSPORTIN,
 			    				iLandX, iLandY );
-#ifndef PSX
+
 				audio_PlayObjDynamicTrack( psTransporter, ID_SOUND_BLIMP_FLIGHT,
 									moveCheckDroidMovingAndVisible );
-#endif
+
                 //only want to fly one transporter in at a time now - AB 14/01/99
                 break;
             }
@@ -1234,10 +1191,10 @@ void restoreMissionData(void)
 
 	resetRadarRedraw();
 
-#ifndef PSX
+
     //reset the environ map back to the homebase settings
     environReset();
-#endif
+
 
 	//intSetMapPos(mission.playerX, mission.playerY);
 }
@@ -1577,10 +1534,10 @@ BOOL startMissionOffClear(STRING *pGame)
 
 	//this gets set when the timer is added in scriptFuncs
 	//mission.startTime = gameTime;
-#ifndef PSX			// ffs ab
+		// ffs ab
     //the message should have been played at the between stage
     missionCountDown &= ~NOT_PLAYED_ACTIVATED;
-#endif
+
 	return TRUE;
 }
 
@@ -1603,10 +1560,10 @@ BOOL startMissionOffKeep(STRING *pGame)
 
 	//this gets set when the timer is added in scriptFuncs
 	//mission.startTime = gameTime;
-#ifndef PSX		// ffs ab
+	// ffs ab
     //the message should have been played at the between stage
     missionCountDown &= ~NOT_PLAYED_ACTIVATED;
-#endif
+
     return TRUE;
 }
 
@@ -1776,11 +1733,9 @@ void processMission()
 }
 
 
-#ifndef PSX
+
 #define MAXLIMBODROIDS (999)
-#else
-#define MAXLIMBODROIDS (10)
-#endif
+
 
 /*This deals with droids at the end of an offworld Limbo mission*/
 void processMissionLimbo(void)
@@ -2027,10 +1982,10 @@ void endMission(void)
     //make sure the cheat time is not set for the next mission
     mission.cheatTime = 0;
 
-#ifndef PSX
+
     //reset the bSetPlayCountDown flag
     setPlayCountDown(TRUE);
-#endif
+
 
 	//mission.type = MISSION_NONE;
 	mission.type = LDS_NONE;
@@ -2205,15 +2160,12 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
                     psResFacility->timeStarted)) / GAME_TICKS_PER_SEC; 
 
 				//check if Research is complete
-#ifndef PSX
+
 				//if ((pointsToAdd + pPlayerRes->currentPoints) > psResFacility->
 				//	timeToResearch)
                 if ((pointsToAdd + pPlayerRes->currentPoints) > (
                     (RESEARCH *)pSubject)->researchPoints)
-#else
-				//if (pointsToAdd > psResFacility->timeToResearch)
-                if (pointsToAdd > ((RESEARCH *)pSubject)->researchPoints)
-#endif
+
 				{
 					//store the last topic researched - if its the best
 					if (psResFacility->psBestTopic == NULL)
@@ -2848,14 +2800,14 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 		    addTransporterTimerInterface();
    			//set the data for the transporter timer label
     		widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)psTransporter);
-#ifndef PSX
+
             //make sure the button is enabled
             psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANTIMER_BUTTON);
             if (psForm)
             {
                 formSetClickState(psForm, WCLICK_NORMAL);
             }
-#endif
+
 		}
         //need a callback for when all the selectedPlayers' reinforcements have been delivered
         if (psTransporter->player == selectedPlayer)
@@ -2957,7 +2909,7 @@ BOOL intAddMissionTimer(void)
 //add the Transporter timer into the top left hand corner of the screen
 BOOL intAddTransporterTimer(void)
 {
-#ifndef PSX
+
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
@@ -3022,7 +2974,7 @@ BOOL intAddTransporterTimer(void)
 		return FALSE;
 	}
 
-#endif
+
 	return TRUE;
 }
 
@@ -3219,7 +3171,7 @@ void intUpdateMissionTimer(struct _widget *psWidget, struct _w_context *psContex
     //make sure its visible
     Label->style &= ~WIDG_HIDDEN;
 
-#ifndef PSX
+
     //make timer flash if time remaining < 5 minutes
     if (timeRemaining < FIVE_MINUTES)
     {
@@ -3266,7 +3218,7 @@ void intUpdateMissionTimer(struct _widget *psWidget, struct _w_context *psContex
         }
     }
 
-#endif
+
 }
 
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
@@ -3328,11 +3280,9 @@ void intUpdateTransporterTimer(struct _widget *psWidget, struct _w_context *psCo
 		if(missionCanReEnforce()) { // ((mission.type == LDS_MKEEP) || (mission.type == LDS_MCLEAR)) & (mission.ETA >= 0) ) {
 			fillTimeDisplay(Label->aText, ETA, FALSE);
 		} else {
-#ifndef PSX
+
 			fillTimeDisplay(Label->aText, 0, FALSE);
-#else
-			fillTimeDisplay(Label->aText, LZ_COMPROMISED_TIME, FALSE);
-#endif
+
 		}
 	}
 
@@ -3365,14 +3315,14 @@ void intRemoveMissionTimer(void)
 /* Remove the Transporter Timer widgets from the screen*/
 void intRemoveTransporterTimer(void)
 {
-#ifndef PSX
+
 	//remove main screen
 	if(widgGetFromID(psWScreen,IDTRANTIMER_BUTTON) != NULL) 
 	{	
     	widgDelete(psWScreen, IDTRANTIMER_BUTTON);
     }
-#endif
 }
+
 
 
 // ////////////////////////////////////////////////////////////
@@ -3380,7 +3330,7 @@ void intRemoveTransporterTimer(void)
 // mission result functions for the interface.
 
 
-#ifndef PSX
+
 void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 //	UNUSEDPARAMETER(pColours);
@@ -3399,263 +3349,7 @@ void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD 
 	scoreDataToScreen();
 }
 
-#else	// PSX version.
 
-#define ENABLE_BACKDROPS
-#define USEPRIMBUFFERS	TRUE
-
-//UBYTE *OldCacheStart;
-//UDWORD OldCacheSize;
-//UBYTE *BDropData = NULL;
-extern void UpdateVRAM(void);
-
-void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
-{
-	UNUSEDPARAMETER(pColours);
-	UNUSEDPARAMETER(yOffset);
-	UNUSEDPARAMETER(xOffset);
-	UNUSEDPARAMETER(psWidget);
-
-	if(bDisplayScores) {
-		scoreDataToScreen();
-	}
-}
-
-
-static UBYTE *CurrentBackdrop = NULL;
-static BOOL	CurrentBackdropIsValid = FALSE;
-static BOOL CurrentIsPrimBuffer = FALSE;
-
-void UpdateBackdrop(void)
-{
-#ifdef ENABLE_BACKDROPS
-	if(CurrentBackdrop) {
-		TIM_IMAGE TimInfo;
-		RECT CurrentImage;
-
-		OpenTIM((void*)CurrentBackdrop);
-		ReadTIM(&TimInfo);
-
-		CurrentImage.x=0;
-		CurrentImage.y=GetDBIndex()*GetDisplayHeight();
-		CurrentImage.w=TimInfo.prect->w;
-		CurrentImage.h=TimInfo.prect->h;
-
-		DrawSync(0);
-		LoadImage(&CurrentImage,TimInfo.paddr);
-		DrawSync(0);
-	}
-#endif
-}
-
-
-//void DisplayBackdrop(void)
-//{
-//	if(CurrentBackdrop) {
-//		TIM_IMAGE TimInfo;
-//		RECT CurrentImage;
-//
-//		OpenTIM((void*)CurrentBackdrop);
-//		ReadTIM(&TimInfo);
-//
-//		CurrentImage.x=0;
-//		CurrentImage.y=0;
-//		CurrentImage.w=TimInfo.prect->w;
-//		CurrentImage.h=TimInfo.prect->h;
-//
-//		DrawSync(0);
-//		VSync(0);
-//		LoadImage(&CurrentImage,TimInfo.paddr);
-//		DrawSync(0);
-//
-//		CurrentImage.y=GetDisplayHeight();
-//
-//		DrawSync(0);
-//		VSync(0);
-//		LoadImage(&CurrentImage,TimInfo.paddr);
-//		DrawSync(0);
-//	}
-//}
-
-
-
-BOOL GetBackdropActive(void)
-{
-	return BackdropActive;
-}
-
-
-BOOL IsBackdropLoaded(void)
-{
-	return CurrentBackdropIsValid;
-}
-
-void StartBackdropDisplay(void)
-{
-	SetDisplaySize(DISPLAY_WIDTH,DISPLAY_HEIGHT);		// flip to lowres for this screen - needed for end of level (was staying in hi-res for results screen)
-#ifdef ENABLE_BACKDROPS
-	SetVRAMUpdateCallback(UpdateBackdrop);
-#endif
-	BackdropActive = TRUE;
-}
-
-
-void StopBackdropDisplay(void)
-{
-#ifdef ENABLE_BACKDROPS
-	SetVRAMUpdateCallback(NULL);
-#endif
-	BackdropActive = FALSE;
-}
-
-extern BOOL SetWDGCache(UBYTE *CacheStart, UDWORD CacheSize);
-extern BOOL GetWDGCache(UBYTE **CacheStart,UDWORD *CacheSize);
-extern BOOL FreeCurrentWDG(void);
-
-
-#ifdef DISPLAYMODE_PAL
-#define BDROPDIR "bdropspal"
-#else
-#define BDROPDIR "bdrops"
-#endif
-
-UBYTE LastBackdropFname[32];
-
-UBYTE *GetLastBackdropName(void)
-{
-	return LastBackdropFname;
-}
-
-// Load a backdrop bitmap from BDROP.WDG
-//
-// Filename 		backdrop to load.
-// UsePrimBuffer	If this is TRUE then the backdrop is stored at the begining of the primitive
-//					buffer. In this case you must be carefull that the primitive buffer is not in use
-//					when this function is called.
-// 					If UsePrimBuffer = FALSE then memory is allocated for the bitmap.
-//
-// Assumes bitmap to be loaded is a 320 x 256 x 16 bit TIM.
-// Assumes WDG cache points to begining of primative buffers.
-// Assumes primative buffers are big enought to hold the bitmap.
-//
-UBYTE *LoadBackdrop(char *FileName,BOOL UsePrimBuffer)
-{
-	BOOL Result;
-	UBYTE *FileData = NULL;
-	UDWORD FileSize;
-	UBYTE fname[32];
-	UBYTE AllocateMode;
-	
-#ifdef ENABLE_BACKDROPS
-
-	if(CurrentBackdropIsValid) 
-	{
-		UnloadBackdrop();
-	}
-	CurrentIsPrimBuffer = UsePrimBuffer;
-
-	DrawSync(0);		// Ensure anything being drawn has finished before continueing.
-
-	// we need to take a backup copy of the backdrop name so that we can restore it if needed
-	strcpy(LastBackdropFname,FileName);
-	sprintf(fname,"%s\\%s",BDROPDIR,FileName);
-
-/*
-	if(UsePrimBuffer==TRUE) 
-	{
-		// Allocate memory at the beggining of the primative buffer for our picture.
-		// This means that the primitive buffer will be smaller but still usable for
-		// drawing GPU stuff.
-		FileData=AllocInPrimBuffers(320*256*2+128);
-		// This will also invalidate the file cache .. and it will need to be reloaded
-	}
-*/
-
-	DBPRINTF(("Loading backdrop %s useprimbuffer=%d\n",fname,UsePrimBuffer));
-	if (UsePrimBuffer==TRUE)
-	{
-//		AllocateMode=WDG_USESUPPLIED;
-		AllocateMode=WDG_RETURNCACHE;	// return the pointer in the cache where the file is stored
-	}
-	else
-	{
-		AllocateMode=WDG_ALLOCATEMEM;
-	}
-
-	FILE_InvalidateCache();			// This line MUST be included so that we make sure that the backdrop is loaded into cache
-	Result = loadFileFromWDG(fname, &FileData, &FileSize, AllocateMode);
-	if(Result != TRUE) 
-	{
-		// Backdrop not in WDG loading from mem
-		if (!loadFile(fname, &FileData, &FileSize))
-		{
-			DBPRINTF(("Error loading %s from WDG (%d)\n",fname,Result));
-			FileData = NULL;
-		}
-
-	}
-
-
-	if(UsePrimBuffer==TRUE) 
-	{
-		UBYTE *FileStart;		// Where in the cache is the file stored
-		// Allocate memory at the beggining of the primative buffer for our picture.
-		// This means that the primitive buffer will be smaller but still usable for
-		// drawing GPU stuff.
-#define BACKDROPSIZE (320*256*2+128)
-
-		FileStart=FileData;	 //
-		FileData=AllocInPrimBuffers(BACKDROPSIZE);
-
-//		// Fill the source bitmap for testing.
-//		{
-//			UDWORD i;
-//			for(i=20; i<BACKDROPSIZE; i++) {
-//				FileStart[i] = 0x1f;
-//			}
-//		}
-
-		// memmove must be used because both are in the primative buffer area ... it should get sorted out though
-DBPRINTF(("filedata=%p filestart=%p size=%p\n",FileData,FileStart,BACKDROPSIZE));
-		memmove(FileData,FileStart,BACKDROPSIZE);	   // copy the data from the cache into the start of the primative buffer
-		FILE_InvalidateCache();
-	}
-
-
-	CurrentBackdrop = FileData;
-	CurrentBackdropIsValid = TRUE;
-
-	DBPRINTF(("OK\n",FileName));
-#endif
-	return FileData;
-}
-
-
-// Unload a backdrop bitmap.
-// if the bitmap was loaded with UsePrimBuffer = TRUE then call
-// this function with UsePrimBuffer = TRUE.
-//
-BOOL UnloadBackdrop(void)
-{
-#ifdef ENABLE_BACKDROPS
-	if(CurrentBackdropIsValid) {
-		DBPRINTF(("Unloading backdrop\n"));
-		if(CurrentIsPrimBuffer) {
-			DrawSync(0);		// Ensure anything being drawn has finished before continueing.
-			ResetPrimBuffers();
-		} else {
-			if(CurrentBackdrop) {
-				FREE(CurrentBackdrop);
-			}
-		}
-
-		CurrentBackdropIsValid = FALSE;
-	}
-#endif
-	return TRUE;
-}
-
-#endif
 
 void missionResetInGameState( void )
 {
@@ -3688,7 +3382,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
 
-#ifndef PSX
+
 
 	// add some funky beats
 	cdAudio_PlayTrack(2);	// 2= frontend music.
@@ -3703,11 +3397,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		pie_LoadBackDrop(SCREEN_MISSIONEND,FALSE);
 	}
 
-#else
 
-	LoadBackdrop("frontend.tim",USEPRIMBUFFERS);
-	StartBackdropDisplay();
-#endif
 
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
@@ -3771,26 +3461,13 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sLabInit.height = 16;
 	if(result)
 	{	
-#ifndef PSX
+
         //don't bother adding the text if haven't played the audio
         if (bPlaySuccess)
         {
 		    sLabInit.pText = strresGetString(psStringRes,STR_MR_OBJECTIVE_ACHIEVED);//"Objective Achieved";
         }
-#else	// might want to do this on PC as well. Apparently not!
-		// If the've won the game then..
-		if(testPlayerHasWon()) {
-			// In fastplay say "Practice Complete"
-			if(GetInFastPlay()) {
-	  			sLabInit.pText = strresGetString(psStringRes,STR_MR_PRACTICE_COMPLETE);
-			} else {
-				// In the real game say "Victory"
-	  			sLabInit.pText = strresGetString(psStringRes,STR_MR_VICTORY);
-			}
-		} else {
-  			sLabInit.pText = strresGetString(psStringRes,STR_MR_OBJECTIVE_ACHIEVED);//"Objective Achieved";
-		}
-#endif
+
 	}
 	else
 	{
@@ -3863,7 +3540,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	}
 	else
 	{
-#ifndef PSX
+
 #ifndef COVERMOUNT
 		//load
 		sButInit.id			= IDMISSIONRES_LOAD;
@@ -3878,27 +3555,19 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		sButInit.y			= MISSION_2_Y;
 		sButInit.pText		= strresGetString(psStringRes,STR_MR_QUIT_TO_MAIN);//"Quit to Main Menu";
 		widgAddButton(psWScreen, &sButInit);
-#else	// No load option on Playstation.
-		//quit
-		sButInit.id			= IDMISSIONRES_QUIT;
-		sButInit.x			= MISSION_2_X;
-		sButInit.y			= MISSION_2_Y-22;
-		sButInit.pText		= strresGetString(psStringRes,STR_MR_QUIT_TO_MAIN);//"Quit to Main Menu";
-		widgAddButton(psWScreen, &sButInit);
-		intSetCurrentCursorPosition(&InterfaceSnap,sButInit.id);
-#endif
+
 	}
 
 	intMode		= INT_MISSIONRES;
 	MissionResUp = TRUE;
 
-#ifndef PSX
+
 	/* play result audio */
 	if ( result == TRUE AND bPlaySuccess)
 	{
 		audio_QueueTrack( ID_SOUND_OBJECTIVE_ACCOMPLISHED );
 	}
-#endif
+
 
 	return TRUE;
 }
@@ -3922,13 +3591,9 @@ void intRemoveMissionResultNoAnim(void)
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);		
 
-#ifndef PSX
+
 	 cdAudio_Stop();
-#else
-	StopBackdropDisplay();
-	UnloadBackdrop();
-	DBPRINTF(("Backdrop released\n"));
-#endif
+
 
 	MissionResUp	 	= FALSE;
 	ClosingMissionRes   = FALSE;
@@ -4031,18 +3696,18 @@ void missionContineButtonPressed( void )
 void intProcessMissionResult(UDWORD id)
 {
 	W_BUTINIT	sButInit;
-#ifndef PSX
-	CD_INDEX	CDrequired;
-#endif
 
-#ifndef PSX
+	CD_INDEX	CDrequired;
+
+
+
 	/* GJ to TC - this call processes the CD change widget box */
 	if ( !cdspan_ProcessCDChange(id) )
-#endif
+
 	switch(id)
 	{
 
-#ifndef PSX
+
 	case IDMISSIONRES_LOAD:
 		// throw up some filerequester
 		addLoadSave(LOAD_MISSIONEND,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_LOAD_GAME)/*"Load Game"*/);
@@ -4068,31 +3733,7 @@ void intProcessMissionResult(UDWORD id)
 			widgAddButton(psWScreen, &sButInit);
 		}
 		break;
-#else
-//	case IDMISSIONRES_LOAD:
-//		// throw up some filerequester
-//		addLoadSave(TRUE,"savegame\\","gam",strresGetString(psStringRes,STR_MR_LOAD_GAME)/*"Load Game"*/);
-//		break;
-	case IDMISSIONRES_SAVE:
-#if(1)
-		widgDelete(psWScreen, IDMISSIONRES_TITLE);
-		widgDelete(psWScreen, IDMISSIONRES_FORM);
-		widgDelete(psWScreen, IDMISSIONRES_BACKFORM);		
-		StopBackdropDisplay();
-		UnloadBackdrop();
-		MissionResUp	 	= FALSE;
-		ClosingMissionRes   = FALSE;
-		intMode				= INT_NORMAL;
 
-		intDoLoadSave(TRUE);
-
-		resetMissionPauseState();		// Don't ask.
-		intAddMissionResult(TRUE, TRUE);
-#else
-		addLoadSave(FALSE,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_SAVE_GAME)/*"Save Game"*/);
-#endif
-		break;
-#endif
 
 	case IDMISSIONRES_QUIT:
 
@@ -4100,7 +3741,7 @@ void intProcessMissionResult(UDWORD id)
 		break;
 
 	case IDMISSIONRES_CONTINUE:
-#ifndef PSX
+
 		if(bLoadSaveUp)
 		{
 			closeLoadSave();				// close save interface if it's up.
@@ -4109,11 +3750,11 @@ void intProcessMissionResult(UDWORD id)
 		/* check correct CD in drive */
 		CDrequired = getCDForCampaign( getCampaignNumber() );
 		if ( cdspan_CheckCDPresent( CDrequired ) )
-#endif
+
 		{
 			missionContineButtonPressed();
 		}
-#ifndef PSX
+
 		else
 		{
 			widgDelete(psWScreen, IDMISSIONRES_TITLE);
@@ -4122,7 +3763,7 @@ void intProcessMissionResult(UDWORD id)
 			showChangeCDBox( psWScreen, CDrequired,
 				missionContineButtonPressed, missionCDCancelPressed );
 		}
-#endif	
+
 
 		break;
 
@@ -4175,7 +3816,7 @@ void launchMission(void)
 	}
 }
 
-#ifndef PSX
+
 void intCDOK( void )
 {
 
@@ -4190,7 +3831,7 @@ void intCDCancel( void )
 {
 	/* do nothing - dealt with in HCI */
 }
-#endif
+
 
 //sets up the game to start a new mission
 //BOOL setUpMission(MISSION_TYPE type)
@@ -4324,10 +3965,10 @@ void adjustMissionPower(void)
 game needs to be paused*/
 void setMissionPauseState(void)
 {
-#ifndef PSX
+
 	if (!bMultiPlayer)
 	{
-#endif
+
 
 		gameTimeStop();
 		setGameUpdatePause(TRUE);
@@ -4335,18 +3976,18 @@ void setMissionPauseState(void)
 		setScriptPause(TRUE);
 		setConsolePause(TRUE);
 
-#ifndef PSX
+
 	}
-#endif
+
 }
 
 /*resets the pause states */
 void resetMissionPauseState(void)
 {
-#ifndef PSX
+
 	if (!bMultiPlayer)
 	{
-#endif
+
 
 		setGameUpdatePause(FALSE);
 		setAudioPause(FALSE);
@@ -4354,9 +3995,9 @@ void resetMissionPauseState(void)
 		setConsolePause(FALSE);
 		gameTimeStart();
 
-#ifndef PSX
+
 	}
-#endif
+
 }
 
 //gets the coords for a no go area
@@ -4407,14 +4048,12 @@ void setLandingZone(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2)
 		sLandingZone[0].y2 = y2;
 	}
 
-#ifndef PSX
+
 		if(pie_Hardware())
 		{
 			addLandingLights(getLandingX(0)+64,getLandingY(0)+64);
 		}
-#else
-		addLandingLights(getLandingX(0)+64,getLandingY(0)+64);
-#endif
+
 }
 
 //sets the coords for a no go area
@@ -4442,16 +4081,12 @@ void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 		sLandingZone[area].y2 = y2;
 	}
 
-#ifndef PSX
+
 		if(area==0 AND pie_Hardware())
 		{
 			addLandingLights(getLandingX(area)+64,getLandingY(area)+64);
 		}
-#else
-		if(area == 0) {
-			addLandingLights(getLandingX(area)+64,getLandingY(area)+64);
-		}
-#endif
+
 
 }
 
@@ -4776,7 +4411,7 @@ BOOL getDroidsToSafetyFlag(void)
     return bDroidsToSafety;
 }
 
-#ifndef PSX
+
 //access functions for bPlayCountDown flag - TRUE = play coded mission count down
 void setPlayCountDown(UBYTE set)
 {
@@ -4786,7 +4421,7 @@ BOOL getPlayCountDown(void)
 {
     return bPlayCountDown;
 }
-#endif
+
 
 //checks to see if the player has any droids (except Transporters left)
 BOOL missionDroidsRemaining(UDWORD player)
@@ -4844,12 +4479,12 @@ void clearMissionWidgets(void)
     {
         intRemoveMissionTimer();
     }
-#ifndef PSX
+
     if (missionCanReEnforce())
     {
         intRemoveTransporterTimer();
     }
-#endif
+
     intRemoveTransporterLaunch();
 }
 
@@ -4864,7 +4499,7 @@ void resetMissionWidgets(void)
         //make sure its not flashing when added
         stopMissionButtonFlash(IDTIMER_FORM);
     }
-#ifndef PSX
+
     if (missionCanReEnforce())
     {
         addTransporterTimerInterface();
@@ -4899,7 +4534,7 @@ void resetMissionWidgets(void)
             }
         }
     }
-#endif
+
 }
 
 void	setCampaignNumber( UDWORD number )
