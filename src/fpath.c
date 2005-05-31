@@ -49,14 +49,14 @@ BOOL	fpathDoMessage;
 // dir 0 => x = 0, y = -1
 static POINT aDirOffset[NUM_DIR] =
 {
-	 0, 1,
-	-1, 1,
-	-1, 0,
-	-1,-1,
-	 0,-1,
-	 1,-1,
-	 1, 0,
-	 1, 1,
+	{ 0, 1},
+	{-1, 1},
+	{-1, 0},
+	{-1,-1},
+	{ 0,-1},
+	{ 1,-1},
+	{ 1, 0},
+	{ 1, 1},
 };
 
 /* global pointer for object being routed - GJ hack -
@@ -710,7 +710,7 @@ void fpathClearIgnore(void)
 // find a clear tile on a gateway to route to
 void fpathGatewayCoords(GATEWAY *psGate, SDWORD *px, SDWORD *py)
 {
-	SDWORD	x,y, dist, mx,my, pos;
+	SDWORD	x = 0, y = 0, dist, mx, my, pos;
 
 	// find the clear tile nearest to the middle
 	mx = (psGate->x1 + psGate->x2)/2;
@@ -1053,7 +1053,7 @@ SDWORD fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerrain,
 						 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy,
 						 MOVE_CONTROL *psMoveCntl)
 {
-	static SDWORD	linkx,linky, gwx,gwy, asret, routex,routey, matchPoints;
+	static SDWORD	linkx, linky, gwx, gwy, asret, matchPoints;
 	static ASTAR_ROUTE		sAStarRoute;
 	SDWORD			retval = FPR_OK, gwRet, zone;
 	static GATEWAY	*psCurrRoute, *psGWRoute, *psLastGW;
@@ -1306,7 +1306,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	SDWORD				dir, nearestDir, minDist, tileDist;
 	FPATH_RETVAL		retVal = FPR_OK;
 //	DROID				*psCurr;
-	DROID				*psDroid;
+	DROID				*psDroid = NULL;
 	PROPULSION_STATS	*psPropStats;
 	UDWORD				GWTerrain;
 

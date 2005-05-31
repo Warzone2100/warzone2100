@@ -199,9 +199,7 @@ extern void pie_D3DPoly(PIED3DPOLY *poly);
 //necromancer
 extern void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3,  SDWORD texPage);
 
-
-
-
+void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 
 
 #endif // _piedef_h

@@ -103,13 +103,6 @@ static	UDWORD	auxVarSec; // dirty filthy hack - don't look for what this does...
 static	UDWORD	aeCalls;
 static	UDWORD	specifiedSize;
 static  UDWORD	ellSpec;
-static	POINT	powerHack[NUM_POWER_MODULES] = 		 // don't even ask
-{
-	{-90,90},
-	{-90,-90},
-	{90,-90},
-	{90,90}
-};
 // ----------------------------------------------------------------------------------------
 /* PROTOTYPES */
 /* externals */
@@ -1315,7 +1308,7 @@ void	updateDestruction(EFFECT *psEffect)
 {
 iVector	pos;
 UDWORD	effectType;
-UDWORD	widthScatter,breadthScatter, heightScatter;
+UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
 SDWORD	iX, iY;
 LIGHT	light;
 UDWORD	percent;
@@ -1921,7 +1914,6 @@ void	renderExplosionEffect(EFFECT *psEffect)
 	SDWORD	percent;
 	UDWORD brightness, specular;
 //	SDWORD centreX, centreZ;
-	UDWORD	timeSlice;
 
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
@@ -2207,7 +2199,7 @@ void	renderSmokeEffect(EFFECT *psEffect)
 {
 #ifndef PSX		// not on psx yet
 UDWORD	percent;
-UDWORD	transparency;
+UDWORD	transparency = 0;
 iVector	vec;
 SDWORD	rx,rz;
 UDWORD brightness, specular;
@@ -2797,7 +2789,7 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 SDWORD	i;
 SDWORD	inStart,inEnd;
 SDWORD	varStart,varEnd,varStride;
-SDWORD	shift;
+SDWORD	shift = 0;
 iVector	base;
 iVector	pos;
 

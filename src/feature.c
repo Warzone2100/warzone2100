@@ -176,9 +176,9 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 			&GfxFile, &type, &compType, &compName,
 			&psFeature->tileDraw, &psFeature->allowLOS, &psFeature->visibleAtStart);*/
 		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
-			&featureName, &Width, &Breadth,
+			featureName, &Width, &Breadth,
 			&psFeature->damageable, &psFeature->armour, &psFeature->body, 
-			&GfxFile, &type, &psFeature->tileDraw, &psFeature->allowLOS, 
+			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS, 
 			&psFeature->visibleAtStart);
 
 
@@ -256,7 +256,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	}
 	memset(asFeatureStats, 0, sizeof(FEATURE_STATS) * numFeatureStats);
 
-	/* Create some simple stats 
+	// Create some simple stats 
 	ref = REF_FEATURE_START;
 	psStats = asFeatureStats;
 	psStats->pName = "Mesa Feature";
@@ -318,7 +318,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->allowLOS = TRUE;
 	psStats->psImd = resGetData("IMD", "miarthov.imd");
 
-	/* Find the hover component for it 
+	// Find the hover component for it 
 	psStats->compType = COMP_PROPULSION;
 	for(comp=0; comp<numPropulsionStats; comp++)
 	{
@@ -338,7 +338,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->allowLOS = TRUE;
 	psStats->psImd = resGetData("IMD", "miartecm.imd");
 	
-	/* Find the ecm component for it 
+	// Find the ecm component for it 
 	psStats->compType = COMP_ECM;
 	for(comp=0; comp<numECMStats; comp++)
 	{
@@ -472,8 +472,8 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->allowLOS = TRUE;
 	psStats->psImd = resGetData("IMD", "miwrek4.imd");
 
-	/* These are test features for the LOS code 
-/*	psStats++;
+	// These are test features for the LOS code 
+	psStats++;
 	psStats->pName = "Cube 1,1";
 	psStats->ref = ref++;
 	psStats->subType = FEAT_LOS_OBJ;
@@ -603,18 +603,14 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 /* Release the feature stats memory */
 void featureStatsShutDown(void)
 {
-	FEATURE_STATS	*psFeature = asFeatureStats;
-
-//#ifndef RESOURCE_NAMES
 #if !defined(RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
-	
+	FEATURE_STATS	*psFeature = asFeatureStats;
 	UDWORD			inc;
 
 	for(inc=0; inc < numFeatureStats; inc++, psFeature++)
 	{
 		FREE(psFeature->pName);
 	}
-
 #endif
 
 	if(numFeatureStats) 
@@ -631,7 +627,6 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass,
 
 	/* this is ignored for features */
 	//(void)weaponClass;
-    UNUSEDPARAMETER(weaponClass);
 
 	ASSERT((PTRVALID(psFeature, sizeof(FEATURE)),
 		"featureDamage: Invalid feature pointer"));
@@ -935,6 +930,8 @@ void featureUpdate(FEATURE *psFeat)
 //		{
 			destroyFeature(psFeat); // get rid of the now!!!
 //		}
+		break;
+	default:
 		break;
 	}
 }

@@ -320,6 +320,8 @@ extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
 /*dummy function for John*/
 extern void brainAvailable(BRAIN_STATS *psStat);
 
+void adjustMaxDesignStats(void);
+
 //Access functions for the max values to be used in the Design Screen
 extern UDWORD getMaxComponentWeight(void);
 extern UDWORD getMaxBodyArmour(void);

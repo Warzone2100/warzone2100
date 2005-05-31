@@ -301,10 +301,10 @@ static BOOL intAddComponentForm(UDWORD numButtons);
 /* Add the template tab form to the design screen */
 static BOOL intAddTemplateForm(DROID_TEMPLATE *psSelected);
 /* Add the Major system tab form to the design screen */
-static BOOL intAddMultiComponentForm(UBYTE *aSensor, UDWORD numSensor,
-							 UBYTE *aECM, UDWORD numECM,
-							 UBYTE	*aConstruct, UDWORD numConstruct,
-							 UBYTE *aWeapon, UDWORD numWeapon);
+//static BOOL intAddMultiComponentForm(UBYTE *aSensor, UDWORD numSensor,
+//							 UBYTE *aECM, UDWORD numECM,
+//							 UBYTE	*aConstruct, UDWORD numConstruct,
+//							 UBYTE *aWeapon, UDWORD numWeapon);
 // count the number of available components
 static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
 							  COMP_BASE_STATS *asStats, UDWORD size);
@@ -1950,7 +1950,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	{
 //	case IDES_COMMAND:
 //		intSetDesignMode(IDES_BRAIN);
-		break;
+//		break;
 	case IDES_SENSOR:
 	case IDES_CONSTRUCT:
 	case IDES_ECM:
@@ -1960,6 +1960,8 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 		break;
 	case IDES_WEAPON:
 		intSetDesignMode(IDES_TURRET);
+		break;
+	default:
 		break;
 	}
 
@@ -2195,6 +2197,8 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 //		{
 //			return FALSE;
 //		}
+		break;
+	default:
 		break;
 	}
 
@@ -3072,6 +3076,8 @@ static void intSetSystemShadowStats(COMP_BASE_STATS *psStats)
 		case IDES_REPAIR:
 			intSetRepairShadowStats(NULL);
 			break;
+		default:
+			break;
 		}
 	}
 }
@@ -3699,6 +3705,8 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 		/* Air speed - terrain type doesn't matter, use road */
 		widgSetBarSize(psWScreen, IDDES_PROPAIR, intCalcSpeed(TER_ROAD, psStats));
 		break;
+	default:
+		break;
 	}
 
 	/* weight */
@@ -3777,6 +3785,8 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 			/* Reset the shadow bar */
 			widgSetMinorBarSize(psWScreen, IDDES_PROPAIR, 0);
 		}
+		break;
+	default:
 		break;
 	}
 
@@ -4279,6 +4289,8 @@ void intProcessDesign(UDWORD id)
 			}
 
 			break;
+		default:
+			break;
 		}
 
 		/* Lock the new button */
@@ -4326,6 +4338,8 @@ void intProcessDesign(UDWORD id)
 				case IDES_SYSTEM:
 				case IDES_TURRET:
 					widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
+					break;
+				default:
 					break;
 			}
 #endif
@@ -4722,6 +4736,8 @@ void intProcessDesign(UDWORD id)
 				widgHide(   psWScreen, IDDES_PROPFORM );
 				widgReveal( psWScreen, IDDES_SYSTEMFORM );
 				break;
+			default:
+				break;
 		}
 
 		widgReveal( psWScreen, IDDES_STATSFORM );
@@ -4748,6 +4764,8 @@ void intProcessDesign(UDWORD id)
 				case IDES_SYSTEM:
 				case IDES_TURRET:
 					intSetDesignMode( IDES_BODY );
+					break;
+				default:
 					break;
 			}
 		}
@@ -4829,6 +4847,8 @@ void intRunDesign(void)
 			intSetBodyShadowStats(NULL);
 			intSetPropulsionShadowStats((PROPULSION_STATS *)psStats);
 			break;
+		default:
+			break;
 		}
 
 		//set the template shadow stats
@@ -4903,8 +4923,6 @@ void intDisplayStatForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	SWORD			templateRadius;
 	SDWORD			falseScale;
 
-	UNUSEDPARAMETER(pColours);
-
 	/* get stats from userdata pointer in widget stored in
 	 * intSetSystemStats, intSetBodyStats, intSetPropulsionStats
 	 */
@@ -4963,8 +4981,6 @@ void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iVector			Rotation,Position;
 	SWORD			templateRadius;
 	SDWORD			falseScale;
-
-	UNUSEDPARAMETER(pColours);
 
 	x0 = xOffset+Form->x;
 	y0 = yOffset+Form->y;
@@ -5030,7 +5046,6 @@ void intDisplayDesignForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
-	UNUSEDPARAMETER(pColours);
 
 	x0 = xOffset+Form->x;
 	y0 = yOffset+Form->y;
@@ -5093,7 +5108,7 @@ BOOL saveTemplate(void)
 		if ( psTempl == NULL )
 		{
 			/* The design needs a new template in the list */
-			if (!HEAP_ALLOC(psTemplateHeap, &psTempl))
+			if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTempl))
 			{
 				DBPRINTF( ("saveTemplate: heap alloc failed\n") );
 				return FALSE;
@@ -5228,8 +5243,8 @@ void runTemplateShadowStats(UDWORD id)
 				psStats = (COMP_BASE_STATS *)(asRepairStats + psTempl->
 					asParts[COMP_REPAIRUNIT]);
 				break;
-			//default:
-				//not interested in other types!
+			default:
+				break;
 			}
 		}
 

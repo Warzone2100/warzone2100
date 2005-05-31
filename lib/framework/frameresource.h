@@ -152,6 +152,7 @@ BOOL OpenWDG(char *WDGname);
 BOOL IsWDGopen(void);
 void CloseWDG(void);
 
+void SetLastResourceHash(char *fname);
 
 #endif
 

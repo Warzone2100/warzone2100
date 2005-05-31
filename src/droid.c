@@ -66,6 +66,7 @@
 #include "edit3d.h"
 #include "scores.h"
 #include "research.h"
+#include "screen.h"
 
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
@@ -146,7 +147,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	UDWORD		penDamage, armourDamage;
 	BOOL		penetrated = FALSE;
 	UDWORD		armour=0;
-	SDWORD		state;
+	SECONDARY_STATE		state;
 	SDWORD		level, cmdLevel;
 
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
@@ -375,7 +376,6 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
 void droidDeleteName(DROID *psDroid)
 {
-	UNUSEDPARAMETER(psDroid);
 }
 
 /* droidRelease: release all resources associated with a droid -
@@ -1326,6 +1326,8 @@ void displayNaybors(void)
 			break;
 		case OBJ_FEATURE:
 			pType = "FEATURE";
+			break;
+		default:
 			break;
 		}
 #ifndef PSX
@@ -2860,14 +2862,17 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 	SBYTE				*pStartDroidData;
         int cnt;
 	UDWORD				NumDroids = 0, i, player;
-	STRING				componentName[MAX_NAME_SIZE], droidName[MAX_NAME_SIZE];
+	STRING				componentName[MAX_NAME_SIZE];
+#ifdef HASH_NAMES
+	STRING droidName[MAX_NAME_SIZE];
+#endif
 	BOOL				found = FALSE; //,EndOfFile;
 	DROID_TEMPLATE		*pDroidDesign;
 	COMP_BASE_STATS		*pStats;
 	UDWORD				size, inc, templateID;
 	BOOL				bDefaultTemplateFound = FALSE;
 #ifdef STORE_RESOURCE_ID
-	STRING				*pDroidName = droidName;
+//	STRING				*pDroidName = droidName;
 #endif
 #ifdef RESOURCE_NAMES
 	UDWORD				id;
@@ -2888,7 +2893,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 	for (i=0; i < NumDroids; i++)
 	{
-		if (!HEAP_ALLOC(psTemplateHeap, &pDroidDesign))
+		if (!HEAP_ALLOC(psTemplateHeap, (void*) &pDroidDesign))
 		{
 			DBERROR(("Out of memory - Droid Templates"));
 			return FALSE;
@@ -2901,9 +2906,9 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		pDroidDesign->pName = NULL;
 #endif
 
-		//read the data into the storage - the data is delimeted using comma's
+		//read the data into the storage - the data is delimited using comma's
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%d,%n",&componentName, &templateID,&cnt);
+		sscanf(pDroidData, "%[^','],%d,%n", componentName, &templateID, &cnt);
                 pDroidData += cnt;
 
 // Hideous mishmash of ifdef's ... sorry about that
@@ -2964,7 +2969,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 		//read in Body Name
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 
 		found = FALSE;
@@ -3010,7 +3015,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Brain Name
 		found = FALSE;
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 		
 		//get the Brain stats pointer
@@ -3055,7 +3060,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Construct Name
 		found = FALSE;
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 
 		//get the Construct stats pointer
@@ -3099,7 +3104,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Ecm Name
 		found = FALSE;
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 		
 		//get the Ecm stats pointer
@@ -3150,7 +3155,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Propulsion Name
 		found = FALSE;
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 
 		//get the Propulsion stats pointer
@@ -3194,7 +3199,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Repair Name
 		found = FALSE;
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 
 		//get the Repair stats pointer
@@ -3237,7 +3242,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 		//read in droid type - only interested if set to PERSON
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 		if (!strcmp(componentName, "PERSON"))
 		{
@@ -3273,7 +3278,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		//read in Sensor Name
 		found = FALSE;
 		componentName[0] = '\0';
-		sscanf(pDroidData,"%[^','],%n",&componentName,&cnt);
+		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
 
 		//get the Sensor stats pointer
@@ -3545,7 +3550,6 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 	UDWORD				NumWeapons = 0, i, player;
 	STRING				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	DROID_TEMPLATE		*pTemplate;
-	WEAPON_STATS		*pWeapons = asWeaponStats;
 	BOOL				recFound;
 	UWORD				SkippedWeaponCount=0;
 	SDWORD				incW;
@@ -3573,7 +3577,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		TemplateName[0] = '\0';
 		WeaponName[0] = '\0';
-		sscanf(pWeaponData,"%[^','],%[^','],%d", &TemplateName, &WeaponName, &player);
+		sscanf(pWeaponData,"%[^','],%[^','],%d", TemplateName, WeaponName, &player);
 		//loop through each droid to compare the name
 
 		player=RemapPlayerNumber(player);	// for psx ...
@@ -4137,8 +4141,6 @@ UDWORD	calcDroidPower(DROID *psDroid)
 
 	return power;
 }
-
-	static SDWORD TESTHHEIGHT=50;
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
 DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
@@ -5503,6 +5505,7 @@ switch(rank)
 		return strresGetString(psStringRes, STR_DL_LEVEL_ACE);
 	}
 #endif
+	return NULL;
 }
 
 STRING	*getDroidLevelName(DROID *psDroid)
@@ -6177,9 +6180,6 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 	ASSERT((PTRVALID(psStruct, sizeof(STRUCTURE)),
 		"buildModule: Invalid structure pointer"));
 
-	UNUSEDPARAMETER(psDroid);
-    UNUSEDPARAMETER(bCheckPower);
-
 	order = FALSE;
 	switch (psStruct->pStructureType->type)
 	{
@@ -6244,7 +6244,7 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
         //Power is obtained gradually now, so allow order
 		/*if(bCheckPower)
 		{
-			/* check enough power to build
+			// check enough power to build
 			if (!checkPower(selectedPlayer, asStructureStats[i].powerToBuild, TRUE))
 			{	
 				order = FALSE;
@@ -6316,15 +6316,14 @@ void setUpBuildModule(DROID *psDroid)
 // not written yet - needs merging with code in Dr Jones' Design.c
 void BuildNameFromDroid(DROID *psDroid, STRING *ConstructedName)
 {
-	UNUSEDPARAMETER(psDroid);	
-	UNUSEDPARAMETER(ConstructedName);	
 }
 
 
 // We just need 1 buffer for the current displayed droid (or template) name
 #define MAXCONNAME WIDG_MAXSTR	//(32)
+#ifdef HASH_NAMES
 static STRING ConstructedName[MAXCONNAME+1]="Body Mk XXIV";	// dummy name
-
+#endif
 
 
 STRING *getDroidName(DROID *psDroid)
@@ -6383,7 +6382,6 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 #ifdef STORE_RESOURCE_ID
 	UDWORD			id;
 	STRING			*pName = NULL;
-	static STRING	Unknown[]="Name Unknown";
 
 	/*see if the name has a resource associated with it by trying to get 
 	the ID for the string*/
@@ -6407,6 +6405,7 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 	return pNameID;
 #endif
 #endif
+	return NULL;
 }
 
 /* Just returns true if the droid's present body points aren't as high as the original*/
@@ -6764,7 +6763,7 @@ void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 FIRE_SUPPORT order can be assigned*/
 BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 {
-	SENSOR_STATS	*psStats;
+	SENSOR_STATS	*psStats = NULL;
 
 	//first check if the object is a droid or a structure
 	if ( (psObj->type != OBJ_DROID) &&
@@ -6795,6 +6794,8 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 		{
 			return FALSE;
 		}
+		break;
+	default:
 		break;
 	}
 

@@ -63,7 +63,7 @@ static BOOL		bConsoleDisplayEnabled;
 static UDWORD	consoleVisibleLines;
 
 /* Whether new messages are allowed to be added */
-static allowNewMessages;
+static int allowNewMessages;
 
 /* What's the default justification */
 static CONSOLE_TEXT_JUSTIFICATION	defJustification;
@@ -500,7 +500,7 @@ UDWORD	i;
 UDWORD	count;
 BOOL	bGotIt;
 BOOL	bQuit;
-UDWORD	marker;
+UDWORD	marker = 0;
 UDWORD	linePitch;
 UDWORD	MesY;
 //UDWORD	buildWidth;

@@ -61,7 +61,7 @@ void	initDemoCamera( void )
 {
 #ifdef NON_INTERACT
 	presentStatus = DC_ISACTIVE;
-#else if
+#else
 	presentStatus = DC_INACTIVE;
 #endif
 	lastCameraMove = 0;

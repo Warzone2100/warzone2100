@@ -121,9 +121,9 @@ void	environUpdate( void )
 UDWORD	i,j;
 UDWORD	index;
 FRACT	value,newValue;
-FRACT	increment;
-FRACT	lowest;
-FRACT	highest;
+FRACT	increment = 0;
+FRACT	lowest = 0;
+FRACT	highest = 0;
 SDWORD	startX,startY,endX,endY;
 FRACT	fraction;
 

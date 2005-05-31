@@ -123,8 +123,6 @@ BOOL bufferSBODYLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 void dataReleaseStats(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	freeComponentLists();
 	statsShutDown();
 }
@@ -409,8 +407,6 @@ BOOL bufferSTEMPLLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 // release the templates
 void dataSTEMPLRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	//free the storage allocated to the droid templates
 	droidTemplateShutDown();
 }
@@ -468,8 +464,6 @@ BOOL bufferSSTRUCTLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 // release the structure stats
 void dataSSTRUCTRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	freeStructureLists();
 	structureStatsShutDown();
 }
@@ -541,8 +535,6 @@ BOOL bufferSFEATLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 // free the feature stats
 void dataSFEATRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	featureStatsShutDown();
 }
 
@@ -567,16 +559,12 @@ BOOL bufferSFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 // release the function stats
 void dataSFUNCRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	FunctionShutDown();
 }
 
 // release the research stats
 void dataRESCHRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	//free the storage allocated to the stats
 	ResearchShutDown(); 
 }
@@ -601,7 +589,7 @@ BOOL bufferRESCHLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 	/* set a dummy value so the release function gets called - the Release 
     function is now called when load up the next set
-	//*ppData = (void *)1;
+	// *ppData = (void *)1;
     pass back NULL so that can load the same name file for the next campaign*/
 	*ppData = NULL;
 	return TRUE;
@@ -854,8 +842,6 @@ BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 //	iPalette sPal;
 	iSprite *psSprite;
 
-	UNUSEDPARAMETER(size);
-
 	psSprite = MALLOC(sizeof(iSprite));
 	if (!psSprite)	{
 		return FALSE;
@@ -888,8 +874,6 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 //	BLOCK_HEAP	*psHeap;
 //	UBYTE	*pFileData, *pImageData;
 //	UDWORD	fileSize, width,height;
-
-	UNUSEDPARAMETER(size);
 
 	if(pie_Hardware()) {
 		*ppData = NULL;	
@@ -980,8 +964,6 @@ BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 //	BLOCK_HEAP	*psHeap;
 //	UBYTE	*pFileData, *pImageData;
 //	UDWORD	fileSize, width,height;
-
-	UNUSEDPARAMETER(size);
 
 	if(!pie_Hardware()) {
 		*ppData = NULL;	
@@ -1127,8 +1109,6 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	STRING		texfile[255];
 	SDWORD		i, id;
 //	BOOL		bFound = FALSE;
-	size;	// why?
-
 
 	// generate a texture page name in "page-xx" format
 	strncpy(texfile, GetLastResourceFilename(), 254);
@@ -1309,11 +1289,7 @@ BOOL dataAudioLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 
 void dataAudioRelease( void *pData )
 {
-	if ( audio_Disabled() == TRUE )
-	{
-		UNUSEDPARAMETER(pData);
-	}
-	else
+	if (audio_Disabled() == FALSE)
 	{
 		TRACK	*psTrack = (TRACK *) pData;
 
@@ -1347,8 +1323,6 @@ BOOL dataAudioCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 BOOL dataAnimLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 {
 	BASEANIM	*psAnim;
-
-	size;
 
 	if ( (psAnim = anim_LoadFromBuffer( pBuffer, size )) == NULL ) 
 	{
@@ -1408,8 +1382,6 @@ BOOL dataStrResLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 void dataStrResRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
-
 	if (psStringRes != NULL)
 	{
 		strresDestroy(psStringRes);
@@ -1488,12 +1460,12 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	pLastResourceName=GetLastResourceFilename();
 
 	strcpy(BinaryScriptName,aCurrResDir);	//"script\\text.bin\\");
-// remove the \\
+// remove the '\\'
 	DBPRINTF(("[%s] len=%d\n",BinaryScriptName,strlen(BinaryScriptName) ));
 
 	BinaryScriptName[strlen(BinaryScriptName)-1]=0;
 
-// add .bin\\
+// add '.bin\\'
 
 	DBPRINTF(("[%s] len=%d\n",BinaryScriptName,strlen(BinaryScriptName) ));
 	strcat(BinaryScriptName,".bin\\");

@@ -290,9 +290,9 @@ static BOOL	bScreenShakeActive = FALSE;
 static UDWORD screenShakeStarted;
 static UDWORD screenShakeLength;
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
-static bSensorAssigned;
+static BOOL bSensorAssigned;
 //used to determine if the player has selected a Las Sat structure
-static bLasSatStruct;
+static BOOL bLasSatStruct;
 
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
@@ -1739,18 +1739,13 @@ static STRUCTURE_STATS ReposStats;
 static BOOL ReposValid = FALSE;
 static BOOL BVReposValid = FALSE;
 static FLAG_POSITION *ReposFlag;
-static BASE_OBJECT ReposObj;
-
 
 void StartTacticalScroll(BOOL driveActive)
 {
-	UNUSEDPARAMETER(driveActive);
 }
 
 void StartTacticalScrollObj(BOOL driveActive,BASE_OBJECT *psObj)
 {
-	UNUSEDPARAMETER(driveActive);
-	UNUSEDPARAMETER(psObj);
 }
 
 void CancelTacticalScroll(void)
@@ -1766,13 +1761,11 @@ void displayInitVars(void)
 
 
 
-
 // Start repositioning a delivery point.
 //
 void StartDeliveryPosition(OBJECT_POSITION	*psLocation,BOOL driveActive)
 {
 	FLAG_POSITION	*psFlagPos;
-	UNUSEDPARAMETER(driveActive);
 	/* clear the selection */
 //	clearSelection();
 	//clear the Deliv Point if one
@@ -1940,7 +1933,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 {
 	DROID	*psD;
 	BOOL	bGotGroup;
-	SDWORD	groupNumber;
+	SDWORD	groupNumber = 0;
 
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
