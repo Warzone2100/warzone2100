@@ -81,8 +81,6 @@ void	dispAdditionalInfo( void );
 
 /* The present mission data */
 static	MISSION_DATA	missionData;
-static	UDWORD	numUnits;
-static	UDWORD	numStrs;
 static	UDWORD	dispST;
 static	BOOL	bDispStarted = FALSE;
 static	char	text[255];

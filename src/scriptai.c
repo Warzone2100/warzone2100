@@ -24,6 +24,8 @@
 #include "research.h"
 #include "gateway.h"
 #include "multiplay.h"
+#include "power.h"
+#include "geometry.h"
 
 // Add a droid to a group
 BOOL scrGroupAddDroid(void)

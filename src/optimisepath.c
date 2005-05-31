@@ -51,7 +51,6 @@ UDWORD	getStepIndexFromAngle(UDWORD angle);
 */
 void	optimisePathForDroid(DROID *psDroid)
 {
-	UNUSEDPARAMETER(psDroid);
 #if 0
 	// didn't bother to get this to compile when I changed the PATH_POINT structure
 	// I'll sort it out later - John.
@@ -220,7 +219,7 @@ UDWORD	retVal;
 UDWORD	getStepIndexFromAngle(UDWORD angle)
 {
 FRACT	accA;
-UDWORD	retVal;
+UDWORD	retVal = 0;
 
 	accA = MAKEFRACT(angle);
 

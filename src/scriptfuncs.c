@@ -10,6 +10,7 @@
 #include "frame.h"
 #include "widget.h"
 
+#include "effects.h"
 #include "script.h"
 #include "scripttabs.h"
 #include "gtime.h"
@@ -1723,6 +1724,7 @@ BOOL scrGetFeature(void)
 	{
 		return FALSE;
 	}
+	return FALSE;
 }
 
 
@@ -3776,8 +3778,7 @@ BOOL scrSetFogColour(void)
 // test function to test variable references
 BOOL scrRefTest(void)
 {
-	SDWORD		Num;
-
+	SDWORD		Num = 0;
 
 	if (!stackPopParams(1,VAL_INT, Num));
 	{

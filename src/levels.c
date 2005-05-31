@@ -21,6 +21,7 @@
 #include "piestate.h"
 #include "data.h"
 #include "multiwdg.h"
+#include "ivi.h"
 
 //#ifdef DEBUG
 #include "script.h"

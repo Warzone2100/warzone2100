@@ -104,7 +104,6 @@ static BOOL okToSend()
 // Droid checking info. keep position and damage in sync.
 BOOL sendCheck(VOID)
 {
-	static UDWORD chooser=0;
 	UDWORD i;
 
 	NETgetBytesSent();			// update stats.
@@ -486,13 +485,6 @@ static void onscreenUpdate(DROID *psDroid,
 
 	BASE_OBJECT *psClickedOn;
 	BOOL		bMouseOver = FALSE;
-
-	UNUSEDPARAMETER(order);
-	UNUSEDPARAMETER(x);
-	UNUSEDPARAMETER(y);
-	UNUSEDPARAMETER(fy);
-	UNUSEDPARAMETER(fx);
-	UNUSEDPARAMETER(dir);
 
 	psClickedOn = mouseTarget();
 	if( psClickedOn != NULL && psClickedOn->type == OBJ_DROID)
@@ -1148,12 +1140,12 @@ BOOL recvPing(NETMSG *ping)
 		reply.size		= 2;
 		reply.type		= NET_PING;
 	
-		NETsend(&reply, player2dpid[ping->body[0]], FALSE);	// reply to it
+		NETsend(&reply, player2dpid[(int) ping->body[0]], FALSE);	// reply to it
 	}
 	else													// else it's returned, so store it.
 	{
-		ingame.PingTimes[ping->body[0]]	= (gameTime2 - PingSend[ping->body[0]] ) /2 ;
-		PingSend[ping->body[0]]		= 0;					// note we've recvd it!
+		ingame.PingTimes[(int) ping->body[0]]	= (gameTime2 - PingSend[(int) ping->body[0]] ) /2 ;
+		PingSend[(int) ping->body[0]]		= 0;					// note we've recvd it!
 	}
 	return TRUE;
 }

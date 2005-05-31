@@ -229,5 +229,6 @@ void AddDerrickBurningMessage(void);
 // check whether the queue order keys are pressed
 extern BOOL ctrlShiftDown(void);
 
-#endif
+extern UDWORD getTargetType(void);
 
+#endif

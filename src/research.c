@@ -295,7 +295,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 
 		//read the data into the storage - the data is delimeted using comma's
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%[^','],", &ResearchName);
+		sscanf(pResearchData,"%[^','],", ResearchName);
 		//allocate storage for the name
 
 
@@ -320,7 +320,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 
 		//determine the tech level
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%[^','],", &ResearchName);
+		sscanf(pResearchData,"%[^','],", ResearchName);
 		if (!setTechLevel((BASE_STATS *)pResearch, ResearchName))
 		{
 			return FALSE;
@@ -329,7 +329,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 		pResearchData += (strlen(ResearchName)+1);
 
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%[^','],", &ResearchName);
+		sscanf(pResearchData,"%[^','],", ResearchName);
 		
         //subGroup value now holds which category the research comes under for yet another icon!
 		// store subgroup. may differ from tech level at some point?
@@ -408,8 +408,8 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 
 			sscanf(pResearchData,"%d,%[^','],%[^','],%[^','],%[^','],%[^','], \
                 %[^','],%[^','],%d,%d,%d,%d,%d,%d,%d,%d,%d",
-				&techCode, &iconID, &imdName, &imdName2, &msgName, 
-                &structName, &compName, &compType,
+				&techCode, iconID, imdName, imdName2, msgName, 
+                structName, compName, compType,
 				&resPoints, &keyTopic, &numPRRequired, 
 				&numFunctions, &numStructures, 
 				&numRedStructs, &numStructResults, 
@@ -791,10 +791,10 @@ BOOL loadResearchPR(SBYTE *pPRData, UDWORD bufferSize)
 	for (i=0; i < NumToAlloc; i++)
 	{
 		recFound = FALSE;
-		//read the data into the storage - the data is delimited using comma's
+		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
 		PRName[0] = '\0';
-		sscanf(pPRData,"%[^','],%[^','],%*d", &ResearchName, &PRName);
+		sscanf(pPRData,"%[^','],%[^','],%*d", ResearchName, PRName);
 
 		if (!getResourceName(ResearchName))
 		{
@@ -919,11 +919,11 @@ BOOL loadResearchArtefacts(SBYTE *pArteData, UDWORD bufferSize, UDWORD listNumbe
 
 	for (i=0; i < NumToAlloc; i++)
 	{
-		//read the data into the storage - the data is delimited using comma's
+		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
 		ArteName[0] = '\0';
 		TypeName[0] = '\0';
-		sscanf(pArteData,"%[^','],%[^','],%[^',']", &ResearchName, &ArteName, &TypeName);
+		sscanf(pArteData,"%[^','],%[^','],%[^',']", ResearchName, ArteName, TypeName);
 
 		//increment the data pointer
 		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
@@ -980,7 +980,7 @@ BOOL loadResearchArtefacts(SBYTE *pArteData, UDWORD bufferSize, UDWORD listNumbe
 		case RES_LIST:
 			ArteName[0] = '\0';
 			TypeName[0] = '\0';
-			sscanf(pArteData, "%[^','],%[^','],%*d", &ArteName, &TypeName);
+			sscanf(pArteData, "%[^','],%[^','],%*d", ArteName, TypeName);
 			if (!strcmp(ArteName, "0"))
 			{
 				*(pResearch->pReplacedArtefacts + pResearch->storeCount) =  NULL;
@@ -1092,7 +1092,7 @@ BOOL loadResearchStructures(SBYTE *pStructData, UDWORD bufferSize,UDWORD listNum
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		StructureName[0] = '\0';
-		sscanf(pStructData,"%[^','],%[^','],%*d,%*d", &ResearchName, &StructureName);
+		sscanf(pStructData,"%[^','],%[^','],%*d,%*d", ResearchName, StructureName);
 
 		if (!getResourceName(ResearchName))
 		{
@@ -1237,7 +1237,7 @@ BOOL loadResearchFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		FunctionName[0] = '\0';
-		sscanf(pFunctionData,"%[^','],%[^','],%*d", &ResearchName, &FunctionName);
+		sscanf(pFunctionData,"%[^','],%[^','],%*d", ResearchName, FunctionName);
 	
 		if (!getResourceName(ResearchName))
 		{

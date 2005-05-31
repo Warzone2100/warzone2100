@@ -22,7 +22,7 @@
 #include "piedef.h"
 #include "piestate.h"
 #include "vid.h"
-
+#include "screen.h"
 
 
 #include "display3d.h"
@@ -306,7 +306,6 @@ static void orderDroids(void);
 
 /* Close strings */
 static STRING pCloseText[] = "X";
-static STRING pCloseTip[] = "Close";
 
 /* Player button strings */
 static STRING	*apPlayerText[] =
@@ -439,7 +438,7 @@ static UWORD			objNumTabs;
 static UWORD			objMajor, objMinor;
 
 /* The current map width and height in the new map edit boxes */
-static UDWORD			newMapWidth, newMapHeight;
+//static UDWORD			newMapWidth, newMapHeight;
 
 /* Store a list of stats pointers from the main structure stats */
 static STRUCTURE_STATS	**apsStructStatsList;
@@ -529,12 +528,14 @@ static void intProcessOptions(UDWORD id);
 /* Process return codes from the object placement stats screen */
 static void intProcessEditStats(UDWORD id);
 
+#ifdef EDIT_OPTIONS
 /* Add the edit widgets to the widget screen */
 static BOOL intAddEdit(void);
 /* Remove the edit widgets from the widget screen */
 static void intRemoveEdit(void);
 /* Process return codes from the edit screen */
 static void intProcessEdit(UDWORD id);
+#endif
 
 
 /* The int AddObject function is only called by :
@@ -596,11 +597,6 @@ static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid);
 static void intStopStructPosition(void);
 /* See if a structure location has been found */
 static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY);
-
-//adds the transporter screen when a Transporter is clicked on
-static void addTransporter(void);
-
-
 
 static STRUCTURE *CurrentStruct = NULL;
 static SWORD CurrentStructType = 0;
@@ -991,13 +987,6 @@ VOID intRefreshScreen(VOID)
 
 void intSetCurrentCursorPosition(CURSORSNAP *Snap,UDWORD id)
 {
-
-	UNUSEDPARAMETER(id);
-	UNUSEDPARAMETER(Snap);
-
-	if(!Refreshing) {
-
-	}
 }
 
 
@@ -1348,12 +1337,11 @@ void intResetScreen(BOOL NoAnim)
 			intRemoveTrans();
 		}
 		break;
-
-
 	case INT_CDCHANGE:
 		cdspan_RemoveChangeCDBox();
 		break;
-
+	default:
+		break;
 	}
 
 	intMode = INT_NORMAL;
@@ -1506,6 +1494,8 @@ INT_RETVAL intRunWidgets(void)
 #else
 				intAddResearch(NULL);
 #endif
+				break;
+			default:
 				break;
 			}
 
@@ -2855,6 +2845,8 @@ static void intResetWindows(BASE_OBJECT *psObj)
 
 			intAddCommand((DROID *)psObj);
 			break;
+		default:
+			break;
 		}
 		//intAddObjectStats(psObj, id);
 	}
@@ -3489,6 +3481,8 @@ void intObjectSelected(BASE_OBJECT *psObj)
 //				((STRUCTURE*)psObj)->selected = TRUE;		// wrong place?
 			}
 			break;
+		default:
+			break;
 		}
 	} else {
 		intResetScreen(FALSE);
@@ -3526,13 +3520,7 @@ extern void FinishStructurePosition(UDWORD xPos,UDWORD yPos,void *UserData);
 //static void intStartStructPosition(UDWORD width, UDWORD height)
 static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid)
 {
-
-	
-	UNUSEDPARAMETER(psDroid);
-
 	init3DBuilding(psStats,NULL,NULL);
-
-
 
 #ifdef DISP2D
 	disp2DStartStructPosition(psStats);
@@ -5924,8 +5912,6 @@ void intUpdateManufactureLimits(struct _widget *psWidget, struct _w_context *psC
 						getNumMissionDroids(selectedPlayer) +
 						getNumTransporterDroids(selectedPlayer);
 
-	UNUSEDPARAMETER(psContext);
-
 	if(CurDroids > MaxDroids) {
 		CurDroids = MaxDroids;
 	}
@@ -6508,6 +6494,8 @@ donelab:
 		case IOBJ_MANUFACTURE:
 			eventFireCallbackTrigger(CALL_MANULIST);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -6545,17 +6533,12 @@ static BOOL selectCommand(BASE_OBJECT *psObj)
 /* Return the stats for a command droid */
 static BASE_STATS *getCommandStats(BASE_OBJECT *psObj)
 {
-	UNUSEDPARAMETER(psObj);
-
 	return NULL;
 }
 
 /* Set the stats for a command droid */
 static BOOL setCommandStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
-	UNUSEDPARAMETER(psObj);
-	UNUSEDPARAMETER(psStats);
-
 	return TRUE;
 }
 
@@ -7837,17 +7820,16 @@ void intCheckReticuleButtons(void)
 		psDroid->psNext)
 	{
 		switch(psDroid->droidType) {
-			case DROID_CONSTRUCT:
-            case DROID_CYBORG_CONSTRUCT:
-				ReticuleEnabled[RETBUT_BUILD].Enabled = TRUE;
-				break;
-			case DROID_COMMAND:
-				ReticuleEnabled[RETBUT_COMMAND].Enabled = TRUE;
-
-				break;
-
+		case DROID_CONSTRUCT:
+		case DROID_CYBORG_CONSTRUCT:
+			ReticuleEnabled[RETBUT_BUILD].Enabled = TRUE;
+			break;
+		case DROID_COMMAND:
+			ReticuleEnabled[RETBUT_COMMAND].Enabled = TRUE;
+			break;
+		default:
+			break;
 		}
-
 	}
 
 	for (i=0; i<NUMRETBUTS; i++) {
@@ -8141,6 +8123,8 @@ UDWORD GetWeaponMajorClass(WEAPON_STATS *psWeapStats)
         case WSC_EMP:
             return WMC_EMP;
             break;
+	default:
+		break;
 	}
 
 	ASSERT((FALSE,"Unknown weapon class"));
@@ -8549,7 +8533,7 @@ void orderObjectInterface(void)
 cyborg factories 1-5 and then Vtol factories 1-5*/
 void orderFactories(void)
 {
-	STRUCTURE	*psList = (STRUCTURE *)apsObjectList, *psStruct, *psNext;
+	STRUCTURE	*psStruct, *psNext;
 	SDWORD		entry;
 	UDWORD		inc, type, objectInc;
 

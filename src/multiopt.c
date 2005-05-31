@@ -57,7 +57,7 @@ extern VOID	stopJoining(void);
 
 VOID		sendOptions			(DPID dest,UDWORD player);
 VOID		recvOptions			(NETMSG *pMsg);
-static BOOL dMatchInit			(VOID);
+//static BOOL dMatchInit			(VOID);
 static BOOL campInit			(VOID);
 BOOL		hostCampaign		(STRING *sGame,		STRING *sPlayer);
 BOOL		joinCampaign		(UDWORD gameNumber, STRING *playername);
@@ -587,7 +587,7 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
 	DROID_TEMPLATE	*psTempl;
 
-	if (!HEAP_ALLOC(psTemplateHeap, &psTempl))
+	if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTempl))
 	{
 		return FALSE;
 	}
@@ -644,7 +644,7 @@ BOOL copyTemplateSet(UDWORD from,UDWORD to)
 // setup templates
 BOOL multiTemplateSetup()
 {
-	UDWORD player,pcPlayer;
+	UDWORD player, pcPlayer = 0;
 	CHAR			sTemp[256];
 
 

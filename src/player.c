@@ -227,8 +227,6 @@ void playerNewDroid(DROID *psDroid)
 //	BOOL			foundDroid;
 //	char			droidName[MAX_NAME_SIZE];
 
-	UNUSEDPARAMETER(psDroid);
-
 /*	if (!psDroid)
 	{
 		return;
@@ -401,9 +399,6 @@ void playerNewDroid(DROID *psDroid)
 droids are near to the home base first*/
 void attackLocation(UDWORD x, UDWORD y, UDWORD player)
 {
-	UNUSEDPARAMETER(x);
-	UNUSEDPARAMETER(y);
-	UNUSEDPARAMETER(player);
 /*	BOOL	foundDroid;
 	DROID	*psDroid, *psCurr;
 	SDWORD	xdiff, ydiff, radSquared;

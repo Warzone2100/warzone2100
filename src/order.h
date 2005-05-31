@@ -155,6 +155,8 @@ extern BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 extern void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order,
 						BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 
+extern void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
+
 /* Give selected droids an order with a location target */
 extern void orderSelectedLoc(UDWORD player, UDWORD x, UDWORD y);
 extern void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add);

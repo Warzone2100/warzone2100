@@ -623,6 +623,8 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 			case ORDBUTCLASS_VTOLFACTORY:
 				NumButs = countAssignableFactories((UBYTE)selectedPlayer,VTOL_FLAG);
 				break;
+			default:
+				break;
 		}
 
 		sButInit.id = OrderButtons[OrdIndex].ButBaseID;
@@ -777,6 +779,8 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 					widgHide(psWScreen, sButInit.id);
 					bHidden = TRUE;
 				}
+				break;
+			default:
 				break;
 			}
 
@@ -1353,7 +1357,6 @@ static BOOL CheckObjectOrderList(void)
 
 static BOOL intRefreshOrderButtons(void)
 {
-	BOOL Animate = TRUE;
 	SECONDARY_STATE State;
 	UWORD i,j;//,k;
 	UWORD OrdIndex;
@@ -1382,6 +1385,8 @@ static BOOL intRefreshOrderButtons(void)
 				break;
 			case ORDBUTCLASS_VTOLFACTORY:
 				NumButs = countAssignableFactories((UBYTE)selectedPlayer,VTOL_FLAG);
+				break;
+			default:
 				break;
 		}
 
@@ -1430,7 +1435,8 @@ static BOOL intRefreshOrderButtons(void)
 // if there are multiple states then don't return a state
 static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
 {
-	SDWORD	i, state, currState;
+	SDWORD	i;
+	SECONDARY_STATE state, currState;
 	BOOL	bFirst;
 
 	state = 0;

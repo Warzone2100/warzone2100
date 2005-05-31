@@ -79,4 +79,7 @@ typedef enum _screenType
 
 extern void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX);
 extern void pie_ResetBackDrop(void);
+
+void    bufferTo16Bit(UBYTE *origBuffer,UWORD *newBuffer, BOOL b3DFX);
+
 #endif // 

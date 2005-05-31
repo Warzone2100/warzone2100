@@ -30,9 +30,9 @@
 BOOL scrBaseObjGet(UDWORD index)
 {
 //	INTERP_VAL		sVal;
-	INTERP_TYPE		type;
+	INTERP_TYPE		type = 0;
 	BASE_OBJECT		*psObj;
-	SDWORD			val;
+	SDWORD			val = 0;
 	DROID			*psDroid;
 	STRUCTURE		*psStruct;
 	FEATURE			*psFeature;
@@ -471,7 +471,9 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, UBYTE *pBuffer, UDWORD *pSize)
 	DROID		*psCDroid;
 	SDWORD		members;
 	DROID_GROUP	*psGroup;
+#ifdef _DEBUG
 	BASE_OBJECT	*psObj;
+#endif
 	switch (type)
 	{
 	case ST_INTMESSAGE:

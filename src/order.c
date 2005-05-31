@@ -256,7 +256,8 @@ void orderUpdateDroid(DROID *psDroid)
 	BASE_OBJECT		*psFireTarget, *psObj;
 	STRUCTURE		*psStruct, *psWall;
 	REPAIR_FACILITY	*psRepairFac;
-	SDWORD			xdiff,ydiff, state, temp;
+	SDWORD			xdiff,ydiff, temp;
+	SECONDARY_STATE state;
 	BOOL			bAttack;
 	DROID			*psSpotter;
 
@@ -1223,7 +1224,8 @@ void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
 	FRACT		sensorAngle, fsAngle, adiff;
-	SDWORD		state, xdiff,ydiff;
+	SDWORD		xdiff,ydiff;
+	SECONDARY_STATE state;
 	DROID		*psCurr;
 	BASE_OBJECT	*psTarget;
 	BOOL		bRetreat;
@@ -1363,6 +1365,8 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 				iAudioID = ID_SOUND_ASSIGNED_TO_COUNTER_RADAR;
 			}
 			break;
+		default:
+			break;
 	}
 
 	if ( iAudioID != NO_SOUND )
@@ -1383,7 +1387,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 //	UDWORD		actionX,actionY;
 	UDWORD		iRepairFacDistSq, iStructDistSq, iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
-	SDWORD		iDX, iDY, state;
+	SDWORD		iDX, iDY;
+	SECONDARY_STATE state;
 	UDWORD		droidX,droidY;
 #ifdef DEBUG_GROUP2
 	static UDWORD lastFrame;
@@ -2746,12 +2751,8 @@ BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 {
 	DROID_ORDER		order;
-	SDWORD			state;
+	SECONDARY_STATE			state;
 
-	UNUSEDPARAMETER(psDroid);
-	UNUSEDPARAMETER(x);
-	UNUSEDPARAMETER(y);
-							
 	// default to move
 	order = DORDER_MOVE;
 
@@ -3154,8 +3155,6 @@ void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 {
 	DROID	*psDroid;
 
-	UNUSEDPARAMETER(psObj);
-#ifndef COVERMOUNT
 	/* loop over selected droids */
 	for( psDroid = apsDroidLists[player]; psDroid; psDroid=psDroid->psNext )
 	{
@@ -3176,7 +3175,6 @@ void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 			break;
 		}
 	}
-#endif
 }
 
 /* Give selected droids an order from an object target
@@ -3544,7 +3542,7 @@ STRING *secondaryPrintFactories(UDWORD state)
 // check the damage level of a droid against it's secondary state
 void secondaryCheckDamageLevel(DROID *psDroid)
 {
-	SDWORD	State;
+	SECONDARY_STATE	State;
 
 	if( secondaryGetState(psDroid, DSO_REPAIR_LEVEL, &State) )
 	{
@@ -3598,7 +3596,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	UDWORD		CurrState, factType, prodType;
 	STRUCTURE	*psStruct;
 	SDWORD		factoryInc, order;
-	BOOL		retVal, bMultiPlayGame;
+	BOOL		retVal, bMultiPlayGame = FALSE;
 	DROID		*psTransport, *psCurr, *psNext;
 
 
@@ -3962,7 +3960,7 @@ BOOL secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
 void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
 	DROID	*psCurr;
-	SDWORD	currState;
+	SECONDARY_STATE	currState;
 
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{

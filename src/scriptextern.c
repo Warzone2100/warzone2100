@@ -12,9 +12,10 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 
+#include "rendfunc.h"
+#include "display.h"
 
 #include "multiplay.h"
-
 
 #include "winmain.h"
 #include "hci.h"

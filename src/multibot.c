@@ -156,7 +156,7 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 	DROID	*psDroid;
 	UBYTE	player,chosen,aruns,amm;
 	UDWORD	id,ids;
-	STRUCTURE *psStruct;
+	STRUCTURE *psStruct = NULL;
 
 	NetGet(pMsg,0,player);
 	NetGet(pMsg,1,id);
@@ -664,11 +664,6 @@ BOOL SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj)
 	//DROID	*pDroid;
 	//USHORT	droidcount=0;
 
-    UNUSEDPARAMETER(psObj);
-    UNUSEDPARAMETER(x);
-    UNUSEDPARAMETER(y);
-    UNUSEDPARAMETER(psGroup);
-
     return FALSE;	//doesnt fukin work. return FALSE and use other msgs to cope with this (about 2 packet overhead)
 /*
 	if (psObj == NULL)							//it's a position order
@@ -839,7 +834,7 @@ BOOL recvGroupOrder(NETMSG *pMsg)
 	}
 
 	// for each droid
-	for(droidcount;droidcount>0;droidcount--)
+	while (droidcount > 0)
 	{
 		NetGet(pMsg,13+((droidcount-1) * sizeof(UDWORD)) ,id);
 		IdToDroid(id, ANYPLAYER, &psDroid);							// find the droid
@@ -863,7 +858,7 @@ BOOL recvGroupOrder(NETMSG *pMsg)
 		ProcessDroidOrder(psDroid,order,x,y,desttype,destid);		// process the order.
 
 		// no need to do formation stuff anymore.
-
+		droidcount--;
 	}
 	return TRUE;
 }

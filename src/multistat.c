@@ -240,8 +240,6 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 	UDWORD			x1,y1,x,y;
 	DROID_TEMPLATE *psTempl;
 
-	UNUSEDPARAMETER(bAddTempl);
-
 //	if(game.type == DMATCH)
 //	{
 //		chooseForceLoc(&x,&y);
@@ -504,7 +502,8 @@ BOOL loadForce(char *name)
 	}
 #else
 	// new method.
-	for(fcount;fcount!=0;fcount--)											// get forces.
+	// get forces.
+	while (fcount > 0)
 	{
 		if (fread(&ref, sizeof(ref), 1, pFileHandle) != 1)					// read in a template ref code.
 		{
@@ -518,6 +517,7 @@ BOOL loadForce(char *name)
 		{
 			addToForce(psTempl);												// add it to the force.
 		}
+		fcount--;
 	}
 #endif
 
@@ -742,8 +742,6 @@ VOID updateMultiStatsLoses(void)
 VOID updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 {
 	PLAYERSTATS	st;
-
-	psKilled;
 
 	if(isHumanPlayer(player))
 	{

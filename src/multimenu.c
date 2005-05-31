@@ -4,6 +4,8 @@
  *  Also the selection of disk files..
  */
 
+#include <unistd.h>
+
 #include "frame.h"
 #include "widget.h"
 
@@ -32,6 +34,7 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multijoin.h"
+#include "scores.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -223,7 +226,6 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 //	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	UDWORD	count;
 	STRING  butString[255];
-	UNUSEDPARAMETER(pColours);
 	
 	strcpy(butString,((W_BUTTON *)psWidget)->pTip);
 
@@ -261,7 +263,6 @@ void displayCamTypeBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 //	UDWORD	count;
-	UNUSEDPARAMETER(pColours);
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 	pie_DrawText( &(psWidget->UserData), x+2, y+12);
@@ -276,11 +277,13 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
 	UDWORD			players,numButtons,butPerForm,i;
+#ifdef WIN32
 	WIN32_FIND_DATA	found;	
 	HANDLE			dir;
+	UDWORD			count;
+#endif
 	STRING			ToFind[255],sTemp[64];
 	static STRING	tips[40][MAX_STR_SIZE];
-	UDWORD			count;
 
 	numButtons = 0;
 	
@@ -664,9 +667,9 @@ void displayExtraGubbins(UDWORD height)
 	sprintf(str,"Pack:%d/%d",NETgetPacketsSent(), NETgetPacketsRecvd());
 	iV_DrawText((UCHAR*)str,MULTIMENU_FORM_X+80,MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
 #endif
-
 	return;
 }
+
 
 void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
@@ -676,17 +679,13 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	UDWORD			player;//,pl2;
 	iVector			Rotation,Position;
 
-	UNUSEDPARAMETER(pColours);
-
 	player = (int)psWidget->pUserData;	//get the in game player number.
-
 
 	if( responsibleFor(player,0) )
 	{
 		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height);
 	}
 
-					
 	iV_SetFont(WFont);											// font
 	iV_SetTextColour(-1);										//colour
 
@@ -694,9 +693,9 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	{	
 		//c2:name, 
 		
-		sprintf(str,"%d:",player,getPlayerName(player) );
+		sprintf(str,"%d:", player);
 		
-		strcat(str, getPlayerName(player) );
+		strcat(str, getPlayerName(player));
 		while(iV_GetTextWidth(str) >= (MULTIMENU_C0-MULTIMENU_C2-10) )
 		{
 			str[strlen(str)-1]='\0';
