@@ -12,9 +12,9 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 
-#ifndef PSX
+
 #include "multiplay.h"
-#endif
+
 
 #include "winmain.h"
 #include "hci.h"
@@ -31,7 +31,7 @@ BOOL		bInTutorial = FALSE;
 BOOL		bExtraVictoryFlag = FALSE;
 BOOL		bExtraFailFlag = FALSE;
 
-#ifndef PSX
+
 
 // whether or not to track the player's transporter as it comes
 // into an offworld mission.
@@ -39,15 +39,7 @@ BOOL		bTrackTransporter = FALSE;
 // whether or not we're running on the PSX.
 BOOL		bIsPSX = FALSE;
 
-#else
 
-// whether or not to track the player's transporter as it comes
-// into an offworld mission.
-BOOL		bTrackTransporter = TRUE;
-// whether or not we're running on the PSX.
-BOOL		bIsPSX = TRUE;
-
-#endif
 
 
 // reset the script externals for a new level
@@ -129,7 +121,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 
 
-#ifndef PSX
+
 	case EXTID_MULTIGAMETYPE:		// multiplayer variable..
 		type = VAL_INT;
 		val = game.type;
@@ -142,7 +134,7 @@ BOOL scrGenExternGet(UDWORD index)
 		type = VAL_INT;
 		val	= game.base;
 		break;
-#endif					 
+				 
 		default:
 		ASSERT((FALSE, "scrGenExternGet: unknown variable index"));
 		return FALSE;

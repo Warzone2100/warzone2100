@@ -277,25 +277,9 @@ extern	int	scrv_mapch	YY_ARGS((int delim, int escape));
  *
  */
 
-#ifndef PSX
+
 #include <stdio.h>
-#else
-/* A few definitions so the lex generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-#ifndef _FILE_
-#define _FILE_
-typedef int FILE;	// in stdio.h ?
-#endif
-#define stderr 0
-#define stdin  0
-#define stdout 0
-static int fprintf(FILE* f,char* c,...)
-{
-	return 0;
-}
-#endif
+
 
 #include "frame.h"
 #include "script.h"

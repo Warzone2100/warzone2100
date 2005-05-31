@@ -1086,7 +1086,7 @@ BOOL scrEnableStructure(void)
 }
 
 
-#ifndef PSX
+
 // -----------------------------------------------------------------------------------------
 // Check if a structure can be built.
 // currently PC skirmish only.
@@ -1114,7 +1114,7 @@ BOOL scrIsStructureAvailable(void)
 	}
 	return TRUE;
 }
-#endif
+
 
 // -----------------------------------------------------------------------------------------
 //make the droid with the matching id the currently selected droid
@@ -1224,7 +1224,7 @@ BOOL scrAddReticuleButton(void)
 	return(TRUE);
 #endif
 
-#ifndef PSX
+
 	//set the appropriate flag to 'draw' the button
 	switch (val)
 	{
@@ -1257,9 +1257,7 @@ BOOL scrAddReticuleButton(void)
 		ASSERT((FALSE, "scrAddReticuleButton: Invalid reticule Button ID"));
 		return FALSE;
 	}
-#else
-	intShowReticuleButton(val,TRUE);
-#endif
+
 	return TRUE;
 }
 
@@ -1268,23 +1266,17 @@ BOOL scrAddReticuleButton(void)
 BOOL scrRemoveReticuleButton(void)
 {
 	SDWORD	val;
-#ifndef PSX
-	BOOL	bReset;
-#endif
 
-#ifndef PSX
+	BOOL	bReset;
+
+
+
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
 		return FALSE;
 	}
-#else
-	// SCARY HUH?!
-	if (!stackPopParams(1, VAL_INT, &val))
-	{
-		return FALSE;
-	}
-#endif
-#ifndef PSX
+
+
 	if(bInTutorial)
 	{
 		if(bReset)	// not always desirable
@@ -1323,11 +1315,7 @@ BOOL scrRemoveReticuleButton(void)
 		ASSERT((FALSE, "scrAddReticuleButton: Invalid reticule Button ID"));
 		return FALSE;
 	}
-#else
-		intShowReticuleButton(val,FALSE);
 
-//		widgHide(psWScreen, val);
-#endif
 	return TRUE;
 }
 
@@ -1511,12 +1499,10 @@ BOOL scrBuildDroid(void)
 	//check building the right sort of droid for the factory
 	if (!validTemplateForFactory(psTemplate, psFactory))
 	{
-#ifndef PSX
+
 		ASSERT((FALSE, "scrBuildUnit: invalid template - %s for factory - %s",
 			&psTemplate->aName, psFactory->pStructureType->pName));
-#else
-		ASSERT((FALSE, "scrBuildUnit: invalid template - for factory"));
-#endif
+
 		return FALSE;
 	}
 		
@@ -2064,7 +2050,7 @@ BOOL scrStructureBeingBuilt(void)
 }
 
 
-#ifndef PSX
+
 // -----------------------------------------------------------------------------------------
 // multiplayer skirmish only for now.
 // returns TRUE if a specific struct is complete. I know it's like the previous func, 
@@ -2092,7 +2078,7 @@ BOOL scrStructureComplete(void)
 	return TRUE;
 }
 
-#endif
+
 
 // -----------------------------------------------------------------------------------------
 /*looks to see if a structure (specified by type) exists and built*/
@@ -2784,14 +2770,14 @@ BOOL scrSetStructureLimits(void)
 
 	psStructLimits = asStructLimits[player];
 	psStructLimits[structInc].limit = (UBYTE)limit;
-#ifndef PSX
+
 	psStructLimits[structInc].globalLimit = (UBYTE)limit;
-#endif
+
 	return TRUE;
 }
 
 
-#ifndef PSX
+
 // -----------------------------------------------------------------------------------------
 // multiplayer limit handler.
 BOOL scrApplyLimitSet()
@@ -2799,7 +2785,7 @@ BOOL scrApplyLimitSet()
 	applyLimitSet();
 	return TRUE;
 }
-#endif
+
 
 
 // -----------------------------------------------------------------------------------------
@@ -2915,7 +2901,7 @@ BOOL scrAddConsoleText(void)
 }
 
 
-#ifndef PSX
+
 // -----------------------------------------------------------------------------------------
 /* add a text message to the top of the screen for the selected player - without clearing whats there*/
 BOOL scrTagConsoleText(void)
@@ -2944,16 +2930,16 @@ BOOL scrTagConsoleText(void)
 
 	return TRUE;
 }
-#endif
+
 
 // -----------------------------------------------------------------------------------------
-#ifndef PSX
+
 BOOL	scrClearConsole(void)
 {
 	flushConsoleMessages();
 	return(TRUE);
 }
-#endif
+
 // -----------------------------------------------------------------------------------------
 //demo functions for turning the power on
 BOOL scrTurnPowerOff(void)
@@ -3104,10 +3090,10 @@ BOOL scrGameOver(void)
 
     /*this function will only be called with gameOver = TRUE when at the end of 
     the game so we'll just hard-code what happens!*/
-#ifndef PSX
+
     //don't want this in multiplayer...
     if (!bMultiPlayer)
-#endif
+
     {
         if (gameOver == TRUE AND !bInTutorial)
         {
@@ -3115,18 +3101,10 @@ BOOL scrGameOver(void)
 		    setScriptWinLoseVideo(PLAY_WIN);
 
     	    seq_ClearSeqList();
-#ifndef PSX
+
 	        seq_AddSeqToList("outro.rpl",NULL,"outro.txa", FALSE,0);
 	        seq_StartNextFullScreenVideo();
-#else
-			// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-//	        seq_AddSeqToList("misc\\outro.str",NULL,"misc\\outro.txa", FALSE,0);
-		
-			SetSpAlt();
-	        seq_AddSeqToList(OutroMovie,NULL,OutroText, FALSE,0);
-	        seq_StartNextFullScreenVideo();
-			SetSpAltNormal();
-#endif
+
         }
     }
 
@@ -3236,9 +3214,9 @@ BOOL scrPlayBackgroundAudio(void)
 		return FALSE;
 	}
 
-#ifndef PSX
+
 	cdspan_PlayInGameAudio(pText, iVol);
-#endif
+
 
 	return TRUE;
 	
@@ -3255,27 +3233,23 @@ BOOL scrPlayCDAudio(void)
 		return FALSE;
 	}
 
-#ifndef PSX
+
 
 	if (playAudioCDs) {
 		cdAudio_PlayTrack( iTrack );
 	}
-//#ifdef PSX
-//	cdAudio_PlayTrack( iTrack );	
-//
-//#endif
-#endif	// Playstation CD audio no hardcoded.
+
 	return TRUE;
 }
 
 // -----------------------------------------------------------------------------------------
 BOOL scrStopCDAudio(void)
 {
-#ifndef PSX
+
 	if (playAudioCDs) {
 		cdAudio_Stop();
 	}
-#endif	// Playstation CD audio no hardcoded.
+
 	return TRUE;
 }
 
@@ -3595,7 +3569,7 @@ BOOL scrSetSnow(void)
 		return FALSE;
 	}
 
-#ifndef PSX
+
 	if(bState)
 	{
 		atmosSetWeatherType(WT_SNOWING);
@@ -3604,7 +3578,7 @@ BOOL scrSetSnow(void)
 	{
 		atmosSetWeatherType(WT_NONE);
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -3619,7 +3593,7 @@ BOOL scrSetRain(void)
 		return FALSE;
 	}
 
-#ifndef PSX
+
 	if(bState)
 	{
 		atmosSetWeatherType(WT_RAINING);
@@ -3628,7 +3602,7 @@ BOOL scrSetRain(void)
 	{
 		atmosSetWeatherType(WT_NONE);
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -3642,7 +3616,7 @@ BOOL scrSetBackgroundFog(void)
 	{
 		return FALSE;
 	}
-#ifndef PSX
+
 	//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
 	{
@@ -3699,7 +3673,7 @@ BOOL scrSetBackgroundFog(void)
 		}
 	}
 */
-#endif
+
 	return TRUE;
 }
 
@@ -3713,7 +3687,7 @@ BOOL scrSetDepthFog(void)
 	{
 		return FALSE;
 	}
-#ifndef PSX		// ffs am
+	// ffs am
 //jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
 	{
@@ -3769,7 +3743,7 @@ BOOL scrSetDepthFog(void)
 		}
 	}
 */
-#endif
+
 	return TRUE;
 }
 
@@ -3785,7 +3759,7 @@ BOOL scrSetFogColour(void)
 		return FALSE;
 	}
 
-#ifndef PSX
+
 //	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 //	{
 		red &= 0xff;	
@@ -3794,7 +3768,7 @@ BOOL scrSetFogColour(void)
 		scrFogColour = ((red << 16) + (green << 8) + blue);
 		pie_SetFogColour(scrFogColour);
 //	}
-#endif
+
 	return TRUE;
 }
 
@@ -3817,7 +3791,7 @@ BOOL scrRefTest(void)
 
 // -----------------------------------------------------------------------------------------
 // is player a human or computer player? (multiplayer only)
-#ifndef PSX
+
 BOOL scrIsHumanPlayer(void)
 {
 	SDWORD	player;
@@ -3834,7 +3808,7 @@ BOOL scrIsHumanPlayer(void)
 
 	return TRUE;
 }
-#endif
+
 
 // -----------------------------------------------------------------------------------------
 // Set an alliance between two players
@@ -3891,7 +3865,7 @@ BOOL scrCreateAlliance(void)
 }
 
 
-#ifndef PSX
+
 // -----------------------------------------------------------------------------------------
 // offer an alliance
 BOOL scrOfferAlliance(void)
@@ -3913,7 +3887,7 @@ BOOL scrOfferAlliance(void)
 	requestAlliance((UBYTE)player1,(UBYTE)player2,TRUE,TRUE);
 	return TRUE;
 }
-#endif
+
 
 // -----------------------------------------------------------------------------------------
 // Break an alliance between two players
@@ -3972,7 +3946,7 @@ if(bMultiPlayer)
 // returns true if 2 or more players are in alliance.
 BOOL scrAllianceExists(void)
 {
-#ifndef PSX
+
 	UDWORD i,j;
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -3989,7 +3963,7 @@ BOOL scrAllianceExists(void)
 		}
 	}
 
-#endif
+
 
 	if (!stackPushResult(VAL_BOOL, FALSE))
 	{
@@ -4059,7 +4033,7 @@ BOOL scrPlayerInAlliance(void)
 BOOL scrDominatingAlliance(void)
 {
 	UDWORD i,j;
-#ifndef PSX
+
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		for(j=0;j<MAX_PLAYERS;j++)
@@ -4078,7 +4052,7 @@ BOOL scrDominatingAlliance(void)
 		}
 // -----------------------------------------------------------------------------------------
 	}
-#endif
+
 
 	if (!stackPushResult(VAL_BOOL, TRUE))
 	{
@@ -4097,7 +4071,7 @@ BOOL scrMyResponsibility(void)
 	{
 		return FALSE;
 	}
-#ifndef PSX
+
 	if(	myResponsibility(player) )
 	{
 		if (!stackPushResult(VAL_BOOL, TRUE))
@@ -4112,12 +4086,7 @@ BOOL scrMyResponsibility(void)
 			return FALSE;
 		}
 	}
-#else
-	if (!stackPushResult(VAL_BOOL, TRUE))
-	{
-		return FALSE;
-	}
-#endif
+
 
 	return TRUE;
 }	
@@ -4309,12 +4278,12 @@ BOOL scrCompleteResearch(void)
 
 	researchResult(researchIndex, (UBYTE)player, FALSE);
 
-#ifndef PSX
+
 	if(bMultiPlayer && (gameTime > 2 ))
 	{
 		SendResearch((UBYTE)player,researchIndex );
 	}
-#endif
+
 
 	return TRUE;
 }
@@ -4330,14 +4299,14 @@ BOOL scrFlashOn(void)
 	{
 		return FALSE;
 	}
-#ifndef PSX
+
 	// For the time being ... we will perform the old code for the reticule ...
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
 		flashReticuleButton((UDWORD)button);
 		return TRUE;
 	}
-#endif
+
 
 	if(widgGetFromID(psWScreen,button) != NULL)
 	{
@@ -4357,13 +4326,13 @@ BOOL scrFlashOff(void)
 	{
 		return FALSE;
 	}
-#ifndef PSX
+
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
 		stopReticuleButtonFlash((UDWORD)button);
 		return TRUE;
 	}
-#endif
+
 
 	if(widgGetFromID(psWScreen,button) != NULL)
 	{
@@ -4636,9 +4605,9 @@ BOOL scrSetMissionTime(void)
 	}
 	//store the value
 	mission.time = time;
-#ifndef PSX		// ffs ab    ... but shouldn't this be on the psx ?
+		// ffs ab    ... but shouldn't this be on the psx ?
     setMissionCountDown();
-#endif
+
 
 	//add the timer to the interface
 	if (mission.time >= 0)
@@ -4721,9 +4690,9 @@ BOOL scrSetReinforcementTime(void)
     //make sure the timer is not there if the reinforcement time has been set to < 0
     if (time < 0)
     {
-#ifndef PSX
+
         intRemoveTransporterTimer();
-#endif
+
         /*only remove the launch if haven't got a transporter droid since the 
         scripts set the time to -1 at the between stage if there are not going 
         to be reinforcements on the submap  */
@@ -4782,9 +4751,9 @@ BOOL scrSetAllStructureLimits(void)
 	for (i = 0; i < numStructureStats; i++)
 	{
 		psStructLimits[i].limit = (UBYTE)limit;
-#ifndef PSX
+
 		psStructLimits[i].globalLimit = (UBYTE)limit;
-#endif
+
 	}
 
 	return TRUE;
@@ -5084,7 +5053,7 @@ UDWORD	tileNum;
 		return(FALSE);
 	}
 
-#ifndef PSX
+
 	if(tileNum > 96)
 	{
 		ASSERT((FALSE,"SCRIPT : Water tile number too high in scrSetWaterTile"));
@@ -5092,7 +5061,7 @@ UDWORD	tileNum;
 	}
 
 	setUnderwaterTile(tileNum);
-#endif
+
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------------
@@ -5106,7 +5075,7 @@ UDWORD	tileNum;
 		return(FALSE);
 	}
 
-#ifndef PSX
+
 	if(tileNum > 96)
 	{
 		ASSERT((FALSE,"SCRIPT : Rubble tile number too high in scrSetWaterTile"));
@@ -5114,7 +5083,7 @@ UDWORD	tileNum;
 	}
 
 	setRubbleTile(tileNum);
-#endif
+
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------------
@@ -5128,19 +5097,19 @@ UDWORD	campaignNumber;
 		return(FALSE);
 	}
 
-#ifndef PSX
+
 	setCampaignNumber(campaignNumber);
-#endif
+
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------------
-#ifndef PSX
+
 BOOL	scrGetUnitCount( void )
 {
 	return TRUE;
 }
 
-#endif
+
 // -----------------------------------------------------------------------------------------
 // Tests whether a structure has a certain module for a player. Tests whether any structure
 // has this module if structure is null
@@ -6108,9 +6077,9 @@ BOOL scrSetPlayCountDown(void)
 		return FALSE;
 	}
 
-#ifndef PSX
+
     setPlayCountDown((UBYTE)bState);
-#endif
+
 
 	return TRUE;
 }
@@ -6295,7 +6264,7 @@ BOOL scrResetLimboMission(void)
 }
 
 
-#ifndef PSX
+
 // skirmish only.
 BOOL scrIsVtol(void)
 {
@@ -6320,9 +6289,9 @@ BOOL scrIsVtol(void)
 	return TRUE;
 }
 
-#endif
 
-#ifndef PSX
+
+
 // do the setting up of the template list for the tutorial.
 BOOL scrTutorialTemplates(void)
 {
@@ -6372,7 +6341,7 @@ BOOL scrTutorialTemplates(void)
 	}
 	return TRUE;
 }
-#endif
+
 
 static	UDWORD			playerToEnumDroid;
 static	UDWORD			playerVisibleDroid;

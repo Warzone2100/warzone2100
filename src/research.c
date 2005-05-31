@@ -24,15 +24,13 @@
 #include "frend.h"		// frontend ids.
 #include "intimage.h"
 
-#ifndef PSX
-#include "multiplay.h"
-#endif
 
-#ifndef PSX
+#include "multiplay.h"
+
+
+
 //#include "intfac.h"		// Interface image id's.
-#else
-//#include "intpsx.h"
-#endif
+
 
 //used to calc the research power
 #define RESEARCH_FACTOR		32//16
@@ -48,18 +46,16 @@ RESEARCH                *psCBLastResearch;
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
 //changing above a UBYTE size will require changes throughout research - put the designers off if you can!
 //PC and PSX are different because of the multiplayer research trees
-#ifndef PSX
+
 //#define MAX_RESEARCH        (216 + 20)
 //#define MAX_RESEARCH        (255)
 //new levels required for Patch
 #define MAX_RESEARCH        (450)
-#else
-#define MAX_RESEARCH        (211 + 20)
-#endif
+
 
 //need to define max's for each of the lists associated with the research - these 
 //values have been chosen based on the current research stats - 21/12/98
-#ifndef PSX
+
 //#define MAX_RESEARCH_PR             (280 + 20)
 /*#define MAX_RESEARCH_PR             (400)
 #define MAX_RESEARCH_STRUCT_PR      (24 + 5)
@@ -76,16 +72,7 @@ RESEARCH                *psCBLastResearch;
 #define MAX_RESEARCH_ARTE_RED       (40 + 5)
 #define MAX_RESEARCH_STRUCT_RES     (84 + 5)
 #define MAX_RESEARCH_ARTE_RES       (125 + 5)
-#else
-#define MAX_RESEARCH_PR             (180 + 20 + 4)
-#define MAX_RESEARCH_STRUCT_PR      (24 + 5)
-#define MAX_RESEARCH_FUNC           (150 + 25)
-#define MAX_RESEARCH_STRUCT_RED     (10 + 2)
-#define MAX_RESEARCH_ARTE_RED       (20 + 5)
-//#define MAX_RESEARCH_STRUCT_RES     (28 + 5)
-#define MAX_RESEARCH_STRUCT_RES     (44 + 5)
-#define MAX_RESEARCH_ARTE_RES       (50 + 5)
-#endif
+
 
 
 
@@ -101,11 +88,9 @@ UWORD               *pResearchStructRes;
 COMP_BASE_STATS	    **pResearchArteRes;
 COMP_BASE_STATS	    **pResearchArteRep;
 
-#ifndef PSX
+
 UWORD               numResearchPR;
-#else
-UBYTE               numResearchPR;
-#endif
+
 
 UWORD               numResearchStructPR;
 UBYTE               numResearchFunc;
@@ -665,11 +650,9 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
             pResearch->pPRList = pResearchPR + numResearchPR;
             //pResearchPR += pResearch->numPRRequired;
             //keep track on how many are being allocated
-#ifndef PSX
+
             numResearchPR = (UWORD)(numResearchPR + pResearch->numPRRequired);
-#else
-            numResearchPR = (UBYTE)(numResearchPR + pResearch->numPRRequired);
-#endif
+
 		}
 
 		//allocate storage for the structures
@@ -1389,10 +1372,10 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			}
 		}
 
-#ifndef PSX
+
 		//if single player mode and key topic, then ignore cos can't do it!
 		if (!bMultiPlayer)
-#endif
+
 		{
 			if (asResearch[inc].keyTopic)
 			{
@@ -2234,7 +2217,7 @@ BOOL ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding)
 {
-#ifndef PSX
+
 	RESEARCH_FACILITY		*psResFac;
 
 	ASSERT((psBuilding->pStructureType->type == REF_RESEARCH, 
@@ -2252,9 +2235,7 @@ void holdResearch(STRUCTURE *psBuilding)
 			audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 		}
 	}
-#else
-	cancelResearch(psBuilding);
-#endif
+
 }
 
 /*release a research facility from hold*/
@@ -2338,13 +2319,13 @@ void cancelResearch(STRUCTURE *psBuilding)
         }
 		else
 		{
-#ifndef PSX		// only PC version saves these
+		// only PC version saves these
 			/*store the points - need to keep this so can add points after the topic 
 			has been cancelled and restarted*/
 			pPlayerRes->currentPoints += (psResFac->researchPoints * (gameTime - 
                 psResFac->timeStarted)) / GAME_TICKS_PER_SEC;
 
-#endif    	
+  	
             //set the researched flag
 			MakeResearchCancelled(pPlayerRes);
 		}

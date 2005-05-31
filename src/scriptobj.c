@@ -18,9 +18,9 @@
 #include "message.h"
 #include "researchdef.h"
 #include "audio.h"
-#ifndef PSX
+
 #include "multiplay.h"
-#endif
+
 #include "text.h"
 #include "levels.h"
 #include "scriptvals.h"
@@ -379,7 +379,7 @@ BOOL scrGroupObjGet(UDWORD index)
 	return TRUE;
 }
 
-#ifndef PSX
+
 // get the name from a stat pointer
 STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
@@ -966,13 +966,4 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, UBYTE *pBuffer, UDWORD size
 	return TRUE;
 }
 
-#else
-BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, UBYTE *pBuffer, UDWORD *pSize)
-{
-	DBERROR(("scrValDefSave: not implemented for PSX"));
-}
-BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, UBYTE *pBuffer, UDWORD size, UDWORD *pData)
-{
-	DBERROR(("scrValDefLoad: not implemented for PSX"));
-}
-#endif
+

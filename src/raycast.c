@@ -51,7 +51,7 @@ static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 #define angle_PSX2WORLD(ang) ((((ang)%4096)*360)/4096)
 
 /* Initialise the ray tables */
-#ifndef PSX
+
 BOOL rayInitialise(void)
 {
 	SDWORD	i;
@@ -120,123 +120,7 @@ BOOL rayInitialise(void)
 	return TRUE;
 }
 
-#else	// Start of PSX version.
 
-BOOL rayInitialise(void)
-{
-	SDWORD	i;
-	FRACT	angle = MAKEFRACT(0);
-	FRACT	val;
-
-	for(i=0; i<NUM_RAYS; i++)
-	{
-		// Set up the fixed offset tables for calculating the intersection points
-
-		angle = (i*4096) / NUM_RAYS;
-
-		val = rcos(angle);
-		if(val != 0) {
-			val = (rsin(angle)*4096) / val;
-		} else {
-			val = MAX_FRACT;
-		}
-
-
-
-		rayDX[i] = (SDWORD)(TILE_UNITS * (RAY_ACCMUL / 4096) * val);
-
-//		rayDX[i] = (SDWORD)(TILE_UNITS * RAY_ACCMUL * val);
-		if (i <= NUM_RAYS/4 ||
-			(i >= 3*NUM_RAYS/4))
-		{
-			rayDX[i] = -rayDX[i];
-		}
-		if(val == 0) {
-			val = (FRACT)1;	// Horrible hack to avoid divide by zero.
-		}
-
-
-#define ACC_LOST (2)	// we this fact from the calc to make all the calcs fit in 32 signed bits
-		{
-			SDWORD top;
-			SDWORD bot;
-
-			top = (TILE_UNITS * RAY_ACCMUL * (4096 / ACC_LOST) );
-			bot=val/ACC_LOST;
-
-			if (bot==0)	// divide by zero check
-			{
-				if (top>=0)
-				{
-					rayDY[i] = (SDWORD)(SDWORD_MAX);
-				}
-				else
-				{
-					rayDY[i] = (SDWORD)(SDWORD_MIN);
-					
-				}
-			}
-			else
-			{
-				rayDY[i] = (SDWORD)(top / bot);
-			}
-
-			
-		}	
-
-
-//		rayDY[i] = (SDWORD)(TILE_UNITS * RAY_ACCMUL / val);
-		if (i >= NUM_RAYS/2)
-		{
-			rayDY[i] = -rayDY[i];
-		}
-
-		// These are used to calculate the initial intersection
-		rayFPTan[i] = val;
-		rayFPInvTan[i] = RAY_ACCMUL*4096 / val;
-
-		// Set up the trig tables for calculating the offset distances
-		val = rsin(angle);
-		if(val == 0) {
-			val = (FRACT)1;
-		}
-
-		rayFPInvSin[i] = RAY_ACCMUL*4096 / val;
-		if (i >= NUM_RAYS/2)
-		{
-			rayVDist[i] = (-TILE_UNITS*4096) / val;
-		}
-		else
-		{
-			rayVDist[i] = TILE_UNITS*4096 / val;
-		}
-
-		val = rcos(angle);
-
-		if(val == 0) {
-			val = (FRACT)1;
-		}
-
-		rayFPInvCos[i] = RAY_ACCMUL*4096 /  val;
-		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
-		{
-			rayHDist[i] = TILE_UNITS*4096 / val;
-		}
-		else
-		{
-			rayHDist[i] = (-TILE_UNITS*4096) / val;
-		}
-
-//		DBPRINTF(("%d Tan %d InvTan %d ",i,rayFPTan[i],rayFPInvTan[i]);
-//		DBPRINTF(("InvSin %d VDist %d ",rayFPInvSin[i],rayVDist[i]);
-//		DBPRINTF(("InvCos %d HDist %d ",rayFPInvCos[i],rayHDist[i]);
-//		DBPRINTF(("rayDX %d rayDY %d\n",rayDX[i],rayDY[i]);
-	}
-
-	return TRUE;
-}
-
-#endif
 
 //void rayC(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback);
 //
@@ -506,12 +390,9 @@ UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	xdiff = x2 - x1;
 	ydiff = y1 - y2;
 
-#ifndef PSX
+
 	angle = (SDWORD)((NUM_RAYS/2) * atan2(xdiff, ydiff) / PI);
-#else
-	angle = (SDWORD)ratan2(xdiff, ydiff);
-	angle = angle_PSX2WORLD(angle);
-#endif
+
 
 	angle += NUM_RAYS/2;
 	angle = angle % NUM_RAYS;
@@ -673,11 +554,9 @@ iVector	pos;
 			}
 
 			/* Work out the angle to this point from start point */
-#ifndef PSX
+
 			newPitch = RAD_TO_DEG(atan2(MAKEFRACT(heightDif),MAKEFRACT(dist)));
-#else
-			newPitch = MAKEFRACT((SDWORD)angle_PSX2World( ratan2(heightDif, dist) ));
-#endif
+
 
 			/* Is this the steepest we've found? */
 			if(newPitch>gPitch)
