@@ -10,13 +10,7 @@
 // ////////////////////////////////////////////////////////////////////////
 // Include this file in your game to add multiplayer facilities.
 
-#ifdef INC_DIRECTX
-#pragma warning (disable : 4201 4214 4115 4514)
-#include <dplay.h>
-#include <dplobby.h>
-#include <dsound.h>
-#pragma warning (default : 4201 4214 4115)
-#endif
+
 
 #define IDIRECTPLAY2_OR_GREATER
 

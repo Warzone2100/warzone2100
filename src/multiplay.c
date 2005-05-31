@@ -619,30 +619,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 // Required by the net library. It's the system message handler..
 BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 {
-#ifdef INC_DIRECTX
-	switch( ((LPDPMSG_GENERIC)mg)->dwType )
-	{
-	case DPSYS_DESTROYPLAYERORGROUP:	// player leaving the game
-		if ( ((LPDPMSG_DESTROYPLAYERORGROUP)mg)->dwPlayerType == DPPLAYERTYPE_PLAYER)
-		{		
-			NETlogEntry("directplay leave player called...",0,0);
-			MultiPlayerLeave(((LPDPMSG_DESTROYPLAYERORGROUP)mg)->dpId);
-		}
-		break;
 
-	case DPSYS_CREATEPLAYERORGROUP:	// player joining the game.
-		MultiPlayerJoin(((LPDPMSG_CREATEPLAYERORGROUP)mg)->dpId);	
-		break;
-
-	case DPSYS_HOST:				// we have become host.
-		NetPlay.bHost = TRUE;
-		break;
-
-	default:
-		break;
-	}
-
-#endif
 	return (TRUE);
 }
 

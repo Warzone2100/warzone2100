@@ -5,9 +5,7 @@
 
 /***************************************************************************/
 
-#ifdef INC_DIRECTX
-#include <dsound.h>
-#endif
+
 
 #include "track.h"
 

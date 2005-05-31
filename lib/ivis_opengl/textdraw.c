@@ -752,76 +752,7 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 
 void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, int XPos, int YPos)
 {
-#ifdef INC_DIRECTX
-	int Index;
-	UWORD ImageID;
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
-	UDWORD* lpSurface;
-	DDSURFACEDESC2	DD_sd; 
-	HRESULT			hRes;
 
-//	pie_BeginTextRender(Font->FontColourIndex);
-	// We lock the surface before blitting video to it.
-	DD_sd.dwSize = sizeof( DD_sd );
-	if ( lpDDSF->lpVtbl->GetSurfaceDesc(lpDDSF, &DD_sd ) != DD_OK )
-	{
-		DBERROR(("Sequence player text GetSurfaceDesc failed:"));
-		return;
-	}
-
-	hRes = lpDDSF->lpVtbl->Lock(lpDDSF, NULL, &DD_sd,DDLOCK_WAIT, NULL);
-	if (hRes != DD_OK)
-	{
-		DBERROR(("Sequence player text draw buffer lock failed:\n%s", DDErrorToString(hRes)));
-		return;
-	}
-
-	if (DD_sd.ddpfPixelFormat.dwRGBBitCount != 16)
-	{
-		// We can unlock the suurface now as we have finished with it, 
-		// until the next decode is required
-		lpDDSF->lpVtbl->Unlock(lpDDSF, DD_sd.lpSurface );
-		return;
-	}
-
-	lpSurface = (UDWORD*)DD_sd.lpSurface; 
-	
-	while (*String!=0) 
-	{
-		Index = *String;
-		if(Index!=ASCII_SPACE)
-		{
-			ImageID = (UWORD)Font->AsciiTable[Index];
-			pie_RenderCharToSurface(lpSurface, DD_sd.lPitch, Font->FontFile, ImageID, XPos, YPos, 0xffff);
-			XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-		}
-		else
-		{
-			XPos += Font->FontSpaceSize;
-		}
-	
-		String++;
-		//	Index = ( *String - '!' );
-
-	//	if((Index >= 0) && (Index <= Font->FontEndID - Font->FontStartID))
-	//	{
-	//		ImageID = (UWORD)(Font->FontStartID + Index);
-
-	//		pie_RenderCharToSurface(lpSurface, DD_sd.lPitch, Font->FontFile, ImageID, XPos, YPos, 0xffff);
-
-	//		XPos += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-
-	//}
-	//	else if(Index == -1)
-	//	{
-	//		XPos += Font->FontSpaceSize;
-	//	}
-
-	}
-	// We can unlock the suurface now as we have finished with it, 
-	// until the next decode is required
-	lpDDSF->lpVtbl->Unlock(lpDDSF, DD_sd.lpSurface );
-#endif
 }
 
 void pie_DrawText270(unsigned char *String,int XPos,int YPos)

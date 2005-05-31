@@ -688,7 +688,7 @@ void	updateWaypoint(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	updateFirework(EFFECT *psEffect)
 {
-#ifndef PSX
+
 UDWORD	height;
 UDWORD	xDif,yDif,radius,val;
 iVector	dv;
@@ -813,7 +813,7 @@ UDWORD	drop;
 	}
 
 
-#endif
+
 }
 // ----------------------------------------------------------------------------------------
 void	updateSatLaser(EFFECT *psEffect)
@@ -861,21 +861,15 @@ LIGHT	light;
 
 
 		/* Now, add the column of light */
-#ifndef PSX
+
 		for(i=startHeight; i<endHeight; i+=56)
-#else
-		for(i=startHeight; i<endHeight; i+=56*4)
-#endif
+
 		{
-#ifndef PSX
+
 			radius = 80;
 			/* Add 36 around in a circle..! */
 			for(val = 0; val<=180; val+=30)
-#else
-			radius = 40;
-//			for(val = 0; val<=180; val+=180)
-			val = 0;
-#endif
+
 			{
    				xDif = radius * (SIN(DEG(val)));
    				yDif = radius * (COS(DEG(val)));
@@ -930,10 +924,10 @@ UDWORD	percent;
 UDWORD	range;
 FRACT	scaling;
 
-#ifndef PSX	
+	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
-#endif
+
 	if(TEST_LIT(psEffect))
 	{
 		if(psEffect->lifeSpan) 
@@ -966,9 +960,9 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 		processLight(&light);
 //#endif
 	}
-#ifndef PSX	
+	
 }
-#endif
+
 
 #ifdef DOLIGHTS
 /*
@@ -1031,20 +1025,13 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 
 	if(!gamePaused())
 	{
-#ifndef PSX
+
 		/* Tesla explosions are the only ones that rise, or indeed move */
 		if(psEffect->type == EXPLOSION_TYPE_TESLA)
 		{
 			psEffect->position.y += (MAKEINT(psEffect->velocity.y) * fraction);
 		}
-#else
-		if( (psEffect->type == EXPLOSION_TYPE_TESLA) ||
-			(psEffect->type == EXPLOSION_TYPE_POWERMODULE) ||
-			(psEffect->type == EXPLOSION_TYPE_RESEARCHMODULE) ) 
-		{
-			psEffect->position.y += (MAKEINT(psEffect->velocity.y) * fraction);
-		}
-#endif
+
 	}
 }
 // ----------------------------------------------------------------------------------------
@@ -1064,15 +1051,11 @@ void	updateBlood(EFFECT *psEffect)
 		}
 	}
 	/* Move it about in the world */
-#ifndef PSX
+
 	psEffect->position.x += (psEffect->velocity.x * fraction);
 	psEffect->position.y += (psEffect->velocity.y * fraction);
 	psEffect->position.z += (psEffect->velocity.z * fraction);
-#else
-	psEffect->position.x += (MAKEINT(psEffect->velocity.x) * fraction);
-	psEffect->position.y += (MAKEINT(psEffect->velocity.y) * fraction);
-	psEffect->position.z += (MAKEINT(psEffect->velocity.z) * fraction);
-#endif
+
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1114,15 +1097,11 @@ void	updatePolySmoke(EFFECT *psEffect)
 	}
 
 	/* Update position */
-#ifndef PSX
+
 	psEffect->position.x += (psEffect->velocity.x * fraction);
 	psEffect->position.y += (psEffect->velocity.y * fraction);
 	psEffect->position.z += (psEffect->velocity.z * fraction);
-#else
-	psEffect->position.x += (FRACTmul(psEffect->velocity.x,fraction));
-	psEffect->position.y += (FRACTmul(psEffect->velocity.y,fraction));
-	psEffect->position.z += (FRACTmul(psEffect->velocity.z,fraction));
-#endif
+
 
 	/* If it doesn't get killed by frame number, then by age */
 	if(TEST_CYCLIC(psEffect))
@@ -1148,10 +1127,10 @@ iVector	dv;
 UDWORD	groundHeight;
 MAPTILE	*psTile;
 
-#ifndef PSX	
+
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
-#endif
+
 LIGHT	light;
 #ifdef DOLIGHTS
 	if(psEffect->type!=GRAVITON_TYPE_GIBLET)
@@ -1164,9 +1143,9 @@ LIGHT	light;
 		processLight(&light);
 	}
 #endif
-#ifndef PSX	
+	
 }
-#endif
+
 
 	if(gamePaused())
 	{
@@ -1174,15 +1153,11 @@ LIGHT	light;
 		return;
 	}
 	/* Move it about in the world */
-	#ifndef PSX
+
 		psEffect->position.x += (psEffect->velocity.x * fraction);
 		psEffect->position.y += (psEffect->velocity.y * fraction);			
 		psEffect->position.z += (psEffect->velocity.z * fraction);
-	#else
-		psEffect->position.x += (MAKEINT(psEffect->velocity.x) * fraction);
-		psEffect->position.y += (MAKEINT(psEffect->velocity.y) * fraction);
-		psEffect->position.z += (MAKEINT(psEffect->velocity.z) * fraction);
-	#endif
+
 	/* If it's bounced/drifted off the map then kill it */
 	if(((UDWORD)MAKEINT(psEffect->position.x)/TILE_UNITS >= mapWidth) OR 
 		(UDWORD)MAKEINT(psEffect->position.z)/TILE_UNITS >= mapHeight)
@@ -1271,13 +1246,11 @@ LIGHT	light;
 			{
 				psEffect->specific++;
 				/* Half it's velocity */
-#ifndef PSX
+
 //				psEffect->velocity.x/=(FRACT)(2);
 				psEffect->velocity.y/=(FRACT)(-2); // only y gets flipped
 //				psEffect->velocity.z/=(FRACT)(2);
-#else
-				psEffect->velocity.y/=((FRACT)-4);	// Don't know why but -4 works much better on PSX.
-#endif
+
 				/* Set it at ground level - may have gone through */
 				psEffect->position.y = MAKEFRACT(groundHeight);
 			}
@@ -1316,10 +1289,10 @@ UDWORD	range;
 FRACT	div;
 UDWORD	height;
 
-#ifndef PSX	
+	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
-#endif
+
 	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
 	if(percent > 100)  
 	{
@@ -1349,9 +1322,9 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 	}
 	processLight(&light);
 #endif
-#ifndef PSX	
+
 }
-#endif
+
 
 
 	if(gameTime > (psEffect->birthTime + psEffect->lifeSpan))
@@ -1518,15 +1491,11 @@ void	updateConstruction(EFFECT *psEffect)
 	}
 
 	/* Move it about in the world */
-#ifndef PSX
+
 	psEffect->position.x += (psEffect->velocity.x * fraction);
 	psEffect->position.y += (psEffect->velocity.y * fraction);
 	psEffect->position.z += (psEffect->velocity.z * fraction);
-#else
-	psEffect->position.x += (MAKEINT(psEffect->velocity.x) * fraction);
-	psEffect->position.y += (MAKEINT(psEffect->velocity.y) * fraction);
-	psEffect->position.z += (MAKEINT(psEffect->velocity.z) * fraction);
-#endif
+
 
 	/* If it doesn't get killed by frame number, then by height */
 	if(TEST_CYCLIC(psEffect))
@@ -1555,10 +1524,10 @@ iVector	pos;
 LIGHT	light;
 UDWORD	percent;
 
-#ifndef PSX	
+	
 if (pie_Hardware())//pc only on hardware, always on PSX
 {
-#endif
+
 	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
 	if(percent > 100)  
 	{
@@ -1572,9 +1541,9 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 	light.colour = LIGHT_RED;
 	processLight(&light);
 #endif
-#ifndef PSX	
+	
 }
-#endif
+
 	
 
 	/* Time to update the frame number on the construction sprite */
@@ -1695,7 +1664,7 @@ void	renderEffect(EFFECT *psEffect)
 /* drawing func for wapypoints . AJL. */
 void	renderWaypointEffect(EFFECT *psEffect)
 {
-#ifndef PSX
+
 iVector		dv;
 SDWORD		rx,rz;
 UDWORD brightness, specular;
@@ -1718,22 +1687,13 @@ UDWORD brightness, specular;
 	pie_Draw3DShape(psEffect->imd, 0, 0, brightness, specular, 0, 0);
 //	pie_Draw3DShape(psEffect->imd, 0, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();
-#else
-	PIE PieParams;
 
-	PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT;
-	PieParams.ColourRGB[0] = 
-	PieParams.ColourRGB[1] = 
-	PieParams.ColourRGB[2] = 64;
-	PieParams.TransMode = TRANSMODE_ADDITIVE;
-	rendEffect(psEffect,100,&PieParams);
-#endif
 }
 
 // ----------------------------------------------------------------------------------------
 void	renderFirework(EFFECT *psEffect)
 {
-#ifndef PSX
+
 iVector		dv;
 SDWORD		rx,rz;
 UDWORD brightness, specular;
@@ -1779,7 +1739,7 @@ UDWORD brightness, specular;
 	{
 		pie_SetDitherStatus(FALSE);
 	}
-#endif
+
 
 
 }
@@ -1787,7 +1747,7 @@ UDWORD brightness, specular;
 /* drawing func for blood. */
 void	renderBloodEffect(EFFECT *psEffect)
 {
-#ifndef PSX
+
 iVector		dv;
 SDWORD		rx,rz;
 UDWORD brightness, specular;
@@ -1812,13 +1772,7 @@ UDWORD brightness, specular;
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	iV_MatrixEnd();
-#else
-	PIE PieParams;
 
-	PieParams.Flags = PIE_TRANSPARENT;
-	PieParams.TransMode = TRANSMODE_TRANSLUCENT;
-	rendEffect(psEffect,psEffect->size,&PieParams);
-#endif
 }
 
 
@@ -1826,7 +1780,7 @@ UDWORD brightness, specular;
 // ----------------------------------------------------------------------------------------
 void	renderDestructionEffect(EFFECT *psEffect)
 {
-#ifndef PSX
+
 iVector	dv;
 SDWORD	rx,rz;
 FRACT	div;
@@ -1872,9 +1826,7 @@ UDWORD	brightness,specular;
  
 
 	iV_MatrixEnd();
-#else
-#warning destruction effect not implemented on PSX yet.
-#endif
+
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1908,7 +1860,7 @@ UDWORD	timeSlice;
 /* Renders the standard explosion effect */
 void	renderExplosionEffect(EFFECT *psEffect)
 {
-#ifndef PSX
+
 	iVector		dv;
 	SDWORD		rx,rz;
 	SDWORD	percent;
@@ -1991,53 +1943,13 @@ void	renderExplosionEffect(EFFECT *psEffect)
 
 
 	iV_MatrixEnd();
-#else
-	PIE PieParams;
-	int Size = psEffect->size;
 
-
-	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
-	{
-		if(rejectLandLight(psEffect->specific))
-		{
-			return;
-		}
-	}
-
-
-	PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT;
-	if(psEffect->type == EXPLOSION_TYPE_LASER) {
-		PieParams.ColourRGB[0] = rand()&255;
-		PieParams.ColourRGB[1] = rand()&255;
-		PieParams.ColourRGB[2] = rand()&255;
-	} else if(psEffect->type == EXPLOSION_TYPE_POWERMODULE) {
-		PieParams.ColourRGB[0] = 32;
-		PieParams.ColourRGB[1] = 32;
-		PieParams.ColourRGB[2] = 128;
-	} else if(psEffect->type == EXPLOSION_TYPE_RESEARCHMODULE) {
-		PieParams.ColourRGB[0] = 32;
-		PieParams.ColourRGB[1] = 128;
-		PieParams.ColourRGB[2] = 32;
-	} else if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT) {
-		PieParams.ColourRGB[0] = 		//64; 
-		PieParams.ColourRGB[1] = 		//0;
-		PieParams.ColourRGB[2] = 64;	//0;
-		Size /= 4;
-	} else {
-		PieParams.ColourRGB[0] = 
-		PieParams.ColourRGB[1] = 
-		PieParams.ColourRGB[2] = 64;
-	}
-	PieParams.TransMode = TRANSMODE_ADDITIVE;
-
-	rendEffect(psEffect,Size,&PieParams);
-#endif
 }
 
 // ----------------------------------------------------------------------------------------
 void	renderGravitonEffect(EFFECT *psEffect)
 {
-#ifndef PSX
+
 iVector	vec;
 SDWORD	rx,rz;
 UDWORD  brightness, specular;
@@ -2084,14 +1996,7 @@ UDWORD  brightness, specular;
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
-#else
-	PIE PieParams;
 
-	PieParams.Flags=PIE_PALETTEID;
-	PieParams.PaletteID = psEffect->frameNumber&3;
-
-	rendEffect(psEffect,100,&PieParams);	//NULL);
-#endif
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2100,7 +2005,7 @@ renderConstructionEffect:-
 Renders the standard construction effect */
 void	renderConstructionEffect(EFFECT *psEffect)
 {
-#ifndef PSX		// not on psx yet
+
 iVector	vec,null;
 SDWORD	rx,rz;
 SDWORD	percent;
@@ -2178,16 +2083,7 @@ UDWORD brightness, specular;
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
-#else // Start of PSX version.
-	PIE PieParams;
 
-	PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT;
-	PieParams.ColourRGB[0] = (rand()%64)+16;	// Any sufficiently advanced technology
-	PieParams.ColourRGB[1] = (rand()%64)+16;	// is indistinguishable from magic! ( so there! )
-	PieParams.ColourRGB[2] = (rand()%64)+16;
-	PieParams.TransMode = TRANSMODE_ADDITIVE;
-	rendEffect(psEffect,100,&PieParams);
-#endif
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2197,7 +2093,7 @@ Renders the standard smoke effect - it is now scaled in real-time as well
 */
 void	renderSmokeEffect(EFFECT *psEffect)
 {
-#ifndef PSX		// not on psx yet
+
 UDWORD	percent;
 UDWORD	transparency = 0;
 iVector	vec;
@@ -2238,7 +2134,7 @@ UDWORD brightness, specular;
 
 	if(TEST_SCALED(psEffect))
 	{
-#ifndef PSX
+
 		if (pie_Hardware())
 		{
 #ifdef HARDWARE_TEST//test additive
@@ -2260,7 +2156,7 @@ UDWORD brightness, specular;
 #endif
 		}
 		else
-#endif
+
 		{//software
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)))/2;
 			scaleMatrix(percent + psEffect->baseScale);
@@ -2307,35 +2203,7 @@ UDWORD brightness, specular;
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
-#else // Start of PSX version.
-	UDWORD percent;
-	UBYTE  offset;
-	UDWORD Scale = 100;
-	PIE PieParams;
 
-	if(TEST_SCALED(psEffect))
-	{
-		percent = PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan);
-		Scale = percent + psEffect->baseScale;
-	}
-
-	PieParams.Flags = PIE_COLOURED | PIE_TRANSPARENT;
-	if(psEffect->type == SMOKE_TYPE_TRAIL)
-	{
-		PieParams.ColourRGB[0] = 
-		PieParams.ColourRGB[1] = 
-		PieParams.ColourRGB[2] = 64;
-	} else {
-		PieParams.ColourRGB[0] = 
-		PieParams.ColourRGB[1] = 
-		PieParams.ColourRGB[2] = 16;
-	}
-	PieParams.TransMode = TRANSMODE_ADDITIVE;
-
-//	PieParams.Flags = PIE_TRANSPARENT;
-//	PieParams.TransMode = TRANSMODE_TRANSLUCENT;
-	rendEffect(psEffect,Scale,&PieParams);
-#endif
 }
 
 
@@ -2344,7 +2212,7 @@ UDWORD brightness, specular;
 // ----------------------------------------------------------------------------------------
 void	effectSetUpFirework(EFFECT *psEffect)
 {
-#ifndef PSX
+
 UDWORD	camExtra;
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
@@ -2391,7 +2259,7 @@ UDWORD	camExtra;
 	}
 
 	psEffect->frameDelay = (EXPLOSION_FRAME_DELAY*2);
-#endif
+
 }
 // ----------------------------------------------------------------------------------------
 void	effectSetupSmoke(EFFECT *psEffect)
@@ -2636,7 +2504,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 		psEffect->frameDelay = (UWORD)EXPLOSION_FRAME_DELAY;
 	}
 
-#ifndef PSX
+
 	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC;
@@ -2645,9 +2513,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 	{
 		psEffect->lifeSpan = (psEffect->frameDelay *  psEffect->imd->numFrames);
 	}
-#else
-	psEffect->lifeSpan = (psEffect->frameDelay *  EffectGetNumFrames(psEffect));
-#endif
+
 
 	if ( (psEffect->type!=EXPLOSION_TYPE_NOT_FACING) AND (psEffect->type!=EXPLOSION_TYPE_SHOCKWAVE))
 	{
@@ -2797,21 +2663,14 @@ iVector	pos;
 	base.y = y;
 	base.z = z;
 
-#ifndef PSX
+
 	varStart = pImd->xmin -16;
 	varEnd = pImd->xmax + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
 	inStart = pImd->zmin - 16;
 	inEnd = pImd->zmax + 16;
-#else
-	varStart = -((SWORD)pImd->xmax) -16;
-	varEnd = pImd->xmax + 16;
-	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
-	inStart = -((SWORD)pImd->zmax) - 16;
-	inEnd = pImd->zmax + 16;
-#endif
 
 	for(i=varStart; i<varEnd; i+=varStride)
 	{
@@ -2842,21 +2701,14 @@ iVector	pos;
 
 	}
 
-#ifndef PSX
+
 	varStart = pImd->zmin - 16;
 	varEnd = pImd->zmax + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
 	inStart = pImd->xmin - 16;
 	inEnd = pImd->xmax + 16;
-#else
-	varStart = -((SWORD)pImd->zmax) -16;
-	varEnd = pImd->zmax + 16;
-	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
-	inStart = -((SWORD)pImd->xmax) - 16;
-	inEnd = pImd->xmax + 16;
-#endif
 
 	for(i=varStart; i<varEnd; i+=varStride)
 	{
@@ -2897,52 +2749,23 @@ UDWORD	getNumEffects( void )
 // ----------------------------------------------------------------------------------------
 UDWORD EffectGetNumFrames(EFFECT *psEffect)
 {
-#ifndef PSX
-	return psEffect->imd->numFrames;
-#else
-	if(psEffect->imd->flags & iV_IMD_XEFFECT) {
-		return ((iIMDShapeEffect*)psEffect->imd)->numframes;
-	} else {
-//		assert(2+2==5);			// no normal imd shape effects on psx
-		DBPRINTF(("1 no normal imd shape effects on psx\n"));
-		return 0;
 
-//		return psEffect->imd->numFrames;
-	}
-#endif
+	return psEffect->imd->numFrames;
+
 }
 
 UDWORD IMDGetNumFrames(iIMDShape *Shape)
 {
-#ifndef PSX
+
 	return Shape->numFrames;
-#else
-	if(Shape->flags & iV_IMD_XEFFECT) {
-		return ((iIMDShapeEffect*)Shape)->numframes;
-	} else 
-	{
-//		assert(2+2==5);			// no normal imd shape effects on psx
-		DBPRINTF(("2 no normal imd shape effects on psx\n"));
-		return 0;
-//		return Shape->numFrames;
-	}
-#endif
+
 }
 
 UDWORD IMDGetAnimInterval(iIMDShape *Shape)
 {
-#ifndef PSX
-	return Shape->animInterval;
-#else
-	if(Shape->flags & iV_IMD_XEFFECT) {
-		return 50;
-	} else {
-		assert(2+2==5);			// no normal imd shape effects on psx
-		return 0;
 
-//		return Shape->animInterval;
-	}
-#endif
+	return Shape->animInterval;
+
 }
 
 void	effectGiveAuxVar( UDWORD var)

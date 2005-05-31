@@ -295,50 +295,6 @@ UDWORD	radius;
 //use outside of D3D sceen only
 void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
 {
-#ifdef INC_DIRECTX
-	DDSURFACEDESC2	DD_sd; 
-	HRESULT			hRes;
-	int i, j, surfaceSkip, srcSkip;
-	UWORD *pSurface, *pSrc;
-	SDWORD surfaceStride;
 
-	// We lock the surface before blitting video to it.
-	DD_sd.dwSize = sizeof( DD_sd );
-	if ( lpDDS4->lpVtbl->GetSurfaceDesc(lpDDS4, &DD_sd ) != DD_OK )
-	{
-		DBERROR(("pie_RenderImageToSurface GetSurfaceDesc failed:\n"));
-		return;
-	}
-	
-	hRes = lpDDS4->lpVtbl->Lock(lpDDS4, NULL, &DD_sd,DDLOCK_WAIT, NULL);
-	if (hRes != DD_OK)
-	{
-		DBERROR(("pie_RenderImageToSurface buffer lock failed:\n%s", DDErrorToString(hRes)));
-	}
-
-	pSurface = (WORD*)DD_sd.lpSurface;
-	pSrc = pSrcData;
-
-	//word strides
-	surfaceStride = DD_sd.lPitch/2;
-	srcStride /= 2;
-
-	pSurface += (surfaceOffsetX + surfaceOffsetY * surfaceStride);
-
-	surfaceSkip = surfaceStride -srcWidth;
-	srcSkip = srcStride -srcWidth;
-
-	for (i=0; i<srcHeight; i++)
-	{
-		for (j=0; j<srcWidth; j++)
-		{
-			*pSurface++ = *pSrc++;
-		}
-		pSurface += surfaceSkip;
-		pSrc += srcSkip;
-	}
-	// We can unlock the surface now as we have finished with it, 
-	lpDDS4->lpVtbl->Unlock(lpDDS4, DD_sd.lpSurface );
-#endif
 }
 

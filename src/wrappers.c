@@ -533,13 +533,7 @@ void	runCreditsScreen( void )
 			return;
 			break;
 		}		
-#ifdef INC_GLIDE
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_LoadBackDrop(screen,TRUE);
-		}
-		else
-#endif
+
 		{
 			pie_LoadBackDrop(screen,FALSE);
 		}

@@ -9,16 +9,14 @@
 
 // limit the number of iterations for astar
 #define FPATH_MAX_ROUTE_INIT	400
-#ifndef PSX
+
 extern SDWORD	astarMaxRoute;
 #  ifdef DEBUG
 #    define FPATH_LOOP_LIMIT	(astarMaxRoute / 2)
 #  else
 #    define FPATH_LOOP_LIMIT	astarMaxRoute
 #  endif
-#else
-#  define FPATH_LOOP_LIMIT	100
-#endif
+
 
 
 // return values for routing

@@ -36,13 +36,8 @@
 #include "wdg.h"
 #include "multiwdg.h"
 #include "screen.h"
-#ifdef INC_DIRECTX
-#include "d3drender.h"
-#include "dx6texman.h"
-#endif
-#ifdef INC_GLIDE
-#include "dglide.h"
-#endif
+
+
 
 
 // Warzone 2100 . Pumpkin Studios
@@ -168,15 +163,9 @@ int main(int argc, char *argv[])
 
 	war_SetRendMode(REND_MODE_SOFTWARE); // NOID changed from REND_MODE_HAL
 
-#ifdef INC_GLIDE
-	if (InitGlideDLL())	// In ivis02/3dfxdyn.c - returns FALSE if no glide2x.dll is not found
-	{
-		bGlideFound = TRUE;
-		war_SetRendMode(REND_MODE_GLIDE);//default to glide this will be over writen by Registry or Command line if found
-	}
-#else
+
 	bGlideFound = FALSE;
-#endif
+
    
 init://jump here from the end if re_initialising
 
@@ -437,16 +426,7 @@ init://jump here from the end if re_initialising
 			case FRAME_KILLFOCUS:
 				paused = TRUE;
 				gameTimeStop();
-#ifdef INC_GLIDE
-				if (pie_GetRenderEngine() == ENGINE_GLIDE)
-				{
-					if (!gl_Deactivate())
-					{
-						quit = TRUE;
-						Restart = TRUE;
-					}
-				}
-#endif
+
 				mixer_SaveIngameVols();
 				mixer_RestoreWinVols();
 				audio_StopAll();
@@ -459,16 +439,7 @@ init://jump here from the end if re_initialising
 					quit = TRUE;
 					Restart = TRUE;
 				}
-#ifdef INC_GLIDE
-				if (pie_GetRenderEngine() == ENGINE_GLIDE)
-				{
-					if (!gl_Reactivate())
-					{
-						quit = TRUE;
-						Restart = TRUE;
-					}
-				}
-#endif
+
 				else if (pie_GetRenderEngine() == ENGINE_D3D)
 				{
 //					dtm_RestoreTextures();
@@ -712,9 +683,7 @@ init://jump here from the end if re_initialising
 
 	frameShutDown();
 
-#ifdef INC_GLIDE
-	ShutdownGlideDLL();
-#endif
+
 
 	if (reInit) goto init;
 
@@ -730,9 +699,7 @@ exit:
 
 	frameShutDown();
 
-#ifdef INC_GLIDE
-	ShutdownGlideDLL();
-#endif
+
 
 	return 1;
 

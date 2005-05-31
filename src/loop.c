@@ -34,9 +34,7 @@
 #include "message.h"
 #include "bucket3d.h"
 #include "display3d.h"
-#ifdef INC_GLIDE
-#include "3dfxfunc.h"
-#endif
+
 #include "multiplay.h" //ajl
 #include "script.h"
 #include "scripttabs.h"
@@ -614,17 +612,7 @@ GAMECODE gameLoop(void)
 			//quitting from the game to the front end
 			//so get a new backdrop
 			quitting = TRUE;
-#ifdef INC_GLIDE
-			if (pie_GetRenderEngine() == ENGINE_GLIDE)
-			{
-#ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT,TRUE);
-#else
-				pie_LoadBackDrop(SCREEN_RANDOMBDROP,TRUE);
-#endif
-			}
-			else
-#endif
+
 			{
 #ifdef COVERMOUNT
 				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
@@ -730,25 +718,7 @@ GAMECODE gameLoop(void)
 			pie_SetFogStatus(TRUE);
 //			}
 
-#ifdef INC_GLIDE
-			if(pie_GetRenderEngine() == ENGINE_GLIDE)
-			{
-				if(!driveModeActive()) {
-					pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-					pie_SetFogStatus(FALSE);
-					pie_DrawMouse(mouseX(),mouseY());
-					pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-					pie_SetFogStatus(TRUE);
-				} else {
-					// If were in driving mode then put the cursor over the current target.
-					BASE_OBJECT *psObj = targetGetCurrent();
-					if(psObj != NULL) {
-						SetMousePos(0,psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-						pie_DrawMouse(psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-					}
-				}
-			}
-#endif
+
 	//#endif
 		}										   
 		/*else if (!quitting)
@@ -1021,12 +991,7 @@ static BOOL bActiveBackDrop = FALSE;
 #endif
 //		clearCount = 0;
 		pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-#ifdef INC_GLIDE
-		if(pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-		}
-#endif
+
 		if (bActiveBackDrop)
 		{
  			screen_RestartBackDrop();
@@ -1048,12 +1013,7 @@ static BOOL bActiveBackDrop = FALSE;
 		if (seq_AnySeqLeft())
 		{
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-#ifdef INC_GLIDE
-			if(pie_GetRenderEngine() == ENGINE_GLIDE)
-			{
-				pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-			}
-#endif
+
 			if (bActiveBackDrop)
 			{
 				screen_RestartBackDrop();
@@ -1082,12 +1042,7 @@ static BOOL bActiveBackDrop = FALSE;
 #endif
 //		    clearCount = 0;
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-#ifdef INC_GLIDE
-			if(pie_GetRenderEngine() == ENGINE_GLIDE)
-			{
-				pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-			}
-#endif
+
     		if (bActiveBackDrop)
 	    	{
 		    	screen_RestartBackDrop();

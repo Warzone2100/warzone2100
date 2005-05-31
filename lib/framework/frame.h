@@ -39,13 +39,7 @@ FILE* unix_fopen(char* filename, char* mode);
 #include "types.h"
 #include "debug.h"
 #include "mem.h"
-#ifdef INC_DIRECTX
-#include <ddraw.h>
-#include "dderror.h"
-#include "surface.h"
-#include "image.h"
-#include "dxinput.h"
-#endif
+
 #include "input.h"
 #include "font.h"
 #include "heap.h"
