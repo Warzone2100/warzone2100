@@ -34,20 +34,23 @@
 #include "text.h"
 #include "mission.h"
 #include "gtime.h"
-
-
+//======================================================================================
+//--------------------------------
+#define totalslots 20			//saves slots.. was 10 , now 20   *Away with hard coding values!* -Q
+#define totalslotspace 64		//guessing 64 max chars for filename.
+//--------------------------------
 // ////////////////////////////////////////////////////////////////////////////
 #define LOADSAVE_X				130	+ D_W
-#define LOADSAVE_Y				170	+ D_H
+#define LOADSAVE_Y				10	//+ D_H		//was 170 -Q
 #define LOADSAVE_W				380
-#define LOADSAVE_H				200
+#define LOADSAVE_H				240	//was 200 -Q
 
 #define MAX_SAVE_NAME			60
 
 
-#define LOADSAVE_HGAP			5
-#define LOADSAVE_VGAP			5
-#define LOADSAVE_BANNER_DEPTH	25
+#define LOADSAVE_HGAP			9		//from 5 to 9 -Q
+#define LOADSAVE_VGAP			9		//from 5 to 9 -Q
+#define LOADSAVE_BANNER_DEPTH	40 		//was 25 top banner which displays either load or save
 
 
 #define LOADENTRY_W				(LOADSAVE_W -(3 * LOADSAVE_HGAP)) /2
@@ -59,10 +62,10 @@
 #define LOADSAVE_LABEL			ID_LOADSAVE+3		// load/save
 #define LOADSAVE_BANNER			ID_LOADSAVE+4		// banner.
 
-#define LOADENTRY_START			ID_LOADSAVE+5		// each of the buttons.	
-#define LOADENTRY_END			ID_LOADSAVE+15	
+#define LOADENTRY_START			ID_LOADSAVE+10		// each of the buttons.	
+#define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q	
 
-#define SAVEENTRY_EDIT			ID_LOADSAVE+16		// save edit box.
+#define SAVEENTRY_EDIT			ID_LOADSAVE+50		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
 void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
@@ -130,16 +133,17 @@ BOOL bLoad;
 
 	return _addLoadSave(bLoad,sSearchPath,sExtension,title);
 }
-
-
-// ////////////////////////////////////////////////////
+//****************************************************************************************
+// Load menu/save menu?
+//*****************************************************************************************
 static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *title)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
 	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
-	static STRING	sSlots[10][64];
+// removed hardcoded values!  change with the defines above! -Q
+	static STRING	sSlots[totalslots][totalslotspace];			
 	STRING			sTemp[255];
 
 //#ifndef PSX		//This is NOT for PSX, it is for windows!
@@ -197,13 +201,13 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 
 	/* add a form to place the tabbed form on */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = 0;
+	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
 	sFormInit.id = LOADSAVE_FORM;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = (SWORD)(LOADSAVE_X);
 	sFormInit.y = (SWORD)(LOADSAVE_Y);
 	sFormInit.width = LOADSAVE_W;
-	sFormInit.height = LOADSAVE_H;
+	sFormInit.height = (LOADSAVE_H*2)-46;		// hmm..the bottom of the box.... -Q
 	sFormInit.disableChildren = TRUE;
 	sFormInit.pDisplay = intOpenPlainForm;
 	widgAddForm(psRequestScreen, &sFormInit);
@@ -227,9 +231,9 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	sLabInit.id		= LOADSAVE_LABEL;
 	sLabInit.style	= WLAB_ALIGNCENTRE;
 	sLabInit.x		= 0;
-	sLabInit.y		= 4;
+	sLabInit.y		= 3;
 	sLabInit.width	= LOADSAVE_W-(2*LOADSAVE_HGAP);	//LOADSAVE_W;
-	sLabInit.height = 20;
+	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText	= title;
 	sLabInit.FontID = WFont;
 	widgAddLabel(psRequestScreen, &sLabInit);
@@ -238,8 +242,8 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	// add cancel.
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = LOADSAVE_BANNER;
-	sButInit.x = 4;
-	sButInit.y = 3;
+	sButInit.x = 8;
+	sButInit.y = 8;
 	sButInit.width		= iV_GetImageWidth(IntImages,IMAGE_NRUTER);
 	sButInit.height		= iV_GetImageHeight(IntImages,IMAGE_NRUTER);
 	sButInit.pUserData	= (void*)PACKDWORD_TRI(0,IMAGE_NRUTER , IMAGE_NRUTER);
@@ -260,11 +264,11 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	sButInit.pDisplay	= displayLoadSlot;
 	sButInit.FontID		= WFont;
 
-	for(slotCount = 0; slotCount< 10 ; slotCount++)
+	for(slotCount = 0; slotCount< totalslots; slotCount++)
 	{
 		sButInit.id		= slotCount+LOADENTRY_START;
 		
-		if(slotCount<5)
+		if(slotCount<(totalslots/2))
 		{
 			sButInit.x	= LOADSAVE_HGAP;
 			sButInit.y	= (SWORD)((LOADSAVE_BANNER_DEPTH +(2*LOADSAVE_VGAP)) + (
@@ -274,7 +278,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 		{
 			sButInit.x	= (2*LOADSAVE_HGAP)+LOADENTRY_W;
 			sButInit.y	= (SWORD)((LOADSAVE_BANNER_DEPTH +(2* LOADSAVE_VGAP)) + (
-                (slotCount-5) *(LOADSAVE_VGAP+LOADENTRY_H)));
+                (slotCount-(totalslots/2)) *(LOADSAVE_VGAP+LOADENTRY_H)));
 		}
 		widgAddButton(psRequestScreen, &sButInit);
 	}
@@ -302,7 +306,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 				
 			slotCount++;		// goto next but.
 	
-			if(!FindNextFile(dir,&found ) || slotCount == 10 )// only show upto 10 entrys.
+			if(!FindNextFile(dir,&found ) || slotCount == totalslots )// only show upto 10 entrys.
 			{
 				break;
 			}
@@ -330,7 +334,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 				((W_BUTTON *)widgGetFromID(psRequestScreen,LOADENTRY_START+slotCount))->pText = sSlots[slotCount];
 					
 				slotCount++;		// goto next but.
-				if(slotCount == 10 )	// only show upto 10 entrys.
+				if(slotCount == totalslots )	// only show upto 10 entrys.
 				{
 					break;
 				}
