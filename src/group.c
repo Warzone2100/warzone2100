@@ -9,9 +9,9 @@
 #include "objects.h"
 #include "group.h"
 #include "orderdef.h"
-#ifndef PSX
+
 #include "multiplay.h"
-#endif
+
 // sizes for the group heap
 #define GRP_HEAP_INIT	45
 #define GRP_HEAP_EXT	15

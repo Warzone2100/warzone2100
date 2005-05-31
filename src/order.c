@@ -30,11 +30,9 @@
 #include "script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
-#ifndef PSX
+
 #include "multiplay.h"  //ajl
-#else
-extern UDWORD selectedPlayer;
-#endif
+
 #include "mission.h"
 #include "hci.h"
 #include "visibility.h"
@@ -340,14 +338,14 @@ void orderUpdateDroid(DROID *psDroid)
 			psObj = checkForRepairRange(psDroid,NULL);
 			if (psObj)
 			{
-#ifndef PSX
+
 if(!bMultiPlayer || myResponsibility(psDroid->player))
 {
-#endif
+
 				orderDroidObj(psDroid, DORDER_DROIDREPAIR, psObj);
-#ifndef PSX
+
 }
-#endif
+
 			}
 		}
 
@@ -361,14 +359,14 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 			psObj = checkForDamagedStruct(psDroid,NULL);
 			if (psObj)
 			{
-#ifndef PSX
+
 if(!bMultiPlayer || myResponsibility(psDroid->player))
 {
-#endif
+
 				orderDroidObj(psDroid, DORDER_REPAIR, psObj);
-#ifndef PSX
+
 }
-#endif
+
 			}
 		}
 
@@ -1176,12 +1174,12 @@ void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	ASSERT((PTRVALID(psGroup, sizeof(DROID_GROUP)),
 		"cmdUnitOrderGroupBase: invalid unit group"));
 
-#ifndef PSX
+
 	if (bMultiPlayer && SendCmdGroup(psGroup, psData->x,	psData->y,	psData->psObj) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(TRUE);
 	}
-#endif
+
 
 	if (psData->order == DORDER_RECOVER)
 	{
@@ -1220,7 +1218,7 @@ void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 
 // check the position of units giving fire support to this unit and tell
 // them to pull back if the sensor is going to move through them
-#ifndef PSX
+
 void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
@@ -1376,7 +1374,7 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 }
 
 
-#endif
+
 
 
 /* The base order function */
@@ -1792,12 +1790,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			actionDroidObj(psDroid, DACTION_FIRESUPPORT, psOrder->psObj);
 		}
-#ifndef PSX
+
 		if ( psDroid->player == selectedPlayer )
 		{
 			orderPlayFireSupportAudio( psOrder->psObj );
 		}
-#endif
+
 		break;
 	case DORDER_RETREAT:
 	case DORDER_RUNBURN:
@@ -1822,11 +1820,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_RTB:
 		// send vtols back to their return pos
-#ifndef PSX
+
 		if (vtolDroid(psDroid) && !bMultiPlayer && psDroid->player != selectedPlayer)
-#else
-		if (vtolDroid(psDroid) && psDroid->player != selectedPlayer)
-#endif
+
 		{
 			iDX = asVTOLReturnPos[psDroid->player].x;
 			iDY = asVTOLReturnPos[psDroid->player].y;
@@ -1968,11 +1964,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		else
 		{
 			// no repair facility or HQ go to the landing zone
-#ifndef PSX
+
 			if (!bMultiPlayer && selectedPlayer == 0)
-#else
-			if (selectedPlayer == 0)
-#endif
+
 			{
 				orderDroid(psDroid, DORDER_RTB);
 /*				orderDroidLoc(psDroid, DORDER_MOVE, getLandingX(psDroid->player),
@@ -2143,12 +2137,12 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 	sOrder.order = order;
 	orderDroidBase(psDroid, &sOrder);
 
-#ifndef PSX
+
 	if(bMultiPlayer)
 	{
 		SendDroidInfo(psDroid,  order,  0,  0, NULL);
 	}
-#endif
+
 
 }
 
@@ -2192,13 +2186,13 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 
 	orderClearDroidList(psDroid);
 
-#ifndef PSX
+
 	if(bMultiPlayer) //ajl
 	{
 		SendDroidInfo(psDroid,  order,  x,  y, NULL);
 		turnOffMultiMsg(TRUE);	// msgs off.
 	}
-#endif
+
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2265,12 +2259,12 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 
 	orderClearDroidList(psDroid);
 
-#ifndef PSX
+
 	if(bMultiPlayer) //ajl
 	{
 		SendDroidInfo(psDroid,  order, 0,0, psObj);
 	}
-#endif
+
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2523,7 +2517,7 @@ BOOL bOrderEffectDisplayed = FALSE;
 // add an order to a droids order list
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
-#ifndef PSX
+
 	iVector		position;
 
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
@@ -2577,14 +2571,14 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		addEffect(&position,EFFECT_WAYPOINT,WAYPOINT_TYPE,FALSE,NULL,0);
 		bOrderEffectDisplayed = TRUE;
 	}
-#endif
+
 }
 
 
 // do the next order from a droids order list
 BOOL orderDroidList(DROID *psDroid)
 {
-#ifndef PSX
+
 	DROID_ORDER_DATA	sOrder;
 
 	if (psDroid->listSize > 0)
@@ -2638,7 +2632,7 @@ BOOL orderDroidList(DROID *psDroid)
 
 		return TRUE;
 	}
-#endif
+
 	return FALSE;
 }
 
@@ -2646,16 +2640,16 @@ BOOL orderDroidList(DROID *psDroid)
 // clear all the orders from the list
 void orderClearDroidList(DROID *psDroid)
 {
-#ifndef PSX		// ffs je
+		// ffs je
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
-#endif
+
 }
 
 // check all the orders in the list for died objects
 void orderCheckList(DROID *psDroid)
 {
-#ifndef PSX
+
 	SDWORD	i;
 
 	i=0;
@@ -2694,7 +2688,7 @@ void orderCheckList(DROID *psDroid)
 			i ++;
 		}
 	}
-#endif
+
 }
 
 
@@ -2814,12 +2808,12 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		return;
 	}
 
-#ifndef PSX
+
 	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,x,y,NULL) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(TRUE);
 	}
-#endif
+
 
 	// remove any units from their command group
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
@@ -3193,12 +3187,12 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	DROID		*psCurr, *psDemolish;
 	DROID_ORDER	order;
 
-#ifndef PSX
+
 	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,0,0,psObj) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(TRUE);
 	}
-#endif
+
 
 	// remove any units from their command group
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
@@ -3607,7 +3601,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	BOOL		retVal, bMultiPlayGame;
 	DROID		*psTransport, *psCurr, *psNext;
 
-#ifndef PSX
+
 
 	if(bMultiPlayer)
 	{	
@@ -3616,7 +3610,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		sendDroidSecondary(psDroid,sec,State);
 		turnOffMultiMsg(TRUE);		// msgs off.
 	}
-#endif
+
 
 	// set the state for any droids in the command group
 	if ((sec != DSO_RECYCLE) &&
@@ -3924,9 +3918,9 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 
 	psDroid->secondaryOrder = CurrState;
 
-#ifndef PSX
+
 	turnOffMultiMsg(FALSE);
-#endif
+
 
 	return retVal;
 }

@@ -9,11 +9,9 @@
 
 
 // maximum number of WRF/WDG files
-#ifndef PSX
+
 #define LEVEL_MAXFILES	9
-#else
-#define LEVEL_MAXFILES	8
-#endif
+
 
 // types of level datasets
 
@@ -49,7 +47,7 @@ typedef UDWORD LEVEL_TYPE;
 // the WRF/WDG files needed for a particular level
 // the WRF/WDG files needed for a particular level
 
-#ifndef PSX
+
 typedef struct _level_dataset
 {
 	SWORD	type;							// type of map
@@ -64,25 +62,7 @@ typedef struct _level_dataset
 	struct _level_dataset *psNext;
 } LEVEL_DATASET;
 
-#else
 
-// Values for LEVEL_DATASET->Flags.
-#define LDF_CAMEND	1		// Offworld mission is last map in campaign and can overwrite the main campaign map.
-
-typedef struct _level_dataset
-{
-	SBYTE	type;							// type of map
-	UBYTE	MissionNum;						// Mission number within the campaign
-	UBYTE	Flags;							// control flags.
-	SBYTE	BaseData;						// Which entry in levelinfo[] must be loaded for the level to load	(-1 for none)
-	STRING	*pName;							// title for the level
-	STRING	*DataFile; 					// the WRF/WDG files for the level - ONLY 1 allowed on PSX
-	STRING  *GameDataFile;					// used for loaded the game - or NULL for none
-
-
-} LEVEL_DATASET;
-
-#endif
 
 
 // the current level descriptions

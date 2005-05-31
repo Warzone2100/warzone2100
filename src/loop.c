@@ -538,7 +538,7 @@ GAMECODE gameLoop(void)
 		{
 			scroll();
 		}
-#ifndef PSX
+
 		if(InGameOpUp)		// ingame options menu up, run it!
 		{
 			intRunInGameOptions();
@@ -601,7 +601,7 @@ GAMECODE gameLoop(void)
 				}
 			}
 		}
-#endif
+
 	SDL_Delay(20);	//Added to prevent busy loop, and get CPU time back when paused!
 	}
 
@@ -707,7 +707,7 @@ GAMECODE gameLoop(void)
 			pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 			pie_SetFogStatus(FALSE);
 
-#ifndef PSX
+
 			if(bMultiPlayer)
 			{
 //				if((game.type == DMATCH) && !MultiMenuUp)
@@ -721,7 +721,7 @@ GAMECODE gameLoop(void)
 					setWidgetsStatus(FALSE);
 				}
 			}
-#endif
+
 			if(getWidgetsStatus())
 			{
 				intDisplayWidgets();
@@ -1128,11 +1128,9 @@ static BOOL bActiveBackDrop = FALSE;
 	/* restore volume after video quit */
 	if ( bVolKilled == TRUE )
 	{
-#ifndef PSX
+
 		mixer_SetWavVolume( g_iGlobalVol );
-#else
-		sound_SetGlobalVolume( g_iGlobalVol );
-#endif
+
 	}
 	
 	return GAMECODE_CONTINUE;

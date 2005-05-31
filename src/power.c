@@ -12,10 +12,10 @@
 #include "audio_id.h"
 #include "objmem.h"
 #include "frontend.h"
-#ifndef PSX
+
 #include "multiplay.h"
 #include "multiint.h"
-#endif
+
 #include "feature.h"
 #include "structure.h"
 #include "mission.h"
@@ -479,7 +479,7 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	}
 }*/
 
-#ifndef PSX
+
 // only used in multiplayer games.
 void setPower(UDWORD player, UDWORD avail)
 {
@@ -493,7 +493,7 @@ void setPower(UDWORD player, UDWORD avail)
 	pwrcSetPlayerCryptPower(player, asPower[player]->currentPower);
 }
 
-#endif
+
 
 /*sets the initial value for the power*/
 void setPlayerPower(UDWORD power, UDWORD player)
@@ -937,7 +937,7 @@ BOOL droidUsesPower(DROID *psDroid)
 }
 
 //won't bother with this on PSX unless starts being used too much!
-#ifndef PSX
+
 //this is a check cos there is a problem with the power but not sure where!!
 void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 {
@@ -970,7 +970,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
         }
     }
 }
-#endif
+
 
 
 /*initialise the PlayerPower based on what structures are available*/

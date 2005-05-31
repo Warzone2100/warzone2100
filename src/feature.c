@@ -27,10 +27,10 @@
 #include "effects.h"
 #include "geometry.h"
 #include "scores.h"
-#ifndef PSX
+
 #include "multiplay.h" 
 #include "advvis.h"
-#endif
+
 #include "mapgrid.h"
 #include "display3d.h"
 #include "gateway.h"
@@ -677,12 +677,12 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass,
 			psFeature->body -= 1;
 		}
 	}
-#ifndef PSX
+
 //	if(psFeature->sDisplay.imd->ymax > 300)
 //	{
 		psFeature->timeLastHit = gameTime;
 //	}
-#endif
+
 	return FALSE;
 
 }
@@ -787,13 +787,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
 	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
-#ifndef PSX
+
 	psFeature->bTargetted = FALSE;
 	psFeature->timeLastHit = 0;
-#endif
 
 
-#ifndef PSX	
+
+	
 	if(getRevealStatus())
 	{
 		vis = 0;
@@ -810,7 +810,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 			vis = 0;
 		}
 	}
-#endif
+
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		psFeature->visible[i] = 0;//vis;
@@ -828,14 +828,10 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	// set up the imd for the feature
 	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
 	{
-#ifndef PSX
+
 //		psFeature->sDisplay.imd = wreckageImds[rand()%MAX_WRECKAGE];
 		psFeature->sDisplay.imd = getRandomWreckageImd();
-#else
-		psFeature->sDisplay.imd = NULL;
-		DBPRINTF(("buildFeature: NO WRECKS ON PSX\n"));
-		assert(0);
-#endif
+
 	}
 	else
 	{
@@ -851,14 +847,14 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		for (breadth = 0; breadth <= psStats->baseBreadth; breadth++)
 		{
 			//check not outside of map - for load save game
-#ifndef PSX
+
 			ASSERT(((mapX+width) < mapWidth,
 				"x coord bigger than map width - %s, id = %d",
 				getName(psFeature->psStats->pName), psFeature->id));
 			ASSERT(((mapY+breadth) < mapHeight,
 				"y coord bigger than map height - %s, id = %d",
 				getName(psFeature->psStats->pName), psFeature->id));
-#endif
+
 			psTile = mapTile(mapX+width, mapY+breadth);
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -967,12 +963,12 @@ void removeFeature(FEATURE *psDel)
 		return;
 	}
 
-#ifndef PSX	// dont send if starting up, all players do this anyway.
+
 	if(bMultiPlayer && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
 	}
-#endif
+
 
 	//remove from the map data
 	mapX = (psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
@@ -1023,7 +1019,7 @@ void removeFeature(FEATURE *psDel)
 
 	killFeature(psDel);
 
-#ifndef PSX	// No wrecks on PSX please.
+
 	//once a feature of type FEAT_BUILDING is destroyed - it leaves a wrecked 
 	//struct FEATURE in its place - ?!
 	if (psDel->psStats->subType == FEAT_BUILDING)
@@ -1042,7 +1038,7 @@ void removeFeature(FEATURE *psDel)
 //		buildFeature((asFeatureStats + structFeature), mapX << TILE_SHIFT, 
 //			mapY << TILE_SHIFT, FALSE);
 	}
-#endif
+
 }
 
 /* Remove a Feature and free it's memory */
@@ -1147,13 +1143,13 @@ void destroyFeature(FEATURE *psDel)
 		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,FALSE,NULL,0);
 
 		//play sound
-#ifndef PSX		// ffs gj
+		// ffs gj
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
 			audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_BUILDING_FALL );
 		}
 		else
-#endif
+
 		{
 			audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_EXPLOSION );
 		}

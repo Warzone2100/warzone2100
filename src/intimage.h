@@ -6,7 +6,7 @@
 #define FILLBLUE 128
 #define FILLTRANS 128
 
-#ifndef PSX
+
 // Sprite image structure.
 typedef struct {
 	UDWORD BMPNum;	// Source bitmap index.
@@ -17,10 +17,7 @@ typedef struct {
 	SDWORD XOffset;	// X offset for drawing.
 	SDWORD YOffset;	// Y offset for drawing.
 } IMAGE;
-#else
-#include "imagepsx.h"
-#include "gamefx.h"
-#endif
+
 
 
 enum {
@@ -91,15 +88,13 @@ extern IMAGEFRAME FrameText;
 // A few useful defined tabs.
 extern TABDEF StandardTab;
 extern TABDEF SystemTab;
-#ifndef PSX
-extern TABDEF SmallTab;
-#endif
 
-#ifndef PSX
+extern TABDEF SmallTab;
+
+
+
 #include "intfac.h"		// Interface image id's.
-#else
-#include "intpsx.h"
-#endif
+
 
 extern BOOL imageInitBitmaps(void);
 

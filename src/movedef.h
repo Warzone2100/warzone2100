@@ -67,9 +67,9 @@ typedef struct _move_control
 	UWORD	iAttackRuns;
 
 	// added for vtol movement
-#ifndef PSX
+
 	FRACT	fz;
-#endif
+
 
 	/* Only needed for Alex's movement update ? */
 //	UDWORD	timeStarted;

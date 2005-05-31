@@ -19,11 +19,9 @@
 #define NUM_OBJECTBUFFERS		(NUM_OBJECTSURFACES*4)
 #define NUM_STATBUFFERS			(NUM_STATSURFACES*4)
 #define NUM_TOPICBUFFERS		(NUM_TOPICSURFACES*4)
-#ifndef PSX
+
 #define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*8)
-#else
-#define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*4)
-#endif
+
 
 /* Power levels are divided by this for power bar display. The extra factor has 
 been included so that the levels appear the same for the power bar as for the

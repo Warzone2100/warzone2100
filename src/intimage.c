@@ -64,7 +64,7 @@ IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
 
 
 
-#ifndef PSX
+
 // Form frame definitions.
 IMAGEFRAME FrameNormal = {
 	0,0, 0,0,
@@ -99,25 +99,7 @@ IMAGEFRAME FrameRadar = {
 	{FR_IGNORE, 0,0, 0,0 ,0},
 	{FR_IGNORE, 0,0, 0,0 ,0}},
 };
-#else
-// Form frame definitions.
-IMAGEFRAME FrameNormal = {
-	0,0, 0,0,
-	0,
-	0,
-	0,
-	0,
-	0, FR_SOLID,
-	0, FR_SOLID,
-	0, FR_SOLID,
-	0, FR_SOLID,
-	{{FR_FRAME,	0,1, 0,-1 ,190},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0}},
-};
-#endif
+
 
 //IMAGEFRAME FrameObject = {
 //	0,0, 0,0,
@@ -273,7 +255,7 @@ void DrawEnableLocks(BOOL Enable)
 
 void DrawBegin(void)
 {
-#ifndef PSX
+
 	if(EnableLocks) {
 		if(LockRefs == 0) {
 			pie_LocalRenderBegin();
@@ -281,13 +263,13 @@ void DrawBegin(void)
 
 		LockRefs++;
 	}
-#endif
+
 }
 
 
 void DrawEnd(void)
 {
-#ifndef PSX
+
 	if(EnableLocks) {
 		LockRefs--;
 
@@ -297,7 +279,7 @@ void DrawEnd(void)
 			pie_LocalRenderEnd();
 		}
 	}
-#endif
+
 }
 
 void RenderWindowFrame(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
@@ -353,7 +335,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Masked = TRUE;
 					}
 
-#ifndef PSX
+
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Rect->TLXOffset,
@@ -363,7 +345,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 										(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 					}
 					else
-#endif					
+				
 					{
 						iV_TransBoxFill( x+Rect->TLXOffset,
 										y+Rect->TLYOffset,
@@ -388,7 +370,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifndef PSX
+
 
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
@@ -398,7 +380,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 										y+Height-INCEND+Rect->BRYOffset,
 										(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 					} else 
-#endif
+
 					{
 						iV_TransBoxFill( x+Rect->TLXOffset,
 										y+Rect->TLYOffset,
@@ -419,7 +401,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifndef PSX
+
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Width-INCEND+Rect->TLXOffset,
@@ -428,7 +410,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 										y+Height-INCEND+Rect->BRYOffset,
 										(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 					} else 
-#endif
+
 					{
 						iV_TransBoxFill( x+Width-INCEND+Rect->TLXOffset,
 										y+Rect->TLYOffset,
@@ -449,7 +431,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifndef PSX
+
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Rect->TLXOffset,
@@ -458,7 +440,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 										y+Rect->BRYOffset,
 										(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 					}else
-#endif
+
 					  {
 						iV_TransBoxFill( x+Rect->TLXOffset,
 										y+Rect->TLYOffset,
@@ -481,7 +463,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
 					}
-#ifndef PSX
+
 					if (pie_GetRenderEngine() == ENGINE_GLIDE)
 					{
 						iV_UniTransBoxFill( x+Rect->TLXOffset,
@@ -491,7 +473,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 										(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 					} 
 					else
-#endif
+
 					{
 						iV_TransBoxFill( x+Rect->TLXOffset,
 										y+Height-INCEND+Rect->TLYOffset,

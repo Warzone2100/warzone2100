@@ -28,7 +28,7 @@ extern BOOL	bSubtitles;
 // position info for window.
 
 // game options
-#ifndef PSX
+
 // initial options
 #define INTINGAMEOP_W			120	 
 
@@ -53,36 +53,11 @@ extern BOOL	bSubtitles;
 #define INTINGAMEOP3_X			((320-(INTINGAMEOP3_W/2))+D_W)
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
 
-#else //PSX
 
-// initial options
-#define INTINGAMEOP_W			(100+30)
-#define INTINGAMEOP_H			(105+30)	//(105)
-#define INTINGAMEOP_X			((320-(INTINGAMEOP_W/2))+D_W)
-#define INTINGAMEOP_Y			((240-(INTINGAMEOP_H/2))+D_H)
 
-#if COUNTRY == COUNTRY_GERMAN
- #define INTINGAMEOP2_W			(290+30+48)
-#else
- #define INTINGAMEOP2_W			(290+30)
-#endif
 
-#define INTINGAMEOP2_H			(105+64+50+40+40+40)	//(105+64)
-#define INTINGAMEOP2_X			((320-(INTINGAMEOP2_W/2))+D_W)
-#define INTINGAMEOP2_Y			((240-(INTINGAMEOP2_H/2))+D_H)
-
-// quit confirmation.
-#define INTINGAMEOP3_W			(100+26)
-#define INTINGAMEOP3_H			(75+20)	//75
-#define INTINGAMEOP3_X			((320-(INTINGAMEOP3_W/2))+D_W)
-#define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
-#endif
-
-#ifndef PSX
  #define PAUSEMESSAGE_YOFFSET (0)
-#else
- #define PAUSEMESSAGE_YOFFSET (32)
-#endif
+
 
 #define INTINGAMEOP_PAUSEX			RET_X
 #define INTINGAMEOP_PAUSEY			10
@@ -119,7 +94,7 @@ extern BOOL	bSubtitles;
 #define INTINGAMEOP_SUBTITLES		(INTINGAMEOP+23)
 #define INTINGAMEOP_SUBTITLES_BT	(INTINGAMEOP+24)
 
-#ifndef PSX
+
 // positions within option boxes.
 #define INTINGAMEOP_1_X		5
 #define INTINGAMEOP_MID		100
@@ -129,19 +104,7 @@ extern BOOL	bSubtitles;
 #define	INTINGAMEOP_4_Y		80
 #define	INTINGAMEOP_5_Y		100
 #define	INTINGAMEOP_6_Y		120
-#else
-// positions within option boxes.
-#define INTINGAMEOP_1_X		18
-#define INTINGAMEOP_MID		100
-#define	INTINGAMEOP_1_Y		20
-#define	INTINGAMEOP_2_Y		60	//50
-#define	INTINGAMEOP_3_Y		100	//80
-#define	INTINGAMEOP_4_Y		140	//110
-#define	INTINGAMEOP_5_Y		180	//140
-#define	INTINGAMEOP_6_Y		220	//140
-#define	INTINGAMEOP_7_Y		260	//140
-#define	INTINGAMEOP_8_Y		300	//140
-#endif
+
 
 
 #define OPALIGN		(WBUT_PLAIN | WBUT_TXTCENTRE)

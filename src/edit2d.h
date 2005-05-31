@@ -1,6 +1,6 @@
 #ifdef DISP2D
 
-#ifndef PSX		// only needed on PC
+		// only needed on PC
 /*
  * Edit2D.h
  *
@@ -35,6 +35,6 @@ extern BOOL writeMapFile(STRING *pFileName);
 
 #endif
 
-#endif
+
 
 #endif

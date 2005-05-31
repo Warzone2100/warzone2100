@@ -111,10 +111,10 @@ extern BOOL structUsesPower(STRUCTURE *psStruct);
 extern BOOL droidUsesPower(DROID *psDroid);
 
 //won't bother with this on PSX unless starts being used too much!
-#ifndef PSX
+
 //this is a check cos there is a problem with the power but not sure where!!
 extern void powerCheck(BOOL bBeforePowerUsed, UBYTE player);
-#endif
+
 
 extern PLAYER_POWER		*asPower[MAX_PLAYERS];
 

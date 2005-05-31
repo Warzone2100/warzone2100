@@ -100,11 +100,9 @@ typedef enum
 	LL_OUTER
 }LAND_LIGHT_SPEC;
 
-#ifndef PSX
+
 #define MAX_EFFECTS	2500
-#else
-#define MAX_EFFECTS	150
-#endif
+
 #define	GRAVITON_GRAVITY	((FRACT)-800)
 #define	EFFECT_X_FLIP		0x1
 #define	EFFECT_Y_FLIP		0x2

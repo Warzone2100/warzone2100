@@ -327,9 +327,9 @@ typedef struct _structure
 	UWORD		turretPitch;				// weapon, ECM and sensor direction and pitch
 
 	UDWORD		timeLastHit;				//the time the structure was last attacked
-#ifndef PSX
+
 	UDWORD		lastHitWeapon;
-#endif
+
 	UWORD		radarX;
 	UWORD		radarY;
 	//the ecm power needs to be stored since the actual ecm stat can change with research
@@ -355,9 +355,9 @@ typedef struct _structure_limits
 	UBYTE		limit;				/* the number allowed to be built */
 	UBYTE		currentQuantity;	/* the number of the type currently 
 												   built per player*/
-#ifndef PSX
+
 	UBYTE		globalLimit;		// multiplayer only. sets the max value selectable (limits changed by player)
-#endif
+
 } STRUCTURE_LIMITS;
 
 

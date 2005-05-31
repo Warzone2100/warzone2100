@@ -70,9 +70,9 @@ char	MultiCustomMapsPath[255];
 char	MultiPlayersPath[255];
 
 #ifndef WIN32
-#ifndef PSX
+
 char	UnixRegFilePath[255];
-#endif
+
 #endif
 
 // Some prototypes because I can't be arse to create a .h file
@@ -120,9 +120,9 @@ int main(int argc, char *argv[])
 	SDWORD			pSize;
 
 #ifndef WIN32
-#ifndef PSX
+
 	char	UnixUserPath[255];
-#endif
+
 #endif
 
 #ifdef WIN32
@@ -569,13 +569,13 @@ init://jump here from the end if re_initialising
 								quit = TRUE;
 #endif
 
-#ifndef PSX
+
 								if(NetPlay.bLobbyLaunched)
 								{
 //									changeTitleMode(QUIT);
 									quit = TRUE;
 								}
-#endif
+
 								break;
 							case GAMECODE_FASTEXIT:
 								DBPRINTF(("GAMECODE_FASTEXIT\n"));

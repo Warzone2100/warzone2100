@@ -205,12 +205,12 @@ static BOOL _intAddInGameOptions(void)
 //	UWORD WindowWidth;
 	W_FORMINIT		sFormInit;			
 
-#ifndef PSX
+
 	audio_StopAll();
 
     //clear out any mission widgets - timers etc that may be on the screen
     clearMissionWidgets();
-#endif
+
 	
 	setWidgetsStatus(TRUE);
 	DisableCursorSnapsExcept(INTINGAMEOP);
@@ -246,7 +246,7 @@ static BOOL _intAddInGameOptions(void)
 	sFormInit.y			= (SWORD)INTINGAMEOP_Y;
 	sFormInit.height	= INTINGAMEOP_H;
 
-#ifndef PSX
+
     if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
 	}
@@ -254,18 +254,16 @@ static BOOL _intAddInGameOptions(void)
 	{
 		sFormInit.height	= INTINGAMEOP_HS;
 	}
-#endif
 
-#ifndef PSX	
+
+	
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
-#else
-	sFormInit.pDisplay	= intDisplayPlainForm;
-#endif
+
 	widgAddForm(psWScreen, &sFormInit);
 
 	// add 'quit' text
-#ifndef PSX
+
 // #ifdef COVERMOUNT
  #if 0
 	addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
@@ -281,9 +279,7 @@ static BOOL _intAddInGameOptions(void)
 	}
 
  #endif
-#else
-	addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
-#endif
+
 
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_1_Y,STR_GAME_RESUME,OPALIGN);
@@ -293,14 +289,14 @@ static BOOL _intAddInGameOptions(void)
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS,INTINGAMEOP_2_Y,STR_FE_OPTIONS,OPALIGN);
 
-#ifndef PSX		
+		
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{		// add 'load'
 		addIGTextButton(INTINGAMEOP_LOAD,INTINGAMEOP_3_Y,STR_MISC_LOADGAME,OPALIGN);
 		// add 'save'
 		addIGTextButton(INTINGAMEOP_SAVE,INTINGAMEOP_4_Y,STR_MISC_SAVEGAME,OPALIGN);
 	}
-#endif
+
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= TRUE;					// inform interface.
@@ -401,9 +397,9 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 // In Game Options house keeping stuff.
 BOOL intRunInGameOptions(void)
 {
-#ifndef PSX
+
 	processFrontendSnap(FALSE);
-#endif
+
 	return TRUE;
 }
 
@@ -432,7 +428,7 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(FALSE, TRUE);
 		break;
 
-#ifndef PSX
+
 //	case INTINGAMEOP_REPLAY:
 //		intCloseInGameOptions(TRUE, FALSE);
 //		if(0!=strcmp(getLevelName(),"CAM_1A"))
@@ -450,7 +446,7 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(TRUE, FALSE);
 		addLoadSave(SAVE_INGAME,SaveGamePath,"gam", strresGetString(psStringRes,STR_MR_SAVE_GAME) );
 		break;
-#endif
+
 
 	// GAME OPTIONS KEYS 
 	case INTINGAMEOP_FXVOL:	
@@ -459,7 +455,7 @@ void intProcessInGameOptions(UDWORD id)
 		SetMousePos(0,INTINGAMEOP2_X+INTINGAMEOP_MID+5 ,mouseY());	// move mouse
 		break;
 
-#ifndef PSX
+
 	case INTINGAMEOP_FXVOL_S:	
 		mixer_SetWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_FXVOL_S));
 		break;
@@ -472,7 +468,7 @@ void intProcessInGameOptions(UDWORD id)
 //		if(gammaValue<0.5)  gammaValue = (float).5;
 //		pie_SetGammaValue(gammaValue);
 //		break;
-#endif
+
 	
 	default:
 		break;

@@ -10,13 +10,10 @@
 // How many game ticks for one event tick
 #define SCR_TICKRATE	100
 
-#ifndef PSX
+
 #define BARB1		6	
 #define BARB2		7
-#else
-#define BARB1		2
-#define BARB2		3
-#endif
+
 
 // ID numbers for each user type
 typedef enum _scr_user_types

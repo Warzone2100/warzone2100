@@ -32,10 +32,10 @@ extern void missionDestroyObjects(void);
 //this is called everytime the game is quit
 extern void releaseMission(void);
 
-#ifndef PSX
+
 /*on the PC - sets the countdown played flag*/
 extern void setMissionCountDown(void);
-#endif
+
 
 //extern BOOL startMission(MISSION_TYPE missionType, STRING *pGame);
 extern BOOL startMission(UDWORD missionType, STRING *pGame);
@@ -112,11 +112,11 @@ the display*/
 extern void addMissionTimerInterface(void);
 extern void intRemoveMissionTimer(void);
 
-#ifndef PSX
+
 //access functions for bPlayCountDown flag
 extern void setPlayCountDown(UBYTE set);
 extern BOOL getPlayCountDown(void);
-#endif
+
 
 /*	checks the x,y passed in are not within the boundary of the Landing Zone
 	x and y in tile coords */
@@ -179,28 +179,14 @@ extern void placeLimboDroids(void);
 //bCheating = TRUE == start of cheat, bCheating = FALSE == end of cheat
 extern void setMissionCheatTime(BOOL bCheating);
 
-#ifndef PSX
+
 
  #define		MISSIONRES_X			20	// pos & size of box.
  #define		MISSIONRES_Y			380	
  #define		MISSIONRES_W			600	
  #define		MISSIONRES_H			80
 
-#else
 
- #ifdef COVERMOUNT
-  #define		MISSIONRES_X			20	// pos & size of box.
-  #define		MISSIONRES_Y			380	
-  #define		MISSIONRES_W			600	
-  #define		MISSIONRES_H			80
- #else
-  #define		MISSIONRES_X			20	// pos & size of box.
-  #define		MISSIONRES_Y			(380-32)
-  #define		MISSIONRES_W			600	
-  #define		MISSIONRES_H			(80+32)
- #endif
-
-#endif
 
 #define		MISSIONRES_TITLE_X		20	
 #define		MISSIONRES_TITLE_Y		20	

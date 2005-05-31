@@ -7,12 +7,9 @@
 #define _raycast_h
 
 #define NUM_RAYS		360
-#ifndef PSX
+
 #define RAY_ANGLE		((float)(2*PI/NUM_RAYS))
-#else
-#define RAY_ANGLE		((4096/NUM_RAYS))
-/*#error Tim I've half PSXed the code you just have to fill in a few gaps*/
-#endif
+
 #define RAY_LENGTH		(TILE_UNITS * 5)
 
 // maximum length for a visiblity ray

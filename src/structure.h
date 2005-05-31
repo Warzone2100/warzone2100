@@ -31,15 +31,10 @@
 
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
-#ifndef PSX
+
 #define MAX_PROD_RUN	20
 
-#else
 
-#define MAX_PROD_RUN	4		// Set the number of different types to build to 4 on the playstation (desperate attempt to clas back some memory)
-
-
-#endif
 
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0

@@ -42,7 +42,7 @@
 
 
 
-#ifndef PSX		// whole file is going on PSX !!!!!!!
+
 
 
 
@@ -561,7 +561,7 @@ void	tileLayouts(int texture)
 // Render a Map Surface to display memory.
 void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height)
 {
-#ifndef PSX
+
 	if (!pie_Hardware())
 	{
 		pie_LocalRenderBegin();
@@ -570,10 +570,10 @@ void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWO
 
 		pie_LocalRenderEnd();
 	}
-#endif
+
 }
 
-#ifndef PSX
+
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map 
 THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
 /*void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD, iIMDShape *pIMD2,
@@ -803,66 +803,6 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 	}
 }
 
-#else
-
-extern void draw3DScene(void);
-
-
-void renderIntelWorld(iVector *location, iVector *viewVector,
-						  UDWORD distance,SWORD OriginX,SWORD OriginY)
-{
-	iView View;
-
-	oldPos.x = player.p.x;
-	oldPos.y = player.p.y;
-	oldPos.z = player.p.z;
-
-	oldView.x = player.r.x;
-	oldView.y = player.r.y;
-	oldView.z = player.r.z;
-
-	/* What are we looking at? */
-	mapPos.x = player.p.x = location->x;
-	mapPos.y = player.p.y = location->y;
-	mapPos.z = player.p.z = location->z;
-
-	/* And from what angle? */
-	mapView.x = player.r.x = viewVector->x;
-	mapView.y = player.r.y = viewVector->y;
-	mapView.z = player.r.z = viewVector->z;
-
-	/* And from how far away? */
-	elevation = distance;
-
-	SetGeomOffset(OriginX/2,OriginY/2);
-
-	View.p.x = location->x;
-	View.p.y = location->y;
-	View.p.z = location->z;
-	View.r.x = viewVector->x;
-	View.r.y = viewVector->y;
-	View.r.z = viewVector->z;
-
-
-/*	Annette made me do it. - draw3DScene does not take any parameters anymore ... so all this view stuff isn't used ... unless anyone knows differently
-	draw3DScene(&View);
-*/
-
-	draw3DScene();
-
-//DBPRINTF(("map display - not on psx ... yet\n");
-
-
-	player.p.x = oldPos.x; 
-	player.p.y = oldPos.y; 
-	player.p.z = oldPos.z; 
-
-	player.r.x = oldView.x;
-	player.r.y = oldView.y;
-	player.r.z = oldView.z;
-}
-
-#endif
 
 
 
@@ -874,100 +814,5 @@ void renderIntelWorld(iVector *location, iVector *viewVector,
 
 
 
-#else  // PSX VERSION OF FILE !!!!!!!!!!!!!
 
 
-#define ROTATE_ANGLE	5
-
-iSurface*	setUpMapSurface(UDWORD width, UDWORD height) 
-{
-	
-}	
-
-
-
-void	releaseMapSurface(iSurface *pSurface)
-{
-}
-
-
-void renderIntelIMD(iIMDShape *pIMD,iIMDShape *pIMD2,SWORD OriginX,SWORD OriginY, BOOL SpinMe)
-{
-	static UDWORD angle = 0;
-	SWORD OldBias;
-
-	iVector Rotation,Position,NullVector;
-
-	SetGeomOffset(OriginX/2,OriginY/2);
-
-	Rotation.x = -30;
-	Rotation.y = angle;
-	Rotation.z = 0;
-
-	NullVector.x = 0;
-	NullVector.y = 0;
-	NullVector.z = 0;
-
-	Position.x = 0;
-	Position.y = 0;
-
-#ifndef PSX
-
-	Position.z = pIMD->sradius*8;
-#ifdef LIMITBUTZ
-	if (Position.z > (INTERFACE_DEPTH- pIMD->sradius))
-	{
-		Position.z = INTERFACE_DEPTH - pIMD->sradius;
-	}
-#endif
-
-#else
-	Position.z = pIMD->radius*8;
-#ifdef LIMITBUTZ
-	if (Position.z > (INTERFACE_DEPTH- pIMD->radius))
-	{
-		Position.z = INTERFACE_DEPTH - pIMD->radius;
-	}
-#endif
-#endif
-	/* display current component */
-	SetGeomOffset( XToPSX(OriginX),YToPSX(OriginY) );
-
-	SetIMDRenderingMode(USE_FIXEDZ,0);			// When rendering buttons we need to write to a constant entry in the OT ... this is set by the second param
-	setComponentButtonOTIndex(OT2D_FARFARFORE);	// Force draw depth to foreground.
-
-	// Stop the renderer playing with the OTZ.
-	OldBias = psxiv_GetZBias();		// Store the current Z Bias.
-	psxiv_SetZBias(0);				// Don't want the renderer to add anything to the OtZ.
-	psxiv_EnableZCheck(FALSE);		// Rendering over the 2d so don't check for this in the renderer.
-
-	// Flush the current TPageID at this OT index.
-	UpdateTPageID(0,OT2D_FARFARFORE);	
-
-	displayIMDButton(pIMD,&Rotation,&Position,TRUE, PSX_BUTTON_SCALE);
-	if(pIMD2) {
-		displayIMDButton(pIMD2,&Rotation,&Position,TRUE, PSX_BUTTON_SCALE);
-	}
-
-	psxiv_SetZBias(OldBias);			// Restore the renderers z bias.
-	psxiv_EnableZCheck(TRUE);			// And re-enable OtZ range checks
-	SetIMDRenderingMode(USE_MAXZ,0); 	// Set OT position calculation back to using the max Z value
-	setComponentButtonOTIndex(ORDERING_BUTTONRENDERING);	// Restore draw depth for button rendering.
-
-	if (SpinMe==TRUE)
-	{
-		angle += 2;
-		if (angle > 360)
-		{
-			angle -= 360;
-		}
-		
-	}
-}
-
-void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height)
-{
-}
-
-
-#endif

@@ -382,7 +382,7 @@ static void gwCalcZoneCenter(SDWORD zone, SDWORD *px, SDWORD *py)
 }
 
 // check all the zones are of reasonable sizes
-#ifndef PSX
+
 void gwCheckZoneSizes(void)
 {
 	SDWORD		zone, xsum,ysum, numtiles, inzone;
@@ -427,7 +427,7 @@ void gwCheckZoneSizes(void)
 		}
 	}
 }
-#endif
+
 
 // add the land/water link gateways
 BOOL gwGenerateLinkGates(void)
@@ -854,15 +854,9 @@ BOOL gwLinkGateways(void)
 						psLink->x1,psLink->y1, psLink->x2,psLink->y2));
 					psCurr->psLinks[link].psGateway = psLink;
 					psCurr->psLinks[link].flags = 0;
-#ifndef PSX
+
 					psCurr->psLinks[link].dist = (SWORD)gwRouteLength(psCurr, psLink);
-#else
-					x = (psLink->x1 + psLink->x2)/2;
-					y = (psLink->y1 + psLink->y2)/2;
-					xdiff = x - gwX;
-					ydiff = y - gwY;
-					psCurr->psLinks[link].dist = iSQRT(xdiff*xdiff + ydiff*ydiff);
-#endif
+
 					link += 1;
 				}
 			}

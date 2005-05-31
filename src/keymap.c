@@ -5,9 +5,9 @@
 #include "console.h"
 #include "keybind.h"
 #include "display3d.h"
-#ifndef PSX
+
 #include "keyedit.h"
-#endif
+
 
 /*	
 	KeyMap.c
@@ -46,14 +46,14 @@ extern BOOL	bAllowDebugMode;
 
 // ----------------------------------------------------------------------------------
 /* WIN 32 specific */
-#ifndef PSX
+
 BOOL	checkQwertyKeys			( void );
 UDWORD	asciiKeyCodeToTable		( KEY_CODE code );
 KEY_CODE	getQwertyKey		( void );
 UDWORD	getMarkerX				( KEY_CODE code );
 UDWORD	getMarkerY				( KEY_CODE code );
 SDWORD	getMarkerSpin			( KEY_CODE code );
-#endif
+
 // ----------------------------------------------------------------------------------
 KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
 {
@@ -73,7 +73,7 @@ KEY_MAPPING	*psMapping,*psReturn;
 }
 // ----------------------------------------------------------------------------------
 /* Some win32 specific stuff allowing the user to add key mappings themselves */
-#ifndef PSX
+
 #define	NUM_QWERTY_KEYS	26
 typedef	struct	_keymap_Marker
 {
@@ -82,7 +82,7 @@ UDWORD	xPos,yPos;
 SDWORD	spin;
 } KEYMAP_MARKER;
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
-#endif
+
 
 static	BOOL			bDoingDebugMappings = FALSE; // PSX needs this too...
 // ----------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ static BOOL	bKeyProcessing = TRUE;
 // ----------------------------------------------------------------------------------
 // Adding a mapped function ? add a save pointer! Thank AlexL.
 // don't bugger around with the order either. new ones go at the end! DEBUG in debug section..
-#ifndef PSX
+
 //typedef void (*_keymapsave)(void);
 _keymapsave keyMapSaveTable[] =
 {
@@ -247,7 +247,7 @@ _keymapsave keyMapSaveTable[] =
 
 	NULL		// last function!
 };
-#endif
+
 
 // ----------------------------------------------------------------------------------
 /*	
@@ -263,7 +263,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	bKeyProcessing = TRUE;
 	processDebugMappings(FALSE);
 
-#ifndef PSX
+
 	for(i=0; i<NUM_QWERTY_KEYS; i++)
 	{
 		qwertyKeyMappings[i].psMapping = NULL;
@@ -499,45 +499,7 @@ if(bAllowDebugMode)
 	
 
 
-#else	// PSX key mapings.
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SelectNaybors,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_A,KEYMAP_PRESSED,kf_NextGroup,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_PrevGroup,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_NextUnit,"");
 
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_1,KEYMAP_PRESSED,kf_AssignGrouping,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_2,KEYMAP_PRESSED,kf_AssignGrouping,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_3,KEYMAP_PRESSED,kf_AssignGrouping,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_4,KEYMAP_PRESSED,kf_AssignGrouping,"");
-
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SelectGrouping,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_W,KEYMAP_PRESSED,kf_SelectGrouping,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_SelectGrouping,"");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_SelectGrouping,"");
-
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_A,KEYMAP_PRESSED,kf_SelectMoveGrouping,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SelectMoveGrouping,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_SelectMoveGrouping,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_F,KEYMAP_PRESSED,kf_SelectMoveGrouping,"");
-
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_ToggleCamera,"");
-//#ifdef COVERMOUNT
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_SystemClose,"");
-//#endif
-
-// Diagnostic controls.
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_P,KEYMAP_PRESSED,kf_TogglePauseMode,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_X,KEYMAP_PRESSED,kf_addInGameOptions,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_ToggleGodMode,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_G,KEYMAP_PRESSED,kf_MaxScrollLimits,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_TogglePower,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_B,KEYMAP_PRESSED,kf_AllAvailable,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_AddMissionOffWorld,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,"");
-//	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_C,KEYMAP_PRESSED,kf_FinishResearch,"");
-
-#endif
 }
 
 // ----------------------------------------------------------------------------------
@@ -567,22 +529,11 @@ BLOCK_HEAP  *psHeap;
 
 	/* Plus one for the terminator */
 
-#ifndef PSX
+
 
 	newMapping->pName = (STRING*)MALLOC(strlen(name)+1);
 	ASSERT(((int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping"));
-#else
 
-	if (strlen(name)==0)
-	{
-		newMapping->pName=NULL;
-	}
-	else
-	{
-		newMapping->pName = (STRING*)MALLOC(strlen(name)+1);
-	}
-
-#endif
 	memSetBlockHeap(psHeap);
 
 
@@ -733,12 +684,12 @@ BOOL		bKeyProcessed;
 		return;
 	}
 
-#ifndef PSX
+
 
 	/* Jump out if we've got a new mapping */
   	(void) checkQwertyKeys();
 
-#endif
+
 	/* Check for the meta keys */
 	if(keyDown(KEY_LCTRL) OR keyDown(KEY_RCTRL) OR keyDown(KEY_LALT)
 		OR keyDown(KEY_RALT) OR keyDown(KEY_LSHIFT) OR keyDown(KEY_RSHIFT))
@@ -765,12 +716,12 @@ BOOL		bKeyProcessed;
 		{
 			break;
 		}
-#ifndef PSX
+
 		if(keyToProcess->subKeyCode == KEY_MAXSCAN)
 		{
 			continue;
 		}
-#endif
+
 
 		if(keyToProcess->metaKeyCode==KEY_IGNORE AND !bMetaKeyDown AND
 			!(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings == FALSE) )
@@ -849,7 +800,7 @@ BOOL		bKeyProcessed;
 }
 
 // ----------------------------------------------------------------------------------
-#ifndef PSX
+
 /* Allows _new_ mappings to be made at runtime */
 BOOL	checkQwertyKeys( void )
 {
@@ -885,10 +836,10 @@ BOOL		aquired;
 	}
 	return(aquired);
 }
-#endif
 
 
-#ifndef PSX
+
+
 // ----------------------------------------------------------------------------------
 // this function isn't really module static - should be removed - debug only
 void	keyShowMappings( void )
@@ -924,7 +875,7 @@ BOOL	onlySub;
 		CONPRINTF(ConsoleString,(ConsoleString,"%s and %s - %s",asciiMeta,asciiSub,psMapping->pName));
 	}
 }
-#endif
+
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last sub key pressed - allows called functions to have a simple stack */
 KEY_CODE	getLastSubKey( void )
@@ -976,7 +927,7 @@ void	keySetMappingStatus(KEY_MAPPING *psMapping, BOOL state)
 	psMapping->active = state;
 }
 
-#ifndef PSX
+
 /* Returns the key code of the first ascii key that its finds has been PRESSED */
 KEY_CODE	getQwertyKey( void )
 {
@@ -1057,7 +1008,7 @@ UDWORD	entry;
 	return(qwertyKeyMappings[entry].spin);
 }
 
-#endif
+
 // ----------------------------------------------------------------------------------
 /* Defines whether we process debug key mapping stuff */
 void	processDebugMappings( BOOL val )

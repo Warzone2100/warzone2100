@@ -17,9 +17,9 @@
 #include "piedef.h"
 #include "objmem.h"
 #include "map.h"
-#ifndef PSX
+
 #include "multiplay.h"
-#endif
+
 /* Allocation sizes for the message heaps */
 #define MESSAGE_INIT		20
 #define MESSAGE_EXT			5
@@ -604,7 +604,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 			sscanf(pViewMsgData,",%[^',']%n",name,&cnt);
                         pViewMsgData += cnt;
 
-#ifndef PSX
+
 			//get the ID for the string
 			if (!strresGetIDNum(psStringRes, name, &id))
 			{
@@ -613,10 +613,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 			}
 			//get the string from the id
 			psViewData->ppTextMsg[dataInc] = strresGetString(psStringRes, id);
-#else
-			// Playstation version stores the hash of the string id.
-			psViewData->ppTextMsg[dataInc] = (STRING*)HashString(name);
-#endif
+
 		}
 
 		//sscanf(pViewMsgData,"%d", &psViewData->type);
@@ -771,14 +768,10 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 						DBERROR(("Cannot find the view data string id %s ", name));
 						return NULL;
 					}
-#ifndef PSX
+
 					//get the string from the id
 					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetString(psStringRes, id);
-#else
-				// Playstation version stored the hashname and resolves it later 
-				// This is because we have to load the researchstrings
-					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = (STRING*)HashString(name);
-#endif
+
 
 
 
@@ -819,7 +812,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 				return NULL;
 			}
 		
-#ifndef PSX
+
 			audioName[0] = '\0';
 			sscanf(pViewMsgData, ",%d,%d,%d,%[^','],%d%n", &LocX, &LocY, &LocZ, 
 				audioName,&proxType,&cnt);
@@ -847,20 +840,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 					return FALSE;
 				}
 			}
-#else
-			sscanf(pViewMsgData, ",%d,%d,%d,%d,%d%n", &LocX, &LocY, &LocZ, 
-				&audioID,&proxType,&cnt);
-                        pViewMsgData += cnt;
- #ifdef DEBUG
-			if ( ((audioID < 0) || (audioID >= ID_MAX_SOUND)) &&
-				 (audioID != NO_SOUND) )
-			{
-				DBERROR(("Invalid Proximity message Sound ID - %d for message %s", 
-						audioID, audioName));
-				return FALSE;
-			}
- #endif
-#endif
+
 
 			((VIEW_PROXIMITY *)psViewData->pData)->audioID = audioID;
 

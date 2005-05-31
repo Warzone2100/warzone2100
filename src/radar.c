@@ -57,7 +57,7 @@ static UDWORD		sweep;
 static UBYTE		colBlack,colWhite,colRadarBorder,colGrey;
 
 // colours for each clan on the radar map.
-#ifndef PSX
+
 #define CAMPAIGNS	3
 static UDWORD		clanColours[CAMPAIGNS][MAX_PLAYERS] = 
 {
@@ -76,27 +76,7 @@ static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 
 
 
-#else
-#define CAMPAIGNS	4	// Cams 1,2,3 and fastplay.
-static UDWORD		clanColours[CAMPAIGNS][MAX_PLAYERS] = 
-{
-//Player 0 Player (GREEN) 48 236 104
-//Player 1 New Paradigm (YELLOW) 255 255 0 (if bleeds, make G = 200)
-//Player 2 Collective (RED) 223 62 98
-//Player 3 Nexus (BLUE) 47 62 238
-	{81,245,207,197},
-	{81,245,207,197},
-	{81,245,207,197},
-	{81,245,207,197},
-};
-static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] = 
-{
-{165,165,165,165}, // everything flashes red when attacked.
-{165,165,165,165}, 
-{165,165,165,165}, 
-};
-//static UDWORD		clanColours[MAX_PLAYERS] = {255,255,255,255}; // nb black is white on radar.
-#endif
+
 
 static UBYTE		tileColours[NUM_TILES];
 static BOOL		radarStrobe;
@@ -153,14 +133,11 @@ void resetRadarRedraw(void)
 
 BOOL InitRadar(void)
 {
-#ifndef PSX
+
 	radarBuffer = MALLOC(RADWIDTH*RADHEIGHT);
 	if(radarBuffer==NULL) return FALSE;
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
-#else
-	if(radarBuffer==NULL) return FALSE;
-	memset(radarBuffer,0,(RADWIDTH/2)*(RADHEIGHT/2));
-#endif
+
 
 // Set up an image structure for the radar bitmap so we can draw
 // it useing iV_DrawImageDef().
@@ -189,18 +166,18 @@ BOOL InitRadar(void)
 //	clanColours[7] = (UDWORD)iV_PaletteNearestColour(255,255,0);
 
 
-#ifndef PSX
+
 	pie_InitRadar();
-#endif
+
 	return TRUE;
 }
 
 
 BOOL ShutdownRadar(void)
 {
-#ifndef PSX
+
 	pie_ShutdownRadar();
-#endif
+
 	FREE(radarBuffer);
 
 	return TRUE;
@@ -211,23 +188,19 @@ void SetRadarZoom(UWORD ZoomLevel)
 {
 	ASSERT((ZoomLevel <= MAX_RADARZOOM,"SetRadarZoom: Max radar zoom exceeded"));
 
-#ifndef PSX
+
 	if(ZoomLevel != RadarZoom) {
 		RadarZoom = ZoomLevel;
 		RadarRedraw = TRUE;
 	}
-#else
-	ZoomLevel = 1;
-#endif
+
 }
 
 UDWORD GetRadarZoom(void)
 {
-#ifndef PSX
+
 	return RadarZoom;
-#else
-	return 1;
-#endif
+
 }
 
 
@@ -313,11 +286,9 @@ void SetRadarStrobe(UDWORD x,UDWORD y)
 //
 static void CalcRadarPixelSize(UWORD *SizeH,UWORD *SizeV)
 {
-#ifndef PSX
+
 	UWORD Size = (UWORD)(1<<RadarZoom);
-#else
-	UWORD Size = (UWORD)(1<<(RadarZoom+1));
-#endif
+
 	*SizeH = Size;
 	*SizeV = Size;
 
@@ -598,14 +569,12 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 
 	Scr = screen + OffsetX + OffsetY*Modulus;
 
-#ifndef PSX
+
 	if(pie_Hardware())//was  == ENGINE_GLIDE)
 	{
 		ShadeDiv = 4;
 	}
-#else
-	ShadeDiv = 4;
-#endif
+
 
 	if(RadarRedraw) {
 		EndY = VisHeight;
@@ -748,11 +717,9 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	}
 
 
-#ifndef PSX
+
 	camNum = getCampaignNumber()-1;
-#else
-	camNum = getLevelDataSetNum();
-#endif
+
 
    	/* Show droids on map - go through all players */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
@@ -780,7 +747,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 
 					if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
-#ifndef PSX	// 	
+	// 	
 						if((clan == selectedPlayer) AND (gameTime-psDroid->timeLastHit < HIT_NOTIFICATION))
 						{
 						   	/*
@@ -796,7 +763,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 								col = flashCol;
 						}
 						else
-#endif
+
 						{
 								col = playerCol;
 						}
@@ -1025,7 +992,7 @@ SDWORD	dif;
 	return(dif/2);
 }
 
-#ifndef PSX
+
 /* Draws a Myth/FF7 style viewing window */
 void	drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH,UDWORD boxSizeV )
 {
@@ -1082,7 +1049,7 @@ UDWORD	camNumber;
 	/* Send the four points to the draw routine and the clip box params */
 	pie_DrawViewingWindow(tv,RADTLX,RADTLY,RADTLX+RADWIDTH,RADTLY+RADHEIGHT,colour);
 }
-#endif
+
 
 
 static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
@@ -1151,7 +1118,7 @@ BOOL CoordInRadar(int x,int y)
 }
 
 
-#ifndef PSX
+
 void	calcRadarColour(UBYTE *tileBitmap, UDWORD tileNumber)
 {
 	UDWORD	i, j;
@@ -1213,61 +1180,3 @@ void	calcRadarColour(UBYTE *tileBitmap, UDWORD tileNumber)
 #endif
 	tileColours[tileNumber] = (UBYTE)iV_PaletteNearestColour(fRed,fGreen,fBlue);
 }
-
-#else	// Start of PSX version.
-
-// Take a 4bit PSX tile texture and calculate a radar colour to
-// represent it.
-//
-// Assumes tile is even number of pixels wide.
-//
-void	calcRadarColour(UBYTE *tileBitmap,UWORD *tileClut, UDWORD tileNumber)
-{
-	UDWORD	i;
-	UBYTE	penNumber;
-	UBYTE	fRed,fGreen,fBlue;
-	UBYTE	red,green,blue;
-	UDWORD	tRed,tGreen,tBlue;
-
-	/* Zero all totals */
-	tRed = tGreen = tBlue = 0;
-
-	/* Got through every pixel */
-	for(i=0; i<TILE_SIZE/8; i++)
-	{
-		/* Get pixel colour index */
-		penNumber = (UBYTE)(tileBitmap[i] & 0xf0)>>4;
-
-		/* Get the r,g,b components */
-		red		=	(tileClut[penNumber]&0x1f) << 3;
-		green	=	((tileClut[penNumber]>>5)&0x1f) << 3;
-		blue	=	((tileClut[penNumber]>>10)&0x1f) << 3;
-		/* Add them to totals */
-		tRed	+=	red;
-		tGreen	+=	green;
-		tBlue	+=	blue;
-
-		/* Get pixel colour index */
-		penNumber = (UBYTE)(tileBitmap[i] & 0x0f);
-
-		/* Get the r,g,b components */
-		red		=	(tileClut[penNumber]&0x1f) << 3;
-		green	=	((tileClut[penNumber]>>5)&0x1f) << 3;
-		blue	=	((tileClut[penNumber]>>10)&0x1f) << 3;
-		/* Add them to totals */
-		tRed	+=	red;
-		tGreen	+=	green;
-		tBlue	+=	blue;
-	}
-
-	/* Get average of each component */
-	fRed	=	(UBYTE) (tRed/(TILE_SIZE/4));
-	fGreen	=	(UBYTE) (tGreen/(TILE_SIZE/4));
-	fBlue	=	(UBYTE) (tBlue/(TILE_SIZE/4));
-
-	tileColours[tileNumber] = (UBYTE)iV_PaletteNearestColour(fRed,fGreen,fBlue);
-}
-#endif // End of psx version (calcRadarColour).
-
-
-

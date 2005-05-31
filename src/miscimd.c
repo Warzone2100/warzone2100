@@ -103,7 +103,7 @@ iIMDShape	*getImdFromIndex(UDWORD	index)
 	return(miscImds[index].pImd);
 }
 // -------------------------------------------------------------------------------
-#ifndef PSX
+
 iIMDShape	*getRandomWreckageImd( void )
 {
 	iIMDShape *WreckageIMD;
@@ -121,7 +121,7 @@ iIMDShape	*getRandomWreckageImd( void )
 
 	return(WreckageIMD);
 }
-#endif
+
 // -------------------------------------------------------------------------------
 iIMDShape	*getRandomDebrisImd( void )
 {

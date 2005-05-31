@@ -181,10 +181,10 @@ extern BOOL scrSetStructureLimits(void);
 // Sets all structure limits for a player to a specified value
 extern BOOL scrSetAllStructureLimits(void);
 
-#ifndef PSX
+
 //multiplayer limit handler
 extern BOOL scrApplyLimitSet(void);
-#endif
+
 
 // plays a sound for the specified player - only plays the sound if the 
 //specified player = selectedPlayer
@@ -200,10 +200,10 @@ extern BOOL scrAddConsoleText(void);
 // same as above - but it doesn't clear what's there and isn't permanent
 extern	BOOL scrShowConsoleText(void);
 
-#ifndef PSX
+
 /* Adds console text without clearing old */
 extern BOOL scrTagConsoleText(void);
-#endif
+
 
 //demo functions for turning the power on
 extern BOOL scrTurnPowerOff(void);

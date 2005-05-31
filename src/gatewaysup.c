@@ -3,7 +3,7 @@
  * Only needed for map preprocessing.
  *
  */
-#ifndef PSX
+
 // segment printf's
 //#define DEBUG_GROUP1
 // stack printf's
@@ -75,9 +75,9 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y);
 // generate the zone equivalence tables
 BOOL gwGenerateZoneEquiv(SDWORD numZones);
 
-#ifndef PSX
+
 #define ENABLEFILL		// disable this on the psx 
-#endif
+
 
 #ifdef ENABLEFILL
 struct Segment stack[MAX], *sp = stack;	/* stack of filled segments */
@@ -95,9 +95,9 @@ void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
 #ifdef ENABLEFILL
     int l, x1, x2, dy;
     Pixel ov;							/* old pixel value */
-#ifndef PSX
+
     struct Segment stack[MAX], *sp = stack;	/* stack of filled segments */
-#endif
+
     ov = gwGetZone(x, y);		/* read pv at seed point */
 
     if (ov==nv) {
@@ -510,11 +510,9 @@ BOOL gwCreateBlankZoneMap(void)
 	}
 	for(i=0; i< gwMapHeight(); i++)
 	{
-#ifndef PSX
+
 		apRLEZones[i] = MALLOC(gwMapWidth() * 2);
-#else
-		apRLEZones[i] = MALLOC(1 * 2);		// we need to get some memory back
-#endif
+
 		if (apRLEZones[i] == NULL)
 		{
 			DBERROR(("gwCreateBlankZoneMap: Out of memory"));
@@ -657,4 +655,4 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y)
 
 
 
-#endif
+

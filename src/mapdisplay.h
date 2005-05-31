@@ -29,14 +29,14 @@ extern iSurface* setUpMapSurface(UDWORD width, UDWORD height);
 // Render a Map Surface to display memory.
 extern void renderMapSurface(struct iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height);
 
-#ifndef PSX
+
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map */
 extern void renderIMDToBuffer(struct iSurface *pSurface, struct iIMDShape *pIMD,
 							  struct iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
 							  UDWORD OriginX,UDWORD OriginY);
 extern void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch, 
                             UDWORD OriginX, UDWORD OriginY);
-#endif
+
 
 extern void	releaseMapSurface(struct iSurface *pSurface);
 

@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef PSX		// not wanted for PSX
+
 #include <math.h>
-#endif
+
 
 #include "ivisdef.h" //ivis matrix code
 #include "geo.h" //ivis matrix code
@@ -43,7 +43,7 @@ UBYTE	sineHeightTable[SIZE_SINE_TABLE];
 //UDWORD	screenShakeStarted = 0;
 //UDWORD	screenShakeLength = 0;
 
-#ifndef PSX	// uses nasty maths functions
+
 
 
 void initBulletTable( void )
@@ -94,65 +94,7 @@ double	angle;
 }
 
 
-#else
 
-
-
-void initBulletTable( void )
-{
-UDWORD	 i;
-UBYTE	height;
-	for (i=0; i<SIZE_SINE_TABLE; i++)
-	{
-	height = (UBYTE) ((AMPLITUDE_HEIGHT*rsin((i*2048)/SIZE_SINE_TABLE))/4096);
-	sineHeightTable[i] = height;
-	}
-}
-
-
-
-/* Angle returned is reflected in line x=0 */
-//
-// Pretty much untested on PSX - but I think it should work
-//
-SDWORD	calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
-{
-	SDWORD	xDif,yDif;
-	long angle;
-	SDWORD GameAngle;
-
-	xDif = (x1-x0);
-	/* Watch out here - should really be y1-y0, but coordinate system is reversed in Y */
-	yDif = (y0-y1);
-
-	angle = ratan2(yDif,xDif);	// PlayStation routine returns value in range 0->4096 (4096=360 degrees)
-
-	angle+= (4096/4);			// add ninety degrees (as in PC)
-
-	GameAngle =(((angle&4095)*360)/4096);		// must do a bitwise "and" to avoid negative angles
-
-	ASSERT((GameAngle >= 0 && GameAngle < 360,
-		"calcDirection: droid direction out of range"));	
-
-
-	return (GameAngle);
-}
-
-//void	attemptScreenShake(void)
-//{
-//	if(!bScreenShakeActive)
-//	{
-//		bScreenShakeActive = TRUE;
-//		screenShakeStarted = gameTime;
-//		screenShakeLength = 1500;
-//#if defined(PSX) && defined(LIBPAD)
-//		SetVibro1(0,64,256);
-//#endif
-//	}
-//}
-
-
-#endif
 
 #ifndef WIN32
 #define max(a,b) (((a)>(b))?(a):(b))
@@ -263,7 +205,7 @@ SDWORD directionDiff(SDWORD a, SDWORD b)
 	return diff;
 }
 
-#ifndef PSX
+
 
 void WorldPointToScreen( iPoint *worldPt, iPoint *screenPt )
 {
@@ -330,74 +272,7 @@ int32	rx,rz;
 	pie_MatEnd();
 }
 
-#else
 
-static SVECTOR ZeroVector={0,0,0};
-
-// Assumes world matrix context already set.
-void WorldPointToScreen( iPoint *worldPt, iPoint *screenPt )
-{
-	iVector vec;
-//	SVECTOR null;
-	SWORD Screen[2];
-	UDWORD	worldX,worldY;
-	SDWORD	xShift,zShift;
-//		int32	rx,rz;
-
-//		/* Get into game context */
-//		/* Get the x,z translation components */
-//		rx = player.p.x & (TILE_UNITS-1);
-//	 	rz = player.p.z & (TILE_UNITS-1);
-//	
-//	/* Push identity matrix onto stack */
-//		psxiV_MatrixBegin();
-//	
-//		/* Set the camera position */
-//		psxiV_ITRANSLATE(camera.p.x,camera.p.y,camera.p.z);
-//	
-//		/* Rotate for the player */
-//		psxiV_MatrixRotateZ(player.r.z);
-//		psxiV_MatrixRotateY(player.r.y);
-//		psxiV_MatrixRotateX(player.r.x);
-//		
-//		/* Translate */
-//		psxiV_TRANSLATE(-rx,-player.p.y,rz);
-
-//	/* No rotation is necessary*/
-//	null.vx = 0; null.vy = 0; null.vz = 0;
-
-	/* Pull out coords now, because we use them twice */
-	worldX = worldPt->x;
-	worldY = worldPt->y;
-
-	/* Get the coordinates of the object into the grid */
-	vec.x = ( worldX - player.p.x) - terrainMidX*TILE_UNITS;
-	vec.z = terrainMidY*TILE_UNITS - (worldY - player.p.z);
-
-	/* Which tile is it on? - In order to establish height (y coordinate in 3 space) */
-	vec.y = map_Height(worldX/TILE_UNITS,worldY/TILE_UNITS);
-
-	/* Translate */
-	psxiV_TRANSLATE(vec.x,vec.y,vec.z);
-
- 	xShift = player.p.x & (TILE_UNITS-1);
-	zShift = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	psxiV_TRANSLATE(xShift,0,-zShift);
-
-	psxUseMatrix();
-
-	/* Project - no rotation being done. So effectively mapping from 3 space to 2 space */
-//	psxiV_RotateProject(&null,Screen);
-	gte_ldv0(&ZeroVector);
-   	gte_rtps();
-    gte_stsxy((long *)Screen);
-	
-	screenPt->x = Screen[0]*2;
-	screenPt->y = Screen[1]*2;
-}
-#endif
 
 /*	Calculates the RELATIVE screen coords of a game object from its BASE_OBJECT pointer */
 /*	Alex - Saturday 5th July, 1997  */
