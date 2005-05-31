@@ -1,4 +1,4 @@
-#ifndef PSX
+
 /* Texture stuff. Calls 3dfxText functions in the 3dfx cases */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
 
@@ -11,9 +11,7 @@
 #include "texture.h"
 #include "radar.h"
 #include "tex.h"
-#ifdef INC_DIRECTX
-#include "dx6texman.h"
-#endif
+
 
 /* Can fit at most 32 texture pages into a 2meg texture memory */
 #define MAX_TEXTURE_PAGES	32
@@ -528,4 +526,4 @@ iColour		*psCurrentPalette;
 
 
 
-#endif
+

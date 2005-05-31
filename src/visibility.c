@@ -185,9 +185,9 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Not true visibility - done on sensor range */
 
 	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
-#ifndef PSX
+
 		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
-#endif
+
 		dist = 1;
 	}
 
@@ -212,7 +212,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	
 		// new - ask Alex M
 	/* Not true visibility - done on sensor range */
-#ifndef PSX
+
 		if(getRevealStatus())
 		{
 			if( ((UDWORD)rayPlayer == selectedPlayer) OR
@@ -225,7 +225,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 //				SET_TILE_SENSOR(psTile);
 			}
 		}
-#endif
+
 	}
 
 	return TRUE;
@@ -1168,7 +1168,7 @@ MAPTILE		*psTile;
 	{
 		for (j = 0; j < breadth; j++)
 		{
-#ifndef PSX
+
 			/* Slow fade up */
 			if(getRevealStatus())
 			{
@@ -1177,7 +1177,7 @@ MAPTILE		*psTile;
 					avInformOfChange(mapX+i,mapY+j);
 				}
 			}
-#endif
+
 			psTile = mapTile(mapX+i,mapY+j);
 			SET_TILE_VISIBLE(player, psTile);
 		}
