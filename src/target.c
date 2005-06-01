@@ -127,7 +127,6 @@ void targetSetTargetable(UWORD DroidType)
 
 void	targetAdd(BASE_OBJECT *psObj)
 {
-//	UNUSEDPARAMETER(psObj);
 }
 
 
@@ -136,7 +135,6 @@ void	targetAdd(BASE_OBJECT *psObj)
 //
 void targetKilledObject(BASE_OBJECT *psObj)
 {
-//	UNUSEDPARAMETER(psObj);
 }
 
 

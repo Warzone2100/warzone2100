@@ -1523,7 +1523,6 @@ BOOL dataBinaryScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 void dataBinScriptRelease(void *pData)
 {
-	UNUSEDPARAMETER(pData);
 }
 
 #endif

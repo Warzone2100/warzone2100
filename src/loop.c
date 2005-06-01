@@ -614,11 +614,7 @@ GAMECODE gameLoop(void)
 			quitting = TRUE;
 
 			{
-#ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
-#else
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
-#endif
 			}
 		}
 		else //if in video mode esc kill video
@@ -651,9 +647,7 @@ GAMECODE gameLoop(void)
 						(dragBox3D.status != DRAG_DRAGGING) &&
 						(wallDrag.status != DRAG_DRAGGING))
 					{
-#ifndef NON_INTERACT
 						ProcessRadarInput();
-#endif
 					}
 					processInput();
 

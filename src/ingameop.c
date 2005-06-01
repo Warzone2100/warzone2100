@@ -264,10 +264,6 @@ static BOOL _intAddInGameOptions(void)
 
 	// add 'quit' text
 
-// #ifdef COVERMOUNT
- #if 0
-	addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
- #else
     if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
 		addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_5_Y,STR_GAME_QUIT,OPALIGN);
@@ -277,9 +273,6 @@ static BOOL _intAddInGameOptions(void)
 	{	
 		addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
 	}
-
- #endif
-
 
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_1_Y,STR_GAME_RESUME,OPALIGN);

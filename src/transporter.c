@@ -1246,8 +1246,6 @@ void intUpdateTransCapacity(struct _widget *psWidget, struct _w_context *psConte
 //	UDWORD		capacity = TRANSPORTER_CAPACITY;
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 
-//	UNUSEDPARAMETER(psContext);
-
 	intSetTransCapacityLabel(Label->aText);
 
 //	if (psCurrTransporter)
@@ -2032,9 +2030,6 @@ DROID * transporterGetScriptCurrent( void )
 void resetTransporter(DROID *psTransporter)
 {
      W_CLICKFORM *psForm;
-
-     //not sure if we want this for something else
-//     UNUSEDPARAMETER(psTransporter);
 
      //enable the form so can add more droids into the transporter
      psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANS_LAUNCH);

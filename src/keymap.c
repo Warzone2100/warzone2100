@@ -511,15 +511,6 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status,KEY_CODE metaCode, KEY_CODE subCode
 KEY_MAPPING	*newMapping;
 BLOCK_HEAP  *psHeap;
 
-#ifdef COVERMOUNT
-#ifdef NON_INTERACT		// escape key is the only valid mapping
-	if(subCode!=KEY_ESC)
-	{
-		return(NULL);
-	}
-#endif
-#endif
-
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
 	/* Get some memory for our binding */

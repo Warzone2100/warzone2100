@@ -168,10 +168,6 @@ void recvOptions(NETMSG *pMsg)
 #ifndef DEBUG
 		DBERROR(("Host is running a different version of Warzone2100."));
 #endif
-#ifdef COVERMOUNT
-		DBERROR(("Warzone 2100 Demo is not compatible with the release version"));
-		ExitProcess(4);
-#endif
 	}
 	if(ingame.numStructureLimits)							// free old limits.
 	{
@@ -191,10 +187,6 @@ void recvOptions(NETMSG *pMsg)
 	{	
 
 		DBERROR(("Host Binary is different from this one. Cheating?"));
-#ifdef COVERMOUNT
-		DBERROR(("Warzone 2100 Demo is not compatible with the release version"));
-		ExitProcess(4);
-#endif
 	}
 
 	NetGet(pMsg,pos,newPl);
@@ -488,8 +480,6 @@ BOOL lobbyInitialise(VOID)
 	{
 		return FALSE;
 	}
-
-#ifndef COVERMOUNT 
 	// setup the encryption key 
 
 	// hash the file to get the key.and catch out the exe patchers.
@@ -499,22 +489,8 @@ BOOL lobbyInitialise(VOID)
 	NETsetKey(NEThashFile("warzone.exe"), 0xb72a5, 0x114d0, 0x2a7);
 #endif
 
-#else
-	// hash the file to get the key.and catch out the exe patchers.
-	NETsetKey(NEThashFile("wzdemo.exe"), 0xb72a5, 0x114d0, 0x2a7);
-#endif
-
 	if(NetPlay.bLobbyLaunched)									// now check for lobby launching..
 	{
-
-// DISABLE LOBBIES HERE
-//dont play lobby games from this covermount.
-
-#ifndef MULTIDEMO
-#ifdef COVERMOUNT								
-		return FALSE;
-#endif
-#endif
 		if(!LobbyLaunched())
 		{
 			return FALSE;

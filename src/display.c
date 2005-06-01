@@ -447,11 +447,6 @@ void ProcessRadarInput(void)
 	int y = mouseY();
 	UDWORD	temp1,temp2;
 
-#ifdef COVERMOUNT
-#ifdef NON_INTERACT
-	return;
-#endif
-#endif
 	/* Only allow jump-to-area-of-map if radar is on-screen */
 	mouseOverRadar = FALSE;
 	if(radarOnScreen AND  getHQExists(selectedPlayer))
@@ -572,14 +567,6 @@ void processInput(void)
 
 	mX = mouseX();
 	mY = mouseY();
-
-
-#ifdef COVERMOUNT
-#ifdef NON_INTERACT
-	keyProcessMappings(FALSE);		// remove these two lines
-	return;						// remove these two lines
-#endif
-#endif
 
 	/* Process all of our key mappings */
 //	keyProcessMappings();	// done later - see below.
@@ -935,15 +922,6 @@ void processMouseClickInput(void)
 	MOUSE_TARGET	item=MT_NOTARGET;
 	BOOL OverRadar = OverRadarAndNotDragging();
 
-
-
-#ifdef COVERMOUNT
-#ifdef NON_INTERACT
-	return;
-#endif
-#endif
-
-	
 	// These four functions were embedded in this function but I moved them out for readability. In the
 // absense of any comments I had a guess as to there use and named them accordingly PD 28/05/98.
 	//ignoreOrder = CheckFinishedWallDrag(); - this name is misleading since called for all Structures AB
@@ -1000,7 +978,6 @@ void processMouseClickInput(void)
 				kill3DBuilding();
 				bRadarDragging = FALSE;
 			}
-#ifndef NON_INTERACT
 			if(mouseDrag(MOUSE_RMB,(UDWORD *)&rotX,(UDWORD *)&rotY) AND !rotActive AND !bRadarDragging)
 			{
 				rotInitial = player.r.y;
@@ -1009,7 +986,6 @@ void processMouseClickInput(void)
 				yMoved = 0;
 				rotActive = TRUE;
 			}
-#endif
 		}
 	}
 
@@ -1201,12 +1177,6 @@ void scroll(void)
 #endif
 	UDWORD	timeDiff;
 	BOOL	bRetardScroll = FALSE;
-
-#ifdef COVERMOUNT
-#ifdef NON_INTERACT
-	return;	// no scroll control in demo only version
-#endif
-#endif
 
 	if(InGameOpUp || bDisplayMultiJoiningStatus )		// cant scroll when menu up. or when over radar
 	{
@@ -1567,7 +1537,6 @@ void displayWorld(void)
 	iVector	pos;
 	shakeUpdate();
 
-#ifndef NON_INTERACT
 	if(mouseDown(MOUSE_RMB) AND	rotActive)
 	{
   		if( (abs(mX-rotX)>8) OR xMoved>8)
@@ -1619,9 +1588,7 @@ void displayWorld(void)
 			setDesiredPitch(player.r.x/DEG_1);
 		}
 	}
-#endif
 
-#ifndef NON_INTERACT
 	if(mouseReleased(MOUSE_RMB) AND rotActive)
 	{
 		rotActive = FALSE;
@@ -1633,7 +1600,6 @@ void displayWorld(void)
 		camInformOfRotation(&pos);
 		bRadarDragging = FALSE;
 	}
-#endif
 
 	draw3DScene();
 

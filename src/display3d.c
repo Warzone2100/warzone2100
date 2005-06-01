@@ -600,12 +600,7 @@ BOOL		bPlayerHasHQ = FALSE;
 			flushConsoleMessages();
 			setConsolePermanence(TRUE,TRUE);
 	  		permitNewConsoleMessages(TRUE);
-
-#ifndef COVERMOUNT
-#ifndef NON_INTERACT
 			addConsoleMessage("Warzone 2100 : Pumpkin Studios ",RIGHT_JUSTIFY);
-#endif
-#endif
 	  		permitNewConsoleMessages(FALSE);
 		}
 

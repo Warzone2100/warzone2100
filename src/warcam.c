@@ -1501,13 +1501,6 @@ UDWORD	count;
 
 void camSetOldView(int x,int y,int z,int rx,int ry,int dist)
 {
-//	UNUSEDPARAMETER(x);
-//	UNUSEDPARAMETER(y);
-//	UNUSEDPARAMETER(z);
-//	UNUSEDPARAMETER(rx);
-//	UNUSEDPARAMETER(ry);
-//	UNUSEDPARAMETER(dist);
-
 //DBPRINTF(("camSetOldView(%d %d %d %d %d %d)\n",x,y,z,rx,ry,dist));
 //DBPRINTF(("%d %d %d %d %d %d\n",player.p.x,player.p.y,player.r.x,player.r.y,getViewDistance()));
 //	trackingCamera.oldView.p.x = x;

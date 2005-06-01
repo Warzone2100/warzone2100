@@ -1460,15 +1460,11 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			if (actionInRange(psDroid, psDroid->psActionTarget))
 			{
-
-
-#ifndef COVERMOUNT
 				if ( psDroid->player == selectedPlayer )
 				{
 					audio_QueueTrackMinDelay( ID_SOUND_COMMENCING_ATTACK_RUN2,
 												VTOL_ATTACK_AUDIO_DELAY );
 				}
-#endif
 
 				if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
 										&(psDroid->turretRotation), &(psDroid->turretPitch),

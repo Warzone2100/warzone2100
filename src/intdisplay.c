@@ -1967,11 +1967,6 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 {
 	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
 
-//	UNUSEDPARAMETER(Position);	//[May 30 compiler warning "statement with no effect"] -Q
-//	UNUSEDPARAMETER(Width);	//[May 30 compiler warning "statement with no effect"] -Q
-//	UNUSEDPARAMETER(Height);	//[May 30 compiler warning "statement with no effect"] -Q
-//	UNUSEDPARAMETER(Number);	//[May 30 compiler warning "statement with no effect"] -Q
-
 //	ASSERT((Number < 4,"intDisplayTab : Too many tabs."));
     //Number represents which tab we are on but not interested since they all look the same now - AB 25/01/99
 	/*if(Number > 3) {
@@ -2010,9 +2005,6 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //#endif
 //
 ////	ASSERT((Number < 4,"intDisplaySystemTab : Too many tabs."));
-//	UNUSEDPARAMETER(Position);
-//	UNUSEDPARAMETER(Width);
-//	UNUSEDPARAMETER(Height);
 //
 //	Number = Number%4;	// Make sure number never gets bigger than 3.
 //
@@ -3330,8 +3322,6 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 //
 //SDWORD ResearchGetImage(RESEARCH_FACILITY *Research)
 //{
-//	UNUSEDPARAMETER(Research);
-//
 //	return 0;	//IMAGE_RESITEM;
 //}
 
@@ -3572,7 +3562,6 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 //{
 //	W_TABFORM *Form = (W_TABFORM*)psWidget;
 //	UDWORD x0,y0,x1,y1;
-//	UNUSEDPARAMETER(pColours);
 //
 //	x0 = xOffset+Form->x;
 //	y0 = yOffset+Form->y;

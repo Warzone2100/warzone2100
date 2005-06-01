@@ -1299,9 +1299,6 @@ BOOL loadGameInit(STRING *pGameToLoad,BOOL GameIsLevelStart )
 	UDWORD			fileSize;
 
 	/* Load in the chosen file data */
-
-//	UNUSEDPARAMETER(GameIsLevelStart);
-
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(pGameToLoad, pFileData, displayBufferSize, &fileSize))
 	{
@@ -2732,7 +2729,6 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	setViewAngle(INITIAL_STARTING_PITCH);
 	setDesiredPitch(INITIAL_DESIRED_PITCH);
 
-#ifndef COVERMOUNT
     //check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
     if (gameType == GTYPE_SAVE_MIDMISSION AND missionLimboExpand())
     {
@@ -2746,7 +2742,6 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
             startMissionSave(LDS_EXPAND);
         }
     }
-#endif
 
     //set this if come into a save game mid mission
     if (gameType == GTYPE_SAVE_MIDMISSION)
@@ -3461,10 +3456,8 @@ BOOL gameLoadV7(UBYTE *pFileData, UDWORD filesize)
 		//shouldn't be able to be any other value at the moment!
 		if (psNewLevel->type == LDS_CAMSTART 
 			OR psNewLevel->type == LDS_BETWEEN 
-#ifndef COVERMOUNT
 			OR psNewLevel->type == LDS_EXPAND 
 			OR psNewLevel->type == LDS_EXPAND_LIMBO
-#endif	
 		    )
 		{
 			launchMission();
@@ -4162,14 +4155,7 @@ BOOL loadSaveDroidInitV2(UBYTE *pFileData, UDWORD filesize,UDWORD quantity)
 	UDWORD i;
 	UDWORD NumberOfSkippedDroids = 0;
 
-
-
-
-//	UNUSEDPARAMETER(filesize);
-
 	pDroidInit = (SAVE_DROIDINIT*)pFileData;
-
-
 
 	for(i=0; i<quantity; i++) 
 	{
@@ -4241,8 +4227,6 @@ DROID_TEMPLATE *FindDroidTemplate(STRING *name,UDWORD player)
 	DROID_TEMPLATE *Template;
 	UDWORD			id;
 
-//	UNUSEDPARAMETER(player);
-
 /*#ifdef RESOURCE_NAMES
 
 	//get the name from the resource associated with it 
@@ -4254,13 +4238,7 @@ DROID_TEMPLATE *FindDroidTemplate(STRING *name,UDWORD player)
 	//get the string from the id
 	name = strresGetString(psStringRes, id);
 
-#else
-
-	UNUSEDPARAMETER(id);
-
 #endif*/
-
-
 	
 	//get the name from the resource associated with it 
 	if (!strresGetIDNum(psStringRes, name, &id))
@@ -4270,7 +4248,6 @@ DROID_TEMPLATE *FindDroidTemplate(STRING *name,UDWORD player)
 	}
 	//get the string from the id
 	name = strresGetString(psStringRes, id);
-
 
 	for(TempPlayer=0; TempPlayer<MAX_PLAYERS; TempPlayer++) {
 		Template = apsDroidTemplates[TempPlayer];
@@ -9288,8 +9265,6 @@ BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 	VIEWDATA		*psViewData = NULL;
 	UDWORD			i, height;
 
-//    UNUSEDPARAMETER(version);
-
 	//clear any messages put in during level loads	
 	//freeMessages();
 
@@ -9300,10 +9275,8 @@ BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDW
     }
     else if (gameType == GTYPE_SAVE_START)
     {
-#ifndef COVERMOUNT
         //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
         if (levelType == LDS_CAMSTART OR levelType == LDS_CAMCHANGE)
-#endif
         {
             return TRUE;
         }
@@ -9527,8 +9500,6 @@ BOOL loadSaveProximityV(UBYTE *pFileData, UDWORD filesize, UDWORD numProximitys,
 	SAVE_PROXIMITY	*psSaveProximity;
 	PROXIMITY_DISPLAY	*psProximity;
 	UDWORD i;
-
-    UNUSEDPARAMETER(version);
 
 	//clear any proximitys put in during level loads	
 	freeProximitys();
@@ -10617,11 +10588,6 @@ BOOL getSaveObjectName(STRING *pName)
 		//get the string from the id if one exists
 		strcpy(pName, strresGetString(psStringRes, id));
 	}
-#else
-
-	//don't do anything with the name
-//	UNUSEDPARAMETER(pName);
-
 #endif
 
 	return TRUE;
@@ -10722,8 +10688,6 @@ SDWORD getCompFromNamePreV7(UDWORD compType, STRING *pName)
 
 #else
 
-	UNUSEDPARAMETER(compType);
-	UNUSEDPARAMETER(pName);
 	return getCompFromName(compType, pName);
 
 #endif
@@ -10780,8 +10744,6 @@ SDWORD getStatFromNamePreV7(BOOL isFeature, STRING *pName)
 
 #else
 
-	UNUSEDPARAMETER(compType);
-	UNUSEDPARAMETER(pName);
 	return getCompFromName(compType, pName);
 
 #endif

@@ -580,10 +580,6 @@ THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
 					   UDWORD WindowX,UDWORD WindowY,UDWORD OriginX,UDWORD OriginY)
 {
 	static UDWORD angle = 0;
-	UNUSEDPARAMETER(OriginX);
-	UNUSEDPARAMETER(OriginY);
-	UNUSEDPARAMETER(WindowX);
-	UNUSEDPARAMETER(WindowY);
 
 	if(!pie_Hardware())
 	{

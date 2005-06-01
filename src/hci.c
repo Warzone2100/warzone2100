@@ -4198,13 +4198,10 @@ BOOL intReticuleIsUp(void)
 
 void intRemoveReticule(void)
 {
-#ifndef NON_INTERACT
 	if(ReticuleUp == TRUE) {
 		widgDelete(psWScreen,IDRET_FORM);		// remove reticule
 		ReticuleUp = FALSE;
-
 	}
-#endif
 }
 
 	
@@ -4228,10 +4225,6 @@ void togglePowerBar(void)
 BOOL intAddPower(void)
 {
 	W_BARINIT	sBarInit;
-
-#ifdef NON_INTERACT
-	return(TRUE);
-#endif
 
 	memset(&sBarInit, 0, sizeof(W_BARINIT));
 
@@ -8657,10 +8650,6 @@ BOOL intAddOptions(void)
 
 BOOL intAddReticule(void)
 {
-
-#ifdef NON_INTERACT
-	return TRUE;
-#endif
 	return _intAddReticule();
 }
 

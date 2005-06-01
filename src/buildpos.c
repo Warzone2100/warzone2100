@@ -192,8 +192,6 @@ BOOL bposChooseSameSize(STRUCTURE *psStruct, SDWORD cluster, STRUCTURE_STATS *ps
 
 BOOL bposChooseNotWall(STRUCTURE *psStruct, SDWORD cluster, STRUCTURE_STATS *psStats)
 {
-	UNUSEDPARAMETER(psStats);
-
 	return (psStruct->cluster == cluster) &&
 			(psStruct->pStructureType->type != REF_WALL) &&
 			(psStruct->pStructureType->type != REF_WALLCORNER);
@@ -201,8 +199,6 @@ BOOL bposChooseNotWall(STRUCTURE *psStruct, SDWORD cluster, STRUCTURE_STATS *psS
 
 BOOL bposChooseWall(STRUCTURE *psStruct, SDWORD cluster, STRUCTURE_STATS *psStats)
 {
-	UNUSEDPARAMETER(psStats);
-
 	return (psStruct->cluster == cluster) &&
 			(psStruct->pStructureType->type == REF_WALL);
 }

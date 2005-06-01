@@ -66,13 +66,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 
 		if ( stricmp( tokenType, "-window" ) == 0 )
 		{
-#ifdef	_DEBUG
 			clStartWindowed = TRUE;
-#else
-#ifndef COVERMOUNT
-			clStartWindowed = TRUE;
-#endif
-#endif
 		}
 		else if ( stricmp( tokenType, "-fullscreen" ) == 0 )
 		{
@@ -99,42 +93,26 @@ BOOL ParseCommandLine(int argc, char** argv)
 
 		else if ( stricmp( tokenType, "-MMX" ) == 0 )
 		{
-#ifndef COVERMOUNT
 			war_SetRendMode(REND_MODE_RGB);
 			pie_SetDirect3DDeviceName("RGB Emulation");
 			pie_SetVideoBuffer(640, 480);
-#else
-			war_SetRendMode(REND_MODE_SOFTWARE);
-			war_SetFog(FALSE);
-#endif
 		}
 		else if ( stricmp( tokenType, "-RGB" ) == 0 )
 		{
-#ifndef COVERMOUNT
 			war_SetRendMode(REND_MODE_RGB);
 			pie_SetDirect3DDeviceName("RGB Emulation");
 			pie_SetVideoBuffer(640, 480);
-#else
-			war_SetRendMode(REND_MODE_SOFTWARE);
-			war_SetFog(FALSE);
-#endif
 		}
 		else if ( stricmp( tokenType, "-REF" ) == 0 )
 		{
-#ifndef COVERMOUNT
 			war_SetRendMode(REND_MODE_REF);
 			pie_SetDirect3DDeviceName("Reference Rasterizer");
 			pie_SetVideoBuffer(640, 480);
-#else
-			war_SetRendMode(REND_MODE_SOFTWARE);
-			war_SetFog(FALSE);
-#endif
 		}
 		else if ( stricmp( tokenType, "-title" ) == 0 )
 		{
 			SetGameMode(GS_TITLE_SCREEN);
 		}
-#ifndef NON_INTERACT
 		else if ( stricmp( tokenType, "-game" ) == 0 )
 		{
 			// find the game name
@@ -160,7 +138,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
-#endif
 		else if ( stricmp( tokenType, "-datapath" ) == 0 )
 		{
 			// find the quoted path name
@@ -177,13 +154,10 @@ BOOL ParseCommandLine(int argc, char** argv)
 				DBERROR(("Path not found: %s\n", token));
 			}
 		}
-
-//#ifndef COVERMOUNT
 		else if( stricmp( tokenType,cl2) == 0)
 		{
 			bAllowDebugMode =TRUE;
 		}
-//#endif
 		else if( sscanf(tokenType,"-%ix%i", &w, &h) == 2)
 		{
 			pie_SetVideoBuffer(w, h);
@@ -272,12 +246,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 	{
 		pie_SetVideoBuffer(640, 480);
 	}
-
-	// look for any gamespy flags in the command line.
-#ifdef NON_INTERACT
-	SetGameMode(GS_NORMAL);
-#endif
-
 	return TRUE;
 }
 
@@ -292,11 +260,6 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 	static UBYTE count = 0;
 //	UDWORD val;
 	LPVOID finalconnection;	 
-
-//#ifdef COVERMOUNT
-//	return TRUE;
-//#endif
-
 
 #if 0
 	// check for gamespy flag...

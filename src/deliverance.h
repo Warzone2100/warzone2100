@@ -17,10 +17,6 @@
 #define MAX_STR_SIZE		20
 #define	MAX_STR_LENGTH		256
 
-
-#define UNUSEDPARAMETER(p) p
-
-
 //used to flag for some script code whilst work in progress
 #define SCRIPTS
 

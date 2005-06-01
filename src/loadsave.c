@@ -708,8 +708,6 @@ static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 
-//	UNUSEDPARAMETER(pColours);
-
 	if(psWidget->pUserData)
 	{
 		col = COL_GREEN;
@@ -733,8 +731,6 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 //	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
 //	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	STRING  butString[64];
-
-//	UNUSEDPARAMETER(pColours);
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
@@ -764,12 +760,9 @@ static void displayLoadSaveEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD
 	UDWORD	y = yOffset+psWidget->y;
 	UDWORD	w = psWidget->width;
 	UDWORD  h = psWidget->height;
-//	UNUSEDPARAMETER(pColours);
 
 	iV_BoxFill(x,y,x+w,y+h,COL_RED);
 	iV_BoxFill(x+1,y+1,x+w-1,y+h-1,COL_BLUE);
-
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////

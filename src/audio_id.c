@@ -134,7 +134,6 @@ static AUDIO_ID asAudioID[] =
 {ID_SOUND_UNIT_RETURNING_FOR_REPAIR,		"PCV402.wav"}, 
 
 /* Artillery Batteries */
-#ifndef COVERMOUNT
 {ID_SOUND_ASSIGNED_TO_SENSOR,			"PCV403.wav"}, 
 {ID_SOUND_SENSOR_LOCKED_ON,				"PCV404.wav"}, 
 {ID_SOUND_ASSIGNED_TO_COUNTER_RADAR,		"PCV405.wav"},	
@@ -164,9 +163,7 @@ static AUDIO_ID asAudioID[] =
 {ID_SOUND_GUARD,							"PCV424.wav"}, 
 {ID_SOUND_PURSUE,						"PCV425.wav"}, 
 {ID_SOUND_PATROL,						"PCV426.wav"}, 
-#endif
 {ID_SOUND_RETURN_TO_LZ,					"PCV427.wav"}, 
-#ifndef COVERMOUNT
 {ID_SOUND_RECYCLING,						"PCV428.wav"}, 
 {ID_SOUND_SCATTER,						"PCV429.wav"}, 
 
@@ -188,7 +185,6 @@ static AUDIO_ID asAudioID[] =
 
 {ID_SOUND_ROUTE_OBSTRUCTED,				"PCV438.wav"}, 
 {ID_SOUND_NO_ROUTE_AVAILABLE,			"PCV439.wav"}, 
-#endif
 
 /* Transports and LZS */
 {ID_SOUND_REINFORCEMENTS_AVAILABLE,		"PCV440.wav"}, 
@@ -242,7 +238,6 @@ static AUDIO_ID asAudioID[] =
 {ID_TECHNOLOGY_TRANSFER,					"PCV485.wav"}, 
 {ID_UNITS_TRANSFER,						"PCV486.wav"}, 
 
-#ifndef COVERMOUNT
 /* Group and Commander Voices - Male */
 {ID_SOUND_GROUP,							"Group.wav"},
 {ID_SOUND_GROUP_0,						"0.wav"},
@@ -335,7 +330,6 @@ static AUDIO_ID asAudioID[] =
 {ID_SOUND_COLL_DIE,						"COl018a.wav"}, 
 {ID_SOUND_COLL_INTERCEPT_AND_DESTROY,	"COl019a.wav"}, 
 {ID_SOUND_COLL_ENEMY_DESTROYED,			"COl020a.wav"}, 
-#endif
 
 /* SFX */
 	/* Weapon Sounds */			

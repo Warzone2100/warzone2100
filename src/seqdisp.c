@@ -129,7 +129,6 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 	BOOL state = TRUE;
 	FILE	*pFileHandle;
 	DDPIXELFORMAT *pDDPixelFormat;
-//	UNUSEDPARAMETER(pSurface);
 
 	if (seqCommand == SEQUENCE_KILL)
 	{

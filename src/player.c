@@ -142,7 +142,6 @@ void playerShutDown(void)
 /* Check a group list for dead droids */
 /*static void playerCheckGroup(DROID **ppsDroid)
 {
-	UNUSEDPARAMETER(ppsDroid);
 	DROID	*psPrev = NULL, *psCurr;;
 
 	while (*ppsDroid && (*ppsDroid)->died)

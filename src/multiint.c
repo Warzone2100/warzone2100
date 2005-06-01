@@ -389,7 +389,6 @@ static void decideWRF(void)
 #if 0
 static BOOL OptionsUnknown(UDWORD parentID)
 {
-//	UNUSEDPARAMETER(parentID);
 	SettingsUp = -1;
 	return TRUE;
 }
@@ -397,9 +396,7 @@ static BOOL OptionsUnknown(UDWORD parentID)
 
 static BOOL OptionsIPX(UDWORD parentID)											//ipx Options
 {	
-//	UNUSEDPARAMETER(parentID);
 	SettingsUp = -1;
-
 	return TRUE;
 }
 
@@ -408,8 +405,6 @@ static BOOL OptionsModem(UDWORD parentID)											//modem options
 	W_EDBINIT		sEdInit;
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
-
-//	UNUSEDPARAMETER(parentID);
 
 	if(ingame.bHostSetup)
 	{
@@ -475,8 +470,6 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
-//	UNUSEDPARAMETER(parentID);
-
 	if(ingame.bHostSetup)
 	{
 		SettingsUp = -1;
@@ -538,8 +531,6 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 static BOOL OptionsCable(UDWORD parentID)			// serial connection cable options
 {
 	W_FORMINIT		sFormInit;
-
-//	UNUSEDPARAMETER(parentID);
 
 	widgCreateScreen(&psConScreen);		
 	widgSetTipFont(psConScreen,WFont);
@@ -1033,18 +1024,7 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON,WBUT_DISABLE);		
 
 	}
-
-	//disable demo options
-#ifdef MULTIDEMO
-//	widgSetButtonState(psWScreen, MULTIOP_MAP,WEDBS_DISABLE);	
-//	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON,WBUT_DISABLE);	
-
-	widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_DISABLE);	
-//	widgSetButtonState(psWScreen, MULTIOP_ARENA,WBUT_DISABLE);
-	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_DISABLE);
-#endif
-
-		return;
+	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1560,19 +1540,11 @@ VOID	stopJoining(void)
 
 			if (pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
-#ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT,TRUE);
-#else
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,TRUE);
-#endif	
 			}
 			else
 			{
-#ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
-#else
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
-#endif
 			}
 		}
 
@@ -3129,8 +3101,6 @@ void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UBYTE	j,col;
 	UWORD	oldPoint,newPoint,oldx,oldy,newx,newy;
 	
-//	UNUSEDPARAMETER(pColours);
-	
 	// white poly
 //	pie_BoxFillIndex(x,y,x+w,y+h,COL_WHITE);
 
@@ -3226,7 +3196,7 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
-//	UNUSEDPARAMETER(pColours);	
+
 	iV_Line(x, y, x+psWidget->width , y, iV_PaletteNearestColour(100,100,160) );
 
 	AddCursorSnap(&InterfaceSnap,
@@ -3278,7 +3248,6 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	UDWORD		j;
 	UDWORD		i,eval;
 	PLAYERSTATS stat;
-//	UNUSEDPARAMETER(pColours);
 
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
@@ -3521,8 +3490,6 @@ void intDisplayFeBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	UDWORD	w = psWidget->width;
 	UDWORD	h = psWidget->height; 
 
-//	UNUSEDPARAMETER(pColours);
-	
 	drawBlueBox(x,y,w,h);
 
 }
@@ -3534,7 +3501,6 @@ void displayMultiEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 	UWORD	im = (UWORD)((UDWORD)psWidget->pUserData);
-//	UNUSEDPARAMETER(pColours);
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
 	drawBlueBox(x+psWidget->width,y,psWidget->height,psWidget->height);	// box on end.
@@ -3567,9 +3533,6 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	BOOL	usehl = ((UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData)));
 //	BOOL	snap = 1;
-	
-//	UNUSEDPARAMETER(pColours);
-	
 
 	//evaluate
 	if( (usehl==1) && ((W_BUTTON*)psWidget)->state & WBUTS_HILITE) 
@@ -3766,9 +3729,6 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	tly = y-80;
 	brx = x+58;
 	bry = y+23;
-
-//	UNUSEDPARAMETER(pColours);
-
 
 	pie_BoxFill(tlx,	tly,	brx,	bry, 0x006067a0);	
 	pie_BoxFill(tlx+1,	tly+1,	brx-1,	bry-1,	0x002f3050);

@@ -115,8 +115,6 @@ void releasePlayerPower(void)
 /*check the current power - if enough return true, else return false */
 BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
 {
-//    UNUSEDPARAMETER(playAudio);
-
 	//if not doing a check on the power - just return TRUE
 	if (!powerCalculated)
 	{

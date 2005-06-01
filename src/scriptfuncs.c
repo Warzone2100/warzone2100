@@ -1221,11 +1221,6 @@ BOOL scrAddReticuleButton(void)
 		return FALSE;
 	}
 
-#ifdef NON_INTERACT
-	return(TRUE);
-#endif
-
-
 	//set the appropriate flag to 'draw' the button
 	switch (val)
 	{

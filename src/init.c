@@ -1946,8 +1946,6 @@ BOOL newMapInitialise(void)
 */
 //#endif
 
-
-
 	return TRUE;
 }
 
@@ -1955,20 +1953,14 @@ BOOL newMapInitialise(void)
 void	initMiscVars( void )
 {
 	selectedPlayer = 0;
-#ifndef NON_INTERACT
 	godMode = FALSE;
-#else
-	godMode = TRUE;
-#endif
 
 	// ffs am
 
 	radarOnScreen = TRUE;
 	enableConsoleDisplay(TRUE);
 
-
 	setEnergyBarDisplay(TRUE);
-
 
 	setSelectedGroup(UBYTE_MAX);
 	processDebugMappings(FALSE);

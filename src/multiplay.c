@@ -1337,7 +1337,6 @@ BOOL sendDestroyExtra(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller)
 	NETMSG		m;
 	UDWORD		n=0;
 	
-//	UNUSEDPARAMETER(psKilled);
 /*	if(psKilled != NULL)
 	{
 		NetAdd(m,4,psKilled->id);	// id of thing killed

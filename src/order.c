@@ -1324,10 +1324,6 @@ done:
 
 static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 {
-#ifdef COVERMOUNT
-	return;
-#else
-	
 	DROID		*psDroid = NULL;
 	STRUCTURE	*psStruct = NULL;
 	SDWORD		iAudioID = NO_SOUND;
@@ -1373,8 +1369,6 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 	{
 		audio_QueueTrackMinDelay( iAudioID, AUDIO_DELAY_FIRESUPPORT );
 	}
-#endif
-
 }
 
 

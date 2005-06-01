@@ -31,12 +31,7 @@ extern BOOL	bSubtitles;
 
 // initial options
 #define INTINGAMEOP_W			120	 
-
-//#ifdef COVERMOUNT
-//#define INTINGAMEOP_H			88
-//#else
 #define INTINGAMEOP_H			124
-//#endif
 #define INTINGAMEOP_HS			88
 
 #define INTINGAMEOP_X			((320-(INTINGAMEOP_W/2))+D_W)
@@ -53,11 +48,7 @@ extern BOOL	bSubtitles;
 #define INTINGAMEOP3_X			((320-(INTINGAMEOP3_W/2))+D_W)
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
 
-
-
-
- #define PAUSEMESSAGE_YOFFSET (0)
-
+#define PAUSEMESSAGE_YOFFSET (0)
 
 #define INTINGAMEOP_PAUSEX			RET_X
 #define INTINGAMEOP_PAUSEY			10
@@ -105,7 +96,4 @@ extern BOOL	bSubtitles;
 #define	INTINGAMEOP_5_Y		100
 #define	INTINGAMEOP_6_Y		120
 
-
-
 #define OPALIGN		(WBUT_PLAIN | WBUT_TXTCENTRE)
-

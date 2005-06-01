@@ -1510,8 +1510,6 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 {
 	UDWORD		penDamage, armourDamage;
 
-//	UNUSEDPARAMETER(weaponClass);
-
 	ASSERT((PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"structureDamage: Invalid Structure pointer"));
 
@@ -3756,26 +3754,18 @@ static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={300,300,300,300,
 //static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={10,10,10,10,10,10,10,10};
 
 
-
-
 UDWORD getMaxStructures(UDWORD PlayerNumber)
 {
-
-//    UNUSEDPARAMETER(PlayerNumber);
 	// PC currently doesn't limit number of structures a player can build, so just
 	// return an absurdly large number.
 	return 99999;
-
 }
 
 
 BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 {
-
-//    UNUSEDPARAMETER(PlayerNumber);
 	// PC currently doesn't limit number of structures a player can build.
 	return FALSE;
-
 } 
 
 
@@ -6826,11 +6816,6 @@ BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player)
 /* return true if within range of a building */
 /*BOOL validAssemblyPoint(UDWORD x, UDWORD y,UDWORD player,FLAG_POSITION *psCurr,BOOL bNew)
 {
-	UNUSEDPARAMETER(x);
-	UNUSEDPARAMETER(y);
-	UNUSEDPARAMETER(player);
-	UNUSEDPARAMETER(psCurr);
-	UNUSEDPARAMETER(bNew);
 	return TRUE;
 }*/
 /*

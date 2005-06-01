@@ -421,8 +421,6 @@ VOID displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	
 	UDWORD scale,Radius;
 
-//	UNUSEDPARAMETER(pColours);
-	
 	drawBlueBox(x,y,w,h);
 
 	// draw image
