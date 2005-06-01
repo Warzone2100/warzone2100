@@ -15,7 +15,7 @@
 #include "piematrix.h" // clockwise check
 #include "pieclip.h"
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 
 
 
@@ -3755,4 +3755,4 @@ void _ttspolygon_4101(int npoints, iVertex *vrt, iTexture  *tex, int brightness)
 	}
 }
 
-#endif
+

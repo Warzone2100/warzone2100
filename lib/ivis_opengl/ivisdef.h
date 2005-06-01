@@ -13,10 +13,7 @@
 #include "frame.h"
 #include "pietypes.h"
 
-// on the psx we need piepsx defined ... on the pc we need it when creating binary pie's
-//#ifdef PSX
-//#define PIEPSX	//Note, looks like we do NOT need this, but the above comment says otherwise, but it is only defined for the PSX... -Q
-//#endif
+
 
 /***************************************************************************/
 /***************************************************************************/
@@ -112,14 +109,12 @@ typedef uint16 BSPPOLYID;			// lets hope this can work as a byte ... that will l
 #endif
 #include "bspimd.h" //structure defintions only
 
-#ifdef PIEPSX
-typedef UBYTE VERTEXID;	// lets try it as a byte on the psx ... MAX_POINTS is already set to 256 so all should be ok
-#else
+
 typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure (32bits on pc 16bits on PSX)
-#endif
 
 
-#ifndef PIEPSX	// for normal non PSX use ...
+
+
 typedef struct {
 	uint32 flags;
 	int32 zcentre;
@@ -132,18 +127,7 @@ typedef struct {
 	BSPPOLYID BSP_NextPoly;	// the polygon number for the next in the BSP list ... or BSPPOLYID_TERMINATE for no more
 #endif
 } iIMDPoly;
-#else		// playstation poly structure ... slimline version of memory saving
-typedef struct {
-	uint32 flags;
-	UWORD npnts;
-	iVector normal;
-	VERTEXID *pindex;
-	iVertex *vrt;
-#ifdef BSPIMD
-	BSPPOLYID BSP_NextPoly;	// the polygon number for the next in the BSP list ... or BSPPOLYID_TERMINATE for no more
-#endif
-} iIMDPoly;
-#endif
+
 
 
 // PlayStation special effect structure ... loaded as a PIE (type 9) and cast to iIMDShape 
@@ -177,7 +161,7 @@ typedef struct iIMDShapeProjectile
 } iIMDShapeProjectile;
 
 // PC version
-#ifndef PIEPSX
+
 typedef struct iIMDShape {
 	uint32 flags;
 	int32 texpage;	
@@ -205,32 +189,7 @@ typedef struct iIMDShape {
 } iIMDShape;
 
 
-#else
 
-// Playstation version
-typedef struct iIMDShape {
-	uint32 flags;
-	UWORD radius,xmax,ymax,zmax;		// used in component .c (ymax in droid.c)
-	UBYTE npoints;
-	UBYTE npolys;
-	UBYTE nconnectors;
- 	SBYTE texpage;		// number of the tex page that this PIE uses ... -1 indicates a non-textured shape
-
-   iVector *points;
-   iIMDPoly *polys;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
-   iVector *connectors;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
-
-	uint16 clut;	// This is an ID for the palette that we use ... it stands for ColourLookUpTable
-	uint16 tpage;	// This is an ID for the texture page 
-	struct iIMDShape *next;		// next pie in multilevel pies (NULL for non multilevel !)
-
-#ifdef BSPIMD
-	PSBSPTREENODE BSPNode;	// Start of the BSP tree - NULL if none;
-#endif
-
-} iIMDShape;
-
-#endif
 
 
 
@@ -259,7 +218,7 @@ typedef struct {
 	UBYTE PalFile[16];
 } IMAGEHEADER;
 
-#ifndef PIEPSX
+
 typedef struct {
 //	UDWORD HashValue
 	UWORD TPageID;
@@ -270,20 +229,7 @@ typedef struct {
 	SWORD XOffset;
 	SWORD YOffset;
 } IMAGEDEF;
-#else
-typedef struct {
-	UDWORD HashValue;
-	UWORD TPageID;
-	UWORD PalID;
-	UWORD PalIndex;
-	UBYTE Tu,Tv;
-	UBYTE Width,Height;
-	SBYTE XOffset;
-	SBYTE YOffset;
-//	SWORD XOffset;
-//	SWORD YOffset;
-} IMAGEDEF;
-#endif
+
 
 typedef struct {
 	IMAGEHEADER Header;

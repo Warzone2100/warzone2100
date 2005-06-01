@@ -579,7 +579,7 @@ void DownLoadRadar(unsigned char *buffer)
 //
 void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 {
-#ifndef PIEPSX		// was #ifndef PSX
+
 	UDWORD *Source = (UDWORD*) rendSurface.buffer;
 	UDWORD *Dest = (UDWORD*)DisplayBuffer;
 	UDWORD Size = rendSurface.size / 4;
@@ -590,7 +590,7 @@ void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 		Source++;
 		Dest++;
 	}
-#endif
+
 }
 
 // Download buffer in system memory to the display back buffer.
@@ -674,7 +674,7 @@ void ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int Sca
 
 void	iVBlitPixelTransRect(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 {
-#ifndef PIEPSX		// was #ifndef PSX
+
 UBYTE	*screen;
 UBYTE	present;
 UDWORD	i,j;
@@ -692,16 +692,14 @@ UDWORD	i,j;
 			*screen++ = aTransTable[present];
 		}
 	}
-#endif
+
 }
 
 //*************************************************************************
 
 void	pie_BuildTransTable(UDWORD tableNo)
 {
-#ifdef PIEPSX
-	return;
-#else
+
 UDWORD	i;
 UBYTE	red = 0, green = 0, blue = 0;
 iColour* psPalette = pie_GetGamePal();
@@ -787,7 +785,7 @@ iColour* psPalette = pie_GetGamePal();
 			aTransTable4[i] = pal_GetNearestColour(red,green,blue);
 		}
 	}
-#endif
+
 }
 
 #endif

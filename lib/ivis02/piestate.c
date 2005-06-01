@@ -693,18 +693,18 @@ void pie_SetGammaValue(float val)
 /***************************************************************************/
 void pie_DrawMouse(SDWORD x,SDWORD y)
 {
-#ifndef PIEPSX
 
-#endif
+
+
 }
 
 /***************************************************************************/
 UWORD	presentMouseID;
 void pie_SetMouse(IMAGEFILE *psImageFile,UWORD ImageID)
 {
-#ifndef PIEPSX
 
-#endif
+
+
 	presentMouseID = ImageID;
 }
 

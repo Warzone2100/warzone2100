@@ -26,7 +26,7 @@
 
 
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 #define MIST
 
 /***************************************************************************/
@@ -576,9 +576,9 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifndef PSX
+
 				imdPoly.pTexAnim = pPolys->pTexAnim;
-#endif
+
 				if (imdPoly.flags > 0)
 				{
 					pie_IvisPolyFrame(shape->texpage, &imdPoly,frame,TRUE);	   // draw the polygon ... this is an inline function
@@ -617,9 +617,9 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifndef PSX
+
 				piePoly.pTexAnim = pPolys->pTexAnim;
-#endif
+
 				if (piePoly.flags > 0)
 				{
 						pie_PiePolyFrame(&piePoly,frame,TRUE);	   // draw the polygon ... this is an inline function
@@ -865,9 +865,9 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				imdPoly.npnts = pPolys->npnts;
 				imdPoly.vrt = &imdVrts[0];
-#ifndef PIEPSX   // was #ifndef PSX
+
 				imdPoly.pTexAnim = pPolys->pTexAnim;
-#endif
+
 				if (imdPoly.flags > 0)
 				{
 					pie_IvisPolyFrame(shape->texpage, &imdPoly,frame,TRUE);	   // draw the polygon ... this is an inline function
@@ -906,9 +906,9 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				piePoly.nVrts = pPolys->npnts;
 				piePoly.pVrts = &pieVrts[0];
-#ifndef PIEPSX   // was #ifndef PSX
+
 				piePoly.pTexAnim = pPolys->pTexAnim;
-#endif
+
 				if (piePoly.flags > 0)
 				{
 						pie_PiePolyFrame(&piePoly,frame,TRUE);	   // draw the polygon ... this is an inline function
@@ -1609,7 +1609,7 @@ int	uFrame, vFrame, j, framesPerLine;
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
-#ifndef PIEPSX   // was #ifndef PSX
+
 		if (poly->pTexAnim != NULL)
 		{
 			if (poly->pTexAnim->nFrames >=0)
@@ -1640,7 +1640,7 @@ int	uFrame, vFrame, j, framesPerLine;
 				}
 			}
 		}
-#endif
+
 	}
 #ifndef NO_RENDER
 	//draw with new texture data
@@ -1815,7 +1815,7 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
-#ifndef PIEPSX   // was #ifndef PSX
+
 		if (poly->pTexAnim != NULL)
 		{
 			if (poly->pTexAnim->nFrames >=0)
@@ -1847,7 +1847,7 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 				}
 			}
 		}
-#endif
+
 	}
 #ifndef NO_RENDER
 	pie_IvisPoly(texPage, poly, bClip);
@@ -2177,4 +2177,4 @@ void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCoun
 
 
 
-#endif
+//#endif  //line29

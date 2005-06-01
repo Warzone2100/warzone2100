@@ -291,7 +291,7 @@ void my_error_exit(j_common_ptr cinfo)
   my_error_ptr myerr = (my_error_ptr) cinfo->err;
   longjmp(myerr->setjmp_buffer, 1);
 }
-
+//=====================================================================
 void screen_SetBackDropFromFile(char* filename) {
 	static JSAMPARRAY buffer = NULL;
 	static unsigned int buffer_size = 0;
@@ -367,6 +367,7 @@ void screen_SetBackDropFromFile(char* filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
+//===================================================================
 
 void screen_StopBackDrop(void)
 {

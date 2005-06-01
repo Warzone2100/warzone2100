@@ -15,7 +15,7 @@
 #include "piemode.h"
 #include "bug.h"
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 
 //*************************************************************************
 
@@ -2207,4 +2207,4 @@ void _rbitmapr270_sr(iBitmap *bmp, int x, int y, int w, int h, int tw, int th)
 		bp++;
 	}
 }
-#endif
+

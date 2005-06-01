@@ -270,9 +270,9 @@ void _iv_vid_setup(void)
 
 	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
-#ifndef PIEPSX		// was #ifndef PSX
+
 	rendSurface.buffer = NULL;
-#endif
+
 	rendSurface.size = 0;
 }
 
@@ -281,11 +281,9 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	iSurface *s;
 	int i;
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 	assert(buffer!=NULL);	// on playstation this MUST be null
-#else
-//	assert(buffer==NULL);	// Commented out by Paul as a temp measure to make it work.
-#endif
+
 
 	if ((s = (iSurface *) iV_HeapAlloc(sizeof(iSurface))) == NULL)
 		return NULL;
@@ -298,11 +296,11 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	s->width = width;
 	s->height = height;
 	s->size = width * height;
-#ifndef PIEPSX		// was #ifndef PSX
+
 	s->buffer = buffer;
 	for (i=0; i<iV_SCANTABLE_MAX; i++)
 		s->scantable[i] = i * width;
-#endif
+
 	s->clip.left = 0;
 	s->clip.right = width-1;
 	s->clip.top = 0;
@@ -450,7 +448,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 
 	switch (mode) {
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 		case iV_MODE_SURFACE:
 			_clear_sr(0);
 //			pie_Draw3DShape				= pie_Draw3DIntelShape;
@@ -747,101 +745,15 @@ void iV_RenderAssign(int mode, iSurface *s)
 
 			break;
 
-#else
-			case REND_PSX:
-//			pie_VideoShutDown 		 		= _close_psx;
-			iV_VSync 			 		= _vsync_psx;
-//			iV_Clear 			 		= _clear_psx;
-//			iV_RenderEnd 				= _bank_on_psx;
-//			iV_RenderBegin 			= _bank_off_psx;
-//			iV_Palette 			 		= _palette_psx;
-//			iV_Pixel 			 		= _pixel_psx;
-//			iV_pPixel 			 		= _pixel_psx;
-			iV_pLine 			 		= _line_psx;
-//			iV_pHLine 			 		= _hline_psx;
-//			iV_pVLine 			 		= _vline_psx;
-//			iV_pCircle 			 		= _circle_psx;
-//			iV_pCircleFill 	 		= _circlef_psx;
-//			iV_pPolygon 		 		= _polygon_psx;
-//			iV_pQuad				 		= _quad_psx;
-//			iV_pTriangle 		 		= _triangle_psx;
-			iV_pBox 				 		= _box_psx;
-			iV_pBoxFill 		 		= _boxf_psx;
-			iV_ppBitmap 		 		= _bitmap_psx;
-//			iV_ppBitmapColour			= _bitmapcolour_psx;
-			iV_ppBitmapColourTrans		= _tbitmapcolour_psx;
-//			iV_pBitmap			 		= pbitmap;
-//			iV_pBitmapResize 	 		= _rbitmap_psx;
-//			iV_pBitmapResizeRot90 	= _rbitmapr90_psx;
-//			iV_pBitmapResizeRot180	= _rbitmapr180_psx;
-//			iV_pBitmapResizeRot270	= _rbitmapr270_psx;
-//			iV_pBitmapGet 				= _gbitmap_psx;
-			iV_ppBitmapTrans			= _tbitmap_psx;
-//			iV_pBitmapTrans			= ptbitmap;
-//			iV_ppBitmapShadow			= _sbitmap_psx;
-//			iV_pBitmapShadow			= psbitmap;
-//			iV_ppBitmapRot90			= _bitmapr90_psx;
-//			iV_pBitmapRot90			= pbitmapr90;
-//			iV_ppBitmapRot180			= _bitmapr180_psx;
-//			iV_pBitmapRot180			= pbitmapr180;
-//			iV_ppBitmapRot270			= _bitmapr270_psx;
-//			iV_pBitmapRot270			= pbitmapr270;
 
-//			iV_Line 					= line;
-//			iV_HLine 					= hline;
-//			iV_VLine 					= vline;
-//			iV_Circle 					= circle;
-//			iV_CircleFill 				= circlef;
-//			iV_Polygon 					= iV_pPolygon;
-//			iV_Quad						= ivquad;
-//			iV_Triangle 				= iV_pTriangle;
-//			iV_Box 						= box;
-//			iV_BoxFill 					= boxf;
-//			iV_Bitmap 					= bitmap;
-//			iV_BitmapResize 			= rbitmap;
-//			iV_BitmapResizeRot90		= rbitmapr90;
-//			iV_BitmapResizeRot180	= rbitmapr180;
-//			iV_BitmapResizeRot270 	= rbitmapr270;
-//			iV_BitmapGet 				= gbitmap;
-//			iV_BitmapTrans				= tbitmap;
-//			iV_BitmapShadow			= sbitmap;
-//			iV_BitmapRot90				= bitmapr90;
-//			iV_BitmapRot180			= bitmapr180;
-//			iV_BitmapRot270			= bitmapr270;
-			iV_SetTransFilter			= SetTransFilter_psx;
-//			iV_TransBoxFill				= TransBoxFill_psx;
-
-//			iV_DrawImageDef			= DrawImageDef_PSX;
-//			iV_DrawSemiTransImageDef = DrawSemiTransImageDef_PSX;
-//			iV_DrawImage			= DrawImage_PSX;
-//			iV_DrawImageRect		= DrawImageRect_PSX;
-//			iV_DrawTransImage		= DrawTransImage_PSX;
-//			iV_DrawTransImageRect	= DrawTransImageRect_PSX;
-//			iV_DrawColourImage		= DrawColourImage_PSX;
-//			iV_DrawColourTransImage	= DrawTransColourImage_PSX;
-//			iV_DrawStretchImage		= DrawStretchImage_PSX;
-
-//			iV_BeginTextRender		= BeginTextRender;
-//			iV_TextRender270		= TextRender270;
-//			iV_TextRender			= TextRender;
-//			iV_EndTextRender		= EndTextRender;
-
-//			pie_DownLoadRadar		= DownLoadRadar;
-
-//			iV_UploadDisplayBuffer	= UploadDisplayBuffer_PSX;
-//			iV_DownloadDisplayBuffer = DownloadDisplayBuffer_PSX;
-//			iV_ScaleBitmapRGB		= ScaleBitmapRGB_PSX;
-
-			break;
-#endif
 	}
 
 
 	iV_DEBUG0("vid[RenderAssign] = assigned renderer :\n");
-#ifndef PIEPSX		// was #ifndef PSX
+
 	iV_DEBUG5("usr %d\nflags %x\nxcentre, ycentre %d\nbuffer %p\n",
 			s->usr,s->flags,s->xcentre,s->ycentre,s->buffer);
-#endif
+
 
 }
 #endif	// don't want this function at all if we have PIETOOL defined

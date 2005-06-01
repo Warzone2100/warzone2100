@@ -109,19 +109,14 @@ void iV_Abort(char *string, ...)
 #ifndef FINALBUILD
 void iV_Error(long errorn, char *msge, ...)
 {
-#ifndef PIEPSX
+
 	va_list argptr;
 
 	va_start(argptr,msge);
 	vsprintf(&_iVERROR.msge[0],msge,argptr);
 	va_end(argptr);
 	_iVERROR.n = errorn;
-#else
 
-	
-	// ON playstation the output the messages as a printf
-	DBPRINTF(("iV_ERROR:%s\n",msge));
-#endif
 
 }
 #endif

@@ -38,9 +38,9 @@
 extern BOOL pie_Download8bitTexturePage(void* bitmap,UWORD Width,UWORD Height);//assumes 256*256 page
 extern BOOL pie_Reload8bitTexturePage(void* bitmap,UWORD Width,UWORD Height, SDWORD index);
 extern UDWORD pie_GetLastPageDownloaded(void);
-#ifndef PIEPSX
+
 extern int pie_AddBMPtoTexPages( 	iSprite* s, char* filename, int type,
 					iBool bColourKeyed, iBool bResource);
-#endif
+
 
 #endif // _pieTexture_h

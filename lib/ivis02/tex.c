@@ -36,7 +36,7 @@ static int _tex_get_top_bit(uint32 n)
 	return i;
 }
 
-#ifdef PIEPSX
+
 /*
 	When a binary PIE is loaded the texture page field contains just a number that the PieBin utility assigned it
 	generally this number is the numeric part of the texture page file name. For example if the texture page was
@@ -67,7 +67,7 @@ BOOL MapTexturePage(iIMDShape *Pie)
 	return(FALSE);
 			
 }
-#endif
+
 
 
 //*************************************************************************
@@ -127,7 +127,7 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 	_TEX_PAGE[i].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[i].type = type;
 
-#ifndef PIEPSX
+
 	if ( rendSurface.usr >= REND_D3D_RGB &&
 		 rendSurface.usr <= REND_D3D_REF )
 	{
@@ -138,14 +138,14 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 		}
 	}
 
-#endif
+
 	/* Send back the texpage number so we can store it in the IMD */
 
 	_TEX_INDEX++;
 
-#ifndef PIEPSX
 
-#endif
+
+
 	{
 		return (i);
 	}
@@ -216,11 +216,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 		i++;
 	}
 
-#ifdef PIEPSX
 
-	DBPRINTF(("Texture page [%s] was not loaded in resource .wrf file! - fatal error\n",filename));
-	return(-1);
-#else
 
 	
 	/* Get a pointer to the texpage in memory - we KNOW it's there from the check at start */
@@ -229,7 +225,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 
 	return pie_AddBMPtoTexPages(s, fname, type, bColourKeyed, TRUE);
 
-#endif
+
 
 }
 

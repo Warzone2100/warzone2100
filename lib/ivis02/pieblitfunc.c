@@ -23,7 +23,7 @@
 #include "piefunc.h"
 #include "piematrix.h"
 
-#ifndef PIEPSX
+
 /***************************************************************************/
 /*
  *	Local Definitions
@@ -1106,4 +1106,4 @@ void pie_D3DRenderForFlip(void)
 
 
 
-#endif
+

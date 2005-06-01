@@ -364,7 +364,7 @@ void pie_SetGeometricOffset(int x, int y)
 
 
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 // all these routines use the PC format of iVertex ... and are not used on the PSX
 //*************************************************************************
 
@@ -379,7 +379,7 @@ BOOL pie_PieClockwise(PIEVERTEX *s)
 	return (((s[1].sy - s[0].sy) * (s[2].sx - s[1].sx)) <=
 			((s[1].sx - s[0].sx) * (s[2].sy - s[1].sy)));
 }
-#endif
+
 
 //*************************************************************************
 //*** inverse rotate 3D vector with current rotation matrix

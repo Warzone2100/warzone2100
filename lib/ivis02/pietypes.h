@@ -58,48 +58,13 @@ typedef struct {int8 x, y;} iPoint8;
 typedef struct {int16 x, y;} iPoint16;
 typedef struct {int32 x, y;} iPoint32;
 
-#ifndef PIEPSX			// was    #ifndef PSX
+
 	typedef struct {int32 x, y, z;} iVector;
 	typedef struct {double x, y, z;} iVectorf;
 	typedef struct {int xshift, width, height; iBitmap *bmp;
 					iColour *pPal; iBool bColourKeyed; } iTexture;
 	typedef struct {int32 x, y, z, u, v; uint8 g;} iVertex; 
-#else  // Basically its a playstation ...
-#ifdef IVECTOR_EQU_SVECTOR
-	typedef struct {SWORD x, y, z, pad;} iVector;
-#else
-	typedef struct {SWORD x, y, z;} iVector;
-#endif
-	typedef struct {FRACT x, y, z;} iVectorf;
 
-
-
-
-//	typedef struct {int xshift, width, height; iBitmap *bmp; SBYTE num; uint16 tpage; uint16 clut; iBool bColourKeyed; } iTexture;
-
-	typedef struct
-	{
-		SBYTE num;		// texture page id value ... Page-8-player...   would be stored as 8  ... -1 for not defined
-		RECT VRAMpos;	// Location in VRAM that this texture page is located
-		uint16 tpage;	// Id of the texture page
-		uint16 clut;	// Clut ID of the texture page
-// 	UDWORD	TextureMode;	// 4/8/16 bit ... Is this needed ?
-#ifdef PIETOOL
-		int width,height,xshift;
-		iBitmap *bmp;
-		iBool bColourKeyed;
-
-#endif
-	} iTexture;
-
-
-	// on the playstation we store the texture page ID, and the u,v coords withing the texture page
-	typedef struct 
-		{
-		uint8 u,v;	// 8 bit u,v coords are all that is needed on the playstation
-	//	uint8 g;	// Lighting values (? - needed)
-		} iVertex; 
-#endif
 typedef struct {FRACT x,y,z;} PIEVECTORF;
 typedef struct {iVector p, r;} iView;
 

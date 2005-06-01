@@ -30,12 +30,12 @@
  */
 /***************************************************************************/
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 UBYTE		aTransTable[256];
 UBYTE		aTransTable2[256];		// 2 trans tabels so we can have 2 transparancy colours without slowdown.
 UBYTE		aTransTable3[256];		// 3 trans tabels so we can have 3 transparancy colours without slowdown.
 UBYTE		aTransTable4[256];		// 4 trans tabels so we can have 4 transparancy colours without slowdown.
-#endif
+
 /* Set default transparency filter to green pass */
 UDWORD		transFilter = TRANS_GREY;
 static int	g_mode = REND_UNDEFINED;
@@ -68,24 +68,10 @@ void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
  */
 /***************************************************************************/
 
-#ifdef PIEPSX
-// This is here on the PSX as we don't want to include
-// all that uneaded stuff in pieClip.c
-
-void pie_Set2DClip(int x0, int y0, int x1, int y1)
-{
-	DBPRINTF(("pie_Set2DClip %p\n",psRendSurface));
-	assert(psRendSurface != NULL);
-
-	psRendSurface->clip.left = x0;
-	psRendSurface->clip.top = y0;
-	psRendSurface->clip.right = x1;
-	psRendSurface->clip.bottom = y1;
-}
-#endif
 
 
-#if(1) 	//#ifndef PIEPSX		// was #ifndef PSX
+
+
 
 //*************************************************************************
 //*** line plot 2D line - clipped
@@ -234,10 +220,7 @@ UDWORD	fourPixels;
 UDWORD	output;
 UDWORD	width;
 UDWORD	i,j;
-#ifdef PIEPSX
-	DBPRINTF(("iVBlitTransRect called ... stub\n"));
-	return;
-#else
+
 
 	/* Note x1 must be greater than x0 */
 	width = x1-x0;
@@ -270,7 +253,7 @@ UDWORD	i,j;
 			}
 		}
 	}
-#endif
+
 }
 
 //*************************************************************************
@@ -625,7 +608,7 @@ void DownLoadRadar(unsigned char *buffer)
 //
 void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 {
-#ifndef PIEPSX		// was #ifndef PSX
+
 	UDWORD *Source = (UDWORD*) rendSurface.buffer;
 	UDWORD *Dest = (UDWORD*)DisplayBuffer;
 	UDWORD Size = rendSurface.size / 4;
@@ -636,7 +619,7 @@ void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 		Source++;
 		Dest++;
 	}
-#endif
+
 }
 
 // Download buffer in system memory to the display back buffer.
@@ -720,7 +703,7 @@ void ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int Sca
 
 void	iVBlitPixelTransRect(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 {
-#ifndef PIEPSX		// was #ifndef PSX
+
 UBYTE	*screen;
 UBYTE	present;
 UDWORD	i,j;
@@ -738,16 +721,14 @@ UDWORD	i,j;
 			*screen++ = aTransTable[present];
 		}
 	}
-#endif
+
 }
 
 //*************************************************************************
 
 void	pie_BuildTransTable(UDWORD tableNo)
 {
-#ifdef PIEPSX
-	return;
-#else
+
 UDWORD	i;
 UBYTE	red,green,blue;
 iColour* psPalette = pie_GetGamePal();
@@ -833,7 +814,7 @@ iColour* psPalette = pie_GetGamePal();
 			aTransTable4[i] = pal_GetNearestColour(red,green,blue);
 		}
 	}
-#endif
+
 }
 
 //*************************************************************************
@@ -855,6 +836,6 @@ iColour* psPalette = pie_GetGamePal();
 //*************************************************************************
 
 
-#endif
+
 
 #endif

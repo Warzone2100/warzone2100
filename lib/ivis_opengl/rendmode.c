@@ -243,11 +243,9 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	int i;
 
 
-#ifndef PIEPSX		// was #ifndef PSX
+
 	assert(buffer!=NULL);	// on playstation this MUST be null
-#else
-//	assert(buffer==NULL);	// Commented out by Paul as a temp measure to make it work.
-#endif
+
 
 	if ((s = (iSurface *) iV_HeapAlloc(sizeof(iSurface))) == NULL)
 		return NULL;
@@ -261,11 +259,11 @@ iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, 
 	s->width = width;
 	s->height = height;
 	s->size = width * height;
-#ifndef PIEPSX		// was #ifndef PSX
+
 	s->buffer = buffer;
 	for (i=0; i<iV_SCANTABLE_MAX; i++)
 		s->scantable[i] = i * width;
-#endif
+
 	s->clip.left = 0;
 	s->clip.right = width-1;
 	s->clip.top = 0;

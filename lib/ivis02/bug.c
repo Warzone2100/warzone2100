@@ -22,7 +22,7 @@ void _debug_create_log(void)
 void iV_Debug(char *string, ...)
 
 {
-#ifndef PIEPSX
+
 	va_list argptr;
 	FILE *fp;
 
@@ -33,11 +33,7 @@ void iV_Debug(char *string, ...)
 		va_end(argptr);
 		fclose(fp);
 	}
-#else
-#ifndef NO_IV_DEBUG_PRINTF	
-	DBPRINTF(("iv_debug : %s\n",string));
-#endif
-#endif
+
 }
 
 void iV_DisplayLogFile(void)
