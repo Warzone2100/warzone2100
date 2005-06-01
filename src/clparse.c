@@ -32,14 +32,11 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
 
-// whether to start windowed
-BOOL	clStartWindowed;
 // whether to play the intro video
 BOOL	clIntroVideo;
 
 // let the end user into debug mode....
 BOOL	bAllowDebugMode = FALSE;
-
 
 // note that render mode must come before resolution flag.
 BOOL ParseCommandLine(int argc, char** argv)
@@ -47,7 +44,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 //	char			seps[] = " ,\t\n";
 	char			*tokenType;
 	char			*token;
-	BOOL			bCrippleD3D = FALSE; // Disable higher resolutions for d3D
 //	char			seps2[] ="\"";
 	char			cl[255];
 	char			cl2[255];
@@ -66,11 +62,11 @@ BOOL ParseCommandLine(int argc, char** argv)
 
 		if ( stricmp( tokenType, "-window" ) == 0 )
 		{
-			clStartWindowed = TRUE;
+			war_setFullscreen(FALSE);
 		}
 		else if ( stricmp( tokenType, "-fullscreen" ) == 0 )
 		{
-			clStartWindowed = FALSE;
+			war_setFullscreen(TRUE);
 		}
 		else if ( stricmp( tokenType, "-intro" ) == 0 )
 		{
@@ -87,7 +83,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_SetRendMode(REND_MODE_HAL);
 			pie_SetDirect3DDeviceName("Direct3D HAL");
-//			bCrippleD3D = TRUE;
 			pie_SetVideoBuffer(640, 480);
 		}
 
@@ -179,10 +174,10 @@ BOOL ParseCommandLine(int argc, char** argv)
 			pie_SetFogCap(FOG_CAP_GREY);
 		}
 		else if (stricmp(tokenType, "-CDA") == 0) {
-			playAudioCDs = TRUE;
+			war_SetPlayAudioCDs(TRUE);
 		}
 		else if (stricmp(tokenType, "-noCDA") == 0) {
-			playAudioCDs = FALSE;
+			war_SetPlayAudioCDs(FALSE);
 		}
 		else if( stricmp( tokenType,"-2meg") == 0)
 		{
@@ -240,17 +235,8 @@ BOOL ParseCommandLine(int argc, char** argv)
 		//	return FALSE;
 		}
 	}
-	
-	/* Hack to disable higher resolution requests in d3d for the demo */
-	if(bCrippleD3D)
-	{
-		pie_SetVideoBuffer(640, 480);
-	}
 	return TRUE;
 }
-
-
-
 
 
 // ////////////////////////////////////////////////////////

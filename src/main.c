@@ -140,7 +140,6 @@ int main(int argc, char *argv[])
 #endif
 
 	// initialise all the command line states
-	clStartWindowed = FALSE;  // NOID changed from FALSE
 	clIntroVideo = FALSE;
 
 //	if (!pie_CheckForDX6())
@@ -153,12 +152,9 @@ int main(int argc, char *argv[])
 
 	war_SetRendMode(REND_MODE_SOFTWARE); // NOID changed from REND_MODE_HAL
 
-
 	bGlideFound = FALSE;
-
    
 init://jump here from the end if re_initialising
-
 
 	// initialise memory stuff, moved out of frameinit by ajl. 
 	if (!memInitialise())
@@ -236,7 +232,7 @@ init://jump here from the end if re_initialising
 
 //	frameDDEnumerate();
 
-	if (!frameInitialise(NULL, "Warzone 2100", DISP_WIDTH,DISP_HEIGHT,dispBitDepth, !clStartWindowed, bVidMem, bGlide))
+	if (!frameInitialise(NULL, "Warzone 2100", DISP_WIDTH,DISP_HEIGHT,dispBitDepth, war_getFullscreen(), bVidMem, bGlide))
 	{
 		return -1;
 	}

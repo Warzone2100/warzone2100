@@ -879,7 +879,7 @@ BOOL systemInitialise(void)
 	}
 
 
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Open();
 		mixer_Open();
 	}
@@ -987,7 +987,7 @@ BOOL systemShutdown(void)
 	}
 
 
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Stop();
 		cdAudio_Close();
 		mixer_Close();
@@ -1589,7 +1589,7 @@ BOOL stageTwoShutDown(void)
 	DBPRINTF(("stageTwoShutDown\n"));
 
 
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Stop();
 	}
 
@@ -1891,7 +1891,7 @@ BOOL saveGameReset(void)
 //#ifdef MISSION_S
 	DBPRINTF(("saveGameReset\n"));
 
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Stop();
 	}
 

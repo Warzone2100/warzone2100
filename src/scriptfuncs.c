@@ -3232,7 +3232,7 @@ BOOL scrPlayCDAudio(void)
 
 
 
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_PlayTrack( iTrack );
 	}
 
@@ -3242,8 +3242,7 @@ BOOL scrPlayCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrStopCDAudio(void)
 {
-
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Stop();
 	}
 
@@ -3253,7 +3252,7 @@ BOOL scrStopCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrPauseCDAudio(void)
 {
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Pause();
 	}
 	return TRUE;
@@ -3262,7 +3261,7 @@ BOOL scrPauseCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrResumeCDAudio(void)
 {
-	if (playAudioCDs) {
+	if (war_GetPlayAudioCDs()) {
 		cdAudio_Resume();
 	}
 	return TRUE;

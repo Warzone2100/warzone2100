@@ -37,9 +37,6 @@
 extern  char	sForceName[256];
 extern	UBYTE	sPlayer[128];
 
-BOOL bAllowSubtitles = FALSE;
-BOOL playAudioCDs = FALSE;
-
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(BOOL bResourceAvailable)
 {
@@ -58,11 +55,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	// subtitles
 	if(getWarzoneKeyNumeric("allowsubtitles", &val))
 	{
-		bAllowSubtitles = val;
-		if(!bAllowSubtitles)
-		{
-			setWarzoneKeyNumeric("subtitles",(DWORD)TRUE);			// subtitles
-		}
+		war_SetAllowSubtitles(val);
 	}
 
 	// //////////////////////////
@@ -80,7 +73,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	}
 	
 	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
-		playAudioCDs = val;
+		war_SetPlayAudioCDs(val);
 	}
 
 	// //////////////////////////
@@ -122,7 +115,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setShakeStatus(TRUE);
 		setWarzoneKeyNumeric("shake", TRUE);
 	}
-
+	
 	// //////////////////////////
 	// invert mouse
 	if(getWarzoneKeyNumeric("mouseflip", &val))
@@ -462,6 +455,9 @@ BOOL loadRenderMode()
 		}
 	}
 
+	if (getWarzoneKeyNumeric("fullscreen", &val)) {
+		war_setFullscreen(val);
+	}
 
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
@@ -488,7 +484,7 @@ BOOL saveConfig()
 	// fxvol and cdvol
 	setWarzoneKeyNumeric("fxvol", mixer_GetWavVolume());
 	setWarzoneKeyNumeric("cdvol", mixer_GetCDVolume());
-	setWarzoneKeyNumeric("playaudiocds", playAudioCDs);
+	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
 
 	// note running rendermode
 	// ENGINE_GLIDE etc.
@@ -508,13 +504,14 @@ BOOL saveConfig()
 		setWarzoneKeyString("resolution", buf);
 	}
 
+	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
 
 	// dont save out the cheat mode.
 	if(getDifficultyLevel()==DL_KILLER OR getDifficultyLevel()== DL_TOUGH)
 	{
 		setDifficultyLevel(DL_NORMAL);
 	}
-	setWarzoneKeyNumeric("allowSubtitles",(DWORD)bAllowSubtitles);
+	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
 	setWarzoneKeyNumeric("gamma",(DWORD)(gammaValue*25));			// gamma
 	setWarzoneKeyNumeric("scroll",(DWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level	

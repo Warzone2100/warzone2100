@@ -74,5 +74,11 @@ extern void war_SetDirectDrawDeviceName(char* pDDDeviceName);
 extern char* war_GetDirectDrawDeviceName(void);
 extern void war_SetDirect3DDeviceName(char* pD3DDeviceName);
 extern char* war_GetDirect3DDeviceName(void);
+extern void war_SetPlayAudioCDs(BOOL b);
+extern BOOL war_GetPlayAudioCDs(void);
+extern void war_SetAllowSubtitles(BOOL);
+extern BOOL war_GetAllowSubtitles(void);
+extern void war_setFullscreen(BOOL);
+extern BOOL war_getFullscreen(void);
 
 #endif // _warzoneConfig_h

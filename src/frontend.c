@@ -1242,7 +1242,7 @@ BOOL startGameOptions2Menu(VOID)
 
 	////////////
 	//subtitle mode.
-	if(bAllowSubtitles)
+	if(war_GetAllowSubtitles())
 	{
 		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,FALSE);
 	}
@@ -1251,7 +1251,7 @@ BOOL startGameOptions2Menu(VOID)
 		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,TRUE);
 	}
 
-	if(bAllowSubtitles)
+	if(war_GetAllowSubtitles())
 	{
 		if ( !seq_GetSubtitles() )
 		{

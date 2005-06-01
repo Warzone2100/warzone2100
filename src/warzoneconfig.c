@@ -36,6 +36,9 @@ typedef struct _warzoneGlobals
 	SWORD		effectsLevel;
 	char		DDrawDriverName[256];
 	char		D3DDriverName[256];
+	BOOL		allowSubtitles;
+	BOOL		playAudioCDs;
+	BOOL		Fullscreen;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -60,11 +63,12 @@ static WARZONE_GLOBALS	warGlobs;//STATIC use or write an access function if you 
 void war_SetDefaultStates(void)//Sets all states
 {
 	warGlobs.renderMode = REND_MODE_SOFTWARE;
-	pie_SetFogCap(FOG_CAP_UNDEFINED);//set here and reset in clParse or loadConfig
-	pie_SetTexCap(TEX_CAP_UNDEFINED);//set here and reset in clParse or loadConfig
-	war_SetFog(FALSE);//set here and reset in clParse or loadConfig
-	war_SetTranslucent(FALSE);//set here and reset in clParse or loadConfig
-	war_SetAdditive(FALSE);//set here and reset in clParse or loadConfig
+	//set those here and reset in clParse or loadConfig
+	pie_SetFogCap(FOG_CAP_UNDEFINED);
+	pie_SetTexCap(TEX_CAP_UNDEFINED);
+	war_SetFog(FALSE);
+	war_SetTranslucent(FALSE);
+	war_SetAdditive(FALSE);
 }
 
 /***************************************************************************/
@@ -92,6 +96,30 @@ void war_SetRendMode(WAR_REND_MODE rendMode)
 WAR_REND_MODE war_GetRendMode(void)
 {
 	return warGlobs.renderMode;
+}
+
+void war_SetPlayAudioCDs(BOOL b) {
+	warGlobs.playAudioCDs = b;
+}
+
+BOOL war_GetPlayAudioCDs(void) {
+	return warGlobs.playAudioCDs;
+}
+
+void war_SetAllowSubtitles(BOOL b) {
+	warGlobs.allowSubtitles = b;
+}
+
+BOOL war_GetAllowSubtitles(void) {
+	return warGlobs.allowSubtitles;
+}
+
+void war_setFullscreen(BOOL b) {
+	warGlobs.Fullscreen = b;
+}
+
+BOOL war_getFullscreen(void) {
+	return warGlobs.Fullscreen;
 }
 
 /***************************************************************************/
