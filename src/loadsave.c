@@ -41,7 +41,7 @@
 //--------------------------------
 // ////////////////////////////////////////////////////////////////////////////
 #define LOADSAVE_X				130	+ D_W
-#define LOADSAVE_Y				10	//+ D_H		//was 170 -Q
+#define LOADSAVE_Y				30	+ D_H		//was 170 -Q
 #define LOADSAVE_W				380
 #define LOADSAVE_H				240	//was 200 -Q
 
