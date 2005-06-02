@@ -37,38 +37,6 @@ static int _tex_get_top_bit(uint32 n)
 }
 
 
-/*
-	When a binary PIE is loaded the texture page field contains just a number that the PieBin utility assigned it
-	generally this number is the numeric part of the texture page file name. For example if the texture page was
-	"Page-11-Player Buildings.pcx" the texture page field will contain 11. 
-	When the texture pages are loaded up (from the WRF) the .num field contains a matching number which matchs up
-	with the binary pie texture page. This will allow the texture page id field in the PIE to be replaced with the
-	valid ID from the texturepage structure.
-
-*/
-BOOL MapTexturePage(iIMDShape *Pie)
-{
-		// Scan through all the loaded texture pages and find a match for the num.
-	UDWORD Page=0;
-	
-	while (Page<_TEX_INDEX)
-	{
-		if (_TEX_PAGE[Page].tex.num==Pie->tpage)
-		{
-//			DBPRINTF(("PIE texture num %d mapped to ",Pie->tpage));
-			Pie->tpage=_TEX_PAGE[Page].tex.tpage;
-//			DBPRINTF(("%d\n",Pie->tpage));
-			return(TRUE);
-		}
-		Page++;
-	}		
-	// no match found
-	DBPRINTF(("No match for PIE texture num %d\n",Pie->tpage));
-	return(FALSE);
-			
-}
-
-
 
 //*************************************************************************
 //*** load texture file or return index if already loaded
