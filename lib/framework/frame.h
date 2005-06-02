@@ -8,9 +8,13 @@
 #define _frame_h
 
 #ifdef WIN32
+#ifndef __GNUC__
 #pragma warning (disable : 4201 4214 4115 4514)
+#endif
 #include <windows.h>
+#ifndef __GNUC__
 #pragma warning (default : 4201 4214 4115)
+#endif
 #endif
 
 /* Linux specific stuff */

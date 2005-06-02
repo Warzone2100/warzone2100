@@ -15,13 +15,16 @@
 #endif
 
 #ifdef WIN32
+#ifndef __GNUC__
 #pragma warning (disable : 4201 4214 4115 4514)
+#endif
 #define INIT_GUID
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
-
+#ifndef __GNUC__
 #pragma warning (default : 4201 4214 4115)
+#endif
 #endif
 
 #include "types.h"
