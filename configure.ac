@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.56)
 AC_INIT([warzone], [1.3], [http://developer.berlios.de/projects/warzone/])
 AC_CONFIG_SRCDIR([lib/gamelib/parser.h])
 AC_CONFIG_HEADER([config.h])
@@ -24,7 +24,6 @@ AC_CHECK_HEADERS([limits.h malloc.h memory.h stddef.h stdint.h stdlib.h string.h
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
-AC_C_RESTRICT
 AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
@@ -39,12 +38,22 @@ AC_CHECK_FUNCS([gethostname memmove memset sqrt strchr strdup strncasecmp strrch
 AC_HEADER_STDBOOL
 AC_HEADER_TIME
 
-# Force or skip build of OpenGL?
-#   --with-opengl will force an opengl build (skip tests)
+AC_ARG_ENABLE(debug,
+[  --enable-debug          run in debug mode],
+[ debug=$withval ], [ debug=no ])
+if test "x$debug" = xyes; then
+  CFLAGS="$CFLAGS -DDEBUG"
+fi
+
 #   --without-opengl will build without opengl
 AC_ARG_WITH(opengl,
 [  --with-opengl           use OpenGL to accelerate graphics (default)],
 [ opengl=$withval ], [ opengl=maybe ])
+
+#   --without-openal will build without OpenAL
+AC_ARG_WITH(openal,
+[  --with-openal           use OpenAL for sound (default)],
+[ openal=$withval ], [ openal=yes ])
 
 AM_PATH_SDL([1.1.4], [sdl_found="yes"], [sdl_found="no"])
 if test "$sdl_found" = yes; then
@@ -55,19 +64,11 @@ else
   AC_MSG_ERROR([You need to install SDL (http://www.libsdl.org/).])
 fi
 
-if test "x$opengl" = xmaybe; then
+if test "x$opengl" != xno; then
   AC_CHECK_HEADER(GL/gl.h, GL_h=yes, GL_h=no)
-  AC_CHECK_LIB(GL, glGetString, GL_lib=yes, GL_lib=no)
-  AC_MSG_CHECKING([OpenGL])
-  if test "x$GL_h" = "xno"; then
-    if test "x$opengl" = xyes; then
-      AC_MSG_ERROR([You need to install OpenGL header files (usually a -dev package).])
-    else
-      opengl=no
-    fi
-  else
-    opengl=yes
-  fi
+  GL_lib=yes
+  AC_CHECK_LIB(GL, main, GLLIB=GL, 
+               [AC_CHECK_LIB(opengl32, main, GLLIB=opengl32, GL_lib=no)])
   if test "x$GL_lib" = "xno"; then
     if test "x$opengl" = xyes; then
       AC_MSG_ERROR([You need to install OpenGL.])
@@ -75,27 +76,59 @@ if test "x$opengl" = xmaybe; then
       opengl=no
     fi
   else
-    opengl=yes
+    if test "x$GL_h" = "xno"; then
+      if test "x$opengl" = xyes; then
+        AC_MSG_ERROR([You need to install OpenGL header files (usually a -dev package).])
+      else
+        opengl=no
+      fi
+    else
+      opengl=yes
+    fi
   fi
 fi
+AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = xyes; then
-  AC_DEFINE(OPENGL, 1, [OpenGL acceleration])
-  LIBS="$LIBS -lGL -ljpeg"
+  AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
+  LIBS="$LIBS -l$GLLIB -ljpeg"
   AC_SUBST(RENDERER, "ivis_opengl")
+  AC_MSG_RESULT([yes])
 else
   AC_SUBST(RENDERER, "ivis02")
+  AC_MSG_RESULT([no])
 fi
 
-AC_CHECK_HEADER(AL/al.h, AL_h=yes, AL_h=no)
-AC_CHECK_LIB(openal, alGetString, AL_lib=yes, AL_lib=no)
+if test "x$openal" != xno; then
+  AC_CHECK_HEADER(AL/al.h, AL_h=yes, AL_h=no)
+  AL_lib=yes
+  AC_CHECK_LIB(openal, main, ALLIB=openal, 
+               [AC_CHECK_LIB(openal32, main, ALLIB=openal32, AL_lib=no)])
+  if test "x$AL_lib" = "xno"; then
+    if test "x$openal" = xyes; then
+      AC_MSG_ERROR([You need to install OpenAL.])
+    else
+      openal=no
+    fi
+  else
+    if test "x$AL_h" = "xno"; then
+      if test "x$openal" = xyes; then
+        AC_MSG_ERROR([You need to install OpenAL header files (usually a -dev package).])
+      else
+        openal=no
+      fi
+    else
+      openal=yes
+    fi
+  fi
+fi
 AC_MSG_CHECKING([OpenAL])
-if test "x$AL_h" = "xno"; then
-  AC_MSG_ERROR([You need to install OpenAL header files (usually a -dev package).])
+if test "x$openal" = xyes; then
+  LIBS="$LIBS -l$ALLIB"
+  AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
 fi
-if test "x$AL_lib" = "xno"; then
-  AC_MSG_ERROR([You need to install OpenAL.])
-fi
-LIBS="$LIBS -lopenal"
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
@@ -129,5 +162,5 @@ echo ""
 echo "Warzone will compile with the following components:"
 echo ""
 echo " OpenGL acceleration:   $opengl"
-echo " OpenAL sound system:   yes"
+echo " OpenAL sound system:   $openal"
 echo ""
