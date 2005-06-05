@@ -1,8 +1,9 @@
 
 
-#ifdef MSVC
 
-#define DRIVEFUNCINLINE _inline
+#ifdef _MSC_VER	  //   //sigh... well, we really need either __forceinline or __inline for win32(.net)...
+//#undef DRIVEFUNCINLINE
+#define DRIVEFUNCINLINE  __inline
 
 #else
 

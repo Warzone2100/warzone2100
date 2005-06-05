@@ -3,9 +3,9 @@
  *  Handles the In Game MultiPlayer Screen, alliances etc...
  *  Also the selection of disk files..
  */
-
+#ifndef WIN32
 #include <unistd.h>
-
+#endif	//above line not needed for win32.  --Qamly
 #include "frame.h"
 #include "widget.h"
 

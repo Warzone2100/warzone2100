@@ -55,8 +55,8 @@
 /* Turn on basic debugging if a MSVC debug build and NODEBUG has not been defined */
 #ifdef _DEBUG
 #ifndef NODEBUG
-#ifndef DEBUG
-#define DEBUG
+#ifndef DEBUG2		//Changed since some of this debug code breaks .exe! (crashed) [need to fix] -Qamly
+#define DEBUG2		//ditto as above.
 #endif
 #endif
 #endif
@@ -65,10 +65,10 @@
    Turn on debugging if FORCEDEBUG has been defined. */
 #ifdef _NDEBUG
 #ifndef FORCEDEBUG
-#undef DEBUG
+#undef DEBUG	//that is one way to turn it off... ;)
 #else
 #ifndef DEBUG
-#define DEBUG
+#define DEBUG1	//Change since some debug code breaks the .exe. :eek: [need to fix]--Qamly
 #endif
 #endif
 #endif

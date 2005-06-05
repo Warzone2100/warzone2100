@@ -278,8 +278,8 @@ extern void mapSaveTexture(void);
 extern void	mapWaterProcess( void );
 
 
-#ifdef MSVC
-#define FUNCINLINE _inline
+#ifdef _MSC_VER			//ack, not _inline, but __inline or __forceinline needed --Qamly.
+#define FUNCINLINE __inline
 #else
 
 #undef FUNCINLINE

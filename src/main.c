@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
 #endif
 
-#ifdef WIN32
+#ifdef WIN32				//Note, fix this like linux so we don't use the reg, and use config file? -Q
 	strcpy(SaveGamePath,"savegame\\");
 	strcpy(MultiForcesPath,"multiplay\\forces\\");
 	strcpy(MultiCustomMapsPath,"multiplay\\custommaps\\");

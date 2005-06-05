@@ -4,9 +4,9 @@
  * Parse command line arguments
  *
  */
-
+#ifndef WIN32
 #include <unistd.h>
-
+#endif	//above line not for .net I should say..  --Qamly
 #include "frame.h"
 #include "widget.h"
 

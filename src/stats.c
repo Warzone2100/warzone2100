@@ -483,7 +483,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 					waterGfx[MAX_NAME_SIZE], muzzleGfx[MAX_NAME_SIZE],
 					trailGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 	STRING			fireOnMove[10], weaponClass[15], weaponSubClass[15],
-					weaponEffect[15], movement[15], facePlayer[5],
+					weaponEffect[16], movement[15], facePlayer[5],		//weaponEffect[15] caused stack corruption. --Qamly
 					faceInFlight[5],lightWorld[5];
 	UDWORD			longRange, effectSize, numAttackRuns, designable;
 	UDWORD			numRounds;

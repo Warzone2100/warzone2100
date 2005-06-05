@@ -170,12 +170,13 @@ SDWORD i;
 	Frames++;
 }
 
-/* replacement for win32 function */
+/* replacement for win32 function */	//Check this.  [test] --Qamly
+#ifndef WIN32									//Note, I vote for name change, since we are using SDL now right? --Qamly
 DWORD GetTickCount()
 {
         return (DWORD) SDL_GetTicks();
 }
-
+#endif
 /* Return the current frame rate */
 UDWORD frameGetFrameRate(void)
 {
@@ -347,7 +348,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 		mouseOn = TRUE;
 		displayMouse = TRUE;
 	}
-	else
+	else	//Below is glide stuff.. never used right? --Qamly
 	{
 		mouseOn = FALSE;
 		displayMouse = FALSE;

@@ -26,7 +26,7 @@
 static FILE *pDebugFile = NULL;
 static BOOL StringOut = TRUE;
 
-#ifdef WIN32
+#ifdef WIN321	//All this stuff NOT needed in win32! -Qamly
 // message and assert callbacks
 static DB_MBCALLBACK	mbCallback = NULL;
 static DB_MBCALLBACK	errorCallback = NULL;
@@ -76,10 +76,11 @@ void dbg_printf(SBYTE *pFormat, ...)
 	/* Output it */
 	if (StringOut)
 	{
-#ifdef WIN32
+#ifdef WIN321	//Not needed on win32? --Qamly
 		OutputDebugString(aBuffer);
 #else
-		fprintf(stderr, "%s", aBuffer); fflush(stderr);
+		fprintf(stderr, "%s", aBuffer);
+	    fflush(stderr);
 #endif
 	}
 
@@ -155,7 +156,7 @@ void dbg_MessageBox(SBYTE *pFormat, ...)
 {
 	SBYTE		aBuffer[DEBUG_STR_MAX];   // Output string buffer
     va_list		pArgs;					  // Format arguments
-#ifdef WIN32
+#ifdef WIN321  //Again, don't look like it is needed. --Qamly
 	DB_MBRETVAL	retVal;
 #endif
 	
@@ -168,7 +169,7 @@ void dbg_MessageBox(SBYTE *pFormat, ...)
 	/* Output it */
 	dbg_printf("MB: %s\n", aBuffer);
 
-#ifdef WIN32
+#ifdef WIN321  //Not needed? --Qamly
 	/* Ensure the box can be seen */
 	screenFlipToGDI();
 
@@ -195,7 +196,7 @@ static SBYTE aErrorFile[DEBUG_STR_MAX]=ERROR_DEFAULT_FILE;
 static UDWORD ErrorLine;
 void dbg_ErrorPosition(SBYTE *pFile, UDWORD Line)
 {
-#ifdef WIN32
+#ifdef WIN321  //Don't look like it is needed.  --Qamly
 	if (pFile == NULL)
 	{
 		/* Ensure the box can be seen */
@@ -231,7 +232,7 @@ void dbg_ErrorBox(SBYTE *pFormat, ...)
 {
 	SBYTE		aBuffer[DEBUG_STR_MAX] = "";	// Output string buffer
     va_list		pArgs;							// Format arguments
-#ifdef WIN32
+#ifdef WIN321		//Not needed --Qamly
 	DB_MBRETVAL	retVal;
 #endif
 	
@@ -250,7 +251,7 @@ void dbg_ErrorBox(SBYTE *pFormat, ...)
 	/* Output it */
 	dbg_printf("ErrorBox: %s\n", aBuffer);
 
-#ifdef WIN32
+#ifdef WIN321  //Don't look like it is needed.  --Qamly
 	/* Ensure the box can be seen */
 	screenFlipToGDI();
 
@@ -281,7 +282,7 @@ void dbg_AssertPosition(SBYTE *pFile, UDWORD Line)
 {
 	if (pFile == NULL)
 	{
-#ifdef WIN32
+#ifdef WIN321	//Do we care on win32? Just stick with linux error messages? --Qamly
 		/* Ensure the box can be seen */
 		screenFlipToGDI();
 

@@ -11,9 +11,14 @@
 #endif
 
 #include <stdio.h>
+#ifndef _MSC_VER		//um.. can't find this in win32?  ..Bah, compiler specific crud.
 #include <stdint.h>
+#endif
 #include <string.h>
 #include <SDL/SDL.h>
+#ifdef WIN32
+#include <windows.h>  //needed for gl.h!  --Qamly
+#endif
 #include <GL/gl.h>
 #include <jpeglib.h>
 #include <setjmp.h>

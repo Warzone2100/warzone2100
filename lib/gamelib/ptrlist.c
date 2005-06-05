@@ -13,7 +13,7 @@ extern void					*g_ElementToBeRemoved;
 
 /***************************************************************************/
 
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs			//Not really needed I guess?  -Qamly		-kill
 static CRITICAL_SECTION		critSecAudio;
 #endif
 /***************************************************************************/
@@ -48,7 +48,7 @@ ptrList_Create( PTRLIST **ppsList, UDWORD udwInitElements,
 	(*ppsList)->udwElementSize = udwElementSize;
 
 	ptrList_Init( *ppsList );
-#ifdef WIN32	//ffs
+#ifdef WIN321	//ffs		//Not really needed. --Qamly	-kill
 	InitializeCriticalSection( &critSecAudio );
 #endif
 	return TRUE;
@@ -70,7 +70,7 @@ ptrList_Destroy( PTRLIST *ptrList )
 
 	/* free struct */
 	FREE( ptrList );
-#ifdef WIN32		// ffs
+#ifdef WIN321		// ffs	//Not really needed. --Qamly	-kill
 	DeleteCriticalSection( &critSecAudio );
 #endif
 }
@@ -187,7 +187,7 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 
 	psPrevNode = NULL;
 	psCurNode = ptrList->psNode;
-#ifdef WIN32	//ffs
+#ifdef WIN321	//ffs	//Not really needed. --Qamly	-kill
 	EnterCriticalSection( &critSecAudio );
 #endif
 
@@ -218,7 +218,7 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 		psPrevNode->psNext = psNode;
 		psNode->psNext = psCurNode;
 	}
-#ifdef WIN32		// ffs
+#ifdef WIN321		// ffs	//Not really needed. --Qamly	-kill
 	LeaveCriticalSection( &critSecAudio );
 #endif
 
@@ -237,7 +237,7 @@ ptrList_RemoveElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 
 	psPrevNode = NULL;
 	psCurNode = ptrList->psNode;
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs	//Not really needed. --Qamly	-kill
 	EnterCriticalSection( &critSecAudio );
 #endif
 
@@ -301,7 +301,7 @@ ASSERT( (psCurNode->psElement == psElement,
 
 		bOK = TRUE;
 	}
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs	//Not really needed. --Qamly	-kill
 	LeaveCriticalSection( &critSecAudio );
 #endif
 	return bOK;
@@ -313,7 +313,7 @@ void *
 ptrList_GetNext( PTRLIST *ptrList )
 {
 	void	*pElement = NULL;
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs	//Not really needed. --Qamly	-kill
 	EnterCriticalSection( &critSecAudio );
 #endif
 	if ( ptrList == NULL )
@@ -345,7 +345,7 @@ ptrList_GetNext( PTRLIST *ptrList )
 			pElement = ptrList->psCurNode->psElement;
 		}
 	}
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs	//Not really needed. --Qamly	-kill
 	LeaveCriticalSection( &critSecAudio );
 #endif
 	return pElement;
@@ -357,7 +357,7 @@ void *
 ptrList_GetFirst( PTRLIST *ptrList )
 {
 	void	*pElement = NULL;
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs	//Not really needed. --Qamly	-kill
 	EnterCriticalSection( &critSecAudio );
 #endif
 	ptrList->bDontGetNext = FALSE;
@@ -371,7 +371,7 @@ ptrList_GetFirst( PTRLIST *ptrList )
 	{
 		pElement = ptrList->psCurNode->psElement;
 	}
-#ifdef WIN32	// ffs 
+#ifdef WIN321	// ffs	//Not really needed. --Qamly	--kill
 	LeaveCriticalSection( &critSecAudio );
 #endif
 	return pElement;

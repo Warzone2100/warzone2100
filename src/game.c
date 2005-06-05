@@ -4,9 +4,9 @@
 
 /* Standard library headers */
 #include <stdio.h>
-#ifdef WIN32
-#include <direct.h>	   
-#endif
+//#ifdef WIN32			//away directX! -Q
+//#include <direct.h>	   
+//#endif
 #include <assert.h>
 
 /* Warzone src and library headers */

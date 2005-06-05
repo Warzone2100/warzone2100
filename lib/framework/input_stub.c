@@ -90,7 +90,9 @@ void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 		return;
 	}
 	ASSERT(((code >= 0) && (code <= KEY_MAXSCAN), "Invalid key code: %d", code));
+#ifndef WIN32
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
+#endif //no snprinf in win32* (well...) --Qamly
 }
 
 
@@ -255,7 +257,7 @@ void inputProcessEvent(SDL_Event *event)
 
 
 
-				DBP1(("Code: %x\n", vk));
+				DBP1(("Code: %x\n", vk))		//This breaks with .NET, [DBP1(("Code: %x\n", vk));]it don't want the ; at end. --Qamly
 
 				unsigned char char_code = event->key.keysym.unicode;
 

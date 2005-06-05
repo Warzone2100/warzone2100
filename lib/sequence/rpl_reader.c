@@ -1,5 +1,7 @@
 #include <stdlib.h>
-
+#ifdef WIN32
+#include <windows.h>
+#endif //looks like we need this. --Qamly
 #include "adpcm.h"
 #include "frame.h"
 #include "rpl_reader.h"
@@ -278,12 +280,15 @@ unsigned int rpl_decode_video_unknown(RPL* rpl, char* in, unsigned int in_size, 
 	return 0;
 }
 
-int rpl_decode_next_image(RPL* rpl, char* buffer) {
+int rpl_decode_next_image(RPL* rpl, char* buffer)
+{
+	unsigned int data_size = rpl->chunks[rpl->current_video_frame].video_size;
+
 	if (rpl->current_video_frame >= rpl->nb_chunks) {
 		return -1;
 	}
 
-	unsigned int data_size = rpl->chunks[rpl->current_video_frame].video_size;
+//	unsigned int data_size = rpl->chunks[rpl->current_video_frame].video_size;		//can't have this here in .c rules that is. ;)
 
 	fseek(rpl->f, rpl->chunks[rpl->current_video_frame].offset, SEEK_SET);
 	fread(data_buffer, data_size, 1, rpl->f);

@@ -16,6 +16,7 @@
 #endif
 
 #ifdef WIN32
+#define WIN32_LEAN_AND_MEAN
 # include <windows.h>
 #endif
 
@@ -151,9 +152,13 @@ typedef struct
     DWORD dwCurrentPlayers;
 } DPSESSIONDESC2;
 #endif
-
+#ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly	-kill
 #define _inline inline
 #define __inline inline
+#else
+#define _inline __inline
+//#define __inline __inline		//not needed really.
+#endif //win32
 
 /* missing define - only used in Screen.c */
 #define DDGDI_GETHOSTIDENTIFIER 1

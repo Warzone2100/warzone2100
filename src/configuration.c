@@ -62,7 +62,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	// fx vol
 	if(getWarzoneKeyNumeric("fxvol", &val))
 	{
-		mixer_SetWavVolume((SDWORD)val);
+		mixer_SetWavVolume((SDWORD)val);//was val
 	}
 	
 	// //////////////////////////

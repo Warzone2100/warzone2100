@@ -241,6 +241,7 @@ extern	char* m_textmsg YY_ARGS((int id, const char* str, char* cls));
 #define	YY_DECL	
 #endif
 
+
 /*
  * You can redefine lev_getc. For YACC Tracing, compile this code
  * with -DYYTRACE to get input from yt_getc

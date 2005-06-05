@@ -48,9 +48,9 @@ FILE* unix_fopen(char* filename, char* mode);
 #include "font.h"
 #include "heap.h"
 #include "treap.h"
-#ifdef WIN32
-#include "w95trace.h"
-#endif
+//#ifdef WIN32		//bah, not needed.  --Qamly
+//#include "w95trace.h"
+//#endif
 #include "fractions.h"
 #include "trig.h"
 #include "frameresource.h"

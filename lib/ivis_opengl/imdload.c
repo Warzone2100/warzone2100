@@ -358,7 +358,12 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 		if (bTextured)
 		{
 			//resToLower(texfile);
+#ifdef WIN32				//fixed for win32
+//          printf("texfile cmp in imdload.c :%s\n", texfile);
+          if (strnicmp(texfile, "page-", 5) == 0)
+          #else
 			if (strncasecmp(texfile, "page-", 5) == 0)
+#endif //win32 don't got that function... (well...)  --Qamly.
 			{
 				for(i=5; i<(SDWORD)strlen(texfile); i++)
 				{

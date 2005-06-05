@@ -8,6 +8,9 @@
 /***************************************************************************/
 
 #include <string.h>
+#ifdef WIN32
+#include <windows.h>  //needed for gl.h!  --Qamly
+#endif
 #include <GL/gl.h>
 
 #include "frame.h"
