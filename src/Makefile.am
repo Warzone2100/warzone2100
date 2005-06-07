@@ -1,7 +1,7 @@
 bin_PROGRAMS = warzone
 AM_CPPFLAGS = -I../lib/framework -I../lib/gamelib -I../lib/$(RENDERER) \
 	-I../lib/netplay -I../lib/script -I../lib/sequence -I../lib/sound \
-	-I../lib/widget
+	-I../lib/widget -I..
 warzone_SOURCES = \
 		ai.c \
 		astar.c \
