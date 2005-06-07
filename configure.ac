@@ -40,9 +40,15 @@ AC_HEADER_TIME
 
 AC_ARG_ENABLE(debug,
 [  --enable-debug          run in debug mode],
-[ debug=$withval ], [ debug=no ])
-if test "x$debug" = xyes; then
-  CFLAGS="$CFLAGS -DDEBUG"
+[ debug=$enableval ], [ debug=no ])
+AC_MSG_CHECKING([debug mode])
+if test "$debug" = yes; then
+  # -O0 turns off all optimizations; this is necessary for accurate debugging
+  CFLAGS="-O0 -g"
+  AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
 fi
 
 #   --without-opengl will build without opengl
@@ -167,3 +173,7 @@ echo ""
 echo " OpenGL acceleration:   $opengl"
 echo " OpenAL sound system:   $openal"
 echo ""
+if test "x$debug" = xyes; then
+  echo " *** Running in debug mode! ***"
+  echo ""
+fi

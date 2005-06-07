@@ -7,7 +7,9 @@
 #ifndef _frame_h
 #define _frame_h
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #ifdef WIN32
 #ifndef __GNUC__
