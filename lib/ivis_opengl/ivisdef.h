@@ -22,7 +22,7 @@
  */
 /***************************************************************************/
 #define BSPIMD	// now defined for all versions (optional BSP handled on all formats)
-#ifdef WIN321		//Why is this only for win32?  --Qamly [test] --Not needed!
+#ifdef WIN321		//Not really needed I guess, however, see debug.c comments.  -Qamly	
 	#define iV_DDX
 #endif
 

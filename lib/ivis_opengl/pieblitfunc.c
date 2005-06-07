@@ -8,7 +8,7 @@
 /***************************************************************************/
 
 #include <time.h>
-#ifdef WIN32
+#ifdef _MSC_VER	
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>

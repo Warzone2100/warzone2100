@@ -90,9 +90,9 @@ void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 		return;
 	}
 	ASSERT(((code >= 0) && (code <= KEY_MAXSCAN), "Invalid key code: %d", code));
-#ifndef WIN32
+#ifndef _MSC_VER	
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
-#endif //no snprinf in win32* (well...) --Qamly
+#endif //no snprinf in _MSC_VER	* (well...) --Qamly
 }
 
 

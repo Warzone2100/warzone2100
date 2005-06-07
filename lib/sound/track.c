@@ -118,7 +118,7 @@ BOOL sound_Init( HWND hWnd, SDWORD iMaxSameSamples )
 	}
 
 	// init audio array
-	g_apTrack = (TRACK **) MALLOC( sizeof(TRACK *) * MAX_TRACKS );
+	g_apTrack = (TRACK **) MALLOC( sizeof(TRACK* ) * MAX_TRACKS);
 	for ( i = 0; i < MAX_TRACKS; i++ )
 	{
 		g_apTrack[i] = NULL;
@@ -188,13 +188,15 @@ BOOL sound_SetTrackVals
 			return FALSE;
 		}
 
-		// set track members
-		psTrack->bLoop = bLoop;
+		// set track members								
+		psTrack->bLoop = bLoop;						
 		psTrack->iVol = iVol;
 		psTrack->iPriority = iPriority;
 		psTrack->iAudibleRadius = iAudibleRadius;
+		psTrack->iTime =0;			//added, since they really should init all the values. -Q
 		psTrack->iTimeLastFinished = 0;
 		psTrack->iNumPlaying = 0;
+		psTrack->bCompressed =0;	//added  this was the bugger that caused grief for .net.  It was never defined. -Q		
 
 		// I didn't comment the below value out, so I guess NOT needed. -Q
 		//
@@ -506,7 +508,7 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 
 	psTrack = g_apTrack[psSample->iTrack];
 
-	// check only playing compressed audio on queue channel
+/*	// check only playing compressed audio on queue channel
 #if USE_COMPRESSED_SPEECH
 	if ( bQueued && !psTrack->bCompressed )
 	{
@@ -526,7 +528,7 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 		DBPRINTF( ("sound_PlayTrack: trying to play compressed speech %s!\n", psTrack->pName) );
 		return FALSE;
 	}
-#endif
+#endif*/
 	return sound_Play2DSample( psTrack, psSample, bQueued );
 }
 
@@ -541,12 +543,12 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 	//~~~~~~~~~~~~~
 
 	psTrack = g_apTrack[psSample->iTrack];
-	if ( psTrack->bCompressed )
+/*	if ( psTrack->bCompressed )
 	{
 		DBPRINTF( ("sound_PlayTrack: trying to play compressed audio %s!\n", psTrack->pName) );
 		return FALSE;
 	}
-
+*/
 	return sound_Play3DSample( psTrack, psSample );
 }
 

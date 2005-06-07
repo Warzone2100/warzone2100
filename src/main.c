@@ -103,14 +103,16 @@ int main(int argc, char *argv[])
 	GAMECODE		loopStatus = 0;
 	iColour*		psPaletteBuffer;
 	SDWORD			pSize;
-
+#ifdef _MSC_VER	
+	int tmpFlag; //debug stuff for VC -Q
+#endif
 #ifndef WIN32
 
 	char	UnixUserPath[255];
 
 #endif
 
-#ifdef WIN32				//Note, fix this like linux so we don't use the reg, and use config file? -Q
+#ifdef WIN32				//Note, Should we fix this like linux so we don't use the reg, and use config file? -Q
 	strcpy(SaveGamePath,"savegame\\");
 	strcpy(MultiForcesPath,"multiplay\\forces\\");
 	strcpy(MultiCustomMapsPath,"multiplay\\custommaps\\");
@@ -147,6 +149,18 @@ int main(int argc, char *argv[])
 //		DBERROR(("Unable to create DirectX 6 interface.\nPlease ensure DirectX 6 or later is installed."));
 //		return -1;
 //	}
+//=========================
+/*
+#ifdef _DEBUG		//Debug stuff for .net, don't delete :)  -Q
+#ifdef _MSC_VER
+tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+tmpFlag |=(_CRTDBG_CHECK_ALWAYS_DF|_CRTDBG_ALLOC_MEM_DF);
+_CrtSetDbgFlag( tmpFlag );			//just turning on VC debug stuff...
+#endif
+#endif
+*/
+//=========================
+
 
 	war_SetDefaultStates();
 

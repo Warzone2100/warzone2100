@@ -358,12 +358,12 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 		if (bTextured)
 		{
 			//resToLower(texfile);
-#ifdef WIN32				//fixed for win32
+#ifdef  _MSC_VER					//fixed for .net
 //          printf("texfile cmp in imdload.c :%s\n", texfile);
           if (strnicmp(texfile, "page-", 5) == 0)
           #else
 			if (strncasecmp(texfile, "page-", 5) == 0)
-#endif //win32 don't got that function... (well...)  --Qamly.
+#endif //.net don't got that function... (well...)  --Qamly.
 			{
 				for(i=5; i<(SDWORD)strlen(texfile); i++)
 				{

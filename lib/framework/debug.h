@@ -60,7 +60,13 @@
 #endif
 #endif
 #endif
-
+//===========
+#ifdef _DEBUG
+#ifdef _MSC_VER	
+#include <crtdbg.h>		//we will try some VC mem routines... -Q
+#endif
+#endif
+//==========
 /* Turn off debugging if a MSVC release build and FORCEDEBUG has not been defined.
    Turn on debugging if FORCEDEBUG has been defined. */
 #ifdef _NDEBUG

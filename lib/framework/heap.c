@@ -138,6 +138,7 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 		DBERROR(("heapCreate: Out of memory"));
 		return FALSE;
 	}
+//	memset(*ppsHeap,0,sizeof(OBJ_HEAP));			//setting everything to 0 first (debug test)-Q
 	(*ppsHeap)->pMemory = (UBYTE *)MALLOC(size * init);
 
 /*

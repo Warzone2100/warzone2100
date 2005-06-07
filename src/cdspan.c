@@ -54,8 +54,8 @@ static STRING		g_szCurDriveName[MAX_STR] = "";
 
 BOOL
 cdspan_GetDriveName( BOOL bCheckAny, STRING szDriveName[], ... )
-{
-#ifdef WIN321		//Note, why do we need this?? --QAMLY [test]	--we don't  --kill it!
+{							 //I use WIN321 to disable these for now -Q
+#ifdef WIN321		//Neither linux nor win32 uses this, but maybe sometime in future? --QAMLY 
 	UINT		uiRet;
 	STRING		szDrives[MAX_STR],
 				szVolNameList[MAX_VOL_NAMES][MAX_STR],
@@ -203,7 +203,7 @@ cdspan_PlayInGameAudio( STRING szFileName[], SDWORD iVol )
 static BOOL
 cdspan_GetCDLabel( STRING *szLabel )
 {
-#ifdef WIN321		//Note, why do we even need this? --Qamly  [test]	--we don't!  kill it!
+#ifdef WIN321		//Neither linux nor win32 uses this, but maybe sometime in future? --QAMLY
 	char	szVolName[MAX_STR], szSysName[MAX_STR];
 	DWORD	dwVolSerialNum, dwFlags, dwMaxlen;
 

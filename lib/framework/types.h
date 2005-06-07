@@ -152,13 +152,13 @@ typedef struct
     DWORD dwCurrentPlayers;
 } DPSESSIONDESC2;
 #endif
-#ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly	-kill
+#ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly	
 #define _inline inline
 #define __inline inline
 #else
 #define _inline __inline
 //#define __inline __inline		//not needed really.
-#endif //win32
+#endif //_MSC_VER
 
 /* missing define - only used in Screen.c */
 #define DDGDI_GETHOSTIDENTIFIER 1

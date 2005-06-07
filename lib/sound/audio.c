@@ -390,7 +390,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
 	if ( psSample != NULL )
 	{
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
+		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );		//[check] -Q
 		psSample->iTrack = iTrack;
 		psSample->x = SAMPLE_COORD_INVALID;
 		psSample->y = SAMPLE_COORD_INVALID;
@@ -719,7 +719,7 @@ BOOL audio_SetTrackVals
 	}
 
 	// get track pointer from resource
-	psTrack = resGetData( "WAV", szFileName );
+	psTrack = resGetData( "WAV", szFileName );		//at this point we have 4 valid entries, and 8 invalid -Q
 	if ( psTrack == NULL )
 	{
 		DBPRINTF( ("audio_SetTrackVals: track %s resource not found\n", szFileName) );
@@ -740,7 +740,7 @@ BOOL audio_SetTrackVals
 		}
 		else
 		{
-			return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius, VagID );
+			return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius, VagID );	//now psTrack should be fully set. -Q
 		}
 	}
 }
@@ -883,7 +883,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	else
 	{
 		// setup sample
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
+		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );						// [check] -Q
 		psSample->iTrack = iTrack;
 		psSample->x = iX;
 		psSample->y = iY;
@@ -1078,7 +1078,7 @@ void audio_PlayTrack( int iTrack )
 	if ( psSample != NULL )
 	{
 		// setup sample
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
+		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );	  // Set everything to 0  (looks good) -Q
 		psSample->iTrack = iTrack;
 		psSample->bRemove = FALSE;
 

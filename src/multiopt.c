@@ -501,7 +501,7 @@ BOOL multiInitialise(VOID)
 {
 	// NET AUDIO CAPTURE 
 	NETinitAudioCapture();
-#ifdef WIN32			//Disabled for now.  --Qamly
+#ifdef WIN32			//Disabled for now.  (returns FALSE always anyway) --Qamly
 //	NETinitPlaybackBuffer(audio_GetDirectSoundObj());			// pass in a dsound pointer to use.
 #endif
 

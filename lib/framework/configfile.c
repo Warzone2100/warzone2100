@@ -5,7 +5,7 @@
 ///
 //
 // * Windows version
-#ifdef WIN32	// registry stuff IS used but it shouldn't be! --Qamly
+#ifdef WIN32	// registry stuff IS used but it shouldn't be, I see no need, we can use same code linux does. --Qamly
 static HKEY ghWarzoneKey = NULL;
 
 //

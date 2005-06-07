@@ -8,9 +8,9 @@
 
 #include <ctype.h>
 #include <string.h>
-#ifndef WIN32
+#ifndef  _MSC_VER	
 #include <unistd.h>
-#endif		//above line not in win32 --Qamly
+#endif		//above line not in .net --Qamly
 #include "frame.h"
 #include "widget.h"
 #include "piepalette.h"		// for predefined colours.
