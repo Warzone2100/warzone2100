@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libivis02.a
-AM_CPPFLAGS = -I../framework -I../gamelib
+AM_CPPFLAGS = -I../framework -I../gamelib -I../..
 libivis02_a_SOURCES = \
 	bitimage.c \
 	bspimd.c \

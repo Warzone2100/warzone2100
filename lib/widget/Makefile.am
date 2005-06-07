@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libwidget.a
-AM_CPPFLAGS = -I../framework -I../$(RENDERER)
+AM_CPPFLAGS = -I../framework -I../$(RENDERER) -I../..
 libwidget_a_SOURCES = \
 	bar.c \
 	button.c \

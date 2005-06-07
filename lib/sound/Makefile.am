@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libsound.a
-AM_CPPFLAGS = -I../framework -I../gamelib
+AM_CPPFLAGS = -I../framework -I../gamelib -I../..
 libsound_a_SOURCES = \
 	audio.c \
 	cdaudio.c \

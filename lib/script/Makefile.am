@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libscript.a
-AM_CPPFLAGS = -I../framework
+AM_CPPFLAGS = -I../framework -I../..
 libscript_a_SOURCES = \
 	codeprint.c \
 	event.c \

@@ -1,4 +1,5 @@
 noinst_LIBRARIES = libframework.a
+AM_CPPFLAGS = -I../..
 libframework_a_SOURCES = \
 	block.c \
 	configfile.c \

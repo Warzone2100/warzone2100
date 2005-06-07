@@ -1,6 +1,5 @@
 noinst_LIBRARIES = libgamelib.a
-
-AM_CPPFLAGS = -I../framework -I../sound -I../$(RENDERER)
+AM_CPPFLAGS = -I../framework -I../sound -I../$(RENDERER) -I../..
 libgamelib_a_SOURCES = \
 	anim.c \
 	animobj.c \

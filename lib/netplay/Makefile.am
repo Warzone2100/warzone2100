@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libnetplay.a
-AM_CPPFLAGS = -I../framework
+AM_CPPFLAGS = -I../framework -I../..
 libnetplay_a_SOURCES = \
 	netaudio_stub.c \
 	netcrypt.c \

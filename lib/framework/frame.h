@@ -7,6 +7,8 @@
 #ifndef _frame_h
 #define _frame_h
 
+#include "config.h"
+
 #ifdef WIN32
 #ifndef __GNUC__
 #pragma warning (disable : 4201 4214 4115 4514)
