@@ -381,7 +381,7 @@ void screen_SetBackDropFromFile(char* filename) {
 
 void screen_StopBackDrop(void)
 {
-	bBackDrop = TRUE;	//checking [movie]
+	bBackDrop = FALSE;	//checking [movie]
 }
 
 void screen_RestartBackDrop(void)
