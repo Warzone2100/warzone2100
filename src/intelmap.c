@@ -778,7 +778,10 @@ void intProcessIntelMap(UDWORD id)
 // Add all the Video Sequences for a message ... works on PC &  PSX
 void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 {
+
 	BOOL bLoop = FALSE;
+
+//		printf("start message sequnce\n");		//[testing if we hit this] -Q
 	//should never have a proximity message here
 	if (psMessage->type == MSG_PROXIMITY)
 	{
@@ -1482,7 +1485,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 	{
 		DBPRINTF(("avt seq=%d [%s]\n",sequence,psSeqDisplay->ppTextMsg[0]));
 		//add each message, first at the top
-		x = VIDEO_TEXT_TOP_X;
+		x = VIDEO_TEXT_TOP_X; 
 		y = VIDEO_TEXT_TOP_Y;
 
 

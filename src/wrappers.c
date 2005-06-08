@@ -328,7 +328,7 @@ TITLECODE titleLoop(void)
 	audio_Update();
 
 		
-	pie_GlobalRenderEnd(TRUE);//force to black
+	pie_GlobalRenderEnd(FALSE);//force to black  //[movie]  --We got no videos yet, so better to display the backdrop... -Q
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 

@@ -1111,7 +1111,7 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 	aSeqList[currentSeq].pSeq = pSeqName;
 	aSeqList[currentSeq].pAudio = pAudioName;
 	aSeqList[currentSeq].bSeqLoop = bLoop;
-	if (pTextName != NULL)
+	if (pTextName != NULL) 
 	{
 		seq_AddTextFromFile(pTextName, FALSE);//SEQ_TEXT_POSITION);//ordinary text not justified
 	}

@@ -192,7 +192,7 @@ void sound_FreeTrack( TRACK *psTrack )
 //
 int sound_GetMaxVolume( void )
 {
-	return 32767;
+	return 32767;		// Why this value? -Q
 }
 
 //*

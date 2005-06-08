@@ -587,14 +587,14 @@ void frontEndNewGame( void )
 			seq_ClearSeqList();
 		
 			seq_AddSeqToList("CAM1\\c001.rpl",NULL,"CAM1\\c001.txa",FALSE,0);
-			/*
-			seq_AddTextForVideo("Dawn, July 4th, 2066", 20, 432, 0, 299);
-			seq_AddTextForVideo("Project HQ.", 0, 0, 0, 299);
-			seq_AddTextForVideo("A New Era", 0, 0, 0, 299);
-			seq_AddTextForVideo("Morning, July 4th, 2066", 20, 432, 399, 699);
-			seq_AddTextForVideo("In-flight to Western Sector", 0, 0, 399, 699);
-			seq_AddTextForVideo("Team Alpha nears its destination", 0, 0, 399, 699);
-			*/
+			
+//			seq_AddTextForVideo("Dawn, July 4th, 2066", 20, 432, 0, 299,0,0);
+//			seq_AddTextForVideo("Project HQ.", 0, 0, 0, 299);
+//			seq_AddTextForVideo("A New Era", 0, 0, 0, 299);
+//			seq_AddTextForVideo("Morning, July 4th, 2066", 20, 432, 399, 699);
+//			seq_AddTextForVideo("In-flight to Western Sector", 0, 0, 399, 699);
+//			seq_AddTextForVideo("Team Alpha nears its destination", 0, 0, 399, 699);
+			
 		
 			seq_StartNextFullScreenVideo();
             break;
@@ -863,6 +863,7 @@ BOOL startOptionsMenu(VOID)
 
 	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS3Y);
 	SnapToID(&InterfaceSnap,3);
+
 
 
 	return TRUE;

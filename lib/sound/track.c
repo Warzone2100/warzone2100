@@ -684,7 +684,7 @@ SDWORD sound_GetGlobalVolume( void )
 	// * } } return iGlobVol;
 	// * #endif Checking if needed --Qamly
 	//
-	return 0;
+	return AUDIO_VOL_MAX;		//return max volume for now... -Q
 }
 
 //*
@@ -704,6 +704,7 @@ void sound_SetGlobalVolume( SDWORD iVol )
 	// * waveOutSetVolume failed\n") );
 	// * } } #endif
 	//
+//	return AUDIO_VOL_MAX;	//this is not used, and function been changed from SDWORD to void... -Q
 }
 
 //*

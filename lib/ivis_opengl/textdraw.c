@@ -750,8 +750,52 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 	}
 }
 
-void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *String, int XPos, int YPos)
+//===========================================================
+// Partial fix for rendering text on 'video', you can read it now. -Q
+// --still to do, add 'boxes' under text so you can see it better.
+//===========================================================
+void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *string, int x, int y)
 {
+	int Index;
+	UWORD ImageID;
+	IVIS_FONT *Font = &iVFonts[ActiveFontID];
+
+	/* Colour selection */
+	pie_BeginTextRender(Font->FontColourIndex);
+
+	while (*string!=0) {
+
+		Index = *string;
+
+		// Toggle colour mode?
+		if(Index == ASCII_COLOURMODE) {
+			if(TextColourIndex >= 0) {
+				OldTextColourIndex = TextColourIndex;
+				TextColourIndex = -1;
+			} else {
+				if(OldTextColourIndex >= 0) {
+					TextColourIndex = OldTextColourIndex;
+				}
+			}
+		} else if(Index == ASCII_SPACE) {
+			x += Font->FontSpaceSize;
+		} else {
+			ImageID = (UWORD)Font->AsciiTable[Index];
+			pie_TextRender(Font->FontFile,ImageID,x,y);
+			x += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
+		}
+
+// Don't use this any more, If the text needs to wrap then use
+// pie_DrawFormattedText() defined above.
+		/* New bit to make text wrap */
+		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
+		{
+			/* Drop it to the next line if we hit screen edge */
+			x = 0;
+			y += iV_GetTextLineSize();
+		}
+		string++;
+	}
 
 }
 
