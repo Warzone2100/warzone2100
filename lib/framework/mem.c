@@ -134,7 +134,7 @@ SDWORD	memBlockCmp(UDWORD	key1, UDWORD key2)
 	return 1;
 }
 
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 
 /* Replacement for malloc that records where the memory was requested.
  * All allocated memory is initialised to INITIALISE_BYTE
@@ -211,29 +211,10 @@ void *memMallocRelease(size_t Size)
 		return blkAlloc(psCurrBlockHeap, Size);
 	}
 
-#if (1)
 	return RMALLOC(Size);
-#else
-// psx version that prints a message if the malloc fails
-{
-	void *t;
-	{
-		char str[16];
-		sprintf(str,"ALLOC %d\n",Size);
-		prnt(1,str,0,0);
-	}
-	t=RMALLOC(Size);
-	if (t==0)
-	{
-		prnt(1,"NOMEM",0,0);
-	}
-	return(t);
-}
-#endif
-
 }
 
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 
 /* Replacement for free
  *
@@ -386,7 +367,7 @@ BOOL memPointerValid(void *pPtr, size_t size)
 /* Recursive function to print out the list of memory blocks */
 SDWORD memRecReport(MEM_NODE *psRoot)
 {
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 	if (psRoot)
 	{
 		DBPRINTF(("%s, line %d : \t", psRoot->pFile, psRoot->line));
@@ -407,7 +388,7 @@ SDWORD memRecReport(MEM_NODE *psRoot)
 	return 0;
 }
 
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 #define MAXMODULES (32)
 typedef struct
 {
@@ -425,7 +406,7 @@ static UDWORD MemTotalAllocated;
 /* Recursive function to total up the amount of mem allocated */
 void memSummary(MEM_NODE *psRoot)
 {
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 
 						// bsort
 	if (psRoot)
@@ -474,7 +455,7 @@ void memMemorySummary(void)
 
 void memMemoryDump(MEM_NODE *Node)
 {
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 
 	int i;
 
@@ -498,7 +479,7 @@ void memMemoryDump(MEM_NODE *Node)
  */
 void memMemoryReport(STRING *pFileName)
 {
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 	SDWORD		TotMem;
 
 	if (pFileName)
@@ -537,7 +518,7 @@ void memMemoryReport(STRING *pFileName)
 /* Display the memory treap */
 void memDisplayTreap(STRING *pFileName)
 {
-#if DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
 	if (pFileName)
 	{
 		DBOUTPUTFILE(pFileName);
