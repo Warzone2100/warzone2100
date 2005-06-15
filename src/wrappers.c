@@ -371,7 +371,7 @@ void loadingScreenCallback(void)
 	lastTick = GetTickCount();
 	pie_GlobalRenderBegin();
 	DrawBegin();
-  	if(pie_GetRenderEngine() == ENGINE_D3D)
+  	if(pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 	{
 		pie_UniTransBoxFill(1,1,2,2,0x00010101, 32);
 	}

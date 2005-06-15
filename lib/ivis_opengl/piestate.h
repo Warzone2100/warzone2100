@@ -30,7 +30,8 @@ typedef	enum	REND_ENGINE
 					ENGINE_4101,
 					ENGINE_SR,
 					ENGINE_GLIDE,
-					ENGINE_D3D
+					ENGINE_D3D,
+					ENGINE_OPENGL
 				}
 				REND_ENGINE;
 

@@ -53,7 +53,7 @@ static UBYTE		aByteScale[256][256];
 void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWORD srcWidth,UDWORD srcHeight,UDWORD srcStride)
 {
 	/*
-	if (pie_GetRenderEngine() == ENGINE_D3D)
+	if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 	{
 		pie_D3DSetupRenderForFlip(destX, destY, pSrcData, srcWidth, srcHeight, srcStride);
 	}

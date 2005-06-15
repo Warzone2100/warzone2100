@@ -2174,7 +2174,7 @@ UDWORD brightness, specular;
 	{
 		pie_SetDitherStatus(TRUE);
 	}
-	else if(pie_GetRenderEngine() == ENGINE_D3D)//JPS smoke strength increased for d3d 12 may 99
+	else if(pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q //JPS smoke strength increased for d3d 12 may 99
 	{
 		transparency = (transparency*3)/2;
 	}

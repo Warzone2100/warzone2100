@@ -3648,7 +3648,7 @@ void intDisplayWidgets(void)
 
 	//		software and glide
 	//		turn off the backdrop
-			if (pie_GetRenderEngine() != ENGINE_D3D)
+			if (pie_GetRenderEngine() != ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 			{
 				screen_StopBackDrop();
 			}

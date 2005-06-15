@@ -1035,6 +1035,7 @@ BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		*ppData = &tilesPCX;
 	}
 	DBPRINTF(("HW Tiles loaded\n"));
+	printf("HW Tiles loaded\n");
 	return TRUE;
 }
 
@@ -1671,7 +1672,7 @@ BOOL dataInitLoadFuncs(void)
 	while(1)
 	{
 		if(CurrentType->aType==NULL)	break;		// if we are at end of list exit 
-
+//		printf(" ==>%s\n",CurrentType->aType);		//TESTING -Q
 		if(!resAddBufferLoad(CurrentType->aType,CurrentType->buffLoad,CurrentType->release))
 		{
 			return FALSE;	// error whilst adding a buffer load

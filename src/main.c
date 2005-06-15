@@ -401,7 +401,7 @@ init://jump here from the end if re_initialising
 		{
 			frameRet = frameUpdate();
 			
-			if (pie_GetRenderEngine() == ENGINE_D3D)
+			if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 			{
 				if ( frameRet == FRAME_SETFOCUS )
 				{
@@ -432,7 +432,7 @@ init://jump here from the end if re_initialising
 					Restart = TRUE;
 				}
 
-				else if (pie_GetRenderEngine() == ENGINE_D3D)
+				else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 				{
 //					dtm_RestoreTextures();
 				}

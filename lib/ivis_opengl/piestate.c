@@ -196,10 +196,12 @@ void pie_ResetStates(void)//Sets all states
 /***************************************************************************/
 
 void pie_SetRenderEngine(REND_ENGINE rendEngine) {
+//	printf("renderstate is (old)%d (new)%d\n",rendStates.rendEngine,rendEngine);	//Quick check to see what we using. -Q
 	rendStates.rendEngine = rendEngine;
 }
 
 REND_ENGINE pie_GetRenderEngine(void) {
+//	printf("renderstate is :%d\n",rendStates.rendEngine);		//Quick check to see what we are using -Q
 	return rendStates.rendEngine;
 }
 

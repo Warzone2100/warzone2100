@@ -113,7 +113,7 @@ BOOL pie_Initialise(SDWORD mode)
 	rendSurface.xpshift		= 10;
 	rendSurface.ypshift		= 10;
 
-	pie_SetRenderEngine(ENGINE_D3D);
+	pie_SetRenderEngine(ENGINE_OPENGL);		//was ENGINE_D3D -Q
 
 	pie_SetDefaultStates();
 	iV_RenderAssign(mode,&rendSurface);

@@ -963,7 +963,7 @@ void drawTiles(iView *camera, iView *player)
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileXYZ.x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 
-				if (pie_GetRenderEngine() == ENGINE_D3D)
+				if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 			 	{
 					tileScreenInfo[i][j].specular.argb = specular;
 		   		}
@@ -5294,7 +5294,7 @@ SDWORD	zone;
 								(PIEVERTEX*)&tileScreenInfo[i+1][j+0],
 								&texturePage,0,0);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
@@ -5311,7 +5311,7 @@ SDWORD	zone;
 								(PIEVERTEX*)&tileScreenInfo[i+1][j+1],
 				&texturePage,0,0);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
@@ -5330,7 +5330,7 @@ SDWORD	zone;
 								(PIEVERTEX*)&tileScreenInfo[i+1][j+0],
 				&texturePage,0,0);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
@@ -5347,7 +5347,7 @@ SDWORD	zone;
 								(PIEVERTEX*)&tileScreenInfo[i+1][j+0],
 				&texturePage,0,0);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
@@ -5477,7 +5477,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
 								&texturePage,0,pie_ADDITIVE);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
@@ -5501,7 +5501,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
 								&texturePage,0,pie_ADDITIVE);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
@@ -5527,7 +5527,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
 								&texturePage,0,pie_ADDITIVE);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
@@ -5551,7 +5551,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
 								&texturePage,0,pie_ADDITIVE);
 		}
-		else if (pie_GetRenderEngine() == ENGINE_D3D)
+		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 		{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}

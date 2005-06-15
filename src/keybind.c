@@ -314,7 +314,7 @@ void	kf_FrameRate( void )
 {
 
 
-	if (pie_GetRenderEngine() == ENGINE_D3D)
+	if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 	{
 		if(weHave3DNow())
 		{
