@@ -953,7 +953,7 @@ static BOOL bActiveBackDrop = FALSE;
 	if ( (keyPressed(KEY_ESC) || bQuitVideo) && !seq_AnySeqLeft() )
 	{
 		/* zero volume before video quit - restore later */
-		g_iGlobalVol = sound_GetGlobalVolume();
+		g_iGlobalVol = mixer_GetWavVolume();
 		mixer_SetWavVolume( 0 );
 		bVolKilled = TRUE;
 	}

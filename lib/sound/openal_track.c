@@ -23,6 +23,8 @@ ALfloat		listenerPos[3] = { 0.0, 0.0, 0.0 };
 BOOL		listenerMoved = FALSE;
 BOOL		cdAudio_Update( void );
 
+ALfloat		sfx_volume = 1.0;
+
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -241,7 +243,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 
 	alGenSources( 1, &(psSample->iSample) );
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
-	alSourcef( psSample->iSample, AL_GAIN, 1.0f );
+	alSourcef( psSample->iSample, AL_GAIN, sfx_volume );
 	alSourcefv( psSample->iSample, AL_POSITION, zero );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, (ALuint) (psTrack->pMem) );
@@ -273,7 +275,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	alGenSources( 1, &(psSample->iSample) );
-	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
+	alSourcef( psSample->iSample, AL_PITCH, sfx_volume );
 	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, (ALuint) (psTrack->pMem) );
@@ -369,14 +371,8 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 		gain = 0.0;
 	}
 
-	alSourcef( iSample, AL_GAIN, gain );
+	alSourcef( iSample, AL_GAIN, gain * sfx_volume );
 
-	//
-	// alSourcef(iSample, AL_MIN_GAIN, gain);
-	//
-	//
-	// alSourcef(iSample, AL_MAX_GAIN, gain);
-	//
 	pos[0] = iX;
 	pos[1] = iY;
 	pos[2] = iZ;
@@ -455,6 +451,24 @@ LPDIRECTSOUND sound_GetDirectSoundObj( void )
 {
 	return NULL;
 }
+
+SDWORD mixer_GetWavVolume( void )
+{
+	return 100*sfx_volume;
+}
+
+void mixer_SetWavVolume( SDWORD iVol )
+{
+	sfx_volume = iVol * 0.01;
+
+	if (sfx_volume < 0.0) {
+		sfx_volume = 0.0;
+	} else if (sfx_volume > 1.0) {
+		sfx_volume = 1.0;
+	}
+}
+
+
 
 //*
 //
