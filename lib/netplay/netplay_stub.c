@@ -90,7 +90,13 @@ void NET_initBufferedSocket(NETBUFSOCKET* bs, TCPsocket s) {
 	bs->bytes = 0;
 }
 
-BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set) {
+BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
+{
+	int size;
+	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
+	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
+
+
 	if (bs->buffer_start != 0) {
 		return FALSE;
 	}
@@ -99,9 +105,7 @@ BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set) {
 		return FALSE;
 	}
 
-	int size;
-	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
-	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
+
 
 	size = SDLNet_TCP_Recv(bs->socket, bufstart, bufsize);
 
@@ -119,7 +123,9 @@ BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set) {
 	return FALSE;
 }
 
-BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg) {
+BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
+{
+	unsigned int size;
 	const NETMSG* message = (NETMSG*)(bs->buffer + bs->buffer_start);
 	const unsigned int headersize =   sizeof(message->size)
 					+ sizeof(message->type)
@@ -130,7 +136,7 @@ BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg) {
 		goto error;
 	}
 
-	const unsigned int size = message->size + headersize;
+	size = message->size + headersize;
 
 	if (size > bs->bytes) {
 		goto error;
