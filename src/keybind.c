@@ -1914,7 +1914,7 @@ void kf_SendTextMessage(void)
 			}		
 			else							 						// display
 			{
-				sprintf(sTextToSend,"%s%c",sTextToSend,ch);
+				sprintf(sTextToSend,"%s%c",sTextToSend,inputGetCharKey());
 			}	
 
 			ch = (CHAR)inputGetKey();
@@ -2453,9 +2453,11 @@ FRACT available_speed[] = {
 	FRACTCONST(3, 2),
 	FRACTCONST(2, 1),
 	FRACTCONST(5, 2),
-	FRACTCONST(3, 1)
+	FRACTCONST(3, 1),
+	FRACTCONST(10, 1),
+	FRACTCONST(20, 1)
 };
-unsigned int nb_available_speeds = 9;
+unsigned int nb_available_speeds = 11;
 
 void kf_SpeedUp( void )
 {

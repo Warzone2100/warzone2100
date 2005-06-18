@@ -128,7 +128,7 @@ LIBS=		framework \
 		sound \
 		widget
 
-EXT_LIBS=	$(OPENAL_LIB)
+EXT_LIBS=	$(OPENAL_LIB) SDL_net
 
 ifeq ($(GFX), opengl)
 LIBS+=ivis_opengl

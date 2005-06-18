@@ -27,6 +27,8 @@
 
 #include "cursors.c"
 
+#define IGNORE_FOCUS
+
 /* Linux specific stuff */
 
 
@@ -249,6 +251,7 @@ static void processEvent(SDL_Event *event)
 {
 	switch(event->type)
 	{
+#ifndef IGNORE_FOCUS
 		case SDL_ACTIVEEVENT:
 			if (event->active.state == SDL_APPINPUTFOCUS || event->active.state == SDL_APPACTIVE)
 			{
@@ -274,6 +277,7 @@ static void processEvent(SDL_Event *event)
 				}
 			}
 			break;
+#endif
 		case SDL_KEYUP:
 		case SDL_KEYDOWN:
 		case SDL_MOUSEBUTTONUP:

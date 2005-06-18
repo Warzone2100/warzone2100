@@ -8,7 +8,6 @@
 
 #include <stdio.h>		// get rid of a couple of warnings.
 
-
 #include "frame.h"
 #include "frameint.h"
 #include "screen.h"
@@ -59,9 +58,6 @@
 
 #include "levels.h"
 
-
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // vars 
 extern char	MultiForcesPath[255];
@@ -82,11 +78,11 @@ extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX
 
 BOOL						bHosted			= FALSE;				//we have set up a game
 UBYTE						sPlayer[128];							// player name (to be used)
-UBYTE						buildTime[8]	 = __TIME__ ;
+UBYTE						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
 static BOOL					bColourChooserUp= FALSE;
 static SWORD				SettingsUp		= 0;
 static UBYTE				InitialProto	= 0;
-//static W_SCREEN				*psConScreen;
+static W_SCREEN				*psConScreen;
 static DWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
 static BOOL					safeSearch		= FALSE;				// allow auto game finding.
@@ -138,11 +134,7 @@ VOID		runGameFind				(VOID);
 VOID		startGameFind			(VOID);
 
 // Connection option functions
-//static BOOL	OptionsUnknown			(UDWORD);
-//static BOOL	OptionsIPX				(UDWORD);
-//static BOOL	Options					(UDWORD);	
-//static BOOL	OptionsInet				(UDWORD);
-//static BOOL	OptionsCable			(UDWORD);	
+static BOOL	OptionsInet				(UDWORD);
 static VOID addConnections			(UDWORD);
 VOID		runConnectionScreen		(VOID);
 BOOL		startConnectionScreen	(VOID);
@@ -150,10 +142,12 @@ BOOL		startConnectionScreen	(VOID);
 // Game option functions
 static	VOID	addOkBut			(VOID);
 static	VOID	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
+UDWORD	addPlayerBox		(BOOL);				// players (mid) box
 static	VOID	addChatBox			(VOID);
 static	VOID	disableMultiButs	(VOID);
 static	VOID	processMultiopWidgets(UDWORD);
 static	VOID	SendFireUp			(VOID);
+VOID	kickPlayer			(DPID dpid);
 VOID			runMultiOptions		(VOID);
 BOOL			startMultiOptions	(BOOL);
 VOID			frontendMultiMessages(VOID);
@@ -386,84 +380,6 @@ static void decideWRF(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Connection Options Screen.
 
-#if 0
-static BOOL OptionsUnknown(UDWORD parentID)
-{
-	SettingsUp = -1;
-	return TRUE;
-}
-
-
-static BOOL OptionsIPX(UDWORD parentID)											//ipx Options
-{	
-	SettingsUp = -1;
-	return TRUE;
-}
-
-static BOOL OptionsModem(UDWORD parentID)											//modem options
-{
-	W_EDBINIT		sEdInit;
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-
-	if(ingame.bHostSetup)
-	{
-		SettingsUp = -1;
-		return TRUE;
-	}
-
-	widgCreateScreen(&psConScreen);		
-	widgSetTipFont(psConScreen,WFont);
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
-	sFormInit.formID = 0;
-	sFormInit.id = CON_SETTINGS;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = CON_SETTINGSX;
-	sFormInit.y = CON_SETTINGSY;
-	sFormInit.width = CON_SETTINGSWIDTH;
-	sFormInit.height = CON_SETTINGSHEIGHT;
-	sFormInit.pDisplay = intDisplayFeBox;
-	widgAddForm(psConScreen, &sFormInit);
-
-	addMultiBut(psConScreen, CON_SETTINGS,CON_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
-				STR_MUL_OK,IMAGE_OK,IMAGE_OK,TRUE);
-
-
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	sLabInit.formID = CON_SETTINGS;
-	sLabInit.id		= CON_SETTINGS_LABEL;
-	sLabInit.style	= WLAB_ALIGNCENTRE;
-	sLabInit.x		= 0;
-	sLabInit.y		= 10;
-	sLabInit.width	= CON_SETTINGSWIDTH;
-	sLabInit.height = 20;
-	sLabInit.pText	= strresGetString(psStringRes, STR_MUL_PHONENO);//"Telephone Number To Dial";
-	sLabInit.FontID = WFont;
-	widgAddLabel(psConScreen, &sLabInit);
-
-
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));					// phonenumber
-	sEdInit.formID = CON_SETTINGS;
-	sEdInit.id = CON_PHONE;
-	sEdInit.style = WEDB_PLAIN;
-	sEdInit.x = CON_PHONEX;
-	sEdInit.y = CON_PHONEY;
-	sEdInit.width = CON_NAMEBOXWIDTH;
-	sEdInit.height = CON_NAMEBOXHEIGHT;
-	sEdInit.pText = ""; //strresGetString(psStringRes, STR_MUL_PHONENO);//"Telephone Number To Dial";
-	sEdInit.FontID = WFont;
-	sEdInit.pBoxDisplay = intDisplayEditBox;
-	if (!widgAddEditBox(psConScreen, &sEdInit))
-	{
-		return FALSE;
-	}
-
-	SettingsUp = 1;
-	return TRUE;
-}
-
-
 static BOOL OptionsInet(UDWORD parentID)			//internet options
 {	
 	W_EDBINIT		sEdInit;
@@ -528,51 +444,6 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	return TRUE;
 }
 
-static BOOL OptionsCable(UDWORD parentID)			// serial connection cable options
-{
-	W_FORMINIT		sFormInit;
-
-	widgCreateScreen(&psConScreen);		
-	widgSetTipFont(psConScreen,WFont);
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
-	sFormInit.formID = 0;
-	sFormInit.id = CON_SETTINGS;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = CON_SETTINGSX;
-	sFormInit.y = CON_SETTINGSY;
-	sFormInit.width = CON_SETTINGSWIDTH;
-	sFormInit.height = CON_SETTINGSHEIGHT;
-	sFormInit.pDisplay = intDisplayFeBox;
-	widgAddForm(psConScreen, &sFormInit);
-
-	addMultiBut(psConScreen,CON_SETTINGS,CON_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
-				STR_MUL_OK,IMAGE_OK,IMAGE_OK,TRUE);
-
-
-	addMultiBut(psConScreen,CON_SETTINGS,CON_COM1,CON_COM1X,CON_COM1Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_COM1,IMAGE_COM1,IMAGE_COM1_HI,TRUE);	// com1
-	addMultiBut(psConScreen,CON_SETTINGS,CON_COM2,CON_COM2X,CON_COM2Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_COM2,IMAGE_COM2,IMAGE_COM2_HI,TRUE);	// com2
-	addMultiBut(psConScreen,CON_SETTINGS,CON_COM3,CON_COM3X,CON_COM3Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_COM3,IMAGE_COM3,IMAGE_COM3_HI,TRUE);	
-	addMultiBut(psConScreen,CON_SETTINGS,CON_COM4,CON_COM4X,CON_COM4Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_COM4,IMAGE_COM4,IMAGE_COM4_HI,TRUE);	
-
-	addMultiBut(psConScreen,CON_SETTINGS,CON_14400,CON_14400X,CON_14400Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_14400,IMAGE_14400,IMAGE_14400_HI,TRUE);		// baudrate-h
-	addMultiBut(psConScreen,CON_SETTINGS,CON_19200,CON_19200X,CON_19200Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_19200,IMAGE_19200,IMAGE_19200_HI,TRUE);	
-	addMultiBut(psConScreen,CON_SETTINGS,CON_57600,CON_57600X,CON_57600Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_56000,IMAGE_56000,IMAGE_56000_HI,TRUE);	
-	addMultiBut(psConScreen,CON_SETTINGS,CON_11520,CON_11520X,CON_11520Y,CON_COMBUTWIDTH,CON_COMBUTHEIGHT,
-				STR_MUL_115200,IMAGE_115200,IMAGE_115200_HI,TRUE);	
-
-	SettingsUp = 1;
-	return TRUE;
-}
-#endif
-
 // ////////////////////////////////////////////////////////////////////////////
 // Draw the connections screen.
 BOOL startConnectionScreen(VOID)
@@ -600,12 +471,272 @@ BOOL startConnectionScreen(VOID)
 // add connections
 static void addConnections(UDWORD begin)
 {
-
+	UDWORD	pos = 50;
+	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, strresGetString(psStringRes,STR_CON_INTERNET),FALSE,FALSE);
 }
 	
 VOID runConnectionScreen(void )
 {
+	UDWORD id;
+	static UDWORD chosenproto;
+	static char addr[128];
+	LPVOID finalconnection;	 
 
+	processFrontendSnap(TRUE);
+
+	if(SettingsUp ==1)
+	{	
+		id = widgRunScreen(psConScreen);				// Run the current set of widgets 
+	}
+	else
+	{
+		id = widgRunScreen(psWScreen);					// Run the current set of widgets 
+	}
+
+
+	if(id == CON_CANCEL)								//cancel
+	{	
+		changeTitleMode(MULTI);
+		bMultiPlayer = FALSE;
+	}
+
+	if(id == CON_TYPESID_MORE)
+	{
+		widgDelete(psWScreen,FRONTEND_BOTFORM);
+		
+		SettingsUp = 0;
+		InitialProto +=5;
+
+		addBottomForm();	
+		addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
+		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
+
+		addConnections(InitialProto);
+	}
+
+	
+	if(  SettingsUp==0 &&  (id >= CON_TYPESID_START) && (id<=CON_TYPESID_END) )
+	{
+
+		/* RODZ
+		if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_MODEM))
+		{	
+			chosenproto =1;
+			OptionsModem(id);
+		}
+
+		else if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_TCPIP))
+		{
+		*/
+			chosenproto =2;
+			OptionsInet(id);
+		/* RODZ
+		}
+
+		else if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_IPX))
+		{
+			chosenproto =3;
+			OptionsIPX(id);
+		}
+
+		else if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_SERIAL))
+		{
+			chosenproto =4;
+			baud = 19200;
+			com  = 1;
+			OptionsCable(id);
+			widgSetButtonState(psConScreen, CON_COM1,WBUT_LOCK);
+			widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);
+		}
+	
+		else if(IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &SPGUID_MPLAYER) ) // mplayer
+		{
+			if(system("multiplay\\MplayNow\\mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
+			{
+				changeTitleMode(QUIT);									// shut down warzone...
+			}
+		}
+		else if( strncmp(NetPlay.protocols[id-CON_TYPESID_START].name,"Simulator For",12) == 0)	// DIRECTPLAY 6 TEST MODE
+		{		
+			OptionsUnknown(id);
+			chosenproto =5;
+		}
+		else
+		{
+//  comment to allow no other connectionmethod (+below)
+			OptionsUnknown(id);
+			finalconnection = NetPlay.protocols[id-CON_TYPESID_START].connection;
+		}
+		*/
+	}
+
+	switch(id)												// settings buttons
+	{
+
+	/* RODZ
+	case CON_PHONE:											//phone no entered
+		strcpy(telno,widgGetString(psConScreen, CON_PHONE));
+		break;
+	*/
+	case CON_IP:											// ip entered
+		strcpy(addr,widgGetString(psConScreen, CON_IP));
+		break;
+	/* RODZ
+	case CON_COM1:											// com1 
+		com = 1;
+		widgSetButtonState(psConScreen, CON_COM1,WBUT_LOCK);// change hilight
+		widgSetButtonState(psConScreen, CON_COM2,0);	
+		widgSetButtonState(psConScreen, CON_COM3,0);
+		widgSetButtonState(psConScreen, CON_COM4,0);
+		break;
+	case CON_COM2:										// com 2 
+		com = 2;
+		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
+		widgSetButtonState(psConScreen, CON_COM2,WBUT_LOCK);	
+		widgSetButtonState(psConScreen, CON_COM3,0);
+		widgSetButtonState(psConScreen, CON_COM4,0);
+
+		break;
+	case CON_COM3:										// com 3
+		com = 3;
+		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
+		widgSetButtonState(psConScreen, CON_COM2,0);	
+		widgSetButtonState(psConScreen, CON_COM3,WBUT_LOCK);
+		widgSetButtonState(psConScreen, CON_COM4,0);
+		break;
+	case CON_COM4:										// com 4
+		com = 4;
+		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
+		widgSetButtonState(psConScreen, CON_COM2,0);	
+		widgSetButtonState(psConScreen, CON_COM3,0);
+		widgSetButtonState(psConScreen, CON_COM4,WBUT_LOCK);
+		break;
+	case CON_14400:										// 14400
+		baud = 14400;
+		widgSetButtonState(psConScreen, CON_14400,WBUT_LOCK);	// change hilight
+		widgSetButtonState(psConScreen, CON_19200,0);	
+		widgSetButtonState(psConScreen, CON_57600,0);
+		widgSetButtonState(psConScreen, CON_11520,0);
+		break;
+	case CON_19200:										// 19200
+		baud = 19200;
+		widgSetButtonState(psConScreen, CON_14400,0);	
+		widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);	
+		widgSetButtonState(psConScreen, CON_57600,0);
+		widgSetButtonState(psConScreen, CON_11520,0);
+		break;
+	case CON_57600:										// 57600
+		baud = 57600;
+		widgSetButtonState(psConScreen, CON_14400,0);	
+		widgSetButtonState(psConScreen, CON_19200,0);	
+		widgSetButtonState(psConScreen, CON_57600,WBUT_LOCK);
+		widgSetButtonState(psConScreen, CON_11520,0);
+		break;
+	case CON_11520:										// 11520 
+		baud = 115200;
+		widgSetButtonState(psConScreen, CON_14400,0);	
+		widgSetButtonState(psConScreen, CON_19200,0);	
+		widgSetButtonState(psConScreen, CON_57600,0);
+		widgSetButtonState(psConScreen, CON_11520,WBUT_LOCK);
+		break;
+	*/
+	default:
+		break;
+	}
+
+	if(id==CON_OK || SettingsUp == -1)
+	{
+		if(SettingsUp == 1)
+		{
+			widgReleaseScreen(psConScreen);	
+			SettingsUp =0;
+		}
+
+		switch(chosenproto)
+		{
+		/* RODZ
+		case 1:			
+			game.bytesPerSec			= MODEMBYTESPERSEC;
+			game.packetsPerSec			= MODEMPACKETS;	
+			DBPRINTF(("using modem %d\n",ingame.modem));
+			NETsetupModem(&finalconnection,telno,ingame.modem);	//modem
+			break;
+		*/
+		case 2:		
+			game.bytesPerSec			= INETBYTESPERSEC;	
+			game.packetsPerSec			= INETPACKETS;
+			NETsetupTCPIP(&finalconnection, addr);			//inet
+			break;
+		/* RODZ
+		case 3:												//ipx
+			game.bytesPerSec			= IPXBYTESPERSEC;	
+			game.packetsPerSec			= IPXPACKETS;
+			safeSearch = TRUE;
+			for(i=0;
+				i<MaxProtocols && !IsEqualGUID(&(NetPlay.protocols[i].guid), &DPSPGUID_IPX);
+				i++);
+			finalconnection = NetPlay.protocols[i].connection;
+			break;
+		case 4:												//cable
+			game.bytesPerSec			= CABLEBYTESPERSEC;	
+			game.packetsPerSec			= CABLEPACKETS;
+			NETsetupSerial(&finalconnection,com,baud,ONESTOPBIT,NOPARITY,DPCPA_RTSFLOW);	
+			break;
+		case 5:												// dplay6 tester.
+			game.bytesPerSec			= INETBYTESPERSEC;	
+			game.packetsPerSec			= INETPACKETS;
+			for(i=0;
+					i<MaxProtocols 
+					&& strncmp(NetPlay.protocols[id-CON_TYPESID_START].name,"Simulator For",12) != 0;
+				i++);
+			finalconnection = NetPlay.protocols[i].connection;
+			break;
+
+		*/
+		default:
+			game.bytesPerSec			= DEFAULTBYTESPERSEC;// possibly a lobby, so default. 
+			game.packetsPerSec			= DEFAULTPACKETS;
+// swap comments below to allow other providers.
+			// RODZ finalconnection = NetPlay.protocols[id-CON_TYPESID_START].connection;
+			break;
+//			return;	//dont work on anything else!
+		}
+		
+/*
+		if(NETselectProtocol(finalconnection))			// start the connection.
+		{
+*/
+			if(ingame.bHostSetup)
+			{
+				changeTitleMode(MULTIOPTION);
+			}
+			else
+			{
+				changeTitleMode(GAMEFIND);
+			}
+/* RODZ
+			if(chosenproto==1 || chosenproto==2 || chosenproto==4)		// this hack fixes the 
+			{											// memory leak in netplay
+				FREE(finalconnection);					// cant do it in the lib, since requires protochosen!
+			}
+		}
+		else
+		{
+			DBPRINTF(("Protocol Init Failed."));
+		}
+*/
+	}
+
+	StartCursorSnap(&InterfaceSnap);
+	DrawBegin();
+	
+	widgDisplayScreen(psWScreen);							// show the widgets currently running
+	if(SettingsUp == 1)
+	{
+		widgDisplayScreen(psConScreen);						// show the widgets currently running
+	}
+
+	DrawEnd();
 }
 
 
@@ -672,7 +803,85 @@ static void addGames()
 
 void runGameFind(void )
 {
+	UDWORD id;
+	static UDWORD lastupdate=0;
+	
+	if(lastupdate> gameTime)lastupdate = 0;
+	if(gameTime-lastupdate >6000)
+	{
+		lastupdate = gameTime;
+		if(safeSearch)
+		{
+			NETfindGame(TRUE);						// find games asynchronously
+		}
+		addGames();									//redraw list
+	}
+	
+	processFrontendSnap(FALSE);
 
+	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
+	
+	if(id == CON_CANCEL)								// ok
+	{
+		changeTitleMode(PROTOCOL);
+	}
+
+	if(id == MULTIOP_REFRESH)
+	{
+		NETfindGame(TRUE);								// find games asynchronously
+		addGames();										//redraw list.
+	}
+
+
+	if(id >= GAMES_GAMESTART && id<=GAMES_GAMEEND)
+	{
+		gameNumber = id-GAMES_GAMESTART;
+
+		if( ( NetPlay.games[gameNumber].desc.dwCurrentPlayers < NetPlay.games[gameNumber].desc.dwMaxPlayers)
+			&& !(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED) ) // if still joinable
+		{			
+			
+			// if skirmish, check it wont take the last slot
+			if( NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH
+			  && (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers -1)
+			  )
+			{
+				goto FAIL;
+			}
+			
+
+			ingame.localOptionsReceived = FALSE;			// note we are awaiting options
+			strcpy(game.name, NetPlay.games[gameNumber].name);		// store name
+
+//			strcpy(sPlayer,"LastUsed");	
+//			loadMultiStats(sPlayer,&nullStats);
+//			if(NETgetGameFlagsUnjoined(gameNumber,1) == DMATCH)
+//			{
+//				joinArena(gameNumber,(STRING*)sPlayer);		
+//			}
+//			else
+//			{
+				joinCampaign(gameNumber,(STRING*)sPlayer);	
+//			}	
+
+			changeTitleMode(MULTIOPTION);
+		}
+	
+	}
+
+FAIL:
+
+	StartCursorSnap(&InterfaceSnap);
+	
+	DrawBegin();
+	widgDisplayScreen(psWScreen);								// show the widgets currently running
+	if(safeSearch)
+	{
+		iV_SetFont(FEFont);
+		pie_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_SEARCHING),D_W+260,D_H+460);
+	}
+
+	DrawEnd();
 }
 
 
@@ -1024,7 +1233,18 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON,WBUT_DISABLE);		
 
 	}
-	return;
+
+	//disable demo options
+#ifdef MULTIDEMO
+//	widgSetButtonState(psWScreen, MULTIOP_MAP,WEDBS_DISABLE);	
+//	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON,WBUT_DISABLE);	
+
+	widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_DISABLE);	
+//	widgSetButtonState(psWScreen, MULTIOP_ARENA,WBUT_DISABLE);
+	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_DISABLE);
+#endif
+
+		return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1236,17 +1456,17 @@ UDWORD addPlayerBox(BOOL players)
 
 	if(bHosted || ingame.localJoiningInProgress)
 	{
-		NETplayerInfo(NULL);
+		NETplayerInfo();
 	}
 	else
 	{
-		NETplayerInfo(&NetPlay.games[gameNumber].desc.guidInstance);	// get player info.
+		NETplayerInfo();			// get player info.
 	}
 
-	widgDelete(psWScreen,MULTIOP_PLAYERS);						// del player window
-	widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
+	widgDelete(psWScreen,MULTIOP_PLAYERS);		// del player window
+	widgDelete(psWScreen,FRONTEND_SIDETEXT2);	// del text too,
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));					// draw player window
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));	// draw player window
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = MULTIOP_PLAYERS;
 	sFormInit.x = MULTIOP_PLAYERSX;
@@ -1540,11 +1760,19 @@ VOID	stopJoining(void)
 
 			if (pie_GetRenderEngine() == ENGINE_GLIDE)
 			{
+#ifdef COVERMOUNT
+				pie_LoadBackDrop(SCREEN_COVERMOUNT,TRUE);
+#else
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,TRUE);
+#endif	
 			}
 			else
 			{
+#ifdef COVERMOUNT
+				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
+#else
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
+#endif
 			}
 		}
 
@@ -2144,7 +2372,7 @@ void frontendMultiMessages(void)
 			{
 				addWhiteBoard();
 			}
-			memcpy(&whiteBoard[(int) msg.body[0]], &msg.body[1], NUMWHITE*2);
+			memcpy(&whiteBoard[msg.body[0]], &msg.body[1], NUMWHITE*2);
 			
 			break;
 
@@ -3090,7 +3318,7 @@ BOOL runWhiteBoard()
 	return TRUE;
 }
 
-void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = D_W+xOffset+psWidget->x;
 	UDWORD	y = D_H+yOffset+psWidget->y;
@@ -3163,6 +3391,8 @@ void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	
 	// overlay close widget.
 	iV_DrawTransImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
+	
+	return TRUE;
 }
 
 // add whiteboard
@@ -3196,7 +3426,6 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
-
 	iV_Line(x, y, x+psWidget->width , y, iV_PaletteNearestColour(100,100,160) );
 
 	AddCursorSnap(&InterfaceSnap,
@@ -3211,7 +3440,98 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 // ////////////////////////////////////////////////////////////////////////////
 void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
+	UDWORD x = xOffset+psWidget->x;
+	UDWORD y = yOffset+psWidget->y;
+	BOOL Hilight = FALSE;
+	BOOL Down = FALSE;
+	UDWORD	i;
+	STRING	tmp[8];
+	UDWORD png;
 
+	i = (int)psWidget->pUserData;
+
+	// collate info
+	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE))
+	{
+		Hilight = TRUE;
+	}
+	if( ((W_BUTTON*)psWidget)->state & (WBUT_LOCK |WBUT_CLICKLOCK)) //LOCK WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+	{
+		Down = TRUE;
+	}
+
+	// Draw blue boxes. 
+	drawBlueBox(x,y,psWidget->width,psWidget->height);
+	drawBlueBox(x,y,94,psWidget->height);	
+	drawBlueBox(x,y,55,psWidget->height);
+
+	//draw game info
+	iV_SetFont(WFont);													// font
+	iV_SetTextColour(-1);												//colour
+
+	//draw type overlay.
+//	if(NETgetGameFlagsUnjoined(i,1) == DMATCH)
+//	{
+//		iV_DrawTransImage(FrontImages,IMAGE_ARENA_OVER,x+59,y+3);
+//	}
+//	else
+	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
+	{
+		iV_DrawTransImage(FrontImages,IMAGE_CAMPAIGN_OVER,x+59,y+3);
+	}
+	else if( NETgetGameFlagsUnjoined(i,1) == TEAMPLAY)
+	{
+		iV_DrawTransImage(FrontImages,IMAGE_TEAM_OVER,x+62,y+3);
+	}
+	else
+	{
+		iV_DrawTransImage(FrontImages,IMAGE_SKIRMISH_OVER,x+62,y+3);	// SKIRMISH
+	}
+
+	// ping rating
+	png = NETgetGameFlagsUnjoined(i,2);
+	if(png >= PING_LO && png < PING_MED)
+	{
+		iV_DrawTransImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
+	}
+	else if(png >= PING_MED && png < PING_HI)
+	{
+		iV_DrawTransImage(FrontImages,IMAGE_LAMP_AMBER,x+70,y+26);
+	}else
+	{
+		iV_DrawTransImage(FrontImages,IMAGE_LAMP_RED,x+70,y+26);
+	}
+
+	//draw game name
+	while(iV_GetTextWidth(NetPlay.games[i].name) > (psWidget->width-110) )
+	{
+		NetPlay.games[i].name[strlen(NetPlay.games[i].name)-1]='\0';
+	}
+	iV_DrawText((UCHAR*)NetPlay.games[i].name,x+100,y+24);								// name
+
+	// get game info.
+	if(	   (NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
+		|| (NetPlay.games[i].desc.dwCurrentPlayers >= NetPlay.games[i].desc.dwMaxPlayers) 	// if not joinable
+	
+		||(   (NETgetGameFlagsUnjoined(gameNumber,1)== SKIRMISH)	// the LAST bug...
+			&&(NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers -1)
+		  )
+	   )
+
+	{
+		// need some sort of closed thing here!
+		iV_DrawTransImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
+	}
+	else
+	{
+		iV_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_PLAYERS),x+5,y+18);
+		sprintf(tmp,"%d/%d",NetPlay.games[i].desc.dwCurrentPlayers,NetPlay.games[i].desc.dwMaxPlayers);
+		iV_DrawText((UCHAR*)tmp,x+17,y+33);
+	}	
+
+	AddCursorSnap(&InterfaceSnap,
+				(SWORD)(x+(psWidget->width/2)),
+				(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 }
 
 
@@ -3227,7 +3547,7 @@ static UDWORD bestPlayer(UDWORD player)
 	{
 		if(isHumanPlayer(i) && i!=player )
 		{
-			score = getMultiStats(i,FALSE).totalScore;
+			score = getMultiStats(i, FALSE).totalScore;
 	
 			if(score >= myscore)
 			{
@@ -3325,7 +3645,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 
 		// ranking against other players.
 		eval = bestPlayer(j);
-		switch(eval)
+		switch (eval)
 		{
 		case 1:
 			iV_DrawTransImage(IntImages,IMAGE_GN_1,x+5,y+3);
@@ -3533,7 +3853,7 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	BOOL	usehl = ((UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData)));
 //	BOOL	snap = 1;
-
+	
 	//evaluate
 	if( (usehl==1) && ((W_BUTTON*)psWidget)->state & WBUTS_HILITE) 
 	{
@@ -3635,8 +3955,6 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 						(SWORD)(x+(psWidget->width/2)),
 						(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 	}
-
-
 }
 
 

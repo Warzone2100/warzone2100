@@ -538,8 +538,8 @@ BOOL loadForce(char *name)
 // Get Player's stats
 PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 {	
+	static PLAYERSTATS stat;
 	DWORD		statSize = sizeof(PLAYERSTATS);
-	PLAYERSTATS	stat;
 	DPID		playerDPID;
 
 	playerDPID = player2dpid[player];

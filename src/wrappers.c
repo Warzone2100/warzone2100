@@ -51,12 +51,6 @@
 #include "multistat.h"
 #include "multilimit.h"
 
-
-
-
-
-
-
 extern void frontEndCheckCD( tMode tModeNext, CD_INDEX cdIndex );
 
 typedef struct _star
@@ -184,14 +178,7 @@ TITLECODE titleLoop(void)
 				ingame.bHostSetup = FALSE;
 			}
 
-			if(NetPlay.lpDirectPlay4A)		// make sure lobby is valid.
-			{
-				changeTitleMode(MULTIOPTION);
-			}
-			else
-			{
-				changeTitleMode(QUIT);
-			}
+			changeTitleMode(QUIT);
 		}
 		else if(gameSpy.bGameSpy)
 		{

@@ -335,7 +335,7 @@ BOOL joinCampaign(UDWORD gameNumber, STRING *sPlayer)
 //		game.type = CAMPAIGN;
 		if(!NetPlay.bLobbyLaunched)
 		{
-			NETjoinGame(NetPlay.games[gameNumber].desc.guidInstance,sPlayer);	// join 
+			NETjoinGame(sPlayer);	// join 
 		}
 		ingame.localJoiningInProgress	= TRUE;
 
@@ -474,18 +474,19 @@ BOOL LobbyLaunched(VOID)
 BOOL lobbyInitialise(VOID)
 {
 
-	if(!NETinit(WARZONEGUID,TRUE))								// initialise, may change guid.
+	if(!NETinit(TRUE))								// initialise, may change guid.
 	{
 		return FALSE;
 	}
 	// setup the encryption key 
 
+	// RODZ : hashing the file is no more an option.
 	// hash the file to get the key.and catch out the exe patchers.
-#ifdef DEBUG
+//#ifdef DEBUG
 	NETsetKey( 0xdaf456 ,0xb72a5, 0x114d0, 0x2a17);
-#else
-	NETsetKey(NEThashFile("warzone.exe"), 0xb72a5, 0x114d0, 0x2a7);
-#endif
+//#else
+//	NETsetKey(NEThashFile("warzone.exe"), 0xb72a5, 0x114d0, 0x2a7);
+//#endif
 
 	if(NetPlay.bLobbyLaunched)									// now check for lobby launching..
 	{

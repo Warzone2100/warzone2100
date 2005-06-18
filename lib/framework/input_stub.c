@@ -261,8 +261,7 @@ void inputProcessEvent(SDL_Event *event)
 
 				unsigned char char_code = event->key.keysym.unicode;
 
-				if (   (char_code < 32)
-				    || (char_code > 150)) {
+				if (char_code < 32) {
 					char_code = 0;
 				}
 				inputAddBuffer(vk, char_code, 1);

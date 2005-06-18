@@ -11,6 +11,8 @@
 #include "frame.h"
 #include "netplay.h"
 
+extern char* network_host;
+
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Setup functions to avoid DPLAY dialog boxes when connecting.
@@ -21,6 +23,7 @@
 
 BOOL NETsetupIPX(LPVOID *addr)
 {
+printf("NETsetupIPX\n");
 	return FALSE;
 	
 }
@@ -30,7 +33,9 @@ BOOL NETsetupIPX(LPVOID *addr)
 // pass an ip address to this in order to avoid the popup dialog on the client.
 BOOL NETsetupTCPIP(LPVOID *addr, char *machine)
 {
-	return FALSE;
+printf("NETsetupTCPIP %s\n", machine);
+	network_host = machine;
+	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -57,11 +62,13 @@ BOOL NETsetupTCPIP(LPVOID *addr, char *machine)
 //  DPCPA_XONXOFFFLOW 	Indicates software flow control (xon/xoff). 
 BOOL NETsetupSerial(LPVOID *addr,DWORD ComPort,DWORD BaudRate, DWORD StopBits, DWORD Parity, DWORD FlowControl)
 {
+printf("NETsetupSerial\n");
 	return FALSE;
 }
 
 BOOL NETsetupModem(LPVOID *addr, char *Phoneno, UDWORD modemToUse )
 {
+printf("NETsetupModem\n");
 	return FALSE;
 } 
 

@@ -70,6 +70,10 @@ else
   AC_MSG_ERROR([You need to install SDL (http://www.libsdl.org/).])
 fi
 
+AC_PATH_SDLNET([
+	CPPFLAGS="$CPPFLAGS $SDLNETINC" LIBS="$LIBS $SDLNETLIB"],
+	AC_MSG_ERROR(SDL_net is not installed))
+
 if test "x$opengl" != xno; then
   AC_CHECK_HEADER(GL/gl.h, GL_h=yes, GL_h=no)
   GL_lib=yes

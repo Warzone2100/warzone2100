@@ -207,7 +207,8 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 	
 	result.type			= msg->type + ENCRYPTFLAG;
 	result.size			= msg->size;
-	result.paddedBytes	= msg->paddedBytes;
+	result.paddedBytes		= msg->paddedBytes;
+	result.destination		= msg->destination;
 
 	while(msg->size)
 	{

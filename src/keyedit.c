@@ -65,7 +65,8 @@ BOOL		saveKeyMap		(void);
 BOOL		loadKeyMap		(void);
 static BOOL	pushedKeyMap		(UDWORD key);
 
-extern char	buildTime[8];
+char	keymapVersion[8] = "KM_0001";
+extern char    KeyMapPath[];
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -333,7 +334,7 @@ BOOL startKeyMapEditor(BOOL first)
 	addBackdrop();
 	addSideText	(FRONTEND_SIDETEXT ,KM_X-2,KM_Y,strresGetString(psStringRes, STR_KM_KEYMAP_SIDE));
 
-	if(first)
+	if (first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
@@ -490,7 +491,7 @@ BOOL saveKeyMap(void)
 	SDWORD		count;
 	STRING		name[128];
 
-	pFileHandle = fopen("keymap.map", "wb");								// open the file
+	pFileHandle = fopen(KeyMapPath, "wb");								// open the file
 	if (!pFileHandle)
 	{
 		DBERROR(("Couldn't open keymap file"));
@@ -510,7 +511,7 @@ BOOL saveKeyMap(void)
 	}
 
 	// version data
-	if (fwrite(&buildTime, 8, 1, pFileHandle) != 1)		
+	if (fwrite(&keymapVersion, 8, 1, pFileHandle) != 1)		
 	{
 		DBERROR(("version Write failed"));
 		return FALSE;
@@ -598,7 +599,7 @@ BOOL loadKeyMap(void)
 	// throw away any keymaps!!
 	keyClearMappings();
 	
-	pFileHandle = fopen("keymap.map", "rb");								// check file exists
+	pFileHandle = fopen(KeyMapPath, "rb");								// check file exists
 	if (pFileHandle == NULL)
 	{
 		return FALSE;														// failed
@@ -613,12 +614,12 @@ BOOL loadKeyMap(void)
 
 	// get version number.
 	// if not from current version, create a new one..
-	if(fread(&ver,8,1,pFileHandle) !=1)
+	if(fread(&ver,8,1,pFileHandle) != 1)
 	{
 		fclose(pFileHandle);
 		return FALSE;
 	}
-	if (strncmp(ver, buildTime, 8) != 0)	// check 
+	if (strncmp(ver, keymapVersion, 8) != 0)	// check 
 	{
 		fclose(pFileHandle);
 		return FALSE;	

@@ -87,7 +87,7 @@ static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 static BOOL okToSend()
 {
 	//update checks	& go no further if any exceeded.
-	if(	(NETgetRecentBytesSent() + NETgetRecentBytesRecvd() )  >= game.bytesPerSec)
+	if((NETgetRecentBytesSent() + NETgetRecentBytesRecvd()) >= game.bytesPerSec)
 	{
 		return FALSE;
 	}
@@ -302,7 +302,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 BOOL recvDroidCheck(NETMSG *m)
 {
 	FRACT			fx,fy;
-	UDWORD			ref,player,x,y,bod,target=0;//,dir;
+	UDWORD			ref,player,x = 0,y = 0,bod,target=0;//,dir;
 	UWORD			dir,numkills;	
 	DROID_ORDER		ord;
 	BOOL			onscreen;
@@ -314,8 +314,8 @@ BOOL recvDroidCheck(NETMSG *m)
 	while(i < m->size)
 	{
 		// obtain information about remote droid.
-		player = m->body[			i+0];
-		ord = (DROID_ORDER)m->body[	i+1];								// droid id.
+		player = m->body[i+0];
+		ord = (DROID_ORDER)m->body[i+1];								// droid id.
 		NetGet(m,					i+2,ref);	
 		NetGet(m,					i+6,state);
 		NetGet(m,					i+10,bod);							// Damage update.
@@ -394,12 +394,9 @@ BOOL recvDroidCheck(NETMSG *m)
 		//////////////////////////////////////
 		/// now do the update.
 
-		if(vtolDroid(pD))
+		if (   onscreen
+		    || vtolDroid(pD))
 		{	
-			onscreenUpdate(pD,bod,x,y,fx,fy,dir,ord);
-		}
-		else if(onscreen)
-		{
 			onscreenUpdate(pD,bod,x,y,fx,fy,dir,ord);
 		}
 		else
@@ -409,7 +406,7 @@ BOOL recvDroidCheck(NETMSG *m)
 
 		//////////////////////////////////////
 		// now make note of how accurate the world model is for this droid.	// if droid is close then remember.
-		if(    abs(x- pD->x)<(TILE_UNITS*2)
+		if(    abs(x-pD->x)<(TILE_UNITS*2)
 			|| abs(y- pD->y)<(TILE_UNITS*2))
 		{
 			pD->lastSync	= gameTime;								// note we did a reasonable job.

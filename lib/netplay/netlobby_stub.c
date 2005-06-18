@@ -21,12 +21,14 @@
 // cdir  = directory to set as current dir, once lauched.
 BOOL NETsetRegistryEntries(char *name,char *guid,char *file,char *cline,char *path,char *cdir)						   
 {
+printf("NETsetRegistryEntries\n");
 	return FALSE;
 }
 
 
 BOOL NETcheckRegistryEntries(char *name,char *guid)
 {
+printf("NETcheckRegistryEntries\n");
 	return FALSE;
 }
 
@@ -35,5 +37,6 @@ BOOL NETcheckRegistryEntries(char *name,char *guid)
 // returns FALSE if not lobbied!
 BOOL NETconnectToLobby(LPNETPLAY lpNetPlay)
 {
+printf("NETconnectToLobby\n");
 	return FALSE;
 }
