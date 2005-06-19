@@ -2603,6 +2603,10 @@ void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 	if (numObst > 0)
 	{
+#ifdef ARROWS
+		static BOOL bTest = TRUE;
+#endif
+
 		distTot /= numObst;
 
 		// Create the avoid vector
@@ -2846,6 +2850,10 @@ void moveGetObstVector5(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 	if (numObst > 0)
 	{
+#ifdef ARROWS
+		static BOOL bTest = TRUE;
+#endif
+
 		fDistTot /= numObst;
 
 		// Create the avoid vector
