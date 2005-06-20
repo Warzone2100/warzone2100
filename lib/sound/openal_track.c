@@ -275,7 +275,8 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	alGenSources( 1, &(psSample->iSample) );
-	alSourcef( psSample->iSample, AL_PITCH, sfx_volume );
+	alSourcef( psSample->iSample, AL_PITCH, 1.0 );
+	alSourcef( psSample->iSample, AL_GAIN, sfx_volume );
 	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, (ALuint) (psTrack->pMem) );
