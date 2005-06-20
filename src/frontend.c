@@ -1462,19 +1462,11 @@ BOOL startGameOptionsMenu(VOID)
 	addFESlider(FRONTEND_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5, AUDIO_VOL_MAX,mixer_GetWavVolume(),FRONTEND_FX );
 	
 	// cd audio
-	addTextButton(FRONTEND_MUSIC, FRONTEND_POS5X-25,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_MUSIC),TRUE,FALSE);
-	addFESlider(FRONTEND_MUSIC_SL,FRONTEND_BOTFORM, FRONTEND_POS5M, FRONTEND_POS5Y+5,AUDIO_VOL_MAX,mixer_GetCDVolume(),FRONTEND_MUSIC );
+	addTextButton(FRONTEND_3D_FX, FRONTEND_POS5X-25,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_3D_FX),TRUE,FALSE);
+	addFESlider(FRONTEND_3D_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS5M, FRONTEND_POS5Y+5,AUDIO_VOL_MAX,mixer_Get3dWavVolume(),FRONTEND_3D_FX );
 
-/*	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		//gamma
-		if(gammaValue>3)	   gammaValue = (float)2.9;
-		if(gammaValue<0.5)  gammaValue = (float).5;
-	
-		addTextButton(FRONTEND_GAMMA, FRONTEND_POS6X-25,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_GAMMA),TRUE,FALSE);
-		addFESlider(FRONTEND_GAMMA_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5, 60, (UDWORD)(gammaValue*25),FRONTEND_GAMMA );
-	}
-*/
+	addTextButton(FRONTEND_MUSIC, FRONTEND_POS6X-25,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_MUSIC),TRUE,FALSE);
+	addFESlider(FRONTEND_MUSIC_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5,AUDIO_VOL_MAX,mixer_GetCDVolume(),FRONTEND_MUSIC );
 
 	// colour stuff	
 	w = 	iV_GetImageWidth(FrontImages,IMAGE_PLAYER0);
@@ -1518,6 +1510,7 @@ BOOL runGameOptionsMenu(VOID)
 //	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
 	case FRONTEND_FX:
+	case FRONTEND_3D_FX:
 	case FRONTEND_MUSIC:
 		SetMousePos(0,FRONTEND_BOTFORMX+FRONTEND_POS1M+5,mouseY()-3);	// move mouse
 		break;
@@ -1576,6 +1569,10 @@ BOOL runGameOptionsMenu(VOID)
 		break;
 	case FRONTEND_FX_SL:
 		mixer_SetWavVolume(widgGetSliderPos(psWScreen,FRONTEND_FX_SL));
+		break;
+
+	case FRONTEND_3D_FX_SL:
+		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen,FRONTEND_3D_FX_SL));
 		break;
 
 	case FRONTEND_MUSIC_SL:

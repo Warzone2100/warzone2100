@@ -16,6 +16,8 @@ SDWORD	mixer_GetCDVolume( void );
 void	mixer_SetCDVolume( SDWORD iVol );
 SDWORD	mixer_GetWavVolume( void );
 void	mixer_SetWavVolume( SDWORD iVol );
+SDWORD	mixer_Get3dWavVolume( void );
+void	mixer_Set3dWavVolume( SDWORD iVol );
 void	mixer_SaveWinVols();
 void	mixer_RestoreWinVols();
 void	mixer_SaveIngameVols();

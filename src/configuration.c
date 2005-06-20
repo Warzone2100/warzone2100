@@ -59,10 +59,17 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	}
 
 	// //////////////////////////
+	// voice vol
+	if(getWarzoneKeyNumeric("voicevol", &val))
+	{
+		mixer_SetWavVolume((SDWORD)val);//was val
+	}
+	
+	// //////////////////////////
 	// fx vol
 	if(getWarzoneKeyNumeric("fxvol", &val))
 	{
-		mixer_SetWavVolume((SDWORD)val);//was val
+		mixer_Set3dWavVolume((SDWORD)val);//was val
 	}
 	
 	// //////////////////////////
@@ -481,8 +488,9 @@ BOOL saveConfig()
 	}
 
 	// //////////////////////////
-	// fxvol and cdvol
-	setWarzoneKeyNumeric("fxvol", mixer_GetWavVolume());
+	// voicevol, fxvol and cdvol
+	setWarzoneKeyNumeric("voicevol", mixer_GetWavVolume());
+	setWarzoneKeyNumeric("fxvol", mixer_Get3dWavVolume());
 	setWarzoneKeyNumeric("cdvol", mixer_GetCDVolume());
 	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
 

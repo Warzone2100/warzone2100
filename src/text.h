@@ -219,6 +219,7 @@ enum _fixed_str_id
 	STR_FE_SCROLL,		
 	STR_FE_GAMMA,					
 	STR_FE_FX,			
+	STR_FE_3D_FX,			
 	STR_FE_MUSIC,		
 	STR_FE_CLAN,
 	STR_FE_CRAPFOG,

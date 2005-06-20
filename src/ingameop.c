@@ -79,8 +79,8 @@ static BOOL addQuitOptions(VOID)
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
 	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x			= (SWORD)INTINGAMEOP3_X;
-	sFormInit.y			= (SWORD)INTINGAMEOP3_Y;
+	sFormInit.x		= (SWORD)INTINGAMEOP3_X;
+	sFormInit.y		= (SWORD)INTINGAMEOP3_Y;
 	sFormInit.height	= INTINGAMEOP3_H;
 
 	sFormInit.pDisplay	= intOpenPlainForm;
@@ -121,8 +121,8 @@ static BOOL _addSlideOptions()
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
 	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x			= (SWORD)INTINGAMEOP2_X;
-	sFormInit.y			= (SWORD)INTINGAMEOP2_Y;
+	sFormInit.x		= (SWORD)INTINGAMEOP2_X;
+	sFormInit.y		= (SWORD)INTINGAMEOP2_Y;
 	sFormInit.width		= INTINGAMEOP2_W;
 	sFormInit.height	= INTINGAMEOP2_H;
 
@@ -134,16 +134,21 @@ static BOOL _addSlideOptions()
 
 
 
-	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_3_Y,STR_GAME_RESUME,WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_4_Y,STR_GAME_RESUME,WBUT_PLAIN);
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_FXVOL,INTINGAMEOP_1_Y,STR_FE_FX,WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP , INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
 				AUDIO_VOL_MAX,mixer_GetWavVolume(),INTINGAMEOP_FXVOL);
 
+	// fx vol
+	addIGTextButton(INTINGAMEOP_3DFXVOL,INTINGAMEOP_2_Y,STR_FE_3D_FX,WBUT_PLAIN);
+	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP , INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
+				AUDIO_VOL_MAX,mixer_Get3dWavVolume(),INTINGAMEOP_3DFXVOL);
+
 	// cd vol
-	addIGTextButton(INTINGAMEOP_CDVOL,INTINGAMEOP_2_Y,STR_FE_MUSIC,WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_CDVOL_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_2_Y-5,
+	addIGTextButton(INTINGAMEOP_CDVOL,INTINGAMEOP_3_Y,STR_FE_MUSIC,WBUT_PLAIN);
+	addFESlider(INTINGAMEOP_CDVOL_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX,mixer_GetCDVolume(),INTINGAMEOP_CDVOL);
 
 
@@ -443,6 +448,7 @@ void intProcessInGameOptions(UDWORD id)
 
 	// GAME OPTIONS KEYS 
 	case INTINGAMEOP_FXVOL:	
+	case INTINGAMEOP_3DFXVOL:	
 	case INTINGAMEOP_CDVOL:	
 //	case INTINGAMEOP_GAMMA:	
 		SetMousePos(0,INTINGAMEOP2_X+INTINGAMEOP_MID+5 ,mouseY());	// move mouse
@@ -451,6 +457,9 @@ void intProcessInGameOptions(UDWORD id)
 
 	case INTINGAMEOP_FXVOL_S:	
 		mixer_SetWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_FXVOL_S));
+		break;
+	case INTINGAMEOP_3DFXVOL_S:	
+		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_3DFXVOL_S));
 		break;
 	case INTINGAMEOP_CDVOL_S:	
 		mixer_SetCDVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_CDVOL_S));

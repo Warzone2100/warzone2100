@@ -24,6 +24,7 @@ BOOL		listenerMoved = FALSE;
 BOOL		cdAudio_Update( void );
 
 ALfloat		sfx_volume = 1.0;
+ALfloat		sfx3d_volume = 1.0;
 
 //*
 // =======================================================================================================================
@@ -276,7 +277,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 
 	alGenSources( 1, &(psSample->iSample) );
 	alSourcef( psSample->iSample, AL_PITCH, 1.0 );
-	alSourcef( psSample->iSample, AL_GAIN, sfx_volume );
+	alSourcef( psSample->iSample, AL_GAIN, sfx3d_volume );
 	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, (ALuint) (psTrack->pMem) );
@@ -372,7 +373,7 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 		gain = 0.0;
 	}
 
-	alSourcef( iSample, AL_GAIN, gain * sfx_volume );
+	alSourcef( iSample, AL_GAIN, gain * sfx3d_volume );
 
 	pos[0] = iX;
 	pos[1] = iY;
@@ -466,6 +467,22 @@ void mixer_SetWavVolume( SDWORD iVol )
 		sfx_volume = 0.0;
 	} else if (sfx_volume > 1.0) {
 		sfx_volume = 1.0;
+	}
+}
+
+SDWORD mixer_Get3dWavVolume( void )
+{
+	return 100*sfx3d_volume;
+}
+
+void mixer_Set3dWavVolume( SDWORD iVol )
+{
+	sfx3d_volume = iVol * 0.01;
+
+	if (sfx3d_volume < 0.0) {
+		sfx3d_volume = 0.0;
+	} else if (sfx3d_volume > 1.0) {
+		sfx3d_volume = 1.0;
 	}
 }
 
