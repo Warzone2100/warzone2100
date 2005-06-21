@@ -128,7 +128,7 @@ LIBS=		framework \
 		sound \
 		widget
 
-EXT_LIBS=	$(OPENAL_LIB) SDL_net
+EXT_LIBS=	vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net
 
 ifeq ($(GFX), opengl)
 LIBS+=ivis_opengl

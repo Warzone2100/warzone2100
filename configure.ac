@@ -61,6 +61,16 @@ AC_ARG_WITH(openal,
 [  --with-openal           use OpenAL for sound (default)],
 [ openal=$withval ], [ openal=yes ])
 
+#   --with-cda will build with audio CD support
+AC_ARG_WITH(cda,
+[  --with-cda              built support for audio CD],
+[ cda=$withval ], [ cda=no ])
+
+#   --without-ogg will build without Ogg vorbis
+AC_ARG_WITH(ogg,
+[  --with-ogg              built support for Ogg files (default)],
+[ ogg=$withval ], [ ogg=yes ])
+
 AM_PATH_SDL([1.1.4], [sdl_found="yes"], [sdl_found="no"])
 if test "$sdl_found" = yes; then
   CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
@@ -143,6 +153,27 @@ else
   AC_MSG_ERROR([OpenAL is currently mandatory])
 fi
 
+oggmusic=no
+if test "x$cda" = "xyes"
+then
+  AC_DEFINE(WZ_CDA, 1, [Audio CD support])
+else
+  if test "x$ogg" = "xyes"
+  then
+    AM_PATH_OGG(have_ogg=yes, have_ogg=no)
+    AM_PATH_VORBIS(have_vorbis=yes, have_vorbis=no)
+    if test "x$have_ogg" = "xyes"
+    then
+      if test "x$have_vorbis" = "xyes"
+      then
+        oggmusic=yes
+        AC_DEFINE(WZ_OGGMUSIC, 1, [Ogg vorbis support])
+        LIBS="$LIBS -lvorbis -logg"
+      fi
+    fi
+  fi
+fi
+
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
@@ -176,6 +207,8 @@ echo "Warzone will compile with the following components:"
 echo ""
 echo " OpenGL acceleration:   $opengl"
 echo " OpenAL sound system:   $openal"
+echo " Audio CD support:      $cda"
+echo " OGG music support:     $oggmusic"
 echo ""
 if test "x$debug" = xyes; then
   echo " *** Running in debug mode! ***"

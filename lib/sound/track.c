@@ -671,46 +671,6 @@ SDWORD sound_GetAvailableID( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetGlobalVolume( void )
-{
-	//
-	// * //Bah! not needed! --Qamly #ifdef WIN32MM MMRESULT mmRes;
-	// * SDWORD iVol;
-	// * SDWORD iGlobVol = AUDIO_VOL_MAX;
-	// * if ( g_bDevVolume == TRUE ) { mmRes = waveOutGetVolume( 0, (LPDWORD) &iVol );
-	// * if ( mmRes == MMSYSERR_NOERROR ) { iGlobVol = ((SDWORD) LOWORD( iVol )) *
-	// * AUDIO_VOL_MAX / 0xFFFF;
-	// * } else { DBPRINTF( ("sound_GetGlobalVolume: waveOutGetVolume failed\n") );
-	// * } } return iGlobVol;
-	// * #endif Checking if needed --Qamly
-	//
-	return AUDIO_VOL_MAX;		//return max volume for now... -Q
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void sound_SetGlobalVolume( SDWORD iVol )
-{
-	// Bah! not needed! --Qamly
-	//
-	// * #ifdef WIN32MM MMRESULT mmRes;
-	// * SDWORD iNewVol, iWinVol;
-	// * if ( g_bDevVolume == TRUE ) { iWinVol = iVol * 0xFFFF / AUDIO_VOL_MAX;
-	// * iNewVol = (iWinVol << 16) | iWinVol;
-	// * mmRes = waveOutSetVolume( 0, iNewVol );
-	// * if ( mmRes != MMSYSERR_NOERROR ) { DBPRINTF( ("sound_GetGlobalVolume:
-	// * waveOutSetVolume failed\n") );
-	// * } } #endif
-	//
-//	return AUDIO_VOL_MAX;	//this is not used, and function been changed from SDWORD to void... -Q
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 void sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback )
 {
 	g_pStopTrackCallback = pStopTrackCallback;

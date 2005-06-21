@@ -12,7 +12,7 @@
 #ifndef M_PI
 	#define M_PI	3.1415926535897932385
 #endif // win32 don't define that...
-int				current_queue_sample = -1;
+int current_queue_sample = -1;
 typedef struct	SAMPLE_LIST
 {
 	struct AUDIO_SAMPLE *curr;

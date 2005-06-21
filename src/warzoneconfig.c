@@ -69,6 +69,8 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetFog(FALSE);
 	war_SetTranslucent(FALSE);
 	war_SetAdditive(FALSE);
+
+	war_SetPlayAudioCDs(TRUE);
 }
 
 /***************************************************************************/
