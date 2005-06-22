@@ -168,7 +168,7 @@ else
       then
         oggmusic=yes
         AC_DEFINE(WZ_OGGMUSIC, 1, [Ogg vorbis support])
-        LIBS="$LIBS -lvorbis -logg"
+        LIBS="$LIBS -lvorbisfile -lvorbis -logg"
       fi
     fi
   fi
