@@ -4,6 +4,7 @@
 //*
 //
 #include <AL/al.h>
+#include <AL/alc.h>
 #include <AL/alut.h>
 #include "frame.h"
 #include "tracklib.h"
@@ -18,13 +19,17 @@ typedef struct	SAMPLE_LIST
 	struct AUDIO_SAMPLE *curr;
 	struct SAMPLE_LIST	*next;
 } SAMPLE_LIST;
-SAMPLE_LIST *active_samples = NULL;
-ALfloat		listenerPos[3] = { 0.0, 0.0, 0.0 };
-BOOL		listenerMoved = FALSE;
-BOOL		cdAudio_Update( void );
 
-ALfloat		sfx_volume = 1.0;
-ALfloat		sfx3d_volume = 1.0;
+static SAMPLE_LIST *active_samples = NULL;
+
+static ALfloat		listenerPos[3] = { 0.0, 0.0, 0.0 };
+
+static ALfloat		sfx_volume = 1.0;
+static ALfloat		sfx3d_volume = 1.0;
+
+BOOL openal_initialized = FALSE;
+
+BOOL		cdAudio_Update( void );
 
 //*
 // =======================================================================================================================
@@ -33,12 +38,19 @@ ALfloat		sfx3d_volume = 1.0;
 BOOL sound_InitLibrary( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	int		nbargs = 0;
+	int	nbargs = 0;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	alutInit( &nbargs, NULL );
+
+	if (alcGetError(NULL) != AL_NO_ERROR) {
+		return FALSE;
+	}
+
+	openal_initialized = TRUE;
+
 	alListenerfv( AL_POSITION, listenerPos );
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
@@ -186,7 +198,9 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 //
 void sound_FreeTrack( TRACK *psTrack )
 {
-	alDeleteBuffers( 1, &(psTrack->pMem) );
+	ALuint buffer = (ALuint)(psTrack->pMem);
+
+	alDeleteBuffers( 1, &buffer );
 }
 
 //*
@@ -242,6 +256,10 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	if (sfx_volume == 0.0) {
+		return FALSE;
+	}
+
 	alGenSources( 1, &(psSample->iSample) );
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
 	alSourcef( psSample->iSample, AL_GAIN, sfx_volume );
@@ -270,10 +288,12 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 //
 BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SDWORD	iLoops;
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	if (sfx3d_volume == 0.0) {
+		return FALSE;
+	}
 
 	alGenSources( 1, &(psSample->iSample) );
 	alSourcef( psSample->iSample, AL_PITCH, 1.0 );

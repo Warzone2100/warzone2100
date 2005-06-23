@@ -71,6 +71,11 @@ AC_ARG_WITH(ogg,
 [  --with-ogg              built support for Ogg files (default)],
 [ ogg=$withval ], [ ogg=yes ])
 
+#   --without-mp3 will build without Ogg vorbis
+AC_ARG_WITH(mp3,
+[  --with-mp3              built support for Mp3 files (default)],
+[ mp3=$withval ], [ mp3=yes ])
+
 AM_PATH_SDL([1.1.4], [sdl_found="yes"], [sdl_found="no"])
 if test "$sdl_found" = yes; then
   CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
@@ -154,6 +159,7 @@ else
 fi
 
 oggmusic=no
+mp3music=no
 if test "x$cda" = "xyes"
 then
   AC_DEFINE(WZ_CDA, 1, [Audio CD support])
@@ -167,10 +173,24 @@ else
       if test "x$have_vorbis" = "xyes"
       then
         oggmusic=yes
-        AC_DEFINE(WZ_OGGMUSIC, 1, [Ogg vorbis support])
         LIBS="$LIBS -lvorbisfile -lvorbis -logg"
+      else
+        AC_DEFINE(WZ_NOOGG, 1, [Disable ogg vorbis support])
       fi
+      AC_DEFINE(WZ_NOOGG, 1, [Disable ogg vorbis support])
     fi
+  else
+    AC_DEFINE(WZ_NOOGG, 1, [Disable ogg vorbis support])
+  fi
+
+  if test "x$mp3" = "xyes"
+  then
+    AC_CHECK_LIB(mad,
+		 mad_stream_init,
+		 LIBS="$LIBS -lmad"; mp3music=yes,
+		 AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support]),)
+  else
+    AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support])
   fi
 fi
 
@@ -208,6 +228,7 @@ echo ""
 echo " OpenGL acceleration:   $opengl"
 echo " OpenAL sound system:   $openal"
 echo " Audio CD support:      $cda"
+echo " MP3 music support:     $mp3music"
 echo " OGG music support:     $oggmusic"
 echo ""
 if test "x$debug" = xyes; then

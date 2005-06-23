@@ -385,7 +385,7 @@ void dbg_Assert(BOOL Expression, SBYTE *pFormat, ...)
 	if (!Expression)
 	{
 		DBPRINTF(("\n\nAssertion failed , File: %s\nLine: %d\n\n", pAssertFile, AssertLine));
-		exit(1);
+		abort();
 	}
 }
 #endif
