@@ -177,6 +177,7 @@ else
       else
         AC_DEFINE(WZ_NOOGG, 1, [Disable ogg vorbis support])
       fi
+    else
       AC_DEFINE(WZ_NOOGG, 1, [Disable ogg vorbis support])
     fi
   else
