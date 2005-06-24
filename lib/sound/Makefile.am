@@ -5,6 +5,7 @@ libsound_a_SOURCES = \
 	cdaudio.c \
 	mixer_stub.c \
 	openal_track.c \
+	playlist.c \
 	track.c \
 	aud.h \
 	audio.h \

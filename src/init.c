@@ -102,7 +102,7 @@
 #include "gateway.h"
 #include "lighting.h"
 
-
+extern char* UserMusicPath;
 
 extern void statsInitVars(void);
 extern void	structureInitVars(void);
@@ -880,7 +880,7 @@ BOOL systemInitialise(void)
 
 
 	if (war_GetPlayAudioCDs()) {
-		cdAudio_Open();
+		cdAudio_Open(UserMusicPath);
 		mixer_Open();
 	}
 

@@ -2,6 +2,7 @@ SRC_FILES=	audio.c \
 		cdaudio.c \
 		mixer_stub.c \
 		openal_track.c \
+		playlist.c \
 		track.c
 
 LIBS=framework gamelib

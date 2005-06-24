@@ -5,7 +5,7 @@
 
 /***************************************************************************/
 
-BOOL	cdAudio_Open( void );
+BOOL	cdAudio_Open( char* user_musicdir );
 BOOL	cdAudio_Close( void );
 BOOL	cdAudio_PlayTrack( SDWORD iTrack );
 BOOL	cdAudio_Stop( void );

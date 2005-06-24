@@ -53,11 +53,13 @@ char	ScreenDumpPath[255];
 char	MultiForcesPath[255];
 char	MultiCustomMapsPath[255];
 char	MultiPlayersPath[255];
-char   KeyMapPath[255];
+char	KeyMapPath[255];
+char*	UserMusicPath;
 
 #ifndef WIN32
 
 char	UnixRegFilePath[255];
+char	__UserMusicPath[255];
 
 #endif
 
@@ -120,6 +122,7 @@ int main(int argc, char *argv[])
 	strcpy(MultiPlayersPath,"multiplay\\players\\");
 	strcpy(ScreenDumpPath,"");
 	strcpy(KeyMapPath,"keymap.map");
+	UserMusicPath = NULL;
 #else
 	strcpy(UnixUserPath,(char *)getenv("HOME"));
 	strcat(UnixUserPath,"/.warzone2100/");
@@ -141,6 +144,9 @@ int main(int argc, char *argv[])
 	strcat(UnixRegFilePath,"config");
 	strcpy(KeyMapPath,UnixUserPath);
 	strcat(KeyMapPath,"keymap.map");
+	strcpy(__UserMusicPath,UnixUserPath);
+	strcat(__UserMusicPath,"music");
+	UserMusicPath = __UserMusicPath;
 #endif
 
 	// initialise all the command line states

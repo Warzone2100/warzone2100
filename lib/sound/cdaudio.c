@@ -72,6 +72,12 @@ static unsigned int	music_rate;
 
 #endif
 
+void PlayList_Init();
+char PlayList_Read(const char* path);
+void PlayList_SetTrack(unsigned int t);
+char* PlayList_CurrentSong();
+char* PlayList_NextSong();
+void PlayList_DeleteCurrentSong();
 
 //*
 //
@@ -81,7 +87,7 @@ static unsigned int	music_rate;
 // ======================================================================
 // ======================================================================
 //
-BOOL cdAudio_Open( void )
+BOOL cdAudio_Open( char* user_musicdir )
 {
 #ifdef WZ_CDA
 	if ( !SDL_CDNumDrives() )
@@ -113,6 +119,13 @@ BOOL cdAudio_Open( void )
 	alSourcef (music_source, AL_ROLLOFF_FACTOR, 0.0);
 	alSourcei (music_source, AL_SOURCE_RELATIVE, AL_TRUE);
 
+	PlayList_Init();
+	if (   (   user_musicdir == NULL
+		|| PlayList_Read(user_musicdir))
+	    && PlayList_Read("music")) {
+		return FALSE;
+	}
+	
 	music_initialized = TRUE;
 
 	return TRUE;
@@ -226,9 +239,7 @@ int mp3_read_buffer(char *buffer, const int size) {
 #endif
 
 #ifndef WZ_CDA
-BOOL cdAudio_OpenTrack(SDWORD t) {
-	char filename[32];
-
+BOOL cdAudio_OpenTrack(char* filename) {
 	if (!music_initialized) {
 		return FALSE;
 	}
@@ -243,8 +254,6 @@ BOOL cdAudio_OpenTrack(SDWORD t) {
 #endif
 		fclose(music_file);
 	}
-
-	sprintf(filename, "music/track%i.ogg", t);
 
 	music_file_format = WZ_NONE;
 
@@ -366,7 +375,20 @@ BOOL cdAudio_FillBuffer(ALuint b) {
 		if (result > 0) {
 			size += result;
 		} else {
-			cdAudio_OpenTrack(music_track);
+			char* filename;
+
+			for (;;) {
+				filename = PlayList_NextSong();
+
+				if (filename == NULL) {
+					music_track = 0;
+					break;
+				}
+				if (cdAudio_OpenTrack(filename)) {
+					printf("Now playing %s\n", filename);
+					break;
+				}
+			}
 		}
 	}
 
@@ -398,11 +420,24 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 
 	cdAudio_CloseTrack();
 
-	if (cdAudio_OpenTrack(iTrack)) {
-		music_track = iTrack;
-	} else {
-		music_track = 0;
-		return FALSE;
+	PlayList_SetTrack(iTrack);
+
+	{
+		char* filename = PlayList_CurrentSong();
+
+		for (;;) {
+			if (filename == NULL) {
+				music_track = 0;
+				return FALSE;
+			}
+			if (cdAudio_OpenTrack(filename)) {
+				music_track = iTrack;
+				printf("Now playing %s\n", filename);
+				break;
+			}
+
+			filename = PlayList_NextSong();
+		}
 	}
 
 	for (i = 0; i < NB_BUFFERS; ++i) {
