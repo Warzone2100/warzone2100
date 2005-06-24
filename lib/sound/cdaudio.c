@@ -191,8 +191,12 @@ void mp3_refill() {
 	mad_synth_frame(&mp3_synth, &mp3_frame);
 	mp3_pos_in_frame = 0;
 }
-
-static inline signed int scale_sample(mad_fixed_t sample) {
+#ifdef _MSC_VER	//Slight fix
+static __inline signed int scale_sample(mad_fixed_t sample)
+#else
+static inline signed int scale_sample(mad_fixed_t sample)
+#endif
+{
   /* round */
   sample += (1L << (MAD_F_FRACBITS - 16));
 
@@ -258,7 +262,12 @@ BOOL cdAudio_OpenTrack(char* filename) {
 	music_file_format = WZ_NONE;
 
 #ifndef WZ_NOMP3
-	if (strncasecmp(filename+strlen(filename)-4, ".mp3", 4) == 0) {
+#ifdef _MSC_VER	//slight fix 
+	if (stricmp(filename+strlen(filename)-4, ".mp3", 4) == 0)
+#else
+	if (strncasecmp(filename+strlen(filename)-4, ".mp3", 4) == 0)
+#endif
+	{
 		music_file = fopen(filename, "rb");
 
 		if (music_file == NULL) {
@@ -298,7 +307,12 @@ BOOL cdAudio_OpenTrack(char* filename) {
 #endif
 
 #ifndef WZ_NOOGG
-	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0) {
+#ifdef _MSC_VER	//slight fix
+if (stricmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
+#else
+	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
+#endif
+	{
 		music_file = fopen(filename, "rb");
 
 		if (music_file == NULL) {
