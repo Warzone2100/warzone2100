@@ -92,7 +92,10 @@ void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 	ASSERT(((code >= 0) && (code <= KEY_MAXSCAN), "Invalid key code: %d", code));
 #ifndef _MSC_VER	
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
-#endif //no snprinf in _MSC_VER	* (well...) --Qamly
+#else
+	_snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
+//	sprintf(ascii,"%s",SDL_GetKeyName(keyCodeToSDLKey(code)));	//temp
+#endif //use _snprintf() in _MSC_VER	  --Q
 }
 
 
