@@ -374,7 +374,7 @@ BOOL cdAudio_FillBuffer(ALuint b) {
 #ifndef WZ_NOMP3
 		if (music_file_format == WZ_MP3) {
 			result = mp3_read_buffer(music_data+size, BUFFER_SIZE-size);
-			music_rate = 44100;
+			music_rate = mp3_synth.pcm.samplerate;
 		}
 #endif
 
