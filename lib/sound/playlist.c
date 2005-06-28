@@ -11,6 +11,7 @@ typedef struct {
 	char**		songs;
 	unsigned int	nb_songs;
 	unsigned int	list_size;
+	BOOL		shuffle;
 } WZ_TRACK;
 
 static unsigned int current_track = 0;
@@ -32,7 +33,6 @@ void PlayList_Init() {
 
 char PlayList_Read(const char* path) {
 	FILE* f;
-	unsigned int nb_songs = 0;
 	char* path_to_music = NULL;
 
 	sprintf(buffer, "%s/music.wpl", path);
@@ -55,6 +55,7 @@ char PlayList_Read(const char* path) {
 				current_track = new_track;
 				free(path_to_music);
 				path_to_music = NULL;
+				CURRENT_TRACK.shuffle = FALSE;
 			}
 		} else if (strncmp(buffer, "path=", 5) == 0) {
 			free(path_to_music);
@@ -64,11 +65,12 @@ char PlayList_Read(const char* path) {
 			} else {
 				path_to_music = strdup(path_to_music);
 			}
-			printf("  path = %s\n", path_to_music);
+			//printf("  path = %s\n", path_to_music);
 		} else if (strncmp(buffer, "shuffle=", 8) == 0) {
 			if (strcmp(strtok(buffer+8, "\n"), "yes") == 0) {
+				CURRENT_TRACK.shuffle = TRUE;
 			}
-			printf("  shuffle = yes\n");
+			//printf("  shuffle = yes\n");
 		} else if (   buffer[0] != '\0'
 			   && (filename = strtok(buffer, "\n")) != NULL
 			   && strlen(filename) != 0) {
@@ -82,7 +84,7 @@ char PlayList_Read(const char* path) {
 						  + strlen(path_to_music)+2);
 				sprintf(filepath, "%s/%s", path_to_music, filename);
 			}
-			printf("  adding song %s\n", filepath);
+			//printf("  adding song %s\n", filepath);
 
 			if (CURRENT_TRACK.nb_songs == CURRENT_TRACK.list_size) {
 				CURRENT_TRACK.list_size <<= 1;
@@ -99,12 +101,27 @@ char PlayList_Read(const char* path) {
 	return 0;
 }
 
+void PlayList_Shuffle() {
+	if (CURRENT_TRACK.shuffle) {
+		unsigned int i;
+
+		for (i = CURRENT_TRACK.nb_songs-1; i > 0; --i) {
+			unsigned int j = random() % (i + 1);
+			char* swap = CURRENT_TRACK.songs[j];
+
+			CURRENT_TRACK.songs[j] = CURRENT_TRACK.songs[i];
+			CURRENT_TRACK.songs[i] = swap;
+		}
+	}
+}
+
 void PlayList_SetTrack(unsigned int t) {
 	if (t >= 0 && t < NB_TRACKS) {
 		current_track = t;
 	} else {
 		current_track = 0;
 	}
+	PlayList_Shuffle();
 	current_song = 0;
 }
 
@@ -118,6 +135,7 @@ char* PlayList_CurrentSong() {
 
 char* PlayList_NextSong() {
 	if (++current_song >= CURRENT_TRACK.nb_songs) {
+		PlayList_Shuffle();
 		current_song = 0;
 	}
 
