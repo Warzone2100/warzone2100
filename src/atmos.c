@@ -343,7 +343,7 @@ void	renderParticle( ATPART *psPart )
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 	/* Scale it... */
-	scaleMatrix(psPart->size);
+	pie_MatScale(psPart->size);
 	/* Draw it... */
 	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );

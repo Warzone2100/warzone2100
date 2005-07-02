@@ -12,6 +12,7 @@
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "piedef.h"
 #include "piematrix.h"
@@ -24,20 +25,18 @@
  */
 /***************************************************************************/
 
-
-
 /*
 
 	Playstation and PC stuff   ... just the matrix stack & surface normal code is all thats needed on the PSX
 
 */
 
-
 #define MATRIX_MAX	8
-
+#define	ONE_PERCENT	41	// 4096/100
 
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX *psMatrix = &aMatrixStack[0];
+static BOOL perspective = FALSE;
 
 
 
@@ -136,11 +135,14 @@ int		aSinTable[SC_TABLESIZE + (SC_TABLESIZE/4)];
 void pie_MatReset(void)
 
 {
+// printf("pie_MatReset\n");
 	psMatrix = &aMatrixStack[0];
 
 	// make 1st matrix identity
 
 	*psMatrix = _MATRIX_ID;
+
+	glLoadIdentity();
 }
 
 
@@ -159,6 +161,8 @@ void pie_MatBegin(void)
 	}
 	psMatrix++;
 	aMatrixStack[_MATRIX_INDEX] = aMatrixStack[_MATRIX_INDEX-1];
+
+	glPushMatrix();
 }
 
 
@@ -173,6 +177,56 @@ void pie_MatEnd(void)
 	_MATRIX_INDEX--;
 	ASSERT((_MATRIX_INDEX >= 0,"pie_MatEnd of the bottom of the stack"));
 	psMatrix--;
+
+	glPopMatrix();
+}
+
+
+void pie_MATTRANS(int x, int y, int z) {
+	psMatrix->j = x<<FP12_SHIFT;
+	psMatrix->k = y<<FP12_SHIFT;
+	psMatrix->l = z<<FP12_SHIFT;
+
+	//Actually this is more complicated.
+	//glTranslatef(x, y, z);
+}
+
+void pie_TRANSLATE(int x, int y, int z) {
+	psMatrix->j += ((x) * psMatrix->a + (y) * psMatrix->d + (z) * psMatrix->g);
+	psMatrix->k += ((x) * psMatrix->b + (y) * psMatrix->e + (z) * psMatrix->h);
+	psMatrix->l += ((x) * psMatrix->c + (y) * psMatrix->f + (z) * psMatrix->i);
+
+	//glTranslatef(x, y, z);
+}
+
+//*************************************************************************
+//*** matrix scale current transformation matrix
+//*
+//******
+void	pie_MatScale( UDWORD percent )
+{
+SDWORD	scaleFactor;
+
+	if(percent == 100)
+	{
+		return;
+	}
+
+	scaleFactor = percent * ONE_PERCENT;
+
+	psMatrix->a = (psMatrix->a * scaleFactor) / 4096;
+	psMatrix->b = (psMatrix->b * scaleFactor) / 4096;
+	psMatrix->c = (psMatrix->c * scaleFactor) / 4096;
+
+	psMatrix->d = (psMatrix->d * scaleFactor) / 4096;
+	psMatrix->e = (psMatrix->e * scaleFactor) / 4096;
+	psMatrix->f = (psMatrix->f * scaleFactor) / 4096;
+
+	psMatrix->g = (psMatrix->g * scaleFactor) / 4096;
+	psMatrix->h = (psMatrix->h * scaleFactor) / 4096;
+	psMatrix->i = (psMatrix->i * scaleFactor) / 4096;
+
+	//glScalef(0.01*percent, 0.01*percent, 0.01*percent);
 }
 
 
@@ -184,6 +238,7 @@ void pie_MatEnd(void)
 void pie_MatRotY(int y)
 
 {
+// printf("pie_MatRotY %i\n", y);
 	int t;
 	int cra, sra;
 
@@ -203,6 +258,8 @@ void pie_MatRotY(int y)
 		psMatrix->i = ((sra * psMatrix->c) + (cra * psMatrix->i))>>FP12_SHIFT;
 		psMatrix->c = t;
 	}
+
+	//glRotatef(y*22.5/4096.0, 0, 1, 0);
 }
 
 
@@ -214,6 +271,7 @@ void pie_MatRotY(int y)
 void pie_MatRotZ(int z)
 
 {
+// printf("pie_MatRotZ %i\n", z);
 	int t;
 	int cra, sra;
 
@@ -233,6 +291,8 @@ void pie_MatRotZ(int z)
 		psMatrix->f = ((cra * psMatrix->f) - (sra * psMatrix->c))>>FP12_SHIFT;
 		psMatrix->c = t;
 	}
+
+	//glRotatef(z*22.5/4096.0, 0, 0, 1);
 }
 
 
@@ -242,8 +302,8 @@ void pie_MatRotZ(int z)
 //******
 
 void pie_MatRotX(int x)
-
 {
+// printf("pie_MatRotX %i\n", x);
 	int cra, sra;
 	int t;
 
@@ -263,6 +323,8 @@ void pie_MatRotX(int x)
 		psMatrix->i = ((cra * psMatrix->i) - (sra * psMatrix->f))>>FP12_SHIFT;
 		psMatrix->f = t;
 	}
+
+	//glRotatef(x*22.5/4096.0, 1, 0, 0);
 }
 
 
@@ -316,43 +378,37 @@ int32 pie_RotProj(iVector *v3d, iPoint *v2d)
 	return zz;
 }
 
-
-
-//*************************************************************************
-//*** create 3x3 matrix from given euler angles
-//*
-//* params	r	= vector x,y,z euler rotation angles
-//*			m	= pointer to matrix for storing result
-//*
-//* on exit	*m	= 3x3 pure rotation matrix
-//*
-//******
-
-void pie_MatCreate(iVector *r, SDMATRIX *m) {
-	int crx, cry, crz, srx, sry, srz;
-
-	crx = COS(r->x); cry = COS(r->y); crz = COS(r->z);
-	srx = SIN(r->x); sry = SIN(r->y); srz = SIN(r->z);
-
-	m->a = (((cry * crz) - (((sry * srx) >> FP12_SHIFT) * srz))>>FP12_SHIFT);
-	m->b = (((cry * srz) + (((sry * srx) >> FP12_SHIFT) * crz))>>FP12_SHIFT);
-	m->c = ((-sry * crx)>>FP12_SHIFT);
-	m->d = ((-crx * srz)>>FP12_SHIFT);
-	m->e = ((crx * crz)>>FP12_SHIFT);
-	m->f = srx;
-	m->g = (((sry * crz) + (((cry * srx) >> FP12_SHIFT) * srz))>>FP12_SHIFT);
-	m->h = (((sry * srz) - (((cry * srx) >> FP12_SHIFT) * crz))>>FP12_SHIFT);
-	m->i = ((cry * crx)>>FP12_SHIFT);
-}
-
 //*************************************************************************
 
 void pie_PerspectiveBegin() {
+	/*
+	float width = pie_GetVideoBufferWidth();
+	float height = pie_GetVideoBufferHeight();
+	float ratio = width/height;
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glTranslatef((width-2*psRendSurface->xcentre)/width,
+		     (height-2*psRendSurface->ycentre)/height , 0);
+	glFrustum(-40*ratio, 40*ratio, -40, 40, 110, 1000000);
+	glScalef(1, 1, -1);
+	glMatrixMode(GL_MODELVIEW);
+	*/
+
 	glDepthRange(0.1, 1);
+
+	perspective = TRUE;
 }
 
 void pie_PerspectiveEnd() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), 0, 1, -1);
+	glMatrixMode(GL_MODELVIEW);
+
 	glDepthRange(0, 0.1);
+
+	perspective = FALSE;
 }
 
 

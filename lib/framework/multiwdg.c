@@ -149,7 +149,7 @@ BOOL wdgCheckDependancies(void)
 					sprintf(aText + strlen(aText), "    %s.wdg\n", psCheck->asDep[i].aName);
 				}
 				DBERROR((aText));
-				return FALSE;
+				//return FALSE;
 			}
 		}
 	}

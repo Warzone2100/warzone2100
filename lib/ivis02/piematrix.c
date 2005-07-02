@@ -31,6 +31,7 @@
 
 
 #define MATRIX_MAX	8
+#define	ONE_PERCENT	41	// 4096/100
 
 void pie_PerspectiveBegin() {
 }
@@ -176,6 +177,35 @@ void pie_MatEnd(void)
 	_MATRIX_INDEX--;
 	ASSERT((_MATRIX_INDEX >= 0,"pie_MatEnd of the bottom of the stack"));
 	psMatrix--;
+}
+
+
+//*************************************************************************
+//*** matrix scale current transformation matrix
+//*
+//******
+void	pie_MatScale( UDWORD percent )
+{
+SDWORD	scaleFactor;
+
+	if(percent == 100)
+	{
+		return;
+	}
+
+	scaleFactor = percent * ONE_PERCENT;
+
+	psMatrix->a = (psMatrix->a * scaleFactor) / 4096;
+	psMatrix->b = (psMatrix->b * scaleFactor) / 4096;
+	psMatrix->c = (psMatrix->c * scaleFactor) / 4096;
+
+	psMatrix->d = (psMatrix->d * scaleFactor) / 4096;
+	psMatrix->e = (psMatrix->e * scaleFactor) / 4096;
+	psMatrix->f = (psMatrix->f * scaleFactor) / 4096;
+
+	psMatrix->g = (psMatrix->g * scaleFactor) / 4096;
+	psMatrix->h = (psMatrix->h * scaleFactor) / 4096;
+	psMatrix->i = (psMatrix->i * scaleFactor) / 4096;
 }
 
 

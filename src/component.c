@@ -306,7 +306,7 @@ void displayIMDButton(iIMDShape *IMDShape,
 	iVector TmpCamPos = {0,0,0};
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
+	pie_MatScale(scale);
 
 	pie_SetFogStatus(FALSE);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0); // ajl changed 0 to selectedPlayer
@@ -334,7 +334,7 @@ void displayStructureButton(STRUCTURE *psStructure,
 
 	SetBSPObjectPos(0,0,0);
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
+	pie_MatScale(scale);
 
 
 	/* Draw the building's base first */
@@ -419,7 +419,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
     }
 
     setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
+	pie_MatScale(scale);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
@@ -505,7 +505,7 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 	iVector TmpCamPos = {0,0,0};
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
+	pie_MatScale(scale);
 
 	compID = StatIsComponent(Stat);
 	if (compID > 0)	{
@@ -555,7 +555,7 @@ void displayResearchButton(BASE_STATS *Stat,
 	if(ResearchIMD)
 	{
 		setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-		scaleMatrix(scale);
+		pie_MatScale(scale);
 
 		if(MountIMD) {
 			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);	// ajl, added colourthing using selectedPlayer
@@ -584,7 +584,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 	memset( &Droid, 0, sizeof(DROID) );
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
+	pie_MatScale(scale);
 
 // Decide how to sort it.
 
@@ -621,7 +621,7 @@ void displayComponentButtonObject(DROID *psDroid,
  	iVector		TmpCamPos = {0,0,0};
 	
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
-	scaleMatrix(scale);
+	pie_MatScale(scale);
 
 // Decide how to sort it.
 	difference = Rotation->y%360;
@@ -846,7 +846,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 		}
 	}
 */
-//	scaleMatrix(droidScale);
+//	pie_MatScale(droidScale);
 
 	/* set default components transparent */
 	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )
@@ -888,7 +888,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			if ( psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == FALSE )
 			{
 				// FIXME - hideous....!!!!
-				scaleMatrix(75);
+				pie_MatScale(75);
 				if(pie_GetRenderEngine()==ENGINE_GLIDE)
 				{
 					pie_Draw3DShape(psShape, 0, psDroid->player-6, brightness, specular, pieFlag | pie_NO_BILINEAR, iPieData);

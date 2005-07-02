@@ -1,6 +1,5 @@
 SRC_FILES=	bitimage.c \
 		bspimd.c \
-		bug.c \
 		fbf.c \
 		imd.c \
 		imdload.c \

@@ -279,7 +279,7 @@ SDWORD  index;
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 
-	sprite.bmp = _TEX_PAGE[pageId[pageNumber]].tex.bmp;
+	sprite.bmp = MALLOC(TEXTURE_PAGE_SIZE);
 //	memset(sprite.bmp,0,TEXTURE_PAGE_SIZE);
 	tilesProcessed = 0;
 	tilesAcross = srcWidth/tileWidth;
@@ -302,36 +302,15 @@ SDWORD  index;
 			/* Have we got all the tiles from the source!? */
 			if((tilesProcessed == tilesPerSource))// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
 			{
-				if(pie_GetRenderEngine() == ENGINE_GLIDE)
-				{
-					index = iV_TEXPAGE(firstTexturePage+pageNumber)->textPage3dfx;
-					pageId[pageNumber] = index;
-					pie_Reload8bitTexturePage(sprite.bmp,(UWORD) sprite.width,(UWORD) sprite.height, index);
-				}
-				else //D3D
-				{
-//					dtm_LoadTexSurface(&_TEX_PAGE[pageId[pageNumber]].tex, pageId[pageNumber]);
-				}
+				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, TRUE, FALSE);
 				goto exit;
 			}
 
 			/* Have we run out of texture page? */
 			if(tilesProcessed%tilesPerPage == 0)
 			{
-				if(pie_GetRenderEngine() == ENGINE_GLIDE)
-				{
-					/* If so, download this one and reset to start again */
-					index = iV_TEXPAGE(firstTexturePage+pageNumber)->textPage3dfx;
-					pageId[pageNumber] = index;
-					pie_Reload8bitTexturePage(sprite.bmp, (UWORD)sprite.width, (UWORD)sprite.height, index);
-				}
-				else //D3D
-				{
-					/* If so, download this one and reset to start again */
-//					dtm_LoadTexSurface(&_TEX_PAGE[pageId[pageNumber]].tex, pageId[pageNumber]);
-				}
+				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, TRUE, FALSE);
 				pageNumber++;
-				sprite.bmp = _TEX_PAGE[pageId[pageNumber]].tex.bmp;
 				presentLoc = sprite.bmp;
 			}
 			else if(tilesProcessed%tilesAcrossPage == 0)

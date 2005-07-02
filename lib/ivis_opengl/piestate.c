@@ -441,7 +441,7 @@ void pie_SetTexturePage(SDWORD num)
 			glDisable(GL_TEXTURE_2D);
 		} else {
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, num);
+			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].textPage3dfx);
 		}
 	}
 #endif

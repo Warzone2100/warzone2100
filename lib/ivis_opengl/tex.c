@@ -65,7 +65,6 @@ static int _tex_get_top_bit(uint32 n)
 */
 
 int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource) {
-//	int				i3d;
 	int				i;
 
 	/* Get next available texture page */
@@ -105,7 +104,7 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 
 	glGenTextures(1, &_TEX_PAGE[i].textPage3dfx);
 
-	pie_SetTexturePage(_TEX_PAGE[i].textPage3dfx);
+	pie_SetTexturePage(i);
 
 	if (   (s->width & (s->width-1)) == 0
 	    && (s->height & (s->height-1)) == 0) {
@@ -123,7 +122,45 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 
 	_TEX_INDEX++;
 
-	return _TEX_PAGE[i].textPage3dfx;
+	return i;
+}
+
+void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource) {
+	int				i;
+
+	/* DID come from a resource */
+	_TEX_PAGE[tex_index].bResource = bResource;
+	// Default values
+	_TEX_PAGE[tex_index].tex.bmp = NULL;
+	_TEX_PAGE[tex_index].tex.width = 256;
+	_TEX_PAGE[tex_index].tex.height = 256;
+	_TEX_PAGE[tex_index].tex.xshift = 0;
+
+	if (s != NULL) {
+		_TEX_PAGE[tex_index].tex.bmp = s->bmp;
+		_TEX_PAGE[tex_index].tex.width = s->width;
+		_TEX_PAGE[tex_index].tex.height = s->height;
+		_TEX_PAGE[tex_index].tex.xshift = _tex_get_top_bit(s->width);
+	} else {
+		//printf ("  Sprite is null\n");
+		return -1;
+	}
+	_TEX_PAGE[tex_index].tex.bColourKeyed = bColourKeyed;
+	_TEX_PAGE[tex_index].type = type;
+
+	pie_SetTexturePage(tex_index);
+
+	if (   (s->width & (s->width-1)) == 0
+	    && (s->height & (s->height-1)) == 0) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, s->width, s->height, 0,
+			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+	}
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
 
@@ -173,7 +210,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 	while (i<_TEX_INDEX) {
 		if (stricmp(fname,_TEX_PAGE[i].name) == 0) {
 			/* Send back 3dfx texpage number if we're on 3dfx - they're NOT the same */
-			return(_TEX_PAGE[i].textPage3dfx);
+			return(i);
 		}
 		i++;
 	}

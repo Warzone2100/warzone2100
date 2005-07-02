@@ -145,10 +145,10 @@ void	trackHeight( SDWORD desiredHeight );
 void	setViewAngle(SDWORD angle);
 void	setViewDistance(UDWORD dist);
 void	getDefaultColours( void );
-void renderSky(void);
+void	renderSky(void);
 void	showShadePalette( void );
 /* Function prototypes:- */
-void	scaleMatrix( UDWORD percent );
+void	pie_MatScale( UDWORD percent );
 void	screenSlideDown( void );
 void	locateMouse(void);
 void	preprocessTiles(void);
@@ -332,7 +332,6 @@ BASE_OBJECT *psSensorObj = NULL;
 UDWORD	destTargetX,destTargetY;
 UDWORD	destTileX=0,destTileY=0;
 
-#define	ONE_PERCENT		41	// 4096/100
 #define	TARGET_TO_SENSOR_TIME	((4*(GAME_TICKS_PER_SEC))/5)
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
 
@@ -807,8 +806,7 @@ void drawTiles(iView *camera, iView *player)
 	/* Push identity matrix onto stack */
 	pie_MatBegin();
 	// Now, scale the world according to what resolution we're running in
-	scaleMatrix(pie_GetResScalingFactor());
-	// Now, scale the world according to what resolution we're running in
+	pie_MatScale(pie_GetResScalingFactor());
 	/* Set the camera position */
 	pie_MATTRANS(camera->p.x,camera->p.y,camera->p.z);
 	/* Rotate for the player */
@@ -852,7 +850,7 @@ void drawTiles(iView *camera, iView *player)
 				tileXYZ.x = ((j-terrainMidX)<<TILE_SHIFT);
 				tileXYZ.y = 0;//map_TileHeight(edgeX,edgeY);
 				tileXYZ.z = ((terrainMidY-i)<<TILE_SHIFT);
-  				tileScreenInfo[i][j].sz = pie_RotProj(&tileXYZ,(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotProj(&tileXYZ,(iPoint *)&tileScreenInfo[i][j].sx);
 			  
 			   	if (pie_GetFogEnabled())
 			  	{
@@ -1544,7 +1542,7 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 			if ( psDroid->droidType == DROID_PERSON )
 			{
 				iPlayer = psParentObj->player-6;
-				scaleMatrix(75);
+				pie_MatScale(75);
 			}
 			else
 			{
@@ -3101,7 +3099,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 			psPosition->coords.x, psPosition->coords.y,0);
 	}
 
-	scaleMatrix(50);				//they are all big now so make this one smaller too
+	pie_MatScale(50);				//they are all big now so make this one smaller too
 
 //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
@@ -4875,34 +4873,6 @@ BOOL	bWaterTile;
 	}
  
    
-}
-
-
-/*
-This needs to be dumped into IVIS - shouldn't be in here - Alex
-*/
-void	scaleMatrix( UDWORD percent )
-{
-SDWORD	scaleFactor;
-
-	if(percent == 100)
-	{
-		return;
-	}
-
-	scaleFactor = percent * ONE_PERCENT;
-
-	psMatrix->a = (psMatrix->a * scaleFactor) / 4096;
-	psMatrix->b = (psMatrix->b * scaleFactor) / 4096;
-	psMatrix->c = (psMatrix->c * scaleFactor) / 4096;
-
-	psMatrix->d = (psMatrix->d * scaleFactor) / 4096;
-	psMatrix->e = (psMatrix->e * scaleFactor) / 4096;
-	psMatrix->f = (psMatrix->f * scaleFactor) / 4096;
-
-	psMatrix->g = (psMatrix->g * scaleFactor) / 4096;
-	psMatrix->h = (psMatrix->h * scaleFactor) / 4096;
-	psMatrix->i = (psMatrix->i * scaleFactor) / 4096;
 }
 
 /*

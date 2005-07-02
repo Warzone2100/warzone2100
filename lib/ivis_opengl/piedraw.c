@@ -41,8 +41,6 @@
 
 static PIEPIXEL		scrPoints[pie_MAX_POINTS];
 static PIEVERTEX	pieVrts[pie_MAX_POLY_VERTS];
-static PIEVERTEX	clippedVrts[pie_MAX_POLY_VERTS];
-//static D3DTLVERTEX	d3dVrts[pie_MAX_POLY_VERTS];
 static iVertex		imdVrts[pie_MAX_POLY_VERTS];
 static SDWORD		pieCount = 0;
 static SDWORD		tileCount = 0;
@@ -230,16 +228,13 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	int32		rx, ry, rz;
 	int32		tzx, tzy;
 	int32		tempY;
-
 	int i, n;
 	iVector		*pVertices;
 	PIEPIXEL	*pPixels;
 	iIMDPoly	*pPolys;
 	PIEPOLY		piePoly;
-//	iIMDPoly	imdPoly;
 	VERTEXID	*index;
 	PIELIGHT	colour, specular;
-//	UBYTE		alpha;
 
 	pieCount++;
 
@@ -350,8 +345,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		ry = pVertices->x * psMatrix->b + tempY * psMatrix->e + pVertices->z * psMatrix->h + psMatrix->k;
 		rz = pVertices->x * psMatrix->c + tempY * psMatrix->f + pVertices->z * psMatrix->i + psMatrix->l;
 
-
-
 		pPixels->d3dz = D3DVAL((rz>>STRETCHED_Z_SHIFT));
 
 		tzx = rz >> psRendSurface->xpshift;
@@ -366,9 +359,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		{
 			pPixels->d3dx = (float)LONG_WAY;//just along way off screen
 			pPixels->d3dy = (float)LONG_WAY;
-		}
-		else
-		{
+		} else {
 			pPixels->d3dx = D3DVAL((psRendSurface->xcentre + (rx / tzx)));
 			pPixels->d3dy = D3DVAL((psRendSurface->ycentre - (ry / tzy)));
 		}
@@ -390,11 +381,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		{
 			pieVrts[n].sx = MAKEINT(scrPoints[*index].d3dx);
 			pieVrts[n].sy = MAKEINT(scrPoints[*index].d3dy);
-			//cull triangles with off screen points
-			if (scrPoints[*index].d3dy > (float)LONG_TEST)
-			{
-				piePoly.flags = 0;
-			}
 			pieVrts[n].sz  = MAKEINT(scrPoints[*index].d3dz);
 			pieVrts[n].tu = pPolys->vrt[n].u;
 			pieVrts[n].tv = pPolys->vrt[n].v;
@@ -529,24 +515,15 @@ void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 
 void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOOL bClip)
 {
-	SDWORD n;
 	polyCount++;
 
 	pie_SetTexturePage(-1);
 	pie_SetColourKeyedBlack(FALSE);
 	pie_SetColour(colour);
 
-	if (bClip)
-	{
-		n = pie_ClipFlat2dLine(x0, y0, x1, y1);
-		if (n != 2) {
-			return;
-		}
-	}
-
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(x0, y0, INTERFACE_DEPTH * INV_MAX_Z);
-	glVertex3f(x1, y1, INTERFACE_DEPTH * INV_MAX_Z);
+	glVertex3f(x0, y0, INTERFACE_DEPTH);
+	glVertex3f(x1, y1, INTERFACE_DEPTH);
 	glEnd();
 }
 
@@ -568,24 +545,6 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 	c.argb = colour;
 	pie_SetColourKeyedBlack(FALSE);
 
-	if (bClip) {
-		if (   x0>psRendSurface->clip.right
-		    || x1<psRendSurface->clip.left
-		    || y0>psRendSurface->clip.bottom
-		    || y1<psRendSurface->clip.top) {
-			return;
-		}
-
-		if (x0<psRendSurface->clip.left)
-			x0 = psRendSurface->clip.left;
-		if (x1>psRendSurface->clip.right)
-			x1 = psRendSurface->clip.right;
-		if (y0<psRendSurface->clip.top)
-			y0 = psRendSurface->clip.top;
-		if (y1>psRendSurface->clip.bottom)
-			y1 = psRendSurface->clip.bottom;
-	}
-
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
 	glBegin(GL_TRIANGLE_STRIP);
 	glVertex2i(x0, y0);
@@ -606,23 +565,8 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip)
 {
-	SDWORD n;
-//	static BOOL bBilinear;
-
 	polyCount++;
-	// handle texture animated polygons
-	if (!(poly->flags & PIE_NO_CULL) && (poly->nVrts >= 3)) {
-		//cull if backfaced
-		if(!pie_PieClockwise(poly->pVrts)) {
-			return;//culled
-		}
-	}
 
-	if (bClip) {
-		n = pie_ClipTextured(poly->nVrts,poly->pVrts,&clippedVrts[0],TRUE);
-		poly->nVrts = n;
-		poly->pVrts = &clippedVrts[0];
-	}
 	if (poly->nVrts >= 3) {
 		if (poly->flags & PIE_COLOURKEYED) {
 			pie_SetColourKeyedBlack(TRUE);
@@ -637,16 +581,6 @@ static void pie_PiePolyFrame(PIEPOLY *poly, int frame, BOOL bClip)
 {
 int	uFrame, vFrame, j, framesPerLine;
 
-	// handle texture animated polygons
-	if (!(poly->flags & PIE_NO_CULL) && (poly->nVrts >= 3))
-	{
-		//cull if backfaced
-		if(!pie_PieClockwise(poly->pVrts))
-		{
-			return;//culled
-		}
-		poly->flags |= PIE_NO_CULL;//dont check culling again for this poly
-	}
 	if (poly->flags & PIE_COLOURKEYED) {
 		pie_SetColourKeyedBlack(TRUE);
 	} else {
@@ -760,30 +694,7 @@ static void pie_D3DPolyFrame(PIED3DPOLY *poly, int frame) {
  *                     ---
  ***************************************************************************/
 static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip) {
-	int c;
-	iVertex clip[iV_POLY_MAX_POINTS+4];
-//	BOOL bBilinear;
-
 	polyCount++;
-
-	// handle texture animated polygons
-	if (!(poly->flags & PIE_NO_CULL) && (poly->npnts >= 3)) {
-		//cull if backfaced
-		if(!pie_Clockwise(poly->vrt)) {
-			return;//culled
-		}
-	}
-
-	if (bClip) {
-		// call correct clipper (FLAT, GOUR, TEX)
-		if (poly->flags & iV_IMD_TEX) {
-			c = pie_PolyClipTex2D(poly->npnts, &poly->vrt[0], clip);
-		} else {
-			return;//no clip mode
-		}
-		poly->npnts = c;
-		poly->vrt= &clip[0];
-	}
 
 	if (poly->npnts >= 3) {
 		SDWORD i;
@@ -797,7 +708,7 @@ static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip) {
 		for (i = 0; i < poly->npnts; ++i) {
 			glColor3ub(poly->vrt[i].g*16, poly->vrt[i].g*16, poly->vrt[i].g*16);
 			glTexCoord2f(poly->vrt[i].u, poly->vrt[i].v);
-			glVertex3f(poly->vrt[i].x, poly->vrt[i].y, poly->vrt[i].z * INV_MAX_Z);
+			glVertex3f(poly->vrt[i].x, poly->vrt[i].y, poly->vrt[i].z);
 		}
 		glEnd();
 	}
@@ -808,17 +719,6 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 	int	uFrame, vFrame, j, framesPerLine;
 
 	polyCount++;
-
-	// handle texture animated polygons
-	if (!(poly->flags & PIE_NO_CULL) && (poly->npnts >= 3))
-	{
-		//cull if backfaced
-		if(!pie_Clockwise(poly->vrt))
-		{
-			return;//culled
-		}
-		poly->flags |= PIE_NO_CULL;//dont check culling again for this poly
-	}
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
 	{
@@ -871,25 +771,17 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 //ivis style draw function
 void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint *offset)
 {
-	UDWORD	n, i;
-//	UDWORD f;
-	iVertex clip[iV_POLY_MAX_POINTS];
+	UDWORD	i;
 
    	if ( !pie_CLOCKWISE( pv[0].x, pv[0].y, pv[1].x, pv[1].y, pv[2].x, pv[2].y ) ) {
 		return;
 	}
 
-	n = pie_PolyClipTex2D(3, pv, &clip[0]);
-
-	if (n < 3) {
-		return;
-	}
-
 	glBegin(GL_TRIANGLE_FAN);
-	for (i = 0; i < n; i++) {
-		glColor4ub(clip[i].g*16, clip[i].g*16, clip[i].g*16, 255);
-		glTexCoord2f(clip[i].u, clip[i].v);
-		glVertex3f(clip[i].x, clip[i].y, clip[i].z * INV_MAX_Z);
+	for (i = 0; i < 3; i++) {
+		glColor4ub(pv[i].g*16, pv[i].g*16, pv[i].g*16, 255);
+		glTexCoord2f(pv[i].u, pv[i].v);
+		glVertex3f(pv[i].x, pv[i].y, pv[i].z);
 	}
 	glEnd();
 }
@@ -900,11 +792,7 @@ void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture*
 
 
 void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects) {
-//	SDWORD		i;
-	SDWORD		nVrts;
-//	iIMDPoly	imdPoly;
 	BOOL		bClockwise;
-//	UBYTE		alpha, *psAlpha;
 	FRACT		offset = 0;
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the
@@ -934,22 +822,14 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 	}
 	pie_SetBilinear(TRUE);
 
-	nVrts = pie_ClipTextured(numVrts, &aVrts[0], &clippedVrts[0], TRUE);
-
-	if (nVrts >= 3) {
-		pie_Polygon(nVrts, clippedVrts, offset);
+	if (numVrts >= 3) {
+		pie_Polygon(numVrts, aVrts, offset);
 	}
 }
 
 //#ifdef NECROMANCER
 void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3, SDWORD texPage)
 {
-//	SDWORD i;
-	SDWORD nVrts;
-//	DWORD	colour, specular;
-//	iIMDPoly imdPoly;
-//	PIEVERTEX *pv;
-
 	tileCount++;
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
@@ -960,11 +840,8 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 	memcpy(&pieVrts[1],pv1,sizeof(PIEVERTEX));
 	memcpy(&pieVrts[2],pv2,sizeof(PIEVERTEX));
 	memcpy(&pieVrts[3],pv3,sizeof(PIEVERTEX));
-	nVrts = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0], FALSE);
 
-	if (nVrts >= 3) {
-		pie_Polygon(nVrts, clippedVrts, 0.0);
-	}
+	pie_Polygon(4, pieVrts, 0.0);
 }
 //#endif
 

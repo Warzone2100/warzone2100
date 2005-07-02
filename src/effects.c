@@ -1730,7 +1730,7 @@ UDWORD brightness, specular;
 	}
 
 
-	scaleMatrix(psEffect->size);
+	pie_MatScale(psEffect->size);
  	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, 0, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
  	iV_MatrixEnd();
 
@@ -1763,7 +1763,7 @@ UDWORD brightness, specular;
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
-	scaleMatrix(psEffect->size);
+	pie_MatScale(psEffect->size);
 
 	// set up lighting
   //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
@@ -1898,16 +1898,16 @@ void	renderExplosionEffect(EFFECT *psEffect)
 		percent = MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan));
 		if(percent<0) percent = 0;
 		if(percent>45) percent = 45;
-		scaleMatrix(psEffect->size - percent);
+		pie_MatScale(psEffect->size - percent);
 	}
 	else if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)))/3;
-		scaleMatrix(BASE_PLASMA_SIZE + percent);
+		pie_MatScale(BASE_PLASMA_SIZE + percent);
 	}
 	else
 	{
-		scaleMatrix(psEffect->size);
+		pie_MatScale(psEffect->size);
 	}
 	//get fog value
 //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
@@ -1983,11 +1983,11 @@ UDWORD  brightness, specular;
 	if(psEffect->type == GRAVITON_TYPE_EMITTING_ST)
 	{
 		/* Twice as big - 150 percent */
-		scaleMatrix(psEffect->size);
+		pie_MatScale(psEffect->size);
 	}
 	else
 	{
-		scaleMatrix(100);
+		pie_MatScale(100);
 	}
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-MAKEINT(psEffect->position.x),
 		getCentreZ()-MAKEINT(psEffect->position.z), &specular);
@@ -2059,7 +2059,7 @@ UDWORD brightness, specular;
 	translucency+=10;
 	size = 2*translucency;
 	if(size>90) size = 90;
-	scaleMatrix(size);
+	pie_MatScale(size);
 
 	// set up lighting
 //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
@@ -2141,17 +2141,17 @@ UDWORD brightness, specular;
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
 			if(percent<10 AND psEffect->type == SMOKE_TYPE_TRAIL)
 			{
-				scaleMatrix((3 * percent/10 * psEffect->baseScale)/100);
+				pie_MatScale((3 * percent/10 * psEffect->baseScale)/100);
 				transparency = (EFFECT_SMOKE_ADDITIVE * (100 - 10))/100;
 			}
 			else
 			{
-				scaleMatrix((4 * percent * psEffect->baseScale)/100);
+				pie_MatScale((4 * percent * psEffect->baseScale)/100);
 				transparency = (EFFECT_SMOKE_ADDITIVE * (100 - percent))/100;
 			}
 #else//Constant alpha
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
-			scaleMatrix(percent + psEffect->baseScale);
+			pie_MatScale(percent + psEffect->baseScale);
 			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 #endif
 		}
@@ -2159,7 +2159,7 @@ UDWORD brightness, specular;
 
 		{//software
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)))/2;
-			scaleMatrix(percent + psEffect->baseScale);
+			pie_MatScale(percent + psEffect->baseScale);
 			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 		}
 	}

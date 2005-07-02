@@ -33,12 +33,7 @@ extern SDWORD	aSinTable[];
 #define SIN(X)					aSinTable[(uint16)(X) >> 4]
 #define COS(X)					aSinTable[((uint16)(X) >> 4) + 1024]
 
-#define pie_INVTRANSX(X)		psMatrix->j = (X)<<FP12_SHIFT
-#define pie_INVTRANSY(Y)		psMatrix->k = (Y)<<FP12_SHIFT
-#define pie_INVTRANSZ(Z)		psMatrix->l = (Z)<<FP12_SHIFT
-#define pie_MATTRANS(X,Y,Z)		{	psMatrix->j = (X)<<FP12_SHIFT;				\
-						psMatrix->k = (Y)<<FP12_SHIFT;				\
-						psMatrix->l = (Z)<<FP12_SHIFT;	}
+
 //*************************************************************************
 
 #define pie_SETUP_ROTATE_PROJECT																\
@@ -83,20 +78,10 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#define pie_TRANSLATE(x, y, z)																\
-{																									\
-	psMatrix->j += ((x) * psMatrix->a + (y) * psMatrix->d + 					\
-						(z) * psMatrix->g);													\
-	psMatrix->k += ((x) * psMatrix->b + (y) * psMatrix->e + 					\
-						(z) * psMatrix->h);													\
-	psMatrix->l += ((x) * psMatrix->c + (y) * psMatrix->f + 					\
-						(z) * psMatrix->i);													\
-}
 
 //*************************************************************************
 
-#define pie_CLOCKWISE(x0,y0,x1,y1,x2,y2) ((((y1)-(y0)) * ((x2)-(x1))) <=	\
-															(((x1)-(x0)) * ((y2)-(y1))))
+#define pie_CLOCKWISE(x0,y0,x1,y1,x2,y2) ((((y1)-(y0)) * ((x2)-(x1))) <= (((x1)-(x0)) * ((y2)-(y1))))
 
 //*************************************************************************
 
@@ -108,6 +93,8 @@ extern void pie_MatInit(void);
 
 extern void pie_MatBegin(void);
 extern void pie_MatEnd(void);
+extern void pie_MATTRANS(int x,int y,int z);
+extern void pie_TRANSLATE(int x, int y, int z);
 extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);

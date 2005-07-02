@@ -12,7 +12,7 @@ ifeq ($(OSTYPE), msys)
 OPENGL_LIB=opengl32
 OPENAL_LIB=openal32
 else
-OPENGL_LIB=GL
+OPENGL_LIB=GLU GL
 OPENAL_LIB=openal
 endif
 
