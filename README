@@ -1,0 +1,94 @@
+Warzone 2100 ReDev
+
+
+0) Welcome back !
+
+Warzone 2100 was an innovative 3D real-time strategy game back in 1999, and most
+will agree it didn't enjoy the commercial success it should have had. The game's
+source code was liberated on December 6th, 2004, under a GPL license (see
+COPYING in this directory for details). Soon after that, the Warzone 2100 ReDev
+project was formed to take care of its future.
+
+Our goal is to make warzone run on all possible platforms. Therefore, we
+stripped the original code of all proprietary technologies and replaced them
+with cross-platform and free equivalents, like OpenGL, OpenAL, etc... Right
+now, Warzone 2100 works very well on Windows and GNU/Linux, and we have even
+heard of it running on BSD with no particular issue.
+
+What you get here is the early product of our collective work. We're not pros,
+we just like the game, so bear with us, and feel free to join us if you think
+you can do better. We can be found at :
+http://www.realtimestrategies.net/forums/index.php
+You'll have most chances to find us in the development section.
+
+
+1) Command-line options.
+
+Once the game is installed (see INSTALL in this directory), you can run it by
+changing to its directory and typing './warzone'. Here's a few of the most
+common command line options :
+	-fullscreen : runs in a full-screen window
+	-window : runs in a window
+	-WIDTHxHEIGHT : runs at WIDTH times HEIGHT resolution, replace WIDTH
+		and HEIGHT with your dimensions of choice. Beware, though,
+		as it needs to be a resolution supported by your X server.
+
+Note that you do need to type the dash in front of the option, like this :
+		./warzone -fullscreen -1280x960
+(this is my prefered mode).
+
+The fullscreen/window modes and the resolution are stored, so they only need to
+be specified once, or when you want to change them. So,
+		./warzone
+will start in fullscreen and in 1280x960 because this is what I specified just
+before (remember ?).
+
+For more groovy command-line options, check src/clparse.c (yes, we promise we'll
+document this properly some day).
+
+
+2) Configuration
+
+When you start Warzone 2100 for the first time, a '.warzone2100' directory
+is created in your home directory. A certain number of files are also created in
+it, the most important being the one called 'config'. In case you are upgrading
+from a previous version and experience problems, try and remove this
+'~/.warzone2100/config' file.
+
+
+3) Music
+
+As the original game music is part of the data that was not liberated, we are
+reintroducing music, but in a different way. We use a playlist system that can
+point to any ogg or mp3 file in you filesystem. This is still experimental, and
+we are gradually making this more useable.
+
+The following playlists are read, in this order, and only the first playlist
+found is used :
+- ~/.warzone2100/music/music.wpl
+- <whereverwarzoneisinstalled>/music/music.wpl
+
+Playlist example :
+
+--------------------------------------------------------------------------------
+[track1]
+path=.
+neos_earth.ogg
+neos_flam.ogg
+
+[track2]
+path=.
+neos_nebulae.ogg
+--------------------------------------------------------------------------------
+
+track1 is the track played during the game, track2 is for the menu.
+
+"path" can be anything you wish. If it's ".", the path is the directory where
+the playlist is found. If no path is set, all filenames must be given with
+absolute path.
+
+ogg and mp3 files are supported (provided all necessary libs are installed).
+
+
+
+                                                    The Warzone 2100 ReDev team.
