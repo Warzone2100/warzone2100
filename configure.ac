@@ -57,21 +57,23 @@ AC_ARG_WITH(opengl,
 [ opengl=$withval ], [ opengl=maybe ])
 
 #   --without-openal will build without OpenAL
-AC_ARG_WITH(openal,
-[  --with-openal           use OpenAL for sound (default)],
-[ openal=$withval ], [ openal=yes ])
+# Commented out as OpenAL is not curently an option,
+# but it will need to become optional someday.
+#AC_ARG_WITH(openal,
+#[  --with-openal           use OpenAL for sound (default)],
+#[ openal=$withval ], [ openal=yes ])
 
 #   --with-cda will build with audio CD support
 AC_ARG_WITH(cda,
 [  --with-cda              built support for audio CD],
 [ cda=$withval ], [ cda=no ])
 
-#   --without-ogg will build without Ogg vorbis
+#   --without-ogg will build without Ogg vorbis support
 AC_ARG_WITH(ogg,
 [  --with-ogg              built support for Ogg files (default)],
 [ ogg=$withval ], [ ogg=yes ])
 
-#   --without-mp3 will build without Ogg vorbis
+#   --without-mp3 will build without MP3 support
 AC_ARG_WITH(mp3,
 [  --with-mp3              built support for Mp3 files (default)],
 [ mp3=$withval ], [ mp3=yes ])
