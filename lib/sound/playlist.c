@@ -2,6 +2,12 @@
 
 #include "frame.h"
 
+#ifdef _MSC_VER			//hope this works out OK, since .Net has no random()
+#define random rand		//it only has rand().  -Q
+#endif
+
+
+
 #define BUFFER_SIZE 2048
 static char buffer[BUFFER_SIZE];
 
@@ -108,7 +114,7 @@ void PlayList_Shuffle() {
 		for (i = CURRENT_TRACK.nb_songs-1; i > 0; --i) {
 			unsigned int j = random() % (i + 1);
 			char* swap = CURRENT_TRACK.songs[j];
-
+ 
 			CURRENT_TRACK.songs[j] = CURRENT_TRACK.songs[i];
 			CURRENT_TRACK.songs[i] = swap;
 		}

@@ -32,6 +32,11 @@
 #include "bspfunc.h"	// for imd functions
 
 
+#ifdef  _MSC_VER					//fixed for .net -Q
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#endif
+
 #ifndef FINALBUILD
 #define ALLOW_TEXTPIES	// With this define enabled we are allowed to load and process ascii pie files ... with it removed we are only allowed binary ones !
 #endif
@@ -358,12 +363,9 @@ iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath,
 		if (bTextured)
 		{
 			//resToLower(texfile);
-#ifdef  _MSC_VER					//fixed for .net
 //          printf("texfile cmp in imdload.c :%s\n", texfile);
-          if (strnicmp(texfile, "page-", 5) == 0)
-          #else
 			if (strncasecmp(texfile, "page-", 5) == 0)
-#endif //.net don't got that function... (well...)  --Qamly.
+
 			{
 				for(i=5; i<(SDWORD)strlen(texfile); i++)
 				{
