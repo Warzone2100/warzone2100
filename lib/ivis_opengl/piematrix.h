@@ -95,6 +95,7 @@ extern void pie_MatBegin(void);
 extern void pie_MatEnd(void);
 extern void pie_MATTRANS(int x,int y,int z);
 extern void pie_TRANSLATE(int x, int y, int z);
+extern void pie_MatScale( UDWORD percent );
 extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);

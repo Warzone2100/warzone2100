@@ -3705,12 +3705,12 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 #ifdef SCRIPTS
 		if ( psNewDroid->player == selectedPlayer )
 		{
-			eventFireCallbackTrigger(CALL_DROIDBUILT);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
 #endif
 		psScrCBNewDroid = psNewDroid;
 		psScrCBNewDroidFact = psStructure;
-		eventFireCallbackTrigger(CALL_NEWDROID);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
 		psScrCBNewDroid = NULL;
 		psScrCBNewDroidFact = NULL;
 	}
@@ -7156,21 +7156,21 @@ void structureCompletedCallback(STRUCTURE_STATS *psStructType)
 
 	if (psStructType->type == REF_POWER_GEN)
 	{
-		eventFireCallbackTrigger(CALL_POWERGEN_BUILT);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_POWERGEN_BUILT);
 	}
 	if (psStructType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		eventFireCallbackTrigger(CALL_RESEX_BUILT);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEX_BUILT);
 	}
 	if (psStructType->type == REF_RESEARCH)
 	{
-		eventFireCallbackTrigger(CALL_RESEARCH_BUILT);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCH_BUILT);
 	}
 	if (psStructType->type == REF_FACTORY OR
 		psStructType->type == REF_CYBORG_FACTORY OR
 		psStructType->type == REF_VTOL_FACTORY)
 	{
-		eventFireCallbackTrigger(CALL_FACTORY_BUILT);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FACTORY_BUILT);
 	}
 
 }
@@ -7868,7 +7868,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
                         psStringRes,STR_GAM_ELECDAM),
 		    		    getStatName(psStructure->pStructureType)));
                     //tell the scripts if selectedPlayer has lost a structure
-                    eventFireCallbackTrigger(CALL_ELECTRONIC_TAKEOVER);
+                    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 	    	    }
 		        //give a reward to the attacking player
     		    //researchReward(psStructure->player, attackPlayer);
@@ -7925,7 +7925,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
     			    CONPRINTF(ConsoleString,(ConsoleString,strresGetString(
                         psStringRes,STR_GAM_ELECDAM)));
                     //tell the scripts if selectedPlayer has lost a droid
-                    eventFireCallbackTrigger(CALL_ELECTRONIC_TAKEOVER);
+                    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
                 bCompleted = TRUE;
 

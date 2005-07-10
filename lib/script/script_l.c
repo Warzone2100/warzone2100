@@ -164,7 +164,7 @@ static int scr__base[] = {
 };
 
 
-#line 1 "d:/usr/mks-ly/etc/yylex.c"
+//#line 1 "d:/usr/mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -292,7 +292,7 @@ extern	void	scr_error	YY_ARGS((char *fmt, ...));
 extern	void	scr_comment	YY_ARGS((char *term));
 extern	int	scr_mapch	YY_ARGS((int delim, int escape));
 
-#line 1 "Script.l"
+//#line 1 "Script.l"
 
 /*
  * script.l
@@ -506,7 +506,7 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 
 
 
-#line 127 "d:/usr/mks-ly/etc/yylex.c"
+//#line 127 "d:/usr/mks-ly/etc/yylex.c"
 
 
 #ifndef YYLMAX
@@ -734,7 +734,7 @@ YYDECL {
 	int scr_oldi, scr_oleng;	/* base i, scr_leng before look-ahead */
 	int scr_eof;		/* 1 if eof has already been read */
 
-#line 350 "d:/usr/mks-ly/etc/yylex.c"
+//#line 350 "d:/usr/mks-ly/etc/yylex.c"
 
 
 
@@ -858,79 +858,79 @@ YYDECL {
 	YY_USER;
 	switch (scr__la_act[scr_fmin] & 0777) {
 	case 0:
-#line 224 "Script.l"
+//#line 224 "Script.l"
 	return WAIT;
 	break;
 	case 1:
-#line 225 "Script.l"
+//#line 225 "Script.l"
 	return EVERY;
 	break;
 	case 2:
-#line 226 "Script.l"
+//#line 226 "Script.l"
 	return TRIGGER;
 	break;
 	case 3:
-#line 227 "Script.l"
+//#line 227 "Script.l"
 	return EVENT;
 	break;
 	case 4:
-#line 228 "Script.l"
+//#line 228 "Script.l"
 	return INACTIVE;
 	break;
 	case 5:
-#line 229 "Script.l"
+//#line 229 "Script.l"
 	return INITIALISE;
 	break;
 	case 6:
-#line 230 "Script.l"
+//#line 230 "Script.l"
 	return LINK;
 	break;
 	case 7:
-#line 231 "Script.l"
+//#line 231 "Script.l"
 	return REF;
 	break;
 	case 8:
-#line 236 "Script.l"
+//#line 236 "Script.l"
 	{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 	break;
 	case 9:
-#line 237 "Script.l"
+//#line 237 "Script.l"
 	{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
 	break;
 	case 10:
-#line 238 "Script.l"
+//#line 238 "Script.l"
 	return WHILE;
 	break;
 	case 11:
-#line 239 "Script.l"
+//#line 239 "Script.l"
 	return IF;
 	break;
 	case 12:
-#line 240 "Script.l"
+//#line 240 "Script.l"
 	return ELSE;
 	break;
 	case 13:
-#line 241 "Script.l"
+//#line 241 "Script.l"
 	return EXIT;
 	break;
 	case 14:
-#line 242 "Script.l"
+//#line 242 "Script.l"
 	return PAUSE;
 	break;
 	case 15:
-#line 245 "Script.l"
+//#line 245 "Script.l"
 	{ scr_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 16:
-#line 246 "Script.l"
+//#line 246 "Script.l"
 	{ scr_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 17:
-#line 247 "Script.l"
+//#line 247 "Script.l"
 	{ scr_lval.tval = VAL_INT; return TYPE; }
 	break;
 	case 18:
-#line 248 "Script.l"
+//#line 248 "Script.l"
 	{ scr_lval.tval = VAL_INT; return TYPE; }
 	/*float					{ ais_lval.tval = VAL_FLOAT; return TYPE; }*/
 	/* string type isn't implemented yet */
@@ -938,75 +938,75 @@ YYDECL {
 	/* object					{ scr_lval.tval = VAL_OBJECT; return TYPE; } */
 	break;
 	case 19:
-#line 255 "Script.l"
+//#line 255 "Script.l"
 	{ scr_lval.bval = TRUE; return BOOLEAN; }
 	break;
 	case 20:
-#line 256 "Script.l"
+//#line 256 "Script.l"
 	{ scr_lval.bval = TRUE; return BOOLEAN; }
 	break;
 	case 21:
-#line 257 "Script.l"
+//#line 257 "Script.l"
 	{ scr_lval.bval = FALSE; return BOOLEAN; }
 	break;
 	case 22:
-#line 258 "Script.l"
+//#line 258 "Script.l"
 	{ scr_lval.bval = FALSE; return BOOLEAN; }
 	break;
 	case 23:
-#line 261 "Script.l"
+//#line 261 "Script.l"
 	return BOOLEQUAL;
 	break;
 	case 24:
-#line 262 "Script.l"
+//#line 262 "Script.l"
 	return NOTEQUAL;
 	break;
 	case 25:
-#line 263 "Script.l"
+//#line 263 "Script.l"
 	return GREATEQUAL;
 	break;
 	case 26:
-#line 264 "Script.l"
+//#line 264 "Script.l"
 	return LESSEQUAL;
 	break;
 	case 27:
-#line 265 "Script.l"
+//#line 265 "Script.l"
 	return GREATER;
 	break;
 	case 28:
-#line 266 "Script.l"
+//#line 266 "Script.l"
 	return LESS;
 	break;
 	case 29:
-#line 267 "Script.l"
+//#line 267 "Script.l"
 	return _AND;
 	break;
 	case 30:
-#line 268 "Script.l"
+//#line 268 "Script.l"
 	return _AND;
 	break;
 	case 31:
-#line 269 "Script.l"
+//#line 269 "Script.l"
 	return _OR;
 	break;
 	case 32:
-#line 270 "Script.l"
+//#line 270 "Script.l"
 	return _OR;
 	break;
 	case 33:
-#line 271 "Script.l"
+//#line 271 "Script.l"
 	return _NOT;
 	break;
 	case 34:
-#line 272 "Script.l"
+//#line 272 "Script.l"
 	return _NOT;
 	break;
 	case 35:
-#line 278 "Script.l"
+//#line 278 "Script.l"
 	{ scr_lval.ival = atol(scr_text); return INTEGER; }
 	break;
 	case 36:
-#line 281 "Script.l"
+//#line 281 "Script.l"
 	{
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
@@ -1058,15 +1058,15 @@ YYDECL {
 							}
 	break;
 	case 37:
-#line 332 "Script.l"
+//#line 332 "Script.l"
 	{ BEGIN QUOTE; }
 	break;
 	case 38:
-#line 333 "Script.l"
+//#line 333 "Script.l"
 	{ BEGIN 0; }
 	break;
 	case 39:
-#line 334 "Script.l"
+//#line 334 "Script.l"
 	{
 								strcpy(aText[currText], scr_text);
 								scr_lval.sval = aText[currText];
@@ -1075,41 +1075,41 @@ YYDECL {
 							}
 	break;
 	case 40:
-#line 342 "Script.l"
+//#line 342 "Script.l"
 	;
 	break;
 	case 41:
-#line 345 "Script.l"
+//#line 345 "Script.l"
 	{ inComment=TRUE; BEGIN COMMENT; }
 	break;
 	case 42:
 	case 43:
-#line 347 "Script.l"
+//#line 347 "Script.l"
 	{ inComment=FALSE; BEGIN 0; }
 	break;
 	case 44:
 	case 45:
-#line 349 "Script.l"
+//#line 349 "Script.l"
 	;
 	break;
 	case 46:
-#line 352 "Script.l"
+//#line 352 "Script.l"
 	{ BEGIN SLCOMMENT; }
 	break;
 	case 47:
-#line 353 "Script.l"
+//#line 353 "Script.l"
 	{ BEGIN 0; }
 	break;
 	case 48:
-#line 354 "Script.l"
+//#line 354 "Script.l"
 	;
 	break;
 	case 49:
-#line 357 "Script.l"
+//#line 357 "Script.l"
 	return scr_text[0];
 	break;
 
-#line 472 "d:/usr/mks-ly/etc/yylex.c"
+//#line 472 "d:/usr/mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
@@ -1146,8 +1146,7 @@ typedef struct scr__save_block_tag {
 } YY_SAVED;
 
 YY_SAVED *
-scr_SaveScan(fp)
-FILE * fp;
+scr_SaveScan(FILE * fp)
 {
 	YY_SAVED * p;
 
@@ -1174,8 +1173,7 @@ FILE * fp;
  * Restore previous LEX state
  */
 void
-scr_RestoreScan(p)
-YY_SAVED * p;
+scr_RestoreScan(YY_SAVED * p)
 {
 	if (p == NULL)
 		return;
@@ -1231,8 +1229,7 @@ input()
  * pushback char
  */
 YY_DECL int
-unput(c)
-	int c;
+unput(int c)
 {
 #ifndef YY_PRESERVE
 	if (scr__end >= YYLMAX) {
@@ -1258,7 +1255,7 @@ unput(c)
 	return c;
 }
 
-#line 360 "Script.l"
+//#line 360 "Script.l"
 
 /* Set the current input buffer for the lexer */
 void scriptSetInputBuffer(UBYTE *pBuffer, UDWORD size)

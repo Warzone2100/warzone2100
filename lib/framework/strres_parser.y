@@ -5,17 +5,6 @@
  * Yacc file for parsing String Resource files
  */
 
-#ifdef PSX
-/* A few definitions so the yacc generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-static int printf(char* c, ...)
-{
-	return 0;
-}
-#endif
-
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
@@ -29,6 +18,20 @@ static int printf(char* c, ...)
 
 /* Turn off a couple of warnings that the yacc generated code gives */
 #pragma warning ( disable : 4305 4102)
+
+/*
+ * A simple error reporting routine
+ */
+
+int strres_error(const char *pMessage,...)
+{
+	int		line;
+	char	*pText;
+
+	strresGetErrorData(&line, &pText);
+	DBERROR(("STRRES file parse error:\n%s at line %d\nText: '%s'\n",
+			  pMessage, line, pText));
+}
 
 %}
 
@@ -58,20 +61,6 @@ line:			TEXT QTEXT
 
 %%
 
-
-/*
- * A simple error reporting routine
- */
-
-void strres_error(char *pMessage,...)
-{
-	int		line;
-	char	*pText;
-
-	strresGetErrorData(&line, &pText);
-	DBERROR(("RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
-			  pMessage, line, strres_char, pText));
-}
 
 
 

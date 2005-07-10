@@ -1279,7 +1279,7 @@ void intResetScreen(BOOL NoAnim)
 
 		if (bInTutorial)
 		{
-			eventFireCallbackTrigger(CALL_DESIGN_QUIT);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_QUIT);
 		}
 
 						// pc
@@ -1587,7 +1587,7 @@ INT_RETVAL intRunWidgets(void)
 	intLastWidget = retID;
 	if (bInTutorial && retID != 0)
 	{
-		eventFireCallbackTrigger(CALL_BUTTON_PRESSED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUTTON_PRESSED);
 	}
 
 	/* Extra code for the power bars to deal with the shadow */
@@ -2631,7 +2631,7 @@ static void intRunStats(void)
 		// fire the tutorial trigger if neccessary
 		if (bInTutorial && Quantity != ProductionRun && Quantity > 1)
 		{
-			eventFireCallbackTrigger(CALL_MANURUN);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MANURUN);
 		}
 
 		ProductionRun = Quantity;
@@ -3213,7 +3213,7 @@ static void intProcessStats(UDWORD id)
 					if (bInTutorial && objMode == IOBJ_BUILD)
 					{
 
-						eventFireCallbackTrigger(CALL_BUILDGRID);
+						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUILDGRID);
 					}
 
 					// Set the object stats
@@ -5416,7 +5416,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 	if (bInTutorial)
 	{
 		DBPRINTF(("Go with object open callback!\n"));
-	 	eventFireCallbackTrigger(CALL_OBJECTOPEN);
+	 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTOPEN);
 	}
 
 	return TRUE;
@@ -5482,7 +5482,7 @@ void intRemoveObject(void)
 	if (bInTutorial)
 	{
 		DBPRINTF(("Go with object close callback!\n"));
-	 	eventFireCallbackTrigger(CALL_OBJECTCLOSE);
+	 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTCLOSE);
 	}
 
 }
@@ -6479,13 +6479,13 @@ donelab:
 		switch (objMode)
 		{
 		case IOBJ_BUILD:
-			eventFireCallbackTrigger(CALL_BUILDLIST);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUILDLIST);
 			break;
 		case IOBJ_RESEARCH:
-			eventFireCallbackTrigger(CALL_RESEARCHLIST);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHLIST);
 			break;
 		case IOBJ_MANUFACTURE:
-			eventFireCallbackTrigger(CALL_MANULIST);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MANULIST);
 			break;
 		default:
 			break;
@@ -8301,7 +8301,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,BOOL AllowGroup)
 		if (bInTutorial)
 		{
 			psCBSelectedDroid = CurrentDroid;
-			eventFireCallbackTrigger(CALL_DROID_SELECTED);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
 			psCBSelectedDroid = NULL;
 		}
 

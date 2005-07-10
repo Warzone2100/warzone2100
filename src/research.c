@@ -2062,7 +2062,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
     if ((player == selectedPlayer) && bDisplay)
     {
         psCBLastResearch = pResearch;
-	    eventFireCallbackTrigger(CALL_RESEARCHCOMPLETED);
+	    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
         psCBLastResearch = NULL;
     }
 #endif

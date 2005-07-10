@@ -1837,7 +1837,7 @@ BOOL updateTransporter(DROID *psTransporter)
             psTransporter->action = DACTION_NONE;
 
 			//the script can call startMission for this callback for offworld missions
-			eventFireCallbackTrigger(CALL_START_NEXT_LEVEL);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 
 			// clear order
 			psTransporter->order = DORDER_NONE;
@@ -1928,7 +1928,7 @@ void processLaunchTransporter(void)
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, 
 				(void*)psCurrTransporter);
 
-			eventFireCallbackTrigger(CALL_LAUNCH_TRANSPORTER);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
 		}
 	}
 }

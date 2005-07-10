@@ -9,8 +9,6 @@
 
 /***************************************************************************/
 
-extern FILE	*audp_in;
-
 extern void		IncludeFile( char szFileName[] );
 extern BOOL		ParseFile( char szFileName[] );
 extern void		IncludeFile( char szFileName[] );

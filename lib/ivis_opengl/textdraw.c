@@ -289,17 +289,16 @@ UDWORD pie_GetFormattedTextFlags(void)
 	return FFlags;
 }
 
-static RENDERTEXT_CALLBACK Indirect_pie_DrawText=pie_DrawText;
-
+static RENDERTEXT_CALLBACK Indirect_pie_DrawText= pie_DrawText;
 
 void SetIndirectDrawTextCallback( RENDERTEXT_CALLBACK *routine)
 {
-	Indirect_pie_DrawText=routine;	
+	Indirect_pie_DrawText=*routine;	
 }
 
 RENDERTEXT_CALLBACK *GetIndirectDrawTextCallback( void)
 {
-	return(Indirect_pie_DrawText);
+	return(&Indirect_pie_DrawText);
 }
 		  
 

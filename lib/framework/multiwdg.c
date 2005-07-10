@@ -273,7 +273,7 @@ BOOL wdgLoadCompleteCatalog(char *pWDGName)
 	FILE		*pFileHandle;
 
 	// allocate the cache structure
-	psNew = MALLOC(sizeof(WDGCACHE));
+	psNew = (WDGCACHE*)MALLOC(sizeof(WDGCACHE));
 	if (psNew == NULL)
 	{
 		DBERROR(("wdgLoadCompleteCatalog: out of memory"));
@@ -291,14 +291,14 @@ BOOL wdgLoadCompleteCatalog(char *pWDGName)
 	// get the WRF catalog
 	WDG_GetCurrentWDGCatalog(&pWDGName, &numWRF, &psCat);
 	psNew->numWRF = numWRF;
-	psNew->asWRFCatalog = MALLOC( sizeof(WDGINFO) * numWRF);
+	psNew->asWRFCatalog = (WDGINFO*)MALLOC( sizeof(WDGINFO) * numWRF);
 	if (psNew->asWRFCatalog == NULL)
 	{
 		DBERROR(("wdgLoadCompleteCatalog: out of memory"));
 		return FALSE;
 	}
 	memcpy(psNew->asWRFCatalog, psCat, sizeof(WDGINFO) * numWRF);
-	psNew->apsWRFFileCatalog = MALLOC( sizeof(WRFINFO *) * numWRF );
+	psNew->apsWRFFileCatalog = (WRFINFO**)MALLOC( sizeof(WRFINFO *) * numWRF );
 	if (psNew->apsWRFFileCatalog == NULL)
 	{
 		DBERROR(("wdgLoadCompleteCatalog: out of memory"));
@@ -333,7 +333,7 @@ BOOL wdgLoadCompleteCatalog(char *pWDGName)
 			fclose(pFileHandle);
 			return FALSE;
 		}
-		psNew->apsWRFFileCatalog[i] = MALLOC( sizeof(WRFINFO) * psCat[i].filecount );
+		psNew->apsWRFFileCatalog[i] = (WRFINFO*)MALLOC( sizeof(WRFINFO) * psCat[i].filecount );
 		if (psNew->apsWRFFileCatalog[i] == NULL)
 		{
 			DBERROR(("wdgLoadCompleteCatalog: out of memory"));

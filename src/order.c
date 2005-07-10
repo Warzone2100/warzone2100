@@ -310,7 +310,7 @@ void orderUpdateDroid(DROID *psDroid)
                 if (psDroid->psGroup AND psDroid->psGroup->refCount < 2)
                 {
     	    		//the script can call startMission for this callback for offworld missions
-        			eventFireCallbackTrigger(CALL_START_NEXT_LEVEL);
+        			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
                 }
             }
         }
@@ -407,7 +407,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
             else
             {
 			    //the script can call startMission for this callback for offworld missions
-			    eventFireCallbackTrigger(CALL_START_NEXT_LEVEL);
+			    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 
 			    /* clear order */
 			    psDroid->order = DORDER_NONE;
@@ -778,7 +778,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 		{
 			psDroid->order = DORDER_NONE;
 			psScrCBVtolOffMap = psDroid;
-			eventFireCallbackTrigger(CALL_VTOL_OFF_MAP);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VTOL_OFF_MAP);
 		}
 		break;
 	case DORDER_RTR:
@@ -1053,7 +1053,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
                 if (psDroid->psGroup AND psDroid->psGroup->refCount < 2)
                 {
     	    		//the script can call startMission for this callback for offworld missions
-        			eventFireCallbackTrigger(CALL_START_NEXT_LEVEL);
+        			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
                 }
             }
         }

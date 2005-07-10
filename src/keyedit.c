@@ -146,7 +146,7 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 	}
 
 	/* Clear down mappings using these keys... But only if it isn't unassigned */
-	keyReAssignMapping( metakey, subkey, KEY_IGNORE, KEY_MAXSCAN );
+	keyReAssignMapping( metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN );
 
 	/* Try and see if its there already - damn well should be! */
 	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);

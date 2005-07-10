@@ -22,12 +22,12 @@
 
 /* Basic numeric types */
 typedef unsigned	char	UBYTE;
-typedef	signed		char	SBYTE;
-typedef signed		char	STRING;
+typedef			char	SBYTE;
+typedef 		char	STRING;
 typedef	unsigned	short	UWORD;
-typedef	signed		short	SWORD;
+typedef			short	SWORD;
 typedef	unsigned	int	UDWORD;
-typedef	signed		int	SDWORD;
+typedef			int	SDWORD;
 
 #ifndef WIN32
 

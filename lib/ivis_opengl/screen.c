@@ -20,7 +20,13 @@
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <jpeglib.h>
+#ifdef __cplusplus
+}
+#endif
 #include <setjmp.h>
 
 #include "frame.h"
@@ -43,9 +49,6 @@ SCREEN_MODE		screenMode = SCREEN_WINDOWED;
 
 /* Which mode (of operation) the library is running in */
 DISPLAY_MODES	displayMode;
-
-/* The handle for the main application window */
-HANDLE		hWndMain = NULL;
 
 /* The Front and back buffers */
 LPDIRECTDRAWSURFACE4	psFront = NULL;
@@ -356,7 +359,7 @@ void screen_SetBackDropFromFile(char* filename) {
 	tmp = (uintptr_t)buffer;
 	while (cinfo.output_scanline < cinfo.output_height) {
 		ptr[0] = (JSAMPARRAY)tmp;
-		jpeg_read_scanlines(&cinfo, ptr, 1);
+		jpeg_read_scanlines(&cinfo, (JSAMPARRAY)ptr, 1);
 		tmp += row_stride;
 	}
 	jpeg_finish_decompress(&cinfo);

@@ -146,7 +146,7 @@ void clusterUpdate(void)
 		if (aClusterEmpty[i])
 		{
 			scrCBEmptyClusterID = i;
-			eventFireCallbackTrigger(CALL_CLUSTER_EMPTY);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CLUSTER_EMPTY);
 			aClusterEmpty[i] = FALSE;
 		}
 	}
@@ -717,18 +717,18 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 
 			psScrCBObjSeen = psObj;
 			psScrCBObjViewer = psViewer;
-			eventFireCallbackTrigger(CALL_OBJ_SEEN);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJ_SEEN);
 
 			switch (psObj->type)
 			{
 			case OBJ_DROID:
-				eventFireCallbackTrigger(CALL_DROID_SEEN);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SEEN);
 				break;
 			case OBJ_STRUCTURE:
-				eventFireCallbackTrigger(CALL_STRUCT_SEEN);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_SEEN);
 				break;
 			case OBJ_FEATURE:
-				eventFireCallbackTrigger(CALL_FEATURE_SEEN);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FEATURE_SEEN);
 				break;
 			default:
 				ASSERT((FALSE, "clustObjectSeen: invalid object type"));
@@ -750,18 +750,18 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 //		DBPRINTF(("CALL_ATTACKED player %d, cluster %d\n",
 //			psObj->player, psObj->cluster));
 		psScrCBTarget = psObj;
-		eventFireCallbackTrigger(CALL_ATTACKED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ATTACKED);
 
 		switch (psObj->type)
 		{
 		case OBJ_DROID:
 			psLastDroidHit = (DROID *)psObj;
-			eventFireCallbackTrigger(CALL_DROID_ATTACKED);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_ATTACKED);
 			psLastDroidHit = NULL;
 			break;
 		case OBJ_STRUCTURE:
 			psLastStructHit = (STRUCTURE *)psObj;
-			eventFireCallbackTrigger(CALL_STRUCT_ATTACKED);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_ATTACKED);
 			psLastStructHit = NULL;
 			break;
 		default:

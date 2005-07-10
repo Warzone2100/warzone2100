@@ -890,7 +890,7 @@ BOOL scrAddDroidToMissionList(void)
 		psDroid = buildMissionDroid( psTemplate, 128, 128, player );
 	}
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psDroid))
 	{
 		return FALSE;
 	}
@@ -951,7 +951,7 @@ BOOL scrAddDroid(void)
 		}
 	}
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psDroid))
 	{
 		return FALSE;
 	}
@@ -1675,7 +1675,7 @@ BOOL scrGetFeature(void)
 	
 	if(psFeat == NULL)		// no more to find.
 	{
-		if (!stackPushResult(ST_FEATURE, (SDWORD)NULL))
+		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (SDWORD)NULL))
 		{
 			return FALSE;
 		}
@@ -1686,7 +1686,7 @@ BOOL scrGetFeature(void)
 	if(psFeatureStatToFind[bucket] == NULL)
 	{
 		DBPRINTF(("invalid feature to find. possibly due to save game\n"));
-		if(!stackPushResult(ST_FEATURE,(SDWORD)NULL))
+		if(!stackPushResult((INTERP_TYPE)ST_FEATURE,(SDWORD)NULL))
 		{
 			return FALSE;
 		}
@@ -1702,7 +1702,7 @@ BOOL scrGetFeature(void)
 			&&!fireOnLocation(psFeat->x,psFeat->y)		// not burning.
 			)
 		{
-			if (!stackPushResult(ST_FEATURE,(SDWORD)psFeat))	//	push result
+			if (!stackPushResult((INTERP_TYPE)ST_FEATURE,(SDWORD)psFeat))	//	push result
 			{
 				return FALSE;
 			}
@@ -1715,7 +1715,7 @@ BOOL scrGetFeature(void)
 	}
 	
 	// none found
-	if (!stackPushResult(ST_FEATURE, (UDWORD)NULL))
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (UDWORD)NULL))
 	{
 		return FALSE;
 	}
@@ -1814,7 +1814,7 @@ BOOL scrAddFeature(void)
 		psFeat = buildFeature( psStat, iX, iY, FALSE );
 	}
 
-	if (!stackPushResult(ST_FEATURE, (UDWORD)psFeat))
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (UDWORD)psFeat))
 	{
 		return FALSE;
 	}
@@ -1884,7 +1884,7 @@ BOOL scrAddStructure(void)
 		}
 	}
 
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psStruct))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psStruct))
 	{
 		return FALSE;
 	}
@@ -1963,7 +1963,7 @@ BOOL scrEnumStruct(void)
 	
 	if(psStruct == NULL)		// no more to find.
 	{
-		if (!stackPushResult(ST_STRUCTURE, (SDWORD)NULL))
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (SDWORD)NULL))
 		{
 			return FALSE;
 		}
@@ -1978,7 +1978,7 @@ BOOL scrEnumStruct(void)
 			(psStruct->visible[playerToEnumStruct])
 		   )
 		{
-			if (!stackPushResult(ST_STRUCTURE,(UDWORD) psStruct))			//	push result
+			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE,(UDWORD) psStruct))			//	push result
 			{
 				return FALSE;
 			}
@@ -1989,7 +1989,7 @@ BOOL scrEnumStruct(void)
 		psStruct = psStruct->psNext;
 	}
 	// push NULL, none found;
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)NULL))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)NULL))
 	{
 		return FALSE;
 	}
@@ -2212,7 +2212,7 @@ BOOL scrGetStructure(void)
 		psStruct = NULL;
 	}
 	
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psStruct))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psStruct))
 	{
 		return FALSE;
 	}
@@ -2316,7 +2316,7 @@ BOOL scrGetTemplate(void)
 		psTemplate = NULL;
 	}
 	
-	if (!stackPushResult(ST_TEMPLATE, (UDWORD)psTemplate))
+	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, (UDWORD)psTemplate))
 	{
 		return FALSE;
 	}
@@ -2420,7 +2420,7 @@ BOOL scrGetDroid(void)
 		psDroid = NULL;
 	}
 	
-	if (!stackPushResult(ST_DROID, (UDWORD)psDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)psDroid))
 	{
 		return FALSE;
 	}
@@ -4163,7 +4163,7 @@ BOOL scrStructureBuiltInRange(void)
 		psCurr = NULL;
 	}
 	
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psCurr))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psCurr))
 	{
 		return FALSE;
 	}
@@ -5808,7 +5808,7 @@ BOOL scrTakeOverSingleDroid(void)
 
     psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psNewDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psNewDroid))
 	{
 		return FALSE;
     }
@@ -5947,7 +5947,7 @@ BOOL scrTakeOverSingleStructure(void)
         }
     }
 
-	if (!stackPushResult(ST_STRUCTURE, (SDWORD)psNewStruct))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (SDWORD)psNewStruct))
 	{
 		return FALSE;
     }
@@ -6379,7 +6379,7 @@ BOOL scrEnumDroid(void)
 	{
 		if(psDroid->visible[playerVisibleDroid])
 		{
-			if (!stackPushResult(ST_DROID,(UDWORD) psDroid))			//	push result
+			if (!stackPushResult((INTERP_TYPE)ST_DROID,(UDWORD) psDroid))			//	push result
 			{
 				return FALSE;
 			}
@@ -6393,7 +6393,7 @@ BOOL scrEnumDroid(void)
 	}
 
 	// push NULLDROID, since didn't find any
-	if (!stackPushResult(ST_DROID, (UDWORD)NULL))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)NULL))
 	{
 		return FALSE;
 	}

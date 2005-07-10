@@ -289,7 +289,8 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 		NetAdd2(pMsg,	i+24,		pD->orderX);
 		NetAdd2(pMsg,	i+26,		pD->orderY);
 	}
-	NetAdd2(pMsg,		i+28,		((UWORD)pD->numKills));		// droid kills
+	UWORD numkills = pD->numKills;
+	NetAdd2(pMsg,		i+28,		numkills);	// droid kills
 
 	pMsg->size =(UWORD)( pMsg->size + 30);
 	

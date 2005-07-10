@@ -17,6 +17,7 @@ OPENAL_LIB=openal
 endif
 
 CPP=gcc
+#CPP=g++ -fpermissive
 CFLAGS+=-gstabs -DYY_STATIC
 
 ifeq ($(MODE), prod)

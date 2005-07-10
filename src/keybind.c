@@ -1095,7 +1095,7 @@ if(bMultiPlayer)
 #endif
 
 	game_SetValidityKey(VALIDITYKEY_CTRL_M);
-	eventFireCallbackTrigger(CALL_MISSION_START);
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_START);
 }
 // --------------------------------------------------------------------------
 /* Tell the scripts to end a mission*/
@@ -1109,7 +1109,7 @@ if(bMultiPlayer)
 }
 #endif
 
-	eventFireCallbackTrigger(CALL_MISSION_END);
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
 }
 // --------------------------------------------------------------------------
 /* Initialise the player power levels*/

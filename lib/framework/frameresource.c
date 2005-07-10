@@ -740,7 +740,7 @@ BOOL resLoadFile(STRING *pType, STRING *pFile)
 		// Set up the resource structure if there is something to store
 		if (pData != NULL)
 		{
-			psRes = MALLOC(sizeof(RES_DATA));
+			psRes = (RES_DATA*)MALLOC(sizeof(RES_DATA));
 			if (!psRes)
 			{
 				DBERROR(("resLoadFile: Out of memory"));
@@ -1254,7 +1254,7 @@ BOOL FILE_ProcessFile(WRFINFO *CurrentFile, UBYTE *pRetreivedFile)
 	{
 		RES_DATA *psRes;
 
-		psRes = MALLOC(sizeof(RES_DATA));
+		psRes = (RES_DATA*)MALLOC(sizeof(RES_DATA));
 		if (!psRes)
 		{
 			DBERROR(("resLoadFile: Out of memory"));

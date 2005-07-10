@@ -165,7 +165,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			ASSERT((FALSE,"scrBaseObjGet: body only valid for a droid"));
 			return FALSE;
 		}
-		type = ST_BODY;
+		type = (INTERP_TYPE)ST_BODY;
 		val = ((DROID *)psObj)->asBits[COMP_BODY].nStat;
 		break;
 	case OBJID_PROPULSION:
@@ -174,7 +174,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			ASSERT((FALSE,"scrBaseObjGet: propulsion only valid for a droid"));
 			return FALSE;
 		}
-		type = ST_PROPULSION;
+		type = (INTERP_TYPE)ST_PROPULSION;
 		val = ((DROID *)psObj)->asBits[COMP_PROPULSION].nStat;
 		break;
 	case OBJID_WEAPON:
@@ -183,7 +183,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			ASSERT((FALSE,"scrBaseObjGet: weapon only valid for a droid"));
 			return FALSE;
 		}
-		type = ST_WEAPON;
+		type = (INTERP_TYPE)ST_WEAPON;
 		//if (((DROID *)psObj)->numWeaps == 0)
         if (((DROID *)psObj)->asWeaps[0].nStat == 0)
 		{
@@ -200,7 +200,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			ASSERT((FALSE,"scrBaseObjGet: stat only valid for a structure"));
 			return FALSE;
 		}
-		type = ST_STRUCTURESTAT;
+		type = (INTERP_TYPE)ST_STRUCTURESTAT;
 		val = ((STRUCTURE *)psObj)->pStructureType - asStructureStats;
 		break;
 	default:
@@ -244,7 +244,7 @@ BOOL scrObjToDroid(void)
 		psObj = NULL;
 	}
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psObj))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psObj))
 	{
 		return FALSE;
 	}
@@ -269,7 +269,7 @@ BOOL scrObjToStructure(void)
 		psObj = NULL;
 	}
 
-	if (!stackPushResult(ST_STRUCTURE, (SDWORD)psObj))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (SDWORD)psObj))
 	{
 		return FALSE;
 	}
@@ -294,7 +294,7 @@ BOOL scrObjToFeature(void)
 		psObj = NULL;
 	}
 
-	if (!stackPushResult(ST_FEATURE, (SDWORD)psObj))
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (SDWORD)psObj))
 	{
 		return FALSE;
 	}

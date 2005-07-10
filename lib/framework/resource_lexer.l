@@ -36,9 +36,6 @@ static int fprintf(FILE* f,char* c,...)
 /* Turn off a couple of warnings that the lex generated code gives */
 #pragma warning ( disable : 4102 4305 )
 
-/* Maximum length for any TEXT value */
-#define YYLMAX	255
-
 /* Store for any string values */
 STRING aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
 static UDWORD currText=0;
@@ -50,8 +47,12 @@ static BOOL inComment = FALSE;
 static UBYTE *pInputBuffer = NULL;
 static UBYTE *pEndBuffer = NULL;
 
-#undef res_getc
-#define res_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
+#define YY_INPUT(buf,result,max_size) \
+			if (pInputBuffer != pEndBuffer) { \
+				buf[0] = *(pInputBuffer++); result = 1; \
+			} else { \
+				buf[0] = EOF; result = YY_NULL; \
+			}
 
 %}
 
@@ -117,7 +118,8 @@ void resSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pEndBuffer = pBuffer + size;
 
 	/* Reset the lexer incase it's been used before */
-	res__reset();
+	//res_reset();
+	YY_FLUSH_BUFFER;
 	inComment = FALSE;
 }
 

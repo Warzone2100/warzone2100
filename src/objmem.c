@@ -288,17 +288,17 @@ void objmemUpdate(void)
 		{
 			// do the object died callback
 			psCBObjDestroyed = psCurr;
-			eventFireCallbackTrigger(CALL_OBJ_DESTROYED);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJ_DESTROYED);
 			switch (psCurr->type)
 			{
 			case OBJ_DROID:
-				eventFireCallbackTrigger(CALL_DROID_DESTROYED);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_DESTROYED);
 				break;
 			case OBJ_STRUCTURE:
-				eventFireCallbackTrigger(CALL_STRUCT_DESTROYED);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_DESTROYED);
 				break;
 			case OBJ_FEATURE:
-				eventFireCallbackTrigger(CALL_FEATURE_DESTROYED);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FEATURE_DESTROYED);
 				break;
 			default:
 				break;

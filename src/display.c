@@ -1746,7 +1746,7 @@ void StartDeliveryPosition(OBJECT_POSITION	*psLocation,BOOL driveActive)
 
 	if(bInTutorial)
 	{
-		eventFireCallbackTrigger(CALL_DELIVPOINTMOVED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DELIVPOINTMOVED);
 	}
 
 	// Setup dummy structure stats for positioning a delivery point.
@@ -1927,7 +1927,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 				groupNumber = psD->group;
 			}
 		}
-		if(bGotGroup && ( keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)) ))
+		if(bGotGroup && ( keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)) )
 		{
 			psDroid->group = (UBYTE)groupNumber;
 			secondarySetAverageGroupState(selectedPlayer, (UDWORD)groupNumber);
@@ -1953,7 +1953,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 		if (bInTutorial)
 		{
 			psCBSelectedDroid = psDroid;
-			eventFireCallbackTrigger(CALL_DROID_SELECTED);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
 			psCBSelectedDroid = NULL;
 		}
 	}

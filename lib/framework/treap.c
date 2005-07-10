@@ -74,7 +74,7 @@ SDWORD treapStringCmp(UDWORD key1, UDWORD key2)
  */
 BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 {
-	*ppsTreap = MALLOC(sizeof(TREAP));
+	*ppsTreap = (TREAP*)MALLOC(sizeof(TREAP));
 	if (!(*ppsTreap))
 	{
 		DBERROR(("treapCreate: Out of memory"));
@@ -176,7 +176,7 @@ BOOL treapAdd(TREAP *psTreap, UDWORD key, void *pObj)
 {
 	TREAP_NODE	*psNew;
 
-	if (!HEAP_ALLOC(psTreap->psNodes, (void*)&psNew))
+	if (!HEAP_ALLOC(psTreap->psNodes, (void**)&psNew))
 	{
 		return FALSE;
 	}

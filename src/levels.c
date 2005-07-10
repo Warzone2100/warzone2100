@@ -1125,7 +1125,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
     //in from the script-controlled Transporters
     if (!pSaveName AND psNewLevel->type == LDS_CAMSTART)
     {
-        eventFireCallbackTrigger(CALL_NO_REINFORCEMENTS_LEFT);
+        eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
     }
 //#endif
 

@@ -363,10 +363,10 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_LEFTARROW,KEYMAP_PRESSED,kf_FaceEast, strresGetString(psStringRes,STR_BIND_RIGHT));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_RIGHTARROW,KEYMAP_PRESSED,kf_FaceWest, strresGetString(psStringRes,STR_BIND_LEFT));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_STAR,KEYMAP_PRESSED,kf_JumpToResourceExtractor,	strresGetString(psStringRes,STR_BIND_RESJ));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToRepairUnits,	strresGetString(psStringRes,STR_BIND_REPJ));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToConstructorUnits,	strresGetString(psStringRes,STR_BIND_CONJ));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToSensorUnits,	strresGetString(psStringRes,STR_BIND_SENJ));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToCommandUnits,	strresGetString(psStringRes,STR_BIND_COMJ));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToRepairUnits,	strresGetString(psStringRes,STR_BIND_REPJ));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToConstructorUnits,	strresGetString(psStringRes,STR_BIND_CONJ));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToSensorUnits,	strresGetString(psStringRes,STR_BIND_SENJ));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToCommandUnits,	strresGetString(psStringRes,STR_BIND_COMJ));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_TAB,KEYMAP_PRESSED,kf_ToggleOverlays,			strresGetString(psStringRes,STR_BIND_OVERL));
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_BACKQUOTE,KEYMAP_PRESSED,kf_ToggleConsoleDrop,strresGetString(psStringRes,STR_BIND_CONSOLE));
 	//                                **********************************
@@ -412,11 +412,11 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//									SELECT PLAYERS - DEBUG ONLY
- 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextFactory,strresGetString(psStringRes,STR_BIND_SELFACTORY));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextResearch,strresGetString(psStringRes,STR_BIND_SELRESEARCH));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextPowerStation,strresGetString(psStringRes,STR_BIND_SELPOWER));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,strresGetString(psStringRes,STR_BIND_SELCYBORG));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
+ 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextFactory,strresGetString(psStringRes,STR_BIND_SELFACTORY));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextResearch,strresGetString(psStringRes,STR_BIND_SELRESEARCH));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextPowerStation,strresGetString(psStringRes,STR_BIND_SELPOWER));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,strresGetString(psStringRes,STR_BIND_SELCYBORG));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
 	
 #ifndef DEBUG
 if(bAllowDebugMode)

@@ -1429,7 +1429,7 @@ BOOL recvColourRequest(NETMSG *pMsg)
 		setupNewPlayer	(dpid,chosenPlayer);		// setup all the guff for that player.
 		sendOptions		(dpid,chosenPlayer);	
 		
-		NETplayerInfo(NULL);						// bring netplay up to date with changes.
+		NETplayerInfo();						// bring netplay up to date with changes.
 
 		if(player == selectedPlayer)// if host changing
 		{
@@ -2143,7 +2143,7 @@ static void processMultiopWidgets(UDWORD id)
 		strcpy((STRING*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));
 
 		// chop to 15 chars..
-		while(strlen(sPlayer) > 15)	// clip name.
+		while(strlen((STRING*)sPlayer) > 15)	// clip name.
 		{
 			sPlayer[strlen(sPlayer)-1]='\0';
 		}

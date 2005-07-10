@@ -6,6 +6,7 @@
 */
 #include "frame.h"
 #include "piedef.h"
+#include "piematrix.h"
 #include "piestate.h"
 #include "display3d.h"
 #include "display3ddef.h"
@@ -397,5 +398,5 @@ void	atmosSetWeatherType(WT_CLASS type)
 // -----------------------------------------------------------------------------
 WT_CLASS	atmosGetWeatherType( void )
 {
-	return(weather);
+	return (WT_CLASS)weather;
 }

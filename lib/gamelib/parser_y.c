@@ -48,7 +48,7 @@ typedef struct yyTypedRules_tag {	/* Typed rule table */
 
 #endif
 
-#line 1 ".\parser.y"
+//#line 1 ".\parser.y"
 
 
 /* Turn off a couple of warnings that the lex generated code gives */
@@ -305,7 +305,7 @@ typedef struct yyTraceItems_tag {
 } yyTraceItems;
 #endif
 
-#line 2 "d:\mks-ly/etc/yyparse.c"
+//#line 2 "d:\mks-ly/etc/yyparse.c"
 
 /*
  * Copyright 1985, 1990 by Mortice Kern Systems Inc.  All rights reserved.
@@ -484,7 +484,7 @@ static char *	yygetState YY_ARGS((int));
 #define yyassert(condition, msg, arg)
 #endif
 
-#line 192 ".\parser.y"
+//#line 192 ".\parser.y"
 /***************************************************************************/
 /* A simple error reporting routine */
 
@@ -503,19 +503,6 @@ void audp_error(char *pMessage,...)
 			  aTxtBuf, line, audp_char, pText));
 
 	va_end(args);
-}
-
-/***************************************************************************/
-/* Read a resource file */
-
-BOOL ParseResourceFile( UBYTE *pData, UDWORD fileSize )
-{
-	// Tell lex about the input buffer
-	parserSetInputBuffer( pData, fileSize );
-
-	audp_parse();
-
-	return TRUE;
 }
 
 /***************************************************************************/
@@ -538,7 +525,7 @@ BOOL ParseResourceFile( UBYTE *pData, UDWORD fileSize )
 
 static int win_yyparse();			/* prototype */
 
-audp_parse() 
+int audp_parse() 
 {
 	int wReturnValue;
 	HANDLE hRes_table;		/* handle of resource after loading */
@@ -631,7 +618,7 @@ static int win_yyparse()
  * standard way.
  */
 
-audp_parse() 
+int audp_parse() 
 
 #endif /* YACC_WINDOWS */
 
@@ -874,27 +861,27 @@ yyEncore:
 	switch (yyi) {		/* perform semantic action */
 		
 case YYr12: {	/* audio_track :  AUDIO QTEXT LOOP INTEGER INTEGER INTEGER */
-#line 78 ".\parser.y"
+//#line 78 ".\parser.y"
 
 							audio_SetTrackVals( yypvt[-4].sval, TRUE, &g_iDummy, yypvt[-2].ival, yypvt[-1].ival, yypvt[0].ival, 0 );
 						
 } break;
 
 case YYr13: {	/* audio_track :  AUDIO QTEXT ONESHOT INTEGER INTEGER INTEGER */
-#line 82 ".\parser.y"
+//#line 82 ".\parser.y"
 
 							audio_SetTrackVals( yypvt[-4].sval, FALSE, &g_iDummy, yypvt[-2].ival, yypvt[-1].ival, yypvt[0].ival, 0 );
 						
 } break;
 
 case YYr14: {	/* anim_module_header :  ANIM_MODULE "{" */
-#line 88 ".\parser.y"
+//#line 88 ".\parser.y"
 
 						
 } break;
 
 case YYr26: {	/* anim_config :  QTEXT INTEGER */
-#line 121 ".\parser.y"
+//#line 121 ".\parser.y"
 
 							g_iCurAnimID = yypvt[0].ival;
 							anim_SetVals( yypvt[-1].sval, yypvt[0].ival );
@@ -902,35 +889,35 @@ case YYr26: {	/* anim_config :  QTEXT INTEGER */
 } break;
 
 case YYr27: {	/* anim_trans :  ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER */
-#line 133 ".\parser.y"
+//#line 133 ".\parser.y"
 
 							anim_Create3D( yypvt[-3].sval, yypvt[-2].ival, yypvt[-1].ival, yypvt[0].ival, ANIM_3D_TRANS, g_iCurAnimID );
 						
 } break;
 
 case YYr28: {	/* anim_trans :  ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER $27 "{" anim_obj_list "}" */
-#line 137 ".\parser.y"
+//#line 137 ".\parser.y"
 
 							g_iCurAnimID++;
 						
 } break;
 
 case YYr29: {	/* anim_frames :  ANIM3DFRAMES QTEXT INTEGER INTEGER */
-#line 143 ".\parser.y"
+//#line 143 ".\parser.y"
 
 							anim_Create3D( yypvt[-2].sval, yypvt[-1].ival, yypvt[0].ival, 1, ANIM_3D_FRAMES, g_iCurAnimID );
 						
 } break;
 
 case YYr30: {	/* anim_frames :  ANIM3DFRAMES QTEXT INTEGER INTEGER $29 "{" */
-#line 147 ".\parser.y"
+//#line 147 ".\parser.y"
 
 							anim_BeginScript();
 						
 } break;
 
 case YYr31: {	/* anim_frames :  ANIM3DFRAMES QTEXT INTEGER INTEGER $29 "{" $30 anim_script "}" */
-#line 151 ".\parser.y"
+//#line 151 ".\parser.y"
 
 							anim_EndScript();
 							g_iCurAnimID++;
@@ -938,21 +925,21 @@ case YYr31: {	/* anim_frames :  ANIM3DFRAMES QTEXT INTEGER INTEGER $29 "{" $30 a
 } break;
 
 case YYr34: {	/* anim_obj :  ANIMOBJECT INTEGER QTEXT "{" */
-#line 162 ".\parser.y"
+//#line 162 ".\parser.y"
 
 							anim_BeginScript();
 						
 } break;
 
 case YYr35: {	/* anim_obj :  ANIMOBJECT INTEGER QTEXT "{" $34 anim_script "}" */
-#line 166 ".\parser.y"
+//#line 166 ".\parser.y"
 
 							anim_EndScript();
 						
 } break;
 
 case YYr38: {	/* anim_state :  INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER */
-#line 176 ".\parser.y"
+//#line 176 ".\parser.y"
 
 							vecPos.x   = yypvt[-8].ival;
 							vecPos.y   = yypvt[-7].ival;
@@ -966,7 +953,7 @@ case YYr38: {	/* anim_state :  INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER I
 							anim_AddFrameToAnim( yypvt[-9].ival, vecPos, vecRot, vecScale );
 						
 } break;
-#line 314 "d:\mks-ly/etc/yyparse.c"
+//#line 314 "d:\mks-ly/etc/yyparse.c"
 	case YYrACCEPT:
 		YYACCEPT;
 	case YYrERROR:
@@ -1089,6 +1076,19 @@ yyReturn:
 #endif
 	return(retval);
 #endif
+}
+
+/***************************************************************************/
+/* Read a resource file */
+
+BOOL ParseResourceFile( UBYTE *pData, UDWORD fileSize )
+{
+	// Tell lex about the input buffer
+	parserSetInputBuffer( pData, fileSize );
+
+	audp_parse();
+
+	return TRUE;
 }
 
 		

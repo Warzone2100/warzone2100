@@ -54,9 +54,12 @@ static BOOL inComment;
 static UBYTE *pInputBuffer = NULL;
 static UBYTE *pEndBuffer = NULL;
 
-#undef strres_getc
-#define strres_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
-
+#define YY_INPUT(buf,result,max_size) \
+			if (pInputBuffer != pEndBuffer) { \
+				buf[0] = *(pInputBuffer++); result = 1; \
+			} else { \
+				buf[0] = EOF; result = YY_NULL; \
+			}
 %}
 
 %x COMMENT
@@ -111,7 +114,7 @@ void strresSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pEndBuffer = pBuffer + size;
 
 	/* Reset the lexer incase it's been used before */
-	strres__reset();
+	YY_FLUSH_BUFFER;
 }
 
 void strresGetErrorData(int *pLine, char **ppText)

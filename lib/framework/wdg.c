@@ -684,7 +684,7 @@ BOOL FILE_InitialiseCache(SDWORD CacheSize)
 			
 	}
 #endif
-	CacheBuffer=MALLOC(CacheSize);
+	CacheBuffer=(UBYTE*)MALLOC(CacheSize);
 	if (CacheBuffer==NULL)
 	{
 		DBPRINTF(("No memory for the file cache ... !\n"));
@@ -1032,7 +1032,7 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 	else if (MemAllocationMode==WDG_ALLOCATEMEM)
 	{
 		// we must allocate memory for the file
-		*ppFileData=MALLOC(CurrentFile->filesize);
+		*ppFileData=(UBYTE*)MALLOC(CurrentFile->filesize);
 		if (*ppFileData==NULL)
 		{
 			// no mem for file

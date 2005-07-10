@@ -976,7 +976,7 @@ static BOOL bActiveBackDrop = FALSE;
         //don't do the callback if we're playing the win/lose video
         if (!getScriptWinLoseVideo())
         {
-		    eventFireCallbackTrigger(CALL_VIDEO_QUIT);
+		    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
         }
         else
         {
@@ -1027,7 +1027,7 @@ static BOOL bActiveBackDrop = FALSE;
             //don't do the callback if we're playing the win/lose video
             if (!getScriptWinLoseVideo())
             {
-			    eventFireCallbackTrigger(CALL_VIDEO_QUIT);
+			    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
             }
             else
             {

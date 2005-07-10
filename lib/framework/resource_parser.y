@@ -5,24 +5,14 @@
  * Yacc file for parsing RES files
  */
 
-#ifdef PSX
-/* A few definitions so the yacc generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-static int printf(char* c, ...)
-{
-	return 0;
-}
-#endif
-
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
 // directory printfs
 #define DEBUG_GROUP0
-// file printfs
-//#define DEBUG_GROUP1
+
+#include <string.h>
+
 #include "types.h"
 #include "debug.h"
 #include "resly.h"
@@ -30,6 +20,20 @@ static int printf(char* c, ...)
 
 /* Turn off a couple of warnings that the yacc generated code gives */
 #pragma warning ( disable : 4305 4102)
+
+/*
+ * A simple error reporting routine
+ */
+
+int res_error(const char *pMessage,...)
+{
+	int	line;
+	char	*pText;
+
+	resGetErrorData(&line, &pText);
+	DBERROR(("RES file parse error:\n%s at line %d\nText: '%s'\n",
+			  pMessage, line, pText));
+}
 
 %}
 
@@ -97,20 +101,6 @@ file_line:			FILETOKEN TEXT QTEXT
 
 %%
 
-
-/*
- * A simple error reporting routine
- */
-
-void res_error(char *pMessage,...)
-{
-	int		line;
-	char	*pText;
-
-	resGetErrorData(&line, &pText);
-	DBERROR(("RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
-			  pMessage, line, res_char, pText));
-}
 
 
 

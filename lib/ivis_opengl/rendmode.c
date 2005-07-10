@@ -14,8 +14,8 @@
 
 //*************************************************************************
 
-//void (*iV_VideoClose)(void);
 void (*iV_VSync)(void);
+
 //*************************************************************************
 
 iSurface	rendSurface;
@@ -329,7 +329,6 @@ int iV_GetDisplayHeight(void)
 //*************************************************************************
 
 //void (*pie_VideoShutDown)(void);
-void (*iV_VSync)(void);
 //void (*iV_Clear)(uint32 colour);
 //void (*iV_RenderEnd)(void);
 //void (*iV_RenderBegin)(void);

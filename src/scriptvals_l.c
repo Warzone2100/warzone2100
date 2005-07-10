@@ -141,7 +141,7 @@ static int scrv__base[] = {
 };
 
 
-#line 1 "d:/usr/mks-ly/etc/yylex.c"
+//#line 1 "d:/usr/mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -269,7 +269,7 @@ extern	void	scrv_error	YY_ARGS((char *fmt, ...));
 extern	void	scrv_comment	YY_ARGS((char *term));
 extern	int	scrv_mapch	YY_ARGS((int delim, int escape));
 
-#line 1 "ScriptVals.l"
+//#line 1 "ScriptVals.l"
 
 /*
  * ScriptVals.l
@@ -309,7 +309,7 @@ static UBYTE *pEndBuffer = NULL;
 #undef scrv_getc
 #define scrv_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
 
-#line 127 "d:/usr/mks-ly/etc/yylex.c"
+//#line 127 "d:/usr/mks-ly/etc/yylex.c"
 
 
 #ifndef YYLMAX
@@ -537,7 +537,7 @@ YYDECL {
 	int scrv_oldi, scrv_oleng;	/* base i, scrv_leng before look-ahead */
 	int scrv_eof;		/* 1 if eof has already been read */
 
-#line 350 "d:/usr/mks-ly/etc/yylex.c"
+//#line 350 "d:/usr/mks-ly/etc/yylex.c"
 
 
 
@@ -661,51 +661,51 @@ YYDECL {
 	YY_USER;
 	switch (scrv__la_act[scrv_fmin] & 0777) {
 	case 0:
-#line 65 "ScriptVals.l"
+//#line 65 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_INT; return TYPE; }
 	break;
 	case 1:
-#line 66 "ScriptVals.l"
+//#line 66 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_INT; return TYPE; }
 	break;
 	case 2:
-#line 67 "ScriptVals.l"
+//#line 67 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 3:
-#line 68 "ScriptVals.l"
+//#line 68 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 4:
-#line 69 "ScriptVals.l"
+//#line 69 "ScriptVals.l"
 	return SCRIPT;
 	break;
 	case 5:
-#line 70 "ScriptVals.l"
+//#line 70 "ScriptVals.l"
 	return STORE;
 	break;
 	case 6:
-#line 71 "ScriptVals.l"
+//#line 71 "ScriptVals.l"
 	return RUN;
 	break;
 	case 7:
-#line 73 "ScriptVals.l"
+//#line 73 "ScriptVals.l"
 	{ scrv_lval.bval = TRUE;	 return BOOLEAN; }
 	break;
 	case 8:
-#line 74 "ScriptVals.l"
+//#line 74 "ScriptVals.l"
 	{ scrv_lval.bval = TRUE;	 return BOOLEAN; }
 	break;
 	case 9:
-#line 75 "ScriptVals.l"
+//#line 75 "ScriptVals.l"
 	{ scrv_lval.bval = FALSE;	 return BOOLEAN; }
 	break;
 	case 10:
-#line 76 "ScriptVals.l"
+//#line 76 "ScriptVals.l"
 	{ scrv_lval.bval = FALSE;	 return BOOLEAN; }
 	break;
 	case 11:
-#line 79 "ScriptVals.l"
+//#line 79 "ScriptVals.l"
 	{
 								INTERP_TYPE type;
 								UDWORD		index;
@@ -736,23 +736,23 @@ YYDECL {
 							}
 	break;
 	case 12:
-#line 109 "ScriptVals.l"
+//#line 109 "ScriptVals.l"
 	{ scrv_lval.ival = atol(scrv_text); return INTEGER; }
 	break;
 	case 13:
-#line 112 "ScriptVals.l"
+//#line 112 "ScriptVals.l"
 	{ BEGIN QUOTE; }
 	break;
 	case 14:
-#line 113 "ScriptVals.l"
+//#line 113 "ScriptVals.l"
 	{ BEGIN 0; }
 	break;
 	case 15:
-#line 114 "ScriptVals.l"
+//#line 114 "ScriptVals.l"
 	{ scrv_error("Unexpected end of line in string"); }
 	break;
 	case 16:
-#line 115 "ScriptVals.l"
+//#line 115 "ScriptVals.l"
 	{
 								strcpy(aText[currText], scrv_text);
 								scrv_lval.sval = aText[currText];
@@ -761,41 +761,41 @@ YYDECL {
 							}
 	break;
 	case 17:
-#line 123 "ScriptVals.l"
+//#line 123 "ScriptVals.l"
 	;
 	break;
 	case 18:
-#line 126 "ScriptVals.l"
+//#line 126 "ScriptVals.l"
 	{ inComment=TRUE; BEGIN COMMENT; }
 	break;
 	case 19:
 	case 20:
-#line 128 "ScriptVals.l"
+//#line 128 "ScriptVals.l"
 	{ inComment=FALSE; BEGIN 0; }
 	break;
 	case 21:
 	case 22:
-#line 130 "ScriptVals.l"
+//#line 130 "ScriptVals.l"
 	;
 	break;
 	case 23:
-#line 133 "ScriptVals.l"
+//#line 133 "ScriptVals.l"
 	{ BEGIN SLCOMMENT; }
 	break;
 	case 24:
-#line 134 "ScriptVals.l"
+//#line 134 "ScriptVals.l"
 	{ BEGIN 0; }
 	break;
 	case 25:
-#line 135 "ScriptVals.l"
+//#line 135 "ScriptVals.l"
 	;
 	break;
 	case 26:
-#line 138 "ScriptVals.l"
+//#line 138 "ScriptVals.l"
 	return scrv_text[0];
 	break;
 
-#line 472 "d:/usr/mks-ly/etc/yylex.c"
+//#line 472 "d:/usr/mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
@@ -832,8 +832,7 @@ typedef struct scrv__save_block_tag {
 } YY_SAVED;
 
 YY_SAVED *
-scrv_SaveScan(fp)
-FILE * fp;
+scrv_SaveScan(FILE * fp)
 {
 	YY_SAVED * p;
 
@@ -860,8 +859,7 @@ FILE * fp;
  * Restore previous LEX state
  */
 void
-scrv_RestoreScan(p)
-YY_SAVED * p;
+scrv_RestoreScan(YY_SAVED * p)
 {
 	if (p == NULL)
 		return;
@@ -917,8 +915,7 @@ input()
  * pushback char
  */
 YY_DECL int
-unput(c)
-	int c;
+unput(int c)
 {
 #ifndef YY_PRESERVE
 	if (scrv__end >= YYLMAX) {
@@ -944,7 +941,7 @@ unput(c)
 	return c;
 }
 
-#line 141 "ScriptVals.l"
+//#line 141 "ScriptVals.l"
 
 /* Set the current input buffer for the lexer */
 void scrvSetInputBuffer(UBYTE *pBuffer, UDWORD size)

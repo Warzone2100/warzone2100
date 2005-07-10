@@ -369,7 +369,7 @@ void requestAlliance(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio)
 
 	CBallFrom = from;
 	CBallTo = to;
-	eventFireCallbackTrigger(CALL_ALLIANCEOFFER);
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ALLIANCEOFFER);
 
 	if(to == selectedPlayer)
 	{

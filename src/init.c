@@ -859,7 +859,7 @@ BOOL systemInitialise(void)
 	{
 		displayBufferSize = 1500000;
 	}
-	DisplayBuffer = MALLOC(displayBufferSize);
+	DisplayBuffer = (UBYTE*)MALLOC(displayBufferSize);
 	if (DisplayBuffer == NULL)
 	{
 		DBERROR(("Unable to allocate memory for display buffer"));
@@ -1778,7 +1778,7 @@ BOOL stageThreeInitialise(void)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 
 	{
-		eventFireCallbackTrigger(CALL_GAMEINIT);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 	}
 
 	return TRUE;

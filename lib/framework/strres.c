@@ -29,14 +29,14 @@ STR_RES	*psCurrRes;
 /* Allocate a string block */
 static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 {
-	*ppsBlock = MALLOC(sizeof(STR_BLOCK));
+	*ppsBlock = (STR_BLOCK*)MALLOC(sizeof(STR_BLOCK));
 	if (!*ppsBlock)
 	{
 		DBERROR(("strresAllocBlock: Out of memory - 1"));
 		return FALSE;
 	}
 
-	(*ppsBlock)->apStrings = MALLOC(sizeof(STRING *) * size);
+	(*ppsBlock)->apStrings = (STRING**)MALLOC(sizeof(STRING *) * size);
 	if (!(*ppsBlock)->apStrings)
 	{
 		DBERROR(("strresAllocBlock: Out of memory - 2"));
@@ -59,7 +59,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 {
 	STR_RES		*psRes;
 
-	psRes = MALLOC(sizeof(STR_RES));
+	psRes = (STR_RES*)MALLOC(sizeof(STR_RES));
 	if (!psRes)
 	{
 		DBERROR(("strresCreate: Out of memory"));
@@ -102,8 +102,8 @@ void strresReleaseIDStrings(STR_RES *psRes)
 	ASSERT((PTRVALID(psRes, sizeof(STR_RES)),
 		"strresLoadFixedID: Invalid string res pointer"));
 
-	for(psID = TREAP_GETSMALLEST(psRes->psIDTreap); psID;
-		psID = TREAP_GETSMALLEST(psRes->psIDTreap))
+	for(psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap); psID;
+		psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap))
 	{
 		TREAP_DEL(psRes->psIDTreap, (UDWORD)psID->pIDStr);
 		if (psID->id & ID_ALLOC)
@@ -202,7 +202,7 @@ BOOL strresGetIDNum(STR_RES *psRes, STRING *pIDStr, UDWORD *pIDNum)
 	ASSERT((PTRVALID(psRes, sizeof(STR_RES)),
 		"strresLoadFixedID: Invalid string res pointer"));
 
-	psID = TREAP_FIND(psRes->psIDTreap, (UDWORD)pIDStr);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (UDWORD)pIDStr);
 	if (!psID)
 	{
 		*pIDNum = 0;
@@ -229,7 +229,7 @@ BOOL strresGetIDString(STR_RES *psRes, STRING *pIDStr, STRING **ppStoredID)
 	ASSERT((PTRVALID(psRes, sizeof(STR_RES)),
 		"strresLoadFixedID: Invalid string res pointer"));
 
-	psID = TREAP_FIND(psRes->psIDTreap, (UDWORD)pIDStr);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (UDWORD)pIDStr);
 	if (!psID)
 	{
 		*ppStoredID = NULL;
@@ -254,17 +254,17 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 		"strresLoadFixedID: Invalid string res pointer"));
 
 	// Find the id for the string
-	psID = TREAP_FIND(psRes->psIDTreap, (UDWORD)pID);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (UDWORD)pID);
 	if (!psID)
 	{
 		// No ID yet so generate a new one
-		psID = MALLOC(sizeof(STR_ID));
+		psID = (STR_ID*)MALLOC(sizeof(STR_ID));
 		if (!psID)
 		{
 			DBERROR(("strresStoreString: Out of memory"));
 			return FALSE;
 		}
-		psID->pIDStr = MALLOC(sizeof(STRING) * (stringLen(pID) + 1));
+		psID->pIDStr = (STRING*)MALLOC(sizeof(STRING) * (stringLen(pID) + 1));
 		if (!psID->pIDStr)
 		{
 			DBERROR(("strresStoreString: Out of memory"));
@@ -303,7 +303,7 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 	}
 
 	// Allocate a copy of the string
-	pNew = MALLOC(sizeof(STRING) * (stringLen(pString) + 1));
+	pNew = (STRING*)MALLOC(sizeof(STRING) * (stringLen(pString) + 1));
 	if (!pNew)
 	{
 		DBERROR(("strresStoreString: Out of memory"));

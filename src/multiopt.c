@@ -214,7 +214,7 @@ void recvOptions(NETMSG *pMsg)
 		{
 			// it's us thats new
 			selectedPlayer = play;							// select player
-			NETplayerInfo(NULL);							// get player info	
+			NETplayerInfo();							// get player info	
 			powerCalculated = FALSE;						// turn off any power requirements.
 		}
 		else
@@ -299,13 +299,13 @@ BOOL hostCampaign(STRING *sGame, STRING *sPlayer)
 
 	if(!NetPlay.bComms)
 	{
-		NETplayerInfo(NULL);
+		NETplayerInfo();
 		strcpy(NetPlay.players[0].name,sPlayer);
 		numpl = 1;
 	}
 	else
 	{
-		numpl = NETplayerInfo(NULL);	
+		numpl = NETplayerInfo();	
 	}
 
 	// may be more than one player already. check and resolve!
@@ -449,7 +449,7 @@ BOOL LobbyLaunched(VOID)
 	PLAYERSTATS		pl={0};
 	
 	// set the player info as soon as possible to avoid screwy scores appearing elsewhere.
-	NETplayerInfo(NULL);		
+	NETplayerInfo();		
 	NETfindGame(TRUE);
 
 	for(i = 0; (i< MAX_PLAYERS)&& (NetPlay.players[i].dpid != NetPlay.dpidPlayer);i++);

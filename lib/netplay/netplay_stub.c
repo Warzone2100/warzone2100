@@ -698,7 +698,7 @@ printf("NETprocessSystemMessage\n");
 			//printf("Receiving info for player %i\n", dpid);
 
 			memcpy(&players[dpid], pi, sizeof(NET_PLAYER));
-			NETplayerInfo(NULL);
+			NETplayerInfo();
 
 			if (is_server) {
 				NETBroadcastPlayerInfo(dpid);

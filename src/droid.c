@@ -6871,7 +6871,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 		// skirmish callback!
 		psScrCBDroidTaken = psD;
-		eventFireCallbackTrigger(CALL_UNITTAKEOVER);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
 		psScrCBDroidTaken = NULL;
 
 #ifdef TEST_EW

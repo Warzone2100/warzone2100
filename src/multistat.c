@@ -73,7 +73,7 @@ BOOL addToForce(DROID_TEMPLATE  *templ)
 		 psTempl = psTempl->psNext); 
 	if(!psTempl)
 	{
-		pT = MALLOC(sizeof(DROID_TEMPLATE));
+		pT = (DROID_TEMPLATE*)MALLOC(sizeof(DROID_TEMPLATE));
 		if ( !pT)
 		{
 			return FALSE;
@@ -608,7 +608,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	//decode packet;
 	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
 	NETsetKey(11974,224351,2023901,21080);
-	NETunmangleData( codedst,&st,sizeof(SAVEDPLAYERSTATS));
+	NETunmangleData((long int*)codedst,(long int*)&st,sizeof(SAVEDPLAYERSTATS));
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	//set stats.
@@ -653,7 +653,7 @@ BOOL saveMultiStats(STRING *sFileName, STRING *sPlayerName,PLAYERSTATS *playerSt
 	//encode packet;
 	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
 	NETsetKey(11974,224351,2023901,21080);
-	NETmangleData(&st,&codedst,sizeof(SAVEDPLAYERSTATS));	
+	NETmangleData((long int*)&st,(long int*)&codedst,sizeof(SAVEDPLAYERSTATS));	
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	strcpy(fileName,MultiPlayersPath);

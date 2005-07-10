@@ -292,7 +292,7 @@ BOOL scrIterateGroup(void)
 		psDroid = NULL;
 	}
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psDroid))
 	{
 		return FALSE;
 	}
@@ -324,7 +324,7 @@ BOOL scrIterateCluster(void)
 
 	psObj = clustIterate();
 
-	if (!stackPushResult(ST_BASEOBJECT, (SDWORD)psObj))
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (SDWORD)psObj))
 	{
 		return FALSE;
 	}
@@ -1220,7 +1220,7 @@ BOOL scrStructTargetInArea(void)
 
 	psTarget = (STRUCTURE *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_STRUCT, 0, x1,y1, x2,y2);
 
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psTarget))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psTarget))
 	{
 		return FALSE;
 	}
@@ -1243,7 +1243,7 @@ BOOL scrStructTargetOnMap(void)
 									scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 									scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psTarget))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psTarget))
 	{
 		return FALSE;
 	}
@@ -1266,7 +1266,7 @@ BOOL scrDroidTargetInArea(void)
 
 	psTarget = (DROID *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_DROID, 0, x1,y1, x2,y2);
 
-	if (!stackPushResult(ST_DROID, (UDWORD)psTarget))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)psTarget))
 	{
 		return FALSE;
 	}
@@ -1289,7 +1289,7 @@ BOOL scrDroidTargetOnMap(void)
 							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	if (!stackPushResult(ST_DROID, (UDWORD)psTarget))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)psTarget))
 	{
 		return FALSE;
 	}
@@ -1322,7 +1322,7 @@ BOOL scrTargetInCluster(void)
 							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	if (!stackPushResult(ST_BASEOBJECT, (UDWORD)psTarget))
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (UDWORD)psTarget))
 	{
 		return FALSE;
 	}
@@ -1461,14 +1461,14 @@ BOOL scrSkLocateEnemy(void)
 	// set the x and y accordingly..
 	if(psStruct)
 	{
-		if (!stackPushResult(ST_BASEOBJECT, (SDWORD)psStruct ))		// success!
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (SDWORD)psStruct ))		// success!
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		if (!stackPushResult(ST_BASEOBJECT, 0))		// part success
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, 0))		// part success
 		{
 			return FALSE;
 		}

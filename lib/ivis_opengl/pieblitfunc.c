@@ -428,7 +428,7 @@ void pie_ImageDefTrans(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,i
 void pie_UploadDisplayBuffer(UBYTE *DisplayBuffer)
 {
 	pie_GlobalRenderEnd(FALSE);
-	screen_Upload((UWORD*)DisplayBuffer);
+	screen_Upload();
 	pie_GlobalRenderBegin();
 }
 

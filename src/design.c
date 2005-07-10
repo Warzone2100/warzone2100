@@ -4233,7 +4233,7 @@ void intProcessDesign(UDWORD id)
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
-				eventFireCallbackTrigger(CALL_DESIGN_WEAPON);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
 			}
 			break;
 		case IDES_BODY:
@@ -4249,7 +4249,7 @@ void intProcessDesign(UDWORD id)
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
-				eventFireCallbackTrigger(CALL_DESIGN_BODY);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_BODY);
 			}
 			break;
 		case IDES_PROPULSION:
@@ -4285,7 +4285,7 @@ void intProcessDesign(UDWORD id)
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
-				eventFireCallbackTrigger(CALL_DESIGN_PROPULSION);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_PROPULSION);
 			}
 
 			break;
@@ -4469,11 +4469,11 @@ void intProcessDesign(UDWORD id)
 		{
 			if (statType(apsExtraSysList[id - IDDES_EXTRASYSSTART]->ref) == COMP_BRAIN)
 			{
-				eventFireCallbackTrigger(CALL_DESIGN_COMMAND);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_COMMAND);
 			}
 			else
 			{
-				eventFireCallbackTrigger(CALL_DESIGN_SYSTEM);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_SYSTEM);
 			}
 		}
 #ifdef FLASH_BUTTONS
@@ -4711,7 +4711,7 @@ void intProcessDesign(UDWORD id)
 		if (saveTemplate())
 		{
 #ifdef SCRIPTS
-			eventFireCallbackTrigger(CALL_DROIDDESIGNED);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDDESIGNED);
 #endif
 		}
 
@@ -5108,7 +5108,7 @@ BOOL saveTemplate(void)
 		if ( psTempl == NULL )
 		{
 			/* The design needs a new template in the list */
-			if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTempl))
+			if (!HEAP_ALLOC(psTemplateHeap, (void**) &psTempl))
 			{
 				DBPRINTF( ("saveTemplate: heap alloc failed\n") );
 				return FALSE;

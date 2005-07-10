@@ -1201,7 +1201,7 @@ void actionUpdateDroid(DROID *psDroid)
                 if (!missionDroidsRemaining(selectedPlayer))
                 {
     	    		//the script can call startMission for this callback for offworld missions
-        			eventFireCallbackTrigger(CALL_START_NEXT_LEVEL);
+        			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
                 }
             }
         }

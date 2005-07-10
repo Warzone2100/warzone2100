@@ -2710,7 +2710,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 		/* trigger script callback detailing group about to disembark */
 		transporterSetScriptCurrent( psTransporter );
-		eventFireCallbackTrigger(CALL_TRANSPORTER_LANDED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_LANDED);
 		transporterSetScriptCurrent( NULL );
 
 		/* remove droids from transporter group if not already transferred to script group */
@@ -2749,7 +2749,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 	{
     	/* trigger script callback */
 	    transporterSetScriptCurrent( psTransporter );
-		eventFireCallbackTrigger(CALL_TRANSPORTER_OFFMAP);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_OFFMAP);
 		transporterSetScriptCurrent( NULL );
 
 		//gridRemoveObject( (BASE_OBJECT *) psTransporter ); - these happen in droidRemove()
@@ -2792,7 +2792,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
             }
             if (psDroid == NULL)
             {
-            	eventFireCallbackTrigger(CALL_NO_REINFORCEMENTS_LEFT);
+            	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
             }
         }
 	}
@@ -3231,7 +3231,7 @@ void intUpdateTransporterTimer(struct _widget *psWidget, struct _w_context *psCo
 				    if ( psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN )
 				    {
 					    missionFlyTransportersIn( selectedPlayer, FALSE );
-					    eventFireCallbackTrigger( CALL_TRANSPORTER_REINFORCE );
+					    eventFireCallbackTrigger( (TRIGGER_TYPE)CALL_TRANSPORTER_REINFORCE );
 				    }
 			    }
             }
@@ -4226,7 +4226,7 @@ void missionTimerUpdate(void)
 		    if ((SDWORD)(gameTime - mission.startTime) > mission.time)
 		    {
 			    //the script can call the end game cos have failed!
-			    eventFireCallbackTrigger(CALL_MISSION_TIME);
+			    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_TIME);
 		    }
 	    }
     }

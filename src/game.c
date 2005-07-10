@@ -68,6 +68,12 @@
 #define MAX_BODY			SWORD_MAX
 #define SAVEKEY_ONMISSION	0x100
 
+/** 
+ * The code is reusing some pointers as normal integer values apparently. This
+ * should be fixed!
+ */
+#define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = rval; }
+
 UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
@@ -4577,13 +4583,13 @@ DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD version)
 		psDroid->orderY2				= psSaveDroid->orderY2;		
 		psDroid->timeLastHit			= psSaveDroid->timeLastHit;
 		//rebuild the object pointer from the ID
-		(UDWORD)(psDroid->psTarget)			= psSaveDroid->targetID;
+		FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
 		psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
 		psDroid->action				= psSaveDroid->action;			
 		psDroid->actionX				= psSaveDroid->actionX;		
 		psDroid->actionY				= psSaveDroid->actionY;		
 		//rebuild the object pointer from the ID
-		(UDWORD)(psDroid->psActionTarget)		= psSaveDroid->actionTargetID;
+		FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget, psSaveDroid->actionTargetID);
 		psDroid->actionStarted		= psSaveDroid->actionStarted;	
 		psDroid->actionPoints		= psSaveDroid->actionPoints;
         //actionHeight has been renamed to powerAccrued - AB 7/1/99
@@ -4621,7 +4627,7 @@ DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD version)
 		}
 //warning V14 - v17 only		
 		//rebuild the object pointer from the ID
-		(UDWORD)(psDroid->psBaseStruct ) = psSaveDroidV14->baseStructID;						
+		FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroidV14->baseStructID);
 		psDroid->group = psSaveDroidV14->group;			
 		psDroid->selected = psSaveDroidV14->selected;		
 //20feb		psDroid->cluster = psSaveDroidV14->cluster;		
@@ -4655,7 +4661,7 @@ DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD version)
 			}
 		}
 		//rebuild the object pointer from the ID
-		(UDWORD)(psDroid->psBaseStruct ) = psSaveDroid->baseStructID;						
+		FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroid->baseStructID);
 		psDroid->group = psSaveDroid->group;			
 		psDroid->selected = psSaveDroid->selected;		
 //20feb		psDroid->cluster = psSaveDroid->cluster;		
@@ -4832,13 +4838,13 @@ DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	psDroid->orderY2				= psSaveDroid->orderY2;		
 	psDroid->timeLastHit			= psSaveDroid->timeLastHit;
 	//rebuild the object pointer from the ID
-	(UDWORD)(psDroid->psTarget)			= psSaveDroid->targetID;
+	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
 	psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
 	psDroid->action				= psSaveDroid->action;			
 	psDroid->actionX				= psSaveDroid->actionX;		
 	psDroid->actionY				= psSaveDroid->actionY;		
 	//rebuild the object pointer from the ID
-	(UDWORD)(psDroid->psActionTarget)		= psSaveDroid->actionTargetID;
+	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget, psSaveDroid->actionTargetID);
 	psDroid->actionStarted		= psSaveDroid->actionStarted;	
 	psDroid->actionPoints		= psSaveDroid->actionPoints;
     //actionHeight has been renamed to powerAccrued - AB 7/1/99
@@ -4866,7 +4872,7 @@ DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		}
 	}
 	//rebuild the object pointer from the ID
-	(UDWORD)(psDroid->psBaseStruct ) = psSaveDroid->baseStructID;						
+	FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroid->baseStructID);
 	psDroid->group = psSaveDroid->group;			
 	psDroid->selected = psSaveDroid->selected;		
 //20feb	psDroid->cluster = psSaveDroid->cluster;		
@@ -4883,8 +4889,8 @@ DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 						 (psDroid->droidType != DROID_COMMAND) )
 		{
 			//rebuild group from command id in loadDroidSetPointers
-			(UDWORD)(psDroid->psGroup ) = psSaveDroid->commandId;
-			(UDWORD)(psDroid->psGrpNext) = UDWORD_MAX;
+			FIXME_CAST_ASSIGN(UDWORD, psDroid->psGroup, psSaveDroid->commandId);
+			FIXME_CAST_ASSIGN(UDWORD, psDroid->psGrpNext, UDWORD_MAX);
 		}
 	}
 	else
@@ -6289,7 +6295,7 @@ BOOL loadSaveStructureV19(UBYTE *pFileData, UDWORD filesize, UDWORD numStructure
 				//if factory reset the delivery points
 					//this trashes the flag pos pointer but flag pos list is cleared when flags load
 					//assemblyCheck
-					(UDWORD)(psFactory->psAssemblyPoint) = psSaveStructure->factoryInc;
+					FIXME_CAST_ASSIGN(UDWORD, psFactory->psAssemblyPoint, psSaveStructure->factoryInc);
 					//if factory was building find the template from the unique ID
 					if (psSaveStructure->subjectInc == UDWORD_MAX)
 					{
@@ -6691,7 +6697,7 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 			//if factory reset the delivery points
 				//this trashes the flag pos pointer but flag pos list is cleared when flags load
 				//assemblyCheck
-				(UDWORD)(psFactory->psAssemblyPoint) = psSaveStructure->factoryInc;
+				FIXME_CAST_ASSIGN(UDWORD, psFactory->psAssemblyPoint, psSaveStructure->factoryInc);
 				//if factory was building find the template from the unique ID
 				if (psSaveStructure->subjectInc == UDWORD_MAX)
 				{
@@ -6713,7 +6719,7 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 				if (version >= VERSION_21)//version 21
 				{
 					//reset command id in loadStructSetPointers
-					(UDWORD)(psFactory->psCommander ) = psSaveStructure->commandId;						
+					FIXME_CAST_ASSIGN(UDWORD, psFactory->psCommander, psSaveStructure->commandId);
 				}
                 //secondary order added - AB 22/04/99
                 if (version >= VERSION_32)
@@ -6798,7 +6804,7 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 				//assemblyCheck
 				psRepair->psDeliveryPoint = NULL;
 				//if  repair facility was  repairing find the object later
-				(UDWORD)(psRepair->psObj) = psSaveStructure->subjectInc;
+				FIXME_CAST_ASSIGN(UDWORD, psRepair->psObj, psSaveStructure->subjectInc);
                 if (version < VERSION_27)
                 {
                     psRepair->currentPtsAdded = 0;
@@ -6815,7 +6821,7 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 					psReArmPad->reArmPoints = psSaveStructure->output;//set in build structure ?
 					psReArmPad->timeStarted = psSaveStructure->droidTimeStarted;
 					//if  ReArm Pad was  rearming find the object later
-					(UDWORD)(psReArmPad->psObj) = psSaveStructure->subjectInc;
+					FIXME_CAST_ASSIGN(UDWORD, psReArmPad->psObj, psSaveStructure->subjectInc);
                     if (version < VERSION_28)
                     {
                         psReArmPad->currentPtsAdded = 0;

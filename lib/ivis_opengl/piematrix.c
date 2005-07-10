@@ -15,6 +15,7 @@
 #include <GL/glu.h>
 
 #include "piedef.h"
+#include "pieclip.h"
 #include "piematrix.h"
 #include "rendmode.h"
 #include "bug.h"

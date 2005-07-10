@@ -135,8 +135,6 @@ void pie_ShutDown(void) {
 /***************************************************************************/
 
 void pie_ScreenFlip(CLEAR_MODE clearMode) {
-	UWORD* bd;
-
 	screenDoDumpToDiskIfRequired();
 	SDL_GL_SwapBuffers();
 	switch (clearMode) {
@@ -148,8 +146,8 @@ void pie_ScreenFlip(CLEAR_MODE clearMode) {
 			break;
 	}
 
-	if ((bd = screen_GetBackDrop()) != NULL) {
-		screen_Upload(bd);
+	if (screen_GetBackDrop()) {
+		screen_Upload();
 	}
 }
 
@@ -169,7 +167,7 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack) {
 UDWORD	pie_GetResScalingFactor( void ) {
 //	UDWORD	resWidth;	//n.b. resolution width implies resolution height...!
 
-	return pie_GetVideoBufferWidth() * 0.16;
+	return pie_GetVideoBufferWidth()/6;
 }
 
 /***************************************************************************/

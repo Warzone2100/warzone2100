@@ -269,11 +269,11 @@ BOOL MultiPlayerLeave( DPID dp)
 		}
 	}
 
-	NETplayerInfo(NULL);									// update the player info stuff		
+	NETplayerInfo();									// update the player info stuff		
 
 
 	// fire script callback to reassign skirmish players.
-	eventFireCallbackTrigger(CALL_PLAYERLEFT);
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
 
 	return TRUE;
@@ -367,7 +367,7 @@ void setupNewPlayer(DPID dpid,UDWORD player)
 	}
 
 	resetMultiVisibility(player);						// set visibility flags.
-	NETplayerInfo(NULL);								// update the net info stuff
+	NETplayerInfo();								// update the net info stuff
 
 	setMultiStats(player2dpid[player],getMultiStats(player,FALSE),TRUE);  // get the players score from the ether.
 

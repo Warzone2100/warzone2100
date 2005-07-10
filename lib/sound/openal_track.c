@@ -27,9 +27,22 @@ static ALfloat		listenerPos[3] = { 0.0, 0.0, 0.0 };
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
 
+static ALCdevice* device = 0;
+static ALCcontext* context = 0;
+
 BOOL openal_initialized = FALSE;
 
 BOOL		cdAudio_Update( void );
+
+static void PrintOpenALVersion()
+{
+	printf("OpenAL Vendor: %s\n"
+		   "OpenAL Version: %s\n"
+		   "OpenAL Renderer: %s\n"
+		   "OpenAL Extensions: %s\n",
+		   alGetString(AL_VENDOR), alGetString(AL_VERSION),
+		   alGetString(AL_RENDERER), alGetString(AL_EXTENSIONS));
+}
 
 //*
 // =======================================================================================================================
@@ -41,11 +54,30 @@ BOOL sound_InitLibrary( void )
 	int	nbargs = 0;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	int contextAttributes[] = { 0 };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	alutInit( &nbargs, NULL );
+	device = alcOpenDevice(0);
+	if(device == 0) {
+		PrintOpenALVersion();
+		printf("Couldn't open audio device.\n");
+		return FALSE;
+	}
 
-	if (alcGetError(NULL) != AL_NO_ERROR) {
+	context = alcCreateContext(device, contextAttributes);
+	alcMakeContextCurrent(context);
+	
+	int err = alcGetError(device);
+	if (err != ALC_NO_ERROR) {
+		PrintOpenALVersion();
+		printf("Couldn't initialize audio context: %s\n",
+				alcGetString(device, err));
+		return FALSE;
+	}
+	err = alGetError();
+	if (err != AL_NO_ERROR) {
+		PrintOpenALVersion();
+		printf("Audio error after init: %s\n", alGetString(err));
 		return FALSE;
 	}
 
@@ -64,6 +96,14 @@ BOOL sound_InitLibrary( void )
 //
 void sound_ShutdownLibrary( void )
 {
+	if(context != 0) {
+		//alcDestroyContext(context); // this gives a long delay on some impl.
+		context = 0;
+	}
+	if(device != 0) {
+		alcCloseDevice(device);
+		device = 0;
+	}
 }
 
 //*
@@ -106,6 +146,12 @@ void sound_Update( void )
 	}
 
 	cdAudio_Update();
+	alcProcessContext(context);
+	int err = alcGetError(device);
+	if(err != ALC_NO_ERROR) {
+		printf("Error while processing audio contet: &s\n",
+				alGetString(err));
+	}
 }
 
 //*

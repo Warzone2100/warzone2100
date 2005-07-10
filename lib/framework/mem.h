@@ -69,7 +69,7 @@ extern void memDisplayTreap(STRING *pFileName);
 #if DEBUG_MALLOC
 
 #define MALLOC(size)		memMalloc(__FILE__, __LINE__, size)
-#define FREE(ptr)			memFree(__FILE__, __LINE__, ptr); ptr = NULL
+#define FREE(ptr)		{ void** p = &(ptr); memFree(__FILE__, __LINE__, *p); *p = NULL; }
 #ifndef NO_PTRVALID
 #define PTRVALID(ptr, size)	memPointerValid(ptr, size) 
 #else
@@ -81,7 +81,7 @@ extern void memDisplayTreap(STRING *pFileName);
 #else // !DEBUG_MALLOC
 
 #define MALLOC(size)		memMallocRelease(size)
-#define FREE(ptr)			memFreeRelease(ptr); ptr = NULL
+#define FREE(ptr)		{ void** p = &(ptr); memFreeRelease(*p); *p = NULL; }
 #define PTRVALID(ptr, size)	(TRUE)
 #define MEMORYREPORT(file)
 #define MEMORYTREAP(file)	memDisplayTreap(file)

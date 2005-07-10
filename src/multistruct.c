@@ -352,7 +352,8 @@ BOOL sendLasSat(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj)
 	NetAdd(msg,0,player);
 	NetAdd(msg,1,psStruct->id);
 	NetAdd(msg,5,psObj->id);
-	NetAdd(msg,9,((UBYTE)psObj->player));
+	UBYTE p = psObj->player;
+	NetAdd(msg,9,p);
 		
 	msg.size = 10;
 	msg.type = NET_LASSAT;

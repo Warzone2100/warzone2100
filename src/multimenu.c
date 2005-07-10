@@ -265,7 +265,7 @@ void displayCamTypeBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 //	UDWORD	count;
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
-	pie_DrawText( &(psWidget->UserData), x+2, y+12);
+	pie_DrawText( (STRING*)&(psWidget->UserData), x+2, y+12);
 
 }
 

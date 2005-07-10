@@ -128,7 +128,8 @@ BOOL sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen)
 		return FALSE;
 	}
 
-	NetAdd(msg,0,(UBYTE)(psDroid->player));
+	UBYTE player = psDroid->player;
+	NetAdd(msg,0,player);
 	NetAdd(msg,1,psDroid->id);
 	NetAdd(msg,5,chosen);
 	if(psStruct)
