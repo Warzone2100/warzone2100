@@ -66,7 +66,7 @@
 #include "revision.h"
 
 
-static const char* version_string = "Version 2.0 beta (Revision " SVN_REVISION ")";
+static const char* version_string = "Version 2.0 beta (Revision %s)";
 
 extern BOOL bSubtitles;
 
@@ -1893,7 +1893,8 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 	
-	sprintf(sTmp, "%s", version_string);
+	sprintf(sTmp, version_string, SVN_REVISION);
+	sprintf(sTmp, "%s", sTmp);
 	if (pie_Hardware()) {
 		sprintf(sTmp, "%s OpenGL", sTmp);
 	} else {
