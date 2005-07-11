@@ -1,1 +1,1 @@
-#define SVN_REVISION "184:185M"
+#define SVN_REVISION "$WCREV$"
