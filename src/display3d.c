@@ -6025,7 +6025,7 @@ void	testEffect( void )
 	UDWORD	i;
 
 	/* Hardware only effect, and then only if you've got additive! */
-	if((pie_Hardware() AND war_GetAdditive()) )
+	if((pie_Hardware() /* RODZ AND war_GetAdditive()*/ ) )
 	{
 		/* Only do for player 0 power stations */
 
