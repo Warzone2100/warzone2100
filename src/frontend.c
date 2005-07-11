@@ -66,7 +66,7 @@
 
 
 
-#define VERSION_STRING	"VER 2.0 (beta) Build 159"
+#define VERSION_STRING	"VER 2.0 (beta) Build 183"		//We got to remember to change this, or perhaps move it from here?
 
 extern BOOL bSubtitles;
 

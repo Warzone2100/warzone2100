@@ -262,6 +262,8 @@ static BOOL sendDroidCheck(VOID)
 static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 {
 //	UDWORD packtemp;
+	UWORD numkills;		// 
+
 	pMsg->body[			i+0] =		(CHAR)pD->player;	
 	pMsg->body[			i+1] =		(CHAR)pD->order;		// order being executed
 	NetAdd2( pMsg,		i+2,		pD->id);				// droid id
@@ -289,7 +291,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 		NetAdd2(pMsg,	i+24,		pD->orderX);
 		NetAdd2(pMsg,	i+26,		pD->orderY);
 	}
-	UWORD numkills = pD->numKills;
+	numkills = pD->numKills;
 	NetAdd2(pMsg,		i+28,		numkills);	// droid kills
 
 	pMsg->size =(UWORD)( pMsg->size + 30);

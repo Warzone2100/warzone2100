@@ -122,13 +122,14 @@ BOOL sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen)
 	NETMSG msg;
 	UDWORD	blank=0;
 	UBYTE attackRuns, ammo;
+	UBYTE player;
 
 	if(!myResponsibility(psDroid->player))
 	{
 		return FALSE;
 	}
 
-	UBYTE player = psDroid->player;
+	player = psDroid->player;
 	NetAdd(msg,0,player);
 	NetAdd(msg,1,psDroid->id);
 	NetAdd(msg,5,chosen);

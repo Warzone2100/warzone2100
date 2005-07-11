@@ -348,11 +348,12 @@ BOOL recvDestroyStructure(NETMSG * m)
 BOOL sendLasSat(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
 	NETMSG msg;
+	UBYTE p;		
 
 	NetAdd(msg,0,player);
 	NetAdd(msg,1,psStruct->id);
 	NetAdd(msg,5,psObj->id);
-	UBYTE p = psObj->player;
+	p = psObj->player;
 	NetAdd(msg,9,p);
 		
 	msg.size = 10;

@@ -978,7 +978,11 @@ BOOL systemShutdown(void)
 		return FALSE;
 	}
 
-
+	if (war_GetPlayAudioCDs()) {		
+		cdAudio_Stop();
+		cdAudio_Close();
+		mixer_Close();
+	}
 
 
 	if ( audio_Disabled() == FALSE && !audio_Shutdown() )
@@ -986,12 +990,6 @@ BOOL systemShutdown(void)
 		return FALSE;
 	}
 
-
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Stop();
-		cdAudio_Close();
-		mixer_Close();
-	}
 
 
 	FREE(DisplayBuffer);

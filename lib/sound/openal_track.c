@@ -52,6 +52,7 @@ BOOL sound_InitLibrary( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	int	nbargs = 0;
+	int err=0;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	int contextAttributes[] = { 0 };
@@ -67,7 +68,7 @@ BOOL sound_InitLibrary( void )
 	context = alcCreateContext(device, contextAttributes);
 	alcMakeContextCurrent(context);
 	
-	int err = alcGetError(device);
+	err = alcGetError(device);
 	if (err != ALC_NO_ERROR) {
 		PrintOpenALVersion();
 		printf("Couldn't initialize audio context: %s\n",
@@ -112,7 +113,8 @@ void sound_ShutdownLibrary( void )
 //
 void sound_Update( void )
 {
-	{
+	int err=0;
+//	{			//  <=== whats up with this ??
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		SAMPLE_LIST **tmp = &active_samples;
 		SAMPLE_LIST *i;
@@ -143,11 +145,11 @@ void sound_Update( void )
 				break;
 			}
 		}
-	}
+//	}//  <=== whats up with this You trying to make those local only ??
 
 	cdAudio_Update();
 	alcProcessContext(context);
-	int err = alcGetError(device);
+	err = alcGetError(device);
 	if(err != ALC_NO_ERROR) {
 		printf("Error while processing audio contet: &s\n",
 				alGetString(err));
