@@ -1136,8 +1136,8 @@ BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
 	{
 		if ( isHumanPlayer(i) )
 		{
-			if ( (i != player1) && aiCheckAlliances( i, player1 ) ||
-				 (i != player2) && aiCheckAlliances( i, player2 )    )
+			if ( ((i != player1) && aiCheckAlliances( i, player1 )) ||
+				 ((i != player2) && aiCheckAlliances( i, player2 ))    )
 			{
 				iAlliances++;
 			}

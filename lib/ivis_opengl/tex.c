@@ -222,7 +222,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 	return pie_AddBMPtoTexPages(s, fname, type, bColourKeyed, TRUE);
 }
 
-int pie_ReloadTexPage(char *filename,UBYTE *pBuffer) {
+int pie_ReloadTexPage(char *filename,SBYTE *pBuffer) {
 	char			fname[MAX_FILE_PATH];
 	int				i;
 	iSprite			s;

@@ -44,7 +44,7 @@ extern int iV_TexLoad( char *path, char *filename, int type,
 						iBool palkeep, iBool bColourKeyed );
 extern int iV_TexLoadNew( char *path, char *filename, int type,
 					iBool palkeep, iBool bColourKeyed );
-extern int pie_ReloadTexPage(char *filename,UBYTE *pBuffer);
+extern int pie_ReloadTexPage(char *filename,SBYTE *pBuffer);
 extern int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource);
 void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource);
 extern void pie_TexInit(void);

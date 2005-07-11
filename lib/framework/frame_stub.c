@@ -167,7 +167,8 @@ SDWORD i;
 			}
 		RecentAverage = Total/TIMESPAN;
 
-		FrameRate = Frames / PresSeconds;
+		if (PresSeconds > 0)
+			FrameRate = Frames / PresSeconds;
 		}	
 	Frames++;
 }

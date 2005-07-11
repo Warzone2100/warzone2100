@@ -27,7 +27,7 @@
 BOOL	sound_InitLibrary( void );
 void	sound_ShutdownLibrary( void );
 
-BOOL	sound_ReadTrackFromFile( TRACK * psTrack, char szFileName[] );
+BOOL	sound_ReadTrackFromFile( TRACK * psTrack, signed char szFileName[] );
 BOOL	sound_ReadTrackFromBuffer( TRACK * psTrack, void *pBuffer,
 									UDWORD udwSize );
 void	sound_FreeTrack( TRACK * psTrack );
@@ -35,7 +35,7 @@ void	sound_FreeTrack( TRACK * psTrack );
 BOOL	sound_Play2DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample,
 							BOOL bQueued );
 BOOL	sound_Play3DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample );
-void	sound_StopSample( SDWORD iSample );
+void	sound_StopSample( UDWORD iSample );
 void	sound_PauseSample( AUDIO_SAMPLE * psSample );
 void	sound_ResumeSample( AUDIO_SAMPLE * psSample );
 

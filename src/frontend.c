@@ -63,10 +63,10 @@
 #include "multistat.h"
 #include "netplay.h"
 
+#include "revision.h"
 
 
-
-#define VERSION_STRING	"VER 2.0 (beta) Build 183"		//We got to remember to change this, or perhaps move it from here?
+static const char* version_string = "Version 2.0 beta (Revision " SVN_REVISION ")";
 
 extern BOOL bSubtitles;
 
@@ -1892,49 +1892,19 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
-
-
-
-	switch(war_GetRendMode())
-	{
-	case REND_MODE_SOFTWARE:
-		if(weHave3DNow())
-		{
-			sprintf(sTmp, VERSION_STRING " - Build: %s SW (With AMD 3DNow!)",__DATE__);
+	
+	sprintf(sTmp, "%s", version_string);
+	if (pie_Hardware()) {
+		sprintf(sTmp, "%s OpenGL", sTmp);
+	} else {
+		sprintf(sTmp, "%s Software", sTmp);
+		if (weHave3DNow()) {
+			sprintf(sTmp, "%s (With AMD 3DNow!)", sTmp);
 		}
-		else
-		{
-			sprintf(sTmp, VERSION_STRING " - Build: %s SW",__DATE__);
-		}
-		break;
-		
-	case REND_MODE_GLIDE:
-		if(weHave3DNow())
-		{
-			sprintf(sTmp, VERSION_STRING " - Build: %s 3DFX (With AMD 3DNow!)",__DATE__);
-		}
-		else
-		{
-			sprintf(sTmp, VERSION_STRING " - Build: %s 3DFX",__DATE__);
-		}
-		break;
-
-	case REND_MODE_HAL:
-		if(weHave3DNow())
-		{
-			sprintf(sTmp, VERSION_STRING " - Build: %s OpenGL (With AMD 3DNow!)",__DATE__);
-		}
-		else
-		{
-			sprintf(sTmp, VERSION_STRING " - Build: %s OpenGL",__DATE__);
-		}
-		break;
-	default:
-		sprintf(sTmp, VERSION_STRING " - Build: %s OpenGL",__DATE__);
-		break;
 	}
+	sprintf(sTmp, "%s - Built: %s", sTmp, __DATE__);
+	
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
-
 
 }
 

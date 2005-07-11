@@ -375,15 +375,20 @@ static UBYTE	DBug_ExpandString(UBYTE		*pub_stringbuffer,
 	switch (ub_percentchar)
 	{
 		case	'a':	/* attribute (char) */
-
-			ub_newattribute = va_arg(val_arglist, char);
+			printf("Warning (%s:%d): changed char to int, might not work.\n", __FILE__, __LINE__);
+			ub_newattribute = va_arg(val_arglist, int);
+// changed because gcc 4 says it'll crash here
+// was			ub_newattribute = va_arg(val_arglist, char);
 
 			break;
 
 
 		case	'c':	/* character */
 
-			sprintf((char*)pub_stringbuffer, (const char*)pub_percentstring, va_arg(val_arglist, char));
+			printf("Warning (%s:%d): changed char to int, might not work.\n", __FILE__, __LINE__);
+			sprintf((char*)pub_stringbuffer, (const char*)pub_percentstring, va_arg(val_arglist, int));
+// changed because gcc 4 says it'll crash here
+// was			sprintf((char*)pub_stringbuffer, (const char*)pub_percentstring, va_arg(val_arglist, char));
 
 			break;
 

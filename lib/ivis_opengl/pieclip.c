@@ -35,10 +35,6 @@ static UDWORD	videoBufferWidth = 640,videoBufferHeight = 480;
  */
 /***************************************************************************/
 
-static int _xtclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip);
-static int _ytclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip);
-static int _xclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip);
-static int _yclip_edge2d(iVertex *s1, iVertex *s2, iVertex *clip);
 static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip);
 static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip);
 

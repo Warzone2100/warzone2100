@@ -3095,6 +3095,8 @@ BOOL moveReachedWayPoint(DROID *psDroid)
 		// if the dot product is -ve the droid has got past the way point
 		// but only move onto the next way point if we can see the previous one
 		// (this helps units that have got nudged off course).
+		
+		// FIXME: TILE_UNITS is larger than the type width in the right shift
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
 			fpathTileLOS((SDWORD)psDroid->x >> TILE_UNITS, (SDWORD)psDroid->y >> TILE_UNITS,
 						  psDroid->sMove.targetX >> TILE_UNITS, psDroid->sMove.targetY >> TILE_UNITS))

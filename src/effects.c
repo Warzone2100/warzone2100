@@ -1176,8 +1176,9 @@ LIGHT	light;
 	}
 
 	/* Does it emit a trail? And is it high enough? */
-	if( (psEffect->type == GRAVITON_TYPE_EMITTING_DR) OR (psEffect->type == GRAVITON_TYPE_EMITTING_ST)
-		AND (psEffect->position.y>(groundHeight+10)))
+	if ((psEffect->type == GRAVITON_TYPE_EMITTING_DR)
+	    || ((psEffect->type == GRAVITON_TYPE_EMITTING_ST)
+		&& (psEffect->position.y>(groundHeight+10))))
 	{
 		/* Time to add another trail 'thing'? */
 		if(gameTime>psEffect->lastFrame+psEffect->frameDelay)

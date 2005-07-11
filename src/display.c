@@ -1908,7 +1908,8 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 	{
 //		psDroid->selected = FALSE;
 		DeSelectDroid(psDroid);
-		psDroid->group == UBYTE_MAX;
+		// was "=="
+		psDroid->group = UBYTE_MAX;
 //		if(OrderUp)
 		{
 			/* Fix this ALEX M!!! */									

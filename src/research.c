@@ -619,6 +619,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 				DBERROR(("Out of memory assigning research functions"));
 				return FALSE;
 			}*/
+	    // FIXME: always false due to limited range of data type
             if (numResearchFunc >= MAX_RESEARCH_FUNC)
             {
                 DBERROR(("Out of memory assigning research functions"));
@@ -1306,6 +1307,8 @@ BOOL loadResearchFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 			return FALSE;
 		}
         //quick check that haven't reached maxPR
+
+	// FIXME: always false due to limited range of data type
         if (numResearchFunc >= MAX_RESEARCH_FUNC)
         {
             //don't load any more since will write over memory!

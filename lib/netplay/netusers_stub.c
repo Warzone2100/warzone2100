@@ -33,7 +33,8 @@ BOOL NETisSpectator(DPID dpid)
 {
 	UBYTE i;
 
-	if(dpid = NetPlay.dpidPlayer == dpid)	// checking ourselves
+	// was "dpid = NetPlay.dpidPlayer == dpid", but that didn't make sense.
+	if((dpid = NetPlay.dpidPlayer) == dpid)	// checking ourselves
 	{
 		return NetPlay.bSpectator;
 	}

@@ -124,7 +124,7 @@ iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
 	UBYTE *pFileData,*pFileDataStart;
 	UDWORD FileSize;
 	BOOL res;
-	UBYTE path[MAX_FILE_PATH];
+	SBYTE path[MAX_FILE_PATH];
 
 
 	iV_DEBUG1("imd[IMDLoad] = loading shape file '%s':",filename);
@@ -158,8 +158,6 @@ iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
 		return NULL;
 	}
 
-
-
 	{
 		UDWORD *tp;
 		UDWORD tt;
@@ -178,7 +176,7 @@ iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
 
 
 	pFileDataStart=pFileData;
-	pIMD=iV_ProcessIMD(&pFileData,pFileData+FileSize,path, imagePath,palkeep);
+	pIMD=iV_ProcessIMD(&pFileData, pFileData + FileSize, path, imagePath, palkeep);
 
 	FREE(pFileDataStart);	// free the file up
 
@@ -203,14 +201,7 @@ void DumpIMDInfo(void)
 
 }
 
-
-
-
-
-
-
 static char texfile[64];	//Last loaded texture page filename
-
 
 char *GetLastLoadedTexturePage(void)
 {
@@ -832,7 +823,7 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 		}
 		else
 		{
-			NodeID = psNode->link[LEFT];
+			NodeID = (int) psNode->link[LEFT];
 			psNode->link[LEFT] = &NodeList[NodeID];
 		}		
 
@@ -843,7 +834,7 @@ static iBool _imd_load_bsp(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape *s,
 		}
 		else
 		{
-			NodeID = psNode->link[RIGHT];
+			NodeID = (int) psNode->link[RIGHT];
 			psNode->link[RIGHT] = &NodeList[NodeID];
 		}		
 	}
@@ -1567,7 +1558,7 @@ int tpGetNumPIEs(void);
 iIMDShape *tpGetPIE(int Index);
 char *tpGetPIEName(int Index);
 int tpGetNumLevels(int Index);
-int tpGetLevel(int Index,int LevelIndex);
+iIMDShape *tpGetLevel(int Index,int LevelIndex);
 
 void tpInit(void)
 {
@@ -1607,7 +1598,7 @@ int tpGetNumLevels(int Index)
 }
 
 
-int tpGetLevel(int Index,int LevelIndex)
+iIMDShape *tpGetLevel(int Index,int LevelIndex)
 {
 	return tp_PieList[Index].Levels[LevelIndex % tp_PieList[Index].NumLevels];
 }

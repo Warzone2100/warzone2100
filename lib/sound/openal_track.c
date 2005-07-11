@@ -12,8 +12,8 @@
 #define ATTENUATION_FACTOR	0.0003
 #ifndef M_PI
 	#define M_PI	3.1415926535897932385
-#endif // win32 don't define that...
-int current_queue_sample = -1;
+#endif // win32 doesn't define that...
+unsigned int current_queue_sample = -1;
 typedef struct	SAMPLE_LIST
 {
 	struct AUDIO_SAMPLE *curr;
@@ -51,7 +51,6 @@ static void PrintOpenALVersion()
 BOOL sound_InitLibrary( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	int	nbargs = 0;
 	int err=0;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
@@ -151,7 +150,7 @@ void sound_Update( void )
 	alcProcessContext(context);
 	err = alcGetError(device);
 	if(err != ALC_NO_ERROR) {
-		printf("Error while processing audio contet: &s\n",
+		printf("Error while processing audio context: %s\n",
 				alGetString(err));
 	}
 }
@@ -200,7 +199,7 @@ static void sound_SaveTrackData( TRACK *psTrack, ALuint buffer )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_ReadTrackFromFile( TRACK *psTrack, char szFileName[] )
+BOOL sound_ReadTrackFromFile( TRACK *psTrack, signed char szFileName[] )
 {
 	//~~~~~~~~~~~~~~~~~~~
 	ALuint		buffer;
@@ -368,7 +367,7 @@ BOOL sound_PlayStream( AUDIO_SAMPLE *psSample, char szFileName[], SDWORD iVol )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_StopSample( SDWORD iSample )
+void sound_StopSample( UDWORD iSample )
 {
 	alSourceStop( iSample );
 	alDeleteSources( 1, &iSample );

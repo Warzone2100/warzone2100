@@ -21,7 +21,7 @@ extern void iV_GetTextExtents(unsigned char *String,int *Width,int *y0,int *y1);
 extern int iV_GetTextAboveBase(void);
 extern int iV_GetTextBelowBase(void);
 extern int iV_GetTextLineSize(void);
-extern int iV_GetTextWidth(unsigned char *String);
+extern int iV_GetTextWidth(STRING *String);
 extern int iV_GetCharWidth(unsigned char Char);
 extern void iV_SetTextColour(SWORD Index);
 

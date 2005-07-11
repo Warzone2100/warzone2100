@@ -157,6 +157,8 @@ BOOL scrBaseObjGet(UDWORD index)
 			//val = psStruct->body * 100 / psStruct->baseBodyPoints;
 			val = psStruct->body * 100 / structureBody(psStruct);
 			break;
+		default:
+			break;
 		}
 		break;
 	case OBJID_BODY:
@@ -450,6 +452,8 @@ STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
 	case ST_BASESTATS:
 	case ST_COMPONENT:
 		// should never have variables of this type
+		break;
+	default:
 		break;
 	}
 

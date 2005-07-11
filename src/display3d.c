@@ -519,7 +519,8 @@ BOOL		bPlayerHasHQ = FALSE;
 	}
 	else
 	{
-		if(!gamePaused)
+		// FIXME: This wasn't shown before. Do we want to keep it? Or change it?
+		if(!gamePaused())
 		{
 			iV_DrawText("Developed by Pumpkin Studios",RET_X+3,467+E_H);
 			iV_DrawText("Published by EIDOS Interactive",pie_GetVideoBufferWidth()-196,467+E_H);
@@ -3592,10 +3593,10 @@ FRACT		mulH;
 		{
 			/* If it's selected */
 			if( (psStruct->selected) 
-				OR (bMouseOverOwnStructure AND (psStruct==(STRUCTURE*)psClickedOn) 
-										   AND (((STRUCTURE*)psClickedOn)->status==SS_BUILT) )
+				OR (bMouseOverOwnStructure AND (psStruct==(STRUCTURE*)psClickedOn)
+										   AND (((STRUCTURE*)psClickedOn)->status==SS_BUILT)
 										   /* If it was clipped - reject it */
-										   AND psStruct->sDisplay.frameNumber == currentGameFrame)
+										   AND psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
 			//----
 				scale = max(psStruct->pStructureType->baseWidth,psStruct->pStructureType->baseBreadth);

@@ -22,7 +22,9 @@
 // Logging for degug only
 // ////////////////////////////////////////////////////////////////////////
 
+#ifdef LOG
 static FILE	*pFileHandle;
+#endif
 
 BOOL NETstartLogging()
 {

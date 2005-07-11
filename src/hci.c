@@ -6414,7 +6414,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 								sLabInit.y = STAT_BUTHEIGHT - 19;
 								sLabInit.width = 12;
 								sLabInit.height = 15;
-								sLabInit.pUserData = (void*)ii;
+								sLabInit.pUserData = (void*)(int)ii;
 								sLabInit.pTip = getPlayerName(ii);
 								sLabInit.pDisplay = intDisplayAllyIcon;
 								widgAddLabel(psWScreen, &sLabInit);

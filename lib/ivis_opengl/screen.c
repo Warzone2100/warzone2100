@@ -478,7 +478,7 @@ void screenToggleMode(void)
 }
 
 void screenDoDumpToDiskIfRequired() {
-	static char* buffer = NULL;
+	static unsigned char* buffer = NULL;
 	static unsigned int buffer_size = 0;
 	struct jpeg_compress_struct cinfo;
 	struct jpeg_error_mgr jerr;

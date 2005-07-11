@@ -165,7 +165,7 @@ int iV_GetTextBelowBase(void)
 
 
 
-int iV_GetTextWidth(unsigned char *String)
+int iV_GetTextWidth(STRING *String)
 {
 	int Index;
 	int MaxX = 0;

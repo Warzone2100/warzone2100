@@ -1,4 +1,3 @@
-OBJ_FILES=$(SRC_FILES:%.c=%.o)
 LIB_FILE=$(LIB:%=../lib%.a)
 
 include $(MAKERULES)/common.mk
@@ -17,9 +16,6 @@ dep:
 $(LIB_FILE): $(OBJ_FILES)
 	rm -f $(LIB_FILE)
 	ar rcv $(LIB_FILE) $(OBJ_FILES)
-
-%.o: %.c
-	$(CPP) $(CFLAGS) -c -o $@ $(<)
 
 clean:
 	rm -f $(LIB_FILE) *.o $(GENERATED_SRC) *~

@@ -1,5 +1,3 @@
-OBJ_FILES=$(SRC_FILES:%.c=%.o)
-
 include $(MAKERULES)/common.mk
 
 CFLAGS+=-I . `$(SDLCONFIG) --cflags` $(LIBS:%=-I ../lib/%)
@@ -15,10 +13,7 @@ dep:
 	rm -f make.depend.bak
 
 $(EXE): $(OBJ_FILES) $(LIBS:%=../lib/lib%.a)
-	$(CPP) -o $@ $(OBJ_FILES) $(LDFLAGS)
-
-%.o: %.c
-	$(CPP) $(CFLAGS) -c -o $@ $(<)
+	$(CC) -o $@ $(OBJ_FILES) $(LDFLAGS)
 
 clean:
 	rm -f $(EXE) *.o *~

@@ -288,7 +288,7 @@ void *sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_LoadTrackFromFile( char szFileName[] )
+BOOL sound_LoadTrackFromFile( signed char szFileName[] )
 {
 	//~~~~~~~~~~~~
 	TRACK	*pTrack;
@@ -299,15 +299,15 @@ BOOL sound_LoadTrackFromFile( char szFileName[] )
 	if ( pTrack != NULL )
 	{
 		pTrack->bMemBuffer = FALSE;
-		pTrack->pName = MALLOC( strlen(szFileName) + 1 );
+		pTrack->pName = MALLOC( strlen((char*) szFileName) + 1 );
 		if ( pTrack->pName == NULL )
 		{
 			DBERROR( ("sound_LoadTrackFromFile: Out of memory") );
 			return FALSE;
 		}
 
-		strcpy( pTrack->pName, szFileName );
-		pTrack->resID = HashStringIgnoreCase( szFileName );
+		strcpy( pTrack->pName, (char*) szFileName );
+		pTrack->resID = HashStringIgnoreCase( (char*) szFileName );
 		if ( sound_ReadTrackFromFile(pTrack, szFileName) == FALSE )
 		{
 			return FALSE;
@@ -491,7 +491,8 @@ char *sound_GetTrackName( SDWORD iTrack )
 //
 UDWORD sound_GetTrackHashName( SDWORD iTrack )
 {
-	if ( iTrack == SAMPLE_NOT_FOUND ) return 0;
+	if (iTrack == 0 || iTrack == SAMPLE_NOT_FOUND)
+		return 0;
 	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
 	return g_apTrack[iTrack]->resID;
 }

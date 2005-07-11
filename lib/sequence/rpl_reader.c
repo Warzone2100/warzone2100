@@ -235,7 +235,7 @@ unsigned int rpl_decode_sound_raw(RPL* rpl, short* buffer, unsigned int buffer_s
 }
 
 unsigned int rpl_decode_sound_adpcm(RPL* rpl, short* buffer, unsigned int buffer_size) {
-	static char* tmp_buffer = NULL;
+	static unsigned char* tmp_buffer = NULL;
 	unsigned int tmp_buffer_size = 0;
 	unsigned int size = 0;
 	short* tmp = buffer;

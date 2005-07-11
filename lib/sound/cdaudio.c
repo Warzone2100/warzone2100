@@ -49,7 +49,7 @@ static struct mad_stream mp3_stream;
 static struct mad_frame mp3_frame;
 static struct mad_synth mp3_synth;
 
-static char		mp3_buffer[MP3_BUFFER_SIZE + MAD_BUFFER_GUARD];
+static unsigned char		mp3_buffer[MP3_BUFFER_SIZE + MAD_BUFFER_GUARD];
 static unsigned int	mp3_buffer_length;
 static unsigned int	mp3_size;
 static unsigned int	mp3_pos_in_frame;

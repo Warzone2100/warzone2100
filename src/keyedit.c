@@ -157,7 +157,8 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 	/* Now alter it to the new values */
 	psMapping->metaKeyCode = metakey;
 	psMapping->subKeyCode = subkey;
-	psMapping->status == KEYMAP_ASSIGNABLE; //must be
+	// was "=="
+	psMapping->status = KEYMAP_ASSIGNABLE; //must be
 	if(alt)
 	{
 		psMapping->altMetaKeyCode = alt;

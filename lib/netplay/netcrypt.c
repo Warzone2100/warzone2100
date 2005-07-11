@@ -148,8 +148,8 @@ static BOOL mangle	( long *v,  long *w)
 	while(n-- > 0)
 	{
 		sum+=delta;
-		y+=(z<<4) + NetPlay.cryptKey[0] ^ z + sum ^ (z>>5) + NetPlay.cryptKey[1];
-		z+=(y<<4) + NetPlay.cryptKey[2] ^ y + sum ^ (y>>5) + NetPlay.cryptKey[3];
+		y += ((z << 4) + NetPlay.cryptKey[0]) ^ (z + sum) ^ ((z >> 5) + NetPlay.cryptKey[1]);
+		z += ((y << 4) + NetPlay.cryptKey[2]) ^ (y + sum) ^ ((y >> 5) + NetPlay.cryptKey[3]);
 	}
 	w[0] = y;
 	w[1] = z;
@@ -169,8 +169,8 @@ static BOOL unmangle(long * v, long *w)
 	sum = delta * n;/* (generally sum =delta*n )*/
 	while(n-- > 0)
 	{
-		z -= (y << 4) + NetPlay.cryptKey[2] ^ y + sum ^ (y >> 5) + NetPlay.cryptKey[3];
-		y -= (z << 4) + NetPlay.cryptKey[0] ^ z + sum ^ (z >> 5) + NetPlay.cryptKey[1];
+		z -= ((y << 4) + NetPlay.cryptKey[2]) ^ (y + sum) ^ ((y >> 5) + NetPlay.cryptKey[3]);
+		y -= ((z << 4) + NetPlay.cryptKey[0]) ^ (z + sum) ^ ((z >> 5) + NetPlay.cryptKey[1]);
 		sum -= delta;
 	}
 	w[0] = y;

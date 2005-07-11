@@ -16,8 +16,8 @@ OPENGL_LIB=GLU GL
 OPENAL_LIB=openal
 endif
 
-CPP=gcc
-#CPP=g++ -fpermissive
+CC=gcc
+#CC=g++ -fpermissive
 CFLAGS+=-gstabs -DYY_STATIC
 
 ifeq ($(MODE), prod)
@@ -26,3 +26,7 @@ else
 CFLAGS+=-Wall -g
 endif
 
+OBJ_FILES=$(SRC_FILES:%.c=%.o)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $(<)

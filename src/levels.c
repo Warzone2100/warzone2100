@@ -1048,10 +1048,10 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 
 			// set the view position if necessary
 			if ((pSaveName != NULL)
-				 ||(psNewLevel->type != LDS_BETWEEN)
-				 &&(psNewLevel->type != LDS_EXPAND) 
-				 &&(psNewLevel->type != LDS_EXPAND_LIMBO)
-				)
+			    || ((psNewLevel->type != LDS_BETWEEN)
+				&& (psNewLevel->type != LDS_EXPAND)
+				&& (psNewLevel->type != LDS_EXPAND_LIMBO)
+				))
 			{
 				if (!newMapInitialise())
 				{

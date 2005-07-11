@@ -8524,6 +8524,7 @@ BOOL loadSaveCompListV9(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UD
 			}
 		}
 
+		// FIXME: always false due to limited range of data type
 		if (psSaveCompList->type < 0 OR psSaveCompList->type > COMP_NUMCOMPONENTS)
 		{
 			//ignore this record
@@ -8577,6 +8578,7 @@ BOOL loadSaveCompListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 	{
 		psSaveCompList = (SAVE_COMPLIST *) pFileData;
 
+		// FIXME: always false due to limited range of data type
 		if (psSaveCompList->type < 0 OR psSaveCompList->type > COMP_NUMCOMPONENTS)
 		{
 			//ignore this record
@@ -9688,6 +9690,7 @@ BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ve
 		psflag->factoryInc = psSaveflag->factoryInc;	//indicates whether the first, second etc factory
 		psflag->factoryType = psSaveflag->factoryType;	//indicates whether standard, cyborg or vtol factory
 
+		// FIXME: always false due to limited range of data type
 		if (psflag->factoryInc == UDWORD_MAX)
 		{
 			DBERROR(("loadSaveFlag flag data error"));

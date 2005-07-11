@@ -269,7 +269,6 @@ UDWORD	tilesProcessed;
 unsigned char	*tileStorage;
 unsigned char	*presentLoc;
 iSprite	sprite;
-SDWORD  index;
 	//check enough pages are allocated
 
 	/* Get enough memory to store one tile */

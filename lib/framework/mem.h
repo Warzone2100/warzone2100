@@ -81,7 +81,7 @@ extern void memDisplayTreap(STRING *pFileName);
 #else // !DEBUG_MALLOC
 
 #define MALLOC(size)		memMallocRelease(size)
-#define FREE(ptr)		{ void** p = &(ptr); memFreeRelease(*p); *p = NULL; }
+#define FREE(ptr)		{ void** p = (void**)&(ptr); memFreeRelease(*p); *p = NULL; }
 #define PTRVALID(ptr, size)	(TRUE)
 #define MEMORYREPORT(file)
 #define MEMORYTREAP(file)	memDisplayTreap(file)

@@ -19,7 +19,7 @@
 
 /***************************************************************************/
 
-#define	MAX_STR			256
+#define	ANIM_MAX_STR			256
 #define	ANIM_DELAYED	0xFFFE
 #define	NO_ANIM			0xFFFD
 #define	NO_IMD			0xFFFC
@@ -34,7 +34,7 @@ struct ANIM_STATE;
 struct BASEANIM;
 
 #define ANIM_BASE_ELEMENTS						\
-	char				szFileName[MAX_STR];	\
+	char				szFileName[ANIM_MAX_STR];	\
 	char				animType;				\
 	UWORD				uwID;					\
 	UWORD				uwFrameRate;			\

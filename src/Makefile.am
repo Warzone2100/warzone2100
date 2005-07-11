@@ -276,3 +276,8 @@ warzone_LDFLAGS = -L../lib/framework -L../lib/gamelib -L../lib/$(RENDERER) \
 	-L../lib/widget
 warzone_DEPENDENCIES = $(warzone_libs)
 warzone_LDADD        = $(warzone_libs)
+
+revision.h:
+	@echo "#define SVN_REVISION \"`svnversion ..`\"" > revision.h
+
+.PHONY: revision.h
