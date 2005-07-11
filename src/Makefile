@@ -141,6 +141,7 @@ MAKERULES=../makerules
 include $(MAKERULES)/exe.mk
 
 revision.h:
+	@echo "Generating revision.h..."
 	@echo "#define SVN_REVISION \"`svnversion ..`\"" > revision.h
 
 .PHONY: revision.h

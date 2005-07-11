@@ -278,6 +278,7 @@ warzone_DEPENDENCIES = $(warzone_libs)
 warzone_LDADD        = $(warzone_libs)
 
 revision.h:
+	@echo "Generating revision.h..."
 	@echo "#define SVN_REVISION \"`svnversion ..`\"" > revision.h
 
 .PHONY: revision.h
