@@ -277,8 +277,10 @@ warzone_LDFLAGS = -L../lib/framework -L../lib/gamelib -L../lib/$(RENDERER) \
 warzone_DEPENDENCIES = $(warzone_libs)
 warzone_LDADD        = $(warzone_libs)
 
-revision.h:
-	@echo "Generating revision.h..."
-	@echo "#define SVN_REVISION \"`svnversion ..`\"" > revision.h
 
-.PHONY: revision.h
+# Just delete frontend.o so it is remade unconditionally to have an
+# up-to-date revision number.
+STUPID_TRICK := $(shell rm -rf frontend.o)
+
+SVN_REV := $(shell svnversion ..)
+CFLAGS += -DSVN_REVISION=\"$(SVN_REV)\" $(STUPID_TRICK)

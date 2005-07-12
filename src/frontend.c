@@ -63,8 +63,9 @@
 #include "multistat.h"
 #include "netplay.h"
 
+#ifdef WHATEVER_YOU_NEED_FOR_DOT_NET
 #include "revision.h"
-
+#endif
 
 static const char* version_string = "Version 2.0 beta (Revision %s)";
 

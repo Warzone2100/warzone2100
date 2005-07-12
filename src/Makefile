@@ -140,8 +140,9 @@ endif
 MAKERULES=../makerules
 include $(MAKERULES)/exe.mk
 
-revision.h:
-	@echo "Generating revision.h..."
-	@echo "#define SVN_REVISION \"`svnversion ..`\"" > revision.h
+# Just delete frontend.o so it is remade unconditionally to have an
+# up-to-date revision number.
+STUPID_TRICK := $(shell rm -rf frontend.o)
 
-.PHONY: revision.h
+SVN_REV := $(shell svnversion ..)
+CFLAGS += -DSVN_REVISION=\"$(SVN_REV)\" $(STUPID_TRICK)
