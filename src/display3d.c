@@ -520,7 +520,7 @@ BOOL		bPlayerHasHQ = FALSE;
 	else
 	{
 		// FIXME: This wasn't shown before. Do we want to keep it? Or change it?
-		if(!gamePaused())
+		if(gamePaused())
 		{
 			iV_DrawText("Developed by Pumpkin Studios",RET_X+3,467+E_H);
 			iV_DrawText("Published by EIDOS Interactive",pie_GetVideoBufferWidth()-196,467+E_H);
