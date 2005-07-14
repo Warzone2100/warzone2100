@@ -49,14 +49,16 @@ char PlayList_Read(const char* path) {
 
 		fgets(buffer, BUFFER_SIZE, f);
 
-		if (sscanf(buffer, "[track%i]", &new_track) == 1) {
-			if (new_track >= 0 && new_track < NB_TRACKS) {
-				printf("Track %i\n", new_track);
-				current_track = new_track;
-				free(path_to_music);
-				path_to_music = NULL;
-				CURRENT_TRACK.shuffle = FALSE;
-			}
+		if (strncmp(buffer, "[game]", 6) == 0) {
+			current_track = 1;
+			free(path_to_music);
+			path_to_music = NULL;
+			CURRENT_TRACK.shuffle = FALSE;
+		} else if (strncmp(buffer, "[menu]", 6) == 0) {
+			current_track = 2;
+			free(path_to_music);
+			path_to_music = NULL;
+			CURRENT_TRACK.shuffle = FALSE;
 		} else if (strncmp(buffer, "path=", 5) == 0) {
 			free(path_to_music);
 			path_to_music = strtok(buffer+5, "\n");
