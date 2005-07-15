@@ -71,17 +71,26 @@ found is used :
 Playlist example :
 
 --------------------------------------------------------------------------------
-[track1]
+[game]
 path=.
-neos_earth.ogg
-neos_flam.ogg
+shuffle=yes
+neos_aurore.ogg
+neos_chocolat.ogg
+neos_down.ogg
+neos_esperance.ogg
+neos_indy.ogg
 
-[track2]
+[menu]
 path=.
-neos_nebulae.ogg
+neos_symphonie_du_vide.ogg
 --------------------------------------------------------------------------------
 
-track1 is the track played during the game, track2 is for the menu.
+In this example, there are 6 songs played in random order while playing a game,
+and one song only when going around in the menu.
+
+"shuffle=yes" specifies you want the songs for a given category (game or menu)
+to be played in random order. If you want it for both categories, you need to
+specify it in both of them.
 
 "path" can be anything you wish. If it's ".", the path is the directory where
 the playlist is found. If no path is set, all filenames must be given with
