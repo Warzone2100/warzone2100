@@ -244,4 +244,4 @@ echo ""
 #if test "x$debug" = xyes; then
 #  echo " *** Running in debug mode! ***"
 #  echo ""
-fi
+#fi
