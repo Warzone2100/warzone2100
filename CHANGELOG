@@ -7,7 +7,7 @@
 * Moved MatScale function into the ivis lib.
 * Configure fix: OpenAL is required, not optional.
 * More code cleanup.
-* gcc4 fixes.
+* gcc4 fixes (thanks to Matze Braun).
 * Fixed problem with power plant effect.
 * Now use rand() for shuffle mode in playlist on all platforms.
 * Fixed sound-related crash on exit.
@@ -22,7 +22,7 @@ really annoying.
 * Reverted to wdg data file format, which re-enabled technology levels 2 and
 3, plus more maps.
 * More sample musics from Neos in order to demo the new shuffle mode.
-* Cleaned-up (kinda...) JPEG backdrops used for menu backgrounds in OpenGL.
+* Cleaned-up (kinda...) JPEG backdrops used for backgrounds in OpenGL.
 
 0.2 - 20050625
 * Code cleanups and minor bug corrections.
