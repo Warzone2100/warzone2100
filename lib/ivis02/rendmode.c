@@ -264,8 +264,6 @@ uint8 *iV_VideoMemoryAlloc(int mode)
 //NOTE check this [may 28] -Q
 void _iv_vid_setup(void)
 {
-	int i;
-
 	pie_SetRenderEngine(ENGINE_UNDEFINED);
 
 	rendSurface.usr = REND_UNDEFINED;
@@ -668,28 +666,28 @@ void iV_RenderAssign(int mode, iSurface *s)
 //			iV_pPolygon 		 		= _polygon_D3D;
 //			iV_pQuad			 		= _quad_D3D;
 //			iV_pTriangle 		 		= _triangle_D3D;
-			iV_VSync 			 		= _vsync_4101;
+//			iV_VSync 			 		= _vsync_4101;
 //			iV_Clear 			 		= _clear_4101;
 //			iV_Palette 			 		= _palette_D3D;
 //			iV_Pixel 			 		= _dummyFunc1_D3D;
 //			iV_pPixel 			 		= _dummyFunc1_D3D;
-			iV_pLine 			 		= _dummyFunc2_D3D;
+//			iV_pLine 			 		= _dummyFunc2_D3D;
 //			iV_pHLine 			 		= _dummyFunc3_D3D;
 //			iV_pVLine 			 		= _dummyFunc3_D3D;
 //			iV_pCircle 			 		= _dummyFunc3_D3D;
 //			iV_pCircleFill 		 		= _dummyFunc3_D3D;
-			iV_pBox 			 		= _dummyFunc2_D3D;
-			iV_pBoxFill 		 		= _dummyFunc2_D3D;
-			iV_ppBitmap 		 		= _dummyFunc5_D3D;
+//			iV_pBox 			 		= _dummyFunc2_D3D;
+//			iV_pBoxFill 		 		= _dummyFunc2_D3D;
+//			iV_ppBitmap 		 		= _dummyFunc5_D3D;
 //			iV_ppBitmapColour			= _dummyFunc6_D3D;
-			iV_ppBitmapColourTrans		= _dummyFunc6_D3D;
+//			iV_ppBitmapColourTrans		= _dummyFunc6_D3D;
 //			iV_pBitmap			 		= _dummyFunc4_D3D;
 //			iV_pBitmapResize 	 		= _dummyFunc6_D3D;
 //			iV_pBitmapResizeRot90		= _dummyFunc6_D3D;
 //			iV_pBitmapResizeRot180		= _dummyFunc6_D3D;
 //			iV_pBitmapResizeRot270		= _dummyFunc6_D3D;
 //			iV_pBitmapGet 				= _dummyFunc4_D3D;
-			iV_ppBitmapTrans			= _dummyFunc5_D3D;
+//			iV_ppBitmapTrans			= _dummyFunc5_D3D;
 //			iV_pBitmapTrans				= _dummyFunc4_D3D;
 //			iV_ppBitmapShadow			= _dummyFunc5_D3D;
 //			iV_pBitmapShadow			= _dummyFunc4_D3D;
@@ -721,7 +719,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 //			iV_BitmapRot90				= _dummyFunc4_D3D;
 //			iV_BitmapRot180				= _dummyFunc4_D3D;
 //			iV_BitmapRot270				= _dummyFunc4_D3D;
-			iV_SetTransFilter  			= SetTransFilter_D3D;
+//			iV_SetTransFilter  			= SetTransFilter_D3D;
 //			iV_TransBoxFill	   			= TransBoxFill_D3D;
 
 //			iV_DrawImageDef			= _dummyFunc4_D3D;//DrawImageDef;

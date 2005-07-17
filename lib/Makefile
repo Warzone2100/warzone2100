@@ -6,10 +6,10 @@ SUBDIRS=framework \
 	sound \
 	widget
 
-ifeq ($(GFX), opengl)
-SUBDIRS+=ivis_opengl
-else
+ifeq ($(GFX), software)
 SUBDIRS+=ivis02
+else
+SUBDIRS+=ivis_opengl
 endif
 
 SUBDIRS_CLEAN=	framework \

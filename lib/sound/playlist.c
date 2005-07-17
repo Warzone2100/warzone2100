@@ -44,7 +44,6 @@ char PlayList_Read(const char* path) {
 	}
 
 	while (!feof(f)) {
-		unsigned int new_track;
 		char* filename;
 
 		fgets(buffer, BUFFER_SIZE, f);

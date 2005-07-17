@@ -217,8 +217,8 @@ SDWORD	scaleFactor;
 void pie_MatRotY(int y)
 
 {
-	register t;
-	register cra, sra;
+	int t;
+	int cra, sra;
 
 	if (y != 0) {
    	cra = COS(y);
@@ -247,8 +247,8 @@ void pie_MatRotY(int y)
 void pie_MatRotZ(int z)
 
 {
-	register t;
-	register cra, sra;
+	int t;
+	int cra, sra;
 
 	if (z != 0) {
 		cra = COS(z);

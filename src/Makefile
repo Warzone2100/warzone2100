@@ -130,11 +130,11 @@ LIBS=		framework \
 
 EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net
 
-ifeq ($(GFX), opengl)
+ifeq ($(GFX), software)
+LIBS+=ivis02
+else
 LIBS+=ivis_opengl
 EXT_LIBS+=$(OPENGL_LIB) jpeg
-else
-LIBS+=ivis02
 endif
 
 MAKERULES=../makerules

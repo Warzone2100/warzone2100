@@ -1054,7 +1054,7 @@ static BOOL bActiveBackDrop = FALSE;
 	if( clearCount < 1)
 	{
 		bClear = CLEAR_BLACK;
-		if (screen_GetBackDrop() != NULL)
+		if ((void*)screen_GetBackDrop() != NULL)
 		{
 			bActiveBackDrop = TRUE;
 			screen_StopBackDrop();

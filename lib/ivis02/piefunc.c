@@ -17,7 +17,7 @@
 #include "pietexture.h"
 #include "pieclip.h"
 
-
+#include "gtime.h"
 
 
 
@@ -135,11 +135,7 @@ void	pie_DrawViewingWindow(iVector *v,UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2
 
 		if (clip >= 3)
 		{
-			if(pie_Translucent())
-			{
-				D3D_PIEPolygon(clip,&clippedVrts[0]);
-			}
-			else
+			if(!pie_Translucent())
 			{
 				for (i = 0;i < (clip - 1);i++)
 				{
@@ -155,22 +151,6 @@ void	pie_DrawViewingWindow(iVector *v,UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2
 /* ---------------------------------------------------------------------------------- */
 void	pie_TransColouredTriangle(PIEVERTEX *vrt, UDWORD rgb, UDWORD trans)
 {
-UDWORD	clip;
-
-
-	if (pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		// Give us a D3D version jezza!
-		clip = pie_ClipTexturedTriangleFast(&vrt[0],&vrt[1],&vrt[2],&clippedVrts[0], TRUE);
-
-		if(clip >= 3)
-		{
-			pie_SetTexturePage(-1);
-			pie_SetRendMode(REND_ALPHA_ITERATED);
-			D3D_PIEPolygon(clip,&clippedVrts[0]);
-		}
-	}
-	
 }
 
 /* ---------------------------------------------------------------------------------- */

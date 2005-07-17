@@ -17,8 +17,7 @@
 #include "piematrix.h" // clockwise check
 #include "pieclip.h"
 
-
-
+#include "screen.h"
 
 #include "frame.h"
 #include "frameint.h"
@@ -779,7 +778,7 @@ void _circle_4101(int x, int y, int r, uint32 colour)
 	xwidth = x * WIDTH_4101;
 	rwidth = r * WIDTH_4101;
 
-	e = 3 - r<<1;
+	e = (3 - r)<<1;
 	xs = 0;
 
 	while (xs++<=r) {
@@ -810,112 +809,6 @@ void _circle_4101(int x, int y, int r, uint32 colour)
 void _circlef_4101(int x, int y, int r, uint32 colour)
 
 {
-}
-
-//*************************************************************************
-//*** plot texture-mapped horizontal line (linear mapping)
-//*
-//* params	x1 							= scanline left screen x
-//*			x2 							= scanline right screen x
-//*			btx1, btx2, bty1, bty2 	= tex coefficients shifted by iV_DIVSHIFT
-//*			xshift						= width of bitmap as a shift
-//*			tex							= bitmap
-//******
-
-static void _thline_4101(int x1, int x2, int y, fixed btx1, fixed btx2, fixed bty1, fixed bty2, int xshift, iBitmap *tex)
-
-{
-	int x, dx, col;
-	fixed txs, tys;
-	uint8 *pp;
-
-	if (x1 > x2) {
-		iV_SWAP(x1,x2);
-		iV_SWAP(btx1,btx2);
-		iV_SWAP(bty1,bty2);
-	}
-
-#ifdef ACCURATE
-	// use this for higher accuracy if required
-	// dx = (x2 - x1)+1 (+1) avoids test for when dx == 0
-	dx = (x2 - x1)+1; // if no iV_SWAP this fails when dx == -1 !
-	txs = (((btx2-btx1))) / dx;
-	tys = (((bty2-bty1))) /dx;
-#else
-	dx = x2-x1;
-	// add 1 (DIVMULTP) instead of .5 (saves adding .5 to big_tx in poly
-	txs = (((btx2-btx1)+iV_DIVMULTP)>>iV_DIVSHIFT) * _iVPRIM_DIVTABLE[dx];
-	tys = (((bty2-bty1)+iV_DIVMULTP)>>iV_DIVSHIFT) * _iVPRIM_DIVTABLE[dx];
-#endif
-
-	pp = psRendSurface->buffer + psRendSurface->scantable[y] + x1;
-
-	//for (x = x1; x < x2; x++, pp++) {
-	for (x = dx; x >0; x--, pp++) {
-		col = *((uint8 *)tex+((bty1 >> iV_DIVSHIFT)<<xshift)+(btx1>>iV_DIVSHIFT));
-		*pp = col;
-		btx1 += txs;
-		bty1 += tys;
-	}
-}
-
-//*************************************************************************
-//*** plot texture-mapped horizontal line (linear mapping) 0 is transparent
-//*
-//* params	x1 							= scanline left screen x
-//*			x2 							= scanline right screen x
-//*			btx1, btx2, bty1, bty2 	= tex coefficients shifted by iV_DIVSHIFT
-//*			xshift						= width of bitmap as a shift
-//*			tex							= bitmap
-//******
-
-static void _tthline_4101(int x1, int x2, int y, fixed btx1, fixed btx2, fixed bty1, fixed bty2, int xshift, iBitmap *tex)
-
-{
-	int x, dx, col;
-	fixed txs, tys;
-	uint8 *pp;
-
-	/* delete */
-	if ((y < psRendSurface->clip.top) || (y > psRendSurface->clip.bottom))
-		return;
-
-
-	if (x1 > x2) {
-		iV_SWAP(x1,x2);
-		iV_SWAP(btx1,btx2);
-		iV_SWAP(bty1,bty2);
-	}
-
-
-	/* delete */
-	if ((x1 < psRendSurface->clip.left) || (x2 > psRendSurface->clip.right))
-		return;
-
-
-#ifdef ACCURATE
-	// use this for higher accuracy if required (when rolled)
-	// dx = (x2 - x1)+1 (+1) avoids test for when dx == 0
-	dx = (x2 - x1)+1;
-	txs = (((btx2-btx1))) / dx;
-	tys = (((bty2-bty1))) /dx;
-#else
-	dx = x2-x1;
-	// add 1 (DIVMULTP) instead of .5 (saves adding .5 to big_tx in poly
-	txs = (((btx2-btx1)+iV_DIVMULTP)>>iV_DIVSHIFT) * _iVPRIM_DIVTABLE[dx];
-	tys = (((bty2-bty1)+iV_DIVMULTP)>>iV_DIVSHIFT) * _iVPRIM_DIVTABLE[dx];
-#endif
-
-
-	pp = psRendSurface->buffer + psRendSurface->scantable[y] + x1;
-
-	//for (x = x1; x < x2; x++, pp++) {
-	for (x = dx; x >0; x--, pp++) {
-		col = *((uint8 *)tex+((bty1 >> iV_DIVSHIFT)<<xshift)+(btx1>>iV_DIVSHIFT));
-		if (col) *pp = col;
-		btx1 += txs;
-		bty1 += tys;
-	}
 }
 
 //*************************************************************************
@@ -2653,7 +2546,6 @@ void _tgtriangle_4101(iVertex *vrt, iTexture  *tex)
 
 {
 	int i, miny, li, dxl, dyl, dxr, dyr, y;
-	static uint32 dlx = 0x96a996ff;
 	fixed gradl, gradr, gradxl, gradxr, gradyl, gradyr;
 	fixed bxl, bxr;
 	int32 dtx, dty;
@@ -3329,7 +3221,6 @@ void _tstriangle_4101(iVertex *vrt, iTexture  *tex, int brightness)
 
 {
 	int i, miny, li, dxl, dyl, dxr, dyr, y;
-	static uint32 dlx = 0x96a996ff;
 	fixed gradl, gradr, gradxl, gradxr, gradyl, gradyr;
 	fixed bxl, bxr;
 	int32 dtx, dty;
@@ -3462,7 +3353,6 @@ void _ttstriangle_4101(iVertex *vrt, iTexture  *tex, int brightness)
 
 {
 	int i, miny, li, dxl, dyl, dxr, dyr, y;
-	static uint32 dlx = 0x96a996ff;
 	fixed gradl, gradr, gradxl, gradxr, gradyl, gradyr;
 	fixed bxl, bxr;
 	int32 dtx, dty;

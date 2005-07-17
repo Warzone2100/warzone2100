@@ -939,7 +939,9 @@ static iBool _imd_load_points(UBYTE **ppFileData, UBYTE *FileDataEnd, iIMDShape 
 	int32 xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
-	iVectorf dia1, dia2, vxmin, vymin, vzmin, vxmax, vymax, vzmax, cen;
+	iVectorf dia1, dia2, cen;
+	iVectorf vxmin = { 0, 0, 0 }, vymin = { 0, 0, 0 }, vzmin = { 0, 0, 0 },
+	         vxmax = { 0, 0, 0 }, vymax = { 0, 0, 0 }, vzmax = { 0, 0, 0 };
 
 	//load the points then pass through a second time to setup bounding datavalues
 
@@ -1456,20 +1458,6 @@ CheckColourKey( iIMDShape *psShape )
 	return FALSE;
 }
 
-
-
-
-static int32 _imd_find_scale(int32 value, int32 limit)
-
-{
-	int n;
-
-	for (n = 0; value > limit; n++)
-		value >>= 1;
-
-	return n;
-}
-
 #else
 
 
@@ -1548,8 +1536,6 @@ typedef struct {
 static int tp_NumPies;
 static TPPIELIST tp_PieList[TP_MAX_PIES];
 
-void tpInit(void);
-void tpAddPIE(char *FileName,iIMDShape *pIMD);
 int tpGetNumPIEs(void);
 iIMDShape *tpGetPIE(int Index);
 char *tpGetPIEName(int Index);

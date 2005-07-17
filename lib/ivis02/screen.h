@@ -91,6 +91,8 @@ typedef enum _screen_mode
 /* get screen window handle */
 extern HWND screenGetHWnd( void );
 
+extern SDL_Surface *screenGetSDL(void);
+
 /* Set whether the display is windowed or full screen */
 extern void screenSetMode(SCREEN_MODE mode);
 

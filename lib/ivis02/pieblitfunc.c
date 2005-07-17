@@ -22,7 +22,7 @@
 #include "pieclip.h"
 #include "piefunc.h"
 #include "piematrix.h"
-
+#include "screen.h"
 
 /***************************************************************************/
 /*
@@ -404,7 +404,6 @@ void pie_ImageFileID(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 	SDWORD width;
 	SDWORD height;
 	SDWORD delta;
-	SDWORD	div,wave;
 
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];
@@ -782,9 +781,6 @@ void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID)
 	case ENGINE_SR:
 		DownLoadRadar(buffer);
 		break;
-
-	case ENGINE_D3D:
-		dtm_LoadRadarSurface(buffer);
 	default:
 		break;
 	}
@@ -792,8 +788,6 @@ void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID)
 
 void pie_RenderRadar(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y)
 {
-	PIEIMAGE pieImage;
-	PIERECT dest;
 	//special case of pie_ImageDef
 	switch (pie_GetRenderEngine())
 	{
@@ -801,23 +795,6 @@ void pie_RenderRadar(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y)
 	case ENGINE_SR:
 		pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
 		break;
-
-	case ENGINE_D3D:
-		pie_SetBilinear(TRUE);
-		pie_SetRendMode(REND_GOURAUD_TEX);
-		pie_SetColour(COLOURINTENSITY);
-		pie_SetColourKeyedBlack(TRUE);
-		//special case function because texture is held outside of texture list
-		pieImage.texPage = RADAR_TEXPAGE_D3D;
-		pieImage.tu = 0;
-		pieImage.tv = 0;
-		pieImage.tw = dtm_GetRadarTexImageSize();
-		pieImage.th = dtm_GetRadarTexImageSize();
-		dest.x = x;
-		dest.y = y;
-		dest.w = 128;
-		dest.h = 128;
-		pie_DrawImage(&pieImage, &dest, &rendStyle);
 	default:
 		break;
 	}
@@ -826,8 +803,6 @@ void pie_RenderRadar(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y)
 
 void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int angle)
 {
-	PIEIMAGE pieImage;
-	PIERECT dest;
 	//special case of pie_ImageDef
 	switch (pie_GetRenderEngine())
 	{
@@ -835,23 +810,6 @@ void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,in
 	case ENGINE_SR:
 		pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
 		break;
-
-	case ENGINE_D3D:
-		pie_SetBilinear(TRUE);
-		pie_SetRendMode(REND_GOURAUD_TEX);
-		pie_SetColour(COLOURINTENSITY);
-		pie_SetColourKeyedBlack(TRUE);
-		//special case function because texture is held outside of texture list
-		pieImage.texPage = RADAR_TEXPAGE_D3D;
-		pieImage.tu = 0;
-		pieImage.tv = 0;
-		pieImage.tw = dtm_GetRadarTexImageSize();
-		pieImage.th = dtm_GetRadarTexImageSize();
-		dest.x = x;
-		dest.y = y;
-		dest.w = 128;
-		dest.h = 128;
-		pie_DrawImage(&pieImage, &dest, &rendStyle);
 	default:
 		break;
 	}

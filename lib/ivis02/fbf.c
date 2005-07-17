@@ -259,7 +259,7 @@ int32 iV_FileSize(char *filename)
 
 	size = -1;
 
-	if (fd = iV_FileOpen(filename,iV_FBF_MODE_R,iV_FBF_DEFAULT_BUFFER) < 0)
+	if ((fd = iV_FileOpen(filename,iV_FBF_MODE_R,iV_FBF_DEFAULT_BUFFER)) < 0)
 		return -1;
 
 	size = iV_FileSizeOpen(fd);

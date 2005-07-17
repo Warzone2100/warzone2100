@@ -152,11 +152,6 @@ int main(int argc, char *argv[])
 	// initialise all the command line states
 	clIntroVideo = FALSE;
 
-//	if (!pie_CheckForDX6())
-//	{
-//		DBERROR(("Unable to create DirectX 6 interface.\nPlease ensure DirectX 6 or later is installed."));
-//		return -1;
-//	}
 //=========================
 /*
 #ifdef _DEBUG		//Debug stuff for .net, don't delete :)  -Q

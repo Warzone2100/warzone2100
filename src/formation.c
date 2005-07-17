@@ -788,8 +788,8 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	else if (psFormation->free != -1)
 	{
 		// add the new object to the members
-		psFormation->asMembers[psFormation->free].psObj = psObj;
-		psFormation->free = psFormation->asMembers[psFormation->free].next;
+		psFormation->asMembers[(int)psFormation->free].psObj = psObj;
+		psFormation->free = psFormation->asMembers[(int)psFormation->free].next;
 		formationReorder(psFormation);
 
 		// find the object

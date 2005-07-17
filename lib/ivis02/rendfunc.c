@@ -38,7 +38,6 @@ UBYTE		aTransTable4[256];		// 4 trans tabels so we can have 4 transparancy colou
 
 /* Set default transparency filter to green pass */
 UDWORD		transFilter = TRANS_GREY;
-static int	g_mode = REND_UNDEFINED;
 static IMAGEFILE *MouseImageFile;
 static UWORD MouseImageID;
 
@@ -84,8 +83,8 @@ void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
 void line(int x0, int y0, int x1, int y1, uint32 colour)
 
 {
-	register code1, code2, code;
-	int x, y;
+	int code1, code2, code;
+	int x = 0, y = 0;
 
 
 	code1 = code2 = 0;
@@ -730,7 +729,7 @@ void	pie_BuildTransTable(UDWORD tableNo)
 {
 
 UDWORD	i;
-UBYTE	red,green,blue;
+UBYTE	red = 0, green = 0, blue = 0;
 iColour* psPalette = pie_GetGamePal();
 
 	// Step through all the palette entries for the currently selected iVPALETTE

@@ -20,6 +20,7 @@
 
 #include "rendmode.h"
 #include "pieclip.h"
+#include "screen.h"
 
 /***************************************************************************/
 /*
@@ -35,9 +36,6 @@
 
 	int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
 
-
-static BOOL fogColourSet = FALSE;
-static SDWORD d3dActive = 0;
 static	BOOL	bDither = FALSE;
 
 /***************************************************************************/
@@ -63,15 +61,6 @@ BOOL	pie_GetDitherStatus( void )
 void	pie_SetDitherStatus( BOOL val )
 {
 	bDither = val;
-}
-
-BOOL pie_CheckForDX6(void)
-{
-	UDWORD	DXVersion, DXPlatform;
-
-
-	return TRUE;
-
 }
 
 BOOL pie_Initialise(SDWORD mode)
@@ -101,33 +90,8 @@ BOOL pie_Initialise(SDWORD mode)
 
 	//mode specific initialisation
 
-	if (mode == REND_D3D_HAL)
-	{
-		iV_RenderAssign(REND_D3D_HAL,&rendSurface);
-		pie_SetRenderEngine(ENGINE_D3D);
-		rendSurface.usr = mode;
-		r = _mode_D3D_HAL();
-	}
-	else if (mode == REND_D3D_REF)
-	{
-		iV_RenderAssign(REND_D3D_REF,&rendSurface);
-		pie_SetRenderEngine(ENGINE_D3D);
-		rendSurface.usr = mode;
-		r = _mode_D3D_REF();
-	}
-	else if (mode == REND_D3D_RGB)
-	{
-		iV_RenderAssign(REND_D3D_RGB,&rendSurface);
-		pie_SetRenderEngine(ENGINE_D3D);
-		rendSurface.usr = mode;
-		r = _mode_D3D_RGB();
-	}
-	else//REND_MODE_SOFTWARE
-	{
-		pie_SetRenderEngine(ENGINE_4101);
-		r = _mode_4101();	// we always want success as jon's stuff does the init
-	}
-
+	pie_SetRenderEngine(ENGINE_4101);
+	r = _mode_4101();	// we always want success as jon's stuff does the init
 
 	if (r)
 	{
@@ -161,10 +125,6 @@ void pie_ShutDown(void)
 	case ENGINE_SR:
 		_close_sr();
 		break;
-
-	case ENGINE_D3D:
-		_close_D3D();
-		break;
 	default:
 		break;
 	}
@@ -175,7 +135,6 @@ void pie_ShutDown(void)
 
 void pie_ScreenFlip(CLEAR_MODE clearMode)
 {
-	UWORD * backDrop;
 	switch (pie_GetRenderEngine())
 	{
 	case ENGINE_4101:
@@ -246,14 +205,6 @@ void pie_GlobalRenderBegin(void)
 {
 	switch (pie_GetRenderEngine())
 	{
-
-	case ENGINE_D3D:
-		if (d3dActive == 0)
-		{
-			d3dActive = 1;
-			_renderBegin_D3D();
-		}
-		break;
 	default:
 		break;
 	}
@@ -263,14 +214,6 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack)
 {
 	switch (pie_GetRenderEngine())
 	{
-
-	case ENGINE_D3D:
-		if (d3dActive != 0)
-		{
-			d3dActive = 0;
-			_renderEnd_D3D();
-		}
-		break;
 	default:
 		break;
 	}

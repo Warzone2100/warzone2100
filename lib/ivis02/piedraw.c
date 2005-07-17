@@ -21,11 +21,7 @@
 #include "piestate.h"
 #include "pietexture.h"
 #include "pieclip.h"
-
-
-
-
-
+#include "bspfunc.h"
 
 #define MIST
 
@@ -61,7 +57,6 @@ static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip);
 static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL bClip);
 //d3d draw poly (low level) D3D mode only
 void pie_D3DPoly(PIED3DPOLY *poly);
-static void pie_D3DPolyFrame(PIED3DPOLY *poly, SDWORD frame);
 //pievertex draw poly (low level) //all modes from PIEVERTEX data
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
 static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
@@ -222,13 +217,14 @@ static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD
 #if (_MSC_VER != 1000) && (_MSC_VER != 1020)
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
 {
-
+#ifdef _MSC_VER
 	// needed for AMD
 	int amd_scale = 0x3a800000;				// 2^-10
 	int amd_pie_RAISE_SCALE = 0x3b800000;	// 2^-8
 	int amd_sign = 0x80000000;
 	int	amd_RAISE = 0;
 	int	amd_HEIGHT_SCALED = 0x3f800000;
+#endif
 
 	// needed for intel
 	int32		rx, ry, rz;
@@ -1346,12 +1342,6 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	pieVrts[3].tv = image->tv + image->th + EDGE_CORRECTION;
 	pieVrts[3].light.argb = style->colour.argb;
 	pieVrts[3].specular.argb = style->specular.argb;
-
-	if (pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		D3D_PIEPolygon(4, pieVrts);
-	}
-
 }
 
 /***************************************************************************
@@ -1407,12 +1397,6 @@ void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	pieVrts[2].tv = image->tv + image->th + EDGE_CORRECTION;
 	pieVrts[3].light.argb = style->colour.argb;
 	pieVrts[3].specular.argb = style->specular.argb;
-
-	if (pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		D3D_PIEPolygon(4, pieVrts);
-	}
-
 }
 
 /***************************************************************************
@@ -1439,27 +1423,6 @@ void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 			return;
 		}
 	}
-	if (pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		d3dVrts[0].sx = (float)x0;
-		d3dVrts[0].sy = (float)y0;
-		
-		d3dVrts[0].sz  = (float)INTERFACE_DEPTH * (float)INV_MAX_Z;
-		d3dVrts[0].rhw = (float)1.0/d3dVrts[0].sz;
-
-		d3dVrts[0].tu = (float)0.0;
-		d3dVrts[0].tv = (float)0.0;
-		d3dVrts[0].color = colour;
-		d3dVrts[0].specular = 0;
-
-		memcpy(&d3dVrts[1],&d3dVrts[0],sizeof(D3DTLVERTEX));
-		d3dVrts[1].sx = (float)x1;
-		d3dVrts[1].sy = (float)y1;
-
-#ifndef NO_RENDER
-		D3DDrawPoly(2,&d3dVrts[0]); 
-#endif
-	}
 }
 
 /***************************************************************************
@@ -1474,9 +1437,7 @@ void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 
 void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOOL bClip)
 {
-	SDWORD swap;
 	polyCount++;
-
 
 	if (bClip)
 	{
@@ -1493,52 +1454,6 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 		if (y1>psRendSurface->clip.bottom)
 			y1 = psRendSurface->clip.bottom;
 	}
-	if (pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		if (x1 < x0)
-		{
-			swap = x0;
-			x0 = x1;
-			x1 = swap;		
-
-		}
-		if (y1 < y0)
-		{
-			swap = y0;
-			y0 = y1;
-			y1 = swap;
-
-		}
-		d3dVrts[0].sx = (float)x0;
-		d3dVrts[0].sy = (float)y0;
-		//cull triangles with off screen points
-		d3dVrts[0].sz  = (float)INTERFACE_DEPTH * (float)INV_MAX_Z;
-		d3dVrts[0].rhw = (float)1.0/d3dVrts[0].sz;
-
-		d3dVrts[0].tu = (float)0.0;
-		d3dVrts[0].tv = (float)0.0;
-		d3dVrts[0].color = colour;
-		d3dVrts[0].specular = 0;
-
-		memcpy(&d3dVrts[1],&d3dVrts[0],sizeof(D3DTLVERTEX));
-		memcpy(&d3dVrts[2],&d3dVrts[0],sizeof(D3DTLVERTEX));
-		memcpy(&d3dVrts[3],&d3dVrts[0],sizeof(D3DTLVERTEX));
-		memcpy(&d3dVrts[4],&d3dVrts[0],sizeof(D3DTLVERTEX));
-
-		d3dVrts[1].sx = (float)x1 + D3D_RECT_CORRECTION;
-		d3dVrts[1].sy = (float)y0;
-
-		d3dVrts[2].sx = (float)x1 + D3D_RECT_CORRECTION;
-		d3dVrts[2].sy = (float)y1 + D3D_RECT_CORRECTION;
-
-		d3dVrts[3].sx = (float)x0;
-		d3dVrts[3].sy = (float)y1 + D3D_RECT_CORRECTION;
-
-#ifndef NO_RENDER
-		D3DDrawPoly(3,&d3dVrts[2]); 
-		D3DDrawPoly(3,&d3dVrts[0]); 
-#endif
-	}
 }
 
 /***************************************************************************
@@ -1552,9 +1467,6 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip)
 {
-	SDWORD n;
-static BOOL bBilinear;
-
 	polyCount++;
 	// handle texture animated polygons
 	if (!(poly->flags & PIE_NO_CULL) && (poly->nVrts >= 3))
@@ -1563,31 +1475,6 @@ static BOOL bBilinear;
 		if(!pie_PieClockwise(poly->pVrts))
 		{
 			return;//culled
-		}
-	}
-
-
-	if (pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		if (bClip)
-		{
-			n = pie_ClipTextured(poly->nVrts,poly->pVrts,&clippedVrts[0],TRUE);
-			poly->nVrts = n;
-			poly->pVrts = &clippedVrts[0];
-		}
-		if (poly->nVrts >= 3)
-		{
-			if (poly->flags & PIE_COLOURKEYED)
-			{
-				bBilinear = pie_GetBilinear();
-				pie_SetBilinear(FALSE);
-				D3D_PIEPolygon(poly->nVrts,poly->pVrts);
-				pie_SetBilinear(bBilinear);
-			}
-			else
-			{
-				D3D_PIEPolygon(poly->nVrts,poly->pVrts);
-			}
 		}
 	}
 }
@@ -1663,53 +1550,7 @@ void pie_D3DPoly(PIED3DPOLY *poly)
 	return;
 #else
 	polyCount++;
-	D3DDrawPoly(poly->nVrts, &poly->pVrts[0]);
 #endif
-}
-
-static void pie_D3DPolyFrame(PIED3DPOLY *poly, int frame)
-{
-	int	uFrame, vFrame, j, framesPerLine;
-	// handle texture animated polygons
-
-	if (poly->flags & iV_IMD_TEXANIM)
-	{
-		if (poly->pTexAnim != NULL)
-		{
-			if (poly->pTexAnim->nFrames >=0)
-			{
-				frame %= poly->pTexAnim->nFrames;
-			}
-			else //frame is colour key
-			{
-				frame %= (-poly->pTexAnim->nFrames);
-			}
-
-
-			if (frame > 0)
-			{
-				framesPerLine = 256 / poly->pTexAnim->textureWidth;//use TexPage WIDTH define
-
-				vFrame = 0;
-				while (frame >= framesPerLine)
-				{
-					frame -= framesPerLine;
-					vFrame += poly->pTexAnim->textureHeight;
-				}
-				uFrame = frame * poly->pTexAnim->textureWidth;
-				
-				// no clip for d3d render??
-				// shift the clipped textures for animation
-				for (j=0; j<poly->nVrts; j++) 
-				{
-					poly->pVrts[j].tu += (float)uFrame/(float)256.0;
-					poly->pVrts[j].tv += (float)vFrame/(float)256.0;
-				}
-			}
-		}
-	}
-
-	pie_D3DPoly(poly);
 }
 
 //old ivis style draw poly
@@ -1864,7 +1705,7 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, int frame, BOOL bC
 //ivis style draw function
 void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint *offset)
 {
-	UDWORD	n,f;
+	UDWORD	n;
 	iVertex clip[iV_POLY_MAX_POINTS];
    
    	if ( !pie_CLOCKWISE( pv[0].x, pv[0].y, pv[1].x, pv[1].y, pv[2].x, pv[2].y ) )

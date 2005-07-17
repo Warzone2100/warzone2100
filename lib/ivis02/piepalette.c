@@ -7,6 +7,7 @@
 #include "bug.h"
 #include "fractions.h"
 
+#include "screen.h"
 
 #define RED_CHROMATICITY	1
 #define GREEN_CHROMATICITY	1
@@ -37,7 +38,7 @@ void pie_SetColourDefines(void);
 iColour*			psGamePal = NULL;
 PALETTEENTRY*		psWinPal = NULL;
 uint8				palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
-bPaletteInitialised = FALSE;
+BOOL bPaletteInitialised = FALSE;
 uint8	 colours[16];
 
 /* Look up table for transparency */
@@ -191,9 +192,10 @@ BOOL pal_AddNewPalette(iColour *pal)
 {
 // PSX version dos'nt use palettes as such, SetRGBLookup sets up a global palette instead which is generally
 // just used for colour index to RGB conversions.
-	int i, rg;
-	long	entry;
-	long	cardPal[256];
+	int i;
+#if defined(RED_GREEN) || defined(GREEN_BLUE)
+	int rg;
+#endif
 	iColour *p;
 	PALETTEENTRY *w;
 
@@ -337,7 +339,7 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 {
 	int c ;
 	int32 distance_r, distance_g, distance_b, squared_distance;
-	int32 best_colour, best_squared_distance;
+	int32 best_colour = 0, best_squared_distance;
 
 	ASSERT((bPaletteInitialised,"pal_GetNearestColour, palette not initialised."));
 

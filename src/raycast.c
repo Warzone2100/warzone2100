@@ -164,8 +164,8 @@ BOOL rayInitialise(void)
 void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
 {
 	SDWORD		hdInc=0, vdInc=0;		// increases in x and y distance per intersection
-	SDWORD		hDist, vDist;		// distance to current horizontal and vertical intersections
-	RAY_POINT	sVert, sHoriz;
+	SDWORD		hDist, vDist;		// distance to current horizontal and vertical intersectionse
+	RAY_POINT	sVert = { 0, 0 }, sHoriz = { 0, 0 };
 	SDWORD		vdx=0, hdy=0;			// vertical x increment, horiz y inc
 #if RAY_CLIP == 0
 	SDWORD		newLen, clipLen;	// ray length after clipping

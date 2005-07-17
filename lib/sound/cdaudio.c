@@ -362,7 +362,7 @@ BOOL cdAudio_CloseTrack() {
 BOOL cdAudio_FillBuffer(ALuint b) {
 	int  size = 0;
 	int  section;
-	int  result;
+	int  result = 0;
 
 	while (size < BUFFER_SIZE) {
 

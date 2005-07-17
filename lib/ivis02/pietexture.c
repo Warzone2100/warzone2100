@@ -56,14 +56,6 @@ BOOL pie_Download8bitTexturePage(void* bitmap,UWORD Width,UWORD Height)
 	}
 }
 
-BOOL pie_Reload8bitTexturePage(void* bitmap,UWORD Width,UWORD Height, SDWORD index)
-{
-
-	{
-		return dtm_ReLoadTexture(index);
-	}
-}
-
 UDWORD pie_GetLastPageDownloaded(void)
 {
 

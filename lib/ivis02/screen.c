@@ -39,9 +39,6 @@ LPDIRECTDRAWSURFACE4	psFront = NULL;
  */
 LPDIRECTDRAWSURFACE4	psBack = NULL;
 
-/* The palette for palettised modes */
-static LPDIRECTDRAWPALETTE	psPalette = NULL;
-
 /* The actual palette entries for the display palette */
 #define PAL_MAX				256
 static SDL_Color			asPalEntries[PAL_MAX];

@@ -426,30 +426,9 @@ UDWORD pie_GetFogColour(void)
 {
 	return rendStates.fogColour;
 }
-/***************************************************************************/
+
 void pie_SetTexturePage(SDWORD num)
 {
-#ifndef PIETOOL
-	if (num != rendStates.texPage)
-	{
-		rendStates.texPage = num;
-		if (num < 0)
-		{
-			if (rendStates.rendEngine == ENGINE_D3D)
-			{
-				dtm_SetTexturePage(-1);
-			}
-		}
-		else
-		{
-
-			if (rendStates.rendEngine == ENGINE_D3D)
-			{
-				dtm_SetTexturePage(num);
-			}
-		}
-	}
-#endif
 }
 
 /***************************************************************************/
@@ -546,11 +525,6 @@ void pie_SetColourKeyedBlack(BOOL keyingOn)
 	{
 		rendStates.keyingOn = keyingOn;
 		pieStateCount++;
-
-		if (rendStates.rendEngine == ENGINE_D3D)
-		{
-			D3DSetColourKeying(keyingOn);
-		}
 	}
 #endif
 }
@@ -563,11 +537,6 @@ void pie_SetBilinear(BOOL bilinearOn)
 	{
 		rendStates.bilinearOn = bilinearOn;
 		pieStateCount++;
-
-		if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			dx6_SetBilinear(bilinearOn);
-		}
 	}
 #endif
 }
@@ -651,13 +620,6 @@ static void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 	{
 		rendStates.transMode = transMode;
 		pieStateCount++;
-
-		if (rendStates.rendEngine == ENGINE_D3D)
-		{
-			D3DSetTranslucencyMode(transMode);
-			rendStates.transMode = transMode;
-		}
-
 	}
 #endif
 }

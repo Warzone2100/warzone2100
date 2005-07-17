@@ -126,8 +126,6 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 }
 
 void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource) {
-	int				i;
-
 	/* DID come from a resource */
 	_TEX_PAGE[tex_index].bResource = bResource;
 	// Default values
@@ -143,7 +141,7 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 		_TEX_PAGE[tex_index].tex.xshift = _tex_get_top_bit(s->width);
 	} else {
 		//printf ("  Sprite is null\n");
-		return -1;
+		return;
 	}
 	_TEX_PAGE[tex_index].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[tex_index].type = type;

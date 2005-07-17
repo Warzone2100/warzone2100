@@ -2372,7 +2372,7 @@ void frontendMultiMessages(void)
 			{
 				addWhiteBoard();
 			}
-			memcpy(&whiteBoard[msg.body[0]], &msg.body[1], NUMWHITE*2);
+			memcpy(&whiteBoard[(int)msg.body[0]], &msg.body[1], NUMWHITE*2);
 			
 			break;
 

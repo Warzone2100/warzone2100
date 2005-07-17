@@ -126,6 +126,8 @@ extern void pie_SetGeometricOffset(int x, int y);
 // PIEVERTEX structure contains much infomation that is not required on the playstation ... and hence is not currently used
 extern BOOL pie_PieClockwise(PIEVERTEX *s);	
 
-
+extern void pie_MatScale( UDWORD percent );
+extern void pie_PerspectiveBegin(void);
+extern void pie_PerspectiveEnd(void);
 
 #endif

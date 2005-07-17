@@ -62,7 +62,6 @@ static int _tex_get_top_bit(uint32 n)
 
 int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource)
 {
-	int				i3d;
 	int				i;
 	/* Get next available texture page */
 	i = _TEX_INDEX;
@@ -95,24 +94,9 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 	_TEX_PAGE[i].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[i].type = type;
 
-
-	if ( rendSurface.usr >= REND_D3D_RGB &&
-		 rendSurface.usr <= REND_D3D_REF )
-	{
-		/* set pie texture pointer */
-		if ( dtm_LoadTexSurface( &_TEX_PAGE[i].tex, i) == FALSE )
-		{
-			return -1;
-		}
-	}
-
-
 	/* Send back the texpage number so we can store it in the IMD */
 
 	_TEX_INDEX++;
-
-
-
 
 	{
 		return (i);
@@ -241,11 +225,6 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 
 	pie_PCXLoadMemToBuffer(pBuffer,&s,NULL); 
 
-
-	if(pie_GetRenderEngine() == ENGINE_D3D)
-	{
-		dtm_LoadTexSurface(&_TEX_PAGE[i].tex, i);
-	}
 	return i;
 
 }

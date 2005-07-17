@@ -1206,7 +1206,7 @@ void seq_StartNextFullScreenVideo(void)
 	else
 	{
 		/* check backdrop already up */
-		if ( screen_GetBackDrop() == NULL )
+		if ( (void*)screen_GetBackDrop() == NULL )
 		{
 			bBackDropWasAlreadyUp = FALSE;
 		}

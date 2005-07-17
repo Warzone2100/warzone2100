@@ -9,10 +9,10 @@ SRC_FILES=	anim.c \
 
 LIBS=framework sound
 
-ifeq ($(GFX), opengl)
-LIBS+=ivis_opengl
-else
+ifeq ($(GFX), software)
 LIBS+=ivis02
+else
+LIBS+=ivis_opengl
 endif
 
 LIB=gamelib

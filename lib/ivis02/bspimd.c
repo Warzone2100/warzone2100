@@ -49,9 +49,6 @@ iIMDShape *BSPimd=NULL;		// This is a global ... it is used in imddraw.c (for sp
 static iVector *BSPScrPos=NULL;
 
 static iVector *CurrentVertexList=NULL;
-static int CurrentVertexListCount=0;
-
-
 
 extern BOOL NoCullBSP;	// Oh yes... a global externaly referenced variable....
 

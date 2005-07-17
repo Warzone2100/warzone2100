@@ -2255,7 +2255,7 @@ BOOL		bForceDraw;
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 {
 	UDWORD			msgX = 0, msgY = 0;
-	iVector			dv;
+	iVector			dv = { 0 };
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r;
 	iIMDShape		*proxImd = NULL;
@@ -5061,8 +5061,8 @@ UDWORD	tileNumber;
 UDWORD	renderFlag;
 iPoint	offset;
 PIEVERTEX aVrts[3];
-BYTE	oldColours[4];
-UDWORD	oldColoursWord[4];
+BYTE	oldColours[4] = { 0, 0, 0, 0 };
+UDWORD	oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
 SDWORD	zone;
 #endif

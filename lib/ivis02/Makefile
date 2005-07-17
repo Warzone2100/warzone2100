@@ -18,13 +18,12 @@ SRC_FILES=	bitimage.c \
 		rendfunc.c \
 		rendmode.c \
 		screen.c \
-		stubs.c \
 		tex.c \
 		textdraw.c \
 		v4101_stub.c \
 		vsr.c
 
-LIBS=framework
+LIBS=framework gamelib
 
 LIB=ivis02
 
