@@ -1,0 +1,1 @@
+#define SVN_REVISION "$WCREV$"
