@@ -171,6 +171,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 			}
 			else
 			{
+				if(pFileHandle)		//should help avoid crashes since we are missing videos for now...
 				fclose(pFileHandle);
 			}
 		}
@@ -1041,7 +1042,7 @@ BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 	}
 	FindClose(fileHandle);
 */	
-	if (loadFileToBufferNoError(aTextName, DisplayBuffer, displayBufferSize, &fileSize) == FALSE)
+	if (loadFileToBufferNoError(aTextName, DisplayBuffer, displayBufferSize, &fileSize) == FALSE)  //Did I mention this is lame? -Q
 	{
 		return FALSE;
 	}
@@ -1124,6 +1125,7 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 		strcpy(aSubtitleName,pSeqName);
 		aSubtitleName[strLen - 4] = 0;
 		strcat(aSubtitleName,".txt");
+		printf("%s ==%s ??\n",pSeqName,aSubtitleName);
 		seq_AddTextFromFile(aSubtitleName, TRUE);//SEQ_TEXT_JUSTIFY);//subtitles centre justified
 	}
 }
@@ -1206,7 +1208,7 @@ void seq_StartNextFullScreenVideo(void)
 	else
 	{
 		/* check backdrop already up */
-		if ( (void*)screen_GetBackDrop() == NULL )
+		if ( screen_GetBackDrop() == NULL )
 		{
 			bBackDropWasAlreadyUp = FALSE;
 		}
