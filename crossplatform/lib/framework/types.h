@@ -23,7 +23,7 @@
 /* Basic numeric types */
 typedef unsigned	char	UBYTE;
 typedef			char	SBYTE;
-typedef 		char	STRING;
+typedef unsigned	char	STRING;
 typedef	unsigned	short	UWORD;
 typedef			short	SWORD;
 typedef	unsigned	int	UDWORD;
