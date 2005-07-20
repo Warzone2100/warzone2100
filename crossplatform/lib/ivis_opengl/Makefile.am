@@ -21,7 +21,6 @@ libivis_opengl_a_SOURCES = \
 	rendfunc.c \
 	rendmode.c \
 	screen.c \
-	stubs.c \
 	tex.c \
 	textdraw.c \
 	bitimage.h  \

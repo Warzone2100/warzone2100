@@ -17,7 +17,6 @@ SRC_FILES=	bitimage.c \
 		rendfunc.c \
 		rendmode.c \
 		screen.c \
-		stubs.c \
 		tex.c \
 		textdraw.c
 
