@@ -163,11 +163,13 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 		
 			// check it exists. If not then try CD.
 			pFileHandle = fopen(aVideoName, "rb");
-			if (pFileHandle == NULL && bCDPath)
+			if (pFileHandle == NULL)
 			{
-				ASSERT(((strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
-				strcpy(aVideoName,aCDPath);
-				strcat(aVideoName,sequenceName);
+				if (bCDPath) {
+					ASSERT(((strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+					strcpy(aVideoName,aCDPath);
+					strcat(aVideoName,sequenceName);
+				}
 			}
 			else
 			{

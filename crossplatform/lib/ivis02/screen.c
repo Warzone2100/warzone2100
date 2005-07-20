@@ -102,6 +102,7 @@ BOOL screenInitialise(UDWORD		width,			// Display width
 					  HANDLE		hWindow)		// The main windows handle
 {
 	UDWORD				i,j,k, index;
+	int video_flags;
 
 	/* Store the screen information */
 	screenWidth = width;
@@ -111,8 +112,12 @@ BOOL screenInitialise(UDWORD		width,			// Display width
 	/* store vidmem flag */
 	g_bVidMem = bVidMem;
 
-	screen = SDL_SetVideoMode(screenWidth, screenHeight, screenDepth, SDL_HWPALETTE | SDL_HWSURFACE | SDL_DOUBLEBUF);
-
+	video_flags = SDL_HWPALETTE | SDL_HWSURFACE | SDL_DOUBLEBUF;
+	screen = SDL_SetVideoMode(screenWidth, screenHeight, screenDepth, video_flags);
+	if (!screen) {
+		printf("Error: SDL_SetVideoMode failed (%s).\n", SDL_GetError());
+		return FALSE;
+	}
 
 	/* If we're going to run in a palettised mode initialise the palette */
 	if (bitDepth == PALETTISED_BITDEPTH)

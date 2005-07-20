@@ -127,8 +127,6 @@ static int res__base[] = {
  618, 455, 490, 618, 172, 618
 };
 
-
-#line 1 "d:/usr/mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -256,8 +254,6 @@ extern	void	res_error	YY_ARGS((char *fmt, ...));
 extern	void	res_comment	YY_ARGS((char *term));
 extern	int	res_mapch	YY_ARGS((int delim, int escape));
 
-#line 1 "Resource.l"
-
 /*
  * resource.l
  *
@@ -298,9 +294,6 @@ static UBYTE *pEndBuffer = NULL;
 
 #undef res_getc
 #define res_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
-
-#line 127 "d:/usr/mks-ly/etc/yylex.c"
-
 
 #ifndef YYLMAX
 #define	YYLMAX		100		/* token and pushback buffer size */
@@ -527,9 +520,6 @@ YYDECL {
 	int res_oldi, res_oleng;	/* base i, res_leng before look-ahead */
 	int res_eof;		/* 1 if eof has already been read */
 
-#line 350 "d:/usr/mks-ly/etc/yylex.c"
-
-
 
 #if !YY_STATIC_STDIO
 	if (res_in == (FILE *)0)
@@ -651,15 +641,12 @@ YYDECL {
 	YY_USER;
 	switch (res__la_act[res_fmin] & 0777) {
 	case 0:
-#line 64 "Resource.l"
 	{ return DIRECTORY; }
 	break;
 	case 1:
-#line 65 "Resource.l"
 	{ return FILETOKEN; }
 	break;
 	case 2:
-#line 68 "Resource.l"
 	{
 								strcpy(aText[currText], res_text);
 								res_lval.sval = aText[currText];
@@ -668,19 +655,15 @@ YYDECL {
 							}
 	break;
 	case 3:
-#line 76 "Resource.l"
 	{ BEGIN QUOTE; }
 	break;
 	case 4:
-#line 77 "Resource.l"
 	{ BEGIN 0; }
 	break;
 	case 5:
-#line 78 "Resource.l"
 	{ res_error("Unexpected end of line in string"); }
 	break;
 	case 6:
-#line 79 "Resource.l"
 	{
 								strcpy(aText[currText], res_text);
 								res_lval.sval = aText[currText];
@@ -689,7 +672,6 @@ YYDECL {
 							}
 	break;
 	case 7:
-#line 85 "Resource.l"
 	{
 								aText[currText][0] = '\0';
 								aText[currText][1] = '\0';
@@ -699,41 +681,32 @@ YYDECL {
 							}
 	break;
 	case 8:
-#line 94 "Resource.l"
 	;
 	break;
 	case 9:
-#line 97 "Resource.l"
 	{ inComment=TRUE; BEGIN COMMENT; }
 	break;
 	case 10:
 	case 11:
-#line 99 "Resource.l"
 	{ inComment=FALSE; BEGIN 0; }
 	break;
 	case 12:
 	case 13:
-#line 101 "Resource.l"
 	;
 	break;
 	case 14:
-#line 104 "Resource.l"
 	{ BEGIN SLCOMMENT; }
 	break;
 	case 15:
-#line 105 "Resource.l"
 	{ BEGIN 0; }
 	break;
 	case 16:
-#line 106 "Resource.l"
 	;
 	break;
 	case 17:
-#line 109 "Resource.l"
 	return res_text[0];
 	break;
 
-#line 472 "d:/usr/mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
@@ -770,8 +743,7 @@ typedef struct res__save_block_tag {
 } YY_SAVED;
 
 YY_SAVED *
-res_SaveScan(fp)
-FILE * fp;
+res_SaveScan(FILE *fp)
 {
 	YY_SAVED * p;
 
@@ -798,8 +770,7 @@ FILE * fp;
  * Restore previous LEX state
  */
 void
-res_RestoreScan(p)
-YY_SAVED * p;
+res_RestoreScan(YY_SAVED *p)
 {
 	if (p == NULL)
 		return;
@@ -855,8 +826,7 @@ input()
  * pushback char
  */
 YY_DECL int
-unput(c)
-	int c;
+unput(int c)
 {
 #ifndef YY_PRESERVE
 	if (res__end >= YYLMAX) {
@@ -881,8 +851,6 @@ unput(c)
 	}	/* endif */
 	return c;
 }
-
-#line 112 "Resource.l"
 
 /* Set the current input buffer for the lexer */
 void resSetInputBuffer(UBYTE *pBuffer, UDWORD size)
