@@ -181,7 +181,7 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 		}
 		
 		bpp = SDL_VideoModeOK(width, height, screenDepth, video_flags);
-		if (bpp) {
+		if (!bpp) {
 			printf("Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, screenDepth);
 			return FALSE;
 		}
