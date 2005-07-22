@@ -305,8 +305,6 @@ extern int	yt_getc YY_ARGS((void));
 			else { YY_SCANNER; strres_leng = (n); YY_USER; }
 
 YY_DECL	void	strres__reset YY_ARGS((void));
-YY_DECL	int	input	YY_ARGS((void));
-YY_DECL	int	unput	YY_ARGS((int c));
 
 /* functions defined in libl.lib */
 extern	int	strres_wrap	YY_ARGS((void));
@@ -320,9 +318,7 @@ extern	int	strres_mapch	YY_ARGS((int delim, int escape));
  * Lex file for parsing string resource files
  */
 
-
 #include <stdio.h>
-
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -338,9 +334,6 @@ extern	int	strres_mapch	YY_ARGS((int delim, int escape));
 
 /* Get the Yacc definitions */
 #include "strres_y.h"
-
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -368,8 +361,6 @@ static UBYTE *pEndBuffer = NULL;
  * If %pointer is used, strres_text is a pointer to strres__tbuf[].
  */
 YY_DECL char	strres_text[YYLMAX+1];
-
-
 
 #ifdef	YY_DEBUG
 #undef	YY_DEBUG
@@ -614,7 +605,6 @@ YYDECL {
 		memmove(strres_text, strres_text+strres_leng, (size_t) strres__end);
 	i = 0;
 
-  strres__contin:
 	strres_oldi = i;
 
 	/* run the state machine until it jams */
@@ -661,12 +651,11 @@ YYDECL {
 		strres_st = strres__next[strres_base];
 	  strres__jammed: ;
 	  strres__sbuf[++i] = (strres__state_t) strres_st;
-	} while (!(strres_st == strres__endst || YY_INTERACTIVE && strres__base[strres_st] > strres__nxtmax && strres__default[strres_st] == strres__endst));
+	} while (!(strres_st == strres__endst || (YY_INTERACTIVE && strres__base[strres_st] > strres__nxtmax && strres__default[strres_st] == strres__endst)));
 	YY_DEBUG(m_textmsg(1550, "<stopped %d, i = %d>\n", "I num1 num2"), strres_st, i);
 	if (strres_st != strres__endst)
 		++i;
 
-  strres__search:
 	/* search backward for a final state */
 	while (--i > strres_oldi) {
 		strres_st = strres__sbuf[i];
@@ -758,22 +747,8 @@ YYDECL {
 	YY_SCANNER;
 	i = strres_leng;
 	goto strres__again;			/* action fell though */
-
-  strres__reject:
-	YY_SCANNER;
-	i = strres_oleng;			/* restore original strres_text */
-	if (++strres_fmin < strres_fmax)
-		goto strres__found;		/* another final state, same length */
-	else
-		goto strres__search;		/* try shorter strres_text */
-
-  strres__more:
-	YY_SCANNER;
-	i = strres_leng;
-	if (i > 0)
-		strres__lastc = strres_text[i-1];
-	goto strres__contin;
 }
+
 /*
  * Safely switch input stream underneath LEX
  */
@@ -840,62 +815,6 @@ strres__reset()
 {
 	YY_INIT;
 	strres_lineno = 1;		/* line number */
-}
-/* get input char with pushback */
-YY_DECL int
-input()
-{
-	int c;
-#ifndef YY_PRESERVE
-	if (strres__end > strres_leng) {
-		strres__end--;
-		memmove(strres_text+strres_leng, strres_text+strres_leng+1,
-			(size_t) (strres__end-strres_leng));
-		c = strres__save;
-		YY_USER;
-#else
-	if (strres__push < strres__save+YYLMAX) {
-		c = *strres__push++;
-#endif
-	} else
-		c = strres_getc();
-	strres__lastc = c;
-	if (c == YYNEWLINE)
-		strres_lineno++;
-	if (c == EOF) /* strres_getc() can set c=EOF vsc4 wants c==EOF to return 0 */
-		return 0;
-	else
-		return c;
-}
-
-/*f
- * pushback char
- */
-YY_DECL int
-unput(int c)
-{
-#ifndef YY_PRESERVE
-	if (strres__end >= YYLMAX) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		if (strres__end > strres_leng) {
-			strres_text[strres_leng] = strres__save;
-			memmove(strres_text+strres_leng+1, strres_text+strres_leng,
-				(size_t) (strres__end-strres_leng));
-			strres_text[strres_leng] = 0;
-		}
-		strres__end++;
-		strres__save = (char) c;
-#else
-	if (strres__push <= strres__save) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		*--strres__push = c;
-#endif
-		if (c == YYNEWLINE)
-			strres_lineno--;
-	}	/* endif */
-	return c;
 }
 
 /* Set the current input buffer for the lexer */

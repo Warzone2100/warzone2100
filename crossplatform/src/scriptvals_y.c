@@ -48,17 +48,12 @@ typedef struct yyTypedRules_tag {	/* Typed rule table */
 
 #endif
 
-#line 1 ".\\ScriptVals.y"
-
 /*
  * ScriptVals.y
  *
  * yacc grammar for loading script variable values
  *
  */
-
-
-
 
 #include <stdio.h>
 
@@ -83,9 +78,6 @@ static SCRIPT_CONTEXT	*psCurrContext;
 
 // the current array indexes
 static ARRAY_INDEXES	sCurrArrayIndexes;
-
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
 
 // check that an array index is valid
 BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
@@ -314,8 +306,6 @@ typedef struct yyTraceItems_tag {
 } yyTraceItems;
 #endif
 
-#line 2 "d:\mks-ly/etc/yyparse.c"
-
 /*
  * Copyright 1985, 1990 by Mortice Kern Systems Inc.  All rights reserved.
  * 
@@ -418,7 +408,6 @@ int yysinc = -1; /* stack size increment, <0 = double, 0 = none, >0 = fixed */
 int yyssize = YYSSIZE;
 #endif
 
-#define YYERROR		goto yyerrlabel
 #define yyerrok		yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (scrv_debug) yyShowRead(-1); scrv_char = -1; }
@@ -493,7 +482,6 @@ static char *	yygetState YY_ARGS((int));
 #define yyassert(condition, msg, arg)
 #endif
 
-#line 753 ".\\ScriptVals.y"
 // Lookup a type
 BOOL scrvLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 {
@@ -510,7 +498,6 @@ BOOL scrvLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 
 	return FALSE;
 }
-
 
 // Lookup a variable identifier
 BOOL scrvLookUpVar(STRING *pIdent, UDWORD *pIndex)
@@ -535,7 +522,6 @@ BOOL scrvLookUpVar(STRING *pIdent, UDWORD *pIndex)
 	return FALSE;
 }
 
-
 // Lookup an array identifier
 BOOL scrvLookUpArray(STRING *pIdent, UDWORD *pIndex)
 {
@@ -558,7 +544,6 @@ BOOL scrvLookUpArray(STRING *pIdent, UDWORD *pIndex)
 
 	return FALSE;
 }
-
 
 // Load a script value file
 BOOL scrvLoad(UBYTE *pData, UDWORD size)
@@ -592,9 +577,6 @@ void scrv_error(char *pMessage,...)
 	va_end(args);
 }
 #endif
-
-
-
 
 #ifdef YACC_WINDOWS
 
@@ -706,7 +688,7 @@ static int win_yyparse()
  * standard way.
  */
 
-scrv_parse() 
+int scrv_parse() 
 
 #endif /* YACC_WINDOWS */
 
@@ -757,7 +739,6 @@ scrv_parse()
 #ifdef YYDYNAMIC
 	char *envp;
 #endif
-
 
 #ifdef YYDYNAMIC
 	if ((envp = getenv("YYSTACKSIZE")) != (char *)0) {
@@ -949,7 +930,6 @@ yyEncore:
 	switch (yyi) {		/* perform semantic action */
 		
 case YYr3: {	/* script_entry :  script_name RUN */
-#line 135 ".\\ScriptVals.y"
 
 					if (!eventNewContext(psCurrScript, CR_RELEASE, &psCurrContext))
 					{
@@ -965,7 +945,6 @@ case YYr3: {	/* script_entry :  script_name RUN */
 } break;
 
 case YYr4: {	/* script_entry :  script_name RUN $3 '{' var_init_list '}' */
-#line 148 ".\\ScriptVals.y"
 
 					if (!eventRunContext(psCurrContext, gameTime/SCR_TICKRATE))
 					{
@@ -975,7 +954,6 @@ case YYr4: {	/* script_entry :  script_name RUN $3 '{' var_init_list '}' */
 } break;
 
 case YYr5: {	/* script_entry :  script_name STORE QTEXT */
-#line 155 ".\\ScriptVals.y"
 
 					if (!eventNewContext(psCurrScript, CR_NORELEASE, &psCurrContext))
 					{
@@ -991,8 +969,6 @@ case YYr5: {	/* script_entry :  script_name STORE QTEXT */
 } break;
 
 case YYr7: {	/* script_name :  SCRIPT QTEXT */
-#line 171 ".\\ScriptVals.y"
-
 
 					int namelen,extpos;
 					char *stringname;
@@ -1034,7 +1010,6 @@ case YYr7: {	/* script_name :  SCRIPT QTEXT */
 } break;
 
 case YYr11: {	/* var_init :  var_entry TYPE var_value */
-#line 223 ".\\ScriptVals.y"
 
 					BASE_OBJECT		*psObj;
 					SDWORD			compIndex;
@@ -1444,7 +1419,6 @@ case YYr11: {	/* var_init :  var_entry TYPE var_value */
 						break;
 					case ST_SOUND:
 
-
 						if (yypvt[0].sInit.type != IT_STRING)
 						{
 							scrv_error("Typemismatch for variable %d", yypvt[-2].vindex);
@@ -1492,7 +1466,6 @@ case YYr11: {	/* var_init :  var_entry TYPE var_value */
 } break;
 
 case YYr12: {	/* array_index :  '[' INTEGER ']' */
-#line 692 ".\\ScriptVals.y"
 
 					sCurrArrayIndexes.dimensions = 1;
 					sCurrArrayIndexes.elements[0] = yypvt[-1].ival;
@@ -1502,14 +1475,12 @@ case YYr12: {	/* array_index :  '[' INTEGER ']' */
 } break;
 
 case YYr13: {	/* array_index_list :  array_index */
-#line 701 ".\\ScriptVals.y"
 
 					yyval.arrayIndex = yypvt[0].arrayIndex;
 				
 } break;
 
 case YYr14: {	/* array_index_list :  array_index_list '[' INTEGER ']' */
-#line 705 ".\\ScriptVals.y"
 
 					if (yypvt[-3].arrayIndex->dimensions >= VAR_MAX_DIMENSIONS)
 					{
@@ -1522,14 +1493,12 @@ case YYr14: {	/* array_index_list :  array_index_list '[' INTEGER ']' */
 } break;
 
 case YYr15: {	/* var_entry :  VAR */
-#line 718 ".\\ScriptVals.y"
 
 					yyval.vindex = yypvt[0].vindex;
 				
 } break;
 
 case YYr16: {	/* var_entry :  ARRAY array_index_list */
-#line 722 ".\\ScriptVals.y"
 
 					UDWORD	index;
 
@@ -1543,7 +1512,6 @@ case YYr16: {	/* var_entry :  ARRAY array_index_list */
 } break;
 
 case YYr17: {	/* var_value :  BOOLEAN */
-#line 735 ".\\ScriptVals.y"
 
 					yyval.sInit.type = IT_BOOL;
 					yyval.sInit.index = yypvt[0].bval;
@@ -1551,7 +1519,6 @@ case YYr17: {	/* var_value :  BOOLEAN */
 } break;
 
 case YYr18: {	/* var_value :  INTEGER */
-#line 740 ".\\ScriptVals.y"
 
 					yyval.sInit.type = IT_INDEX;
 					yyval.sInit.index = yypvt[0].ival;
@@ -1559,13 +1526,11 @@ case YYr18: {	/* var_value :  INTEGER */
 } break;
 
 case YYr19: {	/* var_value :  QTEXT */
-#line 745 ".\\ScriptVals.y"
 
 					yyval.sInit.type = IT_STRING;
 					yyval.sInit.pString = yypvt[0].sval;
 				
 } break;
-#line 314 "d:\mks-ly/etc/yyparse.c"
 	case YYrACCEPT:
 		YYACCEPT;
 	case YYrERROR:
@@ -1589,10 +1554,6 @@ case YYr19: {	/* var_value :  QTEXT */
 #endif
 	goto yyStack;
 
-yyerrlabel:	;		/* come here from YYERROR	*/
-/*
-#pragma used yyerrlabel
- */
 	yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--;

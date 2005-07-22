@@ -1,9 +1,7 @@
 //*
 //
 #ifdef WIN32
-	#pragma warning( disable : 4201 4214 4115 4514 )
-	#include <windows.h>
-	#pragma warning( default : 4201 4214 4115 )
+#include <windows.h>
 #endif
 #include "frame.h"
 #include "tracklib.h"

@@ -37,6 +37,8 @@
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
 
+_ltoken_type LTOKEN_TYPE;
+
 static	UBYTE	currentLevelName[32];
 
 // the current level descriptions

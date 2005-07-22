@@ -18,9 +18,6 @@
 #include "resly.h"
 #include "frameresource.h"
 
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
-
 /*
  * A simple error reporting routine
  */

@@ -6,20 +6,6 @@
  *
  */
 
-
-#ifdef PSX
-/* A few definitions so the yacc generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-
-//static int printf(char* c, ...)
-//{
-//	return 0;
-//}
-
-#endif
-
 #include <stdio.h>
 
 #include "frame.h"
@@ -43,9 +29,6 @@ static SCRIPT_CONTEXT	*psCurrContext;
 
 // the current array indexes
 static ARRAY_INDEXES	sCurrArrayIndexes;
-
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
 
 // check that an array index is valid
 BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)

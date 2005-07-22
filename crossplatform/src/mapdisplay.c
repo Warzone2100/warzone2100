@@ -104,8 +104,6 @@ static	SDWORD mapGridWidth, mapGridHeight, mapGridMidX, mapGridMidY;
 static	SDWORD mapGridX, mapGridZ;
 static	SDWORD gridDivX, gridDivZ;
 static	iVector tileScreenCoords[MAX_MAP_GRID][MAX_MAP_GRID];
-POINT 	sP1,sP2,sP3,sP4;
-POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
 
 /*Flag to switch code for bucket sorting in renderFeatures etc 
   for the renderMapToBuffer code */

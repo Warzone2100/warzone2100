@@ -5,8 +5,6 @@
  *
  */
 
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -17,9 +15,6 @@
 #include "mono.h"
 #include "types.h"
 
-/* Turn off some warnings as I can't be bothered sorting it out properly */
-//#pragma warning (disable : 4244 4057)
-
 #define	MONO_SCREEN_ADDR	0xB0000
 
 #define	SLASH_T				0x09						/* tab */
@@ -28,7 +23,6 @@
 static void	DBug_DumpString(SDWORD, SDWORD, UBYTE *, UBYTE);
 static UBYTE	DBug_ExpandString(UBYTE *, UBYTE *, UBYTE, va_list, UBYTE);
 static UBYTE	DBug_CheckFormatChar(UBYTE);
-
 
 /*
 *	NAME

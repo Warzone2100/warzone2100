@@ -48,24 +48,11 @@ typedef struct yyTypedRules_tag {	/* Typed rule table */
 
 #endif
 
-#line 1 "StrRes.y"
-
 /*
  * StrRes.y
  *
  * Yacc file for parsing String Resource files
  */
-
-#ifdef PSX
-/* A few definitions so the yacc generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-static int printf(char* c, ...)
-{
-	return 0;
-}
-#endif
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -77,9 +64,6 @@ static int printf(char* c, ...)
 #include "treap.h"
 #include "strres.h"
 #include "strresly.h"
-
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
 
 typedef union {
 	STRING  *sval;
@@ -183,8 +167,6 @@ typedef struct yyTraceItems_tag {
 } yyTraceItems;
 #endif
 
-#line 2 "d:/usr/mks-ly/etc/yyparse.c"
-
 /*
  * Copyright 1985, 1990 by Mortice Kern Systems Inc.  All rights reserved.
  * 
@@ -287,7 +269,6 @@ int yysinc = -1; /* stack size increment, <0 = double, 0 = none, >0 = fixed */
 int yyssize = YYSSIZE;
 #endif
 
-#define YYERROR		goto yyerrlabel
 #define yyerrok		yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (strres_debug) yyShowRead(-1); strres_char = -1; }
@@ -362,7 +343,6 @@ static char *	yygetState YY_ARGS((int));
 #define yyassert(condition, msg, arg)
 #endif
 
-#line 62 "StrRes.y"
 /*
  * A simple error reporting routine
  */
@@ -376,10 +356,6 @@ void strres_error(char *pMessage,...)
 	DBERROR(("RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
 			  pMessage, line, strres_char, pText));
 }
-
-
-
-
 
 #ifdef YACC_WINDOWS
 
@@ -491,7 +467,7 @@ static int win_yyparse()
  * standard way.
  */
 
-strres_parse() 
+int strres_parse() 
 
 #endif /* YACC_WINDOWS */
 
@@ -542,7 +518,6 @@ strres_parse()
 #ifdef YYDYNAMIC
 	char *envp;
 #endif
-
 
 #ifdef YYDYNAMIC
 	if ((envp = getenv("YYSTACKSIZE")) != (char *)0) {
@@ -734,7 +709,6 @@ yyEncore:
 	switch (yyi) {		/* perform semantic action */
 		
 case YYr3: {	/* line :  TEXT QTEXT */
-#line 50 "StrRes.y"
 
 								
 								if (!strresStoreString(psCurrRes, yypvt[-1].sval, yypvt[0].sval))
@@ -743,7 +717,6 @@ case YYr3: {	/* line :  TEXT QTEXT */
 								}
 							
 } break;
-#line 314 "d:/usr/mks-ly/etc/yyparse.c"
 	case YYrACCEPT:
 		YYACCEPT;
 	case YYrERROR:
@@ -767,7 +740,6 @@ case YYr3: {	/* line :  TEXT QTEXT */
 #endif
 	goto yyStack;
 
-yyerrlabel:	;		/* come here from YYERROR	*/
 /*
 #pragma used yyerrlabel
  */

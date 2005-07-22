@@ -12,13 +12,7 @@
 #endif
 
 #ifdef WIN32
-#ifndef __GNUC__
-#pragma warning (disable : 4201 4214 4115 4514)
-#endif
 #include <windows.h>
-#ifndef __GNUC__
-#pragma warning (default : 4201 4214 4115)
-#endif
 #endif
 
 /* Linux specific stuff */
@@ -37,12 +31,10 @@ FILE* unix_fopen(char* filename, char* mode);
 
 #endif
 
-
 #define InitializeCriticalSection(x)
 #define DeleteCriticalSection(x)
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
-
 
 #include "types.h"
 #include "debug.h"

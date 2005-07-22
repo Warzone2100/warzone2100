@@ -79,9 +79,6 @@ static int printf(char* c, ...)
 #include "resly.h"
 #include "frameresource.h"
 
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
-
 typedef union {
 	STRING  *sval;
 } YYSTYPE;
@@ -296,7 +293,6 @@ int yysinc = -1; /* stack size increment, <0 = double, 0 = none, >0 = fixed */
 int yyssize = YYSSIZE;
 #endif
 
-#define YYERROR		goto yyerrlabel
 #define yyerrok		yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (res_debug) yyShowRead(-1); res_char = -1; }
@@ -384,10 +380,6 @@ void res_error(char *pMessage,...)
 	DBERROR(("RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
 			  pMessage, line, res_char, pText));
 }
-
-
-
-
 
 #ifdef YACC_WINDOWS
 
@@ -499,7 +491,7 @@ static int win_yyparse()
  * standard way.
  */
 
-res_parse() 
+int res_parse()
 
 #endif /* YACC_WINDOWS */
 
@@ -803,10 +795,6 @@ case YYr6: {	/* file_line :  FILETOKEN TEXT QTEXT */
 #endif
 	goto yyStack;
 
-yyerrlabel:	;		/* come here from YYERROR	*/
-/*
-#pragma used yyerrlabel
- */
 	yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--;

@@ -1,8 +1,5 @@
 %{
 
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
-
 #include <stdio.h>
 
 #include "frame.h"

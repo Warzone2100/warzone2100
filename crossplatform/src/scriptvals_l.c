@@ -140,8 +140,6 @@ static int scrv__base[] = {
  369, 651, 487, 498, 651, 651, 616, 651
 };
 
-
-//#line 1 "d:/usr/mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -223,7 +221,6 @@ extern	char* m_textmsg YY_ARGS((int id, const char* str, char* cls));
 #define	YY_DECL	
 #endif
 
-
 /*
  * You can redefine scrv_getc. For YACC Tracing, compile this code
  * with -DYYTRACE to get input from yt_getc
@@ -260,16 +257,12 @@ extern int	yt_getc YY_ARGS((void));
 			else { YY_SCANNER; scrv_leng = (n); YY_USER; }
 
 YY_DECL	void	scrv__reset YY_ARGS((void));
-YY_DECL	int	input	YY_ARGS((void));
-YY_DECL	int	unput	YY_ARGS((int c));
 
 /* functions defined in libl.lib */
 extern	int	scrv_wrap	YY_ARGS((void));
 extern	void	scrv_error	YY_ARGS((char *fmt, ...));
 extern	void	scrv_comment	YY_ARGS((char *term));
 extern	int	scrv_mapch	YY_ARGS((int delim, int escape));
-
-//#line 1 "ScriptVals.l"
 
 /*
  * ScriptVals.l
@@ -278,9 +271,7 @@ extern	int	scrv_mapch	YY_ARGS((int delim, int escape));
  *
  */
 
-
 #include <stdio.h>
-
 
 #include "frame.h"
 #include "script.h"
@@ -288,9 +279,6 @@ extern	int	scrv_mapch	YY_ARGS((int delim, int escape));
 
 /* Get the Yacc definitions */
 #include "scriptvals_y.h"
-
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -309,9 +297,6 @@ static UBYTE *pEndBuffer = NULL;
 #undef scrv_getc
 #define scrv_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
 
-//#line 127 "d:/usr/mks-ly/etc/yylex.c"
-
-
 #ifndef YYLMAX
 #define	YYLMAX		100		/* token and pushback buffer size */
 #endif /* YYLMAX */
@@ -321,8 +306,6 @@ static UBYTE *pEndBuffer = NULL;
  * If %pointer is used, scrv_text is a pointer to scrv__tbuf[].
  */
 YY_DECL char	scrv_text[YYLMAX+1];
-
-
 
 #ifdef	YY_DEBUG
 #undef	YY_DEBUG
@@ -411,7 +394,6 @@ static	char *scrv__push = scrv__save+YYLMAX;
 	}
 
 #endif
-
 
 #ifdef LEX_WINDOWS
 
@@ -537,10 +519,6 @@ YYDECL {
 	int scrv_oldi, scrv_oleng;	/* base i, scrv_leng before look-ahead */
 	int scrv_eof;		/* 1 if eof has already been read */
 
-//#line 350 "d:/usr/mks-ly/etc/yylex.c"
-
-
-
 #if !YY_STATIC_STDIO
 	if (scrv_in == (FILE *)0)
 		scrv_in = stdin;
@@ -571,7 +549,6 @@ YYDECL {
 		memmove(scrv_text, scrv_text+scrv_leng, (size_t) scrv__end);
 	i = 0;
 
-  scrv__contin:
 	scrv_oldi = i;
 
 	/* run the state machine until it jams */
@@ -618,12 +595,11 @@ YYDECL {
 		scrv_st = scrv__next[scrv_base];
 	  scrv__jammed: ;
 	  scrv__sbuf[++i] = (scrv__state_t) scrv_st;
-	} while (!(scrv_st == scrv__endst || YY_INTERACTIVE && scrv__base[scrv_st] > scrv__nxtmax && scrv__default[scrv_st] == scrv__endst));
+	} while (!(scrv_st == scrv__endst || (YY_INTERACTIVE && scrv__base[scrv_st] > scrv__nxtmax && scrv__default[scrv_st] == scrv__endst)));
 	YY_DEBUG(m_textmsg(1550, "<stopped %d, i = %d>\n", "I num1 num2"), scrv_st, i);
 	if (scrv_st != scrv__endst)
 		++i;
 
-  scrv__search:
 	/* search backward for a final state */
 	while (--i > scrv_oldi) {
 		scrv_st = scrv__sbuf[i];
@@ -661,51 +637,39 @@ YYDECL {
 	YY_USER;
 	switch (scrv__la_act[scrv_fmin] & 0777) {
 	case 0:
-//#line 65 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_INT; return TYPE; }
 	break;
 	case 1:
-//#line 66 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_INT; return TYPE; }
 	break;
 	case 2:
-//#line 67 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 3:
-//#line 68 "ScriptVals.l"
 	{ scrv_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 4:
-//#line 69 "ScriptVals.l"
 	return SCRIPT;
 	break;
 	case 5:
-//#line 70 "ScriptVals.l"
 	return STORE;
 	break;
 	case 6:
-//#line 71 "ScriptVals.l"
 	return RUN;
 	break;
 	case 7:
-//#line 73 "ScriptVals.l"
 	{ scrv_lval.bval = TRUE;	 return BOOLEAN; }
 	break;
 	case 8:
-//#line 74 "ScriptVals.l"
 	{ scrv_lval.bval = TRUE;	 return BOOLEAN; }
 	break;
 	case 9:
-//#line 75 "ScriptVals.l"
 	{ scrv_lval.bval = FALSE;	 return BOOLEAN; }
 	break;
 	case 10:
-//#line 76 "ScriptVals.l"
 	{ scrv_lval.bval = FALSE;	 return BOOLEAN; }
 	break;
 	case 11:
-//#line 79 "ScriptVals.l"
 	{
 								INTERP_TYPE type;
 								UDWORD		index;
@@ -736,23 +700,18 @@ YYDECL {
 							}
 	break;
 	case 12:
-//#line 109 "ScriptVals.l"
 	{ scrv_lval.ival = atol(scrv_text); return INTEGER; }
 	break;
 	case 13:
-//#line 112 "ScriptVals.l"
 	{ BEGIN QUOTE; }
 	break;
 	case 14:
-//#line 113 "ScriptVals.l"
 	{ BEGIN 0; }
 	break;
 	case 15:
-//#line 114 "ScriptVals.l"
 	{ scrv_error("Unexpected end of line in string"); }
 	break;
 	case 16:
-//#line 115 "ScriptVals.l"
 	{
 								strcpy(aText[currText], scrv_text);
 								scrv_lval.sval = aText[currText];
@@ -761,62 +720,38 @@ YYDECL {
 							}
 	break;
 	case 17:
-//#line 123 "ScriptVals.l"
 	;
 	break;
 	case 18:
-//#line 126 "ScriptVals.l"
 	{ inComment=TRUE; BEGIN COMMENT; }
 	break;
 	case 19:
 	case 20:
-//#line 128 "ScriptVals.l"
 	{ inComment=FALSE; BEGIN 0; }
 	break;
 	case 21:
 	case 22:
-//#line 130 "ScriptVals.l"
 	;
 	break;
 	case 23:
-//#line 133 "ScriptVals.l"
 	{ BEGIN SLCOMMENT; }
 	break;
 	case 24:
-//#line 134 "ScriptVals.l"
 	{ BEGIN 0; }
 	break;
 	case 25:
-//#line 135 "ScriptVals.l"
 	;
 	break;
 	case 26:
-//#line 138 "ScriptVals.l"
 	return scrv_text[0];
 	break;
-
-//#line 472 "d:/usr/mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
 	i = scrv_leng;
 	goto scrv__again;			/* action fell though */
-
-  scrv__reject:
-	YY_SCANNER;
-	i = scrv_oleng;			/* restore original scrv_text */
-	if (++scrv_fmin < scrv_fmax)
-		goto scrv__found;		/* another final state, same length */
-	else
-		goto scrv__search;		/* try shorter scrv_text */
-
-  scrv__more:
-	YY_SCANNER;
-	i = scrv_leng;
-	if (i > 0)
-		scrv__lastc = scrv_text[i-1];
-	goto scrv__contin;
 }
+
 /*
  * Safely switch input stream underneath LEX
  */
@@ -884,64 +819,6 @@ scrv__reset()
 	YY_INIT;
 	scrv_lineno = 1;		/* line number */
 }
-/* get input char with pushback */
-YY_DECL int
-input()
-{
-	int c;
-#ifndef YY_PRESERVE
-	if (scrv__end > scrv_leng) {
-		scrv__end--;
-		memmove(scrv_text+scrv_leng, scrv_text+scrv_leng+1,
-			(size_t) (scrv__end-scrv_leng));
-		c = scrv__save;
-		YY_USER;
-#else
-	if (scrv__push < scrv__save+YYLMAX) {
-		c = *scrv__push++;
-#endif
-	} else
-		c = scrv_getc();
-	scrv__lastc = c;
-	if (c == YYNEWLINE)
-		scrv_lineno++;
-	if (c == EOF) /* scrv_getc() can set c=EOF vsc4 wants c==EOF to return 0 */
-		return 0;
-	else
-		return c;
-}
-
-/*f
- * pushback char
- */
-YY_DECL int
-unput(int c)
-{
-#ifndef YY_PRESERVE
-	if (scrv__end >= YYLMAX) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		if (scrv__end > scrv_leng) {
-			scrv_text[scrv_leng] = scrv__save;
-			memmove(scrv_text+scrv_leng+1, scrv_text+scrv_leng,
-				(size_t) (scrv__end-scrv_leng));
-			scrv_text[scrv_leng] = 0;
-		}
-		scrv__end++;
-		scrv__save = (char) c;
-#else
-	if (scrv__push <= scrv__save) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		*--scrv__push = c;
-#endif
-		if (c == YYNEWLINE)
-			scrv_lineno--;
-	}	/* endif */
-	return c;
-}
-
-//#line 141 "ScriptVals.l"
 
 /* Set the current input buffer for the lexer */
 void scrvSetInputBuffer(UBYTE *pBuffer, UDWORD size)

@@ -23,6 +23,7 @@
 #include "piemode.h"
 #include "levels.h"
 #include "research.h"
+#include "configfile.h"
 #include "warzoneconfig.h"
 #include "clparse.h"
 #include "cdspan.h"
@@ -58,7 +59,6 @@ char*	UserMusicPath;
 
 #ifndef WIN32
 
-char	UnixRegFilePath[255];
 char	__UserMusicPath[255];
 
 #endif

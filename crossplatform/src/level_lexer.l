@@ -6,29 +6,12 @@
  *
  */
 
-#ifndef PSX
 #include <stdio.h>
-#else
-/* A few definitions so the lex generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-#ifndef _FILE_
-#define _FILE_
-typedef int FILE;	// in stdio.h ?
-#endif
-#define stderr 0
-#define stdin  0
-#define stdout 0
-#endif
 
 #include "frame.h"
 
 #include "levels.h"
 #include "levelint.h"
-
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255

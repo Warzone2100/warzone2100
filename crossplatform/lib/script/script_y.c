@@ -48,8 +48,6 @@ typedef struct yyTypedRules_tag {	/* Typed rule table */
 
 #endif
 
-#line 1 "Script.y"
-
 /*
  * script.y
  *
@@ -84,9 +82,6 @@ typedef enum _code_error
 	CE_PARSE			// A parse error occured
 } CODE_ERROR;
 
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
-
 /* Pointer to the compiled code */
 static SCRIPT_CODE	*psFinalProg=NULL;
 
@@ -104,9 +99,6 @@ static PARAM_BLOCK	*psCurrPBlock=NULL;
 
 /* Pointer into the current code block */
 static UDWORD		*ip;
-
-/* Pointer to current parameter declaration block */
-static PARAM_DECL	*psCurrParamDecl=NULL;
 
 /* Pointer to current trigger subdeclaration */
 static TRIGGER_DECL	*psCurrTDecl=NULL;
@@ -154,9 +146,6 @@ static UDWORD			numEvents;
  */
 static BOOL localVariableDef=FALSE;
 
-/* The identifier for the current script function being defined */
-static STRING *pCurrFuncIdent=NULL;
-
 /* A temporary store for a line number - used when
  * generating debugging info for functions, conditionals and loops.
  */
@@ -187,7 +176,6 @@ CALLBACK_SYMBOL	*asScrCallbackTab;
  * These macros are used to allocate and free the different types of code
  * block used within the compiler
  */
-
 
 /* What the macro should do if it has an allocation error.
  * This is different depending on whether the macro is used
@@ -533,7 +521,6 @@ CALLBACK_SYMBOL	*asScrCallbackTab;
  * to the next free space in the code block.
  */
 
-
 /* Macro to store an opcode in a code block */
 #define PUT_OPCODE(ip, opcode) \
 	*ip = (opcode) << OPCODE_SHIFT; \
@@ -634,7 +621,6 @@ CALLBACK_SYMBOL	*asScrCallbackTab;
 	if (genDebugInfo) \
 		FREE((psBlock)->psDebug)
 
-
 /* Macro to copy the debugging information from one block to another */
 #define PUT_DEBUG(psFinal, psBlock) \
 	if (genDebugInfo) \
@@ -647,7 +633,6 @@ CALLBACK_SYMBOL	*asScrCallbackTab;
 /* Macro to combine the debugging information in two blocks into a third block */
 static UDWORD		_dbEntry;
 static SCRIPT_DEBUG	*_psCurr;
-static UDWORD		_baseOffset;
 #define COMBINE_DEBUG(psFinal, psBlock1, psBlock2) \
 	if (genDebugInfo) \
 	{ \
@@ -691,7 +676,6 @@ static UDWORD		_baseOffset;
 		strcpy((psBlock)->psDebug[offset].pLabel, pString); \
 	}
 
-
 /***************************************************************************************
  *
  * Code generation functions
@@ -712,8 +696,6 @@ static UDWORD		_baseOffset;
 		YYERROR; \
 	} 
 
-
-   
 /* Generate the code for a function call, checking the parameter
  * types match.
  */
@@ -801,7 +783,6 @@ CODE_ERROR scriptCodeFunction(FUNC_SYMBOL		*psFSymbol,		// The function being ca
 	return CE_OK;
 }
 
-
 /* Generate the code for a parameter callback, checking the parameter
  * types match.
  */
@@ -872,7 +853,6 @@ CODE_ERROR scriptCodeCallbackParams(
 	return CE_OK;
 }
 
-
 /* Generate code for assigning a value to a variable */
 CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assign to
 							  CODE_BLOCK	*psValue,		// The code for the value to
@@ -932,7 +912,6 @@ CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assig
 	return CE_OK;
 }
 
-
 /* Generate code for assigning a value to an object variable */
 CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variable to assign to
 								 CODE_BLOCK		*psValue,	// The code for the value to
@@ -980,7 +959,6 @@ CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variable to a
 	return CE_OK;
 }
 
-
 /* Generate code for getting a value from an object variable */
 CODE_ERROR scriptCodeObjGet(OBJVAR_BLOCK	*psVariable,// The variable to get from
 						  CODE_BLOCK	**ppsBlock)	// Generated code
@@ -1018,7 +996,6 @@ CODE_ERROR scriptCodeObjGet(OBJVAR_BLOCK	*psVariable,// The variable to get from
 
 	return CE_OK;
 }
-
 
 /* Generate code for assigning a value to an array variable */
 CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The variable to assign to
@@ -1082,7 +1059,6 @@ CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The variable to 
 	return CE_OK;
 }
 
-
 /* Generate code for getting a value from an array variable */
 CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to get from
 						  CODE_BLOCK	**ppsBlock)	// Generated code
@@ -1135,7 +1111,6 @@ CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to get fro
 
 	return CE_OK;
 }
-
 
 /* Generate the final code block for conditional statements */
 CODE_ERROR scriptCodeConditional(
@@ -1201,7 +1176,6 @@ CODE_ERROR scriptCodeParameter(CODE_BLOCK		*psParam,		// Code for the parameter
 	return CE_OK;
 }
 
-
 /* Generate code for binary operators (e.g. 2 + 2) */
 CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for first parameter
 								  CODE_BLOCK	*psSecond,	// Code for second parameter
@@ -1224,7 +1198,6 @@ CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for first param
 
 	return CE_OK;
 }
-
 
 /* Generate code for accessing an object variable.  The variable symbol is
  * stored with the code for the object value so that this block can be used for
@@ -1259,7 +1232,6 @@ CODE_ERROR scriptCodeObjectVariable(CODE_BLOCK	*psObjCode,	// Code for the objec
 
 	return CE_OK;
 }
-
 
 /* Generate code for accessing an array variable.  The variable symbol is
  * stored with the code for the object value so that this block can be used for
@@ -1298,7 +1270,6 @@ CODE_ERROR scriptCodeArrayVariable(ARRAY_BLOCK	*psArrayCode,	// Code for the arr
 	return CE_OK;
 }
 
-
 /* Generate code for a constant */
 CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variable symbol
 							CODE_BLOCK		**ppsBlock)	// Generated code
@@ -1335,7 +1306,6 @@ CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variable symb
 
 	return CE_OK;
 }
-
 
 /* Generate code for getting a variables value */
 CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symbol
@@ -1382,7 +1352,6 @@ CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symb
 	return CE_OK;
 }
 
-
 /* Generate code for getting a variables value */
 CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variable symbol
 							PARAM_BLOCK		**ppsBlock)		// Generated code
@@ -1418,7 +1387,6 @@ CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variable symb
 
 	return CE_OK;
 }
-
 
 /* Generate the code for a trigger and store it in the trigger list */
 CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
@@ -1458,7 +1426,6 @@ CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
 	return CE_OK;
 }
 
-
 /* Generate the code for an event and store it in the event list */
 CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_BLOCK *psCode)
 {
@@ -1495,7 +1462,6 @@ CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_B
 	return CE_OK;
 }
 
-
 /* Store the types of a list of variables into a code block.
  * The order of the list is reversed so that the type of the
  * first variable defined is stored first.
@@ -1511,7 +1477,6 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 		PUT_INDEX(ip, psVar->type);
 	}
 }
-
 
 /* Change the error action for the ALLOC macro's to what it
  * should be inside a rule body.
@@ -2334,8 +2299,6 @@ typedef struct yyTraceItems_tag {
 } yyTraceItems;
 #endif
 
-#line 2 "e:/usr/mks-ly/etc/yyparse.c"
-
 /*
  * Copyright 1985, 1990 by Mortice Kern Systems Inc.  All rights reserved.
  * 
@@ -2513,7 +2476,6 @@ static char *	yygetState YY_ARGS((int));
 #define yyassert(condition, msg, arg)
 #endif
 
-#line 3407 "Script.y"
 // Reset all the symbol tables
 static void scriptResetTables(void)
 {
@@ -2615,7 +2577,6 @@ BOOL scriptCompile(UBYTE *pData, UDWORD fileSize,
 	return TRUE;
 }
 
-
 /* A simple error reporting routine */
 void scr_error(char *pMessage, ...)
 {
@@ -2637,7 +2598,6 @@ void scr_error(char *pMessage, ...)
 #endif
 }
 
-
 /* Look up a type symbol */
 BOOL scriptLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 {
@@ -2657,7 +2617,6 @@ BOOL scriptLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 
 	return FALSE;
 }
-
 
 /* Reset the local variable symbol table at the end of a function */
 void scriptClearLocalVariables(void)
@@ -2738,7 +2697,6 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 	return TRUE;
 }
 
-
 /* Look up a variable symbol */
 BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 {
@@ -2810,7 +2768,6 @@ BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 	return FALSE;
 }
 
-
 /* Add a new trigger symbol */
 BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 {
@@ -2864,7 +2821,6 @@ BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 		psTrigger->psDebug = NULL;
 	}
 
-
 	// Store the trigger
 	psPrev = NULL;
 	for(psCurr = psTriggers; psCurr; psCurr = psCurr->psNext)
@@ -2883,7 +2839,6 @@ BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 	return TRUE;
 }
 
-
 /* Lookup a trigger symbol */
 BOOL scriptLookUpTrigger(STRING *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 {
@@ -2900,7 +2855,6 @@ BOOL scriptLookUpTrigger(STRING *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 
 	return FALSE;
 }
-
 
 /* Lookup a callback trigger symbol */
 BOOL scriptLookUpCallback(STRING *pIdent, CALLBACK_SYMBOL **ppsCallback)
@@ -3022,7 +2976,6 @@ BOOL scriptLookUpEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent)
 	return FALSE;
 }
 
-
 /* Look up a constant variable symbol */
 BOOL scriptLookUpConstant(STRING *pIdent, CONST_SYMBOL **ppsSym)
 {
@@ -3043,7 +2996,6 @@ BOOL scriptLookUpConstant(STRING *pIdent, CONST_SYMBOL **ppsSym)
 
 	return FALSE;
 }
-
 
 /* Look up a function symbol */
 BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym)
@@ -3079,7 +3031,6 @@ BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym)
 	return FALSE;
 }
 
-
 /* Set the type table */
 void scriptSetTypeTab(TYPE_SYMBOL *psTypeTab)
 {
@@ -3097,7 +3048,6 @@ void scriptSetTypeTab(TYPE_SYMBOL *psTypeTab)
 
 	asScrTypeTab = psTypeTab;
 }
-
 
 /* Set the function table */
 void scriptSetFuncTab(FUNC_SYMBOL *psFuncTab)
@@ -3140,7 +3090,6 @@ void scriptSetCallbackTab(CALLBACK_SYMBOL *psCallTab)
 
 	asScrCallbackTab = psCallTab;
 }
-
 
 #ifdef YACC_WINDOWS
 
@@ -3252,7 +3201,7 @@ static int win_yyparse()
  * standard way.
  */
 
-scr_parse() 
+int scr_parse() 
 
 #endif /* YACC_WINDOWS */
 
@@ -3303,7 +3252,6 @@ scr_parse()
 #ifdef YYDYNAMIC
 	char *envp;
 #endif
-
 
 #ifdef YYDYNAMIC
 	if ((envp = getenv("YYSTACKSIZE")) != (char *)0) {
@@ -3495,7 +3443,6 @@ yyEncore:
 	switch (yyi) {		/* perform semantic action */
 		
 case YYr1: {	/* script :  header var_list */
-#line 1626 "Script.y"
 
 					
 					
@@ -3504,7 +3451,6 @@ case YYr1: {	/* script :  header var_list */
 } break;
 
 case YYr2: {	/* script :  header var_list $1 trigger_list event_list */
-#line 1632 "Script.y"
 
 					SDWORD			size, debug, i, dimension, arraySize, totalArraySize;
 					SDWORD			numArrays;
@@ -3706,7 +3652,6 @@ case YYr2: {	/* script :  header var_list $1 trigger_list event_list */
 } break;
 
 case YYr6: {	/* header_decl :  LINK TYPE ';' */
-#line 1843 "Script.y"
 
 //						if (!scriptAddVariable("owner", yypvt[-1].tval, ST_PUBLIC, 0))
 //						{
@@ -3717,21 +3662,18 @@ case YYr6: {	/* header_decl :  LINK TYPE ';' */
 } break;
 
 case YYr8: {	/* var_list :  variable_decl ';' */
-#line 1860 "Script.y"
 
 					FREE_VARDECL(yypvt[-1].vdecl);
 				
 } break;
 
 case YYr9: {	/* var_list :  var_list variable_decl ';' */
-#line 1864 "Script.y"
 
 					FREE_VARDECL(yypvt[-1].vdecl);
 				
 } break;
 
 case YYr10: {	/* variable_decl_head :  STORAGE TYPE */
-#line 1870 "Script.y"
 
 							ALLOC_VARDECL(psCurrVDecl);
 							psCurrVDecl->storage = yypvt[-1].stype;
@@ -3742,7 +3684,6 @@ case YYr10: {	/* variable_decl_head :  STORAGE TYPE */
 } break;
 
 case YYr11: {	/* variable_decl_head :  STORAGE TRIGGER */
-#line 1878 "Script.y"
 
 							ALLOC_VARDECL(psCurrVDecl);
 							psCurrVDecl->storage = yypvt[-1].stype;
@@ -3753,7 +3694,6 @@ case YYr11: {	/* variable_decl_head :  STORAGE TRIGGER */
 } break;
 
 case YYr12: {	/* variable_decl_head :  STORAGE EVENT */
-#line 1886 "Script.y"
 
 							ALLOC_VARDECL(psCurrVDecl);
 							psCurrVDecl->storage = yypvt[-1].stype;
@@ -3764,7 +3704,6 @@ case YYr12: {	/* variable_decl_head :  STORAGE EVENT */
 } break;
 
 case YYr13: {	/* array_sub_decl :  '[' INTEGER ']' */
-#line 1896 "Script.y"
 
 						if (yypvt[-1].ival <= 0 || yypvt[-1].ival >= VAR_MAX_ELEMENTS)
 						{
@@ -3780,14 +3719,12 @@ case YYr13: {	/* array_sub_decl :  '[' INTEGER ']' */
 } break;
 
 case YYr14: {	/* array_sub_decl_list :  array_sub_decl */
-#line 1911 "Script.y"
 
 						yyval.videcl = yypvt[0].videcl;
 					
 } break;
 
 case YYr15: {	/* array_sub_decl_list :  array_sub_decl_list '[' INTEGER ']' */
-#line 1916 "Script.y"
 
 						if (yypvt[-3].videcl->dimensions >= VAR_MAX_DIMENSIONS)
 						{
@@ -3808,7 +3745,6 @@ case YYr15: {	/* array_sub_decl_list :  array_sub_decl_list '[' INTEGER ']' */
 } break;
 
 case YYr16: {	/* variable_ident :  IDENT */
-#line 1936 "Script.y"
 
 						ALLOC_VARIDENTDECL(psCurrVIdentDecl, yypvt[0].sval, 0);
 
@@ -3817,7 +3753,6 @@ case YYr16: {	/* variable_ident :  IDENT */
 } break;
 
 case YYr17: {	/* variable_ident :  IDENT array_sub_decl_list */
-#line 1943 "Script.y"
 
 						yypvt[0].videcl->pIdent = MALLOC(strlen(yypvt[-1].sval)+1);
 						if (yypvt[0].videcl->pIdent == NULL)
@@ -3832,7 +3767,6 @@ case YYr17: {	/* variable_ident :  IDENT array_sub_decl_list */
 } break;
 
 case YYr18: {	/* variable_decl :  variable_decl_head variable_ident */
-#line 1957 "Script.y"
 
 						if (!scriptAddVariable(yypvt[-1].vdecl, yypvt[0].videcl))
 						{
@@ -3848,7 +3782,6 @@ case YYr18: {	/* variable_decl :  variable_decl_head variable_ident */
 } break;
 
 case YYr19: {	/* variable_decl :  variable_decl ',' variable_ident */
-#line 1970 "Script.y"
 
 						if (!scriptAddVariable(yypvt[-2].vdecl, yypvt[0].videcl))
 						{
@@ -3864,7 +3797,6 @@ case YYr19: {	/* variable_decl :  variable_decl ',' variable_ident */
 } break;
 
 case YYr23: {	/* trigger_subdecl :  boolexp ',' INTEGER */
-#line 1995 "Script.y"
 
 						ALLOC_TSUBDECL(psCurrTDecl, TR_CODE, yypvt[-2].cblock->size, yypvt[0].ival);
 						ip = psCurrTDecl->pCode;
@@ -3876,7 +3808,6 @@ case YYr23: {	/* trigger_subdecl :  boolexp ',' INTEGER */
 } break;
 
 case YYr24: {	/* trigger_subdecl :  WAIT ',' INTEGER */
-#line 2004 "Script.y"
 
 						ALLOC_TSUBDECL(psCurrTDecl, TR_WAIT, 0, yypvt[0].ival);
 
@@ -3885,7 +3816,6 @@ case YYr24: {	/* trigger_subdecl :  WAIT ',' INTEGER */
 } break;
 
 case YYr25: {	/* trigger_subdecl :  EVERY ',' INTEGER */
-#line 2010 "Script.y"
 
 						ALLOC_TSUBDECL(psCurrTDecl, TR_EVERY, 0, yypvt[0].ival);
 
@@ -3894,7 +3824,6 @@ case YYr25: {	/* trigger_subdecl :  EVERY ',' INTEGER */
 } break;
 
 case YYr26: {	/* trigger_subdecl :  INITIALISE */
-#line 2016 "Script.y"
 
 						ALLOC_TSUBDECL(psCurrTDecl, TR_INIT, 0, 0);
 
@@ -3903,7 +3832,6 @@ case YYr26: {	/* trigger_subdecl :  INITIALISE */
 } break;
 
 case YYr27: {	/* trigger_subdecl :  CALLBACK_SYM */
-#line 2022 "Script.y"
 
 						if (yypvt[0].cbSymbol->numParams != 0)
 						{
@@ -3918,7 +3846,6 @@ case YYr27: {	/* trigger_subdecl :  CALLBACK_SYM */
 } break;
 
 case YYr28: {	/* trigger_subdecl :  CALLBACK_SYM ',' param_list */
-#line 2034 "Script.y"
 
 						codeRet = scriptCodeCallbackParams(yypvt[-2].cbSymbol, yypvt[0].pblock, &psCurrTDecl);
 						CHECK_CODE_ERROR(codeRet);
@@ -3928,7 +3855,6 @@ case YYr28: {	/* trigger_subdecl :  CALLBACK_SYM ',' param_list */
 } break;
 
 case YYr29: {	/* trigger_decl :  TRIGGER IDENT '(' trigger_subdecl ')' ';' */
-#line 2043 "Script.y"
 
 						SDWORD	line;
 						STRING	*pDummy;
@@ -3943,7 +3869,6 @@ case YYr29: {	/* trigger_decl :  TRIGGER IDENT '(' trigger_subdecl ')' ';' */
 } break;
 
 case YYr32: {	/* event_subdecl :  EVENT IDENT */
-#line 2066 "Script.y"
 
 						EVENT_SYMBOL	*psEvent;
 						if (!scriptDeclareEvent(yypvt[0].sval, &psEvent))
@@ -3956,14 +3881,12 @@ case YYr32: {	/* event_subdecl :  EVENT IDENT */
 } break;
 
 case YYr33: {	/* event_subdecl :  EVENT EVENT_SYM */
-#line 2076 "Script.y"
 
 							yyval.eSymbol = yypvt[0].eSymbol;
 						
 } break;
 
 case YYr35: {	/* event_decl :  event_subdecl '(' TRIG_SYM ')' '{' statement_list '}' */
-#line 2083 "Script.y"
 
 						if (!scriptDefineEvent(yypvt[-6].eSymbol, yypvt[-1].cblock, yypvt[-4].tSymbol->index))
 						{
@@ -3976,7 +3899,6 @@ case YYr35: {	/* event_decl :  event_subdecl '(' TRIG_SYM ')' '{' statement_list
 } break;
 
 case YYr36: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' */
-#line 2093 "Script.y"
 
 						// Get the line for the implicit trigger declaration
 						STRING	*pDummy;
@@ -3985,7 +3907,6 @@ case YYr36: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' */
 } break;
 
 case YYr37: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' $36 '{' statement_list '}' */
-#line 2099 "Script.y"
 
 						// Create a trigger for this event
 						if (!scriptAddTrigger("", yypvt[-5].tdecl, debugLine))
@@ -4005,7 +3926,6 @@ case YYr37: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' $36 '{' sta
 } break;
 
 case YYr38: {	/* event_decl :  event_subdecl '(' INACTIVE ')' '{' statement_list '}' */
-#line 2116 "Script.y"
 
 						if (!scriptDefineEvent(yypvt[-6].eSymbol, yypvt[-1].cblock, -1))
 						{
@@ -4018,7 +3938,6 @@ case YYr38: {	/* event_decl :  event_subdecl '(' INACTIVE ')' '{' statement_list
 } break;
 
 case YYr39: {	/* statement_list :  */
-#line 2133 "Script.y"
 
 							// Allocate a dummy code block
 							ALLOC_BLOCK(psCurrBlock, 1);
@@ -4029,14 +3948,12 @@ case YYr39: {	/* statement_list :  */
 } break;
 
 case YYr40: {	/* statement_list :  statement */
-#line 2141 "Script.y"
 
 							yyval.cblock = yypvt[0].cblock;
 						
 } break;
 
 case YYr41: {	/* statement_list :  statement_list statement */
-#line 2145 "Script.y"
 
 							ALLOC_BLOCK(psCurrBlock, yypvt[-1].cblock->size + yypvt[0].cblock->size);
 							ALLOC_DEBUG(psCurrBlock, yypvt[-1].cblock->debugEntries +
@@ -4059,7 +3976,6 @@ case YYr41: {	/* statement_list :  statement_list statement */
 } break;
 
 case YYr42: {	/* statement :  assignment ';' */
-#line 2167 "Script.y"
 
 						UDWORD line;
 						STRING *pDummy;
@@ -4078,7 +3994,6 @@ case YYr42: {	/* statement :  assignment ';' */
 } break;
 
 case YYr43: {	/* statement :  func_call ';' */
-#line 2183 "Script.y"
 
 						UDWORD line;
 						STRING *pDummy;
@@ -4099,21 +4014,18 @@ case YYr43: {	/* statement :  func_call ';' */
 } break;
 
 case YYr44: {	/* statement :  conditional */
-#line 2201 "Script.y"
 
 						yyval.cblock = yypvt[0].cblock;
 					
 } break;
 
 case YYr45: {	/* statement :  loop */
-#line 2205 "Script.y"
 
 						yyval.cblock = yypvt[0].cblock;
 					
 } break;
 
 case YYr46: {	/* statement :  EXIT ';' */
-#line 2209 "Script.y"
 
 						UDWORD line;
 						STRING *pDummy;
@@ -4139,7 +4051,6 @@ case YYr46: {	/* statement :  EXIT ';' */
 } break;
 
 case YYr47: {	/* statement :  PAUSE '(' INTEGER ')' ';' */
-#line 2232 "Script.y"
 
 						UDWORD line;
 						STRING *pDummy;
@@ -4172,7 +4083,6 @@ case YYr47: {	/* statement :  PAUSE '(' INTEGER ')' ';' */
 } break;
 
 case YYr48: {	/* assignment :  NUM_VAR '=' expression */
-#line 2267 "Script.y"
 
 							codeRet = scriptCodeAssignment(yypvt[-2].vSymbol, yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4183,7 +4093,6 @@ case YYr48: {	/* assignment :  NUM_VAR '=' expression */
 } break;
 
 case YYr49: {	/* assignment :  BOOL_VAR '=' boolexp */
-#line 2275 "Script.y"
 
 							codeRet = scriptCodeAssignment(yypvt[-2].vSymbol, yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4194,7 +4103,6 @@ case YYr49: {	/* assignment :  BOOL_VAR '=' boolexp */
 } break;
 
 case YYr50: {	/* assignment :  OBJ_VAR '=' objexp */
-#line 2283 "Script.y"
 
 							if (!interpCheckEquiv(yypvt[-2].vSymbol->type, yypvt[0].cblock->type))
 							{
@@ -4210,7 +4118,6 @@ case YYr50: {	/* assignment :  OBJ_VAR '=' objexp */
 } break;
 
 case YYr51: {	/* assignment :  VAR '=' userexp */
-#line 2296 "Script.y"
 
 							if (!interpCheckEquiv(yypvt[-2].vSymbol->type, yypvt[0].cblock->type))
 							{
@@ -4226,7 +4133,6 @@ case YYr51: {	/* assignment :  VAR '=' userexp */
 } break;
 
 case YYr52: {	/* assignment :  num_objvar '=' expression */
-#line 2309 "Script.y"
 
 							codeRet = scriptCodeObjAssignment(yypvt[-2].objVarBlock, yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4237,7 +4143,6 @@ case YYr52: {	/* assignment :  num_objvar '=' expression */
 } break;
 
 case YYr53: {	/* assignment :  bool_objvar '=' boolexp */
-#line 2317 "Script.y"
 
 							codeRet = scriptCodeObjAssignment(yypvt[-2].objVarBlock, yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4248,7 +4153,6 @@ case YYr53: {	/* assignment :  bool_objvar '=' boolexp */
 } break;
 
 case YYr54: {	/* assignment :  user_objvar '=' userexp */
-#line 2325 "Script.y"
 
 							if (!interpCheckEquiv(yypvt[-2].objVarBlock->psObjVar->type,yypvt[0].cblock->type))
 							{
@@ -4264,7 +4168,6 @@ case YYr54: {	/* assignment :  user_objvar '=' userexp */
 } break;
 
 case YYr55: {	/* assignment :  obj_objvar '=' objexp */
-#line 2338 "Script.y"
 
 							if (!interpCheckEquiv(yypvt[-2].objVarBlock->psObjVar->type, yypvt[0].cblock->type))
 							{
@@ -4280,7 +4183,6 @@ case YYr55: {	/* assignment :  obj_objvar '=' objexp */
 } break;
 
 case YYr56: {	/* assignment :  num_array_var '=' expression */
-#line 2351 "Script.y"
 
 							codeRet = scriptCodeArrayAssignment(yypvt[-2].arrayBlock, yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4291,7 +4193,6 @@ case YYr56: {	/* assignment :  num_array_var '=' expression */
 } break;
 
 case YYr57: {	/* assignment :  bool_array_var '=' boolexp */
-#line 2359 "Script.y"
 
 							codeRet = scriptCodeArrayAssignment(yypvt[-2].arrayBlock, yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4302,7 +4203,6 @@ case YYr57: {	/* assignment :  bool_array_var '=' boolexp */
 } break;
 
 case YYr58: {	/* assignment :  user_array_var '=' userexp */
-#line 2367 "Script.y"
 
 							if (!interpCheckEquiv(yypvt[-2].arrayBlock->psArrayVar->type,yypvt[0].cblock->type))
 							{
@@ -4318,7 +4218,6 @@ case YYr58: {	/* assignment :  user_array_var '=' userexp */
 } break;
 
 case YYr59: {	/* assignment :  obj_array_var '=' objexp */
-#line 2380 "Script.y"
 
 							if (!interpCheckEquiv(yypvt[-2].arrayBlock->psArrayVar->type, yypvt[0].cblock->type))
 							{
@@ -4334,7 +4233,6 @@ case YYr59: {	/* assignment :  obj_array_var '=' objexp */
 } break;
 
 case YYr60: {	/* func_call :  NUM_FUNC '(' param_list ')' */
-#line 2401 "Script.y"
 
 						DBP0(("[compile] NUM_FUNC\n"));
 
@@ -4348,7 +4246,6 @@ case YYr60: {	/* func_call :  NUM_FUNC '(' param_list ')' */
 } break;
 
 case YYr61: {	/* func_call :  BOOL_FUNC '(' param_list ')' */
-#line 2412 "Script.y"
 
 						DBP0(("[compile] BOOL_FUNC\n"));
 
@@ -4362,7 +4259,6 @@ case YYr61: {	/* func_call :  BOOL_FUNC '(' param_list ')' */
 } break;
 
 case YYr62: {	/* func_call :  USER_FUNC '(' param_list ')' */
-#line 2423 "Script.y"
 
 						DBP0(("[compile] USER_FUNC\n"));
 
@@ -4376,7 +4272,6 @@ case YYr62: {	/* func_call :  USER_FUNC '(' param_list ')' */
 } break;
 
 case YYr63: {	/* func_call :  OBJ_FUNC '(' param_list ')' */
-#line 2434 "Script.y"
 
 						DBP0(("[compile] OBJ_FUNC\n"));
 
@@ -4390,7 +4285,6 @@ case YYr63: {	/* func_call :  OBJ_FUNC '(' param_list ')' */
 } break;
 
 case YYr64: {	/* func_call :  FUNC '(' param_list ')' */
-#line 2445 "Script.y"
 
 						DBP0(("[compile] FUNC\n"));
 						
@@ -4403,7 +4297,6 @@ case YYr64: {	/* func_call :  FUNC '(' param_list ')' */
 } break;
 
 case YYr65: {	/* param_list :  */
-#line 2464 "Script.y"
 
 						
 						ALLOC_PBLOCK(psCurrPBlock, sizeof(UDWORD), 1);
@@ -4415,7 +4308,6 @@ case YYr65: {	/* param_list :  */
 } break;
 
 case YYr66: {	/* param_list :  parameter */
-#line 2473 "Script.y"
 
 						DBP0(("[compile] parameter\n"));
 						yyval.pblock = yypvt[0].pblock;
@@ -4423,7 +4315,6 @@ case YYr66: {	/* param_list :  parameter */
 } break;
 
 case YYr67: {	/* param_list :  param_list ',' parameter */
-#line 2478 "Script.y"
 
 						DBP0(("[compile] param_list , parameter\n"));
 
@@ -4452,7 +4343,6 @@ case YYr67: {	/* param_list :  param_list ',' parameter */
 } break;
 
 case YYr68: {	/* parameter :  expression */
-#line 2505 "Script.y"
 
 						
 						codeRet = scriptCodeParameter(yypvt[0].cblock, VAL_INT, &psCurrPBlock);
@@ -4464,7 +4354,6 @@ case YYr68: {	/* parameter :  expression */
 } break;
 
 case YYr69: {	/* parameter :  boolexp */
-#line 2514 "Script.y"
 
 						
 						codeRet = scriptCodeParameter(yypvt[0].cblock, VAL_BOOL, &psCurrPBlock);
@@ -4476,7 +4365,6 @@ case YYr69: {	/* parameter :  boolexp */
 } break;
 
 case YYr70: {	/* parameter :  userexp */
-#line 2523 "Script.y"
 
 						
 						codeRet = scriptCodeParameter((CODE_BLOCK *)yypvt[0].cblock, yypvt[0].cblock->type, &psCurrPBlock);
@@ -4488,7 +4376,6 @@ case YYr70: {	/* parameter :  userexp */
 } break;
 
 case YYr71: {	/* parameter :  objexp */
-#line 2532 "Script.y"
 
 						
 						codeRet = scriptCodeParameter(yypvt[0].cblock, yypvt[0].cblock->type, &psCurrPBlock);
@@ -4500,7 +4387,6 @@ case YYr71: {	/* parameter :  objexp */
 } break;
 
 case YYr72: {	/* parameter :  var_ref */
-#line 2541 "Script.y"
 
 						
 						yyval.pblock = yypvt[0].pblock;
@@ -4508,7 +4394,6 @@ case YYr72: {	/* parameter :  var_ref */
 } break;
 
 case YYr73: {	/* var_ref :  REF NUM_VAR */
-#line 2548 "Script.y"
 
 						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -4519,7 +4404,6 @@ case YYr73: {	/* var_ref :  REF NUM_VAR */
 } break;
 
 case YYr74: {	/* var_ref :  REF BOOL_VAR */
-#line 2556 "Script.y"
 
 						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -4530,7 +4414,6 @@ case YYr74: {	/* var_ref :  REF BOOL_VAR */
 } break;
 
 case YYr75: {	/* var_ref :  REF VAR */
-#line 2564 "Script.y"
 
 						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -4541,7 +4424,6 @@ case YYr75: {	/* var_ref :  REF VAR */
 } break;
 
 case YYr76: {	/* var_ref :  REF OBJ_VAR */
-#line 2572 "Script.y"
 
 						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -4552,7 +4434,6 @@ case YYr76: {	/* var_ref :  REF OBJ_VAR */
 } break;
 
 case YYr77: {	/* conditional :  cond_clause_list */
-#line 2587 "Script.y"
 
 						codeRet = scriptCodeConditional(yypvt[0].condBlock, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -4562,7 +4443,6 @@ case YYr77: {	/* conditional :  cond_clause_list */
 } break;
 
 case YYr78: {	/* conditional :  cond_clause_list ELSE terminal_cond */
-#line 2594 "Script.y"
 
 						ALLOC_CONDBLOCK(psCondBlock,
 										yypvt[-2].condBlock->numOffsets + yypvt[0].condBlock->numOffsets,
@@ -4599,14 +4479,12 @@ case YYr78: {	/* conditional :  cond_clause_list ELSE terminal_cond */
 } break;
 
 case YYr79: {	/* cond_clause_list :  cond_clause */
-#line 2630 "Script.y"
 
 						yyval.condBlock = yypvt[0].condBlock;
 					
 } break;
 
 case YYr80: {	/* cond_clause_list :  cond_clause_list ELSE cond_clause */
-#line 2634 "Script.y"
 
 						ALLOC_CONDBLOCK(psCondBlock,
 										yypvt[-2].condBlock->numOffsets + yypvt[0].condBlock->numOffsets,
@@ -4640,7 +4518,6 @@ case YYr80: {	/* cond_clause_list :  cond_clause_list ELSE cond_clause */
 } break;
 
 case YYr81: {	/* terminal_cond :  '{' statement_list '}' */
-#line 2668 "Script.y"
 
 						
 						ALLOC_CONDBLOCK(psCondBlock, 1, yypvt[-1].cblock->size);
@@ -4660,7 +4537,6 @@ case YYr81: {	/* terminal_cond :  '{' statement_list '}' */
 } break;
 
 case YYr82: {	/* cond_clause :  IF '(' boolexp ')' */
-#line 2687 "Script.y"
 
 						STRING *pDummy;
 
@@ -4671,7 +4547,6 @@ case YYr82: {	/* cond_clause :  IF '(' boolexp ')' */
 } break;
 
 case YYr83: {	/* cond_clause :  IF '(' boolexp ')' $82 '{' statement_list '}' */
-#line 2695 "Script.y"
 
 						
 						ALLOC_CONDBLOCK(psCondBlock, 1,
@@ -4717,7 +4592,6 @@ case YYr83: {	/* cond_clause :  IF '(' boolexp ')' $82 '{' statement_list '}' */
 } break;
 
 case YYr84: {	/* loop :  WHILE '(' boolexp ')' */
-#line 2751 "Script.y"
 
 					STRING *pDummy;
 
@@ -4728,7 +4602,6 @@ case YYr84: {	/* loop :  WHILE '(' boolexp ')' */
 } break;
 
 case YYr85: {	/* loop :  WHILE '(' boolexp ')' $84 '{' statement_list '}' */
-#line 2759 "Script.y"
 
 
 					ALLOC_BLOCK(psCurrBlock, yypvt[-5].cblock->size + yypvt[-1].cblock->size + sizeof(OPCODE) * 2);
@@ -4765,7 +4638,6 @@ case YYr85: {	/* loop :  WHILE '(' boolexp ')' $84 '{' statement_list '}' */
 } break;
 
 case YYr86: {	/* expression :  expression '+' expression */
-#line 2800 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_ADD, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4776,7 +4648,6 @@ case YYr86: {	/* expression :  expression '+' expression */
 } break;
 
 case YYr87: {	/* expression :  expression '-' expression */
-#line 2808 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_SUB, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4787,7 +4658,6 @@ case YYr87: {	/* expression :  expression '-' expression */
 } break;
 
 case YYr88: {	/* expression :  expression '*' expression */
-#line 2816 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_MUL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4798,7 +4668,6 @@ case YYr88: {	/* expression :  expression '*' expression */
 } break;
 
 case YYr89: {	/* expression :  expression '/' expression */
-#line 2824 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_DIV, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4809,7 +4678,6 @@ case YYr89: {	/* expression :  expression '/' expression */
 } break;
 
 case YYr90: {	/* expression :  '-' expression */
-#line 2832 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, yypvt[0].cblock->size + sizeof(OPCODE));
 					ip = psCurrBlock->pCode;
@@ -4829,7 +4697,6 @@ case YYr90: {	/* expression :  '-' expression */
 } break;
 
 case YYr91: {	/* expression :  '(' expression ')' */
-#line 2849 "Script.y"
 
 					
 					yyval.cblock = yypvt[-1].cblock;
@@ -4837,7 +4704,6 @@ case YYr91: {	/* expression :  '(' expression ')' */
 } break;
 
 case YYr92: {	/* expression :  NUM_FUNC '(' param_list ')' */
-#line 2854 "Script.y"
 
 					
 					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
@@ -4849,7 +4715,6 @@ case YYr92: {	/* expression :  NUM_FUNC '(' param_list ')' */
 } break;
 
 case YYr93: {	/* expression :  NUM_VAR */
-#line 2863 "Script.y"
 
 					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4860,7 +4725,6 @@ case YYr93: {	/* expression :  NUM_VAR */
 } break;
 
 case YYr94: {	/* expression :  NUM_CONSTANT */
-#line 2871 "Script.y"
 
 					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4871,7 +4735,6 @@ case YYr94: {	/* expression :  NUM_CONSTANT */
 } break;
 
 case YYr95: {	/* expression :  num_objvar */
-#line 2879 "Script.y"
 
 					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4882,7 +4745,6 @@ case YYr95: {	/* expression :  num_objvar */
 } break;
 
 case YYr96: {	/* expression :  num_array_var */
-#line 2887 "Script.y"
 
 					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4893,7 +4755,6 @@ case YYr96: {	/* expression :  num_array_var */
 } break;
 
 case YYr97: {	/* expression :  INTEGER */
-#line 2895 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));
 					ip = psCurrBlock->pCode;
@@ -4908,7 +4769,6 @@ case YYr97: {	/* expression :  INTEGER */
 } break;
 
 case YYr98: {	/* boolexp :  boolexp _AND boolexp */
-#line 2914 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_AND, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4919,7 +4779,6 @@ case YYr98: {	/* boolexp :  boolexp _AND boolexp */
 } break;
 
 case YYr99: {	/* boolexp :  boolexp _OR boolexp */
-#line 2922 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_OR, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4930,7 +4789,6 @@ case YYr99: {	/* boolexp :  boolexp _OR boolexp */
 } break;
 
 case YYr100: {	/* boolexp :  boolexp BOOLEQUAL boolexp */
-#line 2930 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4941,7 +4799,6 @@ case YYr100: {	/* boolexp :  boolexp BOOLEQUAL boolexp */
 } break;
 
 case YYr101: {	/* boolexp :  boolexp NOTEQUAL boolexp */
-#line 2938 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4952,7 +4809,6 @@ case YYr101: {	/* boolexp :  boolexp NOTEQUAL boolexp */
 } break;
 
 case YYr102: {	/* boolexp :  _NOT boolexp */
-#line 2946 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, yypvt[0].cblock->size + sizeof(OPCODE));
 					ip = psCurrBlock->pCode;
@@ -4972,7 +4828,6 @@ case YYr102: {	/* boolexp :  _NOT boolexp */
 } break;
 
 case YYr103: {	/* boolexp :  '(' boolexp ')' */
-#line 2963 "Script.y"
 
 					
 					yyval.cblock = yypvt[-1].cblock;
@@ -4980,7 +4835,6 @@ case YYr103: {	/* boolexp :  '(' boolexp ')' */
 } break;
 
 case YYr104: {	/* boolexp :  BOOL_FUNC '(' param_list ')' */
-#line 2968 "Script.y"
 
 					
 					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
@@ -4992,7 +4846,6 @@ case YYr104: {	/* boolexp :  BOOL_FUNC '(' param_list ')' */
 } break;
 
 case YYr105: {	/* boolexp :  BOOL_VAR */
-#line 2977 "Script.y"
 
 					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5003,7 +4856,6 @@ case YYr105: {	/* boolexp :  BOOL_VAR */
 } break;
 
 case YYr106: {	/* boolexp :  BOOL_CONSTANT */
-#line 2985 "Script.y"
 
 					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5014,7 +4866,6 @@ case YYr106: {	/* boolexp :  BOOL_CONSTANT */
 } break;
 
 case YYr107: {	/* boolexp :  bool_objvar */
-#line 2993 "Script.y"
 
 					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5025,7 +4876,6 @@ case YYr107: {	/* boolexp :  bool_objvar */
 } break;
 
 case YYr108: {	/* boolexp :  bool_array_var */
-#line 3001 "Script.y"
 
 					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5036,7 +4886,6 @@ case YYr108: {	/* boolexp :  bool_array_var */
 } break;
 
 case YYr109: {	/* boolexp :  BOOLEAN */
-#line 3009 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));
 					ip = psCurrBlock->pCode;
@@ -5051,7 +4900,6 @@ case YYr109: {	/* boolexp :  BOOLEAN */
 } break;
 
 case YYr110: {	/* boolexp :  expression BOOLEQUAL expression */
-#line 3021 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5062,7 +4910,6 @@ case YYr110: {	/* boolexp :  expression BOOLEQUAL expression */
 } break;
 
 case YYr111: {	/* boolexp :  userexp BOOLEQUAL userexp */
-#line 3029 "Script.y"
 
 					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
 					{
@@ -5078,7 +4925,6 @@ case YYr111: {	/* boolexp :  userexp BOOLEQUAL userexp */
 } break;
 
 case YYr112: {	/* boolexp :  objexp BOOLEQUAL objexp */
-#line 3042 "Script.y"
 
 					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
 					{
@@ -5094,7 +4940,6 @@ case YYr112: {	/* boolexp :  objexp BOOLEQUAL objexp */
 } break;
 
 case YYr113: {	/* boolexp :  expression NOTEQUAL expression */
-#line 3055 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5105,7 +4950,6 @@ case YYr113: {	/* boolexp :  expression NOTEQUAL expression */
 } break;
 
 case YYr114: {	/* boolexp :  userexp NOTEQUAL userexp */
-#line 3063 "Script.y"
 
 					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
 					{
@@ -5121,7 +4965,6 @@ case YYr114: {	/* boolexp :  userexp NOTEQUAL userexp */
 } break;
 
 case YYr115: {	/* boolexp :  objexp NOTEQUAL objexp */
-#line 3076 "Script.y"
 
 					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
 					{
@@ -5137,7 +4980,6 @@ case YYr115: {	/* boolexp :  objexp NOTEQUAL objexp */
 } break;
 
 case YYr116: {	/* boolexp :  expression LESSEQUAL expression */
-#line 3089 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_LESSEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5148,7 +4990,6 @@ case YYr116: {	/* boolexp :  expression LESSEQUAL expression */
 } break;
 
 case YYr117: {	/* boolexp :  expression GREATEQUAL expression */
-#line 3097 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_GREATEREQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5159,7 +5000,6 @@ case YYr117: {	/* boolexp :  expression GREATEQUAL expression */
 } break;
 
 case YYr118: {	/* boolexp :  expression GREATER expression */
-#line 3105 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_GREATER, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5170,7 +5010,6 @@ case YYr118: {	/* boolexp :  expression GREATER expression */
 } break;
 
 case YYr119: {	/* boolexp :  expression LESS expression */
-#line 3113 "Script.y"
 
 					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_LESS, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5181,7 +5020,6 @@ case YYr119: {	/* boolexp :  expression LESS expression */
 } break;
 
 case YYr120: {	/* userexp :  VAR */
-#line 3128 "Script.y"
 
 					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5192,7 +5030,6 @@ case YYr120: {	/* userexp :  VAR */
 } break;
 
 case YYr121: {	/* userexp :  USER_CONSTANT */
-#line 3136 "Script.y"
 
 					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5203,7 +5040,6 @@ case YYr121: {	/* userexp :  USER_CONSTANT */
 } break;
 
 case YYr122: {	/* userexp :  user_objvar */
-#line 3144 "Script.y"
 
 					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5213,7 +5049,6 @@ case YYr122: {	/* userexp :  user_objvar */
 } break;
 
 case YYr123: {	/* userexp :  user_array_var */
-#line 3151 "Script.y"
 
 					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5224,7 +5059,6 @@ case YYr123: {	/* userexp :  user_array_var */
 } break;
 
 case YYr124: {	/* userexp :  USER_FUNC '(' param_list ')' */
-#line 3159 "Script.y"
 
 					
 					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
@@ -5236,7 +5070,6 @@ case YYr124: {	/* userexp :  USER_FUNC '(' param_list ')' */
 } break;
 
 case YYr125: {	/* userexp :  TRIG_SYM */
-#line 3168 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));
 					ip = psCurrBlock->pCode;
@@ -5253,7 +5086,6 @@ case YYr125: {	/* userexp :  TRIG_SYM */
 } break;
 
 case YYr126: {	/* userexp :  INACTIVE */
-#line 3182 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));
 					ip = psCurrBlock->pCode;
@@ -5270,7 +5102,6 @@ case YYr126: {	/* userexp :  INACTIVE */
 } break;
 
 case YYr127: {	/* userexp :  EVENT_SYM */
-#line 3196 "Script.y"
 
 					ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));
 					ip = psCurrBlock->pCode;
@@ -5287,7 +5118,6 @@ case YYr127: {	/* userexp :  EVENT_SYM */
 } break;
 
 case YYr128: {	/* objexp :  OBJ_VAR */
-#line 3217 "Script.y"
 
 					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5298,7 +5128,6 @@ case YYr128: {	/* objexp :  OBJ_VAR */
 } break;
 
 case YYr129: {	/* objexp :  OBJ_CONSTANT */
-#line 3225 "Script.y"
 
 					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5309,7 +5138,6 @@ case YYr129: {	/* objexp :  OBJ_CONSTANT */
 } break;
 
 case YYr130: {	/* objexp :  OBJ_FUNC '(' param_list ')' */
-#line 3233 "Script.y"
 
 					
 					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
@@ -5321,7 +5149,6 @@ case YYr130: {	/* objexp :  OBJ_FUNC '(' param_list ')' */
 } break;
 
 case YYr131: {	/* objexp :  obj_objvar */
-#line 3242 "Script.y"
 
 					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5332,7 +5159,6 @@ case YYr131: {	/* objexp :  obj_objvar */
 } break;
 
 case YYr132: {	/* objexp :  obj_array_var */
-#line 3250 "Script.y"
 
 					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5343,7 +5169,6 @@ case YYr132: {	/* objexp :  obj_array_var */
 } break;
 
 case YYr133: {	/* objexp_dot :  objexp '.' */
-#line 3264 "Script.y"
 
 					// Store the object type for the variable lookup
 					objVarContext = yypvt[-1].cblock->type;
@@ -5351,7 +5176,6 @@ case YYr133: {	/* objexp_dot :  objexp '.' */
 } break;
 
 case YYr134: {	/* num_objvar :  objexp_dot NUM_OBJVAR */
-#line 3275 "Script.y"
 
 					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5365,7 +5189,6 @@ case YYr134: {	/* num_objvar :  objexp_dot NUM_OBJVAR */
 } break;
 
 case YYr135: {	/* bool_objvar :  objexp_dot BOOL_OBJVAR */
-#line 3288 "Script.y"
 
 					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5379,7 +5202,6 @@ case YYr135: {	/* bool_objvar :  objexp_dot BOOL_OBJVAR */
 } break;
 
 case YYr136: {	/* user_objvar :  objexp_dot USER_OBJVAR */
-#line 3301 "Script.y"
 
 					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5393,7 +5215,6 @@ case YYr136: {	/* user_objvar :  objexp_dot USER_OBJVAR */
 } break;
 
 case YYr137: {	/* obj_objvar :  objexp_dot OBJ_OBJVAR */
-#line 3313 "Script.y"
 
 					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5407,7 +5228,6 @@ case YYr137: {	/* obj_objvar :  objexp_dot OBJ_OBJVAR */
 } break;
 
 case YYr138: {	/* array_index :  '[' expression ']' */
-#line 3332 "Script.y"
 
 						ALLOC_ARRAYBLOCK(psCurrArrayBlock, yypvt[-1].cblock->size, NULL);
 						ip = psCurrArrayBlock->pCode;
@@ -5421,14 +5241,12 @@ case YYr138: {	/* array_index :  '[' expression ']' */
 } break;
 
 case YYr139: {	/* array_index_list :  array_index */
-#line 3345 "Script.y"
 
 						yyval.arrayBlock = yypvt[0].arrayBlock;
 					
 } break;
 
 case YYr140: {	/* array_index_list :  array_index_list '[' expression ']' */
-#line 3350 "Script.y"
 
 						ALLOC_ARRAYBLOCK(psCurrArrayBlock, yypvt[-3].arrayBlock->size + yypvt[-1].cblock->size, NULL);
 						ip = psCurrArrayBlock->pCode;
@@ -5445,7 +5263,6 @@ case YYr140: {	/* array_index_list :  array_index_list '[' expression ']' */
 } break;
 
 case YYr141: {	/* num_array_var :  NUM_ARRAY array_index_list */
-#line 3366 "Script.y"
 
 						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -5456,7 +5273,6 @@ case YYr141: {	/* num_array_var :  NUM_ARRAY array_index_list */
 } break;
 
 case YYr142: {	/* bool_array_var :  BOOL_ARRAY array_index_list */
-#line 3376 "Script.y"
 
 						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -5467,7 +5283,6 @@ case YYr142: {	/* bool_array_var :  BOOL_ARRAY array_index_list */
 } break;
 
 case YYr143: {	/* obj_array_var :  OBJ_ARRAY array_index_list */
-#line 3386 "Script.y"
 
 						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -5478,7 +5293,6 @@ case YYr143: {	/* obj_array_var :  OBJ_ARRAY array_index_list */
 } break;
 
 case YYr144: {	/* user_array_var :  VAR_ARRAY array_index_list */
-#line 3396 "Script.y"
 
 						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
@@ -5487,7 +5301,6 @@ case YYr144: {	/* user_array_var :  VAR_ARRAY array_index_list */
 						yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
-#line 314 "e:/usr/mks-ly/etc/yyparse.c"
 	case YYrACCEPT:
 		YYACCEPT;
 	case YYrERROR:

@@ -33,9 +33,6 @@ static int fprintf(FILE* f,char* c,...)
 /* Get the Yacc definitions */
 #include "resource_y.h"
 
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
-
 /* Store for any string values */
 STRING aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
 static UDWORD currText=0;

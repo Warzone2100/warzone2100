@@ -10,16 +10,13 @@
 #include <stdlib.h>
 
 #ifdef WIN32
-#pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
-#pragma warning (default : 4201 4214 4115)
 #endif
 
 #include "frame.h"
 #include "frameint.h"
-
 
 #define DEBUG_STR_MAX 1000  // Maximum length of a debugging output string
 
@@ -37,7 +34,6 @@ void dbg_SetMessageBoxCallback(DB_MBCALLBACK callback)
 {
 	mbCallback = callback;
 }
-
 
 // set the error box callback
 void dbg_SetErrorBoxCallback(DB_MBCALLBACK callback)

@@ -5,17 +5,6 @@
  * The yacc grammar for the scipt files.
  */
 
-#ifdef PSX
-/* A few definitions so the yacc generated code will compile on the PSX.
- * These shouldn't actually be used by any code that is run on the PSX, it
- * just keeps the compiler happy.
- */
-//static int printf(char* c, ...)
-//{
-//	return 0;
-//}
-#endif
-
 #include <string.h>
 #include <limits.h>
 #include <stdio.h>
@@ -32,9 +21,6 @@ typedef enum _code_error
 	CE_MEMORY,			// Out of memory
 	CE_PARSE			// A parse error occured
 } CODE_ERROR;
-
-/* Turn off a couple of warnings that the yacc generated code gives */
-#pragma warning ( disable : 4305 4102)
 
 /* Pointer to the compiled code */
 static SCRIPT_CODE	*psFinalProg=NULL;

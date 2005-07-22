@@ -274,8 +274,6 @@ int32 playerXTile, playerZTile, rx, rz;
 BOOL	gouraudShading = TRUE;
 /* Have we located the mouse? */
 BOOL	mouseLocated = TRUE;
-/* Mouse x and y - saves reading them every time we want to use them */
-SDWORD	mX,mY;
 /* Index so we know how to find the tile BEHIND the one currently being processed for any view angle */
 UDWORD	stepIndex;
 /* The box used for multiple selection - present screen coordinates */

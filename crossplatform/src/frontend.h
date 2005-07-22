@@ -32,7 +32,7 @@ typedef enum _title_mode {
 // This dos'nt compile on the PSX.
 //typedef enum _titlemode tMode;	// define the type
 
-tMode titleMode;					// the global case
+extern tMode titleMode;					// the global case
 
 #define DEFAULT_LEVEL	"CAM_1A"
 //#define DEFAULT_LEVEL	"CAM_2A"

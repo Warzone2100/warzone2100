@@ -6,7 +6,7 @@
 #define _levelint_h
 
 // return values from the lexer
-enum _token_type
+typedef enum _token_type
 {
 	LTK_LEVEL = 0x100,		// level key word
 	LTK_PLAYERS,			// players key word
@@ -26,7 +26,9 @@ enum _token_type
 	LTK_IDENT,				// an identifier
 	LTK_STRING,				// a quoted string
 	LTK_INTEGER,			// a number
-} LTOKEN_TYPE;
+} _ltoken_type;
+
+extern _ltoken_type LTOKEN_TYPE;
 
 // return values from the lexer
 extern STRING *pLevToken;

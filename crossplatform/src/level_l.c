@@ -158,8 +158,6 @@ static int lev__base[] = {
 
 };
 
-
-//#line 1 "d:/usr/mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -241,7 +239,6 @@ extern	char* m_textmsg YY_ARGS((int id, const char* str, char* cls));
 #define	YY_DECL	
 #endif
 
-
 /*
  * You can redefine lev_getc. For YACC Tracing, compile this code
  * with -DYYTRACE to get input from yt_getc
@@ -278,16 +275,12 @@ extern int	yt_getc YY_ARGS((void));
 			else { YY_SCANNER; lev_leng = (n); YY_USER; }
 
 YY_DECL	void	lev__reset YY_ARGS((void));
-YY_DECL	int	input	YY_ARGS((void));
-YY_DECL	int	unput	YY_ARGS((int c));
 
 /* functions defined in libl.lib */
 extern	int	lev_wrap	YY_ARGS((void));
 extern	void	lev_error	YY_ARGS((char *fmt, ...));
 extern	void	lev_comment	YY_ARGS((char *term));
 extern	int	lev_mapch	YY_ARGS((int delim, int escape));
-
-//#line 1 "Level.l"
 
 /*
  * Level.l
@@ -296,17 +289,12 @@ extern	int	lev_mapch	YY_ARGS((int delim, int escape));
  *
  */
 
-
 #include <stdio.h>
-
 
 #include "frame.h"
 
 #include "levels.h"
 #include "levelint.h"
-
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -324,9 +312,6 @@ static UBYTE *pEndBuffer = NULL;
 #undef lev_getc
 #define lev_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
 
-//#line 127 "d:/usr/mks-ly/etc/yylex.c"
-
-
 #ifndef YYLMAX
 #define	YYLMAX		100		/* token and pushback buffer size */
 #endif /* YYLMAX */
@@ -336,8 +321,6 @@ static UBYTE *pEndBuffer = NULL;
  * If %pointer is used, lev_text is a pointer to lev__tbuf[].
  */
 YY_DECL char	lev_text[YYLMAX+1];
-
-
 
 #ifdef	YY_DEBUG
 #undef	YY_DEBUG
@@ -426,7 +409,6 @@ static	char *lev__push = lev__save+YYLMAX;
 	}
 
 #endif
-
 
 #ifdef LEX_WINDOWS
 
@@ -552,10 +534,6 @@ YYDECL {
 	int lev_oldi, lev_oleng;	/* base i, lev_leng before look-ahead */
 	int lev_eof;		/* 1 if eof has already been read */
 
-//#line 350 "d:/usr/mks-ly/etc/yylex.c"
-
-
-
 #if !YY_STATIC_STDIO
 	if (lev_in == (FILE *)0)
 		lev_in = stdin;
@@ -586,7 +564,6 @@ YYDECL {
 		memmove(lev_text, lev_text+lev_leng, (size_t) lev__end);
 	i = 0;
 
-  lev__contin:
 	lev_oldi = i;
 
 	/* run the state machine until it jams */
@@ -633,12 +610,11 @@ YYDECL {
 		lev_st = lev__next[lev_base];
 	  lev__jammed: ;
 	  lev__sbuf[++i] = (lev__state_t) lev_st;
-	} while (!(lev_st == lev__endst || YY_INTERACTIVE && lev__base[lev_st] > lev__nxtmax && lev__default[lev_st] == lev__endst));
+	} while (!(lev_st == lev__endst || (YY_INTERACTIVE && lev__base[lev_st] > lev__nxtmax && lev__default[lev_st] == lev__endst)));
 	YY_DEBUG(m_textmsg(1550, "<stopped %d, i = %d>\n", "I num1 num2"), lev_st, i);
 	if (lev_st != lev__endst)
 		++i;
 
-  lev__search:
 	/* search backward for a final state */
 	while (--i > lev_oldi) {
 		lev_st = lev__sbuf[i];
@@ -676,67 +652,51 @@ YYDECL {
 	YY_USER;
 	switch (lev__la_act[lev_fmin] & 0777) {
 	case 0:
-//#line 58 "Level.l"
 	return LTK_LEVEL;
 	break;
 	case 1:
-//#line 59 "Level.l"
 	return LTK_PLAYERS;
 	break;
 	case 2:
-//#line 60 "Level.l"
 	return LTK_TYPE;
 	break;
 	case 3:
-//#line 61 "Level.l"
 	return LTK_DATA;
 	break;
 	case 4:
-//#line 62 "Level.l"
 	return LTK_GAME;
 	break;
 	case 5:
-//#line 63 "Level.l"
 	return LTK_CAMPAIGN;
 	break;
 	case 6:
-//#line 64 "Level.l"
 	return LTK_CAMSTART;
 	break;
 	case 7:
-//#line 65 "Level.l"
 	return LTK_CAMCHANGE;
 	break;
 	case 8:
-//#line 66 "Level.l"
 	return LTK_DATASET;
 	break;
 	case 9:
-//#line 67 "Level.l"
 	return LTK_EXPAND;
 	break;
 	case 10:
-//#line 68 "Level.l"
 	return LTK_EXPAND_LIMBO;
 	break;
 	case 11:
-//#line 69 "Level.l"
 	return LTK_BETWEEN;
 	break;
 	case 12:
-//#line 70 "Level.l"
 	return LTK_MKEEP;
 	break;
 	case 13:
-//#line 71 "Level.l"
 	return LTK_MKEEP_LIMBO;
 	break;
 	case 14:
-//#line 72 "Level.l"
 	return LTK_MCLEAR;
 	break;
 	case 15:
-//#line 75 "Level.l"
 	{
 								strcpy(aText, lev_text);
 								pLevToken = aText;
@@ -744,19 +704,15 @@ YYDECL {
 							}
 	break;
 	case 16:
-//#line 82 "Level.l"
 	{ BEGIN QUOTE; }
 	break;
 	case 17:
-//#line 83 "Level.l"
 	{ BEGIN 0; }
 	break;
 	case 18:
-//#line 84 "Level.l"
 	{ levError("Unexpected end of line in string"); }
 	break;
 	case 19:
-//#line 85 "Level.l"
 	{
 								strcpy(aText, lev_text);
 								pLevToken = aText;
@@ -764,66 +720,41 @@ YYDECL {
 							}
 	break;
 	case 20:
-//#line 92 "Level.l"
 	{ levVal = atol(lev_text); return LTK_INTEGER; }
 	break;
 	case 21:
-//#line 95 "Level.l"
 	;
 	break;
 	case 22:
-//#line 98 "Level.l"
 	{ inComment=TRUE; BEGIN COMMENT; }
 	break;
 	case 23:
 	case 24:
-//#line 100 "Level.l"
 	{ inComment=FALSE; BEGIN 0; }
 	break;
 	case 25:
 	case 26:
-//#line 102 "Level.l"
 	;
 	break;
 	case 27:
-//#line 105 "Level.l"
 	{ BEGIN SLCOMMENT; }
 	break;
 	case 28:
-//#line 106 "Level.l"
 	{ BEGIN 0; }
 	break;
 	case 29:
-//#line 107 "Level.l"
 	;
 	break;
 	case 30:
-//#line 110 "Level.l"
 	return lev_text[0];
 	break;
-
-//#line 472 "d:/usr/mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
 	i = lev_leng;
 	goto lev__again;			/* action fell though */
-
-  lev__reject:
-	YY_SCANNER;
-	i = lev_oleng;			/* restore original lev_text */
-	if (++lev_fmin < lev_fmax)
-		goto lev__found;		/* another final state, same length */
-	else
-		goto lev__search;		/* try shorter lev_text */
-
-  lev__more:
-	YY_SCANNER;
-	i = lev_leng;
-	if (i > 0)
-		lev__lastc = lev_text[i-1];
-	goto lev__contin;
 }
+
 /*
  * Safely switch input stream underneath LEX
  */
@@ -891,64 +822,6 @@ lev__reset()
 	YY_INIT;
 	lev_lineno = 1;		/* line number */
 }
-/* get input char with pushback */
-YY_DECL int
-input()
-{
-	int c;
-#ifndef YY_PRESERVE
-	if (lev__end > lev_leng) {
-		lev__end--;
-		memmove(lev_text+lev_leng, lev_text+lev_leng+1,
-			(size_t) (lev__end-lev_leng));
-		c = lev__save;
-		YY_USER;
-#else
-	if (lev__push < lev__save+YYLMAX) {
-		c = *lev__push++;
-#endif
-	} else
-		c = lev_getc();
-	lev__lastc = c;
-	if (c == YYNEWLINE)
-		lev_lineno++;
-	if (c == EOF) /* lev_getc() can set c=EOF vsc4 wants c==EOF to return 0 */
-		return 0;
-	else
-		return c;
-}
-
-/*f
- * pushback char
- */
-YY_DECL int
-unput(int c)
-{
-#ifndef YY_PRESERVE
-	if (lev__end >= YYLMAX) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		if (lev__end > lev_leng) {
-			lev_text[lev_leng] = lev__save;
-			memmove(lev_text+lev_leng+1, lev_text+lev_leng,
-				(size_t) (lev__end-lev_leng));
-			lev_text[lev_leng] = 0;
-		}
-		lev__end++;
-		lev__save = (char) c;
-#else
-	if (lev__push <= lev__save) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		*--lev__push = c;
-#endif
-		if (c == YYNEWLINE)
-			lev_lineno--;
-	}	/* endif */
-	return c;
-}
-
-//#line 113 "Level.l"
 
 /* Set the current input buffer for the lexer */
 void levSetInputBuffer(UBYTE *pBuffer, UDWORD size)

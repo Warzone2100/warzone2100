@@ -37,9 +37,6 @@ static int fprintf(FILE* f,char* c,...)
 /* Get the Yacc definitions */
 #include "strres_y.h"
 
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
-
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 

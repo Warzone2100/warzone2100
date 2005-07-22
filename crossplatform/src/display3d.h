@@ -154,4 +154,9 @@ extern UDWORD	barMode;
 
 extern UDWORD	geoOffset;
 extern UDWORD	texPage;
+
+/* Points for flipping the texture around if the tile is flipped or rotated */
+extern POINT 	sP1,sP2,sP3,sP4;
+extern POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
+
 #endif

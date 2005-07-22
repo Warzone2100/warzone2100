@@ -163,8 +163,6 @@ static int scr__base[] = {
  246, 681, 681, 413, 681, 424, 681, 542, 553, 681, 529, 681
 };
 
-
-//#line 1 "d:/usr/mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -246,7 +244,6 @@ extern	char* m_textmsg YY_ARGS((int id, const char* str, char* cls));
 #define	YY_DECL	
 #endif
 
-
 /*
  * You can redefine scr_getc. For YACC Tracing, compile this code
  * with -DYYTRACE to get input from yt_getc
@@ -283,16 +280,12 @@ extern int	yt_getc YY_ARGS((void));
 			else { YY_SCANNER; scr_leng = (n); YY_USER; }
 
 YY_DECL	void	scr__reset YY_ARGS((void));
-YY_DECL	int	input	YY_ARGS((void));
-YY_DECL	int	unput	YY_ARGS((int c));
 
 /* functions defined in libl.lib */
 extern	int	scr_wrap	YY_ARGS((void));
 extern	void	scr_error	YY_ARGS((char *fmt, ...));
 extern	void	scr_comment	YY_ARGS((char *term));
 extern	int	scr_mapch	YY_ARGS((int delim, int escape));
-
-//#line 1 "Script.l"
 
 /*
  * script.l
@@ -324,9 +317,6 @@ static int fprintf(FILE* f,char* c,...)
 
 /* Get the Yacc definitions */
 #include "script_y.h"
-
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -504,11 +494,6 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 	}
 }
 
-
-
-//#line 127 "d:/usr/mks-ly/etc/yylex.c"
-
-
 #ifndef YYLMAX
 #define	YYLMAX		100		/* token and pushback buffer size */
 #endif /* YYLMAX */
@@ -518,8 +503,6 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
  * If %pointer is used, scr_text is a pointer to scr__tbuf[].
  */
 YY_DECL char	scr_text[YYLMAX+1];
-
-
 
 #ifdef	YY_DEBUG
 #undef	YY_DEBUG
@@ -608,7 +591,6 @@ static	char *scr__push = scr__save+YYLMAX;
 	}
 
 #endif
-
 
 #ifdef LEX_WINDOWS
 
@@ -734,10 +716,6 @@ YYDECL {
 	int scr_oldi, scr_oleng;	/* base i, scr_leng before look-ahead */
 	int scr_eof;		/* 1 if eof has already been read */
 
-//#line 350 "d:/usr/mks-ly/etc/yylex.c"
-
-
-
 #if !YY_STATIC_STDIO
 	if (scr_in == (FILE *)0)
 		scr_in = stdin;
@@ -768,7 +746,6 @@ YYDECL {
 		memmove(scr_text, scr_text+scr_leng, (size_t) scr__end);
 	i = 0;
 
-  scr__contin:
 	scr_oldi = i;
 
 	/* run the state machine until it jams */
@@ -815,12 +792,11 @@ YYDECL {
 		scr_st = scr__next[scr_base];
 	  scr__jammed: ;
 	  scr__sbuf[++i] = (scr__state_t) scr_st;
-	} while (!(scr_st == scr__endst || YY_INTERACTIVE && scr__base[scr_st] > scr__nxtmax && scr__default[scr_st] == scr__endst));
+	} while (!(scr_st == scr__endst || (YY_INTERACTIVE && scr__base[scr_st] > scr__nxtmax && scr__default[scr_st] == scr__endst)));
 	YY_DEBUG(m_textmsg(1550, "<stopped %d, i = %d>\n", "I num1 num2"), scr_st, i);
 	if (scr_st != scr__endst)
 		++i;
 
-  scr__search:
 	/* search backward for a final state */
 	while (--i > scr_oldi) {
 		scr_st = scr__sbuf[i];
@@ -858,79 +834,60 @@ YYDECL {
 	YY_USER;
 	switch (scr__la_act[scr_fmin] & 0777) {
 	case 0:
-//#line 224 "Script.l"
 	return WAIT;
 	break;
 	case 1:
-//#line 225 "Script.l"
 	return EVERY;
 	break;
 	case 2:
-//#line 226 "Script.l"
 	return TRIGGER;
 	break;
 	case 3:
-//#line 227 "Script.l"
 	return EVENT;
 	break;
 	case 4:
-//#line 228 "Script.l"
 	return INACTIVE;
 	break;
 	case 5:
-//#line 229 "Script.l"
 	return INITIALISE;
 	break;
 	case 6:
-//#line 230 "Script.l"
 	return LINK;
 	break;
 	case 7:
-//#line 231 "Script.l"
 	return REF;
 	break;
 	case 8:
-//#line 236 "Script.l"
 	{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 	break;
 	case 9:
-//#line 237 "Script.l"
 	{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
 	break;
 	case 10:
-//#line 238 "Script.l"
 	return WHILE;
 	break;
 	case 11:
-//#line 239 "Script.l"
 	return IF;
 	break;
 	case 12:
-//#line 240 "Script.l"
 	return ELSE;
 	break;
 	case 13:
-//#line 241 "Script.l"
 	return EXIT;
 	break;
 	case 14:
-//#line 242 "Script.l"
 	return PAUSE;
 	break;
 	case 15:
-//#line 245 "Script.l"
 	{ scr_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 16:
-//#line 246 "Script.l"
 	{ scr_lval.tval = VAL_BOOL; return TYPE; }
 	break;
 	case 17:
-//#line 247 "Script.l"
 	{ scr_lval.tval = VAL_INT; return TYPE; }
 	break;
 	case 18:
-//#line 248 "Script.l"
 	{ scr_lval.tval = VAL_INT; return TYPE; }
 	/*float					{ ais_lval.tval = VAL_FLOAT; return TYPE; }*/
 	/* string type isn't implemented yet */
@@ -938,75 +895,57 @@ YYDECL {
 	/* object					{ scr_lval.tval = VAL_OBJECT; return TYPE; } */
 	break;
 	case 19:
-//#line 255 "Script.l"
 	{ scr_lval.bval = TRUE; return BOOLEAN; }
 	break;
 	case 20:
-//#line 256 "Script.l"
 	{ scr_lval.bval = TRUE; return BOOLEAN; }
 	break;
 	case 21:
-//#line 257 "Script.l"
 	{ scr_lval.bval = FALSE; return BOOLEAN; }
 	break;
 	case 22:
-//#line 258 "Script.l"
 	{ scr_lval.bval = FALSE; return BOOLEAN; }
 	break;
 	case 23:
-//#line 261 "Script.l"
 	return BOOLEQUAL;
 	break;
 	case 24:
-//#line 262 "Script.l"
 	return NOTEQUAL;
 	break;
 	case 25:
-//#line 263 "Script.l"
 	return GREATEQUAL;
 	break;
 	case 26:
-//#line 264 "Script.l"
 	return LESSEQUAL;
 	break;
 	case 27:
-//#line 265 "Script.l"
 	return GREATER;
 	break;
 	case 28:
-//#line 266 "Script.l"
 	return LESS;
 	break;
 	case 29:
-//#line 267 "Script.l"
 	return _AND;
 	break;
 	case 30:
-//#line 268 "Script.l"
 	return _AND;
 	break;
 	case 31:
-//#line 269 "Script.l"
 	return _OR;
 	break;
 	case 32:
-//#line 270 "Script.l"
 	return _OR;
 	break;
 	case 33:
-//#line 271 "Script.l"
 	return _NOT;
 	break;
 	case 34:
-//#line 272 "Script.l"
 	return _NOT;
 	break;
 	case 35:
-//#line 278 "Script.l"
 	{ scr_lval.ival = atol(scr_text); return INTEGER; }
 	break;
 	case 36:
-//#line 281 "Script.l"
 	{
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
@@ -1058,15 +997,12 @@ YYDECL {
 							}
 	break;
 	case 37:
-//#line 332 "Script.l"
 	{ BEGIN QUOTE; }
 	break;
 	case 38:
-//#line 333 "Script.l"
 	{ BEGIN 0; }
 	break;
 	case 39:
-//#line 334 "Script.l"
 	{
 								strcpy(aText[currText], scr_text);
 								scr_lval.sval = aText[currText];
@@ -1075,61 +1011,36 @@ YYDECL {
 							}
 	break;
 	case 40:
-//#line 342 "Script.l"
 	;
 	break;
 	case 41:
-//#line 345 "Script.l"
 	{ inComment=TRUE; BEGIN COMMENT; }
 	break;
 	case 42:
 	case 43:
-//#line 347 "Script.l"
 	{ inComment=FALSE; BEGIN 0; }
 	break;
 	case 44:
 	case 45:
-//#line 349 "Script.l"
 	;
 	break;
 	case 46:
-//#line 352 "Script.l"
 	{ BEGIN SLCOMMENT; }
 	break;
 	case 47:
-//#line 353 "Script.l"
 	{ BEGIN 0; }
 	break;
 	case 48:
-//#line 354 "Script.l"
 	;
 	break;
 	case 49:
-//#line 357 "Script.l"
 	return scr_text[0];
 	break;
-
-//#line 472 "d:/usr/mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
 	i = scr_leng;
 	goto scr__again;			/* action fell though */
-
-  scr__reject:
-	YY_SCANNER;
-	i = scr_oleng;			/* restore original scr_text */
-	if (++scr_fmin < scr_fmax)
-		goto scr__found;		/* another final state, same length */
-	else
-		goto scr__search;		/* try shorter scr_text */
-
-  scr__more:
-	YY_SCANNER;
-	i = scr_leng;
-	if (i > 0)
-		scr__lastc = scr_text[i-1];
-	goto scr__contin;
 }
 /*
  * Safely switch input stream underneath LEX
@@ -1198,64 +1109,6 @@ scr__reset()
 	YY_INIT;
 	scr_lineno = 1;		/* line number */
 }
-/* get input char with pushback */
-YY_DECL int
-input()
-{
-	int c;
-#ifndef YY_PRESERVE
-	if (scr__end > scr_leng) {
-		scr__end--;
-		memmove(scr_text+scr_leng, scr_text+scr_leng+1,
-			(size_t) (scr__end-scr_leng));
-		c = scr__save;
-		YY_USER;
-#else
-	if (scr__push < scr__save+YYLMAX) {
-		c = *scr__push++;
-#endif
-	} else
-		c = scr_getc();
-	scr__lastc = c;
-	if (c == YYNEWLINE)
-		scr_lineno++;
-	if (c == EOF) /* scr_getc() can set c=EOF vsc4 wants c==EOF to return 0 */
-		return 0;
-	else
-		return c;
-}
-
-/*f
- * pushback char
- */
-YY_DECL int
-unput(int c)
-{
-#ifndef YY_PRESERVE
-	if (scr__end >= YYLMAX) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		if (scr__end > scr_leng) {
-			scr_text[scr_leng] = scr__save;
-			memmove(scr_text+scr_leng+1, scr_text+scr_leng,
-				(size_t) (scr__end-scr_leng));
-			scr_text[scr_leng] = 0;
-		}
-		scr__end++;
-		scr__save = (char) c;
-#else
-	if (scr__push <= scr__save) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		*--scr__push = c;
-#endif
-		if (c == YYNEWLINE)
-			scr_lineno--;
-	}	/* endif */
-	return c;
-}
-
-//#line 360 "Script.l"
 
 /* Set the current input buffer for the lexer */
 void scriptSetInputBuffer(UBYTE *pBuffer, UDWORD size)

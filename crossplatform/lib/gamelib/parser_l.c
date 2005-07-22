@@ -135,8 +135,6 @@ static int audp__base[] = {
  589, 589, 578, 589, 589, 589
 };
 
-
-//#line 1 "d:\mks-ly/etc/yylex.c"
 /*
  * Copyright 1988, 1992 by Mortice Kern Systems Inc.  All rights reserved.
  * All rights reserved.
@@ -254,8 +252,6 @@ extern int	yt_getc YY_ARGS((void));
 			else { YY_SCANNER; audp_leng = (n); YY_USER; }
 
 YY_DECL	void	audp__reset YY_ARGS((void));
-YY_DECL	int	input	YY_ARGS((void));
-YY_DECL	int	unput	YY_ARGS((int c));
 
 /* functions defined in libl.lib */
 extern	int	audp_wrap	YY_ARGS((void));
@@ -263,15 +259,7 @@ extern	void	audp_error	YY_ARGS((char *fmt, ...));
 extern	void	audp_comment	YY_ARGS((char *term));
 extern	int	audp_mapch	YY_ARGS((int delim, int escape));
 
-//#line 1 ".\parser.l"
-
-
-
 #include <stdio.h>
-
-
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4129 4305 )
 
 /* include framework */
 #include "frame.h"
@@ -295,13 +283,8 @@ static	FILE	*g_fpOld;
 static UBYTE *pInputBuffer = NULL;
 static UBYTE *pEndBuffer = NULL;
 
-static int	audp_GetChar( void );
-
 #undef audp_getc
 #define audp_getc() ( pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF )
-
-//#line 127 "d:\mks-ly/etc/yylex.c"
-
 
 #ifndef YYLMAX
 #define	YYLMAX		100		/* token and pushback buffer size */
@@ -312,8 +295,6 @@ static int	audp_GetChar( void );
  * If %pointer is used, audp_text is a pointer to audp__tbuf[].
  */
 YY_DECL char	audp_text[YYLMAX+1];
-
-
 
 #ifdef	YY_DEBUG
 #undef	YY_DEBUG
@@ -402,7 +383,6 @@ static	char *audp__push = audp__save+YYLMAX;
 	}
 
 #endif
-
 
 #ifdef LEX_WINDOWS
 
@@ -528,10 +508,6 @@ YYDECL {
 	int audp_oldi, audp_oleng;	/* base i, audp_leng before look-ahead */
 	int audp_eof;		/* 1 if eof has already been read */
 
-//#line 350 "d:\mks-ly/etc/yylex.c"
-
-
-
 #if !YY_STATIC_STDIO
 	if (audp_in == (FILE *)0)
 		audp_in = stdin;
@@ -562,7 +538,6 @@ YYDECL {
 		memmove(audp_text, audp_text+audp_leng, (size_t) audp__end);
 	i = 0;
 
-  audp__contin:
 	audp_oldi = i;
 
 	/* run the state machine until it jams */
@@ -609,12 +584,11 @@ YYDECL {
 		audp_st = audp__next[audp_base];
 	  audp__jammed: ;
 	  audp__sbuf[++i] = (audp__state_t) audp_st;
-	} while (!(audp_st == audp__endst || YY_INTERACTIVE && audp__base[audp_st] > audp__nxtmax && audp__default[audp_st] == audp__endst));
+	} while (!(audp_st == audp__endst || (YY_INTERACTIVE && audp__base[audp_st] > audp__nxtmax && audp__default[audp_st] == audp__endst)));
 	YY_DEBUG(m_textmsg(1550, "<stopped %d, i = %d>\n", "I num1 num2"), audp_st, i);
 	if (audp_st != audp__endst)
 		++i;
 
-  audp__search:
 	/* search backward for a final state */
 	while (--i > audp_oldi) {
 		audp_st = audp__sbuf[i];
@@ -652,49 +626,38 @@ YYDECL {
 	YY_USER;
 	switch (audp__la_act[audp_fmin] & 0777) {
 	case 0:
-//#line 60 ".\parser.l"
 	{	return ONESHOT;			}
 	break;
 	case 1:
-//#line 61 ".\parser.l"
 	{	return LOOP;			}
 	break;
 	case 2:
-//#line 62 ".\parser.l"
 	{	return AUDIO;			}
 	break;
 	case 3:
-//#line 63 ".\parser.l"
 	{	return ANIM3DFILE;		}
 	break;
 	case 4:
-//#line 64 ".\parser.l"
 	{	return AUDIO_MODULE;	}
 	break;
 	case 5:
-//#line 65 ".\parser.l"
 	{	return ANIM_MODULE;		}
 	break;
 	case 6:
-//#line 66 ".\parser.l"
 	{	return ANIM3DFRAMES;	}
 	break;
 	case 7:
-//#line 67 ".\parser.l"
 	{	return ANIM3DTRANS;		}
 	break;
 	case 8:
-//#line 68 ".\parser.l"
 	{	return ANIMOBJECT;		}
 	break;
 	case 9:
-//#line 78 ".\parser.l"
 	{	audp_lval.ival = atoi(audp_text);
 									return INTEGER;
 								}
 	break;
 	case 10:
-//#line 83 ".\parser.l"
 	{
 									/* skip opening quote */
 									strcpy( audp_lval.sval, audp_text+1 );
@@ -714,55 +677,32 @@ YYDECL {
 								}
 	break;
 	case 11:
-//#line 102 ".\parser.l"
 	{	strcpy( audp_lval.sval, audp_text );
 									return TEXT;
 								}
 	break;
 	case 12:
-//#line 107 ".\parser.l"
 	;
 	break;
 	case 13:
-//#line 110 ".\parser.l"
 	{ BEGIN COMMENT; }
 	break;
 	case 14:
 	case 15:
-//#line 112 ".\parser.l"
 	{ BEGIN 0; }
 	break;
 	case 16:
 	case 17:
-//#line 114 ".\parser.l"
 	;
 	break;
 	case 18:
-//#line 117 ".\parser.l"
 	return audp_text[0];
 	break;
-
-//#line 472 "d:\mks-ly/etc/yylex.c"
 
 	}
 	YY_SCANNER;
 	i = audp_leng;
 	goto audp__again;			/* action fell though */
-
-  audp__reject:
-	YY_SCANNER;
-	i = audp_oleng;			/* restore original audp_text */
-	if (++audp_fmin < audp_fmax)
-		goto audp__found;		/* another final state, same length */
-	else
-		goto audp__search;		/* try shorter audp_text */
-
-  audp__more:
-	YY_SCANNER;
-	i = audp_leng;
-	if (i > 0)
-		audp__lastc = audp_text[i-1];
-	goto audp__contin;
 }
 /*
  * Safely switch input stream underneath LEX
@@ -831,64 +771,6 @@ audp__reset()
 	YY_INIT;
 	audp_lineno = 1;		/* line number */
 }
-/* get input char with pushback */
-YY_DECL int
-input()
-{
-	int c;
-#ifndef YY_PRESERVE
-	if (audp__end > audp_leng) {
-		audp__end--;
-		memmove(audp_text+audp_leng, audp_text+audp_leng+1,
-			(size_t) (audp__end-audp_leng));
-		c = audp__save;
-		YY_USER;
-#else
-	if (audp__push < audp__save+YYLMAX) {
-		c = *audp__push++;
-#endif
-	} else
-		c = audp_getc();
-	audp__lastc = c;
-	if (c == YYNEWLINE)
-		audp_lineno++;
-	if (c == EOF) /* audp_getc() can set c=EOF vsc4 wants c==EOF to return 0 */
-		return 0;
-	else
-		return c;
-}
-
-/*f
- * pushback char
- */
-YY_DECL int
-unput(int c)
-{
-#ifndef YY_PRESERVE
-	if (audp__end >= YYLMAX) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		if (audp__end > audp_leng) {
-			audp_text[audp_leng] = audp__save;
-			memmove(audp_text+audp_leng+1, audp_text+audp_leng,
-				(size_t) (audp__end-audp_leng));
-			audp_text[audp_leng] = 0;
-		}
-		audp__end++;
-		audp__save = (char) c;
-#else
-	if (audp__push <= audp__save) {
-		YY_FATAL(m_textmsg(1552, "Push-back buffer overflow", "E"));
-	} else {
-		*--audp__push = c;
-#endif
-		if (c == YYNEWLINE)
-			audp_lineno--;
-	}	/* endif */
-	return c;
-}
-
-//#line 121 ".\parser.l"
 
 /***************************************************************************/
 
