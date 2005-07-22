@@ -70,7 +70,7 @@ typedef union {
 } YYSTYPE;
 #define TEXT	257
 #define QTEXT	258
-extern int strres_char, yyerrflag;
+extern int strres_char, str_yyerrflag;
 extern YYSTYPE strres_lval;
 #if YYDEBUG
 enum YY_Types { YY_t_NoneDefined, YY_t_sval
@@ -240,7 +240,7 @@ extern void yyShowRead YY_ARGS((int));
  * with a return value of -1
  */
 #define YY_TRACE(fn) { \
-	yyx.state = yystate; yyx.lookahead = strres_char; yyx.errflag =yyerrflag; \
+	yyx.state = yystate; yyx.lookahead = strres_char; yyx.errflag =str_yyerrflag; \
 	yyx.states = yys+1; yyx.nstates = yyps-yys; \
 	yyx.values = yyv+1; yyx.nvalues = yypv-yyv; \
 	yyx.types = yytypev+1; yyx.done = 0; \
@@ -269,7 +269,7 @@ int yysinc = -1; /* stack size increment, <0 = double, 0 = none, >0 = fixed */
 int yyssize = YYSSIZE;
 #endif
 
-#define yyerrok		yyerrflag = 0
+#define yyerrok		str_yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (strres_debug) yyShowRead(-1); strres_char = -1; }
 #else
@@ -277,7 +277,7 @@ int yyssize = YYSSIZE;
 #endif
 #define YYACCEPT	YYRETURN(0)
 #define YYABORT		YYRETURN(1)
-#define YYRECOVERING()	(yyerrflag != 0)
+#define YYRECOVERING()	(str_yyerrflag != 0)
 #ifdef YYALLOC
 #define YYRETURN(val)	{ retval = (val); goto yyReturn; }
 #else
@@ -313,13 +313,13 @@ int yyssize = YYSSIZE;
  */
 #define	yyneg(s)	(-((s)+1))
 
-YYSTYPE	yyval;				/* $ */
-YYSTYPE	*yypvt;				/* $n */
+YYSTYPE	str_yyval;				/* $ */
+YYSTYPE	*str_yypvt;				/* $n */
 YYSTYPE	strres_lval;				/* strres_lex() sets this */
 
 int	strres_char,				/* current token */
-	yyerrflag,			/* error flag */
-	yynerrs;			/* error count */
+	str_yyerrflag,			/* error flag */
+	str_yynerrs;			/* error count */
 
 #if YYDEBUG
 int strres_debug = 0;		/* debug if this flag is set */
@@ -503,9 +503,9 @@ int strres_parse()
 	short	*yytypev;
 #endif
 	YYSTYPE save_yylval;
-	YYSTYPE save_yyval;
-	YYSTYPE *save_yypvt;
-	int save_yychar, save_yyerrflag, save_yynerrs;
+	YYSTYPE save_str_yyval;
+	YYSTYPE *save_str_yypvt;
+	int save_yychar, save_str_yyerrflag, save_str_yynerrs;
 	int retval; 			/* return value holder */
 #else
 	short		yys[YYSSIZE + 1];
@@ -544,15 +544,15 @@ int strres_parse()
 		return 1;
 	}
 	save_yylval = strres_lval;
-	save_yyval = yyval;
-	save_yypvt = yypvt;
+	save_str_yyval = str_yyval;
+	save_str_yypvt = str_yypvt;
 	save_yychar = strres_char;
-	save_yyerrflag = yyerrflag;
-	save_yynerrs = yynerrs;
+	save_str_yyerrflag = str_yyerrflag;
+	save_str_yynerrs = str_yynerrs;
 #endif
 
-	yynerrs = 0;
-	yyerrflag = 0;
+	str_yynerrs = 0;
+	str_yyerrflag = 0;
 	yyclearin;
 	yyps = yys;
 	yypv = yyv;
@@ -612,7 +612,7 @@ yyStack:
 	}
 #endif /* !YYDYNAMIC */
 	*yyps = yystate;	/* stack current state */
-	*++yypv = yyval;	/* ... and value */
+	*++yypv = str_yyval;	/* ... and value */
 #if YYDEBUG
 	*++yytp = yyruletype;	/* ... and type */
 
@@ -652,10 +652,10 @@ yyEncore:
 					YY_TRACE(yyShowShift)
 				}
 #endif
-				yyval = strres_lval;	/* stack what strres_lex() set */
+				str_yyval = strres_lval;	/* stack what strres_lex() set */
 				yyclearin;		/* clear token */
-				if (yyerrflag)
-					yyerrflag--;	/* successful shift */
+				if (str_yyerrflag)
+					str_yyerrflag--;	/* successful shift */
 				goto yyStack;
 			}
 		}
@@ -699,9 +699,9 @@ yyEncore:
 	yytp -= yyj;
 #endif
 	yyps -= yyj;		/* pop stacks */
-	yypvt = yypv;		/* save top */
+	str_yypvt = yypv;		/* save top */
 	yypv -= yyj;
-	yyval = yypv[1];	/* default action $ = $1 */
+	str_yyval = yypv[1];	/* default action $ = $1 */
 #if YYDEBUG
 	yyruletype = yyRules[yyrmap[yyi]].type;
 #endif
@@ -711,7 +711,7 @@ yyEncore:
 case YYr3: {	/* line :  TEXT QTEXT */
 
 								
-								if (!strresStoreString(psCurrRes, yypvt[-1].sval, yypvt[0].sval))
+								if (!strresStoreString(psCurrRes, str_yypvt[-1].sval, str_yypvt[0].sval))
 								{
 									YYABORT;
 								}
@@ -743,7 +743,7 @@ case YYr3: {	/* line :  TEXT QTEXT */
 /*
 #pragma used yyerrlabel
  */
-	yyerrflag = 1;
+	str_yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--;
 		yypv--;
@@ -753,22 +753,22 @@ case YYr3: {	/* line :  TEXT QTEXT */
 	}
 
 yyError:
-	switch (yyerrflag) {
+	switch (str_yyerrflag) {
 
 	case 0:		/* new error */
-		yynerrs++;
+		str_yynerrs++;
 		yyi = strres_char;
 		strres_error(m_textmsg(4969, "Syntax error", "E"));
 		if (yyi != strres_char) {
 			/* user has changed the current token */
 			/* try again */
-			yyerrflag++;	/* avoid loops */
+			str_yyerrflag++;	/* avoid loops */
 			goto yyEncore;
 		}
 
 	case 1:		/* partially recovered */
 	case 2:
-		yyerrflag = 3;	/* need 3 valid shifts to recover */
+		str_yyerrflag = 3;	/* need 3 valid shifts to recover */
 			
 		/*
 		 *	Pop states, looking for a
@@ -826,11 +826,11 @@ yyError:
 #ifdef YYALLOC
 yyReturn:
 	strres_lval = save_yylval;
-	yyval = save_yyval;
-	yypvt = save_yypvt;
+	str_yyval = save_str_yyval;
+	str_yypvt = save_str_yypvt;
 	strres_char = save_yychar;
-	yyerrflag = save_yyerrflag;
-	yynerrs = save_yynerrs;
+	str_yyerrflag = save_str_yyerrflag;
+	str_yynerrs = save_str_yynerrs;
 	free((char *)yys);
 	free((char *)yyv);
 #if YYDEBUG

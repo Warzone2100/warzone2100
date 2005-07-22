@@ -69,9 +69,6 @@ extern CURSORSNAP			InterfaceSnap;
 extern BOOL					bSendingMap;
 
 extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
-								  UDWORD butWidth, UDWORD butHeight, UDWORD gap,
-								  DROID_TEMPLATE *psSelected, BOOL blankButton);
 
 extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
@@ -2983,7 +2980,7 @@ static VOID AvailableForces(VOID)
 	intAddTemplateButtons(IDDES_TEMPLFORM, FORCE_AVAILABLEWIDTH ,
 							   FORCE_AVAILABLEHEIGHT,
 							   OBJ_BUTWIDTH,OBJ_BUTHEIGHT,2,
-							   NULL, FALSE);
+							   NULL);
 
 
 }

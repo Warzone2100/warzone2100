@@ -314,10 +314,6 @@ static BOOL intAddSystemButtons(SDWORD mode);
 static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 								   UBYTE *aAvailable,	UDWORD numEntries,
 								   UDWORD compID,UDWORD WhichTab);
-/* Add the droid template buttons to a form */
-BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
-								  UDWORD butWidth, UDWORD butHeight, UDWORD gap,
-								  DROID_TEMPLATE *psSelected);
 /* Add the component buttons to the main tab of the component form */
 static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 									 UDWORD constIndex, UDWORD repairIndex, UDWORD brainIndex);

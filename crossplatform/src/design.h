@@ -104,6 +104,10 @@
 #define	IDDES_PROPBUTTON		5902		// Propulsion button
 
 extern BOOL intAddDesign( BOOL bShowCentreScreen );
+
+extern BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight, UDWORD butWidth,
+		UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
+
 extern void intRemoveDesign(void);
 extern void intProcessDesign(UDWORD id);
 extern void intRunDesign(void);

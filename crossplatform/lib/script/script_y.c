@@ -1569,7 +1569,7 @@ typedef union {
 #define TRIG_SYM	308
 #define EVENT_SYM	309
 #define CALLBACK_SYM	310
-extern int scr_char, yyerrflag;
+extern int scr_char, scr_yyerrflag;
 extern YYSTYPE scr_lval;
 #if YYDEBUG
 enum YY_Types { YY_t_NoneDefined, YY_t_bval, YY_t_ival, YY_t_sval, YY_t_tval, YY_t_stype, YY_t_vSymbol, YY_t_cSymbol, YY_t_fSymbol, YY_t_tSymbol, YY_t_eSymbol, YY_t_cbSymbol, YY_t_cblock, YY_t_objVarBlock, YY_t_arrayBlock, YY_t_pblock, YY_t_condBlock, YY_t_videcl, YY_t_vdecl, YY_t_tdecl
@@ -2372,7 +2372,7 @@ extern void yyShowRead YY_ARGS((int));
  * with a return value of -1
  */
 #define YY_TRACE(fn) { \
-	yyx.state = yystate; yyx.lookahead = scr_char; yyx.errflag =yyerrflag; \
+	yyx.state = yystate; yyx.lookahead = scr_char; yyx.errflag =scr_yyerrflag; \
 	yyx.states = yys+1; yyx.nstates = yyps-yys; \
 	yyx.values = yyv+1; yyx.nvalues = yypv-yyv; \
 	yyx.types = yytypev+1; yyx.done = 0; \
@@ -2402,7 +2402,7 @@ int yyssize = YYSSIZE;
 #endif
 
 #define YYERROR		goto yyerrlabel
-#define yyerrok		yyerrflag = 0
+#define yyerrok		scr_yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (scr_debug) yyShowRead(-1); scr_char = -1; }
 #else
@@ -2410,7 +2410,7 @@ int yyssize = YYSSIZE;
 #endif
 #define YYACCEPT	YYRETURN(0)
 #define YYABORT		YYRETURN(1)
-#define YYRECOVERING()	(yyerrflag != 0)
+#define YYRECOVERING()	(scr_yyerrflag != 0)
 #ifdef YYALLOC
 #define YYRETURN(val)	{ retval = (val); goto yyReturn; }
 #else
@@ -2446,13 +2446,13 @@ int yyssize = YYSSIZE;
  */
 #define	yyneg(s)	(-((s)+1))
 
-YYSTYPE	yyval;				/* $ */
-YYSTYPE	*yypvt;				/* $n */
+YYSTYPE	scr_yyval;				/* $ */
+YYSTYPE	*scr_yypvt;				/* $n */
 YYSTYPE	scr_lval;				/* scr_lex() sets this */
 
 int	scr_char,				/* current token */
-	yyerrflag,			/* error flag */
-	yynerrs;			/* error count */
+	scr_yyerrflag,			/* error flag */
+	scr_yynerrs;			/* error count */
 
 #if YYDEBUG
 int scr_debug = 0;		/* debug if this flag is set */
@@ -3237,9 +3237,9 @@ int scr_parse()
 	short	*yytypev;
 #endif
 	YYSTYPE save_yylval;
-	YYSTYPE save_yyval;
-	YYSTYPE *save_yypvt;
-	int save_yychar, save_yyerrflag, save_yynerrs;
+	YYSTYPE save_scr_yyval;
+	YYSTYPE *save_scr_yypvt;
+	int save_yychar, save_scr_yyerrflag, save_scr_yynerrs;
 	int retval; 			/* return value holder */
 #else
 	short		yys[YYSSIZE + 1];
@@ -3278,15 +3278,15 @@ int scr_parse()
 		return 1;
 	}
 	save_yylval = scr_lval;
-	save_yyval = yyval;
-	save_yypvt = yypvt;
+	save_scr_yyval = scr_yyval;
+	save_scr_yypvt = scr_yypvt;
 	save_yychar = scr_char;
-	save_yyerrflag = yyerrflag;
-	save_yynerrs = yynerrs;
+	save_scr_yyerrflag = scr_yyerrflag;
+	save_scr_yynerrs = scr_yynerrs;
 #endif
 
-	yynerrs = 0;
-	yyerrflag = 0;
+	scr_yynerrs = 0;
+	scr_yyerrflag = 0;
 	yyclearin;
 	yyps = yys;
 	yypv = yyv;
@@ -3346,7 +3346,7 @@ yyStack:
 	}
 #endif /* !YYDYNAMIC */
 	*yyps = yystate;	/* stack current state */
-	*++yypv = yyval;	/* ... and value */
+	*++yypv = scr_yyval;	/* ... and value */
 #if YYDEBUG
 	*++yytp = yyruletype;	/* ... and type */
 
@@ -3386,10 +3386,10 @@ yyEncore:
 					YY_TRACE(yyShowShift)
 				}
 #endif
-				yyval = scr_lval;	/* stack what scr_lex() set */
+				scr_yyval = scr_lval;	/* stack what scr_lex() set */
 				yyclearin;		/* clear token */
-				if (yyerrflag)
-					yyerrflag--;	/* successful shift */
+				if (scr_yyerrflag)
+					scr_yyerrflag--;	/* successful shift */
 				goto yyStack;
 			}
 		}
@@ -3433,9 +3433,9 @@ yyEncore:
 	yytp -= yyj;
 #endif
 	yyps -= yyj;		/* pop stacks */
-	yypvt = yypv;		/* save top */
+	scr_yypvt = yypv;		/* save top */
 	yypv -= yyj;
-	yyval = yypv[1];	/* default action $ = $1 */
+	scr_yyval = yypv[1];	/* default action $ = $1 */
 #if YYDEBUG
 	yyruletype = yyRules[yyrmap[yyi]].type;
 #endif
@@ -3653,7 +3653,7 @@ case YYr2: {	/* script :  header var_list $1 trigger_list event_list */
 
 case YYr6: {	/* header_decl :  LINK TYPE ';' */
 
-//						if (!scriptAddVariable("owner", yypvt[-1].tval, ST_PUBLIC, 0))
+//						if (!scriptAddVariable("owner", scr_yypvt[-1].tval, ST_PUBLIC, 0))
 //						{
 							// Out of memory - error already given
 //							YYABORT;
@@ -3663,163 +3663,163 @@ case YYr6: {	/* header_decl :  LINK TYPE ';' */
 
 case YYr8: {	/* var_list :  variable_decl ';' */
 
-					FREE_VARDECL(yypvt[-1].vdecl);
+					FREE_VARDECL(scr_yypvt[-1].vdecl);
 				
 } break;
 
 case YYr9: {	/* var_list :  var_list variable_decl ';' */
 
-					FREE_VARDECL(yypvt[-1].vdecl);
+					FREE_VARDECL(scr_yypvt[-1].vdecl);
 				
 } break;
 
 case YYr10: {	/* variable_decl_head :  STORAGE TYPE */
 
 							ALLOC_VARDECL(psCurrVDecl);
-							psCurrVDecl->storage = yypvt[-1].stype;
-							psCurrVDecl->type = yypvt[0].tval;
+							psCurrVDecl->storage = scr_yypvt[-1].stype;
+							psCurrVDecl->type = scr_yypvt[0].tval;
 
-							yyval.vdecl = psCurrVDecl;
+							scr_yyval.vdecl = psCurrVDecl;
 						
 } break;
 
 case YYr11: {	/* variable_decl_head :  STORAGE TRIGGER */
 
 							ALLOC_VARDECL(psCurrVDecl);
-							psCurrVDecl->storage = yypvt[-1].stype;
+							psCurrVDecl->storage = scr_yypvt[-1].stype;
 							psCurrVDecl->type = VAL_TRIGGER;
 
-							yyval.vdecl = psCurrVDecl;
+							scr_yyval.vdecl = psCurrVDecl;
 						
 } break;
 
 case YYr12: {	/* variable_decl_head :  STORAGE EVENT */
 
 							ALLOC_VARDECL(psCurrVDecl);
-							psCurrVDecl->storage = yypvt[-1].stype;
+							psCurrVDecl->storage = scr_yypvt[-1].stype;
 							psCurrVDecl->type = VAL_EVENT;
 
-							yyval.vdecl = psCurrVDecl;
+							scr_yyval.vdecl = psCurrVDecl;
 						
 } break;
 
 case YYr13: {	/* array_sub_decl :  '[' INTEGER ']' */
 
-						if (yypvt[-1].ival <= 0 || yypvt[-1].ival >= VAR_MAX_ELEMENTS)
+						if (scr_yypvt[-1].ival <= 0 || scr_yypvt[-1].ival >= VAR_MAX_ELEMENTS)
 						{
-							scr_error("Invalid array size %d", yypvt[-1].ival);
+							scr_error("Invalid array size %d", scr_yypvt[-1].ival);
 							YYABORT;
 						}
 
 						ALLOC_VARIDENTDECL(psCurrVIdentDecl, NULL, 1);
-						psCurrVIdentDecl->elements[0] = yypvt[-1].ival;
+						psCurrVIdentDecl->elements[0] = scr_yypvt[-1].ival;
 
-						yyval.videcl = psCurrVIdentDecl;
+						scr_yyval.videcl = psCurrVIdentDecl;
 					
 } break;
 
 case YYr14: {	/* array_sub_decl_list :  array_sub_decl */
 
-						yyval.videcl = yypvt[0].videcl;
+						scr_yyval.videcl = scr_yypvt[0].videcl;
 					
 } break;
 
 case YYr15: {	/* array_sub_decl_list :  array_sub_decl_list '[' INTEGER ']' */
 
-						if (yypvt[-3].videcl->dimensions >= VAR_MAX_DIMENSIONS)
+						if (scr_yypvt[-3].videcl->dimensions >= VAR_MAX_DIMENSIONS)
 						{
 							scr_error("Too many dimensions for array");
 							YYABORT;
 						}
-						if (yypvt[-1].ival <= 0 || yypvt[-1].ival >= VAR_MAX_ELEMENTS)
+						if (scr_yypvt[-1].ival <= 0 || scr_yypvt[-1].ival >= VAR_MAX_ELEMENTS)
 						{
-							scr_error("Invalid array size %d", yypvt[-1].ival);
+							scr_error("Invalid array size %d", scr_yypvt[-1].ival);
 							YYABORT;
 						}
 
-						yypvt[-3].videcl->elements[yypvt[-3].videcl->dimensions] = yypvt[-1].ival;
-						yypvt[-3].videcl->dimensions += 1;
+						scr_yypvt[-3].videcl->elements[scr_yypvt[-3].videcl->dimensions] = scr_yypvt[-1].ival;
+						scr_yypvt[-3].videcl->dimensions += 1;
 
-						yyval.videcl = yypvt[-3].videcl;
+						scr_yyval.videcl = scr_yypvt[-3].videcl;
 					
 } break;
 
 case YYr16: {	/* variable_ident :  IDENT */
 
-						ALLOC_VARIDENTDECL(psCurrVIdentDecl, yypvt[0].sval, 0);
+						ALLOC_VARIDENTDECL(psCurrVIdentDecl, scr_yypvt[0].sval, 0);
 
-						yyval.videcl = psCurrVIdentDecl;
+						scr_yyval.videcl = psCurrVIdentDecl;
 					
 } break;
 
 case YYr17: {	/* variable_ident :  IDENT array_sub_decl_list */
 
-						yypvt[0].videcl->pIdent = MALLOC(strlen(yypvt[-1].sval)+1);
-						if (yypvt[0].videcl->pIdent == NULL)
+						scr_yypvt[0].videcl->pIdent = MALLOC(strlen(scr_yypvt[-1].sval)+1);
+						if (scr_yypvt[0].videcl->pIdent == NULL)
 						{
 							scr_error("Out of memory");
 							YYABORT;
 						}
-						strcpy(yypvt[0].videcl->pIdent, yypvt[-1].sval);
+						strcpy(scr_yypvt[0].videcl->pIdent, scr_yypvt[-1].sval);
 
-						yyval.videcl = yypvt[0].videcl;
+						scr_yyval.videcl = scr_yypvt[0].videcl;
 					
 } break;
 
 case YYr18: {	/* variable_decl :  variable_decl_head variable_ident */
 
-						if (!scriptAddVariable(yypvt[-1].vdecl, yypvt[0].videcl))
+						if (!scriptAddVariable(scr_yypvt[-1].vdecl, scr_yypvt[0].videcl))
 						{
 							
 							YYABORT;
 						}
 
-						FREE_VARIDENTDECL(yypvt[0].videcl);
+						FREE_VARIDENTDECL(scr_yypvt[0].videcl);
 
 						
-						yyval.vdecl = yypvt[-1].vdecl;
+						scr_yyval.vdecl = scr_yypvt[-1].vdecl;
 					
 } break;
 
 case YYr19: {	/* variable_decl :  variable_decl ',' variable_ident */
 
-						if (!scriptAddVariable(yypvt[-2].vdecl, yypvt[0].videcl))
+						if (!scriptAddVariable(scr_yypvt[-2].vdecl, scr_yypvt[0].videcl))
 						{
 							
 							YYABORT;
 						}
 
-						FREE_VARIDENTDECL(yypvt[0].videcl);
+						FREE_VARIDENTDECL(scr_yypvt[0].videcl);
 
 						
-						yyval.vdecl = yypvt[-2].vdecl;
+						scr_yyval.vdecl = scr_yypvt[-2].vdecl;
 					
 } break;
 
 case YYr23: {	/* trigger_subdecl :  boolexp ',' INTEGER */
 
-						ALLOC_TSUBDECL(psCurrTDecl, TR_CODE, yypvt[-2].cblock->size, yypvt[0].ival);
+						ALLOC_TSUBDECL(psCurrTDecl, TR_CODE, scr_yypvt[-2].cblock->size, scr_yypvt[0].ival);
 						ip = psCurrTDecl->pCode;
-						PUT_BLOCK(ip, yypvt[-2].cblock);
-						FREE_BLOCK(yypvt[-2].cblock);
+						PUT_BLOCK(ip, scr_yypvt[-2].cblock);
+						FREE_BLOCK(scr_yypvt[-2].cblock);
 
-						yyval.tdecl = psCurrTDecl;
+						scr_yyval.tdecl = psCurrTDecl;
 					
 } break;
 
 case YYr24: {	/* trigger_subdecl :  WAIT ',' INTEGER */
 
-						ALLOC_TSUBDECL(psCurrTDecl, TR_WAIT, 0, yypvt[0].ival);
+						ALLOC_TSUBDECL(psCurrTDecl, TR_WAIT, 0, scr_yypvt[0].ival);
 
-						yyval.tdecl = psCurrTDecl;
+						scr_yyval.tdecl = psCurrTDecl;
 					
 } break;
 
 case YYr25: {	/* trigger_subdecl :  EVERY ',' INTEGER */
 
-						ALLOC_TSUBDECL(psCurrTDecl, TR_EVERY, 0, yypvt[0].ival);
+						ALLOC_TSUBDECL(psCurrTDecl, TR_EVERY, 0, scr_yypvt[0].ival);
 
-						yyval.tdecl = psCurrTDecl;
+						scr_yyval.tdecl = psCurrTDecl;
 					
 } break;
 
@@ -3827,30 +3827,30 @@ case YYr26: {	/* trigger_subdecl :  INITIALISE */
 
 						ALLOC_TSUBDECL(psCurrTDecl, TR_INIT, 0, 0);
 
-						yyval.tdecl = psCurrTDecl;
+						scr_yyval.tdecl = psCurrTDecl;
 					
 } break;
 
 case YYr27: {	/* trigger_subdecl :  CALLBACK_SYM */
 
-						if (yypvt[0].cbSymbol->numParams != 0)
+						if (scr_yypvt[0].cbSymbol->numParams != 0)
 						{
 							scr_error("Expected parameters for callback trigger");
 							YYABORT;
 						}
 
-						ALLOC_TSUBDECL(psCurrTDecl, yypvt[0].cbSymbol->type, 0, 0);
+						ALLOC_TSUBDECL(psCurrTDecl, scr_yypvt[0].cbSymbol->type, 0, 0);
 
-						yyval.tdecl = psCurrTDecl;
+						scr_yyval.tdecl = psCurrTDecl;
 					
 } break;
 
 case YYr28: {	/* trigger_subdecl :  CALLBACK_SYM ',' param_list */
 
-						codeRet = scriptCodeCallbackParams(yypvt[-2].cbSymbol, yypvt[0].pblock, &psCurrTDecl);
+						codeRet = scriptCodeCallbackParams(scr_yypvt[-2].cbSymbol, scr_yypvt[0].pblock, &psCurrTDecl);
 						CHECK_CODE_ERROR(codeRet);
 
-						yyval.tdecl = psCurrTDecl;
+						scr_yyval.tdecl = psCurrTDecl;
 					
 } break;
 
@@ -3860,41 +3860,41 @@ case YYr29: {	/* trigger_decl :  TRIGGER IDENT '(' trigger_subdecl ')' ';' */
 						STRING	*pDummy;
 
 						scriptGetErrorData(&line, &pDummy);
-						if (!scriptAddTrigger(yypvt[-4].sval, yypvt[-2].tdecl, (UDWORD)line))
+						if (!scriptAddTrigger(scr_yypvt[-4].sval, scr_yypvt[-2].tdecl, (UDWORD)line))
 						{
 							YYABORT;
 						}
-						FREE_TSUBDECL(yypvt[-2].tdecl);
+						FREE_TSUBDECL(scr_yypvt[-2].tdecl);
 					
 } break;
 
 case YYr32: {	/* event_subdecl :  EVENT IDENT */
 
 						EVENT_SYMBOL	*psEvent;
-						if (!scriptDeclareEvent(yypvt[0].sval, &psEvent))
+						if (!scriptDeclareEvent(scr_yypvt[0].sval, &psEvent))
 						{
 							YYABORT;
 						}
 
-						yyval.eSymbol = psEvent;
+						scr_yyval.eSymbol = psEvent;
 					
 } break;
 
 case YYr33: {	/* event_subdecl :  EVENT EVENT_SYM */
 
-							yyval.eSymbol = yypvt[0].eSymbol;
+							scr_yyval.eSymbol = scr_yypvt[0].eSymbol;
 						
 } break;
 
 case YYr35: {	/* event_decl :  event_subdecl '(' TRIG_SYM ')' '{' statement_list '}' */
 
-						if (!scriptDefineEvent(yypvt[-6].eSymbol, yypvt[-1].cblock, yypvt[-4].tSymbol->index))
+						if (!scriptDefineEvent(scr_yypvt[-6].eSymbol, scr_yypvt[-1].cblock, scr_yypvt[-4].tSymbol->index))
 						{
 							YYABORT;
 						}
 
-						FREE_DEBUG(yypvt[-1].cblock);
-						FREE_BLOCK(yypvt[-1].cblock);
+						FREE_DEBUG(scr_yypvt[-1].cblock);
+						FREE_BLOCK(scr_yypvt[-1].cblock);
 					
 } break;
 
@@ -3909,31 +3909,31 @@ case YYr36: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' */
 case YYr37: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' $36 '{' statement_list '}' */
 
 						// Create a trigger for this event
-						if (!scriptAddTrigger("", yypvt[-5].tdecl, debugLine))
+						if (!scriptAddTrigger("", scr_yypvt[-5].tdecl, debugLine))
 						{
 							YYABORT;
 						}
-						FREE_TSUBDECL(yypvt[-5].tdecl);
+						FREE_TSUBDECL(scr_yypvt[-5].tdecl);
 
-						if (!scriptDefineEvent(yypvt[-7].eSymbol, yypvt[-1].cblock, numTriggers - 1))
+						if (!scriptDefineEvent(scr_yypvt[-7].eSymbol, scr_yypvt[-1].cblock, numTriggers - 1))
 						{
 							YYABORT;
 						}
 
-						FREE_DEBUG(yypvt[-1].cblock);
-						FREE_BLOCK(yypvt[-1].cblock);
+						FREE_DEBUG(scr_yypvt[-1].cblock);
+						FREE_BLOCK(scr_yypvt[-1].cblock);
 					
 } break;
 
 case YYr38: {	/* event_decl :  event_subdecl '(' INACTIVE ')' '{' statement_list '}' */
 
-						if (!scriptDefineEvent(yypvt[-6].eSymbol, yypvt[-1].cblock, -1))
+						if (!scriptDefineEvent(scr_yypvt[-6].eSymbol, scr_yypvt[-1].cblock, -1))
 						{
 							YYABORT;
 						}
 
-						FREE_DEBUG(yypvt[-1].cblock);
-						FREE_BLOCK(yypvt[-1].cblock);
+						FREE_DEBUG(scr_yypvt[-1].cblock);
+						FREE_BLOCK(scr_yypvt[-1].cblock);
 					
 } break;
 
@@ -3943,35 +3943,35 @@ case YYr39: {	/* statement_list :  */
 							ALLOC_BLOCK(psCurrBlock, 1);
 							psCurrBlock->size = 0;
 
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr40: {	/* statement_list :  statement */
 
-							yyval.cblock = yypvt[0].cblock;
+							scr_yyval.cblock = scr_yypvt[0].cblock;
 						
 } break;
 
 case YYr41: {	/* statement_list :  statement_list statement */
 
-							ALLOC_BLOCK(psCurrBlock, yypvt[-1].cblock->size + yypvt[0].cblock->size);
-							ALLOC_DEBUG(psCurrBlock, yypvt[-1].cblock->debugEntries +
-													 yypvt[0].cblock->debugEntries);
+							ALLOC_BLOCK(psCurrBlock, scr_yypvt[-1].cblock->size + scr_yypvt[0].cblock->size);
+							ALLOC_DEBUG(psCurrBlock, scr_yypvt[-1].cblock->debugEntries +
+													 scr_yypvt[0].cblock->debugEntries);
 							ip = psCurrBlock->pCode;
 
 							
-							PUT_BLOCK(ip, yypvt[-1].cblock);
-							PUT_BLOCK(ip, yypvt[0].cblock);
-							PUT_DEBUG(psCurrBlock, yypvt[-1].cblock);
-							APPEND_DEBUG(psCurrBlock, yypvt[-1].cblock->size / sizeof(UDWORD), yypvt[0].cblock);
-							FREE_DEBUG(yypvt[-1].cblock);
-							FREE_DEBUG(yypvt[0].cblock);
-							FREE_BLOCK(yypvt[-1].cblock);
-							FREE_BLOCK(yypvt[0].cblock);
+							PUT_BLOCK(ip, scr_yypvt[-1].cblock);
+							PUT_BLOCK(ip, scr_yypvt[0].cblock);
+							PUT_DEBUG(psCurrBlock, scr_yypvt[-1].cblock);
+							APPEND_DEBUG(psCurrBlock, scr_yypvt[-1].cblock->size / sizeof(UDWORD), scr_yypvt[0].cblock);
+							FREE_DEBUG(scr_yypvt[-1].cblock);
+							FREE_DEBUG(scr_yypvt[0].cblock);
+							FREE_BLOCK(scr_yypvt[-1].cblock);
+							FREE_BLOCK(scr_yypvt[0].cblock);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
@@ -3983,13 +3983,13 @@ case YYr42: {	/* statement :  assignment ';' */
 						
 						if (genDebugInfo)
 						{
-							ALLOC_DEBUG(yypvt[-1].cblock, 1);
-							yypvt[-1].cblock->psDebug[0].offset = 0;
+							ALLOC_DEBUG(scr_yypvt[-1].cblock, 1);
+							scr_yypvt[-1].cblock->psDebug[0].offset = 0;
 							scriptGetErrorData((SDWORD *)&line, &pDummy);
-							yypvt[-1].cblock->psDebug[0].line = line;
+							scr_yypvt[-1].cblock->psDebug[0].line = line;
 						}
 
-						yyval.cblock = yypvt[-1].cblock;
+						scr_yyval.cblock = scr_yypvt[-1].cblock;
 					
 } break;
 
@@ -4003,25 +4003,25 @@ case YYr43: {	/* statement :  func_call ';' */
 						
 						if (genDebugInfo)
 						{
-							ALLOC_DEBUG(yypvt[-1].cblock, 1);
-							yypvt[-1].cblock->psDebug[0].offset = 0;
+							ALLOC_DEBUG(scr_yypvt[-1].cblock, 1);
+							scr_yypvt[-1].cblock->psDebug[0].offset = 0;
 							scriptGetErrorData((SDWORD *)&line, &pDummy);
-							yypvt[-1].cblock->psDebug[0].line = line;
+							scr_yypvt[-1].cblock->psDebug[0].line = line;
 						}
 
-						yyval.cblock = yypvt[-1].cblock;
+						scr_yyval.cblock = scr_yypvt[-1].cblock;
 					
 } break;
 
 case YYr44: {	/* statement :  conditional */
 
-						yyval.cblock = yypvt[0].cblock;
+						scr_yyval.cblock = scr_yypvt[0].cblock;
 					
 } break;
 
 case YYr45: {	/* statement :  loop */
 
-						yyval.cblock = yypvt[0].cblock;
+						scr_yyval.cblock = scr_yypvt[0].cblock;
 					
 } break;
 
@@ -4046,7 +4046,7 @@ case YYr46: {	/* statement :  EXIT ';' */
 							psCurrBlock->psDebug[0].line = line;
 						}
 
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
@@ -4056,7 +4056,7 @@ case YYr47: {	/* statement :  PAUSE '(' INTEGER ')' ';' */
 						STRING *pDummy;
 
 						// can only have a positive pause
-						if (yypvt[-2].ival < 0)
+						if (scr_yypvt[-2].ival < 0)
 						{
 							scr_error("Invalid pause time");
 							YYABORT;
@@ -4068,7 +4068,7 @@ case YYr47: {	/* statement :  PAUSE '(' INTEGER ')' ';' */
 						ip = psCurrBlock->pCode;
 
 						
-						PUT_PKOPCODE(ip, OP_PAUSE, yypvt[-2].ival);
+						PUT_PKOPCODE(ip, OP_PAUSE, scr_yypvt[-2].ival);
 
 						
 						if (genDebugInfo)
@@ -4078,157 +4078,157 @@ case YYr47: {	/* statement :  PAUSE '(' INTEGER ')' ';' */
 							psCurrBlock->psDebug[0].line = line;
 						}
 
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
 case YYr48: {	/* assignment :  NUM_VAR '=' expression */
 
-							codeRet = scriptCodeAssignment(yypvt[-2].vSymbol, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeAssignment(scr_yypvt[-2].vSymbol, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr49: {	/* assignment :  BOOL_VAR '=' boolexp */
 
-							codeRet = scriptCodeAssignment(yypvt[-2].vSymbol, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeAssignment(scr_yypvt[-2].vSymbol, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr50: {	/* assignment :  OBJ_VAR '=' objexp */
 
-							if (!interpCheckEquiv(yypvt[-2].vSymbol->type, yypvt[0].cblock->type))
+							if (!interpCheckEquiv(scr_yypvt[-2].vSymbol->type, scr_yypvt[0].cblock->type))
 							{
 								scr_error("User type mismatch for assignment");
 								YYABORT;
 							}
-							codeRet = scriptCodeAssignment(yypvt[-2].vSymbol, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeAssignment(scr_yypvt[-2].vSymbol, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr51: {	/* assignment :  VAR '=' userexp */
 
-							if (!interpCheckEquiv(yypvt[-2].vSymbol->type, yypvt[0].cblock->type))
+							if (!interpCheckEquiv(scr_yypvt[-2].vSymbol->type, scr_yypvt[0].cblock->type))
 							{
 								scr_error("User type mismatch for assignment");
 								YYABORT;
 							}
-							codeRet = scriptCodeAssignment(yypvt[-2].vSymbol, (CODE_BLOCK *)yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeAssignment(scr_yypvt[-2].vSymbol, (CODE_BLOCK *)scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr52: {	/* assignment :  num_objvar '=' expression */
 
-							codeRet = scriptCodeObjAssignment(yypvt[-2].objVarBlock, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeObjAssignment(scr_yypvt[-2].objVarBlock, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr53: {	/* assignment :  bool_objvar '=' boolexp */
 
-							codeRet = scriptCodeObjAssignment(yypvt[-2].objVarBlock, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeObjAssignment(scr_yypvt[-2].objVarBlock, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr54: {	/* assignment :  user_objvar '=' userexp */
 
-							if (!interpCheckEquiv(yypvt[-2].objVarBlock->psObjVar->type,yypvt[0].cblock->type))
+							if (!interpCheckEquiv(scr_yypvt[-2].objVarBlock->psObjVar->type,scr_yypvt[0].cblock->type))
 							{
 								scr_error("User type mismatch for assignment");
 								YYABORT;
 							}
-							codeRet = scriptCodeObjAssignment(yypvt[-2].objVarBlock, (CODE_BLOCK *)yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeObjAssignment(scr_yypvt[-2].objVarBlock, (CODE_BLOCK *)scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr55: {	/* assignment :  obj_objvar '=' objexp */
 
-							if (!interpCheckEquiv(yypvt[-2].objVarBlock->psObjVar->type, yypvt[0].cblock->type))
+							if (!interpCheckEquiv(scr_yypvt[-2].objVarBlock->psObjVar->type, scr_yypvt[0].cblock->type))
 							{
 								scr_error("User type mismatch for assignment");
 								YYABORT;
 							}
-							codeRet = scriptCodeObjAssignment(yypvt[-2].objVarBlock, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeObjAssignment(scr_yypvt[-2].objVarBlock, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr56: {	/* assignment :  num_array_var '=' expression */
 
-							codeRet = scriptCodeArrayAssignment(yypvt[-2].arrayBlock, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeArrayAssignment(scr_yypvt[-2].arrayBlock, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr57: {	/* assignment :  bool_array_var '=' boolexp */
 
-							codeRet = scriptCodeArrayAssignment(yypvt[-2].arrayBlock, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeArrayAssignment(scr_yypvt[-2].arrayBlock, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr58: {	/* assignment :  user_array_var '=' userexp */
 
-							if (!interpCheckEquiv(yypvt[-2].arrayBlock->psArrayVar->type,yypvt[0].cblock->type))
+							if (!interpCheckEquiv(scr_yypvt[-2].arrayBlock->psArrayVar->type,scr_yypvt[0].cblock->type))
 							{
 								scr_error("User type mismatch for assignment");
 								YYABORT;
 							}
-							codeRet = scriptCodeArrayAssignment(yypvt[-2].arrayBlock, (CODE_BLOCK *)yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeArrayAssignment(scr_yypvt[-2].arrayBlock, (CODE_BLOCK *)scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
 case YYr59: {	/* assignment :  obj_array_var '=' objexp */
 
-							if (!interpCheckEquiv(yypvt[-2].arrayBlock->psArrayVar->type, yypvt[0].cblock->type))
+							if (!interpCheckEquiv(scr_yypvt[-2].arrayBlock->psArrayVar->type, scr_yypvt[0].cblock->type))
 							{
 								scr_error("User type mismatch for assignment");
 								YYABORT;
 							}
-							codeRet = scriptCodeArrayAssignment(yypvt[-2].arrayBlock, yypvt[0].cblock, &psCurrBlock);
+							codeRet = scriptCodeArrayAssignment(scr_yypvt[-2].arrayBlock, scr_yypvt[0].cblock, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
 
 							
-							yyval.cblock = psCurrBlock;
+							scr_yyval.cblock = psCurrBlock;
 						
 } break;
 
@@ -4237,11 +4237,11 @@ case YYr60: {	/* func_call :  NUM_FUNC '(' param_list ')' */
 						DBP0(("[compile] NUM_FUNC\n"));
 
 						
-						codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, FALSE, &psCurrBlock);
+						codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, FALSE, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
@@ -4250,11 +4250,11 @@ case YYr61: {	/* func_call :  BOOL_FUNC '(' param_list ')' */
 						DBP0(("[compile] BOOL_FUNC\n"));
 
 						
-						codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, FALSE, &psCurrBlock);
+						codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, FALSE, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
@@ -4263,11 +4263,11 @@ case YYr62: {	/* func_call :  USER_FUNC '(' param_list ')' */
 						DBP0(("[compile] USER_FUNC\n"));
 
 						
-						codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, FALSE, &psCurrBlock);
+						codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, FALSE, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
@@ -4276,11 +4276,11 @@ case YYr63: {	/* func_call :  OBJ_FUNC '(' param_list ')' */
 						DBP0(("[compile] OBJ_FUNC\n"));
 
 						
-						codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, FALSE, &psCurrBlock);
+						codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, FALSE, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
@@ -4288,11 +4288,11 @@ case YYr64: {	/* func_call :  FUNC '(' param_list ')' */
 
 						DBP0(("[compile] FUNC\n"));
 						
-						codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, FALSE, &psCurrBlock);
+						codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, FALSE, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
@@ -4303,14 +4303,14 @@ case YYr65: {	/* param_list :  */
 						psCurrPBlock->size = 0;
 						psCurrPBlock->numParams = 0;
 
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr66: {	/* param_list :  parameter */
 
 						DBP0(("[compile] parameter\n"));
-						yyval.pblock = yypvt[0].pblock;
+						scr_yyval.pblock = scr_yypvt[0].pblock;
 					
 } break;
 
@@ -4318,221 +4318,221 @@ case YYr67: {	/* param_list :  param_list ',' parameter */
 
 						DBP0(("[compile] param_list , parameter\n"));
 
-						ALLOC_PBLOCK(psCurrPBlock, yypvt[-2].pblock->size + yypvt[0].pblock->size,
-												   yypvt[-2].pblock->numParams + yypvt[0].pblock->numParams);
+						ALLOC_PBLOCK(psCurrPBlock, scr_yypvt[-2].pblock->size + scr_yypvt[0].pblock->size,
+												   scr_yypvt[-2].pblock->numParams + scr_yypvt[0].pblock->numParams);
 						ip = psCurrPBlock->pCode;
 
 						
-						PUT_BLOCK(ip, yypvt[-2].pblock);
-						PUT_BLOCK(ip, yypvt[0].pblock);
+						PUT_BLOCK(ip, scr_yypvt[-2].pblock);
+						PUT_BLOCK(ip, scr_yypvt[0].pblock);
 						
 						
-						memcpy(psCurrPBlock->aParams, yypvt[-2].pblock->aParams,
-								yypvt[-2].pblock->numParams * sizeof(INTERP_TYPE));
-						memcpy(psCurrPBlock->aParams + yypvt[-2].pblock->numParams,
-								yypvt[0].pblock->aParams,
-								yypvt[0].pblock->numParams * sizeof(INTERP_TYPE));
+						memcpy(psCurrPBlock->aParams, scr_yypvt[-2].pblock->aParams,
+								scr_yypvt[-2].pblock->numParams * sizeof(INTERP_TYPE));
+						memcpy(psCurrPBlock->aParams + scr_yypvt[-2].pblock->numParams,
+								scr_yypvt[0].pblock->aParams,
+								scr_yypvt[0].pblock->numParams * sizeof(INTERP_TYPE));
 
 						
-						FREE_PBLOCK(yypvt[-2].pblock);
-						FREE_PBLOCK(yypvt[0].pblock);
+						FREE_PBLOCK(scr_yypvt[-2].pblock);
+						FREE_PBLOCK(scr_yypvt[0].pblock);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr68: {	/* parameter :  expression */
 
 						
-						codeRet = scriptCodeParameter(yypvt[0].cblock, VAL_INT, &psCurrPBlock);
+						codeRet = scriptCodeParameter(scr_yypvt[0].cblock, VAL_INT, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr69: {	/* parameter :  boolexp */
 
 						
-						codeRet = scriptCodeParameter(yypvt[0].cblock, VAL_BOOL, &psCurrPBlock);
+						codeRet = scriptCodeParameter(scr_yypvt[0].cblock, VAL_BOOL, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr70: {	/* parameter :  userexp */
 
 						
-						codeRet = scriptCodeParameter((CODE_BLOCK *)yypvt[0].cblock, yypvt[0].cblock->type, &psCurrPBlock);
+						codeRet = scriptCodeParameter((CODE_BLOCK *)scr_yypvt[0].cblock, scr_yypvt[0].cblock->type, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr71: {	/* parameter :  objexp */
 
 						
-						codeRet = scriptCodeParameter(yypvt[0].cblock, yypvt[0].cblock->type, &psCurrPBlock);
+						codeRet = scriptCodeParameter(scr_yypvt[0].cblock, scr_yypvt[0].cblock->type, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr72: {	/* parameter :  var_ref */
 
 						
-						yyval.pblock = yypvt[0].pblock;
+						scr_yyval.pblock = scr_yypvt[0].pblock;
 					
 } break;
 
 case YYr73: {	/* var_ref :  REF NUM_VAR */
 
-						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
+						codeRet = scriptCodeVarRef(scr_yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr74: {	/* var_ref :  REF BOOL_VAR */
 
-						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
+						codeRet = scriptCodeVarRef(scr_yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr75: {	/* var_ref :  REF VAR */
 
-						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
+						codeRet = scriptCodeVarRef(scr_yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr76: {	/* var_ref :  REF OBJ_VAR */
 
-						codeRet = scriptCodeVarRef(yypvt[0].vSymbol, &psCurrPBlock);
+						codeRet = scriptCodeVarRef(scr_yypvt[0].vSymbol, &psCurrPBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.pblock = psCurrPBlock;
+						scr_yyval.pblock = psCurrPBlock;
 					
 } break;
 
 case YYr77: {	/* conditional :  cond_clause_list */
 
-						codeRet = scriptCodeConditional(yypvt[0].condBlock, &psCurrBlock);
+						codeRet = scriptCodeConditional(scr_yypvt[0].condBlock, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
 case YYr78: {	/* conditional :  cond_clause_list ELSE terminal_cond */
 
 						ALLOC_CONDBLOCK(psCondBlock,
-										yypvt[-2].condBlock->numOffsets + yypvt[0].condBlock->numOffsets,
-										yypvt[-2].condBlock->size + yypvt[0].condBlock->size);
-						ALLOC_DEBUG(psCondBlock, yypvt[-2].condBlock->debugEntries + yypvt[0].condBlock->debugEntries);
+										scr_yypvt[-2].condBlock->numOffsets + scr_yypvt[0].condBlock->numOffsets,
+										scr_yypvt[-2].condBlock->size + scr_yypvt[0].condBlock->size);
+						ALLOC_DEBUG(psCondBlock, scr_yypvt[-2].condBlock->debugEntries + scr_yypvt[0].condBlock->debugEntries);
 						ip = psCondBlock->pCode;
 
 						
-						PUT_BLOCK(ip, yypvt[-2].condBlock);
-						PUT_BLOCK(ip, yypvt[0].condBlock);
+						PUT_BLOCK(ip, scr_yypvt[-2].condBlock);
+						PUT_BLOCK(ip, scr_yypvt[0].condBlock);
 
 						
 						
-						memcpy(psCondBlock->aOffsets, yypvt[-2].condBlock->aOffsets,
-							   yypvt[-2].condBlock->numOffsets * sizeof(SDWORD));
-						psCondBlock->numOffsets = yypvt[-2].condBlock->numOffsets;
+						memcpy(psCondBlock->aOffsets, scr_yypvt[-2].condBlock->aOffsets,
+							   scr_yypvt[-2].condBlock->numOffsets * sizeof(SDWORD));
+						psCondBlock->numOffsets = scr_yypvt[-2].condBlock->numOffsets;
 
 						
-						PUT_DEBUG(psCondBlock, yypvt[-2].condBlock);
-						APPEND_DEBUG(psCondBlock, yypvt[-2].condBlock->size / sizeof(UDWORD), yypvt[0].condBlock);
+						PUT_DEBUG(psCondBlock, scr_yypvt[-2].condBlock);
+						APPEND_DEBUG(psCondBlock, scr_yypvt[-2].condBlock->size / sizeof(UDWORD), scr_yypvt[0].condBlock);
 
 						
-						FREE_DEBUG(yypvt[-2].condBlock);
-						FREE_DEBUG(yypvt[0].condBlock);
-						FREE_CONDBLOCK(yypvt[-2].condBlock);
-						FREE_CONDBLOCK(yypvt[0].condBlock);
+						FREE_DEBUG(scr_yypvt[-2].condBlock);
+						FREE_DEBUG(scr_yypvt[0].condBlock);
+						FREE_CONDBLOCK(scr_yypvt[-2].condBlock);
+						FREE_CONDBLOCK(scr_yypvt[0].condBlock);
 
 						
 						codeRet = scriptCodeConditional(psCondBlock, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
-						yyval.cblock = psCurrBlock;
+						scr_yyval.cblock = psCurrBlock;
 					
 } break;
 
 case YYr79: {	/* cond_clause_list :  cond_clause */
 
-						yyval.condBlock = yypvt[0].condBlock;
+						scr_yyval.condBlock = scr_yypvt[0].condBlock;
 					
 } break;
 
 case YYr80: {	/* cond_clause_list :  cond_clause_list ELSE cond_clause */
 
 						ALLOC_CONDBLOCK(psCondBlock,
-										yypvt[-2].condBlock->numOffsets + yypvt[0].condBlock->numOffsets,
-										yypvt[-2].condBlock->size + yypvt[0].condBlock->size);
-						ALLOC_DEBUG(psCondBlock, yypvt[-2].condBlock->debugEntries + yypvt[0].condBlock->debugEntries);
+										scr_yypvt[-2].condBlock->numOffsets + scr_yypvt[0].condBlock->numOffsets,
+										scr_yypvt[-2].condBlock->size + scr_yypvt[0].condBlock->size);
+						ALLOC_DEBUG(psCondBlock, scr_yypvt[-2].condBlock->debugEntries + scr_yypvt[0].condBlock->debugEntries);
 						ip = psCondBlock->pCode;
 
 						
-						PUT_BLOCK(ip, yypvt[-2].condBlock);
-						PUT_BLOCK(ip, yypvt[0].condBlock);
+						PUT_BLOCK(ip, scr_yypvt[-2].condBlock);
+						PUT_BLOCK(ip, scr_yypvt[0].condBlock);
 
 						
-						memcpy(psCondBlock->aOffsets, yypvt[-2].condBlock->aOffsets,
-							   yypvt[-2].condBlock->numOffsets * sizeof(SDWORD));
-						psCondBlock->aOffsets[yypvt[-2].condBlock->numOffsets] =
-							yypvt[0].condBlock->aOffsets[0] + yypvt[-2].condBlock->size / sizeof(UDWORD);
-						psCondBlock->numOffsets = yypvt[-2].condBlock->numOffsets + 1;
+						memcpy(psCondBlock->aOffsets, scr_yypvt[-2].condBlock->aOffsets,
+							   scr_yypvt[-2].condBlock->numOffsets * sizeof(SDWORD));
+						psCondBlock->aOffsets[scr_yypvt[-2].condBlock->numOffsets] =
+							scr_yypvt[0].condBlock->aOffsets[0] + scr_yypvt[-2].condBlock->size / sizeof(UDWORD);
+						psCondBlock->numOffsets = scr_yypvt[-2].condBlock->numOffsets + 1;
 
 						
-						PUT_DEBUG(psCondBlock, yypvt[-2].condBlock);
-						APPEND_DEBUG(psCondBlock, yypvt[-2].condBlock->size / sizeof(UDWORD), yypvt[0].condBlock);
+						PUT_DEBUG(psCondBlock, scr_yypvt[-2].condBlock);
+						APPEND_DEBUG(psCondBlock, scr_yypvt[-2].condBlock->size / sizeof(UDWORD), scr_yypvt[0].condBlock);
 
 						
-						FREE_DEBUG(yypvt[-2].condBlock);
-						FREE_DEBUG(yypvt[0].condBlock);
-						FREE_CONDBLOCK(yypvt[-2].condBlock);
-						FREE_CONDBLOCK(yypvt[0].condBlock);
+						FREE_DEBUG(scr_yypvt[-2].condBlock);
+						FREE_DEBUG(scr_yypvt[0].condBlock);
+						FREE_CONDBLOCK(scr_yypvt[-2].condBlock);
+						FREE_CONDBLOCK(scr_yypvt[0].condBlock);
 
-						yyval.condBlock = psCondBlock;
+						scr_yyval.condBlock = psCondBlock;
 					
 } break;
 
 case YYr81: {	/* terminal_cond :  '{' statement_list '}' */
 
 						
-						ALLOC_CONDBLOCK(psCondBlock, 1, yypvt[-1].cblock->size);
-						ALLOC_DEBUG(psCondBlock, yypvt[-1].cblock->debugEntries);
+						ALLOC_CONDBLOCK(psCondBlock, 1, scr_yypvt[-1].cblock->size);
+						ALLOC_DEBUG(psCondBlock, scr_yypvt[-1].cblock->debugEntries);
 						ip = psCondBlock->pCode;
 
 						
-						PUT_DEBUG(psCondBlock, yypvt[-1].cblock);
+						PUT_DEBUG(psCondBlock, scr_yypvt[-1].cblock);
 
 						
-						PUT_BLOCK(ip, yypvt[-1].cblock);
-						FREE_DEBUG(yypvt[-1].cblock);
-						FREE_BLOCK(yypvt[-1].cblock);
+						PUT_BLOCK(ip, scr_yypvt[-1].cblock);
+						FREE_DEBUG(scr_yypvt[-1].cblock);
+						FREE_BLOCK(scr_yypvt[-1].cblock);
 
-						yyval.condBlock = psCondBlock;
+						scr_yyval.condBlock = psCondBlock;
 					
 } break;
 
@@ -4550,18 +4550,18 @@ case YYr83: {	/* cond_clause :  IF '(' boolexp ')' $82 '{' statement_list '}' */
 
 						
 						ALLOC_CONDBLOCK(psCondBlock, 1,
-										yypvt[-5].cblock->size + yypvt[-1].cblock->size + 
+										scr_yypvt[-5].cblock->size + scr_yypvt[-1].cblock->size + 
 										sizeof(OPCODE)*2);
-						ALLOC_DEBUG(psCondBlock, yypvt[-1].cblock->debugEntries + 1);
+						ALLOC_DEBUG(psCondBlock, scr_yypvt[-1].cblock->debugEntries + 1);
 						ip = psCondBlock->pCode;
 
 						
-						PUT_BLOCK(ip, yypvt[-5].cblock);
-						FREE_BLOCK(yypvt[-5].cblock);
+						PUT_BLOCK(ip, scr_yypvt[-5].cblock);
+						FREE_BLOCK(scr_yypvt[-5].cblock);
 
 						
 						
-						PUT_PKOPCODE(ip, OP_JUMPFALSE, (yypvt[-1].cblock->size / sizeof(UDWORD)) + 2);
+						PUT_PKOPCODE(ip, OP_JUMPFALSE, (scr_yypvt[-1].cblock->size / sizeof(UDWORD)) + 2);
 
 						
 						if (genDebugInfo)
@@ -4569,13 +4569,13 @@ case YYr83: {	/* cond_clause :  IF '(' boolexp ')' $82 '{' statement_list '}' */
 							psCondBlock->debugEntries = 1;
 							psCondBlock->psDebug->line = debugLine;
 							psCondBlock->psDebug->offset = 0;
-							APPEND_DEBUG(psCondBlock, ip - psCondBlock->pCode, yypvt[-1].cblock);
+							APPEND_DEBUG(psCondBlock, ip - psCondBlock->pCode, scr_yypvt[-1].cblock);
 						}
 
 						
-						PUT_BLOCK(ip, yypvt[-1].cblock);
-						FREE_DEBUG(yypvt[-1].cblock);
-						FREE_BLOCK(yypvt[-1].cblock);
+						PUT_BLOCK(ip, scr_yypvt[-1].cblock);
+						FREE_DEBUG(scr_yypvt[-1].cblock);
+						FREE_BLOCK(scr_yypvt[-1].cblock);
 
 						
 						psCondBlock->aOffsets[0] = ip - psCondBlock->pCode;
@@ -4587,7 +4587,7 @@ case YYr83: {	/* cond_clause :  IF '(' boolexp ')' $82 '{' statement_list '}' */
 						
 						PUT_PKOPCODE(ip, OP_JUMP, 0);
 
-						yyval.condBlock = psCondBlock;
+						scr_yyval.condBlock = psCondBlock;
 					
 } break;
 
@@ -4604,17 +4604,17 @@ case YYr84: {	/* loop :  WHILE '(' boolexp ')' */
 case YYr85: {	/* loop :  WHILE '(' boolexp ')' $84 '{' statement_list '}' */
 
 
-					ALLOC_BLOCK(psCurrBlock, yypvt[-5].cblock->size + yypvt[-1].cblock->size + sizeof(OPCODE) * 2);
-					ALLOC_DEBUG(psCurrBlock, yypvt[-1].cblock->debugEntries + 1);
+					ALLOC_BLOCK(psCurrBlock, scr_yypvt[-5].cblock->size + scr_yypvt[-1].cblock->size + sizeof(OPCODE) * 2);
+					ALLOC_DEBUG(psCurrBlock, scr_yypvt[-1].cblock->debugEntries + 1);
 					ip = psCurrBlock->pCode;
 
 					
-					PUT_BLOCK(ip, yypvt[-5].cblock);
-					FREE_BLOCK(yypvt[-5].cblock);
+					PUT_BLOCK(ip, scr_yypvt[-5].cblock);
+					FREE_BLOCK(scr_yypvt[-5].cblock);
 
 					
 					
-					PUT_PKOPCODE(ip, OP_JUMPFALSE, (yypvt[-1].cblock->size / sizeof(UDWORD)) + 2);
+					PUT_PKOPCODE(ip, OP_JUMPFALSE, (scr_yypvt[-1].cblock->size / sizeof(UDWORD)) + 2);
 
 					
 					if (genDebugInfo)
@@ -4622,135 +4622,135 @@ case YYr85: {	/* loop :  WHILE '(' boolexp ')' $84 '{' statement_list '}' */
 						psCurrBlock->debugEntries = 1;
 						psCurrBlock->psDebug->line = debugLine;
 						psCurrBlock->psDebug->offset = 0;
-						APPEND_DEBUG(psCurrBlock, ip - psCurrBlock->pCode, yypvt[-1].cblock);
+						APPEND_DEBUG(psCurrBlock, ip - psCurrBlock->pCode, scr_yypvt[-1].cblock);
 					}
 
 					
-					PUT_BLOCK(ip, yypvt[-1].cblock);
-					FREE_DEBUG(yypvt[-1].cblock);
-					FREE_BLOCK(yypvt[-1].cblock);
+					PUT_BLOCK(ip, scr_yypvt[-1].cblock);
+					FREE_DEBUG(scr_yypvt[-1].cblock);
+					FREE_BLOCK(scr_yypvt[-1].cblock);
 
 					
 					PUT_PKOPCODE(ip, OP_JUMP, (SWORD)( -(SWORD)(psCurrBlock->size / sizeof(UDWORD)) + 1));
 
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr86: {	/* expression :  expression '+' expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_ADD, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_ADD, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr87: {	/* expression :  expression '-' expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_SUB, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_SUB, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr88: {	/* expression :  expression '*' expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_MUL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_MUL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr89: {	/* expression :  expression '/' expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_DIV, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_DIV, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr90: {	/* expression :  '-' expression */
 
-					ALLOC_BLOCK(psCurrBlock, yypvt[0].cblock->size + sizeof(OPCODE));
+					ALLOC_BLOCK(psCurrBlock, scr_yypvt[0].cblock->size + sizeof(OPCODE));
 					ip = psCurrBlock->pCode;
 
 					
-					PUT_BLOCK(ip, yypvt[0].cblock);
+					PUT_BLOCK(ip, scr_yypvt[0].cblock);
 
 					
 					PUT_PKOPCODE(ip, OP_UNARYOP, OP_NEG);
 
 					
-					FREE_BLOCK(yypvt[0].cblock);
+					FREE_BLOCK(scr_yypvt[0].cblock);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr91: {	/* expression :  '(' expression ')' */
 
 					
-					yyval.cblock = yypvt[-1].cblock;
+					scr_yyval.cblock = scr_yypvt[-1].cblock;
 				
 } break;
 
 case YYr92: {	/* expression :  NUM_FUNC '(' param_list ')' */
 
 					
-					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
+					codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, TRUE, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr93: {	/* expression :  NUM_VAR */
 
-					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
+					codeRet = scriptCodeVarGet(scr_yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr94: {	/* expression :  NUM_CONSTANT */
 
-					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
+					codeRet = scriptCodeConstant(scr_yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr95: {	/* expression :  num_objvar */
 
-					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
+					codeRet = scriptCodeObjGet(scr_yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr96: {	/* expression :  num_array_var */
 
-					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
+					codeRet = scriptCodeArrayGet(scr_yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
@@ -4761,127 +4761,127 @@ case YYr97: {	/* expression :  INTEGER */
 
 					
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_INT);
-					PUT_DATA(ip, yypvt[0].ival);
+					PUT_DATA(ip, scr_yypvt[0].ival);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr98: {	/* boolexp :  boolexp _AND boolexp */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_AND, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_AND, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr99: {	/* boolexp :  boolexp _OR boolexp */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_OR, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_OR, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr100: {	/* boolexp :  boolexp BOOLEQUAL boolexp */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr101: {	/* boolexp :  boolexp NOTEQUAL boolexp */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr102: {	/* boolexp :  _NOT boolexp */
 
-					ALLOC_BLOCK(psCurrBlock, yypvt[0].cblock->size + sizeof(OPCODE));
+					ALLOC_BLOCK(psCurrBlock, scr_yypvt[0].cblock->size + sizeof(OPCODE));
 					ip = psCurrBlock->pCode;
 
 					
-					PUT_BLOCK(ip, yypvt[0].cblock);
+					PUT_BLOCK(ip, scr_yypvt[0].cblock);
 
 					
 					PUT_PKOPCODE(ip, OP_UNARYOP, OP_NOT);
 
 					
-					FREE_BLOCK(yypvt[0].cblock);
+					FREE_BLOCK(scr_yypvt[0].cblock);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr103: {	/* boolexp :  '(' boolexp ')' */
 
 					
-					yyval.cblock = yypvt[-1].cblock;
+					scr_yyval.cblock = scr_yypvt[-1].cblock;
 				
 } break;
 
 case YYr104: {	/* boolexp :  BOOL_FUNC '(' param_list ')' */
 
 					
-					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
+					codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, TRUE, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr105: {	/* boolexp :  BOOL_VAR */
 
-					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
+					codeRet = scriptCodeVarGet(scr_yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr106: {	/* boolexp :  BOOL_CONSTANT */
 
-					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
+					codeRet = scriptCodeConstant(scr_yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr107: {	/* boolexp :  bool_objvar */
 
-					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
+					codeRet = scriptCodeObjGet(scr_yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr108: {	/* boolexp :  bool_array_var */
 
-					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
+					codeRet = scriptCodeArrayGet(scr_yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
@@ -4892,180 +4892,180 @@ case YYr109: {	/* boolexp :  BOOLEAN */
 
 					
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_BOOL);
-					PUT_DATA(ip, yypvt[0].bval);
+					PUT_DATA(ip, scr_yypvt[0].bval);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr110: {	/* boolexp :  expression BOOLEQUAL expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr111: {	/* boolexp :  userexp BOOLEQUAL userexp */
 
-					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
+					if (!interpCheckEquiv(scr_yypvt[-2].cblock->type,scr_yypvt[0].cblock->type))
 					{
 						scr_error("Type mismatch for equality");
 						YYABORT;
 					}
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr112: {	/* boolexp :  objexp BOOLEQUAL objexp */
 
-					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
+					if (!interpCheckEquiv(scr_yypvt[-2].cblock->type,scr_yypvt[0].cblock->type))
 					{
 						scr_error("Type mismatch for equality");
 						YYABORT;
 					}
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_EQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr113: {	/* boolexp :  expression NOTEQUAL expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr114: {	/* boolexp :  userexp NOTEQUAL userexp */
 
-					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
+					if (!interpCheckEquiv(scr_yypvt[-2].cblock->type,scr_yypvt[0].cblock->type))
 					{
 						scr_error("Type mismatch for inequality");
 						YYABORT;
 					}
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr115: {	/* boolexp :  objexp NOTEQUAL objexp */
 
-					if (!interpCheckEquiv(yypvt[-2].cblock->type,yypvt[0].cblock->type))
+					if (!interpCheckEquiv(scr_yypvt[-2].cblock->type,scr_yypvt[0].cblock->type))
 					{
 						scr_error("Type mismatch for inequality");
 						YYABORT;
 					}
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr116: {	/* boolexp :  expression LESSEQUAL expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_LESSEQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_LESSEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr117: {	/* boolexp :  expression GREATEQUAL expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_GREATEREQUAL, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_GREATEREQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr118: {	/* boolexp :  expression GREATER expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_GREATER, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_GREATER, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr119: {	/* boolexp :  expression LESS expression */
 
-					codeRet = scriptCodeBinaryOperator(yypvt[-2].cblock, yypvt[0].cblock, OP_LESS, &psCurrBlock);
+					codeRet = scriptCodeBinaryOperator(scr_yypvt[-2].cblock, scr_yypvt[0].cblock, OP_LESS, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr120: {	/* userexp :  VAR */
 
-					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
+					codeRet = scriptCodeVarGet(scr_yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr121: {	/* userexp :  USER_CONSTANT */
 
-					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
+					codeRet = scriptCodeConstant(scr_yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr122: {	/* userexp :  user_objvar */
 
-					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
+					codeRet = scriptCodeObjGet(scr_yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr123: {	/* userexp :  user_array_var */
 
-					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
+					codeRet = scriptCodeArrayGet(scr_yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr124: {	/* userexp :  USER_FUNC '(' param_list ')' */
 
 					
-					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
+					codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, TRUE, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
@@ -5076,12 +5076,12 @@ case YYr125: {	/* userexp :  TRIG_SYM */
 
 					
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_TRIGGER);
-					PUT_DATA(ip, yypvt[0].tSymbol->index);
+					PUT_DATA(ip, scr_yypvt[0].tSymbol->index);
 
 					psCurrBlock->type = VAL_TRIGGER;
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
@@ -5097,7 +5097,7 @@ case YYr126: {	/* userexp :  INACTIVE */
 					psCurrBlock->type = VAL_TRIGGER;
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
@@ -5108,197 +5108,197 @@ case YYr127: {	/* userexp :  EVENT_SYM */
 
 					
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_EVENT);
-					PUT_DATA(ip, yypvt[0].eSymbol->index);
+					PUT_DATA(ip, scr_yypvt[0].eSymbol->index);
 
 					psCurrBlock->type = VAL_EVENT;
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr128: {	/* objexp :  OBJ_VAR */
 
-					codeRet = scriptCodeVarGet(yypvt[0].vSymbol, &psCurrBlock);
+					codeRet = scriptCodeVarGet(scr_yypvt[0].vSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr129: {	/* objexp :  OBJ_CONSTANT */
 
-					codeRet = scriptCodeConstant(yypvt[0].cSymbol, &psCurrBlock);
+					codeRet = scriptCodeConstant(scr_yypvt[0].cSymbol, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr130: {	/* objexp :  OBJ_FUNC '(' param_list ')' */
 
 					
-					codeRet = scriptCodeFunction(yypvt[-3].fSymbol, yypvt[-1].pblock, TRUE, &psCurrBlock);
+					codeRet = scriptCodeFunction(scr_yypvt[-3].fSymbol, scr_yypvt[-1].pblock, TRUE, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr131: {	/* objexp :  obj_objvar */
 
-					codeRet = scriptCodeObjGet(yypvt[0].objVarBlock, &psCurrBlock);
+					codeRet = scriptCodeObjGet(scr_yypvt[0].objVarBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr132: {	/* objexp :  obj_array_var */
 
-					codeRet = scriptCodeArrayGet(yypvt[0].arrayBlock, &psCurrBlock);
+					codeRet = scriptCodeArrayGet(scr_yypvt[0].arrayBlock, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					
-					yyval.cblock = psCurrBlock;
+					scr_yyval.cblock = psCurrBlock;
 				
 } break;
 
 case YYr133: {	/* objexp_dot :  objexp '.' */
 
 					// Store the object type for the variable lookup
-					objVarContext = yypvt[-1].cblock->type;
+					objVarContext = scr_yypvt[-1].cblock->type;
 				
 } break;
 
 case YYr134: {	/* num_objvar :  objexp_dot NUM_OBJVAR */
 
-					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
+					codeRet = scriptCodeObjectVariable(scr_yypvt[-1].cblock, scr_yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					// reset the object type
 					objVarContext = 0;
 
 					
-					yyval.objVarBlock = psObjVarBlock;
+					scr_yyval.objVarBlock = psObjVarBlock;
 				
 } break;
 
 case YYr135: {	/* bool_objvar :  objexp_dot BOOL_OBJVAR */
 
-					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
+					codeRet = scriptCodeObjectVariable(scr_yypvt[-1].cblock, scr_yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					// reset the object type
 					objVarContext = 0;
 
 					
-					yyval.objVarBlock = psObjVarBlock;
+					scr_yyval.objVarBlock = psObjVarBlock;
 				
 } break;
 
 case YYr136: {	/* user_objvar :  objexp_dot USER_OBJVAR */
 
-					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
+					codeRet = scriptCodeObjectVariable(scr_yypvt[-1].cblock, scr_yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					// reset the object type
 					objVarContext = 0;
 
 					
-					yyval.objVarBlock = psObjVarBlock;
+					scr_yyval.objVarBlock = psObjVarBlock;
 				
 } break;
 
 case YYr137: {	/* obj_objvar :  objexp_dot OBJ_OBJVAR */
 
-					codeRet = scriptCodeObjectVariable(yypvt[-1].cblock, yypvt[0].vSymbol, &psObjVarBlock);
+					codeRet = scriptCodeObjectVariable(scr_yypvt[-1].cblock, scr_yypvt[0].vSymbol, &psObjVarBlock);
 					CHECK_CODE_ERROR(codeRet);
 
 					// reset the object type
 					objVarContext = 0;
 
 					
-					yyval.objVarBlock = psObjVarBlock;
+					scr_yyval.objVarBlock = psObjVarBlock;
 				
 } break;
 
 case YYr138: {	/* array_index :  '[' expression ']' */
 
-						ALLOC_ARRAYBLOCK(psCurrArrayBlock, yypvt[-1].cblock->size, NULL);
+						ALLOC_ARRAYBLOCK(psCurrArrayBlock, scr_yypvt[-1].cblock->size, NULL);
 						ip = psCurrArrayBlock->pCode;
 
 						
-						PUT_BLOCK(ip, yypvt[-1].cblock);
-						FREE_BLOCK(yypvt[-1].cblock);
+						PUT_BLOCK(ip, scr_yypvt[-1].cblock);
+						FREE_BLOCK(scr_yypvt[-1].cblock);
 
-						yyval.arrayBlock = psCurrArrayBlock;
+						scr_yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
 
 case YYr139: {	/* array_index_list :  array_index */
 
-						yyval.arrayBlock = yypvt[0].arrayBlock;
+						scr_yyval.arrayBlock = scr_yypvt[0].arrayBlock;
 					
 } break;
 
 case YYr140: {	/* array_index_list :  array_index_list '[' expression ']' */
 
-						ALLOC_ARRAYBLOCK(psCurrArrayBlock, yypvt[-3].arrayBlock->size + yypvt[-1].cblock->size, NULL);
+						ALLOC_ARRAYBLOCK(psCurrArrayBlock, scr_yypvt[-3].arrayBlock->size + scr_yypvt[-1].cblock->size, NULL);
 						ip = psCurrArrayBlock->pCode;
 
 						
-						psCurrArrayBlock->dimensions = yypvt[-3].arrayBlock->dimensions + 1;
-						PUT_BLOCK(ip, yypvt[-3].arrayBlock);
-						PUT_BLOCK(ip, yypvt[-1].cblock);
-						FREE_ARRAYBLOCK(yypvt[-3].arrayBlock);
-						FREE_ARRAYBLOCK(yypvt[-1].cblock);
+						psCurrArrayBlock->dimensions = scr_yypvt[-3].arrayBlock->dimensions + 1;
+						PUT_BLOCK(ip, scr_yypvt[-3].arrayBlock);
+						PUT_BLOCK(ip, scr_yypvt[-1].cblock);
+						FREE_ARRAYBLOCK(scr_yypvt[-3].arrayBlock);
+						FREE_ARRAYBLOCK(scr_yypvt[-1].cblock);
 
-						yyval.arrayBlock = psCurrArrayBlock;
+						scr_yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
 
 case YYr141: {	/* num_array_var :  NUM_ARRAY array_index_list */
 
-						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
+						codeRet = scriptCodeArrayVariable(scr_yypvt[0].arrayBlock, scr_yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.arrayBlock = psCurrArrayBlock;
+						scr_yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
 
 case YYr142: {	/* bool_array_var :  BOOL_ARRAY array_index_list */
 
-						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
+						codeRet = scriptCodeArrayVariable(scr_yypvt[0].arrayBlock, scr_yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.arrayBlock = psCurrArrayBlock;
+						scr_yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
 
 case YYr143: {	/* obj_array_var :  OBJ_ARRAY array_index_list */
 
-						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
+						codeRet = scriptCodeArrayVariable(scr_yypvt[0].arrayBlock, scr_yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.arrayBlock = psCurrArrayBlock;
+						scr_yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
 
 case YYr144: {	/* user_array_var :  VAR_ARRAY array_index_list */
 
-						codeRet = scriptCodeArrayVariable(yypvt[0].arrayBlock, yypvt[-1].vSymbol, &psCurrArrayBlock);
+						codeRet = scriptCodeArrayVariable(scr_yypvt[0].arrayBlock, scr_yypvt[-1].vSymbol, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
 
 						
-						yyval.arrayBlock = psCurrArrayBlock;
+						scr_yyval.arrayBlock = psCurrArrayBlock;
 					
 } break;
 	case YYrACCEPT:
@@ -5328,7 +5328,7 @@ yyerrlabel:	;		/* come here from YYERROR	*/
 /*
 #pragma used yyerrlabel
  */
-	yyerrflag = 1;
+	scr_yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--;
 		yypv--;
@@ -5338,22 +5338,22 @@ yyerrlabel:	;		/* come here from YYERROR	*/
 	}
 
 yyError:
-	switch (yyerrflag) {
+	switch (scr_yyerrflag) {
 
 	case 0:		/* new error */
-		yynerrs++;
+		scr_yynerrs++;
 		yyi = scr_char;
 		scr_error(m_textmsg(4969, "Syntax error", "E"));
 		if (yyi != scr_char) {
 			/* user has changed the current token */
 			/* try again */
-			yyerrflag++;	/* avoid loops */
+			scr_yyerrflag++;	/* avoid loops */
 			goto yyEncore;
 		}
 
 	case 1:		/* partially recovered */
 	case 2:
-		yyerrflag = 3;	/* need 3 valid shifts to recover */
+		scr_yyerrflag = 3;	/* need 3 valid shifts to recover */
 			
 		/*
 		 *	Pop states, looking for a
@@ -5411,11 +5411,11 @@ yyError:
 #ifdef YYALLOC
 yyReturn:
 	scr_lval = save_yylval;
-	yyval = save_yyval;
-	yypvt = save_yypvt;
+	scr_yyval = save_scr_yyval;
+	scr_yypvt = save_scr_yypvt;
 	scr_char = save_yychar;
-	yyerrflag = save_yyerrflag;
-	yynerrs = save_yynerrs;
+	scr_yyerrflag = save_scr_yyerrflag;
+	scr_yynerrs = save_scr_yynerrs;
 	free((char *)yys);
 	free((char *)yyv);
 #if YYDEBUG

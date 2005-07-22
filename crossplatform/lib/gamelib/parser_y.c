@@ -80,7 +80,7 @@ typedef union {
 #define AUDIO_MODULE	269
 #define ANIM_MODULE	270
 #define ANIMOBJECT	271
-extern int audp_char, yyerrflag;
+extern int audp_char, audp_yyerrflag;
 extern YYSTYPE audp_lval;
 #if YYDEBUG
 enum YY_Types { YY_t_NoneDefined, YY_t_fval, YY_t_ival, YY_t_sval
@@ -372,7 +372,7 @@ extern void yyShowRead YY_ARGS((int));
  * with a return value of -1
  */
 #define YY_TRACE(fn) { \
-	yyx.state = yystate; yyx.lookahead = audp_char; yyx.errflag =yyerrflag; \
+	yyx.state = yystate; yyx.lookahead = audp_char; yyx.errflag =audp_yyerrflag; \
 	yyx.states = yys+1; yyx.nstates = yyps-yys; \
 	yyx.values = yyv+1; yyx.nvalues = yypv-yyv; \
 	yyx.types = yytypev+1; yyx.done = 0; \
@@ -401,7 +401,7 @@ int yysinc = -1; /* stack size increment, <0 = double, 0 = none, >0 = fixed */
 int yyssize = YYSSIZE;
 #endif
 
-#define yyerrok		yyerrflag = 0
+#define yyerrok		audp_yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (audp_debug) yyShowRead(-1); audp_char = -1; }
 #else
@@ -409,7 +409,7 @@ int yyssize = YYSSIZE;
 #endif
 #define YYACCEPT	YYRETURN(0)
 #define YYABORT		YYRETURN(1)
-#define YYRECOVERING()	(yyerrflag != 0)
+#define YYRECOVERING()	(audp_yyerrflag != 0)
 #ifdef YYALLOC
 #define YYRETURN(val)	{ retval = (val); goto yyReturn; }
 #else
@@ -445,13 +445,13 @@ int yyssize = YYSSIZE;
  */
 #define	yyneg(s)	(-((s)+1))
 
-YYSTYPE	yyval;				/* $ */
-YYSTYPE	*yypvt;				/* $n */
+YYSTYPE	audp_yyval;				/* $ */
+YYSTYPE	*audp_yypvt;				/* $n */
 YYSTYPE	audp_lval;				/* audp_lex() sets this */
 
 int	audp_char,				/* current token */
-	yyerrflag,			/* error flag */
-	yynerrs;			/* error count */
+	audp_yyerrflag,			/* error flag */
+	audp_yynerrs;			/* error count */
 
 #if YYDEBUG
 int audp_debug = 0;		/* debug if this flag is set */
@@ -643,9 +643,9 @@ int audp_parse()
 	short	*yytypev;
 #endif
 	YYSTYPE save_yylval;
-	YYSTYPE save_yyval;
-	YYSTYPE *save_yypvt;
-	int save_yychar, save_yyerrflag, save_yynerrs;
+	YYSTYPE save_audp_yyval;
+	YYSTYPE *save_audp_yypvt;
+	int save_yychar, save_audp_yyerrflag, save_audp_yynerrs;
 	int retval; 			/* return value holder */
 #else
 	short		yys[YYSSIZE + 1];
@@ -685,15 +685,15 @@ int audp_parse()
 		return 1;
 	}
 	save_yylval = audp_lval;
-	save_yyval = yyval;
-	save_yypvt = yypvt;
+	save_audp_yyval = audp_yyval;
+	save_audp_yypvt = audp_yypvt;
 	save_yychar = audp_char;
-	save_yyerrflag = yyerrflag;
-	save_yynerrs = yynerrs;
+	save_audp_yyerrflag = audp_yyerrflag;
+	save_audp_yynerrs = audp_yynerrs;
 #endif
 
-	yynerrs = 0;
-	yyerrflag = 0;
+	audp_yynerrs = 0;
+	audp_yyerrflag = 0;
 	yyclearin;
 	yyps = yys;
 	yypv = yyv;
@@ -753,7 +753,7 @@ yyStack:
 	}
 #endif /* !YYDYNAMIC */
 	*yyps = yystate;	/* stack current state */
-	*++yypv = yyval;	/* ... and value */
+	*++yypv = audp_yyval;	/* ... and value */
 #if YYDEBUG
 	*++yytp = yyruletype;	/* ... and type */
 
@@ -793,10 +793,10 @@ yyEncore:
 					YY_TRACE(yyShowShift)
 				}
 #endif
-				yyval = audp_lval;	/* stack what audp_lex() set */
+				audp_yyval = audp_lval;	/* stack what audp_lex() set */
 				yyclearin;		/* clear token */
-				if (yyerrflag)
-					yyerrflag--;	/* successful shift */
+				if (audp_yyerrflag)
+					audp_yyerrflag--;	/* successful shift */
 				goto yyStack;
 			}
 		}
@@ -840,9 +840,9 @@ yyEncore:
 	yytp -= yyj;
 #endif
 	yyps -= yyj;		/* pop stacks */
-	yypvt = yypv;		/* save top */
+	audp_yypvt = yypv;		/* save top */
 	yypv -= yyj;
-	yyval = yypv[1];	/* default action $ = $1 */
+	audp_yyval = yypv[1];	/* default action $ = $1 */
 #if YYDEBUG
 	yyruletype = yyRules[yyrmap[yyi]].type;
 #endif
@@ -850,23 +850,23 @@ yyEncore:
 	switch (yyi) {		/* perform semantic action */
 		
 case YYr12: {	/* audio_track :  AUDIO QTEXT LOOP INTEGER INTEGER INTEGER */
-							audio_SetTrackVals( yypvt[-4].sval, TRUE, &g_iDummy, yypvt[-2].ival, yypvt[-1].ival, yypvt[0].ival, 0 );
+							audio_SetTrackVals( audp_yypvt[-4].sval, TRUE, &g_iDummy, audp_yypvt[-2].ival, audp_yypvt[-1].ival, audp_yypvt[0].ival, 0 );
 } break;
 
 case YYr13: {	/* audio_track :  AUDIO QTEXT ONESHOT INTEGER INTEGER INTEGER */
-							audio_SetTrackVals( yypvt[-4].sval, FALSE, &g_iDummy, yypvt[-2].ival, yypvt[-1].ival, yypvt[0].ival, 0 );
+							audio_SetTrackVals( audp_yypvt[-4].sval, FALSE, &g_iDummy, audp_yypvt[-2].ival, audp_yypvt[-1].ival, audp_yypvt[0].ival, 0 );
 } break;
 
 case YYr14: {	/* anim_module_header :  ANIM_MODULE "{" */
 } break;
 
 case YYr26: {	/* anim_config :  QTEXT INTEGER */
-							g_iCurAnimID = yypvt[0].ival;
-							anim_SetVals( yypvt[-1].sval, yypvt[0].ival );
+							g_iCurAnimID = audp_yypvt[0].ival;
+							anim_SetVals( audp_yypvt[-1].sval, audp_yypvt[0].ival );
 } break;
 
 case YYr27: {	/* anim_trans :  ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER */
-							anim_Create3D( yypvt[-3].sval, yypvt[-2].ival, yypvt[-1].ival, yypvt[0].ival, ANIM_3D_TRANS, g_iCurAnimID );
+							anim_Create3D( audp_yypvt[-3].sval, audp_yypvt[-2].ival, audp_yypvt[-1].ival, audp_yypvt[0].ival, ANIM_3D_TRANS, g_iCurAnimID );
 } break;
 
 case YYr28: {	/* anim_trans :  ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER $27 "{" anim_obj_list "}" */
@@ -874,7 +874,7 @@ case YYr28: {	/* anim_trans :  ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER $27 "{"
 } break;
 
 case YYr29: {	/* anim_frames :  ANIM3DFRAMES QTEXT INTEGER INTEGER */
-							anim_Create3D( yypvt[-2].sval, yypvt[-1].ival, yypvt[0].ival, 1, ANIM_3D_FRAMES, g_iCurAnimID );
+							anim_Create3D( audp_yypvt[-2].sval, audp_yypvt[-1].ival, audp_yypvt[0].ival, 1, ANIM_3D_FRAMES, g_iCurAnimID );
 } break;
 
 case YYr30: {	/* anim_frames :  ANIM3DFRAMES QTEXT INTEGER INTEGER $29 "{" */
@@ -895,16 +895,16 @@ case YYr35: {	/* anim_obj :  ANIMOBJECT INTEGER QTEXT "{" $34 anim_script "}" */
 } break;
 
 case YYr38: {	/* anim_state :  INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER */
-							vecPos.x   = yypvt[-8].ival;
-							vecPos.y   = yypvt[-7].ival;
-							vecPos.z   = yypvt[-6].ival;
-							vecRot.x   = yypvt[-5].ival;
-							vecRot.y   = yypvt[-4].ival;
-							vecRot.z   = yypvt[-3].ival;
-							vecScale.x = yypvt[-2].ival;
-							vecScale.y = yypvt[-1].ival;
-							vecScale.z = yypvt[0].ival;
-							anim_AddFrameToAnim( yypvt[-9].ival, vecPos, vecRot, vecScale );
+							vecPos.x   = audp_yypvt[-8].ival;
+							vecPos.y   = audp_yypvt[-7].ival;
+							vecPos.z   = audp_yypvt[-6].ival;
+							vecRot.x   = audp_yypvt[-5].ival;
+							vecRot.y   = audp_yypvt[-4].ival;
+							vecRot.z   = audp_yypvt[-3].ival;
+							vecScale.x = audp_yypvt[-2].ival;
+							vecScale.y = audp_yypvt[-1].ival;
+							vecScale.z = audp_yypvt[0].ival;
+							anim_AddFrameToAnim( audp_yypvt[-9].ival, vecPos, vecRot, vecScale );
 } break;
 	case YYrACCEPT:
 		YYACCEPT;
@@ -932,7 +932,7 @@ case YYr38: {	/* anim_state :  INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER I
 /*
 #pragma used yyerrlabel
  */
-	yyerrflag = 1;
+	audp_yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--;
 		yypv--;
@@ -942,22 +942,22 @@ case YYr38: {	/* anim_state :  INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER I
 	}
 
 yyError:
-	switch (yyerrflag) {
+	switch (audp_yyerrflag) {
 
 	case 0:		/* new error */
-		yynerrs++;
+		audp_yynerrs++;
 		yyi = audp_char;
 		audp_error(m_textmsg(4969, "Syntax error", "E"));
 		if (yyi != audp_char) {
 			/* user has changed the current token */
 			/* try again */
-			yyerrflag++;	/* avoid loops */
+			audp_yyerrflag++;	/* avoid loops */
 			goto yyEncore;
 		}
 
 	case 1:		/* partially recovered */
 	case 2:
-		yyerrflag = 3;	/* need 3 valid shifts to recover */
+		audp_yyerrflag = 3;	/* need 3 valid shifts to recover */
 			
 		/*
 		 *	Pop states, looking for a
@@ -1015,11 +1015,11 @@ yyError:
 #ifdef YYALLOC
 yyReturn:
 	audp_lval = save_yylval;
-	yyval = save_yyval;
-	yypvt = save_yypvt;
+	audp_yyval = save_audp_yyval;
+	audp_yypvt = save_audp_yypvt;
 	audp_char = save_yychar;
-	yyerrflag = save_yyerrflag;
-	yynerrs = save_yynerrs;
+	audp_yyerrflag = save_audp_yyerrflag;
+	audp_yynerrs = save_audp_yynerrs;
 	free((char *)yys);
 	free((char *)yyv);
 #if YYDEBUG

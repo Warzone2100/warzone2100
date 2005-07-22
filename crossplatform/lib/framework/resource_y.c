@@ -86,7 +86,7 @@ typedef union {
 #define QTEXT	258
 #define DIRECTORY	259
 #define FILETOKEN	260
-extern int res_char, yyerrflag;
+extern int res_char, res_yyerrflag;
 extern YYSTYPE res_lval;
 #if YYDEBUG
 enum YY_Types { YY_t_NoneDefined, YY_t_sval
@@ -264,7 +264,7 @@ extern void yyShowRead YY_ARGS((int));
  * with a return value of -1
  */
 #define YY_TRACE(fn) { \
-	yyx.state = yystate; yyx.lookahead = res_char; yyx.errflag =yyerrflag; \
+	yyx.state = yystate; yyx.lookahead = res_char; yyx.errflag =res_yyerrflag; \
 	yyx.states = yys+1; yyx.nstates = yyps-yys; \
 	yyx.values = yyv+1; yyx.nvalues = yypv-yyv; \
 	yyx.types = yytypev+1; yyx.done = 0; \
@@ -293,7 +293,7 @@ int yysinc = -1; /* stack size increment, <0 = double, 0 = none, >0 = fixed */
 int yyssize = YYSSIZE;
 #endif
 
-#define yyerrok		yyerrflag = 0
+#define yyerrok		res_yyerrflag = 0
 #if YYDEBUG
 #define yyclearin	{ if (res_debug) yyShowRead(-1); res_char = -1; }
 #else
@@ -301,7 +301,7 @@ int yyssize = YYSSIZE;
 #endif
 #define YYACCEPT	YYRETURN(0)
 #define YYABORT		YYRETURN(1)
-#define YYRECOVERING()	(yyerrflag != 0)
+#define YYRECOVERING()	(res_yyerrflag != 0)
 #ifdef YYALLOC
 #define YYRETURN(val)	{ retval = (val); goto yyReturn; }
 #else
@@ -337,13 +337,13 @@ int yyssize = YYSSIZE;
  */
 #define	yyneg(s)	(-((s)+1))
 
-YYSTYPE	yyval;				/* $ */
-YYSTYPE	*yypvt;				/* $n */
+YYSTYPE	res_yyval;				/* $ */
+YYSTYPE	*res_yypvt;				/* $n */
 YYSTYPE	res_lval;				/* res_lex() sets this */
 
 int	res_char,				/* current token */
-	yyerrflag,			/* error flag */
-	yynerrs;			/* error count */
+	res_yyerrflag,			/* error flag */
+	res_yynerrs;			/* error count */
 
 #if YYDEBUG
 int res_debug = 0;		/* debug if this flag is set */
@@ -527,9 +527,9 @@ int res_parse()
 	short	*yytypev;
 #endif
 	YYSTYPE save_yylval;
-	YYSTYPE save_yyval;
-	YYSTYPE *save_yypvt;
-	int save_yychar, save_yyerrflag, save_yynerrs;
+	YYSTYPE save_res_yyval;
+	YYSTYPE *save_res_yypvt;
+	int save_yychar, save_res_yyerrflag, save_res_yynerrs;
 	int retval; 			/* return value holder */
 #else
 	short		yys[YYSSIZE + 1];
@@ -569,15 +569,15 @@ int res_parse()
 		return 1;
 	}
 	save_yylval = res_lval;
-	save_yyval = yyval;
-	save_yypvt = yypvt;
+	save_res_yyval = res_yyval;
+	save_res_yypvt = yypvt;
 	save_yychar = res_char;
-	save_yyerrflag = yyerrflag;
-	save_yynerrs = yynerrs;
+	save_res_yyerrflag = yyerrflag;
+	save_res_yynerrs = yynerrs;
 #endif
 
-	yynerrs = 0;
-	yyerrflag = 0;
+	res_yynerrs = 0;
+	res_yyerrflag = 0;
 	yyclearin;
 	yyps = yys;
 	yypv = yyv;
@@ -637,7 +637,7 @@ yyStack:
 	}
 #endif /* !YYDYNAMIC */
 	*yyps = yystate;	/* stack current state */
-	*++yypv = yyval;	/* ... and value */
+	*++yypv = res_yyval;	/* ... and value */
 #if YYDEBUG
 	*++yytp = yyruletype;	/* ... and type */
 
@@ -677,10 +677,10 @@ yyEncore:
 					YY_TRACE(yyShowShift)
 				}
 #endif
-				yyval = res_lval;	/* stack what res_lex() set */
+				res_yyval = res_lval;	/* stack what res_lex() set */
 				yyclearin;		/* clear token */
-				if (yyerrflag)
-					yyerrflag--;	/* successful shift */
+				if (res_yyerrflag)
+					res_yyerrflag--;	/* successful shift */
 				goto yyStack;
 			}
 		}
@@ -724,9 +724,9 @@ yyEncore:
 	yytp -= yyj;
 #endif
 	yyps -= yyj;		/* pop stacks */
-	yypvt = yypv;		/* save top */
+	res_yypvt = yypv;		/* save top */
 	yypv -= yyj;
-	yyval = yypv[1];	/* default action $ = $1 */
+	res_yyval = yypv[1];	/* default action $ = $1 */
 #if YYDEBUG
 	yyruletype = yyRules[yyrmap[yyi]].type;
 #endif
@@ -738,20 +738,20 @@ case YYr5: {	/* dir_line :  DIRECTORY QTEXT */
 											UDWORD len;
 
 											// set a new input directory
-											DBP0(("directory: %s\n", yypvt[0].sval));
-											if (yypvt[0].sval[1] == ':' ||
-												yypvt[0].sval[0] == '\\')
+											DBP0(("directory: %s\n", res_yypvt[0].sval));
+											if (res_yypvt[0].sval[1] == ':' ||
+												res_yypvt[0].sval[0] == '\\')
 											{
 												// the new dir is rooted
-												strcpy(aCurrResDir, yypvt[0].sval);
+												strcpy(aCurrResDir, res_yypvt[0].sval);
 											}
 											else
 											{
 												strcpy(aCurrResDir, aResDir);
 												strcpy(aCurrResDir + strlen(aResDir),
-													   yypvt[0].sval);
+													   res_yypvt[0].sval);
 											}
-											if (strlen(yypvt[0].sval) > 0)
+											if (strlen(res_yypvt[0].sval) > 0)
 											{
 												// Add a trailing '\\'
 												len = strlen(aCurrResDir);
@@ -765,8 +765,8 @@ case YYr5: {	/* dir_line :  DIRECTORY QTEXT */
 case YYr6: {	/* file_line :  FILETOKEN TEXT QTEXT */
 
 											
-											DBP1(("file: %s %s\n", yypvt[-1].sval, yypvt[0].sval));
-											if (!resLoadFile(yypvt[-1].sval, yypvt[0].sval))
+											DBP1(("file: %s %s\n", res_yypvt[-1].sval, yypvt[0].sval));
+											if (!resLoadFile(res_yypvt[-1].sval, res_yypvt[0].sval))
 											{
 												YYABORT;
 											}
@@ -795,7 +795,7 @@ case YYr6: {	/* file_line :  FILETOKEN TEXT QTEXT */
 #endif
 	goto yyStack;
 
-	yyerrflag = 1;
+	res_yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--;
 		yypv--;
@@ -805,22 +805,22 @@ case YYr6: {	/* file_line :  FILETOKEN TEXT QTEXT */
 	}
 
 yyError:
-	switch (yyerrflag) {
+	switch (res_yyerrflag) {
 
 	case 0:		/* new error */
-		yynerrs++;
+		res_yynerrs++;
 		yyi = res_char;
 		res_error(m_textmsg(4969, "Syntax error", "E"));
 		if (yyi != res_char) {
 			/* user has changed the current token */
 			/* try again */
-			yyerrflag++;	/* avoid loops */
+			res_yyerrflag++;	/* avoid loops */
 			goto yyEncore;
 		}
 
 	case 1:		/* partially recovered */
 	case 2:
-		yyerrflag = 3;	/* need 3 valid shifts to recover */
+		res_yyerrflag = 3;	/* need 3 valid shifts to recover */
 			
 		/*
 		 *	Pop states, looking for a
@@ -878,11 +878,11 @@ yyError:
 #ifdef YYALLOC
 yyReturn:
 	res_lval = save_yylval;
-	yyval = save_yyval;
-	yypvt = save_yypvt;
+	res_yyval = save_res_yyval;
+	res_yypvt = save_yypvt;
 	res_char = save_yychar;
-	yyerrflag = save_yyerrflag;
-	yynerrs = save_yynerrs;
+	res_yyerrflag = save_yyerrflag;
+	res_yynerrs = save_yynerrs;
 	free((char *)yys);
 	free((char *)yyv);
 #if YYDEBUG
