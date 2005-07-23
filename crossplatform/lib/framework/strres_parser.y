@@ -16,11 +16,13 @@
 #include "strres.h"
 #include "strresly.h"
 
+int strres_lex (void);
+
 /*
  * A simple error reporting routine
  */
 
-int strres_error(const char *pMessage,...)
+void strres_error(const char *pMessage,...)
 {
 	int		line;
 	char	*pText;
@@ -31,6 +33,8 @@ int strres_error(const char *pMessage,...)
 }
 
 %}
+
+%name-prefix="strres_"
 
 %union {
 	STRING  *sval;
@@ -52,6 +56,7 @@ line:			TEXT QTEXT
 								if (!strresStoreString(psCurrRes, $1, $2))
 								{
 									YYABORT;
+									printf("Hello. I'm the parser.\n");
 								}
 							}
 			;

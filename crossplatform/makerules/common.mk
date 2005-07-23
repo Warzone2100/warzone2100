@@ -26,7 +26,19 @@ else
 CFLAGS+=-Wall -Wno-pointer-sign -g
 endif
 
-OBJ_FILES=$(SRC_FILES:%.c=%.o)
+OBJ1=$(SRC_FILES:%.l=%.o)
+OBJ2=$(OBJ1:%.y=%.o)
+OBJ_FILES=$(OBJ2:%.c=%.o)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $(<)
+
+%.c: %.l
+	lex -o $@ $(<)
+#	cp $@ $@.bak
+# for debugging, since make deletes the generated files for some reason...
+
+%.c: %.y
+	bison -d -o $@ $(<)
+#	cp $@ $@.bak
+# for debugging, since make deletes the generated files for some reason...

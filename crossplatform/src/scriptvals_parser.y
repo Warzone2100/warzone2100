@@ -21,6 +21,8 @@
 #include "levels.h"
 #include "research.h"
 
+extern int scrv_lex(void);
+
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
 
@@ -76,6 +78,8 @@ BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 }
 
 %}
+
+%name-prefix="scrv_"
 
 %union {
 	BOOL			bval;

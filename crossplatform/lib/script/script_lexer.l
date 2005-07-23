@@ -11,7 +11,7 @@
 #include "script.h"
 
 /* Get the Yacc definitions */
-#include "script_y.h"
+#include "script_parser.h"
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -193,6 +193,9 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 
 %}
 
+%option prefix="scr_"
+%option nounput
+
 %x COMMENT
 %x SLCOMMENT
 %x QUOTE
@@ -345,7 +348,8 @@ void scriptSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pEndBuffer = pBuffer + size;
 
 	/* Reset the lexer in case it's been used before */
-	scr__reset();
+//	scr__reset();
+	scr__flush_buffer( YY_CURRENT_BUFFER );
 }
 
 void scriptGetErrorData(int *pLine, char **ppText)

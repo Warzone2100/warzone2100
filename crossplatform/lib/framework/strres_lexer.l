@@ -35,7 +35,9 @@ static int fprintf(FILE* f,char* c,...)
 #include "strresly.h"
 
 /* Get the Yacc definitions */
-#include "strres_y.h"
+#include "strres_parser.h"
+
+void strres_error(char *pMessage,...);
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -58,6 +60,9 @@ static UBYTE *pEndBuffer = NULL;
 				buf[0] = EOF; result = YY_NULL; \
 			}
 %}
+
+%option nounput
+%option prefix="strres_"
 
 %x COMMENT
 %x QUOTE
@@ -111,7 +116,8 @@ void strresSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pEndBuffer = pBuffer + size;
 
 	/* Reset the lexer incase it's been used before */
-	YY_FLUSH_BUFFER;
+//	YY_FLUSH_BUFFER;
+	yy_flush_buffer( YY_CURRENT_BUFFER );
 }
 
 void strresGetErrorData(int *pLine, char **ppText)

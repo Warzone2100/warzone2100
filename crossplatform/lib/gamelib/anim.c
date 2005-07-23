@@ -40,7 +40,7 @@ ANIMGLOBALS	g_animGlobals;
 BOOL
 anim_Init( GETSHAPEFUNC pGetShapeFunc )
 {
-	int		iSizeAnim2D = sizeof(ANIM2D),
+	int		iSizeAnim2D = sizeof(A_ANIM2D),
 			iSizeAnim3D = sizeof(ANIM3D);
 
 	/* ensure ANIM2D and ANIM3D structs same size */

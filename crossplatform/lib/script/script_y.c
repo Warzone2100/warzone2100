@@ -1409,7 +1409,7 @@ CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
 	if (genDebugInfo)
 	{
 		/* Add debugging info for the EXIT instruction */
-		scriptGetErrorData((SDWORD *)&line, &pDummy);
+		scriptGetErrorData((SDWORD *)&line, (char**)&pDummy);
 		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
 		psNewBlock->psDebug[psNewBlock->debugEntries].offset = 
 				ip - psNewBlock->pCode;
@@ -1445,7 +1445,7 @@ CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_B
 	if (genDebugInfo)
 	{
 		/* Add debugging info for the EXIT instruction */
-		scriptGetErrorData((SDWORD *)&line, &pDummy);
+		scriptGetErrorData((SDWORD *)&line, (char**)&pDummy);
 		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
 		psNewBlock->psDebug[psNewBlock->debugEntries].offset = 
 				ip - psNewBlock->pCode;
@@ -3859,7 +3859,7 @@ case YYr29: {	/* trigger_decl :  TRIGGER IDENT '(' trigger_subdecl ')' ';' */
 						SDWORD	line;
 						STRING	*pDummy;
 
-						scriptGetErrorData(&line, &pDummy);
+						scriptGetErrorData(&line, (char**)&pDummy);
 						if (!scriptAddTrigger(scr_yypvt[-4].sval, scr_yypvt[-2].tdecl, (UDWORD)line))
 						{
 							YYABORT;
@@ -3902,7 +3902,7 @@ case YYr36: {	/* event_decl :  event_subdecl '(' trigger_subdecl ')' */
 
 						// Get the line for the implicit trigger declaration
 						STRING	*pDummy;
-						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+						scriptGetErrorData((SDWORD *)&debugLine, (char**)&pDummy);
 					
 } break;
 
@@ -3985,7 +3985,7 @@ case YYr42: {	/* statement :  assignment ';' */
 						{
 							ALLOC_DEBUG(scr_yypvt[-1].cblock, 1);
 							scr_yypvt[-1].cblock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**)&pDummy);
 							scr_yypvt[-1].cblock->psDebug[0].line = line;
 						}
 
@@ -4005,7 +4005,7 @@ case YYr43: {	/* statement :  func_call ';' */
 						{
 							ALLOC_DEBUG(scr_yypvt[-1].cblock, 1);
 							scr_yypvt[-1].cblock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**)&pDummy);
 							scr_yypvt[-1].cblock->psDebug[0].line = line;
 						}
 
@@ -4042,7 +4042,7 @@ case YYr46: {	/* statement :  EXIT ';' */
 						if (genDebugInfo)
 						{
 							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**)&pDummy);
 							psCurrBlock->psDebug[0].line = line;
 						}
 
@@ -4074,7 +4074,7 @@ case YYr47: {	/* statement :  PAUSE '(' INTEGER ')' ';' */
 						if (genDebugInfo)
 						{
 							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**)&pDummy);
 							psCurrBlock->psDebug[0].line = line;
 						}
 
@@ -4542,7 +4542,7 @@ case YYr82: {	/* cond_clause :  IF '(' boolexp ')' */
 
 						
 						
-						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+						scriptGetErrorData((SDWORD *)&debugLine, (char**)&pDummy);
 					
 } break;
 
@@ -4597,7 +4597,7 @@ case YYr84: {	/* loop :  WHILE '(' boolexp ')' */
 
 					
 					
-					scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+					scriptGetErrorData((SDWORD *)&debugLine, (char**)&pDummy);
 				
 } break;
 

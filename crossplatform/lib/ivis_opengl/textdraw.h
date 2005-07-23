@@ -65,13 +65,9 @@ extern void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, in
 
 void	InitClut24(UWORD *InputClut);
 
-
-
 typedef void (*RENDERTEXT_CALLBACK)(UBYTE *String, UDWORD X, UDWORD Y);
 // routines used for textdraw
-void SetIndirectDrawTextCallback( RENDERTEXT_CALLBACK *routine);
-RENDERTEXT_CALLBACK *GetIndirectDrawTextCallback( void);
-
-
+void SetIndirectDrawTextCallback(RENDERTEXT_CALLBACK routine);
+RENDERTEXT_CALLBACK GetIndirectDrawTextCallback(void);
 
 #endif

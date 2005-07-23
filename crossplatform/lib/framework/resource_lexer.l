@@ -31,7 +31,13 @@ static int fprintf(FILE* f,char* c,...)
 #include "resly.h"
 
 /* Get the Yacc definitions */
-#include "resource_y.h"
+#include "resource_parser.h"
+
+extern void res_error(char *pMessage,...);
+
+#ifndef YYLMAX
+#define YYLMAX 8192
+#endif
 
 /* Store for any string values */
 STRING aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
@@ -52,6 +58,9 @@ static UBYTE *pEndBuffer = NULL;
 			}
 
 %}
+
+%option nounput
+%option prefix="res_"
 
 %x COMMENT
 %x QUOTE
@@ -116,7 +125,8 @@ void resSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 
 	/* Reset the lexer incase it's been used before */
 	//res_reset();
-	YY_FLUSH_BUFFER;
+//	YY_FLUSH_BUFFER;
+	res__flush_buffer( YY_CURRENT_BUFFER );
 	inComment = FALSE;
 }
 

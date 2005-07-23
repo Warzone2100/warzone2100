@@ -13,7 +13,7 @@
 #include "scriptvals.h"
 
 /* Get the Yacc definitions */
-#include "scriptvals_y.h"
+#include "scriptvals_parser.h"
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
@@ -33,6 +33,9 @@ static UBYTE *pEndBuffer = NULL;
 #define scrv_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
 
 %}
+
+%option prefix="scrv_"
+%option nounput
 
 %x COMMENT
 %x SLCOMMENT
@@ -125,7 +128,8 @@ void scrvSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pEndBuffer = pBuffer + size;
 
 	/* Reset the lexer incase it's been used before */
-	scrv__reset();
+//	scrv__reset();
+	scrv__flush_buffer( YY_CURRENT_BUFFER );
 }
 
 void scrvGetErrorData(int *pLine, char **ppText)

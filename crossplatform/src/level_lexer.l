@@ -31,6 +31,9 @@ static UBYTE *pEndBuffer = NULL;
 
 %}
 
+%option prefix="lev_"
+%option nounput
+
 %x COMMENT
 %x SLCOMMENT
 %x QUOTE
@@ -101,7 +104,8 @@ void levSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pEndBuffer = pBuffer + size;
 
 	/* Reset the lexer incase it's been used before */
-	lev__reset();
+//	lev__reset();
+	lev__flush_buffer( YY_CURRENT_BUFFER );                                                                                                                         
 }
 
 void levGetErrorData(int *pLine, char **ppText)

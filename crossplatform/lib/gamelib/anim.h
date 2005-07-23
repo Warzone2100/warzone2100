@@ -80,11 +80,11 @@ typedef struct BASEANIM
 }
 BASEANIM;
 
-typedef struct ANIM2D
+typedef struct A_ANIM2D
 {
 	ANIM_2D_ELEMENTS
 }
-ANIM2D;
+A_ANIM2D;
 
 typedef struct ANIM3D
 {

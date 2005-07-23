@@ -5,6 +5,8 @@
  * Yacc file for parsing RES files
  */
 
+int res_lex (void);
+
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
@@ -22,7 +24,7 @@
  * A simple error reporting routine
  */
 
-int res_error(const char *pMessage,...)
+void res_error(const char *pMessage,...)
 {
 	int	line;
 	char	*pText;
@@ -33,6 +35,8 @@ int res_error(const char *pMessage,...)
 }
 
 %}
+
+%name-prefix="res_"
 
 %union {
 	STRING  *sval;

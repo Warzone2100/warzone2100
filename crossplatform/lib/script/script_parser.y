@@ -14,6 +14,8 @@
 #include "parse.h"
 #include "script.h"
 
+int scr_lex (void);
+
 /* Error return codes for code generation functions */
 typedef enum _code_error
 {
@@ -41,7 +43,7 @@ static PARAM_BLOCK	*psCurrPBlock=NULL;
 static UDWORD		*ip;
 
 /* Pointer to current parameter declaration block */
-static PARAM_DECL	*psCurrParamDecl=NULL;
+//static PARAM_DECL	*psCurrParamDecl=NULL;
 
 /* Pointer to current trigger subdeclaration */
 static TRIGGER_DECL	*psCurrTDecl=NULL;
@@ -90,7 +92,7 @@ static UDWORD			numEvents;
 static BOOL localVariableDef=FALSE;
 
 /* The identifier for the current script function being defined */
-static STRING *pCurrFuncIdent=NULL;
+//static STRING *pCurrFuncIdent=NULL;
 
 /* A temporary store for a line number - used when
  * generating debugging info for functions, conditionals and loops.
@@ -582,7 +584,7 @@ CALLBACK_SYMBOL	*asScrCallbackTab;
 /* Macro to combine the debugging information in two blocks into a third block */
 static UDWORD		_dbEntry;
 static SCRIPT_DEBUG	*_psCurr;
-static UDWORD		_baseOffset;
+//static UDWORD		_baseOffset;
 #define COMBINE_DEBUG(psFinal, psBlock1, psBlock2) \
 	if (genDebugInfo) \
 	{ \
@@ -1376,7 +1378,7 @@ CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
 	if (genDebugInfo)
 	{
 		/* Add debugging info for the EXIT instruction */
-		scriptGetErrorData((SDWORD *)&line, &pDummy);
+		scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
 		psNewBlock->psDebug[psNewBlock->debugEntries].offset = 
 				ip - psNewBlock->pCode;
@@ -1413,7 +1415,7 @@ CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_B
 	if (genDebugInfo)
 	{
 		/* Add debugging info for the EXIT instruction */
-		scriptGetErrorData((SDWORD *)&line, &pDummy);
+		scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
 		psNewBlock->psDebug[psNewBlock->debugEntries].offset = 
 				ip - psNewBlock->pCode;
@@ -1460,6 +1462,8 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 #define ALLOC_ERROR_ACTION YYABORT
 
 %}
+
+%name-prefix="scr_"
 
 %union {
 	/* Types returned by the lexer */
@@ -2030,7 +2034,7 @@ trigger_decl:		TRIGGER IDENT '(' trigger_subdecl ')' ';'
 						SDWORD	line;
 						STRING	*pDummy;
 
-						scriptGetErrorData(&line, &pDummy);
+						scriptGetErrorData(&line, (char**) &pDummy);
 						if (!scriptAddTrigger($2, $4, (UDWORD)line))
 						{
 							YYABORT;
@@ -2079,7 +2083,7 @@ event_decl:			event_subdecl ';'
 					{
 						// Get the line for the implicit trigger declaration
 						STRING	*pDummy;
-						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+						scriptGetErrorData((SDWORD *)&debugLine, (char**) &pDummy);
 					}
 														'{' statement_list '}'
 					{
@@ -2159,7 +2163,7 @@ statement:			assignment ';'
 						{
 							ALLOC_DEBUG($1, 1);
 							$1->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 							$1->psDebug[0].line = line;
 						}
 
@@ -2177,7 +2181,7 @@ statement:			assignment ';'
 						{
 							ALLOC_DEBUG($1, 1);
 							$1->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 							$1->psDebug[0].line = line;
 						}
 
@@ -2208,7 +2212,7 @@ statement:			assignment ';'
 						if (genDebugInfo)
 						{
 							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 							psCurrBlock->psDebug[0].line = line;
 						}
 
@@ -2238,7 +2242,7 @@ statement:			assignment ';'
 						if (genDebugInfo)
 						{
 							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 							psCurrBlock->psDebug[0].line = line;
 						}
 
@@ -2675,7 +2679,7 @@ cond_clause:		IF '(' boolexp ')'
 
 						/* Get the line number for the end of the boolean expression */
 						/* and store it in debugLine.                                 */
-						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+						scriptGetErrorData((SDWORD *)&debugLine, (char**) &pDummy);
 					}
 									'{' statement_list '}'
 					{
@@ -2739,7 +2743,7 @@ loop:		WHILE '(' boolexp ')'
 
 					/* Get the line number for the end of the boolean expression */
 					/* and store it in debugLine.                                 */
-					scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+					scriptGetErrorData((SDWORD *)&debugLine, (char**) &pDummy);
 				}
 								 '{' statement_list '}'
 				{
