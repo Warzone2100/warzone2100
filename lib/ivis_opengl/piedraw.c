@@ -27,6 +27,8 @@
 
 #define MIST
 
+extern BOOL drawing_interface;
+
 /***************************************************************************/
 /*
  *	Local Definitions
@@ -69,6 +71,35 @@ void DrawTriangleList(BSPPOLYID PolygonNumber);
  *	Source
  */
 /***************************************************************************/
+
+static BOOL lighting = FALSE;
+
+void pie_BeginLighting(float x, float y, float z) {
+	float pos[4];
+	float zero[4] = {0, 0, 0, 0};
+	float ambient[4] = {0.2, 0.2, 0.2, 0};
+	float diffuse[4] = {1, 1, 1, 0};
+	float specular[4] = {0, 0, 0, 0};
+
+	pos[0] = x;
+	pos[1] = y;
+	pos[2] = z;
+	pos[3] = 0;
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, zero);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+	glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+	glEnable(GL_LIGHT0);
+
+//	lighting = TRUE;
+}
+
+void pie_EndLighting(float x, float y, float z) {
+	//lighting = FALSE;
+}
 
 #ifdef BSPIMD
 	extern iIMDShape *BSPimd;	// global defined here for speed 
@@ -184,8 +215,40 @@ static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD
 */
 #endif
 
+typedef struct {
+	float x;
+	float y;
+	float z;
+} fVector;
+
+void fVector_Set(fVector* v, float x, float y, float z) {
+	v->x = x;
+	v->y = y;
+	v->z = z;
+}
+
+void fVector_Sub(fVector* dest, fVector* op1, fVector* op2) {
+	dest->x = op1->x - op2->x;
+	dest->y = op1->y - op2->y;
+	dest->z = op1->z - op2->z;
+}
+
+float fVector_SP(fVector* op1, fVector* op2) {
+	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
+}
+
+void fVector_CP(fVector* dest, fVector* op1, fVector* op2) {
+	dest->x = op1->y * op2->z - op1->z * op2->y;
+	dest->y = op1->z * op2->x - op1->x * op2->z;
+	dest->z = op1->x * op2->y - op1->y * op2->x;
+}
+
+float fVector_Length2(fVector* v) {
+	return v->x*v->x + v->y*v->y + v->z*v->z;
+}
+
 void
-pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset) {
+pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light) {
 	SDWORD i;
 
 	if (numVerts < 1) {
@@ -195,15 +258,45 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset) {
 	} else if (numVerts == 2) {
 		glBegin(GL_LINE_STRIP);
 	} else {
+		if (light) {
+			float ambient[4] = { 1, 1, 1, 1 };
+			float diffuse[4] = { 1, 1, 1, 1 };
+			float specular[4] = { 1, 1, 1, 1 };
+			float shininess = 0;
+
+			 glEnable(GL_LIGHTING);
+			 glEnable(GL_NORMALIZE);
+
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+		}
 		glBegin(GL_TRIANGLE_FAN);
+		if (light) {
+			fVector p1, p2, p3, v1, v2, n;
+			float l;
+
+			fVector_Set(&p1, pVrts[0].sx, pVrts[0].sy, pVrts[0].sz);
+			fVector_Set(&p2, pVrts[1].sx, pVrts[1].sy, pVrts[1].sz);
+			fVector_Set(&p3, pVrts[2].sx, pVrts[2].sy, pVrts[2].sz);
+			fVector_Sub(&v1, &p3, &p1);
+			fVector_Sub(&v2, &p2, &p1);
+			fVector_CP(&n, &v1, &v2);
+			l = 1.0;
+
+			glNormal3f(n.x*l, n.y*l, n.z*l);
+			//printf("%f %f %f\n", n.x*l, n.y*l, n.z*l);
+		}
 	}
 	for (i = 0; i < numVerts; i++) {
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
 		glTexCoord2f(pVrts[i].tu, pVrts[i].tv+texture_offset);
 		//d3dVrts[i].specular = pVrts[i].specular.argb;
-		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz * INV_MAX_Z);
+		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz);
 	}
 	glEnd();
+	glDisable(GL_LIGHTING);
 }
 
 /***************************************************************************
@@ -214,19 +307,35 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset) {
  * Avoids recalculating vertex projections for every poly 
  ***************************************************************************/
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
-{
+typedef struct {
+	float		matrix[16];
+	iIMDShape*	shape;
+	int		flag;
+	int		flag_data;
+} shadowcasting_shape_t;
 
-	// needed for AMD
-//	int amd_scale = 0x3a800000;				// 2^-10
-//	int amd_pie_RAISE_SCALE = 0x3b800000;	// 2^-8
-//	int amd_sign = 0x80000000;
-//	int amd_RAISE = 0;
-//	int amd_HEIGHT_SCALED = 0x3f800000;
+typedef struct {
+	float		matrix[16];
+	iIMDShape*	shape;
+	int		frame;
+	PIELIGHT	colour;
+	PIELIGHT	specular;
+	int		flag;
+	int		flag_data;
+} transluscent_shape_t;
 
-	// needed for intel
-	int32		rx, ry, rz;
-	int32		tzx, tzy;
+#define MAX_SCSHAPES 500
+#define MAX_TSHAPES 500
+
+static shadowcasting_shape_t* scshapes = NULL;
+static unsigned int scshapes_size = 0;
+static unsigned int nb_scshapes = 0;
+static transluscent_shape_t* tshapes = NULL;
+static unsigned int tshapes_size = 0;
+static unsigned int nb_tshapes = 0;
+
+void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
+		      int pieFlag, int pieFlagData) {
 	int32		tempY;
 	int i, n;
 	iVector		*pVertices;
@@ -234,55 +343,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	iIMDPoly	*pPolys;
 	PIEPOLY		piePoly;
 	VERTEXID	*index;
-	PIELIGHT	colour, specular;
-
-	pieCount++;
-
-	// Fix for transparent buildings and features!! */
-	if( (pieFlag & pie_TRANSLUCENT) AND (pieFlagData>220) )
-	{
-		pieFlag = pieFlagData = 0;	// force to bilinear and non-transparent
-	}
-	// Fix for transparent buildings and features!! */
-
-	
-
-// WARZONE light as byte passed in colour so expand
-	if (col <= MAX_UB_LIGHT) {
-		colour.byte.a = 255;//no fog
-		colour.byte.r = (UBYTE)col;
-		colour.byte.g = (UBYTE)col;
-		colour.byte.b = (UBYTE)col;
-	} else {
-		colour.argb = col;
-	}
-	specular.argb = spec;
-
-	if (frame == 0) 
-	{
-		frame = team;
-	}
-
-	/*
-	if (!pie_Translucent())
-	{
-		if ((pieFlag & pie_ADDITIVE) || (pieFlag & pie_TRANSLUCENT))
-		{
-			pieFlag &= (pie_FLAG_MASK - pie_TRANSLUCENT - pie_ADDITIVE);
-			pieFlag |= pie_NO_BILINEAR;
-		}
-	}
-	else if (!pie_Additive())
-	{
-		if (pieFlag & pie_ADDITIVE)//Assume also translucent
-		{
-			pieFlag -= pie_ADDITIVE;
-			pieFlag |= pie_TRANSLUCENT;
-			pieFlag |= pie_NO_BILINEAR;
-			pieFlagData /= 2;
-		}
-	}
-	*/
+	BOOL		light = lighting;
 
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE) { //Assume also translucent
@@ -290,11 +351,13 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pie_SetRendMode(REND_ADDITIVE_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(TRUE);
+		light = FALSE;
 	} else if (pieFlag & pie_TRANSLUCENT) {
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
+		light = FALSE;
 	} else {
 		if (pieFlag & pie_BUTTON)
 		{
@@ -341,28 +404,9 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 			}
 			//if (tempY < 0) tempY = 0;
 		}
-		rx = pVertices->x * psMatrix->a + tempY * psMatrix->d + pVertices->z * psMatrix->g + psMatrix->j;
-		ry = pVertices->x * psMatrix->b + tempY * psMatrix->e + pVertices->z * psMatrix->h + psMatrix->k;
-		rz = pVertices->x * psMatrix->c + tempY * psMatrix->f + pVertices->z * psMatrix->i + psMatrix->l;
-
-		pPixels->d3dz = D3DVAL((rz>>STRETCHED_Z_SHIFT));
-
-		tzx = rz >> psRendSurface->xpshift;
-		tzy = rz >> psRendSurface->ypshift;
-
-		if ((tzx<=0) || (tzy<=0))
-		{
-			pPixels->d3dx = (float)LONG_WAY;//just along way off screen
-			pPixels->d3dy = (float)LONG_WAY;
-		}
-		else if (pPixels->d3dz < D3DVAL(MIN_STRETCHED_Z))
-		{
-			pPixels->d3dx = (float)LONG_WAY;//just along way off screen
-			pPixels->d3dy = (float)LONG_WAY;
-		} else {
-			pPixels->d3dx = D3DVAL((psRendSurface->xcentre + (rx / tzx)));
-			pPixels->d3dy = D3DVAL((psRendSurface->ycentre - (ry / tzy)));
-		}
+		pPixels->d3dx = pVertices->x;
+		pPixels->d3dy = tempY;
+		pPixels->d3dz = pVertices->z;
 	}
 
 	pPolys = shape->polys;
@@ -381,7 +425,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		{
 			pieVrts[n].sx = MAKEINT(scrPoints[*index].d3dx);
 			pieVrts[n].sy = MAKEINT(scrPoints[*index].d3dy);
-			pieVrts[n].sz  = MAKEINT(scrPoints[*index].d3dz);
+			pieVrts[n].sz = MAKEINT(scrPoints[*index].d3dz);
 			pieVrts[n].tu = pPolys->vrt[n].u;
 			pieVrts[n].tv = pPolys->vrt[n].v;
 			pieVrts[n].light.argb = colour.argb;
@@ -393,12 +437,271 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		piePoly.pTexAnim = pPolys->pTexAnim;
 
 		if (piePoly.flags > 0) {
-			pie_PiePolyFrame(&piePoly,frame,TRUE);	   // draw the polygon ... this is an inline function
+			pie_PiePolyFrame(&piePoly,frame,light);	   // draw the polygon ... this is an inline function
 		}
 	}
 	if (pieFlag & pie_BUTTON) {
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	}
+}
+
+void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
+	int32		tempY;
+	int i, n;
+	iVector		*pVertices;
+	PIEPIXEL	*pPixels;
+	iIMDPoly	*pPolys;
+	VERTEXID	*index;
+
+	pVertices = shape->points;
+	pPixels = scrPoints;
+	for (i = 0; i < shape->npoints; i++, pVertices++, pPixels++) {
+		tempY = pVertices->y;
+		if (flag & pie_RAISE) {
+			tempY = pVertices->y - flag_data;
+			if (tempY < 0) tempY = 0;
+
+		} else if (flag & pie_HEIGHT_SCALED) {
+			if(pVertices->y>0) {
+				tempY = (pVertices->y * flag_data)/pie_RAISE_SCALE;
+			}
+		}
+		pPixels->d3dx = pVertices->x;
+		pPixels->d3dy = tempY;
+		pPixels->d3dz = pVertices->z;
+	}
+
+	pPolys = shape->polys;
+	for (i = 0; i < shape->npolys; ++i, ++pPolys) {
+		fVector p1, p2, p3, v1, v2, normal;
+
+		index = pPolys->pindex;
+		fVector_Set(&p1, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		++index;
+		fVector_Set(&p2, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		++index;
+		fVector_Set(&p3, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		fVector_Sub(&v1, &p3, &p1);
+		fVector_Sub(&v2, &p2, &p1);
+		fVector_CP(&normal, &v1, &v2);
+		if (fVector_SP(&normal, light) > 0) {
+			index = pPolys->pindex;
+			glBegin(GL_TRIANGLE_STRIP);
+			for (n = 0; n < pPolys->npnts; ++n, ++index) {
+				glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
+				glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+			}
+			index = pPolys->pindex;
+			glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
+			glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		} else {
+			index = pPolys->pindex;
+			glBegin(GL_TRIANGLE_STRIP);
+			for (n = 0; n < pPolys->npnts; ++n, ++index) {
+				glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+				glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
+			}
+			index = pPolys->pindex;
+			glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+			glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
+		}
+		glEnd();
+	}
+}
+
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
+{
+	PIELIGHT colour, specular;
+	float distance;
+
+	pieCount++;
+
+	// Fix for transparent buildings and features!! */
+	if( (pieFlag & pie_TRANSLUCENT) AND (pieFlagData>220) )
+	{
+		pieFlag = pieFlagData = 0;	// force to bilinear and non-transparent
+	}
+	// Fix for transparent buildings and features!! */
+
+// WARZONE light as byte passed in colour so expand
+	if (col <= MAX_UB_LIGHT) {
+		colour.byte.a = 255;//no fog
+		colour.byte.r = (UBYTE)col;
+		colour.byte.g = (UBYTE)col;
+		colour.byte.b = (UBYTE)col;
+	} else {
+		colour.argb = col;
+	}
+	specular.argb = spec;
+
+	if (frame == 0) 
+	{
+		frame = team;
+	}
+
+	if (drawing_interface) {
+		pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
+	} else {
+		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT)) {
+			if (tshapes_size <= nb_tshapes) {
+				if (tshapes_size == 0) {
+					tshapes_size = 64;
+					tshapes = (transluscent_shape_t*)malloc(tshapes_size*sizeof(transluscent_shape_t));
+				} else {
+					tshapes_size <<= 1;
+					tshapes = (transluscent_shape_t*)realloc(tshapes, tshapes_size*sizeof(transluscent_shape_t));
+				}
+			}
+			glGetFloatv(GL_MODELVIEW_MATRIX, tshapes[nb_tshapes].matrix);
+			tshapes[nb_tshapes].shape = shape;
+			tshapes[nb_tshapes].frame = frame;
+			tshapes[nb_tshapes].colour = colour;
+			tshapes[nb_tshapes].specular = specular;
+			tshapes[nb_tshapes].flag = pieFlag;
+			tshapes[nb_tshapes].flag_data = pieFlagData;
+			nb_tshapes++;
+		} else {
+			if (scshapes_size <= nb_scshapes) {
+				if (scshapes_size == 0) {
+					scshapes_size = 64;
+					scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
+				} else {
+					scshapes_size <<= 1;
+					scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
+				}
+			}
+			glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
+			distance = scshapes[nb_scshapes].matrix[12]*scshapes[nb_scshapes].matrix[12];
+			distance += scshapes[nb_scshapes].matrix[13]*scshapes[nb_scshapes].matrix[13];
+			distance += scshapes[nb_scshapes].matrix[14]*scshapes[nb_scshapes].matrix[14];
+			// if object is too far in the fog don't generate a shadow.
+			if (distance < 6000*6000) {
+				scshapes[nb_scshapes].shape = shape;
+				scshapes[nb_scshapes].flag = pieFlag;
+				scshapes[nb_scshapes].flag_data = pieFlagData;
+				nb_scshapes++;
+			}
+			pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
+		}
+	}
+}
+
+void inverse_matrix(float* src, float * dst) {
+	float det = src[0]*src[5]*src[10]+src[4]*src[9]*src[2]+src[8]*src[1]*src[6] -src[2]*src[5]*src[8]-src[6]*src[9]*src[0]-src[10]*src[1]*src[4];
+	float invdet = 1.0/det;
+
+	dst[0] = invdet*(src[5]*src[10]-src[9]*src[6]);
+	dst[1] = invdet*(src[9]*src[2]-src[1]*src[10]);
+	dst[2] = invdet*(src[1]*src[6]-src[5]*src[2]);
+	dst[3] = invdet*(src[8]*src[6]-src[4]*src[10]);
+	dst[4] = invdet*(src[0]*src[10]-src[8]*src[2]);
+	dst[5] = invdet*(src[4]*src[2]-src[0]*src[6]);
+	dst[6] = invdet*(src[4]*src[9]-src[8]*src[5]);
+	dst[7] = invdet*(src[8]*src[1]-src[0]*src[9]);
+	dst[8] = invdet*(src[0]*src[5]-src[4]*src[1]);
+}
+
+void pie_DrawShadows() {
+	static BOOL dlist_defined = FALSE;
+	static GLuint dlist;
+	unsigned int i;
+	float l[4];
+	fVector light;
+	float invmat[9];
+	float width = pie_GetVideoBufferWidth();
+	float height = pie_GetVideoBufferHeight();
+
+	glGetLightfv(GL_LIGHT0, GL_POSITION, l);
+
+	pie_SetTexturePage(-1);
+
+	glPushMatrix();
+
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_FALSE);
+	glEnable(GL_STENCIL_TEST);
+	glClear(GL_STENCIL_BUFFER_BIT);
+
+	if (!dlist_defined) {
+		dlist = glGenLists(1);
+		dlist_defined = TRUE;
+	}
+
+	// Setup stencil for front faces.
+	glStencilMask(~0);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+
+	glNewList(dlist, GL_COMPILE_AND_EXECUTE);
+
+	for (i = 0; i < nb_scshapes; ++i) {
+		glLoadIdentity();
+		glMultMatrixf(scshapes[i].matrix);
+		inverse_matrix(scshapes[i].matrix, invmat);
+		light.x = invmat[0]*l[0] + invmat[3]*l[1] + invmat[6]*l[2];
+		light.y = invmat[1]*l[0] + invmat[4]*l[1] + invmat[7]*l[2];
+		light.z = invmat[2]*l[0] + invmat[5]*l[1] + invmat[8]*l[2];
+		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
+	}
+
+	glEndList();
+
+	// Setup stencil for back faces.
+	glCullFace(GL_FRONT);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
+	glCallList(dlist);
+
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+	glStencilMask(~0);
+	glStencilFunc(GL_LESS, 0, ~0);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(0, 0, 0, 0.5);
+
+	glCullFace(GL_FRONT);
+	pie_PerspectiveEnd();
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+	glBegin(GL_TRIANGLE_STRIP);
+	glVertex2f(0, 0);
+	glVertex2f(width, 0);
+	glVertex2f(0, height);
+	glVertex2f(width, height);
+	glEnd();
+	pie_PerspectiveBegin();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_STENCIL_TEST);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+
+	glPopMatrix();
+
+	nb_scshapes = 0;
+}
+
+void pie_DrawRemainingTransShapes() {
+	unsigned int i;
+
+	for (i = 0; i < nb_tshapes; ++i) {
+		glPushMatrix();
+		glLoadIdentity();
+		glMultMatrixf(tshapes[i].matrix);
+		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour,
+				 tshapes[i].specular, tshapes[i].flag, tshapes[i].flag_data);
+		glPopMatrix();
+	}
+
+	nb_tshapes = 0;
+}
+
+void pie_RemainingPasses() {
+	pie_DrawShadows();
+	pie_DrawRemainingTransShapes();
 }
 
 /***************************************************************************
@@ -459,49 +762,25 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 
 void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 {
-	/* Set transparent color to be 0 red, 0 green, 0 blue, 0 alpha */
+	PIELIGHT colour;
+
 	polyCount++;
 
 	pie_SetTexturePage(image->texPage);
 
-	style->colour.argb = pie_GetColour();
-	style->specular.argb = 0x00000000;
+	colour.argb = pie_GetColour();
 
-	//set up 4 pie verts
-	//set up 4 pie verts
-	pieVrts[0].sx = dest->x;
-	pieVrts[0].sy = dest->y;
-	pieVrts[0].sz  = (SDWORD)INTERFACE_DEPTH;
-	pieVrts[3].tu = image->tu;
-	pieVrts[3].tv = image->tv;
-	pieVrts[0].light.argb = style->colour.argb;
-	pieVrts[0].specular.argb = style->specular.argb;
-
-	pieVrts[1].sx = dest->x + dest->h + EDGE_CORRECTION;
-	pieVrts[1].sy = dest->y;
-	pieVrts[1].sz  = (SDWORD)INTERFACE_DEPTH;
-	pieVrts[0].tu = image->tu + image->tw + EDGE_CORRECTION;
-	pieVrts[0].tv = image->tv;
-	pieVrts[1].light.argb = style->colour.argb;
-	pieVrts[1].specular.argb = style->specular.argb;
-
-	pieVrts[2].sx = dest->x + dest->h + EDGE_CORRECTION;
-	pieVrts[2].sy = dest->y + dest->w + EDGE_CORRECTION;
-	pieVrts[2].sz  = (SDWORD)INTERFACE_DEPTH;
-	pieVrts[1].tu = image->tu + image->tw + EDGE_CORRECTION;
-	pieVrts[1].tv = image->tv + image->th + EDGE_CORRECTION;
-	pieVrts[2].light.argb = style->colour.argb;
-	pieVrts[2].specular.argb = style->specular.argb;
-
-	pieVrts[3].sx = dest->x;
-	pieVrts[3].sy = dest->y + dest->w + EDGE_CORRECTION;
-	pieVrts[3].sz  = (SDWORD)INTERFACE_DEPTH;
-	pieVrts[2].tu = image->tu;
-	pieVrts[2].tv = image->tv + image->th + EDGE_CORRECTION;
-	pieVrts[3].light.argb = style->colour.argb;
-	pieVrts[3].specular.argb = style->specular.argb;
-
-	pie_Polygon(4, pieVrts, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
+	glTexCoord2f(image->tu+image->tw+EDGE_CORRECTION, image->tv);
+	glVertex2f(dest->x, dest->y);
+	glTexCoord2f(image->tu+image->tw+EDGE_CORRECTION, image->tv+image->th+EDGE_CORRECTION);
+	glVertex2f(dest->x+dest->h+EDGE_CORRECTION, dest->y);
+	glTexCoord2f(image->tu, image->tv+image->th+EDGE_CORRECTION);
+	glVertex2f(dest->x+dest->h+EDGE_CORRECTION, dest->y+dest->w+EDGE_CORRECTION);
+	glTexCoord2f(image->tu, image->tv);
+	glVertex2f(dest->x, dest->y+dest->w+EDGE_CORRECTION);
+	glEnd();
 }
 
 /***************************************************************************
@@ -548,8 +827,8 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
 	glBegin(GL_TRIANGLE_STRIP);
 	glVertex2i(x0, y0);
-	glVertex2i(x0, y1);
 	glVertex2i(x1, y0);
+	glVertex2i(x0, y1);
 	glVertex2i(x1, y1);
 	glEnd();
 }
@@ -563,7 +842,7 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
  *
  ***************************************************************************/
 
-static void pie_PiePoly(PIEPOLY *poly, BOOL bClip)
+static void pie_PiePoly(PIEPOLY *poly, BOOL light)
 {
 	polyCount++;
 
@@ -573,11 +852,11 @@ static void pie_PiePoly(PIEPOLY *poly, BOOL bClip)
 		} else {
 			pie_SetColourKeyedBlack(FALSE);
 		}
-		pie_Polygon(poly->nVrts, poly->pVrts, 0.0);
+		pie_Polygon(poly->nVrts, poly->pVrts, 0.0, light);
 	}
 }
 
-static void pie_PiePolyFrame(PIEPOLY *poly, int frame, BOOL bClip)
+static void pie_PiePolyFrame(PIEPOLY *poly, int frame, BOOL light)
 {
 int	uFrame, vFrame, j, framesPerLine;
 
@@ -616,73 +895,9 @@ int	uFrame, vFrame, j, framesPerLine;
 	}
 #ifndef NO_RENDER
 	//draw with new texture data
-	pie_PiePoly(poly, bClip);
+	pie_PiePoly(poly, light);
 #endif
 }
-
-/***************************************************************************
- * pie_D3DPoly
- *
- * D3D specific poly draw function should change to use hardpoly
- *
- * Assumes render mode NOT set up externally
- *                     ---   
- ***************************************************************************/
-
-/*
-void pie_D3DPoly(PIED3DPOLY *poly)
-{
-#ifdef NO_RENDER
-	return;
-#else
-	polyCount++;
-	D3DDrawPoly(poly->nVrts, &poly->pVrts[0]);
-#endif
-}
-
-static void pie_D3DPolyFrame(PIED3DPOLY *poly, int frame) {
-	int	uFrame, vFrame, j, framesPerLine;
-	// handle texture animated polygons
-
-	if (poly->flags & iV_IMD_TEXANIM)
-	{
-		if (poly->pTexAnim != NULL)
-		{
-			if (poly->pTexAnim->nFrames >=0)
-			{
-				frame %= poly->pTexAnim->nFrames;
-			}
-			else //frame is colour key
-			{
-				frame %= (-poly->pTexAnim->nFrames);
-			}
-
-
-			if (frame > 0)
-			{
-				framesPerLine = 256 / poly->pTexAnim->textureWidth;//use TexPage WIDTH define
-
-				vFrame = 0;
-				while (frame >= framesPerLine)
-				{
-					frame -= framesPerLine;
-					vFrame += poly->pTexAnim->textureHeight;
-				}
-				uFrame = frame * poly->pTexAnim->textureWidth;
-				
-				// no clip for d3d render??
-				// shift the clipped textures for animation
-				for (j=0; j<poly->nVrts; j++) {
-					poly->pVrts[j].tu += (float)uFrame/(float)256.0;
-					poly->pVrts[j].tv += (float)vFrame/(float)256.0;
-				}
-			}
-		}
-	}
-
-	pie_D3DPoly(poly);
-}
-*/
 
 //old ivis style draw poly
 /***************************************************************************
@@ -773,10 +988,6 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 {
 	UDWORD	i;
 
-   	if ( !pie_CLOCKWISE( pv[0].x, pv[0].y, pv[1].x, pv[1].y, pv[2].x, pv[2].y ) ) {
-		return;
-	}
-
 	glBegin(GL_TRIANGLE_FAN);
 	for (i = 0; i < 3; i++) {
 		glColor4ub(pv[i].g*16, pv[i].g*16, pv[i].g*16, 255);
@@ -792,7 +1003,6 @@ void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture*
 
 
 void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects) {
-	BOOL		bClockwise;
 	FRACT		offset = 0;
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the
@@ -800,12 +1010,6 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 
 
 	*/
-  	if(((aVrts[1].sy - aVrts[0].sy) * (aVrts[2].sx - aVrts[1].sx)) <= ((aVrts[1].sx - aVrts[0].sx) * (aVrts[2].sy - aVrts[1].sy)) ) {
-		bClockwise = TRUE;
-	} else {
-		return;
-	}
-
 	tileCount++;
 	pie_SetTexturePage(texPage);
 	pie_SetFogStatus(TRUE);
@@ -823,7 +1027,7 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 	pie_SetBilinear(TRUE);
 
 	if (numVrts >= 3) {
-		pie_Polygon(numVrts, aVrts, offset);
+		pie_Polygon(numVrts, aVrts, offset, FALSE);
 	}
 }
 
@@ -841,7 +1045,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 	memcpy(&pieVrts[2],pv2,sizeof(PIEVERTEX));
 	memcpy(&pieVrts[3],pv3,sizeof(PIEVERTEX));
 
-	pie_Polygon(4, pieVrts, 0.0);
+	pie_Polygon(4, pieVrts, 0.0, TRUE);
 }
 //#endif
 

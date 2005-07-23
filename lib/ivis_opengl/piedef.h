@@ -172,6 +172,7 @@ typedef struct
  */
 /***************************************************************************/
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
+extern void pie_RemainingPasses();
 //extern void pie_Draw3DIntelShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
 //extern void pie_Draw3DNowShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
@@ -195,6 +196,7 @@ extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 //piedraw functions used in piefunc.c 
 extern void pie_D3DPoly(PIED3DPOLY *poly);
 
+extern void pie_BeginLighting(float x, float y, float z);
 
 //necromancer
 extern void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3,  SDWORD texPage);

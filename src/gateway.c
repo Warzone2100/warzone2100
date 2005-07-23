@@ -651,7 +651,7 @@ SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 }
 
 
-#ifdef DEBUG
+#if defined(DEBUG) || defined(ALWAYS_ASSERT)
 // check that the initial flood fill tiles are not on a blocking tile
 BOOL gwCheckFloodTiles(GATEWAY *psGate)
 {

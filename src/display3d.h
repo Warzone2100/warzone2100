@@ -118,9 +118,12 @@ extern UDWORD visibleYTiles;
 // Expanded PIEVERTEX.
 typedef struct {
 	// PIEVERTEX.
-	SDWORD sx, sy, sz; UWORD tu, tv; PIELIGHT light, specular;
+	SDWORD x, y, z; UWORD tu, tv; PIELIGHT light, specular;
+	SDWORD sx, sy, sz;
 	// Extra data for water.
-	SDWORD wx, wy, wz; PIELIGHT wlight;
+	SDWORD wx, wy, wz;
+	SDWORD water_height;
+	PIELIGHT wlight;
 	UBYTE	drawInfo;
 	UBYTE	bWater;
 } SVMESH;

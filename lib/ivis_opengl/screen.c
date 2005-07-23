@@ -96,9 +96,9 @@ BOOL    bUpload = FALSE;
 //fog
 DWORD	fogColour = 0;
 
-char screendump_filename[255];
-unsigned int screendump_num = 0;
-unsigned int screendump_required = 0;
+static char screendump_filename[255];
+static unsigned int screendump_num = 0;
+static BOOL screendump_required = FALSE;
 
 /* flag forcing buffers into video memory */
 static BOOL	g_bVidMem;
@@ -190,6 +190,8 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 	glScalef(1/256.0, 1/256.0, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glCullFace(GL_FRONT);
+	glEnable(GL_CULL_FACE);
 
 	return TRUE;
 }
@@ -292,23 +294,66 @@ void screenRestoreSurfaces(void)
 	/* nothing to do */
 }
 
-struct my_error_mgr {
+/* Image structure */
+
+typedef struct {
+	unsigned int	width;
+	unsigned int	height;
+	unsigned int	channels;
+	unsigned char*	data;
+} pie_image;
+
+BOOL image_init(pie_image* image) {
+	if (image == NULL) return TRUE;
+
+	image->width = 0;
+	image->height = 0;
+	image->channels = 0;
+	image->data = NULL;
+
+	return FALSE;
+}
+
+BOOL image_create(pie_image* image,
+		  unsigned int width,
+		  unsigned int height,
+		  unsigned int channels) {
+	if (image == NULL) return TRUE;
+
+	image->width = width;
+	image->height = height;
+	image->channels = channels;
+	if (image->data != NULL) {
+		free(image->data);
+	}
+	image->data = malloc(width*height*channels);
+
+	return FALSE;
+}
+
+BOOL image_delete(pie_image* image) {
+	if (image == NULL) return TRUE;
+
+	if (image->data != NULL) {
+		free(image->data);
+		image->data = NULL;
+	}
+
+	return FALSE;
+}
+
+typedef struct my_error_mgr {
   struct jpeg_error_mgr pub;
   jmp_buf setjmp_buffer;
-};
-
-typedef struct my_error_mgr * my_error_ptr;
+}* my_error_ptr;
 
 void my_error_exit(j_common_ptr cinfo)
 {
   my_error_ptr myerr = (my_error_ptr) cinfo->err;
   longjmp(myerr->setjmp_buffer, 1);
 }
-//=====================================================================
-void screen_SetBackDropFromFile(char* filename) {
-	static JSAMPARRAY buffer = NULL;
-	static unsigned int buffer_size = 0;
 
+BOOL image_load_from_jpg(pie_image* image, const char* filename) {
 	struct jpeg_decompress_struct cinfo;
 	struct my_error_mgr jerr;
 	FILE * infile;
@@ -317,9 +362,11 @@ void screen_SetBackDropFromFile(char* filename) {
 	uintptr_t tmp;
 	JSAMPARRAY ptr[1];
 
+	if (image == NULL) return TRUE;
+
 	if ((infile = fopen(filename, "rb")) == NULL) {
-		printf("can't open %s\n", filename);
-		return;
+		printf("Cannot open file \"%s\".\n", filename);
+		return TRUE;
 	}
 
 	cinfo.err = jpeg_std_error(&jerr.pub);
@@ -328,7 +375,7 @@ void screen_SetBackDropFromFile(char* filename) {
 	if (setjmp(jerr.setjmp_buffer)) {
 		jpeg_destroy_decompress(&cinfo);
 		fclose(infile);
-		return;
+		return TRUE;
 	}
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, infile);
@@ -346,17 +393,11 @@ void screen_SetBackDropFromFile(char* filename) {
 	row_stride = cinfo.output_width * cinfo.output_components;
 	image_size = row_stride * cinfo.output_height;
 
-	if (buffer_size < image_size) {
-		if (buffer != NULL) {
-			free(buffer);
-		}
-		buffer = malloc(image_size);
-		buffer_size = image_size;
-	}
+	image_create(image, cinfo.output_width, cinfo.output_height, cinfo.output_components);
 
 	jpeg_start_decompress(&cinfo);
 
-	tmp = (uintptr_t)buffer;
+	tmp = (uintptr_t)image->data;
 	while (cinfo.output_scanline < cinfo.output_height) {
 		ptr[0] = (JSAMPARRAY)tmp;
 		jpeg_read_scanlines(&cinfo, (JSAMPARRAY)ptr, 1);
@@ -366,20 +407,34 @@ void screen_SetBackDropFromFile(char* filename) {
 	jpeg_destroy_decompress(&cinfo);
 	fclose(infile);
 
-	if (backDropTexture == -1) {
-		glGenTextures(1, &backDropTexture);
+	return FALSE;
+}
+
+//=====================================================================
+
+void screen_SetBackDropFromFile(char* filename) {
+	pie_image image;
+
+	image_init(&image);
+
+	if (!image_load_from_jpg(&image, filename)) {
+		if (backDropTexture == -1) {
+			glGenTextures(1, &backDropTexture);
+		}
+
+		pie_SetTexturePage(-1);
+		glBindTexture(GL_TEXTURE_2D, backDropTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+			     image.width, image.height,
+			     0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	}
 
-	pie_SetTexturePage(-1);
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-		     cinfo.output_width, cinfo.output_height,
-		     0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	image_delete(&image);
 }
 //===================================================================
 
@@ -484,9 +539,11 @@ void screenDoDumpToDiskIfRequired() {
 	struct jpeg_error_mgr jerr;
 	FILE * outfile;	
 	JSAMPROW row_pointer[1];
-	int row_stride = screen->w * 3;
+	int row_stride;
 
-	if (screendump_required == 0) return;
+	if (!screendump_required) return;
+
+	row_stride = screen->w * 3;
 
 	if (row_stride * screen->h > buffer_size) {
 		if (buffer != NULL) {
@@ -497,7 +554,7 @@ void screenDoDumpToDiskIfRequired() {
 	}
 	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 
-	screendump_required = 0;
+	screendump_required = FALSE;
 
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_compress(&cinfo);
@@ -823,7 +880,7 @@ char* screenDumpToDisk(char* path) {
 		}
 	}
 
-	screendump_required = 1;
+	screendump_required = TRUE;
 
 	return screendump_filename;
 }

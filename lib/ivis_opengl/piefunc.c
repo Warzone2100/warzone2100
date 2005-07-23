@@ -153,7 +153,7 @@ void pie_TransColouredTriangle(PIEVERTEX *vrt, UDWORD rgb, UDWORD trans)
         glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
         for (i = 0; i < 3; ++i)
         {
-		glVertex2f(vrt[i].sx, vrt[i].sy);
+		glVertex3f(vrt[i].sx, vrt[i].sy, vrt[i].sz);
 	}
         glEnd();}
 

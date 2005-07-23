@@ -142,10 +142,7 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 
 	SetBSPObjectRot(DEG(-Rotation->y),0);								// Droid rotation
 
-
-
-
-
+	pie_PerspectiveBegin();
    	pie_MatBegin();
 
 	pie_TRANSLATE(Position->x,Position->y,Position->z);
@@ -165,6 +162,7 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 void unsetMatrix(void)
 {
 	pie_MatEnd();
+	pie_PerspectiveEnd();
 }
 
 

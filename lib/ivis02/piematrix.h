@@ -42,30 +42,8 @@ extern SDWORD	aSinTable[];
 									psMatrix->l = (Z)<<FP12_SHIFT;	}
 //*************************************************************************
 
-#define pie_SETUP_ROTATE_PROJECT																\
-	int32 _ivzfx, _ivzfy, _ivx, _ivy, _ivz
-
-#define pie_ROTATE_PROJECT(x,y,z,xs,ys)										\
-{																			\
-	_ivx = (x) * psMatrix->a + (y) * psMatrix->d + (z) * psMatrix->g +	\
-				psMatrix->j;												\
-	_ivy = (x) * psMatrix->b + (y) * psMatrix->e + (z) * psMatrix->h +	\
-				psMatrix->k;												\
-	_ivz = (x) * psMatrix->c + (y) * psMatrix->f + (z) * psMatrix->i +	\
-				psMatrix->l;												\
-	_ivzfx = _ivz >> psRendSurface->xpshift;							\
-	_ivzfy = _ivz >> psRendSurface->ypshift;							\
-	if ((_ivzfx > 0) && (_ivzfy > 0))										\
-	{																		\
-		(xs) = psRendSurface->xcentre + (int32) (_ivx / _ivzfx);		\
-		(ys) = psRendSurface->ycentre - (int32) (_ivy / _ivzfy);		\
-	}																		\
-	else																	\
-	{																		\
-		(xs) = 1<<15;														\
-		(ys) = 1<<15;														\
-	}																		\
-}
+#define pie_SETUP_ROTATE_PROJECT
+#define pie_ROTATE_PROJECT(x, y, z, sx, sy) pie_RotateProject(x, y, z, &(sx), &(sy))
 
 //*************************************************************************
 
@@ -113,6 +91,7 @@ extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);
 extern int32 pie_RotProj(iVector *v3d, iPoint *v2d);
+extern int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys);
 
 //*************************************************************************
 

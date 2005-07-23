@@ -63,6 +63,14 @@ static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
 
 void DrawTriangleList(BSPPOLYID PolygonNumber);
 
+// Functions that are not implemented here...
+
+void pie_BeginLighting(float x, float y, float z) {
+}
+
+void pie_RemainingPasses() {
+}
+
 /***************************************************************************/
 /*
  *	Source

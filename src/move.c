@@ -960,7 +960,7 @@ static void angleToVector(SDWORD angle, FRACT *pX, FRACT *pY)
 static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 {
 	FRACT	diff, change;
-#ifdef DEBUG
+#if defined(DEBUG) || defined(ALWAYS_ASSERT)
 	SDWORD	path=0;
 #define SET_PATH(x) path=x
 #else

@@ -39,13 +39,15 @@ void pie_PerspectiveBegin() {
 void pie_PerspectiveEnd() {
 }
 
+pie_Begin3DScene() {
+}
+
+pie_BeginInterface() {
+}
+
 
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX	*psMatrix = &aMatrixStack[0];
-
-
-
-
 
 void pie_VectorNormalise(iVector *v)
 
@@ -311,45 +313,44 @@ void pie_MatRotX(int x)
 //*
 //******
 
-int32 pie_RotProj(iVector *v3d, iPoint *v2d)
-
+int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
 {
 	int32 zfx, zfy;
-	int32 zz, x, y, z;
+	int32 zz, _x, _y, _z;
 
 
-	x = v3d->x * psMatrix->a+v3d->y * psMatrix->d+v3d->z * psMatrix->g +
-				psMatrix->j;
-	y = v3d->x * psMatrix->b+v3d->y * psMatrix->e+v3d->z * psMatrix->h +
-				psMatrix->k;
-	z = v3d->x * psMatrix->c+v3d->y * psMatrix->f+v3d->z * psMatrix->i +
-				psMatrix->l;
+	_x = x * psMatrix->a+y * psMatrix->d+z * psMatrix->g + psMatrix->j;
+	_y = x * psMatrix->b+y * psMatrix->e+z * psMatrix->h + psMatrix->k;
+	_z = x * psMatrix->c+y * psMatrix->f+z * psMatrix->i + psMatrix->l;
 
-	zz = z >> STRETCHED_Z_SHIFT;
+	zz = _z >> STRETCHED_Z_SHIFT;
 
-	zfx = z >> psRendSurface->xpshift;
-	zfy = z >> psRendSurface->ypshift;
+	zfx = _z >> psRendSurface->xpshift;
+	zfy = _z >> psRendSurface->ypshift;
 
 	if ((zfx<=0) || (zfy<=0))
 	{
-		v2d->x = LONG_WAY;//just along way off screen
-		v2d->y = LONG_WAY;
+		xs = LONG_WAY;//just along way off screen
+		ys = LONG_WAY;
 	}
 	else if (zz < MIN_STRETCHED_Z)
 	{
-		v2d->x = LONG_WAY;//just along way off screen
-		v2d->y = LONG_WAY;
+		xs = LONG_WAY;//just along way off screen
+		ys = LONG_WAY;
 	}
 	else
 	{
-		v2d->x = psRendSurface->xcentre + (x / zfx);
-		v2d->y = psRendSurface->ycentre - (y / zfy);
+		*xs = psRendSurface->xcentre + (_x / zfx);
+		*ys = psRendSurface->ycentre - (_y / zfy);
 	}
 
 	return zz;
 }
 
-
+int32 pie_RotProj(iVector *v3d, iPoint *v2d)
+{
+	return pie_RotateProject(v3d->x, v3d->y, v3d->z, &(v2d->x), &(v2d->y));
+}
 
 //*************************************************************************
 //*** create 3x3 matrix from given euler angles

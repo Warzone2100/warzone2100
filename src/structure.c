@@ -6975,7 +6975,7 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 	UBYTE			mask = 1;
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
-#ifdef DEBUG
+#if defined(DEBUG) || defined(ALWAYS_ASSERT)
 	STRING			*pType;
 #endif
 
@@ -6993,7 +6993,7 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 	if (inc >= MAX_FACTORY)
 	{
         //this may happen now with electronic warfare
-#ifdef DEBUG
+#if defined(DEBUG) || defined(ALWAYS_ASSERT)
 		switch (factoryType)
 		{
 		case FACTORY_FLAG:

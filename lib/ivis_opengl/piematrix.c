@@ -39,9 +39,7 @@ static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX *psMatrix = &aMatrixStack[0];
 static BOOL perspective = FALSE;
 
-
-
-
+BOOL drawing_interface = TRUE;
 
 void pie_VectorNormalise(iVector *v)
 
@@ -184,12 +182,18 @@ void pie_MatEnd(void)
 
 
 void pie_MATTRANS(int x, int y, int z) {
+	GLfloat matrix[16];
+
 	psMatrix->j = x<<FP12_SHIFT;
 	psMatrix->k = y<<FP12_SHIFT;
 	psMatrix->l = z<<FP12_SHIFT;
 
-	//Actually this is more complicated.
-	//glTranslatef(x, y, z);
+	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+	matrix[12] = x;
+	matrix[13] = y;
+	matrix[14] = z;
+	glLoadIdentity();
+	glMultMatrixf(matrix);
 }
 
 void pie_TRANSLATE(int x, int y, int z) {
@@ -197,7 +201,7 @@ void pie_TRANSLATE(int x, int y, int z) {
 	psMatrix->k += ((x) * psMatrix->b + (y) * psMatrix->e + (z) * psMatrix->h);
 	psMatrix->l += ((x) * psMatrix->c + (y) * psMatrix->f + (z) * psMatrix->i);
 
-	//glTranslatef(x, y, z);
+	glTranslatef(x, y, z);
 }
 
 //*************************************************************************
@@ -227,7 +231,7 @@ SDWORD	scaleFactor;
 	psMatrix->h = (psMatrix->h * scaleFactor) / 4096;
 	psMatrix->i = (psMatrix->i * scaleFactor) / 4096;
 
-	//glScalef(0.01*percent, 0.01*percent, 0.01*percent);
+	glScalef(0.01*percent, 0.01*percent, 0.01*percent);
 }
 
 
@@ -260,7 +264,7 @@ void pie_MatRotY(int y)
 		psMatrix->c = t;
 	}
 
-	//glRotatef(y*22.5/4096.0, 0, 1, 0);
+	glRotatef(y*22.5/4096.0, 0, 1, 0);
 }
 
 
@@ -293,7 +297,7 @@ void pie_MatRotZ(int z)
 		psMatrix->c = t;
 	}
 
-	//glRotatef(z*22.5/4096.0, 0, 0, 1);
+	glRotatef(z*22.5/4096.0, 0, 0, 1);
 }
 
 
@@ -325,7 +329,7 @@ void pie_MatRotX(int x)
 		psMatrix->f = t;
 	}
 
-	//glRotatef(x*22.5/4096.0, 1, 0, 0);
+	glRotatef(x*22.5/4096.0, 1, 0, 0);
 }
 
 
@@ -341,64 +345,67 @@ void pie_MatRotX(int x)
 //*
 //******
 
-int32 pie_RotProj(iVector *v3d, iPoint *v2d)
-
+int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
 {
 	int32 zfx, zfy;
-	int32 zz, x, y, z;
+	int32 zz, _x, _y, _z;
 
 
-	x = v3d->x * psMatrix->a+v3d->y * psMatrix->d+v3d->z * psMatrix->g +
-				psMatrix->j;
-	y = v3d->x * psMatrix->b+v3d->y * psMatrix->e+v3d->z * psMatrix->h +
-				psMatrix->k;
-	z = v3d->x * psMatrix->c+v3d->y * psMatrix->f+v3d->z * psMatrix->i +
-				psMatrix->l;
+	_x = x * psMatrix->a+y * psMatrix->d+z * psMatrix->g + psMatrix->j;
+	_y = x * psMatrix->b+y * psMatrix->e+z * psMatrix->h + psMatrix->k;
+	_z = x * psMatrix->c+y * psMatrix->f+z * psMatrix->i + psMatrix->l;
 
-	zz = z >> STRETCHED_Z_SHIFT;
+	zz = _z >> STRETCHED_Z_SHIFT;
 
-	zfx = z >> psRendSurface->xpshift;
-	zfy = z >> psRendSurface->ypshift;
+	zfx = _z >> psRendSurface->xpshift;
+	zfy = _z >> psRendSurface->ypshift;
 
 	if ((zfx<=0) || (zfy<=0))
 	{
-		v2d->x = LONG_WAY;//just along way off screen
-		v2d->y = LONG_WAY;
+		xs = LONG_WAY;//just along way off screen
+		ys = LONG_WAY;
 	}
 	else if (zz < MIN_STRETCHED_Z)
 	{
-		v2d->x = LONG_WAY;//just along way off screen
-		v2d->y = LONG_WAY;
+		xs = LONG_WAY;//just along way off screen
+		ys = LONG_WAY;
 	}
 	else
 	{
-		v2d->x = psRendSurface->xcentre + (x / zfx);
-		v2d->y = psRendSurface->ycentre - (y / zfy);
+		*xs = psRendSurface->xcentre + (_x / zfx);
+		*ys = psRendSurface->ycentre - (_y / zfy);
 	}
 
 	return zz;
 }
 
+int32 pie_RotProj(iVector *v3d, iPoint *v2d)
+{
+	return pie_RotateProject(v3d->x, v3d->y, v3d->z, &(v2d->x), &(v2d->y));
+}
+
+int32 pie_Transform(iVector *v3d, iPoint *v2d)
+{
+	v2d->x = v3d->x;
+	v2d->y = v3d->y;
+	return v3d->z;
+}
+
 //*************************************************************************
 
 void pie_PerspectiveBegin() {
-	/*
 	float width = pie_GetVideoBufferWidth();
 	float height = pie_GetVideoBufferHeight();
-	float ratio = width/height;
+	float xangle = width/6;
+	float yangle = height/6;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glTranslatef((width-2*psRendSurface->xcentre)/width,
+	glTranslatef((2*psRendSurface->xcentre-width)/width,
 		     (height-2*psRendSurface->ycentre)/height , 0);
-	glFrustum(-40*ratio, 40*ratio, -40, 40, 110, 1000000);
+	glFrustum(-xangle, xangle, -yangle, yangle, 330, 100000);
 	glScalef(1, 1, -1);
 	glMatrixMode(GL_MODELVIEW);
-	*/
-
-	glDepthRange(0.1, 1);
-
-	perspective = TRUE;
 }
 
 void pie_PerspectiveEnd() {
@@ -406,12 +413,17 @@ void pie_PerspectiveEnd() {
 	glLoadIdentity();
 	glOrtho(0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), 0, 1, -1);
 	glMatrixMode(GL_MODELVIEW);
-
-	glDepthRange(0, 0.1);
-
-	perspective = FALSE;
 }
 
+pie_Begin3DScene() {
+	glDepthRange(0.1, 1);
+	drawing_interface = FALSE;
+}
+
+pie_BeginInterface() {
+	glDepthRange(0, 0.1);
+	drawing_interface = TRUE;
+}
 
 //*************************************************************************
 
@@ -421,9 +433,6 @@ void pie_SetGeometricOffset(int x, int y)
 	psRendSurface->xcentre = x;
 	psRendSurface->ycentre = y;
 }
-
-
-
 
 // all these routines use the PC format of iVertex ... and are not used on the PSX
 //*************************************************************************

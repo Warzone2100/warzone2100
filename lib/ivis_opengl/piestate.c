@@ -379,12 +379,33 @@ BOOL pie_GetFogEnabled(void)
 
 void pie_SetFogStatus(BOOL val)
 {
+	PIELIGHT fog;
+	float fog_colour[4];
+
 	if (rendStates.fogEnabled)
 	{
 		//fog enabled so toggle if required 
 		if (rendStates.fog != val)
 		{
 			rendStates.fog = val;
+
+			if (rendStates.fog) {
+				fog.argb = pie_GetFogColour();
+				fog_colour[0] = fog.byte.r/255.0;
+				fog_colour[1] = fog.byte.g/255.0;
+				fog_colour[2] = fog.byte.b/255.0;
+				fog_colour[3] = fog.byte.a/255.0;
+
+				glFogi(GL_FOG_MODE, GL_LINEAR);
+				glFogfv(GL_FOG_COLOR, fog_colour);
+				glFogf(GL_FOG_DENSITY, 0.35f);
+				glHint(GL_FOG_HINT, GL_DONT_CARE);
+				glFogf(GL_FOG_START, 5000.0f);
+				glFogf(GL_FOG_END, 7000.0f);
+				glEnable(GL_FOG);
+			} else {
+				glDisable(GL_FOG);
+			}
 		}
 	}
 	else

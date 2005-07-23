@@ -135,13 +135,19 @@ void pie_ShutDown(void) {
 /***************************************************************************/
 
 void pie_ScreenFlip(CLEAR_MODE clearMode) {
+	PIELIGHT fog_colour;
+
 	screenDoDumpToDiskIfRequired();
 	SDL_GL_SwapBuffers();
 	switch (clearMode) {
 		case CLEAR_BLACK:
 		default:
 			glDepthMask(GL_TRUE);
-			glClearColor(0, 0, 0, 0);
+			fog_colour.argb = pie_GetFogColour();
+			glClearColor(fog_colour.byte.r/255.0,
+				     fog_colour.byte.g/255.0,
+				     fog_colour.byte.b/255.0,
+				     fog_colour.byte.a/255.0);
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 			break;
 	}

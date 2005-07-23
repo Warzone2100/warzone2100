@@ -444,9 +444,9 @@ BOOL		bPlayerHasHQ = FALSE;
 		dragQuad.coords[3].y = dragBox3D.y2;
 	}
 
-	pie_PerspectiveBegin();
+	pie_Begin3DScene();
    	displayTerrain();
-	pie_PerspectiveEnd();
+	pie_BeginInterface();
 	updateLightLevels();	
 	drawDroidSelections();
 	/* Show the selected delivery point */
@@ -526,8 +526,6 @@ BOOL		bPlayerHasHQ = FALSE;
 			iV_DrawText("Published by EIDOS Interactive",pie_GetVideoBufferWidth()-196,467+E_H);
 		}
 	}
-
-	
 
 	/*
 	if(mousePressed(MOUSE_LMB))
@@ -680,6 +678,7 @@ void displayTerrain(void)
 
 	/* Set 3D world origins */
 	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
+	pie_PerspectiveBegin();
 
 	/* We haven't yet located which tile mouse is over */
 	mouseLocated = FALSE;
@@ -691,6 +690,8 @@ void displayTerrain(void)
 
 	/* Now, draw the terrain */
 	drawTiles(&camera,&player);
+
+	pie_PerspectiveEnd();
 
 	/* Show the drag Box if necessary */
 	drawDragBox();
@@ -745,7 +746,6 @@ void	setProximityDraw(BOOL val)
 void drawTiles(iView *camera, iView *player)
 {
 	SDWORD	i,j;
-	iVector tileXYZ;
 	SDWORD	zMax;
 	iVector BSPCamera;
 	MAPTILE	*psTile; 	
@@ -761,10 +761,10 @@ void drawTiles(iView *camera, iView *player)
 	FRACT	fraction;
 	UDWORD	realX,realY;
 	BOOL	bEdgeTile;
+	SDWORD tmp_y;
+	static float angle = 0.0;
 
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
-
-   	
 	if(!gamePaused())
 	{
 		fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
@@ -816,6 +816,9 @@ void drawTiles(iView *camera, iView *player)
 	pie_MatRotY(player->r.y);
 	  /* Translate */
 	pie_TRANSLATE(-rx,-player->p.y,rz);
+	angle += 0.01;
+	// RODZ uncomment the following line to see an OpenGL lighting demo
+	pie_BeginLighting(10, -500, -500);
 	
 	/* ---------------------------------------------------------------- */
 	/* Rotate and project all the tiles within the grid                 */
@@ -848,10 +851,10 @@ void drawTiles(iView *camera, iView *player)
 				else
 				if(playerZTile+i > (SDWORD)(mapHeight-1) ) edgeY = mapHeight-1;
 
-				tileXYZ.x = ((j-terrainMidX)<<TILE_SHIFT);
-				tileXYZ.y = 0;//map_TileHeight(edgeX,edgeY);
-				tileXYZ.z = ((terrainMidY-i)<<TILE_SHIFT);
-				tileScreenInfo[i][j].sz = pie_RotProj(&tileXYZ,(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].x = ((j-terrainMidX)<<TILE_SHIFT);
+				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
+				tileScreenInfo[i][j].z = ((terrainMidY-i)<<TILE_SHIFT);
+				tileScreenInfo[i][j].sz = pie_RotProj(&tileScreenInfo[i][j].x,(iPoint *)&tileScreenInfo[i][j].sx);
 			  
 			   	if (pie_GetFogEnabled())
 			  	{
@@ -868,7 +871,7 @@ void drawTiles(iView *camera, iView *player)
 			  	}
 			  	else
 			  	{
-			  		tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(mapTile(edgeX,edgeY)->illumination,rx-tileXYZ.x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
+			  		tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(mapTile(edgeX,edgeY)->illumination,rx-tileScreenInfo[i][j].x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 			  	}
 
 					
@@ -892,7 +895,7 @@ void drawTiles(iView *camera, iView *player)
 				
 				psTile = mapTile(playerXTile+j,playerZTile+i);
 				/* Get a pointer to the tile at this location */
-				tileXYZ.x = ((j-terrainMidX)<<TILE_SHIFT);
+				tileScreenInfo[i][j].x = ((j-terrainMidX)<<TILE_SHIFT);
 				if(pie_Hardware())
 				{
 					if(TERRAIN_TYPE(psTile)==TER_WATER)
@@ -900,13 +903,13 @@ void drawTiles(iView *camera, iView *player)
 						tileScreenInfo[i][j].bWater = TRUE;
 					}
 				}
-				tileXYZ.y = map_TileHeight(playerXTile+j, playerZTile+i);
-				tileXYZ.z = ((terrainMidY-i)<<TILE_SHIFT);
+				tileScreenInfo[i][j].y = map_TileHeight(playerXTile+j, playerZTile+i);
+				tileScreenInfo[i][j].z = ((terrainMidY-i)<<TILE_SHIFT);
 
 				/* Is it in the centre and therefore worth averaging height over? */
 				if(i > MIN_TILE_Y AND i < MAX_TILE_Y AND j > MIN_TILE_X AND j < MAX_TILE_X)
 				{
-					averageCentreTerrainHeight += tileXYZ.y;
+					averageCentreTerrainHeight += tileScreenInfo[i][j].y;
 					numTilesAveraged++;
 				}
 				realX = playerXTile+j;
@@ -952,15 +955,15 @@ void drawTiles(iView *camera, iView *player)
 						PushedDown = TRUE;
 					 	shiftVal = WATER_DEPTH + ((3*environGetData(playerXTile+j,playerZTile+i))/2);
 						altVal = 0;//environGetValue(playerXTile+j,playerZTile+i);
-						tileXYZ.y -= (shiftVal+altVal);
+						tileScreenInfo[i][j].y -= (shiftVal+altVal);
 						// And darken it.
 						TileIllum = (UBYTE)((TileIllum*3)/4);
 					}
 				}
 #endif
-				tileScreenInfo[i][j].sz = pie_RotProj(&tileXYZ,(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotProj(&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].sx);
 
-				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileXYZ.x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
+				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileScreenInfo[i][j].x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 
 				if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 			 	{
@@ -974,21 +977,25 @@ void drawTiles(iView *camera, iView *player)
 					if(IsWaterTile) {
 						// If it's the main water tile then bring it back up because it was pushed down
 						// for the river bed calc.
-						if(PushedDown) { //TextNum == WaterTileID) {
-							tileXYZ.y += (shiftVal + (2*altVal));
+						tmp_y = tileScreenInfo[i][j].y;
+						if (PushedDown) { //TextNum == WaterTileID) {
+							tileScreenInfo[i][j].y += (shiftVal + (2*altVal));
 						}
 
 						// Transform it into the wx,wy mesh members.
-						tileScreenInfo[i][j].wz = pie_RotProj(&tileXYZ,(iPoint *)&tileScreenInfo[i][j].wx);
+						tileScreenInfo[i][j].wz = pie_RotProj(&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].wx);
 						tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
-							TileIllum, rx-tileXYZ.x,		  // cos altval can go to 20
+							TileIllum, rx-tileScreenInfo[i][j].x,		  // cos altval can go to 20
 							rz - ((i-terrainMidY)<<TILE_SHIFT), &specular);
+						tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
+						tileScreenInfo[i][j].y = tmp_y;
 					} else {
 						// If it was'nt a water tile then need to ensure wx,wy are valid because
 						// a water tile might be sharing verticies with it.
 						tileScreenInfo[i][j].wx = tileScreenInfo[i][j].sx;
 						tileScreenInfo[i][j].wy = tileScreenInfo[i][j].sy;
 						tileScreenInfo[i][j].wz = tileScreenInfo[i][j].sz;
+						tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 					}
 				}
 #endif
@@ -1079,6 +1086,7 @@ void drawTiles(iView *camera, iView *player)
 	atmosDrawParticles();
 #ifdef BUCKET
 	bucketRenderCurrentList();
+	pie_RemainingPasses();
 #endif
 #ifdef ARROWS
 	arrowDrawAll();
@@ -4105,10 +4113,10 @@ FRACT			mulH;
 					{
 						if(bEnergyBars)
 						{
-						 	pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+1, scrY+scrR - 7, longBoxCol);
+						 	pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, longBoxCol);
 							pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1,longBoxCol);
 							pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1,longBoxCol);
-							pie_BoxFill(scrX+scrR, scrY+scrR+1, scrX+scrR+1, scrY+scrR-7,longBoxCol);
+							pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1,longBoxCol);
 						}
 						else
 						{
@@ -4119,10 +4127,10 @@ FRACT			mulH;
 							}
 							else
 							{
-								pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+1, scrY+scrR - 7, longPowerCol);
+								pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, longPowerCol);
 								pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1,longPowerCol);
 								pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1,longPowerCol);
-								pie_BoxFill(scrX+scrR, scrY+scrR+1, scrX+scrR+1, scrY+scrR-7,longPowerCol);
+								pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1,longPowerCol);
 							}
 						}
 					}
@@ -4544,12 +4552,12 @@ iPoint	srcS,destS;
 	speeded up and the accuracy increased to allow variable size bouding boxes */
 void	calcScreenCoords(DROID *psDroid)
 {
-//BOOL	setMouse = FALSE;
-SDWORD	centX,centY,centZ;
-SDWORD	cX,cY;
-iIMDShape	*imd;
-UDWORD	radius;
-POINT	pt;
+	//BOOL	setMouse = FALSE;
+	SDWORD	centX,centY,centZ;
+	SDWORD	cX, cY, cZ;
+	iIMDShape	*imd;
+	UDWORD	radius;
+	POINT	pt;
 
 	/* Ennsure correct context */
 	pie_SETUP_ROTATE_PROJECT;
@@ -4572,10 +4580,10 @@ POINT	pt;
 
 	}
 
-	radius = ((radius * pie_GetResScalingFactor())/100);
-
 	/* Pop matrices and get the screen corrdinates */
-	pie_ROTATE_PROJECT(centX,centY,centZ,cX,cY);
+	cZ = pie_ROTATE_PROJECT(centX, centY, centZ, cX, cY);
+
+	radius = ((radius * pie_GetResScalingFactor()) * 80 / cZ);
 
 	/* Deselect all the droids if we've released the drag box */
 	if(dragBox3D.status == DRAG_RELEASED)
@@ -5432,17 +5440,17 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	if(TRI_FLIPPED(psTile))
 	{
    		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+0].wx;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+0].wy;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+0].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
+   		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
+   		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
    		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+0][j+1].wx;
-   		aVrts[1].sy = tileScreenInfo[i+0][j+1].wy;
-   		aVrts[1].sz = tileScreenInfo[i+0][j+1].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[1].sx = tileScreenInfo[i+0][j+1].x;
+   		aVrts[1].sy = tileScreenInfo[i+0][j+1].water_height;
+   		aVrts[1].sz = tileScreenInfo[i+0][j+1].z;
    		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
+   		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
+   		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
@@ -5456,17 +5464,17 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	else
 	{
    		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+0].wx;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+0].wy;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+0].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
+   		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
+   		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
    		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+0][j+1].wx;
-   		aVrts[1].sy = tileScreenInfo[i+0][j+1].wy;
-   		aVrts[1].sz = tileScreenInfo[i+0][j+1].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[1].sx = tileScreenInfo[i+0][j+1].x;
+   		aVrts[1].sy = tileScreenInfo[i+0][j+1].water_height;
+   		aVrts[1].sz = tileScreenInfo[i+0][j+1].z;
    		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+1].wx;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+1].wy;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+1].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[2].sx = tileScreenInfo[i+1][j+1].x;
+   		aVrts[2].sy = tileScreenInfo[i+1][j+1].water_height;
+   		aVrts[2].sz = tileScreenInfo[i+1][j+1].z;
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
@@ -5482,17 +5490,17 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	if(TRI_FLIPPED(psTile))
 	{
    		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+1].wx;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+1].wy;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+1].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[0].sx = tileScreenInfo[i+0][j+1].x;
+   		aVrts[0].sy = tileScreenInfo[i+0][j+1].water_height;
+   		aVrts[0].sz = tileScreenInfo[i+0][j+1].z;
    		memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+1][j+1].wx;
-   		aVrts[1].sy = tileScreenInfo[i+1][j+1].wy;
-   		aVrts[1].sz = tileScreenInfo[i+1][j+1].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[1].sx = tileScreenInfo[i+1][j+1].x;
+   		aVrts[1].sy = tileScreenInfo[i+1][j+1].water_height;
+   		aVrts[1].sz = tileScreenInfo[i+1][j+1].z;
    		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
+   		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
+   		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
@@ -5506,17 +5514,17 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	else
 	{
    		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+0].wx;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+0].wy;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+0].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
+   		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
+   		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
    		memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+1][j+1].wx;
-   		aVrts[1].sy = tileScreenInfo[i+1][j+1].wy;
-   		aVrts[1].sz = tileScreenInfo[i+1][j+1].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[1].sx = tileScreenInfo[i+1][j+1].x;
+   		aVrts[1].sy = tileScreenInfo[i+1][j+1].water_height;
+   		aVrts[1].sz = tileScreenInfo[i+1][j+1].z;
    		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_EDGE_ZOFFSET;
+   		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
+   		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
+   		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
 		if (pie_GetRenderEngine() == ENGINE_GLIDE)
 		{
 			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
@@ -5585,23 +5593,23 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)	//hardware only
 		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + 31);
 
 		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-		aVrts[0].sx = tileScreenInfo[i+0][j+0].wx;
-		aVrts[0].sy = tileScreenInfo[i+0][j+0].wy;
-		aVrts[0].sz = tileScreenInfo[i+0][j+0].wz - WATER_ZOFFSET;
+		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
+		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
+		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
 		aVrts[0].light = tileScreenInfo[i+0][j+0].wlight;
 		aVrts[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-		aVrts[1].sx = tileScreenInfo[i+0][j+1].wx;
-		aVrts[1].sy = tileScreenInfo[i+0][j+1].wy;
-		aVrts[1].sz = tileScreenInfo[i+0][j+1].wz - WATER_ZOFFSET;
+		aVrts[1].sx = tileScreenInfo[i+0][j+1].x;
+		aVrts[1].sy = tileScreenInfo[i+0][j+1].water_height;
+		aVrts[1].sz = tileScreenInfo[i+0][j+1].z;
 		aVrts[1].light = tileScreenInfo[i+0][j+1].wlight;
 		aVrts[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-		aVrts[2].sx = tileScreenInfo[i+1][j+1].wx;
-		aVrts[2].sy = tileScreenInfo[i+1][j+1].wy;
-		aVrts[2].sz = tileScreenInfo[i+1][j+1].wz - WATER_ZOFFSET;
+		aVrts[2].sx = tileScreenInfo[i+1][j+1].x;
+		aVrts[2].sy = tileScreenInfo[i+1][j+1].water_height;
+		aVrts[2].sz = tileScreenInfo[i+1][j+1].z;
 		aVrts[2].light = tileScreenInfo[i+1][j+1].wlight;
 		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -5610,9 +5618,9 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)	//hardware only
 		memcpy(&aVrts[1],&aVrts[2],sizeof(PIEVERTEX));
 
 		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
-		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
-		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_ZOFFSET;
+		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
+		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
+		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
 		aVrts[2].light = tileScreenInfo[i+1][j+0].wlight;
 		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -6360,38 +6368,35 @@ UDWORD	i;
 
 static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 {
-PIEVERTEX	pts[3];
-iPoint	pt1,pt2,pt3;
-UDWORD	pt1Z,pt2Z,pt3Z;
-iVector each;	
-iVector	*point;
-UDWORD	pointIndex;
-SDWORD	realY;
-iVector	null,vec;
-SDWORD	rx,rz;
-UDWORD	colour;
-UDWORD	specular;
-UDWORD	trans;
+	PIEVERTEX	pts[3];
+	iPoint	pt1,pt2,pt3;
+	UDWORD	pt1Z,pt2Z,pt3Z;
+	iVector each;	
+	iVector	*point;
+	UDWORD	pointIndex;
+	SDWORD	realY;
+	iVector	null,vec;
+	SDWORD	rx,rz;
+	UDWORD	colour;
+	UDWORD	specular;
+	UDWORD	trans;
 
-trans = 0; //Defining the variable trans to eleminate a runtime debug error
-//SDWORD	centreX,centreZ;
+	trans = 0; //Defining the variable trans to eleminate a runtime debug error
 
 	null.x = null.y = null.z = 0;
 	each.x = psDroid->x;
-	each.y = psDroid->z + 24;
 	each.z = psDroid->y;
+	each.y = psDroid->z + 24;
 
 	vec.x = (each.x - player.p.x) - terrainMidX*TILE_UNITS;
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
 	vec.y = each.y;
 
-	pie_MatBegin();
-	pie_TRANSLATE(vec.x,vec.y,vec.z);
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pie_TRANSLATE(rx,0,-rz);
-	pt1Z = pie_RotProj(&null,&pt1);
-	pie_MatEnd();
+	pts[0].sx = vec.x + rx;
+	pts[0].sy = vec.y;
+	pts[0].sz = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -6404,28 +6409,18 @@ trans = 0; //Defining the variable trans to eleminate a runtime debug error
 	if(ONEINEIGHT)
 	{
 		effectSetSize(30);
-  //	 	if(rand()%2)
-  //		{
-			addEffect(&each,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,getImdFromIndex(MI_PLASMA),0);
-  //		}
-  //		else
-  //		{
-  //			addEffect(&each,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,0);
-  //		}
+		addEffect(&each,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,getImdFromIndex(MI_PLASMA),0);
 	}
 
 	vec.x = (each.x - player.p.x) - terrainMidX*TILE_UNITS;
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
 	vec.y = each.y;
 
-	pie_MatBegin();
-	pie_TRANSLATE(vec.x,vec.y,vec.z);
 	rx = player.p.x & (TILE_UNITS-1);
-
 	rz = player.p.z & (TILE_UNITS-1);
-	pie_TRANSLATE(rx,0,-rz);
-	pt2Z = pie_RotProj(&null,&pt2);
-	pie_MatEnd();
+	pts[1].sx = vec.x + rx;
+	pts[1].sy = vec.y;
+	pts[1].sz = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -6439,19 +6434,11 @@ trans = 0; //Defining the variable trans to eleminate a runtime debug error
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
 	vec.y = each.y;
 
-	pie_MatBegin();
-	pie_TRANSLATE(vec.x,vec.y,vec.z);
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pie_TRANSLATE(rx,0,-rz);
-	pt3Z = pie_RotProj(&null,&pt3);
-	pie_MatEnd();
-
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
-
-  //	colour = lightDoFogAndIllumination(255,centreX - psDroid->x, centreZ - psDroid->z,&specular);
-//	   rx-tileXYZ.x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
+	pts[2].sx = vec.x + rx;
+	pts[2].sy = vec.y;
+	pts[2].sz = vec.z - rz;
 
 	// set the colour
 	colour = UBYTE_MAX;
@@ -6497,76 +6484,20 @@ trans = 0; //Defining the variable trans to eleminate a runtime debug error
 	}
 
 
-  	pts[0].sx = pt1.x;
-	pts[0].sy = pt1.y;
-	pts[0].sz = pt1Z;
 	pts[0].tu = 0;
 	pts[0].tv = 0;
 	pts[0].specular.argb = colour;
 
-	pts[1].sx = pt2.x;
-	pts[1].sy = pt2.y;
-	pts[1].sz = pt2Z;
 	pts[1].tu = 0;
 	pts[1].tv = 0;
 	pts[1].specular.argb = 0;
 	
-	pts[2].sx = pt3.x;
-	pts[2].sy = pt3.y;
-	pts[2].sz = pt3Z;
 	pts[2].tu = 0;
 	pts[2].tv = 0;
 	pts[2].specular.argb = 0;
 
  
-/* Only do if at least one point is on-screen */
-	if( ((pts[0].sx>0 AND pts[0].sx<DISP_WIDTH) AND	(pts[0].sy>0 AND pts[0].sy<DISP_HEIGHT)) OR
-	   ( (pts[1].sx>0 AND pts[1].sx<DISP_WIDTH) AND	(pts[1].sy>0 AND pts[1].sy<DISP_HEIGHT)) OR
-		((pts[2].sx>0 AND pts[2].sx<DISP_WIDTH) AND (pts[2].sy>0 AND pts[2].sy<DISP_HEIGHT)) )
-	{
-		pie_TransColouredTriangle((PIEVERTEX*)&pts,colour,trans);
-	}
-	return;
-
-/*
-
-	pts[0].sx = psDroid->x;
-	pts[0].sy = psDroid->z + 24;
-	pts[0].sz = psDroid->y;
-
-	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
-	point = &(psStructure->sDisplay.imd->points[pointIndex]);
-
-	pts[1].sx = psStructure->x + point->x;
-	realY = MAKEINT((structHeightScale(psStructure) * point->y));
-	pts[1].sy = psStructure->z + realY;
-	pts[1].sz = psStructure->y - point->z;
-
-	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
-	point = &(psStructure->sDisplay.imd->points[pointIndex]);
-
-	pts[2].sx = psStructure->x + point->x;
-	realY = MAKEINT((structHeightScale(psStructure) * point->y));
-	pts[2].sy = psStructure->z + realY;
-	pts[2].sz = psStructure->y - point->z;
-
-	pie_TransColouredTriangle((PIEVERTEX*)&pts,0x00ff0000,128);
-
-//	draw3dLine(&src,&dest,COL_WHITE);
-
-//	if(rand()%5==1)
-//	{	
-//		effectGiveAuxVar(50);
-//		addEffect(&dest,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-//	}
-	point = &(psStructure->sDisplay.imd->points[pointIndex+1]);
-
-	src.x = psStructure->x + point->x;
-	realY = MAKEINT((structHeightScale(psStructure) * point->y));
-	src.y = psStructure->z + realY;
-	src.z = psStructure->y - point->z;
-	draw3dLine(&src,&dest,COL_GREEN);
-	*/
+	pie_TransColouredTriangle((PIEVERTEX*)&pts,colour,trans);
 }
 
 /*
