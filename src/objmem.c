@@ -660,8 +660,8 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 		if (psCurr != NULL)
 		{
 			psPrev->psNext = psCurr->psNext;
+			HEAP_FREE(psFlagPosHeap, psCurr);
 		}
-		HEAP_FREE(psFlagPosHeap, psCurr);
 	}
 }
 
