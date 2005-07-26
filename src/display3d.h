@@ -152,6 +152,7 @@ extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 #define BAR_FULL	0
 #define BAR_BASIC	1
 #define BAR_DOT		2
+#define BAR_NONE	3
 
 extern UDWORD	barMode;
 

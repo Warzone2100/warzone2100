@@ -4023,6 +4023,8 @@ FRACT			mulH;
 		bEnergyBars = FALSE;
 		bTinyBars = TRUE;
 		break;
+	case BAR_NONE:
+		return;
 	default:
 		ASSERT((FALSE,"Invalid energy bar display value"));
 		break;
@@ -5733,7 +5735,7 @@ UDWORD	desPitch;
 // -------------------------------------------------------------------------------------
 void	toggleEnergyBars( void )
 {
-	if(++barMode>BAR_DOT)
+	if(++barMode>BAR_NONE)
 	{
 		barMode = BAR_FULL;
 	}
