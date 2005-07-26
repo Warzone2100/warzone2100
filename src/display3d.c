@@ -818,7 +818,7 @@ void drawTiles(iView *camera, iView *player)
 	pie_TRANSLATE(-rx,-player->p.y,rz);
 	angle += 0.01;
 	// RODZ uncomment the following line to see an OpenGL lighting demo
-	pie_BeginLighting(10, -500, -500);
+	pie_BeginLighting(50, -300, -300);
 	
 	/* ---------------------------------------------------------------- */
 	/* Rotate and project all the tiles within the grid                 */

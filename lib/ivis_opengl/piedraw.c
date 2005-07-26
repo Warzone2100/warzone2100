@@ -31,6 +31,52 @@ extern BOOL drawing_interface;
 
 /***************************************************************************/
 /*
+ *	OpenGL extensions for shadows
+ */
+/***************************************************************************/
+
+BOOL check_extension(const char* extension_name) {
+	char* extension_list = (char*)glGetString(GL_EXTENSIONS);
+	unsigned int extension_name_length = strlen(extension_name);
+	char* tmp = extension_list;
+	unsigned int first_extension_length;
+
+	if (!extension_name || !extension_list) return FALSE;
+
+	while (tmp[0]) {
+		first_extension_length = strcspn(tmp, " ");
+
+		if (   extension_name_length == first_extension_length
+		    && strncmp(extension_name, tmp, first_extension_length) == 0) {
+			printf("%s is supported.\n", extension_name);
+			return TRUE;
+		}
+		tmp += first_extension_length + 1;
+	}
+
+	printf("%s is not supported.\n", extension_name);
+
+	return FALSE;
+}
+
+PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
+
+BOOL stencil_one_pass() {
+	static BOOL initialised = FALSE;
+	static BOOL return_value;
+
+	if (!initialised) {
+		return_value =    check_extension("GL_EXT_stencil_two_side")
+			       && check_extension("GL_EXT_stencil_wrap");
+		glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC) SDL_GL_GetProcAddress("glActiveStencilFaceEXT");
+		initialised = TRUE;
+	}
+
+	return return_value;
+}
+
+/***************************************************************************/
+/*
  *	Local Definitions
  */
 /***************************************************************************/
@@ -623,19 +669,31 @@ void pie_DrawShadows() {
 	glEnable(GL_STENCIL_TEST);
 	glClear(GL_STENCIL_BUFFER_BIT);
 
-	if (!dlist_defined) {
-		dlist = glGenLists(1);
-		dlist_defined = TRUE;
+	if (stencil_one_pass()) {
+		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+		glDisable(GL_CULL_FACE);
+		glStencilMask(~0);
+		glActiveStencilFaceEXT(GL_BACK);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR_WRAP_EXT);
+		glStencilFunc(GL_ALWAYS, 0, ~0);
+		glActiveStencilFaceEXT(GL_FRONT);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
+		glStencilFunc(GL_ALWAYS, 0, ~0);
+	} else {
+		if (!dlist_defined) {
+			dlist = glGenLists(1);
+			dlist_defined = TRUE;
+		}
+		// Setup stencil for back faces.
+		glStencilMask(~0);
+		glStencilFunc(GL_ALWAYS, 0, ~0);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+
+		// Start display list.
+		glNewList(dlist, GL_COMPILE_AND_EXECUTE);
 	}
-
-	// Setup stencil for front faces.
-	glStencilMask(~0);
-	glStencilFunc(GL_ALWAYS, 0, ~0);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-
-	glNewList(dlist, GL_COMPILE_AND_EXECUTE);
 
 	for (i = 0; i < nb_scshapes; ++i) {
 		glLoadIdentity();
@@ -649,11 +707,21 @@ void pie_DrawShadows() {
 
 	glEndList();
 
-	// Setup stencil for back faces.
-	glCullFace(GL_FRONT);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
-	glCallList(dlist);
+	if (stencil_one_pass()) {
+		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+	} else {
+		// End display list.
+		glEndList();
 
+		// Setup stencil for front faces.
+		glCullFace(GL_FRONT);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
+
+		// Draw display list
+		glCallList(dlist);
+	}
+
+	glEnable(GL_CULL_FACE);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 	glStencilMask(~0);
@@ -662,7 +730,6 @@ void pie_DrawShadows() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(0, 0, 0, 0.5);
 
-	glCullFace(GL_FRONT);
 	pie_PerspectiveEnd();
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
