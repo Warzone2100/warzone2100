@@ -1,3 +1,19 @@
+0.2.2 - 20050724
+* More Compiler warning fixes.
+* Fixed a few assert-related problems.
+* Lots of lex/yacc related fixes.
+* Fixed a crash with missing videos
+* Fixed a wrong function definition / call in multiint.c.
+* Fixed crash with international characters.
+* Fixed memory release crash.
+* Removed the last traces of stubs.c in both ivis directories (and thus fixed
+building the software renderer with automake).
+* Check that video mode can actually be set.
+* Changed the static makefiles to build the OpenGL version by default. Use
+GFX=software for the software renderer.
+* It is now possible to compile the game with g++ using the -fpermissive
+compiler flag.
+
 0.2.1 - 20050716
 * .net bug fixes.
 * Music sample rate fix.
