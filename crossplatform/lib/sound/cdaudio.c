@@ -1,3 +1,5 @@
+#include "frame.h"
+
 #ifdef WZ_CDA
 
 #include <SDL/SDL.h>
@@ -19,7 +21,6 @@
 
 #endif
 
-#include "frame.h"
 #include "audio.h"
 #include "cdaudio.h"
 
