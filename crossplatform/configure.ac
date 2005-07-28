@@ -117,6 +117,7 @@ if test "x$opengl" != xno; then
     fi
   fi
 fi
+AC_CHECK_LIB(jpeg, main, , [AC_MSG_ERROR([You need to install the jpeg library.])])
 AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = xyes; then
   AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
@@ -133,8 +134,6 @@ if test "x$openal" != xno; then
   AL_lib=yes
   AC_CHECK_LIB(openal, main, ALLIB=openal, 
                [AC_CHECK_LIB(openal32, main, ALLIB=openal32, AL_lib=no)])
-  # On Windows (and perhaps some other platforms), Alut is a separate library
-  AC_CHECK_LIB(alut, main, ALUTLIB="-lalut", ALUTLIB="")
   if test "x$AL_lib" = "xno"; then
     if test "x$openal" = xyes; then
       AC_MSG_ERROR([You need to install OpenAL.])
@@ -155,7 +154,7 @@ if test "x$openal" != xno; then
 fi
 AC_MSG_CHECKING([OpenAL])
 if test "x$openal" = xyes; then
-  LIBS="$LIBS -l$ALLIB $ALUTLIB"
+  LIBS="$LIBS -l$ALLIB"
   AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])
   AC_MSG_RESULT([yes])
 else
