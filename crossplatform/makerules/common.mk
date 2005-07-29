@@ -21,9 +21,9 @@ CC=gcc
 CFLAGS+=-gstabs -DYY_STATIC
 
 ifeq ($(MODE), prod)
-CFLAGS+=-Wall -Wno-pointer-sign -fno-strict-aliasing -O2
+CFLAGS+=-Wall -fno-strict-aliasing -O2
 else
-CFLAGS+=-Wall -Wno-pointer-sign -g
+CFLAGS+=-Wall -g
 endif
 
 OBJ1=$(SRC_FILES:%.l=%.o)
