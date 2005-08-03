@@ -1892,14 +1892,14 @@ DBPRINTF(("addText : %s\n",txt));
 // show a background piccy
 VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	STRING	sTmp[128];
+    const size_t sTmpSize = 200;
+	STRING	sTmp[sTmpSize];
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
-	sprintf(sTmp, "Version 2.0 beta %s w/%s - Built %s", SVN_REVISION,
+	snprintf(sTmp, sTmpSize, "Version 2.0 beta %s w/%s - Built %s", SVN_REVISION,
             pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
-    printf("Version: %s\n", sTmp); fflush(NULL);
 	
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
 }
