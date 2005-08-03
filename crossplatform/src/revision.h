@@ -1,1 +1,1 @@
-#define SVN_REVISION "$REVISION$"
+#define SVN_REVISION "$Revision$"
