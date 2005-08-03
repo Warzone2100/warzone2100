@@ -73,6 +73,7 @@ warzone_SOURCES = \
 		radar.c \
 		raycast.c \
 		research.c \
+		revision.h \
 		scores.c \
 		scriptai.c \
 		scriptcb.c \
@@ -277,10 +278,7 @@ warzone_LDFLAGS = -L../lib/framework -L../lib/gamelib -L../lib/$(RENDERER) \
 warzone_DEPENDENCIES = $(warzone_libs)
 warzone_LDADD        = $(warzone_libs)
 
-
 # Just delete frontend.o so it is remade unconditionally to have an
 # up-to-date revision number.
 STUPID_TRICK := $(shell rm -rf frontend.o)
-
-SVN_REV := $(shell svnversion ..)
-CFLAGS += -DSVN_REVISION=\"$(SVN_REV)\" $(STUPID_TRICK)
+CFLAGS += $(STUPID_TRICK)
