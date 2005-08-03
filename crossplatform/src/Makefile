@@ -140,9 +140,12 @@ endif
 MAKERULES=../makerules
 include $(MAKERULES)/exe.mk
 
-# Just delete frontend.o so it is remade unconditionally to have an
+# On every build, record the working copy revision string in revision.h
+# if svnversion is not installed, it will be just an empty string.
+# Also delete frontend.o so it is remade unconditionally to have an
 # up-to-date revision number.
 STUPID_TRICK := $(shell rm -rf frontend.o)
-
-SVN_REV := $(shell svnversion ..)
-CFLAGS += -DSVN_REVISION=\"$(SVN_REV)\" $(STUPID_TRICK)
+REWRITE_REVISION_H1 := $(shell echo -n '\#define SVN_REVISION "Revision ' > revision.h)
+REWRITE_REVISION_H2 := $(shell svnversion -n . >> revision.h)
+REWRITE_REVISION_H3 := $(shell echo '"' >> revision.h)
+CFLAGS += $(STUPID_TRICK) $(REWRITE_REVISION_H1) $(REWRITE_REVISION_H2) $(REWRITE_REVISION_H3)
