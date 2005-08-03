@@ -67,7 +67,10 @@
 #include "revision.h"
 #endif
 
-static const char* version_string = "Version 2.0 beta (Revision %s)";
+#include "revision.h"
+#ifndef SVN_REVISION
+#error "SVN_REVISION must be defined!"
+#endif
 
 extern BOOL bSubtitles;
 
@@ -1893,21 +1896,12 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
-	
-	sprintf(sTmp, version_string, SVN_REVISION);
-	sprintf(sTmp, "%s", sTmp);
-	if (pie_Hardware()) {
-		sprintf(sTmp, "%s OpenGL", sTmp);
-	} else {
-		sprintf(sTmp, "%s Software", sTmp);
-		if (weHave3DNow()) {
-			sprintf(sTmp, "%s (With AMD 3DNow!)", sTmp);
-		}
-	}
-	sprintf(sTmp, "%s - Built: %s", sTmp, __DATE__);
+
+	sprintf(sTmp, "Version 2.0 beta (%s) w/%s - Built %s", SVN_REVISION,
+            pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
+    printf("Version: %s\n", sTmp); fflush(NULL);
 	
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
