@@ -271,7 +271,7 @@ void dbg_ErrorBox(SBYTE *pFormat, ...)
  * (In fact there is no reason for this to be used outside the ASSERT macro)
  */
 #define ASSERT_DEFAULT_FILE "No Valid Assert File Name"
-//static SBYTE aAssertFile[DEBUG_STR_MAX];
+static SBYTE aAssertFile[DEBUG_STR_MAX];
 static SBYTE *pAssertFile;
 static UDWORD AssertLine;
 void dbg_AssertPosition(SBYTE *pFile, UDWORD Line)
@@ -287,7 +287,7 @@ void dbg_AssertPosition(SBYTE *pFile, UDWORD Line)
 #else
 		DBPRINTF(("Error : Invalid assertion arguments\n"));
 #endif
-//		strcpy(aAssertFile, ASSERT_DEFAULT_FILE);
+		strcpy(aAssertFile, ASSERT_DEFAULT_FILE);
 		pAssertFile = ASSERT_DEFAULT_FILE;
 		AssertLine = 0;
 		return;
@@ -380,7 +380,30 @@ void dbg_Assert(BOOL Expression, SBYTE *pFormat, ...)
 {
 	if (!Expression)
 	{
-		DBPRINTF(("\n\nAssertion failed , File: %s\nLine: %d\n\n", pAssertFile, AssertLine));
+		va_list ap;
+		va_start( ap, pFormat );
+		
+		DBPRINTF(("\n\nAssertion failed, File: %s, Line: %d\n\n", pAssertFile, AssertLine));
+
+		// FIXME Probably very slow implementation
+		while( *pFormat )
+		{
+			if( *pFormat == '%' )
+			{
+				pFormat++;
+				if( *pFormat == 'd' )
+					printf( "%d", va_arg(ap, int) );
+				else if( *pFormat == 's' )
+					printf( "%s", va_arg(ap, char*) );
+				else
+					printf( "\nBUG in debug.c!\nUnsupported handle: %c\n", *pFormat );
+			}
+			else
+				printf( "%c", (char) *pFormat);
+			pFormat++;
+		}
+		va_end( ap );
+
 		abort();
 	}
 }

@@ -58,7 +58,6 @@ void heapSetCallPos(STRING *pFileName, SDWORD lineNumber)
 static void heapCreateFreeList(OBJ_HEAP *psHeap)
 {
 	UDWORD		size = psHeap->objSize;
-//	UDWORD		init = psHeap->initAlloc;
 	UDWORD		ext = psHeap->extAlloc;
 	UDWORD		i, extSize;
 	FREE_OBJECT	*psCurr = NULL;
@@ -68,6 +67,8 @@ static void heapCreateFreeList(OBJ_HEAP *psHeap)
 
 	// Set up the main memory block
 #if DEBUG_HEAP
+	UDWORD          init = psHeap->initAlloc;
+
 	// Initialise the memory to a fixed value to check for memory overwrites
 	memset(psHeap->pMemory, FREE_BYTE, size * init);
 #endif

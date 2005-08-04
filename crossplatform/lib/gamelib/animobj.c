@@ -109,7 +109,9 @@ animObj_HashFunction( int iKey1, int iKey2 )
 static void
 animObj_HashFreeElementFunc( void * psElement )
 {
-//	ANIM_OBJECT	*psObj = (ANIM_OBJECT *) psElement;
+#ifdef DEBUG
+	ANIM_OBJECT	*psObj = (ANIM_OBJECT *) psElement;
+#endif
 
 	ASSERT( (PTRVALID(psObj, sizeof(ANIM_OBJECT)),
 		"animObj_HashFreeElementFunc: object pointer invalid\n") );

@@ -38,21 +38,18 @@ AC_CHECK_FUNCS([gethostname memmove memset sqrt strchr strdup strncasecmp strrch
 AC_HEADER_STDBOOL
 AC_HEADER_TIME
 
-# Commented out as the code is so messy that it doesn't work. It may even not
-# compile. The long term solution is to fix the code, but in the meantime we
-# need to hide the dust under the carpet.
-#AC_ARG_ENABLE(debug,
-#[  --enable-debug          run in debug mode],
-#[ debug=$enableval ], [ debug=no ])
-#AC_MSG_CHECKING([debug mode])
-#if test "$debug" = yes; then
-#  # -O0 turns off all optimizations; this is necessary for accurate debugging
-#  CFLAGS="-O0 -g"
-#  AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
-#  AC_MSG_RESULT([yes])
-#else
-#  AC_MSG_RESULT([no])
-#fi
+AC_ARG_ENABLE(debug,
+[  --enable-debug          run in debug mode],
+[ debug=$enableval ], [ debug=no ])
+AC_MSG_CHECKING([debug mode])
+if test "$debug" = yes; then
+  # -O0 turns off all optimizations; this is necessary for accurate debugging
+  CFLAGS="-O0 -g"
+  AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
 
 #   --without-opengl will build without opengl
 AC_ARG_WITH(opengl,
@@ -246,10 +243,7 @@ echo " MP3 music support:     $mp3music"
 echo " OGG music support:     $oggmusic"
 echo ""
 
-# Commented out as the code is so messy that it doesn't work. It may even not
-# compile. The long term solution is to fix the code, but in the meantime we
-# need to hide the dust under the carpet.
-#if test "x$debug" = xyes; then
-#  echo " *** Running in debug mode! ***"
-#  echo ""
-#fi
+if test "x$debug" = xyes; then
+  echo " *** Running in debug mode! ***"
+  echo ""
+fi

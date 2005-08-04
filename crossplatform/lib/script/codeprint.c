@@ -129,7 +129,9 @@ void cpPrintPackedVal(UDWORD *ip)
 {
 	INTERP_TYPE	type = (*ip) & OPCODE_DATAMASK;
 	UDWORD		i;
-//	UDWORD data = *(ip + 1);
+#ifdef DEBUG
+	UDWORD data = *(ip + 1);
+#endif
 
 	if (type & VAL_REF)
 	{
