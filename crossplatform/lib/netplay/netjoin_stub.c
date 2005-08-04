@@ -9,12 +9,6 @@
 
 
 // ////////////////////////////////////////////////////////////////////////
-//close the open game..
-HRESULT NETclose(VOID)
-{
-printf("NETclose\n");
-	return 0;
-}
 
 
 DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
