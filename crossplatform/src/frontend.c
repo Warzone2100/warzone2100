@@ -1885,7 +1885,9 @@ DBPRINTF(("addText : %s\n",txt));
 }
 
 
-
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#endif
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
 
@@ -1893,13 +1895,16 @@ DBPRINTF(("addText : %s\n",txt));
 VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
     const size_t sTmpSize = 200;
-	STRING	sTmp[sTmpSize];
+
+	STRING	sTmp[200];			//Couldn't have sTmp[sTmpSize], .net did NOT like that, so for now...
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
 	snprintf(sTmp, sTmpSize, "Version 2.0 beta %s w/%s - Built %s", SVN_REVISION,
             pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
+
+
 	
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
 }

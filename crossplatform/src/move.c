@@ -960,8 +960,8 @@ static void angleToVector(SDWORD angle, FRACT *pX, FRACT *pY)
 static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 {
 	FRACT	diff, change;
-#ifdef DEBUG
-	SDWORD	path=0;
+#ifdef DEBUG							//Ugh.  If your gonna ONLY use this variable in "DEBUG", then
+	SDWORD	path=0;				//make sure you wrap the function that uses it also!
 #define SET_PATH(x) path=x
 #else
 #define SET_PATH(x)
@@ -1045,10 +1045,11 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 
 	DBP2(("path %d: diff %f\n", path, diff));
 
-
+#ifdef DEBUG			//Don't forget that if you don't define the variable, then we error out.
 	ASSERT(( MAKEINT(*pCurr) < 360 && MAKEINT(*pCurr) >= 0,
 			 "moveCalcTurn: angle out of range - path %d\n"
 			 "   NOTE - ANYONE WHO SEES THIS PLEASE REMEMBER: path %d", path, path));
+#endif
 }
 
 

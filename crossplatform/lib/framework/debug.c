@@ -9,6 +9,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
+#include <stdio.h>
 #endif
 
 #include "frame.h"
@@ -24,6 +25,12 @@ static BOOL enabled_debug_parts[LOG_LAST];
 static const char *code_part_names[] = {
   "all", "sound", "video", "3d", "error", "never"
 };
+
+#ifdef _MSC_VER
+#define vsnprintf _vsnprintf
+#define snprintf  _snprintf
+#define strcasecmp stricmp 
+#endif
 
 /**********************************************************************
  cat_snprintf is like a combination of snprintf and strlcat;

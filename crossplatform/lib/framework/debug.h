@@ -24,9 +24,14 @@
  */
 
 /* DBMB used to be 'show message box' */
+#ifndef _MSC_VER
 #define DBMB(x) _db_debug x
 #define DBPRINTF(x) _db_debug x
 #define _db_debug(...) debug(LOG_NEVER, __VA_ARGS__)
+#else
+#define DBMB(x)
+#define DBPRINTF(x)
+#endif
 
 /*
  *
@@ -37,8 +42,12 @@
  *
  * Arguments:	ASSERT((condition, "Format string with variables: %d, %d", var1, var2));
  */
+#ifndef _MSC_VER
 #define ASSERT(x) my_assert x
 #define my_assert(x, y, ...) assert(y)
+#else
+#define ASSERT(x)
+#endif
 
 /*
  *
@@ -50,12 +59,16 @@
  * Arguments as for printf
  */
 
+#ifndef _MSC_VER
 #define DBERROR(x) _debug_error x
 #define _debug_error(...) 			\
 	do {					\
 		debug(LOG_ERROR, __VA_ARGS__);	\
 		abort();			\
 	} while (FALSE);
+#else
+#define DBERROR(x)
+#endif
 
 
 /****************************************************************************************

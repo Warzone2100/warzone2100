@@ -6976,8 +6976,8 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
 #ifdef DEBUG
-	STRING			*pType;
-#endif
+	STRING			*pType;			//if you are going to do this, then make SURE you also do the same to anything
+#endif									//that uses the variable.  
 
 	ASSERT((player < MAX_PLAYERS, "setFlagPositionInc: invalid player number"));
 	//find the first vacant slot
@@ -7013,7 +7013,9 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 			break;
 		}
 #endif
+#ifdef DEBUG
 	    ASSERT((FALSE, "Building more than %d %s for player %d", MAX_FACTORY, pType, player));
+#endif
 		inc = 1;
 	}
 
