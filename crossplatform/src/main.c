@@ -152,6 +152,8 @@ int main(int argc, char *argv[])
 	// initialise all the command line states
 	clIntroVideo = FALSE;
 
+	debug_init(); // must be called early
+
 //=========================
 /*
 #ifdef _DEBUG		//Debug stuff for .net, don't delete :)  -Q

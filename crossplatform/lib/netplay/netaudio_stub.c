@@ -10,27 +10,27 @@
 // ////////////////////////////////////////////////////////////////////////
 BOOL NETinitAudioCapture(VOID)
 {
-printf("NETinitAudioCapture\n");
+	debug(LOG_SOUND, "NETinitAudioCapture");
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
 BOOL NETshutdownAudioCapture(VOID)
 {
-printf("NETshutdownAudioCapture\n");
+	debug(LOG_SOUND, "NETshutdownAudioCapture");
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
 BOOL NETstartAudioCapture(VOID)
 {
-printf("NETstartAudioCapture\n");
+	debug(LOG_SOUND, "NETstartAudioCapture");
 	return FALSE;
 }
 // ////////////////////////////////////////////////////////////////////////
 BOOL NETstopAudioCapture(VOID)
 {
-printf("NETstopAudioCapture\n");
+	debug(LOG_SOUND, "NETstopAudioCapture");
 	return FALSE;
 }
 
@@ -39,7 +39,7 @@ printf("NETstopAudioCapture\n");
 // update the pointers and process the buffer accordingly.
 BOOL NETprocessAudioCapture(VOID)
 {
-printf("NETprocessAudioCapture\n");
+	debug(LOG_SOUND, "NETprocessAudioCapture");
 	return FALSE;
 }
 
@@ -47,7 +47,7 @@ printf("NETprocessAudioCapture\n");
 
 BOOL NETinitPlaybackBuffer(LPDIRECTSOUND pDs)
 {
-printf("NETinitPlaybackBuffer\n");
+	debug(LOG_SOUND, "NETinitPlaybackBuffer");
 	return FALSE;
 }
 
@@ -55,22 +55,22 @@ printf("NETinitPlaybackBuffer\n");
 // handle the playback buffer.
 BOOL NETqueueIncomingAudio( LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream)
 { 
-printf("NETqueueIncomingAudio\n");
-    return FALSE; 
+	debug(LOG_SOUND, "NETqueueIncomingAudio");
+	return FALSE; 
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // Handle a incoming message that needs to be played
 void NETplayIncomingAudio(NETMSG *pMsg)
 {	
-printf("NETplayIncomingAudio\n");
+	debug(LOG_SOUND, "NETplayIncomingAudio");
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // close it all down
 BOOL NETshutdownAudioPlayback(VOID)
 {
-printf("NETshutdownAudioPlayback\n");
+	debug(LOG_SOUND, "NETshutdownAudioPlayback");
 	return TRUE;
 }
 

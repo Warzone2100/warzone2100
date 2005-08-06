@@ -36,7 +36,7 @@ BOOL		cdAudio_Update( void );
 
 static void PrintOpenALVersion()
 {
-	printf("OpenAL Vendor: %s\n"
+	debug(LOG_ERROR, "OpenAL Vendor: %s\n"
 		   "OpenAL Version: %s\n"
 		   "OpenAL Renderer: %s\n"
 		   "OpenAL Extensions: %s\n",
@@ -60,7 +60,7 @@ BOOL sound_InitLibrary( void )
 	device = alcOpenDevice(0);
 	if(device == 0) {
 		PrintOpenALVersion();
-		printf("Couldn't open audio device.\n");
+		debug(LOG_ERROR, "Couldn't open audio device.");
 		return FALSE;
 	}
 
@@ -70,14 +70,14 @@ BOOL sound_InitLibrary( void )
 	err = alcGetError(device);
 	if (err != ALC_NO_ERROR) {
 		PrintOpenALVersion();
-		printf("Couldn't initialize audio context: %s\n",
+		debug(LOG_ERROR, "Couldn't initialize audio context: %s",
 				alcGetString(device, err));
 		return FALSE;
 	}
 	err = alGetError();
 	if (err != AL_NO_ERROR) {
 		PrintOpenALVersion();
-		printf("Audio error after init: %s\n", alGetString(err));
+		debug(LOG_ERROR, "Audio error after init: %s", alGetString(err));
 		return FALSE;
 	}
 

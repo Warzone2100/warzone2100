@@ -5,10 +5,6 @@
  *
  */
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
@@ -18,394 +14,201 @@
 #include "frame.h"
 #include "frameint.h"
 
-#define DEBUG_STR_MAX 1000  // Maximum length of a debugging output string
+#define MAX_FILENAME_SIZE 200
+#define MAX_LEN_LOG_LINE 512
+FILE *logfile = NULL;
+static log_callback_fn callback;
+static BOOL enabled_debug_parts[LOG_LAST];
 
-static FILE *pDebugFile = NULL;
-static BOOL StringOut = TRUE;
+/* This list _must_ match the enum in debug.h! */
+static const char *code_part_names[] = {
+  "all", "sound", "video", "3d", "error", "never"
+};
 
-#ifdef WIN321	//Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly 
-// message and assert callbacks
-static DB_MBCALLBACK	mbCallback = NULL;
-static DB_MBCALLBACK	errorCallback = NULL;
-static DB_MBCALLBACK	assertCallback = NULL;
+/**********************************************************************
+ cat_snprintf is like a combination of snprintf and strlcat;
+ it does snprintf to the end of an existing string.
 
-// Set the message box callback
-void dbg_SetMessageBoxCallback(DB_MBCALLBACK callback)
+ Like mystrlcat, n is the total length available for str, including
+ existing contents and trailing nul.  If there is no extra room
+ available in str, does not change the string.
+
+ Also like mystrlcat, returns the final length that str would have
+ had without truncation.  I.e., if return is >= n, truncation occurred.
+**********************************************************************/
+static int cat_snprintf(char *str, size_t n, const char *format, ...)
 {
-	mbCallback = callback;
+	size_t len;
+	int ret;
+	va_list ap;
+
+	assert(format != NULL);
+	assert(str != NULL);
+	assert(n > 0);
+
+	len = strlen(str);
+	assert(len < n);
+
+	va_start(ap, format);
+	ret = vsnprintf(str + len, n - len, format, ap);
+	va_end(ap);
+	return (int) (ret + len);
 }
 
-// set the error box callback
-void dbg_SetErrorBoxCallback(DB_MBCALLBACK callback)
+/**************************************************************************
+  Convert code_part names to enum; case insensitive; returns LOG_LAST 
+  if can't match.
+**************************************************************************/
+static enum code_part code_part_from_str(const char *str)
 {
-	errorCallback = callback;
-}
+	enum code_part i;
 
-// Set the assert box callback
-void dbg_SetAssertCallback(DB_MBCALLBACK callback)
-{
-	assertCallback = callback;
-}
-#endif // WIN32
-
-/*
- * dbg_printf
- *
- * Replacement for printf for debugging output.
- * Sends strings to OutputDebugString and/or a file.
- * Output is controlled by the functions :
- *
- * dbg_SetOutputFile, dbg_NoOutputFile
- * dbg_SetOutputString, dbg_NoOutputString
- */
-void dbg_printf(SBYTE *pFormat, ...)
-{
-	SBYTE		aBuffer[DEBUG_STR_MAX];   // Output string buffer
-    va_list		pArgs;					  // Format arguments
-	
-	/* Initialise the argument list */
-	va_start(pArgs, pFormat);
-
-	/* Print out the string */
-	(void)vsprintf(aBuffer, pFormat, pArgs);
-
-	/* Output it */
-	if (StringOut)
-	{
-#ifdef WIN321	//Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-		OutputDebugString(aBuffer);
-#else
-		fprintf(stderr, "%s", aBuffer);
-	    fflush(stderr);
-#endif
+	for (i = 0; i < LOG_LAST; i++) {
+		if (strcasecmp(code_part_names[i], str) == 0) {
+			return i;
+		}
 	}
-
-	/* If there is a debugging file open, send text to that too */
-	if (pDebugFile)
-	{
-		fprintf(pDebugFile, "%s", aBuffer);
-		fflush(pDebugFile);
-	}
-
+	return LOG_LAST;
 }
 
-/*
- * dbg_SetOutputFile
- *
- * Send debugging output to a file
- */
-void dbg_SetOutputFile(SBYTE *pFilename)
+/**************************************************************************
+  Basic output callback.  Just dump stuff to stderr.  Add newline if none.
+**************************************************************************/
+static void callback_debug_stderr(const char *buf)
 {
-	ASSERT((pFilename != NULL, "dbg_SetOutputFile passed NULL filename"));
-
-	if (pDebugFile)
-	{
-		fclose(pDebugFile);
-	}
-	pDebugFile = fopen(pFilename, "w");
-
-	if (!pDebugFile)
-	{
-		dbg_MessageBox("Couldn't open debugging output file: %s", pFilename);
+	if (!strchr(buf, '\n')) {
+		fprintf(stderr, "%s\n", buf);
+	} else {
+		fprintf(stderr, "%s", buf);
 	}
 }
 
-/*
- * dbg_NoOutputFile
- *
- * Turn off debugging to a file
- */
-void dbg_NoOutputFile(void)
+/**************************************************************************
+  Call once to initialize the debug logging system.
+**************************************************************************/
+void debug_init(void)
 {
-	if (pDebugFile)
-	{
-		fclose(pDebugFile);
+	memset(enabled_debug_parts, 0, sizeof(enabled_debug_parts));
+	enabled_debug_parts[LOG_ERROR] = TRUE;
+	callback = callback_debug_stderr;
+}
+
+/**************************************************************************
+  Send debug output to given file, in addition to any other places.
+  Only enabled output is sent to the file.
+**************************************************************************/
+void debug_to_file(char *file)
+{
+	assert(strlen(file) < MAX_FILENAME_SIZE);
+	if (logfile) {
+		fclose(logfile);
+	}
+	logfile = fopen(file, "a");
+	if (!logfile) {
+		fprintf(stderr, "Could not open %s for appending!\n",
+		        file);
+	} else {
+		fprintf(logfile, "\nStarting log\n");
 	}
 }
 
-/*
- * dbg_SetOutputString
- *
- * Send debugging to OutputDebugString
- */
-void dbg_SetOutputString(void)
+/**************************************************************************
+  Use the given callback for outputting debug logging to screen.  This 
+  is in addition to any logging to file we do.
+**************************************************************************/
+void debug_use_callback(log_callback_fn use_callback)
 {
-	StringOut = TRUE;
+	callback = use_callback;
 }
 
-/*
- * dbg_NoOutputString
- *
- * Turn off debugging to OutputDebugString
- */
-void dbg_NoOutputString(void)
+/**************************************************************************
+  Use the given callback for outputting debug logging to screen.  This 
+  is in addition to any logging to file we do.
+**************************************************************************/
+void debug_enable_switch(const char *str)
 {
-	StringOut = FALSE;
-}
+	enum code_part part = code_part_from_str(str);
 
-/*
- * dbg_MessageBox
- *
- * Display a message box, arguments as printf
- */
-void dbg_MessageBox(SBYTE *pFormat, ...)
-{
-	SBYTE		aBuffer[DEBUG_STR_MAX];   // Output string buffer
-    va_list		pArgs;					  // Format arguments
-#ifdef WIN321  //Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-	DB_MBRETVAL	retVal;
-#endif
-	
-	/* Initialise the argument list */
-	va_start(pArgs, pFormat);
-
-	/* Print out the string */
-	(void)vsprintf(aBuffer, pFormat, pArgs);
-
-	/* Output it */
-	dbg_printf("MB: %s\n", aBuffer);
-
-#ifdef WIN321  //Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-	/* Ensure the box can be seen */
-	screenFlipToGDI();
-
-	retVal = DBR_USE_WINDOWS_MB;
-	if (mbCallback)
-	{
-		retVal = mbCallback(aBuffer);
+	if (part != LOG_LAST) {
+		enabled_debug_parts[part] = !enabled_debug_parts[part];
 	}
-	if (retVal == DBR_USE_WINDOWS_MB)
-	{
-		(void)MessageBox(frameGetWinHandle(), aBuffer, "Debugging Message", MB_OK);
+	if (part == LOG_ALL) {
+		memset(enabled_debug_parts, TRUE, sizeof(enabled_debug_parts));
 	}
-#endif
 }
 
-/*
- *
- * dbg_ErrorPosition
- *
- * Set the position for an error message.
- */
-#define ERROR_DEFAULT_FILE "No valid Error file name"
-static SBYTE aErrorFile[DEBUG_STR_MAX]=ERROR_DEFAULT_FILE;
-static UDWORD ErrorLine;
-void dbg_ErrorPosition(SBYTE *pFile, UDWORD Line)
+/**************************************************************************
+  Output to relevant places.
+**************************************************************************/
+static void debug_out(const char *buf)
 {
-#ifdef WIN321  //Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-	if (pFile == NULL)
-	{
-		/* Ensure the box can be seen */
-		screenFlipToGDI();
+	callback(buf);
+	if (logfile) {
+		if (!strchr(buf, '\n')) {
+			fprintf(logfile, "%s\n", buf);
+		} else {
+			fprintf(logfile, "%s", buf);
+		}
+	}
+}
 
-		(void)MessageBox(frameGetWinHandle(), "Invalid error arguments\n", "Error",
-			       MB_OK | MB_ICONWARNING);
-		strcpy(aErrorFile, ERROR_DEFAULT_FILE);
-		ErrorLine = 0;
+/**************************************************************************
+  Maybe output some information, depending on user settings.
+**************************************************************************/
+void debug(enum code_part part, const char *str, ...)
+{
+	va_list ap;
+	static char bufbuf[2][MAX_LEN_LOG_LINE];
+	char buf[MAX_LEN_LOG_LINE];
+	static BOOL bufbuf1 = FALSE;
+	static unsigned int repeated = 0; /* times current message repeated */
+	static unsigned int next = 2;     /* next total to print update */
+	static unsigned int prev = 0;     /* total on last update */
+
+	/* Not enabled debugging for this part? Punt! */
+	if (!enabled_debug_parts[part]) {
 		return;
 	}
-	
-	if (strlen(pFile) >= DEBUG_STR_MAX)
-	{
-		memcpy(aErrorFile, pFile, DEBUG_STR_MAX);
-		aErrorFile[DEBUG_STR_MAX-1] = '\0';
-		ErrorLine = Line;
-	}
-	else
-	{
-		strcpy(aErrorFile, pFile);
-		ErrorLine = Line;
-	}
-#endif // WIN32
-}
 
-/*
- * dbg_ErrorBox
- *
- * Display an error message in a dialog box, arguments as printf
- */
-void dbg_ErrorBox(SBYTE *pFormat, ...)
-{
-	SBYTE		aBuffer[DEBUG_STR_MAX] = "";	// Output string buffer
-    va_list		pArgs;							// Format arguments
-#ifdef WIN321		//Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-	DB_MBRETVAL	retVal;
-#endif
-	
-	/* Initialise the argument list */
-	va_start(pArgs, pFormat);
+	va_start(ap, str);
 
-	/* See if there is a Filename to display */
-	if (strcmp(aErrorFile, ERROR_DEFAULT_FILE) != 0)
-	{
-		sprintf(aBuffer, "File: %s\nLine: %d\n\n", aErrorFile, ErrorLine);
-	}
+	vsnprintf(bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE, str, ap);
 
-	/* Print out the string */
-	(void)vsprintf(aBuffer + strlen(aBuffer), pFormat, pArgs);
-
-	/* Output it */
-	dbg_printf("ErrorBox: %s\n", aBuffer);
-
-#ifdef WIN321  //Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-	/* Ensure the box can be seen */
-	screenFlipToGDI();
-
-	retVal = DBR_USE_WINDOWS_MB;
-	if (errorCallback)
-	{
-		retVal = errorCallback(aBuffer);
-	}
-	if (retVal == DBR_USE_WINDOWS_MB)
-	{
-		(void)MessageBox(frameGetWinHandle(), aBuffer, "Error", MB_OK | MB_ICONWARNING);
-	}
-#endif
-}
-
-/*
- * dbg_AssertPosition
- *
- * Set the file and position for an assertion.
- * This should only be used directly before a call to dbg_Assert.
- * (In fact there is no reason for this to be used outside the ASSERT macro)
- */
-#define ASSERT_DEFAULT_FILE "No Valid Assert File Name"
-static SBYTE aAssertFile[DEBUG_STR_MAX];
-static SBYTE *pAssertFile;
-static UDWORD AssertLine;
-void dbg_AssertPosition(SBYTE *pFile, UDWORD Line)
-{
-	if (pFile == NULL)
-	{
-#ifdef WIN321	//Mainly for debugging, but it also breaks some stuff, so disabled to WIN321 for now -Qamly
-		/* Ensure the box can be seen */
-		screenFlipToGDI();
-
-		(void)MessageBox(frameGetWinHandle(), "Invalid assertion arguments\n", "Error",
-			       MB_OK | MB_ICONWARNING);
-#else
-		DBPRINTF(("Error : Invalid assertion arguments\n"));
-#endif
-		strcpy(aAssertFile, ASSERT_DEFAULT_FILE);
-		pAssertFile = ASSERT_DEFAULT_FILE;
-		AssertLine = 0;
-		return;
-	}
-	
-/*	if (strlen(pFile) >= DEBUG_STR_MAX)
-	{
-		memcpy(aAssertFile, pFile, DEBUG_STR_MAX);
-		aAssertFile[DEBUG_STR_MAX-1] = '\0';
-		AssertLine = Line;
-	}
-	else
-	{
-		strcpy(aAssertFile, pFile);
-		AssertLine = Line;
-	}*/
-	pAssertFile = pFile;
-	AssertLine = Line;
-}
-
-/*
- * dbg_Assert
- *
- * Rewritten assert macro.
- * If Expression is false it uses the Format string and va_list to
- * generate a string which it displays in a message box.
- * 
- * DebugBreak is used to jump into the debugger.
- *
- */
-#ifdef WIN32_DEBUG //WIN32
-void dbg_Assert(BOOL Expression, SBYTE *pFormat, ...)
-{
-	va_list		pArgs;
-	SBYTE		aBuffer[DEBUG_STR_MAX];
-	int			Result=0;
-	DB_MBRETVAL	retVal;
-
-	if (!Expression)
-	{
-		va_start(pArgs, pFormat);
-		sprintf(aBuffer, "File: %s\nLine: %d\n\n", pAssertFile, AssertLine);
-		(void)vsprintf(aBuffer + strlen(aBuffer), pFormat, pArgs);
-		(void)strcat(aBuffer, "\n\nTERMINATE PROGRAM ?");
-		
-		/* Ensure the box can be seen */
-		screenFlipToGDI();
-
-		dbg_printf("ASSERT: %s\n", aBuffer);
-		retVal = DBR_USE_WINDOWS_MB;
-		if (assertCallback)
-		{
-			retVal = assertCallback(aBuffer);
-		}
-		if (retVal == DBR_USE_WINDOWS_MB)
-		{
-//			if (!bRunningUnderGlide)
-			{
-				Result = MessageBox(frameGetWinHandle(), aBuffer, "Assertion Failure",
-									MB_YESNOCANCEL | MB_ICONWARNING);
+	if (0 == strncmp(bufbuf[0], bufbuf[1], MAX_LEN_LOG_LINE - 1)) {
+		repeated++;
+		if (repeated == next) {
+			snprintf(buf, sizeof(buf), "last message repeated %d times",
+			         repeated - prev);
+			if (repeated > 2) {
+				cat_snprintf(buf, sizeof(buf), " (total %d repeats)", 
+				             repeated);
 			}
-/*			else
-			{
-				Result = MessageBox(NULL, aBuffer, "Assertion Failure",
-									MB_YESNOCANCEL | MB_ICONWARNING);
-			}*/
-		}
-
-		if (retVal == DBR_YES ||
-			Result == IDYES)
-		{
-//			abort();
-//			frameShutDown();
-			ExitProcess(3);
-		}
-		else if (retVal == DBR_NO || Result == IDNO)
-		{
-			/* Can only do a DebugBreak in window mode -
-			 * Do it in full screen and GDI can't get in so the machine hangs.
-			 */
-			screenSetMode(SCREEN_WINDOWED);
-			DebugBreak();
-		}
-		//  Result could == IDCANCEL - do nothing in this case.
-
-	}
-}
-#else
-void dbg_Assert(BOOL Expression, SBYTE *pFormat, ...)
-{
-	if (!Expression)
-	{
-		va_list ap;
-		va_start( ap, pFormat );
-		
-		DBPRINTF(("\n\nAssertion failed, File: %s, Line: %d\n\n", pAssertFile, AssertLine));
-
-		// FIXME Probably very slow implementation
-		while( *pFormat )
-		{
-			if( *pFormat == '%' )
-			{
-				pFormat++;
-				if( *pFormat == 'd' )
-					printf( "%d", va_arg(ap, int) );
-				else if( *pFormat == 's' )
-					printf( "%s", va_arg(ap, char*) );
-				else
-					printf( "\nBUG in debug.c!\nUnsupported handle: %c\n", *pFormat );
+			debug_out(buf);
+			prev = repeated;
+			next *= 2;
 			}
-			else
-				printf( "%c", (char) *pFormat);
-			pFormat++;
+		} else {
+		if (repeated > 0 && repeated != prev) {
+			if (repeated == 1) {
+				/* just repeat the previous message: */
+				debug_out(bufbuf1 ? bufbuf[0] : bufbuf[1]);
+			} else {
+				snprintf(buf, sizeof(buf),
+					 "last message repeated %d times", 
+				         repeated - prev);
+				if (repeated > 2) {
+					cat_snprintf(buf, sizeof(buf),
+					" (total %d repeats)", repeated);
+				}
+				debug_out(buf);
+			}
 		}
-		va_end( ap );
-
-		abort();
+		repeated = 0;
+		next = 2;
+		prev = 0;
+		debug_out(bufbuf1 ? bufbuf[1] : bufbuf[0]);
 	}
+	bufbuf1 = !bufbuf1;
+	fflush(logfile);
+	va_end(ap);
 }
-#endif
-

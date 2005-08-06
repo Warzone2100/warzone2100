@@ -423,7 +423,7 @@ BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 {
 //	psSample;
 	bAudioPlaying = FALSE;
-	dbg_printf("************* briefing ended **************\n");
+	debug(LOG_NEVER, "************* briefing ended **************");
 
 	return TRUE;
 }
