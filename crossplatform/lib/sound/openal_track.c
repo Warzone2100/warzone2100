@@ -5,7 +5,7 @@
 //
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <ALut/alut.h>
+//#include <ALut/alut.h>
 #include "frame.h"
 #include "tracklib.h"
 #include "audio.h"
