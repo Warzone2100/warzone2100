@@ -5,7 +5,7 @@
 //
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
+#include <ALut/alut.h>
 #include "frame.h"
 #include "tracklib.h"
 #include "audio.h"
@@ -97,7 +97,8 @@ BOOL sound_InitLibrary( void )
 void sound_ShutdownLibrary( void )
 {
 	if(context != 0) {
-		//alcDestroyContext(context); // this gives a long delay on some impl.
+		alcMakeContextCurrent(NULL);		//this should work now -Q
+		alcDestroyContext(context); // this gives a long delay on some impl.
 		context = 0;
 	}
 	if(device != 0) {
