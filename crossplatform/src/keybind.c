@@ -316,30 +316,14 @@ void	kf_FrameRate( void )
 
 	if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 	{
-		if(weHave3DNow())
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,"DIRECT3D (With AMD 3DNow!) fps %d; PIEs %d; polys %d; Terr. polys %d; States %d",
-				frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
-		}
-		else
-		{
- 	 	   	CONPRINTF(ConsoleString,(ConsoleString,"DIRECT3D fps %d; PIEs %d; polys %d; Terr. polys %d; States %d",
-				frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
-		}
+ 	 	CONPRINTF(ConsoleString,(ConsoleString,"DIRECT3D fps %d; PIEs %d; polys %d; Terr. polys %d; States %d",
+			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
 
 	}
 	else
 	{	
-		if(weHave3DNow())
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,"SOFTWARE (With AMD 3DNow!) fps - %d; pie's - %d; polys - %d; Terr. polys - %d;",
-				frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount));
-		}
-		else
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,"SOFTWARE fps - %d; pie's - %d; polys - %d; Terr. polys - %d;",
-				frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount));
-		}
+		CONPRINTF(ConsoleString,(ConsoleString,"SOFTWARE fps - %d; pie's - %d; polys - %d; Terr. polys - %d;",
+			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount));
 	}
 		if (bMultiPlayer)
 		{

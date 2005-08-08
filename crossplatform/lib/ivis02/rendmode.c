@@ -62,76 +62,6 @@ void (*iV_ppBitmapColourTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow,
 //******
 
 
-static BOOL	bHas3DNow;
-BOOL	weHave3DNow( void )
-{
-	return(bHas3DNow);
-}
-
-#define	CPUID	__asm _emit 0x0f __asm _emit 0xa2
-
-BOOL	cpuHas3DNow( void )
-{
-BOOL	b3DNow;
-	/* As of yet - we haven't found an AMD 3DNow! equipped processor */
-	b3DNow = FALSE;
-
-#ifdef _MSC_VER
-	_asm
-	{
-		push	ebx
-		push	edx
-		push	ecx
-		pushfd
-		pushfd
-		pop		eax
-		mov		edx,eax
-		xor		eax,0200000h
-		push	eax
-		popfd
-		pushfd
-		pop		eax
-		cmp		eax,edx
-		// quit if the processor has no cpu id query instructions
-		jz		has_no_3dnow			
-		// Otherwise, establish what kind of CPU we have found
-		xor		eax,eax
-		// issue the cpuid instruction
-		CPUID
-		// Now we need to check for an AMD processor - the id is authenticAMD
-		cmp		ebx,068747541h		// htuA
-		jnz		has_no_3dnow
-		cmp		edx,069746e65h		// itne
-		jnz		has_no_3dnow
-		cmp		ecx,0444d4163h		// DMAc
-		jnz		has_no_3dnow
-		// At this point we could check for other vendors that support AMD technology and 3DNow, but....
-		mov		eax,080000000h
-		CPUID
-		test	eax,eax
-		jz		has_no_3dnow
-		mov		eax,080000001h
-		CPUID
-		test	edx,080000000h	// we have 3DNow!
-		jz		has_no_3dnow
-		// Need to send back that we have 3D now support
-		mov		eax,1	// we have it
-		jmp		has_3d_now
-has_no_3dnow:
-		mov		eax,0
-has_3d_now:
-		mov		b3DNow,eax
-		popfd
-		pop		ecx
-		pop		edx
-		pop		ebx
-	}
-#endif // _MSC_VER
-	return(b3DNow);
-}
-
-
-
 int32 iV_VideoMemorySize(int mode)
 
 {
@@ -441,7 +371,6 @@ void iV_RenderAssign(int mode, iSurface *s)
 {
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
-	bHas3DNow = cpuHas3DNow();	// do some funky stuff to see if we have an AMD
 	g_mode = mode;
 
 	switch (mode) {

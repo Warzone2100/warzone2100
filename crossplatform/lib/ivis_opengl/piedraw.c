@@ -217,14 +217,6 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset) {
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
 {
 
-	// needed for AMD
-//	int amd_scale = 0x3a800000;				// 2^-10
-//	int amd_pie_RAISE_SCALE = 0x3b800000;	// 2^-8
-//	int amd_sign = 0x80000000;
-//	int amd_RAISE = 0;
-//	int amd_HEIGHT_SCALED = 0x3f800000;
-
-	// needed for intel
 	int32		rx, ry, rz;
 	int32		tzx, tzy;
 	int32		tempY;
