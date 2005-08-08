@@ -225,6 +225,7 @@ AC_CONFIG_FILES([Makefile
                  lib/gamelib/Makefile
                  lib/ivis_opengl/Makefile
                  lib/ivis02/Makefile
+                 lib/ivis_common/Makefile
                  lib/netplay/Makefile
                  lib/script/Makefile
                  lib/sequence/Makefile

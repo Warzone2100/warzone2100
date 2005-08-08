@@ -1,7 +1,7 @@
 bin_PROGRAMS = warzone
 AM_CPPFLAGS = -I../lib/framework -I../lib/gamelib -I../lib/$(RENDERER) \
 	-I../lib/netplay -I../lib/script -I../lib/sequence -I../lib/sound \
-	-I../lib/widget -I..
+	-I../lib/widget -I../lib/ivis_common -I..
 warzone_SOURCES = \
 		ai.c \
 		astar.c \
@@ -266,6 +266,7 @@ warzone_libs =  ../lib/framework/libframework.a \
 		../lib/sound/libsound.a \
 		../lib/netplay/libnetplay.a \
 		../lib/script/libscript.a \
+		../lib/ivis_common/libivis_common.a \
 		../lib/$(RENDERER)/lib$(RENDERER).a \
 		../lib/gamelib/libgamelib.a \
 		../lib/sequence/libsequence.a \
@@ -273,7 +274,7 @@ warzone_libs =  ../lib/framework/libframework.a \
 
 warzone_LDFLAGS = -L../lib/framework -L../lib/gamelib -L../lib/$(RENDERER) \
 	-L../lib/netplay -L../lib/script -L../lib/sequence -L../lib/sound \
-	-L../lib/widget
+	-L../lib/widget -L../lib/ivis_common
 warzone_DEPENDENCIES = $(warzone_libs)
 warzone_LDADD        = $(warzone_libs)
 
