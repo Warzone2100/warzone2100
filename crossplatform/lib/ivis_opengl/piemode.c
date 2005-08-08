@@ -66,13 +66,6 @@ void	pie_SetDitherStatus( BOOL val )
 	bDither = val;
 }
 
-BOOL pie_CheckForDX6(void)
-{
-//	UDWORD	DXVersion, DXPlatform;
-
-	return TRUE;
-}
-
 BOOL pie_Initialise(SDWORD mode)
 {
 //	BOOL r;//result

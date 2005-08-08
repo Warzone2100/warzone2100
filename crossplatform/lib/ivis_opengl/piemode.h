@@ -43,7 +43,6 @@ extern int32	_iVPRIM_DIVTABLE[];
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern BOOL pie_CheckForDX6(void);
 extern BOOL pie_Initialise(SDWORD mode);
 extern void pie_ShutDown(void);
 extern void pie_ScreenFlip(CLEAR_MODE ClearMode);
