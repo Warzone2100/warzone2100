@@ -48,8 +48,6 @@ static BOOL bDither = FALSE;
  *	Local ProtoTypes
  */
 /***************************************************************************/
-//okay just this once
-extern void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform);
 extern void screenDoDumpToDiskIfRequired();
 
 /***************************************************************************/
