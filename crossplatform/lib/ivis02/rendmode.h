@@ -7,7 +7,6 @@
 
 #include "pieblitfunc.h"
 
-//#include "ivid3d.h"
 #include "bitimage.h"
 #include "textdraw.h"
 

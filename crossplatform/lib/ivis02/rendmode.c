@@ -8,13 +8,10 @@
 
 #include "pieclip.h"
 
-
-#include "d3dmode.h"
 #include "v4101.h"
 
 #include "rendfunc.h"
 #include "vsr.h"
-//#include "3dfxfunc.h"
 //#include "rendfunc.h"
 #include "textdraw.h"
 
@@ -584,95 +581,6 @@ void iV_RenderAssign(int mode, iSurface *s)
 			iV_Triangle3D 		= _triangle3d;
 */
 			break;
-
-		case REND_D3D_RGB:
-		case REND_D3D_HAL:
-		case REND_D3D_REF:
-//			pie_Draw3DShape				= pie_Draw3DIntelShape;
-//			pie_VideoShutDown 		 	= _close_D3D;
-//			iV_RenderBegin				= _renderBegin_D3D;
-//			iV_RenderEnd 				= _renderEnd_D3D;
-//			iV_pPolygon 		 		= _polygon_D3D;
-//			iV_pQuad			 		= _quad_D3D;
-//			iV_pTriangle 		 		= _triangle_D3D;
-//			iV_VSync 			 		= _vsync_4101;
-//			iV_Clear 			 		= _clear_4101;
-//			iV_Palette 			 		= _palette_D3D;
-//			iV_Pixel 			 		= _dummyFunc1_D3D;
-//			iV_pPixel 			 		= _dummyFunc1_D3D;
-//			iV_pLine 			 		= _dummyFunc2_D3D;
-//			iV_pHLine 			 		= _dummyFunc3_D3D;
-//			iV_pVLine 			 		= _dummyFunc3_D3D;
-//			iV_pCircle 			 		= _dummyFunc3_D3D;
-//			iV_pCircleFill 		 		= _dummyFunc3_D3D;
-//			iV_pBox 			 		= _dummyFunc2_D3D;
-//			iV_pBoxFill 		 		= _dummyFunc2_D3D;
-//			iV_ppBitmap 		 		= _dummyFunc5_D3D;
-//			iV_ppBitmapColour			= _dummyFunc6_D3D;
-//			iV_ppBitmapColourTrans		= _dummyFunc6_D3D;
-//			iV_pBitmap			 		= _dummyFunc4_D3D;
-//			iV_pBitmapResize 	 		= _dummyFunc6_D3D;
-//			iV_pBitmapResizeRot90		= _dummyFunc6_D3D;
-//			iV_pBitmapResizeRot180		= _dummyFunc6_D3D;
-//			iV_pBitmapResizeRot270		= _dummyFunc6_D3D;
-//			iV_pBitmapGet 				= _dummyFunc4_D3D;
-//			iV_ppBitmapTrans			= _dummyFunc5_D3D;
-//			iV_pBitmapTrans				= _dummyFunc4_D3D;
-//			iV_ppBitmapShadow			= _dummyFunc5_D3D;
-//			iV_pBitmapShadow			= _dummyFunc4_D3D;
-//			iV_ppBitmapRot90			= _dummyFunc5_D3D;
-//			iV_pBitmapRot90				= _dummyFunc4_D3D;
-//			iV_ppBitmapRot180			= _dummyFunc5_D3D;
-//			iV_pBitmapRot180			= _dummyFunc4_D3D;
-//			iV_ppBitmapRot270			= _dummyFunc5_D3D;
-//			iV_pBitmapRot270			= _dummyFunc4_D3D;
-
-//			iV_Line 					= _dummyFunc2_D3D;
-//			iV_HLine 					= _dummyFunc3_D3D;
-//			iV_VLine 					= _dummyFunc3_D3D;
-//			iV_Circle 					= _dummyFunc3_D3D;
-//			iV_CircleFill 				= _dummyFunc3_D3D;
-//			iV_Polygon 					= iV_pPolygon;
-//			iV_Quad						= _dummyFunc8_D3D;
-//			iV_Triangle 				= iV_pTriangle;
-//			iV_Box 						= _dummyFunc2_D3D;
-//			iV_BoxFill 					= _dummyFunc2_D3D;
-//			iV_Bitmap 					= _dummyFunc4_D3D;
-//			iV_BitmapResize 			= _dummyFunc6_D3D;
-//			iV_BitmapResizeRot90		= _dummyFunc6_D3D;
-//			iV_BitmapResizeRot180		= _dummyFunc6_D3D;
-//			iV_BitmapResizeRot270 		= _dummyFunc6_D3D;
-//			iV_BitmapGet 				= _dummyFunc4_D3D;
-//			iV_BitmapTrans				= _dummyFunc4_D3D;
-//			iV_BitmapShadow				= _dummyFunc4_D3D;
-//			iV_BitmapRot90				= _dummyFunc4_D3D;
-//			iV_BitmapRot180				= _dummyFunc4_D3D;
-//			iV_BitmapRot270				= _dummyFunc4_D3D;
-//			iV_SetTransFilter  			= SetTransFilter_D3D;
-//			iV_TransBoxFill	   			= TransBoxFill_D3D;
-
-//			iV_DrawImageDef			= _dummyFunc4_D3D;//DrawImageDef;
-//			iV_DrawSemiTransImageDef = _dummyFunc4_D3D;//DrawSemiTransImageDef;
-//			iV_DrawImage			= _dummyFunc4_D3D;//DrawImage;
-//			iV_DrawImageRect		= _dummyFunc4_D3D;//DrawImageRect;
-//			iV_DrawTransImage		= _dummyFunc4_D3D;//DrawTransImage;
-//			iV_DrawTransImageRect	= _dummyFunc4_D3D;//DrawTransImageRect;
-//			iV_DrawStretchImage		= NULL;
-
-//			iV_BeginTextRender		= _dummyFunc4_D3D;//BeginTextRender;
-//			iV_TextRender270		= _dummyFunc4_D3D;//TextRender270;
-//			iV_TextRender			= _dummyFunc4_D3D;//TextRender;
-//			iV_EndTextRender		= _dummyFunc4_D3D;//EndTextRender;
-
-//			pie_DownLoadRadar		= _dummyFunc4_D3D;//DownLoadRadar;
-
-//			iV_UploadDisplayBuffer	= _dummyFunc1_D3D;
-//			iV_DownloadDisplayBuffer = _dummyFunc1_D3D;
-//			iV_ScaleBitmapRGB		= _dummyFunc4_D3D;
-
-			break;
-
-
 	}
 
 
