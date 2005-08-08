@@ -7,7 +7,7 @@ SRC_FILES=	bar.c \
 		tip.c \
 		widget.c
 
-LIBS=framework
+LIBS=framework ivis_common
 
 ifeq ($(GFX), software)
 LIBS+=ivis02

@@ -1,6 +1,5 @@
 SRC_FILES=	bitimage.c \
 		bspimd.c \
-		bug.c \
 		fbf.c \
 		imd.c \
 		imdload.c \
@@ -23,7 +22,7 @@ SRC_FILES=	bitimage.c \
 		v4101_stub.c \
 		vsr.c
 
-LIBS=framework gamelib
+LIBS=framework gamelib ivis_common
 
 LIB=ivis02
 

@@ -4,6 +4,7 @@ SUBDIRS=framework \
 	script \
 	sequence \
 	sound \
+	ivis_common \
 	widget
 
 ifeq ($(GFX), software)
@@ -19,6 +20,7 @@ SUBDIRS_CLEAN=	framework \
 		sequence \
 		sound \
 		widget \
+		ivis_common \
 		ivis02 \
 		ivis_opengl
 

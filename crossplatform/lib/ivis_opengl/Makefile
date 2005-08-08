@@ -20,7 +20,7 @@ SRC_FILES=	bitimage.c \
 		tex.c \
 		textdraw.c
 
-LIBS=framework gamelib
+LIBS=ivis_common framework gamelib
 
 LIB=ivis_opengl
 

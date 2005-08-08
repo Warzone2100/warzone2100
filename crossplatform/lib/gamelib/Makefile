@@ -7,7 +7,7 @@ SRC_FILES=	anim.c \
 		pqueue.c \
 		ptrlist.c
 
-LIBS=framework sound
+LIBS=ivis_common framework sound
 
 ifeq ($(GFX), software)
 LIBS+=ivis02

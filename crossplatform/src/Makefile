@@ -126,6 +126,7 @@ LIBS=		framework \
 		script \
 		sequence \
 		sound \
+		ivis_common \
 		widget
 
 EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net
