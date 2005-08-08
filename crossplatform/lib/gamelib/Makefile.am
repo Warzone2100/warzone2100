@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libgamelib.a
-AM_CPPFLAGS = -I../framework -I../sound -I../$(RENDERER) -I../..
+AM_CPPFLAGS = -I../framework -I../sound -I../$(RENDERER) -I../ivis_common -I../..
 libgamelib_a_SOURCES = \
 	anim.c \
 	animobj.c \
@@ -13,6 +13,7 @@ libgamelib_a_SOURCES = \
 	anim.h  gtime.h    maxpidef.h  parser_y.h  priority.h
 
 libgamelib_a_libs = ../framework/libframework.a \
-		../$(RENDERER)/lib$(RENDERER).a
+		../$(RENDERER)/lib$(RENDERER).a \
+		../ivis_common/libivis_common.a
 libgamelib_a_DEPENDENCIES = $(libgamelib_a_libs)
 libgamelib_a_LIBADD = $(libgamelib_a_libs)

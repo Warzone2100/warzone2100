@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libwidget.a
-AM_CPPFLAGS = -I../framework -I../$(RENDERER) -I../..
+AM_CPPFLAGS = -I../framework -I../$(RENDERER) -I../ivis_common -I../..
 libwidget_a_SOURCES = \
 	bar.c \
 	button.c \
@@ -21,6 +21,7 @@ libwidget_a_SOURCES = \
 	widgint.h
 
 libwidget_a_libs = ../framework/libframework.a \
-		../$(RENDERER)/lib$(RENDERER).a
+		../$(RENDERER)/lib$(RENDERER).a \
+		../ivis_common/libivis_common.a
 libwidget_a_DEPENDENCIES = $(libwidget_a_libs)
 libwidget_a_LIBADD = $(libwidget_a_libs)
