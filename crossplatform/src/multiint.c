@@ -215,20 +215,10 @@ void loadMapPreview(void)
 		coltab[col] = pal_GetNearestColour( col*16,col*16, col*16);
 	}
 		
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
+	if (screenGetBackBufferBitDepth() == 16) {
 		bitDepth = 16;
-	}
-	else
-	{
-		if( screenGetBackBufferBitDepth() == 16 )
-		{
-			bitDepth = 16;
-		}
-		else
-		{
-			bitDepth = 8;
-		}
+	} else {
+		bitDepth = 8;
 	}
 
 	backDropSprite.width = BACKDROP_WIDTH;
@@ -296,7 +286,7 @@ void loadMapPreview(void)
 
 	if (bitDepth != 8)
 	{
-		bufferTo16Bit(tempBmp, backDropBmp,(pie_GetRenderEngine() == ENGINE_GLIDE));		// convert
+		bufferTo16Bit(tempBmp, backDropBmp, FALSE);		// convert
 	}
 
 	//screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
@@ -1752,27 +1742,13 @@ VOID	stopJoining(void)
 			selectedPlayer =0;
 		}
 
-		if(ingame.bHostSetup)
-		{	
-
-			if (pie_GetRenderEngine() == ENGINE_GLIDE)
-			{
-#ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT,TRUE);
-#else
-				pie_LoadBackDrop(SCREEN_RANDOMBDROP,TRUE);
-#endif	
-			}
-			else
-			{
+		if (ingame.bHostSetup) {
 #ifdef COVERMOUNT
 				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
 #else
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
 #endif
-			}
 		}
-
 	}	
 }
 
@@ -3931,23 +3907,11 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	}
 	
 
-	if(Grey)																	// disabled, render something over it!
-	{
-
-		if(pie_GetRenderEngine() == ENGINE_GLIDE)
-		{	pie_SetSwirlyBoxes(FALSE);
-			iV_UniTransBoxFill(x,y,x+psWidget->width,y+psWidget->height,(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
-			pie_SetSwirlyBoxes(TRUE);
-		}
-		else
-		{
-			iV_TransBoxFill(x,y,x+psWidget->width,y+psWidget->height);
-		}
-	
-	}
-
-	if(!Grey)					// add a snap.
-	{
+	if (Grey) {
+		// disabled, render something over it!
+		iV_TransBoxFill(x,y,x+psWidget->width,y+psWidget->height);
+	} else {
+		// add a snap.
 		AddCursorSnap(&InterfaceSnap,
 						(SWORD)(x+(psWidget->width/2)),
 						(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);

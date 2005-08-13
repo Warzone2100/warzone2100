@@ -778,56 +778,18 @@ BOOL dataIMDBufferLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 	pBufferPosition=pBuffer;
 
-	BinaryPIE=TRUE;
-	// Check for binary PIE files
-
-	for (Letter=0;Letter<4;Letter++)
-	{
-		if (pBufferPosition[Letter]!=BinaryPieLetters[Letter])	// if any on the letters are incorrect then it can't be a binary pie
-		{
-			BinaryPIE=FALSE;
-			break;		// no point in continuing			
-		}
-	}
-
-	if (BinaryPIE==FALSE)
-	{
-		psIMD = iV_ProcessIMD(&pBufferPosition,pBuffer+size,(UBYTE *)"", (UBYTE *)"",FALSE);
+	psIMD = iV_ProcessIMD(&pBufferPosition,pBuffer+size,(UBYTE *)"", (UBYTE *)"",FALSE);
 #ifndef FINALBUILD
 		tpAddPIE(GetLastResourceFilename(),psIMD);
 #endif
-		if (psIMD == NULL)
-		{
-			
-			DBERROR(("IMD load failed - %s", GetLastResourceFilename()));
-			return FALSE;
-		}
-		
+	if (psIMD == NULL) {
+		DBERROR(("IMD load failed - %s", GetLastResourceFilename()));
+		return FALSE;
 	}
-	else
-	{
-
-		psIMD=iV_ProcessBPIE((iIMDShape *)(pBuffer+4),size);
-#ifndef FINALBUILD
-		tpAddPIE(GetLastResourceFilename(),psIMD);
-#endif
-		if (psIMD==NULL)
-		{
-			DBERROR(("BinaryPIE load failed - %s",GetLastResourceFilename() ));
-			return(FALSE);
-		
-		}
-
-
-	}
-
-
 
 	*ppData = psIMD;
 	return TRUE;
 }
-
-
 
 
 /* Release an imd */

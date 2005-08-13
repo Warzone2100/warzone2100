@@ -372,16 +372,7 @@ UDWORD	pixelHeight;
 		}
 
 			/* GET RID OF THE MAGIC NUMBERS BELOW */
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_SetSwirlyBoxes(TRUE);
-			iV_UniTransBoxFill(RET_X+1,474+E_H-pixelHeight,RET_X+1+pixelLength+2,473+E_H,0x000000ff,128);
-			pie_SetSwirlyBoxes(FALSE);
-		}
-		else
-		{
-			iV_TransBoxFill(RET_X+1,474+E_H-pixelHeight,RET_X+1+pixelLength+2,473+E_H);
-		}
+		iV_TransBoxFill(RET_X+1,474+E_H-pixelHeight,RET_X+1+pixelLength+2,473+E_H);
 
 		iV_DrawText(sTextToSend,RET_X+3,469+E_H);
 }
@@ -563,19 +554,6 @@ BOOL		bPlayerHasHQ = FALSE;
 #endif
  	}
 
-	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		if(getSelectedGroup()<UBYTE_MAX)
-		{
-	 		sprintf(buildInfo,"%d", getSelectedGroup());
-			iV_DrawText(buildInfo,mX-17,mY+4);
-		}
-		else if(getSelectedCommander()<UBYTE_MAX)
-		{
-	 		sprintf(buildInfo,"*%d", getSelectedCommander());
-			iV_DrawText(buildInfo,mX-25,mY+4);
-		}
-	}
   	while(player.r.y>DEG(360))
 	{
 		player.r.y-=DEG(360);
@@ -960,8 +938,7 @@ void drawTiles(iView *camera, iView *player)
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileXYZ.x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 
-				if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-			 	{
+				if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 					tileScreenInfo[i][j].specular.argb = specular;
 		   		}
 
@@ -1726,11 +1703,6 @@ BOOL	bEdgeTile;
 			}
 
 			renderFlag = 0;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64); 
-			offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64); 
-		}
 			pie_DrawTriangle(p, &texturePage, renderFlag, &offset);	
 		 
 			if(TRI_FLIPPED(psTile))
@@ -3668,32 +3640,17 @@ FRACT		mulH;
 		   			health =  PERCENT(psStruct->currentBuildPts , 
 						psStruct->pStructureType->buildPoints);
 					if(health>=100) health = 100;	// belt and braces
-						if(pie_GetRenderEngine() == ENGINE_GLIDE)
-						{
-							longPowerCol = 0x00ffff00;
-						}
-						else
-						{
-							powerCol = COL_YELLOW;
-						}
+						powerCol = COL_YELLOW;
 						mulH = MAKEFRACT(health)/100;
 						mulH*=MAKEFRACT(width);
 						health = MAKEINT(mulH);
 //						health = (((width*10000)/100)*health)/10000;
 						if(health>width) health = width;
 						health*=2;
-						if(pie_GetRenderEngine() == ENGINE_GLIDE)
-						{
-							pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
-							pie_BoxFill(scrX-scrR-1, scrY, scrX-scrR+health, scrY+1, longPowerCol);
-						}
-						else
-						{
-//							pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-//							pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
-							pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
-							pie_BoxFillIndex(scrX - scrR,scrY ,scrX - scrR+health,scrY+1,powerCol);
-						}
+//						pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
+//						pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
+						pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
+						pie_BoxFillIndex(scrX - scrR,scrY ,scrX - scrR+health,scrY+1,powerCol);
 					}
 				}
 					//----
@@ -3810,28 +3767,13 @@ FRACT		mulH;
 				scrR = width;
 //				health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
 			   	health =  PERCENT(psStruct->currentBuildPts , psStruct->pStructureType->buildPoints);
-				if(pie_GetRenderEngine() == ENGINE_GLIDE)
-				{
-					longPowerCol = 0x0000ff00;
-				}
-				else
-				{
-					powerCol = COL_GREEN;
-				}
+				powerCol = COL_GREEN;
 				health = (((width*10000)/100)*health)/10000;
 				health*=2;
-				if(pie_GetRenderEngine() == ENGINE_GLIDE)
-				{
-					pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
-					pie_BoxFill(scrX-scrR-1, scrY, scrX-scrR+health, scrY+1, longPowerCol);
-				}
-				else
-				{
-//					pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-//					pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
-					pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
-					pie_BoxFillIndex(scrX - scrR-1,scrY,scrX - scrR+health,scrY+1,powerCol);
-				}
+//				pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
+//				pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
+				pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
+				pie_BoxFillIndex(scrX - scrR-1,scrY,scrX - scrR+health,scrY+1,powerCol);
 			}
 			//----
 		}
@@ -5003,7 +4945,7 @@ SDWORD	shift;
   		break;
 
   	default:
-  		DBERROR((FALSE,"Weirdy direction for a structure in renderWall"));
+  		DBERROR(("Weirdy direction for a structure in renderWall"));
   		break;
   	}
 /*
@@ -5256,15 +5198,7 @@ SDWORD	zone;
 	/* The first triangle */
 	if(TRI_FLIPPED(psTile))
 	{
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle((PIEVERTEX*)&tileScreenInfo[i+0][j+0],
-								(PIEVERTEX*)&tileScreenInfo[i+0][j+1],
-								(PIEVERTEX*)&tileScreenInfo[i+1][j+0],
-								&texturePage,0,0);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
 			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
@@ -5273,15 +5207,7 @@ SDWORD	zone;
 	}
 	else
 	{
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle((PIEVERTEX*)&tileScreenInfo[i+0][j+0],
-								(PIEVERTEX*)&tileScreenInfo[i+0][j+1],
-								(PIEVERTEX*)&tileScreenInfo[i+1][j+1],
-				&texturePage,0,0);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
 			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
@@ -5292,15 +5218,7 @@ SDWORD	zone;
 	/* The second triangle */
 	if(TRI_FLIPPED(psTile))
 	{
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle((PIEVERTEX*)&tileScreenInfo[i+0][j+1],
-								(PIEVERTEX*)&tileScreenInfo[i+1][j+1],
-								(PIEVERTEX*)&tileScreenInfo[i+1][j+0],
-				&texturePage,0,0);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
 			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
@@ -5309,15 +5227,7 @@ SDWORD	zone;
 	}
 	else
 	{
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle((PIEVERTEX*)&tileScreenInfo[i+0][j+0],
-								(PIEVERTEX*)&tileScreenInfo[i+1][j+1],
-								(PIEVERTEX*)&tileScreenInfo[i+1][j+0],
-				&texturePage,0,0);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
 			memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
 			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
@@ -5441,13 +5351,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
    		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
    		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_EDGE_ZOFFSET;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -5465,13 +5369,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+1].wx;
    		aVrts[2].sy = tileScreenInfo[i+1][j+1].wy;
    		aVrts[2].sz = tileScreenInfo[i+1][j+1].wz - WATER_EDGE_ZOFFSET;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -5491,13 +5389,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
    		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
    		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_EDGE_ZOFFSET;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -5515,13 +5407,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+0].wx;
    		aVrts[2].sy = tileScreenInfo[i+1][j+0].wy;
    		aVrts[2].sz = tileScreenInfo[i+1][j+0].wz - WATER_EDGE_ZOFFSET;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -6455,45 +6341,15 @@ trans = 0; //Defining the variable trans to eleminate a runtime debug error
 	colour = UBYTE_MAX;
 	colour = lightDoFogAndIllumination(colour,getCentreX() - psDroid->x, getCentreZ() - psDroid->y,&specular);
 
-	if	(pie_GetRenderEngine() == ENGINE_GLIDE)
+	colour &= 0xff;
+	if (	(psDroid->action == DACTION_DEMOLISH) OR
+	(psDroid->action == DACTION_CLEARWRECK) )
 	{
-		if (war_GetFog())
-		{
-			trans = colour >> 24;//alpha 
-			trans &= 0xff;
-			trans = UBYTE_MAX - trans;
-		}
-		else
-		{
-			trans = colour & 0xff;
-		}
-		trans >>= 1;//divide by 2
-		if (	(psDroid->action == DACTION_DEMOLISH) OR
-			(psDroid->action == DACTION_CLEARWRECK) )
-		{
-			colour = 0x00ff0000;//red
-		}
-		else
-		{
-			colour = 0x000000ff;//blue
-		}
-		pts[0].light.argb = 0x00000000;
-		pts[1].light.argb = 0x00000000;
-		pts[2].light.argb = 0x00000000;
+		colour <<= 16;//red
 	}
-	else
-	{
-		colour &= 0xff;
-		if (	(psDroid->action == DACTION_DEMOLISH) OR
-		(psDroid->action == DACTION_CLEARWRECK) )
-		{
-			colour <<= 16;//red
-		}
-		pts[0].light.argb = 0xff000000;
-		pts[1].light.argb = 0xff000000;
-		pts[2].light.argb = 0xff000000;
-	}
-
+	pts[0].light.argb = 0xff000000;
+	pts[1].light.argb = 0xff000000;
+	pts[2].light.argb = 0xff000000;
 
   	pts[0].sx = pt1.x;
 	pts[0].sy = pt1.y;

@@ -453,19 +453,7 @@ void drawRadar(void)
 
 	pie_DownLoadRadar(radarBuffer,RADAR_3DFX_TPAGEID);
 
-
-	if(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		iV_UniTransBoxFill( RADTLX,RADTLY,
-							RADTLX+RADWIDTH,RADTLY+RADHEIGHT,
-							(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
-	}
-	else
-	{
-		iV_TransBoxFill( RADTLX,RADTLY,
-							RADTLX+RADWIDTH,RADTLY+RADHEIGHT);
-	}
-
+	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 
 	//iV_DrawSemiTransImageDef(&RadarImage,radarBuffer,RadarWidth,RADTLX,RADTLY,192);
 
@@ -569,12 +557,9 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 
 	Scr = screen + OffsetX + OffsetY*Modulus;
 
-
-	if(pie_Hardware())//was  == ENGINE_GLIDE)
-	{
+	if (pie_Hardware()) {
 		ShadeDiv = 4;
 	}
-
 
 	if(RadarRedraw) {
 		EndY = VisHeight;

@@ -319,13 +319,11 @@ TITLECODE titleLoop(void)
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
-//#ifndef PSX
-	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&	/* Check for toggling display mode */
-		keyPressed(KEY_RETURN) AND pie_GetRenderEngine()!=ENGINE_GLIDE)
-	{
+	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) 
+	    /* Check for toggling display mode */
+	    && keyPressed(KEY_RETURN)) {
 		screenToggleMode();
 	}
-//#endif
 	SDL_Delay(30);	//To fix ALL menus to be less CPU hogging. -Q 5-14-05
 	return RetCode;
 }
@@ -358,8 +356,7 @@ void loadingScreenCallback(void)
 	lastTick = GetTickCount();
 	pie_GlobalRenderBegin();
 	DrawBegin();
-  	if(pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-	{
+  	if (pie_GetRenderEngine() == ENGINE_OPENGL) {
 		pie_UniTransBoxFill(1,1,2,2,0x00010101, 32);
 	}
 	/* Draw the black rectangle at the bottom */

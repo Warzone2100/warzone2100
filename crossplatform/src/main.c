@@ -445,6 +445,7 @@ init://jump here from the end if re_initialising
 				mixer_RestoreIngameVols();
 				break;
 			case FRAME_QUIT:
+				debug(LOG_MAIN, "frame quit");
 				quit = TRUE;
 				Restart = TRUE;
 				break;
@@ -530,7 +531,7 @@ init://jump here from the end if re_initialising
 						loopStatus = gameLoop();
 						switch(loopStatus) {
 							case GAMECODE_QUITGAME:
-								DBPRINTF(("GAMECODE_QUITGAME\n"));
+								debug(LOG_MAIN, "GAMECODE_QUITGAME");
 								gameStatus = GS_TITLE_SCREEN;
 								Restart = TRUE;
 								if(NetPlay.bLobbyLaunched)
@@ -578,7 +579,7 @@ init://jump here from the end if re_initialising
 					break;
 
 				case	GS_VIDEO_MODE:
-				DBERROR(("Video_mode no longer valid"));
+					debug(LOG_ERROR, "Video_mode no longer valid");
 					if (loop_GetVideoStatus())
 					{
 						videoLoop();
@@ -615,7 +616,7 @@ init://jump here from the end if re_initialising
 					break;
 		
 				default:
-					DBERROR(("Weirdy game status I'm afraid!!"));
+					debug(LOG_ERROR, "Weirdy game status I'm afraid!!");
 					break;
 				}
 
@@ -652,7 +653,7 @@ init://jump here from the end if re_initialising
 				break;
 
 			case	GS_VIDEO_MODE:
-				DBERROR(("Video_mode no longer valid"));
+				debug(LOG_ERROR, "Video_mode no longer valid");
 				if (videoInitialised)
 				{
 					videoInitialised = FALSE;
@@ -660,13 +661,13 @@ init://jump here from the end if re_initialising
 				break;
 
 			default:
-				DBERROR(("Unknown game status on shutdown!"));
+				debug(LOG_ERROR, "Unknown game status on shutdown!");
 				break;
 		}
 	
 	} // End of !quit loop.
 
-	DBPRINTF(("Shuting down application\n"));
+	debug(LOG_MAIN, "Shuting down application");
 
 	systemShutdown();
 
@@ -682,7 +683,7 @@ init://jump here from the end if re_initialising
 
 exit:
 
-	DBPRINTF(("Shutting down after fail\n"));
+	debug(LOG_ERROR, "Shutting down after failure");
 
 	systemShutdown();
 

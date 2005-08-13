@@ -940,16 +940,8 @@ SDWORD	fog = 0;
 		brightness = (UBYTE)pie_ByteScale((UBYTE)brightness, (UBYTE)umbra);
 	}
 
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)//glide
-	{
-		*pSpecular = 0;
-		lighting.byte.a = (UBYTE)fog;
-		lighting.byte.r = brightness;
-		lighting.byte.g = brightness;
-		lighting.byte.b = brightness;
-	}
-	else if ( fog == 0)//(d3d with no fog)
-	{
+	if (fog == 0) {
+		// (d3d with no fog?)
 		*pSpecular = 0;
 		lighting.byte.a = UBYTE_MAX;
 		lighting.byte.r = brightness;

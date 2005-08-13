@@ -457,21 +457,8 @@ UDWORD	exceed;
 		{
 			clipDepth = (DISP_HEIGHT - linePitch);
 		}
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			if(bInTutorial) pie_SetSwirlyBoxes(TRUE);
-			iV_UniTransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
-				mainConsole.topX+mainConsole.width,clipDepth,						 // ho ho
-//				(hack = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop)) < DISP_HEIGHT-linePitch ? hack : (DISP_HEIGHT-linePitch),
-				(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE,FILLTRANS);
-			if(bInTutorial) pie_SetSwirlyBoxes(FALSE);
-		}
-		else
-		{
-			iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
-				mainConsole.topX+mainConsole.width ,clipDepth);
-				//(hack = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop)) < DISP_HEIGHT-linePitch ? hack : (DISP_HEIGHT-linePitch)
-		}
+		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
+			mainConsole.topX+mainConsole.width ,clipDepth);
 	}
  
    
@@ -562,18 +549,8 @@ UDWORD	MesY;
 
 		/* How big a box is necessary? */
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			if(bInTutorial) pie_SetSwirlyBoxes(TRUE);
-			iV_UniTransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT,
-				mainConsole.topX+mainConsole.width,mainConsole.topY+((count)*linePitch)+CON_BORDER_HEIGHT-linePitch,(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE,FILLTRANS);
-			if(bInTutorial) pie_SetSwirlyBoxes(FALSE);
-		}
-		else
-		{
-			iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT,
-				mainConsole.topX+mainConsole.width ,mainConsole.topY+((count)*linePitch)+CON_BORDER_HEIGHT-linePitch);
-		}
+		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT,
+			mainConsole.topX+mainConsole.width ,mainConsole.topY+((count)*linePitch)+CON_BORDER_HEIGHT-linePitch);
 	}
 	/*
 	if(count)

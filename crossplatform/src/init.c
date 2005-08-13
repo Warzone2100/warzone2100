@@ -978,7 +978,8 @@ BOOL systemShutdown(void)
 		return FALSE;
 	}
 
-	if (war_GetPlayAudioCDs()) {		
+	if (war_GetPlayAudioCDs()) {
+		debug(LOG_MAIN, "shutting down CD audio");
 		cdAudio_Stop();
 		cdAudio_Close();
 		mixer_Close();
@@ -990,15 +991,10 @@ BOOL systemShutdown(void)
 		return FALSE;
 	}
 
-
-
+	debug(LOG_MAIN, "shutting down graphics subsystem");
 	FREE(DisplayBuffer);
-
-
 	iV_ShutDown();
-
 	levShutDown();
-
 	widgShutDown();
 
 	return TRUE;
