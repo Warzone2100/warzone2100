@@ -1,4 +1,9 @@
-SRC_FILES=	bug.c
+SRC_FILES= \
+		bitimage.c \
+		bug.c \
+		fbf.c \
+		imd.c \
+		imdload.c
 
 LIBS=framework gamelib
 

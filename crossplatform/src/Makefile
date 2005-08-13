@@ -126,7 +126,6 @@ LIBS=		framework \
 		script \
 		sequence \
 		sound \
-		ivis_common \
 		widget
 
 EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net
@@ -137,6 +136,7 @@ else
 LIBS+=ivis_opengl
 EXT_LIBS+=$(OPENGL_LIB) jpeg
 endif
+LIBS+=ivis_common
 
 MAKERULES=../makerules
 include $(MAKERULES)/exe.mk

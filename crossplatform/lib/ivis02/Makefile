@@ -1,8 +1,5 @@
-SRC_FILES=	bitimage.c \
+SRC_FILES= \
 		bspimd.c \
-		fbf.c \
-		imd.c \
-		imdload.c \
 		ivi.c \
 		pcx.c \
 		pieblitfunc.c \
