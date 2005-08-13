@@ -1,11 +1,7 @@
 noinst_LIBRARIES = libivis02.a
 AM_CPPFLAGS = -I../framework -I../gamelib -I../.. -I../ivis_common
 libivis02_a_SOURCES = \
-	bitimage.c \
 	bspimd.c \
-	fbf.c \
-	imd.c \
-	imdload.c \
 	ivi.c \
 	pcx.c \
 	pieblitfunc.c \
@@ -24,12 +20,10 @@ libivis02_a_SOURCES = \
 	textdraw.c \
 	v4101_stub.c \
 	vsr.c \
-	rendmode.h \
 	vid.h \
 	screen.h \
 	vsr.h \
 	pietexture.h \
-	tex.h \
 	dglide.h \
 	piematrix.h \
 	v4101.h

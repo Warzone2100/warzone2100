@@ -1,7 +1,11 @@
 noinst_LIBRARIES = libivis_common.a
 AM_CPPFLAGS = -I../framework -I../gamelib -I../..
 libivis_common_a_SOURCES = \
+	bitimage.c \
 	bug.c \
+	fbf.c \
+	imd.c \
+	imdload.c \
 	bitimage.h \
 	bspfunc.h \
 	bspimd.h \
@@ -22,6 +26,8 @@ libivis_common_a_SOURCES = \
 	piestate.h \
 	pietypes.h \
 	rendfunc.h \
+	rendmode.h \
+	tex.h \
 	textdraw.h
 
 libivis_common_a_libs = ../framework/libframework.a

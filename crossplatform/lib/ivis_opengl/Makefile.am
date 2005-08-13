@@ -1,11 +1,7 @@
 noinst_LIBRARIES = libivis_opengl.a
 AM_CPPFLAGS = -I../framework -I../gamelib -I../.. -I../ivis_common
 libivis_opengl_a_SOURCES = \
-	bitimage.c \
 	bspimd.c \
-	fbf.c \
-	imd.c \
-	imdload.c \
 	ivi.c \
 	pcx.c \
 	pieblitfunc.c \
@@ -26,8 +22,6 @@ libivis_opengl_a_SOURCES = \
 	piematrix.h \
 	pietexture.h \
 	screen.h \
-	tex.h \
-	rendmode.h \
 	vid.h
 
 libivis_opengl_a_libs = ../framework/libframework.a ../ivis_common/libivis_common.a
