@@ -183,10 +183,10 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 
 }
 
-int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
+int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
 {
 
-	char			fname[MAX_FILE_PATH];
+	STRING fname[MAX_FILE_PATH];
 	int				i;
 	iSprite			s;
 
@@ -195,11 +195,8 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 
 	/* Get a copy of the name */
 	// if we convert it to upper case ... the resource loading will not work
-	for (i = 0; i < (int)strlen(filename); i++)
-	{
-
+	for (i = 0; i < (int)strlen(filename); i++) {
 		fname[i] = filename[i];
-
 	}
 	/* Terminate it */
 	fname[i] = '\0';
@@ -208,13 +205,11 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 	i = 0;
 	/* Have we already loaded this one then? */
 
-	while (stricmp(fname,_TEX_PAGE[i].name) != 0)
-	{
+	while (stricmp(fname,_TEX_PAGE[i].name) != 0) {
 		i++;
-		if (i>=_TEX_INDEX) 
-		{
-				DBERROR(("Texture not in resources[2]\n",filename));
-				return -1;
+		if ( i>= _TEX_INDEX) {
+			DBERROR(("Texture not in resources %s[2]\n",filename));
+			return -1;
 		}
 	}
 
@@ -223,10 +218,10 @@ int pie_ReloadTexPage(char *filename,UBYTE *pBuffer)
 	s.height = _TEX_PAGE[i].tex.height;
 	s.bmp = _TEX_PAGE[i].tex.bmp;
 
-	pie_PCXLoadMemToBuffer(pBuffer,&s,NULL); 
+	// FIXME: evil cast
+	pie_PCXLoadMemToBuffer((int8 *)pBuffer,&s,NULL); 
 
 	return i;
-
 }
 
 int iV_TexLoad( char *path, char *filename, int type,

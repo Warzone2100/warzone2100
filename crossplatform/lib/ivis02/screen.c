@@ -267,7 +267,7 @@ void screenRestoreSurfaces(void)
 	/* nothing to do */
 }
 
-void screen_SetBackDrop(UWORD* newBackDropBmp, UDWORD width, UDWORD height)
+void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height)
 {
 	bBackDrop = TRUE;
 	pBackDropData = newBackDropBmp;
@@ -303,7 +303,7 @@ UDWORD screen_GetBackDropWidth(void)
 	return 0;
 }
 
-void screen_Upload(UWORD* newBackDropBmp)
+void screen_Upload(UWORD *newBackDropBmp)
 {
 	UDWORD		y;
 	UBYTE		*Src;

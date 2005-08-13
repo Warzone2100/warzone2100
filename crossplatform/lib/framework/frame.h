@@ -139,11 +139,10 @@ typedef LRESULT (* DEFWINPROCTYPE)(HWND hWnd, UINT Msg,
 										 WPARAM wParam, LPARAM lParam);
 extern void frameSetWindowProc(DEFWINPROCTYPE winProc);
 
-
 /* Load the file with name pointed to by pFileName into a memory buffer. */
 extern BOOL loadFile(STRING *pFileName,		// The filename
-					 UBYTE **ppFileData,	// A buffer containing the file contents
-					 UDWORD *pFileSize);	// The size of this buffer
+                     STRING **ppFileData,	// A buffer containing the file contents
+                     UDWORD *pFileSize);	// The size of this buffer
 
 /* Load the file with name pointed to by pFileName into a memory buffer. */
 // if allocate mem is true then the memory is allocated ... else it is already in ppFileData, and the max size is in pFileSize ... this is adjusted to the actual loaded file size

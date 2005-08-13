@@ -438,11 +438,8 @@ void pie_DownloadDisplayBuffer(UBYTE *DisplayBuffer)
 	switch (pie_GetRenderEngine())
 	{
 	case ENGINE_4101:
-	case ENGINE_SR:
 		DownloadDisplayBuffer(DisplayBuffer);
 		break;
-	case ENGINE_D3D:
-		//screen_SetBackDropFullWidth();//set when background sets
 	default:
 		break;
 	}
@@ -454,10 +451,8 @@ void pie_ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int
 	switch (pie_GetRenderEngine())
 	{
 	case ENGINE_4101:
-	case ENGINE_SR:
 		ScaleBitmapRGB(DisplayBuffer, Width, Height, ScaleR, ScaleG, ScaleB);
 		break;
-	case ENGINE_D3D:
 	case ENGINE_OPENGL:
 	default:
 		break;

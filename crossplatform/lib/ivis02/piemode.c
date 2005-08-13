@@ -114,9 +114,6 @@ void pie_ShutDown(void)
 	case ENGINE_4101:
 		_close_4101();
 		break;
-	case ENGINE_SR:
-		_close_sr();
-		break;
 	default:
 		break;
 	}
@@ -139,35 +136,6 @@ void pie_ScreenFlip(CLEAR_MODE clearMode)
 				screenFlip(TRUE);//automatically downloads active backdrop and never fogs
 			}
 		break;
-	case ENGINE_D3D:
-		pie_D3DRenderForFlip();
-
-		switch (clearMode)
-		{
-		case CLEAR_OFF:
-		case CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD:
-			screenFlip(FALSE);
-			break;
-		case CLEAR_FOG:
-			if (pie_GetFogEnabled())
-			{
-				screen_SetFogColour(pie_GetFogColour());
-			}
-			else
-			{
-				screen_SetFogColour(0);
-			}
-			screenFlip(TRUE);
-			break;
-		case CLEAR_BLACK:
-		default:
-			screen_SetFogColour(0);
-			screenFlip(TRUE);
-			break;
-		}
-		break;
-
-	case ENGINE_SR:
 	default:
 		break;
 	}
@@ -180,12 +148,7 @@ void pie_Clear(UDWORD colour)
 
 	switch (pie_GetRenderEngine())
 	{
-	case ENGINE_SR:
-		_clear_sr(colour);
-		break;
 	case ENGINE_4101:
-	case ENGINE_D3D:
-	case ENGINE_GLIDE:
 	default:
 		break;
 	}
@@ -251,9 +214,6 @@ void pie_LocalRenderBegin(void)
 	case ENGINE_4101:
 		_bank_off_4101();
 		break;
-	case ENGINE_SR:
-		_bank_off_sr();
-		break;
 	default:
 		break;
 	}
@@ -265,9 +225,6 @@ void pie_LocalRenderEnd(void)
 	{
 	case ENGINE_4101:
 		_bank_on_4101();
-		break;
-	case ENGINE_SR:
-		_bank_on_sr();
 		break;
 	default:
 		break;

@@ -5,6 +5,8 @@
 
 //*************************************************************************
 
+
+
 #define iV_TEX_MAX		48
 
 
@@ -19,6 +21,7 @@
 #define iV_TEXNAME(i)	((char *) (&_TEX_PAGE[(i)].name))
 #define iV_TEXTYPE(i)	(_TEX_PAGE[(i)].type)
 
+
 //*************************************************************************
 
 typedef struct
@@ -26,8 +29,8 @@ typedef struct
 	iTexture	tex;
 	uint8		type;
 	char		name[80];
-	int			textPage3dfx;	// what page number is it on 3dfx - not the same thing
-	int			bResource;		// Was page provided by resource handler?
+	unsigned int textPage3dfx;
+	int		bResource;	// Was page provided by resource handler?
 }
 iTexPage;
 
@@ -37,12 +40,13 @@ extern iTexPage	_TEX_PAGE[iV_TEX_MAX];
 
 //*************************************************************************
 
-extern int iV_TexLoad( char *path, char *filename, int type,
+extern int iV_TexLoad(STRING *path, STRING *filename, int type,
 						iBool palkeep, iBool bColourKeyed );
-extern int iV_TexLoadNew( char *path, char *filename, int type,
+extern int iV_TexLoadNew(STRING *path, STRING *filename, int type,
 					iBool palkeep, iBool bColourKeyed );
-extern int pie_ReloadTexPage(char *filename,UBYTE *pBuffer);
-extern int pie_AddBMPtoTexPages( 	iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource);
+extern int pie_ReloadTexPage(STRING *filename,SBYTE *pBuffer);
+extern int pie_AddBMPtoTexPages(iSprite* s, STRING *filename, int type, iBool bColourKeyed, iBool bResource);
+void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource);
 extern void pie_TexInit(void);
 
 //*************************************************************************
@@ -52,7 +56,7 @@ extern void pie_TexShutDown(void);
 extern BOOL iV_TexSizeIsLegal(UDWORD Width,UDWORD Height);
 extern BOOL iV_IsPower2(UDWORD Value);
 
-extern void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource);
+
 
 BOOL FindTextureNumber(UDWORD TexNum,int* TexPage);
 

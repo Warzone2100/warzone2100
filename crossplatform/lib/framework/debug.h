@@ -180,6 +180,7 @@
 
 enum code_part {
   LOG_ALL, /* special: sets all to on */
+  LOG_MAIN,
   LOG_SOUND, 
   LOG_VIDEO, 
   LOG_3D,

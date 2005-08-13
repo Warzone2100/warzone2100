@@ -73,12 +73,13 @@
 
 //*************************************************************************
 
-extern BOOL iV_setImagePath(char *path);
-extern iIMDShape *iV_IMDLoad(char *filename, iBool palkeep);
-extern iIMDShape *iV_ProcessIMD(UBYTE **ppFileData, UBYTE *FileDataEnd, UBYTE *IMDpath, UBYTE *PCXpath,iBool palkeep);
+extern BOOL iV_setImagePath(STRING *path);
+extern iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep);
+extern iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, 
+                                STRING *IMDpath, STRING *PCXpath, iBool palkeep);
 iIMDShape *iV_ProcessBPIE(iIMDShape *, UDWORD size);
 
-extern iBool iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
+extern iBool iV_IMDSave(STRING *filename, iIMDShape *s, BOOL PieIMD);
 extern void iV_IMDDebug(iIMDShape *s);
 
 extern void iV_IMDRelease(iIMDShape *s);
@@ -109,6 +110,6 @@ extern void iV_IMDDrawTexturedShade(iIMDShape *shape, int lightLevel);
 */
 
 void tpInit(void);
-void tpAddPIE(char *FileName,iIMDShape *pIMD);
+void tpAddPIE(STRING *FileName, iIMDShape *pIMD);
 
 #endif

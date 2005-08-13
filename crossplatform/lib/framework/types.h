@@ -23,7 +23,7 @@
 /* Basic numeric types */
 typedef unsigned	char	UBYTE;
 typedef			char	SBYTE;
-typedef unsigned	char	STRING;
+typedef 		char	STRING;
 typedef	unsigned	short	UWORD;
 typedef			short	SWORD;
 typedef	unsigned	int	UDWORD;
@@ -57,7 +57,10 @@ typedef			int	SDWORD;
 #define REG_BINARY       0
 #define HKEY_LOCAL_MACHINE       0
 
+#ifndef APIENTRY
 #define APIENTRY
+#endif
+
 #define cdecl
 
 #define __int64 long long 

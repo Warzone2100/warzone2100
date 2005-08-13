@@ -24,6 +24,11 @@
 extern "C" {
 #endif
 #include <jpeglib.h>
+// the following two lines compromise an ugly hack because some jpeglib.h
+// actually contain configure-created defines that conflict with ours!
+// man, those jpeglib authors should get a frigging clue...
+#undef HAVE_STDDEF_H
+#undef HAVE_STDLIB_H
 #ifdef __cplusplus
 }
 #endif
@@ -105,7 +110,7 @@ static BOOL	g_bVidMem;
 
 //static UDWORD	backDropWidth = BACKDROP_WIDTH;
 //static UDWORD	backDropHeight = BACKDROP_HEIGHT;
-static GLint	backDropTexture = -1;
+static GLuint	backDropTexture = -1;
 
 SDL_Surface *screenGetSDL() {
         return screen;

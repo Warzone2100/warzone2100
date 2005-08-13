@@ -1,50 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
-#ifdef WIN32
-#include <dos.h>
-#endif
-#include "rendmode.h"
+
+//#include "rendmode.h"
 #include "bug.h"
 #include "piepalette.h"
 #include "pcx.h"
 #include "tex.h"
 #include "ivispatch.h"
-
-
-
 #include "bitimage.h"
 
+extern BOOL   pie_Hardware(void);
 
+static BOOL LoadTextureFile(STRING *FileName, iSprite *TPage, int *TPageID);
 
-
-
-
-static BOOL LoadTextureFile(char *FileName,iSprite *TPage,int *TPageID);
-
-
-
-UWORD iV_GetImageWidth(IMAGEFILE *ImageFile,UWORD ID)
+UWORD iV_GetImageWidth(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-
 	return ImageFile->ImageDefs[ID].Width;
-
 }
 
-UWORD iV_GetImageHeight(IMAGEFILE *ImageFile,UWORD ID)
+UWORD iV_GetImageHeight(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-
 	return ImageFile->ImageDefs[ID].Height;
-
-
 }
 
 
 // Get image width with no coordinate conversion.
 //
-UWORD iV_GetImageWidthNoCC(IMAGEFILE *ImageFile,UWORD ID)
+UWORD iV_GetImageWidthNoCC(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].Width;
@@ -52,46 +38,36 @@ UWORD iV_GetImageWidthNoCC(IMAGEFILE *ImageFile,UWORD ID)
 
 // Get image height with no coordinate conversion.
 //
-UWORD iV_GetImageHeightNoCC(IMAGEFILE *ImageFile,UWORD ID)
+UWORD iV_GetImageHeightNoCC(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].Height;
 }
 
 
-SWORD iV_GetImageXOffset(IMAGEFILE *ImageFile,UWORD ID)
+SWORD iV_GetImageXOffset(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-
 	return ImageFile->ImageDefs[ID].XOffset;
-
 }
 
-SWORD iV_GetImageYOffset(IMAGEFILE *ImageFile,UWORD ID)
+SWORD iV_GetImageYOffset(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-
 	return ImageFile->ImageDefs[ID].YOffset;
-
 }
 
-UWORD iV_GetImageCenterX(IMAGEFILE *ImageFile,UWORD ID)
+UWORD iV_GetImageCenterX(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-
 	return ImageFile->ImageDefs[ID].XOffset + ImageFile->ImageDefs[ID].Width/2;
-
 }
 
-UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile,UWORD ID)
+UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
-
 	return ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2;
-
 }
-
-
 
 IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 {
@@ -129,9 +105,10 @@ IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 
 	ImageFile->Header = *Header;
 
-// Load the texture pages.
-	for(i=0; i<Header->NumTPages; i++) {
-		LoadTextureFile((char*)Header->TPageFiles[i],&ImageFile->TexturePages[i],(int*)&ImageFile->TPageIDs[i]);
+	// Load the texture pages.
+	for (i = 0; i < Header->NumTPages; i++) {
+		LoadTextureFile((STRING*)Header->TPageFiles[i], &ImageFile->TexturePages[i],
+                    (int*)&ImageFile->TPageIDs[i]);
 	}
 
 	ImageDef = (IMAGEDEF*)Ptr;
@@ -161,23 +138,18 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 }
 
 
-static BOOL LoadTextureFile(char *FileName,iSprite *pSprite,int *texPageID)
+static BOOL LoadTextureFile(STRING *FileName, iSprite *pSprite, int *texPageID)
 {
 	SDWORD i;
-//	iPalette pal;
 
 	DBPRINTF(("ltf) %s\n",FileName));
 
-	if(!resPresent("IMGPAGE",FileName))
-	{
-		if(!iV_PCXLoad(FileName,pSprite,NULL))
-		{
+	if (!resPresent("IMGPAGE",FileName)) {
+		if (!iV_PCXLoad(FileName,pSprite,NULL)) {
 			DBERROR(("Unable to load texture file : %s",FileName));
 			return FALSE;
 		}
-	}
-	else
-	{
+	} else {
 		*pSprite = *(iSprite*)resGetData("IMGPAGE",FileName);
 	}
 
@@ -186,24 +158,17 @@ static BOOL LoadTextureFile(char *FileName,iSprite *pSprite,int *texPageID)
 	/* Have we already loaded this one then? */
 	while (i<_TEX_INDEX) 
 	{
-		if (stricmp(FileName,_TEX_PAGE[i].name) == 0)
-		{
-			/* Send back 3dfx texpage number if we're on 3dfx - they're NOT the same */
-		 	if(rendSurface.usr == REND_GLIDE_3DFX)
-			{
-
+		if (stricmp(FileName,_TEX_PAGE[i].name) == 0) {
+			if (pie_Hardware()) {
 				*texPageID = (_TEX_PAGE[i].textPage3dfx);
-				return TRUE;
-			}
-			else
-			{
-				/* Otherwise send back the software one */
+			} else {
 				*texPageID = i;
-				return TRUE;
 			}
+			return TRUE;
 		}
 		i++;
 	}
+
 #ifdef PIETOOL
 	*texPageID=NULL;
 #else
@@ -211,6 +176,3 @@ static BOOL LoadTextureFile(char *FileName,iSprite *pSprite,int *texPageID)
 #endif
 	return TRUE;
 }
-
-
-

@@ -253,11 +253,6 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 	if (rendStates.depthBuffer != depthMode)
 	{
 		rendStates.depthBuffer = depthMode;
-		if (rendStates.rendEngine == ENGINE_D3D)
-		{
-
-		}
-
 	}
 #endif
 }
@@ -559,22 +554,6 @@ static void pie_SetColourCombine(COLOUR_MODE colCombMode)
 	{
 		rendStates.colourCombine = colCombMode;
 		pieStateCount++;
-
-		if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			switch (colCombMode)
-			{
-				case COLOUR_TEX_CONSTANT:
-					break;
-				case COLOUR_FLAT_CONSTANT:
-				case COLOUR_FLAT_ITERATED:
-					pie_SetTexturePage(-1);
-					break;
-				case COLOUR_TEX_ITERATED:
-				default:
-					break;
-			}
-		}
 	}
 #endif
 }

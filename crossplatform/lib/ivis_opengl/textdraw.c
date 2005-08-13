@@ -14,7 +14,7 @@
 #include "textdraw.h"
 #include "bitimage.h"
 
-extern	void	pie_DrawTextNew(unsigned char *string, int x, int y);
+extern	void	pie_DrawTextNew(STRING *string, int x, int y);
 extern SDWORD DisplayXFactor;
 
 /***************************************************************************/
@@ -232,7 +232,7 @@ BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *Y
 }
 
 
-int iV_GetCharWidth(unsigned char Char)
+int iV_GetCharWidth(STRING Char)
 {
 	int Index;
 	UWORD ImageID;
@@ -267,8 +267,8 @@ enum {
 	EXTENTS_END
 };
 
-static UBYTE FString[256];		// Must do something about these wastefull static arrays.
-static UBYTE FWord[256];
+static STRING FString[256];		// Must do something about these wastefull static arrays.
+static STRING FWord[256];
 static int LastX;				// Cursor position after last draw.
 static int LastY;
 static int LastTWidth;			// Pixel width of the last string draw.
@@ -293,12 +293,12 @@ static RENDERTEXT_CALLBACK Indirect_pie_DrawText= pie_DrawText;
 
 void SetIndirectDrawTextCallback( RENDERTEXT_CALLBACK routine)
 {
-	Indirect_pie_DrawText=*routine;	
+	Indirect_pie_DrawText=routine;	
 }
 
 RENDERTEXT_CALLBACK GetIndirectDrawTextCallback( void)
 {
-	return(&Indirect_pie_DrawText);
+	return(Indirect_pie_DrawText);
 }
 		  
 
@@ -450,13 +450,13 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 			FWord[i] = 0;
 
 			// And add it to the output string.
-			strcat((char*)FString,(char*)FWord);
+			strcat(FString, FWord);
    		}
 
 
 		// Remove trailing spaces, usefull when doing centre justify.
 		if(FFlags & FTEXTF_SKIP_TRAILING_SPACES) {
-			for(t=strlen((char*)FString)-1; t >= 0; t--) {
+			for (t = strlen(FString) - 1; t >= 0; t--) {
 				if(FString[t] != ' ') {
 					break;
 				}
@@ -466,7 +466,7 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 
 #ifdef _TESTBED
 		// Replace spaces with ~.
-		for(t=0; t<strlen((char*)FString); t++) {
+		for (t = 0; t < strlen(FString); t++) {
 			if(FString[t] == ' ') FString[t] = '~';
 		}
 #endif
@@ -597,7 +597,7 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 
 static SWORD OldTextColourIndex = -1;
 
-void pie_DrawText(unsigned char *string, UDWORD x, UDWORD y)
+void pie_DrawText(STRING *string, UDWORD x, UDWORD y)
 {
 	int Index;
 	UWORD ImageID;
@@ -753,7 +753,7 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 // Partial fix for rendering text on 'video', you can read it now. -Q
 // --still to do, add 'boxes' under text so you can see it better.
 //===========================================================
-void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *string, int x, int y)
+void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, STRING *string, int x, int y)
 {
 	int Index;
 	UWORD ImageID;
@@ -798,7 +798,7 @@ void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, unsigned char *string, i
 
 }
 
-void pie_DrawText270(unsigned char *String,int XPos,int YPos)
+void pie_DrawText270(STRING *String,int XPos,int YPos)
 {
 	int Index;
 	UWORD ImageID;

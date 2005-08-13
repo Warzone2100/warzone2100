@@ -25,11 +25,7 @@
 typedef	enum	REND_ENGINE
 				{
 					ENGINE_UNDEFINED,
-					ENGINE_16Bit,
 					ENGINE_4101,
-					ENGINE_SR,
-					ENGINE_GLIDE,
-					ENGINE_D3D,
 					ENGINE_OPENGL
 				}
 				REND_ENGINE;

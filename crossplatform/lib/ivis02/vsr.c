@@ -11,6 +11,8 @@
 #include <conio.h>
 #include <dos.h>
 #endif
+
+#include "ivi.h"
 #include "rendmode.h"
 #include "piemode.h"
 #include "bug.h"

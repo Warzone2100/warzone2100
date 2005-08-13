@@ -19,14 +19,14 @@
 
 //*************************************************************************
 
-extern int iV_FileOpen(char *fname, int mode, int buffersize);
-extern int iV_FileGet(int fd);
-extern void iV_FileClose(int fd);
-extern int iV_FilePut(int fd, int8 c);
-extern int iV_FileSeek(int fd, int where, int seek);
-extern int32 iV_FileSize(char *filename);
-extern int32 iV_FileSizeOpen(int fd);
-extern iBool iV_FileLoad(char *filename, uint8 *data);
-extern iBool iV_FileSave(char *filename, uint8 *data, int32 size);
+int iV_FileOpen(STRING *fname, int mode, int buffersize);
+int iV_FileGet(int fd);
+void iV_FileClose(int fd);
+int iV_FilePut(int fd, int8 c);
+int iV_FileSeek(int fd, int where, int seek);
+int32 iV_FileSize(STRING *filename);
+int32 iV_FileSizeOpen(int fd);
+iBool iV_FileLoad(STRING *filename, uint8 *data);
+iBool iV_FileSave(STRING *filename, uint8 *data, int32 size);
 
 #endif

@@ -22,6 +22,7 @@
 #include "pietexture.h"
 #include "pieclip.h"
 #include "bspfunc.h"
+#include "v4101.h"
 
 #define MIST
 
@@ -163,7 +164,7 @@ void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z)
 
 
 
-static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD frame)
+static void AddIMDPrimativesBSP2(iIMDShape *IMDdef, UDWORD frame)
 {
 	iVector pPos;
 
@@ -188,10 +189,7 @@ static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD
 //	DBPRINTF(("cam(%d,%d,%d) obj(%d,%d,%d) \n",BSPCamera.x,BSPCamera.y,BSPCamera.z,BSPObject.x,BSPObject.y,BSPObject.z));
 //	DBPRINTF((" pos(%d,%d,%d)\n",pPos.x,pPos.y,pPos.z));
 
-
-
-
-	DrawBSPIMD( IMDdef, &pPos , ScrVertices);		// in bspimd.c
+	DrawBSPIMD(IMDdef, &pPos); //, scrPoints);		// in bspimd.c
 }
 
 
@@ -221,7 +219,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	iIMDPoly	imdPoly;
 	VERTEXID	*index;
 	PIELIGHT	colour, specular;
-	UBYTE		alpha;
 
 	pieCount++;
 
@@ -279,21 +276,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	{
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
-
-		if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			alpha = 255-specular.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-			colour.byte.r = pie_ByteScale(alpha, colour.byte.r);
-			colour.byte.g = pie_ByteScale(alpha, colour.byte.g);
-			colour.byte.b = pie_ByteScale(alpha, colour.byte.b);
-			specular.argb = 0;
-		}
-		else
-		{
-			colour.byte.a = (UBYTE)pieFlagData;
-		}
+		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(TRUE);
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
@@ -301,17 +284,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 
-		if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			alpha = 255-specular.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-			specular.argb = 0;
-		}
-		else
-		{
-			colour.byte.a = (UBYTE)pieFlagData;
-		}
+		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
 	}
 	else
@@ -405,7 +378,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 
 	if ((!pie_Hardware()) AND shape->BSPNode!=NULL)
 	{
-		AddIMDPrimativesBSP2(shape,scrPoints,frame);
+		AddIMDPrimativesBSP2(shape, frame);
 		return;
 	}
 
@@ -571,20 +544,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
 
-		if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			alpha = 255-specular.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-			colour.byte.r = pie_ByteScale(alpha, colour.byte.r);
-			colour.byte.g = pie_ByteScale(alpha, colour.byte.g);
-			colour.byte.b = pie_ByteScale(alpha, colour.byte.b);
-			specular.argb = 0;
-		}
-		else
-		{
-			colour.byte.a = (UBYTE)pieFlagData;
-		}
+		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(TRUE);
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
@@ -592,17 +552,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 
-		if (pie_GetRenderEngine() == ENGINE_D3D)
-		{
-			alpha = 255-specular.byte.a;
-			alpha = pie_ByteScale(alpha, (UBYTE)pieFlagData);//scale transparency by fog value
-			colour.byte.a = alpha;
-			specular.argb = 0;
-		}
-		else
-		{
-			colour.byte.a = (UBYTE)pieFlagData;
-		}
+		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
 	}
 	else
@@ -694,7 +644,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 
 	if ((!pie_Hardware()) AND shape->BSPNode!=NULL)
 	{
-		AddIMDPrimativesBSP2(shape,scrPoints,frame);
+		AddIMDPrimativesBSP2(shape, frame);
 		return;
 	}
 
@@ -1419,8 +1369,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 	pie_SetTexturePage(texPage);
 	pie_SetBilinear(TRUE);
 
-	if ((pie_GetRenderEngine() == ENGINE_4101) || (pie_GetRenderEngine() == ENGINE_SR))
-	{
+	if (pie_GetRenderEngine() == ENGINE_4101) {
 		imdPoly.flags = iV_IMD_TEX;
 		imdPoly.npnts = 3;
 		for(i = 0; i < 4; i++)
