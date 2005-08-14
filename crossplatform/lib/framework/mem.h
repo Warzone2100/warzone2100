@@ -19,20 +19,16 @@
 
 /* in fast debugging mode turn off heap and pointer valid checking - GJ */
 #ifdef DEBUG_FAST
-#define DEBUG_HEAP		FALSE
-#define	NO_PTRVALID
+#undef DEBUG_HEAP
+#define NO_PTRVALID		TRUE
 #else
 #define DEBUG_HEAP		TRUE
 #endif
 
 #else
 
-#define DEBUG_MALLOC	FALSE
-#define DEBUG_HEAP		FALSE
-
-//#ifdef PSX
-//#warning DEBUG MALLOC DISABLED ON PSX
-//#endif
+#undef DEBUG_MALLOC
+#undef DEBUG_HEAP
 
 #endif
 
@@ -87,8 +83,6 @@ extern void memDisplayTreap(STRING *pFileName);
 #define MEMORYTREAP(file)	memDisplayTreap(file)
 
 #endif // DEBUG_MALLOC
-
-
 
 
 #endif
