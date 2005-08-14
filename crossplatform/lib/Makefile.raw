@@ -25,8 +25,8 @@ SUBDIRS_CLEAN=	framework \
 		ivis_opengl
 
 all dep:
-	@for i in $(SUBDIRS); do (cd $$i; $(MAKE) $@); done
+	@for i in $(SUBDIRS); do (cd $$i; $(MAKE) -f Makefile.raw $@); done
 
 clean:
-	@for i in $(SUBDIRS_CLEAN); do (cd $$i; $(MAKE) $@); done
+	@for i in $(SUBDIRS_CLEAN); do (cd $$i; $(MAKE) -f Makefile.raw $@); done
 
