@@ -1283,7 +1283,7 @@ BOOL sendRequestDroid(UDWORD droidId)
 	NetAdd(msg,0,droidId);
 	NetAdd(msg,4,player2dpid[selectedPlayer] );
 
-	DBPRINTF(("multibot: unknown droid %d, requesting info\n"));
+	DBPRINTF(("multibot: unknown droid %d, requesting info\n", droidId));
 
 	msg.type = NET_REQUESTDROID;
 	msg.size = sizeof(DPID)+sizeof(UDWORD);

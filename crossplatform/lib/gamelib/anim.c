@@ -329,7 +329,7 @@ anim_GetAnimID( char *szName )
 
 	if ( cPos == NULL )
 	{
-		DBERROR( ("anim_GetAnimID: %s isn't .ani file\n") );
+		DBERROR( ("anim_GetAnimID: %s isn't .ani file\n", szName));
 		return NO_ANIM;
 	}
 

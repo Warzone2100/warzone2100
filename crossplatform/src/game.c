@@ -3698,7 +3698,7 @@ BOOL gameLoadV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 	}
 	else
 	{
-		DBPRINTF(("saveGame build date differs;/nsavegame pre-Version 18/n build    %s/n",psSaveGame->buildDate,date));
+		DBPRINTF(("saveGame build date differs;/nsavegame pre-Version 18 (%s)/n build    %s/n",psSaveGame->buildDate,date));
 		oldestSaveGameVersion = 1;
 		validityKey = VALIDITYKEY_DATE;
 	}

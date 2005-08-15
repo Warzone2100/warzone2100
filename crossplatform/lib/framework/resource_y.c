@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 
 /* yacc -v -D Resource_y.h -p res_ -o Resource_y.c Resource.y */

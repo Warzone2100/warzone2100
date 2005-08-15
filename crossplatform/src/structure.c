@@ -2764,7 +2764,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//allocate the necessary space
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 
@@ -2883,7 +2883,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -2950,7 +2950,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 
@@ -2989,7 +2989,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -3061,7 +3061,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -3118,7 +3118,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
