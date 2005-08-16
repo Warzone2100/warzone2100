@@ -143,6 +143,7 @@ if test "x$openal" != xno; then
                [AC_CHECK_LIB(openal32, main, ALLIB=openal32, AL_lib=no)])
   # On Windows (and perhaps some other platforms), Alut is a separate library
   AC_CHECK_LIB(alut, main, ALUTLIB="-lalut", ALUTLIB="")
+  AC_CHECK_HEADER(AL/alut.h, ALUT_H=yes, ALUT_H=no)
   if test "x$AL_lib" = "xno"; then
     if test "x$openal" = xyes; then
       AC_MSG_ERROR([You need to install OpenAL.])
@@ -162,6 +163,9 @@ if test "x$openal" != xno; then
   fi
 fi
 AC_MSG_CHECKING([OpenAL])
+if test "x$ALUT_H" = "xyes"; then
+  AC_DEFINE(WZ_ALUT_H, 1, [Use Alut headers])
+fi
 if test "x$openal" = xyes; then
   WZ_LIBS="$WZ_LIBS -l$ALLIB $ALUTLIB"
   AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])

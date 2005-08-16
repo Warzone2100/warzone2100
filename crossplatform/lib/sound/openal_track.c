@@ -3,17 +3,24 @@
 // Sound library-specific functions
 //*
 //
+
+// this has to be first
+#include "frame.h"
+
 #include <AL/al.h>
 #include <AL/alc.h>
-//#include <ALut/alut.h>
-#include "frame.h"
+#ifdef WZ_ALUT_H
+#include <AL/alut.h>
+#endif
 #include "tracklib.h"
 #include "audio.h"
 #define ATTENUATION_FACTOR	0.0003
 #ifndef M_PI
 	#define M_PI	3.1415926535897932385
 #endif // win32 doesn't define that...
-int current_queue_sample = -1;
+
+ALuint current_queue_sample = -1;
+
 typedef struct	SAMPLE_LIST
 {
 	struct AUDIO_SAMPLE *curr;
