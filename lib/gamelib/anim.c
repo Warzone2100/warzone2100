@@ -296,6 +296,7 @@ anim_SetVals( char szFileName[], UWORD uwAnimID )
 	if ( psAnim == NULL )
 	{
 		DBERROR( ("anim_SetVals: can't find anim %s\n", szFileName) );
+		return ;
 	}
 
 	/* set anim vals */

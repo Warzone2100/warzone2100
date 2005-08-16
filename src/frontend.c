@@ -63,7 +63,7 @@
 #include "multistat.h"
 #include "netplay.h"
 
-#ifdef WHATEVER_YOU_NEED_FOR_DOT_NET
+#ifdef WIN32
 #include "revision.h"
 #endif
 
@@ -373,7 +373,7 @@ BOOL startTitleMenu(VOID)
 		}
 		addTextButton(FRONTEND_TUTORIAL,	FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_TUT) ,FALSE,FALSE);
 		addTextButton(FRONTEND_OPTIONS,		FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_OPTIONS) ,FALSE,FALSE);
-		addTextButton(FRONTEND_PLAYINTRO,	FRONTEND_POS6X,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_INTRO),FALSE,FALSE);
+//		addTextButton(FRONTEND_PLAYINTRO,	FRONTEND_POS6X,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_INTRO),FALSE,FALSE);
 
 	addTextButton(FRONTEND_QUIT,		FRONTEND_POS7X,FRONTEND_POS7Y, strresGetString(psStringRes, STR_FE_QUIT),FALSE,FALSE);
 
@@ -582,6 +582,8 @@ void endSinglePlayerMenu( void )
 
 void frontEndNewGame( void )
 {
+printf("[frontEndNewGame]==========  QUEUE check should be OFF\n");
+	pQUEUE=FALSE;
 	switch(StartWithGame) {
 		case 1:
 			strcpy(pLevelName,DEFAULT_LEVEL);
@@ -773,6 +775,7 @@ BOOL runMultiPlayerMenu(VOID)
 {
 	UDWORD id;
 //	PLAYERSTATS	nullStats;
+	pQUEUE=TRUE;					// Not sure where the best place to stick these. -Q
 	processFrontendSnap(TRUE);
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets 

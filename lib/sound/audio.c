@@ -88,6 +88,7 @@ BOOL audio_Init( HWND hWnd, BOOL bEnabled, AUDIO_CALLBACK pStopTrackCallback )
 		if ( !HEAP_CREATE(&g_psSampleHeap, AUDIO_SAMPLE_HEAP_INIT, AUDIO_SAMPLE_HEAP_EXT, sizeof(AUDIO_SAMPLE)) )
 		{
 			DBERROR( ("audio_Init: couldn't create sample queue\n") );
+			printf("audio_Init: couldn't create sample queue\n");
 			return FALSE;
 		}
 

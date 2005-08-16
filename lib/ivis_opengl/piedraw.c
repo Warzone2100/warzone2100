@@ -12,6 +12,9 @@
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
+#ifdef WIN32
+#include <gl/glext.h>
+#endif
 
 #include "frame.h"
 #include "ivisdef.h"

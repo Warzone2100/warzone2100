@@ -258,11 +258,11 @@ void inputProcessEvent(SDL_Event *event)
 
 			{
 
-
-
-				DBP1(("Code: %x\n", vk))		//This breaks with .NET, [DBP1(("Code: %x\n", vk));]it don't want the ; at end. --Qamly
-
 				unsigned char char_code = event->key.keysym.unicode;
+
+//				DBP1(("Code: %x\n", vk));		//This breaks with .NET, [DBP1(("Code: %x\n", vk));]it don't want the ; at end. --Qamly
+
+
 
 				if (char_code < 32) {
 					char_code = 0;

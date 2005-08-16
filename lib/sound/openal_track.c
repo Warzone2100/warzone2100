@@ -5,7 +5,7 @@
 //
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
+//#include <AL/alut.h>
 #include "frame.h"
 #include "tracklib.h"
 #include "audio.h"
@@ -96,8 +96,10 @@ BOOL sound_InitLibrary( void )
 //
 void sound_ShutdownLibrary( void )
 {
-	if(context != 0) {
-		//alcDestroyContext(context); // this gives a long delay on some impl.
+	if(context != 0) 
+	{
+		alcMakeContextCurrent(NULL);		//this should work now -Q
+		alcDestroyContext(context);			
 		context = 0;
 	}
 	if(device != 0) {
@@ -555,5 +557,5 @@ void mixer_Set3dWavVolume( SDWORD iVol )
 
 
 
-//*
+//
 //

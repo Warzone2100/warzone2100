@@ -170,6 +170,8 @@ extern BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWOR
 extern SDWORD ftol(float f);
 extern BOOL	bRunningUnderGlide;
 
+extern BOOL pQUEUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
+extern char addonmaps[600][256];	// this will hold all the "addon.lev"(s) that we find.
 
 
 UINT HashString( char *String );

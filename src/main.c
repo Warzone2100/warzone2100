@@ -37,6 +37,14 @@
 #include "multiwdg.h"
 #include "screen.h"
 
+#include "sys_zipfile.h"
+
+#ifndef WIN32
+#include <dirent.h>
+#endif
+
+
+
 // Warzone 2100 . Pumpkin Studios
 
 UDWORD	gameStatus = GS_TITLE_SCREEN;	// Start game in title mode.
@@ -48,6 +56,7 @@ BOOL	frontendInitialised = FALSE;
 BOOL	reInit = FALSE;
 BOOL	bGlideFound=FALSE;		
 BOOL	bDisableLobby;
+BOOL pQUEUE=TRUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
 char	SaveGamePath[255];
 char	ScreenDumpPath[255];
 char	MultiForcesPath[255];
@@ -106,6 +115,8 @@ int main(int argc, char *argv[])
 	GAMECODE		loopStatus = 0;
 	iColour*		psPaletteBuffer;
 	SDWORD			pSize;
+	int err=0;
+
 #ifdef _MSC_VER	
 	int tmpFlag; //debug stuff for VC -Q
 #endif
@@ -114,6 +125,16 @@ int main(int argc, char *argv[])
 	char	UnixUserPath[255];
 
 #endif
+//========= might move later...
+#ifdef WIN32
+	WIN32_FIND_DATA		sFindData;
+	HANDLE				hFindHandle;
+#else		//linux
+	DIR *dir;
+	struct dirent *dirent;
+	char *ptr;
+#endif
+//========= might move later...
 
 #ifdef WIN32				//Note, Should we fix this like linux so we don't use the reg, and use config file? -Q
 	strcpy(SaveGamePath,"savegame\\");
@@ -253,6 +274,75 @@ init://jump here from the end if re_initialising
 	{
 		return -1;
 	}
+
+//=================================
+// MOVE THIS TO PROPER LOCATION ?
+	Zip_Init();	//init our zip file... -Q 
+	err=Zip_Open("warzone.wz", NULL);		//1 = good 0=bad
+	if(err==0)											//We must have this!
+	{printf("*** aborting, warzone.wz was not found! \n\n");
+	 return -1;		//return or exit()? hmm
+	}
+//=======================================//NOTE, MP support should be ON now.
+// this should ONLY be enabled for MP, move to correct place...	 //only time it is OFF is with SP games!
+// This adds all our patches needed for MP/ skirmish!					 //so leave this alone for now.
+//Zip_Find_MP("audio\\MemResSp\\Research\\PCV357.wav");
+//printf("$$$$$$$$$$$$$$$$$$***MULTIPLAYER here?***\n");
+	err=Zip_Open("mp.wz", NULL);		//1 = good 0=bad
+	if(err==0)										//Might as well require this also, but not needed in SP campagin.
+	{printf("*** aborting, mp.wz was not found! \n\n");
+	 return FALSE;		//return or exit()? hmm
+	}
+	pQUEUE=TRUE;		//Turn ON when first start, only OFF in SP games!  On now, since a new frontend can be used...
+//==================================================================
+// Now we should hunt for all the other .wz files, so we can add them to the list.
+//this should be a function... but oh well. :) -Q
+#ifdef WIN32
+	memset(&sFindData, 0, sizeof(WIN32_FIND_DATA));
+	hFindHandle = FindFirstFile("*.wz", &sFindData);
+	while (hFindHandle != INVALID_HANDLE_VALUE)
+	{
+		if(stricmp("warzone.wz",sFindData.cFileName)==0) goto skip;	//skip
+		if(stricmp("mp.wz",sFindData.cFileName)==0) goto skip;			//skip
+		printf("Found %s.  Processing it...\n",sFindData.cFileName);
+		err=Zip_Open(sFindData.cFileName, NULL);		//1 = good 0=bad
+		if(err==0)											//We must have this!
+		{printf("*** Error with %s! Remove or fix file! \n\n",sFindData.cFileName);
+		Zip_Shutdown();
+		exit(1);		//return or exit()? hmm
+		}
+skip:
+		if (!FindNextFile(hFindHandle, &sFindData))
+		{
+			hFindHandle = INVALID_HANDLE_VALUE;
+		}
+	}
+#else
+	dir = opendir(".");
+	while ( (dirent = readdir(dir)) != NULL)
+	{printf("Found %s.  Checking it...\n",dirent->d_name);
+		ptr = strrchr(dirent->d_name, '.');
+		if (ptr != NULL && strcmp(".wz", ptr) == 0)
+		{
+		printf("Found %s.  Processing it...\n",dirent->d_name);
+		if(stricmp("warzone.wz",dirent->d_name)==0) continue;		//skip
+		if(stricmp("mp.wz",dirent->d_name)==0) continue;				//skip
+		err=Zip_Open(dirent->d_name, NULL);		//1 = good 0=bad
+		if(err==0)											//We must have this!
+		{printf("*** Error with %s! Remove or fix file! \n\n",dirent->d_name);
+		Zip_Shutdown();
+		exit(1);		//return or exit()? hmm
+		}
+		}
+
+	}
+        closedir(dir);
+#endif
+//=========================== Note, above routine should be moved into a function
+//==--------------------------------------------
+	Zip_Find_MP("NOMATCH");				//set everything up, with a bogus entry.
+	Zip_Find_MPmaps("addon.lev");		//Now, we need to read all the map level data in!
+//=================================
 	if (!wdgLoadAllWDGCatalogs())
 	{
 		return -1;
@@ -665,6 +755,7 @@ init://jump here from the end if re_initialising
 	} // End of !quit loop.
 
 	DBPRINTF(("Shuting down application\n"));
+	Zip_Shutdown(); // shutdown and free some memory...
 
 	systemShutdown();
 

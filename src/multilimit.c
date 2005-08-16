@@ -97,7 +97,7 @@ BOOL startLimitScreen(void)
 	UDWORD			i;
 
 	addBackdrop();											//background
-
+//printf("[startLimitScreen]========= Enable priority here?\n");
 	// load stats...
 	if(!bForceEditorLoaded)
 	{

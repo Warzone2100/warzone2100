@@ -15,6 +15,7 @@
 #include "wdg.h"
 #include "multiwdg.h"
 
+#include "sys_zipfile.h"
 
 // control how data files are loaded
   // I don't know what this is ... but it certainly doesn't work on the playstation  ... (it sounds like the .WDG cacheing to me!)
@@ -116,7 +117,7 @@ BOOL resInitialise(void)
 #endif
 
 	// the pc can handle it the old way
-		FILE_InitialiseCache(2*1024*1024);		// set the cache to be 2meg for the time being ...!
+		FILE_InitialiseCache(6*1024*1024);		// set the cache to be 2meg for the time being ...! //Now 6MB!
 //		WDG_SetCurrentWDG("warzone.wdg");
 		if (!wdgMultiInit())
 		{
@@ -389,13 +390,96 @@ void SetLastHashName(UDWORD HashName)
 BOOL resLoadFromDisk(STRING *pFileName, UBYTE **ppBuffer, UDWORD *pSize)
 {
 	FILE	*pFileHandle;
-
+	char Bname[256];		//used for the name of file..guess we look for name, then hash.
+	int NameHash;			//
+	int foundZip;
+	WZFILE *Fgot=0;		//for  WZ stuff
+	int pos=0;
+	UDWORD FileSize;
 	*ppBuffer = pFileBuffer;
+
+//===================================
+		pos=strlen(pFileName);				//got to have the \ all the correct way!
+		while (pos>0)
+		{
+			if (pFileName[pos]=='/')
+			{ pFileName[pos]='\\';
+				pos++;		// we need to skip the "\"
+				break;
+			}
+
+			pos--;
+		}
+//===================================
+
+
+	sprintf(Bname,"%s",pFileName);
+//	printf("[resLoadFromDisk] loading ...%s\n",Bname);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	if(!foundZip)
+	{//	printf(" First try not found, now trying with hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(	pFileName);
+		sprintf(Bname,"%0x",NameHash);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+	// remove any preceeded directory stuff
+		pos=strlen(pFileName);
+		while (pos>0)
+		{
+			if (pFileName[pos]=='\\')
+			{
+				pos++;		// we need to skip the "\"
+				break;
+			}
+
+			pos--;
+		}
+		strcpy(Bname,&pFileName[pos]);
+
+//		printf(" 2nd try not found, now trying with no path (%s)\n",Bname);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+//		printf(" 3rd try not found, now trying with no path & hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(	Bname);
+		sprintf(Bname,"%0x",NameHash);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{//printf("we got a serious issue here! can't find the file %s! in .wz\n",pFileName);
+	goto tryHD;			//for now...
+		return FALSE;
+	}
+		Fgot=	F_OpenZip(foundZip, 0);//0 = buffer 1=don't buffer...
+	if(!Fgot)
+	{
+		printf("Unable to open file!  Corruption?  \n");
+		return FALSE;
+	}
+	FileSize=Fgot->size;
+	if(pFileBuffer==NULL)
+	printf("What the!?  NULL buffer!\n");			//should error out you know... -Q
+	memset(pFileBuffer,0,FileSize);	//remove later please...
+	memcpy(pFileBuffer,Fgot->data,Fgot->size);
+//	printf("\n============\n===========Size of file = %d\n",Fgot->size);
+	*pSize=Fgot->size;		//grrrr			// always set to correct size
+	pFileBuffer[*pSize] = 0;
+	F_Close(Fgot);
+	return TRUE;
+
+
+
+
+tryHD:
+
 
 	pFileHandle = fopen(pFileName, "rb");
 	if (pFileHandle == NULL)
 	{
-		DBERROR(("Couldn't open %s", pFileName));
+		DBERROR(("[resLoadFromDisk]Couldn't open %s", pFileName));
 		return FALSE;
 	}
 
@@ -429,7 +513,7 @@ BOOL resLoadFromDisk(STRING *pFileName, UBYTE **ppBuffer, UDWORD *pSize)
 		DBERROR(("Close failed for %s", pFileName));
 		return FALSE;
 	}
-
+//	printf("******** Ignore those errors, we DID find it...\n");
 	return TRUE;
 }
 
@@ -769,7 +853,7 @@ void *resGetDataFromHash(STRING *pType, UDWORD HashedID)
 //	STRING		aID[RESID_MAXCHAR];
 	UDWORD HashedType;
 	// Find the correct type
-
+//printf("[resGetDataFromHash]----------%s\n",pType);
 	HashedType=HashString(pType);	// la da la
 
 
@@ -824,7 +908,7 @@ void *resGetData(STRING *pType, STRING *pID)
 	// Find the correct type
 
 	HashedType=HashString(pType);	// la da la
-
+//printf("[resGetData] entering with %s / %s  = %0x\n",pID,pType,HashedType);
 
 	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
 	{
@@ -846,6 +930,7 @@ void *resGetData(STRING *pType, STRING *pID)
 			if (psRes->HashedID==HashedID)
 			{
 				/* We found it */
+//				printf("[resGetData] looking for %s = %0x  ******found!\n",pID,HashedID);
 				break;
 			}
 		}
@@ -856,13 +941,15 @@ void *resGetData(STRING *pType, STRING *pID)
 	if (psRes == NULL)
 	{
 		ASSERT((FALSE, "resGetData: Unknown ID: %s", pID));
-		return NULL;
+//		resLoadFile(pType,pID);
+//		resGetData(pType,pID);
+//		return NULL;
 	}
 
 #ifdef DEBUG
 	psRes->usage += 1;
 #endif
-
+//printf("[resGetData] no error %s %0x\n",pID,psRes);
 	return resGetResDataPointer(psRes);
 }
 

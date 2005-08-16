@@ -87,7 +87,7 @@ void wdgDisableAddonWDG(void)
 		// no WDG loaded
 		return;
 	}
-
+//printf("%%%%%%%%%%%%%%%%%% WDGs are DISABLED, only original use!\n\n\n\n\n");
 	if (strcmp(psWDGCache->aName, "warzone") == 0)
 	{
 		// only the main wdg loaded
@@ -112,7 +112,7 @@ void wdgEnableAddonWDG(void)
 		// nothing in the store
 		return;
 	}
-
+//printf("%%%%%%%%%%%%%%%%%% extra WDGs are ENABLED!\n\n\n\n\n");
 	psWDGCache = psWDGCacheStore;
 	psWDGCacheRev->psPrev = psWDGCacheStoreRev;
 
@@ -129,7 +129,7 @@ BOOL wdgCheckDependancies(void)
 	STRING		aText[500];
 
 	for(psCheck = psWDGCache; psCheck!=NULL; psCheck=psCheck->psNext)
-	{
+	{ printf("checking Dependancies of %s\n",psCheck->aFileName);
 		for(dep = 0; dep < psCheck->numDep; dep++)
 		{
 			for(psSearch=psWDGCache; psSearch!=NULL; psSearch=psSearch->psNext)
@@ -180,6 +180,11 @@ BOOL wdgLoadAllWDGCatalogs(void)
 	hFindHandle = FindFirstFile("*.wdg", &sFindData);
 	while (hFindHandle != INVALID_HANDLE_VALUE)
 	{
+//---------------------  We don't need conflicts, so we will force this.
+		printf("Please remove ALL *.wdg files from this directory!\n");
+		printf("This version of the game requires .wz files ONLY.\n");
+		return FALSE;
+//----------------------
 		if (!wdgLoadCompleteCatalog(sFindData.cFileName))
 		{
 			return FALSE;
@@ -196,7 +201,12 @@ BOOL wdgLoadAllWDGCatalogs(void)
 	{
 		ptr = strrchr(dirent->d_name, '.');
 		if (ptr != NULL && strcmp(".wdg", ptr) == 0)
-		{
+		{//---------------------  We don't need conflicts, so we will force this.
+		printf("Please remove ALL *.wdg files from this directory!\n");
+		printf("This version of the game requires .wz files ONLY.\n");
+		closedir(dir);
+		return FALSE;
+//----------------------
 			if (!wdgLoadCompleteCatalog(dirent->d_name))
 			{
 				closedir(dir);
@@ -355,7 +365,7 @@ BOOL wdgLoadCompleteCatalog(char *pWDGName)
 	// add the cache structure into the list
 	psPrev = NULL;
 	for(psCurr=psWDGCache; psCurr != NULL; psCurr=psCurr->psNext)
-	{
+	{ printf("Sort by sequence... %s =%d ::: %s =%d\n",psCurr->aFileName,psCurr->sequence,psNew->aFileName,psNew->sequence);
 		if (psCurr->sequence < psNew->sequence)
 		{
 			break;
@@ -393,7 +403,7 @@ BOOL wdgLoadCompleteCatalog(char *pWDGName)
 BOOL wdgFindFirstWRF(UDWORD WRFName, WDG_FINDWRF *psFindData)
 {
 	UDWORD	i;
-
+//	printf("**Enter: Find the first instance of a WRF [%0x] in the WDG catalogs : %s\n",WRFName,psFindData->psCurrCache->aFileName);
 	// initialise the find data
 	memset(psFindData, 0, sizeof(WDG_FINDWRF));
 	psFindData->WRFNameHash = WRFName;
@@ -410,6 +420,7 @@ BOOL wdgFindFirstWRF(UDWORD WRFName, WDG_FINDWRF *psFindData)
 		if (psWDGCache->asWRFCatalog[i].WRFname == WRFName)
 		{
 			psFindData->currWRFIndex = i;
+//			printf("FOUND(1): Find the first instance of a WRF [%0x] in the WDG catalogs : %s\n",WRFName,psFindData->psCurrCache->aFileName);
 			return TRUE;
 		}
 	}
@@ -417,6 +428,7 @@ BOOL wdgFindFirstWRF(UDWORD WRFName, WDG_FINDWRF *psFindData)
 	// search the remaining WDGs
 	if (wdgFindNextWRF(psFindData))
 	{
+//		printf("FOUND(2) Find the first instance of a WRF [%0x] in the WDG catalogs : %s\n",WRFName,psFindData->psCurrCache->aFileName);
 		return TRUE;
 	}
 
@@ -438,11 +450,12 @@ BOOL wdgFindNextWRF(WDG_FINDWRF *psFindData)
 	// search each WDG cache
 	psCurrCache=psFindData->psCurrCache->psNext;
 	for(; psCurrCache != NULL; psCurrCache = psCurrCache->psNext)
-	{
+	{//printf("LOOKING in %s ...\n",psCurrCache->aFileName);
 		for(i=0; i<psCurrCache->numWRF; i++)
 		{
 			if (psCurrCache->asWRFCatalog[i].WRFname == psFindData->WRFNameHash)
 			{
+//				printf(" FOUND hash %0x in %s ...\n",psFindData->WRFNameHash,psCurrCache->aFileName);
 				goto found;
 			}
 		}
@@ -454,6 +467,7 @@ found:
 	{
 		psFindData->psCurrCache = psCurrCache;
 		psFindData->currWRFIndex = i;
+		printf("[wdgFindFirstWRF] (FOUND)Using %s , %d \n",psCurrCache->aFileName,psCurrCache->sequence);
 		return TRUE;
 	}
 

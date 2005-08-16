@@ -544,7 +544,7 @@ BOOL levLoadSingleWRF(STRING *pName)
 	BLOCK_RESET(psGameHeap);
 	memSetBlockHeap(psGameHeap);
 	// load the data
-	DBPRINTF(("Loading %s ...\n", pName));
+	DBPRINTF(("[levLoadSingleWRF]Loading %s ...\n", pName));
 	if (!resLoad(pName, 0,
 				 DisplayBuffer, displayBufferSize,
 				 psGameHeap))
@@ -613,7 +613,7 @@ BOOL levLoadBaseData(STRING *pName)
 		if (psBaseData->apDataFiles[i])
 		{
 			// load the data
-			DBPRINTF(("Loading %s ...\n", psBaseData->apDataFiles[i]));
+			DBPRINTF(("levLoadBaseData: Loading %s ...\n", psBaseData->apDataFiles[i]));
 			if (!resLoad(psBaseData->apDataFiles[i], i,
 						 DisplayBuffer, displayBufferSize,
 						 psGameHeap))
@@ -643,7 +643,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
     BOOL            bCamChangeSaveGame;
 
 	DBPRINTF(("Loading level %s\n", pName));
-
+printf("================Loading level %s\n", pName);
 	// reset fog
 //	fogStatus = 0;
 //	pie_EnableFog(FALSE);//removed, always set by script or save game
@@ -773,7 +773,8 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 			if (psBaseData->apDataFiles[i])
 			{
 				// load the data
-				DBPRINTF(("Loading %s ...\n", psBaseData->apDataFiles[i]));
+				DBPRINTF(("levLoadData: Loading %s ...\n", psBaseData->apDataFiles[i]));
+//				printf("\n\n\n[levloadData]:------------: Loading %s ...\n\n\n", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i,
 							 DisplayBuffer, displayBufferSize,
 							 psGameHeap))
@@ -1071,7 +1072,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 		else if (psNewLevel->apDataFiles[i])
 		{
 			// load the data
-			DBPRINTF(("Loading %s ...\n", psNewLevel->apDataFiles[i]));
+			DBPRINTF(("levLoadData: Loading %s ...\n", psNewLevel->apDataFiles[i]));
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID,
 						 DisplayBuffer, displayBufferSize,
 						 psCurrHeap))

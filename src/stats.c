@@ -591,12 +591,12 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
-		{
+		{// printf("[loadWeaponStats] looking for %s\n",GfxFile);
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
 			if (psStats->pIMD == NULL)
 			{
 
-				DBERROR(("Cannot find the weapon PIE for record %s", getStatName(psStats)));
+				DBERROR(("*Cannot find the weapon PIE for record %s", getStatName(psStats)));
 				return FALSE;
 			}
 		}

@@ -128,7 +128,7 @@ LIBS=		framework \
 		sound \
 		widget
 
-EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net
+EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net z
 
 ifeq ($(GFX), software)
 LIBS+=ivis02

@@ -896,11 +896,12 @@ BOOL
 ParseFile( char szFileName[] )
 {
 	FILE	*fp;
-
+printf("[ParseFile]===========%s\n",szFileName);
 	/* open input file */
 	if ( (fp = fopen( szFileName, "rt" )) == NULL )
 	{
 		DBERROR( ("ParseFile: file not found\n") );
+		printf("[ParseFile]===========%s *** NOT FOUND ***\n",szFileName);
 		return FALSE;
 	}
 
@@ -920,7 +921,7 @@ void
 IncludeFile( char szFileName[] )
 {
 	FILE		*fpNew;
-
+printf("[IncludeFile]=============%s\n",szFileName);
 	/* open module file */
 	if ( (fpNew = fopen( szFileName, "rt" )) != NULL )
 	{
@@ -933,6 +934,7 @@ IncludeFile( char szFileName[] )
 	else
 	{
 		DBERROR( ("Included file %s not found\n", szFileName) );
+		printf("[IncludeFile]=============%s   ***NOT FOUND***\n",szFileName);
 	}
 }
 

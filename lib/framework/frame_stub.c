@@ -27,6 +27,8 @@
 
 #include "cursors.c"
 
+#include "sys_zipfile.h"
+
 #define IGNORE_FOCUS
 
 /* Linux specific stuff */
@@ -509,14 +511,21 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 {
 	FILE	*pFileHandle;
 	UDWORD FileSize;
-
 	BOOL res;
+
+	char Bname[256];		//used for the name of file..guess we look for name, then hash.
+	int NameHash;			//
+	int foundZip;
+	WZFILE *Fgot=0;		//for  WZ stuff
+	int pos=0;
+
+
 
 	// First we try to see if we can load the file from the freedata section of the current WDG
 
 	
 	res=loadFileFromWDG(pFileName, ppFileData, pFileSize,WDG_ALLOCATEMEM);	// loaded from WDG file, and allocate memory for it
-	if (res==TRUE)	return TRUE;
+	if (res==TRUE)	{printf("[loadfile2] %s found !\n",pFileName); return TRUE;}
 
 	// Not in WDG so we try to load it the old fashion way !
 	// This will never work on the final build of the PSX because we can *ONLY* load files
@@ -529,14 +538,116 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 #ifdef FINALBUILD
 	return FALSE;
 #else
+//=============
+		pos=strlen(pFileName);				//got to have the \ all the correct way!
+		while (pos>0)
+		{
+			if (pFileName[pos]=='/')
+			{ pFileName[pos]='\\';
+				pos++;		// we need to skip the "\"
+				break;
+			}
+
+			pos--;
+		}
+
+//=============
+
+
+	sprintf(Bname,"%s",pFileName);
+//	printf("[loadFile2] loading ...%s\n",Bname);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	if(!foundZip)
+	{//	printf(" First try not found, now trying with hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(	pFileName);
+		sprintf(Bname,"%0x",NameHash);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+	// remove any preceeded directory stuff
+		pos=strlen(pFileName);
+		while (pos>0)
+		{
+			if (pFileName[pos]=='\\')
+			{
+				pos++;		// we need to skip the "\"
+				break;
+			}
+
+			pos--;
+		}
+		strcpy(Bname,&pFileName[pos]);
+
+//		printf(" 2nd try not found, now trying with no path (%s)\n",Bname);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+//		printf(" 3rd try not found, now trying with no path & hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(	Bname);
+		sprintf(Bname,"%0x",NameHash);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+
+	if(!foundZip)
+	{//printf("we got a serious issue here! can't find the file %s!\n",pFileName);
+		goto tryHD;
+//		return FALSE;
+	}
+		Fgot=	F_OpenZip(foundZip, 0);//0 = buffer 1=don't buffer...
+	if(!Fgot)
+	{
+		printf("Unable to open file!  Corruption?  \n");
+		return FALSE;
+	}
+	FileSize=Fgot->size;
+	if (AllocateMem==TRUE)
+	{
+		// Allocate a buffer to store the data and a terminating zero //
+// we don't want this popping up in the tools (makewdg)
+//		DBPRINTF(("#############FILELOAD MALLOC - size=%d\n",(FileSize)+1));
+		*ppFileData = (UBYTE *)MALLOC((FileSize) + 12);
+		if (*ppFileData == NULL)
+		{
+			DBERROR(("Out of memory"));
+			printf("Out of memory error in loadFile2\n");
+			return FALSE;
+		}
+	}
+	else
+	{
+		if (FileSize > *pFileSize)
+		{
+			DBERROR(("no room for file"));
+			printf("File wrong size in loadFile2?\n");
+			return FALSE;
+		}
+		assert(*ppFileData!=NULL);
+	}
+
+	memset(*ppFileData,0,FileSize+12);	//remove later please...
+	memcpy(*ppFileData,Fgot->data,Fgot->size);
+	*((*ppFileData) + FileSize+1) = 0x0;			// Add the terminating zero
+	*((*ppFileData) + FileSize+2) = 'NULL';
+	*((*ppFileData) + FileSize+3) = "";
+	*((*ppFileData) + FileSize+4) = "\n";	
+//	*ppFileData[FileSize+1]=0;
+	*pFileSize=Fgot->size;		//grrrr			// always set to correct size
+	F_Close(Fgot);
+	return TRUE;
+
+tryHD:
+
+
 	pFileHandle = fopen(pFileName, "rb");
 	if (pFileHandle == NULL)
 	{
-		DBERROR(("Couldn't open %s", pFileName));
+		DBERROR(("[loadFile2] Couldn't open %s", pFileName));
 		return FALSE;
 	}
 
-	/* Get the length of the file */
+	// Get the length of the file 
 	if (fseek(pFileHandle, 0, SEEK_END) != 0)
 	{
 		DBERROR(("SEEK_END failed for %s", pFileName));
@@ -548,9 +659,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 		DBERROR(("SEEK_SET failed for %s", pFileName));
 		return FALSE;
 	}
-
-
-	if (AllocateMem==TRUE)
+if (AllocateMem==TRUE)
 	{
 		/* Allocate a buffer to store the data and a terminating zero */
 // we don't want this popping up in the tools (makewdg)
@@ -588,6 +697,7 @@ BOOL loadFile2(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, BOOL Al
 	*((*ppFileData) + FileSize) = 0;
 	*pFileSize=FileSize;	// always set to correct size
 #endif
+//	printf("********** Ignore those errors for now...we DID find the file...\n");
 	return TRUE;
 }
 
@@ -597,6 +707,11 @@ BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, 
 {
 	FILE	*pFileHandle;
 	UDWORD FileSize;
+	char Bname[256];		//used for the name of file..guess we look for name, then hash.
+	int NameHash;			//
+	int foundZip;
+	WZFILE *Fgot=0;		//for  WZ stuff
+	int pos=0;
 
         // loaded from WDG file, and allocate memory for it
 	if (loadFileFromWDG(pFileName, &pFileBuffer, &FileSize,WDG_USESUPPLIED))
@@ -604,15 +719,78 @@ BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, 
 		*pSize=FileSize;
 		return TRUE;
 	}
+//==========================================
+	sprintf(Bname,"%s",pFileName);
+//	printf("[loadfiletobuffer] loading ...%s\n",Bname);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	if(!foundZip)
+	{
+//		printf(" First try not found, now trying with hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(Bname);	//full path hash
+		sprintf(Bname,"%0x",NameHash);
+//		printf(" First try not found, now trying with hash (%s)\n",Bname);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+	// remove any preceeded directory stuff
+		pos=strlen(pFileName);
+		while (pos>0)
+		{
+			if (pFileName[pos]=='\\')
+			{
+				pos++;		// we need to skip the "\"
+				break;
+			}
+
+			pos--;
+		}
+		strcpy(Bname,&pFileName[pos]);
+//		printf(" 2nd try not found, now trying with no path (%s)\n",Bname);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+//		printf(" 3rd try not found, now trying with no path & hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(	Bname);	//no path hash
+		sprintf(Bname,"%0x",NameHash);
+//		printf(" 3rd try not found, now trying with no path & hash (%s)\n",Bname);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{//printf("we got a serious issue here! can't find the file %s in the .wz!\n",Bname);
+		goto tryHD;
+//		return FALSE;
+	}
+		Fgot=	F_OpenZip(foundZip, 0);//0 = buffer 1=don't buffer...
+	if(!Fgot)
+	{
+		printf("Unable to open file!  Corruption?  \n");
+		return FALSE;
+	}
+
+	if(*pFileBuffer==NULL) printf("hmm 0 buffer!?!?\n\n");
+//	if(Fgot->size != bufferSize)
+//		printf("oops wrong size??? %d != %d \n",Fgot->size,bufferSize);
+	if(Fgot->size +1 == bufferSize)
+	memset(pFileBuffer,0,Fgot->size+1);		//remove later please....
+	memcpy(pFileBuffer,Fgot->data,Fgot->size);
+	*pSize=bufferSize;//Fgot->size;		//grrrr
+
+	F_Close(Fgot);
+	return TRUE;
+
+
+tryHD:
 
 	pFileHandle = fopen(pFileName, "rb");
 	if (pFileHandle == NULL)
 	{
-		DBERROR(("Couldn't open %s", pFileName));
+		DBERROR(("[loadFileToBuffer]Couldn't open %s", pFileName));
 		return FALSE;
 	}
 
-	/* Get the length of the file */
+	// Get the length of the file
 	if (fseek(pFileHandle, 0, SEEK_END) != 0)
 	{
 		DBERROR(("SEEK_END failed for %s", pFileName));
@@ -629,7 +807,7 @@ BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, 
 		DBERROR(("file too big !!:%s size %d\n", pFileName, *pSize));
 		return FALSE;
 	}
-	/* Load the file data */
+	// Load the file data 
 	if (fread(pFileBuffer, 1, *pSize, pFileHandle) != *pSize)
 	{
 		DBERROR(("Read failed for %s", pFileName));
@@ -643,6 +821,7 @@ BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, 
 		return FALSE;
 	}
 
+//	printf("********** Ignore those errors for now...we DID find the file...\n");
 	return TRUE;
 }
 
@@ -651,6 +830,11 @@ BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 {
 	FILE	*pFileHandle;
 	UDWORD FileSize;
+	char Bname[256];		//used for the name of file..guess we look for name, then hash.
+	int NameHash;			//
+	int foundZip;
+	WZFILE *Fgot=0;		//for  WZ stuff
+	int pos=0;
 
         // loaded from WDG file, and allocate memory for it
 	if (loadFileFromWDG(pFileName, &pFileBuffer, &FileSize,WDG_USESUPPLIED))
@@ -658,7 +842,69 @@ BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 		*pSize=FileSize;
 		return TRUE;
 	}
+//==========================================
+	sprintf(Bname,"%s",pFileName);
+//	printf("[loadfiletobufferNoError] loading ...%s\n",Bname);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	if(!foundZip)
+	{
+//		printf(" First try not found, now trying with hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(Bname);	//full path hash
+		sprintf(Bname,"%0x",NameHash);
+//		printf(" First try not found, now trying with hash (%s)\n",Bname);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+	// remove any preceeded directory stuff
+		pos=strlen(pFileName);
+		while (pos>0)
+		{
+			if (pFileName[pos]=='\\')
+			{
+				pos++;		// we need to skip the "\"
+				break;
+			}
 
+			pos--;
+		}
+		strcpy(Bname,&pFileName[pos]);
+//		printf(" 2nd try not found, now trying with no path (%s)\n",Bname);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{
+//	printf(" 3rd try not found, now trying with no path & hash (%s)\n",Bname);
+		NameHash=HashStringIgnoreCase(	Bname);	//no path hash
+		sprintf(Bname,"%0x",NameHash);
+//		printf(" 3rd try not found, now trying with no path & hash (%s)\n",Bname);
+		foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{//printf("we DON'T got a serious issue here! can't find the file %s in the .wz!\n",Bname);
+		goto tryHD;
+//		return FALSE;
+	}
+		Fgot=	F_OpenZip(foundZip, 0);//0 = buffer 1=don't buffer...
+	if(!Fgot)
+	{
+		printf("Unable to open file!  Corruption?  \n");
+		return FALSE;
+	}
+
+	if(*pFileBuffer==NULL) printf("hmm 0 buffer!?!?\n\n");
+
+	if(Fgot->size  == bufferSize)
+	memset(pFileBuffer,0,Fgot->size+1);		//remove later please....
+	memcpy(pFileBuffer,Fgot->data,Fgot->size);
+	*pSize=bufferSize;//Fgot->size;		//grrrr
+
+	F_Close(Fgot);
+//	printf("******found!\n");
+	return TRUE;
+
+//========================================================
+tryHD:
 	pFileHandle = fopen(pFileName, "rb");
 	if (pFileHandle == NULL)
 	{
@@ -690,7 +936,7 @@ BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 	{
 		return FALSE;
 	}
-
+	printf("********** Ignore those errors for now...we DID find the file...\n");
 	return TRUE;
 }
 
@@ -788,7 +1034,7 @@ UINT HashString( char *String )
 							~HIGH_BITS;
 		}
 	}
-
+//	printf("%%%%%%%% String:%s Hash:%0x\n",String,iHashValue);
 	return iHashValue;
 }
 
@@ -810,7 +1056,7 @@ UINT HashStringIgnoreCase( char *String )
 							~HIGH_BITS;
 		}
 	}
-
+//	printf("%%%%%%%% (Ignorcase) String:%s Hash:%0x\n",String,iHashValue);
 	return iHashValue;
 }
 

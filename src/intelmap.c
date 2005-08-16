@@ -781,7 +781,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 
 	BOOL bLoop = FALSE;
 
-//		printf("start message sequnce\n");		//[testing if we hit this] -Q
+//		printf("start message sequence\n");		//[testing if we hit this] -Q
 	//should never have a proximity message here
 	if (psMessage->type == MSG_PROXIMITY)
 	{

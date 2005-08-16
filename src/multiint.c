@@ -363,7 +363,7 @@ static void decideWRF(void)
 	strcpy(pLevelName, MultiCustomMapsPath);			
 	strcat(pLevelName, game.map);
 	strcat(pLevelName, ".wrf");	
-	
+printf("[decideWRF] ----------------------------%s\n",pLevelName);	
 	//if the file exists in the downloaded maps dir then use that one instead.
 	pFileHandle = fopen(pLevelName, "rb");
 	if (pFileHandle == NULL)
@@ -1843,6 +1843,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			strcpy(tmp,MultiCustomMapsPath);
 			strcat(tmp,"*.wrf");
+			printf("[processMultiopWidgets]-----------%s\n",tmp);
 			addMultiRequest(tmp,MULTIOP_MAP,1);
 			break;
 	

@@ -425,16 +425,16 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 				InvalidTop++;
 			}
 		}
-
-		ASSERT(( !InvalidBottom && !InvalidTop,
-				"Safety zone on memory overwritten.\n"
-				"%d Invalid bytes (of %d) found below memory buffer.\n"
-				"%d Invalid bytes (of %d) found above memory buffer.\n\n"
-				"Memory allocated by:\nFile: %s\nLine: %d\n"
-				"Memory freed by:\nFile: %s\nLine: %d\n",
-				InvalidBottom, SAFETY_ZONE_SIZE, InvalidTop, SAFETY_ZONE_SIZE,
-				psDeleted->pFile, psDeleted->line,
-				pCallFileName, callLine));
+// this breaks debug...  ***** look into why...
+//		ASSERT(( !InvalidBottom && !InvalidTop,
+//				"Safety zone on memory overwritten.\n"
+//				"%d Invalid bytes (of %d) found below memory buffer.\n"
+//				"%d Invalid bytes (of %d) found above memory buffer.\n\n"
+//				"Memory allocated by:\nFile: %s\nLine: %d\n"
+//				"Memory freed by:\nFile: %s\nLine: %d\n",
+//				InvalidBottom, SAFETY_ZONE_SIZE, InvalidTop, SAFETY_ZONE_SIZE,
+//				psDeleted->pFile, psDeleted->line,
+//				pCallFileName, callLine));
 
 		/* Trash the memory before it is freed */
 #if MEMORY_SET

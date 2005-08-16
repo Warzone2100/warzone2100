@@ -1,6 +1,8 @@
 SRC_FILES=	block.c \
 		configfile.c \
 		debug.c \
+		dd_zip.c \
+		sys_filein.c \
 		frame_stub.c \
 		frameresource.c \
 		heap.c \

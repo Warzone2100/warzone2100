@@ -19,6 +19,7 @@
 #include "wdg.h"
 #include "multiwdg.h"
 
+#include "sys_zipfile.h"
 
 /** local definitions **/
 
@@ -160,7 +161,7 @@ BOOL WDG_SetCurrentWDG(char *filename)
 	pFileHandle=DISK_OpenFile(filename);	// tries to open the WDG on the HD (pc) or CD  (psx)
 	if (pFileHandle==NULL)
 	{
-		DBPRINTF(("WDG_SetCurrentWDG unable to open %s\n",filename));
+		DBPRINTF(("WDG_SetCurrentWDG:: unable to open %s\n",filename));
 		return FALSE;	
 	}
 
@@ -168,7 +169,7 @@ BOOL WDG_SetCurrentWDG(char *filename)
 	BytesRead=DISK_ReadPos(0,(UBYTE *)&NewHeader,sizeof(WDG_HEADER),pFileHandle);
 	if (BytesRead!=sizeof(WDG_HEADER))
 	{
-		DBPRINTF(("WDG_SetCurrentWDG unable to read from %s\n",filename));
+		DBPRINTF(("WDG_SetCurrentWDG:: unable to read from %s\n",filename));
 		DISK_Close(pFileHandle);  
 		return FALSE;	
 	}
@@ -178,7 +179,7 @@ BOOL WDG_SetCurrentWDG(char *filename)
 		NewHeader.WDGid[1]!='D' ||
 		NewHeader.WDGid[2]!='G')
 	{
-		DBPRINTF(("WDG_SetCurrentWDG bad type of wdg file - %s\n",filename));
+		DBPRINTF(("WDG_SetCurrentWDG:: bad type of wdg file - %s\n",filename));
 		DISK_Close(pFileHandle);  
 		return FALSE;	
 	}
@@ -191,7 +192,7 @@ BOOL WDG_SetCurrentWDG(char *filename)
 		BytesRead=DISK_ReadPos(0,(UBYTE *)&HeaderV5,sizeof(WDG_HEADER_V5),pFileHandle);
 		if (BytesRead!=sizeof(WDG_HEADER_V5))
 		{
-			DBPRINTF(("WDG_SetCurrentWDG unable to read from %s\n",filename));
+			DBPRINTF(("WDG_SetCurrentWDG:: unable to read from %s\n",filename));
 			DISK_Close(pFileHandle);  
 			return FALSE;	
 		}
@@ -223,7 +224,7 @@ BOOL WDG_SetCurrentWDG(char *filename)
 	size = sizeof(WDGINFO)*NumberOfWRFfiles;
 	if (BytesRead!=size)
 	{
-		DBPRINTF(("WDG_SetCurrentWDG unable to read from %s\n",filename));
+		DBPRINTF(("WDG_SetCurrentWDG:: unable to read from %s\n",filename));
 		DISK_Close(pFileHandle);  
 		return FALSE;	
 	}
@@ -305,7 +306,7 @@ BOOL LoadWRFCatalog(WDGINFO *CurrentWRF, FILE *pFileHandle)
 		BytesRead=DISK_ReadPos(CurrentWRF->offset,(UBYTE *)WRFfilesCatalog,sizeof(WRFINFO)*CurrentWRF->filecount,pFileHandle);
 		if (BytesRead!=sizeof(WRFINFO)*CurrentWRF->filecount)
 		{
-			DBPRINTF(("WDG_ProcessWRF unable to read from %s\n",CurrentWDGname));
+			DBPRINTF(("WDG_ProcessWRF:: unable to read from %s\n",CurrentWDGname));
 			return FALSE;	
 		}
 		LastCatalogLoadedOffset=CurrentWRF->offset;
@@ -315,7 +316,82 @@ BOOL LoadWRFCatalog(WDGINFO *CurrentWRF, FILE *pFileHandle)
 	return TRUE;
 }
 
+//==============================================================
+BOOL WDG_ProcessWRFZ(char *WRFname,BOOL UseDataFromWDG )
+{
+	WDGINFO *CurrentWRF;	// Pointer to the current WRF file in the WDG
+//	BOOL FoundWRF;			// Have we had a match for the WRF
+	BOOL CatalogLoadedOK;
+	FILE *pFileHandle;
+	WRFINFO	*CurrentFile;  //=WRFfilesCatalog;
+	UDWORD File;
+	UDWORD pos;
+	UDWORD CurrentWRF_HeaderSize;
+	char wrfentryname[32];
+	WDG_FINDWRF	sFindWRF;
+	int foundZip;
+WZFILE *Fgot=0;
+	char Bname[12];
 
+//	memset(Fgot,0,sizeof(WZFILE));
+	// remove any preceeded directory stuff
+	pos=strlen(WRFname);
+	while (pos>0)
+	{
+		if (WRFname[pos]=='\\')
+		{
+			pos++;		// we need to skip the "\"
+			break;
+		}
+
+		pos--;
+	}
+	strcpy(wrfentryname,&WRFname[pos]);
+
+
+	// Make sure the correct WDG is loaded
+	memset(&sFindWRF, 0, sizeof(WDG_FINDWRF));
+	sFindWRF.WRFNameHash=HashStringIgnoreCase(wrfentryname);
+//	sFindWRF.WRFNameHash=HashString(wrfentryname);
+	sprintf(Bname,"%0x",sFindWRF.WRFNameHash);
+
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	if(!foundZip)
+	{	printf(" First try not found, now trying with path (%s)\n",WRFname);
+		sFindWRF.WRFNameHash=HashStringIgnoreCase(	WRFname);
+		sprintf(Bname,"%0x",sFindWRF.WRFNameHash);
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+	}
+	if(!foundZip)
+	{printf("we got a serious issue here! can't find the file!\n");
+		return FALSE;
+	}
+		Fgot=	F_OpenZip(foundZip, 0);//0 = buffer 1=don't buffer...
+	if(!Fgot)
+	{
+		printf("Unable to find file! [%0x] \n",sFindWRF.WRFNameHash);
+		return FALSE;
+	}
+
+
+			// file is in this WDG - load normally
+//			pRetreivedFile=FILE_Retrieve(pFileHandle,FileOffset,CurrentFile->filesize);	// Somehow get from the wdg the required data and return a pointer to it
+
+		SetLastFnameExtra(CurrentFile->SoftwareFlag, CurrentFile->TexturePage);
+
+		// John has written this function in frameresource.c
+		SetLastHashName(CurrentFile->name);		// set the hashed name up so that the script stuff will work
+
+//		if (FILE_ProcessFile(CurrentFile,pRetreivedFile)==FALSE) return FALSE;
+
+		resDoResLoadCallback();		// do callback.
+
+
+
+	return TRUE;
+}
+//==============================================================
+//==============================================================
 #define MAXSKIPAMOUNT (2048)	// largest amount of file to skip by reading
 
 /*
@@ -358,7 +434,7 @@ BOOL WDG_ProcessWRF(char *WRFname,BOOL UseDataFromWDG )
 	UDWORD CurrentWRF_HeaderSize;
 	char wrfentryname[32];
 	WDG_FINDWRF	sFindWRF;
-
+	UDWORD hash;
 
 // THIS WORKS !!!!!!
 //	prnt(1,"hello\n",0,0);
@@ -383,11 +459,11 @@ BOOL WDG_ProcessWRF(char *WRFname,BOOL UseDataFromWDG )
 		pos--;
 	}
 	strcpy(wrfentryname,&WRFname[pos]);
-
-
+	hash=HashStringIgnoreCase(wrfentryname);
+//printf("[WDG_ProcessWRF] Looking for %s = %0x\n",WRFname, hash);
 	// Make sure the correct WDG is loaded
 	memset(&sFindWRF, 0, sizeof(WDG_FINDWRF));
-	if (!wdgFindFirstWRF(HashStringIgnoreCase(wrfentryname), &sFindWRF))
+	if (!wdgFindFirstWRF(hash, &sFindWRF))
 	{
 		return FALSE;
 	}
@@ -427,7 +503,7 @@ BOOL WDG_ProcessWRF(char *WRFname,BOOL UseDataFromWDG )
 	pFileHandle=DISK_OpenFile(CurrentWDGname);	// tries to open the WDG on the HD (pc) or CD  (psx)
 	if (pFileHandle==NULL)
 	{
-		DBPRINTF(("WDG_ProcessWRF unable to open %s\n",CurrentWDGname));
+		DBPRINTF(("WDG_ProcessWRF:: unable to open %s\n",CurrentWDGname));
 		return FALSE;	
 	}
 
@@ -489,8 +565,9 @@ BOOL WDG_ProcessWRF(char *WRFname,BOOL UseDataFromWDG )
 			pRetreivedFile=FILE_Retrieve(pFileHandle,FileOffset,CurrentFile->filesize);	// Somehow get from the wdg the required data and return a pointer to it
 		}
 
-//		DBPRINTF(("%d) %p\n",File,pRetreivedFile));
-
+//		DBPRINTF(("WDG_ProcessWRF::%d) %0x\n",File,pRetreivedFile));// not very useful 
+		DBPRINTF(("WDG_ProcessWRF::%d) %0x\n",File,CurrentWRF->WRFname));//
+//		printf("WDG_ProcessWRF::%d %0x\n",File,CurrentWRF->WRFname);//
 //		{
 //			char t[32];
 //			sprintf(t,"%d) %p\n",File,pRetreivedFile);
@@ -506,11 +583,12 @@ BOOL WDG_ProcessWRF(char *WRFname,BOOL UseDataFromWDG )
 									
 		if (FILE_ProcessFile(CurrentFile,pRetreivedFile)==FALSE) return FALSE;
 
-
+//		printf("-----=========   rescallback() %0x,\n",CurrentFile->name);
 		resDoResLoadCallback();		// do callback.
 
 	}
 	DISK_Close(pFileHandle);
+//printf("[WDG_ProcessWRF]==============Alright, done!\n");
 	return TRUE;
 }
 
@@ -565,7 +643,7 @@ BOOL FILE_ShutdownCache(void)
 void FILE_InvalidateCache(void)
 {
 //	prnt(1,"cache invalidated1!\n",0,0);
-//	DBPRINTF(("Cache invalidated !!!"));
+	DBPRINTF(("Cache invalidated !!!"));
 //	{
 //		UBYTE buf[32];
 //		sprintf(buf,"cache invalid\n");
@@ -659,10 +737,10 @@ BOOL FILE_InitialiseCache(SDWORD CacheSize)
 		
 		assert(CacheSize>0);
 						
-		DBPRINTF(("Catalog address = %p\n",PrimBufferCatalog));
+		DBPRINTF(("FILE_InitialiseCache::Catalog address = %p\n",PrimBufferCatalog));
 #endif
 
-	DBPRINTF(("\n\n\n\n\n\n\nold cache = %d\n\n\n\n",Cache.BufferSize));
+		DBPRINTF(("\n\n\n\n\n\n\nFILE_InitialiseCache::old cache = %d\n\n\n\n",Cache.BufferSize));
 		DBPRINTF(("adjusted to %p size=%d\n",CacheStart,CacheSize));
 
 		Cache.pBufferStart=CacheStart;
@@ -687,7 +765,7 @@ BOOL FILE_InitialiseCache(SDWORD CacheSize)
 	CacheBuffer=(UBYTE*)MALLOC(CacheSize);
 	if (CacheBuffer==NULL)
 	{
-		DBPRINTF(("No memory for the file cache ... !\n"));
+		DBPRINTF(("FILE_InitialiseCache::No memory for the file cache ... !\n"));
 		blockUnsuspendUsage();
 		return FALSE;
 	}
@@ -718,7 +796,7 @@ UBYTE *FILE_Retrieve(FILE *pFileHandle, UDWORD offsetInWDG, UDWORD filesize)
 	UDWORD BytesRead;
 	// Check to see if the file we want is in the cache 
 
-//DBPRINTF(("\n\n\n\n\n\n\nfile_ret  - cache size = %d\n\n\n\n\n\n\n\n",Cache.BufferSize));
+	DBPRINTF(("\n\n\n\n\n\n\nFILE_Retrieve::file_ret  - cache size = %d\n\n\n\n\n\n\n\n",Cache.BufferSize));
 
 	if (Cache.pBufferStart!=NULL)
 	{
@@ -738,7 +816,7 @@ UBYTE *FILE_Retrieve(FILE *pFileHandle, UDWORD offsetInWDG, UDWORD filesize)
 		// if its not then fill up the cache with data from the start of the requested WDG
 
 
-//		DBPRINTF(("filesize=%d cachesize=%d\n",filesize,Cache.BufferSize));
+		DBPRINTF(("FILE_Retrieve::filesize=%d cachesize=%d\n",filesize,Cache.BufferSize));
 
 
 
@@ -771,7 +849,25 @@ UBYTE *FILE_Retrieve(FILE *pFileHandle, UDWORD offsetInWDG, UDWORD filesize)
 	return NULL;		// error condition ... cache not set up
 }
 
+//==================================================================================
+// load a single file into the cache buffer.  NB - this invalidates the cache
+UBYTE *FILE_RetrieveSingleZ(FILE *pFileHandle, UDWORD offsetInWDG, UDWORD filesize)
+{
+	UDWORD BytesRead;
 
+	BytesRead=DISK_ReadPos(offsetInWDG,Cache.pBufferStart,filesize,pFileHandle);
+
+	if (BytesRead != filesize)
+	{
+		return NULL;
+	}
+
+	Cache.IsCacheDataValid=FALSE;	// Data is not valid for subsequent reads
+
+	// and return a pointer to the start of the buffer
+	return (Cache.pBufferStart);
+}
+//==================================================================================
 // load a single file into the cache buffer.  NB - this invalidates the cache
 UBYTE *FILE_RetrieveSingle(FILE *pFileHandle, UDWORD offsetInWDG, UDWORD filesize)
 {
@@ -814,7 +910,7 @@ UBYTE *FILE_RetreivePending( UDWORD *SizeLoaded)
 	pFileHandle=DISK_OpenFile(CurrentWDGname);	// tries to open the WDG on the HD (pc) or CD  (psx)
 	if (pFileHandle==NULL)
 	{
-		DBPRINTF(("WDG_ProcessWRF unable to open %s\n",CurrentWDGname));
+		DBPRINTF(("[FILE_RetreivePending]WDG_ProcessWRF:: unable to open %s\n",CurrentWDGname));
 		return FALSE;	
 	}
 
@@ -826,7 +922,7 @@ UBYTE *FILE_RetreivePending( UDWORD *SizeLoaded)
 	Cache.OffsetInWDG=DataPendingOffset;	// Set the cache offset position
 	DataPendingOffset+=BytesRead;
 
-	DBPRINTF(("Bytes read = %d remaining=%d\n",BytesRead,DataPendingSize));
+	DBPRINTF(("[FILE_RetreivePending]Bytes read = %d remaining=%d\n",BytesRead,DataPendingSize));
 	
 	Cache.IsCacheDataValid=TRUE;	// Data is now valid !
 
@@ -977,7 +1073,7 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 //	char name[32];
 //	UDWORD pos;
 
-
+	printf("[loadFileFromWDGCache]-----------------------%0x\n",psFindFile->FileNameHash);
 	// get the file offset from the find file structure
 	CurrentWRF = psFindFile->psCurrCache->asWRFCatalog + psFindFile->currWRFIndex;
 	CurrentFile = psFindFile->psCurrCache->apsWRFFileCatalog[ psFindFile->currWRFIndex ] + psFindFile->currFileIndex ;
@@ -992,7 +1088,7 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 	pFileHandle=DISK_OpenFile(psFindFile->psCurrCache->aFileName);	// tries to open the WDG on the HD (pc) or CD  (psx)
 	if (pFileHandle==NULL)
 	{
-		DBPRINTF(("WDG_ProcessWRF unable to open %s\n",CurrentWDGname));
+		DBPRINTF(("[loadFileFromWDGCache]WDG_ProcessWRF unable to open %s\n",CurrentWDGname));
 		return FALSE;	
 	}
 
@@ -1021,7 +1117,7 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 		{	
 			*pFileSize=Cache.BufferSize;	// we got all we could but there is still some left
 			//prnt(1,"DATA STILL PENDING !! \n",0,0); ffs TC
-			DBPRINTF(("size still pending = %d\n",FILE_AmountPending()));
+			DBPRINTF(("[loadFileFromWDGCache]size still pending = %d\n",FILE_AmountPending()));
 
 		}
 		DISK_Close(pFileHandle);
@@ -1036,7 +1132,7 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 		if (*ppFileData==NULL)
 		{
 			// no mem for file
-			DBPRINTF(("alloc failed - no mem for file size %d\n",CurrentFile->filesize));
+			DBPRINTF(("[loadFileFromWDGCache]alloc failed - no mem for file size %d\n",CurrentFile->filesize));
 			DISK_Close(pFileHandle);
 			return FALSE;
 		}
@@ -1052,7 +1148,135 @@ BOOL loadFileFromWDGCache(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *
 	return TRUE;
 
 }
+//============================================================================================
+BOOL loadFileFromWDGCacheZ(WDG_FINDFILE *psFindFile, UBYTE **ppFileData, UDWORD *pFileSize, UBYTE MemAllocationMode)
+{
+	WDGINFO *CurrentWRF;
+//	BOOL FoundWRF;
+//	BOOL CatalogLoadedOK;
+//	BOOL FoundFileInWRF;
+	WRFINFO	CurrentFile;  //=WRFfilesCatalog;
+	FILE *pFileHandle;
+//	UDWORD RequiredFileHash,File;
+	UDWORD FileOffset;
+	UBYTE *pRetreivedFile;
+	UDWORD CurrentWRF_HeaderSize;
+	int foundZip;
+WZFILE *Fgot;
+	char Bname[12];
+//	char name[32];
+//	UDWORD pos;
 
+
+	// get the file offset from the find file structure
+//	CurrentWRF = psFindFile->psCurrCache->asWRFCatalog + psFindFile->currWRFIndex;
+//	CurrentFile = psFindFile->psCurrCache->apsWRFFileCatalog[ psFindFile->currWRFIndex ] + psFindFile->currFileIndex ;
+
+	// This is the size of the WRF headers the data starts directly after this
+//	CurrentWRF_HeaderSize=(sizeof(WRFINFO)*CurrentWRF->filecount);
+
+//	FileOffset=CurrentWRF->offset + CurrentWRF_HeaderSize + CurrentFile->offset;
+
+	FILE_InvalidateCache();
+
+//	pFileHandle=DISK_OpenFile(psFindFile->psCurrCache->aFileName);	// tries to open the WDG on the HD (pc) or CD  (psx)
+//	if (pFileHandle==NULL)
+//	{
+//		DBPRINTF(("WDG_ProcessWRF unable to open %s\n",CurrentWDGname));
+//		return FALSE;	
+//	}
+
+//	pRetreivedFile=FILE_Retrieve(pFileHandle,FileOffset,CurrentFile->filesize);	// Somehow get from the wdg the required data and return a pointer to it
+	sprintf(Bname,"%0x",psFindFile->FileNameHash);
+
+	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
+if(foundZip)
+		Fgot=	F_OpenZip(foundZip, 0);//0 = buffer 1=don't buffer...
+	if(!Fgot)
+	{
+		printf("Unable to find file! [%0x] \n",psFindFile->FileNameHash);
+		return FALSE;
+	}
+	CurrentFile.filesize=Fgot->size;
+	CurrentFile.name=psFindFile->FileNameHash;
+
+//	if (pRetreivedFile==NULL)
+//	{
+//		// Unable to load the file in (perhaps to big for the cache?)
+//		DISK_Close(pFileHandle);
+//		return FALSE;
+//	}														   
+
+
+	if (MemAllocationMode==WDG_RETURNCACHE)
+	{
+		printf("NOT SUPPORTED YET! \n\n");
+		exit(-1);	// temp for this, since I can't find anything that calls it.
+	/*
+		// This will return a pointer in the cache ! ... not currently implemented correctly
+		//   ... it will only work if the whole file fits in the cache (?)
+		*ppFileData=pRetreivedFile;
+
+		if (FILE_AmountPending() <= 0)
+		{
+			*pFileSize=CurrentFile->filesize; 	// we got all the file
+		}
+		else
+		{	
+			*pFileSize=Cache.BufferSize;	// we got all we could but there is still some left
+			//prnt(1,"DATA STILL PENDING !! \n",0,0); ffs TC
+			DBPRINTF(("size still pending = %d\n",FILE_AmountPending()));
+
+		}
+		DISK_Close(pFileHandle);
+		return TRUE;
+*/
+	}
+	// The file was loaded successfully ... now we must find out if we need to allocate memory for it
+	else
+	if (MemAllocationMode==WDG_ALLOCATEMEM)
+	{
+		// we must allocate memory for the file
+		*ppFileData=(UBYTE*)MALLOC(CurrentFile.filesize);
+		if (*ppFileData==NULL)
+		{
+			// no mem for file
+			DBPRINTF(("alloc failed - no mem for file size %d\n",CurrentFile.filesize));
+//			DISK_Close(pFileHandle);
+			return FALSE;
+		}
+	}
+
+	// otherwise WDG_USESUPPLIED which will already have setup the pointers
+	assert(*ppFileData!=NULL);
+
+//	memcpy(*ppFileData,pRetreivedFile,CurrentFile->filesize);
+	memcpy(*ppFileData,Fgot->data,Fgot->size);	// should just make function that use that pointer in the first place...-Q
+	*pFileSize=Fgot->size;
+
+//	DISK_Close(pFileHandle);
+	F_Close(Fgot); //clears the data....
+	return TRUE;
+
+}
+//============================================================================================
+//============================================================================================
+BOOL loadFileFromWDGZ(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, UBYTE AllocateMem)
+{
+	WDG_FINDFILE	sFindFile;
+
+	// find the file
+//	if (!wdgFindFirstFile(HashStringIgnoreCase("MISCDATA"), HashString("MISCDATA"), HashStringIgnoreCase(pFileName),
+//						&sFindFile))
+//	{
+//		return FALSE;
+//	}
+	sFindFile.FileNameHash=HashStringIgnoreCase(pFileName);
+	sFindFile.FileType=HashStringIgnoreCase("MISCDATA");
+
+	return loadFileFromWDGCacheZ(&sFindFile, ppFileData, pFileSize, AllocateMem);
+}
+//============================================================================================
 BOOL loadFileFromWDG(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize, UBYTE AllocateMem)
 {
 	WDG_FINDFILE	sFindFile;

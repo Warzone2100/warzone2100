@@ -423,9 +423,9 @@ BOOL loadForce(char *name)
 	FILE			*pFileHandle;
 	UDWORD			tcount,fcount=0,ref;
 	DROID_TEMPLATE	*psTempl;
-
+	printf("loafforce\n");
 	strcpy(fileName,name);
-
+printf("[loadForce] ----------------------------%s\n,fileName");	
 	pFileHandle = fopen(fileName, "rb");									// check file exists
 	if (pFileHandle == NULL)
 	{
@@ -590,7 +590,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	CreateDirectory(fileName,NULL);			// make dir, no problem if fails!
 	strcat(fileName,sPlayerName);
 	strcat(fileName,".sta");
-
+printf("[loadMultiStats] ----------------------------%s\n",fileName);	
 	// check player already exists 
 	pFileHandle = fopen(fileName, "rb");
 	if (pFileHandle == NULL)

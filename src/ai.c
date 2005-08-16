@@ -741,8 +741,8 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget);
 		}
-			DBP1(("Unit(%s) attacking : %d\n",
-					psDroid->pName, psTarget->id));
+//			DBP1(("Unit(%s) attacking : %d\n",
+//					psDroid->pName, psTarget->id));
 		turnOffMultiMsg(FALSE);
 
 	}

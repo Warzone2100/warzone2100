@@ -1311,6 +1311,7 @@ BOOL loadGameInit(STRING *pGameToLoad,BOOL GameIsLevelStart )
 
 	if (!gameLoad(pFileData, fileSize))
 	{
+printf("[loadgameInit]========----------- FIXME!!!!!!!! \n");
 		DBPRINTF(("loadgame: Fail4\n"));
 		goto error;
 	}

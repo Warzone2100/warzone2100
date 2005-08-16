@@ -102,6 +102,8 @@
 #include "gateway.h"
 #include "lighting.h"
 
+#include <stdio.h>		//test
+
 extern char* UserMusicPath;
 
 extern void statsInitVars(void);
@@ -725,7 +727,7 @@ BOOL InitialiseGlobals(void)
 }
 
 
-
+char addonmaps[600][256];
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Called once on program startup.
@@ -735,7 +737,11 @@ BOOL systemInitialise(void)
 	W_HEAPINIT		sWInit;
 	UBYTE			*pBuffer;
 	UDWORD			size;
-	
+//	FILE *OUTs;				//test
+//	char name[256];			//test
+	char addon[256];
+	int j=0;
+//	OUTs=fopen("addons.txt","a+t");		//test
 	// Setup the sizes of the widget heaps , using code to setup a structure that calls a routine that tells a library how much memory it should allocate (hmmm...)
 	memset(&sWInit, 0, sizeof(sWInit));
 
@@ -779,6 +785,34 @@ BOOL systemInitialise(void)
 			return FALSE;
 		}
 		FREE(pBuffer);
+//=================================================
+//=========NOTE NOTE NOTE
+//since we are NOT using wdgs, gonna load up the addon.manually... -Q
+// this is just a quick hack, this is NOT going to be like this very long!
+//if(psWDGCache == NULL) //basically, if not using WDG data
+///{	   
+//printf("*********** TEMP SOLUTION  1************\n");
+//printf("[systemInitialise]======== *** NEED TO FIX to parse *all* addon.levs in all queues!\n");
+		j=0;
+		while(addonmaps[j][0]!=NULL)
+		{
+			memset(addon,0,sizeof(addon));
+			memcpy(addon,&addonmaps[j][0],strlen(&addonmaps[j][0]));
+		if (!loadFile(addon, &pBuffer, &size))
+		{	printf("***[systemInitialise] addon.lev:[%s] failed to be found?\n",addon);
+			return FALSE;
+		}
+		if (!levParse(pBuffer, size))
+		{printf("***[systemInitialise] %s Parse error?\n",addon);
+			FREE(pBuffer);
+			return FALSE;
+		}
+		FREE(pBuffer);
+		j++; 
+		}
+		printf("[systemInitialise] ========loaded %02d addon.lev files!\n",j);
+//	}
+//=========
 
 		wdgFindFirstFileRev(HashStringIgnoreCase("MISCDATA"),
 							  HashString("MISCDATA"),
@@ -795,12 +829,15 @@ BOOL systemInitialise(void)
 			{
 				return FALSE;
 			}
+//			sprintf(name,"**********[ %s ]***********\n\n",sFindFile.psCurrCache->aFileName);
+//			fwrite(name,strlen(name),1,OUTs);
+//			fwrite(pBuffer,size,1,OUTs);						//all this is for testing
 			FREE(pBuffer);
 
 			wdgFindNextFileRev(&sFindFile);
 		}
 	}
-
+//	fclose(OUTs);	//test
 
 
 
@@ -1226,12 +1263,12 @@ BOOL frontendShutdown(void)
 
 BOOL stageOneInitialise(void)
 {
-
+	int err=0;
 	BLOCK_HEAP	*psHeap;
 
 
 	DBPRINTF(("stageOneInitalise\n"));
-
+	printf("\n\n\n###########################stageOneInitalise\n\n\n");
 #ifndef FINALBUILD
 	tpInit();
 #endif
@@ -1458,8 +1495,10 @@ BOOL stageOneShutDown(void)
 
 BOOL stageTwoInitialise(void)
 {
-	DBPRINTF(("stageTwoInitalise\n"));
+	int err=0;
 
+	DBPRINTF(("stageTwoInitalise\n"));
+	printf("\n\n\n###########################stageTwoInitalise\n\n\n");
 
 	if(bMultiPlayer)
 	{
@@ -1688,7 +1727,7 @@ BOOL stageThreeInitialise(void)
 	STRUCTURE *psStr;
 
 	DBPRINTF(("stageThreeInitalise\n"));
-
+printf("\n\n\n###########################stageThreeInitalise\n\n\n");
 	bTrackingTransporter = FALSE;
 
 	loopMissionState = LMS_NORMAL;
@@ -1711,6 +1750,7 @@ BOOL stageThreeInitialise(void)
 
 	if(bMultiPlayer)
 	{
+		printf("\n\n\n@@@@@@@@@@@@@@@@  multiGameInit() ? \n\n\n");
 		multiGameInit();
 		cmdDroidMultiExpBoost(TRUE);
 	}

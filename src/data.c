@@ -130,7 +130,7 @@ void dataReleaseStats(void *pData)
 
 /* Load the weapon stats */
 BOOL bufferSWEAPONLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
+{//printf("[bufferSWEAPONLoad] loading %s\n",pBuffer);
 	calcCheatHash(pBuffer,size, CHEAT_SWEAPON);
 	if (!loadWeaponStats((SBYTE*)pBuffer, size))
 	{
@@ -1343,7 +1343,7 @@ BOOL dataAnimLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 BOOL dataAnimCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 {
 	*ppData = NULL;
-
+//	printf("\n\n\n\n\n\n\n=======dataAnimCfgLoad=========\n\n %s \n\n\n\n\n\n",pBuffer);
 	if ( ParseResourceFile( pBuffer, size ) == FALSE )
 	{
 		return FALSE;

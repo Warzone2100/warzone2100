@@ -1487,10 +1487,12 @@ UBYTE sendMap(void)
 
 	return done;
 }
-
+extern char addonmaps[600][256];
 // another player is broadcasting a map, recv a chunk
 BOOL recvMapFileData(NETMSG *pMsg)
 {
+	char addon[256];
+	int j=0;
 	UBYTE done;
 	done =  NETrecvFile(pMsg);
 	if(done == 100)
@@ -1512,6 +1514,7 @@ BOOL recvMapFileData(NETMSG *pMsg)
 			UDWORD			size;
 			if (!loadFile("GameDesc.lev", &pBuffer, &size))		// load the original gamedesc.lev
 			{
+printf("[recvMapFileData]====== Hmm.. GameDesc.lev NOT found? \n");
 				return FALSE;
 			}
 			if (!levParse(pBuffer, size))
@@ -1519,6 +1522,31 @@ BOOL recvMapFileData(NETMSG *pMsg)
 				return FALSE;
 			}
 			FREE(pBuffer);
+//********************************
+//========= NOTE NOTE NOTE
+//since we are NOT using wdgs, gonna load up the addon.manually... -Q
+//printf("*********** TEMP SOLUTION  2************\n");
+//printf("[recvMapFileData] ======should look for all these addon.lev files, then parse them all...===FIX\n");
+
+		j=0;
+		while(addonmaps[j][0]!="")
+		{
+			memset(addon,0,sizeof(addon));
+			memcpy(addon,&addonmaps[j][0],strlen(&addonmaps[j][0]));
+		if (!loadFile(addon, &pBuffer, &size))
+		{	printf("***[systemInitialise]addon.lev failed to be found?\n");
+			return FALSE;
+		}
+		if (!levParse(pBuffer, size))
+		{printf("***[systemInitialise]addon.lev Parse error?\n");
+			return FALSE;
+		}
+		FREE(pBuffer);
+		j++;
+		}
+//		FREE(pBuffer);	
+//=========
+
 			wdgFindFirstFileRev(HashStringIgnoreCase("MISCDATA"),
 								  HashString("MISCDATA"),
 								  HashStringIgnoreCase("addon.lev"),

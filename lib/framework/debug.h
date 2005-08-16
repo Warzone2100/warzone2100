@@ -73,7 +73,7 @@
 #ifndef FORCEDEBUG
 #undef DEBUG	//that is one way to turn it off... ;)
 #else
-#ifndef DEBUG
+#ifndef DEBUG1
 #define DEBUG1	//Change since some debug code breaks the .exe. :eek: [need to fix]--Qamly
 #endif
 #endif
@@ -282,6 +282,16 @@ extern void dbg_SetAssertCallback(DB_MBCALLBACK callback);
  * by file basis.
  *
  */
+//#define DEBUG_GROUP0
+//#define DEBUG_GROUP1
+//#define DEBUG_GROUP2
+//#define DEBUG_GROUP3
+//#define DEBUG_GROUP4
+//#define DEBUG_GROUP5
+//#define DEBUG_GROUP6
+//#define DEBUG_GROUP7
+//#define DEBUG_GROUP8
+//#define DEBUG_GROUP9
 
 #ifdef DEBUG_GROUP0
 #define DBP0(x)							DBPRINTF(x)

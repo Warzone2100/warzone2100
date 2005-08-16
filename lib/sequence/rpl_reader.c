@@ -33,12 +33,12 @@ void resize_data_buffer(unsigned int size) {
 
 RPL*
 rpl_open(char* filename) {
-	FILE* f = fopen(filename, "rb");
-	RPL* rpl;
-	char buffer[512];
-	int tmp;
-
-	if (f == NULL) {
+	FILE* f = fopen(filename, "rb");						//Hmm...open from .wz or not?
+	RPL* rpl;														//it is only looking for novideo.rpl for right now.
+	char buffer[512];											//The only issue I see, if we use a memory buffer,
+	int tmp;															//and the video is too large, some system may
+																		//run out of memory. So we may have to redo this
+	if (f == NULL) {												//routine when we change vid formats. -Q
 		return NULL;
 	}
 
