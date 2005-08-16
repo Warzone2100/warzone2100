@@ -1630,9 +1630,9 @@ UBYTE				*pVisData;
 	psHeader = (VIS_SAVEHEADER *)pFileData;
 	if (psHeader->aFileType[0] != 'v' || psHeader->aFileType[1] != 'i' ||
 		psHeader->aFileType[2] != 's' || psHeader->aFileType[3] != 'd')	{
-		DBERROR(("Read visibility data : Weird file type found? Has header letters \
-				  - %s %s %s %s", psHeader->aFileType[0],psHeader->aFileType[1],
-								  psHeader->aFileType[2],psHeader->aFileType[3]));
+		debug(LOG_ERROR, "Read visibility data: Weird file type found? Has header letters"
+				  " - %c %c %c %c", psHeader->aFileType[0],psHeader->aFileType[1],
+								  psHeader->aFileType[2],psHeader->aFileType[3]);
 		return FALSE;
 	}
 

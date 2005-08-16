@@ -3121,9 +3121,9 @@ EFFECT				*pFXData;
 	psHeader = (FX_SAVEHEADER *)pFileData;
 	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'x' ||
 		psHeader->aFileType[2] != 'd' || psHeader->aFileType[3] != 'a')	{
-		DBERROR(("Read FX data : Weird file type found? Has header letters \
-				  - %s %s %s %s", psHeader->aFileType[0],psHeader->aFileType[1],
-								  psHeader->aFileType[2],psHeader->aFileType[3]));
+		debug(LOG_ERROR, "Read FX data: Weird file type found? Has header letters "
+				  "- %c %c %c %c", psHeader->aFileType[0], psHeader->aFileType[1],
+								  psHeader->aFileType[2], psHeader->aFileType[3]);
 		return FALSE;
 	}
 
