@@ -55,7 +55,7 @@ BOOL sound_InitLibrary( void )
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	int contextAttributes[] = { 0 };
-	ALint major, minor;
+	ALint major=0, minor=0;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	device = alcOpenDevice(0);
@@ -65,7 +65,7 @@ BOOL sound_InitLibrary( void )
 		return FALSE;
 	}
 
-	context = alcCreateContext(device, contextAttributes);
+	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
 	alcMakeContextCurrent(context);
 	
 	err = alcGetError(device);
@@ -84,11 +84,22 @@ BOOL sound_InitLibrary( void )
 
 	openal_initialized = TRUE;
 
+	// Clear Error Codes
+	alGetError();
+	alcGetError(device);
 	// Check what version of Open AL we are using
-
-	alcGetIntegerv(device, ALC_MAJOR_VERSION, 1, &major);
-	alcGetIntegerv(device, ALC_MINOR_VERSION, 1, &minor);
-	printf("\nOpen AL Version %d.%d\n", major, minor);
+//looks like this is for the old way to do things...
+//	alcGetIntegerv(device, ALC_MAJOR_VERSION, 1, &major);
+//	alcGetIntegerv(device, ALC_MINOR_VERSION, 1, &minor);
+//	printf("\nOpen AL Version %d.%d\n", major, minor);
+//	err = alcGetError(device);
+//	if(err != ALC_NO_ERROR) {
+//		printf("Error while getting version? : %s\n",
+//			alGetString(err));}
+//newer way:
+	printf("OpenAL Version : %s\n",alGetString(AL_VERSION));
+	printf("OpenAL Renderer : %s\n",alGetString(AL_RENDERER));
+	printf("OpenAL Extensions : %s\n",alGetString(AL_EXTENSIONS));
 
 
 	alListenerfv( AL_POSITION, listenerPos );
