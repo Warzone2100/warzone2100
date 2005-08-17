@@ -55,6 +55,7 @@ BOOL sound_InitLibrary( void )
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	int contextAttributes[] = { 0 };
+	ALint major, minor;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	device = alcOpenDevice(0);
@@ -82,6 +83,13 @@ BOOL sound_InitLibrary( void )
 	}
 
 	openal_initialized = TRUE;
+
+	// Check what version of Open AL we are using
+
+	alcGetIntegerv(device, ALC_MAJOR_VERSION, 1, &major);
+	alcGetIntegerv(device, ALC_MINOR_VERSION, 1, &minor);
+	printf("\nOpen AL Version %d.%d\n", major, minor);
+
 
 	alListenerfv( AL_POSITION, listenerPos );
 	alListenerfv( AL_VELOCITY, listenerVel );
