@@ -2,6 +2,7 @@ noinst_LIBRARIES = libframework.a
 AM_CPPFLAGS = -I../..
 libframework_a_SOURCES = \
 	block.c \
+	dd_zip.c \
 	configfile.c \
 	debug.c \
 	frame_stub.c \
@@ -18,6 +19,8 @@ libframework_a_SOURCES = \
 	treap.c \
 	trig.c \
 	wdg.c \
+	sys_zipfile.h \
+	sys_filein.c \
 	block.h    font.h           heap.h      memint.h    resource_y.h  treap.h \
 	cursor.h   fractions.h      image.h     mono.h      strres.h      treapint.h \
 	dderror.h  frame.h          input.h     multiwdg.h  strresly.h    trig.h \

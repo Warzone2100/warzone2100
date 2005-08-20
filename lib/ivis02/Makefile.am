@@ -21,7 +21,6 @@ libivis02_a_SOURCES = \
 	rendfunc.c \
 	rendmode.c \
 	screen.c \
-	stubs.c \
 	tex.c \
 	textdraw.c \
 	v4101_stub.c \

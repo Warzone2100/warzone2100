@@ -38,6 +38,13 @@ AC_CHECK_FUNCS([gethostname memmove memset sqrt strchr strdup strncasecmp strrch
 AC_HEADER_STDBOOL
 AC_HEADER_TIME
 
+AC_CHECK_LIB(z, gzgets, ,
+  AC_MSG_ERROR([Could not find zlib library.]), )
+AC_CHECK_HEADER(zlib.h, ,
+  AC_MSG_ERROR([zlib found but not zlib.h.
+You may need to install a zlib \"development\" package.]))
+WZ_LIBS="$WZ_LIBS -lz"
+
 # Commented out as the code is so messy that it doesn't work. It may even not
 # compile. The long term solution is to fix the code, but in the meantime we
 # need to hide the dust under the carpet.
