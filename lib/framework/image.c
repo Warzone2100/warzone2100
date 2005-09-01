@@ -5,13 +5,10 @@
  *
  */
 
-
-#pragma warning (disable : 4201 4214 4115 4514)
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #include <ddraw.h>
-#pragma warning (default : 4201 4214 4115)
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -23,7 +20,6 @@
 
 // Define this if you want to generate pictures (for tools ?)
 #define WRITEIMAGES
-
 
 /* The byte value after which the byte represents a run length in a PCX file */
 #define RLE_START 192
@@ -49,8 +45,6 @@ typedef struct _pcxheader {
 	SWORD paletteType;
 	UBYTE aPadding[58];
 } PCXHEADER;
-
-
 
 /* Take a memory buffer that contains a PCX file and convert it
  * to an image buffer and a palette buffer.

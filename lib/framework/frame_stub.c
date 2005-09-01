@@ -342,6 +342,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
         {
+		printf("Error: Could not initialise SDL (%s).\n", SDL_GetError());
 		return FALSE;
         }
 
@@ -807,7 +808,7 @@ tryHD:
 		DBERROR(("file too big !!:%s size %d\n", pFileName, *pSize));
 		return FALSE;
 	}
-	// Load the file data 
+	/* Load the file data */
 	if (fread(pFileBuffer, 1, *pSize, pFileHandle) != *pSize)
 	{
 		DBERROR(("Read failed for %s", pFileName));

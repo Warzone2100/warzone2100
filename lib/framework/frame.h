@@ -37,12 +37,10 @@ FILE* unix_fopen(char* filename, char* mode);
 
 #endif
 
-
 #define InitializeCriticalSection(x)
 #define DeleteCriticalSection(x)
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
-
 
 #include "types.h"
 #include "debug.h"

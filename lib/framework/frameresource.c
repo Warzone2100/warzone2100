@@ -567,7 +567,6 @@ SDWORD FindEmptyResourceFile(void)
 // Get a resource data file ... either loads it or just returns a pointer
 BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 {
-
 	SDWORD ResID;
 	RESOURCEFILE *ResData;
 	UDWORD size;
@@ -578,9 +577,6 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 
 	ResData= &LoadedResourceFiles[ResID];
 	*NewResource=ResData;
-
-
-
 
 	if (pFileBuffer &&
 		resLoadFromDisk(ResourceName, &pBuffer, &size))
@@ -608,7 +604,6 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 	ResData->size=size;
 	ResData->pBuffer=pBuffer;
 	return(TRUE);
-
 }
 
 
@@ -789,9 +784,8 @@ BOOL resLoadFile(STRING *pType, STRING *pFile)
 			BOOL Result;
 
 			Result=RetreiveResourceFile(aFileName,&Resource);
-			if (Result==FALSE)
-			{
-				DBERROR(("resLoadFile: Unable to retreive resource - %d",aFileName));
+			if (Result == FALSE) {
+				debug(LOG_ERROR, "resLoadFile: Unable to retreive resource - %s", aFileName);
 				return(FALSE);
 			}
 			

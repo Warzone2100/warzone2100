@@ -57,7 +57,10 @@ typedef			int	SDWORD;
 #define REG_BINARY       0
 #define HKEY_LOCAL_MACHINE       0
 
+#ifndef APIENTRY
 #define APIENTRY
+#endif
+
 #define cdecl
 
 #define __int64 long long 

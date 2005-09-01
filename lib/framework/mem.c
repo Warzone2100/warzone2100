@@ -482,12 +482,6 @@ void memMemoryReport(STRING *pFileName)
 #ifdef DEBUG_MALLOC
 	SDWORD		TotMem;
 
-	if (pFileName)
-	{
-		DBOUTPUTFILE(pFileName);
-		DBNOOUTPUTSTRING();
-	}
-
 	DBPRINTF(("\nMemory Allocation Report\n\n"));
 	if (!psMemRoot)
 	{
@@ -508,9 +502,6 @@ void memMemoryReport(STRING *pFileName)
 		}
 
 	}
-
-	DBNOOUTPUTFILE();
-	DBSETOUTPUTSTRING();
 #endif
 }
 
@@ -519,17 +510,7 @@ void memMemoryReport(STRING *pFileName)
 void memDisplayTreap(STRING *pFileName)
 {
 #ifdef DEBUG_MALLOC
-	if (pFileName)
-	{
-		DBOUTPUTFILE(pFileName);
-		DBNOOUTPUTSTRING();
-	}
-
 	DBPRINTF(("\nMemory Allocation Treap\n\n"));
-
 	treapDisplayRec((TREAP_NODE *)psMemRoot, 0);
-
-	DBNOOUTPUTFILE();
-	DBSETOUTPUTSTRING();
 #endif
 }

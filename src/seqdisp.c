@@ -382,7 +382,7 @@ void seq_SetVideoPath(void)
 	WIN32_FIND_DATA findData;
 	HANDLE	fileHandle;
 #endif
-	// set up the CD path 
+	/* set up the CD path */
 	if (!bCDPath)
 	{
 		if ( cdspan_GetCDLetter( aCDDrive, g_CDrequired ) == TRUE )
@@ -429,7 +429,7 @@ BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 {
 //	psSample;
 	bAudioPlaying = FALSE;
-	dbg_printf("************* briefing ended **************\n");
+	debug(LOG_NEVER, "************* briefing ended **************");
 
 	return TRUE;
 }
@@ -1133,7 +1133,6 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 		strcpy(aSubtitleName,pSeqName);
 		aSubtitleName[strLen - 4] = 0;
 		strcat(aSubtitleName,".txt");
-		printf("%s ==%s ??\n",pSeqName,aSubtitleName);
 		seq_AddTextFromFile(aSubtitleName, TRUE);//SEQ_TEXT_JUSTIFY);//subtitles centre justified
 	}
 }

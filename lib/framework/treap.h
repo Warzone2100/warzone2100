@@ -21,7 +21,7 @@
 #ifdef DEBUG
 #define DEBUG_TREAP TRUE
 #else
-#define DEBUG_TREAP FALSE
+#undef DEBUG_TREAP
 #endif
 
 
