@@ -2,7 +2,7 @@
 
 AC_PREREQ(2.56)
 AC_INIT([warzone], [1.3], [http://developer.berlios.de/projects/warzone/])
-AC_CONFIG_SRCDIR([lib/gamelib/parser.h])
+AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_TARGET
 
@@ -12,6 +12,8 @@ AM_MAINTAINER_MODE
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
+AC_PROG_YACC
+AC_PROG_LEX
 
 # Checks for libraries.
 
@@ -45,21 +47,18 @@ AC_CHECK_HEADER(zlib.h, ,
 You may need to install a zlib \"development\" package.]))
 WZ_LIBS="$WZ_LIBS -lz"
 
-# Commented out as the code is so messy that it doesn't work. It may even not
-# compile. The long term solution is to fix the code, but in the meantime we
-# need to hide the dust under the carpet.
-#AC_ARG_ENABLE(debug,
-#[  --enable-debug          run in debug mode],
-#[ debug=$enableval ], [ debug=no ])
-#AC_MSG_CHECKING([debug mode])
-#if test "$debug" = yes; then
-#  # -O0 turns off all optimizations; this is necessary for accurate debugging
-#  CFLAGS="-O0 -g"
-#  AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
-#  AC_MSG_RESULT([yes])
-#else
-#  AC_MSG_RESULT([no])
-#fi
+AC_ARG_ENABLE(debug,
+[  --enable-debug          run in debug mode],
+[ debug=$enableval ], [ debug=no ])
+AC_MSG_CHECKING([debug mode])
+if test "$debug" = yes; then
+  # -O0 turns off all optimizations; this is necessary for accurate debugging
+  CFLAGS="-O0 -g"
+  AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
 
 #   --without-opengl will build without opengl
 AC_ARG_WITH(opengl,
@@ -88,17 +87,27 @@ AC_ARG_WITH(mp3,
 [  --with-mp3              built support for Mp3 files (default)],
 [ mp3=$withval ], [ mp3=yes ])
 
+# windows conditional
+case $host_os in
+  *mingw32* ) MINGW32=yes;;
+          * ) MINGW32=no;;
+esac
+if test x"$MINGW32" = "xyes"; then
+  AC_DEFINE(WIN32, 1, [Windows build])
+  LIBS="$LIBS -lmingw32"
+fi
+
 AM_PATH_SDL([1.1.4], [sdl_found="yes"], [sdl_found="no"])
 if test "$sdl_found" = yes; then
-  CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
-  CFLAGS="$CFLAGS $SDL_CFLAGS"
-  LIBS="$LIBS $SDL_LIBS"
+  WZ_CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+  WZ_CFLAGS="$CFLAGS $SDL_CFLAGS"
+  WZ_LIBS="$WZ_LIBS $SDL_LIBS"
 else
   AC_MSG_ERROR([You need to install SDL (http://www.libsdl.org/).])
 fi
 
 AC_PATH_SDLNET([
-	CPPFLAGS="$CPPFLAGS $SDLNETINC" LIBS="$LIBS $SDLNETLIB"],
+	WZ_CPPFLAGS="$WZ_CPPFLAGS $SDLNETINC" WZ_LIBS="$WZ_LIBS $SDLNETLIB"],
 	AC_MSG_ERROR(SDL_net is not installed))
 
 if test "x$opengl" != xno; then
@@ -124,10 +133,11 @@ if test "x$opengl" != xno; then
     fi
   fi
 fi
+AC_CHECK_LIB(jpeg, main, , [AC_MSG_ERROR([You need to install the jpeg library.])])
 AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = xyes; then
   AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
-  LIBS="$LIBS -l$GLLIB -ljpeg"
+  WZ_LIBS="$WZ_LIBS -l$GLLIB -ljpeg"
   AC_SUBST(RENDERER, "ivis_opengl")
   AC_MSG_RESULT([yes])
 else
@@ -142,6 +152,7 @@ if test "x$openal" != xno; then
                [AC_CHECK_LIB(openal32, main, ALLIB=openal32, AL_lib=no)])
   # On Windows (and perhaps some other platforms), Alut is a separate library
   AC_CHECK_LIB(alut, main, ALUTLIB="-lalut", ALUTLIB="")
+  AC_CHECK_HEADER(AL/alut.h, ALUT_H=yes, ALUT_H=no)
   if test "x$AL_lib" = "xno"; then
     if test "x$openal" = xyes; then
       AC_MSG_ERROR([You need to install OpenAL.])
@@ -161,8 +172,11 @@ if test "x$openal" != xno; then
   fi
 fi
 AC_MSG_CHECKING([OpenAL])
+if test "x$ALUT_H" = "xyes"; then
+  AC_DEFINE(WZ_ALUT_H, 1, [Use Alut headers])
+fi
 if test "x$openal" = xyes; then
-  LIBS="$LIBS -l$ALLIB $ALUTLIB"
+  WZ_LIBS="$WZ_LIBS -l$ALLIB $ALUTLIB"
   AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])
   AC_MSG_RESULT([yes])
 else
@@ -185,7 +199,7 @@ else
       if test "x$have_vorbis" = "xyes"
       then
         oggmusic=yes
-        LIBS="$LIBS -lvorbisfile -lvorbis -logg"
+        WZ_LIBS="$WZ_LIBS -lvorbisfile -lvorbis -logg"
       else
         AC_DEFINE(WZ_NOOGG, 1, [Disable ogg vorbis support])
       fi
@@ -210,16 +224,17 @@ fi
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
-CFLAGS="$CFLAGS -Wall -DYY_STATIC -m32"
+CFLAGS="$CFLAGS -Wall -DYY_STATIC -m32 -fno-strict-aliasing"
 
-# windows conditional
-case $host_os in
-  *mingw32* ) MINGW32=yes;;
-          * ) MINGW32=no;;
-esac
-if test x"$MINGW32" = "xyes"; then
-  AC_DEFINE(WIN32, 1, [Windows build])
-fi
+# Set some flex flags. The -olex.yy.c kludge is to ensure that flex
+# generates the kind of filename that automake expects.
+AC_SUBST(FLEX_FLAGS, "-Cr -olex.yy.c -d")
+
+# only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give 
+# strange error messages when something is wrong
+LIBS="$LIBS $WZ_LIBS"
+CFLAGS="$CFLAGS $WZ_CFLAGS"
+CPPFLAGS="$CPPFLAGS $WZ_CPPFLAGS"
 
 AC_CONFIG_FILES([Makefile
                  lib/Makefile
@@ -245,10 +260,7 @@ echo " MP3 music support:     $mp3music"
 echo " OGG music support:     $oggmusic"
 echo ""
 
-# Commented out as the code is so messy that it doesn't work. It may even not
-# compile. The long term solution is to fix the code, but in the meantime we
-# need to hide the dust under the carpet.
-#if test "x$debug" = xyes; then
-#  echo " *** Running in debug mode! ***"
-#  echo ""
-#fi
+if test "x$debug" = xyes; then
+  echo " *** Running in debug mode! ***"
+  echo ""
+fi
