@@ -484,11 +484,11 @@ skip:
 				break;
 
 			default:
-				DBERROR(("Unknown game status on startup!"));
+				debug(LOG_ERROR, "Unknown game status on shutdown!");
 		}
 
 		
-		DBPRINTF(("Entering main loop\n"));
+		debug(LOG_MAIN, "Entering main loop");
 
 		Restart = FALSE;
 		//firstTime = TRUE;
@@ -560,7 +560,7 @@ skip:
 					{
 						switch(titleLoop()) {
 							case TITLECODE_QUITGAME:
-								DBPRINTF(("TITLECODE_QUITGAME\n"));
+								debug(LOG_MAIN, "TITLECODE_QUITGAME");
 								Restart = TRUE;
 								quit = TRUE;
 								break;
@@ -570,18 +570,18 @@ skip:
 	//							break;
 
 							case TITLECODE_SAVEGAMELOAD:
-								DBPRINTF(("TITLECODE_SAVEGAMELOAD\n"));
+								debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
 								gameStatus = GS_SAVEGAMELOAD;
 								Restart = TRUE;
 								break;
 							case TITLECODE_STARTGAME:
-								DBPRINTF(("TITLECODE_STARTGAME\n"));
+								debug(LOG_MAIN, "TITLECODE_STARTGAME");
 								gameStatus = GS_NORMAL;
 								Restart = TRUE;
 								break;
 
 							case TITLECODE_SHOWINTRO:	
-								DBPRINTF(("TITLECODE_SHOWINTRO\n"));
+								debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 								seq_ClearSeqList();
 								seq_AddSeqToList("eidos-logo.rpl",NULL,NULL, FALSE,0);
 								seq_AddSeqToList("pumpkin.rpl",NULL,NULL, FALSE,0);
@@ -595,7 +595,7 @@ skip:
 								break;
 
 							default:
-								DBERROR(("Unknown code returned by titleLoop"));
+								debug(LOG_ERROR, "Unknown code returned by titleLoop");
 						}
 					}
 					pie_SetSwirlyBoxes(FALSE);
@@ -632,31 +632,31 @@ skip:
 								}
 								break;
 							case GAMECODE_FASTEXIT:
-								DBPRINTF(("GAMECODE_FASTEXIT\n"));
+								debug(LOG_MAIN, "GAMECODE_FASTEXIT");
 								Restart = TRUE;
 								quit = TRUE;
 								break;
 
 							case GAMECODE_LOADGAME:
-								DBPRINTF(("GAMECODE_LOADGAME\n"));
+								debug(LOG_MAIN, "GAMECODE_LOADGAME");
 								Restart = TRUE;
 								gameStatus = GS_SAVEGAMELOAD;
 								break;
 
 							case GAMECODE_PLAYVIDEO:
-								DBPRINTF(("GAMECODE_PLAYVIDEO\n"));
+								debug(LOG_MAIN, "GAMECODE_PLAYVIDEO");
 //dont schange mode any more								gameStatus = GS_VIDEO_MODE;
 								Restart = FALSE;
 								break;
 
 							case GAMECODE_NEWLEVEL:
-								DBPRINTF(("GAMECODE_NEWLEVEL\n"));
+								debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
 								// gameStatus is unchanged, just loading additional data
 								Restart = TRUE;
 								break;
 
 							case GAMECODE_RESTARTGAME:
-								DBPRINTF(("GAMECODE_RESTARTGAME\n"));
+								debug(LOG_MAIN, "GAMECODE_RESTARTGAME");
 								Restart = TRUE;
 								break;
 
@@ -664,7 +664,7 @@ skip:
 								break;
 
 							default:
-								DBERROR(("Unknown code returned by gameLoop"));
+								debug(LOG_ERROR, "Unknown code returned by gameLoop");
 						}
 					}
 					break;
@@ -687,7 +687,7 @@ skip:
 						}
 						else
 						{
-								DBPRINTF(("VIDEO_QUIT\n"));
+								debug(LOG_MAIN, "VIDEO_QUIT");
 								if (introVideoControl == 2)//finished playing intro video
 								{
 									gameStatus = GS_TITLE_SCREEN;
@@ -707,7 +707,7 @@ skip:
 					break;
 		
 				default:
-					debug(LOG_ERROR, "Weirdy game status I'm afraid!!");
+					debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 					break;
 				}
 
@@ -752,22 +752,18 @@ skip:
 				break;
 
 			default:
-				DBERROR(("Unknown game status on shutdown!"));
+				debug(LOG_ERROR, "Unknown game status on shutdown!");
 				break;
 		}
 	
 	} // End of !quit loop.
 
-	DBPRINTF(("Shuting down application\n"));
 	Zip_Shutdown(); // shutdown and free some memory...
+  debug(LOG_MAIN, "Shuting down application");
 
 	systemShutdown();
-
 	pal_ShutDown();
-
 	frameShutDown();
-
-
 
 	if (reInit) goto init;
 
@@ -776,17 +772,11 @@ skip:
 exit:
 
 	debug(LOG_ERROR, "Shutting down after failure");
-
 	systemShutdown();
-
 	pal_ShutDown();
-
 	frameShutDown();
 
-
-
 	return 1;
-
 }
 
 
