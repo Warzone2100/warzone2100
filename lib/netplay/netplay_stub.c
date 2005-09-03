@@ -183,9 +183,12 @@ static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
 static SDLNet_SocketSet	socket_set = NULL;
 static BOOL		is_server = FALSE;
 
+static TCPsocket tmp_socket[MAX_TMP_SOCKETS] = { 0 };
+static SDLNet_SocketSet tmp_socket_set = NULL;
+
 static NETMSG		message;
 
-static char*		hostname;
+static char*		hostname = NULL;
 
 // ////////////////////////////////////////////////////////////////////////
 typedef struct {			// data regarding the last one second or so.
@@ -497,6 +500,58 @@ printf("NETshutdown\n");
 	SDLNet_Quit();
 	return 0;
 }
+
+// ////////////////////////////////////////////////////////////////////////
+//close the open game..
+HRESULT NETclose(VOID)
+{
+	unsigned int i;
+
+#ifdef NET_DEBUG
+printf("NETclose\n");
+#endif
+	allow_joining=FALSE;
+	is_server=FALSE;
+
+	if(bsocket) {
+		NET_destroyBufferedSocket(bsocket);
+		bsocket=NULL;
+	}
+	
+	for(i=0;i<MAX_CONNECTED_PLAYERS;i++) {
+		if(connected_bsocket[i]) {
+			NET_destroyBufferedSocket(connected_bsocket[i]);
+			connected_bsocket[i]=NULL;
+		}
+		NET_DestroyPlayer(i);
+	}
+
+	if(tmp_socket_set) {
+		SDLNet_FreeSocketSet(tmp_socket_set);
+		tmp_socket_set=NULL;
+	}
+
+	for(i=0;i<MAX_TMP_SOCKETS;i++) {
+		if(tmp_socket[i]) {
+			SDLNet_TCP_Close(tmp_socket[i]);
+			tmp_socket[i]=NULL;
+		}
+	}
+
+
+	if(socket_set) {
+		SDLNet_FreeSocketSet(socket_set);
+		socket_set=NULL;
+	}
+	
+	if(tcp_socket) {
+		SDLNet_TCP_Close(tcp_socket);
+		tcp_socket=NULL;
+	}
+
+	return 0;
+}
+
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
@@ -896,6 +951,7 @@ BOOL NETsetupTCPIP(LPVOID *addr, char * machine)
 #ifdef NET_DEBUG
 printf("NETsetupTCPIP\n");
 #endif
+	if(hostname) free(hostname);
 	hostname = strdup(machine);
 
 	return TRUE;
@@ -1026,8 +1082,6 @@ UBYTE NETrecvFile(NETMSG *pMsg)
 // Host a game with a given name and player name. & 4 user game flags
 
 void NETallowJoining() {
-	static TCPsocket tmp_socket[MAX_TMP_SOCKETS] = { 0 };
-	static SDLNet_SocketSet tmp_socket_set = NULL;
 	unsigned int i;
 
 	if (allow_joining == FALSE) return;
@@ -1132,13 +1186,13 @@ printf("NEThostGame\n");
 		return FALSE;
 	}
 
-	tcp_socket = SDLNet_TCP_Open(&ip);
+	if(!tcp_socket) tcp_socket = SDLNet_TCP_Open(&ip);
 	if(tcp_socket == NULL) {
 		printf("SDLNet_TCP_Open: %s\n", SDLNet_GetError());
 		return FALSE;
 	}
 
-	socket_set = SDLNet_AllocSocketSet(MAX_CONNECTED_PLAYERS);
+	if(!socket_set) socket_set = SDLNet_AllocSocketSet(MAX_CONNECTED_PLAYERS);
 	if (socket_set == NULL) {
 		printf("Couldn't create socket set: %s\n",
 						SDLNet_GetError());
