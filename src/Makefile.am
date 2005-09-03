@@ -266,7 +266,7 @@ warzone_libs =  ../lib/framework/libframework.a \
 		../lib/sound/libsound.a \
 		../lib/netplay/libnetplay.a \
 		../lib/script/libscript.a \
-    ../lib/ivis_common/libivis_common.a \
+		../lib/ivis_common/libivis_common.a \
 		../lib/$(RENDERER)/lib$(RENDERER).a \
 		../lib/ivis_common/libivis_common.a \
 		../lib/gamelib/libgamelib.a \
