@@ -85,7 +85,7 @@ char OffString[]={"Off"};
 STRING	strFog[MAX_STR_LENGTH];
 STRING	strTrans[MAX_STR_LENGTH];
 
-
+tMode titleMode;					// the global case
 
 
 // ////////////////////////////////////////////////////////////////////////////

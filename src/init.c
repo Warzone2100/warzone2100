@@ -102,8 +102,6 @@
 #include "gateway.h"
 #include "lighting.h"
 
-#include <stdio.h>		//test
-
 extern char* UserMusicPath;
 
 extern void statsInitVars(void);
