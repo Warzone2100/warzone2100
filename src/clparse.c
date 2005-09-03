@@ -64,6 +64,27 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_setFullscreen(FALSE);
 		}
+		else if ( stricmp( tokenType, "-debugfile" ) == 0 )
+		{
+			// find the file name
+			token = argv[++i];
+			if (token == NULL) {
+				DBERROR( ("Missing filename?\n") );
+				return FALSE;
+			}
+			debug_to_file(token);
+		}
+		else if ( stricmp( tokenType, "-debug" ) == 0 )
+		{
+			// find the part name
+			token = argv[++i];
+			if (token == NULL) {
+				DBERROR( ("Missing code part?\n") );
+				return FALSE;
+			}
+			/* FIXME: No error reporting here if bad token... */
+			debug_enable_switch(token);
+		}
 		else if ( stricmp( tokenType, "-fullscreen" ) == 0 )
 		{
 			war_setFullscreen(TRUE);

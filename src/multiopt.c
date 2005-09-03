@@ -534,11 +534,19 @@ BOOL multiShutdown(VOID)
 {
 	FORCE_MEMBER *pF;
 	
+	debug(LOG_MAIN, "shutting down audio capture");
 	NETshutdownAudioCapture();
-	NETshutdownAudioPlayback();
-  	NETshutdown();												// shut down netplay lib.
 
-	while(Force.pMembers)										// clear any force we may have.
+	debug(LOG_MAIN, "shutting down audio playback");
+	NETshutdownAudioPlayback();
+
+	// shut down netplay lib.
+	debug(LOG_MAIN, "shutting down networking");
+  	NETshutdown();
+
+	// clear any force we may have.
+	debug(LOG_MAIN, "free game data");
+	while(Force.pMembers)			
 	{
 		pF = Force.pMembers;
 		Force.pMembers = pF->psNext;

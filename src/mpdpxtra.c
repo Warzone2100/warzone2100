@@ -22,11 +22,9 @@
 	Coptyright 1996-97. Mpath Interactive, Inc.
 
 ----------------------------------------------------------------------------*/
-#pragma warning (disable : 4201 4214 4514 4115)
 
 #include "frame.h"
 #include "mpdpxtra.h"
-
 
 /******** DEFINITIONS ********/
 

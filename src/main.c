@@ -23,6 +23,7 @@
 #include "piemode.h"
 #include "levels.h"
 #include "research.h"
+#include "configfile.h"
 #include "warzoneconfig.h"
 #include "clparse.h"
 #include "cdspan.h"
@@ -172,6 +173,8 @@ int main(int argc, char *argv[])
 
 	// initialise all the command line states
 	clIntroVideo = FALSE;
+
+	debug_init(); // must be called early
 
 //=========================
 /*
@@ -533,6 +536,7 @@ skip:
 				mixer_RestoreIngameVols();
 				break;
 			case FRAME_QUIT:
+				debug(LOG_MAIN, "frame quit");
 				quit = TRUE;
 				Restart = TRUE;
 				break;
@@ -618,7 +622,7 @@ skip:
 						loopStatus = gameLoop();
 						switch(loopStatus) {
 							case GAMECODE_QUITGAME:
-								DBPRINTF(("GAMECODE_QUITGAME\n"));
+								debug(LOG_MAIN, "GAMECODE_QUITGAME");
 								gameStatus = GS_TITLE_SCREEN;
 								Restart = TRUE;
 								if(NetPlay.bLobbyLaunched)
@@ -666,7 +670,7 @@ skip:
 					break;
 
 				case	GS_VIDEO_MODE:
-				DBERROR(("Video_mode no longer valid"));
+					debug(LOG_ERROR, "Video_mode no longer valid");
 					if (loop_GetVideoStatus())
 					{
 						videoLoop();
@@ -703,7 +707,7 @@ skip:
 					break;
 		
 				default:
-					DBERROR(("Weirdy game status I'm afraid!!"));
+					debug(LOG_ERROR, "Weirdy game status I'm afraid!!");
 					break;
 				}
 
@@ -740,7 +744,7 @@ skip:
 				break;
 
 			case	GS_VIDEO_MODE:
-				DBERROR(("Video_mode no longer valid"));
+				debug(LOG_ERROR, "Video_mode no longer valid");
 				if (videoInitialised)
 				{
 					videoInitialised = FALSE;
@@ -771,7 +775,7 @@ skip:
 
 exit:
 
-	DBPRINTF(("Shutting down after fail\n"));
+	debug(LOG_ERROR, "Shutting down after failure");
 
 	systemShutdown();
 

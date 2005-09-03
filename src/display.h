@@ -18,7 +18,7 @@
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
 
-
+extern SDWORD mX, mY;
 
 extern void shakeStart(void);
 

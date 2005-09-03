@@ -733,15 +733,6 @@ GAMECODE gameLoop(void)
 				pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 				pie_SetFogStatus(TRUE);
 			}
-
-			if(pie_GetRenderEngine() == ENGINE_GLIDE)
-			{
-				pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-				pie_SetFogStatus(FALSE);
-				pie_DrawMouse(mouseX(),mouseY());
-				pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-				pie_SetFogStatus(TRUE);
-			}
 		}*/
 	}
 
@@ -811,7 +802,7 @@ GAMECODE gameLoop(void)
 		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
-				keyPressed(KEY_RETURN) AND pie_GetRenderEngine()!=ENGINE_GLIDE)
+				keyPressed(KEY_RETURN))
 			{
 				screenToggleMode();
 		#ifdef DISP2D
@@ -879,7 +870,7 @@ GAMECODE gameLoop(void)
 		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
-				keyPressed(KEY_RETURN) AND pie_GetRenderEngine()!=ENGINE_GLIDE)
+				keyPressed(KEY_RETURN))
 			{
 				screenToggleMode();
 		#ifdef DISP2D
@@ -903,7 +894,7 @@ GAMECODE gameLoop(void)
 		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
-				keyPressed(KEY_RETURN) AND pie_GetRenderEngine()!=ENGINE_GLIDE)
+				keyPressed(KEY_RETURN))
 			{
 				screenToggleMode();
 		#ifdef DISP2D

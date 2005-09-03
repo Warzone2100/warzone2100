@@ -3298,15 +3298,7 @@ void intRemoveTransporterTimer(void)
 
 void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		// need to do some funky rejigging of the buffer to get upto 16bit+alpha
-//		pie_DownLoadBufferToScreen( pMissionBackDrop->bmp,psWidget->x+xOffset,psWidget->y+yOffset,psWidget->width, psWidget->height,1280);
-	}
-	else
-	{
-//		iV_DownloadDisplayBuffer(pMissionBackDrop->bmp);
-	}
+//	iV_DownloadDisplayBuffer(pMissionBackDrop->bmp);
 	scoreDataToScreen();
 }
 
@@ -3342,23 +3334,10 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
-
-
-
 	// add some funky beats
 	cdAudio_PlayTrack(2);	// 2= frontend music.
 
-
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		pie_LoadBackDrop(SCREEN_MISSIONEND,TRUE);
-	}
-	else
-	{
-		pie_LoadBackDrop(SCREEN_MISSIONEND,FALSE);
-	}
-
-
+	pie_LoadBackDrop(SCREEN_MISSIONEND,FALSE);
 
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;

@@ -104,8 +104,8 @@ static	SDWORD mapGridWidth, mapGridHeight, mapGridMidX, mapGridMidY;
 static	SDWORD mapGridX, mapGridZ;
 static	SDWORD gridDivX, gridDivZ;
 static	iVector tileScreenCoords[MAX_MAP_GRID][MAX_MAP_GRID];
-POINT 	sP1,sP2,sP3,sP4;
-POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
+POINT  sP1,sP2,sP3,sP4;
+POINT  *psP1,*psP2,*psP3,*psP4,*psPTemp;
 
 /*Flag to switch code for bucket sorting in renderFeatures etc 
   for the renderMapToBuffer code */
@@ -373,9 +373,6 @@ void	fillMapBufferWithBitmap(iSurface *surface)
 //clear text message background with gray fill
 /*void clearIntelText(iSurface *surface)
 {
-#ifdef PSX
-	DBPRINTF(("clearIntelText not defined on psx\n");
-#else
 	UBYTE		*toFill;
 	UDWORD		width, height, extraWidth;
 
@@ -391,23 +388,21 @@ void	fillMapBufferWithBitmap(iSurface *surface)
 		}
 		toFill += extraWidth;
 	}
-#endif
 }
 */
+
 /* This draws the tile regardless of whether the tile should be VISIBLE */
 void	drawMapTile2(SDWORD i, SDWORD j)
 {
-
-UDWORD	renderFlag;
-UDWORD	realX, realY;
-UDWORD	tileNumber;
-UDWORD	topL,botL,topR,botR;
-//UDWORD	n;
-iVertex p[4];
-//iVertex clip[iV_POLY_MAX_POINTS];
-MAPTILE	*psTile;
-iPoint	offset;
-
+	UDWORD	renderFlag;
+	UDWORD	realX, realY;
+	UDWORD	tileNumber;
+	UDWORD	topL,botL,topR,botR;
+	//UDWORD	n;
+	iVertex p[4];
+	//iVertex clip[iV_POLY_MAX_POINTS];
+	MAPTILE	*psTile;
+	iPoint	offset;
 
 	/* Get the actual tile to render */
 	realX = mapGridX+j;
@@ -425,14 +420,7 @@ iPoint	offset;
 	//if ( TEST_TILE_VISIBLE(selectedPlayer, psTile) OR godMode)
  		/* get the appropriate tile texture */
  		tileNumber = psTile->texture; 
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
-		}
-		else
-		{
-			texturePage.bmp = tilesRAW[tileNumber & TILE_NUMMASK];
-		}
+		texturePage.bmp = tilesRAW[tileNumber & TILE_NUMMASK];
  		  
 		/* Check for flipped and rotated tiles */
 		tileLayouts(tileNumber & ~TILE_NUMMASK);
@@ -474,11 +462,6 @@ iPoint	offset;
 		}
 
 		renderFlag = 0;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64); 
-			offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64); 
-		}
 		pie_DrawTriangle(p, &texturePage, renderFlag, &offset);	
 		// Clip the polygon and establish how many sides it has. 
 		// This routines also now clips shading and U,V values - Alex.

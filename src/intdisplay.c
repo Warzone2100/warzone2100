@@ -3841,28 +3841,14 @@ void drawRadarBlips()
 	UWORD				imageID;
 	UDWORD				VisWidth, VisHeight, delay = 150;
 	PROX_TYPE			proxType;
-	BOOL				bGlide;
-
-
-	if ( pie_GetRenderEngine() == ENGINE_GLIDE )
-	{
-		bGlide = TRUE;
-	}
-	else
-	{
-		bGlide = FALSE;
-	}
-
 
 /*#ifndef PSX
 	SDWORD				radarX,radarY;		// for multiplayer blips
 	//FEATURE				*psFeature;			// ditto. Needed always now!
 #endif*/
 
-
 	VisWidth = RADWIDTH;
 	VisHeight = RADHEIGHT;
-
 
 	/* Go through all the proximity Displays*/
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; 
@@ -3923,20 +3909,8 @@ void drawRadarBlips()
 			}
 			//draw the 'blip'
 
-			if ( bGlide == TRUE )
-			{
-				pie_SetAdditiveSprites(TRUE);
-				pie_SetAdditiveSpriteLevel(0xc0ffffff);
-			}
-
 			iV_DrawImage(IntImages,imageID, psProxDisp->radarX + RADTLX, 
 							psProxDisp->radarY + RADTLY);
-			
-			if ( bGlide == TRUE )
-			{
-				pie_SetAdditiveSprites(FALSE);
-			}
-
 		}
 	}
 

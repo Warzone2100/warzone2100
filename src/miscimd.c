@@ -77,7 +77,6 @@ char	name[15];	// hopefully!
 	{
 		sprintf(name,miscImds[i].pName);
 		strcat(name,".pie");
-//		printf("=-=- looking for %s\n",name);
 		/* see if the resource loader can find it */
 		miscImds[i].pImd = resGetData("IMD",name);
 		/* If it didn't get it then... */

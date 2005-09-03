@@ -219,7 +219,7 @@ BASE_OBJECT	*mouseTarget( void );
 OBJECT_POSITION *	checkMouseLoc(void);
 
 /* Mouse x and y - no point checking them more than once per frame */
-SDWORD	mX = OFF_SCREEN,mY= OFF_SCREEN;			
+SDWORD	mX = OFF_SCREEN, mY = OFF_SCREEN;
 
 BOOL	bInstantRadarJump = FALSE;
 

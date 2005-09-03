@@ -339,7 +339,7 @@ void actionAlignTurret(BASE_OBJECT *psObj)
 //	DBP1(("rotrate=%d framTime=%d rotation=%d\n",psDroid->turretRotRate,frameTime,rotation));
 
 	//DBP1(("droid=%x turret=%x\n",psDroid,psDroid->turretRotation));
-//    DBP1(("unit=%x turret=%x\n",psDroid,ACTION_TURRET_ROTATION_RATE));
+    DBP1(("unit=%x turret=%x\n",psDroid,ACTION_TURRET_ROTATION_RATE));
 
 
 	if (rotation > 180)//crop to 180 degrees, no point in turning more than all the way round
@@ -517,8 +517,8 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	targetRotation = calcDirection(psAttacker->x, psAttacker->y, psTarget->x, psTarget->y);
 
 	//DBP1(("att: rotrate=%d framTime=%d rotation=%d target=%d   startrot=%d ",psAttacker->turretRotRate,frameTime,rotation,targetRotation,tRotation));
- //   DBP1(("att: rotrate=%d framTime=%d rotation=%d target=%d   startrot=%d ",
-//        ACTION_TURRET_ROTATION_RATE,frameTime,rotation,targetRotation,tRotation));
+    DBP1(("att: rotrate=%d framTime=%d rotation=%d target=%d   startrot=%d ",
+        ACTION_TURRET_ROTATION_RATE,frameTime,rotation,targetRotation,tRotation));
 
 
 	rotationError = targetRotation - (tRotation + psAttacker->direction);

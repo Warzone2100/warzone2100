@@ -2764,7 +2764,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//allocate the necessary space
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 
@@ -2883,7 +2883,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -2950,7 +2950,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 
@@ -2989,7 +2989,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -3061,7 +3061,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -3118,7 +3118,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR((FALSE, "Out of memory"));
+				DBERROR(("Out of memory"));
 				return FALSE;
 			}
 			//initialise the memory
@@ -6975,9 +6975,9 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 	UBYTE			mask = 1;
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
-#if defined(DEBUG) || defined(ALWAYS_ASSERT)
-	STRING			*pType;
-#endif
+#ifdef DEBUG
+	STRING			*pType;			//if you are going to do this, then make SURE you also do the same to anything
+#endif									//that uses the variable.  
 
 	ASSERT((player < MAX_PLAYERS, "setFlagPositionInc: invalid player number"));
 	//find the first vacant slot
@@ -6993,7 +6993,7 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 	if (inc >= MAX_FACTORY)
 	{
         //this may happen now with electronic warfare
-#if defined(DEBUG) || defined(ALWAYS_ASSERT)
+#ifdef DEBUG
 		switch (factoryType)
 		{
 		case FACTORY_FLAG:
@@ -7013,7 +7013,9 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 			break;
 		}
 #endif
+#ifdef DEBUG
 	    ASSERT((FALSE, "Building more than %d %s for player %d", MAX_FACTORY, pType, player));
+#endif
 		inc = 1;
 	}
 
