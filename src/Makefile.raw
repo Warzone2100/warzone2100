@@ -128,7 +128,7 @@ LIBS=		framework \
 		sound \
 		widget
 
-EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net z
+EXT_LIBS=	mad vorbisfile vorbis ogg $(OPENAL_LIB) SDL_net
 
 ifeq ($(GFX), software)
 LIBS+=ivis02
@@ -136,13 +136,16 @@ else
 LIBS+=ivis_opengl
 EXT_LIBS+=$(OPENGL_LIB) jpeg
 endif
+LIBS+=ivis_common
 
 MAKERULES=../makerules
 include $(MAKERULES)/exe.mk
 
-# Just delete frontend.o so it is remade unconditionally to have an
+# On every build, record the working copy revision string in revision.h
+# if svnversion is not installed, it will be just an empty string.
+# Also delete frontend.o so it is remade unconditionally to have an
 # up-to-date revision number.
 STUPID_TRICK := $(shell rm -rf frontend.o)
-
-SVN_REV := $(shell svnversion ..)
-CFLAGS += -DSVN_REVISION=\"$(SVN_REV)\" $(STUPID_TRICK)
+REWRITE_REVISION_H1 := $(shell echo -n '\#define SVN_REVISION "Revision ' > revision.h)
+REWRITE_REVISION_H2 := $(shell svnversion -n . >> revision.h)
+REWRITE_REVISION_H3 := $(shell echo '"' >> revision.h)

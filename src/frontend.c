@@ -63,11 +63,14 @@
 #include "multistat.h"
 #include "netplay.h"
 
-#ifdef WIN32
+#ifdef WHATEVER_YOU_NEED_FOR_DOT_NET
 #include "revision.h"
 #endif
 
-static const char* version_string = "Version 2.0 beta (Revision %s)";
+#include "revision.h"
+#ifndef SVN_REVISION
+#error "SVN_REVISION must be defined!"
+#endif
 
 extern BOOL bSubtitles;
 
@@ -1885,29 +1888,28 @@ DBPRINTF(("addText : %s\n",txt));
 }
 
 
-
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#endif
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
 
 // show a background piccy
 VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	STRING	sTmp[128];
+    const size_t sTmpSize = 200;
+
+	STRING	sTmp[200];			//Couldn't have sTmp[sTmpSize], .net did NOT like that, so for now...
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
-	
-	sprintf(sTmp, version_string, SVN_REVISION);
-	sprintf(sTmp, "%s", sTmp);
-	if (pie_Hardware()) {
-		sprintf(sTmp, "%s OpenGL", sTmp);
-	} else {
-		sprintf(sTmp, "%s Software", sTmp);
-	}
-	sprintf(sTmp, "%s - Built: %s", sTmp, __DATE__);
+
+	snprintf(sTmp, sTmpSize, "Version 2.0 beta %s w/%s - Built %s", SVN_REVISION,
+            pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
+
+
 	
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
