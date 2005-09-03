@@ -7,6 +7,7 @@
  */
 /***************************************************************************/
 
+#include "ivi.h"
 #include "pieclip.h"
 #include "frame.h"
 #include "piedef.h"

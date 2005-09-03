@@ -17,6 +17,7 @@
 #include "piematrix.h"
 #include "tex.h"
 
+#include "v4101.h"
 #include "piedef.h"
 #include "piestate.h"
 #include "pietexture.h"
@@ -213,12 +214,6 @@ static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD
  * Will support zbuffering, texturing, coloured lighting and alpha effects
  * Avoids recalculating vertex projections for every poly 
  ***************************************************************************/
-
-//#define _3DNOW
-
-//#ifdef _3DNOW
-#include "amd3d.h"
-//#endif
 
 // ---
 // DEV STUDIO 5, 3D NOW and INTEL VERSION.

@@ -146,7 +146,7 @@ int	seq_RenderOneFrame(LPDIRECTDRAWSURFACE4	lpDDSF, int skip, SDWORD subMin, SDW
 	{
 //		seq_AddTextForVideo("<<hit ESC to continue>>", 0, 0, 399, 299);
 //		return VIDEO_FINISHED;			//For now, user must hit ESC to continue during mission briefings!
-													//**temp** "fix".
+													// temporary "fix".
 	}
 	else 
 	{

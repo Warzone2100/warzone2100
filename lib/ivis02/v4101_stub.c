@@ -10,6 +10,7 @@
 #include <string.h>
 #include <SDL/SDL.h>
 
+#include "ivi.h"
 #include "rendmode.h"
 #include "piemode.h"
 #include "bug.h"

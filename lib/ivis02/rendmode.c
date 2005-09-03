@@ -9,7 +9,6 @@
 #include "pieclip.h"
 
 
-#include "d3dmode.h"
 #include "v4101.h"
 
 #include "rendfunc.h"
