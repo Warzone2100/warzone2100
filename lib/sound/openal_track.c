@@ -3,17 +3,24 @@
 // Sound library-specific functions
 //*
 //
+
+// this has to be first
+#include "frame.h"
+
 #include <AL/al.h>
 #include <AL/alc.h>
-//#include <AL/alut.h>
-#include "frame.h"
+#ifdef WZ_ALUT_H
+#include <AL/alut.h>
+#endif
 #include "tracklib.h"
 #include "audio.h"
 #define ATTENUATION_FACTOR	0.0003
 #ifndef M_PI
 	#define M_PI	3.1415926535897932385
 #endif // win32 doesn't define that...
-int current_queue_sample = -1;
+
+ALuint current_queue_sample = -1;
+
 typedef struct	SAMPLE_LIST
 {
 	struct AUDIO_SAMPLE *curr;
@@ -36,7 +43,7 @@ BOOL		cdAudio_Update( void );
 
 static void PrintOpenALVersion()
 {
-	printf("OpenAL Vendor: %s\n"
+	debug(LOG_ERROR, "OpenAL Vendor: %s\n"
 		   "OpenAL Version: %s\n"
 		   "OpenAL Renderer: %s\n"
 		   "OpenAL Extensions: %s\n",
@@ -54,14 +61,13 @@ BOOL sound_InitLibrary( void )
 	int err=0;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-	int contextAttributes[] = { 0 };
-	ALint major=0, minor=0;
+//	int contextAttributes[] = { 0 };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	device = alcOpenDevice(0);
 	if(device == 0) {
 		PrintOpenALVersion();
-		printf("Couldn't open audio device.\n");
+		debug(LOG_ERROR, "Couldn't open audio device.");
 		return FALSE;
 	}
 
@@ -71,14 +77,14 @@ BOOL sound_InitLibrary( void )
 	err = alcGetError(device);
 	if (err != ALC_NO_ERROR) {
 		PrintOpenALVersion();
-		printf("Couldn't initialize audio context: %s\n",
+		debug(LOG_ERROR, "Couldn't initialize audio context: %s",
 				alcGetString(device, err));
 		return FALSE;
 	}
 	err = alGetError();
 	if (err != AL_NO_ERROR) {
 		PrintOpenALVersion();
-		printf("Audio error after init: %s\n", alGetString(err));
+		debug(LOG_ERROR, "Audio error after init: %s", alGetString(err));
 		return FALSE;
 	}
 
@@ -87,19 +93,11 @@ BOOL sound_InitLibrary( void )
 	// Clear Error Codes
 	alGetError();
 	alcGetError(device);
+
 	// Check what version of Open AL we are using
-//looks like this is for the old way to do things...
-//	alcGetIntegerv(device, ALC_MAJOR_VERSION, 1, &major);
-//	alcGetIntegerv(device, ALC_MINOR_VERSION, 1, &minor);
-//	printf("\nOpen AL Version %d.%d\n", major, minor);
-//	err = alcGetError(device);
-//	if(err != ALC_NO_ERROR) {
-//		printf("Error while getting version? : %s\n",
-//			alGetString(err));}
-//newer way:
-	printf("OpenAL Version : %s\n",alGetString(AL_VERSION));
-	printf("OpenAL Renderer : %s\n",alGetString(AL_RENDERER));
-	printf("OpenAL Extensions : %s\n",alGetString(AL_EXTENSIONS));
+	debug(LOG_SOUND, "OpenAL Version : %s",alGetString(AL_VERSION));
+	debug(LOG_SOUND, "OpenAL Renderer : %s",alGetString(AL_RENDERER));
+	debug(LOG_SOUND, "OpenAL Extensions : %s",alGetString(AL_EXTENSIONS));
 
 
 	alListenerfv( AL_POSITION, listenerPos );
@@ -115,10 +113,9 @@ BOOL sound_InitLibrary( void )
 //
 void sound_ShutdownLibrary( void )
 {
-	if(context != 0) 
-	{
+	if(context != 0) {
 		alcMakeContextCurrent(NULL);		//this should work now -Q
-		alcDestroyContext(context);			
+		alcDestroyContext(context); // this gives a long delay on some impl.
 		context = 0;
 	}
 	if(device != 0) {
@@ -171,7 +168,7 @@ void sound_Update( void )
 	alcProcessContext(context);
 	err = alcGetError(device);
 	if(err != ALC_NO_ERROR) {
-		printf("Error while processing audio context: %s\n",
+		debug(LOG_ERROR, "Error while processing audio context: %s",
 				alGetString(err));
 	}
 }

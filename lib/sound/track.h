@@ -6,6 +6,8 @@
 /***************************************************************************/
 /* defines */
 
+#include <AL/al.h>
+
 #ifndef MAX_STR
 	#define	MAX_STR			255
 #endif
@@ -52,7 +54,7 @@ typedef BOOL (* AUDIO_CALLBACK)  ( struct AUDIO_SAMPLE *psSample );
 typedef struct AUDIO_SAMPLE
 {
 	SDWORD				iTrack;
-	SDWORD				iSample;
+	ALuint				iSample;
 	SDWORD				x, y, z;
 	SDWORD				iLoops;
 	BOOL				bRemove;

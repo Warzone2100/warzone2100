@@ -88,7 +88,6 @@ BOOL audio_Init( HWND hWnd, BOOL bEnabled, AUDIO_CALLBACK pStopTrackCallback )
 		if ( !HEAP_CREATE(&g_psSampleHeap, AUDIO_SAMPLE_HEAP_INIT, AUDIO_SAMPLE_HEAP_EXT, sizeof(AUDIO_SAMPLE)) )
 		{
 			DBERROR( ("audio_Init: couldn't create sample queue\n") );
-			printf("audio_Init: couldn't create sample queue\n");
 			return FALSE;
 		}
 
@@ -371,7 +370,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 	//
 	// SDWORD iSameSamples = 0;
 	//
-	printf( "audio_queuesample called - track=%d\n", iTrack );
+	debug(LOG_SOUND, "audio_queuesample called - track=%d", iTrack );
 
 	// return if audio not enabled
 	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
@@ -387,7 +386,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-	printf( "audio_queuetrack called1\n" );
+	debug(LOG_SOUND, "audio_queuetrack called1" );
 	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
 	if ( psSample != NULL )
 	{
