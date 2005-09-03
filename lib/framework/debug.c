@@ -23,7 +23,7 @@ static BOOL enabled_debug_parts[LOG_LAST];
 
 /* This list _must_ match the enum in debug.h! */
 static const char *code_part_names[] = {
-  "all", "sound", "video", "3d", "error", "never"
+  "all", "main", "sound", "video", "wz", "3d", "error", "never", "last"
 };
 
 #ifdef _MSC_VER
@@ -95,6 +95,18 @@ static void callback_debug_stderr(const char *buf)
 **************************************************************************/
 void debug_init(void)
 {
+	int count = 0;
+
+	while (strcmp(code_part_names[count], "last") != 0) {
+		count++;
+	}
+	if (count != LOG_LAST) {
+		fprintf(stderr, "LOG_LAST != last; whoever edited the debug code last "
+		        "did a mistake.\n");
+		fprintf(stderr, "Always edit both the enum in debug.h and the string "
+		        "list in debug.c!\n");
+		exit(1);
+	}
 	memset(enabled_debug_parts, 0, sizeof(enabled_debug_parts));
 	enabled_debug_parts[LOG_ERROR] = TRUE;
 	callback = callback_debug_stderr;

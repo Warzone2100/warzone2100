@@ -183,6 +183,7 @@ enum code_part {
   LOG_MAIN,
   LOG_SOUND, 
   LOG_VIDEO, 
+  LOG_WZ,
   LOG_3D,
   LOG_ERROR, /* special; on by default */
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
