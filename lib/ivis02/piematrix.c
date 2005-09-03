@@ -39,10 +39,10 @@ void pie_PerspectiveBegin() {
 void pie_PerspectiveEnd() {
 }
 
-pie_Begin3DScene() {
+void pie_Begin3DScene(void) {
 }
 
-pie_BeginInterface() {
+void pie_BeginInterface(void) {
 }
 
 

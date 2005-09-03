@@ -5364,13 +5364,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
    		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
    		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL)	{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -5388,13 +5382,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+1].x;
    		aVrts[2].sy = tileScreenInfo[i+1][j+1].water_height;
    		aVrts[2].sz = tileScreenInfo[i+1][j+1].z;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL)	{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -5414,13 +5402,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
    		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
    		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL)	{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -5438,13 +5420,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
    		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
    		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
    		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		if (pie_GetRenderEngine() == ENGINE_GLIDE)
-		{
-			pie_DrawFastTriangle(&aVrts[0],&aVrts[1],&aVrts[2],
-								&texturePage,0,pie_ADDITIVE);
-		}
-		else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-		{
+		if (pie_GetRenderEngine() == ENGINE_OPENGL)	{
 			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 		}
 	}
@@ -6355,45 +6331,14 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 	colour = UBYTE_MAX;
 	colour = lightDoFogAndIllumination(colour,getCentreX() - psDroid->x, getCentreZ() - psDroid->y,&specular);
 
-	if	(pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		if (war_GetFog())
-		{
-			trans = colour >> 24;//alpha 
-			trans &= 0xff;
-			trans = UBYTE_MAX - trans;
-		}
-		else
-		{
-			trans = colour & 0xff;
-		}
-		trans >>= 1;//divide by 2
-		if (	(psDroid->action == DACTION_DEMOLISH) OR
-			(psDroid->action == DACTION_CLEARWRECK) )
-		{
-			colour = 0x00ff0000;//red
-		}
-		else
-		{
-			colour = 0x000000ff;//blue
-		}
-		pts[0].light.argb = 0x00000000;
-		pts[1].light.argb = 0x00000000;
-		pts[2].light.argb = 0x00000000;
-	}
-	else
-	{
-		colour &= 0xff;
-		if (	(psDroid->action == DACTION_DEMOLISH) OR
-		(psDroid->action == DACTION_CLEARWRECK) )
-		{
+	colour &= 0xff;
+	if ((psDroid->action == DACTION_DEMOLISH) OR
+		(psDroid->action == DACTION_CLEARWRECK) ) {
 			colour <<= 16;//red
 		}
-		pts[0].light.argb = 0xff000000;
-		pts[1].light.argb = 0xff000000;
-		pts[2].light.argb = 0xff000000;
-	}
-
+	pts[0].light.argb = 0xff000000;
+	pts[1].light.argb = 0xff000000;
+	pts[2].light.argb = 0xff000000;
 
 	pts[0].tu = 0;
 	pts[0].tv = 0;

@@ -97,4 +97,7 @@ extern void pie_SetGeometricOffset(int x, int y);
 
 extern BOOL pie_PieClockwise(PIEVERTEX *s);	
 
+void pie_Begin3DScene(void);
+void pie_BeginInterface(void);
+
 #endif

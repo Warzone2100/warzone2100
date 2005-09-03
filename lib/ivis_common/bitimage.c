@@ -3,7 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-//#include "rendmode.h"
 #include "bug.h"
 #include "piepalette.h"
 #include "pcx.h"

@@ -25,11 +25,7 @@
 typedef	enum	REND_ENGINE
 				{
 					ENGINE_UNDEFINED,
-					ENGINE_16Bit,
 					ENGINE_4101,
-					ENGINE_SR,
-					ENGINE_GLIDE,
-					ENGINE_D3D,
 					ENGINE_OPENGL
 				}
 				REND_ENGINE;
@@ -87,8 +83,6 @@ typedef	enum	TEX_CAP
 				TEX_CAP;
 
 #define NO_TEXPAGE -1
-#define RADAR_TEXPAGE_D3D 31
-#define D3D_CLIP_IN_SOFTWARE
 
 /***************************************************************************/
 /*

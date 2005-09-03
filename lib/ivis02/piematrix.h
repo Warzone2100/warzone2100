@@ -109,4 +109,7 @@ extern void pie_MatScale( UDWORD percent );
 extern void pie_PerspectiveBegin(void);
 extern void pie_PerspectiveEnd(void);
 
+void pie_Begin3DScene(void);
+void pie_BeginInterface(void);
+
 #endif

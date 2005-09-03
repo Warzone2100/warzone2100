@@ -587,13 +587,11 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 		return(TRUE);
 	}
 
-
-
 	blockSuspendUsage();
 
-
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
-	if (!loadFile(ResourceName, &pBuffer, &size))
+	// FIXME: evil cast
+	if (!loadFile(ResourceName, (STRING **) &pBuffer, &size))
 	{
 		return FALSE;
 	}

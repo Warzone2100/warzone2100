@@ -415,12 +415,12 @@ void pie_PerspectiveEnd() {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-pie_Begin3DScene() {
+void pie_Begin3DScene(void) {
 	glDepthRange(0.1, 1);
 	drawing_interface = FALSE;
 }
 
-pie_BeginInterface() {
+void pie_BeginInterface(void) {
 	glDepthRange(0, 0.1);
 	drawing_interface = TRUE;
 }

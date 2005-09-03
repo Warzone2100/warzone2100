@@ -499,9 +499,10 @@ void frameShutDown(void)
 }
 
 
-BOOL loadFile(STRING *pFileName, UBYTE **ppFileData, UDWORD *pFileSize)
+BOOL loadFile(STRING *pFileName, STRING **ppFileData, UDWORD *pFileSize)
 {
-	return(loadFile2(pFileName,ppFileData,pFileSize,TRUE));
+	// FIXME: evil cast
+	return(loadFile2(pFileName, (UBYTE **)ppFileData, pFileSize, TRUE));
 }
 
 

@@ -201,5 +201,7 @@ extern void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERT
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 
+void pie_BeginLighting(float x, float y, float z);
+void pie_RemainingPasses(void);
 
 #endif // _piedef_h
