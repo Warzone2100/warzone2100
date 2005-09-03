@@ -48,7 +48,10 @@ iIMDShape *BSPimd=NULL;		// This is a global ... it is used in imddraw.c (for sp
 // Local static variables
 static iVector *BSPScrPos=NULL;
 
-static iVector *CurrentVertexList=NULL;
+static iVector *CurrentVertexList = NULL;
+#ifdef BSP_MAXDEBUG
+static int CurrentVertexListCount = 0;
+#endif
 
 extern BOOL NoCullBSP;	// Oh yes... a global externaly referenced variable....
 
@@ -377,19 +380,13 @@ void GetRealCameraPos(OBJPOS *Camera,SDWORD Distance, iVector *CameraLoc)
 
 }
 
-
-iIMDPoly *BSPScrVertices=NULL;
-
-void DrawBSPIMD(iIMDShape *IMDdef,iVector * pPos, iIMDPoly *ScrVertices)
+void DrawBSPIMD(iIMDShape *IMDdef, iVector *pPos)
 {
-	BSPScrVertices=ScrVertices;	  // this is wrong ... use vrt entry in IMDdef
 	BSPScrPos=pPos;
 	BSPimd=IMDdef;
 
 	TraverseTreeAndRender(IMDdef->BSPNode);
 }
-
-
 
 
 #endif			// #ifdef BSPIMD

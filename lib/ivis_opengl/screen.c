@@ -24,6 +24,11 @@
 extern "C" {
 #endif
 #include <jpeglib.h>
+// the following two lines compromise an ugly hack because some jpeglib.h
+// actually contain configure-created defines that conflict with ours!
+// man, those jpeglib authors should get a frigging clue...
+#undef HAVE_STDDEF_H
+#undef HAVE_STDLIB_H
 #ifdef __cplusplus
 }
 #endif
@@ -105,7 +110,7 @@ static BOOL	g_bVidMem;
 
 //static UDWORD	backDropWidth = BACKDROP_WIDTH;
 //static UDWORD	backDropHeight = BACKDROP_HEIGHT;
-static GLint	backDropTexture = -1;
+static GLuint backDropTexture = -1;
 
 SDL_Surface *screenGetSDL() {
         return screen;
@@ -132,6 +137,7 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 
 	{
 		static int video_flags = 0;
+		int bpp;
 
 		// Calculate the common flags for windowed and fullscreen modes.
 		if (video_flags == 0) {
@@ -173,11 +179,24 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 		}
 
 		if (fullScreen) {
-			screen = SDL_SetVideoMode(width, height, screenDepth, video_flags|SDL_FULLSCREEN);
+			video_flags |= SDL_FULLSCREEN;
 			screenMode = SCREEN_FULLSCREEN;
 		} else {
-			screen = SDL_SetVideoMode(width, height, screenDepth, video_flags/*|SDL_RESIZABLE*/);
 			screenMode = SCREEN_WINDOWED;
+		}
+		
+		bpp = SDL_VideoModeOK(width, height, screenDepth, video_flags);
+		if (!bpp) {
+			printf("Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, screenDepth);
+			return FALSE;
+		}
+		if (bpp != screenDepth) {
+			printf("Warning: Using colour depth of %d instead of %d.\n", bpp, screenDepth);
+		}
+		screen = SDL_SetVideoMode(width, height, bpp, video_flags);
+		if (!screen) {
+			printf("Error: SDL_SetVideoMode failed (%s).\n", SDL_GetError());
+			return FALSE;
 		}
 	}
 

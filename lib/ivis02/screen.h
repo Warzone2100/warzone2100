@@ -15,16 +15,10 @@
 #endif
 
 #ifdef WIN32
-#ifndef __GNUC__
-#pragma warning (disable : 4201 4214 4115 4514)
-#endif
 #define INIT_GUID
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
-#ifndef __GNUC__
-#pragma warning (default : 4201 4214 4115)
-#endif
 #endif
 
 #include "types.h"
@@ -32,7 +26,6 @@
 /* Free up a COM object */
 #undef RELEASE
 #define RELEASE(x) if ((x) != NULL) {(void)(x)->lpVtbl->Release(x); (x) = NULL;}
-
 
 /* Return a pointer to the Direct Draw objects */
 extern LPDIRECTDRAW4 screenGetDDObject(void);
@@ -62,12 +55,12 @@ extern BOOL screenGetBackBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULON
 extern void screenFlip(BOOL clearBackBuffer);
 
 /* backDrop */
-extern void screen_SetBackDrop(UWORD* newBackDropBmp, UDWORD width, UDWORD height);
+extern void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern UWORD* screen_GetBackDrop(void);
 extern UDWORD screen_GetBackDropWidth(void);
-extern void screen_Upload(UWORD* newBackDropBmp);
+extern void screen_Upload(UWORD *newBackDropBmp);
 
 /* screendump */
 char* screenDumpToDisk(char* path);

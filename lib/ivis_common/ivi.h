@@ -17,7 +17,7 @@
 
 #define iV_DIVSHIFT			15
 #define iV_DIVMULTP			(1<<iV_DIVSHIFT)
-#define iV_DIVMULTP_2		(1<<(iV_DIVSHIFT-1))
+#define iV_DIVMULTP_2			(1<<(iV_DIVSHIFT-1))
 
 // Simple derived types
 typedef union {uint32 *dp; uint8 *bp; uint16 *wp;} iPointer;

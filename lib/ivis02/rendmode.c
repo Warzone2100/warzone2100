@@ -8,12 +8,10 @@
 
 #include "pieclip.h"
 
-
 #include "v4101.h"
 
 #include "rendfunc.h"
 #include "vsr.h"
-//#include "3dfxfunc.h"
 //#include "rendfunc.h"
 #include "textdraw.h"
 
@@ -59,76 +57,6 @@ void (*iV_ppBitmapColourTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow,
 //*
 //*
 //******
-
-
-static BOOL	bHas3DNow;
-BOOL	weHave3DNow( void )
-{
-	return(bHas3DNow);
-}
-
-#define	CPUID	__asm _emit 0x0f __asm _emit 0xa2
-
-BOOL	cpuHas3DNow( void )
-{
-BOOL	b3DNow;
-	/* As of yet - we haven't found an AMD 3DNow! equipped processor */
-	b3DNow = FALSE;
-
-#ifdef _MSC_VER
-	_asm
-	{
-		push	ebx
-		push	edx
-		push	ecx
-		pushfd
-		pushfd
-		pop		eax
-		mov		edx,eax
-		xor		eax,0200000h
-		push	eax
-		popfd
-		pushfd
-		pop		eax
-		cmp		eax,edx
-		// quit if the processor has no cpu id query instructions
-		jz		has_no_3dnow			
-		// Otherwise, establish what kind of CPU we have found
-		xor		eax,eax
-		// issue the cpuid instruction
-		CPUID
-		// Now we need to check for an AMD processor - the id is authenticAMD
-		cmp		ebx,068747541h		// htuA
-		jnz		has_no_3dnow
-		cmp		edx,069746e65h		// itne
-		jnz		has_no_3dnow
-		cmp		ecx,0444d4163h		// DMAc
-		jnz		has_no_3dnow
-		// At this point we could check for other vendors that support AMD technology and 3DNow, but....
-		mov		eax,080000000h
-		CPUID
-		test	eax,eax
-		jz		has_no_3dnow
-		mov		eax,080000001h
-		CPUID
-		test	edx,080000000h	// we have 3DNow!
-		jz		has_no_3dnow
-		// Need to send back that we have 3D now support
-		mov		eax,1	// we have it
-		jmp		has_3d_now
-has_no_3dnow:
-		mov		eax,0
-has_3d_now:
-		mov		b3DNow,eax
-		popfd
-		pop		ecx
-		pop		edx
-		pop		ebx
-	}
-#endif // _MSC_VER
-	return(b3DNow);
-}
-
 
 
 int32 iV_VideoMemorySize(int mode)
@@ -440,7 +368,6 @@ void iV_RenderAssign(int mode, iSurface *s)
 {
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
-	bHas3DNow = cpuHas3DNow();	// do some funky stuff to see if we have an AMD
 	g_mode = mode;
 
 	switch (mode) {
@@ -654,95 +581,6 @@ void iV_RenderAssign(int mode, iSurface *s)
 			iV_Triangle3D 		= _triangle3d;
 */
 			break;
-
-		case REND_D3D_RGB:
-		case REND_D3D_HAL:
-		case REND_D3D_REF:
-//			pie_Draw3DShape				= pie_Draw3DIntelShape;
-//			pie_VideoShutDown 		 	= _close_D3D;
-//			iV_RenderBegin				= _renderBegin_D3D;
-//			iV_RenderEnd 				= _renderEnd_D3D;
-//			iV_pPolygon 		 		= _polygon_D3D;
-//			iV_pQuad			 		= _quad_D3D;
-//			iV_pTriangle 		 		= _triangle_D3D;
-//			iV_VSync 			 		= _vsync_4101;
-//			iV_Clear 			 		= _clear_4101;
-//			iV_Palette 			 		= _palette_D3D;
-//			iV_Pixel 			 		= _dummyFunc1_D3D;
-//			iV_pPixel 			 		= _dummyFunc1_D3D;
-//			iV_pLine 			 		= _dummyFunc2_D3D;
-//			iV_pHLine 			 		= _dummyFunc3_D3D;
-//			iV_pVLine 			 		= _dummyFunc3_D3D;
-//			iV_pCircle 			 		= _dummyFunc3_D3D;
-//			iV_pCircleFill 		 		= _dummyFunc3_D3D;
-//			iV_pBox 			 		= _dummyFunc2_D3D;
-//			iV_pBoxFill 		 		= _dummyFunc2_D3D;
-//			iV_ppBitmap 		 		= _dummyFunc5_D3D;
-//			iV_ppBitmapColour			= _dummyFunc6_D3D;
-//			iV_ppBitmapColourTrans		= _dummyFunc6_D3D;
-//			iV_pBitmap			 		= _dummyFunc4_D3D;
-//			iV_pBitmapResize 	 		= _dummyFunc6_D3D;
-//			iV_pBitmapResizeRot90		= _dummyFunc6_D3D;
-//			iV_pBitmapResizeRot180		= _dummyFunc6_D3D;
-//			iV_pBitmapResizeRot270		= _dummyFunc6_D3D;
-//			iV_pBitmapGet 				= _dummyFunc4_D3D;
-//			iV_ppBitmapTrans			= _dummyFunc5_D3D;
-//			iV_pBitmapTrans				= _dummyFunc4_D3D;
-//			iV_ppBitmapShadow			= _dummyFunc5_D3D;
-//			iV_pBitmapShadow			= _dummyFunc4_D3D;
-//			iV_ppBitmapRot90			= _dummyFunc5_D3D;
-//			iV_pBitmapRot90				= _dummyFunc4_D3D;
-//			iV_ppBitmapRot180			= _dummyFunc5_D3D;
-//			iV_pBitmapRot180			= _dummyFunc4_D3D;
-//			iV_ppBitmapRot270			= _dummyFunc5_D3D;
-//			iV_pBitmapRot270			= _dummyFunc4_D3D;
-
-//			iV_Line 					= _dummyFunc2_D3D;
-//			iV_HLine 					= _dummyFunc3_D3D;
-//			iV_VLine 					= _dummyFunc3_D3D;
-//			iV_Circle 					= _dummyFunc3_D3D;
-//			iV_CircleFill 				= _dummyFunc3_D3D;
-//			iV_Polygon 					= iV_pPolygon;
-//			iV_Quad						= _dummyFunc8_D3D;
-//			iV_Triangle 				= iV_pTriangle;
-//			iV_Box 						= _dummyFunc2_D3D;
-//			iV_BoxFill 					= _dummyFunc2_D3D;
-//			iV_Bitmap 					= _dummyFunc4_D3D;
-//			iV_BitmapResize 			= _dummyFunc6_D3D;
-//			iV_BitmapResizeRot90		= _dummyFunc6_D3D;
-//			iV_BitmapResizeRot180		= _dummyFunc6_D3D;
-//			iV_BitmapResizeRot270 		= _dummyFunc6_D3D;
-//			iV_BitmapGet 				= _dummyFunc4_D3D;
-//			iV_BitmapTrans				= _dummyFunc4_D3D;
-//			iV_BitmapShadow				= _dummyFunc4_D3D;
-//			iV_BitmapRot90				= _dummyFunc4_D3D;
-//			iV_BitmapRot180				= _dummyFunc4_D3D;
-//			iV_BitmapRot270				= _dummyFunc4_D3D;
-//			iV_SetTransFilter  			= SetTransFilter_D3D;
-//			iV_TransBoxFill	   			= TransBoxFill_D3D;
-
-//			iV_DrawImageDef			= _dummyFunc4_D3D;//DrawImageDef;
-//			iV_DrawSemiTransImageDef = _dummyFunc4_D3D;//DrawSemiTransImageDef;
-//			iV_DrawImage			= _dummyFunc4_D3D;//DrawImage;
-//			iV_DrawImageRect		= _dummyFunc4_D3D;//DrawImageRect;
-//			iV_DrawTransImage		= _dummyFunc4_D3D;//DrawTransImage;
-//			iV_DrawTransImageRect	= _dummyFunc4_D3D;//DrawTransImageRect;
-//			iV_DrawStretchImage		= NULL;
-
-//			iV_BeginTextRender		= _dummyFunc4_D3D;//BeginTextRender;
-//			iV_TextRender270		= _dummyFunc4_D3D;//TextRender270;
-//			iV_TextRender			= _dummyFunc4_D3D;//TextRender;
-//			iV_EndTextRender		= _dummyFunc4_D3D;//EndTextRender;
-
-//			pie_DownLoadRadar		= _dummyFunc4_D3D;//DownLoadRadar;
-
-//			iV_UploadDisplayBuffer	= _dummyFunc1_D3D;
-//			iV_DownloadDisplayBuffer = _dummyFunc1_D3D;
-//			iV_ScaleBitmapRGB		= _dummyFunc4_D3D;
-
-			break;
-
-
 	}
 
 

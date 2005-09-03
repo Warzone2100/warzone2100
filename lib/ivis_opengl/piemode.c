@@ -48,8 +48,6 @@ static BOOL bDither = FALSE;
  *	Local ProtoTypes
  */
 /***************************************************************************/
-//okay just this once
-extern void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform);
 extern void screenDoDumpToDiskIfRequired();
 
 /***************************************************************************/
@@ -66,13 +64,6 @@ BOOL	pie_GetDitherStatus( void )
 void	pie_SetDitherStatus( BOOL val )
 {
 	bDither = val;
-}
-
-BOOL pie_CheckForDX6(void)
-{
-//	UDWORD	DXVersion, DXPlatform;
-
-	return TRUE;
 }
 
 BOOL pie_Initialise(SDWORD mode)

@@ -49,6 +49,10 @@ pie_BeginInterface() {
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX	*psMatrix = &aMatrixStack[0];
 
+
+
+
+
 void pie_VectorNormalise(iVector *v)
 
 {

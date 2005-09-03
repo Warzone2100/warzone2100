@@ -1903,9 +1903,6 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		sprintf(sTmp, "%s OpenGL", sTmp);
 	} else {
 		sprintf(sTmp, "%s Software", sTmp);
-		if (weHave3DNow()) {
-			sprintf(sTmp, "%s (With AMD 3DNow!)", sTmp);
-		}
 	}
 	sprintf(sTmp, "%s - Built: %s", sTmp, __DATE__);
 	

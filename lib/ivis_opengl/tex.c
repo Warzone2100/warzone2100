@@ -63,8 +63,8 @@ static int _tex_get_top_bit(uint32 n)
 	texture load function is called. Should still work on PSX as the resource stuff isn't in
 	there yet, so it'll default through to the old version 
 */
-
-int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource) {
+int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKeyed, 
+                         iBool bResource) {
 	int				i;
 
 	/* Get next available texture page */
@@ -162,7 +162,7 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 }
 
 
-int iV_TexLoadNew( char *path, char *filename, int type,
+int iV_TexLoadNew(STRING *path, STRING *filename, int type,
 		   iBool palkeep, iBool bColourKeyed )
 {
 	char			fname[MAX_FILE_PATH];
@@ -220,8 +220,8 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 	return pie_AddBMPtoTexPages(s, fname, type, bColourKeyed, TRUE);
 }
 
-int pie_ReloadTexPage(char *filename,SBYTE *pBuffer) {
-	char			fname[MAX_FILE_PATH];
+int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer) {
+	STRING fname[MAX_FILE_PATH];
 	int				i;
 	iSprite			s;
 
@@ -242,7 +242,7 @@ int pie_ReloadTexPage(char *filename,SBYTE *pBuffer) {
 	while (stricmp(fname,_TEX_PAGE[i].name) != 0) {
 		i++;
 		if (i>=_TEX_INDEX) {
-				DBERROR(("Texture not in resources\n",filename));
+				DBERROR(("Texture not in resources\n"));
 				return -1;
 		}
 	}
@@ -251,12 +251,13 @@ int pie_ReloadTexPage(char *filename,SBYTE *pBuffer) {
 	s.height = _TEX_PAGE[i].tex.height;
 	s.bmp = _TEX_PAGE[i].tex.bmp;
 
-	pie_PCXLoadMemToBuffer(pBuffer,&s,NULL); 
+  // FIXME: evil cast
+	pie_PCXLoadMemToBuffer((int8 *)pBuffer, &s, NULL); 
 
 	return i;
 }
 
-int iV_TexLoad( char *path, char *filename, int type,
+int iV_TexLoad(STRING *path, STRING *filename, int type,
 		iBool palkeep, iBool bColourKeyed ) {
 	int				i;
 	char			buffer[MAX_FILE_PATH], fname[MAX_FILE_PATH];

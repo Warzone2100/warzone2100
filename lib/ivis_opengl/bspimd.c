@@ -387,12 +387,8 @@ void GetRealCameraPos(OBJPOS *Camera,SDWORD Distance, iVector *CameraLoc)
 
 }
 
-
-iIMDPoly *BSPScrVertices=NULL;
-
-void DrawBSPIMD(iIMDShape *IMDdef,iVector * pPos, iIMDPoly *ScrVertices)
+void DrawBSPIMD(iIMDShape *IMDdef, iVector *pPos)
 {
-	BSPScrVertices=ScrVertices;	  // this is wrong ... use vrt entry in IMDdef
 	BSPScrPos=pPos;
 	BSPimd=IMDdef;
 

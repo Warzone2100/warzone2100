@@ -207,7 +207,7 @@ int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
 
 	while (stricmp(fname,_TEX_PAGE[i].name) != 0) {
 		i++;
-		if (i >=  _TEX_INDEX) {
+		if (i >= _TEX_INDEX) {
 			DBERROR(("Texture not in resources %s[2]\n",filename));
 			return -1;
 		}
