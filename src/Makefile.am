@@ -199,7 +199,6 @@ warzone_SOURCES = \
 		lighting.h \
 		loadsave.h \
 		loop.h \
-		losroute.h \
 		mapdisplay.h \
 		mapgrid.h \
 		map.h \
