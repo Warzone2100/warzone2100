@@ -1,5 +1,6 @@
 SUBDIRS=framework \
 	gamelib \
+	ivis_common \
 	netplay \
 	script \
 	sequence \
@@ -19,6 +20,7 @@ SUBDIRS_CLEAN=	framework \
 		sequence \
 		sound \
 		widget \
+		ivis_common \
 		ivis02 \
 		ivis_opengl
 
