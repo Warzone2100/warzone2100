@@ -113,11 +113,17 @@ BOOL sound_InitLibrary( void )
 //
 void sound_ShutdownLibrary( void )
 {
+  debug(LOG_SOUND, "sound_ShutdownLibrary: starting shutdown");
 	if(context != 0) {
-		alcMakeContextCurrent(NULL);		//this should work now -Q
+		/* Commented out the two lines below since this caused some versions
+		 * of OpenAL to hang on exit. - Per */
+//    debug(LOG_SOUND, "sound_ShutdownLibrary: make default context NULL");
+//		alcMakeContextCurrent(NULL);		//this should work now -Q
+    debug(LOG_SOUND, "sound_ShutdownLibrary: destroy previous context");
 		alcDestroyContext(context); // this gives a long delay on some impl.
 		context = 0;
 	}
+  debug(LOG_SOUND, "sound_ShutdownLibrary: close device");
 	if(device != 0) {
 		alcCloseDevice(device);
 		device = 0;
