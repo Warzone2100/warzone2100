@@ -22,7 +22,7 @@ libframework_a_SOURCES = \
 	sys_zipfile.h \
 	sys_filein.c \
 	block.h    font.h           heap.h      memint.h    resource_y.h  treap.h \
-	cursor.h   fractions.h      image.h     mono.h      strres.h      treapint.h \
+	cursor.h   fractions.h      mono.h      strres.h    treapint.h \
 	dderror.h  frame.h          input.h     multiwdg.h  strresly.h    trig.h \
 	debug.h    frameint.h       listmacs.h  resly.h     strres_y.h    types.h \
 	dxinput.h  frameresource.h  mem.h       resource.h  surface.h     w95trace.h \
