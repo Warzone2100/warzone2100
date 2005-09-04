@@ -55,7 +55,6 @@ BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
 BOOL	frontendInitialised = FALSE;
 BOOL	reInit = FALSE;
-BOOL	bGlideFound=FALSE;		
 BOOL	bDisableLobby;
 BOOL pQUEUE=TRUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
 char	SaveGamePath[255];
@@ -72,11 +71,6 @@ char	UnixRegFilePath[255];
 char	__UserMusicPath[255];
 
 #endif
-
-// Some prototypes because I can't be arse to create a .h file
-BOOL InitGlideDLL(void);
-BOOL ShutdownGlideDLL(void);
-
 
 /*
 BOOL checkDisableLobby(void)
@@ -109,7 +103,6 @@ int main(int argc, char *argv[])
 	BOOL			quit = FALSE;
 	BOOL			Restart = FALSE;
 	BOOL			paused = FALSE;//, firstTime = TRUE;
-	BOOL			bGlide = FALSE;
 	BOOL			bVidMem = FALSE;
 	SDWORD			dispBitDepth = DISP_BITDEPTH;
 	SDWORD			introVideoControl = 3;
@@ -193,8 +186,6 @@ _CrtSetDbgFlag( tmpFlag );			//just turning on VC debug stuff...
 
 	war_SetRendMode(REND_MODE_SOFTWARE); // NOID changed from REND_MODE_HAL
 
-	bGlideFound = FALSE;
-   
 init://jump here from the end if re_initialising
 
   debug(LOG_MAIN, "reinitializing");
@@ -243,38 +234,28 @@ init://jump here from the end if re_initialising
 	//always start windowed toggle to fullscreen later
 	if (war_GetRendMode() == REND_MODE_HAL)
 	{
-		bGlide = FALSE;
 		bVidMem = TRUE;
 		dispBitDepth = DISP_HARDBITDEPTH;
 	}
 	else if (war_GetRendMode() == REND_MODE_REF)
 	{
-		bGlide = FALSE;
 		bVidMem = TRUE;
 		dispBitDepth = DISP_HARDBITDEPTH;
 	}
 	else if (war_GetRendMode() == REND_MODE_RGB)
 	{
-		bGlide = FALSE;
-		bVidMem = FALSE;
-		dispBitDepth = DISP_HARDBITDEPTH;
-	}
-	else if (war_GetRendMode() == REND_MODE_GLIDE)
-	{
-		bGlide = TRUE;
 		bVidMem = FALSE;
 		dispBitDepth = DISP_HARDBITDEPTH;
 	}
 	else
 	{
-		bGlide = FALSE;
 		bVidMem = FALSE;
 		dispBitDepth = DISP_BITDEPTH;
 	}
 
 //	frameDDEnumerate();
 
-	if (!frameInitialise(NULL, "Warzone 2100", DISP_WIDTH,DISP_HEIGHT,dispBitDepth, war_getFullscreen(), bVidMem, bGlide))
+	if (!frameInitialise(NULL, "Warzone 2100", DISP_WIDTH,DISP_HEIGHT,dispBitDepth, war_getFullscreen(), bVidMem))
 	{
 		return -1;
 	}
@@ -377,14 +358,7 @@ skip:
 	pal_AddNewPalette(psPaletteBuffer);
 	FREE(psPaletteBuffer);
 
-	if (war_GetRendMode() == REND_MODE_GLIDE)
-	{
-		pie_LoadBackDrop(SCREEN_RANDOMBDROP,TRUE);
-	}
-	else
-	{
-		pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
-	}
+	pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
 

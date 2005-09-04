@@ -74,9 +74,6 @@ HANDLE	hWndMain;
 /* Program hInstance */
 HINSTANCE       hInstance;
 
-/* Are we running under glide? */
-BOOL    bRunningUnderGlide = FALSE;
-
 /* Flag if directdraw is active*/
 static BOOL	bActiveDDraw;
 
@@ -338,8 +335,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 					 UDWORD height,			// The display height
 					 UDWORD bitDepth,		// The display bit depth
 					 BOOL	fullScreen,		// Whether to start full screen or windowed
-					 BOOL	bVidMem,	 	// Whether to put surfaces in video memory
-					 BOOL	bGlide )		// Whether to create surfaces
+					 BOOL	bVidMem)	 	// Whether to put surfaces in video memory
 {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
         {
@@ -352,18 +348,10 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 	winQuit = FALSE;
 	focusState = FOCUS_IN;
 	focusLast = FOCUS_IN;
-	if(!bGlide)
-	{
-		mouseOn = TRUE;
-		displayMouse = TRUE;
-	}
-	else	//Below is glide stuff.. never used right? --Qamly
-	{
-		mouseOn = FALSE;
-		displayMouse = FALSE;
-	}
+	mouseOn = TRUE;
+	displayMouse = TRUE;
 //	hInstance = hInst;
-	bActiveDDraw = !bGlide;
+	bActiveDDraw = TRUE;
 
 //	/* Initialise the memory system */
 //	if (!memInitialise())

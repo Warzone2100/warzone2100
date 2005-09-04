@@ -844,13 +844,6 @@ BOOL systemInitialise(void)
 	//initialize render engine
 	switch (war_GetRendMode())
 	{
-	case	REND_MODE_GLIDE:
-		if (!pie_Initialise(REND_GLIDE_3DFX))
-		{
-			ASSERT((FALSE,"Unable to initialise 3DFX hardware"));
-			return FALSE;
-		}
-		break;
 	case	REND_MODE_HAL:
 		pie_SetDirect3DDeviceName("Direct3D HAL");
 		if (!pie_Initialise(REND_D3D_HAL))

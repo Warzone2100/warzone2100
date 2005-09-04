@@ -65,8 +65,7 @@ extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instan
 					 UDWORD height,			// The display height
 					 UDWORD bitDepth,		// The display bit depth
 					 BOOL	fullScreen,		// Whether to start full screen or windowed
-					 BOOL	bVidMem,	 	// Whether to put surfaces in video memory
-					 BOOL	bGlide );		// Whether to create surfaces
+					 BOOL	bVidMem);	 	// Whether to put surfaces in video memory
 
 /* Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
@@ -159,7 +158,6 @@ extern BOOL loadFileToBuffer(STRING *pFileName, UBYTE *pFileBuffer, UDWORD buffe
 extern BOOL loadFileToBufferNoError(STRING *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
 extern SDWORD ftol(float f);
-extern BOOL	bRunningUnderGlide;
 
 extern BOOL pQUEUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
 extern char addonmaps[600][256];	// this will hold all the "addon.lev"(s) that we find.
