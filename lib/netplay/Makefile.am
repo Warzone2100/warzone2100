@@ -6,12 +6,10 @@ libnetplay_a_SOURCES = \
 	netjoin_stub.c \
 	netlobby_stub.c \
 	netplay_stub.c \
-	netprov_stub.c \
 	netsupp_stub.c \
 	netusers_stub.c \
 	netlobby.h \
 	netplay.h \
-	netprov.h \
 	netsupp.h
 
 libnetplay_a_libs = ../framework/libframework.a

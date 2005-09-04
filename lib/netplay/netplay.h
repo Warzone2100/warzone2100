@@ -175,7 +175,6 @@ extern UDWORD	NEThashFile(STRING *pFileName);
 extern UCHAR	NEThashVal(UDWORD value);
 extern UDWORD	NEThashBuffer(unsigned char *pData, UDWORD size);
 
-#include "netprov.h"	// more functions to override dialog boxes
 #include "netlobby.h"	// more functions to provide lobby facilities.
 
 // Some shortcuts to help you along!
