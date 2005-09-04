@@ -544,7 +544,7 @@ BOOL levLoadSingleWRF(STRING *pName)
 	BLOCK_RESET(psGameHeap);
 	memSetBlockHeap(psGameHeap);
 	// load the data
-	DBPRINTF(("[levLoadSingleWRF]Loading %s ...\n", pName));
+	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", pName);
 	if (!resLoad(pName, 0,
 				 DisplayBuffer, displayBufferSize,
 				 psGameHeap))
@@ -572,7 +572,7 @@ BOOL levLoadBaseData(STRING *pName)
 	LEVEL_DATASET	*psNewLevel, *psBaseData;
 	SDWORD			i;
 
-	DBPRINTF(("Loading base data for level %s\n", pName));
+	debug(LOG_WZ, "Loading base data for level %s", pName);
 
 	// find the level dataset
 	if (!levFindDataSet(pName, &psNewLevel))
@@ -613,7 +613,7 @@ BOOL levLoadBaseData(STRING *pName)
 		if (psBaseData->apDataFiles[i])
 		{
 			// load the data
-			DBPRINTF(("levLoadBaseData: Loading %s ...\n", psBaseData->apDataFiles[i]));
+			debug(LOG_WZ, "levLoadBaseData: Loading %s", psBaseData->apDataFiles[i]);
 			if (!resLoad(psBaseData->apDataFiles[i], i,
 						 DisplayBuffer, displayBufferSize,
 						 psGameHeap))
@@ -642,8 +642,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	BLOCK_HEAP		*psCurrHeap;
     BOOL            bCamChangeSaveGame;
 
-	DBPRINTF(("Loading level %s\n", pName));
-printf("================Loading level %s\n", pName);
+	debug(LOG_WZ, "Loading level %s", pName);
 	// reset fog
 //	fogStatus = 0;
 //	pie_EnableFog(FALSE);//removed, always set by script or save game
@@ -773,8 +772,7 @@ printf("================Loading level %s\n", pName);
 			if (psBaseData->apDataFiles[i])
 			{
 				// load the data
-				DBPRINTF(("levLoadData: Loading %s ...\n", psBaseData->apDataFiles[i]));
-//				printf("\n\n\n[levloadData]:------------: Loading %s ...\n\n\n", psBaseData->apDataFiles[i]);
+				debug(LOG_WZ, "levLoadData: Loading %s ...", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i,
 							 DisplayBuffer, displayBufferSize,
 							 psGameHeap))
@@ -964,12 +962,12 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 				(saveType == GTYPE_SAVE_START))
 			{
 				// load the game
-				DBPRINTF(("Loading scenario file %s ...", psNewLevel->apDataFiles[i]));
+				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i]);
 				switch (psNewLevel->type)
 				{
 				case LDS_COMPLETE:
 				case LDS_CAMSTART:
-					DBPRINTF(("COMPLETE / CAMSTART\n"));
+					debug(LOG_WZ, "levLoadData: LDS_COMPLETE / LDS_CAMSTART");
 					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
@@ -977,7 +975,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					}
 					break;
 				case LDS_BETWEEN:
-					DBPRINTF(("BETWEEN\n"));
+					debug(LOG_WZ, "levLoadData: LDS_BETWEEN");
 					if (!startMission(LDS_BETWEEN, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -985,7 +983,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					break;
 				
 				case LDS_MKEEP:
-					DBPRINTF(("MKEEP\n"));
+					debug(LOG_WZ, "levLoadData: LDS_MKEEP");
 					//if (!startMission(MISSION_OFFKEEP, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MKEEP, psNewLevel->apDataFiles[i]))
 					{
@@ -993,7 +991,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					}
 					break;
 				case LDS_CAMCHANGE:
-					DBPRINTF(("CAMCHANGE\n"));
+					debug(LOG_WZ, "levLoadData: LDS_CAMCHANGE");
 					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMCHANGE, psNewLevel->apDataFiles[i]))
 					{
@@ -1002,7 +1000,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					break;
 			
 				case LDS_EXPAND:
-					DBPRINTF(("EXPAND\n"));
+					debug(LOG_WZ, "levLoadData: LDS_EXPAND");
 					//if (!startMission(MISSION_CAMPEXPAND, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_EXPAND, psNewLevel->apDataFiles[i]))
 					{
@@ -1010,7 +1008,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					}
 					break;
 				case LDS_EXPAND_LIMBO:
-					DBPRINTF(("EXPAND_LIMBO\n"));
+					debug(LOG_WZ, "levLoadData: LDS_LIMBO");
 					//if (!startMission(MISSION_CAMPEXPAND, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]))
 					{
@@ -1019,7 +1017,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					break;
 			
 				case LDS_MCLEAR:
-					DBPRINTF(("MCLEAR\n"));
+					debug(LOG_WZ, "levLoadData: LDS_MCLEAR");
 					//if (!startMission(MISSION_OFFCLEAR, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MCLEAR, psNewLevel->apDataFiles[i]))
 					{
@@ -1027,6 +1025,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					}
 					break;
 				case LDS_MKEEP_LIMBO:
+					debug(LOG_WZ, "levLoadData: LDS_MKEEP_LIMBO");
 					DBPRINTF(("MKEEP_LIMBO\n"));
 					//if (!startMission(MISSION_OFFKEEP, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
@@ -1037,7 +1036,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 				default:
 					ASSERT((psNewLevel->type >= MULTI_TYPE_START,
 						"levLoadData: Unexpected mission type"));
-					DBPRINTF(("MULTIPLAYER\n"));
+					debug(LOG_WZ, "levLoadData: default (MULTIPLAYER)");
 					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
@@ -1072,7 +1071,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 		else if (psNewLevel->apDataFiles[i])
 		{
 			// load the data
-			DBPRINTF(("levLoadData: Loading %s ...\n", psNewLevel->apDataFiles[i]));
+			debug(LOG_WZ, "levLoadData: Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID,
 						 DisplayBuffer, displayBufferSize,
 						 psCurrHeap))

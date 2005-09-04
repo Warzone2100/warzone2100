@@ -1514,7 +1514,7 @@ BOOL recvMapFileData(NETMSG *pMsg)
 			UDWORD			size;
 			if (!loadFile("GameDesc.lev", &pBuffer, &size))		// load the original gamedesc.lev
 			{
-printf("[recvMapFileData]====== Hmm.. GameDesc.lev NOT found? \n");
+				debug(LOG_ERROR, "recvMapFileData: GameDesc.lev NOT found?");
 				return FALSE;
 			}
 			if (!levParse(pBuffer, size))
@@ -1533,12 +1533,12 @@ printf("[recvMapFileData]====== Hmm.. GameDesc.lev NOT found? \n");
 		{
 			memset(addon,0,sizeof(addon));
 			memcpy(addon,&addonmaps[j][0],strlen(&addonmaps[j][0]));
-		if (!loadFile(addon, &pBuffer, &size))
-		{	printf("***[systemInitialise]addon.lev failed to be found?\n");
+		if (!loadFile(addon, &pBuffer, &size)) {
+			debug(LOG_ERROR, "systemInitialise: addon.lev failed to be found?");
 			return FALSE;
 		}
-		if (!levParse(pBuffer, size))
-		{printf("***[systemInitialise]addon.lev Parse error?\n");
+		if (!levParse(pBuffer, size)) {
+			debug(LOG_ERROR, "systemInitialise: addon.lev Parse error?");
 			return FALSE;
 		}
 		FREE(pBuffer);
