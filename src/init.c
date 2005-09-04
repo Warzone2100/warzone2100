@@ -796,19 +796,20 @@ BOOL systemInitialise(void)
 		{
 			memset(addon,0,sizeof(addon));
 			memcpy(addon,&addonmaps[j][0],strlen(&addonmaps[j][0]));
-		if (!loadFile(addon, &pBuffer, &size))
-		{	printf("***[systemInitialise] addon.lev:[%s] failed to be found?\n",addon);
+		if (!loadFile(addon, &pBuffer, &size)) {
+			debug(LOG_ERROR, "[systemInitialise] addon.lev:[%s] failed to be found?", 
+			      addon);
 			return FALSE;
 		}
-		if (!levParse(pBuffer, size))
-		{printf("***[systemInitialise] %s Parse error?\n",addon);
+		if (!levParse(pBuffer, size)) {
+			debug(LOG_ERROR, "[systemInitialise] %s Parse error?", addon);
 			FREE(pBuffer);
 			return FALSE;
 		}
 		FREE(pBuffer);
 		j++; 
 		}
-		printf("[systemInitialise] ========loaded %02d addon.lev files!\n",j);
+		debug(LOG_WZ, "[systemInitialise] ======== loaded %02d addon.lev files!", j);
 //	}
 //=========
 
@@ -1073,11 +1074,11 @@ init_ObjectDead( void * psObj )
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-// !PSX Version. Called At Frontend Startup.
+// Called At Frontend Startup.
 
 BOOL frontendInitialise(char *ResourceFile)
 {
-	DBPRINTF(("Initialising frontend : %s\n",ResourceFile));
+	debug(LOG_MAIN, "Initialising frontend : %s", ResourceFile);
 
 	// allocate memory from the pre data heap
 	memSetBlockHeap(psGameHeap);
@@ -1122,7 +1123,7 @@ BOOL frontendInitialise(char *ResourceFile)
 		return FALSE;
 	}
 
-	DBPRINTF(("frontEndInitialise: loading resource file ....."));
+	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
 	if (!resLoad(ResourceFile, 0,
 				 DisplayBuffer, displayBufferSize,
 				 psGameHeap))				//need the object heaps to have been set up before loading in the save game
@@ -1190,7 +1191,7 @@ BOOL frontendInitialise(char *ResourceFile)
 BOOL frontendShutdown(void)
 {
 
-	DBPRINTF(("Shuting down frontend\n"));
+	debug(LOG_MAIN, "Shuting down frontend");
 
 	saveConfig();			// save settings to registry.
 
@@ -1261,8 +1262,7 @@ BOOL stageOneInitialise(void)
 	BLOCK_HEAP	*psHeap;
 
 
-	DBPRINTF(("stageOneInitalise\n"));
-	printf("\n\n\n###########################stageOneInitalise\n\n\n");
+	debug(LOG_MAIN, "stageOneInitalise");
 #ifndef FINALBUILD
 	tpInit();
 #endif
@@ -1399,7 +1399,7 @@ BOOL stageOneInitialise(void)
 
 BOOL stageOneShutDown(void)
 {
-	DBPRINTF(("stageOneShutDown\n"));
+	debug(LOG_MAIN, "stageOneShutDown");
 
 		// ffs
 	//do this before shutting down the iV library
@@ -1489,8 +1489,7 @@ BOOL stageOneShutDown(void)
 
 BOOL stageTwoInitialise(void)
 {
-	DBPRINTF(("stageTwoInitalise\n"));
-	printf("\n\n\n###########################stageTwoInitalise\n\n\n");
+	debug(LOG_MAIN, "stageTwoInitalise");
 
 	if(bMultiPlayer)
 	{
@@ -1606,7 +1605,7 @@ BOOL stageTwoInitialise(void)
 
 
 
-	DBPRINTF(("stageTwoInitialise: done\n"));
+	debug(LOG_MAIN, "stageTwoInitialise: done");
 
 	return TRUE;
 }
@@ -1617,8 +1616,7 @@ BOOL stageTwoInitialise(void)
 //
 BOOL stageTwoShutDown(void)
 {
-	DBPRINTF(("stageTwoShutDown\n"));
-
+	debug(LOG_MAIN, "stageTwoShutDown");
 
 	if (war_GetPlayAudioCDs()) {
 		cdAudio_Stop();
@@ -1718,8 +1716,7 @@ BOOL stageThreeInitialise(void)
 
 	STRUCTURE *psStr;
 
-	DBPRINTF(("stageThreeInitalise\n"));
-printf("\n\n\n###########################stageThreeInitalise\n\n\n");
+	debug(LOG_MAIN, "stageThreeInitalise");
 	bTrackingTransporter = FALSE;
 
 	loopMissionState = LMS_NORMAL;
@@ -1737,7 +1734,6 @@ printf("\n\n\n###########################stageThreeInitalise\n\n\n");
 	effectResetUpdates();
 	//initLighting();
     initLighting(0, 0, mapWidth, mapHeight);
-
 
 
 	if(bMultiPlayer)
@@ -1823,7 +1819,7 @@ printf("\n\n\n###########################stageThreeInitalise\n\n\n");
 
 BOOL stageThreeShutDown(void)
 {
-	DBPRINTF(("stageThreeShutDown\n"));
+	debug(LOG_MAIN, "stageThreeShutDown");
 
 
 
@@ -1902,7 +1898,7 @@ BOOL stageThreeShutDown(void)
 //
 BOOL gameReset(void)
 {
-	DBPRINTF(("gameReset\n"));
+	debug(LOG_MAIN, "gameReset");
 
 	return TRUE;
 }
@@ -1911,7 +1907,7 @@ BOOL gameReset(void)
 // Reset the game between campaigns
 BOOL campaignReset(void)
 {
-	DBPRINTF(("campaignReset\n"));
+	debug(LOG_MAIN, "campaignReset");
 	gwShutDown();
 	mapShutdown();
 	return TRUE;
@@ -1921,7 +1917,7 @@ BOOL campaignReset(void)
 BOOL saveGameReset(void)
 {
 //#ifdef MISSION_S
-	DBPRINTF(("saveGameReset\n"));
+	debug(LOG_MAIN, "saveGameReset");
 
 	if (war_GetPlayAudioCDs()) {
 		cdAudio_Stop();
@@ -1960,7 +1956,7 @@ BOOL saveGameReset(void)
 
 BOOL newMapInitialise(void)
 {
-	DBPRINTF(("newMapInitialise\n"));
+	debug(LOG_MAIN, "newMapInitialise");
 
 //NEW_SAVE removed for V11 Save removed for all versions
 //	initViewPosition();

@@ -305,7 +305,7 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 	{
 		if((file = F_Open(fileName, "rb")) == NULL)		// Try to open the file.
 		{
-			printf(" %s was NOT found! \n",fileName); 
+			debug(LOG_ERROR, "Zip_Open: file %s was NOT found!", fileName);
 			return FALSE;
 		}
 	}
@@ -316,7 +316,7 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 	
 	if(!Zip_LocateCentralDirectory(file))	// Scan the end of the file for the central directory end record.
 	{
-		printf(" Central directory not found!  Corrupted file? \n");
+		debug(LOG_ERROR, "Zip_Open: Central directory not found!  Corrupted file?");
 	}
 	F_Read(&summary, sizeof(summary), file);			// Read the central directory end record.
 
@@ -324,7 +324,7 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 	if(USHORT(summary.diskEntryCount) != USHORT(summary.totalEntryCount))
 //	if(summary.diskEntryCount != summary.totalEntryCount)
 	{
-		printf("Multipart Zip files are not supported.\n");
+		debug(LOG_ERROR, "Multipart Zip files are not supported.");
 	}
 
 	// Read the entire central directory into memory.
@@ -361,11 +361,11 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 		if(USHORT(header->compression) != ZFC_NO_COMPRESSION &&
            USHORT(header->compression) != ZFC_DEFLATED)		// Do we support the format of this file?
 		{
-			printf("This wz file uses an unsupported compression!\n ");
+			debug(LOG_ERROR, "This wz file uses an unsupported compression!");
 		}
 		if(USHORT(header->flags) & ZFH_ENCRYPTED)
 		{
-			printf("Encryption is not supported!\n");
+			debug(LOG_ERROR, "Encryption is not supported!");
 		}
 
 		
@@ -375,7 +375,6 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 		entry = Zip_NewFile(buf);
 		entry->package = pack;
 		entry->size = ULONG(header->size);
-//		printf("^^^^ZIPZIPZIP^^^^^ %s, %d\n",buf,atoi(buf));
 		entry->priority=atoi(buf);
         if(USHORT(header->compression) == ZFC_DEFLATED)		// Compressed using the deflate
         {
@@ -402,10 +401,8 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 	// The central directory is no longer needed.
 	free(directory);
 
-printf("@@@@@@@ wz add %d\n",summary.totalEntryCount);
 	Zip_SortFiles();
 	Zip_RemoveDuplicateFiles();
-printf("@@@@@@@ wz left %d wz total=%d\n",summary.totalEntryCount,zipNumFiles);
 	// File successfully opened!
 	return TRUE;
 }
@@ -467,7 +464,8 @@ int Zip_Iterate(int (*iterator) (const char *, void *), void *parm)
 	return 0;
 }
 //==========================================================
-mystrcat(char *dst, char *src)					//lol... we can get rid of this, and use the others -Q
+void mystrcat(char *dst, const char *src)
+//lol... we can get rid of this, and use the others -Q
 {
 	int i;
 	int slen=0,dlen=0;
@@ -499,8 +497,6 @@ int Zip_Find_MP(const char *fileName)					//side note, we are not using the othe
 {																		//looks like we need to do priority.
 	int i=0;															//works for the most part, but could be fixed up much better. -Q
 	int begin, end;
-	int     relation;
-	char    fullPath[PATH_MAX];
 	char	  PriorityPath[PATH_MAX];
 	int NumList;
 	int found=0;
@@ -522,7 +518,6 @@ int Zip_Find_MP(const char *fileName)					//side note, we are not using the othe
 			 if(prilist[prinum-1]!=zipFiles[begin].priority)
 			 {
 		prilist[prinum]=zipFiles[begin].priority;
-//		printf("$$$$$$$$$$$  pri %d added!\n",zipFiles[begin].priority);
 			prinum++;
 		if(prinum >99)
 		{	printf(" ****  Fatal error!\n");
@@ -575,25 +570,21 @@ int Zip_Find_MP(const char *fileName)					//side note, we are not using the othe
 	return Zip_Find(fileName);
 }
 //=====================================================================
-int Zip_Find_MPmaps(const char *fileName)					//side note, we are not using the other find routine now, since
+void Zip_Find_MPmaps(const char *fileName)					//side note, we are not using the other find routine now, since
 {																				//looks like we need to do priority.
 	int i=0,j=0;															//works for the most part, but could be fixed up much better. -Q
 	int begin, end;
-	int     relation;
-	char    fullPath[PATH_MAX];
 	char	  PriorityPath[PATH_MAX];
 	int NumList;
 	int found=0;
+
 	// Init the search.
 	begin =  0;
 	NumList =1;
 	end = zipNumFiles - 1;
-	
 
 	if(pQUEUE)	//bMultiPlayer			//multiplayer flag (ON) then do this!		// FORCE this thing for now... 0=SP 1=MP // NEED TO FIX****** -Q
 	{
-//		printf("---------$$$$$$ MP= %d $$$$$$$$$$$  LOOKING FOR  %s\n",bMultiPlayer,fileName);
-//		for(i=0;i<prinum;i++)
 		for(i=prinum;i>=0;i--)			//MAPS load *BACKWARDS*!! ie 0 to max #...
 		{	
 			if(stricmp("addon.lev",fileName)) continue;
@@ -608,16 +599,10 @@ int Zip_Find_MPmaps(const char *fileName)					//side note, we are not using the 
 //				printf("---------$$$$$$$$$$$$$$$$$  found %d, %s\n",found,PriorityPath);
 				memcpy(&addonmaps[j][0],PriorityPath,strlen(PriorityPath));
 				j++;
-//				return found;
 			}
 		}
 	}
-//	printf("---------$$$$$$$$$$$$$$$$$  NORMAL find %s\n",fileName);
-//	memcpy(&addonmaps[j++][0],fileName,strlen(fileName));
-	printf("=======done searching for addon.lev.  We found %d\n",j);
-
-//	return Zip_Find(fileName);
-
+	debug(LOG_WZ, "Done searching for addon.lev files.  We found %d", j);
 }
 
 //==========================================================

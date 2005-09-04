@@ -24,14 +24,15 @@ static WZFILE files[MAX_FILES];			//Guess this is enough for now, though we shou
 //============================
 //==============================================
 char   *_fullpath(char *full, const char *original, int maxLen)
-{	char buf[PATH_MAX];
+{
+	static char buf[PATH_MAX];
 
 	getcwd(buf,sizeof(buf));
 	strcat(buf,"/");
-	printf("full is %s\n",original);
-	printf("directory is %s\n",buf);
+	debug(LOG_WZ, "full is %s", original);
+	debug(LOG_WZ, "directory is %s", buf);
 	strcat(buf,original);
-	printf("New directory is %s\n",buf);
+	debug(LOG_WZ, "New directory is %s", buf);
 	memcpy(full,buf,sizeof(char)*PATH_MAX);	//NO! fix this not 255 limit!
 	return buf;
 }
@@ -89,15 +90,13 @@ WZFILE  *F_GetFreeFile(void)
 //* This only works on real files.
 static unsigned int F_GetLastModified(const char *path)
 {
-#ifdef UNIX
-	struct stat s;
-	stat(path, &s);
-	return s.st_mtime;
-#endif
-
 #ifdef WIN32
 	struct _stat s;
 	_stat(path, &s);
+	return s.st_mtime;
+#else
+	struct stat s;
+	stat(path, &s);
 	return s.st_mtime;
 #endif
 }
@@ -162,9 +161,8 @@ WZFILE  *F_OpenZip(int zipIndex, BOOL dontBuffer)
 //===========================================================================
 WZFILE *F_Open(const char *path, const char *mode)
 {
-	char    trans[PATH_MAX], full[PATH_MAX];
+	char full[PATH_MAX];
 	BOOL dontBuffer;
-	int     i;
 
 	if(!mode)		mode = "";
 	dontBuffer = (strchr(mode, 'x') != NULL);

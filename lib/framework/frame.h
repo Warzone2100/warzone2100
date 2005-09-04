@@ -24,8 +24,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-char* unix_path(char* path);
-FILE* unix_fopen(char* filename, char* mode);
+char *unix_path(const char *path);
+FILE *unix_fopen(const char *filename, char *mode);
 
 #define fopen unix_fopen
 

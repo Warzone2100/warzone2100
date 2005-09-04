@@ -197,6 +197,8 @@ _CrtSetDbgFlag( tmpFlag );			//just turning on VC debug stuff...
    
 init://jump here from the end if re_initialising
 
+  debug(LOG_MAIN, "reinitializing");
+
 	// initialise memory stuff, moved out of frameinit by ajl. 
 	if (!memInitialise())
 	{
@@ -207,7 +209,6 @@ init://jump here from the end if re_initialising
 	{
 		return FALSE;
 	}
-
 
 	loadRenderMode();//get the registry entry for clRendMode
 
@@ -282,9 +283,9 @@ init://jump here from the end if re_initialising
 // MOVE THIS TO PROPER LOCATION ?
 	Zip_Init();	//init our zip file... -Q 
 	err=Zip_Open("warzone.wz", NULL);		//1 = good 0=bad
-	if(err==0)											//We must have this!
-	{printf("*** aborting, warzone.wz was not found! \n\n");
-	 return -1;		//return or exit()? hmm
+	if (err == 0) {
+		debug(LOG_ERROR, "*** aborting, warzone.wz was not found!");
+		return -1;		//return or exit()? hmm
 	}
 //=======================================//NOTE, MP support should be ON now.
 // this should ONLY be enabled for MP, move to correct place...	 //only time it is OFF is with SP games!
@@ -292,9 +293,10 @@ init://jump here from the end if re_initialising
 //Zip_Find_MP("audio\\MemResSp\\Research\\PCV357.wav");
 //printf("$$$$$$$$$$$$$$$$$$***MULTIPLAYER here?***\n");
 	err=Zip_Open("mp.wz", NULL);		//1 = good 0=bad
-	if(err==0)										//Might as well require this also, but not needed in SP campagin.
-	{printf("*** aborting, mp.wz was not found! \n\n");
-	 return FALSE;		//return or exit()? hmm
+	if (err == 0) {
+		// Might as well require this also, but not needed in SP campagin.
+		debug(LOG_ERROR, "*** aborting, mp.wz was not found!");
+		return FALSE;		//return or exit()? hmm
 	}
 	pQUEUE=TRUE;		//Turn ON when first start, only OFF in SP games!  On now, since a new frontend can be used...
 //==================================================================
@@ -307,12 +309,13 @@ init://jump here from the end if re_initialising
 	{
 		if(stricmp("warzone.wz",sFindData.cFileName)==0) goto skip;	//skip
 		if(stricmp("mp.wz",sFindData.cFileName)==0) goto skip;			//skip
-		printf("Found %s.  Processing it...\n",sFindData.cFileName);
+		debug(LOG_WZ, "Found %s.  Processing it...", sFindData.cFileName);
 		err=Zip_Open(sFindData.cFileName, NULL);		//1 = good 0=bad
-		if(err==0)											//We must have this!
-		{printf("*** Error with %s! Remove or fix file! \n\n",sFindData.cFileName);
-		Zip_Shutdown();
-		exit(1);		//return or exit()? hmm
+		if (err == 0) {
+			debug(LOG_ERROR, "*** Error with %s! Remove or fix file!",
+			      sFindData.cFileName);
+			Zip_Shutdown();
+			exit(1);		//return or exit()? hmm
 		}
 skip:
 		if (!FindNextFile(hFindHandle, &sFindData))
@@ -322,24 +325,22 @@ skip:
 	}
 #else
 	dir = opendir(".");
-	while ( (dirent = readdir(dir)) != NULL)
-	{printf("Found %s.  Checking it...\n",dirent->d_name);
+	while ((dirent = readdir(dir)) != NULL) {
+		debug(LOG_WZ, "Found %s.  Checking it...", dirent->d_name);
 		ptr = strrchr(dirent->d_name, '.');
-		if (ptr != NULL && strcmp(".wz", ptr) == 0)
-		{
-		printf("Found %s.  Processing it...\n",dirent->d_name);
-		if(stricmp("warzone.wz",dirent->d_name)==0) continue;		//skip
-		if(stricmp("mp.wz",dirent->d_name)==0) continue;				//skip
-		err=Zip_Open(dirent->d_name, NULL);		//1 = good 0=bad
-		if(err==0)											//We must have this!
-		{printf("*** Error with %s! Remove or fix file! \n\n",dirent->d_name);
-		Zip_Shutdown();
-		exit(1);		//return or exit()? hmm
+		if (ptr != NULL && strcmp(".wz", ptr) == 0) {
+			debug(LOG_WZ, "Found %s.  Processing it...", dirent->d_name);
+			if (stricmp("warzone.wz", dirent->d_name) == 0) continue;		// skip
+			if (stricmp("mp.wz", dirent->d_name) == 0) continue;				// skip
+			err = Zip_Open(dirent->d_name, NULL);		// 1 = good, 0 = bad
+			if (err == 0) {
+				debug(LOG_ERROR, "Error with %s! Remove or fix file!", dirent->d_name);
+				Zip_Shutdown();
+				exit(1);		//return or exit()? hmm
+			}
 		}
-		}
-
 	}
-        closedir(dir);
+	closedir(dir);
 #endif
 //=========================== Note, above routine should be moved into a function
 //==--------------------------------------------

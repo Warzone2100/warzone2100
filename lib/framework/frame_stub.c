@@ -36,9 +36,8 @@
 
 #ifndef WIN32
 
-#undef fopen
-
-char* unix_path(char* path) {
+char *unix_path(const char *path)
+{
 	static char returnval[512];
 	unsigned int i;
 
@@ -57,11 +56,13 @@ char* unix_path(char* path) {
 	return returnval;
 }
 
-FILE* unix_fopen(char* filename, char* mode) {
+FILE *unix_fopen(const char *filename, char *mode)
+{
+// ridiculous kludge because we redefine fopen to unix_fopen
+#undef fopen
 	return fopen(unix_path(filename), mode);
-}
-
 #define fopen unix_fopen
+}
 
 #endif
 
