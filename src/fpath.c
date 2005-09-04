@@ -31,7 +31,6 @@ BOOL	fpathDoMessage;
 #include "main.h"
 #endif
 #include "astar.h"
-#include "losroute.h"
 #include "gateway.h"
 #include "gatewayroute.h"
 #include "action.h"

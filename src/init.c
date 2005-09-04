@@ -1013,13 +1013,14 @@ BOOL systemShutdown(void)
 		return FALSE;
 	}
 
+	debug(LOG_MAIN, "shutting down audio subsystems");
+
 	if (war_GetPlayAudioCDs()) {
 		debug(LOG_MAIN, "shutting down CD audio");
 		cdAudio_Stop();
 		cdAudio_Close();
 		mixer_Close();
 	}
-
 
 	if ( audio_Disabled() == FALSE && !audio_Shutdown() )
 	{
@@ -1257,7 +1258,6 @@ BOOL frontendShutdown(void)
 
 BOOL stageOneInitialise(void)
 {
-	int err=0;
 	BLOCK_HEAP	*psHeap;
 
 
@@ -1489,8 +1489,6 @@ BOOL stageOneShutDown(void)
 
 BOOL stageTwoInitialise(void)
 {
-	int err=0;
-
 	DBPRINTF(("stageTwoInitalise\n"));
 	printf("\n\n\n###########################stageTwoInitalise\n\n\n");
 

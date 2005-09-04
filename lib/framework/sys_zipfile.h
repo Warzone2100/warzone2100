@@ -55,6 +55,7 @@ typedef struct {
 void            	F_ShutdownDirec(void);
 int             	F_Access(const char *path);
 WZFILE          *F_Open(const char *path, const char *mode);
+WZFILE          *F_OpenZip(int zipIndex, BOOL dontBuffer);
 void            	F_Close(WZFILE * file);
 int             	F_Length(WZFILE * file);
 int             	F_Read(void *dest, int count, WZFILE * file);

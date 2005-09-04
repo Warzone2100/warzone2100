@@ -545,7 +545,7 @@ BOOL multiShutdown(VOID)
   	NETshutdown();
 
 	// clear any force we may have.
-	debug(LOG_MAIN, "free game data");
+	debug(LOG_MAIN, "free game data (forces)");
 	while(Force.pMembers)			
 	{
 		pF = Force.pMembers;
@@ -553,6 +553,7 @@ BOOL multiShutdown(VOID)
 		FREE(pF);
 	}
 
+	debug(LOG_MAIN, "free game data (structure limits)");
 	if(ingame.numStructureLimits)
 	{
 		ingame.numStructureLimits = 0;
