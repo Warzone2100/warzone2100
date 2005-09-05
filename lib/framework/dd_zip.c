@@ -2,15 +2,17 @@
 // Many thanks goes out to Jaakko Keränen for all his hard work for his routines.
 //**************************************************************************************
 
-
 // HEADER FILES ------------------------------------------------------------
-
-#include "sys_zipfile.h"
 
 #include <stdlib.h>
 #include <search.h>
 #include <malloc.h>
 #include <zlib.h>
+
+#include "frame.h"
+
+#include "sys_zipfile.h"
+
 //#define unsigned int USHORT
 //from dd_share.h
 
