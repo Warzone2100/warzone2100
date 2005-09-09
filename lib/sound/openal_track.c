@@ -115,10 +115,12 @@ void sound_ShutdownLibrary( void )
 {
   debug(LOG_SOUND, "sound_ShutdownLibrary: starting shutdown");
 	if(context != 0) {
-		/* Commented out the two lines below since this caused some versions
+#ifdef WIN32
+		/* Ifdef'ed out the two lines below on Linux since this caused some versions
 		 * of OpenAL to hang on exit. - Per */
-//    debug(LOG_SOUND, "sound_ShutdownLibrary: make default context NULL");
-//		alcMakeContextCurrent(NULL);		//this should work now -Q
+    debug(LOG_SOUND, "sound_ShutdownLibrary: make default context NULL");
+		alcMakeContextCurrent(NULL);		//this should work now -Q
+#endif
     debug(LOG_SOUND, "sound_ShutdownLibrary: destroy previous context");
 		alcDestroyContext(context); // this gives a long delay on some impl.
 		context = 0;
@@ -576,8 +578,3 @@ void mixer_Set3dWavVolume( SDWORD iVol )
 		sfx3d_volume = 1.0;
 	}
 }
-
-
-
-//
-//
