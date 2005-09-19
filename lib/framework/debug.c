@@ -232,7 +232,7 @@ void debug(enum code_part part, const char *str, ...)
 	va_end(ap);
 }
 
-
+#ifdef WIN32
 void dbg_console(SBYTE *pFormat, ...)
 {
 	SBYTE		aBuffer[500];   // Output string buffer
@@ -265,3 +265,4 @@ void DbgMsg(SBYTE *pFormat, ...)
 	/* Output it */
 	(void)MessageBox(frameGetWinHandle(), aBuffer, "Debugging Message", MB_OK);
 }
+#endif
