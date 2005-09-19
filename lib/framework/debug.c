@@ -231,3 +231,37 @@ void debug(enum code_part part, const char *str, ...)
 	fflush(logfile);
 	va_end(ap);
 }
+
+
+void dbg_console(SBYTE *pFormat, ...)
+{
+	SBYTE		aBuffer[500];   // Output string buffer
+    va_list		pArgs;					  // Format arguments
+	
+	/* Initialise the argument list */
+	va_start(pArgs, pFormat);
+
+	/* Print out the string */
+	(void)vsprintf(aBuffer, pFormat, pArgs);
+
+	/* Output it */
+
+	addConsoleMessage(aBuffer,1);	//DEFAULT_JUSTIFY = 3
+
+}
+
+void DbgMsg(SBYTE *pFormat, ...)
+{
+	SBYTE		aBuffer[512];   // Output string buffer
+    va_list		pArgs;					  // Format arguments
+	
+	/* Initialise the argument list */
+	va_start(pArgs, pFormat);
+
+	/* Print out the string */
+	(void)vsprintf(aBuffer, pFormat, pArgs);
+
+
+	/* Output it */
+	(void)MessageBox(frameGetWinHandle(), aBuffer, "Debugging Message", MB_OK);
+}

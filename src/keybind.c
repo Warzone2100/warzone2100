@@ -83,6 +83,7 @@ STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
 STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
 extern char	ScreenDumpPath[];
+extern BOOL	bDrawShadows;
 
 
 int fogCol = 0;//start in nicks mode
@@ -92,6 +93,7 @@ int fogCol = 0;//start in nicks mode
 void	kfsf_SelectAllSameProp	( PROPULSION_TYPE propType );
 void	kfsf_SelectAllSameName	( STRING *droidName );
 void	kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
+BOOL	processConsoleCommands( STRING *pString );
 /*	
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -1872,7 +1874,22 @@ void kf_SendTextMessage(void)
 		   //	if((ch == INPBUF_CR) || (strlen(sTextToSend)==MAX_TYPING_LENGTH) 
 			{
 				bAllowOtherKeyPresses = TRUE;
+
+				// don't send empty lines to other players
+				if(!strcmp(sTextToSend, ""))
+					return;
+
 			 //	flushConsoleMessages();					
+
+				//process console commands, in skirmish only
+				if((game.type == SKIRMISH) || bMultiPlayer)
+				{
+					if(processConsoleCommands(sTextToSend))
+					{
+						return;	//don't process further
+					}
+				}
+
 				if(bMultiPlayer && NetPlay.bComms)
 				{
 					sendTextMessage(sTextToSend,FALSE);
@@ -2522,4 +2539,59 @@ void kf_ToggleReopenBuildMenu( void )
 	}
 }
 
+//Returns TRUE if no further text processing needed
+BOOL	processConsoleCommands( STRING *pString )
+{
+	//STRING	errorString[255];
+	BOOL	bConsoleString = FALSE;
+	char	chPref;
+
+	chPref = pString[0];
+
+	if(chPref == '/')
+		bConsoleString = TRUE;
+
+#ifdef _DEBUG
+	if(strcmp(pString,"exit") == FALSE)
+	{
+		loopFastExit();
+		return TRUE;
+	}
+#endif
+
+	return bConsoleString;
+}
+
+void kf_ToggleRadarAllyEnemy(void)
+{
+	if(bEnemyAllyRadarColor == TRUE)
+	{
+		bEnemyAllyRadarColor = FALSE;
+		resetRadarRedraw();
+	}
+	else
+	{
+		bEnemyAllyRadarColor = TRUE;
+		resetRadarRedraw();
+	}
+}
+
+void kf_ToggleRadarTerrain(void)
+{
+	if(bDrawRadarTerrain == TRUE)
+	{
+		bDrawRadarTerrain = FALSE;
+		resetRadarRedraw();
+	}
+	else
+	{
+		bDrawRadarTerrain = TRUE;
+		resetRadarRedraw();
+	}
+}
+
+void kf_ToggleShadows(void)
+{
+	bDrawShadows = !bDrawShadows;
+}
 // --------------------------------------------------------------------------

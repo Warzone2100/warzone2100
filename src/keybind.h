@@ -196,6 +196,10 @@ extern	void	kf_FaceWest(void);
 extern	void	kf_ToggleRadarJump( void );
 extern	void	kf_MovePause( void );
 
+extern	void	kf_ToggleRadarTerrain( void );		//radar terrain
+extern	void	kf_ToggleRadarAllyEnemy( void );	//enemy/ally color toggle
+extern	void	kf_ToggleShadows(void);
+
 void kf_SpeedUp( void );
 void kf_SlowDown( void );
 void kf_NormalSpeed( void );

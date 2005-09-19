@@ -969,7 +969,8 @@ void processVisibility(BASE_OBJECT *psObj)
 	gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
 
 	// Fix for ally vis
-	if( bMultiPlayer && (game.type == TEAMPLAY) )
+	//if( bMultiPlayer && (game.type == TEAMPLAY) )
+	if( bMultiPlayer )
 	{
 		for(player=0; player<MAX_PLAYERS; player++)
 		{
@@ -1023,6 +1024,7 @@ void processVisibility(BASE_OBJECT *psObj)
 
 	// jiggle the visibility for team play
 	if (bMultiPlayer && (game.type == TEAMPLAY))
+	//if (bMultiPlayer )
 	{
 		for(player = 0; player < MAX_PLAYERS; player++)
 		{

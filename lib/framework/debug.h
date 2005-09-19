@@ -17,6 +17,8 @@
 #include <stdarg.h>
 #include "types.h"
 
+extern void dbg_console(SBYTE *pFormat, ...);
+
 /****************************************************************************************
  *
  * Basic debugging macro's

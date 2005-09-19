@@ -1100,7 +1100,7 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(openchannels[i] && isHumanPlayer(i) )
+			if(openchannels[i] && isHumanPlayer(i) && (i != selectedPlayer))
 			{
 				NETsend(&m,player2dpid[i],FALSE);
 			}
@@ -1110,7 +1110,7 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(sendto[i] && isHumanPlayer(i) )
+			if(sendto[i] && isHumanPlayer(i)  && (i != selectedPlayer))
 			{
 				NETsend(&m,player2dpid[i],FALSE);
 			}

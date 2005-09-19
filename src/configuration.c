@@ -25,7 +25,7 @@
 #include "mixer.h"
 #include "hci.h"
 #include "fpath.h"
-
+#include "radar.h" //because of bDrawRadarTerrain
 // ////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULTFXVOL	80
@@ -36,6 +36,7 @@
 
 extern  char	sForceName[256];
 extern	UBYTE	sPlayer[128];
+extern	BOOL	bDrawShadows;
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(BOOL bResourceAvailable)
@@ -427,6 +428,40 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	}
 
 
+
+	// enemy/allies radar view
+	if(getWarzoneKeyNumeric("radarObjectMode", &val))
+	{
+		bEnemyAllyRadarColor =(BOOL)val;
+	}
+	else
+	{
+		bEnemyAllyRadarColor = FALSE;
+		setWarzoneKeyNumeric("radarObjectMode", (DWORD)bEnemyAllyRadarColor);
+	}
+
+	// no-terrain radar view
+	if(getWarzoneKeyNumeric("radarTerrainMode", &val))
+	{
+		bDrawRadarTerrain =(BOOL)val;
+	}
+	else
+	{
+		bDrawRadarTerrain = TRUE;
+		setWarzoneKeyNumeric("radarTerrainMode", (DWORD)bDrawRadarTerrain);
+	}
+
+	// shadows
+	if(getWarzoneKeyNumeric("shadows", &val))
+	{
+		bDrawShadows =(BOOL)val;
+	}
+	else
+	{
+		bDrawShadows = TRUE;
+		setWarzoneKeyNumeric("shadows", (DWORD)bDrawShadows);
+	}
+
 	return closeWarzoneKey();
 }
 
@@ -530,6 +565,11 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("sequences",(DWORD)(war_GetSeqMode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(DWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("reopenBuild",(DWORD)(intGetReopenBuild()));	// build menu
+
+	setWarzoneKeyNumeric("radarObjectMode",(DWORD)bEnemyAllyRadarColor);	// enemy/allies radar view
+	setWarzoneKeyNumeric("radarTerrainMode",(DWORD)bDrawRadarTerrain);	
+	setWarzoneKeyNumeric("shadows",(DWORD)bDrawShadows);	
+	
 //	setWarzoneKeyNumeric("maxRoute",(DWORD)(fpathGetMaxRoute()));			// maximum routing
 
 	if(!bMultiPlayer)
@@ -565,3 +605,38 @@ BOOL saveConfig()
 	return closeWarzoneKey();
 }
 
+BOOL  loadLastIp(STRING *lastIP)
+{
+	STRING	sBuf[255];
+
+	DBPRINTF(("Reading last ip for mp game\n"));
+
+	if(!openWarzoneKey())
+	{
+		return FALSE;
+	}
+	if(getWarzoneKeyString("lastip",(char*)&sBuf))		
+	{
+		strcpy(lastIP,sBuf);
+	}
+	else
+	{
+		return FALSE;
+	}
+
+	return closeWarzoneKey();
+}
+
+BOOL  saveLastIp(STRING *currentIP)
+{
+	DBPRINTF(("Saving current ip for mp game\n"));
+
+	if(!openWarzoneKey())
+	{
+		return FALSE;
+	}
+
+	setWarzoneKeyString("lastip", currentIP);
+
+	return closeWarzoneKey();
+}

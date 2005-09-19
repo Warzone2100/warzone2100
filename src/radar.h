@@ -14,6 +14,9 @@ extern void	calcRadarColour(iBitmap *tileBitmap, UDWORD tileNumber);
 //#define RADAR_POSITION_AT_ZOOM
 
 /* Radar.h */
+extern BOOL bDrawRadarTerrain;		//radar terrain on/off
+extern BOOL bEnemyAllyRadarColor;	//enemy/ally radar color
+
 extern void resetRadarRedraw(void);
 extern BOOL InitRadar(void);
 extern BOOL ShutdownRadar(void);

@@ -372,6 +372,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	W_EDBINIT		sEdInit;
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
+	STRING			lastIP[255];
 
 	if(ingame.bHostSetup)
 	{
@@ -419,14 +420,28 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
 	sEdInit.pText = "";									//strresGetString(psStringRes, STR_MUL_IPADDR);
+
+	// load last used ip for the 'enter ip' box
+	if(loadLastIp(lastIP))
+	{
+		if(strlen(lastIP) > 3)
+			sEdInit.pText = lastIP;
+	}
+
 	sEdInit.FontID = WFont;
 //	sEdInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EDITBOXLEFTH , IMAGE_DES_EDITBOXLEFT);
 //	sEdInit.pBoxDisplay = intDisplayButtonHilight;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
+
+	
+
 	if (!widgAddEditBox(psConScreen, &sEdInit))
 	{
 		return FALSE;
 	}
+
+	
+
 	SettingsUp = 1;
 	return TRUE;
 }
@@ -567,6 +582,10 @@ VOID runConnectionScreen(void )
 	*/
 	case CON_IP:											// ip entered
 		strcpy(addr,widgGetString(psConScreen, CON_IP));
+
+		// save current ip
+		(void)saveLastIp(addr);
+
 		break;
 	/* RODZ
 	case CON_COM1:											// com1 
@@ -2195,6 +2214,10 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_CHATEDIT:
+		// don't send empty lines to other players in the lobby
+		if(!strcmp(widgGetString(psWScreen, MULTIOP_CHATEDIT), ""))
+			break;
+
 		sendTextMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT),TRUE);					//send
 		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");										// clear box
 		break;

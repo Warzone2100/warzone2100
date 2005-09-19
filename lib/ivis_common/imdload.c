@@ -98,6 +98,8 @@ iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
 	UDWORD FileSize;
 	BOOL res;
 	SBYTE path[MAX_FILE_PATH];
+	UDWORD *tp;
+	UDWORD tt;
 
 	iV_DEBUG1("imd[IMDLoad] = loading shape file '%s':",filename);
 
@@ -122,8 +124,7 @@ iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
 		return NULL;
 	}
 
-	UDWORD *tp;
-	UDWORD tt;
+
 
 	tp = (UDWORD *)pFileData;
 
