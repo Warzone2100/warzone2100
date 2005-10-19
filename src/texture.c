@@ -201,7 +201,7 @@ iSprite	sprite;
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = MALLOC(tileWidth*tileHeight);
+	tileStorage = MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
 	sprite.bmp = MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
@@ -273,7 +273,7 @@ iSprite	sprite;
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = MALLOC(tileWidth*tileHeight);
+	tileStorage = MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
 //	texturePage = MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
