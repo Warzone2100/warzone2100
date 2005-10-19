@@ -303,6 +303,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 		}
 
 		music_file_format = WZ_MP3;
+		return TRUE;
 	}
 #endif
 
@@ -330,10 +331,11 @@ BOOL cdAudio_OpenTrack(char* filename) {
 		}
 
 		music_file_format = WZ_OGG;
+		return TRUE;
 	}
 #endif
 
-	return TRUE;
+	return FALSE; // unhandled
 }
 
 BOOL cdAudio_CloseTrack() {
@@ -397,6 +399,8 @@ BOOL cdAudio_FillBuffer(ALuint b) {
 				if (cdAudio_OpenTrack(filename)) {
 					printf("Now playing %s\n", filename);
 					break;
+				} else {
+					return FALSE;	// break out to avoid infinite loops
 				}
 			}
 		}
@@ -444,6 +448,8 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 				music_track = iTrack;
 				printf("Now playing %s\n", filename);
 				break;
+			} else {
+				return FALSE; // break out to avoid infinite loops
 			}
 
 			filename = PlayList_NextSong();
