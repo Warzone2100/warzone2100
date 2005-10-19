@@ -37,6 +37,7 @@ typedef struct _warzoneGlobals
 	char		DDrawDriverName[256];
 	char		D3DDriverName[256];
 	BOOL		allowSubtitles;
+	BOOL		bShadows;
 	BOOL		playAudioCDs;
 	BOOL		Fullscreen;
 } WARZONE_GLOBALS;
@@ -69,7 +70,8 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetFog(FALSE);
 	war_SetTranslucent(FALSE);
 	war_SetAdditive(FALSE);
-
+	war_SetAllowSubtitles(TRUE);	//added -Q
+	
 	war_SetPlayAudioCDs(TRUE);
 }
 

@@ -187,6 +187,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_SelectAllVTOLs,
 	kf_SelectAllWheeled,
 	kf_FinishResearch,
+	kf_ToggleFPS,
 	kf_FrameRate,
 	kf_SelectAllSameType,
 	kf_SelectNextFactory,
@@ -218,7 +219,7 @@ _keymapsave keyMapSaveTable[] =
 
 	kf_ToggleRadarTerrain,		//radar terrain on/off
 	kf_ToggleRadarAllyEnemy,	//enemy/ally radar color toggle
-	kf_ToggleShadows,
+//	kf_ToggleShadows,	//ran into a bug, so don't do this yet. -Q
 
 	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
 //#ifdef DEBUG	// debug mappings only
@@ -396,7 +397,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,		"Toggle radar terrain");		//radar terrain on/off
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,		"Toggle ally-enemy radar view");		//radar terrain on/off
-	//keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows,		"Toggle shadows");		//shadows toggle
 
 	// Some extra non QWERTY mappings but functioning in same way
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_COMMA,KEYMAP_PRESSED,kf_SetDroidRetreatMedium,	   strresGetString(psStringRes,STR_BIND_LDAM) );
@@ -416,6 +416,10 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_U,KEYMAP_PRESSED,kf_SelectAllUnits,			strresGetString(psStringRes,STR_BIND_ALL));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_V,KEYMAP_PRESSED,kf_SelectAllVTOLs,			strresGetString(psStringRes,STR_BIND_AVTOL));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_W,KEYMAP_PRESSED,kf_SelectAllWheeled,			strresGetString(psStringRes,STR_BIND_AWHE));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_F1,KEYMAP_PRESSED,kf_ToggleFPS,		"Toggle frame rate");
+//	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_F2,KEYMAP_PRESSED,kf_ToggleShadows,		"Toggle shadows");		//NOT enabled yet. Doing menu instead ? -Q
+//Note, didn't have time to fix this, so for now, must use menu option to toggle shadows on/off... -Q
+//Also note, I hijacked bDrawShadows, dunno who included it, but it wasn't really used..so  :p
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Y,KEYMAP_PRESSED,kf_FrameRate,					"Show frame rate");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_Z,KEYMAP_PRESSED,kf_SelectAllSameType,		strresGetString(psStringRes,STR_BIND_ASIMIL));
 	//                                **********************************

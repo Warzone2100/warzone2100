@@ -108,8 +108,8 @@ static BOOL screendump_required = FALSE;
 /* flag forcing buffers into video memory */
 static BOOL	g_bVidMem;
 
-//static UDWORD	backDropWidth = BACKDROP_WIDTH;
-//static UDWORD	backDropHeight = BACKDROP_HEIGHT;
+static UDWORD	backDropWidth = BACKDROP_WIDTH;
+static UDWORD	backDropHeight = BACKDROP_HEIGHT;
 static GLuint backDropTexture = -1;
 
 SDL_Surface *screenGetSDL() {
@@ -313,14 +313,25 @@ void screenRestoreSurfaces(void)
 	/* nothing to do */
 }
 
-/* Image structure */
+void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height)
+{
+	bBackDrop = TRUE;
+	pBackDropData = newBackDropBmp;
+	backDropWidth = width;
+	backDropHeight = height;
+}
 
-typedef struct {
-	unsigned int	width;
-	unsigned int	height;
-	unsigned int	channels;
-	unsigned char*	data;
-} pie_image;
+
+
+
+
+/* Image structure */
+//typedef struct {
+//	unsigned int	width;
+//	unsigned int	height;
+//	unsigned int	channels;
+//	unsigned char*	data;
+//} pie_image;
 
 BOOL image_init(pie_image* image) {
 	if (image == NULL) return TRUE;
@@ -431,6 +442,33 @@ BOOL image_load_from_jpg(pie_image* image, const char* filename) {
 
 //=====================================================================
 
+int image_create_texture(char* filename) {
+	pie_image image;
+	GLint texture;
+
+	image_init(&image);
+
+	if (!image_load_from_jpg(&image, filename)) {
+		glGenTextures(1, &texture);
+
+		pie_SetTexturePage(-1);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+			     image.width, image.height,
+			     0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
+	image_delete(&image);
+
+	return texture;
+}
+//=====================================================================
+
 void screen_SetBackDropFromFile(char* filename) {
 	pie_image image;
 
@@ -471,8 +509,72 @@ BOOL screen_GetBackDrop(void)
 {
 	return bBackDrop;
 }
+//******************************************************************
+//slight hack to display maps (or whatever) in background.
+//bitmap MUST be 512x512 for now.  -Q
+void screen_Upload(UWORD* newBackDropBmp) 
+{	
+//	pie_image image;
+//	image_init(&image);
+	if(newBackDropBmp!=NULL)
+	{
+//	imagetest=malloc((sizeof(char)*512*512*512));
+//	image_load_from_jpg(&image, "texpages\\bdrops\\test1.jpg");
+	glGenTextures(1, &backDropTexture);
+	pie_SetTexturePage(-1);
+	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+		   512,512,//backDropWidth, backDropHeight,
+			0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);//);image.data
 
-void screen_Upload() {
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);//GL_REPLACE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+/*
+//	image_delete(&image);
+//	free(image);
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	pie_SetTexturePage(-1);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	glPolygonMode(GL_FRONT,GL_LINE);
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	glTranslatef(0,0,-13);
+//	glBegin(GL_QUADS);
+//		glVertex3f(-1.0f, 1.0f, 0.0f);				// Top Left
+//		glVertex3f( 1.0f, 1.0f, 0.0f);				// Top Right
+//		glVertex3f( 1.0f,-1.0f, 0.0f);				// Bottom Right
+//		glVertex3f(-1.0f,-1.0f, 0.0f);				// Bottom Left
+//		glEnd();
+glBegin(GL_TRIANGLE_FAN);
+glVertex3f(10, -12, 0);
+glVertex3f(10, 12, 0);
+glVertex3f(-10, 12, 0);
+glVertex3f(-10, -12, 0);
+glEnd();
+//	glTexCoord2f(0, 0);
+//	glVertex2f(0, 0);
+//	glTexCoord2f(512, 0);
+//	glVertex2f(screenWidth*2, 0);
+//	glTexCoord2f(0, 512);
+//	glVertex2f(0, screenHeight*2);
+//	glTexCoord2f(512, 512);
+//	glVertex2f(screenWidth*2, screenHeight*2);
+//	glEnd();
+	glPopMatrix();
+		SDL_GL_SwapBuffers();
+		SDL_GL_SwapBuffers();
+*/
+//	return;
+
+
+	}
+	
+
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 	pie_SetTexturePage(-1);

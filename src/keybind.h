@@ -198,7 +198,8 @@ extern	void	kf_MovePause( void );
 
 extern	void	kf_ToggleRadarTerrain( void );		//radar terrain
 extern	void	kf_ToggleRadarAllyEnemy( void );	//enemy/ally color toggle
-extern	void	kf_ToggleShadows(void);
+//extern	void	kf_ToggleShadows(void);	//NOTE, not used for now.  Maybe later. -Q
+extern void	kf_ToggleFPS(void);		//FPS counter NOT same as kf_Framerate! -Q
 
 void kf_SpeedUp( void );
 void kf_SlowDown( void );
@@ -209,7 +210,8 @@ void kf_NormalSpeed( void );
 #define MAP_SPIN_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
 
-
 extern int fogCol;
+
+extern int showFPS  ;	//Toggle for our FPS display -Q
 
 #endif

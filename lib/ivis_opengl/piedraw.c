@@ -31,7 +31,9 @@
 #define MIST
 
 extern BOOL drawing_interface;
-
+extern	BOOL	bDrawShadows;	//Shadow toggle by popular(?) demand... :p  -Q  (Should throw up a splash screen saying get
+					//better video card, since *IF* we modify gfx engine, GLSL is what I would use, and AFAIK
+					//you need at least a Geforce 5700 or better, or a Radeon 9500 or better!  )
 /***************************************************************************/
 /*
  *	OpenGL extensions for shadows
@@ -769,8 +771,9 @@ void pie_DrawRemainingTransShapes() {
 	nb_tshapes = 0;
 }
 
-void pie_RemainingPasses() {
-	pie_DrawShadows();
+void pie_RemainingPasses()
+{
+	if(getShadowStatus()) pie_DrawShadows();	//bDrawShadows
 	pie_DrawRemainingTransShapes();
 }
 

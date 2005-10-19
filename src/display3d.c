@@ -338,6 +338,8 @@ UDWORD	destTileX=0,destTileY=0;
 #define FOUNDATION_TEXTURE		22
 #define EFFECT_DELIVERY_POINT_TRANSPARENCY		128
 
+int showFPS=1;	//temp for now  it is forced on, turn off via keyboard bind of lctrl-f1 (default)  -Q
+
 unsigned char	buildInfo[255];
 UDWORD GetCameraDistance(void)
 {
@@ -396,9 +398,9 @@ SDWORD	getCentreZ( void )
 void draw3DScene( void )
 {
 //SDWORD	angle;
+
 BOOL		bPlayerHasHQ = FALSE;
-
-
+char	buf[10];	//holds FPS info, should be more than enough space. -Q
   	/* Set the droids on-screen display coordinates for selection later */
 	mX = mouseX();
 	mY = mouseY();
@@ -513,6 +515,11 @@ BOOL		bPlayerHasHQ = FALSE;
 		{
 			iV_DrawText("Developed by Pumpkin Studios",RET_X+3,467+E_H);
 			iV_DrawText("Published by EIDOS Interactive",pie_GetVideoBufferWidth()-196,467+E_H);
+		}
+		if(showFPS)
+		{
+		sprintf(buf,"%d fps",frameGetFrameRate());
+		iV_DrawText(buf,RET_X,478+E_H);
 		}
 	}
 

@@ -7,7 +7,11 @@
  */
 
 #include <stdio.h>		// get rid of a couple of warnings.
-
+#ifdef WIN32
+#include <windows.h>
+#include <sdl/sdl.h>
+#endif
+#include <GL/gl.h>
 #include "frame.h"
 #include "frameint.h"
 #include "screen.h"
@@ -58,6 +62,8 @@
 
 #include "levels.h"
 
+#include <jpeglib.h>
+
 // ////////////////////////////////////////////////////////////////////////////
 // vars 
 extern char	MultiForcesPath[255];
@@ -71,7 +77,7 @@ extern BOOL					bSendingMap;
 extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
-
+extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
 BOOL						bHosted			= FALSE;				//we have set up a game
 UBYTE						sPlayer[128];							// player name (to be used)
@@ -123,7 +129,7 @@ VOID		displayRemoteGame			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 VOID		displayPlayer				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 VOID		displayMultiEditBox			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 VOID		displayForceDroid			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-
+void Show_Map(char *imagedata); //added to show map -Q
 
 // find games
 static VOID addGames				(VOID);
@@ -170,9 +176,17 @@ static VOID		CurrentForce		(VOID);				// draw the current force
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
+// Note, do NOT delete anything in this routine yet! -Q
+//The reason is simple, it will break if NOT using openGL rendering
+//Will be modified at a later time to fix, since pie_hardware is
+//ALWAYS true.   I think we need to set a variable depending
+//on what is being used, something in the init phase along the
+//lines of Crender[3]; Crender="ogl" or "swt" or whatever.
+
 extern UWORD backDropBmp[];
 
-
+#define mywidth 512		//pow2 textures!
+#define myheight 512		//must match what we got now. 
 void loadMapPreview(void)
 {
 	STRING			aFileName[256];
@@ -180,11 +194,14 @@ void loadMapPreview(void)
 	UBYTE			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 
-	iBitmap			tempBmp[BACKDROP_WIDTH*BACKDROP_HEIGHT];
-	UDWORD			i,j,x,y,height,offX,offY;
+//	iBitmap	
+	DWORD		*tempBmp=NULL;//[BACKDROP_WIDTH*BACKDROP_HEIGHT];
+	UDWORD			i,j,x,y,height,offX,offY,offX2,offY2,tmp;
 	UBYTE			scale,col,coltab[16],bitDepth=8;
 	MAPTILE			*psTile,*WTile;
 	iSprite			backDropSprite;
+	UDWORD oursize,ptr,*optr;
+	unsigned char  *imageData;
 
 	if(psMapTiles)
 	{
@@ -209,15 +226,17 @@ void loadMapPreview(void)
 	}
 	gwShutDown();
 
-	//	build col table;
-	for (col=0; col<16; col+=1)
+	//	build col table;	//ack! 
+//	for (col=0; col<16; col+=1)
+//	{
+//		coltab[col] = pal_GetNearestColour( col*16,col*16, col*16);
+//	}
+/*		
+	if (screenGetBackBufferBitDepth() == 16)
 	{
-		coltab[col] = pal_GetNearestColour( col*16,col*16, col*16);
+		bitDepth = 16;		
 	}
-		
-	if (screenGetBackBufferBitDepth() == 16) {
-		bitDepth = 16;
-	} else {
+	else {
 		bitDepth = 8;
 	}
 
@@ -227,14 +246,18 @@ void loadMapPreview(void)
 	if (bitDepth == 8)
 	{
 		backDropSprite.bmp = (UBYTE*)backDropBmp;
+		// plot the image
+		memset(backDropSprite.bmp,0x0,BACKDROP_HEIGHT*BACKDROP_WIDTH);
 	}
 	else
 	{
+		i=sizeof(char)*mywidth*myheight*3;
+		tempBmp=malloc(sizeof(DWORD)*mywidth*myheight*3);//maybe... -Q
+		memset(tempBmp,0,sizeof(DWORD)*mywidth*myheight*3);
 		backDropSprite.bmp = tempBmp;
 	}
 
-	// plot the image
-	memset(backDropSprite.bmp,0,BACKDROP_HEIGHT*BACKDROP_WIDTH);
+*/
 
 	scale =1;
 	if((mapHeight <  240)&&(mapWidth < 320))
@@ -253,10 +276,10 @@ void loadMapPreview(void)
 	{
 		scale = 5;
 	}
-
+/*
 	//centre in screen.
-	offX = (BACKDROP_WIDTH/2) - ((scale*mapWidth)/2);
-	offY = (BACKDROP_HEIGHT/2) - ((scale*mapHeight)/2);
+	offX = (BACKDROP_WIDTH/2) - ((scale*mapWidth)/2);//(mywidth/2 )
+	offY =(BACKDROP_HEIGHT/2) - ((scale*mapHeight)/2);//(myheight/2 ) 
 
 	psTile = psMapTiles;
 	for (i=0; i<mapHeight; i+=1)
@@ -273,7 +296,11 @@ void loadMapPreview(void)
 			{
 				for(y = (i*scale);y< (i*scale)+scale ;y++)
 				{
+					tmp=( (offY+y)*BACKDROP_WIDTH)+x+offX;
 					backDropSprite.bmp[( (offY+y)*BACKDROP_WIDTH)+x+offX]=col;
+					backDropSprite.bmp[tmp]=0xff;
+					tmp=backDropSprite.bmp[( (offY+y)*BACKDROP_WIDTH)+x+offX];
+
 				}
 			}
 			WTile+=1;
@@ -286,19 +313,131 @@ void loadMapPreview(void)
 
 	if (bitDepth != 8)
 	{
-		bufferTo16Bit(tempBmp, backDropBmp, FALSE);		// convert
+//		i=0;
+//		for(j=0;j<(sizeof(DWORD) *mywidth*myheight);j++)
+//			if(tempBmp[j]!=0){ i++;tempBmp[j]=0; }
+//		printf("i=%d\n",i);
+//		i=0;
+		bufferTo16Bit(backDropBmp,tempBmp,  FALSE);
+//		pcxBufferTo16Bit(backDropBmp,tempBmp);
+//		bufferTo16Bit(tempBmp, backDropBmp, FALSE);		// convert
+
+//		for(j=0;j<(sizeof(DWORD ) *mywidth*myheight);j++)
+//			if(tempBmp[j]!=0) i++;
+//		printf("i=%d\n",i);
 	}
+	else
+	{
+*/
+	oursize=sizeof(unsigned char) *mywidth*myheight;
+  imageData = malloc(oursize *3);//sizeof(unsigned char) *mywidth*myheight* 3
+  ptr=imageData;
+  memset(ptr,0x45,sizeof(unsigned char) *mywidth*myheight*3 );	//dunno about background color
+//	ptr+=oursize;
+//  memset(ptr,0x33,sizeof(unsigned char) *mywidth*myheight );
+//	ptr+=oursize;
+//    memset(ptr,0x99,sizeof(unsigned char) *mywidth*myheight );
+  	psTile = psMapTiles;
+	offX2 = (mywidth/2 ) - ((scale*mapWidth)/2);//(mywidth/2 )
+	offY2 =(myheight/2 )  - ((scale*mapHeight)/2);//(myheight/2 ) 
+
+      for (i = 0; i < mapHeight; i++)
+      {
+	  		WTile = psTile;
+        for (j = 0; j <mapWidth ; j++)
+        {
+			height = WTile->height;	
+			col =height;// coltab[height/16];
+
+
+			for(x = (j*scale);x < (j*scale)+scale ;x++)
+			{
+				for(y = (i*scale);y< (i*scale)+scale ;y++)
+				{
+          imageData[3*((offY2+y) * mywidth + (x+offX2))]	//+0 though not needed.  -Q
+		  =col;
+         imageData[3*((offY2+y) * mywidth + (x+offX2))+1]
+		  =col;
+        imageData[3*((offY2+y) * mywidth + (x+offX2))+2]
+		  =col;
+				} 
+			}
+		  WTile+=1;
+        }
+		psTile += mapWidth;
+      }
+  	plotStructurePreview16(imageData,scale,offX2,offY2);
+//	  Show_Map(imageData);//imageData		//Don't get rid of this yes!
+	screen_Upload(imageData);//backDropBmp) ;
+	free(imageData);
+//	}
 
 	//screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
 	hideTime = gameTime;
 	mapShutdown();
+//	if(tempBmp) free(tempBmp);
+	return;
+}
+// leave alone for now please -Q
+// I know this don't belong here, but I am using this for testing.
+void Show_Map(char *imagedata)
+{	
+	GLuint Tex;
+//		SDL_GL_SwapBuffers();
+	pie_image image;
+	image_init(&image);
+//	imagetest=malloc((sizeof(char)*512*512*512));
+	image_load_from_jpg(&image, "texpages\\bdrops\\test1.jpg");
+	glGenTextures(1, &Tex);
+	pie_SetTexturePage(-1);
+	glBindTexture(GL_TEXTURE_2D, Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+		    512,512,//backDropWidth, backDropHeight,
+			0, GL_RGB, GL_UNSIGNED_BYTE, imagedata);//image.data);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	image_delete(&image);
+//	free(image);
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	pie_SetTexturePage(-1);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, Tex);
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	glLoadIdentity();
+//	glTranslatef(0,0,-13);
+//	glBegin(GL_QUADS);
+//		glVertex3f(-1.0f, 1.0f, 0.0f);				// Top Left
+//		glVertex3f( 1.0f, 1.0f, 0.0f);				// Top Right
+//	glVertex3f( 1.0f,-1.0f, 0.0f);				// Bottom Right
+//		glVertex3f(-1.0f,-1.0f, 0.0f);				// Bottom Left
+//		glEnd();
+glBegin(GL_TRIANGLE_FAN);
+//glVertex3f(10, -12, 0);
+//glVertex3f(10, 12, 0);
+//glVertex3f(-10, 12, 0);
+//glVertex3f(-10, -12, 0);
+//glEnd();
+	glTexCoord2f(0, 0);
+	glVertex2f(0, 0);
+	glTexCoord2f(512, 0);
+	glVertex2f(screenWidth*2, 0);
+	glTexCoord2f(0, 512);
+	glVertex2f(0, screenHeight*2);
+	glTexCoord2f(512, 512);
+	glVertex2f(screenWidth*2, screenHeight*2);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+//	glDeleteTextures(1,Tex);
 	return;
 }
 
-
-
-
-/*
+/*		//leave alone -Q
 void displayMapPreview()
 {
 	UDWORD i,j,height;

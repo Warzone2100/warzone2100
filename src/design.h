@@ -104,7 +104,7 @@
 #define	IDDES_PROPBUTTON		5902		// Propulsion button
 
 extern BOOL intAddDesign( BOOL bShowCentreScreen );
-
+/* Add the droid template buttons to a form */
 BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight, UDWORD butWidth,
                            UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
 

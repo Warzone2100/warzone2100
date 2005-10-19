@@ -23,6 +23,18 @@
 
 #include "types.h"
 
+
+/* Image structure */
+
+typedef struct {
+	unsigned int	width;
+	unsigned int	height;
+	unsigned int	channels;
+	unsigned char*	data;
+} pie_image;
+
+
+
 /* Free up a COM object */
 #undef RELEASE
 #define RELEASE(x) if ((x) != NULL) {(void)(x)->lpVtbl->Release(x); (x) = NULL;}
@@ -55,11 +67,12 @@ extern BOOL screenGetBackBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULON
 extern void screenFlip(BOOL clearBackBuffer);
 
 /* backDrop */
+extern void screen_SetBackDrop(UWORD* newBackDropBmp, UDWORD width, UDWORD height);
 extern void screen_SetBackDropFromFile(char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern BOOL screen_GetBackDrop(void);
-extern void screen_Upload();
+extern void screen_Upload(UWORD* newBackDropBmp);
 
 /* screendump */
 char* screenDumpToDisk(char* path);

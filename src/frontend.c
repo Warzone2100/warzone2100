@@ -73,6 +73,7 @@
 #endif
 
 extern BOOL bSubtitles;
+//BOOL	 bDrawShadows=TRUE;	//Shadow toggle by popular(?) demand... :p  -Q  (lol)
 
 extern VOID intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
 
@@ -1167,6 +1168,7 @@ BOOL startGameOptions2Menu(VOID)
 	addTopForm();
 	addBottomForm();
 
+	// Ugh. This REALLY blows chunks.  Pretty crappy way it does widgets/gui stuff -Q
 
 	////////////
 	// mouseflip
@@ -1179,29 +1181,41 @@ BOOL startGameOptions2Menu(VOID)
 	{	// not flipped
 		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
 	}
+	////////////
+	// Shadows for those systems that can't handle it...
+	addTextButton(FRONTEND_SHADOW,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_SHADOW),TRUE,FALSE);
+	if(getShadowStatus())	//quick hack for this...was going to be a keyboard option, but don't have time to fix that also.
+	{// shadow on
+		addTextButton(FRONTEND_SHADOW_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_ON),TRUE,FALSE);
+	}
+	else
+	{//shadow off.
+		addTextButton(FRONTEND_SHADOW_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
+	}
+
 
 	////////////
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_SSHAKE),TRUE,FALSE);
+	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_SSHAKE),TRUE,FALSE);
 	if(getShakeStatus())
 	{// shaking on
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_ON),TRUE,FALSE);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_ON),TRUE,FALSE);
 	}
 	else
 	{//shaking off.
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
 	}
 
 	////////////
 	// fog
-	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_FOG),TRUE,FALSE);
+	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS4X-35,   FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_FOG),TRUE,FALSE);
 	if(war_GetFog())
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_CRAPFOG),TRUE,FALSE);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_CRAPFOG),TRUE,FALSE);
 	}
 	else
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, strresGetString(psStringRes,STR_FE_GOODFOG),TRUE,FALSE);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_GOODFOG),TRUE,FALSE);
 	}
 
 /*	////////////
@@ -1218,20 +1232,20 @@ BOOL startGameOptions2Menu(VOID)
 */
 
 //	////////////
-//	//sequence mode.
-	addTextButton(FRONTEND_SEQUENCE,	FRONTEND_POS6X-35,FRONTEND_POS6Y, strresGetString(psStringRes, STR_SEQ_PLAYBACK),TRUE,FALSE);
-	if (war_GetSeqMode() == SEQ_FULL)
-	{
-		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_FULL),TRUE,FALSE);
-	}
-	else if (war_GetSeqMode() == SEQ_SMALL)
-	{
-		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_WINDOW),TRUE,FALSE);	}
-	else
-	{
-		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_MINIMAL),TRUE,FALSE);
-	}
-
+//	//sequence mode.		//NOT really used for now, maybe someday in future? -Q
+//	addTextButton(FRONTEND_SEQUENCE,	FRONTEND_POS6X-35,FRONTEND_POS6Y, strresGetString(psStringRes, STR_SEQ_PLAYBACK),TRUE,FALSE);
+//	if (war_GetSeqMode() == SEQ_FULL)
+//	{
+//		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_FULL),TRUE,FALSE);
+//	}
+//	else if (war_GetSeqMode() == SEQ_SMALL)
+//	{
+//		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_WINDOW),TRUE,FALSE);	}
+//	else
+//	{
+//		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_MINIMAL),TRUE,FALSE);
+//	}
+//
 //	////////////
 //	//translucency mode.
 //	addTextButton(FRONTEND_TRANSPARENCY,	FRONTEND_POS5X-15,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_TRANSPARENCY),TRUE,FALSE);
@@ -1252,28 +1266,30 @@ BOOL startGameOptions2Menu(VOID)
 	//subtitle mode.
 	if(war_GetAllowSubtitles())
 	{
-		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,FALSE);
+		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,FALSE);
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,TRUE);
+		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_SUBTITLES),TRUE,TRUE);
 	}
 
 	if(war_GetAllowSubtitles())
 	{
 		if ( !seq_GetSubtitles() )
 		{
-			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
+			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
 		}
 		else
 		{
-			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_ON),TRUE,FALSE);
+			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_FE_ON),TRUE,FALSE);
 		}
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS6M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,TRUE);	
+		addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,TRUE);	
 	}
+
+
 	
 	////////////
 	// quit.
@@ -1294,6 +1310,7 @@ BOOL runGameOptions2Menu(VOID)
 	{
 	case FRONTEND_SSHAKE:
 	case FRONTEND_SSHAKE_R:
+	
 		if( getShakeStatus() )
 		{
 			setShakeStatus(FALSE);
@@ -1304,10 +1321,32 @@ BOOL runGameOptions2Menu(VOID)
 			setShakeStatus(TRUE);
 			widgSetString(psWScreen,FRONTEND_SSHAKE_R, strresGetString(psStringRes,STR_FE_ON));
 		}
-		break;
-		break;
+	
+		break;		//ehh?  somthing get clobbered here?  Need to check..might just be a error... -Q
+//		break;
+	case FRONTEND_SHADOW:
+	case FRONTEND_SHADOW_R:
+	
+
+		//kf_ToggleShadows();		//note, this was going to be keyboard, but now it is menu option because of a bug which
+//		bDrawShadows ^= 1;				//will need to be fixed. (mem leak bug)... -Q
+				 		//also note that whoever used this variable before, I hijacked it. :P :D
+		if( getShadowStatus() )
+		{
+		setShadowStatus(FALSE);
+		widgSetString(psWScreen,FRONTEND_SHADOW_R, strresGetString(psStringRes,STR_FE_OFF));
+		}
+		else
+		{
+		setShadowStatus(TRUE);
+		widgSetString(psWScreen,FRONTEND_SHADOW_R, strresGetString(psStringRes,STR_FE_ON));
+		}
+		saveConfig();	//looks like this ISN'T save before MP but it is before sp... find out why later -Q
+							//come to think of it, they all should be saved after exit screen anyway.**FIX ME
+	break;
 	case FRONTEND_MFLIP:
 	case FRONTEND_MFLIP_R:
+	
 		if( getInvertMouseStatus() )
 		{//	 flipped
 			setInvertMouseStatus(FALSE);
@@ -1318,10 +1357,12 @@ BOOL runGameOptions2Menu(VOID)
 			setInvertMouseStatus(TRUE);
 			widgSetString(psWScreen,FRONTEND_MFLIP_R, strresGetString(psStringRes,STR_FE_ON));
 		}
+	
 		break;
 
 	case FRONTEND_FOGTYPE:
 	case FRONTEND_FOGTYPE_R:
+	
 	if( war_GetFog()	)
 	{	// turn off crap fog, turn on vis fog.
 		war_SetFog(FALSE);
@@ -1334,6 +1375,7 @@ BOOL runGameOptions2Menu(VOID)
 		war_SetFog(TRUE);
 		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, strresGetString(psStringRes,STR_FE_CRAPFOG));
 	}
+	
 	break;
 
 	case FRONTEND_QUIT:
@@ -1342,6 +1384,7 @@ BOOL runGameOptions2Menu(VOID)
 
 	case FRONTEND_SUBTITLES:
 	case FRONTEND_SUBTITLES_R:
+	
 		if(	seq_GetSubtitles())
 		{// turn off
 			seq_SetSubtitles(FALSE);
@@ -1352,6 +1395,7 @@ BOOL runGameOptions2Menu(VOID)
 			seq_SetSubtitles(TRUE);
 			widgSetString(psWScreen,FRONTEND_SUBTITLES_R,strresGetString(psStringRes,STR_FE_ON));
 		}
+	
 		break;
 
 		 
@@ -1394,6 +1438,7 @@ BOOL runGameOptions2Menu(VOID)
 //		break;
 	case FRONTEND_SEQUENCE:
 	case FRONTEND_SEQUENCE_R:
+	
 		if( war_GetSeqMode() == SEQ_FULL )
 		{
 			war_SetSeqMode(SEQ_SMALL);
@@ -1409,6 +1454,7 @@ BOOL runGameOptions2Menu(VOID)
 			war_SetSeqMode(SEQ_FULL);
 			widgSetString(psWScreen,FRONTEND_SEQUENCE_R, strresGetString(psStringRes,STR_SEQ_FULL));
 		}
+	
 		break;
 
 	default:

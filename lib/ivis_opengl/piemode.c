@@ -144,7 +144,7 @@ void pie_ScreenFlip(CLEAR_MODE clearMode) {
 	}
 
 	if (screen_GetBackDrop()) {
-		screen_Upload();
+		screen_Upload(NULL);
 	}
 }
 

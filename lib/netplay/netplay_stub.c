@@ -985,7 +985,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 	UBYTE		inBuff[2048];
 	NETMSG		msg;
 	
-	if(newFile)
+	if(newFile)		//force it true for now -Q
 	{
 		// open the file.
 		pFileHandle = fopen(fileName, "rb");			// check file exists

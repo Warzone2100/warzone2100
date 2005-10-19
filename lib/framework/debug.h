@@ -24,6 +24,11 @@ extern void dbg_console(SBYTE *pFormat, ...);
  * Basic debugging macro's
  *
  */
+#ifdef _MSC_VER
+#ifdef _DEBUG
+#define DEBUG
+#endif
+#endif
 
 /* DBMB used to be 'show message box' */
 #ifndef _MSC_VER
@@ -79,7 +84,18 @@ extern void dbg_console(SBYTE *pFormat, ...);
  * by file basis.
  *
  */
-
+/*
+#define  DEBUG_GROUP0
+#define  DEBUG_GROUP1
+#define  DEBUG_GROUP2
+#define  DEBUG_GROUP3
+#define  DEBUG_GROUP4
+#define  DEBUG_GROUP5
+#define  DEBUG_GROUP6
+#define  DEBUG_GROUP7
+#define  DEBUG_GROUP8
+#define  DEBUG_GROUP9
+*/
 #ifdef DEBUG_GROUP0
 #define DBP0(x)							DBPRINTF(x)
 #define DBMB0(x)						DBMB(x)

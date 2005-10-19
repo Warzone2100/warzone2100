@@ -83,7 +83,7 @@ STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
 STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
 extern char	ScreenDumpPath[];
-extern BOOL	bDrawShadows;
+//extern BOOL	bDrawShadows;	//not used for now. -Q
 
 
 int fogCol = 0;//start in nicks mode
@@ -310,7 +310,10 @@ void	kf_SetToughUnitsLevel( void )
 	}
 }
 // --------------------------------------------------------------------------
-
+void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when active) -Q.
+{
+	showFPS ^=1;
+}
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
@@ -318,7 +321,7 @@ void	kf_FrameRate( void )
 
 	if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 	{
- 	 	CONPRINTF(ConsoleString,(ConsoleString,"DIRECT3D fps %d; PIEs %d; polys %d; Terr. polys %d; States %d",
+ 	 	CONPRINTF(ConsoleString,(ConsoleString,"OpenGL fps %d; PIEs %d; polys %d; Terr. polys %d; States %d",
 			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
 
 	}
@@ -2590,8 +2593,10 @@ void kf_ToggleRadarTerrain(void)
 	}
 }
 
-void kf_ToggleShadows(void)
-{
-	bDrawShadows = !bDrawShadows;
-}
+//void kf_ToggleShadows(void)	// Was going to do keyboard toggle, but ran into a bug, so doing
+//{					//menu for now, although may offer this later. -Q
+//	if(bDrawShadows)
+//	bDrawShadows = 0;		//'optimise later. bDrawShadows ^=1 or whatever.
+//	else bDrawShadows=1;
+//}
 // --------------------------------------------------------------------------

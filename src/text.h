@@ -441,6 +441,7 @@ enum _fixed_str_id
 	STR_GAM_DERRICK_BURNING,
 	STR_SEL_NO_STRUCTURE,
 
+	STR_FE_SHADOW,	//shadow toggle -Q
 	STR_FE_SSHAKE,							
 	STR_FE_MFLIP,							
 	STR_FE_ON,								

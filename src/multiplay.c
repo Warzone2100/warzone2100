@@ -1100,7 +1100,7 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(openchannels[i] && isHumanPlayer(i) && (i != selectedPlayer))
+			if(openchannels[i] && isHumanPlayer(i) && (i != selectedPlayer)) //now doesn't send multiplayer msgs to himself (displayed locally in kf_SendTextMessage() )
 			{
 				NETsend(&m,player2dpid[i],FALSE);
 			}
@@ -1425,7 +1425,7 @@ BOOL recvAudioMsg(NETMSG *pMsg)
 // Network File packet processor.
 BOOL recvMapFileRequested(NETMSG *pMsg)
 {
-	char mapStr[128],mapName[128];
+	char mapStr[256],mapName[256],fixedname[256];
 
 //	pMsg;
 
@@ -1439,8 +1439,12 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 	// start sending the map to the other players.
 	if(!bSendingMap)
 	{
+		memset(mapStr,0,256);
+		memset(mapName,0,256);
+		memset(fixedname,0,256);
 		bSendingMap = TRUE;
 		addConsoleMessage("SENDING MAP!",DEFAULT_JUSTIFY);
+		addConsoleMessage("FIX FOR LINUX!",DEFAULT_JUSTIFY);
 
 		strcpy(mapName,game.map);
 		// chop off the -T1
@@ -1454,8 +1458,9 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 		}
 
 		sprintf(mapStr,"%dc-%s",game.maxPlayers,mapName);
-		strcat(mapStr,".wdg");
-	
+		strcat(mapStr,".wz");//.wdg
+		sprintf(fixedname,"maps\\%s",mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
+		memcpy(mapStr,fixedname,256);
 		NETsendFile(TRUE,mapStr,0);
 	}
 #endif

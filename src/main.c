@@ -127,7 +127,15 @@ int main(int argc, char *argv[])
 	DIR *dir;
 	struct dirent *dirent;
 	char *ptr;
+	#ifndef MAX_PATH
+	#define MAX_PATH 512
 #endif
+#endif
+	char OldDirectory[MAX_PATH];	//holds are original directory
+	char NewDirectory[MAX_PATH];
+	char MapPath[MAX_PATH];
+	DWORD  dwRet;		//return value for directory change
+	int dirsize;
 //========= might move later...
 
 #ifdef WIN32				//Note, Should we fix this like linux so we don't use the reg, and use config file? -Q
@@ -271,8 +279,6 @@ init://jump here from the end if re_initialising
 //=======================================//NOTE, MP support should be ON now.
 // this should ONLY be enabled for MP, move to correct place...	 //only time it is OFF is with SP games!
 // This adds all our patches needed for MP/ skirmish!					 //so leave this alone for now.
-//Zip_Find_MP("audio\\MemResSp\\Research\\PCV357.wav");
-//printf("$$$$$$$$$$$$$$$$$$***MULTIPLAYER here?***\n");
 	err=Zip_Open("mp.wz", NULL);		//1 = good 0=bad
 	if (err == 0) {
 		// Might as well require this also, but not needed in SP campagin.
@@ -281,17 +287,35 @@ init://jump here from the end if re_initialising
 	}
 	pQUEUE=TRUE;		//Turn ON when first start, only OFF in SP games!  On now, since a new frontend can be used...
 //==================================================================
+//==--------------------------------------------
+//=================================
 // Now we should hunt for all the other .wz files, so we can add them to the list.
 //this should be a function... but oh well. :) -Q
 #ifdef WIN32
+	memset(OldDirectory,0,MAX_PATH);
+	memset(NewDirectory,0,MAX_PATH); 
+	dwRet = GetCurrentDirectory(MAX_PATH, OldDirectory);
+	if(dwRet==0) {printf("Can't get current directory?  Aborting looking for maps!\n"); goto skipMaps;}
+//	dirsize=strlen(OldDirectory);	// not needed on windows.. dwRet holds string size...
+	if(dwRet>0)
+	{
+		memcpy(NewDirectory,OldDirectory,dwRet);
+		strcat(NewDirectory,"\\maps");
+		dwRet=SetCurrentDirectory(NewDirectory);
+		if(dwRet==0) {printf("Can't find maps directory, Aborting looking for maps!\n"); goto skipMaps;}
 	memset(&sFindData, 0, sizeof(WIN32_FIND_DATA));
 	hFindHandle = FindFirstFile("*.wz", &sFindData);
 	while (hFindHandle != INVALID_HANDLE_VALUE)
 	{
-		if(stricmp("warzone.wz",sFindData.cFileName)==0) goto skip;	//skip
-		if(stricmp("mp.wz",sFindData.cFileName)==0) goto skip;			//skip
+		if(stricmp("warzone.wz",sFindData.cFileName)==0) goto skip;	//skip  //note, these should never be here
+		if(stricmp("mp.wz",sFindData.cFileName)==0) goto skip;			//skip //since change..will fix later.
+printf("Found %s.  Processing it...\n", sFindData.cFileName);
 		debug(LOG_WZ, "Found %s.  Processing it...", sFindData.cFileName);
-		err=Zip_Open(sFindData.cFileName, NULL);		//1 = good 0=bad
+		memset(MapPath,0,MAX_PATH);
+	sprintf(MapPath,"%s\\",NewDirectory);
+	strcat(MapPath,sFindData.cFileName);
+printf("New path is %s\n",MapPath);
+		err=Zip_Open(MapPath,NULL);//sFindData.cFileName, NULL);		//1 = good 0=bad
 		if (err == 0) {
 			debug(LOG_ERROR, "*** Error with %s! Remove or fix file!",
 			      sFindData.cFileName);
@@ -304,17 +328,39 @@ skip:
 			hFindHandle = INVALID_HANDLE_VALUE;
 		}
 	}
+	}//dirsize >0
+	dwRet=SetCurrentDirectory(OldDirectory);
 #else
+
+	memset(OldDirectory,0,MAX_PATH);
+	memset(NewDirectory,0,MAX_PATH-1); 
+	dwRet=getcwd(OldDirectory,MAX_PATH);
+	printf("dwret=%d, %s\n",dwRet,OldDirectory);
+	if(dwRet==0) {printf("Can't get current directory?  Aborting looking for maps!\n"); goto skipMaps;}
+	dwRet=strlen(OldDirectory);
+	memcpy(NewDirectory,OldDirectory,dwRet);
+	strcat(NewDirectory,"/maps");
+	dwRet=chdir(NewDirectory);
+	if(dwRet==-1) {printf("Can't find maps directory, Aborting looking for maps!\n"); goto skipMaps;}
 	dir = opendir(".");
-	while ((dirent = readdir(dir)) != NULL) {
+	while ((dirent = readdir(dir)) != NULL)
+	{
+		printf("Found %s.  Processing it...\n", dirent->d_name);
 		debug(LOG_WZ, "Found %s.  Checking it...", dirent->d_name);
 		ptr = strrchr(dirent->d_name, '.');
 		if (ptr != NULL && strcmp(".wz", ptr) == 0) {
 			debug(LOG_WZ, "Found %s.  Processing it...", dirent->d_name);
 			if (stricmp("warzone.wz", dirent->d_name) == 0) continue;		// skip
 			if (stricmp("mp.wz", dirent->d_name) == 0) continue;				// skip
+		memset(MapPath,0,MAX_PATH);
+//		sprintf(MapPath,"%s/",NewDirectory);
+//		sprintf(MapPath,"maps/");
+//		strcat(MapPath,dirent->d_name);
+//		printf("New path is %s\n",MapPath);
 			err = Zip_Open(dirent->d_name, NULL);		// 1 = good, 0 = bad
-			if (err == 0) {
+			if (err == 0)
+			{
+				printf(" Error with %s! Remove or fix file!", dirent->d_name);
 				debug(LOG_ERROR, "Error with %s! Remove or fix file!", dirent->d_name);
 				Zip_Shutdown();
 				exit(1);		//return or exit()? hmm
@@ -322,12 +368,13 @@ skip:
 		}
 	}
 	closedir(dir);
+	dwRet=chdir(OldDirectory);
 #endif
 //=========================== Note, above routine should be moved into a function
-//==--------------------------------------------
+skipMaps:
 	Zip_Find_MP("NOMATCH");				//set everything up, with a bogus entry.
 	Zip_Find_MPmaps("addon.lev");		//Now, we need to read all the map level data in!
-//=================================
+
 	if (!wdgLoadAllWDGCatalogs())
 	{
 		return -1;

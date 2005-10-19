@@ -123,7 +123,16 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setShakeStatus(TRUE);
 		setWarzoneKeyNumeric("shake", TRUE);
 	}
-	
+		// shadows
+	if(getWarzoneKeyNumeric("shadows", &val))
+	{	
+		setShadowStatus(val);
+	}
+	else
+	{
+		setShadowStatus(TRUE);		//bDrawShadows = TRUE;
+		setWarzoneKeyNumeric("shadows", TRUE);
+	}
 	// //////////////////////////
 	// invert mouse
 	if(getWarzoneKeyNumeric("mouseflip", &val))
@@ -451,16 +460,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setWarzoneKeyNumeric("radarTerrainMode", (DWORD)bDrawRadarTerrain);
 	}
 
-	// shadows
-	if(getWarzoneKeyNumeric("shadows", &val))
-	{
-		bDrawShadows =(BOOL)val;
-	}
-	else
-	{
-		bDrawShadows = TRUE;
-		setWarzoneKeyNumeric("shadows", (DWORD)bDrawShadows);
-	}
+
 
 	return closeWarzoneKey();
 }
@@ -528,7 +528,7 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("fxvol", mixer_Get3dWavVolume());
 	setWarzoneKeyNumeric("cdvol", mixer_GetCDVolume());
 	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
-
+	setWarzoneKeyNumeric("shadows",(DWORD)(getShadowStatus()));
 	// note running rendermode
 	// ENGINE_GLIDE etc.
 	setWarzoneKeyNumeric("renderMode", war_GetRendMode());
@@ -560,6 +560,7 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level	
 	setWarzoneKeyNumeric("barmode",(DWORD)barMode);			//energybars		
 	setWarzoneKeyNumeric("visfog",(DWORD)(!war_GetFog()));			// fogtype
+	setWarzoneKeyNumeric("shadows",(DWORD)(getShadowStatus()));		//and shadows...
 	setWarzoneKeyNumeric("shake",(DWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(DWORD)(getInvertMouseStatus()));	// flipmouse
 	setWarzoneKeyNumeric("sequences",(DWORD)(war_GetSeqMode()));		// sequences
@@ -568,7 +569,7 @@ BOOL saveConfig()
 
 	setWarzoneKeyNumeric("radarObjectMode",(DWORD)bEnemyAllyRadarColor);	// enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(DWORD)bDrawRadarTerrain);	
-	setWarzoneKeyNumeric("shadows",(DWORD)bDrawShadows);	
+//	setWarzoneKeyNumeric("shadows",(DWORD)getShadowStatus());	
 	
 //	setWarzoneKeyNumeric("maxRoute",(DWORD)(fpathGetMaxRoute()));			// maximum routing
 
@@ -599,7 +600,8 @@ BOOL saveConfig()
 		setWarzoneKeyString("phrase1", ingame.phrases[1]);	
 		setWarzoneKeyString("phrase2", ingame.phrases[2]);	
 		setWarzoneKeyString("phrase3", ingame.phrases[3]);	
-		setWarzoneKeyString("phrase4", ingame.phrases[4]);	
+		setWarzoneKeyString("phrase4", ingame.phrases[4]);
+//		setWarzoneKeyNumeric("shadows",(DWORD)getShadowStatus());		//grumble
 	}
 
 	return closeWarzoneKey();

@@ -157,8 +157,9 @@ BOOL getWarzoneKeyBinary( STRING *pName, UCHAR *pData, UDWORD *pSize )
 // =======================================================================================================================
 //
 BOOL setWarzoneKeyNumeric( STRING *pName, DWORD val )
-{
-	RegSetValueEx( ghWarzoneKey, pName, 0, REG_DWORD, (UBYTE *) &val, sizeof(val) );
+{ int error=0;
+	error=RegSetValueEx( ghWarzoneKey, pName, 0, REG_DWORD, (UBYTE *) &val, sizeof(val) );
+	if(error) printf("Can't write registry! [%d]\n",error);
 	return TRUE;
 }
 

@@ -33,7 +33,7 @@ char   *_fullpath(char *full, const char *original, int maxLen)
 	debug(LOG_WZ, "directory is %s", buf);
 	strcat(buf,original);
 	debug(LOG_WZ, "New directory is %s", buf);
-	memcpy(full,buf,sizeof(char)*PATH_MAX);	//NO! fix this not 255 limit!
+	memcpy(full,buf,sizeof(char)*PATH_MAX);	
 	return buf;
 }
 #endif

@@ -433,7 +433,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 
 BOOL bDrawRadarTerrain = TRUE;		//radar terrain on/off
 BOOL bEnemyAllyRadarColor = FALSE;	//enemy/ally radar color
-BOOL	bDrawShadows = TRUE;
+//BOOL	bDrawShadows = TRUE;
 void drawRadar(void)
 {
 	UWORD	boxSizeH,boxSizeV;

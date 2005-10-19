@@ -208,6 +208,7 @@ static BOOL	anyDroidSelected(UDWORD player);
 static BOOL cyborgDroidSelected(UDWORD player);
 //static BOOL ctrlShiftDown(void);
 static BOOL bInvertMouse = TRUE;
+static BOOL bDrawShadows ;		//...
 //BOOL	widgetsOn=TRUE;	//FALSE;
 //BOOL	forceWidgetsOn = FALSE;
 SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
@@ -307,7 +308,14 @@ BOOL	getRadarJumpStatus( void )
 {
 	return(bInstantRadarJump);
 }
-
+BOOL	getShadowStatus(void)
+{	
+	return(bDrawShadows);
+}
+void	setShadowStatus (BOOL val)
+{	
+	bDrawShadows =val;
+}
 BOOL	getShakeStatus( void )
 {
 	return(bShakingPermitted);

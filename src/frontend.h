@@ -268,5 +268,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
 #define FRONTEND_SEQUENCE		20097
 #define FRONTEND_SEQUENCE_R		20098
 
+#define FRONTEND_SHADOW	20099		//hope nothing else uses this ID...
+#define FRONTEND_SHADOW_R  20100		//hope nothing else uses this ID... -Q
 
 #endif

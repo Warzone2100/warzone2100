@@ -428,7 +428,7 @@ void pie_ImageDefTrans(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,i
 void pie_UploadDisplayBuffer(UBYTE *DisplayBuffer)
 {
 	pie_GlobalRenderEnd(FALSE);
-	screen_Upload();
+	screen_Upload(NULL);
 	pie_GlobalRenderBegin();
 }
 
@@ -677,7 +677,7 @@ UDWORD			size;
 
 void pie_ResetBackDrop(void)
 {
-	//screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
+	screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
 	return;
 }
 	

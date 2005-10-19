@@ -10934,3 +10934,135 @@ BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD
 	return TRUE;
 
 }
+//======================================================
+//draws stuff into our newer bitmap.
+BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY)
+{
+	SAVE_STRUCTURE				sSave;  // close eyes now.
+	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
+	SAVE_STRUCTURE_V2			*psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
+	SAVE_STRUCTURE_V12			*psSaveStructure12= (SAVE_STRUCTURE_V12*)&sSave;
+	SAVE_STRUCTURE_V14			*psSaveStructure14= (SAVE_STRUCTURE_V14*)&sSave;
+	SAVE_STRUCTURE_V15			*psSaveStructure15= (SAVE_STRUCTURE_V15*)&sSave;
+	SAVE_STRUCTURE_V17			*psSaveStructure17= (SAVE_STRUCTURE_V17*)&sSave;
+	SAVE_STRUCTURE_V20			*psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
+										// ok you can open them again..
+		
+	STRUCT_SAVEHEADER		*psHeader;
+	STRING			aFileName[256];
+	UDWORD			xx,yy,x,y,count,fileSize,sizeOfSaveStruture;
+	UBYTE			*pFileData = NULL;
+	LEVEL_DATASET	*psLevel;
+
+	levFindDataSet(game.map, &psLevel);
+	strcpy(aFileName,psLevel->apDataFiles[0]);
+	aFileName[strlen(aFileName)-4] = '\0';
+	strcat(aFileName, "\\struct.bjo");		
+
+	pFileData = DisplayBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	{
+		DBPRINTF(("plotStructurePreview16: Fail1\n"));
+	}
+
+	/* Check the file type */
+	psHeader = (STRUCT_SAVEHEADER *)pFileData;
+	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' ||
+		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
+	{
+		DBERROR(("plotStructurePreview16: Incorrect file type"));
+		return FALSE;
+	}
+
+	//increment to the start of the data
+	pFileData += STRUCT_HEADER_SIZE;
+
+	if (psHeader->version < VERSION_12)
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V2);
+	}
+	else if (psHeader->version < VERSION_14)
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V12);
+	}
+	else if (psHeader->version <= VERSION_14)
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V14);
+	}
+	else if (psHeader->version <= VERSION_16)
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V15);
+	}
+	else if (psHeader->version <= VERSION_19)
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V17);
+	}
+	else if (psHeader->version <= VERSION_20)
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V20);
+	}
+	else 
+	{
+		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE);
+	}
+
+
+	/* Load in the structure data */
+	for (count = 0; count < psHeader-> quantity; count ++, pFileData += sizeOfSaveStruture)
+	{
+		if (psHeader->version < VERSION_12)
+		{
+			memcpy(psSaveStructure2, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure2->x >>TILE_SHIFT);
+			yy = (psSaveStructure2->y >>TILE_SHIFT);
+		}
+		else if (psHeader->version < VERSION_14)
+		{
+			memcpy(psSaveStructure12, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure12->x >>TILE_SHIFT);
+			yy = (psSaveStructure12->y >>TILE_SHIFT);
+		}
+		else if (psHeader->version <= VERSION_14)
+		{
+			memcpy(psSaveStructure14, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure14->x >>TILE_SHIFT);
+			yy = (psSaveStructure14->y >>TILE_SHIFT);
+		}
+		else if (psHeader->version <= VERSION_16)
+		{
+			memcpy(psSaveStructure15, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure15->x >>TILE_SHIFT);
+			yy = (psSaveStructure15->y >>TILE_SHIFT);
+		}
+		else if (psHeader->version <= VERSION_19)
+		{
+			memcpy(psSaveStructure17, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure17->x >>TILE_SHIFT);
+			yy = (psSaveStructure17->y >>TILE_SHIFT);
+		}
+		else if (psHeader->version <= VERSION_20)
+		{
+			memcpy(psSaveStructure20, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure20->x >>TILE_SHIFT);
+			yy = (psSaveStructure20->y >>TILE_SHIFT);
+		}
+		else 
+		{
+			memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
+			xx = (psSaveStructure->x >>TILE_SHIFT);
+			yy = (psSaveStructure->y >>TILE_SHIFT);
+		}
+
+		for(x = (xx*scale);x < (xx*scale)+scale ;x++)
+		{
+			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
+			{
+				backDropSprite[3*(( (offY+y)*512)+x+offX)]=0xff;//COL_RED;	//512 is forced, since we using 512*512
+				backDropSprite[3*(( (offY+y)*512)+x+offX)+1]=0x0;//COL_RED;	//0xff0000 =red...
+				backDropSprite[3*(( (offY+y)*512)+x+offX)+2]=0x0;//COL_RED;	//
+			}
+		}
+	}
+	return TRUE;
+
+}

@@ -307,6 +307,9 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 	{
 		if((file = F_Open(fileName, "rb")) == NULL)		// Try to open the file.
 		{
+		#ifndef WIN32
+		perror(fileName);
+		#endif
 			debug(LOG_ERROR, "Zip_Open: file %s was NOT found!", fileName);
 			return FALSE;
 		}
@@ -338,7 +341,7 @@ BOOL Zip_Open(const char *fileName, WZFILE *prevOpened)
 	pack = Zip_NewPackage();
 	strcpy(pack->name, fileName);
 	pack->file = file;
-
+printf("------------New package added! [%s]\n",pack->name);
 	
 	pos = directory;
 	for(index = 0; index < USHORT(summary.totalEntryCount);		// Read all the entries.
@@ -423,10 +426,11 @@ void Zip_RemoveDuplicateFiles(void)					//Yeah...change this! -Q
 	// One scan through the directory is enough.
 	for(i = 0, entry = zipFiles; i < zipNumFiles - 1; i++, entry++)
 	{
+//		printf("ZIP=======LOOKING!======>%s(%s) vs %s(%s)\n",entry[0].name, entry[0].package->name,entry[1].name,entry[1].package->name);
 		// Is this entry the same as the next one?
 		if(!stricmp(entry[0].name, entry[1].name)) 
 		{	
-			//printf("ZIP=======Replaced!======>%s vs %s\n",entry[0].name, entry[1].name);
+//			printf("ZIP=======Replaced!======>%s(%s) vs %s(%s)\n",entry[0].name, entry[0].package->name,entry[1].name,entry[1].package->name);
 			// One of these should be removed. The newer one survives.
 			if(entry[0].package->order > entry[1].package->order)
 				loser = entry + 1;
@@ -575,7 +579,7 @@ int Zip_Find_MP(const char *fileName)					//side note, we are not using the othe
 void Zip_Find_MPmaps(const char *fileName)					//side note, we are not using the other find routine now, since
 {																				//looks like we need to do priority.
 	int i=0,j=0;															//works for the most part, but could be fixed up much better. -Q
-	int begin, end;
+	int begin, end,hit;
 	char	  PriorityPath[PATH_MAX];
 	int NumList;
 	int found=0;
@@ -583,13 +587,14 @@ void Zip_Find_MPmaps(const char *fileName)					//side note, we are not using the
 	// Init the search.
 	begin =  0;
 	NumList =1;
-	end = zipNumFiles - 1;
+	end = zipNumFiles ;
 
+/*
 	if(pQUEUE)	//bMultiPlayer			//multiplayer flag (ON) then do this!		// FORCE this thing for now... 0=SP 1=MP // NEED TO FIX****** -Q
 	{
 		for(i=prinum;i>=0;i--)			//MAPS load *BACKWARDS*!! ie 0 to max #...
 		{	
-			if(stricmp("addon.lev",fileName)) continue;
+//			if(stricmp("addon.lev",fileName)) continue;
 //			if(prilist[i]==0) continue;
 			sprintf(PriorityPath,"%02d\\",prilist[i]);
 			mystrcat(PriorityPath,fileName);
@@ -602,6 +607,17 @@ void Zip_Find_MPmaps(const char *fileName)					//side note, we are not using the
 				memcpy(&addonmaps[j][0],PriorityPath,strlen(PriorityPath));
 				j++;
 			}
+		}	//end for
+	} //pQUEUE
+*/
+	for(i=0;i<end;i++)
+	{
+		hit=strstr(zipFiles[i].name,"addon.lev");
+		if(hit!=NULL)
+		{
+		memcpy(&addonmaps[j][0],zipFiles[i].name,strlen(zipFiles[i].name));
+		j++;
+		printf("#@#@ Found addon.lev [%s], in package [%s]\n",zipFiles[i].name,zipFiles[i].package->name);
 		}
 	}
 	debug(LOG_WZ, "Done searching for addon.lev files.  We found %d", j);
@@ -626,7 +642,8 @@ int Zip_Find(const char *fileName)					//yes, this works fine for normal finding
 	Dir_FixSlashes(fullPath);
 //	printf("2Find -> %s \n",fullPath);
 //	Dir_MakeAbsolute(fullPath);
-
+//printf("looking for...%s\n",fullPath);
+//	fflush(stdout);
 	// Init the search.
 	begin = 0;
 	end = zipNumFiles - 1;
@@ -639,6 +656,8 @@ int Zip_Find(const char *fileName)					//yes, this works fine for normal finding
 		relation = stricmp(fullPath, zipFiles[mid].name);
 		if(!relation)
 		{
+//			printf("+++++++FOUND! %s\n",fullPath);
+//			fflush(stdout);
 			// Got it! We return a 1-based index.
 			return mid + 1;
 		}
@@ -652,6 +671,35 @@ int Zip_Find(const char *fileName)					//yes, this works fine for normal finding
 			// Then it must be in the second half.
 			begin = mid + 1;
 		}
+	}
+//printf("***NOT FOUND****...%s\n",fullPath);
+//	fflush(stdout);
+	// It wasn't found.
+	return 0;
+}
+//===============================
+int Zip_Findlevs(const char *fileName)					//perhaps better...-Q
+{
+	int begin, end, mid,i;
+	int     relation;
+	char    fullPath[PATH_MAX];
+
+	
+	strcpy(fullPath, fileName);				// Convert to an absolute path.
+//	printf("Find -> %s \n",fullPath);
+	Dir_FixSlashes(fullPath);
+//	printf("2Find -> %s \n",fullPath);
+//	Dir_MakeAbsolute(fullPath);
+
+	// Init the search.
+	begin = 0;
+	end = zipNumFiles ;
+
+	for(i=0;i<end;i++)
+	{
+//		relation = stricmp(fullPath, zipFiles[mid].name);
+		relation=strstr(zipFiles[i].name,"addon.lev");
+		if(relation!=NULL) printf("Found addon.leb [%s]\n",zipFiles[i].name);
 	}
 
 	// It wasn't found.

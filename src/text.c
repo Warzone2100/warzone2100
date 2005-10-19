@@ -447,6 +447,7 @@ STR_ID asFixedID[STR_MAX_ID] =
 {STR_SEL_NO_STRUCTURE,				"SEL_NO_STRUCTURE"},
 
 {STR_FE_SSHAKE,							"FE_SSHAKE"},
+{STR_FE_SHADOW,							"FE_SHADOW"},	//for shadow toggle for now...
 {STR_FE_MFLIP,							"FE_MFLIP"},
 {STR_FE_ON,								"FE_ON"},		
 {STR_FE_OFF,								"FE_OFF"},

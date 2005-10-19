@@ -72,6 +72,7 @@ void 		Zip_Init(void);
 void          	Zip_Shutdown(void);
 BOOL        	Zip_Open(const char *fileName, WZFILE * prevOpened);
 int		Zip_Find(const char *fileName);
+int Zip_Findlevs(const char *fileName);	
 int		Zip_Find_MP(const char *fileName);
 void	Zip_Find_MPmaps(const char *fileName);
 int		Zip_Iterate(int (*iterator) (const char *, void *),	void *parm);
