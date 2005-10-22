@@ -1,0 +1,129 @@
+// BTEditView.h : interface of the CBTEditView class
+//
+/////////////////////////////////////////////////////////////////////////////
+
+#include "DirectX.h"
+#include "Geometry.h"
+
+//#include "DDView.h"
+#include "DDImage.h"
+#include "HeightMap.h"
+#include "PCXHandler.h"
+#include "KeyHandler.h"
+
+//#include "InfoDialog.h"
+
+#define	SCREEN_XRES	640
+#define	SCREEN_YRES	480
+#define	SCREEN_BPP	16
+
+enum {
+	DM3D_NODRAG,
+	DM3D_DRAGOBJECT,
+};
+
+class CBTEditView : public CScrollView
+{
+protected: // create from serialization only
+	int m_CurrentObjectID;
+	SLONG m_Selected;
+	BOOL m_HeightsChanged;
+	float m_CurrentHeight;
+	DWORD m_SelVerticies;
+
+//	CInfoDialog *m_InfoDialog;
+
+	CBTEditView();
+	DECLARE_DYNCREATE(CBTEditView)
+
+// Attributes
+public:
+	CBTEditDoc* GetDocument();
+	void SyncPosition(void);
+
+// Operations
+public:
+
+// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(CBTEditView)
+	public:
+	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	protected:
+	virtual void OnInitialUpdate(); // called first time after construct
+	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
+	//}}AFX_VIRTUAL
+
+// Implementation
+public:
+	virtual ~CBTEditView();
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+protected:
+	void InitialiseData(void);
+	void DeleteData(void);
+	void UpdateView(CBTEditDoc* pDoc);
+	BOOL ApplyToolOnce(CPoint point);
+	void ApplyRandomness(int Selected);
+	void ApplyTool(CPoint point,int XVel,int YVel,BOOL JustPressed = FALSE);
+	void PositionSelectedObjects(CPoint point,int XVel,int YVel);
+	void RotateSelectedObjects(CPoint point,int XVel,int YVel);
+
+	void SelectObject(CPoint &point);
+	void DeSelectObject(CPoint &point);
+	void GetObjectHeight(CPoint &point);
+//	CObjectDB* GetObjectVertex(CPoint &point,DWORD *Instance,D3DVECTOR *Vector);
+	void EditStats(void);
+
+	BOOL	m_HasChanged;
+	BOOL	m_Active;
+	BOOL	m_Redraw;
+	BOOL	m_ViewIsInitialised;
+//	CDirectDraw* m_DirectDrawView;
+//	CGeometry* m_DirectMaths;
+//	CHeightMap* m_HeightMap;
+//	D3DVECTOR m_CameraPosition;
+//	D3DVECTOR m_CameraRotation;
+	PCXHandler *m_PCXBitmap;
+	PCXHandler *m_PCXTexBitmap;
+//	LPDIRECTDRAWSURFACE m_TextureSurface;
+//	LPDIRECTDRAWSURFACE m_SpriteSurface;
+//	LPDIRECTDRAWSURFACE m_TextSurface;
+//	DDImage* m_SpriteImage;
+//	DDImage* m_TextImage;
+	DWORD m_MouseX;
+	DWORD m_MouseY;
+	DWORD m_DragMode;
+	CKeyHandler *m_KeyHandler;
+// Generated message map functions
+protected:
+	//{{AFX_MSG(CBTEditView)
+	afx_msg void OnDestroy();
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void On3dpopupProperties();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+};
+
+extern CBTEditView *BTEditView;
+
+#ifndef _DEBUG  // debug version in BTEditView.cpp
+inline CBTEditDoc* CBTEditView::GetDocument()
+   { return (CBTEditDoc*)m_pDocument; }
+#endif
+
+/////////////////////////////////////////////////////////////////////////////

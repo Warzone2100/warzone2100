@@ -1,0 +1,4 @@
+SCC = This is a Source Code Control file
+
+[PIEplugIn.mak]
+SCC_Project_Name = "$/Tools/PIEPlugin", NLBAAAAA
