@@ -212,6 +212,6 @@ void kf_NormalSpeed( void );
 
 extern int fogCol;
 
-extern int showFPS  ;	//Toggle for our FPS display -Q
+extern int showFPS  ;	//Toggle for our FPS display (realtime)  OFF to start with. -Q
 
 #endif

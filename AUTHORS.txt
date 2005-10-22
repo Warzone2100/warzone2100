@@ -1,0 +1,33 @@
+Original game developed by Pumpkin Studios, and published by EIDOS 
+Interactive.
+
+The Warzone 2100 GPL Development Team: (in no particular order)
+
+Ben Russon (grizzly_37)
+Dion Mendel (noid)
+Rodolphe Suescun (rodzilla)
+Christian Ohm (cybersphinx)
+Per Inge Mathisen (sendai)
+Roman C. (troman)
+Denis Dupeyron (charun)
+Henri Valta (henrivee)
+Victor Qamly (vqamly)
+
+Thanks for their contributions to:
+
+Artist:
+  Grim Moroe (grimandmandy)
+
+Lead tester & WZ librarian :
+  Kim Metcalfe (lav_coyote25)
+Testers:
+  Adam Holland (coppercore)
+  Dennis Schridde (devurandom)
+
+IRC & Forum Admin :  (irc.freenode.net #warzone) & 
+  (http://www.realtimestrategies.net/forums/index.php)
+  Kevin Malec (kevin_010)
+Forum Admin:
+  Mike Gilmore (chojun) 
+  http://www.realtimestrategies.net/forums/index.php)
+

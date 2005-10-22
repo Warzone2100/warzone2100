@@ -338,7 +338,7 @@ UDWORD	destTileX=0,destTileY=0;
 #define FOUNDATION_TEXTURE		22
 #define EFFECT_DELIVERY_POINT_TRANSPARENCY		128
 
-int showFPS=1;	//temp for now  it is forced on, turn off via keyboard bind of lctrl-f1 (default)  -Q
+int showFPS=0;	//temp for now  it is forced OFF, turn ON via keyboard bind of lctrl-f1 (default)  -Q
 
 unsigned char	buildInfo[255];
 UDWORD GetCameraDistance(void)

@@ -63,14 +63,20 @@
 #include "multistat.h"
 #include "netplay.h"
 
-#ifdef WHATEVER_YOU_NEED_FOR_DOT_NET
-#include "revision.h"
-#endif
+
 
 #include "revision.h"
 #ifndef SVN_REVISION
 #error "SVN_REVISION must be defined!"
 #endif
+
+#define RELEASE_VERSION		//Comment out this line for non releases (ie, you want the SVN_REVISION # instead)
+#ifdef RELEASE_VERSION		//This is only enabled on builds that we release to the public.
+#define  RELEASE_REVISION "Version 2.0.2.3 (beta)"		//Change revision for releases here.
+#endif
+
+
+
 
 extern BOOL bSubtitles;
 //BOOL	 bDrawShadows=TRUE;	//Shadow toggle by popular(?) demand... :p  -Q  (lol)
@@ -1949,10 +1955,15 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
+#ifdef RELEASE_VERSION		// This is only enabled on builds that we release to the public.
 
-	snprintf(sTmp, sTmpSize, "Version 2.0 beta %s w/%s - Built %s", SVN_REVISION,
+	snprintf(sTmp, sTmpSize, "%s w/%s - Built %s", RELEASE_REVISION,
             pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
 
+#else
+	snprintf(sTmp, sTmpSize, "Version 2.0 beta %s w/%s - Built %s", SVN_REVISION,
+            pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
+#endif
 
 	
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
@@ -2120,6 +2131,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
 
 	return TRUE;
 }
+
 
 
 
