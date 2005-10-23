@@ -65,14 +65,16 @@
 
 
 
-#include "revision.h"
-#ifndef SVN_REVISION
-#error "SVN_REVISION must be defined!"
-#endif
+
 
 #define RELEASE_VERSION		//Comment out this line for non releases (ie, you want the SVN_REVISION # instead)
 #ifdef RELEASE_VERSION		//This is only enabled on builds that we release to the public.
 #define  RELEASE_REVISION "Version 2.0.2.3 (beta)"		//Change revision for releases here.
+#else
+#include "revision.h"
+#ifndef SVN_REVISION
+#error "SVN_REVISION must be defined!"
+#endif
 #endif
 
 
@@ -2131,6 +2133,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
 
 	return TRUE;
 }
+
 
 
 
