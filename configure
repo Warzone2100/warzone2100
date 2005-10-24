@@ -8190,7 +8190,7 @@ LIBS="$LIBS $WZ_LIBS"
 CFLAGS="$CFLAGS $WZ_CFLAGS"
 CPPFLAGS="$CPPFLAGS $WZ_CPPFLAGS"
 
-                                                                                                                                  ac_config_files="$ac_config_files Makefile lib/Makefile lib/framework/Makefile lib/gamelib/Makefile lib/ivis_opengl/Makefile lib/ivis02/Makefile lib/ivis_common/Makefile lib/netplay/Makefile lib/script/Makefile lib/sequence/Makefile lib/sound/Makefile lib/widget/Makefile src/Makefile"
+                                                                                                                                  ac_config_files="$ac_config_files Makefile lib/Makefile lib/framework/Makefile lib/gamelib/Makefile lib/ivis_opengl/Makefile lib/ivis02/Makefile lib/ivis_common/Makefile lib/netplay/Makefile lib/script/Makefile lib/sequence/Makefile lib/sound/Makefile lib/widget/Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8748,18 +8748,18 @@ for ac_config_target in $ac_config_targets
 do
   case "$ac_config_target" in
   # Handling of arguments.
-  "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "lib/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
-  "lib/framework/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/framework/Makefile" ;;
-  "lib/gamelib/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/gamelib/Makefile" ;;
-  "lib/ivis_opengl/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/ivis_opengl/Makefile" ;;
-  "lib/ivis02/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/ivis02/Makefile" ;;
-  "lib/ivis_common/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/ivis_common/Makefile" ;;
-  "lib/netplay/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/netplay/Makefile" ;;
-  "lib/script/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/script/Makefile" ;;
-  "lib/sequence/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/sequence/Makefile" ;;
-  "lib/sound/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/sound/Makefile" ;;
-  "lib/widget/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/widget/Makefile" ;;
+  "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+  "lib/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
+  "lib/framework/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/framework/Makefile" ;;
+  "lib/gamelib/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/gamelib/Makefile" ;;
+  "lib/ivis_opengl/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/ivis_opengl/Makefile" ;;
+  "lib/ivis02/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/ivis02/Makefile" ;;
+  "lib/ivis_common/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/ivis_common/Makefile" ;;
+  "lib/netplay/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/netplay/Makefile" ;;
+  "lib/script/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/script/Makefile" ;;
+  "lib/sequence/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/sequence/Makefile" ;;
+  "lib/sound/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/sound/Makefile" ;;
+  "lib/widget/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/widget/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
