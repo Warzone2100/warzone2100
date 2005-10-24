@@ -35,7 +35,7 @@ be patient or join us if you think you can help us.
 
 We are in need of coders and testers for all platforms (Windows, Linux,
 Mac...). We are also looking for graphics artists and modellers to remake the
-models and textures.
+models and textures, and the missing mission briefings.
 
 Our project is located here:
 http://developer.berlios.de/projects/warzone/
