@@ -3,13 +3,11 @@ Warzone 2100 GPL
 Version 2.0.2.3 (beta)
 ========================================================
 
-********
-NOTE, in game, during single player games, the user must hit the ESC key
-to continue the briefing screens.  This is done so that you may see what
-to do next...
+NOTE, in game, during single player games, the user must
+hit the ESC key to continue the briefing screens.  This
+is done so that you may see what to do next...
 This is a temporary solution.
 For more details, please read the Video section below.
-********
 
 ========================================================
 ========================================================
@@ -45,7 +43,7 @@ http://www.realtimestrategies.net/forums/index.php
 You'll have most chances to find us in the development section.
 
 Other Warzone 2100 Fan sites are available @
-Warzone 2100 Link Turret : http://wzlinkturret.1go.dk/
+Warzone 2100 Link Turret: http://wzlinkturret.1go.dk/
 
 
 Also PLEASE report all bugs you may find to either:
@@ -62,9 +60,45 @@ game.
 
 Thanks!
 
-
 --------------------------------------------------------------------------------
-1) Command-line options.
+
+1) Installation
+
+On Windows, the installer should take care of everything. To change the
+resolution, you need to use a command line option, see next section.  To
+install on Linux, do the following (from the directory this file is in):
+
+./configure
+make
+cp src/warzone data
+
+and then to run the game:
+
+cd data
+./warzone
+
+If the configure/make steps above fail and you have all required libraries
+installed, run "./autogen.sh" and then try again. If it still doesn't work, you
+can try our other build system:
+
+make -f Makefile.raw
+cp src/warzone data
+
+If it still doesn't work, contact us.
+
+After that, you only need the "data" directory. You can move that around as you
+wish, for example:
+
+mv data ~/warzone
+
+To play the game, you have to change to this directory first, so after doing
+the above, to run the game do this:
+
+cd ~/warzone
+./warzone
+
+
+2) Command-line options.
 
 Note, command line options apply to BOTH windows & linux users.
 
@@ -73,20 +107,23 @@ For windows users, you can make a shortcut and if the game is install in
 "c:\Warzone 2100 GPL\warzone.exe -window -800x600".
 
 You can also run it by opening a command window, changing to the correct
-directory ("c:\Warzone 2100 GPL" in this case) and typing
-"warzone -window -800x600".
+directory ("c:\Warzone 2100 GPL" in this case) and typing "warzone -window
+-800x600". This might be useful to try other resolutions (or use other command
+line switches) without changing the default resolution specified in the
+shortcut.
 
 For linux users:
-Once the game is installed (see INSTALL.txt in this directory), you can run it
-by changing to its directory and typing './warzone'. Here's a few of the most
-common command line options :
-	-fullscreen : runs in a full-screen window
-	-window : runs in a window
-	-WIDTHxHEIGHT : runs at WIDTH times HEIGHT resolution, replace WIDTH
-		and HEIGHT with your dimensions of choice. Beware, though,
-		as it needs to be a resolution your X server can display.
+Once the game is installed, you can run it by changing to its directory and
+typing './warzone'.
 
-Note that you do need to type the dash in front of the option, like this :
+Here's a few of the most common command line options:
+	-fullscreen runs in a full-screen window
+	-window runs in a window
+	-WIDTHxHEIGHT runs at WIDTH times HEIGHT resolution, replace WIDTH
+		and HEIGHT with your dimensions of choice. Beware, though,
+		as it needs to be a resolution your computer can display.
+
+Note that you do need to type the dash in front of the option, like this:
 		./warzone -fullscreen -1280x960
 
 The fullscreen/window modes and the resolution are stored, so they only need to
@@ -99,7 +136,7 @@ For more groovy command-line options, check src/clparse.c (yes, we promise we'll
 document this properly some day).
 
 
-2) Configuration
+3) Configuration
 
 For windows users:
 This game uses the registry for most settings.  So no need to worry about a
@@ -112,7 +149,8 @@ it, the most important being the one called 'config'. In case you are upgrading
 from a previous version and experience problems, try and remove this
 '~/.warzone2100/config' file.
 
-3) Videos
+
+4) Videos
 
 We do NOT have permission to distribute the original game videos.
 The videos were made using a custom RPL codec by Eidos, which is also used
@@ -123,17 +161,17 @@ on your HD.  You will hear the sound from the videos if you have the videos
 installed.
 
 
-4) Music
+5) Music
 
 We are not able to distribute the original music, but we have included two free
 tracks. If you don't like them, you can use a custom playlist.
 
 The following playlists are read, in this order, and only the first playlist
-found is used :
+found is used:
 - ~/.warzone2100/music/music.wpl
 - <whereverwarzoneisinstalled>/music/music.wpl
 
-Playlist example :
+Playlist example:
 
 --------------------------------------------------------------------------------
 [game]

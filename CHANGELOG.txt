@@ -2,14 +2,15 @@
 * We now use .wz (renamed .zip) files for the game data,
   .wdg data format isn't supported anymore.
 * Added:
- - Shadows together with an option to disable them
- - FPS meter
+ - Shadows (together with an option to disable them)
+ - FPS meter (Ctrl-F1)
  - Map preview
  - New features for MP/skirmish games:
   * Objects only radar view (Ctrl-Tab)
   * Ally/enemy radar view (Shift-Tab)
   * Remember last used IP address
 * Fixes:
+ - Fog works
  - Memory overrun in texture code
  - Infinite loop in audio code
  - Allies must be visible in MP/skirmish
