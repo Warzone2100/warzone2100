@@ -130,10 +130,11 @@ static void initialize_PhysicsFS(char *mod)
 	}
 	if (*default_data_path == '\0') {
 		strcpy(datapath, PHYSFS_getBaseDir());
-		printf("%s\n", datapath);
 		if (!PHYSFS_addToSearchPath(datapath, 1)
 		    || !PHYSFS_exists("gamedesc.lev")) {
+			debug(LOG_WZ, "%s is not data directory", datapath);
 			strcat(datapath, "data");
+			debug(LOG_WZ, "Checking if %s is the data directory", datapath);
 			if (!PHYSFS_addToSearchPath(datapath, 1)) {
 				debug(LOG_ERROR, "No game data found anywhere!  Aborting...");
 				exit(1);
@@ -170,6 +171,7 @@ static void initialize_PhysicsFS(char *mod)
 		debug(LOG_WZ, "    [%s]", *i);
 	}
 	PHYSFS_freeList(PHYSFS_getSearchPath());
+	debug(LOG_WZ, "Write path: %s", PHYSFS_getWriteDir());
 
 	PHYSFS_permitSymbolicLinks(1);
 
@@ -178,6 +180,24 @@ static void initialize_PhysicsFS(char *mod)
 		exit(1);
 	}
 	debug(LOG_WZ, "gamedesc.lev found at %s", PHYSFS_getRealDir("gamedesc.lev"));
+}
+
+/***************************************************************************
+	Make a directory in write path and set a variable to point to it.
+***************************************************************************/
+static void make_dir(char *dest, char *dirname, char *subdir)
+{
+	strcpy(dest, dirname);
+	if (subdir != NULL) {
+		strcat(dest, PHYSFS_getDirSeparator());
+		strcat(dest, subdir);
+	}
+	PHYSFS_mkdir(dest);
+	if (PHYSFS_isDirectory(dest) == 0) {
+		debug(LOG_ERROR, "Unable to create directory \"%s\" in write dir \"%s\"!",
+		      dest, PHYSFS_getWriteDir());
+		exit(1);
+	}
 }
 
 int main(int argc, char *argv[])
@@ -227,21 +247,11 @@ int main(int argc, char *argv[])
 #endif
 	initialize_PhysicsFS(NULL);
 
-#define MAKESET_DIR(var, dirname,subdir)  \
-	strcpy(var, dirname);                   \
-	strcat(var, PHYSFS_getDirSeparator());  \
-	if (subdir != NULL) {                   \
-		strcat(var, subdir);                  \
-		strcat(var, PHYSFS_getDirSeparator());\
-	}                                       \
-	PHYSFS_mkdir(var);
-
-	MAKESET_DIR(ScreenDumpPath, "screendumps", NULL);
-	MAKESET_DIR(SaveGamePath, "savegame", NULL);
-	MAKESET_DIR(MultiPlayersPath, "multiplay", "players");
-	MAKESET_DIR(MultiForcesPath, "multiplay", "forces");
-	MAKESET_DIR(MultiCustomMapsPath, "multiplay", "custommaps");
-#undef MAKESET_DIR
+	make_dir(ScreenDumpPath, "screendumps", NULL);
+	make_dir(SaveGamePath, "savegame", NULL);
+	make_dir(MultiPlayersPath, "multiplay", "players");
+	make_dir(MultiForcesPath, "multiplay", "forces");
+	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
 
 	/* Put these files in the writedir root */
 	strcpy(RegFilePath, "config");
