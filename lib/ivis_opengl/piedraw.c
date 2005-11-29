@@ -154,15 +154,15 @@ void pie_BeginLighting(float x, float y, float z) {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-//	lighting = TRUE;
+	//lighting = TRUE;
 }
 
 void pie_EndLighting(float x, float y, float z) {
-	//lighting = FALSE;
+	lighting = FALSE;
 }
 
 #ifdef BSPIMD
-	extern iIMDShape *BSPimd;	// global defined here for speed 
+extern iIMDShape *BSPimd;	// global defined here for speed 
 extern	iIMDPoly *BSPScrVertices;
 UDWORD ShapeTexPage;
 UDWORD ShapeFrame;
@@ -178,6 +178,7 @@ void DrawTriangleList(BSPPOLYID PolygonNumber) {
 	VERTEXID	*index;
 	iIMDPoly	imdPoly;
 
+return;
 //	DBPRINTF(("poly %d\n",PolygonNumber));
 
 	while (PolygonNumber!=BSPPOLYID_TERMINATE) {
@@ -546,6 +547,19 @@ void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
 		fVector_Sub(&v2, &p2, &p1);
 		fVector_CP(&normal, &v1, &v2);
 		if (fVector_SP(&normal, light) > 0) {
+			if (   pPolys->flags & PIE_COLOURKEYED
+			    && pPolys->flags & PIE_NO_CULL) {
+				VERTEXID i;
+
+				glBegin(GL_TRIANGLE_FAN);
+				index = pPolys->pindex;
+				glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+				for (n = pPolys->npnts-1; n > 0; --n) {
+					i = pPolys->pindex[n];
+					glVertex3f(scrPoints[i].d3dx, scrPoints[i].d3dy, scrPoints[i].d3dz);
+				}
+				glEnd();
+			}
 			index = pPolys->pindex;
 			glBegin(GL_TRIANGLE_STRIP);
 			for (n = 0; n < pPolys->npnts; ++n, ++index) {
@@ -556,6 +570,15 @@ void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
 			glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
 			glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
 		} else {
+			if (   pPolys->flags & PIE_COLOURKEYED
+			    && pPolys->flags & PIE_NO_CULL) {
+				glBegin(GL_TRIANGLE_FAN);
+				index = pPolys->pindex;
+				for (n = 0; n < pPolys->npnts; ++n, ++index) {
+					glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+				}
+				glEnd();
+			}
 			index = pPolys->pindex;
 			glBegin(GL_TRIANGLE_STRIP);
 			for (n = 0; n < pPolys->npnts; ++n, ++index) {
@@ -678,6 +701,7 @@ void pie_DrawShadows() {
 
 	glPushMatrix();
 
+	pie_SetColourKeyedBlack(FALSE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_FALSE);
@@ -934,19 +958,20 @@ static void pie_PiePoly(PIEPOLY *poly, BOOL light)
 		} else {
 			pie_SetColourKeyedBlack(FALSE);
 		}
+		pie_SetColourKeyedBlack(TRUE);
+		if (poly->flags & PIE_NO_CULL) {
+			glDisable(GL_CULL_FACE);
+		}
 		pie_Polygon(poly->nVrts, poly->pVrts, 0.0, light);
+		if (poly->flags & PIE_NO_CULL) {
+			glEnable(GL_CULL_FACE);
+		}
 	}
 }
 
 static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 {
 int	uFrame, vFrame, j, framesPerLine;
-
-	if (poly->flags & PIE_COLOURKEYED) {
-		pie_SetColourKeyedBlack(TRUE);
-	} else {
-		pie_SetColourKeyedBlack(FALSE);
-	}
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0)) {
 		if (poly->pTexAnim != NULL) {

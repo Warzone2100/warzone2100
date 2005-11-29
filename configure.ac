@@ -144,19 +144,23 @@ AC_PATH_SDLNET([
 
 if test "x$opengl" != xno; then
   AC_CHECK_HEADER(GL/gl.h, GL_h=yes, GL_h=no)
+  AC_CHECK_HEADER(GL/glu.h, GLU_h=yes, GLU_h=no)
   GL_lib=yes
   AC_CHECK_LIB(GL, main, GLLIB=GL, 
                [AC_CHECK_LIB(opengl32, main, GLLIB=opengl32, GL_lib=no)])
-  if test "x$GL_lib" = "xno"; then
+  GLU_lib=yes
+  AC_CHECK_LIB(GLU, main, GLULIB=GLU, 
+               [AC_CHECK_LIB(glu32, main, GLULIB=glu32, GLU_lib=no)])
+  if test "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno"; then
     if test "x$opengl" = xyes; then
-      AC_MSG_ERROR([You need to install OpenGL.])
+      AC_MSG_ERROR([You need to install OpenGL and GLU.])
     else
       opengl=no
     fi
   else
-    if test "x$GL_h" = "xno"; then
+    if test "x$GL_h" = "xno" -o "x$GLU_h" = "xno"; then
       if test "x$opengl" = xyes; then
-        AC_MSG_ERROR([You need to install OpenGL header files (usually a -dev package).])
+        AC_MSG_ERROR([You need to install OpenGL and GLU header files (usually a -dev package).])
       else
         opengl=no
       fi
@@ -170,7 +174,7 @@ AC_CHECK_LIB(png, main, , [AC_MSG_ERROR([You need to install the png library.])]
 AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = xyes; then
   AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
-  WZ_LIBS="$WZ_LIBS -l$GLLIB"
+  WZ_LIBS="$WZ_LIBS -l$GLLIB -l$GLULIB"
   AC_SUBST(RENDERER, "ivis_opengl")
   AC_MSG_RESULT([yes])
 else

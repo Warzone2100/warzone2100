@@ -7,7 +7,7 @@
 
 
 
-#define iV_TEX_MAX		48
+#define iV_TEX_MAX		64
 
 
 

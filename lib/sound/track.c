@@ -507,6 +507,8 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 
 	psTrack = g_apTrack[psSample->iTrack];
 
+	if (psTrack == NULL) return FALSE;
+
 /*	// check only playing compressed audio on queue channel
 #ifdef USE_COMPRESSED_SPEECH
 	if ( bQueued && !psTrack->bCompressed )

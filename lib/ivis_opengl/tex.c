@@ -8,6 +8,7 @@
 #include <windows.h>
 #endif
 #include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "frame.h"
 #include "ivisdef.h"
@@ -102,12 +103,18 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 
 	if (   (s->width & (s->width-1)) == 0
 	    && (s->height & (s->height-1)) == 0) {
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
+			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+/*
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, s->width, s->height, 0,
 			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+*/
+	} else {
+		debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: non POT texture %s", filename);
 	}
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);

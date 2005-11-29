@@ -164,7 +164,11 @@ void pie_GlobalRenderEnd(BOOL bForceClearToBlack) {
 UDWORD	pie_GetResScalingFactor( void ) {
 //	UDWORD	resWidth;	//n.b. resolution width implies resolution height...!
 
-	return pie_GetVideoBufferWidth()/6;
+	if (pie_GetVideoBufferWidth() * 4 > pie_GetVideoBufferHeight() * 5) {
+		return pie_GetVideoBufferHeight()*5/4/6;
+	} else {
+		return pie_GetVideoBufferWidth()/6;
+	}
 }
 
 /***************************************************************************/
