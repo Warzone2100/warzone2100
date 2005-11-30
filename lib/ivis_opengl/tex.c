@@ -179,8 +179,7 @@ int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
 	while (stricmp(filename,_TEX_PAGE[i].name) != 0) {
 		i++;
 		if (i >= _TEX_INDEX) {
-			debug(LOG_TEXTURE, "Texture not in resources");
-			assert(FALSE);
+			debug(LOG_TEXTURE, "Texture %s not in resources", filename);
 			return -1;
 		}
 	}

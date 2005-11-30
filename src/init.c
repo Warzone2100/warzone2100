@@ -732,12 +732,15 @@ BOOL InitialiseGlobals(void)
 **************************************************************************/
 BOOL loadLevels(int patchlevel)
 {
+	static int currentlevel = -1;
 	int j;
 	char *pBuffer;
 	UDWORD size;
 
+	if (patchlevel == currentlevel) return TRUE;
+
 	/* First remove all old patches from search path */
-	for (j = 1; j < MAX_NUM_PATCHES; j++) {
+	for (j = 1; j <= MAX_NUM_PATCHES; j++) {
 		char path[MAX_PATH];
 
 		snprintf(path, MAX_PATH, "%02d", j);
@@ -783,6 +786,8 @@ BOOL loadLevels(int patchlevel)
 		snprintf(path, MAX_PATH, "%02d", j);
 		PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
 	}
+
+	currentlevel = patchlevel;
 
 	return TRUE;
 }

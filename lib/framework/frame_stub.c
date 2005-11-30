@@ -515,6 +515,8 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	}
 	filesize = PHYSFS_fileLength(pfile);
 
+	//debug(LOG_WZ, "loadFile2: %s opened, size %i", pFileName, filesize);
+
 	if (AllocateMem == TRUE) {
 		// Allocate a buffer to store the data and a terminating zero
 		*ppFileData = MALLOC(filesize + 1);

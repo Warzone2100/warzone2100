@@ -952,7 +952,7 @@ SDWORD	getDistanceAdjust( void )
 UDWORD	origDistance;
 SDWORD	dif;
 
-	origDistance = DISTANCE;
+	origDistance = MAXDISTANCE;
 	dif = origDistance-distance;
 	if(dif <0 ) dif = 0;
 	dif/=100;

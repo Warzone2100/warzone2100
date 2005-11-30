@@ -735,9 +735,9 @@ FRACT	zoomInterval;
 
 #ifndef JOHN
 	{
-		if(distance>DISTANCE)
+		if(distance>MAXDISTANCE)
 		{
-			distance = DISTANCE;
+			distance = MAXDISTANCE;
 		}
 	}
 #endif
@@ -825,7 +825,7 @@ void	kf_ExpandScreen( void )
 {
 	if(xOffset)
 	{
-   		if (distance>DISTANCE)
+   		if (distance>MAXDISTANCE)
    		{
    			distance-=170;
    		}
