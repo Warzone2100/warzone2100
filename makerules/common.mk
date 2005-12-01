@@ -9,7 +9,7 @@ SDLCONFIG=sdl-config
 endif
 
 ifeq ($(OSTYPE), msys)
-OPENGL_LIB=opengl32
+OPENGL_LIB=glu32 opengl32
 OPENAL_LIB=openal32
 else
 OPENGL_LIB=GLU GL

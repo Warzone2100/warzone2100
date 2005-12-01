@@ -1079,7 +1079,7 @@ UBYTE screenGetPalEntry(UBYTE red, UBYTE green, UBYTE blue)
 
 char* screenDumpToDisk(char* path) {
 	while (1) {
-		sprintf(screendump_filename, "%s%swz2100_shot_%03i.jpg", path, PHYSFS_getDirSeparator(),++screendump_num);
+		sprintf(screendump_filename, "%s%swz2100_shot_%03i.jpg", path, "/", ++screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
 			break;
 		}

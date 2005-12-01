@@ -2835,7 +2835,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	(void) PHYSFS_mkdir(aFileName);
 
 	//save the map file
-	strcat(aFileName, PHYSFS_getDirSeparator());
+	strcat(aFileName, "/");
 	strcat(aFileName, "game.map");
 	/* Write the data to the file */
 	if (!writeMapFile(aFileName))

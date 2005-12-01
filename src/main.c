@@ -121,7 +121,7 @@ static void initialize_PhysicsFS(char *mod)
 
 	if (*default_data_path != '\0') {
 		strcpy(datapath, default_data_path);
-		strcat(datapath, PHYSFS_getDirSeparator());
+		strcat(datapath, "/");
 		strcat(datapath, "warzone.wz");
 		if (!PHYSFS_addToSearchPath(datapath, 1)) {
 			debug(LOG_WZ, "Could not find warzone.wz in \"%s\".", default_data_path);
@@ -147,7 +147,7 @@ static void initialize_PhysicsFS(char *mod)
 	strcat(mappath, "maps");
 	if (mod) {
 		snprintf(modpath, sizeof(modpath), "%smods%s%s.wz", PHYSFS_getBaseDir(), 
-		         PHYSFS_getDirSeparator(), mod);
+		         "/", mod);
 	}
 
 	/* The 1 below means append to search path, while 0 means prepend. */
@@ -189,7 +189,7 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 {
 	strcpy(dest, dirname);
 	if (subdir != NULL) {
-		strcat(dest, PHYSFS_getDirSeparator());
+		strcat(dest, "/");
 		strcat(dest, subdir);
 	}
 	PHYSFS_mkdir(dest);
@@ -249,6 +249,7 @@ int main(int argc, char *argv[])
 
 	make_dir(ScreenDumpPath, "screendumps", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
+	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 	make_dir(MultiForcesPath, "multiplay", "forces");
 	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");

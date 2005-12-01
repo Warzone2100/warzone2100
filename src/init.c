@@ -762,7 +762,7 @@ BOOL loadLevels(int patchlevel)
 	for (j = 1; j <= patchlevel; j++) {
 		char path[MAX_PATH];
 
-		snprintf(path, MAX_PATH, "%02d%saddon.lev", j, PHYSFS_getDirSeparator());
+		snprintf(path, MAX_PATH, "%02d%saddon.lev", j, "/");
 		if (!PHYSFS_exists(path)) {
 			debug(LOG_WZ, "loadLevels: No \"%s\" found", path);
 			continue;

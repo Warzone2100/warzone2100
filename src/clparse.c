@@ -143,7 +143,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				return FALSE;
 			}
 			strcpy(saveGameName, SaveGamePath);
-			strcat(saveGameName, PHYSFS_getDirSeparator());
+			strcat(saveGameName, "/");
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}

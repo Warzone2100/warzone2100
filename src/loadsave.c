@@ -278,7 +278,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	slotCount = 0;
 
 	strcpy(sPath,sSearchPath);							// setup locals.
-	strcat(sPath, PHYSFS_getDirSeparator());							// setup locals.
+	strcat(sPath, "/");							// setup locals.
 	strcpy(sExt,sExtension);
 
 	debug(LOG_WZ, "_addLoadSave: Searching \"%s\" for savegames", sSearchPath);
