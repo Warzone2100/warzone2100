@@ -97,7 +97,13 @@ static void initialize_PhysicsFS(char *mod)
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 	char **i;
-	char datapath[MAX_PATH], overridepath[MAX_PATH], modpath[MAX_PATH], mappath[MAX_PATH];
+	char datapath[MAX_PATH], overridepath[MAX_PATH], modpath[MAX_PATH];
+  char writepath[MAX_PATH], mappath[MAX_PATH];
+#ifdef WIN32
+  const char *writedir = "warzone-2.0";
+#else
+  const char *writedir = ".warzone-2.0";
+#endif
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -107,17 +113,20 @@ static void initialize_PhysicsFS(char *mod)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-	/* NOTE: Whenever major version is increased, the second string below MUST
-   * be changed too.  This should be in the release documentation in the
-   * wiki. */
-	if (!PHYSFS_setSaneConfig("warzone", "warzone-0.2", "wz", 0, 1)) {
-		debug(LOG_ERROR, "Error setting initial paths: %s", PHYSFS_getLastError());
+	strcpy(writepath, PHYSFS_getUserDir());
+  if (PHYSFS_setWriteDir(writepath) == 0) {
+		debug(LOG_ERROR, "Error setting write directory to home directory \"%s\": %s",
+		      writepath, PHYSFS_getLastError());
 		exit(1);
-	}
-	if (PHYSFS_getWriteDir() == NULL) {
-		debug(LOG_ERROR, "Error getting PhysicsFS write directory.");
+  }
+	strcat(writepath, writedir);
+  (void) PHYSFS_mkdir(writedir); /* Just in case it does not exist yet */
+  if (PHYSFS_setWriteDir(writepath) == 0) {
+		debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
+		      writepath, PHYSFS_getLastError());
 		exit(1);
-	}
+  }
+	PHYSFS_addToSearchPath(writepath, 0); /* add to search path */
 
 	if (*default_data_path != '\0') {
 		strcpy(datapath, default_data_path);
