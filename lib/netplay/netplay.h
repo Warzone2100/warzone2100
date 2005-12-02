@@ -24,6 +24,7 @@
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	DWORD dwSize;
 	DWORD dwFlags;
+	char host[16];	// host ip address
 //	GUID  guidInstance;
 //	GUID  guidApplication;
 	DWORD dwMaxPlayers;
@@ -132,7 +133,7 @@ extern DWORD	NETgetGameFlagsUnjoined(UDWORD gameid,UDWORD flag);	// return one o
 extern BOOL	NETsetGameFlags(UDWORD flag,DWORD value);	// set game flag(1-4) to value.		
 extern BOOL	NEThaltJoining(VOID);				// stop new players joining this game
 extern BOOL	NETfindGame(BOOL asynchronously);		// find games being played(uses GAME_GUID);
-extern BOOL	NETjoinGame(LPSTR playername);			// join game given with playername
+extern BOOL	NETjoinGame(UDWORD gameNumber, LPSTR playername);			// join game given with playername
 extern BOOL	NEThostGame(LPSTR SessionName, LPSTR PlayerName,// host a game 
 			    DWORD one, DWORD two, DWORD three, DWORD four, UDWORD plyrs);
 

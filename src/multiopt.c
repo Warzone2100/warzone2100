@@ -335,7 +335,7 @@ BOOL joinCampaign(UDWORD gameNumber, STRING *sPlayer)
 //		game.type = CAMPAIGN;
 		if(!NetPlay.bLobbyLaunched)
 		{
-			NETjoinGame(sPlayer);	// join 
+			NETjoinGame(gameNumber, sPlayer);	// join 
 		}
 		ingame.localJoiningInProgress	= TRUE;
 

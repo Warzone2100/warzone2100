@@ -195,7 +195,7 @@ void loadMapPreview(void)
 	LEVEL_DATASET	*psLevel;
 
 //	iBitmap	
-	DWORD		*tempBmp=NULL;//[BACKDROP_WIDTH*BACKDROP_HEIGHT];
+	DWORD			*tempBmp=NULL;//[BACKDROP_WIDTH*BACKDROP_HEIGHT];
 	UDWORD			i,j,x,y,height,offX,offY,offX2,offY2,tmp;
 	UBYTE			scale,col,coltab[16],bitDepth=8;
 	MAPTILE			*psTile,*WTile;
@@ -2732,7 +2732,7 @@ void runMultiOptions(VOID)
 			case MULTIOP_MAP:
 				strcpy(game.map,sTemp);
 				game.maxPlayers =(UBYTE) value;
-loadMapPreview();
+				loadMapPreview();
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
 				addGameOptions(FALSE);
