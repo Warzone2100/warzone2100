@@ -1,8 +1,5 @@
 %{
 
-/* Turn off a couple of warnings that the lex generated code gives */
-#pragma warning ( disable : 4102 4305 )
-
 #include <stdio.h>
 
 #include "frame.h"
@@ -10,11 +7,15 @@
 #include "audio.h"
 #include "anim.h"
 
-static int			g_iCurAnimID = 0;
-static int			g_iDummy;
+static int		g_iCurAnimID = 0;
+static int		g_iDummy;
 static VECTOR3D		vecPos, vecRot, vecScale;
 
+void audp_error(char *pMessage,...);
+
 %}
+
+%name-prefix="audp_"
 
 %union {
 	float		fval;
@@ -26,18 +27,13 @@ static VECTOR3D		vecPos, vecRot, vecScale;
 	/* value tokens */
 %token <fval> FLOAT
 %token <ival> INTEGER
-%token <sval> TEXT
-%token <sval> text
 %token <sval> QTEXT			/* Text with double quotes surrounding it */
 %token <ival> LOOP
 %token <ival> ONESHOT
-
-	/* types */
-%type <sval> text
+%token <sval> text
 
 	/* keywords */
 %token AUDIO
-%token ANIM2D
 %token ANIM3DFRAMES
 %token ANIM3DTRANS
 %token ANIM3DFILE
@@ -59,11 +55,11 @@ module_file:			module_file data_list |
 data_list:				audio_module | anim_module
 						;
 
-audio_header:			AUDIO_MODULE "{"
+audio_header:			AUDIO_MODULE '{'
 						;
 
-audio_module:			audio_header audio_list "}" |
-						audio_header  "}"
+audio_module:			audio_header audio_list '}' |
+						audio_header  '}'
 						;
 
 audio_list:				audio_list audio_track |
@@ -84,13 +80,13 @@ audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER INTEGER
 						}
 						;
 
-anim_module_header:		ANIM_MODULE "{"
+anim_module_header:		ANIM_MODULE '{'
 						{
 						}
 						;
 
-anim_module:			anim_module_header anim_file_list   "}" |
-						anim_module_header anim_config_list "}" |
+anim_module:			anim_module_header anim_file_list   '}' |
+						anim_module_header anim_config_list '}' |
 						/* NULL */
 						;
 
@@ -133,7 +129,7 @@ anim_trans:				ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER
 						{
 							anim_Create3D( $2, $3, $4, $5, ANIM_3D_TRANS, g_iCurAnimID );
 						}
-						"{" anim_obj_list "}"
+						'{' anim_obj_list '}'
 						{
 							g_iCurAnimID++;
 						}
@@ -143,11 +139,11 @@ anim_frames:			ANIM3DFRAMES QTEXT INTEGER INTEGER
 						{
 							anim_Create3D( $2, $3, $4, 1, ANIM_3D_FRAMES, g_iCurAnimID );
 						}
-						"{"
+						'{'
 						{
 							anim_BeginScript();
 						}
-						anim_script "}"
+						anim_script '}'
 						{
 							anim_EndScript();
 							g_iCurAnimID++;
@@ -158,11 +154,11 @@ anim_obj_list:			anim_obj anim_obj_list |
 						anim_obj
 						;
 
-anim_obj:				ANIMOBJECT INTEGER QTEXT "{"
+anim_obj:				ANIMOBJECT INTEGER QTEXT '{'
 						{
 							anim_BeginScript();
 						}
-						anim_script "}"
+						anim_script '}'
 						{
 							anim_EndScript();
 						}
