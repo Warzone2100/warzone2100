@@ -10,6 +10,7 @@
 #include "editbox.h"
 #include "form.h"
 #include "vid.h"
+#include "scrap.h"
 
 
 /* Pixel gap between edge of edit box and text */
@@ -98,6 +99,8 @@ BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
 	}
 
 	editBoxInitialise(*ppsWidget);
+
+	init_scrap();
 
 	return TRUE;
 }
@@ -195,6 +198,18 @@ static void overwriteChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
 
 	/* Update the insertion point */
 	*pPos += 1;
+}
+
+/* Put a character into a text buffer overwriting any text under the cursor */
+static void putSelection(STRING *pBuffer, UDWORD *pPos)
+{
+	int scraplen;
+	char* scrap = NULL;
+
+	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
+	strncpy(pBuffer, scrap, scraplen);
+	pBuffer[scraplen] = '\0';
+	*pPos = scraplen;
 }
 
 
@@ -490,6 +505,10 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			}
 			break;
 		case INPBUF_TAB :
+			putSelection(pBuffer, &pos);
+
+			/* Update the printable text */
+			fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
 			break;
 		case INPBUF_CR :
 			/* Finish editing */
