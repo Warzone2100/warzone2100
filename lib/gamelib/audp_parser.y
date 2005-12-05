@@ -1,7 +1,5 @@
 %{
 
-#include <stdio.h>
-
 #include "frame.h"
 #include "parser.h"
 #include "audio.h"
@@ -25,7 +23,7 @@ void audp_error(char *pMessage,...);
 }
 
 	/* value tokens */
-%token <fval> FLOAT
+%token <fval> FLOAT_T
 %token <ival> INTEGER
 %token <sval> QTEXT			/* Text with double quotes surrounding it */
 %token <ival> LOOP

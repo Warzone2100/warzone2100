@@ -15,9 +15,9 @@ else
 LIBS+=ivis_opengl
 endif
 
-GENERATED_SRC=	resource_lexer.c \
-		resource_parser.c \
-		resource_parser.h
+GENERATED_SRC=	audp_lexer.c \
+		audp_parser.c \
+		audp_parser.h
 
 LIB=gamelib
 
@@ -29,7 +29,7 @@ audp_lexer.c: audp_lexer.l
 	mv lex.audp_.c $@
 
 audp_parser.c audp_parser.h: audp_parser.y
-	bison audp_parser.y
+	bison -d audp_parser.y
 	mv audp_parser.tab.c audp_parser.c
 	mv audp_parser.tab.h audp_parser.h
 

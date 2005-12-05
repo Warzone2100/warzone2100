@@ -51,7 +51,7 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 	/* Match floating point numbers */
 	/* This is a problem with the PSX so is disabled
 -?[0-9]*"."[0-9]+				{	audp_lval.fval = (float) atof(audp_text);
-									return FLOAT;
+									return FLOAT_T;
 								}
 	*/
 
