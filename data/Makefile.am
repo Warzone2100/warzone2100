@@ -6,12 +6,12 @@ ZIPLIST = 01 02 03 04 05 06 07 08 09 10 11 anims audio components effects featur
 
 install-data-local:
 	[ -d 01 ] && { zip -ru9 warzone.wz $(ZIPLIST) -x *svn* || zip -T warzone.wz ; } || true
-	[ -d "$(datadir)" ] || $(mkdir_p) "$(datadir)"
-	[ -d "$(datadir)/@PACKAGE@" ] || $(mkdir_p) "$(datadir)/@PACKAGE@"
-	[ -f warzone.wz ] && $(INSTALL_DATA) warzone.wz $(datadir)/@PACKAGE@/ || true
+	[ -d "$(DESTDIR)$(datadir)" ] || $(mkdir_p) "$(DESTDIR)$(datadir)"
+	[ -d "$(DESTDIR)$(datadir)/@PACKAGE@" ] || $(mkdir_p) "$(DESTDIR)$(datadir)/@PACKAGE@"
+	[ -f warzone.wz ] && $(INSTALL_DATA) warzone.wz $(DESTDIR)$(datadir)/@PACKAGE@/ || true
 
 uninstall-local:
-	rm -f $(datadir)/@PACKAGE@/warzone.wz
+	rm -f $(DESTDIR)$(datadir)/@PACKAGE@/warzone.wz
 
 clean-local:
 	rm -f warzone.wz
@@ -21,4 +21,4 @@ installcheck:
 
 dist-hook:
 	[ -d 01 ] && { zip -ru9 warzone.wz $(ZIPLIST) -x *svn* || zip -T warzone.wz ; } || true
-	[ -d 01 ] && cp -fu warzone.wz $(distdir) || true
+	[ -d 01 ] && cp -fu warzone.wz $(DESTDIR)$(distdir) || true
