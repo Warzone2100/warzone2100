@@ -122,7 +122,6 @@ warzone_SOURCES = \
 		oprint.c \
 		power.c \
 		projectile.c \
-		readfiles.c \
 		seqdisp.c \
 		structure.c \
 		target.c \
