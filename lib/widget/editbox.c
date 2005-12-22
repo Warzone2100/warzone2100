@@ -203,13 +203,16 @@ static void overwriteChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
 /* Put a character into a text buffer overwriting any text under the cursor */
 static void putSelection(STRING *pBuffer, UDWORD *pPos)
 {
+	static char* scrap = NULL;
 	int scraplen;
-	char* scrap = NULL;
 
 	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
-	strncpy(pBuffer, scrap, scraplen);
-	pBuffer[scraplen] = '\0';
-	*pPos = scraplen;
+	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
+	{
+		strncpy(pBuffer, scrap, scraplen);
+		pBuffer[scraplen] = '\0';
+		*pPos = scraplen;
+	}
 }
 
 

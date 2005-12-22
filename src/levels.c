@@ -715,6 +715,14 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 		}
 	}
 
+	// if this is a single player level - disable the multiple WDG
+	if (psNewLevel->type < LDS_NONE)
+	{
+		loadLevels(0);
+	} else {
+		loadLevels(MAX_NUM_PATCHES);
+	}
+
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)
 	{

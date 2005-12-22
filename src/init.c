@@ -757,7 +757,7 @@ BOOL loadLevels(int patchlevel)
 	}
 	FREE(pBuffer);
 
-	debug(LOG_WZ, "Loading patches up to patchlevel %d", patchlevel);
+	debug(LOG_WZ, "*****   Loading patches up to patchlevel %d   *****", patchlevel);
 	/* Load every addon.lev file in patchlevel range */
 	for (j = 1; j <= patchlevel; j++) {
 		char path[MAX_PATH];

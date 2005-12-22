@@ -201,6 +201,14 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 		strcat(dest, "/");
 		strcat(dest, subdir);
 	}
+	{
+		unsigned int l = strlen(dest);
+
+		if (dest[l-1] != '/') {
+			dest[l] = '/';
+			dest[l] = '\0';
+		}
+	}
 	PHYSFS_mkdir(dest);
 	if (PHYSFS_isDirectory(dest) == 0) {
 		debug(LOG_ERROR, "Unable to create directory \"%s\" in write dir \"%s\"!",
