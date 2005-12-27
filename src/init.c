@@ -746,6 +746,21 @@ BOOL loadLevels(int patchlevel)
 		snprintf(path, MAX_PATH, "%02d", j);
 		(void) PHYSFS_removeFromSearchPath(path);
 	}
+	{
+		char **rc = PHYSFS_enumerateFiles("mods");
+		char **i;
+
+		for (i = rc; *i != NULL; i++) {
+			char path[MAX_PATH];
+
+			snprintf(path, MAX_PATH, "mods/%s/addon.lev", i[0]);
+			if (PHYSFS_exists(path)) {
+				snprintf(path, MAX_PATH, "mods/%s", i[0]);
+				(void) PHYSFS_removeFromSearchPath(path);
+			}
+		}
+		PHYSFS_freeList(rc);
+	}
 
 	// load the original gamedesc.lev
 	if (!loadFile("gamedesc.lev", &pBuffer, &size)) {
@@ -758,11 +773,10 @@ BOOL loadLevels(int patchlevel)
 	FREE(pBuffer);
 
 	debug(LOG_WZ, "*****   Loading patches up to patchlevel %d   *****", patchlevel);
-	/* Load every addon.lev file in patchlevel range */
 	for (j = 1; j <= patchlevel; j++) {
 		char path[MAX_PATH];
 
-		snprintf(path, MAX_PATH, "%02d%saddon.lev", j, "/");
+		snprintf(path, MAX_PATH, "%02d/addon.lev", j);
 		if (!PHYSFS_exists(path)) {
 			debug(LOG_WZ, "loadLevels: No \"%s\" found", path);
 			continue;
@@ -779,12 +793,59 @@ BOOL loadLevels(int patchlevel)
 		FREE(pBuffer);
 	}
 
+	if (patchlevel > 0) {
+		/* Load every addon.lev file */
+		debug(LOG_WZ, "Loading addons", patchlevel);
+		{
+			char **rc = PHYSFS_enumerateFiles("mods");
+			char **i;
+
+			for (i = rc; *i != NULL; i++) {
+				char path[MAX_PATH];
+
+				snprintf(path, MAX_PATH, "mods/%s/addon.lev", i[0]);
+				if (!PHYSFS_exists(path)) {
+					debug(LOG_WZ, "loadLevels: No \"%s\" found", path);
+					continue;
+				}
+				debug(LOG_WZ, "loadLevels: Loading add-on map \"%s\"", path);
+				if (!loadFile(path, &pBuffer, &size)) {
+					return FALSE;	// only in NDEBUG case
+				}
+				if (!levParse(pBuffer, size)) {
+					debug(LOG_ERROR, "loadLevels: \"%s\" parse error?", path);
+					FREE(pBuffer);
+					return FALSE;
+				}
+				FREE(pBuffer);
+			}
+			PHYSFS_freeList(rc);
+		}
+	}
+
 	/* Now readd used patches */
 	for (j = 1; j <= patchlevel; j++) {
 		char path[MAX_PATH];
 
 		snprintf(path, MAX_PATH, "%02d", j);
 		PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
+	}
+
+	if (patchlevel > 0) {
+		/* Load every addon.lev file */
+		char **rc = PHYSFS_enumerateFiles("mods");
+		char **i;
+
+		for (i = rc; *i != NULL; i++) {
+			char path[MAX_PATH];
+
+			snprintf(path, MAX_PATH, "mods/%s/addon.lev", i[0]);
+			if (PHYSFS_exists(path)) {
+				snprintf(path, MAX_PATH, "mods/%s", i[0]);
+				PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
+			}
+		}
+		PHYSFS_freeList(rc);
 	}
 
 	currentlevel = patchlevel;
@@ -824,9 +885,11 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
+	/*
 	if (!loadLevels(MAX_NUM_PATCHES)) {
 		return FALSE;
 	}
+	*/
 
 	// Initialize render engine
 	war_SetFog(FALSE);

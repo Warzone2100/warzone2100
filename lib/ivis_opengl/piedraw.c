@@ -138,8 +138,8 @@ void pie_BeginLighting(float x, float y, float z) {
 	float pos[4];
 	float zero[4] = {0, 0, 0, 0};
 	float ambient[4] = {0.2, 0.2, 0.2, 0};
-	float diffuse[4] = {1, 1, 1, 0};
-	float specular[4] = {0, 0, 0, 0};
+	float diffuse[4] = {0.5, 0.5, 0.5, 0};
+	float specular[4] = {1, 1, 1, 0};
 
 	pos[0] = x;
 	pos[1] = y;
@@ -324,7 +324,7 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 			float ambient[4] = { 1, 1, 1, 1 };
 			float diffuse[4] = { 1, 1, 1, 1 };
 			float specular[4] = { 1, 1, 1, 1 };
-			float shininess = 0;
+			float shininess = 10;
 
 			 glEnable(GL_LIGHTING);
 			 glEnable(GL_NORMALIZE);
@@ -352,6 +352,7 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 		}
 	}
 	for (i = 0; i < numVerts; i++) {
+		//glColor4ub(255, 255, 255, 255);
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
 		glTexCoord2f(pVrts[i].tu, pVrts[i].tv+texture_offset);
 		//d3dVrts[i].specular = pVrts[i].specular.argb;

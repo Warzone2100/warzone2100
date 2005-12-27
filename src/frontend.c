@@ -583,6 +583,8 @@ void endSinglePlayerMenu( void )
 
 void frontEndNewGame( void )
 {
+	loadLevels(0);
+
 	switch(StartWithGame) {
 		case 1:
 			strcpy(pLevelName,DEFAULT_LEVEL);
@@ -590,14 +592,6 @@ void frontEndNewGame( void )
 		
 			seq_AddSeqToList("CAM1\\c001.rpl",NULL,"CAM1\\c001.txa",FALSE,0);
 			
-//			seq_AddTextForVideo("Dawn, July 4th, 2066", 20, 432, 0, 299,0,0);
-//			seq_AddTextForVideo("Project HQ.", 0, 0, 0, 299);
-//			seq_AddTextForVideo("A New Era", 0, 0, 0, 299);
-//			seq_AddTextForVideo("Morning, July 4th, 2066", 20, 432, 399, 699);
-//			seq_AddTextForVideo("In-flight to Western Sector", 0, 0, 399, 699);
-//			seq_AddTextForVideo("Team Alpha nears its destination", 0, 0, 399, 699);
-			
-		
 			seq_StartNextFullScreenVideo();
             break;
 		
@@ -773,7 +767,9 @@ BOOL startMultiPlayerMenu(VOID)
 BOOL runMultiPlayerMenu(VOID)
 {
 	UDWORD id;
-//	PLAYERSTATS	nullStats;
+
+	loadLevels(MAX_NUM_PATCHES);
+
 	processFrontendSnap(TRUE);
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets 

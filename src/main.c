@@ -150,13 +150,12 @@ static void initialize_PhysicsFS(char *mod)
 			}
 		}
 	}
-	snprintf(overridepath, sizeof(overridepath), "%soverride", 
+	snprintf(overridepath, sizeof(overridepath), "%smods", 
 	         PHYSFS_getBaseDir());
 	strcpy(mappath, PHYSFS_getBaseDir());
 	strcat(mappath, "maps");
 	if (mod) {
-		snprintf(modpath, sizeof(modpath), "%smods%s%s.wz", PHYSFS_getBaseDir(), 
-		         "/", mod);
+		snprintf(modpath, sizeof(modpath), "%smods/%s.wz", PHYSFS_getBaseDir(), mod);
 	}
 
 	/* The 1 below means append to search path, while 0 means prepend. */
