@@ -52,6 +52,7 @@ BOOL	MultiMenuUp			= FALSE;
 BOOL	ClosingMultiMenu	= FALSE;
 static UDWORD	context = 0;
 static UDWORD	current_tech = 0;
+static UDWORD	current_numplayers = 0;
 
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
@@ -103,6 +104,11 @@ static UDWORD	current_tech = 0;
 #define M_REQUEST_C2	(MULTIMENU+62)
 #define M_REQUEST_C3	(MULTIMENU+63)
 
+#define M_REQUEST_AP	(MULTIMENU+70)
+#define M_REQUEST_2P	(MULTIMENU+71)
+#define M_REQUEST_4P	(MULTIMENU+72)
+#define M_REQUEST_8P	(MULTIMENU+73)
+
 #define M_REQUEST_BUT	(MULTIMENU+100)		// allow loads of buttons.
 #define M_REQUEST_BUTM	(MULTIMENU+1100)
 
@@ -127,7 +133,7 @@ static BOOL		giftsUp[MAX_PLAYERS] = {TRUE};		//gift buttons for player are up.
 // enumerates maps in the gamedesc file.
 // returns only maps that are valid the right 'type'
 
-BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUse)
+BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
 {	
 	static LEVEL_DATASET *lev;
 	UBYTE cam;
@@ -170,7 +176,8 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 
 			if((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
 //				|| lev->type == MULTI_SKIRMISHA)
-				&& cam == camToUse)
+				&& (numPlayers == 0 || numPlayers == lev->players)
+				&& cam == camToUse )
 			{
 				strcpy(found,lev->pName);
 				*players = lev->players;
@@ -199,7 +206,8 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 			}
 //	end of service pack
 		
-			if((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3 )
+			if((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3
+				&& (numPlayers == 0 || numPlayers == lev->players))
 //				||lev->type == MULTI_CAMPAIGNA)
 				&& cam == camToUse )
 			{
@@ -277,6 +285,27 @@ void displayCamTypeBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 }
 
+void displayNumPlayersBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+{
+	UDWORD	x = xOffset+psWidget->x;
+	UDWORD	y = yOffset+psWidget->y;
+	char buffer[8];
+
+	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	if ((int)(psWidget->UserData) == current_numplayers) {
+		iV_SetTextColour(PIE_TEXT_WHITE);
+	} else {
+		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
+	}
+	if ((int)(psWidget->UserData) == 0) {
+		sprintf(buffer, " *", (int)(psWidget->UserData));
+	} else {
+		sprintf(buffer, "%iP", (int)(psWidget->UserData));
+	}
+	pie_DrawText(buffer, x+2, y+12);
+
+}
+
 #define NBTIPS 512
 
 unsigned int check_tip_index(unsigned int i) {
@@ -292,7 +321,7 @@ unsigned int check_tip_index(unsigned int i) {
 // ////////////////////////////////////////////////////////////////////////////
 // FIXME: what is this, and why is there some code that only works in win32
 // here? - Per
-VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
+VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
@@ -309,6 +338,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	
 	context = mode;
 	current_tech = mapCam;
+	current_numplayers = numPlayers;
 
 #ifdef WIN32
 	if(GetCurrentDirectory(255,(char*)&ToFind) == 0)
@@ -336,10 +366,10 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	
 	if(mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
 	{
-		if(enumerateMultiMaps(tips[0],&players, TRUE,mapCam))
+		if(enumerateMultiMaps(tips[0],&players, TRUE,mapCam,numPlayers))
 		{
 			numButtons++;
-			while(enumerateMultiMaps(tips[0],&players, FALSE,mapCam))
+			while(enumerateMultiMaps(tips[0],&players, FALSE,mapCam,numPlayers))
 			{
 				numButtons++;
 			}
@@ -501,7 +531,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 
 	if(mode == MULTIOP_MAP)		
 	{
-		if(enumerateMultiMaps( sTemp,&players,TRUE,mapCam))
+		if(enumerateMultiMaps( sTemp,&players,TRUE,mapCam,numPlayers))
 		{
 			do{
 				unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
@@ -527,7 +557,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 					sButInit.y = 4;
 					sButInit.majorID += 1;
 				}
-			}while(enumerateMultiMaps(sTemp,&players,FALSE,mapCam));
+			}while(enumerateMultiMaps(sTemp,&players,FALSE,mapCam,numPlayers));
 		}
 	}
 	multiRequestUp = TRUE;
@@ -541,7 +571,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 		sButInit.id		= M_REQUEST_C1;
 		sButInit.style		= WBUT_PLAIN;
 		sButInit.x		= 4;
-		sButInit.y		= 17;
+		sButInit.y		= 258;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;			
@@ -561,6 +591,31 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 		sButInit.y		+= 22;
 		sButInit.UserData	= 3;			
 		sButInit.pTip		= "Tech:3";
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_AP;
+		sButInit.y		= 17;
+		sButInit.UserData	= 0;			
+		sButInit.pTip		= "Any number of players";
+		sButInit.pDisplay	= displayNumPlayersBut;
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_2P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 2;			
+		sButInit.pTip		= "2 players";
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_4P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 4;			
+		sButInit.pTip		= "4 players";
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_8P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 8;			
+		sButInit.pTip		= "8 players";
 		widgAddButton(psRScreen, &sButInit);
 	}
 
@@ -606,17 +661,37 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValu
 	if( id == M_REQUEST_C1)
 	{
 		closeMultiRequester();
-		addMultiRequest(tmp,MULTIOP_MAP,1);
+		addMultiRequest(tmp,MULTIOP_MAP,1,current_numplayers);
 	}
 	if( id == M_REQUEST_C2)
 	{
 		closeMultiRequester();
-		addMultiRequest(tmp,MULTIOP_MAP,2);
+		addMultiRequest(tmp,MULTIOP_MAP,2,current_numplayers);
 	}
 	if( id == M_REQUEST_C3)
 	{
 		closeMultiRequester();
-		addMultiRequest(tmp,MULTIOP_MAP,3);
+		addMultiRequest(tmp,MULTIOP_MAP,3,current_numplayers);
+	}
+	if( id == M_REQUEST_AP)
+	{
+		closeMultiRequester();
+		addMultiRequest(tmp,MULTIOP_MAP,current_tech,0);
+	}
+	if( id == M_REQUEST_2P)
+	{
+		closeMultiRequester();
+		addMultiRequest(tmp,MULTIOP_MAP,current_tech,2);
+	}
+	if( id == M_REQUEST_4P)
+	{
+		closeMultiRequester();
+		addMultiRequest(tmp,MULTIOP_MAP,current_tech,4);
+	}
+	if( id == M_REQUEST_8P)
+	{
+		closeMultiRequester();
+		addMultiRequest(tmp,MULTIOP_MAP,current_tech,8);
 	}
 //	if( id == M_REQUEST_CA)
 //	{

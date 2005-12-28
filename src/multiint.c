@@ -1956,7 +1956,7 @@ static void processMultiopWidgets(UDWORD id)
 			strcpy(tmp,MultiCustomMapsPath);
 			strcat(tmp,"*.wrf");
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s", tmp);
-			addMultiRequest(tmp,MULTIOP_MAP,1);
+			addMultiRequest(tmp,MULTIOP_MAP,1, 2);
 			break;
 	
 //		case MULTIOP_ARENA:										// turn on arena game	
@@ -2249,7 +2249,7 @@ static void processMultiopWidgets(UDWORD id)
 		widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
 		strcpy(tmp,MultiForcesPath);
 		strcat(tmp,"*.for");
-		addMultiRequest(tmp,MULTIOP_FNAME,0);
+		addMultiRequest(tmp,MULTIOP_FNAME,0,0);
 		break;
 	
 	case MULTIOP_PNAME:			
@@ -2282,7 +2282,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		strcpy(tmp,MultiPlayersPath);
 		strcat(tmp,"*.sta");
-		addMultiRequest(tmp,MULTIOP_PNAME,0);
+		addMultiRequest(tmp,MULTIOP_PNAME,0,0);
 		break;
 
 	case MULTIOP_HOST:

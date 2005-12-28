@@ -8,7 +8,7 @@
 #define __INCLUDED_MULTIMENU__
 
 // requester
-extern VOID		addMultiRequest(STRING *ToFind, UDWORD id,UBYTE mapCam);
+extern VOID		addMultiRequest(STRING *ToFind, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
 extern BOOL		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 extern BOOL		runMultiRequester(UDWORD id,UDWORD *contextmode, STRING *chosen,UDWORD *chosenValue);
