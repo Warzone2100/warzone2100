@@ -165,7 +165,15 @@ int iV_GetTexture(char *filename)
 	}
 
 	/* This should never happen - by now all textures should have been loaded. */
-	debug(LOG_ERROR, "iV_TexLoad: texture %s not loaded!", filename);
+	debug(LOG_ERROR, "*** texture %s not loaded! ***", filename);
+  debug(LOG_ERROR, "Available texture pages in memory:");
+  for (i = 0; i < _TEX_INDEX; i++) {
+    debug(LOG_ERROR, "   %02d : %s", i, _TEX_PAGE[i].name);
+  }
+  debug(LOG_ERROR, "This error probably means you did not specify for this texture");
+  debug(LOG_ERROR, "to be preloaded in the appropriate wrf files before referencing");
+  debug(LOG_ERROR, "it in some pie file.  Remember that patches override several");
+  debug(LOG_ERROR, "standard wrf files as well.");
 	assert(FALSE);
 	return -1;
 }
