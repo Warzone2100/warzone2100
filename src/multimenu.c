@@ -50,7 +50,8 @@ extern void	displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 BOOL	MultiMenuUp			= FALSE;
 BOOL	ClosingMultiMenu	= FALSE;
-static UDWORD	context;	
+static UDWORD	context = 0;
+static UDWORD	current_tech = 0;
 
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
@@ -97,12 +98,13 @@ static UDWORD	context;
 #define M_REQUEST_CLOSE (MULTIMENU+49)
 #define M_REQUEST		(MULTIMENU+50)
 #define M_REQUEST_TAB	(MULTIMENU+51)
-#define M_REQUEST_BUT	(MULTIMENU+55)		// allow loads of buttons.
-#define M_REQUEST_BUTM	(MULTIMENU+150)
 
-#define M_REQUEST_C1	(MULTIMENU+151)
-#define M_REQUEST_C2	(MULTIMENU+152)
-#define M_REQUEST_C3	(MULTIMENU+153)
+#define M_REQUEST_C1	(MULTIMENU+61)
+#define M_REQUEST_C2	(MULTIMENU+62)
+#define M_REQUEST_C3	(MULTIMENU+63)
+
+#define M_REQUEST_BUT	(MULTIMENU+100)		// allow loads of buttons.
+#define M_REQUEST_BUTM	(MULTIMENU+1100)
 
 #define M_REQUEST_X		MULTIOP_PLAYERSX
 #define M_REQUEST_Y		MULTIOP_PLAYERSY
@@ -111,7 +113,7 @@ static UDWORD	context;
 
 
 #define	R_BUT_W			105//112
-#define R_BUT_H			40
+#define R_BUT_H			30
 
 
 BOOL			multiRequestUp = FALSE;				//multimenu is up.
@@ -231,8 +233,8 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 		
-	iV_SetFont(WFont);									// font
-	iV_SetTextColour(-1);								//colour
+	iV_SetFont(WFont);					// font
+	iV_SetTextColour(-1);					//colour
 
 	while(iV_GetTextWidth(butString) > psWidget->width -10 )
 	{
@@ -241,14 +243,14 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 
 	//draw text								
 	iV_DrawText( (UCHAR*)butString,
-				 x+8,
-				 y+24);
+				 x+6,
+				 y+12);
 
 
 	// if map, then draw no. of players.
 	for(count=0;count<(UDWORD)psWidget->pUserData;count++)
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+8),y+28);
+		iV_DrawTransImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+6),y+16);
 	}
 
 	AddCursorSnap(&InterfaceSnap, (SWORD)(x+5),(SWORD)(y+5),psWidget->formID,psWidget->id,NULL);
@@ -262,11 +264,28 @@ void displayCamTypeBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-//	UDWORD	count;
+	char buffer[8];
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
-	pie_DrawText( (STRING*)&(psWidget->UserData), x+2, y+12);
+	sprintf(buffer, "T%i", (int)(psWidget->UserData));
+	if ((int)(psWidget->UserData) == current_tech) {
+		iV_SetTextColour(PIE_TEXT_WHITE);
+	} else {
+		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
+	}
+	pie_DrawText(buffer, x+2, y+12);
 
+}
+
+#define NBTIPS 512
+
+unsigned int check_tip_index(unsigned int i) {
+	if (i < NBTIPS) {
+		return i;
+	} else {
+		debug(LOG_MAIN, "Tip window index too high", i);
+		return NBTIPS-1;
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -284,11 +303,12 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	UDWORD			count;
 #endif
 	STRING			ToFind[255],sTemp[64];
-	static STRING	tips[40][MAX_STR_SIZE];
+	static STRING		tips[NBTIPS][MAX_STR_SIZE];
 
 	numButtons = 0;
 	
 	context = mode;
+	current_tech = mapCam;
 
 #ifdef WIN32
 	if(GetCurrentDirectory(255,(char*)&ToFind) == 0)
@@ -357,13 +377,11 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	sFormInit.y = 2;
 	sFormInit.width = M_REQUEST_W;	
 	sFormInit.height = M_REQUEST_H-4;	
-	if(numForms(numButtons, butPerForm) >4)
+
+	sFormInit.numMajor = numForms(numButtons, butPerForm);
+	if (sFormInit.numMajor > 8)
 	{
-		sFormInit.numMajor =4;
-	}
-	else
-	{
-		sFormInit.numMajor = numForms(numButtons, butPerForm);
+		sFormInit.numMajor = 8;
 	}
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
@@ -376,7 +394,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
-		sFormInit.aNumMinors[i] = 1;
+		sFormInit.aNumMinors[i] = 2;
 	}
 	widgAddForm(psRScreen, &sFormInit);
 
@@ -397,13 +415,13 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	
 	/* Put the buttons on it *//* Set up the button struct */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	sButInit.formID = M_REQUEST_TAB;
+	sButInit.formID		= M_REQUEST_TAB;
 	sButInit.id		= M_REQUEST_BUT;
-	sButInit.style	= WBUT_PLAIN;
-	sButInit.x		= 17;
+	sButInit.style		= WBUT_PLAIN;
+	sButInit.x		= 22;
 	sButInit.y		= 4;
-	sButInit.width	= R_BUT_W;
-	sButInit.height = R_BUT_H;
+	sButInit.width		= R_BUT_W;
+	sButInit.height		= R_BUT_H;
 	sButInit.pUserData	= (void*)0;			
 	sButInit.pDisplay	= displayRequestOption; 
 	sButInit.FontID		= WFont;
@@ -415,13 +433,15 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 		count=0;
 		while( count < (butPerForm*4)  ) 
 		{
+			unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
+
 			/* Set the tip and add the button */		
 // use MALLOC, and do it dynamically
 			found.cFileName[strlen(found.cFileName) -4 ] = '\0';			// chop extension
-			strcpy(tips[sButInit.id-M_REQUEST_BUT],found.cFileName);		//need to store one!
+			strcpy(tips[tip_index],found.cFileName);		//need to store one!
 				
-			sButInit.pTip		= tips[sButInit.id-M_REQUEST_BUT];
-			sButInit.pText		= tips[sButInit.id-M_REQUEST_BUT];
+			sButInit.pTip		= tips[tip_index];
+			sButInit.pText		= tips[tip_index];
 	
 			if(mode == MULTIOP_MAP)											// if its a map, set player flag.
 			{
@@ -448,7 +468,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 			//	sprintf(tips[sButInit.id-M_REQUEST_BUT], "%d)%s",
 			//											sButInit.pUserData, 
 			//											sTemp  );
-				sprintf(tips[sButInit.id-M_REQUEST_BUT], "%s", sTemp  );
+				sprintf(tips[tip_index], "%s", sTemp  );
 			}
 			
 			count++;
@@ -484,15 +504,13 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 		if(enumerateMultiMaps( sTemp,&players,TRUE,mapCam))
 		{
 			do{
+				unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
 				
 				// add number of players to string.
-//				sprintf(tips[sButInit.id-M_REQUEST_BUT], "%d)%s",players,sTemp );
-				sprintf(tips[sButInit.id-M_REQUEST_BUT],"%s",sTemp );
-				//found.cFileName[strlen(found.cFileName) -4 ] = '\0';			// chop extension
-				//strcpy(tips[sButInit.id-M_REQUEST_BUT],found.cFileName);		//need to store one!		
+				sprintf(tips[tip_index],"%s",sTemp );
 				
-				sButInit.pTip = tips[sButInit.id-M_REQUEST_BUT];
-				sButInit.pText = tips[sButInit.id-M_REQUEST_BUT];
+				sButInit.pTip = tips[tip_index];
+				sButInit.pText = tips[tip_index];
 				sButInit.pUserData	= (void*)players; 
 
 				widgAddButton(psRScreen, &sButInit);
@@ -501,7 +519,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 				sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
 				if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
 				{
-					sButInit.x = 17;
+					sButInit.x = 22;
 					sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
 				}	
 				if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
@@ -519,39 +537,31 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam)
 	if(mode == MULTIOP_MAP)								
 	{
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
-		sButInit.formID = M_REQUEST;
+		sButInit.formID		= M_REQUEST;
 		sButInit.id		= M_REQUEST_C1;
-		sButInit.style	= WBUT_PLAIN;
+		sButInit.style		= WBUT_PLAIN;
 		sButInit.x		= 4;
 		sButInit.y		= 17;
-		sButInit.width	= 10;
-		sButInit.height = 17;
-		sButInit.UserData	= '1';			
+		sButInit.width		= 17;
+		sButInit.height		= 17;
+		sButInit.UserData	= 1;			
 		sButInit.FontID		= WFont;
 		sButInit.pTip		= "Tech:1";
 		sButInit.pDisplay	= displayCamTypeBut;
 		
 		widgAddButton(psRScreen, &sButInit);
 
-		sButInit.id		=	M_REQUEST_C2;
-		sButInit.y		+=	22;
-		sButInit.UserData	= '2';			
+		sButInit.id		= M_REQUEST_C2;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 2;			
 		sButInit.pTip		= "Tech:2";
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_C3;
-		sButInit.y		+=	22;
-		sButInit.UserData	= '3';			
+		sButInit.y		+= 22;
+		sButInit.UserData	= 3;			
 		sButInit.pTip		= "Tech:3";
 		widgAddButton(psRScreen, &sButInit);
-
-//		sButInit.id		= M_REQUEST_CA;
-//		sButInit.y		+=	22;
-//		sButInit.UserData	= '*';			
-//		sButInit.pTip		= "Tech:all";
-		
-//		widgAddButton(psRScreen, &sButInit);
-
 	}
 
 }
@@ -587,6 +597,7 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValu
 		*chosenValue = (UDWORD) ((W_BUTTON *)widgGetFromID(psRScreen,id))->pUserData ; 
 		closeMultiRequester();
 		*mode = context;
+
 		return TRUE;
 	}
 

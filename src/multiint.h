@@ -170,13 +170,13 @@ void loadMapPreview(void);
 #define MULTIOP_PLAYERS			10231
 #define MULTIOP_PLAYERSX		373
 #define MULTIOP_PLAYERSY		15
-#define MULTIOP_PLAYER_START	10232		//list of players
+#define MULTIOP_PLAYER_START		10232		//list of players
 #define MULTIOP_PLAYER_END		10249
 #define MULTIOP_PLAYERSW		250
 #define MULTIOP_PLAYERSH		330
 
 #define MULTIOP_PLAYERWIDTH		230
-#define	MULTIOP_PLAYERHEIGHT	36
+#define	MULTIOP_PLAYERHEIGHT		36
 
 #define MULTIOP_OPTIONS			10250
 #define MULTIOP_OPTIONSX		40
@@ -299,14 +299,14 @@ void loadMapPreview(void);
 // ///////////////////////////////
 // Many Button Variations..
 
-#define FORCE_BUTW				56
-#define FORCE_BUTH				38
+#define FORCE_BUTW			56
+#define FORCE_BUTH			38
 
 #define CON_BUTWIDTH			60
 #define CON_BUTHEIGHT			46
 
-#define CON_CONBUTW				CON_CONTYPESWIDTH-15
-#define CON_CONBUTH				46
+#define CON_CONBUTW			CON_CONTYPESWIDTH-15
+#define CON_CONBUTH			46
 
 #define	CON_NAMEBOXWIDTH		CON_SETTINGSWIDTH-CON_PHONEX
 #define	CON_NAMEBOXHEIGHT		15
@@ -314,8 +314,8 @@ void loadMapPreview(void);
 #define CON_COMBUTWIDTH			37
 #define CON_COMBUTHEIGHT		24
 
-#define MULTIOP_OKW				37
-#define MULTIOP_OKH				24
+#define MULTIOP_OKW			37
+#define MULTIOP_OKH			24
 
 #define MULTIOP_BUTW			35
 #define MULTIOP_BUTH			24	

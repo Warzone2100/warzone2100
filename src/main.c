@@ -205,7 +205,7 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 
 		if (dest[l-1] != '/') {
 			dest[l] = '/';
-			dest[l] = '\0';
+			dest[l+1] = '\0';
 		}
 	}
 	PHYSFS_mkdir(dest);

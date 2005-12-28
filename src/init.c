@@ -750,14 +750,23 @@ BOOL loadLevels(int patchlevel)
 		char **rc = PHYSFS_enumerateFiles("mods");
 		char **i;
 
-		for (i = rc; *i != NULL; i++) {
+		for (i = rc; *i != NULL; ++i) {
 			char path[MAX_PATH];
+			char **filelist;
+			char **j;
 
-			snprintf(path, MAX_PATH, "mods/%s/addon.lev", i[0]);
-			if (PHYSFS_exists(path)) {
-				snprintf(path, MAX_PATH, "mods/%s", i[0]);
-				(void) PHYSFS_removeFromSearchPath(path);
+			snprintf(path, MAX_PATH, "mods/%s", i[0]);
+			filelist = PHYSFS_enumerateFiles(path);
+			for (j = filelist; *j != NULL; ++j) {
+				unsigned int l = strlen(j[0]);
+
+				if (   (l >= 9)
+				    && !strcasecmp((char*)(j[0]+l-9), "addon.lev")) {
+					(void) PHYSFS_removeFromSearchPath(path);
+					break;
+				}
 			}
+			PHYSFS_freeList(filelist);
 		}
 		PHYSFS_freeList(rc);
 	}
@@ -802,22 +811,32 @@ BOOL loadLevels(int patchlevel)
 
 			for (i = rc; *i != NULL; i++) {
 				char path[MAX_PATH];
+				char **filelist;
+				char **j;
 
-				snprintf(path, MAX_PATH, "mods/%s/addon.lev", i[0]);
-				if (!PHYSFS_exists(path)) {
-					debug(LOG_WZ, "loadLevels: No \"%s\" found", path);
-					continue;
+				snprintf(path, MAX_PATH, "mods/%s", i[0]);
+				filelist = PHYSFS_enumerateFiles(path);
+				for (j = filelist; *j != NULL; ++j) {
+					unsigned int l = strlen(j[0]);
+
+					if (   (l >= 9)
+					    && !strcasecmp((char*)(j[0]+l-9), "addon.lev")) {
+						char filepath[MAX_PATH];
+
+						snprintf(filepath, MAX_PATH, "mods/%s/%s", i[0], j[0]);
+						debug(LOG_WZ, "loadLevels: Loading add-on map \"%s\"", filepath);
+						if (!loadFile(filepath, &pBuffer, &size)) {
+							return FALSE;	// only in NDEBUG case
+						}
+						if (!levParse(pBuffer, size)) {
+							debug(LOG_ERROR, "loadLevels: \"%s\" parse error?", filepath);
+							FREE(pBuffer);
+							return FALSE;
+						}
+						FREE(pBuffer);
+					}
 				}
-				debug(LOG_WZ, "loadLevels: Loading add-on map \"%s\"", path);
-				if (!loadFile(path, &pBuffer, &size)) {
-					return FALSE;	// only in NDEBUG case
-				}
-				if (!levParse(pBuffer, size)) {
-					debug(LOG_ERROR, "loadLevels: \"%s\" parse error?", path);
-					FREE(pBuffer);
-					return FALSE;
-				}
-				FREE(pBuffer);
+				PHYSFS_freeList(filelist);
 			}
 			PHYSFS_freeList(rc);
 		}
@@ -832,18 +851,26 @@ BOOL loadLevels(int patchlevel)
 	}
 
 	if (patchlevel > 0) {
-		/* Load every addon.lev file */
 		char **rc = PHYSFS_enumerateFiles("mods");
 		char **i;
 
 		for (i = rc; *i != NULL; i++) {
 			char path[MAX_PATH];
+			char **filelist;
+			char **j;
 
-			snprintf(path, MAX_PATH, "mods/%s/addon.lev", i[0]);
-			if (PHYSFS_exists(path)) {
-				snprintf(path, MAX_PATH, "mods/%s", i[0]);
-				PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
+			snprintf(path, MAX_PATH, "mods/%s", i[0]);
+			filelist = PHYSFS_enumerateFiles(path);
+			for (j = filelist; *j != NULL; ++j) {
+				unsigned int l = strlen(j[0]);
+
+				if (   (l >= 9)
+				    && !strcasecmp((char*)(j[0]+l-9), "addon.lev")) {
+					PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
+					break;
+				}
 			}
+			PHYSFS_freeList(filelist);
 		}
 		PHYSFS_freeList(rc);
 	}
