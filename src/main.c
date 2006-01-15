@@ -41,6 +41,7 @@
 #ifndef DEFAULT_DATA_DIR
 	#define DEFAULT_DATA_DIR "/usr/share"
 #endif
+char datadir[MAX_PATH]; // Global that src/clparse.c:ParseCommandLineEarly can write to, so it can override the default datadir on runtime
 
 // Warzone 2100 . Pumpkin Studios
 
@@ -96,7 +97,7 @@ static void initialize_PhysicsFS(char *mod)
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 	char **i;
-	char datadir[MAX_PATH], overridepath[MAX_PATH], modpath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
+	char overridepath[MAX_PATH], modpath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
 #ifdef WIN32
   const char *writedir = "warzone-2.0";
 #else
@@ -126,9 +127,10 @@ static void initialize_PhysicsFS(char *mod)
   }
 	PHYSFS_addToSearchPath(writepath, 0); /* add to search path */
 
-strcpy( datadir, DEFAULT_DATA_DIR );
+if( !*datadir )
+	strcpy( datadir, DEFAULT_DATA_DIR );
 strcat( datadir, "/warzone/warzone.wz" );
-debug( LOG_WZ, "Trying Datadir: %s\n", datadir );
+debug( LOG_WZ, "Trying default datadir: %s\n", datadir );
 if ( !PHYSFS_addToSearchPath( datadir, 1) )
 {
         debug( LOG_WZ, "Could not find data in \"%s\".", datadir );

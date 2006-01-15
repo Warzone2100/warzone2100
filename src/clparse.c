@@ -33,6 +33,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 extern char	SaveGamePath[];
 // Got removed by Dennis
 //extern char default_data_path[MAX_PATH]; // from main.c (yes, I know, more globals - Per)
+extern char datadir[MAX_PATH];
 
 // whether to play the intro video
 BOOL	clIntroVideo;
@@ -51,7 +52,18 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 	for (i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
-		if (stricmp(tokenType, "-debugfile") == 0) {
+// TODO: Support --GNU long-opts and -G short opts
+		if( stricmp(tokenType, "-help" ) == 0 ) {
+			// Show help
+			fprintf( stdout,
+				"Warzone command line options:\n"
+				"   -help :            Show this help\n"
+				"   -debug FLAGS :     Show debug for FLAGS\n"
+				"   -debugfile FILE :  Log debug output in FILE\n"
+				"   -datadir DIR :     Set default datadir to DIR\n" );
+			return FALSE;
+		}
+		else if (stricmp(tokenType, "-debugfile") == 0) {
 			// find the file name
 			token = argv[++i];
 			if (token == NULL) {
@@ -70,17 +82,16 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
 				return FALSE;
 			}
-// Removed by Dennis... Shall we update to the new system?
-/*		} else if (stricmp(tokenType, "-datapath") == 0) {
+		} else if (stricmp(tokenType, "-datadir") == 0) {
 			// find the quoted path name
 			token = argv[++i];
 			if (token == NULL)
 			{
-				DBERROR( ("Unrecognised datapath\n") );
+				DBERROR( ("Unrecognised datadir\n") );
 				return FALSE;
 			}
-			strncpy(default_data_path, token, sizeof(default_data_path));
-*/		}
+			strncpy(datadir, token, sizeof(datadir));
+		}
 	}
 	return TRUE;
 }
