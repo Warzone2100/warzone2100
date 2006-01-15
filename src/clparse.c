@@ -31,7 +31,8 @@
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
-extern char default_data_path[MAX_PATH]; // from main.c (yes, I know, more globals - Per)
+// Got removed by Dennis
+//extern char default_data_path[MAX_PATH]; // from main.c (yes, I know, more globals - Per)
 
 // whether to play the intro video
 BOOL	clIntroVideo;
@@ -69,7 +70,8 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
 				return FALSE;
 			}
-		} else if (stricmp(tokenType, "-datapath") == 0) {
+// Removed by Dennis... Shall we update to the new system?
+/*		} else if (stricmp(tokenType, "-datapath") == 0) {
 			// find the quoted path name
 			token = argv[++i];
 			if (token == NULL)
@@ -78,7 +80,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				return FALSE;
 			}
 			strncpy(default_data_path, token, sizeof(default_data_path));
-		}
+*/		}
 	}
 	return TRUE;
 }

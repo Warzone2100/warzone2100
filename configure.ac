@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([warzone], [2.1], [http://developer.berlios.de/projects/warzone/])
+AC_INIT([warzone], [1.99], [http://developer.berlios.de/projects/warzone/])
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_TARGET
@@ -65,7 +65,7 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([debug mode])
 if test "$debug" = yes; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  CFLAGS="-O0 -g"
+  CFLAGS="-O0 -g3 -Wall"
   AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
   AC_MSG_RESULT([yes])
 else
@@ -126,8 +126,8 @@ AC_DEFUN([WZ_EXPAND_DIR], [
 ])
 dnl export where the datadir is going to be installed; we will look for
 dnl $datadir/warzone/warzone.wz
-WZ_EXPAND_DIR(WARZONE_DATADIR, "$datadir/warzone")
-AC_DEFINE_UNQUOTED(DEFAULT_DATA_PATH, "$WARZONE_DATADIR", [Warzone data path])
+WZ_EXPAND_DIR(datadir, "$datadir/warzone")
+AC_DEFINE_UNQUOTED(DEFAULT_DATA_DIR, "$datadir", [Warzone data path])
 
 AM_PATH_SDL([1.1.4], [sdl_found="yes"], [sdl_found="no"])
 if test "$sdl_found" = yes; then
@@ -290,7 +290,8 @@ AC_CONFIG_FILES([Makefile
                  lib/sound/Makefile
                  lib/widget/Makefile
                  data/Makefile
-                 src/Makefile])
+                 src/Makefile
+                 autopackage/default.apspec])
 AC_OUTPUT
 
 echo ""

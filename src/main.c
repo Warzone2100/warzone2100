@@ -38,8 +38,8 @@
 #include "mixer.h"
 #include "screen.h"
 
-#ifndef DEFAULT_DATA_PATH
-#define DEFAULT_DATA_PATH ""
+#ifndef DEFAULT_DATA_DIR
+	#define DEFAULT_DATA_DIR "/usr/share"
 #endif
 
 // Warzone 2100 . Pumpkin Studios
@@ -60,7 +60,6 @@ char	MultiCustomMapsPath[255];
 char	MultiPlayersPath[255];
 char	KeyMapPath[255];
 char*	UserMusicPath;
-char default_data_path[MAX_PATH];
 char	__UserMusicPath[255];
 char	RegFilePath[255];
 
@@ -97,8 +96,7 @@ static void initialize_PhysicsFS(char *mod)
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 	char **i;
-	char datapath[MAX_PATH], overridepath[MAX_PATH], modpath[MAX_PATH];
-  char writepath[MAX_PATH], mappath[MAX_PATH];
+	char datadir[MAX_PATH], overridepath[MAX_PATH], modpath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
 #ifdef WIN32
   const char *writedir = "warzone-2.0";
 #else
@@ -128,28 +126,36 @@ static void initialize_PhysicsFS(char *mod)
   }
 	PHYSFS_addToSearchPath(writepath, 0); /* add to search path */
 
-	if (*default_data_path != '\0') {
-		strcpy(datapath, default_data_path);
-		strcat(datapath, "/");
-		strcat(datapath, "warzone.wz");
-		if (!PHYSFS_addToSearchPath(datapath, 1)) {
-			debug(LOG_WZ, "Could not find warzone.wz in \"%s\".", default_data_path);
-			*default_data_path = '\0'; // try current dir instead
+strcpy( datadir, DEFAULT_DATA_DIR );
+strcat( datadir, "/warzone/warzone.wz" );
+debug( LOG_WZ, "Trying Datadir: %s\n", datadir );
+if ( !PHYSFS_addToSearchPath( datadir, 1) )
+{
+        debug( LOG_WZ, "Could not find data in \"%s\".", datadir );
+	
+	strcpy( datadir, PHYSFS_getBaseDir() );
+	strcat( datadir, "warzone.wz" );
+	debug( LOG_WZ, "Trying Datadir: %s\n", datadir );
+	if ( !PHYSFS_addToSearchPath( datadir, 1) )
+	{
+		debug( LOG_WZ, "Could not find data in \"%s\".", datadir );
+
+		strcpy( datadir, PHYSFS_getBaseDir() );
+		*strrchr( datadir, '/' ) = '\0'; // Trim ending '/', which getBaseDir allways provides
+
+		if( strcmp( strrchr( datadir, '/' ), "/bin" ) == 0 )
+			strcpy( strrchr( datadir, '/' ), "/share/warzone/warzone.wz" );
+                else if( strcmp( strrchr( datadir, '/' ), "/src" ) == 0 )
+                        strcpy( strrchr( datadir, '/' ), "/data" );
+
+		debug( LOG_WZ, "Trying Datadir: %s\n", datadir );
+		if( !PHYSFS_addToSearchPath( datadir, 1) ) {
+			debug( LOG_ERROR, "Could not find data in \"%s\".", datadir );
+			exit(1);
 		}
 	}
-	if (*default_data_path == '\0') {
-		strcpy(datapath, PHYSFS_getBaseDir());
-		if (!PHYSFS_addToSearchPath(datapath, 1)
-		    || !PHYSFS_exists("gamedesc.lev")) {
-			debug(LOG_WZ, "%s is not data directory", datapath);
-			strcat(datapath, "data");
-			debug(LOG_WZ, "Checking if %s is the data directory", datapath);
-			if (!PHYSFS_addToSearchPath(datapath, 1)) {
-				debug(LOG_ERROR, "No game data found anywhere!  Aborting...");
-				exit(1);
-			}
-		}
-	}
+}
+
 	snprintf(overridepath, sizeof(overridepath), "%smods", 
 	         PHYSFS_getBaseDir());
 	strcpy(mappath, PHYSFS_getBaseDir());
@@ -248,7 +254,6 @@ int main(int argc, char *argv[])
 
 	debug_init();
 
-	strcpy(default_data_path, DEFAULT_DATA_PATH);
 	// find early boot info
 	if (!ParseCommandLineEarly(argc, argv)) {
 		return -1;

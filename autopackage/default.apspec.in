@@ -1,0 +1,50 @@
+# -*-shell-script-*-
+
+[Meta]
+RootName: @gna.org/projects/warzone/:$SOFTWAREVERSION
+DisplayName: Warzone Strategy Game
+ShortName: warzone
+Maintainer: Warzone Resurrection Project <warzone-dev@gna.org>
+Packager: Dennis Schridde <devurandom@gna.org>
+Summary: Warzone is a 3D realtime strategy game about a post nuklear war in the year 2100
+URL: http://www.gna.org/projects/warzone/
+License: GNU General Public License, Version 2
+SoftwareVersion: @VERSION@
+AutopackageTarget: 1.0
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
+# or ask on autopackage-dev if you don't understand interface versioning in autopackage.
+#
+# InterfaceVersion: 0.0
+
+[Description]
+Warzone is a 3D realtime strategy game about a post nuklear war in the year 2100.
+You got to design your own units, by choosing tons of various chassis from a huge research tree.
+Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studies in 1999, and released in 2004 under the GPL.
+
+[BuildPrepare]
+prepareBuild
+
+[BuildUnprepare]
+unprepareBuild
+
+[Imports]
+echo '*' | import
+
+[Prepare]
+# Dependency checking
+require @opengl.org/opengl 1.0
+require @openal.org/openal 0.0
+require @libsdl.org/sdl 1.2
+require @libsdl.org/sdl_net 1.2
+require @icculus.org/physfs 1.0
+
+[Install]
+# Put your installation script here
+installExe bin/warzone
+installData share/warzone
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog
