@@ -201,7 +201,7 @@ BOOL registry_load( char *filename )
 			registry_set_key(key, buffer + l);
 		}
 	}
-	free(bufstart);
+	FREE(bufstart);
 	return TRUE;
 }
 
