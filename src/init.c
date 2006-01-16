@@ -912,11 +912,13 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
-	/*
+  /*
+   * FIXME: This is wrong for single player games, but keep
+   * as is for now so that people can play multiplayer games. 
+   */
 	if (!loadLevels(MAX_NUM_PATCHES)) {
 		return FALSE;
 	}
-	*/
 
 	// Initialize render engine
 	war_SetFog(FALSE);
