@@ -192,7 +192,8 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 			return FALSE;
 		}
 		if (bpp != screenDepth) {
-			printf("Warning: Using colour depth of %d instead of %d.\n", bpp, screenDepth);
+			debug(LOG_3D, "Warning: Using colour depth of %d instead of %d.", 
+            bpp, screenDepth);
 		}
 		screen = SDL_SetVideoMode(width, height, bpp, video_flags);
 		if (!screen) {
