@@ -56,11 +56,19 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 		if( stricmp(tokenType, "-help" ) == 0 ) {
 			// Show help
 			fprintf( stdout,
-				"Warzone command line options:\n"
-				"   -help :            Show this help\n"
-				"   -debug FLAGS :     Show debug for FLAGS\n"
-				"   -debugfile FILE :  Log debug output in FILE\n"
-				"   -datadir DIR :     Set default datadir to DIR\n" );
+				"Warzone2100:\n"
+				"   An OpenGL based 3D real time strategy game, scened in post-nuclear warfare\n"
+				"Usage:\n"
+				"   warzone [OPTIONS]\n"
+				"Options:\n"
+				"   -fullscreen :       Play in fullscreen mode\n"
+				"   -window :           Play in windowed mode\n"
+				"   -<WIDTH>x<HEIGHT> : Set the dimensions of the viewport (screen or window)\n"
+				"   -savegame <NAME>  : Load a saved game\n"
+				"   -help :             Show this help\n"
+				"   -debug FLAGS :      Show debug for FLAGS\n"
+				"   -debugfile FILE :   Log debug output in FILE\n"
+				"   -datadir DIR :      Set default datadir to DIR\n" );
 			return FALSE;
 		}
 		else if (stricmp(tokenType, "-debugfile") == 0) {
