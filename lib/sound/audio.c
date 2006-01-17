@@ -370,7 +370,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 	//
 	// SDWORD iSameSamples = 0;
 	//
-	debug(LOG_SOUND, "audio_queuesample called - track=%d", iTrack );
+//	debug(LOG_SOUND, "audio_queuesample called - track=%d", iTrack );
 
 	// return if audio not enabled
 	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
@@ -386,7 +386,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-	debug(LOG_SOUND, "audio_queuetrack called1" );
+//	debug(LOG_SOUND, "audio_queuetrack called1" );
 	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
 	if ( psSample != NULL )
 	{
