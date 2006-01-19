@@ -128,12 +128,14 @@ iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal)
 		}
 	}
 
+	if (info_ptr) png_destroy_info_struct(png_ptr, &info_ptr);
 	if (png_ptr) png_destroy_read_struct(&png_ptr, NULL, NULL);
 	free(buf);
 
 	return TRUE;
 
 error:
+	if (info_ptr) png_destroy_info_struct(png_ptr, &info_ptr);
 	if (png_ptr) png_destroy_read_struct(&png_ptr, NULL, NULL);
 	free(buf);
 

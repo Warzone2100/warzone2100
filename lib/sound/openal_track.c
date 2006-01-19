@@ -337,6 +337,7 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 		}
 	}
 
+	ov_clear(&ogg_stream);
 	alGenBuffers(1, &buffer);
 	alBufferData(buffer, format, data, size, freq);
 	sound_SaveTrackData(psTrack, buffer);

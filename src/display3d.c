@@ -109,10 +109,10 @@
 
 #if(ADDITIVE_WATER)
 #define WATER_TRANS_MODE pie_ADDITIVE		// Transparency mode for water (pie_TRANSLUCENT or pie_ADDITIVE)
-#define WATER_ALPHA_LEVEL 164 //was 164	// Amount to alpha blend water.
+#define WATER_ALPHA_LEVEL 255 //was 164	// Amount to alpha blend water.
 #else
 #define WATER_TRANS_MODE pie_TRANSLUCENT	// Transparency mode for water (pie_TRANSLUCENT or pie_ADDITIVE)
-#define WATER_ALPHA_LEVEL 160	// Amount to alpha blend water.
+#define WATER_ALPHA_LEVEL 255	// Amount to alpha blend water.
 #endif
 #define WATER_ZOFFSET 32		// Sorting offset for main water tile.
 #define WATER_EDGE_ZOFFSET 64	// Sorting offset for water edge tiles.
