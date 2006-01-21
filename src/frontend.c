@@ -1894,7 +1894,7 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
-	snprintf(sTmp, sTmpSize, "Version %s beta %s w/%s - Built %s", VERSION, SVN_REVISION,
+	snprintf(sTmp, sTmpSize, "Version %s w/%s - Built %s", SVN_REVISION,
             pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
 
 

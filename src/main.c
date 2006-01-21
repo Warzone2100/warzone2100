@@ -90,14 +90,79 @@ BOOL checkDisableLobby(void)
 */
 
 /***************************************************************************
-	Initialize the PhysicsFS library
+	When looking for our data, first check if we have been given an explicit
+	data path from the user. Then check the current directory. Finally check
+	the usual suspects in Unixland and round up some random hang arounds.
+	
+	This function sets the datadir variable.
 ***************************************************************************/
-static void initialize_PhysicsFS(char *mod)
+static void find_data_dir(void)
+{
+	/* Do we have a user supplied data dir? It must point to a directory with gamedesc.lev or
+	 * a warzone.wz with this file inside. */
+	if (datadir[0] != '\0') {
+		strcpy(datadir, DEFAULT_DATA_DIR);
+		if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
+			debug(LOG_ERROR, "Required file gamedesc.lev not found in requested data dir \"%s\".", datadir);
+			exit(1);
+		} else {
+			return;
+		}
+	}
+	
+	/* Check current dir for unpacked game data */
+	if (!PHYSFS_addToSearchPath(PHYSFS_getBaseDir(), 1) || !PHYSFS_exists("gamedesc.lev")) {
+		debug(LOG_WZ, "Could not find data in current dir \"%s\".", PHYSFS_getBaseDir());
+		(void) PHYSFS_removeFromSearchPath(PHYSFS_getBaseDir());
+	} else {
+		return;
+	}
+	
+	/* Check for warzone.wz in current dir */
+	strcpy(datadir, PHYSFS_getBaseDir());
+	strcat(datadir, "warzone.wz");
+	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
+		debug(LOG_WZ, "Did not find warzone.wz in currect directory \"%s\".", datadir);
+		(void) PHYSFS_removeFromSearchPath(datadir);
+	} else {
+		return;
+	}
+	
+	/* Check for warzone.wz in data/ dir */
+	strcpy(datadir, PHYSFS_getBaseDir());
+	strcat(datadir, "data/warzone.wz");
+	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
+		debug(LOG_WZ, "Did not find warzone.wz in data/ directory \"%s\".", datadir);
+		(void) PHYSFS_removeFromSearchPath(datadir);
+	} else {
+		return;
+	}
+	
+	/* Check for warzone.wz in Unixland system data directory and check if we are running 
+	 * straight out of the build directory (for convenience). */
+	strcpy(datadir, PHYSFS_getBaseDir());
+	*strrchr(datadir, '/') = '\0'; // Trim ending '/', which getBaseDir always provides
+	if (strcmp(strrchr(datadir, '/'), "/bin" ) == 0) {
+		strcpy(strrchr(datadir, '/'), "/share/warzone/warzone.wz" );
+	}	else if (strcmp(strrchr(datadir, '/'), "/src" ) == 0 ) {
+		strcpy( strrchr( datadir, '/' ), "/data" );
+	}
+	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
+		debug(LOG_WZ, "Could not find data in \"%s\".", datadir);
+		debug(LOG_ERROR, "Could not find game data. Aborting.");
+		exit(1);
+	}
+}
+
+/***************************************************************************
+	Initialize the PhysicsFS library.
+***************************************************************************/
+static void initialize_PhysicsFS(void)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 	char **i;
-	char overridepath[MAX_PATH], modpath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
+	char overridepath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
 #ifdef WIN32
   const char *writedir = "warzone-2.0";
 #else
@@ -127,44 +192,13 @@ static void initialize_PhysicsFS(char *mod)
   }
 	PHYSFS_addToSearchPath(writepath, 0); /* add to search path */
 
-if( !*datadir )
-	strcpy( datadir, DEFAULT_DATA_DIR );
-strcat( datadir, "/warzone/warzone.wz" );
-debug( LOG_WZ, "Trying default datadir: %s\n", datadir );
-if ( !PHYSFS_addToSearchPath( datadir, 1) )
-{
-        debug( LOG_WZ, "Could not find data in \"%s\".", datadir );
-	
-	strcpy( datadir, PHYSFS_getBaseDir() );
-	strcat( datadir, "warzone.wz" );
-	debug( LOG_WZ, "Trying Datadir: %s\n", datadir );
-	if ( !PHYSFS_addToSearchPath( datadir, 1) )
-	{
-		debug( LOG_WZ, "Could not find data in \"%s\".", datadir );
-
-		strcpy( datadir, PHYSFS_getBaseDir() );
-		*strrchr( datadir, '/' ) = '\0'; // Trim ending '/', which getBaseDir allways provides
-
-		if( strcmp( strrchr( datadir, '/' ), "/bin" ) == 0 )
-			strcpy( strrchr( datadir, '/' ), "/share/warzone/warzone.wz" );
-                else if( strcmp( strrchr( datadir, '/' ), "/src" ) == 0 )
-                        strcpy( strrchr( datadir, '/' ), "/data" );
-
-		debug( LOG_WZ, "Trying Datadir: %s\n", datadir );
-		if( !PHYSFS_addToSearchPath( datadir, 1) ) {
-			debug( LOG_ERROR, "Could not find data in \"%s\".", datadir );
-			exit(1);
-		}
-	}
-}
+  find_data_dir();
+  debug(LOG_WZ, "Data dir set to \"%s\".", datadir);
 
 	snprintf(overridepath, sizeof(overridepath), "%smods", 
 	         PHYSFS_getBaseDir());
 	strcpy(mappath, PHYSFS_getBaseDir());
 	strcat(mappath, "maps");
-	if (mod) {
-		snprintf(modpath, sizeof(modpath), "%smods/%s.wz", PHYSFS_getBaseDir(), mod);
-	}
 
 	/* The 1 below means append to search path, while 0 means prepend. */
 	if (!PHYSFS_addToSearchPath(overridepath, 0)) {
@@ -173,10 +207,6 @@ if ( !PHYSFS_addToSearchPath( datadir, 1) )
 	}
 	if (!PHYSFS_addToSearchPath(mappath, 0)) {
 		debug(LOG_WZ, "Error adding map path %s: %s", mappath,
-		      PHYSFS_getLastError());
-	}
-	if (mod && !PHYSFS_addToSearchPath(modpath, 0)) {
-		debug(LOG_ERROR, "Error adding mod path %s: %s", modpath,
 		      PHYSFS_getLastError());
 	}
 
@@ -190,11 +220,6 @@ if ( !PHYSFS_addToSearchPath( datadir, 1) )
 	debug(LOG_WZ, "Write path: %s", PHYSFS_getWriteDir());
 
 	PHYSFS_permitSymbolicLinks(1);
-
-	if (!PHYSFS_exists("gamedesc.lev")) {
-		debug(LOG_ERROR, "Could not find the file gamedesc.lev in archives!");
-		exit(1);
-	}
 	debug(LOG_WZ, "gamedesc.lev found at %s", PHYSFS_getRealDir("gamedesc.lev"));
 }
 
@@ -255,6 +280,7 @@ int main(int argc, char *argv[])
 #endif
 
 	debug_init();
+	datadir[0] = '\0'; // this needs to be before ParseCommandLineEarly
 
 	// find early boot info
 	if (!ParseCommandLineEarly(argc, argv)) {
@@ -268,7 +294,7 @@ int main(int argc, char *argv[])
 #else
 	PHYSFS_init(argv[0]);
 #endif
-	initialize_PhysicsFS(NULL);
+	initialize_PhysicsFS();
 
 	make_dir(ScreenDumpPath, "screendumps", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
