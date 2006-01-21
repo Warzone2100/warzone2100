@@ -769,126 +769,6 @@ found:
 /* Find out what can see this object */
 void processVisibility(BASE_OBJECT *psObj)
 {
-#ifdef _OLD_PSX_VISIBILITY_METHOD_
-// Simple version. if the tile the object is on is visible then the object is visible.
-	MAPTILE *psTile;
-	int Player;
-	BOOL changed;
-	BOOL prevVis[MAX_PLAYERS];
-	BOOL currVis[MAX_PLAYERS];
-	MESSAGE *psMessage;
-	int i;
-
-	if ((psObj->id % 8) != (frameGetFrameNumber() % 8)) {
-		return;
-	}
-
-	changed = FALSE;
-
-	for (i=0; i<MAX_PLAYERS; i++)
-	{
-		prevVis[i] = psObj->visible[i] != 0;
-	}
-
-	if (psObj->type == OBJ_DROID)
-	{
-		memset (currVis, 0, sizeof(BOOL) * MAX_PLAYERS);
-
-		// one can trivially see oneself
-		currVis[psObj->player]=TRUE;
-	}
-	else
-	{
-		memcpy(currVis, prevVis, sizeof(BOOL) * MAX_PLAYERS);
-	}
-
-
-	if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE)
-	{
-		for(Player = 0; Player < MAX_PLAYERS; Player++) {
-			if (!psObj->visible[Player])
-			{
-				psTile = &psMapTiles[(psObj->x>>TILE_SHIFT) + ((psObj->y>>TILE_SHIFT) * mapWidth)];
-				if( TEST_TILE_VISIBLE(Player,psTile) ) {
-					psObj->visible[Player] = UBYTE_MAX;
-
-		 			currVis[Player]=TRUE;
-					if (!prevVis[Player])
-					{
-						if (psObj->visible[Player] == 0)
-						{
-							psObj->visible[Player] = 1;
-						}
-						clustObjectSeen(psObj, NULL);
-					}
-
-					changed = TRUE;
-				}
-			}
-		}
-	}
-
-	if(changed)
-	{
-//		if (psObj->type != OBJ_FEATURE)
-//		{
-//			clustObjectSeen(psObj, NULL);
-//		}
-
-		// if a structure has just become visible set the tile flags
-		if (psObj->type == OBJ_STRUCTURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
-		{
-			setStructTileDraw((STRUCTURE *)psObj);
-		}
-
-		// if a feature has just become visible set the tile flags
-		if (psObj->type == OBJ_FEATURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
-		{
-			setFeatTileDraw((FEATURE *)psObj);
-
-			/*if this is an oil resource we want to add a proximity message for 
-			the selected Player - if there isn't an Resource Extractor on it*/
-			if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
-			{
-				if(!TILE_HAS_STRUCTURE(mapTile(psObj->x >> TILE_SHIFT,
-					psObj->y >> TILE_SHIFT)))
-				{
-					psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
-					if (psMessage)
-					{
-						psMessage->pViewData = (MSG_VIEWDATA *)psObj;
-					}
-					if(!bInTutorial)
-					{
-						//play message to indicate been seen
-						audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,
-							psObj->x, psObj->y, psObj->z );
-					}
-				}
-			}
-			/*if this is an artefact we want to add a proximity message for 
-				the selected Player*/
-				if (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE)
-				{
-					psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
-					if (psMessage)
-					{
-						psMessage->pViewData = (MSG_VIEWDATA *)psObj;
-					}
-					if(!bInTutorial)
-					{
-						//play message to indicate been seen
-						audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC,
-							psObj->x, psObj->y, psObj->z );
-					}
-				}
-		}
-	}
-
-	return;
-
-#else
-
 //	DROID		*psCount;
 	DROID		*psDroid;
 	STRUCTURE	*psBuilding;
@@ -1133,7 +1013,6 @@ void processVisibility(BASE_OBJECT *psObj)
 				}
 			}
 	}
-#endif // End of #ifdef PSX ( simple version ).
 }
 
 void	setUnderTilesVis(BASE_OBJECT *psObj,UDWORD player)
