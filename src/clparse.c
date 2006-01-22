@@ -41,7 +41,12 @@ BOOL	clIntroVideo;
 // let the end user into debug mode....
 BOOL	bAllowDebugMode = FALSE;
 
-// we need to find these early in the boot process
+/**************************************************************************
+	First half of the command line parsing. Also see ParseCommandLine()
+	below. The parameters here are needed early in the boot process,
+	while the ones in ParseCommandLine can benefit from debugging being
+	set up first.
+**************************************************************************/
 BOOL ParseCommandLineEarly(int argc, char** argv)
 {
 	char			*tokenType;
@@ -104,7 +109,10 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 	return TRUE;
 }
 
-// note that render mode must come before resolution flag.
+/**************************************************************************
+	Second half of command line parsing. See ParseCommandLineEarly() for
+	the first half. Note that render mode must come before resolution flag.
+**************************************************************************/
 BOOL ParseCommandLine(int argc, char** argv)
 {
 //	char			seps[] = " ,\t\n";
