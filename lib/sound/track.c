@@ -246,6 +246,7 @@ void *sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 
 	// allocate track
 	pTrack = (TRACK *) MALLOC( sizeof(TRACK) );
+	memset(pTrack, 0, sizeof(TRACK));
 	if ( pTrack == NULL )
 	{
 		DBERROR( ("sound_LoadTrackFromBuffer: couldn't allocate memory\n") );
@@ -480,7 +481,7 @@ char *sound_GetTrackName( SDWORD iTrack )
 {
 	if ( iTrack == SAMPLE_NOT_FOUND ) return NULL;
 	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
-	return g_apTrack[iTrack]->pName;
+	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
 }
 
 //*
@@ -492,7 +493,7 @@ UDWORD sound_GetTrackHashName( SDWORD iTrack )
 	if (iTrack == 0 || iTrack == SAMPLE_NOT_FOUND)
 		return 0;
 	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
-	return g_apTrack[iTrack]->resID;
+	return g_apTrack[iTrack] ? g_apTrack[iTrack]->resID : 0;
 }
 
 //*
