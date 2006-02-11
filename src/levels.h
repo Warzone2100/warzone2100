@@ -40,12 +40,13 @@ typedef UDWORD LEVEL_TYPE;
 
 typedef struct _level_dataset
 {
-	SWORD	type;							// type of map
-	SWORD	players;						// number of players for the map
-	SWORD	game;							// index of WRF/WDG that loads the scenario file
-	STRING	*pName;							// title for the level
-	STRING	*apDataFiles[LEVEL_MAXFILES];	// the WRF/WDG files for the level
-											// in load order
+	SWORD	type;					// type of map
+	SWORD	players;				// number of players for the map
+	SWORD	game;					// index of WRF/WDG that loads the scenario file
+	STRING	*pName;					// title for the level
+	int	dataDir;					// title for the level
+	STRING	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
+							// in load order
 	struct _level_dataset *psBaseData;		// LEVEL_DATASET that must be loaded for this level to load
 	struct _level_dataset *psChange;		// LEVEL_DATASET used when changing to this level from another
 
@@ -57,7 +58,7 @@ typedef struct _level_dataset
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern BOOL levParse(UBYTE *pBuffer, SDWORD size);
+extern BOOL levParse(UBYTE *pBuffer, SDWORD size, int datadir);
 
 // shutdown the level system
 extern void levShutDown(void);

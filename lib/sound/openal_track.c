@@ -56,6 +56,8 @@ static void PrintOpenALVersion()
 		   alGetString(AL_RENDERER), alGetString(AL_EXTENSIONS));
 }
 
+static unsigned int nb_sources = 0;
+
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -153,14 +155,14 @@ void sound_Update( void )
 		for ( tmp = &active_samples, i = *tmp; i != NULL; i = *tmp )
 		{
 			//~~~~~~~~~~
-			ALenum	state;
+			ALenum	state = AL_STOPPED;
 			//~~~~~~~~~~
 
 			alGetSourcei( i->curr->iSample, AL_SOURCE_STATE, &state );
 			switch ( state )
 			{
 			case AL_PLAYING:
-			case AL_LOOPING:
+			case AL_PAUSED:
 				//
 				// * sound_SetObjectPosition(i->curr->iSample, i->curr->x, i->curr->y, i->curr->z);
 				//
@@ -169,7 +171,10 @@ void sound_Update( void )
 
 			default:
 				sound_FinishedCallback( i->curr );
-				alDeleteSources( 1, &(i->curr->iSample) );
+				if (i->curr->iSample != AL_INVALID) {
+					alDeleteSources( 1, &(i->curr->iSample) );
+					i->curr->iSample = AL_INVALID;
+				}
 				*tmp = i->next;
 				free( i );
 				break;
@@ -209,7 +214,10 @@ BOOL sound_QueueSamplePlaying( void )
 		}
 		else
 		{
-			alDeleteSources( 1, &current_queue_sample );
+			if (current_queue_sample != AL_INVALID) {
+				alDeleteSources( 1, &current_queue_sample );
+				current_queue_sample = AL_INVALID;
+			}
 			current_queue_sample = -1;
 			return FALSE;
 		}
@@ -252,7 +260,7 @@ size_t ovbuf_read(void *ptr, size_t size, size_t nmemb, void *datasource) {
 
 int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
 	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
-	int new_pos;
+	int new_pos = 0;
 
 	switch (whence) {
 		case SEEK_SET:
@@ -503,7 +511,6 @@ BOOL sound_PlayStream( AUDIO_SAMPLE *psSample, char szFileName[], SDWORD iVol )
 void sound_StopSample( UDWORD iSample )
 {
 	alSourceStop( iSample );
-	alDeleteSources( 1, &iSample );
 }
 
 //*
@@ -640,7 +647,10 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 	}
 	else
 	{
-		alDeleteSources( 1, &(psSample->iSample) );
+				if (psSample->iSample != AL_INVALID) {
+					alDeleteSources( 1, &(psSample->iSample) );
+					psSample->iSample = AL_INVALID;
+				}
 		return TRUE;
 	}
 }

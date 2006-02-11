@@ -64,7 +64,7 @@ STRING						tempString[12];
 extern BOOL MultiPlayValidTemplate(DROID_TEMPLATE *psTempl);	// for templates.
 
 extern RESEARCH*			asResearch;							//list of possible research items.
-extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];	
+extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
@@ -1506,14 +1506,15 @@ BOOL recvMapFileData(NETMSG *pMsg)
 		// clear out the old level list.
 		levShutDown();
 		levInitialise();
-		loadLevels(MAX_NUM_PATCHES);
+		if (!buildMapList()) {
+			return FALSE;
+		}
 	}
 	else
 	{
 		flushConsoleMessages();
 		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
-	
 	
 	return TRUE;
 }

@@ -73,6 +73,7 @@
 extern BOOL bSubtitles;
 
 extern VOID intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
+extern void set_active_data_directory(int);
 
 extern CURSORSNAP InterfaceSnap;
 extern VOID ProcessCursorSnap(VOID);
@@ -582,8 +583,6 @@ void endSinglePlayerMenu( void )
 
 void frontEndNewGame( void )
 {
-	loadLevels(0);
-
 	switch(StartWithGame) {
 		case 1:
 			strcpy(pLevelName,DEFAULT_LEVEL);
@@ -766,8 +765,6 @@ BOOL startMultiPlayerMenu(VOID)
 BOOL runMultiPlayerMenu(VOID)
 {
 	UDWORD id;
-
-	loadLevels(MAX_NUM_PATCHES);
 
 	processFrontendSnap(TRUE);
 

@@ -132,6 +132,8 @@ void levError(STRING *pError)
 #endif
 }
 
+void set_active_data_directory(int index);
+
 // find the level dataset
 BOOL levFindDataSet(STRING *pName, LEVEL_DATASET **ppsDataSet)
 {
@@ -153,7 +155,7 @@ BOOL levFindDataSet(STRING *pName, LEVEL_DATASET **ppsDataSet)
 }
 
 // parse a level description data file
-BOOL levParse(UBYTE *pBuffer, SDWORD size)
+BOOL levParse(UBYTE *pBuffer, SDWORD size, int datadir)
 {
 	SDWORD			token, state, currData=0;
 	LEVEL_DATASET	*psDataSet = NULL;
@@ -189,6 +191,7 @@ BOOL levParse(UBYTE *pBuffer, SDWORD size)
 				memset(psDataSet, 0, sizeof(LEVEL_DATASET));
 				psDataSet->players = 1;
 				psDataSet->game = -1;
+				psDataSet->dataDir = datadir;
 				LIST_ADDEND(psLevels, psDataSet, LEVEL_DATASET);
 				currData = 0;
 
@@ -715,13 +718,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 		}
 	}
 
-	// if this is a single player level - disable the multiple WDG
-	if (psNewLevel->type < LDS_NONE)
-	{
-		loadLevels(0);
-	} else {
-		loadLevels(MAX_NUM_PATCHES);
-	}
+	set_active_data_directory(psNewLevel->dataDir);
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)

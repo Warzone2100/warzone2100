@@ -66,12 +66,12 @@ char PlayList_Read(const char* path) {
 			} else {
 				path_to_music = strdup(path_to_music);
 			}
-			//printf("  path = %s\n", path_to_music);
+			printf("  path = %s\n", path_to_music);
 		} else if (strncmp(buffer, "shuffle=", 8) == 0) {
 			if (strcmp(strtok(buffer+8, "\n"), "yes") == 0) {
 				CURRENT_TRACK.shuffle = TRUE;
 			}
-			//printf("  shuffle = yes\n");
+			printf("  shuffle = yes\n");
 		} else if (   buffer[0] != '\0'
 			   && (filename = strtok(buffer, "\n")) != NULL
 			   && strlen(filename) != 0) {
@@ -85,7 +85,7 @@ char PlayList_Read(const char* path) {
 						  + strlen(path_to_music)+2);
 				sprintf(filepath, "%s/%s", path_to_music, filename);
 			}
-			//printf("  adding song %s\n", filepath);
+			printf("  adding song %s\n", filepath);
 
 			if (CURRENT_TRACK.nb_songs == CURRENT_TRACK.list_size) {
 				CURRENT_TRACK.list_size <<= 1;

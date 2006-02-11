@@ -33,6 +33,7 @@ extern BOOL campaignReset(void);
 // Reset the game when loading a save game
 extern BOOL saveGameReset(void);
 
+BOOL buildMapList();
 BOOL loadLevels(int patchlevel);
 
 // the block heap for the game data

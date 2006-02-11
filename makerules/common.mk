@@ -18,7 +18,7 @@ endif
 
 CC=gcc
 #CC=g++ -fpermissive
-CFLAGS+=-gstabs -DYY_STATIC
+CFLAGS+=-gstabs -DYY_STATIC -DVERSION="2.0"
 
 ifeq ($(MODE), prod)
 CFLAGS+=-Wall -fno-strict-aliasing -O2

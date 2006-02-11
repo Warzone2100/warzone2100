@@ -112,7 +112,7 @@ extern void	featureInitVars(void);
 extern void radarInitVars(void);
 extern void	initMiscVars( void );
 
-
+extern char datadir[];
 
 
 
@@ -725,21 +725,203 @@ BOOL InitialiseGlobals(void)
 }
 
 
+void empty_search_path()
+{
+	char** search_path = PHYSFS_getSearchPath();
+	char** i;
+
+	for (i = search_path; *i != NULL; ++i) {
+		PHYSFS_removeFromSearchPath(*i);
+	}
+	PHYSFS_freeList(search_path);
+}
+
+char** save_search_path()
+{
+	char** search_path = PHYSFS_getSearchPath();
+	char** i;
+
+	for (i = search_path; *i != NULL; ++i) {
+		PHYSFS_removeFromSearchPath(*i);
+	}
+
+	return search_path;
+}
+
+void restore_search_path(char** search_path)
+{
+	char** i;
+
+	// empty search path
+	empty_search_path();
+
+	// restore search path
+	for (i = search_path; *i != NULL; ++i) {
+		PHYSFS_addToSearchPath(*i, 1);
+	}
+	PHYSFS_freeList(search_path);
+}
+
+BOOL loadLevFile(const char* filename, int datadir) {
+	char *pBuffer;
+	UDWORD size;
+
+	if (   !PHYSFS_exists(filename)
+	    || !loadFile(filename, &pBuffer, &size)) {
+		return FALSE; // only in NDEBUG case
+	}
+	if (!levParse(pBuffer, size, datadir)) {
+		debug(LOG_ERROR, "loadLevels: gamedesc.lev parse error");
+		return FALSE;
+	}
+	FREE(pBuffer);
+
+	return TRUE;
+}
+
+struct data_dir_t {
+	char*	name;
+	int	depend;
+};
+
+static struct data_dir_t*	data_dirs = NULL;
+static unsigned int		nb_data_dirs = 0;
+static unsigned int		data_dirs_size = 0;
+
+void set_active_data_directory(int index) {
+	static unsigned int current_index = -1;
+
+	if (index != current_index) {
+		int i = index;
+
+		empty_search_path();
+		PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), 1);
+		while (i >= 0 && i < nb_data_dirs) {
+			PHYSFS_addToSearchPath(data_dirs[i].name, 1);
+			i = data_dirs[i].depend;
+		}
+		current_index = index;
+
+		{
+			char** search_path = PHYSFS_getSearchPath();
+			char** i;
+
+			fprintf(stderr, "Updated path:\n");
+			for (i = search_path; *i != NULL; ++i) {
+				fprintf(stderr, "%s\n", *i);
+			}
+			PHYSFS_freeList(search_path);
+		}
+	}
+}
+
+int declare_data_directory(const char* name, int depend) {
+
+	if (name == NULL) {
+		nb_data_dirs = 0;
+		return 0;
+	}
+
+	if (data_dirs_size <= nb_data_dirs) {
+		if (data_dirs_size == 0) {
+			data_dirs_size = 4;
+			data_dirs = (struct data_dir_t*)malloc(data_dirs_size*sizeof(struct data_dir_t));
+		} else {
+			data_dirs_size <<= 1;
+			data_dirs = (struct data_dir_t*)realloc(data_dirs, data_dirs_size*sizeof(struct data_dir_t));
+		}
+	}
+
+	data_dirs[nb_data_dirs].name = strdup(name);
+	data_dirs[nb_data_dirs].depend = depend;
+	return nb_data_dirs++;
+}
+
+#define MAP_DIR "maps"
+
+BOOL buildMapList()
+{
+	char** search_path = save_search_path();
+	int depend;
+
+	declare_data_directory(NULL, -1);
+
+	// load the original gamedesc.lev
+	PHYSFS_addToSearchPath(datadir, 1);
+	depend = declare_data_directory(datadir, -1);
+	if (!loadLevFile("gamedesc.lev", depend)) {
+		restore_search_path(search_path);
+		return FALSE; // only in NDEBUG case
+	}
+	PHYSFS_removeFromSearchPath(datadir);
+
+	// load maps from patches
+	{
+		unsigned int i;
+		char path[MAX_PATH];
+
+		for (i = 1; i <= MAX_NUM_PATCHES; i++) {
+
+			snprintf(path, MAX_PATH, "%s%s%02d", datadir, PHYSFS_getDirSeparator(), i);
+			depend = declare_data_directory(path, depend);
+			PHYSFS_addToSearchPath(path, 1);
+			loadLevFile("addon.lev", depend);
+			PHYSFS_removeFromSearchPath(path);
+		}
+	}
+
+	// load maps from directories in maps directory
+	{
+		char** map_dirs;
+		char** i;
+		char path[MAX_PATH];
+
+		PHYSFS_addToSearchPath(datadir, 1);
+		map_dirs = PHYSFS_enumerateFiles(MAP_DIR);
+		PHYSFS_removeFromSearchPath(datadir);
+
+		for (i = map_dirs; *i != NULL; ++i) {
+			int dir_index = -1;
+			char** filelist;
+			char** j;
+
+			snprintf(path, MAX_PATH, "%s%s"MAP_DIR"%s%s", datadir, PHYSFS_getDirSeparator(), PHYSFS_getDirSeparator(), *i);
+			PHYSFS_addToSearchPath(path, 1);
+			filelist = PHYSFS_enumerateFiles("");
+			for (j = filelist; *j != NULL; ++j) {
+				unsigned int l = strlen(*j);
+
+				if (   (l >= 9)
+				    && !strcasecmp((char*)(*j+l-9), "addon.lev")) {
+					if (dir_index == -1) {
+						dir_index = declare_data_directory(path, depend);
+					}
+					loadLevFile(*j, dir_index);
+				}
+			}
+			PHYSFS_removeFromSearchPath(path);
+		}
+	}
+
+	restore_search_path(search_path);
+	return TRUE;
+}
+
+
 /**************************************************************************
 	Load gamedesc.lev and addon.lev files up given patchlevel in terms of
 	game patches.  Also adds search paths for these patches with higher
 	priority than other files.
 **************************************************************************/
+/*
 BOOL loadLevels(int patchlevel)
 {
 	static int currentlevel = -1;
 	int j;
-	char *pBuffer;
-	UDWORD size;
 
 	if (patchlevel == currentlevel) return TRUE;
 
-	/* First remove all old patches from search path */
+	// First remove all old patches from search path
 	for (j = 1; j <= MAX_NUM_PATCHES; j++) {
 		char path[MAX_PATH];
 
@@ -803,7 +985,7 @@ BOOL loadLevels(int patchlevel)
 	}
 
 	if (patchlevel > 0) {
-		/* Load every addon.lev file */
+		// Load every addon.lev file
 		debug(LOG_WZ, "Loading addons", patchlevel);
 		{
 			char **rc = PHYSFS_enumerateFiles("mods");
@@ -842,7 +1024,7 @@ BOOL loadLevels(int patchlevel)
 		}
 	}
 
-	/* Now readd used patches */
+	// Now readd used patches
 	for (j = 1; j <= patchlevel; j++) {
 		char path[MAX_PATH];
 
@@ -879,6 +1061,7 @@ BOOL loadLevels(int patchlevel)
 
 	return TRUE;
 }
+*/
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -912,13 +1095,9 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
-  /*
-   * FIXME: This is wrong for single player games, but keep
-   * as is for now so that people can play multiplayer games. 
-   */
-	if (!loadLevels(MAX_NUM_PATCHES)) {
-		return FALSE;
-	}
+	buildMapList();
+
+	set_active_data_directory(0);
 
 	// Initialize render engine
 	war_SetFog(FALSE);
@@ -1197,7 +1376,7 @@ BOOL frontendInitialise(char *ResourceFile)
 	
 	initMiscVars();
 
-    gameTimeInit();
+	gameTimeInit();
 
 	// hit me with some funky beats....
 	if (war_GetPlayAudioCDs()) {

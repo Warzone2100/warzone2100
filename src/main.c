@@ -98,6 +98,7 @@ BOOL checkDisableLobby(void)
 ***************************************************************************/
 static void find_data_dir(void)
 {
+	printf("Finding data dir\n");
 	/* Do we have a user supplied data dir? It must point to a directory with gamedesc.lev or
 	 * a warzone.wz with this file inside. */
 	if (datadir[0] != '\0') {
@@ -115,6 +116,11 @@ static void find_data_dir(void)
 		debug(LOG_WZ, "Could not find data in current dir \"%s\".", PHYSFS_getBaseDir());
 		(void) PHYSFS_removeFromSearchPath(PHYSFS_getBaseDir());
 	} else {
+		char* tmp;
+
+		strcpy(datadir, PHYSFS_getBaseDir());
+		tmp = strrchr(datadir, *PHYSFS_getDirSeparator());
+		if (tmp != NULL) *tmp = '\0'; // Trim ending '/', which getBaseDir always provides
 		return;
 	}
 	
@@ -333,7 +339,8 @@ init://jump here from the end if re_initialising
 			return -1;
 		}
 	}
-  debug(LOG_MAIN, "reinitializing");
+
+	debug(LOG_MAIN, "reinitializing");
 
 	// find out if the lobby stuff has been disabled
 //	bDisableLobby = checkDisableLobby();
@@ -412,6 +419,8 @@ init://jump here from the end if re_initialising
 		{
 			case GS_TITLE_SCREEN:
 				screen_RestartBackDrop();
+
+				set_active_data_directory(MAX_NUM_PATCHES);
 
 				if (!frontendInitialise("wrf\\frontend.wrf"))
 				{

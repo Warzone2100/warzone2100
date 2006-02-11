@@ -60,6 +60,7 @@
 #include "multirecv.h"
 #include "multimenu.h"
 
+#include "init.h"
 #include "levels.h"
 
 #include <jpeglib.h>
@@ -173,6 +174,7 @@ BOOL			recvColourRequest	(NETMSG *pMsg);
 static VOID		AvailableForces		(VOID);				// draw available templates
 static VOID		CurrentForce		(VOID);				// draw the current force
 
+#define MAX(a, b) (((a) < (b)) ? (b) : (a))
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -210,6 +212,7 @@ void loadMapPreview(void)
 	}
 
 	levFindDataSet(game.map, &psLevel);
+	set_active_data_directory(MAX(psLevel->dataDir, MAX_NUM_PATCHES));
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "\\game.map");		
@@ -377,6 +380,7 @@ void loadMapPreview(void)
 //	if(tempBmp) free(tempBmp);
 	return;
 }
+
 // leave alone for now please -Q
 // I know this don't belong here, but I am using this for testing.
 void Show_Map(char *imagedata)
