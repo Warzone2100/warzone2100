@@ -4,6 +4,7 @@ SRC_FILES=	block.c \
 		frame_stub.c \
 		frameresource.c \
 		heap.c \
+		ignorecase.c \
 		input_stub.c \
 		mem.c \
 		mono.c \

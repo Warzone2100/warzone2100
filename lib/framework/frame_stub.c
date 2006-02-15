@@ -15,6 +15,7 @@
 #include <time.h>
 #include <SDL/SDL.h>
 #include <physfs.h>
+#include "ignorecase.h"
 
 // window focus messages 
 //#define DEBUG_GROUP1
@@ -499,7 +500,7 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	PHYSFS_sint64 filesize;
 	PHYSFS_sint64 length_read;
 
-	if (!PHYSFS_exists(pFileName)) {
+	if (PHYSFSEXT_locateCorrectCase(pFileName)) {
 		if (hard_fail) {
 			debug(LOG_ERROR, "loadFile2: %s not found", pFileName);
 			assert(FALSE);
