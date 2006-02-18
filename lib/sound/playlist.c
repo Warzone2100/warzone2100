@@ -28,6 +28,18 @@ void PlayList_Init() {
 		playlist[i].songs = malloc(2*sizeof(char*));
 		playlist[i].list_size = 2;
 		playlist[i].nb_songs = 0;
+		memset( playlist[i].songs, 0, playlist[i].list_size*sizeof(char*) );
+	}
+}
+
+void PlayList_Quit() {
+	unsigned int i, j;
+
+	for( i = 0; i < NB_TRACKS; ++i ) {
+		for( j = 0; j < playlist[i].list_size; ++j ) {
+			free( playlist[i].songs[j] );
+		}
+		free( playlist[i].songs );
 	}
 }
 
@@ -109,7 +121,7 @@ void PlayList_Shuffle() {
 		for (i = CURRENT_TRACK.nb_songs-1; i > 0; --i) {
 			unsigned int j = rand() % (i + 1);
 			char* swap = CURRENT_TRACK.songs[j];
- 
+
 			CURRENT_TRACK.songs[j] = CURRENT_TRACK.songs[i];
 			CURRENT_TRACK.songs[i] = swap;
 		}

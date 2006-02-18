@@ -52,11 +52,11 @@ static int _tex_get_top_bit(uint32 n)
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKeyed, 
+int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKeyed,
                          iBool bResource) {
 	int	i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d col=%d res=%d", filename, type, 
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d col=%d res=%d", filename, type,
 	      bColourKeyed, bResource);
 	assert(s != NULL);
 
@@ -196,8 +196,8 @@ int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
 	s.height = _TEX_PAGE[i].tex.height;
 	s.bmp = _TEX_PAGE[i].tex.bmp;
 
-  // FIXME: evil cast
-	pie_PNGLoadMemToBuffer((int8 *)pBuffer, &s, NULL); 
+	// FIXME: evil cast
+	pie_PNGLoadMemToBuffer((int8 *)pBuffer, &s, NULL);
 
 	return i;
 }

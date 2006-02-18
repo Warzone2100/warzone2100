@@ -17,7 +17,7 @@
 #include <physfs.h>
 #include "ignorecase.h"
 
-// window focus messages 
+// window focus messages
 //#define DEBUG_GROUP1
 #include "frame.h"
 #include "frameint.h"
@@ -112,7 +112,7 @@ static BOOL displayMouse=TRUE;
 /* Global variables for the frame rate stuff */
 static SDWORD	FrameCounts[TIMESPAN];
 static SDWORD	Frames;						// Number of frames elapsed since start
-static SDWORD	LastFrames;					
+static SDWORD	LastFrames;
 static SDWORD	RecentFrames;				// Number of frames in last second
 static SDWORD	PresSeconds;				// Number of seconds since execution started
 static SDWORD	LastSeconds;
@@ -145,7 +145,7 @@ SDWORD i;
 static void	MaintainFrameStuff( void )
 {
 SDWORD i;
-	
+
 	PresSeconds = clock()/CLOCKS_PER_SEC;
 	if (PresSeconds!=LastSeconds)
 		{
@@ -167,7 +167,7 @@ SDWORD i;
 
 		if (PresSeconds > 0)
 			FrameRate = Frames / PresSeconds;
-		}	
+		}
 	Frames++;
 }
 
@@ -319,8 +319,17 @@ static void initCursors()
         aCursors[CURSOR_PICKUP - CURSOR_OFFSET] = init_system_cursor(cursor_pickup);
         aCursors[CURSOR_SEEKREPAIR - CURSOR_OFFSET] = init_system_cursor(cursor_seekrepair);
         aCursors[CURSOR_SELECT - CURSOR_OFFSET] = init_system_cursor(cursor_select);
-} 
+}
 
+
+static void freeCursors()
+{
+	unsigned int i = 0;
+	for( ; i < MAX_CURSORS; i++ )
+	{
+		SDL_FreeCursor( aCursors[i] );
+	}
+}
 
 /*
  * frameInitialise
@@ -374,7 +383,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
         /* Initialise the Direct Draw Buffers */
         if (!screenInitialise(width, height, bitDepth, fullScreen, bVidMem, bActiveDDraw, hWndMain))
         {
-                return FALSE;							
+                return FALSE;
         }
 
 	/* Initialise the input system */
@@ -469,6 +478,9 @@ void frameShutDown(void)
 	/* Free the default cursor */
 	// DestroyCursor(hCursor);
 
+	/* Free all cursors */
+	freeCursors();
+
 	/* Destroy the Application window */
 	SDL_Quit();
 
@@ -486,14 +498,14 @@ void frameShutDown(void)
 }
 
 /***************************************************************************
-  Load the file with name pointed to by pFileName into a memory buffer. 
-  If AllocateMem is true then the memory is allocated ... else it is 
-  already in allocated in ppFileData, and the max size is in pFileSize 
+  Load the file with name pointed to by pFileName into a memory buffer.
+  If AllocateMem is true then the memory is allocated ... else it is
+  already in allocated in ppFileData, and the max size is in pFileSize
   ... this is adjusted to the actual loaded file size.
-  
+
   If hard_fail is true, we will assert and report on failures.
 ***************************************************************************/
-static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize, 
+static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
                       BOOL AllocateMem, BOOL hard_fail)
 {
 	PHYSFS_file *pfile;
@@ -601,8 +613,8 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 		debug(LOG_ERROR, "saveFile: PHYSFS_getRealDir(%s) returns NULL?!",
 		      filename);
 	} else {
-	  debug(LOG_WZ, "Successfully wrote to %s%s%s with %d bytes", 
-		      PHYSFS_getRealDir(filename), PHYSFS_getDirSeparator(), 
+	  debug(LOG_WZ, "Successfully wrote to %s%s%s with %d bytes",
+		      PHYSFS_getRealDir(filename), PHYSFS_getDirSeparator(),
 		      filename, size);
 	}
 	return TRUE;
@@ -633,7 +645,7 @@ BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSi
 #define	BITS_IN_int		32
 #define	THREE_QUARTERS	((UINT) ((BITS_IN_int * 3) / 4))
 #define	ONE_EIGHTH		((UINT) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))      
+#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))
 
 //#define	HIGH_BITS		((UINT)(0xf0000000))
 //#define	LOW_BITS		((UINT)(0x0fffffff))
@@ -713,7 +725,7 @@ UINT HashStringIgnoreCase( char *String )
 void ScanFilename(char *Fullname, int *PosOfDot, int *PosOfSlash)
 {
 	int Namelength;
-	
+
 	int DotPos=-1;
 	int SlashPos=-1;
 	int Pos;

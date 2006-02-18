@@ -110,12 +110,12 @@
 #define pie_ADDLIGHT(l,x)						\
 (((l)->byte.r > (MAX_UB_LIGHT - (x))) ? ((l)->byte.r = MAX_UB_LIGHT) : ((l)->byte.r +=(x)));		\
 (((l)->byte.g > (MAX_UB_LIGHT - (x))) ? ((l)->byte.g = MAX_UB_LIGHT) : ((l)->byte.g +=(x)));		\
-(((l)->byte.b > (MAX_UB_LIGHT - (x))) ? ((l)->byte.b = MAX_UB_LIGHT) : ((l)->byte.b +=(x)));		
+(((l)->byte.b > (MAX_UB_LIGHT - (x))) ? ((l)->byte.b = MAX_UB_LIGHT) : ((l)->byte.b +=(x)));
 
 #define pie_SUBTRACTLIGHT(l,x)						\
 (((l->byte.r) < (x)) ? ((l->byte.r) = MIN_UB_LIGHT) : ((l->byte.r) -=(x)));		\
 (((l->byte.g) < (x)) ? ((l->byte.g) = MIN_UB_LIGHT) : ((l->byte.g) -=(x)));		\
-(((l->byte.b) < (x)) ? ((l->byte.b) = MIN_UB_LIGHT) : ((l->byte.b) -=(x)));		
+(((l->byte.b) < (x)) ? ((l->byte.b) = MIN_UB_LIGHT) : ((l->byte.b) -=(x)));
 
 
 /***************************************************************************/
@@ -126,10 +126,10 @@
 
 typedef struct {UBYTE b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
 typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
-typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT; 
+typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT;
 typedef struct {SDWORD sx, sy, sz; UWORD tu, tv; PIELIGHT light, specular;} PIEVERTEX;
 
-typedef struct {float d3dx, d3dy, d3dz;} PIEPIXEL; 
+typedef struct {float d3dx, d3dy, d3dz;} PIEPIXEL;
 
 typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of texture
@@ -192,7 +192,7 @@ extern int pie_Num3dfxBuffersPending( void );
 extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
 extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 
-//piedraw functions used in piefunc.c 
+//piedraw functions used in piefunc.c
 extern void pie_D3DPoly(PIED3DPOLY *poly);
 
 // PNG
@@ -206,5 +206,7 @@ void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 
 void pie_BeginLighting(float x, float y, float z);
 void pie_RemainingPasses(void);
+
+void pie_CleanUp( void );
 
 #endif // _piedef_h

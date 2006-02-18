@@ -81,6 +81,7 @@ static unsigned int	music_rate;
 
 
 void PlayList_Init();
+void PlayList_Quit();
 char PlayList_Read(const char* path);
 void PlayList_SetTrack(unsigned int t);
 char* PlayList_CurrentSong();
@@ -128,12 +129,13 @@ BOOL cdAudio_Open( char* user_musicdir )
 	alSourcei (music_source, AL_SOURCE_RELATIVE, AL_TRUE);
 
 	PlayList_Init();
-	if (   (   user_musicdir == NULL
-		|| PlayList_Read(user_musicdir))
-	    && PlayList_Read("music")) {
+
+	if ( ( user_musicdir == NULL
+		|| PlayList_Read(user_musicdir) )
+	    && PlayList_Read("music") ) {
 		return FALSE;
 	}
-	
+
 	music_initialized = TRUE;
 
 	return TRUE;
@@ -151,11 +153,11 @@ BOOL cdAudio_Close( void )
 	{
 		SDL_CDClose( cdAudio_dev );
 	}
-
-	return TRUE;
-#else
-	return TRUE;
 #endif
+	alDeleteBuffers(NB_BUFFERS, music_buffers);
+	alDeleteSources(1, &music_source);
+	PlayList_Quit();
+	return TRUE;
 }
 
 #ifndef WZ_NOMP3
@@ -321,9 +323,9 @@ BOOL cdAudio_OpenTrack(char* filename) {
 			music_file = NULL;
 			return FALSE;
 		}
-	    
+
 		ogg_info = ov_info(&ogg_stream, -1);
-	 
+
 		if (ogg_info->channels == 1) {
 			music_format = AL_FORMAT_MONO16;
 		} else {

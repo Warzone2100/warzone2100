@@ -1,6 +1,6 @@
 /*
  *Config.c  saves your favourite options to the Registry.
- * 
+ *
  */
 
 #include "frame.h"
@@ -64,21 +64,21 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	{
 		mixer_SetWavVolume((SDWORD)val);//was val
 	}
-	
+
 	// //////////////////////////
 	// fx vol
 	if(getWarzoneKeyNumeric("fxvol", &val))
 	{
 		mixer_Set3dWavVolume((SDWORD)val);//was val
 	}
-	
+
 	// //////////////////////////
 	// cdvol
 	if(getWarzoneKeyNumeric("cdvol", &val))
 	{
 		mixer_SetCDVolume((SDWORD)val);
 	}
-	
+
 	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
 		war_SetPlayAudioCDs(val);
 	}
@@ -96,9 +96,9 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		gammaValue =(float)DEFAULTGAMMA/(float)25;
 		pie_SetGammaValue(gammaValue);
 		if(gammaValue<0.5)gammaValue =(float).5;
-		setWarzoneKeyNumeric("gamma", DEFAULTGAMMA);		
+		setWarzoneKeyNumeric("gamma", DEFAULTGAMMA);
 	}
-	
+
 	// //////////////////////////
 	// scroll
 	if(getWarzoneKeyNumeric("scroll", &val))
@@ -122,7 +122,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setShakeStatus(TRUE);
 		setWarzoneKeyNumeric("shake", TRUE);
 	}
-	
+
 	// //////////////////////////
 	// invert mouse
 	if(getWarzoneKeyNumeric("mouseflip", &val))
@@ -170,7 +170,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setWarzoneKeyNumeric("difficulty", DL_NORMAL);
 	}
 
-	
+
 	if(getWarzoneKeyNumeric("barmode", &val)&&(val<3)&&(val>=0))
 	{
 		barMode = val;
@@ -295,7 +295,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setWarzoneKeyString("mapName", game.map);
 	}
 
-	
+
 	// modem to use.
 	if(getWarzoneKeyNumeric("modemId", &val))
 	{
@@ -395,7 +395,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		game.alliance = NO_ALLIANCES;
 		setWarzoneKeyNumeric("alliance", game.alliance);
 	}
-		
+
 	// force name
 	if(getWarzoneKeyString("forceName",(char*)&sBuf))
 	{
@@ -436,25 +436,23 @@ BOOL loadRenderMode()
 	DWORD val;
 	unsigned int w, h;
 
-	if(!openWarzoneKey())
-	{
+	if( !openWarzoneKey() ) {
 		return FALSE;
 	}
 
-	if (getWarzoneKeyNumeric("fullscreen", &val)) {
+	if( getWarzoneKeyNumeric("fullscreen", &val) ) {
 		war_setFullscreen(val);
 	}
 
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
-	if (   getWarzoneKeyString("resolution", str)
-	    && sscanf(str, "%ix%i", &w, &h) == 2)
-	{	
-		pie_SetVideoBuffer(w, h);
+	if( getWarzoneKeyString("resolution", str)
+		&& sscanf(str, "%ix%i", &w, &h) == 2 ) {
+			pie_SetVideoBuffer(w, h);
 	}
 
 	return closeWarzoneKey();
-}	
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL saveConfig()
@@ -494,8 +492,8 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
 	setWarzoneKeyNumeric("gamma",(DWORD)(gammaValue*25));			// gamma
 	setWarzoneKeyNumeric("scroll",(DWORD)scroll_speed_accel);		// scroll
-	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level	
-	setWarzoneKeyNumeric("barmode",(DWORD)barMode);			//energybars		
+	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
+	setWarzoneKeyNumeric("barmode",(DWORD)barMode);			//energybars
 	setWarzoneKeyNumeric("visfog",(DWORD)(!war_GetFog()));			// fogtype
 	setWarzoneKeyNumeric("shake",(DWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(DWORD)(getInvertMouseStatus()));	// flipmouse
@@ -515,12 +513,12 @@ BOOL saveConfig()
 		{
 			setWarzoneKeyString("gameName", game.name);				//  last hosted game
 		}
-		setWarzoneKeyString("mapName", game.map);				//  map name	
+		setWarzoneKeyString("mapName", game.map);				//  map name
 		setWarzoneKeyNumeric("power", game.power);			// power
 		setWarzoneKeyNumeric("type", game.type);				// game type
 		setWarzoneKeyNumeric("base", game.base);				// size of base
 		setWarzoneKeyNumeric("fog", game.fog);				// fog 'o war
-		setWarzoneKeyNumeric("limit", game.limit);			// limits 
+		setWarzoneKeyNumeric("limit", game.limit);			// limits
 		setWarzoneKeyNumeric("maxPlay", game.maxPlayers);		// max no of players
 		setWarzoneKeyNumeric("compPlay", game.bComputerPlayers);	// allow pc players
 		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
@@ -528,12 +526,16 @@ BOOL saveConfig()
 		setWarzoneKeyString("forceName", sForceName);			// force
 		setWarzoneKeyString("playerName",(STRING*)sPlayer);		// player name
 		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
-		setWarzoneKeyString("phrase1", ingame.phrases[1]);	
-		setWarzoneKeyString("phrase2", ingame.phrases[2]);	
-		setWarzoneKeyString("phrase3", ingame.phrases[3]);	
-		setWarzoneKeyString("phrase4", ingame.phrases[4]);	
+		setWarzoneKeyString("phrase1", ingame.phrases[1]);
+		setWarzoneKeyString("phrase2", ingame.phrases[2]);
+		setWarzoneKeyString("phrase3", ingame.phrases[3]);
+		setWarzoneKeyString("phrase4", ingame.phrases[4]);
 	}
 
 	return closeWarzoneKey();
 }
 
+void closeConfig( void )
+{
+	reallyCloseWarzoneKey();
+}

@@ -124,10 +124,9 @@ int	seq_RenderOneFrameToBuffer(char *lpSF, int skip, SDWORD subMin, SDWORD subMa
 		if (++current_frame >= current_sequence->nb_chunks)
 		{
 			return VIDEO_FINISHED;
-		} else {
-			return current_frame;
 		}
 	}
+	return current_frame;
 }
 
 
@@ -142,16 +141,13 @@ int	seq_RenderOneFrame(LPDIRECTDRAWSURFACE4	lpDDSF, int skip, SDWORD subMin, SDW
 	{
 		return VIDEO_FRAME_ERROR;
 	}
-	else if (++current_frame >= current_sequence->nb_chunks) 
+	else if (++current_frame >= current_sequence->nb_chunks)
 	{
 //		seq_AddTextForVideo("<<hit ESC to continue>>", 0, 0, 399, 299);
-//		return VIDEO_FINISHED;			//For now, user must hit ESC to continue during mission briefings!
-													// temporary "fix".
+//		return VIDEO_FINISHED;	//For now, user must hit ESC to continue during mission briefings!
+		// temporary "fix".
 	}
-	else 
-	{
-		return current_frame;
-	}
+	return current_frame;
 }
 
 BOOL	seq_RefreshVideoBuffers(void)

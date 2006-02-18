@@ -81,8 +81,7 @@ typedef struct TRACK
 	STRING		*pName;					// resource name of the track
 	UDWORD		resID;					// hashed name of the WAV
 
-}
-TRACK;
+} TRACK;
 
 /***************************************************************************/
 /* functions

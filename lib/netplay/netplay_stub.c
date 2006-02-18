@@ -42,7 +42,7 @@ BOOL MultiPlayerJoin(DPID dpid);
 BOOL MultiPlayerLeave(DPID dpid);
 
 // ////////////////////////////////////////////////////////////////////////
-// Variables 
+// Variables
 
 NETPLAY	NetPlay;
 static GAMESTRUCT game;
@@ -203,7 +203,7 @@ static char*		hostname;
 typedef struct {			// data regarding the last one second or so.
 	UDWORD		bytesRecvd;
 	UDWORD		bytesSent;	// number of bytes sent in about 1 sec.
-	UDWORD		packetsSent;			
+	UDWORD		packetsSent;
 	UDWORD		packetsRecvd;
 } NETSTATS;
 
@@ -265,7 +265,7 @@ void NET_DestroyPlayer(unsigned int id) {
 UDWORD NETplayerInfo()
 {
 	unsigned int i;
-	
+
 	NetPlay.playercount = 0;		// reset player counter
 
 	if(!NetPlay.bComms)
@@ -358,7 +358,7 @@ BOOL NETgetLocalPlayerData(DPID dpid,VOID *pData, DWORD *pSize)
 BOOL NETgetGlobalPlayerData(DPID dpid,VOID *pData, DWORD *pSize)
 {
 	if(!NetPlay.bComms)
-	{	
+	{
 		memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
 		return TRUE;
 	}
@@ -380,7 +380,7 @@ BOOL NETsetLocalPlayerData(DPID dpid,VOID *pData, DWORD size)
 BOOL NETsetGlobalPlayerData(DPID dpid, VOID *pData, DWORD size)
 {
 	if(!NetPlay.bComms)
-	{	
+	{
 		local_player_data[dpid].size = size;
 		resize_local_player_data(dpid, size);
 		memcpy(local_player_data[dpid].data, pData, size);
@@ -417,7 +417,7 @@ DWORD NetGameFlags[4];
 // ////////////////////////////////////////////////////////////////////////
 // return one of the four user flags in the current sessiondescription.
 DWORD NETgetGameFlags(UDWORD flag)
-{		
+{
 	if (flag < 1 || flag > 4) {
 		return 0;
 	} else {
@@ -428,7 +428,7 @@ DWORD NETgetGameFlags(UDWORD flag)
 // ////////////////////////////////////////////////////////////////////////
 // Set a game flag
 BOOL NETsetGameFlags(UDWORD flag, DWORD value)
-{		
+{
 	if(!NetPlay.bComms) {
 		return TRUE;
 	}
@@ -455,9 +455,7 @@ BOOL NETsetGameFlags(UDWORD flag, DWORD value)
 // setup stuff
 BOOL NETinit(BOOL bFirstCall)
 {
-#ifdef NET_DEBUG
-printf("NETinit\n");
-#endif
+	debug( LOG_NET, "NETinit" );
 	UDWORD			i;
 
 //	NEThashFile("warzonedebug.exe");
@@ -465,9 +463,9 @@ printf("NETinit\n");
 	if(bFirstCall)
 	{
 		DBPRINTF(("NETPLAY: Init called, MORNIN' \n "));
-		
-		NetPlay.bLobbyLaunched		= FALSE;				// clean up 
-		NetPlay.dpidPlayer		= 0;				
+
+		NetPlay.bLobbyLaunched		= FALSE;				// clean up
+		NetPlay.dpidPlayer		= 0;
 		NetPlay.bHost			= 0;
 		NetPlay.bComms			= TRUE;
 
@@ -484,7 +482,7 @@ printf("NETinit\n");
 			memset(&NetPlay.players[i], 0, sizeof(PLAYER));
 			memset(&NetPlay.games[i], 0, sizeof(GAMESTRUCT));
 		}
-		//GAME_GUID = g;	
+		//GAME_GUID = g;
 
 		NETuseNetwork(TRUE);
 		NETstartLogging();
@@ -494,7 +492,7 @@ printf("NETinit\n");
 		printf("SDLNet_Init: %s\n", SDLNet_GetError());
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -503,9 +501,18 @@ printf("NETinit\n");
 // SHUTDOWN THE CONNECTION.
 HRESULT NETshutdown(VOID)
 {
-#ifdef NET_DEBUG
-printf("NETshutdown\n");
-#endif
+	debug( LOG_NET, "NETshutdown" );
+
+	unsigned int i;
+	for( i = 0; i < MAX_CONNECTED_PLAYERS; i++ )
+	{
+		if( local_player_data[i].data != NULL )
+		{
+			free( local_player_data[i].data );
+		}
+	}
+
+	NETstopLogging();
 	SDLNet_Quit();
 	return 0;
 }
@@ -526,7 +533,7 @@ printf("NETclose\n");
 		NET_destroyBufferedSocket(bsocket);
 		bsocket=NULL;
 	}
-	
+
 	for(i=0;i<MAX_CONNECTED_PLAYERS;i++) {
 		if(connected_bsocket[i]) {
 			NET_destroyBufferedSocket(connected_bsocket[i]);
@@ -552,7 +559,7 @@ printf("NETclose\n");
 		SDLNet_FreeSocketSet(socket_set);
 		socket_set=NULL;
 	}
-	
+
 	if(tcp_socket) {
 		SDLNet_TCP_Close(tcp_socket);
 		tcp_socket=NULL;
@@ -573,7 +580,7 @@ UDWORD NETgetBytesSent(VOID)
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
 
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) ) 
+	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
 	{
 		timy = clock();
 		lastsec = nStats.bytesSent;
@@ -593,7 +600,7 @@ UDWORD NETgetBytesRecvd(VOID)
 {
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) ) 
+	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
 	{
 		timy = clock();
 		lastsec = nStats.bytesRecvd;
@@ -614,7 +621,7 @@ UDWORD NETgetPacketsSent(VOID)
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
 
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) ) 
+	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
 	{
 		timy = clock();
 		lastsec = nStats.packetsSent;
@@ -635,7 +642,7 @@ UDWORD NETgetPacketsRecvd(VOID)
 {
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) ) 
+	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
 	{
 		timy = clock();
 		lastsec = nStats.packetsRecvd;
@@ -653,7 +660,7 @@ UDWORD NETgetRecentPacketsRecvd(VOID)
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
 BOOL NETsend(NETMSG *msg, DPID player, BOOL guarantee)
-{	
+{
 #ifdef NET_DEBUG
 printf("NETsend\n");
 #endif
@@ -701,7 +708,7 @@ printf("NETsend\n");
 // ////////////////////////////////////////////////////////////////////////
 // broadcast a message to all players.
 BOOL NETbcast(NETMSG *msg, BOOL guarantee)
-{	
+{
 #ifdef NET_DEBUG
 printf("NETbcast\n");
 #endif
@@ -834,7 +841,7 @@ BOOL NETrecv(NETMSG * pMsg)
 	if (!NetPlay.bComms)
 	{
 		return FALSE;
-	} 
+	}
 
 	if (is_server) {
 		NETallowJoining();
@@ -867,7 +874,7 @@ receive_message:
 						unsigned int* message_dpid = (unsigned int*)(message.body);
 
 						game.desc.dwCurrentPlayers--;
-						
+
 						message.type = MSG_PLAYER_LEFT;
 						NETsetMessageSize(&message, 4);
 						*message_dpid = i;
@@ -927,7 +934,7 @@ receive_message:
 				} else {
 					//printf("Cannot reflect message %i to DPID %i\n", pMsg->type, pMsg->destination);
 				}
-				
+
 				goto receive_message;
 			}
 
@@ -942,7 +949,7 @@ receive_message:
 			nStats.bytesRecvd   += size;
 			nStats.packetsRecvd += 1;
 		}
-		
+
 	} while (NETprocessSystemMessage(pMsg) == TRUE);
 
 	return TRUE;
@@ -998,7 +1005,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 	UDWORD		bytesRead;
 	UBYTE		inBuff[2048];
 	NETMSG		msg;
-	
+
 	if(newFile)		//force it true for now -Q
 	{
 		// open the file.
@@ -1016,7 +1023,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 			bytesRead = fread(&inBuff, 1, sizeof(inBuff), pFileHandle);
 			fileSize += bytesRead;
 		} while(bytesRead != 0);
-		fclose(pFileHandle);							// close 
+		fclose(pFileHandle);							// close
 		pFileHandle = fopen(fileName, "rb");			// reopen
 
 	}
@@ -1025,13 +1032,13 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 
 	// form a message
 	NetAdd(msg,0,fileSize);		// total bytes in this file.
-	NetAdd(msg,4,bytesRead);	// bytes in this packet	
+	NetAdd(msg,4,bytesRead);	// bytes in this packet
 	NetAdd(msg,8,currPos);		// start byte
 	msg.body[12]=strlen(fileName);
 	msg.size	= 13;
 	NetAddSt(msg,msg.size,fileName);
 	msg.size	+= strlen(fileName);
-	memcpy(&(msg.body[msg.size]),&inBuff,bytesRead);	
+	memcpy(&(msg.body[msg.size]),&inBuff,bytesRead);
 	msg.size	+= bytesRead;
 	msg.type	=  FILEMSG;
 	msg.paddedBytes = 0;
@@ -1043,7 +1050,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 	{
 		NETsend(&msg,player,TRUE);
 	}
-	
+
 	currPos += bytesRead;		// update position!
 	if(currPos == fileSize)
 	{
@@ -1057,7 +1064,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 // recv file. it returns % of the file so far recvd.
 UBYTE NETrecvFile(NETMSG *pMsg)
 {
-	UDWORD			pos, fileSize, currPos, bytesRead; 
+	UDWORD			pos, fileSize, currPos, bytesRead;
 	char			fileName[128];
 	unsigned int		len;
 	static FILE		*pFileHandle;
@@ -1066,7 +1073,7 @@ UBYTE NETrecvFile(NETMSG *pMsg)
 	NetGet(pMsg,0,fileSize);
 	NetGet(pMsg,4,bytesRead);
 	NetGet(pMsg,8,currPos);
-	
+
 	// read filename
 	len = (unsigned int)(pMsg->body[12]);
 	memcpy(fileName,&(pMsg->body[13]),len);
@@ -1079,7 +1086,7 @@ UBYTE NETrecvFile(NETMSG *pMsg)
 		//printf("NETrecvFile: Creating new file %s\n", fileName);
 		pFileHandle = fopen(fileName, "wb");	// create a new file.
 	}
-	
+
 	//write packet to the file.
 	fwrite(&(pMsg->body[pos]), 1, bytesRead, pFileHandle);
 
@@ -1101,7 +1108,7 @@ void NETregisterServer(int state) {
 		switch(state) {
 			case 1: {
 				if(SDLNet_ResolveHost(&ip, master_server, MASTER_SERVER_PORT) == -1) {
-					printf("NETregisterServer: couldn't resolve master server (%s): %s\n", 
+					printf("NETregisterServer: couldn't resolve master server (%s): %s\n",
 						master_server,
 						SDLNet_GetError());
 					return;
@@ -1168,7 +1175,7 @@ void NETallowJoining() {
 				} else if(strcmp(buffer, "join")==0) {
 					SDLNet_TCP_Send(tmp_socket[i], &game, sizeof(GAMESTRUCT));
 				}
-				
+
 			} else {
 				return;
 			}
@@ -1248,7 +1255,7 @@ printf("NEThostGame\n");
 	}
 
 	if(SDLNet_ResolveHost(&ip, NULL, WARZONE_NET_PORT) == -1) {
-		printf("NEThostGame: couldn't resolve master self: %s\n", 
+		printf("NEThostGame: couldn't resolve master self: %s\n",
 			SDLNet_GetError());
 		return FALSE;
 	}
@@ -1311,7 +1318,7 @@ printf("NEThaltJoining\n");
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// find games on open connection, option to do this asynchronously 
+// find games on open connection, option to do this asynchronously
 // since it can sometimes take a while.
 BOOL NETfindGame(BOOL async)	/// may (not) want to use async here...
 {
@@ -1338,7 +1345,7 @@ printf("NETfindGame\n");
 
 	if (SDLNet_ResolveHost(&ip, hostname, (hostname == master_server) ? MASTER_SERVER_PORT
 								          : WARZONE_NET_PORT) == -1) {
-		printf("NETfindGame: couldn't resolve hostname (%s): %s\n", 
+		printf("NETfindGame: couldn't resolve hostname (%s): %s\n",
 			hostname,
 			SDLNet_GetError());
 		return FALSE;
@@ -1363,7 +1370,7 @@ printf("NETfindGame\n");
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 
 	SDLNet_TCP_Send(tcp_socket, "list", 5);
-	
+
 	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
 	    && SDLNet_SocketReady(tcp_socket)
 	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(int))) {
@@ -1373,7 +1380,7 @@ printf("NETfindGame\n");
 	#ifdef NET_DEBUG
 	printf("receiving info of %d game(s)\n", gamesavailable);
 	#endif
-	
+
 	do {
 		if (   SDLNet_CheckSockets(socket_set, 1000) > 0
 		    && SDLNet_SocketReady(tcp_socket)
@@ -1415,22 +1422,22 @@ printf("NETjoinGame gameNumber=%d\n", gameNumber);
 	IPaddress ip;
 	char buffer[sizeof(GAMESTRUCT)*2];
 	GAMESTRUCT* tmpgame = (GAMESTRUCT*)buffer;
-	
+
 
 	NETclose();	// just to be sure :)
-	
+
 	if (hostname != master_server) {
 		free(hostname);
 	}
 	hostname = strdup(NetPlay.games[gameNumber].desc.host);
-	
+
 	if(SDLNet_ResolveHost(&ip, hostname, WARZONE_NET_PORT) == -1) {
-		printf("NETjoinGame: couldn't resolve hostname (%s): %s\n", 
+		printf("NETjoinGame: couldn't resolve hostname (%s): %s\n",
 			hostname,
 			SDLNet_GetError());
 		return FALSE;
 	}
- 
+
 	if (tcp_socket != NULL) {
 		SDLNet_TCP_Close(tcp_socket);
 	}
@@ -1451,7 +1458,7 @@ printf("NETjoinGame gameNumber=%d\n", gameNumber);
 
 
 	SDLNet_TCP_Send(tcp_socket, "join", 5);
-	
+
 	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
 	    && SDLNet_SocketReady(tcp_socket)
 	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)*2) == sizeof(GAMESTRUCT)
@@ -1482,7 +1489,7 @@ printf("NETjoinGame gameNumber=%d\n", gameNumber);
 	message.type = MSG_JOIN;
 	NETsetMessageSize(&message, 64);
 	name = message.body;
-	strcpy(name, playername); 
+	strcpy(name, playername);
 	NETsend(&message, 1, TRUE);
 
 	for (;;) {

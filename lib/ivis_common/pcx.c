@@ -24,7 +24,7 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 	}
 }
 
-iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal) 
+iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal)
 {
 	unsigned int PNG_BYTES_TO_CHECK;
 	png_structp png_ptr = NULL;
@@ -103,7 +103,7 @@ iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal)
 
 			s->width = w;
 			s->height = h;
-			s->bmp = malloc(w*h*info_ptr->channels);
+			s->bmp = malloc(w*h*info_ptr->channels); // FIXME This is a source for a MEMLEAK!!! (according to Valgrind)
 		}
 
 		{

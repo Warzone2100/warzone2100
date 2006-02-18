@@ -119,7 +119,7 @@ BOOL resLoad(STRING *pResFile, SDWORD blockID,
 	psOldHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
 
-	// Load the RES file; allocate memory for a wrf, and load it 
+	// Load the RES file; allocate memory for a wrf, and load it
 	if (!loadFile(pResFile, &pBuffer, &size)) {
 		debug(LOG_ERROR, "resLoad: failed to load %s", pResFile);
 		return FALSE;
@@ -277,7 +277,7 @@ typedef struct
   	UBYTE *pBuffer;	// a pointer to the data
 	UDWORD size;	// number of bytes
 	UBYTE	type;	// what type of resource is it
-} RESOURCEFILE; 
+} RESOURCEFILE;
 
 #define RESFILETYPE_EMPTY (0)			// empty entry
 #define RESFILETYPE_PC_SBL (1)			// Johns SBL stuff
@@ -298,7 +298,7 @@ static void ResetResourceFile(void)
 	for (i=0;i<MAXLOADEDRESOURCES;i++)
 	{
 		LoadedResourceFiles[i].type=RESFILETYPE_EMPTY;
-	}  
+	}
 }
 
 // Returns an empty resource entry or -1 if none exsist
@@ -309,7 +309,7 @@ SDWORD FindEmptyResourceFile(void)
 	  {
 		if (LoadedResourceFiles[i].type==RESFILETYPE_EMPTY)
 			return(i);
-			
+
 	  }
 	return(-1);			// ERROR
 }
@@ -361,14 +361,12 @@ void FreeResourceFile(RESOURCEFILE *OldResource)
 	  {
 		case RESFILETYPE_LOADED:
 			FREE(OldResource->pBuffer);
-	
-
 			break;
 	  }
 
 
 	// Remove from the list
-	OldResource->type=RESFILETYPE_EMPTY;  
+	OldResource->type=RESFILETYPE_EMPTY;
 }
 
 
@@ -449,10 +447,12 @@ BOOL resLoadFile(STRING *pType, STRING *pFile)
 				debug(LOG_ERROR, "resLoadFile: Unable to retreive resource - %s", aFileName);
 				return(FALSE);
 			}
-			
+
 			// Now process the buffer data
 			if (!psT->buffLoad(Resource->pBuffer, Resource->size, &pData))
 			{
+				FreeResourceFile(Resource);
+				psT->release( pData );
 				return FALSE;
 			}
 
@@ -474,7 +474,7 @@ BOOL resLoadFile(STRING *pType, STRING *pFile)
 				return FALSE;
 			}
 			// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
-			resDataInit(psRes,LastResourceFilename,HashStringIgnoreCase(LastResourceFilename),pData,resBlockID);
+			resDataInit( psRes, LastResourceFilename, HashStringIgnoreCase(LastResourceFilename), pData, resBlockID );
 
 			// Add the resource to the list
 			psRes->psNext = psT->psRes;
@@ -685,7 +685,7 @@ void resReleaseAll(void)
 	{
 		for(psRes = psT->psRes; psRes; psRes = psNRes) {
 			if (psRes->usage == 0) {
-				debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType, 
+				debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType,
 				      psRes->aID, psRes->HashedID);
 			}
 			if(psT->release != NULL) {
@@ -766,7 +766,7 @@ void resReleaseAllData(void)
 	for (psT = psResTypes; resValidType(psT); psT = psNT) {
 		for (psRes = psT->psRes; psRes; psRes = psNRes) {
 			if (psRes->usage == 0) {
-				debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType, psRes->aID, 
+				debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType, psRes->aID,
 				      psRes->HashedID);
 			}
 			if(psT->release != NULL) {

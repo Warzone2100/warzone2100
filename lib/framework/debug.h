@@ -197,11 +197,12 @@
 enum code_part {
   LOG_ALL, /* special: sets all to on */
   LOG_MAIN,
-  LOG_SOUND, 
-  LOG_VIDEO, 
+  LOG_SOUND,
+  LOG_VIDEO,
   LOG_WZ,
   LOG_3D,
   LOG_TEXTURE,
+  LOG_NET,
   LOG_ERROR, /* special; on by default */
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
   LOG_LAST /* _must_ be last! */

@@ -42,6 +42,8 @@ static ALfloat		sfx3d_volume = 1.0;
 static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 
+static ALvoid	*data = NULL; // Needed for ReadTrackFromBuffer, must be global, so it can be free'd on shutdown
+
 BOOL openal_initialized = FALSE;
 
 BOOL		cdAudio_Update( void );
@@ -137,6 +139,8 @@ void sound_ShutdownLibrary( void )
 		alcCloseDevice(device);
 		device = 0;
 	}
+
+	free( data );
 }
 
 //*
@@ -305,9 +309,8 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 	OggVorbis_File	ogg_stream;
 	vorbis_info*	ogg_info;
 	ALuint		buffer;
-	ALsizei		size, freq;
+	ALsizei		size=0, freq;
 	ALenum		format;
-	static ALvoid	*data = NULL;
 	static ALuint	data_size;
 	int		result, section;
 
@@ -328,21 +331,19 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 	}
 	freq = ogg_info->rate;
 
-	size = 0;
-
 	if (data == NULL) {
 		data_size = 8192;
 		data = malloc(data_size);
 	}
 
-	for (;;) {
-		result = ov_read(&ogg_stream, (char *)data+size, data_size-size, 0, 2, 1, &section);
-		if (result == 0) break;
+	result = ov_read(&ogg_stream, (char *)data+size, data_size-size, 0, 2, 1, &section);
+	while( result != 0 ) {
 		size += result;
 		if (size == data_size) {
 			data_size *= 2;
 			data = realloc(data, data_size);
 		}
+		result = ov_read(&ogg_stream, (char *)data+size, data_size-size, 0, 2, 1, &section);
 	}
 
 	ov_clear(&ogg_stream);

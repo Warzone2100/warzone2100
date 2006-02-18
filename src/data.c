@@ -564,7 +564,7 @@ void dataSFUNCRelease(void *pData)
 void dataRESCHRelease(void *pData)
 {
 	//free the storage allocated to the stats
-	ResearchShutDown(); 
+	ResearchShutDown();
 }
 
 /* Load the Research stats */
@@ -585,7 +585,7 @@ BOOL bufferRESCHLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	}
 
 
-	/* set a dummy value so the release function gets called - the Release 
+	/* set a dummy value so the release function gets called - the Release
     function is now called when load up the next set
 	// *ppData = (void *)1;
     pass back NULL so that can load the same name file for the next campaign*/
@@ -642,7 +642,7 @@ BOOL bufferRCOMPREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research component results */
 BOOL bufferRCOMPRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-	
+
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRES);
 
 	if (!loadResearchArtefacts((SBYTE*)pBuffer, size, RES_LIST))
@@ -659,7 +659,7 @@ BOOL bufferRCOMPRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research structures required */
 BOOL bufferRSTRREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-		
+
 	calcCheatHash(pBuffer,size,CHEAT_RSTRREQ);
 
 	if (!loadResearchStructures((SBYTE*)pBuffer, size, REQ_LIST))
@@ -676,7 +676,7 @@ BOOL bufferRSTRREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research structures made redundant */
 BOOL bufferRSTRREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-		
+
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRED);
 
 	if (!loadResearchStructures((SBYTE*)pBuffer, size, RED_LIST))
@@ -692,7 +692,7 @@ BOOL bufferRSTRREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research structure results */
 BOOL bufferRSTRRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-	
+
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRES);
 
 	if (!loadResearchStructures((SBYTE*)pBuffer, size, RES_LIST))
@@ -709,7 +709,7 @@ BOOL bufferRSTRRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Load the research functions */
 BOOL bufferRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-		
+
 	calcCheatHash(pBuffer,size,CHEAT_RFUNC);
 
 	if (!loadResearchFunctions((SBYTE*)pBuffer, size))
@@ -777,14 +777,12 @@ BOOL dataIMDBufferLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 //	iPalette sPal;
-	iSprite *psSprite;
-
-	psSprite = MALLOC(sizeof(iSprite));
+	iSprite *psSprite = (iSprite*) MALLOC(sizeof(iSprite));
 	if (!psSprite)	{
 		return FALSE;
 	}
 
-	if(!pie_PNGLoadMem((SBYTE *)pBuffer,psSprite,NULL)) 
+	if(!pie_PNGLoadMem((SBYTE *)pBuffer,psSprite,NULL))
 	{
 		DBERROR(("IMGPAGE load failed"));
 		FREE(psSprite);
@@ -799,7 +797,7 @@ BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 void dataIMGPAGERelease(void *pData)
 {
-	iSprite *psSprite = pData;
+	iSprite *psSprite = (iSprite*) pData;
 	FREE(psSprite->bmp);
 	FREE(psSprite);
 }
@@ -808,10 +806,10 @@ void dataIMGPAGERelease(void *pData)
 BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	if(pie_Hardware()) {
-		*ppData = NULL;	
+		*ppData = NULL;
 		return TRUE;
 	}
-	
+
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
@@ -839,7 +837,7 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 			if(!remakeTileTextures())
 			{
 	 			DBERROR(("Problem converting the terrain graphics file"));
-				return(FALSE);	
+				return(FALSE);
 			}
 		}
 		else
@@ -847,13 +845,13 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 			if(!makeTileTextures())
 			{
 	 			DBERROR(("Problem converting the terrain graphics file"));
-				return(FALSE);	
+				return(FALSE);
 			}
 		}
 
 	if (bTilesPCXLoaded)
 	{
-		*ppData = NULL;	
+		*ppData = NULL;
 	}
 	else
 	{
@@ -866,8 +864,8 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 void dataTERTILESRelease(void *pData)
 {
-	iSprite *psSprite = pData;
-	
+	iSprite *psSprite = (iSprite*) pData;
+
 	freeTileTextures();
 	FREE(psSprite->bmp);
 	bTilesPCXLoaded = FALSE;
@@ -877,10 +875,10 @@ void dataTERTILESRelease(void *pData)
 BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	if(!pie_Hardware()) {
-		*ppData = NULL;	
+		*ppData = NULL;
 		return TRUE;
 	}
-	
+
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
@@ -918,22 +916,21 @@ BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 	if (bTilesPCXLoaded)
 	{
-		*ppData = NULL;	
+		*ppData = NULL;
 	}
 	else
 	{
 		bTilesPCXLoaded = TRUE;
 		*ppData = &tilesPCX;
 	}
-	DBPRINTF(("HW Tiles loaded\n"));
-	printf("HW Tiles loaded\n");
+	debug( LOG_TEXTURE, "HW Tiles loaded\n" );
 	return TRUE;
 }
 
 void dataHWTERTILESRelease(void *pData)
 {
-	iSprite *psSprite = pData;
-	
+	iSprite *psSprite = (iSprite*) pData;
+
 	freeTileTextures();
 	FREE(psSprite->bmp);
 	bTilesPCXLoaded = FALSE;
@@ -944,7 +941,7 @@ void dataHWTERTILESRelease(void *pData)
 BOOL dataIMGLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	IMAGEFILE *ImageFile;
-	
+
 	ImageFile = iV_LoadImageFile(pBuffer,size);
 	if(ImageFile == NULL) {
 		return FALSE;
@@ -1002,8 +999,8 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 			return TRUE;
 		}
 	}
-	
-	
+
+
 	if (strncmp(texfile, "page-", 5) == 0)
 	{
 		for(i=5; i<(SDWORD)strlen(texfile); i++)
@@ -1037,7 +1034,7 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		NewTexturePage->Texture=NULL;
 		NewTexturePage->Palette=NULL;
 
-		psPal=MALLOC(sizeof(iPalette));
+		psPal = MALLOC(sizeof(iPalette));
 		if (!psPal) return FALSE;
 
 		psSprite = MALLOC(sizeof(iSprite));
@@ -1055,17 +1052,17 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 		NewTexturePage->Texture=psSprite;
 		NewTexturePage->Palette=psPal;
-		
-//Hack mar8 to load	textures in order	
+
+//Hack mar8 to load	textures in order
 /*	for(i=0;i<_TEX_INDEX;i++)
-	{	
+	{
 		if (stricmp(texfile,_TEX_PAGE[i].name) != 0)
 		{
 			bFound = TRUE;
 			break;
 		}
 	}
-	if (!bFound) 
+	if (!bFound)
 */
 	{
 		pie_AddBMPtoTexPages(psSprite, texfile, 1, FALSE, TRUE);
@@ -1103,7 +1100,7 @@ BOOL bufferTexPageLoadHardOnly(UBYTE *pBuffer, UDWORD size, void **ppData)
 /* Release an iSprite */
 void dataISpriteRelease(void *pData)
 {
-	iSprite		*psSprite = pData;
+	iSprite *psSprite = (iSprite*) pData;
 
 	FREE(psSprite->bmp);
 	FREE(psSprite);
@@ -1113,12 +1110,10 @@ void dataISpriteRelease(void *pData)
 /* Release a texPage */
 void dataTexPageRelease(void *pData)
 {
-	TEXTUREPAGE *Tpage;
+	TEXTUREPAGE *Tpage = (TEXTUREPAGE *) pData;
 
-	Tpage=(TEXTUREPAGE *)pData;
-
-// We need to handle null texpage data 
-	if (Tpage==NULL) return;
+	// We need to handle null texpage data
+	if (Tpage == NULL) return;
 
 	if (Tpage->Texture != NULL)
 	{
@@ -1126,9 +1121,10 @@ void dataTexPageRelease(void *pData)
 			FREE(Tpage->Texture->bmp);
 		FREE(Tpage->Texture);
 	}
-	if (Tpage->Palette != NULL) FREE(Tpage->Palette);
+	if (Tpage->Palette != NULL)
+		FREE(Tpage->Palette);
 
-	FREE(pData);
+	FREE(Tpage);
 }
 
 
@@ -1146,7 +1142,7 @@ BOOL dataAudioLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 	{
 		return FALSE;
 	}
-	
+
 	/* save track data */
 	*ppData = psTrack;
 
@@ -1167,7 +1163,7 @@ void dataAudioRelease( void *pData )
 	}
 }
 
-	
+
 /* Load an audio file */
 BOOL dataAudioCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 {
@@ -1190,7 +1186,7 @@ BOOL dataAnimLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 {
 	BASEANIM	*psAnim;
 
-	if ( (psAnim = anim_LoadFromBuffer( pBuffer, size )) == NULL ) 
+	if ( (psAnim = anim_LoadFromBuffer( pBuffer, size )) == NULL )
 	{
 		return FALSE;
 	}
@@ -1263,7 +1259,7 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	SCRIPT_CODE		*psProg=NULL;
 	BLOCK_HEAP		*psHeap;
 	BOOL			printHack = FALSE;
-	
+
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
 
 #ifndef NOSCRIPT
@@ -1293,7 +1289,7 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 BOOL dataScriptLoadVals(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
-	
+
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPTVAL);
 
 	// don't load anything if a saved game is being loaded
@@ -1349,7 +1345,7 @@ BOOL dataSaveGameLoad(STRING *pFile, void **ppData)
 typedef struct
 {
 	STRING *aType;				// points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
-	RES_BUFFERLOAD buffLoad;	// routine to process the data for this type 
+	RES_BUFFERLOAD buffLoad;		// routine to process the data for this type
 	RES_FREE release;			// routine to release the data (NULL indicates none)
 	void *ResourceData;			// Linked list of data - set to null initially
 	UDWORD HashedType;			// hashed version of aType
@@ -1397,14 +1393,14 @@ static RES_TYPE_MIN ResourceTypes[]=
 	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
-	{"IMGPAGE",dataIMGPAGELoad, dataIMGPAGERelease},
-	{"TERTILES",dataTERTILESLoad, dataTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with software renderer.
-	{"HWTERTILES",dataHWTERTILESLoad, dataHWTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
+	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
+	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with software renderer.
+	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"WAV", dataAudioLoad, dataAudioRelease},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
-	{"IMG",dataIMGLoad, dataIMGRelease},
+	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", bufferTexPageLoad, dataTexPageRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 
@@ -1425,10 +1421,9 @@ BOOL dataInitLoadFuncs(void)
 	CurrentType=ResourceTypes;	// point to the first entry
 
 	// While there are still some entries in the list
-	while(1)
+	while( CurrentType->aType != NULL )
 	{
-		if(CurrentType->aType==NULL)	break;		// if we are at end of list exit 
-//		printf(" ==>%s\n",CurrentType->aType);		//TESTING -Q
+//		printf(" ==>%s\n",CurrentType->aType);	//TESTING -Q
 		if(!resAddBufferLoad(CurrentType->aType,CurrentType->buffLoad,CurrentType->release))
 		{
 			return FALSE;	// error whilst adding a buffer load

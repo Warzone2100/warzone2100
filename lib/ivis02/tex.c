@@ -48,7 +48,7 @@ static int _tex_get_top_bit(uint32 n)
 //*
 //******
 
-					
+
 /*
 	Alex's shiny new texture loader. Will first check to see if the filename
 	you're trying to load already resides in either memory (software) or in
@@ -56,7 +56,7 @@ static int _tex_get_top_bit(uint32 n)
 	not, then it'll load it in for you. Also, it'll try and get it from the resource
 	handler. If the resource handler doesn't know about this file then, the old
 	texture load function is called. Should still work on PSX as the resource stuff isn't in
-	there yet, so it'll default through to the old version 
+	there yet, so it'll default through to the old version
 */
 
 int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed, iBool bResource)
@@ -65,7 +65,7 @@ int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeye
 	/* Get next available texture page */
 	i = _TEX_INDEX;
 	/* Have we used up too many? */
-	if (_TEX_INDEX >= iV_TEX_MAX) 
+	if (_TEX_INDEX >= iV_TEX_MAX)
 	{
 		iV_DEBUG1("tex[TexLoad] = too many texture pages '%s'\n",buffer);
 		return -1;
@@ -138,7 +138,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 
 		fname[i] = filename[i];
 
-	  
+
 	}
 
 
@@ -149,7 +149,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 	i = 0;
 
 	/* Have we already loaded this one then? */
-	while (i<_TEX_INDEX) 
+	while (i<_TEX_INDEX)
 	{
 
 		if (stricmp(fname,_TEX_PAGE[i].name) == 0)
@@ -166,7 +166,7 @@ int iV_TexLoadNew( char *path, char *filename, int type,
 
 
 
-	
+
 	/* Get a pointer to the texpage in memory - we KNOW it's there from the check at start */
 	TextPage = (TEXTUREPAGE *)resGetData("TEXPAGE",filename);
 	s = TextPage->Texture;
@@ -213,7 +213,7 @@ int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
 	s.bmp = _TEX_PAGE[i].tex.bmp;
 
 	// FIXME: evil cast
-	pie_PNGLoadMemToBuffer((int8 *)pBuffer,&s,NULL); 
+	pie_PNGLoadMemToBuffer((int8 *)pBuffer,&s,NULL);
 
 	return i;
 }
@@ -231,7 +231,7 @@ void pie_TexShutDown(void)
 	i = 0;
 	j = 0;
 
-	while (i < _TEX_INDEX) 
+	while (i < _TEX_INDEX)
 	{
 		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already
 			be free */
@@ -257,7 +257,7 @@ void pie_TexInit(void)
 
 	i = 0;
 
-	while (i < _TEX_INDEX) 
+	while (i < _TEX_INDEX)
 	{
 		_TEX_PAGE[i].tex.bmp = NULL;
 		_TEX_PAGE[i].tex.width = 0;

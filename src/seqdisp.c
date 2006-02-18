@@ -58,7 +58,7 @@ typedef struct {
 	SDWORD startFrame;
 	SDWORD endFrame;
 	BOOL	bSubtitle;
-} SEQTEXT; 
+} SEQTEXT;
 
 typedef struct {
 	char		*pSeq;						//name of the sequence to play
@@ -66,7 +66,7 @@ typedef struct {
 	BOOL		bSeqLoop;					//loop this sequence
 	SDWORD		currentText;				//cuurent number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
-} SEQLIST; 
+} SEQLIST;
 /***************************************************************************/
 /*
  *	local Variables
@@ -90,7 +90,7 @@ char aAudioName[MAX_STR_LENGTH];
 char aTextName[MAX_STR_LENGTH];
 char aSubtitleName[MAX_STR_LENGTH];
 char* pVideoBuffer = NULL;
-UWORD *p3DFXVideoBuffer = NULL; 
+UWORD *p3DFXVideoBuffer = NULL;
 char* pVideoPalette = NULL;
 VIDEO_MODE videoMode;
 PERF_MODE perfMode = VIDEO_PERF_FULLSCREEN;
@@ -160,7 +160,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 			ASSERT(((strlen(sequenceName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
 			strcpy(aVideoName,aHardPath);
 			strcat(aVideoName,sequenceName);
-		
+
 			// check it exists. If not then try CD.
 			pFileHandle = fopen(aVideoName, "rb");
 			if (pFileHandle == NULL && bCDPath)
@@ -186,7 +186,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 			ASSERT((FALSE,"seq_StartFullScreenVideo: sequence path not found"));
 			return FALSE;
 		}
-	
+
 
 		iV_SetFont(WFont);
 		iV_SetTextColour(-1);
@@ -239,7 +239,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 		}
 		frameLag = videoTime - videoFrameTime;
 		frameLag /= RPL_FRAME_TIME;// if were running slow frame lag will be greater than 1
-		videoFrameTime += frameLag * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)   
+		videoFrameTime += frameLag * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)
 		//call sequence player to decode a frame
 		frame = seq_RenderOneFrameToBuffer(pVideoBuffer, frameLag, 2, 0);//skip frame if behind
 //old call
@@ -321,14 +321,14 @@ UDWORD	*toClear;
 		*toClear++ = (UDWORD)0xFCFCFCFC;
 	}
 }
- 
+
 BOOL seq_ReleaseVideoBuffers(void)
 {
 	FREE(pVideoBuffer);
 	FREE(pVideoPalette);
 	return TRUE;
 }
- 
+
 BOOL seq_SetupVideoBuffers(void)
 {
 	SDWORD c,mallocSize;
@@ -395,10 +395,10 @@ void seq_SetVideoPath(void)
 		fileHandle = FindFirstFile("sequences\\*.rpl",&findData);
 		if (fileHandle == INVALID_HANDLE_VALUE)
 		{
-//			bHardPath = FALSE;			//If it fails, then why say true?  Cause we *ALWAYS* need the
-			bHardPath=TRUE;				//videos enabled.  Yes, we are playing novideo.rpl, but for 
-			return;								//windows, if we don't have that directory, then what?
-		}											//then we run into a game stopping bug!  
+//			bHardPath = FALSE;	//If it fails, then why say true?  Cause we *ALWAYS* need the
+			bHardPath=TRUE;		//videos enabled.  Yes, we are playing novideo.rpl, but for
+			return;			//windows, if we don't have that directory, then what?
+		}				//then we run into a game stopping bug!
 		else
 		{
 			bHardPath = TRUE;
@@ -407,7 +407,7 @@ void seq_SetVideoPath(void)
 		}
 #else
 */
-		bHardPath=TRUE;				//yes, always true, as it should be on windows ALSO.
+		bHardPath=TRUE;			//yes, always true, as it should be on windows ALSO.
 
 //#endif
 	}
@@ -427,7 +427,6 @@ BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 //full screenvideo functions
 BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 {
-	SDWORD	i;
 	FILE	*pFileHandle;
 	bHoldSeqForAudio = FALSE;
 
@@ -486,7 +485,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 		return FALSE;
 	}
 
-	
+
 	//set audio path
 	if (audioName != NULL)
 	{
@@ -523,7 +522,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 #endif
 	{
 #ifdef DUMMY_VIDEO
-		if (seq_SetSequence("noVideo.rpl",screenGetSurface(), NULL, videoFrameTime + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode)) 
+		if (seq_SetSequence("noVideo.rpl",screenGetSurface(), NULL, videoFrameTime + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
 		{
 			strcpy(aAudioName,"noVideo.wav");
 			return TRUE;
@@ -582,7 +581,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 	subMax = SUBTITLE_BOX_MIN + D_H;
 
 	//get any text lines over bottom of the video
-	realFrame = textFrame + 1; 
+	realFrame = textFrame + 1;
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
 		if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
@@ -618,7 +617,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 					}
 				}
 			}
-			if ((realFrame >= aSeqList[currentPlaySeq].aText[i].endFrame) && (realFrame < (aSeqList[currentPlaySeq].aText[i].endFrame + frameSkip))) 
+			if ((realFrame >= aSeqList[currentPlaySeq].aText[i].endFrame) && (realFrame < (aSeqList[currentPlaySeq].aText[i].endFrame + frameSkip)))
 			{
 				if (pbClear != NULL)
 				{
@@ -663,7 +662,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 				}
 				frameLag = videoTime - videoFrameTime;
 				frameLag /= RPL_FRAME_TIME;// if were running slow frame lag will be greater than 1
-				videoFrameTime += frameLag * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)   
+				videoFrameTime += frameLag * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)
 				//call sequence player to decode a frame
 				lpDDSF = screenGetSurface();
 				frame = seq_RenderOneFrame(lpDDSF, frameLag, subMin, subMax);
@@ -678,7 +677,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 					videoTime = GetTickCount();
 					seq_RefreshVideoBuffers();
 				}
-				videoFrameTime += frameSkip * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)   
+				videoFrameTime += frameSkip * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)
 				//call sequence player to decode a frame
 				lpDDSF = screenGetSurface();
 				frame = seq_RenderOneFrame(lpDDSF, frameSkip, subMin, subMax);
@@ -692,7 +691,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 			frame = seq_RenderOneFrame(lpDDSF, 0, 2, 0);
 		}
 		//print any text over the video
-		realFrame = textFrame + 1; 
+		realFrame = textFrame + 1;
 		for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 		{
 			if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
@@ -704,7 +703,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 					{
 						aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
 					}
-					pie_DrawTextToSurface(lpDDSF,&(aSeqList[currentPlaySeq].aText[i].pText[0]), 
+					pie_DrawTextToSurface(lpDDSF,&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 							aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 				}
 				else if (aSeqList[currentPlaySeq].bSeqLoop)//if its a looped video always draw the text
@@ -714,7 +713,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 					{
 						aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
 					}
-					pie_DrawTextToSurface(lpDDSF,&(aSeqList[currentPlaySeq].aText[i].pText[0]), 
+					pie_DrawTextToSurface(lpDDSF,&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 							aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 				}
 
@@ -722,7 +721,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 		}
 	}
 
-	textFrame = frame * RPL_FRAME_TIME/STD_FRAME_TIME; 
+	textFrame = frame * RPL_FRAME_TIME/STD_FRAME_TIME;
 
 	if ((frame == VIDEO_FINISHED) || (bHoldSeqForAudio))
 	{
@@ -757,7 +756,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 		DBPRINTF(("VIDEO FRAME ERROR %d\n",frame));
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -805,7 +804,7 @@ static SDWORD lastX;
 	ASSERT((aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS,
 		"seq_AddTextForVideo: too many text lines"));
 
-	sourceLength = strlen(pText); 
+	sourceLength = strlen(pText);
 	currentLength = sourceLength;
 	currentText = &(aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].pText[0]);
 
@@ -820,10 +819,10 @@ static SDWORD lastX;
 		}
 		currentLength--;
 	}
-	
+
 	memcpy(currentText,pText,currentLength);
 	currentText[currentLength] = 0;//terminate the string what ever
-	
+
 	//check the string is shortenough to print
 	//if not take a word of the end and try again
 	while(iV_GetTextWidth(currentText) > BUFFER_WIDTH)
@@ -867,7 +866,7 @@ static SDWORD lastX;
 	}
 
 
-	//set start and finish times for the objects	
+	//set start and finish times for the objects
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startFrame = startFrame;
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endFrame = endFrame;
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].bSubtitle = bJustify;
@@ -923,7 +922,7 @@ BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 
 	strcpy(aTextName,"sequenceAudio\\");
 	strcat(aTextName,pTextName);
-	
+
 /*
 	fileHandle = FindFirstFile(aTextName,&findData);
 	if (fileHandle == INVALID_HANDLE_VALUE)
@@ -931,7 +930,7 @@ BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 		return FALSE;
 	}
 	FindClose(fileHandle);
-*/	
+*/
 	if (loadFileToBufferNoError(aTextName, DisplayBuffer, displayBufferSize, &fileSize) == FALSE)  //Did I mention this is lame? -Q
 	{
 		return FALSE;
@@ -972,7 +971,7 @@ BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 void seq_ClearSeqList(void)
 {
 	SDWORD i;
-	
+
 	seq_ClearTextForVideo();
 	for(i=0;i<MAX_SEQ_LIST;i++)
 	{
@@ -987,7 +986,7 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 {
 	SDWORD strLen;
 	currentSeq++;
-	
+
 
 	if ((currentSeq) >=  MAX_SEQ_LIST)
 	{
@@ -1002,7 +1001,7 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 	aSeqList[currentSeq].pSeq = pSeqName;
 	aSeqList[currentSeq].pAudio = pAudioName;
 	aSeqList[currentSeq].bSeqLoop = bLoop;
-	if (pTextName != NULL) 
+	if (pTextName != NULL)
 	{
 		seq_AddTextFromFile(pTextName, FALSE);//SEQ_TEXT_POSITION);//ordinary text not justified
 	}

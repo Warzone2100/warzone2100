@@ -8,7 +8,7 @@
 /***************************************************************************/
 
 #include <string.h>
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
@@ -162,7 +162,7 @@ void pie_EndLighting(float x, float y, float z) {
 }
 
 #ifdef BSPIMD
-extern iIMDShape *BSPimd;	// global defined here for speed 
+extern iIMDShape *BSPimd;	// global defined here for speed
 extern	iIMDPoly *BSPScrVertices;
 UDWORD ShapeTexPage;
 UDWORD ShapeFrame;
@@ -182,7 +182,7 @@ return;
 //	DBPRINTF(("poly %d\n",PolygonNumber));
 
 	while (PolygonNumber!=BSPPOLYID_TERMINATE) {
-		pPolys= IMD_POLYGON(PolygonNumber);	
+		pPolys= IMD_POLYGON(PolygonNumber);
 
 		index = pPolys->pindex;
 		imdPoly.flags = pPolys->flags;
@@ -220,7 +220,7 @@ static SDWORD BSPObject_Yaw=0,BSPObject_Pitch=0;
 void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z)
 {
 
-	
+
 	BSPObject.x=x;
 	BSPObject.y=y;
 	BSPObject.z=z;
@@ -310,7 +310,7 @@ float fVector_Length2(fVector* v) {
 
 void
 pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
-{  
+{
 	SDWORD i;
 
 	if (numVerts < 1) {
@@ -367,7 +367,7 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
  *
  * Project and render a pumpkin image to render surface
  * Will support zbuffering, texturing, coloured lighting and alpha effects
- * Avoids recalculating vertex projections for every poly 
+ * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 
 typedef struct {
@@ -419,7 +419,7 @@ void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT spe
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
-		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
+		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges
 		light = FALSE;
 	} else {
 		if (pieFlag & pie_BUTTON)
@@ -445,7 +445,7 @@ void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT spe
 
 	pie_SetTexturePage(shape->texpage);
 
-	//now draw the shape	
+	//now draw the shape
 	//rotate and project points from shape->points to scrPoints
 	pVertices = shape->points;
 	pPixels = &scrPoints[0];
@@ -594,6 +594,12 @@ void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
 	}
 }
 
+void pie_CleanUp( void )
+{
+	free( tshapes );
+	free( scshapes );
+}
+
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
 {
 	PIELIGHT colour, specular;
@@ -619,7 +625,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 	specular.argb = spec;
 
-	if (frame == 0) 
+	if (frame == 0)
 	{
 		frame = team;
 	}
@@ -632,9 +638,12 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				if (tshapes_size == 0) {
 					tshapes_size = 64;
 					tshapes = (transluscent_shape_t*)malloc(tshapes_size*sizeof(transluscent_shape_t));
+					memset( tshapes, 0, tshapes_size*sizeof(transluscent_shape_t) );
 				} else {
+					unsigned int old_size = tshapes_size;
 					tshapes_size <<= 1;
 					tshapes = (transluscent_shape_t*)realloc(tshapes, tshapes_size*sizeof(transluscent_shape_t));
+					memset( &tshapes[old_size], 0, (tshapes_size-old_size)*sizeof(transluscent_shape_t) );
 				}
 			}
 			glGetFloatv(GL_MODELVIEW_MATRIX, tshapes[nb_tshapes].matrix);
@@ -650,9 +659,12 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				if (scshapes_size == 0) {
 					scshapes_size = 64;
 					scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
+					memset( scshapes, 0, scshapes_size*sizeof(shadowcasting_shape_t) );
 				} else {
+					unsigned int old_size = scshapes_size;
 					scshapes_size <<= 1;
 					scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
+					memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
 				}
 			}
 			glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
@@ -817,11 +829,11 @@ void pie_RemainingPasses() {
  * General purpose blit function
  * Will support zbuffering, non_textured, coloured lighting and alpha effects
  *
- * replaces all ivis blit functions 
+ * replaces all ivis blit functions
  *
  ***************************************************************************/
 //d3d loses edge pixels in triangle draw
-//this is a temporary correction that may become an option 
+//this is a temporary correction that may become an option
 
 # define EDGE_CORRECTION 0
 
@@ -863,7 +875,7 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
  * General purpose blit function
  * Will support zbuffering, non_textured, coloured lighting and alpha effects
  *
- * replaces all ivis blit functions 
+ * replaces all ivis blit functions
  *
  ***************************************************************************/
 
@@ -992,8 +1004,8 @@ int	uFrame, vFrame, j, framesPerLine;
 					vFrame += poly->pTexAnim->textureHeight;
 				}
 				uFrame = frame * poly->pTexAnim->textureWidth;
-				
-				for (j=0; j<poly->nVrts; j++) 
+
+				for (j=0; j<poly->nVrts; j++)
 				{
 					poly->pVrts[j].tu += uFrame;
 					poly->pVrts[j].tv += vFrame;
@@ -1067,9 +1079,9 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL
 				}
 				uFrame = frame * poly->pTexAnim->textureWidth;
 				// shift the textures for animation
-				if (poly->flags & iV_IMD_TEXANIM) 
+				if (poly->flags & iV_IMD_TEXANIM)
 				{
-					for (j=0; j<poly->npnts; j++) 
+					for (j=0; j<poly->npnts; j++)
 					{
 						poly->vrt[j].u += uFrame;
 						poly->vrt[j].v += vFrame;
@@ -1160,7 +1172,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 
 void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount)
 {
-	*pPieCount  = pieCount; 
+	*pPieCount  = pieCount;
 	*pTileCount = tileCount;
 	*pPolyCount = polyCount;
 	*pStateCount = pieStateCount;

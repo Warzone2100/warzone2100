@@ -8,7 +8,7 @@
 /***************************************************************************/
 
 #include <SDL/SDL.h>
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
@@ -91,20 +91,20 @@ BOOL pie_Initialise(SDWORD mode)
 	pie_MatInit();
 	_TEX_INDEX = 0;
 
-	rendSurface.buffer		= 0;
-	rendSurface.flags		= REND_SURFACE_SCREEN;
-	rendSurface.width		= pie_GetVideoBufferWidth();   
-	rendSurface.height		= pie_GetVideoBufferHeight();  
-	rendSurface.xcentre		= pie_GetVideoBufferWidth()/2; 
-	rendSurface.ycentre		= pie_GetVideoBufferHeight()/2;
-	rendSurface.clip.left	= 0;                           
-	rendSurface.clip.top	= 0;                           
-	rendSurface.clip.right	= pie_GetVideoBufferWidth();   
-	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();  
-	rendSurface.xpshift		= 10;
-	rendSurface.ypshift		= 10;
+	rendSurface.buffer	= 0;
+	rendSurface.flags	= REND_SURFACE_SCREEN;
+	rendSurface.width	= pie_GetVideoBufferWidth();
+	rendSurface.height	= pie_GetVideoBufferHeight();
+	rendSurface.xcentre	= pie_GetVideoBufferWidth()/2;
+	rendSurface.ycentre	= pie_GetVideoBufferHeight()/2;
+	rendSurface.clip.left	= 0;
+	rendSurface.clip.top	= 0;
+	rendSurface.clip.right	= pie_GetVideoBufferWidth();
+	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
+	rendSurface.xpshift	= 10;
+	rendSurface.ypshift	= 10;
 
-	pie_SetRenderEngine(ENGINE_OPENGL);		//was ENGINE_D3D -Q
+	pie_SetRenderEngine(ENGINE_OPENGL); //was ENGINE_D3D -Q
 
 	pie_SetDefaultStates();
 	iV_RenderAssign(mode,&rendSurface);
@@ -121,6 +121,8 @@ void pie_ShutDown(void) {
 	rendSurface.size = 0;
 
 	pie_SetRenderEngine(ENGINE_UNDEFINED);
+
+	pie_CleanUp();
 }
 
 /***************************************************************************/

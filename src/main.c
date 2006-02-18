@@ -41,7 +41,7 @@
 #ifndef DEFAULT_DATA_DIR
 	#define DEFAULT_DATA_DIR "/usr/share"
 #endif
-char datadir[MAX_PATH]; // Global that src/clparse.c:ParseCommandLineEarly can write to, so it can override the default datadir on runtime
+char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
 
 // Warzone 2100 . Pumpkin Studios
 
@@ -60,8 +60,7 @@ char	MultiForcesPath[255];
 char	MultiCustomMapsPath[255];
 char	MultiPlayersPath[255];
 char	KeyMapPath[255];
-char*	UserMusicPath;
-char	__UserMusicPath[255];
+char	UserMusicPath[255];
 char	RegFilePath[255];
 
 /*
@@ -93,7 +92,7 @@ BOOL checkDisableLobby(void)
 	When looking for our data, first check if we have been given an explicit
 	data path from the user. Then check the current directory. Finally check
 	the usual suspects in Unixland and round up some random hang arounds.
-	
+
 	This function sets the datadir variable.
 ***************************************************************************/
 static void find_data_dir(void)
@@ -110,7 +109,7 @@ static void find_data_dir(void)
 			return;
 		}
 	}
-	
+
 	/* Check current dir for unpacked game data */
 	if (!PHYSFS_addToSearchPath(PHYSFS_getBaseDir(), 1) || !PHYSFS_exists("gamedesc.lev")) {
 		debug(LOG_WZ, "Could not find data in current dir \"%s\".", PHYSFS_getBaseDir());
@@ -123,7 +122,7 @@ static void find_data_dir(void)
 		if (tmp != NULL) *tmp = '\0'; // Trim ending '/', which getBaseDir always provides
 		return;
 	}
-	
+
 	/* Check for warzone.wz in current dir */
 	strcpy(datadir, PHYSFS_getBaseDir());
 	strcat(datadir, "warzone.wz");
@@ -133,7 +132,7 @@ static void find_data_dir(void)
 	} else {
 		return;
 	}
-	
+
 	/* Check for warzone.wz in data/ dir */
 	strcpy(datadir, PHYSFS_getBaseDir());
 	strcat(datadir, "data/warzone.wz");
@@ -143,8 +142,8 @@ static void find_data_dir(void)
 	} else {
 		return;
 	}
-	
-	/* Check for warzone.wz in Unixland system data directory and check if we are running 
+
+	/* Check for warzone.wz in Unixland system data directory and check if we are running
 	 * straight out of the build directory (for convenience). */
 	strcpy(datadir, PHYSFS_getBaseDir());
 	*strrchr(datadir, '/') = '\0'; // Trim ending '/', which getBaseDir always provides
@@ -167,7 +166,7 @@ static void initialize_PhysicsFS(void)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-	char **i;
+	char **i, *searchPath;
 	char overridepath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
 #ifdef WIN32
   const char *writedir = "warzone-2.0";
@@ -184,25 +183,24 @@ static void initialize_PhysicsFS(void)
 	      linked.major, linked.minor, linked.patch);
 
 	strcpy(writepath, PHYSFS_getUserDir());
-  if (PHYSFS_setWriteDir(writepath) == 0) {
+	if (PHYSFS_setWriteDir(writepath) == 0) {
 		debug(LOG_ERROR, "Error setting write directory to home directory \"%s\": %s",
 		      writepath, PHYSFS_getLastError());
 		exit(1);
-  }
+	}
 	strcat(writepath, writedir);
-  (void) PHYSFS_mkdir(writedir); /* Just in case it does not exist yet */
-  if (PHYSFS_setWriteDir(writepath) == 0) {
+	(void) PHYSFS_mkdir(writedir); /* Just in case it does not exist yet; */
+	if (PHYSFS_setWriteDir(writepath) == 0) {
 		debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
-		      writepath, PHYSFS_getLastError());
+			writepath, PHYSFS_getLastError());
 		exit(1);
-  }
+	}
 	PHYSFS_addToSearchPath(writepath, 0); /* add to search path */
 
   find_data_dir();
   debug(LOG_WZ, "Data dir set to \"%s\".", datadir);
 
-	snprintf(overridepath, sizeof(overridepath), "%smods", 
-	         PHYSFS_getBaseDir());
+	snprintf(overridepath, sizeof(overridepath), "%smods", PHYSFS_getBaseDir());
 	strcpy(mappath, PHYSFS_getBaseDir());
 	strcat(mappath, "maps");
 
@@ -219,10 +217,11 @@ static void initialize_PhysicsFS(void)
 	/** Debugging and sanity checks **/
 
 	debug(LOG_WZ, "Search paths:");
-	for (i = PHYSFS_getSearchPath(); *i != NULL; i++) {
+	searchPath = PHYSFS_getSearchPath();
+	for (i = searchPath; *i != NULL; i++) {
 		debug(LOG_WZ, "    [%s]", *i);
 	}
-	PHYSFS_freeList(PHYSFS_getSearchPath());
+	PHYSFS_freeList( searchPath );
 	debug(LOG_WZ, "Write path: %s", PHYSFS_getWriteDir());
 
 	PHYSFS_permitSymbolicLinks(1);
@@ -270,7 +269,7 @@ int main(int argc, char *argv[])
 
 	/*** Initialize the debug subsystem ***/
 	/* Debug stuff for .net, don't delete :) */
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 #ifdef _DEBUG
 	{
 		int tmpFlag; //debug stuff for VC -Q
@@ -286,10 +285,9 @@ int main(int argc, char *argv[])
 #endif
 
 	debug_init();
-	datadir[0] = '\0'; // this needs to be before ParseCommandLineEarly
 
 	// find early boot info
-	if (!ParseCommandLineEarly(argc, argv)) {
+	if ( !ParseCommandLineEarly(argc, argv) ) {
 		return -1;
 	}
 
@@ -312,11 +310,7 @@ int main(int argc, char *argv[])
 	/* Put these files in the writedir root */
 	strcpy(RegFilePath, "config");
 	strcpy(KeyMapPath, "keymap.map");
-	strcpy(__UserMusicPath, "music");
-	UserMusicPath = __UserMusicPath;
-
-
-	/*** etc ***/
+	strcpy(UserMusicPath, "music");
 
 	// initialise all the command line states
 	clIntroVideo = FALSE;
@@ -329,7 +323,7 @@ init://jump here from the end if re_initialising
 		return FALSE;
 	}
 
-	loadRenderMode();//get the registry entry for clRendMode
+	loadRenderMode(); //get the registry entry for clRendMode
 
 	bDisableLobby = FALSE;
 
@@ -339,7 +333,6 @@ init://jump here from the end if re_initialising
 			return -1;
 		}
 	}
-
 	debug(LOG_MAIN, "reinitializing");
 
 	// find out if the lobby stuff has been disabled
@@ -370,7 +363,7 @@ init://jump here from the end if re_initialising
 	pie_ScreenFlip(CLEAR_BLACK);
 	pie_ScreenFlip(CLEAR_BLACK);
 
-	if(gameStatus == GS_VIDEO_MODE) 
+	if(gameStatus == GS_VIDEO_MODE)
 	{
 		introVideoControl = 0;//play video
 		gameStatus = GS_TITLE_SCREEN;
@@ -408,7 +401,7 @@ init://jump here from the end if re_initialising
 	{
 		return -1;
 	}
-	
+
 	//set all the pause states to false
 	setAllPauseStates(FALSE);
 
@@ -489,7 +482,7 @@ init://jump here from the end if re_initialising
 				debug(LOG_ERROR, "Unknown game status on shutdown!");
 		}
 
-		
+
 		debug(LOG_MAIN, "Entering main loop");
 
 		Restart = FALSE;
@@ -498,7 +491,7 @@ init://jump here from the end if re_initialising
 		while (!Restart)
 		{
 			frameRet = frameUpdate();
-			
+
 			if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 			{
 				if ( frameRet == FRAME_SETFOCUS )
@@ -582,7 +575,7 @@ init://jump here from the end if re_initialising
 								Restart = TRUE;
 								break;
 
-							case TITLECODE_SHOWINTRO:	
+							case TITLECODE_SHOWINTRO:
 								debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 								seq_ClearSeqList();
 								seq_AddSeqToList("eidos-logo.rpl",NULL,NULL, FALSE,0);
@@ -602,7 +595,7 @@ init://jump here from the end if re_initialising
 					}
 					pie_SetSwirlyBoxes(FALSE);
 					break;
-			
+
 /*				case GS_SAVEGAMELOAD:
 					if (loopNewLevel)
 					{
@@ -707,7 +700,7 @@ init://jump here from the end if re_initialising
 					}
 
 					break;
-		
+
 				default:
 					debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 					break;
@@ -717,7 +710,7 @@ init://jump here from the end if re_initialising
 			}
 		}	// End of !Restart loop.
 
-// Do game mode specific shutdown.	
+// Do game mode specific shutdown.
 		switch(lastStatus) {
 			case GS_TITLE_SCREEN:
 				if (!frontendShutdown())
@@ -757,7 +750,7 @@ init://jump here from the end if re_initialising
 				debug(LOG_ERROR, "Unknown game status on shutdown!");
 				break;
 		}
-	
+
 	} // End of !quit loop.
 
   debug(LOG_MAIN, "Shuting down application");

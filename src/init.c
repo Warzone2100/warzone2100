@@ -33,7 +33,7 @@
 #include "console.h"
 
 #include "piedef.h"
-#include "piestate.h" 
+#include "piestate.h"
 
 #include "configuration.h"
 #include "piemode.h"
@@ -102,7 +102,7 @@
 #include "gateway.h"
 #include "lighting.h"
 
-extern char* UserMusicPath;
+extern char UserMusicPath[];
 
 extern void statsInitVars(void);
 extern void	structureInitVars(void);
@@ -115,7 +115,6 @@ extern void	initMiscVars( void );
 extern char datadir[];
 
 
-
  // the sizes for the game block heap
  #define GAMEBLOCK_INIT		(2*1024*1024)
  #define GAMEBLOCK_EXT		(1024*1024)
@@ -125,8 +124,6 @@ extern char datadir[];
  // the sizes for the mission block heap
  #define MISSIONBLOCK_INIT		(2*1024*1024)
  #define MISSIONBLOCK_EXT		(512*1024)
-				  
-
 
 
 // the block heap for the game data
@@ -142,15 +139,14 @@ BLOCK_HEAP	*psMissionHeap;
 #define GAME_BLOCKID	100
 
 
-
 // Ascii to font image id lookup table for frontend font.
 // Same for WIN32 and PSX.
 //
 
-UWORD FEAsciiLookup[256] = 
+UWORD FEAsciiLookup[256] =
 //#else
 //// We can use bytes as long as we ensure the font images are the 1st 256 in the image file.
-//UBYTE FEAsciiLookup[256] = 
+//UBYTE FEAsciiLookup[256] =
 //#endif
 {
 	IMAGE_TFONT_63,	//0		0..32 are all mapped to question marks
@@ -190,7 +186,7 @@ UWORD FEAsciiLookup[256] =
 	IMAGE_TFONT_34,	//34	"
 	IMAGE_TFONT_35,	//35	#
 	IMAGE_TFONT_36,	//36	$
-	IMAGE_TFONT_37,	//37	
+	IMAGE_TFONT_37,	//37
 	IMAGE_TFONT_38,	//38	&
 	IMAGE_TFONT_39,	//39	'
 	IMAGE_TFONT_40,	//40	(
@@ -313,101 +309,101 @@ UWORD FEAsciiLookup[256] =
 	IMAGE_TFONT_63,	//157	box8
 	IMAGE_TFONT_63,	//158	box9
 	IMAGE_TFONT_63,	//159   Big Y with umlaut
-	IMAGE_TFONT_63,	//160  
+	IMAGE_TFONT_63,	//160
 	IMAGE_TFONT_63,	//161   upside down !
 	IMAGE_TFONT_63,	//162   little c with a slash thru it
-	IMAGE_TFONT_63,	//163  pound sign	
-	IMAGE_TFONT_63,	//164   circle with crosses thru it	
-	IMAGE_TFONT_63,	//165   Big Y with two lines thru it	
-	IMAGE_TFONT_63,	//166   Broken 'pipe' sign	
-	IMAGE_TFONT_63,	//167   Ornate 's'	
-	IMAGE_TFONT_63,	//168   umlaut	
-	IMAGE_TFONT_63,	//169   copyright	
-	IMAGE_TFONT_63,	//170   little tiny 'a'	
-	IMAGE_TFONT_63,	//171   double <<	
-	IMAGE_TFONT_63,	//172   	
-	IMAGE_TFONT_63,	//173   
+	IMAGE_TFONT_63,	//163  pound sign
+	IMAGE_TFONT_63,	//164   circle with crosses thru it
+	IMAGE_TFONT_63,	//165   Big Y with two lines thru it
+	IMAGE_TFONT_63,	//166   Broken 'pipe' sign
+	IMAGE_TFONT_63,	//167   Ornate 's'
+	IMAGE_TFONT_63,	//168   umlaut
+	IMAGE_TFONT_63,	//169   copyright
+	IMAGE_TFONT_63,	//170   little tiny 'a'
+	IMAGE_TFONT_63,	//171   double <<
+	IMAGE_TFONT_63,	//172
+	IMAGE_TFONT_63,	//173
 	IMAGE_TFONT_63,	//174   registered
-	IMAGE_TFONT_63,	//175   
-	IMAGE_TFONT_63,	//176   
-	IMAGE_TFONT_63,	//177   
-	IMAGE_TFONT_63,	//178   
-	IMAGE_TFONT_63,	//179   
-	IMAGE_TFONT_63,	//180   
-	IMAGE_TFONT_63,	//181   
-	IMAGE_TFONT_63,	//182  
-	IMAGE_TFONT_63,	//183   
-	IMAGE_TFONT_63,	//184   
-	IMAGE_TFONT_63,	//185   
-	IMAGE_TFONT_63,	//186   
-	IMAGE_TFONT_63,	//187   
-	IMAGE_TFONT_63,	//188   
-	IMAGE_TFONT_63,	//189   
-	IMAGE_TFONT_63,	//190   
-	IMAGE_TFONT_63,	//191   
-	IMAGE_TFONT_192,	//192   
-	IMAGE_TFONT_193,	//193   
-	IMAGE_TFONT_194,	//194   
-	IMAGE_TFONT_195,	//195   
-	IMAGE_TFONT_196,	//196   
-	IMAGE_TFONT_197,	//197   
-	IMAGE_TFONT_198,	//198   
-	IMAGE_TFONT_199,	//199   
-	IMAGE_TFONT_200,	//200   
-	IMAGE_TFONT_201,	//201   
-	IMAGE_TFONT_202,	//202   
-	IMAGE_TFONT_203,	//203   
-	IMAGE_TFONT_204,	//204   
-	IMAGE_TFONT_205,	//205   
-	IMAGE_TFONT_206,	//206   
-	IMAGE_TFONT_207,	//207   
-	IMAGE_TFONT_208,	//208   
-	IMAGE_TFONT_209,	//209   
-	IMAGE_TFONT_210,	//210   
-	IMAGE_TFONT_211,	//211   
-	IMAGE_TFONT_212,	//212   
-	IMAGE_TFONT_213,	//213   
-	IMAGE_TFONT_214,	//214   
-	IMAGE_TFONT_215,	//215   
-	IMAGE_TFONT_216,	//216   
-	IMAGE_TFONT_217,	//217   
-	IMAGE_TFONT_218,	//218   
-	IMAGE_TFONT_219,	//219   
-	IMAGE_TFONT_220,	//220   
-	IMAGE_TFONT_221,	//221   
-	IMAGE_TFONT_63,	//222   
-	IMAGE_TFONT_63,	//223   
-	IMAGE_TFONT_224,	//224   
-	IMAGE_TFONT_225,	//225   
-	IMAGE_TFONT_226,	//226   
-	IMAGE_TFONT_227,	//227   
-	IMAGE_TFONT_228,	//228   
-	IMAGE_TFONT_229,	//229   
-	IMAGE_TFONT_230,	//230   
-	IMAGE_TFONT_63,	//231   
-	IMAGE_TFONT_232,	//232   
-	IMAGE_TFONT_233,	//233   
-	IMAGE_TFONT_234,	//234   
-	IMAGE_TFONT_235,	//235   
-	IMAGE_TFONT_236,	//236   
-	IMAGE_TFONT_237,	//237   
-	IMAGE_TFONT_238,	//238   
-	IMAGE_TFONT_239,	//239   
-	IMAGE_TFONT_240,	//240   
-	IMAGE_TFONT_241,	//241   
-	IMAGE_TFONT_242,	//242   
-	IMAGE_TFONT_243,	//243   
-	IMAGE_TFONT_244,	//244   
-	IMAGE_TFONT_245,	//245   
-	IMAGE_TFONT_246,	//246   
-	IMAGE_TFONT_63,	//247   
-	IMAGE_TFONT_248,	//248   
-	IMAGE_TFONT_249,	//249   
-	IMAGE_TFONT_250,	//250   
-	IMAGE_TFONT_251,	//251   
-	IMAGE_TFONT_252,	//252   
-	IMAGE_TFONT_253,	//253   
-	IMAGE_TFONT_63,	//254   
+	IMAGE_TFONT_63,	//175
+	IMAGE_TFONT_63,	//176
+	IMAGE_TFONT_63,	//177
+	IMAGE_TFONT_63,	//178
+	IMAGE_TFONT_63,	//179
+	IMAGE_TFONT_63,	//180
+	IMAGE_TFONT_63,	//181
+	IMAGE_TFONT_63,	//182
+	IMAGE_TFONT_63,	//183
+	IMAGE_TFONT_63,	//184
+	IMAGE_TFONT_63,	//185
+	IMAGE_TFONT_63,	//186
+	IMAGE_TFONT_63,	//187
+	IMAGE_TFONT_63,	//188
+	IMAGE_TFONT_63,	//189
+	IMAGE_TFONT_63,	//190
+	IMAGE_TFONT_63,	//191
+	IMAGE_TFONT_192,	//192
+	IMAGE_TFONT_193,	//193
+	IMAGE_TFONT_194,	//194
+	IMAGE_TFONT_195,	//195
+	IMAGE_TFONT_196,	//196
+	IMAGE_TFONT_197,	//197
+	IMAGE_TFONT_198,	//198
+	IMAGE_TFONT_199,	//199
+	IMAGE_TFONT_200,	//200
+	IMAGE_TFONT_201,	//201
+	IMAGE_TFONT_202,	//202
+	IMAGE_TFONT_203,	//203
+	IMAGE_TFONT_204,	//204
+	IMAGE_TFONT_205,	//205
+	IMAGE_TFONT_206,	//206
+	IMAGE_TFONT_207,	//207
+	IMAGE_TFONT_208,	//208
+	IMAGE_TFONT_209,	//209
+	IMAGE_TFONT_210,	//210
+	IMAGE_TFONT_211,	//211
+	IMAGE_TFONT_212,	//212
+	IMAGE_TFONT_213,	//213
+	IMAGE_TFONT_214,	//214
+	IMAGE_TFONT_215,	//215
+	IMAGE_TFONT_216,	//216
+	IMAGE_TFONT_217,	//217
+	IMAGE_TFONT_218,	//218
+	IMAGE_TFONT_219,	//219
+	IMAGE_TFONT_220,	//220
+	IMAGE_TFONT_221,	//221
+	IMAGE_TFONT_63,	//222
+	IMAGE_TFONT_63,	//223
+	IMAGE_TFONT_224,	//224
+	IMAGE_TFONT_225,	//225
+	IMAGE_TFONT_226,	//226
+	IMAGE_TFONT_227,	//227
+	IMAGE_TFONT_228,	//228
+	IMAGE_TFONT_229,	//229
+	IMAGE_TFONT_230,	//230
+	IMAGE_TFONT_63,	//231
+	IMAGE_TFONT_232,	//232
+	IMAGE_TFONT_233,	//233
+	IMAGE_TFONT_234,	//234
+	IMAGE_TFONT_235,	//235
+	IMAGE_TFONT_236,	//236
+	IMAGE_TFONT_237,	//237
+	IMAGE_TFONT_238,	//238
+	IMAGE_TFONT_239,	//239
+	IMAGE_TFONT_240,	//240
+	IMAGE_TFONT_241,	//241
+	IMAGE_TFONT_242,	//242
+	IMAGE_TFONT_243,	//243
+	IMAGE_TFONT_244,	//244
+	IMAGE_TFONT_245,	//245
+	IMAGE_TFONT_246,	//246
+	IMAGE_TFONT_63,	//247
+	IMAGE_TFONT_248,	//248
+	IMAGE_TFONT_249,	//249
+	IMAGE_TFONT_250,	//250
+	IMAGE_TFONT_251,	//251
+	IMAGE_TFONT_252,	//252
+	IMAGE_TFONT_253,	//253
+	IMAGE_TFONT_63,	//254
 	IMAGE_TFONT_63	//255
 };
 
@@ -416,10 +412,10 @@ UWORD FEAsciiLookup[256] =
 // Same for WIN32 and PSX.
 //
 //#ifndef PSX
-//UWORD AsciiLookup[256] = 
+//UWORD AsciiLookup[256] =
 //#else
 //// We can use bytes as long as we ensure the font images are the 1st 256 in the image file.
-UWORD AsciiLookup[256] = 
+UWORD AsciiLookup[256] =
 //#endif
 {
 	IMAGE_ASCII63,	//0		0..32 are all mapped to question marks
@@ -461,7 +457,7 @@ UWORD AsciiLookup[256] =
 	IMAGE_ASCII34,	//34	"
 	IMAGE_ASCII35,	//35	#
 	IMAGE_ASCII36,	//36	$
-	IMAGE_ASCII37,	//37	
+	IMAGE_ASCII37,	//37
 	IMAGE_ASCII38,	//38	&
 	IMAGE_ASCII39,	//39	'
 	IMAGE_ASCII40,	//40	(
@@ -586,101 +582,101 @@ UWORD AsciiLookup[256] =
 	IMAGE_ASCII63,	//157	box8
 	IMAGE_ASCII63,	//158	box9
 	IMAGE_ASCII63,	//159   Big Y with umlaut
-	IMAGE_ASCII63,	//160  
+	IMAGE_ASCII63,	//160
 	IMAGE_ASCII161,	//161   upside down !
 	IMAGE_ASCII63,	//162   little c with a slash thru it
-	IMAGE_ASCII63,	//163  pound sign	
-	IMAGE_ASCII63,	//164   circle with crosses thru it	
-	IMAGE_ASCII63,	//165   Big Y with two lines thru it	
-	IMAGE_ASCII63,	//166   Broken 'pipe' sign	
-	IMAGE_ASCII63,	//167   Ornate 's'	
-	IMAGE_ASCII63,	//168   umlaut	
-	IMAGE_ASCII63,	//169   copyright	
-	IMAGE_ASCII63,	//170   little tiny 'a'	
-	IMAGE_ASCII63,	//171   double <<	
-	IMAGE_ASCII63,	//172   	
-	IMAGE_ASCII63,	//173   
+	IMAGE_ASCII63,	//163  pound sign
+	IMAGE_ASCII63,	//164   circle with crosses thru it
+	IMAGE_ASCII63,	//165   Big Y with two lines thru it
+	IMAGE_ASCII63,	//166   Broken 'pipe' sign
+	IMAGE_ASCII63,	//167   Ornate 's'
+	IMAGE_ASCII63,	//168   umlaut
+	IMAGE_ASCII63,	//169   copyright
+	IMAGE_ASCII63,	//170   little tiny 'a'
+	IMAGE_ASCII63,	//171   double <<
+	IMAGE_ASCII63,	//172
+	IMAGE_ASCII63,	//173
 	IMAGE_ASCII63,	//174   registered
-	IMAGE_ASCII63,	//175   
-	IMAGE_ASCII63,	//176   
-	IMAGE_ASCII63,	//177   
-	IMAGE_ASCII63,	//178   
-	IMAGE_ASCII63,	//179   
-	IMAGE_ASCII63,	//180   
-	IMAGE_ASCII63,	//181   
-	IMAGE_ASCII63,	//182  
-	IMAGE_ASCII63,	//183   
-	IMAGE_ASCII63,	//184   
-	IMAGE_ASCII63,	//185   
-	IMAGE_ASCII63,	//186   
-	IMAGE_ASCII63,	//187   
-	IMAGE_ASCII188,	//188   
-	IMAGE_ASCII189,	//189   
-	IMAGE_ASCII63,	//190   
-	IMAGE_ASCII191,	//191   
-	IMAGE_ASCII192,	//192   
-	IMAGE_ASCII193,	//193   
-	IMAGE_ASCII194,	//194   
-	IMAGE_ASCII195,	//195   
-	IMAGE_ASCII196,	//196   
-	IMAGE_ASCII197,	//197   
-	IMAGE_ASCII198,	//198   
-	IMAGE_ASCII63,	//199   
-	IMAGE_ASCII200,	//200   
-	IMAGE_ASCII201,	//201   
-	IMAGE_ASCII202,	//202   
-	IMAGE_ASCII203,	//203   
-	IMAGE_ASCII204,	//204   
-	IMAGE_ASCII205,	//205   
-	IMAGE_ASCII206,	//206   
-	IMAGE_ASCII207,	//207   
-	IMAGE_ASCII208,	//208   
-	IMAGE_ASCII63,	//209   
-	IMAGE_ASCII210,	//210   
-	IMAGE_ASCII211,	//211   
-	IMAGE_ASCII212,	//212   
-	IMAGE_ASCII213,	//213   
-	IMAGE_ASCII214,	//214   
-	IMAGE_ASCII63,	//215   
-	IMAGE_ASCII216,	//216   
-	IMAGE_ASCII217,	//217   
-	IMAGE_ASCII218,	//218   
-	IMAGE_ASCII219,	//219   
-	IMAGE_ASCII220,	//220   
-	IMAGE_ASCII221,	//221   
-	IMAGE_ASCII63,	//222   
-	IMAGE_ASCII223,	//223   
-	IMAGE_ASCII224,	//224   
-	IMAGE_ASCII225,	//225   
-	IMAGE_ASCII226,	//226   
-	IMAGE_ASCII227,	//227   
-	IMAGE_ASCII228,	//228   
-	IMAGE_ASCII229,	//229   
-	IMAGE_ASCII230,	//230   
-	IMAGE_ASCII231,	//231   
-	IMAGE_ASCII232,	//232   
-	IMAGE_ASCII233,	//233   
-	IMAGE_ASCII234,	//234   
-	IMAGE_ASCII235,	//235   
-	IMAGE_ASCII236,	//236   
-	IMAGE_ASCII237,	//237   
-	IMAGE_ASCII238,	//238   
-	IMAGE_ASCII239,	//239   
-	IMAGE_ASCII63,	//240   
-	IMAGE_ASCII241,	//241   
-	IMAGE_ASCII242,	//242   
-	IMAGE_ASCII243,	//243   
-	IMAGE_ASCII244,	//244   
-	IMAGE_ASCII245,	//245   
-	IMAGE_ASCII246,	//246   
-	IMAGE_ASCII63,	//247   
-	IMAGE_ASCII248,	//248   
-	IMAGE_ASCII249,	//249   
-	IMAGE_ASCII250,	//250   
-	IMAGE_ASCII251,	//251   
-	IMAGE_ASCII252,	//252   
-	IMAGE_ASCII253,	//253   
-	IMAGE_ASCII63,	//254   
+	IMAGE_ASCII63,	//175
+	IMAGE_ASCII63,	//176
+	IMAGE_ASCII63,	//177
+	IMAGE_ASCII63,	//178
+	IMAGE_ASCII63,	//179
+	IMAGE_ASCII63,	//180
+	IMAGE_ASCII63,	//181
+	IMAGE_ASCII63,	//182
+	IMAGE_ASCII63,	//183
+	IMAGE_ASCII63,	//184
+	IMAGE_ASCII63,	//185
+	IMAGE_ASCII63,	//186
+	IMAGE_ASCII63,	//187
+	IMAGE_ASCII188,	//188
+	IMAGE_ASCII189,	//189
+	IMAGE_ASCII63,	//190
+	IMAGE_ASCII191,	//191
+	IMAGE_ASCII192,	//192
+	IMAGE_ASCII193,	//193
+	IMAGE_ASCII194,	//194
+	IMAGE_ASCII195,	//195
+	IMAGE_ASCII196,	//196
+	IMAGE_ASCII197,	//197
+	IMAGE_ASCII198,	//198
+	IMAGE_ASCII63,	//199
+	IMAGE_ASCII200,	//200
+	IMAGE_ASCII201,	//201
+	IMAGE_ASCII202,	//202
+	IMAGE_ASCII203,	//203
+	IMAGE_ASCII204,	//204
+	IMAGE_ASCII205,	//205
+	IMAGE_ASCII206,	//206
+	IMAGE_ASCII207,	//207
+	IMAGE_ASCII208,	//208
+	IMAGE_ASCII63,	//209
+	IMAGE_ASCII210,	//210
+	IMAGE_ASCII211,	//211
+	IMAGE_ASCII212,	//212
+	IMAGE_ASCII213,	//213
+	IMAGE_ASCII214,	//214
+	IMAGE_ASCII63,	//215
+	IMAGE_ASCII216,	//216
+	IMAGE_ASCII217,	//217
+	IMAGE_ASCII218,	//218
+	IMAGE_ASCII219,	//219
+	IMAGE_ASCII220,	//220
+	IMAGE_ASCII221,	//221
+	IMAGE_ASCII63,	//222
+	IMAGE_ASCII223,	//223
+	IMAGE_ASCII224,	//224
+	IMAGE_ASCII225,	//225
+	IMAGE_ASCII226,	//226
+	IMAGE_ASCII227,	//227
+	IMAGE_ASCII228,	//228
+	IMAGE_ASCII229,	//229
+	IMAGE_ASCII230,	//230
+	IMAGE_ASCII231,	//231
+	IMAGE_ASCII232,	//232
+	IMAGE_ASCII233,	//233
+	IMAGE_ASCII234,	//234
+	IMAGE_ASCII235,	//235
+	IMAGE_ASCII236,	//236
+	IMAGE_ASCII237,	//237
+	IMAGE_ASCII238,	//238
+	IMAGE_ASCII239,	//239
+	IMAGE_ASCII63,	//240
+	IMAGE_ASCII241,	//241
+	IMAGE_ASCII242,	//242
+	IMAGE_ASCII243,	//243
+	IMAGE_ASCII244,	//244
+	IMAGE_ASCII245,	//245
+	IMAGE_ASCII246,	//246
+	IMAGE_ASCII63,	//247
+	IMAGE_ASCII248,	//248
+	IMAGE_ASCII249,	//249
+	IMAGE_ASCII250,	//250
+	IMAGE_ASCII251,	//251
+	IMAGE_ASCII252,	//252
+	IMAGE_ASCII253,	//253
+	IMAGE_ASCII63,	//254
 	IMAGE_ASCII63	//255
 };
 
@@ -720,7 +716,7 @@ BOOL InitialiseGlobals(void)
 
 	snapInitVars();
 	driveInitVars(TRUE);
-	
+
 	return TRUE;
 }
 
@@ -826,9 +822,12 @@ int declare_data_directory(const char* name, int depend) {
 		if (data_dirs_size == 0) {
 			data_dirs_size = 4;
 			data_dirs = (struct data_dir_t*)malloc(data_dirs_size*sizeof(struct data_dir_t));
+			memset( data_dirs, 0, data_dirs_size*sizeof(struct data_dir_t) ); // Initialize new data_dirs
 		} else {
+			unsigned int old_size = data_dirs_size;
 			data_dirs_size <<= 1;
 			data_dirs = (struct data_dir_t*)realloc(data_dirs, data_dirs_size*sizeof(struct data_dir_t));
+			memset( &data_dirs[old_size], 0, (data_dirs_size-old_size)*sizeof(struct data_dir_t) ); // Init new data_dirs
 		}
 	}
 
@@ -899,8 +898,10 @@ BOOL buildMapList()
 					loadLevFile(*j, dir_index);
 				}
 			}
+			PHYSFS_freeList( filelist );
 			PHYSFS_removeFromSearchPath(path);
 		}
+		PHYSFS_freeList( map_dirs );
 	}
 
 	restore_search_path(search_path);
@@ -1108,7 +1109,7 @@ BOOL systemInitialise(void)
 
 	pie_SetTranslucent(war_GetTranslucent());
 	pie_SetAdditive(war_GetAdditive());
-	
+
 //	displayBufferSize = iV_GetDisplayWidth()*iV_GetDisplayHeight()*iV_GetDisplayBytesPP();
 	displayBufferSize = DISP_WIDTH*DISP_HEIGHT*2;
 	if (displayBufferSize < 5000000)
@@ -1136,17 +1137,17 @@ BOOL systemInitialise(void)
 		mixer_Open();
 	}
 
-	if (!bDisableLobby && !multiInitialise())			// ajl. Init net stuff
-	{
-		return FALSE;
-	}
-	
-	if (!dataInitLoadFuncs())				// Pass all the data loading functions to the framework library 
+	if (!bDisableLobby && !multiInitialise()) // ajl. Init net stuff
 	{
 		return FALSE;
 	}
 
-	if (!rayInitialise())		/* Initialise the ray tables */
+	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library
+	{
+		return FALSE;
+	}
+
+	if (!rayInitialise()) /* Initialise the ray tables */
 	{
 		return FALSE;
 	}
@@ -1155,12 +1156,12 @@ BOOL systemInitialise(void)
 	{
 		return FALSE;
 	}
-	if (!astarInitialise())		// Initialise the findpath system
+	if (!astarInitialise()) // Initialise the findpath system
 	{
 		return FALSE;
 	}
 
-	loadConfig(FALSE);			// get favourite settings from the registry
+	loadConfig(FALSE); // get favourite settings from the registry
 
 	// create a block heap for the game data
 	if (!BLOCK_CREATE(&psGameHeap, GAMEBLOCK_INIT, GAMEBLOCK_EXT))
@@ -1196,17 +1197,22 @@ BOOL systemInitialise(void)
 //
 BOOL systemShutdown(void)
 {
+	unsigned int i;
 #ifdef ARROWS
 	arrowShutDown();
 #endif
 
 	keyClearMappings();
 	fpathShutDown();
-	
-
 
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
+
+	for( i = 0; i < data_dirs_size; i++ )
+	{
+		free( data_dirs[i].name );
+	}
+	free( data_dirs );
 
 	// release the block heaps
 	BLOCK_DESTROY(psGameHeap);
@@ -1300,12 +1306,12 @@ BOOL frontendInitialise(char *ResourceFile)
 		return FALSE;
 	}
 
-	if (!stringsInitialise())				// Initialise the string system 
+	if (!stringsInitialise())				// Initialise the string system
 	{
 		return FALSE;
 	}
 
-	if (!objInitialise())					// Initialise the object system 
+	if (!objInitialise())					// Initialise the object system
 	{
 		return FALSE;
 	}
@@ -1328,30 +1334,30 @@ BOOL frontendInitialise(char *ResourceFile)
 	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
 	if (!resLoad(ResourceFile, 0,
 				 DisplayBuffer, displayBufferSize,
-				 psGameHeap))				//need the object heaps to have been set up before loading in the save game
+				 psGameHeap))	//need the object heaps to have been set up before loading in the save game
 	{
 		return FALSE;
 	}
 
-	if (!dispInitialise())					// Initialise the display system 
+	if (!dispInitialise())					// Initialise the display system
 	{
 		return FALSE;
 	}
 
 #ifdef BUCKET
-	if ( !bucketSetupList() )				// reset object list 
+	if ( !bucketSetupList() )				// reset object list
 	{
 		return FALSE;
 	}
 #endif
-	
+
 	FrontImages = (IMAGEFILE*)resGetData("IMG","frend.img");
 	FEFont = iV_CreateFontIndirect(FrontImages,FEAsciiLookup,4);
 
    	/* Shift the interface initialisation here temporarily so that it
    		can pick up the stats after they have been loaded */
 	if (!intInitialise())
-	{	 	  	
+	{
 		return FALSE;
 	}
 
@@ -1373,7 +1379,7 @@ BOOL frontendInitialise(char *ResourceFile)
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
 
 	memSetBlockHeap(NULL);
-	
+
 	initMiscVars();
 
 	gameTimeInit();
@@ -1396,6 +1402,7 @@ BOOL frontendShutdown(void)
 	debug(LOG_MAIN, "Shuting down frontend");
 
 	saveConfig();			// save settings to registry.
+	closeConfig();
 
 	//	if (!aiShutdown())
 //	{
@@ -1481,7 +1488,7 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-	if (!objInitialise())		/* Initialise the object system */					 		
+	if (!objInitialise())		/* Initialise the object system */
 	{
 		return FALSE;
 	}
@@ -1628,7 +1635,7 @@ BOOL stageOneShutDown(void)
 
 	formationShutDown();
 	releasePlayerPower();
-    
+
     ResearchRelease();
 
 	//free up the gateway stuff?
@@ -1716,7 +1723,7 @@ BOOL stageTwoInitialise(void)
 		DBERROR(("Can't find all the explosions PCX's"));
 		return FALSE;
 	}
-  
+
 /*
 	if (!loadExtraIMDs())
 	{
@@ -1724,7 +1731,7 @@ BOOL stageTwoInitialise(void)
 	}
 */
 
-	/*if (!mechInitialise())		// Initialise the mechanics system 
+	/*if (!mechInitialise())		// Initialise the mechanics system
 	{
 		return FALSE;
 	}*/
@@ -1742,14 +1749,14 @@ BOOL stageTwoInitialise(void)
 		return FALSE;
 	}
 #endif
-	
+
    	/* Shift the interface initialisation here temporarily so that it
    		can pick up the stats after they have been loaded */
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (!intInitialise())
-	{	 	  	
+	{
 		return FALSE;
 	}
 
@@ -1771,7 +1778,7 @@ BOOL stageTwoInitialise(void)
 		return FALSE;
 	}
 
-	
+
 
 	// keymappings
 	LOADBARCALLBACK();	//	loadingScreenCallback();
@@ -1788,7 +1795,7 @@ BOOL stageTwoInitialise(void)
 
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
-	
+
 //	mapNew(256,256);	// Generate the largest size of map needed for the game
 //	if (!loadGame("final.gam"))
 //	if (!loadGame("savetest.gam"))
@@ -1825,7 +1832,7 @@ BOOL stageTwoShutDown(void)
 	}*/
 
 	freeAllStructs();
-	freeAllDroids();																								  
+	freeAllDroids();
 	freeAllFeatures();
 	freeAllFlagPositions();
 
@@ -1934,7 +1941,8 @@ BOOL stageThreeInitialise(void)
 
 	if(bMultiPlayer)
 	{
-		printf("\n\n\n@@@@@@@@@@@@@@@@  multiGameInit() ? \n\n\n");
+		// FIXME Is this really needed?
+		debug( LOG_WZ, "multiGameInit()\n" );
 		multiGameInit();
 		cmdDroidMultiExpBoost(TRUE);
 	}
@@ -1982,7 +1990,7 @@ BOOL stageThreeInitialise(void)
 			break;
 		}
 	}
-						
+
 
 	// Re-inititialise some static variables.
 
@@ -2062,7 +2070,7 @@ BOOL stageThreeShutDown(void)
 
 	// Remove any remaining enemy objects.
 // Now done in mission state loop.
-//	missionDestroyObjects();	
+//	missionDestroyObjects();
 
 
 
@@ -2077,7 +2085,7 @@ BOOL stageThreeShutDown(void)
 		setPlayerColour(selectedPlayer,temp);
 	}
 	else
-	{	
+	{
 		initPlayerColours();		// reset colours leaving multiplayer game.
 	}
 
@@ -2126,7 +2134,7 @@ BOOL saveGameReset(void)
 	}*/
 
 	freeAllStructs();
-	freeAllDroids();																								  
+	freeAllDroids();
 	freeAllFeatures();
 	freeAllFlagPositions();
 //#ifdef NEW_SAVE added for V12 SAVE safe for all versions

@@ -24,7 +24,7 @@ static BOOL enabled_debug_parts[LOG_LAST];
 /* This list _must_ match the enum in debug.h! */
 static const char *code_part_names[] = {
   "all", "main", "sound", "video", "wz", "3d", "texture", 
-  "error", "never", "last"
+  "net", "error", "never", "last"
 };
 
 #ifdef _MSC_VER
