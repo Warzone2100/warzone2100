@@ -133,6 +133,7 @@ void DrawTriangleList(BSPPOLYID PolygonNumber);
 /***************************************************************************/
 
 static BOOL lighting = FALSE;
+static BOOL shadows = FALSE;
 
 void pie_BeginLighting(float x, float y, float z) {
 	float pos[4];
@@ -155,9 +156,11 @@ void pie_BeginLighting(float x, float y, float z) {
 	glEnable(GL_LIGHT0);
 
 	//lighting = TRUE;
+	shadows = TRUE;
 }
 
-void pie_EndLighting(float x, float y, float z) {
+void pie_EndLighting() {
+	shadows = FALSE;
 	lighting = FALSE;
 }
 
@@ -630,7 +633,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		frame = team;
 	}
 
-	if (drawing_interface) {
+	if (drawing_interface || !shadows) {
 		pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
 	} else {
 		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT)) {

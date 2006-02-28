@@ -124,6 +124,18 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	}
 
 	// //////////////////////////
+	// draw shadows
+	if(getWarzoneKeyNumeric("shadows", &val))
+	{
+		setDrawShadows(val);
+	}
+	else
+	{
+		setDrawShadows(TRUE);
+		setWarzoneKeyNumeric("shadows", TRUE);
+	}
+
+	// //////////////////////////
 	// invert mouse
 	if(getWarzoneKeyNumeric("mouseflip", &val))
 	{
@@ -497,6 +509,7 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("visfog",(DWORD)(!war_GetFog()));			// fogtype
 	setWarzoneKeyNumeric("shake",(DWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(DWORD)(getInvertMouseStatus()));	// flipmouse
+	setWarzoneKeyNumeric("shadows",(DWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sequences",(DWORD)(war_GetSeqMode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(DWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("reopenBuild",(DWORD)(intGetReopenBuild()));	// build menu

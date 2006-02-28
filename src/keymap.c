@@ -243,6 +243,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleGodMode,
 	kf_EndMissionOffWorld, 
 	kf_SystemClose,
+	kf_ToggleShadows,
 //#endif
 
 	NULL		// last function!
@@ -388,6 +389,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
 
 	// Some extra non QWERTY mappings but functioning in same way
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_COMMA,KEYMAP_PRESSED,kf_SetDroidRetreatMedium,	   strresGetString(psStringRes,STR_BIND_LDAM) );

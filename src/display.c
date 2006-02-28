@@ -208,6 +208,7 @@ static BOOL	anyDroidSelected(UDWORD player);
 static BOOL cyborgDroidSelected(UDWORD player);
 //static BOOL ctrlShiftDown(void);
 static BOOL bInvertMouse = TRUE;
+static BOOL bDrawShadows = TRUE;
 //BOOL	widgetsOn=TRUE;	//FALSE;
 //BOOL	forceWidgetsOn = FALSE;
 SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
@@ -321,6 +322,17 @@ BOOL	getInvertMouseStatus( void )
 void	setInvertMouseStatus( BOOL val )
 {
 	bInvertMouse = val;
+}
+
+
+BOOL	getDrawShadows( void )
+{
+	return(bDrawShadows);
+}
+
+void	setDrawShadows( BOOL val )
+{
+	bDrawShadows = val;
 }
 
 

@@ -32,7 +32,7 @@ SDL_CD	*cdAudio_dev;
 
 extern BOOL		openal_initialized;
 
-#define NB_BUFFERS  6
+#define NB_BUFFERS  16
 #define BUFFER_SIZE (16384)
 
 static BOOL		music_initialized;
@@ -44,7 +44,7 @@ enum {	WZ_NONE,
 	WZ_OGG }	music_file_format;
 
 #ifndef WZ_NOMP3
-#define MP3_BUFFER_SIZE (16384)
+#define MP3_BUFFER_SIZE (8192)
 
 static struct mad_stream mp3_stream;
 static struct mad_frame mp3_frame;

@@ -304,8 +304,7 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
   
 	
-	if(GetTickCount()-lastTick < 16)	// cos 1000/60Hz gives roughly 16...:-)
-	{
+	if(GetTickCount()-lastTick < 16) {
 		return;
 	}
  	currTick = GetTickCount();
@@ -361,6 +360,7 @@ void loadingScreenCallback(void)
 	DrawEnd();
 	pie_GlobalRenderEnd(TRUE);//force to black
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
+	audio_Update();
 }
 
 

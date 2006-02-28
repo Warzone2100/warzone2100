@@ -786,7 +786,9 @@ void drawTiles(iView *camera, iView *player)
 	pie_TRANSLATE(-rx,-player->p.y,rz);
 	angle += 0.01;
 	// RODZ uncomment the following line to see an OpenGL lighting demo
-	pie_BeginLighting(50, -300, -300);
+	if (getDrawShadows()) {
+		pie_BeginLighting(50, -300, -300);
+	}
 	
 	/* ---------------------------------------------------------------- */
 	/* Rotate and project all the tiles within the grid                 */
@@ -1055,6 +1057,7 @@ void drawTiles(iView *camera, iView *player)
 #ifdef BUCKET
 	bucketRenderCurrentList();
 	pie_RemainingPasses();
+	pie_EndLighting();
 #endif
 #ifdef ARROWS
 	arrowDrawAll();

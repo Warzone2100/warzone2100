@@ -68,7 +68,7 @@ BOOL		saveKeyMap		(void);
 BOOL		loadKeyMap		(void);
 static BOOL	pushedKeyMap		(UDWORD key);
 
-char	keymapVersion[8] = "KM_0001";
+char	keymapVersion[8] = "KM_0002";
 extern char    KeyMapPath[];
 
 // ////////////////////////////////////////////////////////////////////////////

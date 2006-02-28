@@ -133,6 +133,8 @@ void pie_ScreenFlip(CLEAR_MODE clearMode) {
 	screenDoDumpToDiskIfRequired();
 	SDL_GL_SwapBuffers();
 	switch (clearMode) {
+		case CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD:
+			break;
 		case CLEAR_BLACK:
 		default:
 			glDepthMask(GL_TRUE);

@@ -2432,6 +2432,19 @@ void	kf_ToggleShakeStatus( void )
 
 }
 // --------------------------------------------------------------------------
+void	kf_ToggleShadows( void )
+{
+	if(getDrawShadows())
+	{
+		setDrawShadows(FALSE);
+	}
+	else
+	{
+		setDrawShadows(TRUE);
+	}
+
+}
+// --------------------------------------------------------------------------
 
 FRACT available_speed[] = {
 	FRACTCONST(1, 8),

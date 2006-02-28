@@ -49,7 +49,10 @@ extern void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox);
 
 extern BOOL	buildingDamaged(STRUCTURE *psStructure);
 extern	void	setInvertMouseStatus( BOOL val );
-extern BOOL		getInvertMouseStatus( void );
+extern BOOL	getInvertMouseStatus( void );
+
+extern	void	setDrawShadows( BOOL val );
+extern BOOL	getDrawShadows( void );
 
 extern	BOOL	getRadarJumpStatus( void );
 
