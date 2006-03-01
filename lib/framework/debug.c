@@ -67,9 +67,9 @@ static int cat_snprintf(char *str, size_t n, const char *format, ...)
   Convert code_part names to enum; case insensitive; returns LOG_LAST 
   if can't match.
 **************************************************************************/
-static enum code_part code_part_from_str(const char *str)
+static int code_part_from_str(const char *str)
 {
-	enum code_part i;
+	int i;
 
 	for (i = 0; i < LOG_LAST; i++) {
 		if (strcasecmp(code_part_names[i], str) == 0) {
@@ -148,7 +148,7 @@ void debug_use_callback(log_callback_fn use_callback)
 **************************************************************************/
 BOOL debug_enable_switch(const char *str)
 {
-	enum code_part part = code_part_from_str(str);
+	int part = code_part_from_str(str);
 
 	if (part != LOG_LAST) {
 		enabled_debug_parts[part] = !enabled_debug_parts[part];

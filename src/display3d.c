@@ -248,8 +248,8 @@ SDWORD		fileSize;
 /* Stores the texture for a specific tile */
 static	iTexture texturePage = {6, 64, 64, NULL};
 /* Points for flipping the texture around if the tile is flipped or rotated */
-POINT 	sP1,sP2,sP3,sP4;
-POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
+extern POINT 	sP1,sP2,sP3,sP4;
+extern POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
 /* Pointer to which tile the mouse is currently over */
 MAPTILE	*tile3dOver = NULL;
 /* Records the present X and Y values for the current mouse tile (in tiles */
@@ -824,7 +824,7 @@ void drawTiles(iView *camera, iView *player)
 				tileScreenInfo[i][j].x = ((j-terrainMidX)<<TILE_SHIFT);
 				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
 				tileScreenInfo[i][j].z = ((terrainMidY-i)<<TILE_SHIFT);
-				tileScreenInfo[i][j].sz = pie_RotProj(&tileScreenInfo[i][j].x,(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotProj((iVector*)&tileScreenInfo[i][j].x,(iPoint *)&tileScreenInfo[i][j].sx);
 			  
 			   	if (pie_GetFogEnabled())
 			  	{
@@ -931,7 +931,7 @@ void drawTiles(iView *camera, iView *player)
 					}
 				}
 #endif
-				tileScreenInfo[i][j].sz = pie_RotProj(&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotProj((iVector*)&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].sx);
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileScreenInfo[i][j].x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 
@@ -953,7 +953,7 @@ void drawTiles(iView *camera, iView *player)
 						}
 
 						// Transform it into the wx,wy mesh members.
-						tileScreenInfo[i][j].wz = pie_RotProj(&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].wx);
+						tileScreenInfo[i][j].wz = pie_RotProj((iVector*)&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].wx);
 						tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
 							TileIllum, rx-tileScreenInfo[i][j].x,		  // cos altval can go to 20
 							rz - ((i-terrainMidY)<<TILE_SHIFT), &specular);

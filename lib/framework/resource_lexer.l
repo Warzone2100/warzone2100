@@ -18,7 +18,7 @@
 /* Get the Yacc definitions */
 #include "resource_parser.h"
 
-extern void res_error(char *pMessage,...);
+void res_error(const char *pMessage,...);
 
 #ifndef YYLMAX
 #define YYLMAX 8192

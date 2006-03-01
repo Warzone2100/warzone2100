@@ -16,8 +16,8 @@ OPENGL_LIB=GLU GL
 OPENAL_LIB=openal
 endif
 
-CC=gcc
-#CC=g++ -fpermissive
+#CC=gcc
+CC=g++ -fpermissive
 CFLAGS+=-gstabs -DYY_STATIC -DVERSION="2.0"
 
 ifeq ($(MODE), prod)

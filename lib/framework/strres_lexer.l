@@ -22,7 +22,7 @@
 /* Get the Yacc definitions */
 #include "strres_parser.h"
 
-void strres_error(char *pMessage,...);
+void strres_error(const char *pMessage,...);
 
 /* Maximum length for any TEXT_T value */
 #define YYLMAX	255

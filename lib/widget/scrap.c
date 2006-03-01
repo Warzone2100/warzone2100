@@ -2,7 +2,9 @@
 /* Handle clipboard text and data in arbitrary formats */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 
 #include "SDL.h"
 #include "SDL_syswm.h"

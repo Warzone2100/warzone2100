@@ -41,7 +41,7 @@ SRC_FILES=	ai.c \
 		intelmap.c \
 		keybind.c \
 		keymap.c \
-		level_l.c \
+		level_lexer.c \
 		levels.c \
 		lighting.c \
 		loop.c \
@@ -75,8 +75,8 @@ SRC_FILES=	ai.c \
 		scriptobj.c \
 		scripttabs.c \
 		scriptvals.c \
-		scriptvals_y.c \
-		scriptvals_l.c \
+		scriptvals_parser.c \
+		scriptvals_lexer.c \
 		selection.c \
 		stats.c \
 		text.c \
@@ -140,16 +140,16 @@ LIBS+=ivis_common
 MAKERULES=../makerules
 include $(MAKERULES)/exe.mk
 
-level_l.c: level_lexer.l
+level_lexer.c: level_lexer.l
 	flex $(<)
 	mv lex.lev_.c $@
 
-scriptvals_y.c: scriptvals_parser.y
+scriptvals_parser.c: scriptvals_parser.y
 	bison -d $(<)
-	mv scriptvals_parser.tab.c scriptvals_y.c
+	mv scriptvals_parser.tab.c scriptvals_parser.c
 	mv scriptvals_parser.tab.h scriptvals_parser.h
 
-scriptvals_l.c: scriptvals_lexer.l
+scriptvals_lexer.c: scriptvals_lexer.l
 	flex $(<)
 	mv lex.scrv_.c $@
 

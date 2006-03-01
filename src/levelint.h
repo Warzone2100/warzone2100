@@ -26,7 +26,7 @@ enum _token_type
 	LTK_IDENT,				// an identifier
 	LTK_STRING,				// a quoted string
 	LTK_INTEGER,			// a number
-} LTOKEN_TYPE;
+};
 
 // return values from the lexer
 extern STRING *pLevToken;

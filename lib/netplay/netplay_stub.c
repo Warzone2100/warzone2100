@@ -1101,22 +1101,31 @@ UBYTE NETrecvFile(NETMSG *pMsg)
 
 void NETregisterServer(int state) {
 	static TCPsocket rs_socket = NULL;
-	static int registered=0;
+	static int registered = 0;
+	static int server_not_there = 0;
 	IPaddress ip;
 
-	if (state!=registered) {
+	if (server_not_there) {
+		return;
+	}
+
+	if (state != registered) {
 		switch(state) {
 			case 1: {
 				if(SDLNet_ResolveHost(&ip, master_server, MASTER_SERVER_PORT) == -1) {
 					printf("NETregisterServer: couldn't resolve master server (%s): %s\n",
 						master_server,
 						SDLNet_GetError());
+					server_not_there = 1;
 					return;
 				}
 
 				if(!rs_socket) rs_socket = SDLNet_TCP_Open(&ip);
 				if(rs_socket == NULL) {
-					printf("SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+					printf("NETregisterServer: Cannot connect to master server (%s): %s\n", 
+						master_server,
+						SDLNet_GetError());
+					server_not_there = 1;
 					return;
 				}
 

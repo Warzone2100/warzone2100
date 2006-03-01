@@ -27,6 +27,9 @@ static UBYTE *pEndBuffer = NULL;
 			} else { \
 				buf[0] = EOF; result = YY_NULL; \
 			}
+
+void audp_error(char *pMessage,...);
+
 %}
 
 %option nounput

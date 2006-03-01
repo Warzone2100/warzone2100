@@ -61,7 +61,9 @@ char	MultiCustomMapsPath[255];
 char	MultiPlayersPath[255];
 char	KeyMapPath[255];
 char	UserMusicPath[255];
-char	RegFilePath[255];
+extern char RegFilePath[];
+
+void set_active_data_directory(int index);
 
 /*
 BOOL checkDisableLobby(void)
@@ -166,7 +168,7 @@ static void initialize_PhysicsFS(void)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-	char **i, *searchPath;
+	char **i, **searchPath;
 	char overridepath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
 #ifdef WIN32
   const char *writedir = "warzone-2.0";
@@ -263,7 +265,7 @@ int main(int argc, char *argv[])
 	BOOL			bVidMem = FALSE;
 	SDWORD			dispBitDepth = DISP_BITDEPTH;
 	SDWORD			introVideoControl = 3;
-	GAMECODE		loopStatus = 0;
+	int			loopStatus = 0;
 	iColour*		psPaletteBuffer;
 	SDWORD			pSize;
 
@@ -376,7 +378,7 @@ init://jump here from the end if re_initialising
 		DBERROR(("Out of memory"));
 		return -1;
 	}
-	if (!loadFileToBuffer("palette.bin", psPaletteBuffer, (256 * sizeof(iColour)+1),(UDWORD*)&pSize))
+	if (!loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, (256 * sizeof(iColour)+1),(UDWORD*)&pSize))
 	{
 		DBERROR(("Couldn't load palette data"));
 		return -1;

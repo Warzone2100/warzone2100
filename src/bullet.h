@@ -12,7 +12,7 @@
 #include "objectdef.h"
 
 /* The active bullets */
-PROJ_OBJECT   *psActiveBullets;
+extern PROJ_OBJECT *psActiveBullets;
 
 //used for passing data to the checkBurnDamage function
 typedef struct _fire_box

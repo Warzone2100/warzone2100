@@ -227,7 +227,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	index = currEntry;
 	for (i=0; i< numParams; i++)
 	{
-		type = va_arg(args, INTERP_TYPE);
+		type = va_arg(args, int);
 		pData = va_arg(args, UDWORD *);
 
 		psVal = psCurr->aVals + index;

@@ -73,12 +73,15 @@ extern char	MultiPlayersPath[255];
 
 extern IMAGEFILE			*FrontImages;
 extern CURSORSNAP			InterfaceSnap;
-extern BOOL					bSendingMap;
+extern BOOL				bSendingMap;
 
 extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
+
+extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
+extern void set_active_data_directory(int);
 
 BOOL						bHosted			= FALSE;				//we have set up a game
 UBYTE						sPlayer[128];							// player name (to be used)
@@ -371,7 +374,7 @@ void loadMapPreview(void)
       }
   	plotStructurePreview16(imageData,scale,offX2,offY2);
 //	  Show_Map(imageData);//imageData		//Don't get rid of this yes!
-	screen_Upload(imageData);//backDropBmp) ;
+	screen_Upload((UWORD*)imageData);//backDropBmp) ;
 	free(imageData);
 //	}
 

@@ -28,6 +28,7 @@
 #include "wrappers.h"
 #include "cheat.h"
 
+extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];

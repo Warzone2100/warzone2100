@@ -701,7 +701,7 @@ void screenToggleMode(void)
 
 typedef struct {
 	struct jpeg_destination_mgr pub;
-	struct PHYSFS_File* file;
+	PHYSFS_File* file;
 	JOCTET * buffer;
 } my_jpeg_destination_mgr;
 
@@ -769,7 +769,7 @@ void screenDoDumpToDiskIfRequired()
 
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_compress(&cinfo);
-	cinfo.dest = &jdest;
+	cinfo.dest = &jdest.pub;
 	jdest.pub.init_destination = init_destination;
 	jdest.pub.empty_output_buffer = empty_output_buffer;
 	jdest.pub.term_destination = term_destination;
