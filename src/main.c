@@ -99,7 +99,7 @@ BOOL checkDisableLobby(void)
 ***************************************************************************/
 static void find_data_dir(void)
 {
-	printf("Finding data dir\n");
+	debug(LOG_WZ, "Finding data dir\n");
 	/* Do we have a user supplied data dir? It must point to a directory with gamedesc.lev or
 	 * a warzone.wz with this file inside. */
 	if (datadir[0] != '\0') {
@@ -148,11 +148,13 @@ static void find_data_dir(void)
 	/* Check for warzone.wz in Unixland system data directory and check if we are running
 	 * straight out of the build directory (for convenience). */
 	strcpy(datadir, PHYSFS_getBaseDir());
-	*strrchr(datadir, '/') = '\0'; // Trim ending '/', which getBaseDir always provides
-	if (strcmp(strrchr(datadir, '/'), "/bin" ) == 0) {
-		strcpy(strrchr(datadir, '/'), "/share/warzone/warzone.wz" );
-	}	else if (strcmp(strrchr(datadir, '/'), "/src" ) == 0 ) {
-		strcpy( strrchr( datadir, '/' ), "/data" );
+	if( strrchr(datadir, '/') != NULL ) { // Skip this on Windows, where '/' is not the dirSeperator
+		*strrchr(datadir, '/') = '\0'; // Trim ending '/', which getBaseDir always provides
+		if (strcmp(strrchr(datadir, '/'), "/bin" ) == 0) {
+			strcpy(strrchr(datadir, '/'), "/share/warzone/warzone.wz" );
+		}	else if (strcmp(strrchr(datadir, '/'), "/src" ) == 0 ) {
+			strcpy( strrchr( datadir, '/' ), "/data" );
+		}
 	}
 	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
 		debug(LOG_WZ, "Could not find data in \"%s\".", datadir);
