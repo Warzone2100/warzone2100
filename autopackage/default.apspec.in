@@ -1,7 +1,7 @@
 # -*-shell-script-*-
 
 [Meta]
-RootName: @gna.org/projects/warzone/:$SOFTWAREVERSION
+RootName: @gna.org/projects/warzone:$SOFTWAREVERSION
 DisplayName: Warzone Strategy Game
 ShortName: warzone
 Maintainer: Warzone Resurrection Project <warzone-dev@gna.org>
