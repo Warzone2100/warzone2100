@@ -38,6 +38,8 @@ FILE *unix_fopen(const char *filename, const char *mode);
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
 
+#include "macros.h"
+
 #include "types.h"
 #include "debug.h"
 #include "mem.h"

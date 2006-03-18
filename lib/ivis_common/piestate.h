@@ -41,7 +41,7 @@ typedef	enum	REND_MODE
 					REND_ALPHA_FLAT,
 					REND_ALPHA_ITERATED,
 					REND_FILTER_FLAT,
-					REND_FILTER_ITERATED			
+					REND_FILTER_ITERATED
 				}
 				REND_MODE;
 
@@ -81,6 +81,61 @@ typedef	enum	TEX_CAP
 					TEX_CAP_UNDEFINED
 				}
 				TEX_CAP;
+
+typedef	enum	COLOUR_MODE
+				{
+					COLOUR_FLAT_CONSTANT,
+					COLOUR_FLAT_ITERATED,
+					COLOUR_TEX_ITERATED,
+					COLOUR_TEX_CONSTANT
+				}
+				COLOUR_MODE;
+
+typedef	enum	TEX_MODE
+				{
+					TEX_LOCAL,
+					TEX_NONE
+				}
+				TEX_MODE;
+
+typedef	enum	ALPHA_MODE
+				{
+					ALPHA_ITERATED,
+					ALPHA_CONSTANT
+				}
+				ALPHA_MODE;
+
+
+typedef struct	RENDER_STATE
+				{
+					REND_ENGINE			rendEngine;
+					BOOL				bHardware;
+					DEPTH_MODE			depthBuffer;
+					BOOL				translucent;
+					BOOL				additive;
+					FOG_CAP				fogCap;
+					BOOL				fogEnabled;
+					BOOL				fog;
+					UDWORD				fogColour;
+					TEX_CAP				texCap;
+					SDWORD				texPage;
+					REND_MODE			rendMode;
+					BOOL				bilinearOn;
+					BOOL				keyingOn;
+					COLOUR_MODE			colourCombine;
+					TEX_MODE			texCombine;
+					ALPHA_MODE			alphaCombine;
+					TRANSLUCENCY_MODE	transMode;
+					UDWORD				colour;
+#ifdef STATES
+					BOOL				textured;
+					UBYTE				lightLevel;
+#endif
+					// FIXME Needed???
+					// 	UBYTE				DDrawDriverName[256];
+					// 	UBYTE				D3DDriverName[256];
+				}
+				RENDER_STATE;
 
 #define NO_TEXPAGE -1
 
@@ -130,13 +185,7 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 extern void pie_SetColour(UDWORD val);
 extern UDWORD pie_GetColour(void);
 //mouse states
-extern void pie_DrawMouse(SDWORD x, SDWORD y);
 extern void pie_SetMouse(IMAGEFILE *ImageFile,UWORD ImageID);
-extern UDWORD	pie_GetMouseID( void );
-extern BOOL	pie_SwirlyBoxes( void );
 extern void	pie_SetSwirlyBoxes( BOOL val );
-extern BOOL	pie_WaveBlit( void );
-extern void	pie_SetWaveBlit( BOOL val );
-void pie_ResetStates(void);//Sets all states
 
 #endif // _pieState_h

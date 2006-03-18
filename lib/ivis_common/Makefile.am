@@ -19,11 +19,13 @@ libivis_common_a_SOURCES = \
 	ivispatch.h \
 	pieblitfunc.h \
 	pieclip.h \
+	pieclip.c \
 	piedef.h \
 	piefunc.h \
 	piemode.h \
 	piepalette.h \
 	piestate.h \
+	piestate.c \
 	pietypes.h \
 	rendfunc.h \
 	rendmode.h \

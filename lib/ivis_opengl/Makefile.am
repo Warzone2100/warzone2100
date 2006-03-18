@@ -5,7 +5,6 @@ libivis_opengl_a_SOURCES = \
 	bspimd.c \
 	ivi.c \
 	pieblitfunc.c \
-	pieclip.c \
 	piedraw.c \
 	piefunc.c \
 	piematrix.c \
