@@ -8,8 +8,8 @@ SRC_FILES=	block.c \
 		input_stub.c \
 		mem.c \
 		mono.c \
-		resource_lexer.c \
 		resource_parser.c \
+		resource_lexer.c \
 		strres.c \
 		strres_parser.c \
 		strres_lexer.c \

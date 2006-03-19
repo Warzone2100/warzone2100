@@ -2,7 +2,6 @@ SRC_FILES= \
 		bspimd.c \
 		ivi.c \
 		pieblitfunc.c \
-		pieclip.c \
 		piedraw.c \
 		piefunc.c \
 		piematrix.c \

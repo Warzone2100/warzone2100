@@ -4,7 +4,9 @@ SRC_FILES= \
 		fbf.c \
 		imd.c \
 		imdload.c \
-		pcx.c
+		pcx.c \
+		pieclip.c \
+		piestate.c
 
 LIBS=framework gamelib
 
