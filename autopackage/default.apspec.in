@@ -1,13 +1,13 @@
 # -*-shell-script-*-
 
 [Meta]
-RootName: @gna.org/projects/warzone:$SOFTWAREVERSION
+RootName: @gna.org/warzone:$SOFTWAREVERSION
 DisplayName: Warzone Strategy Game
 ShortName: warzone
 Maintainer: Warzone Resurrection Project <warzone-dev@gna.org>
 Packager: Dennis Schridde <devurandom@gna.org>
 Summary: Warzone is a 3D realtime strategy game about a post nuklear war in the year 2100
-URL: http://www.gna.org/projects/warzone/
+URL: http://gna.org/projects/warzone
 License: GNU General Public License, Version 2
 SoftwareVersion: @VERSION@
 AutopackageTarget: 1.0
@@ -24,7 +24,8 @@ You got to design your own units, by choosing tons of various chassis from a hug
 Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studies in 1999, and released in 2004 under the GPL.
 
 [BuildPrepare]
-prepareBuild
+export APBUILD_STATIC="mad"
+prepareBuild --enable-debug
 
 [BuildUnprepare]
 unprepareBuild
