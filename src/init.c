@@ -856,17 +856,13 @@ BOOL buildMapList()
 
 	// load maps from patches
 	{
-		unsigned int i;
 		char path[MAX_PATH];
 
-		for (i = 1; i <= MAX_NUM_PATCHES; i++) {
-
-			snprintf(path, MAX_PATH, "%s%s%02d", datadir, PHYSFS_getDirSeparator(), i);
-			depend = declare_data_directory(path, depend);
-			PHYSFS_addToSearchPath(path, 1);
-			loadLevFile("addon.lev", depend);
-			PHYSFS_removeFromSearchPath(path);
-		}
+		snprintf(path, MAX_PATH, "%s%smp", datadir, PHYSFS_getDirSeparator());
+		depend = declare_data_directory(path, depend);
+		PHYSFS_addToSearchPath(path, 1);
+		loadLevFile("addon.lev", depend);
+		PHYSFS_removeFromSearchPath(path);
 	}
 
 	// load maps from directories in maps directory
@@ -907,162 +903,6 @@ BOOL buildMapList()
 	restore_search_path(search_path);
 	return TRUE;
 }
-
-
-/**************************************************************************
-	Load gamedesc.lev and addon.lev files up given patchlevel in terms of
-	game patches.  Also adds search paths for these patches with higher
-	priority than other files.
-**************************************************************************/
-/*
-BOOL loadLevels(int patchlevel)
-{
-	static int currentlevel = -1;
-	int j;
-
-	if (patchlevel == currentlevel) return TRUE;
-
-	// First remove all old patches from search path
-	for (j = 1; j <= MAX_NUM_PATCHES; j++) {
-		char path[MAX_PATH];
-
-		snprintf(path, MAX_PATH, "%02d", j);
-		(void) PHYSFS_removeFromSearchPath(path);
-	}
-	{
-		char **rc = PHYSFS_enumerateFiles("mods");
-		char **i;
-
-		for (i = rc; *i != NULL; ++i) {
-			char path[MAX_PATH];
-			char **filelist;
-			char **j;
-
-			snprintf(path, MAX_PATH, "mods/%s", i[0]);
-			filelist = PHYSFS_enumerateFiles(path);
-			for (j = filelist; *j != NULL; ++j) {
-				unsigned int l = strlen(j[0]);
-
-				if (   (l >= 9)
-				    && !strcasecmp((char*)(j[0]+l-9), "addon.lev")) {
-					(void) PHYSFS_removeFromSearchPath(path);
-					break;
-				}
-			}
-			PHYSFS_freeList(filelist);
-		}
-		PHYSFS_freeList(rc);
-	}
-
-	// load the original gamedesc.lev
-	if (!loadFile("gamedesc.lev", &pBuffer, &size)) {
-		return FALSE; // only in NDEBUG case
-	}
-	if (!levParse(pBuffer, size)) {
-		debug(LOG_ERROR, "loadLevels: gamedesc.lev parse error");
-		return FALSE;
-	}
-	FREE(pBuffer);
-
-	debug(LOG_WZ, "*****   Loading patches up to patchlevel %d   *****", patchlevel);
-	for (j = 1; j <= patchlevel; j++) {
-		char path[MAX_PATH];
-
-		snprintf(path, MAX_PATH, "%02d/addon.lev", j);
-		if (!PHYSFS_exists(path)) {
-			debug(LOG_WZ, "loadLevels: No \"%s\" found", path);
-			continue;
-		}
-		debug(LOG_WZ, "loadLevels: Loading add-on map \"%s\"", path);
-		if (!loadFile(path, &pBuffer, &size)) {
-			return FALSE;	// only in NDEBUG case
-		}
-		if (!levParse(pBuffer, size)) {
-			debug(LOG_ERROR, "loadLevels: \"%s\" parse error?", path);
-			FREE(pBuffer);
-			return FALSE;
-		}
-		FREE(pBuffer);
-	}
-
-	if (patchlevel > 0) {
-		// Load every addon.lev file
-		debug(LOG_WZ, "Loading addons", patchlevel);
-		{
-			char **rc = PHYSFS_enumerateFiles("mods");
-			char **i;
-
-			for (i = rc; *i != NULL; i++) {
-				char path[MAX_PATH];
-				char **filelist;
-				char **j;
-
-				snprintf(path, MAX_PATH, "mods/%s", i[0]);
-				filelist = PHYSFS_enumerateFiles(path);
-				for (j = filelist; *j != NULL; ++j) {
-					unsigned int l = strlen(j[0]);
-
-					if (   (l >= 9)
-					    && !strcasecmp((char*)(j[0]+l-9), "addon.lev")) {
-						char filepath[MAX_PATH];
-
-						snprintf(filepath, MAX_PATH, "mods/%s/%s", i[0], j[0]);
-						debug(LOG_WZ, "loadLevels: Loading add-on map \"%s\"", filepath);
-						if (!loadFile(filepath, &pBuffer, &size)) {
-							return FALSE;	// only in NDEBUG case
-						}
-						if (!levParse(pBuffer, size)) {
-							debug(LOG_ERROR, "loadLevels: \"%s\" parse error?", filepath);
-							FREE(pBuffer);
-							return FALSE;
-						}
-						FREE(pBuffer);
-					}
-				}
-				PHYSFS_freeList(filelist);
-			}
-			PHYSFS_freeList(rc);
-		}
-	}
-
-	// Now readd used patches
-	for (j = 1; j <= patchlevel; j++) {
-		char path[MAX_PATH];
-
-		snprintf(path, MAX_PATH, "%02d", j);
-		PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
-	}
-
-	if (patchlevel > 0) {
-		char **rc = PHYSFS_enumerateFiles("mods");
-		char **i;
-
-		for (i = rc; *i != NULL; i++) {
-			char path[MAX_PATH];
-			char **filelist;
-			char **j;
-
-			snprintf(path, MAX_PATH, "mods/%s", i[0]);
-			filelist = PHYSFS_enumerateFiles(path);
-			for (j = filelist; *j != NULL; ++j) {
-				unsigned int l = strlen(j[0]);
-
-				if (   (l >= 9)
-				    && !strcasecmp((char*)(j[0]+l-9), "addon.lev")) {
-					PHYSFS_addToSearchPath(path, 0); // zero means prepend to search path
-					break;
-				}
-			}
-			PHYSFS_freeList(filelist);
-		}
-		PHYSFS_freeList(rc);
-	}
-
-	currentlevel = patchlevel;
-
-	return TRUE;
-}
-*/
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////

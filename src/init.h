@@ -8,7 +8,7 @@
 #define _init_h
 
 // the number of patches
-#define MAX_NUM_PATCHES 11
+#define MAX_NUM_PATCHES 1
 
 // the size of the file loading buffer
 #define FILE_LOAD_BUFF_SIZE		(1024*1024)
