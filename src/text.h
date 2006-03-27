@@ -232,6 +232,7 @@ enum _fixed_str_id
 	STR_FE_GLIDE,	
 	STR_FE_GAME,		
 	STR_FE_GRAPHICS,	
+	STR_FE_AUDIO,	
 	STR_FE_TEXTURE,		
 	STR_FE_EFFECTS,		
 	STR_FE_FOG,			

@@ -24,6 +24,7 @@ typedef enum _title_mode {
 		LOADSAVEGAME,				// 15 loading a save game
 		KEYMAP,						// 16 keymap editor
 		GAME2,						// 17 second options menu.
+		GAME3,						// 18 third options menu.
 //		GRAPHICS,					// 5
 //		VIDEO,
 //	DEMOMODE,					// demo mode. remove for release?
@@ -79,6 +80,7 @@ extern void loadOK					(void);
 extern BOOL CancelPressed			(VOID);
 
 BOOL		runGameOptions2Menu		(VOID);
+BOOL		runGameOptions3Menu		(VOID);
 
 
 extern BOOL GetInFastPlay(void);
@@ -264,6 +266,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
 #define FRONTEND_MFLIP			20095
 #define FRONTEND_MFLIP_R		20096
 
+#define FRONTEND_GAMEOPTIONS3 	20099
 
 #define FRONTEND_SEQUENCE		20097
 #define FRONTEND_SEQUENCE_R		20098

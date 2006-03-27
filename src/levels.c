@@ -132,8 +132,6 @@ void levError(STRING *pError)
 #endif
 }
 
-void set_active_data_directory(int index);
-
 // find the level dataset
 BOOL levFindDataSet(STRING *pName, LEVEL_DATASET **ppsDataSet)
 {
@@ -718,7 +716,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 		}
 	}
 
-	set_active_data_directory(psNewLevel->dataDir);
+	loadLevels(psNewLevel->dataDir);
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)

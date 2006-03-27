@@ -63,8 +63,6 @@ char	KeyMapPath[255];
 char	UserMusicPath[255];
 extern char RegFilePath[];
 
-void set_active_data_directory(int index);
-
 /*
 BOOL checkDisableLobby(void)
 {
@@ -417,7 +415,7 @@ init://jump here from the end if re_initialising
 			case GS_TITLE_SCREEN:
 				screen_RestartBackDrop();
 
-				set_active_data_directory(MAX_NUM_PATCHES);
+				loadLevels(DIR_MULTIPLAYER);
 
 				if (!frontendInitialise("wrf\\frontend.wrf"))
 				{

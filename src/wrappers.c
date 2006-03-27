@@ -235,6 +235,10 @@ TITLECODE titleLoop(void)
 			runGameOptions2Menu();
 			break;
 
+		case GAME3:
+			runGameOptions3Menu();
+			break;
+
 
 		case QUIT:
 			RetCode = TITLECODE_QUITGAME;

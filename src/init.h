@@ -7,9 +7,6 @@
 #ifndef _init_h
 #define _init_h
 
-// the number of patches
-#define MAX_NUM_PATCHES 1
-
 // the size of the file loading buffer
 #define FILE_LOAD_BUFF_SIZE		(1024*1024)
 
@@ -35,6 +32,9 @@ extern BOOL saveGameReset(void);
 
 BOOL buildMapList();
 BOOL loadLevels(int patchlevel);
+#define DIR_CAMPAIGN (-2)
+#define DIR_MULTIPLAYER (-3)
+#define DIR_RELOAD (-4)
 
 // the block heap for the game data
 extern BLOCK_HEAP	*psGameHeap;

@@ -81,7 +81,6 @@ extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX
 extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
-extern void set_active_data_directory(int);
 
 BOOL						bHosted			= FALSE;				//we have set up a game
 UBYTE						sPlayer[128];							// player name (to be used)
@@ -215,7 +214,7 @@ void loadMapPreview(void)
 	}
 
 	levFindDataSet(game.map, &psLevel);
-	set_active_data_directory(MAX(psLevel->dataDir, MAX_NUM_PATCHES));
+	loadLevels(psLevel->dataDir);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "\\game.map");		

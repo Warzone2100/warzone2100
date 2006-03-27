@@ -1,1 +1,1 @@
-#define SVN_REVISION "Revision 51M"
+#define SVN_REVISION "Revision 52M"

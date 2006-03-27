@@ -228,6 +228,7 @@ STR_ID asFixedID[STR_MAX_ID] =
 	{STR_FE_GLIDE,						"FE_GLIDE"},	
 	{STR_FE_GAME,						"FE_GAME"},	
 	{STR_FE_GRAPHICS,					"FE_GRAPHICS"},	
+	{STR_FE_AUDIO,						"FE_AUDIO"},	
 	{STR_FE_TEXTURE,						"FE_TEXTURE"},
 	{STR_FE_EFFECTS,						"FE_EFFECTS"},
 	{STR_FE_FOG,							"FE_FOG"},

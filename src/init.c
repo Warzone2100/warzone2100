@@ -767,7 +767,7 @@ BOOL loadLevFile(const char* filename, int datadir) {
 		return FALSE; // only in NDEBUG case
 	}
 	if (!levParse(pBuffer, size, datadir)) {
-		debug(LOG_ERROR, "loadLevels: gamedesc.lev parse error");
+		debug(LOG_ERROR, "loadLevFile: gamedesc.lev parse error");
 		return FALSE;
 	}
 	FREE(pBuffer);
@@ -783,9 +783,29 @@ struct data_dir_t {
 static struct data_dir_t*	data_dirs = NULL;
 static unsigned int		nb_data_dirs = 0;
 static unsigned int		data_dirs_size = 0;
+static unsigned int		campaign_data_dir = 0;
+static unsigned int		multiplayer_data_dir = 0;
 
-void set_active_data_directory(int index) {
-	static unsigned int current_index = -1;
+BOOL loadLevels(int _index) {
+	static int current_index = -1;
+	int index;
+
+	switch (_index) {
+		case DIR_CAMPAIGN:
+			index = campaign_data_dir;
+			break;
+		case DIR_MULTIPLAYER:
+			index = multiplayer_data_dir;
+			break;
+		case DIR_RELOAD:
+			current_index = -1;
+			// fall into...
+		default:
+			index = _index;
+			break;
+	}
+
+	if (index < 0 || index >= nb_data_dirs) return FALSE;
 
 	if (index != current_index) {
 		int i = index;
@@ -793,7 +813,9 @@ void set_active_data_directory(int index) {
 		empty_search_path();
 		PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), 1);
 		while (i >= 0 && i < nb_data_dirs) {
-			PHYSFS_addToSearchPath(data_dirs[i].name, 1);
+			if (data_dirs[i].name != NULL) {
+				PHYSFS_addToSearchPath(data_dirs[i].name, 1);
+			}
 			i = data_dirs[i].depend;
 		}
 		current_index = index;
@@ -809,15 +831,15 @@ void set_active_data_directory(int index) {
 			PHYSFS_freeList(search_path);
 		}
 	}
+
+	return TRUE;
+}
+
+int init_data_directory_list() {
+	nb_data_dirs = 0;
 }
 
 int declare_data_directory(const char* name, int depend) {
-
-	if (name == NULL) {
-		nb_data_dirs = 0;
-		return 0;
-	}
-
 	if (data_dirs_size <= nb_data_dirs) {
 		if (data_dirs_size == 0) {
 			data_dirs_size = 4;
@@ -831,7 +853,7 @@ int declare_data_directory(const char* name, int depend) {
 		}
 	}
 
-	data_dirs[nb_data_dirs].name = strdup(name);
+	data_dirs[nb_data_dirs].name = (name == NULL) ? NULL : strdup(name);
 	data_dirs[nb_data_dirs].depend = depend;
 	return nb_data_dirs++;
 }
@@ -843,11 +865,12 @@ BOOL buildMapList()
 	char** search_path = save_search_path();
 	int depend;
 
-	declare_data_directory(NULL, -1);
+	init_data_directory_list();
 
 	// load the original gamedesc.lev
 	PHYSFS_addToSearchPath(datadir, 1);
 	depend = declare_data_directory(datadir, -1);
+	campaign_data_dir = declare_data_directory(NULL, depend);
 	if (!loadLevFile("gamedesc.lev", depend)) {
 		restore_search_path(search_path);
 		return FALSE; // only in NDEBUG case
@@ -860,6 +883,7 @@ BOOL buildMapList()
 
 		snprintf(path, MAX_PATH, "%s%smp", datadir, PHYSFS_getDirSeparator());
 		depend = declare_data_directory(path, depend);
+		multiplayer_data_dir = depend = declare_data_directory(NULL, depend);
 		PHYSFS_addToSearchPath(path, 1);
 		loadLevFile("addon.lev", depend);
 		PHYSFS_removeFromSearchPath(path);
@@ -938,7 +962,7 @@ BOOL systemInitialise(void)
 
 	buildMapList();
 
-	set_active_data_directory(0);
+	loadLevels(DIR_CAMPAIGN);
 
 	// Initialize render engine
 	war_SetFog(FALSE);

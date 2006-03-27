@@ -147,6 +147,8 @@ BOOL		startGameOptionsMenu	(VOID);
 BOOL		runGameOptionsMenu		(VOID);
 BOOL		startGameOptions2Menu	(VOID);
 BOOL		runGameOptions2Menu		(VOID);
+BOOL		startGameOptions3Menu	(VOID);
+BOOL		runGameOptions3Menu		(VOID);
 //BOOL		startVideoOptionsMenu	(VOID);
 //BOOL		runVideoOptionsMenu		(VOID);
 //BOOL		startGraphicsOptionsMenu(VOID);
@@ -282,6 +284,10 @@ VOID changeTitleMode(tMode mode)
 
 	case GAME2:
 		startGameOptions2Menu();
+		break;
+
+	case GAME3:
+		startGameOptions3Menu();
 		break;
 
 	case TUTORIAL:
@@ -749,11 +755,11 @@ BOOL startMultiPlayerMenu(VOID)
 	
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,strresGetString(psStringRes, STR_FE_SIDEMULTI));
 
-	addTextButton(FRONTEND_HOST,     FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_HOST),FALSE,FALSE);
-	addTextButton(FRONTEND_JOIN,     FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_JOIN),FALSE,FALSE);
+	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_HOST),FALSE,FALSE);
+	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_JOIN),FALSE,FALSE);
 
-	addTextButton(FRONTEND_FORCEEDIT,FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_FORCEEDIT),FALSE,FALSE);
-	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS6X,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_SKIRMISH ),FALSE,FALSE);
+	addTextButton(FRONTEND_FORCEEDIT,FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_FORCEEDIT),FALSE,FALSE);
+	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_SKIRMISH ),FALSE,FALSE);
 
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
@@ -850,8 +856,9 @@ BOOL startOptionsMenu(VOID)
 	addBottomForm();
 
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, strresGetString(psStringRes, STR_FE_SIDEOPTIONS));
+	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_GAME),FALSE,FALSE);
 	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_GRAPHICS),FALSE,FALSE);
-	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_GAME),FALSE,FALSE);
+	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_AUDIO),FALSE,FALSE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_KM_KEYMAP),FALSE,FALSE);
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
@@ -880,6 +887,9 @@ BOOL runOptionsMenu(VOID)
 		break;
 	case FRONTEND_GAMEOPTIONS2:
 		changeTitleMode(GAME2);
+		break;
+	case FRONTEND_GAMEOPTIONS3:
+		changeTitleMode(GAME3);
 		break;
 //	case FRONTEND_VIDEO:
 //		changeTitleMode(VIDEO);
@@ -917,234 +927,6 @@ BOOL runOptionsMenu(VOID)
 
 	return TRUE;
 }
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// Graphics Options Menu
-/*
-#ifndef PSX
-BOOL startGraphicsOptionsMenu(VOID)
-{
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-//	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,strresGetString(psStringRes, STR_FE_SIDEMULTI));
-
-
-	addTextButton(FRONTEND_TEXTURES,FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_TEXTURE),TRUE,TRUE);
-	addTextButton(FRONTEND_EFFECTS,	FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_EFFECTS),TRUE,TRUE);
-
-	if (war_GetFog())
-	{
-		strcpy(strFog, "on");
-	}
-	else
-	{
-		strcpy(strFog, "off");
-	}
-	addTextButton(FRONTEND_FOG,		FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_FOG),TRUE,FALSE);
-	addTextButton(FRONTEND_FOG_R,	FRONTEND_POS5M,FRONTEND_POS5Y, strFog,TRUE,FALSE);
-
-	//translucency
-	if (!war_GetTranslucent())
-	{
-		strcpy(strTrans, "off  compatible");
-	}
-	else if (!war_GetAdditive())
-	{
-		strcpy(strTrans, "on  compatible");
-	}
-	else
-	{
-		strcpy(strTrans, "on  default");
-	}
-	addTextButton(FRONTEND_TRANSPARENCY,	FRONTEND_POS6X,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_TRANSPARENCY),TRUE,FALSE);
-	addTextButton(FRONTEND_TRANSPARENCY_R,	FRONTEND_POS6M,FRONTEND_POS6Y, strTrans,TRUE,FALSE);
-
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
-
-	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS3Y);
-	SnapToID(&InterfaceSnap,3);
-	return TRUE;
-}
-
-BOOL runGraphicsOptionsMenu(VOID)
-{
-	UDWORD id;
-
-	processFrontendSnap(TRUE);
-
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
-	switch(id)
-	{
-	case FRONTEND_TEXTURES:
-		break;
-	case FRONTEND_EFFECTS:
-		break;
-	case FRONTEND_FOG:
-	case FRONTEND_FOG_R:
-		if (war_GetFog())
-		{
-			war_SetFog(FALSE);
-			widgSetString(psWScreen,FRONTEND_FOG_R,"off");
-		}
-		else
-		{
-			war_SetFog(TRUE);
-			widgSetString(psWScreen,FRONTEND_FOG_R,"on");
-		}
-//changeTitleMode(GRAPHICS);
-
-		break;
-	case FRONTEND_TRANSPARENCY:
-	case FRONTEND_TRANSPARENCY_R:
-	//translucency
-		if (!war_GetTranslucent())
-		{
-			war_SetTranslucent(TRUE);
-			war_SetAdditive(FALSE);
-			widgSetString(psWScreen,FRONTEND_TRANSPARENCY_R,"on compatible");
-		}
-		else if (!war_GetAdditive())
-		{
-			war_SetTranslucent(TRUE);
-			war_SetAdditive(TRUE);
-			widgSetString(psWScreen,FRONTEND_TRANSPARENCY_R,"on default");
-
-		}
-		else
-		{
-			war_SetTranslucent(FALSE);
-			war_SetAdditive(FALSE);
-			widgSetString(psWScreen,FRONTEND_TRANSPARENCY_R,"off compatible");
-		}
-//		changeTitleMode(GRAPHICS);
-		break;
-
-	case FRONTEND_QUIT:
-		changeTitleMode(OPTIONS);
-		break;
-	default:
-		break;
-	}
-	
-	// If close button pressed then return from this menu.
-	if(CancelPressed()) {
-		changeTitleMode(OPTIONS);
-	}
-
-	DrawBegin();
-	StartCursorSnap(&InterfaceSnap);
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
-
-	return TRUE;
-}
-#endif
-
-// ////////////////////////////////////////////////////////////////////////////
-// Video Options Menu
-
-#ifndef PSX
-BOOL startVideoOptionsMenu(VOID)
-{
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-
-	addTextButton(FRONTEND_SOFTWARE,FRONTEND_POS2X,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_SOFTWARE),FALSE,FALSE);
-	addTextButton(FRONTEND_DIRECTX,	FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_DIRECTX),FALSE,FALSE);
-	addTextButton(FRONTEND_OPENGL,	FRONTEND_POS4X,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_OPENGL),FALSE,TRUE);
-	addTextButton(FRONTEND_GLIDE,	FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_GLIDE),FALSE,FALSE);
-
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
-
-	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS3Y);
-	SnapToID(&InterfaceSnap,3);
-	return TRUE;
-}
-
-BOOL runVideoOptionsMenu(VOID)
-{
-	UDWORD id;
-
-	processFrontendSnap(TRUE);
-
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
-	switch(id)
-	{
-	case FRONTEND_SOFTWARE:
-		if (war_GetRendMode() == REND_MODE_SOFTWARE)
-		{
-			changeTitleMode(OPTIONS);
-		}
-		else
-		{
-			war_SetRendMode(REND_MODE_SOFTWARE);
-			reInit = TRUE;//restart
-			changeTitleMode(QUIT);
-		}
-		break;
-	case FRONTEND_GLIDE:
-		if (war_GetRendMode() == REND_MODE_GLIDE)
-		{
-			changeTitleMode(OPTIONS);
-		}
-		else
-		{
-			war_SetRendMode(REND_MODE_GLIDE);
-			reInit = TRUE;//restart
-			changeTitleMode(QUIT);
-		}
-		break;
-	case FRONTEND_DIRECTX:
-		if (war_GetRendMode() == REND_MODE_HAL)
-		{
-			changeTitleMode(OPTIONS);
-		}
-		else
-		{
-			war_SetRendMode(REND_MODE_HAL);
-			reInit = TRUE;//restart
-			changeTitleMode(QUIT);
-		}
-		break;
-	case FRONTEND_OPENGL:
-		if (war_GetRendMode() == REND_MODE_HAL2)
-		{
-			changeTitleMode(OPTIONS);
-		}
-		else
-		{
-			war_SetRendMode(REND_MODE_HAL2);
-			reInit = TRUE;//restart
-			changeTitleMode(QUIT);
-		}
-		break;
-	case FRONTEND_QUIT:
-		changeTitleMode(OPTIONS);
-		break;
-	default:
-		break;
-	}
-	
-	// If close button pressed then return from this menu.
-	if(CancelPressed()) {
-		changeTitleMode(OPTIONS);
-	}
-
-	DrawBegin();
-	StartCursorSnap(&InterfaceSnap);
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
-
-	return TRUE;
-}
-#endif
-*/
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu 2!
@@ -1419,6 +1201,92 @@ BOOL runGameOptions2Menu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
+BOOL startGameOptions3Menu(VOID)
+{
+
+	UDWORD	w,h;
+
+
+
+	addBackdrop();
+	addTopForm();
+	addBottomForm();
+
+	// 2d audio
+	addTextButton(FRONTEND_FX, FRONTEND_POS2X-25,FRONTEND_POS2Y, strresGetString(psStringRes, STR_FE_FX),TRUE,FALSE);
+	addFESlider(FRONTEND_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5, AUDIO_VOL_MAX,mixer_GetWavVolume(),FRONTEND_FX );
+	
+	// 3d audio
+	addTextButton(FRONTEND_3D_FX, FRONTEND_POS3X-25,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_3D_FX),TRUE,FALSE);
+	addFESlider(FRONTEND_3D_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5,AUDIO_VOL_MAX,mixer_Get3dWavVolume(),FRONTEND_3D_FX );
+
+	// cd audio
+	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X-25,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_MUSIC),TRUE,FALSE);
+	addFESlider(FRONTEND_MUSIC_SL,FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5,AUDIO_VOL_MAX,mixer_GetCDVolume(),FRONTEND_MUSIC );
+
+	// quit.
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
+
+	//add some text down the side of the form
+	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, strresGetString(psStringRes, STR_FE_SIDEOPTIONS));
+
+
+	return TRUE;
+}
+
+BOOL runGameOptions3Menu(VOID)
+{
+	UDWORD id;
+
+	processFrontendSnap(FALSE);
+
+	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
+	switch(id)
+	{
+
+	case FRONTEND_FX:
+	case FRONTEND_3D_FX:
+	case FRONTEND_MUSIC:
+		SetMousePos(0,FRONTEND_BOTFORMX+FRONTEND_POS1M+5,mouseY()-3);	// move mouse
+		break;
+
+	case FRONTEND_FX_SL:
+		mixer_SetWavVolume(widgGetSliderPos(psWScreen,FRONTEND_FX_SL));
+		break;
+
+	case FRONTEND_3D_FX_SL:
+		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen,FRONTEND_3D_FX_SL));
+		break;
+
+	case FRONTEND_MUSIC_SL:
+		mixer_SetCDVolume(widgGetSliderPos(psWScreen,FRONTEND_MUSIC_SL));
+		break;
+
+
+	case FRONTEND_QUIT:
+		changeTitleMode(OPTIONS);
+		break;
+
+	default:
+		break;
+	}
+
+	// If close button pressed then return from this menu.
+	if(CancelPressed()) {
+		changeTitleMode(TITLE);
+	}
+
+	DrawBegin();	
+	StartCursorSnap(&InterfaceSnap);
+	widgDisplayScreen(psWScreen);						// show the widgets currently running
+	DrawEnd();
+	return TRUE;
+}
+
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// Game Options Menu
 BOOL startGameOptionsMenu(VOID)
 {
 
@@ -1451,42 +1319,26 @@ BOOL startGameOptionsMenu(VOID)
 	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25,FRONTEND_POS3Y, strresGetString(psStringRes, STR_FE_SCROLL),TRUE,FALSE);
 	addFESlider(FRONTEND_SCROLLSPEED_SL,FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16,(scroll_speed_accel/100),FRONTEND_SCROLLSPEED);
 
-	//volume
-	addTextButton(FRONTEND_FX, FRONTEND_POS4X-25,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_FX),TRUE,FALSE);
-	addFESlider(FRONTEND_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5, AUDIO_VOL_MAX,mixer_GetWavVolume(),FRONTEND_FX );
-	
-	// cd audio
-	addTextButton(FRONTEND_3D_FX, FRONTEND_POS5X-25,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_3D_FX),TRUE,FALSE);
-	addFESlider(FRONTEND_3D_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS5M, FRONTEND_POS5Y+5,AUDIO_VOL_MAX,mixer_Get3dWavVolume(),FRONTEND_3D_FX );
-
-	addTextButton(FRONTEND_MUSIC, FRONTEND_POS6X-25,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_MUSIC),TRUE,FALSE);
-	addFESlider(FRONTEND_MUSIC_SL,FRONTEND_BOTFORM, FRONTEND_POS6M, FRONTEND_POS6Y+5,AUDIO_VOL_MAX,mixer_GetCDVolume(),FRONTEND_MUSIC );
-
 	// colour stuff	
 	w = 	iV_GetImageWidth(FrontImages,IMAGE_PLAYER0);
 	h = 	iV_GetImageHeight(FrontImages,IMAGE_PLAYER0);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P0, FRONTEND_POS7M+(0*(w+6)),FRONTEND_POS7Y,w,h,0,IMAGE_PLAYER0	,IMAGE_PLAYERX,TRUE);
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P0, FRONTEND_POS4M+(0*(w+6)),FRONTEND_POS4Y,w,h,0,IMAGE_PLAYER0	,IMAGE_PLAYERX,TRUE);
 //	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P1, FRONTEND_POS6M-(3*(w+4)),FRONTEND_POS6Y,w,h,0,IMAGE_PLAYER1	,IMAGE_HI34,TRUE);
 //	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P2, FRONTEND_POS6M-(2*(w+4)),FRONTEND_POS6Y,w,h,0,IMAGE_PLAYER2	,IMAGE_HI34,TRUE);
 //	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P3, FRONTEND_POS6M-(1*(w+4)),FRONTEND_POS6Y,w,h,0,IMAGE_PLAYER3	,IMAGE_HI34,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P4, FRONTEND_POS7M+(1*(w+6)),FRONTEND_POS7Y,w,h,0,IMAGE_PLAYER4	,IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P5, FRONTEND_POS7M+(2*(w+6)),FRONTEND_POS7Y,w,h,0,IMAGE_PLAYER5	,IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P6, FRONTEND_POS7M+(3*(w+6)),FRONTEND_POS7Y,w,h,0,IMAGE_PLAYER6	,IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P7, FRONTEND_POS7M+(4*(w+6)),FRONTEND_POS7Y,w,h,0,IMAGE_PLAYER7,IMAGE_PLAYERX,TRUE);
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P4, FRONTEND_POS4M+(1*(w+6)),FRONTEND_POS4Y,w,h,0,IMAGE_PLAYER4	,IMAGE_PLAYERX,TRUE);
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P5, FRONTEND_POS4M+(2*(w+6)),FRONTEND_POS4Y,w,h,0,IMAGE_PLAYER5	,IMAGE_PLAYERX,TRUE);
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P6, FRONTEND_POS4M+(3*(w+6)),FRONTEND_POS4Y,w,h,0,IMAGE_PLAYER6	,IMAGE_PLAYERX,TRUE);
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P7, FRONTEND_POS4M+(4*(w+6)),FRONTEND_POS4Y,w,h,0,IMAGE_PLAYER7,IMAGE_PLAYERX,TRUE);
 
 	widgSetButtonState(psWScreen, FE_P0+getPlayerColour(0), WBUT_LOCK);		
-	addTextButton(FRONTEND_COLOUR,		FRONTEND_POS7X-25,FRONTEND_POS7Y, strresGetString(psStringRes, STR_FE_CLAN),TRUE,FALSE);
-
+	addTextButton(FRONTEND_COLOUR,		FRONTEND_POS4X-25,FRONTEND_POS4Y, strresGetString(psStringRes, STR_FE_CLAN),TRUE,FALSE);
 
 	// quit.
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
-
-
-
 	//add some text down the side of the form
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, strresGetString(psStringRes, STR_FE_SIDEOPTIONS));
-
 
 	return TRUE;
 }
@@ -1503,9 +1355,6 @@ BOOL runGameOptionsMenu(VOID)
 
 //	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
-	case FRONTEND_FX:
-	case FRONTEND_3D_FX:
-	case FRONTEND_MUSIC:
 		SetMousePos(0,FRONTEND_BOTFORMX+FRONTEND_POS1M+5,mouseY()-3);	// move mouse
 		break;
 
@@ -1547,13 +1396,6 @@ BOOL runGameOptionsMenu(VOID)
 		}
 		break;
 
-/*	case FRONTEND_GAMMA_SL:
-		// gamma range = 0.4 - 3 
-		gammaValue = (float)( widgGetSliderPos(psWScreen,FRONTEND_GAMMA_SL) )/25  ;
-		if(gammaValue<0.5)  gammaValue = (float).5;
-		pie_SetGammaValue(gammaValue);
-		break;
-*/
 	case FRONTEND_SCROLLSPEED_SL:
 		scroll_speed_accel = widgGetSliderPos(psWScreen,FRONTEND_SCROLLSPEED_SL) * 100; //0-1600
 		if(scroll_speed_accel ==0)		// make sure you CAN scroll.
@@ -1561,31 +1403,10 @@ BOOL runGameOptionsMenu(VOID)
 			scroll_speed_accel = 100;
 		}
 		break;
-	case FRONTEND_FX_SL:
-		mixer_SetWavVolume(widgGetSliderPos(psWScreen,FRONTEND_FX_SL));
-		break;
-
-	case FRONTEND_3D_FX_SL:
-		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen,FRONTEND_3D_FX_SL));
-		break;
-
-	case FRONTEND_MUSIC_SL:
-		mixer_SetCDVolume(widgGetSliderPos(psWScreen,FRONTEND_MUSIC_SL));
-		break;
-
 
 	case FRONTEND_QUIT:
-//#ifdef PSX
-//		cdAudio_StopTrack();
-//#endif
-
 		changeTitleMode(OPTIONS);
 		break;
-
-//	case FRONTEND_VIDEO:
-//		changeTitleMode(VIDEO);
-//		break;
-
 
 	case FE_P0:
 		widgSetButtonState(psWScreen, FE_P0, WBUT_LOCK);		
