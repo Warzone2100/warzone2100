@@ -987,13 +987,9 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
- #ifdef AUDIO_DISABLED
-	if (!audio_Init(frameGetWinHandle(), FALSE, droidAudioTrackStopped))	// audio.
- #else
-	if (!audio_Init((HWND) frameGetWinHandle(), TRUE, droidAudioTrackStopped))
- #endif
+	if (!audio_Init(droidAudioTrackStopped))
 	{
-		DBERROR( ("Couldn't initialise audio system: continuing without audio\n") );
+		debug( LOG_SOUND, "Couldn't initialise audio system: continuing without audio\n" );
 	}
 
 	if (war_GetPlayAudioCDs()) {

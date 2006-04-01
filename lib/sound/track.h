@@ -87,7 +87,7 @@ typedef struct TRACK
 /* functions
  */
 
-BOOL	sound_Init( HWND hWnd, SDWORD iMaxSameSamples );
+BOOL	sound_Init( SDWORD iMaxSameSamples );
 BOOL	sound_Shutdown();
 
 BOOL	sound_LoadTrackFromFile( signed char szFileName[] );

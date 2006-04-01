@@ -11,8 +11,7 @@
 
 /***************************************************************************/
 
-extern BOOL		audio_Init( HWND hWnd, BOOL bEnabled,
-								AUDIO_CALLBACK pStopTrackCallback );
+extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
 extern BOOL		audio_Update();
 extern BOOL		audio_Shutdown();
 extern BOOL		audio_Disabled( void );

@@ -701,7 +701,7 @@ void screenToggleMode(void)
 
 typedef struct {
 	struct jpeg_destination_mgr pub;
-	struct PHYSFS_File* file;
+	PHYSFS_file* file;
 	JOCTET * buffer;
 } my_jpeg_destination_mgr;
 

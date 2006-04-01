@@ -71,18 +71,10 @@ BOOL audio_Disabled( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_Init( HWND hWnd, BOOL bEnabled, AUDIO_CALLBACK pStopTrackCallback )
+BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 {
-	// if audio not enabled return TRUE to carry on game without audio
-	if ( bEnabled == FALSE )
-	{
-		g_bAudioEnabled = FALSE;
-		return TRUE;
-	}
-
 	// init audio system
-	g_bAudioEnabled = sound_Init( hWnd, MAX_SAME_SAMPLES );
-	if ( g_bAudioEnabled == TRUE )
+	if (g_bAudioEnabled = sound_Init(MAX_SAME_SAMPLES))
 	{
 		// allocate sample heap
 		if ( !HEAP_CREATE(&g_psSampleHeap, AUDIO_SAMPLE_HEAP_INIT, AUDIO_SAMPLE_HEAP_EXT, sizeof(AUDIO_SAMPLE)) )
@@ -92,18 +84,8 @@ BOOL audio_Init( HWND hWnd, BOOL bEnabled, AUDIO_CALLBACK pStopTrackCallback )
 		}
 
 		sound_SetStoppedCallback( pStopTrackCallback );
-
-		// ifdef WIN32 //Not needed ?--Qamly
-		//
-		// InitializeCriticalSection( &critSecAudio );
-		//
-		// endif
-		return TRUE;
 	}
-	else
-	{
-		return FALSE;
-	}
+	return g_bAudioEnabled;
 }
 
 //*
