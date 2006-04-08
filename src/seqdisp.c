@@ -101,7 +101,6 @@ static SDWORD currentPlaySeq = -1;
 static SDWORD frameDuration = 40;
 
 static BOOL			g_bResumeInGame = FALSE;
-static CD_INDEX		g_CDrequired = DISC_EITHER;
 
 static int videoFrameTime = 0;
 static	SDWORD frame = 0;
@@ -372,20 +371,6 @@ void seq_SetVideoPath(void)
 	WIN32_FIND_DATA findData;
 	HANDLE	fileHandle;
 #endif
-	/* set up the CD path */
-	if (!bCDPath)
-	{
-		if ( cdspan_GetCDLetter( aCDDrive, g_CDrequired ) == TRUE )
-		{
-			if (strlen( aCDDrive ) <= (MAX_STR_LENGTH - 20))//leave enough space to add "\\warzone\\sequences\\"
-			{
-				strcpy(aCDPath, aCDDrive);
-				strcat(aCDPath, "warzone\\sequences\\");
-				bCDPath = TRUE;
-				return;			//quick fix for vids.
-			}
-		}
-	}
 	// now set up the hard disc path /
 
 	if (!bHardPath)
@@ -1081,39 +1066,8 @@ void seqDispCDCancel( void )
 /*returns the next sequence in the list to play*/
 void seq_StartNextFullScreenVideo(void)
 {
-	if(bMultiPlayer)
-	{
 		seqDispCDOK();
 		return;
-	}
-
-	/* check correct CD in drive */
-	g_CDrequired = getCDForCampaign( getCampaignNumber() );
-	if ( cdspan_CheckCDPresent( g_CDrequired ) )
-	{
-		seqDispCDOK();
-	}
-	else
-	{
-		/* check backdrop already up */
-		if ( screen_GetBackDrop() == NULL )
-		{
-			bBackDropWasAlreadyUp = FALSE;
-		}
-		else
-		{
-			bBackDropWasAlreadyUp = TRUE;
-		}
-		intResetScreen(TRUE);
-		forceHidePowerBar();
-		intRemoveReticule();
-		setDesignPauseState();
-		if(!bMultiPlayer)
-		{
-			addCDChangeInterface( g_CDrequired, seqDispCDOK, seqDispCDCancel );
-		}
-		g_bResumeInGame = TRUE;
-	}
 }
 
 void seq_SetSubtitles(BOOL bNewState)

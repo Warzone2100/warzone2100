@@ -1337,9 +1337,6 @@ void intResetScreen(BOOL NoAnim)
 			intRemoveTrans();
 		}
 		break;
-	case INT_CDCHANGE:
-		cdspan_RemoveChangeCDBox();
-		break;
 	default:
 		break;
 	}
@@ -1772,15 +1769,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 		quitting = TRUE;
 		break;
 
-
-	case ID_WIDG_CDSPAN_BUTTON_CANCEL:		// cd span box cancel
-		cdspan_ProcessCDChange(retID);
-		intResetScreen(FALSE);
-        //clearMissionWidgets();
-		quitting = TRUE;
-		break;
-
-		
 	// Process form tab clicks.
 	case IDOBJ_TABFORM:		// If tab clicked on in object screen then refresh all rendered buttons.
 		RefreshObjectButtons();
@@ -1861,10 +1849,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 			break;*/
 		case INT_TRANSPORTER:
 			intProcessTransporter(retID);
-			break;
-
-		case INT_CDCHANGE:
-			cdspan_ProcessCDChange(retID);
 			break;
 
 		case INT_NORMAL:
@@ -7433,18 +7417,6 @@ void addTransporterInterface(DROID *psSelected, BOOL onMission)
 	    intMode = INT_TRANSPORTER;
     }
 }
-
-
-void addCDChangeInterface( CD_INDEX CDrequired,
-	CDSPAN_CALLBACK fpOKCallback, CDSPAN_CALLBACK fpCancelCallback )
-{
-	intResetScreen(FALSE);
-	showChangeCDBox( psWScreen, CDrequired, fpOKCallback,
-						fpCancelCallback );
-
-	intMode = INT_CDCHANGE;
-}
-
 
 /*sets which list of structures to use for the interface*/
 STRUCTURE* interfaceStructList(void)

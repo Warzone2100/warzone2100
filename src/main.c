@@ -392,13 +392,6 @@ init://jump here from the end if re_initialising
 
 	quit = FALSE;
 
-	/* check CDROM drive available */
-	if ( cdspan_CheckCDAvailable() == FALSE )
-	{
-		DBERROR( ("Cannot detect CDROM drive\n") );
-		quit = TRUE;
-	}
-
 	if (!systemInitialise())
 	{
 		return -1;

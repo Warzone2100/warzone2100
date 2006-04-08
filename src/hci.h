@@ -413,12 +413,6 @@ extern STRUCTURE* interfaceStructList(void);
 //sets up the Transporter Screen as far as the interface is concerned
 extern void addTransporterInterface(DROID *psSelected, BOOL onMission);
 
-
-/* CD change box */
-extern void addCDChangeInterface( CD_INDEX CDrequired,
-		CDSPAN_CALLBACK fpOKCallback, CDSPAN_CALLBACK fpCancelCallback );
-
-
 /*causes a reticule button to start flashing*/
 extern void flashReticuleButton(UDWORD buttonID);
 

@@ -399,17 +399,11 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
 	CHAR		sTemp[MAX_STR_LENGTH];
-	CD_INDEX	CDrequired;
 	UDWORD		iCampaign,i;
 	W_CONTEXT		context;
 	BOOL		bSkipCD = FALSE;
 
 	id = widgRunScreen(psRequestScreen);
-
-	if ( cdspan_ProcessCDChange(id) )
-	{
-		return bRequestLoad;
-	}
 
 	strcpy(sRequestResult,"");					// set returned filename to null;
 
@@ -438,27 +432,8 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 			{	
 				goto successforce;				// it's a force, dont check the cd.
 			}
-
-			/* check correct CD in drive */
-			iCampaign = getCampaign(sRequestResult,&bSkipCD);
-			if ( iCampaign == 0 OR bSkipCD )
-			{
-				DBPRINTF( ("getCampaign returned 0 or we're loading a skirmish game: assuming correct CD in drive\n") );
-			}
-			CDrequired = getCDForCampaign( iCampaign );
-			if ( (iCampaign == 0) || cdspan_CheckCDPresent( CDrequired ) OR bSkipCD)
-			{
 				goto success;
 			}
-			else
-			{
-				bRequestLoad = FALSE;
-				widgHide(psRequestScreen,LOADSAVE_FORM);
-				showChangeCDBox( psRequestScreen, CDrequired,
-									loadSaveCDOK, loadSaveCDCancel );
-				return FALSE;
-			}
-		}
 		else //  SAVING!add edit box at that position.
 		{
 

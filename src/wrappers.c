@@ -50,8 +50,6 @@
 #include "multistat.h"
 #include "multilimit.h"
 
-extern void frontEndCheckCD( tMode tModeNext, CD_INDEX cdIndex );
-
 typedef struct _star
 {
 	UWORD	xPos;

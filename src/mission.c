@@ -3626,13 +3626,6 @@ void intProcessMissionResult(UDWORD id)
 {
 	W_BUTINIT	sButInit;
 
-	CD_INDEX	CDrequired;
-
-
-
-	/* GJ to TC - this call processes the CD change widget box */
-	if ( !cdspan_ProcessCDChange(id) )
-
 	switch(id)
 	{
 
@@ -3676,24 +3669,7 @@ void intProcessMissionResult(UDWORD id)
 			closeLoadSave();				// close save interface if it's up.
 		}
 
-		/* check correct CD in drive */
-		CDrequired = getCDForCampaign( getCampaignNumber() );
-		if ( cdspan_CheckCDPresent( CDrequired ) )
-
-		{
 			missionContineButtonPressed();
-		}
-
-		else
-		{
-			widgDelete(psWScreen, IDMISSIONRES_TITLE);
-			widgDelete(psWScreen, IDMISSIONRES_FORM);
-			widgDelete(psWScreen, IDMISSIONRES_BACKFORM);		
-			showChangeCDBox( psWScreen, CDrequired,
-				missionContineButtonPressed, missionCDCancelPressed );
-		}
-
-
 		break;
 
 	default:
