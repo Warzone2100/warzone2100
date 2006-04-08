@@ -147,20 +147,16 @@ extern BOOL keyReleased(KEY_CODE code);
 
 typedef enum _mouse_key_code
 {
-	MOUSE_LMB,
-	MOUSE_MMB,
-	MOUSE_RMB
+	MOUSE_LMB = SDL_BUTTON_LEFT,
+	MOUSE_MMB = SDL_BUTTON_MIDDLE,
+	MOUSE_RMB = SDL_BUTTON_RIGHT,
+	MOUSE_WUP = SDL_BUTTON_WHEELUP,
+	MOUSE_WDN = SDL_BUTTON_WHEELDOWN
 } MOUSE_KEY_CODE;
 
 /* These two functions return the current position of the mouse */
 extern SDWORD mouseX(void);
 extern SDWORD mouseY(void);
-
-extern	BOOL	mouseWheelForward( void);
-extern	BOOL	mouseWheelBackwards( void);
-extern	BOOL	mouseWheelStatic( void);
-extern	void	mouseWheelProcessed(void);
-
 
 /* This returns true if the mouse key is currently depressed */
 extern BOOL mouseDown(MOUSE_KEY_CODE code);

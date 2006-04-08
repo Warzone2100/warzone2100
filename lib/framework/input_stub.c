@@ -37,12 +37,6 @@ typedef enum _key_state
 /* The current state of the keyboard */
 static KEY_STATE aKeyState[KEY_MAXSCAN];
 
-/* Mouse wheel stuff */
-//static	UDWORD	oldWheelPos = 0;
-static	BOOL	bMouseWheelForward = FALSE;
-static	BOOL	bMouseWheelBackwards = FALSE;
-static	BOOL	bMouseWheelStatic = TRUE;
-
 /* The current location of the mouse */
 static SDWORD		mouseXPos, mouseYPos;
 
@@ -56,7 +50,7 @@ static MOUSE_KEY_CODE	dragKey;
 static SDWORD			dragX, dragY;
 
 /* The current mouse button state */
-static KEY_STATE aMouseState[3];
+static KEY_STATE aMouseState[6];
 
 
 /* The size of the input buffer */
@@ -109,7 +103,7 @@ void inputInitialise(void)
 		aKeyState[i] = KEY_UP;
 	}
 
-	for (i=0; i<3; i++)
+	for (i = 0; i < 6; i++)
 	{
 		aMouseState[i] = KEY_UP;
 	}
@@ -320,91 +314,30 @@ void inputProcessEvent(SDL_Event *event)
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if (event->button.button == SDL_BUTTON_LEFT)
-			{
-				if (aMouseState[MOUSE_LMB] == KEY_PRESSED)
+			if (aMouseState[event->button.button] == KEY_PRESSED)
 				{
-					aMouseState[MOUSE_LMB] = KEY_PRESSRELEASE;
+				aMouseState[event->button.button] = KEY_PRESSRELEASE;
 				}
-				else if (aMouseState[MOUSE_LMB] == KEY_DOWN ||
-						 aMouseState[MOUSE_LMB] == KEY_DRAG)
+			else if (aMouseState[event->button.button] == KEY_DOWN
+					|| aMouseState[event->button.button] == KEY_DRAG)
 				{
-					aMouseState[MOUSE_LMB] = KEY_RELEASED;
-				}
-			}
-			if (event->button.button == SDL_BUTTON_RIGHT)
-			{
-				if (aMouseState[MOUSE_RMB] == KEY_PRESSED)
-				{
-					aMouseState[MOUSE_RMB] = KEY_PRESSRELEASE;
-				}
-				else if (aMouseState[MOUSE_RMB] == KEY_DOWN ||
-						 aMouseState[MOUSE_RMB] == KEY_DRAG)
-				{
-					aMouseState[MOUSE_RMB] = KEY_RELEASED;
-				}
-			}
-			if (event->button.button == SDL_BUTTON_MIDDLE)
-			{
-				if (aMouseState[MOUSE_MMB] == KEY_PRESSED)
-				{
-					aMouseState[MOUSE_MMB] = KEY_PRESSRELEASE;
-				}
-				else if (aMouseState[MOUSE_MMB] == KEY_DOWN ||
-						 aMouseState[MOUSE_MMB] == KEY_DRAG)
-				{
-					aMouseState[MOUSE_MMB] = KEY_RELEASED;
-				}
+				aMouseState[event->button.button] = KEY_RELEASED;
 			}
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			if (event->button.button == SDL_BUTTON_LEFT)
+			if (aMouseState[event->button.button] == KEY_UP
+					|| aMouseState[event->button.button] == KEY_RELEASED
+					|| aMouseState[event->button.button] == KEY_PRESSRELEASE)
 			{
-				if ((aMouseState[MOUSE_LMB] == KEY_UP) ||
-					(aMouseState[MOUSE_LMB] == KEY_RELEASED) ||
-					(aMouseState[MOUSE_LMB] == KEY_PRESSRELEASE))
+				aMouseState[event->button.button] = KEY_PRESSED;
+				if (event->button.button < 4)
 				{
-					aMouseState[MOUSE_LMB] = KEY_PRESSED;
-					dragKey = MOUSE_LMB;
+					dragKey = event->button.button;
 					dragX = mouseXPos;
 					dragY = mouseYPos;
 				}
 			}
 			// TODO: double click
-			if (event->button.button == SDL_BUTTON_RIGHT)
-			{
-				if ((aMouseState[MOUSE_RMB] == KEY_UP) ||
-					(aMouseState[MOUSE_RMB] == KEY_RELEASED) ||
-					(aMouseState[MOUSE_RMB] == KEY_PRESSRELEASE))
-				{
-					aMouseState[MOUSE_RMB] = KEY_PRESSED;
-					dragKey = MOUSE_RMB;
-					dragX = mouseXPos;
-					dragY = mouseYPos;
-				}
-			}
-			// TODO: double click
-			if (event->button.button == SDL_BUTTON_MIDDLE)
-			{
-				if ((aMouseState[MOUSE_MMB] == KEY_UP) ||
-					(aMouseState[MOUSE_MMB] == KEY_RELEASED) ||
-					(aMouseState[MOUSE_MMB] == KEY_PRESSRELEASE))
-				{
-					aMouseState[MOUSE_MMB] = KEY_PRESSED;
-					dragKey = MOUSE_MMB;
-					dragX = mouseXPos;
-					dragY = mouseYPos;
-				}
-			}
-			// TODO: double click
-			if (event->button.button == SDL_BUTTON_WHEELUP)
-			{
-				bMouseWheelForward = TRUE;
-			}
-			if (event->button.button == SDL_BUTTON_WHEELDOWN)
-			{
-				bMouseWheelBackwards = TRUE;
-			}
 			break;
 		case SDL_ACTIVEEVENT:
 			/* Lost the window focus, have to take this as a global key up */
@@ -416,7 +349,7 @@ void inputProcessEvent(SDL_Event *event)
 					aKeyState[i] = KEY_RELEASED;
 				}
 			}
-			for (i=0; i<3; i++)
+			for (i = 0; i < 6; i++)
 			{
 				if ((aMouseState[i] == KEY_PRESSED) ||
 					(aMouseState[i] == KEY_DOWN) ||
@@ -453,19 +386,14 @@ void inputNewFrame(void)
 
 
 	/* Do the mouse */
-	for(i=0; i<3; i++)
-	{
+	for (i = 0; i < 6; i++) {
 		if (aMouseState[i] == KEY_PRESSED)
-		{
 			aMouseState[i] = KEY_DOWN;
-		}
-		else if ((aMouseState[i] == KEY_RELEASED) ||
-				 (aMouseState[i] == KEY_DOUBLECLICK) ||
-				 (aMouseState[i] == KEY_PRESSRELEASE))
-		{
+		else if ((aMouseState[i] == KEY_RELEASED)
+				|| (aMouseState[i] == KEY_DOUBLECLICK)
+				|| (aMouseState[i] == KEY_PRESSRELEASE))
 			aMouseState[i] = KEY_UP;
 		}
-	}
 }
 
 /* This returns true if the key is currently depressed */
@@ -500,35 +428,6 @@ SDWORD mouseY(void)
 {
 	return mouseYPos;
 }
-
-/* The next three are mutually exclusive */
-
-/* True if mouse wheel moved forward in last frame */
-BOOL	mouseWheelForward( void)
-{
-	return(bMouseWheelForward);
-}
-
-/* True if mouse wheel moved backwards in last frame */
-BOOL	mouseWheelBackwards( void)
-{
-	return(bMouseWheelBackwards);
-}
-
-/* True if mouse wheel remained still in last frame */
-BOOL	mouseWheelStatic( void)
-{
-	return(bMouseWheelStatic);
-}
-
-
-/* Reset bMouseWheelForward and bMouseWheelBackwards */
-void	mouseWheelProcessed(void)
-{
-	bMouseWheelForward = FALSE;
-	bMouseWheelBackwards = FALSE;
-}
-
 
 /* This returns true if the mouse key is currently depressed */
 BOOL mouseDown(MOUSE_KEY_CODE code)
@@ -598,24 +497,9 @@ void setMouseDown(MOUSE_KEY_CODE code)
 	Uint8 button;
 	SDL_Event event;
 
-	switch(code)
-	{
-		case MOUSE_LMB:
-			button = SDL_BUTTON_LEFT;
-			break;
-		case MOUSE_MMB:
-			button = SDL_BUTTON_MIDDLE;
-			break;
-		case MOUSE_RMB:
-			button = SDL_BUTTON_RIGHT;
-			break;
-		default:
-			button = SDL_BUTTON_LEFT;
-			break;
-	}
 	event.type = SDL_MOUSEBUTTONDOWN;
 	event.button.type = SDL_MOUSEBUTTONDOWN;
-	event.button.button = button;
+	event.button.button = code;
 	event.button.state = SDL_PRESSED;
 	event.button.x = mouseX();
 	event.button.y = mouseY();
@@ -628,24 +512,9 @@ void setMouseUp(MOUSE_KEY_CODE code)
 	Uint8 button;
 	SDL_Event event;
 
-	switch(code)
-	{
-		case MOUSE_LMB:
-			button = SDL_BUTTON_LEFT;
-			break;
-		case MOUSE_MMB:
-			button = SDL_BUTTON_MIDDLE;
-			break;
-		case MOUSE_RMB:
-			button = SDL_BUTTON_RIGHT;
-			break;
-		default:
-			button = SDL_BUTTON_LEFT;
-			break;
-	}
 	event.type = SDL_MOUSEBUTTONUP;
 	event.button.type = SDL_MOUSEBUTTONUP;
-	event.button.button = button;
+	event.button.button = code;
 	event.button.state = SDL_RELEASED;
 	event.button.x = mouseX();
 	event.button.y = mouseY();

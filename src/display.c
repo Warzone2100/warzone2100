@@ -595,18 +595,16 @@ void processInput(void)
 		camToggleStatus();
 	}
 
-	if(mouseWheelForward())
+	if(mousePressed(MOUSE_WUP))
 	{
 		for (WheelZoomIterator=0;WheelZoomIterator<20;WheelZoomIterator++)
 			kf_ZoomIn();
-		mouseWheelProcessed();
 	}
 
-	if(mouseWheelBackwards())
+	if(mousePressed(MOUSE_WDN))
 	{
 		for (WheelZoomIterator=0;WheelZoomIterator<20;WheelZoomIterator++)
 			kf_ZoomOut();
-		mouseWheelProcessed();
 	}
 
 	if(intMode != INT_DESIGN)
