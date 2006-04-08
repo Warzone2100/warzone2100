@@ -5,7 +5,6 @@
 
 #include "frame.h"
 #include "netplay.h"
-#include "netsupp.h"
 
 DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
 {

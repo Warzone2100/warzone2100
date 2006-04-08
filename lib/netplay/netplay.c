@@ -13,7 +13,7 @@
 
 #include "frame.h"
 #include "netplay.h"
-#include "netsupp.h"
+#include "netlog.h"
 
 char* master_server = "warzone2100.kicks-ass.org";
 #define MASTER_SERVER_PORT	9998
