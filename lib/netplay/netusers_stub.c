@@ -9,27 +9,20 @@
 // call to disable/enable ALL comms. Absolute arse of a thing, be very careful!
 BOOL NETuseNetwork(BOOL val)
 {
-	if(val)
-	{
-		NetPlay.bComms = TRUE;
-	}
-	else
-	{
-		NetPlay.bComms = FALSE;
-	}
+	NetPlay.bComms = val;
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // Functions for spectators.
 
-BOOL NETspectate(GUID guidSessionInstance)
+WZ_DEPRECATED BOOL NETspectate(GUID guidSessionInstance) // FIXME Remove if unused
 {
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETisSpectator(DPID dpid)
+WZ_DEPRECATED BOOL NETisSpectator(DPID dpid) // FIXME Remove if unused
 {
 	UBYTE i;
 

@@ -5,12 +5,12 @@ libnetplay_a_SOURCES = \
 	netcrypt.c \
 	netjoin_stub.c \
 	netlobby_stub.c \
-	netplay_stub.c \
-	netsupp_stub.c \
+	netplay.c \
+	netlog.c \
 	netusers_stub.c \
 	netlobby.h \
 	netplay.h \
-	netsupp.h
+	netlog.h
 
 libnetplay_a_libs = ../framework/libframework.a
 libnetplay_a_DEPENDENCIES = $(libnetplay_a_libs)

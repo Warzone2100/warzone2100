@@ -63,7 +63,7 @@ void pie_SetFogStatus(BOOL val)
 	}
 }
 
-WZ_DEPRECATED void pie_SetTexturePage(SDWORD num)
+WZ_DEPRECATED void pie_SetTexturePage(SDWORD num) // FIXME Remove if unused
 {
 }
 

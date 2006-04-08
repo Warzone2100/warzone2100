@@ -19,24 +19,24 @@
 // cline = command line params when launching.
 // path  = path the app resides in
 // cdir  = directory to set as current dir, once lauched.
-BOOL NETsetRegistryEntries(char *name,char *guid,char *file,char *cline,char *path,char *cdir)						   
+WZ_DEPRECATED BOOL NETsetRegistryEntries(char *name,char *guid,char *file,char *cline,char *path,char *cdir) // FIXME Remove if unused
 {
-printf("NETsetRegistryEntries\n");
+	debug( LOG_NET, "NETsetRegistryEntries\n" );
 	return FALSE;
 }
 
 
-BOOL NETcheckRegistryEntries(char *name,char *guid)
+WZ_DEPRECATED BOOL NETcheckRegistryEntries(char *name,char *guid) // FIXME Remove if unused
 {
-printf("NETcheckRegistryEntries\n");
+	debug( LOG_NET, "NETcheckRegistryEntries\n" );
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // connect to a given lobby.
 // returns FALSE if not lobbied!
-BOOL NETconnectToLobby(LPNETPLAY lpNetPlay)
+WZ_DEPRECATED BOOL NETconnectToLobby(LPNETPLAY lpNetPlay) // FIXME Remove if unused
 {
-printf("NETconnectToLobby\n");
+	debug( LOG_NET, "NETconnectToLobby\n" );
 	return FALSE;
 }

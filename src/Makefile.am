@@ -113,7 +113,7 @@ warzone_SOURCES = \
 		keyedit.c \
 		loadsave.c \
 		mission.c \
-		mplayer.c \
+		mplayer_stub.c \
 		multigifts.c \
 		multijoin.c \
 		multilimit.c \
@@ -213,7 +213,6 @@ warzone_SOURCES = \
 		mission.h \
 		movedef.h \
 		move.h \
-		mpdpxtra.h \
 		multigifts.h \
 		multiint.h \
 		multijoin.h \

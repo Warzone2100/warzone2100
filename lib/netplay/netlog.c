@@ -1,65 +1,47 @@
-/*
- * NETsupp.h
- *
- * Alex Lee, pumpkin studios, nov97
- * The meaty network support functions
- * as well as some logging stuff.
- * Net Encryption also lives here.
- */
-
 // ////////////////////////////////////////////////////////////////////////
 // Includes
 #include "frame.h"
 #include "netplay.h"
-#include "netsupp.h"
+#include "netlog.h"
 
 #include <time.h>
 #include <stdio.h>
-
-#define LOG
 
 // ////////////////////////////////////////////////////////////////////////
 // Logging for degug only
 // ////////////////////////////////////////////////////////////////////////
 
-#ifdef LOG
 static FILE	*pFileHandle;
-#endif
 
 BOOL NETstartLogging()
 {
-#ifdef LOG
 	time_t aclock;
 	struct tm *newtime;
 	
 	time( &aclock );                 /* Get time in seconds */
-	 newtime = localtime( &aclock );  /* Convert time to struct */
+	newtime = localtime( &aclock );  /* Convert time to struct */
 
-	pFileHandle = fopen("netplay.log", "w");								// open the file
+	pFileHandle = fopen("netplay.log", "w"); // open the file
 	if (!pFileHandle)
 	{
 		return FALSE;
 	}
 	fprintf(pFileHandle,"NETPLAY log: %s\n",asctime( newtime ) );
-#endif
 	return TRUE;
 }
 
 BOOL NETstopLogging()
 {	
-#ifdef LOG
 	if (fclose(pFileHandle) != 0)
 	{
 		return FALSE;
 	}
-#endif
 	return TRUE;
 }
 
 
 BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 {
-#ifdef LOG
 	static UDWORD lastframe = 0;
 	UDWORD frame= frameGetFrameNumber();
 	time_t aclock;
@@ -118,8 +100,8 @@ BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 		fprintf(pFileHandle,"%s \t: NET_TXTMSG \t:%d\t\t%s",str,b,asctime( newtime ));
 		break;
 	case 18:
-		fprintf(pFileHandle,"%s \t: NET_LEAVING \t:%d\t\t%s",str,b,asctime( newtime ));
 		fprintf(pFileHandle,"************************************************************\n");
+		fprintf(pFileHandle,"%s \t: NET_LEAVING \t:%d\t\t%s",str,b,asctime( newtime ));
 		fprintf(pFileHandle,"************************************************************\n");
 		break;
 	case 19:
@@ -167,7 +149,6 @@ BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 		break;
 	}
 	fflush(pFileHandle);
-#endif
 	return TRUE;
 }
 

@@ -11,11 +11,11 @@ libframework_a_SOURCES = \
 	block.c \
 	configfile.c \
 	debug.c \
-	frame_stub.c \
+	frame.c \
 	frameresource.c \
 	heap.c \
 	ignorecase.c \
-	input_stub.c \
+	input.c \
 	mem.c \
 	strres.c \
 	treap.c \

@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([warzone], [1.99], [http://developer.berlios.de/projects/warzone/])
+AC_INIT([warzone], [2.0], [http://gna.org/projects/warzone])
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_TARGET

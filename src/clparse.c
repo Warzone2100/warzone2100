@@ -32,9 +32,7 @@ extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
-// Got removed by Dennis
-//extern char default_data_path[MAX_PATH]; // from main.c (yes, I know, more globals - Per)
-extern char datadir[MAX_PATH];
+extern char	datadir[MAX_PATH];
 
 // whether to play the intro video
 BOOL	clIntroVideo;

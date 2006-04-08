@@ -18,7 +18,7 @@ libivis02_a_SOURCES = \
 	screen.c \
 	tex.c \
 	textdraw.c \
-	v4101_stub.c \
+	v4101.c \
 	vsr.c \
 	vid.h \
 	screen.h \

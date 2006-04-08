@@ -149,11 +149,8 @@ extern BOOL	NETsetGlobalPlayerData(DPID dpid, VOID *pData, DWORD size);
 extern BOOL	NETspectate();			// create a spectator
 extern BOOL	NETisSpectator(DPID dpid);	// check for spectator status.
 
-//from netsupp
-extern BOOL	NETlogEntry(CHAR *str,UDWORD a,UDWORD b);
-extern BOOL	NETstopLogging(VOID);
-extern BOOL	NETstartLogging(VOID);
-	
+#include "netlog.h"
+
 // from net audio.
 extern BOOL	NETprocessAudioCapture(VOID);			//capture
 extern BOOL	NETstopAudioCapture(VOID);

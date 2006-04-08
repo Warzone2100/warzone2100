@@ -207,6 +207,6 @@ void pie_SetColour(UDWORD colour)
 }
 
 /***************************************************************************/
-WZ_DEPRECATED void pie_SetGammaValue(float val)
+WZ_DEPRECATED void pie_SetGammaValue(float val) // FIXME Remove if unused
 {
 }
