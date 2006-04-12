@@ -279,6 +279,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 	// See if the ray has reached the target
 	if (distSq >= tarDist)
 	{
+		lastD = dist;
 		return FALSE;
 	}
 	else
