@@ -44,6 +44,8 @@
 #include "csnap.h"
 extern CURSORSNAP InterfaceSnap;
 
+#define NO_VIDEO
+
 // See research.txt for research entry to be displayed
 // By defined this we jump straight to the research entry when clicking on any button in the intelmap screen
 //#define DBG_RESEARCH_ENTRY (28)			// Weapon research test
@@ -1999,21 +2001,35 @@ void _displayImmediateMessage(MESSAGE *psMessage)
 {
 
 
-		/*
-			This has to be changed to support a script calling a message in the intellegence screen
+	/*
+		This has to be changed to support a script calling a message in the intellegence screen
 
-		*/
+	*/
 
-		DBPRINTF(("\n\n\n\n\n\nDisplayImmedMessage\n\n\n\n\n"));
+	DBPRINTF(("\n\n\n\n\n\nDisplayImmedMessage\n\n\n\n\n"));
 
-		// Need to unload the research strings because the movies need the memory.
-
-
-		StartMessageSequences(psMessage,TRUE);
+	// Need to unload the research strings because the movies need the memory.
 
 
+#ifdef NO_VIDEO
+	/* This sucks, but is better than nothing.. */
+	if (((VIEWDATA*)psMessage->pViewData)->type == VIEW_RPL) {
+	  VIEW_REPLAY	*psViewReplay;
+	  SEQ_DISPLAY	*psSeqDisplay;
+	  UDWORD	Sequence, i;
 
+	  psViewReplay = (VIEW_REPLAY*)((VIEWDATA*)psMessage->pViewData)->pData;
+	  for (Sequence = 0; Sequence < psViewReplay->numSeq; Sequence++) {
+	    psSeqDisplay = &psViewReplay->pSeqList[Sequence];
+	    for (i = 0; i < psSeqDisplay->numText; i++) {
+	      addConsoleMessage(psSeqDisplay->ppTextMsg[i], DEFAULT_JUSTIFY);
+	    }
+	  }
+	  return;
+	}
+#endif
 
+	StartMessageSequences(psMessage,TRUE);
 }
 
 
