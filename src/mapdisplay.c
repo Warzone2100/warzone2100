@@ -33,6 +33,7 @@
 #include "hci.h"
 #include "intelmap.h"
 #include "intimage.h"
+#include "gtime.h"
 
 //#include "dglide.h"
 #include "texture.h"
@@ -53,7 +54,7 @@ extern BOOL		godMode;
 
 
 #define MAX_MAP_GRID	32
-#define ROTATE_ANGLE	5
+#define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
 
 /* ----------------------------------------------------------------------------------------- */
 /* Function prototypes */
@@ -328,7 +329,7 @@ Intelligence Map */
 void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch, 
                             UDWORD OriginX, UDWORD OriginY)
 {
-	static UDWORD   angle = 0;
+	UDWORD   angle = 0;
     
     BASE_STATS      *psResGraphic;
     UDWORD          compID, IMDType;
@@ -360,11 +361,8 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 	//pie_MatRotX(DEG(-30));
 
     // Rotate round
-	angle += ROTATE_ANGLE;
-	if (angle > 360)
-	{
-		angle -= 360;
-	}
+	// full rotation once every 2 seconds..
+	angle = (gameTime2 % ROTATE_TIME) * 360 / ROTATE_TIME;
 	
     Position.x = 0;
 	Position.y = 0;
