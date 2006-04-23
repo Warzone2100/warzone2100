@@ -35,11 +35,15 @@ echo '*' | import
 
 [Prepare]
 # Dependency checking
-require @opengl.org/opengl 1.0
-require @openal.org/openal 0.0
 require @libsdl.org/sdl 1.2
 require @libsdl.org/sdl_net 1.2
-require @icculus.org/physfs 1.0
+require @opengl.org/opengl 1
+require @openal.org/openal 0
+require @icculus.org/physfs 1
+require @libpng.org/libpng 3
+require @jig.org/libjpeg 62
+require @xiph.org/libogg 0
+require @xiph.org/libvorbis 0
 
 [Install]
 # Put your installation script here
