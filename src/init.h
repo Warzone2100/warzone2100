@@ -32,6 +32,9 @@ extern BOOL saveGameReset(void);
 
 BOOL buildMapList();
 BOOL loadLevels(int patchlevel);
+void set_global_mod(const char* name);
+void set_campaign_mod(const char* name);
+void set_multiplayer_mod(const char* name);
 #define DIR_CAMPAIGN (-2)
 #define DIR_MULTIPLAYER (-3)
 #define DIR_RELOAD (-4)

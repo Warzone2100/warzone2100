@@ -1,11 +1,11 @@
 SRC_FILES=	block.c \
 		configfile.c \
 		debug.c \
-		frame_stub.c \
+		frame.c \
 		frameresource.c \
 		heap.c \
 		ignorecase.c \
-		input_stub.c \
+		input.c \
 		mem.c \
 		mono.c \
 		resource_parser.c \

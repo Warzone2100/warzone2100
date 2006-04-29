@@ -781,10 +781,40 @@ struct data_dir_t {
 };
 
 static struct data_dir_t*	data_dirs = NULL;
-static unsigned int		nb_data_dirs = 0;
-static unsigned int		data_dirs_size = 0;
-static unsigned int		campaign_data_dir = 0;
-static unsigned int		multiplayer_data_dir = 0;
+static int			nb_data_dirs = 0;
+static int			data_dirs_size = 0;
+static int			global_mod_dir_campaign = -1;
+static int			global_mod_dir_multiplayer = -1;
+static int			campaign_data_dir = -1;
+static int			multiplayer_data_dir = -1;
+static char*			global_mod = NULL;
+static char*			campaign_mod = NULL;
+static char*			multiplayer_mod = NULL;
+
+BOOL register_mod(int dir, const char* type, const char* name) {
+	char path[MAX_PATH];
+
+	if (dir < 0) {
+		return FALSE;
+	}
+
+	if (data_dirs[dir].name != NULL) {
+		free(data_dirs[dir].name);
+	}
+
+	printf("Registering %s mod %s in slot %i\n", type, name, dir);
+
+	snprintf(path, MAX_PATH, "%s%smods%s%s%s%s",
+				  datadir,
+				    PHYSFS_getDirSeparator(),
+					  PHYSFS_getDirSeparator(),
+					    type,
+					      PHYSFS_getDirSeparator(),
+						name);
+	data_dirs[dir].name = strdup(path);
+
+	return TRUE;
+}
 
 BOOL loadLevels(int _index) {
 	static int current_index = -1;
@@ -805,7 +835,10 @@ BOOL loadLevels(int _index) {
 			break;
 	}
 
-	if (index < 0 || index >= nb_data_dirs) return FALSE;
+	if (index < 0 || index >= nb_data_dirs) {
+		printf("Bad level dir %i\n", index);
+		return FALSE;
+	}
 
 	if (index != current_index) {
 		int i = index;
@@ -833,6 +866,48 @@ BOOL loadLevels(int _index) {
 	}
 
 	return TRUE;
+}
+
+void set_global_mod(const char* name) {
+	if (global_mod != NULL) {
+		free(global_mod);
+	}
+	if (name != NULL) {
+		global_mod = strdup(name);
+		register_mod(global_mod_dir_campaign, "global", global_mod);
+		register_mod(global_mod_dir_multiplayer, "global", global_mod);
+	} else {
+		global_mod = NULL;
+	}
+	printf("setting global mod %s\n", global_mod);
+	loadLevels(DIR_RELOAD);
+}
+
+void set_campaign_mod(const char* name) {
+	if (campaign_mod != NULL) {
+		free(campaign_mod);
+	}
+	if (name != NULL) {
+		campaign_mod = strdup(name);
+		register_mod(campaign_data_dir, "campaign", campaign_mod);
+	} else {
+		campaign_mod = NULL;
+	}
+	printf("setting campaign mod %s\n", campaign_mod);
+	loadLevels(DIR_RELOAD);
+}
+
+void set_multiplayer_mod(const char* name) {
+	if (multiplayer_mod != NULL) {
+		free(multiplayer_mod);
+	}
+	if (name == NULL) {
+		multiplayer_mod = strdup(name);
+		register_mod(multiplayer_data_dir, "multiplayer", multiplayer_mod);
+	} else {
+		multiplayer_mod = NULL;
+	}
+	loadLevels(DIR_RELOAD);
 }
 
 int init_data_directory_list() {
@@ -870,8 +945,11 @@ BOOL buildMapList()
 	// load the original gamedesc.lev
 	PHYSFS_addToSearchPath(datadir, 1);
 	depend = declare_data_directory(datadir, -1);
-	campaign_data_dir = declare_data_directory(NULL, depend);
-	if (!loadLevFile("gamedesc.lev", depend)) {
+	global_mod_dir_campaign = declare_data_directory(NULL, depend);
+	register_mod(global_mod_dir_campaign, "global", global_mod);
+	campaign_data_dir = declare_data_directory(NULL, global_mod_dir_campaign);
+	register_mod(campaign_data_dir, "campaign", campaign_mod);
+	if (!loadLevFile("gamedesc.lev", campaign_data_dir)) {
 		restore_search_path(search_path);
 		return FALSE; // only in NDEBUG case
 	}
@@ -883,7 +961,10 @@ BOOL buildMapList()
 
 		snprintf(path, MAX_PATH, "%s%smp", datadir, PHYSFS_getDirSeparator());
 		depend = declare_data_directory(path, depend);
+		global_mod_dir_multiplayer = depend = declare_data_directory(NULL, depend);
+		register_mod(global_mod_dir_multiplayer, "global", global_mod);
 		multiplayer_data_dir = depend = declare_data_directory(NULL, depend);
+		register_mod(multiplayer_data_dir, "multiplayer", multiplayer_mod);
 		PHYSFS_addToSearchPath(path, 1);
 		loadLevFile("addon.lev", depend);
 		PHYSFS_removeFromSearchPath(path);

@@ -103,7 +103,7 @@ SRC_FILES=	ai.c \
 		loadsave.c \
 		main.c \
 		mission.c \
-		mplayer.c \
+		mplayer_stub.c \
 		multigifts.c \
 		multijoin.c \
 		multilimit.c \

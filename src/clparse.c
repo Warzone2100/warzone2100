@@ -27,6 +27,7 @@
 #include "netplay.h"
 #include "wrappers.h"
 #include "cheat.h"
+#include "init.h"
 
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
@@ -83,7 +84,8 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				return FALSE;
 			}
 			debug_to_file(token);
-		} else if (stricmp(tokenType, "-debug") == 0) {
+		}
+		else if (stricmp(tokenType, "-debug") == 0) {
 			// find the part name
 			token = argv[++i];
 			if (token == NULL) {
@@ -148,6 +150,33 @@ BOOL ParseCommandLine(int argc, char** argv)
 		else if ( stricmp( tokenType, "-title" ) == 0 )
 		{
 			SetGameMode(GS_TITLE_SCREEN);
+		}
+		else if (stricmp(tokenType, "-mod") == 0) {
+			// find the file name
+			token = argv[++i];
+			if (token == NULL) {
+				DBERROR( ("Missing mod name?\n") );
+				return FALSE;
+			}
+			set_global_mod(token);
+		}
+		else if (stricmp(tokenType, "-ca_mod") == 0) {
+			// find the file name
+			token = argv[++i];
+			if (token == NULL) {
+				DBERROR( ("Missing mod name?\n") );
+				return FALSE;
+			}
+			set_campaign_mod(token);
+		}
+		else if (stricmp(tokenType, "-mp_mod") == 0) {
+			// find the file name
+			token = argv[++i];
+			if (token == NULL) {
+				DBERROR( ("Missing mod name?\n") );
+				return FALSE;
+			}
+			set_multiplayer_mod(token);
 		}
 		else if ( stricmp( tokenType, "-game" ) == 0 )
 		{
