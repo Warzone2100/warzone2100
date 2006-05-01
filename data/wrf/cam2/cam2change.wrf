@@ -12,7 +12,6 @@ file		TEXPAGE		"page-8-player buildings-bases Urban.png"
 file		TEXPAGE		"page-9-player-soft buildings-bases-urban.png"	//need altering to urban**DONE**
 file		TEXPAGE		"page-9-player-hard buildings-bases-urban.png"
 file		TEXPAGE 	"page-7-barbarians-Urban.png"
-file 		TERTILES	"tertilesC2.png"
 file 		HWTERTILES	"tertilesc2hw.png"
 
 directory 	"stats\research\cam2"
