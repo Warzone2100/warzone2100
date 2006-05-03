@@ -298,7 +298,7 @@ void displayNumPlayersBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
 	}
 	if ((int)(psWidget->UserData) == 0) {
-		sprintf(buffer, " *", (int)(psWidget->UserData));
+		sprintf(buffer, " *");
 	} else {
 		sprintf(buffer, "%iP", (int)(psWidget->UserData));
 	}
@@ -312,7 +312,7 @@ unsigned int check_tip_index(unsigned int i) {
 	if (i < NBTIPS) {
 		return i;
 	} else {
-		debug(LOG_MAIN, "Tip window index too high", i);
+		debug(LOG_MAIN, "Tip window index too high (%ud)", i);
 		return NBTIPS-1;
 	}
 }

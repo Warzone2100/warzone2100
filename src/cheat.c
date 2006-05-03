@@ -53,7 +53,7 @@ CHEAT_ENTRY	cheatCodes[] =
 	{"end of list",NULL}
 };
 
-unsigned char	cheatString[255];
+char	cheatString[255];
 
 unsigned char	*xorString(unsigned char *string)
 {
@@ -84,9 +84,9 @@ BOOL	getCheatCodeStatus( void )
 
 BOOL	attemptCheatCode( STRING *pName )
 {
-UDWORD	index;
-STRING	errorString[255];
-unsigned char	*xored;
+	UDWORD	index;
+	STRING	errorString[255];
+	char	*xored;
 
 	index = 0;
  

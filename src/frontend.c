@@ -396,17 +396,6 @@ BOOL startTitleMenu(VOID)
 }
 
 
-static void frontEndCDOK( void )
-{
-	changeTitleMode( g_tModeNext );
-}
-
-static void frontEndCDCancel( void )
-{
-	changeTitleMode(TITLE);
-}
-
-
 BOOL runTitleMenu(VOID)
 {
 	UDWORD id;
@@ -1132,11 +1121,6 @@ BOOL runGameOptions2Menu(VOID)
 // Game Options Menu
 BOOL startGameOptions3Menu(VOID)
 {
-
-	UDWORD	w,h;
-
-
-
 	addBackdrop();
 	addTopForm();
 	addBottomForm();

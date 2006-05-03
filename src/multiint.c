@@ -204,8 +204,8 @@ void loadMapPreview(void)
 	UBYTE			scale,col,coltab[16],bitDepth=8;
 	MAPTILE			*psTile,*WTile;
 	iSprite			backDropSprite;
-	UDWORD oursize,ptr,*optr;
-	unsigned char  *imageData;
+	UDWORD oursize,*optr;
+	unsigned char  *ptr, *imageData;
 
 	if(psMapTiles)
 	{

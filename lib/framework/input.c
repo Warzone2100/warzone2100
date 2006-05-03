@@ -494,7 +494,6 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 /* Sets the state of the mouse key to down */
 void setMouseDown(MOUSE_KEY_CODE code)
 {
-	Uint8 button;
 	SDL_Event event;
 
 	event.type = SDL_MOUSEBUTTONDOWN;
@@ -509,7 +508,6 @@ void setMouseDown(MOUSE_KEY_CODE code)
 /* Sets the state of the mouse key to up */
 void setMouseUp(MOUSE_KEY_CODE code)
 {
-	Uint8 button;
 	SDL_Event event;
 
 	event.type = SDL_MOUSEBUTTONUP;

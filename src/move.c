@@ -4594,7 +4594,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 				if ( psDroid->droidType == DROID_TRANSPORTER )
 				{
-					DBPRINTF(("a) dir %d,%d (%d)\n",tx,ty,tangle));
+					DBPRINTF(("a) dir %g,%g (%g)\n",tx,ty,tangle));
 				}
 
 				moveSpeed = moveCalcDroidSpeed(psDroid);

@@ -519,7 +519,7 @@ MISSION_DATA		*pScoreData;
 	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 'c' ||
 		psHeader->aFileType[2] != 'd' || psHeader->aFileType[3] != 'a')	{
 		DBERROR(("Read Score data : Weird file type found? Has header letters \
-				  - %s %s %s %s", psHeader->aFileType[0],psHeader->aFileType[1],
+				  - %c %c %c %c", psHeader->aFileType[0],psHeader->aFileType[1],
 								  psHeader->aFileType[2],psHeader->aFileType[3]));
 		return FALSE;
 	}

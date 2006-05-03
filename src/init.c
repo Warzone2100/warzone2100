@@ -910,7 +910,7 @@ void set_multiplayer_mod(const char* name) {
 	loadLevels(DIR_RELOAD);
 }
 
-int init_data_directory_list() {
+void init_data_directory_list() {
 	nb_data_dirs = 0;
 }
 

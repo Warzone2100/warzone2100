@@ -175,7 +175,7 @@ BOOL Refreshing = FALSE;
 
 
 UBYTE	*DisplayBuffer;
-SDWORD	displayBufferSize;
+UDWORD	displayBufferSize;
 
 
 //hides the power bar from the display - NB static function now

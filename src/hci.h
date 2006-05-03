@@ -312,7 +312,7 @@ extern iIMDShape	*pNewDesignIMD;
 
 
 extern UBYTE	*DisplayBuffer;
-extern SDWORD	displayBufferSize;
+extern UDWORD	displayBufferSize;
 
 
 extern BOOL ClosingMessageView;
