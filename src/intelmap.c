@@ -9,10 +9,12 @@
 #include "widget.h"
 /* Includes direct access to render library */
 #include "piedef.h"
+#include "piestate.h"
 #include "rendmode.h"
 
 //#include "geo.h"
 #include "display3d.h"
+#include "resource.h"
 #include "map.h"
 #include "intdisplay.h"
 #include "objects.h"
@@ -71,9 +73,12 @@ extern CURSORSNAP InterfaceSnap;
 #define IDINTMAP_FLICVIEW		6008	//The Flic View part of MSGVIEW
 #define IDINTMAP_TEXTVIEW		6009	//The Text area of MSGVIEW
 #define	IDINTMAP_TITLELABEL		6010	//The title text
+#define IDINTMAP_SEQTEXT		6011	//Sequence subtitle text
 
 #define IDINTMAP_MSGSTART		6100	//The first button on the intelligence form
 #define	IDINTMAP_MSGEND			6139	//The last button on the intelligence form (40 MAX)
+
+#define IDINTMAP_SEQTEXTSTART		6200	//Sequence subtitle text tabs
 
 //Proximity Messages no longer displayed in Intel Screen
 //#define IDINTMAP_PROXSTART		6200	//The first proximity button
@@ -170,7 +175,17 @@ extern CURSORSNAP InterfaceSnap;
 #define TEXT_XINDENT				5
 #define TEXT_YINDENT				5
 
+/*dimensions for SEQTEXT view relative to IDINTMAP_MSGVIEW*/
+#define INTMAP_SEQTEXTX			0
+#define INTMAP_SEQTEXTY			0
+#define INTMAP_SEQTEXTWIDTH		INTMAP_RESEARCHWIDTH
+#define INTMAP_SEQTEXTHEIGHT		INTMAP_RESEARCHHEIGHT
 
+/*dimensions for SEQTEXT tab view relative to IDINTMAP_SEQTEXT*/
+#define INTMAP_SEQTEXTTABX		0
+#define INTMAP_SEQTEXTTABY		0
+#define INTMAP_SEQTEXTTABWIDTH		INTMAP_SEQTEXTWIDTH
+#define INTMAP_SEQTEXTTABHEIGHT		INTMAP_SEQTEXTHEIGHT
 
 
 //position for text on full screen video
@@ -242,6 +257,14 @@ static void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD 
 					  UDWORD *pColours);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
+static void intDisplaySeqTextView(struct _widget *psWidget,
+				  UDWORD xOffset, UDWORD yOffset,
+				  UDWORD *pColours);
+static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
+				      UDWORD x0, UDWORD y0,
+				      UDWORD width, UDWORD height,
+				      BOOL render,
+				      size_t *major, size_t *minor);
 
 
 
@@ -562,7 +585,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
 	W_LABINIT		sLabInit;
-	BOOL			Animate = FALSE;
+	BOOL			Animate = TRUE;
 	RESEARCH		*psResearch;
 
 	ASSERT((psMessage->type == MSG_RESEARCH, 
@@ -653,6 +676,82 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	}
 
 
+	if (psMessage->type != MSG_RESEARCH &&
+	    ((VIEWDATA*)psMessage->pViewData)->type == VIEW_RPL)
+	{
+		W_FORMINIT	sTabForm;
+		VIEW_REPLAY	*psViewReplay;
+		size_t		i, cur_seq, cur_seqpage;
+
+		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
+
+		/* Add a big tabbed text box for the subtitle text */
+		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+
+		sFormInit.id = IDINTMAP_SEQTEXT;
+		sFormInit.formID = IDINTMAP_MSGVIEW;
+		sFormInit.style = WFORM_TABBED;
+		sFormInit.x = INTMAP_SEQTEXTX;
+		sFormInit.y = INTMAP_SEQTEXTY;
+		sFormInit.width = INTMAP_SEQTEXTWIDTH;
+		sFormInit.height = INTMAP_SEQTEXTHEIGHT;
+
+		sFormInit.majorPos = WFORM_TABBOTTOM;
+		sFormInit.minorPos = WFORM_TABNONE;
+		sFormInit.majorSize = OBJ_TABWIDTH;
+		sFormInit.majorOffset = OBJ_TABOFFSET;
+		sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
+		sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
+
+		sFormInit.numMajor = 0;
+
+		cur_seq = cur_seqpage = 0;
+		do {
+			sFormInit.aNumMinors[sFormInit.numMajor] = 1;
+			sFormInit.numMajor++;
+		}
+		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0,
+						  sFormInit.width, sFormInit.height,
+						  FALSE, &cur_seq, &cur_seqpage));
+
+
+		sFormInit.pFormDisplay = intDisplayObjectForm;
+		sFormInit.pUserData = (void*)&StandardTab;
+		sFormInit.pTabDisplay = intDisplayTab;
+
+		if (!widgAddForm(psWScreen, &sFormInit))
+		{
+			return FALSE;
+		}
+
+
+		memset(&sTabForm, 0, sizeof(W_FORMINIT));
+		sTabForm.formID = IDINTMAP_SEQTEXT;
+		sTabForm.id = IDINTMAP_SEQTEXTSTART;
+		sTabForm.majorID = 0;
+		sTabForm.minorID = 0;
+		sTabForm.style = WFORM_PLAIN;
+		sTabForm.x = INTMAP_SEQTEXTTABX;
+		sTabForm.y = INTMAP_SEQTEXTTABY;
+		sTabForm.width = INTMAP_SEQTEXTTABWIDTH;
+		sTabForm.height = INTMAP_SEQTEXTTABHEIGHT;
+		sTabForm.pDisplay = intDisplaySeqTextView;
+		sTabForm.pUserData = psViewReplay;
+
+		for (i = 0; i < sFormInit.numMajor; i++)
+		{
+			sTabForm.id = IDINTMAP_SEQTEXTSTART + i;
+			sTabForm.majorID = i;
+			if (!widgAddForm(psWScreen, &sTabForm))
+			{
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
+
+
 	/*Add the Title box*/
 	/*memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -714,6 +813,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	}
 
 
+#ifndef NO_VIDEO
 	/*Add the Flic box */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -729,6 +829,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		return FALSE;
 	}
+#endif
 
 
 	/*Add the text box*/
@@ -775,6 +876,91 @@ void intProcessIntelMap(UDWORD id)
 
 }
 
+
+static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
+				      UDWORD x0, UDWORD y0,
+				      UDWORD width, UDWORD height,
+				      BOOL render,
+				      size_t *cur_seq, size_t *cur_seqpage)
+{
+	UDWORD x1, y1, i, linePitch, cur_y;
+	UDWORD ty;
+	UDWORD sequence;
+
+	if (!psViewReplay)
+	{
+		return TRUE;	/* nothing to do */
+	}
+
+	x1 = x0 + width;
+	y1 = y0 + height;
+	ty = y0;
+
+	iV_SetFont(WFont);
+	/* Get the travel to the next line */
+	linePitch = iV_GetTextLineSize();
+	/* Fix for spacing.... */
+	linePitch += 6;
+	ty += 3;
+
+	iV_SetTextColour(iV_PaletteNearestColour(255, 255, 255));
+
+	cur_y = 0;
+
+	/* add each message */
+	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->numSeq; sequence++)
+	{
+		SEQ_DISPLAY *psSeqDisplay = &psViewReplay->pSeqList[sequence];
+		for (; i < psSeqDisplay->numText; i++)
+		{
+			if (render)
+			{
+				iV_DrawText(psSeqDisplay->ppTextMsg[i],
+					    x0 + TEXT_XINDENT,
+					    (ty + TEXT_YINDENT*3) + cur_y);
+			}
+			cur_y += linePitch;
+			if (cur_y > height)
+			{
+				/* run out of room - need to make new tab */
+				*cur_seq = sequence;
+				*cur_seqpage = i;
+				return FALSE;
+			}
+		}
+		i = 0;
+	}
+
+	return TRUE;		/* done */
+}
+
+static void intDisplaySeqTextView(struct _widget *psWidget,
+				  UDWORD xOffset, UDWORD yOffset,
+				  UDWORD *pColours)
+{
+	W_TABFORM *Form = (W_TABFORM*)psWidget;
+	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY*)Form->pUserData;
+	size_t cur_seq, cur_seqpage;
+	UDWORD x0, y0, page;
+
+	x0 = xOffset + Form->x;
+	y0 = yOffset + Form->y;
+
+	RenderWindowFrame(&FrameNormal, x0, y0, Form->width, Form->height);
+
+	/* work out where we're up to in the text */
+	cur_seq = cur_seqpage = 0;
+	for (page = 0; page < Form->majorT; page++)
+	{
+		intDisplaySeqTextViewPage(psViewReplay, x0, y0,
+					  Form->width, Form->height,
+					  FALSE, &cur_seq, &cur_seqpage);
+	}
+
+	intDisplaySeqTextViewPage(psViewReplay, x0, y0,
+				  Form->width, Form->height,
+				  TRUE, &cur_seq, &cur_seqpage);
+}
 
 
 // Add all the Video Sequences for a message ... works on PC &  PSX
@@ -949,6 +1135,11 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		// If its a video sequence then play it anyway
 		if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
 		{
+
+			if (psMessage->pViewData)
+			{
+				intAddMessageView(psMessage);
+			}
 
 			StartMessageSequences(psMessage,TRUE);
 
@@ -1491,7 +1682,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		y = VIDEO_TEXT_TOP_Y;
 
 
-		seq_AddTextForVideo((UBYTE*)psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE, sequence); //startframe endFrame
+		seq_AddTextForVideo(psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE, sequence); //startframe endFrame
 
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
@@ -1499,7 +1690,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		i = 1;
 		while (i < psSeqDisplay->numText)
 		{
-			seq_AddTextForVideo((UBYTE*)psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE, sequence); //startframe endFrame
+			seq_AddTextForVideo(psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE, sequence); //startframe endFrame
 			//initialise after the first setting
 			x = y = 0;
 			i++;
@@ -2000,33 +2191,21 @@ void resetIntelligencePauseState(void)
 void _displayImmediateMessage(MESSAGE *psMessage)
 {
 
-
 	/*
 		This has to be changed to support a script calling a message in the intellegence screen
 
 	*/
 
-	DBPRINTF(("\n\n\n\n\n\nDisplayImmedMessage\n\n\n\n\n"));
-
-	// Need to unload the research strings because the movies need the memory.
-
-
 #ifdef NO_VIDEO
-	/* This sucks, but is better than nothing.. */
-	if (((VIEWDATA*)psMessage->pViewData)->type == VIEW_RPL) {
-	  VIEW_REPLAY	*psViewReplay;
-	  SEQ_DISPLAY	*psSeqDisplay;
-	  UDWORD	Sequence, i;
-
-	  psViewReplay = (VIEW_REPLAY*)((VIEWDATA*)psMessage->pViewData)->pData;
-	  for (Sequence = 0; Sequence < psViewReplay->numSeq; Sequence++) {
-	    psSeqDisplay = &psViewReplay->pSeqList[Sequence];
-	    for (i = 0; i < psSeqDisplay->numText; i++) {
-	      addConsoleMessage(psSeqDisplay->ppTextMsg[i], DEFAULT_JUSTIFY);
-	    }
-	  }
-	  return;
-	}
+	psCurrentMsg = psMessage;
+	/* so we lied about definately not starting the intelligence screen */
+	addIntelScreen();
+	/* reset mouse cursor, since addIntelScreen() doesn't do that */
+	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
+	frameSetCursorFromRes(IDC_DEFAULT);
+	/* addIntelScreen() (via addIntelMap()) actually starts
+	 * playing psCurrentMsg automatically */
+	return;
 #endif
 
 	StartMessageSequences(psMessage,TRUE);

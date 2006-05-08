@@ -34,7 +34,6 @@
  */
 /***************************************************************************/
 #define INCLUDE_AUDIO
-#define DUMMY_VIDEO
 #define RPL_WIDTH 640
 #define RPL_HEIGHT 480
 #define RPL_DEPTH 2	//bytes, 16bit
@@ -212,12 +211,6 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoMode, NULL, videoFrameTime, pDDPixelFormat, perfMode)) == FALSE)
 #endif
 		{
-#ifdef DUMMY_VIDEO
-			if ((bSeqPlaying = seq_SetSequenceForBuffer("noVideo.rpl", videoMode, NULL, time, pDDPixelFormat, perfMode)) == TRUE)
-			{
-				return TRUE;
-			}
-#endif
 			ASSERT((FALSE,"seq_RenderVideoToBuffer: unable to initialise sequence %s",aVideoName));
 			return FALSE;
 		}
@@ -366,7 +359,6 @@ BOOL seq_SetupVideoBuffers(void)
 
 void seq_SetVideoPath(void)
 {
-	char	aCDDrive[256] = "";
 #ifdef WIN32
 	WIN32_FIND_DATA findData;
 	HANDLE	fileHandle;
@@ -506,15 +498,8 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	if (!seq_SetSequence(aVideoName,screenGetSurface(), NULL, videoFrameTime + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
 #endif
 	{
-#ifdef DUMMY_VIDEO
-		if (seq_SetSequence("noVideo.rpl",screenGetSurface(), NULL, videoFrameTime + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
-		{
-			strcpy(aAudioName,"noVideo.wav");
-			return TRUE;
-		}
-#endif
 		seq_StopFullScreenVideo();
-//		ASSERT((FALSE,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName));
+		ASSERT((FALSE,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName));
 		return FALSE;
 	}
 	if (perfMode != VIDEO_PERF_SKIP_FRAMES)//JPS fix for video problems with some sound cards 9 may 99
@@ -666,7 +651,6 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 				//call sequence player to decode a frame
 				lpDDSF = screenGetSurface();
 				frame = seq_RenderOneFrame(lpDDSF, frameSkip, subMin, subMax);
-
 			}
 		}
 		else
@@ -777,7 +761,7 @@ BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight)
 #define MIN_JUSTIFICATION 40
 
 // add a string at x,y or add string below last line if x and y are 0
-BOOL seq_AddTextForVideo(UBYTE* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify, UDWORD PSXSeqNumber)
+BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify, UDWORD PSXSeqNumber)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;

@@ -3049,13 +3049,13 @@ BOOL scrGameOverMessage(void)
 
 	if (psMessage)
 	{
+		//we need to set this here so the VIDEO_QUIT callback is not called
+		setScriptWinLoseVideo((UBYTE)(gameOver ? PLAY_WIN : PLAY_LOSE));
+
 		//set the data
 		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
 		displayImmediateMessage(psMessage);
 		stopReticuleButtonFlash(IDRET_INTEL_MAP);
-
-        //we need to set this here so the VIDEO_QUIT callback is not called
-        setScriptWinLoseVideo((UBYTE)(gameOver ? PLAY_WIN : PLAY_LOSE));
 
         // Can't do this cos won't process windows stuff 
         // Wait for the video to finish.

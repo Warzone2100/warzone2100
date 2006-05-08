@@ -17,7 +17,7 @@
 #include "rpl_reader.h"
 #include "sequence.h"
 
-
+#define DUMMY_VIDEO
 
 RPL* current_sequence = NULL;
 unsigned int current_frame = 0;
@@ -64,7 +64,10 @@ void seq_start_sound(RPL* s) {
 // 3DFX_FULLSCREEN 640 * 480 BGR 565 mod
 BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpDS, int startTime, DDPIXELFORMAT	*DDPixelFormat, PERF_MODE perfMode)
 {
-	printf("seq_SetSequenceForBuffer %s\n", filename);
+#ifdef DUMMY_VIDEO
+	printf("seq_SetSequenceForBuffer %s -> noVideo.rpl\n", filename);
+	filename = "noVideo.rpl";
+#endif
 	if (current_sequence != NULL) {
 		rpl_close(current_sequence);
 	}
@@ -83,7 +86,10 @@ BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpD
  */
 BOOL seq_SetSequence(char* filename, LPDIRECTDRAWSURFACE4 lpDDSF, LPDIRECTSOUND lpDS, int startTime, char* lpBF, PERF_MODE perfMode)
 {
-	printf("seq_SetSequence %s\n", filename);
+#ifdef DUMMY_VIDEO
+	printf("seq_SetSequence %s -> noVideo.rpl\n", filename);
+	filename = "noVideo.rpl";
+#endif
 	if (current_sequence != NULL) {
 		rpl_close(current_sequence);
 	}
@@ -141,12 +147,17 @@ int	seq_RenderOneFrame(LPDIRECTDRAWSURFACE4	lpDDSF, int skip, SDWORD subMin, SDW
 	{
 		return VIDEO_FRAME_ERROR;
 	}
+#ifdef DUMMY_VIDEO
+	  if (++current_frame >= 1000)
+	    return VIDEO_FINISHED;
+#else
 	else if (++current_frame >= current_sequence->nb_chunks)
 	{
 //		seq_AddTextForVideo("<<hit ESC to continue>>", 0, 0, 399, 299);
 //		return VIDEO_FINISHED;	//For now, user must hit ESC to continue during mission briefings!
 		// temporary "fix".
 	}
+#endif
 	return current_frame;
 }
 

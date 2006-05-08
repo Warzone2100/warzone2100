@@ -2,6 +2,7 @@
 #define __RPL_READER_H__
 
 #include <stdio.h>
+#include <physfs.h>
 
 typedef struct RPL_chunk_info_t {
 	int offset;
@@ -10,7 +11,7 @@ typedef struct RPL_chunk_info_t {
 } RPL_chunk_info_t;
 
 typedef struct RPL {
-	FILE*			f;
+	PHYSFS_file*		f;
 
 	// Video attributes
 	int			width;

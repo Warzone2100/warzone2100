@@ -5,6 +5,7 @@
 #include "adpcm.h"
 #include "frame.h"
 #include "rpl_reader.h"
+#include <physfs.h>
 
 unsigned int rpl_decode_sound_none(RPL* rpl, short* buffer, unsigned int buffer_size);
 unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buffer_size);
@@ -31,58 +32,104 @@ void resize_data_buffer(unsigned int size) {
 
 //*************************************************************************************
 
+static char *readline(PHYSFS_file *f, char *linebuf, size_t len) {
+	char c;
+	size_t i = 0;
+
+	for (i = 0; i < len-1; i++) {
+		if (PHYSFS_read(f, &c, 1, 1) != 1) {
+			DBERROR(("Error reading from sequence file: %s\n",
+				 PHYSFS_getLastError()));
+			break;
+		}
+		if (c == '\n' || !isprint(c))
+			break;
+		linebuf[i] = c;
+	}
+
+	linebuf[i] = '\0';
+}
+
+static int readint(PHYSFS_file *f, char *linebuf, size_t len) {
+	int num;
+	readline(f, linebuf, len);
+	if (sscanf(linebuf, "%u", &num) < 1)
+		num = 0;
+	return num;
+}
+
+static float readfloat(PHYSFS_file *f, char *linebuf, size_t len) {
+	float num;
+	readline(f, linebuf, len);
+	if (sscanf(linebuf, "%f", &num) < 1)
+		num = 0.0;
+	return num;
+}
+
 RPL*
 rpl_open(char* filename) {
-	FILE* f = fopen(filename, "rb");						//Hmm...open from .wz or not?
-	RPL* rpl;														//it is only looking for novideo.rpl for right now.
-	char buffer[512];											//The only issue I see, if we use a memory buffer,
-	int tmp;															//and the video is too large, some system may
-																		//run out of memory. So we may have to redo this
-	if (f == NULL) {												//routine when we change vid formats. -Q
+	PHYSFS_file* f;
+	RPL* rpl;
+	char buf[80];
+	int tmp;
+	int ret;
+	size_t len = sizeof(buf);
+
+	/* FIXME: we should just clean up our data */
+	for (tmp = 0; tmp < strlen(filename); tmp++) {
+		if (filename[tmp] == '\\')
+			filename[tmp] = '/';
+	}
+
+	f = PHYSFS_openRead(filename);
+	if (f == NULL) {
+		DBPRINTF(("Error reading %s: %s\n",
+			  filename, PHYSFS_getLastError()));
 		return NULL;
 	}
+
+	/* going to do lots of small reads, so use a buffer */
+	PHYSFS_setBuffer(f, 1024);
 
 	rpl = (RPL*)malloc(sizeof(RPL));
 	rpl->chunks = NULL;
 
 	rpl->f = f;
 
-	fgets(buffer, 511, rpl->f);
-	fgets(buffer, 511, rpl->f);
-	fgets(buffer, 511, rpl->f);
-	fgets(buffer, 511, rpl->f);
+	if (strcmp(readline(f, buf, len), "ARMovie") != 0)
+		DBPRINTF(("%s missing RPL magic number\n", filename));
+	readline(f, buf, len); /* discard filename */
+	readline(f, buf, len); /* discard copyright */
+	if (strcmp(readline(f, buf, len), "ESCAPE 2.0") != 0)
+		/* This field is really "author", but.. */
+		DBPRINTF(("%s not in \"ESCAPE 2.0\" format?\n", filename));
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &tmp);
+
+	tmp = readint(f, buf, len);
 	switch (tmp) {
 		case 130:
 			rpl->video_decoder = dec130_decode;
 			break;
 		default:
 			rpl->video_decoder = rpl_decode_video_unknown;
-			printf("Unknown sound format %i\n", tmp);
+			printf("Unknown video format %i\n", tmp);
 			break;
 	}
 	
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->width);
+	rpl->width = readint(f, buf, len);
 	//printf("width : %i\n", rpl->width); 
-	
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->height);
+
+	rpl->height = readint(f, buf, len);
 	//printf("height : %i\n", rpl->height); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->bpp);
+	rpl->bpp = readint(f, buf, len);
 	//printf("bpp : %i\n", rpl->bpp); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%f", &rpl->fps);
+	rpl->fps = readfloat(f, buf, len);
 	//printf("fps : %f\n\n", rpl->fps); 
 	rpl->current_video_frame = 0;
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &tmp);
+	tmp = readint(f, buf, len);
 	switch (tmp) {
 		case 0:
 			rpl->sound_decoder = rpl_decode_sound_none;
@@ -99,50 +146,38 @@ rpl_open(char* filename) {
 			break;
 	}
 	rpl->current_sound_frame = 0;
-	
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->samples);
+
+	rpl->samples = readint(f, buf, len);
 	//printf("samples : %i\n", rpl->samples); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->channels);
+	rpl->channels = readint(f, buf, len);
 	//printf("channels : %i\n", rpl->channels); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->bps);
+	rpl->bps = readint(f, buf, len);
 	//printf("bits per sample : %i\n\n", rpl->bps); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->fpc);
+	rpl->fpc = readint(f, buf, len);
 	//printf("frames per chunk : %i\n", rpl->fpc); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->nb_chunks);
-	rpl->nb_chunks++;
+	rpl->nb_chunks = readint(f, buf, len) + 1;
 	//printf("chunks : %i\n", rpl->nb_chunks); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->ocs);
+	rpl->ocs = readint(f, buf, len);
 	//printf("odd chunk size : %i\n", rpl->ocs); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->ecs);
+	rpl->ecs = readint(f, buf, len);
 	//printf("even chunk size : %i\n", rpl->ecs); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->otcc);
+	rpl->otcc = readint(f, buf, len);
 	//printf("offset to chunk cat : %i\n\n", rpl->otcc); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->ots);
+	rpl->ots = readint(f, buf, len);
 	//printf("offset to sprite : %i\n", rpl->ots); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->sprite_size);
+	rpl->sprite_size = readint(f, buf, len);
 	//printf("size of sprite : %i\n\n", rpl->sprite_size); 
 
-	fgets(buffer, 511, rpl->f);
-	sscanf(buffer, "%i", &rpl->otkf);
+	rpl->otkf = readint(f, buf, len);
 	//printf("offset to key frames : %i\n", rpl->otkf); 
 
 	{
@@ -150,11 +185,11 @@ rpl_open(char* filename) {
 		unsigned int max_video_size = 0;
 
 		rpl->chunks = malloc(sizeof(RPL_chunk_info_t)*rpl->nb_chunks);
-		fseek(rpl->f, rpl->otcc, SEEK_SET);
+		PHYSFS_seek(f, rpl->otcc);
 
 		for (i = 0; i < rpl->nb_chunks; ++i) {
-			fgets(buffer, 511, rpl->f);
-			if (sscanf(buffer, "%i,%i;%i", &rpl->chunks[i].offset, &rpl->chunks[i].video_size, &rpl->chunks[i].audio_size) != 3) {
+			readline(f, buf, len);
+			if (sscanf(buf, "%i,%i;%i", &rpl->chunks[i].offset, &rpl->chunks[i].video_size, &rpl->chunks[i].audio_size) != 3) {
 				printf("Error in chunk catalog\n");
 				goto error;
 			}
@@ -196,8 +231,8 @@ unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buff
 	tmp = audio_buffer;
 
 	for (i = 0; i < rpl->nb_chunks; ++i) {
-		fseek(rpl->f, rpl->chunks[i].offset+rpl->chunks[i].video_size, SEEK_SET);
-		fread(tmp, rpl->chunks[i].audio_size, 1, rpl->f);
+		PHYSFS_seek(rpl->f, rpl->chunks[i].offset+rpl->chunks[i].video_size);
+		PHYSFS_read(rpl->f, tmp, rpl->chunks[i].audio_size, 1);
 		tmp += rpl->chunks[i].audio_size;
 	}
 
@@ -224,8 +259,8 @@ unsigned int rpl_decode_sound_raw(RPL* rpl, short* buffer, unsigned int buffer_s
 		if (size + (audio_frame_size >> 1) > buffer_size) {
 			break;
 		}
-		fseek(rpl->f, rpl->chunks[cf].offset+rpl->chunks[cf].video_size, SEEK_SET);
-		fread(tmp, audio_frame_size, 1, rpl->f);
+		PHYSFS_seek(rpl->f, rpl->chunks[cf].offset+rpl->chunks[cf].video_size);
+		PHYSFS_read(rpl->f, tmp, audio_frame_size, 1);
 		tmp += audio_frame_size >> 1;
 		size += audio_frame_size >> 1;
 		rpl->current_sound_frame++;
@@ -255,8 +290,8 @@ unsigned int rpl_decode_sound_adpcm(RPL* rpl, short* buffer, unsigned int buffer
 			free(tmp_buffer);
 			tmp_buffer = malloc(tmp_buffer_size);
 		}
-		fseek(rpl->f, rpl->chunks[cf].offset+rpl->chunks[cf].video_size, SEEK_SET);
-		fread(tmp_buffer, audio_frame_size, 1, rpl->f);
+		PHYSFS_seek(rpl->f, rpl->chunks[cf].offset+rpl->chunks[cf].video_size);
+		PHYSFS_read(rpl->f, tmp_buffer, audio_frame_size, 1);
 		adpcm_decode(tmp_buffer, audio_frame_size, &tmp);
 		size += audio_frame_size << 1;
 		rpl->current_sound_frame++;
@@ -282,16 +317,16 @@ unsigned int rpl_decode_video_unknown(RPL* rpl, char* in, unsigned int in_size, 
 
 int rpl_decode_next_image(RPL* rpl, char* buffer)
 {
-	unsigned int data_size = rpl->chunks[rpl->current_video_frame].video_size;
+	unsigned int data_size;
 
 	if (rpl->current_video_frame >= rpl->nb_chunks) {
 		return -1;
 	}
 
-//	unsigned int data_size = rpl->chunks[rpl->current_video_frame].video_size;		//can't have this here in .c rules that is. ;)
+	data_size = rpl->chunks[rpl->current_video_frame].video_size;
 
-	fseek(rpl->f, rpl->chunks[rpl->current_video_frame].offset, SEEK_SET);
-	fread(data_buffer, data_size, 1, rpl->f);
+	PHYSFS_seek(rpl->f, rpl->chunks[rpl->current_video_frame].offset);
+	PHYSFS_read(rpl->f, data_buffer, data_size, 1);
 
 	rpl->video_decoder(rpl, data_buffer, data_size, buffer);
 
@@ -301,7 +336,7 @@ int rpl_decode_next_image(RPL* rpl, char* buffer)
 void
 rpl_close(RPL* rpl) {
 	if (rpl != NULL) {
-		fclose(rpl->f);
+		PHYSFS_close(rpl->f);
 		free(rpl->chunks);
 		free(rpl);
 	}

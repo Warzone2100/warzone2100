@@ -53,7 +53,7 @@ extern BOOL	seq_SetupVideoBuffers(void);
 extern BOOL	seq_ReleaseVideoBuffers(void);
 extern BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
 //text
-extern BOOL seq_AddTextForVideo(UBYTE* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SDWORD bJustify, UDWORD PSXSeqNumber);
+extern BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SDWORD bJustify, UDWORD PSXSeqNumber);
 extern BOOL seq_ClearTextForVideo(void);
 //clear the sequence list
 extern void seq_ClearSeqList(void);
