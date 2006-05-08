@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
 	SDWORD			introVideoControl = 3;
 	int			loopStatus = 0;
 	iColour*		psPaletteBuffer;
-	SDWORD			pSize;
+	UDWORD			pSize;
 
 	/*** Initialize the debug subsystem ***/
 	/* Debug stuff for .net, don't delete :) */
@@ -378,7 +378,7 @@ init://jump here from the end if re_initialising
 		DBERROR(("Out of memory"));
 		return -1;
 	}
-	if (!loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, (256 * sizeof(iColour)+1),(UDWORD*)&pSize))
+	if (!loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
 	{
 		DBERROR(("Couldn't load palette data"));
 		return -1;
