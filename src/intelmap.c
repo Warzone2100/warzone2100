@@ -1228,6 +1228,8 @@ void intCleanUpIntelMap(void)
 
 	cdAudio_Resume();
 
+	// FIXME: NOT SURE IT'S CORRECT. this makes the transports come.
+        eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
 }
 
 
