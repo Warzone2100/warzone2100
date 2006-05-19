@@ -1,0 +1,12 @@
+Easy bugs to fix:
+
+bug #5097: CPU Hog
+	Reduce the amount of main-loop-runs to a reasonable number (eg 50),
+	so we don't eat up the whole CPU time.
+	Advanced code could be taken from the SDL_gfx project (http://www.ferzkopp.net/Software/SDL_gfx-2.0/).
+	The really simple solution would be a kind of SDL_Delay(1000/FPS).
+	
+	Framerate calculation currently takes place in lib/framework/frame.c:103+
+	Main loop resides in src/main.c:486+
+
+	Details: https://gna.org/bugs/index.php?func=detailitem&item_id=5097
