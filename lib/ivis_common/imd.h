@@ -23,9 +23,8 @@
 
 //*************************************************************************
 
-#define iV_IMD_MAX_POINTS	256
-#define iV_IMD_MAX_POLYS	256
-#define iV_IMD_MAX_TEXANIM	256
+#define iV_IMD_MAX_POINTS	512 // increased from 256 - Per, May 20th 2006
+#define iV_IMD_MAX_POLYS	512 // increased from 256 - Per, May 20th 2006
 
 //*************************************************************************
 
