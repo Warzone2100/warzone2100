@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "piedef.h"
 
 /***************************************************************************/
@@ -82,4 +82,4 @@ extern void pie_ResetBackDrop(void);
 
 void    bufferTo16Bit(UBYTE *origBuffer,UWORD *newBuffer, BOOL b3DFX);
 
-#endif // 
+#endif //

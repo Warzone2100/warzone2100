@@ -10,7 +10,7 @@
 #ifndef _pieTypes_h
 #define _pieTypes_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 /***************************************************************************/
 /***************************************************************************/
@@ -63,7 +63,7 @@ typedef struct {int32 x, y;} iPoint32;
 	typedef struct {double x, y, z;} iVectorf;
 	typedef struct {int xshift, width, height; iBitmap *bmp;
 			iColour *pPal; iBool bColourKeyed; } iTexture;
-	typedef struct {int32 x, y, z, u, v; uint8 g;} iVertex; 
+	typedef struct {int32 x, y, z, u, v; uint8 g;} iVertex;
 
 typedef struct {FRACT x,y,z;} PIEVECTORF;
 typedef struct {iVector p, r;} iView;

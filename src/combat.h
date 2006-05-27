@@ -7,7 +7,7 @@
 #ifndef _combat_h
 #define _combat_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 
 /* The range out of which the random number for the to hit should be taken */
@@ -31,7 +31,7 @@ extern BOOL combShutdown(void);
 /* Fire a weapon at something */
 extern void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
-/*checks through the target players list of structures and droids to see 
+/*checks through the target players list of structures and droids to see
 if any support a counter battery sensor*/
 extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 

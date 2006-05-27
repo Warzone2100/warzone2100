@@ -9,16 +9,16 @@
 //#define DEBUG_GROUP0
 // script order printf's
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "group.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptai.h"
 #include "order.h"
 #include "map.h"
 #include "cluster.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "cmddroid.h"
 #include "projectile.h"
 #include "research.h"
@@ -815,7 +815,7 @@ BOOL scrSetDroidTarPref(void)
 			 (SCR_DT_HOVER			== pref) ,
 		"scrSetUnitTarPref: unknown target preference"));
 
-	
+
 	scrDroidPref |= pref;
 
 	return TRUE;
@@ -1124,7 +1124,7 @@ BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD tarType,
 			"scrTargetInArea: invalid target player number"));
 		return NULL;
 	}
-	
+
 	if (x1 > x2)
 	{
 		temp = x2;
@@ -1398,14 +1398,14 @@ BOOL scrSkCanBuildTemplate(void)
 		if( apCompLists[player][COMP_ECM][psTempl->asParts[COMP_ECM]] != AVAILABLE )
 		{
 			goto failTempl;
-		}	
+		}
 		break;
 	case DROID_REPAIR:
 		if( apCompLists[player][COMP_REPAIRUNIT][psTempl->asParts[COMP_REPAIRUNIT]] != AVAILABLE )
 		{
 			goto failTempl;
 		}
-		break;	
+		break;
 
 	case DROID_COMMAND:
 	case DROID_CONSTRUCT:	        // Constructor droid
@@ -1414,7 +1414,7 @@ BOOL scrSkCanBuildTemplate(void)
     case DROID_CYBORG_REPAIR:		// cyborg-repair thang
 	case DROID_TRANSPORTER:	        // guess what this is!
 	case DROID_DEFAULT:		        // Default droid
-	case DROID_ANY:		
+	case DROID_ANY:
 	default:
 		DBERROR(("scrSkCanBuildTemplate: Unhandled template type"));
 		break;
@@ -1446,11 +1446,11 @@ BOOL scrSkLocateEnemy(void)
 	{
 		return FALSE;
 	}
-	
+
 	// find where the player has some structures..	// factories or hq.
 	for(psStruct=apsStructLists[player];
-		psStruct && 
-			!( psStruct->pStructureType->type == REF_HQ	
+		psStruct &&
+			!( psStruct->pStructureType->type == REF_HQ
 			|| psStruct->pStructureType->type == REF_FACTORY
 			|| psStruct->pStructureType->type == REF_CYBORG_FACTORY
 			|| psStruct->pStructureType->type == REF_VTOL_FACTORY
@@ -1481,7 +1481,7 @@ BOOL scrSkLocateEnemy(void)
 BOOL skTopicAvail(UWORD inc, UDWORD player)
 {
 	UDWORD				incPR, incS;
-	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[player]; 
+	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[player];
 	BOOL				bPRFound, bStructFound;
 
 
@@ -1494,11 +1494,11 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 		}
 	}
 
-	// make sure that the research is not completed  or started by another researchfac 
+	// make sure that the research is not completed  or started by another researchfac
 	if ((IsResearchCompleted(&pPlayerRes[inc])==FALSE) && (IsResearchStarted(&pPlayerRes[inc])==FALSE))
 	{
 		// Research is not completed  ... also  it has not been started by another researchfac
-		
+
 		//if there aren't any PR's - go to next topic
 		if (!asResearch[inc].numPRRequired)
 		{
@@ -1525,7 +1525,7 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 		//check for structure effects
 		bStructFound = TRUE;
 		for (incS = 0; incS < asResearch[inc].numStructures; incS++)
-		{	
+		{
 			//if (!checkStructureStatus(asStructureStats + asResearch[inc].
 			//	pStructList[incS], playerID, SS_BUILT))
 			if (!checkSpecificStructExists(asResearch[inc].pStructList[incS],
@@ -1579,7 +1579,7 @@ BOOL scrSkDoResearch(void)
 	{
 		if( skTopicAvail(i,player) )
 		{
-			break;		
+			break;
 		}
 	}
 
@@ -1590,7 +1590,7 @@ BOOL scrSkDoResearch(void)
 		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
 
 		if (IsResearchCancelled(pPlayerRes))
-		{	
+		{
 			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
 		}
 		else
@@ -1619,7 +1619,7 @@ BOOL scrSkDoResearch(void)
 	if(i != numResearch)
 	{
 		researchResult(i,(UBYTE)player,FALSE);
-		
+
 		sprintf(sTemp,"player:%d did topic: %s",player, asResearch[i].pName );
 		NETlogEntry(sTemp,0,0);
 
@@ -1628,9 +1628,9 @@ BOOL scrSkDoResearch(void)
 
 	// set delay for next topic.
 
-	
+
 	timeToResearch = (asResearch+i)->researchPoints / ((RESEARCH_FACILITY*)psResearch->pFunctionality)->researchPoints;;
-	
+
 	if (!stackPushResult(VAL_INT, timeToResearch))		// return time to do it..
 	{
 		return FALSE;
@@ -1658,8 +1658,8 @@ BOOL scrSkVtolEnableCheck(void)
 	{
 		// vtol propulsion
 		for(i=0;(i<numPropulsionStats);i++)
-		{	
-			if((asPropulsionStats[i].propulsionType == LIFT) 
+		{
+			if((asPropulsionStats[i].propulsionType == LIFT)
 			 && apCompLists[player][COMP_PROPULSION][i] == AVAILABLE)
 			{
 				if (!stackPushResult(VAL_BOOL, TRUE))		// success!
@@ -1680,7 +1680,7 @@ BOOL scrSkVtolEnableCheck(void)
 
 // ********************************************************************************************
 BOOL scrSkGetFactoryCapacity(void)
-{	
+{
 	SDWORD count=0,structure;
 	STRUCTURE *psStructure;
 
@@ -1715,7 +1715,7 @@ BOOL scrSkDifficultyModifier(void)
 	}
 
 	// power modifier
-	amount = game.skDiff[player]*40;		//(0-20)*25			
+	amount = game.skDiff[player]*40;		//(0-20)*25
 	if(amount > 0)
 	{
 		addPower(player,amount);
@@ -1743,7 +1743,7 @@ BOOL scrSkDifficultyModifier(void)
             //add 0-60% to the amount required to research
             if (psResFacility->psSubject)
             {
-                pPlayerRes = asPlayerResList[player] + 
+                pPlayerRes = asPlayerResList[player] +
                     (((RESEARCH *)psResFacility->psSubject)->ref - REF_RESEARCH_START);
                 pPlayerRes->currentPoints += ((((RESEARCH *)psResFacility->psSubject)->
                     researchPoints * 3 * game.skDiff[player])/100);
@@ -1753,7 +1753,7 @@ BOOL scrSkDifficultyModifier(void)
 	}
 
 	//free stuff??
-		
+
 
 	return TRUE;
 }
@@ -1772,8 +1772,8 @@ BOOL scrSkDefenseLocation(void)
 	BOOL		noWater;
 
 	if (!stackPopParams(6,
-						VAL_REF|VAL_INT, &pX, 
-						VAL_REF|VAL_INT, &pY,	
+						VAL_REF|VAL_INT, &pX,
+						VAL_REF|VAL_INT, &pY,
 						ST_STRUCTURESTAT, &statIndex,
 						ST_STRUCTURESTAT, &statIndex2,
 						ST_DROID, &psDroid,
@@ -1792,7 +1792,7 @@ BOOL scrSkDefenseLocation(void)
 	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
 
     // check for wacky coords.
-	if(		*pX < 0 
+	if(		*pX < 0
 		||	*pX > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	*pY < 0
 		||	*pY > (SDWORD)(mapHeight<<TILE_SHIFT)
@@ -1949,7 +1949,7 @@ BOOL scrSkDefenseLocation(void)
 	{
 		orderDroidStatsTwoLocAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3,x4,y4);
 	}
-	
+
 	return TRUE;
 
 failed:
@@ -2055,7 +2055,7 @@ BOOL skInitSkirmishTemplates(void)
 
 // add template
 BOOL skAddTemplate(void)
-{	
+{
 	SKIRMISHSTORE *psT;
 
 	SDWORD			stempl,index,pile;
@@ -2072,7 +2072,7 @@ BOOL skAddTemplate(void)
 	{
 		goto fail;
 	}
-	psT->index			= index;	
+	psT->index			= index;
 	psT->psTempl		= psTempl;
 	psT->psNext			= skirmishStore[pile];
 	skirmishStore[pile] = psT;

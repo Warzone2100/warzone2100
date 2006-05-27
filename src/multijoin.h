@@ -1,11 +1,11 @@
 /*
- * Multijoin.h 
- * 
- * Alex Lee, pumpkin studios, 
+ * Multijoin.h
+ *
+ * Alex Lee, pumpkin studios,
  * multijoin caters for all the player comings and goings of each player
  */
 
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 
 extern BOOL sendVersionCheck			();
 extern BOOL recvVersionCheck			(NETMSG *pMsg);

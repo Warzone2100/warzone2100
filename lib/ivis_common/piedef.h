@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "ivisdef.h"
 #include "ivispatch.h"
 

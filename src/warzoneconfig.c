@@ -7,9 +7,9 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "warzoneconfig.h"
-#include "piestate.h"
+#include "lib/ivis_common/piestate.h"
 #include "advvis.h"
 
 /***************************************************************************/

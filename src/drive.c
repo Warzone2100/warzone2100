@@ -2,15 +2,15 @@
 // Drive.c
 //
 // Routines for player driving units about the map.
-//							   
+//
 
 #define DEFINE_DRIVE_INLINE
 
 #include <stdio.h>
 #include <math.h>
-#include "imd.h"
-#include "vid.h"
-#include "frame.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "move.h"
 #include "findpath.h"
@@ -18,11 +18,11 @@
 #include "map.h"
 #include "fpath.h"
 #include "loop.h"
-#include "gtime.h"
-#include "audio.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "geometry.h"
-#include "animobj.h"
+#include "lib/gamelib/animobj.h"
 #include "anim_id.h"
 #include "formationdef.h"
 #include "formation.h"
@@ -33,7 +33,7 @@
 #include "mapgrid.h"
 #include "display.h"	// needed for widgetsOn flag.
 #include "effects.h"
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 #include "hci.h"
 #include "warcam.h"
 #include "radar.h"
@@ -44,8 +44,8 @@
 #include "intdisplay.h"
 
 // all the bollox needed for script callbacks
-#include "interp.h"				// needed to define types in scripttabs.h
-#include "parse.h"				// needed to define types in scripttabs.h (Arse!)
+#include "lib/script/interp.h"				// needed to define types in scripttabs.h
+#include "lib/script/parse.h"				// needed to define types in scripttabs.h (Arse!)
 #include "scripttabs.h"			// needed to define the callback
 #include "scriptextern.h"		// needed to include the GLOBAL for checking bInTutorial
 #include "group.h"
@@ -54,7 +54,7 @@
 
 #define DRIVEFIXED
 #define DRIVENOISE		// Enable driving noises.
-#define ENGINEVOL (0xfff)									   
+#define ENGINEVOL (0xfff)
 #define MINPITCH (768)
 #define PITCHCHANGE (512)
 
@@ -468,7 +468,7 @@ void driveNextDriver(void)
 
 //	if(!Found) {
 		// Not found so start at the begining.
-		for(psDroid = apsDroidLists[selectedPlayer]; 
+		for(psDroid = apsDroidLists[selectedPlayer];
 			psDroid && (psDroid != psDrivenDroid);
 			psDroid = psDroid->psNext) {
 
@@ -511,7 +511,7 @@ static BOOL driveControl(DROID *psDroid)
 			driveDir += 360;
 		}
 		Input = TRUE;
-	} 
+	}
 
 	driveDir = driveDir % 360;
 
@@ -563,7 +563,7 @@ static BOOL driveControl(DROID *psDroid)
 
 static BOOL driveInDriverRange(DROID *psDroid)
 {
-	if( (abs(psDroid->x-psDrivenDroid->x) < FOLLOW_STOP_RANGE) && 
+	if( (abs(psDroid->x-psDrivenDroid->x) < FOLLOW_STOP_RANGE) &&
 		(abs(psDroid->y-psDrivenDroid->y) < FOLLOW_STOP_RANGE) ) {
 		return TRUE;
 	}
@@ -655,7 +655,7 @@ void driveUpdate(void)
 					ASSERT(((psDrivenDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter"));
 					driveDir = psDrivenDroid->direction % 360;
 				}
-				
+
 				DoFollowRangeCheck = TRUE;
 			}
 
@@ -675,7 +675,7 @@ void driveUpdate(void)
 						(psDroid != psDrivenDroid) &&
 						(psDroid->droidType != DROID_TRANSPORTER) &&
 						//((psPropStats->propulsionType != LIFT) || (psDroid->droidType == DROID_CYBORG)) ) {
-                        ((psPropStats->propulsionType != LIFT) || cyborgDroid(psDroid)) ) 
+                        ((psPropStats->propulsionType != LIFT) || cyborgDroid(psDroid)) )
                     {
 						// Send new orders to it's followers.
 						driveMoveFollower(psDroid);

@@ -9,7 +9,7 @@
 #include <math.h>
 #include <assert.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 //#include "widget.h"
 
 #include "objects.h"
@@ -18,15 +18,16 @@
 #include "map.h"
 #include "radar.h"
 /* Includes direct access to render library */
-#include "ivisdef.h"
-#include "piestate.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/piestate.h"
 
-#include "piemode.h"			// ffs
-#include "pieclip.h"			// ffs 
-#include "pieblitfunc.h"
+#include "lib/ivis_common/piemode.h"			// ffs
+#include "lib/ivis_common/pieclip.h"			// ffs
+#include "lib/ivis_common/pieblitfunc.h"
 
-#include "vid.h"
-#include "geo.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/geo.h"
 
 #include "display3d.h"
 #include "edit3d.h"
@@ -34,14 +35,14 @@
 #include "structure.h"
 #include "research.h"
 #include "function.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "stats.h"
 #include "game.h"
 #include "power.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 #include "order.h"
 #include "frontend.h"
 #include "intimage.h"
@@ -149,8 +150,8 @@ BASE_STATS *CurrentStatsTemplate = NULL;
 
 	{NULL,-1},
 };*/
- 
- 
+
+
 UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
 
@@ -231,7 +232,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 				ASSERT((Droid->asBits[COMP_CONSTRUCT].nStat,"intUpdateProgressBar: invalid droid type"));
 				Structure = DroidGetBuildStructure(Droid);				// Get the structure it's building.
 //				ASSERT((Structure != NULL,"intUpdateProgressBar : NULL Structure pointer."));
-				if(Structure) 
+				if(Structure)
                 {
 				    //check if have all the power to build yet
                     BuildPower = structPowerToBuild(Structure);
@@ -263,8 +264,8 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 					}
     				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
 					BarGraph->style &= ~WIDG_HIDDEN;
-				} 
-                else 
+				}
+                else
                 {
 					BarGraph->majorSize = 0;
 					BarGraph->style |= WIDG_HIDDEN;
@@ -308,7 +309,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 					}
 					else
 					{
-						BuildPoints = (gameTime - Manufacture->timeStarted) / 
+						BuildPoints = (gameTime - Manufacture->timeStarted) /
 							GAME_TICKS_PER_SEC;
 					}
 				}
@@ -347,7 +348,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 					//if on hold need to take it into account
 					if (Research->timeStartHold)
 					{
-						
+
 						BuildPoints = ((RESEARCH_FACILITY*)Structure->pFunctionality)->
                             researchPoints * (gameTime - (Research->timeStarted + (
                             gameTime - Research->timeStartHold))) / GAME_TICKS_PER_SEC;
@@ -361,7 +362,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 					{
 
 				    	BuildPoints = ((RESEARCH_FACILITY*)Structure->pFunctionality)->
-                            researchPoints * (gameTime - Research->timeStarted) / 
+                            researchPoints * (gameTime - Research->timeStarted) /
                             GAME_TICKS_PER_SEC;
 
 				    	BuildPoints+= pPlayerRes->currentPoints;
@@ -400,10 +401,10 @@ void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
 	Structure = (STRUCTURE*)psObj;
 
 	if( (psObj != NULL) &&
-		(psObj->type == OBJ_STRUCTURE) && (StructureIsManufacturing(Structure)) ) 
+		(psObj->type == OBJ_STRUCTURE) && (StructureIsManufacturing(Structure)) )
 	{
 		ASSERT((!psObj->died,"intUpdateQuantity: object is dead"));
-	
+
 		/*Quantity = StructureGetFactory(Structure)->quantity;
 		if (Quantity == NON_STOP_PRODUCTION)
 		{
@@ -417,7 +418,7 @@ void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
 		}*/
 
 		psTemplate = (DROID_TEMPLATE *)StructureGetFactory(Structure)->psSubject;
-   		//Quantity = getProductionQuantity(Structure, psTemplate) - 
+   		//Quantity = getProductionQuantity(Structure, psTemplate) -
 		//					getProductionBuilt(Structure, psTemplate);
         Quantity = getProductionQuantity(Structure, psTemplate);
         Remaining = getProductionBuilt(Structure, psTemplate);
@@ -435,8 +436,8 @@ void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
 			Label->aText[1] = (UBYTE)('0'+Quantity % 10);
 		}
 		Label->style &= ~WIDG_HIDDEN;
-	} 
-	else 
+	}
+	else
 	{
 		Label->style |= WIDG_HIDDEN;
 	}
@@ -462,7 +463,7 @@ void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext)
 
 		ASSERT(((Structure->pStructureType->type == REF_FACTORY OR
 			Structure->pStructureType->type == REF_CYBORG_FACTORY OR
-			Structure->pStructureType->type == REF_VTOL_FACTORY), 
+			Structure->pStructureType->type == REF_VTOL_FACTORY),
 			"intAddFactoryInc: structure is not a factory"));
 
 		Label->aText[0] = (UBYTE)('0' + (((FACTORY *)Structure->pFunctionality)->
@@ -733,7 +734,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	{
 		Used = 0;
 	}
-	
+
 	Total = Avail + Used;*/
 
 	/*if(ManPow > Avail) {
@@ -751,7 +752,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 	//if(Total > BarGraph->width) {				// If total size greater than bar size then scale values.
-	if(Avail > BarWidth) {				
+	if(Avail > BarWidth) {
 		//Used = PERNUM(BarGraph->width,Used,Total);
 		//ManPow = PERNUM(BarGraph->width,ManPow,Total);
 		//Avail = BarGraph->width - Used;
@@ -802,7 +803,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	x0 += Used;*/
 
 	//fill in the empty section behind text
-	if(textWidth > 0) 
+	if(textWidth > 0)
 	{
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
 							x0,y0,
@@ -834,7 +835,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	x0 += ManPow;
 
 	//draw the available section if any!
-	if(Avail-ManPow > 0) 
+	if(Avail-ManPow > 0)
 	{
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_AVAIL,
 							x0,y0,
@@ -845,7 +846,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 	//fill in the rest with empty section
-	if(Empty > 0) 
+	if(Empty > 0)
 	{
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
 							x0,y0,
@@ -983,7 +984,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 								Stats = (BASE_STATS*)Buffer->Data2;
 								if(Stats) {
 									/*StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object,FALSE);
-									//if Object != NULL the there must be a IMD so set the object to 
+									//if Object != NULL the there must be a IMD so set the object to
 									//equal the Research stat
 									if (Object != NULL)
 									{
@@ -995,7 +996,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 		    						{
 			    						bOnHold = TRUE;
 				    				}
-                                    StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object, 
+                                    StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object,
                                         &psResGraphic, FALSE);
                                     if (psResGraphic)
                                     {
@@ -1020,7 +1021,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 				                            }
                                             else
                                             {
-                                                ASSERT((FALSE, 
+                                                ASSERT((FALSE,
                                                     "intDisplayStatsButton:Invalid Stat for research button"));
                                                 Object = NULL;
                                                 IMDType = IMDTYPE_RESEARCH;
@@ -1030,7 +1031,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
                                     else
                                     {
                                         //no Stat for this research topic so just use the graphic provided
-                                        //if Object != NULL the there must be a IMD so set the object to 
+                                        //if Object != NULL the there must be a IMD so set the object to
                                         //equal the Research stat
                                         if (Object != NULL)
                                         {
@@ -1049,7 +1050,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 				default:
 					ASSERT((FALSE, "intDisplayObjectButton: invalid structure type"));
 			}
-		} else 
+		} else
 		{
 			RENDERBUTTON_INITIALISED(Buffer);
 		}
@@ -1236,24 +1237,24 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 
 		ButtonDrawXOffset = ButtonDrawYOffset = 0;
 
-		if(Stat) 
+		if(Stat)
 		{
-			if(StatIsStructure(Stat)) 
+			if(StatIsStructure(Stat))
 			{
 //				IMDType = IMDTYPE_STRUCTURE;
 //				Object = (void*)StatGetStructureIMD(Stat,selectedPlayer);
 				Object = (void*)Stat;
 				Player = selectedPlayer;
 				IMDType = IMDTYPE_STRUCTURESTAT;
-			} 
-			else if(StatIsTemplate(Stat)) 
+			}
+			else if(StatIsTemplate(Stat))
 			{
 				IMDType = IMDTYPE_DROIDTEMPLATE;
 				Object = (void*)Stat;
-			} 
-			else 
+			}
+			else
 			{
-				//if(StatIsComponent(Stat)) 
+				//if(StatIsComponent(Stat))
 				//{
 				//	IMDType = IMDTYPE_COMPONENT;
 				//	Shape = StatGetComponentIMD(Stat);
@@ -1264,11 +1265,11 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 					IMDType = IMDTYPE_COMPONENT;
 					Object = (void*)Stat;	//StatGetComponentIMD(Stat, compID);
 				}
-				else if(StatIsResearch(Stat)) 
+				else if(StatIsResearch(Stat))
 				{
 					/*IMDType = IMDTYPE_RESEARCH;
 					StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object,TRUE);
-					//if Object != NULL the there must be a IMD so set the object to 
+					//if Object != NULL the there must be a IMD so set the object to
 					//equal the Research stat
 					if (Object != NULL)
 					{
@@ -1298,7 +1299,7 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 				            }
                             else
                             {
-                                ASSERT((FALSE, 
+                                ASSERT((FALSE,
                                     "intDisplayStatsButton:Invalid Stat for research button"));
                                 Object = NULL;
                                 IMDType = IMDTYPE_RESEARCH;
@@ -1308,7 +1309,7 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
                     else
                     {
                         //no Stat for this research topic so just use the graphic provided
-                        //if Object != NULL the there must be a IMD so set the object to 
+                        //if Object != NULL the there must be a IMD so set the object to
                         //equal the Research stat
                         if (Object != NULL)
                         {
@@ -1319,15 +1320,15 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 				}
 			}
 
-			if(Down) 
+			if(Down)
 			{
 				CurrentStatsTemplate = Stat;
 //				CurrentStatsShape = Object;
 //				CurrentStatsIndex = (SWORD)IMDIndex;
 			}
 
-		} 
-		else 
+		}
+		else
 		{
 			IMDType = IMDTYPE_COMPONENT;
 			//BLANK button for now - AB 9/1/98
@@ -1475,19 +1476,19 @@ void intOpenPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	Ay0 = Ty0 + (Form->height/2) - 4 - APos;
 	Ay1 = Ty0 + (Form->height/2) + 4 + APos;
 
-	if(Ay0 <= (SDWORD)Ty0) 
+	if(Ay0 <= (SDWORD)Ty0)
 	{
 		Ay0 = Ty0;
 	}
 
-	if(Ay1 >= (SDWORD)Ty1) 
+	if(Ay1 >= (SDWORD)Ty1)
 	{
 		Ay1 = Ty1;
 	}
 	Form->Ay0 = (UWORD)Ay0;
 	Form->Ay1 = (UWORD)Ay1;
 
-	if((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1)) 
+	if((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
 	{
 		if (Form->pUserData != NULL)
 		{
@@ -1659,7 +1660,7 @@ void intDisplayImageHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 			Hilight = FALSE;
 	}
 
-	ImageID = (UWORD)UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData);	
+	ImageID = (UWORD)UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData);
 
 
 	//need to flash the button if Full Transporter
@@ -1675,10 +1676,10 @@ void intDisplayImageHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
         	iV_DrawTransImage(IntImages,ImageID,x,y);
 		}
 	}
-    else 
+    else
     {
        	iV_DrawTransImage(IntImages,ImageID,x,y);
-        if(Hilight) 
+        if(Hilight)
         {
 	    	iV_DrawTransImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
 	    }
@@ -1855,7 +1856,7 @@ void intDisplayButtonFlash(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 	{
 		Hilight = TRUE;
 	}
-	
+
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		Down = 1;
@@ -1903,21 +1904,21 @@ void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 //	Hilight = ((W_BUTTON*)psWidget)->state & WBUTS_HILITE;
 	Hilight = buttonIsHilite(psWidget);
 
-	if(Down) 
+	if(Down)
 	{
-		if((DownTime < 1) && (Index != IMAGE_CANCEL_UP)) 
+		if((DownTime < 1) && (Index != IMAGE_CANCEL_UP))
 		{
 			ImageID = IMAGE_RETICULE_BUTDOWN;	// Do the button flash.
-		} 
-		else 
+		}
+		else
 		{
 			ImageID = (UWORD)(Index+1);					// It's down.
 		}
 		DownTime++;
 		//stop the reticule from flashing if it was
 		flashing = (UBYTE)FALSE;
-	} 
-	else 
+	}
+	else
 	{
 		//flashing button?
 		if (flashing)
@@ -1945,7 +1946,7 @@ void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 
 	iV_DrawTransImage(IntImages,ImageID,x,y);
 
-	if(Hilight) 
+	if(Hilight)
 	{
 		if (Index == IMAGE_CANCEL_UP)
 		{
@@ -2009,15 +2010,15 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //	Number = Number%4;	// Make sure number never gets bigger than 3.
 //
 //#ifndef PSX
-//	if(TabType == TAB_MAJOR) 
+//	if(TabType == TAB_MAJOR)
 //	{
 //		iV_DrawTransImage(IntImages,(UWORD)(Tab->MajorUp+Number),x,y);
 //
-//		if(Hilight) 
+//		if(Hilight)
 //		{
 //			iV_DrawTransImage(IntImages,Tab->MajorHilight,x,y);
-//		} 
-//		else if(Selected) 
+//		}
+//		else if(Selected)
 //		{
 //			iV_DrawTransImage(IntImages,(UWORD)(Tab->MajorSelected+Number),x,y);
 //		}
@@ -2027,23 +2028,23 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //		//ASSERT((FALSE,"intDisplaySystemTab : NOT CATERED FOR!!!"));
 //		iV_DrawTransImage(IntImages,(UWORD)(Tab->MinorUp),x,y);
 //
-//		if(Hilight) 
+//		if(Hilight)
 //		{
 //			iV_DrawTransImage(IntImages,Tab->MinorHilight,x,y);
-//		} 
-//		else if(Selected) 
+//		}
+//		else if(Selected)
 //		{
 //			iV_DrawTransImage(IntImages,Tab->MinorSelected,x,y);
 //		}
 //	}
 //#else
-//	if(TabType == TAB_MAJOR) 
+//	if(TabType == TAB_MAJOR)
 //	{
-//		if(Hilight) 
+//		if(Hilight)
 //		{
 //			iV_DrawTransImage(IntImages,Tab->MajorHilight,x,y);
-//		} 
-//		else if(Selected) 
+//		}
+//		else if(Selected)
 //		{
 //			iV_DrawTransImage(IntImages,(UWORD)(Tab->MajorSelected+Number),x,y);
 //		}
@@ -2053,11 +2054,11 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //	}
 //	else
 //	{
-//		if(Hilight) 
+//		if(Hilight)
 //		{
 //			iV_DrawTransImage(IntImages,Tab->MinorHilight,x,y);
-//		} 
-//		else if(Selected) 
+//		}
+//		else if(Selected)
 //		{
 //			iV_DrawTransImage(IntImages,Tab->MinorSelected,x,y);
 //		}
@@ -2084,7 +2085,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 
 // Display one of three images depending on if the widget is currently depressed (ah!).
 //
-void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
 							 UDWORD yOffset, UDWORD *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
@@ -2103,7 +2104,7 @@ void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
 	}
 
 	Hilight = (UBYTE)buttonIsHilite(psButton);
-//	if (psButton->state & WBUTS_HILITE) 
+//	if (psButton->state & WBUTS_HILITE)
 //	{
 //		Hilight = 1;
 //	}
@@ -2111,7 +2112,7 @@ void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
 
 
 	iV_DrawTransImage(IntImages,ImageID,x,y);
-	if (Hilight) 
+	if (Hilight)
 	{
 		iV_DrawTransImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->
 			pUserData),x,y);
@@ -2121,7 +2122,7 @@ void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
 }
 
 // Display DP images depending on factory and if the widget is currently depressed
-void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 						UDWORD yOffset, UDWORD *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
@@ -2134,7 +2135,7 @@ void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 	psStruct = psButton->pUserData;
 	if (psStruct)
 	{
-		ASSERT((StructIsFactory(psStruct), 
+		ASSERT((StructIsFactory(psStruct),
 			"intDisplayDPButton: structure is not a factory"));
 
 		if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
@@ -2143,7 +2144,7 @@ void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 		}
 
 		hilight = (UBYTE)buttonIsHilite(psButton);
-//		if (psButton->state & WBUTS_HILITE) 
+//		if (psButton->state & WBUTS_HILITE)
 //		{
 //			hilight = TRUE;
 //		}
@@ -2165,7 +2166,7 @@ void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 
 
 		iV_DrawTransImage(IntImages,imageID,x,y);
-		if (hilight) 
+		if (hilight)
 		{
             imageID++;
 			iV_DrawTransImage(IntImages,(UWORD)imageID,x,y);
@@ -2294,7 +2295,7 @@ void intDisplayNumber(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	}
 
 		if(Quantity >= STAT_SLDSTOPS)
-		{	
+		{
 			iV_DrawTransImage(IntImages,IMAGE_SLIDER_INFINITY,x+4,y);
 		}
 		else
@@ -2566,7 +2567,7 @@ SDWORD GetSystem0Buffer(void)
 {
 	SDWORD i;
 
-	for(i=0; i<NUM_SYSTEM0BUFFERS; i++) 
+	for(i=0; i<NUM_SYSTEM0BUFFERS; i++)
 	{
 		if( IsBufferInUse(&System0Buffers[i])==FALSE )
 		{
@@ -2643,7 +2644,7 @@ void CloseButtonRender(void)
 		pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 	}
 
-	
+
 }
 
 
@@ -2691,23 +2692,23 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 			iV_RenderAssign(iV_MODE_SURFACE,ButSurf->Surface);
 		}
 
-		if(Down) 
+		if(Down)
 		{
 			//the top button is smaller than the bottom button
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_DOWN)/2) + ButtonDrawXOffset + 2, 
+					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_DOWN)/2) + ButtonDrawXOffset + 2,
 					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUT0_DOWN)/2) + 2 + 8 + ButtonDrawYOffset);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUTB0_DOWN)/2) + ButtonDrawXOffset + 2, 
+					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUTB0_DOWN)/2) + ButtonDrawXOffset + 2,
 					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUTB0_DOWN)/2) + 2 + 12 + ButtonDrawYOffset);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			//the top button is smaller than the bottom button
 			if (buttonType == TOPBUTTON)
@@ -2775,7 +2776,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 				Position.z = BUTTON_DEPTH;
 			}
 		}
-		
+
 		//lefthand display droid buttons
 		if(IMDType == IMDTYPE_DROID)
 		{
@@ -2800,9 +2801,9 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 			iV_RenderAssign(iV_MODE_SURFACE,ButSurf->Surface);
 		}
 
-	 
-		
-		if(Down) 
+
+
+		if(Down)
 		{
 			if (buttonType == TOPBUTTON)
 			{
@@ -2816,8 +2817,8 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUTB0_DOWN)/2) + ButtonDrawXOffset + 2,
 					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUTB0_DOWN)/2) + 2 + 12 + ButtonDrawYOffset);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			if (buttonType == TOPBUTTON)
 			{
@@ -2840,7 +2841,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 			Size = 2;//small structure
 			scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 			//scale = COMP_BUT_SCALE;
-			//ASSERT((Radius <= OBJECT_RADIUS,"Object too big for button - %s", 
+			//ASSERT((Radius <= OBJECT_RADIUS,"Object too big for button - %s",
 			//		((BASE_STATS*)Object)->pName));
 		}
 		else if(IMDType == IMDTYPE_RESEARCH)
@@ -2992,7 +2993,7 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 	}
 
 	ox = oy = 0;
-	/*if(Down) 
+	/*if(Down)
 	{
 		ox = oy = 2;
 	} */
@@ -3091,7 +3092,7 @@ BOOL DroidIsDemolishing(DROID *Droid)
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
-    if (!(droidType(Droid) == DROID_CONSTRUCT OR droidType(Droid) == 
+    if (!(droidType(Droid) == DROID_CONSTRUCT OR droidType(Droid) ==
         DROID_CYBORG_CONSTRUCT))
     {
         return FALSE;
@@ -3115,14 +3116,14 @@ BOOL DroidIsRepairing(DROID *Droid)
 	BASE_OBJECT *psObject;
 
     //if(droidType(Droid) != DROID_REPAIR)
-    if (!(droidType(Droid) == DROID_REPAIR OR droidType(Droid) == 
+    if (!(droidType(Droid) == DROID_REPAIR OR droidType(Droid) ==
         DROID_CYBORG_REPAIR))
-    { 
+    {
         return FALSE;
     }
 
     if (orderStateObj(Droid, DORDER_DROIDREPAIR, &psObject))
-    {	
+    {
 		return TRUE;
 	}
 
@@ -3139,7 +3140,7 @@ BOOL DroidIsBuilding(DROID *Droid)
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
     if (!(droidType(Droid) == DROID_CONSTRUCT OR
-        droidType(Droid) == DROID_CYBORG_CONSTRUCT)) 
+        droidType(Droid) == DROID_CYBORG_CONSTRUCT))
     {
         return FALSE;
     }
@@ -3170,7 +3171,7 @@ BOOL DroidGoingToBuild(DROID *Droid)
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
     if (!(droidType(Droid) == DROID_CONSTRUCT OR
-        droidType(Droid) == DROID_CYBORG_CONSTRUCT)) 
+        droidType(Droid) == DROID_CYBORG_CONSTRUCT))
     {
         return FALSE;
     }
@@ -3328,13 +3329,13 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 
 BOOL StatIsStructure(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref < 
+	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <
 				REF_STRUCTURE_START + REF_RANGE);
 }
 
 BOOL StatIsFeature(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_FEATURE_START && Stat->ref < 
+	return (Stat->ref >= REF_FEATURE_START && Stat->ref <
 				REF_FEATURE_START + REF_RANGE);
 }
 
@@ -3428,10 +3429,10 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 	}
 
 	ASSERT((0,"StatGetComponent : Unknown component"));*/
-	
+
 //	COMP_BASE_STATS *CompStat = (COMP_BASE_STATS *)Stat;
 //	DBPRINTF(("%s\n",Stat->pName));
-	
+
 	*CompIMD = NULL;
 	*MountIMD = NULL;
 
@@ -3493,12 +3494,12 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 
 BOOL StatIsResearch(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_RESEARCH_START && Stat->ref < 
+	return (Stat->ref >= REF_RESEARCH_START && Stat->ref <
 				REF_RESEARCH_START + REF_RANGE);
 }
 
 //void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image,iIMDShape **Shape, BOOL drawTechIcon)
-void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape, 
+void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
                           BASE_STATS **ppGraphicData, BOOL drawTechIcon)
 {
 	*Image = -1;
@@ -3536,7 +3537,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 		Tok++;
 	}
 
-	//test for all - AB		
+	//test for all - AB
 //	return IMD_DEFAULT;
 	return -1;
 }*/
@@ -3629,7 +3630,7 @@ void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours)
 {
 	W_BARGRAPH      *BarGraph = (W_BARGRAPH*)psWidget;
@@ -3738,7 +3739,7 @@ void WidgetAudioCallback(int AudioID)
 
 
 // Widget callback to display a contents button for the Transporter
-void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM			*Form = (W_CLICKFORM*)psWidget;
@@ -3760,17 +3761,17 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 		"intDisplayTransportButton: invalid droid pointer"));
 
 
-/*	if( (pie_GetRenderEngine() == ENGINE_GLIDE) || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || 
-	(Form->state!=Buffer->State) ) 
+/*	if( (pie_GetRenderEngine() == ENGINE_GLIDE) || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) ||
+	(Form->state!=Buffer->State) )
 */
-	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || 
-		(Form->state!=Buffer->State) ) 
+	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) ||
+		(Form->state!=Buffer->State) )
 
 
 	{
 		Hilight = Form->state & WCLICK_HILITE;
 
-		if(Hilight) 
+		if(Hilight)
 		{
 			Buffer->ImdRotation += (UWORD) ((BUTTONOBJ_ROTSPEED*frameTime2) / GAME_TICKS_PER_SEC);
 		}
@@ -3785,7 +3786,7 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 		//ASSERT((PTRVALID(psDroid, sizeof(DROID)),
 		//	"intDisplayTransportButton: invalid droid pointer"));
 
-		if (psDroid) 
+		if (psDroid)
 		{
 			RenderToButton(NULL,0,psDroid,psDroid->player,Buffer,Down,IMDTYPE_DROID,TOPBUTTON);
 		}
@@ -3807,7 +3808,7 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 	if (Hilight)
 	{
 		iV_DrawTransImage(IntImages,IMAGE_BUT_HILITE,xOffset+Form->x,yOffset+Form->y);
-	}   
+	}
 
     //if (psDroid AND missionIsOffworld()) Want this on all reInforcement missions
     if (psDroid AND missionForReInforcements())
@@ -3850,11 +3851,11 @@ void drawRadarBlips()
 	VisHeight = RADHEIGHT;
 
 	/* Go through all the proximity Displays*/
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; 
+	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL;
 		psProxDisp = psProxDisp->psNext)
 	{
 		//check it is within the radar coords
-		if (psProxDisp->radarX > 0 AND psProxDisp->radarX < VisWidth AND 
+		if (psProxDisp->radarX > 0 AND psProxDisp->radarX < VisWidth AND
 			psProxDisp->radarY > 0 AND psProxDisp->radarY < VisHeight)
 		{
 			//pViewProximity = (VIEW_PROXIMITY*)psProxDisp->psMessage->
@@ -3908,17 +3909,17 @@ void drawRadarBlips()
 			}
 			//draw the 'blip'
 
-			iV_DrawImage(IntImages,imageID, psProxDisp->radarX + RADTLX, 
+			iV_DrawImage(IntImages,imageID, psProxDisp->radarX + RADTLX,
 							psProxDisp->radarY + RADTLY);
 		}
 	}
 
 	/*
-	for (psBuilding = apsStructLists[selectedPlayer]; psBuilding != NULL; 
+	for (psBuilding = apsStructLists[selectedPlayer]; psBuilding != NULL;
 		psBuilding = psBuilding->psNext)
 	{
 		//check it is within the radar coords
-		if (psBuilding->radarX > 0 AND psBuilding->radarX < VisWidth AND 
+		if (psBuilding->radarX > 0 AND psBuilding->radarX < VisWidth AND
 			psBuilding->radarY > 0 AND psBuilding->radarY < VisHeight)
 		{
 			//check if recently damaged
@@ -3941,10 +3942,10 @@ void drawRadarBlips()
 				if (imageID)
 				{
 #ifndef PSX
-					iV_DrawTransImage(IntImages,imageID, psBuilding->radarX + RADTLX, 
+					iV_DrawTransImage(IntImages,imageID, psBuilding->radarX + RADTLX,
 						psBuilding->radarY + RADTLY);
 #else
-					iV_DrawTransImage(IntImages,imageID, psBuilding->radarX*2 + RADTLX, 
+					iV_DrawTransImage(IntImages,imageID, psBuilding->radarX*2 + RADTLX,
 									psBuilding->radarY*2 + RADTLY);
 #endif
 				}
@@ -3954,10 +3955,10 @@ void drawRadarBlips()
 	*/
 
 // deathmatch code
-//#ifndef PSX	
+//#ifndef PSX
 //	if(bMultiPlayer && (game.type == DMATCH))
 //	{
-//		for (psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature = 
+//		for (psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature =
 //			psFeature->psNext)
 //		{
 //			if( psFeature->psStats->subType == FEAT_GEN_ARTE)	// it's an artifact.
@@ -3985,11 +3986,11 @@ void drawRadarBlips()
 	UDWORD				VisWidth, VisHeight, delay = 150;
 
 	// Go through all the proximity Displays
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; 
+	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL;
 		psProxDisp = psProxDisp->psNext)
 	{
 		pViewProximity = (VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData;
-		// Is the Message worth rendering? 
+		// Is the Message worth rendering?
 		if(clipXY(pViewProximity->x,pViewProximity->y))
 		{
 			//if the message is read - don't draw
@@ -4005,7 +4006,7 @@ void drawRadarBlips()
 					}
 					psProxDisp->timeLastDrawn = gameTime2;
 				}
-				imageID = (UWORD)(IMAGE_GAM_ENM1 + psProxDisp->strobe + 
+				imageID = (UWORD)(IMAGE_GAM_ENM1 + psProxDisp->strobe +
 					(pViewProximity->proxType * (NUM_PULSES + 1)));
 			}
 			//draw the 'blip'
@@ -4015,7 +4016,7 @@ void drawRadarBlips()
 }*/
 
 /*Displays the proximity messages blips over the world*/
-void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 					UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;
@@ -4082,7 +4083,7 @@ void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 			}
 			psProxDisp->timeLastDrawn = gameTime2;
 		}
-		imageID = (UWORD)(IMAGE_GAM_ENM1 + psProxDisp->strobe + 
+		imageID = (UWORD)(IMAGE_GAM_ENM1 + psProxDisp->strobe +
 			(pViewProximity->proxType * (NUM_PULSES + 1)));
 		*/
 		//set the button's x/y so that can be clicked on
@@ -4090,7 +4091,7 @@ void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 		psButton->y = (SWORD)(psProxDisp->screenY - psButton->height/2);
 /*
 		//draw the 'button'
-		iV_DrawTransImage(IntImages,imageID, psProxDisp->screenX, 
+		iV_DrawTransImage(IntImages,imageID, psProxDisp->screenX,
 			psProxDisp->screenY);
 			*/
 	}
@@ -4102,7 +4103,7 @@ void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 static UDWORD sliderMousePos(	W_SLIDER *Slider )
 {
 	return (widgGetFromID(psWScreen,Slider->formID)->x + Slider->x)
-			+ ((Slider->pos * Slider->width) / Slider->numStops ); 
+			+ ((Slider->pos * Slider->width) / Slider->numStops );
 }
 
 
@@ -4119,7 +4120,7 @@ static UWORD sliderMouseUnit(W_SLIDER *Slider)
 	{
 		return (Slider->pos);
 	}
-	
+
 	if(Slider->pos > (Slider->numStops-posStops))
 	{
 		return (UWORD)(Slider->numStops-Slider->pos);
@@ -4131,25 +4132,25 @@ void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psCont
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 
-	if(Slider->state & SLD_HILITE) 
+	if(Slider->state & SLD_HILITE)
 	{
 		if(keyDown(KEY_LEFTARROW))
 		{
-			if(Slider->pos > 0) 
+			if(Slider->pos > 0)
 			{
 				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
 				bUsingSlider = TRUE;
-				SetMousePos(0,sliderMousePos(Slider),mouseY());	// move mouse				
+				SetMousePos(0,sliderMousePos(Slider),mouseY());	// move mouse
 			}
 		}
-		else if(keyDown(KEY_RIGHTARROW)) 
+		else if(keyDown(KEY_RIGHTARROW))
 		{
-			if(Slider->pos < Slider->numStops) 
+			if(Slider->pos < Slider->numStops)
 			{
 				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
 				bUsingSlider = TRUE;
-	
-				SetMousePos(0,sliderMousePos(Slider),mouseY());	// move mouse		
+
+				SetMousePos(0,sliderMousePos(Slider),mouseY());	// move mouse
 			}
 		}
 	}

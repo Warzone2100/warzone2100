@@ -3,26 +3,26 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "configuration.h"
-#include "configfile.h"
+#include "lib/framework/configfile.h"
 #include "objmem.h"
 #include "display.h"	// gammaValue
-#include "track.h"		// audio
-#include "cdaudio.h"	// audio
-#include "piestate.h"	// setgamma.
+#include "lib/sound/track.h"		// audio
+#include "lib/sound/cdaudio.h"	// audio
+#include "lib/ivis_common/piestate.h"	// setgamma.
 #include "warzoneconfig.h"	// renderMode
 #include "component.h"
 #include "text.h"
 #include "seqdisp.h"
 #include "difficulty.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "display3d.h"
 #include "multiplay.h"
 #include "ai.h"
 #include "advvis.h"
-#include "mixer.h"
+#include "lib/sound/mixer.h"
 #include "hci.h"
 #include "fpath.h"
 

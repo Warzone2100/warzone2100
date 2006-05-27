@@ -5,19 +5,19 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptobj.h"
 #include "group.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "cluster.h"
 #include "messagedef.h"
 #include "message.h"
 #include "researchdef.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 
 #include "multiplay.h"
 
@@ -49,7 +49,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		return FALSE;
 	}
 	// Check this is a valid pointer
-	if (psObj->type != OBJ_DROID && psObj->type != OBJ_STRUCTURE && psObj->type != OBJ_FEATURE) 
+	if (psObj->type != OBJ_DROID && psObj->type != OBJ_STRUCTURE && psObj->type != OBJ_FEATURE)
 	{
 		ASSERT((FALSE, "scrBaseObjGet: invalid object"));
 		return FALSE;
@@ -908,7 +908,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, UBYTE *pBuffer, UDWORD size
 			psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
 		}
-		else 
+		else
 		{
 			members = (size - sizeof(SDWORD)*5) / sizeof(UDWORD);
 			pPos = pBuffer;

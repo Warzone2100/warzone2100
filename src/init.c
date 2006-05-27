@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <physfs.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "init.h"
 #include "mechanics.h"
 #include "objects.h"
@@ -17,13 +17,13 @@
 #include "astar.h"
 #include "disp2d.h"
 #include "hci.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "csnap.h"
 #include "wrappers.h"
 #include <time.h>
 #include "game.h"
-#include "animobj.h"
-#include "ani.h"
+#include "lib/gamelib/animobj.h"
+#include "lib/gamelib/ani.h"
 #include "drive.h"
 #include "bucket3d.h"
 #include "message.h"
@@ -32,16 +32,16 @@
 #include "text.h"
 #include "console.h"
 
-#include "piedef.h"
-#include "piestate.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
 
 #include "configuration.h"
-#include "piemode.h"
-#include "tex.h"
+#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_common/tex.h"
 
 #include "resource.h"
-#include "rendmode.h"
-#include "ivi.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/ivi.h"
 #include "group.h"
 #include "wrappers.h"
 #include "display3d.h"
@@ -51,7 +51,7 @@
 #include "warzoneconfig.h"
 #include "multiplay.h"
 
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
 #include "miscimd.h"
@@ -84,8 +84,8 @@
 
 
 
-#include "cdaudio.h"
-#include "mixer.h"
+#include "lib/sound/cdaudio.h"
+#include "lib/sound/mixer.h"
 #include "advvis.h"
 
 

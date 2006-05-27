@@ -10,7 +10,7 @@
 #ifndef _warzoneConfig_h
 #define _warzoneConfig_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 /***************************************************************************/
 /*

@@ -1,14 +1,14 @@
-/* 
+/*
 Environ.c - handles the enviroment stuff that's stored in tables
 used for the mist and water effects. These are preprocessed.
 */
 
 
 // -------------------------------------------------------------------------------
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 #include "display3d.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 
 // -------------------------------------------------------------------------------
 #define RANDOMLY_ONE_OR_MINUS_ONE	(rand()%2 ? -1 : 1)
@@ -62,7 +62,7 @@ UDWORD map_TileMistValue( UDWORD x, UDWORD y );
 BOOL	waterOnMap(void)
 {
 	return(bWaterOnMap);
-}	
+}
 // -------------------------------------------------------------------------------
 //this function just allocates the memory now for MaxMapWidth, MaxMapHeight
 BOOL    environInit( void )
@@ -79,7 +79,7 @@ BOOL    environInit( void )
 //this function is called whenever the map changes - load new level or return from an offWorld map
 void environReset(void)
 {
-UDWORD	i,j,index;	
+UDWORD	i,j,index;
 MAPTILE	*psTile;
 
 	if(pEnvironData == NULL ) // loading map preview..
@@ -139,7 +139,7 @@ FRACT	fraction;
 		startX = player.p.x/TILE_UNITS;
 	}
 	else
-	{	
+	{
 		startX = 0;
 	}
 	if(player.p.z >= 0)
@@ -165,8 +165,8 @@ FRACT	fraction;
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
 
 	/* Go through the grid */
-	for(i=startY; i<endY; i++)           	
-	{                
+	for(i=startY; i<endY; i++)
+	{
 		for(j=startX; j<endX; j++)
 		{
 			/* Get our index */
@@ -219,7 +219,7 @@ FRACT	fraction;
 				pEnvironData[index].val = newValue;
 			}
 		}
-	} 
+	}
 }
 
 // -------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 	/* Tile comp */
 	tileX = x >> TILE_SHIFT;
 	tileY = y >> TILE_SHIFT;
-   
+
 	/* Inter tile comp */
 	ox = (x & (TILE_UNITS-1));
 	oy = (y & (TILE_UNITS-1));

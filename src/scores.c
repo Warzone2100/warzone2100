@@ -1,19 +1,19 @@
 
-/* 
+/*
 	Scores.c Deals with all the mission results gubbins.
 	Alex W. McLean
 */
 
 // --------------------------------------------------------------------
-#include "frame.h"
-#include "gtime.h"
+#include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "console.h"
 #include "scores.h"
-#include "piedef.h"
-#include "piefunc.h"
-#include "piemode.h"
-#include "piestate.h"
-#include "rendmode.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piefunc.h"
+#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
 #include "objects.h"
 #include "droiddef.h"
 #include "base.h"
@@ -21,11 +21,11 @@
 #include "hci.h"
 #include "text.h"
 #include "miscimd.h"
-#include "geo.h"
+#include "lib/ivis_common/geo.h"
 #include "display3d.h"
 #include "mission.h"
 #include "game.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "intimage.h"
 
@@ -48,24 +48,24 @@
 #define STAT_BAR_WIDTH	100
 STAT_BAR	infoBars[]=
 {
-	{LC_X,100,STAT_BAR_WIDTH,16,10,STR_MR_UNITS_LOST,0,FALSE,TRUE,0,165},	// left column		STAT_UNIT_LOST       
-	{LC_X,120,STAT_BAR_WIDTH,16,20,STR_MR_UNITS_KILLED,0,FALSE,TRUE,0,81},			 //	STAT_UNIT_KILLED         
-	{LC_X,160,STAT_BAR_WIDTH,16,30,STR_MR_STR_LOST,0,FALSE,TRUE,0,165},				 //	STAT_STR_LOST            
-	{LC_X,180,STAT_BAR_WIDTH,16,40,STR_MR_STR_BLOWN_UP,0,FALSE,TRUE,0,81}, 			 //	STAT_STR_BLOWN_UP        
-	{LC_X,220,STAT_BAR_WIDTH,16,50,STR_MR_UNITS_BUILT,0,FALSE,TRUE,0,185}, 			 //	STAT_UNITS_BUILT         
-	{LC_X,240,STAT_BAR_WIDTH,16,60,STR_MR_UNITS_NOW,0,FALSE,TRUE,0,185}, 				 //	STAT_UNITS_NOW           
-	{LC_X,260,STAT_BAR_WIDTH,16,70,STR_MR_STR_BUILT,0,FALSE,TRUE,0,185}, 				 //	STAT_STR_BUILT           
-	{LC_X,280,STAT_BAR_WIDTH,16,80,STR_MR_STR_NOW,0,FALSE,FALSE,0,185}, 				 //	STAT_STR_NOW             
-																		                             
-	{RC_X,100,RANK_BAR_WIDTH,16,10,STR_MR_LEVEL_ROOKIE,0,FALSE,TRUE,0,117},	// right column	//	STAT_ROOKIE      
-	{RC_X,120,RANK_BAR_WIDTH,16,20,STR_MR_LEVEL_GREEN,0,FALSE,TRUE,0,117}, 			 		//	STAT_GREEN       
-	{RC_X,140,RANK_BAR_WIDTH,16,30,STR_MR_LEVEL_TRAINED,0,FALSE,TRUE,0,117}, 		 			//	STAT_TRAINED 
-	{RC_X,160,RANK_BAR_WIDTH,16,40,STR_MR_LEVEL_REGULAR,0,FALSE,TRUE,0,117}, 		 			//	STAT_REGULAR 
-	{RC_X,180,RANK_BAR_WIDTH,16,50,STR_MR_LEVEL_VETERAN,0,FALSE,TRUE,0,117}, 		 			//	STAT_VETERAN 
-	{RC_X,200,RANK_BAR_WIDTH,16,60,STR_MR_LEVEL_CRACK,0,FALSE,TRUE,0,117}, 			 		//	STAT_CRACK       
-	{RC_X,220,RANK_BAR_WIDTH,16,70,STR_MR_LEVEL_ELITE,0,FALSE,TRUE,0,117}, 			 		//	STAT_ELITE       
-	{RC_X,240,RANK_BAR_WIDTH,16,80,STR_MR_LEVEL_SPECIAL,0,FALSE,TRUE,0,117}, 		 			//	STAT_SPECIAL 
-	{RC_X,260,RANK_BAR_WIDTH,16,90,STR_MR_LEVEL_ACE,0,FALSE,TRUE,0,117}, 			 			//	STAT_ACE     
+	{LC_X,100,STAT_BAR_WIDTH,16,10,STR_MR_UNITS_LOST,0,FALSE,TRUE,0,165},	// left column		STAT_UNIT_LOST
+	{LC_X,120,STAT_BAR_WIDTH,16,20,STR_MR_UNITS_KILLED,0,FALSE,TRUE,0,81},			 //	STAT_UNIT_KILLED
+	{LC_X,160,STAT_BAR_WIDTH,16,30,STR_MR_STR_LOST,0,FALSE,TRUE,0,165},				 //	STAT_STR_LOST
+	{LC_X,180,STAT_BAR_WIDTH,16,40,STR_MR_STR_BLOWN_UP,0,FALSE,TRUE,0,81}, 			 //	STAT_STR_BLOWN_UP
+	{LC_X,220,STAT_BAR_WIDTH,16,50,STR_MR_UNITS_BUILT,0,FALSE,TRUE,0,185}, 			 //	STAT_UNITS_BUILT
+	{LC_X,240,STAT_BAR_WIDTH,16,60,STR_MR_UNITS_NOW,0,FALSE,TRUE,0,185}, 				 //	STAT_UNITS_NOW
+	{LC_X,260,STAT_BAR_WIDTH,16,70,STR_MR_STR_BUILT,0,FALSE,TRUE,0,185}, 				 //	STAT_STR_BUILT
+	{LC_X,280,STAT_BAR_WIDTH,16,80,STR_MR_STR_NOW,0,FALSE,FALSE,0,185}, 				 //	STAT_STR_NOW
+
+	{RC_X,100,RANK_BAR_WIDTH,16,10,STR_MR_LEVEL_ROOKIE,0,FALSE,TRUE,0,117},	// right column	//	STAT_ROOKIE
+	{RC_X,120,RANK_BAR_WIDTH,16,20,STR_MR_LEVEL_GREEN,0,FALSE,TRUE,0,117}, 			 		//	STAT_GREEN
+	{RC_X,140,RANK_BAR_WIDTH,16,30,STR_MR_LEVEL_TRAINED,0,FALSE,TRUE,0,117}, 		 			//	STAT_TRAINED
+	{RC_X,160,RANK_BAR_WIDTH,16,40,STR_MR_LEVEL_REGULAR,0,FALSE,TRUE,0,117}, 		 			//	STAT_REGULAR
+	{RC_X,180,RANK_BAR_WIDTH,16,50,STR_MR_LEVEL_VETERAN,0,FALSE,TRUE,0,117}, 		 			//	STAT_VETERAN
+	{RC_X,200,RANK_BAR_WIDTH,16,60,STR_MR_LEVEL_CRACK,0,FALSE,TRUE,0,117}, 			 		//	STAT_CRACK
+	{RC_X,220,RANK_BAR_WIDTH,16,70,STR_MR_LEVEL_ELITE,0,FALSE,TRUE,0,117}, 			 		//	STAT_ELITE
+	{RC_X,240,RANK_BAR_WIDTH,16,80,STR_MR_LEVEL_SPECIAL,0,FALSE,TRUE,0,117}, 		 			//	STAT_SPECIAL
+	{RC_X,260,RANK_BAR_WIDTH,16,90,STR_MR_LEVEL_ACE,0,FALSE,TRUE,0,117}, 			 			//	STAT_ACE
 
 	{0,0,0,0,0,0,0}
 };
@@ -196,7 +196,7 @@ UDWORD	div;
 		psText[index++] = (UBYTE)(':');
 	}
 
-   
+
 	// put in the minutes
 	psText[index++] = (UBYTE)('0' + minutes/10);
 	psText[index++] = (UBYTE)('0' + minutes%10);
@@ -247,7 +247,7 @@ UDWORD	div;
 	pie_UniTransBoxFill(16+D_W,MT_Y_POS-16,DISP_WIDTH-D_W-16,MT_Y_POS+256,0x00000088,128);
 	iV_Box(16+D_W,MT_Y_POS-16,DISP_WIDTH-D_W-16,MT_Y_POS+256,1);
 	pie_SetSwirlyBoxes(FALSE);
-				
+
 	iV_DrawText(strresGetString(psStringRes,STR_MR_UNIT_LOSSES),LC_X+D_W,80+16+D_H);
 	iV_DrawText(strresGetString(psStringRes,STR_MR_STRUCTURE_LOSSES),LC_X+D_W,140+16+D_H);
 	iV_DrawText(strresGetString(psStringRes,STR_MR_FORCE_INFO),LC_X+D_W,200+16+D_H);
@@ -256,7 +256,7 @@ UDWORD	div;
 	index = 0;
 	bMoreBars = TRUE;
 	while(bMoreBars)
-	{	
+	{
 		/* Is it time to display this bar? */
 		if( infoBars[index].bActive)
 		{
@@ -330,7 +330,7 @@ UDWORD	div;
 void	dispAdditionalInfo( void )
 {
 
-	/* We now need to dsiplay the mission time, game time, 
+	/* We now need to dsiplay the mission time, game time,
 		average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
@@ -340,8 +340,8 @@ void	dispAdditionalInfo( void )
 	/* Get the mission result time in a string - and write it out */
 	getAsciiTime((char*)&text2,gameTime-missionData.missionStarted);
 	sprintf(text,strresGetString(psStringRes,STR_MR_MISSION_TIME),text2);
-	iV_DrawText(text,(DISP_WIDTH - iV_GetTextWidth(text))/2,320+D_H);	
-  
+	iV_DrawText(text,(DISP_WIDTH - iV_GetTextWidth(text))/2,320+D_H);
+
 	/* Write out total game time so far */
 	getAsciiTime((char*)&text2,gameTime);
 	sprintf(text,strresGetString(psStringRes,STR_MR_GAME_TIME),text2);
@@ -375,7 +375,7 @@ DROID	*psDroid;
 	else
 	{
 		scaleFactor = (MAKEFRACT(RANK_BAR_WIDTH)/maxi);
-	}	
+	}
 
 	/* Scale for percent */
 	for(i=0; i<DROID_LEVELS; i++)
@@ -473,10 +473,10 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	/* Did we get it? */
 	if(!pFileData)
 	{
-		/* Nope, so do one */	
+		/* Nope, so do one */
 		DBERROR(("Saving Score data : Cannot get the memory! (%d)",fileSize));
 		return(FALSE);
-	} 
+	}
 
 	/* We got the memory, so put the file header on the file */
 	psHeader = (SCORE_SAVEHEADER *)pFileData;
@@ -534,8 +534,8 @@ MISSION_DATA		*pScoreData;
 		DBERROR(("Read Score data : Weird file size!"));
 		return(FALSE);
 	}
-	
-	/* Skip past the header gubbins - can check version number here too */	
+
+	/* Skip past the header gubbins - can check version number here too */
 	pScoreData = (MISSION_DATA*)(pFileData + sizeof(struct _score_save_header));
 
 	memcpy(&missionData,pScoreData,sizeof(struct mission_data));

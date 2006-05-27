@@ -8,7 +8,7 @@
 #define _SeqDisp_h
 
 			// ffs js (bastard)
-#include "piemode.h"
+#include "lib/ivis_common/piemode.h"
 
 /***************************************************************************/
 /*
@@ -22,7 +22,7 @@
 #define  SEQUENCE_KILL 3//stop
 #define  SEQUENCE_HOLD 4//play once and hold last frame
 
-#define  SEQ_TEXT_POSITION  0//position text 
+#define  SEQ_TEXT_POSITION  0//position text
 #define  SEQ_TEXT_FOLLOW_ON 1//justify if less than 3/4 length
 #define  SEQ_TEXT_JUSTIFY   2//justify if less than 520/600
 
@@ -43,7 +43,7 @@ extern BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOf
 
 //full screen render
 //extern BOOL seq_PlayVideo(char* pSeq, char* pAudio);
-//extern BOOL seq_StartFullScreenVideo(char* sequenceFile, char* audioFile);//start videos through seqList 
+//extern BOOL seq_StartFullScreenVideo(char* sequenceFile, char* audioFile);//start videos through seqList
 
 extern BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *bClear);
 
@@ -73,7 +73,7 @@ extern BOOL seq_GetSubtitles(void);
 extern void seq_StartNextFullScreenVideo(void);
 
 
- 
+
 #endif	//SeqDisp.h
 
 

@@ -2,15 +2,16 @@
 /* Texture stuff. Calls 3dfxText functions in the 3dfx cases */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
 
-#include "frame.h"
-#include "pietypes.h"
-#include "piestate.h"
-#include "pietexture.h"
-#include "piepalette.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_common/piestate.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/pietexture.h"
+#include "lib/ivis_common/piepalette.h"
 #include "display3ddef.h"
 #include "texture.h"
 #include "radar.h"
-#include "tex.h"
+#include "lib/ivis_common/tex.h"
 
 
 /* Can fit at most 32 texture pages into a 2meg texture memory */
@@ -58,7 +59,7 @@ static void buildTileIndexes(void);
 /* Extracts the tile texture in pcx format of abc..
 											  def..
 											  ghi..   (say)
-   and puts them into raw format of 
+   and puts them into raw format of
 									a
 									b
 									c
@@ -90,17 +91,17 @@ int makeTileTextures(void)
 	}
 
 	t = 0;
-	if (tilesRAW) 
+	if (tilesRAW)
 	{
-		for (i=0; i<h; i++) 
+		for (i=0; i<h; i++)
 		{
-			for (j=0; j<w; j++) 
+			for (j=0; j<w; j++)
 			{
 				b = tilesPCX.bmp + j * TILE_WIDTH + i * tilesPCX.width * TILE_HEIGHT;
 				saved = s = tilesRAW[t++] = (iBitmap *)MALLOC(sizeof(iBitmap) * TILE_SIZE);
-				if (s) 
+				if (s)
 				{
-					for (y=0; y<TILE_HEIGHT; y++) 
+					for (y=0; y<TILE_HEIGHT; y++)
 					{
 						for (x=0; x<TILE_WIDTH; *s++ = b[x++])
 						{
@@ -109,15 +110,15 @@ int makeTileTextures(void)
 						b+=tilesPCX.width;
 					}
 				  	calcRadarColour(saved,t-1);
-				} 
-				else 
+				}
+				else
 				{
 					return FALSE;
 				}
 			}
 		}
-	} 
-	else 
+	}
+	else
 	{
 		return FALSE;
 	}
@@ -137,17 +138,17 @@ int remakeTileTextures(void)
 
 	//tilesRAW is already set up
 	t = 0;
-	if (tilesRAW) 
+	if (tilesRAW)
 	{
-		for (i=0; i<h; i++) 
+		for (i=0; i<h; i++)
 		{
-			for (j=0; j<w; j++) 
+			for (j=0; j<w; j++)
 			{
 				b = tilesPCX.bmp + j * TILE_WIDTH + i * tilesPCX.width * TILE_HEIGHT;
 				saved = s = tilesRAW[t++];
-				if (s) 
+				if (s)
 				{
-					for (y=0; y<TILE_HEIGHT; y++) 
+					for (y=0; y<TILE_HEIGHT; y++)
 					{
 						for (x=0; x<TILE_WIDTH; *s++ = b[x++])
 						{
@@ -156,16 +157,16 @@ int remakeTileTextures(void)
 						b+=tilesPCX.width;
 					}
 					calcRadarColour(saved,t-1);
-				} 
-				else 
+				}
+				else
 				{
 					return FALSE;
 				}
 
 			}
 		}
-	} 
-	else 
+	}
+	else
 	{
 		return FALSE;
 	}
@@ -173,22 +174,22 @@ int remakeTileTextures(void)
 	return TRUE;
 }
 
-/*	
+/*
 	Extracts the tile textures into separate texture pages and builds
 	a table of which texture page to find each tile in, as well as which one it is
-	within that page. 
-	
+	within that page.
+
 	0123
 	4567
 	89AB
 	CDEF
-	
+
 	The above shows the different possible locations for a tile in the page.
 	So we have a table of MAX_TILES showing
 
 	pageNumber and [0..15]
-		
-	We must then make sure that we source in that texture page and set the 
+
+	We must then make sure that we source in that texture page and set the
 	texture coordinate for a complete tile to be its position.
 */
 void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
@@ -205,7 +206,7 @@ iSprite	sprite;
 	/* This is how many pages are already used on hardware */
 	firstTexturePage = pie_GetLastPageDownloaded() + 1;
 
-	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", srcWidth, 
+	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", srcWidth,
 	      srcHeight, tileWidth, tileHeight, firstTexturePage);
 
 	/* Get enough memory to store one tile */
@@ -360,19 +361,19 @@ BOOL getTileRadarColours(void)
 	h = tilesPCX.height / TILE_HEIGHT;
 	numPCXTiles = w * h;
 
-	
+
 
 	t = 0;
-	for (i=0; i<h; i++) 
+	for (i=0; i<h; i++)
 	{
-		for (j=0; j<w; j++) 
+		for (j=0; j<w; j++)
 		{
 			b = tilesPCX.bmp + j * TILE_WIDTH + i * tilesPCX.width * TILE_HEIGHT;
 			s = &tempBMP[0];
-			if (s) 
+			if (s)
 			{
 				//copy the bitmap to temp buffer for colour calc
-				for (y=0; y<TILE_HEIGHT; y++) 
+				for (y=0; y<TILE_HEIGHT; y++)
 				{
 					for (x=0; x<TILE_WIDTH; *s++ = b[x++])
 					{
@@ -382,8 +383,8 @@ BOOL getTileRadarColours(void)
 				}
 				calcRadarColour(&tempBMP[0],t);
 				t++;
-			} 
-			else 
+			}
+			else
 			{
 				return FALSE;
 			}
@@ -399,7 +400,7 @@ void	freeTileTextures( void )
 	{
 		for(i=0; i<numPCXTiles; i++)
 		{
-			FREE(tilesRAW[i]);		
+			FREE(tilesRAW[i]);
 		}
 		FREE(tilesRAW);
 	}
@@ -482,7 +483,7 @@ static void buildTileIndexes(void)
 }
 
 /*	Converts an 8 bit raw (palettised) source image to
-	a 16 bit argb destination image 
+	a 16 bit argb destination image
 */
 void pcxBufferTo16Bit(UBYTE *origBuffer, UWORD *newBuffer)
 {
@@ -493,7 +494,7 @@ UDWORD	i;
 iColour		*psCurrentPalette;
 
 	psCurrentPalette = pie_GetGamePal();
-	/*	640*480, 8 bit colour source image 
+	/*	640*480, 8 bit colour source image
 		640*480, 16 bit colour destination image
 	*/
 	for(i=0; i<640*480; i++)

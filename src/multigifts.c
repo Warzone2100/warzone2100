@@ -4,9 +4,9 @@
  * Also home to Deathmatch hardcoded RULES.
  */
 
-#include "frame.h"
-#include "widget.h"
-#include "objmem.h"	
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
+#include "objmem.h"
 #include "console.h"
 #include "map.h"
 #include "research.h"
@@ -16,17 +16,17 @@
 #include "hci.h"
 #include "text.h"
 #include "scriptfuncs.h"		// for objectinrange.
-#include "gtime.h"
-#include "effects.h"		
-#include "audio.h"
+#include "lib/gamelib/gtime.h"
+#include "effects.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"			// for samples.
 #include "wrappers.h"			// for gameover..
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "loop.h"
 
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multigifts.h"
 #include "multiint.h"			// for force name.
@@ -35,7 +35,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-//#define DMATCH_DROID_LIMIT	25			// max number of droids in a dmatch game (per player).	
+//#define DMATCH_DROID_LIMIT	25			// max number of droids in a dmatch game (per player).
 
 #define	ENDFREQUENCY		5000		 // how often to check end game conditions
 #define MAXFRAGS			10000		 // max score in a frag match.
@@ -80,7 +80,7 @@ VOID			addLoserGifts					(VOID);
 BOOL recvGift(NETMSG *pMsg)
 {
 	UDWORD t,from,to;
-	
+
 	t    = pMsg->body[0];	//decode msg
 	from = pMsg->body[1];
 	to   = pMsg->body[2];
@@ -158,7 +158,7 @@ BOOL sendGift(UDWORD type,UDWORD to)
 		return FALSE;
 		break;
 	}
-	
+
 	return TRUE;
 }
 // ////////////////////////////////////////////////////////////////////////////
@@ -197,7 +197,7 @@ void giftRadar(UDWORD from, UDWORD to,BOOL send)
 
 static void recvGiftDroids(UDWORD from,UDWORD to,NETMSG *pMsg)
 {
-	
+
 	UDWORD id,pos=3;
 	DROID *pD;
 
@@ -205,9 +205,9 @@ static void recvGiftDroids(UDWORD from,UDWORD to,NETMSG *pMsg)
 	{
 		NetGet(pMsg,pos,id);
 		pos += sizeof(UDWORD);
-	
+
 		if(IdToDroid(id,from,&pD))	// find the droid.
-		{	
+		{
 			//giftSingleDroid(pD,from,to);	// give it away.
             (void)giftSingleDroid(pD,to);	// give it away.
 		}
@@ -218,9 +218,9 @@ static void recvGiftDroids(UDWORD from,UDWORD to,NETMSG *pMsg)
 		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GIFT_DRO),getPlayerName(from) ));
 	}
 }
-	
-	
-	
+
+
+
 
 // give selected droid
 static void sendGiftDroids(UDWORD from,UDWORD to)
@@ -292,7 +292,7 @@ static void giftResearch(UDWORD from,UDWORD to,BOOL send)
 	}
 
 
-/*	pPlayerRes = asPlayerResList[player];		
+/*	pPlayerRes = asPlayerResList[player];
 	pPlayerRes += index;
 	if(IsResearchCompleted(pPlayerRes)==FALSE)
 	{
@@ -398,11 +398,11 @@ void breakAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 {
 	CHAR	tm1[128];
 	if(alliances[p1][p2] == ALLIANCE_FORMED)
-	{	
+	{
 		strcpy(tm1,getPlayerName(p1));
 		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_ALLI_BRK),tm1,getPlayerName(p2) ));
 		if(allowAudio && (p1 == selectedPlayer || p2 == selectedPlayer))
-		{		
+		{
 			audio_QueueTrack(ID_ALLIANCE_BRO);
 		}
 	}
@@ -439,9 +439,9 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	}
 
 	if(bMultiPlayer)//jps 15apr99
-	{	
+	{
 		if(prop)
-		{	
+		{
 			sendAlliance(p1,p2,ALLIANCE_FORMED,0);
 		}
 	}
@@ -484,8 +484,8 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	turnOffMultiMsg(TRUE);
 	for(psDroid= apsDroidLists[p1];psDroid;psDroid=psDroid->psNext)	// from -> to
 	{
-		if(psDroid->order == DORDER_ATTACK 
-			&& psDroid->psTarget 
+		if(psDroid->order == DORDER_ATTACK
+			&& psDroid->psTarget
 			&& psDroid->psTarget->player == p2)
 		{
 			orderDroid(psDroid,DORDER_STOP);
@@ -493,8 +493,8 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	}
 	for(psDroid= apsDroidLists[p2];psDroid;psDroid=psDroid->psNext)	// to -> from
 	{
-		if(psDroid->order == DORDER_ATTACK 
-			&& psDroid->psTarget 
+		if(psDroid->order == DORDER_ATTACK
+			&& psDroid->psTarget
 			&& psDroid->psTarget->player == p1)
 		{
 			orderDroid(psDroid,DORDER_STOP);
@@ -509,7 +509,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 void sendAlliance(UBYTE from, UBYTE to, UBYTE state,SDWORD value)
 {
 	NETMSG m;
-		
+
 	m.size =0;
 	NetAdd(m,m.size,from);
 	m.size+=sizeof(from);
@@ -522,7 +522,7 @@ void sendAlliance(UBYTE from, UBYTE to, UBYTE state,SDWORD value)
 
 	NetAdd(m,m.size,value);
 	m.size+=sizeof(value);
-	
+
 	m.type = NET_ALLIANCE;
 	NETbcast(&m,TRUE);
 
@@ -543,7 +543,7 @@ BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)
 
 	NetGet(pMsg,pos,from);
 	pos += sizeof(from);
-	
+
 	NetGet(pMsg,pos,to);
 	pos += sizeof(to);
 
@@ -589,12 +589,12 @@ VOID  technologyGiveAway(STRUCTURE *pS)
 	{
 
 		x = (pS->x >> TILE_SHIFT);
-		y = (pS->y >> TILE_SHIFT); 
+		y = (pS->y >> TILE_SHIFT);
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
 			ASSERT((FALSE, "technologyGiveAway: Unable to find a free location"));
 		}
-		
+
 		for(i=0; (i<numFeatureStats) && (asFeatureStats[i].subType != FEAT_GEN_ARTE); i++);
 		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);
 		if(pF)
@@ -604,8 +604,8 @@ VOID  technologyGiveAway(STRUCTURE *pS)
 
 		m.body[0] = (UBYTE) 1;		// note how many
 		m.size	  = 1;
-		
-		// type. 
+
+		// type.
 		NetAdd(m,m.size,type);
 		m.size += sizeof(type);
 
@@ -616,10 +616,10 @@ VOID  technologyGiveAway(STRUCTURE *pS)
 		ny = (UWORD)y;
 		NetAdd(m,m.size,ny);
 		m.size += sizeof(UWORD);
-		
+
 		NetAdd(m,m.size,pF->id);
 		m.size += sizeof(pF->id);
-		
+
 		m.body[m.size] = (UBYTE) pS->player;
 		m.size	+=1;
 
@@ -672,7 +672,7 @@ void addLoserGifts(void)
 		}
 
 		lastgift = gameTime;
-		
+
 		for(i=0; (i<numFeatureStats) && (asFeatureStats[i].subType != FEAT_OIL_DRUM); i++);
 		quantity = rand()%5+1;
 
@@ -683,9 +683,9 @@ void addLoserGifts(void)
 		m.size += sizeof(type);
 
 		for(count = 0;count<quantity;count++)
-		{		
-			x = apsStructLists[selectedPlayer]->x >> TILE_SHIFT;	
-			y = apsStructLists[selectedPlayer]->y >> TILE_SHIFT; 
+		{
+			x = apsStructLists[selectedPlayer]->x >> TILE_SHIFT;
+			y = apsStructLists[selectedPlayer]->y >> TILE_SHIFT;
 			if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 			{
 				ASSERT((FALSE, "addlosergifts: Unable to find a free location"));
@@ -693,8 +693,8 @@ void addLoserGifts(void)
 
 			NETlogEntry("gift",0,0);
 
-			pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);	
-		
+			pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);
+
 			nx = (UWORD)x;
 			ny = (UWORD)y;
 			NetAdd(m,m.size,x);			m.size += sizeof(UWORD);
@@ -707,14 +707,14 @@ void addLoserGifts(void)
 			{
 				pF->player = ONEPLAYER;		// flag for multiplayer artifacts
 			}
-		}	
+		}
 		audio_QueueTrack(ID_GIFT);
 		m.type  = NET_ARTIFACTS;
 		NETbcast(&m,FALSE);		// tell everyone.
-		
+
 	}
 
-/* removed. too confusing.. con droids all over!	
+/* removed. too confusing.. con droids all over!
 	// player has no construction droids
 	for(psD=apsDroidLists[selectedPlayer];(psD != NULL)&&(psD->droidType !=DROID_CONSTRUCT);psD = psD->psNext);
 	if(!psD)
@@ -731,28 +731,28 @@ void addLoserGifts(void)
 				x = apsStructLists[selectedPlayer]->x >>TILE_SHIFT;
 				y = apsStructLists[selectedPlayer]->y >>TILE_SHIFT;
 				z = apsStructLists[selectedPlayer]->z >>TILE_SHIFT;
-			
+
 				pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,normalPAT);
 
 				position.x = x<<TILE_SHIFT;				// Add an effect
-				position.z = y<<TILE_SHIFT;	
+				position.z = y<<TILE_SHIFT;
 				position.y = z<<TILE_SHIFT;
-			
+
 				if(gameTime - lastgift< GIFTFREQ)
 				{
 					return;
 				}
 				lastgift = gameTime;
-				powerCalc(FALSE);											
+				powerCalc(FALSE);
 				psD=buildDroid(	psTempl, x<<TILE_SHIFT,  y<<TILE_SHIFT, selectedPlayer, FALSE);
 				if(psD)
-				{	
+				{
 					audio_QueueTrack(ID_GIFT);
 					addDroid(psD,apsDroidLists);							// add droid. telling everyone
 					addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
 				}
 				powerCalc(TRUE);											// power back on.
-			}	
+			}
 		}
 	}
 	*/
@@ -790,8 +790,8 @@ VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 			ASSERT((FALSE, "addMultiPlayerRandomArtifacts: Unable to find a free location"));
 		}
 
-		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);	
-		
+		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);
+
 		nx = (UWORD)x;
 		ny = (UWORD)y;
 		NetAdd(m,m.size,nx);
@@ -801,14 +801,14 @@ VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 
 		NetAdd(m,m.size,pF->id);
 		m.size += sizeof(pF->id);
-	
+
 		m.body[m.size]  = ANYPLAYER;
 		m.size +=1;
 		if(pF)
 		{
 			pF->player = ANYPLAYER;		// flag for multiplayer artifacts
 		}
-	}	
+	}
 
 	NETbcast(&m,FALSE);		// tell everyone.
 }
@@ -838,7 +838,7 @@ VOID recvMultiPlayerRandomArtifacts(NETMSG *pMsg)
 
 	quantity = (UDWORD) pMsg->body[0];
 	index = 1;
-	
+
 	NetGet(pMsg,index,type);
 	index += sizeof(type);
 
@@ -870,7 +870,7 @@ void giftArtifact(UDWORD owner,UDWORD x,UDWORD y)
 	PLAYER_RESEARCH *pO,*pR;
 	UDWORD	topic=0;
 	pR   = asPlayerResList[selectedPlayer];
-	
+
 	if(owner == ANYPLAYER)
 	{
 //		foundDMatchDroid(selectedPlayer,x,y);
@@ -891,8 +891,8 @@ void giftArtifact(UDWORD owner,UDWORD x,UDWORD y)
 				CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,
 					STR_MUL_ARTIF),getName(asResearch[topic].pName)));
 				return;
-			}		
-		}	
+			}
+		}
 	}
 }
 
@@ -902,17 +902,17 @@ VOID processMultiPlayerArtifacts(VOID)
 	static UDWORD lastCall;
 	FEATURE	*pF,*pFN;
 	UDWORD	x,y,pl;
-	iVector position; 
+	iVector position;
 	BOOL	found=FALSE;
 
 	// only do this every now and again.
 	if(lastCall > gameTime)lastCall= 0;
 	if ( (gameTime - lastCall) <2000)
-	{	
+	{
 		return;
 	}
 	lastCall = gameTime;
-	
+
 	addLoserGifts();
 
 	for(pF = apsFeatureLists[0]; pF ; pF = pFN)
@@ -920,20 +920,20 @@ VOID processMultiPlayerArtifacts(VOID)
 		pFN = pF->psNext;
 		// artifacts
 		if(pF->psStats->subType == FEAT_GEN_ARTE)
-		{	
+		{
 			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->x,pF->y,(TILE_UNITS+(TILE_UNITS/3))  );
 			if(found)
 			{
 				position.x = pF->x;				// Add an effect
-				position.z = pF->y;	
+				position.z = pF->y;
 				position.y = pF->z;
 				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
-							
+
 //				if(game.type == DMATCH)
 //				{
 //					x = pF->x;
 //					y = pF->y;
-//					removeFeature(pF);			// remove artifact+ send info.					
+//					removeFeature(pF);			// remove artifact+ send info.
 //					foundDMatchDroid(selectedPlayer, x,y);
 //					addDMatchDroid(1);
 //				}
@@ -943,8 +943,8 @@ VOID processMultiPlayerArtifacts(VOID)
 					y = pF->y;
 					pl= pF->player;
 					removeFeature(pF);			// remove artifact+ send info.
-					giftArtifact(pl,x,y);		// reward player.	
-					pF->player = 0;				
+					giftArtifact(pl,x,y);		// reward player.
+					pF->player = 0;
 					audio_QueueTrack( ID_SOUND_ARTIFACT_RECOVERED );
 //				}
 			}
@@ -953,7 +953,7 @@ VOID processMultiPlayerArtifacts(VOID)
 
 		// oil drums
 //		if(pF->psStats->subType == FEAT_OIL_DRUM)
-//		{	
+//		{
 //			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->x,pF->y,(TILE_UNITS+(TILE_UNITS/3))  );
 //			if(found)
 //			{
@@ -995,7 +995,7 @@ DROID_TEMPLATE * pickDistribTempl(UDWORD player)
 
 	rn = (rand()% abs(max-av) )+ av;	// pick a test level. av - max.
 	rn = abs(rn - av);					// rn is now a random distance from av.
-	
+
 	dist = 0;					//init distn
 
 	while(dist <= rn)
@@ -1007,7 +1007,7 @@ DROID_TEMPLATE * pickDistribTempl(UDWORD player)
 		{
 			i++;
 		}
-	
+
 		// distance of this template
 		dist = abs(psTempl->powerPoints - av);
 	}
@@ -1065,17 +1065,17 @@ BOOL deathmatchCheck(VOID)
 		setPower(selectedPlayer,LEV_HI);		// reset power.
 		sendPowerCheck(TRUE);					// tell everyone.
 
-		strcpy(sTemp, "multiplay\\Forces\\");			
-		strcat(sTemp, sForceName);	
-		strcat(sTemp,".For");	
+		strcpy(sTemp, "multiplay\\Forces\\");
+		strcat(sTemp, sForceName);
+		strcat(sTemp,".For");
 		loadForce( sTemp);
-	
+
 		useTheForce(FALSE);
 
 		cameraToHome(selectedPlayer,FALSE);			// move camera.
 	}
 
-	
+
 	// go no further if recently called.
 	if(lastCheck > gameTime)lastCheck = 0;
 	if(gameTime-lastCheck < ENDFREQUENCY)
@@ -1087,7 +1087,7 @@ BOOL deathmatchCheck(VOID)
 	// end game conditions.
 	// fraglimit / timelimit.
 	if(NetPlay.bHost && !gameComplete)
-	{	
+	{
 		switch(game.limit)
 		{
 		case FRAGLIMIT:		// check for fraglimit => FRAGLIMIT
@@ -1120,12 +1120,12 @@ BOOL deathmatchCheck(VOID)
 				dMatchWinner(pl,TRUE);
 			}
 			break;
-		
+
 		default:
 			break;
 		}
 
-	
+
 	}
 
 	return TRUE;

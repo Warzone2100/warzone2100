@@ -13,8 +13,8 @@
 
 /***************************************************************************/
 
-#include "types.h"
-#include "imd.h"
+#include "lib/framework/types.h"
+#include "lib/ivis_common/imd.h"
 #include "maxpidef.h"
 
 /***************************************************************************/

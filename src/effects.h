@@ -1,17 +1,17 @@
 #ifndef _effects_h
 #define _effects_h
-/*	
+/*
 	All singing, all dancing new effects code. Does all the stuff
 	that explosion.c and most of particle.c used to do as well as
 	all the construction dust clouds, body parts and all other
-	temporary world 'effects 
+	temporary world 'effects
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
-#include "piedef.h"
-#include "pietypes.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/pietypes.h"
 
 /* All the effect groups */
-typedef enum 
+typedef enum
 {
 EFFECT_EXPLOSION,
 EFFECT_CONSTRUCTION,
@@ -169,9 +169,9 @@ typedef enum
 #define	DROID_DESTRUCTION_DURATION		(3*GAME_TICKS_PER_SEC/2) // 1.5 seconds
 #define	STRUCTURE_DESTRUCTION_DURATION	((7*GAME_TICKS_PER_SEC)/2)	 // 3.5 seconds
 
-/* 
+/*
 	Definition of an 'effect'. This'll need to come down in size
-	for the PlayStation? 
+	for the PlayStation?
 */
 
 typedef struct	_effect_def
@@ -205,10 +205,10 @@ extern void	effectGiveAuxVar		( UDWORD var); // naughty
 extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
 
 extern void	initEffectsSystem		( void );
-extern void	processEffects			( void );		
-extern void	addEffect				( iVector *pos, EFFECT_GROUP group, 
+extern void	processEffects			( void );
+extern void	addEffect				( iVector *pos, EFFECT_GROUP group,
 										EFFECT_TYPE type, BOOL specified, struct iIMDShape *imd, BOOL lit );
-extern void	addMultiEffect			( iVector *basePos, iVector *scatter,EFFECT_GROUP group, 
+extern void	addMultiEffect			( iVector *basePos, iVector *scatter,EFFECT_GROUP group,
 									EFFECT_TYPE type,BOOL specified, struct iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
 
 extern void drawEffects				( void );

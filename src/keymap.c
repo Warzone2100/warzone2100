@@ -1,5 +1,5 @@
-#include "frame.h"
-#include "gtime.h"
+#include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "text.h"
 #include "keymap.h"
 #include "console.h"
@@ -9,7 +9,7 @@
 #include "keyedit.h"
 
 
-/*	
+/*
 	KeyMap.c
 	Alex McLean
 	Pumpkin Studios, EIDOS Interactive.
@@ -21,7 +21,7 @@
 
 // ----------------------------------------------------------------------------------
 /* Function Prototypes */
-KEY_MAPPING	*keyAddMapping		( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode, 
+KEY_MAPPING	*keyAddMapping		( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
 								 KEY_ACTION action, void (*pKeyMapFunc)(void), STRING *name );
 BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
 BOOL	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
@@ -37,8 +37,8 @@ void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
 void	processDebugMappings	( BOOL val );
 BOOL	getDebugMappingStatus	( void );
 BOOL	keyReAssignMappingName(STRING *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
-							
-BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode, 
+
+BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 							KEY_CODE newMetaCode, KEY_CODE newSubCode );
 KEY_MAPPING	*getKeyMapFromName(STRING *pName);
 
@@ -59,7 +59,7 @@ KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
 {
 KEY_MAPPING	*psMapping,*psReturn;
 
-	for(psMapping = keyMappings,psReturn = NULL; 
+	for(psMapping = keyMappings,psReturn = NULL;
 		psMapping AND !psReturn;
 		psMapping = psMapping->psNext)
 		{
@@ -141,7 +141,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_SeekNorth,
 	kf_ToggleCamera,
 	kf_addInGameOptions,
-	kf_RadarZoomOut,	
+	kf_RadarZoomOut,
 	kf_RadarZoomIn,
 	kf_ZoomOut,
 	kf_ZoomIn,
@@ -158,21 +158,21 @@ _keymapsave keyMapSaveTable[] =
 	kf_JumpToCommandUnits,
 	kf_ToggleOverlays,
 	kf_CentreOnBase,
-	kf_SetDroidAttackCease , 
+	kf_SetDroidAttackCease ,
 	kf_JumpToUnassignedUnits ,
-	kf_SetDroidAttackReturn , 
+	kf_SetDroidAttackReturn ,
 	kf_SetDroidAttackAtWill ,
-	kf_SetDroidReturnToBase , 
+	kf_SetDroidReturnToBase ,
 	kf_SetDroidRangeDefault,
-	kf_ToggleFormationSpeedLimiting, 
+	kf_ToggleFormationSpeedLimiting,
 	kf_SetDroidRangeShort,
-	kf_SetDroidMovePursue , 
+	kf_SetDroidMovePursue ,
 	kf_SetDroidMovePatrol ,
-	kf_SetDroidGoForRepair , 
+	kf_SetDroidGoForRepair ,
 	kf_SetDroidMoveHold ,
-	kf_SendTextMessage,	
+	kf_SendTextMessage,
 	kf_SetDroidRangeLong,
-	kf_ScatterDroids, 
+	kf_ScatterDroids,
 	kf_SetDroidRetreatMedium,
 	kf_SetDroidRetreatHeavy,
 	kf_SetDroidRetreatNever,
@@ -226,12 +226,12 @@ _keymapsave keyMapSaveTable[] =
 	kf_RecalcLighting,
 	kf_ToggleFog,
 	kf_ChooseOptions,
-	kf_TogglePower, 
-	kf_ToggleWeather, 
+	kf_TogglePower,
+	kf_ToggleWeather,
 	kf_SelectPlayer,
 	kf_ToggleMistFog,
 	kf_ToggleFogColour,
-	kf_AddMissionOffWorld, 
+	kf_AddMissionOffWorld,
 	kf_KillSelected,
 	kf_ShowMappings,
 	kf_GiveTemplateSet,
@@ -241,7 +241,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_LowerTile,
 	kf_ToggleDemoMode,
 	kf_ToggleGodMode,
-	kf_EndMissionOffWorld, 
+	kf_EndMissionOffWorld,
 	kf_SystemClose,
 	kf_ToggleShadows,
 //#endif
@@ -251,10 +251,10 @@ _keymapsave keyMapSaveTable[] =
 
 
 // ----------------------------------------------------------------------------------
-/*	
+/*
 	Here is where we assign functions to keys and to combinations of keys.
 	these will be read in from a .cfg file customisable by the player from
-	an in-game menu 
+	an in-game menu
 */
 void	keyInitMappings( BOOL bForceDefaults )
 {
@@ -270,7 +270,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 		qwertyKeyMappings[i].psMapping = NULL;
 	}
 
-	// load the mappings. 
+	// load the mappings.
 	if(!bForceDefaults && loadKeyMap() == TRUE)
 	{
 		return;
@@ -337,7 +337,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_9,KEYMAP_PRESSED,kf_SelectCommander_9,				strresGetString(psStringRes,STR_BIND_CMD9));
 	//                                **********************************
 	//                                **********************************
-	//	MULTIPLAYER 
+	//	MULTIPLAYER
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		strresGetString(psStringRes,STR_BIND_MULOP));
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_PRESSED,kf_multiAudioStart,	strresGetString(psStringRes,STR_BIND_AUDON));
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_RELEASED,kf_multiAudioStop,	strresGetString(psStringRes,STR_BIND_AUDOFF));
@@ -384,8 +384,8 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SetDroidMovePatrol ,		strresGetString(psStringRes,STR_BIND_PATR));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_SetDroidGoForRepair ,	strresGetString(psStringRes,STR_BIND_REPA));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SetDroidMoveHold ,		strresGetString(psStringRes,STR_BIND_DSTOP));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,			strresGetString(psStringRes,STR_BIND_SENDT));	
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		strresGetString(psStringRes,STR_BIND_LONGR));	
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,			strresGetString(psStringRes,STR_BIND_SENDT));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		strresGetString(psStringRes,STR_BIND_LONGR));
 
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
@@ -419,7 +419,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextPowerStation,strresGetString(psStringRes,STR_BIND_SELPOWER));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,strresGetString(psStringRes,STR_BIND_SELCYBORG));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
-	
+
 #ifndef DEBUG
 if(bAllowDebugMode)
 {
@@ -434,7 +434,7 @@ if(bAllowDebugMode)
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_LowerTile,						"Lower tile height");	
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_LowerTile,						"Lower tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,				"Toggles on/off DEMO Mode");
 //	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_ToggleSensorDisplay,			"Toggle Sensor display");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_B,KEYMAP_PRESSED,kf_EndMissionOffWorld,			"End Mission");
@@ -461,10 +461,10 @@ if(bAllowDebugMode)
 #ifndef DEBUG
 }
 #endif
-		
+
 	saveKeyMap();	// save out the default key mappings.
 
-//  ------------------------ OLD STUFF - Store here! 
+//  ------------------------ OLD STUFF - Store here!
 	/*
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F6,KEYMAP_DOWN,kf_UpGeoOffset,"Raise the geometric offset");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F7,KEYMAP_DOWN,kf_DownGeoOffset,"Lower the geometric offset");
@@ -488,8 +488,8 @@ if(bAllowDebugMode)
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Q,KEYMAP_DOWN,kf_RaiseTile,"Raise tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_ShowNumObjects,"Show number of Objects");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_FrameRate,"Show Frame Rate");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,"Send Text Message");	
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_ToggleBackgroundFog,"Toggle Background Fog");	
+	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,"Send Text Message");
+	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_ToggleBackgroundFog,"Toggle Background Fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_BuildInfo,"Build date and time");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_LowerTile,"Lower tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_X,KEYMAP_PRESSED,kf_DebugDroidInfo,"Droid Debug Info");
@@ -498,7 +498,7 @@ if(bAllowDebugMode)
 	*/
 
 //  ------------------------ OLD STUFF - Store here!
-	
+
 
 
 
@@ -551,9 +551,9 @@ BLOCK_HEAP  *psHeap;
 	newMapping->altMetaKeyCode = KEY_IGNORE;
 
 	/* We always request only the left hand one */
-	if(metaCode == KEY_LCTRL) {newMapping->altMetaKeyCode = KEY_RCTRL;} 
-	else if(metaCode == KEY_LALT) {newMapping->altMetaKeyCode = KEY_RALT;} 
-	else if(metaCode == KEY_LSHIFT) {newMapping->altMetaKeyCode = KEY_RSHIFT;} 
+	if(metaCode == KEY_LCTRL) {newMapping->altMetaKeyCode = KEY_RCTRL;}
+	else if(metaCode == KEY_LALT) {newMapping->altMetaKeyCode = KEY_RALT;}
+	else if(metaCode == KEY_LSHIFT) {newMapping->altMetaKeyCode = KEY_RSHIFT;}
 
 	/* Set it to be active */
 	newMapping->active = TRUE;
@@ -570,7 +570,7 @@ BLOCK_HEAP  *psHeap;
 BOOL	keyRemoveMapping( KEY_CODE metaCode, KEY_CODE subCode )
 {
 KEY_MAPPING	*mapping;
-	
+
 	mapping = keyFindMapping(metaCode, subCode);
 	return(keyRemoveMappingPt(mapping));
 }
@@ -581,7 +581,7 @@ KEY_MAPPING *keyFindMapping( KEY_CODE metaCode, KEY_CODE subCode )
 {
 KEY_MAPPING	*psCurr;
 
-	/* See if we can find it */	
+	/* See if we can find it */
 	for(psCurr = keyMappings; psCurr != NULL; psCurr = psCurr->psNext)
 		{
 			if(psCurr->metaKeyCode == metaCode AND psCurr->subKeyCode == subCode)
@@ -623,12 +623,12 @@ KEY_MAPPING	*psPrev,*psCurr;
 		return(TRUE);
 	}
 
-	/* See if we can find it */	
+	/* See if we can find it */
 	for(psPrev = NULL, psCurr = keyMappings;
 		psCurr != NULL AND psCurr!=psToRemove;
 		psPrev = psCurr, psCurr = psCurr->psNext)
 		{
-		  /*NOP*/	
+		  /*NOP*/
 		}
 
 		/* If it was found... */
@@ -761,7 +761,7 @@ BOOL		bKeyProcessed;
  		}
 		/* Process the combi ones */
  		if( (keyToProcess->metaKeyCode!=KEY_IGNORE AND bMetaKeyDown) AND
-			!(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings == FALSE)) 
+			!(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings == FALSE))
  		{
  			/* It's a combo keypress - one held down and the other pressed */
  			if(keyDown(keyToProcess->metaKeyCode) AND keyPressed(keyToProcess->subKeyCode) )
@@ -800,7 +800,7 @@ BOOL	checkQwertyKeys( void )
 KEY_CODE	qKey;
 UDWORD		tableEntry;
 BOOL		aquired;
-	
+
 	aquired = FALSE;
 	/* Are we trying to make a new map marker? */
 	if( keyDown(KEY_LALT))
@@ -817,7 +817,7 @@ BOOL		aquired;
 				keyRemoveMappingPt(qwertyKeyMappings[tableEntry].psMapping);
 			}
 			/* Now add the new one for this location */
-			qwertyKeyMappings[tableEntry].psMapping = 
+			qwertyKeyMappings[tableEntry].psMapping =
 				keyAddMapping(KEYMAP_ALWAYS,KEY_LSHIFT,qKey,KEYMAP_PRESSED,kf_JumpToMapMarker,"Jump to new map marker");
 			aquired = TRUE;
 
@@ -857,7 +857,7 @@ BOOL	onlySub;
 		keyScanToString(psMapping->metaKeyCode,(STRING *)&asciiMeta,20);
 		onlySub = FALSE;
 	}
-	
+
 	keyScanToString(psMapping->subKeyCode,(STRING *)&asciiSub,20);
 	if(onlySub)
 	{
@@ -938,7 +938,7 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
-			return(i);	// middle row key pressed 
+			return(i);	// middle row key pressed
 		}
 	}
 
@@ -947,7 +947,7 @@ UDWORD	i;
 		if(keyPressed(i))
 		{
 			return(i);	// bottomw row key pressed
-		}					
+		}
 	}
 	return(0);			// no ascii key pressed
 }
@@ -1016,13 +1016,13 @@ BOOL	getDebugMappingStatus( void )
 	return(bDoingDebugMappings);
 }
 // ----------------------------------------------------------------------------------
-BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode, 
+BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 							KEY_CODE newMetaCode, KEY_CODE newSubCode )
 {
 KEY_MAPPING	*psMapping;
 BOOL		bFound;
 
-	for(psMapping = keyMappings,bFound = FALSE; psMapping AND !bFound; 
+	for(psMapping = keyMappings,bFound = FALSE; psMapping AND !bFound;
 		psMapping = psMapping->psNext)
 	{
 		/* Find the original */
@@ -1049,7 +1049,7 @@ KEY_MAPPING	*psMapping;
 KEY_CODE	origMetaCode,origSubCode;
 BOOL	bReplaced;
 
-  	for(psMapping = keyMappings,bReplaced = FALSE; psMapping AND !bReplaced; 
+  	for(psMapping = keyMappings,bReplaced = FALSE; psMapping AND !bReplaced;
 		psMapping = psMapping->psNext)
 	{
 		if(strcmp(psMapping->pName,pName) == FALSE)	//negative

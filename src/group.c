@@ -5,7 +5,7 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "group.h"
 #include "orderdef.h"
@@ -180,7 +180,7 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 	psGroup->refCount -= 1;
 
 	// if psDroid == NULL just decrease the refcount don't remove anything from the list
-	if (psDroid != NULL && 
+	if (psDroid != NULL &&
 		(psDroid->droidType != DROID_COMMAND ||
 		 psGroup->type != GT_COMMAND))
 	{
@@ -320,7 +320,7 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 
 	if(bMultiPlayer)
 	{
-		SendGroupOrderGroup(psGroup,order,x,y,NULL); 
+		SendGroupOrderGroup(psGroup,order,x,y,NULL);
 		bMultiPlayer = FALSE;
 
 		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
@@ -357,7 +357,7 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 		{
 			orderDroidObj(psCurr, order, psObj);
 		}
-	
+
 		bMultiPlayer = TRUE;
 	}
 	else

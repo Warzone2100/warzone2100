@@ -9,34 +9,35 @@
 
 /* loop position printf's */
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "loop.h"
-#include "rendmode.h"
-#include "piestate.h" //ivis render code
-#include "piemode.h"
-#include "vid.h" //ivis render code
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piestate.h" //ivis render code
+#include "lib/ivis_common/piemode.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h" //ivis render code
 #include "objects.h"
 #include "display.h"
 #include "map.h"
 #include "disp2d.h"
 #include "hci.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "ingameop.h"
 #include "player.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "miscimd.h"
 #include "effects.h"
 #include "radar.h"
 #include "projectile.h"
 #include "console.h"
 #include "power.h"
-#include "animobj.h"
+#include "lib/gamelib/animobj.h"
 #include "message.h"
 #include "bucket3d.h"
 #include "display3d.h"
 
 #include "multiplay.h" //ajl
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "levels.h"
 #include "visibility.h"
@@ -45,13 +46,14 @@
 #include "loadsave.h"
 #include "game.h"
 #include "text.h"
-#include "screen.h"
+// FIXME Direct iVis implementation inlcude!
+#include "lib/ivis_opengl/screen.h"
 #include "multijoin.h"
 
 #include "intimage.h"
 #include "resource.h"
 #include "seqdisp.h"
-#include "cdaudio.h"
+#include "lib/sound/cdaudio.h"
 #include "mission.h"
 #include "warcam.h"
 #include "lighting.h"
@@ -63,7 +65,7 @@
 #include "fpath.h"
 #include "scriptextern.h"
 #include "cluster.h"
-#include "mixer.h"
+#include "lib/sound/mixer.h"
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
@@ -173,7 +175,7 @@ GAMECODE gameLoop(void)
 	pie_ScreenFlip(clearMode);//gameloopflip
 //JPS 24 feb???
 
-	
+
 	fastExit = FALSE;
 
 	pie_GlobalRenderBegin();
@@ -203,7 +205,7 @@ GAMECODE gameLoop(void)
 		DBP1(("loop: Run Widgets Update\n"));
 	  	if( (!rotActive) && getWidgetsStatus() &&
 			(dragBox3D.status != DRAG_DRAGGING) &&
-			(wallDrag.status != DRAG_DRAGGING) ) 
+			(wallDrag.status != DRAG_DRAGGING) )
 		{
 			intRetVal = intRunWidgets();
 		}
@@ -215,17 +217,17 @@ GAMECODE gameLoop(void)
         //don't process the object lists if paused or about to quit to the front end
 		if (!(gameUpdatePaused() OR intRetVal == INT_QUIT))
 		{
-			if( (dragBox3D.status != DRAG_DRAGGING) && (wallDrag.status 
-				!= DRAG_DRAGGING)) 
+			if( (dragBox3D.status != DRAG_DRAGGING) && (wallDrag.status
+				!= DRAG_DRAGGING))
 			{
-				if( (intRetVal == INT_INTERCEPT) 
-					|| (radarOnScreen && CoordInRadar(mouseX(),mouseY()) AND 
+				if( (intRetVal == INT_INTERCEPT)
+					|| (radarOnScreen && CoordInRadar(mouseX(),mouseY()) AND
                     getHQExists(selectedPlayer)) )
 				{
 					pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 					frameSetCursorFromRes(IDC_DEFAULT);
 					//if( (intRetVal != INT_FULLSCREENPAUSE) && (
-					//	intRetVal != INT_INTELPAUSE) ) 
+					//	intRetVal != INT_INTELPAUSE) )
 					//{
 						intRetVal = INT_INTERCEPT;
 					//}
@@ -240,7 +242,7 @@ GAMECODE gameLoop(void)
 		// multiplayer stuff.
 
 		// Don't update the game world if the design screen is up and single player game
-		//if (((intRetVal != INT_FULLSCREENPAUSE) || bMultiPlayer) AND ((intRetVal != 
+		//if (((intRetVal != INT_FULLSCREENPAUSE) || bMultiPlayer) AND ((intRetVal !=
 		//	INT_INTELPAUSE) || bMultiPlayer))
 
 #ifdef DEBUG
@@ -337,7 +339,7 @@ GAMECODE gameLoop(void)
 					}
 
 				}
-				
+
 				numMissionDroids[i]=0;
 				for(psCurr = mission.apsDroidLists[i]; psCurr; psCurr = psNext)
 				{
@@ -386,7 +388,7 @@ GAMECODE gameLoop(void)
 					}
 				}
 
-                /*set this up AFTER droidUpdate so that if trying to building a 
+                /*set this up AFTER droidUpdate so that if trying to building a
                 new one, we know whether one exists already*/
                 setLasSatExists(FALSE, i);
 				for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
@@ -418,7 +420,7 @@ GAMECODE gameLoop(void)
                         setLasSatExists(TRUE, i);
                     }
 				}
-				for (psCBuilding = mission.apsStructLists[i]; psCBuilding; 
+				for (psCBuilding = mission.apsStructLists[i]; psCBuilding;
 						psCBuilding = psNBuilding)
 				{
 					/* Copy the next pointer - not 100% sure if the structure could get destroyed
@@ -458,7 +460,7 @@ GAMECODE gameLoop(void)
 				featureUpdate(psCFeat);
 			}
 
-			
+
 			DBP1(("loop: Smoke/Explosion Update\n"));
 
 			/* Ensure smoke drifts up! */
@@ -478,11 +480,11 @@ GAMECODE gameLoop(void)
 
 		//}
 		// Don't update the game world if the design screen is up and single player game
-		//if (((intRetVal != INT_FULLSCREENPAUSE ) || bMultiPlayer) AND ((intRetVal != 
+		//if (((intRetVal != INT_FULLSCREENPAUSE ) || bMultiPlayer) AND ((intRetVal !=
 		//	INT_INTELNOSCROLL) || bMultiPlayer))
 		//{
 			//not any more!
-			//need to be able to scroll and have radar still in Intelligence Screen - 
+			//need to be able to scroll and have radar still in Intelligence Screen -
 			//but only if 3D View is not up
 			/*if(!getWarCamStatus())
 			{
@@ -490,7 +492,7 @@ GAMECODE gameLoop(void)
 			}*/
 		//}
 		// Don't update the game world if the design screen is up and single player game
-		//if ((intRetVal != INT_FULLSCREENPAUSE ) || bMultiPlayer) 
+		//if ((intRetVal != INT_FULLSCREENPAUSE ) || bMultiPlayer)
 		//{
 //			DBP1(("Radar update \n"));
 //			/* Make radar line sweep and colour cycle */
@@ -498,13 +500,13 @@ GAMECODE gameLoop(void)
 		//}
 
 		// Don't update the game world if the design screen is up and single player game
-		//if ((intRetVal != INT_FULLSCREENPAUSE AND intRetVal != 
+		//if ((intRetVal != INT_FULLSCREENPAUSE AND intRetVal !=
 		//	INT_INTELPAUSE) || bMultiPlayer)
 		//{
 			DBP1(("loop: Objmem Update\n"));
 
 			objmemUpdate();
-			
+
 			DBP1(("loop: audio Update\n"));
 
 		}
@@ -517,7 +519,7 @@ GAMECODE gameLoop(void)
 		{
 			if(!getWarCamStatus()) //this could set scrollPause?
 			{
-			 	if(dragBox3D.status != DRAG_DRAGGING 
+			 	if(dragBox3D.status != DRAG_DRAGGING
 					&& intMode		!= INT_INGAMEOP )
 				{
 					scroll();
@@ -632,7 +634,7 @@ GAMECODE gameLoop(void)
 				if (display3D)
 				{
 					/*bPlayerHasHQ=FALSE;
-					for (psStructure = apsStructLists[selectedPlayer]; psStructure AND 
+					for (psStructure = apsStructLists[selectedPlayer]; psStructure AND
 						!bPlayerHasHQ; psStructure = psStructure->psNext)
 					{
 						if (psStructure->pStructureType->type == REF_HQ)
@@ -663,7 +665,7 @@ GAMECODE gameLoop(void)
 							processMouseClickInput();
 						//}
 					}
-					DBP1(("loop: display3D\n"));		
+					DBP1(("loop: display3D\n"));
 					downloadAtStartOfFrame();
 					displayWorld();
 				}
@@ -714,10 +716,10 @@ GAMECODE gameLoop(void)
 
 
 	//#endif
-		}										   
+		}
 		/*else if (!quitting)
 		{
-			// Display the in game interface 
+			// Display the in game interface
 	//#ifdef PSX
 	//		DrawMousePointer(mouseX(),mouseY());	// add the mouse pointer as a primative
 	//#endif
@@ -770,7 +772,7 @@ GAMECODE gameLoop(void)
 //	}		// ALL THIS GUBBINS DONE IN A PROPER KEYMAPPING NOW (A DEBUG ONE THOUGH!).
 
 	DBP1(("loop: flip\n"));
-	
+
 	pie_GetResetCounts(&loopPieCount, &loopTileCount, &loopPolyCount, &loopStateChanges);
 
 
@@ -910,7 +912,7 @@ GAMECODE gameLoop(void)
 		audio_StopAll();
 		return GAMECODE_PLAYVIDEO;
 	}
-	
+
 	/*
 	if( (intMode == INT_NORMAL) AND (forceWidgetsOn == TRUE) )
 	{
@@ -1072,7 +1074,7 @@ static BOOL bActiveBackDrop = FALSE;
 		mixer_SetWavVolume( g_iGlobalVol );
 
 	}
-	
+
 	return GAMECODE_CONTINUE;
 }
 

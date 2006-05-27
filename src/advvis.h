@@ -1,7 +1,7 @@
 #ifndef _advvis_h
 #define _advvis_h
 
-#include "types.h"
+#include "lib/framework/types.h"
 #include "base.h"
 
 extern void	avInformOfChange(SDWORD x, SDWORD y);

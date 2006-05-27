@@ -5,11 +5,11 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "cmddroiddef.h"
 #include "cmddroid.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "group.h"
 #include "order.h"
 #include "multiplay.h"
@@ -235,7 +235,7 @@ SDWORD cmdGetCommanderLevel(DROID *psDroid)
 	return 0;
 }
 
-// Selects all droids for a given commander 
+// Selects all droids for a given commander
 void	cmdSelectSubDroids(DROID *psDroid)
 {
 DROID	*psCurr;

@@ -7,7 +7,7 @@
 #ifndef _loop_h
 #define _loop_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 typedef enum {
 	GAMECODE_CONTINUE,

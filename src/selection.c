@@ -1,12 +1,12 @@
-/*	
-	Selection.c 
-	Alex McLean, Pumpkin studios, EIDOS. 
-	Attempt to rationalise the unit selection procedure and	
-	also necessary as we now need to return the number of 
+/*
+	Selection.c
+	Alex McLean, Pumpkin studios, EIDOS.
+	Attempt to rationalise the unit selection procedure and
+	also necessary as we now need to return the number of
 	units selected according to specified criteria.
 */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "base.h"
 #include "droiddef.h"
@@ -24,7 +24,7 @@
 
 // ---------------------------------------------------------------------
 // EXTERNALLY REFERENCED FUNCTIONS
-UDWORD	selDroidSelection		( UDWORD	player, SELECTION_CLASS droidClass, 
+UDWORD	selDroidSelection		( UDWORD	player, SELECTION_CLASS droidClass,
 									SELECTIONTYPE droidType, BOOL bOnScreen );
 UDWORD	selDroidDeselect		( UDWORD player );
 UDWORD	selNumSelected			( UDWORD player );
@@ -39,7 +39,7 @@ UDWORD	selSelectAllDamaged		( UDWORD player, BOOL bOnScreen);
 UDWORD	selSelectAllSame		( UDWORD player, BOOL bOnScreen);
 UDWORD	selNameSelect			( STRING *droidName, UDWORD player, BOOL bOnScreen );
 // ---------------------------------------------------------------------
-/*	
+/*
 	Selects the units of a given player according to given criteria.
 	It is also possible to request whether the units be onscreen or not.
 */
@@ -48,7 +48,7 @@ DROID	*psOldRD = NULL;	// pointer to last selected repair unit
 DROID	*psOldNS = NULL;
 STRUCTURE	*psOldStruct = NULL;
 
-UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass, 
+UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
 						  SELECTIONTYPE droidType, BOOL bOnScreen )
 {
 UDWORD	retVal;
@@ -114,7 +114,7 @@ UDWORD	count;
 
 	selDroidDeselect(player);
 	/* Go thru' all */
-	for(psDroid = apsDroidLists[player],count = 0; 
+	for(psDroid = apsDroidLists[player],count = 0;
 		psDroid; psDroid = psDroid->psNext)
 		{
 			/* Do we care about them being on screen? */
@@ -143,7 +143,7 @@ DROID	*psDroid;
 UDWORD	count;
 
 	selDroidDeselect(player);
-	/* Go thru' them all */	
+	/* Go thru' them all */
 	for(psDroid = apsDroidLists[player], count = 0;
 		psDroid; psDroid = psDroid->psNext)
 	{
@@ -230,12 +230,12 @@ UDWORD	count;
 }
 // ---------------------------------------------------------------------
 // Deselects all units for the player
-UDWORD	selDroidDeselect( UDWORD player )	
+UDWORD	selDroidDeselect( UDWORD player )
 {
 UDWORD	count;
 DROID	*psDroid;
 
-	for(psDroid = apsDroidLists[player], count = 0; 
+	for(psDroid = apsDroidLists[player], count = 0;
 		psDroid; psDroid = psDroid->psNext)
 		{
 			if(psDroid->selected)
@@ -249,12 +249,12 @@ DROID	*psDroid;
 }
 // ---------------------------------------------------------------------
 // Lets you know how many are selected for a given player
-UDWORD	selNumSelected( UDWORD player )	
+UDWORD	selNumSelected( UDWORD player )
 {
 UDWORD	count;
 DROID	*psDroid;
 
-	for(psDroid = apsDroidLists[player], count = 0; 
+	for(psDroid = apsDroidLists[player], count = 0;
 		psDroid; psDroid = psDroid->psNext)
 		{
 			if(psDroid->selected)
@@ -311,9 +311,9 @@ UDWORD	count;
 				}
 			}
 		}
-	if(count) 
-		return(count+1); 
-	else 
+	if(count)
+		return(count+1);
+	else
 		return(count);
 
 }
@@ -327,7 +327,7 @@ DROID	*psResult;
 DROID	*psFirst;
 BOOL	bLaterInList, bMatch;
 
-	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE; 
+	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
 		psCurr AND !psResult; psCurr = psCurr->psNext)
 	{
 		//if( psCurr->droidType == (SDWORD)unitType )
@@ -335,7 +335,7 @@ BOOL	bLaterInList, bMatch;
         bMatch = FALSE;
         if (unitType == DROID_CONSTRUCT)
         {
-            if (psCurr->droidType == DROID_CONSTRUCT OR 
+            if (psCurr->droidType == DROID_CONSTRUCT OR
                 psCurr->droidType == DROID_CYBORG_CONSTRUCT)
             {
                 bMatch = TRUE;
@@ -343,7 +343,7 @@ BOOL	bLaterInList, bMatch;
         }
         else if (unitType == DROID_REPAIR)
         {
-            if (psCurr->droidType == DROID_REPAIR OR 
+            if (psCurr->droidType == DROID_REPAIR OR
                 psCurr->droidType == DROID_CYBORG_REPAIR)
             {
                 bMatch = TRUE;
@@ -360,7 +360,7 @@ BOOL	bLaterInList, bMatch;
 			{
 				psFirst = psCurr;
 			}
-		 
+
 			if(psCurr == psOldRD)
 			{
 				bLaterInList = TRUE;
@@ -376,7 +376,7 @@ BOOL	bLaterInList, bMatch;
 			else if(psCurr!=psOldRD AND bLaterInList)
 			{
 				psResult = psCurr;
-			} 	
+			}
 
 		 }
 	}
@@ -439,20 +439,20 @@ DROID	*psCurr;
 DROID	*psResult;
 DROID	*psFirst;
 BOOL	bLaterInList;
-	
-	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE; 
+
+	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
 		psCurr AND !psResult; psCurr = psCurr->psNext)
 	{
 		if( psCurr->droidType == DROID_REPAIR OR
             psCurr->droidType == DROID_CYBORG_REPAIR )
 		{
-			
+
 		 	/* Always store away the first one we find */
 			if(!psFirst)
 			{
 				psFirst = psCurr;
 			}
-		 
+
 			if(psCurr == psOldRD)
 			{
 				bLaterInList = TRUE;
@@ -468,7 +468,7 @@ BOOL	bLaterInList;
 			else if(psCurr!=psOldRD AND bLaterInList)
 			{
 				psResult = psCurr;
-			} 	
+			}
 
 		 }
 	}
@@ -518,20 +518,20 @@ DROID	*psCurr;
 DROID	*psResult;
 DROID	*psFirst;
 BOOL	bLaterInList;
-	
-	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE; 
+
+	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
 		psCurr AND !psResult; psCurr = psCurr->psNext)
 	{
 		/* Only look at unselected ones */
 		if(psCurr->group==UBYTE_MAX)
 		{
-			
+
 		  	/* Keep a record of first one */
 			if(!psFirst)
 			{
 				psFirst = psCurr;
 			}
-		
+
 			if(psCurr == psOldNS)
 			{
 				bLaterInList = TRUE;
@@ -547,8 +547,8 @@ BOOL	bLaterInList;
 			else if(psCurr!=psOldNS AND bLaterInList)
 			{
 				psResult = psCurr;
-			} 	
-			
+			}
+
 		}
 	}
 

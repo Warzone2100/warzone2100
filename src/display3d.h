@@ -4,8 +4,8 @@
 #define _display3d_h
 
 #include "display3ddef.h"	// This should be the only place including this file on the PC ... display3d_psx.h on the playstation
-#include "pietypes.h"
-#include "piedef.h"
+#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_common/piedef.h"
 #include "objectdef.h"
 #include "message.h"
 
@@ -41,7 +41,7 @@ extern void displayFeatures( void );
 extern void	displayStaticObjects( void );
 extern void	displayDynamicObjects( void );
 extern void displayProximityMsgs( void );
-extern void displayDelivPoints(void); 
+extern void displayDelivPoints(void);
 extern void	calcScreenCoords(DROID *psDroid);
 extern void	toggleReloadBarDisplay( void );
 extern void	toggleEnergyBars( void );

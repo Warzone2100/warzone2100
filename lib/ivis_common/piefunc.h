@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 
 
@@ -34,7 +34,7 @@
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_DownLoadBufferToScreen(void *srcData, UDWORD destX, UDWORD 
+extern void pie_DownLoadBufferToScreen(void *srcData, UDWORD destX, UDWORD
 							destY,UDWORD srcWidth,UDWORD srcHeight,UDWORD srcStride);
 extern void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour);
 extern void pie_DrawBoundingDisc(iIMDShape *shape, int pieFlag);

@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "piedef.h"
 
 

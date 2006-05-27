@@ -3,7 +3,7 @@
  *
  * Routines for moving units about the map
  *
- */							   
+ */
 
 /* Movement printfs */
 //#define DEBUG_GROUP1
@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 //#define DEBUG_DRIVE_SPEED
 #ifdef DEBUG
@@ -39,11 +39,11 @@ BOOL	moveDoMessage;
 #include "map.h"
 #include "fpath.h"
 #include "loop.h"
-#include "gtime.h"
-#include "audio.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "geometry.h"
-#include "animobj.h"
+#include "lib/gamelib/animobj.h"
 #include "anim_id.h"
 #include "formationdef.h"
 #include "formation.h"
@@ -55,7 +55,7 @@ BOOL	moveDoMessage;
 #include "mapgrid.h"
 #include "display.h"	// needed for widgetsOn flag.
 #include "effects.h"
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 #include "power.h"
 #include "scores.h"
 
@@ -69,7 +69,7 @@ BOOL	moveDoMessage;
 #endif
 
 
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multigifts.h"
 
@@ -817,7 +817,7 @@ void moveStopDroid(DROID *psDroid)
 /*Stops a droid dead in its tracks - doesn't allow for any little skidding bits*/
 void moveReallyStopDroid(DROID *psDroid)
 {
-    ASSERT((PTRVALID(psDroid, sizeof(DROID)), 
+    ASSERT((PTRVALID(psDroid, sizeof(DROID)),
         "moveReallyStopUnit: invalid unit pointer"));
 
     psDroid->sMove.Status = MOVEINACTIVE;
@@ -1463,7 +1463,7 @@ BOOL moveObjOnTarget(DROID *psDroid, BASE_OBJECT *psObst)
 	}
 
 	return FALSE;
-	
+
 	/*	SDWORD	absX, absY;
 	SDWORD	tarX, tarY, tarMag;
 	SDWORD	obstX, obstY, obstMag;
@@ -1501,7 +1501,7 @@ BOOL moveObjOnTarget(DROID *psDroid, BASE_OBJECT *psObst)
 }
 
 
-// Calculate the actual movement to slide around 
+// Calculate the actual movement to slide around
 void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, FRACT *pMx, FRACT *pMy)
 {
 	SDWORD		obstX, obstY;
@@ -1568,7 +1568,7 @@ void moveCalcBlockingSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy, SDWORD tarDir
 	SDWORD	state = 0;
 #define NOTE_STATE(x) state = x
 #else
-#define NOTE_STATE(x) 
+#define NOTE_STATE(x)
 #define NOTE_SLIDE
 #define NOTE_STATE(x)
 #endif
@@ -2157,7 +2157,7 @@ void moveCalcDroidSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy)
 	normX = FRACTdiv(MAKEFRACT(xdiff), MAKEFRACT(mag));
 	normY = FRACTdiv(MAKEFRACT(ydiff), MAKEFRACT(mag));
 	DBP3(("mag %d\n", mag));
-	
+
 	// Create the avoid vector
 	if (FRACTmul(*pX, normY) + FRACTmul(*pY,-normX) < 0)
 	{
@@ -2176,9 +2176,9 @@ void moveCalcDroidSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy)
 //	if (mag > obstBound)
 //	{
 //		DBP3(("mag > obstBound\n"));
-		*pX = *pX * (float)mag / AVOID_DIST + 
+		*pX = *pX * (float)mag / AVOID_DIST +
 			  avoidX * (AVOID_DIST - (float)mag)/AVOID_DIST;
-		*pY = *pY * (float)mag / AVOID_DIST + 
+		*pY = *pY * (float)mag / AVOID_DIST +
 			  avoidY * (AVOID_DIST - (float)mag)/AVOID_DIST;
 
 		resMag = FRACTmul(*pX, *pX) + FRACTmul(*pY,*pY);
@@ -2189,10 +2189,10 @@ void moveCalcDroidSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy)
 //	else
 //	{
 //		DBP3(("mag < obstBound\n"));
-//		*pX = *pX * (float)mag / AVOID_DIST + 
+//		*pX = *pX * (float)mag / AVOID_DIST +
 //			  normX * (float)(obstBound - mag)/obstRange +
 //			  avoidX * (mag - obstRad)/obstBound;
-//		*pY = *pY * (float)mag / AVOID_DIST + 
+//		*pY = *pY * (float)mag / AVOID_DIST +
 //			  normY * (float)(obstBound - mag)/obstRange +
 //			  avoidY * (mag - obstRad)/obstBound;
 //	}
@@ -2225,7 +2225,7 @@ BOOL moveGetTileObst(SDWORD cx,SDWORD cy, SDWORD ox,SDWORD oy, SDWORD *pDist)
 	return TRUE;
 }
 
-			
+
 // Get a charged particle vector from all nearby objects
 void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 {
@@ -2352,7 +2352,7 @@ void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 			normX = FRACTdiv(normX, resMag);
 			normY = FRACTdiv(normY, resMag);
 			mag = minMag;
-			
+
 			// Create the avoid vector
 			if (FRACTmul(*pX, normY) + FRACTmul(*pY,-normX) < 0)
 			{
@@ -2369,13 +2369,13 @@ void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 
 
-			*pX = *pX * (float)mag / AVOID_DIST + 
+			*pX = *pX * (float)mag / AVOID_DIST +
 				  avoidX * (AVOID_DIST - (float)mag)/AVOID_DIST;
 
-			*pY = *pY * (float)mag / AVOID_DIST + 
+			*pY = *pY * (float)mag / AVOID_DIST +
 				  avoidY * (AVOID_DIST - (float)mag)/AVOID_DIST;
 
-	
+
 
 			resMag = FRACTmul(*pX, *pX) + FRACTmul(*pY,*pY);
 			resMag = fSQRT(resMag);
@@ -2525,7 +2525,7 @@ void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 			// object too far away to worry about
 			continue;
 		}
-		
+
 		// vtol droids only avoid each other and don't affect ground droids
 		if ( (vtolDroid(psDroid) && (psObj->type != OBJ_DROID || !vtolDroid((DROID *)psObj))) ||
 			 (!vtolDroid(psDroid) && psObj->type == OBJ_DROID && vtolDroid((DROID *)psObj)) )
@@ -2965,7 +2965,7 @@ static void moveGetDirection(DROID *psDroid, FRACT *pX, FRACT *pY)
 			bNoVector = FALSE;
 		}
 	}
-	
+
 	if (bNoVector)
 
 	{
@@ -3078,14 +3078,14 @@ BOOL moveReachedWayPoint(DROID *psDroid)
 
 			iRange = TILE_UNITS/4;
 
-		}										  
+		}
 		else
 		{
 			iRange = TILE_UNITS/4;
 		}
 
-				
-		
+
+
 		if (droidX*droidX + droidY*droidY < iRange*iRange)
 		{
 			return TRUE;
@@ -3096,7 +3096,7 @@ BOOL moveReachedWayPoint(DROID *psDroid)
 		// if the dot product is -ve the droid has got past the way point
 		// but only move onto the next way point if we can see the previous one
 		// (this helps units that have got nudged off course).
-		
+
 		// FIXME: TILE_UNITS is larger than the type width in the right shift
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
 			fpathTileLOS((SDWORD)psDroid->x >> TILE_UNITS, (SDWORD)psDroid->y >> TILE_UNITS,
@@ -3360,7 +3360,7 @@ void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
 			{
 				finalDir += TRIG_DEGREES;
 			}
-		}		
+		}
 	}
 
 	psDroid->sMove.dir = (SWORD)finalDir;
@@ -3472,14 +3472,14 @@ void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 //	{
 //		DBPRINTF(("Droid off edge of map ... fixing (a)\n"));
 //		psDroid->x=1;
-//	} 
+//	}
 //	else
 //	{
 //		if ( psDroid->x > mapWidth*TILE_UNITS )
 //		{
 //			DBPRINTF(("Droid off edge of map ... fixing (b)\n"));
 //			psDroid->x= mapWidth*TILE_UNITS-1;
-//			
+//
 //		}
 //	}
 //
@@ -3488,14 +3488,14 @@ void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 //	{
 //		DBPRINTF(("Droid off edge of map ... fixing (c)\n"));
 //		psDroid->y=1;
-//	} 
+//	}
 //	else
 //	{
 //		if ( psDroid->y > mapHeight*TILE_UNITS )
 //		{
 //			DBPRINTF(("Droid off edge of map ... fixing (d)\n"));
 //			psDroid->y= mapHeight*TILE_UNITS-1;
-//			
+//
 //		}
 //	}
 //#else
@@ -3689,7 +3689,7 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 
 
 // On the pc we make the animation non-visible
-// 
+//
 // on the psx we remove the animation totally, and reallocate it when it is next needed
 //    ... this is so we can allow the playstation to use far fewer animation entries
 
@@ -4288,7 +4288,7 @@ BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 		ASSERT( (PTRVALID(psDroid, sizeof(DROID)),
 			"moveDroidStartCallback: unit pointer invalid\n") );
 	}
-	
+
 	if ( psDroid != NULL )
 	{
 		movePlayDroidMoveAudio( psDroid );
@@ -4397,12 +4397,12 @@ static void checkLocalFeatures(DROID *psDroid)
 
 	droidGetNaybors(psDroid);// update naybor list.
 
-	// scan the neighbours 
+	// scan the neighbours
 	for(i=0; i<(SDWORD)numNaybors; i++)
 	{
 #define DROIDDIST (((TILE_UNITS*3)/2) * ((TILE_UNITS*3)/2))
 		psObj = asDroidNaybors[i].psObj;
-		if (   psObj->type != OBJ_FEATURE 
+		if (   psObj->type != OBJ_FEATURE
 			|| ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM
 			|| asDroidNaybors[i].distSqr >= DROIDDIST )
 		{
@@ -4748,7 +4748,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 
 		moveSpeed = moveCalcDroidSpeed(psDroid);
-	
+
 		moveDir = MAKEINT(tangle);
 
 
@@ -4969,7 +4969,7 @@ void moveUpdateDroid(DROID *psDroid)
 	/* If it's sitting in water then it's got to go with the flow! */
 	if(TERRAIN_TYPE(mapTile(psDroid->x/TILE_UNITS,psDroid->y/TILE_UNITS)) == TER_WATER)
 	{
-		updateDroidOrientation(psDroid);	
+		updateDroidOrientation(psDroid);
 	}
 
 

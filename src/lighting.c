@@ -2,21 +2,21 @@
 /* Calculates the shading values for the terrain world. */
 /* The terrain intensity values are calculated at map load/creation time. */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "ivisdef.h" //ivis matrix code
-#include "piestate.h" //ivis matrix code
-#include "piefunc.h" //ivis matrix code
-#include "geo.h" //ivis matrix code
+#include "lib/ivis_common/ivisdef.h" //ivis matrix code
+#include "lib/ivis_common/piestate.h" //ivis matrix code
+#include "lib/ivis_common/piefunc.h" //ivis matrix code
+#include "lib/ivis_common/geo.h" //ivis matrix code
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"
 #include "effects.h"
 #include "atmos.h"
 #include "environ.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "console.h"
 #include "arrow.h"
 
@@ -65,7 +65,7 @@ MAPTILE	*psTile;
 			{
 				mapTile(i,j)->illumination = 2;
 			}
-		}	
+		}
 	}
 
 	//for(i=2; i<mapHeight-2; i++)
@@ -97,12 +97,12 @@ MAPTILE	*psTile;
 					psTile->texture = 0;
 				}
 			}
-		}	
+		}
 	}
 
-	// Cheers to paul for this idea - works on PC too 
+	// Cheers to paul for this idea - works on PC too
 	//	Basically darkens down the tiles that are outside the scroll
-	//	limits - thereby emphasising the cannot-go-there-ness of them 
+	//	limits - thereby emphasising the cannot-go-there-ness of them
 	for(i=0; i<mapWidth; i++)
 	{
 		for(j=0; j<mapHeight; j++)
@@ -129,7 +129,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
         ASSERT((FALSE, "initLighting: coords off edge of map"));
         return;
     }
-    
+
     for(i = x1; i < x2; i++)
 	{
 		for(j = y1; j < y2; j++)
@@ -157,10 +157,10 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
             {
 			    calcTileIllum(i,j);
             }
-        	// Cheers to paul for this idea - works on PC too 
+        	// Cheers to paul for this idea - works on PC too
     	    //	Basically darkens down the tiles that are outside the scroll
-	        //	limits - thereby emphasising the cannot-go-there-ness of them 
-			if((SDWORD)i < (scrollMinX+4) OR (SDWORD)i > (scrollMaxX-4) OR 
+	        //	limits - thereby emphasising the cannot-go-there-ness of them
+			if((SDWORD)i < (scrollMinX+4) OR (SDWORD)i > (scrollMaxX-4) OR
                 (SDWORD)j < (scrollMinY+4) OR (SDWORD)j > (scrollMaxY-4))
 			{
 				psTile->illumination/=3;
@@ -179,7 +179,7 @@ UDWORD	val;
 
 	numNormals = 0;
 	/* Quadrants look like:-
-				
+
 				  *
 				  *
 			0	  *    1
@@ -195,13 +195,13 @@ UDWORD	val;
 
 	/* Do quadrant 0 - tile that's above and left*/
 	normalsOnTile(tileX-1, tileY-1,0);
-	
+
 	/* Do quadrant 1 - tile that's above and right*/
 	normalsOnTile(tileX,tileY-1,1);
-	
+
 	/* Do quadrant 2 - tile that's down and right*/
 	normalsOnTile(tileX,tileY,2);
-	
+
 	/* Do quadrant 3 - tile that's down and left*/
 	normalsOnTile(tileX-1,tileY,3);
 
@@ -216,13 +216,13 @@ UDWORD	val;
 	}
 	pie_VectorNormalise(&finalVector);
 	pie_VectorNormalise(&theSun);
-   
+
 //	iV_NumberOut(theSun.x,100,100,255);
 //	iV_NumberOut(theSun.y,100,110,255);
 //	iV_NumberOut(theSun.z,100,120,255);
 
 //	iV_NumberOut(numNormals,100,140,255);
-   
+
 	dotProduct =	(finalVector.x * theSun.x +
 					finalVector.y * theSun.y +
 					finalVector.z * theSun.z)>>FP12_SHIFT;
@@ -275,7 +275,7 @@ SDWORD	rMod,drMod,dMod,nMod;
 
  	switch(quadrant)
 	{
-		
+
 	case 0:
 	case 2:
 		/* Is it flipped? In this case one triangle  */
@@ -328,7 +328,7 @@ SDWORD	rMod,drMod,dMod,nMod;
 			corner3.y = (tileY+1)<<TILE_SHIFT;
 			corner3.z = tileDownRight->height - drMod;
 			pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
-	
+
 			corner1.x = tileX<<TILE_SHIFT;
 			corner1.y = tileY<<TILE_SHIFT;
 			corner1.z = psTile->height - nMod;
@@ -416,7 +416,7 @@ SDWORD	rMod,drMod,dMod,nMod;
 
 #if 0
 /*	Processes a light into the tileScreenInfo structure - this needs
-	to be optimised and profiled as it's costly to perform 
+	to be optimised and profiled as it's costly to perform
 */
 void	processLight(LIGHT *psLight)
 {
@@ -467,13 +467,13 @@ SDWORD	gridMinX,gridMinY,gridMaxX,gridMaxY;
 	{
 		for(j=yLower; j<yUpper; j++)
 		{
-			/*	
+			/*
 				We must make sure that we don't attempt to colour a tile that isn't actually
 				on our grid - say when a light is on the periphery of the grid.
 			*/
 			if(i>gridMinX AND i<gridMaxX AND j>gridMinY AND j<gridMaxY)
 			{
-		 		distToCorner = calcDistToTile(i,j,&psLight->position);	
+		 		distToCorner = calcDistToTile(i,j,&psLight->position);
 				/* If we're inside the range of the light */
 				if(distToCorner<psLight->range)
 				{
@@ -527,7 +527,7 @@ UDWORD	percent;
     {
         startX = 0;
     }
-	else if(startX > (SDWORD)(mapWidth-1)) 
+	else if(startX > (SDWORD)(mapWidth-1))
     {
         startX = mapWidth-1;
     }
@@ -535,7 +535,7 @@ UDWORD	percent;
     {
         endX = 0;
     }
-	else if(endX > (SDWORD)(mapWidth-1)) 
+	else if(endX > (SDWORD)(mapWidth-1))
     {
         endX = mapWidth-1;
     }
@@ -545,11 +545,11 @@ UDWORD	percent;
     {
         startY = 0;
     }
-    else if(startY > (SDWORD)(mapHeight-1)) 
+    else if(startY > (SDWORD)(mapHeight-1))
     {
         startY = mapHeight-1;
     }
-	if(endY < 0) 
+	if(endY < 0)
     {
         endY = 0;
     }
@@ -563,7 +563,7 @@ UDWORD	percent;
 	{
 		for(j=startY; j<=endY; j++)
 		{
-				distToCorner = calcDistToTile(i,j,&psLight->position);	
+				distToCorner = calcDistToTile(i,j,&psLight->position);
 				/* If we're inside the range of the light */
 			 	if(distToCorner<(SDWORD)psLight->range)
 				{
@@ -573,8 +573,8 @@ UDWORD	percent;
 					yIndex = j - playerZTile;
 					// Might go off the grid for light ranges > one tile
 //					if(i<visibleXTiles AND j<visibleYTiles AND i>=0 AND j>=0)
-					if(xIndex >= 0 AND yIndex >= 0 AND 
-                        xIndex < (SDWORD)visibleXTiles AND 
+					if(xIndex >= 0 AND yIndex >= 0 AND
+                        xIndex < (SDWORD)visibleXTiles AND
                         yIndex < (SDWORD)visibleYTiles)
 					{
 						colourTile(xIndex,yIndex,psLight->colour, (UBYTE)(2*percent));
@@ -712,11 +712,11 @@ void	colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent
 }
 
 
-//three fog modes, background fog, distance fog, ground mist 
+//three fog modes, background fog, distance fog, ground mist
 
 
-#define UMBRA_RADIUS 384 
-#define FOG_RADIUS 384   //256 too abrupt at edges 
+#define UMBRA_RADIUS 384
+#define FOG_RADIUS 384   //256 too abrupt at edges
 #define FOG_START 512
 #define FOG_RATE 10
 
@@ -746,7 +746,7 @@ float	fraction,adjust;
 	}
 	else
 	{
-		lightVal = mapTile(tileX,tileY)->illumination +		 //	
+		lightVal = mapTile(tileX,tileY)->illumination +		 //
 				   mapTile(tileX-1,tileY)->illumination +	 //		 *
 				   mapTile(tileX,tileY-1)->illumination +	 //		***		pattern
 				   mapTile(tileX+1,tileY)->illumination +	 //		 *
@@ -760,7 +760,7 @@ float	fraction,adjust;
 	presVal = psDroid->illumination;
 	adjust = MAKEFRACT(lightVal) - MAKEFRACT(presVal);
 	adjust *= (fraction*DROID_SEEK_LIGHT_SPEED) ;
-	retVal = presVal + MAKEINT(adjust); 
+	retVal = presVal + MAKEINT(adjust);
 	if(retVal > 255) retVal = 255;
 	psDroid->illumination = (UBYTE)retVal;
 }
@@ -777,11 +777,11 @@ SDWORD	umbra;
 SDWORD	distance;
 SDWORD	cosA,sinA;
 PIELIGHT lighting, specular, fogColour;
-SDWORD	depth = 0; 
-SDWORD	colour;	
+SDWORD	depth = 0;
+SDWORD	colour;
 SDWORD	fog = 0;
 //SDWORD	mist = 0;
- 
+
 	distance = (SDWORD) (sqrt(dx*dx+dz*dz));
 
 	penumbraRadius = (visibleXTiles/2)<<TILE_SHIFT;
@@ -813,7 +813,7 @@ SDWORD	fog = 0;
 			{
 				edge = 255;
 			}
-			else 
+			else
 			{
 				edge = (((player.p.x - dx + penumbraRadius)*255)/(UMBRA_RADIUS));
 			}
@@ -841,8 +841,8 @@ SDWORD	fog = 0;
 	{
 		depth = 1;
 	}
-	
-	
+
+
 	if ((fogStatus & FOG_DISTANCE) || (fogStatus & FOG_BACKGROUND))
 	{
 		//add fog
@@ -851,7 +851,7 @@ SDWORD	fog = 0;
 			cosA = COS(player.r.y);
 			sinA = SIN(player.r.y);
 			depth = sinA * dx + cosA * dz;
-			depth >>= FP12_SHIFT; 
+			depth >>= FP12_SHIFT;
 			depth += FOG_START;
 			depth /= FOG_RATE;
 		}
@@ -950,7 +950,7 @@ SDWORD	fog = 0;
 	}
 	else
 	{
-		fogColour.argb = pie_GetFogColour(); 		
+		fogColour.argb = pie_GetFogColour();
 		specular.byte.a = (UBYTE)fog;
 		specular.byte.r = pie_ByteScale((UBYTE)fog, fogColour.byte.r);
 		specular.byte.g = pie_ByteScale((UBYTE)fog, fogColour.byte.g);
@@ -1017,7 +1017,7 @@ void	showSunOnTile(UDWORD x, UDWORD y)
 {
 iVector	a,b;
 
- 
+
 	{
 		a.x = (x<<TILE_SHIFT)+(TILE_UNITS/2);
 		a.z = (y<<TILE_SHIFT)+(TILE_UNITS/2);
@@ -1026,7 +1026,7 @@ iVector	a,b;
 		b.x = a.x + theSun.x/64;
 		b.y = a.y + theSun.y/64;
 		b.z = a.z + theSun.z/64;
-  
+
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(FALSE);
 		draw3dLine(&a,&b,mapTile(x,y)->illumination);

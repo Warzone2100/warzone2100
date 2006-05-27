@@ -1,7 +1,7 @@
 /***************************************************************************/
 
-#include "pietypes.h"
-#include "piestate.h"
+#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_common/piestate.h"
 #include "arrow.h"
 
 /***************************************************************************/

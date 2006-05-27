@@ -9,7 +9,7 @@
 #ifndef _pieMatrix_h
 #define _pieMatrix_h
 
-#include "piedef.h"
+#include "lib/ivis_common/piedef.h"
 
 /***************************************************************************/
 /*
@@ -95,7 +95,7 @@ extern void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
 extern BOOL pie_Clockwise(iVertex *s);
 extern void pie_SetGeometricOffset(int x, int y);
 
-extern BOOL pie_PieClockwise(PIEVERTEX *s);	
+extern BOOL pie_PieClockwise(PIEVERTEX *s);
 
 void pie_Begin3DScene(void);
 void pie_BeginInterface(void);

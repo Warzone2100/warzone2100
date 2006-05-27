@@ -6,10 +6,10 @@
  */
 
 
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 #include "objects.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 
 // Get all the function prototypes
@@ -26,11 +26,11 @@
 //#include "mission.h"
 #include "levels.h"
 #include "order.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "mission.h"
 
 #include "design.h"			// for the iddes_...
-#include "display.h"		// for the MT_...  
+#include "display.h"		// for the MT_...
 
 #include "multiplay.h"
 #include "intfac.h"
@@ -163,7 +163,7 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "structureIdle",			scrStructureIdle,		VAL_BOOL,
 		1, { (INTERP_TYPE)ST_STRUCTURE } },
-	
+
 	{ "initEnumStruct",			scrInitEnumStruct,		VAL_VOID,
 		4, { VAL_BOOL, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT,VAL_INT } },
 
@@ -175,7 +175,7 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "structureComplete",	scrStructureComplete,		VAL_BOOL,		// pc multiplayer only
 		1,	{ (INTERP_TYPE)ST_STRUCTURE } },
-	
+
 	{ "structureBuilt",			scrStructureBuilt,		VAL_BOOL,
 		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
 
@@ -184,7 +184,7 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "anyStructButWallsLeft",	scrAnyStructButWallsLeft, VAL_BOOL,
 		1,	{ VAL_INT } },
-	
+
 	{ "anyFactoriesLeft",		scrAnyFactoriesLeft,	VAL_BOOL,
 		1,	{ VAL_INT } },
 
@@ -528,13 +528,13 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "losTwoObjects",			scrLOSTwoBaseObjects,	VAL_BOOL,
 		3, { (INTERP_TYPE)ST_BASEOBJECT, (INTERP_TYPE)ST_BASEOBJECT, VAL_BOOL } },
 
-	{ "killStructsInArea",		scrDestroyStructuresInArea,	VAL_VOID,	
+	{ "killStructsInArea",		scrDestroyStructuresInArea,	VAL_VOID,
 		8, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL} },
 
 	{ "getThreatInArea",		scrThreatInArea,		VAL_INT,
 		10, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL} },
 
-	{ "getNearestGateway",		scrGetNearestGateway,	VAL_BOOL,	
+	{ "getNearestGateway",		scrGetNearestGateway,	VAL_BOOL,
 		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT } },
 
 	{ "setWaterTile",			scrSetWaterTile,		VAL_VOID,
@@ -550,16 +550,16 @@ FUNC_SYMBOL asFuncTable[] =
 		3, {VAL_INT,(INTERP_TYPE)ST_STRUCTURE,VAL_INT} },
 
 	{ "killDroidsInArea",		scrDestroyUnitsInArea,	VAL_INT,
-	5, {VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} }, 
+	5, {VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
 
 	{ "vanishUnit",				scrRemoveDroid,			VAL_VOID,
 		1, {(INTERP_TYPE)ST_DROID} },
 
 	{ "forceDamageObject",		scrForceDamage,			VAL_VOID,
 		2, {(INTERP_TYPE)ST_BASEOBJECT,VAL_INT}},
-	
+
 	//multiplayer stuff.
-	{ "isHumanPlayer",		scrIsHumanPlayer,			VAL_BOOL,	
+	{ "isHumanPlayer",		scrIsHumanPlayer,			VAL_BOOL,
 	    1, { VAL_INT } },
 
 	{ "offerAlliance",		scrOfferAlliance,			VAL_VOID,
@@ -598,9 +598,9 @@ FUNC_SYMBOL asFuncTable[] =
 	{"getGameStatus", 		scrGetGameStatus,	  		VAL_BOOL,	1, {VAL_INT} },
 
     //player colour access functions
-	{ "getPlayerColour",	scrGetPlayerColour,		    VAL_INT,	
+	{ "getPlayerColour",	scrGetPlayerColour,		    VAL_INT,
         1, { VAL_INT } },
-	
+
     { "setPlayerColour",	scrSetPlayerColour,		    VAL_VOID,
 		2, { VAL_INT, VAL_INT } },
 
@@ -641,14 +641,14 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_INT, VAL_INT }, },
 	{ "targetInCluster",	scrTargetInCluster,				(INTERP_TYPE)ST_DROID,
 		2, { VAL_INT, VAL_INT }, },
-        
+
 	{ "setDroidsToSafetyFlag",	scrSetDroidsToSafetyFlag,	VAL_VOID,
 		1, { VAL_BOOL } },
 
 	{ "setPlayCountDown",       scrSetPlayCountDown,	    VAL_VOID,
 		1, { VAL_BOOL } },
 
-	{ "getDroidCount",	        scrGetDroidCount,		    VAL_INT,	
+	{ "getDroidCount",	        scrGetDroidCount,		    VAL_INT,
         1, { VAL_INT } },
 
 	{ "fireWeaponAtObj",		scrFireWeaponAtObj,			VAL_VOID,
@@ -663,7 +663,7 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "setVTOLReturnPos",		scrSetVTOLReturnPos,		VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_INT } },
-		
+
 	{ "isVtol",					scrIsVtol,					VAL_BOOL,
 		1, { (INTERP_TYPE)ST_DROID } },
 
@@ -758,7 +758,7 @@ VAR_SYMBOL asExternTable[] =
 
 
 
-	
+
 	{ "multiPlayerGameType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,	EXTID_MULTIGAMETYPE,
 		scrGenExternGet,			NULL },
 
@@ -769,7 +769,7 @@ VAR_SYMBOL asExternTable[] =
 		scrGenExternGet,			NULL },
 
 
-		
+
 
 	/* This entry marks the end of the variable list */
 	{ NULL, VAL_VOID, (INTERP_TYPE)ST_EXTERN, 0, 0, NULL, NULL }
@@ -851,7 +851,7 @@ VAR_SYMBOL asObjTable[] =
  *
  *	"variable name", <variable type>, <bool value>, <int value>,
  *						<object pointer value>
- * 
+ *
  * Only the value corresponding to the type should be set, all other values
  * should be 0.
  *
@@ -1129,7 +1129,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DT_HOVER",		VAL_INT,	0,	SCR_DT_HOVER,		0 },
 
 	// multiplayer
-	
+
 //	{ "DMATCH",				VAL_INT,	0,		DMATCH,					0 },
 	{ "CAMPAIGN",			VAL_INT,	0,		CAMPAIGN,				0 },
 	{ "TEAMPLAY",			VAL_INT,	0,		TEAMPLAY,				0 },
@@ -1274,7 +1274,7 @@ TYPE_EQUIV asEquivTable[] =
 	{ (INTERP_TYPE)ST_BASEOBJECT,	3,	{ (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURE, (INTERP_TYPE)ST_FEATURE, } },
 	{ (INTERP_TYPE)ST_COMPONENT,		8,	{ (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_ECM, (INTERP_TYPE)ST_SENSOR, (INTERP_TYPE)ST_CONSTRUCT, (INTERP_TYPE)ST_WEAPON, (INTERP_TYPE)ST_REPAIR, (INTERP_TYPE)ST_BRAIN } },
 	{ (INTERP_TYPE)ST_BASESTATS,		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_FEATURESTAT } },
-	
+
 	{ (INTERP_TYPE)ST_DROID,			1,	{ (INTERP_TYPE)ST_POINTER_O, } },
 	{ (INTERP_TYPE)ST_STRUCTURE,		1,	{ (INTERP_TYPE)ST_POINTER_O, } },
 	{ (INTERP_TYPE)ST_FEATURE,		1,	{ (INTERP_TYPE)ST_POINTER_O, } },

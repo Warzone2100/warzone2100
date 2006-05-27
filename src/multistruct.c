@@ -3,14 +3,14 @@
  *
  * Alex Lee 98, Pumpkin Studios.
  *
- * files to cope with multiplayer structure related stuff.. 
+ * files to cope with multiplayer structure related stuff..
  */
 
-#include "frame.h"
-#include "droid.h"					
+#include "lib/framework/frame.h"
+#include "droid.h"
 #include "droiddef.h"
-#include "base.h"					
-#include "power.h"	
+#include "base.h"
+#include "power.h"
 #include "geometry.h"								// for gettilestructure
 #include "anim_id.h"
 #include "stats.h"
@@ -19,7 +19,7 @@
 #include "action.h"
 #include "order.h"
 #include "projectile.h"
-#include "netplay.h"								// the netplay library.					
+#include "lib/netplay/netplay.h"								// the netplay library.
 #include "multiplay.h"
 #include "multigifts.h"
 #include "audio_id.h"
@@ -38,7 +38,7 @@ BOOL		SendBuildFinished		(STRUCTURE *psStruct);
 BOOL		recvBuildFinished		(NETMSG *m);
 BOOL		SendDestroyStructure	(STRUCTURE *s);
 BOOL		RecvDestroyStructure	(NETMSG * m);
-	
+
 BOOL		sendLasSat				(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj);
 BOOL		recvLasSat				(NETMSG *pMsg);
 
@@ -54,7 +54,7 @@ BOOL		recvLasSat				(NETMSG *pMsg);
 	for (breadth=0; breadth < (UBYTE)(baseBreadth + 1); breadth++)
 	{
 		for (width=0; width < (UBYTE)(baseWidth + 1); width++)
-		{	
+		{
 			while((x+width-1)<0)width++;
 			while((y+breadth-1)<0)breadth++;
 
@@ -79,7 +79,7 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 	order = (UBYTE)psDroid->order;
 	NetAdd(msg,0,player);			//player
 	NetAdd(msg,1,psDroid->psTarStats->ref);	//id of thing to build
-	NetAdd(msg,5,psDroid->orderX);					// x 
+	NetAdd(msg,5,psDroid->orderX);					// x
 	NetAdd(msg,7,psDroid->orderY);					// y
 	NetAdd(msg,11,psDroid->id);						// droid to order to build it
 	NetAdd(msg,15,psStruct->id);					// building id to create
@@ -96,9 +96,9 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 
 	NetAdd(msg,24,psStruct->z);
 
-	msg.size =28;	
+	msg.size =28;
 	msg.type = NET_BUILD;
-	return (NETbcast(&msg,FALSE));	
+	return (NETbcast(&msg,FALSE));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -123,13 +123,13 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 	NetGet(pMsg,24,z);
 	for(typeindex=0;										// find structure target
 	(typeindex<numStructureStats ) && (asStructureStats[typeindex].ref != structStat);
-	typeindex++);  
+	typeindex++);
 
 	psStats = &asStructureStats[typeindex];
-	
+
 	if(IdToDroid(droidId,player, &psDroid))
 	{
-		if (getDroidDestination( (BASE_STATS *)psStats ,x,y, &actionX,&actionY))				
+		if (getDroidDestination( (BASE_STATS *)psStats ,x,y, &actionX,&actionY))
 		{
 			psDroid->order = order;
 			if(psDroid->order == DORDER_LINEBUILD)
@@ -157,13 +157,13 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 				droidStartBuild(psDroid);
 				psDroid->action = DACTION_BUILD;
 			}
-			
+
 		}
 
 
-		if (psDroid->psTarget)									//sync id's 
+		if (psDroid->psTarget)									//sync id's
 		{
-			((STRUCTURE*)psDroid->psTarget)->id = structId; 
+			((STRUCTURE*)psDroid->psTarget)->id = structId;
 		}
 	}
 
@@ -179,7 +179,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 
 	NetAdd(m,0,psStruct->id);							//id of finished struct
 	// also enough info to build it if we don't already know about it.
-	NetAdd(m,4,psStruct->pStructureType->ref);			// kind of building.			
+	NetAdd(m,4,psStruct->pStructureType->ref);			// kind of building.
 	NetAdd(m,8,psStruct->x);							// x pos
 	NetAdd(m,10,psStruct->y);							// y pos
 	NetAdd(m,12,psStruct->z);							// y pos
@@ -201,11 +201,11 @@ BOOL recvBuildFinished(NETMSG *m)
 
 	NetGet(m,0,strId);									// get the struct id.
 	psStr = IdToStruct(strId,ANYPLAYER);
-	
+
 	if(psStr)
 	{												// make it complete.
 		psStr->currentBuildPts = psStr->pStructureType->buildPoints+1;
-	
+
 		if(psStr->status != SS_BUILT)
 		{
 			psStr->status = SS_BUILT;
@@ -214,9 +214,9 @@ BOOL recvBuildFinished(NETMSG *m)
 		NETlogEntry("building finished ok." ,0,0);
 		return TRUE;
 	}
-	
+
 	// the building wasn't started, so we'll have to just plonk it down in the map.
-	NetGet(m,4,type);									// kind of building.			
+	NetGet(m,4,type);									// kind of building.
 	NetGet(m,8,x);										// x pos
 	NetGet(m,10,y);										// y pos
 	NetGet(m,12,z);										// z pos
@@ -225,18 +225,18 @@ BOOL recvBuildFinished(NETMSG *m)
 
 	for(typeindex=0;														// find structure target
 		(typeindex<numStructureStats ) && (asStructureStats[typeindex].ref != type);
-		typeindex++);  
+		typeindex++);
 	psStr = 0;
 
 	// check for similar buildings, to avoid overlaps
-	if( TILE_HAS_STRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT))   )		
+	if( TILE_HAS_STRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT))   )
 	{
 		// get structure;
 		psStr = getTileStructure(x>>TILE_SHIFT, y>>TILE_SHIFT);
 		if(asStructureStats[typeindex].type == psStr->pStructureType->type)
 		{
-			// correct type, correct location, just rename the id's to sync it.. (urgh) 
-			psStr->id = strId;	
+			// correct type, correct location, just rename the id's to sync it.. (urgh)
+			psStr->id = strId;
 			psStr->status = SS_BUILT;
 			buildingComplete(psStr);
 			NETlogEntry("structure id modified" ,0,player);
@@ -249,10 +249,10 @@ BOOL recvBuildFinished(NETMSG *m)
 					player,TRUE);
 	if (psStr)
 	{
-		psStr->id		= strId; 
+		psStr->id		= strId;
 		psStr->status	= SS_BUILT;
 		buildingComplete(psStr);
-	
+
 		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete :%d",strId ));
 		NETlogEntry("had to plonk down a building" ,0,player);
 	}
@@ -285,8 +285,8 @@ BOOL recvDemolishFinished(NETMSG *m)
 	UDWORD		s,d;
 	DROID		*psDroid;
 
-	NetGet(m,0,s);					
-	NetGet(m,4,d);							
+	NetGet(m,0,s);
+	NetGet(m,4,d);
 
 	psStruct = IdToStruct(s,ANYPLAYER);
 	IdToDroid(d,ANYPLAYER,&psDroid);
@@ -348,14 +348,14 @@ BOOL recvDestroyStructure(NETMSG * m)
 BOOL sendLasSat(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
 	NETMSG msg;
-	UBYTE p;		
+	UBYTE p;
 
 	NetAdd(msg,0,player);
 	NetAdd(msg,1,psStruct->id);
 	NetAdd(msg,5,psObj->id);
 	p = psObj->player;
 	NetAdd(msg,9,p);
-		
+
 	msg.size = 10;
 	msg.type = NET_LASSAT;
 
@@ -381,10 +381,10 @@ BOOL recvLasSat(NETMSG *pMsg)
 
 	if(psStruct && psObj)
 	{
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->x, 
+		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->x,
             psObj->y, psObj->z, psObj, TRUE);
         //play 5 second countdown message
-		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->x, psObj->y, 
+		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->x, psObj->y,
             psObj->z );
 	}
 

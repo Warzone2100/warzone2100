@@ -7,15 +7,15 @@
 
 /* Turn printf's */
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "objects.h"
 #include "map.h"
 #include "findpath.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "geometry.h"
 
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 
 #define TURN_RATE 220
 
@@ -47,11 +47,11 @@ BOOL blockingTile(UDWORD x, UDWORD y, UDWORD mask)
 	{
 		return TRUE;
 	}
-	return FALSE;   
+	return FALSE;
 }
 
-void FindPath (SDWORD StartX, SDWORD StartY, SDWORD DestinationX, 
-					  SDWORD DestinationY, MOVE_CONTROL *MoveData,	
+void FindPath (SDWORD StartX, SDWORD StartY, SDWORD DestinationX,
+					  SDWORD DestinationY, MOVE_CONTROL *MoveData,
 					  UBYTE Mask)
 {
 PATH_POINT Route[TRAVELSIZE+2];
@@ -68,13 +68,13 @@ SDWORD	DirectionalConvertor [16] =
 				{ 0,4,0,0,2,3,0,1,0,0,0,0,6,5,0,7 };
 SDWORD	RNum,LNum;
 SDWORD	MovementIndex;
-  
-/* WARNING - there's a lot of block move/pixel move conflicts going on here - they're 
+
+/* WARNING - there's a lot of block move/pixel move conflicts going on here - they're
    resolved in the movement update routine by masking out higher bits - read the commented
-   out code below and it should be clearer - Alex . This whole findpath routine HAS to be 
+   out code below and it should be clearer - Alex . This whole findpath routine HAS to be
    re-written from scratch.......:-( */
 
-						  
+
 	Movement=MoveData->MovementList;
 	MoveData->Position=0;
 	MoveData->Mask=Mask;
@@ -84,7 +84,7 @@ SDWORD	MovementIndex;
 	// Clear the initial setting
 	Movement[MovementIndex].XCoordinate=0;
 
-	
+
 	/*  WASTE OF TIME....?
 	// Is starting pixel position inside the middle of a square???
 	if (((StartX & TILE_MASK) != TILE_UNITS/2) ||
@@ -204,7 +204,7 @@ SDWORD	MovementIndex;
 						PixelX+=XStep;
 						Gradient+=DeltaY;
 					}
-				} while ( ((PixelX/TILE_UNITS)==BlockX) && 
+				} while ( ((PixelX/TILE_UNITS)==BlockX) &&
 						((PixelY/TILE_UNITS)==BlockY) );
 
 				BlockX=(SWORD)(PixelX/TILE_UNITS);
@@ -212,10 +212,10 @@ SDWORD	MovementIndex;
 
 			}
 
-			RNum=WallHug (RightHug, 1, LastBX, LastBY, BlockX, BlockY, 
+			RNum=WallHug (RightHug, 1, LastBX, LastBY, BlockX, BlockY,
 				TravelDirection, Mask);
-	
-			LNum=WallHug (LeftHug, -1, LastBX, LastBY, BlockX, BlockY, 
+
+			LNum=WallHug (LeftHug, -1, LastBX, LastBY, BlockX, BlockY,
 				TravelDirection, Mask);
 
 			// Now copy the best wall hug path into the overall path
@@ -274,7 +274,7 @@ SDWORD	MovementIndex;
 
 	// Has the coordinate buffer array been filled?
 	if (RoutePosition<TRAVELSIZE &&
-		(Route[RoutePosition-1].XCoordinate!=BlockX || 
+		(Route[RoutePosition-1].XCoordinate!=BlockX ||
 		Route[RoutePosition-1].YCoordinate!=BlockY) )
 		{
 		// Save away the destination position (Last block in the sequence)
@@ -323,7 +323,7 @@ SDWORD	MovementIndex;
 	}
 	while ( (Count!=RoutePosition) && (MovementIndex<(MAXMOVES-2) ) );
 
-/* Mr M. Carr has a lot to answer for.......... 
+/* Mr M. Carr has a lot to answer for..........
 
 	// Did we start this function with the starting coordinates off centre of the block?
 	if (Movement[0].XCoordinate==-1)
@@ -617,7 +617,7 @@ static void updateTurn(MOVE_CONTROL *psMove)
 		}
 	}
 	ASSERT((psMove->Direction3D < 360,
-		"updateTurn: droid direction out of range"));	
+		"updateTurn: droid direction out of range"));
 }
 
 
@@ -658,7 +658,7 @@ FRACT		fraction;
 		/* New a new waypoint */
 		MoveData->Status = MOVENAVIGATE;
 		}
- 
+
 	/* Below is where the probbies lie.....cos of first check for completion */
 	/* Some dodgy things occur here - cos of first move centering.....		 */
 
@@ -671,7 +671,7 @@ FRACT		fraction;
 	{
 		TurnToTarget(Obj, MoveData, tarX,tarY);
 	}
- 
+
 	/* Are we turning to face the new direction */
 	if (MoveData->Status == MOVETURN || MoveData->Status == MOVETURNSTOP)
 	{
@@ -709,8 +709,8 @@ FRACT		fraction;
 
 
 		fraction = FRACTdiv(MAKEFRACT(timeSoFar),MAKEFRACT(MoveData->arrivalTime));
- 
-   
+
+
 
 
 		/* Should be have arrived by now? */
@@ -719,24 +719,24 @@ FRACT		fraction;
 			/* If so, then get there NOW... */
 			Obj->x = MoveData->targetX;
 			Obj->y = MoveData->targetY;
-	   
+
 			/* And tell system to get to the next journey waypoint */
 			MoveData->Position++;
 			MoveData->Status = MOVENAVIGATE;
 			MoveData->startedMoving = FALSE;
-	   
+
 		}
    		else
 		{
 			/* Set to the correct fractional distance along this waypoint stage */
-			
+
 			Obj->x = MoveData->srcX+(MAKEINT(fraction*xDif));
 			Obj->y = MoveData->srcY+(MAKEINT(fraction*yDif));
-		} 
+		}
 	}
 
 	/* Have we got there? */
-	if (Obj->x == (UDWORD)MoveData->DestinationX AND 
+	if (Obj->x == (UDWORD)MoveData->DestinationX AND
 		Obj->y == (UDWORD)MoveData->DestinationY)
 	{
 		MoveData->Status = MOVEINACTIVE;
@@ -782,7 +782,7 @@ FRACT	length;
 	/* Convert to natural number N+, and return */
 	return(MAKEINT(eta));
 }
-													
+
 void	setDirection(MOVE_CONTROL *MoveData)
 {
 SDWORD	x0,x1,y0,y1;
@@ -801,7 +801,7 @@ UDWORD vect2Follow[COMPASS_POINTS][3]=
 {NIL,POS,SOUTH},
 {NIL,NEG,NORTH}
 };
-	
+
 	x0 = MoveData->srcX;
 	y0 = MoveData->srcY;
 	x1 = MoveData->targetX;

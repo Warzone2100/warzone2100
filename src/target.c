@@ -5,9 +5,9 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include "frame.h"
-#include "gtime.h"
-#include "animobj.h"
+#include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/gamelib/animobj.h"
 
 #include "statsdef.h"
 #include "base.h"
@@ -19,9 +19,10 @@
 #include "objectdef.h"
 #include "droid.h"
 
-#include "geo.h"
-#include "imd.h"
-#include "vid.h"
+#include "lib/ivis_common/geo.h"
+#include "lib/ivis_common/imd.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 
 
 

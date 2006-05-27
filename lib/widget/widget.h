@@ -6,7 +6,7 @@
 #ifndef _widget_h
 #define _widget_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "widgbase.h"
 
 /***********************************************************************************
@@ -24,7 +24,7 @@
 /* Tabbed form */
 #define WFORM_TABBED		1
 
-/* Invisible (i.e. see through) form - 
+/* Invisible (i.e. see through) form -
  * can be used in conjunction with WFORM_PLAIN or WFORM_TABBED.
  */
 #define WFORM_INVISIBLE		2
@@ -107,7 +107,7 @@ typedef struct _w_init
 	WINIT_BASE;
 } W_INIT;
 
-/* Flags for controlling where the tabs appear on a form - 
+/* Flags for controlling where the tabs appear on a form -
  * used in the majorPos and minorPos entries of the W_FORMINIT struct
  */
 #define	WFORM_TABNONE		0		// No tab
@@ -229,7 +229,7 @@ typedef struct _w_sldinit
 {
 	/* The basic init entries */
 	WINIT_BASE;
-	
+
 	UWORD		orientation;	// Orientation of the slider
 	UWORD		numStops;		// Number of stops on the slider
 	UWORD		barSize;		// Size of the bar

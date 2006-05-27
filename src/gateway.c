@@ -55,7 +55,7 @@
 //#define DEBUG_GROUP0
 // water gate printf's
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 #include "astar.h"
 #include "fpath.h"
@@ -492,7 +492,7 @@ void gwFreeGateway(GATEWAY *psDel)
 
 	LIST_REMOVE(psGateways, psDel, GATEWAY);
 
-	if (psMapTiles)		// this lines fixes the bug where we were closing the gateways after freeing the map 
+	if (psMapTiles)		// this lines fixes the bug where we were closing the gateways after freeing the map
 	{
 
 		// clear the map flags
@@ -1057,7 +1057,7 @@ BOOL gwNewEquivTable(SDWORD numZones)
 	{
 		apEquivZones[i] = NULL;
 	}
-	
+
 	return TRUE;
 }
 

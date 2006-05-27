@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "feature.h"
 #include "map.h"
 #include "hci.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "power.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "objects.h"
 #include "display.h"
@@ -28,7 +28,7 @@
 #include "geometry.h"
 #include "scores.h"
 
-#include "multiplay.h" 
+#include "multiplay.h"
 #include "advvis.h"
 
 #include "mapgrid.h"
@@ -141,7 +141,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	SBYTE				*pData;
 	FEATURE_STATS		*psFeature;
 	UDWORD				i;
-	STRING				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE], 
+	STRING				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE],
 						type[MAX_NAME_SIZE];
 						//compName[MAX_NAME_SIZE], compType[MAX_NAME_SIZE];
 
@@ -172,13 +172,13 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 
 /*		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%[^','],%[^','],%d,%d,%d",
 			&featureName, &psFeature->baseWidth, &psFeature->baseBreadth,
-			&psFeature->damageable, &psFeature->armour, &psFeature->body, 
+			&psFeature->damageable, &psFeature->armour, &psFeature->body,
 			&GfxFile, &type, &compType, &compName,
 			&psFeature->tileDraw, &psFeature->allowLOS, &psFeature->visibleAtStart);*/
 		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
 			featureName, &Width, &Breadth,
-			&psFeature->damageable, &psFeature->armour, &psFeature->body, 
-			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS, 
+			&psFeature->damageable, &psFeature->armour, &psFeature->body,
+			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS,
 			&psFeature->visibleAtStart);
 
 
@@ -198,7 +198,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 
 		//determine the feature type
 		featureType(psFeature, type);
-	
+
 		//need to know which is the wrecked droid and wrecked structure for later use
 		//the last stat of each type is used
 		/*if (psFeature->subType == FEAT_DROID)
@@ -226,7 +226,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 #endif
 			return FALSE;
 		}
-		
+
 		//sort out the component - if any
 		/*if (strcmp(compType, "0"))
 		{
@@ -243,7 +243,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	}
 
 //	FREE(pData);
-	
+
 	return TRUE;
 
 	/* Allocate the stats Array */
@@ -256,7 +256,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	}
 	memset(asFeatureStats, 0, sizeof(FEATURE_STATS) * numFeatureStats);
 
-	// Create some simple stats 
+	// Create some simple stats
 	ref = REF_FEATURE_START;
 	psStats = asFeatureStats;
 	psStats->pName = "Mesa Feature";
@@ -277,7 +277,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->tileDraw = FALSE;
 	psStats->allowLOS = FALSE;
 	psStats->psImd = resGetData("IMD", "mimesa2.imd");
-	
+
 	psStats++;
 	psStats->pName = "Cliff";
 	psStats->ref = ref ++;
@@ -318,7 +318,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->allowLOS = TRUE;
 	psStats->psImd = resGetData("IMD", "miarthov.imd");
 
-	// Find the hover component for it 
+	// Find the hover component for it
 	psStats->compType = COMP_PROPULSION;
 	for(comp=0; comp<numPropulsionStats; comp++)
 	{
@@ -327,7 +327,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 			psStats->compIndex = comp;
 		}
 	}
-	
+
 	psStats++;
 	psStats->pName = "Wrecked Tank";
 	psStats->ref = ref ++;
@@ -337,8 +337,8 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->tileDraw = FALSE;
 	psStats->allowLOS = TRUE;
 	psStats->psImd = resGetData("IMD", "miartecm.imd");
-	
-	// Find the ecm component for it 
+
+	// Find the ecm component for it
 	psStats->compType = COMP_ECM;
 	for(comp=0; comp<numECMStats; comp++)
 	{
@@ -387,7 +387,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->tileDraw = FALSE;
 	psStats->allowLOS = FALSE;
 	psStats->psImd = resGetData("IMD", "mibould2.imd");
-	
+
 	psStats++;
 	psStats->pName = "Boulder 3";
 	psStats->ref = ref ++;
@@ -472,7 +472,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	psStats->allowLOS = TRUE;
 	psStats->psImd = resGetData("IMD", "miwrek4.imd");
 
-	// These are test features for the LOS code 
+	// These are test features for the LOS code
 	psStats++;
 	psStats->pName = "Cube 1,1";
 	psStats->ref = ref++;
@@ -613,14 +613,14 @@ void featureStatsShutDown(void)
 	}
 #endif
 
-	if(numFeatureStats) 
+	if(numFeatureStats)
 	{
 		FREE(asFeatureStats);
 	}
 }
 
 /* Deal with damage to a feature */
-BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, 
+BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass,
                    UDWORD weaponSubClass)
 {
 	UDWORD		penDamage;
@@ -721,7 +721,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	//add the feature to the list - this enables it to be drawn whilst being built
 	addFeature(psFeature);
-	
+
 	// get the terrain average height
 	startX = x >> TILE_SHIFT;
 	startY = y >> TILE_SHIFT;
@@ -788,7 +788,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 
 
-	
+
 	if(getRevealStatus())
 	{
 		vis = 0;
@@ -812,7 +812,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	//load into the map data
 
-	if(FromSave) {	
+	if(FromSave) {
 		mapX = (x >> TILE_SHIFT) - (psStats->baseWidth/2);
 		mapY = (y >> TILE_SHIFT) - (psStats->baseBreadth/2);
 	} else {
@@ -854,10 +854,10 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
 				ASSERT((!(TILE_HAS_FEATURE(mapTile(mapX+width,mapY+breadth))),
-					"buildFeature - feature- %d already found at %d, %d", 
+					"buildFeature - feature- %d already found at %d, %d",
 					psFeature->id, mapX+width,mapY+breadth));
-			
-				SET_TILE_FEATURE(psTile);	
+
+				SET_TILE_FEATURE(psTile);
 				// if it's a tall feature then flag it in the map.
 				if(psFeature->sDisplay.imd->ymax > TALLOBJECT_YMAX) {
 //#ifdef PSX
@@ -871,7 +871,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 					SET_TILE_NOTBLOCKING(psTile);
 				}
 			}
-			
+
 			if( (!psStats->tileDraw) && (FromSave == FALSE) )
 			{
 				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
@@ -879,7 +879,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 //				psTile->illumination = ILLUMINATION_NONE;		// set the tile so that there is no illumination connecting to feature ... this value works on both psx & pc
 			}
-			
+
 		}
 	}
 	psFeature->z = map_TileHeight(mapX,mapY);//jps 18july97
@@ -951,7 +951,7 @@ void removeFeature(FEATURE *psDel)
 
 	ASSERT( (PTRVALID(psDel, sizeof(FEATURE)),
 		"removeFeature: invalid feature pointer\n") );
-	
+
 	if (psDel->died)
 	{
 		// feature has already been killed, quit
@@ -1017,7 +1017,7 @@ void removeFeature(FEATURE *psDel)
 	killFeature(psDel);
 
 
-	//once a feature of type FEAT_BUILDING is destroyed - it leaves a wrecked 
+	//once a feature of type FEAT_BUILDING is destroyed - it leaves a wrecked
 	//struct FEATURE in its place - ?!
 	if (psDel->psStats->subType == FEAT_BUILDING)
 	{
@@ -1032,7 +1032,7 @@ void removeFeature(FEATURE *psDel)
 			}
 		}*/
 
-//		buildFeature((asFeatureStats + structFeature), mapX << TILE_SHIFT, 
+//		buildFeature((asFeatureStats + structFeature), mapX << TILE_SHIFT,
 //			mapY << TILE_SHIFT, FALSE);
 	}
 
@@ -1051,7 +1051,7 @@ void destroyFeature(FEATURE *psDel)
 
 	ASSERT( (PTRVALID(psDel, sizeof(FEATURE)),
 		"destroyFeature: invalid feature pointer\n") );
-	
+
 //---------------------------------------------------------------------------------------
  	/* Only add if visible and damageable*/
 	if(psDel->visible[selectedPlayer] AND psDel->psStats->damageable)
@@ -1080,7 +1080,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.z = psDel->y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->z + 32 + rand()%heightScatter;
 			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,FALSE,NULL,0);
-		}			
+		}
 
 //	  	if(psDel->sDisplay.imd->ymax>300)	// WARNING - STATS CHANGE NEEDED!!!!!!!!!!!
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
@@ -1171,7 +1171,7 @@ SDWORD getFeatureStatFromName( STRING *pName )
 #endif
 
 #ifdef RESOURCE_NAMES
-	
+
 	if (!getResourceName(pName))
 	{
 		return -1;
@@ -1194,7 +1194,7 @@ SDWORD getFeatureStatFromName( STRING *pName )
 	return -1;
 }
 
-/*looks around the given droid to see if there is any building 
+/*looks around the given droid to see if there is any building
 wreckage to clear*/
 FEATURE	* checkForWreckage(DROID *psDroid)
 {

@@ -1,27 +1,27 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 #include "objects.h"
 #include "loop.h"
 #include "edit2d.h"
 #include "map.h"
-#include "bitimage.h"//bitmap routines
+#include "lib/ivis_common/bitimage.h"//bitmap routines
 
 
 
 #include "display3d.h"
 #include "hci.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
-#include "widgint.h"
-#include "bar.h"
-#include "form.h"
-#include "label.h"
-#include "button.h"
-#include "editbox.h"
-#include "slider.h"
+#include "lib/widget/widgint.h"
+#include "lib/widget/bar.h"
+#include "lib/widget/form.h"
+#include "lib/widget/label.h"
+#include "lib/widget/button.h"
+#include "lib/widget/editbox.h"
+#include "lib/widget/slider.h"
 #include "order.h"
 #include "intimage.h"
 #include "intdisplay.h"
@@ -33,7 +33,7 @@
 
 
 #define ORDER_X			23
-#define ORDER_Y			45 
+#define ORDER_Y			45
 #define ORDER_WIDTH		RET_FORMWIDTH
 #define ORDER_HEIGHT	273
 #define ORDER_BUTX		8
@@ -86,7 +86,7 @@ typedef enum {
 
 /*
  NOTE:
-	ORD_BTYPE_BOOLEAN_DEPEND only supports two buttons 
+	ORD_BTYPE_BOOLEAN_DEPEND only supports two buttons
 	ie button 1 = enable destruct, button 2 = destruct
 */
 
@@ -536,7 +536,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 	// Build a list of orders available for the list of selected droids. - if a factory has not been selected
     if (psStructure == NULL)
     {
-	    if(!BuildDroidOrderList()) 
+	    if(!BuildDroidOrderList())
         {
 		    // If no orders then return;
 		    return FALSE;
@@ -599,7 +599,7 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 
 	Height = 0;
 	NumDisplayedOrders = 0;
-	
+
 	for(j=0; ((j<NumAvailableOrders) && (NumDisplayedOrders < MAX_DISPLAYABLE_ORDERS)); j++) {
    		OrdIndex = AvailableOrders[j].OrderIndex;
 
@@ -649,16 +649,16 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 
 			case ORD_JUSTIFY_RIGHT:
 				sButInit.x = (SWORD)(sFormInit.width - ORDER_BUTX -
-						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) + 
+						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
 						((NumJustifyButs-1) * ORDER_BUTGAP ) ) ));
 				break;
 
 			case ORD_JUSTIFY_CENTER:
 //				sButInit.x = (SWORD)((sFormInit.width / 2) -
-//						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) + 
+//						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
 //						((NumJustifyButs-1) * ORDER_BUTGAP ) ) / 2 ));
 				sButInit.x = ((SWORD)((sFormInit.width ) -
-						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) + 
+						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
 						((NumJustifyButs-1) * ORDER_BUTGAP ) ))))/2;
 				break;
 
@@ -686,21 +686,21 @@ BOOL _intAddOrder(BASE_OBJECT *psObj)
 				}
 
 				// get position on line
-				NumCombineButs = (UWORD)(NumCombineButs - (NumCombineBefore - (NumCombineBefore % ORD_MAX_COMBINE_BUTS))); 
+				NumCombineButs = (UWORD)(NumCombineButs - (NumCombineBefore - (NumCombineBefore % ORD_MAX_COMBINE_BUTS)));
 
 				if (NumCombineButs >= ORD_MAX_COMBINE_BUTS)
 				{
 					// the buttons will fill the line
-					sButInit.x = (SWORD)(ORDER_BUTX + 
+					sButInit.x = (SWORD)(ORDER_BUTX +
 							(GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP ) * NumCombineBefore);
 				}
 				else
 				{
 					// center the buttons
 					sButInit.x = (SWORD)((sFormInit.width / 2) -
-							( ((NumCombineButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) + 
+							( ((NumCombineButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
 							((NumCombineButs-1) * ORDER_BUTGAP ) ) / 2 ));
-					sButInit.x = (SWORD)(sButInit.x + 
+					sButInit.x = (SWORD)(sButInit.x +
 						(GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP ) * NumCombineBefore);
 				}
 
@@ -839,7 +839,7 @@ void intRunOrder(void)
 	}
 
 	// If all dead then remove the screen.
-	if(NumDead == NumSelectedDroids) 
+	if(NumDead == NumSelectedDroids)
     {
         //might have a factory selected
         if (psSelectedFactory == NULL)
@@ -850,7 +850,7 @@ void intRunOrder(void)
 	}
 
 	// If droids no longer selected then remove screen.
-	if(NumSelected == 0) 
+	if(NumSelected == 0)
     {
         //might have a factory selected
         if (psSelectedFactory == NULL)
@@ -871,7 +871,7 @@ void _intProcessOrder(UDWORD id)
 	UDWORD BaseID;
 	UDWORD StateIndex;
 	UDWORD CombineState;
-		
+
 	if(id == IDORDER_CLOSE) {
 		intRemoveOrder();
 		if (intMode == INT_ORDER)
@@ -1047,7 +1047,7 @@ void intProcessOrder(UDWORD id)
 	_intProcessOrder(id);
 }
 
-	
+
 // Remove the droids order screen with animation.
 //
 void intRemoveOrder(void)
@@ -1486,7 +1486,7 @@ static UDWORD GetImageHeight(IMAGEFILE *ImageFile,UDWORD ImageID)
 //new function added to bring up the RMB order form for Factories as well as droids
 void intAddFactoryOrder(STRUCTURE *psStructure)
 {
-	if(!OrderUp) 
+	if(!OrderUp)
 	{
 		intResetScreen(FALSE);
 		intAddOrder((BASE_OBJECT *)psStructure);

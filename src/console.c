@@ -1,14 +1,14 @@
-#include "frame.h"
-#include "gtime.h"
+#include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "base.h"
-#include "piedef.h"
-#include "piestate.h"
-#include "rendmode.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
 #include "intimage.h"
 #include "console.h"
 #include "scriptextern.h"
 #include "audio_id.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
@@ -94,7 +94,7 @@ void	setConsoleLineInfo			( UDWORD vis );
 UDWORD	getConsoleLineInfo			( void );
 void	permitNewConsoleMessages		( BOOL allow);
 UDWORD	displayOldMessages			( void );
-	
+
 /* Sets the system up */
 void	initConsoleMessages( void )
 {
@@ -131,7 +131,7 @@ void	initConsoleMessages( void )
 	/* Set left justification as default */
 	setDefaultConsoleJust(LEFT_JUSTIFY);
 
-	/*	Set up the console size and postion 
+	/*	Set up the console size and postion
 		x,y,width */
 	setConsoleSizePos(16,16,DISP_WIDTH-32);
 
@@ -162,10 +162,10 @@ void	toggleConsoleDrop( void )
 		audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 	}
 
-	return;	
+	return;
 	if(!bConsoleDropped)
 	{
-		
+
 		bConsoleDropped = !bConsoleDropped;
 	}
 	/* Are they opening it? */
@@ -224,7 +224,7 @@ CONSOLE_MESSAGE	*psMessage;
 			consoleStorage[messageIndex].JustifyType = FTEXT_RIGHTJUSTIFY;
 		break;
 
-		/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */ 
+		/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */
 	case CENTRE_JUSTIFY:
 			consoleStorage[messageIndex].JustifyType = FTEXT_CENTRE;
 		break;
@@ -233,7 +233,7 @@ CONSOLE_MESSAGE	*psMessage;
 		DBERROR(("Weirdy type of text justification for console print"));
 		break;
 	}
-	
+
 	/* Copy over the text of the message */
 	strcpy(consoleStorage[messageIndex].text,messageText);
 
@@ -261,7 +261,7 @@ CONSOLE_MESSAGE	*psMessage;
 		/* Add it to the end */
 		psMessage->psNext = &consoleStorage[messageIndex];
 	}
- 
+
 	/* Move on in our array */
 	if(messageIndex++ >= MAX_CONSOLE_MESSAGES-1)
 	{
@@ -324,7 +324,7 @@ void	updateConsoleMessages( void )
 	{
 		return;
 	}
-	
+
 	/* Time to kill the top one ?*/
 	if(gameTime2 - consoleMessages->timeAdded > messageDuration)
 	{
@@ -345,19 +345,19 @@ void	updateConsoleMessages( void )
 	}
 }
 
-/* 
-	Allows us to specify how long messages will stay on screen for. 
+/*
+	Allows us to specify how long messages will stay on screen for.
 */
 void	setConsoleMessageDuration(UDWORD time)
 {
 	messageDuration = time;
 }
 
-/*	
+/*
 	Allows us to remove the top message on screen.
 	This and the function above should be sufficient to allow
 	us to put up messages that stay there until we remove them
-	ourselves - be sure and reset message duration afterwards 
+	ourselves - be sure and reset message duration afterwards
 */
 void	removeTopConsoleMessage( void )
 {
@@ -405,7 +405,7 @@ UDWORD	exceed;
 	{
 		/* No point - so get out */
  	return;
-	}								
+	}
 
 	/* Return if it's disabled */
 	if(!bConsoleDisplayEnabled)
@@ -426,7 +426,7 @@ UDWORD	exceed;
 	drop = 0;
 	if(bConsoleDropped)
 	{
-		
+
 		drop = displayOldMessages();
 	}
 	if(consoleMessages==NULL)
@@ -437,8 +437,8 @@ UDWORD	exceed;
 	/* Do we want a box under it? */
 	if(bTextBoxActive)
 	{
-		for(psMessage = consoleMessages,exceed = 0; 
-			psMessage AND (numProcessed<consoleVisibleLines) AND (exceed < 4); // ho ho ho!!! 
+		for(psMessage = consoleMessages,exceed = 0;
+			psMessage AND (numProcessed<consoleVisibleLines) AND (exceed < 4); // ho ho ho!!!
 			psMessage = psMessage->psNext)
 		{
 			if((UDWORD)iV_GetTextWidth(psMessage->text) > mainConsole.width)
@@ -446,7 +446,7 @@ UDWORD	exceed;
 				exceed++;
 			}
 		}
-		
+
 		/* How big a box is necessary? */
 		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
 		/* Add on the extra - hope it doesn't exceed two lines! */
@@ -460,13 +460,13 @@ UDWORD	exceed;
 		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
 			mainConsole.topX+mainConsole.width ,clipDepth);
 	}
- 
-   
+
+
 
 	/* Stop when we've drawn enough or we're at the end */
 	MesY = mainConsole.topY + drop;
-	for(psMessage = consoleMessages,numProcessed = 0; 
-		psMessage AND numProcessed<consoleVisibleLines AND MesY<(DISP_HEIGHT-linePitch); 
+	for(psMessage = consoleMessages,numProcessed = 0;
+		psMessage AND numProcessed<consoleVisibleLines AND MesY<(DISP_HEIGHT-linePitch);
 		psMessage = psMessage->psNext)
 	{
  		/* Draw the text string */
@@ -496,7 +496,7 @@ UDWORD	MesY;
 	/* Check there actually are any messages */
 	thisIndex = messageId;
 	count = 0;
-	
+
 	if(thisIndex)
 	{
 		bQuit = FALSE;
@@ -519,7 +519,7 @@ UDWORD	MesY;
 			{
 				bQuit = TRUE;	// count holds how many we got
 			}
-			if(thisIndex) 
+			if(thisIndex)
 			{
 			 	/* Look for an older one */
 				thisIndex--;
@@ -536,15 +536,15 @@ UDWORD	MesY;
 		}
 	}
 
-	if(!count) 
+	if(!count)
 	{
 		/* there are messages - just no old ones yet */
 		return(0);
-	}	
+	}
 
 	if(count)
 	{
-		/* Get the line pitch */ 
+		/* Get the line pitch */
 		linePitch = iV_GetTextLineSize();
 
 		/* How big a box is necessary? */
@@ -625,7 +625,7 @@ void	setConsoleBackdropStatus(BOOL state)
 	bTextBoxActive = state;
 }
 
-/* 
+/*
 	Turns on and off display of console. It's worth
 	noting that this is just the display so if you want
 	to make sure that when it's turned back on again, there
@@ -661,7 +661,7 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 
 	/* Should be done below */
 	mainConsole.textDepth = 8;
-	flushConsoleMessages();	
+	flushConsoleMessages();
 }
 
 /*	Establishes whether the console messages stay there */
@@ -688,14 +688,14 @@ void	setConsolePermanence(BOOL state, BOOL bClearOld)
 /* TRUE or FALSE as to whether the mouse is presently over the console window */
 BOOL	mouseOverConsoleBox( void )
 {
-	if	( 
+	if	(
 		((UDWORD)mouseX() > mainConsole.topX)	// condition 1
 		AND ((UDWORD)mouseY() > mainConsole.topY)	// condition 2
 		AND ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)	//condition 3
 		AND ((UDWORD)mouseY() < (mainConsole.topY + iV_GetTextLineSize()*numActiveMessages))	//condition 4
 	)
 	{
-		return(TRUE);	
+		return(TRUE);
 	}
 	else
 	{
@@ -746,6 +746,6 @@ BOOL	getConsoleDisplayStatus( void )
 
 void	conShowReplayWav( void )
 {
-	
+
 
 }

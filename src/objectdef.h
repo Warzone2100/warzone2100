@@ -8,8 +8,8 @@
 #ifndef _objectdef_h
 #define _objectdef_h
 
-#include "frame.h"
-#include "pietypes.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/pietypes.h"
 
 #include "aidef.h"
 #include "functiondef.h"

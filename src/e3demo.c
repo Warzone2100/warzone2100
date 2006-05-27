@@ -1,4 +1,4 @@
-/*	
+/*
 	Temporary Warzone file for the E3 Demo.
 	Bounces the camera around and attempts to track
 	interesting stuff.
@@ -7,13 +7,13 @@
 */
 // -------------------------------------------------------------------------
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 // -------------------------------------------------------------------------
 
 #if !defined(PSX) || defined(E3DEMO)
 
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "map.h"
 #include "hci.h"
@@ -91,7 +91,7 @@ UDWORD	i,numWith;
 		/* Nope, so get out */
 		return;
 	}
-	
+
 	/* Is it time for a new target? */
 	if( gameTime > (lastCameraMove + demoCamInterval) )
 	{
@@ -149,7 +149,7 @@ UDWORD	i,numWith;
 				/* Only do this if we've got a droid and an enemy building to attack! */
 				if(psDroid AND apsStructLists[otherPlayer])
 				{
-					if( (orderState(psDroid,DORDER_NONE) == TRUE) OR 
+					if( (orderState(psDroid,DORDER_NONE) == TRUE) OR
 						((orderState(psDroid,DORDER_GUARD) == TRUE) AND (psDroid->action == DACTION_NONE)))
 					{
 						/* Make the droid attack the building - it'll indirectly route there too */
@@ -196,11 +196,11 @@ BOOL	demoGetStatus( void )
 	{
 		return(FALSE);
 	}
-}	
+}
 
 // -------------------------------------------------------------------------
 /*	Attempts to find a new location for the tracking camera to go to, or
-	a new object (target) for it to track. 
+	a new object (target) for it to track.
 */
 #define NUM_CHOICES 2
 #define DROID_SEEK	0
@@ -304,7 +304,7 @@ PROPULSION_STATS	*psPropStats;
 			{
 				psDroid->selected = TRUE;
 			  	selectedPlayer = player;
-				psLastDroid = psDroid;	
+				psLastDroid = psDroid;
 			  //	if(orderState(psDroid,DORDER_ATTACK) == FALSE)
 			  //	{
 		 	 		orderDroidLoc(psDroid,DORDER_MOVE,
@@ -445,9 +445,9 @@ UDWORD	droidIndex;
 /* Hack! */
 BOOL	tooNearEdge( UDWORD x, UDWORD y )
 {
-	if( (x > ((visibleXTiles/2) * TILE_UNITS)) AND          
+	if( (x > ((visibleXTiles/2) * TILE_UNITS)) AND
 		(x < ((mapWidth-(visibleXTiles/2)) * TILE_UNITS)) AND
-		(y > ((visibleYTiles/2) * TILE_UNITS)) AND          
+		(y > ((visibleYTiles/2) * TILE_UNITS)) AND
 		(y < ((mapHeight-(visibleYTiles/2)) * TILE_UNITS)) )
 	{
 		return(FALSE);

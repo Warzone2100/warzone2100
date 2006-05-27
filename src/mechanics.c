@@ -8,7 +8,7 @@
 /* extra structures required for demo */
 //#define DEMO
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "mechanics.h"
 #include "stats.h"
 #include "structure.h"
@@ -209,9 +209,9 @@ BOOL allocStructLists(void)
 
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
-		if(numStructureStats) 
+		if(numStructureStats)
 		{
-			apStructTypeLists[inc] = (UBYTE *) MALLOC(sizeof(UBYTE) * 
+			apStructTypeLists[inc] = (UBYTE *) MALLOC(sizeof(UBYTE) *
 								numStructureStats);
 			if (apStructTypeLists[inc] == NULL)
 			{
@@ -222,8 +222,8 @@ BOOL allocStructLists(void)
 			{
 				apStructTypeLists[inc][stat] = UNAVAILABLE;
 			}
-		} 
-		else 
+		}
+		else
 		{
 			apStructTypeLists[inc] = NULL;
 		}
@@ -368,13 +368,13 @@ BOOL gameStatStart(void)
 	//allocate the space for the Players' structure lists
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
-		if(numStructureStats) 
+		if(numStructureStats)
 		{
 #ifdef DEMO
-			apStructTypeLists[inc] = (UDWORD *) MALLOC(sizeof(UDWORD) * 
+			apStructTypeLists[inc] = (UDWORD *) MALLOC(sizeof(UDWORD) *
 								(numStructureStats + NUM_DEMO_STRUCTS));
 #else
-			apStructTypeLists[inc] = (UDWORD *) MALLOC(sizeof(UDWORD) * 
+			apStructTypeLists[inc] = (UDWORD *) MALLOC(sizeof(UDWORD) *
 								numStructureStats);
 #endif
 			if (apStructTypeLists[inc] == NULL)
@@ -393,8 +393,8 @@ BOOL gameStatStart(void)
 				apStructTypeLists[inc][stat] = UNAVAILABLE;
 			}
 #endif
-		} 
-		else 
+		}
+		else
 		{
 			apStructTypeLists[inc] = NULL;
 		}
@@ -476,7 +476,7 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}	
+	}
 	for (comp=0; comp < numSensorStats; comp++)
 	{
 		if (!strcmp(asSensorStats[comp].pName, "Default Sensor"))
@@ -487,7 +487,7 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}		
+	}
 	for (comp=0; comp < numRepairStats; comp++)
 	{
 		if (!strcmp(asRepairStats[comp].pName, "Light Repair #1"))
@@ -498,7 +498,7 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}		
+	}
 	for (comp=0; comp < numPropulsionStats; comp++)
 	{
 		if (!strcmp(asPropulsionStats[comp].pName, "Wheeled Propulsion"))
@@ -509,7 +509,7 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}		
+	}
 	/*for (comp=0; comp < numProgramStats; comp++)
 	{
 		if (!strcmp(asProgramStats[comp].pName, "Radar Program"))
@@ -533,7 +533,7 @@ BOOL gameStatStart(void)
 				apCompLists[inc][COMP_PROGRAM][comp] = AVAILABLE;
 			}
 		}
-	}*/		
+	}*/
 	for (comp=0; comp < numConstructStats; comp++)
 	{
 		if (!strcmp(asConstructStats[comp].pName, "Building Constructor"))
@@ -544,7 +544,7 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}		
+	}
 	for (comp=0; comp < numBrainStats; comp++)
 	{
 		if (!strcmp(asBrainStats[comp].pName, "Standard Brain"))
@@ -555,7 +555,7 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}		
+	}
 	for (comp=0; comp < numBodyStats; comp++)
 	{
 		if (!strcmp(asBodyStats[comp].pName, "Viper Body"))
@@ -566,10 +566,10 @@ BOOL gameStatStart(void)
 			}
 			break;
 		}
-	}		
+	}
 
 
-	// set the default sensor and ECM 
+	// set the default sensor and ECM
 	for(comp=0; comp < numSensorStats; comp++)
 	{
 		if (!strcmp(asSensorStats[comp].pName, "Default Sensor"))
@@ -610,11 +610,11 @@ BOOL gameStatStart(void)
 					posY = rand()%mapHeight/2+mapHeight/4;
 				}
 				while(blockingTile(posX,posY,TER_ALL));
-/*				psStructure = buildStructure(&asStructureStats[comp], posX << 
+/*				psStructure = buildStructure(&asStructureStats[comp], posX <<
 					TILE_SHIFT + TILE_UNITS/2 , (posY << TILE_SHIFT) + TILE_UNITS/2,
 					inc); */
-				psStructure = buildStructure(&asStructureStats[comp], 
-					posX << TILE_SHIFT, (posY << TILE_SHIFT), inc,FALSE); 
+				psStructure = buildStructure(&asStructureStats[comp],
+					posX << TILE_SHIFT, (posY << TILE_SHIFT), inc,FALSE);
 				psStructure->status = SS_BUILT;
 				builtRes = TRUE;
 			}
@@ -627,11 +627,11 @@ BOOL gameStatStart(void)
 					posY = rand()%mapHeight/2+mapHeight/4;
 				}
 				while(blockingTile(posX,posY,TER_ALL));
-/*				psStructure = buildStructure(&asStructureStats[comp], posX << 
-					TILE_SHIFT + TILE_UNITS/2, (posY << TILE_SHIFT) + TILE_UNITS/2, 
+/*				psStructure = buildStructure(&asStructureStats[comp], posX <<
+					TILE_SHIFT + TILE_UNITS/2, (posY << TILE_SHIFT) + TILE_UNITS/2,
 					inc); */
-				psStructure = buildStructure(&asStructureStats[comp], 
-					posX << TILE_SHIFT, posY << TILE_SHIFT, inc,FALSE); 
+				psStructure = buildStructure(&asStructureStats[comp],
+					posX << TILE_SHIFT, posY << TILE_SHIFT, inc,FALSE);
 				psStructure->status = SS_BUILT;
 				builtGen = TRUE;
 			}

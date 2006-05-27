@@ -12,10 +12,11 @@
 #include <sdl/sdl.h>
 #endif
 #include <GL/gl.h>
-#include "frame.h"
-#include "frameint.h"
-#include "screen.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/screen.h"
+#include "lib/widget/widget.h"
 
 #include "winmain.h"
 #include "objects.h"
@@ -23,14 +24,15 @@
 #include "display3d.h"
 
 /* Includes direct access to render library */
-#include "piedef.h"
-#include "piestate.h"
-#include "pieclip.h"
-#include "vid.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/pieclip.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 #include "objmem.h"
 #include "gateway.h"
 #include <time.h>
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "text.h"
 #include "configuration.h"
 #include "intdisplay.h"
@@ -39,7 +41,8 @@
 #include "csnap.h"
 #include "power.h"
 #include "loadsave.h"			// for blueboxes.
-#include "piematrix.h"			// for setgeometricoffset
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "component.h"
 #include "map.h"
 #include "console.h"			// chat box stuff
@@ -49,10 +52,10 @@
 #include "frontend.h"
 //#include "texture.h"
 #include "data.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "keymap.h"
 
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "multijoin.h"
@@ -66,7 +69,7 @@
 #include <jpeglib.h>
 
 // ////////////////////////////////////////////////////////////////////////////
-// vars 
+// vars
 extern char	MultiForcesPath[255];
 extern char	MultiCustomMapsPath[255];
 extern char	MultiPlayersPath[255];
@@ -159,9 +162,9 @@ BOOL			startMultiOptions	(BOOL);
 VOID			frontendMultiMessages(VOID);
 
 // whiteboard funcs
-static	BOOL	removeWhiteBoard	(VOID);	
-static	BOOL	addWhiteBoard		(VOID);	
-static	BOOL	runWhiteBoard		(VOID);	
+static	BOOL	removeWhiteBoard	(VOID);
+static	BOOL	addWhiteBoard		(VOID);
+static	BOOL	runWhiteBoard		(VOID);
 
 static	UDWORD	bestPlayer			(UDWORD);
 static	VOID	decideWRF			(VOID);
@@ -190,7 +193,7 @@ static VOID		CurrentForce		(VOID);				// draw the current force
 extern UWORD backDropBmp[];
 
 #define mywidth 512		//pow2 textures!
-#define myheight 512		//must match what we got now. 
+#define myheight 512		//must match what we got now.
 void loadMapPreview(void)
 {
 	STRING			aFileName[256];
@@ -198,7 +201,7 @@ void loadMapPreview(void)
 	UBYTE			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 
-//	iBitmap	
+//	iBitmap
 	DWORD			*tempBmp=NULL;//[BACKDROP_WIDTH*BACKDROP_HEIGHT];
 	UDWORD			i,j,x,y,height,offX,offY,offX2,offY2,tmp;
 	UBYTE			scale,col,coltab[16],bitDepth=8;
@@ -217,7 +220,7 @@ void loadMapPreview(void)
 	loadLevels(psLevel->dataDir);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "\\game.map");		
+	strcat(aFileName, "\\game.map");
 
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -231,16 +234,16 @@ void loadMapPreview(void)
 	}
 	gwShutDown();
 
-	//	build col table;	//ack! 
+	//	build col table;	//ack!
 //	for (col=0; col<16; col+=1)
 //	{
 //		coltab[col] = pal_GetNearestColour( col*16,col*16, col*16);
 //	}
-/*		
+/*
 	if (screenGetBackBufferBitDepth() == 16)
 	{
-		bitDepth = 16;		
-	} 
+		bitDepth = 16;
+	}
 	else {
 	bitDepth = 8;
 	}
@@ -284,7 +287,7 @@ void loadMapPreview(void)
 /*
 	//centre in screen.
 	offX = (BACKDROP_WIDTH/2) - ((scale*mapWidth)/2);//(mywidth/2 )
-	offY =(BACKDROP_HEIGHT/2) - ((scale*mapHeight)/2);//(myheight/2 ) 
+	offY =(BACKDROP_HEIGHT/2) - ((scale*mapHeight)/2);//(myheight/2 )
 
 	psTile = psMapTiles;
 	for (i=0; i<mapHeight; i+=1)
@@ -292,10 +295,10 @@ void loadMapPreview(void)
 		WTile = psTile;
 		for (j=0; j<mapWidth; j+=1)	//Wtile is tile considering at i,j.
 		{
-			
-			height = WTile->height;				
+
+			height = WTile->height;
 			col = coltab[height/16];
-		
+
 			// plot the pixel into the array.
 			for(x = (j*scale);x < (j*scale)+scale ;x++)
 			{
@@ -344,14 +347,14 @@ void loadMapPreview(void)
 //    memset(ptr,0x99,sizeof(unsigned char) *mywidth*myheight );
   	psTile = psMapTiles;
 	offX2 = (mywidth/2 ) - ((scale*mapWidth)/2);//(mywidth/2 )
-	offY2 =(myheight/2 )  - ((scale*mapHeight)/2);//(myheight/2 ) 
+	offY2 =(myheight/2 )  - ((scale*mapHeight)/2);//(myheight/2 )
 
       for (i = 0; i < mapHeight; i++)
       {
 	  		WTile = psTile;
         for (j = 0; j <mapWidth ; j++)
         {
-			height = WTile->height;	
+			height = WTile->height;
 			col =height;// coltab[height/16];
 
 
@@ -365,7 +368,7 @@ void loadMapPreview(void)
 		  =col;
         imageData[3*((offY2+y) * mywidth + (x+offX2))+2]
 		  =col;
-				} 
+				}
 			}
 		  WTile+=1;
         }
@@ -386,7 +389,7 @@ void loadMapPreview(void)
 // leave alone for now please -Q
 // I know this don't belong here, but I am using this for testing.
 void Show_Map(char *imagedata)
-{	
+{
 	GLuint Tex;
 //		SDL_GL_SwapBuffers();
 	pie_image image;
@@ -463,20 +466,20 @@ void displayMapPreview()
 		WTile = psTile;
 		for (j=0; j<mapWidth; j+=2)	//Wtile is tile considering at i,j.
 		{
-			
+
 			height = WTile->height;
-			
+
 			col = coltab[height/16];
 //				pal_GetNearestColour( height, height, height);
-			
+
 			pie_BoxFillIndex(j,i,j+2,i+2,col);
-		
+
 
 			WTile+=2;
 		}
 		psTile += mapWidth*2;
 	}
-	
+
 
 
 
@@ -491,10 +494,10 @@ static void decideWRF(void)
 	HANDLE pFileHandle;
 
 	// try and load it from the maps directory first,
-	strcpy(pLevelName, MultiCustomMapsPath);			
+	strcpy(pLevelName, MultiCustomMapsPath);
 	strcat(pLevelName, game.map);
-	strcat(pLevelName, ".wrf");	
-	debug(LOG_WZ, "decideWRF: %s", pLevelName);	
+	strcat(pLevelName, ".wrf");
+	debug(LOG_WZ, "decideWRF: %s", pLevelName);
 	//if the file exists in the downloaded maps dir then use that one instead.
 	// FIXME: Try to incorporate this into physfs setup somehow for sane paths
 	pFileHandle = fopen(pLevelName, "rb");
@@ -505,7 +508,7 @@ static void decideWRF(void)
 	else
 	{
 		fclose(pFileHandle);
-	}		
+	}
 }
 
 
@@ -513,7 +516,7 @@ static void decideWRF(void)
 // Connection Options Screen.
 
 static BOOL OptionsInet(UDWORD parentID)			//internet options
-{	
+{
 	W_EDBINIT		sEdInit;
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
@@ -524,7 +527,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 		return TRUE;
 	}
 
-	widgCreateScreen(&psConScreen);		
+	widgCreateScreen(&psConScreen);
 	widgSetTipFont(psConScreen,WFont);
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
@@ -541,7 +544,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	addMultiBut(psConScreen, CON_SETTINGS,CON_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
 				STR_MUL_OK,IMAGE_OK,IMAGE_OK,TRUE);
 
-	//label. 
+	//label.
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 	sLabInit.formID = CON_SETTINGS;
 	sLabInit.id		= CON_SETTINGS_LABEL;
@@ -582,8 +585,8 @@ BOOL startConnectionScreen(VOID)
 {
 	addBackdrop();										//background
 	addTopForm();										// logo
-	addBottomForm();	
-	
+	addBottomForm();
+
 	SettingsUp		= 0;
 	InitialProto	= 0;
 	safeSearch		= FALSE;
@@ -606,28 +609,28 @@ static void addConnections(UDWORD begin)
 	UDWORD	pos = 50;
 	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, strresGetString(psStringRes,STR_CON_INTERNET),FALSE,FALSE);
 }
-	
+
 VOID runConnectionScreen(void )
 {
 	UDWORD id;
 	static UDWORD chosenproto;
 	static char addr[128];
-	LPVOID finalconnection;	 
+	LPVOID finalconnection;
 
 	processFrontendSnap(TRUE);
 
 	if(SettingsUp ==1)
-	{	
-		id = widgRunScreen(psConScreen);				// Run the current set of widgets 
+	{
+		id = widgRunScreen(psConScreen);				// Run the current set of widgets
 	}
 	else
 	{
-		id = widgRunScreen(psWScreen);					// Run the current set of widgets 
+		id = widgRunScreen(psWScreen);					// Run the current set of widgets
 	}
 
 
 	if(id == CON_CANCEL)								//cancel
-	{	
+	{
 		changeTitleMode(MULTI);
 		bMultiPlayer = FALSE;
 	}
@@ -635,24 +638,24 @@ VOID runConnectionScreen(void )
 	if(id == CON_TYPESID_MORE)
 	{
 		widgDelete(psWScreen,FRONTEND_BOTFORM);
-		
+
 		SettingsUp = 0;
 		InitialProto +=5;
 
-		addBottomForm();	
+		addBottomForm();
 		addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
 		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
 
 		addConnections(InitialProto);
 	}
 
-	
+
 	if(  SettingsUp==0 &&  (id >= CON_TYPESID_START) && (id<=CON_TYPESID_END) )
 	{
 
 		/* RODZ
 		if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_MODEM))
-		{	
+		{
 			chosenproto =1;
 			OptionsModem(id);
 		}
@@ -680,7 +683,7 @@ VOID runConnectionScreen(void )
 			widgSetButtonState(psConScreen, CON_COM1,WBUT_LOCK);
 			widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);
 		}
-	
+
 		else if(IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &SPGUID_MPLAYER) ) // mplayer
 		{
 			if(system("multiplay\\MplayNow\\mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
@@ -689,7 +692,7 @@ VOID runConnectionScreen(void )
 			}
 		}
 		else if( strncmp(NetPlay.protocols[id-CON_TYPESID_START].name,"Simulator For",12) == 0)	// DIRECTPLAY 6 TEST MODE
-		{		
+		{
 			OptionsUnknown(id);
 			chosenproto =5;
 		}
@@ -714,17 +717,17 @@ VOID runConnectionScreen(void )
 		strcpy(addr,widgGetString(psConScreen, CON_IP));
 		break;
 	/* RODZ
-	case CON_COM1:											// com1 
+	case CON_COM1:											// com1
 		com = 1;
 		widgSetButtonState(psConScreen, CON_COM1,WBUT_LOCK);// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,0);	
+		widgSetButtonState(psConScreen, CON_COM2,0);
 		widgSetButtonState(psConScreen, CON_COM3,0);
 		widgSetButtonState(psConScreen, CON_COM4,0);
 		break;
-	case CON_COM2:										// com 2 
+	case CON_COM2:										// com 2
 		com = 2;
 		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,WBUT_LOCK);	
+		widgSetButtonState(psConScreen, CON_COM2,WBUT_LOCK);
 		widgSetButtonState(psConScreen, CON_COM3,0);
 		widgSetButtonState(psConScreen, CON_COM4,0);
 
@@ -732,42 +735,42 @@ VOID runConnectionScreen(void )
 	case CON_COM3:										// com 3
 		com = 3;
 		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,0);	
+		widgSetButtonState(psConScreen, CON_COM2,0);
 		widgSetButtonState(psConScreen, CON_COM3,WBUT_LOCK);
 		widgSetButtonState(psConScreen, CON_COM4,0);
 		break;
 	case CON_COM4:										// com 4
 		com = 4;
 		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,0);	
+		widgSetButtonState(psConScreen, CON_COM2,0);
 		widgSetButtonState(psConScreen, CON_COM3,0);
 		widgSetButtonState(psConScreen, CON_COM4,WBUT_LOCK);
 		break;
 	case CON_14400:										// 14400
 		baud = 14400;
 		widgSetButtonState(psConScreen, CON_14400,WBUT_LOCK);	// change hilight
-		widgSetButtonState(psConScreen, CON_19200,0);	
+		widgSetButtonState(psConScreen, CON_19200,0);
 		widgSetButtonState(psConScreen, CON_57600,0);
 		widgSetButtonState(psConScreen, CON_11520,0);
 		break;
 	case CON_19200:										// 19200
 		baud = 19200;
-		widgSetButtonState(psConScreen, CON_14400,0);	
-		widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);	
+		widgSetButtonState(psConScreen, CON_14400,0);
+		widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);
 		widgSetButtonState(psConScreen, CON_57600,0);
 		widgSetButtonState(psConScreen, CON_11520,0);
 		break;
 	case CON_57600:										// 57600
 		baud = 57600;
-		widgSetButtonState(psConScreen, CON_14400,0);	
-		widgSetButtonState(psConScreen, CON_19200,0);	
+		widgSetButtonState(psConScreen, CON_14400,0);
+		widgSetButtonState(psConScreen, CON_19200,0);
 		widgSetButtonState(psConScreen, CON_57600,WBUT_LOCK);
 		widgSetButtonState(psConScreen, CON_11520,0);
 		break;
-	case CON_11520:										// 11520 
+	case CON_11520:										// 11520
 		baud = 115200;
-		widgSetButtonState(psConScreen, CON_14400,0);	
-		widgSetButtonState(psConScreen, CON_19200,0);	
+		widgSetButtonState(psConScreen, CON_14400,0);
+		widgSetButtonState(psConScreen, CON_19200,0);
 		widgSetButtonState(psConScreen, CON_57600,0);
 		widgSetButtonState(psConScreen, CON_11520,WBUT_LOCK);
 		break;
@@ -780,28 +783,28 @@ VOID runConnectionScreen(void )
 	{
 		if(SettingsUp == 1)
 		{
-			widgReleaseScreen(psConScreen);	
+			widgReleaseScreen(psConScreen);
 			SettingsUp =0;
 		}
 
 		switch(chosenproto)
 		{
 		/* RODZ
-		case 1:			
+		case 1:
 			game.bytesPerSec			= MODEMBYTESPERSEC;
-			game.packetsPerSec			= MODEMPACKETS;	
+			game.packetsPerSec			= MODEMPACKETS;
 			DBPRINTF(("using modem %d\n",ingame.modem));
 			NETsetupModem(&finalconnection,telno,ingame.modem);	//modem
 			break;
 		*/
-		case 2:		
-			game.bytesPerSec			= INETBYTESPERSEC;	
+		case 2:
+			game.bytesPerSec			= INETBYTESPERSEC;
 			game.packetsPerSec			= INETPACKETS;
 			NETsetupTCPIP(&finalconnection, addr);			//inet
 			break;
 		/* RODZ
 		case 3:												//ipx
-			game.bytesPerSec			= IPXBYTESPERSEC;	
+			game.bytesPerSec			= IPXBYTESPERSEC;
 			game.packetsPerSec			= IPXPACKETS;
 			safeSearch = TRUE;
 			for(i=0;
@@ -810,15 +813,15 @@ VOID runConnectionScreen(void )
 			finalconnection = NetPlay.protocols[i].connection;
 			break;
 		case 4:												//cable
-			game.bytesPerSec			= CABLEBYTESPERSEC;	
+			game.bytesPerSec			= CABLEBYTESPERSEC;
 			game.packetsPerSec			= CABLEPACKETS;
-			NETsetupSerial(&finalconnection,com,baud,ONESTOPBIT,NOPARITY,DPCPA_RTSFLOW);	
+			NETsetupSerial(&finalconnection,com,baud,ONESTOPBIT,NOPARITY,DPCPA_RTSFLOW);
 			break;
 		case 5:												// dplay6 tester.
-			game.bytesPerSec			= INETBYTESPERSEC;	
+			game.bytesPerSec			= INETBYTESPERSEC;
 			game.packetsPerSec			= INETPACKETS;
 			for(i=0;
-					i<MaxProtocols 
+					i<MaxProtocols
 					&& strncmp(NetPlay.protocols[id-CON_TYPESID_START].name,"Simulator For",12) != 0;
 				i++);
 			finalconnection = NetPlay.protocols[i].connection;
@@ -826,14 +829,14 @@ VOID runConnectionScreen(void )
 
 		*/
 		default:
-			game.bytesPerSec			= DEFAULTBYTESPERSEC;// possibly a lobby, so default. 
+			game.bytesPerSec			= DEFAULTBYTESPERSEC;// possibly a lobby, so default.
 			game.packetsPerSec			= DEFAULTPACKETS;
 // swap comments below to allow other providers.
 			// RODZ finalconnection = NetPlay.protocols[id-CON_TYPESID_START].connection;
 			break;
 //			return;	//dont work on anything else!
 		}
-		
+
 /*
 		if(NETselectProtocol(finalconnection))			// start the connection.
 		{
@@ -847,7 +850,7 @@ VOID runConnectionScreen(void )
 				changeTitleMode(GAMEFIND);
 			}
 /* RODZ
-			if(chosenproto==1 || chosenproto==2 || chosenproto==4)		// this hack fixes the 
+			if(chosenproto==1 || chosenproto==2 || chosenproto==4)		// this hack fixes the
 			{											// memory leak in netplay
 				FREE(finalconnection);					// cant do it in the lib, since requires protochosen!
 			}
@@ -861,7 +864,7 @@ VOID runConnectionScreen(void )
 
 	StartCursorSnap(&InterfaceSnap);
 	DrawBegin();
-	
+
 	widgDisplayScreen(psWScreen);							// show the widgets currently running
 	if(SettingsUp == 1)
 	{
@@ -879,32 +882,32 @@ static void addGames()
 {
 	UDWORD i,gcount=0;
 	W_BUTINIT	sButInit;
-	
+
 	//count games to see if need two columns.
-	for(i=0;i<MaxGames;i++)							// draw games 
+	for(i=0;i<MaxGames;i++)							// draw games
 	{
 		if( NetPlay.games[i].desc.dwSize !=0)
 		{
 			gcount++;
 		}
 	}
-	
+
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.width = GAMES_GAMEWIDTH;
 	sButInit.height = GAMES_GAMEHEIGHT;
 	sButInit.FontID = WFont;
-	sButInit.pDisplay = displayRemoteGame;	
+	sButInit.pDisplay = displayRemoteGame;
 
-	for(i=0;i<MaxGames;i++)							// draw games 
+	for(i=0;i<MaxGames;i++)							// draw games
 	{
 		widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
 		if( NetPlay.games[i].desc.dwSize !=0)
 		{
-		
+
 			sButInit.id = GAMES_GAMESTART+i;
-		
+
 			if(gcount < 6)							// only center column needed.
 			{
 				sButInit.x = 125;
@@ -923,21 +926,21 @@ static void addGames()
 					sButInit.y = (SHORT)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
 				}
 			}
-			
+
 			sButInit.pTip = NetPlay.games[i].name;
-		
-			sButInit.pUserData = (void *)i;	
+
+			sButInit.pUserData = (void *)i;
 			widgAddButton(psWScreen, &sButInit);
 		}
 	}
-	
+
 }
 
 void runGameFind(void )
 {
 	UDWORD id;
 	static UDWORD lastupdate=0;
-	
+
 	if(lastupdate> gameTime)lastupdate = 0;
 	if(gameTime-lastupdate >6000)
 	{
@@ -948,11 +951,11 @@ void runGameFind(void )
 		}
 		addGames();									//redraw list
 	}
-	
+
 	processFrontendSnap(FALSE);
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
-	
+	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+
 	if(id == CON_CANCEL)								// ok
 	{
 		changeTitleMode(PROTOCOL);
@@ -971,8 +974,8 @@ void runGameFind(void )
 
 		if( ( NetPlay.games[gameNumber].desc.dwCurrentPlayers < NetPlay.games[gameNumber].desc.dwMaxPlayers)
 			&& !(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED) ) // if still joinable
-		{			
-			
+		{
+
 			// if skirmish, check it wont take the last slot
 			if( NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH
 			  && (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers -1)
@@ -980,31 +983,31 @@ void runGameFind(void )
 			{
 				goto FAIL;
 			}
-			
+
 
 			ingame.localOptionsReceived = FALSE;			// note we are awaiting options
 			strcpy(game.name, NetPlay.games[gameNumber].name);		// store name
 
-//			strcpy(sPlayer,"LastUsed");	
+//			strcpy(sPlayer,"LastUsed");
 //			loadMultiStats(sPlayer,&nullStats);
 //			if(NETgetGameFlagsUnjoined(gameNumber,1) == DMATCH)
 //			{
-//				joinArena(gameNumber,(STRING*)sPlayer);		
+//				joinArena(gameNumber,(STRING*)sPlayer);
 //			}
 //			else
 //			{
-				joinCampaign(gameNumber,(STRING*)sPlayer);	
-//			}	
+				joinCampaign(gameNumber,(STRING*)sPlayer);
+//			}
 
 			changeTitleMode(MULTIOPTION);
 		}
-	
+
 	}
 
 FAIL:
 
 	StartCursorSnap(&InterfaceSnap);
-	
+
 	DrawBegin();
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if(safeSearch)
@@ -1021,7 +1024,7 @@ void startGameFind(void)
 {
 	addBackdrop();										//background
 	addTopForm();										// logo
-	addBottomForm();	
+	addBottomForm();
 
 	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,strresGetString(psStringRes,STR_GAMES_GAMES));
 
@@ -1035,8 +1038,8 @@ void startGameFind(void)
 		addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH ,480-MULTIOP_OKW-5 ,5,MULTIOP_OKW,MULTIOP_OKH,
 					STR_MUL_REFRESH,IMAGE_REFRESH,IMAGE_REFRESH,FALSE);			// Find Games button
 	}
-	
-	NETfindGame(TRUE);	
+
+	NETfindGame(TRUE);
 	addGames();	// now add games.
 }
 
@@ -1084,7 +1087,7 @@ static void addBlueForm(UDWORD parent,UDWORD id,STRING *txt,UDWORD x,UDWORD y,UD
 
 static void addGameOptions(BOOL bRedo)
 {
-	W_FORMINIT		sFormInit;	
+	W_FORMINIT		sFormInit;
 
 	if(bRedo)
 	{
@@ -1094,7 +1097,7 @@ static void addGameOptions(BOOL bRedo)
 
 	widgDelete(psWScreen,MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen,FRONTEND_SIDETEXT3);				// del text..
-	
+
 	iV_SetFont(WFont);
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// draw options box.
@@ -1109,24 +1112,24 @@ static void addGameOptions(BOOL bRedo)
 	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,strresGetString(psStringRes,STR_MUL_SIDEOPTIONS));
-	
+
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_GNAME,MCOL0,MROW2,STR_MUL_GAMEIC, game.name ,IMAGE_EDIT_GAME,MULTIOP_GNAME_ICON);
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_MAP  ,MCOL0,MROW3,STR_MUL_MAPIC, game.map ,IMAGE_EDIT_MAP,MULTIOP_MAP_ICON);
 
 
 	// buttons.
-		
+
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,strresGetString(psStringRes,STR_LABEL_TYPE),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
-//	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_ARENA,	MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH, 
+//	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_ARENA,	MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 //				STR_MUL_ARENA,   IMAGE_ARENA,   IMAGE_ARENA_HI,TRUE);		//arena
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_CAMPAIGN,MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 				STR_MUL_CAMPAIGN,IMAGE_CAMPAIGN,IMAGE_CAMPAIGN_HI,TRUE);	//camp
 
-	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_TEAMPLAY,MCOL2, 2 , MULTIOP_BUTW,MULTIOP_BUTH, 
+	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_TEAMPLAY,MCOL2, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 				STR_MUL_TEAMPLAY,IMAGE_TEAM,IMAGE_TEAM_HI,TRUE);			//teamplay
 
-	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_SKIRMISH,MCOL3, 2 , MULTIOP_BUTW,MULTIOP_BUTH, 
+	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_SKIRMISH,MCOL3, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 				STR_MUL_SKIRMISH,IMAGE_SKIRMISH,IMAGE_SKIRMISH_HI,TRUE);	//skirmish
 
 //	widgSetButtonState(psWScreen, MULTIOP_ARENA,	0);
@@ -1152,9 +1155,9 @@ static void addGameOptions(BOOL bRedo)
 
 	if(!NetPlay.bComms)
 	{
-		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	
-//		widgSetButtonState(psWScreen, MULTIOP_ARENA,	WBUT_DISABLE);	
-		widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY, WBUT_DISABLE);	
+		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+//		widgSetButtonState(psWScreen, MULTIOP_ARENA,	WBUT_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY, WBUT_DISABLE);
 	}
 
 	//just display the game options.
@@ -1182,17 +1185,17 @@ static void addGameOptions(BOOL bRedo)
 		// alliances
 //		if(game.type == DMATCH)
 //		{
-//			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,strresGetString(psStringRes,STR_LABEL_ALLI),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);	
+//			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,strresGetString(psStringRes,STR_LABEL_ALLI),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
 //		}
 //		else
 //		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,strresGetString(psStringRes,STR_LABEL_ALLI),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);	
+			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,strresGetString(psStringRes,STR_LABEL_ALLI),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 //		}
 
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_ALLIANCEN,IMAGE_NOALLI,IMAGE_NOALLI_HI,TRUE);		
+				STR_MUL_ALLIANCEN,IMAGE_NOALLI,IMAGE_NOALLI_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_Y,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_ALLIANCEY,IMAGE_ALLI,IMAGE_ALLI_HI,TRUE);			
+				STR_MUL_ALLIANCEY,IMAGE_ALLI,IMAGE_ALLI_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 		switch(game.alliance)
@@ -1205,18 +1208,18 @@ static void addGameOptions(BOOL bRedo)
 			break;
 		}
 	}
-		
+
 /*	if(game.type == DMATCH)
 	{
 
-		// limit options		
+		// limit options
 		addBlueForm(MULTIOP_OPTIONS,MULTIOP_LIMIT,strresGetString(psStringRes,STR_LABEL_LIMIT) ,MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_NOLIMIT,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_NOLIM,IMAGE_NOLIMIT,IMAGE_NOLIMIT_HI,TRUE);		
+			STR_MUL_NOLIM,IMAGE_NOLIMIT,IMAGE_NOLIMIT_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_FRAGLIMIT,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_FRAGLIM,IMAGE_FRAGLIMIT,IMAGE_FRAGLIMIT_HI,TRUE);	
+			STR_MUL_FRAGLIM,IMAGE_FRAGLIMIT,IMAGE_FRAGLIMIT_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_TIMELIMIT, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_TIMELIM,IMAGE_TIMELIMIT,IMAGE_TIMELIMIT_HI,TRUE);	
+			STR_MUL_TIMELIM,IMAGE_TIMELIMIT,IMAGE_TIMELIMIT_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,0);		//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,0);
 		widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT ,0);
@@ -1238,20 +1241,20 @@ static void addGameOptions(BOOL bRedo)
 //	  ||(game.type != DMATCH && game.base != CAMP_WALLS))
 	{
 		widgSetButtonState(psWScreen, MULTIOP_FNAME,WEDBS_DISABLE);		// disable force buts
-		widgSetButtonState(psWScreen, MULTIOP_FNAME_ICON,WBUT_DISABLE);		
+		widgSetButtonState(psWScreen, MULTIOP_FNAME_ICON,WBUT_DISABLE);
 	}
 
 	if(game.type == CAMPAIGN || game.type == SKIRMISH || game.type == TEAMPLAY)
 	{
 
-		// pow levels		
+		// pow levels
 		addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,strresGetString(psStringRes,STR_INT_POWER),MCOL0,MROW9,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_POWLO,IMAGE_POWLO,IMAGE_POWLO_HI,TRUE);		
+			STR_MUL_POWLO,IMAGE_POWLO,IMAGE_POWLO_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_POWMED,IMAGE_POWMED,IMAGE_POWMED_HI,TRUE);	
+			STR_MUL_POWMED,IMAGE_POWMED,IMAGE_POWMED_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_HI, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_POWHI,IMAGE_POWHI,IMAGE_POWHI_HI,TRUE);	
+			STR_MUL_POWHI,IMAGE_POWHI,IMAGE_POWHI_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);		//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
@@ -1268,16 +1271,16 @@ static void addGameOptions(BOOL bRedo)
 			break;
 		}
 
-		//type clean/base/defence			
+		//type clean/base/defence
 		addBlueForm(MULTIOP_OPTIONS,MULTIOP_BASETYPE,strresGetString(psStringRes,STR_LABEL_BASE),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPCLEAN,IMAGE_NOBASE,IMAGE_NOBASE_HI,TRUE);		
+				STR_MUL_CAMPCLEAN,IMAGE_NOBASE,IMAGE_NOBASE_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPBASE,IMAGE_SBASE,IMAGE_SBASE_HI,TRUE);		
+				STR_MUL_CAMPBASE,IMAGE_SBASE,IMAGE_SBASE_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_DEFENCE,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPDEFENCE,IMAGE_LBASE,IMAGE_LBASE_HI,TRUE);			
+				STR_MUL_CAMPDEFENCE,IMAGE_LBASE,IMAGE_LBASE_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_CLEAN,0);						//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_BASE,0);	
+		widgSetButtonState(psWScreen, MULTIOP_BASE,0);
 		widgSetButtonState(psWScreen, MULTIOP_DEFENCE,0);
 		switch(game.base)
 		{
@@ -1302,16 +1305,16 @@ static void addGameOptions(BOOL bRedo)
 			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,strresGetString(psStringRes,STR_MUL_COMP),MCOL0,MROW10,MULTIOP_BLUEFORMW,27);
 		}
 		else
-		{	
+		{
 			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,strresGetString(psStringRes,STR_MUL_COMP),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 		}
 
 		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_Y,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_COMP_Y,IMAGE_COMPUTER_Y,IMAGE_COMPUTER_Y_HI,TRUE);		
+				STR_MUL_COMP_Y,IMAGE_COMPUTER_Y,IMAGE_COMPUTER_Y_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_N,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_COMP_N,IMAGE_COMPUTER_N,IMAGE_COMPUTER_N_HI,TRUE);		
+				STR_MUL_COMP_N,IMAGE_COMPUTER_N,IMAGE_COMPUTER_N_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,0);						//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,0);	
+		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,0);
 		switch(game.bComputerPlayers)
 		{
 		case FALSE:
@@ -1325,8 +1328,8 @@ static void addGameOptions(BOOL bRedo)
 		//remove PC players for 7/8 player maps.
 		if(game.maxPlayers >6)
 		{
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_DISABLE);	
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,WBUT_DISABLE);	
+			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_DISABLE);
+			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,WBUT_DISABLE);
 		}
 
 	}
@@ -1340,7 +1343,7 @@ static void addGameOptions(BOOL bRedo)
 
 
 	// host Games button
-	if(ingame.bHostSetup && !bHosted)								
+	if(ingame.bHostSetup && !bHosted)
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_HOST,MULTIOP_HOSTX,MULTIOP_HOSTY,35,28,
 					STR_MUL_HOST,IMAGE_HOST,IMAGE_HOST,FALSE);
@@ -1358,20 +1361,20 @@ static void addGameOptions(BOOL bRedo)
 	// disable buttons not available in lobby games
 	if(NetPlay.bLobbyLaunched)
 	{
-		widgSetButtonState(psWScreen, MULTIOP_GNAME,WEDBS_DISABLE);	
-		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON,WBUT_DISABLE);		
+		widgSetButtonState(psWScreen, MULTIOP_GNAME,WEDBS_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON,WBUT_DISABLE);
 
-		widgSetButtonState(psWScreen, MULTIOP_PNAME,WEDBS_DISABLE);	
-		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON,WBUT_DISABLE);		
+		widgSetButtonState(psWScreen, MULTIOP_PNAME,WEDBS_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON,WBUT_DISABLE);
 
 	}
 
 	//disable demo options
 #ifdef MULTIDEMO
-//	widgSetButtonState(psWScreen, MULTIOP_MAP,WEDBS_DISABLE);	
-//	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON,WBUT_DISABLE);	
+//	widgSetButtonState(psWScreen, MULTIOP_MAP,WEDBS_DISABLE);
+//	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON,WBUT_DISABLE);
 
-	widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_DISABLE);	
+	widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_DISABLE);
 //	widgSetButtonState(psWScreen, MULTIOP_ARENA,WBUT_DISABLE);
 	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_DISABLE);
 #endif
@@ -1383,7 +1386,7 @@ static void addGameOptions(BOOL bRedo)
 // Colour functions
 
 static BOOL safeToUseColour(UDWORD player,UDWORD col)
-{	
+{
 	UDWORD i;
 
 	// if already using it.
@@ -1422,7 +1425,7 @@ static BOOL safeToUseColour(UDWORD player,UDWORD col)
 }
 
 BOOL chooseColour(UDWORD player)
-{	
+{
 	UDWORD col;
 
 	for(col =0;col<MAX_PLAYERS;col++)
@@ -1454,7 +1457,7 @@ static VOID addColourChooser(UDWORD player)
 	// add the flags
 	for(i=0;i<MAX_PLAYERS;i++)		//game.maxPlayers;i++)
 	{
-		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,  
+		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
 			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
 			4,/*9,*/													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
@@ -1471,7 +1474,7 @@ static VOID addColourChooser(UDWORD player)
 	for(i=0;i<game.maxPlayers;i++)
 	{
 
-		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,  
+		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,
 			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
 			23,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
@@ -1492,7 +1495,7 @@ static VOID addColourChooser(UDWORD player)
 static VOID closeColourChooser(void)
 {
 	bColourChooserUp = FALSE;
-	
+
 	widgDelete(psWScreen,MULTIOP_COLCHOOSER_FORM);
 }
 
@@ -1523,17 +1526,17 @@ BOOL recvColourRequest(NETMSG *pMsg)
 	UDWORD	player,col,oldcol;
 	UBYTE	chosenPlayer;
 	DPID	dpid;
-	
+
 	if(!NetPlay.bHost)							//only host should act.
 	{
 		return TRUE;
 	}
-	
+
 	player			= (UDWORD) pMsg->body[0];
 	col				= (UDWORD) pMsg->body[1];
 	chosenPlayer	= (UDWORD) pMsg->body[2];
 
-	if(chosenPlayer == UBYTE_MAX)	
+	if(chosenPlayer == UBYTE_MAX)
 	{	// colour change.
 		if(!safeToUseColour(player,col))
 		{
@@ -1549,9 +1552,9 @@ BOOL recvColourRequest(NETMSG *pMsg)
 		{
 			return FALSE;
 		}
-		
+
 		dpid = player2dpid[player];
-		player2dpid[player] = 0;					// remove player, 
+		player2dpid[player] = 0;					// remove player,
 		ingame.JoiningInProgress[player] = FALSE;	// if they never joined, reset the flag
 
 		oldcol = getPlayerColour(chosenPlayer);
@@ -1559,8 +1562,8 @@ BOOL recvColourRequest(NETMSG *pMsg)
 		setPlayerColour	(player,oldcol);			// reset old colour
 //		chooseColour	(chosenPlayer);				// pick an unused colour.
 		setupNewPlayer	(dpid,chosenPlayer);		// setup all the guff for that player.
-		sendOptions		(dpid,chosenPlayer);	
-		
+		sendOptions		(dpid,chosenPlayer);
+
 		NETplayerInfo();						// bring netplay up to date with changes.
 
 		if(player == selectedPlayer)// if host changing
@@ -1576,10 +1579,10 @@ BOOL recvColourRequest(NETMSG *pMsg)
 
 UDWORD addPlayerBox(BOOL players)
 {
-	W_FORMINIT		sFormInit;				
-	W_BUTINIT		sButInit;		
+	W_FORMINIT		sFormInit;
+	W_BUTINIT		sButInit;
 	UDWORD			i=0;
-	
+
 	// if background isn't there, then return since were not ready to draw the box yet!
 	if(widgGetFromID(psWScreen,FRONTEND_BACKDROP) == NULL)
 	{
@@ -1614,7 +1617,7 @@ UDWORD addPlayerBox(BOOL players)
 	if(players)
 	{
 		for(i=0;i<game.maxPlayers;i++)
-		{	
+		{
 			if(ingame.localOptionsReceived && NetPlay.players[i].dpid)					// only draw if real player!
 			{
 				memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -1629,7 +1632,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.FontID = WFont;
 				sButInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
 				sButInit.pUserData = (void*) i;
-				
+
 				if(bColourChooserUp && NetPlay.players[i].dpid == player2dpid[selectedPlayer])
 				{
 					addColourChooser(i);
@@ -1658,7 +1661,7 @@ UDWORD addPlayerBox(BOOL players)
 		}
 
 	}
-	
+
 	if(ingame.bHostSetup) // if hosting.
 	{
 		sliderEnableDrag(TRUE);
@@ -1703,7 +1706,7 @@ static VOID addOkBut(VOID)
 
 static VOID addChatBox(VOID)
 {
-	W_FORMINIT		sFormInit;			
+	W_FORMINIT		sFormInit;
 	W_EDBINIT		sEdInit;
 
 	if(widgGetFromID(psWScreen,FRONTEND_TOPFORM))
@@ -1716,7 +1719,7 @@ static VOID addChatBox(VOID)
 		return;
 	}
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));	
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
 	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
 	sFormInit.id = MULTIOP_CHATBOX;
@@ -1724,7 +1727,7 @@ static VOID addChatBox(VOID)
 	sFormInit.y = MULTIOP_CHATBOXY;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.width = MULTIOP_CHATBOXW;
-	sFormInit.height = MULTIOP_CHATBOXH;	
+	sFormInit.height = MULTIOP_CHATBOXH;
 	sFormInit.disableChildren = TRUE;								// wait till open!
 	sFormInit.pDisplay = intOpenPlainForm;//intDisplayPlainForm;
 	widgAddForm(psWScreen, &sFormInit);
@@ -1742,7 +1745,7 @@ static VOID addChatBox(VOID)
 
 	memset(&sEdInit, 0, sizeof(W_EDBINIT));							// add the edit box
 	sEdInit.formID = MULTIOP_CHATBOX;
-	sEdInit.id = MULTIOP_CHATEDIT;	
+	sEdInit.id = MULTIOP_CHATEDIT;
 	sEdInit.x = MULTIOP_CHATEDITX;
 	sEdInit.y = MULTIOP_CHATEDITY;
 	sEdInit.style = WEDB_PLAIN;
@@ -1753,19 +1756,19 @@ static VOID addChatBox(VOID)
 	sEdInit.pUserData = NULL;
 	sEdInit.pBoxDisplay = displayChatEdit;
 
-	widgAddEditBox(psWScreen, &sEdInit);	
+	widgAddEditBox(psWScreen, &sEdInit);
 
 	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 static void disableMultiButs(void)
-{	
+{
 
 	// edit box icons.
 	widgSetButtonState(psWScreen,MULTIOP_GNAME_ICON,WBUT_DISABLE);
 	widgSetButtonState(psWScreen,MULTIOP_MAP_ICON ,WBUT_DISABLE);
-	
+
 	// edit boxes
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
 	widgSetButtonState(psWScreen,MULTIOP_MAP,WEDBS_DISABLE);
@@ -1778,16 +1781,16 @@ static void disableMultiButs(void)
 		widgSetButtonState(psWScreen,MULTIOP_FNAME,WEDBS_DISABLE);
 	}
 
-	if(game.type != CAMPAIGN)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	
-//	if(game.type != DMATCH)		widgSetButtonState(psWScreen, MULTIOP_ARENA,	WBUT_DISABLE);	
-	if(game.type != SKIRMISH)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);	
-	if(game.type != TEAMPLAY)	widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY, WBUT_DISABLE);	
+	if(game.type != CAMPAIGN)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+//	if(game.type != DMATCH)		widgSetButtonState(psWScreen, MULTIOP_ARENA,	WBUT_DISABLE);
+	if(game.type != SKIRMISH)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
+	if(game.type != TEAMPLAY)	widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY, WBUT_DISABLE);
 
 	if(! NetPlay.bHost)
 	{
 		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
 		if(!game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_ON ,WBUT_DISABLE);
-	
+
 //		if(  game.type == DMATCH )
 //		{
 //			if(game.limit != NOLIMIT)	widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,WBUT_DISABLE);	// limit levels
@@ -1809,10 +1812,10 @@ static void disableMultiButs(void)
 
 			if(game.power != LEV_LOW)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_DISABLE);		// pow levels
 			if(game.power != LEV_MED)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_DISABLE);
-			if(game.power != LEV_HI )	widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_DISABLE);	
+			if(game.power != LEV_HI )	widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_DISABLE);
 		}
 
-		
+
 		if( /*game.type == DMATCH||*/ game.type == CAMPAIGN  || game.type == SKIRMISH)
 		{
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
@@ -1826,7 +1829,7 @@ static void disableMultiButs(void)
 ////////////////////////////////////////////////////////////////////////////
 VOID	stopJoining(void)
 {
-	dwSelectedGame	 = 0;	
+	dwSelectedGame	 = 0;
 	saveConfig();
 
 	if(bWhiteBoardUp)
@@ -1835,7 +1838,7 @@ VOID	stopJoining(void)
 	}
 
 	if(NetPlay.bLobbyLaunched)
-	{		
+	{
 		changeTitleMode(QUIT);
 		return;
 	}
@@ -1849,23 +1852,23 @@ VOID	stopJoining(void)
 			widgDelete(psWScreen,FRONTEND_BACKDROP);		// refresh options screen.
 //			startMultiOptions(FALSE);
 			startMultiOptions(TRUE);
-			ingame.localJoiningInProgress = FALSE;			
+			ingame.localJoiningInProgress = FALSE;
 			return;
 		}
 		else if(ingame.localJoiningInProgress)				// cancel a joined game.
 		{
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
-			
+
 			ingame.localJoiningInProgress = FALSE;			// reset local flags
 			ingame.localOptionsReceived = FALSE;
 			if(!ingame.bHostSetup && NetPlay.bHost)			// joining and host was transfered.
-			{	
+			{
 				NetPlay.bHost = FALSE;
 			}
-			
+
 			if(NetPlay.bComms)	// not even connected.
-			{	
+			{
 				changeTitleMode(GAMEFIND);
 				selectedPlayer =0;
 			}
@@ -1877,7 +1880,7 @@ VOID	stopJoining(void)
 			return;
 		}
 		if(NetPlay.bComms)	// not even connected.
-		{	
+		{
 			changeTitleMode(PROTOCOL);
 			selectedPlayer =0;
 		}
@@ -1894,14 +1897,14 @@ VOID	stopJoining(void)
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
 #endif
 		}
-	}	
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////
 static VOID chooseSkirmishColours()
 {
 	UDWORD col,i,k;
-	BOOL taken;	
+	BOOL taken;
 
 	col=0;
 	for(i=0;i<MAX_PLAYERS;i++)	// assign each pc player a colour.
@@ -1938,7 +1941,7 @@ static void processMultiopWidgets(UDWORD id)
 	STRING	tmp[255];
 
 	// host, who is setting up the game
-	if((ingame.bHostSetup && !bHosted))							
+	if((ingame.bHostSetup && !bHosted))
 	{
 		switch(id)												// Options buttons
 		{
@@ -1946,15 +1949,15 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_GNAME:										// we get this when nec.
 			strcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
 			break;
-	
-		case MULTIOP_MAP:						
+
+		case MULTIOP_MAP:
 			widgSetString(psWScreen, MULTIOP_MAP,game.map);
 //			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			break;
 
-		case MULTIOP_GNAME_ICON:								
+		case MULTIOP_GNAME_ICON:
 			break;
-		
+
 		case MULTIOP_MAP_ICON:
 			widgDelete(psWScreen,MULTIOP_PLAYERS);
 			widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
@@ -1964,72 +1967,72 @@ static void processMultiopWidgets(UDWORD id)
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s", tmp);
 			addMultiRequest(tmp,MULTIOP_MAP,1, 2);
 			break;
-	
-//		case MULTIOP_ARENA:										// turn on arena game	
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, WBUT_LOCK);		
-//			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, 0);	
+
+//		case MULTIOP_ARENA:										// turn on arena game
+//			widgSetButtonState(psWScreen, MULTIOP_ARENA, WBUT_LOCK);
+//			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, 0);
 //			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 //			widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY,0);
 //			game.type = DMATCH;
 //
-//			widgSetString(psWScreen, MULTIOP_MAP, "DeadValley");	
+//			widgSetString(psWScreen, MULTIOP_MAP, "DeadValley");
 //			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 //			game.maxPlayers =8;
 //
 //			addGameOptions();
 //			widgSetButtonState(psWScreen, MULTIOP_FNAME,WEDBS_FIXED);
-//			widgSetButtonState(psWScreen, MULTIOP_FNAME_ICON,0);		
+//			widgSetButtonState(psWScreen, MULTIOP_FNAME_ICON,0);
 //			break;
 
 		case MULTIOP_CAMPAIGN:									// turn on campaign game
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);		
+//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY,0);
 			game.type = CAMPAIGN;
-			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);	
+			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			game.maxPlayers = 4;	
+			game.maxPlayers = 4;
 
 			addGameOptions(FALSE);
-			break;	
+			break;
 
 		case MULTIOP_SKIRMISH:
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);		
+//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY,0);
 			game.type = SKIRMISH;
-			
-			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);	
+
+			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			game.maxPlayers = 4;	
+			game.maxPlayers = 4;
 
 			addGameOptions(FALSE);
 			break;
 
 		case MULTIOP_TEAMPLAY:
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);		
+//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			widgSetButtonState(psWScreen, MULTIOP_TEAMPLAY,WBUT_LOCK);
-			
-			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);	
+
+			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 
 			game.type		= TEAMPLAY;
-			game.maxPlayers = 4;	
+			game.maxPlayers = 4;
 			game.alliance	= ALLIANCES;
 
 			addGameOptions(FALSE);
-			break;	
+			break;
 
 		}
-	}		
-		
+	}
+
 	// host who is setting up or has hosted
 	if(ingame.bHostSetup);// || NetPlay.bHost)
-	{	
+	{
 		switch(id)
 		{
 		case MULTIOP_COMPUTER_Y:
@@ -2041,7 +2044,7 @@ static void processMultiopWidgets(UDWORD id)
 				sendOptions(0,0);
 			}
 			break;
-		
+
 		case MULTIOP_COMPUTER_N:
 			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,0);
 			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_LOCK);
@@ -2059,7 +2062,7 @@ static void processMultiopWidgets(UDWORD id)
 			if(bHosted)
 			{
 				sendOptions(0,0);
-			}	
+			}
 			break;
 
 		case MULTIOP_FOG_OFF:
@@ -2082,7 +2085,7 @@ static void processMultiopWidgets(UDWORD id)
 				sendOptions(0,0);
 			}
 			break;
-			
+
 		case MULTIOP_TECH_MED:
 			widgSetButtonState(psWScreen, MULTIOP_TECH_LOW,0);
 			widgSetButtonState(psWScreen, MULTIOP_TECH_MED,WBUT_LOCK);
@@ -2093,7 +2096,7 @@ static void processMultiopWidgets(UDWORD id)
 				sendOptions(0,0);
 			}
 			break;
-		
+
 		case MULTIOP_TECH_HI:
 			widgSetButtonState(psWScreen, MULTIOP_TECH_LOW,0);
 			widgSetButtonState(psWScreen, MULTIOP_TECH_MED,0);
@@ -2104,7 +2107,7 @@ static void processMultiopWidgets(UDWORD id)
 				sendOptions(0,0);
 			}
 			break;
-*/						
+*/
 		case MULTIOP_CLEAN:
 			game.base = CAMP_CLEAN;
 			addGameOptions(FALSE);
@@ -2115,7 +2118,7 @@ static void processMultiopWidgets(UDWORD id)
 				addOkBut();
 			}
 			break;
-		
+
 		case MULTIOP_BASE:
 			game.base = CAMP_BASE;
 			addGameOptions(FALSE);
@@ -2126,10 +2129,10 @@ static void processMultiopWidgets(UDWORD id)
 				addOkBut();
 			}
 			break;
-		
+
 		case MULTIOP_DEFENCE:
 			game.base = CAMP_WALLS;
-			addGameOptions(FALSE);	
+			addGameOptions(FALSE);
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -2137,7 +2140,7 @@ static void processMultiopWidgets(UDWORD id)
 				addOkBut();
 			}
 			break;
-		
+
 		case MULTIOP_ALLIANCE_N:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
@@ -2157,7 +2160,7 @@ static void processMultiopWidgets(UDWORD id)
 				sendOptions(0,0);
 			}
 			break;
-		
+
 		case MULTIOP_POWLEV_LOW:								// set power level to low
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
@@ -2233,7 +2236,7 @@ static void processMultiopWidgets(UDWORD id)
 	case MULTIOP_WHITEBOARD:
 		if(bWhiteBoardUp)
 		{
-			removeWhiteBoard();	
+			removeWhiteBoard();
 		}
 		else
 		{
@@ -2257,8 +2260,8 @@ static void processMultiopWidgets(UDWORD id)
 		strcat(tmp,"*.for");
 		addMultiRequest(tmp,MULTIOP_FNAME,0,0);
 		break;
-	
-	case MULTIOP_PNAME:			
+
+	case MULTIOP_PNAME:
 		strcpy((STRING*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));
 
 		// chop to 15 chars..
@@ -2282,7 +2285,7 @@ static void processMultiopWidgets(UDWORD id)
 		setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
 		break;
 
-	case MULTIOP_PNAME_ICON:		
+	case MULTIOP_PNAME_ICON:
 		widgDelete(psWScreen,MULTIOP_PLAYERS);
 		widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
 
@@ -2298,14 +2301,14 @@ static void processMultiopWidgets(UDWORD id)
 		}
 		strcpy((STRING*)game.name,widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		strcpy((STRING*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));	// pname
-		strcpy((STRING*)game.map,widgGetString(psWScreen, MULTIOP_MAP));		// add the name	
-	
+		strcpy((STRING*)game.map,widgGetString(psWScreen, MULTIOP_MAP));		// add the name
+
 		removeWildcards((STRING*)sPlayer);
 		removeWildcards(sForceName);
-		
+
 //		if (game.type == DMATCH)
 //		{
-//			hostArena((STRING*)game.name,(STRING*)sPlayer);		
+//			hostArena((STRING*)game.name,(STRING*)sPlayer);
 //			bHosted = TRUE;
 //		}
 //		else
@@ -2316,7 +2319,7 @@ static void processMultiopWidgets(UDWORD id)
 
 	// wait for players, when happy, send options.
 		if(NetPlay.bLobbyLaunched)
-		{	
+		{
 			for(i=0;i<MAX_PLAYERS;i++)	// send options to everyone.
 			{
 				if(isHumanPlayer(i))
@@ -2327,9 +2330,9 @@ static void processMultiopWidgets(UDWORD id)
 		}
 
 		widgDelete(psWScreen,MULTIOP_REFRESH);
-		widgDelete(psWScreen,MULTIOP_HOST);				
-			
-		ingame.localOptionsReceived = TRUE;	
+		widgDelete(psWScreen,MULTIOP_HOST);
+
+		ingame.localOptionsReceived = TRUE;
 
 		addGameOptions(FALSE);									// update game options box.
 		addChatBox();
@@ -2350,14 +2353,14 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case CON_OK:
-		decideWRF();										// set up swrf & game.map			
+		decideWRF();										// set up swrf & game.map
 		strcpy(sForceName,widgGetString(psWScreen, MULTIOP_FNAME));
 		removeWildcards(sForceName);
 		bMultiPlayer = TRUE;
 
 		if(NetPlay.bHost)
 		{
-	
+
 			///////////
 			//
 			if(game.type == SKIRMISH)
@@ -2367,7 +2370,7 @@ static void processMultiopWidgets(UDWORD id)
 			}
 			// end of skirmish col choose
 			////////
-				
+
 			resetCheatHash();
 
 			NEThaltJoining();							// stop new players entering.
@@ -2383,8 +2386,8 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 		changeTitleMode(STARTGAME);
-		
-		bHosted = FALSE;		
+
+		bHosted = FALSE;
 
 		if(NetPlay.bHost)
 		{
@@ -2399,8 +2402,8 @@ static void processMultiopWidgets(UDWORD id)
 
 	default:
 		break;
-	}	
-	
+	}
+
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
 		if(NetPlay.players[id-MULTIOP_PLAYER_START].dpid == player2dpid[selectedPlayer] )
@@ -2422,9 +2425,9 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_SKSLIDE) && (id <=MULTIOP_SKSLIDE_END)) // choseskirmish difficulty.
 	{
 		game.skDiff[id-MULTIOP_SKSLIDE] = widgGetSliderPos(psWScreen,id);
-		
-		if(		(id-MULTIOP_SKSLIDE == game.maxPlayers-1)  
-			&& 	(game.skDiff[id-MULTIOP_SKSLIDE] == 0) 
+
+		if(		(id-MULTIOP_SKSLIDE == game.maxPlayers-1)
+			&& 	(game.skDiff[id-MULTIOP_SKSLIDE] == 0)
 			)
 		{
 			game.skDiff[id-MULTIOP_SKSLIDE] = 1;
@@ -2485,7 +2488,7 @@ void frontendMultiMessages(void)
 
 			if(titleMode == MULTIOPTION)
 			{
-				addGameOptions(TRUE);	
+				addGameOptions(TRUE);
 				disableMultiButs();
 				addChatBox();
 			}
@@ -2497,13 +2500,13 @@ void frontendMultiMessages(void)
 				addWhiteBoard();
 			}
 			memcpy(&whiteBoard[(int)msg.body[0]], &msg.body[1], NUMWHITE*2);
-			
+
 			break;
 
 		case NET_ALLIANCE:
 			recvAlliance(&msg,FALSE);
 			break;
-	
+
 		case NET_COLOURREQUEST:
 			recvColourRequest(&msg);
 			break;
@@ -2524,7 +2527,7 @@ void frontendMultiMessages(void)
 
 		case NET_PLAYERRESPONDING:			// remote player is now playing.
 			NetGet((&msg),0,i);
-			ingame.JoiningInProgress[i] = FALSE;	
+			ingame.JoiningInProgress[i] = FALSE;
 			break;
 
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
@@ -2543,21 +2546,21 @@ void frontendMultiMessages(void)
 
 				// set the fog correctly..
 				setRevealStatus(game.fog);
-		
-				bMultiPlayer = TRUE;	
+
+				bMultiPlayer = TRUE;
 				if(bWhiteBoardUp)
 				{
 				removeWhiteBoard();
 				}
 				changeTitleMode(STARTGAME);
-				bHosted = FALSE;		
+				bHosted = FALSE;
 				break;
 			}
 
 		case NET_KICK:						// player is forcing someone to leave
 			NetGet((&msg),0,dp);
 			if(NetPlay.dpidPlayer == dp)	// we've been told to leave.
-			{	
+			{
 				stopJoining();
 			}
 			break;
@@ -2599,9 +2602,9 @@ void runMultiOptions(VOID)
 	if ((gameTime - lastrefresh) >2000)
 	{
 		lastrefresh= gameTime;
-		if( !multiRequestUp 
-			&& (bHosted 
-				|| (ingame.localJoiningInProgress && !NetPlay.bLobbyLaunched) 
+		if( !multiRequestUp
+			&& (bHosted
+				|| (ingame.localJoiningInProgress && !NetPlay.bLobbyLaunched)
 				|| (NetPlay.bLobbyLaunched && ingame.localOptionsReceived)
 				)
 			)
@@ -2628,7 +2631,7 @@ void runMultiOptions(VOID)
 
 
 						if(NetPlay.bHost)
-						{	
+						{
 							sendOptions(0,0);
 						}
 					}
@@ -2649,7 +2652,7 @@ void runMultiOptions(VOID)
 		{
 			NETstartAudioCapture();
 		}
-		
+
 		if(keyReleased(KEY_KP_FULLSTOP))	// stop capture
 		{
 			NETstopAudioCapture();
@@ -2666,13 +2669,13 @@ void runMultiOptions(VOID)
 	}
 
 	// check for being able to go!
-//	if(ingame.localJoiningInProgress 
+//	if(ingame.localJoiningInProgress
 //		&& (widgGetFromID(psWScreen,CON_OK) == NULL)	// oks not yet there.
-//		&& ingame.localOptionsReceived					// weve got the options	
+//		&& ingame.localOptionsReceived					// weve got the options
 //		&& (game.type == DMATCH))						// it's a dmatch game
 //	{
 //		for(i=0;i<MAX_PLAYERS;i++)
-//		{	
+//		{
 //			if( isHumanPlayer(i) && !ingame.JoiningInProgress[i])			// only go when someones ready..
 //			{
 //				addOkBut();
@@ -2680,10 +2683,10 @@ void runMultiOptions(VOID)
 //			}
 //		}
 //	}
-	
+
 	// if typing and not in an edit box then jump to chat box.
 	k = getQwertyKey();
-	if(	k && psWScreen->psFocus == NULL)	
+	if(	k && psWScreen->psFocus == NULL)
 	{
 		context.psScreen	= psWScreen;
 		context.psForm		= (W_FORM *)psWScreen->psForm;
@@ -2691,7 +2694,7 @@ void runMultiOptions(VOID)
 		context.yOffset		= 0;
 		context.mx			= mouseX();
 		context.my			= mouseY();
-		
+
 		keyScanToString(k,(char*)&str,3);
 		if(widgGetFromID(psWScreen,MULTIOP_CHATEDIT))
 		{
@@ -2703,13 +2706,13 @@ void runMultiOptions(VOID)
 	// chat box handling
 	if(widgGetFromID(psWScreen,MULTIOP_CHATBOX))
 	{
-		while(getNumberConsoleMessages() >getConsoleLineInfo())					
+		while(getNumberConsoleMessages() >getConsoleLineInfo())
 		{
 			removeTopConsoleMessage();
 		}
 		updateConsoleMessages();								// run the chatbox
 	}
-	
+
 	// widget handling
 
 	if(multiRequestUp)
@@ -2721,7 +2724,7 @@ void runMultiOptions(VOID)
 			{
 			case MULTIOP_PNAME:
 				strcpy((STRING*)sPlayer,sTemp);
-				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);	
+				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
 
 				sprintf(sTemp," -> %s",sPlayer);
 				sendTextMessage(sTemp,TRUE);
@@ -2755,16 +2758,16 @@ void runMultiOptions(VOID)
 		if(hideTime != 0)
 		{
 			if(gameTime-hideTime <1500)
-			{	
+			{
 				return;
 			}
 			hideTime = 0;
 		}
 
-		id = widgRunScreen(psWScreen);								// run the widgets.	
+		id = widgRunScreen(psWScreen);								// run the widgets.
 		processMultiopWidgets(id);
 	}
-	
+
 	StartCursorSnap(&InterfaceSnap);
 
 	DrawBegin();
@@ -2774,7 +2777,7 @@ void runMultiOptions(VOID)
 	{
 		widgDisplayScreen(psRScreen);								// show the Requester running
 	}
-	
+
 	if(widgGetFromID(psWScreen,MULTIOP_CHATBOX))
 	{
 		iV_SetFont(WFont);											// switch to small font.
@@ -2782,7 +2785,7 @@ void runMultiOptions(VOID)
 	}
 
 	runWhiteBoard();
-	
+
 //	if(psMapTiles)
 //	{
 //		displayMapPreview();
@@ -2797,7 +2800,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	PLAYERSTATS		nullStats;
 	UBYTE i;
 
-	addBackdrop();	
+	addBackdrop();
 	addTopForm();
 
 	if(!bReenter)
@@ -2828,13 +2831,13 @@ BOOL startMultiOptions(BOOL bReenter)
 		game.base					= CAMP_BASE;
 //		game.bHaveServer			= FALSE;
 		game.limit					= NOLIMIT;
-//		game.packetsPerSec			= 6;	
-		game.maxPlayers				= 4;	
+//		game.packetsPerSec			= 6;
+		game.maxPlayers				= 4;
 		game.bComputerPlayers		= FALSE;
 		strcpy(sForceName,	"Default");
 */
 
-		// set the encrypt key.	
+		// set the encrypt key.
 		if(NetPlay.bHost)
 		{
 			game.encryptKey = 0;
@@ -2864,7 +2867,7 @@ BOOL startMultiOptions(BOOL bReenter)
 		if(NetPlay.bLobbyLaunched)
 		{
 			game.bytesPerSec	= INETBYTESPERSEC;					// maximum bitrate achieved before dropping checks.
-			game.packetsPerSec	= INETPACKETS;		
+			game.packetsPerSec	= INETPACKETS;
 		}
 
 		loadMultiStats((STRING*)sPlayer,&nullStats);
@@ -2875,7 +2878,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	addGameOptions(FALSE);
 
 	if(NetPlay.bLobbyLaunched)
-	{				
+	{
 		if(!NetPlay.bHost)
 		{
 			ingame.localJoiningInProgress = TRUE;
@@ -2889,10 +2892,10 @@ BOOL startMultiOptions(BOOL bReenter)
 	addMultiBut(psWScreen,
 		FRONTEND_BACKDROP,
 		MULTIOP_WHITEBOARD,
-		MULTIOP_CHATBOXX-15,MULTIOP_CHATBOXY+MULTIOP_CHATBOXH-15 ,9,9, 
+		MULTIOP_CHATBOXX-15,MULTIOP_CHATBOXY+MULTIOP_CHATBOXH-15 ,9,9,
 		0,IMAGE_PENCIL,IMAGE_PENCIL,TRUE);	//whiteboard icon
 
-	// going back to multiop after setting limits up.. 
+	// going back to multiop after setting limits up..
 	if(bReenter && bHosted)
 	{
 		disableMultiButs();
@@ -2916,7 +2919,7 @@ static VOID CurrentForce(VOID)
 	UDWORD			numButtons, butPerForm;
 	UDWORD i;
 	FORCE_MEMBER	*pF;
-	
+
 	W_FORMINIT		sButInit;
 	STRING			aButText[6]; //???
 	SDWORD			BufferID;
@@ -2927,8 +2930,8 @@ static VOID CurrentForce(VOID)
 	ClearObjectBuffers();
 
 	/* Count the number of minor tabs needed for the template form
-	 * Also need one for the new template button */	
-	
+	 * Also need one for the new template button */
+
 	numButtons = 0;
 	for(pF = Force.pMembers; pF; pF= pF->psNext)
 	{
@@ -2936,9 +2939,9 @@ static VOID CurrentForce(VOID)
 	}
 
 	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((FORCE_CURRENTWIDTH - 0 - 2) / 
+	butPerForm = ((FORCE_CURRENTWIDTH - 0 - 2) /
 						(OBJ_BUTWIDTH +2)) *
-				 ((FORCE_CURRENTHEIGHT - 0- 2) / 
+				 ((FORCE_CURRENTHEIGHT - 0- 2) /
 						(OBJ_BUTHEIGHT+ 2));
 
 	/* add a form to place the tabbed form on */
@@ -2957,13 +2960,13 @@ static VOID CurrentForce(VOID)
 
 	/* Add the design templates form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = FORCE_CURRENT;	
+	sFormInit.formID = FORCE_CURRENT;
 	sFormInit.id = FORCE_CURRENTFORM;
 	sFormInit.style = WFORM_TABBED;
 	sFormInit.x = 2;
 	sFormInit.y = 2;
-	sFormInit.width = FORCE_CURRENTWIDTH;	
-	sFormInit.height = FORCE_CURRENTHEIGHT;	
+	sFormInit.width = FORCE_CURRENTWIDTH;
+	sFormInit.height = FORCE_CURRENTHEIGHT;
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
@@ -2971,7 +2974,7 @@ static VOID CurrentForce(VOID)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;	
+	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = (void*)&StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -3039,7 +3042,7 @@ static VOID AvailableForces(VOID)
 	memset( apsTemplateList, 0, sizeof(DROID_TEMPLATE*) * MAXTEMPLATES );
 	numButtons = 0;
 	psTempl = apsDroidTemplates[FORCEEDITPLAYER];
-	
+
 	while ((psTempl != NULL) && (numButtons < MAXTEMPLATES))
 	{
 		apsTemplateList[numButtons] = psTempl;
@@ -3057,9 +3060,9 @@ static VOID AvailableForces(VOID)
 
 
 	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((FORCE_AVAILABLEWIDTH - 0 - 2) / 
+	butPerForm = ((FORCE_AVAILABLEWIDTH - 0 - 2) /
 						(OBJ_BUTWIDTH +2)) *
-				 ((FORCE_AVAILABLEHEIGHT - 0- 2) / 
+				 ((FORCE_AVAILABLEHEIGHT - 0- 2) /
 						(OBJ_BUTHEIGHT+ 2));
 
 	/* add a form to place the tabbed form on */
@@ -3075,17 +3078,17 @@ static VOID AvailableForces(VOID)
 	sFormInit.pDisplay = intDisplayPlainForm;
 
 	widgAddForm(psWScreen, &sFormInit);
-	
+
 	addSideText(FRONTEND_SIDETEXT1,FORCE_AVAILABLEX-1,FORCE_AVAILABLEY,strresGetString(psStringRes, STR_MUL_SIDETEMPLATES));
 
 	/* Add the design templates form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = IDDES_TEMPLBASE;	
+	sFormInit.formID = IDDES_TEMPLBASE;
 	sFormInit.id = IDDES_TEMPLFORM;
 	sFormInit.style = WFORM_TABBED;
 	sFormInit.x = 2;
 	sFormInit.y = 2;
-	sFormInit.width = FORCE_AVAILABLEWIDTH;	
+	sFormInit.width = FORCE_AVAILABLEWIDTH;
 	sFormInit.height = FORCE_AVAILABLEHEIGHT;
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	sFormInit.majorPos = WFORM_TABTOP;
@@ -3126,7 +3129,7 @@ VOID runForceSelect(VOID)
 	posy = 5;
 
 	processFrontendSnap(FALSE);
-	
+
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(FALSE))// check for file name.
@@ -3152,11 +3155,11 @@ VOID runForceSelect(VOID)
 	else
 	{
 		// MouseOver stuff.
-		id = widgGetMouseOver(psWScreen);					
+		id = widgGetMouseOver(psWScreen);
 		if (id >=IDDES_TEMPLSTART  AND id <= IDDES_TEMPLEND)
 		{
 			currID = IDDES_TEMPLSTART;
-			for(psTempl = apsDroidTemplates[selectedPlayer]; psTempl;psTempl = psTempl->psNext)	
+			for(psTempl = apsDroidTemplates[selectedPlayer]; psTempl;psTempl = psTempl->psNext)
 			{
 				if (currID == id)
 				{
@@ -3177,7 +3180,7 @@ VOID runForceSelect(VOID)
 		if (id >= IDDES_TEMPLSTART && id <= IDDES_TEMPLEND)
 		{
 			currID = IDDES_TEMPLSTART;
-			for(psTempl = apsDroidTemplates[selectedPlayer]; psTempl;psTempl = psTempl->psNext)	
+			for(psTempl = apsDroidTemplates[selectedPlayer]; psTempl;psTempl = psTempl->psNext)
 			{
 				if (currID == id)
 				{
@@ -3187,12 +3190,12 @@ VOID runForceSelect(VOID)
 			}
 
 			if(!addToForce(psTempl))								// store this droid in force list.
-			{	
+			{
 				widgDisplayScreen(psWScreen);
 				return;
 			}
-					
-			CurrentForce();	
+
+			CurrentForce();
 		}
 
 		if((id >= FORCE_FORCE)&&(id <= FORCE_FORCEEND))				// FORCE droid selected
@@ -3200,8 +3203,8 @@ VOID runForceSelect(VOID)
 			pF = Force.pMembers;									// dont delete if it's frozen
 			for(i=0;i<(id-FORCE_FORCE);i++)pF=pF->psNext;			// goto that force element;
 			removeFromForce(id-FORCE_FORCE);						//delete it from force.
-			CurrentForce();	
-			
+			CurrentForce();
+
 		}
 
 		switch(id)
@@ -3214,7 +3217,7 @@ VOID runForceSelect(VOID)
 			}
 			selectedPlayer = 0;									// just in case.
 			changeTitleMode(MULTI);
-			
+
  	  		eventReset();
 //			resReleaseBlockData(500);
 			resReleaseBlockData(501);
@@ -3227,23 +3230,23 @@ VOID runForceSelect(VOID)
 			while(Force.pMembers)
 			{
 				removeFromForce(0);								// delete each force member.
-			}	
+			}
 			AvailableForces();									// update force screen
 			CurrentForce();
 			break;
 
-		case FORCE_PRESETDEFAULT:	
+		case FORCE_PRESETDEFAULT:
 			strcpy(dir,"multiplay\\Forces\\Default.FOR");
-			loadForce(dir);				
+			loadForce(dir);
 			AvailableForces();										// update force screen
 			CurrentForce();
 			break;
 
-		case FORCE_LOAD:	
+		case FORCE_LOAD:
 			addLoadSave(LOAD_FORCE,MultiForcesPath,"For",strresGetString(psStringRes,STR_MUL_LOAD) );
 			break;
 
-		case FORCE_SAVE:	
+		case FORCE_SAVE:
 			addLoadSave(SAVE_FORCE,MultiForcesPath,"For",strresGetString(psStringRes,STR_MUL_SAVE) );
 			break;
 
@@ -3255,7 +3258,7 @@ VOID runForceSelect(VOID)
 	StartCursorSnap(&InterfaceSnap);
 
 	DrawBegin();
-	widgDisplayScreen(psWScreen);							// show the widgets currently running	
+	widgDisplayScreen(psWScreen);							// show the widgets currently running
 	if(bLoadSaveUp)
 	{
 		displayLoadSave();
@@ -3268,7 +3271,7 @@ VOID runForceSelect(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL startForceSelect(VOID)
 {
-	W_FORMINIT		sFormInit;	
+	W_FORMINIT		sFormInit;
 	W_BARINIT		sBarInit;
 	STRING			dir[256];
 	DROID_TEMPLATE	*psTempl;
@@ -3288,7 +3291,7 @@ BOOL startForceSelect(VOID)
 
 	addBackdrop();
 	addTopForm();
-	
+
 	// init power profiles.
 	for(psTempl = apsDroidTemplates[FORCEEDITPLAYER]; psTempl; psTempl = psTempl->psNext)
 	{
@@ -3345,17 +3348,17 @@ BOOL startForceSelect(VOID)
 				STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,FALSE);			// cancel
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_PRESETCLEAR,FORCE_PRESETCLEARX,FORCE_PRESETCLEARY,FORCE_BUTW,FORCE_BUTH,
-		STR_MUL_CLEAR,IMAGE_CLEARFORCE,IMAGE_CLEARFORCE,TRUE);			// clear.	
+		STR_MUL_CLEAR,IMAGE_CLEARFORCE,IMAGE_CLEARFORCE,TRUE);			// clear.
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_PRESETDEFAULT,FORCE_PRESETDEFAULTX,FORCE_PRESETDEFAULTY,FORCE_BUTW,FORCE_BUTH,
 		STR_MUL_DEFAULT,IMAGE_DEFAULTFORCE,IMAGE_DEFAULTFORCE,TRUE);	// default.
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_LOAD,FORCE_LOADX,FORCE_LOADY,FORCE_BUTW,FORCE_BUTH,
 		STR_MUL_LOAD,IMAGE_LOADFORCE,IMAGE_LOADFORCE,TRUE);				// load
-	
+
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_SAVE,FORCE_SAVEX,FORCE_SAVEY,FORCE_BUTW,FORCE_BUTH,
 		STR_MUL_SAVE,IMAGE_SAVEFORCE,IMAGE_SAVEFORCE,TRUE);				// save
-	
+
 	return TRUE;
 }
 
@@ -3391,8 +3394,8 @@ BOOL runWhiteBoard()
 
 	widgDisplayScreen(psWhiteScreen);
 
-	// if mouse over && mouse down.	
-	if(	   mx	> WHITEX 
+	// if mouse over && mouse down.
+	if(	   mx	> WHITEX
 		&& mx < (WHITEX+WHITEW)
 		&& my > WHITEY
 		&& my < (WHITEY+WHITEH)
@@ -3406,7 +3409,7 @@ BOOL runWhiteBoard()
 
 			whiteBoard[selectedPlayer][curWhite] = (UWORD) (((y-1)*WHITEW) + x);
 		}
-	
+
 		if(mouseReleased(MOUSE_LMB))
 		{
 			whiteBoard[selectedPlayer][curWhite] = 0;	//add a non-point
@@ -3449,10 +3452,10 @@ BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 //	UDWORD	w = psWidget->width;
 //	UDWORD	h = psWidget->height;
 	UDWORD	i;
-	div_t	d;	
+	div_t	d;
 	UBYTE	j,col;
 	UWORD	oldPoint,newPoint,oldx,oldy,newx,newy;
-	
+
 	// white poly
 //	pie_BoxFillIndex(x,y,x+w,y+h,COL_WHITE);
 
@@ -3489,7 +3492,7 @@ BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 				col =COL_LIGHTCYAN;
 				break;
  			}
-	
+
 			oldPoint =whiteBoard[i][0];
 			d = div(oldPoint,WHITEW);
 			oldy = (UWORD)d.quot;
@@ -3508,14 +3511,14 @@ BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 				}
 				oldPoint = newPoint;
 				oldx = newx;
-				oldy = newy;		
+				oldy = newy;
 			}
 		}
 	}
-	
+
 	// overlay close widget.
 	iV_DrawTransImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
-	
+
 	return TRUE;
 }
 
@@ -3526,7 +3529,7 @@ BOOL addWhiteBoard()
 
 	// clear whiteboard
 	memset(&whiteBoard,0,sizeof(whiteBoard));
-	widgCreateScreen(&psWhiteScreen);		
+	widgCreateScreen(&psWhiteScreen);
 	widgSetTipFont(psWhiteScreen,WFont);
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
 	sFormInit.formID = 0;
@@ -3538,7 +3541,7 @@ BOOL addWhiteBoard()
 	sFormInit.height = WHITEH;
 	sFormInit.pDisplay = displayWhiteBoard;
 	widgAddForm(psWhiteScreen, &sFormInit);
-	
+
 	bWhiteBoardUp = TRUE;
 	return TRUE;
 }
@@ -3584,9 +3587,9 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		Down = TRUE;
 	}
 
-	// Draw blue boxes. 
+	// Draw blue boxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
-	drawBlueBox(x,y,94,psWidget->height);	
+	drawBlueBox(x,y,94,psWidget->height);
 	drawBlueBox(x,y,55,psWidget->height);
 
 	//draw game info
@@ -3636,7 +3639,7 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	// get game info.
 	if(	   (NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
 		|| (NetPlay.games[i].desc.dwCurrentPlayers >= NetPlay.games[i].desc.dwMaxPlayers) 	// if not joinable
-	
+
 		||(   (NETgetGameFlagsUnjoined(gameNumber,1)== SKIRMISH)	// the LAST bug...
 			&&(NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers -1)
 		  )
@@ -3651,7 +3654,7 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		iV_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_PLAYERS),x+5,y+18);
 		sprintf(tmp,"%d/%d",NetPlay.games[i].desc.dwCurrentPlayers,NetPlay.games[i].desc.dwMaxPlayers);
 		iV_DrawText((UCHAR*)tmp,x+17,y+33);
-	}	
+	}
 
 	AddCursorSnap(&InterfaceSnap,
 				(SWORD)(x+(psWidget->width/2)),
@@ -3672,14 +3675,14 @@ static UDWORD bestPlayer(UDWORD player)
 		if(isHumanPlayer(i) && i!=player )
 		{
 			score = getMultiStats(i, FALSE).totalScore;
-	
+
 			if(score >= myscore)
 			{
 				count++;
 			}
 		}
 	}
-	
+
 	return count;
 }
 
@@ -3697,7 +3700,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	{
 		Hilight = TRUE;
 	}
-	i = (int)psWidget->pUserData;	
+	i = (int)psWidget->pUserData;
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
@@ -3706,7 +3709,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	{
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
-		drawBlueBox(x,y,60,psWidget->height);									
+		drawBlueBox(x,y,60,psWidget->height);
 		drawBlueBox(x,y,31,psWidget->height);										// left.
 
 		for(j=0; player2dpid[j] != NetPlay.players[i].dpid && j<MAX_PLAYERS; j++);// get the in game playernumber.
@@ -3719,8 +3722,8 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 		{
 			NetPlay.players[i].name[strlen(NetPlay.players[i].name)-1]='\0';
 		}
-		iV_DrawText((UCHAR*)NetPlay.players[i].name,x+65,y+22);							
-	
+		iV_DrawText((UCHAR*)NetPlay.players[i].name,x+65,y+22);
+
 		// ping rating
 		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)
 		{
@@ -3735,10 +3738,10 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 		}
 
 
-		// player number	
+		// player number
 //		iV_DrawTransImage(FrontImages,IMAGE_WEE_GUY,x,y+23);
 		switch(j)
-		{	
+		{
 		case 0:
 			iV_DrawTransImage(IntImages,IMAGE_GN_0,x+4,y+29);;
 			break;
@@ -3765,7 +3768,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 			break;
 		default:
 			break;
-		}		
+		}
 
 		// ranking against other players.
 		eval = bestPlayer(j);
@@ -3795,7 +3798,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 		default:
 			break;
 		}
- 
+
 		if(getMultiStats(j,FALSE).played < 5)
 		{
 			iV_DrawTransImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
@@ -3818,7 +3821,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 			{
 				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+3);
 			}
-		
+
 
 			// star 2 games played
 			eval = stat.played;
@@ -3834,7 +3837,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 			{
 				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+13);
 			}
-		
+
 
 			// star 3 games won.
 			eval = stat.wins;
@@ -3850,7 +3853,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 			{
 				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+23);
 			}
-		
+
 			// medals.
 			if((stat.loses>2)AND(stat.wins>2)AND(stat.wins>(2*stat.loses)) )// bronze requirement.
 			{
@@ -3875,28 +3878,28 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 		switch(getPlayerColour(j))		//flag icon
 		{
 		case 0:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);						
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
 			break;
 		case 1:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);					
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
 			break;
 		case 2:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);					
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
 			break;
 		case 3:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);					
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
 			break;
 		case 4:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);					
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
 			break;
 		case 5:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);					
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
 			break;
 		case 6:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);	
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
 			break;
 		case 7:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);		
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
 			break;
 		default:
 			break;
@@ -3914,7 +3917,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 //		if(game.type == SKIRMISH && game.skirmishPlayers[i])
 		if(game.type == SKIRMISH && game.skDiff[i])
 		{
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);		
+			iV_DrawTransImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
 		}
 	}
 	AddCursorSnap(&InterfaceSnap,
@@ -3932,7 +3935,7 @@ void intDisplayFeBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 	UDWORD	w = psWidget->width;
-	UDWORD	h = psWidget->height; 
+	UDWORD	h = psWidget->height;
 
 	drawBlueBox(x,y,w,h);
 
@@ -3952,7 +3955,7 @@ void displayMultiEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	iV_DrawTransImage(FrontImages,im,x+psWidget->width+2,y+4);			//icon descriptor.
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
-	{	
+	{
 		pie_SetSwirlyBoxes(FALSE);
 		pie_UniTransBoxFill(x,y, x+psWidget->width+psWidget->height ,y+psWidget->height,(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 		pie_SetSwirlyBoxes(TRUE);
@@ -3977,9 +3980,9 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	BOOL	usehl = ((UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData)));
 //	BOOL	snap = 1;
-	
+
 	//evaluate
-	if( (usehl==1) && ((W_BUTTON*)psWidget)->state & WBUTS_HILITE) 
+	if( (usehl==1) && ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
 	{
 		Hilight = TRUE;
 		switch(iV_GetImageWidth(FrontImages,im))			//pick a hilight.
@@ -3999,7 +4002,7 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 		case 35:
 			hiToUse = IMAGE_HI39;
 			break;
-		case 37:	
+		case 37:
 			hiToUse = IMAGE_HI41;
 			break;
 		case 56:
@@ -4020,7 +4023,7 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 
 	if( ((W_BUTTON*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
-		Down = 1;		
+		Down = 1;
 	}
 
 	if( ((W_BUTTON*)psWidget)->state & WBUTS_GREY)
@@ -4042,10 +4045,10 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	if(Hilight && !Grey)
 	{
 		if(Down)
-		{	
+		{
 			iV_DrawTransImage(FrontImages,im2,x,y);
 		}
-	
+
 		if(hiToUse)
 		{
 			iV_DrawTransImage(FrontImages,hiToUse,x,y);
@@ -4056,7 +4059,7 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 	{
 		iV_DrawTransImage(FrontImages,im2,x,y);
 	}
-	
+
 
 	if (Grey) {
 		// disabled, render something over it!
@@ -4095,7 +4098,7 @@ BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y,UDWORD tip, STRI
 	{
 		return FALSE;
 	}
-	
+
 	// note drawing is done by the editbox draw tho...
 
 	addMultiBut(psWScreen,MULTIOP_OPTIONS ,iconid,(x+MULTIOP_EDITBOXW+2),(y+2) ,
@@ -4111,7 +4114,7 @@ BOOL addMultiBut(W_SCREEN *screen,UDWORD formid,UDWORD id,UDWORD x, UDWORD y,
 {
 	W_BUTINIT		sButInit;
 
-	memset(&sButInit, 0, sizeof(W_BUTINIT));		
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = formid;
 	sButInit.id = id;
 	sButInit.style = WFORM_PLAIN;
@@ -4131,14 +4134,14 @@ BOOL addMultiBut(W_SCREEN *screen,UDWORD formid,UDWORD id,UDWORD x, UDWORD y,
 		sButInit.pUserData = (void*)PACKDWORD_TRI(0,norm , hi);
 	}
 	else if (hiIt == 0)
-	{	
+	{
 		sButInit.pUserData = (void*)PACKDWORD_TRI(1,norm , hi);
 	}
-	else 
+	else
 	{}
 	*/
 		sButInit.pUserData = (void*)PACKDWORD_TRI(hiIt,norm , hi);
-	
+
 
 	if (!widgAddButton(screen, &sButInit))
 	{
@@ -4160,7 +4163,7 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	brx = x+58;
 	bry = y+23;
 
-	pie_BoxFill(tlx,	tly,	brx,	bry, 0x006067a0);	
+	pie_BoxFill(tlx,	tly,	brx,	bry, 0x006067a0);
 	pie_BoxFill(tlx+1,	tly+1,	brx-1,	bry-1,	0x002f3050);
 
 	if (pie_Hardware())
@@ -4185,5 +4188,5 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 	}
-	return;	
+	return;
 }

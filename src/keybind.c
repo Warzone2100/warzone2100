@@ -1,4 +1,4 @@
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "base.h"
 #include "map.h"
@@ -12,7 +12,7 @@
 #include "edit3d.h"
 #include "keybind.h"
 #include "mechanics.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "lighting.h"
 #include "power.h"
@@ -24,12 +24,13 @@
 #include "component.h"
 #include "geometry.h"
 #include "radar.h"
-#include "screen.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/screen.h"
 
 
 #include "cheat.h"
 #include "e3demo.h"	// will this be on PSX?
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multimenu.h"
 #include "atmos.h"
@@ -42,20 +43,21 @@
 
 
 #include "intorder.h"
-#include "widget.h"
-#include "widgint.h"
-#include "bar.h"
-#include "form.h"
-#include "label.h"
-#include "button.h"
+#include "lib/widget/widget.h"
+#include "lib/widget/widgint.h"
+#include "lib/widget/bar.h"
+#include "lib/widget/form.h"
+#include "lib/widget/label.h"
+#include "lib/widget/button.h"
 #include "order.h"
-#include "rendmode.h"
-#include "piestate.h"
-#include "piematrix.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piestate.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
 
 #include "keymap.h"
 #include "loop.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "mission.h"
@@ -81,7 +83,7 @@ BOOL		bAllowOtherKeyPresses = TRUE;
 extern BOOL	bAllowDebugMode;
 STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
-STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
+STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 extern char	ScreenDumpPath[];
 
 
@@ -92,7 +94,7 @@ int fogCol = 0;//start in nicks mode
 void	kfsf_SelectAllSameProp	( PROPULSION_TYPE propType );
 void	kfsf_SelectAllSameName	( STRING *droidName );
 void	kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
-/*	
+/*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
 	All functions at the moment must be 'void func(void)'.
@@ -321,7 +323,7 @@ void	kf_FrameRate( void )
 
 	}
 	else
-	{	
+	{
 		CONPRINTF(ConsoleString,(ConsoleString,"SOFTWARE fps - %d; pie's - %d; polys - %d; Terr. polys - %d;",
 			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount));
 	}
@@ -334,7 +336,7 @@ void	kf_FrameRate( void )
 						NETgetBytesRecvd(),
 						NETgetPacketsSent(),
 						NETgetPacketsRecvd() ));
-						
+
 		}
 		gameStats = !gameStats;
 
@@ -452,7 +454,7 @@ void	kf_RaiseGamma( void )
 void	kf_LowerGamma( void )
 {
 
-}	
+}
 
 // --------------------------------------------------------------------------
 
@@ -500,7 +502,7 @@ iVector	pos;
 		effectGiveAuxVar(50);
 		effectGiveAuxVarSec(10000);
 
-		addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,FALSE,NULL,0); 
+		addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,FALSE,NULL,0);
 
 }
 
@@ -509,7 +511,7 @@ void	kf_ToggleBackgroundFog( void )
 {
 
 	static BOOL bEnabled  = TRUE;//start in nicks mode
-	
+
 		if (bEnabled)//true, so go to false
 		{
 			bEnabled = FALSE;
@@ -536,7 +538,7 @@ extern void	kf_ToggleDistanceFog( void )
 {
 
 	static BOOL bEnabled  = TRUE;//start in nicks mode
-	
+
 		if (bEnabled)//true, so go to false
 		{
 			bEnabled = FALSE;
@@ -563,7 +565,7 @@ void	kf_ToggleMistFog( void )
 {
 
 	static BOOL bEnabled  = TRUE;//start in nicks mode
-	
+
 		if (bEnabled)//true, so go to false
 		{
 			bEnabled = FALSE;
@@ -595,7 +597,7 @@ void	kf_ToggleFogColour( void )
 	switch(fogCol)
 	{
 	case 1:
-			pie_SetFogColour(0x00c9920f);//nicks colour Urban 
+			pie_SetFogColour(0x00c9920f);//nicks colour Urban
 			break;
 	case 2:
 			pie_SetFogColour(0x00b6e1ec);//nicks colour Rockies 182,225,236
@@ -608,7 +610,7 @@ void	kf_ToggleFogColour( void )
 			  break;
 	case 0:
 	default:
-			pie_SetFogColour(0x00B08f5f);//nicks colour Arizona 
+			pie_SetFogColour(0x00B08f5f);//nicks colour Arizona
 			//pie_SetFogColour(0x0078684f);//(nicks colour + 404040)/2
 		break;
 	}
@@ -619,7 +621,7 @@ void	kf_ToggleFog( void )
 {
 
 	static BOOL fogEnabled = FALSE;
-	
+
 		if (fogEnabled)
 		{
 			fogEnabled = FALSE;
@@ -731,7 +733,7 @@ FRACT	zoomInterval;
 	zoomInterval = fraction * MAP_ZOOM_RATE;
 	distance += MAKEINT(zoomInterval);
 	/* If we're debugging, limit to a bit more */
-	
+
 
 #ifndef JOHN
 	{
@@ -747,7 +749,7 @@ FRACT	zoomInterval;
 // --------------------------------------------------------------------------
 void	kf_RadarZoomIn( void )
 {
-	if(RadarZoomLevel < MAX_RADARZOOM) 
+	if(RadarZoomLevel < MAX_RADARZOOM)
 	{
 		RadarZoomLevel++;
 	   	SetRadarZoom(RadarZoomLevel);
@@ -756,7 +758,7 @@ void	kf_RadarZoomIn( void )
 	else	// at maximum already
 	{
 		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-	}	
+	}
 
 }
 // --------------------------------------------------------------------------
@@ -784,12 +786,12 @@ FRACT	zoomInterval;
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	zoomInterval = fraction * MAP_ZOOM_RATE;
 	distance -= MAKEINT(zoomInterval);
-  	
+
 	if( distance< MINDISTANCE)
 	{
 		distance = MINDISTANCE;
 	}
-	
+
 }
 
 // --------------------------------------------------------------------------
@@ -806,7 +808,7 @@ void kf_MaxScrollLimits( void )
 /*
 void	kf_ShrinkScreen( void )
 {
-	// nearest multiple of 8 plus 1 
+	// nearest multiple of 8 plus 1
 	if (xOffset<73)
 	{
 		xOffset+=8;
@@ -864,7 +866,7 @@ FRACT	rotAmount;
 		player.r.y+= DEG(360);
 	}
 }
-			
+
 // --------------------------------------------------------------------------
 /* Pitches camera back */
 void	kf_PitchBack( void )
@@ -884,7 +886,7 @@ FRACT	pitchAmount;
 //	pitch = getSuggestedPitch();
 //	angConcern = DEG(360-pitch);
 //
-//	if(player.r.x < angConcern) 
+//	if(player.r.x < angConcern)
 //	{
 //#endif
 
@@ -1137,10 +1139,10 @@ void kf_multiAudioStart(void)
 }
 
 void kf_multiAudioStop(void)
-{	
-	if(bMultiPlayer 
+{
+	if(bMultiPlayer
 		&& game.bytesPerSec==IPXBYTESPERSEC)
-	{	
+	{
 		NETstopAudioCapture();
 	}
 	return;
@@ -1301,7 +1303,7 @@ void	kf_TogglePauseMode( void )
 	if(gamePaused() == FALSE)
 	{
 		/* Then pause it */
-		setGamePauseStatus(TRUE);		
+		setGamePauseStatus(TRUE);
 		setConsolePause(TRUE);
 		setScriptPause(TRUE);
 		setAudioPause(TRUE);
@@ -1659,13 +1661,13 @@ BOOL	bMovePause = FALSE;
 // --------------------------------------------------------------------------
 void	kf_MovePause( void )
 {
-	
+
 	if(!bMultiPlayer)	// can't do it in multiplay
 	{
 		if(!bMovePause)
 		{
 			/* Then pause it */
-			setGamePauseStatus(TRUE);		
+			setGamePauseStatus(TRUE);
 			setConsolePause(TRUE);
 			setScriptPause(TRUE);
 			setAudioPause(TRUE);
@@ -1852,15 +1854,15 @@ void kf_GiveTemplateSet(void)
 void kf_SendTextMessage(void)
 {
 
-	CHAR	ch;									
+	CHAR	ch;
 
-	if(/*bMultiPlayer || */!bAllowOtherKeyPresses OR getCheatCodeStatus()) 
+	if(/*bMultiPlayer || */!bAllowOtherKeyPresses OR getCheatCodeStatus())
 	{
 		if(bAllowOtherKeyPresses)									// just starting.
 		{
 			bAllowOtherKeyPresses = FALSE;
 			strcpy(sTextToSend,"");
-			inputClearBuffer();										
+			inputClearBuffer();
 		}
 
 		ch = (CHAR)inputGetKey();
@@ -1869,10 +1871,10 @@ void kf_SendTextMessage(void)
 			// Kill if they hit return - it maxes out console or it's more than one line long
 		   	if((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
 				OR iV_GetTextWidth(sTextToSend) > (DISP_WIDTH-64))// sendit
-		   //	if((ch == INPBUF_CR) || (strlen(sTextToSend)==MAX_TYPING_LENGTH) 
+		   //	if((ch == INPBUF_CR) || (strlen(sTextToSend)==MAX_TYPING_LENGTH)
 			{
 				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();					
+			 //	flushConsoleMessages();
 
 				// don't send empty lines to other players
 				if(!strcmp(sTextToSend, ""))
@@ -1888,7 +1890,7 @@ void kf_SendTextMessage(void)
 				}
 				return;
 			}
-			else if(ch == INPBUF_BKSPACE )							// delete 
+			else if(ch == INPBUF_BKSPACE )							// delete
 			{
 				if(sTextToSend[0] != '\0')							// cant delete nothing!
 				{
@@ -1898,13 +1900,13 @@ void kf_SendTextMessage(void)
 			else if(ch == INPBUF_ESC)								//abort.
 			{
 				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();						
+			 //	flushConsoleMessages();
 				return;
-			}		
+			}
 			else							 						// display
 			{
 				sprintf(sTextToSend,"%s%c",sTextToSend,inputGetCharKey());
-			}	
+			}
 
 			ch = (CHAR)inputGetKey();
 		}
@@ -1916,7 +1918,7 @@ void kf_SendTextMessage(void)
 			}else{
 				strcpy(sTextToSend,ingame.phrases[0]);
 				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();					
+			 //	flushConsoleMessages();
 				sendTextMessage(sTextToSend,FALSE);
 				return;
 			}
@@ -1927,8 +1929,8 @@ void kf_SendTextMessage(void)
 			}else{
 				strcpy(sTextToSend,ingame.phrases[1]);
 				bAllowOtherKeyPresses = TRUE;
-			//	flushConsoleMessages();					
-				sendTextMessage(sTextToSend,FALSE);			
+			//	flushConsoleMessages();
+				sendTextMessage(sTextToSend,FALSE);
 				return;
 			}
 		}
@@ -1938,7 +1940,7 @@ void kf_SendTextMessage(void)
 			}else{
 				strcpy(sTextToSend,ingame.phrases[2]);
 				bAllowOtherKeyPresses = TRUE;
-			//	flushConsoleMessages();					
+			//	flushConsoleMessages();
 				sendTextMessage(sTextToSend,FALSE);
 				return;
 			}
@@ -1949,23 +1951,23 @@ void kf_SendTextMessage(void)
 			}else{
 				strcpy(sTextToSend,ingame.phrases[3]);
 				bAllowOtherKeyPresses = TRUE;
-			//	flushConsoleMessages();					
+			//	flushConsoleMessages();
 				sendTextMessage(sTextToSend,FALSE);
 				return;
 			}
 		}
 		if(keyPressed(KEY_F5)){
 			if(keyDown(KEY_LCTRL)){
-				strcpy(ingame.phrases[4],sTextToSend );			
+				strcpy(ingame.phrases[4],sTextToSend );
 			}else{
 				strcpy(sTextToSend,ingame.phrases[4]);
 				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();					
+			 //	flushConsoleMessages();
 				sendTextMessage(sTextToSend,FALSE);
 				return;
 			}
 		}
-		
+
 
 //		flushConsoleMessages();								//clear
 //		addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY);		//display
@@ -2013,7 +2015,7 @@ UDWORD	dX,dY;
 // --------------------------------------------------------------------------
 void	kf_SelectAllUnits( void )
 {
- 
+
 	selDroidSelection(selectedPlayer, DS_ALL_UNITS, DST_UNUSED, FALSE);
 
 /*
@@ -2085,7 +2087,7 @@ DROID	*psDroid;
 		if(psDroid->numWeaps)
 		{
 			psDroid->selected = TRUE;
-		}	
+		}
 	}
 */
 }
@@ -2267,7 +2269,7 @@ BOOL	found;
 DROID	*psOther;
 
 	found = FALSE;
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid AND !found; 
+	for(psDroid = apsDroidLists[selectedPlayer]; psDroid AND !found;
 		psDroid = psDroid->psNext)
 		{
 			if(psDroid->selected)
@@ -2373,7 +2375,7 @@ BOOL	bFound;
 		{
 			bFound = TRUE;
 			psGotOne = psDroid;
-		}	
+		}
 	}
 	if(bFound)
 	{
@@ -2402,7 +2404,7 @@ iVector	pos;
 
 		pos.x = mouseTileX*TILE_UNITS + TILE_UNITS/2;
 		pos.z = mouseTileY*TILE_UNITS + TILE_UNITS/2;
-		pos.y = map_Height(pos.x,pos.z) + SHOCK_WAVE_HEIGHT; 
+		pos.y = map_Height(pos.x,pos.z) + SHOCK_WAVE_HEIGHT;
 
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,FALSE,NULL,0);
 }

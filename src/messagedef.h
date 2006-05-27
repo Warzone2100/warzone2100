@@ -7,15 +7,15 @@
 #define _messageDef_h
 
 #include "deliverance.h"
-#include "pietypes.h"
-	
+#include "lib/ivis_common/pietypes.h"
+
 typedef enum _message_type
 {
 	MSG_RESEARCH,		// Research message
 	MSG_CAMPAIGN,		// Campaign message
 	MSG_MISSION,		// Mission Report messages
 	MSG_PROXIMITY,		// Proximity message
-	
+
 	MSG_TYPES,
 } MESSAGE_TYPE;
 
@@ -45,8 +45,8 @@ typedef struct _view_research
 	struct	iIMDShape	*pIMD2;				//allows base plates and turrets to be drawn as well
 	STRING	sequenceName[MAX_STR_LENGTH];	//which windowed flic to display
 	STRING	*pAudio;						/*name of audio track to play (for this seq)*/
-	UWORD	numFrames;						/* On PSX if type is VIEW_RPL then 
-											this is used as a number_of_frames_in_the_stream	
+	UWORD	numFrames;						/* On PSX if type is VIEW_RPL then
+											this is used as a number_of_frames_in_the_stream
 											count - NOT used on PC*/
 } VIEW_RESEARCH;
 
@@ -54,12 +54,12 @@ typedef struct _seq_display
 {
 	STRING		sequenceName[MAX_STR_LENGTH];
 
-	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish 
-	UBYTE		numText;		//the number of textmessages associated with 
+	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish
+	UBYTE		numText;		//the number of textmessages associated with
 								//this sequence
 	STRING		**ppTextMsg;	//Pointer to text messages - if any
 	STRING		*pAudio;		/*name of audio track to play (for this seq)*/
-	UWORD		numFrames;		/* On PSX if type is VIEW_RPL then 
+	UWORD		numFrames;		/* On PSX if type is VIEW_RPL then
 								this is used as a number_of_frames_in_the_stream
 								count - NOT used on PC*/
 } SEQ_DISPLAY;
@@ -90,7 +90,7 @@ typedef struct _viewdata
 	VIEW_TYPE	type;		//the type of view
 	UBYTE		numText;	//the number of textmessages associated with this data
 	STRING		**ppTextMsg;	//Pointer to text messages - if any
-	void*		pData;		/*the data required to view - either a 
+	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
 } VIEWDATA;
 
@@ -99,7 +99,7 @@ typedef void* MSG_VIEWDATA;
 //base structure for each message
 typedef struct _message
 {
-	MESSAGE_TYPE	type;					//The type of message 
+	MESSAGE_TYPE	type;					//The type of message
 	UDWORD			id;						//ID number of the message
 	//VIEWDATA		*pViewData;				//Pointer to view data - if any - should be some!
 	MSG_VIEWDATA	*pViewData;				//Pointer to view data - if any - should be some!

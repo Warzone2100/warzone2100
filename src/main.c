@@ -2,28 +2,28 @@
  * main.c
  *
  */
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include <physfs.h>
 
-#include "widget.h"
-#include "script.h"
+#include "lib/widget/widget.h"
+#include "lib/script/script.h"
 #include "init.h"
 #include "loop.h"
 #include "objects.h"
 #include "display.h"
-#include "piestate.h"
-#include "gtime.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/gamelib/gtime.h"
 #include "winmain.h"
 #include "wrappers.h"
 #include "scripttabs.h"
 #include "deliverance.h"
 #include "frontend.h"
 #include "seqdisp.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "console.h"
-#include "rendmode.h"
-#include "piemode.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piemode.h"
 #include "levels.h"
 #include "research.h"
 #include "warzoneconfig.h"
@@ -31,12 +31,13 @@
 #include "cdspan.h"
 #include "configuration.h"
 #include "multiplay.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "loadsave.h"
 #include "game.h"
 #include "lighting.h"
-#include "mixer.h"
-#include "screen.h"
+#include "lib/sound/mixer.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/screen.h"
 
 #ifndef DEFAULT_DATA_DIR
 	#define DEFAULT_DATA_DIR "/usr/share"

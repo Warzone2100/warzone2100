@@ -31,7 +31,7 @@
 
 #else
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 
 #endif
@@ -48,9 +48,9 @@ struct FRect {			/* window: a discrete 2-D rectangle */
 };
 
 struct Segment {
-	int y;			//                                                        
-	int xl;			// Filled horizontal segment of scanline y for xl<=x<=xr. 
-	int xr;			// Parent segment was on line y-dy.  dy=1 or -1           
+	int y;			//
+	int xl;			// Filled horizontal segment of scanline y for xl<=x<=xr.
+	int xr;			// Parent segment was on line y-dy.  dy=1 or -1
 	int dy;			//
 };
 
@@ -76,7 +76,7 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y);
 BOOL gwGenerateZoneEquiv(SDWORD numZones);
 
 
-#define ENABLEFILL		// disable this on the psx 
+#define ENABLEFILL		// disable this on the psx
 
 
 #ifdef ENABLEFILL
@@ -464,7 +464,7 @@ BOOL gwGenerateZoneEquiv(SDWORD numZones)
 		}
 		aNumEquiv[i] = 0;
 	}
-	
+
 	// go over the map - skipping edge tiles to avoid going over the
 	// edge of the map
 	numEquiv = 0;
@@ -526,7 +526,7 @@ BOOL gwCreateBlankZoneMap(void)
 		*apRLEZones[i] = (UBYTE)gwMapWidth();
 		*(apRLEZones[i] + 1) = 0;
 	}
-	
+
 	return TRUE;
 }
 

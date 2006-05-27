@@ -7,8 +7,8 @@
 #include "objectdef.h"
 #include "power.h"
 #include "hci.h"
-#include "gtime.h"
-#include "audio.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "objmem.h"
 #include "frontend.h"
@@ -32,14 +32,14 @@
 #define HARD_POWER_MOD      90
 
 //arbitary high value - needs to allow all structures to be built at start of any game
-#define MAX_POWER	100000		
+#define MAX_POWER	100000
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
 
 /*Update the capcity and available power if necessary */
 //static void availablePowerUpdate(STRUCTURE *psBuilding);
-/*looks through the player's list of droids and structures to see what power 
+/*looks through the player's list of droids and structures to see what power
 has been used*/
 //static UDWORD calcPlayerUsedPower(UDWORD player);
 
@@ -242,7 +242,7 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
             modifier = NORMAL_POWER_MOD;
         }
         //include modifier as a %
-		pointsToAdd = (modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100); 
+		pointsToAdd = (modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100);
 		if (pointsToAdd)
 		{
             //lose a lot on rounding this way
@@ -288,8 +288,8 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 	//only extracts points whilst its active ie associated with a power gen
 	if (pResExtractor->active)
 	{
-		pointsToAdd = EXTRACT_POINTS * (gameTime - pResExtractor->timeLastUpdated) / 
-			GAME_TICKS_PER_SEC; 
+		pointsToAdd = EXTRACT_POINTS * (gameTime - pResExtractor->timeLastUpdated) /
+			GAME_TICKS_PER_SEC;
 
 		if (pointsToAdd)
 		{
@@ -367,7 +367,7 @@ void updatePlayerPower(UDWORD player)
 	}*/
 
 	//for (psStruct = psList; psStruct != NULL; psStruct = psStruct->psNext)
-	for (psStruct = powerStructList((UBYTE)player); psStruct != NULL; psStruct = 
+	for (psStruct = powerStructList((UBYTE)player); psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN AND psStruct->
@@ -384,7 +384,7 @@ void updatePlayerPower(UDWORD player)
 
 }
 
-/* Update current power based on what was extracted during the last cycle and 
+/* Update current power based on what was extracted during the last cycle and
    what Power Generators exist */
 /*void updatePlayerPower(UDWORD player)
 {
@@ -395,11 +395,11 @@ void updatePlayerPower(UDWORD player)
 		return;
 	}
 
-	//may need to order the structures so that the Power Gen with the highest 
+	//may need to order the structures so that the Power Gen with the highest
 	//multiplier is used first so that the player gets maximum power output. For now
 	//all multiplier are the same
 
-	for (psStruct = apsStructLists[player]; psStruct != NULL AND 
+	for (psStruct = apsStructLists[player]; psStruct != NULL AND
 		asPower[player]->extractedPower != 0; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN AND psStruct->
@@ -520,7 +520,7 @@ void newGameInitPower(void)
 	}
 }
 
-/*this keeps track of which object was the last to receive power. Power is 
+/*this keeps track of which object was the last to receive power. Power is
 passed through the object lists each cycle whilst there is some*/
 /*void spreadPower(UBYTE player)
 {
@@ -542,13 +542,13 @@ passed through the object lists each cycle whilst there is some*/
 		warning++;
 		if (warning > 1000)
 		{
-			ASSERT((FALSE, 
-				"spreading power round more than 1000 buildings for player %d?", 
+			ASSERT((FALSE,
+				"spreading power round more than 1000 buildings for player %d?",
 				player));
 			warning = 0;
 		}
 
-		//if haven't used any power and been through the whole list of 
+		//if haven't used any power and been through the whole list of
 		//structures then jump out
 		if (!first)
 		{
@@ -732,7 +732,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
 			    //powerDiff = ((STRUCTURE *)psDroid->psTarget)->pStructureType->
                 //    powerToBuild - ((STRUCTURE *)psDroid->psTarget)->
                 //    currentPowerAccrued;
-                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget) - 
+                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget) -
                     ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued;
 			    //if equal then don't need power
 			    if (powerDiff)
@@ -740,14 +740,14 @@ BOOL accruePower(BASE_OBJECT *psObject)
 				    if (POWER_PER_CYCLE >= powerDiff)
 				    {
 					    usePower(psDroid->player, powerDiff);
-					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued += 
+					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
                             powerDiff;
 					    bPowerUsed = TRUE;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psDroid->player, POWER_PER_CYCLE);
-					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued += 
+					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
                             POWER_PER_CYCLE;
 					    bPowerUsed = TRUE;
 				    }
@@ -765,7 +765,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
             else
             {
                 //might have guard order but action of repair
-                if (orderState(psDroid, DORDER_GUARD) AND psDroid->action == 
+                if (orderState(psDroid, DORDER_GUARD) AND psDroid->action ==
                     DACTION_DROIDREPAIR)
                 {
                     psTarget = (DROID *)psDroid->psActionTarget;
@@ -809,7 +809,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
     default:
         ASSERT((FALSE, "accruePower: Invalid object type"));
     }
-    
+
 	return bPowerUsed;
 }
 
@@ -833,7 +833,7 @@ BOOL getLastPowered(BASE_OBJECT *psObject)
 	{
 		return TRUE;
 	}
-	/*if we've got round to the last object again, by setting to NULL will 
+	/*if we've got round to the last object again, by setting to NULL will
 	enable the next object to get some power*/
 	if (asPower[psObject->player]->psLastPowered == psObject)
 	{
@@ -854,12 +854,12 @@ STRUCTURE	*psCurr;
 STRUCTURE	*psFirst;
 BOOL		bGonePastIt;
 
-	for(psCurr = apsStructLists[selectedPlayer],psFirst = NULL,bGonePastIt = FALSE; 
+	for(psCurr = apsStructLists[selectedPlayer],psFirst = NULL,bGonePastIt = FALSE;
 		psCurr; psCurr = psCurr->psNext)
 	{
 		if( psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR )
 		{
-		   
+
 			if(!psFirst)
 			{
 				psFirst = psCurr;
@@ -871,9 +871,9 @@ BOOL		bGonePastIt;
 			}
 			else if(psCurr!=psStruct AND bGonePastIt)
 			{
-				return(psCurr);				
-			} 	
-			
+				return(psCurr);
+			}
+
 			if(psCurr==psStruct)
 			{
 				bGonePastIt = TRUE;
@@ -892,7 +892,7 @@ BOOL structUsesPower(STRUCTURE *psStruct)
 
 	ASSERT((PTRVALID(psStruct, sizeof(STRUCTURE)),
 		"structUsesPower: Invalid Structure pointer"));
-    
+
     switch(psStruct->pStructureType->type)
     {
         case REF_FACTORY:
@@ -917,7 +917,7 @@ BOOL droidUsesPower(DROID *psDroid)
 
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
 		"unitUsesPower: Invalid unit pointer"));
-    
+
     switch(psDroid->droidType)
     {
         case DROID_CONSTRUCT:
@@ -956,7 +956,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
     }
     else
     {
-        /*check to see if we've been thru the whole list of structures and 
+        /*check to see if we've been thru the whole list of structures and
         droids and not reset the lastPowered object in the power structure and
         there was some power at the start of the loop to use*/
         if (psLastPowered != NULL AND psLastPowered == asPower[player]->
@@ -991,7 +991,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 			}
 		}
 	}
-	
+
 	//calculate the total available and capacity
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -1008,7 +1008,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 		}
 	}
 
-	//adjust for the power already used 
+	//adjust for the power already used
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		usedPower = calcPlayerUsedPower(player);
@@ -1016,7 +1016,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 		{
 			if ((SDWORD)asPower[player]->availablePower < usedPower)
 			{
-				asPower[player]->usedPower = asPower[player]->availablePower - 
+				asPower[player]->usedPower = asPower[player]->availablePower -
 					usedPower;
 				asPower[player]->availablePower = 0;
 //				audio_PlayTrack( ID_SOUND_POWER_LOW );
@@ -1129,7 +1129,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 	UDWORD			power;
 
 	//check its the correct type of building
-	if (psBuilding->pStructureType->type == REF_POWER_GEN OR 
+	if (psBuilding->pStructureType->type == REF_POWER_GEN OR
 		psBuilding->pStructureType->type == REF_HQ)
 	{
 		if ((SDWORD)(asPower[psBuilding->player]->extractedPower) > asPower[psBuilding->
@@ -1149,7 +1149,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 		//{
 		//	power = power * ((POWER_GEN *)psBuilding->pFunctionality)->multiplier;
 		//}
-		
+
 		asPower[psBuilding->player]->capacity -= power;
 		asPower[psBuilding->player]->availablePower += power ;
 	}
@@ -1177,10 +1177,10 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 		if (asPower[psBuilding->player]->capacity != 0)
 		{
 			for (psStruct = apsStructLists[psBuilding->player]; psStruct != NULL AND
-				asPower[psBuilding->player]->extractedPower != 0; psStruct = 
+				asPower[psBuilding->player]->extractedPower != 0; psStruct =
 				psStruct->psNext)
 			{
-				if (psStruct->pStructureType->type == REF_POWER_GEN OR 
+				if (psStruct->pStructureType->type == REF_POWER_GEN OR
 					psStruct->pStructureType->type == REF_HQ)
 				{
 					availablePowerUpdate(psStruct);
@@ -1190,12 +1190,12 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 	}
 }*/
 
-/*update the generator capacity if necessary. This function is called whenever 
+/*update the generator capacity if necessary. This function is called whenever
   a Power Generator or Power Module is built or HQ is built*/
 /*void capacityUpdate(STRUCTURE * psBuilding)
 {
 	UDWORD		power = 0;
- 
+
 	if (psBuilding->pStructureType->type == REF_POWER_GEN)
 	{
 		//only add on module power if this is what has been built BIT OF A HACK REALLY!
@@ -1210,7 +1210,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 		//	pFunctionality)->power * ((POWER_GEN *)psBuilding->pFunctionality)->
 		//	multiplier);
 
-		power = (((POWER_GEN *)psBuilding->pFunctionality)->power * 
+		power = (((POWER_GEN *)psBuilding->pFunctionality)->power *
 			((POWER_GEN *)psBuilding->pFunctionality)->multiplier);
 	}
 	else
@@ -1257,12 +1257,12 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 	}
 
 	asPower[player]->availablePower = 0;
-	
+
 	// add multiplayer allowances if a multiplayer game.
 #ifndef PSX
 	if(bMultiPlayer && (game.dmatch || game.base == CAMP_CLEAN))
 	{
-		asPower[player]->availablePower = game.power+RESIDUAL_POW;		
+		asPower[player]->availablePower = game.power+RESIDUAL_POW;
 	}
 #endif
 
@@ -1284,7 +1284,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 	usedPower = calcPlayerUsedPower(player);
 	if ((SDWORD)asPower[player]->availablePower < usedPower)
 	{
-		asPower[player]->usedPower = asPower[player]->availablePower - 
+		asPower[player]->usedPower = asPower[player]->availablePower -
 			usedPower;
 		asPower[player]->availablePower = 0;
 		if (player == selectedPlayer)
@@ -1302,7 +1302,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 }*/
 
 
-/*looks through the player's list of droids and structures to see what power 
+/*looks through the player's list of droids and structures to see what power
 has been used*/
 /*UDWORD calcPlayerUsedPower(UDWORD player)
 {
@@ -1315,7 +1315,7 @@ has been used*/
 	{
 		used += psDroid->power;
 	}
-	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct = 
+	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
 		used += psStruct->pStructureType->powerToBuild;

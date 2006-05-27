@@ -5,12 +5,12 @@
  *
  */
 #include <time.h>
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 /* Includes direct access to render library */
-#include "piedef.h"
-#include "piestate.h"
-#include "rendmode.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
 
 //#include "geo.h"
 #include "display3d.h"
@@ -24,20 +24,20 @@
 #include "hci.h"
 #include "intelmap.h"
 #include "mapdisplay.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "text.h"
 #include "console.h"
 #include "research.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "loop.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 
 #include "seqdisp.h"
 
 
 #include "multiplay.h"
-#include "cdaudio.h"
+#include "lib/sound/cdaudio.h"
 
 #include "scriptextern.h"
 
@@ -57,7 +57,7 @@ extern CURSORSNAP InterfaceSnap;
 
 //Height to view the world from in Intelligence Screen
 /*#ifndef PSX
-#define INTELMAP_VIEWHEIGHT		2250		
+#define INTELMAP_VIEWHEIGHT		2250
 #else
 #define INTELMAP_VIEWHEIGHT		(2250)
 #endif*/
@@ -103,7 +103,7 @@ extern CURSORSNAP InterfaceSnap;
 
 /*3D View message form screen positions relative to INTMAP_FORM */
 //#define INTMAP_VIEWX			211
-//#define INTMAP_VIEWY			(-260)	
+//#define INTMAP_VIEWY			(-260)
 //#define INTMAP_VIEWWIDTH		MSG_BUFFER_WIDTH
 //#define INTMAP_VIEWHEIGHT		MSG_BUFFER_HEIGHT
 
@@ -153,23 +153,23 @@ extern CURSORSNAP InterfaceSnap;
 /*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
 
 #define	INTMAP_TITLEX			0
-#define INTMAP_TITLEY			0	
+#define INTMAP_TITLEY			0
 #define	INTMAP_TITLEWIDTH		INTMAP_RESEARCHWIDTH
 #define INTMAP_TITLEHEIGHT		18
 #define	INTMAP_PIEX				3
-#define INTMAP_PIEY				24	
+#define INTMAP_PIEY				24
 
 //#define INTMAP_PIEWIDTH		240
 //#define INTMAP_PIEHEIGHT		169
 /*dimensions for FLIC view section relative to IDINTMAP_MSGVIEW*/
 #define	INTMAP_FLICX			245
-#define INTMAP_FLICY			24	
+#define INTMAP_FLICY			24
 #define	INTMAP_FLICWIDTH		192
 #define INTMAP_FLICHEIGHT		170
 /*dimensions for TEXT view section relative to IDINTMAP_MSGVIEW*/
 
 #define	INTMAP_TEXTX			0
-#define INTMAP_TEXTY			200	
+#define INTMAP_TEXTY			200
 #define	INTMAP_TEXTWIDTH		INTMAP_RESEARCHWIDTH
 #define INTMAP_TEXTHEIGHT		88
 #define TEXT_XINDENT				5
@@ -217,24 +217,24 @@ static BOOL				playCurrent;
 /* functions declarations ****************/
 static BOOL intAddMessageForm(BOOL playCurrent);
 /*Displays the buttons used on the intelligence map */
-static void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset, 
+static void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours);
 /* displays the 3D view for the current message */
-//static void intDisplayMessageView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+//static void intDisplayMessageView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 //					  UDWORD *pColours);
 
 /* Add the Proximity message buttons */
 //static BOOL intAddProximityButton(MESSAGE *pMessage, UDWORD inc);
 
 /*Displays the proximity messages used on the intelligence map */
-//static void intDisplayProximityButton(struct _widget *psWidget, UDWORD xOffset, 
+//static void intDisplayProximityButton(struct _widget *psWidget, UDWORD xOffset,
 //							  UDWORD yOffset, UDWORD *pColours);
 
-/*deal with the actual button press - proxMsg is set to true if a proximity 
+/*deal with the actual button press - proxMsg is set to true if a proximity
   button has been pressed*/
 static void intIntelButtonPressed(BOOL proxMsg, UDWORD id);
 
-/*this sets the width and height for the Intel map surface so that it fill the 
+/*this sets the width and height for the Intel map surface so that it fill the
 appropriate sized image for the view*/
 //static void setIntelBufferSize(UDWORD type);
 
@@ -249,11 +249,11 @@ appropriate sized image for the view*/
 /* Remove the Message View from the Intelligence screen without animation*/
 //static void intRemoveMessageViewNoAnim(BOOL animated);
 
-static void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+static void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
-static void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+static void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
-static void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+static void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
@@ -305,7 +305,7 @@ BOOL _intAddIntelMap(void)
 	}
 
 	// Is the form already up?
-	if(widgGetFromID(psWScreen,IDINTMAP_FORM) != NULL) 
+	if(widgGetFromID(psWScreen,IDINTMAP_FORM) != NULL)
 	{
 		intRemoveIntelMapNoAnim();
 		Animate = FALSE;
@@ -322,7 +322,7 @@ BOOL _intAddIntelMap(void)
 	//add message to indicate game is paused - single player mode
 	if(PAUSE_DISPLAY_CONDITION)
 	{
-		if(widgGetFromID(psWScreen,IDINTMAP_PAUSELABEL) == NULL) 
+		if(widgGetFromID(psWScreen,IDINTMAP_PAUSELABEL) == NULL)
 		{
 			memset(&sLabInit,0,sizeof(W_LABINIT));
 			sLabInit.id = IDINTMAP_PAUSELABEL;
@@ -343,10 +343,10 @@ BOOL _intAddIntelMap(void)
 
 	//set pause states before putting the interface up
 	setIntelligencePauseState();
-	
+
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
-	// Add the main Intelligence Map form 
+	// Add the main Intelligence Map form
 
 	sFormInit.formID = 0;
 	sFormInit.id = IDINTMAP_FORM;
@@ -356,12 +356,12 @@ BOOL _intAddIntelMap(void)
 	sFormInit.width = INTMAP_WIDTH;
 	sFormInit.height = INTMAP_HEIGHT;
 // If the window was closed then do open animation.
-	if(Animate) 
+	if(Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
 		sFormInit.disableChildren = TRUE;
-	} 
-	else 
+	}
+	else
 	{
 // otherwise just recreate it.
 		sFormInit.pDisplay = intDisplayPlainForm;
@@ -377,7 +377,7 @@ BOOL _intAddIntelMap(void)
 //	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
 ////	SetMouseFormPosition(&sFormInit);
 //#endif
-	
+
 	if (!intAddMessageForm(playCurrent))
 	{
 		return FALSE;
@@ -407,7 +407,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 	sFormInit.height = INTMAP_MSGHEIGHT;
 	sFormInit.x = INTMAP_MSGX;
 	sFormInit.y = INTMAP_MSGY;
-	
+
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
@@ -418,7 +418,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 	numButtons = 0;
 	//numProxMsg = 0;
 	/*work out the number of buttons */
-	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage = 
+	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
 		psMessage->psNext)
 	{
 		//ignore proximity messages here
@@ -476,7 +476,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 
 	//add each button
 	messageID = 0;
-	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage = 
+	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
 		psMessage->psNext)
 	{
 		/*if (psMessage->type == MSG_TUTORIAL)
@@ -541,7 +541,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 
 		/* Update the init struct for the next button */
 		sBFormInit.id += 1;
-        
+
         //stop adding the buttons when at max
 		if (sBFormInit.id > IDINTMAP_MSGEND)
 		{
@@ -588,11 +588,11 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	BOOL			Animate = TRUE;
 	RESEARCH		*psResearch;
 
-	ASSERT((psMessage->type == MSG_RESEARCH, 
+	ASSERT((psMessage->type == MSG_RESEARCH,
 		"intAddMessageView: invalid message type"));
 
 	// Is the form already up?
-	if(widgGetFromID(psWScreen,IDINTMAP_MSGVIEW) != NULL) 
+	if(widgGetFromID(psWScreen,IDINTMAP_MSGVIEW) != NULL)
 	{
 		intRemoveMessageView(FALSE);
 		Animate = FALSE;
@@ -640,17 +640,17 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	}*/
 
 	// If the window was closed then do open animation.
-	if(Animate) 
+	if(Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
 		sFormInit.disableChildren = TRUE;
-	} 
-	else 
+	}
+	else
 	{
 		// otherwise just display it.
 		sFormInit.pDisplay = intDisplayPlainForm;
 	}
-	
+
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;
@@ -779,7 +779,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sLabInit.height = INTMAP_TITLEHEIGHT;
 	//print research name in title bar
 
-	ASSERT((psMessage->type != MSG_PROXIMITY, 
+	ASSERT((psMessage->type != MSG_PROXIMITY,
 		"intAddMessageView:Invalid message type for research"));
 
 	psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
@@ -1054,8 +1054,8 @@ MESSAGE TimsMessage=
 #endif
 
 
-/* 
-deal with the actual button press - proxMsg is set to true if a proximity 
+/*
+deal with the actual button press - proxMsg is set to true if a proximity
 button has been pressed
 */
 void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
@@ -1065,7 +1065,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 //	char aAudioName[MAX_STR_LENGTH];	// made static to reduce stack usage.
 	RESEARCH		*psResearch;
 
-	ASSERT((proxMsg = TRUE, 
+	ASSERT((proxMsg = TRUE,
 		"intIntelButtonPressed: Shouldn't be able to get a proximity message!"));
 
 	/* message button has been pressed - clear the old button and messageView*/
@@ -1085,7 +1085,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 
 	//Find the message for the new button */
 	currID = IDINTMAP_MSGSTART;
-	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage = 
+	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
 		psMessage->psNext)
 	{
 		if (psMessage->type != MSG_PROXIMITY)
@@ -1115,14 +1115,14 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		//set the current message
 		psCurrentMsg = psMessage;
 		//initTextDisplay(psCurrentMsg, WFont, 255);
-		
+
 		//set the read flag
 		psCurrentMsg->read = TRUE;
 
 		//this is for the deaf! - done in intDisplayMessageView()
 		/*if (psMessage->pViewData->pTextMsg)
 		{
-			addGameMessage(psMessage->pViewData->pTextMsg, INTEL_TXT_LIFE, 
+			addGameMessage(psMessage->pViewData->pTextMsg, INTEL_TXT_LIFE,
 				TRUE);
 		}*/
 
@@ -1213,7 +1213,7 @@ void intCleanUpIntelMap(void)
 	MESSAGE		*psMessage, *psNext;
 
 	//remove any research messages that have been read
-	for (psMessage = apsMessages[selectedPlayer]; psMessage != NULL; psMessage = 
+	for (psMessage = apsMessages[selectedPlayer]; psMessage != NULL; psMessage =
 		psNext)
 	{
 		psNext = psMessage->psNext;
@@ -1249,7 +1249,7 @@ void intRemoveIntelMap(void)
 	}*/
 	//remove 3dView if still there
 	Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
-	if(Widg) 
+	if(Widg)
 	{
 		intRemoveMessageView(FALSE);
 	}
@@ -1267,7 +1267,7 @@ void intRemoveIntelMap(void)
 
 
 //	//remove any research messages that have been read
-//	for (psMessage = apsMessages[selectedPlayer]; psMessage != NULL; psMessage = 
+//	for (psMessage = apsMessages[selectedPlayer]; psMessage != NULL; psMessage =
 //		psNext)
 //	{
 //		psNext = psMessage->psNext;
@@ -1294,7 +1294,7 @@ void intRemoveIntelMapNoAnim(void)
 	}*/
 	//remove 3dView if still there
 	Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
-	if(Widg) 
+	if(Widg)
 	{
 		intRemoveMessageView(FALSE);
 	}
@@ -1319,12 +1319,12 @@ void intRemoveMessageView(BOOL animated)
 
 	//remove 3dView if still there
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
-	if(Form) 
+	if(Form)
 	{
 
 		//stop the video
 		psViewResearch = (VIEW_RESEARCH *)Form->pUserData;
-		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName, 
+		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName,
 			gameTime2, SEQUENCE_KILL);
 
 
@@ -1351,7 +1351,7 @@ void intRemoveMessageView(BOOL animated)
 
 
 /*Displays the buttons used on the intelligence map */
-void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
@@ -1444,9 +1444,9 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 			//RenderToButton(IntImages,(UWORD)image,pResearch,selectedPlayer,psBuffer,Down,
 			//				IMDType,TOPBUTTON);											// ajl, changed from 0 to selectedPLayer
 			RenderToButton(IntImages,(UWORD)image,psResGraphic,selectedPlayer,
-                psBuffer,Down,IMDType,TOPBUTTON);											
-		} 
-		else 
+                psBuffer,Down,IMDType,TOPBUTTON);
+		}
+		else
 		{
 			RenderToButton(NULL,0,pResearch,selectedPlayer,psBuffer,Down,IMDType,TOPBUTTON); //ajl, changed from 0 to selectedPlayer
 		}
@@ -1487,7 +1487,7 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 
 
 /* displays the PIE view for the current message */
-void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
@@ -1534,7 +1534,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 // 3DFX version does it straight to the display.
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
-		//renderIMDToBuffer(pIntelMapSurface, psViewResearch->pIMD, 
+		//renderIMDToBuffer(pIntelMapSurface, psViewResearch->pIMD,
 		//	psViewResearch->pIMD2, x0, y0, x0+(x1-x0)/2, y0+(y1-y0)/2);
         renderResearchToBuffer(pIntelMapSurface, psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
 		//add the contents to the window - this is only done in software now
@@ -1559,7 +1559,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 /* displays the FLIC view for the current message */
-void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
 {
 
@@ -1597,21 +1597,21 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		//render a frame of the current movie
 		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 //#ifndef PSX
-		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName, 
+		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName,
 			gameTime2, SEQUENCE_HOLD);
 		//download to screen now
-		seq_BlitBufferToScreen((SBYTE *)rendSurface.buffer, rendSurface.scantable[1], 
+		seq_BlitBufferToScreen((SBYTE *)rendSurface.buffer, rendSurface.scantable[1],
 			x0, y0);
 //#else
 //	// PSXSequencesCountdown is the time until the playstation research seq. starts
 //	// ... This gives the rest of the display a chance to have a head start.
-//	//  ... avoiding screen flickers 
+//	//  ... avoiding screen flickers
 //		if (PSXSequencesCountdown>0) PSXSequencesCountdown--;
 //		if (PSXSequencesCountdown==1)
 //		{
 //			StartMessageSequences(psMessage,FALSE);	// PSX Version just starts the sequences
 //			loop_SetVideoPlaybackMode();		// set so that the main loop plays the video !
-//			
+//
 //		}
 //#endif
 		CloseButtonRender();
@@ -1620,7 +1620,7 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 }
 
 /* displays the TEXT view for the current message */
-void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
@@ -1660,7 +1660,7 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 				return;
 			}
 			//need to check the string will fit!
-			iV_DrawText(((VIEWDATA *)psMessage->pViewData)->ppTextMsg[i], x0 + TEXT_XINDENT, 
+			iV_DrawText(((VIEWDATA *)psMessage->pViewData)->ppTextMsg[i], x0 + TEXT_XINDENT,
 				(ty + TEXT_YINDENT*3) + (i * linePitch));
 		}
 
@@ -1671,7 +1671,7 @@ void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 
 
-//adds text to full screen video		
+//adds text to full screen video
 void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 {
 	UDWORD	i, x, y;
@@ -1680,7 +1680,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 	{
 		DBPRINTF(("avt seq=%d [%s]\n",sequence,psSeqDisplay->ppTextMsg[0]));
 		//add each message, first at the top
-		x = VIDEO_TEXT_TOP_X; 
+		x = VIDEO_TEXT_TOP_X;
 		y = VIDEO_TEXT_TOP_Y;
 
 
@@ -1726,7 +1726,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 	}
 }*/
 
-/*this sets the width and height for the Intel map surface so that it fill the 
+/*this sets the width and height for the Intel map surface so that it fill the
 appropriate sized image for the view*/
 /*void setIntelBufferSize(UDWORD type)
 {
@@ -1791,7 +1791,7 @@ appropriate sized image for the view*/
 	default:
 		ASSERT((FALSE, "Unknown message type"));
 	}
-	
+
 #ifdef PSX
 	DisplayControlDiag();
 #endif
@@ -1803,7 +1803,7 @@ appropriate sized image for the view*/
 //	screenTextOut(x+1,y+1,psMessage->pViewData->pTextMsg);
 	//scrollMessage(psMessage->pViewData->pTextMsg, x2, x1, y, 5);
 
-#ifdef PSX	
+#ifdef PSX
 	setConsoleSizePos(x1+2,y-32-iV_GetTextLineSize()*2,(x2-x1)-4);
 #else
 	setConsoleSizePos(x1, y, (x2-x1));
@@ -1818,7 +1818,7 @@ void setCurrentMsg(void)
 	MESSAGE *psMsg, *psLastMsg;
 
 	psLastMsg = NULL;
-	for (psMsg = apsMessages[selectedPlayer]; psMsg != NULL; psMsg = 
+	for (psMsg = apsMessages[selectedPlayer]; psMsg != NULL; psMsg =
 		psMsg->psNext)
 	{
 		if (psMsg->type != MSG_PROXIMITY)
@@ -1863,7 +1863,7 @@ void setCurrentMsg(void)
 		ASSERT((FALSE, "Unknown message type"));
 		return;
 	}
-	
+
 	currentLength = 0;
 	strLen = strlen(psMessage->pViewData->pTextMsg);
 	frames = 0;
@@ -1905,7 +1905,7 @@ void setCurrentMsg(void)
 	UDWORD			frames, inc, strLen;
 	SDWORD			position, startChar, currentLength;
 	UDWORD			endChar, text;
-			
+
 	//work out current frame
 	frames = 20 * (gameTime2 - currentTextDisplay.startTime)/GAME_TICKS_PER_SEC;
 
@@ -1916,7 +1916,7 @@ void setCurrentMsg(void)
 
 	//work out position of the string
 	for (inc = 0; inc < frames; inc++)
-	{	
+	{
 		//framesMinus1 = frames - 1;
 		if ((frames - 1 - inc) > (strLen-1))
 		{
@@ -1925,7 +1925,7 @@ void setCurrentMsg(void)
 			//nothing to draw so go to next inc
 			continue;
 		}
-	
+
 		//increment the current amount drawn
 		currentLength += iV_GetCharWidth(pText[frames - 1 - inc]);
 
@@ -2008,7 +2008,7 @@ void setCurrentMsg(void)
 
 
 /*Displays the proximity messages used on the intelligence map */
-/*void intDisplayProximityButton(struct _widget *psWidget, UDWORD xOffset, 
+/*void intDisplayProximityButton(struct _widget *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;
@@ -2151,7 +2151,7 @@ void setIntelligencePauseState(void)
 
 		gameTimeStop();
 		setGameUpdatePause(TRUE);
-		if(!bInTutorial) 
+		if(!bInTutorial)
 		{	// Don't pause the scripts or the console if the tutorial is running.
 			setScriptPause(TRUE);
 			setConsolePause(TRUE);
@@ -2187,7 +2187,7 @@ void resetIntelligencePauseState(void)
 
 
 
-// play this message immediately, but definitely donot tell the intelligence screen to start 
+// play this message immediately, but definitely donot tell the intelligence screen to start
 
 
 void _displayImmediateMessage(MESSAGE *psMessage)

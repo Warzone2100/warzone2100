@@ -13,23 +13,23 @@
 //#define DEBUG_GROUP2
 /* Turn on Missed printf's */
 //#define DEBUG_GROUP3
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "objects.h"
 #include "combat.h"
 #include "stats.h"
 #include "visibility.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "map.h"
 #include "move.h"
 #include "findpath.h"
 #include "messagedef.h"
 #include "miscimd.h"
 #include "projectile.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "geometry.h"
-#include "cmddroid.h" 
+#include "cmddroid.h"
 #include "mapgrid.h"
 #include "order.h"
 #include "ai.h"
@@ -175,7 +175,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	{
 		if (!visibleObjWallBlock(psAttacker, psTarget))
 		{
-			// Can't see the target - can't hit it with direct fire 
+			// Can't see the target - can't hit it with direct fire
 			DBP3(("directLOS failed\n"));
 			return;
 		}
@@ -187,7 +187,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		// a bunker can't shoot through walls
 		if (!visibleObjWallBlock(psAttacker, psTarget))
 		{
-			// Can't see the target - can't hit it with direct fire 
+			// Can't see the target - can't hit it with direct fire
 			DBP3(("directLOS failed\n"));
 			return;
 		}
@@ -196,7 +196,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	{
 		if (!visibleObject(psAttacker, psTarget))
 		{
-			// Can't see the target - can't hit it with direct fire 
+			// Can't see the target - can't hit it with direct fire
 			DBP3(("directLOS failed\n"));
 			return;
 		}
@@ -205,7 +205,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	{
 		if (!psTarget->visible[psAttacker->player])
 		{
-			// Can't get an indirect LOS - can't hit it with the weapon 
+			// Can't get an indirect LOS - can't hit it with the weapon
 			DBP3(("indirectLOS failed\n"));
 			return;
 		}
@@ -221,7 +221,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		case OBJ_DROID:
 			if (!visibleObjWallBlock(psAttacker, psTarget))
 			{
-				// Can't see the target - can't hit it with direct fire 
+				// Can't see the target - can't hit it with direct fire
 				DBP3(("directLOS failed\n"));
 				return;
 			}
@@ -229,7 +229,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		default:
 			if (!visibleObject(psAttacker, psTarget))
 			{
-				// Can't see the target - can't hit it with direct fire 
+				// Can't see the target - can't hit it with direct fire
 				DBP3(("directLOS failed\n"));
 				return;
 			}
@@ -240,7 +240,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	{
 		if (!psTarget->visible[psAttacker->player])
 		{
-			// Can't get an indirect LOS - can't hit it with the weapon 
+			// Can't get an indirect LOS - can't hit it with the weapon
 			DBP3(("indirectLOS failed\n"));
 			return;
 		}
@@ -454,7 +454,7 @@ missed:
 	return;
 }
 
-/*checks through the target players list of structures and droids to see 
+/*checks through the target players list of structures and droids to see
 if any support a counter battery sensor*/
 void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 {
@@ -496,7 +496,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		{
 			psDroid = (DROID *)psViewer;
 			//must be a CB sensor
-			/*if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == 
+			/*if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 				INDIRECT_CB_SENSOR OR asSensorStats[psDroid->asBits[COMP_SENSOR].
 				nStat].type == VTOL_CB_SENSOR)*/
             if (cbSensorDroid(psDroid))

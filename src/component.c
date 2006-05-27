@@ -1,22 +1,22 @@
-/*	
+/*
 	Component.c
 	Draws component objects - oh yes indeed.
-	Alex M, Pumpkin Studios, EIDOS Interactive, 1997. 
-	
+	Alex M, Pumpkin Studios, EIDOS Interactive, 1997.
+
 */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "base.h"
 #include "droid.h"
 #include "action.h"
 #include "order.h"
 #include "component.h"
-#include "ivisdef.h" //ivis matrix code
-#include "geo.h" //ivis matrix code
-#include "piedef.h" //ivis matrix code
-#include "piestate.h" //ivis render code
+#include "lib/ivis_common/ivisdef.h" //ivis matrix code
+#include "lib/ivis_common/geo.h" //ivis matrix code
+#include "lib/ivis_common/piedef.h" //ivis matrix code
+#include "lib/ivis_common/piestate.h" //ivis render code
 #include "lighting.h"
-#include "bspfunc.h"
+#include "lib/ivis_common/bspfunc.h"
 #include "loop.h"
 
 
@@ -27,13 +27,13 @@
 #define GetRadius(x) ((x)->sradius)
 
 #include "stats.h"
-#include "piemode.h"
+#include "lib/ivis_common/piemode.h"
 #include "objects.h"
 #include "display.h"
 #include "geometry.h"
 #include "display3d.h"
 #include "map.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "intdisplay.h"
 #include "miscimd.h"
 #include "effects.h"
@@ -123,7 +123,7 @@ void updateLightLevels(void)
 
 void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ)
 {
-	
+
 
 	iVector BSPCameraPos;
 	OBJPOS Camera = {0,0,0};
@@ -134,9 +134,9 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 //	Rotation->y=0;
 
 	GetRealCameraPos(&Camera,Position->z,&BSPCameraPos);
-//	SetBSPCameraPos(BSPCameraPos.x,BSPCameraPos.y,BSPCameraPos.z);	
+//	SetBSPCameraPos(BSPCameraPos.x,BSPCameraPos.y,BSPCameraPos.z);
 	// Fixes BSP drawing in buttons. eg Player HQ.
-	SetBSPCameraPos(BSPCameraPos.x,500,BSPCameraPos.z);	
+	SetBSPCameraPos(BSPCameraPos.x,500,BSPCameraPos.z);
 	SetBSPObjectPos(0,0,0);			// For imd button the bsp is sourced at 0,0,0
 
 
@@ -202,7 +202,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
 	if ( (StatIsComponent(psComponent) != COMP_WEAPON) ||
 		  ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB )
-	{ 
+	{
 		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
 	}
 
@@ -321,10 +321,10 @@ void displayStructureButton(STRUCTURE *psStructure,
 	UDWORD			nWeaponStat;
 	iVector TmpCamPos = {0,0,0};
 
-    /*HACK HACK HACK! 
-    if its a 'tall thin (ie tower)' structure with something on the top - offset the 
+    /*HACK HACK HACK!
+    if its a 'tall thin (ie tower)' structure with something on the top - offset the
     position to show the object on top*/
-    if (psStructure->pStructureType->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND 
+    if (psStructure->pStructureType->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND
         getStructureHeight(psStructure) > TOWER_HEIGHT)
     {
         Position->y -= 20;
@@ -396,7 +396,7 @@ void displayStructureButton(STRUCTURE *psStructure,
 			//we have a droid weapon so do we draw a muzzle flash
 			iV_MatrixEnd();
 		}
-	} 
+	}
 	unsetMatrix();
 }
 
@@ -407,10 +407,10 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 	iVector TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
 
-    /*HACK HACK HACK! 
-    if its a 'tall thin (ie tower)' structure stat with something on the top - offset the 
+    /*HACK HACK HACK!
+    if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
     position to show the object on top*/
-    if (Stats->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND 
+    if (Stats->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND
         getStructureStatHeight(Stats) > TOWER_HEIGHT)
     {
         Position->y -= 20;
@@ -485,13 +485,13 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 			//we have a droid weapon so do we draw a muzzle flash
 			iV_MatrixEnd();
 		}
-	} 
+	}
 
 	unsetMatrix();
 }
 
 
-    
+
 // Render a component given a BASE_STATS structure.
 //
 void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Position,
@@ -617,7 +617,7 @@ void displayComponentButtonObject(DROID *psDroid,
 	SDWORD		difference;
 	iVector		mountRotation = {0,0,0};
  	iVector		TmpCamPos = {0,0,0};
-	
+
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
 
@@ -722,7 +722,7 @@ MAPTILE	*psTile;
 		objectShimmy( (BASE_OBJECT*) psDroid );
 	}
 
-    if (psDroid->lastHitWeapon == WSC_EMP AND 
+    if (psDroid->lastHitWeapon == WSC_EMP AND
         (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
     {
         iVector			position;
@@ -742,15 +742,15 @@ MAPTILE	*psTile;
 	}
 	else
 	{
-	   
+
 		// make sure it's not over water.
 		tileX = psDroid->x/TILE_UNITS;
 		tileY = psDroid->y/TILE_UNITS;
 		// double check it's on map
-		if( (tileX>=0) AND 
+		if( (tileX>=0) AND
 			(tileY>=0) AND
 			(tileX<mapWidth) AND
-			(tileY<mapHeight) )		
+			(tileY<mapHeight) )
 		{
 			psTile = mapTile(tileX,tileY);
 			if(TERRAIN_TYPE(psTile) != TER_WATER)
@@ -783,7 +783,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 //	SDWORD				centreX,centreZ;
 	UDWORD				colour;
 	UDWORD				bDarkSide = FALSE;
-	
+
    	/* Cast the droid pointer */
 	psDroid = (DROID *)psObj;
 	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) AND psDroid->lastHitWeapon == WSC_ELECTRONIC AND !gamePaused())
@@ -836,7 +836,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 		}
 	}
 	else
-	{	
+	{
 		psShape = getRightPropulsionIMD(psDroid);
 		if(psShape!=NULL)
 		{
@@ -922,7 +922,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 
 			/* GJ TODO: add flame-finding code here */
             psJet = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pFlameIMD;
-			
+
 			if ( psJet != NULL )
 			{
 				pie_Draw3DShape( psJet, getStaticTimeValueRange(100,psJet->numFrames), colour /*getPlayerColour(psDroid->player)*/, brightness, specular, pie_ADDITIVE, 200);
@@ -976,12 +976,12 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			pie_TRANSLATE( psShape->connectors[iConnector].x,
 						   psShape->connectors[iConnector].z,
 						   psShape->connectors[iConnector].y  );
-	
+
 			/* Rotate the turret */
 			pie_MatRotY(DEG(mountRotation->y));
 			//dont pitch the turret
 //			pie_MatRotZ(DEG(mountRotation->z));
-	
+
 			/* vtol weapons inverted */
 			if ( iConnector == 1 )
 			{
@@ -989,7 +989,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			}
 
 		//SEPERATE Mount IMDs now...
-		/*	Get the mounting graphic - we've already moved to the right position 
+		/*	Get the mounting graphic - we've already moved to the right position
 			Allegedly - all droids will have a mount graphic so this shouldn't
 			fall on it's arse......*/
 		//psShape = MOUNT_IMD(psDroid,psDroid->player);
@@ -1002,7 +1002,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			case DROID_CYBORG_SUPER:
 			case DROID_WEAPON:
 			case DROID_COMMAND:		// command droids have a weapon to store all the graphics
-				/*	Get the mounting graphic - we've already moved to the right position 
+				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				/* Double check that the weapon droid actually has any */
@@ -1019,7 +1019,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 					{
 						pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 					}
-			
+
 					//if(psDroid->numWeaps) already done this check above?!
 					{
 						pie_TRANSLATE(0,0,psDroid->asWeaps[0].recoilValue);
@@ -1089,7 +1089,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				break;
 
 			case DROID_SENSOR:
-				/*	Get the mounting graphic - we've already moved to the right position 
+				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				psShape = SENSOR_MOUNT_IMD(psDroid,psDroid->player);
@@ -1100,7 +1100,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 //					pie_MatRotY(DEG(psDroid->turretRotation));
 					pie_Draw3DShape(psShape, 0,colour/*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
-				
+
 				/* Get the sensor graphic, assuming it's there */
 				psShape = SENSOR_IMD(psDroid,psDroid->player);
 				/* Draw it */
@@ -1114,7 +1114,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 
 			case DROID_CONSTRUCT:
             case DROID_CYBORG_CONSTRUCT:
-				/*	Get the mounting graphic - we've already moved to the right position 
+				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				psShape = CONSTRUCT_MOUNT_IMD(psDroid,psDroid->player);
@@ -1140,10 +1140,10 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				{
 					pie_Draw3DShape(psShape, 0,colour/*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
-		
+
 				break;
 			case DROID_ECM:
-				/*	Get the mounting graphic - we've already moved to the right position 
+				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				psShape = ECM_MOUNT_IMD(psDroid,psDroid->player);
@@ -1152,7 +1152,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				{
 					pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
-				
+
 				/* Get the ECM graphic assuming it's there.... */
 				psShape = ECM_IMD(psDroid,psDroid->player);
 				/* Draw it */
@@ -1163,7 +1163,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 					break;
 			case DROID_REPAIR:
             case DROID_CYBORG_REPAIR:
-				/*	Get the mounting graphic - we've already moved to the right position 
+				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				psShape = REPAIR_MOUNT_IMD(psDroid,psDroid->player);
@@ -1172,7 +1172,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				{
 					pie_Draw3DShape(psShape, 0,colour /*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
-				
+
                 /* translate for construct mount point if cyborg */
                 if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
 				{
@@ -1180,10 +1180,10 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 								   psShape->connectors[0].z,
 								   psShape->connectors[0].y  );
 				}
-				
+
                 /* Get the Repair graphic assuming it's there.... */
                 psShape = REPAIR_IMD(psDroid,psDroid->player);
-	
+
 				/* Draw it */
 				if(psShape)
 				{
@@ -1194,7 +1194,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 									   psShape->connectors[0].z,
 									   psShape->connectors[0].y  );
 						pie_TRANSLATE(0,-20,0);
-						
+
 						psShape = getImdFromIndex(MI_FLAME);
 
 						/* Rotate for droid */
@@ -1203,8 +1203,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 						pie_MatRotZ(DEG(-psDroid->roll));
 					   	pie_MatRotY(DEG(-mountRotation->y));
 
-						iV_MatrixRotateY(-player.r.y);         
-						iV_MatrixRotateX(-player.r.x);         
+						iV_MatrixRotateY(-player.r.y);
+						iV_MatrixRotateX(-player.r.x);
 							/* Dither on software */
 						if(pie_GetRenderEngine() == ENGINE_4101)
 						{
@@ -1218,8 +1218,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 							pie_SetDitherStatus(FALSE);
 						}
 
-						iV_MatrixRotateX(player.r.x);     
-						iV_MatrixRotateY(player.r.y);         
+						iV_MatrixRotateX(player.r.x);
+						iV_MatrixRotateY(player.r.y);
 					}
 				}
 					break;
@@ -1267,7 +1267,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 		}
 	}
 	else
-	{	
+	{
 		psShape = getLeftPropulsionIMD(psDroid);
 		if(psShape!=NULL)
 		{
@@ -1304,7 +1304,7 @@ iVector	pos;
             case DROID_CYBORG_CONSTRUCT:
             case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
-			case DROID_COMMAND:	   
+			case DROID_COMMAND:
 				//if(psDroid->numWeaps)
 				if(psDroid->asWeaps[0].nStat > 0)
                 {
@@ -1331,7 +1331,7 @@ iVector	pos;
             case DROID_CYBORG_CONSTRUCT:
             case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
-			case DROID_COMMAND:	   
+			case DROID_COMMAND:
 				//if(psDroid->numWeaps)
                 if(psDroid->asWeaps[0].nStat > 0)
 				{
@@ -1373,7 +1373,7 @@ iVector	pos;
 //{
 //	velocity.x = 1-rand()%3;
 //	velocity.z = 1-rand()%3;
-//	velocity.y = 4+rand()%7; 
+//	velocity.y = 4+rand()%7;
 //	addEffect(position,EFFECT_GRAVITON,GRAVITON_TYPE_GIBLET,TRUE,psShape,0);
 //}
 
@@ -1428,10 +1428,10 @@ iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
 {
 	UDWORD			bodyStat, propStat;
 	iIMDShape		**imd;
-	
+
 	bodyStat = psDroid->asBits[COMP_BODY].nStat;
 	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
-	
+
 	imd = asBodyStats[bodyStat].ppIMDList;
 	imd += (propStat * NUM_PROP_SIDES + LEFT_PROP);
 
@@ -1442,7 +1442,7 @@ iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 {
 	UDWORD			bodyStat, propStat;
 	iIMDShape		**imd;
-	
+
 	bodyStat = psDroid->asBits[COMP_BODY].nStat;
 	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
 

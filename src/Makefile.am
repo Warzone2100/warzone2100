@@ -2,11 +2,7 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 bin_PROGRAMS = warzone
 BUILT_SOURCES = scriptvals_parser.h
-AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)/lib/gamelib \
-	-I$(top_srcdir)/lib/$(RENDERER) \
-	-I$(top_srcdir)/lib/netplay -I$(top_srcdir)/lib/script \
-	-I$(top_srcdir)/lib/sequence -I$(top_srcdir)/lib/sound \
-	-I$(top_srcdir)/lib/widget -I$(top_srcdir)/lib/ivis_common -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)
 warzone_SOURCES = \
 		version.c \
 		scriptvals_parser.y \
@@ -96,7 +92,6 @@ warzone_SOURCES = \
 		transporter.c \
 		visibility.c \
 		warcam.c \
-		water.c \
 		wrappers.c \
 		ani.c \
 		arrow.c \
@@ -114,7 +109,6 @@ warzone_SOURCES = \
 		keyedit.c \
 		loadsave.c \
 		mission.c \
-		mplayer_stub.c \
 		multigifts.c \
 		multijoin.c \
 		multilimit.c \

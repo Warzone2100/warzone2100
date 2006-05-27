@@ -8,18 +8,18 @@
 #include <assert.h>
 
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 //render library
-#include "piedef.h"
-#include "piestate.h"
-#include "bitimage.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/bitimage.h"
 
 #include "texture.h"
 #include "warzoneconfig.h"
-#include "tex.h"
-#include "textdraw.h"
+#include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/textdraw.h"
 
-#include "frameresource.h"
+#include "lib/framework/frameresource.h"
 #include "stats.h"
 #include "structure.h"
 #include "feature.h"
@@ -29,15 +29,15 @@
 #include "droid.h"
 #include "function.h"
 #include "message.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scriptvals.h"
 #include "display3d.h"
 #include "game.h"
 #include "objects.h"
 #include "display.h"
-#include "audio.h"
-#include "anim.h"
-#include "parser.h"
+#include "lib/sound/audio.h"
+#include "lib/gamelib/anim.h"
+#include "lib/gamelib/parser.h"
 #include "levels.h"
 #include "mechanics.h"
 #include "display3d.h"
@@ -45,7 +45,7 @@
 #include "init.h"
 
 #include "multiplay.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 
 /**********************************************************
  *

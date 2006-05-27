@@ -9,7 +9,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "objects.h"
 #include "map.h"
@@ -171,7 +171,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 	SDWORD		newLen, clipLen;	// ray length after clipping
 #endif
 
-	// Clipping is done with the position offset by TILE_UNITS/4 to account 
+	// Clipping is done with the position offset by TILE_UNITS/4 to account
 	// for the rounding errors when the intersection length is calculated.
 	// Bit of a hack but I'm pretty sure it doesn't let through anything
 	// that should be clippped.
@@ -386,7 +386,7 @@ UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	SDWORD		xdiff, ydiff;
 	SDWORD		angle;
-	
+
 	xdiff = x2 - x1;
 	ydiff = y1 - y2;
 
@@ -446,7 +446,7 @@ SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 
 //-----------------------------------------------------------------------------------
 /*	Gets the maximum terrain height along a certain direction to the edge of the grid
-	from wherever you specify, as well as the distance away 
+	from wherever you specify, as well as the distance away
 */
 // typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist);
 //void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
@@ -605,7 +605,7 @@ void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 }
 
 //-----------------------------------------------------------------------------------
-void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction, 
+void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 							   UDWORD thresholdDistance, SDWORD *pitch)
 {
 	gHPitch = MAKEFRACT(0);

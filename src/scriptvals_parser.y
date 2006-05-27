@@ -8,16 +8,16 @@
 
 #include <stdio.h>
 
-#include "frame.h"
-#include "script.h"
+#include "lib/framework/frame.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
 #include "objects.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "droid.h"
 #include "structure.h"
 #include "message.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "levels.h"
 #include "research.h"
 
@@ -168,27 +168,27 @@ script_name:	SCRIPT QTEXT
 					{
 						if (resPresent("BLO",stringname)==TRUE)
 						{
-							psCurrScript=resGetData("BLO",stringname);				
+							psCurrScript=resGetData("BLO",stringname);
 						}
 						else
 						{
 							// change extension to "slo"
 							stringname[extpos]='s';
-							psCurrScript=resGetData("SCRIPT",stringname);				
+							psCurrScript=resGetData("SCRIPT",stringname);
 						}
 					}
 					else if (strncmp(&stringname[extpos],"slo",3)==0)
 					{
 						if (resPresent("SCRIPT",stringname)==TRUE)
 						{
-							psCurrScript=resGetData("SCRIPT",stringname);				
+							psCurrScript=resGetData("SCRIPT",stringname);
 						}
 #ifdef PSX
 						else
 						{
 							// change extension to "blo"
 							stringname[extpos]='b';
-							psCurrScript=resGetData("BLO",stringname);				
+							psCurrScript=resGetData("BLO",stringname);
 						}
 #endif
 					}
@@ -628,7 +628,7 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Set Value Failed for %s", $1 );
 							YYABORT;
 						}
-		
+
 #else
 
 						if ($3.type != IT_STRING)

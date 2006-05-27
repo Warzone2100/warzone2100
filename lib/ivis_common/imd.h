@@ -17,7 +17,7 @@
 #define BSPPOLYID_TERMINATE (BSPPOLYID_MAXPOLYID+1)	// This is used as a terminator
 
 #include "bspimd.h"
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #endif
 
@@ -34,7 +34,7 @@
 #define iV_IMD_TEX			0x00000200
 #define iV_IMD_TEXANIM		0x00004000	// iV_IMD_TEX must be set also
 #define iV_IMD_PSXTEX		0x00008000	// - use playstation texture allocation method
-#define iV_IMD_BSPFRESH		0x00010000	// Freshly created by the BSP 
+#define iV_IMD_BSPFRESH		0x00010000	// Freshly created by the BSP
 #define iV_IMD_NOHALFPSXTEX 0x00020000
 
 // shape override flags
@@ -74,7 +74,7 @@
 
 extern BOOL iV_setImagePath(STRING *path);
 extern iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep);
-extern iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, 
+extern iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd,
                                 STRING *IMDpath, STRING *PCXpath, iBool palkeep);
 iIMDShape *iV_ProcessBPIE(iIMDShape *, UDWORD size);
 
@@ -83,10 +83,10 @@ extern void iV_IMDDebug(iIMDShape *s);
 
 extern void iV_IMDRelease(iIMDShape *s);
 
-// How high up do we want to stop looking 
+// How high up do we want to stop looking
 #define DROID_VIS_UPPER	100
 
-// How low do we stop looking? 
+// How low do we stop looking?
 #define DROID_VIS_LOWER	10
 
 /* not for PIEDRAW

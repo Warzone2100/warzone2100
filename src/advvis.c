@@ -2,15 +2,15 @@
 /* Experiment - possibly only for the faster configurations */
 /* Makes smooth transitions for terrain visibility */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "base.h"
 #include "map.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "display3d.h"
 #include "advvis.h"
 #include "hci.h"
-#include "piestate.h"
+#include "lib/ivis_common/piestate.h"
 #include "component.h"
 #include "geometry.h"
 
@@ -90,7 +90,7 @@ UDWORD	i,j;
 		startX = player.p.x/TILE_UNITS;
 	}
 	else
-	{	
+	{
 		startX = 0;
 	}
 	if(player.p.z >= 0)
@@ -113,11 +113,11 @@ UDWORD	i,j;
 	if(endY>(SDWORD)(mapHeight-1)) endY =(SDWORD)(mapHeight-1);
 
 	/* Go through the grid */
-	for(i=startY; i<(UDWORD)endY; i++)           	
-	{                
+	for(i=startY; i<(UDWORD)endY; i++)
+	{
 		for(j=startX; j<(UDWORD)endX; j++)
 		{
-			processAVTile(j,i);		
+			processAVTile(j,i);
 		}
 	}
 
@@ -205,7 +205,7 @@ MAPTILE		*psTile;
 				psTile->bMaxed = TRUE;
 				psTile->level = psTile->illumination;
                 //can't have this cos when load up a save game where a structure has been built by the
-                //enemy in an area that has been seen before it flags the structure as visible! 
+                //enemy in an area that has been seen before it flags the structure as visible!
 				/*if(TILE_HAS_STRUCTURE(psTile))
 				{
 				 	psStruct = getTileStructure(i,j);

@@ -10,7 +10,7 @@
 #ifndef _ivispatch_h
 #define _ivispatch_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "pietypes.h"
 
 /***************************************************************************/
@@ -22,26 +22,26 @@
 #define iV_POLY_MAX_POINTS pie_MAX_POLY_SIZE
 
 //palette definitions
-#define iV_PALETTE_SIZE				PALETTE_SIZE	
-#define iV_PALETTE_SHADE_LEVEL		PALETTE_SHADE_LEVEL 
-									
-#define iV_COL_TRANS				COL_TRANS			
-#define iV_COL_BLACK				COL_BLACK			
-#define iV_COL_BLUE					COL_BLUE				
-#define iV_COL_GREEN				COL_GREEN			
-#define iV_COL_CYAN					COL_CYAN				
-#define iV_COL_RED					COL_RED				
-#define iV_COL_MAGENTA  			COL_MAGENTA  		
-#define iV_COL_BROWN				COL_BROWN			
-#define iV_COL_GREY					COL_GREY				
-#define iV_COL_DARKGREY				COL_DARKGREY			
-#define iV_COL_LIGHTBLUE			COL_LIGHTBLUE		
-#define iV_COL_LIGHTGREEN			COL_LIGHTGREEN		
-#define iV_COL_LIGHTCYAN			COL_LIGHTCYAN		
-#define iV_COL_LIGHTRED				COL_LIGHTRED			
-#define iV_COL_LIGHTMAGENTA			COL_LIGHTMAGENTA		
-#define iV_COL_YELLOW				COL_YELLOW			
-#define iV_COL_WHITE				COL_WHITE			
+#define iV_PALETTE_SIZE				PALETTE_SIZE
+#define iV_PALETTE_SHADE_LEVEL		PALETTE_SHADE_LEVEL
+
+#define iV_COL_TRANS				COL_TRANS
+#define iV_COL_BLACK				COL_BLACK
+#define iV_COL_BLUE					COL_BLUE
+#define iV_COL_GREEN				COL_GREEN
+#define iV_COL_CYAN					COL_CYAN
+#define iV_COL_RED					COL_RED
+#define iV_COL_MAGENTA  			COL_MAGENTA
+#define iV_COL_BROWN				COL_BROWN
+#define iV_COL_GREY					COL_GREY
+#define iV_COL_DARKGREY				COL_DARKGREY
+#define iV_COL_LIGHTBLUE			COL_LIGHTBLUE
+#define iV_COL_LIGHTGREEN			COL_LIGHTGREEN
+#define iV_COL_LIGHTCYAN			COL_LIGHTCYAN
+#define iV_COL_LIGHTRED				COL_LIGHTRED
+#define iV_COL_LIGHTMAGENTA			COL_LIGHTMAGENTA
+#define iV_COL_YELLOW				COL_YELLOW
+#define iV_COL_WHITE				COL_WHITE
 
 #define _iVPALETTE					psCurrentPalette
 #define iV_SHADE_TABLE				palShades

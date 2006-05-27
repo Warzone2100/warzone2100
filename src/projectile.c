@@ -7,8 +7,8 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
-#include "gtime.h"
+#include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "move.h"
 #include "action.h"
@@ -16,20 +16,21 @@
 #include "effects.h"
 #include "map.h"
 #include "audio_id.h"
-#include "audio.h"
-#include "hashtabl.h"
+#include "lib/sound/audio.h"
+#include "lib/gamelib/hashtabl.h"
 #include "anim_id.h"
 #include "projectile.h"
 #include "visibility.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "group.h"
 #include "cmddroid.h"
 #include "feature.h"
-#include "piestate.h"
+#include "lib/ivis_common/piestate.h"
 #include "loop.h"
-#include "piematrix.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
 
 #include "scores.h"
 
@@ -92,9 +93,9 @@ static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass);
 
 /***************************************************************************/
-BOOL gfxVisible(PROJ_OBJECT *psObj)	
+BOOL gfxVisible(PROJ_OBJECT *psObj)
 {
-  	BOOL	bVisible;  
+  	BOOL	bVisible;
 
 	bVisible = FALSE;
 
@@ -111,7 +112,7 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 	}
 
 	// always see in this mode
-	if(godMode) 
+	if(godMode)
 	{
 		return(TRUE);
 	}
@@ -127,7 +128,7 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 	{
 		bVisible = TRUE;
 	}
-	
+
 	// someone elses structure firing at something you can't see
 	if( (psObj->psSource != NULL) AND (psObj->psSource->type == OBJ_STRUCTURE) AND
 		(psObj->psSource->player!=selectedPlayer) AND
@@ -146,7 +147,7 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 
 
 	return(bVisible);
-}					
+}
 /***************************************************************************/
 
 BOOL
@@ -221,12 +222,12 @@ void proj_UpdateKills(PROJ_OBJECT *psObj)
 
 
 	if(bMultiPlayer)
-	{	
+	{
 		sendDestroyExtra(psObj->psDest,psObj->psSource);
 		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
 	}
 
-	
+
 	if(psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
 		psDroid = (DROID*)psObj->psSource;
@@ -483,7 +484,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 				psObj->pitch = (SWORD)iPitchHigh;
 			}
 		}
-		
+
 		/* if droid set muzzle pitch */
 		if (psAttacker != NULL)
 		{
@@ -624,7 +625,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 	*/
 
-		// ffs 
+		// ffs
 //	rad = fastRoot(dx,dy);
 	rad = (SDWORD)iSQRT( dx*dx + dy*dy );
 
@@ -672,8 +673,8 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	}
 
 	else
-	if(psStats->weaponSubClass == WSC_COMMAND OR 
-        psStats->weaponSubClass == WSC_ELECTRONIC OR 
+	if(psStats->weaponSubClass == WSC_COMMAND OR
+        psStats->weaponSubClass == WSC_ELECTRONIC OR
         psStats->weaponSubClass == WSC_EMP)
 	{
 	    if(gfxVisible(psObj))
@@ -707,13 +708,13 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	if(gfxVisible(psObj))
 //		if(GFX_VISIBLE(psObj))
 		{
-			pos.x = psObj->x; 
-			pos.y = psObj->z+8; 
+			pos.x = psObj->x;
+			pos.y = psObj->z+8;
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 		}
 	}
-	 
+
 	/* See if effect has finished */
 	if ( (psStats->movementModel == MM_HOMINGDIRECT) AND psObj->psDest )
 	{
@@ -746,8 +747,8 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	/* add smoke trail to indirect weapons firing directly */
 	if( !proj_Direct( psStats ) AND gfxVisible(psObj))//GFX_VISIBLE(psObj) )
 	{
-		pos.x = psObj->x; 
-		pos.y = psObj->z+8; 
+		pos.x = psObj->x;
+		pos.y = psObj->z+8;
 		pos.z = psObj->y;
 		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 	}
@@ -776,7 +777,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	dx = (SDWORD)psObj->tarX-(SDWORD)psObj->startX;
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 
-		// ffs 
+		// ffs
 	iRad = fastRoot(dx,dy);
 
 
@@ -825,8 +826,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 		}
 	}
 	else
-	if(psStats->weaponSubClass == WSC_COMMAND OR 
-        psStats->weaponSubClass == WSC_ELECTRONIC OR 
+	if(psStats->weaponSubClass == WSC_COMMAND OR
+        psStats->weaponSubClass == WSC_ELECTRONIC OR
         psStats->weaponSubClass == WSC_EMP)
 	{
     	if(gfxVisible(psObj))
@@ -856,8 +857,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	{
 		if(GFX_VISIBLE(psObj))
 		{
-			pos.x = psObj->x; 
-			pos.y = psObj->z; 
+			pos.x = psObj->x;
+			pos.y = psObj->z;
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 		}
@@ -870,7 +871,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 		pos.x = psObj->x;
 		pos.z = psObj->y;
 		pos.y = map_Height(pos.x,pos.z) + 8;
-		
+
 		/* It's damage time */
 //		psObj->x = psObj->tarX;		 // leave it where it is, but use tarX, tarY for damage
 //		psObj->y = psObj->tarY;
@@ -894,20 +895,20 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	/* Add a trail graphic */
 	/* If it's indirect and not a flamethrower - add a smoke trail! */
 	/* MAKE IT ADD A 'TRAIL GRAPHIC'? */
-	if(psStats->weaponSubClass != WSC_FLAME AND psStats->weaponSubClass != 
-        WSC_ENERGY AND psStats->weaponSubClass != WSC_COMMAND 
+	if(psStats->weaponSubClass != WSC_FLAME AND psStats->weaponSubClass !=
+        WSC_ENERGY AND psStats->weaponSubClass != WSC_COMMAND
 		AND psStats->weaponSubClass != WSC_ELECTRONIC AND psStats->
         weaponSubClass != WSC_EMP AND !bOver)
 	{
 	if(gfxVisible(psObj))
 //		if(GFX_VISIBLE(psObj))// AND psStats->pTrailGraphic )
 		{
-			pos.x = psObj->x; 
-			pos.y = psObj->z+4; 
+			pos.x = psObj->x;
+			pos.y = psObj->z+4;
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 		}
-	}	
+	}
 }
 
 /***************************************************************************/
@@ -926,7 +927,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	BOOL			bKilled;//,bMultiTemp;
 	iVector			position,scatter;
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
-	
+
 
 	ASSERT((PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_ImpactFunc: invalid projectile pointer"));
@@ -1001,7 +1002,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			{
 				shakeStart();
 			}
-		}	  
+		}
 
 	}
 	/* Nothings been killed */
@@ -1104,7 +1105,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		/* Do damage to the target */
 		if (proj_Direct(psStats))
 		{
-			/*Check for Electronic Warfare damage where we know the subclass 
+			/*Check for Electronic Warfare damage where we know the subclass
             of the weapon*/
 			if (psStats->weaponSubClass == WSC_ELECTRONIC)// AND psObj->psDest->
 				//type == OBJ_STRUCTURE)
@@ -1113,7 +1114,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					//if (electronicDamage((STRUCTURE *)psObj->psDest, calcDamage(
                     if (electronicDamage(psObj->psDest, calcDamage(weaponDamage(
-                        psStats,psObj->player), psStats->weaponEffect, 
+                        psStats,psObj->player), psStats->weaponEffect,
                         psObj->psDest), psObj->player))
 					{
 						if (psObj->psSource->type == OBJ_DROID)
@@ -1137,7 +1138,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			else
 			{
 				/* Just assume a direct fire weapon hits the target */
-				
+
 
 				damage = calcDamage(weaponDamage(psStats,psObj->player), psStats->weaponEffect, psObj->psDest);
 				if(bMultiPlayer)
@@ -1157,12 +1158,12 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				DBP1(("Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player));
 				/*the damage depends on the weapon effect and the target propulsion type or structure strength*/
-			
+
 	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass);
 
-	
+
 	//#ifndef PSX
-	//			if(bMultiTemp) 
+	//			if(bMultiTemp)
 	//			{
 	//				bMultiPlayer = TRUE;
 	//			}
@@ -1206,7 +1207,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 					{
 						//updateMultiStatsDamage(psObj->psSource->player,psObj->psDest->player,psStats->damage);
 						updateMultiStatsDamage(psObj->psSource->player,
-							//psObj->psDest->player,	calcDamage(psStats->damage, 
+							//psObj->psDest->player,	calcDamage(psStats->damage,
 							psObj->psDest->player, damage	);
 					}
 //					bMultiPlayer = FALSE;
@@ -1235,7 +1236,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 //					bMultiPlayer = TRUE;
 //				}
 //#endif
-				
+
 				if(bKilled)
 				{
 					proj_UpdateKills(psObj);
@@ -1295,7 +1296,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 			}
 		}
-	
+
 		/* This was just a simple bullet - release it and return */
 		if ( hashTable_RemoveElement( g_pProjObjTable, psObj,
 										(int) psObj, UNUSED_KEY ) == FALSE )
@@ -1357,24 +1358,24 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 									psCurrD->id, psCurrD->player));
 
 							damage = calcDamage(
-										weaponRadDamage(psStats, psObj->player), 
+										weaponRadDamage(psStats, psObj->player),
 										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
 							if(bMultiPlayer)
 							{
 								if(psObj->psSource && myResponsibility(psObj->psSource->player))
 								{
-									updateMultiStatsDamage(psObj->psSource->player, 
+									updateMultiStatsDamage(psObj->psSource->player,
 										psCurrD->player, damage);
 								}
 								turnOffMultiMsg(TRUE);
 							}
-						
+
 
 							//bKilled = psCurrD->damage(psCurrD, psStats->radiusDamage, psStats->weaponClass);
 							/*bKilled = psCurrD->damage(psCurrD, calcDamage(
-								//psStats->radiusDamage, psStats->weaponEffect, 
-								weaponRadDamage(psStats,psObj->player), 
-								psStats->weaponEffect, 
+								//psStats->radiusDamage, psStats->weaponEffect,
+								weaponRadDamage(psStats,psObj->player),
+								psStats->weaponEffect,
 								(BASE_OBJECT *)psCurrD), psStats->weaponClass);*/
 
 							bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass);
@@ -1412,7 +1413,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						if (dice < weaponRadiusHit(psStats, psObj->player))
 						{
 						damage = calcDamage(weaponRadDamage(
-						   	psStats, psObj->player), 
+						   	psStats, psObj->player),
 										psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
 
 
@@ -1424,7 +1425,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								}
 							}
 
-							bKilled = structureDamage(psCurrS, damage, 
+							bKilled = structureDamage(psCurrS, damage,
                                 psStats->weaponClass, psStats->weaponSubClass);
 
 							if(bKilled)
@@ -1447,7 +1448,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						}
 					}
 
-				  	bKilled = structureDamage(psCurrS, damage, 
+				  	bKilled = structureDamage(psCurrS, damage,
                         psStats->weaponClass, psStats->weaponSubClass);
 
 				   	if(bKilled)
@@ -1487,13 +1488,13 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						DBP1(("Damage to object %d, player %d\n",
 								psCurrF->id, psCurrF->player));
 						//(void)psCurrF->damage(psCurrF, psStats->radiusDamage, psStats->weaponClass);
-						//(void)psCurrF->damage(psCurrF, calcDamage(psStats->radiusDamage, 
+						//(void)psCurrF->damage(psCurrF, calcDamage(psStats->radiusDamage,
 						/*(void)psCurrF->damage(psCurrF, calcDamage(weaponRadDamage(
-							psStats, psObj->player), psStats->weaponEffect, 
+							psStats, psObj->player), psStats->weaponEffect,
 							(BASE_OBJECT *)psCurrF), psStats->weaponClass);*/
 						bKilled = featureDamage(psCurrF, calcDamage(weaponRadDamage(
-							psStats, psObj->player), psStats->weaponEffect, 
-							(BASE_OBJECT *)psCurrF), psStats->weaponClass, 
+							psStats, psObj->player), psStats->weaponEffect,
+							(BASE_OBJECT *)psCurrF), psStats->weaponClass,
                             psStats->weaponSubClass);
 						if(bKilled)
 						{
@@ -1702,7 +1703,7 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 //							bMultiTemp = FALSE;
 //						}
 //#endif
-						
+
 						//bKilled = psCurr->damage(psCurr, damageToDo, psStats->weaponClass);
 
 	  					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass);
@@ -1806,7 +1807,7 @@ FEATURE		*psFeat;
 }
 /***************************************************************************/
 
-/*the damage depends on the weapon effect and the target propulsion type or 
+/*the damage depends on the weapon effect and the target propulsion type or
 structure strength*/
 UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget)
 {
@@ -1839,12 +1840,12 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 
 //	my_error("",0,"","STRUCT damage1=%d damage=%d baseDamage=%d mod=%d (weaponEffect=%d proptype=%d) \n",damage1,damage,baseDamage,Mod,weaponEffect,PropType);
 	}
-#endif		
+#endif
 
 
 	}
 	else if (psTarget->type == OBJ_DROID)
-	{		
+	{
 
 		damage = baseDamage * asWeaponModifier[weaponEffect][(
    			asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].
@@ -1869,7 +1870,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 
 		DBPRINTF(("damage1=%d damage=%d baseDamage=%d mod=%d (weaponEffect=%d proptype=%d) \n",damage1,damage,baseDamage,Mod,weaponEffect,PropType);
 	}
-#endif		
+#endif
 
 
 
@@ -1926,7 +1927,7 @@ STRUCTURE	*psStructure;
 		psFeature = (FEATURE*)psObj;
 		if( (gameTime - psFeature->timeLastHit) < HIT_THRESHOLD )
 			return(TRUE);
-		break;	
+		break;
 	case OBJ_STRUCTURE:
 		psStructure = (STRUCTURE*)psObj;
 		if( (gameTime - psStructure->timeLastHit) < HIT_THRESHOLD AND

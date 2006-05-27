@@ -1,6 +1,8 @@
+// FIXME Stubfile!
 #ifndef _geo_
 #define _geo_
 
-#include "piematrix.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
 
 #endif

@@ -4,27 +4,27 @@
  * Parse command line arguments
  *
  */
-#ifndef _MSC_VER	
+#ifndef _MSC_VER
 #include <unistd.h>
 #endif	// not for .net I should say..  --Qamly
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 
 #include "winmain.h"
 #include "frontend.h"
 
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 #include "warzoneconfig.h"
 #include "configuration.h"
 
 #include "clparse.h"
-#include "piestate.h"
+#include "lib/ivis_common/piestate.h"
 #include "loadsave.h"
 #include "objects.h"
 #include "advvis.h"
 #include "multiplay.h"
 #include "multiint.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
@@ -280,7 +280,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			token = argv[++i];
 			scanGameSpyFlags(tokenType, token);
-		}	
+		}
 	// end of gamespy
 
 		else
@@ -300,7 +300,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 {
 	static UBYTE count = 0;
 //	UDWORD val;
-	LPVOID finalconnection;	 
+	LPVOID finalconnection;
 
 #if 0
 	// check for gamespy flag...
@@ -326,7 +326,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 	if(	 stricmp( gflag,"+host") == 0)			// host a multiplayer.
 	{
 		NetPlay.bHost = 1;
-		game.bytesPerSec			= INETBYTESPERSEC;	
+		game.bytesPerSec			= INETBYTESPERSEC;
 		game.packetsPerSec			= INETPACKETS;
 		NETsetupTCPIP(&finalconnection,"");
 		NETselectProtocol(finalconnection);
@@ -334,7 +334,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 	else if( stricmp( gflag,"+connect") == 0)	// join a multiplayer.
 	{
 		NetPlay.bHost = 0;
-		game.bytesPerSec			= INETBYTESPERSEC;	
+		game.bytesPerSec			= INETBYTESPERSEC;
 		game.packetsPerSec			= INETPACKETS;
 		NETsetupTCPIP(&finalconnection,value);
 		NETselectProtocol(finalconnection);
@@ -342,10 +342,10 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 	}
 	else if( stricmp( gflag,"+name") == 0)		// player name.
 	{
-		strcpy((char *)sPlayer,value);		
+		strcpy((char *)sPlayer,value);
 	}
 	else if( stricmp( gflag,"+hostname") == 0)	// game name.
-	{	
+	{
 		strcpy(game.name,value);
 	}
 

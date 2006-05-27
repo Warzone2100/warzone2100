@@ -1,12 +1,12 @@
 /*
  * Multiplay.c
- * 
+ *
  * Alex Lee, Sep97, Pumpkin Studios
- * 
+ *
  * Contains the day to day networking stuff, and received message handler.
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 
 #include "stats.h"									// for templates.
@@ -23,7 +23,7 @@
 #include "wrappers.h"								// for game over
 #include "component.h"
 #include "frontend.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "levels.h"
 #include "selection.h"
@@ -31,11 +31,11 @@
 #include "init.h"
 #include "warcam.h"	// these 4 for fireworks
 #include "effects.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "keybind.h"
 
-#include "netplay.h"								// the netplay library.
-#include "multiplay.h"								// warzone net stuff.	
+#include "lib/netplay/netplay.h"								// the netplay library.
+#include "multiplay.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
 #include "multistat.h"
@@ -58,7 +58,7 @@ MULTIPLAYERINGAME			ingame;
 
 BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
-STRING						tempString[12];		
+STRING						tempString[12];
 // ////////////////////////////////////////////////////////////////////////////
 // Remote Prototypes
 extern BOOL MultiPlayValidTemplate(DROID_TEMPLATE *psTempl);	// for templates.
@@ -81,7 +81,7 @@ DROID_TEMPLATE *NameToTemplate(CHAR *sName,UDWORD player);
 
 STRING *getPlayerName		(UDWORD player);
 BOOL	isHumanPlayer		(UDWORD player);				// determine if human
-BOOL	myResponsibility	(UDWORD player);				// this pc has comms responsibility 
+BOOL	myResponsibility	(UDWORD player);				// this pc has comms responsibility
 BOOL	responsibleFor		(UDWORD player,UDWORD player2);	// has player responsibility for player2
 UDWORD	whosResponsible		(UDWORD player);				// returns player responsible for 'player'
 iVector	cameraToHome		(UDWORD player,BOOL scroll);
@@ -90,7 +90,7 @@ BOOL	recvMessage			(VOID);							// process an incoming message
 BOOL	SendResearch		(UBYTE player,UDWORD index);	// send/recv Research issues
 BOOL	recvResearch		(NETMSG *pMsg);
 BOOL	sendTextMessage		(char *pStr,BOOL bcast);		// send/recv a text message
-BOOL	recvTextMessage		(NETMSG *pMsg);					
+BOOL	recvTextMessage		(NETMSG *pMsg);
 BOOL	sendTemplate		(DROID_TEMPLATE *t);			// send/recv Template information
 BOOL	recvTemplate		(NETMSG *pMsg);
 BOOL	SendDestroyTemplate	(DROID_TEMPLATE *t);			// send/recv Template destruction info
@@ -195,9 +195,9 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 
 		addEffect(&pos2,EFFECT_FIREWORK,FIREWORK_TYPE_LAUNCHER,FALSE,NULL,0);	// throw up some fire works.
 	}
-	
+
 	// show the score..
-	
+
 
 	return TRUE;
 }
@@ -206,33 +206,33 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 // ////////////////////////////////////////////////////////////////////////////
 // MultiPlayer main game loop code.
 BOOL multiPlayerLoop(VOID)
-{	
+{
 	UDWORD		i;
 	UBYTE		joinCount;
 
-	sendCheck();						// send some checking info if possible	
+	sendCheck();						// send some checking info if possible
 	processMultiPlayerArtifacts();		// process artifacts
 
 //	if( (game.type == DMATCH) && !ingame.localJoiningInProgress)
 //	{
 //		deathmatchCheck();
 //	}
-		
+
 //	if (game.type != DMATCH)
-//	{	
+//	{
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 			if(isHumanPlayer(i) && ingame.JoiningInProgress[i] )
 			{
-				joinCount++;	
+				joinCount++;
 			}
 		}
 		if(joinCount)
 		{
 			setWidgetsStatus(FALSE);
 			bDisplayMultiJoiningStatus = joinCount;	// someone is still joining! say So
-		
+
 			// deselect anything selected.
 			selDroidDeselect(selectedPlayer);
 
@@ -251,7 +251,7 @@ BOOL multiPlayerLoop(VOID)
 				bDisplayMultiJoiningStatus = 0;
 				setWidgetsStatus(TRUE);
 			}
-		}	
+		}
 //	}
 
 	// process network audio
@@ -262,7 +262,7 @@ BOOL multiPlayerLoop(VOID)
 
 	recvMessage();						// get queued messages
 
-	
+
 	// if player has won then process the win effects...
 	if(testPlayerHasWon())
 	{
@@ -319,7 +319,7 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			for(psStr=apsStructLists[i];( (psStr != NULL) && (psStr->id != id)); psStr=psStr->psNext); 
+			for(psStr=apsStructLists[i];( (psStr != NULL) && (psStr->id != id)); psStr=psStr->psNext);
 			if(psStr)
 			{
 				return psStr;
@@ -344,7 +344,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			for(psF=apsFeatureLists[i];( (psF != NULL) && (psF->id != id)); psF=psF->psNext); 
+			for(psF=apsFeatureLists[i];( (psF != NULL) && (psF->id != id)); psF=psF->psNext);
 			if(psF)
 			{
 				return psF;
@@ -371,7 +371,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 		 psTempl = psTempl->psNext);
 	}
 	else
-	{	
+	{
 		// REALLY DANGEROUS!!! ID's are NOT assumed to be unique for TEMPLATES.
 		DBPRINTF(("Really Dodgy Check performed for a template"));
 		for(i=0;i<MAX_PLAYERS;i++)
@@ -396,7 +396,7 @@ DROID_TEMPLATE *NameToTemplate(CHAR *sName,UDWORD player)
 	for (psTempl = apsDroidTemplates[player];			// follow templates
 		(psTempl && (strcmp(psTempl->aName,sName) != 0) );
 		 psTempl = psTempl->psNext);
-		 
+
 	 return psTempl;
 }
 /////////////////////////////////////////////////////////////////////////////////
@@ -419,10 +419,10 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 		return (BASE_OBJECT*)pS;
 	}
 
-	// features 
+	// features
 	pF = IdToFeature(id,player);
 	if(pF)
-	{	
+	{
 		return (BASE_OBJECT*)pF;
 	}
 
@@ -478,7 +478,7 @@ STRING *getPlayerName(UDWORD player)
 		}
 	}
 
-	return NetPlay.players[0].name;		
+	return NetPlay.players[0].name;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -498,14 +498,14 @@ UDWORD  whosResponsible(UDWORD player)
     c = ANYPLAYER;
 	if (isHumanPlayer(player))
 	{
-		c = player;	
-	}		
-	
+		c = player;
+	}
+
 	else if(player == selectedPlayer)
 	{
 		c = player;
 	}
-	
+
 	else
 	{
 		// crawl down array to find a responsible fellow,
@@ -575,7 +575,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 	for (psBuilding = apsStructLists[player];
 		 psBuilding && (psBuilding->pStructureType->type != REF_HQ);
 		 psBuilding= psBuilding->psNext);
-	
+
 	if(psBuilding)
 	{
 		x= (psBuilding->x  >> TILE_SHIFT);
@@ -591,11 +591,11 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 		x= (apsStructLists[player]->x  >> TILE_SHIFT);
 		y= (apsStructLists[player]->y  >> TILE_SHIFT);
 	}
-	else														//or map center.	
+	else														//or map center.
 	{
 		x= mapWidth/2;
 		y= mapHeight/2;
-	}	
+	}
 
 
 	if(scroll)
@@ -608,7 +608,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 	}
 
 	res.x = x<<TILE_SHIFT;
-	res.y = map_TileHeight(x,y); 
+	res.y = map_TileHeight(x,y);
 	res.z = y<<TILE_SHIFT;
 	return res;
 }
@@ -663,7 +663,7 @@ BOOL recvMessage(VOID)
 				recvGroupOrder(&msg);
 				break;
 			case NET_CHECK_DROID:				// droid damage and position checks
-				recvDroidCheck(&msg);	
+				recvDroidCheck(&msg);
 				break;
 			case NET_CHECK_STRUCT:				// structure damage checks.
 				recvStructureCheck(&msg);
@@ -688,10 +688,10 @@ BOOL recvMessage(VOID)
 //				recvDroidWaypoint(&msg);
 //				break;
 			case NET_SECONDARY:					// set a droids secondary order level.
-				recvDroidSecondary(&msg);	
+				recvDroidSecondary(&msg);
 				break;
             case NET_SECONDARY_ALL:					// set a droids secondary order level.
-				recvDroidSecondaryAll(&msg);	
+				recvDroidSecondaryAll(&msg);
 				break;
             case NET_DROIDEMBARK:
                 recvDroidEmbark(&msg);              //droid has embarked on a Transporter
@@ -716,7 +716,7 @@ BOOL recvMessage(VOID)
 //				break;
 			case NET_VTOL:
 				recvHappyVtol(&msg);
-				break;			
+				break;
 			case NET_VTOLREARM:
 				recvVtolRearm(&msg);
 				break;
@@ -725,7 +725,7 @@ BOOL recvMessage(VOID)
 				break;
 
 			default:
-				break;					
+				break;
 			}
 		}
 /*
@@ -737,7 +737,7 @@ BOOL recvMessage(VOID)
 			case NET_PLAYERCOMPLETE:			// don't care about this!
 				arenaPlayersReceived++;
 
-				if (arenaPlayersReceived == MAX_PLAYERS)				
+				if (arenaPlayersReceived == MAX_PLAYERS)
 				{
 					ProcessDroidOrders();						// set droid orders....
 					bMultiPlayer = TRUE;						// reinit mulitplay messaging
@@ -748,7 +748,7 @@ BOOL recvMessage(VOID)
 				}
 				else
 				{
-					// request the next player			
+					// request the next player
 					NetAdd(msg,0,NetPlay.dpidPlayer);				//our id
 					NetAdd(msg,4,arenaPlayersReceived);				//player we require.
 					msg.size = 8;
@@ -760,19 +760,19 @@ BOOL recvMessage(VOID)
 			case NET_FEATURES:								// feature set
 				recvFeatures(&msg);							// **biggest message of them all!**
 				break;
-			
+
 //			case NET_STRUCT:								// structure set.
-//				receiveWholeStructure(&msg);		
+//				receiveWholeStructure(&msg);
 //				break;
-		
+
 			default:
-				break;					
+				break;
 			}
-		}		
-*/	
+		}
+*/
 		// messages usable all the time
 		switch(msg.type)
-		{		
+		{
 		case NET_TEMPLATE:					// new template
 			recvTemplate(&msg);
 			break;
@@ -807,7 +807,7 @@ BOOL recvMessage(VOID)
 		case NET_PLAYERRESPONDING:			// remote player is now playing
 			NetGet((&msg),0,a);
 			ingame.JoiningInProgress[a] = FALSE;	// player is with us!
-			break;	
+			break;
 		case NET_COLOURREQUEST:
 			recvColourRequest(&msg);
 			break;
@@ -820,21 +820,21 @@ BOOL recvMessage(VOID)
 		case NET_KICK:
 			NetGet((&msg),0,dp);
 			if(NetPlay.dpidPlayer == dp)	// we've been told to leave.
-			{	
+			{
 				setPlayerHasLost(TRUE);
 			}
 			break;
 
 		case NET_FIREUP:				// frontend only
 			break;
-		
-		case NET_RESEARCHSTATUS: 
+
+		case NET_RESEARCHSTATUS:
 			recvResearchStatus(&msg);
 			break;
 
 		default:
 //			NetGet((&msg),4,a);
-//			DBPRINTF(("wierdy message arrived, type:%d size:%d msg:%d ",msg.type,msg.size,a)); 
+//			DBPRINTF(("wierdy message arrived, type:%d size:%d msg:%d ",msg.type,msg.size,a));
 //			return FALSE;
 			break;
 		}
@@ -864,23 +864,23 @@ BOOL SendResearch(UBYTE player,UDWORD index)
 
 	if(game.type == TEAMPLAY || game.type == SKIRMISH)
 	{
-		pPlayerRes = asPlayerResList[player];		
+		pPlayerRes = asPlayerResList[player];
 		pPlayerRes += index;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 			if(alliances[i][player] == ALLIANCE_FORMED)
-			{		
-				pPlayerRes = asPlayerResList[i];		
+			{
+				pPlayerRes = asPlayerResList[i];
 				pPlayerRes += index;
 				if(IsResearchCompleted(pPlayerRes)==FALSE)
 				{
 					MakeResearchCompleted(pPlayerRes);		// do the research for that player
-					researchResult(index, i,FALSE);	
+					researchResult(index, i,FALSE);
 				}
 			}
 		}
 	}
-	
+
 	return( NETbcast(&m,FALSE) );
 }
 
@@ -895,13 +895,13 @@ BOOL recvResearch(NETMSG *m)
 	player = m->body[0];
 	NetGet(m,1,index);								// get the index
 
-	pPlayerRes = asPlayerResList[player];		
+	pPlayerRes = asPlayerResList[player];
 	pPlayerRes += index;
 	if(IsResearchCompleted(pPlayerRes)==FALSE)
 	{
 		MakeResearchCompleted(pPlayerRes);
 		researchResult(index, player,FALSE);
-	
+
 		//take off the power if available.
 		pResearch = asResearch + index;
 		usePower(player, pResearch->researchPower);
@@ -913,13 +913,13 @@ BOOL recvResearch(NETMSG *m)
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 			if(alliances[i][player] == ALLIANCE_FORMED)
-			{		
-				pPlayerRes = asPlayerResList[i];		
+			{
+				pPlayerRes = asPlayerResList[i];
 				pPlayerRes += index;
 				if(IsResearchCompleted(pPlayerRes)==FALSE)
 				{
 					MakeResearchCompleted(pPlayerRes);		// do the research for that player
-					researchResult(index, i,FALSE);	
+					researchResult(index, i,FALSE);
 				}
 			}
 		}
@@ -927,7 +927,7 @@ BOOL recvResearch(NETMSG *m)
 
 	return TRUE;
 }
-  
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
@@ -941,11 +941,11 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL b
 	UWORD start = (UBYTE)bStart;
 	if(!myResponsibility(player) || gameTime <5 )
 	{
-		return TRUE;	
+		return TRUE;
 	}
 
 	NetAdd(m,0,player);				// player researching
-	NetAdd(m,1,start);	// start stop..	
+	NetAdd(m,1,start);	// start stop..
 	if(psBuilding)
 	{
 		NetAdd(m,2,psBuilding->id);	// res lab.
@@ -955,7 +955,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL b
 		NetAdd(m,2,nil);			// res lab.
 	}
 	NetAdd(m,6,index);				// topic.
-	
+
 	m.size = 10;
 	m.type = NET_RESEARCHSTATUS;
 
@@ -971,12 +971,12 @@ BOOL recvResearchStatus(NETMSG *pMsg)
 	RESEARCH			*pResearch;
 	UBYTE				player,bStart;
 	UDWORD				index,buildingId;
-    
+
 	NetGet(pMsg,0,player);				// player researching
-	NetGet(pMsg,1,bStart);				// start stop..	
+	NetGet(pMsg,1,bStart);				// start stop..
 	NetGet(pMsg,2,buildingId);			// res lab.
 	NetGet(pMsg,6,index);				// topic.
-	
+
 	pPlayerRes = asPlayerResList[player] + index;
 
 	// psBuilding may be null if finishing.
@@ -995,7 +995,7 @@ BOOL recvResearchStatus(NETMSG *pMsg)
 			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
 
 			if (IsResearchCancelled(pPlayerRes))
-			{	
+			{
 				psResFacilty->powerAccrued	= pResearch->researchPower;//set up as if all power available for cancelled topics
 			}
 			else
@@ -1015,16 +1015,16 @@ BOOL recvResearchStatus(NETMSG *pMsg)
 
 	}
 	else								// finished/cancelled research
-	{	
+	{
 		if(buildingId == 0)				// find the centre doing this research.(set building
-		{	
+		{
 			// go through the structs to find the centre that's doing this topic)
 			for(psBuilding = apsStructLists[player];psBuilding;psBuilding = psBuilding->psNext)
 			{
-				if(   psBuilding->pStructureType->type == REF_RESEARCH 
-				   && psBuilding->status == SS_BUILT 
+				if(   psBuilding->pStructureType->type == REF_RESEARCH
+				   && psBuilding->status == SS_BUILT
 				   && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
-				   && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index 
+				   && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index
 				  )
 				{
 					break;
@@ -1133,10 +1133,10 @@ BOOL recvTextMessage(NETMSG *pMsg)
 	DPID	dpid;
 	UDWORD	i;
 	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
-	
+
 	NetGet(pMsg,0,dpid);
 	for(i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
-	
+
 	strcpy(msg,NetPlay.players[i].name);					// name
 	strcat(msg," : ");								// seperator
 	strcat(msg, &(pMsg->body[4]));					// add message
@@ -1199,9 +1199,9 @@ BOOL recvTemplate(NETMSG * m)
 
 	memcpy(&t,&(m->body[1]),sizeof(DROID_TEMPLATE));
 
-	psTempl = IdToTemplate(t.multiPlayerID,player);		
-	if(psTempl)												// already exists.	
-	{		
+	psTempl = IdToTemplate(t.multiPlayerID,player);
+	if(psTempl)												// already exists.
+	{
 		t.psNext = psTempl->psNext;
 		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
 	}
@@ -1227,7 +1227,7 @@ BOOL recvTemplate(NETMSG * m)
 			psTempl->psNext = NULL;
 		}
 		else
-		{	
+		{
 			apsDroidTemplates[player]=psTempl;
 			psTempl->psNext = NULL;
 		}
@@ -1244,7 +1244,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	NETMSG m;
 
-	m.body[0] = (char) selectedPlayer;			// send player number	
+	m.body[0] = (char) selectedPlayer;			// send player number
 
 	// send id of template to destroy
 	NetAdd(m,1,(t->multiPlayerID));
@@ -1277,12 +1277,12 @@ BOOL recvDestroyTemplate(NETMSG * m)
 	if (psTempl)										// if we found itthen delete it.
 	{
 		if(psTempPrev)									// Update list pointers.
-		{		
+		{
 			psTempPrev->psNext = psTempl->psNext;		// It's down the list somewhere ?
-		} else 
-		{					
-			apsDroidTemplates[player] = psTempl->psNext;// It's at the root ?	
-		}		
+		} else
+		{
+			apsDroidTemplates[player] = psTempl->psNext;// It's at the root ?
+		}
 		HEAP_FREE(psTemplateHeap, psTempl);									// Delete the template.
 	}
 	return (TRUE);
@@ -1291,7 +1291,7 @@ BOOL recvDestroyTemplate(NETMSG * m)
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-// Features 
+// Features
 
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
@@ -1316,7 +1316,7 @@ BOOL recvDestroyFeature(NETMSG *pMsg)
 
 	//	for(pF = apsFeatureLists[0]; pF && (pF->id  != id);	pF = pF->psNext);	// find the feature
 	pF = IdToFeature(id,ANYPLAYER);
-	
+
 	if(  (pF == NULL)  )													// if already a gonner.
 	{
 		return FALSE;														// feature wasnt found anyway.
@@ -1335,7 +1335,7 @@ BOOL sendDestroyExtra(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller)
 {
 	NETMSG		m;
 	UDWORD		n=0;
-	
+
 /*	if(psKilled != NULL)
 	{
 		NetAdd(m,4,psKilled->id);	// id of thing killed
@@ -1344,7 +1344,7 @@ BOOL sendDestroyExtra(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller)
 	{
 		NetAdd(m,4,n);
 	}
-*/	
+*/
 	if(psKiller != NULL)
 	{
 		NetAdd(m,0,psKiller->id);	// id of killer.
@@ -1354,7 +1354,7 @@ BOOL sendDestroyExtra(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller)
 		NetAdd(m,0,n);
 	}
 
-	
+
 	m.type = NET_DESTROYXTRA;
 	m.size = 4;
 
@@ -1369,10 +1369,10 @@ BOOL recvDestroyExtra(NETMSG *pMsg)
 
 	BASE_OBJECT	*psSrc;
 	UDWORD		srcId;
-	
+
 	DROID		*psKiller;
 /*
-	NetGet(pMsg,0,killedId);					// remove as normal	
+	NetGet(pMsg,0,killedId);					// remove as normal
 	if(killedId !=0)
 	{
 		psKilled = IdToPointer(killedId,ANYPLAYER);
@@ -1381,7 +1381,7 @@ BOOL recvDestroyExtra(NETMSG *pMsg)
 			switch(psKilled->type)
 			{
 			case OBJ_DROID:
-				recvDestroyDroid(pMsg);				
+				recvDestroyDroid(pMsg);
 				break;
 			case OBJ_STRUCTURE:
 				recvDestroyStructure(pMsg);
@@ -1402,7 +1402,7 @@ BOOL recvDestroyExtra(NETMSG *pMsg)
 		{
 			psKiller = 	(DROID*)psSrc;
 			if(psKiller)
-			{	
+			{
 				psKiller->numKills++;
 			}
 			cmdDroidUpdateKills(psKiller);
@@ -1472,14 +1472,14 @@ UBYTE sendMap(void)
 	UBYTE done;
 	static UDWORD lastCall;
 
-	
+
 	if(lastCall > gameTime)lastCall= 0;
 	if ( (gameTime - lastCall) <200)
-	{	
+	{
 		return 0;
 	}
 	lastCall = gameTime;
-	
+
 
 	done = NETsendFile(FALSE,game.map,0);
 
@@ -1515,6 +1515,6 @@ BOOL recvMapFileData(NETMSG *pMsg)
 		flushConsoleMessages();
 		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
-	
+
 	return TRUE;
 }

@@ -3,20 +3,20 @@
 /*	23rd September, 1998 - This code is now so hideously complex
 	and unreadable that's it's inadvisable to attempt changing
 	how the camera works, since I'm not sure that I'll be able to even
-	get it working the way it used to, should anything get broken. 
+	get it working the way it used to, should anything get broken.
 	I really hope that no further changes are needed here...:-(
 	Alex M. */
 #include <stdio.h>
-#include "frame.h"
-#include "geo.h"
-#include "piedef.h" //ivis matrix code
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/geo.h"
+#include "lib/ivis_common/piedef.h" //ivis matrix code
 #include "objects.h"
 #include "warcam.h"
 #include "display.h"
 #include "display3d.h"
 #include "hci.h"
 #include "console.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "effects.h"
 #include "map.h"
 #include "geometry.h"
@@ -67,11 +67,11 @@ SDWORD	presAvAngle = 0;;
 #define	LOGO_ROT_SPEED DEG(120)
 
 /*	These are the DEFAULT offsets that make us track _behind_ a droid and allow
-	it to be pretty far _down_ the screen, so we can see more 
+	it to be pretty far _down_ the screen, so we can see more
 */
 
 #define	CAM_DEFAULT_X_OFFSET	-400
-#define CAM_DEFAULT_Y_OFFSET	-400	
+#define CAM_DEFAULT_Y_OFFSET	-400
 #define	MINCAMROTX	-20
 
 
@@ -113,7 +113,7 @@ void	getGroupTrackingConcerns	( SDWORD *x,SDWORD *y, SDWORD *z,UDWORD groupNumbe
 UDWORD	getNumDroidsSelected		( void );
 
 /*	These used to be #defines but they're variable now as it may be necessary
-	to allow the player	to customise tracking speed? Jim? 
+	to allow the player	to customise tracking speed? Jim?
 */
 FRACT	accelConstant,velocityConstant, rotAccelConstant, rotVelocityConstant;
 
@@ -124,8 +124,8 @@ static	BOOL bFullInfo = FALSE;
 static	BOOL bRadarTrackingRequested = FALSE;
 
 /* World coordinates for a radar track/jump */
-//static  SDWORD	 radarX,radarY;	
-static  FRACT	 radarX,radarY;	
+//static  SDWORD	 radarX,radarY;
+static  FRACT	 radarX,radarY;
 
 /*	Where we were up to (pos and rot) last update - allows us to see whether
 	we are sufficently near our target to disable further tracking */
@@ -141,7 +141,7 @@ static BOOL OldViewValid;
 void	initWarCam( void )
 {
 	/* We're not intitially following anything */
-	trackingCamera.status = CAM_INACTIVE;	
+	trackingCamera.status = CAM_INACTIVE;
 
 	/* Set up the default tracking variables */
 	accelConstant = ACCEL_CONSTANT;
@@ -194,10 +194,10 @@ BOOL Status = TRUE;
 	switch(trackingCamera.status)
 	{
 	case CAM_REQUEST:
-			
+
 			/* See if we can find the target to follow */
 			foundTarget = camFindTarget();
-			
+
 			if(foundTarget AND !foundTarget->died)
 			{
 				/* We've got one, so store away info */
@@ -231,7 +231,7 @@ BOOL Status = TRUE;
 			{
 				/*
 					Camera track came back false, either because droid died or is
-					no longer selected, so reset to old values 
+					no longer selected, so reset to old values
 				*/
 				foundTarget = camFindTarget();
 				if(foundTarget AND !foundTarget->died)
@@ -386,7 +386,7 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 {
 	/* Store away the target */
 	trackingCamera.target = psTarget;
-	
+
 	/* Save away all the view angles */
 	trackingCamera.oldView.r.x = trackingCamera.rotation.x = MAKEFRACT(player.r.x);
 	trackingCamera.oldView.r.y = trackingCamera.rotation.y = MAKEFRACT(player.r.y);
@@ -444,27 +444,27 @@ in the case of location and degrees of arc in the case of rotation.
   V = V + A(frameTime/GAME_TICKS_PER_SEC)
   P = P + V(frameTime/GAME_TICKS_PER_SEC)
 
-  Things are the same for the rotation except that D is then the difference in angles 
+  Things are the same for the rotation except that D is then the difference in angles
   between the way the camera and droid being tracked are facing. AND.... the two
   constants c1 and c2 will be different as we're dealing with entirely different scales
   and units. Separation in terms of distance could be in the thousands whereas degrees
   cannot exceed 180.
 
   This all works because acceleration is based on how far apart they are minus some factor
-  times the camera's present velocity. This minus factor is what slows it down when the 
+  times the camera's present velocity. This minus factor is what slows it down when the
   separation gets very small. Without this, it would continually oscillate about it's target
-  point. The four constants (two each for rotation and position) need to be found 
+  point. The four constants (two each for rotation and position) need to be found
   by trial and error since the metrics of time,space and rotation are entirely warzone
   specific.
 
   And that's all folks.
-*/  
+*/
 
 //-----------------------------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------------------
-/*	N.B. the code from here on in is not very PSX friendly as there's lots of 
+/*	N.B. the code from here on in is not very PSX friendly as there's lots of
 	unfriendly little floats - essentially the next 6 functions */
 
 void	updateCameraAcceleration(UBYTE update)
@@ -493,14 +493,14 @@ SDWORD	angle;
 			bFlying = TRUE;
 		}
 	}
-	/*	This is where we check what it is we're tracking. 
+	/*	This is where we check what it is we're tracking.
 		Were we to track a building or location - this is
 		where it'd be set up */
-	
+
 	/*	If we're tracking a droid, then we nned to track slightly in front
 		of it in order that the droid appears down the screen a bit. This means
-		that we need to find an offset point from it relative to it's present 
-		direction 
+		that we need to find an offset point from it relative to it's present
+		direction
 	*/
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
@@ -572,19 +572,19 @@ SDWORD	angle;
 		separation = (FRACT)(realPos - trackingCamera.position.x);
 		if(!bFlying)
 		{
-		 	trackingCamera.acceleration.x = 
+		 	trackingCamera.acceleration.x =
 				(accelConstant*separation - velocityConstant*(FRACT)trackingCamera.velocity.x);
 		}
 		else
 		{
-			trackingCamera.acceleration.x = 
+			trackingCamera.acceleration.x =
 				((accelConstant*separation*4) - (velocityConstant*2*(FRACT)trackingCamera.velocity.x));
 
 		}
-	}					          
-						          
-	if(update & Y_UPDATE)	          
-	{					          
+	}
+
+	if(update & Y_UPDATE)
+	{
 //		flushConsoleMessages();
 //		CONPRINTF(ConsoleString,(ConsoleString,"Attempted height : %d",yConcern));
 
@@ -601,24 +601,24 @@ SDWORD	angle;
 		}
 		else
 		{
-			trackingCamera.acceleration.y = 
+			trackingCamera.acceleration.y =
 				(((accelConstant)*separation*4) - ((velocityConstant)*2*trackingCamera.velocity.y));
 		}
-	}					          
-						          
-	if(update & Z_UPDATE)	          
-	{					          
+	}
+
+	if(update & Z_UPDATE)
+	{
 		/* Need to update acceleration along z axis */
 		realPos = zConcern - (CAM_Z_SHIFT) - yBehind;
 		separation = (FRACT)(realPos - trackingCamera.position.z);
 		if(!bFlying)
 		{
-			trackingCamera.acceleration.z =  
+			trackingCamera.acceleration.z =
 				(accelConstant*separation - velocityConstant*trackingCamera.velocity.z);
 		}
 		else
 		{
-			trackingCamera.acceleration.z =  
+			trackingCamera.acceleration.z =
 				((accelConstant*separation*4) - (velocityConstant*2*trackingCamera.velocity.z));
 
 		}
@@ -631,10 +631,10 @@ void	updateCameraVelocity( UBYTE	update )
 {
 //UDWORD	frameTime;
 FRACT	fraction;
-	
+
 	/*	Get the time fraction of a second - the next two lines are present in 4
 		of the next six functions. All 4 of these functions are called every frame, so
-		it may be an idea to calculate these higher up and store them in a static but 
+		it may be an idea to calculate these higher up and store them in a static but
 		I've left them in for clarity for now */
 
 //	frameTime = gameTime - trackingCamera.lastUpdate;
@@ -684,10 +684,10 @@ PROPULSION_STATS	*psPropStats;
 	{
 		/* Need to update position along x axis */
 		trackingCamera.position.x += (trackingCamera.velocity.x * fraction);
-	}					          
-						          
-	if(update & Y_UPDATE)	          
-	{					          
+	}
+
+	if(update & Y_UPDATE)
+	{
 //		if(trackingCamera.target->type == OBJ_TARGET)
 //		{
 			/* Need to update position along y axis */
@@ -700,10 +700,10 @@ PROPULSION_STATS	*psPropStats;
 //			trackingCamera.position.y += MAKEINT(((FRACT)trackingCamera.velocity.y * fraction));
 //		}
 //		}
-	}					          
-						          
-	if(update & Z_UPDATE)	          
-	{					          
+	}
+
+	if(update & Z_UPDATE)
+	{
 		/* Need to update position along z axis */
 		trackingCamera.position.z += (trackingCamera.velocity.z * fraction);
 	}
@@ -750,27 +750,27 @@ SDWORD	xPos,yPos,zPos;
 		{
 			if(trackingCamera.target->selected)
 			{
-				yConcern =	DEG(getAverageTrackAngle(FALSE));//DEG(trackingCamera.target->direction);	
+				yConcern =	DEG(getAverageTrackAngle(FALSE));//DEG(trackingCamera.target->direction);
 			}
 			else
 			{
-				yConcern =	DEG(getGroupAverageTrackAngle(trackingCamera.target->group,FALSE));//DEG(trackingCamera.target->direction);	
+				yConcern =	DEG(getGroupAverageTrackAngle(trackingCamera.target->group,FALSE));//DEG(trackingCamera.target->direction);
 			}
 		}
 		else
 		{
-			yConcern =	DEG(trackingCamera.target->direction);	
+			yConcern =	DEG(trackingCamera.target->direction);
 		}
 		yConcern +=	DEG(180);
-		
+
   		while(trackingCamera.rotation.y<0)
 		{
 			trackingCamera.rotation.y+=DEG(360);
 		}
-		
+
 		/* Which way are we facing? */
 		worldAngle =  trackingCamera.rotation.y;
-		separation = (FRACT) ((yConcern - worldAngle));		
+		separation = (FRACT) ((yConcern - worldAngle));
 		if(separation<DEG(-180))
 		{
 			separation+=DEG(360);
@@ -781,7 +781,7 @@ SDWORD	xPos,yPos,zPos;
 		}
 
 		/* Make new acceleration */
-		trackingCamera.rotAccel.y = 
+		trackingCamera.rotAccel.y =
 			(rotAccelConstant*separation - rotVelocityConstant*trackingCamera.rotVel.y);
 	}
 
@@ -806,8 +806,8 @@ SDWORD	xPos,yPos,zPos;
 		{
 			xConcern = DEG(trackingCamera.target->pitch);
 			xConcern += DEG(-16);
-		}	
-	
+		}
+
 		//xConcern = DEG(trackingCamera.target->pitch);
 	   //	if(xConcern>DEG(MINCAMROTX))
 	   //	{
@@ -818,7 +818,7 @@ SDWORD	xPos,yPos,zPos;
 				trackingCamera.rotation.x+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.x;
-		separation = (FRACT) ((xConcern - worldAngle));		
+		separation = (FRACT) ((xConcern - worldAngle));
 
 		MODFRACT(separation,DEG(360));
 
@@ -832,7 +832,7 @@ SDWORD	xPos,yPos,zPos;
 		}
 
 		/* Make new acceleration */
-		trackingCamera.rotAccel.x = 
+		trackingCamera.rotAccel.x =
 			/* Make this really slow */
 			((rotAccelConstant)*separation - rotVelocityConstant*(FRACT)trackingCamera.rotVel.x);
 	}
@@ -853,7 +853,7 @@ SDWORD	xPos,yPos,zPos;
 				trackingCamera.rotation.z+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.z;
-		separation = (FRACT) ((zConcern - worldAngle));		
+		separation = (FRACT) ((zConcern - worldAngle));
 		if(separation<DEG(-180))
 		{
 			separation+=DEG(360);
@@ -864,7 +864,7 @@ SDWORD	xPos,yPos,zPos;
 		}
 
 		/* Make new acceleration */
-		trackingCamera.rotAccel.z = 
+		trackingCamera.rotAccel.z =
 			/* Make this really slow */
 			((rotAccelConstant/1)*separation - rotVelocityConstant*(FRACT)trackingCamera.rotVel.z);
 	}
@@ -884,22 +884,22 @@ FRACT	fraction;
 
 	if(update & Y_UPDATE)
 	{
-		trackingCamera.rotVel.y += ((FRACT)trackingCamera.rotAccel.y * fraction);	
+		trackingCamera.rotVel.y += ((FRACT)trackingCamera.rotAccel.y * fraction);
 	}
 	if(update & X_UPDATE)
 	{
-		trackingCamera.rotVel.x += ((FRACT)trackingCamera.rotAccel.x * fraction);	
+		trackingCamera.rotVel.x += ((FRACT)trackingCamera.rotAccel.x * fraction);
 	}
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.rotVel.z += ((FRACT)trackingCamera.rotAccel.z * fraction);	
+		trackingCamera.rotVel.z += ((FRACT)trackingCamera.rotAccel.z * fraction);
 	}
 
 }
 
 //-----------------------------------------------------------------------------------
 /* Move the camera around by adding the velocity */
-void	updateCameraRotationPosition( UBYTE update )										
+void	updateCameraRotationPosition( UBYTE update )
 {
 //UDWORD	frameTime;
 FRACT	fraction;
@@ -909,15 +909,15 @@ FRACT	fraction;
 
  	if(update & Y_UPDATE)
 	{
-		trackingCamera.rotation.y += (trackingCamera.rotVel.y * fraction);	
+		trackingCamera.rotation.y += (trackingCamera.rotVel.y * fraction);
 	}
 	if(update & X_UPDATE)
 	{
-		trackingCamera.rotation.x += (trackingCamera.rotVel.x * fraction);	
+		trackingCamera.rotation.x += (trackingCamera.rotVel.x * fraction);
 	}
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.rotation.z += (trackingCamera.rotVel.z * fraction);	
+		trackingCamera.rotation.z += (trackingCamera.rotVel.z * fraction);
 	}
 }
 
@@ -971,10 +971,10 @@ BOOL	bFlying;
 	updateCameraPosition(CAM_ALL);
 
 	/* Update the acceleration,velocity and rotation of the camera for rotation */
-	/*	You can track roll as well (z axis) but it makes you ill and looks 
+	/*	You can track roll as well (z axis) but it makes you ill and looks
 		like a flight sim, so for now just pitch and orientation */
 
-	
+
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
 		psDroid = (DROID*)trackingCamera.target;
@@ -984,7 +984,7 @@ BOOL	bFlying;
 				bFlying = TRUE;
 		}
 	}
-/*	
+/*
 	bIsBuilding = FALSE;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
@@ -995,8 +995,8 @@ BOOL	bFlying;
 		}
 	}
 */
-	
-	
+
+
 	if(bRadarAllign OR trackingCamera.target->type == OBJ_DROID)
 	{
 		if(bFlying)
@@ -1042,7 +1042,7 @@ BOOL	bFlying;
 
 	/* Update the rotations that're now stored in trackingCamera.rotation (iVector) */
 	player.r.x = trackingCamera.rotation.x;
-	/*if(!bIsBuilding)*/	
+	/*if(!bIsBuilding)*/
 	player.r.y = trackingCamera.rotation.y;
 	player.r.z = trackingCamera.rotation.z;
 
@@ -1076,7 +1076,7 @@ BOOL	bFlying;
 	if(getRadarTrackingStatus())
 	{
 		/*	This will ensure we come to a rest and terminate the tracking
-			routine once we're close enough 
+			routine once we're close enough
 		*/
 		if(getRotationMagnitude()<10000)
 		{
@@ -1133,22 +1133,22 @@ UDWORD	bestSoFar;
 
 	if(keyPressed(KEY_LEFTARROW))
 	{
-		leaderClass = LEADER_LEFT;		
+		leaderClass = LEADER_LEFT;
 	}
-	
+
 	else if(keyPressed(KEY_RIGHTARROW))
 	{
-		leaderClass = LEADER_RIGHT;		
+		leaderClass = LEADER_RIGHT;
 	}
 
 	else if(keyPressed(KEY_UPARROW))
 	{
-		leaderClass = LEADER_UP;		
+		leaderClass = LEADER_UP;
 	}
 
 	else if(keyPressed(KEY_DOWNARROW))
 	{
-		leaderClass = LEADER_DOWN;		
+		leaderClass = LEADER_DOWN;
 	}
 	else
 	{
@@ -1311,7 +1311,7 @@ SDWORD	retVal;
 			*/
 		}
 	}
-	if(droidCount)												     
+	if(droidCount)
 	{
 		retVal = (averageAngle/droidCount);
 		averageAngleFloat = RAD_TO_DEG(atan2(xTotal,yTotal));
@@ -1432,7 +1432,7 @@ DROID	*psDroid;
 UDWORD	count;
 
 	xTotals = yTotals = zTotals = 0;
-	for(count = 0, psDroid = apsDroidLists[selectedPlayer]; 
+	for(count = 0, psDroid = apsDroidLists[selectedPlayer];
 		psDroid; psDroid = psDroid->psNext)
 		{
 			if(psDroid->selected)
@@ -1462,7 +1462,7 @@ DROID	*psDroid;
 UDWORD	count;
 
 	xTotals = yTotals = zTotals = 0;
-	for(count = 0, psDroid = apsDroidLists[selectedPlayer]; 
+	for(count = 0, psDroid = apsDroidLists[selectedPlayer];
 		psDroid; psDroid = psDroid->psNext)
 		{
 			if(psDroid->group == groupNumber)
@@ -1522,7 +1522,7 @@ void	camSwitchOff( void )
 
 	/* And height */
 	/* Is this desirable??? */
-//	player.p.y = trackingCamera.oldView.p.y;	
+//	player.p.y = trackingCamera.oldView.p.y;
 
 	/* Restore distance */
 	setViewDistance(trackingCamera.oldDistance);
@@ -1603,11 +1603,11 @@ void	setUpRadarTarget(SDWORD x, SDWORD y)
 /* Informs the tracking camera that we want to start tracking to a new radar target */
 void	requestRadarTrack(SDWORD x, SDWORD y)
 {
-/*	
+/*
 	ASSERT((x<mapWidth*TILE_UNITS,"Weirdy x coordinate for tracking"));
 	ASSERT((y<mapHeight*TILE_UNITS,"Weirdy y coordinate for tracking"));
 */
-	
+
 	radarX = (SWORD)x;
  	radarY = (SWORD)y;
  	bRadarTrackingRequested = TRUE;
@@ -1620,7 +1620,7 @@ void	requestRadarTrack(SDWORD x, SDWORD y)
 BOOL	getRadarTrackingStatus( void )
 {
 BOOL	retVal;
- 
+
 	if(trackingCamera.status == CAM_INACTIVE)
 	{
 		retVal = FALSE;

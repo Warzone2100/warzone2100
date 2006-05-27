@@ -8,8 +8,8 @@
 
 #include <stdio.h>
 
-#include "frame.h"
-#include "script.h"
+#include "lib/framework/frame.h"
+#include "lib/script/script.h"
 #include "scriptvals.h"
 
 /* Get the Yacc definitions */

@@ -1,5 +1,5 @@
-/* 
-	bucket3D.c - stores object render calls in a linked list renders after bucket sorting objects 
+/*
+	bucket3D.c - stores object render calls in a linked list renders after bucket sorting objects
 
 				-------------------------------------------------
 				Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
@@ -7,12 +7,12 @@
 */
 
 /* Includes direct access to matrix code */
-#include "piedef.h"
-#include "piestate.h"
-#include "rendmode.h"
-#include "geo.h"//matrix code
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/geo.h"//matrix code
 /* Includes from PUMPKIN stuff */
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objectdef.h"
 #include "map.h"
 #include "display3d.h"
@@ -29,7 +29,7 @@
 #define NUM_OBJECTS		4000
 #define BUCKET_OFFSET	0
 #define BUCKET_RANGE	32000
- 
+
 #define BUCKET_CLIP
 #define CLIP_LEFT	(0)
 #define CLIP_RIGHT	((SDWORD)DISP_WIDTH)
@@ -40,7 +40,7 @@
 
 typedef struct _bucket_tag
 {
-	struct _bucket_tag* psNextTag; 
+	struct _bucket_tag* psNextTag;
 	RENDER_TYPE			objectType; //type of object held
 	void*				pObject; //pointer to the object
 	SDWORD				actualZ;
@@ -135,12 +135,12 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	ASSERT((resourceCounter <= NUM_OBJECTS, "bucketAddTypeToList: too many objects"));
 
 	//put the object data into the tag
-	newTag->objectType = objectType;  
+	newTag->objectType = objectType;
 	newTag->pObject = pObject;
 	if(pie_Hardware())
 	{
-		if ((objectType == RENDER_EFFECT) && ((((EFFECT*)pObject)->group == EFFECT_EXPLOSION) || 
-			(((EFFECT*)pObject)->group == EFFECT_CONSTRUCTION) || 
+		if ((objectType == RENDER_EFFECT) && ((((EFFECT*)pObject)->group == EFFECT_EXPLOSION) ||
+			(((EFFECT*)pObject)->group == EFFECT_CONSTRUCTION) ||
 			(((EFFECT*)pObject)->group == EFFECT_SMOKE) ||
 			(((EFFECT*)pObject)->group == EFFECT_FIREWORK)))
 		{
@@ -150,7 +150,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		else if(objectType == RENDER_SHADOW)
 		{
 			z = bucketCalculateZ(objectType, pObject);
-		}	
+		}
 		else if(objectType == RENDER_PROJECTILE_TRANSPARENT)
 		{
 			z = bucketCalculateZ(objectType, pObject);
@@ -282,7 +282,7 @@ extern BOOL bucketRenderCurrentList(void)
 				case RENDER_TILE:
 					if (pie_Hardware())
 					{
-					
+
 						drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
 					}
 					else
@@ -325,7 +325,7 @@ extern BOOL bucketRenderCurrentList(void)
 
 //	testRender();
 
-	
+
 	//reset the tag array
 	resourceCounter = 0;
 //	iV_NumberOut(worldMax,100,100,255);
@@ -386,11 +386,11 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 #endif
 			break;
-		case RENDER_PROJECTILE://not depth sorted 
+		case RENDER_PROJECTILE://not depth sorted
 		case RENDER_PROJECTILE_TRANSPARENT:
 //			((PROJ_OBJECT*)pObject)->psWStats;
 			/* these guys should never be added to the list anyway */
-			if(((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_FLAME OR 
+			if(((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_FLAME OR
                 ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_COMMAND OR
                 ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_EMP)
 			{
@@ -412,7 +412,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				psSimpObj = (SIMPLE_OBJECT*) pObject;
    				position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
    				position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
-			   
+
 				position.y = psSimpObj->z;
 
 				z = pie_RotProj(&position,&pixel);
@@ -442,7 +442,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
    			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
-		   
+
 			//if((objectType == RENDER_STRUCTURE) AND (((STRUCTURE*)pObject)->
 			//	pStructureType->type >= REF_DEFENSE) AND
 			//	(((STRUCTURE*)pObject)->pStructureType->type<=REF_TOWER4))
@@ -489,7 +489,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
    			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
-		   
+
 			position.y = psSimpObj->z+2;
 
 			z = pie_RotProj(&position,&pixel);
@@ -536,7 +536,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			iV_MatrixRotateX( -psCompObj->orientation.x );
 
 			z = pie_RotProj(&position,&pixel);
-#ifdef BUCKET_CLIP	
+#ifdef BUCKET_CLIP
 			/*	Don't do this for animations
 			if (z > 0)
 			{
@@ -598,10 +598,10 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXDATA)
 			{
 				position.x = (((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)
-					pObject)->psMessage->pViewData)->pData)->x - player.p.x) - 
+					pObject)->psMessage->pViewData)->pData)->x - player.p.x) -
 					terrainMidX * TILE_UNITS;
    				position.z = terrainMidY * TILE_UNITS - (((VIEW_PROXIMITY *)((VIEWDATA *)
-					((PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pData)->y - 
+					((PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pData)->y -
 					player.p.z);
  				position.y = ((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)pObject)->
 					psMessage->pViewData)->pData)->z;
@@ -609,10 +609,10 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			else if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXOBJ)
 			{
 				position.x = (((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
-					psMessage->pViewData)->x - player.p.x) - terrainMidX * 
+					psMessage->pViewData)->x - player.p.x) - terrainMidX *
 					TILE_UNITS;
    				position.z = terrainMidY * TILE_UNITS - (((BASE_OBJECT *)((
-					PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->y - 
+					PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->y -
 					player.p.z);
  				position.y = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
 					psMessage->pViewData)->z;
@@ -681,7 +681,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 	   		/* Translate */
    			iV_TRANSLATE(px,0,-pz);
-			position.x = (((FLAG_POSITION *)pObject)->coords.x - player.p.x) - 
+			position.x = (((FLAG_POSITION *)pObject)->coords.x - player.p.x) -
 				terrainMidX * TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (((FLAG_POSITION*)pObject)->
 				coords.y - player.p.z);
@@ -724,7 +724,7 @@ SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 		return -1;
 	}
 #endif
-	
+
 	switch(objectType)
 	{
 		case RENDER_EFFECT:
@@ -796,7 +796,7 @@ SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 
 void testRender(void)
 {
-   
+
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	//render test line
@@ -828,8 +828,8 @@ void testRender(void)
 	dest.y = 100;
 	dest.w = 63;
 	dest.h = 63;
-	
-	
+
+
 	pie_DrawImage(&image, &dest, &style);
 
 	image.texPage = 0;
@@ -841,8 +841,8 @@ void testRender(void)
 	dest.y = 100;
 	dest.w = 63;
 	dest.h = 31;
-	
-	
+
+
 	pie_DrawImage(&image, &dest, &style);
 
 	image.texPage = 0;
@@ -854,8 +854,8 @@ void testRender(void)
 	dest.y = 200;
 	dest.w = 31;
 	dest.h = 63;
-	
-	
+
+
 	pie_DrawImage(&image, &dest, &style);
 */
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);

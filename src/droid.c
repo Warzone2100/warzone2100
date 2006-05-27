@@ -10,7 +10,7 @@
 /* Droid damage printf's */
 //#define DEBUG_GROUP1
 //#include <assert.h>
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "loop.h"
 #include "visibility.h"
@@ -19,21 +19,21 @@
 //#include "droid.h"
 //#include "objmem.h"
 #include "hci.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "game.h"
 #include "power.h"
 #include "miscimd.h"
 #include "effects.h"
 #include "feature.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "action.h"
 #include "order.h"
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 #include "move.h"
-#include "geo.h"
+#include "lib/ivis_common/geo.h"
 #include "anim_id.h"
-#include "animobj.h"
+#include "lib/gamelib/animobj.h"
 #include "geometry.h"
 #include "display.h"
 #include "console.h"
@@ -50,7 +50,7 @@
 #include "display3d.h"
 #include "group.h"
 #include "text.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "cmddroid.h"
@@ -61,12 +61,13 @@
 #include "mission.h"
 #include "levels.h"
 #include "transporter.h"
-#include "selection.h" 
-#include "difficulty.h"	 
+#include "selection.h"
+#include "difficulty.h"
 #include "edit3d.h"
 #include "scores.h"
 #include "research.h"
-#include "screen.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/screen.h"
 
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
@@ -130,7 +131,7 @@ BOOL droidInit(void)
 	memset(aDroidExperience, 0, sizeof(UWORD) * MAX_PLAYERS * MAX_RECYCLED_DROIDS);
 //	memset(aLastDroidHit, 0, sizeof(UDWORD) * MAX_PLAYERS);
 	psLastDroidHit = NULL;
-									  
+
 	return TRUE;
 }
 
@@ -164,7 +165,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
         return FALSE;
     }
 
-	
+
 
     //only overwrite if the last weapon to hit was not an EMP - need the time value for this
     if (psDroid->lastHitWeapon != WSC_EMP)
@@ -177,7 +178,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
 //	if(selectedPlayer==0)
 	if(psDroid->player != selectedPlayer)
-	{	
+	{
 		// Player inflicting damage on enemy.
 		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,TRUE);
 	} else {
@@ -261,14 +262,14 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			if(psDroid->player == selectedPlayer)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_UNITLOST)));
-				scoreUpdateVar(WD_UNITS_LOST);				
+				scoreUpdateVar(WD_UNITS_LOST);
 				audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
 											psDroid->x, psDroid->y, psDroid->z );
 	//				"INTEL REPORT : Unit Lost!"));
 			}
 			else
 			{
-				scoreUpdateVar(WD_UNITS_KILLED);				
+				scoreUpdateVar(WD_UNITS_KILLED);
 			}
 			if(psDroid->droidType == DROID_PERSON AND weaponClass == WC_HEAT)
 			{
@@ -277,7 +278,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			else
 			{
 	  			destroyDroid(psDroid);
-	
+
 			}
 			return TRUE;
 		}
@@ -317,14 +318,14 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
             if(psDroid->player == selectedPlayer)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_UNITLOST)));
-				scoreUpdateVar(WD_UNITS_LOST);				
+				scoreUpdateVar(WD_UNITS_LOST);
 				audio_QueueTrackMinDelayPos( ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
 											psDroid->x, psDroid->y, psDroid->z );
 			}
 			else
 			{
-				scoreUpdateVar(WD_UNITS_KILLED);				
-			}	
+				scoreUpdateVar(WD_UNITS_KILLED);
+			}
 
   			destroyDroid(psDroid);
 
@@ -390,7 +391,7 @@ void droidRelease(DROID *psDroid)
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDroid->psGroup->psList; psCurr != NULL AND psCurr != 
+			for (psCurr = psDroid->psGroup->psList; psCurr != NULL AND psCurr !=
 				psDroid; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
@@ -460,7 +461,7 @@ void recycleDroid(DROID *psDroid)
 	}
 
 	position.x = psDroid->x;				// Add an effect
-	position.z = psDroid->y;	
+	position.z = psDroid->y;
 	position.y = psDroid->z;
 
 //	destroyDroid(psDroid);
@@ -492,9 +493,9 @@ void	removeDroidBase(DROID *psDel)
 		return;
 	}
 
-	
+
 	//ajl, inform others of destruction.
-	if(bMultiPlayer)					
+	if(bMultiPlayer)
 	{
 		if( !((psDel->player != selectedPlayer) && (psDel->order == DORDER_RECYCLE)))
 		{
@@ -527,11 +528,11 @@ void	removeDroidBase(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != NULL AND psCurr != 
+			for (psCurr = psDel->psGroup->psList; psCurr != NULL AND psCurr !=
 				psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
-				
+
 				/* add droid to droid list then vanish it - hope this works! - GJ */
 				addDroid(psCurr, apsDroidLists);
 				vanishDroid(psCurr);
@@ -572,7 +573,7 @@ void	removeDroidBase(DROID *psDel)
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if(psDel->droidType == DROID_COMMAND)
 	{
-	
+
 		for (psStruct = apsStructLists[psDel->player]; psStruct; psStruct=psStruct->psNext)
 		{
 /* Replace the delivery points for the factories assigned to this command droid */
@@ -592,9 +593,9 @@ void	removeDroidBase(DROID *psDel)
 	}
 
     //check to see if constructor droid currently trying to find a location to build
-    //if (psDel->droidType == DROID_CONSTRUCT AND psDel->player == 
-    if ((psDel->droidType == DROID_CONSTRUCT OR psDel->droidType == 
-        DROID_CYBORG_CONSTRUCT) AND psDel->player == 
+    //if (psDel->droidType == DROID_CONSTRUCT AND psDel->player ==
+    if ((psDel->droidType == DROID_CONSTRUCT OR psDel->droidType ==
+        DROID_CYBORG_CONSTRUCT) AND psDel->player ==
         selectedPlayer AND psDel->selected)
     {
         //if currently trying to build, kill off the placement
@@ -622,7 +623,7 @@ void	removeDroidBase(DROID *psDel)
 	{
 		intRefreshScreen();
 	}
-	
+
 	killDroid(psDel);
 }
 
@@ -649,7 +650,7 @@ void	removeDroidFX(DROID *psDel)
 	{
 		if(gameTime - lastDroidRemove < 100)	//assume 10 fames a sec min
 		{
-			droidRemoveKills++;	
+			droidRemoveKills++;
 			if(droidRemoveKills>=2)
 			{
 				ASSERT((FALSE,"3 of your droids killed in less than a tenth of a second?"));
@@ -730,12 +731,12 @@ VOID destroyDroid(DROID *psDel)
 					{
 						psTile->level/=2;
 					}
-				   
+
 				}
 			}
 		}
 	}
-	
+
 	removeDroidFX(psDel);
 	removeDroidBase(psDel);
 	return;
@@ -771,8 +772,8 @@ void destroyDroid(DROID *psDel)
 
 
 	//ajl, inform others of destruction.
-	if(bMultiPlayer)					
-	{	
+	if(bMultiPlayer)
+	{
 		SendDestroyDroid(psDel);
 	}
 
@@ -816,9 +817,9 @@ void destroyDroid(DROID *psDel)
 //				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,debrisImds[rand()%MAX_DEBRIS],0);
 				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,getRandomDebrisImd(),0);
 			}
-		}			
+		}
 
-		
+
 		// this sounds a bit crap on the psx
 		/* And then a destruction sequence...*/
 		pos.x = psDel->x;
@@ -859,7 +860,7 @@ void destroyDroid(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != NULL AND psCurr != 
+			for (psCurr = psDel->psGroup->psList; psCurr != NULL AND psCurr !=
 				psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
@@ -902,7 +903,7 @@ void destroyDroid(DROID *psDel)
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if(psDel->droidType == DROID_COMMAND)
 	{
-	
+
 		for (psStruct = apsStructLists[psDel->player]; psStruct; psStruct=psStruct->psNext)
 		{
 /* Replace the delivery points for the factories assigned to this command droid */
@@ -940,7 +941,7 @@ void destroyDroid(DROID *psDel)
 	{
 		intRefreshScreen();
 	}
-	
+
 	killDroid(psDel);
 
 }
@@ -956,7 +957,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	if(!driveDroidKilled(psDroid)) {	// Tell the driver system it's gone.
 
 	}
-	
+
 	//tell the power system its gone
 	powerDestroyObject((BASE_OBJECT *)psDroid);
 
@@ -1340,10 +1341,10 @@ void droidUpdate(DROID *psDroid)
 		clustUpdateObject((BASE_OBJECT *)psDroid);
 	}
 
-    //may need power 
+    //may need power
     if (droidUsesPower(psDroid))
     {
-//	    if ((asPower[psDroid->player]->currentPower > POWER_PER_CYCLE) OR 
+//	    if ((asPower[psDroid->player]->currentPower > POWER_PER_CYCLE) OR
 //		    (!powerCalculated))
 		if (checkPower(psDroid->player, POWER_PER_CYCLE, FALSE))
 	    {
@@ -1394,7 +1395,7 @@ void droidUpdate(DROID *psDroid)
 	{
 		//percentDamage= PERCENT(psDroid->body,(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->bodyPoints );
 		percentDamage= (100-PERCENT(psDroid->body,psDroid->originalBody));
-		// Is there any damage? 
+		// Is there any damage?
 		if(percentDamage>=25)
 		{
 			if(percentDamage>=100)
@@ -1434,7 +1435,7 @@ void droidUpdate(DROID *psDroid)
 			if(psBeingTargetted->type == OBJ_STRUCTURE)
 			{
 				/* And it's your structure or your droid... */
-				if( (((STRUCTURE*)psBeingTargetted)->player == selectedPlayer) 
+				if( (((STRUCTURE*)psBeingTargetted)->player == selectedPlayer)
 					OR (psDroid->player == selectedPlayer) )
 				{
 					/* Highlight the structure in question */
@@ -1446,11 +1447,11 @@ void droidUpdate(DROID *psDroid)
 			if(psBeingTargetted->type == OBJ_DROID)
 			{
 				/* And it's your  your droid... */
-	 			if( (((DROID*)psBeingTargetted)->player == selectedPlayer) 
+	 			if( (((DROID*)psBeingTargetted)->player == selectedPlayer)
  					OR (psDroid->player == selectedPlayer) )
  				{
  				   	((DROID*)psBeingTargetted)->bTargetted = TRUE;
-				
+
  				}
 			}
 			else if(psBeingTargetted->type == OBJ_FEATURE)
@@ -1575,7 +1576,7 @@ void droidUpdate(DROID *psDroid)
 	{
 		return 1;
 	}
-	
+
 	return 0;
 }*/
 
@@ -1635,7 +1636,7 @@ BOOL droidStartFoundation(DROID *psDroid)
 	if (psDroid->order == DORDER_BUILD || psDroid->order == DORDER_LINEBUILD)
 	{
         //buildStructure() calls this now so don't need it twice! AB 14/12/98
-		//height = buildFoundation((STRUCTURE_STATS *)psDroid->psTarStats, 
+		//height = buildFoundation((STRUCTURE_STATS *)psDroid->psTarStats,
 		//				psDroid->orderX,psDroid->orderY);
 		//if (height >= 0)
 		{
@@ -1726,7 +1727,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		//need to check structLimits have not been exceeded
 		psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats;
 		if (asStructLimits[psDroid->player][psStructStat - asStructureStats].
-			currentQuantity >= asStructLimits[psDroid->player][psStructStat - 
+			currentQuantity >= asStructLimits[psDroid->player][psStructStat -
 			asStructureStats].limit)
 		{
 			intBuildFinished(psDroid);
@@ -1777,7 +1778,7 @@ BOOL droidStartBuild(DROID *psDroid)
 
 		if (bMultiPlayer)
 		{
-//			psStruct->id = psDroid->buildingId;// Change the id to the constructor droids required id. 
+//			psStruct->id = psDroid->buildingId;// Change the id to the constructor droids required id.
 
 			if(myResponsibility(psDroid->player) )
 			{
@@ -1824,7 +1825,7 @@ static void droidAddWeldSound( iVector iVecEffect )
 
 	iAudioID = ID_SOUND_CONSTRUCTION_1 + (rand()%4);
 
-	
+
 	audio_PlayStaticTrack( iVecEffect.x, iVecEffect.z, iAudioID );
 }
 
@@ -1853,7 +1854,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 	}
 }
 
-/* Update a construction droid while it is building 
+/* Update a construction droid while it is building
    returns TRUE while building continues */
 BOOL droidUpdateBuild(DROID *psDroid)
 {
@@ -1869,7 +1870,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT((psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateBuild: target is not a structure"));
-	ASSERT((psDroid->asBits[COMP_CONSTRUCT].nStat < numConstructStats, 
+	ASSERT((psDroid->asBits[COMP_CONSTRUCT].nStat < numConstructStats,
 		"unitUpdateBuild: Invalid construct pointer for unit"));
 
 	/* Check the structure is still there to build */
@@ -1911,7 +1912,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
     //check if enough power to do more
     if (buildPercent > powerPercent)
     {
-        //reset the actionStarted time and actionPoints added so the correct 
+        //reset the actionStarted time and actionPoints added so the correct
         //amount of points are added when there is more power
         psDroid->actionStarted = gameTime;
         psDroid->actionPoints = 0;
@@ -1923,8 +1924,8 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	constructPoints = constructorPoints(asConstructStats + psDroid->
 		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
-	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) / 
-		GAME_TICKS_PER_SEC; 
+	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
+		GAME_TICKS_PER_SEC;
 
 	//these two lines needs to be removed if illumination is put pack in
 	psStruct->currentBuildPts = (SWORD)(psStruct->currentBuildPts + pointsToAdd - psDroid->actionPoints);
@@ -1956,13 +1957,13 @@ BOOL droidUpdateBuild(DROID *psDroid)
 #endif
 		//set the illumination of the tiles back to original value as building is completed
 
-		mapX = (psStruct->x - psStruct->pStructureType->baseWidth * 
+		mapX = (psStruct->x - psStruct->pStructureType->baseWidth *
 			TILE_UNITS / 2) >> TILE_SHIFT;
-		mapY = (psStruct->y - psStruct->pStructureType->baseBreadth * 
+		mapY = (psStruct->y - psStruct->pStructureType->baseBreadth *
 			TILE_UNITS / 2) >> TILE_SHIFT;
 
-		
-		
+
+
 		for (i = 0; i < psStruct->pStructureType->baseWidth+1; i++)
 		{
 			for (j = 0; j < psStruct->pStructureType->baseBreadth+1; j++)
@@ -1970,12 +1971,12 @@ BOOL droidUpdateBuild(DROID *psDroid)
 #ifndef PSX
 				FRACT	divisor,illumin, currentIllumin;
 
-				divisor = (FOUNDATION_ILLUMIN + prev - 
+				divisor = (FOUNDATION_ILLUMIN + prev -
 					(FOUNDATION_ILLUMIN * prev)/(FRACT)100) / (FRACT)100;
 				//work out what the initial value was before modifier was applied
 				currentIllumin = mapTile(mapX+i, mapY+j)->illumination;
 				illumin = currentIllumin / divisor;
-				divisor = ( FOUNDATION_ILLUMIN+current-(FOUNDATION_ILLUMIN*current)/(FRACT)100 ) 
+				divisor = ( FOUNDATION_ILLUMIN+current-(FOUNDATION_ILLUMIN*current)/(FRACT)100 )
 																			/ (FRACT)100;
 				illumin = illumin * divisor;
 				mapTile(mapX+i, mapY+j)->illumination = (UBYTE)illumin;
@@ -1993,7 +1994,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		prev = current;
 	}
 	*/
-	
+
 	//store the amount just added
 	psDroid->actionPoints = pointsToAdd;
 
@@ -2097,13 +2098,13 @@ BOOL droidUpdateFoundation(DROID *psDroid)
 	for (breadth = 0; breadth < (UBYTE)(psStructStats->baseBreadth + 1); breadth++)
 	{
 		for (width = 0; width < (UBYTE)(psStructStats->baseWidth + 1); width++)
-		{	
+		{
 			//set the tile to the required foundation height
 			setTileHeight(x + width, y + breadth, psDroid->actionHeight);
 			// We need to raise features on raised tiles to the new height
 			if(TILE_HAS_FEATURE(mapTile(x+width,y+breadth)))
 			{
-				getTileFeature(x+width, y+breadth)->z = 
+				getTileFeature(x+width, y+breadth)->z =
 					psDroid->actionHeight;
 			}
 		}
@@ -2133,7 +2134,7 @@ BOOL droidUpdateFoundation(DROID *psDroid)
 	//we want this to happen almost immediately...so add lots each cycle
 	//pointsToAdd = 40 * (gameTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
 	pointsToAdd = gameTime - psDroid->actionStarted;
-	
+
 	//if time to raise a new section
 	if (pointsToAdd > psDroid->actionPoints)
 	{
@@ -2143,7 +2144,7 @@ BOOL droidUpdateFoundation(DROID *psDroid)
 		{
 			width = (UBYTE)(psDroid->tileNumber % (psStructStats->baseWidth + 1));
 			for (; width < (UBYTE)(psStructStats->baseWidth + 1); width++)
-			{	
+			{
 
 				//set the illumination of the tile to FOUNDATION_ILLUM% darker
 				illumin = mapTile(x + width, y + breadth)->illumination;
@@ -2154,7 +2155,7 @@ BOOL droidUpdateFoundation(DROID *psDroid)
 				height = map_TileHeight(x + width, y + breadth);
 				if (height < psDroid->actionHeight)
 				{
-					newHeight = height + (buildSpeed * (pointsToAdd - 
+					newHeight = height + (buildSpeed * (pointsToAdd -
 						psDroid->actionPoints));
 					if (newHeight > (SDWORD)psDroid->actionHeight)
 					{
@@ -2174,7 +2175,7 @@ BOOL droidUpdateFoundation(DROID *psDroid)
 				}
 				else if (height > psDroid->actionHeight)
 				{
-					newHeight = (SDWORD)(height - (buildSpeed * (pointsToAdd - 
+					newHeight = (SDWORD)(height - (buildSpeed * (pointsToAdd -
 						psDroid->actionPoints)));
 					if (newHeight < (SDWORD)psDroid->actionHeight)
 					{
@@ -2191,7 +2192,7 @@ BOOL droidUpdateFoundation(DROID *psDroid)
 					psDroid->actionPoints = pointsToAdd;
 					return TRUE;
 				}
-				else 
+				else
 				{
 					//already at the right height
 					//psDroid->tileNumber++;
@@ -2269,7 +2270,7 @@ BOOL droidStartDemolishing( DROID *psDroid )
 
 	return TRUE;
 }
-   
+
 BOOL droidUpdateDemolishing( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
@@ -2286,8 +2287,8 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 	constructPoints = constructorPoints(asConstructStats + psDroid->
 		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
-	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) / 
-		GAME_TICKS_PER_SEC; 
+	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
+		GAME_TICKS_PER_SEC;
 
 	psStruct->currentBuildPts = (SWORD)(psStruct->currentBuildPts - pointsToAdd - psDroid->actionPoints);
 
@@ -2381,8 +2382,8 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 	    psDroid->psTarStats = NULL;
 
 		return FALSE;
-	} 
-    else 
+	}
+    else
     {
 		addConstructorEffect(psStruct);
 	}
@@ -2400,7 +2401,7 @@ BOOL droidStartClearing( DROID *psDroid )
 	psFeature = (FEATURE *)psDroid->psTarget;
 	ASSERT((psFeature->type == OBJ_FEATURE,
 		"unitStartClearing: target is not a feature"));
-	ASSERT((psFeature->psStats->subType == FEAT_BUILD_WRECK, 
+	ASSERT((psFeature->psStats->subType == FEAT_BUILD_WRECK,
 		"unitStartClearing: feature is not a wrecked building"));
 
 	psDroid->actionStarted = gameTime;
@@ -2408,8 +2409,8 @@ BOOL droidStartClearing( DROID *psDroid )
 
 	return TRUE;
 }
-   
-/* Update a construction droid while it is clearing 
+
+/* Update a construction droid while it is clearing
    returns TRUE while continues */
 BOOL droidUpdateClearing( DROID *psDroid )
 {
@@ -2421,7 +2422,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 	psFeature = (FEATURE *)psDroid->psTarget;
 	ASSERT((psFeature->type == OBJ_FEATURE,
 		"unitStartClearing: target is not a feature"));
-	ASSERT((psFeature->psStats->subType == FEAT_BUILD_WRECK, 
+	ASSERT((psFeature->psStats->subType == FEAT_BUILD_WRECK,
 		"unitStartClearing: feature is not a wrecked building"));
 
 	if (psFeature->body > 0)
@@ -2429,8 +2430,8 @@ BOOL droidUpdateClearing( DROID *psDroid )
 		constructPoints = constructorPoints(asConstructStats + psDroid->
 			asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
-		pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) / 
-			GAME_TICKS_PER_SEC; 
+		pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
+			GAME_TICKS_PER_SEC;
 
 		psFeature->body -= (pointsToAdd - psDroid->actionPoints);
 
@@ -2524,7 +2525,7 @@ BOOL droidStartRestore( DROID *psDroid )
 
 	return TRUE;
 }
-   
+
 /*continue restoring a structure*/
 BOOL droidUpdateRestore( DROID *psDroid )
 {
@@ -2537,26 +2538,26 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT((psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateRestore: target is not a structure"));
-	ASSERT((psStruct->pStructureType->resistance != 0, 
+	ASSERT((psStruct->pStructureType->resistance != 0,
 		"unitUpdateRestore: invalid structure for EW"));
 
-	//ASSERT((psDroid->numWeaps != 0, 
-    ASSERT((psDroid->asWeaps[0].nStat > 0, 
+	//ASSERT((psDroid->numWeaps != 0,
+    ASSERT((psDroid->asWeaps[0].nStat > 0,
 		"unitUpdateRestore: droid doean't have any weapons"));
 
 	psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
 
-	ASSERT((psStats->weaponSubClass == WSC_ELECTRONIC, 
+	ASSERT((psStats->weaponSubClass == WSC_ELECTRONIC,
 		"unitUpdateRestore: unit's weapon is not EW"));
 
 	//restorePoints = calcDamage(psStats->damage, psStats->weaponEffect,(BASE_OBJECT *)psStruct);
-	restorePoints = calcDamage(weaponDamage(psStats, psDroid->player), 
+	restorePoints = calcDamage(weaponDamage(psStats, psDroid->player),
 		psStats->weaponEffect,(BASE_OBJECT *)psStruct);
 
-	pointsToAdd = restorePoints * (gameTime - psDroid->actionStarted) / 
-		GAME_TICKS_PER_SEC; 
+	pointsToAdd = restorePoints * (gameTime - psDroid->actionStarted) /
+		GAME_TICKS_PER_SEC;
 
-	psStruct->resistance = (SWORD)(psStruct->resistance + (pointsToAdd - 
+	psStruct->resistance = (SWORD)(psStruct->resistance + (pointsToAdd -
         psDroid->actionPoints));
 
 	//store the amount just added
@@ -2573,7 +2574,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	{
 		addConsoleMessage(strresGetString(psStringRes,STR_GAM_STRREST) ,DEFAULT_JUSTIFY);
 		//psStruct->resistance = psStruct->pStructureType->resistance;
-		psStruct->resistance = (UWORD)structureResistance(psStruct->pStructureType, 
+		psStruct->resistance = (UWORD)structureResistance(psStruct->pStructureType,
 			psStruct->player);
 		return FALSE;
 	}
@@ -2594,7 +2595,7 @@ FRACT	fraction;
 	}
 
 	/* We have a weapon */
-	if(gameTime > (psDroid->asWeaps[0].lastFired + DEFAULT_RECOIL_TIME) ) 
+	if(gameTime > (psDroid->asWeaps[0].lastFired + DEFAULT_RECOIL_TIME) )
 	{
 		/* Recoil effect is over */
 		psDroid->asWeaps[0].recoilValue = 0;
@@ -2615,7 +2616,7 @@ FRACT	fraction;
 		recoil = percent/5;
 	}
 
-	fraction = 	
+	fraction =
 		MAKEFRACT(asWeaponStats[psDroid->asWeaps[0].nStat].recoilValue)/
 		(MAKEFRACT(100));
 
@@ -2643,8 +2644,8 @@ BOOL droidUpdateRepair( DROID *psDroid )
 	iRepairPoints = constructorPoints(asConstructStats + psDroid->
 		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
-	iPointsToAdd = iRepairPoints * (gameTime - psDroid->actionStarted) / 
-		GAME_TICKS_PER_SEC; 
+	iPointsToAdd = iRepairPoints * (gameTime - psDroid->actionStarted) /
+		GAME_TICKS_PER_SEC;
 
 	/* add points to structure */
 	psStruct->body = (UWORD)(psStruct->body  + (iPointsToAdd - psDroid->actionPoints));
@@ -2703,7 +2704,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
     else
     {
         //check if enough power to do any
-        //powerCost = (powerReqForDroidRepair(psDroidToRepair) - 
+        //powerCost = (powerReqForDroidRepair(psDroidToRepair) -
         //    psDroidToRepair->powerAccrued) / POWER_FACTOR;
         powerCost = powerReqForDroidRepair(psDroidToRepair);
         if (powerCost > psDroidToRepair->powerAccrued)
@@ -2722,7 +2723,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
     {
         if (!psDroidToRepair->powerAccrued)
         {
-            //reset the actionStarted time and actionPoints added so the correct 
+            //reset the actionStarted time and actionPoints added so the correct
             //amount of points are added when there is more power
 			psRepairDroid->actionStarted = gameTime;
             //init so repair points to add won't be huge when start up again
@@ -2739,13 +2740,13 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	//if self repair then add repair points depending on the time delay for the stat
 	if (psRepairDroid == psDroidToRepair)
 	{
-		iPointsToAdd = iRepairPoints * (gameTime - psRepairDroid->actionStarted) / 
+		iPointsToAdd = iRepairPoints * (gameTime - psRepairDroid->actionStarted) /
 			(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat)->time;
 	}
 	else
 	{
-		iPointsToAdd = iRepairPoints * (gameTime - psRepairDroid->actionStarted) / 
-			GAME_TICKS_PER_SEC; 
+		iPointsToAdd = iRepairPoints * (gameTime - psRepairDroid->actionStarted) /
+			GAME_TICKS_PER_SEC;
 	}
 
     iPointsToAdd -= psRepairDroid->actionPoints;
@@ -2773,7 +2774,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
             }
             else
             {
-                /*reset the actionStarted time and actionPoints added so the correct 
+                /*reset the actionStarted time and actionPoints added so the correct
                 amount of points are added when there is more power*/
                 psRepairDroid->actionStarted = gameTime;
                 psRepairDroid->actionPoints = 0;
@@ -2877,7 +2878,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 	//We ain't EVER going back to the way it was so..just store the long (translated) name in aName
 /*#ifdef RESOURCE_NAMES
-		//get the name associated with the resource 		
+		//get the name associated with the resource
 		if (!strresGetIDNum(psStringRes, componentName, &id))
 		{
 			DBERROR(("Unable to find string resource for %s", componentName));
@@ -2906,7 +2907,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		pDroidDesign->pName[DROID_MAXNAME-1]=0;*/
 
 
-		/*ALWAYS get the name associated with the resource for PC regardless 
+		/*ALWAYS get the name associated with the resource for PC regardless
 		of STORE_RESOURCE_ID or RESOURCE_NAMES! - 25/06/98 AB*/
 		if (!strresGetIDNum(psStringRes, componentName, &id))
 		{
@@ -2942,7 +2943,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
@@ -2974,7 +2975,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		componentName[0] = '\0';
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
-		
+
 		//get the Brain stats pointer
 		if (!strcmp(componentName,"0"))
 		{
@@ -2987,7 +2988,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
 #endif
@@ -3032,7 +3033,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
 #endif
@@ -3063,7 +3064,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		componentName[0] = '\0';
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
                 pDroidData += cnt;
-		
+
 		//get the Ecm stats pointer
 		if (!strcmp(componentName,"0"))
 		{
@@ -3076,7 +3077,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
 #endif
@@ -3108,7 +3109,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 
 
-	
+
 		//read in Propulsion Name
 		found = FALSE;
 		componentName[0] = '\0';
@@ -3127,7 +3128,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
 #endif
@@ -3171,7 +3172,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
 #endif
@@ -3250,7 +3251,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			if (!getResourceName(componentName))
 			{
 				return FALSE;
-			}	
+			}
 
 #ifdef HASH_NAMES
 			HashedName=HashString(componentName);
@@ -3283,11 +3284,11 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in totals
-		/*sscanf(pDroidData,"%d,%d", 
+		/*sscanf(pDroidData,"%d,%d",
 			&pDroidDesign->numProgs, &pDroidDesign->numWeaps);*/
 		sscanf(pDroidData,"%d", &pDroidDesign->numWeaps);
 		//check that not allocating more weapons than allowed
-		if (((asBodyStats + pDroidDesign->asParts[COMP_BODY])->weaponSlots < 
+		if (((asBodyStats + pDroidDesign->asParts[COMP_BODY])->weaponSlots <
 			 pDroidDesign->numWeaps) ||
 			pDroidDesign->numWeaps > DROID_MAXWEAPS)
 		{
@@ -3300,7 +3301,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 			return FALSE;
 		}
 		//check that not allocating more programs than allowed
-		/*if (((asBrainStats + pDroidDesign->asParts[COMP_BRAIN])->progCap < 
+		/*if (((asBrainStats + pDroidDesign->asParts[COMP_BRAIN])->progCap <
 			 pDroidDesign->numProgs) ||
 			pDroidDesign->numProgs > DROID_MAXPROGS)
 		{
@@ -3358,7 +3359,7 @@ void initTemplatePoints(void)
 
 	for (player=0; player < MAX_PLAYERS; player++)
 	{
-		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; 
+		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL;
 			pDroidDesign = pDroidDesign->psNext)
 		{
 			//calculate the total build points
@@ -3375,7 +3376,7 @@ BOOL idfDroid(DROID *psDroid)
 {
     //add Cyborgs
 	//if (psDroid->droidType != DROID_WEAPON)
-    if (!(psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_CYBORG || 
+    if (!(psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_CYBORG ||
         psDroid->droidType == DROID_CYBORG_SUPER))
 	{
 		return FALSE;
@@ -3394,12 +3395,12 @@ BOOL templateIsIDF(DROID_TEMPLATE *psTemplate)
 {
     //add Cyborgs
 	//if (psTemplate->droidType != DROID_WEAPON)
-    if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG || 
+    if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG ||
         psTemplate->droidType == DROID_CYBORG_SUPER))
 	{
 		return FALSE;
 	}
-	
+
 	if (proj_Direct(psTemplate->asWeaps[0] + asWeaponStats))
 	{
 		return FALSE;
@@ -3516,7 +3517,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 	//initialise the store count variable
 	for (player=0; player < MAX_PLAYERS; player++)
 	{
-		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; 
+		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL;
 			pTemplate = pTemplate->psNext)
 		{
 			//clear the storage flags
@@ -3560,7 +3561,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 
 		if (player < MAX_PLAYERS)
 		{
-			for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = 
+			for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate =
 				pTemplate->psNext)
 			{
 #ifdef HASH_NAMES
@@ -3595,7 +3596,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 			//if weapon not found - error
 			if (incW == -1)
 			{
-				DBERROR(("Unable to find Weapon %s for template %s", 
+				DBERROR(("Unable to find Weapon %s for template %s",
 							WeaponName, TemplateName));
 				return FALSE;
 			}
@@ -3604,7 +3605,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 				//Weapon found, alloc this to the current Template
 				pTemplate->asWeaps[pTemplate->storeCount] = incW;
 				//check not allocating more than allowed
-				if (pTemplate->storeCount > 
+				if (pTemplate->storeCount >
 								(SDWORD)pTemplate->numWeaps)
 				{
 					DBERROR(("Trying to allocate more weapons than allowed for Template - %s",
@@ -3661,7 +3662,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 	//initialise the store count variable
 	for (player=0; player < MAX_PLAYERS; player++)
 	{
-		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; 
+		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL;
 			pTemplate = pTemplate->psNext)
 		{
 			//clear the storage flags
@@ -3698,12 +3699,12 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 #ifdef HASH_NAMES
 		HashedTemplateName=HashString(TemplateName);
 		HashedProgramName=HashString(ProgramName);
-#endif				
+#endif
 
 		if (player < MAX_PLAYERS)
 		{
 			//loop through each droid to compare the name
-			for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = 
+			for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate =
 				pTemplate->psNext)
 			{
 
@@ -3784,7 +3785,7 @@ BOOL droidTemplateShutDown()
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; 
+		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL;
 			pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
@@ -3802,20 +3803,20 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 
 	/* Get the basic component weight */
 	weight =
-		(asBodyStats + psTemplate->asParts[COMP_BODY])->weight + 
-		(asBrainStats + psTemplate->asParts[COMP_BRAIN])->weight + 
-		//(asPowerStats + psTemplate->asParts[COMP_POWERPLANT])->weight + 
-		//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight + 
-		(asSensorStats + psTemplate->asParts[COMP_SENSOR])->weight + 
-		(asECMStats + psTemplate->asParts[COMP_ECM])->weight + 
-		//(asArmourStats + psTemplate->asParts[COMP_ARMOUR])->weight + 
+		(asBodyStats + psTemplate->asParts[COMP_BODY])->weight +
+		(asBrainStats + psTemplate->asParts[COMP_BRAIN])->weight +
+		//(asPowerStats + psTemplate->asParts[COMP_POWERPLANT])->weight +
+		//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight +
+		(asSensorStats + psTemplate->asParts[COMP_SENSOR])->weight +
+		(asECMStats + psTemplate->asParts[COMP_ECM])->weight +
+		//(asArmourStats + psTemplate->asParts[COMP_ARMOUR])->weight +
 		(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->weight +
 		(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->weight;
 
 	/* propulsion weight is a percentage of the body weight */
-	weight += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight * 
+	weight += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight *
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->weight) / 100);
-	
+
 	/* Add the weapon weight */
 	for(i=0; i<psTemplate->numWeaps; i++)
 	{
@@ -3836,16 +3837,16 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 	}
 	/* Get the basic component body points */
 	body =
-		(asBodyStats + psTemplate->asParts[COMP_BODY])->body + 
-		(asBrainStats + psTemplate->asParts[COMP_BRAIN])->body + 
-		//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body + 
-		(asSensorStats + psTemplate->asParts[COMP_SENSOR])->body + 
-		(asECMStats + psTemplate->asParts[COMP_ECM])->body + 
+		(asBodyStats + psTemplate->asParts[COMP_BODY])->body +
+		(asBrainStats + psTemplate->asParts[COMP_BRAIN])->body +
+		//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body +
+		(asSensorStats + psTemplate->asParts[COMP_SENSOR])->body +
+		(asECMStats + psTemplate->asParts[COMP_ECM])->body +
 		(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->body +
 		(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->body;
 
 	/* propulsion body points are a percentage of the bodys' body points */
-	body += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body * 
+	body += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body *
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->body) / 100);
 
 	/* Add the weapon body points */
@@ -3870,15 +3871,15 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 	}
 	/* Get the basic component body points */
 	body =
-		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->body + 
-		(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->body + 
-		(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->body + 
-		(asECMStats + psDroid->asBits[COMP_ECM].nStat)->body + 
+		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->body +
+		(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->body +
+		(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->body +
+		(asECMStats + psDroid->asBits[COMP_ECM].nStat)->body +
 		(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->body +
 		(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->body;
 
 	/* propulsion body points are a percentage of the bodys' body points */
-	body += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->body * 
+	body += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->body *
 		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->body) / 100);
 
 	/* Add the weapon body points */
@@ -3902,12 +3903,12 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 	//	powerOutput * 100) / weight;
 	/*if (psTemplate->droidType == DROID_CYBORG)
 	{
-		return (bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], 
+		return (bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
 			player, CYBORG_BODY_UPGRADE) * 100) / weight;
 	}
 	else
 	{
-		return (bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], 
+		return (bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
 			player, DROID_BODY_UPGRADE) * 100) / weight;
 	}*/
 	if (psTemplate->droidType == DROID_CYBORG OR
@@ -3916,15 +3917,15 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
         psTemplate->droidType == DROID_CYBORG_REPAIR)
 	{
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
-            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult * 
-            bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], 
+            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
+            bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
             player, CYBORG_BODY_UPGRADE)) / weight;
 	}
 	else
 	{
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
-            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult * 
-            bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], 
+            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
+            bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
 			player, DROID_BODY_UPGRADE)) / weight;
 	}
 
@@ -3951,7 +3952,7 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex)
     UDWORD  droidSpeed;
 //	return baseSpeed * getSpeedFactor(terrainType,
 //		(asPropulsionStats + propIndex)->propulsionType) / 100;
-    
+
     //need to ensure doesn't go over the max speed possible for this propulsion
     droidSpeed = baseSpeed * getSpeedFactor(terrainType,
 		(asPropulsionStats + propIndex)->propulsionType) / 100;
@@ -3968,22 +3969,22 @@ UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 {
 	UDWORD	build, i;
 
-	build = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints + 
-	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPoints + 
-	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPoints + 
-	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPoints + 
-	(asECMStats + psTemplate->asParts[COMP_ECM])->buildPoints + 
+	build = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints +
+	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPoints +
+	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPoints +
+	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPoints +
+	(asECMStats + psTemplate->asParts[COMP_ECM])->buildPoints +
 	(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPoints +
 	(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPoints;
 
 	/* propulsion build points are a percentage of the bodys' build points */
-	build += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPoints * 
+	build += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPoints *
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints) / 100);
 
 	//add weapon power
 	for(i=0; i<psTemplate->numWeaps; i++)
 	{
-		ASSERT((psTemplate->asWeaps[i]<numWeaponStats, 
+		ASSERT((psTemplate->asWeaps[i]<numWeaponStats,
 			//"Invalid Template weapon for %s", psTemplate->pName));
 			"Invalid Template weapon for %s", getTemplateName(psTemplate)));
 		build += (asWeaponStats + psTemplate->asWeaps[i])->buildPoints;
@@ -4006,11 +4007,11 @@ UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 {
 	UDWORD	build, i;
 
-	build = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPoints + 
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPoints + 
-	(asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPoints + 
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPoints + 
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPoints + 
+	build = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPoints +
+	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPoints +
+	(asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPoints +
+	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPoints +
+	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPoints +
 	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->buildPoints;
 
 	//add weapon power
@@ -4028,22 +4029,22 @@ UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 	return build;
 }*/
 
-/* Calculate the power points required to build/maintain a template */			
+/* Calculate the power points required to build/maintain a template */
 UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
-{	
+{
 	UDWORD power, i;
 
 	//get the component power
-	power = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower + 
-	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPower + 
-	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower + 
-	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPower + 
-	(asECMStats + psTemplate->asParts[COMP_ECM])->buildPower + 
+	power = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower +
+	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPower +
+	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower +
+	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPower +
+	(asECMStats + psTemplate->asParts[COMP_ECM])->buildPower +
 	(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPower +
 	(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPower;
 
 	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower * 
+	power += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower *
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower) / 100);
 
 	//add weapon power
@@ -4062,22 +4063,22 @@ UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
 }
 
 
-/* Calculate the power points required to build/maintain a droid */			
+/* Calculate the power points required to build/maintain a droid */
 UDWORD	calcDroidPower(DROID *psDroid)
-{	
+{
 	UDWORD      power;//, i;
 
 	//get the component power
-	power = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower + 
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPower + 
-	//(asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->buildPower + 
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPower + 
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPower + 
+	power = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower +
+	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPower +
+	//(asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->buildPower +
+	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPower +
+	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPower +
 	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->buildPower +
 	(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->buildPower;
 
 	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPower * 
+	power += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPower *
 		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower) / 100);
 
 	//add weapon power
@@ -4098,7 +4099,7 @@ UDWORD	calcDroidPower(DROID *psDroid)
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
-DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
+DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 				  BOOL onMission)
 {
 	DROID			*psDroid;
@@ -4116,7 +4117,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	/*
 	if(bMultiPlayer)
 	{
-		for(psDroid=apsDroidLists[selectedPlayer],i=0; 
+		for(psDroid=apsDroidLists[selectedPlayer],i=0;
 		psDroid; psDroid = psDroid->psNext,i++)
 		{
 		}
@@ -4153,7 +4154,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		ASSERT((FALSE,"Cannot get the memory for the unit"));
 		return NULL;
 	}
-	
+
 
 	//THIS IS DONE BEFORE STARTING TO BUILD NOW IN STRUCTURE.C AB 14/05/98
 	/*subtract the power required to build*/
@@ -4218,7 +4219,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		}
 		grpJoin(psGrp, psDroid);
 	}
-	
+
 	psDroid->order = DORDER_NONE;
 	psDroid->orderX = 0;
 	psDroid->orderY = 0;
@@ -4232,7 +4233,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->actionY = 0;
 	psDroid->psActionTarget = NULL;
 
-		// ffs je 
+		// ffs je
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
 
@@ -4331,16 +4332,16 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		[COMP_SENSOR]), (UBYTE)player);
 	psDroid->sensorPower = sensorPower((asSensorStats + pTemplate->asParts
 		[COMP_SENSOR]), (UBYTE)player);
-	
+
 	/*psDroid->power = (asPowerStats + pTemplate->asParts
 		[COMP_POWERPLANT])->output;
 	psDroid->power = (asBodyStats + pTemplate->asParts[COMP_BODY])->
 		powerOutput;*/
-	
+
 	//psDroid->ECMMod = (asECMStats + pTemplate->asParts[COMP_ECM])->power;
-	psDroid->ECMMod = ecmPower((asECMStats + pTemplate->asParts[COMP_ECM]), 
+	psDroid->ECMMod = ecmPower((asECMStats + pTemplate->asParts[COMP_ECM]),
 		(UBYTE) player);
-	
+
 	//psDroid->body = (asBodyStats + pTemplate->asParts[COMP_BODY])->bodyPoints;
 	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);
 	psDroid->originalBody = psDroid->body;
@@ -4442,7 +4443,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 
 
 	// ajl. droid will be created, so inform others
-	if(bMultiPlayer)		
+	if(bMultiPlayer)
 	{
 		if (SendDroid(pTemplate,  x,  y,  (UBYTE)player, psDroid->id) == FALSE)
 		{
@@ -4503,11 +4504,11 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->turretPitch = 0;
 
 //	psDroid->ECMMod = (asECMStats + pTemplate->asParts[COMP_ECM])->power;
-	
+
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 
-	//create the droids weapons	
+	//create the droids weapons
 	//psDroid->numWeaps = pTemplate->numWeaps;
     psDroid->asWeaps[0].nStat = 0;
 	if (pTemplate->numWeaps > 0)
@@ -4529,42 +4530,42 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	}
 	//allocate the components hit points
 	psDroid->asBits[COMP_BODY].nStat = (UBYTE)pTemplate->asParts[COMP_BODY];
-	//psDroid->asBits[COMP_BODY].hitPoints = 
+	//psDroid->asBits[COMP_BODY].hitPoints =
 	//	(asBodyStats + pTemplate->asParts[COMP_BODY])->hitPoints;
 
 	// ajl - changed this to init brains for all droids (crashed)
-	psDroid->asBits[COMP_BRAIN].nStat = 0;	
+	psDroid->asBits[COMP_BRAIN].nStat = 0;
 
 	// This is done by the Command droid stuff - John.
 	// Not any more - John.
 	psDroid->asBits[COMP_BRAIN].nStat = (UBYTE)pTemplate->asParts[COMP_BRAIN];
-//	psDroid->asBits[COMP_BRAIN].hitPoints = 
+//	psDroid->asBits[COMP_BRAIN].hitPoints =
 //		(asBrainStats + pTemplate->asParts[COMP_BRAIN])->hitPoints;
 
-	/*psDroid->asBits[COMP_POWERPLANT].hitPoints = 
+	/*psDroid->asBits[COMP_POWERPLANT].hitPoints =
 		(asPowerStats + pTemplate->asParts[COMP_POWERPLANT])->hitPoints;*/
 
 	psDroid->asBits[COMP_PROPULSION].nStat = (UBYTE)pTemplate->asParts[COMP_PROPULSION];
-	//psDroid->asBits[COMP_PROPULSION].hitPoints = 
+	//psDroid->asBits[COMP_PROPULSION].hitPoints =
 	//	(asPropulsionStats + pTemplate->asParts[COMP_PROPULSION])->hitPoints;
 
 	psDroid->asBits[COMP_SENSOR].nStat = (UBYTE)pTemplate->asParts[COMP_SENSOR];
-	//psDroid->asBits[COMP_SENSOR].hitPoints = 
+	//psDroid->asBits[COMP_SENSOR].hitPoints =
 	//	(asSensorStats + pTemplate->asParts[COMP_SENSOR])->hitPoints;
 
 	psDroid->asBits[COMP_ECM].nStat = (UBYTE)pTemplate->asParts[COMP_ECM];
-	//psDroid->asBits[COMP_ECM].hitPoints = 
+	//psDroid->asBits[COMP_ECM].hitPoints =
 	//	(asECMStats + pTemplate->asParts[COMP_ECM])->hitPoints;
 
-	/*psDroid->asBits[COMP_ARMOUR].hitPoints = 
+	/*psDroid->asBits[COMP_ARMOUR].hitPoints =
 		(asArmourStats + pTemplate->asParts[COMP_ARMOUR])->hitPoints; */
 
 	psDroid->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)pTemplate->asParts[COMP_REPAIRUNIT];
-	//psDroid->asBits[COMP_REPAIRUNIT].hitPoints = 
+	//psDroid->asBits[COMP_REPAIRUNIT].hitPoints =
 	//	(asRepairStats + pTemplate->asParts[COMP_REPAIRUNIT])->hitPoints;
 
 	psDroid->asBits[COMP_CONSTRUCT].nStat = (UBYTE)pTemplate->asParts[COMP_CONSTRUCT];
-	//psDroid->asBits[COMP_CONSTRUCT].hitPoints = 
+	//psDroid->asBits[COMP_CONSTRUCT].hitPoints =
 	//	(asConstructStats + pTemplate->asParts[COMP_CONSTRUCT])->hitPoints;
 }
 
@@ -4605,7 +4606,7 @@ void templateSetParts(DROID *psDroid,DROID_TEMPLATE *psTemplate)
 
 
 
-/* 
+/*
 fills the list with Templates that can be manufactured
 in the Factory - based on size. There is a limit on how many can be manufactured
 at any one time. Pass back the number available.
@@ -4646,7 +4647,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 			//can only have (MAX_CMDDROIDS) in the world at any one time
 			if (psCurr->droidType == DROID_COMMAND)
 			{
-				if (checkProductionForCommand(psFactory->player) + 
+				if (checkProductionForCommand(psFactory->player) +
 					checkCommandExist(psFactory->player) >= (MAX_CMDDROIDS))
 				{
 					continue;
@@ -4709,7 +4710,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 		if (psDroid->player == DROIDPLAYER1 OR psDroid->player == DROIDPLAYER2)
 		{
 			imdNum = BARBARIANS;
-			if (!strcmp(asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName, 
+			if (!strcmp(asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName,
 				"BaBa Body"))
 			{
 				imdNum = BARBARIANS + 1;
@@ -4756,7 +4757,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 					}
 				}
 			}
-			else 
+			else
 			// No weapon droid
 			{
 				if(psDroid->asBits[COMP_CONSTRUCT].nStat)
@@ -4820,7 +4821,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 		if (Player == 6 OR Player == 7)
 		{
 			imdNum = BARBARIANS;
-			if (!strcmp(asBodyStats[Template->asParts[COMP_BODY]].pName, 
+			if (!strcmp(asBodyStats[Template->asParts[COMP_BODY]].pName,
 				"BaBa Body"))
 			{
 				imdNum = BARBARIANS + 1;
@@ -4867,7 +4868,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 					}
 				}
 			}
-			else 
+			else
 			// No weapon droid
 			{
 				if(Template->asParts[COMP_CONSTRUCT])
@@ -5034,7 +5035,7 @@ BOOL Selected = FALSE;
 FLAG_POSITION	*psFlagPos;
 
 	if(groupNumber<UBYTE_MAX)
-	{	
+	{
 		for(psDroid = apsDroidLists[playerNumber]; psDroid!=NULL; psDroid = psDroid->psNext)
 		{
 			/* Wipe out the ones in the wrong group */
@@ -5114,8 +5115,8 @@ char	groupInfo[255];
 		addConsoleMessage(groupInfo,RIGHT_JUSTIFY);
 
 }
-   	 
-   
+
+
 
 UDWORD	getSelectedGroup( void )
 {
@@ -5196,7 +5197,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
 
 
 	}
-		
+
 
   else
 	{
@@ -5210,7 +5211,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
 
 
 /* IF YOU USE THIS FUNCTION - NOTE THAT selectedPlayer's TEMPLATES ARE NOT USED!!!!
-   gets a template from its name - relies on the name being unique (or it will 
+   gets a template from its name - relies on the name being unique (or it will
    return the first one it finds!! */
 DROID_TEMPLATE * getTemplateFromName(STRING *pName)
 {
@@ -5230,7 +5231,7 @@ DROID_TEMPLATE * getTemplateFromName(STRING *pName)
 
 #endif
 
-	/*all droid and template names are now stored as the translated 
+	/*all droid and template names are now stored as the translated
 	name regardless of RESOURCE_NAMES and STORE_RESOURCE_ID! - AB 26/06/98*/
 	getDroidResourceName(pName);
 
@@ -5240,7 +5241,7 @@ DROID_TEMPLATE * getTemplateFromName(STRING *pName)
         //OK so we want selectedPlayer's CYBORG templates since they cannot be edited
         //and we don't want to duplicate them for the sake of it! (ha!)
         //don't use selectedPlayer's templates if not multiplayer
-        //this was written for use in the scripts and we don't want the scripts to use 
+        //this was written for use in the scripts and we don't want the scripts to use
         //selectedPlayer's templates because we cannot guarentee they will exist!
 /*#ifndef PSX
         if (!bMultiPlayer)
@@ -5270,7 +5271,7 @@ DROID_TEMPLATE * getTemplateFromName(STRING *pName)
                     if (player == selectedPlayer AND
                         !(psCurr->droidType == DROID_CYBORG OR
 						  psCurr->droidType == DROID_CYBORG_SUPER OR
-                          psCurr->droidType == DROID_CYBORG_CONSTRUCT OR 
+                          psCurr->droidType == DROID_CYBORG_CONSTRUCT OR
                           psCurr->droidType == DROID_CYBORG_REPAIR))
                     {
                         //ignore
@@ -5378,7 +5379,7 @@ UDWORD	getDroidLevel(DROID *psDroid)
 	{
 		return(7);
 	}
-	else 
+	else
 	{
 		return(8);
 	}
@@ -5463,7 +5464,7 @@ UDWORD	count;
 		lower = upper = 0;
 	}*/
 
-	for(psDroid = apsDroidLists[selectedPlayer],count = 0; 
+	for(psDroid = apsDroidLists[selectedPlayer],count = 0;
 		psDroid; psDroid = psDroid->psNext)
 	{
 /*		numKills = psDroid->numKills;
@@ -5490,31 +5491,31 @@ UDWORD	getBound(UDWORD level)
 		return(1<<(level+2));
 	}
 	else return(UDWORD_MAX);
-	
+
 	switch(level)
 	{
-	case 0:	
+	case 0:
 		return(0);
 		break;
-	case 1:	
+	case 1:
 		return(4);
 		break;
-	case 2:	
+	case 2:
 		return(8);
 		break;
-	case 3:	
+	case 3:
 		return(16);
 		break;
-	case 4:	
+	case 4:
 		return(32);
 		break;
-	case 5:	
+	case 5:
 		return(64);
 		break;
-	case 6:	
+	case 6:
 		return(128);
 		break;
-	case 7:	
+	case 7:
 		return(512);
 		break;
 	default:
@@ -5525,20 +5526,20 @@ UDWORD	getBound(UDWORD level)
 
 /* Calculate the system points used by a template - NOT USED AT PRESENT*/
 UDWORD	calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
-{	
+{
 	UDWORD system, i;
 
 	//get the component system points
-	system = (asBodyStats + psTemplate->asParts[COMP_BODY])->systemPoints + 
-	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->systemPoints + 
-	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower + 
-	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->systemPoints + 
-	(asECMStats + psTemplate->asParts[COMP_ECM])->systemPoints + 
+	system = (asBodyStats + psTemplate->asParts[COMP_BODY])->systemPoints +
+	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->systemPoints +
+	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower +
+	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->systemPoints +
+	(asECMStats + psTemplate->asParts[COMP_ECM])->systemPoints +
 	(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->systemPoints +
 	(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->systemPoints;
 
 	/* propulsion system points are a percentage of the bodys' system points */
-	system += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->systemPoints * 
+	system += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->systemPoints *
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->systemPoints) / 100);
 
 	//add weapon system
@@ -5559,14 +5560,14 @@ UDWORD	calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
 
 /* Calculate the system points used by a droid - NOT USED AT PRESENT*/
 UDWORD	calcDroidSystemPoints(DROID *psDroid)
-{	
+{
 	UDWORD      system;//, i;
 
 	//get the component system points
-	system = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->systemPoints + 
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->systemPoints + 
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->systemPoints + 
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->systemPoints + 
+	system = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->systemPoints +
+	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->systemPoints +
+	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->systemPoints +
+	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->systemPoints +
 	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->systemPoints +
 	(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->systemPoints;
 
@@ -5610,11 +5611,11 @@ STRING *droidGetName(DROID *psDroid)
 		STRING *DroidName;
 		DroidName=strresGetString(NULL,psDroid->HashedDroidName);
 		if (DroidName!=NULL) return(DroidName);	// if we found a name then return it...  other wise build the name
-	}	
+	}
 
 	BuildNameFromDroid(psDroid,ConstructedName);
 	return(ConstructedName);
-	
+
 #endif
 }
 
@@ -5623,7 +5624,7 @@ STRING *droidGetName(DROID *psDroid)
 //
 // Set the name of a droid in it's DROID structure.
 //
-// - only possible on the PC where you can adjust the names, 
+// - only possible on the PC where you can adjust the names,
 //
 void droidSetName(DROID *psDroid,STRING *pName)
 {
@@ -5728,7 +5729,7 @@ BOOL sensiblePlace(SDWORD x, SDWORD y)
 		count++;
 	if( fpathBlockingTile(x+1,y+1) )
 		count++;
-	
+
 	if(count > 1)
 		return FALSE;
 
@@ -5775,7 +5776,7 @@ BOOL	halfPAT(UDWORD x, UDWORD y)
 }
 
 // ------------------------------------------------------------------------------------
-BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations, 
+BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 BOOL (*function)(UDWORD x, UDWORD y))
 {
 SDWORD	i,j;
@@ -5883,7 +5884,7 @@ SDWORD	i,j;
 SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
-	/*	
+	/*
 		Why was this written - I wrote pickATileGen to take a function
 		pointer for what qualified as a valid tile - could use that.
 		I'm not going to change it in case I'm missing the point */
@@ -5934,10 +5935,10 @@ UDWORD	passes;
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns an x/y tile coord to place a droid
-/* works round the location in a clockwise direction  Returns FALSE if a valid 
+/* works round the location in a clockwise direction  Returns FALSE if a valid
 location isn't found*/
 /*BOOL pickATile(UDWORD *pX0,UDWORD *pY0, UBYTE numIterations)
-{	
+{
 	BOOL		found = FALSE;
 	UDWORD		startX, startY, incX, incY;
 	SDWORD		x=0, y=0;
@@ -6016,7 +6017,7 @@ location isn't found*/
 }
 */
 
-/* Looks through the players list of droids to see if any of them are 
+/* Looks through the players list of droids to see if any of them are
 building the specified structure - returns TRUE if finds one*/
 BOOL checkDroidsBuilding(STRUCTURE *psStructure)
 {
@@ -6036,7 +6037,7 @@ BOOL checkDroidsBuilding(STRUCTURE *psStructure)
 	return FALSE;
 }
 
-/* Looks through the players list of droids to see if any of them are 
+/* Looks through the players list of droids to see if any of them are
 demolishing the specified structure - returns TRUE if finds one*/
 BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
 {
@@ -6076,13 +6077,13 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 		//check room for one more!
 		if (((POWER_GEN *)psStruct->pFunctionality)->capacity < NUM_POWER_MODULES)
 		{
-			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type != 
+			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
 				REF_POWER_MODULE);i++)
 			{
 				//keep looking for the Power Module stat...
 			}*/
 			i = powerModuleStat;
-	
+
 			order = TRUE;
 		}
 		break;
@@ -6091,28 +6092,28 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 		//check room for one more!
 		if (((FACTORY *)psStruct->pFunctionality)->capacity < NUM_FACTORY_MODULES)
 		{
-			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type != 
+			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
 				REF_FACTORY_MODULE);i++)
 			{
 				//keep looking for the Factory Module stat...
 			}*/
 			i = factoryModuleStat;
-	
+
 			order = TRUE;
 		}
 		break;
 	case REF_RESEARCH:
 		//check room for one more!
-		if (((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity < 
+		if (((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity <
 			NUM_RESEARCH_MODULES)
 		{
-			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type != 
+			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
 				REF_RESEARCH_MODULE);i++)
 			{
 				//keep looking for the Research Module stat...
 			}*/
 			i = researchModuleStat;
-	
+
 			order = TRUE;
 		}
 		break;
@@ -6124,7 +6125,7 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 	if (order)
 	{
 		//check availability of Module
-		if (!((i < numStructureStats) && 
+		if (!((i < numStructureStats) &&
 			(apStructTypeLists[psDroid->player][i] == AVAILABLE)))
 		{
 			order = FALSE;
@@ -6135,7 +6136,7 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 		{
 			// check enough power to build
 			if (!checkPower(selectedPlayer, asStructureStats[i].powerToBuild, TRUE))
-			{	
+			{
 				order = FALSE;
 			}
 		}*/
@@ -6145,7 +6146,7 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 }
 
 /*Deals with building a module - checking if any droid is currently doing this
- - if so, helping to build the current one*/  
+ - if so, helping to build the current one*/
 void setUpBuildModule(DROID *psDroid)
 {
 	UDWORD		tileX, tileY;
@@ -6226,7 +6227,7 @@ STRING *getDroidName(DROID *psDroid)
 
 
 
-/*return the name to display for the interface - we don't know if this is 
+/*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
 STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 {
@@ -6234,7 +6235,7 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 	STRING *TempName;
 
 	STRING *NewName;
-/*  - Performed in 	GetDefaultTemplateName   - with other droids 
+/*  - Performed in 	GetDefaultTemplateName   - with other droids
 
 	// On the PSX the NameHash entry points to the name for database generated templates
 	// - user generated templates are NULL'ed
@@ -6256,7 +6257,7 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 
 	if (NewName==NULL || NewName[0]==0)
 	{
-		// No name ... we assume its the NEW VEHICLE BUTTON 
+		// No name ... we assume its the NEW VEHICLE BUTTON
 		strcpy(ConstructedName, strresGetString(psStringRes, STR_DES_NEWVEH));
 	}
 	else
@@ -6264,7 +6265,7 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 		strncpy(ConstructedName,NewName,MAXCONNAME);
 	}
 	return(ConstructedName);
-		
+
 #else
 	//STRING *pNameID=psTemplate->pName;
 	STRING *pNameID = psTemplate->aName;
@@ -6272,7 +6273,7 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 	UDWORD			id;
 	STRING			*pName = NULL;
 
-	/*see if the name has a resource associated with it by trying to get 
+	/*see if the name has a resource associated with it by trying to get
 	the ID for the string*/
 	if (strresGetIDNum(psStringRes, pNameID, &id))
 	{
@@ -6323,7 +6324,7 @@ BOOL getDroidResourceName(STRING *pName)
 	}
 	//get the string from the id
 	strcpy(pName, strresGetString(psStringRes, id));
-	
+
 	return TRUE;
 }
 
@@ -6372,9 +6373,9 @@ BOOL droidUnderRepair(DROID *psDroid)
 		//look thru the list of players droids to see if any are repairing this droid
 		for (psCurr = apsDroidLists[psDroid->player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			//if (psCurr->droidType == DROID_REPAIR AND psCurr->action == 
-            if ((psCurr->droidType == DROID_REPAIR OR psCurr->droidType == 
-                DROID_CYBORG_REPAIR) AND psCurr->action == 
+			//if (psCurr->droidType == DROID_REPAIR AND psCurr->action ==
+            if ((psCurr->droidType == DROID_REPAIR OR psCurr->droidType ==
+                DROID_CYBORG_REPAIR) AND psCurr->action ==
 				DACTION_DROIDREPAIR AND psCurr->psTarget == (BASE_OBJECT *)psDroid)
 			{
 				return TRUE;
@@ -6521,7 +6522,7 @@ BOOL allVtolsRearmed(DROID *psDroid)
 {
 	DROID	*psCurr;
 	BOOL	stillRearming;
-	
+
 	// ignore all non vtols
 	if (!vtolDroid(psDroid))
 	{
@@ -6551,11 +6552,11 @@ UWORD   getNumAttackRuns(DROID *psDroid)
 
     ASSERT((vtolDroid(psDroid), "numAttackRuns:not a VTOL Droid"));
 
-    /*if weapon attached to the droid is a salvo weapon, then number of shots that 
+    /*if weapon attached to the droid is a salvo weapon, then number of shots that
     can be fired = vtolAttackRuns*numRounds */
     if (asWeaponStats[psDroid->asWeaps[0].nStat].reloadTime)
     {
-        numAttackRuns = (UWORD)(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds * 
+        numAttackRuns = (UWORD)(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds *
             asWeaponStats[psDroid->asWeaps[0].nStat].vtolAttackRuns);
     }
     else
@@ -6566,7 +6567,7 @@ UWORD   getNumAttackRuns(DROID *psDroid)
     return numAttackRuns;
 }
 
-/*Checks a vtol for being fully armed and fully repaired to see if ready to 
+/*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 BOOL  vtolHappy(DROID *psDroid)
 {
@@ -6648,7 +6649,7 @@ void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
     }
 }*/
 
-/*compares the droid sensor type with the droid weapon type to see if the 
+/*compares the droid sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
 BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 {
@@ -6690,7 +6691,7 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 
 	//check droid is a weapon droid - or Cyborg!!
 	//if (psDroid->droidType != DROID_WEAPON)
-    if (!(psDroid->droidType == DROID_WEAPON OR psDroid->droidType == 
+    if (!(psDroid->droidType == DROID_WEAPON OR psDroid->droidType ==
         DROID_CYBORG OR psDroid->droidType == DROID_CYBORG_SUPER))
 	{
 		return FALSE;
@@ -6741,11 +6742,11 @@ BOOL cbSensorDroid(DROID *psDroid)
 	}
 
     /*Super Sensor works as any type*/
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == 
+	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 		VTOL_CB_SENSOR OR
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == 
+		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 		INDIRECT_CB_SENSOR OR
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == 
+		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 		SUPER_SENSOR)
 	{
 		return TRUE;
@@ -6771,7 +6772,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
     //leave any group it belongs to  - this gets called in droidRemove()
 	/*if(psD->psGroup)
 	{
-		grpLeave( psD->psGroup, psD); 
+		grpLeave( psD->psGroup, psD);
 		psD->psGroup = NULL;
 	}*/
 	// remove the droid from the cluster systerm - this gets called in droidRemove()
@@ -6838,7 +6839,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //check through the 'to' players list of droids to see if any are targetting it
         for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
         {
-            if (psCurr->psTarget == (BASE_OBJECT *)psD OR 
+            if (psCurr->psTarget == (BASE_OBJECT *)psD OR
                 psCurr->psActionTarget == (BASE_OBJECT *)psD)
             {
                 orderDroid(psCurr, DORDER_STOP);
@@ -6849,18 +6850,18 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
                 if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
                 {
             		// move the rest of the list down
-		            memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, 
+		            memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1,
                         (psCurr->listSize - i) * sizeof(ORDER_LIST));
                     //adjust list size
                     psCurr->listSize -= 1;
                     //initialise the empty last slot
-		            memset(psCurr->asOrderList + psCurr->listSize, 0, 
+		            memset(psCurr->asOrderList + psCurr->listSize, 0,
                         sizeof(ORDER_LIST));
                 }
             }
         }
         //check through the 'to' players list of structures to see if any are targetting it
-        for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct = 
+        for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct =
             psStruct->psNext)
         {
             if (psStruct->psTarget == (BASE_OBJECT *)psD)
@@ -6898,7 +6899,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         direction = psD->direction;
         //only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
         //if ((psD->player == selectedPlayer) &&
-		//	(psD->player != to)) 
+		//	(psD->player != to))
         if ((psD->player == selectedPlayer) AND (to != selectedPlayer))
         {
             scoreUpdateVar(WD_UNITS_LOST);
@@ -6918,7 +6919,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
             psNewDroid->armour[WC_HEAT] = armourH;
             psNewDroid->numKills = numKills;
             psNewDroid->direction = direction;
-    		if(!(psNewDroid->droidType == DROID_PERSON OR 
+    		if(!(psNewDroid->droidType == DROID_PERSON OR
                 //psNewDroid->droidType == DROID_CYBORG OR
                 cyborgDroid(psNewDroid) OR
                 psNewDroid->droidType == DROID_TRANSPORTER))
@@ -6940,7 +6941,7 @@ SWORD   droidResistance(DROID *psDroid)
     SWORD   resistance;
 
     resistance = (SWORD)(psDroid->numKills * DROID_RESISTANCE_FACTOR);
- 
+
     //ensure base minimum in MP before the upgrade effect
     if (bMultiPlayer)
     {
@@ -6964,8 +6965,8 @@ SWORD   droidResistance(DROID *psDroid)
     return resistance;
 }
 
-/*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is 
-direct fire. Also check numVTOLattackRuns for the weapon is not zero - return 
+/*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is
+direct fire. Also check numVTOLattackRuns for the weapon is not zero - return
 TRUE if valid weapon*/
 BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
@@ -7060,7 +7061,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 								{
 									structSetManufacture(psStruct, psNextTemplate,psFactory->quantity);
 								}
-								else 
+								else
 								{
 									//nothing more to manufacture - reset the Subject and Tab on HCI Form
 									intManufactureFinished(psStruct);
@@ -7129,7 +7130,7 @@ UWORD powerReqForDroidRepair(DROID *psDroid)
 
     //powerPercent = (UWORD)(100 - PERCENT(psDroid->body, psDroid->originalBody));
     //by including POWER_FACTOR don't have to worry about rounding errors
-	//powerReq = (UWORD)((POWER_FACTOR * powerPercent * calcDroidPower(psDroid) * 
+	//powerReq = (UWORD)((POWER_FACTOR * powerPercent * calcDroidPower(psDroid) *
     //    REPAIR_POWER_FACTOR) / 100);
 
     return powerReq;
@@ -7138,7 +7139,7 @@ UWORD powerReqForDroidRepair(DROID *psDroid)
 /*power cost for One repair point*/
 UWORD repairPowerPoint(DROID *psDroid)
 {
-    return (UWORD)(((POWER_FACTOR * calcDroidPower(psDroid)) / psDroid->originalBody) * 
+    return (UWORD)(((POWER_FACTOR * calcDroidPower(psDroid)) / psDroid->originalBody) *
         REPAIR_POWER_FACTOR);
 }
 

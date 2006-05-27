@@ -8,16 +8,16 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "base.h"
 #include "map.h"
 #include "disp2d.h"
 #include "display3d.h"
-#include "piedef.h"
-#include "gtime.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/gamelib/gtime.h"
 
 #include "cluster.h"
-#include "aud.h"
+#include "lib/sound/aud.h"
 #include "audio_id.h"
 
 /***************************************************************************/
@@ -233,7 +233,7 @@ audio_GetClusterCentre( void *psClusterObj, SDWORD *piX, SDWORD *piY, SDWORD *pi
 			}
 		}
 		while ( psDroid != NULL );
-	
+
 		/* get average */
 		if ( bDroidInClusterMoving == TRUE )
 		{

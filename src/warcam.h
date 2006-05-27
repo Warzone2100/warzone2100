@@ -2,7 +2,7 @@
 /* Prevent multiple inclusion */
 #define _warcam_h
 
-#include "pietypes.h"
+#include "lib/ivis_common/pietypes.h"
 
 #define X_UPDATE 0x1
 #define Y_UPDATE 0x2

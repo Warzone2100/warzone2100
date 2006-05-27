@@ -6,8 +6,8 @@
 #ifndef _droiddef_h
 #define _droiddef_h
 
-#include "animobj.h"
-#include "audio.h"
+#include "lib/gamelib/animobj.h"
+#include "lib/sound/audio.h"
 
 /* The number of components in the asParts / asBits arrays */
 #define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)
@@ -83,14 +83,14 @@ typedef struct _order_list
 typedef struct _droid_template
 {
 	// FOR DROID TEMPLATES
-	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL, 
+	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL,
 	// on the PSX the NameHash entry is used. If it is database generated template, the hashed version of the short name of the template is stored. If it is a user generated template NULL is stored.
-	STATS_BASE;						/* basic stats */ 
+	STATS_BASE;						/* basic stats */
 
 
 	// on the PC this contains the full editable ascii name of the template
 	// on the PSX this is not used, the full name is NON-EDITABLE and is generated from the template components e.g. Viper Mk I
-	STRING			aName[DROID_MAXNAME];	 
+	STRING			aName[DROID_MAXNAME];
 
 	UBYTE 			NameVersion;			// Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied to droid structure
 
@@ -100,7 +100,7 @@ typedef struct _droid_template
 	 */
 	SDWORD			asParts[DROID_MAXCOMP];
 
-	UDWORD			buildPoints;				/*total build points required to manufacture 
+	UDWORD			buildPoints;				/*total build points required to manufacture
 												  the droid*/
 	UDWORD			powerPoints;				/*total power points required to build/maintain
 												  the droid */
@@ -108,7 +108,7 @@ typedef struct _droid_template
 	/* The weapon systems */
 	UDWORD			numWeaps;					/* Number of weapons*/
 	UDWORD			asWeaps[DROID_MAXWEAPS];	/* weapon indices */
-	
+
 	/* The programs */
 	//UDWORD			numProgs;					/* Number of programs*/
 	//UDWORD			asProgs[DROID_MAXPROGS];	/* program indices*/
@@ -130,7 +130,7 @@ typedef struct _droid
 
 
 	//Ascii name of the droid - This is generated from the droid template and can not be changed by the game player after creation.
-	STRING		aName[DROID_MAXNAME];			
+	STRING		aName[DROID_MAXNAME];
 
 //	UBYTE 		NameVersion;			// Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 
@@ -149,7 +149,7 @@ typedef struct _droid
 	 * COMP_BRAIN is an index into the asCommandDroids array NOT asBrainStats
 	 */
 	COMPONENT		asBits[DROID_MAXCOMP];
-	
+
 	/* The other droid data.  These are all derived from the components
 	 * but stored here for easy access
 	 */
@@ -222,7 +222,7 @@ typedef struct _droid
 	struct _base_object	*psActionTarget;	// Action target object
 	UDWORD				actionStarted;		// Game time action started
 	UDWORD				actionPoints;		// number of points done by action since start
-	//UWORD				actionHeight;		// height to level the ground to for foundation, 
+	//UWORD				actionHeight;		// height to level the ground to for foundation,
 											// possibly use it for other data as well? Yup! - powerAccrued!
     UWORD               powerAccrued;       // renamed the above variable since this is what its used for now!
 	//UBYTE				tileNumber;			// tile number for foundation NOT USED ANYMORE
@@ -230,14 +230,14 @@ typedef struct _droid
 	UBYTE				illumination;
 	UBYTE				updateFlags;
 
-	
+
 	/* Movement control data */
-	MOVE_CONTROL		sMove;	
+	MOVE_CONTROL		sMove;
 //	void				*lastTile;
 	/* AI data */
-//	AI_DATA				sAI;				
+//	AI_DATA				sAI;
 	/* anim data */
-	ANIM_OBJECT			*psCurAnim;			
+	ANIM_OBJECT			*psCurAnim;
 
 
 	SDWORD				iAudioID;

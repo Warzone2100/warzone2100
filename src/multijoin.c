@@ -1,20 +1,20 @@
-/* 
+/*
  * Multijoin.c
  *
- * Alex Lee, pumpkin studios, bath,  
+ * Alex Lee, pumpkin studios, bath,
  *
  * Stuff to handle the comings and goings of players.
  */
 
 #include <stdio.h>					// for sprintf
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "objmem.h"
 #include "statsdef.h"
 #include "droiddef.h"
-#include "textdraw.h"
-#include "gtime.h"
+#include "lib/ivis_common/textdraw.h"
+#include "lib/gamelib/gtime.h"
 #include "game.h"
 #include "projectile.h"
 #include "droid.h"
@@ -30,15 +30,15 @@
 #include "hci.h"
 #include "component.h"
 #include "research.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "wrappers.h"
 #include "intimage.h"
 #include "data.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multijoin.h"
 #include "multirecv.h"
@@ -61,8 +61,8 @@ BOOL intDisplayMultiJoiningStatus (UBYTE joinCount);
 VOID clearPlayer		(UDWORD player,BOOL quietly,BOOL removeOil);// what to do when a arena player leaves.
 BOOL MultiPlayerLeave	(DPID dp);								// remote player has left.
 BOOL MultiPlayerJoin	(DPID dp);								// remote player has just joined.
-VOID setupNewPlayer		(DPID dpid,UDWORD player);				// stuff to do when player joins.	
-//BOOL multiPlayerRequest	(NETMSG *pMsg);							// remote player has requested info 
+VOID setupNewPlayer		(DPID dpid,UDWORD player);				// stuff to do when player joins.
+//BOOL multiPlayerRequest	(NETMSG *pMsg);							// remote player has requested info
 //BOOL UpdateClient		(DPID dest, UDWORD playerToSend);		// send information to a remote player
 //BOOL ProcessDroidOrders	(VOID);									// ince setup, this player issues each droid order.
 //BOOL SendFeatures		(FEATURE *pFeature, DPID player);
@@ -82,7 +82,7 @@ BOOL sendVersionCheck()
 	NetAdd(msg,1,cheatHash);
 	msg.size = sizeof(cheatHash)+1;
 	msg.type = NET_VERSION;
-	
+
 	return NETbcast(&msg,TRUE);
 }
 
@@ -100,7 +100,7 @@ BOOL recvVersionCheck(NETMSG *pMsg)
 	return TRUE;
 
 FAILURE:
-	
+
 	// what should we do now ?
 	NetGet(pMsg,0,pl);
 
@@ -129,8 +129,8 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 
 	w = RET_FORMWIDTH;
 	h = RET_FORMHEIGHT;
-	x = RET_X; 
-	y = RET_Y; 
+	x = RET_X;
+	y = RET_Y;
 
 //	cameraToHome(selectedPlayer);				// home the camera to the player.
 	RenderWindowFrame(&FrameNormal, x, y ,w, h);		// draw a wee blu box.
@@ -192,13 +192,13 @@ VOID clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		}
 		else
 		{
-			if(	(psStruct->pStructureType->type != REF_WALL && 
+			if(	(psStruct->pStructureType->type != REF_WALL &&
 				 psStruct->pStructureType->type != REF_WALLCORNER ) )
 			{
 				destroyStruct(psStruct);
 			}
 		}
-		
+
 		if(bTemp)
 		{
 			if(apsFeatureLists[0]->psStats->subType == FEAT_OIL_RESOURCE)
@@ -208,9 +208,9 @@ VOID clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		}
 		psStruct = psNext;
 	}
-	
-	return;	
-}				
+
+	return;
+}
 
 // Reset visibilty, so a new player can't see the old stuff!!
 VOID resetMultiVisibility(UDWORD player)
@@ -220,9 +220,9 @@ VOID resetMultiVisibility(UDWORD player)
 	STRUCTURE	*pStruct;
 
 	for(owned = 0 ; owned <MAX_PLAYERS ;owned++)		// for each player
-	{	
+	{
 		if(owned != player)								// done reset own stuff..
-		{			
+		{
 			//droids
 			for(pDroid = apsDroidLists[owned];pDroid;pDroid=pDroid->psNext)
 			{
@@ -250,26 +250,26 @@ BOOL MultiPlayerLeave( DPID dp)
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
 	if(i != MAX_PLAYERS)									// player not already removed
-	{	
+	{
 		NETlogEntry("Player Unexpectedly leaving, came from directplay...",0,dp);
 
 		sprintf( buf,strresGetString(psStringRes, STR_MUL_LEAVE),getPlayerName(i) );
-		
+
 		turnOffMultiMsg(TRUE);
-		clearPlayer(i,FALSE,FALSE);	
+		clearPlayer(i,FALSE,FALSE);
 		game.skDiff[i] = 10;
 
 		turnOffMultiMsg(FALSE);
 
 		addConsoleMessage(buf,DEFAULT_JUSTIFY);
-	
+
 		if(widgGetFromID(psWScreen,IDRET_FORM))
 		{
 			audio_QueueTrack( ID_CLAN_EXIT );
 		}
 	}
 
-	NETplayerInfo();									// update the player info stuff		
+	NETplayerInfo();									// update the player info stuff
 
 
 	// fire script callback to reassign skirmish players.
@@ -289,17 +289,17 @@ BOOL MultiPlayerJoin(DPID dpid)
 	{
 		audio_QueueTrack( ID_CLAN_ENTER );
 	}
-	
+
 	if(widgGetFromID(psWScreen,MULTIOP_PLAYERS))	// if in multimenu.
 	{
-		if( !multiRequestUp && (bHosted 
-								|| (ingame.localJoiningInProgress && !NetPlay.bLobbyLaunched) 
+		if( !multiRequestUp && (bHosted
+								|| (ingame.localJoiningInProgress && !NetPlay.bLobbyLaunched)
 								|| (NetPlay.bLobbyLaunched && ingame.localOptionsReceived)
 			))
 			{
 				addPlayerBox(TRUE);				// update the player box.
 			}
-	}	
+	}
 
 	if(NetPlay.bHost)		// host responsible for welcoming this player.
 	{
@@ -314,7 +314,7 @@ BOOL MultiPlayerJoin(DPID dpid)
 		ASSERT((NetPlay.playercount<=MAX_PLAYERS,"Too many players!"));
 
 		// setup data for this player, then broadcast it to the other players.
-#if 0		
+#if 0
 		for(i=0; player2dpid[i]!= 0 ;i++);			// find a zero entry, for a new player. MAKE RANDOM!!!
 #else
 		do{											// randomly allocate a player to this new machine.
@@ -329,10 +329,10 @@ BOOL MultiPlayerJoin(DPID dpid)
 		if(!NetPlay.bLobbyLaunched
 		   || (NetPlay.bLobbyLaunched && bHosted))
 		{
-			sendOptions(dpid,i);	
+			sendOptions(dpid,i);
 		}
 
-		// if skirmish and game full, then kick... 
+		// if skirmish and game full, then kick...
 		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
 		{
 			kickPlayer(dpid);
@@ -356,7 +356,7 @@ void setupNewPlayer(DPID dpid,UDWORD player)
 
 //	if (game.type == DMATCH)
 //	{
-//		// set the power level for that player..	
+//		// set the power level for that player..
 //		setPower(player, game.power);
 //	}
 
@@ -387,14 +387,14 @@ void setupNewPlayer(DPID dpid,UDWORD player)
 
 /*
 BOOL multiPlayerRequest(NETMSG *pMsg)
-{		
+{
 	DPID dp;
 	UDWORD pl,newpl;//,rpl;
 	BOOL responsible = FALSE;
 
 	NetGet(pMsg,0,dp);			// player dpid requesting info
 	NetGet(pMsg,4,pl);			// player they require.
-	
+
 	for(newpl=0;(player2dpid[newpl] != dp) &&(newpl<MAX_PLAYERS);newpl++);		// find player
 
 
@@ -442,12 +442,12 @@ BOOL UpdateClient(DPID dest, UDWORD playerToSend)
 		SendFeatures(apsFeatureLists[0],dest);
 	}
 
-//	pR = asPlayerResList[playerToSend];							// **RESEARCH** 
+//	pR = asPlayerResList[playerToSend];							// **RESEARCH**
 //	for(i=0; i<numResearch; i++)								// do for each topic.
 //	{
 //		if(pR[i].researched == RESEARCHED)						// send if researched
 //		{
-//			NetAdd(m,0,(char)playerToSend);					
+//			NetAdd(m,0,(char)playerToSend);
 //			NetAdd(m,1,i);										// reference into topic.
 //			m.size =1+sizeof(UDWORD);
 //			m.type = NET_RESEARCH;
@@ -462,17 +462,17 @@ BOOL UpdateClient(DPID dest, UDWORD playerToSend)
 //		memcpy(&(m.body[1]),pT,	sizeof(DROID_TEMPLATE));		//the template itself
 //		strcpy(&(m.body[1+sizeof(DROID_TEMPLATE)]),	pT->pName );//the name to give the template
 //		m.size =(UWORD)(sizeof(DROID_TEMPLATE)+ strlen(pT->pName) +2);
-//		m.type=NET_TEMPLATE;		
+//		m.type=NET_TEMPLATE;
 //		NETsend(m,dest,TRUE);
 //		pT=pT->psNext;											// onto next template
 //	}
-	
+
 //	for(pS=apsStructLists[playerToSend]; pS; pS=pS->psNext)		//  **STRUCTURES**
 //	{
 	// NOTE SEND WHOLE STRUCTURE DOESNT WORK! need to do as sendwholedroids.
 //		SendWholeStructure(pS,dest);
 //	}
-	
+
 
 
 	m.type = NET_PLAYERCOMPLETE;								// completed message
@@ -491,10 +491,10 @@ BOOL UpdateClient(DPID dest, UDWORD playerToSend)
 BOOL SendFeatures(FEATURE *pFeature, DPID player)
 {
 	NETMSG msg;
-	
+
 	msg.size = 0;
 	msg.type = NET_FEATURES;
-	
+
 	for(;pFeature;pFeature=pFeature->psNext)
 	{
 		NetAdd(msg,msg.size,pFeature->id);				//id
@@ -526,15 +526,15 @@ BOOL recvFeatures(NETMSG *pMsg)
 {
 	UDWORD		id,type,msgdepth,i,body,player;
 	UWORD		x,y;
-	for(msgdepth=0; msgdepth<pMsg->size ;msgdepth+=17) 							// go down the list	
-	{	
+	for(msgdepth=0; msgdepth<pMsg->size ;msgdepth+=17) 							// go down the list
+	{
 		NetGet(pMsg,msgdepth,   id);											// Recv Msg.
 		NetGet(pMsg,msgdepth+4, x);
 		NetGet(pMsg,msgdepth+6, y);
 		NetGet(pMsg,msgdepth+8,type);
 		NetGet(pMsg,msgdepth+12,body);
 		player = pMsg->body[msgdepth+16];
-		
+
 		for(i=0; (i<numFeatureStats) && (asFeatureStats[i].ref != type); i++);  // find structure target
 		if(asFeatureStats[i].ref == type)
 		{
@@ -555,7 +555,7 @@ BOOL ProcessDroidOrders(VOID)
 {
 	UDWORD		i;
 	DROID		*pD;
-	UDWORD		TarRef;	
+	UDWORD		TarRef;
 	DROID_ORDER_DATA	sOrder;
 	DROIDSTORE *pStore;
 
@@ -572,7 +572,7 @@ BOOL ProcessDroidOrders(VOID)
 		{
 			TarRef = (UDWORD) pD->psTarget;
 			pD->psTarget = IdToPointer(TarRef,ANYPLAYER);
-				
+
 			if(pD->psTarget == NULL)											// target wasn't found. check list of things to add.
 			{
 				for(pStore = tempDroidList;pStore;pStore = pStore->psNext)
@@ -604,7 +604,7 @@ BOOL ProcessDroidOrders(VOID)
 				}
 			}
 		}
-				
+
 		sOrder.order	= pD->order;											// set the order
 		sOrder.x		= pD->orderX;
 		sOrder.y		= pD->orderY;
@@ -612,12 +612,12 @@ BOOL ProcessDroidOrders(VOID)
 		sOrder.psStats	= pD->psTarStats;
 
 		if(pD->psTarget)											// double check to see if we caught it!
-		{	
+		{
 			orderDroidBase(pD,&sOrder);								// issue the order.
 		}
-		else if(pD->order == DORDER_BUILD)							// building has no 
+		else if(pD->order == DORDER_BUILD)							// building has no
 		{															//	target in the early stages.
-			orderDroidBase(pD,&sOrder);		
+			orderDroidBase(pD,&sOrder);
 		}
 
 		addDroid(pD, apsDroidLists);								// add the droid to the world.
@@ -625,7 +625,7 @@ BOOL ProcessDroidOrders(VOID)
 		pStore = tempDroidList->psNext;								// goto next droid.
 		FREE(tempDroidList);
 		tempDroidList = pStore;
-		
+
 		if(tempDroidList)
 		{
 			pD=tempDroidList->psDroid;

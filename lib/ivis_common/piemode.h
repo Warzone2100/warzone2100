@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 
 /***************************************************************************/
@@ -55,4 +55,4 @@ extern UDWORD	pie_GetResScalingFactor( void );
 extern void	pie_SetDitherStatus( BOOL val );
 extern BOOL	pie_GetDitherStatus( void );
 
-#endif // 
+#endif //

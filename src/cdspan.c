@@ -5,10 +5,10 @@
  * move that to somewhere else
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
-#include "audio.h"
-#include "track.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/track.h"
 #include "cdspan.h"
 
 static STRING		g_szCurDriveName[MAX_STR] = "";

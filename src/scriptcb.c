@@ -6,9 +6,9 @@
  */
 
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "projectile.h"
@@ -448,17 +448,17 @@ BOOL scrCBObjectSeen(SDWORD callback)
 	{
 		retval = FALSE;
 	}
-	else if ((callback == CALL_DROID_SEEN) && 
+	else if ((callback == CALL_DROID_SEEN) &&
 			 (psScrCBObjSeen->type != OBJ_DROID))
 	{
 		retval = FALSE;
 	}
-	else if ((callback == CALL_STRUCT_SEEN) && 
+	else if ((callback == CALL_STRUCT_SEEN) &&
 			 (psScrCBObjSeen->type != OBJ_STRUCTURE))
 	{
 		retval = FALSE;
 	}
-	else if ((callback == CALL_FEATURE_SEEN) && 
+	else if ((callback == CALL_FEATURE_SEEN) &&
 			 (psScrCBObjSeen->type != OBJ_FEATURE))
 	{
 		retval = FALSE;
@@ -674,7 +674,7 @@ BOOL scrCBResCompleted(void)
 BOOL scrCBPlayerLeft(void)
 {
 	SDWORD	player;
-	if (!stackPopParams(1, VAL_INT, &player) ) 
+	if (!stackPopParams(1, VAL_INT, &player) )
 	{
 		return FALSE;
 	}
@@ -692,8 +692,8 @@ BOOL scrCBPlayerLeft(void)
 BOOL scrCBAllianceOffer(void)
 {
 	SDWORD	*from,*to;
-	
-	if (!stackPopParams(2, VAL_REF | VAL_INT, &from, VAL_REF | VAL_INT,&to) ) 
+
+	if (!stackPopParams(2, VAL_REF | VAL_INT, &from, VAL_REF | VAL_INT,&to) )
 	{
 		return FALSE;
 	}

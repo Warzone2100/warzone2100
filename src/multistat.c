@@ -2,20 +2,20 @@
  * MultiStat.c
  *
  * Alex Lee , pumpkin studios, EIDOS
- * 
+ *
  * load / update / store multiplayer statistics for league tables etc...
  * Also handle the force save/loads and default teams for each tech level.
  */
 
 #include <stdio.h>
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objmem.h"
 #include "power.h"
 #include "map.h"
-#include "widget.h"
+#include "lib/widget/widget.h"
 #include "text.h"
 #include "effects.h"	// for discovery flash
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "cmddroid.h"
 #include "multiplay.h"
 #include "multirecv.h"
@@ -53,7 +53,7 @@ VOID		updateMultiStatsKills	(BASE_OBJECT *psKilled, UDWORD player);
 // ////////////////////////////////////////////////////////////////////////////
 // FORCE SELECT STUFF
 // ////////////////////////////////////////////////////////////////////////////
-	
+
 // ////////////////////////////////////////////////////////////////////////////
 // funcs to edit the force.
 
@@ -70,7 +70,7 @@ BOOL addToForce(DROID_TEMPLATE  *templ)
 	// add template to list. if it doesn't exist.
 	for( psTempl = Force.pForceTemplates;							// find relevant template
 		 psTempl && (psTempl->ref != templ->ref);
-		 psTempl = psTempl->psNext); 
+		 psTempl = psTempl->psNext);
 	if(!psTempl)
 	{
 		pT = (DROID_TEMPLATE*)MALLOC(sizeof(DROID_TEMPLATE));
@@ -92,7 +92,7 @@ BOOL addToForce(DROID_TEMPLATE  *templ)
 	{
 		pT = psTempl;		// set up to point to existing template.
 	}
-	
+
 	// add droid.
 	pF = MALLOC(sizeof(FORCE_MEMBER));						// create a slot in the force.
 	if (!pF)
@@ -118,7 +118,7 @@ BOOL removeFromForce(UDWORD number)
 	pF= Force.pMembers;
 	for(i=0;i<number;i++)pF=pF->psNext;						// goto that force element;
 	addPower(selectedPlayer, pF->pTempl->powerPoints);		// return that much power.
-		
+
 	if(number==0)											// if first remove it,
 	{
 		pF = Force.pMembers;
@@ -147,7 +147,7 @@ BOOL removeFromForce(UDWORD number)
 			inuse = TRUE;
 		}
 	}
-	
+
 	if(!inuse)		// remove template, no longer needed.
 	{
 		psPrev = NULL;
@@ -163,13 +163,13 @@ BOOL removeFromForce(UDWORD number)
 		if (psCurr)										// if we found itthen delete it.
 		{
 			if(psPrev)									// Update list pointers.
-			{		
+			{
 				psPrev->psNext = psCurr->psNext;		// It's down the list somewhere
 			}
-			else 
-			{					
-				Force.pForceTemplates = psCurr->psNext;	// It's at the root 	
-			}		
+			else
+			{
+				Force.pForceTemplates = psCurr->psNext;	// It's at the root
+			}
 			FREE(psCurr);			// Delete the template.
 		}
 	}
@@ -200,7 +200,7 @@ VOID chooseForceLoc(UDWORD *pX,UDWORD *pY)
 		{
 			chose  = (rand()%(tcount+1));
 		}
-		
+
 		tcount= 0;
 		pFeat=apsFeatureLists[0];
 		while(pFeat && (tcount!=chose))
@@ -215,7 +215,7 @@ VOID chooseForceLoc(UDWORD *pX,UDWORD *pY)
 			}
 		}
 		x = pFeat->x >>TILE_SHIFT;
-		y = pFeat->y >>TILE_SHIFT;		
+		y = pFeat->y >>TILE_SHIFT;
 	}
 	else													//dont use boulders
 	{
@@ -231,7 +231,7 @@ VOID chooseForceLoc(UDWORD *pX,UDWORD *pY)
 */
 
 // ////////////////////////////////////////////////////////////////////////////
-// place the force on the map. 
+// place the force on the map.
 VOID useTheForce(BOOL bAddTempl)//Luke
 {
 	DROID			*pDr;
@@ -263,12 +263,12 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 
 	x1 = x;													// now we have a coord, place droids
 	y1 = y;
-	
+
 	while(Force.pMembers)									// for each force member
 	{
 		x = x1;
-		y = y1;	
-		
+		y = y1;
+
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
 			ASSERT((FALSE, "UseTheForce: Unable to find a free location"));
@@ -285,8 +285,8 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 		// end of template copy
 		pTempl = Force.pMembers->pTempl;
 
-/*		if(!psTempl)												// already exists.	
-		{	
+/*		if(!psTempl)												// already exists.
+		{
 			if (HEAP_ALLOC(psTemplateHeap, &psTempl))
 			{
 				memcpy(psTempl, Force.pMembers->pTempl, sizeof(DROID_TEMPLATE));
@@ -296,17 +296,17 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 					for(psCurr = apsDroidTemplates[selectedPlayer];
 						psCurr->psNext != NULL;
 						psCurr = psCurr->psNext
-						);		
+						);
 					psCurr->psNext = psTempl;
 					psTempl->psNext = NULL;
 				}
 			}
 		}
 		else
-		{	
+		{
 			apsDroidTemplates[selectedPlayer]=psTempl;
 			psTempl->psNext = NULL;
-		}	
+		}
 */
 
 
@@ -318,12 +318,12 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 			removeFromForce(0);									// remove from force (to free power)
 			if (pDr)
 			{
-				addDroid(pDr, apsDroidLists);					// add it to the world.			
+				addDroid(pDr, apsDroidLists);					// add it to the world.
 				position.x = pDr->x;								// Add an effect
-				position.z = pDr->y;	
+				position.z = pDr->y;
 				position.y = pDr->z;
 				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
-			}	
+			}
 //		}
 	}
 
@@ -339,7 +339,7 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 //  droids
 
 BOOL saveForce(char *name,FORCE *pfForce)
-{	
+{
 	STRING			fileName[255]="";
 	FILE			*pFileHandle;
 	DROID_TEMPLATE	*pT;
@@ -354,12 +354,12 @@ BOOL saveForce(char *name,FORCE *pfForce)
 		DBERROR(("Couldn't open %s", fileName));
 		return FALSE;
 	}
-	
+
 	// save header for force file.
 
-	count =0;	
+	count =0;
 	for(pT = pfForce->pForceTemplates;pT;pT=pT->psNext) count++;			// count templates
-	if (fwrite(&count, sizeof(UDWORD), 1, pFileHandle) != 1)		
+	if (fwrite(&count, sizeof(UDWORD), 1, pFileHandle) != 1)
 	{
 		DBERROR(("Write failed for %s", fileName));
 		return FALSE;
@@ -367,16 +367,16 @@ BOOL saveForce(char *name,FORCE *pfForce)
 
 	count=0;
 	for(pCount=pfForce->pMembers;pCount;pCount=pCount->psNext) count++;	// count droids
-	if (fwrite(&count, sizeof(UDWORD), 1, pFileHandle) != 1)		
+	if (fwrite(&count, sizeof(UDWORD), 1, pFileHandle) != 1)
 	{
 		DBERROR(("Write failed for %s", fileName));
 		return FALSE;
 	}
 
-#if 0 
+#if 0
 	// old method. save whole template
 	for(pT = pfForce->pForceTemplates;pT;pT=pT->psNext)					// save templates
-	{	
+	{
 		if (fwrite(pT, sizeof(DROID_TEMPLATE), 1, pFileHandle) != 1)	// template
 		{
 			DBERROR(("Write failed for %s", fileName));
@@ -384,7 +384,7 @@ BOOL saveForce(char *name,FORCE *pfForce)
 		}
 		fputc(10,pFileHandle);											//seperator.
 	}
-	
+
 	// save force
 	for(pMember = pfForce->pMembers;pMember;pMember =pMember->psNext)
 	{
@@ -434,7 +434,7 @@ BOOL loadForce(char *name)
 
 	while(Force.pMembers)													// clear current force
 	{
-		removeFromForce(0);	
+		removeFromForce(0);
 	}
 
 //	DBERROR(("tem %d   :   mem %d",Force.pForceTemplates ,	Force.pMembers));
@@ -450,7 +450,7 @@ BOOL loadForce(char *name)
 		return FALSE;
 	}
 
-	if (fread(&fcount, sizeof(UDWORD), 1, pFileHandle) != 1)				// get number of droids in force	
+	if (fread(&fcount, sizeof(UDWORD), 1, pFileHandle) != 1)				// get number of droids in force
 	{
 		DBERROR(("read failed for %s", fileName));
 		fclose(pFileHandle);
@@ -467,14 +467,14 @@ BOOL loadForce(char *name)
 			DBERROR(("Couldn't allocate template for %s", fileName));
 			return FALSE;
 		}
-		if (fread(psTempl, sizeof(DROID_TEMPLATE), 1, pFileHandle) != 1)	// read in a template.		
+		if (fread(psTempl, sizeof(DROID_TEMPLATE), 1, pFileHandle) != 1)	// read in a template.
 		{
 			DBERROR(("read failed for %s", fileName));
 			fclose(pFileHandle);
 			return FALSE;
 		}
 		psTempl->pName = (CHAR*)&psTempl->aName;
-		fgetc(pFileHandle);													// remove the template separator in the force file.	
+		fgetc(pFileHandle);													// remove the template separator in the force file.
 		psTempl->psNext = Force.pForceTemplates;
 		Force.pForceTemplates=psTempl;
 	}
@@ -486,11 +486,11 @@ BOOL loadForce(char *name)
 			fclose(pFileHandle);
 			return FALSE;
 		}
-		
+
 		for( psTempl = Force.pForceTemplates;								// find relevant template
 			 psTempl && (psTempl->ref != ref);
-			 psTempl = psTempl->psNext); 
-	
+			 psTempl = psTempl->psNext);
+
 		if(!psTempl)
 		{
 			DBERROR(("failed to load. invalid file."));
@@ -537,13 +537,13 @@ BOOL loadForce(char *name)
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
 PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
-{	
+{
 	static PLAYERSTATS stat;
 	DWORD		statSize = sizeof(PLAYERSTATS);
 	DPID		playerDPID;
 
 	playerDPID = player2dpid[player];
-	
+
 	if(bLocal)
 	{
 		NETgetLocalPlayerData(playerDPID,&stat,&statSize);
@@ -582,7 +582,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	UDWORD				size;
 	UBYTE				*pFileData;
 	FILE				*pFileHandle;
-	PLAYERSTATS			blankstats = {0}; 
+	PLAYERSTATS			blankstats = {0};
 	SAVEDPLAYERSTATS	st,*codedst;
 	UDWORD				tmp[4];
 
@@ -590,8 +590,8 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	strcat(fileName,sPlayerName);
 	strcat(fileName,".sta");
 
-  debug(LOG_WZ, "loadMultiStats: %s",fileName);	
-	// check player already exists 
+  debug(LOG_WZ, "loadMultiStats: %s",fileName);
+	// check player already exists
 	// FIXME: integrate with physfs stuff, and add basic sanity
 	pFileHandle = fopen(fileName, "rb");
 	if (pFileHandle == NULL)
@@ -613,7 +613,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	//set stats.
-	memcpy(playerStats,&(st.stats), sizeof(PLAYERSTATS));	// get 
+	memcpy(playerStats,&(st.stats), sizeof(PLAYERSTATS));	// get
 
 	//set the name. ASSUME STRING IS LONG ENOUGH!
 	strcpy(sPlayerName,st.name);
@@ -625,7 +625,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	playerStats->recentScore = 0;
 	playerStats->killsToAdd  = 0;
 	playerStats->scoreToAdd  = 0;
-	
+
 
 	// clear any skirmish stats.
 	for(size = 0;size<MAX_PLAYERS;size++)
@@ -633,7 +633,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 		ingame.skScores[size][0] =0;
 		ingame.skScores[size][1] =0;
 	}
-	
+
 	return TRUE;
 }
 
@@ -650,11 +650,11 @@ BOOL saveMultiStats(STRING *sFileName, STRING *sPlayerName,PLAYERSTATS *playerSt
 	memset(st.name,0,255);
 	memset(st.padding,1,4);
 	strcpy(st.name, sPlayerName);
-	
+
 	//encode packet;
 	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
 	NETsetKey(11974,224351,2023901,21080);
-	NETmangleData((long int*)&st,(long int*)&codedst,sizeof(SAVEDPLAYERSTATS));	
+	NETmangleData((long int*)&st,(long int*)&codedst,sizeof(SAVEDPLAYERSTATS));
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	strcpy(fileName,MultiPlayersPath);
@@ -700,7 +700,7 @@ VOID updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 			st.scoreToAdd  -= inflicted;
 		}
 		else
-		{	
+		{
 			st.recentScore  -= inflicted;
 		}
 		setMultiStats(player2dpid[defender], st, TRUE);
@@ -716,8 +716,8 @@ VOID updateMultiStatsGames(void)
 {
 	PLAYERSTATS	st;
 
-	st  = getMultiStats(selectedPlayer,TRUE);	
-	st.played ++; 
+	st  = getMultiStats(selectedPlayer,TRUE);
+	st.played ++;
 	setMultiStats(player2dpid[selectedPlayer], st, TRUE);
 }
 
@@ -725,8 +725,8 @@ VOID updateMultiStatsGames(void)
 VOID updateMultiStatsWins(void)
 {
 	PLAYERSTATS	st;
-	st  = getMultiStats(selectedPlayer,TRUE);	
-	st.wins ++; 
+	st  = getMultiStats(selectedPlayer,TRUE);
+	st.wins ++;
 	setMultiStats(player2dpid[selectedPlayer], st, TRUE);
 }
 
@@ -734,8 +734,8 @@ VOID updateMultiStatsWins(void)
 VOID updateMultiStatsLoses(void)
 {
 	PLAYERSTATS	st;
-	st  = getMultiStats(selectedPlayer,TRUE);	
-	st.loses ++; 
+	st  = getMultiStats(selectedPlayer,TRUE);
+	st.loses ++;
 	setMultiStats(player2dpid[selectedPlayer], st, TRUE);
 }
 
@@ -746,7 +746,7 @@ VOID updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 
 	if(isHumanPlayer(player))
 	{
-		st  = getMultiStats(player,TRUE);	
+		st  = getMultiStats(player,TRUE);
 
 		if(NetPlay.bComms)
 		{

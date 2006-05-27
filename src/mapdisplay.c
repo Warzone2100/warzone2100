@@ -15,15 +15,18 @@
 #include <stdio.h>
 
 /* Includes direct access to render library */
-#include "ivisdef.h"
-#include "piedef.h"
-#include "piestate.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
 
-#include "piemode.h"
-#include "pietexture.h"
+#include "lib/ivis_common/piemode.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/pietexture.h"
 
-#include "piematrix.h"
-#include "vid.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 
 #include "map.h"
 #include "mapdisplay.h"
@@ -33,7 +36,7 @@
 #include "hci.h"
 #include "intelmap.h"
 #include "intimage.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 
 //#include "dglide.h"
 #include "texture.h"
@@ -96,7 +99,7 @@ iVector mapPos, mapView;
 POINT  sP1,sP2,sP3,sP4;
 POINT  *psP1,*psP2,*psP3,*psP4,*psPTemp;
 
-/*Flag to switch code for bucket sorting in renderFeatures etc 
+/*Flag to switch code for bucket sorting in renderFeatures etc
   for the renderMapToBuffer code */
   /*This is no longer used but may be useful for testing so I've left it in - maybe
   get rid of it eventually? - AB 1/4/98*/
@@ -109,7 +112,7 @@ UDWORD	intelColours[MAX_INTEL_SHADES];
 
 /* ----------------------------------------------------------------------------------------- */
 /* Functions */
-iSurface*	setUpMapSurface(UDWORD width, UDWORD height) 
+iSurface*	setUpMapSurface(UDWORD width, UDWORD height)
 {
 void		*bufSpace;
 iSurface	*pMapSurface;
@@ -164,14 +167,14 @@ void	fillMapBufferWithBitmap(iSurface *surface)
 {
 
 	UBYTE		*toFill;
-	UDWORD		x, y, extraWidth, surfaceWidth, surfaceHeight, 
+	UDWORD		x, y, extraWidth, surfaceWidth, surfaceHeight,
 				bitmapWidth, bitmapHeight, xSource, ySource,
 				x0, y0;
 	iBitmap		*pBitmapBuffer;
 	IMAGEDEF	*pImageDef;
 	UDWORD		Modulus;
 
-	
+
 	toFill = surface->buffer;
 	extraWidth = MSG_BUFFER_WIDTH - surface->width;
 
@@ -214,7 +217,7 @@ void	tileLayouts(int texture)
 
 	/* Store pointers to the points */
 	psP1 = &sP1; psP2 = &sP2; psP3 = &sP3; psP4 = &sP4;
-	
+
 	if (texture & TILE_XFLIP)
 	{
 		psPTemp = psP1; psP1 = psP2; psP2 = psPTemp; psPTemp = psP3; psP3 = psP4; psP4 = psPTemp;
@@ -223,7 +226,7 @@ void	tileLayouts(int texture)
 	{
  		psPTemp = psP1;	psP1 = psP4; psP4 = psPTemp; psPTemp = psP2; psP2 = psP3; psP3 = psPTemp;
 	}
-	
+
 	switch ((texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
 	{
 	case 1:
@@ -254,7 +257,7 @@ void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWO
 }
 
 
-/* renders up to two IMDs into the surface - used by message display in Intelligence Map 
+/* renders up to two IMDs into the surface - used by message display in Intelligence Map
 THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
 /*void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD, iIMDShape *pIMD2,
 					   UDWORD WindowX,UDWORD WindowY,UDWORD OriginX,UDWORD OriginY)
@@ -267,7 +270,7 @@ THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
    		iV_RenderAssign(iV_MODE_SURFACE,pSurface);
 	}
 
-	// Empty the buffer 
+	// Empty the buffer
 	//clearMapBuffer(pSurface);
 	//fill with the intelColours set up at the beginning
 	//fillMapBuffer(pSurface);
@@ -294,7 +297,7 @@ THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
 //	pie_TRANSLATE(0,0,pIMD->sradius*8);
 	scaleMatrix(RESEARCH_COMPONENT_SCALE);
 
-	// Pitch down a bit 
+	// Pitch down a bit
 	pie_MatRotX(DEG(-30));
 
 	// Rotate round
@@ -319,24 +322,24 @@ THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
 
 	if (!pie_Hardware())
 	{
-		// Tell renderer we're back to back buffer 
+		// Tell renderer we're back to back buffer
 		iV_RenderAssign(iV_MODE_4101,&rendSurface);
 	}
 }*/
 
-/* renders the Research IMDs into the surface - used by message display in 
+/* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */
-void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch, 
+void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY)
 {
 	UDWORD   angle = 0;
-    
+
     BASE_STATS      *psResGraphic;
     UDWORD          compID, IMDType;
 	iVector         Rotation,Position;
 	UDWORD          basePlateSize, Radius;
     SDWORD          scale = 0;
-	
+
 	if(!pie_Hardware())
 	{
 		 //Ensure all rendering is done to our bitmap and not to back or primary buffer
@@ -357,13 +360,13 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 		pie_SetGeometricOffset(pSurface->width/2,pSurface->height/2);
 	}
 
-	// Pitch down a bit 
+	// Pitch down a bit
 	//pie_MatRotX(DEG(-30));
 
     // Rotate round
 	// full rotation once every 2 seconds..
 	angle = (gameTime2 % ROTATE_TIME) * 360 / ROTATE_TIME;
-	
+
     Position.x = 0;
 	Position.y = 0;
 	Position.z = BUTTON_DEPTH;
@@ -387,10 +390,10 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 			if(basePlateSize == 1)
 			{
 				scale = RESEARCH_COMPONENT_SCALE / 2;
-                /*HACK HACK HACK! 
-                if its a 'tall thin (ie tower)' structure stat with something on 
+                /*HACK HACK HACK!
+                if its a 'tall thin (ie tower)' structure stat with something on
                 the top - offset the position to show the object on top*/
-                if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors AND 
+                if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors AND
                     getStructureStatHeight((STRUCTURE_STATS*)psResearch->psStat) > TOWER_HEIGHT)
                 {
                     Position.y -= 30;
@@ -471,7 +474,7 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 
 	if (!pie_Hardware())
 	{
-		// Tell renderer we're back to back buffer 
+		// Tell renderer we're back to back buffer
 		iV_RenderAssign(iV_MODE_4101,&rendSurface);
 	}
 }

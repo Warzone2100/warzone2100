@@ -1,11 +1,11 @@
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 #include "hci.h"
 #include "mapdisplay.h"
 #include "display3d.h"
-#include "ivisdef.h" //ivis matrix code
-#include "piedef.h" //pie render
-#include "geo.h" //ivis matrix code
+#include "lib/ivis_common/ivisdef.h" //ivis matrix code
+#include "lib/ivis_common/piedef.h" //pie render
+#include "lib/ivis_common/geo.h" //ivis matrix code
 #include "miscimd.h"
 #include "effects.h"
 #include "bridge.h"
@@ -15,7 +15,7 @@
 #define min(a,b) (((a)<(b))?(a):(b))
 #endif
 
-/* 
+/*
 Bridge.c
 Alex McLean, Pumpkin Studios EIDOS Interactive, 1998.
 Handles rendering and placement of bridging sections for
@@ -24,13 +24,13 @@ the final game, but we'll see...
 */
 
 
-/* 
+/*
 Returns TRUE or FALSE as to whether a bridge is valid.
 For it to be TRUE - all intervening points must be lower than the start
 and end points. We can also check other stuff here like what it's going
-over. Also, it has to be between a minimum and maximum length and 
+over. Also, it has to be between a minimum and maximum length and
 one of the axes must share the same values.
-*/ 
+*/
 BOOL	bridgeValid(UDWORD startX,UDWORD startY, UDWORD endX, UDWORD endY)
 {
 BOOL	xBridge, yBridge;
@@ -60,16 +60,16 @@ UDWORD	i;
 		return(FALSE);
 	}
 
-	/*	Check intervening tiles to see if they're lower 
+	/*	Check intervening tiles to see if they're lower
 	so first get the start and end heights */
 	startHeight = mapTile(startX,startY)->height;
 	endHeight = mapTile(endX,endY)->height;
-	
-	/*	
+
+	/*
 		Don't whinge about this piece of code please! It's nice and short
-		and is called very infrequently. Could be made slightly faster. 
+		and is called very infrequently. Could be made slightly faster.
 	*/
-	for(i = ( xBridge ? ( min(startY,endY) ) : ( min(startX,endX)) ); 
+	for(i = ( xBridge ? ( min(startY,endY) ) : ( min(startX,endX)) );
 		i < ( xBridge ? ( max(startY,endY) ) : ( max(startX,endX)) ); i++)
 	{
 		/* Get the height of a bridge section */
@@ -86,8 +86,8 @@ UDWORD	i;
 }
 
 
-/*	
-	This function will actually draw a wall section 
+/*
+	This function will actually draw a wall section
 	Slightly different from yer basic structure draw in that
 	it's not alligned to the terrain as bridge sections sit
 	at a height stored in their structure - as they're above the ground
@@ -95,7 +95,7 @@ UDWORD	i;
 */
 BOOL	renderBridgeSection(STRUCTURE *psStructure)
 {
-	SDWORD			structX,structY,structZ;	
+	SDWORD			structX,structY,structZ;
 	SDWORD			rx,rz;
 	//iIMDShape		*imd;
 	iVector			dv;
@@ -110,11 +110,11 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			structX = psStructure->x;
 			structY = psStructure->y;
 			structZ = psStructure->z;
-	
+
 			/* Establish where it is in the world */
 			dv.x = (structX - player.p.x) - terrainMidX*TILE_UNITS;
 			dv.z = terrainMidY*TILE_UNITS - (structY - player.p.z);
-			dv.y = structZ;  
+			dv.y = structZ;
 
 			SetBSPObjectPos(structX,dv.y,structY);	// world x,y,z coord of structure ... this is needed for the BSP code
 
@@ -132,11 +132,11 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			pie_TRANSLATE(rx,0,-rz);
 
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, pie_DROID_BRIGHT_LEVEL, 0, 0, 0);
-  	  
+
 			pie_MatEnd();
 			return(TRUE);
 }
- 
+
 /*
 	This will work out all the info you need about the bridge including
 	length - height to set sections at in order to allign to terrain and
@@ -148,7 +148,7 @@ void	getBridgeInfo(UDWORD startX,UDWORD startY,UDWORD endX, UDWORD endY, BRIDGE_
 BOOL	xBridge,yBridge;
 UDWORD	startHeight,endHeight;
 BOOL	startHigher;
-	
+
 	/* Copy over the location coordinates */
 	info->startX = startX;
 	info->startY = startY;
@@ -161,7 +161,7 @@ BOOL	startHigher;
 
 	/* Find out which is higher */
 	startHigher = (startHeight>=endHeight ? TRUE : FALSE);
-	
+
 	/* If the start position is higher */
 	if(startHigher)
 	{
@@ -179,17 +179,17 @@ BOOL	startHigher;
 		/* So we need to raise the start position */
 		info->heightChange = endHeight - startHeight;
 	}
-	
+
 	/* Establish axes allignment */
 	/* Only one of these can occur otherwise
 	bridge is one square big */
 	xBridge = ( (startX == endX) ? TRUE : FALSE );
 	yBridge = ( (startY == endY) ? TRUE : FALSE );
-	
-	/* 
+
+	/*
 		Set the bridge's height.
 		Note that when the bridge is built BOTH tile heights need
-		to be set to the agreed value on their bridge trailing edge 
+		to be set to the agreed value on their bridge trailing edge
 		(x,y) and (x,y+1) is constant X and (x,y) and (x+1,y) if constant
 		Y
 	*/
@@ -201,7 +201,7 @@ BOOL	startHigher;
 	{
 		info->bridgeHeight = map_TileHeight(endX,endY);
 	}
-	
+
 	/* We've got a bridge of constant X */
 	if(xBridge)
 	{
@@ -219,7 +219,7 @@ BOOL	startHigher;
 		DBERROR(("Weirdy Bridge requested - no axes allignment"));
 	}
 }
-	
+
 void	testBuildBridge(UDWORD startX,UDWORD startY,UDWORD endX,UDWORD endY)
 {
 BRIDGE_INFO	bridge;
@@ -231,7 +231,7 @@ iVector	dv;
 		getBridgeInfo(startX,startY,endX,endY,&bridge);
 		if(bridge.bConstantX)
 		{
-	
+
 			for(i=min(bridge.startY,bridge.endY); i<(max(bridge.startY,bridge.endY)+1); i++)
 			{
 		   		dv.x = ((bridge.startX*128)+64);
@@ -289,7 +289,7 @@ iVector	dv;
 //				addExplosion(&dv,TYPE_EXPLOSION_MED,NULL);
 			}
 		}
-	
+
 	}
 }
 

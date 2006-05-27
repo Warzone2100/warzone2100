@@ -6,7 +6,7 @@
  */
 
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
 #include "player.h"
@@ -170,7 +170,7 @@ void playerUpdate(UDWORD player)
 
 
 	if ((!bMultiPlayer) && (player ==0))		// this'll have to come out to allow p1 AI
-	{											// currently stops the whole thing crashing. 
+	{											// currently stops the whole thing crashing.
 		return;
 	}
 	else if( bMultiPlayer && (isHumanPlayer(player)))
@@ -179,14 +179,14 @@ void playerUpdate(UDWORD player)
 	}
 
 
-	// See if the human player has been seen by this player 
+	// See if the human player has been seen by this player
 /*	if (!asPlayerAI[player].building)
 	{
 		for(psCurr = apsDroidLists[0]; psCurr; psCurr = psCurr->psNext)
 		{
 			if (psCurr->visible[player])
 			{
-				// Seen one - start manufacturing droids to attack with 
+				// Seen one - start manufacturing droids to attack with
 				playerStartManufacture(player);
 				asPlayerAI[player].building = TRUE;
 				break;
@@ -195,7 +195,7 @@ void playerUpdate(UDWORD player)
 	}
 	else
 	{
-		// Check the factory is still producing 
+		// Check the factory is still producing
 		for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 		{
 			if (psStruct->pStructureType->type == REF_FACTORY)
@@ -205,7 +205,7 @@ void playerUpdate(UDWORD player)
 		}
 		if (psStruct && ((FACTORY *)psStruct->pFunctionality)->psSubject == NULL)
 		{
-			// Factory isn't building - restart it 
+			// Factory isn't building - restart it
 			playerStartManufacture(player);
 		}
 	}
@@ -255,12 +255,12 @@ void playerNewDroid(DROID *psDroid)
 	asPlayerAI[player].psAttackGrp = psDroid;
 */
 	//This now happens in buildDroid - AB 6/1/98
-	//move droid to assembly point 
+	//move droid to assembly point
 	//orderDroidLoc(psDroid, DORDER_MOVE,	aAssemblyPos[player].x << TILE_SHIFT,
 	//		aAssemblyPos[player].y << TILE_SHIFT);
 
 	//SCRIPTED NOW
-	/* Move the droid to the assembly point 
+	/* Move the droid to the assembly point
 	if (asPlayerAI[player].groupPoints < attackPoints[player])
 	{
 		orderDroidLoc(psDroid, DORDER_MOVE,
@@ -269,8 +269,8 @@ void playerNewDroid(DROID *psDroid)
 	}
 	else
 	{
-		// send the droids to attack - 
-		   first see if there are any droids close to the base 
+		// send the droids to attack -
+		   first see if there are any droids close to the base
 		foundDroid = FALSE;
 		radSquared = DROID_SCAN*DROID_SCAN;
 		for(psCurr = apsDroidLists[0]; psCurr; psCurr = psCurr->psNext)
@@ -301,7 +301,7 @@ void playerNewDroid(DROID *psDroid)
 		}
 	}
 
-	// Choose a new droid to build 
+	// Choose a new droid to build
 	newManu = rand() % numManInfo[player];
 	templIndex = aManInfo[player][newManu].templIndex;
 //	psTempl = apsDroidTemplates[player];
@@ -327,7 +327,7 @@ void playerNewDroid(DROID *psDroid)
 	}
 	if (psTempl)
 	{
-		// Start the production of the droid 
+		// Start the production of the droid
 		structSetManufacture(psStruct, psTempl, 1);
 		asPlayerAI[player].groupPoints += aManInfo[player][newManu].points;
 	}*/
@@ -342,7 +342,7 @@ void playerNewDroid(DROID *psDroid)
 	DROID_TEMPLATE	*psTempl;
 	char			droidName[MAX_NAME_SIZE];
 
-	// Find the factory 
+	// Find the factory
 	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_FACTORY)
@@ -351,7 +351,7 @@ void playerNewDroid(DROID *psDroid)
 		}
 	}
 
-	// Choose a new droid to build 
+	// Choose a new droid to build
 	if (psStruct)
 	{
 		newManu = rand() % numManInfo[player];
@@ -379,7 +379,7 @@ void playerNewDroid(DROID *psDroid)
 		}
 		if (psTempl)
 		{
-			// Start the production of the droid 
+			// Start the production of the droid
 			structSetManufacture(psStruct, psTempl, 1);
 			asPlayerAI[player].groupPoints += aManInfo[player][newManu].points;
 		}
@@ -394,7 +394,7 @@ void playerNewDroid(DROID *psDroid)
 	aAssemblyPos[player].y = y >> TILE_SHIFT;
 }*/
 
-/* sends players droids to attack a specified x/y. Checks to see if any enemy 
+/* sends players droids to attack a specified x/y. Checks to see if any enemy
 droids are near to the home base first*/
 void attackLocation(UDWORD x, UDWORD y, UDWORD player)
 {

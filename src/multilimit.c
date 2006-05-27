@@ -2,11 +2,11 @@
  * multilimit.c
  *
  * interface for setting limits to the game, bots, structlimits etc...
- */ 
+ */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "csnap.h"
-#include "widget.h"
+#include "lib/widget/widget.h"
 #include "hci.h"
 #include "text.h"
 #include "intimage.h"
@@ -18,25 +18,26 @@
 #include "component.h"
 #include "loadsave.h"
 #include "wrappers.h"	// for loading screen
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "console.h"
-#include "bitimage.h"	// GFX incs
-#include "textdraw.h"
-#include "piematrix.h"
-#include "piestate.h"
-#include "netplay.h"
+#include "lib/ivis_common/bitimage.h"	// GFX incs
+#include "lib/ivis_common/textdraw.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multirecv.h"
 #include "multiint.h"
 #include "multilimit.h"
-#include "piemode.h"
-#include "script.h"
+#include "lib/ivis_common/piemode.h"
+#include "lib/script/script.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // externs
 extern IMAGEFILE	*FrontImages;
 extern CURSORSNAP	InterfaceSnap;
-extern void			intDisplayPlainForm	(struct _widget *psWidget, UDWORD xOffset, 
+extern void			intDisplayPlainForm	(struct _widget *psWidget, UDWORD xOffset,
 										 UDWORD yOffset, UDWORD *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -92,7 +93,7 @@ BOOL useStruct(UDWORD count,UDWORD i)
 BOOL startLimitScreen(void)
 {
 	W_FORMINIT		sButInit;
-	W_FORMINIT		sFormInit;			
+	W_FORMINIT		sFormInit;
 	UDWORD			numButtons = 0;
 	UDWORD			i;
 
@@ -104,21 +105,21 @@ BOOL startLimitScreen(void)
 		initLoadingScreen( TRUE, TRUE);//changed by jeremy mar8
 /*		if (!resLoad("wrf\\forcedit.wrf", 500,
 					 DisplayBuffer, displayBufferSize,
-					 psGameHeap))				//need the object heaps to have been set up before loading 
+					 psGameHeap))				//need the object heaps to have been set up before loading
 		{
 			return FALSE;
 		}
 */
 		if (!resLoad("wrf\\piestats.wrf", 501,
 					 DisplayBuffer, displayBufferSize,
-					 psGameHeap))				//need the object heaps to have been set up before loading 
+					 psGameHeap))				//need the object heaps to have been set up before loading
 		{
 			return FALSE;
 		}
-		
+
 		if (!resLoad("wrf\\forcedit2.wrf", 502,
 					 DisplayBuffer, displayBufferSize,
-					 psGameHeap))				//need the object heaps to have been set up before loading 
+					 psGameHeap))				//need the object heaps to have been set up before loading
 		{
 			return FALSE;
 		}
@@ -139,7 +140,7 @@ BOOL startLimitScreen(void)
 	sFormInit.width		= LIMITSW;
 	sFormInit.height	= LIMITSH;
 	sFormInit.pDisplay	= intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);	
+	widgAddForm(psWScreen, &sFormInit);
 
 	// return button.
 //	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
@@ -171,8 +172,8 @@ BOOL startLimitScreen(void)
 					STR_MUL_OK,IMAGE_OK,IMAGE_OK,TRUE);
 
 
-	
-	// Count the number of minor tabs needed	
+
+	// Count the number of minor tabs needed
 	numButtons = 0;
 
 	for(i=0;i<numStructureStats;i++ )
@@ -187,13 +188,13 @@ BOOL startLimitScreen(void)
 
 	// add tab form..
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = IDLIMITS;	
+	sFormInit.formID = IDLIMITS;
 	sFormInit.id = IDLIMITS_TABS;
 	sFormInit.style = WFORM_TABBED;
 	sFormInit.x = 50;
 	sFormInit.y = 10;
-	sFormInit.width = LIMITSW - 100;	
-	sFormInit.height =LIMITSH - 4;	
+	sFormInit.width = LIMITSW - 100;
+	sFormInit.height =LIMITSH - 4;
 	sFormInit.numMajor = numForms(numButtons, BUTPERFORM);
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
@@ -201,7 +202,7 @@ BOOL startLimitScreen(void)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;	
+	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = (void*)&StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -210,8 +211,8 @@ BOOL startLimitScreen(void)
 	}
 	widgAddForm(psWScreen, &sFormInit);
 
-	//Put the buttons on it 
-	memset(&sButInit, 0, sizeof(W_BUTINIT));		
+	//Put the buttons on it
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID   = IDLIMITS_TABS;//IDLIMITS;
 	sButInit.style	  = WFORM_PLAIN;
 	sButInit.width    = BARWIDTH;
@@ -228,10 +229,10 @@ BOOL startLimitScreen(void)
 		{
 			numButtons++;
 			sButInit.pUserData= (VOID*) i;
-		
+
 			widgAddForm(psWScreen, &sButInit);
 			sButInit.id	++;
-			
+
 			addFESlider(sButInit.id,sButInit.id-1, 290,11,
 						asStructLimits[0][i].globalLimit,
 						asStructLimits[0][i].limit, 0);
@@ -257,14 +258,14 @@ BOOL startLimitScreen(void)
 
 VOID runLimitScreen(void)
 {
-	UDWORD id,statid;	
-	
+	UDWORD id,statid;
+
 	processFrontendSnap(FALSE);
 	frontendMultiMessages();							// network stuff.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
+	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
-	// sliders 
+	// sliders
 	if((id > IDLIMITS_ENTRIES_START)  && (id< IDLIMITS_ENTRIES_END))
 	{
 		statid = (UDWORD) widgGetFromID(psWScreen,id-1)->pUserData ;
@@ -287,16 +288,16 @@ VOID runLimitScreen(void)
 //			eventReset();
 			bForceEditorLoaded = FALSE;
 			changeTitleMode(MULTIOPTION);
-			
+
 
 			// make some noize.
 			if(!ingame.localOptionsReceived)
-			{				
+			{
 				addConsoleMessage("Limits Reset To Default Values",DEFAULT_JUSTIFY);
 			}
 			else
 			{
-				sendTextMessage("Limits Reset To Default Values",TRUE);	
+				sendTextMessage("Limits Reset To Default Values",TRUE);
 			}
 
 
@@ -335,7 +336,7 @@ VOID createLimitSet(VOID)
 	{
 		if(asStructLimits[0][i].limit != LOTS_OF)
 		{
-			numchanges++;	
+			numchanges++;
 		}
 	}
 
@@ -370,7 +371,7 @@ VOID applyLimitSet(VOID)
 	UDWORD i;
 	UBYTE val;
 	UDWORD id;
-	
+
 	if(ingame.numStructureLimits == 0)
 	{
 		return;
@@ -385,7 +386,7 @@ VOID applyLimitSet(VOID)
 		pEntry += sizeof(UDWORD);
 		memcpy(&val,pEntry,sizeof(UBYTE));
 		pEntry += sizeof(UBYTE);
-	
+
 		if(id <numStructureStats)
 		{
 			asStructLimits[0][id].limit=val;
@@ -400,7 +401,7 @@ VOID applyLimitSet(VOID)
 	}
 
 	// free.
-	if(	ingame.numStructureLimits )	
+	if(	ingame.numStructureLimits )
 	{
 		FREE(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;
@@ -414,11 +415,11 @@ VOID displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 	UDWORD	w = psWidget->width;
-	UDWORD	h = psWidget->height; 
+	UDWORD	h = psWidget->height;
 	STRUCTURE_STATS	*stat = asStructureStats+(UDWORD)psWidget->pUserData;
 	iVector	Rotation,Position;
 	CHAR	str[3];
-	
+
 	UDWORD scale,Radius;
 
 	drawBlueBox(x,y,w,h);
@@ -443,7 +444,7 @@ VOID displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	displayStructureStatButton(stat ,0,	 &Rotation,&Position,TRUE, scale);
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);				
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
 	iV_SetFont(WFont);											// font

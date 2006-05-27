@@ -6,12 +6,12 @@
  */
 
 /* Droid attack printf's */
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
 #include "findpath.h"
 #include "visibility.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "combat.h"
 #include "hci.h"
 #include "player.h"
@@ -138,7 +138,7 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 			{
 				if (electronic)
 				{
-					/*don't want to target structures with resistance of zero if 
+					/*don't want to target structures with resistance of zero if
                     using electronic warfare*/
 //					if (((STRUCTURE *)psObj)->pStructureType->resistance != 0)// AND
 						//((STRUCTURE *)psObj)->resistance >= (SDWORD)(((STRUCTURE *)
@@ -159,10 +159,10 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 					psTarget = psObj;
 					break;
 				}
-				else if ( (  ((STRUCTURE *)psObj)->pStructureType->type != REF_WALL 
+				else if ( (  ((STRUCTURE *)psObj)->pStructureType->type != REF_WALL
 						   &&((STRUCTURE *)psObj)->pStructureType->type != REF_WALLCORNER
-						  ) 	
-						 || driveModeActive() 
+						  )
+						 || driveModeActive()
 						 || (bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(psDroid->player))
 						)
 				{
@@ -307,7 +307,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 			"aiChooseTarget: no weapons on structure"));
 		psWStats = ((STRUCTURE *)psObj)->asWeaps[0].nStat + asWeaponStats;
 
-		
+
 		// see if there is a target from the command droids
 		psTarget = NULL;
 		psCommander = cmdDroidGetDesignator(psObj->player);
@@ -512,9 +512,9 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 					 ((DROID *)psObj)->sensorRange;
 		break;
 	case OBJ_STRUCTURE:
-		if (!(structStandardSensor((STRUCTURE *)psObj) OR 
+		if (!(structStandardSensor((STRUCTURE *)psObj) OR
 			structVTOLSensor((STRUCTURE *)psObj)))
-		{	
+		{
 			// to be used for Standard and VTOL intercept Turret Sensors only
 			return FALSE;
 		}
@@ -559,7 +559,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 
             tarDist = SDWORD_MAX;
             psTarget = NULL;
-            // just go through the list of droids/structures for the oppositions 
+            // just go through the list of droids/structures for the oppositions
             // and get the nearest target. This might be REAL slow...
             for (player = 0; player < MAX_PLAYERS; player++)
             {
@@ -684,7 +684,7 @@ void aiUpdateDroid(DROID *psDroid)
 		lookForTarget = FALSE;
 	}
 
-	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player)) 
+	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player))
 	{
 		lookForTarget = FALSE;
 	}
@@ -828,6 +828,6 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
     {
         bValidTarget = TRUE;
     }
-    
+
     return bValidTarget;
 }

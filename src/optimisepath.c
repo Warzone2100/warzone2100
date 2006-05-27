@@ -1,4 +1,4 @@
-/*	
+/*
 	25th September, 1998. Path Optimisation.
 	An attempt to optimise the final path found for routing
 	in order to stop units getting snagged on corners.
@@ -6,14 +6,14 @@
 */
 
 // -------------------------------------------------------------------------
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "base.h"
 #include "move.h"
 #include "map.h"
 #include "weapons.h"
 #include "statsdef.h"
 #include "droiddef.h"
-#include "pietypes.h"
+#include "lib/ivis_common/pietypes.h"
 #include "optimisepath.h"
 #include "raycast.h"
 #include "fpath.h"
@@ -21,7 +21,7 @@
 
 // -------------------------------------------------------------------------
 /* Where to slide a path point according to bisecting angle */
-signed char	markerSteps[8][2] = 
+signed char	markerSteps[8][2] =
 {
 	{0,0},
 	{1,-1},
@@ -47,7 +47,7 @@ UDWORD	getStepIndexFromAngle(UDWORD angle);
 	vectors to the previous and next waypoint is found. We then
 	calculate which way to make this angle (line) face. It needs to face into
 	the larger of the two arcs, thereby moving _away_ from the blocking
-	tile 
+	tile
 */
 void	optimisePathForDroid(DROID *psDroid)
 {
@@ -70,7 +70,7 @@ PATH_POINT	*moveList;
 	moveList = psDroid->sMove.MovementList;
 
 	/* Go through the movement list */
-	while(moveList[index].XCoordinate != -1) 
+	while(moveList[index].XCoordinate != -1)
 	{
 		/* If it's not the start point and not the end point */
 		if(index!=0 AND moveList[index+1].XCoordinate != -1	AND moveList[index+1].YCoordinate != -1)
@@ -83,7 +83,7 @@ PATH_POINT	*moveList;
 			// To be found by experiment, or maybe vehicle speed.
 			// ------------------------
 
-			
+
 			/* Get the existing waypoint */
 			x1 = moveList[index].XCoordinate;
 			y1 = moveList[index].YCoordinate;
@@ -134,7 +134,7 @@ PATH_POINT	*moveList;
 			/* Could we move the waypoint there? */
 			if(!fpathBlockingTile(tileX,tileY))
 			{
-		 //		DBPRINTF(("Moved marker\n"));	  
+		 //		DBPRINTF(("Moved marker\n"));
 				/* Move it */
 				moveList[index].XCoordinate = (x1 + (xAlt*TILE_UNITS));
 				moveList[index].YCoordinate = (y1 + (yAlt*TILE_UNITS));
@@ -154,7 +154,7 @@ PATH_POINT	*moveList;
 				effectGiveAuxVar(8);
 	  			effectGiveAuxVarSec(150000);
 				addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_SMOKY_BLUE,FALSE,NULL,0);
-				
+
 			}
 			else
 			{
@@ -182,7 +182,7 @@ PATH_POINT	*moveList;
 }
 
 // -------------------------------------------------------------------------
-/*	
+/*
 	Gets the angle that bisects the given to angles. the angle
 	is given such that it points into the larger arc. This is
 	of course ambiguous in the case where the two given angles
@@ -194,7 +194,7 @@ FRACT	xVec,yVec;
 FRACT	angle;
 UDWORD	retVal;
 
-	/* Get the component vectors */  
+	/* Get the component vectors */
 	xVec = trigSin(angleA) + trigSin(angleB);
 	yVec = trigCos(angleA) + trigCos(angleB);
 
@@ -207,14 +207,14 @@ UDWORD	retVal;
 	/* And make it point the other way - into larger arc */
 	retVal = (retVal + 180)%360;
 	ASSERT((retVal<360,"Weird angle found"));
-	
+
 	return(retVal);
 }
 
 // -------------------------------------------------------------------------
-/*	
-	A hack function - could be done by dividing the angle by 45 
-	and establishing the right quadrant 
+/*
+	A hack function - could be done by dividing the angle by 45
+	and establishing the right quadrant
 */
 UDWORD	getStepIndexFromAngle(UDWORD angle)
 {
@@ -266,7 +266,7 @@ UDWORD	retVal = 0;
 
 	}
 
-	return(retVal);		
+	return(retVal);
 
 }
 // -------------------------------------------------------------------------

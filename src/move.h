@@ -9,7 +9,7 @@
 
 #include "objectdef.h"
 #include "findpath.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 
 /* The base movement speed */
 extern FRACT	baseSpeed;

@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "levels.h"
 #include "levelint.h"

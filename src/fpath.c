@@ -12,7 +12,7 @@
 // gateway route printf's
 //#define DEBUG_GROUP2
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 BOOL	fpathDoMessage;
 #undef DBP2
@@ -1518,7 +1518,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		retVal = FPR_RESCHEDULE;
 		goto exit;
 	}
-	
+
 	DBP0(("Unit %d: ", psObj->id));
 	if (psPartialRouteObj == NULL)
 	{
@@ -1676,7 +1676,7 @@ BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY)
 				}
 				psDroid->sMove.numPoints = psCurr->sMove.numPoints;
 
-				// now see if the route 
+				// now see if the route
 
 				return TRUE;
 			}

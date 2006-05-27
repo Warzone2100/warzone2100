@@ -6,14 +6,14 @@
  */
 
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "deliverance.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "map.h"
 #include "power.h"
-#include "script.h"
+#include "lib/script/script.h"
 #include "scriptvals.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
@@ -171,7 +171,7 @@ BOOL objmemInitialise(void)
 		return FALSE;
 	}
 
-	if (!HEAP_CREATE(&psStructFuncHeap, sizeof(FUNCTIONALITY), STRUCTFUNC_INIT, 
+	if (!HEAP_CREATE(&psStructFuncHeap, sizeof(FUNCTIONALITY), STRUCTFUNC_INIT,
 		STRUCTFUNC_EXT))
 	{
 		return FALSE;
@@ -254,7 +254,7 @@ void objmemUpdate(void)
 		psDestroyedObj = psNext;
 	}
 
-	/* Now see if there are any further down the list 
+	/* Now see if there are any further down the list
 	Keep track of the previous object to set its Next pointer*/
 	for(psCurr = psPrev = psDestroyedObj; psCurr != NULL; psCurr = psNext)
 	{
@@ -317,7 +317,7 @@ void objmemUpdate(void)
  * change.
  */
 
-/* Creating a new object 
+/* Creating a new object
  * new is a pointer to a pointer to the new object
  * type is the type of the object
  */
@@ -471,8 +471,8 @@ BOOL createDroid(UDWORD player, DROID **ppsNew)
 	 DROID_GROUP	*psGroup;
 
 	 ADD(pList, psDroidToAdd, DROID);
-     /*whenever a droid gets added to a list other than the current list 
-     its died flag is set to NOT_CURRENT_LIST so that anything targetting 
+     /*whenever a droid gets added to a list other than the current list
+     its died flag is set to NOT_CURRENT_LIST so that anything targetting
      it will cancel itself - HACK?!*/
      if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
      {
@@ -514,9 +514,9 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 	ASSERT((psDroidToRemove->player < MAX_PLAYERS,
 		"removeUnit: invalid player for unit"));
 	REMOVE(pList, psDroidToRemove, DROID);
-     
-    /*whenever a droid is removed from the current list its died 
-    flag is set to NOT_CURRENT_LIST so that anything targetting 
+
+    /*whenever a droid is removed from the current list its died
+    flag is set to NOT_CURRENT_LIST so that anything targetting
     it will cancel itself - HACK?!*/
     if (pList[psDroidToRemove->player] == apsDroidLists[psDroidToRemove->player])
     {
@@ -631,7 +631,7 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	ASSERT((PTRVALID((psFlagPosToAdd), sizeof(FLAG_POSITION)),
 		"addFlagPosition: Invalid FlagPosition pointer"));
 
-	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player]; 
+	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
 	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;
  }
 
@@ -650,7 +650,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 	}
 	else
 	{
-		for(psCurr = apsFlagPosLists[psDel->player]; (psCurr != psDel) && 
+		for(psCurr = apsFlagPosLists[psDel->player]; (psCurr != psDel) &&
 			(psCurr != NULL); psCurr = psCurr->psNext)
 		{
 			psPrev = psCurr;
@@ -691,7 +691,7 @@ void checkFactoryFlags(void)
 	FLAG_POSITION	*psFlag;
 	SDWORD			player, type, factory;
 
-	//clear the check array	
+	//clear the check array
 	for(player=0; player<MAX_PLAYERS; player++)
 	{
 		//for(type=0; type<NUM_FACTORY_TYPES; type++)

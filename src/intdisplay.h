@@ -1,14 +1,14 @@
 #ifndef _intdisplay_h
 #define _intdisplay_h
 
-#include "widget.h"
-#include "widgint.h"
-#include "bar.h"
-#include "form.h"
-#include "label.h"
-#include "button.h"
-#include "editbox.h"
-#include "slider.h"
+#include "lib/widget/widget.h"
+#include "lib/widget/widgint.h"
+#include "lib/widget/bar.h"
+#include "lib/widget/form.h"
+#include "lib/widget/label.h"
+#include "lib/widget/button.h"
+#include "lib/widget/editbox.h"
+#include "lib/widget/slider.h"
 #include "intimage.h"
 #include "droid.h"
 
@@ -23,10 +23,10 @@
 #define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*8)
 
 
-/* Power levels are divided by this for power bar display. The extra factor has 
+/* Power levels are divided by this for power bar display. The extra factor has
 been included so that the levels appear the same for the power bar as for the
 power values in the buttons */
-#define POWERBAR_SCALE			(5 * WBAR_SCALE/STAT_PROGBARWIDTH)	
+#define POWERBAR_SCALE			(5 * WBAR_SCALE/STAT_PROGBARWIDTH)
 
 #define BUTTONOBJ_ROTSPEED		90	// Speed to rotate objects rendered in
 									// buttons ( degrees per second )
@@ -287,34 +287,34 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 
 BOOL StatIsResearch(BASE_STATS *Stat);
 //void StatGetResearchImage(BASE_STATS *Stat,SDWORD *Image,iIMDShape **Shape, BOOL drawTechIcon);
-void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape, 
+void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
                           BASE_STATS **ppGraphicData, BOOL drawTechIcon);
 
 //SWORD GetTokenID(TOKENID *Tok,STRING *Token);
 //SWORD FindTokenID(TOKENID *Tok,STRING *Token);
 
 //displays a border for a form
-extern void intDisplayBorderForm(struct _widget *psWidget, UDWORD xOffset, 
+extern void intDisplayBorderForm(struct _widget *psWidget, UDWORD xOffset,
 								 UDWORD yOffset, UDWORD *pColours);
 
 /* Draws a stats bar for the design screen */
-extern void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
+extern void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 							   UDWORD *pColours);
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset, 
+void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours);
 
 // Widget callback function to play an audio track.
 extern void WidgetAudioCallback(int AudioID);
 
 // Widget callback to display a contents button for the Transporter
-extern void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset, 
+extern void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, UDWORD *pColours);
 /*draws blips on radar to represent Proximity Display*/
 extern void drawRadarBlips();
 
 /*Displays the proximity messages blips over the world*/
-extern void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset, 
+extern void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 					UDWORD yOffset, UDWORD *pColours);
 
 extern void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psContext);

@@ -4,28 +4,28 @@
  * Pumpkin Studios. 98
  */
 
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 #include "display3d.h"
 #include "intdisplay.h"
 #include "hci.h"			// for wFont def.& intmode.
 #include "loop.h"
 #include "text.h"
-#include "piestate.h"		// for getrendertype
+#include "lib/ivis_common/piestate.h"		// for getrendertype
 #include "resource.h"
 //#include "display.h"		// for gammaValue.
 #include "frontend.h"		// for textdisplay function
 #include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
 
-#include "scriptextern.h"	// for tutorial 
-#include "rendmode.h"
+#include "scriptextern.h"	// for tutorial
+#include "lib/ivis_common/rendmode.h"
 #include "keybind.h"
 
-#include "audio.h"					// for sound.
+#include "lib/sound/audio.h"					// for sound.
 
-#include "cdaudio.h"
-#include "mixer.h"
+#include "lib/sound/cdaudio.h"
+#include "lib/sound/mixer.h"
 #include "multiplay.h"
 
 
@@ -33,7 +33,7 @@
 #include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 
 
 extern char	SaveGamePath[];
@@ -60,8 +60,8 @@ void ResetMaxStringWidth(void);
 
 static BOOL addQuitOptions(VOID)
 {
-	W_FORMINIT		sFormInit;		
-//	UWORD WindowWidth;	
+	W_FORMINIT		sFormInit;
+//	UWORD WindowWidth;
 
 	DisableCursorSnapsExcept(INTINGAMEOP);
 
@@ -70,7 +70,7 @@ static BOOL addQuitOptions(VOID)
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
 	}
 
-	memset(&sFormInit,0, sizeof(W_FORMINIT));	
+	memset(&sFormInit,0, sizeof(W_FORMINIT));
 
 
 	sFormInit.width		= INTINGAMEOP3_W;
@@ -96,7 +96,7 @@ static BOOL addQuitOptions(VOID)
 
 	//  quit
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM,INTINGAMEOP_2_Y,STR_GAME_QUIT,OPALIGN);
-	
+
 	SetMousePos(0,INTINGAMEOP3_X+INTINGAMEOP_1_X,INTINGAMEOP3_Y+INTINGAMEOP_1_Y); // move mouse to resume.
 
 	return TRUE;
@@ -105,7 +105,7 @@ static BOOL addQuitOptions(VOID)
 
 static BOOL _addSlideOptions()
 {
-	W_FORMINIT		sFormInit;			
+	W_FORMINIT		sFormInit;
 
 	DisableCursorSnapsExcept(INTINGAMEOP);
 
@@ -114,7 +114,7 @@ static BOOL _addSlideOptions()
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
 	}
 
-	memset(&sFormInit,0, sizeof(W_FORMINIT));	
+	memset(&sFormInit,0, sizeof(W_FORMINIT));
 
 
 	// add form
@@ -162,10 +162,10 @@ static BOOL _addSlideOptions()
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
 		addIGTextButton(INTINGAMEOP_GAMMA,INTINGAMEOP_3_Y,STR_FE_GAMMA,WBUT_PLAIN);
-		
+
 		if(gammaValue>3)	   gammaValue = (float)2.9;
 		if(gammaValue<0.5)  gammaValue = (float).5;
-	
+
 		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gammaValue*25),INTINGAMEOP_GAMMA );
 
 	}
@@ -200,7 +200,7 @@ void AddMaxStringWidth(STR_RES *psRes, UDWORD StringID)
 }
 UDWORD GetMaxStringWidth(void)
 {
-	return MaxStringWidth;	
+	return MaxStringWidth;
 }
 
 
@@ -208,7 +208,7 @@ UDWORD GetMaxStringWidth(void)
 static BOOL _intAddInGameOptions(void)
 {
 //	UWORD WindowWidth;
-	W_FORMINIT		sFormInit;			
+	W_FORMINIT		sFormInit;
 
 
 	audio_StopAll();
@@ -216,7 +216,7 @@ static BOOL _intAddInGameOptions(void)
     //clear out any mission widgets - timers etc that may be on the screen
     clearMissionWidgets();
 
-	
+
 	setWidgetsStatus(TRUE);
 	DisableCursorSnapsExcept(INTINGAMEOP);
 
@@ -237,7 +237,7 @@ static BOOL _intAddInGameOptions(void)
 	}
 
 
-	memset(&sFormInit,0, sizeof(W_FORMINIT));	
+	memset(&sFormInit,0, sizeof(W_FORMINIT));
 
 
 
@@ -261,7 +261,7 @@ static BOOL _intAddInGameOptions(void)
 	}
 
 
-	
+
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= TRUE;
 
@@ -275,7 +275,7 @@ static BOOL _intAddInGameOptions(void)
 
 	}
 	else
-	{	
+	{
 		addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
 	}
 
@@ -287,7 +287,7 @@ static BOOL _intAddInGameOptions(void)
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS,INTINGAMEOP_2_Y,STR_FE_OPTIONS,OPALIGN);
 
-		
+
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{		// add 'load'
 		addIGTextButton(INTINGAMEOP_LOAD,INTINGAMEOP_3_Y,STR_MISC_LOADGAME,OPALIGN);
@@ -299,7 +299,7 @@ static BOOL _intAddInGameOptions(void)
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= TRUE;					// inform interface.
 	SetMousePos(0,INTINGAMEOP_X+INTINGAMEOP_1_X,INTINGAMEOP_Y+INTINGAMEOP_1_Y); // move mouse to resume.
-	
+
 	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);			// reset cursor (hw)
 	frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
@@ -446,32 +446,32 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 
 
-	// GAME OPTIONS KEYS 
-	case INTINGAMEOP_FXVOL:	
-	case INTINGAMEOP_3DFXVOL:	
-	case INTINGAMEOP_CDVOL:	
-//	case INTINGAMEOP_GAMMA:	
+	// GAME OPTIONS KEYS
+	case INTINGAMEOP_FXVOL:
+	case INTINGAMEOP_3DFXVOL:
+	case INTINGAMEOP_CDVOL:
+//	case INTINGAMEOP_GAMMA:
 		SetMousePos(0,INTINGAMEOP2_X+INTINGAMEOP_MID+5 ,mouseY());	// move mouse
 		break;
 
 
-	case INTINGAMEOP_FXVOL_S:	
+	case INTINGAMEOP_FXVOL_S:
 		mixer_SetWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_FXVOL_S));
 		break;
-	case INTINGAMEOP_3DFXVOL_S:	
+	case INTINGAMEOP_3DFXVOL_S:
 		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_3DFXVOL_S));
 		break;
-	case INTINGAMEOP_CDVOL_S:	
+	case INTINGAMEOP_CDVOL_S:
 		mixer_SetCDVolume(widgGetSliderPos(psWScreen,INTINGAMEOP_CDVOL_S));
 		break;
-	
+
 //	case INTINGAMEOP_GAMMA_S:
 //		gammaValue = (float)(widgGetSliderPos(psWScreen,INTINGAMEOP_GAMMA_S))/25  ;
 //		if(gammaValue<0.5)  gammaValue = (float).5;
 //		pie_SetGammaValue(gammaValue);
 //		break;
 
-	
+
 	default:
 		break;
 	}

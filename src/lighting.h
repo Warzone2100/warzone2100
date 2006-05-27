@@ -1,11 +1,11 @@
 /* Lighting.h - Alex */
-#include "pietypes.h"
+#include "lib/ivis_common/pietypes.h"
 
-#define FOG_FLAGS		7	
-#define FOG_BACKGROUND	1	
-#define FOG_DISTANCE	2	
-#define FOG_GROUND		4	
-#define FOG_ENABLED		8	
+#define FOG_FLAGS		7
+#define FOG_BACKGROUND	1
+#define FOG_DISTANCE	2
+#define FOG_GROUND		4
+#define FOG_ENABLED		8
 
 extern UDWORD	fogStatus;
 

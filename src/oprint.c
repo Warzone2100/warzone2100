@@ -5,7 +5,7 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "projectile.h"
 #include "console.h"
@@ -165,7 +165,7 @@ void printWeaponInfo(WEAPON_STATS *psStats)
 		break;
 	}
 
-	
+
 	OPRINTF(ConsoleString,(ConsoleString,"Weapon: "));
 	printComponentInfo((COMP_BASE_STATS *)psStats);
 	OPRINTF(ConsoleString,(ConsoleString,"   sRng %d lRng %d mRng %d %s\n"
@@ -174,7 +174,7 @@ void printWeaponInfo(WEAPON_STATS *psStats)
 				proj_Direct(psStats) ? "direct" : "indirect",
 				//psStats->shortHit, psStats->longHit, psStats->firePause, psStats->damage));
 				weaponShortHit(psStats,(UBYTE)selectedPlayer), weaponLongHit(psStats,
-				(UBYTE)selectedPlayer), weaponFirePause(psStats,(UBYTE)selectedPlayer), 
+				(UBYTE)selectedPlayer), weaponFirePause(psStats,(UBYTE)selectedPlayer),
 				weaponDamage(psStats, (UBYTE)selectedPlayer)));
 	OPRINTF(ConsoleString,(ConsoleString,"   rad %d radHt %d radDam %d\n"
 			  "   inTime %d inDam %d inRad %d\n",
@@ -209,7 +209,7 @@ void printDroidInfo(DROID *psDroid)
 	printBaseObjInfo((BASE_OBJECT *)psDroid);
 
 	OPRINTF(ConsoleString,(ConsoleString,"   wt %d bSpeed %d sRng %d sPwr %d ECM %d bdy %d\n",
-		psDroid->weight, psDroid->baseSpeed, psDroid->sensorRange, 
+		psDroid->weight, psDroid->baseSpeed, psDroid->sensorRange,
 		psDroid->sensorPower,psDroid->ECMMod, psDroid->body));
 
 	/*for(i=0; i<(SDWORD)psDroid->numWeaps; i++)
@@ -261,7 +261,7 @@ void printDroidInfo(DROID *psDroid)
 				printComponentInfo((COMP_BASE_STATS *)psECMStats);
 				OPRINTF(ConsoleString,(ConsoleString,"   pwr %d loc %d imd %p\n",
 					//psECMStats->power, psECMStats->location, psECMStats->pMountGraphic));
-					ecmPower(psECMStats, psDroid->player), psECMStats->location, 
+					ecmPower(psECMStats, psDroid->player), psECMStats->location,
 					psECMStats->pMountGraphic));
 			}
 			else
@@ -277,7 +277,7 @@ void printDroidInfo(DROID *psDroid)
 				printComponentInfo((COMP_BASE_STATS *)psSensStats);
 				OPRINTF(ConsoleString,(ConsoleString,"   rng %d pwr %d loc %d imd %p\n",
 					//psSensStats->range, psSensStats->power,
-					sensorRange(psSensStats,psDroid->player), 
+					sensorRange(psSensStats,psDroid->player),
 					sensorPower(psSensStats,psDroid->player),
 					psSensStats->location, psSensStats->pMountGraphic));
 			}
@@ -294,7 +294,7 @@ void printDroidInfo(DROID *psDroid)
 				printComponentInfo((COMP_BASE_STATS *)psConstStats);
 				OPRINTF(ConsoleString,(ConsoleString,"   cPnts %d imd %p\n",
 					//psConstStats->constructPoints, psConstStats->pMountGraphic));
-					constructorPoints(psConstStats, psDroid->player), 
+					constructorPoints(psConstStats, psDroid->player),
 					psConstStats->pMountGraphic));
 			}
 			break;
@@ -305,9 +305,9 @@ void printDroidInfo(DROID *psDroid)
 				psRepairStats = asRepairStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMP_BASE_STATS *)psRepairStats);
 				OPRINTF(ConsoleString,(ConsoleString,"   repPnts %d loc %d imd %p\n",
-					//psRepairStats->repairPoints, psRepairStats->location, 
-					repairPoints(psRepairStats, psDroid->player), 
-					psRepairStats->location, 
+					//psRepairStats->repairPoints, psRepairStats->location,
+					repairPoints(psRepairStats, psDroid->player),
+					psRepairStats->location,
 					psRepairStats->pMountGraphic));
 			}
 			break;

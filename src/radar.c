@@ -1,13 +1,15 @@
-#include "frame.h"
-#include "piedef.h"
-#include "rendmode.h"
-#include "piematrix.h"
-#include "piepalette.h"
-#include "piestate.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/rendmode.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/piestate.h"
 #include "objects.h"
 #include "display3d.h"
 #include "map.h"
-#include "screen.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/screen.h"
 #include "component.h"
 #include "radar.h"
 #include "mapdisplay.h"
@@ -17,13 +19,13 @@
 #include "loop.h"
 #include "warcam.h"
 #include "display.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "mission.h"
 
 
 
 #include "multiplay.h"
-#include "piefunc.h"
+#include "lib/ivis_common/piefunc.h"
 
 
 
@@ -59,18 +61,18 @@ static UBYTE		colBlack,colWhite,colRadarBorder,colGrey;
 // colours for each clan on the radar map.
 
 #define CAMPAIGNS	3
-static UDWORD		clanColours[CAMPAIGNS][MAX_PLAYERS] = 
+static UDWORD		clanColours[CAMPAIGNS][MAX_PLAYERS] =
 {
-{81,243,231,1,182,187,207,195}, 
-{81,243,231,1,182,187,207,195}, 
-{81,243,231,1,182,187,207,195}, 
+{81,243,231,1,182,187,207,195},
+{81,243,231,1,182,187,207,195},
+{81,243,231,1,182,187,207,195},
 };
 
-static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] = 
+static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 {
 {165,165,165,165,255,165,165,165}, // everything flashes red when attacked except red - it goes white!
-{165,165,165,165,255,165,165,165}, 
-{165,165,165,165,255,165,165,165}, 
+{165,165,165,165,255,165,165,165},
+{165,165,165,165,255,165,165,165},
 };
 
 
@@ -149,7 +151,7 @@ BOOL InitRadar(void)
 	RadarImage.Height = (UWORD)RadarHeight;
 	RadarImage.XOffset = 0;
 	RadarImage.YOffset = 0;
-	
+
 	colRadarBorder	= COL_GREY;
 	colBlack = 0;
 	colGrey = COL_DARKGREY;
@@ -217,7 +219,7 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 
 	//*PosX = ((mX-RADTLX-RadarOffsetX)/boxSizeH)+RadarScrollX+RadarMapOriginX;
 	//*PosY = ((mY-RADTLY-RadarOffsetY)/boxSizeV)+RadarScrollY+RadarMapOriginY;
-	
+
 
 	// Calculate where on the radar we clicked
 	Xoffset=mX-RADTLX-RadarOffsetX;
@@ -226,14 +228,14 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 
 	Yoffset=mY-RADTLY-RadarOffsetY;
 	if (Yoffset<0) Yoffset=0;
-	
+
 
 	sPosX = ((Xoffset)/boxSizeH)+RadarScrollX+RadarMapOriginX;
 	sPosY = ((Yoffset)/boxSizeV)+RadarScrollY+RadarMapOriginY;
-	
-	
-	
-	
+
+
+
+
 	if (sPosX < scrollMinX)
 	{
 		sPosX = scrollMinX;
@@ -257,7 +259,7 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 //given a world pos, return a radar pos..
 // ajl did this, so don't blame paul when it barfs...
 void worldPosToRadarPos(UDWORD wX,UDWORD wY,SDWORD *rX, SDWORD *rY)
-{	
+{
 	SDWORD x,y;
 	UWORD	boxSizeH,boxSizeV;
 
@@ -332,7 +334,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 	SDWORD PrevRadarScrollY = RadarScrollY;
 	SDWORD PrevRadarMapOriginX = RadarMapOriginX;
 	SDWORD PrevRadarMapOriginY = RadarMapOriginY;
-	SDWORD PrevRadarMapWidth = RadarMapWidth; 
+	SDWORD PrevRadarMapWidth = RadarMapWidth;
 	SDWORD PrevRadarMapHeight = RadarMapHeight;
 
 	SDWORD BorderX;
@@ -383,7 +385,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 
 	if(viewX < BorderX) {
 		RadarScrollX += viewX-BorderX;
-	} 
+	}
 
 	viewX += visibleXTiles;
 	if(viewX > (RadVisWidth/boxSizeH)-BorderX) {
@@ -483,7 +485,7 @@ static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
  	if(sweep >= (UDWORD)RadarHeight) {
 		sweep = 0;
 	}
- 
+
 	if(!gamePaused())
 	{
 		if(sweepStrobeIndex++>=BOX_PULSE_SIZE)
@@ -517,7 +519,7 @@ static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSize
 	}
 }
 
-	
+
 // Draw the map tiles on the radar.
 //
 static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
@@ -683,7 +685,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	UBYTE				playerCol,col;
 	UBYTE				flashCol;
 	UBYTE				camNum;
-	
+
 
 
 	SizeH = boxSizeH;
@@ -716,8 +718,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    		for(psDroid = apsDroidLists[clan]; psDroid != NULL;
    			psDroid = psDroid->psNext)
    		{
-			if(psDroid->visible[selectedPlayer] 
-				OR godMode 
+			if(psDroid->visible[selectedPlayer]
+				OR godMode
 				OR (bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,psDroid->player))
 				)
 			{
@@ -732,7 +734,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 
 					if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
-	// 	
+	//
 						if((clan == selectedPlayer) AND (gameTime-psDroid->timeLastHit < HIT_NOTIFICATION))
 						{
 						   	/*
@@ -761,8 +763,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 #ifdef CHECKBUFFER
 								ASSERT(( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow"));
 								ASSERT(( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun"));
-#endif							
-								*WPtr = col;	
+#endif
+								*WPtr = col;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -784,8 +786,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;
    			psStruct = psStruct->psNext)
    		{
-			if(psStruct->visible[selectedPlayer] 
-				OR godMode 
+			if(psStruct->visible[selectedPlayer]
+				OR godMode
 				OR (bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,psStruct->player))
 				)
 			{
@@ -902,7 +904,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 
 			psProxDisp->radarX = 0;
 			psProxDisp->radarY = 0;
-			if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) 
+			if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0))
 			{
 				//store the coords
 				psProxDisp->radarX = x + OffsetX;
@@ -967,13 +969,13 @@ SDWORD	dif;
 
 	pitch = 360 - (player.r.x/DEG_1);
 
-	// Max at 
+	// Max at
 	lookingDown = (0-MIN_PLAYER_X_ANGLE);
 	lookingFar = (0-MAX_PLAYER_X_ANGLE);
 	dif = pitch-lookingFar;
 	if(dif <0) dif = 0;
 	if(dif>(lookingDown-lookingFar)) dif = (lookingDown-lookingFar);
-   
+
 	return(dif/2);
 }
 
@@ -992,7 +994,7 @@ UDWORD	camNumber;
 	longX = ((visibleXTiles/2)-(dif/2)) * boxSizeH;
 	yDropVar = ((visibleYTiles/2)-(dif2/3)) * boxSizeV;
 	yDrop = ((visibleYTiles/2)-dif2/3) * boxSizeV;
-   
+
 
  	v[0].x = -longX;
 	v[0].y = -yDropVar;
@@ -1006,9 +1008,9 @@ UDWORD	camNumber;
 	v[3].x = shortX;
 	v[3].y = yDrop;
 
-	centre.x = RADTLX+x+(visibleXTiles*boxSizeH)/2;       
-	centre.y = RADTLY+y+(visibleYTiles*boxSizeV)/2;       
-   	
+	centre.x = RADTLX+x+(visibleXTiles*boxSizeH)/2;
+	centre.y = RADTLY+y+(visibleYTiles*boxSizeV)/2;
+
 	RotateVector2D(v,tv,&centre,player.r.y,4);
   //	iV_Line(tv[0].x,tv[0].y,tv[1].x,tv[1].y,colWhite);
   //	iV_Line(tv[1].x,tv[1].y,tv[3].x,tv[3].y,colWhite);
@@ -1043,8 +1045,8 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 	SDWORD	viewX,viewY;
 	SDWORD	offsetX,offsetY;
 
-	offsetX = 
-	offsetY = 
+	offsetX =
+	offsetY =
 	viewX = ((player.p.x/TILE_UNITS)-RadarScrollX-RadarMapOriginX)*boxSizeH;
 	viewY = ((player.p.z/TILE_UNITS)-RadarScrollY-RadarMapOriginY)*boxSizeV;
 	viewX += RadarOffsetX;
@@ -1067,7 +1069,7 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 			{
 				radarStrobe = FALSE;
 				radarStrobeIndex = 0;
-			}	
+			}
 		}
 		*/
 
@@ -1098,7 +1100,7 @@ BOOL CoordInRadar(int x,int y)
 
 		return TRUE;
 	}
-	
+
 	return FALSE;
 }
 
@@ -1122,7 +1124,7 @@ void	calcRadarColour(UBYTE *tileBitmap, UDWORD tileNumber)
 		/* Get pixel colour index */
 		penNumber = (UBYTE) tileBitmap[i];
 		/* Get the r,g,b components */
-		red		=	_iVPALETTE[penNumber].r;			  
+		red		=	_iVPALETTE[penNumber].r;
 		green	=	_iVPALETTE[penNumber].g;
 		blue	=	_iVPALETTE[penNumber].b;
 		/* Add them to totals */

@@ -5,13 +5,13 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "powercrypt.h"
 #include "deliverance.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "multiplay.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 
 // how long to pause between sending cheat messages
 #define PWRC_MESSAGE_PAUSE		10000

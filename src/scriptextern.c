@@ -5,21 +5,21 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptextern.h"
 
-#include "rendfunc.h"
+#include "lib/ivis_common/rendfunc.h"
 #include "display.h"
 
 #include "multiplay.h"
 
 #include "winmain.h"
 #include "hci.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 
 
 // current game level
@@ -100,7 +100,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 	case EXTID_CURSOR:
 		type = VAL_INT;
-		val = iV_GetMouseFrame();	// from  rendfunc.c 
+		val = iV_GetMouseFrame();	// from  rendfunc.c
 //		DBPRINTF(("CURSOR = %d val\n",val));
 		break;
 	case EXTID_INTMODE:
@@ -135,7 +135,7 @@ BOOL scrGenExternGet(UDWORD index)
 		type = VAL_INT;
 		val	= game.base;
 		break;
-				 
+
 		default:
 		ASSERT((FALSE, "scrGenExternGet: unknown variable index"));
 		return FALSE;

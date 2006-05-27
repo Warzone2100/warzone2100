@@ -7,7 +7,7 @@
 
 
 //#define DEBUG_GROUP0
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
 #include "astar.h"
@@ -86,7 +86,7 @@ void formationShutDown(void)
 UDWORD	adjustDirection(SDWORD present, SDWORD difference)
 {
 SDWORD	sum;
-	
+
 	sum = present+difference;
 	if(sum>=0 AND sum<=360)
 	{
@@ -274,7 +274,7 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 		"formationLeave: invalid formation"));
 	ASSERT((psFormation->refCount > 0,
 		"formationLeave: refcount is zero"));
-	
+
 	DBP0(("formationLeave: %p, obj %d\n", psFormation, psObj->id));
 
 	asMembers = psFormation->asMembers;
@@ -707,7 +707,7 @@ void formationReorder(FORMATION *psFormation)
 		asMembers[unit].dist = (SWORD)(aFreePos[line].dist + formationObjRadius(apsObjects[obj]));
 		if (asMembers[unit].dist >= psFormation->size * aFreePos[line].rank)
 		{
-			asMembers[unit].dist = (SWORD)(psFormation->size * aFreePos[line].rank + 
+			asMembers[unit].dist = (SWORD)(psFormation->size * aFreePos[line].rank +
 						formationObjRadius(apsObjects[obj]));
 		}
 		asMembers[unit].psObj = apsObjects[obj];

@@ -7,12 +7,12 @@
 #ifndef _displaydef_h
 #define _displaydef_h
 
-#include "imd.h"
+#include "lib/ivis_common/imd.h"
 		// ffs am
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
 
-#define DISP_WIDTH		(pie_GetVideoBufferWidth()) 
+#define DISP_WIDTH		(pie_GetVideoBufferWidth())
 #define DISP_HEIGHT		(pie_GetVideoBufferHeight())
 
 #define DISP_HARDBITDEPTH	(16)
@@ -38,7 +38,7 @@ typedef struct _screen_disp_data
 //	BOOL		onScreen;
 //	UDWORD		numTiles;
 	UDWORD		screenX,screenY;
-	UDWORD		screenR; 
+	UDWORD		screenR;
 } SCREEN_DISP_DATA;
 
 

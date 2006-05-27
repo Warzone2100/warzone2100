@@ -7,14 +7,14 @@
 
 // cluster empty printf's
 //#define DEBUG_GROUP0
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
 #include "cluster.h"
 #include "console.h"
 #include "hci.h"
-#include "gtime.h"
-#include "script.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
 

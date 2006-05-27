@@ -8,25 +8,21 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 
 #include "objects.h"
 #include "loop.h"
 #include "edit2d.h"
 #include "map.h"
 /* Includes direct access to render library */
-#include "ivisdef.h"
-#include "piestate.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piemode.h"
 
-
-#include "piemode.h"
-
-
-#include "vid.h"
-#include "bitimage.h"
-
-
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/bitimage.h"
 
 #include "display3d.h"
 #include "edit3d.h"
@@ -34,21 +30,21 @@
 #include "structure.h"
 #include "research.h"
 #include "function.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "stats.h"
 #include "game.h"
 #include "power.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
-#include "widgint.h"
-#include "bar.h"
-#include "form.h"
-#include "label.h"
-#include "button.h"
-#include "editbox.h"
-#include "slider.h"
-#include "fractions.h"
+#include "lib/widget/widgint.h"
+#include "lib/widget/bar.h"
+#include "lib/widget/form.h"
+#include "lib/widget/label.h"
+#include "lib/widget/button.h"
+#include "lib/widget/editbox.h"
+#include "lib/widget/slider.h"
+#include "lib/framework/fractions.h"
 #include "order.h"
 #include "winmain.h"
 
@@ -387,7 +383,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
 				}
 				break;
-			
+
 			case FR_TOP:
 				if(Opaque==FALSE) {
 					if(Masked == FALSE) {
@@ -407,9 +403,9 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 				break;
 
 			case FR_BOTTOM:
-				if(Opaque==FALSE) 
+				if(Opaque==FALSE)
 				{
-					if(Masked == FALSE) 
+					if(Masked == FALSE)
 					{
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
 						Masked = TRUE;
@@ -444,7 +440,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 		HTopRight = (SWORD)iV_GetImageHeight(IntImages,Frame->TopRight);
 		iV_DrawTransImage(IntImages,Frame->TopRight,x+Width-WTopRight, y);
 	}
-	
+
 	if(Frame->BottomRight >= 0) {
 		WBottomRight = (SWORD)iV_GetImageWidth(IntImages,Frame->BottomRight);
 		HBottomRight = (SWORD)iV_GetImageHeight(IntImages,Frame->BottomRight);

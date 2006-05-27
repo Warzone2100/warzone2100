@@ -6,13 +6,13 @@
  */
 
 
-#include "frame.h"
-#include "script.h"
+#include "lib/framework/frame.h"
+#include "lib/script/script.h"
 #include "objects.h"
 #include "base.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "text.h"
 #include "group.h"
 
@@ -221,7 +221,7 @@ BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj)
 	//UDWORD			player;
 	BASE_OBJECT		*psObj;
 
-	
+
 	psObj = getBaseObjFromId(id);
 	*ppsObj = psObj;
 

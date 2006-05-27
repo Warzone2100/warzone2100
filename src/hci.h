@@ -6,11 +6,11 @@
 #ifndef _hci_h
 #define _hci_h
 
-#include "widget.h"
+#include "lib/widget/widget.h"
 #include "message.h"
 
 #include "cdspan.h"
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
 //#include "intimage.h"
 
@@ -46,7 +46,7 @@
 
 
 
-/* Object screen IDs */	 
+/* Object screen IDs */
 
 #define IDOBJ_FORM			3000		// The object back form for build/manufacture/research
 #define IDOBJ_CLOSE			3001		// The form for the close button
@@ -99,7 +99,7 @@
 
 // Reticule position.
 #define RET_X				23
-#define RET_Y				(324+E_H) 
+#define RET_Y				(324+E_H)
 #define RET_FORMWIDTH		132
 #define RET_FORMHEIGHT		132
 
@@ -111,13 +111,13 @@
 #define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
 #define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
 #define OBJ_BACKWIDTH	320	//316		// Width of object screen back form.
-#define OBJ_BACKHEIGHT	115		// Height of object screen back form. 
+#define OBJ_BACKHEIGHT	115		// Height of object screen back form.
 
 /* Build screen positions */
 #define OBJ_TABX		2	// X coord of object screen tab form.
 #define OBJ_TABY		6	// Y coord of object screen tab form.
-#define OBJ_WIDTH		316	//312//310	// Width of object screen tab form.  
-#define OBJ_HEIGHT		112	// Height of object screen tab form. 
+#define OBJ_WIDTH		316	//312//310	// Width of object screen tab form.
+#define OBJ_HEIGHT		112	// Height of object screen tab form.
 #define OBJ_GAP			2	// Gap between buttons.
 #define OBJ_STARTX		2	// Offset of first obj button from left of tab form.
 #define OBJ_STARTY		42	//44	// Offset of first obj button from top of tab form.
@@ -143,7 +143,7 @@
 #define POW_CLICKBARMAJORBLUE	0
 
 //tab details
-#define OBJ_TABWIDTH	26	
+#define OBJ_TABWIDTH	26
 #define OBJ_TABHEIGHT	11
 #define	OBJ_TABOFFSET	2
 
@@ -165,7 +165,7 @@
 
 // 2 16 bit values packed into a DWORD.
 #define PACKDWORD(a,b)	( ( (a)<<16 ) | (b) )
-#define UNPACKDWORD_HI(a) ( (a)>>16 )					
+#define UNPACKDWORD_HI(a) ( (a)>>16 )
 #define UNPACKDWORD_LOW(a) ( (a) & 0xffff)
 
 // 3 10 bit values packed into a DWORD.
@@ -185,7 +185,7 @@
 //#define BUILDPOINTS_STRUCTDIV 1
 //#define BUILDPOINTS_DROIDDIV 5
 //#define POWERPOINTS_STRUCTDIV 1
-#define POWERPOINTS_DROIDDIV	5 //3 
+#define POWERPOINTS_DROIDDIV	5 //3
 
 #define OBJ_BUTWIDTH		60		// Button width.
 #define OBJ_BUTHEIGHT		46		// Button height.
@@ -249,7 +249,7 @@ typedef enum {
 	INT_TRANSPORTER, //Loading/unloading a Transporter
 	INT_MISSIONRES,	// Results of a mission display.
 	INT_MULTIMENU,	// multiplayer only, player stats etc...
-	INT_CDCHANGE,		// CD Change message box 
+	INT_CDCHANGE,		// CD Change message box
 
     INT_MAXMODE,   //leave as last so we can start the objMode at this value
 } INTMODE;
@@ -302,7 +302,7 @@ extern UDWORD	outlineColour3D;
 
 //Buffer to hold the 3D view for the Intelligence Screen
 extern iSurface *pIntelMapSurface;
-/*Message View Buffer width and height - MAXIMUM Sizes! - only need to be 
+/*Message View Buffer width and height - MAXIMUM Sizes! - only need to be
 as big as Pie View in Research Msg now*/
 #define	MSG_BUFFER_WIDTH		INTMAP_PIEWIDTH//DISP_WIDTH//640
 #define	MSG_BUFFER_HEIGHT		INTMAP_PIEHEIGHT//DISP_HEIGHT//480
@@ -334,7 +334,7 @@ typedef enum _int_retval
 	INT_INTERCEPT,	// key clicks have been intercepted
 	//INT_FULLSCREENPAUSE,	// The widget interface is full screen and
 							// the rest of the game should pause
-	//INT_INTELPAUSE,			// The Intelligence Map is up and all update 
+	//INT_INTELPAUSE,			// The Intelligence Map is up and all update
 							// routines should pause - hopefully!
 	INT_INTELNOSCROLL,		//The 3DView of the intelligence screen is up
 							// and we don't want scroll (or update!)

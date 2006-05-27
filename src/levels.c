@@ -9,7 +9,7 @@
 
 // levLoadData printf's
 #define DEBUG_GROUP0
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "init.h"
 #include "objects.h"
 #include "hci.h"
@@ -18,12 +18,12 @@
 #include "levelint.h"
 #include "game.h"
 #include "lighting.h"
-#include "piestate.h"
+#include "lib/ivis_common/piestate.h"
 #include "data.h"
-#include "ivi.h"
+#include "lib/ivis_common/ivi.h"
 
 //#ifdef DEBUG
-#include "script.h"
+#include "lib/script/script.h"
 #include "scripttabs.h"
 //#endif
 
@@ -85,7 +85,7 @@ BOOL levInitialise(void)
 	psLevels = NULL;
 	psBaseData = NULL;
 	psCurrLevel = NULL;
-	
+
 	return TRUE;
 }
 
@@ -302,7 +302,7 @@ BOOL levParse(UBYTE *pBuffer, SDWORD size, int datadir)
 			else if (state == LP_LEVELDONE)
 			{
 				if (psDataSet->type == LDS_CAMSTART ||
-					psDataSet->type == LDS_MKEEP 
+					psDataSet->type == LDS_MKEEP
 					||psDataSet->type == LDS_CAMCHANGE ||
 					psDataSet->type == LDS_EXPAND ||
 					psDataSet->type == LDS_MCLEAR ||
@@ -426,7 +426,7 @@ BOOL levParse(UBYTE *pBuffer, SDWORD size, int datadir)
 		levError("Unexpected end of file");
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -466,7 +466,7 @@ BOOL levReleaseMissionData(void)
 			}
 			else// if (psCurrLevel->apDataFiles[i])
 			{
-                
+
 				resReleaseBlockData(i + CURRENT_DATAID);
 			}
 		}
@@ -582,7 +582,7 @@ BOOL levLoadBaseData(STRING *pName)
 	}
 
 	if (psNewLevel->type != LDS_CAMSTART &&
-		psNewLevel->type != LDS_MKEEP 
+		psNewLevel->type != LDS_MKEEP
 		&& psNewLevel->type != LDS_EXPAND &&
 		psNewLevel->type != LDS_MCLEAR &&
         psNewLevel->type != LDS_EXPAND_LIMBO &&
@@ -646,7 +646,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	// reset fog
 //	fogStatus = 0;
 //	pie_EnableFog(FALSE);//removed, always set by script or save game
-	
+
 	levelLoadType = saveType;
 
 	// find the level dataset
@@ -907,7 +907,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 			}
 
 			// missions with a seperate map have to use the mission heap now
-			if ((psNewLevel->type == LDS_MKEEP 
+			if ((psNewLevel->type == LDS_MKEEP
 				 ||psNewLevel->type == LDS_MCLEAR
                  ||psNewLevel->type == LDS_MKEEP_LIMBO
 				  ) &&
@@ -977,7 +977,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 						return FALSE;
 					}
 					break;
-				
+
 				case LDS_MKEEP:
 					debug(LOG_WZ, "levLoadData: LDS_MKEEP");
 					//if (!startMission(MISSION_OFFKEEP, psNewLevel->apDataFiles[i]))
@@ -994,7 +994,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 						return FALSE;
 					}
 					break;
-			
+
 				case LDS_EXPAND:
 					debug(LOG_WZ, "levLoadData: LDS_EXPAND");
 					//if (!startMission(MISSION_CAMPEXPAND, psNewLevel->apDataFiles[i]))
@@ -1011,7 +1011,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 						return FALSE;
 					}
 					break;
-			
+
 				case LDS_MCLEAR:
 					debug(LOG_WZ, "levLoadData: LDS_MCLEAR");
 					//if (!startMission(MISSION_OFFCLEAR, psNewLevel->apDataFiles[i]))

@@ -10,7 +10,7 @@
 #ifndef _ivisdef_h
 #define _ivisdef_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "pietypes.h"
 
 
@@ -22,7 +22,7 @@
  */
 /***************************************************************************/
 #define BSPIMD	// now defined for all versions (optional BSP handled on all formats)
-#ifdef WIN321		//Not really needed I guess, however, see debug.c comments.  -Qamly	
+#ifdef WIN321		//Not really needed I guess, however, see debug.c comments.  -Qamly
 	#define iV_DDX
 #endif
 
@@ -130,7 +130,7 @@ typedef struct {
 
 
 
-// PlayStation special effect structure ... loaded as a PIE (type 9) and cast to iIMDShape 
+// PlayStation special effect structure ... loaded as a PIE (type 9) and cast to iIMDShape
 typedef struct iIMDShapeEffect
 {
 	uint32 flags;			// This 'flags' can be used to check if the file is a 3d PIE file or a special effect
@@ -146,7 +146,7 @@ typedef struct iIMDShapeEffect
 #define TRACER_SINGLE 0	// iIMDShapeProjectile types.
 #define TRACER_DOUBLE 1
 
-// PlayStation special effect structure ... loaded as a PIE (type 10) and cast to iIMDShape 
+// PlayStation special effect structure ... loaded as a PIE (type 10) and cast to iIMDShape
 typedef struct iIMDShapeProjectile
 {
 	uint32 flags;			// This 'flags' can be used to check if the file is a 3d PIE file or a special effect
@@ -164,7 +164,7 @@ typedef struct iIMDShapeProjectile
 
 typedef struct iIMDShape {
 	uint32 flags;
-	int32 texpage;	
+	int32 texpage;
 	int32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
 
 	iVector ocen;

@@ -9,11 +9,11 @@
 /* map line printf's */
 //#define DEBUG_GROUP1
 #include <assert.h>
-#include "frame.h"
-#include "frameint.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 #define DEFINE_MAPINLINE	// defines the inline functions in this module
 #include "map.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "projectile.h"
 // chnaged line	- alex
@@ -29,7 +29,7 @@
 #include "gateway.h"
 #include "wrappers.h"
 
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 
 BOOL	bDoneWater = FALSE;
 BOOL	nearLand(UDWORD x, UDWORD y);
@@ -59,7 +59,7 @@ typedef struct _map_save_tilev2
 {
 	SAVE_MAP_V2;
 } MAP_SAVETILEV2;
-	
+
 typedef struct _map_save_tilev1
 {
 	UDWORD		texture;
@@ -133,10 +133,10 @@ typedef float AAFLOAT;
 
 
 // Maximun expected return value from get height
-#define	MAX_HEIGHT			(256 * ELEVATION_SCALE)	
+#define	MAX_HEIGHT			(256 * ELEVATION_SCALE)
 
 /* Number of entries in the sqrt(1/(1+x*x)) table for aaLine */
-#define	ROOT_TABLE_SIZE		1024	
+#define	ROOT_TABLE_SIZE		1024
 
 /* aaLine direction bits and tables */
 #define DIR_STEEP			1  /* set when abs(dy) > abs(dx) */
@@ -259,12 +259,12 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 	mapWidth = width;
 	mapHeight = height;
-	
+
 	for (i=0; i<MAX_TILE_TEXTURES; i++)
 		{
 			terrainTypes[i] = TER_SANDYBRUSH;
 		}
-	
+
 	/* Calculate the shift to use on y when indexing into the map array - USES mapWidth NOW*/
 //	mapShift = widthShift;
 
@@ -367,7 +367,7 @@ BOOL mapLoadV2(UBYTE *pFileData, UDWORD fileSize)
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
 
-		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);  
+		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);
 
 
 
@@ -417,7 +417,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
 
-		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);  
+		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);
 
 
 
@@ -649,7 +649,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 			aMapLinePoints = NULL;
 		}
 	}
-	
+
 	/* Allocate the memory for the map */
 	if (mapAlloc)
 	{
@@ -663,7 +663,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 		}
 		memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
 
-	 
+
 
 		mapWidth = width;
 		mapHeight = height;
@@ -709,7 +709,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
-	
+
 	return TRUE;
 }
 
@@ -754,7 +754,7 @@ BOOL mapSave(UBYTE **ppFileData, UDWORD *pFileSize)
 	for(i=0; i<(UDWORD)gwNumZones; i++) {
 		*pFileSize += 1+aNumEquiv[i];
 	}
-	
+
 	*ppFileData = (UBYTE *)MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
@@ -837,7 +837,7 @@ BOOL mapSave(UBYTE **ppFileData, UDWORD *pFileSize)
 			}
 		}
 	}
-	
+
 	ASSERT(( ( ((UDWORD)psLastZone) - ((UDWORD)*ppFileData) ) < *pFileSize,"Buffer overflow saving map"));
 
 	return TRUE;
@@ -872,7 +872,7 @@ BOOL mapSaveMission(UBYTE **ppFileData, UDWORD *pFileSize)
 	for(i=0; i<gwNumZones; i++) {
 		*pFileSize += 1+aNumEquiv[i];
 	}
-	
+
 	*ppFileData = (UBYTE *)MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
@@ -951,7 +951,7 @@ BOOL mapSaveMission(UBYTE **ppFileData, UDWORD *pFileSize)
 			}
 		}
 	}
-	
+
 	ASSERT(( ( ((UDWORD)psLastZone) - ((UDWORD)*ppFileData) ) < *pFileSize,"Buffer overflow saving map"));
 
 	return TRUE;
@@ -1127,7 +1127,7 @@ void mapRootTblInit(void)
 	ASSERT((bitCount==1,"ROOT_TABLE_SIZE not a power of 2"));		// ROOT_TABLE_SIZE must be a power of 2
 
 	tablecells = (1 << tablebits) + 1;
-	
+
 
 
 	/* Allocate the table */
@@ -1334,7 +1334,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	/* Tile comp */
 	tileX = x >> TILE_SHIFT;
 	tileY = y >> TILE_SHIFT;
-   
+
 	/* Inter tile comp */
 	ox = (x & (TILE_UNITS-1));
 	oy = (y & (TILE_UNITS-1));
@@ -1353,7 +1353,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		oy = (SDWORD)y - (SDWORD)(tileY << TILE_SHIFT);
 		oy = TILE_UNITS - oy;
 		dy = ((lowerHeightOffset - upperHeightOffset) * oy )/ TILE_UNITS;
-		
+
 		return((SEA_LEVEL + (dy*ELEVATION_SCALE)));
 		*/
 	}
@@ -1364,7 +1364,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 //	ox = (SDWORD)x - (SDWORD)(tileX << TILE_SHIFT);
 //	oy = (SDWORD)y - (SDWORD)(tileY << TILE_SHIFT);
 
-	
+
 
 	ASSERT((ox < TILE_UNITS, "mapHeight: x offset too big"));
 	ASSERT((oy < TILE_UNITS, "mapHeight: y offset too big"));
@@ -1477,7 +1477,7 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 	{
 		return TRUE;
 	}
-	
+
 	/* trivial test below */
 	if ( (psObj->z <= h1) && (psObj->z <= h2) &&
 		 (psObj->z <= h3) && (psObj->z <= h4)    )
@@ -1497,7 +1497,7 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 	}
 }
 
-/* returns the max and min height of a tile by looking at the four corners 
+/* returns the max and min height of a tile by looking at the four corners
    in tile coords */
 void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
 {
@@ -1561,10 +1561,10 @@ UDWORD			i;
 	/* Did we get it? */
 	if(!pFileData)
 	{
-		/* Nope, so do one */	
+		/* Nope, so do one */
 		DBERROR(("Saving visibility data : Cannot get the memory! (%d)",fileSize));
 		return(FALSE);
-	} 
+	}
 
 	/* We got the memory, so put the file header on the file */
 	psHeader = (VIS_SAVEHEADER *)pFileData;
@@ -1579,7 +1579,7 @@ UDWORD			i;
 	/* Skip past the header to the raw data area */
 	pVisData = pFileData + sizeof(struct _vis_save_header);
 
-	 
+
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
 			pVisData[i] = psMapTiles[i].tileVisBits;
@@ -1630,8 +1630,8 @@ UBYTE				*pVisData;
 					mapWidth,mapHeight));
 		return(FALSE);
 	}
-	
-	/* Skip past the header gubbins - can check version number here too */	
+
+	/* Skip past the header gubbins - can check version number here too */
 	pVisData = (UBYTE*)pFileData + sizeof(struct _vis_save_header);
 
 	/* For every tile... */

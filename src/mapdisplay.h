@@ -1,7 +1,7 @@
 #ifndef _mapdisplay_h
 #define _mapdisplay_h
 
-#include "pietypes.h"
+#include "lib/ivis_common/pietypes.h"
 
 /* MapDisplay.h */
 
@@ -9,7 +9,7 @@
 #define BUFFER_GRIDY	22
 
 
-/*Flag to switch code for bucket sorting in renderFeatures etc 
+/*Flag to switch code for bucket sorting in renderFeatures etc
   for the renderMapToBuffer code */
   /*This is no longer used but may be useful for testing so I've left it in - maybe
   get rid of it eventually? - AB 1/4/98*/
@@ -24,7 +24,7 @@ extern iSurface	*mapSurface;
 extern iSurface* setUpMapSurface(UDWORD width, UDWORD height);
 
 /* Render the world to given surface */
-//extern void	renderMapToBuffer( struct iSurface *pSurface, iVector *location, iVector *viewVector, 
+//extern void	renderMapToBuffer( struct iSurface *pSurface, iVector *location, iVector *viewVector,
 //						  UDWORD distance );
 // Render a Map Surface to display memory.
 extern void renderMapSurface(struct iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height);
@@ -34,7 +34,7 @@ extern void renderMapSurface(struct iSurface *pSurface, UDWORD x, UDWORD y, UDWO
 extern void renderIMDToBuffer(struct iSurface *pSurface, struct iIMDShape *pIMD,
 							  struct iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
 							  UDWORD OriginX,UDWORD OriginY);
-extern void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch, 
+extern void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY);
 
 

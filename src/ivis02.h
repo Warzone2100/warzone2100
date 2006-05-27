@@ -8,8 +8,8 @@
 #define _ivis02_h
 
 /* Includes direct access to render modes */
-#include "ivisdef.h"
-#include "rendmode.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/rendmode.h"
 //#include "geo.h"
 //#include "bug.h"
 //#include "pal.h"

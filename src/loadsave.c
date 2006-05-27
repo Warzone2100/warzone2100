@@ -9,14 +9,14 @@
 #include <ctype.h>
 #include <string.h>
 #include <physfs.h>
-#ifndef  _MSC_VER	
+#ifndef  _MSC_VER
 #include <unistd.h>
 #endif		//above line not in .net --Qamly
 
-#include "frame.h"
-#include "widget.h"
-#include "piepalette.h"		// for predefined colours.
-#include "rendmode.h"		// for boxfill
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
+#include "lib/ivis_common/piepalette.h"		// for predefined colours.
+#include "lib/ivis_common/rendmode.h"		// for boxfill
 #include "hci.h"
 #include "loadsave.h"
 #include "multiplay.h"
@@ -31,12 +31,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "loop.h"
 #include "intdisplay.h"
 #include "text.h"
 #include "mission.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 //======================================================================================
 //--------------------------------
 #define totalslots 20			//saves slots.. was 10 , now 20   *Away with hard coding values!* -Q
@@ -65,8 +65,8 @@
 #define LOADSAVE_LABEL			ID_LOADSAVE+3		// load/save
 #define LOADSAVE_BANNER			ID_LOADSAVE+4		// banner.
 
-#define LOADENTRY_START			ID_LOADSAVE+10		// each of the buttons.	
-#define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q	
+#define LOADENTRY_START			ID_LOADSAVE+10		// each of the buttons.
+#define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
 #define SAVEENTRY_EDIT			ID_LOADSAVE+50		// save edit box. must be highest value possible I guess. -Q
 
@@ -145,9 +145,9 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 // removed hardcoded values!  change with the defines above! -Q
-	static STRING	sSlots[totalslots][totalslotspace];			
+	static STRING	sSlots[totalslots][totalslotspace];
 	char **i, **files;
-	
+
 	mode = bLoad;
 
 	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
@@ -156,19 +156,19 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 		{
 			gameTimeStop();
 			if(GetGameMode() == GS_NORMAL)
-			{	
+			{
 				BOOL radOnScreen = radarOnScreen;				// Only do this in main game.
-					
+
 				bRender3DOnly = TRUE;
 				radarOnScreen = FALSE;
-		
+
 				displayWorld();									// Just display the 3d, no interface
-		
+
 				pie_UploadDisplayBuffer(DisplayBuffer);			// Upload the current display back buffer into system memory.
-			
+
 				iV_ScaleBitmapRGB(DisplayBuffer,iV_GetDisplayWidth(),
 								 iV_GetDisplayHeight(),2,2,2);	// Make it darker.
-			
+
 				radarOnScreen = radOnScreen;
 				bRender3DOnly = FALSE;
 			}
@@ -258,7 +258,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	for(slotCount = 0; slotCount< totalslots; slotCount++)
 	{
 		sButInit.id		= slotCount+LOADENTRY_START;
-		
+
 		if(slotCount<(totalslots/2))
 		{
 			sButInit.x	= LOADSAVE_HGAP;
@@ -362,7 +362,7 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 
 /***************************************************************************
 	Delete a savegame.  saveGameName should be a .gam extension save game
-	filename reference.  We delete this file, any .es file with the same 
+	filename reference.  We delete this file, any .es file with the same
 	name, and any files in the directory with the same name.
 ***************************************************************************/
 void deleteSaveGame(char* saveGameName)
@@ -371,11 +371,11 @@ void deleteSaveGame(char* saveGameName)
 
 	ASSERT((strlen(saveGameName) < MAX_STR_LENGTH,"deleteSaveGame; save game name too long"));
 
-	PHYSFS_delete(saveGameName);	
+	PHYSFS_delete(saveGameName);
 	saveGameName[strlen(saveGameName)-4] = '\0';// strip extension
-	
+
 	strcat(saveGameName,".es");					// remove script data if it exists.
-	PHYSFS_delete(saveGameName);	
+	PHYSFS_delete(saveGameName);
 	saveGameName[strlen(saveGameName)-3] = '\0';// strip extension
 
 	// check for a directory and remove that too.
@@ -427,9 +427,9 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 			{
 				goto failure;				// clicked on an empty box
 			}
-		
+
 			if( bLoadSaveMode == LOAD_FORCE || bLoadSaveMode ==SAVE_FORCE )
-			{	
+			{
 				goto successforce;				// it's a force, dont check the cd.
 			}
 				goto success;
@@ -448,22 +448,22 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				sEdInit.y     =	widgGetFromID(psRequestScreen,id)->y;
 				sEdInit.width = widgGetFromID(psRequestScreen,id)->width;
 				sEdInit.height= widgGetFromID(psRequestScreen,id)->height;
-				sEdInit.pText = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText; 
+				sEdInit.pText = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText;
 				sEdInit.FontID= WFont;
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
 				widgAddEditBox(psRequestScreen, &sEdInit);
-				
+
 				sprintf(sTemp,"%s%s.%s",
 						sPath,
 						((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,
 						sExt);
 
 				widgHide(psRequestScreen,id);		// hide the old button
-				chosenSlotId = id; 
+				chosenSlotId = id;
 
 				strcpy(sDelete,sTemp);				// prepare the savegame name.
 				sTemp[strlen(sTemp)-4] = '\0';		// strip extension
-	
+
 				// auto click in the edit box we just made.
 				context.psScreen	= psRequestScreen;
 				context.psForm		= (W_FORM *)psRequestScreen->psForm;
@@ -481,9 +481,9 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	}
 
 	// finished entering a name.
-	if( id == SAVEENTRY_EDIT) 
+	if( id == SAVEENTRY_EDIT)
 	{
-		if(!keyPressed(KEY_RETURN))						// enter was not pushed, so not a vaild entry.	
+		if(!keyPressed(KEY_RETURN))						// enter was not pushed, so not a vaild entry.
 		{
 			widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
 			widgReveal(psRequestScreen,chosenSlotId);
@@ -499,10 +499,10 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		{
 			if( i != chosenSlotId)
 			{
-				
-				if( ((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText 
+
+				if( ((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText
 					&& strcmp( sTemp,	((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText ) ==0)
-				{	
+				{
 					widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen,chosenSlotId);
 				// move mouse to same box..
@@ -529,7 +529,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		{
 			goto failure;				// we entered a blank name..
 		}
-	
+
 		// we're done. saving.
 		closeLoadSave();
 		bRequestLoad = FALSE;
@@ -556,7 +556,7 @@ failure:
 success:
 	setCampaignNumber( getCampaign(sRequestResult,&bSkipCD) );
 successforce:
-	closeLoadSave();		
+	closeLoadSave();
 	bRequestLoad = TRUE;
 	return TRUE;
 }
@@ -578,18 +578,18 @@ void removeWildcards(char *pStr)
 
 	for(i=0;i<strlen(pStr);i++)
 	{
-/*	if(   pStr[i] == '?' 
+/*	if(   pStr[i] == '?'
 		   || pStr[i] == '*'
 		   || pStr[i] == '"'
-		   || pStr[i] == '.' 
-		   || pStr[i] == '/' 
+		   || pStr[i] == '.'
+		   || pStr[i] == '/'
 		   || pStr[i] == '\\'
 		   || pStr[i] == '|' )
 		{
 			pStr[i] = '_';
 		}
 */
-		if( !isalnum(pStr[i]) 
+		if( !isalnum(pStr[i])
  		 && pStr[i] != ' '
 		 && pStr[i] != '-'
 		 && pStr[i] != '+'
@@ -598,7 +598,7 @@ void removeWildcards(char *pStr)
 		{
 			pStr[i] = '_';
 		}
-			
+
 	}
 
 	if (strlen(pStr) >= MAX_SAVE_NAME)
@@ -638,7 +638,7 @@ static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	
+
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 //	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
@@ -650,7 +650,7 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	if(((W_BUTTON *)psWidget)->pTip )
 	{
 		strcpy(butString,((W_BUTTON *)psWidget)->pTip);
-		
+
 		iV_SetFont(WFont);									// font
 		iV_SetTextColour(-1);								//colour
 
@@ -659,7 +659,7 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 			butString[strlen(butString)-1]='\0';
 		}
 
-		//draw text								
+		//draw text
 		iV_DrawText( butString, x+4, y+17);
 
 
@@ -685,7 +685,7 @@ void drawBlueBox(UDWORD x,UDWORD y, UDWORD w, UDWORD h)
     UBYTE       light = COL_LIGHTBLUE;
 
 	// box
-	pie_BoxFillIndex(x-1,y-1,x+w+1,y+h+1,light);	
+	pie_BoxFillIndex(x-1,y-1,x+w+1,y+h+1,light);
 	pie_BoxFillIndex(x,y,x+w,y+h,dark);
 }
 

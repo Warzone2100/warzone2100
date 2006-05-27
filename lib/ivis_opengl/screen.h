@@ -21,7 +21,7 @@
 #include <windows.h>
 #endif
 
-#include "types.h"
+#include "lib/framework/types.h"
 
 
 /* Image structure */

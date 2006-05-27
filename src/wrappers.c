@@ -1,25 +1,27 @@
 /*
- * Wrappers.c   
- * frontend loop & also loading screen & game over screen. 
- * AlexL. Pumpkin Studios, EIDOS Interactive, 1997 
+ * Wrappers.c
+ * frontend loop & also loading screen & game over screen.
+ * AlexL. Pumpkin Studios, EIDOS Interactive, 1997
  */
 
 #include <stdio.h>
 
-#include "frame.h"
-#include "ivisdef.h" //ivis palette code
-#include "piestate.h"
-#include "textdraw.h" //ivis text code
-#include "screen.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/ivisdef.h" //ivis palette code
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/textdraw.h" //ivis text code
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/screen.h"
 
 
-#include "piemode.h"
-#include "piematrix.h"
-#include "piefunc.h"
+#include "lib/ivis_common/piemode.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piefunc.h"
 
 
 #include "hci.h"		// access to widget screen.
-#include "widget.h"
+#include "lib/widget/widget.h"
 #include "wrappers.h"
 #include "winmain.h"
 #include "objects.h"
@@ -31,9 +33,9 @@
 #include "intimage.h"
 #include "text.h"
 #include "intdisplay.h"	//for shutdown
-#include "audio.h"		
-#include "audio_id.h"		
-#include "gtime.h"
+#include "lib/sound/audio.h"
+#include "audio_id.h"
+#include "lib/gamelib/gtime.h"
 #include "ingameop.h"
 #include "keymap.h"
 #include "mission.h"
@@ -42,11 +44,12 @@
 
 #include "keyedit.h"
 #include "seqdisp.h"
-#include "vid.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 #include "resource.h"
-#include "netplay.h"	// multiplayer 
+#include "lib/netplay/netplay.h"	// multiplayer
 #include "multiplay.h"
-#include "multiint.h"				
+#include "multiint.h"
 #include "multistat.h"
 #include "multilimit.h"
 
@@ -128,12 +131,12 @@ TITLECODE titleLoop(void)
 
 		if(NetPlay.bLobbyLaunched)					// lobbies skip title screens & go into the game
 		{
-			if (NetPlay.bHost)		
+			if (NetPlay.bHost)
 			{
 				ingame.bHostSetup = TRUE;
 			}
 			else
-			{	
+			{
 				ingame.bHostSetup = FALSE;
 			}
 
@@ -142,12 +145,12 @@ TITLECODE titleLoop(void)
 		else if(gameSpy.bGameSpy)
 		{
 			// set host
-			if (NetPlay.bHost)		
+			if (NetPlay.bHost)
 			{
 				ingame.bHostSetup = TRUE;
 			}
 			else
-			{	
+			{
 				ingame.bHostSetup = FALSE;
 			}
 			// set protocol
@@ -155,7 +158,7 @@ TITLECODE titleLoop(void)
 			// if host goto options.
 			// if client goto game find.
 			if(NetPlay.bHost)
-			{	
+			{
 				changeTitleMode(MULTIOPTION);
 			}
 			else
@@ -195,7 +198,7 @@ TITLECODE titleLoop(void)
 
 		case TITLE:
 			runTitleMenu();
-			break;	
+			break;
 
 		case SINGLE:
 			runSinglePlayerMenu();
@@ -241,8 +244,8 @@ TITLECODE titleLoop(void)
 		case QUIT:
 			RetCode = TITLECODE_QUITGAME;
 			break;
-		
-		case STARTGAME:	
+
+		case STARTGAME:
 		case LOADSAVEGAME:
 
 			initLoadingScreen(TRUE,TRUE);//render active
@@ -277,12 +280,12 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 
-		
+
 	pie_GlobalRenderEnd(FALSE);//force to black  //[movie]  --We got no videos yet, so better to display the backdrop... -Q
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
-	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) 
+	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
 	    /* Check for toggling display mode */
 	    && keyPressed(KEY_RETURN)) {
 		screenToggleMode();
@@ -304,8 +307,8 @@ void loadingScreenCallback(void)
 	UDWORD			i;
 	UDWORD			topX,topY,botX,botY;
 	UDWORD			currTick;
-  
-	
+
+
 	if(GetTickCount()-lastTick < 16) {
 		return;
 	}
@@ -358,7 +361,7 @@ void loadingScreenCallback(void)
 		}
 
    	}
-	
+
 	DrawEnd();
 	pie_GlobalRenderEnd(TRUE);//force to black
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
@@ -437,7 +440,7 @@ void startCreditsScreen( BOOL bRenderActive)
 void	runCreditsScreen( void )
 {
 	// Check for key presses now.
-	if(keyReleased(KEY_ESC) 
+	if(keyReleased(KEY_ESC)
 	   || keyReleased(KEY_SPACE)
 	   || mouseReleased(MOUSE_LMB)
 	   || (gameTime-lastChange > 4000)
@@ -473,7 +476,7 @@ BOOL displayGameOver(BOOL bDidit)
 //	addConsoleMessage(strresGetString(psStringRes,STR_GAM_GAMEOVER), CENTRE_JUSTIFY );
 //	addConsoleMessage(" ", CENTRE_JUSTIFY );
 
-    //set this for debug mode too - what gets displayed then depends on whether we 
+    //set this for debug mode too - what gets displayed then depends on whether we
     //have won or lost and if we are in debug mode
 
 	// this bit decides whether to auto quit to front end.
@@ -488,7 +491,7 @@ BOOL displayGameOver(BOOL bDidit)
 			setPlayerHasLost(TRUE);
 		}
 	}
-	
+
 	if(bMultiPlayer)
 	{
 		if(bDidit)
@@ -502,7 +505,7 @@ BOOL displayGameOver(BOOL bDidit)
 		}
 	}
 
-//	if(getDebugMappingStatus()) 
+//	if(getDebugMappingStatus())
 //	{
 //		intAddInGameOptions();
 //	}
@@ -513,7 +516,7 @@ BOOL displayGameOver(BOOL bDidit)
         //clear out any mission widgets - timers etc that may be on the screen
         clearMissionWidgets();
 		intAddMissionResult(bDidit, TRUE);
-    }	
+    }
 
 	return TRUE;
 }

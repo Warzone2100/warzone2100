@@ -7,7 +7,7 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
 #include "mapgrid.h"
@@ -26,7 +26,7 @@ UDWORD	gridWidth, gridHeight;
 // The heap for the grid arrays
 OBJ_HEAP	*psGridHeap;
 
-// The map grid 
+// The map grid
 GRID_ARRAY	*apsMapGrid[GRID_MAXAREA];
 #define GridIndex(a,b) (((b)*gridWidth) + (a))
 
@@ -116,17 +116,17 @@ void gridReset(void)
 	//put all the existing objects into the grid
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		for (psDroid = apsDroidLists[inc]; psDroid != NULL; psDroid = 
+		for (psDroid = apsDroidLists[inc]; psDroid != NULL; psDroid =
 			psDroid->psNext)
 		{
 			gridAddObject((BASE_OBJECT *)psDroid);
 		}
-		for (psStruct = apsStructLists[inc]; psStruct != NULL; psStruct = 
+		for (psStruct = apsStructLists[inc]; psStruct != NULL; psStruct =
 			psStruct->psNext)
 		{
 			gridAddObject((BASE_OBJECT *)psStruct);
 		}
-		for (psFeature = apsFeatureLists[inc]; psFeature != NULL; psFeature = 
+		for (psFeature = apsFeatureLists[inc]; psFeature != NULL; psFeature =
 			psFeature->psNext)
 		{
 			gridAddObject((BASE_OBJECT *)psFeature);
@@ -615,7 +615,7 @@ BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
      		return(TRUE);
 		}
 	}
-} 	
+}
 
 
 // Get the range of effect of an object

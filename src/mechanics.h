@@ -7,10 +7,10 @@
 #ifndef _mechanics_h
 #define _mechanics_h
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "combat.h"
 #include "findpath.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "map.h"
 #include "mechanics.h"
 #include "move.h"

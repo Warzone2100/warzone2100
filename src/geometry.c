@@ -1,7 +1,7 @@
 /* Geometry.c - holds trig/vector deliverance specific stuff for 3D */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,14 +9,14 @@
 #include <math.h>
 
 
-#include "ivisdef.h" //ivis matrix code
-#include "geo.h" //ivis matrix code
+#include "lib/ivis_common/ivisdef.h" //ivis matrix code
+#include "lib/ivis_common/geo.h" //ivis matrix code
 
 #include "objectdef.h"
 #include "map.h"
 #include "display3d.h"
 #include "geometry.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "display.h"
 
@@ -82,13 +82,13 @@ double	angle;
 	angle = atan2(yDif,xDif);
 	angle = (double) (180*(angle/pi));
 	angleInt = (SDWORD) angle;
-		
+
 	angleInt+=90;
 	if (angleInt<0)
 		angleInt+=360;
 
 	ASSERT((angleInt >= 0 && angleInt < 360,
-		"calcDirection: droid direction out of range"));	
+		"calcDirection: droid direction out of range"));
 
 	return(angleInt);
 }
@@ -104,7 +104,7 @@ double	angle;
 /*	A useful function and one that should have been written long ago, assuming of course
 	that is hasn't been!!!! Alex M, 24th Sept, 1998. Returns the nearest unit
 	to a given world coordinate - we can choose whether we require that the unit be
-	selected or not... Makes sending the most logical unit to do something very easy. 
+	selected or not... Makes sending the most logical unit to do something very easy.
 
   NB*****THIS WON'T PICK A VTOL DROID*****
 */
@@ -116,7 +116,7 @@ UDWORD	xDif,yDif,dist;
 UDWORD	bestSoFar;
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
-	for(psDroid = apsDroidLists[selectedPlayer],psBestUnit = NULL, bestSoFar = UDWORD_MAX; 
+	for(psDroid = apsDroidLists[selectedPlayer],psBestUnit = NULL, bestSoFar = UDWORD_MAX;
 		psDroid; psDroid = psDroid->psNext)
 	{
         if (!vtolDroid(psDroid))
@@ -140,7 +140,7 @@ UDWORD	bestSoFar;
             }
 		}
 	}
-	return(psBestUnit);	
+	return(psBestUnit);
 }
 // -------------------------------------------------------------------------------------------
 
@@ -150,12 +150,12 @@ int inQuad(POINT *pt, QUAD *quad)
 {
 int i, j, c = 0;
 
-	for (i = 0, j = 3; i < 4; j = i++) 
+	for (i = 0, j = 3; i < 4; j = i++)
 	{
 		if ((((quad->coords[i].y<=pt->y) AND (pt->y<quad->coords[j].y)) OR
              ((quad->coords[j].y<=pt->y) AND (pt->y<quad->coords[i].y))) AND
-			(pt->x < (quad->coords[j].x - quad->coords[i].x) * 
-			(pt->y - quad->coords[i].y) / (quad->coords[j].y - 
+			(pt->x < (quad->coords[j].x - quad->coords[i].x) *
+			(pt->y - quad->coords[i].y) / (quad->coords[j].y -
 			quad->coords[i].y) + quad->coords[i].x))
 
           c = !c;
@@ -167,7 +167,7 @@ int i, j, c = 0;
 UDWORD	adjustDirection(SDWORD present, SDWORD difference)
 {
 SDWORD	sum;
-	
+
 	sum = present+difference;
 	if(sum>=0 AND sum<=360)
 	{
@@ -230,7 +230,7 @@ int32	rx,rz;
 	iV_MatrixRotateZ(player.r.z);
 	iV_MatrixRotateX(player.r.x);
 	iV_MatrixRotateY(player.r.y);
-	
+
 	/* Translate */
 	iV_TRANSLATE(-rx,-player.p.y,rz);
 
@@ -266,7 +266,7 @@ int32	rx,rz;
 
 	/* Project - no rotation being done. So effectively mapping from 3 space to 2 space */
 	pie_RotProj(&null,screenPt);
-	
+
 	/* Pop remaining matrices */
 	pie_MatEnd();
 	pie_MatEnd();
@@ -319,7 +319,7 @@ UDWORD		i;
 	for(i=0; i<MAX_PLAYERS AND !psReturn; i++)
 	{
 		/* Got thru' all structures for this player - again drop out if match */
-		for (psStructure = apsStructLists[i]; 
+		for (psStructure = apsStructLists[i];
 			psStructure AND !psReturn; psStructure = psStructure->psNext)
 		{
 			/* Get structure coords */
@@ -376,7 +376,7 @@ UDWORD		width,breadth;
 	centreY = (y<<TILE_SHIFT)+(TILE_UNITS/2);
 
 	/* Go through all features for this player - again drop out if we get one */
-	for (psFeature = apsFeatureLists[0]; 
+	for (psFeature = apsFeatureLists[0];
 		psFeature AND !psReturn; psFeature = psFeature->psNext)
 		{
 			/* Get the features coords */
@@ -402,7 +402,7 @@ UDWORD		width,breadth;
 	return(psReturn);
 }
 
-/*	Will return a base_object pointer to either a structure or feature - depending 
+/*	Will return a base_object pointer to either a structure or feature - depending
 	what's on tile. Returns NULL if nothing */
 BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y)
 {
@@ -503,8 +503,8 @@ SDWORD	dX,dY;
 			dX = psDroid->sDisplay.screenX;
 			dY = psDroid->sDisplay.screenY;
 			/* Is it on screen */
-			if(dX>(0-tolerance) AND dY>(0-tolerance) 
-				AND dX < (SDWORD)(DISP_WIDTH+tolerance) 
+			if(dX>(0-tolerance) AND dY>(0-tolerance)
+				AND dX < (SDWORD)(DISP_WIDTH+tolerance)
 				AND dY < (SDWORD)(DISP_HEIGHT+tolerance))
 			{
 				return(TRUE);

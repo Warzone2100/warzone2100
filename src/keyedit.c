@@ -5,25 +5,25 @@
  */
 
 // ////////////////////////////////////////////////////////////////////////////
-// includes 
+// includes
 #include <SDL/SDL.h>
 #include <physfs.h>
 
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 #include "frontend.h"
 #include "frend.h"
 #include "text.h"
-#include "textdraw.h"
+#include "lib/ivis_common/textdraw.h"
 #include "hci.h"
 #include "loadsave.h"
 #include "keymap.h"
 #include "csnap.h"
 #include "intimage.h"
-#include "bitimage.h"
+#include "lib/ivis_common/bitimage.h"
 #include "intdisplay.h"
 #include "audio_id.h"
-#include "pieblitfunc.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@
 #define KM_Y				20
 
 #define KM_RETURNX			(KM_W-90)
-#define KM_RETURNY			(KM_H-42)		
+#define KM_RETURNY			(KM_H-42)
 
 #define BUTTONSPERKEYMAPPAGE 20
 
@@ -81,7 +81,7 @@ static BOOL pushedKeyMap(UDWORD key)
 //	for(selectedKeyMap = keyMappings;
 //		selectedKeyMap->status != KEYMAP_ASSIGNABLE;
 //		(selectedKeyMap->status= KEYMAP__DEBUG) && (selectedKeyMap->status==KEYMAP___HIDE);
-//		
+//
 //		selectedKeyMap = selectedKeyMap->psNext);
 //
 //	while(count!=key)
@@ -91,7 +91,7 @@ static BOOL pushedKeyMap(UDWORD key)
 //		if(selectedKeyMap->status == KEYMAP_ASSIGNABLE)
 //		{
 //			count++;
-//		}	
+//		}
 //	}
 	selectedKeyMap = widgGetFromID(psWScreen,key)->pUserData;
 	if(selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
@@ -125,21 +125,21 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 		metakey= KEY_LALT;
 		alt = KEY_RALT;
 	}
-	
+
 	// ctrl
 	else if( keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL) )
 	{
-		metakey = KEY_LCTRL;	
+		metakey = KEY_LCTRL;
 		alt = KEY_RCTRL;
 	}
-	
+
 	// shift
 	else if( keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT) )
 	{
-		metakey = KEY_LSHIFT;	
+		metakey = KEY_LSHIFT;
 		alt = KEY_RSHIFT;
 	}
-	
+
 	// check if bound to a fixed combo.
 	pExist = keyFindMapping(  metakey,  subkey );
 	if(pExist && (pExist->status == KEYMAP_ALWAYS OR pExist->status == KEYMAP_ALWAYS_PROCESS))
@@ -181,7 +181,7 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 //	keyRemoveMappingPt(selectedKeyMap);
 
 	keyAddMapping(status,metakey,subkey,action,function,name);
-					
+
 	// add new binding.
 //	keyReAssignMapping( selectedKeyMap->metaKeyCode, selectedKeyMap->subKeyCode, metakey, subkey);
   //	keyAddMapping(
@@ -226,14 +226,14 @@ BOOL runKeyMapEditor(void)
 {
 	UDWORD id;
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets 
-	
+	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+
 	if(id == KM_RETURN)			// return
 	{
 		saveKeyMap();
 		changeTitleMode(TITLE);
 	}
-	if(id == KM_DEFAULT)	
+	if(id == KM_DEFAULT)
 	{
 		keyClearMappings();
 		keyInitMappings(TRUE);
@@ -244,16 +244,16 @@ BOOL runKeyMapEditor(void)
 	{
 		 pushedKeyMap(id);
 	}
-	
+
 	if(selectedKeyMap)
 	{
 		id = scanKeyBoardForBinding();
 		if(id)
 		{
-			pushedKeyCombo(id); 
+			pushedKeyCombo(id);
 		}
 	}
-	
+
 	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
@@ -294,7 +294,7 @@ VOID displayKeyMap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
 	UDWORD		w = psWidget->width;
-	UDWORD		h = psWidget->height; 
+	UDWORD		h = psWidget->height;
 	KEY_MAPPING *psMapping = (KEY_MAPPING*)psWidget->pUserData;
 	STRING		sKey[MAX_NAME_SIZE];// was just 40
 
@@ -351,7 +351,7 @@ BOOL startKeyMapEditor(BOOL first)
 	sFormInit.width		= KM_W;
 	sFormInit.height	= KM_H;
 	sFormInit.pDisplay	= intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);	
+	widgAddForm(psWScreen, &sFormInit);
 
 
 	addMultiBut(psWScreen,KM_FORM,KM_RETURN,			// return button.
@@ -388,21 +388,21 @@ BOOL startKeyMapEditor(BOOL first)
 
 	// add tab form..
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID		= KM_FORM;	
+	sFormInit.formID		= KM_FORM;
 	sFormInit.id			= KM_FORM_TABS;
 	sFormInit.style			= WFORM_TABBED;
 	sFormInit.x			= 50;
 	sFormInit.y			= 10;
-	sFormInit.width			= KM_W- 100;	
-	sFormInit.height		= KM_H- 4;	
+	sFormInit.width			= KM_W- 100;
+	sFormInit.height		= KM_H- 4;
 	sFormInit.numMajor		= numForms(mapcount, BUTTONSPERKEYMAPPAGE);
 	sFormInit.majorPos		= WFORM_TABTOP;
 	sFormInit.minorPos		= WFORM_TABNONE;
-	sFormInit.majorSize		= OBJ_TABWIDTH+3; 
+	sFormInit.majorSize		= OBJ_TABWIDTH+3;
 	sFormInit.majorOffset		= OBJ_TABOFFSET;
 	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
-	sFormInit.pFormDisplay		= intDisplayObjectForm;	
+	sFormInit.pFormDisplay		= intDisplayObjectForm;
 	sFormInit.pUserData		= (void*)&StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -411,8 +411,8 @@ BOOL startKeyMapEditor(BOOL first)
 	}
 	widgAddForm(psWScreen, &sFormInit);
 
-	//Put the buttons on it 
-	memset(&sButInit, 0, sizeof(W_BUTINIT));		
+	//Put the buttons on it
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID   = KM_FORM_TABS;
 	sButInit.style	  = WFORM_PLAIN;
 	sButInit.width    = KM_ENTRYW;
@@ -447,7 +447,7 @@ BOOL startKeyMapEditor(BOOL first)
 				{
 					/* Keep a record of it */
 					strcpy(test,psMapping->pName);
-				   	psNext = psMapping;	
+				   	psNext = psMapping;
 					bGotOne = TRUE;
 				}
 			}
@@ -527,7 +527,7 @@ BOOL saveKeyMap(void)
 		// name
 		strcpy(name,psMapping->pName);
 		WRITE(&name, 128);
-		
+
 		WRITE(&psMapping->status, sizeof(KEY_STATUS));	// status
 		WRITE(&psMapping->metaKeyCode, sizeof(KEY_CODE));	// metakey
 		WRITE(&psMapping->subKeyCode, sizeof(KEY_CODE)); // subkey
@@ -604,7 +604,7 @@ BOOL loadKeyMap(void)
 	if (strncmp(ver, keymapVersion, 8) != 0) {
 		/* If wrong version, create a new one instead. */
 		PHYSFS_close(pfile);
-		return FALSE;	
+		return FALSE;
 	}
 
 	for(; count > 0; count--) {

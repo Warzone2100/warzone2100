@@ -1,10 +1,10 @@
-	/*	
+	/*
 	Edit3D.c - to ultimately contain the map editing functions -
 	they are presently scattered in various files .
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997
 	*/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "map.h"
 #include "edit3d.h"
 #include "display3d.h"
@@ -15,8 +15,8 @@
 /*
 Definition of a tile to highlight - presently more than is required
 but means that we can highlight any individual tile in future. An
-x coordinate that is greater than mapWidth implies that the highlight 
-is invalid (not currently being used) 
+x coordinate that is greater than mapWidth implies that the highlight
+is invalid (not currently being used)
 */
 
 UDWORD	buildState = BUILD3D_NONE;
@@ -76,7 +76,7 @@ MAPTILE	*psTile;
 void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 {
 SDWORD	newHeight;
-  
+
 	newHeight = psTile->height + adjust;
 	if (newHeight>=MIN_TILE_HEIGHT AND newHeight<=MAX_TILE_HEIGHT)
 	{
@@ -156,7 +156,7 @@ void	kill3DBuilding		( void )
 BOOL process3DBuilding(void)
 {
 	UDWORD	bX,bY;
-	
+
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
@@ -188,37 +188,37 @@ BOOL process3DBuilding(void)
 	/* Need to update the building locations if we're building */
 	bX = mouseTileX;
 	bY = mouseTileY;
-	
+
 	if(mouseTileX<2)
 	{
-		bX = 2; 
+		bX = 2;
 	}
-	else 
+	else
 	{
 		bX = mouseTileX;
 	}
 	if(mouseTileX > (SDWORD)(mapWidth-3))
 	{
-		bX = mapWidth-3; 
+		bX = mapWidth-3;
 	}
-	else 
+	else
 	{
 		bX = mouseTileX;
 	}
 
-	if(mouseTileY<2) 
+	if(mouseTileY<2)
 	{
-		bY = 2; 
+		bY = 2;
 	}
-	else 
+	else
 	{
 		bY = mouseTileY;
 	}
 	if(mouseTileY > (SDWORD)(mapHeight-3))
 	{
-		bY = mapHeight-3; 
+		bY = mapHeight-3;
 	}
-	else 
+	else
 	{
 		bY = mouseTileY;
 	}
@@ -228,7 +228,7 @@ BOOL process3DBuilding(void)
 	buildSite.xBR = (UWORD)(buildSite.xTL+sBuildDetails.width-1);
   	buildSite.yBR = (UWORD)(buildSite.yTL+sBuildDetails.height-1);
 
-	if( (buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL) ) 
+	if( (buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL) )
 	{
 		sBuildDetails.CallBack(sBuildDetails.x,sBuildDetails.y,sBuildDetails.UserData);
 		buildState = BUILD3D_NONE;
@@ -249,7 +249,7 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 
 	*x = sBuildDetails.x;
 	*y = sBuildDetails.y;
- 
+
 	// lovely hack to make the repair facility 3x3 - need to offset the position by 1
 	if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
 	{

@@ -1,7 +1,7 @@
 /* Handles cheat codes for Warzone */
 /* Alex M 19th - Jan. 1999 */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "cheat.h"
 #include "console.h"
 #include "keybind.h"
@@ -14,7 +14,7 @@ STRING	*pName;
 void (*function)(void);	// pointer to void* function
 } CHEAT_ENTRY;
 
-CHEAT_ENTRY	cheatCodes[] = 
+CHEAT_ENTRY	cheatCodes[] =
 {
 //	{"OPHZM",kf_TogglePower},		//power
 //	{"VQKZMY^\\Z",kf_ToggleOverlays},//interface
@@ -39,7 +39,7 @@ CHEAT_ENTRY	cheatCodes[] =
 	{"LW^TZF",kf_ToggleShakeStatus},//shakey
 	{"RPJLZYSVO",kf_ToggleMouseInvert},//mouseflip
 	{"]VYYZM ]^TZM",kf_SetKillerLevel},//biffa
-	{"LO^MTSZ XMZZQ",kf_SetKillerLevel}, //biffa   
+	{"LO^MTSZ XMZZQ",kf_SetKillerLevel}, //biffa
 	{"Z^LF",kf_SetEasyLevel},//easy
 	{"QPMR^S",kf_SetNormalLevel},//normal
 	{"W^M[",kf_SetHardLevel},//hard
@@ -48,7 +48,7 @@ CHEAT_ENTRY	cheatCodes[] =
 	{"XZK PYY RF S^Q[",kf_KillEnemy},	// kills all enemy units and structures
 	{"IZMLVPQ",kf_BuildInfo},	// tells you when the game was built
 	{"KVRZ KPXXSZ",kf_ToggleMissionTimer},
-	{"HPMT W^M[ZM",kf_FinishResearch}, 
+	{"HPMT W^M[ZM",kf_FinishResearch},
 	{"\\^MPS IPM[ZMR^Q",kf_NoFaults},//carol vorderman
 	{"end of list",NULL}
 };
@@ -89,7 +89,7 @@ BOOL	attemptCheatCode( STRING *pName )
 	char	*xored;
 
 	index = 0;
- 
+
 	while(cheatCodes[index].function!=NULL)
 	{
 		strcpy(cheatString,cheatCodes[index].pName);

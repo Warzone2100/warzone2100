@@ -6,16 +6,17 @@
 #ifndef WIN32
 #include <unistd.h>
 #endif	//above line not needed for win32.  --Qamly
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 
 #include "display3d.h"
 #include "intdisplay.h"
 #include "text.h"
-#include "vid.h"
-#include "piedef.h"
-#include "gtime.h"
-#include "geo.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl//vid.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/ivis_common/geo.h"
 #include "levels.h"
 #include "objmem.h"		 	//for droid lists.
 #include "component.h"		// for disaplycomponentobj.
@@ -27,7 +28,7 @@
 #include "ai.h"
 #include "csnap.h"
 #include "frend.h"
-#include "netplay.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multistat.h"
 #include "multimenu.h"
@@ -90,7 +91,7 @@ static UDWORD	current_numplayers = 0;
 #define	MULTIMENU_GIFT_DRO		(MULTIMENU_GIFT_RES		 +MAX_PLAYERS)
 #define	MULTIMENU_GIFT_POW		(MULTIMENU_GIFT_DRO		 +MAX_PLAYERS)
 #define MULTIMENU_CHANNEL		(MULTIMENU_GIFT_POW		 +MAX_PLAYERS)
-	
+
 #define MULTIMENU_STOPS			50
 #define MULTIMENU_MIDPOS		(MULTIMENU_STOPS/2)
 #define MULTIMENU_MULTIPLIER	((100/MULTIMENU_STOPS)*2)
@@ -134,7 +135,7 @@ static BOOL		giftsUp[MAX_PLAYERS] = {TRUE};		//gift buttons for player are up.
 // returns only maps that are valid the right 'type'
 
 BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
-{	
+{
 	static LEVEL_DATASET *lev;
 	UBYTE cam;
 
@@ -158,15 +159,15 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 		if(game.type == SKIRMISH)
 		{
 			if(lev->type == MULTI_SKIRMISH2)
-			{	
+			{
 				cam = 2;
-			} 
+			}
 			else if(lev->type == MULTI_SKIRMISH3)
-			{	
+			{
 				cam = 3;
 			}
 //			else if(lev->type == MULTI_SKIRMISHA)
-//			{	
+//			{
 //				cam = 0;
 //			}
 			else
@@ -187,17 +188,17 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 		}
 		else	//  campaign, teamplay
 		{
-// 'service pack 1' 
+// 'service pack 1'
 			if(lev->type == MULTI_CAMPAIGN2)
-			{	
+			{
 				cam = 2;
-			} 
+			}
 			else if(lev->type == MULTI_CAMPAIGN3)
-			{	
+			{
 				cam = 3;
 			}
 //			else if(lev->type == MULTI_CAMPAIGNA)
-//			{	
+//			{
 //				cam = 0;
 //			}
 			else
@@ -205,7 +206,7 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 				cam = 1;
 			}
 //	end of service pack
-		
+
 			if((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3
 				&& (numPlayers == 0 || numPlayers == lev->players))
 //				||lev->type == MULTI_CAMPAIGNA)
@@ -229,18 +230,18 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 // ////////////////////////////////////////////////////////////////////////////
 void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	
+
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 //	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
 //	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	UDWORD	count;
 	STRING  butString[255];
-	
+
 	strcpy(butString,((W_BUTTON *)psWidget)->pTip);
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
-		
+
 	iV_SetFont(WFont);					// font
 	iV_SetTextColour(-1);					//colour
 
@@ -249,7 +250,7 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 		butString[strlen(butString)-1]='\0';
 	}
 
-	//draw text								
+	//draw text
 	iV_DrawText( (UCHAR*)butString,
 				 x+6,
 				 y+12);
@@ -327,7 +328,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	W_BUTINIT		sButInit;
 	UDWORD			players,numButtons,butPerForm,i;
 #ifdef WIN32
-	WIN32_FIND_DATA	found;	
+	WIN32_FIND_DATA	found;
 	HANDLE			dir;
 	UDWORD			count;
 #endif
@@ -335,7 +336,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	static STRING		tips[NBTIPS][MAX_STR_SIZE];
 
 	numButtons = 0;
-	
+
 	context = mode;
 	current_tech = mapCam;
 	current_numplayers = numPlayers;
@@ -351,7 +352,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	dir =FindFirstFile(ToFind,&found);
 	if(dir != INVALID_HANDLE_VALUE)
 	{
-		while( TRUE ) 
+		while( TRUE )
 		{
 			numButtons++;
 			if(! FindNextFile(dir,&found ) )
@@ -363,7 +364,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	FindClose(dir);
 #endif
 
-	
+
 	if(mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
 	{
 		if(enumerateMultiMaps(tips[0],&players, TRUE,mapCam,numPlayers))
@@ -380,9 +381,9 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	widgSetTipFont(psRScreen,WFont);
 
 	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((M_REQUEST_W - 0 - 4) / 
+	butPerForm = ((M_REQUEST_W - 0 - 4) /
 						(R_BUT_W +4)) *
-				 ((M_REQUEST_H - 0- 4) / 
+				 ((M_REQUEST_H - 0- 4) /
 						(R_BUT_H+ 4));
 
 	/* add a form to place the tabbed form on */
@@ -400,13 +401,13 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 
 	/* Add the tabs */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = M_REQUEST;	
+	sFormInit.formID = M_REQUEST;
 	sFormInit.id = M_REQUEST_TAB;
 	sFormInit.style = WFORM_TABBED;
 	sFormInit.x = 2;
 	sFormInit.y = 2;
-	sFormInit.width = M_REQUEST_W;	
-	sFormInit.height = M_REQUEST_H-4;	
+	sFormInit.width = M_REQUEST_W;
+	sFormInit.height = M_REQUEST_H-4;
 
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	if (sFormInit.numMajor > 8)
@@ -419,7 +420,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;	
+	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = (void*)&StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -442,7 +443,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
-	
+
 	/* Put the buttons on it *//* Set up the button struct */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID		= M_REQUEST_TAB;
@@ -452,8 +453,8 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	sButInit.y		= 4;
 	sButInit.width		= R_BUT_W;
 	sButInit.height		= R_BUT_H;
-	sButInit.pUserData	= (void*)0;			
-	sButInit.pDisplay	= displayRequestOption; 
+	sButInit.pUserData	= (void*)0;
+	sButInit.pDisplay	= displayRequestOption;
 	sButInit.FontID		= WFont;
 
 #ifdef WIN32
@@ -461,24 +462,24 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	if(dir != INVALID_HANDLE_VALUE)
 	{
 		count=0;
-		while( count < (butPerForm*4)  ) 
+		while( count < (butPerForm*4)  )
 		{
 			unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
 
-			/* Set the tip and add the button */		
+			/* Set the tip and add the button */
 // use MALLOC, and do it dynamically
 			found.cFileName[strlen(found.cFileName) -4 ] = '\0';			// chop extension
 			strcpy(tips[tip_index],found.cFileName);		//need to store one!
-				
+
 			sButInit.pTip		= tips[tip_index];
 			sButInit.pText		= tips[tip_index];
-	
+
 			if(mode == MULTIOP_MAP)											// if its a map, set player flag.
 			{
 				sButInit.pUserData	= (void*)( found.cFileName[0]-'0'  );
 
 //				if(game.type == DMATCH)
-//				{				
+//				{
 //					if( found.cFileName[1] != 'd')
 //					{
 //						goto nextone;
@@ -491,19 +492,19 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 						goto nextone;
 					}
 //				}
-	
+
 				strcpy(sTemp,   strrchr(found.cFileName,'-')+1  );		//chop off description
 
 				// add number of players to string, choping of description
 			//	sprintf(tips[sButInit.id-M_REQUEST_BUT], "%d)%s",
-			//											sButInit.pUserData, 
+			//											sButInit.pUserData,
 			//											sTemp  );
 				sprintf(tips[tip_index], "%s", sTemp  );
 			}
-			
+
 			count++;
 			widgAddButton(psRScreen, &sButInit);
-			
+
 			/* Update the init struct for the next button */
 			sButInit.id += 1;
 			sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
@@ -517,10 +518,10 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 				sButInit.y = 4;
 				sButInit.majorID += 1;
 			}
-			
+
  nextone:
 
-			if(!FindNextFile(dir,&found ) )	/* find next one*/	
+			if(!FindNextFile(dir,&found ) )	/* find next one*/
 			{
 				break;
 			}
@@ -529,29 +530,29 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	FindClose(dir);
 #endif
 
-	if(mode == MULTIOP_MAP)		
+	if(mode == MULTIOP_MAP)
 	{
 		if(enumerateMultiMaps( sTemp,&players,TRUE,mapCam,numPlayers))
 		{
 			do{
 				unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
-				
+
 				// add number of players to string.
 				sprintf(tips[tip_index],"%s",sTemp );
-				
+
 				sButInit.pTip = tips[tip_index];
 				sButInit.pText = tips[tip_index];
-				sButInit.pUserData	= (void*)players; 
+				sButInit.pUserData	= (void*)players;
 
 				widgAddButton(psRScreen, &sButInit);
-				
+
 				sButInit.id += 1;
 				sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
 				if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
 				{
 					sButInit.x = 22;
 					sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
-				}	
+				}
 				if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
 				{
 					sButInit.y = 4;
@@ -564,7 +565,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 
 
 	// if it's map select then add the cam style buttons.
-	if(mode == MULTIOP_MAP)								
+	if(mode == MULTIOP_MAP)
 	{
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID		= M_REQUEST;
@@ -574,47 +575,47 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 		sButInit.y		= 258;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
-		sButInit.UserData	= 1;			
+		sButInit.UserData	= 1;
 		sButInit.FontID		= WFont;
 		sButInit.pTip		= "Tech:1";
 		sButInit.pDisplay	= displayCamTypeBut;
-		
+
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_C2;
 		sButInit.y		+= 22;
-		sButInit.UserData	= 2;			
+		sButInit.UserData	= 2;
 		sButInit.pTip		= "Tech:2";
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_C3;
 		sButInit.y		+= 22;
-		sButInit.UserData	= 3;			
+		sButInit.UserData	= 3;
 		sButInit.pTip		= "Tech:3";
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_AP;
 		sButInit.y		= 17;
-		sButInit.UserData	= 0;			
+		sButInit.UserData	= 0;
 		sButInit.pTip		= "Any number of players";
 		sButInit.pDisplay	= displayNumPlayersBut;
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_2P;
 		sButInit.y		+= 22;
-		sButInit.UserData	= 2;			
+		sButInit.UserData	= 2;
 		sButInit.pTip		= "2 players";
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_4P;
 		sButInit.y		+= 22;
-		sButInit.UserData	= 4;			
+		sButInit.UserData	= 4;
 		sButInit.pTip		= "4 players";
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_8P;
 		sButInit.y		+= 22;
-		sButInit.UserData	= 8;			
+		sButInit.UserData	= 8;
 		sButInit.pTip		= "8 players";
 		widgAddButton(psRScreen, &sButInit);
 	}
@@ -646,10 +647,10 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValu
 
 //		if(context == MULTIOP_MAP)						// chop off the number of players.
 //		{
-//			strcpy(chosen, strrchr(chosen,')')+1  );	
+//			strcpy(chosen, strrchr(chosen,')')+1  );
 //		}
 
-		*chosenValue = (UDWORD) ((W_BUTTON *)widgGetFromID(psRScreen,id))->pUserData ; 
+		*chosenValue = (UDWORD) ((W_BUTTON *)widgGetFromID(psRScreen,id))->pUserData ;
 		closeMultiRequester();
 		*mode = context;
 
@@ -707,7 +708,7 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValu
 // Multiplayer in game menu stuff
 
 // ////////////////////////////////////////////////////////////////////////////
-// Display Functions 
+// Display Functions
 
 
 void displayExtraGubbins(UDWORD height)
@@ -724,7 +725,7 @@ void displayExtraGubbins(UDWORD height)
 
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C8 -6 , MULTIMENU_FORM_Y,
 			MULTIMENU_FORM_X+MULTIMENU_C8 -6 , MULTIMENU_FORM_Y+height, iV_COL_BLACK);
-	
+
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C9 -6 , MULTIMENU_FORM_Y,
 			MULTIMENU_FORM_X+MULTIMENU_C9 -6 , MULTIMENU_FORM_Y+height, iV_COL_BLACK);
 
@@ -736,7 +737,7 @@ void displayExtraGubbins(UDWORD height)
 
 	iV_Line(MULTIMENU_FORM_X				, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H,
 			MULTIMENU_FORM_X+MULTIMENU_FORM_W, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H, iV_COL_BLACK);
-				  
+
 	//draw titles.
 	iV_SetFont(WFont);											// font
 	iV_SetTextColour(-1);										//colour
@@ -744,7 +745,7 @@ void displayExtraGubbins(UDWORD height)
 	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_ALLIANCES),MULTIMENU_FORM_X+MULTIMENU_C0,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_SCORE)	   ,MULTIMENU_FORM_X+MULTIMENU_C8,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_KILLS)    ,MULTIMENU_FORM_X+MULTIMENU_C9,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_PING)     ,MULTIMENU_FORM_X+MULTIMENU_C10,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);	
+	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_PING)     ,MULTIMENU_FORM_X+MULTIMENU_C10,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_PLAY)     ,									MULTIMENU_FORM_X+MULTIMENU_C11,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 
 #ifdef DEBUG
@@ -777,11 +778,11 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetTextColour(-1);										//colour
 
 	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
-	{	
-		//c2:name, 
-		
+	{
+		//c2:name,
+
 		sprintf(str,"%d:", player);
-		
+
 		strcat(str, getPlayerName(player));
 		while(iV_GetTextWidth(str) >= (MULTIMENU_C0-MULTIMENU_C2-10) )
 		{
@@ -817,15 +818,15 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 						giftsUp[player] = FALSE;
 					}
 				}
-			}		
+			}
 		}
-	}	
+	}
 	if(isHumanPlayer(player))
 	{
 		//c8:score,
 		sprintf(str,"%d",getMultiStats(player,TRUE).recentScore);
 		iV_DrawText((UCHAR*)str,x+MULTIMENU_C8,y+MULTIMENU_FONT_OSET);
-		
+
 		//c9:kills,
 //		if(game.type == DMATCH)
 //		{
@@ -846,13 +847,13 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 			}
 			else
 			{
-				sprintf(str,"%d",ingame.PingTimes[player]);				
+				sprintf(str,"%d",ingame.PingTimes[player]);
 			}
 			iV_DrawText((UCHAR*)str,x+MULTIMENU_C10,y+MULTIMENU_FONT_OSET);
 		}
 
 		//c11:played
-		sprintf(str,"%d",getMultiStats(player,TRUE).played);		
+		sprintf(str,"%d",getMultiStats(player,TRUE).played);
 		iV_DrawText((UCHAR*)str,x+MULTIMENU_C11,y+MULTIMENU_FONT_OSET);
 	}
 	else
@@ -882,7 +883,7 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	// clean up widgets if player leaves while menu is up.
 	if(!isHumanPlayer(player) && !(game.type == SKIRMISH && player<game.maxPlayers))
-	{	
+	{
 		if(widgGetFromID(psWScreen,MULTIMENU_CHANNEL+player))
 		{
 			widgDelete(psWScreen,MULTIMENU_CHANNEL+ player);
@@ -927,10 +928,10 @@ void displayAllianceState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 		b = IMAGE_MULTI_OFFAL_HI;
 		c = IMAGE_MULTI_OFFAL;						// replace with real gfx
 		break;
-	default:	
+	default:
 		a = 0;
 		b = IMAGE_MULTI_NOAL_HI;
-		c = IMAGE_MULTI_NOAL;	
+		c = IMAGE_MULTI_NOAL;
 		break;
 	}
 
@@ -957,7 +958,7 @@ void displayChannelState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 	default:
 		a = 0;
 		b = IMAGE_MULTI_NOCHAN;
-		c = IMAGE_MULTI_NOCHAN;						
+		c = IMAGE_MULTI_NOCHAN;
 		break;
 	}
 
@@ -990,7 +991,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 	sFormInit.pUserData		  = (VOID *)player;
 	widgAddForm(psWScreen, &sFormInit);
 
-	//name, 
+	//name,
 	//score,
 	//kills,
 	//ping
@@ -1000,7 +1001,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 	if(player != selectedPlayer)
 	{
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
-		sButInit.formID = id; 
+		sButInit.formID = id;
 		sButInit.style	= WBUT_PLAIN;
 		sButInit.x		= MULTIMENU_C0;
 		sButInit.y		= 5;
@@ -1009,13 +1010,13 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.FontID = WFont;
 		sButInit.id		= MULTIMENU_CHANNEL + player;
 		sButInit.pTip	= "channel";
-		sButInit.pDisplay = displayChannelState; 
+		sButInit.pDisplay = displayChannelState;
 		sButInit.pUserData = (VOID*)player;
 		widgAddButton(psWScreen, &sButInit);
 	}
 
 	if(game.alliance!=NO_ALLIANCES && player!=selectedPlayer)
-	{		
+	{
 		//alliance
 		sButInit.x		= MULTIMENU_C3;
 		sButInit.y		= 5;
@@ -1024,7 +1025,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.FontID = WFont;
 		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
 		sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_STATE);
-		sButInit.pDisplay = displayAllianceState; 
+		sButInit.pDisplay = displayAllianceState;
 		sButInit.pUserData = (VOID*)player;
 
 		widgAddButton(psWScreen, &sButInit);
@@ -1059,11 +1060,11 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 			sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_POW);
 			sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MULTI_POW_HI , IMAGE_MULTI_POW);
 			widgAddButton(psWScreen, &sButInit);
-	
+
 			giftsUp[player] = TRUE;				// note buttons are up!
 //		}
-		
-	}		
+
+	}
 }
 
 
@@ -1122,7 +1123,7 @@ BOOL intAddMultiMenu(VOID)
 			pos++;
 		}
 	}
-	
+
 	// Add the close button.
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = MULTIMENU_FORM;
@@ -1183,7 +1184,7 @@ BOOL intCloseMultiMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // In Game Options house keeping stuff.
 BOOL intRunMultiMenu(VOID)
-{	
+{
 	return TRUE;
 }
 
@@ -1243,7 +1244,7 @@ BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
 // ////////////////////////////////////////////////////////////////////////////
 // process clicks made by user.
 VOID intProcessMultiMenu(UDWORD id)
-{	
+{
 	UBYTE	i;
 
 	//close
@@ -1271,19 +1272,19 @@ VOID intProcessMultiMenu(UDWORD id)
 				formAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE);			// form an alliance
 			}
 			break;
-		case ALLIANCE_REQUESTED:	
+		case ALLIANCE_REQUESTED:
 			breakAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE);		// break an alliance
-			break;	
+			break;
 
 		case ALLIANCE_FORMED:
 			if(game.type != TEAMPLAY)									// cant break state in teamplay..
 			{
 				breakAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE);		// break an alliance
 			}
-			break;	
+			break;
 		default:
 			break;
-		}	
+		}
 	}
 
 
@@ -1296,7 +1297,7 @@ VOID intProcessMultiMenu(UDWORD id)
 			openchannels[i] = FALSE;// close channel
 		}
 		else
-		{	
+		{
 			openchannels[i] = TRUE;// open channel
 		}
 	}
@@ -1306,23 +1307,23 @@ VOID intProcessMultiMenu(UDWORD id)
 	{
 		sendGift(RADAR_GIFT, id - MULTIMENU_GIFT_RAD);
 	}
-	
+
 	// research gift
 	if(id >= MULTIMENU_GIFT_RES && id<MULTIMENU_GIFT_RES  +MAX_PLAYERS)
 	{
 		sendGift(RESEARCH_GIFT, id - MULTIMENU_GIFT_RES);
 	}
-	
+
 	//droid gift
 	if(id >=  MULTIMENU_GIFT_DRO && id<  MULTIMENU_GIFT_DRO +MAX_PLAYERS)
 	{
-		sendGift(DROID_GIFT, id - MULTIMENU_GIFT_DRO);	
+		sendGift(DROID_GIFT, id - MULTIMENU_GIFT_DRO);
 	}
 
 	//power gift
 	if(id >=  MULTIMENU_GIFT_POW && id<  MULTIMENU_GIFT_POW +MAX_PLAYERS)
 	{
-		sendGift(POWER_GIFT, id - MULTIMENU_GIFT_POW);	
+		sendGift(POWER_GIFT, id - MULTIMENU_GIFT_POW);
 	}
 
 

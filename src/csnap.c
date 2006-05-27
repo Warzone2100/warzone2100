@@ -6,13 +6,13 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "frame.h"
-#include "widget.h"
+#include "lib/framework/frame.h"
+#include "lib/widget/widget.h"
 #include "deliverance.h"
-#include "fractions.h"
+#include "lib/framework/fractions.h"
 
-#include "piestate.h"
-#include "pieclip.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/pieclip.h"
 
 #include "csnap.h"
 #include "audio_id.h"
@@ -31,7 +31,7 @@ SNAPBIAS DefaultBias =
 };
 
 
-SNAPBIAS FrontendBias = 
+SNAPBIAS FrontendBias =
 {
 	1,1,	// Nearest
 	1,1,	// Up
@@ -41,7 +41,7 @@ SNAPBIAS FrontendBias =
 };
 
 
-SNAPBIAS ReticuleBias = 
+SNAPBIAS ReticuleBias =
 {
 	1,1,	// Nearest
 	1,1,	// Up
@@ -51,7 +51,7 @@ SNAPBIAS ReticuleBias =
 };
 
 
-SNAPBIAS TabBias = 
+SNAPBIAS TabBias =
 {
 	1,1,	// Nearest
 	1,8,	// Up

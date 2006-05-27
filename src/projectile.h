@@ -11,11 +11,11 @@
 
 /***************************************************************************/
 
-#include "types.h"
+#include "lib/framework/types.h"
 #include "base.h"
 #include "statsdef.h"
 #include "movedef.h"
-#include "anim.h"
+#include "lib/gamelib/anim.h"
 
 /***************************************************************************/
 
@@ -84,11 +84,11 @@ SDWORD	proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz);
 	(													\
 		godMode											\
 	)													\
-)														
+)
 */
-extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, 
+extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect,
 						 BASE_OBJECT *psTarget);
-extern BOOL gfxVisible(PROJ_OBJECT *psObj);	
+extern BOOL gfxVisible(PROJ_OBJECT *psObj);
 
 /***************************************************************************/
 

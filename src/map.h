@@ -8,7 +8,7 @@
 #define _map_h
 
 #include <stdio.h>
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "objects.h"
 
 
@@ -45,9 +45,9 @@ typedef enum _terrain_type
 
 typedef enum _tts
 {
-TILE_TYPE,		
-SPEED,	   
-MARKER,		
+TILE_TYPE,
+SPEED,
+MARKER,
 } TYPE_SPEEDS;
 extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 
@@ -90,7 +90,7 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #endif*/
 
 #define BITS_STRUCTURE_MASK	0xfe
-#define BITS_FEATURE_MASK	0xfd 
+#define BITS_FEATURE_MASK	0xfd
 #define BITS_OCCUPIED_MASK	0xfc
 
 #define TILE_IS_NOTBLOCKING(x)	(x->texture & TILE_NOTBLOCKING)
@@ -226,7 +226,7 @@ typedef struct _maptile
 #define MAP_MAXHEIGHT	256
 #define MAP_MAXAREA		(256*256)
 
-#define TILE_MAX_HEIGHT		(255 * ELEVATION_SCALE) 
+#define TILE_MAX_HEIGHT		(255 * ELEVATION_SCALE)
 #define TILE_MIN_HEIGHT		  0
 
 /* The size and contents of the map */
@@ -284,7 +284,7 @@ extern void	mapWaterProcess( void );
 
 #undef FUNCINLINE
 #ifdef DEFINE_MAPINLINE
-#define FUNCINLINE 
+#define FUNCINLINE
 #else
 #define FUNCINLINE __inline extern
 #endif
@@ -301,7 +301,7 @@ FUNCINLINE MAPTILE *mapTile(UDWORD x, UDWORD y)
 		"mapTile: y coordinate bigger than map height"));
 
 	//return psMapTiles + x + (y << mapShift); //width no longer a power of 2
-	return psMapTiles + x + (y * mapWidth); 
+	return psMapTiles + x + (y * mapWidth);
 }
 
 /* Return height of tile at x,y */
@@ -382,7 +382,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y);
 /* returns TRUE if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
 
-/* returns the max and min height of a tile by looking at the four corners 
+/* returns the max and min height of a tile by looking at the four corners
    in tile coords */
 extern void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin);
 

@@ -8,10 +8,10 @@
 #include "raycast.h"
 #include "geometry.h"
 #include "hci.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "mapgrid.h"
 #include "cluster.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "audio_id.h"
 #include "scriptextern.h"
 #include "structure.h"
@@ -196,20 +196,20 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	if (newG >= currG)
 	{
 		currG = newG;
-		
+
 		SET_TILE_VISIBLE(rayPlayer, psTile);
 		if(rayPlayer == selectedPlayer && !bDisplaySensorRange)
 		{
 			psTile->inRange = UBYTE_MAX;
 		}
-		
+
 		// new - ask alex M
-		if( (selectedPlayer!=rayPlayer) AND 
+		if( (selectedPlayer!=rayPlayer) AND
 			(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,rayPlayer)) )
 		{
 			SET_TILE_VISIBLE(selectedPlayer,psTile);
 		}
-	
+
 		// new - ask Alex M
 	/* Not true visibility - done on sensor range */
 
@@ -371,7 +371,7 @@ void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
 		return;
 	}
 
-  
+
 
 	rayPlayer = psObj->player;
 
@@ -531,7 +531,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 			{
 				if( (psTarget->type == OBJ_DROID) OR (psTarget->type == OBJ_STRUCTURE) )
 				{
-					return(TRUE);	
+					return(TRUE);
 				}
 			}
 	}
@@ -732,10 +732,10 @@ found:
 {
 	TILE	*psTile;
 
-	// get a pointer to the tile 
+	// get a pointer to the tile
 	psTile = mapTile(x,y);
 
-	// Is it anything other than grass or sand? 
+	// Is it anything other than grass or sand?
 	if (psTile->type != TER_GRASS AND psTile->type!=TER_SAND)
 		return(TRUE);
 	else
@@ -885,7 +885,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			 !currVis[psViewer->player] &&
 			 visibleObject(psViewer, psObj) )
  		{
-			// Tell system that this side can see this object 
+			// Tell system that this side can see this object
  			currVis[psViewer->player]=TRUE;
 			if (!prevVis[psViewer->player])
 			{
@@ -967,7 +967,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	/* Make sure all tiles under a feature/structure become visible when you see it */
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
-		if( (psObj->type == OBJ_STRUCTURE OR psObj->type == OBJ_FEATURE) AND 
+		if( (psObj->type == OBJ_STRUCTURE OR psObj->type == OBJ_FEATURE) AND
 			(!prevVis[i] AND psObj->visible[i]) )
 		{
 			setUnderTilesVis(psObj,i);
@@ -978,7 +978,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	if (psObj->type == OBJ_FEATURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
 	{
 		setFeatTileDraw((FEATURE *)psObj);
-		/*if this is an oil resource we want to add a proximity message for 
+		/*if this is an oil resource we want to add a proximity message for
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
@@ -1043,7 +1043,7 @@ MAPTILE		*psTile;
 		mapX = (psStructure->x - width * TILE_UNITS / 2) >> TILE_SHIFT;
 		mapY = (psStructure->y - breadth * TILE_UNITS / 2) >> TILE_SHIFT;
 	}
-	
+
 	for (i = 0; i < width; i++)
 	{
 		for (j = 0; j < breadth; j++)
@@ -1239,7 +1239,7 @@ void startSensorDisplay()
 //		for(ray=0; ray < NUM_RAYS; ray += NUM_RAYS/80)
 //		{
 //			startH = psDroid->z + visObjHeight((BASE_OBJECT*)psDroid);// initialise the callback variables //rayTerrainCallback
-//			currG = -UBYTE_MAX * GRAD_MUL;	// Cast the rays from the viewer	
+//			currG = -UBYTE_MAX * GRAD_MUL;	// Cast the rays from the viewer
 			visTilesUpdate((BASE_OBJECT*)psDroid,FALSE);
 //			rayCast(psDroid->x,psDroid->y,ray, range, rayTerrainCallback);
 //		}

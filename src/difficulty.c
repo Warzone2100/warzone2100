@@ -9,7 +9,7 @@
 
 
 // ------------------------------------------------------------------------------------
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "difficulty.h"
 // ------------------------------------------------------------------------------------
 DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
@@ -79,7 +79,7 @@ SDWORD	modifyForDifficultyLevel(SDWORD basicVal,BOOL IsPlayer)
 {
 	SDWORD	retVal;
 
-// You can't garantee that we don't want damage modifiers in normal difficulty.	
+// You can't garantee that we don't want damage modifiers in normal difficulty.
 //	/* Unmodified! */
 //	if(getDifficultyLevel() == DL_NORMAL)
 //	{
@@ -88,9 +88,9 @@ SDWORD	modifyForDifficultyLevel(SDWORD basicVal,BOOL IsPlayer)
 
 //	retVal = basicVal*fDifModifier;
 	if(IsPlayer) {
-		retVal = (SDWORD)ROUND(basicVal*fDifPlayerModifier); 
+		retVal = (SDWORD)ROUND(basicVal*fDifPlayerModifier);
 	} else {
-		retVal = (SDWORD)ROUND(basicVal*fDifEnemyModifier); 
+		retVal = (SDWORD)ROUND(basicVal*fDifEnemyModifier);
 	}
 
 //	DBPRINTF(("%d : %d %d\n",IsPlayer,basicVal,retVal));

@@ -7,7 +7,7 @@
 #ifndef _transporter_h
 #define _transporter_h
 
-#include "widget.h"
+#include "lib/widget/widget.h"
 
 #define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CONTENTFORM		9003	//The Transporter Contents form
@@ -31,14 +31,14 @@ extern void intProcessTransporter(UDWORD id);
 extern void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
 /*check to see if the droid can fit on the Transporter - return TRUE if fits*/
 extern BOOL checkTransporterSpace(DROID *psTransporter, DROID *psAssigned);
-/*calculates how much space is remaining on the transporter - allows droids to take 
+/*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
 extern UDWORD calcRemainingCapacity(DROID *psTransporter);
 
 /*launches the defined transporter to the offworld map*/
 extern BOOL launchTransporter(DROID *psTransporter);
 
-/*checks how long the transporter has been travelling to see if it should 
+/*checks how long the transporter has been travelling to see if it should
 have arrived - returns TRUE when there*/
 extern BOOL updateTransporter(DROID *psTransporter);
 

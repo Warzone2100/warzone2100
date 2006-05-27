@@ -1,21 +1,22 @@
 /* Atmos.c - Handles atmospherics such as snow and rain */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
-/* 
-	At present, the water effects are part of the atmos 
-	system and aren't properly implemented in the software mode 
+/*
+	At present, the water effects are part of the atmos
+	system and aren't properly implemented in the software mode
 */
-#include "frame.h"
-#include "piedef.h"
-#include "piematrix.h"
-#include "piestate.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/piedef.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piestate.h"
 #include "display3d.h"
 #include "display3ddef.h"
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 #include "miscimd.h"
 #include "map.h"
 #include "atmos.h"
 #include "loop.h"
-#include "geo.h"
+#include "lib/ivis_common/geo.h"
 #include "effects.h"
 #include "lighting.h"
 #include "bucket3d.h"
@@ -73,7 +74,7 @@ UDWORD	i;
 	for(i=0; i<MAX_ATMOS_PARTICLES; i++)
 	{
 		/* None are being used initially */
-		asAtmosParts[i].status = APS_INACTIVE;	
+		asAtmosParts[i].status = APS_INACTIVE;
 	}
 	/* Start at the beginning */
 	freeParticle = 0;
@@ -89,7 +90,7 @@ void	atmosUpdateSystem( void )
 UDWORD	i;
 UDWORD	numberToAdd;
 iVector	pos;
-	
+
 	/* Establish how long the last game frame took */
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
 
@@ -123,7 +124,7 @@ iVector	pos;
 
 			/* If we've got one on the grid */
 			if(pos.x>0 AND pos.z>0 AND
-			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) AND 
+			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) AND
 			   pos.z<(SDWORD)((mapHeight-1)*TILE_UNITS) )
 			{
 			   	/* On grid, so which particle shall we add? */
@@ -165,10 +166,10 @@ MAPTILE	*psTile;
 
 		/* Wrap it around if it's gone off grid... */
 	   	testParticleWrap(psPart);
-	 	
+
 		/* If it's gone off the WORLD... */
 		if(psPart->position.x<0 OR psPart->position.z<0 OR
-		   psPart->position.x>((mapWidth-1)*TILE_UNITS) OR 
+		   psPart->position.x>((mapWidth-1)*TILE_UNITS) OR
 		   psPart->position.z>((mapHeight-1)*TILE_UNITS) )
 		{
 			/* The kill it */
@@ -192,7 +193,7 @@ MAPTILE	*psTile;
 					x = (MAKEINT(psPart->position.x))>>TILE_SHIFT;
 					y = (MAKEINT(psPart->position.z))>>TILE_SHIFT;
 					psTile = mapTile(x,y);
-					if(TERRAIN_TYPE(psTile) == TER_WATER AND TEST_TILE_VISIBLE(selectedPlayer,psTile)) 
+					if(TERRAIN_TYPE(psTile) == TER_WATER AND TEST_TILE_VISIBLE(selectedPlayer,psTile))
 					{
 						pos.x = MAKEINT(psPart->position.x);
 						pos.z = MAKEINT(psPart->position.z);
@@ -225,7 +226,7 @@ void	atmosAddParticle( iVector *pos, AP_TYPE type )
 UDWORD	activeCount;
 UDWORD	i;
 
-	for(i=freeParticle,activeCount=0; (asAtmosParts[i].status==APS_ACTIVE) 
+	for(i=freeParticle,activeCount=0; (asAtmosParts[i].status==APS_ACTIVE)
 		AND activeCount<MAX_ATMOS_PARTICLES; i++)
 	{
 		activeCount++;
@@ -248,7 +249,7 @@ UDWORD	i;
 		freeParticle = i;
 	}
 
-	
+
 	/* Record it's type */
 	asAtmosParts[freeParticle].type = (UBYTE)type;
 
@@ -317,7 +318,7 @@ UDWORD	i;
 #endif
 			}
 		}
-	}	 
+	}
 }
 
 // -----------------------------------------------------------------------------

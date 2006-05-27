@@ -13,7 +13,7 @@
 //#define DEBUG_GROUP2
 #include <assert.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "objects.h"
 #include "map.h"
@@ -185,7 +185,7 @@ void fpathShutDown(void)
 #define	BITS_IN_int		32
 #define	THREE_QUARTERS	((UINT) ((BITS_IN_int * 3) / 4))
 #define	ONE_EIGHTH		((UINT) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))      
+#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))
 
 /***************************************************************************/
 /*
@@ -407,7 +407,7 @@ static UWORD seed = 1234;
 BOOL fpathRandChoice(void)
 {
 	UDWORD	val;
-	
+
 	val = (seed * RAND_MULTI + RAND_INC) & RAND_MOD;
 	seed = (UWORD)val;
 
