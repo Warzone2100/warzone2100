@@ -64,11 +64,7 @@
 #include "netplay.h"
 
 
-
-#include "revision.h"
-#ifndef SVN_REVISION
-#error "SVN_REVISION must be defined!"
-#endif
+#include "version.h"
 
 extern BOOL bSubtitles;
 
@@ -1625,7 +1621,7 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
-	snprintf(sTmp, sTmpSize, "Version %s w/%s - Built %s", SVN_REVISION,
+	snprintf(sTmp, sTmpSize, "Version %s - Revision %s - w/%s - Built %s", version(), revision(),
             pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
 
 

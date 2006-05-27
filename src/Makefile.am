@@ -8,6 +8,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)/lib/gamelib \
 	-I$(top_srcdir)/lib/sequence -I$(top_srcdir)/lib/sound \
 	-I$(top_srcdir)/lib/widget -I$(top_srcdir)/lib/ivis_common -I$(top_srcdir)
 warzone_SOURCES = \
+		version.c \
 		scriptvals_parser.y \
 		scriptvals_lexer.l \
 		level_lexer.l \
@@ -269,23 +270,21 @@ warzone_libs =  ../lib/framework/libframework.a \
 		../lib/script/libscript.a \
 		../lib/ivis_common/libivis_common.a \
 		../lib/$(RENDERER)/lib$(RENDERER).a \
-		../lib/ivis_common/libivis_common.a \
 		../lib/gamelib/libgamelib.a \
 		../lib/sequence/libsequence.a \
 		../lib/widget/libwidget.a
 
-warzone_LDFLAGS = -L../lib/framework -L../lib/gamelib -L../lib/$(RENDERER) \
-	-L../lib/netplay -L../lib/script -L../lib/sequence -L../lib/sound \
-	-L../lib/widget -L../lib/ivis_common
 warzone_DEPENDENCIES = $(warzone_libs)
 warzone_LDADD        = $(warzone_libs)
 
-# On every build, record the working copy revision string in revision.h
-# if svnversion is not installed, it will be just an empty string.
-# Also delete frontend.o so it is remade unconditionally to have an
-# up-to-date revision number.
-STUPID_TRICK := $(shell rm -rf frontend.o)
-REWRITE_REVISION_H1 := $(shell echo -n '\#define SVN_REVISION "Revision ' > revision.h)
-REWRITE_REVISION_H2 := $(shell svnversion -n . >> revision.h)
-REWRITE_REVISION_H3 := $(shell echo '"' >> revision.h)
-
+##
+## on every build, record the working copy revision string
+##
+.PHONY: version.c
+version.c:
+	echo -n 'const char* version(void) { return "'	> version.c
+	echo -n $(VERSION)		>> version.c
+	echo '"; }'			>> version.c
+	echo -n 'const char* revision(void) { return "'	>> version.c
+	echo -n `svnversion -n .`	>> version.c
+	echo '"; }' 			>> version.c

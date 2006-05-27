@@ -1,11 +1,6 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
-# This is a kludge to make Gentoo behave and select the
-# correct version of automake to use.
-WANT_AUTOMAKE=1.8
-export WANT_AUTOMAKE
-
 DIE=0
 SRCDIR=`dirname $0`
 BUILDDIR=`pwd`
