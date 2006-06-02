@@ -1,8 +1,8 @@
 %{
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "parser.h"
-#include "audio.h"
+#include "lib/sound/audio.h"
 #include "anim.h"
 
 static int		g_iCurAnimID = 0;

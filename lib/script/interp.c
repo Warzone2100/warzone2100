@@ -7,7 +7,7 @@
 
 /* Control the execution trace printf's */
 #define DEBUG_GROUP0
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "interp.h"
 #include "stack.h"
 #include "codeprint.h"
@@ -86,9 +86,9 @@ BOOL	interpTrace;
 
 #else
 
-#define TRCPRINTVAL(x) 
-#define TRCPRINTMATHSOP(x) 
-#define TRCPRINTSTACKTOP() 
+#define TRCPRINTVAL(x)
+#define TRCPRINTMATHSOP(x)
+#define TRCPRINTSTACKTOP()
 #define TRCPRINTFUNC(x)
 #define TRCPRINTVARFUNC(x,data)
 

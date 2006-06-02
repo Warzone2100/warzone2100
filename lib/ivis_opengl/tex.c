@@ -10,14 +10,14 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "frame.h"
-#include "ivisdef.h"
-#include "piestate.h"
-#include "tex.h"
-#include "rendmode.h"
-#include "piepalette.h"
-#include "bug.h"
-#include "ivispatch.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/ivis_common/ivispatch.h"
 
 //*************************************************************************
 

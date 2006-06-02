@@ -10,8 +10,9 @@
 #include "tip.h"
 #include "form.h"
 #include "bar.h"
-#include "vid.h"
-#include "piepalette.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/piepalette.h"
 
 /* The widget heap */
 OBJ_HEAP	*psBarHeap;

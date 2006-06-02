@@ -10,10 +10,10 @@
 #include <stdio.h>
 
 
-#include "piedef.h"
+#include "lib/ivis_common/piedef.h"
 #include "piematrix.h"
-#include "rendmode.h"
-#include "bug.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bug.h"
 
 /***************************************************************************/
 /*

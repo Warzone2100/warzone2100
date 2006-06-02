@@ -3,7 +3,7 @@
  * imdload.c
  *
  * updated to load version 4 files
- * 
+ *
  * changes at version 4;
  *		pcx name as string
  *		pcx filepath
@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 //#include "piematrix.h" //for surface normals
 #include "ivisdef.h"	// for imd structures
 #include "imd.h"	// for imd structures
@@ -42,7 +42,7 @@ static char		imagePath[MAX_FILE_PATH] = {""};
 extern void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v);
 
 // local prototypes
-static iIMDShape *_imd_load_level(STRING **FileData, STRING *FileDataEnd, int nlevels, 
+static iIMDShape *_imd_load_level(STRING **FileData, STRING *FileDataEnd, int nlevels,
                                   int texpage);
 static char *_imd_get_path(STRING *filename, STRING *path);
 BOOL CheckColourKey(iIMDShape *psShape);
@@ -112,14 +112,14 @@ iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
 
 	if (strlen(path) != 0) {
 		if (strlen(imagePath) != 0) {
-			if ((strlen(path) + strlen(imagePath)) > MAX_FILE_PATH) {	
+			if ((strlen(path) + strlen(imagePath)) > MAX_FILE_PATH) {
 				iV_Error(0xff,"(iv_IMDLoad) image path too long for load file");
 				return NULL;
 			}
 			strcat(imagePath,path);
 		}
 	}
-	
+
 	res = loadFile(_IMD_NAME,&pFileData, &FileSize);
 	if (res == FALSE) {
 		iV_Error(0xff,"(iv_IMDLoad) unable to load file");
@@ -169,7 +169,7 @@ char *GetLastLoadedTexturePage(void)
 
 
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpath, 
+iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpath,
                          STRING *PCXpath,iBool palkeep)
 {
 	STRING		*pFileData = *ppFileData;
@@ -214,7 +214,7 @@ iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpa
 	// get texture page if specified
 	if (_IMD_FLAGS & iV_IMD_XTEX){
 		if (_IMD_VER == 1) {
-			if (sscanf(pFileData, "%s %d %s %d %d%n", buffer, &ptype, texfile, &pwidth, 
+			if (sscanf(pFileData, "%s %d %s %d %d%n", buffer, &ptype, texfile, &pwidth,
 			           &pheight, &cnt) != 5) {
 				debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -C (%s)", buffer);
 				return NULL;
@@ -460,7 +460,7 @@ static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape
 						&nFrames,
 						&pbRate,
 						&tWidth,
-						&tHeight,&cnt)	!= 4) 
+						&tHeight,&cnt)	!= 4)
 				{
 					iV_Error(0xff,"(_load_polys) [poly %d] error reading texanim data",i);
 					return FALSE;
@@ -471,9 +471,9 @@ static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape
 				ASSERT( (tHeight>0, "_imd_load_polys: texture height = %i", tHeight) );
 
 				poly->pTexAnim->nFrames = nFrames;
-				
+
 				/* Assumes same number of frames per poly */
-				
+
 				s->numFrames = nFrames;
 				poly->pTexAnim->playbackRate =pbRate;
 
@@ -482,7 +482,7 @@ static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape
 				poly->pTexAnim->textureWidth =tWidth;
 				poly->pTexAnim->textureHeight =tHeight;
 			} else {
-				poly->pTexAnim = NULL;	
+				poly->pTexAnim = NULL;
 			}
 		// PC texture coord routine
 			if (poly->vrt && (poly->flags & (iV_IMD_TEX|iV_IMD_PSXTEX))) {
@@ -534,7 +534,7 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 		iV_Error(0xff,"(_imd_load_bsp) Too many polygons in IMD for BSP to handle");
 	}
 
-	// Build table of nodes - we sort out the links later 
+	// Build table of nodes - we sort out the links later
 	NodeList=MALLOC((sizeof(BSPTREENODE))*BSPNodeCount);	// Allocate the entire node tree
 
 	memset(NodeList,0,(sizeof(BSPTREENODE))*BSPNodeCount);	// Zero it out ... we need to make all pointers NULL
@@ -550,16 +550,16 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 		FirstPolygonID=-1;	// This indicates the first polygon in the forward facing BSP list
 
 		InitNode(psNode);
-	
+
 		if (sscanf(pFileData,"%d%n",&NodeID,&cnt) != 1)	// Check that we read 1 parameter ok
 		{
 			iV_Error(0xff,"(_load_bsp) - needed a left node!");
 			return FALSE;
 		}
 		pFileData += cnt;
-		psNode->link[LEFT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node 
+		psNode->link[LEFT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node
 
-		// Get forward facing polygon list - never empty apart from root node 
+		// Get forward facing polygon list - never empty apart from root node
 		while(1) {
 			if (sscanf(pFileData,"%d%n",&PolygonID,&cnt) != 1) 	// Get a valid polygon number
 			{
@@ -567,21 +567,21 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 				return FALSE;
 			}
 			pFileData += cnt;
-		
+
 			if (PolygonID==-1)	break;
 
 			if ((PolygonID<0) || (PolygonID >= s->npolys)) {
 				iV_Error(0xff,"(_load_bsp) - bad polygon number");
 				return FALSE;
 			}
-			
-			if (FirstPolygonID==-1) FirstPolygonID=PolygonID;	
-				
+
+			if (FirstPolygonID==-1) FirstPolygonID=PolygonID;
+
 			IMDTri=GETBSPTRIANGLE(PolygonID);
 			if (IMDTri->BSP_NextPoly != BSPPOLYID_TERMINATE) {
 				iV_Error(0xff,"(_load_bsp) - Polygon is mentioned more than once in the BSP");
 			}
-			
+
 			IMDTri->BSP_NextPoly=psNode->TriSameDir;
 			psNode->TriSameDir=PolygonID;
 //			list_Add( psNode->psTriSameDir , &(s->polys[PolygonID]) );
@@ -591,7 +591,7 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 		if (FirstPolygonID != -1) {
 			GetPlane(s, FirstPolygonID, &(psNode->Plane));
 		} else {
-			memset((char *)&(psNode->Plane),0,sizeof(PLANE));	// Clear the plane equation 
+			memset((char *)&(psNode->Plane),0,sizeof(PLANE));	// Clear the plane equation
 		}
 
 		// Get reverse facing polygon list - frequently empty
@@ -602,7 +602,7 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 				return FALSE;
 			}
 			pFileData += cnt;
-		
+
 			if (PolygonID == -1) {
 				break;
 			}
@@ -611,12 +611,12 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 				return FALSE;
 			}
 
-			// Insert into the list 
+			// Insert into the list
 			IMDTri=GETBSPTRIANGLE(PolygonID);
 			if (IMDTri->BSP_NextPoly != BSPPOLYID_TERMINATE) {
 				iV_Error(0xff,"(_load_bsp) - Polygon is mentioned more than once in the BSP");
 			}
-		
+
 			IMDTri->BSP_NextPoly=psNode->TriOppoDir;
 			psNode->TriOppoDir=PolygonID;
 
@@ -629,7 +629,7 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 			return FALSE;
 		}
 		pFileData += cnt;
-		psNode->link[RIGHT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node 
+		psNode->link[RIGHT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node
 	}
 
 	// Now fix all the links
@@ -640,21 +640,21 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 		psNode = &(NodeList[Node]);
 
 		if ((SDWORD)(psNode->link[LEFT]) == -1) {
-			psNode->link[LEFT]=0;	// if its zero then its an empty link 
+			psNode->link[LEFT]=0;	// if its zero then its an empty link
 		} else {
 			NodeID = (int) psNode->link[LEFT];
 			psNode->link[LEFT] = &NodeList[NodeID];
 		}
 
 		if ((SDWORD)(psNode->link[RIGHT]) == -1) {
-			psNode->link[RIGHT]=0;	// if its zero then its an empty link 
+			psNode->link[RIGHT]=0;	// if its zero then its an empty link
 		} else {
 			NodeID = (int) psNode->link[RIGHT];
 			psNode->link[RIGHT] = &NodeList[NodeID];
 		}
 	}
 
-	// Set the shape node list to the root node ... this can be used to 
+	// Set the shape node list to the root node ... this can be used to
   // FREE up the BSP memory if we needed to
 	s->BSPNode = &NodeList[0];
 	iV_DEBUG0("BSP Loaded AOK\n");
@@ -684,7 +684,7 @@ BOOL ReadPoints(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
 			return FALSE;
 		}
 		pFileData += cnt;
-		
+
 //		DBPRINTF(("%d) x=%d y=%x z=%d\n",i,newX,newY,newZ));
 		//check for duplicate points
 		match = -1;
@@ -771,7 +771,7 @@ static iBool _imd_load_points(STRING **ppFileData, STRING *FileDataEnd, iIMDShap
 	vxmax.x = vymax.y = vzmax.z = (double) -FP12_MULTIPLIER;
 	vxmin.x = vymin.y = vzmin.z = (double) FP12_MULTIPLIER;
 
-	// set up bounding data for minimum number of vertices	
+	// set up bounding data for minimum number of vertices
 	for (i = 0; i < s->npoints; i++, p++) {
 			if (p->x > s->xmax)
 				s->xmax = p->x;
@@ -794,7 +794,7 @@ static iBool _imd_load_points(STRING **ppFileData, STRING *FileDataEnd, iIMDShap
 				s->ymax = p->y;
 			if (p->y < s->ymin)
 				s->ymin = p->y;
-			
+
 			if (p->z > s->zmax)
 				s->zmax = p->z;
 			if (p->z < s->zmin)
@@ -981,9 +981,9 @@ static iBool _imd_load_connectors(STRING **ppFileData, STRING *FileDataEnd, iIMD
 
 	p = s->connectors;
 
-	for (i=0; i<s->nconnectors; i++, p++) 
+	for (i=0; i<s->nconnectors; i++, p++)
 	{
-		if (sscanf(pFileData,"%d %d %d%n",&(newX),&(newY),&(newZ),&cnt) != 3) 
+		if (sscanf(pFileData,"%d %d %d%n",&(newX),&(newY),&(newZ),&cnt) != 3)
 		{
 			iV_Error(0xff,"(_load_connectors) file corrupt -M");
 			return FALSE;
@@ -1093,7 +1093,7 @@ static iIMDShape *_imd_load_level(STRING **ppFileData, STRING *FileDataEnd, int 
 		pFileData += cnt;
 
 		s->npolys=npolys;
-	  
+
 		if (strcmp(buffer,"POLYGONS") != 0) {
 			debug(LOG_ERROR,"_imd_load_level: expecting 'POLYGONS' directive");
 			return NULL;
@@ -1179,7 +1179,7 @@ BOOL iV_setImagePath(STRING *path)
 	i = strlen(imagePath);
 	if (imagePath[i] != '\\')
 	{
-		imagePath[i] = '\\';					
+		imagePath[i] = '\\';
 		imagePath[i+1] = 0;
 	}
 	return TRUE;
@@ -1233,7 +1233,7 @@ BOOL CheckColourKey( iIMDShape *psShape ) {
 
 				/* next level */
 				psShape = psShape->next;
-			}			
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libsequence.a
-AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)
 libsequence_a_SOURCES = \
 	adpcm.c \
 	dec130.c \

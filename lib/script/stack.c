@@ -6,7 +6,7 @@
 
 #include <stdarg.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "interp.h"
 #include "stack.h"
 #include "codeprint.h"

@@ -4,22 +4,22 @@
 #ifdef WIN32
 #include <dos.h>
 #endif
-#include "rendmode.h"
+#include "lib/ivis_common/rendmode.h"
 
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
 #include "v4101.h"
 
-#include "rendfunc.h"
+#include "lib/ivis_common/rendfunc.h"
 #include "vsr.h"
 //#include "rendfunc.h"
-#include "textdraw.h"
+#include "lib/ivis_common/textdraw.h"
 
-#include "bug.h"
-#include "piepalette.h"
-#include "piestate.h"
-#include "ivispatch.h"
-#include "fractions.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/ivispatch.h"
+#include "lib/framework/fractions.h"
 
 
 
@@ -44,7 +44,7 @@ static iBool	_VIDEO_LOCK;
 
 //*************************************************************************
 //temporary definition
-//void (*iV_pPolygon)(int npoints, iVertex *vrt, iTexture *tex, uint32 type); 
+//void (*iV_pPolygon)(int npoints, iVertex *vrt, iTexture *tex, uint32 type);
 //void (*iV_pTriangle)(iVertex *vrt, iTexture *tex, uint32 type);
 void (*iV_ppBitmapColourTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow,int ColourIndex);
 //void (*iV_DrawStretchImage)(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int Width,int Height);
@@ -248,7 +248,7 @@ void iV_SurfaceDestroy(iSurface *s)
 
 	if (s)
 		iV_HeapFree(s,sizeof(iSurface));
-		
+
 }
 
 //*************************************************************************
@@ -330,7 +330,7 @@ void (*iV_ppBitmapTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow);
 void (*iV_SetTransFilter)(UDWORD rgb,UDWORD tablenumber);
 //void (*iV_DrawColourTransImage)(IMAGEFILE *ImageFile,UWORD ID,int x,int y,UWORD ColourIndex);
 
-void (*iV_UniBitmapDepth)(int texPage, int u, int v, int srcWidth, int srcHeight, 
+void (*iV_UniBitmapDepth)(int texPage, int u, int v, int srcWidth, int srcHeight,
 						int x, int y, int destWidth, int destHeight, unsigned char brightness, int depth);
 
 //void (*iV_SetGammaValue)(float val);
@@ -385,7 +385,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 //			iV_Palette 					= _palette_sr;
 
 			iV_SetTransFilter  			= SetTransFilter;
-//rend	
+//rend
 			iV_pLine 					= _line_sr;
 //			iV_Line 					= line;
 //			iV_Polygon					= iV_pPolygon;
@@ -395,7 +395,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 //			iV_Box 						= box;
 //			iV_BoxFill 					= boxf;
 //			iV_TransBoxFill	   			= TransBoxFill;
-//blit	
+//blit
 			iV_ppBitmap 				= _bitmap_sr;
 			iV_ppBitmapTrans			= _tbitmap_sr;
 //			iV_DrawImageDef			= DrawImageDef;
@@ -419,7 +419,7 @@ void iV_RenderAssign(int mode, iSurface *s)
 
 
 // indirect
-			
+
 			iV_pBox 						= _box_sr;
 //			iV_pPolygon 	  			= _polygon_sr;
 //			iV_pTriangle 				= _triangle_sr;

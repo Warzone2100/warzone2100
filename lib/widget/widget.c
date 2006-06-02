@@ -5,8 +5,8 @@
  */
 
 
-#include "frame.h"
-#include "frameint.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 
 #include "widget.h"
 #include "widgint.h"
@@ -68,7 +68,7 @@ BOOL widgInitialise(W_HEAPINIT *psInit)
 		return FALSE;
 	}
 #endif
-	
+
 	tipInitialise();
 
 #if W_USE_MALLOC

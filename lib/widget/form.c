@@ -4,13 +4,14 @@
  * Functionality for the form widget.
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "widget.h"
 #include "widgint.h"
 #include "form.h"
 #include "tip.h"
-#include "vid.h"
-#include "piepalette.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/piepalette.h"
 
 /* The widget heaps */
 OBJ_HEAP	*psFormHeap;
@@ -34,21 +35,21 @@ typedef struct _tab_pos
 static void formSetDefaultColours(W_FORM *psForm)
 {
 	static BOOL bDefaultsSet = FALSE;
-	static UBYTE wcol_bkgrnd;    
-	static SDWORD wcol_text;      
-	static UBYTE wcol_light;     
-	static UBYTE wcol_dark;      
-	static UBYTE wcol_hilite;    
-	static UBYTE wcol_cursor;    
-	static UBYTE wcol_tipbkgrnd; 
-	static UBYTE wcol_disable;   
+	static UBYTE wcol_bkgrnd;
+	static SDWORD wcol_text;
+	static UBYTE wcol_light;
+	static UBYTE wcol_dark;
+	static UBYTE wcol_hilite;
+	static UBYTE wcol_cursor;
+	static UBYTE wcol_tipbkgrnd;
+	static UBYTE wcol_disable;
 
 	if (bDefaultsSet)
 	{
 		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
 		psForm->aColours[WCOL_TEXT]      = wcol_text;
 		psForm->aColours[WCOL_LIGHT]     = wcol_light;
-		psForm->aColours[WCOL_DARK]      = wcol_dark;    
+		psForm->aColours[WCOL_DARK]      = wcol_dark;
 		psForm->aColours[WCOL_HILITE]    = wcol_hilite;
 		psForm->aColours[WCOL_CURSOR]    = wcol_cursor;
 		psForm->aColours[WCOL_TIPBKGRND] = wcol_tipbkgrnd;
@@ -66,11 +67,11 @@ static void formSetDefaultColours(W_FORM *psForm)
 		wcol_disable   = (UBYTE)pal_GetNearestColour(0xbf,0xbf,0xbf);
 
 		bDefaultsSet   = TRUE;
-		
+
 		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
 		psForm->aColours[WCOL_TEXT]      = wcol_text;
 		psForm->aColours[WCOL_LIGHT]     = wcol_light;
-		psForm->aColours[WCOL_DARK]      = wcol_dark;    
+		psForm->aColours[WCOL_DARK]      = wcol_dark;
 		psForm->aColours[WCOL_HILITE]    = wcol_hilite;
 		psForm->aColours[WCOL_CURSOR]    = wcol_cursor;
 		psForm->aColours[WCOL_TIPBKGRND] = wcol_tipbkgrnd;
@@ -132,7 +133,7 @@ static BOOL formCreatePlain(W_FORM **ppsWidget, W_FORMINIT *psInit)
 	formSetDefaultColours(*ppsWidget);
 
 	formInitialise(*ppsWidget);
-	
+
 	return TRUE;
 }
 
@@ -220,7 +221,7 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 	formSetDefaultColours((W_FORM *)*ppsWidget);
 
 	formInitialise((W_FORM *)*ppsWidget);
-	
+
 	return TRUE;
 }
 
@@ -838,7 +839,7 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 	SDWORD	x, y1;
 	UDWORD	i;
 
-#if NO_DISPLAY_SINGLE_TABS 
+#if NO_DISPLAY_SINGLE_TABS
 	if (number == 1)
 	{
 		/* Don't have single tabs */
@@ -880,7 +881,7 @@ static BOOL formPickVTab(TAB_POS *psTabPos,
 	SDWORD	x1, y;
 	UDWORD	i;
 
-#if NO_DISPLAY_SINGLE_TABS 
+#if NO_DISPLAY_SINGLE_TABS
 	if (number == 1)
 	{
 		/* Don't have single tabs */
@@ -1330,7 +1331,7 @@ void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	pie_BoxFillIndex(x0+1,y0+1, x1-1,y1-1,WCOL_BKGRND);
 
 	/* Display the border */
-	if (psForm->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)) 
+	if (psForm->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
 		/* Form down */
 		iV_Line(x0,y1,x0,y0,*(pColours + WCOL_DARK));
@@ -1694,7 +1695,7 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 						 psForm->tabHiLite - psForm->numMajor, pColours,TAB_MINOR,psForm->tabMinorGap);
 		break;
 	case WFORM_TABLEFT:
-		formDisplayLTabs(psForm,x0 - psForm->tabMinorThickness + psForm->tabHorzOffset + psForm->minorOffset, 
+		formDisplayLTabs(psForm,x0 - psForm->tabMinorThickness + psForm->tabHorzOffset + psForm->minorOffset,
 						 y0+psForm->minorOffset,
 						 psForm->tabMinorThickness, psForm->minorSize,
 						 psMajor->numMinor, psForm->minorT,

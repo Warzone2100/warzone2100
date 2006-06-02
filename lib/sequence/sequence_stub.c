@@ -13,7 +13,7 @@
 #include <AL/al.h>
 
 // Standard include file
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "rpl_reader.h"
 #include "sequence.h"
 

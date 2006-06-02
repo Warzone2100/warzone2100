@@ -7,11 +7,11 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "pietexture.h"
-#include "piedef.h"
-#include "piestate.h"
-#include "tex.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/tex.h"
 
 /***************************************************************************/
 /*

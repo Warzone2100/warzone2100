@@ -7,21 +7,21 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
-#include "ivisdef.h"
+#include "lib/ivis_common/ivisdef.h"
 
-#include "imd.h"
-#include "rendmode.h"
-#include "piefunc.h"
+#include "lib/ivis_common/imd.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piefunc.h"
 #include "piematrix.h"
-#include "tex.h"
+#include "lib/ivis_common/tex.h"
 
-#include "piedef.h"
-#include "piestate.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
 #include "pietexture.h"
-#include "pieclip.h"
-#include "bspfunc.h"
+#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_common/bspfunc.h"
 #include "v4101.h"
 
 #define MIST
@@ -77,7 +77,7 @@ void pie_RemainingPasses(void) {
 }
 
 #ifdef BSPIMD
-	extern iIMDShape *BSPimd;	// global defined here for speed 
+	extern iIMDShape *BSPimd;	// global defined here for speed
 extern	iIMDPoly *BSPScrVertices;
 UDWORD ShapeTexPage;
 UDWORD ShapeFrame;
@@ -99,7 +99,7 @@ void DrawTriangleList(BSPPOLYID PolygonNumber)
 
 		while(PolygonNumber!=BSPPOLYID_TERMINATE)
 		{
-			pPolys= IMD_POLYGON(PolygonNumber);	
+			pPolys= IMD_POLYGON(PolygonNumber);
 
 				index = pPolys->pindex;
 				imdPoly.flags = pPolys->flags;
@@ -138,7 +138,7 @@ static SDWORD BSPObject_Yaw=0,BSPObject_Pitch=0;
 void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z)
 {
 
-	
+
 	BSPObject.x=x;
 	BSPObject.y=y;
 	BSPObject.z=z;
@@ -207,7 +207,7 @@ static void AddIMDPrimativesBSP2(iIMDShape *IMDdef, UDWORD frame)
  *
  * Project and render a pumpkin image to render surface
  * Will support zbuffering, texturing, coloured lighting and alpha effects
- * Avoids recalculating vertex projections for every poly 
+ * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 // DEV STUDIO 5, 3D NOW and INTEL VERSION.
 #if (_MSC_VER != 1000) && (_MSC_VER != 1020)
@@ -235,7 +235,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 	// Fix for transparent buildings and features!! */
 
-	
+
 
 // WARZONE light as byte passed in colour so expand
 	if (col <= MAX_UB_LIGHT)
@@ -254,7 +254,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 	specular.argb = spec;
 
-	if (frame == 0) 
+	if (frame == 0)
 	{
 		frame = team;
 	}
@@ -291,7 +291,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pie_SetRendMode(REND_ALPHA_TEX);
 
 		colour.byte.a = (UBYTE)pieFlagData;
-		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
+		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges
 	}
 	else
 	{
@@ -326,7 +326,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	pie_SetTexturePage(shape->texpage);
 
 
-//now draw the shape	
+//now draw the shape
 	//rotate and project points from shape->points to scrPoints
 	pVertices = shape->points;
 	pPixels = &scrPoints[0];
@@ -502,7 +502,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 	// Fix for transparent buildings and features!! */
 
-	
+
 
 // WARZONE light as byte passed in colour so expand
 	if (col <= MAX_UB_LIGHT)
@@ -521,7 +521,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 	specular.argb = spec;
 
-	if (frame == 0) 
+	if (frame == 0)
 	{
 		frame = team;
 	}
@@ -559,7 +559,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pie_SetRendMode(REND_ALPHA_TEX);
 
 		colour.byte.a = (UBYTE)pieFlagData;
-		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
+		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges
 	}
 	else
 	{
@@ -594,7 +594,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	pie_SetTexturePage(shape->texpage);
 
 
-//now draw the shape	
+//now draw the shape
 	//rotate and project points from shape->points to scrPoints
 	pVertices = shape->points;
 	pPixels = &scrPoints[0];
@@ -745,11 +745,11 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
  * General purpose blit function
  * Will support zbuffering, non_textured, coloured lighting and alpha effects
  *
- * replaces all ivis blit functions 
+ * replaces all ivis blit functions
  *
  ***************************************************************************/
 //d3d loses edge pixels in triangle draw
-//this is a temporary correction that may become an option 
+//this is a temporary correction that may become an option
 
 # define EDGE_CORRECTION 0
 
@@ -803,7 +803,7 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
  * General purpose blit function
  * Will support zbuffering, non_textured, coloured lighting and alpha effects
  *
- * replaces all ivis blit functions 
+ * replaces all ivis blit functions
  *
  ***************************************************************************/
 
@@ -972,8 +972,8 @@ int	uFrame, vFrame, j, framesPerLine;
 					vFrame += poly->pTexAnim->textureHeight;
 				}
 				uFrame = frame * poly->pTexAnim->textureWidth;
-				
-				for (j=0; j<poly->nVrts; j++) 
+
+				for (j=0; j<poly->nVrts; j++)
 				{
 					poly->pVrts[j].tu += uFrame;
 					poly->pVrts[j].tv += vFrame;
@@ -994,7 +994,7 @@ int	uFrame, vFrame, j, framesPerLine;
  * D3D specific poly draw function should change to use hardpoly
  *
  * Assumes render mode NOT set up externally
- *                     ---   
+ *                     ---
  ***************************************************************************/
 
 void pie_D3DPoly(PIED3DPOLY *poly)
@@ -1131,9 +1131,9 @@ static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL
 				}
 				uFrame = frame * poly->pTexAnim->textureWidth;
 				// shift the textures for animation
-				if (poly->flags & iV_IMD_TEXANIM) 
+				if (poly->flags & iV_IMD_TEXANIM)
 				{
-					for (j=0; j<poly->npnts; j++) 
+					for (j=0; j<poly->npnts; j++)
 					{
 						poly->vrt[j].u += uFrame;
 						poly->vrt[j].v += vFrame;
@@ -1160,7 +1160,7 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 {
 	UDWORD	n;
 	iVertex clip[iV_POLY_MAX_POINTS];
-   
+
    	if ( !pie_CLOCKWISE( pv[0].x, pv[0].y, pv[1].x, pv[1].y, pv[2].x, pv[2].y ) )
 	{
 		return;
@@ -1189,7 +1189,7 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 	}
 */
 	// Dealing with triangles?
-	if (n==3) 
+	if (n==3)
 	{
 
 	  	if ((rendSurface.usr == iV_MODE_4101) || (rendSurface.usr == REND_GLIDE_3DFX))
@@ -1197,7 +1197,7 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 				   	   	iV_tgTriangle(clip,texPage);
 //		else
 //			p_Triangle(clip,texPage,0);
-	} 
+	}
    	else if (n>3) // If not, then it's a n sided polygon with n > 3
    	{
 	 	if ((rendSurface.usr == iV_MODE_4101) || (rendSurface.usr == REND_GLIDE_3DFX))
@@ -1222,7 +1222,7 @@ void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture*
 	{
 		return;
 	}
-	
+
 	tileCount++;
 
 	n = pie_ClipTexturedTriangleFast(v1,v2,v3,&clippedVrts[0], FALSE);//no specular for glide
@@ -1246,7 +1246,7 @@ void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture*
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 		alpha = (UBYTE)pieFlagData;
-		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges 
+		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges
 	}
 	else
 	{
@@ -1318,7 +1318,7 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 		pie_IvisPoly(texPage, &imdPoly, TRUE);	   // draw the polygon ... this is an inline function
 	}
 
-	else//d3d 
+	else//d3d
 	{
 		renderPoly.nVrts = pie_ClipTextured(numVrts, &aVrts[0], &clippedVrts[0], TRUE);
 		renderPoly.flags = 0x08;
@@ -1405,7 +1405,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 		}
 	}
 
-	else//d3d 
+	else//d3d
 	{
 		memcpy(&pieVrts[0],pv0,sizeof(PIEVERTEX));
 		memcpy(&pieVrts[1],pv1,sizeof(PIEVERTEX));
@@ -1455,7 +1455,7 @@ void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3
 
 void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount)
 {
-	*pPieCount  = pieCount; 
+	*pPieCount  = pieCount;
 	*pTileCount = tileCount;
 	*pPolyCount = polyCount;
 	*pStateCount = pieStateCount;

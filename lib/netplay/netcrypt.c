@@ -1,10 +1,10 @@
-/* 
+/*
  * netcrypt.c
  *
  * 1999 pumpkin Studios
  * secure netplay services.
  *
- * Feistel cipher with XOR & addition as nonlinear mixing funcs. 
+ * Feistel cipher with XOR & addition as nonlinear mixing funcs.
  * Based on Tiny Encryption Algorithm (TEA) by David Wheeler & Roger Needham
  * of the cambridge computer laboratory.
  * delta = delta = (sqrt(5) - 1).2^31
@@ -14,7 +14,7 @@
  * but not good enough for storing files securely on harddisk. Try encryptstrength=32;
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "netplay.h"
 #include "netlog.h"
 
@@ -40,7 +40,7 @@ UDWORD	NEThashFile(STRING *pFileName)
 	UDWORD	hashval,c,*val;
 	FILE	*pFileHandle;
 	STRING	fileName[255];
-	
+
 	UBYTE	inBuff[2048];		// must be multiple of 4 bytes.
 
 	strcpy(fileName,pFileName);
@@ -58,7 +58,7 @@ UDWORD	NEThashFile(STRING *pFileName)
 	}
 
 	// multibyte/buff version
-	while(fread(&inBuff, sizeof(inBuff), 1, pFileHandle) == 1)				// get number of droids in force	
+	while(fread(&inBuff, sizeof(inBuff), 1, pFileHandle) == 1)				// get number of droids in force
 	{
 		for(c=0;c<2048 ;c+=4)
 		{	val = (UDWORD*)&inBuff[c];
@@ -137,7 +137,7 @@ BOOL NETsetKey(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// encrypt a byte sequence of nibblelength 
+// encrypt a byte sequence of nibblelength
 static BOOL mangle	( long *v,  long *w)
 {
 	unsigned long	y=v[0],
@@ -157,7 +157,7 @@ static BOOL mangle	( long *v,  long *w)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// decrypt a byte sequence of nibblelength 
+// decrypt a byte sequence of nibblelength
 static BOOL unmangle(long * v, long *w)
 {
 	unsigned long	y=v[0],
@@ -190,13 +190,13 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 #if 0
 	return msg;
 #endif
-	
+
 	if(msg->size > MaxMsgSize-NIBBLELENGTH)
 	{
 		DBERROR(("NETmanglePacket: can't encrypt huge packets. returning unencrypted packet"));
 		return msg;
 	}
-	
+
 	msg->paddedBytes	= 0;
 	while( msg->size%NIBBLELENGTH != 0)	//need to pad out msg.
 	{
@@ -204,7 +204,7 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 		msg->size++;
 		msg->paddedBytes++;
 	}
-	
+
 	result.type			= msg->type + ENCRYPTFLAG;
 	result.size			= msg->size;
 	result.paddedBytes		= msg->paddedBytes;
@@ -225,14 +225,14 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 // decrypt a netplay packet
 // messages SHOULD be 8byte multiples, not required tho. will return padded out..
 
-VOID NETunmanglePacket(NETMSG *msg) 
+VOID NETunmanglePacket(NETMSG *msg)
 {
 	NETMSG result;
 	UDWORD pos=0;
 
 	if(msg->size%NIBBLELENGTH !=0)
 	{
-		DBERROR(("NETunmanglePacket: Incoming msg wrong length")); 
+		DBERROR(("NETunmanglePacket: Incoming msg wrong length"));
 		NETlogEntry("NETunmanglePacket failure",msg->type,msg->size);
 		return;
 	}
@@ -256,10 +256,10 @@ VOID NETunmanglePacket(NETMSG *msg)
 
 // ////////////////////////////////////////////////////////////////////////
 // encrypt any datastream.
-BOOL NETmangleData(long *input,long *result, UDWORD dataSize) 
+BOOL NETmangleData(long *input,long *result, UDWORD dataSize)
 {
 	long	offset;
-	
+
 	offset = 0;
 
 	if(dataSize%8 != 0)		//if message not multiple of 8 bytes,
@@ -267,19 +267,19 @@ BOOL NETmangleData(long *input,long *result, UDWORD dataSize)
 		DBERROR(("NETmangleData: msg not a multiple of 8 bytes"));
 		return FALSE;
 	}
-	
+
 	//  /4's are long form. since nibblelength is in char form
 	while(offset!=(long)(dataSize/4) )
 	{
 		mangle( (input+offset),(result+offset) );
-		offset		+= NIBBLELENGTH/4 ;	
+		offset		+= NIBBLELENGTH/4 ;
 	}
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // decrypt any datastream.
-BOOL NETunmangleData(long *input, long *result, UDWORD dataSize) 
+BOOL NETunmangleData(long *input, long *result, UDWORD dataSize)
 {
 	long	offset;
 
@@ -290,7 +290,7 @@ BOOL NETunmangleData(long *input, long *result, UDWORD dataSize)
 	{
 		DBERROR(("NETunmangleData: msg not a multiple of 8 bytes"));
 		return FALSE;
-	} 
+	}
 
 	//  /4's are long form. since nibblelength is in char form
 	while(offset!= (long)(dataSize/4))

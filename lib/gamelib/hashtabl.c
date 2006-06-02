@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <memory.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "hashtabl.h"
 
@@ -92,7 +92,7 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 //		my_error("",0,"","htc FAIL!\n");
 		return FALSE;
 	}
-	
+
 	/* init members */
 	(*ppsTable)->udwTableSize   = udwTableSize;
 	(*ppsTable)->udwElements    = udwInitElements;
@@ -121,7 +121,7 @@ hashTable_Destroy( HASHTABLE *psTable )
 			"hashTable_Destroy: table pointer invalid\n") );
 
 	hashTable_Clear( psTable );
-	
+
 	/* destroy heaps */
 	HEAP_DESTROY( psTable->psNodeHeap );
 	HEAP_DESTROY( psTable->psElementHeap );
@@ -266,7 +266,7 @@ hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
 	psNode->iKey1     = iKey1;
 	psNode->iKey2     = iKey2;
 	psNode->psElement = psElement;
-	
+
 	/* add new node to head of list */
 	psNode->psNext = psTable->ppsNode[udwHashIndex];
 	psTable->ppsNode[udwHashIndex] = psNode;
@@ -285,7 +285,7 @@ hashTable_FindElement( HASHTABLE *psTable, int iKey1, int iKey2 )
 {
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode;
-	
+
 	ASSERT( (PTRVALID(psTable, sizeof(HASHTABLE)),
 			"hashTable_FindElement: table pointer invalid\n") );
 

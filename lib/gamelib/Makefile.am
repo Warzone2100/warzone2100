@@ -1,8 +1,7 @@
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 noinst_LIBRARIES = libgamelib.a
-AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)/lib/sound \
-	-I$(top_srcdir)/lib/$(RENDERER) -I$(top_srcdir)/lib/ivis_common -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)
 BUILT_SOURCES = audp_parser.h
 libgamelib_a_SOURCES = \
 	anim.c \

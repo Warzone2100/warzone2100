@@ -5,7 +5,7 @@
  * Routines for displaying compiled scripts
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "interp.h"
 #include "parse.h"
 #include "codeprint.h"
@@ -276,13 +276,13 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 	{
 		for(i = 0; asScrExternalTab[i].pIdent != NULL; i++)
 		{
-			if (asScrExternalTab[i].set == pFunc && 
+			if (asScrExternalTab[i].set == pFunc &&
 				asScrExternalTab[i].index == index)
 			{
 				DBPRINTF(("%s (set)", asScrExternalTab[i].pIdent));
 				return;
 			}
-			else if (asScrExternalTab[i].get == pFunc && 
+			else if (asScrExternalTab[i].get == pFunc &&
 					 asScrExternalTab[i].index == index)
 			{
 				DBPRINTF(("%s (get)", asScrExternalTab[i].pIdent));
@@ -296,13 +296,13 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 	{
 		for(i = 0; asScrObjectVarTab[i].pIdent != NULL; i++)
 		{
-			if (asScrObjectVarTab[i].set == pFunc && 
+			if (asScrObjectVarTab[i].set == pFunc &&
 				asScrObjectVarTab[i].index == index)
 			{
 				DBPRINTF(("%s (set)", asScrObjectVarTab[i].pIdent));
 				return;
 			}
-			else if (asScrObjectVarTab[i].get == pFunc && 
+			else if (asScrObjectVarTab[i].get == pFunc &&
 					 asScrObjectVarTab[i].index == index)
 			{
 				DBPRINTF(("%s (get)", asScrObjectVarTab[i].pIdent));

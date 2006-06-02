@@ -3,9 +3,9 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "tracklib.h"
-#include "priority.h"
+#include "lib/gamelib/priority.h"
 
 //*
 //
@@ -186,15 +186,15 @@ BOOL sound_SetTrackVals
 			return FALSE;
 		}
 
-		// set track members								
-		psTrack->bLoop = bLoop;						
+		// set track members
+		psTrack->bLoop = bLoop;
 		psTrack->iVol = iVol;
 		psTrack->iPriority = iPriority;
 		psTrack->iAudibleRadius = iAudibleRadius;
 		psTrack->iTime =0;			//added, since they really should init all the values. -Q
 		psTrack->iTimeLastFinished = 0;
 		psTrack->iNumPlaying = 0;
-		psTrack->bCompressed =0;	//added  this was the bugger that caused grief for .net.  It was never defined. -Q		
+		psTrack->bCompressed =0;	//added  this was the bugger that caused grief for .net.  It was never defined. -Q
 
 		// I didn't comment the below value out, so I guess NOT needed. -Q
 		//

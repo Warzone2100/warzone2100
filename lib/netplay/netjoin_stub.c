@@ -1,9 +1,9 @@
 /*
  * Net join.
  * join related stuff
- */ 
+ */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "netplay.h"
 
 DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
@@ -14,12 +14,12 @@ DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
 		return NetPlay.games[gameid].desc.dwUser1;
 		break;
 	case 2:
-		return NetPlay.games[gameid].desc.dwUser2;	
+		return NetPlay.games[gameid].desc.dwUser2;
 		break;
 	case 3:
 		return NetPlay.games[gameid].desc.dwUser3;
 		break;
-	case 4:	
+	case 4:
 		return NetPlay.games[gameid].desc.dwUser4;
 		break;
 	default:

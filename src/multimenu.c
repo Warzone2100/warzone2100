@@ -13,7 +13,7 @@
 #include "intdisplay.h"
 #include "text.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl//vid.h"
+#include "lib/ivis_opengl/vid.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/geo.h"

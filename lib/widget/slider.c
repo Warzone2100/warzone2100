@@ -8,7 +8,8 @@
 #include "widget.h"
 #include "widgint.h"
 #include "slider.h"
-#include "vid.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 
 /* The widget heaps */
 OBJ_HEAP	*psSldHeap;

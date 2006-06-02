@@ -1,10 +1,12 @@
+// FIXME Stubfile!
+
 /*
  * NetAudio.c
  *
  * intra/internet audio
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "netplay.h"
 
 // ////////////////////////////////////////////////////////////////////////
@@ -45,7 +47,7 @@ WZ_DEPRECATED BOOL NETprocessAudioCapture(VOID) // FIXME Remove if unused
 
 // ////////////////////////////////////////////////////////////////////////
 
-WZ_DEPRECATED BOOL NETinitPlaybackBuffer(LPDIRECTSOUND pDs)
+WZ_DEPRECATED BOOL NETinitPlaybackBuffer(LPDIRECTSOUND pDs) // FIXME Remove if unused
 {
 	debug(LOG_SOUND, "NETinitPlaybackBuffer");
 	return FALSE;
@@ -54,15 +56,15 @@ WZ_DEPRECATED BOOL NETinitPlaybackBuffer(LPDIRECTSOUND pDs)
 // ////////////////////////////////////////////////////////////////////////
 // handle the playback buffer.
 WZ_DEPRECATED BOOL NETqueueIncomingAudio( LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream) // FIXME Remove if unused
-{ 
+{
 	debug(LOG_SOUND, "NETqueueIncomingAudio");
-	return FALSE; 
+	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // Handle a incoming message that needs to be played
 WZ_DEPRECATED void NETplayIncomingAudio(NETMSG *pMsg) // FIXME Remove if unused
-{	
+{
 	debug(LOG_SOUND, "NETplayIncomingAudio");
 }
 

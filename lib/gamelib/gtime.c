@@ -8,7 +8,7 @@
 #include <time.h>
 
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "gtime.h"
 
 
@@ -16,7 +16,7 @@
 
 //#define RATE_LIMIT
 
-#define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)		
+#define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
 /* The current time in the game world */
 UDWORD gameTime;
@@ -53,7 +53,7 @@ static UDWORD	stopCount;
 BOOL gameTimeInit(void)
 {
 	//gameTime = 0;
-    /*start the timer off at 2 so that when the scripts strip the map of objects 
+    /*start the timer off at 2 so that when the scripts strip the map of objects
     for multiPlayer they will be processed as if they died*/
     gameTime = 2;
 	timeOffset = 0;
@@ -108,7 +108,7 @@ void gameTimeUpdate(void)
 	{
 #ifdef RATE_LIMIT
 		// Limit the frame time
-#endif		
+#endif
 
 		// ooops the clock has wrapped round -
 		// someone actually managed to keep windows running for 50 days !!!!

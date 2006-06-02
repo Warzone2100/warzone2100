@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libivis_common.a
-AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)/lib/gamelib -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)
 libivis_common_a_SOURCES = \
 	bitimage.c \
 	bug.c \

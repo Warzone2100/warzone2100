@@ -5,7 +5,7 @@
 //
 
 // this has to be first
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -82,7 +82,7 @@ BOOL sound_InitLibrary( void )
 
 	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
 	alcMakeContextCurrent(context);
-	
+
 	err = alcGetError(device);
 	if (err != ALC_NO_ERROR) {
 		PrintOpenALVersion();
@@ -320,10 +320,10 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 
 	if (ov_open_callbacks(&ovbuf, &ogg_stream, NULL, 0, ovbuf_callbacks) < 0) {
 		return FALSE;
-	} 
+	}
 
 	ogg_info = ov_info(&ogg_stream, -1);
- 
+
 	if (ogg_info->channels == 1) {
 		format = AL_FORMAT_MONO16;
 	} else {

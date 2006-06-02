@@ -4,14 +4,15 @@
  * Functions for the button widget
  */
 
-#include "frame.h"
-#include "frameint.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 #include "widget.h"
 #include "widgint.h"
 #include "button.h"
 #include "form.h"
 #include "tip.h"
-#include "vid.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 
 /* The widget heap */
 OBJ_HEAP	*psButHeap;
@@ -409,7 +410,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			iV_Line(x1-3,y1-3, x1-3,y0+2,*(pColours + WCOL_HILITE));
 		}
 	}
-	else 
+	else
 	{
 		/* Display the button up */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);

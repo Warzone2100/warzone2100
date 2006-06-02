@@ -1,6 +1,5 @@
 noinst_LIBRARIES = libivis_opengl.a
-AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)/lib/gamelib -I$(top_srcdir) \
-	-I$(top_srcdir)/lib/ivis_common
+AM_CPPFLAGS = -I$(top_srcdir)
 libivis_opengl_a_SOURCES = \
 	bspimd.c \
 	ivi.c \

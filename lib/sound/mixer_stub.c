@@ -1,3 +1,5 @@
+// FIXME Stubfile!
+
 //*
 //
 #include "mixer.h"

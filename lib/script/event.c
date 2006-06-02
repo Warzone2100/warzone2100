@@ -10,7 +10,7 @@
 #define DEBUG_GROUP0
 // display tested triggers
 //#define DEBUG_GROUP1
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "interp.h"
 #include "script.h"
 #include "event.h"
@@ -742,7 +742,7 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 	}
 }
 
-	
+
 // Initialise a trigger
 static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psContext,
 							 UDWORD event, SDWORD trigger, UDWORD currTime)

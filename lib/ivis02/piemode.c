@@ -7,19 +7,19 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
-#include "piedef.h"
-#include "piestate.h"
-#include "piemode.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piemode.h"
 #include "piematrix.h"
-#include "piefunc.h"
-#include "tex.h"
+#include "lib/ivis_common/piefunc.h"
+#include "lib/ivis_common/tex.h"
 
 #include "v4101.h"
 #include "vsr.h"
 
-#include "rendmode.h"
-#include "pieclip.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieclip.h"
 #include "screen.h"
 
 /***************************************************************************/
@@ -98,7 +98,7 @@ BOOL pie_Initialise(SDWORD mode)
 	}
 	else
 	{
-		
+
 		iV_ShutDown();
 		DBERROR(("Initialise videomode failed"));
 		return FALSE;

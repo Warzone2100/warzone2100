@@ -13,10 +13,10 @@
 #endif
 #include <GL/gl.h>
 
-#include "frame.h"
-#include "piestate.h"
-#include "piedef.h"
-#include "tex.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/tex.h"
 
 /***************************************************************************/
 /*

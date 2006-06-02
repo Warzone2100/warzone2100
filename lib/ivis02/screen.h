@@ -21,7 +21,7 @@
 #include <windows.h>
 #endif
 
-#include "types.h"
+#include "lib/framework/types.h"
 
 /* Free up a COM object */
 #undef RELEASE

@@ -1,7 +1,7 @@
 #ifndef _vsr_
 #define _vsr_
 
-#include "ivi.h"
+#include "lib/ivis_common/ivi.h"
 extern iBool _mode_sr(void);
 extern void _close_sr(void);
 extern void _vsync_sr(void);

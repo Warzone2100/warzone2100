@@ -7,17 +7,17 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
-#include "piedef.h"
-#include "rendmode.h"
-#include "piefunc.h"
-#include "piestate.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piefunc.h"
+#include "lib/ivis_common/piestate.h"
 #include "piematrix.h"
 #include "pietexture.h"
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
-#include "gtime.h"
+#include "lib/gamelib/gtime.h"
 
 
 
@@ -59,7 +59,7 @@ void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWOR
 /*
  *	void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour)
  *
- * Draws rectangular filter to screen ivis mode defaults to 
+ * Draws rectangular filter to screen ivis mode defaults to
  *
  */
 /***************************************************************************/
@@ -100,7 +100,7 @@ void	pie_DrawViewingWindow(iVector *v,UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2
 		pieVrts[0].sy = v[1].y;
 		//cull triangles with off screen points
 		pieVrts[0].sz  = INTERFACE_DEPTH;
-		
+
 
 		pieVrts[0].tu = 0.0;
 		pieVrts[0].tv = 0.0;
@@ -193,7 +193,7 @@ void pie_DrawBoundingDisc(iIMDShape *shape, int pieFlag)
 	{
 		colour |= 0xff;
 	}
-			
+
 	//rotate and project four new points
 	pPixels = &scrPoints[0];
 	radR2 = (shape->oradius * 71)/100;
@@ -263,7 +263,7 @@ void pie_DrawBoundingDisc(iIMDShape *shape, int pieFlag)
 		}
 	}
 
-	
+
 	renderPoly.flags = PIE_NO_CULL | PIE_ALPHA;
 	for (n=0; n<8; n++)
 	{
@@ -474,15 +474,15 @@ void pie_Water(SDWORD texPage, SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, SDWOR
 	}
 }
 
-#define FOG_RED 00 
-#define FOG_GREEN 00 
-#define FOG_BLUE 80 
-#define MIST_RED 00 
-#define MIST_GREEN 80 
-#define MIST_BLUE 00 
-#define FOG_DEPTH 3000 
-#define FOG_RATE 4 
-#define MIST_HEIGHT 100 
+#define FOG_RED 00
+#define FOG_GREEN 00
+#define FOG_BLUE 80
+#define MIST_RED 00
+#define MIST_GREEN 80
+#define MIST_BLUE 00
+#define FOG_DEPTH 3000
+#define FOG_RATE 4
+#define MIST_HEIGHT 100
 #define SPECULAR_FOG_AND_MIST 0
 
 void pie_AddFogandMist(SDWORD depth, SDWORD height, PIELIGHT* pColour, PIELIGHT* pSpecular)
@@ -537,11 +537,11 @@ void pie_AddFogandMist(SDWORD depth, SDWORD height, PIELIGHT* pColour, PIELIGHT*
 	// set colour components
 	pColour->r = cRed;
 	pColour->g = cGreen;
-	pColour->b = cBlue; 
+	pColour->b = cBlue;
 	// set specular components
 	pSpecular->r = sRed;
 	pSpecular->g = sGreen;
-	pSpecular->b = sBlue; 
+	pSpecular->b = sBlue;
 */
 	// mist level is high upto MIST_HEIGHT then ramps up gently
 #endif
@@ -551,7 +551,7 @@ void pie_InitMaths(void)
 {
 	UBYTE c;
 	UDWORD a,b,bigC;
-	
+
 	for(a=0; a<=UBYTE_MAX; a++)
 	{
 		for(b=0; b<=UBYTE_MAX; b++)
@@ -577,18 +577,18 @@ UDWORD	xDif;
 UDWORD	yDif;
 UDWORD	radius;
 
-	val = getTimeValueRange(5760,360); 
+	val = getTimeValueRange(5760,360);
 	radius = 100;
 	xDif = radius * (SIN(DEG(val)));
 	yDif = radius * (COS(DEG(val)));
 
 	xDif = xDif/4096;	 // cos it's fixed point
 	yDif = yDif/4096;
-	
+
  	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
    	pie_CornerBox(x,y,x2,y2,trans,20+(radius+xDif),20+(radius+yDif),20+(radius-xDif),20+(radius-yDif));
 	/*
-	val = 360-getTimeValueRange(2880,360);   
+	val = 360-getTimeValueRange(2880,360);
 	xDif = radius * (SIN(DEG(val)));
 	yDif = radius * (COS(DEG(val)));
 
@@ -601,7 +601,7 @@ UDWORD	radius;
 }
 
 
-//render raw data in system memory to direct draw surface 
+//render raw data in system memory to direct draw surface
 //use outside of D3D sceen only
 void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
 {

@@ -1,6 +1,6 @@
 #include <png.h>
 #include <setjmp.h>
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "ivisdef.h"
 #include "fbf.h"
 #include "bug.h"

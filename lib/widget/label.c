@@ -5,13 +5,14 @@
  */
 
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "widget.h"
 #include "widgint.h"
 #include "label.h"
 #include "form.h"
 #include "tip.h"
-#include "vid.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 
 /* The widget heaps */
 OBJ_HEAP	*psLabHeap;

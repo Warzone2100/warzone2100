@@ -1,9 +1,9 @@
-/* 
+/*
  * netusers.c
  * functions regarding specific players
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "netplay.h"
 
 // call to disable/enable ALL comms. Absolute arse of a thing, be very careful!

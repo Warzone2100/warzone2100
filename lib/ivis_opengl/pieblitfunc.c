@@ -8,21 +8,21 @@
 /***************************************************************************/
 
 #include <time.h>
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
 
-#include "frame.h"
-#include "pieblitfunc.h"
-#include "bug.h"
-#include "piedef.h"
-#include "piemode.h"
-#include "piestate.h"
-#include "rendfunc.h"
-#include "rendmode.h"
-#include "pieclip.h"
-#include "piefunc.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendfunc.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_common/piefunc.h"
 #include "piematrix.h"
 #include "screen.h"
 
@@ -546,7 +546,7 @@ void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,in
 
 
 /*	Converts an 8 bit raw (palettised) source image to
-	a 16 bit argb destination image 
+	a 16 bit argb destination image
 */
 void	bufferTo16Bit(UBYTE *origBuffer,UWORD *newBuffer, BOOL b3DFX)
 {
@@ -574,7 +574,7 @@ UDWORD			size;
 	else
 	{
 		/*
-		// Cannot playback if not 16bit mode 
+		// Cannot playback if not 16bit mode
 		*/
 		if( screenGetBackBufferBitDepth() == 16 )
 		{
@@ -645,7 +645,7 @@ UDWORD			size;
 	}
 
 	/*
-		640*480, 8 bit colour source image 
+		640*480, 8 bit colour source image
 		640*480, 16 bit colour destination image
 	*/
 	size = BACKDROP_WIDTH*BACKDROP_HEIGHT;//pie_GetVideoBufferWidth()*pie_GetVideoBufferHeight();
@@ -679,8 +679,8 @@ void pie_ResetBackDrop(void)
 	screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
 	return;
 }
-	
-	
+
+
 void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX) {
 	UDWORD	chooser0,chooser1;
 	CHAR	backd[128];

@@ -2,7 +2,7 @@
 
 	BSP Draw routines for iVis02
 
-	- 5 Sept 1997  - Tim Cannell - Pumpkin Studios - Eidos 
+	- 5 Sept 1997  - Tim Cannell - Pumpkin Studios - Eidos
 
 
 
@@ -12,12 +12,12 @@
 
 #include <string.h>
 
-#include "frame.h"	// just for the typedef's
-#include "pietypes.h"
+#include "lib/framework/frame.h"	// just for the typedef's
+#include "lib/ivis_common/pietypes.h"
 #include "piematrix.h"
-#include "ivisdef.h"// this can have the #define for BSPIMD in it
-#include "imd.h"// this has the #define for BSPPOLYID_TERMINATE
-#include "ivi.h"
+#include "lib/ivis_common/ivisdef.h"// this can have the #define for BSPIMD in it
+#include "lib/ivis_common/imd.h"// this has the #define for BSPPOLYID_TERMINATE
+#include "lib/ivis_common/ivi.h"
 
 #ifdef BSPIMD		// covers the whole file
 
@@ -25,11 +25,11 @@
 
 //#define BSP_MAXDEBUG		// define this if you want max debug options (runs very slow)
 
-#include "bspimd.h"
+#include "lib/ivis_common/bspimd.h"
 
 
 
-#include "bspfunc.h"
+#include "lib/ivis_common/bspfunc.h"
 
 
 #include <stdio.h>
@@ -67,7 +67,7 @@ extern BOOL NoCullBSP;	// Oh yes... a global externaly referenced variable....
  * returns OPPOSITE_SIDE if opposite,
  *         IN_PLANE if contained in plane,
  *         SAME_SIDE if same side
- *       Also returns pvDot - the dot product 
+ *       Also returns pvDot - the dot product
  * - inputs vP vector to the point
  * - psPlane structure containing the plane equation
  */
@@ -114,14 +114,14 @@ static void TraverseTreeAndRender( PSBSPTREENODE psNode)
 {
 	/* is viewer on same side? */
 // On the playstation we need the list in reverse order (front most polygon first)
-// so we just do the list the opposite way around - this affects the BACKFACE culling as well 
+// so we just do the list the opposite way around - this affects the BACKFACE culling as well
 	if ( IsPointOnPlane( &psNode->Plane, BSPScrPos ) == SAME_SIDE )
 	{
-		/* recurse on opposite side, render this node on same side, 
+		/* recurse on opposite side, render this node on same side,
 		 * recurse on same side.
 		 */
 
-		if (psNode->link[LEFT]!=NULL) TraverseTreeAndRender( psNode->link[LEFT]);				 
+		if (psNode->link[LEFT]!=NULL) TraverseTreeAndRender( psNode->link[LEFT]);
 		if (psNode->TriSameDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriSameDir);
 #ifndef BSP_BACKFACECULL
 		if (psNode->TriOppoDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriOppoDir);
@@ -150,7 +150,7 @@ static void TraverseTreeAndRender( PSBSPTREENODE psNode)
 
 
 /*
-	These routines are used by the IMD Load_BSP routine 
+	These routines are used by the IMD Load_BSP routine
 */
 typedef iIMDPoly * PSTRIANGLE;
 
@@ -231,7 +231,7 @@ void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane )
 
 	/* normalise normal */
 	iNormalise( &Result );
-   
+
 // This result MUST be cast to a fract and not called using MAKEFRACT
 //
 //  This is because on a playstation we are casting from FRACT->FRACT (so no conversion is needed)
@@ -279,7 +279,7 @@ static FRACT GetDist( PSTRIANGLE psTri, int pA, int pB )
 	vx = MAKEFRACT( IMDvec(psTri->pindex[pA])->x - IMDvec(psTri->pindex[pB])->x);
 	vy = MAKEFRACT( IMDvec(psTri->pindex[pA])->y - IMDvec(psTri->pindex[pB])->y);
 	vz = MAKEFRACT( IMDvec(psTri->pindex[pA])->z - IMDvec(psTri->pindex[pB])->z);
-	
+
 
 
 	sum_square = (FRACTmul(vx,vx)+FRACTmul(vy,vy)+FRACTmul(vz,vz) );
@@ -324,7 +324,7 @@ static iVectorf *iNormalise(iVectorf * v)
 	vx = (FRACT)v->x;
 	vy = (FRACT)v->y;
 	vz = (FRACT)v->z;
- 
+
  	if ((vx == 0) && (vy == 0) && (vz == 0))
 	{
         return v;
@@ -349,7 +349,7 @@ PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode)
 	PSBNODE			psBNode;
 
 	/* create node triangle lists */
-	psBSPNode->TriSameDir=BSPPOLYID_TERMINATE;	
+	psBSPNode->TriSameDir=BSPPOLYID_TERMINATE;
 	psBSPNode->TriOppoDir=BSPPOLYID_TERMINATE;
 
 	psBNode = (PSBNODE) psBSPNode;

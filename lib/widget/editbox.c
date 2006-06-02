@@ -4,12 +4,13 @@
  * Functions for the edit box widget.
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"
 #include "form.h"
-#include "vid.h"
+// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/vid.h"
 #include "scrap.h"
 
 
@@ -588,7 +589,7 @@ void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 
 	if(psWidget->state & WEDBS_DISABLE)	// disabled button.
 	{
-		return;							
+		return;
 	}
 
 	if ((psWidget->state & WEDBS_MASK) == WEDBS_FIXED)

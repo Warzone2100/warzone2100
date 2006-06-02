@@ -9,7 +9,7 @@
 #include <limits.h>
 #include <stdio.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "interp.h"
 #include "parse.h"
 #include "script.h"
@@ -613,7 +613,7 @@ static SCRIPT_DEBUG	*_psCurr;
 		} \
 		(psFinal)->debugEntries = (UWORD)((psFinal)->debugEntries + (psBlock)->debugEntries); \
 	}
-	
+
 
 /* Macro to store a label in the debug info */
 #define DEBUG_LABEL(psBlock, offset, pString) \
@@ -647,10 +647,10 @@ static SCRIPT_DEBUG	*_psCurr;
 	else if ((error) == CE_PARSE) \
 	{ \
 		YYERROR; \
-	} 
+	}
 
 
-   
+
 /* Generate the code for a function call, checking the parameter
  * types match.
  */
@@ -706,7 +706,7 @@ CODE_ERROR scriptCodeFunction(FUNC_SYMBOL		*psFSymbol,		// The function being ca
 	{
 		size += sizeof(OPCODE);
 	}
-	
+
 	ALLOC_BLOCK(*ppsCBlock, size);
 	ip = (*ppsCBlock)->pCode;
 	(*ppsCBlock)->type = psFSymbol->type;
@@ -794,7 +794,7 @@ CODE_ERROR scriptCodeCallbackParams(
 	}
 
 	size = psPBlock->size + sizeof(OPCODE) + sizeof(SCRIPT_FUNC);
-	
+
 	ALLOC_TSUBDECL(*ppsTDecl, psCBSymbol->type, size, 0);
 	ip = (*ppsTDecl)->pCode;
 
@@ -896,7 +896,7 @@ CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variable to a
 		return CE_PARSE;
 	}
 
-	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + 
+	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size +
 					sizeof(OPCODE) + sizeof(SCRIPT_VARFUNC));
 	ip = (*ppsBlock)->pCode;
 
@@ -938,7 +938,7 @@ CODE_ERROR scriptCodeObjGet(OBJVAR_BLOCK	*psVariable,// The variable to get from
 		return CE_PARSE;
 	}
 
-	ALLOC_BLOCK(*ppsBlock, psVariable->size + 
+	ALLOC_BLOCK(*ppsBlock, psVariable->size +
 					sizeof(OPCODE) + sizeof(SCRIPT_VARFUNC));
 	ip = (*ppsBlock)->pCode;
 
@@ -1132,7 +1132,7 @@ CODE_ERROR scriptCodeParameter(CODE_BLOCK		*psParam,		// Code for the parameter
 	/* Copy in the code for the parameter */
 	PUT_BLOCK(ip, psParam);
 	FREE_BLOCK(psParam);
-	
+
 	(*ppsBlock)->aParams[0] = type;
 
 	return CE_OK;
@@ -1380,7 +1380,7 @@ CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
 		/* Add debugging info for the EXIT instruction */
 		scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
-		psNewBlock->psDebug[psNewBlock->debugEntries].offset = 
+		psNewBlock->psDebug[psNewBlock->debugEntries].offset =
 				ip - psNewBlock->pCode;
 		psNewBlock->debugEntries ++;
 	}
@@ -1417,7 +1417,7 @@ CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_B
 		/* Add debugging info for the EXIT instruction */
 		scriptGetErrorData((SDWORD *)&line, (char**) &pDummy);
 		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
-		psNewBlock->psDebug[psNewBlock->debugEntries].offset = 
+		psNewBlock->psDebug[psNewBlock->debugEntries].offset =
 				ip - psNewBlock->pCode;
 		psNewBlock->debugEntries ++;
 	}
@@ -1612,7 +1612,7 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 
 %%
 
-script:			header var_list 
+script:			header var_list
 				{
 					/* stop parsing here if we are just getting */
 					/* the variables in the script */
@@ -2475,7 +2475,7 @@ param_list:		/* NULL token */
 						/* Copy in the code for the parameters */
 						PUT_BLOCK(ip, $1);
 						PUT_BLOCK(ip, $3);
-						
+
 						/* Copy the parameter types */
 						memcpy(psCurrPBlock->aParams, $1->aParams,
 								$1->numParams * sizeof(INTERP_TYPE));
@@ -2685,7 +2685,7 @@ cond_clause:		IF '(' boolexp ')'
 					{
 						/* Allocate the block */
 						ALLOC_CONDBLOCK(psCondBlock, 1,
-										$3->size + $7->size + 
+										$3->size + $7->size +
 										sizeof(OPCODE)*2);
 						ALLOC_DEBUG(psCondBlock, $7->debugEntries + 1);
 						ip = psCondBlock->pCode;

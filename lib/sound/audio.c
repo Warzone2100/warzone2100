@@ -1,12 +1,12 @@
 //*
 //
 #include <stdio.h>
-#include "frame.h"
-#include "gtime.h"
+#include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "tracklib.h"
-#include "priority.h"
+#include "lib/gamelib/priority.h"
 #include "aud.h"
-#include "trig.h"
+#include "lib/framework/trig.h"
 
 //*
 //

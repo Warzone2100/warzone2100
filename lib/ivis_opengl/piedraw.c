@@ -16,17 +16,17 @@
 #include <gl/glext.h>
 #endif
 
-#include "frame.h"
-#include "ivisdef.h"
-#include "imd.h"
-#include "rendmode.h"
-#include "piefunc.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/imd.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piefunc.h"
 #include "piematrix.h"
-#include "tex.h"
-#include "piedef.h"
-#include "piestate.h"
+#include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piestate.h"
 #include "pietexture.h"
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
 #define MIST
 

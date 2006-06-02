@@ -12,10 +12,10 @@
 #include <dos.h>
 #endif
 
-#include "ivi.h"
-#include "rendmode.h"
-#include "piemode.h"
-#include "bug.h"
+#include "lib/ivis_common/ivi.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_common/bug.h"
 
 
 

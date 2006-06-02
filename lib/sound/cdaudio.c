@@ -1,4 +1,4 @@
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #ifdef WZ_CDA
 

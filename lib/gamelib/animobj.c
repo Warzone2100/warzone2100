@@ -10,7 +10,7 @@
 
 #include <string.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "hashtabl.h"
 #include "gtime.h"
 #include "animobj.h"
@@ -59,7 +59,7 @@ animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 	/* allocate hashtable */
 	hashTable_Create( &g_pAnimObjTable, ANIM_HASH_TABLE_SIZE,
 				ANIM_OBJ_INIT, ANIM_OBJ_EXT, iSize );
-	
+
 	/* set local hash table functions */
 	hashTable_SetHashFunction( g_pAnimObjTable, animObj_HashFunction );
 	hashTable_SetFreeElementFunction( g_pAnimObjTable,

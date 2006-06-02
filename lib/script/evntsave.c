@@ -5,7 +5,7 @@
  *
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "script.h"
 #include "evntsave.h"
 
@@ -304,7 +304,7 @@ static BOOL eventLoadContextHashed(SDWORD version, UBYTE *pBuffer, UDWORD *pSize
 		hashedName = *((UDWORD*)pPos);
 		pPos += sizeof(UDWORD);
 		psCode = resGetDataFromHash("SCRIPT", hashedName);
-		
+
 
 		// check the number of variables
 		numVars = psCode->numGlobals + psCode->arraySize;
@@ -433,7 +433,7 @@ BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, UBYTE *pBuffer, UDWORD *pSize)
 	UDWORD				size;
 	UBYTE				*pPos;
 	SDWORD				numTriggers, context;
-	
+
 	size = 0;
 	pPos = pBuffer;
 
@@ -491,7 +491,7 @@ BOOL eventLoadTriggerList(SDWORD version, UBYTE *pBuffer, UDWORD *pSize)
 	SCRIPT_CONTEXT		*psContext;
 
 	version = version;
-	
+
 	size = 0;
 	pPos = pBuffer;
 
@@ -570,7 +570,7 @@ BOOL eventSaveState(SDWORD version, UBYTE **ppBuffer, UDWORD *pFileSize)
 	totalSize += size;
 
 
-	
+
 	// Allocate the buffer to save to
 	pBuffer = MALLOC(totalSize);
 	if (pBuffer == NULL)

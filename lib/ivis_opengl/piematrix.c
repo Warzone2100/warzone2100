@@ -8,17 +8,17 @@
 /***************************************************************************/
 
 #include <stdio.h>
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "piedef.h"
-#include "pieclip.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
-#include "rendmode.h"
-#include "bug.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bug.h"
 
 /***************************************************************************/
 /*

@@ -11,7 +11,7 @@
 #include <SDL/SDL_thread.h>
 #include <SDL/SDL_net.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "netplay.h"
 #include "netlog.h"
 
@@ -1122,7 +1122,7 @@ void NETregisterServer(int state) {
 
 				if(!rs_socket) rs_socket = SDLNet_TCP_Open(&ip);
 				if(rs_socket == NULL) {
-					printf("NETregisterServer: Cannot connect to master server (%s): %s\n", 
+					printf("NETregisterServer: Cannot connect to master server (%s): %s\n",
 						master_server,
 						SDLNet_GetError());
 					server_not_there = 1;

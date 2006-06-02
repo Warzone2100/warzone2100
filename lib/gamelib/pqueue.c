@@ -6,7 +6,7 @@
  */
 /***************************************************************************/
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "priority.h"
 #include "pqueue.h"
@@ -26,7 +26,7 @@ queue_Init( QUEUE ** ppQueue, int iMaxElements, int iElementSize,
 
 	/* allocate queue */
 	(*ppQueue) = (QUEUE *) MALLOC( sizeof(QUEUE) );
-	
+
 	if ( (*ppQueue) == NULL )
 	{
 		DBERROR( ("queue_Init: couldn't allocate memory for queue") );
@@ -172,7 +172,7 @@ queue_Enqueue( QUEUE * pQueue, void * psElement, int iPriority )
 	/* init pointer to head of queue */
 	psNode = pQueue->psNodeQHead;
 	psNodePrev = NULL;
-	
+
 	/* init node priority */
 	psFreeNode->iPriority = iPriority;
 
@@ -273,7 +273,7 @@ queue_FindElement( QUEUE * pQueue, void * psElement )
 
 	/* init pointers to head of queue */
 	psNodePrev = psNode = pQueue->psNodeQHead;
-	
+
 	/* find node in queue */
 	while ( psNodePrev != NULL && psNode != NULL )
 	{

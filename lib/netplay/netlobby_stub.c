@@ -6,7 +6,7 @@
  * alex lee, nov97, pumpkin studios.
  */
 
-#include "frame.h"				// for dbprintf
+#include "lib/framework/frame.h"				// for dbprintf
 #include "netplay.h"
 //#include "netlobby.h"
 

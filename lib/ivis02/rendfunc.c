@@ -4,14 +4,14 @@
 #ifdef WIN32
 #include <dos.h>
 #endif
-#include "rendfunc.h"
-#include "rendmode.h"
-#include "bug.h"
-#include "piepalette.h"
-#include "ivispatch.h"
-#include "fractions.h"
+#include "lib/ivis_common/rendfunc.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/ivispatch.h"
+#include "lib/framework/fractions.h"
 
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
 
 
@@ -548,7 +548,7 @@ void DrawTransColourImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y,SWORD Colour
 				return;
 			}
 		}
-	
+
 	if (ColourIndex == PIE_TEXT_WHITE)
 	{
 		iV_ppBitmapColourTrans(bmp,	x, y, width, height, modulus, 255);
@@ -561,7 +561,7 @@ void DrawTransColourImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y,SWORD Colour
 	{
 		pie_RenderDeepBlueTintedBitmap(bmp,	x, y, width, height, modulus);
 	}
-	else 
+	else
 	{
 		iV_ppBitmapColourTrans(bmp,	x, y, width, height, modulus, ColourIndex);
 	}
@@ -656,14 +656,14 @@ void	DownloadDisplayBuffer(UBYTE *DisplayBuffer)
 	depth = pie_GetVideoBufferHeight();
 	width = pie_GetVideoBufferWidth();
 
-//always full screen 
-	modulo = 0;//width - BACKDROP_WIDTH;	
+//always full screen
+	modulo = 0;//width - BACKDROP_WIDTH;
 
 	drop = 0;//(depth - BACKDROP_HEIGHT)/2;
 
 	Dest += ((drop*width) + (modulo))/4;		// dealing with dwords
 
-//always full screen 
+//always full screen
 	srcDepth = depth;//BACKDROP_HEIGHT;
 	srcWidth = width;//BACKDROP_WIDTH;
 	for(i=0; i<srcDepth; i++)
@@ -776,10 +776,10 @@ iColour* psPalette = pie_GetGamePal();
 				blue = 255;
 			}
 			else
-			{		
+			{
 				blue = (psPalette[i].b+50);
-			}			
-			
+			}
+
 			if( ((UDWORD)psPalette[i].g)+50 >255)
 			{
 				green = 255;
@@ -788,10 +788,10 @@ iColour* psPalette = pie_GetGamePal();
 			{
 				green = (psPalette[i].g+50);
 			}
-			
+
 			break;
 
-		default:	
+		default:
 			ASSERT((FALSE,"Invalid transparency filter selection"));
 			break;
 		}

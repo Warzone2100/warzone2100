@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <time.h>
-#include "ivisdef.h"
-#include "piestate.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/piestate.h"
 //#include "ivi.h"
 //#include "v3d.h"
-#include "rendmode.h"
+#include "lib/ivis_common/rendmode.h"
 
-#include "piemode.h"
+#include "lib/ivis_common/piemode.h"
 
 //#include "geo.h"
-#include "bug.h"
+#include "lib/ivis_common/bug.h"
 //#include "pio.h"
-#include "piepalette.h"
+#include "lib/ivis_common/piepalette.h"
 #include "piematrix.h"
 //#include "kyb.h"
-#include "tex.h"
+#include "lib/ivis_common/tex.h"
 //#include "pdv.h"
-#include "ivispatch.h"
+#include "lib/ivis_common/ivispatch.h"
 
 
 //*************************************************************************

@@ -2,7 +2,7 @@
 #define _v4101_
 
 
-#include "ivisdef.h"
+#include "lib/ivis_common/ivisdef.h"
 extern iBool _mode_4101(void);
 extern void _close_4101(void);
 extern void _vsync_4101(void);

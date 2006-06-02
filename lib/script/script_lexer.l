@@ -5,7 +5,7 @@
  * Script file lexer.
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "interp.h"
 #include "parse.h"
 #include "script.h"

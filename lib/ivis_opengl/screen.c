@@ -4,7 +4,7 @@
  * Basic double buffered display using direct draw.
  *
  */
- 
+
 #ifdef WIN32
 /* We need this kludge to avoid a redefinition of INT32 in a jpeglib header */
 #define XMD_H
@@ -16,7 +16,7 @@
 #endif
 #include <string.h>
 #include <SDL/SDL.h>
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <GL/gl.h>
@@ -35,9 +35,9 @@ extern "C" {
 #include <physfs.h>
 #include <setjmp.h>
 
-#include "frame.h"
-#include "frameint.h"
-#include "piestate.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
+#include "lib/ivis_common/piestate.h"
 #include "screen.h"
 
 /* Control Whether the back buffer is in system memory for full screen */
@@ -185,14 +185,14 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 		} else {
 			screenMode = SCREEN_WINDOWED;
 		}
-		
+
 		bpp = SDL_VideoModeOK(width, height, screenDepth, video_flags);
 		if (!bpp) {
 			printf("Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, screenDepth);
 			return FALSE;
 		}
 		if (bpp != screenDepth) {
-			debug(LOG_3D, "Warning: Using colour depth of %d instead of %d.", 
+			debug(LOG_3D, "Warning: Using colour depth of %d instead of %d.",
             bpp, screenDepth);
 		}
 		screen = SDL_SetVideoMode(width, height, bpp, video_flags);
@@ -332,7 +332,7 @@ void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height)
 //	unsigned char*	data;
 //} pie_image;
 
-BOOL image_init(pie_image* image) 
+BOOL image_init(pie_image* image)
 {
 	if (image == NULL) return TRUE;
 
@@ -347,7 +347,7 @@ BOOL image_init(pie_image* image)
 BOOL image_create(pie_image* image,
 		  unsigned int width,
 		  unsigned int height,
-		  unsigned int channels) 
+		  unsigned int channels)
 {
 	if (image == NULL) return TRUE;
 
@@ -362,7 +362,7 @@ BOOL image_create(pie_image* image,
 	return FALSE;
 }
 
-BOOL image_delete(pie_image* image) 
+BOOL image_delete(pie_image* image)
 {
 	if (image == NULL) return TRUE;
 
@@ -556,8 +556,8 @@ BOOL screen_GetBackDrop(void)
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be 512x512 for now.  -Q
-void screen_Upload(UWORD* newBackDropBmp) 
-{	
+void screen_Upload(UWORD* newBackDropBmp)
+{
 //	pie_image image;
 //	image_init(&image);
 	if(newBackDropBmp!=NULL)
@@ -617,8 +617,8 @@ glEnd();
 
 
 	}
-	
-	
+
+
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 	pie_SetTexturePage(-1);
@@ -657,7 +657,7 @@ void screen_SetFogColour(UDWORD newFogColour)
 				blue = newFogColour >> 3;
 				blue &= screen->format->Bmask;
 				fogColour = red + green + blue;
-			}		
+			}
 			else if (screen->format->Gmask == 0x03e0)//555
 			{
 				red = newFogColour >> 9;
@@ -667,7 +667,7 @@ void screen_SetFogColour(UDWORD newFogColour)
 				blue = newFogColour >> 3;
 				blue &= screen->format->Bmask;
 				fogColour = red + green + blue;
-			}		
+			}
 		}
 		currentFogColour = newFogColour;
 	}
@@ -677,7 +677,7 @@ void screen_SetFogColour(UDWORD newFogColour)
 /* Swap between windowed and full screen mode */
 void screenToggleMode(void)
 {
-	
+
 	if ((displayMode == MODE_WINDOWED) || (displayMode == MODE_FULLSCREEN))
 	{
 		/* The framework can only run in the current screen mode */
@@ -705,7 +705,7 @@ typedef struct {
 	JOCTET * buffer;
 } my_jpeg_destination_mgr;
 
-METHODDEF(void) init_destination(j_compress_ptr cinfo) 
+METHODDEF(void) init_destination(j_compress_ptr cinfo)
 {
 	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)(cinfo->dest);
 
@@ -716,7 +716,7 @@ METHODDEF(void) init_destination(j_compress_ptr cinfo)
 	dm->pub.free_in_buffer = BUFFER_SIZE;
 }
 
-METHODDEF(boolean) empty_output_buffer(j_compress_ptr cinfo) 
+METHODDEF(boolean) empty_output_buffer(j_compress_ptr cinfo)
 {
 	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
 
@@ -736,7 +736,7 @@ METHODDEF(void) term_destination(j_compress_ptr cinfo) {
 	free(dm->buffer);
 }
 
-void screenDoDumpToDiskIfRequired() 
+void screenDoDumpToDiskIfRequired()
 {
 	static unsigned char* buffer = NULL;
 	static unsigned int buffer_size = 0;
@@ -774,7 +774,7 @@ void screenDoDumpToDiskIfRequired()
 	jdest.pub.empty_output_buffer = empty_output_buffer;
 	jdest.pub.term_destination = term_destination;
 
-	cinfo.image_width = screen->w; 
+	cinfo.image_width = screen->w;
 	cinfo.image_height = screen->h;
 	cinfo.input_components = 3;
 	cinfo.in_color_space = JCS_RGB;
@@ -913,7 +913,7 @@ BOOL screenToggleVideoPlaybackMode(void)
 		DBERROR(("Create Primary Surface failed:\n%s", DDErrorToString(ddrval)));
 		return FALSE;
 	}
-	
+
 	//copy the palette
 	memset(&sFrontBufferPixelFormat, 0, sizeof(DDPIXELFORMAT));
 	sFrontBufferPixelFormat.dwSize = sizeof(DDPIXELFORMAT);

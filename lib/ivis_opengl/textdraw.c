@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "ivisdef.h"
-#include "piestate.h"
-#include "rendmode.h"
-#include "rendfunc.h"
-#include "pieclip.h"
-#include "pieblitfunc.h"
-#include "bug.h"
-#include "piepalette.h"
-#include "ivispatch.h"
-#include "textdraw.h"
-#include "bitimage.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/rendfunc.h"
+#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/ivispatch.h"
+#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_common/bitimage.h"
 
 extern	void	pie_DrawTextNew(STRING *string, int x, int y);
 extern SDWORD DisplayXFactor;
@@ -100,7 +100,7 @@ int iV_CreateFontIndirect(IMAGEFILE *ImageFile, UWORD *AsciiTable, int SpaceSize
 	IVIS_FONT *Font;
 
 	assert(NumFonts < MAX_IVIS_FONTS-1);
-	
+
 	Font = &iVFonts[NumFonts];
 
 	Font->FontFile = ImageFile;
@@ -214,7 +214,7 @@ BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *Y
 
 			return TRUE;
 		}
-		else 
+		else
 		{
 			*Width = Font->FontSpaceSize;
 			*Height=0;
@@ -228,7 +228,7 @@ BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *Y
 
 	return TRUE;
 
-	
+
 }
 
 
@@ -293,14 +293,14 @@ static RENDERTEXT_CALLBACK Indirect_pie_DrawText= pie_DrawText;
 
 void SetIndirectDrawTextCallback( RENDERTEXT_CALLBACK routine)
 {
-	Indirect_pie_DrawText=routine;	
+	Indirect_pie_DrawText=routine;
 }
 
 RENDERTEXT_CALLBACK GetIndirectDrawTextCallback( void)
 {
 	return(Indirect_pie_DrawText);
 }
-		  
+
 
 #define EXTENTS_USEMAXWIDTH (0)
 #define EXTENTS_USELASTX (1)
@@ -356,10 +356,10 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 	int TWidth;
 
 	si = 0;
-	
+
 
 //	DBPRINTF(("[%s] @(%d,%d) extentsmode=%d just=%d\n",String,x,y,ExtentsMode,Justify));
-														
+
 	while(si < Len) {
 		// Remove leading spaces, usefull when doing centre justify.
 		if(FFlags & FTEXTF_SKIP_LEADING_SPACES) {
@@ -520,7 +520,7 @@ UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD
 		{
 			if (RecordExtents==EXTENTS_START)
 			{
-// 
+//
 				ExtentsStartY = y + iV_GetTextAboveBase();
 				ExtentsEndY = jy - iV_GetTextLineSize()+iV_GetTextBelowBase();
 
@@ -712,7 +712,7 @@ void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFi
 	bmp = ImageFile->TexturePages[Image->TPageID].bmp;
 
 	bmp += ((UDWORD)Image->Tu) + ((UDWORD)Image->Tv) * Modulus;
-			   	
+
 	x = x+Image->XOffset;
 	y = y+Image->YOffset;
 	w = Image->Width;
@@ -810,8 +810,8 @@ void pie_DrawText270(STRING *String,int XPos,int YPos)
 	}
 
 	pie_BeginTextRender(Font->FontColourIndex);
-					
-	while (*String!=0)	
+
+	while (*String!=0)
 	{
 		Index = *String;
 
@@ -831,7 +831,7 @@ void pie_BeginTextRender(SWORD ColourIndex)
 {
 	TextColourIndex = ColourIndex;
 	pie_SetRendMode(REND_TEXT);
-	pie_SetBilinear(FALSE); 
+	pie_SetBilinear(FALSE);
 }
 
 void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
@@ -866,7 +866,7 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 }
 
 void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
-{		
+{
 	/*
 	int w,h,i,j,Modulus;
 	uint8 *srcbp, *bp;
@@ -902,18 +902,18 @@ void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 
 	srcbp = bp = (uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y+h-1];
 	width = pie_GetVideoBufferWidth();
-	for (j=0; j<h; j++) 
+	for (j=0; j<h; j++)
 	{
 		bp = srcbp;
-		for (i=0; i<w; i++) 
-		{							
-			if(*Bmp++) 
+		for (i=0; i<w; i++)
+		{
+			if(*Bmp++)
 			{
 				present =  *bp;							// What colour is there at the moment?
 				*bp = aTransTable2[present];			// Write in the new version (brite?)
-				//	*bp = (UBYTE)TextColourIndex;		// old 
+				//	*bp = (UBYTE)TextColourIndex;		// old
 			}
-			bp -= width;		// goto previous line. 
+			bp -= width;		// goto previous line.
 		}
 		srcbp++;
 		Bmp += (Modulus - w);

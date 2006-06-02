@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <SDL/SDL.h>
 
-#include "frame.h"
-#include "frameint.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 #include "screen.h"
 
 /* Control Whether the back buffer is in system memory for full screen */
@@ -360,7 +360,7 @@ void screen_SetFogColour(UDWORD newFogColour)
 				blue = newFogColour >> 3;
 				blue &= screen->format->Bmask;
 				fogColour = red + green + blue;
-			}		
+			}
 			else if (screen->format->Gmask == 0x03e0)//555
 			{
 				red = newFogColour >> 9;
@@ -370,7 +370,7 @@ void screen_SetFogColour(UDWORD newFogColour)
 				blue = newFogColour >> 3;
 				blue &= screen->format->Bmask;
 				fogColour = red + green + blue;
-			}		
+			}
 		}
 		currentFogColour = newFogColour;
 	}
@@ -396,7 +396,7 @@ void screenFlip(BOOL clearBackBuffer)
 /* Swap between windowed and full screen mode */
 void screenToggleMode(void)
 {
-	
+
 	if ((displayMode == MODE_WINDOWED) || (displayMode == MODE_FULLSCREEN))
 	{
 		/* The framework can only run in the current screen mode */
@@ -534,7 +534,7 @@ BOOL screenToggleVideoPlaybackMode(void)
 		DBERROR(("Create Primary Surface failed:\n%s", DDErrorToString(ddrval)));
 		return FALSE;
 	}
-	
+
 	//copy the palette
 	memset(&sFrontBufferPixelFormat, 0, sizeof(DDPIXELFORMAT));
 	sFrontBufferPixelFormat.dwSize = sizeof(DDPIXELFORMAT);

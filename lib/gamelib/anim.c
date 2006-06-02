@@ -11,8 +11,8 @@
 
 #include <string.h>
 
-#include "frame.h"
-#include "geo.h"
+#include "lib/framework/frame.h"
+#include "lib/ivis_common/geo.h"
 
 #include "anim.h"
 #include "parser.h"

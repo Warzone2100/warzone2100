@@ -1,6 +1,5 @@
 noinst_LIBRARIES = libwidget.a
-AM_CPPFLAGS = -I$(top_srcdir)/lib/framework -I$(top_srcdir)/lib/$(RENDERER) \
-	-I$(top_srcdir)/lib/ivis_common -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)
 libwidget_a_SOURCES = \
 	bar.c \
 	button.c \

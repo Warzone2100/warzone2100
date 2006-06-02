@@ -3,7 +3,7 @@
 #include <windows.h>
 #endif //looks like we need this. --Qamly
 #include "adpcm.h"
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "rpl_reader.h"
 #include <physfs.h>
 
@@ -115,18 +115,18 @@ rpl_open(char* filename) {
 			printf("Unknown video format %i\n", tmp);
 			break;
 	}
-	
+
 	rpl->width = readint(f, buf, len);
-	//printf("width : %i\n", rpl->width); 
+	//printf("width : %i\n", rpl->width);
 
 	rpl->height = readint(f, buf, len);
-	//printf("height : %i\n", rpl->height); 
+	//printf("height : %i\n", rpl->height);
 
 	rpl->bpp = readint(f, buf, len);
-	//printf("bpp : %i\n", rpl->bpp); 
+	//printf("bpp : %i\n", rpl->bpp);
 
 	rpl->fps = readfloat(f, buf, len);
-	//printf("fps : %f\n\n", rpl->fps); 
+	//printf("fps : %f\n\n", rpl->fps);
 	rpl->current_video_frame = 0;
 
 	tmp = readint(f, buf, len);
@@ -148,37 +148,37 @@ rpl_open(char* filename) {
 	rpl->current_sound_frame = 0;
 
 	rpl->samples = readint(f, buf, len);
-	//printf("samples : %i\n", rpl->samples); 
+	//printf("samples : %i\n", rpl->samples);
 
 	rpl->channels = readint(f, buf, len);
-	//printf("channels : %i\n", rpl->channels); 
+	//printf("channels : %i\n", rpl->channels);
 
 	rpl->bps = readint(f, buf, len);
-	//printf("bits per sample : %i\n\n", rpl->bps); 
+	//printf("bits per sample : %i\n\n", rpl->bps);
 
 	rpl->fpc = readint(f, buf, len);
-	//printf("frames per chunk : %i\n", rpl->fpc); 
+	//printf("frames per chunk : %i\n", rpl->fpc);
 
 	rpl->nb_chunks = readint(f, buf, len) + 1;
-	//printf("chunks : %i\n", rpl->nb_chunks); 
+	//printf("chunks : %i\n", rpl->nb_chunks);
 
 	rpl->ocs = readint(f, buf, len);
-	//printf("odd chunk size : %i\n", rpl->ocs); 
+	//printf("odd chunk size : %i\n", rpl->ocs);
 
 	rpl->ecs = readint(f, buf, len);
-	//printf("even chunk size : %i\n", rpl->ecs); 
+	//printf("even chunk size : %i\n", rpl->ecs);
 
 	rpl->otcc = readint(f, buf, len);
-	//printf("offset to chunk cat : %i\n\n", rpl->otcc); 
+	//printf("offset to chunk cat : %i\n\n", rpl->otcc);
 
 	rpl->ots = readint(f, buf, len);
-	//printf("offset to sprite : %i\n", rpl->ots); 
+	//printf("offset to sprite : %i\n", rpl->ots);
 
 	rpl->sprite_size = readint(f, buf, len);
-	//printf("size of sprite : %i\n\n", rpl->sprite_size); 
+	//printf("size of sprite : %i\n\n", rpl->sprite_size);
 
 	rpl->otkf = readint(f, buf, len);
-	//printf("offset to key frames : %i\n", rpl->otkf); 
+	//printf("offset to key frames : %i\n", rpl->otkf);
 
 	{
 		unsigned int i;

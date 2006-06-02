@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <memory.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include "ptrlist.h"
 
@@ -13,7 +13,7 @@ extern void					*g_ElementToBeRemoved;
 
 /***************************************************************************/
 
-#ifdef WIN321	// ffs			//Not really needed I guess?  [Don't delete yet, possible future use?] -Qamly		
+#ifdef WIN321	// ffs			//Not really needed I guess?  [Don't delete yet, possible future use?] -Qamly
 static CRITICAL_SECTION		critSecAudio;
 #endif
 /***************************************************************************/
@@ -41,14 +41,14 @@ ptrList_Create( PTRLIST **ppsList, UDWORD udwInitElements,
 	{
 		return FALSE;
 	}
-	
+
 	/* init members */
 	(*ppsList)->udwElements    = udwInitElements;
 	(*ppsList)->udwExtElements = udwExtElements;
 	(*ppsList)->udwElementSize = udwElementSize;
 
 	ptrList_Init( *ppsList );
-#ifdef WIN321	//ffs		//Not really needed I guess?  -Qamly	
+#ifdef WIN321	//ffs		//Not really needed I guess?  -Qamly
 	InitializeCriticalSection( &critSecAudio );
 #endif
 	return TRUE;
@@ -63,14 +63,14 @@ ptrList_Destroy( PTRLIST *ptrList )
 			"ptrList_Destroy: list pointer invalid\n") );
 
 	ptrList_Clear( ptrList );
-	
+
 	/* destroy heaps */
 	HEAP_DESTROY( ptrList->psNodeHeap );
 	HEAP_DESTROY( ptrList->psElementHeap );
 
 	/* free struct */
 	FREE( ptrList );
-#ifdef WIN321		// Not really needed I guess?  -Qamly	
+#ifdef WIN321		// Not really needed I guess?  -Qamly
 	DeleteCriticalSection( &critSecAudio );
 #endif
 }
@@ -146,7 +146,7 @@ ptrList_GetElement( PTRLIST *ptrList )
 
 /***************************************************************************/
 /*
- * ptrList_FreeElement 
+ * ptrList_FreeElement
  *
  * Free element that was allocated using ptrList_GetElement without
  * inserting in list: will fail if element not allocated from ptrList
@@ -187,7 +187,7 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 
 	psPrevNode = NULL;
 	psCurNode = ptrList->psNode;
-#ifdef WIN321	//ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	//ffs	//Not really needed I guess?  -Qamly
 	EnterCriticalSection( &critSecAudio );
 #endif
 
@@ -218,7 +218,7 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 		psPrevNode->psNext = psNode;
 		psNode->psNext = psCurNode;
 	}
-#ifdef WIN321		// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321		// ffs	//Not really needed I guess?  -Qamly
 	LeaveCriticalSection( &critSecAudio );
 #endif
 
@@ -237,7 +237,7 @@ ptrList_RemoveElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 
 	psPrevNode = NULL;
 	psCurNode = ptrList->psNode;
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
 	EnterCriticalSection( &critSecAudio );
 #endif
 
@@ -301,7 +301,7 @@ ASSERT( (psCurNode->psElement == psElement,
 
 		bOK = TRUE;
 	}
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
 	LeaveCriticalSection( &critSecAudio );
 #endif
 	return bOK;
@@ -313,7 +313,7 @@ void *
 ptrList_GetNext( PTRLIST *ptrList )
 {
 	void	*pElement = NULL;
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
 	EnterCriticalSection( &critSecAudio );
 #endif
 	if ( ptrList == NULL )
@@ -345,7 +345,7 @@ ptrList_GetNext( PTRLIST *ptrList )
 			pElement = ptrList->psCurNode->psElement;
 		}
 	}
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
 	LeaveCriticalSection( &critSecAudio );
 #endif
 	return pElement;
@@ -357,7 +357,7 @@ void *
 ptrList_GetFirst( PTRLIST *ptrList )
 {
 	void	*pElement = NULL;
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
 	EnterCriticalSection( &critSecAudio );
 #endif
 	ptrList->bDontGetNext = FALSE;
@@ -371,7 +371,7 @@ ptrList_GetFirst( PTRLIST *ptrList )
 	{
 		pElement = ptrList->psCurNode->psElement;
 	}
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly	
+#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
 	LeaveCriticalSection( &critSecAudio );
 #endif
 	return pElement;

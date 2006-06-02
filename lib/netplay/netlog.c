@@ -1,6 +1,6 @@
 // ////////////////////////////////////////////////////////////////////////
 // Includes
-#include "frame.h"
+#include "lib/framework/frame.h"
 #include "netplay.h"
 #include "netlog.h"
 
@@ -17,7 +17,7 @@ BOOL NETstartLogging()
 {
 	time_t aclock;
 	struct tm *newtime;
-	
+
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
@@ -31,7 +31,7 @@ BOOL NETstartLogging()
 }
 
 BOOL NETstopLogging()
-{	
+{
 	if (fclose(pFileHandle) != 0)
 	{
 		return FALSE;
@@ -53,7 +53,7 @@ BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 		return TRUE;
 	}
 #endif
-		
+
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
@@ -62,7 +62,7 @@ BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 	{
 		lastframe = frame;
 		fprintf(pFileHandle,"-----------------------------------------------------------\n");
-	}	
+	}
 
 	switch(a)		// replace common msgs with txt descriptions
 	{

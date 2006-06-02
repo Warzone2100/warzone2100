@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "ivi.h"
-#include "piestate.h"
-#include "piepalette.h"
-#include "rendmode.h"
-#include "bug.h"
-#include "fractions.h"
+#include "lib/ivis_common/ivi.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/framework/fractions.h"
 #include "screen.h"
 
 #define RED_CHROMATICITY	1
@@ -58,7 +58,7 @@ BYTE				ap = 0,	ac = 0, rp = 0,	rc = 0, gp = 0,	gc = 0, bp = 0, bc = 0;
 ULONG				mask, amask, rmask, gmask, bmask;
 
 	/*
-	// Cannot convert iof not 16bit mode 
+	// Cannot convert iof not 16bit mode
 	*/
 
 	if ( ! screenGetFrontBufferPixelFormatMasks(&amask, &rmask, &gmask, &bmask))
@@ -71,7 +71,7 @@ ULONG				mask, amask, rmask, gmask, bmask;
 	psPal =	pie_GetGamePal();
 
 	/*
-	// Cannot playback if not 16bit mode 
+	// Cannot playback if not 16bit mode
 	*/
 	if( screenGetFrontBufferBitDepth() == 16 )
 	{
@@ -161,17 +161,17 @@ ULONG				mask, amask, rmask, gmask, bmask;
 		green = (UWORD) psPal[i].g;
 		blue = (UWORD) psPal[i].b;
 
-		alpha >>= (8-ac);  
-		red >>= (8-rc);  
-		blue >>= (8-bc);  
-		green >>= (8-gc);  
+		alpha >>= (8-ac);
+		red >>= (8-rc);
+		blue >>= (8-bc);
+		green >>= (8-gc);
 
-		alpha <<= ap;  
-		red <<= rp;  
-		blue <<= bp;  
+		alpha <<= ap;
+		red <<= rp;
+		blue <<= bp;
 		green <<= gp;
-		
-		palette16Bit[i] = alpha + red + green + blue;		
+
+		palette16Bit[i] = alpha + red + green + blue;
 		alpha = 0xff;//alpha = 0xff when i > 0
 	}
 	return(TRUE);
@@ -207,7 +207,7 @@ int pal_AddNewPalette(iColour *pal)
 		{
 			DBERROR(("pal_AddNewPalette - Out of memory"));
 			return FALSE;
-		}	
+		}
 	}
 	if (psWinPal == NULL)
 	{
@@ -216,7 +216,7 @@ int pal_AddNewPalette(iColour *pal)
 		{
 			DBERROR(("pal_AddNewPalette - Out of memory"));
 			return FALSE;
-		}	
+		}
 	}
 
 	p = psGamePal;
@@ -413,7 +413,7 @@ int		numShades;
 			if(seekGreen >255) seekGreen = 255;
 			if(seekBlue >255) seekBlue = 255;
 
-			palShades[(numColours * PALETTE_SHADE_LEVEL) + (numShades-COLOUR_BALANCE)] = 
+			palShades[(numColours * PALETTE_SHADE_LEVEL) + (numShades-COLOUR_BALANCE)] =
 				pal_GetNearestColour((uint8) seekRed, (uint8) seekGreen, (uint8) seekBlue);
 		}
 	}
@@ -438,7 +438,7 @@ PALETTEENTRY*	pie_GetWinPal(void)
 
 
 
-	End of PC Version 
+	End of PC Version
 
 
 

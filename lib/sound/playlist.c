@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #define BUFFER_SIZE 2048
 static char buffer[BUFFER_SIZE];

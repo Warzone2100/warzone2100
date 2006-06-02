@@ -8,7 +8,7 @@
 
 #include "fbf.h"
 #include "ivispatch.h"
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #define MAXBUFFERS			5
 #define BUFFERSIZE			1024
@@ -165,7 +165,7 @@ int iV_FilePut(int fd, int8 c)
 	int i = 1;
 
 	if (fbf[fd].n == fbf[fd].buffersize) {
-		i = fwrite(fbf[fd].buffer, sizeof(int8), fbf[fd].buffersize, 
+		i = fwrite(fbf[fd].buffer, sizeof(int8), fbf[fd].buffersize,
 		           fbf[fd].fp);
 		fbf[fd].n = 0;
 		fbf[fd].b = fbf[fd].buffer;

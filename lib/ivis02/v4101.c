@@ -10,18 +10,18 @@
 #include <string.h>
 #include <SDL/SDL.h>
 
-#include "ivi.h"
-#include "rendmode.h"
-#include "piemode.h"
-#include "bug.h"
-#include "piepalette.h"
+#include "lib/ivis_common/ivi.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_common/bug.h"
+#include "lib/ivis_common/piepalette.h"
 #include "piematrix.h" // clockwise check
-#include "pieclip.h"
+#include "lib/ivis_common/pieclip.h"
 
 #include "screen.h"
 
-#include "frame.h"
-#include "frameint.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 
 char	colour = 0;
 
@@ -180,8 +180,8 @@ __pp = psRendSurface->buffer + psRendSurface->scantable[_y_] + _x1_;			\
 		}																							\
 	}
 /*
-//__du = (_btx2_ - _btx1_) / __dx;												
-//__dv = (_bty2_ - _bty1_) / __dx;												
+//__du = (_btx2_ - _btx1_) / __dx;
+//__dv = (_bty2_ - _bty1_) / __dx;
 #define _TTHLINE_A																\
 if (_x1_ > _x2_) {																\
 	iV_SWAP(_x1_,_x2_);															\
@@ -272,14 +272,14 @@ int	width;
 	rendSurface.flags		= REND_SURFACE_SCREEN;
 	rendSurface.usr			= iV_MODE_4101;
 	rendSurface.size		= SIZE_4101;
-	rendSurface.width		= pie_GetVideoBufferWidth();   
-	rendSurface.height		= pie_GetVideoBufferHeight();  
-	rendSurface.xcentre		= pie_GetVideoBufferWidth()/2; 
+	rendSurface.width		= pie_GetVideoBufferWidth();
+	rendSurface.height		= pie_GetVideoBufferHeight();
+	rendSurface.xcentre		= pie_GetVideoBufferWidth()/2;
 	rendSurface.ycentre		= pie_GetVideoBufferHeight()/2;
-	rendSurface.clip.left	= 0;                           
-	rendSurface.clip.top	= 0;                           
-	rendSurface.clip.right	= pie_GetVideoBufferWidth();   
-	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();  
+	rendSurface.clip.left	= 0;
+	rendSurface.clip.top	= 0;
+	rendSurface.clip.right	= pie_GetVideoBufferWidth();
+	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
 	rendSurface.xpshift		= 10;
 	rendSurface.ypshift		= 10;
 
@@ -425,7 +425,7 @@ void _hline_4101(int x1, int x2, int y, uint32 colour)
 	uint8 *bp;
 	uint32 *dp;
 
-	
+
 	colour |= colour<<8;
 	colour |= colour<<16;
 
@@ -2769,7 +2769,7 @@ static void _tghline_4101(int x1, int x2, int y, fixed btx1, fixed btx2, fixed b
 	pp = psRendSurface->buffer + psRendSurface->scantable[y] + x1;
 
 	//for (x = x1; x < x2; x++, pp++) {
-	for (x = dx; x >0; x--, pp++) 
+	for (x = dx; x >0; x--, pp++)
 	{
 		col = *((uint8 *)tex+((bty1 >> iV_DIVSHIFT)<<xshift)+(btx1>>iV_DIVSHIFT));
 
@@ -2996,13 +2996,13 @@ void _tgpolygon_4101(int npoints, iVertex *vrt, iTexture  *tex)
 	//---------------------------------------------------------------------------
 
 				/* Flat shade the scan line segment if light levels at edge are the same */
-				if (gourILeft == gourIRight) 
+				if (gourILeft == gourIRight)
 				{
 					_tfhline_4101(bxl >> iV_DIVSHIFT,bxr >> iV_DIVSHIFT,y++,btxl,btxr,
 							btyl,btyr,tex->xshift,tex->bmp,gourILeft>>iV_DIVSHIFT);
-				} 
+				}
 				/* Otherwise there's disparate values for illumination - so gouraud shade */
-				else 
+				else
 				{
 					_tghline_4101(bxl >> iV_DIVSHIFT,bxr >> iV_DIVSHIFT,y++,btxl,btxr,
 							btyl,btyr,gourILeft,gourIRight,tex->xshift,tex->bmp);
@@ -3045,12 +3045,12 @@ void _tgpolygon_4101(int npoints, iVertex *vrt, iTexture  *tex)
 	//---------------------------------------------------------------------------
 
 				/* See above */
-				if (gourILeft == gourIRight) 
+				if (gourILeft == gourIRight)
 				{
 					_tfhline_4101(bxl >> iV_DIVSHIFT,bxr >> iV_DIVSHIFT,y++,btxl,btxr,
 							btyl,btyr,tex->xshift,tex->bmp,gourILeft>>iV_DIVSHIFT);
-				} 
-				else 
+				}
+				else
 				{
 					_tghline_4101(bxl >> iV_DIVSHIFT,bxr >> iV_DIVSHIFT,y++,btxl,btxr,
 						btyl,btyr,gourILeft,gourIRight,tex->xshift,tex->bmp);
@@ -3071,7 +3071,7 @@ void _tgpolygon_4101(int npoints, iVertex *vrt, iTexture  *tex)
 			btxr = ((int32)nvrt[ri].u << iV_DIVSHIFT);
 			btyr = ((int32)nvrt[ri].v << iV_DIVSHIFT);
 	//---------------------------------------------------------------------------
-			gourGRight = _iVPRIM_DIVTABLE[dyr] * (nvrt[ri+1].g - nvrt[ri].g); 
+			gourGRight = _iVPRIM_DIVTABLE[dyr] * (nvrt[ri+1].g - nvrt[ri].g);
 			gourIRight = nvrt[ri].g << iV_DIVSHIFT;
 	//---------------------------------------------------------------------------
 			ri++;
