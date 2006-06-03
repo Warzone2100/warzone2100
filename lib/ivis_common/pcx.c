@@ -30,9 +30,9 @@ iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal)
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 
-	assert(pngimage != NULL);
-
 	wzpng_io_buf* buf = (wzpng_io_buf*)malloc(sizeof(wzpng_io_buf));
+
+	assert(pngimage != NULL);
 	buf->buffer = (char*)pngimage;
 	buf->length = 10000000;
 

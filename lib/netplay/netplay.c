@@ -455,8 +455,8 @@ BOOL NETsetGameFlags(UDWORD flag, DWORD value)
 // setup stuff
 BOOL NETinit(BOOL bFirstCall)
 {
-	debug( LOG_NET, "NETinit" );
 	UDWORD			i;
+	debug( LOG_NET, "NETinit" );
 
 //	NEThashFile("warzonedebug.exe");
 
@@ -501,9 +501,9 @@ BOOL NETinit(BOOL bFirstCall)
 // SHUTDOWN THE CONNECTION.
 HRESULT NETshutdown(VOID)
 {
+	unsigned int i;
 	debug( LOG_NET, "NETshutdown" );
 
-	unsigned int i;
 	for( i = 0; i < MAX_CONNECTED_PLAYERS; i++ )
 	{
 		if( local_player_data[i].data != NULL )

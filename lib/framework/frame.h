@@ -55,6 +55,10 @@ FILE *unix_fopen(const char *filename, const char *mode);
 #include "block.h"
 #include "listmacs.h"
 
+#ifdef WIN32
+#include "win32fixes.h"
+#endif
+
 #ifndef WIN32
 DWORD GetTickCount();
 #endif

@@ -29,7 +29,7 @@ void audp_error(char *pMessage,...);
 %token <sval> QTEXT			/* Text with double quotes surrounding it */
 %token <ival> LOOP
 %token <ival> ONESHOT
-%token <sval> text
+%token <sval> TEXT
 
 	/* keywords */
 %token AUDIO
