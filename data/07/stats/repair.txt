@@ -1,6 +1,0 @@
-ZNULLREPAIR,Level All,0,0,0,0,0,0,DEFAULT,0,0,0,100,0
-NEXUSrepair,Level Three,0,0,0,0,0,1,DEFAULT,0,0,100,100,0
-LightRepair1,Level All,50,250,800,0,10,0,TURRET,GNMREPAR.PIE,TRMECM1.PIE,15,7,1
-HeavyRepair,Level Two,50,250,3000,0,10,0,TURRET,GNMREPR2.PIE,TRMECM1.PIE,30,7,1
-CyborgRepair,Level All,50,250,150,0,10,0,TURRET,cy_rep.pie,cybody.pie,8,7,0
-AutoRepair,Level One,0,0,0,0,0,1,DEFAULT,0,0,100,75,0
