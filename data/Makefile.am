@@ -1,8 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-ZIPLIST = anims audio components effects features \
-	gamedesc.lev images messages misc mp multiplay novideo.rpl palette.bin script \
+BASELIST = anims audio components effects features \
+	gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script \
 	sequenceaudio stats structs texpages wrf
+PATCHLIST = addon.lev anims audio components effects \
+	messages multiplay stats structs texpages wrf
 
 install-data-local:
 	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(ZIPLIST) -x *svn* || zip -T warzone.wz ; }
