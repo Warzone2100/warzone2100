@@ -7,8 +7,8 @@ PATCHLIST = addon.lev anims audio components effects \
 	messages multiplay stats structs texpages wrf
 
 install-data-local:
-	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(ZIPLIST) -x *svn* || zip -T warzone.wz ; }
-	[ -f gamedesc.lev ] && { cd mp && { zip -ru9 ../mp.wz mp -x *svn* || zip -T ../mp.wz ; } && cd .. ; }
+	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz ; }
+	[ -f gamedesc.lev ] && { cd mp && { zip -ru9 ../mp.wz ${PATCHLIST} -x *svn* || zip -T ../mp.wz ; } && cd .. ; }
 	[ -d "$(DESTDIR)$(datadir)" ] || $(mkdir_p) "$(DESTDIR)$(datadir)"
 	[ -f warzone.wz ] && $(INSTALL_DATA) warzone.wz $(DESTDIR)$(datadir)/
 	[ -f mp.wz ] && $(INSTALL_DATA) mp.wz $(DESTDIR)$(datadir)/
@@ -26,6 +26,6 @@ installcheck:
 	[ -f mp.wz ] && zip -T mp.wz
 
 dist-hook:
-	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(ZIPLIST) -x *svn* || zip -T warzone.wz; }
-	[ -f gamedesc.lev ] && { cd mp && { zip -ru9 ../mp.wz mp -x *svn* || zip -T ../mp.wz ; } && cd .. ; }
+	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz; }
+	[ -f gamedesc.lev ] && { cd mp && { zip -ru9 ../mp.wz ${PATCHLIST} -x *svn* || zip -T ../mp.wz ; } && cd .. ; }
 	[ -f warzone.wz ] && cp -fu warzone.wz mp.wz $(DESTDIR)$(distdir)
