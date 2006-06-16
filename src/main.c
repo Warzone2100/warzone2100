@@ -39,10 +39,24 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 
-#ifndef DEFAULT_DATA_DIR
-	#define DEFAULT_DATA_DIR "/usr/share"
+#include "modding.h"
+
+#ifndef DEFAULT_DATADIR
+# define DEFAULT_DATADIR "/usr/share/warzone/"
 #endif
+
+#ifdef WIN32
+# define WZ_WRITEDIR "Warzone-2.0"
+#else
+# define WZ_WRITEDIR ".warzone-2.0"
+#endif
+
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
+
+char * global_mods[MAX_MODS] = { NULL };
+char * campaign_mods[MAX_MODS] = { NULL };
+char * multiplay_mods[MAX_MODS] = { NULL };
+
 
 // Warzone 2100 . Pumpkin Studios
 
@@ -89,77 +103,74 @@ BOOL checkDisableLobby(void)
 }
 */
 
-/***************************************************************************
-	When looking for our data, first check if we have been given an explicit
-	data path from the user. Then check the current directory. Finally check
-	the usual suspects in Unixland and round up some random hang arounds.
-
-	This function sets the datadir variable.
-***************************************************************************/
-static void find_data_dir(void)
+static BOOL inList( char * list[], const char * item )
 {
-	debug(LOG_WZ, "Finding data dir\n");
-	/* Do we have a user supplied data dir? It must point to a directory with gamedesc.lev or
-	 * a warzone.wz with this file inside. */
-	if (datadir[0] != '\0') {
-		strcpy(datadir, DEFAULT_DATA_DIR);
-		if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
-			debug(LOG_ERROR, "Required file gamedesc.lev not found in requested data dir \"%s\".", datadir);
-			exit(1);
-		} else {
-			return;
+	int i = 0;
+	debug( LOG_NEVER, "Item: [%s]", item );
+	while( list[i] != NULL )
+	{
+		debug( LOG_NEVER, "Checking for match with: [%s]", list[i] );
+		if ( strcmp( list[i], item ) == 0 )
+			return TRUE;
+		i++;
+	}
+	return FALSE;
+}
+
+void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] )
+{
+	char tmpstr[MAX_PATH];
+	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
+	char ** i = subdirlist;
+	while( *i != NULL )
+	{
+		debug( LOG_NEVER, "Examining subdir: [%s]", *i );
+		if( !checkList || inList( checkList, *i ) )
+		{
+			strcpy( tmpstr, basedir );
+			strcat( tmpstr, subdir );
+			strcat( tmpstr, PHYSFS_getDirSeparator() );
+			strcat( tmpstr, *i );
+			debug( LOG_NEVER, "Adding [%s] to search path", tmpstr );
+			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
+		i++;
 	}
+	PHYSFS_freeList( subdirlist );
+}
 
-	/* Check current dir for unpacked game data */
-	if (!PHYSFS_addToSearchPath(PHYSFS_getBaseDir(), 1) || !PHYSFS_exists("gamedesc.lev")) {
-		debug(LOG_WZ, "Could not find data in current dir \"%s\".", PHYSFS_getBaseDir());
-		(void) PHYSFS_removeFromSearchPath(PHYSFS_getBaseDir());
-	} else {
-		char* tmp;
-
-		strcpy(datadir, PHYSFS_getBaseDir());
-		tmp = strrchr(datadir, *PHYSFS_getDirSeparator());
-		if (tmp != NULL) *tmp = '\0'; // Trim ending '/', which getBaseDir always provides
-		return;
-	}
-
-	/* Check for warzone.wz in current dir */
-	strcpy(datadir, PHYSFS_getBaseDir());
-	strcat(datadir, "warzone.wz");
-	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
-		debug(LOG_WZ, "Did not find warzone.wz in currect directory \"%s\".", datadir);
-		(void) PHYSFS_removeFromSearchPath(datadir);
-	} else {
-		return;
-	}
-
-	/* Check for warzone.wz in data/ dir */
-	strcpy(datadir, PHYSFS_getBaseDir());
-	strcat(datadir, "data/warzone.wz");
-	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
-		debug(LOG_WZ, "Did not find warzone.wz in data/ directory \"%s\".", datadir);
-		(void) PHYSFS_removeFromSearchPath(datadir);
-	} else {
-		return;
-	}
-
-	/* Check for warzone.wz in Unixland system data directory and check if we are running
-	 * straight out of the build directory (for convenience). */
-	strcpy(datadir, PHYSFS_getBaseDir());
-	if( strrchr(datadir, '/') != NULL ) { // Skip this on Windows, where '/' is not the dirSeperator
-		*strrchr(datadir, '/') = '\0'; // Trim ending '/', which getBaseDir always provides
-		if (strcmp(strrchr(datadir, '/'), "/bin" ) == 0) {
-			strcpy(strrchr(datadir, '/'), "/share/warzone/warzone.wz" );
-		}	else if (strcmp(strrchr(datadir, '/'), "/src" ) == 0 ) {
-			strcpy( strrchr( datadir, '/' ), "/data" );
+void removeSubdirs( const char * basedir, const char * subdir, char * checkList[] )
+{
+	char tmpstr[MAX_PATH];
+	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
+	char ** i = subdirlist;
+	while( *i != NULL )
+	{
+		debug( LOG_NEVER, "Examining subdir: [%s]", *i );
+		if( !checkList || inList( checkList, *i ) )
+		{
+			strcpy( tmpstr, basedir );
+			strcat( tmpstr, subdir );
+			strcat( tmpstr, PHYSFS_getDirSeparator() );
+			strcat( tmpstr, *i );
+			debug( LOG_NEVER, "Removing [%s] from search path", tmpstr );
+			PHYSFS_removeFromSearchPath( tmpstr );
 		}
+		i++;
 	}
-	if (!PHYSFS_addToSearchPath(datadir, 1) || !PHYSFS_exists("gamedesc.lev")) {
-		debug(LOG_WZ, "Could not find data in \"%s\".", datadir);
-		debug(LOG_ERROR, "Could not find game data. Aborting.");
-		exit(1);
+	PHYSFS_freeList( subdirlist );
+}
+
+void printSearchPath( void )
+{
+	char ** i, ** searchPath;
+
+	debug(LOG_WZ, "Search paths:");
+	searchPath = PHYSFS_getSearchPath();
+	for (i = searchPath; *i != NULL; i++) {
+		debug(LOG_WZ, "    [%s]", *i);
 	}
+	PHYSFS_freeList( searchPath );
 }
 
 /***************************************************************************
@@ -169,13 +180,7 @@ static void initialize_PhysicsFS(void)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-	char **i, **searchPath;
-	char overridepath[MAX_PATH], writepath[MAX_PATH], mappath[MAX_PATH];
-#ifdef WIN32
-  const char *writedir = "warzone-2.0";
-#else
-  const char *writedir = ".warzone-2.0";
-#endif
+	char tmpstr[MAX_PATH];
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -185,50 +190,111 @@ static void initialize_PhysicsFS(void)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-	strcpy(writepath, PHYSFS_getUserDir());
-	if (PHYSFS_setWriteDir(writepath) == 0) {
-		debug(LOG_ERROR, "Error setting write directory to home directory \"%s\": %s",
-		      writepath, PHYSFS_getLastError());
+	strcpy( tmpstr, PHYSFS_getUserDir() );
+	strcat( tmpstr, WZ_WRITEDIR );
+	if ( PHYSFS_setWriteDir( tmpstr ) == 0 ) {
+		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			tmpstr, PHYSFS_getLastError() );
 		exit(1);
 	}
-	strcat(writepath, writedir);
-	(void) PHYSFS_mkdir(writedir); /* Just in case it does not exist yet; */
-	if (PHYSFS_setWriteDir(writepath) == 0) {
-		debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
-			writepath, PHYSFS_getLastError());
-		exit(1);
-	}
-	PHYSFS_addToSearchPath(writepath, 0); /* add to search path */
+	
+	// User's home dir
+	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_APPEND );
 
-  find_data_dir();
-  debug(LOG_WZ, "Data dir set to \"%s\".", datadir);
+	PHYSFS_permitSymbolicLinks(1);
 
-	snprintf(overridepath, sizeof(overridepath), "%smods", PHYSFS_getBaseDir());
-	strcpy(mappath, PHYSFS_getBaseDir());
-	strcat(mappath, "maps");
+	debug( LOG_WZ, "Write dir: %s", PHYSFS_getWriteDir() );
+	debug( LOG_WZ, "Base dir: %s", PHYSFS_getBaseDir() );
+}
 
-	/* The 1 below means append to search path, while 0 means prepend. */
-	if (!PHYSFS_addToSearchPath(overridepath, 0)) {
-		debug(LOG_WZ, "Error adding override path %s: %s", overridepath,
-		      PHYSFS_getLastError());
-	}
-	if (!PHYSFS_addToSearchPath(mappath, 0)) {
-		debug(LOG_WZ, "Error adding map path %s: %s", mappath,
-		      PHYSFS_getLastError());
-	}
+// We need ParseCommandLine, before we can add any mods...
+void scanDataDirs( void )
+{
+	char tmpstr[MAX_PATH], prefix[MAX_PATH];
+
+	// Command line supplied datadir
+	PHYSFS_addToSearchPath( datadir, PHYSFS_PREPEND );
+
+	// maps/mods subdirs of user's home dir
+	addSubdirs( PHYSFS_getWriteDir(), "mods/global", PHYSFS_APPEND, global_mods );
+	addSubdirs( PHYSFS_getWriteDir(), "maps", PHYSFS_APPEND, FALSE );
+
+	// maps/mods subdirs of program dir
+	PHYSFS_addToSearchPath( PHYSFS_getBaseDir(), PHYSFS_APPEND );
+	addSubdirs( PHYSFS_getBaseDir(), "mods/global", PHYSFS_APPEND, global_mods );
+	addSubdirs( PHYSFS_getBaseDir(), "maps", PHYSFS_APPEND, FALSE );
+	PHYSFS_removeFromSearchPath( PHYSFS_getBaseDir() );
+
+	// Program dir mp.wz patches
+	strcpy( tmpstr, PHYSFS_getBaseDir() );
+	strcat( tmpstr, "mp.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+	// Program dir warzone.wz
+	strcpy( tmpstr, PHYSFS_getBaseDir() );
+	strcat( tmpstr, "warzone.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+
+	// Plain program dir + patches
+	strcpy( tmpstr, PHYSFS_getBaseDir() );
+	strcat( tmpstr, "mp" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	PHYSFS_addToSearchPath( PHYSFS_getBaseDir(), PHYSFS_APPEND );
+
+
+	// Plain default datadir on Unix
+	strcpy( tmpstr, DEFAULT_DATADIR );
+	strcat( tmpstr, "mp" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	PHYSFS_addToSearchPath( DEFAULT_DATADIR, PHYSFS_APPEND );
+
+	// Default datadir with .wz files on Unix
+	strcpy( tmpstr, DEFAULT_DATADIR );
+	strcat( tmpstr, "mp.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	strcpy( tmpstr, DEFAULT_DATADIR );
+	strcat( tmpstr, "warzone.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+
+	// Find out which PREFIX we are in...
+	strcpy( tmpstr, PHYSFS_getBaseDir() );
+	*strrchr( tmpstr, *PHYSFS_getDirSeparator() ) = '\0'; // Trim ending '/', which getBaseDir always provides
+
+	strncpy( prefix, PHYSFS_getBaseDir(), // Skip the last dir from base dir
+		strrchr( tmpstr, *PHYSFS_getDirSeparator() ) - tmpstr );
+
+	// Relocation for AutoPackage
+	strcpy( tmpstr, prefix );
+	strcat( tmpstr, "/share/warzone/mp.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	strcpy( tmpstr, prefix );
+	strcat( tmpstr, "/share/warzone/warzone.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+	// Hack for the hackers... Use data in SVN dir
+	strcpy( tmpstr, prefix );
+	strcat( tmpstr, "/data/mp" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	strcpy( tmpstr, prefix );
+	strcat( tmpstr, "/data" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+		
 
 	/** Debugging and sanity checks **/
 
-	debug(LOG_WZ, "Search paths:");
-	searchPath = PHYSFS_getSearchPath();
-	for (i = searchPath; *i != NULL; i++) {
-		debug(LOG_WZ, "    [%s]", *i);
-	}
-	PHYSFS_freeList( searchPath );
-	debug(LOG_WZ, "Write path: %s", PHYSFS_getWriteDir());
+	printSearchPath();
 
-	PHYSFS_permitSymbolicLinks(1);
-	debug(LOG_WZ, "gamedesc.lev found at %s", PHYSFS_getRealDir("gamedesc.lev"));
+	if( PHYSFS_exists("gamedesc.lev") )
+	{
+		debug( LOG_WZ, "gamedesc.lev found at %s", PHYSFS_getRealDir( "gamedesc.lev" ) );
+	}
+	else
+	{
+		debug( LOG_ERROR, "Could not find game data. Aborting." );
+		exit(1);
+	}
 }
 
 /***************************************************************************
@@ -242,7 +308,7 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 		strcat(dest, subdir);
 	}
 	{
-		unsigned int l = strlen(dest);
+		size_t l = strlen(dest);
 
 		if (dest[l-1] != '/') {
 			dest[l] = '/';
@@ -296,11 +362,7 @@ int main(int argc, char *argv[])
 
 	/*** Initialize PhysicsFS ***/
 
-#ifdef WIN32
-	PHYSFS_init(NULL);
-#else
 	PHYSFS_init(argv[0]);
-#endif
 	initialize_PhysicsFS();
 
 	make_dir(ScreenDumpPath, "screendumps", NULL);
@@ -336,6 +398,9 @@ init://jump here from the end if re_initialising
 			return -1;
 		}
 	}
+
+	scanDataDirs();
+
 	debug(LOG_MAIN, "reinitializing");
 
 	// find out if the lobby stuff has been disabled
@@ -347,10 +412,6 @@ init://jump here from the end if re_initialising
 	}
 
 	reInit = FALSE;//just so we dont restart again
-
-#ifdef USE_FILE_PATH
-	chdir(FILE_PATH);
-#endif
 
 	bVidMem = FALSE;
 	dispBitDepth = DISP_BITDEPTH;
@@ -409,9 +470,9 @@ init://jump here from the end if re_initialising
 			case GS_TITLE_SCREEN:
 				screen_RestartBackDrop();
 
-				loadLevels(DIR_MULTIPLAYER);
+				//loadLevels(DIR_MULTIPLAYER);
 
-				if (!frontendInitialise("wrf\\frontend.wrf"))
+				if (!frontendInitialise("wrf/frontend.wrf"))
 				{
 					goto exit;
 				}

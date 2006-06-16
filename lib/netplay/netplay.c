@@ -10,6 +10,7 @@
 #include <time.h>			// for stats
 #include <SDL/SDL_thread.h>
 #include <SDL/SDL_net.h>
+#include <physfs.h>
 
 #include "lib/framework/frame.h"
 #include "netplay.h"
@@ -1000,19 +1001,19 @@ BOOL NETfindProtocol(BOOL Lob)
 
 UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 {
-	static UDWORD	fileSize,currPos;
-	static FILE	*pFileHandle;
-	UDWORD		bytesRead;
+	static PHYSFS_sint64	fileSize,currPos;
+	static PHYSFS_file	*pFileHandle;
+	PHYSFS_sint64		bytesRead;
 	UBYTE		inBuff[2048];
 	NETMSG		msg;
 
 	if(newFile)		//force it true for now -Q
 	{
 		// open the file.
-		pFileHandle = fopen(fileName, "rb");			// check file exists
+		pFileHandle = PHYSFS_openRead(fileName);			// check file exists
 		if (pFileHandle == NULL)
 		{
-			DBPRINTF(("NETsendFile: Failed\n"));
+			debug( LOG_WZ, "NETsendFile: Failed\n" );
 			return 0;															// failed
 		}
 		// get the file's size.
@@ -1020,15 +1021,14 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 		currPos =0;
 		do
 		{
-			bytesRead = fread(&inBuff, 1, sizeof(inBuff), pFileHandle);
+			bytesRead = PHYSFS_read( pFileHandle, &inBuff, 1, sizeof(inBuff) );
 			fileSize += bytesRead;
 		} while(bytesRead != 0);
-		fclose(pFileHandle);							// close
-		pFileHandle = fopen(fileName, "rb");			// reopen
 
+		PHYSFS_seek(pFileHandle, 0 );
 	}
 	// read some bytes.
-	bytesRead = fread(&inBuff, 1, sizeof(inBuff), pFileHandle);
+	bytesRead = PHYSFS_read(pFileHandle, &inBuff, sizeof(inBuff), 1 );
 
 	// form a message
 	NetAdd(msg,0,fileSize);		// total bytes in this file.
@@ -1054,7 +1054,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 	currPos += bytesRead;		// update position!
 	if(currPos == fileSize)
 	{
-		fclose(pFileHandle);
+		PHYSFS_close(pFileHandle);
 	}
 
 	return (currPos*100)/fileSize;
@@ -1067,7 +1067,7 @@ UBYTE NETrecvFile(NETMSG *pMsg)
 	UDWORD			pos, fileSize, currPos, bytesRead;
 	char			fileName[128];
 	unsigned int		len;
-	static FILE		*pFileHandle;
+	static PHYSFS_file	*pFileHandle;
 
 	//read incoming bytes.
 	NetGet(pMsg,0,fileSize);
@@ -1084,15 +1084,15 @@ UBYTE NETrecvFile(NETMSG *pMsg)
 	if(currPos == 0)	// first packet!
 	{
 		//printf("NETrecvFile: Creating new file %s\n", fileName);
-		pFileHandle = fopen(fileName, "wb");	// create a new file.
+		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
 	//write packet to the file.
-	fwrite(&(pMsg->body[pos]), 1, bytesRead, pFileHandle);
+	PHYSFS_write( pFileHandle, &(pMsg->body[pos]), bytesRead, 1 );
 
 	if(currPos+bytesRead == fileSize)	// last packet
 	{
-		fclose(pFileHandle);
+		PHYSFS_close(pFileHandle);
 	}
 
 	//return the percent count.

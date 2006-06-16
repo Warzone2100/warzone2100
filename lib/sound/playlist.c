@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <physfs.h>
 
 #include "lib/framework/frame.h"
 
@@ -44,21 +45,21 @@ void PlayList_Quit() {
 }
 
 char PlayList_Read(const char* path) {
-	FILE* f;
+	PHYSFS_file * f;
 	char* path_to_music = NULL;
 
 	sprintf(buffer, "%s/music.wpl", path);
 
-	f = fopen(buffer, "r");
+	f = PHYSFS_openRead(buffer);
 
 	if (f == NULL) {
 		return 1;
 	}
 
-	while (!feof(f)) {
+	while (!PHYSFS_eof(f)) {
 		char* filename;
 
-		fgets(buffer, BUFFER_SIZE, f);
+		PHYSFS_read( f, buffer, BUFFER_SIZE, 1 );
 
 		if (strncmp(buffer, "[game]", 6) == 0) {
 			current_track = 1;
@@ -110,6 +111,8 @@ char PlayList_Read(const char* path) {
 	}
 
 	free(path_to_music);
+
+	PHYSFS_close(f);
 
 	return 0;
 }

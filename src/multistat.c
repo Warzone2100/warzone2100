@@ -8,6 +8,8 @@
  */
 
 #include <stdio.h>
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "objmem.h"
 #include "power.h"
@@ -341,17 +343,17 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 BOOL saveForce(char *name,FORCE *pfForce)
 {
 	STRING			fileName[255]="";
-	FILE			*pFileHandle;
+	PHYSFS_file		*pFileHandle;
 	DROID_TEMPLATE	*pT;
 	FORCE_MEMBER	*pCount,*pMember;
 	UDWORD			count=0;
 
 	strcpy(fileName,name);
 
-	pFileHandle = fopen(fileName, "wb");								// open the file
+	pFileHandle = PHYSFS_openWrite(fileName);								// open the file
 	if (!pFileHandle)
 	{
-		DBERROR(("Couldn't open %s", fileName));
+		debug( LOG_ERROR, "Couldn't open %s", fileName );
 		return FALSE;
 	}
 
@@ -359,17 +361,17 @@ BOOL saveForce(char *name,FORCE *pfForce)
 
 	count =0;
 	for(pT = pfForce->pForceTemplates;pT;pT=pT->psNext) count++;			// count templates
-	if (fwrite(&count, sizeof(UDWORD), 1, pFileHandle) != 1)
+	if (PHYSFS_write( pFileHandle, &count, sizeof(UDWORD), 1 ) != 1)
 	{
-		DBERROR(("Write failed for %s", fileName));
+		debug( LOG_ERROR, "Write failed for %s", fileName );
 		return FALSE;
 	}
 
 	count=0;
 	for(pCount=pfForce->pMembers;pCount;pCount=pCount->psNext) count++;	// count droids
-	if (fwrite(&count, sizeof(UDWORD), 1, pFileHandle) != 1)
+	if (PHYSFS_write( pFileHandle, &count, sizeof(UDWORD), 1 ) != 1)
 	{
-		DBERROR(("Write failed for %s", fileName));
+		debug( LOG_ERROR, "Write failed for %s", fileName );
 		return FALSE;
 	}
 
@@ -398,15 +400,15 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	// new method. refs to templates. USED FOR MULITLANG SUPP.
 	for(pMember = pfForce->pMembers;pMember;pMember =pMember->psNext)
 	{
-		if (fwrite( &(pMember->pTempl->multiPlayerID) ,sizeof(pMember->pTempl->multiPlayerID), 1, pFileHandle) != 1)
+		if ( PHYSFS_write( pFileHandle, &(pMember->pTempl->multiPlayerID), sizeof(pMember->pTempl->multiPlayerID), 1 ) != 1 )
 		{
-			DBERROR(("Write failed for %s", fileName));					// force type
+			debug( LOG_ERROR, "Write failed for %s", fileName );					// force type
 			return FALSE;
 		}
 	}
 #endif
 
-	if (fclose(pFileHandle) != 0)
+	if ( PHYSFS_close(pFileHandle) != 0 )
 	{
 		DBERROR(("Close failed for %s", fileName));
 		return FALSE;
@@ -420,13 +422,13 @@ BOOL loadForce(char *name)
 {
 	STRING			fileName[255]="";
 //	STRING			tname[255]="";
-	FILE			*pFileHandle;
+	PHYSFS_file		*pFileHandle;
 	UDWORD			tcount,fcount=0,ref;
 	DROID_TEMPLATE	*psTempl;
 
 	strcpy(fileName,name);
-  debug(LOG_WZ, "loadForce: %s", fileName);
-	pFileHandle = fopen(fileName, "rb");									// check file exists
+	debug(LOG_WZ, "loadForce: %s", fileName);
+	pFileHandle = PHYSFS_openRead(fileName);									// check file exists
 	if (pFileHandle == NULL)
 	{
 		return FALSE;														// failed
@@ -443,17 +445,17 @@ BOOL loadForce(char *name)
 	Force.pMembers = NULL;
 
 	// load in new force.
-	if (fread(&tcount, sizeof(UDWORD), 1, pFileHandle) != 1)				// get number of templates
+	if ( PHYSFS_read( pFileHandle, &tcount, sizeof(UDWORD), 1 ) != 1 )				// get number of templates
 	{
-		DBERROR(("Read failed for %s", fileName));
-		fclose(pFileHandle);
+		debug( LOG_ERROR, "Read failed for %s", fileName );
+		PHYSFS_close(pFileHandle);
 		return FALSE;
 	}
 
-	if (fread(&fcount, sizeof(UDWORD), 1, pFileHandle) != 1)				// get number of droids in force
+	if ( PHYSFS_read( pFileHandle, &fcount, sizeof(UDWORD), 1 ) != 1 )				// get number of droids in force
 	{
-		DBERROR(("read failed for %s", fileName));
-		fclose(pFileHandle);
+		debug( LOG_ERROR, "read failed for %s", fileName );
+		PHYSFS_close(pFileHandle);
 		return FALSE;
 	}
 
@@ -505,10 +507,10 @@ BOOL loadForce(char *name)
 	// get forces.
 	while (fcount > 0)
 	{
-		if (fread(&ref, sizeof(ref), 1, pFileHandle) != 1)					// read in a template ref code.
+		if ( PHYSFS_read( pFileHandle, &ref, sizeof(ref), 1 ) != 1)					// read in a template ref code.
 		{
-			DBERROR(("read failed for %s", fileName));
-			fclose(pFileHandle);
+			debug( LOG_ERROR, "read failed for %s", fileName );
+			PHYSFS_close(pFileHandle);
 			return FALSE;
 		}
 
@@ -521,9 +523,9 @@ BOOL loadForce(char *name)
 	}
 #endif
 
-	if (fclose(pFileHandle) != 0)
+	if (PHYSFS_close(pFileHandle) != 0)
 	{
-		DBERROR(("Close failed for %s", fileName));
+		debug( LOG_ERROR, "Close failed for %s", fileName );
 		return FALSE;
 	}
 	return TRUE;
@@ -581,7 +583,6 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	STRING				fileName[255]="";
 	UDWORD				size;
 	UBYTE				*pFileData;
-	FILE				*pFileHandle;
 	PLAYERSTATS			blankstats = {0};
 	SAVEDPLAYERSTATS	st,*codedst;
 	UDWORD				tmp[4];
@@ -590,17 +591,12 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 	strcat(fileName,sPlayerName);
 	strcat(fileName,".sta");
 
-  debug(LOG_WZ, "loadMultiStats: %s",fileName);
+	debug(LOG_WZ, "loadMultiStats: %s", fileName);
 	// check player already exists
 	// FIXME: integrate with physfs stuff, and add basic sanity
-	pFileHandle = fopen(fileName, "rb");
-	if (pFileHandle == NULL)
+	if ( !PHYSFS_exists( fileName ) )
 	{
 		saveMultiStats(sPlayerName,sPlayerName,&blankstats);		// didnt exist so create.
-	}
-	else
-	{
-		fclose(pFileHandle);
 	}
 
 	loadFile(fileName,&pFileData,&size);

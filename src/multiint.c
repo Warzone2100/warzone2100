@@ -12,6 +12,8 @@
 #include <sdl/sdl.h>
 #endif
 #include <GL/gl.h>
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
 // FIXME Direct iVis implementation include!
@@ -217,7 +219,7 @@ void loadMapPreview(void)
 	}
 
 	levFindDataSet(game.map, &psLevel);
-	loadLevels(psLevel->dataDir);
+	loadMods(psLevel->dataDir);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "\\game.map");
@@ -491,8 +493,6 @@ void displayMapPreview()
 //sets sWRFILE form game.map
 static void decideWRF(void)
 {
-	HANDLE pFileHandle;
-
 	// try and load it from the maps directory first,
 	strcpy(pLevelName, MultiCustomMapsPath);
 	strcat(pLevelName, game.map);
@@ -500,14 +500,9 @@ static void decideWRF(void)
 	debug(LOG_WZ, "decideWRF: %s", pLevelName);
 	//if the file exists in the downloaded maps dir then use that one instead.
 	// FIXME: Try to incorporate this into physfs setup somehow for sane paths
-	pFileHandle = fopen(pLevelName, "rb");
-	if (pFileHandle == NULL)
+	if ( !PHYSFS_exists(pLevelName) )
 	{
 		strcpy(pLevelName, game.map);		// doesn't exist, must be a predefined one.
-	}
-	else
-	{
-		fclose(pFileHandle);
 	}
 }
 

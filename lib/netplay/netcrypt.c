@@ -14,6 +14,8 @@
  * but not good enough for storing files securely on harddisk. Try encryptstrength=32;
  */
 
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "netplay.h"
 #include "netlog.h"
@@ -38,7 +40,7 @@ BOOL	NETunmangleData		( long *input, long *result, UDWORD dataSize);
 UDWORD	NEThashFile(STRING *pFileName)
 {
 	UDWORD	hashval,c,*val;
-	FILE	*pFileHandle;
+	PHYSFS_file	*pFileHandle;
 	STRING	fileName[255];
 
 	UBYTE	inBuff[2048];		// must be multiple of 4 bytes.
@@ -47,18 +49,18 @@ UDWORD	NEThashFile(STRING *pFileName)
 
 	hashval =0;
 
-	DBPRINTF(("NEThashFile: Hashing File\n"));
+	debug( LOG_WZ, "NEThashFile: Hashing File\n" );
 
 	// open the file.
-	pFileHandle = fopen(fileName, "rb");									// check file exists
+	pFileHandle = PHYSFS_openRead(fileName);									// check file exists
 	if (pFileHandle == NULL)
 	{
-		DBPRINTF(("NEThashFile: Failed\n"));
+		debug( LOG_WZ, "NEThashFile: Failed\n" );
 		return 0;															// failed
 	}
 
 	// multibyte/buff version
-	while(fread(&inBuff, sizeof(inBuff), 1, pFileHandle) == 1)				// get number of droids in force
+	while(PHYSFS_read( pFileHandle, &inBuff, sizeof(inBuff), 1 ) == 1)				// get number of droids in force
 	{
 		for(c=0;c<2048 ;c+=4)
 		{	val = (UDWORD*)&inBuff[c];
@@ -73,10 +75,10 @@ UDWORD	NEThashFile(STRING *pFileName)
 	{
 		hashval = hashval ^ c;
 	}
-	fclose(pFileHandle);
 #endif
+	PHYSFS_close(pFileHandle);
 
-	DBPRINTF(("NEThashFile: Hash Complete :   *****  %u  ***** is todays magic number.\n",hashval));
+	debug( LOG_WZ, "NEThashFile: Hash Complete :   *****  %u  ***** is todays magic number.\n",hashval );
 //	DBERROR(("%d",hashval));
 
 	return hashval;

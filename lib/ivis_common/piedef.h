@@ -187,7 +187,6 @@ extern void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void*
 extern void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture* texPage, int pieFlag, int pieFlagData);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
-extern int pie_Num3dfxBuffersPending( void );
 
 extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
 extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);

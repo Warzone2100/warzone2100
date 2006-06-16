@@ -1,3 +1,6 @@
+// FIXME Is this whole stuff unused???
+// MSVC says so...
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,6 +8,8 @@
 #include <dos.h>
 #include <io.h>
 #endif
+
+#include <physfs.h>
 
 #include "fbf.h"
 #include "ivispatch.h"
@@ -22,7 +27,7 @@ static struct {
 	int8 	*buffer;
 	int8	*b;
 	int 	n;
-	FILE 	*fp;
+	PHYSFS_file 	*fp;
 	int 	buffersize;
 } fbf[MAXBUFFERS];
 
@@ -63,7 +68,7 @@ static int _fbf_getslot(void)
 int iV_FileOpen(STRING *fname, int mode, int buffersize)
 {
 	int s;
-	FILE *fp;
+	PHYSFS_file *fp;
 
 	if ((s = _fbf_getslot()) == -1) {
 		return (iV_FBF_TOOMANYOPEN);
@@ -71,12 +76,12 @@ int iV_FileOpen(STRING *fname, int mode, int buffersize)
 
 	switch (mode) {
 		case iV_FBF_MODE_R:
-			if ((fp = fopen(fname,"rb")) == NULL)
+			if ((fp = PHYSFS_openRead(fname)) == NULL)
 				return (iV_FBF_OPENFAILED);
 			break;
 
 		case iV_FBF_MODE_W:
-			if ((fp = fopen(fname,"wb")) == NULL)
+			if ((fp = PHYSFS_openWrite(fname)) == NULL)
 				return (iV_FBF_OPENFAILED);
 			break;
 
@@ -89,7 +94,7 @@ int iV_FileOpen(STRING *fname, int mode, int buffersize)
 	}
 
 	if ((fbf[s].buffer = ((int8 *) iV_HeapAlloc(buffersize))) == NULL) {
-		fclose(fp);
+		PHYSFS_close(fp);
 		return (iV_FBF_OUTOFMEMORY);
 	}
 
@@ -116,7 +121,7 @@ int iV_FileOpen(STRING *fname, int mode, int buffersize)
 int iV_FileGet(int fd)
 {
 	if (fbf[fd].n == 0) {
-		fbf[fd].n = fread(fbf[fd].buffer,sizeof(int8),fbf[fd].buffersize,fbf[fd].fp);
+		fbf[fd].n = PHYSFS_read( fbf[fd].fp, fbf[fd].buffer, sizeof(int8), fbf[fd].buffersize );
 		fbf[fd].b = fbf[fd].buffer;
 	}
 
@@ -134,7 +139,7 @@ void iV_FileClose(int fd)
 {
 	if (fbf[fd].open) {
 		if ((fbf[fd].mode == iV_FBF_MODE_W) && (fbf[fd].n > 0)) {
-			fwrite(fbf[fd].buffer,sizeof(int8),fbf[fd].n,fbf[fd].fp);
+			PHYSFS_write( fbf[fd].fp, fbf[fd].buffer, sizeof(int8), fbf[fd].n );
 		}
 
 		if (fbf[fd].buffer) {
@@ -143,7 +148,7 @@ void iV_FileClose(int fd)
 		}
 
 		if (fbf[fd].fp) {
-			fclose(fbf[fd].fp);
+			PHYSFS_close( fbf[fd].fp );
 		}
 
 		fbf[fd].open = 0;
@@ -165,8 +170,7 @@ int iV_FilePut(int fd, int8 c)
 	int i = 1;
 
 	if (fbf[fd].n == fbf[fd].buffersize) {
-		i = fwrite(fbf[fd].buffer, sizeof(int8), fbf[fd].buffersize,
-		           fbf[fd].fp);
+		i = PHYSFS_write( fbf[fd].fp, fbf[fd].buffer, sizeof(int8), fbf[fd].buffersize );
 		fbf[fd].n = 0;
 		fbf[fd].b = fbf[fd].buffer;
 	}
@@ -190,9 +194,16 @@ int iV_FilePut(int fd, int8 c)
 //******
 int iV_FileSeek(int fd, int where, int seek)
 {
+	char nullbuffer[1];
 	fbf[fd].n = 0;
 
-	return (fseek(fbf[fd].fp,where,seek));
+	if( seek == iV_FBF_SEEK_SET )
+		return ( PHYSFS_seek( fbf[fd].fp, where ) );
+	else
+	{
+		while( PHYSFS_read( fbf[fd].fp, nullbuffer, 1, 1 ) );
+		return ( PHYSFS_seek( fbf[fd].fp, PHYSFS_tell( fbf[fd].fp ) - where ) );
+	}
 }
 
 //*************************************************************************
@@ -206,18 +217,19 @@ int iV_FileSeek(int fd, int where, int seek)
 //******
 int32 iV_FileSizeOpen(int fd)
 {
-	int32 pos, size;
-	FILE *fp;
+	PHYSFS_sint64 pos, size;
+	PHYSFS_file *fp;
+	char nullbuffer[1];
 
 	size = -1;
 
 	if (fbf[fd].open) {
 		fp = fbf[fd].fp;
 		if (fp) {
-			pos = ftell(fp);
-			fseek(fp,0,SEEK_END);
-			size = ftell(fp);
-			fseek(fp,pos,SEEK_SET);
+			pos = PHYSFS_tell(fp);
+			while( PHYSFS_read( fbf[fd].fp, nullbuffer, 1, 1 ) );
+			size = PHYSFS_tell(fp);
+			PHYSFS_seek(fp,pos);
 		}
 	}
 
@@ -261,15 +273,15 @@ int32 iV_FileSize(STRING *filename)
 //******
 iBool iV_FileSave(STRING *filename, uint8 *data, int32 size)
 {
-	FILE *fp;
+	PHYSFS_file *fp;
 
-	if ((fp = fopen(filename,"wb")) == NULL) {
+	if ((fp = PHYSFS_openWrite(filename)) == NULL) {
 		return FALSE;
 	}
 
-	fwrite(data,sizeof(uint8),size,fp);
+	PHYSFS_write( fp, data, sizeof(uint8), size );
 
-	fclose(fp);
+	PHYSFS_close(fp);
 
 	return TRUE;
 }
@@ -284,17 +296,17 @@ iBool iV_FileSave(STRING *filename, uint8 *data, int32 size)
 //******
 iBool iV_FileLoad(STRING *filename, uint8 *data)
 {
-	FILE *fp;
+	PHYSFS_file *fp;
 	int32 size;
 
 	size = iV_FileSize(filename);
 
-	if ((fp = fopen(filename,"rb")) == NULL) {
+	if ((fp = PHYSFS_openRead(filename)) == NULL) {
 		return FALSE;
 	}
 
-	if ((int32)fread(data,sizeof(uint8),size,fp) != size) {
-		fclose(fp);
+	if ((int32)PHYSFS_read(fp, data, sizeof(uint8), size) != size) {
+		PHYSFS_close(fp);
 		return FALSE;
 	}
 

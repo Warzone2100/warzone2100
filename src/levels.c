@@ -128,7 +128,7 @@ void levError(STRING *pError)
 #ifdef DEBUG
 	ASSERT((FALSE, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText));
 #else
-	DBERROR(("Level File parse error:\n%s at line %d text %s\n", pError, line, pText));
+	debug( LOG_ERROR, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
 #endif
 }
 
@@ -673,7 +673,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	if (((psNewLevel->psChange != NULL) && (psCurrLevel != NULL)) OR bCamChangeSaveGame)
 	{
         //store the level name
-		DBP0(("levLoadData: Found CAMCHANGE dataset\n"));
+		debug( LOG_WZ, "levLoadData: Found CAMCHANGE dataset\n" );
         psChangeLevel = psNewLevel;
 		psNewLevel = psNewLevel->psChange;
 	}
@@ -681,7 +681,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	// ensure the correct dataset is loaded
 	if (psNewLevel->type == LDS_CAMPAIGN)
 	{
-		DBERROR(("levLoadData: Cannot load a campaign dataset (%s)", psNewLevel->pName));
+		debug( LOG_ERROR, "levLoadData: Cannot load a campaign dataset (%s)", psNewLevel->pName );
 		return FALSE;
 	}
 	else
@@ -693,7 +693,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 				(psCurrLevel->type >= LDS_NONE && psNewLevel->type  < LDS_NONE))
 			{
 				// there is a dataset loaded but it isn't the correct one
-				DBP0(("levLoadData: Incorrect base dataset loaded - levReleaseAll()\n"));
+				debug( LOG_WZ, "levLoadData: Incorrect base dataset loaded - levReleaseAll()\n" );
 				levReleaseAll();	// this sets psCurrLevel to NULL
 			}
 		}
@@ -716,7 +716,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 		}
 	}
 
-	loadLevels(psNewLevel->dataDir);
+	loadMods(psNewLevel->dataDir);
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)

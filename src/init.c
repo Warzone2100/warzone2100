@@ -102,6 +102,8 @@
 #include "gateway.h"
 #include "lighting.h"
 
+#include "modding.h"
+
 extern char UserMusicPath[];
 
 extern void statsInitVars(void);
@@ -113,6 +115,8 @@ extern void radarInitVars(void);
 extern void	initMiscVars( void );
 
 extern char datadir[];
+extern char * campaign_mods[];
+extern char * multiplay_mods[];
 
 
  // the sizes for the game block heap
@@ -721,53 +725,17 @@ BOOL InitialiseGlobals(void)
 }
 
 
-void empty_search_path()
-{
-	char** search_path = PHYSFS_getSearchPath();
-	char** i;
-
-	for (i = search_path; *i != NULL; ++i) {
-		PHYSFS_removeFromSearchPath(*i);
-	}
-	PHYSFS_freeList(search_path);
-}
-
-char** save_search_path()
-{
-	char** search_path = PHYSFS_getSearchPath();
-	char** i;
-
-	for (i = search_path; *i != NULL; ++i) {
-		PHYSFS_removeFromSearchPath(*i);
-	}
-
-	return search_path;
-}
-
-void restore_search_path(char** search_path)
-{
-	char** i;
-
-	// empty search path
-	empty_search_path();
-
-	// restore search path
-	for (i = search_path; *i != NULL; ++i) {
-		PHYSFS_addToSearchPath(*i, 1);
-	}
-	PHYSFS_freeList(search_path);
-}
-
 BOOL loadLevFile(const char* filename, int datadir) {
 	char *pBuffer;
 	UDWORD size;
 
 	if (   !PHYSFS_exists(filename)
 	    || !loadFile(filename, &pBuffer, &size)) {
+		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
 		return FALSE; // only in NDEBUG case
 	}
 	if (!levParse(pBuffer, size, datadir)) {
-		debug(LOG_ERROR, "loadLevFile: gamedesc.lev parse error");
+		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
 		return FALSE;
 	}
 	FREE(pBuffer);
@@ -775,237 +743,75 @@ BOOL loadLevFile(const char* filename, int datadir) {
 	return TRUE;
 }
 
-struct data_dir_t {
-	char*	name;
-	int	depend;
-};
 
-static struct data_dir_t*	data_dirs = NULL;
-static int			nb_data_dirs = 0;
-static int			data_dirs_size = 0;
-static int			global_mod_dir_campaign = -1;
-static int			global_mod_dir_multiplayer = -1;
-static int			campaign_data_dir = -1;
-static int			multiplayer_data_dir = -1;
-static char*			global_mod = NULL;
-static char*			campaign_mod = NULL;
-static char*			multiplayer_mod = NULL;
+BOOL loadMods( int mode )
+{
+	static int current_mode = MOD_NONE;
 
-BOOL register_mod(int dir, const char* type, const char* name) {
-	char path[MAX_PATH];
-
-	if (dir < 0) {
-		return FALSE;
-	}
-
-	if (data_dirs[dir].name != NULL) {
-		free(data_dirs[dir].name);
-	}
-
-	printf("Registering %s mod %s in slot %i\n", type, name, dir);
-
-	snprintf(path, MAX_PATH, "%s%smods%s%s%s%s",
-				  datadir,
-				    PHYSFS_getDirSeparator(),
-					  PHYSFS_getDirSeparator(),
-					    type,
-					      PHYSFS_getDirSeparator(),
-						name);
-	data_dirs[dir].name = strdup(path);
-
-	return TRUE;
-}
-
-BOOL loadLevels(int _index) {
-	static int current_index = -1;
-	int index;
-
-	switch (_index) {
-		case DIR_CAMPAIGN:
-			index = campaign_data_dir;
-			break;
-		case DIR_MULTIPLAYER:
-			index = multiplayer_data_dir;
-			break;
-		case DIR_RELOAD:
-			current_index = -1;
-			// fall into...
-		default:
-			index = _index;
-			break;
-	}
-
-	if (index < 0 || index >= nb_data_dirs) {
-		printf("Bad level dir %i\n", index);
-		return FALSE;
-	}
-
-	if (index != current_index) {
-		int i = index;
-
-		empty_search_path();
-		PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), 1);
-		while (i >= 0 && i < nb_data_dirs) {
-			if (data_dirs[i].name != NULL) {
-				PHYSFS_addToSearchPath(data_dirs[i].name, 1);
-			}
-			i = data_dirs[i].depend;
-		}
-		current_index = index;
-
+	if ( mode != current_mode )
+	{
+		current_mode = mode;
+		switch ( mode )
 		{
-			char** search_path = PHYSFS_getSearchPath();
-			char** i;
+			case MOD_NONE:
+				debug( LOG_WZ, "Removing all mods" );
+				removeSubdirs( PHYSFS_getWriteDir(), "mods/multiplay", multiplay_mods );
+				removeSubdirs( PHYSFS_getBaseDir(), "mods/multiplay", multiplay_mods );
+				removeSubdirs( PHYSFS_getWriteDir(), "mods/campaign", campaign_mods );
+				removeSubdirs( PHYSFS_getBaseDir(), "mods/campaign", campaign_mods );
+				break;
+			case MOD_CAMPAIGN:
+				debug( LOG_WZ, "Switching to campaign mods" );
 
-			fprintf(stderr, "Updated path:\n");
-			for (i = search_path; *i != NULL; ++i) {
-				fprintf(stderr, "%s\n", *i);
-			}
-			PHYSFS_freeList(search_path);
+				// Throw multiplay only mods out...
+				removeSubdirs( PHYSFS_getWriteDir(), "mods/multiplay", multiplay_mods );
+				removeSubdirs( PHYSFS_getBaseDir(), "mods/multiplay", multiplay_mods );
+
+				// Pull campaign only mods in...
+				addSubdirs( PHYSFS_getWriteDir(), "mods/campaign", PHYSFS_PREPEND, campaign_mods );
+				addSubdirs( PHYSFS_getBaseDir(), "mods/campaign", PHYSFS_PREPEND, campaign_mods );
+				break;
+			case MOD_MULTIPLAY:
+				debug( LOG_WZ, "Switching to multiplay mode" );
+
+				// Throw campaign only mods out...
+				removeSubdirs( PHYSFS_getWriteDir(), "mods/campaign", campaign_mods );
+				removeSubdirs( PHYSFS_getBaseDir(), "mods/campaign", campaign_mods );
+
+				// Pull multiplay only mods in...
+				addSubdirs( PHYSFS_getWriteDir(), "mods/multiplay", PHYSFS_PREPEND, multiplay_mods );
+				addSubdirs( PHYSFS_getBaseDir(), "mods/multiplay", PHYSFS_PREPEND, multiplay_mods );
+				break;
+			default:
+				debug( LOG_ERROR, "loadMods: Can't switch to unknown mode %i", mode );
+				break;
 		}
+		printSearchPath();
 	}
-
 	return TRUE;
 }
 
-void set_global_mod(const char* name) {
-	if (global_mod != NULL) {
-		free(global_mod);
-	}
-	if (name != NULL) {
-		global_mod = strdup(name);
-		register_mod(global_mod_dir_campaign, "global", global_mod);
-		register_mod(global_mod_dir_multiplayer, "global", global_mod);
-	} else {
-		global_mod = NULL;
-	}
-	printf("setting global mod %s\n", global_mod);
-	loadLevels(DIR_RELOAD);
-}
-
-void set_campaign_mod(const char* name) {
-	if (campaign_mod != NULL) {
-		free(campaign_mod);
-	}
-	if (name != NULL) {
-		campaign_mod = strdup(name);
-		register_mod(campaign_data_dir, "campaign", campaign_mod);
-	} else {
-		campaign_mod = NULL;
-	}
-	printf("setting campaign mod %s\n", campaign_mod);
-	loadLevels(DIR_RELOAD);
-}
-
-void set_multiplayer_mod(const char* name) {
-	if (multiplayer_mod != NULL) {
-		free(multiplayer_mod);
-	}
-	if (name == NULL) {
-		multiplayer_mod = strdup(name);
-		register_mod(multiplayer_data_dir, "multiplayer", multiplayer_mod);
-	} else {
-		multiplayer_mod = NULL;
-	}
-	loadLevels(DIR_RELOAD);
-}
-
-void init_data_directory_list() {
-	nb_data_dirs = 0;
-}
-
-int declare_data_directory(const char* name, int depend) {
-	if (data_dirs_size <= nb_data_dirs) {
-		if (data_dirs_size == 0) {
-			data_dirs_size = 4;
-			data_dirs = (struct data_dir_t*)malloc(data_dirs_size*sizeof(struct data_dir_t));
-			memset( data_dirs, 0, data_dirs_size*sizeof(struct data_dir_t) ); // Initialize new data_dirs
-		} else {
-			unsigned int old_size = data_dirs_size;
-			data_dirs_size <<= 1;
-			data_dirs = (struct data_dir_t*)realloc(data_dirs, data_dirs_size*sizeof(struct data_dir_t));
-			memset( &data_dirs[old_size], 0, (data_dirs_size-old_size)*sizeof(struct data_dir_t) ); // Init new data_dirs
-		}
-	}
-
-	data_dirs[nb_data_dirs].name = (name == NULL) ? NULL : strdup(name);
-	data_dirs[nb_data_dirs].depend = depend;
-	return nb_data_dirs++;
-}
-
-#define MAP_DIR "maps"
 
 BOOL buildMapList()
 {
-	char** search_path = save_search_path();
-	int depend;
+	char ** filelist, ** file;
+	size_t len;
 
-	init_data_directory_list();
-
-	// load the original gamedesc.lev
-	PHYSFS_addToSearchPath(datadir, 1);
-	depend = declare_data_directory(datadir, -1);
-	global_mod_dir_campaign = declare_data_directory(NULL, depend);
-	register_mod(global_mod_dir_campaign, "global", global_mod);
-	campaign_data_dir = declare_data_directory(NULL, global_mod_dir_campaign);
-	register_mod(campaign_data_dir, "campaign", campaign_mod);
-	if (!loadLevFile("gamedesc.lev", campaign_data_dir)) {
-		restore_search_path(search_path);
-		return FALSE; // only in NDEBUG case
+	if ( !loadLevFile( "gamedesc.lev", MOD_CAMPAIGN ) ) {
+		return FALSE;
 	}
-	PHYSFS_removeFromSearchPath(datadir);
+	loadLevFile( "addon.lev", MOD_MULTIPLAY );
 
-	// load maps from patches
-	{
-		char path[MAX_PATH];
-
-		snprintf(path, MAX_PATH, "%s%smp", datadir, PHYSFS_getDirSeparator());
-		depend = declare_data_directory(path, depend);
-		global_mod_dir_multiplayer = depend = declare_data_directory(NULL, depend);
-		register_mod(global_mod_dir_multiplayer, "global", global_mod);
-		multiplayer_data_dir = depend = declare_data_directory(NULL, depend);
-		register_mod(multiplayer_data_dir, "multiplayer", multiplayer_mod);
-		PHYSFS_addToSearchPath(path, 1);
-		loadLevFile("addon.lev", depend);
-		PHYSFS_removeFromSearchPath(path);
-	}
-
-	// load maps from directories in maps directory
-	{
-		char** map_dirs;
-		char** i;
-		char path[MAX_PATH];
-
-		PHYSFS_addToSearchPath(datadir, 1);
-		map_dirs = PHYSFS_enumerateFiles(MAP_DIR);
-		PHYSFS_removeFromSearchPath(datadir);
-
-		for (i = map_dirs; *i != NULL; ++i) {
-			int dir_index = -1;
-			char** filelist;
-			char** j;
-
-			snprintf(path, MAX_PATH, "%s%s"MAP_DIR"%s%s", datadir, PHYSFS_getDirSeparator(), PHYSFS_getDirSeparator(), *i);
-			PHYSFS_addToSearchPath(path, 1);
-			filelist = PHYSFS_enumerateFiles("");
-			for (j = filelist; *j != NULL; ++j) {
-				unsigned int l = strlen(*j);
-
-				if (   (l >= 9)
-				    && !strcasecmp((char*)(*j+l-9), "addon.lev")) {
-					if (dir_index == -1) {
-						dir_index = declare_data_directory(path, depend);
-					}
-					loadLevFile(*j, dir_index);
-				}
-			}
-			PHYSFS_freeList( filelist );
-			PHYSFS_removeFromSearchPath(path);
+	filelist = PHYSFS_enumerateFiles("");
+	for ( file = filelist; *file != NULL; ++file ) {
+		len = strlen( *file );
+		if ( len > 10 // Do not add addon.lev again
+				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
+			debug( LOG_WZ, "Loading lev file: %s\n", *file );
+			loadLevFile( *file, MOD_MULTIPLAY );
 		}
-		PHYSFS_freeList( map_dirs );
 	}
-
-	restore_search_path(search_path);
+	PHYSFS_freeList( filelist );
 	return TRUE;
 }
 
@@ -1043,7 +849,7 @@ BOOL systemInitialise(void)
 
 	buildMapList();
 
-	loadLevels(DIR_CAMPAIGN);
+	//loadLevels(DIR_CAMPAIGN);
 
 	// Initialize render engine
 	war_SetFog(FALSE);
@@ -1138,7 +944,7 @@ BOOL systemInitialise(void)
 //
 BOOL systemShutdown(void)
 {
-	unsigned int i;
+//	unsigned int i;
 #ifdef ARROWS
 	arrowShutDown();
 #endif
@@ -1149,11 +955,13 @@ BOOL systemShutdown(void)
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
 
+/*
 	for( i = 0; i < data_dirs_size; i++ )
 	{
 		free( data_dirs[i].name );
 	}
 	free( data_dirs );
+*/
 
 	// release the block heaps
 	BLOCK_DESTROY(psGameHeap);
@@ -1816,9 +1624,9 @@ void SetAllTilesVisible(void)
 {
 	// Make all the tiles visible
 	MAPTILE *psTile = psMapTiles;
-	int i;
+	UDWORD i;
 
-	for(i=0; i<mapWidth*mapHeight; i++) {
+	for( i=0; i < mapWidth*mapHeight; i++ ) {
 		SET_TILE_VISIBLE(selectedPlayer,psTile);
 		psTile++;
 	}

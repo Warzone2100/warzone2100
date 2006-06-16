@@ -41,7 +41,6 @@ extern void pie_DrawBoundingDisc(iIMDShape *shape, int pieFlag);
 extern void pie_Blit(SDWORD texPage, SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 extern void pie_Sky(SDWORD texPage, PIEVERTEX* aSky );
 extern void pie_Water(SDWORD texPage, SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, SDWORD height, SDWORD translucency);
-extern void pie_AddFogandMist(SDWORD depth, SDWORD height, PIELIGHT* pColour, PIELIGHT* pSpecular);
 extern void pie_InitMaths(void);
 extern UBYTE pie_ByteScale(UBYTE a, UBYTE b);
 extern void	pie_CornerBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour,

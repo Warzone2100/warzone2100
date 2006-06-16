@@ -34,6 +34,9 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
 extern char	datadir[MAX_PATH];
+extern char * global_mods[MAX_MODS];
+extern char * campaign_mods[MAX_MODS];
+extern char * multiplay_mods[MAX_MODS];
 
 // whether to play the intro video
 BOOL	clIntroVideo;
@@ -101,7 +104,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 			token = argv[++i];
 			if (token == NULL)
 			{
-				DBERROR( ("Unrecognised datadir\n") );
+				debug( LOG_ERROR, "Unrecognised datadir\n" );
 				return FALSE;
 			}
 			strncpy(datadir, token, sizeof(datadir));
@@ -124,7 +127,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 	char			cl2[255];
 	unsigned char		*pXor;
 	unsigned int		w, h;
-	int i;
+	int i = 0, j = 0;
 
 	// for cheating
 	sprintf(cl,"%s","VR^\\WZ^KVQXL\\^SSFH^XXZM");
@@ -155,28 +158,46 @@ BOOL ParseCommandLine(int argc, char** argv)
 			// find the file name
 			token = argv[++i];
 			if (token == NULL) {
-				DBERROR( ("Missing mod name?\n") );
+				debug( LOG_ERROR, "Missing mod name?\n" );
 				return FALSE;
 			}
-			set_global_mod(token);
+
+			for( j = 0; global_mods[j] != NULL && j < 100; j++ );
+			if( global_mods[j] != NULL )
+				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
+			global_mods[j] = token;
+
+			//set_global_mod(token);
 		}
 		else if (stricmp(tokenType, "-ca_mod") == 0) {
 			// find the file name
 			token = argv[++i];
 			if (token == NULL) {
-				DBERROR( ("Missing mod name?\n") );
+				debug( LOG_ERROR, "Missing mod name?\n" );
 				return FALSE;
 			}
-			set_campaign_mod(token);
+
+			for( j = 0; campaign_mods[j] != NULL && j < 100; j++ );
+			if( campaign_mods[j] != NULL )
+				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
+			campaign_mods[j] = token;
+
+			//set_campaign_mod(token);
 		}
 		else if (stricmp(tokenType, "-mp_mod") == 0) {
 			// find the file name
 			token = argv[++i];
 			if (token == NULL) {
-				DBERROR( ("Missing mod name?\n") );
+				debug( LOG_ERROR, "Missing mod name?\n" );
 				return FALSE;
 			}
-			set_multiplayer_mod(token);
+
+			for( j = 0; multiplay_mods[j] != NULL && j < 100; j++ );
+			if( multiplay_mods[j] != NULL )
+				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
+			multiplay_mods[j] = token;
+
+			//set_multiplayer_mod(token);
 		}
 		else if ( stricmp( tokenType, "-game" ) == 0 )
 		{

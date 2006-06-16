@@ -31,13 +31,10 @@ extern BOOL campaignReset(void);
 extern BOOL saveGameReset(void);
 
 BOOL buildMapList();
-BOOL loadLevels(int patchlevel);
-void set_global_mod(const char* name);
-void set_campaign_mod(const char* name);
-void set_multiplayer_mod(const char* name);
-#define DIR_CAMPAIGN (-2)
-#define DIR_MULTIPLAYER (-3)
-#define DIR_RELOAD (-4)
+BOOL loadMods(int mode);
+#define MOD_NONE 0
+#define MOD_CAMPAIGN 1
+#define MOD_MULTIPLAY 2
 
 // the block heap for the game data
 extern BLOCK_HEAP	*psGameHeap;

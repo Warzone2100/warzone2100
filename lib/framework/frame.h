@@ -15,6 +15,8 @@
 #include <windows.h>
 #endif
 
+#define MAX_MODS 100
+
 /* Linux specific stuff */
 #ifndef WIN32
 
@@ -55,7 +57,7 @@ FILE *unix_fopen(const char *filename, const char *mode);
 #include "block.h"
 #include "listmacs.h"
 
-#ifdef WIN32
+#ifdef _MSC_VER
 #include "win32fixes.h"
 #endif
 

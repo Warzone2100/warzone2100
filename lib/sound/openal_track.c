@@ -17,6 +17,8 @@
 #include <vorbis/vorbisfile.h>
 #endif
 
+#include <physfs.h>
+
 #include "tracklib.h"
 #include "audio.h"
 #define ATTENUATION_FACTOR	0.0003
@@ -359,16 +361,18 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 //
 BOOL sound_ReadTrackFromFile( TRACK *psTrack, signed char szFileName[] )
 {
-	FILE* f = fopen(szFileName, "r");
+	PHYSFS_file * f = PHYSFS_openRead(szFileName);
 	static char* buffer = NULL;
 	static unsigned int buffer_size = 0;
 	unsigned int size;
+	char seekbuf[1];
 
 	if (f == NULL) return FALSE;
 
-	fseek(f, 0, SEEK_END);
-	size = ftell(f);
-	fseek(f, 0, SEEK_SET);
+	// FIXME Ugly hack because PhysFS doesn't support reporting the filesize, nor seeking to the end
+	while( PHYSFS_read( f, seekbuf, 1, 1 ) );
+	size = PHYSFS_tell( f );
+	PHYSFS_seek( f, 0 );
 
 	if (size > buffer_size) {
 		if (buffer != NULL) free(buffer);
@@ -376,7 +380,7 @@ BOOL sound_ReadTrackFromFile( TRACK *psTrack, signed char szFileName[] )
 		buffer = (char*)malloc(buffer_size);
 	}
 
-	fread(buffer, 1, size, f);
+	PHYSFS_read(f, buffer, 1, size);
 
 	return sound_ReadTrackFromBuffer(psTrack, buffer, size);
 }

@@ -4,6 +4,8 @@
  * Functions for the display of the Escape Sequences
  *
  */
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/rendmode.h"
@@ -126,7 +128,6 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 	SDWORD	frameLag;
 	int	videoTime;
 	BOOL state = TRUE;
-	FILE	*pFileHandle;
 	DDPIXELFORMAT *pDDPixelFormat;
 
 	if (seqCommand == SEQUENCE_KILL)
@@ -161,17 +162,11 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 			strcat(aVideoName,sequenceName);
 
 			// check it exists. If not then try CD.
-			pFileHandle = fopen(aVideoName, "rb");
-			if (pFileHandle == NULL && bCDPath)
+			if ( !PHYSFS_exists( aVideoName ) && bCDPath)
 			{
 				ASSERT(((strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
 				strcpy(aVideoName,aCDPath);
 				strcat(aVideoName,sequenceName);
-			}
-			else
-			{
-				if(pFileHandle)		//should help avoid crashes since we are missing videos for now...
-				fclose(pFileHandle);
 			}
 		}
 		else if (bCDPath)
@@ -260,7 +255,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 	}
 	else if (frame < 0) //an ERROR
 	{
-		DBPRINTF(("VIDEO FRAME ERROR %d\n",frame));
+		debug( LOG_WZ, "VIDEO FRAME ERROR %d\n", frame );
 		state = FALSE;
 		seq_ShutDown();
 		bSeqPlaying = FALSE;
@@ -405,7 +400,6 @@ BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 //full screenvideo functions
 BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 {
-	FILE	*pFileHandle;
 	bHoldSeqForAudio = FALSE;
 
 	frameSkip = 1;
@@ -439,16 +433,11 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 		strcat(aVideoName,videoName);
 
 		// check it exists. If not then try CD.
-		pFileHandle = fopen(aVideoName, "rb");
-		if (pFileHandle == NULL && bCDPath)
+		if ( !PHYSFS_exists( aVideoName ) && bCDPath)
 		{
 			ASSERT(((strlen(videoName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
 			strcpy(aVideoName,aCDPath);
 			strcat(aVideoName,videoName);
-		}
-		else if (pFileHandle != NULL)
-		{
-			fclose(pFileHandle);
 		}
 	}
 	else if (bCDPath)

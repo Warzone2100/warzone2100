@@ -38,8 +38,8 @@ static char *readline(PHYSFS_file *f, char *linebuf, size_t len) {
 
 	for (i = 0; i < len-1; i++) {
 		if (PHYSFS_read(f, &c, 1, 1) != 1) {
-			DBERROR(("Error reading from sequence file: %s\n",
-				 PHYSFS_getLastError()));
+			debug( LOG_ERROR, "Error reading from sequence file: %s\n",
+				 PHYSFS_getLastError() );
 			break;
 		}
 		if (c == '\n' || !isprint(c))
@@ -48,6 +48,8 @@ static char *readline(PHYSFS_file *f, char *linebuf, size_t len) {
 	}
 
 	linebuf[i] = '\0';
+
+	return linebuf;
 }
 
 static int readint(PHYSFS_file *f, char *linebuf, size_t len) {
@@ -83,8 +85,8 @@ rpl_open(char* filename) {
 
 	f = PHYSFS_openRead(filename);
 	if (f == NULL) {
-		DBPRINTF(("Error reading %s: %s\n",
-			  filename, PHYSFS_getLastError()));
+		debug( LOG_ERROR, "Error reading %s: %s",
+			  filename, PHYSFS_getLastError() );
 		return NULL;
 	}
 
@@ -220,7 +222,7 @@ unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buff
 	unsigned total_audio_size = 0;
 	char* audio_buffer;
 	char* tmp;
-	FILE* out;
+	PHYSFS_file * out;
 
 	printf("Saving unknown sound stream to file\n");
 	for (i = 0; i < rpl->nb_chunks; ++i) {
@@ -236,9 +238,9 @@ unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buff
 		tmp += rpl->chunks[i].audio_size;
 	}
 
-	out = fopen("unknown_sound", "wb");
-	fwrite(audio_buffer, total_audio_size, 1, out);
-	fclose(out);
+	out = PHYSFS_openWrite("unknown_sound");
+	PHYSFS_write(out, audio_buffer, total_audio_size, 1);
+	PHYSFS_close(out);
 
 	free(audio_buffer);
 

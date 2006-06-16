@@ -5,7 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "physfs.h"
+#include <physfs.h>
 #include "ignorecase.h"
 
 /**
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 {
     int rc;
     char buf[128];
-    PHYSFS_File *f;
+    PHYSFS_file *f;
 
     if (!PHYSFS_init(argv[0]))
     {

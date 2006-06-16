@@ -157,88 +157,8 @@ void pie_TransColouredTriangle(PIEVERTEX *vrt, UDWORD rgb, UDWORD trans)
 	}
         glEnd();}
 
+
 /* ---------------------------------------------------------------------------------- */
-/* Returns number of buffers pending */
-int pie_Num3dfxBuffersPending( void )
-{
-	int retVal=0;
-
-	return(retVal);
-}
-/* ---------------------------------------------------------------------------------- */
-
-#define FOG_RED 00
-#define FOG_GREEN 00
-#define FOG_BLUE 80
-#define MIST_RED 00
-#define MIST_GREEN 80
-#define MIST_BLUE 00
-#define FOG_DEPTH 3000
-#define FOG_RATE 4
-#define MIST_HEIGHT 100
-#define SPECULAR_FOG_AND_MIST 0
-
-void pie_AddFogandMist(SDWORD depth, SDWORD height, PIELIGHT* pColour, PIELIGHT* pSpecular)
-{
-#if SPECULAR_FOG_AND_MIST
-	SDWORD fogLevel;//0 to 256
-	SDWORD mistLevel;//0 to 256
-	DWORD cRed,cGreen,cBlue;
-	DWORD sRed,sGreen,sBlue;
-
-	/// get colour components
-/*	cRed = pColour->r;
-	cGreen = pColour->g;
-	cBlue = pColour->b;
-*/
-	/// get specular components
-/*	sRed = pSpecular->r;
-	sGreen = pSpecular->g;
-	sBlue = pSpecular->b;
-*/
-	// fog level is gradual upto FOG_DEPTH then ramps up suddenly
-	if (depth < (FOG_DEPTH/2))
-	{
-		fogLevel = 256;
-	}
-	else if (depth < FOG_DEPTH)
-	{
-		depth -= (FOG_DEPTH/2);
-		fogLevel = 192 * depth/(FOG_DEPTH/2);
-	}
-	else
-	{
-		depth -= FOG_DEPTH;
-		fogLevel = 64 * depth/FOG_RATE;
-		fogLevel += 192;
-		if (fogLevel > 256)
-		{
-			fogLevel = 256;
-		}
-	}
-
-	pColour->a = fogLevel;
-/*
-	cRed = (cRed * (256 - fogLevel))>>8;
-	cGreen = (cGreen * (256 - fogLevel))>>8;
-	cBlue = (cBlue * (256 - fogLevel))>>8;
-
-	sRed += (FOG_RED * fogLevel)>>8;
-	sGreen += (FOG_GREEN * fogLevel)>>8;
-	sBlue += (FOG_BLUE * fogLevel)>>8;
-
-	// set colour components
-	pColour->r = cRed;
-	pColour->g = cGreen;
-	pColour->b = cBlue;
-	// set specular components
-	pSpecular->r = sRed;
-	pSpecular->g = sGreen;
-	pSpecular->b = sBlue;
-*/
-	// mist level is high upto MIST_HEIGHT then ramps up gently
-#endif
-}
 
 void pie_InitMaths(void)
 {

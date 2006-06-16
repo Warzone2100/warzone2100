@@ -1,3 +1,5 @@
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 
 #ifdef WZ_CDA
@@ -37,7 +39,7 @@ extern BOOL		openal_initialized;
 
 static BOOL		music_initialized;
 
-static FILE*		music_file = NULL;
+static PHYSFS_file*		music_file = NULL;
 
 enum {	WZ_NONE,
 	WZ_MP3,
@@ -182,8 +184,8 @@ void mp3_refill() {
 				memcpy(mp3_buffer, mp3_stream.next_frame, offset);
 			}
 
-			size = fread(mp3_buffer + offset, 1,
-				     MP3_BUFFER_SIZE - offset, music_file);
+			size = PHYSFS_read(music_file, mp3_buffer + offset, 1,
+				     MP3_BUFFER_SIZE - offset );
 
 			if (size <= 0) {
 				return;
@@ -262,7 +264,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 			mad_stream_finish(&mp3_stream);
 		}
 #endif
-		fclose(music_file);
+		PHYSFS_close(music_file);
 	}
 
 	music_file_format = WZ_NONE;
@@ -270,7 +272,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 #ifndef WZ_NOMP3
 	if (strncasecmp(filename+strlen(filename)-4, ".mp3", 4) == 0)
 	{
-		music_file = fopen(filename, "rb");
+		music_file = PHYSFS_openRead(filename);
 
 		if (music_file == NULL) {
 			return FALSE;
@@ -280,8 +282,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 		mad_frame_init(&mp3_frame);
 		mad_synth_init(&mp3_synth);
 
-		mp3_buffer_length = fread(mp3_buffer, 1,
-					  MP3_BUFFER_SIZE, music_file);
+		mp3_buffer_length = PHYSFS_read(music_file, mp3_buffer, MP3_BUFFER_SIZE, 1 );
 
 		mad_stream_buffer(&mp3_stream, mp3_buffer, mp3_buffer_length);
 
@@ -312,14 +313,14 @@ BOOL cdAudio_OpenTrack(char* filename) {
 #ifndef WZ_NOOGG
 	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
 	{
-		music_file = fopen(filename, "rb");
+		music_file = PHYSFS_openRead(filename);
 
 		if (music_file == NULL) {
 			return FALSE;
 		}
 
 		if (ov_open(music_file, &ogg_stream, NULL, 0) < 0) {
-			fclose(music_file);
+			PHYSFS_close(music_file);
 			music_file = NULL;
 			return FALSE;
 		}
@@ -356,7 +357,7 @@ BOOL cdAudio_CloseTrack() {
 			all--;
 		}
 
-		fclose(music_file);
+		PHYSFS_close(music_file);
 		music_file = NULL;
 		music_track = 0;
 	}
@@ -543,8 +544,7 @@ void cdAudio_SetVolume( SDWORD iVol )
 //
 void cdAudio_Update( void )
 {
-#ifdef WZ_CDA
-#else
+#ifndef WZ_CDA
 	if (   music_track != 0
 	    && music_volume != 0.0) {
 		int processed = 0;
