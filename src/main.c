@@ -210,7 +210,7 @@ static void initialize_PhysicsFS(void)
 // We need ParseCommandLine, before we can add any mods...
 void scanDataDirs( void )
 {
-	char tmpstr[MAX_PATH], prefix[MAX_PATH];
+	char tmpstr[MAX_PATH], prefix[MAX_PATH] = { '\0' };
 
 	// Command line supplied datadir
 	PHYSFS_addToSearchPath( datadir, PHYSFS_PREPEND );
