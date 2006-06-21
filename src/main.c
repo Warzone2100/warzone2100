@@ -192,6 +192,8 @@ static void initialize_PhysicsFS(void)
 
 	strcpy( tmpstr, PHYSFS_getUserDir() );
 	strcat( tmpstr, WZ_WRITEDIR );
+	PHYSFS_setWriteDir( PHYSFS_getUserDir() ); // Ugly workaround for PhysFS not creating the writedir as expected.
+	PHYSFS_mkDir( WZ_WRITEDIR ); // s.a.
 	if ( PHYSFS_setWriteDir( tmpstr ) == 0 ) {
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
 			tmpstr, PHYSFS_getLastError() );
