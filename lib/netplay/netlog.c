@@ -6,33 +6,36 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <physfs.h>
 
 // ////////////////////////////////////////////////////////////////////////
 // Logging for degug only
 // ////////////////////////////////////////////////////////////////////////
 
-static FILE	*pFileHandle;
+static PHYSFS_file	*pFileHandle;
 
 BOOL NETstartLogging()
 {
 	time_t aclock;
 	struct tm *newtime;
+	char buf[256];
 
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
-	pFileHandle = fopen("netplay.log", "w"); // open the file
+	pFileHandle = PHYSFS_openWrite( "netplay.log" ); // open the file
 	if (!pFileHandle)
 	{
 		return FALSE;
 	}
-	fprintf(pFileHandle,"NETPLAY log: %s\n",asctime( newtime ) );
+	sprintf( buf, "NETPLAY log: %s\n", asctime( newtime ) );
+	PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 	return TRUE;
 }
 
 BOOL NETstopLogging()
 {
-	if (fclose(pFileHandle) != 0)
+	if (PHYSFS_close(pFileHandle) != 0)
 	{
 		return FALSE;
 	}
@@ -46,6 +49,7 @@ BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 	UDWORD frame= frameGetFrameNumber();
 	time_t aclock;
 	struct tm *newtime;
+	char buf[256];
 
 #ifndef MASSIVELOGS
 	if(a ==9 || a==10)
@@ -61,94 +65,123 @@ BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
 	if(frame != lastframe)
 	{
 		lastframe = frame;
-		fprintf(pFileHandle,"-----------------------------------------------------------\n");
+		sprintf( buf, "-----------------------------------------------------------\n" );
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 	}
 
 	switch(a)		// replace common msgs with txt descriptions
 	{
 	case 1:
-		fprintf(pFileHandle,"%s \t: NET_DROIDINFO  \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_DROIDINFO  \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 2:
-		fprintf(pFileHandle,"%s \t: NET_DROIDDEST  \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_DROIDDEST  \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 3:
-		fprintf(pFileHandle,"%s \t: NET_DROIDMOVE  \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_DROIDMOVE  \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 4:
-		fprintf(pFileHandle,"%s \t: NET_GROUPORDER  \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_GROUPORDER  \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 8:
-		fprintf(pFileHandle,"%s \t: NET_PING \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_PING \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 9:
-		fprintf(pFileHandle,"%s \t: NET_CHECK_DROID \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_CHECK_DROID \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 10:
-		fprintf(pFileHandle,"%s \t: NET_CHECK_STRUCT \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_CHECK_STRUCT \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 11:
-		fprintf(pFileHandle,"%s \t: NET_CHECK_POWER \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_CHECK_POWER \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 13:
-		fprintf(pFileHandle,"%s \t: NET_BUILD \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_BUILD \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 15:
-		fprintf(pFileHandle,"%s \t: NET_BUILDFINISHED \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_BUILDFINISHED \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 17:
-		fprintf(pFileHandle,"%s \t: NET_TXTMSG \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_TXTMSG \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 18:
-		fprintf(pFileHandle,"************************************************************\n");
-		fprintf(pFileHandle,"%s \t: NET_LEAVING \t:%d\t\t%s",str,b,asctime( newtime ));
-		fprintf(pFileHandle,"************************************************************\n");
+		sprintf( buf, "************************************************************\n");
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
+		sprintf( buf, "%s \t: NET_LEAVING \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
+		sprintf( buf, "************************************************************\n");
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 19:
-		fprintf(pFileHandle,"%s \t: NET_REQUESTDROID \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_REQUESTDROID \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 23:
-		fprintf(pFileHandle,"%s \t: NET_WHOLEDROID \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_WHOLEDROID \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 22:
-		fprintf(pFileHandle,"%s \t: NET_STRUCT (Whole) \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_STRUCT (Whole) \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 25:
-		fprintf(pFileHandle,"%s \t: NET_PLAYERRESPONDING \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_PLAYERRESPONDING \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 26:
-		fprintf(pFileHandle,"%s \t: NET_OPTIONS \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_OPTIONS \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 27:
-		fprintf(pFileHandle,"%s \t: NET_WAYPOINT \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_WAYPOINT \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 28:
-		fprintf(pFileHandle,"%s \t: NET_SECONDARY \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_SECONDARY \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 29:
-		fprintf(pFileHandle,"%s \t: NET_FIREUP \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_FIREUP \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 34:
-		fprintf(pFileHandle,"%s \t: NET_ARTIFACTS \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_ARTIFACTS \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 36:
-		fprintf(pFileHandle,"%s \t: NET_SCORESUBMIT \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_SCORESUBMIT \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 37:
-		fprintf(pFileHandle,"%s \t: NET_DESTROYXTRA \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_DESTROYXTRA \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 38:
-		fprintf(pFileHandle,"%s \t: NET_VTOL \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_VTOL \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	case 39:
-		fprintf(pFileHandle,"%s \t: NET_VTOLREARM \t:%d\t\t%s",str,b,asctime( newtime ));
+		sprintf( buf, "%s \t: NET_VTOLREARM \t:%d\t\t%s",str,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 
 	default:
-		fprintf(pFileHandle,"%s \t:%d \t\t\t:%d\t\t%s",str,a,b,asctime( newtime ));
+		sprintf( buf, "%s \t:%d \t\t\t:%d\t\t%s",str,a,b,asctime( newtime ));
+		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 		break;
 	}
-	fflush(pFileHandle);
+	PHYSFS_flush(pFileHandle);
 	return TRUE;
 }
 
