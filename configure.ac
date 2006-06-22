@@ -44,13 +44,19 @@ AC_ARG_ENABLE(make_data,
 [  --disable-make-data     do not recurse make into data directories
                           (ok to disable unless you will 'make install')],
 [ make_data="${enableval}" ], [make_data=yes])
-AM_CONDITIONAL(MAKE_DATA, test x$make_data = xtrue)
+AC_MSG_CHECKING([whether to make data])
+AM_CONDITIONAL(MAKE_DATA, [[[[ "x${make_data}" = "xyes" ]]]] )
+if [[ "x${make_data}" = "xyes" ]] ; then
+	AC_MSG_RESULT([yes])
+else
+	AC_MSG_RESULT([no])
+fi
 
 
 AC_ARG_ENABLE(debug,
 [  --enable-debug          run in debug mode],
 [ debug=$enableval ], [ debug=no ])
-AC_MSG_CHECKING([debug mode])
+AC_MSG_CHECKING([whether to compile in debug mode])
 if [[ "x${debug}" = "xyes" ]] ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
   WZ_CFLAGS="${WZ_CFLAGS} -O0 -g3 -Wall"
@@ -138,7 +144,7 @@ AC_PATH_SDLNET([
   AC_MSG_ERROR([SDL_net is not installed]))
 
 
-if test "x$opengl" != xno; then
+if [[ "x$opengl" != "xno" ]] ; then
   AC_CHECK_HEADER(GL/gl.h, GL_h=yes, GL_h=no)
   AC_CHECK_HEADER(GL/glu.h, GLU_h=yes, GLU_h=no)
   AC_CHECK_LIB(GL, main, GLLIB=GL GL_lib=yes,
