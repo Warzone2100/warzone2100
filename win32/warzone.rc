@@ -1,0 +1,28 @@
+1 VERSIONINFO
+FILEVERSION 2,0,3,0
+PRODUCTVERSION 2,0,3,0
+FILEOS 0x40004
+FILETYPE 0x2
+{
+	BLOCK "StringFileInfo"
+	{
+		BLOCK "040904B0"
+		{
+			VALUE "CompanyName", "Warzone Project"
+			VALUE "FileDescription", "Warzone 2100 GPL"
+			VALUE "FileVersion", "2, 0, 3, 0"
+			VALUE "InternalName", "Warzone"
+			VALUE "LegalCopyright", "Copyright © 2006 Warzone Project"
+			VALUE "OriginalFilename", "warzone.exe"
+			VALUE "ProductName", "Warzone 2100 GPL"
+			VALUE "ProductVersion", "2, 0, 3, 0"
+		}
+	}
+
+	BLOCK "VarFileInfo"
+	{
+		VALUE "Translation", 0x0409 0x04B0
+	}
+}
+
+2 ICON "warzone2100.ico"

@@ -1,6 +1,5 @@
-Easy bugs to fix:
-
-bug #5097: CPU Hog
+- Add a shadow toggle to src/clparse.c
+- bug #5097: CPU Hog
 	Reduce the amount of main-loop-runs to a reasonable number (eg 50),
 	so we don't eat up the whole CPU time.
 	Advanced code could be taken from the SDL_gfx project (http://www.ferzkopp.net/Software/SDL_gfx-2.0/).
