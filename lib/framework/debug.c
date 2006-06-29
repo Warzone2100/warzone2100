@@ -17,6 +17,7 @@
 
 #define MAX_FILENAME_SIZE 200
 #define MAX_LEN_LOG_LINE 512
+#define MAX_LEN_DEBUG_PART 12
 FILE *logfile = NULL;
 static log_callback_fn callback;
 static BOOL enabled_debug_parts[LOG_LAST];
@@ -181,7 +182,7 @@ void debug(enum code_part part, const char *str, ...)
 {
 	va_list ap;
 	static char bufbuf[2][MAX_LEN_LOG_LINE];
-	char buf[MAX_LEN_LOG_LINE];
+	char buf[MAX_LEN_LOG_LINE+MAX_LEN_DEBUG_PART];
 	static BOOL bufbuf1 = FALSE;
 	static unsigned int repeated = 0; /* times current message repeated */
 	static unsigned int next = 2;     /* next total to print update */
@@ -193,8 +194,10 @@ void debug(enum code_part part, const char *str, ...)
 	}
 
 	va_start(ap, str);
-
-	vsnprintf(bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE, str, ap);
+	// FIXME This is buggy. Eg the OpenAL extensions string is corrupted after about 160 chars.
+	// That does not happen if vsprintf() is used instead. But then then string is corrupted after it's end.
+	vsnprintf( bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE, str, ap );
+	va_end(ap);
 
 	if (0 == strncmp(bufbuf[0], bufbuf[1], MAX_LEN_LOG_LINE - 1)) {
 		repeated++;
@@ -203,24 +206,23 @@ void debug(enum code_part part, const char *str, ...)
 			         repeated - prev);
 			if (repeated > 2) {
 				cat_snprintf(buf, sizeof(buf), " (total %d repeats)", 
-				             repeated);
+					repeated);
 			}
 			debug_out(buf);
 			prev = repeated;
 			next *= 2;
-			}
-		} else {
+		}
+	} else {
 		if (repeated > 0 && repeated != prev) {
 			if (repeated == 1) {
 				/* just repeat the previous message: */
 				debug_out(bufbuf1 ? bufbuf[0] : bufbuf[1]);
 			} else {
-				snprintf(buf, sizeof(buf),
-					 "last message repeated %d times", 
+				snprintf(buf, sizeof(buf), "last message repeated %d times", 
 				         repeated - prev);
 				if (repeated > 2) {
-					cat_snprintf(buf, sizeof(buf),
-					" (total %d repeats)", repeated);
+					cat_snprintf(buf, sizeof(buf), " (total %d repeats)",
+						repeated);
 				}
 				debug_out(buf);
 			}
@@ -228,9 +230,11 @@ void debug(enum code_part part, const char *str, ...)
 		repeated = 0;
 		next = 2;
 		prev = 0;
-		debug_out(bufbuf1 ? bufbuf[1] : bufbuf[0]);
+		sprintf( buf, "%s:", code_part_names[part] );
+		memset( buf + 1 + strlen( code_part_names[part] ), ' ', MAX_LEN_DEBUG_PART - 1 - strlen( code_part_names[part] ) );
+		memcpy( buf + MAX_LEN_DEBUG_PART, bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE );
+		debug_out( buf );
 	}
 	bufbuf1 = !bufbuf1;
 	fflush(logfile);
-	va_end(ap);
 }

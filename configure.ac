@@ -1,13 +1,11 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.56)
+AC_PREREQ(2.60)
 AC_INIT([warzone],[2.0.3],[http://gna.org/projects/warzone])
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
 AC_CONFIG_HEADER([config.h])
-AC_CANONICAL_TARGET
 
 AM_INIT_AUTOMAKE
-AM_MAINTAINER_MODE
 
 # Checks for programs.
 AC_PROG_CC
@@ -15,38 +13,16 @@ AC_PROG_RANLIB
 AC_PROG_YACC
 AC_PROG_LEX
 
-# Checks for libraries.
 
-# Checks for header files.
-#AC_HEADER_DIRENT
-#AC_HEADER_STDC
-#AC_HEADER_STDBOOL
-#AC_HEADER_TIME
-#AC_CHECK_HEADERS([limits.h malloc.h memory.h stddef.h stdint.h stdlib.h string.h unistd.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-#AC_C_CONST
-#AC_C_INLINE
-#AC_TYPE_SIZE_T
-#AC_STRUCT_TM
-
-# Checks for library functions.
-#AC_FUNC_CLOSEDIR_VOID
-#AC_FUNC_MALLOC
-#AC_FUNC_MEMCMP
-#AC_FUNC_REALLOC
-#AC_FUNC_STAT
-#AC_FUNC_VPRINTF
-#AC_CHECK_FUNCS([gethostname memmove memset sqrt strchr strdup strncasecmp strrchr strstr])
-
+# Commandline options:
 
 AC_ARG_ENABLE(make_data,
 [  --disable-make-data     do not recurse make into data directories
                           (ok to disable unless you will 'make install')],
-[ make_data="${enableval}" ], [make_data=yes])
+[ make_data="$enableval" ], [make_data=yes])
 AC_MSG_CHECKING([whether to make data])
-AM_CONDITIONAL(MAKE_DATA, [[[[ "x${make_data}" = "xyes" ]]]] )
-if [[ "x${make_data}" = "xyes" ]] ; then
+AM_CONDITIONAL(MAKE_DATA, test "x$make_data" = "xyes" )
+if test "x$make_data" = "xyes" ; then
 	AC_MSG_RESULT([yes])
 else
 	AC_MSG_RESULT([no])
@@ -57,7 +33,7 @@ AC_ARG_ENABLE(debug,
 [  --enable-debug          run in debug mode],
 [ debug=$enableval ], [ debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
-if [[ "x${debug}" = "xyes" ]] ; then
+if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
   WZ_CFLAGS="${WZ_CFLAGS} -O0 -g3 -Wall"
   AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
@@ -119,6 +95,8 @@ WZ_EXPAND_DIR(datadir, "$datadir/warzone")
 AC_DEFINE_UNQUOTED(DEFAULT_DATA_DIR, "$datadir", [Warzone data path])
 
 
+# Checks for libraries:
+
 AC_CHECK_LIB(m, pow)
 
 AC_CHECK_LIB(z, gzgets, , AC_MSG_ERROR([zlib not found.]))
@@ -144,21 +122,21 @@ AC_PATH_SDLNET([
   AC_MSG_ERROR([SDL_net is not installed]))
 
 
-if [[ "x$opengl" != "xno" ]] ; then
+if test "x$opengl" != "xno" ; then
   AC_CHECK_HEADER(GL/gl.h, GL_h=yes, GL_h=no)
   AC_CHECK_HEADER(GL/glu.h, GLU_h=yes, GLU_h=no)
   AC_CHECK_LIB(GL, main, GLLIB=GL GL_lib=yes,
     [AC_CHECK_LIB(opengl32, main, GLLIB=opengl32 GL_lib=yes, GL_lib=no)])
   AC_CHECK_LIB(GLU, main, GLULIB=GLU GLU_lib=yes,
     [AC_CHECK_LIB(glu32, main, GLULIB=glu32 GLU_lib=yes, GLU_lib=no)])
-  if [[ "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno" ]] ; then
-    if [[ "x$opengl" = "xyes" ]] ; then
+  if test "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno" ; then
+    if test "x$opengl" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenGL and GLU.])
     else
       opengl=no
     fi
-  elif [[ "x$GL_h" = "xno" -o "x$GLU_h" = "xno" ]] ; then
-    if [[ "x$opengl" = "xyes" ]] ; then
+  elif test "x$GL_h" = "xno" -o "x$GLU_h" = "xno" ; then
+    if test "x$opengl" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenGL and GLU header files (usually a -dev package).])
     else
       opengl=no
@@ -169,7 +147,7 @@ if [[ "x$opengl" != "xno" ]] ; then
 fi
 
 AC_MSG_CHECKING([OpenGL])
-if [[ "x$opengl" = "xyes" ]] ; then
+if test "x$opengl" = "xyes" ; then
 	AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
 	WZ_LIBS="${WZ_LIBS} -l${GLLIB} -l${GLULIB}"
 	AC_SUBST(RENDERER, "ivis_opengl")
@@ -180,18 +158,18 @@ else
 fi
 
 
-if [[ "x$openal" != "xno" ]] ; then
+if test "x$openal" != "xno" ; then
   AC_CHECK_HEADER(AL/al.h, AL_h=yes, AL_h=no)
   AC_CHECK_LIB(openal, main, ALLIB=openal AL_lib=yes,
                [AC_CHECK_LIB(openal32, main, ALLIB=openal32 AL_lib=yes, AL_lib=no)])
-  if [[ "x$AL_lib" = "xno" ]] ; then
-    if [[ "x$openal" = "xyes" ]] ; then
+  if test "x$AL_lib" = "xno" ; then
+    if test "x$openal" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenAL.])
     else
       openal=no
     fi
-  elif [[ "x$AL_h" = "xno" ]] ; then
-      if [[ "x$openal" = "xyes" ]] ; then
+  elif test "x$AL_h" = "xno" ; then
+      if test "x$openal" = "xyes" ; then
         AC_MSG_ERROR([You need to install OpenAL header files (usually a -dev package).])
       else
         openal=no
@@ -202,7 +180,7 @@ if [[ "x$openal" != "xno" ]] ; then
 fi
 
 AC_MSG_CHECKING([OpenAL])
-if [[ "x$openal" = "xyes" ]] ; then
+if test "x$openal" = "xyes" ; then
 	AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])
 	WZ_LIBS="${WZ_LIBS} -l${ALLIB}"
 	AC_MSG_RESULT([yes])
@@ -212,11 +190,11 @@ else
 fi
 
 
-if [[ "x${ogg}" != "xno" ]] ; then
-  AM_PATH_OGG(have_ogg=yes, have_ogg=no)
-  AM_PATH_VORBIS(have_vorbis=yes, have_vorbis=no)
-  if [[ "x$have_ogg" = "xno" -o "x$have_vorbis" = "xno" ]] ; then
-    if [[ "x${ogg}" = "xyes" ]] ; then
+if test "x$ogg" != "xno" ; then
+  XIPH_PATH_OGG(have_ogg=yes, have_ogg=no)
+  XIPH_PATH_VORBIS(have_vorbis=yes, have_vorbis=no)
+  if test "x$have_ogg" = "xno" -o "x$have_vorbis" = "xno" ; then
+    if "x$ogg" = "xyes" ; then
       AC_MSG_ERROR([You need to install OGG/Vorbis.])
     else
       ogg=no
@@ -231,12 +209,12 @@ else
 fi
 
 
-if [[ "x${mp3}" != "xno" ]] ; then
+if test "x$mp3" != "xno" ; then
   AC_CHECK_LIB(mad, mad_stream_init,
     [AC_CHECK_HEADER(mad.h, have_mad=yes, have_mad=no)],
     [have_mad=no])
-  if [[ "x${have_mad}" = "xno" ]] ; then
-    if [[ "x${mp3}" = "xyes" ]] ; then
+  if test "x$have_mad" = "xno" ; then
+    if test "x$mp3" = "xyes" ; then
       AC_MSG_ERROR([You need to install libMAD.])
     else
       mp3=no
