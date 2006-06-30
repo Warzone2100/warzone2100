@@ -28,12 +28,6 @@ static const char *code_part_names[] = {
   "net", "error", "never", "last"
 };
 
-#ifdef _MSC_VER
-#define vsnprintf _vsnprintf
-#define snprintf  _snprintf
-#define strcasecmp stricmp 
-#endif
-
 /**********************************************************************
  cat_snprintf is like a combination of snprintf and strlcat;
  it does snprintf to the end of an existing string.
