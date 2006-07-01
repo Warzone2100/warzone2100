@@ -37,6 +37,8 @@
 extern  char	sForceName[256];
 extern	UBYTE	sPlayer[128];
 
+extern void registry_clear(void); // from configfile.c
+
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(BOOL bResourceAvailable)
 {
@@ -550,5 +552,5 @@ BOOL saveConfig()
 
 void closeConfig( void )
 {
-	reallyCloseWarzoneKey();
+	registry_clear();
 }

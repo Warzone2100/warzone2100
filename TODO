@@ -13,6 +13,9 @@ Easy:
 - Add a shadow toggle to src/clparse.c
 
 More difficult:
+- Create one single place where platform dependend defines reside
+- Create a "super header" which is included in every header before any other headers.
+    This is needed eg for debugging memleaks through malloc redefinitions (eg when using MSVCRT).
 - [separation] Work out an engine part (lib/) and a game part (src/),
     where no engine part depends on any game part
 

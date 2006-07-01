@@ -76,7 +76,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   -help :             Show this help\n"
 				"   -debug FLAGS :      Show debug for FLAGS\n"
 				"   -debugfile FILE :   Log debug output in FILE\n"
-				"   -datadir DIR :      Set default datadir to DIR\n" );
+				"   -datadir DIR :      Set default datadir to DIR (needs a \\ or / at the end)\n" );
 			return FALSE;
 		}
 		else if (stricmp(tokenType, "-debugfile") == 0) {

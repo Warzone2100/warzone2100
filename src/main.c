@@ -216,6 +216,12 @@ void scanDataDirs( void )
 
 	// Command line supplied datadir
 	PHYSFS_addToSearchPath( datadir, PHYSFS_PREPEND );
+	strcpy( tmpstr, datadir );
+	strcat( tmpstr, "warzone.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	strcpy( tmpstr, datadir );
+	strcat( tmpstr, "mp.wz" );
+	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 	// maps/mods subdirs of user's home dir
 	addSubdirs( PHYSFS_getWriteDir(), "mods/global", PHYSFS_APPEND, global_mods );
@@ -339,20 +345,20 @@ int main(int argc, char *argv[])
 	UDWORD			pSize;
 
 	/*** Initialize the debug subsystem ***/
-	/* Debug stuff for .net, don't delete :) */
 #ifdef _MSC_VER
-#ifdef _DEBUG
-	{
-		int tmpFlag; //debug stuff for VC -Q
+# ifdef _DEBUG
+	int tmpDbgFlag;
+	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
 
-		tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-		tmpFlag |= (_CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_ALLOC_MEM_DF);
-		_CrtSetDbgFlag( tmpFlag );			// just turning on VC debug stuff...
-	}
-#endif
-	#ifndef MAX_PATH
-	#define MAX_PATH 512
-	#endif
+	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
+	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
+	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
+	_CrtSetDbgFlag( tmpDbgFlag );
+# endif
+# ifndef MAX_PATH
+#  define MAX_PATH 512
+# endif
 #endif
 
 	debug_init();
@@ -399,6 +405,7 @@ init://jump here from the end if re_initialising
 		if (!ParseCommandLine(argc, argv)) {
 			return -1;
 		}
+		atexit( closeConfig );
 	}
 
 	scanDataDirs();

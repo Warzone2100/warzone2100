@@ -6,7 +6,6 @@
 extern BOOL getWarzoneKeyNumeric	(STRING *pName,DWORD *val);
 extern BOOL openWarzoneKey			(VOID);
 extern BOOL closeWarzoneKey			(VOID);
-void reallyCloseWarzoneKey ( void );
 extern BOOL setWarzoneKeyNumeric	(STRING *pName,DWORD val);
 extern BOOL getWarzoneKeyString(STRING *pName, STRING *pString);
 extern BOOL setWarzoneKeyString(STRING *pName, STRING *pString);

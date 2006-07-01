@@ -103,7 +103,7 @@ iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal)
 
 			s->width = w;
 			s->height = h;
-			s->bmp = malloc(w*h*info_ptr->channels); // FIXME This is a source for a MEMLEAK!!! (according to Valgrind)
+			s->bmp = malloc(w*h*info_ptr->channels);
 		}
 
 		{

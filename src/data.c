@@ -61,6 +61,8 @@ extern STRING	aCurrResDir[255];		// Arse
 
 UDWORD	cheatHash[CHEAT_MAXCHEAT];
 
+void dataISpriteRelease(void *pData);
+
 /**********************************************************
  *
  * Source
@@ -784,8 +786,8 @@ BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 	if(!pie_PNGLoadMem((SBYTE *)pBuffer,psSprite,NULL))
 	{
-		DBERROR(("IMGPAGE load failed"));
-		FREE(psSprite);
+		debug( LOG_ERROR, "IMGPAGE load failed" );
+		dataISpriteRelease(psSprite);
 		return FALSE;
 	}
 
@@ -798,8 +800,7 @@ BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 void dataIMGPAGERelease(void *pData)
 {
 	iSprite *psSprite = (iSprite*) pData;
-	FREE(psSprite->bmp);
-	FREE(psSprite);
+	dataISpriteRelease(psSprite);
 }
 
 // Tertiles loader. This version for software renderer.
@@ -836,7 +837,7 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		{
 			if(!remakeTileTextures())
 			{
-	 			DBERROR(("Problem converting the terrain graphics file"));
+	 			debug( LOG_ERROR, "Problem converting the terrain graphics file" );
 				return(FALSE);
 			}
 		}
@@ -844,7 +845,7 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		{
 			if(!makeTileTextures())
 			{
-	 			DBERROR(("Problem converting the terrain graphics file"));
+	 			debug( LOG_ERROR, "Problem converting the terrain graphics file" );
 				return(FALSE);
 			}
 		}
@@ -867,7 +868,7 @@ void dataTERTILESRelease(void *pData)
 	iSprite *psSprite = (iSprite*) pData;
 
 	freeTileTextures();
-	FREE(psSprite->bmp);
+	dataISpriteRelease(psSprite);
 	bTilesPCXLoaded = FALSE;
 }
 
@@ -932,7 +933,7 @@ void dataHWTERTILESRelease(void *pData)
 	iSprite *psSprite = (iSprite*) pData;
 
 	freeTileTextures();
-	FREE(psSprite->bmp);
+	dataISpriteRelease(psSprite);
 	bTilesPCXLoaded = FALSE;
 	pie_TexShutDown();
 }
@@ -1045,7 +1046,7 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 		if (!pie_PNGLoadMem((SBYTE *)pBuffer, psSprite, NULL))
 		{
-			FREE(psSprite);
+			dataISpriteRelease(psSprite);
 			return FALSE;
 		}
 
@@ -1102,7 +1103,8 @@ void dataISpriteRelease(void *pData)
 {
 	iSprite *psSprite = (iSprite*) pData;
 
-	FREE(psSprite->bmp);
+	if( psSprite->bmp )
+		free(psSprite->bmp);
 	FREE(psSprite);
 }
 
@@ -1117,9 +1119,7 @@ void dataTexPageRelease(void *pData)
 
 	if (Tpage->Texture != NULL)
 	{
-		if (Tpage->Texture->bmp !=NULL)
-			FREE(Tpage->Texture->bmp);
-		FREE(Tpage->Texture);
+		dataISpriteRelease(Tpage->Texture);
 	}
 	if (Tpage->Palette != NULL)
 		FREE(Tpage->Palette);
