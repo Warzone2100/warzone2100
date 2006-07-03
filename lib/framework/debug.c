@@ -166,6 +166,7 @@ static void debug_out(const char *buf)
 		} else {
 			fprintf(logfile, "%s", buf);
 		}
+		fflush(logfile);
 	}
 }
 
@@ -230,5 +231,4 @@ void debug(enum code_part part, const char *str, ...)
 		debug_out( buf );
 	}
 	bufbuf1 = !bufbuf1;
-	fflush(logfile);
 }

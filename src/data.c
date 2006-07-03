@@ -787,7 +787,6 @@ BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	if(!pie_PNGLoadMem((SBYTE *)pBuffer,psSprite,NULL))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
-		dataISpriteRelease(psSprite);
 		return FALSE;
 	}
 
@@ -814,20 +813,19 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
-		DBPRINTF(("Reloading terrain tiles\n"));
-
-		if(!pie_PNGLoadMemToBuffer((SBYTE *)pBuffer,&tilesPCX,NULL))
+		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
+		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
 		{
-			DBERROR(("TERTILES reload failed"));
+			debug( LOG_ERROR, "TERTILES reload failed" );
 			return FALSE;
 		}
 	}
 	else
 	{
-		DBPRINTF(("Loading terrain tiles\n"));
+		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
 		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
 		{
-			DBERROR(("TERTILES load failed"));
+			debug( LOG_ERROR, "TERTILES load failed" );
 			return FALSE;
 		}
 	}
@@ -859,7 +857,7 @@ BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		bTilesPCXLoaded = TRUE;
 		*ppData = &tilesPCX;
 	}
-	DBPRINTF(("Tiles loaded\n"));
+	debug( LOG_TEXTURE, "Tiles loaded\n" );
 	return TRUE;
 }
 
@@ -883,20 +881,19 @@ BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
-		DBPRINTF(("Reloading terrain tiles\n"));
-
-		if(!pie_PNGLoadMemToBuffer((SBYTE *)pBuffer,&tilesPCX,NULL))
+		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
+		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
 		{
-			DBERROR(("HWTERTILES reload failed"));
+			debug( LOG_ERROR, "HWTERTILES reload failed" );
 			return FALSE;
 		}
 	}
 	else
 	{
-		DBPRINTF(("Loading terrain tiles\n"));
+		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
 		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
 		{
-			DBERROR(("HWTERTILES load failed"));
+			debug( LOG_ERROR, "HWTERTILES load failed" );
 			return FALSE;
 		}
 	}
@@ -1046,7 +1043,6 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 		if (!pie_PNGLoadMem((SBYTE *)pBuffer, psSprite, NULL))
 		{
-			dataISpriteRelease(psSprite);
 			return FALSE;
 		}
 
@@ -1103,9 +1099,16 @@ void dataISpriteRelease(void *pData)
 {
 	iSprite *psSprite = (iSprite*) pData;
 
-	if( psSprite->bmp )
-		free(psSprite->bmp);
-	FREE(psSprite);
+	if( psSprite )
+	{
+		if( psSprite->bmp )
+		{
+			free(psSprite->bmp);
+			psSprite->bmp = NULL;
+		}
+		FREE(psSprite);
+		psSprite = NULL;
+	}
 }
 
 
