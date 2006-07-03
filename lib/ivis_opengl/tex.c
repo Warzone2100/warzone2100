@@ -178,10 +178,14 @@ int iV_GetTexture(char *filename)
 	return -1;
 }
 
-int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
+// According to logfile not used, deprecating
+WZ_DEPRECATED int pie_ReloadTexPage(STRING *filename, SBYTE *pBuffer)
 {
 	int i = 0;
-	iSprite			s;
+	iSprite	s;
+
+	// Log call to check validity of deprecation
+	debug( LOG_NEVER, "pie_ReloadTexPage called" );
 
 	/* Have we already loaded this one then? */
 	while (stricmp(filename,_TEX_PAGE[i].name) != 0) {

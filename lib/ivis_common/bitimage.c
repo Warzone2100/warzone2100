@@ -84,20 +84,20 @@ IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 
 	ImageFile = MALLOC(sizeof(IMAGEFILE));
 	if(ImageFile == NULL) {
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
 		return NULL;
 	}
 
 
 	ImageFile->TexturePages = MALLOC(sizeof(iSprite)*Header->NumTPages);
 	if(ImageFile->TexturePages == NULL) {
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
 		return NULL;
 	}
 
 	ImageFile->ImageDefs = MALLOC(sizeof(IMAGEDEF)*Header->NumImages);
 	if(ImageFile->ImageDefs == NULL) {
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
 		return NULL;
 	}
 
@@ -113,7 +113,7 @@ IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 	for(i=0; i<Header->NumImages; i++) {
 		ImageFile->ImageDefs[i] = *ImageDef;
 		if( (ImageDef->Width <= 0) || (ImageDef->Height <= 0) ) {
-			DBERROR(("Illegal image size"));
+			debug( LOG_ERROR, "Illegal image size" );
 			return NULL;
 		}
 		ImageDef++;

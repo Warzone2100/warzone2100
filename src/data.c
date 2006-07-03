@@ -866,7 +866,11 @@ void dataTERTILESRelease(void *pData)
 	iSprite *psSprite = (iSprite*) pData;
 
 	freeTileTextures();
-	dataISpriteRelease(psSprite);
+	if( psSprite->bmp )
+	{
+		free(psSprite->bmp);
+		psSprite->bmp = NULL;
+	}
 	bTilesPCXLoaded = FALSE;
 }
 
@@ -930,7 +934,12 @@ void dataHWTERTILESRelease(void *pData)
 	iSprite *psSprite = (iSprite*) pData;
 
 	freeTileTextures();
-	dataISpriteRelease(psSprite);
+	if( psSprite->bmp )
+	{
+		free(psSprite->bmp);
+		psSprite->bmp = NULL;
+	}
+	// We are not allowed to free psSprite also, this would give an error on Windows: HEAP[Warzone.exe]: Invalid Address specified to RtlFreeHeap( xxx, xxx )
 	bTilesPCXLoaded = FALSE;
 	pie_TexShutDown();
 }
@@ -1035,7 +1044,7 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		psPal = MALLOC(sizeof(iPalette));
 		if (!psPal) return FALSE;
 
-		psSprite = MALLOC(sizeof(iSprite));
+		psSprite = (iSprite*)MALLOC(sizeof(iSprite));
 		if (!psSprite)
 		{
 			return FALSE;

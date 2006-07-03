@@ -103,6 +103,7 @@ iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal)
 
 			s->width = w;
 			s->height = h;
+			// Freeing s->bmp before allocating new mem would give a HEAP error on Windows (Invalid Address specified to RtlFreeHeap( x, x )).
 			s->bmp = malloc(w*h*info_ptr->channels);
 		}
 

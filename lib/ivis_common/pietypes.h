@@ -49,7 +49,7 @@ typedef uint8 iBitmap;
 typedef struct {uint8 r, g, b;} iColour;
 typedef int iBool;
 typedef struct {int32 x, y;} iPoint;
-typedef struct {int width, height; iBitmap *bmp;} iSprite;
+typedef struct {unsigned int width, height; iBitmap *bmp;} iSprite;
 typedef iColour iPalette[256];
 typedef struct {uint8 r, g, b, p;} iRGB8;
 typedef struct {uint16 r, g, b, p;} iRGB16;
