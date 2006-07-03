@@ -32,6 +32,9 @@
 	 * Starting a map from patches (original maps in T2+3 and all other maps)
 	   will load multiplay mods as expected
    * Improved search for data and allow running from src/ directory
+	   Priorities:
+	   dir/maps > dir/mods > dir/mp/ > dir/ > dir/mp.wz > dir/warzone.wz
+	   -datadir > User's home (maps/mods only) > SVN data (plain only) > AutoPackage > Program dir > DEFAULT_DATADIR
    * Write directory (where config, savegames and screenshots are saved)
 	 is USERDIR\warzone-2.0 on Windows and HOME/.warzone-2.0 on Linux
    * All file handling is now case insensitive

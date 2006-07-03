@@ -103,13 +103,26 @@ BOOL checkDisableLobby(void)
 }
 */
 
+typedef union {
+	struct { 
+		BOOL no_mods : 1; // Dont add maps/ and mods/
+		BOOL no_plain : 1; // Dont add dir/ and mp/
+		BOOL no_wz : 1; // Dont add warzone.wz and mp.wz
+	} flags;
+	BOOL all;
+} data_restriction;
+
 static BOOL inList( char * list[], const char * item )
 {
 	int i = 0;
-	debug( LOG_NEVER, "Item: [%s]", item );
+#ifdef DEBUG
+	debug( LOG_NEVER, "inList: Current item: [%s]", item );
+#endif
 	while( list[i] != NULL )
 	{
-		debug( LOG_NEVER, "Checking for match with: [%s]", list[i] );
+#ifdef DEBUG
+		debug( LOG_NEVER, "inList: Checking for match with: [%s]", list[i] );
+#endif
 		if ( strcmp( list[i], item ) == 0 )
 			return TRUE;
 		i++;
@@ -124,14 +137,17 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 	char ** i = subdirlist;
 	while( *i != NULL )
 	{
-		debug( LOG_NEVER, "Examining subdir: [%s]", *i );
+#ifdef DEBUG
+		debug( LOG_NEVER, "addSubdirs: Examining subdir: [%s]", *i );
+#endif
 		if( !checkList || inList( checkList, *i ) )
 		{
 			strcpy( tmpstr, basedir );
+			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, subdir );
 			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, *i );
-			debug( LOG_NEVER, "Adding [%s] to search path", tmpstr );
+			debug( LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr );
 			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
 		i++;
@@ -146,14 +162,16 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 	char ** i = subdirlist;
 	while( *i != NULL )
 	{
-		debug( LOG_NEVER, "Examining subdir: [%s]", *i );
+#ifdef DEBUG
+		debug( LOG_NEVER, "removeSubdirs: Examining subdir: [%s]", *i );
+#endif
 		if( !checkList || inList( checkList, *i ) )
 		{
 			strcpy( tmpstr, basedir );
 			strcat( tmpstr, subdir );
 			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, *i );
-			debug( LOG_NEVER, "Removing [%s] from search path", tmpstr );
+			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
 			PHYSFS_removeFromSearchPath( tmpstr );
 		}
 		i++;
@@ -171,6 +189,41 @@ void printSearchPath( void )
 		debug(LOG_WZ, "    [%s]", *i);
 	}
 	PHYSFS_freeList( searchPath );
+}
+
+void addDataDir( const char * dir, data_restriction restriction )
+{
+	char tmpstr[MAX_PATH];
+
+	debug( LOG_WZ, "addDataDir: Adding [%s] to search path", dir );
+
+	if( !restriction.flags.no_mods )
+	{
+		PHYSFS_addToSearchPath( dir, PHYSFS_APPEND );
+		addSubdirs( dir, "maps", PHYSFS_APPEND, FALSE );
+		addSubdirs( dir, "mods/global", PHYSFS_APPEND, global_mods );
+		PHYSFS_removeFromSearchPath( dir );
+	}
+	if( !restriction.flags.no_plain )
+	{
+		strcpy( tmpstr, dir );
+		strcat( tmpstr, "mp" );
+		PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+		PHYSFS_addToSearchPath( dir, PHYSFS_APPEND );
+	}
+	if( !restriction.flags.no_wz )
+	{
+		strcpy( tmpstr, dir );
+		strcat( tmpstr, "mp.wz" );
+		PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+		strcpy( tmpstr, dir );
+		strcat( tmpstr, "warzone.wz" );
+		PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	}
+
+#ifdef DEBUG
+	printSearchPath();
+#endif
 }
 
 /***************************************************************************
@@ -200,9 +253,6 @@ static void initialize_PhysicsFS(void)
 		exit(1);
 	}
 	
-	// User's home dir
-	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_APPEND );
-
 	PHYSFS_permitSymbolicLinks(1);
 
 	debug( LOG_WZ, "Write dir: %s", PHYSFS_getWriteDir() );
@@ -212,58 +262,16 @@ static void initialize_PhysicsFS(void)
 // We need ParseCommandLine, before we can add any mods...
 void scanDataDirs( void )
 {
+	/*
+	 * Priorities:
+	 * maps > mods > mp > plain_dir > mp.wz > warzone.wz
+	 *
+	 * -datadir > User's home dir(maps/mods only) > SVN data (plain only) > AutoPackage > BaseDir > DEFAULT_DATADIR
+	 * 
+	 * Only -datadir and home dir are allways examined. Others only if data still not found.
+	 */
 	char tmpstr[MAX_PATH], prefix[MAX_PATH] = { '\0' };
-
-	// Command line supplied datadir
-	PHYSFS_addToSearchPath( datadir, PHYSFS_PREPEND );
-	strcpy( tmpstr, datadir );
-	strcat( tmpstr, "warzone.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	strcpy( tmpstr, datadir );
-	strcat( tmpstr, "mp.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-
-	// maps/mods subdirs of user's home dir
-	addSubdirs( PHYSFS_getWriteDir(), "mods/global", PHYSFS_APPEND, global_mods );
-	addSubdirs( PHYSFS_getWriteDir(), "maps", PHYSFS_APPEND, FALSE );
-
-	// maps/mods subdirs of program dir
-	PHYSFS_addToSearchPath( PHYSFS_getBaseDir(), PHYSFS_APPEND );
-	addSubdirs( PHYSFS_getBaseDir(), "mods/global", PHYSFS_APPEND, global_mods );
-	addSubdirs( PHYSFS_getBaseDir(), "maps", PHYSFS_APPEND, FALSE );
-	PHYSFS_removeFromSearchPath( PHYSFS_getBaseDir() );
-
-	// Program dir mp.wz patches
-	strcpy( tmpstr, PHYSFS_getBaseDir() );
-	strcat( tmpstr, "mp.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-
-	// Program dir warzone.wz
-	strcpy( tmpstr, PHYSFS_getBaseDir() );
-	strcat( tmpstr, "warzone.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-
-
-	// Plain program dir + patches
-	strcpy( tmpstr, PHYSFS_getBaseDir() );
-	strcat( tmpstr, "mp" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	PHYSFS_addToSearchPath( PHYSFS_getBaseDir(), PHYSFS_APPEND );
-
-
-	// Plain default datadir on Unix
-	strcpy( tmpstr, DEFAULT_DATADIR );
-	strcat( tmpstr, "mp" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	PHYSFS_addToSearchPath( DEFAULT_DATADIR, PHYSFS_APPEND );
-
-	// Default datadir with .wz files on Unix
-	strcpy( tmpstr, DEFAULT_DATADIR );
-	strcat( tmpstr, "mp.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	strcpy( tmpstr, DEFAULT_DATADIR );
-	strcat( tmpstr, "warzone.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+	data_restriction restrictions;
 
 
 	// Find out which PREFIX we are in...
@@ -273,22 +281,55 @@ void scanDataDirs( void )
 	strncpy( prefix, PHYSFS_getBaseDir(), // Skip the last dir from base dir
 		strrchr( tmpstr, *PHYSFS_getDirSeparator() ) - tmpstr );
 
-	// Relocation for AutoPackage
-	strcpy( tmpstr, prefix );
-	strcat( tmpstr, "/share/warzone/mp.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	strcpy( tmpstr, prefix );
-	strcat( tmpstr, "/share/warzone/warzone.wz" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
-	// Hack for the hackers... Use data in SVN dir
-	strcpy( tmpstr, prefix );
-	strcat( tmpstr, "/data/mp" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	strcpy( tmpstr, prefix );
-	strcat( tmpstr, "/data" );
-	PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-		
+	// Command line supplied datadir
+	restrictions.all = FALSE; // Reset
+	addDataDir( datadir, restrictions );
+	
+	// User's home dir
+	restrictions.all = FALSE; // Reset
+	restrictions.flags.no_wz = TRUE;
+	restrictions.flags.no_plain = TRUE;
+	addDataDir( PHYSFS_getWriteDir(), restrictions );
+
+	if( !PHYSFS_exists("gamedesc.lev") )
+	{
+		// Data in SVN dir
+		restrictions.all = FALSE; // Reset
+		restrictions.flags.no_wz = TRUE;
+		restrictions.flags.no_mods = TRUE;
+		strcpy( tmpstr, prefix );
+		strcat( tmpstr, "/data" );
+		addDataDir( tmpstr, restrictions );
+
+		if( !PHYSFS_exists("gamedesc.lev") )
+		{
+			// Relocation for AutoPackage
+			restrictions.all = FALSE; // Reset
+			strcpy( tmpstr, prefix );
+			strcat( tmpstr, "/share/warzone" );
+			addDataDir( tmpstr, restrictions );
+
+			if( !PHYSFS_exists("gamedesc.lev") )
+			{
+				// Program dir
+				restrictions.all = FALSE; // Reset
+				addDataDir( PHYSFS_getBaseDir(), restrictions );
+
+				if( !PHYSFS_exists("gamedesc.lev") )
+				{
+					// Guessed fallback default datadir on Unix
+					restrictions.all = FALSE; // Reset
+					addDataDir( DEFAULT_DATADIR, restrictions );
+				}
+			}
+		}
+	}
+
+	// User's home dir first so we allways see what we write
+	PHYSFS_removeFromSearchPath( PHYSFS_getWriteDir() );
+	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
+
 
 	/** Debugging and sanity checks **/
 
@@ -324,7 +365,7 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 		}
 	}
 	PHYSFS_mkdir(dest);
-	if (PHYSFS_isDirectory(dest) == 0) {
+	if ( !PHYSFS_mkdir(dest) ) {
 		debug(LOG_ERROR, "Unable to create directory \"%s\" in write dir \"%s\"!",
 		      dest, PHYSFS_getWriteDir());
 		exit(1);
