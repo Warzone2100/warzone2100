@@ -6,7 +6,7 @@
    * Made scenario briefings visible
    * Fixed bugs which could prevent the transport from arriving
    * Fixed file loading/saving on Windows
-   * Fixed several small memleaks
+   * Fixed nearly all memleaks
    * Various crashfixes
    * Code improvements/simplifications and commonalization
    * Pressing TAB pastes clipboard in host address dialogue (join network game)
