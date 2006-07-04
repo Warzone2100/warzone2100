@@ -46,7 +46,7 @@
 #endif
 
 #ifdef WIN32
-# define WZ_WRITEDIR "Warzone-2.0\"
+# define WZ_WRITEDIR "Warzone-2.0\\"
 #else
 # define WZ_WRITEDIR ".warzone-2.0/"
 #endif
@@ -284,15 +284,9 @@ void scanDataDirs( void )
 	}
 
 
-	// User's home dir first so we allways see what we write
-	PHYSFS_removeFromSearchPath( PHYSFS_getWriteDir() );
-	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
-
-
 	/** Debugging and sanity checks **/
 
 	rebuildSearchPath( mod_multiplay, TRUE );
-	printSearchPath();
 
 	if( PHYSFS_exists("gamedesc.lev") )
 	{

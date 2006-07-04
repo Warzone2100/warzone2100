@@ -744,15 +744,15 @@ BOOL loadLevFile(const char* filename, int datadir) {
 }
 
 
-static SearchPath searchPathRegistry = { "\0", 0, NULL, NULL };
+static wzSearchPath searchPathRegistry = { "\0", 0, NULL, NULL };
 
 
 // Register searchPath above the path with next lower priority
 void registerSearchPath( const char path[], unsigned int priority )
 {
-	SearchPath * curSearchPath = &searchPathRegistry, * tmpSearchPath;
+	wzSearchPath * curSearchPath = &searchPathRegistry, * tmpSearchPath;
 
-	tmpSearchPath = (SearchPath*)malloc(sizeof(SearchPath));
+	tmpSearchPath = (wzSearchPath*)malloc(sizeof(wzSearchPath));
 	strcpy( tmpSearchPath->path, path );
 	tmpSearchPath->priority = priority;
 
@@ -779,7 +779,7 @@ void registerSearchPath( const char path[], unsigned int priority )
  */
 BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 {
-	SearchPath * curSearchPath = &searchPathRegistry;
+	wzSearchPath * curSearchPath = &searchPathRegistry;
 	char tmpstr[MAX_PATH] = "\0";
 	static searchPathMode current_mode = mod_none;
 
@@ -790,114 +790,123 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 		switch ( mode )
 		{
 			case mod_none:
-				debug( LOG_WZ, "loadMods: Switching to no mods" );
+				debug( LOG_WZ, "rebuildSearchPath: Switching to no mods" );
 
-				while( curSearchPath->higherPriority )
+				while( curSearchPath )
 				{
-					debug( LOG_WZ, "addDataDir: Adding [%s] to search path", curSearchPath->path );
+					if( strlen(curSearchPath->path) != 0 )
+					{
+						debug( LOG_WZ, "rebuildSearchPath: Adding [%s] to search path", curSearchPath->path );
 
-					// Remove maps and mods
-					removeSubdirs( curSearchPath->path, "maps", FALSE );
-					removeSubdirs( curSearchPath->path, "mods/global", global_mods );
-					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
-					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
+						// Remove maps and mods
+						removeSubdirs( curSearchPath->path, "maps", FALSE );
+						removeSubdirs( curSearchPath->path, "mods/global", global_mods );
+						removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
+						removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
 
-					// Remove multiplay patches
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "mp" );
-					PHYSFS_removeFromSearchPath( tmpstr );
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "mp.wz" );
-					PHYSFS_removeFromSearchPath( tmpstr );
+						// Remove multiplay patches
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "mp" );
+						PHYSFS_removeFromSearchPath( tmpstr );
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "mp.wz" );
+						PHYSFS_removeFromSearchPath( tmpstr );
 
-					// Remove plain dir
-					PHYSFS_removeFromSearchPath( curSearchPath->path );
+						// Remove plain dir
+						PHYSFS_removeFromSearchPath( curSearchPath->path );
 
-					// Remove warzone.wz
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "warzone.wz" );
-					PHYSFS_removeFromSearchPath( tmpstr );
-
+						// Remove warzone.wz
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "warzone.wz" );
+						PHYSFS_removeFromSearchPath( tmpstr );
+					}
 					curSearchPath = curSearchPath->higherPriority;
 				}
 				break;
 			case mod_campaign:
-				debug( LOG_WZ, "loadMods: Switching to campaign mods" );
+				debug( LOG_WZ, "rebuildSearchPath: Switching to campaign mods" );
 
-				while( curSearchPath->higherPriority )
+				while( curSearchPath )
 				{
-					debug( LOG_WZ, "addDataDir: Adding [%s] to search path", curSearchPath->path );
+					if( strlen(curSearchPath->path) != 0 )
+					{
+						debug( LOG_WZ, "rebuildSearchPath: Adding [%s] to search path", curSearchPath->path );
 
-					// Remove maps multiplay mods
-					removeSubdirs( curSearchPath->path, "maps", FALSE );
-					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
+						// Remove maps multiplay mods
+						removeSubdirs( curSearchPath->path, "maps", FALSE );
+						removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
 
-					// Remove multiplay patches
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "mp" );
-					PHYSFS_removeFromSearchPath( tmpstr );
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "mp.wz" );
-					PHYSFS_removeFromSearchPath( tmpstr );
+						// Remove multiplay patches
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "mp" );
+						PHYSFS_removeFromSearchPath( tmpstr );
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "mp.wz" );
+						PHYSFS_removeFromSearchPath( tmpstr );
 
-					// Add global and campaign mods
-					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
+						// Add global and campaign mods
+						PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
-					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
-					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods );
-					PHYSFS_removeFromSearchPath( curSearchPath->path );
+						addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
+						addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods );
+						PHYSFS_removeFromSearchPath( curSearchPath->path );
 
-					// Add plain dir
-					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
+						// Add plain dir
+						PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
-					// Add warzone.wz
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "warzone.wz" );
-					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-
+						// Add warzone.wz
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "warzone.wz" );
+						PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+					}
 					curSearchPath = curSearchPath->higherPriority;
 				}
 				break;
 			case mod_multiplay:
-				debug( LOG_WZ, "loadMods: Switching to multiplay mods" );
+				debug( LOG_WZ, "rebuildSearchPath: Switching to multiplay mods" );
 
-				while( curSearchPath->higherPriority )
+				while( curSearchPath )
 				{
-					debug( LOG_WZ, "addDataDir: Adding [%s] to search path", curSearchPath->path );
+					if( strlen(curSearchPath->path) != 0 )
+					{
+						debug( LOG_WZ, "rebuildSearchPath: Adding [%s] to search path", curSearchPath->path );
 
-						// Remove campaign mods
-					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
+							// Remove campaign mods
+						removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
 
-					// Add maps and global and multiplay mods
-					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
-					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, FALSE );
-					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
-					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods );
-					PHYSFS_removeFromSearchPath( curSearchPath->path );
+						// Add maps and global and multiplay mods
+						PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
+						addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, FALSE );
+						addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
+						addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods );
+						PHYSFS_removeFromSearchPath( curSearchPath->path );
 
-					// Add multiplay patches
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "mp" );
-					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "mp.wz" );
-					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+						// Add multiplay patches
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "mp" );
+						PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "mp.wz" );
+						PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
-					// Add plain dir
-					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
+						// Add plain dir
+						PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
-					// Add warzone.wz
-					strcpy( tmpstr, curSearchPath->path );
-					strcat( tmpstr, "warzone.wz" );
-					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-
+						// Add warzone.wz
+						strcpy( tmpstr, curSearchPath->path );
+						strcat( tmpstr, "warzone.wz" );
+						PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+					}
 					curSearchPath = curSearchPath->higherPriority;
 				}
 				break;
 			default:
-				debug( LOG_ERROR, "loadMods: Can't switch to unknown mods %i", mode );
+				debug( LOG_ERROR, "rebuildSearchPath: Can't switch to unknown mods %i", mode );
 				return FALSE;
 		}
+		// User's home dir must be first so we allways see what we write
+		PHYSFS_removeFromSearchPath( PHYSFS_getWriteDir() );
+		PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
 		printSearchPath();
 	}
 	return TRUE;

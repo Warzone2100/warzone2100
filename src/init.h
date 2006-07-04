@@ -34,12 +34,12 @@ extern BOOL saveGameReset(void);
 #define MOD_CAMPAIGN 1
 #define MOD_MULTIPLAY 2
 
-typedef struct _SearchPath
+typedef struct _wzSearchPath
 {
 	char path[MAX_PATH];
 	unsigned int priority;
-	struct _SearchPath * higherPriority, * lowerPriority;
-} SearchPath;
+	struct _wzSearchPath * higherPriority, * lowerPriority;
+} wzSearchPath;
 
 typedef enum { mod_none=0, mod_campaign=1, mod_multiplay=2 } searchPathMode;
 
