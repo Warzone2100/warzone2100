@@ -97,10 +97,10 @@ void resSetBaseDir(STRING *pResDir)
 
 /* Parse the res file */
 BOOL resLoad(STRING *pResFile, SDWORD blockID,
-             char *pLoadBuffer, SDWORD bufferSize,
+             UBYTE *pLoadBuffer, SDWORD bufferSize,
              BLOCK_HEAP *psMemHeap)
 {
-	char *pBuffer;
+	UBYTE *pBuffer;
 	UDWORD	size;
 	BLOCK_HEAP *psOldHeap;
 
@@ -321,7 +321,7 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 	SDWORD ResID;
 	RESOURCEFILE *ResData;
 	UDWORD size;
-	char *pBuffer;
+	UBYTE *pBuffer;
 
 	ResID=FindEmptyResourceFile();
 	if (ResID==-1) return(FALSE);		// all resource files are full
@@ -340,7 +340,7 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
 	// FIXME: evil cast
-	if (!loadFile(ResourceName, (STRING **) &pBuffer, &size))
+	if (!loadFile(ResourceName, (UBYTE **) &pBuffer, &size))
 	{
 		return FALSE;
 	}

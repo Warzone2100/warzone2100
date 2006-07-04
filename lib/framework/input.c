@@ -78,13 +78,13 @@ static SDLKey keyCodeToSDLKey(KEY_CODE code)
 
 void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 {
-	if(code == KEY_MAXSCAN)
+	if(keyCodeToSDLKey(code) == KEY_MAXSCAN)
 	{
 		strcpy(ascii,"???");
 		return;
 	}
 	ASSERT(((code >= 0) && (code <= KEY_MAXSCAN), "Invalid key code: %d", code));
-#ifndef _MSC_VER	
+#ifndef _MSC_VER
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
 #else
 	_snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
@@ -332,7 +332,7 @@ void inputProcessEvent(SDL_Event *event)
 				aMouseState[event->button.button] = KEY_PRESSED;
 				if (event->button.button < 4)
 				{
-					dragKey = event->button.button;
+					dragKey = (MOUSE_KEY_CODE)event->button.button;
 					dragX = mouseXPos;
 					dragY = mouseYPos;
 				}

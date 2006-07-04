@@ -159,7 +159,7 @@ BOOL registry_load( char *filename )
 
 	debug(LOG_WZ, "Loading the registry from %s", filename);
 	if (PHYSFS_exists(filename)) {
-		if (!loadFile(filename, &bptr, &filesize)) {
+		if (!loadFile(filename, (UBYTE*)&bptr, &filesize)) {
 			return FALSE;           // happens only in NDEBUG case
 		}
 	} else {

@@ -65,8 +65,8 @@ void seq_start_sound(RPL* s) {
 BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpDS, int startTime, DDPIXELFORMAT	*DDPixelFormat, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
-	printf("seq_SetSequenceForBuffer %s -> noVideo.rpl\n", filename);
-	filename = "noVideo.rpl";
+	printf("seq_SetSequenceForBuffer %s -> novideo.rpl\n", filename);
+	filename = "novideo.rpl";
 #endif
 	if (current_sequence != NULL) {
 		rpl_close(current_sequence);
@@ -87,8 +87,8 @@ BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpD
 BOOL seq_SetSequence(char* filename, LPDIRECTDRAWSURFACE4 lpDDSF, LPDIRECTSOUND lpDS, int startTime, char* lpBF, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
-	printf("seq_SetSequence %s -> noVideo.rpl\n", filename);
-	filename = "noVideo.rpl";
+	printf("seq_SetSequence %s -> novideo.rpl\n", filename);
+	filename = "novideo.rpl";
 #endif
 	if (current_sequence != NULL) {
 		rpl_close(current_sequence);

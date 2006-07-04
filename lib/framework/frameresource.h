@@ -33,7 +33,7 @@ typedef struct res_data
 
 	UDWORD	HashedID;				// hashed version of the name of the id
 	struct	res_data *psNext;		// next entry - most likely to be following on!
-	UDWORD		usage;			
+	UDWORD		usage;
 } RES_DATA;
 
 
@@ -44,13 +44,13 @@ typedef struct _res_type
 	// type is still needed on psx ... strings are defined in source - data.c (yak!)
 	STRING			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only aplicable when loading from wrf (not wdg)
 
-	RES_BUFFERLOAD buffLoad;	// routine to process the data for this type 
+	RES_BUFFERLOAD buffLoad;	// routine to process the data for this type
 	RES_FREE release;			// routine to release the data (NULL indicates none)
 
 	// we must have a pointer to the data here so that we can do a resGetData();
 	RES_DATA		*psRes;		// Linked list of data items of this type
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
-	
+
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
 	struct _res_type	*psNext;
 } RES_TYPE;
@@ -80,7 +80,7 @@ extern void resSetBaseDir(STRING *pResDir);
 /* Parse the res file */
 struct _block_heap;
 BOOL resLoad(STRING *pResFile, SDWORD blockID,
-             char *pLoadBuffer, SDWORD bufferSize,
+             UBYTE *pLoadBuffer, SDWORD bufferSize,
              struct _block_heap *psMemHeap);
 
 /* Release all the resources currently loaded and the resource load functions */

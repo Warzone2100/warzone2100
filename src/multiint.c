@@ -219,7 +219,7 @@ void loadMapPreview(void)
 	}
 
 	levFindDataSet(game.map, &psLevel);
-	loadMods(psLevel->dataDir);
+	rebuildSearchPath(psLevel->dataDir, FALSE);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "\\game.map");

@@ -46,9 +46,9 @@
 #endif
 
 #ifdef WIN32
-# define WZ_WRITEDIR "Warzone-2.0"
+# define WZ_WRITEDIR "Warzone-2.0\"
 #else
-# define WZ_WRITEDIR ".warzone-2.0"
+# define WZ_WRITEDIR ".warzone-2.0/"
 #endif
 
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
@@ -102,15 +102,6 @@ BOOL checkDisableLobby(void)
 	return disable;
 }
 */
-
-typedef union {
-	struct { 
-		BOOL no_mods : 1; // Dont add maps/ and mods/
-		BOOL no_plain : 1; // Dont add dir/ and mp/
-		BOOL no_wz : 1; // Dont add warzone.wz and mp.wz
-	} flags;
-	BOOL all;
-} data_restriction;
 
 static BOOL inList( char * list[], const char * item )
 {
@@ -191,40 +182,6 @@ void printSearchPath( void )
 	PHYSFS_freeList( searchPath );
 }
 
-void addDataDir( const char * dir, data_restriction restriction )
-{
-	char tmpstr[MAX_PATH];
-
-	debug( LOG_WZ, "addDataDir: Adding [%s] to search path", dir );
-
-	if( !restriction.flags.no_mods )
-	{
-		PHYSFS_addToSearchPath( dir, PHYSFS_APPEND );
-		addSubdirs( dir, "maps", PHYSFS_APPEND, FALSE );
-		addSubdirs( dir, "mods/global", PHYSFS_APPEND, global_mods );
-		PHYSFS_removeFromSearchPath( dir );
-	}
-	if( !restriction.flags.no_plain )
-	{
-		strcpy( tmpstr, dir );
-		strcat( tmpstr, "mp" );
-		PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-		PHYSFS_addToSearchPath( dir, PHYSFS_APPEND );
-	}
-	if( !restriction.flags.no_wz )
-	{
-		strcpy( tmpstr, dir );
-		strcat( tmpstr, "mp.wz" );
-		PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-		strcpy( tmpstr, dir );
-		strcat( tmpstr, "warzone.wz" );
-		PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-	}
-
-#ifdef DEBUG
-	printSearchPath();
-#endif
-}
 
 /***************************************************************************
 	Initialize the PhysicsFS library.
@@ -252,27 +209,32 @@ static void initialize_PhysicsFS(void)
 			tmpstr, PHYSFS_getLastError() );
 		exit(1);
 	}
-	
+
+	// User's home dir first so we allways see what we write
+	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
+
 	PHYSFS_permitSymbolicLinks(1);
 
 	debug( LOG_WZ, "Write dir: %s", PHYSFS_getWriteDir() );
 	debug( LOG_WZ, "Base dir: %s", PHYSFS_getBaseDir() );
 }
 
-// We need ParseCommandLine, before we can add any mods...
+/*
+ * \fn void scanDataDirs( void )
+ * \brief Adds default data dirs
+ *
+ * Priority:
+ * -datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
+ *
+ * Only -datadir and home dir are allways examined. Others only if data still not found.
+ *
+ * We need ParseCommandLine, before we can add any mods...
+ *
+ * \sa loadMods
+ */
 void scanDataDirs( void )
 {
-	/*
-	 * Priorities:
-	 * maps > mods > mp > plain_dir > mp.wz > warzone.wz
-	 *
-	 * -datadir > User's home dir(maps/mods only) > SVN data (plain only) > AutoPackage > BaseDir > DEFAULT_DATADIR
-	 * 
-	 * Only -datadir and home dir are allways examined. Others only if data still not found.
-	 */
 	char tmpstr[MAX_PATH], prefix[MAX_PATH] = { '\0' };
-	data_restriction restrictions;
-
 
 	// Find out which PREFIX we are in...
 	strcpy( tmpstr, PHYSFS_getBaseDir() );
@@ -282,49 +244,45 @@ void scanDataDirs( void )
 		strrchr( tmpstr, *PHYSFS_getDirSeparator() ) - tmpstr );
 
 
-	// Command line supplied datadir
-	restrictions.all = FALSE; // Reset
-	addDataDir( datadir, restrictions );
-	
-	// User's home dir
-	restrictions.all = FALSE; // Reset
-	restrictions.flags.no_wz = TRUE;
-	restrictions.flags.no_plain = TRUE;
-	addDataDir( PHYSFS_getWriteDir(), restrictions );
+	// Commandline supplied datadir
+	if( strlen( datadir ) != 0 )
+		registerSearchPath( datadir, 1 );
 
+	// User's home dir
+	registerSearchPath( PHYSFS_getWriteDir(), 2 );
+
+	rebuildSearchPath( mod_multiplay, TRUE );
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
 		// Data in SVN dir
-		restrictions.all = FALSE; // Reset
-		restrictions.flags.no_wz = TRUE;
-		restrictions.flags.no_mods = TRUE;
 		strcpy( tmpstr, prefix );
-		strcat( tmpstr, "/data" );
-		addDataDir( tmpstr, restrictions );
+		strcat( tmpstr, "/data/" );
+		registerSearchPath( tmpstr, 3 );
 
+		rebuildSearchPath( mod_multiplay, TRUE );
 		if( !PHYSFS_exists("gamedesc.lev") )
 		{
 			// Relocation for AutoPackage
-			restrictions.all = FALSE; // Reset
 			strcpy( tmpstr, prefix );
-			strcat( tmpstr, "/share/warzone" );
-			addDataDir( tmpstr, restrictions );
+			strcat( tmpstr, "/share/warzone/" );
+			registerSearchPath( tmpstr, 4 );
 
+			rebuildSearchPath( mod_multiplay, TRUE );
 			if( !PHYSFS_exists("gamedesc.lev") )
 			{
 				// Program dir
-				restrictions.all = FALSE; // Reset
-				addDataDir( PHYSFS_getBaseDir(), restrictions );
+				registerSearchPath( PHYSFS_getBaseDir(), 5 );
 
+				rebuildSearchPath( mod_multiplay, TRUE );
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
-					restrictions.all = FALSE; // Reset
-					addDataDir( DEFAULT_DATADIR, restrictions );
+					registerSearchPath( DEFAULT_DATADIR, 6 );
 				}
 			}
 		}
 	}
+
 
 	// User's home dir first so we allways see what we write
 	PHYSFS_removeFromSearchPath( PHYSFS_getWriteDir() );
@@ -333,6 +291,7 @@ void scanDataDirs( void )
 
 	/** Debugging and sanity checks **/
 
+	rebuildSearchPath( mod_multiplay, TRUE );
 	printSearchPath();
 
 	if( PHYSFS_exists("gamedesc.lev") )

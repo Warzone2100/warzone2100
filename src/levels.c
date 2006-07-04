@@ -716,7 +716,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 		}
 	}
 
-	loadMods(psNewLevel->dataDir);
+	rebuildSearchPath(psNewLevel->dataDir, FALSE);
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)

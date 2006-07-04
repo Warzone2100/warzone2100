@@ -73,7 +73,7 @@ static VAR_SYMBOL	*psLocalVars=NULL;
 static FUNC_SYMBOL	*psFunctions=NULL;
 
 /* The current object variable context */
-static INTERP_TYPE	objVarContext = 0;
+static INTERP_TYPE	objVarContext = (INTERP_TYPE)0;
 
 /* Control whether debug info is generated */
 static BOOL			genDebugInfo = TRUE;

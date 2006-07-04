@@ -30,11 +30,23 @@ extern BOOL campaignReset(void);
 // Reset the game when loading a save game
 extern BOOL saveGameReset(void);
 
-BOOL buildMapList();
-BOOL loadMods(int mode);
 #define MOD_NONE 0
 #define MOD_CAMPAIGN 1
 #define MOD_MULTIPLAY 2
+
+typedef struct _SearchPath
+{
+	char path[MAX_PATH];
+	unsigned int priority;
+	struct _SearchPath * higherPriority, * lowerPriority;
+} SearchPath;
+
+typedef enum { mod_none=0, mod_campaign=1, mod_multiplay=2 } searchPathMode;
+
+void registerSearchPath( const char path[], unsigned int priority );
+BOOL rebuildSearchPath( searchPathMode mode, BOOL force );
+
+BOOL buildMapList();
 
 // the block heap for the game data
 extern BLOCK_HEAP	*psGameHeap;
