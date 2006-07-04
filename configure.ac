@@ -10,8 +10,16 @@ AM_INIT_AUTOMAKE
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
+
 AC_PROG_YACC
+if test "x$YACC" != "xbison -y" ; then
+	AC_MSG_ERROR([Bison is not installed])
+fi
+
 AC_PROG_LEX
+if test "x$LEX" != "flex" ; then
+	AC_MSG_ERROR([Flex is not installed])
+fi
 
 
 # Commandline options:
