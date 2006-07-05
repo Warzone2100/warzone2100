@@ -134,7 +134,6 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 		if( !checkList || inList( checkList, *i ) )
 		{
 			strcpy( tmpstr, basedir );
-			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, subdir );
 			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, *i );

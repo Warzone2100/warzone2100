@@ -36,24 +36,12 @@ extern "C" {
 	Uint32 rate;
     } FPSmanager;
 
-/* --------- Function prototypes */
-
-#ifdef WIN32
-#ifdef BUILD_DLL
-#define DLLINTERFACE __declspec(dllexport)
-#else
-#define DLLINTERFACE __declspec(dllimport)
-#endif
-#else
-#define DLLINTERFACE
-#endif
-
 /* Functions return 0 or value for sucess and -1 for error */
 
-    DLLINTERFACE void SDL_initFramerate(FPSmanager * manager);
-    DLLINTERFACE int SDL_setFramerate(FPSmanager * manager, int rate);
-    DLLINTERFACE int SDL_getFramerate(FPSmanager * manager);
-    DLLINTERFACE void SDL_framerateDelay(FPSmanager * manager);
+    void SDL_initFramerate(FPSmanager * manager);
+    int SDL_setFramerate(FPSmanager * manager, int rate);
+    int SDL_getFramerate(FPSmanager * manager);
+    void SDL_framerateDelay(FPSmanager * manager);
 
 /* --- */
 

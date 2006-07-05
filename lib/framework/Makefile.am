@@ -4,6 +4,7 @@ BUILT_SOURCES = resource_parser.h strres_parser.h
 noinst_LIBRARIES = libframework.a
 AM_CPPFLAGS = -I$(top_srcdir)
 libframework_a_SOURCES = \
+    SDL_framerate.c \
 	resource_lexer.l \
 	resource_parser.y \
 	strres_lexer.l \
