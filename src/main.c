@@ -552,6 +552,7 @@ init://jump here from the end if re_initialising
 		{
 			frameRet = frameUpdate();
 
+/* Unused...
 			if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
 			{
 				if ( frameRet == FRAME_SETFOCUS )
@@ -563,6 +564,7 @@ init://jump here from the end if re_initialising
 //					D3DTestCooperativeLevel( FALSE );
 				}
 			}
+*/
 
 			switch (frameRet)
 			{

@@ -1,20 +1,12 @@
 Easy:
-- bug #5097: CPU Hog
-	Reduce the amount of main-loop-runs to a reasonable number (eg 50),
-	so we don't eat up the whole CPU time.
-	Advanced code could be taken from the SDL_gfx project (http://www.ferzkopp.net/Software/SDL_gfx-2.0/).
-	The really simple solution would be a kind of SDL_Delay(1000/FPS).
-
-	Framerate calculation currently takes place in lib/framework/frame.c:103+
-	Main loop resides in src/main.c:486+
-
-	Details: https://gna.org/bugs/index.php?func=detailitem&item_id=5097
-
 - Add a shadow toggle to src/clparse.c
 
 - Make Warzone respond to the SDL_QUIT event so it can be closed with ^C, ALT+F4 or closing the window.
+    This involves registering all needed functions to atexit() so Warzone shuts down properly on that event.
 
 More difficult:
+- Display "backdrops" instead of novideo.rpl so a story can be told using subtitles and be illustrated with pictures.
+
 - Create one single place where platform dependend defines reside.
 
 - Create a "super header" which is included in every header before any other headers.

@@ -17,7 +17,7 @@ if test "x$YACC" != "xbison -y" ; then
 fi
 
 AC_PROG_LEX
-if test "x$LEX" != "flex" ; then
+if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
 

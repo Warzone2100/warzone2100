@@ -26,10 +26,13 @@
 #include <assert.h>
 #include "cursors.c"
 
+#include "SDL_framerate.h"
+
 #define IGNORE_FOCUS
 
 /* Linux specific stuff */
 
+static FPSmanager wzFPSmanager;
 
 
 char *unix_path(const char *path)
@@ -391,6 +394,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 	/* Initialise the frame rate stuff */
 	InitFrameStuff();
 
+	SDL_initFramerate( &wzFPSmanager );
 
 
 	// Initialise the resource stuff
@@ -464,6 +468,7 @@ FRAME_STATUS frameUpdate(void)
 	{
 		/* Update the frame rate stuff */
 		MaintainFrameStuff();
+		SDL_framerateDelay( &wzFPSmanager );
 	}
 
 	return retVal;
