@@ -100,7 +100,7 @@ AC_DEFUN([WZ_EXPAND_DIR], [
 dnl export where the datadir is going to be installed; we will look for
 dnl $datadir/warzone/warzone.wz
 WZ_EXPAND_DIR(datadir, "$datadir/warzone")
-AC_DEFINE_UNQUOTED(DEFAULT_DATA_DIR, "$datadir", [Warzone data path])
+AC_DEFINE_UNQUOTED(DEFAULT_DATADIR, "$datadir/", [Warzone data path])
 
 
 # Checks for libraries:
