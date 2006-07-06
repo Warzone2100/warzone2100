@@ -172,7 +172,7 @@ void mp3_refill() {
 			int offset;
 
 			if (   music_file == NULL
-			    || feof(music_file)) {
+			    || PHYSFS_eof(music_file)) {
 				return;
 			}
 

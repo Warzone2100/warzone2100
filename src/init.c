@@ -754,6 +754,8 @@ void registerSearchPath( const char path[], unsigned int priority )
 
 	tmpSearchPath = (wzSearchPath*)malloc(sizeof(wzSearchPath));
 	strcpy( tmpSearchPath->path, path );
+	if( path[strlen(path)-1] != *PHYSFS_getDirSeparator() )
+		strcat( tmpSearchPath->path, PHYSFS_getDirSeparator() );
 	tmpSearchPath->priority = priority;
 
 	while( curSearchPath->higherPriority &&

@@ -51,9 +51,11 @@ else
 fi
 
 #   --without-opengl will build without opengl
-AC_ARG_WITH(opengl,
-[  --with-opengl           use OpenGL to accelerate graphics [[auto]]],
-[ opengl=$withval ], [ opengl=maybe ])
+# OpenGL is not anymore an option
+# At least till we got a working software renderer
+#AC_ARG_WITH(opengl,
+#[  --with-opengl           use OpenGL to accelerate graphics [[auto]]],
+#[ opengl=$withval ], [ opengl=maybe ])
 
 #   --without-openal will build without OpenAL
 # Commented out as OpenAL is not curently an option,
@@ -92,15 +94,15 @@ dnl from http://www.cygnus.com/ml/automake/1998-Aug/0040.html
 AC_DEFUN([WZ_EXPAND_DIR], [
         $1=$2
         $1=`(
-            test "x$prefix" = xNONE && prefix="$ac_default_prefix"
-            test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+            test "x$prefix" = "xNONE" && prefix="${ac_default_prefix}"
+            test "x$exec_prefix" = "xNONE" && exec_prefix="${prefix}"
             eval echo \""[$]$1"\"
         )`
 ])
 dnl export where the datadir is going to be installed; we will look for
 dnl $datadir/warzone/warzone.wz
 WZ_EXPAND_DIR(datadir, "$datadir/warzone")
-AC_DEFINE_UNQUOTED(DEFAULT_DATADIR, "$datadir/", [Warzone data path])
+WZ_CFLAGS="${WZ_CFLAGS} -DDEFAULT_DATADIR=\\\"${datadir}\\\""
 
 
 # Checks for libraries:
@@ -112,8 +114,10 @@ AC_CHECK_HEADER(zlib.h, , AC_MSG_ERROR([zlib header not found.]))
 
 
 # Look for image libs
-AC_CHECK_LIB(jpeg, main, , [AC_MSG_ERROR([You need to install the jpeg library.])])
-AC_CHECK_LIB(png, main, , [AC_MSG_ERROR([You need to install the png library.])])
+AC_CHECK_LIB(jpeg, main, , AC_MSG_ERROR([libjpeg not found.]))
+AC_CHECK_HEADER(jpeglib.h, , AC_MSG_ERROR([jpeg header not found.]))
+AC_CHECK_LIB(png, main, , AC_MSG_ERROR([libpng not found.]))
+AC_CHECK_HEADER(png.h, , AC_MSG_ERROR([png header not found.]))
 
 
 # Look for PhysicsFS
@@ -162,7 +166,7 @@ if test "x$opengl" = "xyes" ; then
 	AC_MSG_RESULT([yes])
 else
 	AC_MSG_RESULT([no])
-	AC_SUBST(RENDERER, "ivis02")
+	AC_MSG_ERROR([OpenGL is currently mandatory])
 fi
 
 
@@ -237,20 +241,23 @@ else
 fi
 
 
+# Set flex flags. The -olex.yy.c kludge is to ensure that flex
+# generates the kind of filename that automake expects.
+AC_SUBST(LFLAGS, "-olex.yy.c")
+
+# Set bison flags. The -oy.tab.c kludge is to ensure that bison
+# generates the kind of filename that automake expects.
+AC_SUBST(YFLAGS, "-oy.tab.c")
+
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
 WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -m32 -fno-strict-aliasing"
 
-# Set flex flags. The -olex.yy.c kludge is to ensure that flex
-# generates the kind of filename that automake expects.
-AC_SUBST(FLEX_FLAGS, "-olex.yy.c")
-
 # only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
 # strange error messages when something is wrong
 LIBS="${LIBS} ${WZ_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
-CPPFLAGS="${CPPFLAGS} ${WZ_CPPFLAGS}"
 
 AC_CONFIG_FILES([Makefile
                  lib/Makefile
