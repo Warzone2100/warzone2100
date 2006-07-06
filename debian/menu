@@ -1,0 +1,2 @@
+?package(warzone):needs="X11" section="Games/Strategy"\
+  title="Warzone 2100" command="/usr/games/warzone"
