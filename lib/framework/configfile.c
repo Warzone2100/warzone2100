@@ -152,14 +152,15 @@ void registry_set_key( const char *k, const char *v )
 //
 BOOL registry_load( char *filename )
 {
-	char buffer[MAXLINESIZE], *bptr, *bufstart;
+	char buffer[MAXLINESIZE];
+	UBYTE * bptr = NULL, * bufstart = NULL;
 	char key[32];
 	unsigned int l;
 	UDWORD filesize;
 
 	debug(LOG_WZ, "Loading the registry from %s", filename);
 	if (PHYSFS_exists(filename)) {
-		if (!loadFile(filename, (UBYTE**)&bptr, &filesize)) {
+		if (!loadFile(filename, &bptr, &filesize)) {
 			return FALSE;           // happens only in NDEBUG case
 		}
 	} else {

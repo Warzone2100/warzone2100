@@ -130,14 +130,16 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 	{
 #ifdef DEBUG
 		debug( LOG_NEVER, "addSubdirs: Examining subdir: [%s]", *i );
-#endif
+#endif // DEBUG
 		if( !checkList || inList( checkList, *i ) )
 		{
 			strcpy( tmpstr, basedir );
 			strcat( tmpstr, subdir );
 			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, *i );
+#ifdef DEBUG
 			debug( LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr );
+#endif // DEBUG
 			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
 		i++;
@@ -154,14 +156,16 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 	{
 #ifdef DEBUG
 		debug( LOG_NEVER, "removeSubdirs: Examining subdir: [%s]", *i );
-#endif
+#endif // DEBUG
 		if( !checkList || inList( checkList, *i ) )
 		{
 			strcpy( tmpstr, basedir );
 			strcat( tmpstr, subdir );
 			strcat( tmpstr, PHYSFS_getDirSeparator() );
 			strcat( tmpstr, *i );
+#ifdef DEBUG
 			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
+#endif // DEBUG
 			PHYSFS_removeFromSearchPath( tmpstr );
 		}
 		i++;
@@ -223,6 +227,7 @@ static void initialize_PhysicsFS(void)
  * \brief Adds default data dirs
  *
  * Priority:
+ * Lower loads first. Current:
  * -datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
  *
  * Only -datadir and home dir are allways examined. Others only if data still not found.
@@ -242,6 +247,7 @@ void scanDataDirs( void )
 	strncpy( prefix, PHYSFS_getBaseDir(), // Skip the last dir from base dir
 		strrchr( tmpstr, *PHYSFS_getDirSeparator() ) - tmpstr );
 
+	atexit( cleanSearchPath );
 
 	// Commandline supplied datadir
 	if( strlen( datadir ) != 0 )
@@ -249,34 +255,35 @@ void scanDataDirs( void )
 
 	// User's home dir
 	registerSearchPath( PHYSFS_getWriteDir(), 2 );
-
 	rebuildSearchPath( mod_multiplay, TRUE );
+
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
 		// Data in SVN dir
 		strcpy( tmpstr, prefix );
 		strcat( tmpstr, "/data/" );
 		registerSearchPath( tmpstr, 3 );
-
 		rebuildSearchPath( mod_multiplay, TRUE );
+
 		if( !PHYSFS_exists("gamedesc.lev") )
 		{
 			// Relocation for AutoPackage
 			strcpy( tmpstr, prefix );
 			strcat( tmpstr, "/share/warzone/" );
 			registerSearchPath( tmpstr, 4 );
-
 			rebuildSearchPath( mod_multiplay, TRUE );
+
 			if( !PHYSFS_exists("gamedesc.lev") )
 			{
 				// Program dir
 				registerSearchPath( PHYSFS_getBaseDir(), 5 );
-
 				rebuildSearchPath( mod_multiplay, TRUE );
+
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
 					registerSearchPath( DEFAULT_DATADIR, 6 );
+					rebuildSearchPath( mod_multiplay, TRUE );
 				}
 			}
 		}
@@ -285,7 +292,7 @@ void scanDataDirs( void )
 
 	/** Debugging and sanity checks **/
 
-	rebuildSearchPath( mod_multiplay, TRUE );
+	printSearchPath();
 
 	if( PHYSFS_exists("gamedesc.lev") )
 	{

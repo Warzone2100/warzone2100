@@ -555,12 +555,14 @@ static BOOL loadFile2(char *pFileName, UBYTE **ppFileData, UDWORD *pFileSize,
 	/* Load the file data */
 	length_read = PHYSFS_read(pfile, *ppFileData, 1, filesize);
 	if (length_read != filesize) {
+		FREE( *ppFileData );
 		debug(LOG_ERROR, "loadFile2: Reading %s short: %s",
 		      pFileName, PHYSFS_getLastError());
 		assert(FALSE);
 		return FALSE;
 	}
 	if (!PHYSFS_close(pfile)) {
+		FREE( *ppFileData );
 		debug(LOG_ERROR, "loadFile2: Error closing %s: %s", pFileName,
 		      PHYSFS_getLastError());
 		assert(FALSE);
