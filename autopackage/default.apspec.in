@@ -25,7 +25,7 @@ Warzone 2100 was one of the first 3D RTS games ever. It was released commerciall
 
 [BuildPrepare]
 export APBUILD_STATIC="mad"
-prepareBuild --enable-debug
+prepareBuild
 
 [BuildUnprepare]
 unprepareBuild
