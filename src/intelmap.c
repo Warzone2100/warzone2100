@@ -1383,39 +1383,39 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 	case MSG_RESEARCH:
 		pResearch = getResearchForMsg((VIEWDATA *)psMsg->pViewData);
 		//IMDType = IMDTYPE_RESEARCH;
-        //set the IMDType depending on what stat is associated with the research
-        if (pResearch->psStat)
-        {
-            //we have a Stat associated with this research topic
-            if  (StatIsStructure(pResearch->psStat))
-            {
-                //this defines how the button is drawn
+        	//set the IMDType depending on what stat is associated with the research
+        	if (pResearch->psStat)
+        	{
+			//we have a Stat associated with this research topic
+			if  (StatIsStructure(pResearch->psStat))
+			{
+				//this defines how the button is drawn
 				IMDType = IMDTYPE_STRUCTURESTAT;
-                psResGraphic = pResearch->psStat;
-            }
-            else
-            {
-                compID = StatIsComponent(pResearch->psStat);
+				psResGraphic = pResearch->psStat;
+			}
+			else
+			{
+				compID = StatIsComponent(pResearch->psStat);
 				if (compID != COMP_UNKNOWN)
 				{
-                    //this defines how the button is drawn
-	    			IMDType = IMDTYPE_COMPONENT;
-                    psResGraphic = pResearch->psStat;
-		    	}
-                else
-                {
-                    ASSERT((FALSE, "intDisplayMessageButton: invalid stat"));
-                    IMDType = IMDTYPE_RESEARCH;
-                    psResGraphic = (BASE_STATS *)pResearch;
-                }
-            }
-        }
-        else
-        {
-            //no Stat for this research topic so use the research topic to define what is drawn
-            psResGraphic = (BASE_STATS *)pResearch;
-            IMDType = IMDTYPE_RESEARCH;
-        }
+					//this defines how the button is drawn
+					IMDType = IMDTYPE_COMPONENT;
+					psResGraphic = pResearch->psStat;
+				}
+				else
+				{
+					ASSERT((FALSE, "intDisplayMessageButton: invalid stat"));
+					IMDType = IMDTYPE_RESEARCH;
+					psResGraphic = (BASE_STATS *)pResearch;
+				}
+			}
+		}
+		else
+		{
+			//no Stat for this research topic so use the research topic to define what is drawn
+			psResGraphic = (BASE_STATS *)pResearch;
+			IMDType = IMDTYPE_RESEARCH;
+		}
 		break;
 	case MSG_CAMPAIGN:
 		image = IMAGE_INTEL_CAMPAIGN;
@@ -1426,7 +1426,7 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 		MovieButton = TRUE;
 		break;
 	default:
-		DBERROR(("Unknown message type"));
+		debug( LOG_ERROR, "Unknown message type: %i", psMsg->type );
 		return;
 	}
 
