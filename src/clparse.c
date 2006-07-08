@@ -72,11 +72,14 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   -fullscreen :       Play in fullscreen mode\n"
 				"   -window :           Play in windowed mode\n"
 				"   -<WIDTH>x<HEIGHT> : Set the dimensions of the viewport (screen or window)\n"
-				"   -savegame <NAME>  : Load a saved game\n"
+				"   -savegame <NAME> :  Load a saved game\n"
 				"   -help :             Show this help\n"
 				"   -debug FLAGS :      Show debug for FLAGS\n"
 				"   -debugfile FILE :   Log debug output in FILE\n"
-				"   -datadir DIR :      Set default datadir to DIR\n" );
+				"   -datadir DIR :      Set default datadir to DIR\n" 
+				"   -mod MOD :          Enable global mod MOD\n"
+				"   -mp_mod MOD :       Enable multiplay only mod MOD\n"
+				"   -ca_mod MOD :       Enable campaign only mod MOD\n" );
 			return FALSE;
 		}
 		else if (stricmp(tokenType, "-debugfile") == 0) {

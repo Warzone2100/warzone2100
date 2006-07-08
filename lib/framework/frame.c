@@ -395,7 +395,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 	InitFrameStuff();
 
 	SDL_initFramerate( &wzFPSmanager );
-
+	SDL_setFramerate( &wzFPSmanager, 60 );
 
 	// Initialise the resource stuff
 	if (!resInitialise())

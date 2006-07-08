@@ -11,7 +11,7 @@
    * Code improvements/simplifications and commonalization
    * Pressing TAB pastes clipboard in host address dialogue (join network game)
    * Pressing ALT+S toggles shadows
-   * Framerate limited to a sane amount (30 currently)
+   * Framerate limited to a sane amount (60 currently)
  * Graphics:
    * PNG support (converted all PCX files and removed support for them)
    * Support for JPEG files in .wz packages
