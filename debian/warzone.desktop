@@ -1,13 +1,15 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=Warzone 2100
 Type=Application
+Name=Warzone 2100 GPL
+Name[de]=Warzone 2100 GPL
 GenericName=Strategy Game
+GenericName[de]=Strategiespiel
+Comment=Postnuclear realtime strategy
+Comment[de]=Postnukleare Echtzeit Strategie
 Icon=warzone2100.png
-FilePattern=warzone;
+FilePattern=warzone
+TryExec=warzone
 Exec=warzone
-Terminal=false
-StartupNotify=false
-Categories=Application;Game;
-GenericName[de_DE]=Strategy Game
+Categories=Application;Game;StrategyGame;

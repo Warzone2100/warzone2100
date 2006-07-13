@@ -26,6 +26,8 @@ Warzone 2100 was one of the first 3D RTS games ever. It was released commerciall
 [BuildPrepare]
 export APBUILD_STATIC="mad"
 prepareBuild
+installIcon debian/warzone2100.png
+installDesktop "Games/TacticStrategy" debian/warzone.desktop
 
 [BuildUnprepare]
 unprepareBuild
