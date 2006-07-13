@@ -1,3 +1,11 @@
+warzone (0.2.2+0svn-2) unstable; urgency=low
+
+  * remove alut-dev from Build-Depends: not needed
+  * make warzone-data depend on Source-Version
+  * desktop entry added (using scaled icon from win32)
+
+ -- Pavel Rojtberg <pavel@madman2k.net>  Thu, 13 Jul 2006 15:52:49 +0200
+
 warzone (0.2.2+0svn-1) unstable; urgency=low
 
   * Initial release.

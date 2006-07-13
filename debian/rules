@@ -76,6 +76,8 @@ binary-arch: build install
 	dh_installdocs
 	dh_installexamples
 #	dh_install
+	dh_install -s debian/warzone.desktop /usr/share/applications/
+	dh_install -s debian/warzone2100.png /usr/share/pixmaps/
 	dh_installmenu
 #	dh_installdebconf	
 #	dh_installlogrotate

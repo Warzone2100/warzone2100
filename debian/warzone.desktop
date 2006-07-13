@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Warzone 2100
+Type=Application
+GenericName=Strategy Game
+Icon=warzone2100.png
+FilePattern=warzone;
+Exec=warzone
+Terminal=false
+StartupNotify=false
+Categories=Application;Game;
+GenericName[de_DE]=Strategy Game
