@@ -24,6 +24,11 @@ else
 	CFLAGS += -O2
 endif
 
+%.xpm: %.png
+	pngtopnm -alpha $< | pnmscale -xysize 32 32 > $@.alpha
+	pngtopnm $< | pnmscale -xysize 32 32 | ppmtoxpm -alphamask $@.alpha > $@
+	$(RM) $@.alpha
+
 config.status: configure
 	dh_testdir
 
@@ -32,7 +37,7 @@ config.status: configure
 
 build: build-stamp
 
-build-stamp:  config.status
+build-stamp:  config.status debian/warzone2100.xpm
 	dh_testdir
 
 	$(MAKE)
@@ -42,7 +47,7 @@ build-stamp:  config.status
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp 
+	$(RM) build-stamp 
 
 	-$(MAKE) distclean
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
@@ -51,6 +56,8 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
+
+	$(RM) debian/warzone2100.xpm
 
 	dh_clean 
 
@@ -75,11 +82,10 @@ binary-arch: build install
 	dh_installchangelogs CHANGELOG
 	dh_installdocs
 	dh_installexamples
-#	dh_install
-	dh_install -s debian/warzone.desktop /usr/share/applications/
-	dh_install -s debian/warzone2100.png /usr/share/pixmaps/
+	dh_install
 	dh_installmenu
-#	dh_installdebconf	
+	dh_desktop
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam

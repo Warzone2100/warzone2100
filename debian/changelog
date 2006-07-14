@@ -1,3 +1,13 @@
+warzone (2.0.3-0svn1) unstable; urgency=low
+
+  * Fix upstream version number..
+  * Use dh_desktop
+     - Bump debhelper build-dep version accordingly.
+  * Add icon to menu file too
+     - Requires build-dep on netpbm for conversion to xpm.
+
+ -- Angus Lees <gus@debian.org>  Fri, 14 Jul 2006 21:38:26 +0100
+
 warzone (0.2.2+0svn-2) unstable; urgency=low
 
   * remove alut-dev from Build-Depends: not needed
