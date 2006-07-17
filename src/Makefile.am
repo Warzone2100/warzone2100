@@ -277,8 +277,8 @@ warzone_LDADD        = $(warzone_libs)
 .PHONY: version.c
 version.c:
 	echo -n 'const char* version(void) { return "'	> version.c
-	echo -n $(VERSION)		>> version.c
+	echo -n $(VERSION)	>> version.c
 	echo '"; }'			>> version.c
 	echo -n 'const char* revision(void) { return "'	>> version.c
-	echo -n `svnversion -n .`	>> version.c
-	echo '"; }' 			>> version.c
+	echo -n $(REVISION)	>> version.c
+	echo '"; }' 		>> version.c
