@@ -61,6 +61,12 @@ static unsigned int	mp3_pos_in_frame;
 #ifndef WZ_NOOGG
 static OggVorbis_File	ogg_stream;
 static vorbis_info*	ogg_info;
+
+static size_t wz_ogg_read( void *ptr, size_t size, size_t nmemb, void *datasource );
+static int wz_ogg_seek( void *datasource, ogg_int64_t offset, int whence );
+static int wz_ogg_close( void *datasource );
+
+static ov_callbacks		wz_ogg_callbacks = { wz_ogg_read, wz_ogg_seek, wz_ogg_close, NULL };
 #endif
 
 static ALfloat		music_volume = 0.5;
@@ -94,6 +100,21 @@ void PlayList_DeleteCurrentSong();
 //
 // cdAudio Subclass procedure
 
+size_t wz_ogg_read( void *ptr, size_t size, size_t nmemb, void *datasource )
+{
+	return (PHYSFS_sint64)PHYSFS_read( (PHYSFS_file*)datasource, ptr, (PHYSFS_uint32)size, (PHYSFS_uint32)nmemb );
+}
+int wz_ogg_seek( void *datasource, ogg_int64_t offset, int whence )
+{
+	return -1;
+}
+
+int wz_ogg_close( void *datasource )
+{
+	return PHYSFS_close( (PHYSFS_file*)datasource );
+}
+
+
 //*
 // ======================================================================
 // ======================================================================
@@ -103,14 +124,14 @@ BOOL cdAudio_Open( char* user_musicdir )
 #ifdef WZ_CDA
 	if ( !SDL_CDNumDrives() )
 	{
-		printf( "No CDROM devices available\n" );
+		debug( LOG_SOUND, "No CDROM devices available\n" );
 		return FALSE;
 	}
 
 	cdAudio_dev = SDL_CDOpen( 0 );
 	if ( !cdAudio_dev )
 	{
-		printf( "Couldn't open drive: %s\n", SDL_GetError() );
+		debug( LOG_SOUND, "Couldn't open drive: %s\n", SDL_GetError() );
 		return FALSE;
 	}
 
@@ -275,6 +296,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 		music_file = PHYSFS_openRead(filename);
 
 		if (music_file == NULL) {
+			debug( LOG_SOUND, "Failed opening %s: %s\n", filename, PHYSFS_getLastError() );
 			return FALSE;
 		}
 
@@ -282,7 +304,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 		mad_frame_init(&mp3_frame);
 		mad_synth_init(&mp3_synth);
 
-		mp3_buffer_length = PHYSFS_read(music_file, mp3_buffer, MP3_BUFFER_SIZE, 1 );
+		mp3_buffer_length = PHYSFS_read(music_file, mp3_buffer, 1, MP3_BUFFER_SIZE );
 
 		mad_stream_buffer(&mp3_stream, mp3_buffer, mp3_buffer_length);
 
@@ -316,10 +338,11 @@ BOOL cdAudio_OpenTrack(char* filename) {
 		music_file = PHYSFS_openRead(filename);
 
 		if (music_file == NULL) {
+			debug( LOG_SOUND, "Failed opening %s: %s\n", filename, PHYSFS_getLastError() );
 			return FALSE;
 		}
 
-		if (ov_open(music_file, &ogg_stream, NULL, 0) < 0) {
+		if ( ov_open_callbacks( (void*)music_file, &ogg_stream, NULL, 0, wz_ogg_callbacks ) < 0 ) {
 			PHYSFS_close(music_file);
 			music_file = NULL;
 			return FALSE;
@@ -356,6 +379,10 @@ BOOL cdAudio_CloseTrack() {
 			alSourceUnqueueBuffers(music_source, 1, &buffer);
 			all--;
 		}
+
+#ifndef WZ_NOOGG
+		ov_clear( &ogg_stream );
+#endif // WZ_NOOGG
 
 		PHYSFS_close(music_file);
 		music_file = NULL;
@@ -400,7 +427,7 @@ BOOL cdAudio_FillBuffer(ALuint b) {
 					break;
 				}
 				if (cdAudio_OpenTrack(filename)) {
-					printf("Now playing %s\n", filename);
+					debug( LOG_SOUND, "Now playing %s\n", filename );
 					break;
 				} else {
 					return FALSE;	// break out to avoid infinite loops
