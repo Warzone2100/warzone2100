@@ -131,7 +131,7 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 	/* Store the screen information */
 	screenWidth = width;
 	screenHeight = height;
-	screenDepth = 24;
+	screenDepth = 32;
 
 	/* store vidmem flag */
 	g_bVidMem = bVidMem;
@@ -168,14 +168,42 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 				video_flags |= SDL_HWACCEL;
 			}
 
-			SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
-			SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
-			SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
-			SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
-			SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-			SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
+			bpp = SDL_VideoModeOK(width, height, screenDepth, video_flags);
+			if (!bpp) {
+				debug( LOG_ERROR, "Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, screenDepth );
+				return FALSE;
+			}
+			switch ( bpp )
+			{
+				case 32:
+				case 24:
+					SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+					SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+					SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+					SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
+					SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+					SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
+					break;
+				case 16:
+					debug( LOG_ERROR, "Warning: Using colour depth of %i instead of %i.", bpp, screenDepth );
+					debug( LOG_ERROR, "         You will experience graphics glitches!" );
+					SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
+					SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 6 );
+					SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
+					SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+					SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
+					break;
+				case 8:
+					debug( LOG_ERROR, "Error: You don't want to play Warzone with a bit depth of %i, do you?", bpp );
+					exit( 1 );
+					break;
+				default:
+					debug( LOG_ERROR, "Error: Weird bit depth: %i", bpp );
+					exit( 1 );
+					break;
+			}
 
-    			// Set the double buffer OpenGL attribute.
+			// Set the double buffer OpenGL attribute.
 			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		}
 
@@ -186,15 +214,6 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 			screenMode = SCREEN_WINDOWED;
 		}
 
-		bpp = SDL_VideoModeOK(width, height, screenDepth, video_flags);
-		if (!bpp) {
-			printf("Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, screenDepth);
-			return FALSE;
-		}
-		if (bpp != screenDepth) {
-			debug(LOG_3D, "Warning: Using colour depth of %d instead of %d.",
-            bpp, screenDepth);
-		}
 		screen = SDL_SetVideoMode(width, height, bpp, video_flags);
 		if (!screen) {
 			printf("Error: SDL_SetVideoMode failed (%s).\n", SDL_GetError());
