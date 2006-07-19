@@ -43,8 +43,7 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -O0 -g3 -Wall"
-  AC_DEFINE(DEBUG, 1, [Define if you want extra debugging.])
+  WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -Wall -DDEBUG"
   AC_MSG_RESULT([yes])
 else
   AC_MSG_RESULT([no])
@@ -250,12 +249,12 @@ AC_SUBST(LFLAGS, "-olex.yy.c")
 AC_SUBST(YFLAGS, "-oy.tab.c")
 
 # Set revision to be used by src/Makefile.am
-AC_SUBST(REVISION, `svnversion -n .`)
+AC_SUBST(REVISION, [`svnversion -n .`])
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -m32 -fno-strict-aliasing"
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -m32"
 
 # only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
 # strange error messages when something is wrong
