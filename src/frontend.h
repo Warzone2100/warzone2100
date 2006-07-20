@@ -83,8 +83,6 @@ BOOL		runGameOptions2Menu		(VOID);
 BOOL		runGameOptions3Menu		(VOID);
 
 
-extern BOOL GetInFastPlay(void);
-
 BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
 
 

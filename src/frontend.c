@@ -98,20 +98,6 @@ BOOL			bForceEditorLoaded = FALSE;
 BOOL			bUsingKeyboard = FALSE;		// to disable mouse pointer when using keys.
 BOOL			bUsingSlider   = FALSE;
 
-static tMode	g_tModeNext;
-
-
-// This is used on the PSX so that things like the mission result screen
-// can know if were in the fast play game and behave a bit differently if so.
-// Currently just returns FALSE on the PC.
-BOOL GetInFastPlay(void)
-{
-
-	return FALSE;
-
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // extern Definitions
 

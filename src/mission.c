@@ -3447,12 +3447,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
         else
         {
 			// Finished the mission, so display "Continue Game"
-			if(!GetInFastPlay())	// If in fast play then no save option so move up a bit.
-			{
-				sButInit.y			= MISSION_2_Y;
-			} else {
-				sButInit.y			= MISSION_2_Y-16;
-			}
+			sButInit.y			= MISSION_2_Y;
 			sButInit.id			= IDMISSIONRES_CONTINUE;
 			sButInit.pText		= strresGetString(psStringRes,STR_MR_CONTINUE);//"Continue Game";
 			widgAddButton(psWScreen, &sButInit);
@@ -3462,8 +3457,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		/* Only add save option if in the game for real, ie, not fastplay.
         And the player hasn't just completed the whole game
         Don't add save option if just lost and in debug mode*/
-		if(!GetInFastPlay() AND !testPlayerHasWon() AND
-            !(testPlayerHasLost() AND getDebugMappingStatus()))
+		if (!testPlayerHasWon() AND !(testPlayerHasLost() AND getDebugMappingStatus()))
 		{
 			//save
 			sButInit.id			= IDMISSIONRES_SAVE;

@@ -3,5 +3,5 @@
 extern	void	setCheatCodeStatus(BOOL val);
 extern	BOOL	getCheatCodeStatus( void );
 extern	BOOL	attemptCheatCode(STRING	*pName);
-unsigned char	*xorString(unsigned char *string);
+char	*xorString(char *string);
 #endif

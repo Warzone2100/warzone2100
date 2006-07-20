@@ -251,8 +251,10 @@ appropriate sized image for the view*/
 
 static void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
+#ifndef NO_VIDEO
 static void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
+#endif
 static void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
@@ -1558,6 +1560,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 }
 
+#ifndef NO_VIDEO
 /* displays the FLIC view for the current message */
 void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
@@ -1618,6 +1621,7 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 }
+#endif
 
 /* displays the TEXT view for the current message */
 void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,

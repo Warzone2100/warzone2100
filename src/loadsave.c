@@ -399,7 +399,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
 	CHAR		sTemp[MAX_STR_LENGTH];
-	UDWORD		iCampaign,i;
+	UDWORD		i;
 	W_CONTEXT		context;
 	BOOL		bSkipCD = FALSE;
 

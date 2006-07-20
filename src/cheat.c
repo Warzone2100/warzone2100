@@ -55,9 +55,9 @@ CHEAT_ENTRY	cheatCodes[] =
 
 char	cheatString[255];
 
-unsigned char	*xorString(unsigned char *string)
+char	*xorString(char *string)
 {
-unsigned char	*pReturn;
+	char	*pReturn;
 
 	pReturn = string;
 
