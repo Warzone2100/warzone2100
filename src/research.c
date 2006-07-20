@@ -93,7 +93,7 @@ UWORD               numResearchPR;
 
 
 UWORD               numResearchStructPR;
-UBYTE               numResearchFunc;
+UWORD               numResearchFunc;
 UWORD               numResearchStructRed;
 UBYTE               numResearchArteRed;
 UWORD               numResearchStructRes;
@@ -619,7 +619,6 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 				DBERROR(("Out of memory assigning research functions"));
 				return FALSE;
 			}*/
-	    // FIXME: always false due to limited range of data type
             if (numResearchFunc >= MAX_RESEARCH_FUNC)
             {
                 DBERROR(("Out of memory assigning research functions"));
@@ -629,7 +628,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
             pResearch->pFunctionList = pResearchFunc + numResearchFunc;
             //pResearchFunc += pResearch->numFunctions;
             //keep track on how many are being allocated
-            numResearchFunc = (UBYTE)(numResearchFunc + pResearch->numFunctions);
+            numResearchFunc = (numResearchFunc + pResearch->numFunctions);
 		}
 
 		//allocate storage for the pre-requisities
@@ -1308,7 +1307,6 @@ BOOL loadResearchFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 		}
         //quick check that haven't reached maxPR
 
-	// FIXME: always false due to limited range of data type
         if (numResearchFunc >= MAX_RESEARCH_FUNC)
         {
             //don't load any more since will write over memory!
