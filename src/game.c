@@ -2815,6 +2815,8 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	BLOCK_HEAP		*psHeap;
 	DROID			*psDroid, *psNext;
 
+	strcpy( aFileName, unix_path( aFileName ) );
+
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
 
