@@ -81,7 +81,6 @@ extern CURSORSNAP			InterfaceSnap;
 extern BOOL				bSendingMap;
 
 extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-
 extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
@@ -132,6 +131,7 @@ static VOID addBlueForm					(UDWORD parent,UDWORD id,STRING *txt,UDWORD x,UDWORD
 // Drawing Functions
 VOID		displayChatEdit				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 VOID		displayMultiBut				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+VOID		displayWhiteBoard			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 VOID		intDisplayFeBox				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 VOID		displayRemoteGame			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 VOID		displayPlayer				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -3440,7 +3440,7 @@ BOOL runWhiteBoard()
 	return TRUE;
 }
 
-BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+VOID displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = D_W+xOffset+psWidget->x;
 	UDWORD	y = D_H+yOffset+psWidget->y;
@@ -3513,8 +3513,6 @@ BOOL displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	// overlay close widget.
 	iV_DrawTransImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
-
-	return TRUE;
 }
 
 // add whiteboard
