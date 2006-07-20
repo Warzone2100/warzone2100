@@ -3098,6 +3098,7 @@ BOOL moveReachedWayPoint(DROID *psDroid)
 		// (this helps units that have got nudged off course).
 
 		// FIXME: TILE_UNITS is larger than the type width in the right shift
+		// FIXME: Surely this is meant to be TILE_SHIFT rather than TILE_UNITS? - Per
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
 			fpathTileLOS((SDWORD)psDroid->x >> TILE_UNITS, (SDWORD)psDroid->y >> TILE_UNITS,
 						  psDroid->sMove.targetX >> TILE_UNITS, psDroid->sMove.targetY >> TILE_UNITS))
