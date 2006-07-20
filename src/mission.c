@@ -530,7 +530,7 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 	//if (missionType != MISSION_BETWEEN)
 	if (missionType != LDS_BETWEEN)
 	{
-		loadGameInit(pGame,TRUE);
+		loadGameInit(pGame);
 	}
 
 	//all proximity messages are removed between missions now

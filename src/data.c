@@ -1328,7 +1328,7 @@ BOOL dataSaveGameLoad(STRING *pFile, void **ppData)
 		return FALSE;
 	}
 
-	if (!loadGameInit(pFile,TRUE))
+	if (!loadGameInit(pFile))
 	{
 		return FALSE;
 	}

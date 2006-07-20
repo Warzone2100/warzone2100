@@ -715,7 +715,7 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 
 
 /* Save the map data */
-BOOL mapSave(UBYTE **ppFileData, UDWORD *pFileSize)
+BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 {
 	UDWORD	i;
 	MAP_SAVEHEADER	*psHeader;
@@ -755,7 +755,7 @@ BOOL mapSave(UBYTE **ppFileData, UDWORD *pFileSize)
 		*pFileSize += 1+aNumEquiv[i];
 	}
 
-	*ppFileData = (UBYTE *)MALLOC(*pFileSize);
+	*ppFileData = MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -773,7 +773,7 @@ BOOL mapSave(UBYTE **ppFileData, UDWORD *pFileSize)
 	psHeader->height = mapHeight;
 
 	/* Put the map data into the buffer */
-	psTileData = (MAP_SAVETILE *)((UBYTE *)*ppFileData + SAVE_HEADER_SIZE);
+	psTileData = (MAP_SAVETILE *)(*ppFileData + SAVE_HEADER_SIZE);
 	psTile = psMapTiles;
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{

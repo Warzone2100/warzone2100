@@ -1290,14 +1290,8 @@ char *getSaveStructNameV(SAVE_STRUCTURE *psSaveStructure)
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
 
-// GameIsLevelStart is TRUE when we are starting a new level from the game data (i.e. WDG data not memcard on PSX)
-
-//
-// GameIsLevelStart is always TRUE on both PC & PSX versions !!!
-//
-
 // -----------------------------------------------------------------------------------------
-BOOL loadGameInit(STRING *pGameToLoad,BOOL GameIsLevelStart )
+BOOL loadGameInit(STRING *pGameToLoad )
 {
 	UBYTE			*pFileData = NULL;
 	UDWORD			fileSize;
@@ -8391,8 +8385,7 @@ BOOL loadSaveCompListV9(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UD
 			}
 		}
 
-		// FIXME: always false due to limited range of data type
-		if (psSaveCompList->type < 0 OR psSaveCompList->type > COMP_NUMCOMPONENTS)
+		if (psSaveCompList->type > COMP_NUMCOMPONENTS)
 		{
 			//ignore this record
 			continue;
@@ -8445,8 +8438,7 @@ BOOL loadSaveCompListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 	{
 		psSaveCompList = (SAVE_COMPLIST *) pFileData;
 
-		// FIXME: always false due to limited range of data type
-		if (psSaveCompList->type < 0 OR psSaveCompList->type > COMP_NUMCOMPONENTS)
+		if (psSaveCompList->type > COMP_NUMCOMPONENTS)
 		{
 			//ignore this record
 			continue;
@@ -9557,12 +9549,7 @@ BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ve
 		psflag->factoryInc = psSaveflag->factoryInc;	//indicates whether the first, second etc factory
 		psflag->factoryType = psSaveflag->factoryType;	//indicates whether standard, cyborg or vtol factory
 
-		// FIXME: always false due to limited range of data type
-		if (psflag->factoryInc == UDWORD_MAX)
-		{
-			DBERROR(("loadSaveFlag flag data error"));
-		}
-		else if ((psflag->type == POS_DELIVERY) || (psflag->type == POS_TEMPDELIVERY))
+		if ((psflag->type == POS_DELIVERY) || (psflag->type == POS_TEMPDELIVERY))
 		{
 			if (psflag->factoryType == FACTORY_FLAG)
 			{

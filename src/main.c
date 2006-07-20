@@ -506,7 +506,7 @@ init://jump here from the end if re_initialising
 				screen_RestartBackDrop();
 				gameStatus = GS_NORMAL;
 				// load up a save game
-				if (!loadGameInit(saveGameName,FALSE))
+				if (!loadGameInit(saveGameName))
 				{
 					goto exit;
 				}
