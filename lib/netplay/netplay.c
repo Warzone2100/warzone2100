@@ -1065,7 +1065,7 @@ UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
 UBYTE NETrecvFile(NETMSG *pMsg)
 {
 	UDWORD			pos, fileSize, currPos, bytesRead;
-	char			fileName[128];
+	char			fileName[256];
 	unsigned int		len;
 	static PHYSFS_file	*pFileHandle;
 
