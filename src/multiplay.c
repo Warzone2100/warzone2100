@@ -1139,7 +1139,7 @@ BOOL recvTextMessage(NETMSG *pMsg)
 
 	strcpy(msg,NetPlay.players[i].name);					// name
 	strcat(msg," : ");								// seperator
-	strcat(msg, &(pMsg->body[4]));					// add message
+	strncat(msg, &(pMsg->body[4]), MAX_CONSOLE_STRING_LENGTH);					// add message
 	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);// display it.
 
 	// make some noise!
