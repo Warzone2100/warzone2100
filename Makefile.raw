@@ -1,5 +1,8 @@
 SUBDIRS=lib src
+all clean: $(SUBDIRS)
 
-all clean dep:
-	@for i in $(SUBDIRS); do (cd $$i; $(MAKE) -f Makefile.raw $@); done
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
+src: lib

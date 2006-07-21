@@ -1,25 +1,16 @@
-SRC_FILES=	codeprint.c \
-		event.c \
-		evntsave.c \
-		interp.c \
-		script.c \
-		script_parser.c \
-		script_lexer.c \
-		stack.c
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
 
-LIBS=framework
+SRC=codeprint.c \
+	event.c \
+	evntsave.c \
+	interp.c \
+	script.c \
+	script_parser.c \
+	script_lexer.c \
+	stack.c
 
 LIB=script
 
-MAKERULES=../../makerules
 include $(MAKERULES)/lib.mk
-
-script_lexer.c: script_lexer.l
-	flex $(<)
-	mv lex.scr_.c $@
-
-script_parser.c script_y.h: script_parser.y
-	bison -d script_parser.y
-	mv script_parser.tab.c script_parser.c
-	mv script_parser.tab.h script_parser.h
 

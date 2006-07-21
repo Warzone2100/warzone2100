@@ -1,15 +1,14 @@
-SRC_FILES=	netaudio_stub.c \
-		netcrypt.c \
-		netjoin_stub.c \
-		netlobby_stub.c \
-		netlog.c \
-		netplay.c \
-		netusers_stub.c
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
 
-LIBS=framework
+SRC=netaudio_stub.c \
+	netcrypt.c \
+	netjoin_stub.c \
+	netlobby_stub.c \
+	netlog.c \
+	netplay.c \
+	netusers_stub.c
 
 LIB=netplay
 
-MAKERULES=../../makerules
 include $(MAKERULES)/lib.mk
-

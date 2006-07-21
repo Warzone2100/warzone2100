@@ -1,48 +1,25 @@
-SRC_FILES=	block.c \
-		configfile.c \
-		debug.c \
-		frame.c \
-		frameresource.c \
-		heap.c \
-		ignorecase.c \
-		input.c \
-		mem.c \
-		mono.c \
-		resource_parser.c \
-		resource_lexer.c \
-		strres.c \
-		strres_parser.c \
-		strres_lexer.c \
-		treap.c \
-		trig.c 
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
 
-#GENERATED_SRC=	resource_l.c \
-#		resource_y.c \
-#		resource_y.h \
-#		strres_l.c \
-#		strres_y.c \
-#		strres_y.h
+SRC=block.c \
+	configfile.c \
+	debug.c \
+	frame.c \
+	frameresource.c \
+	heap.c \
+	ignorecase.c \
+	input.c \
+	mem.c \
+	mono.c \
+	resource_parser.c \
+	resource_lexer.c \
+	strres.c \
+	strres_parser.c \
+	strres_lexer.c \
+	treap.c \
+	trig.c \
+	SDL_framerate.c
 
 LIB=framework
 
-MAKERULES=../../makerules
 include $(MAKERULES)/lib.mk
-
-resource_lexer.c: resource_lexer.l
-	flex $(<)
-	mv lex.res_.c $@
-
-resource_parser.c resource_parser.h: resource_parser.y
-	bison -d -pres_ resource_parser.y
-	mv resource_parser.tab.c resource_parser.c
-	mv resource_parser.tab.h resource_parser.h
-
-strres_lexer.c: strres_lexer.l
-	flex $(<)
-	mv lex.strres_.c $@
-
-strres_parser.c strres_parser.h: strres_parser.y
-	bison -d -pstrres_ strres_parser.y
-	mv strres_parser.tab.c strres_parser.c
-	mv strres_parser.tab.h strres_parser.h
-

@@ -1,24 +1,22 @@
-SRC_FILES= \
-		bspimd.c \
-		ivi.c \
-		pieblitfunc.c \
-		piedraw.c \
-		piefunc.c \
-		piematrix.c \
-		piemode.c \
-		piepalette.c \
-		piestate.c \
-		pietexture.c \
-		rendfunc.c \
-		rendmode.c \
-		screen.c \
-		tex.c \
-		textdraw.c
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
 
-LIBS=ivis_common framework gamelib
+SRC=bspimd.c \
+	ivi.c \
+	pieblitfunc.c \
+	piedraw.c \
+	piefunc.c \
+	piematrix.c \
+	piemode.c \
+	piepalette.c \
+	piestate.c \
+	pietexture.c \
+	rendfunc.c \
+	rendmode.c \
+	screen.c \
+	tex.c \
+	textdraw.c
 
 LIB=ivis_opengl
 
-MAKERULES=../../makerules
 include $(MAKERULES)/lib.mk
-

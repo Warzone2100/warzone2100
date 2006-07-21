@@ -1,17 +1,15 @@
-SRC_FILES= \
-		bitimage.c \
-		bug.c \
-		fbf.c \
-		imd.c \
-		imdload.c \
-		pcx.c \
-		pieclip.c \
-		piestate.c
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
 
-LIBS=framework gamelib
+SRC=bitimage.c \
+	bug.c \
+	fbf.c \
+	imd.c \
+	imdload.c \
+	pcx.c \
+	pieclip.c \
+	piestate.c
 
 LIB=ivis_common
 
-MAKERULES=../../makerules
 include $(MAKERULES)/lib.mk
-
