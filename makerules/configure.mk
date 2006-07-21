@@ -28,15 +28,15 @@ $(info DEVDIR set to $(DEVDIR))
 endif
 
 ifeq ($(strip $(BISON)),)
-$(error You must install Bison)
+$(error You must set BISON in $(MAKERULES)/config.mk)
 else
-$(info Pretending that Bison is installed)
+$(info BISON is set to $(BISON))
 endif
 
 ifeq ($(strip $(FLEX)),)
-$(error You must install Flex)
+$(error You must set FLEX in $(MAKERULES)/config.mk)
 else
-$(info Pretending that Flex is installed)
+$(info FLEX is set to $(FLEX))
 endif
 
 
