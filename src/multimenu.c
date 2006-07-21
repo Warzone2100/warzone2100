@@ -207,10 +207,10 @@ BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUs
 			}
 //	end of service pack
 
-			if((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3
-				&& (numPlayers == 0 || numPlayers == lev->players))
+			if ((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3)
 //				||lev->type == MULTI_CAMPAIGNA)
-				&& cam == camToUse )
+			    && (numPlayers == 0 || numPlayers == lev->players)
+			    && cam == camToUse )
 			{
 				strcpy(found,lev->pName);
 				*players = lev->players;
@@ -331,8 +331,9 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	WIN32_FIND_DATA	found;
 	HANDLE			dir;
 	UDWORD			count;
+	STRING			ToFind[255];
 #endif
-	STRING			ToFind[255],sTemp[64];
+	STRING			sTemp[64];
 	static STRING		tips[NBTIPS][MAX_STR_SIZE];
 
 	numButtons = 0;
