@@ -9,7 +9,6 @@ void makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UD
 void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src);
 int	getTileRadarColours(void);
 void	freeTileTextures( void );
-void	pcxBufferTo16Bit(UBYTE *origBuffer,UWORD *newBuffer);
 
 typedef struct _tileTexInfo
 {
