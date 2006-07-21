@@ -176,6 +176,7 @@ extern UDWORD	NEThashBuffer(unsigned char *pData, UDWORD size);
 #include "netlobby.h"	// more functions to provide lobby facilities.
 
 // Some shortcuts to help you along!
+/* FIXME: This is _not_ portable! Bad, Pumpkin, bad! - Per */
 #define NetAdd(m,pos,thing) \
 	memcpy(&(m.body[pos]),&(thing),sizeof(thing)) 
 
@@ -207,9 +208,6 @@ extern UDWORD	NEThashBuffer(unsigned char *pData, UDWORD size);
 
 #define NetGetUint32(m,pos,thing) \
 	(thing) = *((Uint32*)(&((m)->body[(pos)]))) 
-
-#define NetGetSt(m,pos,stri) \
-	strcpy(stri,&(m->body[pos]))
 
 #endif
 
