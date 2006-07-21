@@ -158,7 +158,7 @@ extern void pie_SetRenderEngine(REND_ENGINE rendEngine);
 extern REND_ENGINE pie_GetRenderEngine(void);
 extern BOOL	pie_Hardware(void);
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
-extern void pie_SetGammaValue(float val);
+extern WZ_DEPRECATED void pie_SetGammaValue(float val);
 //renderer capability
 extern void pie_SetTranslucent(BOOL val);
 extern BOOL pie_Translucent(void);
@@ -185,7 +185,7 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 extern void pie_SetColour(UDWORD val);
 extern UDWORD pie_GetColour(void);
 //mouse states
-extern void pie_SetMouse(IMAGEFILE *ImageFile,UWORD ImageID);
-extern void	pie_SetSwirlyBoxes( BOOL val );
+extern WZ_DEPRECATED void pie_SetMouse(IMAGEFILE *ImageFile,UWORD ImageID);
+extern WZ_DEPRECATED void	pie_SetSwirlyBoxes( BOOL val );
 
 #endif // _pieState_h

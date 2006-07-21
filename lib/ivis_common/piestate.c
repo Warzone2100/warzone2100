@@ -328,10 +328,10 @@ UDWORD pie_GetColour(void)
 	return	rendStates.colour;
 }
 
-WZ_DEPRECATED void pie_SetMouse(IMAGEFILE *psImageFile,UWORD ImageID) // FIXME Remove if unused
+void pie_SetMouse(IMAGEFILE *psImageFile,UWORD ImageID) // FIXME Remove if unused
 {
 }
 
-WZ_DEPRECATED void pie_SetSwirlyBoxes( BOOL val ) // FIXME Remove if unused
+void pie_SetSwirlyBoxes( BOOL val ) // FIXME Remove if unused
 {
 }

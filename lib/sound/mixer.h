@@ -10,18 +10,18 @@
 
 /***************************************************************************/
 
-BOOL	mixer_Open( void );
-void	mixer_Close( void );
+WZ_DEPRECATED BOOL	mixer_Open( void );
+WZ_DEPRECATED void	mixer_Close( void );
 SDWORD	mixer_GetCDVolume( void );
 void	mixer_SetCDVolume( SDWORD iVol );
 SDWORD	mixer_GetWavVolume( void );
 void	mixer_SetWavVolume( SDWORD iVol );
 SDWORD	mixer_Get3dWavVolume( void );
 void	mixer_Set3dWavVolume( SDWORD iVol );
-void	mixer_SaveWinVols();
-void	mixer_RestoreWinVols();
-void	mixer_SaveIngameVols();
-void	mixer_RestoreIngameVols();
+WZ_DEPRECATED void	mixer_SaveWinVols();
+WZ_DEPRECATED void	mixer_RestoreWinVols();
+WZ_DEPRECATED void	mixer_SaveIngameVols();
+WZ_DEPRECATED void	mixer_RestoreIngameVols();
 
 /***************************************************************************/
 

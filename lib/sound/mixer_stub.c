@@ -8,7 +8,7 @@
 // =======================================================================================================================
 // =======================================================================================================================
 //
-WZ_DEPRECATED void mixer_SaveWinVols( void ) // FIXME Remove if unused
+void mixer_SaveWinVols( void ) // FIXME Remove if unused
 {
 }
 
@@ -16,7 +16,7 @@ WZ_DEPRECATED void mixer_SaveWinVols( void ) // FIXME Remove if unused
 // =======================================================================================================================
 // =======================================================================================================================
 //
-WZ_DEPRECATED void mixer_RestoreWinVols( void ) // FIXME Remove if unused
+void mixer_RestoreWinVols( void ) // FIXME Remove if unused
 {
 }
 
@@ -24,7 +24,7 @@ WZ_DEPRECATED void mixer_RestoreWinVols( void ) // FIXME Remove if unused
 // =======================================================================================================================
 // =======================================================================================================================
 //
-WZ_DEPRECATED void mixer_SaveIngameVols( void ) // FIXME Remove if unused
+void mixer_SaveIngameVols( void ) // FIXME Remove if unused
 {
 }
 
@@ -32,7 +32,7 @@ WZ_DEPRECATED void mixer_SaveIngameVols( void ) // FIXME Remove if unused
 // =======================================================================================================================
 // =======================================================================================================================
 //
-WZ_DEPRECATED void mixer_RestoreIngameVols( void ) // FIXME Remove if unused
+void mixer_RestoreIngameVols( void ) // FIXME Remove if unused
 {
 }
 
@@ -40,7 +40,7 @@ WZ_DEPRECATED void mixer_RestoreIngameVols( void ) // FIXME Remove if unused
 // =======================================================================================================================
 // =======================================================================================================================
 //
-WZ_DEPRECATED BOOL mixer_Open( void ) // FIXME Remove if unused
+BOOL mixer_Open( void ) // FIXME Remove if unused
 {
 	return TRUE;
 }
@@ -49,7 +49,7 @@ WZ_DEPRECATED BOOL mixer_Open( void ) // FIXME Remove if unused
 // =======================================================================================================================
 // =======================================================================================================================
 //
-WZ_DEPRECATED void mixer_Close( void ) // FIXME Remove if unused
+void mixer_Close( void ) // FIXME Remove if unused
 {
 }
 

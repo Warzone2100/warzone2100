@@ -243,10 +243,8 @@ UDWORD	div;
 
 	fillUpStats();
 
-	pie_SetSwirlyBoxes(TRUE);
 	pie_UniTransBoxFill(16+D_W,MT_Y_POS-16,DISP_WIDTH-D_W-16,MT_Y_POS+256,0x00000088,128);
 	iV_Box(16+D_W,MT_Y_POS-16,DISP_WIDTH-D_W-16,MT_Y_POS+256,1);
-	pie_SetSwirlyBoxes(FALSE);
 
 	iV_DrawText(strresGetString(psStringRes,STR_MR_UNIT_LOSSES),LC_X+D_W,80+16+D_H);
 	iV_DrawText(strresGetString(psStringRes,STR_MR_STRUCTURE_LOSSES),LC_X+D_W,140+16+D_H);

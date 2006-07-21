@@ -16,13 +16,13 @@ BOOL NETuseNetwork(BOOL val)
 // ////////////////////////////////////////////////////////////////////////
 // Functions for spectators.
 
-WZ_DEPRECATED BOOL NETspectate(GUID guidSessionInstance) // FIXME Remove if unused
+BOOL NETspectate(GUID guidSessionInstance) // FIXME Remove if unused
 {
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-WZ_DEPRECATED BOOL NETisSpectator(DPID dpid) // FIXME Remove if unused
+BOOL NETisSpectator(DPID dpid) // FIXME Remove if unused
 {
 	UBYTE i;
 

@@ -13,7 +13,7 @@ unsigned int rpl_decode_sound_raw(RPL* rpl, short* buffer, unsigned int buffer_s
 unsigned int rpl_decode_sound_adpcm(RPL* rpl, short* buffer, unsigned int buffer_size);
 
 unsigned int rpl_decode_video_unknown(RPL* rpl, char* in, unsigned int in_size, char* out);
-unsigned int dec130_decode(RPL* rpl, char* in, unsigned int in_size, char* out);
+WZ_DEPRECATED unsigned int dec130_decode(RPL* rpl, char* in, unsigned int in_size, char* out);
 
 //*************************************************************************************
 
@@ -74,7 +74,6 @@ rpl_open(char* filename) {
 	RPL* rpl;
 	char buf[80];
 	int tmp;
-	int ret;
 	size_t len = sizeof(buf);
 
 	/* FIXME: we should just clean up our data */

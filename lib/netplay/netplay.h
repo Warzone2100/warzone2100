@@ -146,22 +146,22 @@ extern BOOL	NETgetGlobalPlayerData(DPID dpid, VOID *pData, DWORD *pSize);
 extern BOOL	NETsetLocalPlayerData(DPID dpid, VOID *pData, DWORD size);
 extern BOOL	NETsetGlobalPlayerData(DPID dpid, VOID *pData, DWORD size);
 
-extern BOOL	NETspectate();			// create a spectator
-extern BOOL	NETisSpectator(DPID dpid);	// check for spectator status.
+extern WZ_DEPRECATED BOOL	NETspectate();			// create a spectator
+extern WZ_DEPRECATED BOOL	NETisSpectator(DPID dpid);	// check for spectator status.
 
 #include "netlog.h"
 
 // from net audio.
-extern BOOL	NETprocessAudioCapture(VOID);			//capture
-extern BOOL	NETstopAudioCapture(VOID);
-extern BOOL	NETstartAudioCapture(VOID);
-extern BOOL	NETshutdownAudioCapture(VOID);
-extern BOOL	NETinitAudioCapture(VOID);
+extern WZ_DEPRECATED BOOL	NETprocessAudioCapture(VOID);			//capture
+extern WZ_DEPRECATED BOOL	NETstopAudioCapture(VOID);
+extern WZ_DEPRECATED BOOL	NETstartAudioCapture(VOID);
+extern WZ_DEPRECATED BOOL	NETshutdownAudioCapture(VOID);
+extern WZ_DEPRECATED BOOL	NETinitAudioCapture(VOID);
 
-extern BOOL	NETinitPlaybackBuffer(LPDIRECTSOUND pDs);	// playback
-extern VOID	NETplayIncomingAudio(NETMSG *pMsg);
-extern BOOL	NETqueueIncomingAudio(LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream);
-extern BOOL	NETshutdownAudioPlayback(VOID);
+extern WZ_DEPRECATED BOOL	NETinitPlaybackBuffer(LPDIRECTSOUND pDs);	// playback
+extern WZ_DEPRECATED VOID	NETplayIncomingAudio(NETMSG *pMsg);
+extern WZ_DEPRECATED BOOL	NETqueueIncomingAudio(LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream);
+extern WZ_DEPRECATED BOOL	NETshutdownAudioPlayback(VOID);
 
 // encryption
 extern BOOL	NETsetKey(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
@@ -173,7 +173,10 @@ extern UDWORD	NEThashFile(STRING *pFileName);
 extern UCHAR	NEThashVal(UDWORD value);
 extern UDWORD	NEThashBuffer(unsigned char *pData, UDWORD size);
 
-#include "netlobby.h"	// more functions to provide lobby facilities.
+extern WZ_DEPRECATED BOOL NETcheckRegistryEntries	(char *name,char *guid);
+extern WZ_DEPRECATED BOOL NETsetRegistryEntries	(char *name,char *guid,char *file,char *cline,char *path,char *cdir); 
+extern WZ_DEPRECATED BOOL NETconnectToLobby		(LPNETPLAY lpNetPlay);
+//#include "netlobby.h"	// more functions to provide lobby facilities.
 
 // Some shortcuts to help you along!
 /* FIXME: This is _not_ portable! Bad, Pumpkin, bad! - Per */

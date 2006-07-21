@@ -355,10 +355,6 @@ BOOL seq_SetupVideoBuffers(void)
 
 void seq_SetVideoPath(void)
 {
-#ifdef WIN32
-	WIN32_FIND_DATA findData;
-	HANDLE	fileHandle;
-#endif
 	// now set up the hard disc path /
 
 	if (!bHardPath)

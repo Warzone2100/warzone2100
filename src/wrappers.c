@@ -125,8 +125,6 @@ TITLECODE titleLoop(void)
 		titleMode = TITLE;
 		firstcall = FALSE;
 
-		pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);			// reset cursor (hw)
-
 		frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
 		if(NetPlay.bLobbyLaunched)					// lobbies skip title screens & go into the game
