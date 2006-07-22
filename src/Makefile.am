@@ -263,7 +263,7 @@ warzone_libs =  ../lib/framework/libframework.a \
 		../lib/netplay/libnetplay.a \
 		../lib/script/libscript.a \
 		../lib/ivis_common/libivis_common.a \
-		../lib/$(RENDERER)/lib$(RENDERER).a \
+		../lib/ivis_opengl/libivis_opengl.a \
 		../lib/gamelib/libgamelib.a \
 		../lib/sequence/libsequence.a \
 		../lib/widget/libwidget.a

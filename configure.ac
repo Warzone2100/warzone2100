@@ -161,7 +161,6 @@ AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = "xyes" ; then
 	AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
 	WZ_LIBS="${WZ_LIBS} -l${GLLIB} -l${GLULIB}"
-	AC_SUBST(RENDERER, "ivis_opengl")
 	AC_MSG_RESULT([yes])
 else
 	AC_MSG_RESULT([no])
@@ -266,7 +265,6 @@ AC_CONFIG_FILES([Makefile
                  lib/framework/Makefile
                  lib/gamelib/Makefile
                  lib/ivis_opengl/Makefile
-                 lib/ivis02/Makefile
                  lib/ivis_common/Makefile
                  lib/netplay/Makefile
                  lib/script/Makefile

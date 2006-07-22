@@ -3,7 +3,6 @@ SUBDIRS = framework	\
 	sequence	\
 	ivis_common	\
 	ivis_opengl	\
-	ivis02		\
 	gamelib		\
 	sound		\
 	netplay		\
