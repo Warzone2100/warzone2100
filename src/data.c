@@ -802,78 +802,6 @@ void dataIMGPAGERelease(void *pData)
 	dataISpriteRelease(psSprite);
 }
 
-// Tertiles loader. This version for software renderer.
-BOOL dataTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-	if(pie_Hardware()) {
-		*ppData = NULL;
-		return TRUE;
-	}
-
-	// tile loader.
-	if (bTilesPCXLoaded)
-	{
-		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
-		{
-			debug( LOG_ERROR, "TERTILES reload failed" );
-			return FALSE;
-		}
-	}
-	else
-	{
-		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
-		{
-			debug( LOG_ERROR, "TERTILES load failed" );
-			return FALSE;
-		}
-	}
-
-		/* Squirt the tiles into a nice long thin bitmap */
-		if (bTilesPCXLoaded)
-		{
-			if(!remakeTileTextures())
-			{
-	 			debug( LOG_ERROR, "Problem converting the terrain graphics file" );
-				return(FALSE);
-			}
-		}
-		else
-		{
-			if(!makeTileTextures())
-			{
-	 			debug( LOG_ERROR, "Problem converting the terrain graphics file" );
-				return(FALSE);
-			}
-		}
-
-	if (bTilesPCXLoaded)
-	{
-		*ppData = NULL;
-	}
-	else
-	{
-		bTilesPCXLoaded = TRUE;
-		*ppData = &tilesPCX;
-	}
-	debug( LOG_TEXTURE, "Tiles loaded\n" );
-	return TRUE;
-}
-
-void dataTERTILESRelease(void *pData)
-{
-	iSprite *psSprite = (iSprite*) pData;
-
-	freeTileTextures();
-	if( psSprite->bmp )
-	{
-		free(psSprite->bmp);
-		psSprite->bmp = NULL;
-	}
-	bTilesPCXLoaded = FALSE;
-}
-
 // Tertiles loader. This version for hardware renderer.
 BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
@@ -1406,7 +1334,7 @@ static RES_TYPE_MIN ResourceTypes[]=
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
-	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with software renderer.
+	{"TERTILES", NULL, NULL},	// This version was used when running with the software renderer.
 	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"WAV", dataAudioLoad, dataAudioRelease},

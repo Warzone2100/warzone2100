@@ -1,18 +1,14 @@
-
-/* Texture stuff. Calls 3dfxText functions in the 3dfx cases */
-/* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
+/* Texture stuff. Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/pietypes.h"
 #include "lib/ivis_common/piestate.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/pietexture.h"
+#include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/pietexture.h"
 #include "display3ddef.h"
 #include "texture.h"
 #include "radar.h"
-#include "lib/ivis_common/tex.h"
-
 
 /* Can fit at most 32 texture pages into a 2meg texture memory */
 #define MAX_TEXTURE_PAGES	32
@@ -31,9 +27,8 @@ iSprite tilesPCX;
 /* Stores the raw PCX data for the terrain tiles at load file time */
 iBitmap	**tilesRAW;
 /* How many tiles have we loaded */
-//UDWORD	numTiles;
 UDWORD	numPCXTiles;
-/* How many pages have we loaded (hardware)*/
+/* How many pages have we loaded */
 SDWORD	firstTexturePage;
 SDWORD	numTexturePages;
 int		pageId[MAX_TERRAIN_PAGES];
@@ -41,138 +36,18 @@ int		pageId[MAX_TERRAIN_PAGES];
 /* Presently all texture pages are 256*256 big */
 typedef struct _texturePage
 {
-UDWORD	pageNumber;
-UDWORD	cardAddress;
+	UDWORD	pageNumber;
+	UDWORD	cardAddress;
 } TEXTURE_PAGE_3DFX;
 
 
 TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 
-static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest);
-static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static UDWORD	getTileXIndex(UDWORD tileNumber);
 static UDWORD	getTileYIndex(UDWORD tileNumber);
 static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest);
 static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static void buildTileIndexes(void);
-
-/* Extracts the tile texture in pcx format of abc..
-											  def..
-											  ghi..   (say)
-   and puts them into raw format of
-									a
-									b
-									c
-									d
-									e
-									f
-									.
-									.
-
-	currently only used for software renderer
-*/
-int makeTileTextures(void)
-{
-	UDWORD x, y, i, j, w, h, t;
-	iBitmap *b, *s, *saved;
-
-
-	w = tilesPCX.width / TILE_WIDTH;
-	h = tilesPCX.height / TILE_HEIGHT;
-	numPCXTiles = w * h;
-
-	debug(LOG_TEXTURE, "makeTileTextures: tile(%d,%d) num=%d", w, h, numPCXTiles);
-
-	tilesRAW = (iBitmap **) MALLOC(sizeof(iBitmap *) * numPCXTiles);
-
-	for (i=0; i<numPCXTiles; tilesRAW[i++] = NULL)
-	{
-		; /* NOP */
-	}
-
-	t = 0;
-	if (tilesRAW)
-	{
-		for (i=0; i<h; i++)
-		{
-			for (j=0; j<w; j++)
-			{
-				b = tilesPCX.bmp + j * TILE_WIDTH + i * tilesPCX.width * TILE_HEIGHT;
-				saved = s = tilesRAW[t++] = (iBitmap *)MALLOC(sizeof(iBitmap) * TILE_SIZE);
-				if (s)
-				{
-					for (y=0; y<TILE_HEIGHT; y++)
-					{
-						for (x=0; x<TILE_WIDTH; *s++ = b[x++])
-						{
-							; /* NOP */
-						}
-						b+=tilesPCX.width;
-					}
-				  	calcRadarColour(saved,t-1);
-				}
-				else
-				{
-					return FALSE;
-				}
-			}
-		}
-	}
-	else
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-
-int remakeTileTextures(void)
-{
-	UDWORD x, y, i, j, w, h, t;
-	iBitmap *b, *s, *saved;
-
-	w = tilesPCX.width / TILE_WIDTH;
-	h = tilesPCX.height / TILE_HEIGHT;
-	ASSERT((numPCXTiles >= w * h,"remakeTileTextures: New Tertiles larger than existing version"));
-
-	debug(LOG_TEXTURE, "remakeTileTextures: tile(%d,%d) num=%d", w, h, numPCXTiles);
-
-	//tilesRAW is already set up
-	t = 0;
-	if (tilesRAW)
-	{
-		for (i=0; i<h; i++)
-		{
-			for (j=0; j<w; j++)
-			{
-				b = tilesPCX.bmp + j * TILE_WIDTH + i * tilesPCX.width * TILE_HEIGHT;
-				saved = s = tilesRAW[t++];
-				if (s)
-				{
-					for (y=0; y<TILE_HEIGHT; y++)
-					{
-						for (x=0; x<TILE_WIDTH; *s++ = b[x++])
-						{
-							; /* NOP */
-						}
-						b+=tilesPCX.width;
-					}
-					calcRadarColour(saved,t-1);
-				}
-				else
-				{
-					return FALSE;
-				}
-
-			}
-		}
-	}
-	else
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
 
 /*
 	Extracts the tile textures into separate texture pages and builds
@@ -194,14 +69,14 @@ int remakeTileTextures(void)
 */
 void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
 {
-UDWORD	i,j;
-UDWORD	pageNumber;
-UDWORD	tilesAcross,tilesDown;
-UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
-UDWORD	tilesProcessed;
-unsigned char	*tileStorage;
-unsigned char	*presentLoc;
-iSprite	sprite;
+	UDWORD	i,j;
+	UDWORD	pageNumber;
+	UDWORD	tilesAcross,tilesDown;
+	UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
+	UDWORD	tilesProcessed;
+	unsigned char	*tileStorage;
+	unsigned char	*presentLoc;
+	iSprite	sprite;
 
 	/* This is how many pages are already used on hardware */
 	firstTexturePage = pie_GetLastPageDownloaded() + 1;
@@ -274,14 +149,14 @@ exit:
 
 void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
 {
-UDWORD	i,j;
-UDWORD	pageNumber;
-UDWORD	tilesAcross,tilesDown;
-UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
-UDWORD	tilesProcessed;
-unsigned char	*tileStorage;
-unsigned char	*presentLoc;
-iSprite	sprite;
+	UDWORD	i,j;
+	UDWORD	pageNumber;
+	UDWORD	tilesAcross,tilesDown;
+	UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
+	UDWORD	tilesProcessed;
+	unsigned char	*tileStorage;
+	unsigned char	*presentLoc;
+	iSprite	sprite;
 	//check enough pages are allocated
 
 	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", srcWidth,
@@ -361,8 +236,6 @@ BOOL getTileRadarColours(void)
 	h = tilesPCX.height / TILE_HEIGHT;
 	numPCXTiles = w * h;
 
-
-
 	t = 0;
 	for (i=0; i<h; i++)
 	{
@@ -393,32 +266,21 @@ BOOL getTileRadarColours(void)
 	return TRUE;
 }
 
-void	freeTileTextures( void )
+void freeTileTextures(void)
 {
 	UDWORD	i;
-	if (!pie_Hardware())
+
+	for (i = 0; i < numTexturePages; i++)
 	{
-		for(i=0; i<numPCXTiles; i++)
-		{
-			FREE(tilesRAW[i]);
-		}
-		FREE(tilesRAW);
-	}
-	else
-	{
-		for(i=0; i< ((UDWORD)numTexturePages); i++)
-		{
-			FREE(_TEX_PAGE[(firstTexturePage+i)].tex.bmp);
-		}
+		FREE(_TEX_PAGE[(firstTexturePage+i)].tex.bmp);
 	}
 }
 
 static UDWORD	getTileXIndex(UDWORD tileNumber)
 {
-UDWORD	texPage;
-UDWORD	tileInPage;
-UDWORD	xIndex;
-
+	UDWORD	texPage;
+	UDWORD	tileInPage;
+	UDWORD	xIndex;
 
 	texPage = tileNumber/16;
 	tileInPage = tileNumber - (texPage*16);
@@ -428,9 +290,9 @@ UDWORD	xIndex;
 
 static UDWORD	getTileYIndex(UDWORD tileNumber)
 {
-UDWORD	texPage;
-UDWORD	tileInPage;
-UDWORD	yIndex;
+	UDWORD	texPage;
+	UDWORD	tileInPage;
+	UDWORD	yIndex;
 
 	texPage = tileNumber/16;
 	tileInPage = tileNumber - (texPage*16);
