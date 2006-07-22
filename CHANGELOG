@@ -2,10 +2,13 @@ xxxx-xx-xx: Version 2.0.4
  * General:
    * Desktopmenu entry for Linux (AutoPackage/Debian package)
    * Fix crash when using uppercase savegame names on Linux
+   * Several security fixes
  * Sound:
    * Fixed music playlist loading and ogg music playback
  * Graphics:
    * 16bpp "supported" (basic playing possible, graphics glitches may occur, eg. missing progressbars)
+ * Build system:
+   * Makefile.raw system improved. Doesn't require a shell anymore.
 
 2006-07-01: Version 2.0.3
  * General:
