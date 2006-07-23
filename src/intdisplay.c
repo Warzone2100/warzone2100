@@ -892,7 +892,6 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
 
-//	if( (pie_GetRenderEngine() == ENGINE_GLIDE) || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State) ) {
 	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State) ) {
 
 		Hilight = Form->state & WCLICK_HILITE;
@@ -1124,8 +1123,6 @@ void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-
-//	if( (pie_GetRenderEngine() == ENGINE_GLIDE) || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State)  ) {
 	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State)  ) {
 
 		Hilight = Form->state & WCLICK_HILITE;
@@ -1215,10 +1212,7 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-
-//	if( (pie_GetRenderEngine() == ENGINE_GLIDE) || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State) ) {
 	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State) ) {
-
 
 		Hilight = Form->state & WCLICK_HILITE;
 
@@ -2613,40 +2607,19 @@ UWORD ButYPos = 0;
 UWORD ButWidth,ButHeight;
 
 
-
 void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height)
 {
-	if (pie_Hardware())
-	{
-		ButXPos = XPos;
-		ButYPos = YPos;
-		ButWidth = Width;
-		ButHeight = Height;
-		pie_Set2DClip(XPos,YPos,(UWORD)(XPos+Width),(UWORD)(YPos+Height));
-	}
-	else
-	{
-		ButXPos = 0;
-		ButYPos = 0;
-	}
+	ButXPos = XPos;
+	ButYPos = YPos;
+	ButWidth = Width;
+	ButHeight = Height;
+	pie_Set2DClip(XPos,YPos,(UWORD)(XPos+Width),(UWORD)(YPos+Height));
 }
-
-
-
-
 
 void CloseButtonRender(void)
 {
-
-
-	if (pie_Hardware())
-	{
-		pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
-	}
-
-
+	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 }
-
 
 
 // Clear a button bitmap. ( copy the button background ).
@@ -2687,10 +2660,6 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 	}
 
 	if((IMDType == IMDTYPE_DROID) || (IMDType == IMDTYPE_DROIDTEMPLATE)) {	// The case where we have to render a composite droid.
-		if (!pie_Hardware())
-		{
-			iV_RenderAssign(iV_MODE_SURFACE,ButSurf->Surface);
-		}
 
 		if(Down)
 		{
@@ -2788,20 +2757,9 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 
 			displayComponentButtonTemplate((DROID_TEMPLATE*)Object,&Rotation,&Position,TRUE, scale);
 		}
-
-		if(!pie_Hardware())
-		{
-			iV_RenderAssign(iV_MODE_4101,&rendSurface);
-		}
 	}
 	else
 	{	// Just drawing a single IMD.
-		if(!pie_Hardware())
-		{
-			iV_RenderAssign(iV_MODE_SURFACE,ButSurf->Surface);
-		}
-
-
 
 		if(Down)
 		{
@@ -2969,12 +2927,6 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 		}
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-
-		/* Reassign the render buffer to be back to normal */
-		if(!pie_Hardware())
-		{
-			iV_RenderAssign(iV_MODE_4101,&rendSurface);
-		}
 	}
 }
 
@@ -2987,11 +2939,6 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 
 	BUTTON_SURFACE *ButSurf = Buffer->ButSurf;
 
-	if(!pie_Hardware())
-	{
-		iV_RenderAssign(iV_MODE_SURFACE,ButSurf->Surface);
-	}
-
 	ox = oy = 0;
 	/*if(Down)
 	{
@@ -3002,11 +2949,6 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 
 	iV_DrawTransImage(ImageFile,ImageID,ButXPos+ox,ButYPos+oy);
 //	DrawTransImageSR(Image,ox,oy);
-
-	if(!pie_Hardware())
-	{
-		iV_RenderAssign(iV_MODE_4101,&rendSurface);
-	}
 }
 
 
@@ -3760,10 +3702,6 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
 		"intDisplayTransportButton: invalid droid pointer"));
 
-
-/*	if( (pie_GetRenderEngine() == ENGINE_GLIDE) || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) ||
-	(Form->state!=Buffer->State) )
-*/
 	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) ||
 		(Form->state!=Buffer->State) )
 
@@ -3817,15 +3755,12 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
         gfxId = getDroidRankGraphic(psDroid);
 	    if(gfxId != UDWORD_MAX)
 	    {
-
 		    /* Render the rank graphic at the correct location */
 		    /* Render the rank graphic at the correct location */
 		    iV_DrawTransImage(IntImages,(UWORD)gfxId,xOffset+Form->x+50,yOffset+Form->y+30);
 
 	    }
     }
-
-
 }
 
 
