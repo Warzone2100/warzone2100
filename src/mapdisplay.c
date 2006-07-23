@@ -1,5 +1,3 @@
-
-
 /*
 	MapDisplay - Renders the world view necessary for the intelligence map
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997
@@ -38,23 +36,13 @@
 #include "intimage.h"
 #include "lib/gamelib/gtime.h"
 
-//#include "dglide.h"
 #include "texture.h"
 #include "intdisplay.h"
-
-
-
-
-
-
-
-
 
 extern UWORD ButXPos;	// From intDisplay.c
 extern UWORD ButYPos;
 extern UWORD ButWidth,ButHeight;
 extern BOOL		godMode;
-
 
 #define MAX_MAP_GRID	32
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
@@ -340,25 +328,10 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 	UDWORD          basePlateSize, Radius;
     SDWORD          scale = 0;
 
-	if(!pie_Hardware())
-	{
-		 //Ensure all rendering is done to our bitmap and not to back or primary buffer
-   		iV_RenderAssign(iV_MODE_SURFACE,pSurface);
-    	//fill with IMAGE_BUT0 graphic
-        fillMapBufferWithBitmap(pSurface);
-	}
-
 	// Set identity (present) context
 	pie_MatBegin();
 
-	if (pie_Hardware())
-	{
-		pie_SetGeometricOffset(OriginX+10,OriginY+10);
-	}
-	else
-	{
-		pie_SetGeometricOffset(pSurface->width/2,pSurface->height/2);
-	}
+	pie_SetGeometricOffset(OriginX+10,OriginY+10);
 
 	// Pitch down a bit
 	//pie_MatRotX(DEG(-30));
@@ -468,15 +441,8 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 		ASSERT((FALSE, "renderResearchToBuffer: Unknown PIEType"));
 	}
 
-
 	// close matrix context
 	pie_MatEnd();
-
-	if (!pie_Hardware())
-	{
-		// Tell renderer we're back to back buffer
-		iV_RenderAssign(iV_MODE_4101,&rendSurface);
-	}
 }
 
 

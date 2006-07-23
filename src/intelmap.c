@@ -1483,8 +1483,6 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 		iV_DrawTransImage(IntImages,IMAGE_BUT_HILITE,xOffset+psButton->x,
 			yOffset+psButton->y);
 	}
-
-
 }
 
 

@@ -60,7 +60,8 @@ REND_ENGINE pie_GetRenderEngine(void)
 
 BOOL	pie_Hardware(void)
 {
-	return rendStates.bHardware;
+	return TRUE;
+//	return rendStates.bHardware;
 }
 
 //***************************************************************************
