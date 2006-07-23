@@ -232,88 +232,8 @@ void	tileLayouts(int texture)
 // Render a Map Surface to display memory.
 void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height)
 {
-
-	if (!pie_Hardware())
-	{
-		pie_LocalRenderBegin();
-
-		iV_ppBitmap((iBitmap*)pSurface->buffer, x, y, width, height,pSurface->width);
-
-		pie_LocalRenderEnd();
-	}
-
+	/* FIXME: Does nothing! Used for software renderer. - Per */
 }
-
-
-/* renders up to two IMDs into the surface - used by message display in Intelligence Map
-THIS HAS BEEN REPLACED BY renderResearchToBuffer()*/
-/*void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD, iIMDShape *pIMD2,
-					   UDWORD WindowX,UDWORD WindowY,UDWORD OriginX,UDWORD OriginY)
-{
-	static UDWORD angle = 0;
-
-	if(!pie_Hardware())
-	{
-		 //Ensure all rendering is done to our bitmap and not to back or primary buffer
-   		iV_RenderAssign(iV_MODE_SURFACE,pSurface);
-	}
-
-	// Empty the buffer
-	//clearMapBuffer(pSurface);
-	//fill with the intelColours set up at the beginning
-	//fillMapBuffer(pSurface);
-	//fill with IMAGE_BUT0 graphic
-	if (!pie_Hardware())
-	{
-		fillMapBufferWithBitmap(pSurface);
-	}
-
-	// Set identity (present) context
-	pie_MatBegin();
-
-	if (pie_Hardware())
-	{
-		pie_SetGeometricOffset(OriginX+10,OriginY+10);
-	}
-	else
-	{
-		pie_SetGeometricOffset(pSurface->width/2,pSurface->height/2);
-	}
-
-	// shift back
-	pie_TRANSLATE(0,0,BUTTON_DEPTH);
-//	pie_TRANSLATE(0,0,pIMD->sradius*8);
-	scaleMatrix(RESEARCH_COMPONENT_SCALE);
-
-	// Pitch down a bit
-	pie_MatRotX(DEG(-30));
-
-	// Rotate round
-	angle += ROTATE_ANGLE;
-	if (angle > 360)
-	{
-		angle -= 360;
-	}
-	pie_MatRotY(DEG(angle));
-
-	//draw the imds
-	if (pIMD2)
-	{
-		pie_Draw3DShape(pIMD2, 0, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-
-	}
-	pie_Draw3DShape(pIMD, 0, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-
-	// close matrix context
-	pie_MatEnd();
-
-
-	if (!pie_Hardware())
-	{
-		// Tell renderer we're back to back buffer
-		iV_RenderAssign(iV_MODE_4101,&rendSurface);
-	}
-}*/
 
 /* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */

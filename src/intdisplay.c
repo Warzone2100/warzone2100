@@ -891,8 +891,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-
-	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State) ) {
+	{
 
 		Hilight = Form->state & WCLICK_HILITE;
 
@@ -1123,7 +1122,7 @@ void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State)  ) {
+	{
 
 		Hilight = Form->state & WCLICK_HILITE;
 
@@ -1212,7 +1211,7 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) || (Form->state!=Buffer->State) ) {
+	{
 
 		Hilight = Form->state & WCLICK_HILITE;
 
@@ -2965,63 +2964,18 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
 		ox = oy = 0;
 	}
 
-	if(!pie_Hardware())
-	{
-		iV_RenderAssign(iV_MODE_SURFACE,ButSurf->Surface);
-	}
-
 	ClearButton(Down,0, buttonType);
 
 	// Draw a question mark, bit of quick hack this.
 	iV_DrawTransImage(IntImages,IMAGE_QUESTION_MARK,ButXPos+ox+10,ButYPos+oy+3);
-
-	if(!pie_Hardware())
-	{
-		iV_RenderAssign(iV_MODE_4101,&rendSurface);
-	}
 }
-
-
-
-
 
 
 // Render a button to display memory.
 //
 void RenderButton(struct _widget *psWidget,RENDERED_BUTTON *Buffer,UDWORD x,UDWORD y, UDWORD buttonType,BOOL Down)
 {
-
-
-	BUTTON_SURFACE *ButSurf = Buffer->ButSurf;
-	UWORD ImageID;
-
-	if(!pie_Hardware())
-	{
-		DrawBegin();
-
-		if(Down) {
-			if (buttonType == TOPBUTTON) {
-				ImageID = IMAGE_BUT0_DOWN;
-			} else {
-				ImageID = IMAGE_BUTB0_DOWN;
-			}
-		} else {
-			if (buttonType == TOPBUTTON) {
-				ImageID = IMAGE_BUT0_UP;
-			} else {
-				ImageID = IMAGE_BUTB0_UP;
-			}
-		}
-
-		iV_ppBitmapTrans((iBitmap*)ButSurf->Buffer,
-					x,y,
-					iV_GetImageWidth(IntImages,ImageID),iV_GetImageHeight(IntImages,ImageID),
-					ButSurf->Surface->width);
-
-		DrawEnd();
-	}
-
-
+	/* FIXME: Does nothing! Used by software renderer. - Per */
 }
 
 
@@ -3701,10 +3655,6 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
     //there should always be a droid associated with the button
 	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
 		"intDisplayTransportButton: invalid droid pointer"));
-
-	if( pie_Hardware() || (IsBufferInitialised(Buffer)==FALSE) || (Form->state & WCLICK_HILITE) ||
-		(Form->state!=Buffer->State) )
-
 
 	{
 		Hilight = Form->state & WCLICK_HILITE;

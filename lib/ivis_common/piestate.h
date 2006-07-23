@@ -109,7 +109,6 @@ typedef	enum	ALPHA_MODE
 typedef struct	RENDER_STATE
 				{
 					REND_ENGINE			rendEngine;
-					BOOL				bHardware;
 					DEPTH_MODE			depthBuffer;
 					BOOL				translucent;
 					BOOL				additive;
@@ -156,7 +155,6 @@ extern void pie_SetDefaultStates();//Sets all states
 //render engine
 extern void pie_SetRenderEngine(REND_ENGINE rendEngine);
 extern REND_ENGINE pie_GetRenderEngine(void);
-extern BOOL	pie_Hardware(void);
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern WZ_DEPRECATED void pie_SetGammaValue(float val);
 //renderer capability

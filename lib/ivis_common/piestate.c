@@ -47,21 +47,11 @@ void pie_SetDefaultStates(void)//Sets all states
 void pie_SetRenderEngine(REND_ENGINE rendEngine)
 {
 	rendStates.rendEngine = rendEngine;
-	if( rendEngine == ENGINE_4101 )
-		rendStates.bHardware = FALSE;
-	else
-		rendStates.bHardware = TRUE;
 }
 
 REND_ENGINE pie_GetRenderEngine(void)
 {
 	return rendStates.rendEngine;
-}
-
-BOOL	pie_Hardware(void)
-{
-	return TRUE;
-//	return rendStates.bHardware;
 }
 
 //***************************************************************************
