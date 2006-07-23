@@ -122,20 +122,11 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 **************************************************************************/
 BOOL ParseCommandLine(int argc, char** argv)
 {
-//	char			seps[] = " ,\t\n";
 	char			*tokenType;
 	char			*token;
-//	char			seps2[] ="\"";
-	char			cl[255];
-	char			cl2[255];
-	unsigned char		*pXor;
+	char			*cl2 = "-secret";
 	unsigned int		w, h;
 	int i = 0, j = 0;
-
-	// for cheating
-	sprintf(cl,"%s","VR^\\WZ^KVQXL\\^SSFH^XXZM");
-	pXor = xorString(cl);
-	sprintf(cl2,"%s%s","-",cl);
 
 	/* loop through command line */
 	for( i = 1; i < argc; ++i) {
@@ -230,6 +221,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 		}
 		else if( stricmp( tokenType,cl2) == 0)
 		{
+			fprintf(stdout, "CHEAT MODE ACTIVATED!!\n");
 			bAllowDebugMode =TRUE;
 		}
 		else if( sscanf(tokenType,"-%ix%i", &w, &h) == 2)
@@ -274,25 +266,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			bDisableLobby = TRUE;
 		}
-/*		else if ( stricmp( tokenType,"-routeLimit") == 0)
-		{
-			// find the actual maximum routing limit
-			token = strtok( NULL, seps );
-			if (token == NULL)
-			{
-				DBERROR( ("Unrecognised -routeLimit value\n") );
-				return FALSE;
-			}
-
-			if (!openWarzoneKey())
-			{
-				DBERROR(("Couldn't open registry for -routeLimit"));
-				return FALSE;
-			}
-			fpathSetMaxRoute(atoi(token));
-			setWarzoneKeyNumeric("maxRoute",(DWORD)(fpathGetMaxRoute()));
-			closeWarzoneKey();
-		}*/
 
 	// gamespy flags
 		else if (   stricmp(tokenType, "+host") == 0		// host a multiplayer.
