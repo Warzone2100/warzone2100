@@ -9,8 +9,6 @@
 #include "ivispatch.h"
 #include "bitimage.h"
 
-extern BOOL   pie_Hardware(void);
-
 static BOOL LoadTextureFile(STRING *FileName, iSprite *TPage, int *TPageID);
 
 UWORD iV_GetImageWidth(IMAGEFILE *ImageFile, UWORD ID)
@@ -165,11 +163,7 @@ static BOOL LoadTextureFile(STRING *FileName, iSprite *pSprite, int *texPageID)
 	/* We have already loaded this one? */
 	while (i < _TEX_INDEX) {
 		if (stricmp(real_filename, _TEX_PAGE[i].name) == 0) {
-			if (pie_Hardware()) {
-				*texPageID = (_TEX_PAGE[i].textPage3dfx);
-			} else {
-				*texPageID = i;
-			}
+			*texPageID = (_TEX_PAGE[i].textPage3dfx);
 			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
 			return TRUE;
 		}

@@ -805,11 +805,6 @@ void dataIMGPAGERelease(void *pData)
 // Tertiles loader. This version for hardware renderer.
 BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 {
-	if(!pie_Hardware()) {
-		*ppData = NULL;
-		return TRUE;
-	}
-
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
@@ -830,7 +825,6 @@ BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 		}
 	}
 
-	if (pie_Hardware())
 	{
 		getTileRadarColours();
 		// make several 256 * 256 pages

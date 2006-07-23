@@ -3944,11 +3944,7 @@ void setLandingZone(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2)
 	}
 
 
-		if(pie_Hardware())
-		{
-			addLandingLights(getLandingX(0)+64,getLandingY(0)+64);
-		}
-
+	addLandingLights(getLandingX(0)+64,getLandingY(0)+64);
 }
 
 //sets the coords for a no go area
@@ -3976,13 +3972,10 @@ void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 		sLandingZone[area].y2 = y2;
 	}
 
-
-		if(area==0 AND pie_Hardware())
-		{
-			addLandingLights(getLandingX(area)+64,getLandingY(area)+64);
-		}
-
-
+	if (area == 0)
+	{
+		addLandingLights(getLandingX(area) + 64, getLandingY(area) + 64);
+	}
 }
 
 void addLandingLights( UDWORD x, UDWORD y)

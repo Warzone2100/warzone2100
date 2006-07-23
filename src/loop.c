@@ -796,11 +796,6 @@ GAMECODE gameLoop(void)
 	{
 
 //JPS 24 feb???		pie_ScreenFlip(clearMode);//gameloopflip
-	 //	if(pie_Hardware())
-	 //	{
-			/* Needs to be handled! */
-	 //	}
-	//	else
 		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
@@ -864,11 +859,6 @@ GAMECODE gameLoop(void)
 		pie_SetFogStatus(FALSE);
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
-	 //	if(pie_Hardware())
-	 //	{
-			/* Needs to be handled! */
-	//	}
-	//	else
 		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
@@ -888,11 +878,6 @@ GAMECODE gameLoop(void)
 		pie_SetFogStatus(FALSE);
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
-	  //	if(pie_Hardware())
-	   //	{
-			/* Needs to be handled! */
-	  //	}
-	  //	else
 		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
@@ -1090,15 +1075,6 @@ void loop_SetVideoPlaybackMode(void)
 	gameTimeStop();
 	pie_SetFogStatus(FALSE);
 	audio_StopAll();
-	if(!pie_Hardware())
-	{
-		screenToggleVideoPlaybackMode();
-		if (!bSoftVideoPalette)
-		{
-			pal_Make16BitPalette();//now we are in 16bit mode
-			bSoftVideoPalette = TRUE;
-		}
-	}
 }
 
 void loop_ClearVideoPlaybackMode(void)
@@ -1108,10 +1084,6 @@ void loop_ClearVideoPlaybackMode(void)
 	video = FALSE;
 	gameTimeStart();
 //	pie_SetFogStatus(TRUE);
-	if(!pie_Hardware())
-	{
-		screenToggleVideoPlaybackMode();
-	}
 	cdAudio_Resume();
 	ASSERT((videoMode == 0,"loop_ClearVideoPlaybackMode: out of sync."));
 }

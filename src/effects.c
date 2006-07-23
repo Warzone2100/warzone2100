@@ -919,14 +919,10 @@ LIGHT	light;
 /* The update function for the explosions */
 void	updateExplosion(EFFECT *psEffect)
 {
-LIGHT	light;
-UDWORD	percent;
-UDWORD	range;
-FRACT	scaling;
-
-
-if (pie_Hardware())//pc only on hardware, always on PSX
-{
+	LIGHT light;
+	UDWORD percent;
+	UDWORD range;
+	FRACT scaling;
 
 	if(TEST_LIT(psEffect))
 	{
@@ -960,9 +956,6 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 		processLight(&light);
 //#endif
 	}
-
-}
-
 
 #ifdef DOLIGHTS
 /*
@@ -1127,10 +1120,6 @@ iVector	dv;
 UDWORD	groundHeight;
 MAPTILE	*psTile;
 
-
-if (pie_Hardware())//pc only on hardware, always on PSX
-{
-
 LIGHT	light;
 #ifdef DOLIGHTS
 	if(psEffect->type!=GRAVITON_TYPE_GIBLET)
@@ -1143,9 +1132,6 @@ LIGHT	light;
 		processLight(&light);
 	}
 #endif
-
-}
-
 
 	if(gamePaused())
 	{
@@ -1290,10 +1276,6 @@ UDWORD	range;
 FRACT	div;
 UDWORD	height;
 
-
-if (pie_Hardware())//pc only on hardware, always on PSX
-{
-
 	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
 	if(percent > 100)
 	{
@@ -1323,10 +1305,6 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 	}
 	processLight(&light);
 #endif
-
-}
-
-
 
 	if(gameTime > (psEffect->birthTime + psEffect->lifeSpan))
 	{
@@ -1525,10 +1503,6 @@ iVector	pos;
 LIGHT	light;
 UDWORD	percent;
 
-
-if (pie_Hardware())//pc only on hardware, always on PSX
-{
-
 	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
 	if(percent > 100)
 	{
@@ -1542,10 +1516,6 @@ if (pie_Hardware())//pc only on hardware, always on PSX
 	light.colour = LIGHT_RED;
 	processLight(&light);
 #endif
-
-}
-
-
 
 	/* Time to update the frame number on the construction sprite */
 	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
@@ -2135,9 +2105,6 @@ UDWORD brightness, specular;
 
 	if(TEST_SCALED(psEffect))
 	{
-
-		if (pie_Hardware())
-		{
 #ifdef HARDWARE_TEST//test additive
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
 			if(percent<10 AND psEffect->type == SMOKE_TYPE_TRAIL)
@@ -2155,14 +2122,6 @@ UDWORD brightness, specular;
 			pie_MatScale(percent + psEffect->baseScale);
 			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 #endif
-		}
-		else
-
-		{//software
-			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)))/2;
-			pie_MatScale(percent + psEffect->baseScale);
-			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
-		}
 	}
 
    	// set up lighting

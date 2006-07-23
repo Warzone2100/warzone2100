@@ -1608,10 +1608,8 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
-	snprintf(sTmp, sTmpSize, "Version %s - Revision %s - w/%s - Built %s", version(), revision(),
-            pie_Hardware() ? "OpenGL" : "SDL", __DATE__);
-
-
+	snprintf(sTmp, sTmpSize, "Version %s - Revision %s - Built %s", version(), revision(),
+           __DATE__);
 
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
 }

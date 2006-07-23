@@ -185,12 +185,6 @@ static VOID		CurrentForce		(VOID);				// draw the current force
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
-// Note, do NOT delete anything in this routine yet! -Q
-//The reason is simple, it will break if NOT using openGL rendering
-//Will be modified at a later time to fix, since pie_hardware is
-//ALWAYS true.   I think we need to set a variable depending
-//on what is being used, something in the init phase along the
-//lines of Crender[3]; Crender="ogl" or "swt" or whatever.
 
 extern UWORD backDropBmp[];
 
@@ -204,7 +198,6 @@ void loadMapPreview(void)
 	LEVEL_DATASET	*psLevel;
 
 //	iBitmap
-	DWORD			*tempBmp=NULL;//[BACKDROP_WIDTH*BACKDROP_HEIGHT];
 	UDWORD			i,j,x,y,height,offX,offY,offX2,offY2,tmp;
 	UBYTE			scale,col,coltab[16],bitDepth=8;
 	MAPTILE			*psTile,*WTile;
@@ -236,39 +229,6 @@ void loadMapPreview(void)
 	}
 	gwShutDown();
 
-	//	build col table;	//ack!
-//	for (col=0; col<16; col+=1)
-//	{
-//		coltab[col] = pal_GetNearestColour( col*16,col*16, col*16);
-//	}
-/*
-	if (screenGetBackBufferBitDepth() == 16)
-	{
-		bitDepth = 16;
-	}
-	else {
-	bitDepth = 8;
-	}
-
-	backDropSprite.width =BACKDROP_WIDTH;
-	backDropSprite.height =BACKDROP_HEIGHT;
-
-	if (bitDepth == 8)
-	{
-		backDropSprite.bmp = (UBYTE*)backDropBmp;
-		// plot the image
-		memset(backDropSprite.bmp,0x0,BACKDROP_HEIGHT*BACKDROP_WIDTH);
-	}
-	else
-	{
-		i=sizeof(char)*mywidth*myheight*3;
-		tempBmp=malloc(sizeof(DWORD)*mywidth*myheight*3);//maybe... -Q
-		memset(tempBmp,0,sizeof(DWORD)*mywidth*myheight*3);
-		backDropSprite.bmp = tempBmp;
-	}
-
-*/
-
 	scale =1;
 	if((mapHeight <  240)&&(mapWidth < 320))
 	{
@@ -286,70 +246,13 @@ void loadMapPreview(void)
 	{
 		scale = 5;
 	}
-/*
-	//centre in screen.
-	offX = (BACKDROP_WIDTH/2) - ((scale*mapWidth)/2);//(mywidth/2 )
-	offY =(BACKDROP_HEIGHT/2) - ((scale*mapHeight)/2);//(myheight/2 )
-
-	psTile = psMapTiles;
-	for (i=0; i<mapHeight; i+=1)
-	{
-		WTile = psTile;
-		for (j=0; j<mapWidth; j+=1)	//Wtile is tile considering at i,j.
-		{
-
-			height = WTile->height;
-			col = coltab[height/16];
-
-			// plot the pixel into the array.
-			for(x = (j*scale);x < (j*scale)+scale ;x++)
-			{
-				for(y = (i*scale);y< (i*scale)+scale ;y++)
-				{
-					tmp=( (offY+y)*BACKDROP_WIDTH)+x+offX;
-					backDropSprite.bmp[( (offY+y)*BACKDROP_WIDTH)+x+offX]=col;
-					backDropSprite.bmp[tmp]=0xff;
-					tmp=backDropSprite.bmp[( (offY+y)*BACKDROP_WIDTH)+x+offX];
-
-				}
-			}
-			WTile+=1;
-		}
-		psTile += mapWidth;
-	}
-
-
-	plotStructurePreview(&backDropSprite,scale,offX,offY);
-
-	if (bitDepth !=8)
-	{
-//		i=0;
-//		for(j=0;j<(sizeof(DWORD) *mywidth*myheight);j++)
-//			if(tempBmp[j]!=0){ i++;tempBmp[j]=0; }
-//		printf("i=%d\n",i);
-//		i=0;
-		bufferTo16Bit(backDropBmp,tempBmp,  FALSE);
-//		pcxBufferTo16Bit(backDropBmp,tempBmp);
-//		bufferTo16Bit(tempBmp, backDropBmp, FALSE);		// convert
-
-//		for(j=0;j<(sizeof(DWORD ) *mywidth*myheight);j++)
-//			if(tempBmp[j]!=0) i++;
-//		printf("i=%d\n",i);
-	}
-	else
-	{
-*/
 	oursize=sizeof(unsigned char) *mywidth*myheight;
-  imageData = malloc(oursize *3);//sizeof(unsigned char) *mywidth*myheight* 3
+  imageData = malloc(oursize *3);
   ptr=imageData;
   memset(ptr,0x45,sizeof(unsigned char) *mywidth*myheight*3 );	//dunno about background color
-//	ptr+=oursize;
-//  memset(ptr,0x33,sizeof(unsigned char) *mywidth*myheight );
-//	ptr+=oursize;
-//    memset(ptr,0x99,sizeof(unsigned char) *mywidth*myheight );
-  	psTile = psMapTiles;
-	offX2 = (mywidth/2 ) - ((scale*mapWidth)/2);//(mywidth/2 )
-	offY2 =(myheight/2 )  - ((scale*mapHeight)/2);//(myheight/2 )
+  psTile = psMapTiles;
+	offX2 = (mywidth/2 ) - ((scale*mapWidth)/2);
+	offY2 =(myheight/2 )  - ((scale*mapHeight)/2);
 
       for (i = 0; i < mapHeight; i++)
       {
@@ -380,11 +283,9 @@ void loadMapPreview(void)
 //	  Show_Map(imageData);//imageData		//Don't get rid of this yes!
 	screen_Upload((UWORD*)imageData);//backDropBmp) ;
 	free(imageData);
-//	}
 
 	hideTime = gameTime;
 	mapShutdown();
-//	if(tempBmp) free(tempBmp);
 	return;
 }
 
@@ -4159,10 +4060,7 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	pie_BoxFill(tlx,	tly,	brx,	bry, 0x006067a0);
 	pie_BoxFill(tlx+1,	tly+1,	brx-1,	bry-1,	0x002f3050);
 
-	if (pie_Hardware())
-	{
-		pie_Set2DClip((UWORD)(tlx+1),(UWORD)(tly+1),(UWORD)(brx-1),(UWORD)(bry-1));
-	}
+	pie_Set2DClip((UWORD)(tlx+1),(UWORD)(tly+1),(UWORD)(brx-1),(UWORD)(bry-1));
 
 	pie_SetGeometricOffset( x,y);
 	Rotation.x = -20;
@@ -4177,9 +4075,6 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		displayComponentButtonTemplate(Force.pMembers->pTempl, &Rotation,&Position,TRUE, 2 * DROID_BUT_SCALE);
 	}
 
-	if (pie_Hardware())
-	{
-		pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
-	}
+	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 	return;
 }

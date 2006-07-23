@@ -329,15 +329,7 @@ void loadingScreenCallback(void)
 	botX = 630+D_W;
 	botY = 470+D_H+1;
 //	pie_BoxFillIndex(10+D_W,450+D_H-1,630+D_W,470+D_H+1,COL_BLACK);
-	if (pie_Hardware())
-	{
-		pie_UniTransBoxFill(topX,topY,botX,botY,0x00010101, 24);
-	}
-	else
-	{
-		pie_BoxFillIndex(topX,topY,botX,botY,COL_BLACK);
-	}
-
+	pie_UniTransBoxFill(topX,topY,botX,botY,0x00010101, 24);
 
 	for(i=1; i<19; i++)
 	{
@@ -349,14 +341,7 @@ void loadingScreenCallback(void)
 		{
 			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
 		}
-		if (pie_Hardware())
-		{
-			pie_UniTransBoxFill(10+stars[i].xPos+D_W,450+i+D_H,10+stars[i].xPos+(2*stars[i].speed)+D_W,450+i+2+D_H,0x00ffffff, 255);
-		}
-		else
-		{
-	   	  	pie_BoxFillIndex(10+stars[i].xPos+D_W,450+i+D_H,10+stars[i].xPos+2+D_W,450+i+2+D_H,COL_WHITE);
-		}
+		pie_UniTransBoxFill(10+stars[i].xPos+D_W,450+i+D_H,10+stars[i].xPos+(2*stars[i].speed)+D_W,450+i+2+D_H,0x00ffffff, 255);
 
    	}
 

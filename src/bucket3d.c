@@ -137,7 +137,6 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	//put the object data into the tag
 	newTag->objectType = objectType;
 	newTag->pObject = pObject;
-	if(pie_Hardware())
 	{
 		if ((objectType == RENDER_EFFECT) && ((((EFFECT*)pObject)->group == EFFECT_EXPLOSION) ||
 			(((EFFECT*)pObject)->group == EFFECT_CONSTRUCTION) ||
@@ -176,10 +175,6 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		{
 			z = bucketCalculateState(objectType, pObject);
 		}
-	}
-	else
-	{
-		z = bucketCalculateZ(objectType, pObject);
 	}
 
 	if (z < 0)
@@ -280,23 +275,12 @@ extern BOOL bucketRenderCurrentList(void)
 #endif
 				break;
 				case RENDER_TILE:
-					if (pie_Hardware())
-					{
-
-						drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
-					}
-					else
-					{
-						drawTexturedTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
-					}
+					drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
 				break;
 
 				case RENDER_WATERTILE:
-					if (pie_Hardware())
-					{
-						drawTerrainWaterTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
-					}
-					break;
+					drawTerrainWaterTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
+				break;
 
 				case RENDER_PROJECTILE:
 				case RENDER_PROJECTILE_TRANSPARENT:

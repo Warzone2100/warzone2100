@@ -477,10 +477,7 @@ BOOL		bPlayerHasHQ = FALSE;
 		}
 
 	/* Ensure that any text messages are displayed at bottom of screen */
-		if (pie_Hardware())
-		{
-			pie_SetFogStatus(FALSE);
-		}
+		pie_SetFogStatus(FALSE);
 		displayConsoleMessages();
 //		if(getWarCamStatus())
 //		{
@@ -637,14 +634,7 @@ void displayTerrain(void)
 	camera.p.x = 0;
 
 	/* SetUpClipping window - to below the backdrop */
-	if (pie_Hardware())
-	{
-  		pie_Set2DClip(xOffset,yOffset,psRendSurface->width-xOffset,psRendSurface->height-yOffset);
-	}
-	else
-	{
-  		pie_Set2DClip(xOffset,yOffset,psRendSurface->width-xOffset-1,psRendSurface->height-yOffset-1);
-	}
+	pie_Set2DClip(xOffset,yOffset,psRendSurface->width-xOffset,psRendSurface->height-yOffset);
 
 	/* Set 3D world origins */
 	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
@@ -805,10 +795,7 @@ void drawTiles(iView *camera, iView *player)
 		/* Go through the x's */
 		for (j=0; j<(SDWORD)visibleXTiles+1; j++)
 		{
-			if(pie_Hardware())
-			{
-				tileScreenInfo[i][j].bWater = FALSE;
-			}
+			tileScreenInfo[i][j].bWater = FALSE;
 			if( (playerXTile+j < 0) OR
 				(playerZTile+i < 0)	OR
 				(playerXTile+j > (SDWORD)(mapWidth-1)) OR
@@ -830,16 +817,8 @@ void drawTiles(iView *camera, iView *player)
 
 			   	if (pie_GetFogEnabled())
 			  	{
-			  		if(pie_Hardware())
-			  		{
-			  			tileScreenInfo[i][j].light.argb = 0xff030303;
-			  			tileScreenInfo[i][j].specular.argb = pie_GetFogColour();
-			  		}
-			  		else
-					{
-			  			tileScreenInfo[i][j].light.argb = 0x00000003;
-			  			tileScreenInfo[i][j].specular.argb = 0;
-			  		}
+		  			tileScreenInfo[i][j].light.argb = 0xff030303;
+		  			tileScreenInfo[i][j].specular.argb = pie_GetFogColour();
 			  	}
 			  	else
 			  	{
@@ -868,12 +847,9 @@ void drawTiles(iView *camera, iView *player)
 				psTile = mapTile(playerXTile+j,playerZTile+i);
 				/* Get a pointer to the tile at this location */
 				tileScreenInfo[i][j].x = ((j-terrainMidX)<<TILE_SHIFT);
-				if(pie_Hardware())
+				if (TERRAIN_TYPE(psTile) == TER_WATER)
 				{
-					if(TERRAIN_TYPE(psTile)==TER_WATER)
-					{
-						tileScreenInfo[i][j].bWater = TRUE;
-					}
+					tileScreenInfo[i][j].bWater = TRUE;
 				}
 				tileScreenInfo[i][j].y = map_TileHeight(playerXTile+j, playerZTile+i);
 				tileScreenInfo[i][j].z = ((terrainMidY-i)<<TILE_SHIFT);
@@ -915,8 +891,6 @@ void drawTiles(iView *camera, iView *player)
 				}
 
 #ifdef ENABLE_WATER
-				if (pie_Hardware())
-				{
 					TextNum = (UWORD)(psTile->texture & TILE_NUMMASK);
 					IsWaterTile = (TERRAIN_TYPE(psTile) == TER_WATER);
 					// If it's the main water tile then..
@@ -931,7 +905,6 @@ void drawTiles(iView *camera, iView *player)
 						// And darken it.
 						TileIllum = (UBYTE)((TileIllum*3)/4);
 					}
-				}
 #endif
 				tileScreenInfo[i][j].sz = pie_RotProj((iVector*)&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].sx);
 
@@ -943,8 +916,6 @@ void drawTiles(iView *camera, iView *player)
 		   		}
 
 #ifdef ENABLE_WATER
-				if (pie_Hardware())
-				{
 					// If it's any water tile..
 					if(IsWaterTile) {
 						// If it's the main water tile then bring it back up because it was pushed down
@@ -969,7 +940,6 @@ void drawTiles(iView *camera, iView *player)
 						tileScreenInfo[i][j].wz = tileScreenInfo[i][j].sz;
 						tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 					}
-				}
 #endif
 			}
 		}
@@ -1026,10 +996,7 @@ void drawTiles(iView *camera, iView *player)
 					ASSERT((FALSE,"Weirdy tile coords"));
 				}
 				bucketAddTypeToList(RENDER_TILE, &tileIJ[i][j]);
-				if (pie_Hardware()) {
-					bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
-
-				}
+				bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
 			}
 			else
 			{
@@ -1653,14 +1620,7 @@ BOOL	bEdgeTile;
 			{
 				tileNumber = psTile->texture;
 			}
-			if (pie_Hardware())
-			{
-				pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
-			}
-			else
-			{
-				texturePage.bmp = tilesRAW[tileNumber & TILE_NUMMASK];
-			}
+			pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
 //temp
 //			pie_DrawTile(&tileScreenInfo[0][0],&tileScreenInfo[0][1],&tileScreenInfo[1][0],
@@ -3209,14 +3169,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 			temp = imd->points;
 			imd->points = alteredPoints;
 			// Actually render it
-			if (pie_Hardware())
-			{
-				pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, 0, 0);
-			}
-			else
-			{
-	 			pie_Draw3DShape(imd, 0,getPlayerColour( psStructure->player), brightness, specular, 0, 0);
-			}
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, 0, 0);
 			imd->points = temp;
 		}
 
@@ -3238,14 +3191,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 		{
 			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, 0, 0);
 			/*
-			if (pie_Hardware())
-			{
-  				pie_Draw3DShape(imd, 0,getPlayerColour( psStructure->player), brightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
-			}
-			else
-			{
-  				pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, 0, 0);
-			}
+			pie_Draw3DShape(imd, 0,getPlayerColour( psStructure->player), brightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
 			*/
 		}
 
@@ -3420,16 +3366,8 @@ void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
 		{
 			firingStage = (2*scrR) - 1;
 		}
-		if (pie_Hardware())
-		{
-			pie_BoxFill(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),    6+scrY+3, 0x00020202);
-			pie_BoxFill(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage, 6+scrY+2, 0x00ffffff);
-		}
-		else
-		{
-			pie_BoxFillIndex(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),   6+scrY+4, 1);
-			pie_BoxFillIndex(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage,6+scrY+3, 255);
-		}
+		pie_BoxFill(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),    6+scrY+3, 0x00020202);
+		pie_BoxFill(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage, 6+scrY+2, 0x00ffffff);
 		return;
 	}
 	/* ******** ********/
@@ -3520,18 +3458,9 @@ void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
 			{
 				firingStage = (2*scrR) - 1;
 			}
-			if (pie_Hardware())
-			{
-				/* Power bars */
-				pie_BoxFill(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),    6+scrY+3, 0x00020202);
-				pie_BoxFill(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage, 6+scrY+2, 0x00ffffff);
-			}
-			else
-			{
-				/* Power bars */
-				pie_BoxFillIndex(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),   6+scrY+4, 1);
-				pie_BoxFillIndex(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage,6+scrY+3, 255);
-			}
+			/* Power bars */
+			pie_BoxFill(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),    6+scrY+3, 0x00020202);
+			pie_BoxFill(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage, 6+scrY+2, 0x00ffffff);
 		}
 	}
 }
@@ -3602,17 +3531,12 @@ FRACT		mulH;
                 }
 				if(health>100) health =100;
 
-				if(pie_Hardware())
-				{
-					if(health>REPAIRLEV_HIGH) longPowerCol = 0x0000ff00;//green
-					else if(health>=REPAIRLEV_LOW) longPowerCol = 0x00ffff00;//yellow
-					else longPowerCol = 0x00ff0000;//red
-				}
-				else
-				{
-					if(health>REPAIRLEV_HIGH) powerCol = COL_GREEN;
-					else if(health>REPAIRLEV_LOW) powerCol = COL_YELLOW;
-					else powerCol = COL_RED;
+				if (health > REPAIRLEV_HIGH) {
+					longPowerCol = 0x0000ff00; //green
+				} else if (health >= REPAIRLEV_LOW) {
+					longPowerCol = 0x00ffff00; //yellow
+				} else {
+					longPowerCol = 0x00ff0000; //red
 				}
 				mulH = MAKEFRACT(health)/100;
 				mulH*=MAKEFRACT(width);
@@ -3620,16 +3544,8 @@ FRACT		mulH;
 //				health = (((width*10000)/100)*health)/10000;
 				if(health>width) health = width;
 				health*=2;
-				if(pie_Hardware())
-				{
-					pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
-					pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, longPowerCol);
-				}
-				else
-				{
-					pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-					pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
-				}
+				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, 0x00020202);
+				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, longPowerCol);
 
 				drawWeaponReloadBar((BASE_OBJECT *)psStruct, psStruct->asWeaps);
 			}
@@ -3734,35 +3650,13 @@ FRACT		mulH;
                     //show body points
     				health = PERCENT(psStruct->body, structureBody(psStruct));
                 }
-				if(pie_Hardware())
-				{
-					if(health>REPAIRLEV_HIGH) longPowerCol = 0x0000ff00;//green
-					else if(health>REPAIRLEV_LOW) longPowerCol = 0x00ffff00;//yellow
-					else longPowerCol = 0x00ff0000;//red
-				}
-				else
-				{
-					if(health>REPAIRLEV_HIGH) powerCol = COL_GREEN;
-					else if(health>REPAIRLEV_LOW) powerCol = COL_YELLOW;
-					else powerCol = COL_RED;
-				}
+				if (health > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
+				else if (health > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
+				else longPowerCol = 0x00ff0000; //red
 				health = (((width*10000)/100)*health)/10000;
 				health*=2;
-				if(pie_Hardware())
-				{	pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
-					pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, longPowerCol);
-				}
-				else
-				{
-//					pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-//					pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
-				//	printf("==>2b drawc %f, %f, %f\n",psStruct->x,psStruct->y,psStruct->z);
-					pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
-					pie_BoxFillIndex(scrX - scrR,scrY,scrX - scrR+health,scrY+1,powerCol);
-
-				}
-
-
+				pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
+				pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, longPowerCol);
 			}
 			else if(psStruct->status == SS_BEING_BUILT)
 			{
@@ -3899,22 +3793,11 @@ SDWORD			scrX,scrY,scrR;
 			scrX = psDelivPoint->screenX;
 			scrY = psDelivPoint->screenY;
 			scrR = psDelivPoint->screenR;
-			if (pie_Hardware())
+			/* Three DFX clips properly right now - not sure if software does */
+			if ((scrX + scrR) > 0 AND (scrY + scrR) > 0 AND (scrX - scrR) < DISP_WIDTH
+					AND (scrY - scrR) < DISP_HEIGHT)
 			{
-				/* Three DFX clips properly right now - not sure if software does */
-				if((scrX+scrR)>0 AND (scrY+scrR)>0 AND (scrX-scrR)<DISP_WIDTH
-					AND (scrY-scrR)<DISP_HEIGHT)
-				{
-					iV_Box(scrX - scrR, scrY - scrR, scrX + scrR, scrY + scrR, 110);
-				}
-			}
-			else
-			{
-				if( ((SDWORD)(scrX - scrR) > 0) AND (scrX + scrR < DISP_WIDTH) AND
-						((SDWORD)(scrY - scrR) > 0) AND (scrY + scrR < DISP_HEIGHT) )
-				{
-					iV_Box(scrX - scrR, scrY - scrR, scrX + scrR, scrY + scrR, 110);
-				}
+				iV_Box(scrX - scrR, scrY - scrR, scrX + scrR, scrY + scrR, 110);
 			}
 		}
 	}
@@ -3996,18 +3879,9 @@ FRACT			mulH;
 			    damage = PERCENT(psDroid->body,psDroid->originalBody);
 //            }
 
-			if(pie_Hardware())
-			{
-			 	if(damage>REPAIRLEV_HIGH) longPowerCol = 0x0000ff00;//green
-				else if(damage>REPAIRLEV_LOW) longPowerCol = 0x00ffff00;//yellow
-				else longPowerCol = 0x00ff0000;//red
-			}
-			else
-			{
-				if(damage>REPAIRLEV_HIGH) powerCol = defaultColours.green;
-				else if(damage>REPAIRLEV_LOW) powerCol = defaultColours.yellow;
-				else powerCol = defaultColours.red;
-			}
+		 	if (damage > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
+			else if (damage > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
+			else longPowerCol = 0x00ff0000; //red
 //show resistance values if CTRL/SHIFT depressed(now done in reload bar)
 //            if (ctrlShiftDown())
 //          {
@@ -4049,7 +3923,6 @@ FRACT			mulH;
 				{
 
 					/* Selection Lines */
-					if (pie_Hardware())
 					{
 						if(bEnergyBars)
 						{
@@ -4074,46 +3947,12 @@ FRACT			mulH;
 							}
 						}
 					}
-					else
-					{
-						if(bEnergyBars)
-						{
-						 	pie_BoxFillIndex(scrX-scrR, scrY+scrR-7, scrX-scrR, scrY+scrR, boxCol);
-							pie_BoxFillIndex(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR, boxCol);
-							pie_BoxFillIndex(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR, boxCol);
-							pie_BoxFillIndex(scrX+scrR, scrY+scrR-7, scrX+scrR, scrY+scrR+1, boxCol);
-						}
-						else
-						{
-							if(bTinyBars)
-							{
-								pie_BoxFillIndex(scrX-scrR-3, scrY-3, scrX-scrR+3, scrY+3, 1);
-								pie_BoxFillIndex(scrX-scrR-2, scrY-2, scrX-scrR+2, scrY+2, powerCol);
-							}
-							else
-							{
-								pie_BoxFillIndex(scrX-scrR, scrY+scrR-7, scrX-scrR, scrY+scrR, powerCol);
-								pie_BoxFillIndex(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR, powerCol);
-								pie_BoxFillIndex(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR, powerCol);
-								pie_BoxFillIndex(scrX+scrR, scrY+scrR-7, scrX+scrR, scrY+scrR+1, powerCol);
-							}
-						}
-					}
 				}
 				if(bEnergyBars)
 				{
-					if (pie_Hardware())
-					{
-						/* Power bars */
-						pie_BoxFill(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+5,0x00020202);
-						pie_BoxFill(scrX - scrR,scrY + scrR+3,scrX - scrR+damage,scrY+scrR+4,longPowerCol);
-					}
-					else
-					{
-						/* Power bars */
-						pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+5,1);
-						pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+damage,scrY+scrR+4,powerCol);
-					}
+					/* Power bars */
+					pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, 0x00020202);
+					pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, longPowerCol);
 				}
 
 				/* Write the droid rank out */
@@ -4171,18 +4010,10 @@ FRACT			mulH;
 	    			damage = PERCENT(psDroid->body,psDroid->originalBody);
                 }
 
-				if(pie_Hardware())
-				{
-			 		if(damage>REPAIRLEV_HIGH) longPowerCol = 0x0000ff00;//green
-					else if(damage>REPAIRLEV_LOW) longPowerCol = 0x00ffff00;//yellow
-					else longPowerCol = 0x00ff0000;//red
-				}
-				else
-				{
-					if(damage>REPAIRLEV_HIGH) powerCol = defaultColours.green;
-					else if(damage>REPAIRLEV_LOW) powerCol = defaultColours.yellow;
-					else powerCol = defaultColours.red;
-				}
+			 	if (damage > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
+				else if(damage > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
+				else longPowerCol = 0x00ff0000; //red
+
 		  	    //show resistance values if CTRL/SHIFT depressed
                 if (ctrlShiftDown())
                 {
@@ -4223,18 +4054,9 @@ FRACT			mulH;
                     //we always want to show the enemy health/resistance as energyBar - AB 18/06/99
 					//if(bEnergyBars)
 					{
-						if (pie_Hardware())
-						{
-							/* Power bars */
-							pie_BoxFill(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+5,0x00020202);
-							pie_BoxFill(scrX - scrR,scrY + scrR+3,scrX - scrR+damage,scrY+scrR+4,longPowerCol);
-						}
-						else
-						{
-							/* Power bars */
-							pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-							pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+damage,scrY+scrR+5,powerCol);
-						}
+						/* Power bars */
+						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 5, 0x00020202);
+						pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, longPowerCol);
 					}
 				}
 			}
@@ -4849,10 +4671,7 @@ void renderSky(void)
 		{
 			width = 256;
 		}
-		if (pie_Hardware())
-		{
-			iV_UniBitmapDepth(texPage,0,0,width,128,index,0,width,192,200,65000);
-		}
+		iV_UniBitmapDepth(texPage,0,0,width,128,index,0,width,192,200,65000);
 		index += 256;
 	}
 
@@ -4873,10 +4692,7 @@ void renderSky(void)
 		{
 			width = 256;
 		}
-		if (pie_Hardware())
-		{
-			iV_UniBitmapDepth(texPage,0,128,width,127,index,0,width,192,200,64000);
-		}
+		iV_UniBitmapDepth(texPage,0,128,width,127,index,0,width,192,200,64000);
 		index += 256;
 	}
 }
@@ -5910,7 +5726,7 @@ void	testEffect( void )
 	UDWORD	i;
 
 	/* Hardware only effect, and then only if you've got additive! */
-	if((pie_Hardware() /* RODZ AND war_GetAdditive()*/ ) )
+	// if ( RODZ AND war_GetAdditive() ) )
 	{
 		/* Only do for player 0 power stations */
 

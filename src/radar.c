@@ -559,9 +559,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 
 	Scr = screen + OffsetX + OffsetY*Modulus;
 
-	if (pie_Hardware()) {
-		ShadeDiv = 4;
-	}
+	ShadeDiv = 4;
 
 	if(RadarRedraw) {
 		EndY = VisHeight;

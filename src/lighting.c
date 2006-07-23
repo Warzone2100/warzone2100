@@ -57,14 +57,7 @@ MAPTILE	*psTile;
 	{
 		for(j=0; j<mapHeight; j++)
 		{
-			if (pie_Hardware())
-			{
-				mapTile(i,j)->illumination = 16;
-			}
-			else
-			{
-				mapTile(i,j)->illumination = 2;
-			}
+			mapTile(i,j)->illumination = 16;
 		}
 	}
 
@@ -138,14 +131,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
             //always make the edge tiles dark
             if (i==0 OR j==0 OR i >= mapWidth-1 OR j >= mapHeight-1)
             {
-			    if (pie_Hardware())
-			    {
-				    psTile->illumination = 16;
-			    }
-			    else
-			    {
-				    psTile->illumination = 2;
-			    }
+			    psTile->illumination = 16;
 
                 //give water tiles at edge of map a border
 				if(TERRAIN_TYPE(psTile) == TER_WATER)
@@ -228,22 +214,10 @@ UDWORD	val;
 					finalVector.z * theSun.z)>>FP12_SHIFT;
 
    /* iV_NumberOut(dotProduct,100,150,255);*/
-	if (pie_Hardware())
-	{
-		val = ((abs(dotProduct))/16);
-		if(val==0) val = 1;
-		if(val>254) val = 254;
-		mapTile(tileX,tileY)->illumination = (UBYTE) val;
-	}
-	else
-	{
-	  //	mapTile(tileX,tileY)->illumination = (UBYTE)(((abs(dotProduct))/256)%16);
-		val = ((abs(dotProduct))/256);
-		if(val==0) val =1;
-		if(val>15) val = 15;
-	  	mapTile(tileX,tileY)->illumination = (UBYTE)val;
-
-	}
+	val = ((abs(dotProduct)) / 16);
+	if (val == 0) val = 1;
+	if(val > 254) val = 254;
+	mapTile(tileX, tileY)->illumination = val;
 }
 
 void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
@@ -828,14 +802,6 @@ SDWORD	fog = 0;
 		edge = 255;
 	}
 #endif
-	if (!pie_Hardware())
-	{
-		//no fog
-		//software version so return an 8 bit light value
-		*pSpecular = 0;
-		return (UDWORD)pie_ByteScale((UBYTE)brightness,(UBYTE)umbra);
-	}
-
 
 	if ((distance) < 32)
 	{
