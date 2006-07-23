@@ -388,7 +388,7 @@ BIND_TOGRAD		"Toggle Radar"
 BIND_TOGCON		"Toggle Console Display"
 
 BIND_BARS		"Toggle Damage Bars On/Off"
-BIND_SHOT		"Take 3dfx Screen Shot"
+BIND_SHOT		"Take Screen Shot"
 BIND_PAUSE		"Toggle Pause Mode"
 BIND_PREV		"View Location of Previous Message"
 
