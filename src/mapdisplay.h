@@ -23,13 +23,6 @@ extern iSurface	*mapSurface;
 	variables for the renderer to work with */
 extern iSurface* setUpMapSurface(UDWORD width, UDWORD height);
 
-/* Render the world to given surface */
-//extern void	renderMapToBuffer( struct iSurface *pSurface, iVector *location, iVector *viewVector,
-//						  UDWORD distance );
-// Render a Map Surface to display memory.
-extern void renderMapSurface(struct iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height);
-
-
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map */
 extern void renderIMDToBuffer(struct iSurface *pSurface, struct iIMDShape *pIMD,
 							  struct iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,

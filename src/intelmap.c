@@ -1471,10 +1471,6 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 		}
 	}
 
-	// Draw the button.
-	RenderButton(psWidget,psBuffer, xOffset+psButton->x, yOffset+psButton->y, TOPBUTTON,Down);
-
-
 	CloseButtonRender();
 
 	if (Hilight)
@@ -1531,19 +1527,10 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		//render an object
 		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 
-
-// 3DFX version does it straight to the display.
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
-		//renderIMDToBuffer(pIntelMapSurface, psViewResearch->pIMD,
-		//	psViewResearch->pIMD2, x0, y0, x0+(x1-x0)/2, y0+(y1-y0)/2);
-        renderResearchToBuffer(pIntelMapSurface, psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
-		//add the contents to the window - this is only done in software now
-		renderMapSurface(pIntelMapSurface, x0, y0, Form->width, Form->height);
-
+		renderResearchToBuffer(pIntelMapSurface, psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
 
 		CloseButtonRender();
-
-
 
 		//draw image icon in top left of window
 		image = (SWORD)getResearchForMsg((VIEWDATA *)psMessage->pViewData)->iconID;
@@ -1551,10 +1538,6 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		{
 			iV_DrawTransImage(IntImages,image,x0,y0);
 		}
-
-//#ifdef PSX
-//		RenderWindowFrame(&FrameNormal,x0-1,y0-1,x1-x0+2,y1-y0+2);
-//#endif
 	}
 }
 

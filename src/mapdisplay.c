@@ -229,12 +229,6 @@ void	tileLayouts(int texture)
 	}
 }
 
-// Render a Map Surface to display memory.
-void renderMapSurface(iSurface *pSurface, UDWORD x, UDWORD y, UDWORD width, UDWORD height)
-{
-	/* FIXME: Does nothing! Used for software renderer. - Per */
-}
-
 /* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */
 void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,

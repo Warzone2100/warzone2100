@@ -1074,13 +1074,6 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 //						RENDERBUTTON_INITIALISED(Buffer);
 	}
 
-//	DBPRINTF(("%d\n",iV_GetOTIndex_PSX());
-
-	// Draw the button.
-	RenderButton(psWidget,Buffer, xOffset+Form->x, yOffset+Form->y, TOPBUTTON,Down);
-
-
-
 	CloseButtonRender();
 
 	//need to flash the button if a factory is on hold production
@@ -1176,11 +1169,6 @@ void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 		RENDERBUTTON_INITIALISED(Buffer);
 	}
-
-	RenderButton(psWidget,Buffer, xOffset+Form->x, yOffset+Form->y, BTMBUTTON,Down);
-
-
-
 
 	CloseButtonRender();
 
@@ -1349,10 +1337,6 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 
 		RENDERBUTTON_INITIALISED(Buffer);
 	}
-
-	// Draw the button.
-	RenderButton(psWidget,Buffer, xOffset+Form->x, yOffset+Form->y, TOPBUTTON,Down);
-
 
 	CloseButtonRender();
 
@@ -2970,15 +2954,6 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
 	iV_DrawTransImage(IntImages,IMAGE_QUESTION_MARK,ButXPos+ox+10,ButYPos+oy+3);
 }
 
-
-// Render a button to display memory.
-//
-void RenderButton(struct _widget *psWidget,RENDERED_BUTTON *Buffer,UDWORD x,UDWORD y, UDWORD buttonType,BOOL Down)
-{
-	/* FIXME: Does nothing! Used by software renderer. - Per */
-}
-
-
 // Returns TRUE if the droid is currently demolishing something or moving to demolish something.
 //
 BOOL DroidIsDemolishing(DROID *Droid)
@@ -3685,13 +3660,7 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 		RENDERBUTTON_INITIALISED(Buffer);
 	}
 
-	// Draw the button.
-	RenderButton(psWidget, Buffer, xOffset+Form->x, yOffset+Form->y, TOPBUTTON, Down);
-
-
 	CloseButtonRender();
-
-
 
 	if (Hilight)
 	{

@@ -242,7 +242,6 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 
 void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
 
-void RenderButton(struct _widget *psWidget,RENDERED_BUTTON *Buffer,UDWORD x,UDWORD y, UDWORD buttonType,BOOL Down);
 void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
 void RenderBlankToButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
 
