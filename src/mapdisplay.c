@@ -70,11 +70,6 @@ extern BOOL		godMode;
 /*fills the map buffer with intelColours prior to drawing in it*/
 //static	void	fillMapBuffer(iSurface *surface);
 
-//only used in software
-/*fills the map buffer with a bitmap prior to drawing in it*/
-static void	fillMapBufferWithBitmap(iSurface *surface);
-
-
 void		tileLayouts(int texture);
 
 //fill the intelColours array with the colours used for the background
@@ -147,51 +142,6 @@ void	releaseMapSurface(iSurface *pSurface)
 
 		FREE(pSurface);
 	}
-}
-
-//only used in software
-/*fills the map buffer with a bitmap*/
-void	fillMapBufferWithBitmap(iSurface *surface)
-{
-
-	UBYTE		*toFill;
-	UDWORD		x, y, extraWidth, surfaceWidth, surfaceHeight,
-				bitmapWidth, bitmapHeight, xSource, ySource,
-				x0, y0;
-	iBitmap		*pBitmapBuffer;
-	IMAGEDEF	*pImageDef;
-	UDWORD		Modulus;
-
-
-	toFill = surface->buffer;
-	extraWidth = MSG_BUFFER_WIDTH - surface->width;
-
-	pImageDef = &IntImages->ImageDefs[IMAGE_BUT0_UP];
-	Modulus = IntImages->TexturePages[pImageDef->TPageID].width;
-
-	pBitmapBuffer = IntImages->TexturePages[pImageDef->TPageID].bmp;
-	x0 = (UDWORD)pImageDef->Tu + 5;
-	y0 = (UDWORD)pImageDef->Tv + 5;
-	//pBitmapBuffer += (x0 + y0 * Modulus);
-
-	bitmapWidth = pImageDef->Width - 10;
-	bitmapHeight = pImageDef->Height - 10;
-	surfaceWidth = (UDWORD)surface->width;
-	surfaceHeight = (UDWORD)surface->height;
-
-	for (y=0; y < surfaceHeight; y++)
-	{
-		for (x=0; x < surfaceWidth; x++)
-		{
-			//get the source x/y for this destination
-			xSource = x * bitmapWidth/surfaceWidth;
-			ySource = y * bitmapHeight/surfaceHeight;
-
-			*toFill++ = pBitmapBuffer[x0+xSource + (y0+ySource)*Modulus];
-		}
-		toFill += extraWidth;
-	}
-
 }
 
 void	tileLayouts(int texture)

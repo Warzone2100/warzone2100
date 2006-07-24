@@ -9,8 +9,6 @@
 #include <stdio.h>
 #include <math.h>
 
-//#define _DEBUG
-
 #include "lib/framework/frame.h"
 #include "lib/widget/widget.h"
 
@@ -25,7 +23,6 @@
 #include "lib/ivis_opengl/vid.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
-
 
 #include "display3d.h"
 #include "edit3d.h"
@@ -90,11 +87,6 @@
 #define	MAX_INTERFACE_SNAPS	64
 #define	MAX_RADAR_SNAPS 1
 
-
-
-
-// Win32 version.
-
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
@@ -109,22 +101,16 @@ enum {				  // Reticule button indecies.
 	RETBUT_COMMAND,
 };
 
-
-
 typedef struct {
 	UDWORD id;
 	BOOL Enabled;
 	BOOL Hidden;
 } BUTSTATE;
 
-
 typedef struct {
 	SWORD x;
 	SWORD y;
 } BUTOFFSET;
-
-
-// Win32 version.
 
 BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
 	{48,49},	// RETBUT_CANCEL,
@@ -189,9 +175,6 @@ static void orderObjectInterface(void);
 static void orderFactories(void);
 static void orderResearch(void);
 static void orderDroids(void);
-
-//#define INTBOTHWIND		// enables attempt to bring object and stats windows up together. aborted for now,,,
-
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -568,16 +551,6 @@ void intRemoveStatsNoAnim(void);
 static void intProcessStats(UDWORD id);
 // clean up when an object dies
 void intObjectDied(UDWORD objID);
-
-
-#ifdef INTBOTHWIND
-static BOOL intAddBuildScreens(DROID *pSelected);
-static BOOL intRemoveBuildScreens(void);
-static BOOL intAddManufactureScreens(STRUCTURE *pSelected);
-static BOOL intRemoveManufactureScreens(void);
-static BOOL intAddResearchScreens(STRUCTURE *pSelected);
-static BOOL intRemoveResearchScreens(void);
-#endif
 
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
@@ -1209,14 +1182,8 @@ void intResetScreen(BOOL NoAnim)
 	case INT_OBJECT:
 		intStopStructPosition();
 		if(NoAnim) {
-#ifdef INTBOTHWIND
-			intRemoveStatsNoAnim();
-#endif
 			intRemoveObjectNoAnim();
 		} else {
-#ifdef INTBOTHWIND
-			intRemoveStats();
-#endif
 			intRemoveObject();
 		}
 		break;
@@ -1396,31 +1363,12 @@ INT_RETVAL intRunWidgets(void)
 	SDWORD			i;
 	UDWORD			widgOverID;
 
-	//WIDGET			*psWidget;
-
-
-
-
 	intDoScreenRefresh();
-
-// Handle window closing animations.
-//	HandleClosingWindows();	// now done in loop_psx.c, need to add to loop.c on PC.
-
-
 
 	// If the widgets are turned off then why bother to process them?
 //	if(!widgetsOn) {
 //		return INT_NONE;
 //	}
-
-//19 #if defined(PSX) && defined(CHEATBOARD)
-//19 	if(!KeyboardIsActive()) {
-//19 //		if(VPadReleased(VPAD_KEYBOARD)) {
-//19 		if(GetPadData(1) & PAD_SEL) {
-//19 			intAddStringEntry(SENTRY_VIRTUALKEYBOARD,NULL);	// Temp for testing.
-//19 		}
-//19 	}
-//19 #endif
 
 	/* Update the object list if necessary */
 	if (intMode == INT_OBJECT || intMode == INT_STAT || intMode == INT_CMDORDER)
@@ -1474,25 +1422,13 @@ INT_RETVAL intRunWidgets(void)
 			{
 			case IOBJ_BUILD:
 			case IOBJ_BUILDSEL:
-#ifdef INTBOTHWIND
-				intAddBuildScreens(NULL);
-#else
 				intAddBuild(NULL);
-#endif
 				break;
 			case IOBJ_MANUFACTURE:
-#ifdef INTBOTHWIND
-				intAddManufactureScreens(NULL);
-#else
 				intAddManufacture(NULL);
-#endif
 				break;
 			case IOBJ_RESEARCH:
-#ifdef INTBOTHWIND
-				intAddResearchScreens(NULL);
-#else
 				intAddResearch(NULL);
-#endif
 				break;
 			default:
 				break;
@@ -1554,12 +1490,9 @@ INT_RETVAL intRunWidgets(void)
 		intRunInGameOptions();
 	}
 
-
-	if(MissionResUp){
+	if (MissionResUp) {
 		intRunMissionResult();
-
 	}
-
 
 	/* Run the current set of widgets */
 	if(!bLoadSaveUp)
@@ -1570,6 +1503,7 @@ INT_RETVAL intRunWidgets(void)
 	{
 		retID =0;
 	}
+
 	/* We may need to trigger widgets with a key press */
 	if(keyButtonMapping)
 	{
@@ -1579,9 +1513,6 @@ INT_RETVAL intRunWidgets(void)
 		/* Clear it so it doesn't trigger next time around */
 		keyButtonMapping = 0;
 	}
-
-
-
 
 	intLastWidget = retID;
 	if (bInTutorial && retID != 0)
@@ -1603,12 +1534,10 @@ INT_RETVAL intRunWidgets(void)
 		intRunOrder();
 	}
 
-
 	if(MultiMenuUp)
 	{
 		intRunMultiMenu();
 	}
-
 
 	if (retID >= IDPROX_START AND retID <= IDPROX_END)
 	{
@@ -1619,19 +1548,8 @@ INT_RETVAL intRunWidgets(void)
 	/* Extra code for the design screen to deal with the shadow bar graphs */
 	if (intMode == INT_DESIGN)
 	{
-//19 #ifdef PSX
-//19 		if(KeyboardIsActive()) {
-//19 			if(intProcessStringEntry(retKeyID) == STRING_OK) {
-//19 				SetDesignWidgetName(GetStringEntry());
-//19 			}
-//19 		}
-//19 #endif
 		intRunDesign();
 	}
-
-
-
-
 
 	/* Deal with any clicks */
 	switch (retID)
@@ -1641,85 +1559,46 @@ INT_RETVAL intRunWidgets(void)
 		break;
 		/*****************  Reticule buttons  *****************/
 
-
-
-
 	case IDRET_OPTIONS:
-//19 #ifdef PSX
-//19 		ButType = widgGetUserData2(psWScreen,IDRET_OPTIONS);
-//19 		if(ButType == VPAD_MOUSELB) {
-//19 			intResetScreen(FALSE);
-//19 	//		widgSetButtonState(psWScreen, IDRET_OPTIONS, WBUT_CLICKLOCK);	// commented out by ajl, now command droids menu
-//19 			(void)intAddOptions();
-//19 			intMode = INT_OPTION;
-//19 		}
-//19 #else
 		intResetScreen(FALSE);
 //		widgSetButtonState(psWScreen, IDRET_OPTIONS, WBUT_CLICKLOCK);	// commented out by ajl, now command droids menu
 		(void)intAddOptions();
 		intMode = INT_OPTION;
-//19 #endif
 		break;
 
-
 	case IDRET_COMMAND:
-
 		intResetScreen(FALSE);
 		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
 		intAddCommand(NULL);
-
 		break;
 
 	case IDRET_BUILD:
-
 		//intResetScreen(FALSE);
         intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-	#ifdef INTBOTHWIND
-		intAddBuildScreens(NULL);
-		intMode = INT_STAT;
-	#else
 		(void)intAddBuild(NULL);
 //		intMode = INT_OBJECT;
-	#endif
-
 		break;
 
 	case IDRET_MANUFACTURE:
 //		OrderDroidsToEmbark();
 //		missionDestroyObjects();
-
-
 		//intResetScreen(FALSE);
         intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-	#ifdef INTBOTHWIND
-		(void)intAddManufactureScreens(NULL);
-		intMode = INT_STAT;
-	#else
 		(void)intAddManufacture(NULL);
 //		intMode = INT_OBJECT;
-	#endif
-
 		break;
 
 	case IDRET_RESEARCH:
-
 		//intResetScreen(FALSE);
         intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
-	#ifdef INTBOTHWIND
-		(void)intAddResearchScreens(NULL);
-		intMode = INT_STAT;
-	#else
 		(void)intAddResearch(NULL);
 //		intMode = INT_OBJECT;
-	#endif
-
 		break;
 
 	case IDRET_INTEL_MAP:
-
 //		intResetScreen(FALSE);
 //		//check if RMB was clicked
 		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
@@ -1733,18 +1612,15 @@ INT_RETVAL intRunWidgets(void)
 			psCurrentMsg = NULL;
 		}
 		addIntelScreen();
-
 		break;
 
 	case IDRET_DESIGN:
-
 		intResetScreen(TRUE);
 		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 		/*add the power bar - for looks! */
 		intShowPowerBar();
 		(void)intAddDesign( FALSE );
 		intMode = INT_DESIGN;
-
 		break;
 
 	case IDRET_CANCEL:
@@ -1765,7 +1641,6 @@ INT_RETVAL intRunWidgets(void)
 	case IDMISSIONRES_QUIT:			// mission quit
 	case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
 	case IDOPT_QUIT:						// options screen quit
-DBPRINTF(("HCI Quit %d\n",retID));
 		intResetScreen(FALSE);
         //clearMissionWidgets();
 		quitting = TRUE;
@@ -1788,19 +1663,15 @@ DBPRINTF(("HCI Quit %d\n",retID));
 	case IDDES_COMPFORM:	// If tab clicked on in design component screen then refresh all rendered buttons.
 		RefreshObjectButtons();
 		RefreshSystem0Buttons();
-		//RefreshSystem1Buttons();
-		//RefreshSystem2Buttons();
 		break;
 
 		/* Default case passes remaining IDs to appropriate function */
 	default:
 		switch (intMode)
 		{
-
 		case INT_OPTION:
 			intProcessOptions(retID);
 			break;
-
 		case INT_EDITSTAT:
 			intProcessEditStats(retID);
 			break;
@@ -1818,30 +1689,20 @@ DBPRINTF(("HCI Quit %d\n",retID));
 		case INT_OBJECT:
 			intProcessObject(retID);
 			break;
-
 		case INT_ORDER:
 			intProcessOrder(retID);
 			break;
-
 		case INT_MISSIONRES:
 			intProcessMissionResult(retID);
 			break;
-
 		case INT_INGAMEOP:
-
 			intProcessInGameOptions(retID);
-
 			break;
-
 		case INT_MULTIMENU:
 			intProcessMultiMenu(retID);
 			break;
-
-
 		case INT_DESIGN:
-
 			intProcessDesign(retID);
-
 			break;
 		case INT_INTELMAP:
 			intProcessIntelMap(retID);
@@ -1852,7 +1713,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 		case INT_TRANSPORTER:
 			intProcessTransporter(retID);
 			break;
-
 		case INT_NORMAL:
 			break;
 		default:
@@ -1861,7 +1721,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 		}
 		break;
 	}
-
 
 	if (!quitting && !retID)
 	{
@@ -1876,13 +1735,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
  #endif
 		}
 		else
-
-
-#ifdef INTBOTHWIND
-		if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL)
-#else
 		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
-#endif
 		{
 			// See if a position for the structure has been found
 			if (display3D && found3DBuildLocTwo(&structX, &structY, &structX2, &structY2))
@@ -1898,7 +1751,7 @@ DBPRINTF(("HCI Quit %d\n",retID));
 					structY2 = (structY2 << TILE_SHIFT) + TILE_UNITS/2;
 
 					if(IsPlayerStructureLimitReached(selectedPlayer)) {
-
+						/* Nothing */
 					} else {
 						// Set the droid order
 						if ( (intNumSelectedDroids(DROID_CONSTRUCT) == 0) &&
@@ -1916,7 +1769,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 						}
 					}
 				}
-
 
 				// put the build menu up again after the structure position has been chosen
 				//or ctrl/shift is down and we're queing the build orders
@@ -1949,7 +1801,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 //					structY = structY << TILE_SHIFT;
 					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX,structY,
 												&structX,&structY);
-
 
 					// Don't allow derrick to be built on burning ground.
 					if( ((STRUCTURE_STATS*)psPositionStats)->type == REF_RESOURCE_EXTRACTOR) {
@@ -1984,7 +1835,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 //					((DROID *)psObjSelected)->selected = FALSE;//deselect the droid if build command successful
 //					DeSelectDroid((DROID*)psObjSelected);
 //				}
-
 
 				// put the build menu up again after the structure position has been chosen
                 //or ctrl/shift is down and we're queuing the build orders
@@ -2063,7 +1913,6 @@ DBPRINTF(("HCI Quit %d\n",retID));
 	retCode = INT_NONE;
 	if (quitting)
 	{
-DBPRINTF(("INT_QUIT 1\n"));
 		retCode = INT_QUIT;
 	}
 	//the return code has been superceded by the different pause states
@@ -2096,7 +1945,6 @@ DBPRINTF(("INT_QUIT 1\n"));
 		retCode = INT_INTERCEPT;
 	}
 
-
 //#ifndef PSX
 //	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgGetMouseOver(psWScreen) != 0)
 //	{
@@ -2108,7 +1956,6 @@ DBPRINTF(("INT_QUIT 1\n"));
 //		retCode = INT_INTERCEPT;
 //	}
 //#endif
-
 
 	if(	(testPlayerHasLost() OR (testPlayerHasWon() AND !bMultiPlayer)) AND // yeah yeah yeah - I know....
         (intMode != INT_MISSIONRES) AND !getDebugMappingStatus())
@@ -3221,11 +3068,10 @@ static void intProcessStats(UDWORD id)
 				// Get the tabs on the object form
 				widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor,&objMinor);
 
-#ifndef INTBOTHWIND
 				// Close the stats box
 				intRemoveStats();
 				intMode = INT_OBJECT;
-#endif
+
 				// Reset the tabs on the object form
 				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor,objMinor);
 
@@ -3267,11 +3113,9 @@ static void intProcessStats(UDWORD id)
 		/* Get the tabs on the object form */
 		widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor,&objMinor);
 
-//#ifndef INTBOTHWIND
 		/* Close the structure box without doing anything */
 		intRemoveStats();
 		intMode = INT_OBJECT;
-//#else
 
 		/* Reset the tabs on the build form */
 		widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor,objMinor);
@@ -3593,8 +3437,6 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
 }
 
 
-
-
 /* Display the widgets for the in game interface */
 void intDisplayWidgets(void)
 {
@@ -3630,19 +3472,8 @@ void intDisplayWidgets(void)
 		{
 			DrawBegin();
 
-
-
-	//		software and glide
-	//		turn off the backdrop
-			if (pie_GetRenderEngine() != ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-			{
-				screen_StopBackDrop();
-			}
-			else
-			{
-				screen_RestartBackDrop();
-			}
-	// Download buffer in system memory to the display back buffer.
+			screen_RestartBackDrop();
+			// Download buffer in system memory to the display back buffer.
 			iV_DownloadDisplayBuffer(DisplayBuffer);
 
 	//			DISP_WIDTH, DISP_HEIGHT);
@@ -4133,7 +3964,6 @@ BOOL _intAddReticule(void)
 			return FALSE;
 		}
 
-
 		/* Cancel button */
 		sButInit.style = WBUT_PLAIN;
 		sButInit.id = IDRET_CANCEL;
@@ -4153,17 +3983,8 @@ BOOL _intAddReticule(void)
 		{
 			return FALSE;
 		}
-
-
-
-
-
-
 	//	intCheckReticuleButtons();
-
 		ReticuleUp = TRUE;
-
-
 	}
 
 	return TRUE;
@@ -4538,8 +4359,6 @@ BOOL _intAddOptions(void)
 
 //	widgStartScreen(psWScreen);
 	widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
-
-
 
 	return TRUE;
 }
@@ -6942,91 +6761,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 }
 
 
-#ifdef INTBOTHWIND
-
-static BOOL intAddBuildScreens(DROID *pSelected)
-{
-	DROID *psCurrDroid;
-
-	if(pSelected == NULL) {
-		// Find the first construction droid.
-		for(psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid;
-			psCurrDroid = psCurrDroid->psNext) {
-			if (droidType(psCurrDroid) == DROID_CONSTRUCT OR
-                droidType(psCurrDroid) == DROID_CYBRORG_CONSTRUCT) {
-				pSelected = psCurrDroid;
-				break;
-			}
-		}
-	}
-
-	intObjectSelected((BASE_OBJECT*)pSelected);
-
-	return TRUE;
-}
-
-static BOOL intRemoveBuildScreens(void)
-{
-	intResetScreen(FALSE);
-
-	return TRUE;
-}
-
-static BOOL intAddManufactureScreens(STRUCTURE *pSelected)
-{
-	STRUCTURE *psCurrStruct;
-
-	if(pSelected == NULL) {
-		// Find the first factory.
-		//for(psCurrStruct = apsStructLists[selectedPlayer]; psCurrStruct;
-		for(psCurrStruct = interfaceStructList(); psCurrStruct;
-			psCurrStruct = psCurrStruct->psNext) {
-			if(psCurrStruct->pStructureType->type == REF_FACTORY) {
-				pSelected = psCurrStruct;
-				break;
-			}
-		}
-	}
-
-	intObjectSelected((BASE_OBJECT*)pSelected);
-
-	return TRUE;
-}
-
-static BOOL intRemoveManufactureScreens(void)
-{
-	intResetScreen(FALSE);
-
-	return TRUE;
-}
-
-static BOOL intAddResearchScreens(STRUCTURE *pSelected)
-{
-	STRUCTURE *psCurrStruct;
-
-	if(pSelected == NULL) {
-		// Find the first research facility.
-		//for(psCurrStruct = apsStructLists[selectedPlayer]; psCurrStruct;
-		for(psCurrStruct = interfaceStructList(); psCurrStruct;
-			psCurrStruct = psCurrStruct->psNext) {
-			if(psCurrStruct->pStructureType->type == REF_RESEARCH) {
-				pSelected = psCurrStruct;
-				break;
-			}
-		}
-	}
-	return TRUE;
-}
-
-static BOOL intRemoveResearchScreens(void)
-{
-	intResetScreen(FALSE);
-
-	return TRUE;
-}
-
-#endif
-
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
 static BOOL intAddBuild(DROID *psSelected)
@@ -7045,9 +6779,7 @@ static BOOL intAddBuild(DROID *psSelected)
 
 	return intAddObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],
 						(BASE_OBJECT *)psSelected,TRUE);
-
 }
-
 
 
 /* Add the manufacture widgets to the widget screen */
@@ -7069,9 +6801,7 @@ static BOOL intAddManufacture(STRUCTURE *psSelected)
 
 	return intAddObject((BASE_OBJECT *)interfaceStructList(),
 				(BASE_OBJECT *)psSelected,TRUE);
-
 }
-
 
 
 /* Add the research widgets to the widget screen */
@@ -7092,9 +6822,7 @@ static BOOL intAddResearch(STRUCTURE *psSelected)
 
 	return intAddObject((BASE_OBJECT *)interfaceStructList(),
 						(BASE_OBJECT *)psSelected,TRUE);
-
 }
-
 
 
 /* Add the command droid widgets to the widget screen */
@@ -8649,6 +8377,3 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	return _intAddStats(ppsStatsList, numStats, psSelected, psOwner);
 }
-
-
-

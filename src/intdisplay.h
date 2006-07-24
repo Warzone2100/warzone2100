@@ -146,8 +146,6 @@ void ClearTopicButtonBuffer(SDWORD BufferID);
 
 void RefreshObjectButtons(void);
 void RefreshSystem0Buttons(void);
-//void RefreshSystem1Buttons(void);
-//void RefreshSystem2Buttons(void);
 void RefreshTopicButtons(void);
 void RefreshStatsButtons(void);
 
