@@ -28,9 +28,6 @@
 #include "atmos.h"
 #include "raycast.h"
 #include "levels.h"
-#ifdef JEREMY
-#include "groundmist.h"
-#endif
 /* Includes from PUMPKIN stuff */
 #include "lib/framework/frame.h"
 #include "map.h"
@@ -3471,7 +3468,7 @@ void	drawStructureSelections( void )
 STRUCTURE	*psStruct;
 SDWORD		scrX,scrY,scrR;
 UDWORD		longPowerCol = 0;
-UBYTE		powerCol = 0;
+UBYTE		powerCol;
 UDWORD		health,width;
 UDWORD		scale;
 UDWORD		i;
@@ -3808,7 +3805,6 @@ void	drawDroidSelections( void )
 SDWORD			scrX,scrY,scrR;
 DROID			*psDroid;
 UDWORD			damage;
-UBYTE			powerCol = 0;
 UDWORD			longPowerCol = 0;
 UBYTE			boxCol;
 UDWORD			longBoxCol;
@@ -4816,19 +4812,19 @@ defaultColours.white = iV_PaletteNearestColour(255,255,255);
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
 // -------------------------------------------------------------------------------------
-void	drawTerrainTile(UDWORD i, UDWORD j)//hardware only
+void	drawTerrainTile(UDWORD i, UDWORD j)
 {
-SDWORD	actualX,actualY;
-MAPTILE	*psTile;
-BOOL	bOutlined;
-UDWORD	tileNumber;
-UDWORD	renderFlag;
-iPoint	offset;
-PIEVERTEX aVrts[3];
-BYTE	oldColours[4] = { 0, 0, 0, 0 };
-UDWORD	oldColoursWord[4] = { 0, 0, 0, 0 };
+	SDWORD actualX,actualY;
+	MAPTILE *psTile;
+	BOOL bOutlined;
+	UDWORD tileNumber;
+	UDWORD renderFlag;
+	iPoint offset;
+	PIEVERTEX aVrts[3];
+	BYTE oldColours[4] = { 0, 0, 0, 0 };
+	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
-SDWORD	zone;
+	SDWORD zone;
 #endif
 
 	/* Get the correct tile index for the x coordinate */
@@ -4896,7 +4892,6 @@ SDWORD	zone;
 	}
 #endif
 
-
 	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
 	bOutlined = FALSE;
 	if(TILE_HIGHLIGHT(psTile))
@@ -4910,8 +4905,6 @@ SDWORD	zone;
 		{
 			if(outlineColour3D == outlineOK3D)
 			{
-
-
 				oldColoursWord[0] = tileScreenInfo[i+0][j+0].light.argb;
 				oldColoursWord[1] = tileScreenInfo[i+0][j+1].light.argb;
 				oldColoursWord[2] = tileScreenInfo[i+1][j+1].light.argb;
@@ -4990,14 +4983,9 @@ SDWORD	zone;
 
 	}
 	*/
-	/* Get the right texture page */
-#if 0
-	/* Software is just an address */
-	texturePage.bmp = tilesRAW[tileNumber & TILE_NUMMASK];
-#endif
-	/* 3dfx is pre stored and indexed */
+	/* Get the right texture page; it is pre stored and indexed on
+	 * the graphics card */
 	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
-
 
 	/* set up the texture size info */
 	renderFlag = 0;
@@ -5062,16 +5050,7 @@ SDWORD	zone;
 	/* Outline the tile if necessary */
 	if(terrainOutline)
 	{
-    	/*iV_Line(tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,
-   			tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,255);
-   		iV_Line(tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,
-   			tileScreenInfo[i+1][j+1].sx,tileScreenInfo[i+1][j+1].sy,255);
-   		iV_Line(tileScreenInfo[i+1][j+1].sx,tileScreenInfo[i+1][j+1].sy,
-   			tileScreenInfo[i+1][j+0].sx,tileScreenInfo[i+1][j+0].sy,255);
-   		iV_Line(tileScreenInfo[i+1][j+0].sx,tileScreenInfo[i+1][j+0].sy,
-   		tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,255);*/
-
-      	iV_Line(tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,
+		iV_Line(tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,
    			tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,255);
    		iV_Line(tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,
    			tileScreenInfo[i+1][j+1].sx,tileScreenInfo[i+1][j+1].sy,255);
@@ -5101,7 +5080,7 @@ SDWORD	zone;
 }
 
 
-// Render a water edge tile (hardware only).
+// Render a water edge tile
 //
 void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 {
@@ -5112,7 +5091,6 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	UDWORD	renderFlag;
 	iPoint	offset;
 	PIEVERTEX aVrts[3];
-
 
 	/* Get the correct tile index for the x coordinate */
 	actualX = playerXTile + j;
@@ -5232,7 +5210,7 @@ void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 
 // Render a water tile.
 //
-void drawTerrainWaterTile(UDWORD i, UDWORD j)	//hardware only
+void drawTerrainWaterTile(UDWORD i, UDWORD j)
 {
 	UDWORD	actualX,actualY;
 	MAPTILE	*psTile;
@@ -5241,7 +5219,6 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)	//hardware only
 	//UDWORD	renderFlag;
 	iPoint	offset;
 	PIEVERTEX aVrts[3];
-
 
 	/* Get the correct tile index for the x coordinate */
 	actualX = playerXTile + j;
@@ -6158,19 +6135,3 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 
 	pie_TransColouredTriangle((PIEVERTEX*)&pts,colour,trans);
 }
-
-/*
-UDWORD	getSelectionBoxSize( void )
-{
-FRACT	mul;
-UDWORD	dif;
-UDWORD	step;
-UDWORD	min;
-UDWORD	final;
-
-	dif = DISTANCE - MINDISTANCE;
-	step = distance - MINDISTANCE;
-
-	mul = MAKEFRACT(step)/MAKEFRACT(dif);
-}
-*/
