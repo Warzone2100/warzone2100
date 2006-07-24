@@ -444,18 +444,13 @@ void iV_IMDRelease(iIMDShape *s)
 			return;
 		}
 
-		if (s->flags & iV_IMD_XEFFECT) {
-		  iV_HeapFree(s,sizeof(iIMDShapeEffect));		// free the special effect
-			return;
-		}
-
 		if (s->points) {
 			iV_HeapFree(s->points,s->npoints * sizeof(iVector));
 		}
 		if (s->connectors) {
 			iV_HeapFree(s->connectors,s->nconnectors * sizeof(iVector));
 		}
-	  if (s->BSPNode) {
+		if (s->BSPNode) {
 				FREE(s->BSPNode);	// I used MALLOC() so i'm going to use FREE()
 		}
 		if (s->polys) {

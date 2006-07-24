@@ -112,9 +112,6 @@ typedef uint16 BSPPOLYID;			// lets hope this can work as a byte ... that will l
 
 typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure (32bits on pc 16bits on PSX)
 
-
-
-
 typedef struct {
 	uint32 flags;
 	int32 zcentre;
@@ -127,40 +124,6 @@ typedef struct {
 	BSPPOLYID BSP_NextPoly;	// the polygon number for the next in the BSP list ... or BSPPOLYID_TERMINATE for no more
 #endif
 } iIMDPoly;
-
-
-
-// PlayStation special effect structure ... loaded as a PIE (type 9) and cast to iIMDShape
-typedef struct iIMDShapeEffect
-{
-	uint32 flags;			// This 'flags' can be used to check if the file is a 3d PIE file or a special effect
-	// the bit that is set is 	iV_IMD_XEFFECT (see	imd.h)
-	void	*ImageFile;	// ( cast this to (IMAGEFILE*) when using it). - // When loaded as a binary this contains the hashed value of the text starting frame
-	UWORD	firstframe;				//	When loaded as binary this contains the file number of the data file to be loaded (see  iV_ProcessBPIE)
-
-	UWORD	numframes;
-	UWORD	xsize;
-	UWORD	ysize;
-} iIMDShapeEffect;
-
-#define TRACER_SINGLE 0	// iIMDShapeProjectile types.
-#define TRACER_DOUBLE 1
-
-// PlayStation special effect structure ... loaded as a PIE (type 10) and cast to iIMDShape
-typedef struct iIMDShapeProjectile
-{
-	uint32 flags;			// This 'flags' can be used to check if the file is a 3d PIE file or a special effect
-	// the bit that is set is 	iV_IMD_XEFFECT_PROJECTILE (see	imd.h)
-
-	uint8 Type;
-	uint8 Radius;
-	uint8 Seperation;
-	uint8 Pad0;
-	uint8 LRed,LGreen,LBlue,Pad1;
-	uint8 TRed,TGreen,TBlue,Pad2;
-} iIMDShapeProjectile;
-
-// PC version
 
 typedef struct iIMDShape {
 	uint32 flags;
@@ -187,11 +150,6 @@ typedef struct iIMDShape {
 	PSBSPTREENODE BSPNode;	// Start of the BSP tree;
 #endif
 } iIMDShape;
-
-
-
-
-
 
 
 //*************************************************************************
