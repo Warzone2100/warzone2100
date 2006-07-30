@@ -56,7 +56,7 @@ LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32
 else
 DIRSEP=/
 RMF=rm -f
-CFLAGS+=-lGLU -lGL -lopenal
+LDFLAGS+=-lGLU -lGL -lopenal
 endif
 
 ifeq ($(strip $(COMPILER)),g++)

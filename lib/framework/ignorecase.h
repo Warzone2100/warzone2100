@@ -1,7 +1,7 @@
 /** \file ignorecase.h */
 
 /**
- * \mainpage PhysicsFS ignorecase
+ * PhysicsFS ignorecase
  *
  * This is an extension to PhysicsFS to let you handle files in a
  *  case-insensitive manner, regardless of what sort of filesystem or
