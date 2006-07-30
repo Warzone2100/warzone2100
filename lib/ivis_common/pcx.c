@@ -2,7 +2,6 @@
 #include <setjmp.h>
 #include "lib/framework/frame.h"
 #include "ivisdef.h"
-#include "fbf.h"
 #include "bug.h"
 
 #include "ivispatch.h"

@@ -3,7 +3,6 @@ AM_CPPFLAGS = -I$(top_srcdir)
 libivis_common_a_SOURCES = \
 	bitimage.c \
 	bug.c \
-	fbf.c \
 	imd.c \
 	imdload.c \
 	pcx.c \
@@ -11,7 +10,6 @@ libivis_common_a_SOURCES = \
 	bspfunc.h \
 	bspimd.h \
 	bug.h \
-	fbf.h \
 	geo.h \
 	imd.h \
 	ivi.h \

@@ -3,7 +3,6 @@ include $(MAKERULES)/configure.mk
 
 SRC=bitimage.c \
 	bug.c \
-	fbf.c \
 	imd.c \
 	imdload.c \
 	pcx.c \
