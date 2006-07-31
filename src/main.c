@@ -46,9 +46,9 @@
 #endif
 
 #ifdef WIN32
-# define WZ_WRITEDIR "Warzone-2.0\\"
+# define WZ_WRITEDIR "Warzone-2.0"
 #else
-# define WZ_WRITEDIR ".warzone-2.0/"
+# define WZ_WRITEDIR ".warzone-2.0"
 #endif
 
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
@@ -205,9 +205,20 @@ static void initialize_PhysicsFS(void)
 
 	strcpy( tmpstr, PHYSFS_getUserDir() );
 	strcat( tmpstr, WZ_WRITEDIR );
-	PHYSFS_setWriteDir( PHYSFS_getUserDir() ); // Ugly workaround for PhysFS not creating the writedir as expected.
-	PHYSFS_mkdir( WZ_WRITEDIR ); // s.a.
-	if ( PHYSFS_setWriteDir( tmpstr ) == 0 ) {
+	strcat( tmpstr, PHYSFS_getDirSeparator() );
+	if ( !PHYSFS_setWriteDir( PHYSFS_getUserDir() ) ) // Ugly workaround for PhysFS not creating the writedir as expected.
+	{
+		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			PHYSFS_getUserDir(), PHYSFS_getLastError() );
+		exit(1);
+	}
+	if ( !PHYSFS_mkdir( WZ_WRITEDIR ) ) // s.a.
+	{
+		debug( LOG_ERROR, "Error creating directory \"%s\": %s",
+			WZ_WRITEDIR, PHYSFS_getLastError() );
+		exit(1);
+	}
+	if ( !PHYSFS_setWriteDir( tmpstr ) ) {
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
 			tmpstr, PHYSFS_getLastError() );
 		exit(1);
@@ -578,8 +589,6 @@ init://jump here from the end if re_initialising
 				paused = TRUE;
 				gameTimeStop();
 
-				mixer_SaveIngameVols();
-				mixer_RestoreWinVols();
 				audio_StopAll();
 				break;
 			case FRAME_SETFOCUS:
@@ -595,8 +604,6 @@ init://jump here from the end if re_initialising
 				{
 //					dtm_RestoreTextures();
 				}
-				mixer_SaveWinVols();
-				mixer_RestoreIngameVols();
 				break;
 			case FRAME_QUIT:
 				debug(LOG_MAIN, "frame quit");
@@ -614,7 +621,6 @@ init://jump here from the end if re_initialising
 				switch(gameStatus)
 				{
 				case	GS_TITLE_SCREEN:
-					pie_SetSwirlyBoxes(TRUE);
 					if (loop_GetVideoStatus())
 					{
 						videoLoop();
@@ -661,7 +667,6 @@ init://jump here from the end if re_initialising
 								debug(LOG_ERROR, "Unknown code returned by titleLoop");
 						}
 					}
-					pie_SetSwirlyBoxes(FALSE);
 					break;
 
 /*				case GS_SAVEGAMELOAD:

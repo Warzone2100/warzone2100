@@ -123,7 +123,7 @@ void debug_to_file(char *file)
 		fprintf(stderr, "Could not open %s for appending!\n",
 		        file);
 	} else {
-		fprintf(logfile, "\nStarting log\n");
+		fprintf(logfile, "\n--- Starting log ---\n");
 	}
 }
 
