@@ -472,7 +472,7 @@ BOOL loadRenderMode()
 BOOL saveConfig()
 {
 
-	DBPRINTF(("Writing prefs to registry\n"));
+	debug( LOG_WZ, "Writing prefs to registry\n" );
 
 	if(!openWarzoneKey())
 	{

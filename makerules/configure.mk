@@ -52,11 +52,11 @@ ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F
 CFLAGS+=-DWIN32
-LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32
+LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32 -ljpeg6b -lpng13
 else
 DIRSEP=/
 RMF=rm -f
-LDFLAGS+=-lGLU -lGL -lopenal
+LDFLAGS+=-lGLU -lGL -lopenal -ljpeg -lpng
 endif
 
 ifeq ($(strip $(COMPILER)),g++)
@@ -72,6 +72,6 @@ else
 CFLAGS+=-march=i686 -O2
 endif
 
-LDFLAGS+=-lmad -lvorbisfile -lvorbis -logg -ljpeg6b -lpng13 -lphysfs -lzlib1 -lSDLmain -lSDL -lSDL_net
+LDFLAGS+=-lmad -lvorbisfile -lvorbis -logg -lphysfs -lSDLmain -lSDL -lSDL_net
 
 include $(MAKERULES)/common.mk
