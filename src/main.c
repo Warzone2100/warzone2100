@@ -40,6 +40,7 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "modding.h"
+#include "version.h"
 
 #ifndef DEFAULT_DATADIR
 # define DEFAULT_DATADIR "/usr/share/warzone/"
@@ -379,6 +380,8 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	debug( LOG_WZ, "Warzone 2100 GPL, version %s, revision %s", version(), revision() );
+
 	/*** Initialize PhysicsFS ***/
 
 	PHYSFS_init(argv[0]);
@@ -460,7 +463,7 @@ init://jump here from the end if re_initialising
 		DBERROR(("Out of memory"));
 		return -1;
 	}
-	if (!loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
+	if (!loadFileToBuffer("palette.bin", (UBYTE*)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
 	{
 		DBERROR(("Couldn't load palette data"));
 		return -1;
