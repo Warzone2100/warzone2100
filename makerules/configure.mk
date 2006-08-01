@@ -51,7 +51,7 @@ LDFLAGS+=-L$(DEVDIR)/lib
 ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F
-CFLAGS+=-DWIN32
+CFLAGS+=-mwindows -DWIN32
 LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32 -ljpeg6b -lpng13
 else
 DIRSEP=/
