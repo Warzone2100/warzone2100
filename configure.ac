@@ -242,7 +242,7 @@ AC_SUBST(LFLAGS, "-olex.yy.c")
 AC_SUBST(YFLAGS, "-oy.tab.c")
 
 # Set revision to be used by src/Makefile.am
-AC_SUBST(REVISION, [`svnversion -n .`])
+AC_SUBST(REVISION, ["\`svnversion -n .\`"])
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
