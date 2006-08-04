@@ -48,8 +48,16 @@
  * Arguments:	ASSERT((condition, "Format string with variables: %d, %d", var1, var2));
  */
 #ifndef _MSC_VER
-#define ASSERT(x) my_assert x
-#define my_assert(x, y, ...) assert(y)
+#define ASSERT(x) wz_assert x
+#define wz_assert(x, ...)                                                                \
+do {                                                                                     \
+	if (!(x)) {                                                                      \
+		debug(LOG_ERROR, "Fatal error in Warzone file %s, function %s, line %d", \
+		      __FILE__, __FUNCTION__, __LINE__);                                 \
+		debug(LOG_ERROR, __VA_ARGS__);                                           \
+		/*assert(x);*/                                                               \
+	}                                                                                \
+} while (0)
 #else
 #define ASSERT(x)
 #endif

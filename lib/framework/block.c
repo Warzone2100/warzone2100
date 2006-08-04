@@ -158,7 +158,7 @@ void blkPrintDetails(BLOCK_HEAP *psHeap)
 
 #ifdef DEBUG_BLOCK
 		UDWORD	Left=(UDWORD)((psHeap->psBlocks->pMem)+(psHeap->psBlocks->size)-(psHeap->psBlocks->pFree));
-		DBPRINTF(("ptr=%p init=%d ext=%d used=%d (Start=$%x Free=$%x Left=%d)\n",psHeap,psHeap->init,psHeap->ext,psHeap->TotalAllocated,psHeap->psBlocks->pMem,psHeap->psBlocks->pFree,Left));
+		DBPRINTF(("ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n",psHeap,psHeap->init,psHeap->ext,psHeap->TotalAllocated,psHeap->psBlocks->pMem,psHeap->psBlocks->pFree,Left));
 		memMemoryDump(psHeap->psMemTreap);
 #else
 		DBPRINTF(("ptr=%p init=%d ext=%d\n",psHeap,psHeap->init,psHeap->ext));
@@ -182,7 +182,7 @@ void blkReport(void)
 	UDWORD BlockNumber=0;
 	BLOCK_HEAP *psCurHeap;
 
-	DBPRINTF(("\n\nBlock Report. Current Block=%x:\n",memGetBlockHeap() ));
+	DBPRINTF(("\n\nBlock Report. Current Block=%p:\n",memGetBlockHeap() ));
 
 	psCurHeap=psBlockList;
 
@@ -646,7 +646,7 @@ void blockCurrentBlockInfo(void)
 	{
 		UDWORD	Left=(UDWORD)((psCurHeap->psBlocks->pMem)+(psCurHeap->psBlocks->size)-(psCurHeap->psBlocks->pFree));
 	
-		DBPRINTF(("ptr=%p init=%d ext=%d used=%d (Start=$%x Free=$%x Left=%d)\n",psCurHeap,psCurHeap->init,psCurHeap->ext,psCurHeap->TotalAllocated,psCurHeap->psBlocks->pMem,psCurHeap->psBlocks->pFree,Left));
+		DBPRINTF(("ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n",psCurHeap,psCurHeap->init,psCurHeap->ext,psCurHeap->TotalAllocated,psCurHeap->psBlocks->pMem,psCurHeap->psBlocks->pFree,Left));
 	}
 #endif
 }
