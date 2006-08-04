@@ -1497,7 +1497,7 @@ BOOL scrBuildDroid(void)
 	{
 
 		ASSERT((FALSE, "scrBuildUnit: invalid template - %s for factory - %s",
-			&psTemplate->aName, psFactory->pStructureType->pName));
+			psTemplate->aName, psFactory->pStructureType->pName));
 
 		return FALSE;
 	}
@@ -1663,6 +1663,7 @@ BOOL scrGetFeature(void)
 
 	if ( !stackPopParams(1,VAL_INT,&bucket) )
 	{
+		ASSERT((FALSE, "scrGetFeature: Failed to pop player number from stack"));
 		return FALSE;
 	}
 
@@ -1677,6 +1678,7 @@ BOOL scrGetFeature(void)
 	{
 		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (SDWORD)NULL))
 		{
+			ASSERT((FALSE, "scrGetFeature: Failed to push result"));
 			return FALSE;
 		}
 		return TRUE;
@@ -1688,6 +1690,7 @@ BOOL scrGetFeature(void)
 		DBPRINTF(("invalid feature to find. possibly due to save game\n"));
 		if(!stackPushResult((INTERP_TYPE)ST_FEATURE,(SDWORD)NULL))
 		{
+			ASSERT((FALSE, "scrGetFeature: Failed to push result"));
 			return FALSE;
 		}
 		return TRUE;
@@ -1704,6 +1707,7 @@ BOOL scrGetFeature(void)
 		{
 			if (!stackPushResult((INTERP_TYPE)ST_FEATURE,(SDWORD)psFeat))	//	push result
 			{
+				ASSERT((FALSE, "scrGetFeature: Failed to push result"));
 				return FALSE;
 			}
 
@@ -1717,6 +1721,7 @@ BOOL scrGetFeature(void)
 	// none found
 	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (UDWORD)NULL))
 	{
+		ASSERT((FALSE, "scrGetFeature: Failed to push result"));
 		return FALSE;
 	}
 	return TRUE;
@@ -2443,28 +2448,28 @@ BOOL scrSetScrollParams(void)
 	//check the values entered are valid
 	if (minX < 0)
 	{
-		ASSERT((FALSE, "Minimum scroll x value is less than zero - ", minX));
+		ASSERT((FALSE, "Minimum scroll x value %d is less than zero - ", minX));
 		return FALSE;
 	}
 	if (minY < 0)
 	{
-		ASSERT((FALSE, "Minimum scroll y value is less than zero - ", minY));
+		ASSERT((FALSE, "Minimum scroll y value %d is less than zero - ", minY));
 	}
 	if (maxX > (SDWORD)mapWidth)
 	{
-		ASSERT((FALSE, "Maximum scroll x value is greater than mapWidth - ", maxX));
+		ASSERT((FALSE, "Maximum scroll x value %d is greater than mapWidth - ", maxX));
 	}
 	if (maxX < (SDWORD)(visibleXTiles+1))
 	{
-		ASSERT((FALSE, "Maximum scroll x has to be bigger than Visible Width(22) - ", maxX));
+		ASSERT((FALSE, "Maximum scroll x %d has to be bigger than Visible Width(22) - ", maxX));
 	}
 	if (maxY > (SDWORD)mapHeight)
 	{
-		ASSERT((FALSE, "Maximum scroll y value is greater than mapWidth - ", maxY));
+		ASSERT((FALSE, "Maximum scroll y value %d is greater than mapWidth - ", maxY));
 	}
 	if (maxY < (SDWORD)(visibleYTiles+1))
 	{
-		ASSERT((FALSE, "Maximum scroll y has to be bigger than Visible Height(22) - ", maxY));
+		ASSERT((FALSE, "Maximum scroll y %d has to be bigger than Visible Height(22) - ", maxY));
 	}
 
     prevMinX = scrollMinX;
@@ -2501,7 +2506,7 @@ BOOL scrSetScrollMinX(void)
 	//check the value entered are valid
 	if (minX < 0)
 	{
-		ASSERT((FALSE, "Minimum scroll x value is less than zero - ", minX));
+		ASSERT((FALSE, "Minimum scroll x value %d is less than zero - ", minX));
 		return FALSE;
 	}
 
@@ -2531,7 +2536,7 @@ BOOL scrSetScrollMinY(void)
 	//check the value entered are valid
 	if (minY < 0)
 	{
-		ASSERT((FALSE, "Minimum scroll y value is less than zero - ", minY));
+		ASSERT((FALSE, "Minimum scroll y value %d is less than zero - ", minY));
 		return FALSE;
 	}
 
@@ -2562,7 +2567,7 @@ BOOL scrSetScrollMaxX(void)
 	//check the value entered are valid
 	if (maxX > (SDWORD)mapWidth)
 	{
-		ASSERT((FALSE, "Maximum scroll x value is greater than mapWidth - ", maxX));
+		ASSERT((FALSE, "Maximum scroll x value %d is greater than mapWidth - ", maxX));
 		return FALSE;
 	}
 
@@ -2593,7 +2598,7 @@ BOOL scrSetScrollMaxY(void)
 	//check the value entered are valid
 	if (maxY > (SDWORD)mapHeight)
 	{
-		ASSERT((FALSE, "Maximum scroll y value is greater than mapWidth - ", maxY));
+		ASSERT((FALSE, "Maximum scroll y value %d is greater than mapWidth - ", maxY));
 		return FALSE;
 	}
 
@@ -4420,7 +4425,7 @@ BOOL scrSetLandingZone(void)
 	//check won't overflow!
 	if (x1 > UBYTE_MAX OR y1 > UBYTE_MAX OR x2 > UBYTE_MAX OR y2 > UBYTE_MAX)
 	{
-		ASSERT((FALSE, "scrSetLandingZone: one coord is greater than %s", UBYTE_MAX));
+		ASSERT((FALSE, "scrSetLandingZone: one coord is greater than %d", UBYTE_MAX));
 		return FALSE;
 	}
 
@@ -4468,7 +4473,7 @@ BOOL scrSetLimboLanding(void)
 	//check won't overflow!
 	if (x1 > UBYTE_MAX OR y1 > UBYTE_MAX OR x2 > UBYTE_MAX OR y2 > UBYTE_MAX)
 	{
-		ASSERT((FALSE, "scrSetLimboLanding: one coord is greater than %s", UBYTE_MAX));
+		ASSERT((FALSE, "scrSetLimboLanding: one coord is greater than %d", UBYTE_MAX));
 		return FALSE;
 	}
 
@@ -4535,7 +4540,7 @@ BOOL scrSetNoGoArea(void)
 	//check won't overflow!
 	if (x1 > UBYTE_MAX OR y1 > UBYTE_MAX OR x2 > UBYTE_MAX OR y2 > UBYTE_MAX)
 	{
-		ASSERT((FALSE, "scrSetNoGoArea: one coord is greater than %s", UBYTE_MAX));
+		ASSERT((FALSE, "scrSetNoGoArea: one coord is greater than %d", UBYTE_MAX));
 		return FALSE;
 	}
 
@@ -5185,7 +5190,7 @@ UDWORD		newVal;
 	if(damagePercent > 100)
 	{
 		ASSERT((FALSE,"scrForceDamage : You're supposed to be passing in a PERCENTAGE VALUE, \
-			instead I got given %d, which is clearly no good, now is it!?"));
+			instead I got given %d, which is clearly no good, now is it!?", damagePercent));
 		return(FALSE);
 	}
 

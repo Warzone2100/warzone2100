@@ -303,6 +303,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			if (!stackPush(&sVal))
 			{
 				// Eeerk, out of memory
+				ASSERT((FALSE, "interpRunScript: out of memory!"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -319,6 +320,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			if (!stackPush(&sVal))
 			{
 				// Eeerk, out of memory
+				ASSERT((FALSE, "interpRunScript: out of memory!"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -327,6 +329,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			TRCPRINTF(("POP\n"));
 			if (!stackPop(&sVal))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do stack pop"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -335,6 +338,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			TRCPRINTMATHSOP(data);
 			if (!stackBinaryOp((OPCODE)data))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do binary op"));
 				goto exit_with_error;
 			}
 			TRCPRINTSTACKTOP();
@@ -345,6 +349,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			TRCPRINTMATHSOP(data);
 			if (!stackUnaryOp((OPCODE)data))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do unary op"));
 				goto exit_with_error;
 			}
 			TRCPRINTSTACKTOP();
@@ -360,6 +365,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			}
 			if (!stackPush(interpGetVarData(psGlobals, data)))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do stack push"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -375,6 +381,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			}
 			if (!stackPopType(interpGetVarData(psGlobals, data)))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do stack pop"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -402,11 +409,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			TRCPRINTF(("PUSHARRAYGLOBAL  "));
 			if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
 			{
+				ASSERT((FALSE, "interpRunScript: could not get array var data"));
 				goto exit_with_error;
 			}
 			TRCPRINTF(("\n"));
 			if (!stackPush(psVar))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do stack push"));
 				goto exit_with_error;
 			}
 			break;
@@ -417,6 +426,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			// get the array index
 /*			if (!stackPopParams(1, VAL_INT, &arrayIndex))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do pop of params"));
 				goto exit_with_error;
 			}
 			TRCPRINTF(("POPARRAYGLOBAL   [%d] %d(+%d) ", arrayIndex, data, arrayElements));
@@ -434,18 +444,21 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			}
 			if (!stackPopType(interpGetVarData(psGlobals, data + arrayIndex)))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];*/
 			TRCPRINTF(("POPARRAYGLOBAL   "));
 			if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
 			{
+				ASSERT((FALSE, "interpRunScript: could not get array var data"));
 				goto exit_with_error;
 			}
 			TRCPRINTSTACKTOP();
 			TRCPRINTF(("\n"));
 			if (!stackPopType(psVar))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
 				goto exit_with_error;
 			}
 			break;
@@ -454,6 +467,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					(SWORD)data, ip - psProg->pCode + (SWORD)data));
 			if (!stackPop(&sVal))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do pop of stack"));
 				goto exit_with_error;
 			}
 			if (!sVal.v.bval)
@@ -491,6 +505,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			scriptFunc = (SCRIPT_FUNC)*(ip+1);
 			if (!scriptFunc())
 			{
+				ASSERT((FALSE, "interpRunScript: could not do func"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -502,6 +517,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			scriptVarFunc = (SCRIPT_VARFUNC)*(ip+1);
 			if (!scriptVarFunc(data))
 			{
+				ASSERT((FALSE, "interpRunScript: could not do var func"));
 				goto exit_with_error;
 			}
 			ip += aOpSize[opcode];
@@ -518,6 +534,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			// tell the event system to reschedule this event
 			if (!eventAddPauseTrigger(psContext, index, ip - pCodeBase, data))
 			{
+				ASSERT((FALSE, "interpRunScript: could not add pause trigger"));
 				goto exit_with_error;
 			}
 			// now jump out of the event

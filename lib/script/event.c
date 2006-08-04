@@ -1041,11 +1041,11 @@ static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 		if (!interpRunScript(psTrigger->psContext,
 						IRT_EVENT, psTrigger->event, psTrigger->offset))
 		{
-			ASSERT((FALSE, "eventFireTrigger: event %s: code failed",
-				eventGetEventID(psTrigger->psContext->psCode, psTrigger->event)));
 			DB_TRACE(("\n\n********  script failed  *********\n"), 0);
 			DB_TRIGINF(psTrigger,0);
 			DB_TRACE(("\n"),0);
+			ASSERT((FALSE, "eventFireTrigger: event %s: code failed",
+				eventGetEventID(psTrigger->psContext->psCode, psTrigger->event)));
 			return FALSE;
 		}
 	}
