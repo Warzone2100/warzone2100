@@ -1,6 +1,9 @@
 xxxx-xx-xx: Version 2.0.4
  * General:
    * Desktopmenu entry for Linux (AutoPackage/Debian package)
+   * Logfile shows revision and version
+   * Warzone is a full Windows app now. Debug output goes to stdout.txt/stderr.txt
+   * Fix crash when not properly creating the write dir on Windows
    * Fix crash when using uppercase savegame names on Linux
    * Several security fixes
    * Other bug fixes
@@ -8,6 +11,9 @@ xxxx-xx-xx: Version 2.0.4
    * Fixed music playlist loading and ogg music playback
  * Graphics:
    * 16bpp "supported" (basic playing possible, graphics glitches may occur, eg. missing progressbars)
+ * Data:
+   * Warzone uses AI from original version 1.10
+   * Fixed a bug which prevented the AI from creating oil derricks
  * Build system:
    * Makefile.raw system improved. Works without sh/MSys now.
 
