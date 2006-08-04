@@ -1067,7 +1067,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 //	char aAudioName[MAX_STR_LENGTH];	// made static to reduce stack usage.
 	RESEARCH		*psResearch;
 
-	ASSERT((proxMsg = TRUE,
+	ASSERT((proxMsg != TRUE,
 		"intIntelButtonPressed: Shouldn't be able to get a proximity message!"));
 
 	/* message button has been pressed - clear the old button and messageView*/
