@@ -140,11 +140,8 @@ typedef struct _objvar_block
 /* Type for a function symbol */
 typedef struct _func_symbol
 {
-#ifndef NOSCRIPT
 	STRING		*pIdent;	// function's identifier
-#endif
 	SCRIPT_FUNC	pFunc;		// Pointer to the instinct function
-#ifndef NOSCRIPT
 	INTERP_TYPE	type;		// function type
 	UDWORD		numParams;	// Number of parameters to the function
 	INTERP_TYPE	aParams[INST_MAXPARAMS];
@@ -158,7 +155,6 @@ typedef struct _func_symbol
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
 
 	struct _func_symbol *psNext;
-#endif
 } FUNC_SYMBOL;
 
 /* The type for a variable declaration */

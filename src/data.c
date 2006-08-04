@@ -1196,7 +1196,6 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
 
-#ifndef NOSCRIPT
 	DBPRINTF(("COMPILING SCRIPT ...%s\n",GetLastResourceFilename()));
 	// make sure the memory system uses normal malloc for a compile
 	psHeap = memGetBlockHeap();
@@ -1215,7 +1214,7 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	}
 
 	*ppData = psProg;
-#endif
+
 	return TRUE;
 }
 

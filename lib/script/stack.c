@@ -318,7 +318,6 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 /* Print the top value on the stack */
 void stackPrintTop(void)
 {
-#ifndef NOSCRIPT
 	INTERP_VAL	sVal;
 	if (stackPeek(&sVal, 0))
 	{
@@ -328,7 +327,6 @@ void stackPrintTop(void)
 	{
 		DBPRINTF(("STACK EMPTY"));
 	}
-#endif
 }
 
 

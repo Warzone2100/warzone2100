@@ -13,7 +13,6 @@
 #include "event.h"
 #include "evntsave.h"
 
-
 /* Whether to include debug info when compiling */
 typedef enum _scr_debugtype
 {
@@ -21,11 +20,8 @@ typedef enum _scr_debugtype
 	SCR_NODEBUG,		// Do not generate debug info
 } SCR_DEBUGTYPE;
 
-
 // If this is defined we save out the compiled scripts
 #define SCRIPTTYPE SCR_DEBUGINFO
-
-
 
 // Initialise the script library
 extern BOOL scriptInitialise(EVENT_INIT *psInit);
@@ -73,12 +69,6 @@ extern void scriptFreeCode(SCRIPT_CODE *psCode);
 
 /* Display the contents of a program in readable form */
 extern void cpPrintProgram(SCRIPT_CODE *psProg);
-
-// Save a binary version of a program
-extern BOOL scriptSaveProg(SCRIPT_CODE *psProg, UDWORD *pSize, UBYTE **ppData);
-
-// Load a binary version of a program
-extern BOOL scriptLoadProg(UDWORD size, UBYTE *pData, SCRIPT_CODE **ppsProg);
 
 /* Lookup a script variable */
 extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, STRING *pID, UDWORD *pIndex);

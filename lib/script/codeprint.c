@@ -1,4 +1,3 @@
-#ifndef NOSCRIPT
 /*
  * CodePrint.c
  *
@@ -584,9 +583,3 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		data = (*ip) & OPCODE_DATAMASK;
 	}
 }
-
-
-
-
-
-#endif

@@ -59,10 +59,6 @@ BOOL	interpTrace;
 	if (interpTrace) \
 		DBPRINTF(x)
 
-
-
-#ifndef NOSCRIPT
-
 #define TRCPRINTVAL(x) \
 	if (interpTrace) \
 		cpPrintVal(x)
@@ -84,15 +80,6 @@ BOOL	interpTrace;
 	if (interpTrace) \
 		cpPrintVarFunc(x, data)
 
-#else
-
-#define TRCPRINTVAL(x)
-#define TRCPRINTMATHSOP(x)
-#define TRCPRINTSTACKTOP()
-#define TRCPRINTFUNC(x)
-#define TRCPRINTVARFUNC(x,data)
-
-#endif
 
 // TRUE if the interpreter is currently running
 BOOL interpProcessorActive(void)
