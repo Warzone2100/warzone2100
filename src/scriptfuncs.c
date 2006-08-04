@@ -1719,7 +1719,7 @@ BOOL scrGetFeature(void)
 	{
 		return FALSE;
 	}
-	return FALSE;
+	return TRUE;
 }
 
 
