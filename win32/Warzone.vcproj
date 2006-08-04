@@ -40,8 +40,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;___WARZONE_SRC___&quot;;&quot;___DEVPKG___&quot;;&quot;___PLATFORM_SDK___&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -49,6 +49,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -61,11 +62,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib ogg.lib vorbis.lib vorbisfile.lib libpng13.lib libmad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib png13.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;___DEVPKG___&quot;;&quot;___PLATFORM_SDK___&quot;"
+				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
 				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="libcmt.lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib, libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -120,13 +121,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;___WARZONE_SRC___&quot;;&quot;___DEVPKG___&quot;;&quot;___PLATFORM_SDK___&quot;"
+				Optimization="3"
+				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories="&quot;D:\Dokumente und Einstellungen\Admin\Desktop\Warzone&quot;;&quot;D:\Programme\Warzone-DevPkg\include&quot;;&quot;D:\Programme\Microsoft Platform SDK\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
+				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -139,13 +143,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib ogg.lib vorbis.lib vorbisfile.lib libpng13.lib libmad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib ogg.lib vorbis.lib vorbisfile.lib png13.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;___DEVPKG___&quot;;&quot;___PLATFORM_SDK___&quot;"
+				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libcmt.lib"
-				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -207,11 +210,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\anim.c"
+				RelativePath="..\lib\gamelib\anim.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\animobj.c"
+				RelativePath="..\lib\gamelib\animobj.c"
 				>
 			</File>
 			<File
@@ -239,11 +242,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\audp_lexer.c"
+				RelativePath="..\lib\gamelib\audp_lexer.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\audp_parser.c"
+				RelativePath="..\lib\gamelib\audp_parser.c"
 				>
 			</File>
 			<File
@@ -407,10 +410,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\fbf.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\feature.c"
 				>
 			</File>
@@ -471,11 +470,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\gtime.c"
+				RelativePath="..\lib\gamelib\gtime.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\hashtabl.c"
+				RelativePath="..\lib\gamelib\hashtabl.c"
 				>
 			</File>
 			<File
@@ -749,24 +748,6 @@
 			<File
 				RelativePath="..\lib\ivis_opengl\piestate.c"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\lib\ivis_common\piestate.c"
@@ -793,7 +774,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\pqueue.c"
+				RelativePath="..\lib\gamelib\pqueue.c"
 				>
 			</File>
 			<File
@@ -801,7 +782,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\ptrlist.c"
+				RelativePath="..\lib\gamelib\ptrlist.c"
 				>
 			</File>
 			<File
@@ -894,6 +875,10 @@
 			</File>
 			<File
 				RelativePath="..\src\scriptvals_parser.c"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\SDL_framerate.c"
 				>
 			</File>
 			<File
@@ -1027,11 +1012,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\ani.h"
+				RelativePath="..\lib\gamelib\ani.h"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\anim.h"
+				RelativePath="..\lib\gamelib\anim.h"
 				>
 			</File>
 			<File
@@ -1039,7 +1024,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\animobj.h"
+				RelativePath="..\lib\gamelib\animobj.h"
 				>
 			</File>
 			<File
@@ -1067,7 +1052,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\audp_parser.h"
+				RelativePath="..\lib\gamelib\audp_parser.h"
 				>
 			</File>
 			<File
@@ -1263,10 +1248,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\fbf.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\feature.h"
 				>
 			</File>
@@ -1363,11 +1344,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\gtime.h"
+				RelativePath="..\lib\gamelib\gtime.h"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\hashtabl.h"
+				RelativePath="..\lib\gamelib\hashtabl.h"
 				>
 			</File>
 			<File
@@ -1499,7 +1480,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\maxpidef.h"
+				RelativePath="..\lib\gamelib\maxpidef.h"
 				>
 			</File>
 			<File
@@ -1631,7 +1612,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\parser.h"
+				RelativePath="..\lib\gamelib\parser.h"
 				>
 			</File>
 			<File
@@ -1687,11 +1668,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\pqueue.h"
+				RelativePath="..\lib\gamelib\pqueue.h"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\priority.h"
+				RelativePath="..\lib\gamelib\priority.h"
 				>
 			</File>
 			<File
@@ -1699,7 +1680,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\game..\lib\ptrlist.h"
+				RelativePath="..\lib\gamelib\ptrlist.h"
 				>
 			</File>
 			<File
@@ -1792,6 +1773,10 @@
 			</File>
 			<File
 				RelativePath="..\src\scriptvals_parser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\SDL_framerate.h"
 				>
 			</File>
 			<File
@@ -1954,10 +1939,6 @@
 			>
 			<File
 				RelativePath="warzone.rc"
-				>
-			</File>
-			<File
-				RelativePath="warzone2100.ico"
 				>
 			</File>
 		</Filter>

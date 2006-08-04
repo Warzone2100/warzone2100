@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Warzone", "Warzone.vcproj", "{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.Debug|Win32.Build.0 = Debug|Win32
+		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.Release|Win32.ActiveCfg = Release|Win32
+		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
