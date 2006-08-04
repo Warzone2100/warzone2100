@@ -1,3 +1,6 @@
+%.o: %.rc
+	$(WINDRES) $< $@
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o$@ $<
 

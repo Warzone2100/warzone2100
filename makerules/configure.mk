@@ -48,17 +48,6 @@ LDFLAGS+=-L$(DEVDIR)/lib
 
 # Setup build environment with config values
 
-ifeq ($(strip $(PLATFORM)),windows)
-DIRSEP=\\
-RMF=del /F
-CFLAGS+=-mwindows -DWIN32
-LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32 -ljpeg6b -lpng13
-else
-DIRSEP=/
-RMF=rm -f
-LDFLAGS+=-lGLU -lGL -lopenal -ljpeg -lpng
-endif
-
 ifeq ($(strip $(COMPILER)),g++)
 CC=g++
 CFLAGS+=-fpermissive
@@ -69,7 +58,21 @@ endif
 ifeq ($(strip $(MODE)),debug)
 CFLAGS+=-Wall -O0 -g3 -DDEBUG
 else
-CFLAGS+=-march=i686 -O2
+CFLAGS+=-march=i686 -Os
+LDFLAGS+=-Wl,-S
+endif
+
+ifeq ($(strip $(PLATFORM)),windows)
+DIRSEP=\\
+RMF=del /F
+WINDRES=windres
+CFLAGS+=-mwindows -DWIN32
+LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32 -ljpeg6b -lpng13
+else
+DIRSEP=/
+RMF=rm -f
+WINDRES=windres
+LDFLAGS+=-lGLU -lGL -lopenal -ljpeg -lpng
 endif
 
 LDFLAGS+=-lmad -lvorbisfile -lvorbis -logg -lphysfs -lSDLmain -lSDL -lSDL_net
