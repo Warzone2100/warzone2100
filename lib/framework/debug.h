@@ -47,22 +47,31 @@
  *
  * Arguments:	ASSERT((condition, "Format string with variables: %d, %d", var1, var2));
  */
-#define ASSERT(x)
-
-#ifdef DEBUG
-#ifndef _MSC_VER
-#undef ASSERT
-#define ASSERT(x) wz_assert x
-#define wz_assert(x, ...)                                                                \
-do {                                                                                     \
-	if (!(x)) {                                                                      \
-		debug(LOG_ERROR, "Fatal error in Warzone file %s, function %s, line %d", \
-		      __FILE__, __FUNCTION__, __LINE__);                                 \
-		debug(LOG_ERROR, __VA_ARGS__);                                           \
-		assert(x);                                                               \
-	}                                                                                \
+#ifdef _MSC_VER
+// MSVC doesn't understand __VAR_ARGS__ macros
+# define ASSERT(x)
+#else
+# define ASSERT(x) wz_assert x
+# ifdef DEBUG
+#  define wz_assert(x, ...)													\
+do {																		\
+	if (!(x)) {																\
+		debug(LOG_ERROR, "Error in Warzone: file %s, function %s, line %d",	\
+		      __FILE__, __FUNCTION__, __LINE__);							\
+		debug(LOG_ERROR, __VA_ARGS__);										\
+		assert(x);															\
+	}																		\
 } while (FALSE)
-#endif
+# else
+#  define wz_assert(x, ...)													\
+do {																		\
+	if (!(x)) {																\
+		debug(LOG_ERROR, "Error in Warzone: file %s, function %s, line %d",	\
+		      __FILE__, __FUNCTION__, __LINE__);							\
+		debug(LOG_ERROR, __VA_ARGS__);										\
+	}																		\
+} while (FALSE)
+# endif
 #endif
 
 /*
