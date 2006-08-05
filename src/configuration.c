@@ -26,6 +26,8 @@
 #include "hci.h"
 #include "fpath.h"
 
+#include "radar.h" //because of bDrawRadarTerrain
+
 // ////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULTFXVOL	80
@@ -440,6 +442,23 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setWarzoneKeyString("phrase4", ingame.phrases[4]);
 	}
 
+	// enemy/allies radar view
+	if(getWarzoneKeyNumeric("radarObjectMode", &val))
+	{
+		bEnemyAllyRadarColor =(BOOL)val;
+	} else {
+		bEnemyAllyRadarColor = FALSE;
+		setWarzoneKeyNumeric("radarObjectMode", (DWORD)bEnemyAllyRadarColor);
+	}
+
+	// no-terrain radar view
+	if(getWarzoneKeyNumeric("radarTerrainMode", &val))
+	{
+		bDrawRadarTerrain =(BOOL)val;
+	} else {
+		bDrawRadarTerrain = TRUE;
+		setWarzoneKeyNumeric("radarTerrainMode", (DWORD)bDrawRadarTerrain);
+	}
 
 	return closeWarzoneKey();
 }
@@ -516,6 +535,9 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("subtitles",(DWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("reopenBuild",(DWORD)(intGetReopenBuild()));	// build menu
 //	setWarzoneKeyNumeric("maxRoute",(DWORD)(fpathGetMaxRoute()));			// maximum routing
+
+	setWarzoneKeyNumeric("radarObjectMode",(DWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
+	setWarzoneKeyNumeric("radarTerrainMode",(DWORD)bDrawRadarTerrain);
 
 	if(!bMultiPlayer)
 	{

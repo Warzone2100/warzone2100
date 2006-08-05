@@ -314,22 +314,9 @@ void	kf_SetToughUnitsLevel( void )
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-
-
-	if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-	{
- 	 	CONPRINTF(ConsoleString,(ConsoleString,"DIRECT3D fps %d; PIEs %d; polys %d; Terr. polys %d; States %d",
-			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount,loopStateChanges));
-
-	}
-	else
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,"SOFTWARE fps - %d; pie's - %d; polys - %d; Terr. polys - %d;",
-			frameGetFrameRate(),loopPieCount,loopPolyCount,loopTileCount));
-	}
-		if (bMultiPlayer)
-		{
-
+	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d",
+	          frameGetFrameRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	if (bMultiPlayer) {
 			CONPRINTF(ConsoleString,(ConsoleString,
 						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
 						NETgetBytesSent(),
@@ -337,12 +324,11 @@ void	kf_FrameRate( void )
 						NETgetPacketsSent(),
 						NETgetPacketsRecvd() ));
 
-		}
-		gameStats = !gameStats;
+	}
+	gameStats = !gameStats;
 
-		CONPRINTF(ConsoleString,(ConsoleString,"Built at %s on %s",__TIME__,__DATE__));
+	CONPRINTF(ConsoleString, (ConsoleString,"Built at %s on %s",__TIME__,__DATE__));
 //		addConsoleMessage("Game statistics display toggled",DEFAULT_JUSTIFY);
-
 }
 
 // --------------------------------------------------------------------------
@@ -2543,3 +2529,26 @@ void kf_ToggleReopenBuildMenu( void )
 }
 
 // --------------------------------------------------------------------------
+
+void kf_ToggleRadarAllyEnemy(void)
+{
+	if (bEnemyAllyRadarColor == TRUE) {
+               bEnemyAllyRadarColor = FALSE;
+		resetRadarRedraw();
+	} else {
+		bEnemyAllyRadarColor = TRUE;
+		resetRadarRedraw();
+	}
+}
+
+void kf_ToggleRadarTerrain(void)
+{
+	if(bDrawRadarTerrain == TRUE)
+	{
+		bDrawRadarTerrain = FALSE;
+		resetRadarRedraw();
+	} else {
+		bDrawRadarTerrain = TRUE;
+		resetRadarRedraw();
+	}
+}

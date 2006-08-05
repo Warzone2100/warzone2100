@@ -215,6 +215,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleReopenBuildMenu,
 	kf_SensorDisplayOn,
 	kf_SensorDisplayOff,
+	kf_ToggleRadarTerrain,          //radar terrain on/off
+	kf_ToggleRadarAllyEnemy,        //enemy/ally radar color toggle
 	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
 //#ifdef DEBUG	// debug mappings only
 	kf_AllAvailable,
@@ -390,6 +392,8 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");                
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,      "Toggle ally-enemy radar view");
 
 	// Some extra non QWERTY mappings but functioning in same way
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_COMMA,KEYMAP_PRESSED,kf_SetDroidRetreatMedium,	   strresGetString(psStringRes,STR_BIND_LDAM) );

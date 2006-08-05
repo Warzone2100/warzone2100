@@ -205,7 +205,8 @@ void kf_NormalSpeed( void );
 #define	SECS_PER_SPIN	2
 #define MAP_SPIN_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
-
+void kf_ToggleRadarTerrain( void );          //radar terrain
+void kf_ToggleRadarAllyEnemy( void );        //enemy/ally color toggle
 
 extern int fogCol;
 

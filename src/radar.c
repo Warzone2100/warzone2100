@@ -21,19 +21,10 @@
 #include "display.h"
 #include "lib/gamelib/gtime.h"
 #include "mission.h"
-
-
-
 #include "multiplay.h"
 #include "lib/ivis_common/piefunc.h"
 
-
-
-
-
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
-
-
 
 //#define CHECKBUFFER		// Do assertions for buffer overun\underun
 
@@ -56,7 +47,10 @@
 #define RADAR_TRIANGLE_WIDTH	(RADAR_TRIANGLE_SIZE/2)
 
 static UDWORD		sweep;
-static UBYTE		colBlack,colWhite,colRadarBorder,colGrey;
+static UBYTE colBlack, colWhite, colRadarBorder, colGrey, colRadarEnemy, colRadarAlly, colRadarMe;
+
+BOOL bDrawRadarTerrain = TRUE;         //radar terrain on/off
+BOOL bEnemyAllyRadarColor = FALSE;     //enemy/ally radar color
 
 // colours for each clan on the radar map.
 
@@ -157,17 +151,10 @@ BOOL InitRadar(void)
 	colGrey = COL_DARKGREY;
 	colWhite = COL_WHITE;
 
-
-//	clanColours[0] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[1] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[2] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[3] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[4] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[5] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[6] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-//	clanColours[7] = (UDWORD)iV_PaletteNearestColour(255,255,0);
-
-
+	//for enemy/ally radar color mode
+	colRadarAlly = COL_YELLOW;
+	colRadarEnemy = COL_LIGHTRED;
+	colRadarMe = COL_WHITE;
 
 	pie_InitRadar();
 
@@ -585,15 +572,18 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 				ASSERT(( ((UDWORD)WScr) >= radarBuffer , "WScr Onderflow"));
 				ASSERT(( ((UDWORD)WScr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WScr Overrun"));
 #endif
-				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) OR godMode)
-					{
-					   	*WScr = iV_SHADE_TABLE[(tileColours[(WTile->texture & TILE_NUMMASK)] * iV_PALETTE_SHADE_LEVEL+(WTile->illumination >> ShadeDiv))];
-
+				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) OR godMode) {
+					if (bDrawRadarTerrain) {
+						//draw radar terrain on/off feature
+						int i = tileColours[(WTile->texture & TILE_NUMMASK)] * iV_PALETTE_SHADE_LEVEL;
+						int j = WTile->illumination >> ShadeDiv;
+						*WScr = iV_SHADE_TABLE[i + j];
+					} else {
+						*WScr = colBlack;
 					}
-				else
-					{
-						*WScr = colBlack;//colGrey;
-					}
+				} else {
+					*WScr = colBlack;
+				}
 				/* Next pixel, next tile */
 				WScr++;
 				WTile++;
@@ -627,8 +617,12 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 							ASSERT(( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow"));
 							ASSERT(( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun"));
 #endif
-
-   							*WPtr = Val;
+							if (bDrawRadarTerrain) {
+								//radar terrain
+								*WPtr = Val;
+							} else {
+								*WPtr = colBlack;
+							}
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -709,7 +703,18 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    	/* Show droids on map - go through all players */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
    	{
-		playerCol = clanColours[camNum][getPlayerColour(clan)];
+		//draw enemies in red, allies in yellow, if bEnemyAllyRadarColor is TRUE
+		if (bEnemyAllyRadarColor) {
+			if (clan == selectedPlayer) {
+				playerCol = colRadarMe; // grey
+			} else {
+				//enemy or ally (red or yellow)
+				playerCol = (aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
+			}
+		} else {
+			//original 8-color mode
+			playerCol = clanColours[camNum][getPlayerColour(clan)];
+		}
 		flashCol = flashColours[camNum][getPlayerColour(clan)];
 
    		/* Go through all droids */
@@ -778,7 +783,18 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    	/* Do the same for structures */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
    	{
-		playerCol = clanColours[camNum][getPlayerColour(clan)];
+		//draw enemies in red, allies in yellow, if bEnemyAllyRadarColor is TRUE
+		if (bEnemyAllyRadarColor) {
+			if (clan == selectedPlayer) {
+				playerCol = colRadarMe; //grey
+			} else {
+				//enemy or ally (red or yellow)
+				playerCol = (aiCheckAlliances(selectedPlayer,clan) ? colRadarAlly: colRadarEnemy);
+			}
+		} else {
+			//original 8-color mode 
+			playerCol = clanColours[camNum][getPlayerColour(clan)];
+		}
 		flashCol = flashColours[camNum][getPlayerColour(clan)];
    		/* Go through all structures */
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;

@@ -29,6 +29,7 @@ extern	void	downloadAtStartOfFrame( void );
 
 //#define RADAR_ROT	1
 
-
+extern BOOL bDrawRadarTerrain;         //radar terrain on/off
+extern BOOL bEnemyAllyRadarColor;      //enemy/ally radar color
 
 #endif
