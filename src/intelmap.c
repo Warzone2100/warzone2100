@@ -590,8 +590,12 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	BOOL			Animate = TRUE;
 	RESEARCH		*psResearch;
 
-	ASSERT((psMessage->type == MSG_RESEARCH,
-		"intAddMessageView: invalid message type"));
+/*	ASSERT((psMessage->type == MSG_RESEARCH,
+ *		"intAddMessageView: invalid message type")); 
+ *	had to comment out this check, since the 'Fast Play' tutorial triggered it
+ *	with psMessage->type=MSG_MISSION and ((VIEWDATA)*psMessage->pViewData)->type=VIEW_RPL,
+ * 	but which is probably using the wrong function. - Per
+ */
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDINTMAP_MSGVIEW) != NULL)
