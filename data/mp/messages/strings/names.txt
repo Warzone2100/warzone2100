@@ -1808,3 +1808,74 @@ CommandTurret3				"Command turret MkIII"
 R-Comp-CommandTurret03			"Command turret MkIII"
 CommandTurret4				"Command turret MkIV"
 R-Comp-CommandTurret04			"Command turret MkIV"
+
+			/////////////////
+			//NEW TEMPLATES//
+			/////////////////
+
+	/* Aivolution */
+//TransporterU				"Unit transport"
+//TransporterBodyU			"Unit transport Body"
+//R-Cyborg-TransportU			"Unit transport"
+CobraHRepairHover			"Cobra Hover Heavy-Repair"
+ViperHMGWheels				"Viper HMG Wheels"
+Scourge-Mantis-H			"Scourge Mantis Hover"
+TK-Mantis-H				"TK Mantis Hover"
+CobraHMGTracks				"Cobra HMG Tracks"
+Cobra-Hover-HC				"Cobra Hover HC"
+
+//======================================================================
+//GK
+//======================================================================
+A-Viper-Wheels-MG			"Viper Wheels Machinegun"
+A-Viper-Wheels-TMG			"Viper Wheels Twin Machinegun"
+A-Viper-Wheels-HMG			"Viper Wheels Heavy Machinegun"
+A-Cobra-Wheels-HMG			"Cobra Wheels Heavy Machinegun"
+A-Cobra-Hover-HMG			"Cobra Hover Heavy Machinegun"
+
+A-Viper-Trk-MG				"Viper Tracks Machinegun"
+A-Viper-Trk-TMG				"Viper Tracks Twin Machinegun"
+A-Viper-Trk-HMG				"Viper Tracks Heavy Machinegun"
+A-Cobra-Trk-HMG				"Cobra Tracks Heavy Machinegun"
+
+A-Cobra-Hover-MC			"Cobra Hover Medium Cannon"
+A-Scorp-Hover-MC			"Scorpion Hover Medium Cannon"
+A-Scorp-Trk-MC				"Scorpion Tracks Medium Cannon"
+A-Python-Hover-MC			"Python Hover Medium Cannon"
+A-Python-Hover-HC			"Python Hover Heavy Cannon"
+A-Python-Trk-HC				"Python Tracks Heavy Cannon"
+A-Mantis-Trk-Rail			"Mantis Tracks Railgun"
+A-Mantis-Trk-Pulse			"Mantis Tracks Pulse Laser"
+A-Python-Trk-Lancer			"Python Tracks Lancer"
+A-Mantis-Trk-Lancer			"Mantis Tracks Lancer"
+A-Veng-Trk-TK				"Vengeance Tracks Tank Killer"
+
+//A-Python-Trk-HLaser			"Python Tracks Heavy Laser"
+//A-Python-Trk-Scour			"Python Tracks Scourge"
+
+A-Tiger-Trk-HC				"Tiger Tracks Heavy Cannon"
+A-Tiger-Trk-Needle			"Tiger Tracks Needle Gun"
+A-Retrib-Trk-Needle			"Retribution Tracks Needle Gun"
+A-Veng-Trk-Needle			"Vengeance Tracks Needle Gun"
+A-Veng-Trk-Rail				"Vengeance Tracks Rail Gun"
+A-Veng-Trk-Guass			"Vengeance Tracks Guass Cannon"
+A-Veng-Trk-Scourge			"Vengeance Tracks Guass Scourge"
+
+//Anti Structure VTOLs
+V-Bug-ClusterBomb			"Bug Cluster Bomb VTOL"
+V-Bug-BB				"Bug Bunker Buster VTOL"
+V-Scor-ClusterBomb			"Scorpion Cluster Bomb VTOL"
+V-Scor-BB				"Scorpion Bunker Buster VTOL"
+
+//Anti Tank VTOLs
+V-Bug-Lancer				"Bug Lancer VTOL"
+V-Bug-HPV				"Bug HPV VTOL"
+V-Scor-Lancer				"Scorpion Lancer VTOL"
+V-Scor-HPV				"Scorpion HPV VTOL"
+V-Mantis-Lancer				"Mantis Lancer VTOL"
+V-Mantis-HPV				"Mantis HPV VTOL"
+
+//Repair
+A-Rep-Cobra-Trk				"Cobra Repair Trucks"
+A-Rep-Mantis-Trk			"Mantis Repair Trucks"
+
