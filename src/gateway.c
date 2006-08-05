@@ -651,7 +651,6 @@ SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 }
 
 
-#ifdef DEBUG
 // check that the initial flood fill tiles are not on a blocking tile
 BOOL gwCheckFloodTiles(GATEWAY *psGate)
 {
@@ -697,7 +696,6 @@ BOOL gwCheckFloodTiles(GATEWAY *psGate)
 
 	return TRUE;
 }
-#endif
 
 // link all the gateways together
 BOOL gwLinkGateways(void)
