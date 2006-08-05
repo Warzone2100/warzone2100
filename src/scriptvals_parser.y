@@ -183,19 +183,11 @@ script_name:	SCRIPT QTEXT
 						{
 							psCurrScript=resGetData("SCRIPT",stringname);
 						}
-#ifdef PSX
-						else
-						{
-							// change extension to "blo"
-							stringname[extpos]='b';
-							psCurrScript=resGetData("BLO",stringname);
-						}
-#endif
 					}
 
 					if (!psCurrScript)
 					{
-						scrv_error("Script file not found");
+						scrv_error("Script file %s not found", stringname);
 						YYABORT;
 					}
 
@@ -617,20 +609,6 @@ var_init:		var_entry TYPE var_value
 						}
 						break;
 					case ST_SOUND:
-#ifdef PSX
-						if ($3.type != IT_INDEX)
-						{
-							scrv_error("Typemismatch for variable %d", $1);
-							YYABORT;
-						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD) $3.index))
-						{
-							scrv_error("Set Value Failed for %s", $1 );
-							YYABORT;
-						}
-
-#else
-
 						if ($3.type != IT_STRING)
 						{
 							scrv_error("Typemismatch for variable %d", $1);
@@ -649,7 +627,6 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
 						}
-#endif
 						break;
 					case ST_RESEARCH:
 						if ($3.type != IT_STRING)
@@ -818,7 +795,6 @@ BOOL scrvLoad(UBYTE *pData, UDWORD size)
 	return TRUE;
 }
 
-#ifndef FINALBUILD
 /* A simple error reporting routine */
 void scrv_error(char *pMessage,...)
 {
@@ -831,11 +807,8 @@ void scrv_error(char *pMessage,...)
 
 	vsprintf(aTxtBuf, pMessage, args);
 	scrvGetErrorData(&line, &pText);
-	DBERROR(("VLO file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
-			  aTxtBuf, line, scrv_char, pText));
+	debug(LOG_ERROR, "VLO parse error: %s at line %d, token: %d, text: '%s'",
+	      aTxtBuf, line, scrv_char, pText);
 
 	va_end(args);
 }
-#endif
-
-
