@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
 #include "loop.h"
@@ -204,22 +205,15 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 		}
 
 		// new - ask alex M
-		if( (selectedPlayer!=rayPlayer) AND
-			(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,rayPlayer)) )
+		if (selectedPlayer != rayPlayer && bMultiPlayer && aiCheckAlliances(selectedPlayer, rayPlayer))
 		{
 			SET_TILE_VISIBLE(selectedPlayer,psTile);
 		}
 
-		// new - ask Alex M
-	/* Not true visibility - done on sensor range */
-
+		/* Not true visibility - done on sensor range */
 		if(getRevealStatus())
 		{
-			if( ((UDWORD)rayPlayer == selectedPlayer) OR
-				// new - ask AM
-				(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,rayPlayer)) // can see opponent moving
-				// new - ask AM
-				)
+			if (rayPlayer == selectedPlayer || (bMultiPlayer && aiCheckAlliances(selectedPlayer, rayPlayer)))
 			{
 				avInformOfChange(x>>TILE_SHIFT,y>>TILE_SHIFT);
 //				SET_TILE_SENSOR(psTile);
@@ -231,9 +225,8 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return TRUE;
 }
 
-
 /* The los ray callback */
-static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
+BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD		newG;		// The new gradient
 //	MAPTILE		*psTile;
@@ -523,9 +516,10 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		break;
 	}
 
-	// fix to see units and structures of your ally in teamplay mode
+	// fix to see units and structures of your ally
+	// FIXME: needed? - Per
 	/*
-	if(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(psViewer->player,psTarget->player))
+	if(bMultiPlayer && aiCheckAlliances(psViewer->player,psTarget->player))
 	{
 		if( (psViewer->type == OBJ_DROID) OR (psViewer->type == OBJ_STRUCTURE) )
 			{
@@ -849,8 +843,8 @@ void processVisibility(BASE_OBJECT *psObj)
 
 	gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
 
-	// Fix for ally vis
-	if( bMultiPlayer && (game.type == TEAMPLAY) )
+	// Allow allies to see your droids
+	if (bMultiPlayer)
 	{
 		for(player=0; player<MAX_PLAYERS; player++)
 		{
@@ -903,7 +897,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	}
 
 	// jiggle the visibility for team play
-	if (bMultiPlayer && (game.type == TEAMPLAY))
+	if (bMultiPlayer)
 	{
 		for(player = 0; player < MAX_PLAYERS; player++)
 		{
