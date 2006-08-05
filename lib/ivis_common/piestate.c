@@ -108,15 +108,6 @@ FOG_CAP pie_GetFogCap(void)
 	return rendStates.fogCap;
 }
 
-void pie_SetTexCap(TEX_CAP val)
-{
-	rendStates.texCap = val;
-}
-
-TEX_CAP pie_GetTexCap(void)
-{
-	return rendStates.texCap;
-}
 
 //***************************************************************************
 //

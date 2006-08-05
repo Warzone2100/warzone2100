@@ -250,10 +250,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		else if (stricmp(tokenType, "-noCDA") == 0) {
 			war_SetPlayAudioCDs(FALSE);
 		}
-		else if( stricmp( tokenType,"-2meg") == 0)
-		{
-			pie_SetTexCap(TEX_CAP_2M);
-		}
 		else if( stricmp( tokenType,"-seqSmall") == 0)
 		{
 			war_SetSeqMode(SEQ_SMALL);

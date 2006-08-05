@@ -116,7 +116,6 @@ typedef struct	RENDER_STATE
 					BOOL				fogEnabled;
 					BOOL				fog;
 					UDWORD				fogColour;
-					TEX_CAP				texCap;
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				bilinearOn;
