@@ -63,12 +63,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib png13.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
+				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
 				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="msvcrt.lib, libcmt.lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib,libcmt.lib"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
