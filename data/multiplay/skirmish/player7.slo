@@ -76,33 +76,33 @@ private	INT				allianceTime[8];
 /////////////////////////////////////////////////////////////////////
 // triggers.
 
-trigger buildExpandTr				(every, 900);
-trigger fortifyTr					(every,	1250);
-trigger upgradeStructuresTr			(every, 590 );
-trigger conDroidsTr					(every, 1800);	// was 3600
+trigger buildExpandTr				(every, 600);
+trigger fortifyTr					(every,	1000);
+trigger upgradeStructuresTr			(every, 400 );
+trigger conDroidsTr					(every, 1400);	// was 3600
 trigger repairDroidsTr				(every, 2600);
-trigger	managePowerTr				(every, 2000);
-trigger basedetailsTr				(every, 700	);
-trigger buildDerrickTr				(every, 110	);
-trigger buildOilDefenseOrRetreatTr	(every, 170	);
-trigger incendryTr					(every, 310 );
-trigger buildPowerGeneratorsTr		(every, 90	);
-trigger buildBaseTr					(every, 210	);
-trigger finishStructsTr				(every, 610 );
+trigger	managePowerTr				(every, 1500);
+trigger basedetailsTr				(every, 600	);
+trigger buildDerrickTr				(every, 80	);
+trigger buildOilDefenseOrRetreatTr	(every, 120	);
+trigger incendryTr					(every, 250 );
+trigger buildPowerGeneratorsTr		(every, 80	);
+trigger buildBaseTr					(every, 150	);
+trigger finishStructsTr				(every, 500 );
 trigger droidBuiltTr				(CALL_NEWDROID,player, ref droid,ref structure);
 trigger droidDestroyedTr			(CALL_DROID_DESTROYED,  player, ref droid);
 trigger consolidateEventTr			(every,	3100);
-trigger factoryEventTr				(every, 200	);
-trigger cyborgFactoryEventTr		(every, 200	);
+trigger factoryEventTr				(every, 170	);
+trigger cyborgFactoryEventTr		(every, 170	);
 trigger chooseScoutAreaTr			(every,	200	);
 trigger expandScoutAreaTr			(every,	600	);
 trigger scoutMainTr					(every,	150	);
 trigger newObjectReportTr			(CALL_OBJ_SEEN, player, ref baseobj, ref baseobj2);
 trigger attackStuffTr				(every, 300	);
-trigger allOutAttackTr				(every, 2380);
+trigger allOutAttackTr				(every, 2000);
 trigger defendWatchTr				(CALL_STRUCT_ATTACKED, player, ref structure, ref baseobj);
-trigger defendReturnTr				(every,	600	);
-trigger doResearchTr				(every, 500 );
+trigger defendReturnTr				(every,	500	);
+trigger doResearchTr				(every, 450 );
 trigger vtolDefendTr				(CALL_STRUCT_ATTACKED, player, ref structure, ref baseobj);
 trigger vtolStructsTr				(every, 360);		
 trigger buildVtolsTr				(every, 360);		
@@ -112,7 +112,7 @@ trigger takeoverTr					(CALL_UNITTAKEOVER, ref droid);
 trigger useLassatTr					(every, 3000);
 trigger reassignTr					(CALL_PLAYERLEFT,count);	
 trigger formAllianceEventTr			(every,170);
-trigger breakAllianceEventTr		(every,700);
+trigger breakAllianceEventTr		(every,3000);
 trigger difficultyModifierTr		(every,600);
 trigger humanAllianceTr				(CALL_ALLIANCEOFFER,ref count, ref count2);
 
@@ -771,7 +771,7 @@ event upgradeStructures(upgradeStructuresTr )
 					while(structure != NULLOBJECT)	
 					{
 						// if upgrade is available && struct is not upgraded
-						if( isStructureAvailable(facModule,player) and (skGetFactoryCapacity(structure) < 3 ))			
+						if( isStructureAvailable(facModule,player) and (skGetFactoryCapacity(structure) < 2 ))			
 						{
 							orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.			
 						}

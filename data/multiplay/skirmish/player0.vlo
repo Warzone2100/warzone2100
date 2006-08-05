@@ -77,49 +77,45 @@ run
 
 	
 	// defensive structs.
-	numDefStructs	INT					26
+	numDefStructs	INT					22
 	defStructs[0]	STRUCTURESTAT		"PillBox1"
 	defStructs[1]	STRUCTURESTAT		"Pillbox-RotMG"
-	defStructs[2]	STRUCTURESTAT		"Emplacement-MortarPit01"
+	defStructs[2]	STRUCTURESTAT		"PillBox1"		//MG
 	defStructs[3]	STRUCTURESTAT		"PillBox1"
-	defStructs[4]	STRUCTURESTAT		"PillBox5"
+	defStructs[4]	STRUCTURESTAT		"PillBox6"		//Lancer
 	defStructs[5]	STRUCTURESTAT		"Sys-SensoTower02"
-	defStructs[6]	STRUCTURESTAT		"WallTower03"
-	defStructs[7]	STRUCTURESTAT		"WallTower02"
-	defStructs[8]	STRUCTURESTAT		"Emplacement-MRL-pit"
+	defStructs[6]	STRUCTURESTAT		"WallTower03"		//MC
+	defStructs[7]	STRUCTURESTAT		"WallTower04"		//HC
+	defStructs[8]	STRUCTURESTAT		"PillBox6"		//Lancer
 
-	defStructs[9]	STRUCTURESTAT		"Wall-RotMg"				// Campaign 2 Defensive Structures
-	defStructs[10]	STRUCTURESTAT		"Wall-VulcanCan"
-	defStructs[11]	STRUCTURESTAT		"WallTower-HPVcannon"
-	defStructs[12]	STRUCTURESTAT		"Emplacement-Howitzer105"
-	defStructs[13]	STRUCTURESTAT		"Emplacement-HvyATrocket"
-	defStructs[14]	STRUCTURESTAT		"Emplacement-MortarPit02"
-	defStructs[15]	STRUCTURESTAT		"WallTower06"  
-	defStructs[16]	STRUCTURESTAT		"Emplacement-PulseLaser"	// Campaign 3 Defensive Structures
-	defStructs[17]	STRUCTURESTAT		"Emplacement-Rail2"
-	defStructs[18]	STRUCTURESTAT		"Wall-VulcanCan"
-	defStructs[19]	STRUCTURESTAT		"Emplacement-RotMor"
-	defStructs[20]	STRUCTURESTAT		"WallTower-HvATrocket"
-	defStructs[21]	STRUCTURESTAT		"WallTower-Atmiss"
-	defStructs[22]	STRUCTURESTAT		"WallTower-PulseLas"
-	defStructs[23]	STRUCTURESTAT		"WallTower-Rail2"
-	defStructs[24]	STRUCTURESTAT		"WallTower-Rail3"
-	defStructs[25]	STRUCTURESTAT		"Pillbox-RotMG"
+	defStructs[9]	STRUCTURESTAT		"WallTower04"		//HC
+	defStructs[10]	STRUCTURESTAT		"WallTower-HPVcannon"
+	defStructs[11]	STRUCTURESTAT		"Emplacement-Howitzer105"
+	defStructs[12]	STRUCTURESTAT		"Emplacement-HvyATrocket"
+	defStructs[13]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	defStructs[14]	STRUCTURESTAT		"WallTower06"  
+	defStructs[15]	STRUCTURESTAT		"Emplacement-PulseLaser"	// Campaign 3 Defensive Structures
+	defStructs[16]	STRUCTURESTAT		"Emplacement-Rail2"
+
+	defStructs[17]	STRUCTURESTAT		"WallTower-HvATrocket"	//TK
+	defStructs[18]	STRUCTURESTAT		"WallTower-Atmiss"	//Scourge
+	defStructs[19]	STRUCTURESTAT		"WallTower-PulseLas"
+	defStructs[20]	STRUCTURESTAT		"WallTower-Rail2"
+	defStructs[21]	STRUCTURESTAT		"WallTower-Rail3"
 
 	// wall structs (4)
-	numWallWeaps	INT					11
+	numWallWeaps	INT					10
 	wallStruct		STRUCTURESTAT		"A0HardcreteMk1Wall"
-	wallWeaps[0]	STRUCTURESTAT		"WallTower02"
-	wallWeaps[1]	STRUCTURESTAT		"WallTower01"  
-	wallWeaps[2]	STRUCTURESTAT		"WallTower05"
-	wallWeaps[3]	STRUCTURESTAT		"WallTower06"
-	wallWeaps[4]	STRUCTURESTAT		"WallTower04"
-	wallWeaps[5]	STRUCTURESTAT		"WallTower03"
-	wallWeaps[6]	STRUCTURESTAT		"WallTower06"
-	wallWeaps[7]	STRUCTURESTAT		"WallTower-Rail2"
-	wallWeaps[8]	STRUCTURESTAT		"WallTower-PulseLas"
-	wallWeaps[9]	STRUCTURESTAT		"WallTower-Atmiss"
-	wallWeaps[10]	STRUCTURESTAT		"WallTower-HPVcannon"
+	wallWeaps[0]	STRUCTURESTAT		"WallTower01"
+	wallWeaps[1]	STRUCTURESTAT		"WallTower02"
+	wallWeaps[2]	STRUCTURESTAT		"WallTower03"
+	wallWeaps[3]	STRUCTURESTAT		"WallTower04"
+	wallWeaps[4]	STRUCTURESTAT		"WallTower06"
+	wallWeaps[5]	STRUCTURESTAT		"WallTower06"
+	wallWeaps[6]	STRUCTURESTAT		"WallTower-Rail2"
+	wallWeaps[7]	STRUCTURESTAT		"WallTower-PulseLas"
+	wallWeaps[8]	STRUCTURESTAT		"WallTower-Atmiss"
+	wallWeaps[9]	STRUCTURESTAT		"WallTower-HPVcannon"
 
 
 	// extra structs
@@ -137,84 +133,74 @@ run
 	
 	// COMBAT TEMPLATES
 
-	numTemplates	INT		73
+	numTemplates	INT		56
 
 	tmpl[0]		TEMPLATE	"ViperMG01Wheels"
 	tmpl[1]		TEMPLATE	"ViperMG02Wheels"
-	tmpl[2]		TEMPLATE	"ViperMRLWheels"
-	tmpl[3]		TEMPLATE	"ViperMG02Halftrack"
-	tmpl[4]		TEMPLATE	"ViperHMGHalftrack"
+	tmpl[2]		TEMPLATE	"ViperHMGWheels"
+	tmpl[3]		TEMPLATE	"ViperBBWheels"
+	tmpl[4]		TEMPLATE	"ViperLtA-Twheels"
 	tmpl[5]		TEMPLATE	"ViperHMGTracks"
 	tmpl[6]		TEMPLATE	"ViperLtA-Twheels"
-	tmpl[7]		TEMPLATE	"ViperMedCnTrks"
-	tmpl[8]		TEMPLATE	"ViperBBWheels"
-	tmpl[9]		TEMPLATE	"ViperPODWheels"
-	tmpl[10]	TEMPLATE	"P6-M-QMG1-HT"
-	tmpl[11]	TEMPLATE	"CobraMRLHalftrack"
-	tmpl[12]	TEMPLATE	"CobraLtA-Thalftrack"
-	tmpl[13]	TEMPLATE	"CobraFlameTracks"
-	tmpl[14]	TEMPLATE	"CobraHvyMortarHalftrack"
-	tmpl[15]	TEMPLATE	"Sk-CobraBBHover"
-	tmpl[16]	TEMPLATE	"CobraFlameTracks"
-	tmpl[17]	TEMPLATE	"SK-Cobra-Hover-Lancer"
-	tmpl[18]	TEMPLATE	"CobraMedCnTrks"
-	tmpl[19]	TEMPLATE	"SK-Cobra-Hover-HMG"
-	tmpl[20]	TEMPLATE	"CobraHvyCnTrks"
-	tmpl[21]	TEMPLATE	"SK-Cobra-Hover-BB"
-	tmpl[22]	TEMPLATE	"PythonLtCnTrks"
-	tmpl[23]	TEMPLATE	"SK-Python-Hover-Mcannon"
-	tmpl[24]	TEMPLATE	"PythonMedCnTrks"
-	tmpl[25]	TEMPLATE	"SK-Python-Hover-Hcannon"
-	tmpl[26]	TEMPLATE	"SK-Python-Hover-Lancer"
-	//Campaign 2
-	tmpl[27]	TEMPLATE	"SK-Python-Hover-Hcannon"
-	tmpl[28]	TEMPLATE	"SK-Cobra-Track-HVC"
-	tmpl[29]	TEMPLATE	"SK-Cobra-Track-TK"
-	tmpl[30]	TEMPLATE	"SK-Python-Track-Hcannon"
-	tmpl[31]	TEMPLATE	"Sk-PythonHvCanTrack"
-	tmpl[32]	TEMPLATE	"SK-Leopard-Track-Lancer"
-	tmpl[33]	TEMPLATE	"SK-Leopard-HTrk-ASGun"
-	tmpl[34]	TEMPLATE	"SK-Panther-Track-HVC"
-	tmpl[35]	TEMPLATE	"SK-Panther-Hover-HVC"
-	tmpl[36]	TEMPLATE	"SK-Panther-Track-TK"
-	tmpl[37]	TEMPLATE	"SK-Panther-Hover-TK"
-	tmpl[38]	TEMPLATE	"SK-Panther-Htrk-ASGun"
-	tmpl[39]	TEMPLATE	"SK-Panther-Htrk-BB"
-	tmpl[40]	TEMPLATE	"SK-Tiger-Track-Hcannon"
-	tmpl[41]	TEMPLATE	"SK-Tiger-Hover-Hcannon"
-	tmpl[42]	TEMPLATE	"SK-Tiger-Track-HVC"
-	tmpl[43]	TEMPLATE	"SK-Tiger-Hover-HVC"
-	tmpl[44]	TEMPLATE	"SK-Tiger-Track-TK"
-	tmpl[45]	TEMPLATE	"SK-Tiger-Hover-TK"
-	tmpl[46]	TEMPLATE	"SK-Tiger-Track-ASCannon"
-	tmpl[47]	TEMPLATE	"SK-Tiger-Hover-ASCannon"
-	//Campaign 3 
-	tmpl[48]	TEMPLATE	"SK-Leopard-Htrk-Needle"
-	tmpl[49]	TEMPLATE	"SK-Leopard-Hover-Needle"
-	tmpl[50]	TEMPLATE	"SK-Panther-Track-RailGun"
-	tmpl[51]	TEMPLATE	"SK-Panther-Track-TK"
-	tmpl[52]	TEMPLATE	"SK-Panther-Hover-TK"
-	tmpl[53]	TEMPLATE	"SK-Tiger-Track-Scourge"
-	tmpl[54]	TEMPLATE	"SK-Tiger-Hover-Scourge"
-	tmpl[55]	TEMPLATE	"SK-Tiger-Track-Gauss"
-	tmpl[56]	TEMPLATE	"SK-Tiger-Hover-Gauss"
-	tmpl[57]	TEMPLATE	"SK-Retal-Track-Needle"
-	tmpl[58]	TEMPLATE	"SK-Retre-Track-PulseLsr"
-	tmpl[59]	TEMPLATE	"SK-Retre-Track-FlashLight"
-	tmpl[60]	TEMPLATE	"SK-Retre-Htrk-Pepper"
-	tmpl[61]	TEMPLATE	"SK-Retre-Track-RailGun"
-	tmpl[62]	TEMPLATE	"SK-Veng-Track-Scourge"
-	tmpl[63]	TEMPLATE	"SK-Retre-Hover-RailGun"
-	tmpl[64]	TEMPLATE	"SK-Retre-Track-Scourge"
-	tmpl[65]	TEMPLATE	"SK-Retre-Hover-Scourge"
-	tmpl[66]	TEMPLATE	"SK-Veng-Track-Gauss"
-	tmpl[67]	TEMPLATE	"SK-Veng-Hover-Gauss"
-	tmpl[68]	TEMPLATE	"SK-Veng-Track-PulseLsr"
-	tmpl[69]	TEMPLATE	"SK-Veng-Hover-PulseLsr"
-	tmpl[70]	TEMPLATE	"SK-Veng-Hover-Scourge"
-	tmpl[71]	TEMPLATE	"SK-Veng-Track-C6TwinAslt"
-	tmpl[72]	TEMPLATE	"SK-Veng-Track-HvyLaser"
+	tmpl[7]		TEMPLATE	"ViperBBWheels"
+	tmpl[8]		TEMPLATE	"ViperHMGTracks"
+	tmpl[9]		TEMPLATE	"ViperHMGTracks"
+	tmpl[10]	TEMPLATE	"ViperMedCnTrks"
 
+	tmpl[11]	TEMPLATE	"SK-Cobra-Hover-HMG"
+	tmpl[12]	TEMPLATE	"SK-Cobra-Hover-Lancer"
+	tmpl[13]	TEMPLATE	"CobraMedCnTrks"
+	tmpl[14]	TEMPLATE	"SK-Cobra-Hover-Lancer"
+	tmpl[15]	TEMPLATE	"Sk-CobraBBHover"
+	tmpl[16]	TEMPLATE	"CobraMedCnTrks"
+	tmpl[17]	TEMPLATE	"CobraHvyCnTrks"
+	tmpl[18]	TEMPLATE	"CobraHvyCnTrks"
+
+	tmpl[19]	TEMPLATE	"SK-Python-Hover-Mcannon"
+	tmpl[20]	TEMPLATE	"PythonMedCnTrks"
+	tmpl[21]	TEMPLATE	"SK-Python-Hover-Lancer"
+	tmpl[22]	TEMPLATE	"SK-Python-Hover-Hcannon"
+
+	//Campaign 2
+	tmpl[23]	TEMPLATE	"SK-Python-Hover-Hcannon"
+	tmpl[24]	TEMPLATE	"SK-Cobra-Track-TK"
+	tmpl[25]	TEMPLATE	"SK-Python-Track-Hcannon"
+	tmpl[26]	TEMPLATE	"Sk-PythonHvCanTrack"
+
+	tmpl[27]	TEMPLATE	"SK-Panther-Hover-HVC"
+	tmpl[28]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[29]	TEMPLATE	"SK-Panther-Hover-TK"
+
+	tmpl[30]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[31]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[32]	TEMPLATE	"SK-Cobra-Track-TK"
+	tmpl[33]	TEMPLATE	"SK-Tiger-Track-HVC"
+	tmpl[34]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[35]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[36]	TEMPLATE	"SK-Tiger-Hover-TK"
+
+	//Campaign 3 
+	tmpl[37]	TEMPLATE	"SK-Leopard-Htrk-Needle"
+	tmpl[38]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[39]	TEMPLATE	"SK-Panther-Track-RailGun"
+	tmpl[40]	TEMPLATE	"SK-Panther-Hover-TK"
+	tmpl[41]	TEMPLATE	"SK-Tiger-Track-Scourge"
+	tmpl[42]	TEMPLATE	"SK-Tiger-Track-Gauss"
+	tmpl[43]	TEMPLATE	"SK-Tiger-Hover-Gauss"
+	tmpl[44]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[45]	TEMPLATE	"SK-Retre-Track-PulseLsr"
+	tmpl[46]	TEMPLATE	"SK-Retre-Track-FlashLight"
+
+	tmpl[47]	TEMPLATE	"SK-Retre-Track-RailGun"
+	tmpl[48]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl[49]	TEMPLATE	"SK-Retre-Hover-RailGun"
+	tmpl[50]	TEMPLATE	"SK-Retre-Track-Scourge"
+	tmpl[51]	TEMPLATE	"SK-Veng-Track-Gauss"
+	tmpl[52]	TEMPLATE	"SK-Veng-Hover-Gauss"
+	tmpl[53]	TEMPLATE	"SK-Veng-Track-PulseLsr"
+	tmpl[54]	TEMPLATE	"SK-Veng-Hover-Scourge"
+
+	tmpl[55]	TEMPLATE	"SK-Veng-Track-HvyLaser"
 	/////////////////////////////////////////////////////////////////////
 	// SENSORS / REPAIR TEMPLATES
 
