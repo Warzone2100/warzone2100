@@ -47,7 +47,11 @@
  *
  * Arguments:	ASSERT((condition, "Format string with variables: %d, %d", var1, var2));
  */
+#define ASSERT(x)
+
+#ifdef DEBUG
 #ifndef _MSC_VER
+#undef ASSERT
 #define ASSERT(x) wz_assert x
 #define wz_assert(x, ...)                                                                \
 do {                                                                                     \
@@ -55,11 +59,10 @@ do {                                                                            
 		debug(LOG_ERROR, "Fatal error in Warzone file %s, function %s, line %d", \
 		      __FILE__, __FUNCTION__, __LINE__);                                 \
 		debug(LOG_ERROR, __VA_ARGS__);                                           \
-		/*assert(x);*/                                                               \
+		assert(x);                                                               \
 	}                                                                                \
-} while (0)
-#else
-#define ASSERT(x)
+} while (FALSE)
+#endif
 #endif
 
 /*
@@ -211,6 +214,7 @@ enum code_part {
   LOG_3D,
   LOG_TEXTURE,
   LOG_NET,
+  LOG_MEMORY,
   LOG_ERROR, /* special; on by default */
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
   LOG_LAST /* _must_ be last! */

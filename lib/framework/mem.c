@@ -55,7 +55,7 @@ BOOL memInitialise(void)
 {
 	if (psMemRoot != NULL)
 	{
-		DBPRINTF(("memInitialise: *** WARNING *** : memory still allocated??\n"));
+		debug(LOG_MEMORY, "memInitialise: *** WARNING *** : memory still allocated??");
 	}
 	psMemRoot = NULL;
 
@@ -371,17 +371,18 @@ BOOL memPointerValid(void *pPtr, size_t size)
 /* Recursive function to print out the list of memory blocks */
 SDWORD memRecReport(MEM_NODE *psRoot)
 {
-#ifdef DEBUG_MALLOC
+#ifdef REALLY_DEBUG_MALLOC
 	if (psRoot)
 	{
-		DBPRINTF(("%s, line %d : \t", psRoot->pFile, psRoot->line));
 		if (psRoot->size < SHOW_KB_LIMIT)
 		{
-			DBPRINTF(("%d Bytes\n", psRoot->size));
+			debug(LOG_MEMORY, "memRecReport for %s line %d: \t%d bytes",
+			      psRoot->pFile, psRoot->line, psRoot->size);
 		}
 		else
 		{
-			DBPRINTF(("%d Kb\n", (int)(psRoot->size/1024)));
+			debug(LOG_MEMORY, "memRecReport for %s line %d: \t%d kilobytes",
+			      psRoot->pFile, psRoot->line, (int) psRoot->size / 1024);
 		}
 
 		return memRecReport((MEM_NODE *)psRoot->psLeft) +
@@ -468,10 +469,11 @@ void memMemoryDump(MEM_NODE *Node)
 	MemTotalAllocated=0;
 	memSummary(Node);	
 
-	DBPRINTF(("----------------\nMemory Summary\n%d Bytes allocated in %d handy size chunks\n\n", MemTotalAllocated,MemTotalEntries));
+	debug(LOG_MEMORY, "Memory Summary: %d bytes allocated in %d handy size chunks", MemTotalAllocated, MemTotalEntries);
 	for (i=0;i<(SDWORD)MemTotalModules;i++)
 	{
-		DBPRINTF(("%d) [%s] %d allocations totalling %d bytes\n",i,MemModuleInfo[i].pFile,MemModuleInfo[i].Count,MemModuleInfo[i].Total));
+		debug(LOG_MEMORY, "memMemoryDump: %d) [%s] %d allocations totalling %d bytes",
+		      i, MemModuleInfo[i].pFile, MemModuleInfo[i].Count, MemModuleInfo[i].Total);
 	}
 #endif
 
@@ -486,23 +488,21 @@ void memMemoryReport(STRING *pFileName)
 #ifdef DEBUG_MALLOC
 	SDWORD		TotMem;
 
-	DBPRINTF(("\nMemory Allocation Report\n\n"));
 	if (!psMemRoot)
 	{
-		DBPRINTF(("No memory Allocated\n\n"));
+		debug(LOG_MEMORY, "memMemoryReport: No memory allocated");
 	}
 	else
 	{
 		TotMem = memRecReport(psMemRoot);
 
-		DBPRINTF(("\nTotal memory allocated : "));
 		if (TotMem < SHOW_KB_LIMIT)
 		{
-			DBPRINTF(("%d Bytes\n\n", TotMem));
+			debug(LOG_MEMORY, "memMemoryReport: Total memory allocated is %d bytes", TotMem);
 		}
 		else
 		{
-			DBPRINTF(("%d Kb\n\n", (int)(TotMem/1024)));
+			debug(LOG_MEMORY, "memMemoryReport: Total memory allocated is %d kilobytes", (int) TotMem / 1024);
 		}
 
 	}
@@ -514,7 +514,7 @@ void memMemoryReport(STRING *pFileName)
 void memDisplayTreap(STRING *pFileName)
 {
 #ifdef DEBUG_MALLOC
-	DBPRINTF(("\nMemory Allocation Treap\n\n"));
+	debug(LOG_MEMORY, "Memory Allocation Treap:");
 	treapDisplayRec((TREAP_NODE *)psMemRoot, 0);
 #endif
 }

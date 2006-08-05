@@ -252,9 +252,9 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 		psCurrBlk = memGetBlockHeap();
 		memSetBlockHeap(psHeap->psBlkHeap);
 
- #if DEBUG_HEAP
-		DBPRINTF(("Heap %s, line %d extended. Max use: %d\n", psHeap->pFile, psHeap->line, psHeap->maxUsage));
- #endif
+#ifdef REALLY_DEBUG_HEAP
+		debug(LOG_MEMORY, "heapAlloc: Heap %s, line %d extended. Max use: %d\n", psHeap->pFile, psHeap->line, psHeap->maxUsage);
+#endif
 
 		psNew = (HEAP_EXTENSION *)MALLOC(sizeof(HEAP_EXTENSION));
 		if (psNew == NULL)
@@ -447,8 +447,8 @@ void heapDestroy(OBJ_HEAP *psHeap)
 	/* Print out where the unfreed objects were allocated */
 	for(psCurrHdr = psHeap->psInUse; psCurrHdr; psCurrHdr=psCurrHdr->psNext)
 	{
-		DBPRINTF(("             %s, line %d\n",
-				psCurrHdr->pFile, psCurrHdr->line));
+		debug(LOG_MEMORY, "heapDestroy unfreed: %s, line %d",
+		      psCurrHdr->pFile, psCurrHdr->line);
 #if COPY_FILE_STRING
 		if (psCurrHdr->pFile)
 		{

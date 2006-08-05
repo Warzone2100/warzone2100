@@ -280,7 +280,7 @@ BOOL treapDel(TREAP *psTreap, UDWORD key)
 	}
 
 	// Release the node
-#ifdef DEBUG
+#ifdef DEBUG_TREAP
 	FREE(psDel->pFile);
 #endif
 	HEAP_FREE(psTreap->psNodes, psDel);

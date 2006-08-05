@@ -16,7 +16,10 @@
 #ifdef DEBUG
 
 #define DEBUG_MALLOC	TRUE
-#define DEBUG_HEAP		TRUE
+#define DEBUG_HEAP	TRUE
+/* Uncomment below for even more debug spam */
+#undef REALLY_DEBUG_HEAP
+#undef REALLY_DEBUG_MALLOC
 
 #else
 
