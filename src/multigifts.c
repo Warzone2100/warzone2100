@@ -1067,7 +1067,7 @@ BOOL deathmatchCheck(VOID)
 
 		strcpy(sTemp, "multiplay\\Forces\\");
 		strcat(sTemp, sForceName);
-		strcat(sTemp,".For");
+		strcat(sTemp,".for");
 		loadForce( sTemp);
 
 		useTheForce(FALSE);

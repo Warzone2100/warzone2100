@@ -149,6 +149,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	char **i, **files;
 
 	mode = bLoad;
+	debug(LOG_WZ, "_addLoadSave(%d, %s, %s, %s)", bLoad, sSearchPath, sExtension, title);
 
 	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
 	{
@@ -278,7 +279,6 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	slotCount = 0;
 
 	strcpy(sPath,sSearchPath);							// setup locals.
-	strcat(sPath, "/");							// setup locals.
 	strcpy(sExt,sExtension);
 
 	debug(LOG_WZ, "_addLoadSave: Searching \"%s\" for savegames", sSearchPath);
@@ -288,7 +288,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	for (i = files; *i != NULL; i++) {
 		W_BUTTON *button;
 
-		if (!strstr(*i, ".gam")) {
+		if (!strstr(*i, sExtension)) {
 			continue;
 		}
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);

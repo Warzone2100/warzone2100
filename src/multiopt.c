@@ -635,7 +635,7 @@ BOOL multiTemplateSetup()
 	{
 		strcpy(sTemp, MultiForcesPath);
 		strcat(sTemp, sForceName);
-		strcat(sTemp,".For");
+		strcat(sTemp,".for");
 
 		loadForce(sTemp);
 //		useTheForce(TRUE);
@@ -887,7 +887,7 @@ static BOOL dMatchInit()
 
 	strcpy(sTemp, "multiplay\\Forces\\");
 	strcat(sTemp, sForceName);
-	strcat(sTemp,".For");
+	strcat(sTemp,".for");
 	loadForce( sTemp);
 
 

@@ -353,7 +353,7 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	pFileHandle = PHYSFS_openWrite(fileName);								// open the file
 	if (!pFileHandle)
 	{
-		debug( LOG_ERROR, "Couldn't open %s", fileName );
+		debug(LOG_ERROR, "saveForce: Couldn't open %s: %s", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 
@@ -363,7 +363,7 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	for(pT = pfForce->pForceTemplates;pT;pT=pT->psNext) count++;			// count templates
 	if (PHYSFS_write( pFileHandle, &count, sizeof(UDWORD), 1 ) != 1)
 	{
-		debug( LOG_ERROR, "Write failed for %s", fileName );
+		debug(LOG_ERROR, "saveForce: Write failed for %s: %s", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 
@@ -371,11 +371,12 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	for(pCount=pfForce->pMembers;pCount;pCount=pCount->psNext) count++;	// count droids
 	if (PHYSFS_write( pFileHandle, &count, sizeof(UDWORD), 1 ) != 1)
 	{
-		debug( LOG_ERROR, "Write failed for %s", fileName );
+		debug(LOG_ERROR, "saveForce: Write failed for %s: %s", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 
 #if 0
+	// This code (and similar below for loadForce) can probably be removed. Commented out pre-GPL era. - Per
 	// old method. save whole template
 	for(pT = pfForce->pForceTemplates;pT;pT=pT->psNext)					// save templates
 	{
@@ -402,15 +403,15 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	{
 		if ( PHYSFS_write( pFileHandle, &(pMember->pTempl->multiPlayerID), sizeof(pMember->pTempl->multiPlayerID), 1 ) != 1 )
 		{
-			debug( LOG_ERROR, "Write failed for %s", fileName );					// force type
+			debug(LOG_ERROR, "saveForce: Write failed for %s: %s", fileName, PHYSFS_getLastError());
 			return FALSE;
 		}
 	}
 #endif
 
-	if ( PHYSFS_close(pFileHandle) != 0 )
+	if (!PHYSFS_close(pFileHandle))
 	{
-		DBERROR(("Close failed for %s", fileName));
+		debug(LOG_ERROR, "saveForce: Close failed for %s: %s", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 	return TRUE;
@@ -431,6 +432,7 @@ BOOL loadForce(char *name)
 	pFileHandle = PHYSFS_openRead(fileName);									// check file exists
 	if (pFileHandle == NULL)
 	{
+		debug(LOG_ERROR, "loadForce: Failed to open %s: %s", fileName, PHYSFS_getLastError());
 		return FALSE;														// failed
 	}
 
@@ -447,14 +449,14 @@ BOOL loadForce(char *name)
 	// load in new force.
 	if ( PHYSFS_read( pFileHandle, &tcount, sizeof(UDWORD), 1 ) != 1 )				// get number of templates
 	{
-		debug( LOG_ERROR, "Read failed for %s", fileName );
+		debug(LOG_ERROR, "loadForce: Read failed for %s: %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(pFileHandle);
 		return FALSE;
 	}
 
 	if ( PHYSFS_read( pFileHandle, &fcount, sizeof(UDWORD), 1 ) != 1 )				// get number of droids in force
 	{
-		debug( LOG_ERROR, "read failed for %s", fileName );
+		debug(LOG_ERROR, "loadForce: read failed for %s: %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(pFileHandle);
 		return FALSE;
 	}
@@ -509,7 +511,7 @@ BOOL loadForce(char *name)
 	{
 		if ( PHYSFS_read( pFileHandle, &ref, sizeof(ref), 1 ) != 1)					// read in a template ref code.
 		{
-			debug( LOG_ERROR, "read failed for %s", fileName );
+			debug(LOG_ERROR, "loadForce: read failed for %s: %s", fileName, PHYSFS_getLastError());
 			PHYSFS_close(pFileHandle);
 			return FALSE;
 		}
@@ -523,9 +525,9 @@ BOOL loadForce(char *name)
 	}
 #endif
 
-	if (PHYSFS_close(pFileHandle) != 0)
+	if (!PHYSFS_close(pFileHandle))
 	{
-		debug( LOG_ERROR, "Close failed for %s", fileName );
+		debug(LOG_ERROR, "loadForce: Close failed for %s", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 	return TRUE;

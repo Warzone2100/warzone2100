@@ -35,8 +35,9 @@ BOOL NETstartLogging()
 
 BOOL NETstopLogging()
 {
-	if (PHYSFS_close(pFileHandle) != 0)
+	if (!PHYSFS_close(pFileHandle))
 	{
+		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
 		return FALSE;
 	}
 	return TRUE;
