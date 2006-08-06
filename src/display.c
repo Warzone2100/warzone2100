@@ -598,13 +598,13 @@ void processInput(void)
 
 	if(mousePressed(MOUSE_WUP))
 	{
-		for (WheelZoomIterator=0;WheelZoomIterator<20;WheelZoomIterator++)
+		for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
 			kf_ZoomIn();
 	}
 
 	if(mousePressed(MOUSE_WDN))
 	{
-		for (WheelZoomIterator=0;WheelZoomIterator<20;WheelZoomIterator++)
+		for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
 			kf_ZoomOut();
 	}
 
