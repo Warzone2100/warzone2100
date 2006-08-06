@@ -8,13 +8,7 @@
 /***************************************************************************/
 
 #include <string.h>
-#ifdef _MSC_VER
-#include <windows.h>  //needed for gl.h!  --Qamly
-#endif
-#include <GL/gl.h>
-#ifdef WIN32
-#include <gl/glext.h>
-#endif
+#include <SDL/SDL_opengl.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
