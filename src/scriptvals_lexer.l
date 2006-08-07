@@ -137,7 +137,7 @@ void scrvSetInputBuffer(UBYTE *pBuffer, UDWORD size)
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;
 
-	/* Reset the lexer incase it's been used before */
+	/* Reset the lexer in case it's been used before */
 	scrv__flush_buffer(YY_CURRENT_BUFFER);
 	inComment = FALSE;
 }
@@ -152,7 +152,7 @@ int scrv_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reched end of file in a comment"));
+		DBERROR(("Warning: reached end of file in a comment"));
 	}
 	return 1;
 }

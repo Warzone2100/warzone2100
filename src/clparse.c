@@ -74,6 +74,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   -<WIDTH>x<HEIGHT> : Set the dimensions of the viewport (screen or window)\n"
 				"   -savegame <NAME> :  Load a saved game\n"
 				"   -help :             Show this help\n"
+				"   -cheat :            Allow cheat mode\n"
 				"   -debug FLAGS :      Show debug for FLAGS\n"
 				"   -debugfile FILE :   Log debug output in FILE\n"
 				"   -datadir DIR :      Set default datadir to DIR\n" 
@@ -124,7 +125,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 {
 	char			*tokenType;
 	char			*token;
-	char			*cl2 = "-secret";
 	unsigned int		w, h;
 	int i = 0, j = 0;
 
@@ -219,10 +219,10 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
-		else if( stricmp( tokenType,cl2) == 0)
+		else if (stricmp(tokenType, "-cheat") == 0)
 		{
-			fprintf(stdout, "CHEAT MODE ACTIVATED!!\n");
-			bAllowDebugMode =TRUE;
+			fprintf(stdout, "  ** CHEAT MODE PERMITTED! **\n");
+			bAllowDebugMode = TRUE;
 		}
 		else if( sscanf(tokenType,"-%ix%i", &w, &h) == 2)
 		{

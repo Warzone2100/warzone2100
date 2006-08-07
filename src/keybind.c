@@ -1198,18 +1198,15 @@ void	kf_TogglePowerBar( void )
 /* Toggles whether we process debug key mappings */
 void	kf_ToggleDebugMappings( void )
 {
-
 #ifndef DEBUG
-if(bMultiPlayer && (NetPlay.bComms != 0) )
-{
-	return;
-}
+	// Prevent cheating in multiplayer when not compiled in debug mode
+	if (bMultiPlayer && (NetPlay.bComms != 0))
+	{
+		return;
+	}
 #endif
 
-
-#ifndef DEBUG
-	if(bAllowDebugMode)
-#endif
+	if (bAllowDebugMode)
 	{
 		if(getDebugMappingStatus())
 		{
@@ -1228,8 +1225,6 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 		{
 			sendTextMessage("Presses Debug. CHEAT",TRUE);
 		}
-
-
 	}
 }
 // --------------------------------------------------------------------------

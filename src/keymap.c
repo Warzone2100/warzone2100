@@ -282,7 +282,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 
 	// ********************************* ALL THE MAPPINGS ARE NOW IN ORDER, PLEASE ****
 	// ********************************* DO NOT REORDER THEM!!!!!! ********************
-	// PLEASE DON'T TOUCH THIS WITHOUT ASKING ALEX M FIRST...:-)
 	/* ALL OF THIS NEEDS TO COME IN OFF A USER CUSTOMISABLE TEXT FILE */
 	//                                **********************************
 	//                                **********************************
@@ -297,7 +296,6 @@ void	keyInitMappings( BOOL bForceDefaults )
   	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F8,KEYMAP_PRESSED,kf_ToggleConsole,			strresGetString(psStringRes,STR_BIND_TOGCON));
   	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F9,KEYMAP_PRESSED,kf_ToggleEnergyBars,			strresGetString(psStringRes,STR_BIND_BARS));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F10,KEYMAP_PRESSED,kf_ScreenDump,				strresGetString(psStringRes,STR_BIND_SHOT));
-//	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F10,KEYMAP_PRESSED,kf_ScreenDump,				strresGetString(psStringRes,STR_BIND_SHOT));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F11,KEYMAP_PRESSED,kf_ToggleFormationSpeedLimiting,			strresGetString(psStringRes,STR_BIND_SPLIM));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F12,KEYMAP_PRESSED,kf_MoveToLastMessagePos, strresGetString(psStringRes,STR_BIND_PREV));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_F12,KEYMAP_PRESSED,kf_ToggleSensorDisplay,"Toggle Sensor display"); //Which key should we use? --Re enabled see below! -Q 5-10-05
@@ -424,13 +422,11 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,strresGetString(psStringRes,STR_BIND_SELCYBORG));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
 
-#ifndef DEBUG
-if(bAllowDebugMode)
-{
-#endif
+	if (bAllowDebugMode)
+	{
 	// NOTE THIS!!!!!!!
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,				"Make all items available");
-	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_FORWARDSLASH,KEYMAP_PRESSED,kf_ToggleDebugMappings,"TOGGLE Debug Mappings");
+	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_SCROLLLOCK,KEYMAP_PRESSED,kf_TogglePauseMode,	strresGetString(psStringRes,STR_BIND_PAUSE));
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_MaxScrollLimits,				"Maximum scroll limits");
@@ -462,9 +458,7 @@ if(bAllowDebugMode)
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
-#ifndef DEBUG
-}
-#endif
+	}
 
 	saveKeyMap();	// save out the default key mappings.
 
