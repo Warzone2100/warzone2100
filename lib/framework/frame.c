@@ -24,7 +24,7 @@
 
 #include "fractions.h"
 #include <assert.h>
-#include "cursors.c"
+#include "cursors.h"
 
 #include "SDL_framerate.h"
 
