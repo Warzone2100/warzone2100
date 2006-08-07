@@ -33,7 +33,7 @@ More difficult:
 - Improve loading of data / dataformat. Should be possible to load all maps
     in all techlevels for campaign as well as multiplay mode. This would hopefully
     fix those bugs where maps are missing or the campaign breaks because of maps.
-    Would involve mdofication of data and YaCC/Lex files.
+    Would involve modification of data and YaCC/Lex files.
 
 - [network] Rewrite the system how Warzone handles networking.
     New system should be more stable (no out of sync bugs)

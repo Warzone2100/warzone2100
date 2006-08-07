@@ -3,8 +3,6 @@ xxxx-xx-xx: Version 2.0.4
    * Desktopmenu entry for Linux (AutoPackage/Debian package)
    * You can see what your allies see (in multiplayer mode)
    * Different minimap modes (backported from 0.2.3)
-   * Logfile shows revision and version
-   * Warzone is a full Windows app now. Debug output goes to stdout.txt/stderr.txt
    * Fix crash when not properly creating the write dir on Windows
    * Fix crash when using uppercase savegame names on Linux
    * Several security fixes
@@ -17,6 +15,9 @@ xxxx-xx-xx: Version 2.0.4
    * Warzone uses AI from original version 1.10
    * AI reacts faster and builds stronger and more high-tech things
    * Fixed a bug which prevented the AI from creating oil derricks
+ * Debugging:
+   * Logfile shows revision and version
+   * Warzone is now a full Windows app. Debug output goes to stdout.txt/stderr.txt
  * Build system:
    * Makefile.raw system improved. Works without sh/MSys now.
 
