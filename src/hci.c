@@ -828,18 +828,8 @@ BOOL intInitialise(void)
 	objectsChanged = FALSE;
 
 	//set the default colours to be used for drawing outlines in 2D
-//	outlineOK = screenGetCacheColour(0xff,0xff,0xff);
-//	outlineNotOK = screenGetCacheColour(0xff,0x00,0x00);
 	outlineOK = iV_PaletteNearestColour(0xff,0xff,0xff);
 	outlineNotOK = iV_PaletteNearestColour(0xff,0x00,0x00);
-
-//	// Setup the power bar graph colours.
-//	PBarColour1 = screenGetCacheColour(255,0,0);	// Power used.
-//	PBarColour2 = screenGetCacheColour(255,255,0);	// Power available.
-//	PBarColour3 = screenGetCacheColour(200,0,0);	// Power needed to manufacture.
-
-
-
 
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();

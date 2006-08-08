@@ -109,16 +109,12 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 		(*ppsWidget)->display = barGraphDisplay;
 	}
 	/* Set the major colour */
-//	(*ppsWidget)->majorCol = screenGetCacheColour(psInit->sCol.red,
-//											psInit->sCol.green, psInit->sCol.blue);
 	(*ppsWidget)->majorCol = (UBYTE)pal_GetNearestColour(psInit->sCol.red,
 															psInit->sCol.green, psInit->sCol.blue);
 
 	/* Set the minor colour if necessary */
 	if (psInit->style & WBAR_DOUBLE)
 	{
-//		(*ppsWidget)->minorCol = screenGetCacheColour(psInit->sMinorCol.red,
-//												psInit->sMinorCol.green, psInit->sMinorCol.blue);
 		(*ppsWidget)->majorCol = (UBYTE)pal_GetNearestColour(psInit->sMinorCol.red,
 												psInit->sMinorCol.green, psInit->sMinorCol.blue);
 	}

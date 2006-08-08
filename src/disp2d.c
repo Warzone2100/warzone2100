@@ -6,6 +6,38 @@
  */
 #ifdef DISP2D
 
+/* 
+ * In order to reintroduce the 2D map editor, we will have to rewrite the
+ * graphics code almost completely. It used a previous iteration of their
+ * graphics interface. Although portions of it may still be in commented
+ * out portions of the original source release, it is of doubtful value. 
+ * Better to port it to the new interface and OpenGL. - Per
+ */
+
+/* Blit a tile (rectangle) from the surface
+ * to the back buffer at the given location.
+ * The tile is specified by it's size and number, numbering
+ * across from top left to bottom right.
+ * The blit is clipped to the screen size.
+ */
+/*
+extern void screenBlitTile(SDWORD destX, SDWORD destY,  // The location on screen
+                                LPDIRECTDRAWSURFACE4 psSurf,            // The surface to blit from
+                                UDWORD  width, UDWORD height,   // The size of the tile
+                                UDWORD  tile);
+*/
+
+/* Blit the source rectangle of the surface
+ * to the back buffer at the given location.
+ * The blit is clipped to the screen size.
+ */
+/*
+extern void screenBlit(SDWORD destX, SDWORD destY,              // The location on screen
+                                LPDIRECTDRAWSURFACE4 psSurf,            // The surface to blit from
+                                UDWORD  srcX, UDWORD srcY,
+                                UDWORD  width, UDWORD height);  // The source rectangle from the surface
+*/
+
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>

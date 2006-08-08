@@ -318,10 +318,6 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 	for(RectI=0; RectI<5; RectI++) {
 		Rect = &Frame->FRect[RectI];
 
-//		if(Opaque==FALSE) {
-//			screenSetFillCacheColour(Rect->ColourIndex);
-//		}
-
 		switch(Rect->Type) {
 			case FR_FRAME:
 				if(Opaque==FALSE)

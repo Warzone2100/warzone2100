@@ -595,13 +595,3 @@ void pie_D3DSetupRenderForFlip(SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWO
 	gSrcStride		= srcStride;
 	return;
 }
-
-void pie_D3DRenderForFlip(void)
-{
-	if (pgSrcData != NULL)
-	{
-		pie_RenderImageToSurface(screenGetSurface(), gSurfaceOffsetX, gSurfaceOffsetY, pgSrcData, gSrcWidth, gSrcHeight, gSrcStride);
-		pgSrcData = NULL;
-	}
-}
-

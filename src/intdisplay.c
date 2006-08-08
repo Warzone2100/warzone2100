@@ -180,7 +180,6 @@ static SDWORD ButtonDrawXOffset;
 static SDWORD ButtonDrawYOffset;
 
 
-//static UDWORD DisplayQuantity = 1;
 //static SDWORD ActualQuantity = -1;
 
 
@@ -2168,32 +2167,10 @@ void intDisplaySlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 	iV_DrawTransImage(IntImages,IMAGE_SLIDER_BACK,x+STAT_SLD_OX,y+STAT_SLD_OY);
 
-/*	x0 = (SWORD)(Slider->x + xOffset + Slider->barSize/2);
-	y0 = (SWORD)(Slider->y + yOffset + Slider->height/2);
-	x1 = (SWORD)(x0 + Slider->width - Slider->barSize);
-	screenSetLineCacheColour(*(pColours + WCOL_DARK));
-	screenDrawLine(x0,y0, x1,y0);
-*/
-
-
-//#ifndef PSX
 	sx = (SWORD)((Slider->width - Slider->barSize)
 	 			 * Slider->pos / Slider->numStops);
-//#else
-//	iV_SetOTIndex_PSX(iV_GetOTIndex_PSX()-1);
-//	sx = (SWORD)((Slider->width-12 - Slider->barSize)
-//	 			 * Slider->pos / Slider->numStops)+4;
-//#endif
 
 	iV_DrawTransImage(IntImages,IMAGE_SLIDER_BUT,x+sx,y-2);
-
-//#ifdef PSX
-//	AddCursorSnap(&InterfaceSnap,
-//					x+iV_GetImageCenterX(IntImages,IMAGE_SLIDER_BACK),
-//					y+iV_GetImageCenterY(IntImages,IMAGE_SLIDER_BACK),
-//					psWidget->formID,psWidget->id,NULL);
-//#endif
-	//DisplayQuantity = Slider->pos + 1;
 }
 
 

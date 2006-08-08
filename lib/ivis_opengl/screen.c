@@ -10,6 +10,10 @@
 #define XMD_H
 #endif
 
+/* Free up a COM object */
+#undef RELEASE
+#define RELEASE(x) if ((x) != NULL) {(void)(x)->lpVtbl->Release(x); (x) = NULL;}
+
 #include <stdio.h>
 #ifndef _MSC_VER		//um.. can't find this in win32?  ..Bah, compiler specific crud.
 #include <stdint.h>
@@ -50,22 +54,8 @@ UDWORD		screenDepth = 0;
 
 SDL_Surface     *screen;
 
-/* The current screen mode (full screen/windowed) */
-SCREEN_MODE		screenMode = SCREEN_WINDOWED;
-
-/* Which mode (of operation) the library is running in */
-DISPLAY_MODES	displayMode;
-
 /* The Front and back buffers */
 LPDIRECTDRAWSURFACE4	psFront = NULL;
-/* The back buffer is not static to give a back door to display routines so
- * they can get at the back buffer directly.
- * Mainly did this to link in Sam's 3D engine.
- */
-LPDIRECTDRAWSURFACE4	psBack = NULL;
-
-/* The palette for palettised modes */
-//static LPDIRECTDRAWPALETTE	psPalette = NULL;
 
 /* The actual palette entries for the display palette */
 #define PAL_MAX				256
@@ -209,9 +199,6 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 
 		if (fullScreen) {
 			video_flags |= SDL_FULLSCREEN;
-			screenMode = SCREEN_FULLSCREEN;
-		} else {
-			screenMode = SCREEN_WINDOWED;
 		}
 
 		screen = SDL_SetVideoMode(width, height, bpp, video_flags);
@@ -246,73 +233,10 @@ void screenShutDown(void)
 	}
 }
 
-BOOL screenReInit( void )
-{
-	BOOL	bFullScreen;
-
-	if ( screenMode == SCREEN_FULLSCREEN )
-	{
-		bFullScreen = TRUE;
-	}
-	else
-	{
-		bFullScreen = FALSE;
-	}
-
-	screenShutDown();
-
-	return screenInitialise( screenWidth, screenHeight, screenDepth, bFullScreen,
-				 g_bVidMem, TRUE, hWndMain );
-}
-
 /* Return a pointer to the back buffer surface */
 LPDIRECTDRAWSURFACE4 screenGetSurface(void)
 {
-	return psBack;
-}
-
-/* Return a bit depth of the Front buffer */
-UDWORD screenGetFrontBufferBitDepth(void)
-{
-	return screen->format->BitsPerPixel;
-}
-
-/* Return a pixel masks of the Front buffer */
-BOOL screenGetFrontBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask)
-{
-	*amask = screen->format->Amask;
-	*rmask = screen->format->Rmask;
-	*gmask = screen->format->Gmask;
-	*bmask = screen->format->Bmask;
-	return TRUE;
-}
-
-/* Return a bit depth of the Back buffer */
-UDWORD screenGetBackBufferBitDepth(void)
-{
-	return screen->format->BitsPerPixel;
-}
-
-/* Return a pixel masks of the Back buffer */
-BOOL screenGetBackBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gmask, ULONG *bmask)
-{
-	*amask = screen->format->Amask;
-	*rmask = screen->format->Rmask;
-	*gmask = screen->format->Gmask;
-	*bmask = screen->format->Bmask;
-	return TRUE;
-}
-
-/*
- * screenRestoreSurfaces
- *
- * Restore the direct draw surfaces if they have been lost.
- *
- * This is only used internally within the library.
- */
-void screenRestoreSurfaces(void)
-{
-	/* nothing to do */
+	return NULL;
 }
 
 void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height)
@@ -638,63 +562,10 @@ glEnd();
 	glEnd();
 }
 
-void screen_SetFogColour(UDWORD newFogColour)
-{
-	UDWORD red, green, blue;
-	static UDWORD currentFogColour = 0;
-
-	if (newFogColour != currentFogColour)
-	{
-
-		if (screen->format->BitsPerPixel == 16)//only set in 16 bit modes
-		{
-			if (screen->format->Gmask == 0x07e0)//565
-			{
-				red = newFogColour >> 8;
-				red &= screen->format->Rmask;
-				green = newFogColour >> 5;
-				green &= screen->format->Gmask;
-				blue = newFogColour >> 3;
-				blue &= screen->format->Bmask;
-				fogColour = red + green + blue;
-			}
-			else if (screen->format->Gmask == 0x03e0)//555
-			{
-				red = newFogColour >> 9;
-				red &= screen->format->Rmask;
-				green = newFogColour >> 6;
-				green &= screen->format->Gmask;
-				blue = newFogColour >> 3;
-				blue &= screen->format->Bmask;
-				fogColour = red + green + blue;
-			}
-		}
-		currentFogColour = newFogColour;
-	}
-	return;
-}
-
 /* Swap between windowed and full screen mode */
 void screenToggleMode(void)
 {
-
-	if ((displayMode == MODE_WINDOWED) || (displayMode == MODE_FULLSCREEN))
-	{
-		/* The framework can only run in the current screen mode */
-		return;
-	}
-
-	if (SDL_WM_ToggleFullScreen(screen))
-	{
-		if (screenMode == SCREEN_WINDOWED)
-		{
-			screenMode = SCREEN_FULLSCREEN;
-		}
-		else if (screenMode == SCREEN_FULLSCREEN)
-		{
-			screenMode = SCREEN_WINDOWED;
-		}
-	}
+	(void) SDL_WM_ToggleFullScreen(screen);
 }
 
 #define BUFFER_SIZE 4096
@@ -794,216 +665,6 @@ void screenDoDumpToDiskIfRequired()
 	jpeg_destroy_compress(&cinfo);
 }
 
-
-/* Swap between windowed and full screen mode */
-BOOL screenToggleVideoPlaybackMode(void)
-{
-#if 0
-	HRESULT				ddrval;
-	DDSURFACEDESC2		ddsd;		// Direct Draw surface description
-#if !FULL_SCREEN_SYSTEM
-	DDSCAPS				ddscaps;
-#endif
-
-	if ((displayMode == MODE_WINDOWED) || (displayMode == MODE_FULLSCREEN))
-	{
-		/* The framework can only run in the current screen mode */
-		return TRUE;
-	}
-
-	if (screenMode == SCREEN_WINDOWED)
-	{
-		return TRUE;
-	}
-
-	if (screenMode == SCREEN_FULLSCREEN)
-	{
-		screenDepth = 16;
-		screenMode = SCREEN_FULLSCREEN_VIDEO;
-		RELEASE(psPalette);
-	}
-	else if (screenMode == SCREEN_FULLSCREEN_VIDEO)
-	{
-		screenDepth = 8;
-		screenMode = SCREEN_FULLSCREEN;
-	}
-
-	RELEASE(psBack);
-	RELEASE(psFront);
-
-	/* Set the display mode */
-	ddrval = psDD->lpVtbl->SetDisplayMode(
-				psDD,
-				screenWidth, screenHeight, screenDepth,
-				0,0);		// Set these so the DD1 version is used
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Set display mode failed:\n%s", DDErrorToString(ddrval)));
-		return FALSE;
-	}
-
-#if FULL_SCREEN_SYSTEM
-	/* Create the Primary Surface. */
-	memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
-	ddsd.dwSize = sizeof(DDSURFACEDESC2);
-	ddsd.dwFlags = DDSD_CAPS;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
-	ddrval = psDD->lpVtbl->CreateSurface(
-					psDD,
-					&ddsd,
-					&psFront,
-					NULL);
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Create Primary Surface failed:\n%s", DDErrorToString(ddrval)));
-		return FALSE;
-	}
-
-	//copy the palette
-	memset(&sFrontBufferPixelFormat, 0, sizeof(DDPIXELFORMAT));
-	sFrontBufferPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-	ddrval = psFront->lpVtbl->GetPixelFormat(
-				psFront,
-				&sFrontBufferPixelFormat);
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Couldn't get pixel format:\n%s",
-					DDErrorToString(ddrval)));
-		return FALSE;
-	}
-
-	/* Create the back buffer */
-	memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
-	ddsd.dwSize = sizeof(DDSURFACEDESC2);
-	ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
-	ddsd.dwWidth = screenWidth;
-	ddsd.dwHeight = screenHeight;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
-	/* Force the back buffer into system memory unless flag set */
-	if ( !g_bVidMem )
-	{
-		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
-	}
-	ddrval = psDD->lpVtbl->CreateSurface(
-				psDD,
-				&ddsd,
-				&psBack,
-				NULL);
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Create Back surface failed:\n%s", DDErrorToString(ddrval)));
-		return FALSE;
-	}
-#else
-	/* Create the Primary Surface. */
-	memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
-	ddsd.dwSize = sizeof(DDSURFACEDESC2);
-	ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_COMPLEX | DDSCAPS_FLIP;
-
-	ddsd.dwBackBufferCount = 1;	// Use 2 for triple buffering, 1 for double
-
-	ddrval = psDD->lpVtbl->CreateSurface(
-					psDD,
-					&ddsd,
-					&psFront,
-					NULL);
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Create Primary Surface failed:\n%s", DDErrorToString(ddrval)));
-		return FALSE;
-	}
-
-	//copy the palette
-	memset(&sFrontBufferPixelFormat, 0, sizeof(DDPIXELFORMAT));
-	sFrontBufferPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-	ddrval = psFront->lpVtbl->GetPixelFormat(
-				psFront,
-				&sFrontBufferPixelFormat);
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Couldn't get pixel format:\n%s",
-					DDErrorToString(ddrval)));
-		return FALSE;
-	}
-
-	/* Get the back buffer */
-	memset(&ddscaps, 0, sizeof(DDSCAPS));
-	ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
-	ddrval = psFront->lpVtbl->GetAttachedSurface(
-				psFront,
-				&ddscaps,
-				&psBack);
-	if (ddrval != DD_OK)
-	{
-		DBERROR(("Get Back surface failed:\n%s", DDErrorToString(ddrval)));
-		return FALSE;
-	}
-#endif
-	/* If we are in a palettised mode, create a palette */
-	if (screenDepth == PALETTISED_BITDEPTH)
-	{
-		/* Create the palette from the stored palette entries */
-		ddrval = psDD->lpVtbl->CreatePalette(
-						psDD,
-						DDPCAPS_8BIT,
-						asPalEntries,
-						&psPalette,
-						NULL);
-		if (ddrval != DD_OK)
-		{
-			DBERROR(("Failed to create palette:\n%s", DDErrorToString(ddrval)));
-			return FALSE;
-		}
-
-		/* Assign the palette to the front buffer */
-		ddrval = psFront->lpVtbl->SetPalette(psFront, psPalette);
-		if (ddrval != DD_OK)
-		{
-			DBERROR(("Couldn't set palette for front buffer:\n%s",
-						DDErrorToString(ddrval)));
-		}
-
-		/* Assign the palette to the back buffer */
-		ddrval = psFront->lpVtbl->SetPalette(psBack, psPalette);
-		if (ddrval != DD_OK)
-		{
-			DBERROR(("Couldn't set palette for back buffer:\n%s",
-						DDErrorToString(ddrval)));
-		}
-	}
-
-#endif
-	return TRUE;
-}
-
-SCREEN_MODE screenGetMode( void )
-{
-	return screenMode;
-}
-
-/* Set screen mode */
-void screenSetMode(SCREEN_MODE mode)
-{
-	/* If the mode is the same as the current one, don't have to do
-	 * anything.  Otherwise toggle the mode.
-	 */
-	if (mode != screenMode)
-	{
-		screenToggleMode();
-	}
-}
-
-/* In full screen mode flip to the GDI buffer.
- * Use this if you want the user to see any GDI output.
- * This is mainly used so that ASSERTs and message boxes appear
- * even in full screen mode.
- */
-void screenFlipToGDI(void)
-{
-	/* do nothing */
-}
-
 /* Set palette entries for the display buffer
  * first specifies the first palette entry. count the number of entries
  * The psPalette should have at least first + count entries in it.
@@ -1044,38 +705,6 @@ void screenSetPalette(UDWORD first, UDWORD count, PALETTEENTRY *psEntries)
         }
 
         SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, asPalEntries + first, first, count);
-}
-
-/* Return the best colour match when in a palettised mode */
-UBYTE screenGetPalEntry(UBYTE red, UBYTE green, UBYTE blue)
-{
-	UDWORD	i, minDist, dist;
-	UDWORD	redDiff,greenDiff,blueDiff;
-	UBYTE	colour;
-
-	ASSERT((screen->format->BitsPerPixel == 8,
-		"screenSetPalette: not in a palettised mode"));
-
-	minDist = 0xff*0xff*0xff;
-	colour = 0;
-	for(i = 0; i < PAL_MAX; i++)
-	{
-		redDiff = asPalEntries[i].r - red;
-		greenDiff = asPalEntries[i].g - green;
-		blueDiff = asPalEntries[i].b - blue;
-		dist = redDiff*redDiff + greenDiff*greenDiff + blueDiff*blueDiff;
-		if (dist < minDist)
-		{
-			minDist = dist;
-			colour = (UBYTE)i;
-		}
-		if (minDist == 0)
-		{
-			break;
-		}
-	}
-
-	return colour;
 }
 
 char* screenDumpToDisk(char* path) {

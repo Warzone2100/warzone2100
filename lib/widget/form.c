@@ -78,15 +78,6 @@ static void formSetDefaultColours(W_FORM *psForm)
 		psForm->aColours[WCOL_DISABLE]   = wcol_disable;
 
 	}
-//old colours ??
-//	psForm->aColours[WCOL_BKGRND] = screenGetCacheColour(0xbf,0xbf,0xbf);
-//	psForm->aColours[WCOL_TEXT] = -1;	// use bmp colours  was screenGetCacheColour(0,0,0);
-//	psForm->aColours[WCOL_LIGHT] = screenGetCacheColour(0xff,0xff,0xff);
-//	psForm->aColours[WCOL_DARK] = screenGetCacheColour(0,0,0);
-//	psForm->aColours[WCOL_HILITE] = screenGetCacheColour(0x44,0x44,0x44);
-//	psForm->aColours[WCOL_CURSOR] = screenGetCacheColour(0xff,0,0);
-//	psForm->aColours[WCOL_TIPBKGRND] = screenGetCacheColour(50,50,100); //was screenGetCacheColour(0xcc,0xcc,0xcc);
-//	psForm->aColours[WCOL_DISABLE] = screenGetCacheColour(0x7f,0x7f,0x7f);
 }
 
 /* Create a plain form widget */
@@ -736,7 +727,6 @@ void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
 		ASSERT((FALSE, "widgSetColour: Colour id out of range"));
 		return;
 	}
-//	psForm->aColours[colour] = screenGetCacheColour(red,green,blue);
 	psForm->aColours[colour] = (UBYTE)pal_GetNearestColour(red,green,blue);
 }
 
@@ -1634,7 +1624,6 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	if(psForm->pFormDisplay) {
 		psForm->pFormDisplay((WIDGET *)psForm, xOffset, yOffset, psForm->aColours);
 	} else {
-	//	screenSetLineColour(0,0,0);
 		/* Draw the form outline */
 		if (!(psForm->style & WFORM_INVISIBLE))
 		{
