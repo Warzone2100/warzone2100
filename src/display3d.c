@@ -99,43 +99,17 @@
 #define min(a,b) (((a)<(b))?(a):(b))
 #endif
 
-#define SPOTLIGHT
-
-#define ENABLE_WATER			// Enable transparent water.
 #define WATER_TILE 17			// ID of water tile.
 #define BED_TILE 5				// ID of river bed tile.
-//#define ADDITIVE_WATER	1		// Additive transparency on water ( 1 = YES ).
-
-#if(ADDITIVE_WATER)
-#define WATER_TRANS_MODE pie_ADDITIVE		// Transparency mode for water (pie_TRANSLUCENT or pie_ADDITIVE)
 #define WATER_ALPHA_LEVEL 255 //was 164	// Amount to alpha blend water.
-#else
-#define WATER_TRANS_MODE pie_TRANSLUCENT	// Transparency mode for water (pie_TRANSLUCENT or pie_ADDITIVE)
-#define WATER_ALPHA_LEVEL 255	// Amount to alpha blend water.
-#endif
 #define WATER_ZOFFSET 32		// Sorting offset for main water tile.
 #define WATER_EDGE_ZOFFSET 64	// Sorting offset for water edge tiles.
 #define WATER_DEPTH	127			// Amount to push terrain below water.
 
-
-static UWORD WaterTileID = WATER_TILE;
-static UWORD RiverBedTileID = BED_TILE;
-static FRACT	waterRealValue = (FRACT)0;
-//static SDWORD	waterAlphaValue = 168;//jps 15Apr99 for d3d only
-#define WAVE_SPEED 4
-static SWORD vOffset = 1;
-#define	MAX_FIRE_STAGE	32
-static FRACT	separation=(FRACT)0;
-static SDWORD	acceleration=0;
-static SDWORD	heightSpeed=0;
-static FRACT	aSep;
-static SDWORD	aAccel = 0;
-static SDWORD	aSpeed = 0;
-
-UDWORD	barMode=BAR_FULL;
+/********************  Prototypes  ********************/
+// TODO: Declare as many static as possible.
 
 
-//remove this~!
 UDWORD	getTargettingGfx( void );
 void	drawDroidGroupNumber(DROID *psDroid);
 void	toggleEnergyBars( void );
@@ -146,7 +120,6 @@ void	setViewDistance(UDWORD dist);
 void	getDefaultColours( void );
 void	renderSky(void);
 void	showShadePalette( void );
-/* Function prototypes:- */
 void	pie_MatScale( UDWORD percent );
 void	screenSlideDown( void );
 void	locateMouse(void);
@@ -205,94 +178,106 @@ static	void	doConstructionLines( void );
 void	showDroidSelection( DROID *psDroid );
 void	renderDefensiveStructure(STRUCTURE *psStructure);
 void	drawDeliveryPointSelection(void);
-
-
-//#ifdef ALEXM
-//BOOL	bDrawBlips=TRUE;
-//BOOL	bDrawProximitys=FALSE;
-//#else
 BOOL	bDrawBlips=TRUE;
 BOOL	bDrawProximitys=TRUE;
-//#endif
 void	setBlipDraw(BOOL val);
 void	setProximityDraw(BOOL val);
 BOOL	godMode;
-/* Info for Kev.. */
-BOOL bDullInfo = FALSE;
-UDWORD	texPage = 0;
-/* Module variables - need to be wrapped up into specific structures*/
+
+
+/********************  Variables  ********************/
+// Should be cleaned up properly and be put in structures.
+
+static UWORD WaterTileID = WATER_TILE;
+static UWORD RiverBedTileID = BED_TILE;
+static FRACT waterRealValue = (FRACT)0;
+#define WAVE_SPEED 4
+static SWORD vOffset = 1;
+#define	MAX_FIRE_STAGE	32
+static FRACT	separation=(FRACT)0;
+static SDWORD	acceleration=0;
+static SDWORD	heightSpeed=0;
+static FRACT	aSep;
+static SDWORD	aAccel = 0;
+static SDWORD	aSpeed = 0;
+
+UDWORD	barMode = BAR_FULL; // configured in configuration.c
+
 /* Is the scene spinning round - just for showcase stuff */
 BOOL	spinScene = FALSE;
+
 /* Initial 3D world origins */
 UDWORD	mapX=45,mapY=80;
+
 /* Have we made a selection by clicking the mouse - used for dragging etc */
 BOOL	selectAttempt = FALSE;
+
 /* Vectors that hold the player and camera directions and positions */
 iView	player, camera;
+
 /* Temporary rotation vectors to store rotations for droids etc */
 iVector	imdRot,imdRot2;
+
 /* How far away are we from the terrain */
 UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
+
 /* Are we outlining the terrain tile triangles */
 UDWORD		terrainOutline = FALSE;
-/* Stores the screen coordinates of the transformed terrain tiles */
-//PIEVERTEX		tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
+/* Stores the screen coordinates of the transformed terrain tiles */
 SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Stores the tilepointers for rendered tiles */
 TILE_BUCKET		tileIJ[LAND_YGRD][LAND_XGRD];
+
 /* File size - used for any loads. Move to another specific file handling module? */
 SDWORD		fileSize;
+
 /* Stores the texture for a specific tile */
 static	iTexture texturePage = {6, 64, 64, NULL};
+
 /* Points for flipping the texture around if the tile is flipped or rotated */
 extern POINT 	sP1,sP2,sP3,sP4;
 extern POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
+
 /* Pointer to which tile the mouse is currently over */
 MAPTILE	*tile3dOver = NULL;
+
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD	mouseTileX,mouseTileY;
+
 /* World coordinates that the mouse is over */
 UDWORD	tile3dX,tile3dY;
+
 /* Offsets for the screen being shrunk/expanded - how far in, how far down */
 UDWORD	xOffset=CLIP_BORDER,yOffset=CLIP_BORDER;
+
 /* Do we want the radar to be rendered */
 BOOL	radarOnScreen=FALSE;
+
 /* Show unit/building gun/sensor range*/
-BOOL  rangeOnScreen=FALSE;  // For now, most likely will change later!  -Q 5-10-05
-/* Are we highlighting a tile area - used for building placement */
-BOOL	tileHighlight = TRUE;
-/* Current cursur design */
-UDWORD	cursor3D = IDC_DEFAULT;
+BOOL  rangeOnScreen = FALSE;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
+
 /* Temporary values for the terrain render - top left corner of grid to be rendered */
 int32 playerXTile, playerZTile, rx, rz;
-/* Is gouraud shading currently enabled? */
-BOOL	gouraudShading = TRUE;
+
 /* Have we located the mouse? */
 BOOL	mouseLocated = TRUE;
-/* Index so we know how to find the tile BEHIND the one currently being processed for any view angle */
-UDWORD	stepIndex;
+
 /* The box used for multiple selection - present screen coordinates */
 /* The game palette */
 iPalette	gamePal;
-BOOL	done3dfxRadar = FALSE;
 UDWORD	currentGameFrame;
-UDWORD	numTiles = 0;
-SDWORD	tileZ = 8000;
-UDWORD	demoTextPage = 0;
-BOOL	updateVideoCard = FALSE;
-QUAD	dragQuad;
-//BOOL	bScreenClose = FALSE;
-//UDWORD	screenCloseState = SC_INACTIVE;
-//UDWORD	closingTimeStart;
-SDWORD	skyShift;
+static UDWORD	numTiles = 0;
+static SDWORD	tileZ = 8000;
+static QUAD	dragQuad;
 UDWORD	cameraHeight = 400;
 //UDWORD	averageHeight;
+
 // The maximum number of points for flattenImd
 #define MAX_FLATTEN_POINTS	 255
 static iVector	alteredPoints[MAX_FLATTEN_POINTS];
-UBYTE	glowValue = 192;
+
 //number of tiles visible
 UDWORD	visibleXTiles;
 UDWORD	visibleYTiles;
@@ -301,59 +286,55 @@ UDWORD	terrainMidY;
 UDWORD	terrainMaxX;
 UDWORD	terrainMaxY;
 
-UDWORD	underwaterTile = WATER_TILE;
-UDWORD	rubbleTile = 67;//WATER_TILE;
+static UDWORD	underwaterTile = WATER_TILE;
+static UDWORD	rubbleTile = 67;//WATER_TILE;
 
 UDWORD geoOffset;
 static	UDWORD	numTilesAveraged;
 static	UDWORD	averageCentreTerrainHeight;
-//static	UDWORD	effectsProcessed = 0;
-
 static	BOOL	bReloadBars = TRUE;
 static	BOOL	bEnergyBars = TRUE;
 static	BOOL	bTinyBars	= FALSE;
 static	MAPTILE	edgeTile;
-// THIS HAS GOT TO BE UPDATED EACH TIME
-//static char disclaimer[]="v e r s i o n g i v e n t o q a";
-// THIS HAS GOT TO BE UPDATED EACH TIME
 
-UDWORD	lastTargetAssignation = 0;
-UDWORD	lastDestAssignation = 0;
+static UDWORD	lastTargetAssignation = 0;
+static UDWORD	lastDestAssignation = 0;
 
-BOOL	bSensorTargetting = FALSE;
-BOOL	bDestTargetting = FALSE;
-//DROID	*psSensorDroid = NULL;
-BASE_OBJECT *psSensorObj = NULL;
-UDWORD	destTargetX,destTargetY;
-UDWORD	destTileX=0,destTileY=0;
+static BOOL	bSensorTargetting = FALSE;
+static BOOL	bDestTargetting = FALSE;
+static BASE_OBJECT *psSensorObj = NULL;
+static UDWORD	destTargetX,destTargetY;
+static UDWORD	destTileX=0,destTileY=0;
 
 #define	TARGET_TO_SENSOR_TIME	((4*(GAME_TICKS_PER_SEC))/5)
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
-
 
 //this is used to 'highlight' the tiles when selecting a location for a structure
 #define FOUNDATION_TEXTURE		22
 #define EFFECT_DELIVERY_POINT_TRANSPARENCY		128
 
-unsigned char	buildInfo[255];
-UDWORD GetCameraDistance(void)
+static char buildInfo[255];
+
+typedef struct	_defaultColours
 {
-	return distance;
-}
+	UBYTE red, green, blue, yellow, purple, white, black, cyan;
+} DEF_COLOURS;
 
 /* Colour strobe values for the strobing drag selection box */
 UBYTE	boxPulseColours[BOX_PULSE_SIZE] = {233,232,231,230,229,228,227,226,225,224};
 UDWORD	lightLevel=12;
 UDWORD	tCon,tIgn,tCal;
-
-typedef struct	_defaultColours
-{
-UBYTE	red,green,blue,yellow,purple,white,black,cyan;
-} DEF_COLOURS;
-
 DEF_COLOURS	defaultColours;
-
 SDWORD	pitch;
+
+
+/********************  Functions  ********************/
+
+
+UDWORD GetCameraDistance(void)
+{
+	return distance;
+}
 
 void	displayMultiChat( void )
 {
@@ -887,7 +868,6 @@ void drawTiles(iView *camera, iView *player)
 					TileIllum = psTile->inRange;
 				}
 
-#ifdef ENABLE_WATER
 					TextNum = (UWORD)(psTile->texture & TILE_NUMMASK);
 					IsWaterTile = (TERRAIN_TYPE(psTile) == TER_WATER);
 					// If it's the main water tile then..
@@ -902,7 +882,7 @@ void drawTiles(iView *camera, iView *player)
 						// And darken it.
 						TileIllum = (UBYTE)((TileIllum*3)/4);
 					}
-#endif
+
 				tileScreenInfo[i][j].sz = pie_RotProj((iVector*)&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].sx);
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileScreenInfo[i][j].x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
@@ -912,7 +892,6 @@ void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].specular.argb = specular;
 		   		}
 
-#ifdef ENABLE_WATER
 					// If it's any water tile..
 					if(IsWaterTile) {
 						// If it's the main water tile then bring it back up because it was pushed down
@@ -937,7 +916,6 @@ void drawTiles(iView *camera, iView *player)
 						tileScreenInfo[i][j].wz = tileScreenInfo[i][j].sz;
 						tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 					}
-#endif
 			}
 		}
 	}
@@ -4644,9 +4622,13 @@ BOOL	bWaterTile;
 
 /*
 HACK for IAN VISIT, but works....
+FIXME: This is function is not used. Should it be? - Per
 */
 void renderSky(void)
 {
+	const int texPage = 0;
+	SDWORD	skyShift;
+
 	SDWORD index,width;
 	skyShift+=2;
 
@@ -5413,13 +5395,12 @@ void	toggleReloadBarDisplay( void )
 {
 	bReloadBars = !bReloadBars;
 }
+
 // -------------------------------------------------------------------------------------
-//void	assignSensorTarget( DROID *psDroid )
 void assignSensorTarget( BASE_OBJECT *psObj )
 {
 	bSensorTargetting = TRUE;
 	lastTargetAssignation = gameTime2;
-	//psSensorDroid = psDroid;
 	psSensorObj = psObj;
 }
 
@@ -5446,7 +5427,6 @@ void	processSensorTarget( void )
 	{
 		if( (gameTime2 - lastTargetAssignation) < TARGET_TO_SENSOR_TIME)
 		{
-			//if(!psSensorDroid->died)
 			if(!psSensorObj->died AND psSensorObj->sDisplay.frameNumber == currentGameFrame)
 			{
 				x = /*mouseX();*/(SWORD)psSensorObj->sDisplay.screenX;

@@ -83,7 +83,7 @@ extern BOOL levReleaseMissionData(void);
 //get the type of level currently being loaded of GTYPE type
 extern SDWORD getLevelLoadType(void);
 
-extern	UBYTE	*getLevelName( void );
+char *getLevelName( void );
 
 #endif
 

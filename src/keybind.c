@@ -225,17 +225,6 @@ void	kf_BuildInfo( void )
 }
 
 // --------------------------------------------------------------------------
-
-/* Toggles whether the windows surface gets updated */
-void	kf_UpdateWindow( void )
-{
-
-	 	updateVideoCard = !updateVideoCard;
-
-		addConsoleMessage("Windows surface update toggled",DEFAULT_JUSTIFY);
-}
-
-// --------------------------------------------------------------------------
 void	kf_ToggleConsoleDrop( void )
 {
 	if(!bInTutorial)
@@ -671,18 +660,6 @@ void	kf_SimCloseDown( void )
 #endif
 }
 */
-// --------------------------------------------------------------------------
-
-/* Toggles on/off gouraud shading */
-void	kf_ToggleGouraud( void )
-{
-
- 	gouraudShading = !gouraudShading;
- 	addConsoleMessage("Gouraud shading toggled",DEFAULT_JUSTIFY);
-	texPage++;
-
-}
-
 // --------------------------------------------------------------------------
 
 /* Raises the tile under the mouse */

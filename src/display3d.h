@@ -69,16 +69,13 @@ extern UDWORD xOffset,yOffset;
 extern BOOL	selectAttempt;
 extern BOOL draggingTile;
 extern struct iIMDShape *g_imd;
-extern UDWORD cursor3D;
 extern BOOL	droidSelected;
 extern UDWORD terrainMidX,terrainMidY;
 extern int32 playerXTile, playerZTile, rx, rz;
 
 extern SDWORD scrollSpeed;
-extern BOOL	gouraudShading;
 extern iBitmap	**tilesRAW;
 extern UDWORD worldAngle;
-extern UDWORD	stepIndex;
 extern iPalette	gamePal;
 //extern void	assignSensorTarget( DROID *psDroid );
 extern void	assignSensorTarget( BASE_OBJECT *psObj );
@@ -99,8 +96,6 @@ extern BOOL	yBeforeX;
 extern UDWORD numDroidsSelected;
 extern UDWORD	intensity1,intensity2,intensity3;
 extern UDWORD	lightLevel;
-extern UDWORD	demoTextPage;
-extern BOOL		updateVideoCard;
 //extern BOOL		bScreenClose;
 //extern UDWORD closingTimeStart;
 //extern UDWORD screenCloseState;
@@ -157,5 +152,4 @@ extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 extern UDWORD	barMode;
 
 extern UDWORD	geoOffset;
-extern UDWORD	texPage;
 #endif

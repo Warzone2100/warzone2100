@@ -23,29 +23,11 @@ void pie_SetColourDefines(void);
 
 #define COLOUR_BALANCE	6		// 3 from the end. (two brighter shades!)
 
-
-
-
-/*
-
-
-
-	PC VERSION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-*/
-
 iColour*			psGamePal = NULL;
 PALETTEENTRY*		psWinPal = NULL;
 uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 BOOL	bPaletteInitialised = FALSE;
 uint8	colours[16];
-
-/* Look up table for transparency */
-/*	entry[x][y] tells you what colour to poke in when you're writing
-	x over y
-*/
-uint8				transLookup[PALETTE_SIZE][PALETTE_SIZE];
 
 UWORD	palette16Bit[PALETTE_SIZE];	//16 bit version of the present palette
 
@@ -369,25 +351,6 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 	return ((uint8) best_colour);
 }
 
-
-void	pie_BuildSoftwareTransparency( void )
-{
-int	i,j;
-int	red,green,blue;
-
-	for(i=0; i<PALETTE_SIZE; i++)
-	{
-		for(j=0; j<PALETTE_SIZE; j++)
-		{
-			red = (psGamePal[i].r + psGamePal[j].r)	/ 2;
-			green = (psGamePal[i].g + psGamePal[j].g)	/ 2;
-			blue = (psGamePal[i].b + psGamePal[j].b)	/ 2;
-			transLookup[i][j] = pal_GetNearestColour(red,green,blue);
-		}
-	}
-}
-
-
 void pal_BuildAdjustedShadeTable( void )
 {
 float	redFraction, greenFraction, blueFraction;
@@ -430,25 +393,4 @@ PALETTEENTRY*	pie_GetWinPal(void)
 	ASSERT((bPaletteInitialised,"pie_GetWinPal, palette not initialised"));
 	return 	psWinPal;
 }
-
-
-/*
-
-
-
-
-
-	End of PC Version
-
-
-
-
-
-
-*/
-
-
-
-
-
 

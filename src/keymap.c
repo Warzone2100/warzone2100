@@ -474,7 +474,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode,"Toggle Driving Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_ToggleDroidInfo,"Display droid info whilst tracking");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F,KEYMAP_PRESSED,kf_TriFlip,"Flip terrain triangle");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_G,KEYMAP_PRESSED,kf_ToggleGouraud,"Toggle Gouraud Shading");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_ToggleWidgets,"Toggle Widgets");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_ToggleRadarAllign,"Toggles Radar allignment");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_KillSelected,"Kill Selected Droid");

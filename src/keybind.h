@@ -5,7 +5,6 @@
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
 extern void	kf_BuildInfo( void );
-extern void	kf_UpdateWindow( void );
 extern void	kf_FrameRate( void );
 extern void	kf_ShowNumObjects( void );
 extern void	kf_ToggleRadar( void );
@@ -26,7 +25,6 @@ extern void	kf_ToggleFog( void );
 extern void	kf_ToggleShadows( void );
 extern void	kf_ToggleCamera( void );
 extern void	kf_SimCloseDown( void );
-extern void	kf_ToggleGouraud( void );
 extern void	kf_RaiseTile( void );
 extern void	kf_LowerTile( void );
 extern void	kf_SystemClose( void );

@@ -628,7 +628,7 @@ BOOL levLoadBaseData(STRING *pName)
 	return TRUE;
 }
 
-UBYTE	*getLevelName( void )
+char *getLevelName( void )
 {
 	return(currentLevelName);
 }
