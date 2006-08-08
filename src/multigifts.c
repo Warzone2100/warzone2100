@@ -1065,7 +1065,7 @@ BOOL deathmatchCheck(VOID)
 		setPower(selectedPlayer,LEV_HI);		// reset power.
 		sendPowerCheck(TRUE);					// tell everyone.
 
-		strcpy(sTemp, "multiplay\\Forces\\");
+		strcpy(sTemp, "multiplay\\forces\\");
 		strcat(sTemp, sForceName);
 		strcat(sTemp,".for");
 		loadForce( sTemp);

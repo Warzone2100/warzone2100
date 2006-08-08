@@ -319,9 +319,7 @@ void loadingScreenCallback(void)
 	lastTick = GetTickCount();
 	pie_GlobalRenderBegin();
 	DrawBegin();
-  	if (pie_GetRenderEngine() == ENGINE_OPENGL) {
-		pie_UniTransBoxFill(1,1,2,2,0x00010101, 32);
-	}
+	pie_UniTransBoxFill(1, 1, 2, 2, 0x00010101, 32);
 	/* Draw the black rectangle at the bottom */
 
 	topX = 10+D_W;

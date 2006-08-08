@@ -128,7 +128,6 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 	SDWORD	frameLag;
 	int	videoTime;
 	BOOL state = TRUE;
-	DDPIXELFORMAT *pDDPixelFormat;
 
 	if (seqCommand == SEQUENCE_KILL)
 	{
@@ -186,25 +185,16 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 		iV_SetTextColour(-1);
 
 
-		if (pie_GetRenderEngine() == ENGINE_4101)
-		{
-			videoMode = VIDEO_SOFT_WINDOW;
-			pDDPixelFormat = NULL;
-		}
-		else
-		{
-			videoMode = VIDEO_D3D_WINDOW;
-			pDDPixelFormat = screenGetBackBufferPixelFormat();
-		}
+		videoMode = VIDEO_D3D_WINDOW;
 
 //for new timing
 		frame = 0;
 		videoFrameTime = GetTickCount();
 
 #ifdef INCLUDE_AUDIO
-		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoMode, audio_GetDirectSoundObj(), videoFrameTime, pDDPixelFormat, perfMode)) == FALSE)
+		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoMode, audio_GetDirectSoundObj(), videoFrameTime, perfMode)) == FALSE)
 #else
-		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoMode, NULL, videoFrameTime, pDDPixelFormat, perfMode)) == FALSE)
+		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoMode, NULL, videoFrameTime, perfMode)) == FALSE)
 #endif
 		{
 			ASSERT((FALSE,"seq_RenderVideoToBuffer: unable to initialise sequence %s",aVideoName));

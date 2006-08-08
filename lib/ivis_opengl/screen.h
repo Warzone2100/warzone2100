@@ -45,17 +45,8 @@ BOOL image_load_from_jpg(pie_image* image, const char* filename);
 #undef RELEASE
 #define RELEASE(x) if ((x) != NULL) {(void)(x)->lpVtbl->Release(x); (x) = NULL;}
 
-/* Return a pointer to the Direct Draw objects */
-extern LPDIRECTDRAW4 screenGetDDObject(void);
-
 /* Return a pointer to the Direct Draw back buffer surface */
 extern LPDIRECTDRAWSURFACE4 screenGetSurface(void);
-
-/* Return a pointer to the front buffer pixel format */
-extern DDPIXELFORMAT *screenGetFrontBufferPixelFormat(void);
-
-/* Return a pointer to the back buffer pixel format */
-extern DDPIXELFORMAT *screenGetBackBufferPixelFormat(void);
 
 /* Return a bit depth of the Front buffer */
 extern UDWORD screenGetFrontBufferBitDepth(void);

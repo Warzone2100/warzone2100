@@ -39,10 +39,6 @@
 int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
 
 
-//static BOOL fogColourSet = FALSE;
-//static SDWORD d3dActive = 0;
-static BOOL bDither = FALSE;
-
 /***************************************************************************/
 /*
  *	Local ProtoTypes
@@ -56,25 +52,13 @@ extern void screenDoDumpToDiskIfRequired();
  */
 /***************************************************************************/
 
-BOOL	pie_GetDitherStatus( void )
+BOOL pie_Initialise(void)
 {
-	return bDither;
-}
-
-void	pie_SetDitherStatus( BOOL val )
-{
-	bDither = val;
-}
-
-BOOL pie_Initialise(SDWORD mode)
-{
-//	BOOL r;//result
 	int i;
 
 	pie_InitMaths();
 	pie_TexInit();
 
-	pie_SetRenderEngine(ENGINE_UNDEFINED);
 	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
 	rendSurface.buffer = NULL;
@@ -104,10 +88,8 @@ BOOL pie_Initialise(SDWORD mode)
 	rendSurface.xpshift	= 10;
 	rendSurface.ypshift	= 10;
 
-	pie_SetRenderEngine(ENGINE_OPENGL); //was ENGINE_D3D -Q
-
 	pie_SetDefaultStates();
-	iV_RenderAssign(mode,&rendSurface);
+	iV_RenderAssign(&rendSurface);
 	pal_Init();
 
 	return TRUE;
@@ -119,8 +101,6 @@ void pie_ShutDown(void) {
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
 	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.size = 0;
-
-	pie_SetRenderEngine(ENGINE_UNDEFINED);
 
 	pie_CleanUp();
 }

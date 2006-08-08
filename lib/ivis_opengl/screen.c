@@ -265,23 +265,10 @@ BOOL screenReInit( void )
 				 g_bVidMem, TRUE, hWndMain );
 }
 
-/* Return a pointer to the Direct Draw 2 object */
-LPDIRECTDRAW4 screenGetDDObject(void)
-{
-	return NULL;
-}
-
-
-/* Return a pointer to the Direct Draw back buffer surface */
+/* Return a pointer to the back buffer surface */
 LPDIRECTDRAWSURFACE4 screenGetSurface(void)
 {
 	return psBack;
-}
-
-/* Return a pointer to the Front buffer pixel format */
-DDPIXELFORMAT *screenGetFrontBufferPixelFormat(void)
-{
-	return NULL;
 }
 
 /* Return a bit depth of the Front buffer */
@@ -298,12 +285,6 @@ BOOL screenGetFrontBufferPixelFormatMasks(ULONG *amask, ULONG *rmask, ULONG *gma
 	*gmask = screen->format->Gmask;
 	*bmask = screen->format->Bmask;
 	return TRUE;
-}
-
-/* Return a pointer to the back buffer pixel format */
-DDPIXELFORMAT *screenGetBackBufferPixelFormat(void)
-{
-	return NULL;
 }
 
 /* Return a bit depth of the Back buffer */

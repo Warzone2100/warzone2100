@@ -1206,17 +1206,9 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 						iV_MatrixRotateY(-player.r.y);
 						iV_MatrixRotateX(-player.r.x);
 							/* Dither on software */
-						if(pie_GetRenderEngine() == ENGINE_4101)
-						{
-							pie_SetDitherStatus(TRUE);
-						}
 
 					   	pie_Draw3DShape(psShape, getStaticTimeValueRange(100,psShape->numFrames), 0, brightness, 0, pie_ADDITIVE, 140);
 					  		/* Dither off software */
-						if(pie_GetRenderEngine() == ENGINE_4101)
-						{
-							pie_SetDitherStatus(FALSE);
-						}
 
 						iV_MatrixRotateX(player.r.x);
 						iV_MatrixRotateY(player.r.y);

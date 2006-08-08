@@ -58,7 +58,7 @@ typedef enum _perf_mode
  */
 /***************************************************************************/
 //buffer render for software_window 3DFX_window and 3DFX_fullscreen modes
-extern BOOL	seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND	lpDS, int startTime, DDPIXELFORMAT *DDPixelFormat, PERF_MODE perfMode);
+extern BOOL	seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND	lpDS, int startTime, PERF_MODE perfMode);
 extern int	seq_RenderOneFrameToBuffer(char* lpSF, int skip, SDWORD boxMin, SDWORD boxMax);
 
 //directX fullscreeen render uses local buffer to store previous frame data

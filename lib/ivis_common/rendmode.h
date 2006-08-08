@@ -30,7 +30,6 @@
 
 //*************************************************************************
 
-#define iV_MODE_4101		0x4101			// DDX 640x480x256
 #define REND_D3D_RGB		0x133			// Direct3D 640x480x16bit RGB renderer (mmx)
 #define REND_D3D_HAL		0x143			// Direct3D 640x480x16bit hardware
 #define REND_D3D_REF		0x153			// Direct3D 640x480x16bit hardware
@@ -81,8 +80,8 @@ extern void iV_VideoMemoryFree(void);
 extern void iV_VideoMemoryUnlock(void);
 extern uint8 *iV_VideoMemoryAlloc(int mode);
 extern void rend_AssignScreen(void);
-extern void rend_Assign(int mode, iSurface *s);
-extern void iV_RenderAssign(int mode, iSurface *s);
+extern void rend_Assign(iSurface *s);
+extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
 extern iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, uint8 *buffer);
 

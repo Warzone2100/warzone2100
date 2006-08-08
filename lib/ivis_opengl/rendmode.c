@@ -20,7 +20,6 @@ void (*iV_VSync)(void);
 
 iSurface	rendSurface;
 iSurface	*psRendSurface;
-static int	g_mode = REND_UNDEFINED;
 
 //*************************************************************************
 
@@ -221,13 +220,11 @@ void iV_SurfaceDestroy(iSurface *s)
 //*************************************************************************
 //*** assign renderer
 //*
-//* params	mode	= render mode (screen/user) see iV_MODE_...
-//*
 //******
 
-void rend_Assign(int mode, iSurface *s)
+void rend_Assign(iSurface *s)
 {
-	iV_RenderAssign(mode, s);
+	iV_RenderAssign(s);
 
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
@@ -236,9 +233,8 @@ void rend_Assign(int mode, iSurface *s)
 
 // pre VideoOpen
 void rend_AssignScreen(void)
-
 {
-	iV_RenderAssign(rendSurface.usr,&rendSurface);
+	iV_RenderAssign(&rendSurface);
 }
 
 int iV_GetDisplayWidth(void)
@@ -325,12 +321,10 @@ void (*iV_tgPolygon)(int num, iVertex *vrt, iTexture *tex);
 //*************************************************************************
 
 #ifndef PIETOOL
-void iV_RenderAssign(int mode, iSurface *s)
+void iV_RenderAssign(iSurface *s)
 {
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
-
-	g_mode = mode;
 
 	iV_SetTransFilter = SetTransFilter;
 

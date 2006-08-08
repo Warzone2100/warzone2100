@@ -32,7 +32,6 @@
 extern uint8		colours[];
 extern uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 extern uint8		transLookup[PALETTE_SIZE][PALETTE_SIZE];
-extern UWORD	palette16Bit[PALETTE_SIZE];	//16 bit version of the present palette
 
 
 //*************************************************************************

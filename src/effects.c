@@ -1694,26 +1694,11 @@ UDWORD brightness, specular;
   //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
-	/* Dither on software */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(TRUE);
-	}
-
-
 	pie_MatScale(psEffect->size);
  	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, 0, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
  	iV_MatrixEnd();
-
-	/* Dither on software OFF */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(FALSE);
-	}
-
-
-
 }
+
 // ----------------------------------------------------------------------------------------
 /* drawing func for blood. */
 void	renderBloodEffect(EFFECT *psEffect)
@@ -1885,13 +1870,6 @@ void	renderExplosionEffect(EFFECT *psEffect)
 //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
-	/* Dither on software */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(TRUE);
-	}
-
-
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, 0, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
@@ -1906,15 +1884,7 @@ void	renderExplosionEffect(EFFECT *psEffect)
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, 0, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	}
 
-	/* Dither on software OFF */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(FALSE);
-	}
-
-
 	iV_MatrixEnd();
-
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2036,21 +2006,10 @@ UDWORD brightness, specular;
 //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
-  /* Dither on software */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(TRUE);
-	}
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(translucency));
 //	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_TRANSLUCENT, (UBYTE)(40+percent));
 //	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_TRANSLUCENT, (UBYTE)(130-percent));
-
-/* Dither on software */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(FALSE);
-	}
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
@@ -2129,15 +2088,7 @@ UDWORD brightness, specular;
 //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
-	/* Dither on software */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(TRUE);
-	}
-	else if(pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q //JPS smoke strength increased for d3d 12 may 99
-	{
-		transparency = (transparency*3)/2;
-	}
+	transparency = (transparency * 3) / 2;  //JPS smoke strength increased for d3d 12 may 99
 
 	/* Make imds be transparent on 3dfx */
 	if(psEffect->type==SMOKE_TYPE_STEAM)
@@ -2155,15 +2106,9 @@ UDWORD brightness, specular;
 			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(transparency)/2);
 		}
 	}
-	/* Dither on software OFF */
-	if(pie_GetRenderEngine() == ENGINE_4101)
-	{
-		pie_SetDitherStatus(FALSE);
-	}
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
-
 }
 
 

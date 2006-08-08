@@ -35,11 +35,6 @@
 
 //*************************************************************************
 
-void iV_IMDDrawTextureRaise(iIMDShape *shape, float scale);
-void iV_IMDDrawTexturedHeightScaled(iIMDShape *shape, float scale);
-void iV_IMDDrawTexturedShade(iIMDShape *shape, int32 lightLevel);
-			  
-
 // Output BSP Tree to a file
 
 

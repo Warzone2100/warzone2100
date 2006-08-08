@@ -887,10 +887,7 @@ void drawTiles(iView *camera, iView *player)
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileScreenInfo[i][j].x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 
-				if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-			 	{
-					tileScreenInfo[i][j].specular.argb = specular;
-		   		}
+				tileScreenInfo[i][j].specular.argb = specular;
 
 					// If it's any water tile..
 					if(IsWaterTile) {
@@ -2547,22 +2544,11 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 
 							iV_MatrixRotateY(-player.r.y);
 							iV_MatrixRotateX(-player.r.x);
-						   	/* Dither on software */
-							if(pie_GetRenderEngine() == ENGINE_4101)
-							{
-								pie_SetDitherStatus(TRUE);
-							}
 							pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, 0, pie_ADDITIVE, 192);
-						   		/* Dither on software */
-							if(pie_GetRenderEngine() == ENGINE_4101)
-							{
-								pie_SetDitherStatus(FALSE);
-							}
 
 					  		iV_MatrixRotateX(player.r.x);
 					  		iV_MatrixRotateY(player.r.y);
 							pie_MatRotY(DEG((SDWORD)psStructure->turretRotation));
-
 						}
 					}
 					//we have a droid weapon so do we draw a muzzle flash
@@ -4992,41 +4978,33 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	/* The first triangle */
 	if(TRI_FLIPPED(psTile))
 	{
-		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
-			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-			memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-		}
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 	else
 	{
-		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
-			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-			memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-		}
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 
 	/* The second triangle */
 	if(TRI_FLIPPED(psTile))
 	{
-		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
-			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-			memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-		}
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 	else
 	{
-		if (pie_GetRenderEngine() == ENGINE_OPENGL) {
-			memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-			memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-			memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-			pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-		}
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 
 	/* Outline the tile if necessary */

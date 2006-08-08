@@ -602,11 +602,6 @@ init://jump here from the end if re_initialising
 					quit = TRUE;
 					Restart = TRUE;
 				}
-
-				else if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-				{
-//					dtm_RestoreTextures();
-				}
 				break;
 			case FRAME_QUIT:
 				debug(LOG_MAIN, "frame quit");

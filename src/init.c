@@ -1000,7 +1000,7 @@ BOOL systemInitialise(void)
 
 	// Initialize render engine
 	war_SetFog(FALSE);
-	if (!pie_Initialise(iV_MODE_4101)) {
+	if (!pie_Initialise()) {
 		debug(LOG_ERROR, "Unable to initialise renderer");
 		return FALSE;
 	}

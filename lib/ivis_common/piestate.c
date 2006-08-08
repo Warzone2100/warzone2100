@@ -44,16 +44,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetBilinear(TRUE);
 }
 
-void pie_SetRenderEngine(REND_ENGINE rendEngine)
-{
-	rendStates.rendEngine = rendEngine;
-}
-
-REND_ENGINE pie_GetRenderEngine(void)
-{
-	return rendStates.rendEngine;
-}
-
 //***************************************************************************
 //
 // pie_SetTranslucent(BOOL val);

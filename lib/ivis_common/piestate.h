@@ -22,14 +22,6 @@
  */
 /***************************************************************************/
 
-typedef	enum	REND_ENGINE
-				{
-					ENGINE_UNDEFINED,
-					ENGINE_4101,
-					ENGINE_OPENGL
-				}
-				REND_ENGINE;
-
 typedef	enum	REND_MODE
 				{
 					REND_GOURAUD_TEX,
@@ -108,7 +100,6 @@ typedef	enum	ALPHA_MODE
 
 typedef struct	RENDER_STATE
 				{
-					REND_ENGINE			rendEngine;
 					DEPTH_MODE			depthBuffer;
 					BOOL				translucent;
 					BOOL				additive;
@@ -151,9 +142,6 @@ extern SDWORD	pieStateCount;
  */
 /***************************************************************************/
 extern void pie_SetDefaultStates();//Sets all states
-//render engine
-extern void pie_SetRenderEngine(REND_ENGINE rendEngine);
-extern REND_ENGINE pie_GetRenderEngine(void);
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern WZ_DEPRECATED void pie_SetGammaValue(float val);
 //renderer capability

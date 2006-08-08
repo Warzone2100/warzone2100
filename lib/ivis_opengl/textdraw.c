@@ -694,61 +694,6 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 	}
 }
 
-void pie_RenderCharToSurface(UDWORD *lpSurface, SDWORD pitch, IMAGEFILE *ImageFile, UWORD ID, int x, int y, UWORD colour)
-{
-	IMAGEDEF *Image;
-	iBitmap *bmp;
-	UDWORD Modulus;
-	int w;
-	int h;
-	int ow;
-	int i, j, lineb_w;
-	UWORD *bp;
-
-	assert(ID < ImageFile->Header.NumImages);
-	Image = &ImageFile->ImageDefs[ID];
-
-	Modulus = ImageFile->TexturePages[Image->TPageID].width;
-	bmp = ImageFile->TexturePages[Image->TPageID].bmp;
-
-	bmp += ((UDWORD)Image->Tu) + ((UDWORD)Image->Tv) * Modulus;
-
-	x = x+Image->XOffset;
-	y = y+Image->YOffset;
-	w = Image->Width;
-	h = Image->Height;
-	ow = Modulus;
-
-	//word pitch
-	pitch /= 2;
-
-	bp = (UWORD *) lpSurface + x + y * pitch;
-
-	lineb_w = pitch - w;
-	for (i=0; i<h; i++)
-	{
-		for (j=0; j<w; j++)
-		{
-			/*
-			if(*bmp++)
-			{
-				*bp = colour;
-			}
-			*/
-			if(*bmp)
-			{
-				*bp = palette16Bit[*bmp];
-			}
-			bmp++;
-			bp++;
-//			bp++;
-		}
-		bmp += (ow - w);
-		bp += lineb_w;
-//		bp += lineb_w;
-	}
-}
-
 //===========================================================
 // Partial fix for rendering text on 'video', you can read it now. -Q
 // --still to do, add 'boxes' under text so you can see it better.

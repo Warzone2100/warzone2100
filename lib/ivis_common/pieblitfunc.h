@@ -57,7 +57,6 @@ extern void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,i
 
 extern void pie_UploadDisplayBuffer(UBYTE *DisplayBuffer);
 extern void pie_DownloadDisplayBuffer(UBYTE *DisplayBuffer);
-extern void pie_ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB);
 
 extern void pie_D3DSetupRenderForFlip(SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride);
 extern void pie_D3DRenderForFlip(void);
@@ -79,7 +78,5 @@ typedef enum _screenType
 
 extern void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX);
 extern void pie_ResetBackDrop(void);
-
-void    bufferTo16Bit(UBYTE *origBuffer,UWORD *newBuffer, BOOL b3DFX);
 
 #endif //

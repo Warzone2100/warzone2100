@@ -7099,8 +7099,6 @@ void addIntelScreen(void)
 		displayWorld();
 	// Upload the current display back buffer into system memory.
 		pie_UploadDisplayBuffer(DisplayBuffer);
-	// Make it darker.
-		iV_ScaleBitmapRGB(DisplayBuffer,iV_GetDisplayWidth(),iV_GetDisplayHeight(),2,2,2);
 
 		radarOnScreen = radOnScreen;
 		bRender3DOnly = FALSE;

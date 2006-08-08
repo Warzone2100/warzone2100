@@ -89,23 +89,4 @@ extern void iV_IMDRelease(iIMDShape *s);
 // How low do we stop looking?
 #define DROID_VIS_LOWER	10
 
-/* not for PIEDRAW
-extern void iV_IMDDrawTextured(iIMDShape *s);
-extern void iV_PIEDraw(iIMDShape *s,int frame);
-extern void iV_IMDDrawTexturedEnv(iIMDShape *shape, iTexture *env);
-extern int iV_IMDDrawTexturedExtended(iIMDShape *shape, iPoint *point2d, uint32 flags);
-extern void iV_IMDDrawWire(iIMDShape *shape, uint32 col);
-extern void iV_IMDDrawWireExtended(iIMDShape *shape, uint32 col, uint32 flags);
-extern void iV_IMDDrawTexturedHeightScaled(iIMDShape *shape, float scale);
-
-// utils *****************************************************************
-
-extern void iV_IMDRotateProject(iIMDShape *shape, iPoint *points2d);
-extern void iV_IMDDraw2D(iIMDShape *shape, iPoint *points2d, uint32 col);
-extern int iV_IMDPointInShape2D(iIMDShape *shape, iPoint *points2d, iPoint *point);
-extern iBool iV_IMDPointInBoundXZ(iIMDShape *s, iPoint *point);
-extern void iV_IMDDrawTextureRaise(iIMDShape *shape, float scale);
-extern void iV_IMDDrawTexturedShade(iIMDShape *shape, int lightLevel);
-*/
-
 #endif

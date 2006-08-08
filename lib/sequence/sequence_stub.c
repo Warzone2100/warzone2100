@@ -62,7 +62,7 @@ void seq_start_sound(RPL* s) {
 // D3D_WINDOWED video size 16bit uses screen pixel mode
 // 3DFX_WINDOWED video size 16bit BGR 565 mode
 // 3DFX_FULLSCREEN 640 * 480 BGR 565 mod
-BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpDS, int startTime, DDPIXELFORMAT	*DDPixelFormat, PERF_MODE perfMode)
+BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpDS, int startTime, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
 	printf("seq_SetSequenceForBuffer %s -> novideo.rpl\n", filename);
