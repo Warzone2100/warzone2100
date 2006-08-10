@@ -212,12 +212,3 @@ UDWORD	radius;
    	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	*/
 }
-
-
-//render raw data in system memory to direct draw surface
-//use outside of D3D sceen only
-void pie_RenderImageToSurface(LPDIRECTDRAWSURFACE4 lpDDS4, SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
-{
-
-}
-

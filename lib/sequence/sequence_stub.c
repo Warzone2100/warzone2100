@@ -57,12 +57,7 @@ void seq_start_sound(RPL* s) {
 }
 
 
-//buffer render for software_window 3DFX_window and 3DFX_fullscreen modes
-// SOFT_WINDOWED video size 16bit rgb 555 mode (convert to 8bit from the buffer)
-// D3D_WINDOWED video size 16bit uses screen pixel mode
-// 3DFX_WINDOWED video size 16bit BGR 565 mode
-// 3DFX_FULLSCREEN 640 * 480 BGR 565 mod
-BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpDS, int startTime, PERF_MODE perfMode)
+BOOL seq_SetSequenceForBuffer(char* filename, int startTime, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
 	printf("seq_SetSequenceForBuffer %s -> novideo.rpl\n", filename);
@@ -84,7 +79,7 @@ BOOL seq_SetSequenceForBuffer(char* filename, VIDEO_MODE mode, LPDIRECTSOUND lpD
  * directX fullscreeen render uses local buffer to store previous frame data
  * directX 640 * 480 16bit rgb mode render through local buffer to back buffer
  */
-BOOL seq_SetSequence(char* filename, LPDIRECTDRAWSURFACE4 lpDDSF, LPDIRECTSOUND lpDS, int startTime, char* lpBF, PERF_MODE perfMode)
+BOOL seq_SetSequence(char* filename, int startTime, char* lpBF, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
 	printf("seq_SetSequence %s -> novideo.rpl\n", filename);
@@ -114,12 +109,6 @@ int seq_ClearMovie(void)
 }
 
 
-/*
- * buffer render for software_window 3DFX_window and 3DFX_fullscreen modes
- * SOFT_WINDOWED video size 16bit rgb 555 mode (convert to 8bit from the buffer)
- * 3DFX_WINDOWED video size 16bit BGR 565 mode
- * 3DFX_FULLSCREEN 640 * 480 BGR 565 mode
- */
 int	seq_RenderOneFrameToBuffer(char *lpSF, int skip, SDWORD subMin, SDWORD subMax)
 {
 	//printf("seq_RenderOneFrameToBuffer %i\n", skip);
@@ -140,7 +129,7 @@ int	seq_RenderOneFrameToBuffer(char *lpSF, int skip, SDWORD subMin, SDWORD subMa
  * render one frame to a direct draw surface (normally the back buffer)
  * directX 640 * 480 16bit rgb mode render through local buffer to back buffer
  */
-int	seq_RenderOneFrame(LPDIRECTDRAWSURFACE4	lpDDSF, int skip, SDWORD subMin, SDWORD subMax)
+int	seq_RenderOneFrame(int skip, SDWORD subMin, SDWORD subMax)
 {
 	//printf("seq_RenderOneFrame %i\n", skip);
 	if (current_sequence == NULL)

@@ -885,7 +885,7 @@ static BOOL dMatchInit()
 		setPower(i,LEV_HI);							// set deathmatch power to hi.
 	}
 
-	strcpy(sTemp, "multiplay\\forces\\");
+	strcpy(sTemp, "multiplay/forces/");
 	strcat(sTemp, sForceName);
 	strcat(sTemp,".for");
 	loadForce( sTemp);

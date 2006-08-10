@@ -698,7 +698,7 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 // Partial fix for rendering text on 'video', you can read it now. -Q
 // --still to do, add 'boxes' under text so you can see it better.
 //===========================================================
-void pie_DrawTextToSurface(LPDIRECTDRAWSURFACE4	lpDDSF, STRING *string, int x, int y)
+void pie_DrawTextToSurface(STRING *string, int x, int y)
 {
 	int Index;
 	UWORD ImageID;

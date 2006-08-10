@@ -54,9 +54,6 @@ UDWORD		screenDepth = 0;
 
 SDL_Surface     *screen;
 
-/* The Front and back buffers */
-LPDIRECTDRAWSURFACE4	psFront = NULL;
-
 /* The actual palette entries for the display palette */
 #define PAL_MAX				256
 static SDL_Color			asPalEntries[PAL_MAX];
@@ -66,21 +63,6 @@ static SDL_Color			asPalEntries[PAL_MAX];
 
 /* The number of bits in one colour gun of the windows PALETTEENTRY struct */
 #define PALETTEENTRY_BITS 8
-
-/* The Pixel format of the front buffer */
-DDPIXELFORMAT		sFrontBufferPixelFormat;
-
-/* The Pixel format of the back buffer */
-DDPIXELFORMAT		sBackBufferPixelFormat;
-
-/* Window's Pixel format */
-DDPIXELFORMAT		sWinPixelFormat;
-
-/* The size of the windows display mode */
-//static UDWORD		winDispWidth, winDispHeight;
-
-// The current flip state
-FLIP_STATE	screenFlipState;
 
 //backDrop
 #define BACKDROP_WIDTH	640

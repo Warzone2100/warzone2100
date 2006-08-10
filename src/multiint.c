@@ -3132,7 +3132,7 @@ VOID runForceSelect(VOID)
 			break;
 
 		case FORCE_PRESETDEFAULT:
-			strcpy(dir,"multiplay\\forces\\default.for");
+			strcpy(dir,"multiplay/forces/default.for");
 			loadForce(dir);
 			AvailableForces();										// update force screen
 			CurrentForce();
@@ -3179,7 +3179,7 @@ BOOL startForceSelect(VOID)
 	selectedPlayer = FORCEEDITPLAYER;
 	setPower(selectedPlayer,FORCEEDIT_POWER);
 
-	strcpy(dir,"multiplay\\forces\\default.for");		// start with default force.
+	strcpy(dir,"multiplay/forces/default.for");		// start with default force.
 	if(!loadForce(dir))
 	{
 		DBPRINTF(("Error Loading Force"));

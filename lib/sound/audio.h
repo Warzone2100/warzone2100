@@ -71,8 +71,6 @@ extern SDWORD	audio_GetSampleMixVol( AUDIO_SAMPLE * psSample, SDWORD iVol,
 extern SDWORD	audio_Get3DVolume( void );
 extern void		audio_Set3DVolume( SDWORD iVol );
 
-extern LPDIRECTSOUND	audio_GetDirectSoundObj( void );
-
 /***************************************************************************/
 
 #endif	// _AUDIO_H_

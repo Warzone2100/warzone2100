@@ -4,11 +4,9 @@ libnetplay_a_SOURCES = \
 	netaudio_stub.c \
 	netcrypt.c \
 	netjoin_stub.c \
-	netlobby_stub.c \
 	netplay.c \
 	netlog.c \
 	netusers_stub.c \
-	netlobby.h \
 	netplay.h \
 	netlog.h
 

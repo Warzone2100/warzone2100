@@ -71,8 +71,6 @@ void	sound_Update( void );
 
 UDWORD	sound_GetGameTime( void );
 
-LPDIRECTSOUND	sound_GetDirectSoundObj( void );
-
 /***************************************************************************/
 
 #endif	// _TRACKLIB_H_

@@ -89,49 +89,10 @@ extern void surfShutDown(void);
 /* Free current currently open widget file */
 BOOL FreeCurrentWDG(void);
 
-/* The Direct Draw object */
-extern LPDIRECTDRAW4		psDD;
-
 /* The Current screen size and bit depth */
 extern UDWORD		screenWidth;
 extern UDWORD		screenHeight;
 extern UDWORD		screenDepth;
-
-/* Which modes the library can run in */
-typedef enum _display_modes
-{
-	MODE_BOTH,		// Can run both windowed and full screen
-	MODE_WINDOWED,		// Can only run windowed, not full screen
-	MODE_FULLSCREEN,	// Can only run full screen not windowed
-	MODE_8BITFUDGE,		// Runs 8 bit full screen, then true colour windowed
-				// blitting the 8 bit back buffer to the windows display
-} DISPLAY_MODES;
-
-/* The current screen mode (full screen/windowed) */
-// extern SCREEN_MODE		screenMode;
-
-/* Which mode (of operation) the library is running in */
-extern DISPLAY_MODES	displayMode;
-
-/* The Front and back buffers */
-extern LPDIRECTDRAWSURFACE4	psFront;
-extern LPDIRECTDRAWSURFACE4	psBack;
-
-/* The Pixel format of the back buffer */
-extern DDPIXELFORMAT		sBackBufferPixelFormat;
-
-/* Window's Pixel format */
-extern DDPIXELFORMAT		sWinPixelFormat;
-
-// The possible flip states
-typedef enum _flip_state
-{
-	FLIP_IDLE,
-	FLIP_STARTED,
-	FLIP_FINISHED,
-} FLIP_STATE;
-extern FLIP_STATE	screenFlipState;
-
 
 // The critical section for the screen flipping
 extern CRITICAL_SECTION sScreenFlipCritical;
