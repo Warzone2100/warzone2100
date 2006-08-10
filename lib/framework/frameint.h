@@ -76,7 +76,7 @@ extern void inputNewFrame(void);
 /* The list of surfaces structure */
 typedef struct _surface_list
 {
-	LPDIRECTDRAWSURFACE4		psSurface;
+	void *psSurface;
 	struct _surface_list	*psNext;
 } SURFACE_LIST;
 

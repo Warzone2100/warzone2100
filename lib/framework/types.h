@@ -110,56 +110,17 @@ typedef struct
 #endif /* !WIN32 */
 
 #ifndef INC_DIRECTX
-typedef void * LPDIRECTSOUND;
-typedef void * LPDIRECTDRAWSURFACE4;
-typedef void * LPDIRECTDRAW4;
-typedef void * LPDIRECTDRAW;
-typedef void * LPDIRECTDRAWPALETTE;
-typedef void * LPDIRECTDRAWCLIPPER;
-typedef int DDPIXELFORMAT;
-typedef int DDDEVICEIDENTIFIER;
-typedef int DDSURFACEDESC2;
-typedef int IDirectDrawSurface4;
 
 typedef int DPID;
-typedef void * LPDIRECTPLAY4;
-typedef void * LPDIRECTPLAY4A;
-typedef void * LPDIRECTPLAYLOBBY3;
-typedef void * LPDIRECTPLAYLOBBYA;
 
-#define D3DVAL(val)             ((float)(val))
-typedef int D3DVALUE;
-typedef int D3DCOLOR;
-typedef struct {
-    D3DVALUE    sx;
-    D3DVALUE    sy;
-    D3DVALUE    sz;
-    D3DVALUE    rhw;
-    D3DCOLOR    color;
-    D3DCOLOR    specular;
-    D3DVALUE    tu;
-    D3DVALUE    tv;
-} D3DTLVERTEX, *LPD3DTLVERTEX;
-
-typedef struct
-{
-    GUID  guidInstance;
-    DWORD dwSize;
-    DWORD dwFlags;
-    DWORD dwMaxPlayers;
-    DWORD dwCurrentPlayers;
-} DPSESSIONDESC2;
 #endif
+
 #ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly	
 #define _inline inline
 #define __inline inline
 #else
 #define _inline __inline
-//#define __inline __inline		//not needed really.
 #endif //_MSC_VER
-
-/* missing define - only used in Screen.c */
-#define DDGDI_GETHOSTIDENTIFIER 1
 
 /* Numeric size defines */
 #define UBYTE_MAX	0xff
@@ -184,13 +145,7 @@ typedef struct
 
 /* locale types */
 
-//#define LOCAL                   static
-#define STATIC                  static
-#define REGISTER                register
-#define FAST                    register
-#define IMPORT                  extern
 #define VOID                    void
-
 
 
 /* defines for ONEINX - use 

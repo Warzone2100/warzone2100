@@ -149,7 +149,7 @@ typedef struct
 	typedef struct {
 		UDWORD flags;
 		SDWORD nVrts;
-		D3DTLVERTEX *pVrts;
+		void *pVrts;
 		iTexAnim *pTexAnim;
 	} PIED3DPOLY;
 	typedef struct {

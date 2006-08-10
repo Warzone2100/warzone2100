@@ -158,9 +158,9 @@ extern WZ_DEPRECATED BOOL	NETstartAudioCapture(VOID);
 extern WZ_DEPRECATED BOOL	NETshutdownAudioCapture(VOID);
 extern WZ_DEPRECATED BOOL	NETinitAudioCapture(VOID);
 
-extern WZ_DEPRECATED BOOL	NETinitPlaybackBuffer(LPDIRECTSOUND pDs);	// playback
+extern WZ_DEPRECATED BOOL	NETinitPlaybackBuffer(void *pSoundBuffer);	// playback
 extern WZ_DEPRECATED VOID	NETplayIncomingAudio(NETMSG *pMsg);
-extern WZ_DEPRECATED BOOL	NETqueueIncomingAudio(LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream);
+extern WZ_DEPRECATED BOOL	NETqueueIncomingAudio(void *pSoundData, DWORD soundBytes,BOOL bStream);
 extern WZ_DEPRECATED BOOL	NETshutdownAudioPlayback(VOID);
 
 // encryption

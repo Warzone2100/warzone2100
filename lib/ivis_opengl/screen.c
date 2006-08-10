@@ -216,7 +216,7 @@ void screenShutDown(void)
 }
 
 /* Return a pointer to the back buffer surface */
-LPDIRECTDRAWSURFACE4 screenGetSurface(void)
+void *screenGetSurface(void)
 {
 	return NULL;
 }

@@ -21,7 +21,7 @@
 /* Legacy stuff 
  * - only used in the sequence video code we have not yet decided whether to port or to junk */
 
-LPDIRECTDRAWSURFACE4 screenGetSurface(void); /* Return a pointer to the Direct Draw back buffer surface */
+void *screenGetSurface(void); /* Return a pointer to the back buffer surface */
 
 /* Set the colour for text */
 void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);

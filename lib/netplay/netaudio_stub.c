@@ -1,36 +1,35 @@
-// FIXME Stubfile!
-
 /*
  * NetAudio.c
  *
- * intra/internet audio
+ * Internet audio. Team communication using microphone etc.. Currently
+ * just an unimplemented skeleton.
  */
 
 #include "lib/framework/frame.h"
 #include "netplay.h"
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETinitAudioCapture(VOID) // FIXME Remove if unused
+BOOL NETinitAudioCapture(VOID)
 {
 	debug(LOG_SOUND, "NETinitAudioCapture");
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETshutdownAudioCapture(VOID) // FIXME Remove if unused
+BOOL NETshutdownAudioCapture(VOID)
 {
 	debug(LOG_SOUND, "NETshutdownAudioCapture");
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-WZ_DEPRECATED BOOL NETstartAudioCapture(VOID) // FIXME Remove if unused
+BOOL NETstartAudioCapture(VOID)
 {
 	debug(LOG_SOUND, "NETstartAudioCapture");
 	return FALSE;
 }
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETstopAudioCapture(VOID) // FIXME Remove if unused
+BOOL NETstopAudioCapture(VOID)
 {
 	debug(LOG_SOUND, "NETstopAudioCapture");
 	return FALSE;
@@ -39,7 +38,7 @@ BOOL NETstopAudioCapture(VOID) // FIXME Remove if unused
 
 // ////////////////////////////////////////////////////////////////////////
 // update the pointers and process the buffer accordingly.
-BOOL NETprocessAudioCapture(VOID) // FIXME Remove if unused
+BOOL NETprocessAudioCapture(VOID)
 {
 	debug(LOG_SOUND, "NETprocessAudioCapture");
 	return FALSE;
@@ -47,7 +46,7 @@ BOOL NETprocessAudioCapture(VOID) // FIXME Remove if unused
 
 // ////////////////////////////////////////////////////////////////////////
 
-BOOL NETinitPlaybackBuffer(LPDIRECTSOUND pDs) // FIXME Remove if unused
+BOOL NETinitPlaybackBuffer(void *pSoundBuffer)
 {
 	debug(LOG_SOUND, "NETinitPlaybackBuffer");
 	return FALSE;
@@ -55,7 +54,7 @@ BOOL NETinitPlaybackBuffer(LPDIRECTSOUND pDs) // FIXME Remove if unused
 
 // ////////////////////////////////////////////////////////////////////////
 // handle the playback buffer.
-BOOL NETqueueIncomingAudio( LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream) // FIXME Remove if unused
+BOOL NETqueueIncomingAudio( void *pSoundData, DWORD soundBytes,BOOL bStream)
 {
 	debug(LOG_SOUND, "NETqueueIncomingAudio");
 	return FALSE;
@@ -63,14 +62,14 @@ BOOL NETqueueIncomingAudio( LPBYTE lpbSoundData, DWORD dwSoundBytes,BOOL bStream
 
 // ////////////////////////////////////////////////////////////////////////
 // Handle a incoming message that needs to be played
-void NETplayIncomingAudio(NETMSG *pMsg) // FIXME Remove if unused
+void NETplayIncomingAudio(NETMSG *pMsg)
 {
 	debug(LOG_SOUND, "NETplayIncomingAudio");
 }
 
 // ////////////////////////////////////////////////////////////////////////
 // close it all down
-BOOL NETshutdownAudioPlayback(VOID) // FIXME Remove if unused
+BOOL NETshutdownAudioPlayback(VOID)
 {
 	debug(LOG_SOUND, "NETshutdownAudioPlayback");
 	return TRUE;
