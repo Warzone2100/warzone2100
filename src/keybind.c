@@ -1188,14 +1188,13 @@ void	kf_ToggleDebugMappings( void )
 		if(getDebugMappingStatus())
 		{
 			processDebugMappings(FALSE);
-			CONPRINTF(ConsoleString,(ConsoleString,"ALL Debug Key Mappings - DISALLOWED"));
+			CONPRINTF(ConsoleString, (ConsoleString, "CHEATS DISABLED!"));
 		}
 		else
 		{
 			game_SetValidityKey(VALIDITYKEY_CHEAT_MODE);
 			processDebugMappings(TRUE);
-			CONPRINTF(ConsoleString,(ConsoleString,"ALL Debug Key Mappings - PERMITTED"));
-			CONPRINTF(ConsoleString,(ConsoleString,"DISCLAIMER: YOU HAVE NOW CHEATED"));
+			CONPRINTF(ConsoleString, (ConsoleString, "CHEATS ENABLED!"));
 		}
 
 		if(bMultiPlayer)
@@ -1811,10 +1810,8 @@ void kf_GiveTemplateSet(void)
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTextMessage(void)
 {
-
 	CHAR	ch;
 
-	if(/*bMultiPlayer || */!bAllowOtherKeyPresses OR getCheatCodeStatus())
 	{
 		if(bAllowOtherKeyPresses)									// just starting.
 		{
@@ -1842,7 +1839,7 @@ void kf_SendTextMessage(void)
 				{
 					sendTextMessage(sTextToSend,FALSE);
 				}
-				else if(getCheatCodeStatus())
+				else if (getDebugMappingStatus())
 				{
 					(void) attemptCheatCode(sTextToSend);
 				}
@@ -1925,7 +1922,6 @@ void kf_SendTextMessage(void)
 				return;
 			}
 		}
-
 
 //		flushConsoleMessages();								//clear
 //		addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY);		//display

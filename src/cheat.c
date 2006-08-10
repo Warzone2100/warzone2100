@@ -6,95 +6,57 @@
 #include "console.h"
 #include "keybind.h"
 
-static	BOOL	bAllowCheatCodes = TRUE;
-
 typedef struct _cheat_entry
 {
-STRING	*pName;
-void (*function)(void);	// pointer to void* function
+	STRING	*pName;
+	void (*function)(void);	// pointer to void* function
 } CHEAT_ENTRY;
 
 CHEAT_ENTRY	cheatCodes[] =
 {
-//	{"OPHZM",kf_TogglePower},		//power
 //	{"VQKZMY^\\Z",kf_ToggleOverlays},//interface
-//	{"XVIZ ^SS",kf_AllAvailable},	// give all
 //	{"LWPH R^OOVQXL",kf_ShowMappings},//show mappings
 //	{"KZROS^KZL",kf_GiveTemplateSet},//templates
 //	{"LZSZ\\K ^SS",kf_SelectAllCombatUnits},//select all
-//	{"YMPR ^]PIZ",kf_ToggleGodMode},//from above
 //	{"SZK KWZMZ ]Z SVXWK",kf_RecalcLighting},//let there be light
-//	{"YVQVLW QPH",kf_FinishResearch},//finish now
 //	{"PJKSVQZ,",kf_ToggleOutline},
 //	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
-//	{"M^QXZL",kf_ToggleSensorDisplay},//ranges
-//	{"JQVK LK^KL",kf_DebugDroidInfo},//unit stats
 
-	{"W^SSP RZVQ L\\W^KE",kf_AddMissionOffWorld},//let me win
-	{"KVRZ[ZRP",kf_FrameRate},	 //timedemo
-	{"TVSS LZsZ\\KZ[",kf_KillSelected},//kill slected
-	{"[ZRP RP[Z",kf_ToggleDemoMode},	//demo mode
-	{"UPWQ TZKKSZF",kf_ToggleWeather},//john kettley
-	{"WPH Y^LK",kf_FrameRate},//how fast?
-	{"LW^TZF",kf_ToggleShakeStatus},//shakey
-	{"RPJLZYSVO",kf_ToggleMouseInvert},//mouseflip
-	{"]VYYZM ]^TZM",kf_SetKillerLevel},//biffa
-	{"LO^MTSZ XMZZQ",kf_SetKillerLevel}, //biffa
-	{"Z^LF",kf_SetEasyLevel},//easy
-	{"QPMR^S",kf_SetNormalLevel},//normal
-	{"W^M[",kf_SetHardLevel},//hard
-	{"[PJ]SZ JO",kf_SetToughUnitsLevel},	// your units take half the damage
-	{"HW^SZ YVQ",kf_TogglePower},	// turns on/off infinte power
-	{"XZK PYY RF S^Q[",kf_KillEnemy},	// kills all enemy units and structures
-	{"IZMLVPQ",kf_BuildInfo},	// tells you when the game was built
-	{"KVRZ KPXXSZ",kf_ToggleMissionTimer},
-	{"HPMT W^M[ZM",kf_FinishResearch},
-	{"\\^MPS IPM[ZMR^Q",kf_NoFaults},//carol vorderman
+	{"give all", kf_AllAvailable},	// give all
+	{"deity", kf_ToggleGodMode},	//from above
+	{"droidinfo", kf_DebugDroidInfo},	//show unit stats
+	{"sensors", kf_ToggleSensorDisplay},	//show sensor ranges
+	{"let me win", kf_AddMissionOffWorld},	//let me win
+	{"timedemo", kf_FrameRate},	 //timedemo
+	{"kill", kf_KillSelected},	//kill slected
+	{"demo", kf_ToggleDemoMode},	//demo mode
+	{"john kettley", kf_ToggleWeather},	//john kettley
+	{"shakey", kf_ToggleShakeStatus},	//shakey
+	{"mouseflip", kf_ToggleMouseInvert},	//mouseflip
+	{"biffer baker", kf_SetKillerLevel},	//indestructive units
+	{"easy", kf_SetEasyLevel},	//easy
+	{"normal", kf_SetNormalLevel},	//normal
+	{"hard", kf_SetHardLevel},	//hard
+	{"double up", kf_SetToughUnitsLevel},	// your units take half the damage
+	{"whale fin", kf_TogglePower},	// turns on/off infinte power
+	{"get off my land", kf_KillEnemy},	// kills all enemy units and structures
+	{"build info", kf_BuildInfo},	// tells you when the game was built
+	{"time toggle", kf_ToggleMissionTimer},
+	{"work harder", kf_FinishResearch},
+	{"no faults", kf_NoFaults},//carol vorderman
 	{"end of list",NULL}
 };
-
-char	cheatString[255];
-
-char	*xorString(char *string)
-{
-	char	*pReturn;
-
-	pReturn = string;
-
-	while(*pReturn)
-	{
-		if(*pReturn>32)
-		{
-			*pReturn = (UBYTE)(*pReturn ^ 0x3f);
-		}
-		pReturn++;
-	}
-	return(string);
-}
-
-void	setCheatCodeStatus(BOOL val)
-{
-	bAllowCheatCodes = val;
-}
-
-BOOL	getCheatCodeStatus( void )
-{
-	return(bAllowCheatCodes);
-}
 
 BOOL	attemptCheatCode( STRING *pName )
 {
 	UDWORD	index;
 	STRING	errorString[255];
-	char	*xored;
 
 	index = 0;
 
 	while(cheatCodes[index].function!=NULL)
 	{
-		strcpy(cheatString,cheatCodes[index].pName);
-		xored = xorString(cheatString);
-		if(strcmp(pName,xored) == FALSE)	// strcmp oddity
+		if (strcmp(pName, cheatCodes[index].pName) == 0)
 		{
 			/* We've got our man... */
 			cheatCodes[index].function();	// run it
@@ -108,4 +70,3 @@ BOOL	attemptCheatCode( STRING *pName )
 	addConsoleMessage(errorString,LEFT_JUSTIFY);
 	return(FALSE);
 }
-

@@ -422,8 +422,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,strresGetString(psStringRes,STR_BIND_SELCYBORG));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
 
-	if (bAllowDebugMode)
-	{
 	// NOTE THIS!!!!!!!
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,				"Make all items available");
 	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
@@ -458,7 +456,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
-	}
 
 	saveKeyMap();	// save out the default key mappings.
 
