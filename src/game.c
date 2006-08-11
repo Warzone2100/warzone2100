@@ -10,7 +10,9 @@
 /* Warzone src and library headers */
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
-#include "ivis02.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piestate.h"
 #include "lib/script/script.h"
 #include "lib/gamelib/gtime.h"
 #include "map.h"
@@ -32,7 +34,6 @@
 #include "effects.h"
 #include "init.h"
 #include "mission.h"
-#include "lib/ivis_common/piestate.h"
 #include "scores.h"
 #include "audio_id.h"
 #include "anim_id.h"

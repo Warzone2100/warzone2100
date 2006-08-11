@@ -188,7 +188,6 @@ warzone_SOURCES = \
 		intfac.h \
 		intimage.h \
 		intorder.h \
-		ivis02.h \
 		keybind.h \
 		keyedit.h \
 		keymap.h \
