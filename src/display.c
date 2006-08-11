@@ -19,7 +19,7 @@
 #include "lib/ivis_common/piestate.h"
 
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 //#include "ivisheap.h"//make a call for this
 
 #include "lib/ivis_common/tex.h"//make a call for this

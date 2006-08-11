@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <math.h>
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "move.h"

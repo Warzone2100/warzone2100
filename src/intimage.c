@@ -21,7 +21,7 @@
 #include "lib/ivis_common/piemode.h"
 
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/bitimage.h"
 
 #include "display3d.h"

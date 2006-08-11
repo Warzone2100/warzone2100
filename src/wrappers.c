@@ -45,7 +45,7 @@
 #include "keyedit.h"
 #include "seqdisp.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 #include "resource.h"
 #include "lib/netplay/netplay.h"	// multiplayer
 #include "multiplay.h"

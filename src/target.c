@@ -22,7 +22,7 @@
 #include "lib/ivis_common/geo.h"
 #include "lib/ivis_common/imd.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 
 
 

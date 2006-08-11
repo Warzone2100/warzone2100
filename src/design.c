@@ -19,7 +19,7 @@
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"//matrix code
 #include "lib/ivis_common/piestate.h"

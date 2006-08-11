@@ -20,7 +20,7 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 

@@ -19,8 +19,7 @@ libivis_opengl_a_SOURCES = \
 	ivis02.h \
 	piematrix.h \
 	pietexture.h \
-	screen.h \
-	vid.h
+	screen.h
 
 libivis_opengl_a_libs = ../framework/libframework.a ../ivis_common/libivis_common.a
 libivis_opengl_a_DEPENDENCIES = $(libivis_opengl_a_libs)

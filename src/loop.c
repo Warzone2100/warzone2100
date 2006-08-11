@@ -15,7 +15,7 @@
 #include "lib/ivis_common/piestate.h" //ivis render code
 #include "lib/ivis_common/piemode.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h" //ivis render code
+#include "lib/ivis_common/rendmode.h" //ivis render code
 #include "objects.h"
 #include "display.h"
 #include "map.h"

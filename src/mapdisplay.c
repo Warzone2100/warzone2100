@@ -24,7 +24,7 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 
 #include "map.h"
 #include "mapdisplay.h"

@@ -12,7 +12,7 @@
 #include "form.h"
 #include "tip.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 
 /* The widget heaps */
 OBJ_HEAP	*psLabHeap;

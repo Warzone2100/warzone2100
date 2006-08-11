@@ -10,7 +10,7 @@
 #include "editbox.h"
 #include "form.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 #include "scrap.h"
 
 

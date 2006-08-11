@@ -30,7 +30,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/vid.h"
+#include "lib/ivis_common/rendmode.h"
 #include "objmem.h"
 #include "gateway.h"
 #include <time.h>
