@@ -25,8 +25,8 @@ static STRING aText[YYLMAX];
 static BOOL inComment = FALSE;
 
 /* Pointer to the input buffer */
-static UBYTE *pInputBuffer = NULL;
-static UBYTE *pEndBuffer = NULL;
+static char *pInputBuffer = NULL;
+static char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf, result, max_size) \
       if (pInputBuffer != pEndBuffer) { \
@@ -108,7 +108,7 @@ miss_clear					return LTK_MCLEAR;
 %%
 
 /* Set the current input buffer for the lexer */
-void levSetInputBuffer(UBYTE *pBuffer, UDWORD size)
+void levSetInputBuffer(char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;

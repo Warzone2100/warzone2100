@@ -98,8 +98,8 @@ typedef struct TRACK
 BOOL	sound_Init( SDWORD iMaxSameSamples );
 BOOL	sound_Shutdown();
 
-BOOL	sound_LoadTrackFromFile( signed char szFileName[] );
-void *	sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize );
+BOOL	sound_LoadTrackFromFile(char szFileName[]);
+void *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
 			SDWORD iVol, SDWORD iPriority, SDWORD iAudibleRadius,
 			SDWORD VagID );

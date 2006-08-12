@@ -76,7 +76,7 @@ extern void	scoreDataToConsole		( void );
 extern void	scoreDataToScreen		( void );	
 extern void constructTime			( STRING *psText, UDWORD hours, UDWORD minutes, UDWORD seconds );
 extern void	getAsciiTime			( STRING *psText, UDWORD time );
-extern BOOL	readScoreData			( UBYTE *pFileData, UDWORD fileSize );
+extern BOOL	readScoreData			( char *pFileData, UDWORD fileSize );
 extern BOOL	writeScoreData			( STRING *pFileName );
 
 #endif

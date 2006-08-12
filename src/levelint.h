@@ -39,7 +39,7 @@ extern void levError(STRING *pError);
 extern int lev_lex(void);
 
 /* Set the current input buffer for the lexer */
-extern void levSetInputBuffer(UBYTE *pBuffer, UDWORD size);
+extern void levSetInputBuffer(char *pBuffer, UDWORD size);
 
 extern void levGetErrorData(int *pLine, char **ppText);
 

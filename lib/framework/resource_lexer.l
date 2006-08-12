@@ -32,8 +32,8 @@ static UDWORD currText=0;
 static BOOL inComment = FALSE;
 
 /* Pointer to the input buffer */
-static UBYTE *pInputBuffer = NULL;
-static UBYTE *pEndBuffer = NULL;
+static char *pInputBuffer = NULL;
+static char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
 			if (pInputBuffer != pEndBuffer) { \
@@ -104,7 +104,7 @@ file						{ return FILETOKEN; }
 %%
 
 /* Set the current input buffer for the lexer */
-void resSetInputBuffer(UBYTE *pBuffer, UDWORD size)
+void resSetInputBuffer(char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;

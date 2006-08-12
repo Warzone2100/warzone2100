@@ -250,11 +250,7 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 		butString[strlen(butString)-1]='\0';
 	}
 
-	//draw text
-	iV_DrawText( (UCHAR*)butString,
-				 x+6,
-				 y+12);
-
+	iV_DrawText(butString, x + 6, y + 12);	//draw text
 
 	// if map, then draw no. of players.
 	for(count=0;count<(UDWORD)psWidget->pUserData;count++)
@@ -743,18 +739,18 @@ void displayExtraGubbins(UDWORD height)
 	iV_SetFont(WFont);											// font
 	iV_SetTextColour(-1);										//colour
 
-	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_ALLIANCES),MULTIMENU_FORM_X+MULTIMENU_C0,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_SCORE)	   ,MULTIMENU_FORM_X+MULTIMENU_C8,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_KILLS)    ,MULTIMENU_FORM_X+MULTIMENU_C9,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText((UCHAR*)strresGetString(psStringRes, STR_MUL_PING)     ,MULTIMENU_FORM_X+MULTIMENU_C10,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_PLAY)     ,									MULTIMENU_FORM_X+MULTIMENU_C11,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(strresGetString(psStringRes, STR_MUL_ALLIANCES), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(strresGetString(psStringRes, STR_MUL_SCORE), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(strresGetString(psStringRes, STR_MUL_KILLS), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(strresGetString(psStringRes, STR_MUL_PING), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(strresGetString(psStringRes, STR_MUL_PLAY), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 
 #ifdef DEBUG
 	sprintf(str,"Traf:%d/%d",NETgetBytesSent(),NETgetBytesRecvd());
-	iV_DrawText((UCHAR*)str,MULTIMENU_FORM_X,MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
+	iV_DrawText(str, MULTIMENU_FORM_X, MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
 
 	sprintf(str,"Pack:%d/%d",NETgetPacketsSent(), NETgetPacketsRecvd());
-	iV_DrawText((UCHAR*)str,MULTIMENU_FORM_X+80,MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
+	iV_DrawText(str, MULTIMENU_FORM_X+80, MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
 #endif
 	return;
 }
@@ -789,7 +785,7 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		{
 			str[strlen(str)-1]='\0';
 		}
-		iV_DrawText((UCHAR*)str, x+MULTIMENU_C2, y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x+MULTIMENU_C2, y+MULTIMENU_FONT_OSET);
 
 		//c3-7 alliance
 		//manage buttons by showing or hiding them. gifts only in campaign,
@@ -826,7 +822,7 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	{
 		//c8:score,
 		sprintf(str,"%d",getMultiStats(player,TRUE).recentScore);
-		iV_DrawText((UCHAR*)str,x+MULTIMENU_C8,y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 		//c9:kills,
 //		if(game.type == DMATCH)
@@ -837,7 +833,7 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 //		{
 			sprintf(str,"%d",getMultiStats(player,TRUE).recentKills);
 //		}
-		iV_DrawText((UCHAR*)str,x+MULTIMENU_C9,y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 
 		//c10:ping
 		if(player != selectedPlayer)
@@ -850,21 +846,21 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 			{
 				sprintf(str,"%d",ingame.PingTimes[player]);
 			}
-			iV_DrawText((UCHAR*)str,x+MULTIMENU_C10,y+MULTIMENU_FONT_OSET);
+			iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 		}
 
 		//c11:played
 		sprintf(str,"%d",getMultiStats(player,TRUE).played);
-		iV_DrawText((UCHAR*)str,x+MULTIMENU_C11,y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
 	}
 	else
 	{
 		// estimate of score.
 		sprintf(str,"%d",ingame.skScores[player][0]);
-		iV_DrawText((UCHAR*)str,x+MULTIMENU_C8,y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 		// estimated kills
 		sprintf(str,"%d",ingame.skScores[player][1]);
-		iV_DrawText((UCHAR*)str,x+MULTIMENU_C9,y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 
 	}
 
@@ -1353,7 +1349,7 @@ void intDisplayMiniMultiMenu(void)
 
 		// display how far done..
 		sprintf(sTmp,"%d%%", PERCENT(arenaPlayersReceived,MAX_PLAYERS) );
-		iV_DrawText((UCHAR*)sTmp ,x+(w/2)-10,y+(h/2)+3 );
+		iV_DrawText(sTmp, x+(w/2)-10, y+(h/2)+3);
 	}
 	else
 	{
@@ -1406,7 +1402,7 @@ void intDisplayMiniMultiMenu(void)
 		{
 			sTmp[strlen(sTmp)-1]='\0';
 		}
-		iV_DrawText((UCHAR*)sTmp,x+16,y+13);
+		iV_DrawText(sTmp, x + 16, y + 13);
 
 		if(players >1)
 		{
@@ -1416,7 +1412,7 @@ void intDisplayMiniMultiMenu(void)
 			{
 				sTmp[strlen(sTmp)-1]='\0';
 			}
-			iV_DrawText((UCHAR*)sTmp ,x+16,y+26);
+			iV_DrawText(sTmp, x + 16, y + 26);
 		}
 
 		if(players >2)
@@ -1424,14 +1420,14 @@ void intDisplayMiniMultiMenu(void)
 			if(j!=7 && j!=6)
 			{
 				sprintf(sTmp,"%d",8-j);
-				iV_DrawText((UCHAR*)sTmp,x+5,y+39);
+				iV_DrawText(sTmp, x + 5, y + 39);
 
 				strcpy(sTmp,getPlayerName(scp[selectedPlayer]));
 				while(iV_GetTextWidth(sTmp) >= RADWIDTH-20 )
 				{
 					sTmp[strlen(sTmp)-1]='\0';
 				}
-				iV_DrawText((UCHAR*) sTmp,x+16,y+39);
+				iV_DrawText(sTmp, x + 16, y + 39);
 			}
 			else
 			{
@@ -1441,7 +1437,7 @@ void intDisplayMiniMultiMenu(void)
 				{
 					sTmp[strlen(sTmp)-1]='\0';
 				}
-				iV_DrawText((UCHAR*)sTmp ,x+16,y+39);
+				iV_DrawText(sTmp, x + 16, y + 39);
 			}
 		}
 	}

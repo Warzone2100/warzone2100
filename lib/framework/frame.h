@@ -155,17 +155,17 @@ extern void frameSetWindowProc(DEFWINPROCTYPE winProc);
 
 /* Load the file with name pointed to by pFileName into a memory buffer. */
 BOOL loadFile(const char *pFileName,		// The filename
-              UBYTE **ppFileData,	// A buffer containing the file contents
+              char **ppFileData,	// A buffer containing the file contents
               UDWORD *pFileSize);	// The size of this buffer
 
 /* Save the data in the buffer into the given file */
 extern BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
 
 // load a file from disk into a fixed memory buffer
-BOOL loadFileToBuffer(char *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
+BOOL loadFileToBuffer(char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
 // as above but returns quietly if no file found
-BOOL loadFileToBufferNoError(char *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize,
+BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSize,
                              UDWORD *pSize);
 
 extern SDWORD ftol(float f);

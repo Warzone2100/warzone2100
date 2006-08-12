@@ -195,8 +195,8 @@ extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 extern void pie_D3DPoly(PIED3DPOLY *poly);
 
 // PNG
-BOOL pie_PNGLoadMemToBuffer(int8 *pngimage, iSprite *s, iColour *pal);
-iBool pie_PNGLoadMem(int8 *pngimage, iSprite *s, iColour *pal);
+BOOL pie_PNGLoadMemToBuffer(char *pngimage, iSprite *s, iColour *pal);
+iBool pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal);
 
 //necromancer
 extern void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3,  SDWORD texPage);

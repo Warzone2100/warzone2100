@@ -354,7 +354,7 @@ STRING *strresGetString(STR_RES *psRes, UDWORD id)
 
 
 /* Load a string resource file */
-BOOL strresLoad(STR_RES *psRes, UBYTE *pData, UDWORD size)
+BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size)
 {
 	psCurrRes = psRes;
 	strresSetInputBuffer(pData, size);

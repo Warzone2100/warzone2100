@@ -238,7 +238,7 @@ BOOL sound_AddTrack( TRACK *pTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void *sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
+void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 {
 	//~~~~~~~~~~~~
 	TRACK	*pTrack;
@@ -287,7 +287,7 @@ void *sound_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_LoadTrackFromFile( signed char szFileName[] )
+BOOL sound_LoadTrackFromFile(char szFileName[])
 {
 	//~~~~~~~~~~~~
 	TRACK	*pTrack;

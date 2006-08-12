@@ -3664,7 +3664,7 @@ static void scriptResetTables(void)
 }
 
 /* Compile a script program */
-BOOL scriptCompile(UBYTE *pData, UDWORD fileSize,
+BOOL scriptCompile(char *pData, UDWORD fileSize,
 				   SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType)
 {
 	// Tell lex about the input buffer
@@ -4002,7 +4002,7 @@ BOOL scriptLookUpCallback(STRING *pIdent, CALLBACK_SYMBOL **ppsCallback)
 }
 
 /* Add a new event symbol */
-BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, INT numArgs)
+BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, UDWORD numArgs)
 {
 	EVENT_SYMBOL		*psEvent, *psCurr, *psPrev;
 

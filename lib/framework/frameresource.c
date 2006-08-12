@@ -31,7 +31,7 @@ STRING	aCurrResDir[FILE_MAXCHAR];
 static SDWORD	resBlockID;
 
 // buffer to load file data into
-static UBYTE	*pFileBuffer = NULL;
+static char	*pFileBuffer = NULL;
 static SDWORD	fileBufferSize = 0;
 
 // prototypes
@@ -97,10 +97,10 @@ void resSetBaseDir(STRING *pResDir)
 
 /* Parse the res file */
 BOOL resLoad(STRING *pResFile, SDWORD blockID,
-             UBYTE *pLoadBuffer, SDWORD bufferSize,
+             char *pLoadBuffer, SDWORD bufferSize,
              BLOCK_HEAP *psMemHeap)
 {
-	UBYTE *pBuffer;
+	char *pBuffer;
 	UDWORD	size;
 	BLOCK_HEAP *psOldHeap;
 
@@ -274,7 +274,7 @@ void SetLastHashName(UDWORD HashName)
 // Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
 typedef struct
 {
-  	UBYTE *pBuffer;	// a pointer to the data
+  	char *pBuffer;	// a pointer to the data
 	UDWORD size;	// number of bytes
 	UBYTE	type;	// what type of resource is it
 } RESOURCEFILE;
@@ -321,7 +321,7 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 	SDWORD ResID;
 	RESOURCEFILE *ResData;
 	UDWORD size;
-	UBYTE *pBuffer;
+	char *pBuffer;
 
 	ResID=FindEmptyResourceFile();
 	if (ResID==-1) return(FALSE);		// all resource files are full
@@ -339,8 +339,7 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 	blockSuspendUsage();
 
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
-	// FIXME: evil cast
-	if (!loadFile(ResourceName, (UBYTE **) &pBuffer, &size))
+	if (!loadFile(ResourceName, &pBuffer, &size))
 	{
 		return FALSE;
 	}

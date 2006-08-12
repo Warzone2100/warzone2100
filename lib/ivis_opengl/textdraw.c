@@ -342,10 +342,10 @@ void SetExtentsMode_USEMAX(void)
 //
 // Returns y coord of next text line.
 //
-UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD Justify,BOOL DrawBack)
+UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, BOOL DrawBack)
 {
 	int i,si,osi;
-	int Len = strlen((char*)String);
+	int Len = strlen(String);
 	int jx = x;		// Default to left justify.
 	int jy = y;
 	int WWidth;

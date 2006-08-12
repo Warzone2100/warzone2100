@@ -87,8 +87,8 @@ extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDW
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 
 BOOL						bHosted			= FALSE;				//we have set up a game
-UBYTE						sPlayer[128];							// player name (to be used)
-UBYTE						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
+char						sPlayer[128];							// player name (to be used)
+char						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
 static BOOL					bColourChooserUp= FALSE;
 static SWORD				SettingsUp		= 0;
 static UBYTE				InitialProto	= 0;
@@ -194,15 +194,14 @@ void loadMapPreview(void)
 {
 	STRING			aFileName[256];
 	UDWORD			fileSize;
-	UBYTE			*pFileData = NULL;
+	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 
 //	iBitmap
-	UDWORD			i,j,x,y,height,offX,offY,offX2,offY2,tmp;
-	UBYTE			scale,col,coltab[16],bitDepth=8;
+	UDWORD			i, j, x, y, height, offX2, offY2;
+	UBYTE			scale,col;
 	MAPTILE			*psTile,*WTile;
-	iSprite			backDropSprite;
-	UDWORD oursize,*optr;
+	UDWORD oursize;
 	unsigned char  *ptr, *imageData;
 
 	if(psMapTiles)
@@ -909,7 +908,7 @@ FAIL:
 	if(safeSearch)
 	{
 		iV_SetFont(FEFont);
-		pie_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_SEARCHING),D_W+260,D_H+460);
+		pie_DrawText(strresGetString(psStringRes, STR_MUL_SEARCHING), D_W+260, D_H+460);
 	}
 
 	DrawEnd();
@@ -2158,10 +2157,10 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_PNAME:
-		strcpy((STRING*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));
+		strcpy(sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));
 
 		// chop to 15 chars..
-		while(strlen((STRING*)sPlayer) > 15)	// clip name.
+		while(strlen(sPlayer) > 15)	// clip name.
 		{
 			sPlayer[strlen(sPlayer)-1]='\0';
 		}
@@ -2746,7 +2745,7 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.maxPlayers = 4;
 		}
 
-		strncpy((CHAR *)game.version,(STRING*)buildTime,8);		// note buildtime.
+		strncpy(game.version, buildTime, 8);		// note buildtime.
 
 		ingame.localOptionsReceived = FALSE;
 		if(ingame.numStructureLimits)
@@ -3528,7 +3527,7 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		NetPlay.games[i].name[strlen(NetPlay.games[i].name)-1]='\0';
 	}
-	iV_DrawText((UCHAR*)NetPlay.games[i].name,x+100,y+24);								// name
+	iV_DrawText(NetPlay.games[i].name, x + 100, y + 24);	// name
 
 	// get game info.
 	if(	   (NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
@@ -3545,9 +3544,9 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 	else
 	{
-		iV_DrawText((UCHAR*)strresGetString(psStringRes,STR_MUL_PLAYERS),x+5,y+18);
+		iV_DrawText(strresGetString(psStringRes, STR_MUL_PLAYERS), x + 5, y + 18);
 		sprintf(tmp,"%d/%d",NetPlay.games[i].desc.dwCurrentPlayers,NetPlay.games[i].desc.dwMaxPlayers);
-		iV_DrawText((UCHAR*)tmp,x+17,y+33);
+		iV_DrawText(tmp, x + 17, y + 33);
 	}
 
 	AddCursorSnap(&InterfaceSnap,
@@ -3616,7 +3615,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 		{
 			NetPlay.players[i].name[strlen(NetPlay.players[i].name)-1]='\0';
 		}
-		iV_DrawText((UCHAR*)NetPlay.players[i].name,x+65,y+22);
+		iV_DrawText(NetPlay.players[i].name, x + 65, y + 22);
 
 		// ping rating
 		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)

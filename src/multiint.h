@@ -24,7 +24,7 @@ extern	BOOL	addMultiBut				(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, 
 										 UDWORD width, UDWORD height, UDWORD tipres,
 										 UDWORD norm,UDWORD hi,BOOL showmouseover);
 extern  char	sForceName[256];
-extern	UBYTE	sPlayer[128];
+extern	char	sPlayer[128];
 
 VOID    kickPlayer                      (DPID dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box

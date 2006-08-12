@@ -153,7 +153,7 @@ void registry_set_key( const char *k, const char *v )
 BOOL registry_load( char *filename )
 {
 	char buffer[MAXLINESIZE];
-	UBYTE * bptr = NULL, * bufstart = NULL;
+	char *bptr = NULL, *bufstart = NULL;
 	char key[32];
 	unsigned int l;
 	UDWORD filesize;

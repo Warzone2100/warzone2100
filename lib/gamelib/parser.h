@@ -12,8 +12,8 @@
 extern void		IncludeFile( char szFileName[] );
 extern BOOL		ParseFile( char szFileName[] );
 extern void		IncludeFile( char szFileName[] );
-extern void		parserSetInputBuffer( UBYTE *pBuffer, UDWORD size );
-extern BOOL		ParseResourceFile( UBYTE *pData, UDWORD fileSize );
+extern void		parserSetInputBuffer(char *pBuffer, UDWORD size);
+extern BOOL		ParseResourceFile(char *pData, UDWORD fileSize);
 extern BOOL		ParsingBuffer( void );
 extern void		parseGetErrorData(int *pLine, char **ppText);
 

@@ -424,25 +424,16 @@ void pie_ImageDefTrans(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,i
 	pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
 }
 
-void pie_UploadDisplayBuffer(UBYTE *DisplayBuffer)
+void pie_UploadDisplayBuffer(char *DisplayBuffer)
 {
 	pie_GlobalRenderEnd(FALSE);
 	screen_Upload(NULL);
 	pie_GlobalRenderBegin();
 }
 
-void pie_DownloadDisplayBuffer(UBYTE *DisplayBuffer)
+void pie_DownloadDisplayBuffer(char *DisplayBuffer)
 {
-	/*
-	switch (pie_GetRenderEngine())
-	{
-	case ENGINE_4101:
-		DownloadDisplayBuffer(DisplayBuffer);
-		break;
-	default:
-		break;
-	}
-	*/
+	/* Not implemented */
 }
 
 UDWORD radarTexture;

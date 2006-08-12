@@ -726,7 +726,7 @@ BOOL InitialiseGlobals(void)
 
 
 BOOL loadLevFile(const char* filename, int datadir) {
-	UBYTE *pBuffer;
+	char *pBuffer;
 	UDWORD size;
 
 	if (   !PHYSFS_exists(filename)
@@ -1014,7 +1014,7 @@ BOOL systemInitialise(void)
 	{
 		displayBufferSize = 5000000;
 	}
-	DisplayBuffer = (UBYTE*)MALLOC(displayBufferSize);
+	DisplayBuffer = MALLOC(displayBufferSize);
 	if (DisplayBuffer == NULL)
 	{
 		DBERROR(("Unable to allocate memory for display buffer"));

@@ -34,7 +34,7 @@ typedef struct _array_indexes
 } ARRAY_INDEXES;
 
 /* Set the current input buffer for the lexer */
-extern void scrvSetInputBuffer(UBYTE *pBuffer, UDWORD size);
+extern void scrvSetInputBuffer(char *pBuffer, UDWORD size);
 
 extern void scrvGetErrorData(int *pLine, char **ppText);
 
@@ -93,7 +93,7 @@ extern void scrvShutDown(void);
 extern void scrvReset(void);
 
 // Load a script value file
-extern BOOL scrvLoad(UBYTE *pData, UDWORD size);
+extern BOOL scrvLoad(char *pData, UDWORD size);
 
 // Link any object types to the actual pointer values
 //extern BOOL scrvLinkValues(void);

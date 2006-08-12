@@ -36,7 +36,7 @@
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
 
-static	UBYTE	currentLevelName[32];
+static	char	currentLevelName[32];
 
 // the current level descriptions
 LEVEL_DATASET	*psLevels;
@@ -153,7 +153,7 @@ BOOL levFindDataSet(STRING *pName, LEVEL_DATASET **ppsDataSet)
 }
 
 // parse a level description data file
-BOOL levParse(UBYTE *pBuffer, SDWORD size, int datadir)
+BOOL levParse(char *pBuffer, SDWORD size, int datadir)
 {
 	SDWORD			token, state, currData=0;
 	LEVEL_DATASET	*psDataSet = NULL;

@@ -52,9 +52,9 @@ extern void DrawTransColourImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y,SWORD
 extern void iV_SetMousePointer(IMAGEFILE *ImageFile,UWORD ImageID);
 extern void iV_DrawMousePointer(int x,int y);
 extern void DownLoadRadar(unsigned char *buffer);
-extern void UploadDisplayBuffer(UBYTE *DisplayBuffer);
-extern void DownloadDisplayBuffer(UBYTE *DisplayBuffer);
-extern void ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB);
+extern void UploadDisplayBuffer(char *DisplayBuffer);
+extern void DownloadDisplayBuffer(char *DisplayBuffer);
+extern void ScaleBitmapRGB(char *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB);
 
 
 extern UDWORD iV_GetMouseFrame(void);

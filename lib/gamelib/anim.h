@@ -111,7 +111,7 @@ ANIMGLOBALS;
 
 BOOL		anim_Init( GETSHAPEFUNC  );
 BOOL		anim_Shutdown( void );
-BASEANIM *	anim_LoadFromBuffer( UBYTE *pBuffer, UDWORD size );
+BASEANIM *	anim_LoadFromBuffer(char *pBuffer, UDWORD size);
 void		anim_ReleaseAnim( BASEANIM *psAnim );
 BOOL		anim_Create3D( char szPieFileName[], UWORD uwFrames,
 							UWORD uwFrameRate, UWORD uwObj,

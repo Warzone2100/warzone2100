@@ -269,8 +269,8 @@ void (*iV_TransTriangle)(iVertex *vrt);
 //void (*iV_Box)(int x0,int y0, int x1, int y1, uint32 colour);
 //void (*iV_BoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
 
-//void (*iV_DownloadDisplayBuffer)(UBYTE *DisplayBuffer);
-//void (*pie_DownLoadRadar)(unsigned char *buffer);
+//void (*iV_DownloadDisplayBuffer)(char *DisplayBuffer);
+//void (*pie_DownLoadRadar)(char *buffer);
 
 //void (*iV_TransBoxFill)(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 //void (*iV_UniTransBoxFill)(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, UDWORD transparency);

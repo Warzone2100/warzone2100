@@ -527,7 +527,7 @@ BOOL loadForce(char *name)
 
 	if (!PHYSFS_close(pFileHandle))
 	{
-		debug(LOG_ERROR, "loadForce: Close failed for %s", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "loadForce: Close failed for %s: %s", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 	return TRUE;
@@ -584,7 +584,7 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 {
 	STRING				fileName[255]="";
 	UDWORD				size;
-	UBYTE				*pFileData;
+	char				*pFileData;
 	PLAYERSTATS			blankstats = {0};
 	SAVEDPLAYERSTATS	st,*codedst;
 	UDWORD				tmp[4];
@@ -658,7 +658,9 @@ BOOL saveMultiStats(STRING *sFileName, STRING *sPlayerName,PLAYERSTATS *playerSt
 	strcpy(fileName,MultiPlayersPath);
 	strcat(fileName,sFileName);
 	strcat(fileName,".sta");
-	saveFile(fileName,(UBYTE*)&codedst,sizeof(SAVEDPLAYERSTATS));
+
+	// FIXME: ugly cast
+	saveFile(fileName, (char *)&codedst, sizeof(SAVEDPLAYERSTATS));
 
 	return TRUE;
 }

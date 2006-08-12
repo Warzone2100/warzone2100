@@ -523,10 +523,10 @@ void gwFreeGateway(GATEWAY *psDel)
 
 
 // load a gateway list
-BOOL gwLoadGateways(UBYTE *pFileBuffer, UDWORD fileSize)
+BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize)
 {
 	SDWORD	numGW, x1,y1, x2,y2;
-	UBYTE	*pPos;
+	char	*pPos;
 
 	// get the number of gateways
 	pPos = pFileBuffer;

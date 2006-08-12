@@ -58,7 +58,7 @@ typedef struct _level_dataset
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern BOOL levParse(UBYTE *pBuffer, SDWORD size, int datadir);
+extern BOOL levParse(char *pBuffer, SDWORD size, int datadir);
 
 // shutdown the level system
 extern void levShutDown(void);

@@ -26,8 +26,8 @@ static UDWORD currText=0;
 static BOOL inComment = FALSE;
 
 /* Pointer to the input buffer */
-static UBYTE *pInputBuffer = NULL;
-static UBYTE *pEndBuffer = NULL;
+static char *pInputBuffer = NULL;
+static char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf, result, max_size) \
       if (pInputBuffer != pEndBuffer) { \
@@ -421,7 +421,7 @@ NOT						return _NOT;
 %%
 
 /* Set the current input buffer for the lexer */
-void scriptSetInputBuffer(UBYTE *pBuffer, UDWORD size)
+void scriptSetInputBuffer(char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;
@@ -440,7 +440,7 @@ int scr_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reched end of file in a comment"));
+		DBERROR(("Warning: reached end of file in a comment"));
 	}
 	return 1;
 }

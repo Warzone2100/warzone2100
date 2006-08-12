@@ -162,7 +162,7 @@ BOOL ReticuleUp = FALSE;
 BOOL Refreshing = FALSE;
 
 
-UBYTE	*DisplayBuffer;
+char	*DisplayBuffer;
 UDWORD	displayBufferSize;
 
 

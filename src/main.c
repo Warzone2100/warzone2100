@@ -463,7 +463,7 @@ init://jump here from the end if re_initialising
 		DBERROR(("Out of memory"));
 		return -1;
 	}
-	if (!loadFileToBuffer("palette.bin", (UBYTE*)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
+	if (!loadFileToBuffer("palette.bin", psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
 	{
 		DBERROR(("Couldn't load palette data"));
 		return -1;

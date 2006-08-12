@@ -83,7 +83,7 @@ extern GAMESPY	gameSpy;
 typedef struct {
 	UBYTE		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
 	STRING		map[128];					// name of multiplayer map being used.
-	UBYTE		version[8];					// version of warzone
+	char		version[8];					// version of warzone
 	UBYTE		maxPlayers;					// max players to allow
 	STRING		name[128];					// game name   (to be used)
 	BOOL		bComputerPlayers;			// Allow computer players

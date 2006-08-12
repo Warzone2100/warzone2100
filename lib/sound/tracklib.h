@@ -27,7 +27,7 @@
 BOOL	sound_InitLibrary( void );
 void	sound_ShutdownLibrary( void );
 
-BOOL	sound_ReadTrackFromFile( TRACK * psTrack, signed char szFileName[] );
+BOOL	sound_ReadTrackFromFile(TRACK * psTrack, char szFileName[]);
 BOOL	sound_ReadTrackFromBuffer( TRACK * psTrack, void *pBuffer,
 									UDWORD udwSize );
 void	sound_FreeTrack( TRACK * psTrack );

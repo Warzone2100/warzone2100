@@ -191,7 +191,7 @@ UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
 
 /* pointer to a load map function - depends on version */
-BOOL (*pLoadMapFunc)(UBYTE *pFileData, UDWORD fileSize);
+BOOL (*pLoadMapFunc)(char *pFileData, UDWORD fileSize);
 
 MAPTILE *GetCurrentMap(void)	// returns a pointer to the current loaded map data
 {
@@ -311,7 +311,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 }
 
 /* load the map data - for version 1 */
-BOOL mapLoadV1(UBYTE *pFileData, UDWORD fileSize)
+BOOL mapLoadV1(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
 	MAP_SAVETILEV1		*psTileData;
@@ -345,7 +345,7 @@ BOOL mapLoadV1(UBYTE *pFileData, UDWORD fileSize)
 		}
 		psTileData = (MAP_SAVETILEV1 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZEV1);
 	}
-	if (((UBYTE *)psTileData) - pFileData > (SDWORD)fileSize)
+	if ((char *)psTileData - pFileData > fileSize)
 	{
 		DBERROR(("mapLoad: unexpected end of file"));
 		return FALSE;
@@ -360,7 +360,7 @@ BOOL mapLoadV1(UBYTE *pFileData, UDWORD fileSize)
 }
 
 /* load the map data - for version 1 */
-BOOL mapLoadV2(UBYTE *pFileData, UDWORD fileSize)
+BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
 	MAP_SAVETILEV2		*psTileData;
@@ -391,7 +391,7 @@ BOOL mapLoadV2(UBYTE *pFileData, UDWORD fileSize)
 		psTileData = (MAP_SAVETILEV2 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);
 	}
 
-	if (((UBYTE *)psTileData) - pFileData > (SDWORD)fileSize)
+	if ((char *)psTileData - pFileData > fileSize)
 	{
 		DBERROR(("mapLoad: unexpected end of file"));
 		return FALSE;
@@ -407,7 +407,7 @@ BOOL mapLoadV2(UBYTE *pFileData, UDWORD fileSize)
 
 
 /* load the map data - for version 3 */
-BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
+BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
 	MAP_SAVETILEV2		*psTileData;
@@ -537,7 +537,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 		}
 	}
 
-	if (((UBYTE *)pZone) - pFileData > (SDWORD)fileSize)
+	if ((char *)pZone - pFileData > fileSize)
 	{
 		DBERROR(("mapLoadV3: unexpected end of file"));
 		return FALSE;
@@ -573,7 +573,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 
 
 /* Initialise the map structure */
-BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
+BOOL mapLoad(char *pFileData, UDWORD fileSize)
 {
 //	UDWORD				i;
 //	UDWORD	tmp, bitCount, widthShift;
@@ -890,7 +890,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 
 #if 0
 /* Save the map data */
-BOOL mapSaveMission(UBYTE **ppFileData, UDWORD *pFileSize)
+BOOL mapSaveMission(char **ppFileData, UDWORD *pFileSize)
 {
 	UDWORD	i;
 	MAP_SAVEHEADER	*psHeader;
@@ -918,7 +918,7 @@ BOOL mapSaveMission(UBYTE **ppFileData, UDWORD *pFileSize)
 		*pFileSize += 1+aNumEquiv[i];
 	}
 
-	*ppFileData = (UBYTE *)MALLOC(*pFileSize);
+	*ppFileData = MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -1587,11 +1587,11 @@ UDWORD GetHeightOfMap(void)
 BOOL	writeVisibilityData( STRING *pFileName )
 {
 	char *pFileData;		// Pointer to the necessary allocated memory
-UBYTE			*pVisData;		// Pointer to the start of the map data
-UDWORD			fileSize;		// How many bytes we need - depends on compression
-VIS_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
-UDWORD			mapEntries;		// Effectively, how many tiles are there?
-UDWORD			i;
+	char *pVisData;			// Pointer to the start of the map data
+	UDWORD fileSize;		// How many bytes we need - depends on compression
+	VIS_SAVEHEADER *psHeader;		// Pointer to the header part of the file
+	UDWORD mapEntries;		// Effectively, how many tiles are there?
+	UDWORD i;
 	BOOL status = TRUE;
 
 	/* How many tiles do we write out data from? */
@@ -1601,7 +1601,7 @@ UDWORD			i;
 	fileSize = ( sizeof(struct _vis_save_header) + ( mapEntries*sizeof(UBYTE) ) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = (UBYTE *)MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)
@@ -1648,7 +1648,7 @@ UDWORD			i;
 
 // -----------------------------------------------------------------------------------
 /* This will read in the visibility data */
-BOOL	readVisibilityData( UBYTE *pFileData, UDWORD fileSize )
+BOOL	readVisibilityData(char *pFileData, UDWORD fileSize)
 {
 UDWORD				expectedFileSize;
 UDWORD				mapEntries;

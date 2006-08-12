@@ -59,9 +59,9 @@ typedef enum _access_type
 // function pointer for script variable saving
 // if pBuffer is NULL the script system is just asking how much space the saved variable will require
 // otherwise pBuffer points to an array to store the value in
-typedef BOOL (*SCR_VAL_SAVE)(INTERP_TYPE type, UDWORD data, UBYTE *pBuffer, UDWORD *pSize);
+typedef BOOL (*SCR_VAL_SAVE)(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize);
 // function pointer for script variable loading
-typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_TYPE type, UBYTE *pBuffer, UDWORD size, UDWORD *pData);
+typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size, UDWORD *pData);
 
 /* Type for a user type symbol */
 typedef struct _type_symbol
@@ -244,7 +244,7 @@ extern CONST_SYMBOL		*asScrConstantTab;
 extern CALLBACK_SYMBOL	*asScrCallbackTab;
 
 /* Set the current input buffer for the lexer */
-extern void scriptSetInputBuffer(UBYTE *pBuffer, UDWORD size);
+extern void scriptSetInputBuffer(char *pBuffer, UDWORD size);
 
 /* Initialise the parser ready for a new script */
 extern BOOL scriptInitParser(void);
@@ -267,7 +267,7 @@ extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
 extern BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
 
 /* Add a new event symbol */
-extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, INT numArgs);
+extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, UDWORD numArgs);
 
 // Add the code to a defined event
 extern BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger);

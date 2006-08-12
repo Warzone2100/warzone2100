@@ -14,9 +14,9 @@
 #define RESID_MAXCHAR		40
 
 /* Function pointer for a function that loads from a memory buffer */
-typedef BOOL (*RES_BUFFERLOAD)(UBYTE *pBuffer, UDWORD size, void **pData);
+typedef BOOL (*RES_BUFFERLOAD)(char *pBuffer, UDWORD size, void **pData);
 /* Function pointer for a function that loads from a filename */
-typedef BOOL (*RES_FILELOAD)(STRING *pFile, void **pData);
+typedef BOOL (*RES_FILELOAD)(char *pFile, void **pData);
 
 /* Function pointer for releasing a resource loaded by the above functions */
 typedef void (*RES_FREE)(void *pData);
@@ -80,7 +80,7 @@ extern void resSetBaseDir(STRING *pResDir);
 /* Parse the res file */
 struct _block_heap;
 BOOL resLoad(STRING *pResFile, SDWORD blockID,
-             UBYTE *pLoadBuffer, SDWORD bufferSize,
+             char *pLoadBuffer, SDWORD bufferSize,
              struct _block_heap *psMemHeap);
 
 /* Release all the resources currently loaded and the resource load functions */

@@ -55,7 +55,7 @@ extern void pie_SetFormattedTextFlags(UDWORD Flags);
 extern UDWORD pie_GetFormattedTextFlags(void);
 extern void pie_StartTextExtents(void);
 extern void pie_FillTextExtents(int BorderThickness,UBYTE r,UBYTE g,UBYTE b,BOOL Alpha);
-extern UDWORD pie_DrawFormattedText(UBYTE *String,UDWORD x,UDWORD y,UDWORD Width,UDWORD Justify,BOOL DrawBack);
+extern UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, BOOL DrawBack);
 
 extern void pie_DrawText(STRING *string,UDWORD x,UDWORD y);
 extern void pie_DrawTextToSurface(STRING *String, int XPos, int YPos);

@@ -68,7 +68,7 @@ void dataISpriteRelease(void *pData);
  * Source
  *
  *********************************************************/
-void calcCheatHash(UBYTE *pBuffer, UDWORD size, UDWORD cheat)
+void calcCheatHash(char *pBuffer, UDWORD size, UDWORD cheat)
 {
 	if(!bMultiPlayer)
 	{
@@ -103,7 +103,7 @@ void dataClearSaveFlag(void)
 
 
 /* Load the body stats */
-BOOL bufferSBODYLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSBODYLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SBODY);
 	if (!loadBodyStats((SBYTE*)pBuffer, size))
@@ -129,7 +129,7 @@ void dataReleaseStats(void *pData)
 
 
 /* Load the weapon stats */
-BOOL bufferSWEAPONLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSWEAPONLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size, CHEAT_SWEAPON);
 	if (!loadWeaponStats((SBYTE*)pBuffer, size))
@@ -148,7 +148,7 @@ BOOL bufferSWEAPONLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the constructor stats */
-BOOL bufferSCONSTRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSCONSTRLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SCONSTR);
 	if (!loadConstructStats((SBYTE*)pBuffer, size))
@@ -167,7 +167,7 @@ BOOL bufferSCONSTRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the ECM stats */
-BOOL bufferSECMLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSECMLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SECM);
 
@@ -187,7 +187,7 @@ BOOL bufferSECMLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Propulsion stats */
-BOOL bufferSPROPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSPROPLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SPROP);
 
@@ -207,7 +207,7 @@ BOOL bufferSPROPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Sensor stats */
-BOOL bufferSSENSORLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSSENSORLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSENSOR);
 
@@ -227,7 +227,7 @@ BOOL bufferSSENSORLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Repair stats */
-BOOL bufferSREPAIRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSREPAIRLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SREPAIR);
 
@@ -247,7 +247,7 @@ BOOL bufferSREPAIRLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Brain stats */
-BOOL bufferSBRAINLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSBRAINLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SBRAIN);
 
@@ -266,26 +266,8 @@ BOOL bufferSBRAINLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	return TRUE;
 }
 
-/* Load the Program stats */
-/*BOOL bufferSPROGRAMLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-	if (!loadProgramStats((SBYTE*)pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_PROGRAM, numProgramStats))
-	{
-		return FALSE;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return TRUE;
-}*/
-
 /* Load the PropulsionType stats */
-BOOL bufferSPROPTYPESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSPROPTYPESLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SPROPTY);
 
@@ -301,7 +283,7 @@ BOOL bufferSPROPTYPESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the propulsion type sound stats */
-BOOL bufferSPROPSNDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSPROPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadPropulsionSounds((SBYTE*)pBuffer, size))
 	{
@@ -314,7 +296,7 @@ BOOL bufferSPROPSNDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the SSPECABIL stats */
-BOOL bufferSSPECABILLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSSPECABILLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadSpecialAbility((SBYTE*)pBuffer, size))
 	{
@@ -328,7 +310,7 @@ BOOL bufferSSPECABILLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the STERRTABLE stats */
-BOOL bufferSTERRTABLELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSTERRTABLELoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STERRT);
 
@@ -344,7 +326,7 @@ BOOL bufferSTERRTABLELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the body/propulsion IMDs stats */
-BOOL bufferSBPIMDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSBPIMDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadBodyPropulsionIMDs((SBYTE*)pBuffer, size))
 	{
@@ -358,7 +340,7 @@ BOOL bufferSBPIMDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the weapon sound stats */
-BOOL bufferSWEAPSNDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSWEAPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadWeaponSounds((SBYTE*)pBuffer, size))
 	{
@@ -372,7 +354,7 @@ BOOL bufferSWEAPSNDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Weapon Effect modifier stats */
-BOOL bufferSWEAPMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSWEAPMODLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SWEAPMOD);
 
@@ -389,7 +371,7 @@ BOOL bufferSWEAPMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 
 /* Load the Template stats */
-BOOL bufferSTEMPLLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSTEMPLLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STEMP);
 
@@ -412,7 +394,7 @@ void dataSTEMPLRelease(void *pData)
 }
 
 /* Load the Template weapons stats */
-BOOL bufferSTEMPWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSTEMPWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STEMPWEAP);
 
@@ -427,22 +409,8 @@ BOOL bufferSTEMPWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	return TRUE;
 }
 
-/* Load the Template programs stats */
-/*BOOL bufferSTEMPPROGLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-	if (!loadDroidPrograms((SBYTE*)pBuffer, size))
-	{
-		return FALSE;
-	}
-
-
-	//not interested in this value
-	*ppData = NULL;
-	return TRUE;
-}*/
-
 /* Load the Structure stats */
-BOOL bufferSSTRUCTLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSSTRUCTLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRUCT);
 
@@ -469,7 +437,7 @@ void dataSSTRUCTRelease(void *pData)
 }
 
 /* Load the Structure Weapons stats */
-BOOL bufferSSTRWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSSTRWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRWEAP);
 
@@ -485,7 +453,7 @@ BOOL bufferSSTRWEAPLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure Functions stats */
-BOOL bufferSSTRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSSTRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STRFUNC);
 
@@ -501,7 +469,7 @@ BOOL bufferSSTRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure strength modifier stats */
-BOOL bufferSSTRMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSSTRMODLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRMOD);
 
@@ -516,7 +484,7 @@ BOOL bufferSSTRMODLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Feature stats */
-BOOL bufferSFEATLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSFEATLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_SFEAT);
@@ -539,7 +507,7 @@ void dataSFEATRelease(void *pData)
 }
 
 /* Load the Functions stats */
-BOOL bufferSFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SFUNC);
 
@@ -570,7 +538,7 @@ void dataRESCHRelease(void *pData)
 }
 
 /* Load the Research stats */
-BOOL bufferRESCHLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRESCHLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RESCH);
 
@@ -596,7 +564,7 @@ BOOL bufferRESCHLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research pre-requisites */
-BOOL bufferRPREREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRPREREQLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RPREREQ);
 
@@ -610,23 +578,8 @@ BOOL bufferRPREREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	return TRUE;
 }
 
-/* Load the research components required */
-/*BOOL bufferRCOMPREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-	//DON'T DO ANYTHING WITH IT SINCE SHOULDN'T BE LOADING ANYMORE - AB 20/04/98
-	if (!loadResearchArtefacts((SBYTE*)pBuffer, size, REQ_LIST))
-	{
-		return FALSE;
-	}
-
-
-	//not interested in this value
-	*ppData = NULL;
-	return TRUE;
-}*/
-
 /* Load the research components made redundant */
-BOOL bufferRCOMPREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRCOMPREDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRED);
 
@@ -642,7 +595,7 @@ BOOL bufferRCOMPREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research component results */
-BOOL bufferRCOMPRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRCOMPRESLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRES);
@@ -659,7 +612,7 @@ BOOL bufferRCOMPRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structures required */
-BOOL bufferRSTRREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRSTRREQLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_RSTRREQ);
@@ -676,9 +629,8 @@ BOOL bufferRSTRREQLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structures made redundant */
-BOOL bufferRSTRREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRSTRREDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRED);
 
 	if (!loadResearchStructures((SBYTE*)pBuffer, size, RED_LIST))
@@ -692,9 +644,8 @@ BOOL bufferRSTRREDLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structure results */
-BOOL bufferRSTRRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRSTRRESLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRES);
 
 	if (!loadResearchStructures((SBYTE*)pBuffer, size, RES_LIST))
@@ -709,7 +660,7 @@ BOOL bufferRSTRRESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research functions */
-BOOL bufferRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_RFUNC);
@@ -726,7 +677,7 @@ BOOL bufferRFUNCLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the message viewdata */
-BOOL bufferSMSGLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferSMSGLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	VIEWDATA	*pViewData;
 
@@ -750,13 +701,10 @@ void dataSMSGRelease(void *pData)
 }
 
 /* Load an imd */
-BOOL dataIMDBufferLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL dataIMDBufferLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	iIMDShape	*psIMD;
-	char *pBufferPosition;
-
-	// FIXME: evil cast
-	pBufferPosition = (char *)pBuffer;
+	char *pBufferPosition = pBuffer;
 
 	psIMD = iV_ProcessIMD(&pBufferPosition, pBufferPosition + size, "", "", FALSE);
 	if (psIMD == NULL) {
@@ -769,22 +717,14 @@ BOOL dataIMDBufferLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 
-/* Release an imd */
-/*void dataIMDRelease(void *pData)
+BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	iV_IMDRelease(pData);
-}*/
-
-
-BOOL dataIMGPAGELoad(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-//	iPalette sPal;
 	iSprite *psSprite = (iSprite*) MALLOC(sizeof(iSprite));
 	if (!psSprite)	{
 		return FALSE;
 	}
 
-	if(!pie_PNGLoadMem((SBYTE *)pBuffer,psSprite,NULL))
+	if (!pie_PNGLoadMem(pBuffer, psSprite, NULL))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
 		return FALSE;
@@ -803,13 +743,13 @@ void dataIMGPAGERelease(void *pData)
 }
 
 // Tertiles loader. This version for hardware renderer.
-BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
 		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
+		if(!pie_PNGLoadMem(pBuffer,&tilesPCX,NULL))
 		{
 			debug( LOG_ERROR, "HWTERTILES reload failed" );
 			return FALSE;
@@ -818,7 +758,7 @@ BOOL dataHWTERTILESLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	else
 	{
 		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!pie_PNGLoadMem((SBYTE *)pBuffer,&tilesPCX,NULL))
+		if(!pie_PNGLoadMem(pBuffer,&tilesPCX,NULL))
 		{
 			debug( LOG_ERROR, "HWTERTILES load failed" );
 			return FALSE;
@@ -867,7 +807,7 @@ void dataHWTERTILESRelease(void *pData)
 }
 
 
-BOOL dataIMGLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL dataIMGLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	IMAGEFILE *ImageFile;
 
@@ -892,7 +832,7 @@ void dataIMGRelease(void *pData)
 #define TEXTUREHEIGHT (256)
 
 /* Load a texturepage into memory */
-BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	TEXTUREPAGE *NewTexturePage;
 	iPalette	*psPal;
@@ -951,7 +891,7 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 	{
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing old");
-		id = pie_ReloadTexPage(texfile,(UBYTE *)pBuffer);
+		id = pie_ReloadTexPage(texfile, pBuffer);
 		ASSERT((id >=0,"pie_ReloadTexPage failed"));
 		*ppData = NULL;
 	}
@@ -1004,27 +944,6 @@ BOOL bufferTexPageLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 
 }
 
-BOOL bufferTexPageLoadSoftOnly(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-	if (!war_GetTranslucent())
-	{
-		return bufferTexPageLoad(pBuffer, size, ppData);
-	}
-	*ppData = NULL;
-	return TRUE;
-}
-
-BOOL bufferTexPageLoadHardOnly(UBYTE *pBuffer, UDWORD size, void **ppData)
-{
-	if (war_GetTranslucent())
-	{
-		return bufferTexPageLoad(pBuffer, size, ppData);
-	}
-	*ppData = NULL;
-	return TRUE;
-}
-
-
 /* Release an iSprite */
 void dataISpriteRelease(void *pData)
 {
@@ -1063,7 +982,7 @@ void dataTexPageRelease(void *pData)
 
 
 /* Load an audio file */
-BOOL dataAudioLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
+BOOL dataAudioLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	TRACK	*psTrack;
 
@@ -1099,7 +1018,7 @@ void dataAudioRelease( void *pData )
 
 
 /* Load an audio file */
-BOOL dataAudioCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
+BOOL dataAudioCfgLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
 
@@ -1116,7 +1035,7 @@ BOOL dataAudioCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 
 
 /* Load an anim file */
-BOOL dataAnimLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
+BOOL dataAnimLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	BASEANIM	*psAnim;
 
@@ -1135,16 +1054,13 @@ BOOL dataAnimLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
 
 
 /* Load an audio config file */
-BOOL dataAnimCfgLoad( UBYTE *pBuffer, UDWORD size, void **ppData )
+BOOL dataAnimCfgLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
-//	printf("\n\n\n\n\n\n\n=======dataAnimCfgLoad=========\n\n %s \n\n\n\n\n\n",pBuffer);
 	if ( ParseResourceFile( pBuffer, size ) == FALSE )
 	{
 		return FALSE;
 	}
-
-
 
 	return TRUE;
 }
@@ -1156,7 +1072,7 @@ void dataAnimRelease( void *pData )
 }
 
 /* Load a string resource file */
-BOOL dataStrResLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL dataStrResLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	// recreate the string resource if it was freed by a WRF release
 	if (psStringRes == NULL)
@@ -1188,7 +1104,7 @@ void dataStrResRelease(void *pData)
 
 /* Load a script file */
 // All scripts, binary or otherwise are now passed through this routine
-BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	SCRIPT_CODE		*psProg=NULL;
 	BLOCK_HEAP		*psHeap;
@@ -1219,7 +1135,7 @@ BOOL dataScriptLoad(UBYTE *pBuffer, UDWORD size, void **ppData)
 }
 
 // Load a script variable values file
-BOOL dataScriptLoadVals(UBYTE *pBuffer, UDWORD size, void **ppData)
+BOOL dataScriptLoadVals(char *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
 
@@ -1242,7 +1158,7 @@ BOOL dataScriptLoadVals(UBYTE *pBuffer, UDWORD size, void **ppData)
 	return TRUE;
 }
 
-BOOL dataSaveGameLoad(STRING *pFile, void **ppData)
+BOOL dataSaveGameLoad(char *pFile, void **ppData)
 {
 	if (!stageTwoInitialise())
 	{
@@ -1296,7 +1212,6 @@ static RES_TYPE_MIN ResourceTypes[]=
 	{"SSENSOR", bufferSSENSORLoad, NULL},
 	{"SECM", bufferSECMLoad, NULL},
 	{"SREPAIR", bufferSREPAIRLoad, NULL},
-	//{"SPROGRAM", bufferSPROGRAMLoad, NULL},
 	{"SCONSTR", bufferSCONSTRLoad, NULL},
 	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
 	{"SPROPSND", bufferSPROPSNDLoad, NULL},
@@ -1307,7 +1222,6 @@ static RES_TYPE_MIN ResourceTypes[]=
 	{"SWEAPMOD", bufferSWEAPMODLoad, NULL},
 	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},	//template and associated files
 	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL},
-	//{"STEMPPROG", bufferSTEMPPROGLoad, NULL},
 	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},		//structure stats and associated files
 	{"SSTRFUNC", bufferSSTRFUNCLoad, NULL},
 	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL},

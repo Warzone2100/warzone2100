@@ -55,8 +55,8 @@ extern void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID);
 extern void pie_RenderRadar(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y);
 extern void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int angle);
 
-extern void pie_UploadDisplayBuffer(UBYTE *DisplayBuffer);
-extern void pie_DownloadDisplayBuffer(UBYTE *DisplayBuffer);
+extern void pie_UploadDisplayBuffer(char *DisplayBuffer);
+extern void pie_DownloadDisplayBuffer(char *DisplayBuffer);
 
 extern void pie_D3DSetupRenderForFlip(SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride);
 extern void pie_D3DRenderForFlip(void);

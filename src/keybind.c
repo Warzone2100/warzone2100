@@ -2340,7 +2340,7 @@ BOOL	bFound;
 // --------------------------------------------------------------------------
 void kf_ScriptTest( void )
 {
-	UBYTE	*pBuffer;
+	char	*pBuffer;
 	UDWORD	size;
 
 	eventSaveState(1,&pBuffer, &size);

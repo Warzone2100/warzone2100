@@ -116,7 +116,7 @@ extern BOOL loadMissionExtras(STRING *pGameToLoad, SWORD levelType);
 extern BOOL loadScriptState(STRING *pFileName);
 
 //direct access for forceloader
-extern BOOL gameLoad(UBYTE *pFileData, UDWORD filesize);
+extern BOOL gameLoad(char *pFileData, UDWORD filesize);
 
 extern BOOL saveGame(STRING *aFileName, SDWORD saveType);
 

@@ -18,8 +18,8 @@ static	BOOL	g_bParsingSubFile;
 static	FILE	*g_fpOld;
 
 /* Pointer to the input buffer */
-static UBYTE *pInputBuffer = NULL;
-static UBYTE *pEndBuffer = NULL;
+static char *pInputBuffer = NULL;
+static char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
 			if (pInputBuffer != pEndBuffer) { \
@@ -123,8 +123,7 @@ audp_wrap( void )
 /* Set the current input buffer for the lexer */
 /***************************************************************************/
 
-void
-parserSetInputBuffer( UBYTE *pBuffer, UDWORD size )
+void parserSetInputBuffer(char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;

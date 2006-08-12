@@ -74,7 +74,8 @@ BOOL audio_Disabled( void )
 BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 {
 	// init audio system
-	if (g_bAudioEnabled = sound_Init(MAX_SAME_SAMPLES))
+	g_bAudioEnabled = sound_Init(MAX_SAME_SAMPLES);
+	if (g_bAudioEnabled)
 	{
 		// allocate sample heap
 		if ( !HEAP_CREATE(&g_psSampleHeap, AUDIO_SAMPLE_HEAP_INIT, AUDIO_SAMPLE_HEAP_EXT, sizeof(AUDIO_SAMPLE)) )
@@ -648,7 +649,7 @@ BOOL audio_LoadTrackFromFile( signed char szFileName[] )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void *audio_LoadTrackFromBuffer( UBYTE *pBuffer, UDWORD udwSize )
+void *audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 {
 	// if audio not enabled return TRUE to carry on game without audio
 	if ( g_bAudioEnabled == FALSE )

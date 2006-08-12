@@ -311,7 +311,7 @@ as big as Pie View in Research Msg now*/
 extern iIMDShape	*pNewDesignIMD;
 
 
-extern UBYTE	*DisplayBuffer;
+extern char	*DisplayBuffer;
 extern UDWORD	displayBufferSize;
 
 

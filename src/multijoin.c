@@ -136,11 +136,11 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	RenderWindowFrame(&FrameNormal, x, y ,w, h);		// draw a wee blu box.
 
 	// display how far done..
-	pie_DrawText((UCHAR*)strresGetString(psStringRes,STR_GAM_JOINING),
+	pie_DrawText(strresGetString(psStringRes, STR_GAM_JOINING),
 					x+(w/2)-(iV_GetTextWidth(strresGetString(psStringRes,STR_GAM_JOINING))/2),
 					y+(h/2)-8 );
 	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
-	pie_DrawText((UCHAR*)sTmp ,x+(w/2)-10,y+(h/2)+10 );
+	pie_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
 
 	return TRUE;
 }

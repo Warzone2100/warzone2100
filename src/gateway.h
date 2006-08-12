@@ -42,7 +42,7 @@ BOOL gwGenerateLinkGates(void);
 void gwFreeGateway(GATEWAY *psDel);
 
 // load a gateway list
-BOOL gwLoadGateways(UBYTE *pFileBuffer, UDWORD fileSize);
+BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize);
 
 // Process the map to create all the map zones
 BOOL gwProcessMap(void);

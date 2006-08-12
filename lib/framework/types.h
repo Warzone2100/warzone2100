@@ -103,8 +103,8 @@ typedef struct {
 
 typedef struct
 {
-  long  x;
-  long  y;
+  int  x;
+  int  y;
 } POINT;
 
 #endif /* !WIN32 */

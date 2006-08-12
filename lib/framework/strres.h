@@ -64,7 +64,7 @@ extern BOOL strresGetIDString(STR_RES *psRes, STRING *pIDStr, STRING **ppStoredI
 extern STRING *strresGetString(STR_RES *psRes, UDWORD id);
 
 /* Load a string resource file */
-extern BOOL strresLoad(STR_RES *psRes, UBYTE *pData, UDWORD size);
+extern BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size);
 
 /* Return the the length of a STRING */
 extern UDWORD stringLen(STRING *pStr);

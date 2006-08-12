@@ -2997,7 +2997,7 @@ iIMDShape		*psOrig;
 
 // -----------------------------------------------------------------------------------
 /* This will read in the effects data */
-BOOL	readFXData( UBYTE *pFileData, UDWORD fileSize )
+BOOL readFXData(char *pFileData, UDWORD fileSize)
 {
 UDWORD				expectedFileSize;
 FX_SAVEHEADER		*psHeader;

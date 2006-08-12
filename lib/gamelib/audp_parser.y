@@ -207,7 +207,7 @@ void audp_error(char *pMessage,...)
 /***************************************************************************/
 /* Read a resource file */
 
-BOOL ParseResourceFile( UBYTE *pData, UDWORD fileSize )
+BOOL ParseResourceFile(char *pData, UDWORD fileSize)
 {
 	// Tell lex about the input buffer
 	parserSetInputBuffer( pData, fileSize );

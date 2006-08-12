@@ -780,7 +780,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &count,&cnt);
                                 pViewMsgData += cnt;
 
-				ASSERT((count < UWORD_MAX, "loadViewData: numFrames too high for ", name));
+				ASSERT((count < UWORD_MAX, "loadViewData: numFrames too high for %s", name));
 
 				psViewReplay->pSeqList[dataInc].numFrames = (UWORD)count;
 

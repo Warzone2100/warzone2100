@@ -466,12 +466,12 @@ STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
 }
 
 // default value save routine
-BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, UBYTE *pBuffer, UDWORD *pSize)
+BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 {
 	VIEWDATA	*psIntMessage;
 	STRING		*pName;
 	RESEARCH	*psResearch;
-	UBYTE		*pPos;
+	char		*pPos;
 	DROID		*psCDroid;
 	SDWORD		members;
 	DROID_GROUP	*psGroup;
@@ -685,9 +685,9 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, UBYTE *pBuffer, UDWORD *pSize)
 }
 
 // default value load routine
-BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, UBYTE *pBuffer, UDWORD size, UDWORD *pData)
+BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size, UDWORD *pData)
 {
-	UBYTE			*pPos;
+	char			*pPos;
 	DROID			*psCDroid;
 	SDWORD			index, members;
 	UDWORD			id;

@@ -17,7 +17,7 @@ extern STRING	aResDir[FILE_MAXCHAR];
 extern STRING	aCurrResDir[FILE_MAXCHAR];
 
 /* Set the current input buffer for the lexer - used by resLoad */
-extern void resSetInputBuffer(UBYTE *pBuffer, UDWORD size);
+extern void resSetInputBuffer(char *pBuffer, UDWORD size);
 
 /* Give access to the line number and current text for error messages */
 extern void resGetErrorData(int *pLine, char **ppText);

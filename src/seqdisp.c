@@ -843,13 +843,13 @@ BOOL seq_ClearTextForVideo(void)
 
 BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 {
-	UBYTE *pTextBuffer, *pCurrentLine, *pText;
+	char *pTextBuffer, *pCurrentLine, *pText;
 	UDWORD fileSize;
 //	HANDLE	fileHandle;
 //	WIN32_FIND_DATA findData;
 //	BOOL endOfFile = FALSE;
 	SDWORD xOffset, yOffset, startFrame, endFrame;
-	UBYTE* seps	= "\n";
+	char *seps = "\n";
 
 	strcpy(aTextName,"sequenceAudio\\");
 	strcat(aTextName,pTextName);

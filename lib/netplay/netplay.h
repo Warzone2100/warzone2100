@@ -169,9 +169,9 @@ extern NETMSG*	NETmanglePacket(NETMSG *msg);
 extern VOID	NETunmanglePacket(NETMSG *msg);
 extern BOOL	NETmangleData(long *input, long *result, UDWORD dataSize);
 extern BOOL	NETunmangleData(long *input, long *result, UDWORD dataSize);
-extern UDWORD	NEThashFile(STRING *pFileName);
+extern UDWORD	NEThashFile(char *pFileName);
 extern UCHAR	NEThashVal(UDWORD value);
-extern UDWORD	NEThashBuffer(unsigned char *pData, UDWORD size);
+extern UDWORD	NEThashBuffer(char *pData, UDWORD size);
 
 extern WZ_DEPRECATED BOOL NETcheckRegistryEntries	(char *name,char *guid);
 extern WZ_DEPRECATED BOOL NETsetRegistryEntries	(char *name,char *guid,char *file,char *cline,char *path,char *cdir); 

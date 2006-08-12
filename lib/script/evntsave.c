@@ -19,7 +19,7 @@ typedef struct _event_save_header
 
 
 // save the context information for the script system
-static BOOL eventSaveContext(UBYTE *pBuffer, UDWORD *pSize)
+static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize;
 	SDWORD				numVars, i, numContext;
@@ -27,7 +27,7 @@ static BOOL eventSaveContext(UBYTE *pBuffer, UDWORD *pSize)
 	VAL_CHUNK			*psCVals;
 	INTERP_VAL			*psVal;
 	SCR_VAL_SAVE		saveFunc;
-	UBYTE				*pPos;
+	char				*pPos;
 //not hashed	STRING				*pScriptID;
 	UDWORD				hashedName;
 	UWORD				*pValSize = NULL;
@@ -60,7 +60,7 @@ static BOOL eventSaveContext(UBYTE *pBuffer, UDWORD *pSize)
 
 		if (pBuffer != NULL)
 		{
-//not hashed			strcpy((STRING *)pPos, pScriptID);
+//not hashed			strcpy(pPos, pScriptID);
 //not hashed			pPos += strlen(pScriptID) + 1;
 			*((UDWORD*)pPos) = (UDWORD)hashedName;
 			pPos += sizeof(UDWORD);
@@ -159,14 +159,14 @@ static BOOL eventSaveContext(UBYTE *pBuffer, UDWORD *pSize)
 }
 
 // load the context information for the script system
-static BOOL eventLoadContext(SDWORD version, UBYTE *pBuffer, UDWORD *pSize)
+static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize, data;
 	SDWORD				numVars, i, numContext, context;
 	SCRIPT_CONTEXT		*psCCont;
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
-	UBYTE				*pPos;
+	char				*pPos;
 	STRING				*pScriptID;
 	SCRIPT_CODE			*psCode;
 	SWORD				release;
@@ -272,14 +272,14 @@ static BOOL eventLoadContext(SDWORD version, UBYTE *pBuffer, UDWORD *pSize)
 }
 
 // load the context information for the script system
-static BOOL eventLoadContextHashed(SDWORD version, UBYTE *pBuffer, UDWORD *pSize)
+static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize, data;
 	SDWORD				numVars, i, numContext, context;
 	SCRIPT_CONTEXT		*psCCont;
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
-	UBYTE				*pPos;
+	char				*pPos;
 //not hashed	STRING				*pScriptID;
 	UDWORD				hashedName;
 	SCRIPT_CODE			*psCode;
@@ -427,11 +427,11 @@ BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 }
 
 // save a list of triggers
-BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, UBYTE *pBuffer, UDWORD *pSize)
+BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *pSize)
 {
 	ACTIVE_TRIGGER		*psCurr;
 	UDWORD				size;
-	UBYTE				*pPos;
+	char				*pPos;
 	SDWORD				numTriggers, context;
 
 	size = 0;
@@ -483,10 +483,10 @@ BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, UBYTE *pBuffer, UDWORD *pSize)
 
 
 // load a list of triggers
-BOOL eventLoadTriggerList(SDWORD version, UBYTE *pBuffer, UDWORD *pSize)
+static BOOL eventLoadTriggerList(SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, event, offset, time;
-	UBYTE				*pPos;
+	char				*pPos;
 	SDWORD				numTriggers, context, type, trigger, i;
 	SCRIPT_CONTEXT		*psContext;
 
@@ -540,10 +540,10 @@ BOOL eventLoadTriggerList(SDWORD version, UBYTE *pBuffer, UDWORD *pSize)
 
 
 // Save the state of the event system
-BOOL eventSaveState(SDWORD version, UBYTE **ppBuffer, UDWORD *pFileSize)
+BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 {
 	UDWORD			size, totalSize;
-	UBYTE			*pBuffer, *pPos;
+	char			*pBuffer, *pPos;
 	EVENT_SAVE_HDR	*psHdr;
 
 	totalSize = sizeof(EVENT_SAVE_HDR);
@@ -621,10 +621,10 @@ BOOL eventSaveState(SDWORD version, UBYTE **ppBuffer, UDWORD *pFileSize)
 
 
 // Load the state of the event system
-BOOL eventLoadState(UBYTE *pBuffer, UDWORD fileSize, BOOL bHashed)
+BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 {
 	UDWORD			size, totalSize, version;
-	UBYTE			*pPos;
+	char			*pPos;
 	EVENT_SAVE_HDR	*psHdr;
 
 

@@ -577,7 +577,7 @@ void DownLoadRadar(unsigned char *buffer)
 
 // Upload the current display back buffer into system memory.
 //
-void UploadDisplayBuffer(UBYTE *DisplayBuffer)
+void UploadDisplayBuffer(char *DisplayBuffer)
 {
 
 	UDWORD *Source = (UDWORD*) rendSurface.buffer;
@@ -596,7 +596,7 @@ void UploadDisplayBuffer(UBYTE *DisplayBuffer)
 // Download buffer in system memory to the display back buffer.
 //
 /*
-void DownloadDisplayBuffer(UBYTE *DisplayBuffer)
+void DownloadDisplayBuffer(char *DisplayBuffer)
 {
 #ifndef PIEPSX		// was #ifndef PSX
 	UDWORD *Source = (UDWORD*)DisplayBuffer;
@@ -617,7 +617,7 @@ void DownloadDisplayBuffer(UBYTE *DisplayBuffer)
 
 //*************************************************************************
 
-void	DownloadDisplayBuffer(UBYTE *DisplayBuffer)
+void	DownloadDisplayBuffer(char *DisplayBuffer)
 {
 	UDWORD *Source = (UDWORD*)DisplayBuffer;
 	UDWORD *Dest = (UDWORD*) rendSurface.buffer;
@@ -653,9 +653,9 @@ void	DownloadDisplayBuffer(UBYTE *DisplayBuffer)
 //*************************************************************************
 // Scale a bitmaps colours.
 //
-void ScaleBitmapRGB(UBYTE *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB)
+void ScaleBitmapRGB(char *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB)
 {
-	UBYTE *Ptr = DisplayBuffer;
+	char *Ptr = DisplayBuffer;
 	UDWORD Size = Width*Height;
 	UDWORD i;
 

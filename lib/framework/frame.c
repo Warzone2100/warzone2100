@@ -514,7 +514,7 @@ void frameShutDown(void)
 
   If hard_fail is true, we will assert and report on failures.
 ***************************************************************************/
-static BOOL loadFile2(char *pFileName, UBYTE **ppFileData, UDWORD *pFileSize,
+static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
                       BOOL AllocateMem, BOOL hard_fail)
 {
 	PHYSFS_file *pfile;
@@ -541,7 +541,7 @@ static BOOL loadFile2(char *pFileName, UBYTE **ppFileData, UDWORD *pFileSize,
 
 	if (AllocateMem == TRUE) {
 		// Allocate a buffer to store the data and a terminating zero
-		*ppFileData = (UBYTE*)MALLOC(filesize + 1);
+		*ppFileData = MALLOC(filesize + 1);
 		if (*ppFileData == NULL) {
 			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
 			assert(FALSE);
@@ -631,20 +631,20 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	return TRUE;
 }
 
-BOOL loadFile(const char *pFileName, UBYTE **ppFileData, UDWORD *pFileSize)
+BOOL loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
 {
 	return loadFile2(unix_path(pFileName), ppFileData, pFileSize, TRUE, TRUE);
 }
 
 // load a file from disk into a fixed memory buffer
-BOOL loadFileToBuffer(char *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+BOOL loadFileToBuffer(char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(unix_path(pFileName), &pFileBuffer, pSize, FALSE, TRUE);
 }
 
 // as above but returns quietly if no file found
-BOOL loadFileToBufferNoError(char *pFileName, UBYTE *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(unix_path(pFileName), &pFileBuffer, pSize, FALSE, FALSE);

@@ -25,8 +25,8 @@
 
 // ////////////////////////////////////////////////////////////////////////
 // Prototypes
-UDWORD	NEThashFile			(STRING *pFileName);
-UDWORD	NEThashBuffer		(UBYTE *pData, UDWORD size);
+UDWORD	NEThashFile(char *pFileName);
+UDWORD	NEThashBuffer(char *pData, UDWORD size);
 
 BOOL	NETsetKey			(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
 NETMSG*	NETmanglePacket		(NETMSG *msg);
@@ -37,7 +37,7 @@ BOOL	NETunmangleData		( long *input, long *result, UDWORD dataSize);
 
 // ////////////////////////////////////////////////////////////////////////
 // make a hash value from an exe name.
-UDWORD	NEThashFile(STRING *pFileName)
+UDWORD	NEThashFile(char *pFileName)
 {
 	UDWORD	hashval,c,*val;
 	PHYSFS_file	*pFileHandle;
@@ -88,7 +88,7 @@ UDWORD	NEThashFile(STRING *pFileName)
 // ////////////////////////////////////////////////////////////////////////
 // return a hash from a data buffer.
 
-UDWORD	NEThashBuffer(UBYTE *pData, UDWORD size)
+UDWORD	NEThashBuffer(char *pData, UDWORD size)
 {
 	UDWORD hashval,*val;
 	UDWORD pt;

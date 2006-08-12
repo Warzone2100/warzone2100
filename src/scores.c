@@ -454,7 +454,7 @@ DROID	*psDroid;
 }
 // -----------------------------------------------------------------------------------
 /* This will save out the score data */
-BOOL	writeScoreData( STRING *pFileName )
+BOOL writeScoreData(char *pFileName)
 {
 	char *pFileData;		// Pointer to the necessary allocated memory
 MISSION_DATA	*pScoreData;
@@ -466,7 +466,7 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	fileSize = ( sizeof(struct _score_save_header) + sizeof(struct mission_data) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = (UBYTE *)MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)
@@ -506,7 +506,7 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 
 // -----------------------------------------------------------------------------------
 /* This will read in the score data */
-BOOL	readScoreData( UBYTE *pFileData, UDWORD fileSize )
+BOOL readScoreData(char *pFileData, UDWORD fileSize)
 {
 UDWORD				expectedFileSize;
 SCORE_SAVEHEADER	*psHeader;

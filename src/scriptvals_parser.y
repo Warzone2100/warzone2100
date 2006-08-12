@@ -783,7 +783,7 @@ BOOL scrvLookUpArray(STRING *pIdent, UDWORD *pIndex)
 
 
 // Load a script value file
-BOOL scrvLoad(UBYTE *pData, UDWORD size)
+BOOL scrvLoad(char *pData, UDWORD size)
 {
 	scrvSetInputBuffer(pData, size);
 

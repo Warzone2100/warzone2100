@@ -1187,85 +1187,85 @@ static BOOL IsScenario;
  *	Local ProtoTypes
  */
 /***************************************************************************/
-BOOL gameLoad(UBYTE *pFileData, UDWORD filesize);
-static BOOL gameLoadV7(UBYTE *pFileData, UDWORD filesize);
-static BOOL gameLoadV(UBYTE *pFileData, UDWORD filesize, UDWORD version);
+BOOL gameLoad(char *pFileData, UDWORD filesize);
+static BOOL gameLoadV7(char *pFileData, UDWORD filesize);
+static BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version);
 static BOOL writeGameFile(STRING *pFileName, SDWORD saveType);
 static BOOL writeMapFile(STRING *pFileName);
 
-static BOOL loadSaveDroidInitV2(UBYTE *pFileData, UDWORD filesize,UDWORD quantity);
+static BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 
-static BOOL loadSaveDroidInit(UBYTE *pFileData, UDWORD filesize);
+static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
 static DROID_TEMPLATE *FindDroidTemplate(STRING *name,UDWORD player);
 
-static BOOL loadSaveDroid(UBYTE *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
-static BOOL loadSaveDroidV11(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
-static BOOL loadSaveDroidV19(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
-static BOOL loadSaveDroidV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
+static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+static BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+static BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
 static BOOL loadDroidSetPointers(void);
 static BOOL writeDroidFile(STRING *pFileName, DROID **ppsCurrentDroidLists);
 
-static BOOL loadSaveStructure(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveStructureV7(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures);
-static BOOL loadSaveStructureV19(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version);
-static BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version);
+static BOOL loadSaveStructure(char *pFileData, UDWORD filesize);
+static BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures);
+static BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version);
+static BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version);
 static BOOL loadStructSetPointers(void);
 static BOOL writeStructFile(STRING *pFileName);
 
-static BOOL loadSaveTemplate(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveTemplateV7(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates);
-static BOOL loadSaveTemplateV14(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates);
-static BOOL loadSaveTemplateV(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates);
-static BOOL writeTemplateFile(STRING *pFileName);
+static BOOL loadSaveTemplate(char *pFileData, UDWORD filesize);
+static BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates);
+static BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates);
+static BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates);
+static BOOL writeTemplateFile(char *pFileName);
 
-static BOOL loadSaveFeature(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveFeatureV14(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
-static BOOL loadSaveFeatureV(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
-static BOOL writeFeatureFile(STRING *pFileName);
+static BOOL loadSaveFeature(char *pFileData, UDWORD filesize);
+static BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
+static BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
+static BOOL writeFeatureFile(char *pFileName);
 
-BOOL loadTerrainTypeMap(UBYTE *pFileData, UDWORD filesize);		// now used in gamepsx.c aswell
-static BOOL writeTerrainTypeMapFile(STRING *pFileName);
+BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize);		// now used in gamepsx.c aswell
+static BOOL writeTerrainTypeMapFile(char *pFileName);
 
-static BOOL loadSaveCompList(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveCompListV9(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
-static BOOL loadSaveCompListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
-static BOOL writeCompListFile(STRING *pFileName);
+static BOOL loadSaveCompList(char *pFileData, UDWORD filesize);
+static BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
+static BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
+static BOOL writeCompListFile(char *pFileName);
 
-static BOOL loadSaveStructTypeList(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveStructTypeListV7(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL loadSaveStructTypeListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL writeStructTypeListFile(STRING *pFileName);
+static BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize);
+static BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static BOOL writeStructTypeListFile(char *pFileName);
 
-static BOOL loadSaveResearch(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveResearchV8(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL loadSaveResearchV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL writeResearchFile(STRING *pFileName);
+static BOOL loadSaveResearch(char *pFileData, UDWORD filesize);
+static BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static BOOL writeResearchFile(char *pFileName);
 
-static BOOL loadSaveMessage(UBYTE *pFileData, UDWORD filesize, SWORD levelType);
-static BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
-static BOOL writeMessageFile(STRING *pFileName);
+static BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
+static BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
+static BOOL writeMessageFile(char *pFileName);
 
 #ifdef SAVE_PROXIMITY
-static BOOL loadSaveProximity(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveProximityV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version);
-static BOOL writeProximityFile(STRING *pFileName);
+static BOOL loadSaveProximity(char *pFileData, UDWORD filesize);
+static BOOL loadSaveProximityV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version);
+static BOOL writeProximityFile(char *pFileName);
 #endif
 
-static BOOL loadSaveFlag(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numFlags, UDWORD version);
+static BOOL loadSaveFlag(char *pFileData, UDWORD filesize);
+static BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numFlags, UDWORD version);
 static BOOL writeFlagFile(STRING *pFileName);
 
-static BOOL loadSaveProduction(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveProductionV(UBYTE *pFileData, UDWORD filesize, UDWORD version);
+static BOOL loadSaveProduction(char *pFileData, UDWORD filesize);
+static BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version);
 static BOOL writeProductionFile(STRING *pFileName);
 
-static BOOL loadSaveStructLimits(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveStructLimitsV19(UBYTE *pFileData, UDWORD filesize, UDWORD numLimits);
-static BOOL loadSaveStructLimitsV(UBYTE *pFileData, UDWORD filesize, UDWORD numLimits);
+static BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize);
+static BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits);
+static BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits);
 static BOOL writeStructLimitsFile(STRING *pFileName);
 
-static BOOL loadSaveCommandLists(UBYTE *pFileData, UDWORD filesize);
-static BOOL loadSaveCommandListsV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids);
+static BOOL loadSaveCommandLists(char *pFileData, UDWORD filesize);
+static BOOL loadSaveCommandListsV(char *pFileData, UDWORD filesize, UDWORD numDroids);
 static BOOL writeCommandLists(STRING *pFileName);
 
 static BOOL writeScriptState(STRING *pFileName);
@@ -1294,7 +1294,7 @@ so can be called in levLoadData when starting a game from a load save game*/
 // -----------------------------------------------------------------------------------------
 BOOL loadGameInit(STRING *pGameToLoad )
 {
-	UBYTE			*pFileData = NULL;
+	char			*pFileData = NULL;
 	UDWORD			fileSize;
 
 	/* Load in the chosen file data */
@@ -1342,7 +1342,7 @@ BOOL loadMissionExtras(STRING *pGameToLoad, SWORD levelType)
 
 	UDWORD			fileExten, fileSize;
 
-	UBYTE			*pFileData = NULL;
+	char			*pFileData = NULL;
 
 	strcpy(aFileName, pGameToLoad);
 	fileExten = strlen(pGameToLoad) - 3;
@@ -1420,7 +1420,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 	STRING			aFileName[256];
 	//OPENFILENAME		sOFN;
 	UDWORD			fileExten, fileSize, pl;
-	UBYTE			*pFileData = NULL;
+	char			*pFileData = NULL;
 	UDWORD			player, inc, i, j;
     DROID           *psCurr;
     UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
@@ -3174,7 +3174,7 @@ BOOL writeMapFile(STRING *pFileName)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL gameLoad(UBYTE *pFileData, UDWORD filesize)
+BOOL gameLoad(char *pFileData, UDWORD filesize)
 {
 	GAME_SAVEHEADER			*psHeader;
 
@@ -3234,7 +3234,7 @@ BOOL gameLoad(UBYTE *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 // Get campaign number stuff is not needed in this form on the PSX (thank you very much)
-BOOL getCampaignV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
+BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_GAME		*psSaveGame;
 	UDWORD			sizeOfSaveGame = 0;
@@ -3308,7 +3308,7 @@ BOOL getCampaignV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
 	if(version >= VERSION_33) {
 		endian_udword(&psSaveGame->sGame.power);
-		endian_udword(&psSaveGame->sGame.bytesPerSec);
+		endian_uword(&psSaveGame->sGame.bytesPerSec);
 		for(i = 0; i < MaxGames; i++) {
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
@@ -3451,7 +3451,7 @@ BOOL getCampaignV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
     /// it now does even less than it looks like on the psx ... cause its pc only
 UDWORD getCampaign(STRING *pGameToLoad, BOOL *bSkipCDCheck)
 {
-	UBYTE			*pFileData = NULL;
+	char *pFileData = NULL;
 	UDWORD			fileSize;
 	GAME_SAVEHEADER			*psHeader;
 
@@ -3532,7 +3532,7 @@ void game_SetValidityKey(UDWORD keys)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save game */
-BOOL gameLoadV7(UBYTE *pFileData, UDWORD filesize)
+BOOL gameLoadV7(char *pFileData, UDWORD filesize)
 {
 	SAVE_GAME_V7				*psSaveGame;
 	LEVEL_DATASET				*psNewLevel;
@@ -3602,7 +3602,7 @@ BOOL gameLoadV7(UBYTE *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 /* non specific version of a save game */
-BOOL gameLoadV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
+BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_GAME		*psSaveGame;
 //	LEVEL_DATASET	*psNewLevel;
@@ -3699,7 +3699,7 @@ BOOL gameLoadV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
 	if(version >= VERSION_33) {
 		endian_udword(&psSaveGame->sGame.power);
-		endian_udword(&psSaveGame->sGame.bytesPerSec);
+		endian_uword(&psSaveGame->sGame.bytesPerSec);
 		for(i = 0; i < MaxGames; i++) {
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
@@ -4163,7 +4163,7 @@ BOOL writeGameFile(STRING *pFileName, SDWORD saveType)
 
 	/* Allocate the data buffer */
 	fileSize = GAME_HEADER_SIZE + sizeof(SAVE_GAME);
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -4338,7 +4338,7 @@ BOOL writeGameFile(STRING *pFileName, SDWORD saveType)
 	/* SAVE_GAME is GAME_SAVE_V33 */
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
 	endian_udword(&psSaveGame->sGame.power);
-	endian_udword(&psSaveGame->sGame.bytesPerSec);
+	endian_uword(&psSaveGame->sGame.bytesPerSec);
 	for(i = 0; i < MaxGames; i++) {
 		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
 		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
@@ -4456,7 +4456,7 @@ error:
 // Process the droid initialisation file (dinit.bjo). Creates droids for
 // the scenario being loaded. This is *NEVER* called for a user save game
 //
-BOOL loadSaveDroidInit(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 {
 	DROIDINIT_SAVEHEADER		*psHeader;
 
@@ -4501,7 +4501,7 @@ BOOL loadSaveDroidInit(UBYTE *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 // Used for all droids
-BOOL loadSaveDroidInitV2(UBYTE *pFileData, UDWORD filesize,UDWORD quantity)
+BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 {
 	SAVE_DROIDINIT *pDroidInit;
 	DROID_TEMPLATE *psTemplate;
@@ -4640,7 +4640,7 @@ UDWORD RemapPlayerNumber(UDWORD OldNumber)
 
 // -----------------------------------------------------------------------------------------
 /*This is *ALWAYS* called by a User Save Game */
-BOOL loadSaveDroid(UBYTE *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists)
+BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists)
 {
 	DROID_SAVEHEADER		*psHeader;
 
@@ -5441,7 +5441,7 @@ BOOL loadDroidSetPointers(void)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 11 of a save droid */
-BOOL loadSaveDroidV11(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
+BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
 {
 	SAVE_DROID_V11				*psSaveDroid, sSaveDroid;
 //	DROID_TEMPLATE			*psTemplate, sTemplate;
@@ -5560,7 +5560,7 @@ BOOL loadSaveDroidV11(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 
 // -----------------------------------------------------------------------------------------
 /* code specific all versions upto from 12 to 19*/
-BOOL loadSaveDroidV19(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
+BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
 {
 	SAVE_DROID_V18				*psSaveDroid, sSaveDroid;
 //	DROID_TEMPLATE			*psTemplate, sTemplate;
@@ -5711,7 +5711,7 @@ BOOL loadSaveDroidV19(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 
 // -----------------------------------------------------------------------------------------
 /* code for all versions after save name change v19*/
-BOOL loadSaveDroidV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
+BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
 {
 	SAVE_DROID				*psSaveDroid, sSaveDroid;
 //	DROID_TEMPLATE			*psTemplate, sTemplate;
@@ -6285,7 +6285,7 @@ BOOL writeDroidFile(STRING *pFileName, DROID **ppsCurrentDroidLists)
 
 	/* Allocate the data buffer */
 	fileSize = DROID_HEADER_SIZE + totalDroids*sizeof(SAVE_DROID);
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -6321,7 +6321,7 @@ BOOL writeDroidFile(STRING *pFileName, DROID **ppsCurrentDroidLists)
 
 			buildSaveDroidFromDroid(psSaveDroid, psCurr, DROID_NORMAL);
 
-			psSaveDroid = (SAVE_DROID *)((UBYTE *)psSaveDroid + sizeof(SAVE_DROID));
+			psSaveDroid = (SAVE_DROID *)((char *)psSaveDroid + sizeof(SAVE_DROID));
 			// if transporter save any droids in the grp
 			if (psCurr->droidType == DROID_TRANSPORTER)
 			{
@@ -6331,7 +6331,7 @@ BOOL writeDroidFile(STRING *pFileName, DROID **ppsCurrentDroidLists)
 					if (psTrans->droidType != DROID_TRANSPORTER)
 					{
 						buildSaveDroidFromDroid(psSaveDroid, psTrans, DROID_ON_TRANSPORT);
-						psSaveDroid = (SAVE_DROID *)((UBYTE *)psSaveDroid + sizeof(SAVE_DROID));
+						psSaveDroid = (SAVE_DROID *)((char *)psSaveDroid + sizeof(SAVE_DROID));
 					}
 				}
 			}
@@ -6351,7 +6351,7 @@ BOOL writeDroidFile(STRING *pFileName, DROID **ppsCurrentDroidLists)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructure(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 {
 	STRUCT_SAVEHEADER		*psHeader;
 
@@ -6410,7 +6410,7 @@ BOOL loadSaveStructure(UBYTE *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save structure */
-BOOL loadSaveStructureV7(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures)
+BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 {
 	SAVE_STRUCTURE_V2		*psSaveStructure, sSaveStructure;
 	STRUCTURE				*psStructure;
@@ -6661,7 +6661,7 @@ UDWORD getResearchIdFromName(STRING *pName)
 
 // -----------------------------------------------------------------------------------------
 /* code for version upto 19of a save structure */
-BOOL loadSaveStructureV19(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version)
+BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version)
 {
 	SAVE_STRUCTURE_V17			*psSaveStructure, sSaveStructure;
 	STRUCTURE				*psStructure;
@@ -7115,7 +7115,7 @@ BOOL loadSaveStructureV19(UBYTE *pFileData, UDWORD filesize, UDWORD numStructure
 
 // -----------------------------------------------------------------------------------------
 /* code for versions after version 20 of a save structure */
-BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version)
+BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version)
 {
 	SAVE_STRUCTURE			*psSaveStructure, sSaveStructure;
 	STRUCTURE				*psStructure;
@@ -7581,7 +7581,7 @@ BOOL writeStructFile(STRING *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = STRUCT_HEADER_SIZE + totalStructs*sizeof(SAVE_STRUCTURE);
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -7818,7 +7818,7 @@ BOOL writeStructFile(STRING *pFileName)
 			endian_udword(&psSaveStruct->burnStart);
 			endian_udword(&psSaveStruct->burnDamage);
 
-			psSaveStruct = (SAVE_STRUCTURE *)((UBYTE *)psSaveStruct + sizeof(SAVE_STRUCTURE));
+			psSaveStruct = (SAVE_STRUCTURE *)((char *)psSaveStruct + sizeof(SAVE_STRUCTURE));
 		}
 	}
 
@@ -7939,7 +7939,7 @@ BOOL loadStructSetPointers(void)
 #endif
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveFeature(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 {
 	FEATURE_SAVEHEADER		*psHeader;
 
@@ -7991,7 +7991,7 @@ BOOL loadSaveFeature(UBYTE *pFileData, UDWORD filesize)
 // -----------------------------------------------------------------------------------------
 #ifdef ALLOWOLDSAVEGAMES
 /* code specific to version 2 of a save feature */
-BOOL loadSaveFeatureV2(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures)
+BOOL loadSaveFeatureV2(char *pFileData, UDWORD filesize, UDWORD numFeatures)
 {
 	SAVE_FEATURE_V2			*psSaveFeature;
 	FEATURE					*pFeature;
@@ -8100,7 +8100,7 @@ BOOL loadSaveFeatureV2(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures)
 
 // -----------------------------------------------------------------------------------------
 /* code for all version 8 - 14 save features */
-BOOL loadSaveFeatureV14(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
+BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
 {
 	SAVE_FEATURE_V14			*psSaveFeature;
 	FEATURE					*pFeature;
@@ -8215,7 +8215,7 @@ BOOL loadSaveFeatureV14(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, U
 
 // -----------------------------------------------------------------------------------------
 /* code for all post version 7 save features */
-BOOL loadSaveFeatureV(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
+BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
 {
 	SAVE_FEATURE			*psSaveFeature;
 	FEATURE					*pFeature;
@@ -8338,7 +8338,7 @@ BOOL writeFeatureFile(STRING *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = FEATURE_HEADER_SIZE + totalFeatures * sizeof(SAVE_FEATURE);
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -8394,7 +8394,7 @@ BOOL writeFeatureFile(STRING *pFileName)
 		endian_udword(&psSaveFeature->burnStart);
 		endian_udword(&psSaveFeature->burnDamage);
 
-		psSaveFeature = (SAVE_FEATURE *)((UBYTE *)psSaveFeature + sizeof(SAVE_FEATURE));
+		psSaveFeature = (SAVE_FEATURE *)((char *)psSaveFeature + sizeof(SAVE_FEATURE));
 	}
 
 	/* FEATURE_SAVEHEADER */
@@ -8412,7 +8412,7 @@ BOOL writeFeatureFile(STRING *pFileName)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveTemplate(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 {
 	TEMPLATE_SAVEHEADER		*psHeader;
 
@@ -8469,7 +8469,7 @@ BOOL loadSaveTemplate(UBYTE *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save template */
-BOOL loadSaveTemplateV7(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
+BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 {
 	SAVE_TEMPLATE_V2		*psSaveTemplate, sSaveTemplate;
 	DROID_TEMPLATE			*psTemplate;
@@ -8597,7 +8597,7 @@ error:
 
 // -----------------------------------------------------------------------------------------
 /* none specific version of a save template */
-BOOL loadSaveTemplateV14(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
+BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 {
 	SAVE_TEMPLATE_V14			*psSaveTemplate, sSaveTemplate;
 	DROID_TEMPLATE			*psTemplate, *psDestTemplate;
@@ -8757,7 +8757,7 @@ error:
 
 // -----------------------------------------------------------------------------------------
 /* none specific version of a save template */
-BOOL loadSaveTemplateV(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
+BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 {
 	SAVE_TEMPLATE			*psSaveTemplate, sSaveTemplate;
 	DROID_TEMPLATE			*psTemplate, *psDestTemplate;
@@ -8958,7 +8958,7 @@ BOOL writeTemplateFile(STRING *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = TEMPLATE_HEADER_SIZE + totalTemplates*sizeof(SAVE_TEMPLATE);
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -9030,7 +9030,7 @@ BOOL writeTemplateFile(STRING *pFileName)
 			endian_udword(&psSaveTemplate->numWeaps);
 			endian_udword(&psSaveTemplate->multiPlayerID);
 
-			psSaveTemplate = (SAVE_TEMPLATE *)((UBYTE *)psSaveTemplate + sizeof(SAVE_TEMPLATE));
+			psSaveTemplate = (SAVE_TEMPLATE *)((char *)psSaveTemplate + sizeof(SAVE_TEMPLATE));
 		}
 	}
 
@@ -9056,7 +9056,7 @@ BOOL writeTemplateFile(STRING *pFileName)
 // -----------------------------------------------------------------------------------------
 
 // load up a terrain tile type map file
-BOOL loadTerrainTypeMap(UBYTE *pFileData, UDWORD filesize)
+BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize)
 {
 	TILETYPE_SAVEHEADER	*psHeader;
 	UDWORD				i;
@@ -9121,7 +9121,7 @@ BOOL loadTerrainTypeMap(UBYTE *pFileData, UDWORD filesize)
 static BOOL writeTerrainTypeMapFile(STRING *pFileName)
 {
 	TILETYPE_SAVEHEADER		*psHeader;
-	UBYTE					*pFileData;
+	char *pFileData;
 	UDWORD					fileSize, i;
 	UWORD					*pType;
 
@@ -9166,7 +9166,7 @@ static BOOL writeTerrainTypeMapFile(STRING *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up component list file
-BOOL loadSaveCompList(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 {
 	COMPLIST_SAVEHEADER		*psHeader;
 
@@ -9216,7 +9216,7 @@ BOOL loadSaveCompList(UBYTE *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveCompListV9(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
+BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
 {
 	SAVE_COMPLIST_V6		*psSaveCompList;
 	UDWORD				i;
@@ -9282,7 +9282,7 @@ BOOL loadSaveCompListV9(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UD
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveCompListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
+BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
 {
 	SAVE_COMPLIST		*psSaveCompList;
 	UDWORD				i;
@@ -9339,7 +9339,7 @@ BOOL loadSaveCompListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 static BOOL writeCompListFile(STRING *pFileName)
 {
 	COMPLIST_SAVEHEADER		*psHeader;
-	UBYTE					*pFileData;
+	char *pFileData;
 	SAVE_COMPLIST			*psSaveCompList;
 	UDWORD					fileSize, totalComp, player, i;
 	COMP_BASE_STATS			*psStats;
@@ -9380,7 +9380,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_BODY;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_BODY][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numWeaponStats; i++)
 		{
@@ -9391,7 +9391,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_WEAPON;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_WEAPON][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numConstructStats; i++)
 		{
@@ -9402,7 +9402,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_CONSTRUCT;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_CONSTRUCT][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numECMStats; i++)
 		{
@@ -9413,7 +9413,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_ECM;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_ECM][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numPropulsionStats; i++)
 		{
@@ -9424,7 +9424,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_PROPULSION;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_PROPULSION][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numSensorStats; i++)
 		{
@@ -9435,7 +9435,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_SENSOR;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_SENSOR][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numRepairStats; i++)
 		{
@@ -9446,7 +9446,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_REPAIRUNIT;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_REPAIRUNIT][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		for(i = 0; i < numBrainStats; i++)
 		{
@@ -9457,7 +9457,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_BRAIN;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_BRAIN][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
 		/*for(i = 0; i < numProgramStats; i++)
 		{
@@ -9470,7 +9470,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 			psSaveCompList->type = COMP_PROGRAM;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_PROGRAM][i];
-			psSaveCompList = (SAVE_COMPLIST *)((UBYTE *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}*/
 	}
 
@@ -9489,7 +9489,7 @@ static BOOL writeCompListFile(STRING *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up structure type list file
-BOOL loadSaveStructTypeList(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 {
 	STRUCTLIST_SAVEHEADER		*psHeader;
 
@@ -9539,7 +9539,7 @@ BOOL loadSaveStructTypeList(UBYTE *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructTypeListV7(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
+BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_STRUCTLIST_V6		*psSaveStructList;
 	UDWORD				i, statInc;
@@ -9597,7 +9597,7 @@ BOOL loadSaveStructTypeListV7(UBYTE *pFileData, UDWORD filesize, UDWORD numRecor
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructTypeListV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
+BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_STRUCTLIST		*psSaveStructList;
 	UDWORD				i, statInc;
@@ -9660,7 +9660,7 @@ static BOOL writeStructTypeListFile(STRING *pFileName)
 {
 	STRUCTLIST_SAVEHEADER	*psHeader;
 	SAVE_STRUCTLIST			*psSaveStructList;
-	UBYTE					*pFileData;
+	char *pFileData;
 	UDWORD					fileSize, player, i;
 	STRUCTURE_STATS			*psStats;
 
@@ -9696,7 +9696,7 @@ static BOOL writeStructTypeListFile(STRING *pFileName)
 			strcpy(psSaveStructList->name, psStats->pName);
 			psSaveStructList->state = apStructTypeLists[player][i];
 			psSaveStructList->player = (UBYTE)player;
-			psSaveStructList = (SAVE_STRUCTLIST *)((UBYTE *)psSaveStructList +
+			psSaveStructList = (SAVE_STRUCTLIST *)((char *)psSaveStructList +
 				sizeof(SAVE_STRUCTLIST));
 		}
 	}
@@ -9717,7 +9717,7 @@ static BOOL writeStructTypeListFile(STRING *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up saved research file
-BOOL loadSaveResearch(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 {
 	RESEARCH_SAVEHEADER		*psHeader;
 
@@ -9767,7 +9767,7 @@ BOOL loadSaveResearch(UBYTE *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveResearchV8(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
+BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_RESEARCH_V8		*psSaveResearch;
 	UDWORD				i, statInc;
@@ -9850,7 +9850,7 @@ BOOL loadSaveResearchV8(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveResearchV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
+BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_RESEARCH		*psSaveResearch;
 	UDWORD				i, statInc;
@@ -9931,7 +9931,7 @@ static BOOL writeResearchFile(STRING *pFileName)
 {
 	RESEARCH_SAVEHEADER		*psHeader;
 	SAVE_RESEARCH			*psSaveResearch;
-	UBYTE					*pFileData;
+	char *pFileData;
 	UDWORD					fileSize, player, i;
 	RESEARCH				*psStats;
 
@@ -9977,7 +9977,7 @@ static BOOL writeResearchFile(STRING *pFileName)
 		for(player = 0; player < MAX_PLAYERS; player++)
 			endian_udword(&psSaveResearch->currentPoints[player]);
 
-		psSaveResearch = (SAVE_RESEARCH *)((UBYTE *)psSaveResearch +
+		psSaveResearch = (SAVE_RESEARCH *)((char *)psSaveResearch +
 			sizeof(SAVE_RESEARCH));
 	}
 
@@ -9994,7 +9994,7 @@ static BOOL writeResearchFile(STRING *pFileName)
 // -----------------------------------------------------------------------------------------
 //#ifdef NEW_SAVE //V11 Save
 // load up saved message file
-BOOL loadSaveMessage(UBYTE *pFileData, UDWORD filesize, SWORD levelType)
+BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 {
 	MESSAGE_SAVEHEADER		*psHeader;
 
@@ -10023,7 +10023,7 @@ BOOL loadSaveMessage(UBYTE *pFileData, UDWORD filesize, SWORD levelType)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
+BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
 {
 	SAVE_MESSAGE	*psSaveMessage;
 	MESSAGE			*psMessage;
@@ -10062,7 +10062,7 @@ BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 		psSaveMessage = (SAVE_MESSAGE *) pFileData;
 
 		/* SAVE_MESSAGE */
-		endian_sdword(&psSaveMessage->type);
+		endian_sdword(&psSaveMessage->type);	/* FIXME: enum may not be this type! */
 		endian_udword(&psSaveMessage->objId);
 		endian_udword(&psSaveMessage->player);
 
@@ -10139,7 +10139,7 @@ static BOOL writeMessageFile(STRING *pFileName)
 {
 	MESSAGE_SAVEHEADER		*psHeader;
 	SAVE_MESSAGE			*psSaveMessage;
-	UBYTE					*pFileData;
+	char *pFileData;
 	UDWORD					fileSize, player;
 	MESSAGE					*psMessage;
 	PROXIMITY_DISPLAY		*psProx;
@@ -10225,11 +10225,11 @@ static BOOL writeMessageFile(STRING *pFileName)
 			psSaveMessage->read = psMessage->read;			//flag to indicate whether message has been read
 			psSaveMessage->player = psMessage->player;		//which player this message belongs to
 
-			endian_sdword(&psSaveMessage->type);
+			endian_sdword(&psSaveMessage->type); /* FIXME: enum may be different type! */
 			endian_udword(&psSaveMessage->objId);
 			endian_udword(&psSaveMessage->player);
 
-			psSaveMessage = (SAVE_MESSAGE *)((UBYTE *)psSaveMessage + 	sizeof(SAVE_MESSAGE));
+			psSaveMessage = (SAVE_MESSAGE *)((char *)psSaveMessage + 	sizeof(SAVE_MESSAGE));
 		}
 	}
 
@@ -10250,7 +10250,7 @@ static BOOL writeMessageFile(STRING *pFileName)
 // -----------------------------------------------------------------------------------------
 #ifdef SAVE_PROXIMITY_STUFF//V14 Save this is not done because all messages are rebuilt
 // load up saved proximity file
-BOOL loadSaveProximity(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveProximity(char *pFileData, UDWORD filesize)
 {
 	PROXIMITY_SAVEHEADER		*psHeader;
 
@@ -10279,7 +10279,7 @@ BOOL loadSaveProximity(UBYTE *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveProximityV(UBYTE *pFileData, UDWORD filesize, UDWORD numProximitys, UDWORD version)
+BOOL loadSaveProximityV(char *pFileData, UDWORD filesize, UDWORD numProximitys, UDWORD version)
 {
 	SAVE_PROXIMITY	*psSaveProximity;
 	PROXIMITY_DISPLAY	*psProximity;
@@ -10336,7 +10336,7 @@ static BOOL writeProximityFile(STRING *pFileName)
 {
 	PROXIMITY_SAVEHEADER		*psHeader;
 	SAVE_PROXIMITY			*psSaveProximity;
-	UBYTE					*pFileData;
+	char *pFileData;
 	UDWORD					fileSize, player;
 	PROXIMITY_DISPLAY		*psProximity;
 	UDWORD					numProximitys = 0;
@@ -10407,7 +10407,7 @@ static BOOL writeProximityFile(STRING *pFileName)
 			endian_udword(&psSaveProximity->strobe);
 			endian_udword(&psSaveProximity->buttonID);
 
-			psSaveProximity = (SAVE_PROXIMITY *)((UBYTE *)psSaveProximity + sizeof(SAVE_PROXIMITY));
+			psSaveProximity = (SAVE_PROXIMITY *)((char *)psSaveProximity + sizeof(SAVE_PROXIMITY));
 		}
 	}
 
@@ -10428,7 +10428,7 @@ static BOOL writeProximityFile(STRING *pFileName)
 // -----------------------------------------------------------------------------------------
 //#ifdef NEW_SAVE //V11 Save
 // load up saved flag file
-BOOL loadSaveFlag(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveFlag(char *pFileData, UDWORD filesize)
 {
 	FLAG_SAVEHEADER		*psHeader;
 
@@ -10457,7 +10457,7 @@ BOOL loadSaveFlag(UBYTE *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD version)
+BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD version)
 {
 	SAVE_FLAG		*psSaveflag;
 	FLAG_POSITION	*psflag;
@@ -10494,7 +10494,7 @@ BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ve
 		psSaveflag = (SAVE_FLAG *) pFileData;
 
 		/* SAVE_FLAG */
-		endian_sdword(&psSaveflag->type);
+		endian_sdword(&psSaveflag->type); /* FIXME: enum may not be this type! */
 		endian_udword(&psSaveflag->frameNumber);
 		endian_udword(&psSaveflag->screenX);
 		endian_udword(&psSaveflag->screenY);
@@ -10602,7 +10602,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 	SAVE_FLAG			*psSaveflag;
 	STRUCTURE			*psStruct;
 	FACTORY				*psFactory;
-	UBYTE				*pFileData;
+	char				*pFileData;
 	UDWORD				fileSize, player;
 	FLAG_POSITION		*psflag;
 	UDWORD				numflags = 0;
@@ -10693,7 +10693,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 			}
 
 			/* SAVE_FLAG */
-			endian_sdword(&psSaveflag->type);
+			endian_sdword(&psSaveflag->type); /* FIXME: enum may be different type! */
 			endian_udword(&psSaveflag->frameNumber);
 			endian_udword(&psSaveflag->screenX);
 			endian_udword(&psSaveflag->screenY);
@@ -10704,7 +10704,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 			endian_sdword(&psSaveflag->coords.z);
 			endian_udword(&psSaveflag->repairId);
 
-			psSaveflag = (SAVE_FLAG *)((UBYTE *)psSaveflag + 	sizeof(SAVE_FLAG));
+			psSaveflag = (SAVE_FLAG *)((char *)psSaveflag + 	sizeof(SAVE_FLAG));
 		}
 	}
 	//and add the delivery points not in the list
@@ -10744,7 +10744,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 							}
 
 							/* SAVE_FLAG */
-							endian_sdword(&psSaveflag->type);
+							endian_sdword(&psSaveflag->type); /* FIXME: enum may be different type! */
 							endian_udword(&psSaveflag->frameNumber);
 							endian_udword(&psSaveflag->screenX);
 							endian_udword(&psSaveflag->screenY);
@@ -10755,7 +10755,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 							endian_sdword(&psSaveflag->coords.z);
 							endian_udword(&psSaveflag->repairId);
 
-							psSaveflag = (SAVE_FLAG *)((UBYTE *)psSaveflag + 	sizeof(SAVE_FLAG));
+							psSaveflag = (SAVE_FLAG *)((char *)psSaveflag + 	sizeof(SAVE_FLAG));
 						}
 					}
 					break;
@@ -10782,7 +10782,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 
 // -----------------------------------------------------------------------------------------
 //#ifdef PRODUCTION
-BOOL loadSaveProduction(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveProduction(char *pFileData, UDWORD filesize)
 {
 	PRODUCTION_SAVEHEADER		*psHeader;
 
@@ -10810,7 +10810,7 @@ BOOL loadSaveProduction(UBYTE *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveProductionV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
+BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_PRODUCTION	*psSaveProduction;
 	PRODUCTION_RUN	*psCurrentProd;
@@ -10863,7 +10863,7 @@ static BOOL writeProductionFile(STRING *pFileName)
 {
 	PRODUCTION_SAVEHEADER	*psHeader;
 	SAVE_PRODUCTION			*psSaveProduction;
-	UBYTE				*pFileData;
+	char				*pFileData;
 	UDWORD				fileSize;
 	PRODUCTION_RUN	*psCurrentProd;
 	UDWORD				factoryType,factoryNum,runNum;
@@ -10911,7 +10911,7 @@ static BOOL writeProductionFile(STRING *pFileName)
 				/* SAVE_PRODUCTION */
 				endian_udword(&psSaveProduction->multiPlayerID);
 
-				psSaveProduction = (SAVE_PRODUCTION *)((UBYTE *)psSaveProduction + 	sizeof(SAVE_PRODUCTION));
+				psSaveProduction = (SAVE_PRODUCTION *)((char *)psSaveProduction + 	sizeof(SAVE_PRODUCTION));
 			}
 		}
 	}
@@ -10932,7 +10932,7 @@ static BOOL writeProductionFile(STRING *pFileName)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructLimits(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 {
 #ifdef ALLOWSAVE
 	STRUCTLIMITS_SAVEHEADER		*psHeader;
@@ -10980,7 +10980,7 @@ BOOL loadSaveStructLimits(UBYTE *pFileData, UDWORD filesize)
 // -----------------------------------------------------------------------------------------
 #ifdef ALLOWSAVE	  // !?**@?!
 /* code specific to version 2 of saveStructLimits */
-BOOL loadSaveStructLimitsV19(UBYTE *pFileData, UDWORD filesize, UDWORD numLimits)
+BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 {
 	SAVE_STRUCTLIMITS_V2	*psSaveLimits;
 	UDWORD					count, statInc;
@@ -11048,7 +11048,7 @@ BOOL loadSaveStructLimitsV19(UBYTE *pFileData, UDWORD filesize, UDWORD numLimits
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructLimitsV(UBYTE *pFileData, UDWORD filesize, UDWORD numLimits)
+BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 {
 	SAVE_STRUCTLIMITS		*psSaveLimits;
 	UDWORD					count, statInc;
@@ -11131,7 +11131,7 @@ BOOL writeStructLimitsFile(STRING *pFileName)
 
 	// Allocate the data buffer
 	fileSize = STRUCTLIMITS_HEADER_SIZE + (totalLimits * (sizeof(SAVE_STRUCTLIMITS)));
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -11158,7 +11158,7 @@ BOOL writeStructLimitsFile(STRING *pFileName)
 			strcpy(psSaveLimit->name, psStructStats->pName);
 			psSaveLimit->limit = asStructLimits[player][i].limit;
 			psSaveLimit->player = (UBYTE)player;
-			psSaveLimit = (SAVE_STRUCTLIMITS *)((UBYTE *)psSaveLimit + sizeof(SAVE_STRUCTLIMITS));
+			psSaveLimit = (SAVE_STRUCTLIMITS *)((char *)psSaveLimit + sizeof(SAVE_STRUCTLIMITS));
 		}
 	}
 
@@ -11175,7 +11175,7 @@ BOOL writeStructLimitsFile(STRING *pFileName)
 	return FALSE;
 }
 
-BOOL loadSaveCommandLists(UBYTE *pFileData, UDWORD filesize)
+BOOL loadSaveCommandLists(char *pFileData, UDWORD filesize)
 {
 	COMMAND_SAVEHEADER		*psHeader;
 
@@ -11213,7 +11213,7 @@ BOOL loadSaveCommandLists(UBYTE *pFileData, UDWORD filesize)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveCommandListsV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids)
+BOOL loadSaveCommandListsV(char *pFileData, UDWORD filesize, UDWORD numDroids)
 {
 	SAVE_COMMAND		*psSaveCommand;
 	DROID				*psDroid;
@@ -11270,7 +11270,7 @@ BOOL writeCommandLists(STRING *pFileName)
 
 	// Allocate the data buffer
 	fileSize = COMMAND_HEADER_SIZE + (totalDroids * (sizeof(SAVE_COMMAND)));
-	pFileData = (UBYTE *) MALLOC(fileSize);
+	pFileData = MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		DBERROR(("Out of memory"));
@@ -11295,7 +11295,7 @@ BOOL writeCommandLists(STRING *pFileName)
 		for (psDroid = apsCmdDesignation[player]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
 			psSaveCommand->droidID = psDroid->id;
-			psSaveCommand = (SAVE_COMMAND*)((UBYTE *)psSaveCommand + sizeof(SAVE_COMMAND));
+			psSaveCommand = (SAVE_COMMAND*)((char *)psSaveCommand + sizeof(SAVE_COMMAND));
 		}
 */
 		psDroid = cmdDroidGetDesignator(player);
@@ -11312,7 +11312,7 @@ BOOL writeCommandLists(STRING *pFileName)
 		/* COMMAND_SAVE_V20 */
 		endian_udword(&psSaveCommand->droidID);
 
-		psSaveCommand = (SAVE_COMMAND*)((UBYTE *)psSaveCommand + sizeof(SAVE_COMMAND));
+		psSaveCommand = (SAVE_COMMAND*)((char *)psSaveCommand + sizeof(SAVE_COMMAND));
 	}
 
 	/* COMMAND_SAVEHEADER */
@@ -11334,7 +11334,7 @@ BOOL writeCommandLists(STRING *pFileName)
 // write the event state to a file on disk
 static BOOL	writeScriptState(STRING *pFileName)
 {
-	UBYTE	*pBuffer;
+	char	*pBuffer;
 	UDWORD	fileSize;
 
 	if (!eventSaveState(3, &pBuffer, &fileSize))
@@ -11356,7 +11356,7 @@ static BOOL	writeScriptState(STRING *pFileName)
 // load the script state given a .gam name
 BOOL loadScriptState(STRING *pFileName)
 {
-	UBYTE	*pFileData;
+	char	*pFileData;
 	UDWORD	fileSize;
 	BOOL bHashed = FALSE;
 
@@ -11662,7 +11662,7 @@ BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD
 	STRUCT_SAVEHEADER		*psHeader;
 	STRING			aFileName[256];
 	UDWORD			xx,yy,x,y,count,fileSize,sizeOfSaveStruture;
-	UBYTE			*pFileData = NULL;
+	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 
 	levFindDataSet(game.map, &psLevel);
@@ -11796,7 +11796,7 @@ BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX
 	STRUCT_SAVEHEADER		*psHeader;
 	STRING			aFileName[256];
 	UDWORD			xx,yy,x,y,count,fileSize,sizeOfSaveStruture;
-	UBYTE			*pFileData = NULL;
+	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 
 	levFindDataSet(game.map, &psLevel);

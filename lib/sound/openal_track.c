@@ -370,7 +370,7 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_ReadTrackFromFile( TRACK *psTrack, signed char szFileName[] )
+BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 {
 	PHYSFS_file * f = PHYSFS_openRead(szFileName);
 	static char* buffer = NULL;

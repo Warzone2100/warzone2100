@@ -18,7 +18,7 @@ SWORD iV_GetImageYOffset(IMAGEFILE *ImageFile,UWORD ID);
 UWORD iV_GetImageCenterX(IMAGEFILE *ImageFile,UWORD ID);
 UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile,UWORD ID);
 
-IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize);
+IMAGEFILE *iV_LoadImageFile(char *FileData, UDWORD FileSize);
 void iV_FreeImageFile(IMAGEFILE *ImageFile);
 
 

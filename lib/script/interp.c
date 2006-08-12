@@ -594,7 +594,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 			if(!IsRetStackEmpty())		//There was a caller function before this one
 			{
-				if(!PopRetStack(&ip))		//Pop return address
+				if(!PopRetStack(ip))		//Pop return address
 				{
 					debug( LOG_ERROR, "interpRunScript() - PopRetStack(): failed to pop return adress.");
 					return FALSE;
