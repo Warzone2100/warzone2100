@@ -24,6 +24,8 @@ typedef enum _code_error
 	CE_PARSE			// A parse error occured
 } CODE_ERROR;
 
+EVENT_SYMBOL	*psCurEvent = NULL;		/* function stuff: stores current event: for local var declaration */
+
 /* Pointer to the compiled code */
 static SCRIPT_CODE	*psFinalProg=NULL;
 
@@ -1492,7 +1494,6 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 	VAR_IDENT_DECL	*videcl;
 }
 	/* key words */
-%token FUNCTION
 %token TRIGGER
 %token EVENT
 %token WAIT
@@ -1519,6 +1520,10 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %token _AND
 %token _OR
 %token _NOT
+
+/* NEW STUFF */
+%token FUNCTION
+%token RETURN
 
 %left _AND _OR
 %left BOOLEQUAL NOTEQUAL GREATEQUAL LESSEQUAL GREATER LESS
@@ -1610,7 +1615,26 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %type <tdecl>     trigger_subdecl
 %type <eSymbol>   event_subdecl
 
+		/******************/
+		/* function stuff */
+		/******************/
+%type <eSymbol>   func_subdecl
+%type <eSymbol> function_type
+
+/* function_type: custom, in-script defined functions (events actually) */
+%token <eSymbol> VOID_FUNC_CUST		/* A defined function */
+%token <eSymbol> BOOL_FUNC_CUST	/* A defined boolean function */
+%token <eSymbol> NUM_FUNC_CUST	/* A defined numeric (int/float) function */
+%token <eSymbol> USER_FUNC_CUST	/* A defined user defined type function */
+%token <eSymbol> OBJ_FUNC_CUST	/* A defined object pointer function */
+%token <eSymbol> STRING_FUNC_CUST	 /* A defined string function */
+
 %%
+
+
+
+
+
 
 script:			header var_list
 				{
@@ -1620,7 +1644,7 @@ script:			header var_list
 				}
 						 trigger_list event_list
 				{
-					SDWORD			size, debug, i, dimension, arraySize, totalArraySize;
+					SDWORD			size, debugEntries, i, dimension, arraySize, totalArraySize;
 					SDWORD			numArrays;
 					UDWORD			base;
 					VAR_SYMBOL		*psCurr;
@@ -1630,18 +1654,22 @@ script:			header var_list
 
 					// Calculate the code size
 					size = 0;
-					debug = 0;
+					debugEntries = 0;
 					for(psTrig = psTriggers; psTrig; psTrig = psTrig->psNext)
 					{
 						// Add the trigger code size
 						size += psTrig->size;
-						debug += psTrig->debugEntries;
+						debugEntries += psTrig->debugEntries;
 					}
 					for(psEvent = psEvents; psEvent; psEvent = psEvent->psNext)
 					{
+						//Make sure all declared events were defined
+						if(psEvent->pCode == NULL)
+							debug( LOG_ERROR, "'%s' event or function declared but not defined",  psEvent->pIdent);
+
 						// Add the trigger code size
 						size += psEvent->size;
-						debug += psEvent->debugEntries;
+						debugEntries += psEvent->debugEntries;
 					}
 
 					// Allocate the program
@@ -1659,7 +1687,7 @@ script:			header var_list
 					}
 					ALLOC_PROG(psFinalProg, size, psCurrBlock->pCode,
 						numVars, numArrays, numTriggers, numEvents);
-					ALLOC_DEBUG(psFinalProg, debug);
+					ALLOC_DEBUG(psFinalProg, debugEntries);
 					psFinalProg->debugEntries = 0;
 					ip = psFinalProg->pCode;
 
@@ -1817,6 +1845,68 @@ script:			header var_list
 						base += arraySize;
 					}
 				}
+			;
+
+
+function_type:			VOID_FUNC_CUST
+			|	BOOL_FUNC_CUST
+			|	NUM_FUNC_CUST
+			|	USER_FUNC_CUST
+			|	OBJ_FUNC_CUST
+			|	STRING_FUNC_CUST
+			;
+
+/* Function */
+func_subdecl:			FUNCTION TYPE IDENT	/* declaration of a function */
+				{
+					EVENT_SYMBOL	*psEvent;
+
+					debug( LOG_SCRIPT, "func_subdecl: FUNCTION TYPE IDENT" );
+
+					/* allow local vars to have the same names as global vars (don't check global vars) */
+					/* localVariableDef = TRUE; */
+					/* debug( LOG_SCRIPT, "localVariableDef = TRUE 1"); */
+
+					debug( LOG_SCRIPT, "func_subdecl: scriptDeclareEvent" );
+
+					if (!scriptDeclareEvent($3, &psEvent,0))
+					{
+						debug( LOG_SCRIPT, "func_subdecl: scriptDeclareEvent() failed" );
+						YYABORT;
+					}
+					debug( LOG_SCRIPT, "END func_subdecl: scriptDeclareEvent" );
+
+					psEvent->retType = $2;
+					psCurEvent = psEvent;
+					psCurEvent->bFunction = TRUE;
+
+					$$ = psEvent;
+
+					debug( LOG_SCRIPT, "END func_subdecl:FUNCTION IDENT");
+				}
+			/* definition of a function that was already declared (TODO: move to a new rule) */
+			|	FUNCTION TYPE function_type	/* function that was already declared */
+					{
+						debug( LOG_SCRIPT, "func_subdecl: FUNCTION TYPE function_type");
+						psCurEvent = $3;
+
+						/* allow local vars to have the same names as global vars (don't check global vars) */
+						/* localVariableDef = TRUE; */
+						/* DB_INTERP(("localVariableDef = TRUE 2\n")); */
+
+						/* make sure this event was already declared as function before */
+						if(!$3->bFunction)
+						{
+							debug(LOG_SCRIPT, "'%s' was declared as event before and can't be redefined as function", $3->pIdent);
+							debug(LOG_SCRIPT, "Wrong function definition");
+							YYABORT;
+						}
+
+						/* psCurEvent->bFunction = TRUE; */
+						/* psEvent->retType = $2; */
+						$$ = $3;
+						debug(LOG_SCRIPT, "END func_subdecl: FUNCTION TYPE function_type");
+					}
 			;
 
 	/**************************************************************************************
@@ -2055,26 +2145,40 @@ event_list:			event_decl
 event_subdecl:		EVENT IDENT
 					{
 						EVENT_SYMBOL	*psEvent;
-						if (!scriptDeclareEvent($2, &psEvent))
+						debug( LOG_SCRIPT, "event_subdecl: scriptDeclareEvent" );
+						if (!scriptDeclareEvent($2, &psEvent, 0))
 						{
+							debug( LOG_SCRIPT, "event_subdecl: scriptDeclareEvent() failed" );
 							YYABORT;
 						}
 
+						psCurEvent = psEvent;
+
+						debug( LOG_SCRIPT, "END event_subdecl: scriptDeclareEvent, '%s'",  $2);
 						$$ = psEvent;
 					}
 				|	EVENT EVENT_SYM
 						{
+							psCurEvent = $2;
 							$$ = $2;
 						}
 				;
 
+argument_decl:	'(' ')'
+
 event_decl:			event_subdecl ';'
+					{
+						psCurEvent->bDeclared = TRUE;
+					}
 				|	event_subdecl '(' TRIG_SYM ')' '{' statement_list '}'
 					{
 						if (!scriptDefineEvent($1, $6, $3->index))
 						{
+							debug( LOG_SCRIPT, "event_decl: scriptDefineEvent() failed" );
 							YYABORT;
 						}
+
+						psCurEvent = NULL;
 
 						FREE_DEBUG($6);
 						FREE_BLOCK($6);
@@ -2096,8 +2200,11 @@ event_decl:			event_subdecl ';'
 
 						if (!scriptDefineEvent($1, $7, numTriggers - 1))
 						{
+							debug( LOG_SCRIPT, "event_decl: scriptDefineEvent() failed 2" );
 							YYABORT;
 						}
+
+						psCurEvent = NULL;
 
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
@@ -2106,11 +2213,63 @@ event_decl:			event_subdecl ';'
 					{
 						if (!scriptDefineEvent($1, $6, -1))
 						{
+							debug( LOG_SCRIPT, "event_decl: scriptDefineEvent() failed 3" );
 							YYABORT;
 						}
 
+						psCurEvent = NULL;
+
 						FREE_DEBUG($6);
 						FREE_BLOCK($6);
+					}
+
+				/* Function declaration, like: function bool myFunc(); */
+				|	func_subdecl argument_decl ';'
+				{
+					debug( LOG_SCRIPT, "func_subdecl argument_decl ';'");
+					psCurEvent->bDeclared = TRUE;	/* remember current function was declared */
+					debug( LOG_SCRIPT, "END func_subdecl argument_decl ';'");
+				}
+				/* new function (not declared) */
+				/* func_subdecl '(' funcbody_var_def ')' '{' var_list statement_list return_statement '}' */
+				 |	func_subdecl '(' ')' '{' statement_list '}'
+					{
+
+						debug(LOG_SCRIPT, "START func_subdecl ( ) { statement_list } ");
+		/*
+						if(!psCurEvent->bDeclared)
+						{
+							debug( LOG_SCRIPT, "Event %s's definition doesn't match with declaration.", psCurEvent->pIdent);
+							debug( LOG_SCRIPT, "Wrong event definition:\n event %s's definition doesn't match with declaration", psCurEvent->pIdent);
+							YYABORT;
+						}
+		*/
+						/* stays the same if no params (just gets copied) */
+						ALLOC_BLOCK(psCurrBlock, $5->size + sizeof(OPCODE));
+						ip = psCurrBlock->pCode;
+		
+						/* Copy the old (main) code and free it */
+						PUT_BLOCK(ip, $5);
+						PUT_OPCODE(ip, OP_EXIT);		/* must exit after return */
+		
+						/* copy debug info */
+						ALLOC_DEBUG(psCurrBlock, $5->debugEntries);
+						PUT_DEBUG(psCurrBlock, $5);
+
+						if (!scriptDefineEvent($1, psCurrBlock, -1))
+						{
+							debug( LOG_SCRIPT, "event_decl: func_subdecl '(' ')' '{' statement_list '}': scriptDefineEvent() failed 4" );
+							YYABORT;
+						}
+		
+						FREE_DEBUG($5);
+						/* FREE_DEBUG($8); */
+						FREE_BLOCK($5);
+						
+						/* end of event */
+						psCurEvent = NULL;
+
+						debug(LOG_SCRIPT, "END func_subdecl '(' ')' '{' statement_list '}' ");
 					}
 				;
 
@@ -2187,6 +2346,43 @@ statement:			assignment ';'
 
 						$$ = $1;
 					}
+
+
+
+			|	VOID_FUNC_CUST '(' ')'  ';'
+					{
+						UDWORD line;
+						STRING *pDummy;
+
+						debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';'" );
+
+						/* Allocate the code block */
+						ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));	//Opcode + event index
+						ALLOC_DEBUG(psCurrBlock, 1);
+						ip = psCurrBlock->pCode;
+
+						debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';' 1" );
+
+						/* Store the instruction */
+						PUT_OPCODE(ip, OP_FUNC);
+						PUT_FUNC(ip,$1->index);			//Put event index
+
+						debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';' 2" );
+
+						/* Add the debugging information */
+						if (genDebugInfo)
+						{
+							psCurrBlock->psDebug[0].offset = 0;
+							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							psCurrBlock->psDebug[0].line = line;
+						}
+
+						debug( LOG_SCRIPT, "END expression: VOID_FUNC_CUST '(' ')'  ';'" );
+						$$ = psCurrBlock;
+					}
+
+
+
 				|	conditional
 					{
 						$$ = $1;
@@ -3411,6 +3607,8 @@ static void scriptResetTables(void)
 	}
 	psGlobalVars = NULL;
 
+	psCurEvent = NULL;
+
 	/* Reset the global array symbol table */
 	for(psCurr = psGlobalArrays; psCurr != NULL; psCurr = psNext)
 	{
@@ -3804,7 +4002,7 @@ BOOL scriptLookUpCallback(STRING *pIdent, CALLBACK_SYMBOL **ppsCallback)
 }
 
 /* Add a new event symbol */
-BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent)
+BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, INT numArgs)
 {
 	EVENT_SYMBOL		*psEvent, *psCurr, *psPrev;
 
@@ -3828,6 +4026,12 @@ BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent)
 	psEvent->debugEntries = 0;
 	psEvent->index = numEvents++;
 	psEvent->psNext = NULL;
+
+	/* function stuff: remember how many params this function has */
+	psEvent->numParams = numArgs;
+	psEvent->bFunction = FALSE;
+	psEvent->bDeclared = FALSE;
+	psEvent->retType = VAL_VOID;	/* functions can return a value */
 
 	// Add the event to the list
 	psPrev = NULL;
@@ -3951,6 +4155,30 @@ BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym)
 		{
 			*ppsSym = psCurr;
 			return TRUE;
+		}
+	}
+
+	/* Failed to find the indentifier */
+	*ppsSym = NULL;
+	return FALSE;
+}
+
+/* Look up a function symbol defined in script */
+BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym)
+{
+	UDWORD i;
+	EVENT_SYMBOL	*psCurr;
+
+	/* See if the function is defined as a script function */
+	for(psCurr = psEvents; psCurr; psCurr = psCurr->psNext)
+	{
+		if(psCurr->bFunction)	/* event defined as function */
+		{
+			if (strcmp(psCurr->pIdent, pIdent) == 0)
+			{
+				*ppsSym = psCurr;
+				return TRUE;
+			}
 		}
 	}
 

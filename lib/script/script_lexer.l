@@ -206,6 +206,55 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 }
 
 
+/* Get the token type for a custom function symbol */
+SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
+{
+	BOOL	object;
+
+	debug( LOG_SCRIPT, "scriptGetCustomFuncToken" );
+
+	// See if this is an object pointer
+	object = asScrTypeTab[psFunc->retType - VAL_USERTYPESTART].accessType == AT_OBJECT;
+
+	debug( LOG_SCRIPT, "scriptGetCustomFuncToken 3" );
+
+	if (object)
+	{
+		debug( LOG_SCRIPT, "scriptGetCustomFuncToken: object" );
+		return OBJ_FUNC_CUST;
+	}
+	else
+	{
+		switch (psFunc->retType)
+		{
+		case VAL_BOOL:
+			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_BOOL" );
+			return BOOL_FUNC_CUST;
+			break;
+		case VAL_INT:
+//		case VAL_FLOAT:
+			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_INT" );
+			return NUM_FUNC_CUST;
+			break;
+		case VAL_STRING:		/* <NEW> */
+			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_STRING" );
+			return STRING_FUNC_CUST;
+			break;
+		case VAL_VOID:
+			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: void function" );
+			return VOID_FUNC_CUST;
+			break;
+		default:
+			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: default" );
+			return USER_FUNC_CUST;
+			break;
+		}
+	}
+
+	debug( LOG_SCRIPT, "END scriptGetCustomFuncToken" );
+}
+
+
 
 %}
 
@@ -228,10 +277,11 @@ event					return EVENT;
 inactive				return INACTIVE;
 init					return INITIALISE;
 link					return LINK;
-ref						return REF;
+ref					return REF;
 
-	/* function				return FUNCTION;*/
-	/* cond					return COND; */
+	/* new stuff */
+function				return FUNCTION;
+return					return RETURN;
 
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 private					{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
@@ -246,7 +296,11 @@ bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 BOOL					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 int						{ scr_lval.tval = VAL_INT; return TYPE; }
 INT						{ scr_lval.tval = VAL_INT; return TYPE; }
-	/*float					{ ais_lval.tval = VAL_FLOAT; return TYPE; }*/
+
+	/* return value for void functions */
+void					{ scr_lval.tval = VAL_VOID; return TYPE; }
+VOID					{ scr_lval.tval = VAL_VOID; return TYPE; }
+
 	/* string type isn't implemented yet */
 	/* string					{ ais_lval.tval = VAL_STRING; return TYPE; } */
 	/* object					{ scr_lval.tval = VAL_OBJECT; return TYPE; } */
@@ -303,6 +357,14 @@ NOT						return _NOT;
 									DBP0(("[lex] func\n"));
 									return scriptGetFuncToken(scr_lval.fSymbol);
 								}
+
+								/* See if this identifier has been defined as a custom function */
+								else if (scriptLookUpCustomFunction(scr_text, &scr_lval.eSymbol))
+								{
+									debug( LOG_SCRIPT, "scriptLookUpCustomFunction: '%s' - custom function", scr_text );
+									return scriptGetCustomFuncToken(scr_lval.eSymbol);
+								}
+
 								else if (scriptLookUpTrigger(scr_text, &scr_lval.tSymbol))
 								{
 									DBP0(("[lex] TRIG_SYM\n"));

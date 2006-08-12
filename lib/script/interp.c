@@ -216,6 +216,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 //	SDWORD			arrayIndex, dimensions, arrayElements[VAR_MAX_DIMENSIONS];
 	SDWORD			instructionCount = 0;
 
+	UDWORD		CurEvent;
+	BOOL		bStop;
+
 	ASSERT((PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
 		"interpRunScript: invalid context pointer"));
 	psProg=psContext->psCode;
@@ -235,6 +238,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	// Reset the stack in case another script messed up
 	stackReset();
+
+	//reset return stack
+	retStackReset();
 
 	// Turn off tracing initially
 	interpTrace = FALSE;
@@ -276,276 +282,357 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	opcode = (*ip) >> OPCODE_SHIFT;
 	instructionCount = 0;
 
-	// Run the code
-	while (ip < pCodeEnd)// && opcode != OP_EXIT)
-	{
-		if (instructionCount > INTERP_MAXINSTRUCTIONS)
-		{
-			ASSERT((FALSE,
-				"interpRunScript: max instruction count exceeded - infinite loop ?"));
-			goto exit_with_error;
-		}
-		instructionCount += 1;
+	CurEvent = index;
+	bStop = FALSE;
 
-		TRCPRINTF(("%-6d  ", ip - psProg->pCode));
-		opcode = (*ip) >> OPCODE_SHIFT;
-		data = (*ip) & OPCODE_DATAMASK;
-		switch (opcode)
+	while(!bStop)
+	{
+		// Run the code
+		if (ip < pCodeEnd)// && opcode != OP_EXIT)
 		{
-		case OP_PUSH:
-			// The type of the value is stored in with the opcode
-			sVal.type = (*ip) & OPCODE_DATAMASK;
-			// Copy the data as a DWORD
-			sVal.v.ival = (SDWORD)(*(ip+1));
-			TRCPRINTF(("PUSH        "));
-			TRCPRINTVAL(&sVal);
-			TRCPRINTF(("\n"));
-			if (!stackPush(&sVal))
+			if (instructionCount > INTERP_MAXINSTRUCTIONS)
 			{
-				// Eeerk, out of memory
-				ASSERT((FALSE, "interpRunScript: out of memory!"));
+				ASSERT((FALSE,
+					"interpRunScript: max instruction count exceeded - infinite loop ?"));
 				goto exit_with_error;
 			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_PUSHREF:
-			// The type of the variable is stored in with the opcode
-			sVal.type = (*ip) & OPCODE_DATAMASK;
-			// store the pointer
-			psVar = interpGetVarData(psGlobals, *(ip + 1));
-			sVal.v.oval = &(psVar->v.ival);
-			TRCPRINTF(("PUSHREF     "));
-			TRCPRINTVAL(&sVal);
-			TRCPRINTF(("\n"));
-			if (!stackPush(&sVal))
+			instructionCount += 1;
+
+			TRCPRINTF(("%-6d  ", ip - psProg->pCode));
+			opcode = (*ip) >> OPCODE_SHIFT;
+			data = (*ip) & OPCODE_DATAMASK;
+			switch (opcode)
 			{
-				// Eeerk, out of memory
-				ASSERT((FALSE, "interpRunScript: out of memory!"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_POP:
-			TRCPRINTF(("POP\n"));
-			if (!stackPop(&sVal))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do stack pop"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_BINARYOP:
-			TRCPRINTMATHSOP(data);
-			if (!stackBinaryOp((OPCODE)data))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do binary op"));
-				goto exit_with_error;
-			}
-			TRCPRINTSTACKTOP();
-			TRCPRINTF(("\n"));
-			ip += aOpSize[opcode];
-			break;
-		case OP_UNARYOP:
-			TRCPRINTMATHSOP(data);
-			if (!stackUnaryOp((OPCODE)data))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do unary op"));
-				goto exit_with_error;
-			}
-			TRCPRINTSTACKTOP();
-			TRCPRINTF(("\n"));
-			ip += aOpSize[opcode];
-			break;
-		case OP_PUSHGLOBAL:
-			TRCPRINTF(("PUSHGLOBAL  %d\n", data));
-			if (data >= numGlobals)
-			{
-				ASSERT((FALSE, "interpRunScript: variable index out of range"));
-				goto exit_with_error;
-			}
-			if (!stackPush(interpGetVarData(psGlobals, data)))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do stack push"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_POPGLOBAL:
-			TRCPRINTF(("POPGLOBAL   %d ", data));
-			TRCPRINTSTACKTOP();
-			TRCPRINTF(("\n"));
-			if (data >= numGlobals)
-			{
-				ASSERT((FALSE, "interpRunScript: variable index out of range"));
-				goto exit_with_error;
-			}
-			if (!stackPopType(interpGetVarData(psGlobals, data)))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do stack pop"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_PUSHARRAYGLOBAL:
-			// get the number of array elements
-//			arrayElements = (data & ARRAY_ELEMENT_MASK) >> ARRAY_ELEMENT_SHIFT;
-//			data = data & ARRAY_INDEX_MASK;
-			// get the array index
-//			if (!stackPopParams(1, VAL_INT, &arrayIndex))
-//			{
-//				goto exit_with_error;
-//			}
-//			TRCPRINTF(("PUSHARRAYGLOBAL  [%d] %d(+%d)\n", arrayIndex, data, arrayElements));
-//			if (data + arrayElements > numGlobals)
-//			{
-//				ASSERT((FALSE, "interpRunScript: variable index out of range"));
-//				goto exit_with_error;
-//			}
-//			if (arrayIndex < 0 || arrayIndex >= arrayElements)
-//			{
-//				ASSERT((FALSE, "interpRunScript: array index out of range"));
-//				goto exit_with_error;
-//			}
-			TRCPRINTF(("PUSHARRAYGLOBAL  "));
-			if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
-			{
-				ASSERT((FALSE, "interpRunScript: could not get array var data"));
-				goto exit_with_error;
-			}
-			TRCPRINTF(("\n"));
-			if (!stackPush(psVar))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do stack push"));
-				goto exit_with_error;
-			}
-			break;
-		case OP_POPARRAYGLOBAL:
-			// get the number of array elements
-//			arrayElements = (data & ARRAY_ELEMENT_MASK) >> ARRAY_ELEMENT_SHIFT;
-//			data = data & ARRAY_INDEX_MASK;
-			// get the array index
-/*			if (!stackPopParams(1, VAL_INT, &arrayIndex))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do pop of params"));
-				goto exit_with_error;
-			}
-			TRCPRINTF(("POPARRAYGLOBAL   [%d] %d(+%d) ", arrayIndex, data, arrayElements));
-			TRCPRINTSTACKTOP();
-			TRCPRINTF(("\n"));
-			if (data + arrayElements > numGlobals)
-			{
-				ASSERT((FALSE, "interpRunScript: variable index out of range"));
-				goto exit_with_error;
-			}
-			if (arrayIndex < 0 || arrayIndex >= arrayElements)
-			{
-				ASSERT((FALSE, "interpRunScript: array index out of range"));
-				goto exit_with_error;
-			}
-			if (!stackPopType(interpGetVarData(psGlobals, data + arrayIndex)))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];*/
-			TRCPRINTF(("POPARRAYGLOBAL   "));
-			if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
-			{
-				ASSERT((FALSE, "interpRunScript: could not get array var data"));
-				goto exit_with_error;
-			}
-			TRCPRINTSTACKTOP();
-			TRCPRINTF(("\n"));
-			if (!stackPopType(psVar))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
-				goto exit_with_error;
-			}
-			break;
-		case OP_JUMPFALSE:
-			TRCPRINTF(("JUMPFALSE   %d (%d)",
-					(SWORD)data, ip - psProg->pCode + (SWORD)data));
-			if (!stackPop(&sVal))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do pop of stack"));
-				goto exit_with_error;
-			}
-			if (!sVal.v.bval)
-			{
+				/* Custom function call */
+				case OP_FUNC:
+					debug( LOG_SCRIPT, "OP_FUNC" );
+					if(!RetStackRemember(CurEvent, (UDWORD)(ip + 2)))	//Remember where to jump back later
+					{
+						debug( LOG_ERROR, "interpRunScript() - RetStackRemember() failed.");
+						return FALSE;
+					}
+
+					CurEvent = *(ip+1);			//Current event = event to jump to
+
+					if (CurEvent > psProg->numEvents)
+					{
+						debug( LOG_ERROR, "interpRunScript: trigger index out of range");
+						return FALSE;
+					}
+
+					//Set new code execution boundries
+					//----------------------------------
+					pCodeBase = psProg->pCode + psProg->pEventTab[CurEvent];
+					pCodeStart = pCodeBase;
+					pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
+
+					ip = pCodeStart;				//Start at the beginning of the new event
+
+					break;
+
+			case OP_PUSH:
+				// The type of the value is stored in with the opcode
+				sVal.type = (*ip) & OPCODE_DATAMASK;
+				// Copy the data as a DWORD
+				sVal.v.ival = (SDWORD)(*(ip+1));
+				TRCPRINTF(("PUSH        "));
+				TRCPRINTVAL(&sVal);
+				TRCPRINTF(("\n"));
+				if (!stackPush(&sVal))
+				{
+					// Eeerk, out of memory
+					ASSERT((FALSE, "interpRunScript: out of memory!"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_PUSHREF:
+				// The type of the variable is stored in with the opcode
+				sVal.type = (*ip) & OPCODE_DATAMASK;
+				// store the pointer
+				psVar = interpGetVarData(psGlobals, *(ip + 1));
+				sVal.v.oval = &(psVar->v.ival);
+				TRCPRINTF(("PUSHREF     "));
+				TRCPRINTVAL(&sVal);
+				TRCPRINTF(("\n"));
+				if (!stackPush(&sVal))
+				{
+					// Eeerk, out of memory
+					ASSERT((FALSE, "interpRunScript: out of memory!"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_POP:
+				TRCPRINTF(("POP\n"));
+				if (!stackPop(&sVal))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do stack pop"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_BINARYOP:
+				TRCPRINTMATHSOP(data);
+				if (!stackBinaryOp((OPCODE)data))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do binary op"));
+					goto exit_with_error;
+				}
+				TRCPRINTSTACKTOP();
+				TRCPRINTF(("\n"));
+				ip += aOpSize[opcode];
+				break;
+			case OP_UNARYOP:
+				TRCPRINTMATHSOP(data);
+				if (!stackUnaryOp((OPCODE)data))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do unary op"));
+					goto exit_with_error;
+				}
+				TRCPRINTSTACKTOP();
+				TRCPRINTF(("\n"));
+				ip += aOpSize[opcode];
+				break;
+			case OP_PUSHGLOBAL:
+				TRCPRINTF(("PUSHGLOBAL  %d\n", data));
+				if (data >= numGlobals)
+				{
+					ASSERT((FALSE, "interpRunScript: variable index out of range"));
+					goto exit_with_error;
+				}
+				if (!stackPush(interpGetVarData(psGlobals, data)))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do stack push"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_POPGLOBAL:
+				TRCPRINTF(("POPGLOBAL   %d ", data));
+				TRCPRINTSTACKTOP();
+				TRCPRINTF(("\n"));
+				if (data >= numGlobals)
+				{
+					ASSERT((FALSE, "interpRunScript: variable index out of range"));
+					goto exit_with_error;
+				}
+				if (!stackPopType(interpGetVarData(psGlobals, data)))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do stack pop"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_PUSHARRAYGLOBAL:
+				// get the number of array elements
+	//			arrayElements = (data & ARRAY_ELEMENT_MASK) >> ARRAY_ELEMENT_SHIFT;
+	//			data = data & ARRAY_INDEX_MASK;
+				// get the array index
+	//			if (!stackPopParams(1, VAL_INT, &arrayIndex))
+	//			{
+	//				goto exit_with_error;
+	//			}
+	//			TRCPRINTF(("PUSHARRAYGLOBAL  [%d] %d(+%d)\n", arrayIndex, data, arrayElements));
+	//			if (data + arrayElements > numGlobals)
+	//			{
+	//				ASSERT((FALSE, "interpRunScript: variable index out of range"));
+	//				goto exit_with_error;
+	//			}
+	//			if (arrayIndex < 0 || arrayIndex >= arrayElements)
+	//			{
+	//				ASSERT((FALSE, "interpRunScript: array index out of range"));
+	//				goto exit_with_error;
+	//			}
+				TRCPRINTF(("PUSHARRAYGLOBAL  "));
+				if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
+				{
+					ASSERT((FALSE, "interpRunScript: could not get array var data"));
+					goto exit_with_error;
+				}
+				TRCPRINTF(("\n"));
+				if (!stackPush(psVar))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do stack push"));
+					goto exit_with_error;
+				}
+				break;
+			case OP_POPARRAYGLOBAL:
+				// get the number of array elements
+	//			arrayElements = (data & ARRAY_ELEMENT_MASK) >> ARRAY_ELEMENT_SHIFT;
+	//			data = data & ARRAY_INDEX_MASK;
+				// get the array index
+	/*			if (!stackPopParams(1, VAL_INT, &arrayIndex))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do pop of params"));
+					goto exit_with_error;
+				}
+				TRCPRINTF(("POPARRAYGLOBAL   [%d] %d(+%d) ", arrayIndex, data, arrayElements));
+				TRCPRINTSTACKTOP();
+				TRCPRINTF(("\n"));
+				if (data + arrayElements > numGlobals)
+				{
+					ASSERT((FALSE, "interpRunScript: variable index out of range"));
+					goto exit_with_error;
+				}
+				if (arrayIndex < 0 || arrayIndex >= arrayElements)
+				{
+					ASSERT((FALSE, "interpRunScript: array index out of range"));
+					goto exit_with_error;
+				}
+				if (!stackPopType(interpGetVarData(psGlobals, data + arrayIndex)))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];*/
+				TRCPRINTF(("POPARRAYGLOBAL   "));
+				if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
+				{
+					ASSERT((FALSE, "interpRunScript: could not get array var data"));
+					goto exit_with_error;
+				}
+				TRCPRINTSTACKTOP();
+				TRCPRINTF(("\n"));
+				if (!stackPopType(psVar))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
+					goto exit_with_error;
+				}
+				break;
+			case OP_JUMPFALSE:
+				TRCPRINTF(("JUMPFALSE   %d (%d)",
+						(SWORD)data, ip - psProg->pCode + (SWORD)data));
+				if (!stackPop(&sVal))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do pop of stack"));
+					goto exit_with_error;
+				}
+				if (!sVal.v.bval)
+				{
+					// Do the jump
+					TRCPRINTF((" - done -\n"));
+					ip += (SWORD)data;
+					if (ip < pCodeStart || ip > pCodeEnd)
+					{
+						ASSERT((FALSE, "interpRunScript: jump out of range"));
+						goto exit_with_error;
+					}
+				}
+				else
+				{
+					TRCPRINTF(("\n"));
+					ip += aOpSize[opcode];
+				}
+				break;
+			case OP_JUMP:
+				TRCPRINTF(("JUMP        %d (%d)\n",
+						(SWORD)data, ip - psProg->pCode + (SWORD)data));
 				// Do the jump
-				TRCPRINTF((" - done -\n"));
 				ip += (SWORD)data;
 				if (ip < pCodeStart || ip > pCodeEnd)
 				{
 					ASSERT((FALSE, "interpRunScript: jump out of range"));
 					goto exit_with_error;
 				}
+				break;
+			case OP_CALL:
+				TRCPRINTF(("CALL        "));
+				TRCPRINTFUNC( (SCRIPT_FUNC)(*(ip+1)) );
+				TRCPRINTF(("\n"));
+				scriptFunc = (SCRIPT_FUNC)*(ip+1);
+				if (!scriptFunc())
+				{
+					ASSERT((FALSE, "interpRunScript: could not do func"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_VARCALL:
+				TRCPRINTF(("VARCALL     "));
+				TRCPRINTVARFUNC( (SCRIPT_VARFUNC)(*(ip+1)), data );
+				TRCPRINTF(("(%d)\n", data));
+				scriptVarFunc = (SCRIPT_VARFUNC)*(ip+1);
+				if (!scriptVarFunc(data))
+				{
+					ASSERT((FALSE, "interpRunScript: could not do var func"));
+					goto exit_with_error;
+				}
+				ip += aOpSize[opcode];
+				break;
+			case OP_EXIT:
+				// jump out of the code
+				ip = pCodeEnd;
+				break;
+			case OP_PAUSE:
+				TRCPRINTF(("PAUSE       %d\n", data));
+				ASSERT((stackEmpty(),
+					"interpRunScript: OP_PAUSE without empty stack"));
+				ip += aOpSize[opcode];
+				// tell the event system to reschedule this event
+				if (!eventAddPauseTrigger(psContext, index, ip - pCodeBase, data))
+				{
+					ASSERT((FALSE, "interpRunScript: could not add pause trigger"));
+					goto exit_with_error;
+				}
+				// now jump out of the event
+				ip = pCodeEnd;
+				break;
+			default:
+				ASSERT((FALSE, "interpRunScript: unknown opcode"));
+				goto exit_with_error;
+				break;
+			}
+		}
+
+		else	//End of the event reached, see if we have to jump back to the caller function or just exit
+		{
+
+			//reset local vars
+			//if(!resetLocalVars(psProg, CurEvent))
+			//	goto exit_with_error;
+
+			if(!IsRetStackEmpty())		//There was a caller function before this one
+			{
+				if(!PopRetStack(&ip))		//Pop return address
+				{
+					debug( LOG_ERROR, "interpRunScript() - PopRetStack(): failed to pop return adress.");
+					return FALSE;
+				}
+
+ 				if(!PopRetStack(&CurEvent))	//Pop event index
+				{
+					debug( LOG_ERROR, "interpRunScript() - PopRetStack(): failed to pop return event index.");
+					return FALSE;
+				}
+
+				debug( LOG_SCRIPT, "RETURN" );
+
+				//Set new boundries
+				//--------------------------
+ 				pCodeBase = psProg->pCode + psProg->pEventTab[CurEvent];
+				if(CurEvent == index)	//If it's the original event, then also use the offset passed
+				{pCodeStart = pCodeBase + offset;}
+				else
+				{pCodeStart = pCodeBase;}
+				pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
 			}
 			else
 			{
-				TRCPRINTF(("\n"));
-				ip += aOpSize[opcode];
+				//reset local vars
+				//if(!resetLocalVars(psProg, index))
+				//	goto exit_with_error;
+
+				bStop = TRUE;		//Stop execution of this event here, no more calling functions stored
 			}
-			break;
-		case OP_JUMP:
-			TRCPRINTF(("JUMP        %d (%d)\n",
-					(SWORD)data, ip - psProg->pCode + (SWORD)data));
-			// Do the jump
-			ip += (SWORD)data;
-			if (ip < pCodeStart || ip > pCodeEnd)
-			{
-				ASSERT((FALSE, "interpRunScript: jump out of range"));
-				goto exit_with_error;
-			}
-			break;
-		case OP_CALL:
-			TRCPRINTF(("CALL        "));
-			TRCPRINTFUNC( (SCRIPT_FUNC)(*(ip+1)) );
-			TRCPRINTF(("\n"));
-			scriptFunc = (SCRIPT_FUNC)*(ip+1);
-			if (!scriptFunc())
-			{
-				ASSERT((FALSE, "interpRunScript: could not do func"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_VARCALL:
-			TRCPRINTF(("VARCALL     "));
-			TRCPRINTVARFUNC( (SCRIPT_VARFUNC)(*(ip+1)), data );
-			TRCPRINTF(("(%d)\n", data));
-			scriptVarFunc = (SCRIPT_VARFUNC)*(ip+1);
-			if (!scriptVarFunc(data))
-			{
-				ASSERT((FALSE, "interpRunScript: could not do var func"));
-				goto exit_with_error;
-			}
-			ip += aOpSize[opcode];
-			break;
-		case OP_EXIT:
-			// jump out of the code
-			ip = pCodeEnd;
-			break;
-		case OP_PAUSE:
-			TRCPRINTF(("PAUSE       %d\n", data));
-			ASSERT((stackEmpty(),
-				"interpRunScript: OP_PAUSE without empty stack"));
-			ip += aOpSize[opcode];
-			// tell the event system to reschedule this event
-			if (!eventAddPauseTrigger(psContext, index, ip - pCodeBase, data))
-			{
-				ASSERT((FALSE, "interpRunScript: could not add pause trigger"));
-				goto exit_with_error;
-			}
-			// now jump out of the event
-			ip = pCodeEnd;
-			break;
-		default:
-			ASSERT((FALSE, "interpRunScript: unknown opcode"));
-			goto exit_with_error;
-			break;
 		}
+
 	}
+
+
+
+
+
 	TRCPRINTF(("%-6d  EXIT\n", ip - psProg->pCode));
 
 	bInterpRunning = FALSE;
@@ -639,3 +726,60 @@ BOOL interpTraceOff(void)
 	return TRUE;
 }
 
+
+
+/* Call stack stuff */
+
+static UDWORD	retStack[200];	//Primitive stack
+static SDWORD	retStackPos;	//Current Position, always points to the last valid element
+
+void retStackReset(void)
+{
+	retStackPos = -1;		//Beginning of the stack
+}
+
+//Remember current script execution adress
+UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address)
+{
+	//DbgMsg("To remember: %d, %d, %d", EvTrigIndex, address, retStackPos);
+
+	if (retStackPos >= 200)
+	{
+		debug( LOG_ERROR, "RetStackRemember() - return address stack is full");
+		return FALSE;	//Stack full
+	}
+
+	retStackPos = retStackPos + 2;
+	retStack[retStackPos - 1] = EvTrigIndex;	//First store event index
+	retStack[retStackPos] = address;			//current ip
+
+	return TRUE;
+}
+
+BOOL IsRetStackEmpty()
+{
+	if(retStackPos == (-1)) return TRUE;
+	return FALSE;
+}
+
+BOOL PopRetStack(UDWORD  *psVal)
+{
+	//DbgMsg("Popping: %d", retStackPos);
+	if(retStackPos < 0)
+	{
+		return FALSE;
+	}
+
+	*psVal = retStack[retStackPos];
+	
+	retStackPos = retStackPos - 1;
+
+	//DbgMsg("Popped: %d, %d", retStackPos, *psVal);
+
+	return TRUE;
+}
+
+SDWORD GetCallDepth()
+{
+	return (retStackPos + 1) / 2;
+}

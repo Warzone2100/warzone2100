@@ -213,6 +213,15 @@ typedef struct _event_symbol
 	UDWORD			debugEntries;
 	SCRIPT_DEBUG	*psDebug;
 
+	//functions stuff
+	UDWORD		numParams;		//Number of parameters to the function
+	UDWORD		numLocalVars;	//local variables
+	BOOL		bFunction;		//if this event is defined as a function
+	BOOL		bDeclared;		//if function was declared before
+	INTERP_TYPE	retType;		//return type if a function
+
+	INTERP_TYPE	aParams[INST_MAXPARAMS];
+
 	struct _event_symbol *psNext;
 } EVENT_SYMBOL;
 
@@ -258,7 +267,7 @@ extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
 extern BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
 
 /* Add a new event symbol */
-extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent);
+extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, INT numArgs);
 
 // Add the code to a defined event
 extern BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger);

@@ -103,6 +103,8 @@ typedef enum _op_code
 	OP_LESSEQUAL,
 	OP_GREATER,
 	OP_LESS,
+
+	OP_FUNC,		//custom (in-script) function call
 } OPCODE;
 
 /* How far the opcode is shifted up a UDWORD to allow other data to be

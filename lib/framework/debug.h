@@ -214,6 +214,7 @@ do {																		\
 #define wz__attribute(x)
 #endif
 
+/* Must match code_part_names in debug.c */
 enum code_part {
   LOG_ALL, /* special: sets all to on */
   LOG_MAIN,
@@ -226,6 +227,7 @@ enum code_part {
   LOG_MEMORY,
   LOG_ERROR, /* special; on by default */
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
+  LOG_SCRIPT,
   LOG_LAST /* _must_ be last! */
 };
 

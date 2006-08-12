@@ -55,6 +55,18 @@ extern void scriptSetCallbackTab(CALLBACK_SYMBOL *psCallTab);
 /* Set the type equivalence table */
 extern void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab);
 
+
+/***********************************************************************************
+ *
+ * Return stack stuff
+ */
+extern void retStackReset(void);
+extern UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address);
+
+extern BOOL IsRetStackEmpty();
+extern BOOL PopRetStack(UDWORD  *psVal);
+extern SDWORD GetCallDepth();
+
 /***********************************************************************************
  *
  * Compiler functions
