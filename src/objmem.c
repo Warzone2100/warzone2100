@@ -117,6 +117,11 @@ void embalm(BASE_OBJECT *psDead)
 #ifndef HASH_NAMES
 	switch (psDead->type)
 	{
+	case OBJ_BULLET:
+	case OBJ_TARGET:
+		/* Was originally not handled */
+		debug(LOG_ERROR, "src/objmem.c:embalm(): Unhandled dead object type");
+		break;
 	case OBJ_DROID:
 		pName = ((DROID *)psDead)->aName;
 		break;
@@ -996,6 +1001,6 @@ void objListIntegCheck(void)
 	for(psCurr = (BASE_OBJECT*)apsFeatureLists[0]; psCurr; psCurr=psCurr->psNext)
 	{
 		ASSERT((psCurr->type == OBJ_FEATURE,
-				"objListIntegCheck: misplaced object in the feature list for player %d"));
+				"objListIntegCheck: misplaced object in the feature list"));
 	}
 }
