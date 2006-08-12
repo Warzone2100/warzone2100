@@ -80,6 +80,11 @@ IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 	Header = (IMAGEHEADER*)Ptr;
 	Ptr += sizeof(IMAGEHEADER);
 
+	endian_uword(&Header->Version);
+	endian_uword(&Header->NumImages);
+	endian_uword(&Header->BitDepth);
+	endian_uword(&Header->NumTPages);
+
 	ImageFile = MALLOC(sizeof(IMAGEFILE));
 	if(ImageFile == NULL) {
 		debug( LOG_ERROR, "Out of memory" );
@@ -103,12 +108,25 @@ IMAGEFILE *iV_LoadImageFile(UBYTE *FileData, UDWORD FileSize)
 
 	// Load the texture pages.
 	for (i = 0; i < Header->NumTPages; i++) {
-		LoadTextureFile((STRING*)Header->TPageFiles[i], &ImageFile->TexturePages[i],
-                    (int*)&ImageFile->TPageIDs[i]);
+		int tmp;	/* Workaround for MacOS gcc 4.0.0 bug. */
+		LoadTextureFile((STRING*)Header->TPageFiles[i],
+				&ImageFile->TexturePages[i],
+				&tmp);
+		ImageFile->TPageIDs[i] = tmp;
 	}
 
 	ImageDef = (IMAGEDEF*)Ptr;
+
 	for(i=0; i<Header->NumImages; i++) {
+		endian_uword(&ImageDef->TPageID);
+		endian_uword(&ImageDef->PalID);
+		endian_uword(&ImageDef->Tu);
+		endian_uword(&ImageDef->Tv);
+		endian_uword(&ImageDef->Width);
+		endian_uword(&ImageDef->Height);
+		endian_sword(&ImageDef->XOffset);
+		endian_sword(&ImageDef->YOffset);
+
 		ImageFile->ImageDefs[i] = *ImageDef;
 		if( (ImageDef->Width <= 0) || (ImageDef->Height <= 0) ) {
 			debug( LOG_ERROR, "Illegal image size" );

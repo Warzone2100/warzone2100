@@ -3187,6 +3187,9 @@ BOOL gameLoad(UBYTE *pFileData, UDWORD filesize)
 		return FALSE;
 	}
 
+	/* GAME_SAVEHEADER */
+	endian_udword(&psHeader->version);
+
 	//increment to the start of the data
 	pFileData += GAME_HEADER_SIZE;
 
@@ -3236,6 +3239,7 @@ BOOL getCampaignV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 	SAVE_GAME		*psSaveGame;
 	UDWORD			sizeOfSaveGame = 0;
 	UDWORD			campaign;
+	int			i, j;
 
 	psSaveGame = (SAVE_GAME *) pFileData;
 
@@ -3300,6 +3304,141 @@ BOOL getCampaignV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 		return FALSE;
 	}
 
+	/* SAVE_GAME is GAME_SAVE_V33 */
+	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
+	if(version >= VERSION_33) {
+		endian_udword(&psSaveGame->sGame.power);
+		endian_udword(&psSaveGame->sGame.bytesPerSec);
+		for(i = 0; i < MaxGames; i++) {
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
+		}
+		for(i = 0; i < MaxNumberOfPlayers; i++)
+			endian_sdword(&psSaveGame->sNetPlay.players[i].dpid);
+		endian_udword(&psSaveGame->sNetPlay.playercount);
+		endian_sdword(&psSaveGame->sNetPlay.dpidPlayer);
+		for(i = 0; i < 4; i++)
+			endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
+		endian_udword(&psSaveGame->savePlayer);
+		for(i = 0; i < MAX_PLAYERS; i++)
+			endian_sdword(&psSaveGame->sPlayer2dpid[i]);
+	}
+	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
+	if(version >= VERSION_31) {
+		endian_sdword(&psSaveGame->missionCheatTime);
+	}
+	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
+	if(version >= VERSION_30) {
+		endian_sdword(&psSaveGame->scrGameLevel);
+	}
+	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
+	if(version >= VERSION_29) {
+		endian_uword(&psSaveGame->missionScrollMinX);
+		endian_uword(&psSaveGame->missionScrollMinY);
+		endian_uword(&psSaveGame->missionScrollMaxX);
+		endian_uword(&psSaveGame->missionScrollMaxY);
+	}
+	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
+	if(version >= VERSION_27) {
+		for(i = 0; i < MAX_PLAYERS; i++)
+			for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
+				endian_uword(&psSaveGame->awDroidExperience[i][j]);
+	}
+	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
+	if(version >= VERSION_24) {
+		endian_udword(&psSaveGame->reinforceTime);
+	}
+	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
+	if(version >= VERSION_22) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_sdword(&psSaveGame->asRunData[i].sPos.x);
+			endian_sdword(&psSaveGame->asRunData[i].sPos.y);
+		}
+	}
+	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
+	if(version >= VERSION_20) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
+			endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
+		}
+	}
+	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
+	if(version >= VERSION_19) {
+	}
+	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
+	if(version >= VERSION_18) {
+		endian_udword(&psSaveGame->oldestVersion);
+		endian_udword(&psSaveGame->validityKey);
+	}
+	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
+	if(version >= VERSION_17) {
+		endian_udword(&psSaveGame->objId);
+	}
+	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
+	if(version >= VERSION_16) {
+	}
+	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
+	if(version >= VERSION_15) {
+		endian_udword(&psSaveGame->RubbleTile);
+		endian_udword(&psSaveGame->WaterTile);
+		endian_udword(&psSaveGame->fogColour);
+		endian_udword(&psSaveGame->fogState);
+	}
+	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
+	if(version >= VERSION_14) {
+		endian_sdword(&psSaveGame->missionOffTime);
+		endian_sdword(&psSaveGame->missionETA);
+		endian_uword(&psSaveGame->missionHomeLZ_X);
+		endian_uword(&psSaveGame->missionHomeLZ_Y);
+		endian_sdword(&psSaveGame->missionPlayerX);
+		endian_sdword(&psSaveGame->missionPlayerY);
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_uword(&psSaveGame->iTranspEntryTileX[i]);
+			endian_uword(&psSaveGame->iTranspEntryTileY[i]);
+			endian_uword(&psSaveGame->iTranspExitTileX[i]);
+			endian_uword(&psSaveGame->iTranspExitTileY[i]);
+			endian_udword(&psSaveGame->aDefaultSensor[i]);
+			endian_udword(&psSaveGame->aDefaultECM[i]);
+			endian_udword(&psSaveGame->aDefaultRepair[i]);
+		}
+	}
+	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
+	if(version >= VERSION_12) {
+		endian_udword(&psSaveGame->missionTime);
+		endian_udword(&psSaveGame->saveKey);
+	}
+	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
+	if(version >= VERSION_11) {
+		endian_sdword(&psSaveGame->currentPlayerPos.p.x);
+		endian_sdword(&psSaveGame->currentPlayerPos.p.y);
+		endian_sdword(&psSaveGame->currentPlayerPos.p.z);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.x);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.y);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.z);
+	}
+	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
+	if(version >= VERSION_10) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_udword(&psSaveGame->power[i].currentPower);
+			endian_udword(&psSaveGame->power[i].extractedPower);
+		}
+	}
+	/* GAME_SAVE_V7 */
+	if(version >= VERSION_7) {
+		endian_udword(&psSaveGame->gameTime);
+		endian_udword(&psSaveGame->GameType);
+		endian_sdword(&psSaveGame->ScrollMinX);
+		endian_sdword(&psSaveGame->ScrollMinY);
+		endian_udword(&psSaveGame->ScrollMaxX);
+		endian_udword(&psSaveGame->ScrollMaxY);
+	}
+
 //	savedGameTime = psSaveGame->gameTime;
 
 	campaign = psSaveGame->saveKey;
@@ -3333,6 +3472,9 @@ UDWORD getCampaign(STRING *pGameToLoad, BOOL *bSkipCDCheck)
 		DBERROR(("getCampaign: Incorrect file type"));
 		return 0;
 	}
+
+	/* GAME_SAVEHEADER */
+	endian_udword(&psHeader->version);
 
 	//increment to the start of the data
 	pFileData += GAME_HEADER_SIZE;
@@ -3404,6 +3546,14 @@ BOOL gameLoadV7(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("gameLoad: unexpected end of file"));
 		return FALSE;
 	}
+
+	/* GAME_SAVE_V7 */
+	endian_udword(&psSaveGame->gameTime);
+	endian_udword(&psSaveGame->GameType);
+	endian_sdword(&psSaveGame->ScrollMinX);
+	endian_sdword(&psSaveGame->ScrollMinY);
+	endian_udword(&psSaveGame->ScrollMaxX);
+	endian_udword(&psSaveGame->ScrollMaxY);
 
 	savedGameTime = psSaveGame->gameTime;
 
@@ -3544,6 +3694,142 @@ BOOL gameLoadV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 		DBERROR(("gameLoad: unexpected end of file"));
 		return FALSE;
 	}
+
+	/* SAVE_GAME is GAME_SAVE_V33 */
+	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
+	if(version >= VERSION_33) {
+		endian_udword(&psSaveGame->sGame.power);
+		endian_udword(&psSaveGame->sGame.bytesPerSec);
+		for(i = 0; i < MaxGames; i++) {
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
+		}
+		for(i = 0; i < MaxNumberOfPlayers; i++)
+			endian_sdword(&psSaveGame->sNetPlay.players[i].dpid);
+		endian_udword(&psSaveGame->sNetPlay.playercount);
+		endian_sdword(&psSaveGame->sNetPlay.dpidPlayer);
+		for(i = 0; i < 4; i++)
+			endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
+		endian_udword(&psSaveGame->savePlayer);
+		for(i = 0; i < MAX_PLAYERS; i++)
+			endian_sdword(&psSaveGame->sPlayer2dpid[i]);
+	}
+	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
+	if(version >= VERSION_31) {
+		endian_sdword(&psSaveGame->missionCheatTime);
+	}
+	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
+	if(version >= VERSION_30) {
+		endian_sdword(&psSaveGame->scrGameLevel);
+	}
+	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
+	if(version >= VERSION_29) {
+		endian_uword(&psSaveGame->missionScrollMinX);
+		endian_uword(&psSaveGame->missionScrollMinY);
+		endian_uword(&psSaveGame->missionScrollMaxX);
+		endian_uword(&psSaveGame->missionScrollMaxY);
+	}
+	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
+	if(version >= VERSION_27) {
+		for(i = 0; i < MAX_PLAYERS; i++)
+			for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
+				endian_uword(&psSaveGame->awDroidExperience[i][j]);
+	}
+	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
+	if(version >= VERSION_24) {
+		endian_udword(&psSaveGame->reinforceTime);
+	}
+	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
+	if(version >= VERSION_22) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_sdword(&psSaveGame->asRunData[i].sPos.x);
+			endian_sdword(&psSaveGame->asRunData[i].sPos.y);
+		}
+	}
+	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
+	if(version >= VERSION_20) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
+			endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
+		}
+	}
+	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
+	if(version >= VERSION_19) {
+	}
+	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
+	if(version >= VERSION_18) {
+		endian_udword(&psSaveGame->oldestVersion);
+		endian_udword(&psSaveGame->validityKey);
+	}
+	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
+	if(version >= VERSION_17) {
+		endian_udword(&psSaveGame->objId);
+	}
+	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
+	if(version >= VERSION_16) {
+	}
+	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
+	if(version >= VERSION_15) {
+		endian_udword(&psSaveGame->RubbleTile);
+		endian_udword(&psSaveGame->WaterTile);
+		endian_udword(&psSaveGame->fogColour);
+		endian_udword(&psSaveGame->fogState);
+	}
+	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
+	if(version >= VERSION_14) {
+		endian_sdword(&psSaveGame->missionOffTime);
+		endian_sdword(&psSaveGame->missionETA);
+		endian_uword(&psSaveGame->missionHomeLZ_X);
+		endian_uword(&psSaveGame->missionHomeLZ_Y);
+		endian_sdword(&psSaveGame->missionPlayerX);
+		endian_sdword(&psSaveGame->missionPlayerY);
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_uword(&psSaveGame->iTranspEntryTileX[i]);
+			endian_uword(&psSaveGame->iTranspEntryTileY[i]);
+			endian_uword(&psSaveGame->iTranspExitTileX[i]);
+			endian_uword(&psSaveGame->iTranspExitTileY[i]);
+			endian_udword(&psSaveGame->aDefaultSensor[i]);
+			endian_udword(&psSaveGame->aDefaultECM[i]);
+			endian_udword(&psSaveGame->aDefaultRepair[i]);
+		}
+	}
+	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
+	if(version >= VERSION_12) {
+		endian_udword(&psSaveGame->missionTime);
+		endian_udword(&psSaveGame->saveKey);
+	}
+	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
+	if(version >= VERSION_11) {
+		endian_sdword(&psSaveGame->currentPlayerPos.p.x);
+		endian_sdword(&psSaveGame->currentPlayerPos.p.y);
+		endian_sdword(&psSaveGame->currentPlayerPos.p.z);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.x);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.y);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.z);
+	}
+	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
+	if(version >= VERSION_10) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_udword(&psSaveGame->power[i].currentPower);
+			endian_udword(&psSaveGame->power[i].extractedPower);
+		}
+	}
+	/* GAME_SAVE_V7 */
+	if(version >= VERSION_7) {
+		endian_udword(&psSaveGame->gameTime);
+		endian_udword(&psSaveGame->GameType);
+		endian_sdword(&psSaveGame->ScrollMinX);
+		endian_sdword(&psSaveGame->ScrollMinY);
+		endian_udword(&psSaveGame->ScrollMaxX);
+		endian_udword(&psSaveGame->ScrollMaxY);
+	}
+
 
 	savedGameTime = psSaveGame->gameTime;
 
@@ -4049,6 +4335,108 @@ BOOL writeGameFile(STRING *pFileName, SDWORD saveType)
 		psSaveGame->sPlayer2dpid[inc]= player2dpid[inc];
 	}
 
+	/* SAVE_GAME is GAME_SAVE_V33 */
+	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
+	endian_udword(&psSaveGame->sGame.power);
+	endian_udword(&psSaveGame->sGame.bytesPerSec);
+	for(i = 0; i < MaxGames; i++) {
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
+		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
+	}
+	for(i = 0; i < MaxNumberOfPlayers; i++)
+		endian_sdword(&psSaveGame->sNetPlay.players[i].dpid);
+	endian_udword(&psSaveGame->sNetPlay.playercount);
+	endian_sdword(&psSaveGame->sNetPlay.dpidPlayer);
+	for(i = 0; i < 4; i++)
+		endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
+	endian_udword(&psSaveGame->savePlayer);
+	for(i = 0; i < MAX_PLAYERS; i++)
+		endian_sdword(&psSaveGame->sPlayer2dpid[i]);
+	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
+	endian_sdword(&psSaveGame->missionCheatTime);
+	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
+	endian_sdword(&psSaveGame->scrGameLevel);
+	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
+	endian_uword(&psSaveGame->missionScrollMinX);
+	endian_uword(&psSaveGame->missionScrollMinY);
+	endian_uword(&psSaveGame->missionScrollMaxX);
+	endian_uword(&psSaveGame->missionScrollMaxY);
+	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
+	for(i = 0; i < MAX_PLAYERS; i++)
+		for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
+			endian_uword(&psSaveGame->awDroidExperience[i][j]);
+	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
+	endian_udword(&psSaveGame->reinforceTime);
+	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
+	for(i = 0; i < MAX_PLAYERS; i++) {
+		endian_sdword(&psSaveGame->asRunData[i].sPos.x);
+		endian_sdword(&psSaveGame->asRunData[i].sPos.y);
+	}
+	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
+	for(i = 0; i < MAX_PLAYERS; i++) {
+		endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
+		endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
+	}
+	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
+	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
+	endian_udword(&psSaveGame->oldestVersion);
+	endian_udword(&psSaveGame->validityKey);
+	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
+	endian_udword(&psSaveGame->objId);
+	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
+	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
+	endian_udword(&psSaveGame->RubbleTile);
+	endian_udword(&psSaveGame->WaterTile);
+	endian_udword(&psSaveGame->fogColour);
+	endian_udword(&psSaveGame->fogState);
+	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
+	endian_sdword(&psSaveGame->missionOffTime);
+	endian_sdword(&psSaveGame->missionETA);
+	endian_uword(&psSaveGame->missionHomeLZ_X);
+	endian_uword(&psSaveGame->missionHomeLZ_Y);
+	endian_sdword(&psSaveGame->missionPlayerX);
+	endian_sdword(&psSaveGame->missionPlayerY);
+	for(i = 0; i < MAX_PLAYERS; i++) {
+		endian_uword(&psSaveGame->iTranspEntryTileX[i]);
+		endian_uword(&psSaveGame->iTranspEntryTileY[i]);
+		endian_uword(&psSaveGame->iTranspExitTileX[i]);
+		endian_uword(&psSaveGame->iTranspExitTileY[i]);
+		endian_udword(&psSaveGame->aDefaultSensor[i]);
+		endian_udword(&psSaveGame->aDefaultECM[i]);
+		endian_udword(&psSaveGame->aDefaultRepair[i]);
+	}
+	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
+	endian_udword(&psSaveGame->missionTime);
+	endian_udword(&psSaveGame->saveKey);
+	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
+	endian_sdword(&psSaveGame->currentPlayerPos.p.x);
+	endian_sdword(&psSaveGame->currentPlayerPos.p.y);
+	endian_sdword(&psSaveGame->currentPlayerPos.p.z);
+	endian_sdword(&psSaveGame->currentPlayerPos.r.x);
+	endian_sdword(&psSaveGame->currentPlayerPos.r.y);
+	endian_sdword(&psSaveGame->currentPlayerPos.r.z);
+	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
+	for(i = 0; i < MAX_PLAYERS; i++) {
+		endian_udword(&psSaveGame->power[i].currentPower);
+		endian_udword(&psSaveGame->power[i].extractedPower);
+	}
+	/* GAME_SAVE_V7 */
+	endian_udword(&psSaveGame->gameTime);
+	endian_udword(&psSaveGame->GameType);
+	endian_sdword(&psSaveGame->ScrollMinX);
+	endian_sdword(&psSaveGame->ScrollMinY);
+	endian_udword(&psSaveGame->ScrollMaxX);
+	endian_udword(&psSaveGame->ScrollMaxY);
+
+	/* GAME_SAVEHEADER */
+	endian_udword(&psHeader->version);
+
 	/* Write the data to the file */
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
@@ -4079,6 +4467,10 @@ BOOL loadSaveDroidInit(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveUnitInit: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* DROIDINIT_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += DROIDINIT_HEADER_SIZE;
@@ -4121,6 +4513,16 @@ BOOL loadSaveDroidInitV2(UBYTE *pFileData, UDWORD filesize,UDWORD quantity)
 
 	for(i=0; i<quantity; i++)
 	{
+		/* SAVE_DROIDINIT is OBJECT_SAVE_V19 */
+		/* OBJECT_SAVE_V19 */
+		endian_udword(&pDroidInit->id);
+		endian_udword(&pDroidInit->x);
+		endian_udword(&pDroidInit->y);
+		endian_udword(&pDroidInit->z);
+		endian_udword(&pDroidInit->direction);
+		endian_udword(&pDroidInit->player);
+		endian_udword(&pDroidInit->burnStart);
+		endian_udword(&pDroidInit->burnDamage);
 
 		pDroidInit->player=RemapPlayerNumber(pDroidInit->player);
 
@@ -4250,6 +4652,10 @@ BOOL loadSaveDroid(UBYTE *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLis
 		DBERROR(("loadSaveUnit: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* DROID_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += DROID_HEADER_SIZE;
@@ -5045,6 +5451,7 @@ BOOL loadSaveDroidV11(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 	DROID_GROUP				*psGrp;
+	int i;
 
 	psCurrentTransGroup = NULL;
 
@@ -5073,6 +5480,28 @@ BOOL loadSaveDroidV11(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 	for (count = 0; count < numDroids; count ++, pFileData += sizeOfSaveDroid)
 	{
 		memcpy(psSaveDroid, pFileData, sizeOfSaveDroid);
+
+		/* DROID_SAVE_V11 includes OBJECT_SAVE_V19, SAVE_WEAPON_V19 */
+		endian_udword(&psSaveDroid->body);
+		endian_udword(&psSaveDroid->numWeaps);
+		endian_udword(&psSaveDroid->numKills);
+		endian_uword(&psSaveDroid->turretRotation);
+		endian_uword(&psSaveDroid->turretPitch);
+		/* OBJECT_SAVE_V19 */
+		endian_udword(&psSaveDroid->id);
+		endian_udword(&psSaveDroid->x);
+		endian_udword(&psSaveDroid->y);
+		endian_udword(&psSaveDroid->z);
+		endian_udword(&psSaveDroid->direction);
+		endian_udword(&psSaveDroid->player);
+		endian_udword(&psSaveDroid->burnStart);
+		endian_udword(&psSaveDroid->burnDamage);
+		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
+			/* SAVE_WEAPON_V19 */
+			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
+			endian_udword(&psSaveDroid->asWeaps[i].ammo);
+			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
+		}
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -5141,6 +5570,7 @@ BOOL loadSaveDroidV19(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 	DROID_GROUP				*psGrp;
+	int i;
 
 	psCurrentTransGroup = NULL;
 
@@ -5177,6 +5607,49 @@ BOOL loadSaveDroidV19(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWOR
 	for (count = 0; count < numDroids; count ++, pFileData += sizeOfSaveDroid)
 	{
 		memcpy(psSaveDroid, pFileData, sizeOfSaveDroid);
+
+		/* DROID_SAVE_V18 includes DROID_SAVE_V12*/
+		endian_udword(&psSaveDroid->baseStructID);
+		endian_udword(&psSaveDroid->died);
+		endian_udword(&psSaveDroid->lastEmission);
+		/* DROID_SAVE_V12 includes DROID_SAVE_V9 */
+		endian_uword(&psSaveDroid->turretRotation);
+		endian_uword(&psSaveDroid->turretPitch);
+		endian_sdword(&psSaveDroid->order);
+		endian_uword(&psSaveDroid->orderX);
+		endian_uword(&psSaveDroid->orderY);
+		endian_uword(&psSaveDroid->orderX2);
+		endian_uword(&psSaveDroid->orderY2);
+		endian_udword(&psSaveDroid->timeLastHit);
+		endian_udword(&psSaveDroid->targetID);
+		endian_udword(&psSaveDroid->secondaryOrder);
+		endian_sdword(&psSaveDroid->action);
+		endian_udword(&psSaveDroid->actionX);
+		endian_udword(&psSaveDroid->actionY);
+		endian_udword(&psSaveDroid->actionTargetID);
+		endian_udword(&psSaveDroid->actionStarted);
+		endian_udword(&psSaveDroid->actionPoints);
+		endian_uword(&psSaveDroid->actionHeight);
+		/* DROID_SAVE_V9 includes OBJECT_SAVE_V19, SAVE_WEAPON_V19 */
+		endian_udword(&psSaveDroid->body);
+		endian_udword(&psSaveDroid->saveType);
+		endian_udword(&psSaveDroid->numWeaps);
+		endian_udword(&psSaveDroid->numKills);
+		/* OBJECT_SAVE_V19 */
+		endian_udword(&psSaveDroid->id);
+		endian_udword(&psSaveDroid->x);
+		endian_udword(&psSaveDroid->y);
+		endian_udword(&psSaveDroid->z);
+		endian_udword(&psSaveDroid->direction);
+		endian_udword(&psSaveDroid->player);
+		endian_udword(&psSaveDroid->burnStart);
+		endian_udword(&psSaveDroid->burnDamage);
+		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
+			/* SAVE_WEAPON_V19 */
+			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
+			endian_udword(&psSaveDroid->asWeaps[i].ammo);
+			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
+		}
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -5248,6 +5721,7 @@ BOOL loadSaveDroidV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD 
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 //	DROID_GROUP				*psGrp;
+	int i;
 
 	psCurrentTransGroup = NULL;
 
@@ -5276,6 +5750,74 @@ BOOL loadSaveDroidV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD 
 	for (count = 0; count < numDroids; count ++, pFileData += sizeOfSaveDroid)
 	{
 		memcpy(psSaveDroid, pFileData, sizeOfSaveDroid);
+
+		/* DROID_SAVE_V24 includes DROID_SAVE_V21,
+		 * SAVE_MOVE_CONTROL */
+		endian_sdword(&psSaveDroid->resistance);
+		endian_sword(&psSaveDroid->formationDir);
+		endian_sdword(&psSaveDroid->formationX);
+		endian_sdword(&psSaveDroid->formationY);
+		/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
+		endian_udword(&psSaveDroid->commandId);
+		/* DROID_SAVE_V20 includes OBJECT_SAVE_V20, SAVE_WEAPON */
+		endian_udword(&psSaveDroid->body);
+		endian_udword(&psSaveDroid->saveType);
+		endian_udword(&psSaveDroid->numWeaps);
+		endian_udword(&psSaveDroid->numKills);
+		endian_uword(&psSaveDroid->turretRotation);
+		endian_uword(&psSaveDroid->turretPitch);
+		endian_sdword(&psSaveDroid->order);
+		endian_uword(&psSaveDroid->orderX);
+		endian_uword(&psSaveDroid->orderY);
+		endian_uword(&psSaveDroid->orderX2);
+		endian_uword(&psSaveDroid->orderY2);
+		endian_udword(&psSaveDroid->timeLastHit);
+		endian_udword(&psSaveDroid->targetID);
+		endian_udword(&psSaveDroid->secondaryOrder);
+		endian_sdword(&psSaveDroid->action);
+		endian_udword(&psSaveDroid->actionX);
+		endian_udword(&psSaveDroid->actionY);
+		endian_udword(&psSaveDroid->actionTargetID);
+		endian_udword(&psSaveDroid->actionStarted);
+		endian_udword(&psSaveDroid->actionPoints);
+		endian_uword(&psSaveDroid->actionHeight);
+		endian_udword(&psSaveDroid->baseStructID);
+		endian_udword(&psSaveDroid->died);
+		endian_udword(&psSaveDroid->lastEmission);
+		/* OBJECT_SAVE_V20 */
+		endian_udword(&psSaveDroid->id);
+		endian_udword(&psSaveDroid->x);
+		endian_udword(&psSaveDroid->y);
+		endian_udword(&psSaveDroid->z);
+		endian_udword(&psSaveDroid->direction);
+		endian_udword(&psSaveDroid->player);
+		endian_udword(&psSaveDroid->burnStart);
+		endian_udword(&psSaveDroid->burnDamage);
+		/* SAVE_MOVE_CONTROL */
+		endian_sdword(&psSaveDroid->sMove.DestinationX);
+		endian_sdword(&psSaveDroid->sMove.DestinationY);
+		endian_sdword(&psSaveDroid->sMove.srcX);
+		endian_sdword(&psSaveDroid->sMove.srcY);
+		endian_sdword(&psSaveDroid->sMove.targetX);
+		endian_sdword(&psSaveDroid->sMove.targetY);
+		endian_sword(&psSaveDroid->sMove.boundX);
+		endian_sword(&psSaveDroid->sMove.boundY);
+		endian_sword(&psSaveDroid->sMove.dir);
+		endian_sword(&psSaveDroid->sMove.bumpDir);
+		endian_udword(&psSaveDroid->sMove.bumpTime);
+		endian_uword(&psSaveDroid->sMove.lastBump);
+		endian_uword(&psSaveDroid->sMove.pauseTime);
+		endian_uword(&psSaveDroid->sMove.bumpX);
+		endian_uword(&psSaveDroid->sMove.bumpY);
+		endian_udword(&psSaveDroid->sMove.shuffleStart);
+		endian_sword(&psSaveDroid->sMove.iVertSpeed);
+		endian_uword(&psSaveDroid->sMove.iAttackRuns);
+		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
+			/* SAVE_WEAPON */
+			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
+			endian_udword(&psSaveDroid->asWeaps[i].ammo);
+			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
+		}
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -5353,17 +5895,6 @@ BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_
 			still exist*/
 			strcpy(psSaveDroid->name, psCurr->aName);
 
-			psSaveDroid->id = psCurr->id;
-			psSaveDroid->x = psCurr->x;
-			psSaveDroid->y = psCurr->y;
-			psSaveDroid->z = psCurr->z;
-			psSaveDroid->direction = psCurr->direction;
-			psSaveDroid->player = psCurr->player;
-			psSaveDroid->inFire = psCurr->inFire;
-			psSaveDroid->burnStart = psCurr->burnStart;
-			psSaveDroid->burnDamage = psCurr->burnDamage;
-			psSaveDroid->droidType = (UBYTE)psCurr->droidType;
-			psSaveDroid->saveType = (UBYTE)saveType;//identifies special load cases
 			//for (i=0; i < DROID_MAXCOMP; i++) not interested in first comp - COMP_UNKNOWN
 			for (i=1; i < DROID_MAXCOMP; i++)
 			{
@@ -5611,6 +6142,105 @@ BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_
 			psSaveDroid->pointsToAdd = psCurr->sAI.pointsToAdd; */
 
 #endif
+			psSaveDroid->id = psCurr->id;
+			psSaveDroid->x = psCurr->x;
+			psSaveDroid->y = psCurr->y;
+			psSaveDroid->z = psCurr->z;
+			psSaveDroid->direction = psCurr->direction;
+			psSaveDroid->player = psCurr->player;
+			psSaveDroid->inFire = psCurr->inFire;
+			psSaveDroid->burnStart = psCurr->burnStart;
+			psSaveDroid->burnDamage = psCurr->burnDamage;
+			psSaveDroid->droidType = (UBYTE)psCurr->droidType;
+			psSaveDroid->saveType = (UBYTE)saveType;//identifies special load cases
+
+			/* SAVE_DROID is DROID_SAVE_V24 */
+			/* DROID_SAVE_V24 includes DROID_SAVE_V21 */
+			endian_sdword(&psSaveDroid->resistance);
+			endian_sdword(&psSaveDroid->sMove.DestinationX);
+			endian_sdword(&psSaveDroid->sMove.DestinationY);
+			endian_sdword(&psSaveDroid->sMove.srcX);
+			endian_sdword(&psSaveDroid->sMove.srcY);
+			endian_sdword(&psSaveDroid->sMove.targetX);
+			endian_sdword(&psSaveDroid->sMove.targetY);
+			endian_fract(&psSaveDroid->sMove.fx);
+			endian_fract(&psSaveDroid->sMove.fy);
+			endian_fract(&psSaveDroid->sMove.speed);
+			endian_sword(&psSaveDroid->sMove.boundX);
+			endian_sword(&psSaveDroid->sMove.boundY);
+			endian_sword(&psSaveDroid->sMove.dir);
+			endian_sword(&psSaveDroid->sMove.bumpDir);
+			endian_udword(&psSaveDroid->sMove.bumpTime);
+			endian_uword(&psSaveDroid->sMove.lastBump);
+			endian_uword(&psSaveDroid->sMove.pauseTime);
+			endian_uword(&psSaveDroid->sMove.bumpX);
+			endian_uword(&psSaveDroid->sMove.bumpY);
+/* I don't think this is necessary.
+			if(psSaveDroid->sMove.psFormation) {
+				endian_sword(&psSaveDroid->sMove.psFormation->refCount);
+				endian_sword(&psSaveDroid->sMove.psFormation->size);
+				endian_sword(&psSaveDroid->sMove.psFormation->rankDist);
+				endian_sword(&psSaveDroid->sMove.psFormation->dir);
+				endian_sdword(&psSaveDroid->sMove.psFormation->x);
+				endian_sdword(&psSaveDroid->sMove.psFormation->y);
+				for(i = 0; i < F_MAXLINES; i++) {
+					endian_sword(&psSaveDroid->sMove.psFormation->asLines[i].xoffset);
+					endian_sword(&psSaveDroid->sMove.psFormation->asLines[i].yoffset);
+					endian_sword(&psSaveDroid->sMove.psFormation->asLines[i].dir);
+				}
+				endian_sword(&psSaveDroid->sMove.psFormation->numLines);
+				for(i = 0; i < F_MAXMEMBERS; i++)
+					endian_sword(&psSaveDroid->sMove.psFormation->asMembers[i].dist);
+				endian_udword(&psSaveDroid->sMove.psFormation->iSpeed);
+			}
+*/
+			endian_sword(&psSaveDroid->sMove.iVertSpeed);
+			endian_uword(&psSaveDroid->sMove.iAttackRuns);
+			endian_sword(&psSaveDroid->formationDir);
+			endian_sdword(&psSaveDroid->formationX);
+			endian_sdword(&psSaveDroid->formationY);
+			/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
+			endian_udword(&psSaveDroid->commandId);
+			/* DROID_SAVE_V20 includes OBJECT_SAVE_V20 */
+			endian_udword(&psSaveDroid->body);
+			endian_udword(&psSaveDroid->saveType);
+			endian_udword(&psSaveDroid->numWeaps);
+			for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
+				endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
+				endian_udword(&psSaveDroid->asWeaps[i].ammo);
+				endian_udword(&psSaveDroid->asWeaps[i].lastFired);
+			}
+			endian_udword(&psSaveDroid->numKills);
+			endian_uword(&psSaveDroid->turretRotation);
+			endian_uword(&psSaveDroid->turretPitch);
+			endian_sdword(&psSaveDroid->order);
+			endian_uword(&psSaveDroid->orderX);
+			endian_uword(&psSaveDroid->orderY);
+			endian_uword(&psSaveDroid->orderX2);
+			endian_uword(&psSaveDroid->orderY2);
+			endian_udword(&psSaveDroid->timeLastHit);
+			endian_udword(&psSaveDroid->targetID);
+			endian_udword(&psSaveDroid->secondaryOrder);
+			endian_sdword(&psSaveDroid->action);
+			endian_udword(&psSaveDroid->actionX);
+			endian_udword(&psSaveDroid->actionY);
+			endian_udword(&psSaveDroid->actionTargetID);
+			endian_udword(&psSaveDroid->actionStarted);
+			endian_udword(&psSaveDroid->actionPoints);
+			endian_uword(&psSaveDroid->actionHeight);
+			endian_udword(&psSaveDroid->baseStructID);
+			endian_udword(&psSaveDroid->died);
+			endian_udword(&psSaveDroid->lastEmission);
+			/* OBJECT_SAVE_V20 */
+			endian_udword(&psSaveDroid->id);
+			endian_udword(&psSaveDroid->x);
+			endian_udword(&psSaveDroid->y);
+			endian_udword(&psSaveDroid->z);
+			endian_udword(&psSaveDroid->direction);
+			endian_udword(&psSaveDroid->player);
+			endian_udword(&psSaveDroid->burnStart);
+			endian_udword(&psSaveDroid->burnDamage);
+
 			return TRUE;
 }
 
@@ -5671,6 +6301,9 @@ BOOL writeDroidFile(STRING *pFileName, DROID **ppsCurrentDroidLists)
 	psHeader->version = CURRENT_VERSION_NUM;
 	psHeader->quantity = totalDroids;
 
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	psSaveDroid = (SAVE_DROID*)(pFileData + DROID_HEADER_SIZE);
 
 	/* Put the droid data into the buffer */
@@ -5730,6 +6363,10 @@ BOOL loadSaveStructure(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveStructure: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* STRUCT_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += STRUCT_HEADER_SIZE;
@@ -5797,6 +6434,27 @@ BOOL loadSaveStructureV7(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures
 	for (count = 0; count < numStructures; count ++, pFileData += sizeof(SAVE_STRUCTURE_V2))
 	{
 		memcpy(psSaveStructure, pFileData, sizeof(SAVE_STRUCTURE_V2));
+
+		/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+		endian_sdword(&psSaveStructure->currentBuildPts);
+		endian_udword(&psSaveStructure->body);
+		endian_udword(&psSaveStructure->armour);
+		endian_udword(&psSaveStructure->resistance);
+		endian_udword(&psSaveStructure->dummy1);
+		endian_udword(&psSaveStructure->subjectInc);
+		endian_udword(&psSaveStructure->timeStarted);
+		endian_udword(&psSaveStructure->output);
+		endian_udword(&psSaveStructure->capacity);
+		endian_udword(&psSaveStructure->quantity);
+		/* OBJECT_SAVE_V19 */
+		endian_udword(&psSaveStructure->id);
+		endian_udword(&psSaveStructure->x);
+		endian_udword(&psSaveStructure->y);
+		endian_udword(&psSaveStructure->z);
+		endian_udword(&psSaveStructure->direction);
+		endian_udword(&psSaveStructure->player);
+		endian_udword(&psSaveStructure->burnStart);
+		endian_udword(&psSaveStructure->burnDamage);
 
 		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
@@ -6055,6 +6713,37 @@ BOOL loadSaveStructureV19(UBYTE *pFileData, UDWORD filesize, UDWORD numStructure
 	for (count = 0; count < numStructures; count ++, pFileData += sizeOfSaveStruture)
 	{
 		memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
+
+		/* SAVE_STRUCTURE_V17 is STRUCTURE_SAVE_V17 */
+		/* STRUCTURE_SAVE_V17 includes STRUCTURE_SAVE_V15 */
+		endian_sword(&psSaveStructure->currentPowerAccrued);
+		/* STRUCTURE_SAVE_V15 includes STRUCTURE_SAVE_V14 */
+		/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
+		endian_udword(&psSaveStructure->factoryInc);
+		endian_udword(&psSaveStructure->powerAccrued);
+		endian_udword(&psSaveStructure->dummy2);
+		endian_udword(&psSaveStructure->droidTimeStarted);
+		endian_udword(&psSaveStructure->timeToBuild);
+		endian_udword(&psSaveStructure->timeStartHold);
+		/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
+		endian_sdword(&psSaveStructure->currentBuildPts);
+		endian_udword(&psSaveStructure->body);
+		endian_udword(&psSaveStructure->armour);
+		endian_udword(&psSaveStructure->resistance);
+		endian_udword(&psSaveStructure->dummy1);
+		endian_udword(&psSaveStructure->subjectInc);
+		endian_udword(&psSaveStructure->timeStarted);
+		endian_udword(&psSaveStructure->output);
+		endian_udword(&psSaveStructure->capacity);
+		/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+		endian_udword(&psSaveStructure->id);
+		endian_udword(&psSaveStructure->x);
+		endian_udword(&psSaveStructure->y);
+		endian_udword(&psSaveStructure->z);
+		endian_udword(&psSaveStructure->direction);
+		endian_udword(&psSaveStructure->player);
+		endian_udword(&psSaveStructure->burnStart);
+		endian_udword(&psSaveStructure->burnDamage);
 
 		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
@@ -6470,6 +7159,37 @@ BOOL loadSaveStructureV(UBYTE *pFileData, UDWORD filesize, UDWORD numStructures,
 	{
 		memcpy(psSaveStructure, pFileData, sizeOfSaveStructure);
 
+		/* SAVE_STRUCTURE is STRUCTURE_SAVE_V21 */
+		/* STRUCTURE_SAVE_V21 includes STRUCTURE_SAVE_V20 */
+		endian_udword(&psSaveStructure->commandId);
+		/* STRUCTURE_SAVE_V20 includes OBJECT_SAVE_V20 */
+		endian_sdword(&psSaveStructure->currentBuildPts);
+		endian_udword(&psSaveStructure->body);
+		endian_udword(&psSaveStructure->armour);
+		endian_udword(&psSaveStructure->resistance);
+		endian_udword(&psSaveStructure->dummy1);
+		endian_udword(&psSaveStructure->subjectInc);
+		endian_udword(&psSaveStructure->timeStarted);
+		endian_udword(&psSaveStructure->output);
+		endian_udword(&psSaveStructure->capacity);
+		endian_udword(&psSaveStructure->quantity);
+		endian_udword(&psSaveStructure->factoryInc);
+		endian_udword(&psSaveStructure->powerAccrued);
+		endian_udword(&psSaveStructure->dummy2);
+		endian_udword(&psSaveStructure->droidTimeStarted);
+		endian_udword(&psSaveStructure->timeToBuild);
+		endian_udword(&psSaveStructure->timeStartHold);
+		endian_sword(&psSaveStructure->currentPowerAccrued);
+		/* OBJECT_SAVE_V20 */
+		endian_udword(&psSaveStructure->id);
+		endian_udword(&psSaveStructure->x);
+		endian_udword(&psSaveStructure->y);
+		endian_udword(&psSaveStructure->z);
+		endian_udword(&psSaveStructure->direction);
+		endian_udword(&psSaveStructure->player);
+		endian_udword(&psSaveStructure->burnStart);
+		endian_udword(&psSaveStructure->burnDamage);
+
 		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
 		if (psSaveStructure->player >= MAX_PLAYERS)
@@ -6877,6 +7597,9 @@ BOOL writeStructFile(STRING *pFileName)
 	psHeader->version = CURRENT_VERSION_NUM;
 	psHeader->quantity = totalStructs;
 
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	psSaveStruct = (SAVE_STRUCTURE*)(pFileData + STRUCT_HEADER_SIZE);
 
 	/* Put the structure data into the buffer */
@@ -7063,6 +7786,38 @@ BOOL writeStructFile(STRING *pFileName)
 					break;
 				}
 			}
+
+			/* SAVE_STRUCTURE is STRUCTURE_SAVE_V21 */
+			/* STRUCTURE_SAVE_V21 includes STRUCTURE_SAVE_V20 */
+			endian_udword(&psSaveStruct->commandId);
+			/* STRUCTURE_SAVE_V20 includes OBJECT_SAVE_V20 */
+			endian_sdword(&psSaveStruct->currentBuildPts);
+			endian_udword(&psSaveStruct->body);
+			endian_udword(&psSaveStruct->armour);
+			endian_udword(&psSaveStruct->resistance);
+			endian_udword(&psSaveStruct->dummy1);
+			endian_udword(&psSaveStruct->subjectInc);
+			endian_udword(&psSaveStruct->timeStarted);
+			endian_udword(&psSaveStruct->output);
+			endian_udword(&psSaveStruct->capacity);
+			endian_udword(&psSaveStruct->quantity);
+			endian_udword(&psSaveStruct->factoryInc);
+			endian_udword(&psSaveStruct->powerAccrued);
+			endian_udword(&psSaveStruct->dummy2);
+			endian_udword(&psSaveStruct->droidTimeStarted);
+			endian_udword(&psSaveStruct->timeToBuild);
+			endian_udword(&psSaveStruct->timeStartHold);
+			endian_sword(&psSaveStruct->currentPowerAccrued);
+			/* OBJECT_SAVE_V20 */
+			endian_udword(&psSaveStruct->id);
+			endian_udword(&psSaveStruct->x);
+			endian_udword(&psSaveStruct->y);
+			endian_udword(&psSaveStruct->z);
+			endian_udword(&psSaveStruct->direction);
+			endian_udword(&psSaveStruct->player);
+			endian_udword(&psSaveStruct->burnStart);
+			endian_udword(&psSaveStruct->burnDamage);
+
 			psSaveStruct = (SAVE_STRUCTURE *)((UBYTE *)psSaveStruct + sizeof(SAVE_STRUCTURE));
 		}
 	}
@@ -7197,6 +7952,10 @@ BOOL loadSaveFeature(UBYTE *pFileData, UDWORD filesize)
 		return FALSE;
 	}
 
+	/* FEATURE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	//increment to the start of the data
 	pFileData += FEATURE_HEADER_SIZE;
 
@@ -7253,6 +8012,17 @@ BOOL loadSaveFeatureV2(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures)
 									pFileData += sizeof(SAVE_FEATURE_V2))
 	{
 		psSaveFeature = (SAVE_FEATURE_V2 *) pFileData;
+
+		/* SAVE_FEATURE_V2 is FEATURE_SAVE_V2 */
+		/* FEATURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+		endian_udword(&psSaveFeature->id);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
+		endian_udword(&psSaveFeature->direction);
+		endian_udword(&psSaveFeature->player);
+		endian_udword(&psSaveFeature->burnStart);
+		endian_udword(&psSaveFeature->burnDamage);
 
 		//'old' user save games have the translated name saved as a stat
 		if (gameType == GTYPE_SAVE_START)
@@ -7362,6 +8132,18 @@ BOOL loadSaveFeatureV14(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, U
 	{
 		psSaveFeature = (SAVE_FEATURE_V14*) pFileData;
 
+		/* FEATURE_SAVE_V14 is FEATURE_SAVE_V2 */
+		/* FEATURE_SAVE_V2 is OBJECT_SAVE_V19 */
+		/* OBJECT_SAVE_V19 */
+		endian_udword(&psSaveFeature->id);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
+		endian_udword(&psSaveFeature->direction);
+		endian_udword(&psSaveFeature->player);
+		endian_udword(&psSaveFeature->burnStart);
+		endian_udword(&psSaveFeature->burnDamage);
+
 		/*if (psSaveFeature->featureInc > numFeatureStats)
 		{
 			DBERROR(("Invalid Feature Type - unable to load save game"));
@@ -7458,6 +8240,18 @@ BOOL loadSaveFeatureV(UBYTE *pFileData, UDWORD filesize, UDWORD numFeatures, UDW
 									pFileData += sizeOfSaveFeature)
 	{
 		psSaveFeature = (SAVE_FEATURE*) pFileData;
+
+		/* FEATURE_SAVE is FEATURE_SAVE_V20 */
+		/* FEATURE_SAVE_V20 is OBJECT_SAVE_V20 */
+		/* OBJECT_SAVE_V20 */
+		endian_udword(&psSaveFeature->id);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
+		endian_udword(&psSaveFeature->direction);
+		endian_udword(&psSaveFeature->player);
+		endian_udword(&psSaveFeature->burnStart);
+		endian_udword(&psSaveFeature->burnDamage);
 
 		/*if (psSaveFeature->featureInc > numFeatureStats)
 		{
@@ -7587,8 +8381,25 @@ BOOL writeFeatureFile(STRING *pFileName)
 		}
 
 //		psSaveFeature->featureInc = psCurr->psStats - asFeatureStats;
+
+		/* SAVE_FEATURE is FEATURE_SAVE_V20 */
+		/* FEATURE_SAVE_V20 includes OBJECT_SAVE_V20 */
+		/* OBJECT_SAVE_V20 */
+		endian_udword(&psSaveFeature->id);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
+		endian_udword(&psSaveFeature->direction);
+		endian_udword(&psSaveFeature->player);
+		endian_udword(&psSaveFeature->burnStart);
+		endian_udword(&psSaveFeature->burnDamage);
+
 		psSaveFeature = (SAVE_FEATURE *)((UBYTE *)psSaveFeature + sizeof(SAVE_FEATURE));
 	}
+
+	/* FEATURE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	/* Write the data to the file */
 	if (pFileData != NULL) {
@@ -7613,6 +8424,10 @@ BOOL loadSaveTemplate(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveTemplate: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* TEMPLATE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += TEMPLATE_HEADER_SIZE;
@@ -7674,6 +8489,13 @@ BOOL loadSaveTemplateV7(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
 	for (count = 0; count < numTemplates; count ++, pFileData += sizeof(SAVE_TEMPLATE_V2))
 	{
 		memcpy(psSaveTemplate, pFileData, sizeof(SAVE_TEMPLATE_V2));
+
+		/* SAVE_TEMPLATE_V2 is TEMPLATE_SAVE_V2 */
+		/* TEMPLATE_SAVE_V2 */
+		endian_udword(&psSaveTemplate->ref);
+		endian_udword(&psSaveTemplate->player);
+		endian_udword(&psSaveTemplate->numWeaps);
+		endian_udword(&psSaveTemplate->numProgs);
 
 		if (psSaveTemplate->player != 0)
 		{
@@ -7795,6 +8617,12 @@ BOOL loadSaveTemplateV14(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
 	for (count = 0; count < numTemplates; count ++, pFileData += sizeof(SAVE_TEMPLATE_V14))
 	{
 		memcpy(psSaveTemplate, pFileData, sizeof(SAVE_TEMPLATE_V14));
+
+		/* SAVE_TEMPLATE_V14 is TEMPLATE_SAVE_V14 */
+		endian_udword(&psSaveTemplate->ref);
+		endian_udword(&psSaveTemplate->player);
+		endian_udword(&psSaveTemplate->numWeaps);
+		endian_udword(&psSaveTemplate->multiPlayerID);
 
 		//AT SOME POINT CHECK THE multiPlayerID TO SEE IF ALREADY EXISTS - IGNORE IF IT DOES
 
@@ -7949,6 +8777,13 @@ BOOL loadSaveTemplateV(UBYTE *pFileData, UDWORD filesize, UDWORD numTemplates)
 	for (count = 0; count < numTemplates; count ++, pFileData += sizeof(SAVE_TEMPLATE))
 	{
 		memcpy(psSaveTemplate, pFileData, sizeof(SAVE_TEMPLATE));
+
+		/* SAVE_TEMPLATE is TEMPLATE_SAVE_V20 */
+		/* TEMPLATE_SAVE_V20 */
+		endian_udword(&psSaveTemplate->ref);
+		endian_udword(&psSaveTemplate->player);
+		endian_udword(&psSaveTemplate->numWeaps);
+		endian_udword(&psSaveTemplate->multiPlayerID);
 
 		//AT SOME POINT CHECK THE multiPlayerID TO SEE IF ALREADY EXISTS - IGNORE IF IT DOES
 
@@ -8187,9 +9022,21 @@ BOOL writeTemplateFile(STRING *pFileName)
 					break;
 				}
 			}
+
+			/* SAVE_TEMPLATE is TEMPLATE_SAVE_V20 */
+			/* TEMPLATE_SAVE_V20 */
+			endian_udword(&psSaveTemplate->ref);
+			endian_udword(&psSaveTemplate->player);
+			endian_udword(&psSaveTemplate->numWeaps);
+			endian_udword(&psSaveTemplate->multiPlayerID);
+
 			psSaveTemplate = (SAVE_TEMPLATE *)((UBYTE *)psSaveTemplate + sizeof(SAVE_TEMPLATE));
 		}
 	}
+
+	/* TEMPLATE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	/* Write the data to the file */
 	if (pFileData != NULL) {
@@ -8229,6 +9076,11 @@ BOOL loadTerrainTypeMap(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadTerrainTypeMap: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* TILETYPE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 /*	Version doesn't matter for now
 	if (psHeader->version != VERSION_2)
 	{
@@ -8241,6 +9093,7 @@ BOOL loadTerrainTypeMap(UBYTE *pFileData, UDWORD filesize)
 
 	// Load the terrain type mapping
 	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
+	endian_uword(pType);
 	for(i=0; i<psHeader->quantity; i++)
 	{
 		if (i >= MAX_TILE_TEXTURES)
@@ -8257,6 +9110,7 @@ BOOL loadTerrainTypeMap(UBYTE *pFileData, UDWORD filesize)
 
 		terrainTypes[i] = (UBYTE)*pType;
 		pType += 1;
+		endian_uword(pType);
 	}
 
 	return TRUE;
@@ -8293,8 +9147,13 @@ static BOOL writeTerrainTypeMapFile(STRING *pFileName)
 	for(i=0; i<MAX_TILE_TEXTURES; i++)
 	{
 		*pType = terrainTypes[i];
+		endian_uword(pType);
 		pType += 1;
 	}
+
+	/* TILETYPE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
@@ -8319,6 +9178,10 @@ BOOL loadSaveCompList(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveCompList: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* COMPLIST_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += COMPLIST_HEADER_SIZE;
@@ -8611,6 +9474,10 @@ static BOOL writeCompListFile(STRING *pFileName)
 		}*/
 	}
 
+	/* COMPLIST_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
 		return FALSE;
@@ -8634,6 +9501,10 @@ BOOL loadSaveStructTypeList(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveStructTypeList: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* STRUCTLIST_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += STRUCTLIST_HEADER_SIZE;
@@ -8830,6 +9701,10 @@ static BOOL writeStructTypeListFile(STRING *pFileName)
 		}
 	}
 
+	/* STRUCT_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
 		return FALSE;
@@ -8854,6 +9729,10 @@ BOOL loadSaveResearch(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveResearch: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* RESEARCH_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += RESEARCH_HEADER_SIZE;
@@ -8907,6 +9786,11 @@ BOOL loadSaveResearchV8(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
 	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_RESEARCH_V8))
 	{
 		psSaveResearch = (SAVE_RESEARCH_V8 *) pFileData;
+
+		/* SAVE_RESEARCH_V8 is RESEARCH_SAVE_V8 */
+		/* RESEARCH_SAVE_V8 */
+		for(playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
+			endian_udword(&psSaveResearch->currentPoints[playerInc]);
 
 		found = FALSE;
 
@@ -8985,6 +9869,11 @@ BOOL loadSaveResearchV(UBYTE *pFileData, UDWORD filesize, UDWORD numRecords)
 	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_RESEARCH))
 	{
 		psSaveResearch = (SAVE_RESEARCH *) pFileData;
+
+		/* SAVE_RESEARCH is RESEARCH_SAVE_V20 */
+		/* RESEARCH_SAVE_V20 */
+		for(playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
+			endian_udword(&psSaveResearch->currentPoints[playerInc]);
 
 		found = FALSE;
 
@@ -9067,6 +9956,9 @@ static BOOL writeResearchFile(STRING *pFileName)
 	psHeader->version = CURRENT_VERSION_NUM;
 	psHeader->quantity = numResearch;
 
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	psSaveResearch = (SAVE_RESEARCH *) (pFileData + RESEARCH_HEADER_SIZE);
 	//save each type of reesearch
 	psStats = asResearch;
@@ -9081,6 +9973,10 @@ static BOOL writeResearchFile(STRING *pFileName)
 			psSaveResearch->researched[player] = (UBYTE)(asPlayerResList[player][i].ResearchStatus&RESBITS);
 			psSaveResearch->currentPoints[player] = asPlayerResList[player][i].currentPoints;
 		}
+
+		for(player = 0; player < MAX_PLAYERS; player++)
+			endian_udword(&psSaveResearch->currentPoints[player]);
+
 		psSaveResearch = (SAVE_RESEARCH *)((UBYTE *)psSaveResearch +
 			sizeof(SAVE_RESEARCH));
 	}
@@ -9110,6 +10006,10 @@ BOOL loadSaveMessage(UBYTE *pFileData, UDWORD filesize, SWORD levelType)
 		DBERROR(("loadSaveMessage: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* MESSAGE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += MESSAGE_HEADER_SIZE;
@@ -9160,6 +10060,12 @@ BOOL loadSaveMessageV(UBYTE *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 	for (i = 0; i < numMessages; i++, pFileData += sizeof(SAVE_MESSAGE))
 	{
 		psSaveMessage = (SAVE_MESSAGE *) pFileData;
+
+		/* SAVE_MESSAGE */
+		endian_sdword(&psSaveMessage->type);
+		endian_udword(&psSaveMessage->objId);
+		endian_udword(&psSaveMessage->player);
+
 		if (psSaveMessage->type == MSG_PROXIMITY)
 		{
             //only load proximity if a mid-mission save game
@@ -9318,9 +10224,18 @@ static BOOL writeMessageFile(STRING *pFileName)
 			}
 			psSaveMessage->read = psMessage->read;			//flag to indicate whether message has been read
 			psSaveMessage->player = psMessage->player;		//which player this message belongs to
+
+			endian_sdword(&psSaveMessage->type);
+			endian_udword(&psSaveMessage->objId);
+			endian_udword(&psSaveMessage->player);
+
 			psSaveMessage = (SAVE_MESSAGE *)((UBYTE *)psSaveMessage + 	sizeof(SAVE_MESSAGE));
 		}
 	}
+
+	/* MESSAGE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
@@ -9347,6 +10262,10 @@ BOOL loadSaveProximity(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveProximity: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* PROXIMITY_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += PROXIMITY_HEADER_SIZE;
@@ -9381,6 +10300,20 @@ BOOL loadSaveProximityV(UBYTE *pFileData, UDWORD filesize, UDWORD numProximitys,
 	for (i = 0; i < numProximitys; i++, pFileData += sizeof(SAVE_PROXIMITY))
 	{
 		psSaveProximity = (SAVE_PROXIMITY *) pFileData;
+
+		/* SAVE_PROXIMITY */
+		endian_sdword(&psSaveProximity->type);
+		endian_udword(&psSaveProximity->frameNumber);
+		endian_udword(&psSaveProximity->screenX);
+		endian_udword(&psSaveProximity->screenY);
+		endian_udword(&psSaveProximity->screenR);
+		endian_udword(&psSaveProximity->objId);
+		endian_udword(&psSaveProximity->radarX);
+		endian_udword(&psSaveProximity->radarY);
+		endian_udword(&psSaveProximity->timeLastDrawn);
+		endian_udword(&psSaveProximity->strobe);
+		endian_udword(&psSaveProximity->buttonID);
+
 		if (psSaveProximity->type == MSG_PROXIMITY)
 		{
 //			addProximity(psSaveProximity->type, psSaveProximity->proxPos, psSaveProximity->player);
@@ -9461,9 +10394,26 @@ static BOOL writeProximityFile(STRING *pFileName)
 			psSaveProximity->strobe		 = psProximity->strobe;
 			psSaveProximity->buttonID	 = psProximity->buttonID;
 			psSaveProximity->player		 = psProximity->player;
+			/* SAVE_PROXIMITY */
+			endian_sdword(&psSaveProximity->type);
+			endian_udword(&psSaveProximity->frameNumber);
+			endian_udword(&psSaveProximity->screenX);
+			endian_udword(&psSaveProximity->screenY);
+			endian_udword(&psSaveProximity->screenR);
+			endian_udword(&psSaveProximity->objId);
+			endian_udword(&psSaveProximity->radarX);
+			endian_udword(&psSaveProximity->radarY);
+			endian_udword(&psSaveProximity->timeLastDrawn);
+			endian_udword(&psSaveProximity->strobe);
+			endian_udword(&psSaveProximity->buttonID);
+
 			psSaveProximity = (SAVE_PROXIMITY *)((UBYTE *)psSaveProximity + sizeof(SAVE_PROXIMITY));
 		}
 	}
+
+	/* PROXIMITY_SAVEHEADER */
+	endian_udword(&psSaveHeader->version);
+	endian_udword(&psSaveHeader->quantity);
 
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
@@ -9490,6 +10440,10 @@ BOOL loadSaveFlag(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveflag: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* FLAG_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += FLAG_HEADER_SIZE;
@@ -9538,6 +10492,19 @@ BOOL loadSaveFlagV(UBYTE *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ve
 	for (i = 0; i < numflags; i++, pFileData += sizeOfSaveFlag)
 	{
 		psSaveflag = (SAVE_FLAG *) pFileData;
+
+		/* SAVE_FLAG */
+		endian_sdword(&psSaveflag->type);
+		endian_udword(&psSaveflag->frameNumber);
+		endian_udword(&psSaveflag->screenX);
+		endian_udword(&psSaveflag->screenY);
+		endian_udword(&psSaveflag->screenR);
+		endian_udword(&psSaveflag->player);
+		endian_sdword(&psSaveflag->coords.x);
+		endian_sdword(&psSaveflag->coords.y);
+		endian_sdword(&psSaveflag->coords.z);
+		endian_udword(&psSaveflag->repairId);
+
 		createFlagPosition(&psflag, psSaveflag->player);
 		psflag->type = psSaveflag->type;				//The type of flag
 		psflag->frameNumber = psSaveflag->frameNumber;	//when the Position was last drawn
@@ -9724,6 +10691,19 @@ static BOOL writeFlagFile(STRING *pFileName)
 				//get repair facility id
 				psSaveflag->repairId = getRepairIdFromFlag(psflag);
 			}
+
+			/* SAVE_FLAG */
+			endian_sdword(&psSaveflag->type);
+			endian_udword(&psSaveflag->frameNumber);
+			endian_udword(&psSaveflag->screenX);
+			endian_udword(&psSaveflag->screenY);
+			endian_udword(&psSaveflag->screenR);
+			endian_udword(&psSaveflag->player);
+			endian_sdword(&psSaveflag->coords.x);
+			endian_sdword(&psSaveflag->coords.y);
+			endian_sdword(&psSaveflag->coords.z);
+			endian_udword(&psSaveflag->repairId);
+
 			psSaveflag = (SAVE_FLAG *)((UBYTE *)psSaveflag + 	sizeof(SAVE_FLAG));
 		}
 	}
@@ -9762,6 +10742,19 @@ static BOOL writeFlagFile(STRING *pFileName)
 								//get repair facility id
 								psSaveflag->repairId = getRepairIdFromFlag(psflag);
 							}
+
+							/* SAVE_FLAG */
+							endian_sdword(&psSaveflag->type);
+							endian_udword(&psSaveflag->frameNumber);
+							endian_udword(&psSaveflag->screenX);
+							endian_udword(&psSaveflag->screenY);
+							endian_udword(&psSaveflag->screenR);
+							endian_udword(&psSaveflag->player);
+							endian_sdword(&psSaveflag->coords.x);
+							endian_sdword(&psSaveflag->coords.y);
+							endian_sdword(&psSaveflag->coords.z);
+							endian_udword(&psSaveflag->repairId);
+
 							psSaveflag = (SAVE_FLAG *)((UBYTE *)psSaveflag + 	sizeof(SAVE_FLAG));
 						}
 					}
@@ -9773,6 +10766,9 @@ static BOOL writeFlagFile(STRING *pFileName)
 		}
 	}
 
+	/* FLAG_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
@@ -9798,6 +10794,9 @@ BOOL loadSaveProduction(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveProduction: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* PRODUCTION_SAVEHEADER */
+	endian_udword(&psHeader->version);
 
 	//increment to the start of the data
 	pFileData += PRODUCTION_HEADER_SIZE;
@@ -9836,6 +10835,10 @@ BOOL loadSaveProductionV(UBYTE *pFileData, UDWORD filesize, UDWORD version)
 			{
 				psSaveProduction = (SAVE_PRODUCTION *)pFileData;
 				psCurrentProd = &asProductionRun[factoryType][factoryNum][runNum];
+
+				/* SAVE_PRODUCTION */
+				endian_udword(&psSaveProduction->multiPlayerID);
+
 				psCurrentProd->quantity = psSaveProduction->quantity;
 				psCurrentProd->built = psSaveProduction->built;
 				if (psSaveProduction->multiPlayerID != UDWORD_MAX)
@@ -9904,10 +10907,17 @@ static BOOL writeProductionFile(STRING *pFileName)
 				{
 					psSaveProduction->multiPlayerID = psCurrentProd->psTemplate->multiPlayerID;
 				}
+
+				/* SAVE_PRODUCTION */
+				endian_udword(&psSaveProduction->multiPlayerID);
+
 				psSaveProduction = (SAVE_PRODUCTION *)((UBYTE *)psSaveProduction + 	sizeof(SAVE_PRODUCTION));
 			}
 		}
 	}
+
+	/* PRODUCTION_SAVEHEADER */
+	endian_udword(&psHeader->version);
 
 	if (!saveFile(pFileName, pFileData, fileSize))
 	{
@@ -9938,6 +10948,10 @@ BOOL loadSaveStructLimits(UBYTE *pFileData, UDWORD filesize)
 
 	//increment to the start of the data
 	pFileData += STRUCTLIMITS_HEADER_SIZE;
+
+	/* STRUCTLIMITS_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	// Check the file version
 	if ((psHeader->version >= VERSION_15) && (psHeader->version <= VERSION_19))
@@ -10148,6 +11162,10 @@ BOOL writeStructLimitsFile(STRING *pFileName)
 		}
 	}
 
+	/* STRUCTLIMITS_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	// Write the data to the file
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
@@ -10169,6 +11187,10 @@ BOOL loadSaveCommandLists(UBYTE *pFileData, UDWORD filesize)
 		DBERROR(("loadSaveCommandList: Incorrect file type"));
 		return FALSE;
 	}
+
+	/* COMMAND_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	//increment to the start of the data
 	pFileData += COMMAND_HEADER_SIZE;
@@ -10208,6 +11230,10 @@ BOOL loadSaveCommandListsV(UBYTE *pFileData, UDWORD filesize, UDWORD numDroids)
 	// Load in the data
 	for (count = 0; count < numDroids; count++)
 	{
+		/* SAVE_COMMAND is COMMAND_SAVE_V20 */
+		/* COMMAND_SAVE_V20 */
+		endian_udword(&psSaveCommand[count].droidID);
+
 		if (psSaveCommand[count].droidID != UDWORD_MAX)
 		{
 			psDroid = (DROID*)getBaseObjFromId(psSaveCommand[count].droidID);
@@ -10281,8 +11307,17 @@ BOOL writeCommandLists(STRING *pFileName)
 		{
 			psSaveCommand->droidID = UDWORD_MAX;
 		}
+
+		/* SAVE_COMMAND is COMMAND_SAVE_V20 */
+		/* COMMAND_SAVE_V20 */
+		endian_udword(&psSaveCommand->droidID);
+
 		psSaveCommand = (SAVE_COMMAND*)((UBYTE *)psSaveCommand + sizeof(SAVE_COMMAND));
 	}
+
+	/* COMMAND_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
 
 	// Write the data to the file
 	if (pFileData != NULL) {
@@ -10650,6 +11685,10 @@ BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD
 		return FALSE;
 	}
 
+	/* STRUCT_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	//increment to the start of the data
 	pFileData += STRUCT_HEADER_SIZE;
 
@@ -10780,6 +11819,10 @@ BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX
 		return FALSE;
 	}
 
+	/* STRUCT_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
 	//increment to the start of the data
 	pFileData += STRUCT_HEADER_SIZE;
 
@@ -10819,42 +11862,244 @@ BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX
 		if (psHeader->version < VERSION_12)
 		{
 			memcpy(psSaveStructure2, pFileData, sizeOfSaveStruture);
+
+			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+			endian_sdword(&psSaveStructure2->currentBuildPts);
+			endian_udword(&psSaveStructure2->body);
+			endian_udword(&psSaveStructure2->armour);
+			endian_udword(&psSaveStructure2->resistance);
+			endian_udword(&psSaveStructure2->dummy1);
+			endian_udword(&psSaveStructure2->subjectInc);
+			endian_udword(&psSaveStructure2->timeStarted);
+			endian_udword(&psSaveStructure2->output);
+			endian_udword(&psSaveStructure2->capacity);
+			endian_udword(&psSaveStructure2->quantity);
+			/* OBJECT_SAVE_V19 */
+			endian_udword(&psSaveStructure2->id);
+			endian_udword(&psSaveStructure2->x);
+			endian_udword(&psSaveStructure2->y);
+			endian_udword(&psSaveStructure2->z);
+			endian_udword(&psSaveStructure2->direction);
+			endian_udword(&psSaveStructure2->player);
+			endian_udword(&psSaveStructure2->burnStart);
+			endian_udword(&psSaveStructure2->burnDamage);
+
 			xx = (psSaveStructure2->x >>TILE_SHIFT);
 			yy = (psSaveStructure2->y >>TILE_SHIFT);
 		}
 		else if (psHeader->version < VERSION_14)
 		{
 			memcpy(psSaveStructure12, pFileData, sizeOfSaveStruture);
+
+			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
+			endian_udword(&psSaveStructure12->factoryInc);
+			endian_udword(&psSaveStructure12->powerAccrued);
+			endian_udword(&psSaveStructure12->droidTimeStarted);
+			endian_udword(&psSaveStructure12->timeToBuild);
+			endian_udword(&psSaveStructure12->timeStartHold);
+			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+			endian_sdword(&psSaveStructure12->currentBuildPts);
+			endian_udword(&psSaveStructure12->body);
+			endian_udword(&psSaveStructure12->armour);
+			endian_udword(&psSaveStructure12->resistance);
+			endian_udword(&psSaveStructure12->dummy1);
+			endian_udword(&psSaveStructure12->subjectInc);
+			endian_udword(&psSaveStructure12->timeStarted);
+			endian_udword(&psSaveStructure12->output);
+			endian_udword(&psSaveStructure12->capacity);
+			endian_udword(&psSaveStructure12->quantity);
+			/* OBJECT_SAVE_V19 */
+			endian_udword(&psSaveStructure12->id);
+			endian_udword(&psSaveStructure12->x);
+			endian_udword(&psSaveStructure12->y);
+			endian_udword(&psSaveStructure12->z);
+			endian_udword(&psSaveStructure12->direction);
+			endian_udword(&psSaveStructure12->player);
+			endian_udword(&psSaveStructure12->burnStart);
+			endian_udword(&psSaveStructure12->burnDamage);
+
 			xx = (psSaveStructure12->x >>TILE_SHIFT);
 			yy = (psSaveStructure12->y >>TILE_SHIFT);
 		}
 		else if (psHeader->version <= VERSION_14)
 		{
 			memcpy(psSaveStructure14, pFileData, sizeOfSaveStruture);
+
+			/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
+			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
+			endian_udword(&psSaveStructure14->factoryInc);
+			endian_udword(&psSaveStructure14->powerAccrued);
+			endian_udword(&psSaveStructure14->droidTimeStarted);
+			endian_udword(&psSaveStructure14->timeToBuild);
+			endian_udword(&psSaveStructure14->timeStartHold);
+			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+			endian_sdword(&psSaveStructure14->currentBuildPts);
+			endian_udword(&psSaveStructure14->body);
+			endian_udword(&psSaveStructure14->armour);
+			endian_udword(&psSaveStructure14->resistance);
+			endian_udword(&psSaveStructure14->dummy1);
+			endian_udword(&psSaveStructure14->subjectInc);
+			endian_udword(&psSaveStructure14->timeStarted);
+			endian_udword(&psSaveStructure14->output);
+			endian_udword(&psSaveStructure14->capacity);
+			endian_udword(&psSaveStructure14->quantity);
+			/* OBJECT_SAVE_V19 */
+			endian_udword(&psSaveStructure14->id);
+			endian_udword(&psSaveStructure14->x);
+			endian_udword(&psSaveStructure14->y);
+			endian_udword(&psSaveStructure14->z);
+			endian_udword(&psSaveStructure14->direction);
+			endian_udword(&psSaveStructure14->player);
+			endian_udword(&psSaveStructure14->burnStart);
+			endian_udword(&psSaveStructure14->burnDamage);
+
 			xx = (psSaveStructure14->x >>TILE_SHIFT);
 			yy = (psSaveStructure14->y >>TILE_SHIFT);
 		}
 		else if (psHeader->version <= VERSION_16)
 		{
 			memcpy(psSaveStructure15, pFileData, sizeOfSaveStruture);
+
+			/* STRUCTURE_SAVE_V15 includes STRUCTURE_SAVE_V14 */
+			/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
+			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
+			endian_udword(&psSaveStructure15->factoryInc);
+			endian_udword(&psSaveStructure15->powerAccrued);
+			endian_udword(&psSaveStructure15->droidTimeStarted);
+			endian_udword(&psSaveStructure15->timeToBuild);
+			endian_udword(&psSaveStructure15->timeStartHold);
+			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+			endian_sdword(&psSaveStructure15->currentBuildPts);
+			endian_udword(&psSaveStructure15->body);
+			endian_udword(&psSaveStructure15->armour);
+			endian_udword(&psSaveStructure15->resistance);
+			endian_udword(&psSaveStructure15->dummy1);
+			endian_udword(&psSaveStructure15->subjectInc);
+			endian_udword(&psSaveStructure15->timeStarted);
+			endian_udword(&psSaveStructure15->output);
+			endian_udword(&psSaveStructure15->capacity);
+			endian_udword(&psSaveStructure15->quantity);
+			/* OBJECT_SAVE_V19 */
+			endian_udword(&psSaveStructure15->id);
+			endian_udword(&psSaveStructure15->x);
+			endian_udword(&psSaveStructure15->y);
+			endian_udword(&psSaveStructure15->z);
+			endian_udword(&psSaveStructure15->direction);
+			endian_udword(&psSaveStructure15->player);
+			endian_udword(&psSaveStructure15->burnStart);
+			endian_udword(&psSaveStructure15->burnDamage);
+
 			xx = (psSaveStructure15->x >>TILE_SHIFT);
 			yy = (psSaveStructure15->y >>TILE_SHIFT);
 		}
 		else if (psHeader->version <= VERSION_19)
 		{
 			memcpy(psSaveStructure17, pFileData, sizeOfSaveStruture);
+
+			/* STRUCTURE_SAVE_V17 includes STRUCTURE_SAVE_V15 */
+			endian_sword(&psSaveStructure17->currentPowerAccrued);
+			/* STRUCTURE_SAVE_V15 includes STRUCTURE_SAVE_V14 */
+			/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
+			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
+			endian_udword(&psSaveStructure17->factoryInc);
+			endian_udword(&psSaveStructure17->powerAccrued);
+			endian_udword(&psSaveStructure17->droidTimeStarted);
+			endian_udword(&psSaveStructure17->timeToBuild);
+			endian_udword(&psSaveStructure17->timeStartHold);
+			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
+			endian_sdword(&psSaveStructure17->currentBuildPts);
+			endian_udword(&psSaveStructure17->body);
+			endian_udword(&psSaveStructure17->armour);
+			endian_udword(&psSaveStructure17->resistance);
+			endian_udword(&psSaveStructure17->dummy1);
+			endian_udword(&psSaveStructure17->subjectInc);
+			endian_udword(&psSaveStructure17->timeStarted);
+			endian_udword(&psSaveStructure17->output);
+			endian_udword(&psSaveStructure17->capacity);
+			endian_udword(&psSaveStructure17->quantity);
+			/* OBJECT_SAVE_V19 */
+			endian_udword(&psSaveStructure17->id);
+			endian_udword(&psSaveStructure17->x);
+			endian_udword(&psSaveStructure17->y);
+			endian_udword(&psSaveStructure17->z);
+			endian_udword(&psSaveStructure17->direction);
+			endian_udword(&psSaveStructure17->player);
+			endian_udword(&psSaveStructure17->burnStart);
+			endian_udword(&psSaveStructure17->burnDamage);
+
 			xx = (psSaveStructure17->x >>TILE_SHIFT);
 			yy = (psSaveStructure17->y >>TILE_SHIFT);
 		}
 		else if (psHeader->version <= VERSION_20)
 		{
 			memcpy(psSaveStructure20, pFileData, sizeOfSaveStruture);
+
+			/* STRUCTURE_SAVE_V20 includes OBJECT_SAVE_V20 */
+			endian_sdword(&psSaveStructure20->currentBuildPts);
+			endian_udword(&psSaveStructure20->body);
+			endian_udword(&psSaveStructure20->armour);
+			endian_udword(&psSaveStructure20->resistance);
+			endian_udword(&psSaveStructure20->dummy1);
+			endian_udword(&psSaveStructure20->subjectInc);
+			endian_udword(&psSaveStructure20->timeStarted);
+			endian_udword(&psSaveStructure20->output);
+			endian_udword(&psSaveStructure20->capacity);
+			endian_udword(&psSaveStructure20->quantity);
+			endian_udword(&psSaveStructure20->factoryInc);
+			endian_udword(&psSaveStructure20->powerAccrued);
+			endian_udword(&psSaveStructure20->dummy2);
+			endian_udword(&psSaveStructure20->droidTimeStarted);
+			endian_udword(&psSaveStructure20->timeToBuild);
+			endian_udword(&psSaveStructure20->timeStartHold);
+			endian_sword(&psSaveStructure20->currentPowerAccrued);
+			/* OBJECT_SAVE_V20 */
+			endian_udword(&psSaveStructure20->id);
+			endian_udword(&psSaveStructure20->x);
+			endian_udword(&psSaveStructure20->y);
+			endian_udword(&psSaveStructure20->z);
+			endian_udword(&psSaveStructure20->direction);
+			endian_udword(&psSaveStructure20->player);
+			endian_udword(&psSaveStructure20->burnStart);
+			endian_udword(&psSaveStructure20->burnDamage);
+
 			xx = (psSaveStructure20->x >>TILE_SHIFT);
 			yy = (psSaveStructure20->y >>TILE_SHIFT);
 		}
 		else
 		{
 			memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
+
+			/* SAVE_STRUCTURE is STRUCTURE_SAVE_V21 */
+			/* STRUCTURE_SAVE_V21 includes STRUCTURE_SAVE_V20 */
+			endian_udword(&psSaveStructure->commandId);
+			/* STRUCTURE_SAVE_V20 includes OBJECT_SAVE_V20 */
+			endian_sdword(&psSaveStructure->currentBuildPts);
+			endian_udword(&psSaveStructure->body);
+			endian_udword(&psSaveStructure->armour);
+			endian_udword(&psSaveStructure->resistance);
+			endian_udword(&psSaveStructure->dummy1);
+			endian_udword(&psSaveStructure->subjectInc);
+			endian_udword(&psSaveStructure->timeStarted);
+			endian_udword(&psSaveStructure->output);
+			endian_udword(&psSaveStructure->capacity);
+			endian_udword(&psSaveStructure->quantity);
+			endian_udword(&psSaveStructure->factoryInc);
+			endian_udword(&psSaveStructure->powerAccrued);
+			endian_udword(&psSaveStructure->dummy2);
+			endian_udword(&psSaveStructure->droidTimeStarted);
+			endian_udword(&psSaveStructure->timeToBuild);
+			endian_udword(&psSaveStructure->timeStartHold);
+			endian_sword(&psSaveStructure->currentPowerAccrued);
+			/* OBJECT_SAVE_V20 */
+			endian_udword(&psSaveStructure->id);
+			endian_udword(&psSaveStructure->x);
+			endian_udword(&psSaveStructure->y);
+			endian_udword(&psSaveStructure->z);
+			endian_udword(&psSaveStructure->direction);
+			endian_udword(&psSaveStructure->player);
+			endian_udword(&psSaveStructure->burnStart);
+			endian_udword(&psSaveStructure->burnDamage);
+
 			xx = (psSaveStructure->x >>TILE_SHIFT);
 			yy = (psSaveStructure->y >>TILE_SHIFT);
 		}

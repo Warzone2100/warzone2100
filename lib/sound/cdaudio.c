@@ -8,7 +8,11 @@
 
 #else
 
+#ifdef WZ_OPENAL_MAC_H
+#include <openal/al.h>
+#else
 #include <AL/al.h>
+#endif
 
 #ifndef WZ_NOMP3
 #include <mad.h>

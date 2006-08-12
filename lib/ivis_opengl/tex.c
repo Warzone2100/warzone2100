@@ -7,7 +7,7 @@
 #ifdef _MSC_VER			//we need windows.h for below inculde.  --Qamly
 #include <windows.h>
 #endif
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 #include <GL/glu.h>
 
 #include "lib/framework/frame.h"

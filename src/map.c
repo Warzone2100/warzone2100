@@ -323,6 +323,9 @@ BOOL mapLoadV1(UBYTE *pFileData, UDWORD fileSize)
 
 		UDWORD DataTexture;
 
+		/* MAP_SAVETILEV1 */
+		endian_udword(&psTileData->texture);
+
 		DataTexture= GETTILE_TEXTURE(psTileData);
 		// get the texture number
 		psMapTiles[i].texture = (UWORD)(DataTexture&0xffff);
@@ -366,6 +369,9 @@ BOOL mapLoadV2(UBYTE *pFileData, UDWORD fileSize)
 	psTileData = (MAP_SAVETILEV2 *)(pFileData + SAVE_HEADER_SIZE);
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
+
+		/* MAP_SAVETILEV2 */
+		endian_uword(&psTileData->texture);
 
 		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);
 
@@ -417,6 +423,9 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
 
+		/* MAP_SAVETILEV2 */
+		endian_uword(&psTileData->texture);
+
 		psMapTiles[i].texture = GETTILE_TEXTURE2(psTileData);
 
 
@@ -438,6 +447,10 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 
 	psGateHeader = (GATEWAY_SAVEHEADER*)psTileData;
 	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
+
+	/* GATEWAY_SAVEHEADER */
+	endian_udword(&psGateHeader->version);
+	endian_udword(&psGateHeader->numGateways);
 
 	ASSERT((psGateHeader->version == 1,"Invalid gateway version"));
 
@@ -463,6 +476,12 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 //#else
 	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
 
+	/* ZONEMAP_SAVEHEADER */
+	endian_uword(&psZoneHeader->version);
+	endian_uword(&psZoneHeader->numZones);
+	endian_uword(&psZoneHeader->numEquivZones);
+	endian_uword(&psZoneHeader->pad);
+
 	ASSERT(( (psZoneHeader->version == 1) || (psZoneHeader->version == 2),
 			"Invalid zone map version"));
 
@@ -481,6 +500,7 @@ BOOL mapLoadV3(UBYTE *pFileData, UDWORD fileSize)
 
 	for(i=0; i<psZoneHeader->numZones; i++) {
 		ZoneSize = *((UWORD*)(pZone));
+		endian_uword(&ZoneSize);
 
 		pDestZone = gwNewZoneLine(i,ZoneSize);
 
@@ -571,6 +591,11 @@ BOOL mapLoad(UBYTE *pFileData, UDWORD fileSize)
 		FREE(pFileData);
 		return FALSE;
 	}
+
+	/* MAP_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->width);
+	endian_udword(&psHeader->height);
 
 	/* Check the file version - deal with version 1 files */
 	/* Check the file version */
@@ -772,6 +797,11 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	psHeader->width = mapWidth;
 	psHeader->height = mapHeight;
 
+	/* MAP_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->width);
+	endian_udword(&psHeader->height);
+
 	/* Put the map data into the buffer */
 	psTileData = (MAP_SAVETILE *)(*ppFileData + SAVE_HEADER_SIZE);
 	psTile = psMapTiles;
@@ -783,6 +813,9 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 
 		psTileData->height = psTile->height;
 
+		/* MAP_SAVETILEV2 */
+		endian_uword(&psTileData->texture);
+
 		psTileData = (MAP_SAVETILE *)((UBYTE *)psTileData + SAVE_TILE_SIZE);
 		psTile ++;
 	}
@@ -791,6 +824,10 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	psGateHeader = (GATEWAY_SAVEHEADER*)psTileData;
 	psGateHeader->version = 1;
 	psGateHeader->numGateways = numGateways;
+
+	/* GATEWAY_SAVEHEADER */
+	endian_udword(&psGateHeader->version);
+	endian_udword(&psGateHeader->numGateways);
 
 	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
 
@@ -815,11 +852,19 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	psZoneHeader->numZones =(UWORD)gwNumZoneLines();
 	psZoneHeader->numEquivZones =(UWORD)gwNumZones;
 
+	/* ZONEMAP_SAVEHEADER */
+	endian_uword(&psZoneHeader->version);
+	endian_uword(&psZoneHeader->numZones);
+	endian_uword(&psZoneHeader->numEquivZones);
+	endian_uword(&psZoneHeader->pad);
+
 	// Put the zone data.
 	psZone = (UBYTE*)(psZoneHeader+1);
 	for(i=0; i<gwNumZoneLines(); i++) {
 		psLastZone = psZone;
 		*((UWORD*)psZone) = (UWORD)gwZoneLineSize(i);
+		endian_uword(((UWORD *) psZone));
+
 		psZone += sizeof(UWORD);
 		memcpy(psZone,apRLEZones[i],gwZoneLineSize(i));
 		psZone += gwZoneLineSize(i);
@@ -1576,6 +1621,9 @@ UDWORD			i;
 	/* Wirte out the version number - unlikely to change for visibility data */
 	psHeader->version = CURRENT_VERSION_NUM;
 
+	/* VIS_SAVEHEADER */
+	endian_udword(&psHeader->version);
+
 	/* Skip past the header to the raw data area */
 	pVisData = pFileData + sizeof(struct _vis_save_header);
 
@@ -1617,6 +1665,9 @@ UBYTE				*pVisData;
 								  psHeader->aFileType[2],psHeader->aFileType[3]);
 		return FALSE;
 	}
+
+	/* VIS_SAVEHEADER */
+	endian_udword(&psHeader->version);
 
 	/* How much data are we expecting? */
 	mapEntries = (mapWidth*mapHeight);

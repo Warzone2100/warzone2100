@@ -11,7 +11,7 @@
 #ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/pieblitfunc.h"

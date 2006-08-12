@@ -6,7 +6,13 @@
 /***************************************************************************/
 /* defines */
 
+#include "config.h"
+
+#ifdef WZ_OPENAL_MAC_H
+#include <openal/al.h>
+#else
 #include <AL/al.h>
+#endif
 
 #ifndef MAX_STR
 	#define	MAX_STR			255

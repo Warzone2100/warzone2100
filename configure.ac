@@ -3,7 +3,7 @@
 AC_PREREQ(2.56)
 AC_INIT([warzone],[2.0.4_rc1],[http://gna.org/projects/warzone])
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
-AC_CONFIG_HEADER([config.h])
+AM_CONFIG_HEADER([config.h])
 
 AM_INIT_AUTOMAKE
 
@@ -16,7 +16,7 @@ if test "x$YACC" != "xbison -y" ; then
 	AC_MSG_ERROR([Bison is not installed])
 fi
 
-AC_PROG_LEX
+AM_PROG_LEX
 if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
@@ -55,6 +55,7 @@ fi
 #AC_ARG_WITH(openal,
 #[  --with-openal           use OpenAL for sound [[auto]]],
 #[ openal=$withval ], [ openal=maybe ])
+openal=yes
 
 #   --without-ogg will build without Ogg vorbis support
 AC_ARG_WITH(ogg,
@@ -127,12 +128,17 @@ AC_PATH_SDLNET([
 
 
 if test "x$opengl" != "xno" ; then
-  AC_CHECK_HEADER(GL/gl.h, GL_h=yes, GL_h=no)
-  AC_CHECK_HEADER(GL/glu.h, GLU_h=yes, GLU_h=no)
-  AC_CHECK_LIB(GL, main, GLLIB=GL GL_lib=yes,
-    [AC_CHECK_LIB(opengl32, main, GLLIB=opengl32 GL_lib=yes, GL_lib=no)])
-  AC_CHECK_LIB(GLU, main, GLULIB=GLU GLU_lib=yes,
-    [AC_CHECK_LIB(glu32, main, GLULIB=glu32 GLU_lib=yes, GLU_lib=no)])
+  AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
+  AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
+    [AC_CHECK_LIB(opengl32, main, GLLIB=-lopengl32 GL_lib=yes, GL_lib=no)])
+  AC_CHECK_LIB(GLU, main, GLULIB=-lGLU GLU_lib=yes,
+    [AC_CHECK_LIB(glu32, main, GLULIB=-lglu32 GLU_lib=yes, GLU_lib=no)])
+  if test `uname` = "Darwin"; then
+    GL_lib=yes
+    GLU_lib=yes
+    GLLIB="-framework OpenGL"
+    GLULIB=""
+  fi
   if test "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno" ; then
     if test "x$opengl" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenGL and GLU.])
@@ -153,7 +159,7 @@ fi
 AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = "xyes" ; then
 	AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
-	WZ_LIBS="${WZ_LIBS} -l${GLLIB} -l${GLULIB}"
+	WZ_LIBS="${WZ_LIBS} ${GLLIB} ${GLULIB}"
 	AC_SUBST(RENDERER, "ivis_opengl")
 	AC_MSG_RESULT([yes])
 else
@@ -161,11 +167,15 @@ else
 	AC_MSG_ERROR([OpenGL is currently mandatory])
 fi
 
-
 if test "x$openal" != "xno" ; then
-  AC_CHECK_HEADER(AL/al.h, AL_h=yes, AL_h=no)
-  AC_CHECK_LIB(openal, main, ALLIB=openal AL_lib=yes,
-               [AC_CHECK_LIB(openal32, main, ALLIB=openal32 AL_lib=yes, AL_lib=no)])
+  AC_CHECK_HEADER(AL/al.h, AL_h=standard,
+               [AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
+  AC_CHECK_LIB(openal, main, ALLIB=-lopenal AL_lib=yes,
+               [AC_CHECK_LIB(openal32, main, ALLIB=-lopenal32 AL_lib=yes, AL_lib=no)])
+  if test `uname` = "Darwin"; then
+    AL_lib=yes
+    ALLIB="-framework OpenAL"
+  fi
   if test "x$AL_lib" = "xno" ; then
     if test "x$openal" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenAL.])
@@ -186,8 +196,11 @@ fi
 AC_MSG_CHECKING([OpenAL])
 if test "x$openal" = "xyes" ; then
 	AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])
-	WZ_LIBS="${WZ_LIBS} -l${ALLIB}"
+	WZ_LIBS="${WZ_LIBS} ${ALLIB}"
 	AC_MSG_RESULT([yes])
+	if test "x$AL_h" = "xmac"; then
+		AC_DEFINE(WZ_OPENAL_MAC_H, 1, [OpenAL MacOSX header support])
+	fi
 else
 	AC_MSG_RESULT([no])
 	AC_MSG_ERROR([OpenAL is currently mandatory])

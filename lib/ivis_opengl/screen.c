@@ -23,7 +23,7 @@
 #ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

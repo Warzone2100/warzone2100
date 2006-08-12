@@ -7,8 +7,13 @@
 // this has to be first
 #include "lib/framework/frame.h"
 
+#ifdef WZ_OPENAL_MAC_H
+#include <openal/al.h>
+#include <openal/alc.h>
+#else
 #include <AL/al.h>
 #include <AL/alc.h>
+#endif
 
 #ifndef WZ_NOOGG
 #include <ogg/ogg.h>
@@ -25,6 +30,12 @@
 #ifndef M_PI
 	#define M_PI	3.1415926535897932385
 #endif // win32 doesn't define that...
+
+#ifdef __BIG_ENDIAN__
+#define OGG_ENDIAN 1
+#else
+#define OGG_ENDIAN 0
+#endif
 
 ALuint current_queue_sample = -1;
 
@@ -338,14 +349,14 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 		data = malloc(data_size);
 	}
 
-	result = ov_read(&ogg_stream, (char *)data+size, data_size-size, 0, 2, 1, &section);
+	result = ov_read(&ogg_stream, (char *)data+size, data_size-size, OGG_ENDIAN, 2, 1, &section);
 	while( result != 0 ) {
 		size += result;
 		if (size == data_size) {
 			data_size *= 2;
 			data = realloc(data, data_size);
 		}
-		result = ov_read(&ogg_stream, (char *)data+size, data_size-size, 0, 2, 1, &section);
+		result = ov_read(&ogg_stream, (char *)data+size, data_size-size, OGG_ENDIAN, 2, 1, &section);
 	}
 
 	ov_clear(&ogg_stream);

@@ -22,6 +22,8 @@
     #define WIN_SCRAP
 #elif defined(__QNXNTO__)
     #define QNX_SCRAP
+#elif defined(__APPLE__)
+    #define MACOS_SCRAP
 #else
     #error Unknown window manager for clipboard handling
 #endif /* scrap type */
@@ -39,6 +41,10 @@ typedef UINT scrap_type;
 /* * */
 typedef uint32_t scrap_type;
 #define Ph_CL_TEXT T('T', 'E', 'X', 'T')
+
+#elif defined(MACOS_SCRAP)
+/* * */
+typedef uint32_t scrap_type;	/* FIXME */
 
 #endif /* scrap type */
 

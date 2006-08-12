@@ -24,7 +24,11 @@
 
 #include "fractions.h"
 #include <assert.h>
+#ifdef __APPLE__
+#include "cursors16.h"
+#else
 #include "cursors.h"
+#endif
 
 #include "SDL_framerate.h"
 

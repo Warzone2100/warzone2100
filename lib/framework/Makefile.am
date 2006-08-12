@@ -45,4 +45,4 @@ libframework_a_SOURCES = \
 	mem.h
 
 # ugly hack to circumvent ugly hack
-EXTRA_DIST= cursors.h
+EXTRA_DIST= cursors.h cursors16.h

@@ -173,4 +173,72 @@ extern SDWORD ftol(float f);
 UINT HashString( char *String );
 UINT HashStringIgnoreCase( char *String );
 
+
+/* Endianness hacks */
+
+static inline void endian_uword(UWORD *uword) {
+#ifdef __BIG_ENDIAN__
+  UBYTE tmp, *ptr;
+
+  ptr = (UBYTE *) uword;
+  tmp = ptr[0];
+  ptr[0] = ptr[1];
+  ptr[1] = tmp;
+#endif
+}
+
+static inline void endian_sword(SWORD *sword) {
+#ifdef __BIG_ENDIAN__
+  UBYTE tmp, *ptr;
+
+  ptr = (UBYTE *) sword;
+  tmp = ptr[0];
+  ptr[0] = ptr[1];
+  ptr[1] = tmp;
+#endif
+}
+
+static inline void endian_udword(UDWORD *udword) {
+#ifdef __BIG_ENDIAN__
+  UBYTE tmp, *ptr;
+
+  ptr = (UBYTE *) udword;
+  tmp = ptr[0];
+  ptr[0] = ptr[3];
+  ptr[3] = tmp;
+  tmp = ptr[1];
+  ptr[1] = ptr[2];
+  ptr[2] = tmp;
+#endif
+}
+
+static inline void endian_sdword(UDWORD *sdword) {
+#ifdef __BIG_ENDIAN__
+  UBYTE tmp, *ptr;
+
+  ptr = (UBYTE *) sdword;
+  tmp = ptr[0];
+  ptr[0] = ptr[3];
+  ptr[3] = tmp;
+  tmp = ptr[1];
+  ptr[1] = ptr[2];
+  ptr[2] = tmp;
+#endif
+}
+
+static inline void endian_fract(FRACT *fract) {
+#ifdef __BIG_ENDIAN__
+  UBYTE tmp, *ptr;
+
+  ptr = (UBYTE *) fract;
+  tmp = ptr[0];
+  ptr[0] = ptr[3];
+  ptr[3] = tmp;
+  tmp = ptr[1];
+  ptr[1] = ptr[2];
+  ptr[2] = ptr[1];
+#endif
+}
+
+
 #endif

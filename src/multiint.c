@@ -11,7 +11,7 @@
 #include <windows.h>
 #include <sdl/sdl.h>
 #endif
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
