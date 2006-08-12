@@ -2897,8 +2897,6 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 {
 	UDWORD ox,oy;
 
-	BUTTON_SURFACE *ButSurf = Buffer->ButSurf;
-
 	ox = oy = 0;
 	/*if(Down)
 	{
@@ -2916,7 +2914,6 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 //
 void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
 {
-	BUTTON_SURFACE *ButSurf = Buffer->ButSurf;
 	UDWORD ox,oy;
 
 	if(Down) {

@@ -362,13 +362,13 @@ int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
 
 	if ((zfx<=0) || (zfy<=0))
 	{
-		xs = LONG_WAY;//just along way off screen
-		ys = LONG_WAY;
+		*xs = LONG_WAY; //just along way off screen
+		*ys = LONG_WAY;
 	}
 	else if (zz < MIN_STRETCHED_Z)
 	{
-		xs = LONG_WAY;//just along way off screen
-		ys = LONG_WAY;
+		*xs = LONG_WAY; //just along way off screen
+		*ys = LONG_WAY;
 	}
 	else
 	{

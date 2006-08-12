@@ -92,7 +92,6 @@ static BOOL paused=FALSE;
 static BOOL video=FALSE;
 static BOOL bQuitVideo=FALSE;
 static	SDWORD clearCount = 0;
-static BOOL bSoftVideoPalette = FALSE;
 
 //holds which pause is valid at any one time
 typedef struct _pause_state

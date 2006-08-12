@@ -3729,7 +3729,7 @@ SDWORD	getMovementModel(STRING *pMovement)
 		return MM_SWEEP;
 	}
 	//problem if we've got to here
-	ASSERT((FALSE, "Invalid movement model - ", pMovement));
+	ASSERT((FALSE, "Invalid movement model %s", pMovement));
 	return INVALID_MOVEMENT;
 }
 

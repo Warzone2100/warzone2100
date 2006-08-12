@@ -4053,7 +4053,7 @@ BOOL withinLandingZone(UDWORD x, UDWORD y)
 //returns the x coord for where the Transporter can land (for player 0)
 UWORD getLandingX( SDWORD iPlayer )
 {
-	ASSERT( (iPlayer<MAX_NOGO_AREAS, "getLandingX: player %i out of range") );
+	ASSERT( (iPlayer<MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer) );
 	return (UWORD)((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
 		sLandingZone[iPlayer].x1)/2) << TILE_SHIFT);
 }
@@ -4061,7 +4061,7 @@ UWORD getLandingX( SDWORD iPlayer )
 //returns the y coord for where the Transporter can land
 UWORD getLandingY( SDWORD iPlayer )
 {
-	ASSERT( (iPlayer<MAX_NOGO_AREAS, "getLandingY: player %i out of range") );
+	ASSERT( (iPlayer<MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer) );
 	return (UWORD)((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
 		sLandingZone[iPlayer].y1)/2) << TILE_SHIFT);
 }
