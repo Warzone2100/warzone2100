@@ -67,6 +67,8 @@ BOOL check_extension(const char* extension_name) {
 typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 #endif
 
+PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
+
 BOOL stencil_one_pass() {
 	static BOOL initialised = FALSE;
 	static BOOL return_value;
@@ -74,6 +76,7 @@ BOOL stencil_one_pass() {
 	if (!initialised) {
 		return_value =    check_extension("GL_EXT_stencil_two_side")
 			       && check_extension("GL_EXT_stencil_wrap");
+		glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC) SDL_GL_GetProcAddress("glActiveStencilFaceEXT");
 		initialised = TRUE;
 	}
 
