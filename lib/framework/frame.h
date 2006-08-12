@@ -212,7 +212,7 @@ static inline void endian_udword(UDWORD *udword) {
 #endif
 }
 
-static inline void endian_sdword(UDWORD *sdword) {
+static inline void endian_sdword(SDWORD *sdword) {
 #ifdef __BIG_ENDIAN__
   UBYTE tmp, *ptr;
 
