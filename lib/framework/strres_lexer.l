@@ -35,8 +35,8 @@ static UDWORD currText=0;
 static BOOL inComment;
 
 /* Pointer to the input buffer */
-static UBYTE *pInputBuffer = NULL;
-static UBYTE *pEndBuffer = NULL;
+static char *pInputBuffer = NULL;
+static char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
 			if (pInputBuffer != pEndBuffer) { \
@@ -96,7 +96,7 @@ static UBYTE *pEndBuffer = NULL;
 %%
 
 /* Set the current input buffer for the lexer */
-void strresSetInputBuffer(UBYTE *pBuffer, UDWORD size)
+void strresSetInputBuffer(char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;

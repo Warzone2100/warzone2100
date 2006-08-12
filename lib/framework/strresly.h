@@ -16,7 +16,7 @@
 extern STR_RES	*psCurrRes;
 
 /* Set the current input buffer for the lexer - used by strresLoad */
-extern void strresSetInputBuffer(UBYTE *pBuffer, UDWORD size);
+extern void strresSetInputBuffer(char *pBuffer, UDWORD size);
 
 /* Give access to the line number and current text for error messages */
 extern void strresGetErrorData(int *pLine, char **ppText);

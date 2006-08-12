@@ -37,7 +37,6 @@
 
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX *psMatrix = &aMatrixStack[0];
-static BOOL perspective = FALSE;
 
 BOOL drawing_interface = TRUE;
 

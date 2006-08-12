@@ -179,7 +179,7 @@ int iV_GetTexture(char *filename)
 }
 
 // According to logfile not used, deprecating
-WZ_DEPRECATED int pie_ReloadTexPage(STRING *filename, char *pBuffer)
+int pie_ReloadTexPage(STRING *filename, char *pBuffer)
 {
 	int i = 0;
 	iSprite	s;
