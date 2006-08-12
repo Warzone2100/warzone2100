@@ -6,7 +6,9 @@
 /***************************************************************************/
 /* defines */
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #ifdef WZ_OPENAL_MAC_H
 #include <openal/al.h>
