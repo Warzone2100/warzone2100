@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +6,11 @@
 #include <windows.h>
 #endif
 #include <SDL/SDL_opengl.h>
+#ifdef __APPLE__
+#include <opengl/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"

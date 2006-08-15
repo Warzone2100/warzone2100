@@ -76,7 +76,9 @@ BOOL stencil_one_pass() {
 	if (!initialised) {
 		return_value =    check_extension("GL_EXT_stencil_two_side")
 			       && check_extension("GL_EXT_stencil_wrap");
+#ifndef __APPLE__
 		glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC) SDL_GL_GetProcAddress("glActiveStencilFaceEXT");
+#endif
 		initialised = TRUE;
 	}
 

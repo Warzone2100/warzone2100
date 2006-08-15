@@ -12,7 +12,6 @@
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
 #include <SDL/SDL_opengl.h>
-#include <GL/glu.h>
 
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/pieclip.h"

@@ -10,16 +10,16 @@
  */
 /***************************************************************************/
 
+// Standard include file
+#include "lib/framework/frame.h"
+#include "rpl_reader.h"
+#include "sequence.h"
+
 #ifdef WZ_OPENAL_MAC_H
 #include <openal/al.h>
 #else
 #include <AL/al.h>
 #endif
-
-// Standard include file
-#include "lib/framework/frame.h"
-#include "rpl_reader.h"
-#include "sequence.h"
 
 #define DUMMY_VIDEO
 
