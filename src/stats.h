@@ -135,61 +135,61 @@ extern BOOL statsAllocConstruct(UDWORD numEntries);
 *		Load stats functions
 *******************************************************************************/
 /* Return the number of newlines in a file buffer */
-extern UDWORD numCR(UBYTE *pFileBuffer, UDWORD fileSize);
+extern UDWORD numCR(char *pFileBuffer, UDWORD fileSize);
 
 /*Load the weapon stats from the file exported from Access*/
-extern BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize);
+extern BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize);
 
 /*Load the armour stats from the file exported from Access*/
 //extern BOOL loadArmourStats(void);
 
 /*Load the body stats from the file exported from Access*/
-extern BOOL loadBodyStats(SBYTE *pBodyData, UDWORD bufferSize);
+extern BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize);
 
 /*Load the brain stats from the file exported from Access*/
-extern BOOL loadBrainStats(SBYTE *pBrainData, UDWORD bufferSize);
+extern BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize);
 
 /*Load the power stats from the file exported from Access*/
 //extern BOOL loadPowerStats(void);
 
 /*Load the propulsion stats from the file exported from Access*/
-extern BOOL loadPropulsionStats(SBYTE *pPropulsionData, UDWORD bufferSize);
+extern BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize);
 
 /*Load the sensor stats from the file exported from Access*/
-extern BOOL loadSensorStats(SBYTE *pSensorData, UDWORD bufferSize);
+extern BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize);
 
 /*Load the ecm stats from the file exported from Access*/
-extern BOOL loadECMStats(SBYTE *pECMData, UDWORD bufferSize);
+extern BOOL loadECMStats(char *pECMData, UDWORD bufferSize);
 
 /*Load the repair stats from the file exported from Access*/
-extern BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize);
+extern BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize);
 
 /*Load the program stats from the file exported from Access*/
-extern BOOL loadProgramStats(SBYTE *pProgramData, UDWORD bufferSize);
+extern BOOL loadProgramStats(char *pProgramData, UDWORD bufferSize);
 
 /*Load the construct stats from the file exported from Access*/
-extern BOOL loadConstructStats(SBYTE *pConstructData, UDWORD bufferSize);
+extern BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize);
 
 /*Load the Propulsion Types from the file exported from Access*/
-extern BOOL loadPropulsionTypes(SBYTE *pPropTypeData, UDWORD bufferSize);
+extern BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize);
 
 /*Load the propulsion sounds from the file exported from Access*/
-extern BOOL loadPropulsionSounds(SBYTE *pSoundData, UDWORD bufferSize);
+extern BOOL loadPropulsionSounds(char *pSoundData, UDWORD bufferSize);
 
 /*Load the Terrain Table from the file exported from Access*/
-extern BOOL loadTerrainTable(SBYTE *pTerrainTableData, UDWORD bufferSize);
+extern BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize);
 
 /*Load the Special Ability stats from the file exported from Access*/
-extern BOOL loadSpecialAbility(SBYTE *pSAbilityData, UDWORD bufferSize);
+extern BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize);
 
 /* load the IMDs to use for each body-propulsion combination */
-extern BOOL loadBodyPropulsionIMDs(SBYTE *pData, UDWORD bufferSize);
+extern BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize);
 
 /*Load the weapon sounds from the file exported from Access*/
-extern BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize);
+extern BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-extern BOOL loadWeaponModifiers(SBYTE *pWeapModData, UDWORD bufferSize);
+extern BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize);
 /*******************************************************************************
 *		Set stats functions
 *******************************************************************************/

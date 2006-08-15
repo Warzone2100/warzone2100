@@ -71,9 +71,9 @@ extern void	removeDroidBase(DROID *psDel);
 // this only does anything if the naybor list is out of date
 extern void droidGetNaybors(DROID *psDroid);
 
-extern BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize);
-extern BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize);
-//extern BOOL loadDroidPrograms(SBYTE *pProgramData, UDWORD bufferSize);
+extern BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize);
+extern BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize);
+//extern BOOL loadDroidPrograms(car *pProgramData, UDWORD bufferSize);
 
 /*initialise the template build and power points */
 extern void initTemplatePoints(void);

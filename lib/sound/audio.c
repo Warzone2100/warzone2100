@@ -634,7 +634,7 @@ BOOL audio_Update( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_LoadTrackFromFile( signed char szFileName[] )
+BOOL audio_LoadTrackFromFile( char szFileName[] )
 {
 	// if audio not enabled return TRUE to carry on game without audio
 	if ( g_bAudioEnabled == FALSE )

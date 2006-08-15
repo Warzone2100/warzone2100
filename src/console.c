@@ -75,7 +75,7 @@ char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 
 /* MODULE CONSOLE PROTOTYPES */
-void	consolePrintf				( SBYTE *layout, ... );
+void	consolePrintf				( char *layout, ... );
 void	setConsoleSizePos			( UDWORD x, UDWORD y, UDWORD width );
 BOOL	addConsoleMessage			( STRING *messageText, CONSOLE_TEXT_JUSTIFICATION jusType );
 void	updateConsoleMessages		( void );
@@ -716,7 +716,7 @@ UDWORD getConsoleLineInfo(VOID)
 	return consoleVisibleLines;
 }
 
-void	consolePrintf(SBYTE *layout, ...)
+void	consolePrintf(char *layout, ...)
 {
 STRING	consoleString[MAX_CONSOLE_STRING_LENGTH];
 va_list	arguments;		// Formatting info

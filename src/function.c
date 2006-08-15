@@ -42,11 +42,11 @@ UDWORD		numFunctions;
 /*Returns the Function type based on the string - used for reading in data */
 static UDWORD functionType(char* pType);
 static BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore);
-static BOOL loadUpgradeFunction(SBYTE *pData, UBYTE type);
+static BOOL loadUpgradeFunction(char *pData, UBYTE type);
 
 
 //array of functions pointers for each load function
-BOOL (*pLoadFunction[NUMFUNCTIONS])(SBYTE *pData) = //, UDWORD functionType) =
+BOOL (*pLoadFunction[NUMFUNCTIONS])(char *pData) = 
 {
 	loadProduction,
 	loadProductionUpgradeFunction,
@@ -82,10 +82,9 @@ BOOL (*pLoadFunction[NUMFUNCTIONS])(SBYTE *pData) = //, UDWORD functionType) =
 	//loadHQFunction,
 };
 
-//BOOL loadFunctionStats(void)
-BOOL loadFunctionStats(SBYTE *pFunctionData, UDWORD bufferSize)
+BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 {
-	SBYTE		*pStartFunctionData;
+	char		*pStartFunctionData;
 	UDWORD		totalFunctions = 0, i, type;//, player;
 	STRING		FunctionType[MAX_NAME_SIZE];
 	FUNCTION	**pStartList;
@@ -93,7 +92,7 @@ BOOL loadFunctionStats(SBYTE *pFunctionData, UDWORD bufferSize)
 	//keep the start so we release it at the end
 	pStartFunctionData = pFunctionData;
 
-	totalFunctions = numCR((UBYTE *)pFunctionData, bufferSize);
+	totalFunctions = numCR(pFunctionData, bufferSize);
 
 	//allocate storage for the Function pointer array
 	asFunctions = (FUNCTION**) MALLOC(totalFunctions*sizeof(FUNCTION*));
@@ -293,7 +292,7 @@ BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore)
 	return TRUE;
 }
 
-/*BOOL loadFunction(SBYTE *pData, UDWORD functionType)
+/*BOOL loadFunction(char *pData, UDWORD functionType)
 {
 	FUNCTION*				psFunction;
 	STRING					functionName[50];
@@ -337,8 +336,7 @@ BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore)
 	return TRUE;
 }*/
 
-//BOOL loadProduction(SBYTE *pData, UDWORD functionType)
-BOOL loadProduction(SBYTE *pData)
+BOOL loadProduction(char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
 	//UBYTE					propType;
@@ -436,8 +434,7 @@ BOOL loadProduction(SBYTE *pData)
 	return TRUE;
 }
 
-//BOOL loadProductionBoostFunction(SBYTE *pData, UDWORD functionType)
-BOOL loadProductionUpgradeFunction(SBYTE *pData)
+BOOL loadProductionUpgradeFunction(char *pData)
 {
 	PRODUCTION_UPGRADE_FUNCTION*	psFunction;
 	STRING							functionName[MAX_NAME_SIZE];
@@ -504,7 +501,7 @@ BOOL loadProductionUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadResearchFunction(SBYTE *pData)
+BOOL loadResearchFunction(char *pData)
 {
 	RESEARCH_FUNCTION*			psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -537,7 +534,7 @@ BOOL loadResearchFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadReArmFunction(SBYTE *pData)
+BOOL loadReArmFunction(char *pData)
 {
 	REARM_FUNCTION*				psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -571,8 +568,7 @@ BOOL loadReArmFunction(SBYTE *pData)
 }
 
 
-//BOOL loadResearchUpgradeFunction(SBYTE *pData, UDWORD functionType)
-BOOL loadResearchUpgradeFunction(SBYTE *pData)
+BOOL loadResearchUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, RESEARCH_UPGRADE_TYPE))
 	{
@@ -582,7 +578,7 @@ BOOL loadResearchUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadPowerUpgradeFunction(SBYTE *pData)
+BOOL loadPowerUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, POWER_UPGRADE_TYPE))
 	{
@@ -592,7 +588,7 @@ BOOL loadPowerUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadRepairUpgradeFunction(SBYTE *pData)
+BOOL loadRepairUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, REPAIR_UPGRADE_TYPE))
 	{
@@ -602,7 +598,7 @@ BOOL loadRepairUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadDroidRepairUpgradeFunction(SBYTE *pData)
+BOOL loadDroidRepairUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, DROIDREPAIR_UPGRADE_TYPE))
 	{
@@ -612,7 +608,7 @@ BOOL loadDroidRepairUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadDroidECMUpgradeFunction(SBYTE *pData)
+BOOL loadDroidECMUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, DROIDECM_UPGRADE_TYPE))
 	{
@@ -622,7 +618,7 @@ BOOL loadDroidECMUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadDroidConstUpgradeFunction(SBYTE *pData)
+BOOL loadDroidConstUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, DROIDCONST_UPGRADE_TYPE))
 	{
@@ -632,7 +628,7 @@ BOOL loadDroidConstUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadReArmUpgradeFunction(SBYTE *pData)
+BOOL loadReArmUpgradeFunction(char *pData)
 {
 	if (!loadUpgradeFunction(pData, REARM_UPGRADE_TYPE))
 	{
@@ -643,7 +639,7 @@ BOOL loadReArmUpgradeFunction(SBYTE *pData)
 }
 
 //generic load function for upgrade type
-BOOL loadUpgradeFunction(SBYTE *pData, UBYTE type)
+BOOL loadUpgradeFunction(char *pData, UBYTE type)
 {
 	STRING						functionName[MAX_NAME_SIZE];
 	UDWORD						modifier;
@@ -686,7 +682,7 @@ BOOL loadUpgradeFunction(SBYTE *pData, UBYTE type)
 	return TRUE;
 }
 
-BOOL loadDroidBodyUpgradeFunction(SBYTE *pData)
+BOOL loadDroidBodyUpgradeFunction(char *pData)
 {
 	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
 	STRING							functionName[MAX_NAME_SIZE];
@@ -753,7 +749,7 @@ BOOL loadDroidBodyUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadDroidSensorUpgradeFunction(SBYTE *pData)
+BOOL loadDroidSensorUpgradeFunction(char *pData)
 {
 	DROIDSENSOR_UPGRADE_FUNCTION	*psFunction;
 	STRING							functionName[MAX_NAME_SIZE];
@@ -799,7 +795,7 @@ BOOL loadDroidSensorUpgradeFunction(SBYTE *pData)
     return TRUE;
 }
 
-BOOL loadWeaponUpgradeFunction(SBYTE *pData)
+BOOL loadWeaponUpgradeFunction(char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION*	psFunction;
 	STRING						functionName[MAX_NAME_SIZE],
@@ -870,7 +866,7 @@ BOOL loadWeaponUpgradeFunction(SBYTE *pData)
     return TRUE;
 }
 
-BOOL loadStructureUpgradeFunction(SBYTE *pData)
+BOOL loadStructureUpgradeFunction(char *pData)
 {
 	STRUCTURE_UPGRADE_FUNCTION  *psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -919,7 +915,7 @@ BOOL loadStructureUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadWallDefenceUpgradeFunction(SBYTE *pData)
+BOOL loadWallDefenceUpgradeFunction(char *pData)
 {
 	WALLDEFENCE_UPGRADE_FUNCTION  *psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -966,8 +962,7 @@ BOOL loadWallDefenceUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }
 
-//BOOL loadBodyUpgradeFunction(SBYTE *pData, UDWORD functionType)
-/*BOOL loadBodyUpgradeFunction(SBYTE *pData)
+/*BOOL loadBodyUpgradeFunction(char *pData)
 {
 	BODY_UPGRADE_FUNCTION*		psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1003,8 +998,7 @@ BOOL loadWallDefenceUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }*/
 
-//BOOL loadRadarMapFunction(SBYTE *pData, UDWORD functionType)
-/*BOOL loadRadarMapFunction(SBYTE *pData)
+/*BOOL loadRadarMapFunction(char *pData)
 {
 	RADAR_MAP_FUNCTION*			psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1038,8 +1032,7 @@ BOOL loadWallDefenceUpgradeFunction(SBYTE *pData)
 	return TRUE;
 }*/
 
-//BOOL loadPowerGenFunction(SBYTE *pData, UDWORD functionType)
-BOOL loadPowerGenFunction(SBYTE *pData)
+BOOL loadPowerGenFunction(char *pData)
 {
 	POWER_GEN_FUNCTION*			psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1083,7 +1076,7 @@ BOOL loadPowerGenFunction(SBYTE *pData)
 	return TRUE;
 }
 
-BOOL loadResourceFunction(SBYTE *pData)
+BOOL loadResourceFunction(char *pData)
 {
 	RESOURCE_FUNCTION			*psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1117,8 +1110,7 @@ BOOL loadResourceFunction(SBYTE *pData)
 	return TRUE;
 }
 
-//BOOL loadPowerRegFunction(SBYTE *pData, UDWORD functionType)
-/*BOOL loadPowerRegFunction(SBYTE *pData)
+/*BOOL loadPowerRegFunction(char *pData)
 {
 	POWER_REG_FUNCTION*			psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1152,8 +1144,7 @@ BOOL loadResourceFunction(SBYTE *pData)
 	return TRUE;
 }*/
 
-//BOOL loadPowerRelayFunction(SBYTE *pData, UDWORD functionType)
-/*BOOL loadPowerRelayFunction(SBYTE *pData)
+/*BOOL loadPowerRelayFunction(char *pData)
 {
 	POWER_RELAY_FUNCTION*			psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1187,8 +1178,7 @@ BOOL loadResourceFunction(SBYTE *pData)
 	return TRUE;
 }*/
 
-//BOOL loadRepairDroidFunction(SBYTE *pData, UDWORD functionType)
-BOOL loadRepairDroidFunction(SBYTE *pData)
+BOOL loadRepairDroidFunction(char *pData)
 {
 	REPAIR_DROID_FUNCTION*		psFunction;
 	STRING						functionName[MAX_NAME_SIZE];
@@ -1223,8 +1213,7 @@ BOOL loadRepairDroidFunction(SBYTE *pData)
 	return TRUE;
 }
 
-//BOOL loadDefensiveStructFunction(SBYTE *pData, UDWORD functionType)
-/*BOOL loadDefensiveStructFunction(SBYTE *pData)
+/*BOOL loadDefensiveStructFunction(char *pData)
 {
 	//pData;
 	//DBERROR(("Defensive Structure Function is not longer used - \
@@ -1337,7 +1326,6 @@ BOOL loadRepairDroidFunction(SBYTE *pData)
 	return TRUE;
 }*/
 
-//BOOL loadArmourUpgradeFunction(SBYTE *pData, UDWORD functionType)
 /*BOOL loadArmourUpgradeFunction(SBYTE *pData)
 {
 	ARMOUR_UPGRADE_FUNCTION*	psFunction;
@@ -1397,7 +1385,6 @@ BOOL loadRepairDroidFunction(SBYTE *pData)
 	return TRUE;
 }*/
 
-//BOOL loadRepairUpgradeFunction(SBYTE *pData, UDWORD functionType)
 /*BOOL loadRepairUpgradeFunction(SBYTE *pData)
 {
 	REPAIR_UPGRADE_FUNCTION*	psFunction;
@@ -1475,7 +1462,7 @@ BOOL loadRepairDroidFunction(SBYTE *pData)
 
 	return TRUE;
 }*/
-//BOOL loadResistanceUpgradeFunction(SBYTE *pData, UDWORD functionType)
+
 /*BOOL loadResistanceUpgradeFunction(SBYTE *pData)
 {
 	RESISTANCE_UPGRADE_FUNCTION*		psFunction;
@@ -1515,7 +1502,7 @@ BOOL loadRepairDroidFunction(SBYTE *pData)
 }*/
 
 /*loads the corner stat to use for a particular wall stat */
-BOOL loadWallFunction(SBYTE *pData)
+BOOL loadWallFunction(char *pData)
 {
 	WALL_FUNCTION			*psFunction;
 //	UDWORD					i;

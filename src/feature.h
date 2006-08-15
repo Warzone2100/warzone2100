@@ -21,7 +21,7 @@ extern UDWORD			structFeature;
 extern UDWORD			oilResFeature;
 
 /* Load the feature stats */
-extern BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize);
+extern BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize);
 
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);

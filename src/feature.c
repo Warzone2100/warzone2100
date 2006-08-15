@@ -136,9 +136,9 @@ void featureType(FEATURE_STATS* psFeature, char *pType)
 }
 
 /* Load the feature stats */
-BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
+BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 {
-	SBYTE				*pData;
+	char				*pData;
 	FEATURE_STATS		*psFeature;
 	UDWORD				i;
 	STRING				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE],
@@ -148,7 +148,7 @@ BOOL loadFeatureStats(SBYTE *pFeatureData, UDWORD bufferSize)
 	//keep the start so we release it at the end
 	pData = pFeatureData;
 
-	numFeatureStats = numCR((UBYTE *)pFeatureData, bufferSize);
+	numFeatureStats = numCR(pFeatureData, bufferSize);
 
 	asFeatureStats = (FEATURE_STATS *)MALLOC(sizeof(FEATURE_STATS)*
 		numFeatureStats);

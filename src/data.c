@@ -106,7 +106,7 @@ void dataClearSaveFlag(void)
 BOOL bufferSBODYLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SBODY);
-	if (!loadBodyStats((SBYTE*)pBuffer, size))
+	if (!loadBodyStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -132,7 +132,7 @@ void dataReleaseStats(void *pData)
 BOOL bufferSWEAPONLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size, CHEAT_SWEAPON);
-	if (!loadWeaponStats((SBYTE*)pBuffer, size))
+	if (!loadWeaponStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -151,7 +151,7 @@ BOOL bufferSWEAPONLoad(char *pBuffer, UDWORD size, void **ppData)
 BOOL bufferSCONSTRLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SCONSTR);
-	if (!loadConstructStats((SBYTE*)pBuffer, size))
+	if (!loadConstructStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -171,7 +171,7 @@ BOOL bufferSECMLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SECM);
 
-	if (!loadECMStats((SBYTE*)pBuffer, size))
+	if (!loadECMStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -191,7 +191,7 @@ BOOL bufferSPROPLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SPROP);
 
-	if (!loadPropulsionStats((SBYTE*)pBuffer, size))
+	if (!loadPropulsionStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -211,7 +211,7 @@ BOOL bufferSSENSORLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSENSOR);
 
-	if (!loadSensorStats((SBYTE*)pBuffer, size))
+	if (!loadSensorStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -231,7 +231,7 @@ BOOL bufferSREPAIRLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SREPAIR);
 
-	if (!loadRepairStats((SBYTE*)pBuffer, size))
+	if (!loadRepairStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -251,7 +251,7 @@ BOOL bufferSBRAINLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SBRAIN);
 
-	if (!loadBrainStats((SBYTE*)pBuffer, size))
+	if (!loadBrainStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -271,7 +271,7 @@ BOOL bufferSPROPTYPESLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SPROPTY);
 
-	if (!loadPropulsionTypes((SBYTE*)pBuffer, size))
+	if (!loadPropulsionTypes(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -285,7 +285,7 @@ BOOL bufferSPROPTYPESLoad(char *pBuffer, UDWORD size, void **ppData)
 /* Load the propulsion type sound stats */
 BOOL bufferSPROPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadPropulsionSounds((SBYTE*)pBuffer, size))
+	if (!loadPropulsionSounds(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -298,7 +298,7 @@ BOOL bufferSPROPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 /* Load the SSPECABIL stats */
 BOOL bufferSSPECABILLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadSpecialAbility((SBYTE*)pBuffer, size))
+	if (!loadSpecialAbility(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -314,7 +314,7 @@ BOOL bufferSTERRTABLELoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STERRT);
 
-	if (!loadTerrainTable((SBYTE*)pBuffer, size))
+	if (!loadTerrainTable(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -328,7 +328,7 @@ BOOL bufferSTERRTABLELoad(char *pBuffer, UDWORD size, void **ppData)
 /* Load the body/propulsion IMDs stats */
 BOOL bufferSBPIMDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadBodyPropulsionIMDs((SBYTE*)pBuffer, size))
+	if (!loadBodyPropulsionIMDs(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -342,7 +342,7 @@ BOOL bufferSBPIMDLoad(char *pBuffer, UDWORD size, void **ppData)
 /* Load the weapon sound stats */
 BOOL bufferSWEAPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadWeaponSounds((SBYTE*)pBuffer, size))
+	if (!loadWeaponSounds(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -358,7 +358,7 @@ BOOL bufferSWEAPMODLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SWEAPMOD);
 
-	if (!loadWeaponModifiers((SBYTE*)pBuffer, size))
+	if (!loadWeaponModifiers(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -375,7 +375,7 @@ BOOL bufferSTEMPLLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STEMP);
 
-	if (!loadDroidTemplates((SBYTE*)pBuffer, size))
+	if (!loadDroidTemplates(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -398,7 +398,7 @@ BOOL bufferSTEMPWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STEMPWEAP);
 
-	if (!loadDroidWeapons((SBYTE*)pBuffer, size))
+	if (!loadDroidWeapons(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -414,7 +414,7 @@ BOOL bufferSSTRUCTLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRUCT);
 
-	if (!loadStructureStats((SBYTE*)pBuffer, size))
+	if (!loadStructureStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -441,7 +441,7 @@ BOOL bufferSSTRWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRWEAP);
 
-	if (!loadStructureWeapons((SBYTE*)pBuffer, size))
+	if (!loadStructureWeapons(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -457,7 +457,7 @@ BOOL bufferSSTRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STRFUNC);
 
-	if (!loadStructureFunctions((SBYTE*)pBuffer, size))
+	if (!loadStructureFunctions(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -473,7 +473,7 @@ BOOL bufferSSTRMODLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRMOD);
 
-	if (!loadStructureStrengthModifiers((SBYTE*)pBuffer, size))
+	if (!loadStructureStrengthModifiers(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -489,7 +489,7 @@ BOOL bufferSFEATLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_SFEAT);
 
-	if (!loadFeatureStats((SBYTE*)pBuffer, size))
+	if (!loadFeatureStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -511,7 +511,7 @@ BOOL bufferSFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SFUNC);
 
-	if (!loadFunctionStats((SBYTE*)pBuffer, size))
+	if (!loadFunctionStats(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -549,7 +549,7 @@ BOOL bufferRESCHLoad(char *pBuffer, UDWORD size, void **ppData)
         dataRESCHRelease(NULL);
     }
 
-	if (!loadResearch((SBYTE*)pBuffer, size))
+	if (!loadResearch(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -568,7 +568,7 @@ BOOL bufferRPREREQLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RPREREQ);
 
-	if (!loadResearchPR((SBYTE*)pBuffer, size))
+	if (!loadResearchPR(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -583,7 +583,7 @@ BOOL bufferRCOMPREDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRED);
 
-	if (!loadResearchArtefacts((SBYTE*)pBuffer, size, RED_LIST))
+	if (!loadResearchArtefacts(pBuffer, size, RED_LIST))
 	{
 		return FALSE;
 	}
@@ -600,7 +600,7 @@ BOOL bufferRCOMPRESLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRES);
 
-	if (!loadResearchArtefacts((SBYTE*)pBuffer, size, RES_LIST))
+	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
 	{
 		return FALSE;
 	}
@@ -617,7 +617,7 @@ BOOL bufferRSTRREQLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_RSTRREQ);
 
-	if (!loadResearchStructures((SBYTE*)pBuffer, size, REQ_LIST))
+	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
 	{
 		return FALSE;
 	}
@@ -633,7 +633,7 @@ BOOL bufferRSTRREDLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRED);
 
-	if (!loadResearchStructures((SBYTE*)pBuffer, size, RED_LIST))
+	if (!loadResearchStructures(pBuffer, size, RED_LIST))
 	{
 		return FALSE;
 	}
@@ -648,7 +648,7 @@ BOOL bufferRSTRRESLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRES);
 
-	if (!loadResearchStructures((SBYTE*)pBuffer, size, RES_LIST))
+	if (!loadResearchStructures(pBuffer, size, RES_LIST))
 	{
 		return FALSE;
 	}
@@ -665,7 +665,7 @@ BOOL bufferRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_RFUNC);
 
-	if (!loadResearchFunctions((SBYTE*)pBuffer, size))
+	if (!loadResearchFunctions(pBuffer, size))
 	{
 		return FALSE;
 	}
@@ -681,7 +681,7 @@ BOOL bufferSMSGLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	VIEWDATA	*pViewData;
 
-	pViewData = loadViewData((SBYTE*)pBuffer, size);
+	pViewData = loadViewData(pBuffer, size);
 	if (!pViewData)
 	{
 		return FALSE;
@@ -912,7 +912,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 			return FALSE;
 		}
 
-		if (!pie_PNGLoadMem((SBYTE *)pBuffer, psSprite, NULL))
+		if (!pie_PNGLoadMem(pBuffer, psSprite, NULL))
 		{
 			return FALSE;
 		}

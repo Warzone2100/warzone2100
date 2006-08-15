@@ -44,7 +44,7 @@ extern void freeMessages(void);
 extern void releaseAllProxDisp(void);
 
 /*load the view data for the messages from the file exported from the world editor*/
-extern VIEWDATA* loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize);
+extern VIEWDATA* loadViewData(char *pViewMsgData, UDWORD bufferSize);
 /*get the view data that contains the text message pointer passed in */
 extern VIEWDATA* getViewData(STRING *pTextMsg);
 /* Release the viewdata memory */

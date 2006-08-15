@@ -81,11 +81,11 @@ extern BOOL IsPlayerDroidLimitReached(UDWORD PlayerNumber);
 extern BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber);
 extern BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
-extern BOOL loadStructureStats(SBYTE *pStructData, UDWORD bufferSize);
-extern BOOL loadStructureWeapons(SBYTE *pWeaponData, UDWORD bufferSize);
-extern BOOL loadStructureFunctions(SBYTE *pFunctionData, UDWORD bufferSize);
+extern BOOL loadStructureStats(char *pStructData, UDWORD bufferSize);
+extern BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize);
+extern BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-extern BOOL loadStructureStrengthModifiers(SBYTE *pStrengthModData, UDWORD bufferSize);
+extern BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD bufferSize);
 
 extern BOOL	structureStatsShutDown(void);
 

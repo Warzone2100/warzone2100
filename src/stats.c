@@ -303,7 +303,7 @@ BOOL statsShutDown(void)
 
 
 /* Return the number of newlines in a file buffer */
-UDWORD numCR(UBYTE *pFileBuffer, UDWORD fileSize)
+UDWORD numCR(char *pFileBuffer, UDWORD fileSize)
 {
 	UDWORD  lines=0;//, filePos=0;
 
@@ -471,7 +471,7 @@ STRING *getStatName(void * Stat)
 *		Load stats functions
 *******************************************************************************/
 /*Load the weapon stats from the file exported from Access*/
-BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
+BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	WEAPON_STATS	sStats, *psStats, *psStartStats;
@@ -503,7 +503,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumWeapons = numCR((UBYTE *)pWeaponData, bufferSize);
+	NumWeapons = numCR(pWeaponData, bufferSize);
 	if (!statsAllocWeapons(NumWeapons))
 	{
 		return FALSE;
@@ -899,7 +899,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pWeaponData = (SBYTE*)strchr(pWeaponData,'\n') + 1;
+		pWeaponData = strchr(pWeaponData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -910,7 +910,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 /*Load the Armour stats from the file exported from Access*/
 /*BOOL loadArmourStats(void)
 {
-	SBYTE *pArmourData, *pStartArmourData;
+	char *pArmourData, *pStartArmourData;
 	UDWORD fileSize;
 	ARMOUR_STATS	*psStats, *psStartStats;
 	UDWORD	NumArmour = 0,i;
@@ -918,7 +918,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 	BOOL EndOfFile;
 
 
-	if (!loadFile("Armour.txt", (UBYTE**)&pArmourData, &fileSize))
+	if (!loadFile("Armour.txt", &pArmourData, &fileSize))
 	{
 		return FALSE;
 	}
@@ -991,7 +991,7 @@ BOOL loadWeaponStats(SBYTE *pWeaponData, UDWORD bufferSize)
 */
 
 /*Load the Body stats from the file exported from Access*/
-BOOL loadBodyStats(SBYTE *pBodyData, UDWORD bufferSize)
+BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	BODY_STATS		sStats, *psStats, *psStartStats;
@@ -1014,7 +1014,7 @@ BOOL loadBodyStats(SBYTE *pBodyData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumBody = numCR((UBYTE *)pBodyData, bufferSize);
+	NumBody = numCR(pBodyData, bufferSize);
 
 	if (!statsAllocBody(NumBody))
 	{
@@ -1127,7 +1127,7 @@ BOOL loadBodyStats(SBYTE *pBodyData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pBodyData = (SBYTE*)strchr(pBodyData,'\n') + 1;
+		pBodyData = strchr(pBodyData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -1135,7 +1135,7 @@ BOOL loadBodyStats(SBYTE *pBodyData, UDWORD bufferSize)
 }
 
 /*Load the Brain stats from the file exported from Access*/
-BOOL loadBrainStats(SBYTE *pBrainData, UDWORD bufferSize)
+BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 {
 	//SBYTE		*pData;
 	BRAIN_STATS	sStats, *psStats, *psStartStats;
@@ -1156,7 +1156,7 @@ BOOL loadBrainStats(SBYTE *pBrainData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumBrain = numCR((UBYTE *)pBrainData, bufferSize);
+	NumBrain = numCR(pBrainData, bufferSize);
 
 	if (!statsAllocBrain(NumBrain))
 	{
@@ -1231,7 +1231,7 @@ BOOL loadBrainStats(SBYTE *pBrainData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pBrainData = (SBYTE*)strchr(pBrainData,'\n') + 1;
+		pBrainData = strchr(pBrainData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -1241,7 +1241,7 @@ BOOL loadBrainStats(SBYTE *pBrainData, UDWORD bufferSize)
 /*Load the Power stats from the file exported from Access*/
 /*BOOL loadPowerStats(void)
 {
-	SBYTE *pPowerData, *pStartPowerData;
+	char *pPowerData, *pStartPowerData;
 	UDWORD fileSize;
 	POWER_STATS	*psStats, *psStartStats;
 	UDWORD	NumPower = 0,i;
@@ -1249,7 +1249,7 @@ BOOL loadBrainStats(SBYTE *pBrainData, UDWORD bufferSize)
 	BOOL EndOfFile;
 
 
-	if (!loadFile("PowerPlant.txt", (UBYTE**)&pPowerData, &fileSize))
+	if (!loadFile("PowerPlant.txt", &pPowerData, &fileSize))
 	{
 		return FALSE;
 	}
@@ -1365,7 +1365,7 @@ UBYTE	getPropulsionType(STRING *pType)
 }
 
 /*Load the Propulsion stats from the file exported from Access*/
-BOOL loadPropulsionStats(SBYTE *pPropulsionData, UDWORD bufferSize)
+BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 {
 	//SBYTE				*pData;
 	PROPULSION_STATS	sStats, *psStats, *psStartStats;
@@ -1386,7 +1386,7 @@ BOOL loadPropulsionStats(SBYTE *pPropulsionData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumPropulsion = numCR((UBYTE *)pPropulsionData, bufferSize);
+	NumPropulsion = numCR(pPropulsionData, bufferSize);
 	if (!statsAllocPropulsion(NumPropulsion))
 	{
 		return FALSE;
@@ -1470,7 +1470,7 @@ BOOL loadPropulsionStats(SBYTE *pPropulsionData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pPropulsionData = (SBYTE*)strchr(pPropulsionData,'\n') + 1;
+		pPropulsionData = strchr(pPropulsionData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -1505,7 +1505,7 @@ BOOL loadPropulsionStats(SBYTE *pPropulsionData, UDWORD bufferSize)
 }
 
 /*Load the Sensor stats from the file exported from Access*/
-BOOL loadSensorStats(SBYTE *pSensorData, UDWORD bufferSize)
+BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	SENSOR_STATS	sStats, *psStats, *psStartStats;
@@ -1527,7 +1527,7 @@ BOOL loadSensorStats(SBYTE *pSensorData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumSensor = numCR((UBYTE *)pSensorData, bufferSize);
+	NumSensor = numCR(pSensorData, bufferSize);
 	if (!statsAllocSensor(NumSensor))
 	{
 		return FALSE;
@@ -1661,7 +1661,7 @@ BOOL loadSensorStats(SBYTE *pSensorData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pSensorData = (SBYTE*)strchr(pSensorData,'\n') + 1;
+		pSensorData = strchr(pSensorData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -1669,7 +1669,7 @@ BOOL loadSensorStats(SBYTE *pSensorData, UDWORD bufferSize)
 }
 
 /*Load the ECM stats from the file exported from Access*/
-BOOL loadECMStats(SBYTE *pECMData, UDWORD bufferSize)
+BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
 {
 	//SBYTE		*pData;
 	ECM_STATS	sStats, *psStats, *psStartStats;
@@ -1692,7 +1692,7 @@ BOOL loadECMStats(SBYTE *pECMData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumECM = numCR((UBYTE *)pECMData, bufferSize);
+	NumECM = numCR(pECMData, bufferSize);
 
 	if (!statsAllocECM(NumECM))
 	{
@@ -1801,7 +1801,7 @@ BOOL loadECMStats(SBYTE *pECMData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pECMData = (SBYTE*)strchr(pECMData,'\n') + 1;
+		pECMData = strchr(pECMData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -1809,7 +1809,7 @@ BOOL loadECMStats(SBYTE *pECMData, UDWORD bufferSize)
 }
 
 /*Load the Repair stats from the file exported from Access*/
-BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
+BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	REPAIR_STATS	sStats, *psStats, *psStartStats;
@@ -1830,7 +1830,7 @@ BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumRepair = numCR((UBYTE *)pRepairData, bufferSize);
+	NumRepair = numCR(pRepairData, bufferSize);
 
 	if (!statsAllocRepair(NumRepair))
 	{
@@ -1946,7 +1946,7 @@ BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pRepairData = (SBYTE*)strchr(pRepairData,'\n') + 1;
+		pRepairData = strchr(pRepairData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -1954,7 +1954,7 @@ BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
 }
 
 /*Load the Program stats from the file exported from Access*/
-/*BOOL loadProgramStats(SBYTE *pProgramData, UDWORD bufferSize)
+/*BOOL loadProgramStats(char *pProgramData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	PROGRAM_STATS	sStats, *psStats, *psStartStats;
@@ -1974,7 +1974,7 @@ BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumProgram = numCR((UBYTE *)pProgramData, bufferSize);
+	NumProgram = numCR(pProgramData, bufferSize);
 	if (!statsAllocProgram(NumProgram))
 	{
 		return FALSE;
@@ -2017,7 +2017,7 @@ BOOL loadRepairStats(SBYTE *pRepairData, UDWORD bufferSize)
 }*/
 
 /*Load the Construct stats from the file exported from Access*/
-BOOL loadConstructStats(SBYTE *pConstructData, UDWORD bufferSize)
+BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	CONSTRUCT_STATS	sStats, *psStats, *psStartStats;
@@ -2038,7 +2038,7 @@ BOOL loadConstructStats(SBYTE *pConstructData, UDWORD bufferSize)
 	//reserve the start of the data
 	psStartStats = psStats;
 
-	NumConstruct = numCR((UBYTE *)pConstructData, bufferSize);
+	NumConstruct = numCR(pConstructData, bufferSize);
 	if (!statsAllocConstruct(NumConstruct))
 	{
 		return FALSE;
@@ -2129,7 +2129,7 @@ BOOL loadConstructStats(SBYTE *pConstructData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pConstructData = (SBYTE*)strchr(pConstructData,'\n') + 1;
+		pConstructData = strchr(pConstructData,'\n') + 1;
 	}
 //	FREE(pData);
 //	FREE(psStats);
@@ -2138,7 +2138,7 @@ BOOL loadConstructStats(SBYTE *pConstructData, UDWORD bufferSize)
 
 
 /*Load the Propulsion Types from the file exported from Access*/
-BOOL loadPropulsionTypes(SBYTE *pPropTypeData, UDWORD bufferSize)
+BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 {
 	//SBYTE				*pData;
 	PROPULSION_TYPES	*pPropType;
@@ -2148,7 +2148,7 @@ BOOL loadPropulsionTypes(SBYTE *pPropTypeData, UDWORD bufferSize)
 	//keep the start so we can release it at the end
 	//pData = pPropTypeData;
 
-	//NumTypes = numCR((UBYTE *)pPropTypeData, bufferSize);
+	//NumTypes = numCR(pPropTypeData, bufferSize);
 	NumTypes = NUM_PROP_TYPES;
 
 	//allocate storage for the stats
@@ -2225,7 +2225,7 @@ BOOL loadPropulsionTypes(SBYTE *pPropTypeData, UDWORD bufferSize)
 		pPropType->shutDownID = NO_SOUND;
 
 		//increment the pointer to the start of the next record
-		pPropTypeData = (SBYTE*)strchr(pPropTypeData,'\n') + 1;
+		pPropTypeData = strchr(pPropTypeData,'\n') + 1;
 	}
 //	FREE(pData);
 
@@ -2234,7 +2234,7 @@ BOOL loadPropulsionTypes(SBYTE *pPropTypeData, UDWORD bufferSize)
 
 
 /*Load the Terrain Table from the file exported from Access*/
-BOOL loadTerrainTable(SBYTE *pTerrainTableData, UDWORD bufferSize)
+BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	TERRAIN_TABLE	*pTerrainTable;
@@ -2244,7 +2244,7 @@ BOOL loadTerrainTable(SBYTE *pTerrainTableData, UDWORD bufferSize)
 
 	//pData = pTerrainTableData;
 
-	NumEntries = numCR((UBYTE *)pTerrainTableData, bufferSize);
+	NumEntries = numCR(pTerrainTableData, bufferSize);
 
 	//allocate storage for the stats
 	asTerrainTable = (TERRAIN_TABLE *)MALLOC(sizeof(TERRAIN_TABLE) *
@@ -2280,7 +2280,7 @@ BOOL loadTerrainTable(SBYTE *pTerrainTableData, UDWORD bufferSize)
 		//store the speed factor at the correct location from the start
 		storeSpeedFactor(terrainType, propulsionType, speedFactor);
 		//increment the pointer to the start of the next record
-		pTerrainTableData = (SBYTE*)strchr(pTerrainTableData,'\n') + 1;
+		pTerrainTableData = strchr(pTerrainTableData,'\n') + 1;
 	}
 //	FREE(pData);
 
@@ -2303,7 +2303,7 @@ BOOL loadTerrainTable(SBYTE *pTerrainTableData, UDWORD bufferSize)
 }
 
 /*Load the Special Ability stats from the file exported from Access*/
-BOOL loadSpecialAbility(SBYTE *pSAbilityData, UDWORD bufferSize)
+BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	SPECIAL_ABILITY *pSAbility;
@@ -2313,7 +2313,7 @@ BOOL loadSpecialAbility(SBYTE *pSAbilityData, UDWORD bufferSize)
 	//keep the start so we can release it at the end
 	//pData = pSAbilityData;
 
-	NumTypes = numCR((UBYTE *)pSAbilityData, bufferSize);
+	NumTypes = numCR(pSAbilityData, bufferSize);
 
 	//allocate storage for the stats
 	asSpecialAbility = (SPECIAL_ABILITY *)MALLOC(sizeof(SPECIAL_ABILITY)*NumTypes);
@@ -2351,7 +2351,7 @@ BOOL loadSpecialAbility(SBYTE *pSAbilityData, UDWORD bufferSize)
 		strcpy(asSpecialAbility->pName,SAbilityName);
 
 		//increment the pointer to the start of the next record
-		pSAbilityData = (SBYTE*)strchr(pSAbilityData,'\n') + 1;
+		pSAbilityData = strchr(pSAbilityData,'\n') + 1;
 		asSpecialAbility++;
 	}
 //	FREE(pData);
@@ -2362,7 +2362,7 @@ BOOL loadSpecialAbility(SBYTE *pSAbilityData, UDWORD bufferSize)
 }
 
 /* load the IMDs to use for each body-propulsion combination */
-BOOL loadBodyPropulsionIMDs(SBYTE *pData, UDWORD bufferSize)
+BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 {
 //	SBYTE				*pStartData;
 	BODY_STATS			*psBodyStat;
@@ -2403,7 +2403,7 @@ BOOL loadBodyPropulsionIMDs(SBYTE *pData, UDWORD bufferSize)
 
 
 
-	NumTypes = numCR((UBYTE *)pData, bufferSize);
+	NumTypes = numCR(pData, bufferSize);
 
 	for (i=0; i < NumTypes; i++)
 	{
@@ -2514,7 +2514,7 @@ BOOL loadBodyPropulsionIMDs(SBYTE *pData, UDWORD bufferSize)
 		psBodyStat->ppIMDList = startIMDs;
 
 		//increment the pointer to the start of the next record
-		pData = (SBYTE*)strchr(pData,'\n') + 1;
+		pData = strchr(pData,'\n') + 1;
 	}
 //	FREE(pStartData);
 	return(TRUE);
@@ -2553,7 +2553,7 @@ statsGetAudioIDFromString( STRING *szStatName, STRING *szWavName, SDWORD *piWavI
 
 
 /*Load the weapon sounds from the file exported from Access*/
-BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
+BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize)
 {
 //#ifdef PSX
 //#warning "loadWeaponSounds : NOT IMPLEMENTED ON PSX"
@@ -2571,7 +2571,7 @@ BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
 #endif
 	BOOL 	Ok = TRUE;
 
-	NumRecords = numCR((UBYTE *)pSoundData, bufferSize);
+	NumRecords = numCR(pSoundData, bufferSize);
 
 	ASSERT((asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded"));
 
@@ -2626,7 +2626,7 @@ BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
 //			return FALSE;
 		}
 		//increment the pointer to the start of the next record
-		pSoundData = (SBYTE*)strchr(pSoundData,'\n') + 1;
+		pSoundData = strchr(pSoundData,'\n') + 1;
 	}
 
 //	return Ok;
@@ -2635,7 +2635,7 @@ BOOL loadWeaponSounds(SBYTE *pSoundData, UDWORD bufferSize)
 }
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-BOOL loadWeaponModifiers(SBYTE *pWeapModData, UDWORD bufferSize)
+BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize)
 {
 	PROPULSION_TYPE		propInc;
 	WEAPON_EFFECT		effectInc;
@@ -2652,7 +2652,7 @@ BOOL loadWeaponModifiers(SBYTE *pWeapModData, UDWORD bufferSize)
 		}
 	}
 
-	NumRecords = numCR((UBYTE *)pWeapModData, bufferSize);
+	NumRecords = numCR(pWeapModData, bufferSize);
 
 	for (i=0; i < NumRecords; i++)
 	{
@@ -2687,14 +2687,14 @@ BOOL loadWeaponModifiers(SBYTE *pWeapModData, UDWORD bufferSize)
 		asWeaponModifier[effectInc][propInc] = (UWORD)modifier;
 
 		//increment the pointer to the start of the next record
-		pWeapModData = (SBYTE*)strchr(pWeapModData,'\n') + 1;
+		pWeapModData = strchr(pWeapModData,'\n') + 1;
 	}
 
 	return TRUE;
 }
 
 /*Load the propulsion type sounds from the file exported from Access*/
-BOOL loadPropulsionSounds(SBYTE *pPropSoundData, UDWORD bufferSize)
+BOOL loadPropulsionSounds(char *pPropSoundData, UDWORD bufferSize)
 {
 	SDWORD				NumRecords = 0, i, startID, idleID, moveOffID, moveID,
 						hissID, shutDownID, iDum;
@@ -2705,7 +2705,7 @@ BOOL loadPropulsionSounds(SBYTE *pPropSoundData, UDWORD bufferSize)
 	UDWORD				type;
 	PROPULSION_TYPES	*pPropType;
 
-	NumRecords = numCR((UBYTE *)pPropSoundData, bufferSize);
+	NumRecords = numCR(pPropSoundData, bufferSize);
 
 	ASSERT((asPropulsionTypes != NULL,
 		"loadPropulsionSounds: Propulsion type stats not loaded"));
@@ -2764,7 +2764,7 @@ BOOL loadPropulsionSounds(SBYTE *pPropSoundData, UDWORD bufferSize)
 		pPropType->shutDownID = (SWORD)shutDownID;
 
 		//increment the pointer to the start of the next record
-		pPropSoundData = (SBYTE*)strchr(pPropSoundData,'\n') + 1;
+		pPropSoundData = strchr(pPropSoundData,'\n') + 1;
 	}
 
 	return(TRUE);

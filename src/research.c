@@ -252,9 +252,9 @@ BOOL researchInitVars(void)
 
 
 /*Load the research stats from the file exported from Access*/
-BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
+BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 {
-	SBYTE		        *pStartResearchData;
+	char		        *pStartResearchData;
 	RESEARCH	        *pResearch;
     COMP_BASE_STATS     *psComp;
 	SDWORD				structID;
@@ -268,7 +268,7 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 	//reserve the start of the data
 	pStartResearchData = pResearchData;
 
-	researchCount = numCR((UBYTE *)pResearchData, bufferSize);
+	researchCount = numCR(pResearchData, bufferSize);
 	/*asResearch = (RESEARCH *)MALLOC(sizeof(RESEARCH)*researchCount);
 	if (asResearch == NULL)
 	{
@@ -764,9 +764,9 @@ BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize)
 
 
 //Load the pre-requisites for a research list
-BOOL loadResearchPR(SBYTE *pPRData, UDWORD bufferSize)
+BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 {
-	SBYTE				*pStartPRData;
+	char				*pStartPRData;
 	UDWORD				NumToAlloc = 0, i;
 	STRING				ResearchName[MAX_NAME_SIZE], PRName[MAX_NAME_SIZE];
 	//UBYTE				incR, incPR;
@@ -782,7 +782,7 @@ BOOL loadResearchPR(SBYTE *pPRData, UDWORD bufferSize)
 
 	pStartPRData = pPRData;
 
-	NumToAlloc = numCR((UBYTE *)pPRData, bufferSize);
+	NumToAlloc = numCR(pPRData, bufferSize);
 
     //check not going to go over max
     ASSERT((NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!"));
@@ -878,9 +878,9 @@ BOOL loadResearchPR(SBYTE *pPRData, UDWORD bufferSize)
 }
 
 //Load the artefacts for a research list
-BOOL loadResearchArtefacts(SBYTE *pArteData, UDWORD bufferSize, UDWORD listNumber)
+BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber)
 {
-	SBYTE				*pStartArteData;
+	char				*pStartArteData;
 	UDWORD				NumToAlloc = 0, i;
 	STRING				ResearchName[MAX_NAME_SIZE], ArteName[MAX_NAME_SIZE],
 						TypeName[MAX_NAME_SIZE];
@@ -899,7 +899,7 @@ BOOL loadResearchArtefacts(SBYTE *pArteData, UDWORD bufferSize, UDWORD listNumbe
 
 	pStartArteData = pArteData;
 
-	NumToAlloc = numCR((UBYTE *)pArteData, bufferSize);
+	NumToAlloc = numCR(pArteData, bufferSize);
 
     //check not going to go over max
 	switch (listNumber)
@@ -1037,9 +1037,9 @@ BOOL loadResearchArtefacts(SBYTE *pArteData, UDWORD bufferSize, UDWORD listNumbe
 }
 
 //Load the Structures for a research list
-BOOL loadResearchStructures(SBYTE *pStructData, UDWORD bufferSize,UDWORD listNumber)
+BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumber)
 {
-	SBYTE				*pStartStructData;
+	char				*pStartStructData;
 	UDWORD				NumToAlloc = 0, i;
 	STRING				ResearchName[MAX_NAME_SIZE], StructureName[MAX_NAME_SIZE];
 	//UBYTE				incR;
@@ -1064,7 +1064,7 @@ BOOL loadResearchStructures(SBYTE *pStructData, UDWORD bufferSize,UDWORD listNum
 
 	pStartStructData = pStructData;
 
-	NumToAlloc = numCR((UBYTE *)pStructData, bufferSize);
+	NumToAlloc = numCR(pStructData, bufferSize);
 	switch (listNumber)
 	{
 	case REQ_LIST:
@@ -1203,9 +1203,9 @@ BOOL loadResearchStructures(SBYTE *pStructData, UDWORD bufferSize,UDWORD listNum
 }
 
 //Load the pre-requisites for a research list
-BOOL loadResearchFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
+BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 {
-	SBYTE				*pStartFunctionData;
+	char				*pStartFunctionData;
 	UDWORD				NumToAlloc = 0, i;
 	STRING				ResearchName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
 	UDWORD				incR, incF;
@@ -1226,7 +1226,7 @@ BOOL loadResearchFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 
 	pStartFunctionData = pFunctionData;
 
-	NumToAlloc = numCR((UBYTE *)pFunctionData, bufferSize);
+	NumToAlloc = numCR(pFunctionData, bufferSize);
     //check not going to go over max
     ASSERT((NumToAlloc <= MAX_RESEARCH_FUNC, "loadResearchFunctions: too many"));
     numResearchFunc = 0;

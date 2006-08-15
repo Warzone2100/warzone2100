@@ -63,16 +63,16 @@ extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
 //extern BOOL loadResearch(void);
-extern BOOL loadResearch(SBYTE *pResearchData, UDWORD bufferSize);
+extern BOOL loadResearch(char *pResearchData, UDWORD bufferSize);
 //Load the pre-requisites for a research list
-extern BOOL loadResearchPR(SBYTE *pPRData, UDWORD bufferSize);
+extern BOOL loadResearchPR(char *pPRData, UDWORD bufferSize);
 //Load the artefacts for a research list
-extern BOOL loadResearchArtefacts(SBYTE *pArteData, UDWORD bufferSize, 
+extern BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, 
 								  UDWORD listNumber);
 //Load the pre-requisites for a research list
-extern BOOL loadResearchFunctions(SBYTE *pFunctionData, UDWORD bufferSize);
+extern BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize);
 //Load the Structures for a research list
-extern BOOL loadResearchStructures(SBYTE *pStructData, UDWORD bufferSize,
+extern BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,
 								   UDWORD listNumber);
 
 /*function to check what can be researched for a particular player at any one 

@@ -522,9 +522,8 @@ BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 }
 
 /*load the view data for the messages from the file */
-VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
+VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 {
-	//SBYTE				*pData;
 	UDWORD				i, id, dataInc, seqInc, numFrames, numData, count, count2;
 	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
@@ -538,7 +537,7 @@ VIEWDATA *loadViewData(SBYTE *pViewMsgData, UDWORD bufferSize)
 	//keep the start so we release it at the end
 	//pData = pViewMsgData;
 
-	numData = numCR((UBYTE *)pViewMsgData, bufferSize);
+	numData = numCR(pViewMsgData, bufferSize);
 	if (numData > UBYTE_MAX)
 	{
 		DBERROR(("loadViewData: Didn't expect 256 viewData messages!"));

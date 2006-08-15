@@ -2815,9 +2815,9 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 }
 
 /* load the Droid stats for the components from the Access database */
-BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
+BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 {
-	SBYTE				*pStartDroidData;
+	char				*pStartDroidData;
         int cnt;
 	UDWORD				NumDroids = 0, i, player;
 	STRING				componentName[MAX_NAME_SIZE];
@@ -2847,7 +2847,7 @@ BOOL loadDroidTemplates(SBYTE *pDroidData, UDWORD bufferSize)
 
 	pStartDroidData = pDroidData;
 
-	NumDroids = numCR((UBYTE *)pDroidData, bufferSize);
+	NumDroids = numCR(pDroidData, bufferSize);
 
 	for (i=0; i < NumDroids; i++)
 	{
@@ -3502,9 +3502,9 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 }
 
 //Load the weapons assigned to Droids in the Access database
-BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
+BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 {
-	SBYTE				*pStartWeaponData;
+	char				*pStartWeaponData;
 	UDWORD				NumWeapons = 0, i, player;
 	STRING				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	DROID_TEMPLATE		*pTemplate;
@@ -3527,7 +3527,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 
 	pStartWeaponData = pWeaponData;
 
-	NumWeapons = numCR((UBYTE *)pWeaponData, bufferSize);
+	NumWeapons = numCR(pWeaponData, bufferSize);
 
 	for (i=0; i < NumWeapons; i++)
 	{
@@ -3645,9 +3645,9 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 }
 
 //Load the programs assigned to Droids in the Access database
-/*BOOL loadDroidPrograms(SBYTE *pProgramData, UDWORD bufferSize)
+/*BOOL loadDroidPrograms(char *pProgramData, UDWORD bufferSize)
 {
-	SBYTE				*pStartProgramData;
+	char				*pStartProgramData;
 	UDWORD				NumPrograms = 0, i, incP, player;
 	STRING				ProgramName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	DROID_TEMPLATE		*pTemplate;
@@ -3672,7 +3672,7 @@ BOOL loadDroidWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 
 	pStartProgramData = pProgramData;
 
-	NumPrograms = numCR((UBYTE *)pProgramData, bufferSize);
+	NumPrograms = numCR(pProgramData, bufferSize);
 
 	for (i=0; i < NumPrograms; i++)
 	{

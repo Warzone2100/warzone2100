@@ -97,7 +97,7 @@ iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
 	STRING *pFileData,*pFileDataStart;
 	UDWORD FileSize;
 	BOOL res;
-	SBYTE path[MAX_FILE_PATH];
+	char path[MAX_FILE_PATH];
 	UDWORD *tp;
 	UDWORD tt;
 

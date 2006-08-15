@@ -15,9 +15,6 @@
 #define RELEASE(x) if ((x) != NULL) {(void)(x)->lpVtbl->Release(x); (x) = NULL;}
 
 #include <stdio.h>
-#ifndef _MSC_VER		//um.. can't find this in win32?  ..Bah, compiler specific crud.
-#include <stdint.h>
-#endif
 #include <string.h>
 #include <SDL/SDL.h>
 #ifdef _MSC_VER

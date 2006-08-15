@@ -739,9 +739,9 @@ void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
 #endif
 
 /* load the Structure stats from the Access database */
-BOOL loadStructureStats(SBYTE *pStructData, UDWORD bufferSize)
+BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 {
-	SBYTE				*pData;
+	char				*pData;
 	UDWORD				NumStructures = 0, i, inc, player, numWeaps, weapSlots;
 	STRING				StructureName[MAX_NAME_SIZE], foundation[MAX_NAME_SIZE],
 						type[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
@@ -785,7 +785,7 @@ BOOL loadStructureStats(SBYTE *pStructData, UDWORD bufferSize)
 	//keep the start so we release it at the end
 	pData = pStructData;
 
-	NumStructures = numCR((UBYTE *)pStructData, bufferSize);
+	NumStructures = numCR(pStructData, bufferSize);
 
 //#ifdef DEMO
 //	asStructureStats = (STRUCTURE_STATS *)MALLOC(sizeof(STRUCTURE_STATS)*
@@ -1165,9 +1165,9 @@ void setCurrentStructQuantity(BOOL displayError)
 }
 
 //Load the weapons assigned to Structure in the Access database
-BOOL loadStructureWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
+BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 {
-	SBYTE				*pStartWeaponData;
+	char				*pStartWeaponData;
 	UDWORD				NumToAlloc = 0, i,incS, incW;
 	STRING				StructureName[MAX_NAME_SIZE], WeaponName[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
@@ -1182,7 +1182,7 @@ BOOL loadStructureWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 
 	pStartWeaponData = pWeaponData;
 
-	NumToAlloc = numCR((UBYTE *)pWeaponData, bufferSize);
+	NumToAlloc = numCR(pWeaponData, bufferSize);
 
 	for (i=0; i < NumToAlloc; i++)
 	{
@@ -1267,9 +1267,9 @@ BOOL loadStructureWeapons(SBYTE *pWeaponData, UDWORD bufferSize)
 }
 
 //Load the programs assigned to Droids in the Access database
-BOOL loadStructureFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
+BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 {
-	SBYTE				*pStartFunctionData;
+	char				*pStartFunctionData;
 	UDWORD				NumToAlloc = 0,i,incS, incF;
 	STRING				StructureName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
@@ -1282,7 +1282,7 @@ BOOL loadStructureFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 
 	pStartFunctionData = pFunctionData;
 
-	NumToAlloc = numCR((UBYTE *)pFunctionData, bufferSize);
+	NumToAlloc = numCR(pFunctionData, bufferSize);
 
 	for (i=0; i < NumToAlloc; i++)
 	{
@@ -1406,7 +1406,7 @@ BOOL loadStructureFunctions(SBYTE *pFunctionData, UDWORD bufferSize)
 }
 
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-BOOL loadStructureStrengthModifiers(SBYTE *pStrengthModData, UDWORD bufferSize)
+BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD bufferSize)
 {
 	STRUCT_STRENGTH		strengthInc;
 	WEAPON_EFFECT		effectInc;
@@ -1424,7 +1424,7 @@ BOOL loadStructureStrengthModifiers(SBYTE *pStrengthModData, UDWORD bufferSize)
 		}
 	}
 
-	NumRecords = numCR((UBYTE *)pStrengthModData, bufferSize);
+	NumRecords = numCR(pStrengthModData, bufferSize);
 
 	for (i=0; i < NumRecords; i++)
 	{
