@@ -202,6 +202,50 @@ BOOL interpInitialise(void)
 	return TRUE;
 }
 
+//reset local vars
+BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
+{
+	
+	SDWORD		i;
+
+	if(EventIndex >= psCode->numEvents) 
+	{
+		debug(LOG_ERROR, "resetLocalVars: wrong event index: %d", EventIndex);
+		return FALSE;
+	}
+
+	for(i=0; i < psCode->numLocalVars[EventIndex]; i++)
+	{
+		//Initialize main value
+		if(psCode->ppsLocalVarVal[EventIndex][i].type == VAL_STRING)
+		{
+			debug(LOG_ERROR , "resetLocalVars: String type is not implemented");
+			psCode->ppsLocalVarVal[EventIndex][i].v.sval = (char*)MALLOC(255);	//MAXSTRLEN
+
+			strcpy(psCode->ppsLocalVarVal[EventIndex][i].v.sval,"\0");
+		}
+		else
+		{
+			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
+		}
+
+		/* only group (!) must be re-created each time */
+		//if (psCode->ppsLocalVarVal[EventIndex][i].type == ST_GROUP)
+		//{
+		//	//DB_INTERP(("resetLocalVars -  created\n"));
+		//
+		//	if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
+		//	{
+		//		debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");
+		//		return FALSE;
+		//	}
+		//}
+	}
+
+	//debug(LOG_SCRIPT, "Reset local vars for event %d", EventIndex);
+	return TRUE;
+}
+
 /* Run a compiled script */
 BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
 {
@@ -217,7 +261,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	SDWORD			instructionCount = 0;
 
 	UDWORD		CurEvent;
-	BOOL		bStop;
+	BOOL		bStop,bEvent;
 
 	ASSERT((PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
 		"interpRunScript: invalid context pointer"));
@@ -227,6 +271,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	if (bInterpRunning)
 	{
+		debug(LOG_ERROR,"interpRunScript: interpreter already running"
+			"                 - callback being called from within a script function?");
 		ASSERT((FALSE,
 			"interpRunScript: interpreter already running"
 			"                 - callback being called from within a script function?"));
@@ -249,12 +295,15 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	numGlobals = psProg->numGlobals;
 	psGlobals = psContext->psGlobals;
 
+	bEvent = FALSE;
+
 	// Find the code range
 	switch (runType)
 	{
 	case IRT_TRIGGER:
 		if (index > psProg->numTriggers)
 		{
+			debug(LOG_ERROR,"interpRunScript: trigger index out of range");
 			ASSERT((FALSE, "interpRunScript: trigger index out of range"));
 			return FALSE;
 		}
@@ -265,14 +314,18 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	case IRT_EVENT:
 		if (index > psProg->numEvents)
 		{
+			debug(LOG_ERROR,"interpRunScript: trigger index out of range");
 			ASSERT((FALSE, "interpRunScript: trigger index out of range"));
 			return FALSE;
 		}
 		pCodeBase = psProg->pCode + psProg->pEventTab[index];
 		pCodeStart = pCodeBase + offset;
 		pCodeEnd  = psProg->pCode + psProg->pEventTab[index+1];
+
+		bEvent = TRUE; //remember it's an event
 		break;
 	default:
+		debug(LOG_ERROR,"interpRunScript: unknown run type");
 		ASSERT((FALSE, "interpRunScript: unknown run type"));
 		return FALSE;
 	}
@@ -292,6 +345,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		{
 			if (instructionCount > INTERP_MAXINSTRUCTIONS)
 			{
+				debug( LOG_ERROR, "interpRunScript: max instruction count exceeded - infinite loop ?" );
 				ASSERT((FALSE,
 					"interpRunScript: max instruction count exceeded - infinite loop ?"));
 				goto exit_with_error;
@@ -305,14 +359,17 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			{
 				/* Custom function call */
 				case OP_FUNC:
-					debug( LOG_SCRIPT, "OP_FUNC" );
-					if(!RetStackRemember(CurEvent, (UDWORD)(ip + 2)))	//Remember where to jump back later
+					//debug( LOG_SCRIPT, "-OP_FUNC" );
+					//debug( LOG_SCRIPT, "OP_FUNC: remember event %d, ip=%d", CurEvent, (ip + 2) );
+					if(!RetStackRemember(CurEvent, (ip + 2)))	//Remember where to jump back later
 					{
 						debug( LOG_ERROR, "interpRunScript() - RetStackRemember() failed.");
 						return FALSE;
 					}
 
 					CurEvent = *(ip+1);			//Current event = event to jump to
+
+					
 
 					if (CurEvent > psProg->numEvents)
 					{
@@ -328,7 +385,95 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 					ip = pCodeStart;				//Start at the beginning of the new event
 
+					//debug( LOG_SCRIPT, "-OP_FUNC: jumped to event %d; ip=%d, numLocalVars: %d", CurEvent, ip, psContext->psCode->numLocalVars[CurEvent] );
+
+					//debug( LOG_SCRIPT, "-END OP_FUNC" );
+
 					break;
+
+				//handle local variables
+			case OP_PUSHLOCAL:
+
+				//debug( LOG_SCRIPT, "OP_PUSHLOCAL");
+				//debug( LOG_SCRIPT, "OP_PUSHLOCAL, (CurEvent=%d, data =%d) num loc vars: %d; pushing: %d", CurEvent, data, psContext->psCode->numLocalVars[CurEvent], psContext->psCode->ppsLocalVarVal[CurEvent][data].v.ival);
+				
+				if (data >= psContext->psCode->numLocalVars[CurEvent])
+				{
+					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCAL: variable index out of range");
+					ASSERT((FALSE, "interpRunScript: OP_PUSHLOCAL: variable index out of range"));
+					goto exit_with_error;
+				}
+
+				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 2");
+				//debug(LOG_SCRIPT, "OP_PUSHLOCAL type: %d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type);
+				
+				if (!stackPush( &(psContext->psCode->ppsLocalVarVal[CurEvent][data]) ))
+				{
+					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCAL: push failed");
+					goto exit_with_error;
+				}
+
+				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 3");
+				
+				ip += 1;//aOpSize[opcode];
+				break;
+			case OP_POPLOCAL:
+								
+				//debug( LOG_SCRIPT, "OP_POPLOCAL, event index: '%d', data: '%d'", CurEvent, data);
+				//debug( LOG_SCRIPT, "OP_POPLOCAL, numLocalVars: '%d'", psContext->psCode->numLocalVars[CurEvent]);
+
+				if (data >= psContext->psCode->numLocalVars[CurEvent])
+				{
+					debug(LOG_ERROR, "interpRunScript: OP_POPLOCAL: variable index out of range");
+					ASSERT((FALSE, "interpRunScript: variable index out of range"));
+					goto exit_with_error;
+				}
+
+				//debug( LOG_SCRIPT, "OP_POPLOCAL 2");
+				//DbgMsg("OP_POPLOCAL type: %d, CurEvent=%d, data=%d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type, CurEvent, data);
+
+				if (!stackPopType( &(psContext->psCode->ppsLocalVarVal[CurEvent][data]) ))
+				{
+					debug(LOG_ERROR, "interpRunScript: OP_POPLOCAL: pop failed");
+					goto exit_with_error;
+				}
+				//debug(LOG_SCRIPT, "OP_POPLOCAL: type=%d, val=%d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type, psContext->psCode->ppsLocalVarVal[CurEvent][data].v.ival);
+
+				//debug( LOG_SCRIPT, "OP_POPLOCAL 3");
+				ip += 1; //aOpSize[opcode];
+
+				break;
+
+			case OP_PUSHLOCALREF:
+
+				// The type of the variable is stored in with the opcode
+				sVal.type = (*ip) & OPCODE_DATAMASK;
+
+				/* get local var index */
+				data = *(ip + 1);	
+
+				if (data >= psContext->psCode->numLocalVars[CurEvent])
+				{
+					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCALREF: variable index out of range");
+					ASSERT((FALSE, "interpRunScript: OP_PUSHLOCALREF: variable index out of range"));
+					goto exit_with_error;
+				}
+				/* get local variable */
+				psVar = &(psContext->psCode->ppsLocalVarVal[CurEvent][data]);
+
+				sVal.v.oval = &(psVar->v.ival);
+
+				TRCPRINTF(("PUSHREF     "));
+				TRCPRINTVAL(&sVal);
+				TRCPRINTF(("\n"));
+
+				if (!stackPush(&sVal))
+				{
+					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCALREF: push failed");
+					goto exit_with_error;
+				}
+				ip += 2;
+				break;
 
 			case OP_PUSH:
 				// The type of the value is stored in with the opcode
@@ -341,6 +486,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackPush(&sVal))
 				{
 					// Eeerk, out of memory
+					debug( LOG_ERROR, "interpRunScript: out of memory!" );
 					ASSERT((FALSE, "interpRunScript: out of memory!"));
 					goto exit_with_error;
 				}
@@ -358,6 +504,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackPush(&sVal))
 				{
 					// Eeerk, out of memory
+					debug( LOG_ERROR, "interpRunScript: out of memory!" );
 					ASSERT((FALSE, "interpRunScript: out of memory!"));
 					goto exit_with_error;
 				}
@@ -367,6 +514,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTF(("POP\n"));
 				if (!stackPop(&sVal))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do stack pop" );
 					ASSERT((FALSE, "interpRunScript: could not do stack pop"));
 					goto exit_with_error;
 				}
@@ -376,6 +524,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTMATHSOP(data);
 				if (!stackBinaryOp((OPCODE)data))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do binary op" );
 					ASSERT((FALSE, "interpRunScript: could not do binary op"));
 					goto exit_with_error;
 				}
@@ -387,6 +536,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTMATHSOP(data);
 				if (!stackUnaryOp((OPCODE)data))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do unary op" );
 					ASSERT((FALSE, "interpRunScript: could not do unary op"));
 					goto exit_with_error;
 				}
@@ -398,11 +548,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTF(("PUSHGLOBAL  %d\n", data));
 				if (data >= numGlobals)
 				{
+					debug( LOG_ERROR, "interpRunScript: variable index out of range" );
 					ASSERT((FALSE, "interpRunScript: variable index out of range"));
 					goto exit_with_error;
 				}
 				if (!stackPush(interpGetVarData(psGlobals, data)))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do stack push" );
 					ASSERT((FALSE, "interpRunScript: could not do stack push"));
 					goto exit_with_error;
 				}
@@ -414,11 +566,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTF(("\n"));
 				if (data >= numGlobals)
 				{
+					debug( LOG_ERROR, "interpRunScript: variable index out of range" );
 					ASSERT((FALSE, "interpRunScript: variable index out of range"));
 					goto exit_with_error;
 				}
 				if (!stackPopType(interpGetVarData(psGlobals, data)))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do stack pop" );
 					ASSERT((FALSE, "interpRunScript: could not do stack pop"));
 					goto exit_with_error;
 				}
@@ -447,12 +601,14 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTF(("PUSHARRAYGLOBAL  "));
 				if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not get array var data, CurEvent=%d", CurEvent );
 					ASSERT((FALSE, "interpRunScript: could not get array var data"));
 					goto exit_with_error;
 				}
 				TRCPRINTF(("\n"));
 				if (!stackPush(psVar))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do stack push" );
 					ASSERT((FALSE, "interpRunScript: could not do stack push"));
 					goto exit_with_error;
 				}
@@ -489,6 +645,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTF(("POPARRAYGLOBAL   "));
 				if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not get array var data" );
 					ASSERT((FALSE, "interpRunScript: could not get array var data"));
 					goto exit_with_error;
 				}
@@ -496,6 +653,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				TRCPRINTF(("\n"));
 				if (!stackPopType(psVar))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do pop stack of type" );
 					ASSERT((FALSE, "interpRunScript: could not do pop stack of type"));
 					goto exit_with_error;
 				}
@@ -505,6 +663,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 						(SWORD)data, ip - psProg->pCode + (SWORD)data));
 				if (!stackPop(&sVal))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do pop of stack" );
 					ASSERT((FALSE, "interpRunScript: could not do pop of stack"));
 					goto exit_with_error;
 				}
@@ -515,6 +674,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					ip += (SWORD)data;
 					if (ip < pCodeStart || ip > pCodeEnd)
 					{
+						debug( LOG_ERROR, "interpRunScript: jump out of range" );
 						ASSERT((FALSE, "interpRunScript: jump out of range"));
 						goto exit_with_error;
 					}
@@ -532,6 +692,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ip += (SWORD)data;
 				if (ip < pCodeStart || ip > pCodeEnd)
 				{
+					debug( LOG_ERROR, "interpRunScript: jump out of range" );
 					ASSERT((FALSE, "interpRunScript: jump out of range"));
 					goto exit_with_error;
 				}
@@ -543,6 +704,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				scriptFunc = (SCRIPT_FUNC)*(ip+1);
 				if (!scriptFunc())
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do func" );
 					ASSERT((FALSE, "interpRunScript: could not do func"));
 					goto exit_with_error;
 				}
@@ -555,6 +717,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				scriptVarFunc = (SCRIPT_VARFUNC)*(ip+1);
 				if (!scriptVarFunc(data))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not do var func" );
 					ASSERT((FALSE, "interpRunScript: could not do var func"));
 					goto exit_with_error;
 				}
@@ -572,6 +735,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				// tell the event system to reschedule this event
 				if (!eventAddPauseTrigger(psContext, index, ip - pCodeBase, data))
 				{
+					debug( LOG_ERROR, "interpRunScript: could not add pause trigger" );
 					ASSERT((FALSE, "interpRunScript: could not add pause trigger"));
 					goto exit_with_error;
 				}
@@ -579,6 +743,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ip = pCodeEnd;
 				break;
 			default:
+				debug(LOG_ERROR, "interpRunScript: unknown opcode");
 				ASSERT((FALSE, "interpRunScript: unknown opcode"));
 				goto exit_with_error;
 				break;
@@ -587,18 +752,26 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 		else	//End of the event reached, see if we have to jump back to the caller function or just exit
 		{
+			//debug(LOG_SCRIPT, "End of event reached");
 
 			//reset local vars
-			//if(!resetLocalVars(psProg, CurEvent))
-			//	goto exit_with_error;
+			if(!resetLocalVars(psProg, CurEvent))
+			{
+				debug( LOG_ERROR, "interpRunScript: could not reset local vars for event %d", CurEvent );
+				goto exit_with_error;
+			}
 
 			if(!IsRetStackEmpty())		//There was a caller function before this one
 			{
-				if (!PopRetStack((UDWORD *)&ip))		//Pop return address
+				//debug(LOG_SCRIPT, "GetCallDepth = %d", GetCallDepth());
+
+				if(!PopRetStack((UDWORD *)&ip))		//Pop return address
 				{
 					debug( LOG_ERROR, "interpRunScript() - PopRetStack(): failed to pop return adress.");
 					return FALSE;
 				}
+
+				//debug(LOG_SCRIPT, "Return adress = %d", ip);
 
  				if(!PopRetStack(&CurEvent))	//Pop event index
 				{
@@ -606,7 +779,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					return FALSE;
 				}
 
-				debug( LOG_SCRIPT, "RETURN" );
+				//debug( LOG_SCRIPT, "RETURNED TO CALLER EVENT %d", CurEvent );
 
 				//Set new boundries
 				//--------------------------
@@ -619,9 +792,14 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			}
 			else
 			{
+				//debug( LOG_SCRIPT, " *** CALL STACK EMPTY ***" );
+
 				//reset local vars
-				//if(!resetLocalVars(psProg, index))
-				//	goto exit_with_error;
+				if(!resetLocalVars(psProg, index))
+				{
+					debug( LOG_ERROR, "interpRunScript: could not reset local vars" );
+					goto exit_with_error;
+				}
 
 				bStop = TRUE;		//Stop execution of this event here, no more calling functions stored
 			}
@@ -640,6 +818,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 exit_with_error:
 	// Deal with the script crashing or running out of memory
+	debug(LOG_ERROR,"interpRunScript: *** ERROR EXIT *** (CurEvent=%d)", CurEvent);
 	TRCPRINTF(("*** ERROR EXIT ***\n"));
 	bInterpRunning = FALSE;
 	return FALSE;
@@ -753,6 +932,8 @@ UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address)
 	retStack[retStackPos - 1] = EvTrigIndex;	//First store event index
 	retStack[retStackPos] = address;			//current ip
 
+	//debug( LOG_SCRIPT, "RetStackRemember: ip=%d, event=%d", address, EvTrigIndex);
+
 	return TRUE;
 }
 
@@ -764,9 +945,9 @@ BOOL IsRetStackEmpty()
 
 BOOL PopRetStack(UDWORD  *psVal)
 {
-	//DbgMsg("Popping: %d", retStackPos);
 	if(retStackPos < 0)
 	{
+		debug( LOG_ERROR, "PopRetStack: retStackPos < 0");
 		return FALSE;
 	}
 
@@ -774,7 +955,7 @@ BOOL PopRetStack(UDWORD  *psVal)
 	
 	retStackPos = retStackPos - 1;
 
-	//DbgMsg("Popped: %d, %d", retStackPos, *psVal);
+	//debug( LOG_SCRIPT, "PopRetStack: val=%d", *psVal);
 
 	return TRUE;
 }

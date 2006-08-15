@@ -306,5 +306,8 @@ extern BOOL scriptSetCode(CODE_BLOCK  *psBlock);	// The code block
 /* Look up a function symbol */
 extern BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym);
 
+/* Look up an in-script custom function symbol */
+extern BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym);
+
 #endif
 

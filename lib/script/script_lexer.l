@@ -44,6 +44,8 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 {
 	BOOL	object;
 
+	//debug( LOG_SCRIPT, "scriptGetVarToken" );
+
 	// See if this is an object pointer
 	if (!asScrTypeTab || psVar->type < VAL_USERTYPESTART)
 	{
@@ -118,6 +120,7 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 				break;
 			case VAL_INT:
 //			case VAL_FLOAT:
+				//debug( LOG_SCRIPT, "scriptGetVarToken: VAL_INT (NUM_VAR)" );
 				return NUM_VAR;
 				break;
 			default:
@@ -126,12 +129,16 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 			}
 		}
 	}
+
+	//debug( LOG_SCRIPT, "END scriptGetVarToken" );
 }
 
 /* Get the token type for a constant symbol */
 SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 {
 	BOOL	object;
+
+	//debug( LOG_SCRIPT, "scriptGetConstToken" );
 
 	// See if this is an object constant
 	if (!asScrTypeTab || psConst->type < VAL_USERTYPESTART)
@@ -163,12 +170,16 @@ SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 		}
 		break;
 	}
+
+	//debug( LOG_SCRIPT, "END scriptGetConstToken" );
 }
 
 /* Get the token type for a function symbol */
 SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 {
 	BOOL	object;
+
+	//debug( LOG_SCRIPT, "scriptGetFuncToken" );
 
 	// See if this is an object pointer
 	if (!asScrTypeTab || psFunc->type < VAL_USERTYPESTART)
@@ -203,6 +214,8 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 			break;
 		}
 	}
+
+	//debug( LOG_SCRIPT, "END scriptGetFuncToken" );
 }
 
 
@@ -211,16 +224,16 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 {
 	BOOL	object;
 
-	debug( LOG_SCRIPT, "scriptGetCustomFuncToken" );
+	//debug( LOG_SCRIPT, "scriptGetCustomFuncToken" );
 
 	// See if this is an object pointer
 	object = asScrTypeTab[psFunc->retType - VAL_USERTYPESTART].accessType == AT_OBJECT;
 
-	debug( LOG_SCRIPT, "scriptGetCustomFuncToken 3" );
+	//debug( LOG_SCRIPT, "scriptGetCustomFuncToken 3" );
 
 	if (object)
 	{
-		debug( LOG_SCRIPT, "scriptGetCustomFuncToken: object" );
+		//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: object" );
 		return OBJ_FUNC_CUST;
 	}
 	else
@@ -228,30 +241,30 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 		switch (psFunc->retType)
 		{
 		case VAL_BOOL:
-			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_BOOL" );
+			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_BOOL" );
 			return BOOL_FUNC_CUST;
 			break;
 		case VAL_INT:
 //		case VAL_FLOAT:
-			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_INT" );
+			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_INT" );
 			return NUM_FUNC_CUST;
 			break;
 		case VAL_STRING:		/* <NEW> */
-			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_STRING" );
+			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_STRING" );
 			return STRING_FUNC_CUST;
 			break;
 		case VAL_VOID:
-			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: void function" );
+			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: void function" );
 			return VOID_FUNC_CUST;
 			break;
 		default:
-			debug( LOG_SCRIPT, "scriptGetCustomFuncToken: default" );
+			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: default" );
 			return USER_FUNC_CUST;
 			break;
 		}
 	}
 
-	debug( LOG_SCRIPT, "END scriptGetCustomFuncToken" );
+	//debug( LOG_SCRIPT, "END scriptGetCustomFuncToken" );
 }
 
 
@@ -281,10 +294,11 @@ ref					return REF;
 
 	/* new stuff */
 function				return FUNCTION;
-return					return RETURN;
+return					{ return RET; }
 
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 private					{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
+local					{ scr_lval.stype = ST_LOCAL; return STORAGE; }
 while					return WHILE;
 if						return IF;
 else					return ELSE;
@@ -333,6 +347,8 @@ NOT						return _NOT;
 
 	/* Match identifiers */
 [a-zA-Z][0-9_a-zA-Z]*		{
+								//debug( LOG_SCRIPT, "FLEX: looking up '%s'", scr_text );
+
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
 								{
@@ -361,7 +377,7 @@ NOT						return _NOT;
 								/* See if this identifier has been defined as a custom function */
 								else if (scriptLookUpCustomFunction(scr_text, &scr_lval.eSymbol))
 								{
-									debug( LOG_SCRIPT, "scriptLookUpCustomFunction: '%s' - custom function", scr_text );
+									//debug( LOG_SCRIPT, "scriptLookUpCustomFunction: '%s' - custom function", scr_text );
 									return scriptGetCustomFuncToken(scr_lval.eSymbol);
 								}
 
@@ -382,6 +398,8 @@ NOT						return _NOT;
 								}
 								else
 								{
+									//debug( LOG_SCRIPT, "FLEX: '%s' is an ident", scr_text );
+
 									strcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
@@ -440,7 +458,7 @@ int scr_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reached end of file in a comment"));
+		DBERROR(("Warning: reched end of file in a comment"));
 	}
 	return 1;
 }

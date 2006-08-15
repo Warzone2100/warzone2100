@@ -103,6 +103,23 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 		}
 		FREE(psCode->psArrayDebug);
 	}
+
+	/* Free local vars */
+	for(i=0; i < psCode->numEvents; i++)
+	{
+		FREE(psCode->ppsLocalVars[i]);
+		FREE(psCode->ppsLocalVarVal[i]);
+
+		psCode->numParams = 0;
+		psCode->numLocalVars = 0;
+
+		FREE(psCode->numParams);
+		FREE(psCode->numLocalVars);
+	}
+
+	FREE(psCode->ppsLocalVars);
+	FREE(psCode->ppsLocalVarVal);
+
 	FREE(psCode);
 }
 

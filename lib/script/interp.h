@@ -105,6 +105,9 @@ typedef enum _op_code
 	OP_LESS,
 
 	OP_FUNC,		//custom (in-script) function call
+	OP_POPLOCAL,	//local var
+	OP_PUSHLOCAL,
+	OP_PUSHLOCALREF,
 } OPCODE;
 
 /* How far the opcode is shifted up a UDWORD to allow other data to be
@@ -135,6 +138,7 @@ typedef enum _storage_type
 	ST_PRIVATE,		// Private variable
 	ST_OBJECT,		// A value stored in an objects data space.
 	ST_EXTERN,		// An external value accessed by function call
+	ST_LOCAL,		// A local variable
 } enum_STORAGE_TYPE;
 
 typedef UBYTE STORAGE_TYPE;
@@ -208,6 +212,14 @@ typedef struct _script_code
 	UWORD			numArrays;		// the number of arrays in the program
 	UDWORD			arraySize;		// the number of elements in all the defined arrays
 	INTERP_TYPE		*pGlobals;		// Types of the global variables
+
+
+	INTERP_TYPE		**ppsLocalVars;		//storage for local vars
+	UDWORD			*numLocalVars;		//number of local vars each event has
+	INTERP_VAL		**ppsLocalVarVal;	//Values of the local vars used during interpreting process
+	UDWORD			*numParams;			//number of arguments this event has
+
+
 	VAR_DEBUG		*psVarDebug;	// The names and storage types of variables
 	ARRAY_DATA		*psArrayInfo;	// The sizes of the program arrays
 	ARRAY_DEBUG		*psArrayDebug;	// Debug info for the arrays

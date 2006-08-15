@@ -359,7 +359,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					 SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psContext;
-	SDWORD		val, storeIndex, type, arrayNum, i, arraySize;
+	SDWORD		val, storeIndex, type, arrayNum, i,j, arraySize;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
 
 	ASSERT((PTRVALID(psCode, sizeof(SCRIPT_CODE)),
@@ -368,6 +368,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	// Get a new context
 	if (!HEAP_ALLOC(psContHeap, (void*) &psContext))
 	{
+		debug(LOG_ERROR,"eventNewContext: HEAP_ALLOC failed");
 		return FALSE;
 	}
 
@@ -387,6 +388,66 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			arraySize *= psCode->psArrayInfo[arrayNum].elements[i];
 		}
 	}
+
+
+	//prepare local variables (initialize, store type)
+	//-------------------------------
+	psCode->ppsLocalVarVal = (INTERP_VAL **)MALLOC(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event 
+
+	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
+
+	for(i=0;i < psCode->numEvents; i++)
+	{
+		if(psCode->numLocalVars[i] > 0)	//this event has any local vars declared
+		{
+			psCode->ppsLocalVarVal[i] = (INTERP_VAL*)MALLOC(sizeof(INTERP_VAL) * psCode->numLocalVars[i]);	//allocate space for local vars array (for the current event)
+
+			debug(LOG_SCRIPT,"Event %d has %d local variables", i, psCode->numLocalVars[i]);
+
+			for(j=0; j < psCode->numLocalVars[i]; j++)
+			{
+				type = psCode->ppsLocalVars[i][j];
+				psCode->ppsLocalVarVal[i][j].type = type;	//store (copy) var type (data used during parsing -> data used during interpreting)
+
+				//debug(LOG_SCRIPT,"var %d's type: %d", i, type);
+
+
+				//initialize Strings and integers
+				if(type == VAL_STRING)
+				{
+					debug(LOG_SCRIPT,"eventNewContext: STRING type variables are not implemented");
+
+					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(255);	//TODO: MAXSTRLEN
+					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
+				}
+				else
+				{
+					psCode->ppsLocalVarVal[i][j].v.ival = 0;
+				}
+
+				//Initialize objects
+				if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])
+				{
+					if (!asCreateFuncs[type](&(psCode->ppsLocalVarVal[i][j]) ))
+					{
+						debug(LOG_ERROR,"eventNewContext: asCreateFuncs failed for local var");
+						return FALSE;
+					}
+				}
+
+				//debug(LOG_SCRIPT, "i=%d, j=%d, value=%d",i,j,psCode->ppsLocalVarVal[i][j].v.ival);
+			}
+
+			debug(LOG_SCRIPT,"------");
+			
+		}
+		else	//this event has no local vars
+		{
+			psCode->ppsLocalVarVal[i] = NULL;
+		}
+		
+	}
+
 	while (val >= 0)
 	{
 		if (!HEAP_ALLOC(psValHeap, (void*) &psNewChunk))

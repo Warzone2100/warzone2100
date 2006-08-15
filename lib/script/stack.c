@@ -142,11 +142,16 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 {
 	INTERP_VAL	*psTop;
 
+	//debug(LOG_SCRIPT, "stackPopType 1");
+
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
+		debug(LOG_ERROR, "stackPopType: stack empty");
 		ASSERT((FALSE, "stackPopType: stack empty"));
 		return FALSE;
 	}
+
+	//debug(LOG_SCRIPT, "stackPopType 2");
 
 	/* move the stack pointer down one */
 	if (currEntry == 0)
@@ -160,15 +165,25 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 		currEntry--;
 	}
 
+	//debug(LOG_SCRIPT, "stackPopType 3");
+
 	psTop = psCurrChunk->aVals + currEntry;
+
+	//debug(LOG_SCRIPT, "stackPopType 4");
+
 	if (!interpCheckEquiv(psVal->type,psTop->type))
 	{
+		debug(LOG_ERROR, "stackPopType: type mismatch");
 		ASSERT((FALSE, "stackPopType: type mismatch"));
 		return FALSE;
 	}
 
+	//debug(LOG_SCRIPT, "stackPopType 5");
+
 	/* copy the value off the stack */
 	psVal->v.ival = psTop->v.ival;
+
+	//debug(LOG_SCRIPT, "stackPopType 6");
 
 	return TRUE;
 }

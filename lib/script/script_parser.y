@@ -24,7 +24,12 @@ typedef enum _code_error
 	CE_PARSE			// A parse error occured
 } CODE_ERROR;
 
-EVENT_SYMBOL	*psCurEvent = NULL;		/* function stuff: stores current event: for local var declaration */
+
+#define			maxEventsLocalVars	1200		/* should be big enough */
+static VAR_SYMBOL	*psLocalVarsB[maxEventsLocalVars];	/* local var storage */
+static UDWORD		numEventLocalVars[maxEventsLocalVars];	/* number of declared local vars for each event */
+static VAR_SYMBOL	*psLocalVarsTemp;			/* temporary storage for local vars, before current event declaration is found */
+EVENT_SYMBOL		*psCurEvent = NULL;			/* function stuff: stores current event: for local var declaration */
 
 /* Pointer to the compiled code */
 static SCRIPT_CODE	*psFinalProg=NULL;
@@ -820,6 +825,8 @@ CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assig
 {
 	SDWORD		size;
 
+	//debug( LOG_SCRIPT, "scriptCodeAssignment" );
+
 	ASSERT((psVariable != NULL,
 		"scriptCodeAssignment: Invalid variable symbol pointer"));
 	ASSERT((PTRVALID(psValue, sizeof(CODE_BLOCK)),
@@ -835,6 +842,7 @@ CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assig
 		// Check there is a set function
 		if (psVariable->set == NULL)
 		{
+			debug( LOG_ERROR, "scriptCodeAssignment: No set function for external variable" );
 			scr_error("No set function for external variable");
 			return CE_PARSE;
 		}
@@ -854,6 +862,11 @@ CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assig
 	case ST_PRIVATE:
 		PUT_PKOPCODE(ip, OP_POPGLOBAL, psVariable->index);
 		break;
+	case ST_LOCAL:	/* local cariable assignment code */
+		//PUT_DATA(ip, psCurEvent->index);			//event index of the local var
+		//debug( LOG_SCRIPT, "scriptCodeAssignment: added local var assignment code");
+		PUT_PKOPCODE(ip, OP_POPLOCAL, psVariable->index);
+		break;
 	case ST_EXTERN:
 		PUT_PKOPCODE(ip, OP_VARCALL, psVariable->index);
 		PUT_VARFUNC(ip, psVariable->set);
@@ -867,6 +880,8 @@ CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assig
 		return CE_PARSE;
 		break;
 	}
+
+	//debug( LOG_SCRIPT, "END scriptCodeAssignment" );
 
 	return CE_OK;
 }
@@ -1165,6 +1180,50 @@ CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for first param
 }
 
 
+/* check if the arguments in the function definition body match the argument types
+and names from function declaration (if there was any) */
+BOOL checkFuncParamType(SDWORD argIndex, SDWORD argType)
+{
+	VAR_SYMBOL		*psCurr;
+	SDWORD			i,j;
+
+	if(psCurEvent == NULL)
+	{
+		debug( LOG_ERROR, "checkFuncParamType() - psCurEvent == NULL" );
+		return FALSE;
+	}
+
+	if(argIndex < psCurEvent->numParams)
+	{
+		/* find the argument by the index */
+		i=psCurEvent->index;
+		j=0;
+		for(psCurr =psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
+		{
+			if((psCurEvent->numParams - j - 1)==argIndex)	/* got to the right argument */
+			{
+				if(argType != psCurr->type)
+				{
+					debug( LOG_ERROR, "Argument type with index %d in event '%s' doesn't match function declaration (%d/%d)",argIndex,psCurEvent->pIdent,argType,psCurr->type);
+					return FALSE;
+				}
+				else
+				{
+					//debug( LOG_SCRIPT, "arg matched");
+					return TRUE;
+				}
+			}
+			j++;
+		}
+	}
+	else
+	{
+		debug( LOG_ERROR, "checkFuncParamType() - argument %d has wrong argument index, event: '%s'", argIndex, psCurEvent->pIdent);
+		return FALSE;
+	}
+}
+
+
 /* Generate code for accessing an object variable.  The variable symbol is
  * stored with the code for the object value so that this block can be used for
  * both setting and retrieving an object value.
@@ -1282,6 +1341,8 @@ CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symb
 {
 	SDWORD	size;
 
+	//debug( LOG_SCRIPT, "scriptCodeVarGet" );
+
 	size = sizeof(OPCODE);
 	if (psVariable->storage == ST_EXTERN)
 	{
@@ -1304,6 +1365,13 @@ CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symb
 	case ST_PRIVATE:
 		PUT_PKOPCODE(ip, OP_PUSHGLOBAL, psVariable->index);
 		break;
+
+	case ST_LOCAL:	/* local variable */
+		//PUT_DATA(ip, psCurEvent->index);			//event index of the local var
+		//debug( LOG_SCRIPT, "scriptCodeVarGet: OP_PUSHLOCAL" );
+		PUT_PKOPCODE(ip, OP_PUSHLOCAL, psVariable->index);
+		break;
+
 	case ST_EXTERN:
 		PUT_PKOPCODE(ip, OP_VARCALL, psVariable->index);
 		PUT_VARFUNC(ip, psVariable->get);
@@ -1317,6 +1385,8 @@ CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symb
 		return CE_PARSE;
 		break;
 	}
+
+	//debug( LOG_SCRIPT, "END scriptCodeVarGet" );
 
 	return CE_OK;
 }
@@ -1341,6 +1411,13 @@ CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variable symb
 		PUT_PKOPCODE(ip, OP_PUSHREF, (*ppsBlock)->aParams[0]);
 		PUT_DATA(ip, psVariable->index);
 		break;
+
+	case ST_LOCAL:
+	
+		PUT_PKOPCODE(ip, OP_PUSHLOCALREF, (*ppsBlock)->aParams[0]);
+		PUT_DATA(ip, psVariable->index);
+		break;
+
 	case ST_EXTERN:
 		scr_error("Cannot use external variables in this context");
 		return CE_PARSE;
@@ -1523,7 +1600,7 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 
 /* NEW STUFF */
 %token FUNCTION
-%token RETURN
+%token RET
 
 %left _AND _OR
 %left BOOLEQUAL NOTEQUAL GREATEQUAL LESSEQUAL GREATER LESS
@@ -1629,6 +1706,9 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %token <eSymbol> OBJ_FUNC_CUST	/* A defined object pointer function */
 %token <eSymbol> STRING_FUNC_CUST	 /* A defined string function */
 
+%type <cblock> 	return_statement
+%type <vdecl>	var_line
+
 %%
 
 
@@ -1651,6 +1731,9 @@ script:			header var_list
 					TRIGGER_SYMBOL	*psTrig;
 					EVENT_SYMBOL	*psEvent;
 					UDWORD			numVars;
+
+					INTERP_TYPE		*pCurEvLocalVars;
+					UDWORD		j;
 
 					// Calculate the code size
 					size = 0;
@@ -1687,6 +1770,48 @@ script:			header var_list
 					}
 					ALLOC_PROG(psFinalProg, size, psCurrBlock->pCode,
 						numVars, numArrays, numTriggers, numEvents);
+
+
+
+
+					/* store local vars */
+					//allocate array for holding an array of local vars for each event
+					psFinalProg->ppsLocalVars = (INTERP_TYPE **)MALLOC(sizeof(INTERP_TYPE*) * numEvents);
+					psFinalProg->numLocalVars = (UDWORD *)MALLOC(sizeof(UDWORD) * numEvents);	//how many local vars each event has
+					psFinalProg->numParams = (UDWORD *)MALLOC(sizeof(UDWORD) * numEvents);	//how many arguments each event has
+
+					i=0;
+					for(psEvent = psEvents; psEvent; psEvent = psEvent->psNext)
+					{
+						psEvent->numLocalVars = numEventLocalVars[i];
+
+						psFinalProg->numLocalVars[i] = numEventLocalVars[i];	//remember how many local vars this event has
+						psFinalProg->numParams[i] = psEvent->numParams;	//remember how many parameters this event has
+
+						if(numEventLocalVars[i] > 0)
+						{
+							pCurEvLocalVars = (INTERP_TYPE*)MALLOC(sizeof(INTERP_TYPE) * numEventLocalVars[i]);
+							
+							j=0;
+							for(psCurr =psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
+							{
+								//DB_INTERP(("remembering loc var \n"));
+								//DB_INTERP(("%d - %d \n",i,j));
+								pCurEvLocalVars[numEventLocalVars[i] - j - 1] = psCurr->type;	//save type, order is reversed
+								j++;
+							}
+						}
+						else
+						{
+							pCurEvLocalVars = NULL;	//this event has no local vars
+						}
+
+						psFinalProg->ppsLocalVars[i] = pCurEvLocalVars;
+						i++;
+					}
+
+
+
 					ALLOC_DEBUG(psFinalProg, debugEntries);
 					psFinalProg->debugEntries = 0;
 					ip = psFinalProg->pCode;
@@ -1856,25 +1981,69 @@ function_type:			VOID_FUNC_CUST
 			|	STRING_FUNC_CUST
 			;
 
+
+return_statement_void:	RET ';'
+			;
+
+
+return_statement:		return_statement_void	/* nothing or "return;" */
+					{
+						//debug( LOG_SCRIPT, "return_statement: return_statement_void" );
+
+						if(psCurEvent == NULL)	/* no events declared or defined yet */
+						{
+							debug( LOG_ERROR, "Return statement outside of function or event");
+							YYABORT;
+						}
+
+						if(!psCurEvent->bFunction)
+						{
+							debug( LOG_ERROR, "Return statement inside of an event '%s'", psCurEvent->pIdent);
+							YYABORT;
+						}
+
+						if(psCurEvent->retType != VAL_VOID)
+						{
+							debug( LOG_ERROR, "Wrong return statement syntax for a non-void function '%s'", psCurEvent->pIdent);
+							YYABORT;
+						}
+
+						//debug( LOG_SCRIPT, "return_statement: found 'return;' in '%s' function", psCurEvent->pIdent );
+
+
+						/* Allocate code block for exit instruction */
+						ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE));
+						ip = psCurrBlock->pCode;
+						PUT_OPCODE(ip, OP_EXIT);	/* just exit function */
+
+						psCurrBlock->type = VAL_VOID;	/* make return statement of type VOID manually */
+
+						//debug( LOG_SCRIPT, "END return_statement: return_statement_void" );
+
+						$$ = psCurrBlock;
+					}
+			;
+
+
 /* Function */
 func_subdecl:			FUNCTION TYPE IDENT	/* declaration of a function */
 				{
 					EVENT_SYMBOL	*psEvent;
 
-					debug( LOG_SCRIPT, "func_subdecl: FUNCTION TYPE IDENT" );
+					//debug( LOG_SCRIPT, "func_subdecl: FUNCTION TYPE IDENT: '%s'", $3 );
 
-					/* allow local vars to have the same names as global vars (don't check global vars) */
-					/* localVariableDef = TRUE; */
-					/* debug( LOG_SCRIPT, "localVariableDef = TRUE 1"); */
+					//allow local vars to have the same names as global vars (don't check global vars)
+					localVariableDef = TRUE;
+					//debug( LOG_SCRIPT, "localVariableDef = TRUE 1");
 
-					debug( LOG_SCRIPT, "func_subdecl: scriptDeclareEvent" );
+					//debug( LOG_SCRIPT, "func_subdecl: scriptDeclareEvent" );
 
 					if (!scriptDeclareEvent($3, &psEvent,0))
 					{
-						debug( LOG_SCRIPT, "func_subdecl: scriptDeclareEvent() failed" );
+						debug( LOG_ERROR, "func_subdecl: scriptDeclareEvent() failed" );
 						YYABORT;
 					}
-					debug( LOG_SCRIPT, "END func_subdecl: scriptDeclareEvent" );
+					//debug( LOG_SCRIPT, "END func_subdecl: scriptDeclareEvent" );
 
 					psEvent->retType = $2;
 					psCurEvent = psEvent;
@@ -1882,30 +2051,24 @@ func_subdecl:			FUNCTION TYPE IDENT	/* declaration of a function */
 
 					$$ = psEvent;
 
-					debug( LOG_SCRIPT, "END func_subdecl:FUNCTION IDENT");
+					//debug( LOG_SCRIPT, "END func_subdecl:FUNCTION TYPE IDENT");
 				}
 			/* definition of a function that was already declared (TODO: move to a new rule) */
 			|	FUNCTION TYPE function_type	/* function that was already declared */
 					{
-						debug( LOG_SCRIPT, "func_subdecl: FUNCTION TYPE function_type");
+						//debug( LOG_SCRIPT, "func_subdecl: FUNCTION TYPE function_type, function: '%s'", $3->pIdent);
 						psCurEvent = $3;
-
-						/* allow local vars to have the same names as global vars (don't check global vars) */
-						/* localVariableDef = TRUE; */
-						/* DB_INTERP(("localVariableDef = TRUE 2\n")); */
 
 						/* make sure this event was already declared as function before */
 						if(!$3->bFunction)
 						{
-							debug(LOG_SCRIPT, "'%s' was declared as event before and can't be redefined as function", $3->pIdent);
-							debug(LOG_SCRIPT, "Wrong function definition");
+							debug(LOG_ERROR, "'%s' was declared as event before and can't be redefined as function", $3->pIdent);
+							debug(LOG_ERROR, "Wrong function definition");
 							YYABORT;
 						}
 
-						/* psCurEvent->bFunction = TRUE; */
-						/* psEvent->retType = $2; */
 						$$ = $3;
-						debug(LOG_SCRIPT, "END func_subdecl: FUNCTION TYPE function_type");
+						//debug(LOG_SCRIPT, "END func_subdecl: FUNCTION TYPE function_type");
 					}
 			;
 
@@ -1914,7 +2077,7 @@ func_subdecl:			FUNCTION TYPE IDENT	/* declaration of a function */
 	 * Header declarations
 	 */
 
-header:			/* NULL token */
+header:			/* empty */
 			|	header_decl
 			|	header header_decl
 			;
@@ -1935,22 +2098,41 @@ header_decl:	LINK TYPE ';'
 	 * Variable and function declarations
 	 */
 
-var_list:		/* NULL token */
-			|	variable_decl ';'
+var_list:		/* empty */
+			|	var_line
 				{
 					FREE_VARDECL($1);
 				}
-			|	var_list variable_decl ';'
+			|	var_list var_line
 				{
 					FREE_VARDECL($2);
 				}
 			;
+
+var_line:		variable_decl ';'
+		{
+			/* remember that local var declaration is over */
+			localVariableDef = FALSE;
+			//debug( LOG_SCRIPT, "localVariableDef = FALSE 3");
+			$$ = $1;
+		}
+		;
 
 variable_decl_head:		STORAGE TYPE
 						{
 							ALLOC_VARDECL(psCurrVDecl);
 							psCurrVDecl->storage = $1;
 							psCurrVDecl->type = $2;
+
+
+							/* allow local vars to have the same names as global vars (don't check global vars) */
+							if($1 == ST_LOCAL)
+							{
+								//debug( LOG_SCRIPT, "variable_decl_head:	STORAGE TYPE: local" );
+
+								localVariableDef = TRUE;
+								//debug( LOG_SCRIPT, "localVariableDef = TRUE 4");
+							}
 
 							$$ = psCurrVDecl;
 						}
@@ -2035,6 +2217,9 @@ variable_ident:		IDENT
 
 variable_decl:	variable_decl_head variable_ident
 					{
+						//if($1->storage == ST_LOCAL)
+						//	debug( LOG_SCRIPT, "variable_decl:	variable_decl_head variable_ident: local" );
+							
 						if (!scriptAddVariable($1, $2))
 						{
 							/* Out of memory - error already given */
@@ -2066,7 +2251,7 @@ variable_decl:	variable_decl_head variable_ident
 	 * Trigger declarations
 	 */
 
-trigger_list:		/* NULL token */
+trigger_list:		/* empty */
 				|	trigger_decl
 				|	trigger_list trigger_decl
 				;
@@ -2145,16 +2330,16 @@ event_list:			event_decl
 event_subdecl:		EVENT IDENT
 					{
 						EVENT_SYMBOL	*psEvent;
-						debug( LOG_SCRIPT, "event_subdecl: scriptDeclareEvent" );
+						//debug( LOG_SCRIPT, "event_subdecl: scriptDeclareEvent" );
 						if (!scriptDeclareEvent($2, &psEvent, 0))
 						{
-							debug( LOG_SCRIPT, "event_subdecl: scriptDeclareEvent() failed" );
+							debug( LOG_ERROR, "event_subdecl: scriptDeclareEvent() failed" );
 							YYABORT;
 						}
 
 						psCurEvent = psEvent;
 
-						debug( LOG_SCRIPT, "END event_subdecl: scriptDeclareEvent, '%s'",  $2);
+						//debug( LOG_SCRIPT, "END event_subdecl: scriptDeclareEvent, '%s'",  $2);
 						$$ = psEvent;
 					}
 				|	EVENT EVENT_SYM
@@ -2165,6 +2350,11 @@ event_subdecl:		EVENT IDENT
 				;
 
 argument_decl:	'(' ')'
+				{
+					/* remember that local var declaration is over */
+					localVariableDef = FALSE;
+					//debug( LOG_SCRIPT, "localVariableDef = FALSE 6");
+				}
 
 event_decl:			event_subdecl ';'
 					{
@@ -2174,7 +2364,7 @@ event_decl:			event_subdecl ';'
 					{
 						if (!scriptDefineEvent($1, $6, $3->index))
 						{
-							debug( LOG_SCRIPT, "event_decl: scriptDefineEvent() failed" );
+							debug( LOG_ERROR, "event_decl: scriptDefineEvent() failed" );
 							YYABORT;
 						}
 
@@ -2200,7 +2390,7 @@ event_decl:			event_subdecl ';'
 
 						if (!scriptDefineEvent($1, $7, numTriggers - 1))
 						{
-							debug( LOG_SCRIPT, "event_decl: scriptDefineEvent() failed 2" );
+							debug( LOG_ERROR, "event_decl: scriptDefineEvent() failed 2" );
 							YYABORT;
 						}
 
@@ -2213,7 +2403,7 @@ event_decl:			event_subdecl ';'
 					{
 						if (!scriptDefineEvent($1, $6, -1))
 						{
-							debug( LOG_SCRIPT, "event_decl: scriptDefineEvent() failed 3" );
+							debug( LOG_ERROR, "event_decl: scriptDefineEvent() failed 3" );
 							YYABORT;
 						}
 
@@ -2226,50 +2416,53 @@ event_decl:			event_subdecl ';'
 				/* Function declaration, like: function bool myFunc(); */
 				|	func_subdecl argument_decl ';'
 				{
-					debug( LOG_SCRIPT, "func_subdecl argument_decl ';'");
+					//debug( LOG_SCRIPT, "func_subdecl argument_decl ';', function '%s'", $1->pIdent);
 					psCurEvent->bDeclared = TRUE;	/* remember current function was declared */
-					debug( LOG_SCRIPT, "END func_subdecl argument_decl ';'");
+					localVariableDef = FALSE;
+					//debug( LOG_SCRIPT, "localVariableDef = FALSE 5");
+					//debug( LOG_SCRIPT, "END func_subdecl argument_decl ';'");
 				}
 				/* new function (not declared) */
 				/* func_subdecl '(' funcbody_var_def ')' '{' var_list statement_list return_statement '}' */
-				 |	func_subdecl '(' ')' '{' statement_list '}'
+				 |	func_subdecl '(' ')' '{' var_list statement_list return_statement '}'
 					{
 
-						debug(LOG_SCRIPT, "START func_subdecl ( ) { statement_list } ");
+						//debug(LOG_SCRIPT, "START func_subdecl '(' ')' '{' var_list statement_list return_statement '}' ");
 		/*
 						if(!psCurEvent->bDeclared)
 						{
-							debug( LOG_SCRIPT, "Event %s's definition doesn't match with declaration.", psCurEvent->pIdent);
-							debug( LOG_SCRIPT, "Wrong event definition:\n event %s's definition doesn't match with declaration", psCurEvent->pIdent);
+							debug( LOG_ERROR, "Event %s's definition doesn't match with declaration.", psCurEvent->pIdent);
+							debug( LOG_ERROR, "Wrong event definition:\n event %s's definition doesn't match with declaration", psCurEvent->pIdent);
 							YYABORT;
 						}
 		*/
 						/* stays the same if no params (just gets copied) */
-						ALLOC_BLOCK(psCurrBlock, $5->size + sizeof(OPCODE));
+						ALLOC_BLOCK(psCurrBlock, $6->size + $7->size + sizeof(OPCODE));
 						ip = psCurrBlock->pCode;
 		
 						/* Copy the old (main) code and free it */
-						PUT_BLOCK(ip, $5);
+						PUT_BLOCK(ip, $6);			/* put statement_list code */
+						PUT_BLOCK(ip, $7);			/* put return_statement code */
 						PUT_OPCODE(ip, OP_EXIT);		/* must exit after return */
 		
 						/* copy debug info */
-						ALLOC_DEBUG(psCurrBlock, $5->debugEntries);
-						PUT_DEBUG(psCurrBlock, $5);
+						ALLOC_DEBUG(psCurrBlock, $6->debugEntries);
+						PUT_DEBUG(psCurrBlock, $6);
 
 						if (!scriptDefineEvent($1, psCurrBlock, -1))
 						{
-							debug( LOG_SCRIPT, "event_decl: func_subdecl '(' ')' '{' statement_list '}': scriptDefineEvent() failed 4" );
+							debug( LOG_ERROR, "event_decl: func_subdecl '(' ')' '{' statement_list '}': scriptDefineEvent() failed 4" );
 							YYABORT;
 						}
 		
-						FREE_DEBUG($5);
-						/* FREE_DEBUG($8); */
-						FREE_BLOCK($5);
+						FREE_DEBUG($6);
+						FREE_BLOCK($6);
+						FREE_BLOCK($7);
 						
 						/* end of event */
 						psCurEvent = NULL;
 
-						debug(LOG_SCRIPT, "END func_subdecl '(' ')' '{' statement_list '}' ");
+						//debug(LOG_SCRIPT, "END func_subdecl '(' ')' '{' var_list statement_list return_statement '}'");
 					}
 				;
 
@@ -2278,7 +2471,7 @@ event_decl:			event_subdecl ';'
 	 * Statements
 	 */
 
-statement_list:		/* NULL token */
+statement_list:		/* empty */
 						{
 							// Allocate a dummy code block
 							ALLOC_BLOCK(psCurrBlock, 1);
@@ -2354,20 +2547,20 @@ statement:			assignment ';'
 						UDWORD line;
 						STRING *pDummy;
 
-						debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';'" );
+						//debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';'" );
 
 						/* Allocate the code block */
 						ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));	//Opcode + event index
 						ALLOC_DEBUG(psCurrBlock, 1);
 						ip = psCurrBlock->pCode;
 
-						debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';' 1" );
+						//debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';' 1" );
 
 						/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
 						PUT_FUNC(ip,$1->index);			//Put event index
 
-						debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';' 2" );
+						//debug( LOG_SCRIPT, "expression: VOID_FUNC_CUST '(' ')'  ';' 2" );
 
 						/* Add the debugging information */
 						if (genDebugInfo)
@@ -2377,7 +2570,7 @@ statement:			assignment ';'
 							psCurrBlock->psDebug[0].line = line;
 						}
 
-						debug( LOG_SCRIPT, "END expression: VOID_FUNC_CUST '(' ')'  ';'" );
+						//debug( LOG_SCRIPT, "END expression: VOID_FUNC_CUST '(' ')'  ';'" );
 						$$ = psCurrBlock;
 					}
 
@@ -2414,6 +2607,54 @@ statement:			assignment ';'
 
 						$$ = psCurrBlock;
 					}
+
+				|	return_statement
+					{
+						UDWORD line;
+						STRING *pDummy;
+
+						//debug( LOG_SCRIPT, "statement: return_statement");
+
+						if(psCurEvent == NULL)
+						{
+							debug( LOG_ERROR, "'return' outside of function or event");
+							YYABORT;
+						}
+
+						if(!psCurEvent->bFunction)
+						{
+							debug( LOG_ERROR, "'return' can only be used in functions, not in events, event: '%s'", psCurEvent->pIdent);
+							YYABORT;
+						}
+
+						if($1->type != psCurEvent->retType)
+						{
+							debug( LOG_ERROR, "'return' type doesn't match with function return type, function: '%s' (%d / %d)", psCurEvent->pIdent, $1->type, psCurEvent->retType);
+							YYABORT;
+						}
+
+						ALLOC_BLOCK(psCurrBlock, $1->size + sizeof(OPCODE));
+						ALLOC_DEBUG(psCurrBlock, 1);
+						ip = psCurrBlock->pCode;
+
+						PUT_BLOCK(ip, $1);
+						PUT_OPCODE(ip, OP_EXIT);
+
+						FREE_BLOCK($1);
+
+						if (genDebugInfo)
+						{
+							psCurrBlock->psDebug[0].offset = 0;
+							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							psCurrBlock->psDebug[0].line = line;
+						}
+
+						//debug( LOG_SCRIPT, "END statement: return_statement");
+
+						$$ = psCurrBlock;
+					}
+
+
 				|	PAUSE '(' INTEGER ')' ';'
 					{
 						UDWORD line;
@@ -2646,7 +2887,7 @@ func_call:		NUM_FUNC '(' param_list ')'
 	 * These rules return PARAM_BLOCKS which contain the type of each
 	 * parameter as well as the code for the parameter.
 	 */
-param_list:		/* NULL token */
+param_list:		/* empty */
 					{
 						/* create a dummy pblock containing nothing */
 						ALLOC_PBLOCK(psCurrPBlock, sizeof(UDWORD), 1);
@@ -3597,6 +3838,13 @@ static void scriptResetTables(void)
 	TRIGGER_SYMBOL	*psTCurr, *psTNext;
 	EVENT_SYMBOL	*psECurr, *psENext;
 	FUNC_SYMBOL		*psFCurr, *psFNext;
+	UDWORD			i;
+
+	//debug( LOG_SCRIPT, "scriptResetTables" );
+
+	/* we start with global vars definition */
+	localVariableDef = FALSE;
+	//debug( LOG_SCRIPT, "localVariableDef = FALSE reset");
 
 	/* Reset the global variable symbol table */
 	for(psCurr = psGlobalVars; psCurr != NULL; psCurr = psNext)
@@ -3608,6 +3856,29 @@ static void scriptResetTables(void)
 	psGlobalVars = NULL;
 
 	psCurEvent = NULL;
+
+	/* Reset the local variable symbol table */
+	for(i=0; i<maxEventsLocalVars; i++)
+	{
+		numEventLocalVars[i] = 0;
+
+		for(psCurr = psLocalVarsB[i]; psCurr != NULL; psCurr = psNext)
+		{
+			psNext = psCurr->psNext;
+			FREE(psCurr->pIdent);
+			FREE(psCurr);
+		}
+		psLocalVarsB[i] = NULL;
+	}
+
+	/* Reset the temp local variable symbol table */
+	for(psCurr = psLocalVarsTemp; psCurr != NULL; psCurr = psNext)
+	{
+		psNext = psCurr->psNext;
+		FREE(psCurr->pIdent);
+		FREE(psCurr);
+	}
+	psLocalVarsTemp = NULL;
 
 	/* Reset the global array symbol table */
 	for(psCurr = psGlobalArrays; psCurr != NULL; psCurr = psNext)
@@ -3661,12 +3932,16 @@ static void scriptResetTables(void)
 		FREE(psFCurr);
 	}
 	psFunctions = NULL;
+
+	//debug( LOG_SCRIPT, "END scriptResetTables" );
 }
 
 /* Compile a script program */
 BOOL scriptCompile(char *pData, UDWORD fileSize,
 				   SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType)
 {
+	//debug( LOG_SCRIPT, "scriptCompile" );
+
 	// Tell lex about the input buffer
 	scriptSetInputBuffer(pData, fileSize);
 
@@ -3689,6 +3964,8 @@ BOOL scriptCompile(char *pData, UDWORD fileSize,
 	scriptResetTables();
 
 	*ppsProg = psFinalProg;
+
+	//debug( LOG_SCRIPT, "END scriptCompile" );
 
 	return TRUE;
 }
@@ -3713,6 +3990,8 @@ void scr_error(char *pMessage, ...)
 	DBERROR(("script parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
 			  pMessage, line, scr_char, text));
 #endif
+
+	debug( LOG_ERROR, "Script error" );
 }
 
 
@@ -3720,6 +3999,8 @@ void scr_error(char *pMessage, ...)
 BOOL scriptLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 {
 	UDWORD	i;
+
+	//debug( LOG_SCRIPT, "scriptLookUpType" );
 
 	if (asScrTypeTab)
 	{
@@ -3733,6 +4014,8 @@ BOOL scriptLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 		}
 	}
 
+	//debug( LOG_SCRIPT, "END scriptLookUpType" );
+
 	return FALSE;
 }
 
@@ -3742,12 +4025,16 @@ void scriptClearLocalVariables(void)
 {
 	VAR_SYMBOL	*psCurr, *psNext;
 
+	//debug( LOG_SCRIPT, "scriptClearLocalVariables" );
+
 	for(psCurr = psLocalVars; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
 		FREE(psCurr->pIdent);
 		FREE(psCurr);
 	}
+
+	//debug( LOG_SCRIPT, "END scriptClearLocalVariables" );
 }
 
 /* Add a new variable symbol.
@@ -3760,6 +4047,22 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 	VAR_SYMBOL		*psNew;
 	SDWORD			i;//, size;
 
+	VAR_SYMBOL **ppsVarSym;
+
+	//debug( LOG_SCRIPT, "scriptAddVariable" );
+
+
+	//if(psStorage->storage == ST_LOCAL)
+	//{
+	//	debug( LOG_SCRIPT, "scriptAddVariable: looking up local var" );
+	//
+	//	if(scriptLookUpVariable(psVarIdent->pIdent, &ppsVarSym))
+	//	{
+	//		debug( LOG_SCRIPT, "var found" );
+	//		//DbgMsg("var=%s, index=%d of %d", psVarIdent->pIdent, (*ppsVarSym)->index, psCurEvent->numParams);
+	//	}
+	//}
+
 	/* Allocate the memory for the symbol structure */
 	psNew = (VAR_SYMBOL *)MALLOC(sizeof(VAR_SYMBOL));
 	if (psNew == NULL)
@@ -3767,36 +4070,72 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 		scr_error("Out of memory");
 		return FALSE;
 	}
+
 	psNew->pIdent = psVarIdent->pIdent; //(STRING *)MALLOC(strlen(pIdent) + 1);
+
 /*	if (psNew->pIdent == NULL)
 	{
 		scr_error("Out of memory");
 		return FALSE;
 	}*/
 
+
 	/* Intialise the symbol structure */
 //	strcpy(psNew->pIdent, pIdent);
+
 	psNew->type = psStorage->type;
 	psNew->storage = psStorage->storage;
 	psNew->dimensions = psVarIdent->dimensions;
+
 	for(i=0; i<psNew->dimensions; i++)
 	{
 		psNew->elements[i] = psVarIdent->elements[i];
 	}
 	if (psNew->dimensions == 0)
 	{
-		if (psGlobalVars == NULL)
+		if(psStorage->storage != ST_LOCAL)	//if not a local var
 		{
-			psNew->index = 0;
-		}
-		else
-		{
-			psNew->index = psGlobalVars->index + 1;
-		}
+			if (psGlobalVars == NULL)
+			{
+				psNew->index = 0;
+			}
+			else
+			{
+				psNew->index = psGlobalVars->index + 1;
+			}
 
-		/* Add the symbol to the list */
-		psNew->psNext = psGlobalVars;
-		psGlobalVars = psNew;
+			/* Add the symbol to the list */
+			psNew->psNext = psGlobalVars;
+			psGlobalVars = psNew;
+
+			//debug( LOG_SCRIPT, "scriptAddVariable: added global: '%s'", psVarIdent->pIdent);
+		}
+		else	/* local var */
+		{
+			if(psCurEvent == NULL)
+				debug( LOG_ERROR, "Can't declare local variables before defining an event" );
+
+			//DB_INTERP(("local variable declared for event %d, type=%d \n", psCurEvent->index, psNew->type));
+			//DB_INTERP(("%s \n", psNew->pIdent));
+
+			if (psLocalVarsB[psCurEvent->index] == NULL)
+			{
+				psNew->index = 0;
+				//debug( LOG_SCRIPT, "*first* local var of event %d", psCurEvent->index );
+			}
+			else
+			{
+				psNew->index = psLocalVarsB[psCurEvent->index]->index + 1;
+				//debug( LOG_SCRIPT, "next local var of event %d, new index is %d", psCurEvent->index, psNew->index );
+			}
+
+			numEventLocalVars[psCurEvent->index] = numEventLocalVars[psCurEvent->index] + 1;
+
+			psNew->psNext = psLocalVarsB[psCurEvent->index];
+			psLocalVarsB[psCurEvent->index] = psNew;
+
+			//debug( LOG_SCRIPT, "local variable declared: '%s'", psVarIdent->pIdent);
+		}
 	}
 	else
 	{
@@ -3813,6 +4152,8 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 		psGlobalArrays = psNew;
 	}
 
+	//debug( LOG_SCRIPT, "END scriptAddVariable" );
+
 	return TRUE;
 }
 
@@ -3821,6 +4162,14 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 {
 	VAR_SYMBOL		*psCurr;
+	UDWORD			i;
+
+	//debug( LOG_SCRIPT, "scriptLookUpVariable" );
+
+	//if(localVariableDef)
+	//	debug( LOG_SCRIPT, "scriptLookUpVariable: looking for '%s', localVariableDef = TRUE", pIdent );
+	//else
+	//	debug( LOG_SCRIPT, "scriptLookUpVariable: looking for '%s', localVariableDef = FALSE", pIdent );
 
 	/* See if the symbol is an object variable */
 	if (asScrObjectVarTab && objVarContext != 0)
@@ -3859,6 +4208,48 @@ BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 		}
 	}
 
+
+	/* check local vars if we are inside of an event or function */
+	if(psCurEvent != NULL)
+	{
+		if(psCurEvent->index >= maxEventsLocalVars)
+			debug( LOG_ERROR, "Event index too high: %d", psCurEvent->index);
+
+		i = psCurEvent->index;
+
+		if(psLocalVarsB[i] != NULL)	//any vars stored for this event
+		{
+			int	line;
+			char	*text;
+
+			//debug( LOG_SCRIPT, "now checking event %s, event index = %d, looking for '%s'", psCurEvent->pIdent, psCurEvent->index, pIdent);
+
+			scriptGetErrorData(&line, &text);
+
+			for(psCurr =psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if(psCurr->pIdent == NULL)
+					debug(LOG_ERROR, "psCurr->pIdent == NULL");
+
+				//DB_INTERP(("start comparing, num local vars=%d, at line %d\n", numEventLocalVars[i], line));
+				//DB_INTERP(("current var=%s\n", psCurr->pIdent));
+				//DB_INTERP(("passed string=%s\n", pIdent));
+
+				//DB_INTERP(("comparing %s with %s \n", psCurr->pIdent, pIdent));
+				if (strcmp(psCurr->pIdent, pIdent) == 0)
+				{
+					//DB_INTERP(("4\n"));
+					//debug( LOG_SCRIPT, "scriptLookUpVariable - local var found, type=%d", psCurr->type);
+					*ppsSym = psCurr;
+					return TRUE;
+				}
+			}
+		}
+	}
+
+
+
+
 	/* See if the symbol is in the global variable list.
 	 * This is not checked for when local variables are being defined.
 	 * This allows local variables to have the same name as global ones.
@@ -3885,6 +4276,9 @@ BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 
 	/* Failed to find the variable */
 	*ppsSym = NULL;
+
+	//debug( LOG_SCRIPT, "END scriptLookUpVariable" );
+
 	return FALSE;
 }
 
@@ -3893,6 +4287,8 @@ BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 {
 	TRIGGER_SYMBOL		*psTrigger, *psCurr, *psPrev;
+
+	//debug( LOG_SCRIPT, "scriptAddTrigger" );
 
 	// Allocate the trigger
 	psTrigger = MALLOC(sizeof(TRIGGER_SYMBOL));
@@ -3958,6 +4354,8 @@ BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 		psTriggers = psTrigger;
 	}
 
+	//debug( LOG_SCRIPT, "END scriptAddTrigger" );
+
 	return TRUE;
 }
 
@@ -3966,6 +4364,8 @@ BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 BOOL scriptLookUpTrigger(STRING *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 {
 	TRIGGER_SYMBOL	*psCurr;
+
+	//debug( LOG_SCRIPT, "scriptLookUpTrigger" );
 
 	for(psCurr = psTriggers; psCurr; psCurr=psCurr->psNext)
 	{
@@ -3976,6 +4376,8 @@ BOOL scriptLookUpTrigger(STRING *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 		}
 	}
 
+	//debug( LOG_SCRIPT, "END scriptLookUpTrigger" );
+
 	return FALSE;
 }
 
@@ -3984,6 +4386,8 @@ BOOL scriptLookUpTrigger(STRING *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 BOOL scriptLookUpCallback(STRING *pIdent, CALLBACK_SYMBOL **ppsCallback)
 {
 	CALLBACK_SYMBOL		*psCurr;
+
+	//debug( LOG_SCRIPT, "scriptLookUpCallback" );
 
 	if (!asScrCallbackTab)
 	{
@@ -3998,6 +4402,9 @@ BOOL scriptLookUpCallback(STRING *pIdent, CALLBACK_SYMBOL **ppsCallback)
 			return TRUE;
 		}
 	}
+
+	//debug( LOG_SCRIPT, "END scriptLookUpCallback" );
+
 	return FALSE;
 }
 
@@ -4005,6 +4412,8 @@ BOOL scriptLookUpCallback(STRING *pIdent, CALLBACK_SYMBOL **ppsCallback)
 BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, UDWORD numArgs)
 {
 	EVENT_SYMBOL		*psEvent, *psCurr, *psPrev;
+
+	//debug( LOG_SCRIPT, "scriptDeclareEvent" );
 
 	// Allocate the event
 	psEvent = MALLOC(sizeof(EVENT_SYMBOL));
@@ -4050,12 +4459,17 @@ BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, UDWORD numArgs)
 
 	*ppsEvent = psEvent;
 
+	//debug( LOG_SCRIPT, "END scriptDeclareEvent" );
+
 	return TRUE;
 }
 
 // Add the code to a defined event
 BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger)
 {
+
+	//debug( LOG_SCRIPT, "scriptDefineEvent" );
+
 	// Store the event code
 	psEvent->pCode = MALLOC(psCode->size);
 	if (!psEvent->pCode)
@@ -4086,6 +4500,8 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 		psEvent->psDebug = NULL;
 	}
 
+	//debug( LOG_SCRIPT, "END scriptDefineEvent" );
+
 	return TRUE;
 }
 
@@ -4093,6 +4509,8 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 BOOL scriptLookUpEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent)
 {
 	EVENT_SYMBOL	*psCurr;
+
+	//debug( LOG_SCRIPT, "scriptLookUpEvent" );
 
 	for(psCurr = psEvents; psCurr; psCurr=psCurr->psNext)
 	{
@@ -4103,6 +4521,8 @@ BOOL scriptLookUpEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent)
 		}
 	}
 
+	//debug( LOG_SCRIPT, "END scriptLookUpEvent" );
+
 	return FALSE;
 }
 
@@ -4111,6 +4531,8 @@ BOOL scriptLookUpEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent)
 BOOL scriptLookUpConstant(STRING *pIdent, CONST_SYMBOL **ppsSym)
 {
 	CONST_SYMBOL	*psCurr;
+
+	//debug( LOG_SCRIPT, "scriptLookUpConstant" );
 
 	/* Scan the Constant list */
 	if (asScrConstantTab)
@@ -4125,6 +4547,8 @@ BOOL scriptLookUpConstant(STRING *pIdent, CONST_SYMBOL **ppsSym)
 		}
 	}
 
+	//debug( LOG_SCRIPT, "END scriptLookUpConstant" );
+
 	return FALSE;
 }
 
@@ -4134,6 +4558,8 @@ BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym)
 {
 	UDWORD i;
 	FUNC_SYMBOL	*psCurr;
+
+	//debug( LOG_SCRIPT, "scriptLookUpFunction" );
 
 	/* See if the function is defined as an instinct function */
 	if (asScrInstinctTab)
@@ -4160,6 +4586,9 @@ BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym)
 
 	/* Failed to find the indentifier */
 	*ppsSym = NULL;
+
+	//debug( LOG_SCRIPT, "END scriptLookUpFunction" );
+
 	return FALSE;
 }
 
@@ -4168,6 +4597,8 @@ BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym)
 {
 	UDWORD i;
 	EVENT_SYMBOL	*psCurr;
+
+	//debug( LOG_SCRIPT, "scriptLookUpCustomFunction" );
 
 	/* See if the function is defined as a script function */
 	for(psCurr = psEvents; psCurr; psCurr = psCurr->psNext)
@@ -4184,6 +4615,9 @@ BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym)
 
 	/* Failed to find the indentifier */
 	*ppsSym = NULL;
+
+	//debug( LOG_SCRIPT, "END scriptLookUpCustomFunction" );
+
 	return FALSE;
 }
 
