@@ -109,11 +109,14 @@ FAILURE:
 	sprintf(sTmp,"%s has different data. CHEATING or wrong version",getPlayerName(pl));
 	addConsoleMessage(sTmp,DEFAULT_JUSTIFY);
 	sendTextMessage(sTmp,TRUE);
-
+/*
+	// We need to disable this for now. It is in any case trivial to circumvent, and
+	// may give a false sense of security. - Per
 	if(NetPlay.bHost)
 	{
 		kickPlayer( player2dpid[pl] );
 	}
+*/
 //	setPlayerHasLost(TRUE);
 	return TRUE;
 }

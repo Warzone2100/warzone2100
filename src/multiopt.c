@@ -180,12 +180,15 @@ void recvOptions(NETMSG *pMsg)
 
 	NetGet(pMsg,pos,checkval);
 	pos += sizeof(checkval);
+/*
+	// This was set to a fixed value in earlier versions of post-Pumpkin code. 
+	// Commenting out to avoid confusion. Should probably be removed. - Per
 	if(checkval != NEThashVal(NetPlay.cryptKey[0]))
 	{
 
 		DBERROR(("Host Binary is different from this one. Cheating?"));
 	}
-
+*/
 	NetGet(pMsg,pos,newPl);
 	pos += sizeof(newPl);
 
