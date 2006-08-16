@@ -1,7 +1,7 @@
 xxxx-xx-xx: Version 2.0.4
  * General:
+   * MacOS / big endian support
    * Desktopmenu entry for Linux (AutoPackage/Debian package)
-   * You can see what your allies see (in multiplayer mode)
    * Different minimap modes (backported from 0.2.3)
    * Fix crash when not properly creating the write dir on Windows
    * Fix crash when using uppercase savegame names on Linux
@@ -15,7 +15,10 @@ xxxx-xx-xx: Version 2.0.4
    * Warzone uses AI from original version 1.10
    * AI reacts faster and builds stronger and more high-tech things
    * Fixed a bug which prevented the AI from creating oil derricks
+ * Scripting:
+   * Support for functions (including local variables)
  * Debugging:
+   * Cheat mode access changed
    * Logfile shows revision and version
    * Warzone is now a full Windows app. Debug output goes to stdout.txt/stderr.txt
  * Build system:
