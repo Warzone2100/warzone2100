@@ -14,9 +14,9 @@ cd Warzone.app
 mkdir Contents
 cd Contents
 
-echo "Adding Info.plist..."
+echo "Converting and adding Info.plist..."
 
-cp "$WORKDIR"/macosx/Info.plist .
+plutil -convert binary1 -o ./Info.plist "$WORKDIR"/macosx/Info.plist
 
 echo "Adding Warzone startup script..."
 
@@ -89,10 +89,11 @@ DISK=`hdid -nomount "$TMPDMG" | awk '/scheme/ {print substr ($1, 6, length)}'`
 newfs_hfs -v "${VOL}" /dev/r${DISK}s2 >/dev/null 2>&1
 hdiutil eject "$DISK" >/dev/null 2>&1
 
-echo "Copying application bundle to dmg..."
+echo "Copying application bundle and README.txt to dmg..."
 
 hdid "$TMPDMG" >/dev/null 2>&1
 ditto -rsrcFork -v "Warzone.app" "/Volumes/${VOL}/Warzone.app" >/dev/null 2>&1
+cp README.txt "/Volumes/${VOL}/README.txt" >/dev/null 2>&1
 hdiutil eject "$DISK" >/dev/null 2>&1
 
 echo "Cleaning up application bundle..."
