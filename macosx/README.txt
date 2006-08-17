@@ -1,32 +1,16 @@
-This directory contains support files for the MacOS X port of Warzone 2100.
-Run the script 'makedmg.sh' to create 'Warzone 2100.dmg', containing a
-fully-self-contained application bundle to run Warzone 2100 on MacOS X.
-
-Building Warzone 2100 on MacOS X is currently only known to work on
-MacOS X 10.4 "Tiger" with DarwinPorts and the following ports installed:
-  jpeg
-  libmad
-  libogg
-  libpng
-  libsdl
-  libsdl_net
-  libvorbis
-  physfs
-
-DarwinPorts puts files in /opt/local, so you will have to run the configure
-script as follows (line-ending backslashes continue the command on the
-following line):
-
-CFLAGS=-I/opt/local/include \
-CPPFLAGS=-I/opt/local/include \
-LIBS=-L/opt/local/lib \
-./configure
-
-After compiling the software by running 'make' in the toplevel directory,
-you can run makedmg.sh to create the final disk image file.
+Welcome to Warzone 2100 on MacOS X.  To install the game, simply drag
+the Warzone application bundle icon from the mounted disk image to a
+location on your hard drive.  You can then eject and throw away the
+disk image.  To run the game, simply double-click the Warzone icon
+on your hard drive.
 
 When you run the program, it will create a directory named .warzone-2.0
 in your home directory.  You can control settings such as the screen
 resolution in the 'config' file within that directory.  The setting to
-change the screen resolution is 'resolution=<setting>'.
+change the screen resolution is 'resolution=<setting>'.  To run in
+fullscreen mode, change the 'fullscreen=0' line to read 'fullscreen=1'.
+
+This program is distributed as a self-contained application bundle.
+It should run without requiring any additional software on MacOS X
+10.3 "Panther" and 10.4 "Tiger" on the PowerPC platform.
 
