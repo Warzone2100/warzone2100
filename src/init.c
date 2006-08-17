@@ -756,9 +756,9 @@ void cleanSearchPath( void )
 
 	while( curSearchPath )
 	{
-		tmpSearchPath = curSearchPath;
+		tmpSearchPath = curSearchPath->higherPriority;
 		free( curSearchPath );
-		curSearchPath = tmpSearchPath->higherPriority;
+		curSearchPath = tmpSearchPath;
 	}	
 }
 
