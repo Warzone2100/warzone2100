@@ -22,7 +22,7 @@ following line):
 
 CFLAGS=-I/opt/local/include \
 CPPFLAGS=-I/opt/local/include \
-LIBS=-L/opt/local/lib \
+LDFLAGS=-L/opt/local/lib \
 ./configure
 
 After compiling the software by running 'make' in the toplevel directory,
