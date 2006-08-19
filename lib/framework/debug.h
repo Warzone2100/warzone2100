@@ -34,14 +34,9 @@
 #define DBPRINTF(x) _db_debug x
 #define _db_debug(...) debug(LOG_NEVER, __VA_ARGS__)
 #else
-#define DBMB(x) debug_msvc(x)
-#define DBPRINTF(x) debug_msvc(x)
+#define DBMB(x)
+#define DBPRINTF(x)
 #endif
-
-/* Special MSVC hacks */
-void debug_msvc(const char *str, ...);
-void dbg_position(const char *file, int line);
-void dbg_assert(BOOL condition, const char *str, ...);
 
 /*
  *
@@ -52,31 +47,27 @@ void dbg_assert(BOOL condition, const char *str, ...);
  *
  * Arguments:	ASSERT((condition, "Format string with variables: %d, %d", var1, var2));
  */
+# define ASSERT(x) wz_assert x
 #ifdef _MSC_VER
 // MSVC doesn't understand __VAR_ARGS__ macros
-# define ASSERT(x) do { dbg_position(__FILE__, __LINE__); dbg_assert(x); } while(0)
+# define wz_assert(x, ...) \
+do { \
+	if (!(x)) { \
+		debug( LOG_ERROR, "Assert in Warzone: file %s, line %d", \
+			__FILE__, __LINE__ ); \
+		assert(x); \
+} \
+} while (FALSE)
 #else
-# define ASSERT(x) wz_assert x
-# ifdef DEBUG
-#  define wz_assert(x, ...)													\
-do {																		\
-	if (!(x)) {																\
-		debug(LOG_ERROR, "Error in Warzone: file %s, function %s, line %d",	\
-		      __FILE__, __FUNCTION__, __LINE__);							\
-		debug(LOG_ERROR, __VA_ARGS__);										\
-		assert(x);															\
-	}																		\
+# define wz_assert(x, ...) \
+do { \
+	if (!(x)) { \
+		debug( LOG_ERROR, "Assert in Warzone: file %s, function %s, line %d", \
+			__FILE__, __FUNCTION__, __LINE__ ); \
+		debug( LOG_ERROR, __VA_ARGS__ ); \
+		assert(x); \
+} \
 } while (FALSE)
-# else
-#  define wz_assert(x, ...)													\
-do {																		\
-	if (!(x)) {																\
-		debug(LOG_ERROR, "Error in Warzone: file %s, function %s, line %d",	\
-		      __FILE__, __FUNCTION__, __LINE__);							\
-		debug(LOG_ERROR, __VA_ARGS__);										\
-	}																		\
-} while (FALSE)
-# endif
 #endif
 
 /*
@@ -97,7 +88,7 @@ do {																		\
 		abort();			\
 	} while (FALSE);
 #else
-#define DBERROR(x) do { debug_msvc(x); abort(); } while(0)
+#define DBERROR(x)
 #endif
 
 

@@ -28,42 +28,6 @@ static const char *code_part_names[] = {
   "net", "memory", "error", "never", "script", "last"
 };
 
-static int msvc_line = -1;
-static char msvc_file[250];
-
-/* Protos */
-static void real_debug(enum code_part part, const char *str, va_list ap);
-
-/**********************************************************************
-  MSVC hacks.
-**********************************************************************/
-void debug_msvc(const char *str, ...)
-{
-	va_list ap;
-	va_start(ap, str);
-	real_debug(LOG_NEVER, str, ap);
-	va_end(ap);
-}
-void dbg_position(const char *file, int line)
-{
-	msvc_line = line;
-	strncpy(msvc_file, file, 250);
-}
-void dbg_assert(BOOL condition, const char *str, ...)
-{
-        if (!(condition)) {
-		va_list ap;
-		va_start(ap, str);
-                debug(LOG_ERROR, "Error in Warzone: file %s, line %d",
-                      msvc_file, msvc_line);
-		real_debug(LOG_ERROR, str, ap);
-		va_end(ap);
-#ifdef DEBUG
-                assert(condition);
-#endif
-        }
-}
-
 /**********************************************************************
  cat_snprintf is like a combination of snprintf and strlcat;
  it does snprintf to the end of an existing string.
@@ -212,12 +176,6 @@ static void debug_out(const char *buf)
 void debug(enum code_part part, const char *str, ...)
 {
 	va_list ap;
-	va_start(ap, str);
-	real_debug(part, str, ap);
-	va_end(ap);
-}
-static void real_debug(enum code_part part, const char *str, va_list ap)
-{
 	static char bufbuf[2][MAX_LEN_LOG_LINE];
 	char buf[MAX_LEN_LOG_LINE+MAX_LEN_DEBUG_PART];
 	static BOOL bufbuf1 = FALSE;
@@ -230,9 +188,11 @@ static void real_debug(enum code_part part, const char *str, va_list ap)
 		return;
 	}
 
+	va_start(ap, str);
 	// FIXME This is buggy. Eg the OpenAL extensions string is corrupted after about 160 chars.
 	// That does not happen if vsprintf() is used instead. But then then string is corrupted after it's end.
 	vsnprintf( bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE, str, ap );
+	va_end(ap);
 
 	if (0 == strncmp(bufbuf[0], bufbuf[1], MAX_LEN_LOG_LINE - 1)) {
 		repeated++;
