@@ -6,6 +6,13 @@
 #ifndef _interp_h
 #define _interp_h
 
+//String support
+//-----------------------------
+static UDWORD		CURSTACKSTR	= 0;	//Points to the top of the string stack
+#define				MAXSTRLEN	255					//Max len of a single string
+#define				MAXSTACKLEN	6000
+static char			STRSTACK[MAXSTACKLEN][MAXSTRLEN];	//simple string 'stack'
+
 /* The possible value types for scripts */
 typedef enum _interp_type
 {
@@ -96,6 +103,9 @@ typedef enum _op_code
 	OP_OR,
 	OP_NOT,
 
+	//String cancatenation
+	OP_CANC,
+
 	// Comparison operators
 	OP_EQUAL,
 	OP_NOTEQUAL,
@@ -107,7 +117,7 @@ typedef enum _op_code
 	OP_FUNC,		//custom (in-script) function call
 	OP_POPLOCAL,	//local var
 	OP_PUSHLOCAL,
-	OP_PUSHLOCALREF,
+	OP_PUSHLOCALREF,	//variable of object type (pointer)
 } OPCODE;
 
 /* How far the opcode is shifted up a UDWORD to allow other data to be

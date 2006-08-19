@@ -122,6 +122,7 @@ typedef struct _const_symbol
 	BOOL			bval;
 	SDWORD			ival;
 	void			*oval;
+	STRING			*sval;	//String values
 //	float			fval;
 } CONST_SYMBOL;
 
@@ -308,6 +309,10 @@ extern BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym);
 
 /* Look up an in-script custom function symbol */
 extern BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym);
+
+extern BOOL popArguments(UDWORD **ip_temp, SDWORD numParams);
+
+extern void widgCopyString(STRING *pDest, STRING *pSrc);
 
 #endif
 

@@ -44,8 +44,6 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 {
 	BOOL	object;
 
-	//debug( LOG_SCRIPT, "scriptGetVarToken" );
-
 	// See if this is an object pointer
 	if (!asScrTypeTab || psVar->type < VAL_USERTYPESTART)
 	{
@@ -120,8 +118,10 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 				break;
 			case VAL_INT:
 //			case VAL_FLOAT:
-				//debug( LOG_SCRIPT, "scriptGetVarToken: VAL_INT (NUM_VAR)" );
 				return NUM_VAR;
+				break;
+			case VAL_STRING:
+				return STRING_VAR;
 				break;
 			default:
 				return VAR;
@@ -129,16 +129,12 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 			}
 		}
 	}
-
-	//debug( LOG_SCRIPT, "END scriptGetVarToken" );
 }
 
 /* Get the token type for a constant symbol */
 SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 {
 	BOOL	object;
-
-	//debug( LOG_SCRIPT, "scriptGetConstToken" );
 
 	// See if this is an object constant
 	if (!asScrTypeTab || psConst->type < VAL_USERTYPESTART)
@@ -159,9 +155,13 @@ SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 //	case VAL_FLOAT:
 		return NUM_CONSTANT;
 		break;
+	case VAL_STRING:
+		return STRING_CONSTANT;
+		break;
 	default:
 		if (object)
 		{
+			//debug(LOG_SCRIPT, "scriptGetConstToken: OBJ_CONSTANT");
 			return OBJ_CONSTANT;
 		}
 		else
@@ -170,8 +170,6 @@ SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 		}
 		break;
 	}
-
-	//debug( LOG_SCRIPT, "END scriptGetConstToken" );
 }
 
 /* Get the token type for a function symbol */
@@ -179,17 +177,8 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 {
 	BOOL	object;
 
-	//debug( LOG_SCRIPT, "scriptGetFuncToken" );
-
 	// See if this is an object pointer
-	if (!asScrTypeTab || psFunc->type < VAL_USERTYPESTART)
-	{
-		object = FALSE;
-	}
-	else
-	{
-		object = asScrTypeTab[psFunc->type - VAL_USERTYPESTART].accessType == AT_OBJECT;
-	}
+	object = asScrTypeTab[psFunc->type - VAL_USERTYPESTART].accessType == AT_OBJECT;
 
 	if (object)
 	{
@@ -206,6 +195,9 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 //		case VAL_FLOAT:
 			return NUM_FUNC;
 			break;
+		case VAL_STRING:
+			return STRING_FUNC;
+			break;
 		case VAL_VOID:
 			return FUNC;
 			break;
@@ -214,26 +206,18 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 			break;
 		}
 	}
-
-	//debug( LOG_SCRIPT, "END scriptGetFuncToken" );
 }
-
 
 /* Get the token type for a custom function symbol */
 SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 {
 	BOOL	object;
 
-	//debug( LOG_SCRIPT, "scriptGetCustomFuncToken" );
-
 	// See if this is an object pointer
 	object = asScrTypeTab[psFunc->retType - VAL_USERTYPESTART].accessType == AT_OBJECT;
 
-	//debug( LOG_SCRIPT, "scriptGetCustomFuncToken 3" );
-
 	if (object)
 	{
-		//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: object" );
 		return OBJ_FUNC_CUST;
 	}
 	else
@@ -241,30 +225,23 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 		switch (psFunc->retType)
 		{
 		case VAL_BOOL:
-			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_BOOL" );
 			return BOOL_FUNC_CUST;
 			break;
 		case VAL_INT:
 //		case VAL_FLOAT:
-			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_INT" );
 			return NUM_FUNC_CUST;
 			break;
-		case VAL_STRING:		/* <NEW> */
-			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: VAL_STRING" );
+		case VAL_STRING:
 			return STRING_FUNC_CUST;
 			break;
 		case VAL_VOID:
-			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: void function" );
 			return VOID_FUNC_CUST;
 			break;
 		default:
-			//debug( LOG_SCRIPT, "scriptGetCustomFuncToken: default" );
 			return USER_FUNC_CUST;
 			break;
 		}
 	}
-
-	//debug( LOG_SCRIPT, "END scriptGetCustomFuncToken" );
 }
 
 
@@ -291,10 +268,12 @@ inactive				return INACTIVE;
 init					return INITIALISE;
 link					return LINK;
 ref					return REF;
+return					return	RET;
+function					return	FUNCTION;
 
-	/* new stuff */
-function				return FUNCTION;
-return					{ return RET; }
+	/* function				return FUNCTION;*/
+	/* cond					return COND; */
+
 
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 private					{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
@@ -306,15 +285,15 @@ exit					return EXIT;
 pause					return PAUSE;
 
 	/* Match to type key words */
+void					{ scr_lval.tval = VAL_VOID; return TYPE; }
+VOID					{ scr_lval.tval = VAL_VOID; return TYPE; }
+string					{ scr_lval.tval = VAL_STRING; return TYPE; }
+STRING					{ scr_lval.tval = VAL_STRING; return TYPE; }
 bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 BOOL					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 int						{ scr_lval.tval = VAL_INT; return TYPE; }
 INT						{ scr_lval.tval = VAL_INT; return TYPE; }
-
-	/* return value for void functions */
-void					{ scr_lval.tval = VAL_VOID; return TYPE; }
-VOID					{ scr_lval.tval = VAL_VOID; return TYPE; }
-
+	/*float					{ ais_lval.tval = VAL_FLOAT; return TYPE; }*/
 	/* string type isn't implemented yet */
 	/* string					{ ais_lval.tval = VAL_STRING; return TYPE; } */
 	/* object					{ scr_lval.tval = VAL_OBJECT; return TYPE; } */
@@ -346,64 +325,63 @@ NOT						return _NOT;
 -?[0-9]+					{ scr_lval.ival = atol(scr_text); return INTEGER; }
 
 	/* Match identifiers */
-[a-zA-Z][0-9_a-zA-Z]*		{
-								//debug( LOG_SCRIPT, "FLEX: looking up '%s'", scr_text );
-
+[a-zA-Z_][0-9_a-zA-Z_]*		{
+						debug(LOG_SCRIPT, "looking up '%s'", scr_text);
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
 								{
-									DBP0(("[lex] TYPE\n"));
+									debug(LOG_SCRIPT, "'%s' is a type", scr_text);
 									return TYPE;
 								}
 								/* See if this identifier has been defined as a variable */
 								else if (scriptLookUpVariable(scr_text, &scr_lval.vSymbol))
 								{
-									DBP0(("[lex] variable\n"));
+									debug(LOG_SCRIPT, "'%s' is a var", scr_text);
 									return scriptGetVarToken(scr_lval.vSymbol);
 								}
 								/* See if this identifier has been defined as a constant */
 								else if (scriptLookUpConstant(scr_text, &scr_lval.cSymbol))
 								{
-									DBP0(("[lex] constant\n"));
+									debug(LOG_SCRIPT, "'%s' is a constant", scr_text);
 									return scriptGetConstToken(scr_lval.cSymbol);
 								}
 								/* See if this identifier has been defined as a function */
 								else if (scriptLookUpFunction(scr_text, &scr_lval.fSymbol))
 								{
-									DBP0(("[lex] func\n"));
+									debug(LOG_SCRIPT, "'%s' is a function", scr_text);
 									return scriptGetFuncToken(scr_lval.fSymbol);
 								}
 
 								/* See if this identifier has been defined as a custom function */
 								else if (scriptLookUpCustomFunction(scr_text, &scr_lval.eSymbol))
 								{
-									//debug( LOG_SCRIPT, "scriptLookUpCustomFunction: '%s' - custom function", scr_text );
+									debug(LOG_SCRIPT, "'%s' is a cust func", scr_text);
 									return scriptGetCustomFuncToken(scr_lval.eSymbol);
 								}
 
 								else if (scriptLookUpTrigger(scr_text, &scr_lval.tSymbol))
 								{
-									DBP0(("[lex] TRIG_SYM\n"));
+									debug(LOG_SCRIPT, "'%s' is a trigger", scr_text);
 									return TRIG_SYM;
 								}
 								else if (scriptLookUpEvent(scr_text, &scr_lval.eSymbol))
 								{
-									DBP0(("[lex] EVENT_SYM\n"));
+									debug(LOG_SCRIPT, "'%s' is an event", scr_text);
+								
 									return EVENT_SYM;
 								}
 								else if (scriptLookUpCallback(scr_text, &scr_lval.cbSymbol))
 								{
-									DBP0(("[lex] CALLBACK_SYM\n"));
+									debug(LOG_SCRIPT, "'%s' is a callback", scr_text);
 									return CALLBACK_SYM;
 								}
 								else
 								{
-									//debug( LOG_SCRIPT, "FLEX: '%s' is an ident", scr_text );
-
+									debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
+								
 									strcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
-									DBP0(("[lex] IDENT\n"));
 									return IDENT;
 								}
 							}
@@ -415,6 +393,7 @@ NOT						return _NOT;
 								strcpy(aText[currText], scr_text);
 								scr_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
+								debug(LOG_SCRIPT, "%s is QTEXT", scr_text);
 								return QTEXT;
 							}
 
@@ -458,7 +437,7 @@ int scr_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reched end of file in a comment"));
+		DBERROR(("Warning: reached end of file in a comment"));
 	}
 	return 1;
 }

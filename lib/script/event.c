@@ -14,6 +14,7 @@
 #include "interp.h"
 #include "script.h"
 #include "event.h"
+#include "scripttabs.h"		//because of ST_GROUP
 
 // array to store release functions
 static VAL_CREATE_FUNC		*asCreateFuncs;
@@ -87,16 +88,19 @@ BOOL eventInitialise(EVENT_INIT *psInit)
 	// Create the value heap
 	if (!HEAP_CREATE(&psValHeap, sizeof(VAL_CHUNK), psInit->valInit, psInit->valExt))
 	{
+		debug(LOG_ERROR, "eventInitialise: HEAP_CREATE failed for values");
 		return FALSE;
 	}
 	// Create the trigger heap
 	if (!HEAP_CREATE(&psTrigHeap, sizeof(ACTIVE_TRIGGER), psInit->trigInit, psInit->trigExt))
 	{
+		debug(LOG_ERROR, "eventInitialise: HEAP_CREATE failed for triggers");
 		return FALSE;
 	}
 	// Create the context heap
 	if (!HEAP_CREATE(&psContHeap, sizeof(SCRIPT_CONTEXT), psInit->contInit, psInit->contExt))
 	{
+		debug(LOG_ERROR, "eventInitialise: HEAP_CREATE failed for context");
 		return FALSE;
 	}
 
@@ -303,19 +307,22 @@ void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 // Initialise the create/release function array - specify the maximum value type
 BOOL eventInitValueFuncs(SDWORD maxType)
 {
+	if(asReleaseFuncs != NULL)	//<NEW> 13.05.05
+		debug(LOG_ERROR, "eventInitValueFuncs: array already initialised");
+
 	ASSERT((asReleaseFuncs == NULL,
 		"eventInitValueFuncs: array already initialised"));
 
 	asCreateFuncs = (VAL_CREATE_FUNC *)MALLOC(sizeof(VAL_CREATE_FUNC) * maxType);
 	if (!asCreateFuncs)
 	{
-		DBERROR(("eventInitValueFuncs: Out of memory"));
+		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
 		return FALSE;
 	}
 	asReleaseFuncs = (VAL_RELEASE_FUNC *)MALLOC(sizeof(VAL_RELEASE_FUNC) * maxType);
 	if (!asReleaseFuncs)
 	{
-		DBERROR(("eventInitValueFuncs: Out of memory"));
+		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
 		return FALSE;
 	}
 
@@ -331,7 +338,7 @@ BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 {
 	if (type >= numFuncs)
 	{
-		DBERROR(("eventAddValueCreate: type out of range"));
+		debug(LOG_ERROR, "eventAddValueCreate: type out of range");
 		return FALSE;
 	}
 
@@ -345,6 +352,7 @@ BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 {
 	if (type >= numFuncs)
 	{
+		debug(LOG_ERROR, "eventAddValueRelease: type out of range");
 		DBERROR(("eventAddValueRelease: type out of range"));
 		return FALSE;
 	}
@@ -415,9 +423,9 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//initialize Strings and integers
 				if(type == VAL_STRING)
 				{
-					debug(LOG_SCRIPT,"eventNewContext: STRING type variables are not implemented");
+					//debug(LOG_ERROR,"eventNewContext: STRING type variables are not implemented");
 
-					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(255);	//TODO: MAXSTRLEN
+					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(MAXSTRLEN);
 					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
 				}
 				else
@@ -474,7 +482,21 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				type = psCode->pGlobals[val];
 			}
 			psNewChunk->asVals[storeIndex].type = type;
-			psNewChunk->asVals[storeIndex].v.ival = 0;
+
+
+			//initialize Strings
+			if(type == VAL_STRING)
+			{
+				//debug(LOG_ERROR, "eventNewContext: STRING data type is not implemented");
+				psNewChunk->asVals[storeIndex].v.sval = (char*)MALLOC(MAXSTRLEN);
+				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
+			}
+			else
+			{
+				psNewChunk->asVals[storeIndex].v.ival = 0;
+			}
+
+
 			if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])
 			{
 				if (!asCreateFuncs[type](psNewChunk->asVals + storeIndex))
@@ -1375,5 +1397,49 @@ BOOL eventSetTraceLevel(void)
 
 	eventTraceLevel = level;
 
+	return TRUE;
+}
+
+//reset local vars
+BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
+{
+	
+	SDWORD		i;
+
+	if(EventIndex >= psCode->numEvents) 
+	{
+		debug(LOG_ERROR, "resetLocalVars: wrong event index: %d", EventIndex);
+		return FALSE;
+	}
+
+	for(i=0; i < psCode->numLocalVars[EventIndex]; i++)
+	{
+		//Initialize main value
+		if(psCode->ppsLocalVarVal[EventIndex][i].type == VAL_STRING)
+		{
+			//debug(LOG_ERROR , "resetLocalVars: String type is not implemented");
+			psCode->ppsLocalVarVal[EventIndex][i].v.sval = (char*)MALLOC(MAXSTRLEN);
+
+			strcpy(psCode->ppsLocalVarVal[EventIndex][i].v.sval,"\0");
+		}
+		else
+		{
+			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
+		}
+
+		/* only group (!) must be re-created each time */
+		if (psCode->ppsLocalVarVal[EventIndex][i].type == ST_GROUP)
+		{
+			debug(LOG_SCRIPT, "resetLocalVars -  created");
+		
+			if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
+			{
+				debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");
+				return FALSE;
+			}
+		}
+	}
+
+	//debug(LOG_SCRIPT, "Reset local vars for event %d", EventIndex);
 	return TRUE;
 }

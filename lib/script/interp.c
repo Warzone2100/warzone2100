@@ -12,11 +12,14 @@
 #include "stack.h"
 #include "codeprint.h"
 #include "script.h"
+#include "event.h" //needed for eventGetEventID() 
 
 
 // the maximum number of instructions to execute before assuming
 // an infinite loop
 #define INTERP_MAXINSTRUCTIONS		100000
+
+
 
 /* The size of each opcode */
 SDWORD aOpSize[] =
@@ -202,50 +205,6 @@ BOOL interpInitialise(void)
 	return TRUE;
 }
 
-//reset local vars
-BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
-{
-	
-	SDWORD		i;
-
-	if(EventIndex >= psCode->numEvents) 
-	{
-		debug(LOG_ERROR, "resetLocalVars: wrong event index: %d", EventIndex);
-		return FALSE;
-	}
-
-	for(i=0; i < psCode->numLocalVars[EventIndex]; i++)
-	{
-		//Initialize main value
-		if(psCode->ppsLocalVarVal[EventIndex][i].type == VAL_STRING)
-		{
-			debug(LOG_ERROR , "resetLocalVars: String type is not implemented");
-			psCode->ppsLocalVarVal[EventIndex][i].v.sval = (char*)MALLOC(255);	//MAXSTRLEN
-
-			strcpy(psCode->ppsLocalVarVal[EventIndex][i].v.sval,"\0");
-		}
-		else
-		{
-			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
-		}
-
-		/* only group (!) must be re-created each time */
-		//if (psCode->ppsLocalVarVal[EventIndex][i].type == ST_GROUP)
-		//{
-		//	//DB_INTERP(("resetLocalVars -  created\n"));
-		//
-		//	if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
-		//	{
-		//		debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");
-		//		return FALSE;
-		//	}
-		//}
-	}
-
-	//debug(LOG_SCRIPT, "Reset local vars for event %d", EventIndex);
-	return TRUE;
-}
-
 /* Run a compiled script */
 BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
 {
@@ -262,6 +221,10 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	UDWORD		CurEvent;
 	BOOL		bStop,bEvent;
+	SDWORD		callDepth;
+	STRING		*pTrigLab, *pEventLab;
+
+	//debug(LOG_SCRIPT, "interpRunScript 1");
 
 	ASSERT((PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
 		"interpRunScript: invalid context pointer"));
@@ -337,6 +300,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	CurEvent = index;
 	bStop = FALSE;
+
+	//debug(LOG_SCRIPT, "interpRunScript 2");
 
 	while(!bStop)
 	{
@@ -698,17 +663,20 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 				break;
 			case OP_CALL:
-				TRCPRINTF(("CALL        "));
+				//debug(LOG_SCRIPT, "OP_CALL");
 				TRCPRINTFUNC( (SCRIPT_FUNC)(*(ip+1)) );
 				TRCPRINTF(("\n"));
 				scriptFunc = (SCRIPT_FUNC)*(ip+1);
+				//debug(LOG_SCRIPT, "OP_CALL 1");
 				if (!scriptFunc())
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do func" );
 					ASSERT((FALSE, "interpRunScript: could not do func"));
 					goto exit_with_error;
 				}
+				//debug(LOG_SCRIPT, "OP_CALL 2");
 				ip += aOpSize[opcode];
+				//debug(LOG_SCRIPT, "OP_CALL 3");
 				break;
 			case OP_VARCALL:
 				TRCPRINTF(("VARCALL     "));
@@ -808,7 +776,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	}
 
 
-
+	//debug(LOG_SCRIPT, "interpRunScript 3");
 
 
 	TRCPRINTF(("%-6d  EXIT\n", ip - psProg->pCode));
@@ -819,6 +787,35 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 exit_with_error:
 	// Deal with the script crashing or running out of memory
 	debug(LOG_ERROR,"interpRunScript: *** ERROR EXIT *** (CurEvent=%d)", CurEvent);
+
+
+	debug(LOG_ERROR,"Original event/trigger ID: %d (of %d)", index, psProg->numEvents);
+	debug(LOG_ERROR,"Current event ID: %d (of %d)", CurEvent, psProg->numEvents);
+	callDepth = GetCallDepth();
+	debug(LOG_ERROR,"Call depth : %d", callDepth);
+
+	if(psProg->psDebug != NULL)
+	{
+		debug(LOG_ERROR,"Displaying debug info:");
+
+		if(bEvent)
+		{
+			// find the debug info for the original (caller)  event
+			pEventLab = eventGetEventID(psProg, index);
+			debug(LOG_ERROR,"Original event name: %s", pEventLab);
+
+			pEventLab = eventGetEventID(psProg, CurEvent);
+			debug(LOG_ERROR,"Current event name: %s", pEventLab);
+		}
+		else
+		{
+			// find the debug info for the trigger
+			pTrigLab = eventGetTriggerID(psProg, index);
+			debug(LOG_ERROR,"Trigger: %s", pTrigLab);
+		}
+	}
+
+
 	TRCPRINTF(("*** ERROR EXIT ***\n"));
 	bInterpRunning = FALSE;
 	return FALSE;

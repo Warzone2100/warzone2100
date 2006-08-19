@@ -698,6 +698,13 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "skFireLassat",			scrSkFireLassat,			VAL_VOID,
 	2, {VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
 
+	/* New functions */
+
+	{ "strcmp",			scrStrcmp,		VAL_BOOL,
+		2, { VAL_STRING, VAL_STRING} },
+
+	/* END new functions */
+
 
 //	{ "skOrderDroidLineBuild",	scrSkOrderDroidLineBuild,	VAL_VOID,
 //	6, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },

@@ -6405,3 +6405,35 @@ BOOL scrEnumDroid(void)
 
 	return TRUE;
 }
+
+
+//-----------------------------------------
+//New functions
+//-----------------------------------------
+
+//compare two strings (0 means they are different)
+BOOL scrStrcmp(void)
+{
+	STRING	*ssval1=NULL;
+	STRING	*ssval2=NULL;
+
+	debug(LOG_SCRIPT,"scrStrcmp");
+	
+	if (!stackPopParams(2, VAL_STRING, &ssval1, VAL_STRING, &ssval2))
+	{
+		debug(LOG_ERROR, "scrStrcmp(): stack failed");
+		return FALSE;
+	}
+
+	debug(LOG_SCRIPT,"scrStrcmp 1");
+	
+	if (!stackPushResult(VAL_BOOL, !strcmp(ssval1, ssval2)))
+	{
+		debug(LOG_ERROR, "scrStrcmp: failed to push result");
+		return FALSE;
+	}
+
+	debug(LOG_SCRIPT,"scrStrcmp 2");
+
+	return TRUE;
+}

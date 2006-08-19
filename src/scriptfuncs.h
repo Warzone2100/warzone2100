@@ -496,6 +496,11 @@ extern BOOL scrResetLimboMission(void);
 // skirmish lassat fire.
 extern BOOL scrSkFireLassat(void);
 
+//-----------------------------------------
+//New functions
+//-----------------------------------------
+
+extern BOOL scrStrcmp(void);
 #endif
 
 
