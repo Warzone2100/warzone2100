@@ -182,7 +182,7 @@ void *memMalloc(STRING *pFileName, SDWORD LineNumber, size_t Size)
 	strcpy(psNode->pFile, pFileName);
 	psNode->line = LineNumber;
 	psNode->size = Size;
-	
+
 	/* Store the new entry in the memory treap */
 	psNode->priority = (UDWORD)rand();
 	psNode->key = (UDWORD)psNode;
@@ -245,7 +245,7 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 
 	ASSERT(((pFileName != NULL), "No filename passed to mem_Free"));
 	ASSERT(((pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
-								  "File: %s\nLine: %d", pFileName, LineNumber));
+								  "File: %s\nLine: %d\n", pFileName, LineNumber));
 
 
 	// see if the pointer was allocated in a block
@@ -397,7 +397,7 @@ SDWORD memRecReport(MEM_NODE *psRoot)
 #define MAXMODULES (32)
 typedef struct
 {
-	char pFile[128];	
+	char pFile[128];
 	int Count;
 	int Total;
 } MEMMOD;
@@ -467,7 +467,7 @@ void memMemoryDump(MEM_NODE *Node)
 	MemTotalEntries=0;
 	MemTotalModules=0;
 	MemTotalAllocated=0;
-	memSummary(Node);	
+	memSummary(Node);
 
 	debug(LOG_MEMORY, "Memory Summary: %d bytes allocated in %d handy size chunks", MemTotalAllocated, MemTotalEntries);
 	for (i=0;i<(SDWORD)MemTotalModules;i++)

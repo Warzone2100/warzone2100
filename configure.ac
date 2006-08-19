@@ -46,6 +46,7 @@ if test "x$debug" = "xyes" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -Wall -DDEBUG"
   AC_MSG_RESULT([yes])
 else
+  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
   AC_MSG_RESULT([no])
 fi
 
