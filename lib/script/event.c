@@ -14,7 +14,6 @@
 #include "interp.h"
 #include "script.h"
 #include "event.h"
-#include "scripttabs.h"		//because of ST_GROUP
 
 // array to store release functions
 static VAL_CREATE_FUNC		*asCreateFuncs;

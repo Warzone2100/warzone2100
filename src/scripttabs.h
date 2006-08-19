@@ -7,6 +7,8 @@
 #ifndef _scripttabs_h
 #define _scripttabs_h
 
+#include "lib/script/event.h" // needed for _scr_user_types
+
 // How many game ticks for one event tick
 #define SCR_TICKRATE	100
 
@@ -14,44 +16,6 @@
 #define BARB1		6	
 #define BARB2		7
 
-
-// ID numbers for each user type
-typedef enum _scr_user_types
-{
-	ST_INTMESSAGE = VAL_USERTYPESTART,		// Intelligence message ?? (6)
-	ST_BASEOBJECT,							// Base object
-	ST_DROID,								// Droid object
-	ST_STRUCTURE,							// Structure object
-	ST_FEATURE,								// Feature object
-	ST_BASESTATS,							// General stats type
-	ST_COMPONENT,							// General component
-	ST_BODY,								// Component types
-	ST_PROPULSION,
-	ST_ECM,
-	ST_SENSOR,
-	ST_CONSTRUCT,
-	ST_WEAPON,
-	ST_REPAIR,
-	ST_BRAIN,
-	ST_TEMPLATE,							// Template object
-	ST_STRUCTUREID,							/* A structure ID number (don't really 
-											   need this since just a number?)*/
-	ST_STRUCTURESTAT,						// structure stat type
-	ST_FEATURESTAT,							// feature stat type
-	ST_DROIDID,								// ID of a droid
-	ST_TEXTSTRING,							// text string for display messages in tutorial
-	ST_SOUND,
-	ST_LEVEL,								// The name of a game level
-	ST_GROUP,								// A group of droids
-	ST_RESEARCH,							// A research topic
-
-	//private types for game code - not for use in script
-	ST_POINTER_O,								//used so we can check for NULL objects etc
-	ST_POINTER_T,								//used so we can check for NULL templates
-	ST_POINTER_S,								// NULL stats
-
-	ST_MAXTYPE,									// maximum possible type - should always be last
-} SCR_USER_TYPES;
 
 typedef enum _scr_callback_types
 {
