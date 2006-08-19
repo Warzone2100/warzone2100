@@ -34,9 +34,14 @@
 #define DBPRINTF(x) _db_debug x
 #define _db_debug(...) debug(LOG_NEVER, __VA_ARGS__)
 #else
-#define DBMB(x)
-#define DBPRINTF(x)
+#define DBMB(x) debug_msvc(x)
+#define DBPRINTF(x) debug_msvc(x)
 #endif
+
+/* Special MSVC hacks */
+void debug_msvc(const char *str, ...);
+void dbg_position(const char *file, int line);
+void dbg_assert(BOOL condition, const char *str, ...);
 
 /*
  *
@@ -49,7 +54,7 @@
  */
 #ifdef _MSC_VER
 // MSVC doesn't understand __VAR_ARGS__ macros
-# define ASSERT(x)
+# define ASSERT(x) do { dbg_position(__FILE__, __LINE__); dbg_assert(x); } while(0)
 #else
 # define ASSERT(x) wz_assert x
 # ifdef DEBUG
@@ -92,7 +97,7 @@ do {																		\
 		abort();			\
 	} while (FALSE);
 #else
-#define DBERROR(x)
+#define DBERROR(x) do { debug_msvc(x); abort(); } while(0)
 #endif
 
 
