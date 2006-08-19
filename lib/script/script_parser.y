@@ -4813,7 +4813,7 @@ static void scriptResetTables(void)
 }
 
 /* Compile a script program */
-BOOL scriptCompile(UBYTE *pData, UDWORD fileSize,
+BOOL scriptCompile(char *pData, UDWORD fileSize,
 				   SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType)
 {
 	// Tell lex about the input buffer
