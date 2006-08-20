@@ -17,6 +17,7 @@ xxxx-xx-xx: Version 2.0.4
    * Fixed a bug which prevented the AI from creating oil derricks
  * Scripting:
    * Support for functions (including local variables)
+   * Script parse errors now report filename and line number
  * Debugging:
    * Cheat mode access changed
    * Logfile shows revision and version
