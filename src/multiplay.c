@@ -35,7 +35,7 @@
 #include "keybind.h"
 
 #include "lib/script/script.h"				//Because of "ScriptTabs.h"
-#include "scriptTabs.h"			//because of CALL_AI_MSG
+#include "scripttabs.h"			//because of CALL_AI_MSG
 #include "scriptcb.h"			//for console callback
 
 #include "lib/netplay/netplay.h"								// the netplay library.

@@ -24,7 +24,7 @@
 #include "research.h"
 #include "gateway.h"
 #include "multiplay.h"
-#include "Action.h"		//because of .action
+#include "action.h"		//because of .action
 #include "power.h"
 #include "geometry.h"
 

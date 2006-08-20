@@ -312,7 +312,7 @@ extern void displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to); //make AI p
 
 
 /* for multiplayer message stack */
-extern	UDWORD msgStackPush(SDWORD plFrom, SDWORD plTo, STRING *tStr);
+extern  UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, STRING *tStr, SDWORD x, SDWORD y);
 extern	BOOL isMsgStackEmpty();
 extern	BOOL msgStackGetFrom(SDWORD  *psVal);
 extern	BOOL msgStackGetTo(SDWORD  *psVal);

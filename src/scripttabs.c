@@ -26,7 +26,7 @@
 //#include "mission.h"
 #include "levels.h"
 #include "order.h"
-#include "Action.h"		//new member variable - .action
+#include "action.h"		//new member variable - .action
 #include "lib/gamelib/gtime.h"
 #include "mission.h"
 
