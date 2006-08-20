@@ -63,6 +63,8 @@ UDWORD	cheatHash[CHEAT_MAXCHEAT];
 
 void dataISpriteRelease(void *pData);
 
+extern int scr_lineno;
+
 /**********************************************************
  *
  * Source
@@ -1116,6 +1118,8 @@ BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 	// make sure the memory system uses normal malloc for a compile
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
+
+	scr_lineno = 1;
 
 	if (!scriptCompile(pBuffer, size, &psProg, SCRIPTTYPE))		// see script.h
 	{
