@@ -25,8 +25,12 @@ enum _objids
 	OBJID_PROPULSION,	// the propulsion component
 	OBJID_WEAPON,		// the weapon component
 	OBJID_STRUCTSTAT,	// the stat of a structure
+	OBJID_STRUCTSTATTYPE,//new
 	OBJID_ORDERX,		// order coords.106
 	OBJID_ORDERY,
+	OBJID_ACTION,
+	OBJID_SELECTED,		//if droid is selected (humans only)
+	OBJID_TARGET,		//added object->psTarget
 };
 
 // id's for group variables

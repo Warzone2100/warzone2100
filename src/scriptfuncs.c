@@ -6343,6 +6343,137 @@ BOOL scrTutorialTemplates(void)
 }
 
 
+
+
+
+
+
+//-----------------------------------------
+//New functions
+//-----------------------------------------
+
+//compare two strings (0 means they are different)
+BOOL scrStrcmp(void)
+{
+	STRING	*ssval1=NULL;
+	STRING	*ssval2=NULL;
+
+	if (!stackPopParams(2, VAL_STRING, &ssval1, VAL_STRING, &ssval2))
+	{
+		debug(LOG_ERROR, "scrStrcmp(): stack failed");
+		return FALSE;
+	}
+	
+	if (!stackPushResult(VAL_BOOL, !strcmp(ssval1, ssval2)))
+	{
+		debug(LOG_ERROR, "scrStrcmp: failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Output a string to console */
+BOOL scrConsole(void)
+{
+	STRING	*ssval=NULL;
+
+	if (!stackPopParams(1, VAL_STRING, &ssval))
+	{
+		debug(LOG_ERROR, "scrConsole(): stack failed");
+		return FALSE;
+	}
+
+	addConsoleMessage(ssval,DEFAULT_JUSTIFY);
+
+	return TRUE;
+}
+
+BOOL scrDebug[MAX_PLAYERS];
+
+//turn on debug messages
+BOOL scrDbgMsgOn(void)
+{
+	BOOL	bOn;
+	SDWORD	player;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bOn))
+	{
+		debug(LOG_ERROR, "scrDbgMsgOn(): stack failed");
+		return FALSE;
+	}
+
+	if (player < 0 || player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "scrDbgMsgOn(): wrong player number");
+		return FALSE;
+	}
+
+	scrDebug[player] = bOn;
+
+	return TRUE;
+}
+
+BOOL scrMsg(void)
+{
+	SDWORD	playerTo,playerFrom;
+	STRING	*ssval=NULL;
+	STRING tmp[255];
+
+	if (!stackPopParams(3, VAL_STRING, &ssval, VAL_INT, &playerFrom, VAL_INT, &playerTo))
+	{
+		debug(LOG_ERROR, "scrMsg(): stack failed");
+		return FALSE;
+	}
+
+	if(playerFrom < 0 || playerFrom >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "scrMsg(): playerFrom out of range");
+		return FALSE;
+	}
+
+	if(playerTo < 0 || playerTo >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "scrMsg(): playerTo out of range");
+		return FALSE;
+	}
+
+	//sendAIMessage(ssval, playerFrom, playerTo);		//TODO: implement multiplayer messages
+
+
+	//show the message we sent on our local console as well (even in skirmish, if player plays as this AI)
+	if(playerFrom == selectedPlayer)
+	{
+		sprintf(tmp,"[%d-%d] : %s",playerFrom, playerTo, ssval);											// add message
+		addConsoleMessage(tmp, RIGHT_JUSTIFY);
+	}
+
+	return TRUE;
+}
+
+BOOL scrDbg(void)
+{
+	STRING	*ssval=NULL;
+	SDWORD	player;
+	
+
+	if (!stackPopParams(2, VAL_STRING, &ssval, VAL_INT, &player))
+	{
+		debug(LOG_ERROR, "scrDbg(): stack failed");
+		return FALSE;
+	}
+
+	if(scrDebug[player])
+	{
+		STRING	*sTmp;
+		sTmp = (char*)MALLOC(255);
+		sprintf(sTmp,"%d) %s",player,ssval);
+		addConsoleMessage(sTmp,DEFAULT_JUSTIFY);
+	}
+
+	return TRUE;
+}
+
 static	UDWORD			playerToEnumDroid;
 static	UDWORD			playerVisibleDroid;
 static	UDWORD			enumDroidCount;
@@ -6400,40 +6531,57 @@ BOOL scrEnumDroid(void)
 	// push NULLDROID, since didn't find any
 	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)NULL))
 	{
+		debug(LOG_ERROR, "scrEnumDroid() - push failed");
 		return FALSE;
 	}
 
 	return TRUE;
 }
 
-
-//-----------------------------------------
-//New functions
-//-----------------------------------------
-
-//compare two strings (0 means they are different)
-BOOL scrStrcmp(void)
+//Return the template factory is currently building
+BOOL scrFactoryGetTemplate(void)
 {
-	STRING	*ssval1=NULL;
-	STRING	*ssval2=NULL;
+	SDWORD			structure;
+	STRUCTURE		*psStructure = NULL;
+	DROID_TEMPLATE	*psTemplate = NULL;
 
-	debug(LOG_SCRIPT,"scrStrcmp");
-	
-	if (!stackPopParams(2, VAL_STRING, &ssval1, VAL_STRING, &ssval2))
+	if (!stackPopParams(1, ST_STRUCTURE, &structure))
 	{
-		debug(LOG_ERROR, "scrStrcmp(): stack failed");
+		debug(LOG_ERROR, "scrFactoryGetTemplate() - stackPopParams failed");
 		return FALSE;
 	}
 
-	debug(LOG_SCRIPT,"scrStrcmp 1");
-	
-	if (!stackPushResult(VAL_BOOL, !strcmp(ssval1, ssval2)))
+	psStructure = (STRUCTURE *)structure;
+
+	if (psStructure == NULL)
 	{
-		debug(LOG_ERROR, "scrStrcmp: failed to push result");
+		ASSERT((FALSE, "scrFactoryGetTemplate: NULL factory object"));
 		return FALSE;
 	}
 
-	debug(LOG_SCRIPT,"scrStrcmp 2");
+	ASSERT((PTRVALID(psStructure, sizeof(STRUCTURE)),
+		"scrFactoryGetTemplate: Invalid structure pointer"));
+	ASSERT(((psStructure->pStructureType->type == REF_FACTORY OR
+		psStructure->pStructureType->type == REF_CYBORG_FACTORY OR
+		psStructure->pStructureType->type == REF_VTOL_FACTORY), 
+		"scrFactoryGetTemplate: structure is not a factory"));
+
+	if(!StructIsFactory(psStructure))
+	{
+		debug(LOG_ERROR, "scrFactoryGetTemplate: structure not a factory.");
+		return FALSE;
+	}
+
+	psTemplate = (DROID_TEMPLATE *)((FACTORY*)psStructure->pFunctionality)->psSubject;
+
+	ASSERT((PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+		"scrFactoryGetTemplate: Invalid template pointer"));
+
+	if (!stackPushResult(ST_TEMPLATE, (UDWORD)psTemplate))
+	{
+		debug(LOG_ERROR, "scrFactoryGetTemplate: stackPushResult failed");
+		return FALSE;
+	}
 
 	return TRUE;
 }

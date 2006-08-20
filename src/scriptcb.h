@@ -7,6 +7,19 @@
 #ifndef _scriptcb_h
 #define _scriptcb_h
 
+//console callback stuff
+//---------------------------
+#define MAXSTRLEN 255
+extern SDWORD ConsolePlayer;
+extern SDWORD MultiMsgPlayerTo;
+extern SDWORD MultiMsgPlayerFrom;
+extern SDWORD beaconX;
+extern SDWORD beaconY;
+extern char ConsoleMsg[MAXSTRLEN];	//Last console message
+extern char MultiplayMsg[MAXSTRLEN];	//Last multiplayer message
+extern STRUCTURE	*psScrCBNewStruct;		//for scrCBStructBuilt callback
+extern DROID		*psScrCBNewStructTruck;	//for scrCBStructBuilt callback
+
 
 // The pointer to the droid that was just built for a CALL_NEWDROID
 extern DROID		*psScrCBDroidTaken;
@@ -97,6 +110,13 @@ extern BOOL scrCBPlayerLeft(void);
 // alliance offered.
 extern BOOL scrCBAllianceOffer(void);
 extern UDWORD	CBallFrom,CBallTo;
+
+//Console callback
+extern BOOL scrCallConsole(void);
+extern BOOL scrCBStructBuilt(void);
+extern BOOL scrCallMultiMsg(void);
+//extern BOOL scrCallBeacon(void);
+extern BOOL scrCBTransporterLandedB(void);
 
 #endif
 

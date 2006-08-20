@@ -98,7 +98,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 					// internal type - just store the DWORD value
 					if (pBuffer != NULL)
 					{
-						*((UDWORD *)pPos) = (UDWORD)psVal->v.ival;
+						*((UDWORD *)pPos) = (UDWORD)psVal->v.ival;	//TODO: make it save strings properly
 						pPos += sizeof(UDWORD);
 					}
 

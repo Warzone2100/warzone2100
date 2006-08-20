@@ -5,10 +5,7 @@
  *
  */
 #ifndef _scriptfuncs_h
-#define _scriptfuncs_h
-
-extern BOOL scrInitEnumDroids(void);	
-extern BOOL scrEnumDroid(void);		
+#define _scriptfuncs_h	
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
@@ -501,6 +498,17 @@ extern BOOL scrSkFireLassat(void);
 //-----------------------------------------
 
 extern BOOL scrStrcmp(void);
+extern BOOL scrConsole(void);
+extern BOOL scrDbgMsgOn(void);
+extern BOOL scrDbg(void);
+extern BOOL scrMsg(void);
+
+extern BOOL scrActionDroidObj(void);
+extern BOOL scrInitEnumDroids(void);	
+extern BOOL scrEnumDroid(void);
+extern BOOL scrInitIterateGroupB(void);
+extern BOOL scrIterateGroupB(void);
+extern BOOL	scrFactoryGetTemplate(void);
 #endif
 
 

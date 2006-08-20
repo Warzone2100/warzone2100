@@ -64,7 +64,11 @@ typedef enum _msgtype
 	NET_RESEARCHSTATUS,		//44 105, research state.
 	NET_LASSAT,				//45 107, lassat firing.
 
-	NET_REQUESTMAP			//46 107 dont have map, please send it.
+	NET_REQUESTMAP,			//46 107 dont have map, please send it.
+	NET_AITEXTMSG,			//chat between AIs
+	NET_TEAMS_ON,
+	NET_BEACONMSG,
+	NET_SET_TEAMS
 
 } MESSAGE_TYPES;
 
@@ -234,6 +238,7 @@ extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
 extern BOOL SendResearch		(UBYTE player,UDWORD index);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.      
 extern BOOL sendTextMessage		(char *pStr,BOOL cast);			// send a text message
+extern BOOL sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
 
 extern BOOL turnOffMultiMsg		(BOOL bDoit);
 
@@ -302,3 +307,15 @@ extern UDWORD averagePing		(VOID);
 extern VOID modifyResources		(POWER_GEN_FUNCTION* psFunction);
 
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
+
+extern void displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to); //make AI process a message
+
+
+/* for multiplayer message stack */
+extern	UDWORD msgStackPush(SDWORD plFrom, SDWORD plTo, STRING *tStr);
+extern	BOOL isMsgStackEmpty();
+extern	BOOL msgStackGetFrom(SDWORD  *psVal);
+extern	BOOL msgStackGetTo(SDWORD  *psVal);
+extern	BOOL msgStackGetMsg(STRING  *psVal);
+extern	BOOL msgStackPop();
+extern	SDWORD msgStackGetCount();

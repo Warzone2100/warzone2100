@@ -49,7 +49,7 @@ void scriptShutDown(void)
 /* Free a SCRIPT_CODE structure */
 void scriptFreeCode(SCRIPT_CODE *psCode)
 {
-	UDWORD	i;
+	UDWORD	i,j;
 
 	FREE(psCode->pCode);
 	if (psCode->pTriggerTab)
@@ -107,18 +107,30 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 	/* Free local vars */
 	for(i=0; i < psCode->numEvents; i++)
 	{
-		FREE(psCode->ppsLocalVars[i]);
-		FREE(psCode->ppsLocalVarVal[i]);
+		if(psCode->numLocalVars[i] > 0)		//only free if any defined
+		{
+			//free strings for event i
+			for(j=0; j < psCode->numLocalVars[i]; j++)
+			{
+				if(psCode->ppsLocalVarVal[i][j].type == VAL_STRING);	//if a string
+				{
+					if(psCode->ppsLocalVarVal[i][j].v.sval != NULL)		//doublecheck..
+						FREE(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
+				}
+			}
 
-		psCode->numParams = 0;
-		psCode->numLocalVars = 0;
-
-		FREE(psCode->numParams);
-		FREE(psCode->numLocalVars);
+			FREE(psCode->ppsLocalVars[i]);
+			FREE(psCode->ppsLocalVarVal[i]);	//free pointer to event i local vars
+		}
 	}
+
+	FREE(psCode->numParams);
+	FREE(psCode->numLocalVars);
 
 	FREE(psCode->ppsLocalVars);
 	FREE(psCode->ppsLocalVarVal);
+
+	psCode->numEvents = 0;
 
 	FREE(psCode);
 }

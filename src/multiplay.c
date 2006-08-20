@@ -34,6 +34,10 @@
 #include "lib/gamelib/gtime.h"
 #include "keybind.h"
 
+#include "lib/script/script.h"				//Because of "ScriptTabs.h"
+#include "scriptTabs.h"			//because of CALL_AI_MSG
+#include "scriptcb.h"			//for console callback
+
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "multiplay.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
@@ -59,6 +63,24 @@ MULTIPLAYERINGAME			ingame;
 BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
 STRING						tempString[12];
+
+/////////////////////////////////////
+/* multiplayer message stack stuff */
+/////////////////////////////////////
+#define MAX_MSG_STACK	100
+#define MAX_STR			255
+
+char msgStr[MAX_MSG_STACK][MAX_STR];
+
+SDWORD msgPlFrom[MAX_MSG_STACK];
+SDWORD msgPlTo[MAX_MSG_STACK];
+
+SDWORD callbackType[MAX_MSG_STACK];
+SDWORD locx[MAX_MSG_STACK];
+SDWORD locy[MAX_MSG_STACK];
+
+SDWORD msgStackPos = -1;				//top element pointer
+
 // ////////////////////////////////////////////////////////////////////////////
 // Remote Prototypes
 extern BOOL MultiPlayValidTemplate(DROID_TEMPLATE *psTempl);	// for templates.
@@ -90,6 +112,11 @@ BOOL	recvMessage			(VOID);							// process an incoming message
 BOOL	SendResearch		(UBYTE player,UDWORD index);	// send/recv Research issues
 BOOL	recvResearch		(NETMSG *pMsg);
 BOOL	sendTextMessage		(char *pStr,BOOL bcast);		// send/recv a text message
+
+BOOL	sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
+void	displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to);
+BOOL	recvTextMessageAI	(NETMSG *pMsg);					//AI multiplayer message
+
 BOOL	recvTextMessage		(NETMSG *pMsg);
 BOOL	sendTemplate		(DROID_TEMPLATE *t);			// send/recv Template information
 BOOL	recvTemplate		(NETMSG *pMsg);
@@ -674,6 +701,15 @@ BOOL recvMessage(VOID)
 			case NET_TEXTMSG:					// simple text message
 				recvTextMessage(&msg);
 				break;
+
+			case NET_AITEXTMSG:					//multiplayer AI text message
+				recvTextMessageAI(&msg);
+				break;
+			//case NET_BEACONMSG:					//beacon (blip) message
+			//	recvBeacon(&msg);
+			//	break;
+
+
 			case NET_BUILD:						// a build order has been sent.
 				recvBuildStarted(&msg);
 				break;
@@ -1099,9 +1135,16 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(openchannels[i] && isHumanPlayer(i) && (i != selectedPlayer)) //now doesn't send multiplayer msgs to himself (displayed locally in kf_SendTextMessage() )
+			if(openchannels[i])
 			{
-				NETsend(&m,player2dpid[i],FALSE);
+				if(isHumanPlayer(i) )
+				{
+					NETsend(&m,player2dpid[i],FALSE);
+				}
+				else	//also send to AIs now (non-humans), needed for AI
+				{
+					sendAIMessage(&(m.body[4]), selectedPlayer, i);
+				}
 			}
 		}
 	}
@@ -1109,9 +1152,16 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(sendto[i] && isHumanPlayer(i) && (i != selectedPlayer))
+			if(sendto[i])
 			{
-				NETsend(&m,player2dpid[i],FALSE);
+				if(isHumanPlayer(i))
+				{
+					NETsend(&m,player2dpid[i],FALSE);
+				}
+				else	//also send to AIs now (non-humans), needed for AI
+				{
+					sendAIMessage(&(m.body[4]), selectedPlayer, i);
+				}
 			}
 		}
 	}
@@ -1127,20 +1177,127 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	return TRUE;
 }
 
+//AI multiplayer message, send from a certain player index to another player index
+BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
+{
+	NETMSG	m;
+	SDWORD	sendPlayer;
+	BOOL	bEncrypting;
+
+	//check if this is one of the local players, don't need net send then
+	if(to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
+	{
+		//Just show him the message
+		displayAIMessage(pStr, player, to);
+
+		//Received a console message from a player callback
+		//store and call later
+		//-------------------------------------------------
+		if(!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1))
+		{
+			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
+			return FALSE;
+		}
+	}
+	else		//not a local player (use multiplayer mode)
+	{
+		if(!ingame.localOptionsReceived)
+		{
+			return TRUE;
+		}
+
+		bEncrypting = NetPlay.bEncryptAllPackets;
+		NetPlay.bEncryptAllPackets = FALSE;
+
+		NetAdd(m,0,player);			//save the actual sender
+
+		//save the actual player that is to get this msg on the source machine (source can host many AIs)
+		NetAdd(m,4,to);			//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+
+		memcpy(&(m.body[8]),&(pStr[0]), strlen( &(pStr[0]) )+1);		// copy message in.
+
+		m.size = (UWORD)( strlen( &(pStr[0]) )+9);						// package the message up and send it.
+		m.type = NET_AITEXTMSG;		//new type
+
+		//find machine that is hosting this human or AI
+		sendPlayer = whosResponsible(to);
+
+		if(sendPlayer >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
+			return FALSE;
+		}
+
+		if(!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
+		{
+			debug(LOG_ERROR, "sendAIMessage() - player is not human.");
+			return FALSE;
+		}
+
+		NETsend(&m,player2dpid[sendPlayer],FALSE);		//send to the player who is hosting 'to' player (might be himself if human and not AI)
+
+		NetPlay.bEncryptAllPackets = bEncrypting;
+	}
+
+	return TRUE;
+}
+
+void displayAIMessage(STRING *pStr, SDWORD from, SDWORD to)
+{
+	STRING tmp[255];
+
+	if(isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
+	{
+		//addConsoleMessage(pStr,DEFAULT_JUSTIFY);
+		//console("%d: %s", from, pStr);
+		sprintf(tmp,"%d",from);
+		strcat(tmp," : ");											// seperator
+		strcat(tmp,pStr);											// add message
+		addConsoleMessage(tmp,DEFAULT_JUSTIFY);
+	}
+}
+
 // Write a message to the console.
 BOOL recvTextMessage(NETMSG *pMsg)
 {
 	DPID	dpid;
 	UDWORD	i;
 	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
+	UDWORD  player,j;		//console callback - player who sent the message
 
 	NetGet(pMsg,0,dpid);
 	for(i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
 
+	//console callback - find real number of the player
+	for(j = 0; i<MAX_PLAYERS;j++)
+	{
+		if(dpid == player2dpid[j])
+		{
+			player = j;
+			break;
+		}
+	}
+
+/*
 	strcpy(msg,NetPlay.players[i].name);					// name
 	strcat(msg," : ");								// seperator
 	strncat(msg, &(pMsg->body[4]), MAX_CONSOLE_STRING_LENGTH);					// add message
 	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);// display it.
+*/
+
+	sprintf(msg, "%d", i);
+	strcat(msg," : ");								// seperator
+	strcat(msg, &(pMsg->body[4]));					// add message
+	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);
+
+	//multiplayer message callback
+	//Received a console message from a player, save
+	//----------------------------------------------
+	MultiMsgPlayerFrom = player;
+	MultiMsgPlayerTo = selectedPlayer;
+
+	strcpy(MultiplayMsg,&(pMsg->body[4]));
+	eventFireCallbackTrigger(CALL_AI_MSG);
 
 	// make some noise!
 	if(titleMode == MULTIOPTION || titleMode == MULTILIMIT)
@@ -1150,6 +1307,34 @@ BOOL recvTextMessage(NETMSG *pMsg)
 	else if(!ingame.localJoiningInProgress)
 	{
 		audio_PlayTrack(ID_SOUND_MESSAGEEND);
+	}
+
+	return TRUE;
+}
+
+//AI multiplayer message - received message from AI (from scripts)
+BOOL recvTextMessageAI(NETMSG *pMsg)
+{
+	SDWORD	sender, receiver;
+	
+	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
+
+	NetGet(pMsg,0,sender);
+	NetGet(pMsg,4,receiver);
+	
+	strcpy(msg, &(pMsg->body[8]));
+	strcat(msg,NetPlay.players[sender].name);		// name
+
+	//Display the message and make the script callback
+	displayAIMessage(msg, sender, receiver);
+
+	//Received a console message from a player callback
+	//store and call later
+	//-------------------------------------------------
+	if(!msgStackPush(CALL_AI_MSG,sender,receiver,msg,-1,-1))
+	{
+		debug(LOG_ERROR, "recvTextMessageAI() - msgStackPush - stack failed");
+		return FALSE;
 	}
 
 	return TRUE;
@@ -1516,5 +1701,224 @@ BOOL recvMapFileData(NETMSG *pMsg)
 		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
 
+	return TRUE;
+}
+
+
+//------------------------------------------------------------------------------------------------//
+
+/* multiplayer message stack */
+void msgStackReset(void)
+{
+	msgStackPos = -1;		//Beginning of the stack
+}
+
+UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, STRING *tStr, SDWORD x, SDWORD y)
+{
+	if (msgStackPos >= MAX_MSG_STACK)
+	{
+		debug(LOG_ERROR, "msgStackPush() - stack full");
+		return FALSE;
+	}
+
+	//make point to the last valid element
+	msgStackPos++;
+
+	//remember values
+	msgPlFrom[msgStackPos] = plFrom;
+	msgPlTo[msgStackPos] = plTo;
+
+	callbackType[msgStackPos] = CBtype;
+	locx[msgStackPos] = x;
+	locy[msgStackPos] = y;
+
+	strcpy(msgStr[msgStackPos], tStr);
+
+	return TRUE;
+}
+
+BOOL isMsgStackEmpty()
+{
+	if(msgStackPos == (-1)) return TRUE;
+	return FALSE;
+}
+
+BOOL msgStackGetFrom(SDWORD  *psVal)
+{
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackGetFrom: msgStackPos < 0");
+		return FALSE;
+	}
+
+	*psVal = msgPlFrom[0];
+	
+	return TRUE;
+}
+
+BOOL msgStackGetTo(SDWORD  *psVal)
+{
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackGetTo: msgStackPos < 0");
+		return FALSE;
+	}
+
+	*psVal = msgPlTo[0];
+	
+	return TRUE;
+}
+
+BOOL msgStackGetCallbackType(SDWORD  *psVal)
+{
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackGetCallbackType: msgStackPos < 0");
+		return FALSE;
+	}
+
+	*psVal = callbackType[0];
+	
+	return TRUE;
+}
+
+BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
+{
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackGetXY: msgStackPos < 0");
+		return FALSE;
+	}
+
+	*psValx = locx[0];
+	*psValy = locy[0];
+	
+	return TRUE;
+}
+
+
+BOOL msgStackGetMsg(STRING  *psVal)
+{
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackGetMsg: msgStackPos < 0");
+		return FALSE;
+	}
+
+	strcpy(psVal, msgStr[0]);
+	//*psVal = msgPlTo[msgStackPos];
+	
+	return TRUE;
+}
+
+BOOL msgStackSort()
+{
+	SDWORD i;
+
+	//go through all-1 elements (bottom-top)
+	for(i=0;i<msgStackPos;i++)
+	{
+		msgPlFrom[i] = msgPlFrom[i+1];
+		msgPlTo[i] = msgPlTo[i+1];
+
+		callbackType[i] = callbackType[i+1];
+		locx[i] = locx[i+1];
+		locy[i] = locy[i+1];
+
+		strcpy(msgStr[i], msgStr[i+1]);
+	}
+
+	//erase top element
+	msgPlFrom[msgStackPos] = -2;
+	msgPlTo[msgStackPos] = -2;
+
+	callbackType[msgStackPos] = -2;
+	locx[msgStackPos] = -2;
+	locy[msgStackPos] = -2;
+
+	strcpy(msgStr[msgStackPos], "ERROR STRING!!!!!!!!");
+
+	msgStackPos--;		//since removed the top element
+
+	return TRUE;
+}
+
+BOOL msgStackPop()
+{
+	if(msgStackPos < 0 || msgStackPos >= MAX_MSG_STACK)
+	{
+		debug(LOG_ERROR, "msgStackPop: wrong msgStackPos index");
+		return FALSE;
+	}
+
+	return msgStackSort();		//move allelements 1 pos lower
+}
+
+SDWORD msgStackGetCount()
+{
+	return msgStackPos + 1;
+}
+
+BOOL msgStackFireTop()
+{
+	SDWORD		_callbackType;
+	STRING		msg[255];
+
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackFireTop: msgStackPos < 0");
+		return FALSE;
+	}
+
+	if(!msgStackGetCallbackType(&_callbackType))
+		return FALSE;
+
+
+	switch(_callbackType)
+	{
+		/*
+		case CALL_BEACON:
+
+			if(!msgStackGetXY(&beaconX, &beaconY))
+				return FALSE;
+
+			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
+				return FALSE;
+
+			if(!msgStackGetTo(&MultiMsgPlayerTo))
+				return FALSE;
+
+			if(!msgStackGetMsg(msg))
+				return FALSE;
+
+			strcpy(MultiplayMsg, msg);
+
+			eventFireCallbackTrigger(CALL_BEACON);
+			break;
+*/
+		case CALL_AI_MSG:
+			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
+				return FALSE;
+
+			if(!msgStackGetTo(&MultiMsgPlayerTo))
+				return FALSE;
+
+			if(!msgStackGetMsg(msg))
+				return FALSE;
+
+			strcpy(MultiplayMsg, msg);
+
+			eventFireCallbackTrigger(CALL_AI_MSG);
+			break;
+
+		default:
+			debug(LOG_ERROR, "msgStackFireTop: unknown callback type");
+			return FALSE;
+			break;
+	}
+
+	if(!msgStackPop())
+		return FALSE;
+	
 	return TRUE;
 }

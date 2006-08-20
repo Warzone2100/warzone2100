@@ -24,6 +24,7 @@
 #include "research.h"
 #include "gateway.h"
 #include "multiplay.h"
+#include "Action.h"		//because of .action
 #include "power.h"
 #include "geometry.h"
 
@@ -1974,6 +1975,113 @@ BOOL scrSkFireLassat(void)
 	if(psObj)
 	{
 		orderStructureObj(player, psObj);
+	}
+
+	return TRUE;
+}
+
+//-----------------------
+// New functions
+//-----------------------
+BOOL scrActionDroidObj(void)
+{
+	DROID			*psDroid;
+	SDWORD			action;
+	BASE_OBJECT		*psObj;
+
+	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &action, ST_BASEOBJECT, &psObj))
+	{
+		debug(LOG_ERROR, "scrActionDroidObj: failed to pop");
+		return FALSE;
+	}
+
+	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
+		"scrOrderUnitObj: Invalid unit pointer"));
+	ASSERT((PTRVALID(psObj, sizeof(BASE_OBJECT)),
+		"scrOrderUnitObj: Invalid object pointer"));
+
+	if (psDroid == NULL || psObj == NULL)
+	{
+		return FALSE;
+	}
+
+	if (action != DACTION_DROIDREPAIR)
+	{
+		debug(LOG_ERROR, "scrActionDroidObj: this action is not supported");
+		return FALSE;
+	}
+
+	actionDroidObj(psDroid, action, psObj);
+
+	return TRUE;
+}
+
+//<script function - improved version
+// variables for the group iterator
+DROID_GROUP		*psScrIterateGroupB[MAX_PLAYERS];
+DROID			*psScrIterateGroupDroidB[MAX_PLAYERS];
+
+// initialise iterating a groups members
+BOOL scrInitIterateGroupB(void)
+{
+	DROID_GROUP	*psGroup;
+	SDWORD		bucket;
+
+	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &bucket))
+	{
+		debug(LOG_ERROR, "scrInitIterateGroupB: stackPopParams failed");
+		return FALSE;
+	}
+
+	ASSERT((PTRVALID(psGroup, sizeof(DROID_GROUP)),
+		"scrInitIterateGroupB: invalid group pointer"));
+
+	ASSERT((bucket < MAX_PLAYERS,
+		"scrInitIterateGroupB: invalid bucket"));
+
+	psScrIterateGroupB[bucket] = psGroup;
+	psScrIterateGroupDroidB[bucket] = psGroup->psList;
+
+	return TRUE;
+}
+ 
+//script function - improved version
+// iterate through a groups members
+BOOL scrIterateGroupB(void)
+{
+	DROID_GROUP	*psGroup;
+	DROID		*psDroid;
+	SDWORD		bucket;
+
+	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &bucket))
+	{
+		debug(LOG_ERROR, "scrIterateGroupB: stackPopParams failed");
+		return FALSE;
+	}
+
+	ASSERT((bucket < MAX_PLAYERS,
+		"scrIterateGroupB: invalid bucket"));
+
+	if (psGroup != psScrIterateGroupB[bucket])
+	{
+		ASSERT((FALSE, "scrIterateGroupB: invalid group, InitGroupIterateB not called?"));
+		return FALSE;
+	}
+
+	if (psScrIterateGroupDroidB[bucket] != NULL)
+	{
+		psDroid = psScrIterateGroupDroidB[bucket];
+		psScrIterateGroupDroidB[bucket] = psScrIterateGroupDroidB[bucket]->psGrpNext;
+	}
+	else
+	{
+		psDroid = NULL;
+	}
+
+	if (!stackPushResult(ST_DROID, (SDWORD)psDroid))
+	{
+		debug(LOG_ERROR, "scrIterateGroupB: stackPushResult failed");
+		return FALSE;
 	}
 
 	return TRUE;

@@ -224,7 +224,7 @@ typedef struct _script_code
 	INTERP_TYPE		*pGlobals;		// Types of the global variables
 
 
-	INTERP_TYPE		**ppsLocalVars;		//storage for local vars
+	INTERP_TYPE		**ppsLocalVars;		//storage for local vars (type)
 	UDWORD			*numLocalVars;		//number of local vars each event has
 	INTERP_VAL		**ppsLocalVarVal;	//Values of the local vars used during interpreting process
 	UDWORD			*numParams;			//number of arguments this event has
