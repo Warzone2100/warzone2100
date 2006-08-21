@@ -717,6 +717,9 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "msg",			scrMsg,				VAL_VOID,		//multiplayer msg
 		3, { VAL_STRING, VAL_INT, VAL_INT } },
 
+	{ "debug",			scrDebugFile,				VAL_VOID,
+		1, { VAL_STRING } },
+
 	//{ "addHelpMsg",				scrAddHelpMsg,			VAL_VOID,
 	//	6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 

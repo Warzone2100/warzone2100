@@ -232,6 +232,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	ASSERT((PTRVALID(psProg, sizeof(SCRIPT_CODE)),
 		"interpRunScript: invalid script code pointer"));
 
+
 	if (bInterpRunning)
 	{
 		debug(LOG_ERROR,"interpRunScript: interpreter already running"
@@ -282,7 +283,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			return FALSE;
 		}
 		pCodeBase = psProg->pCode + psProg->pEventTab[index];
-		pCodeStart = pCodeBase + offset;
+		pCodeStart = pCodeBase + offset;		//offset only used for pause() script function
 		pCodeEnd  = psProg->pCode + psProg->pEventTab[index+1];
 
 		bEvent = TRUE; //remember it's an event
@@ -292,6 +293,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		ASSERT((FALSE, "interpRunScript: unknown run type"));
 		return FALSE;
 	}
+
+	
 
 	// Get the first opcode
 	ip = pCodeStart;
@@ -722,16 +725,16 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		{
 			//debug(LOG_SCRIPT, "End of event reached");
 
-			//reset local vars
-			if(!resetLocalVars(psProg, CurEvent))
-			{
-				debug( LOG_ERROR, "interpRunScript: could not reset local vars for event %d", CurEvent );
-				goto exit_with_error;
-			}
-
 			if(!IsRetStackEmpty())		//There was a caller function before this one
 			{
 				//debug(LOG_SCRIPT, "GetCallDepth = %d", GetCallDepth());
+
+				//reset local vars (since trigger can't be called, only local vars of an event can be reset here)
+				if(!resetLocalVars(psProg, CurEvent))
+				{
+					debug( LOG_ERROR, "interpRunScript: could not reset local vars for event %d", CurEvent );
+					goto exit_with_error;
+				}
 
 				if(!PopRetStack((UDWORD *)&ip))		//Pop return address
 				{
@@ -751,22 +754,40 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 				//Set new boundries
 				//--------------------------
- 				pCodeBase = psProg->pCode + psProg->pEventTab[CurEvent];
-				if(CurEvent == index)	//If it's the original event, then also use the offset passed
-				{pCodeStart = pCodeBase + offset;}
-				else
-				{pCodeStart = pCodeBase;}
-				pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
+				if(IsRetStackEmpty())	//if we jumped back to the original caller
+				{
+					if(!bEvent)		//original caller was a trigger (is it possible at all?)
+					{
+						pCodeBase = psProg->pCode + psProg->pTriggerTab[CurEvent];
+						pCodeStart = pCodeBase;
+						pCodeEnd  = psProg->pCode + psProg->pTriggerTab[CurEvent+1];
+					}
+					else			//original caller was an event
+					{
+ 						pCodeBase = psProg->pCode + psProg->pEventTab[CurEvent];
+						pCodeStart = pCodeBase + offset;	//also use the offset passed, since it's an original caller event (offset is used for pause() )
+						pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
+					}
+				}
+				else	//we are still jumping thru functions (this can't be a callback, since it can't/should not be called)
+				{
+ 					pCodeBase = psProg->pCode + psProg->pEventTab[CurEvent];
+					pCodeStart = pCodeBase;
+					pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
+				}
 			}
 			else
 			{
 				//debug( LOG_SCRIPT, " *** CALL STACK EMPTY ***" );
 
-				//reset local vars
-				if(!resetLocalVars(psProg, index))
+				//reset local vars only if original caller was an event, not a trigger
+				if(bEvent)
 				{
-					debug( LOG_ERROR, "interpRunScript: could not reset local vars" );
-					goto exit_with_error;
+					if(!resetLocalVars(psProg, index))
+					{
+						debug( LOG_ERROR, "interpRunScript: could not reset local vars" );
+						goto exit_with_error;
+					}
 				}
 
 				bStop = TRUE;		//Stop execution of this event here, no more calling functions stored
@@ -788,8 +809,11 @@ exit_with_error:
 	// Deal with the script crashing or running out of memory
 	debug(LOG_ERROR,"interpRunScript: *** ERROR EXIT *** (CurEvent=%d)", CurEvent);
 
+	if(bEvent)
+		debug(LOG_ERROR,"Original event ID: %d (of %d)", index, psProg->numEvents);
+	else
+		debug(LOG_ERROR,"Original trigger ID: %d (of %d)", index, psProg->numTriggers);
 
-	debug(LOG_ERROR,"Original event/trigger ID: %d (of %d)", index, psProg->numEvents);
 	debug(LOG_ERROR,"Current event ID: %d (of %d)", CurEvent, psProg->numEvents);
 	callDepth = GetCallDepth();
 	debug(LOG_ERROR,"Call depth : %d", callDepth);

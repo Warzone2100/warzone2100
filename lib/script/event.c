@@ -1406,7 +1406,11 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 
 	if(EventIndex >= psCode->numEvents) 
 	{
-		debug(LOG_ERROR, "resetLocalVars: wrong event index: %d", EventIndex);
+		if(psCode->psDebug != NULL)
+			debug(LOG_ERROR, "resetLocalVars: wrong event index: %d (Event name: %s, total events count = %d, stack depth = %d)", EventIndex, eventGetEventID(psCode, EventIndex), psCode->numEvents, GetCallDepth());
+		else
+			debug(LOG_ERROR, "resetLocalVars: wrong event index: %d (total events count = %d, stack depth = %d)", EventIndex, psCode->numEvents, GetCallDepth());
+
 		return FALSE;
 	}
 

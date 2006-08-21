@@ -4849,19 +4849,18 @@ void scr_error(char *pMessage, ...)
 	va_end(args);
 	scriptGetErrorData(&line, &text);
 #ifdef DEBUG
+	debug(LOG_ERROR, "script parse error:\n%s at %s:%d\nToken: %d, Text: '%s'\n",
+			  aBuff, GetLastResourceFilename(), line, scr_char, text);
 	ASSERT((FALSE, "script parse error:\n%s at %s:%d\nToken: %d, Text: '%s'\n",
 			  aBuff, GetLastResourceFilename(), line, scr_char, text));
-			  
-	debug(LOG_ERROR, "script parse error:\n'%s' at %s:%d\nToken: %d, Text: '%s'\n",
-			  aBuff, GetLastResourceFilename(), line, scr_char, text);
 #else
 	//DBERROR(("script parse error:\n%s at line %d\nToken: %d, Text: '%s'\n",
 	//		  pMessage, line, scr_char, text));
-	DBERROR(("script parse error:\n%s at %s:%d\nToken: %d, Text: '%s'\n",
-			  aBuff, GetLastResourceFilename(), line, scr_char, text));
-			  
 	debug(LOG_ERROR, "script parse error:\n'%s' at %s:%d\nToken: %d, Text: '%s'\n",
 			  aBuff, GetLastResourceFilename(), line, scr_char, text);
+	DBERROR(("script parse error:\n%s at %s:%d\nToken: %d, Text: '%s'\n",
+			  aBuff, GetLastResourceFilename(), line, scr_char, text));
+
 #endif
 }
 

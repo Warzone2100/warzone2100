@@ -502,6 +502,7 @@ extern BOOL scrConsole(void);
 extern BOOL scrDbgMsgOn(void);
 extern BOOL scrDbg(void);
 extern BOOL scrMsg(void);
+extern BOOL scrDebugFile(void);
 
 extern BOOL scrActionDroidObj(void);
 extern BOOL scrInitEnumDroids(void);
