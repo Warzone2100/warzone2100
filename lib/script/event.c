@@ -445,7 +445,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//debug(LOG_SCRIPT, "i=%d, j=%d, value=%d",i,j,psCode->ppsLocalVarVal[i][j].v.ival);
 			}
 
-			debug(LOG_SCRIPT,"------");
+			//debug(LOG_SCRIPT,"------");
 			
 		}
 		else	//this event has no local vars
@@ -486,7 +486,6 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			//initialize Strings
 			if(type == VAL_STRING)
 			{
-				//debug(LOG_ERROR, "eventNewContext: STRING data type is not implemented");
 				psNewChunk->asVals[storeIndex].v.sval = (char*)MALLOC(MAXSTRLEN);
 				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
 			}
@@ -495,7 +494,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				psNewChunk->asVals[storeIndex].v.ival = 0;
 			}
 
-
+			//initialize objects
 			if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])
 			{
 				if (!asCreateFuncs[type](psNewChunk->asVals + storeIndex))

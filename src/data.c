@@ -1114,7 +1114,7 @@ BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
 
-	DBPRINTF(("COMPILING SCRIPT ...%s\n",GetLastResourceFilename()));
+	debug(LOG_WZ, "COMPILING SCRIPT ...%s",GetLastResourceFilename());
 	// make sure the memory system uses normal malloc for a compile
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
@@ -1123,7 +1123,7 @@ BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	if (!scriptCompile(pBuffer, size, &psProg, SCRIPTTYPE))		// see script.h
 	{
-		DBERROR(("Script %s did not compile", GetLastResourceFilename()));
+		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
 		return FALSE;
 	}
 	memSetBlockHeap(psHeap);
@@ -1151,10 +1151,11 @@ BOOL dataScriptLoadVals(char *pBuffer, UDWORD size, void **ppData)
 		return TRUE;
 	}
 
-	DBPRINTF(("Loading script data %s\n",GetLastResourceFilename()));
+	debug(LOG_WZ, "Loading script data %s",GetLastResourceFilename());
 
 	if (!scrvLoad(pBuffer, size))
 	{
+		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
 		return FALSE;
 	}
 

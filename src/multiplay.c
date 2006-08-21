@@ -1278,16 +1278,11 @@ BOOL recvTextMessage(NETMSG *pMsg)
 		}
 	}
 
-/*
-	strcpy(msg,NetPlay.players[i].name);					// name
+	//sprintf(msg, "%d", i);
+	strcpy(msg,NetPlay.players[i].name);
 	strcat(msg," : ");								// seperator
+	//strcat(msg, &(pMsg->body[4]));					// add message
 	strncat(msg, &(pMsg->body[4]), MAX_CONSOLE_STRING_LENGTH);					// add message
-	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);// display it.
-*/
-
-	sprintf(msg, "%d", i);
-	strcat(msg," : ");								// seperator
-	strcat(msg, &(pMsg->body[4]));					// add message
 	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);
 
 	//multiplayer message callback
