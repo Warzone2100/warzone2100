@@ -6474,6 +6474,21 @@ BOOL scrDbg(void)
 	return TRUE;
 }
 
+BOOL scrDebugFile(void)
+{
+	STRING	*ssval=NULL;
+
+	if (!stackPopParams(1, VAL_STRING, &ssval))
+	{
+		debug(LOG_ERROR, "scrDebugFile(): stack failed");
+		return FALSE;
+	}
+
+	debug(LOG_SCRIPT, ssval);
+
+	return TRUE;
+}
+
 static	UDWORD			playerToEnumDroid;
 static	UDWORD			playerVisibleDroid;
 static	UDWORD			enumDroidCount;
