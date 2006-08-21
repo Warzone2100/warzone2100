@@ -5,7 +5,7 @@
  *
  */
 #ifndef _scriptfuncs_h
-#define _scriptfuncs_h	
+#define _scriptfuncs_h
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
@@ -183,11 +183,11 @@ extern BOOL scrSetAllStructureLimits(void);
 extern BOOL scrApplyLimitSet(void);
 
 
-// plays a sound for the specified player - only plays the sound if the 
+// plays a sound for the specified player - only plays the sound if the
 //specified player = selectedPlayer
 extern BOOL scrPlaySound(void);
 
-// plays a sound for the specified player - only plays the sound if the 
+// plays a sound for the specified player - only plays the sound if the
 // specified player = selectedPlayer - saves position
 extern BOOL scrPlaySoundPos(void);
 
@@ -317,7 +317,7 @@ extern BOOL scrDominatingAlliance(void);
 // push true if human player is responsible for 'player'
 extern BOOL	scrMyResponsibility(void);
 
-/*checks to see if a structure of the type specified exists within the 
+/*checks to see if a structure of the type specified exists within the
 specified range of an XY location */
 extern BOOL scrStructureBuiltInRange(void);
 
@@ -504,7 +504,7 @@ extern BOOL scrDbg(void);
 extern BOOL scrMsg(void);
 
 extern BOOL scrActionDroidObj(void);
-extern BOOL scrInitEnumDroids(void);	
+extern BOOL scrInitEnumDroids(void);
 extern BOOL scrEnumDroid(void);
 extern BOOL scrInitIterateGroupB(void);
 extern BOOL scrIterateGroupB(void);
@@ -565,7 +565,7 @@ extern BOOL skTopicAvail(UWORD inc, UDWORD player);
 extern UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
 extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY);
 extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
-extern void printf_console(SBYTE *pFormat, ...);
+extern void printf_console(const char *pFormat, ...);
 #endif
 
 

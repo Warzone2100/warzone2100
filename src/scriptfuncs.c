@@ -6363,7 +6363,7 @@ BOOL scrStrcmp(void)
 		debug(LOG_ERROR, "scrStrcmp(): stack failed");
 		return FALSE;
 	}
-	
+
 	if (!stackPushResult(VAL_BOOL, !strcmp(ssval1, ssval2)))
 	{
 		debug(LOG_ERROR, "scrStrcmp: failed to push result");
@@ -6455,7 +6455,7 @@ BOOL scrDbg(void)
 {
 	STRING	*ssval=NULL;
 	SDWORD	player;
-	
+
 
 	if (!stackPopParams(2, VAL_STRING, &ssval, VAL_INT, &player))
 	{
@@ -6564,7 +6564,7 @@ BOOL scrFactoryGetTemplate(void)
 		"scrFactoryGetTemplate: Invalid structure pointer"));
 	ASSERT(((psStructure->pStructureType->type == REF_FACTORY OR
 		psStructure->pStructureType->type == REF_CYBORG_FACTORY OR
-		psStructure->pStructureType->type == REF_VTOL_FACTORY), 
+		psStructure->pStructureType->type == REF_VTOL_FACTORY),
 		"scrFactoryGetTemplate: structure is not a factory"));
 
 	if(!StructIsFactory(psStructure))
@@ -6620,7 +6620,7 @@ BOOL scrNumTemplatesInProduction(void)
 		if (StructIsFactory(psStruct))
 		{
 			FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
-			
+
 			//if this is the template currently being worked on
 			if (psBaseStats == psFactory->psSubject)
 			{
@@ -6879,7 +6879,7 @@ BOOL scrMin(void)
 	{
 		return FALSE;}
 
-	if (!stackPushResult(VAL_INT, min(val1,val2)))
+		if (!stackPushResult(VAL_INT, MIN(val2, val1)))
 	{
 		return FALSE;
 	}
@@ -6897,7 +6897,7 @@ BOOL scrMax(void)
 		return FALSE;
 	}
 
-	if (!stackPushResult(VAL_INT, max(val1,val2)))
+	if (!stackPushResult(VAL_INT, MAX(val1, val2)))
 	{
 		return FALSE;
 	}
@@ -6927,7 +6927,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 			if(psStruct->visible[player])	//if can see it
 			{
 				structType = psStruct->pStructureType->type;
-				
+
 				switch(structType)		//dangerous to get near these structures
 				{
 					case REF_DEFENSE:
@@ -6993,10 +6993,10 @@ BOOL scrFogTileInRange(void)
 		VAL_INT, &wRange, VAL_INT, &player, VAL_INT, &threadRange))
 	{
 		debug(LOG_ERROR, "scrFogTileInRange: failed to pop");
-		return FALSE;} 
+		return FALSE;}
 
     //Check coords
-	if(		pwLookerX < 0 
+	if(		pwLookerX < 0
 		||	pwLookerX > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	pwLookerY < 0
 		||	pwLookerY > (SDWORD)(mapHeight<<TILE_SHIFT) )
@@ -7046,7 +7046,7 @@ BOOL scrFogTileInRange(void)
 									ok = TRUE;
 							}
 							//}
-						}	
+						}
 					}
 				}
 		  	}
@@ -7081,17 +7081,16 @@ BOOL scrMapRevealedInRange(void)
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
 	UDWORD		i,j;
 	MAPTILE		*psTile;
-	BOOL		ok = FALSE;
 
 	if (!stackPopParams(4, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
 		VAL_INT, &wRange, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,  "scrMapRevealedInRange: failed to pop");
 		return FALSE;
-	} 
+	}
 
     //Check coords
-	if(		wRangeX < 0 
+	if(		wRangeX < 0
 		||	wRangeX > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	wRangeY < 0
 		||	wRangeY > (SDWORD)(mapHeight<<TILE_SHIFT) )
@@ -7146,7 +7145,7 @@ BOOL scrNumResearchLeft(void)
 
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
-	
+
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_RESEARCH, &psResearch ))
 	{
@@ -7155,7 +7154,7 @@ BOOL scrNumResearchLeft(void)
 	}
 
 	if(psResearch == NULL)
-	{	
+	{
 		ASSERT((FALSE, "scrNumResearchLeft(): no such research topic"));
 		return FALSE;
 	}
@@ -7209,14 +7208,14 @@ BOOL scrNumResearchLeft(void)
 				}
 				index = Stack[top + 2];	//if index = -1, then exit
 				cur = Stack[top + 1];		//go to next PR of the last node
-				
+
 			}
 			else		//end of PRs not reached
 			{
 				result += asResearch[index].numPRRequired;		//add num of PRs this topic has
 
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
-			
+
 				//decide if has to check its PRs
 				if(!IsResearchCompleted(&pPlayerRes[tempIndex]) &&	//don't touch if completed already
 					!skTopicAvail(index,player) &&					//has no unresearched PRs left if available
@@ -7263,24 +7262,24 @@ BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player)
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
-		if(i != player && aiCheckAlliances(player,i))	
+		if(i != player && aiCheckAlliances(player,i))
 		{
 			//check each research facility to see if they are doing this topic.
 			for(psOtherStruct=apsStructLists[i];psOtherStruct;psOtherStruct=psOtherStruct->psNext)
 			{
-				if(   psOtherStruct->pStructureType->type == REF_RESEARCH 
-						&& psOtherStruct->status == SS_BUILT 
+				if(   psOtherStruct->pStructureType->type == REF_RESEARCH
+						&& psOtherStruct->status == SS_BUILT
 						&& ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject
 						 )
 				{
-					
+
 					if(((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == Stat->ref)
 					{
 						return TRUE;
 					}
 				}
 			}
-			
+
 		}
 	}
 
@@ -7302,7 +7301,7 @@ BOOL scrResearchCompleted(void)
 	}
 
 	if(psResearch == NULL)
-	{	
+	{
 		ASSERT((FALSE, ": no such research topic"));
 		return FALSE;
 	}
@@ -7349,7 +7348,7 @@ BOOL scrResearchStarted(void)
 	}
 
 	if(psResearch == NULL)
-	{	
+	{
 		ASSERT((FALSE, ": no such research topic"));
 		return FALSE;
 	}
@@ -7387,7 +7386,7 @@ BOOL scrThreatInRange(void)
 	SDWORD				player,range,rangeX,rangeY;
 	BOOL				threat,bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrThreatInRange(): stack failed");
@@ -7410,7 +7409,7 @@ BOOL scrNumEnemyWeapObjInRange(void)
 	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapObjInRange(): stack failed");
@@ -7515,7 +7514,7 @@ BOOL scrNumEnemyWeapDroidsInRange(void)
 	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapDroidsInRange(): stack failed");
@@ -7548,7 +7547,7 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
 
-	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
@@ -7580,7 +7579,7 @@ BOOL scrNumFriendlyWeapObjInRange(void)
 	UDWORD				numFriends = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapObjInRange(): stack failed");
@@ -7610,7 +7609,7 @@ BOOL scrNumFriendlyWeapDroidsInRange(void)
 	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapDroidsInRange(): stack failed");
@@ -7642,7 +7641,7 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
 
-	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
@@ -7672,7 +7671,7 @@ BOOL scrNumPlayerWeapObjInRange(void)
 	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapObjInRange(): stack failed");
@@ -7681,7 +7680,7 @@ BOOL scrNumPlayerWeapObjInRange(void)
 
 	numEnemies = numEnemies + numPlayerWeapDroidsInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs);
 	numEnemies = numEnemies + numPlayerWeapStructsInRange(player, lookingPlayer, range, rangeX, rangeY);
-	
+
 	if (!stackPushResult(VAL_INT, numEnemies))
 	{
 		debug(LOG_ERROR, "scrNumPlayerWeapObjInRange(): failed to push result");
@@ -7697,7 +7696,7 @@ BOOL scrNumEnemyObjInRange(void)
 	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): stack failed");
@@ -7719,7 +7718,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 	UDWORD				i,tx,ty,numEnemies;
 	STRUCTURE			*psStruct;
 	DROID				*psDroid;
- 
+
 	tx = rangeX >> TILE_SHIFT;
 	ty = rangeY >> TILE_SHIFT;
 
@@ -7780,7 +7779,7 @@ BOOL scrNumStructsByStatInRange(void)
 	SDWORD		xdiff, ydiff;
 	STRUCTURE_STATS *psTarget;
 
-	if (!stackPopParams(6, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y, 
+	if (!stackPopParams(6, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
 		VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrNumStructsByStatInRange(): stack failed");
@@ -7816,7 +7815,7 @@ BOOL scrNumStructsByStatInRange(void)
 
 	NumStruct = 0;
 
-	//now look through the players list of structures to see if this type 
+	//now look through the players list of structures to see if this type
 	//exists within range
 	psTarget = &asStructureStats[index];
 	rangeSquared = range * range;
@@ -7825,13 +7824,13 @@ BOOL scrNumStructsByStatInRange(void)
 		xdiff = (SDWORD)psCurr->x - x;
 		ydiff = (SDWORD)psCurr->y - y;
 		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-		{	
+		{
 
 #ifdef HASH_NAMES
-			if( psCurr->pStructureType->NameHash == psTarget->NameHash ) 
+			if( psCurr->pStructureType->NameHash == psTarget->NameHash )
 #else
-			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 ) 
-#endif	
+			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
+#endif
 			{
 				if(psCurr->visible[lookingPlayer])		//can we see it?
 				{
@@ -7840,7 +7839,7 @@ BOOL scrNumStructsByStatInRange(void)
 			}
 		}
 	}
-	
+
 	if (!stackPushResult(VAL_INT, NumStruct))
 	{
 		return FALSE;
@@ -7857,7 +7856,7 @@ BOOL scrNumStructsByStatInArea(void)
 
 	STRUCTURE_STATS		*psStats;
 
-	if (!stackPopParams(7, ST_STRUCTURESTAT, &index, VAL_INT, &x1, VAL_INT, &y1, 
+	if (!stackPopParams(7, ST_STRUCTURESTAT, &index, VAL_INT, &x1, VAL_INT, &y1,
 		VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,"scrNumStructsByStatInArea: failed to pop");
@@ -7886,7 +7885,7 @@ BOOL scrNumStructsByStatInArea(void)
 
 	NumStruct = 0;
 
-	for (psCurr = apsStructLists[player]; psCurr != NULL; 
+	for (psCurr = apsStructLists[player]; psCurr != NULL;
 		psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType == psStats)
@@ -7901,7 +7900,7 @@ BOOL scrNumStructsByStatInArea(void)
 			}
 		}
 	}
-	
+
 	if (!stackPushResult(VAL_INT, NumStruct))
 	{
 		return FALSE;
@@ -7917,7 +7916,7 @@ BOOL scrNumStructsByTypeInRange(void)
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
 
-	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer, 
+	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer,
 		VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
 		debug(LOG_ERROR,"scrNumStructsByTypeInRange: failed to pop");
@@ -7950,7 +7949,7 @@ BOOL scrNumStructsByTypeInRange(void)
 
 	NumStruct = 0;
 
-	//now look through the players list of structures to see if this type 
+	//now look through the players list of structures to see if this type
 	//exists within range
 	rangeSquared = range * range;
 	for(psCurr = apsStructLists[targetPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -7968,7 +7967,7 @@ BOOL scrNumStructsByTypeInRange(void)
 			}
 		}
 	}
-	
+
 	if (!stackPushResult(VAL_INT, NumStruct))
 	{
 		return FALSE;
@@ -7984,7 +7983,7 @@ BOOL scrNumFeatByTypeInRange(void)
 	FEATURE		*psCurr;
 	SDWORD		xdiff, ydiff;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, 
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer,
 		VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumFeatByTypeInRange(): failed to pop");
@@ -8017,7 +8016,7 @@ BOOL scrNumFeatByTypeInRange(void)
 
 	NumFeat = 0;
 
-	//now look through the players list of structures to see if this type 
+	//now look through the players list of structures to see if this type
 	//exists within range
 	rangeSquared = range * range;
 	for(psCurr = apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)
@@ -8025,7 +8024,7 @@ BOOL scrNumFeatByTypeInRange(void)
 		xdiff = (SDWORD)psCurr->x - x;
 		ydiff = (SDWORD)psCurr->y - y;
 		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-		{	
+		{
 			if((type < 0) ||(psCurr->psStats->subType == type))	//like FEAT_OIL_RESOURCE
 			{
 				if(psCurr->visible[lookingPlayer])		//can we see it?
@@ -8035,7 +8034,7 @@ BOOL scrNumFeatByTypeInRange(void)
 			}
 		}
 	}
-	
+
 	if (!stackPushResult(VAL_INT, NumFeat))
 	{
 		return FALSE;
@@ -8052,7 +8051,7 @@ BOOL scrNumStructsButNotWallsInRangeVis(void)
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
 
-	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y, 
+	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
 		VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,"scrNumStructsButNotWallsInRangeVis: failed to pop");
@@ -8095,13 +8094,13 @@ BOOL scrNumStructsButNotWallsInRangeVis(void)
 				xdiff = (SDWORD)psCurr->x - x;
 				ydiff = (SDWORD)psCurr->y - y;
 				if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-				{	
+				{
 					NumStruct++;
 				}
 			}
 		}
 	}
-	
+
 	if (!stackPushResult(VAL_INT, NumStruct))
 	{
 		return FALSE;
@@ -8134,7 +8133,7 @@ BOOL scrGetStructureVis(void)
 
 	//search the players' list of built structures to see if one exists
 	found = FALSE;
-	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct = 
+	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
@@ -8152,7 +8151,7 @@ BOOL scrGetStructureVis(void)
 	{
 		psStruct = NULL;
 	}
-	
+
 	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psStruct))
 	{
 		return FALSE;
@@ -8164,17 +8163,18 @@ BOOL scrGetStructureVis(void)
 //returns num of visible structures of a certain player in range
 BOOL scrChooseValidLoc(void)
 {
-	SDWORD		sendY, sendX, *x, *y,tx,ty, player, threatRange;
+	SDWORD sendY, sendX, *x, *y, player, threatRange;
+	UDWORD tx,ty;
 
-	if (!stackPopParams(6, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y, 
+	if (!stackPopParams(6, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y,
 		VAL_INT, &sendX, VAL_INT, &sendY, VAL_INT, &player, VAL_INT, &threatRange))
 	{
 		debug(LOG_ERROR,"scrChooseValidLoc: failed to pop");
 		return FALSE;
 	}
- 
+
     //Check coords
-	if(		sendX < 0 
+	if(		sendX < 0
 		||	sendX > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	sendY < 0
 		||	sendY > (SDWORD)(mapHeight<<TILE_SHIFT) )
@@ -8222,9 +8222,9 @@ BOOL scrGetClosestEnemy(void)
 		debug(LOG_ERROR,"scrGetClosestEnemy: stack failed");
 		return FALSE;
 	}
- 
+
     //Check coords
-	if(		x < 0 
+	if(		x < 0
 		||	x > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	y < 0
 		||	y > (SDWORD)(mapHeight<<TILE_SHIFT) )
@@ -8252,7 +8252,7 @@ BOOL scrGetClosestEnemy(void)
 			if(psDroid->visible[player])		//can see this droid?
 			{
 				//if only weapon droids and don't have it, then skip
-				if (weaponOnly && 
+				if (weaponOnly &&
 				(	psDroid->droidType != DROID_WEAPON &&
 					psDroid->droidType != DROID_PERSON &&
 					psDroid->droidType != DROID_CYBORG &&
@@ -8291,7 +8291,7 @@ BOOL scrGetClosestEnemy(void)
 				{
 					continue;
 				}
- 
+
 				dist = dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT) << TILE_SHIFT;
 				if(dist < bestDist)
 				{
@@ -8347,7 +8347,7 @@ BOOL scrTransporterCapacity(void)
 		debug(LOG_ERROR, "scrTransporterCapacity(): passed droid is not a transporter");
 		return FALSE;
 	}
-	
+
 	if (!stackPushResult(VAL_INT, calcRemainingCapacity(psDroid)))
 	{
 		debug(LOG_ERROR, "scrHasIndirectWeapon(): failed to push result");
@@ -8379,7 +8379,7 @@ BOOL scrTransporterFlying(void)
 		debug(LOG_ERROR,"scrTransporterFlying(): passed droid is not a transporter");
 		return FALSE;
 	}
-	
+
 	if (!stackPushResult(VAL_BOOL, (SDWORD)transporterFlying(psDroid)))
 	{
 		debug(LOG_ERROR,"scrTransporterFlying(): failed to push result");
@@ -8425,13 +8425,13 @@ BOOL scrHasGroup(void)
 
 	if (!stackPopParams(1, ST_DROID, &psDroid))
 	{
-		debug(LOG_ERROR,"scrHasGroup: failed to pop", "failed", MB_OK);
+		debug( LOG_ERROR,"scrHasGroup: failed to pop" );
 		return FALSE;
 	}
 
 	if (psDroid == NULL)
 	{
-		debug(LOG_ERROR, "scrHasGroup: droid is NULLOBJECT", "failed", MB_OK);
+		debug( LOG_ERROR, "scrHasGroup: droid is NULLOBJECT" );
 		return FALSE;
 	}
 
@@ -8613,9 +8613,9 @@ BOOL scrGetClosestEnemyDroidByType(void)
 		debug(LOG_ERROR, "scrGetClosestEnemyDroidByType: stack failed");
 		return FALSE;
 	}
- 
+
     //Check coords
-	if(		x < 0 
+	if(		x < 0
 		||	x > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	y < 0
 		||	y > (SDWORD)(mapHeight<<TILE_SHIFT) )
@@ -8699,9 +8699,9 @@ BOOL scrGetClosestEnemyStructByType(void)
 		debug(LOG_ERROR, "scrGetClosestEnemyStructByType: stack failed");
 		return FALSE;
 	}
- 
+
     //Check coords
-	if(		x < 0 
+	if(		x < 0
 		||	x > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	y < 0
 		||	y > (SDWORD)(mapHeight<<TILE_SHIFT) )
@@ -8728,7 +8728,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 			if(psStruct->visible[player])	//if can see it
 			{
 				//only need defenses?
-				if((type != (-1)) && (psStruct->pStructureType->type != type))	//non-weapon-structures	
+				if((type != (-1)) && (psStruct->pStructureType->type != type))	//non-weapon-structures
 				{
 					continue;
 				}
@@ -8767,12 +8767,12 @@ BOOL scrGetClosestEnemyStructByType(void)
 }
 
 /* output warnings directly to the in-game console */
-void printf_console(SBYTE *pFormat, ...)
+void printf_console(const char *pFormat, ...)
 {
 #ifdef DEBUG
-	SBYTE		aBuffer[500];   // Output string buffer
+	char		aBuffer[500];   // Output string buffer
     va_list		pArgs;					  // Format arguments
-	
+
 	/* Initialise the argument list */
 	va_start(pArgs, pFormat);
 
@@ -8792,7 +8792,7 @@ BOOL scrCirclePerimPoint(void)
 	UDWORD				dist;
 	float				factor,tempx,tempy;
 
-	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx, VAL_REF|VAL_INT, &gry, 
+	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx, VAL_REF|VAL_INT, &gry,
 		 VAL_INT, &radius))
 	{
 		debug(LOG_ERROR,"scrCirclePerimPoint(): stack failed");
@@ -8807,7 +8807,7 @@ BOOL scrCirclePerimPoint(void)
 
 	tempx = (float)(*grx - basex);	//x len (signed!)
 	tempy = (float)(*gry - basey);
-	
+
 	dist = dirtySqrt(basex,basey,*grx,*gry);		//len
 
 	factor =  (float)((float)dist / (float)radius);			//by what factor is dist > radius?
@@ -8895,7 +8895,7 @@ BOOL scrNumAllies(void)
 	{
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -8908,7 +8908,7 @@ BOOL scrNumAAinRange(void)
 	UDWORD				numFound = 0;
 	STRUCTURE	*psStruct;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &lookingPlayer, VAL_INT, &rangeX, 
+	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR,"scrNumAAinRange(): stack failed");
@@ -8986,7 +8986,7 @@ BOOL scrSelectGroup(void)
 	{
 		psCurr->selected = bSelect;
 	}
-	
+
 	return TRUE;
 }
 

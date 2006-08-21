@@ -48,6 +48,9 @@ FILE *unix_fopen(const char *filename, const char *mode);
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
 
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) < (b)) ? (b) : (a))
+
 #include "macros.h"
 
 #include "types.h"
