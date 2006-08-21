@@ -1,6 +1,8 @@
 Easy:
 - Add a shadow toggle to src/clparse.c
 
+- Add an option to directly host or join a multiplay game to src/clparse.c
+
 - Make Warzone respond to the SDL_QUIT event so it can be closed with ^C, ALT+F4 or closing the window.
     This involves registering all needed functions to atexit() so Warzone shuts down properly on that event.
 
