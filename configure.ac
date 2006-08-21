@@ -5,7 +5,7 @@ AC_INIT([warzone],[2.0.4_rc2],[http://gna.org/projects/warzone])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CC
