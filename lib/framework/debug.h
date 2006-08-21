@@ -211,7 +211,7 @@ do { \
 #endif
 
 /* Must match code_part_names in debug.c */
-enum code_part {
+typedef enum {
   LOG_ALL, /* special: sets all to on */
   LOG_MAIN,
   LOG_SOUND,
@@ -225,15 +225,58 @@ enum code_part {
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
   LOG_SCRIPT,
   LOG_LAST /* _must_ be last! */
-};
+} code_part;
 
-typedef void (*log_callback_fn)(const char*);
+typedef void (*debug_callback_fn)(void**, const char*);
+typedef void (*debug_callback_init)(void**);
+typedef void (*debug_callback_exit)(void**);
 
-void debug_init(void);
-void debug_to_file(char *file);
-void debug_use_callback(log_callback_fn use_callback);
+typedef struct _debug_callback {
+	struct _debug_callback * next;
+	debug_callback_fn callback; /// Function which does the output
+	debug_callback_init init; /// Setup function
+	debug_callback_exit exit; /// Cleaning function
+	void * data; /// Used to pass data to the above functions. Eg a filename or handle.
+} debug_callback;
+
+/**
+ * Call once to initialize the debug logging system.
+ *
+ * Doesn't register any callbacks!
+ */
+void debug_init( void );
+
+/**
+ * Shutdown the debug system and remove all output callbacks
+ */
+void debug_exit( void );
+
+/**
+ * Register a callback to be called on every call to debug()
+ *
+ * \param	callback	Function which does the output
+ * \param	init		Initializer function which does all setup for the callback (optional, may be NULL)
+ * \param	exit		Cleanup function called when unregistering the callback (optional, may be NULL)
+ * \param	data		Data to be passed to all three functions (optional, may be NULL)
+ */
+void debug_register_callback( debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void * data );
+
+/**
+ * Toggle debug output for part associated with str
+ *
+ * \param	str	Codepart in textformat
+ */
 BOOL debug_enable_switch(const char *str);
-void debug(enum code_part part, const char *str, ...)
-           wz__attribute((format (printf, 2, 3)));
+
+/**
+ * Output printf style format str with additional arguments.
+ *
+ * Only outputs if debugging of part was formerly enabled with debug_enable_switch.
+ *
+ * \param	part	Code part to associate with this message
+ * \param	str		printf style formatstring
+ */
+void debug( code_part part, const char *str, ...)
+           wz__attribute((format (printf, 2, 3)) );
 
 #endif

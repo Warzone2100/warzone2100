@@ -38,6 +38,10 @@ extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
 
+void debug_callback_file( void**, const char * );
+void debug_callback_file_init( void** );
+void debug_callback_file_exit( void** );
+
 // whether to play the intro video
 BOOL	clIntroVideo;
 
@@ -77,7 +81,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   -cheat :            Allow cheat mode\n"
 				"   -debug FLAGS :      Show debug for FLAGS\n"
 				"   -debugfile FILE :   Log debug output in FILE\n"
-				"   -datadir DIR :      Set default datadir to DIR\n" 
+				"   -datadir DIR :      Set default datadir to DIR\n"
 				"   -mod MOD :          Enable global mod MOD\n"
 				"   -mp_mod MOD :       Enable multiplay only mod MOD\n"
 				"   -ca_mod MOD :       Enable campaign only mod MOD\n" );
@@ -90,7 +94,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				DBERROR( ("Missing filename?\n") );
 				return FALSE;
 			}
-			debug_to_file(token);
+			debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
 		}
 		else if (stricmp(tokenType, "-debug") == 0) {
 			// find the part name

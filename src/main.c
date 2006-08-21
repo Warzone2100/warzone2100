@@ -81,7 +81,9 @@ char	MultiCustomMapsPath[255];
 char	MultiPlayersPath[255];
 char	KeyMapPath[255];
 char	UserMusicPath[255];
-extern char RegFilePath[];
+char	RegFilePath[];
+
+void debug_callback_stderr( void**, const char * );
 
 /*
 BOOL checkDisableLobby(void)
@@ -378,6 +380,7 @@ int main(int argc, char *argv[])
 #endif
 
 	debug_init();
+	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
@@ -828,12 +831,13 @@ init://jump here from the end if re_initialising
 
 	} // End of !quit loop.
 
-  debug(LOG_MAIN, "Shuting down application");
+	debug(LOG_MAIN, "Shuting down application");
 
 	systemShutdown();
 	pal_ShutDown();
 	frameShutDown();
 
+	debug_exit();
 	if (reInit) goto init;
 
 	return 0;
@@ -841,6 +845,7 @@ init://jump here from the end if re_initialising
 exit:
 
 	debug(LOG_ERROR, "Shutting down after failure");
+
 	systemShutdown();
 	pal_ShutDown();
 	frameShutDown();

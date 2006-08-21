@@ -18,13 +18,13 @@
 #define MAX_FILENAME_SIZE 200
 #define MAX_LEN_LOG_LINE 512
 #define MAX_LEN_DEBUG_PART 12
-FILE *logfile = NULL;
-static log_callback_fn callback;
+
+static debug_callback * callbackRegistry = NULL;
 static BOOL enabled_debug_parts[LOG_LAST];
 
 /* This list _must_ match the enum in debug.h! */
 static const char *code_part_names[] = {
-  "all", "main", "sound", "video", "wz", "3d", "texture", 
+  "all", "main", "sound", "video", "wz", "3d", "texture",
   "net", "memory", "error", "never", "script", "last"
 };
 
@@ -58,10 +58,11 @@ static int cat_snprintf(char *str, size_t n, const char *format, ...)
 	return (int) (ret + len);
 }
 
-/**************************************************************************
-  Convert code_part names to enum; case insensitive; returns LOG_LAST 
-  if can't match.
-**************************************************************************/
+/**
+ * Convert code_part names to enum. Case insensitive.
+ *
+ * \return	Codepart number or LOG_LAST if can't match.
+ */
 static int code_part_from_str(const char *str)
 {
 	int i;
@@ -74,21 +75,78 @@ static int code_part_from_str(const char *str)
 	return LOG_LAST;
 }
 
-/**************************************************************************
-  Basic output callback.  Just dump stuff to stderr.  Add newline if none.
-**************************************************************************/
-static void callback_debug_stderr(const char *buf)
+
+/**
+ * Callback for outputing to stderr
+ *
+ * \param	data			Ignored. Use NULL.
+ * \param	outputBuffer	Buffer containing the preprocessed text to output.
+ */
+void debug_callback_stderr( void ** data, const char * outputBuffer )
 {
-	if (!strchr(buf, '\n')) {
-		fprintf(stderr, "%s\n", buf);
+	if ( !strchr( outputBuffer, '\n' ) ) {
+		fprintf( stderr, "%s\n", outputBuffer );
 	} else {
-		fprintf(stderr, "%s", buf);
+		fprintf( stderr, "%s", outputBuffer );
 	}
 }
 
-/**************************************************************************
-  Call once to initialize the debug logging system.
-**************************************************************************/
+/**
+ * Callback for outputing to a file
+ *
+ * \param	data			Filehandle to output to.
+ * \param	outputBuffer	Buffer containing the preprocessed text to output.
+ */
+void debug_callback_file( void ** data, const char * outputBuffer )
+{
+	FILE * logfile = (FILE*)*data;
+
+	if ( !strchr( outputBuffer, '\n' ) ) {
+		fprintf( logfile, "%s\n", outputBuffer );
+	} else {
+		fprintf( logfile, "%s", outputBuffer );
+	}
+}
+
+/**
+ * Setup the file callback
+ *
+ * Sets data to the filehandle opened for the filename found in data.
+ *
+ * \param[in,out]	data	In: 	The filename to output to.
+ * 							Out:	The filehandle.
+ */
+void debug_callback_file_init( void ** data )
+{
+	const char * filename = (const char *)*data;
+	FILE * logfile = NULL;
+
+	assert( strlen( filename ) < MAX_FILENAME_SIZE );
+
+	logfile = fopen( filename, "a" );
+	if (!logfile) {
+		fprintf( stderr, "Could not open %s for appending!\n", filename );
+	} else {
+		fprintf( logfile, "\n--- Starting log ---\n" );
+		*data = logfile;
+	}
+}
+
+/**
+ * Shutdown the file callback
+ *
+ * Closes the logfile.
+ *
+ * \param	data	The filehandle to close.
+ */
+void debug_callback_file_exit( void ** data )
+{
+	FILE * logfile = (FILE*)*data;
+	fclose( logfile );
+	*data = NULL;
+}
+
+
 void debug_init(void)
 {
 	int count = 0;
@@ -97,50 +155,62 @@ void debug_init(void)
 		count++;
 	}
 	if (count != LOG_LAST) {
-		fprintf(stderr, "LOG_LAST != last; whoever edited the debug code last "
-		        "did a mistake.\n");
-		fprintf(stderr, "Always edit both the enum in debug.h and the string "
-		        "list in debug.c!\n");
+		fprintf( stderr, "LOG_LAST != last; whoever edited the debug code last "
+		        "did a mistake.\n" );
+		fprintf( stderr, "Always edit both the enum in debug.h and the string "
+		        "list in debug.c!\n" );
 		exit(1);
 	}
-	memset(enabled_debug_parts, 0, sizeof(enabled_debug_parts));
+	memset( enabled_debug_parts, FALSE, sizeof(enabled_debug_parts) );
 	enabled_debug_parts[LOG_ERROR] = TRUE;
-	callback = callback_debug_stderr;
 }
 
-/**************************************************************************
-  Send debug output to given file, in addition to any other places.
-  Only enabled output is sent to the file.
-**************************************************************************/
-void debug_to_file(char *file)
+
+void debug_exit(void)
 {
-	assert(strlen(file) < MAX_FILENAME_SIZE);
-	if (logfile) {
-		fclose(logfile);
+	debug_callback * curCallback = callbackRegistry, * tmpCallback = NULL;
+
+	while ( curCallback )
+	{
+		if ( curCallback->exit )
+			curCallback->exit( &curCallback->data );
+		tmpCallback = curCallback->next;
+		free( curCallback );
+		curCallback = tmpCallback;
 	}
-	logfile = fopen(file, "a");
-	if (!logfile) {
-		fprintf(stderr, "Could not open %s for appending!\n",
-		        file);
-	} else {
-		fprintf(logfile, "\n--- Starting log ---\n");
-	}
+
+	callbackRegistry = NULL;
 }
 
-/**************************************************************************
-  Use the given callback for outputting debug logging to screen.  This 
-  is in addition to any logging to file we do.
-**************************************************************************/
-void debug_use_callback(log_callback_fn use_callback)
+
+void debug_register_callback( debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void * data )
 {
-	callback = use_callback;
+	debug_callback * curCallback = callbackRegistry, * tmpCallback = NULL;
+
+	tmpCallback = (debug_callback*)malloc(sizeof(debug_callback));
+
+	tmpCallback->next = NULL;
+	tmpCallback->callback = callback;
+	tmpCallback->init = init;
+	tmpCallback->exit = exit;
+	tmpCallback->data = data;
+
+	if ( tmpCallback->init )
+		tmpCallback->init( &tmpCallback->data );
+
+	if ( !curCallback )
+	{
+		callbackRegistry = tmpCallback;
+		return;
+	}
+
+	while ( curCallback->next )
+		curCallback = curCallback->next;
+
+	curCallback->next = tmpCallback;
 }
 
-/**************************************************************************
-  Use the given callback for outputting debug logging to screen.  This 
-  is in addition to any logging to file we do.  Returns FALSE if part
-  not found.
-**************************************************************************/
+
 BOOL debug_enable_switch(const char *str)
 {
 	int part = code_part_from_str(str);
@@ -154,31 +224,16 @@ BOOL debug_enable_switch(const char *str)
 	return (part != LOG_LAST);
 }
 
-/**************************************************************************
-  Output to relevant places.
-**************************************************************************/
-static void debug_out(const char *buf)
-{
-	callback(buf);
-	if (logfile) {
-		if (!strchr(buf, '\n')) {
-			fprintf(logfile, "%s\n", buf);
-		} else {
-			fprintf(logfile, "%s", buf);
-		}
-		fflush(logfile);
-	}
-}
 
-/**************************************************************************
-  Maybe output some information, depending on user settings.
-**************************************************************************/
-void debug(enum code_part part, const char *str, ...)
+void debug( code_part part, const char *str, ... )
 {
 	va_list ap;
-	static char bufbuf[2][MAX_LEN_LOG_LINE];
-	char buf[MAX_LEN_LOG_LINE+MAX_LEN_DEBUG_PART];
-	static BOOL bufbuf1 = FALSE;
+	static char inputBuffer[2][MAX_LEN_LOG_LINE];
+	static char outputBuffer[MAX_LEN_LOG_LINE+MAX_LEN_DEBUG_PART];
+	static BOOL useInputBuffer1 = FALSE;
+
+	debug_callback * curCallback = callbackRegistry;
+
 	static unsigned int repeated = 0; /* times current message repeated */
 	static unsigned int next = 2;     /* next total to print update */
 	static unsigned int prev = 0;     /* total on last update */
@@ -189,46 +244,61 @@ void debug(enum code_part part, const char *str, ...)
 	}
 
 	va_start(ap, str);
-	// FIXME This is buggy. Eg the OpenAL extensions string is corrupted after about 160 chars.
-	// That does not happen if vsprintf() is used instead. But then then string is corrupted after it's end.
-	vsnprintf( bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE, str, ap );
+	vsnprintf( useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], MAX_LEN_LOG_LINE, str, ap );
 	va_end(ap);
 
-	if (0 == strncmp(bufbuf[0], bufbuf[1], MAX_LEN_LOG_LINE - 1)) {
+	if ( strncmp( inputBuffer[0], inputBuffer[1], MAX_LEN_LOG_LINE - 1 ) == 0 ) {
+		// Recieved again the same line
 		repeated++;
 		if (repeated == next) {
-			snprintf(buf, sizeof(buf), "last message repeated %d times",
-			         repeated - prev);
+			snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
 			if (repeated > 2) {
-				cat_snprintf(buf, sizeof(buf), " (total %d repeats)", 
-					repeated);
+				cat_snprintf( outputBuffer, sizeof(outputBuffer), " (total %d repeats)", repeated );
 			}
-			debug_out(buf);
+			while (curCallback)
+			{
+				curCallback->callback( &curCallback->data, outputBuffer );
+				curCallback = curCallback->next;
+			}
+			curCallback = callbackRegistry;
 			prev = repeated;
 			next *= 2;
 		}
 	} else {
-		if (repeated > 0 && repeated != prev) {
-			if (repeated == 1) {
-				/* just repeat the previous message: */
-				debug_out(bufbuf1 ? bufbuf[0] : bufbuf[1]);
-			} else {
-				snprintf(buf, sizeof(buf), "last message repeated %d times", 
-				         repeated - prev);
-				if (repeated > 2) {
-					cat_snprintf(buf, sizeof(buf), " (total %d repeats)",
-						repeated);
-				}
-				debug_out(buf);
+		// Recieved another line, cleanup the old
+		if (repeated > 0 && repeated != prev && repeated != 1) {
+			/* just repeat the previous message when only one repeat occured */
+			snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
+			if (repeated > 2) {
+				cat_snprintf( outputBuffer, sizeof(outputBuffer), " (total %d repeats)", repeated );
 			}
+			while (curCallback)
+			{
+				curCallback->callback( &curCallback->data, outputBuffer );
+				curCallback = curCallback->next;
+			}
+			curCallback = callbackRegistry;
 		}
 		repeated = 0;
 		next = 2;
 		prev = 0;
-		sprintf( buf, "%s:", code_part_names[part] );
-		memset( buf + 1 + strlen( code_part_names[part] ), ' ', MAX_LEN_DEBUG_PART - 1 - strlen( code_part_names[part] ) );
-		memcpy( buf + MAX_LEN_DEBUG_PART, bufbuf1 ? bufbuf[1] : bufbuf[0], MAX_LEN_LOG_LINE );
-		debug_out( buf );
 	}
-	bufbuf1 = !bufbuf1;
+
+	if (!repeated)
+	{
+		// Assemble the outputBuffer:
+		sprintf( outputBuffer, "%s:", code_part_names[part] );
+		memset( outputBuffer + strlen( code_part_names[part] ) + 1, ' ', MAX_LEN_DEBUG_PART - strlen( code_part_names[part] ) - 1 ); // Fill with whitespaces
+		snprintf( outputBuffer + MAX_LEN_DEBUG_PART, MAX_LEN_LOG_LINE, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] ); // Append the message
+
+		while (curCallback)
+		{
+			curCallback->callback( &curCallback->data, outputBuffer );
+			curCallback = curCallback->next;
+		}
+	}
+	useInputBuffer1 = !useInputBuffer1; // Swap buffers
 }
+
+
+
