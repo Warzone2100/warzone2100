@@ -49,7 +49,11 @@
 #ifdef WIN32
 # define WZ_WRITEDIR "Warzone-2.0"
 #else
-# define WZ_WRITEDIR ".warzone-2.0"
+# ifdef __APPLE__
+#  define WZ_WRITEDIR "Library/Application Support/Warzone-2.0"
+# else
+#  define WZ_WRITEDIR ".warzone-2.0"
+# endif
 #endif
 
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
