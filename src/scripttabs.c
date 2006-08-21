@@ -746,6 +746,157 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "factoryGetTemplate",			scrFactoryGetTemplate,		ST_TEMPLATE,
 		1, { ST_STRUCTURE } },
 
+	{ "numTemplatesInProduction",	scrNumTemplatesInProduction,		VAL_INT,
+		2, { ST_TEMPLATE, VAL_INT } },
+
+	{ "numDroidsByComponent",			scrNumDroidsByComponent,		VAL_INT,
+		3, { ST_COMPONENT, VAL_INT, VAL_INT } },
+
+	{ "getStructureLimit",	scrGetStructureLimit,		VAL_INT,
+		2, { ST_STRUCTURESTAT, VAL_INT } },
+
+	{ "structureLimitReached",	scrStructureLimitReached,		VAL_BOOL,
+		2, { ST_STRUCTURESTAT, VAL_INT } },
+
+	{ "getNumStructures",	scrGetNumStructures,		VAL_INT,
+		2, { ST_STRUCTURESTAT, VAL_INT } },
+
+	{ "getUnitLimit",	scrGetUnitLimit,		VAL_INT,
+		1, { VAL_INT } },
+
+	{ "min",	scrMin,		VAL_INT,
+		2, { VAL_INT, VAL_INT } },
+
+	{ "max",	scrMax,		VAL_INT,
+		2, { VAL_INT, VAL_INT } },
+
+	{ "fogTileInRange",	scrFogTileInRange,		VAL_BOOL,
+		9, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "mapRevealedInRange",	scrMapRevealedInRange,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "numResearchLeft",			scrNumResearchLeft,			VAL_INT,
+		2, { VAL_INT, ST_RESEARCH } },
+
+	{ "researchCompleted",			scrResearchCompleted,			VAL_BOOL,
+		2, { ST_RESEARCH, VAL_INT } },
+
+	{ "researchStarted",			scrResearchStarted,			VAL_BOOL,
+		2, { ST_RESEARCH, VAL_INT } },
+
+	{ "threatInRange",			scrThreatInRange,			VAL_BOOL,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyWeapObjInRange",			scrNumEnemyWeapObjInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyWeapDroidsInRange",			scrNumEnemyWeapDroidsInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyWeapStructsInRange",			scrNumEnemyWeapStructsInRange,			VAL_INT,
+		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT} },
+
+	{ "numFriendlyWeapObjInRange",			scrNumFriendlyWeapObjInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numFriendlyWeapDroidsInRange",			scrNumFriendlyWeapDroidsInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numFriendlyWeapStructsInRange",			scrNumFriendlyWeapStructsInRange,			VAL_INT,
+		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT} },
+
+	{ "numPlayerWeapObjInRange",			scrNumPlayerWeapObjInRange,			VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyObjInRange",			scrNumEnemyObjInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	//{ "alliancesLocked",			scrAlliancesLocked,			VAL_BOOL,
+	//	0, {VAL_VOID} },
+
+//num structures
+	{ "numStructsByStatInRange",			scrNumStructsByStatInRange,		VAL_INT,
+		6, { ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "numStructsByStatInArea",			scrNumStructsByStatInArea,		VAL_INT,
+		7, { ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "numStructsByTypeInRange",		scrNumStructsByTypeInRange,	VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "numFeatByTypeInRange",		scrNumFeatByTypeInRange,	VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "numStructsButNotWallsInRangeVis",			scrNumStructsButNotWallsInRangeVis,		VAL_INT,
+		5, { VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "getStructureVis",			scrGetStructureVis,		ST_STRUCTURE,
+		3, { ST_STRUCTURESTAT, VAL_INT, VAL_INT } },
+
+	{ "chooseValidLoc",			scrChooseValidLoc,		VAL_BOOL,
+		6, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "getClosestEnemy",			scrGetClosestEnemy,		ST_BASEOBJECT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT } },
+
+	{ "transporterCapacity",		scrTransporterCapacity,		VAL_INT,
+		1, { ST_DROID} },
+
+	{ "transporterFlying",		scrTransporterFlying,		VAL_BOOL,
+		1, { ST_DROID} },
+
+	{ "unloadTransporter",		scrUnloadTransporter,		VAL_VOID,
+		3, { ST_DROID, VAL_INT, VAL_INT} },
+
+	{ "hasGroup",		scrHasGroup,		VAL_BOOL,
+		1, { ST_DROID} },
+
+	{ "objWeaponMaxRange",		scrObjWeaponMaxRange,		VAL_INT,
+		1, { ST_BASEOBJECT} },
+
+	{ "objHasWeapon",			scrObjHasWeapon,		VAL_BOOL,
+		1, { ST_BASEOBJECT} },
+
+	{ "objectHasIndirectWeapon",		scrObjectHasIndirectWeapon,		VAL_BOOL,
+		1, { ST_BASEOBJECT} },
+
+	{ "getClosestEnemyDroidByType",			scrGetClosestEnemyDroidByType,		ST_DROID,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_INT } },
+
+	{ "getClosestEnemyStructByType",		scrGetClosestEnemyStructByType,	ST_STRUCTURE,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+
+	{ "skDefenseLocationB",		scrSkDefenseLocationB,		VAL_BOOL,
+	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, ST_STRUCTURESTAT, ST_STRUCTURESTAT, ST_DROID,VAL_INT } },
+
+	{ "circlePerimPoint",			scrCirclePerimPoint,		VAL_VOID,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT} },
+
+	{ "giftRadar",			scrGiftRadar,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numAllies",			scrNumAllies,		VAL_INT,
+		1, { VAL_INT} },
+
+	{ "numAAinRange",			scrNumAAinRange,		VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "selectDroid",			scrSelectDroid,		VAL_VOID,
+		2, { ST_DROID, VAL_BOOL} },
+
+	{ "selectGroup",			scrSelectGroup,		VAL_VOID,
+		2, { ST_GROUP, VAL_BOOL} },
+
+	{ "modulo",			scrModulo,		VAL_INT,
+		2, { VAL_INT, VAL_INT} },
+
+	{ "playerLoaded",			scrPlayerLoaded,		VAL_BOOL,
+		1, { VAL_INT} },
+
+
+
 	/* END new functions */
 
 

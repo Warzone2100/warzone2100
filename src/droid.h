@@ -254,6 +254,8 @@ extern	BOOL	normalPAT(UDWORD x, UDWORD y);
 extern	BOOL	zonedPAT(UDWORD x, UDWORD y);
 extern	BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations, 
 					 BOOL (*function)(UDWORD x, UDWORD y));
+extern	BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange, 
+					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y));
 
 
 //initialises the droid movement model

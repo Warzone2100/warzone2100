@@ -45,7 +45,7 @@
 // prototypes
 BOOL			recvGift						(NETMSG *pMsg);
 BOOL			sendGift						(UDWORD type,UDWORD to);
-static VOID		giftRadar						(UDWORD from, UDWORD to,BOOL send);
+VOID			giftRadar						(UDWORD from, UDWORD to,BOOL send);
 //static VOID		giftSingleDroid					(DROID *psD,UDWORD from,UDWORD to);
 static VOID		recvGiftDroids					(UDWORD from,UDWORD to,NETMSG *pMsg);
 static VOID		sendGiftDroids					(UDWORD from,UDWORD to);
@@ -163,7 +163,7 @@ BOOL sendGift(UDWORD type,UDWORD to)
 }
 // ////////////////////////////////////////////////////////////////////////////
 // give radar information
-void giftRadar(UDWORD from, UDWORD to,BOOL send)
+VOID giftRadar(UDWORD from, UDWORD to,BOOL send)
 {
 	NETMSG m;
 
@@ -321,7 +321,7 @@ static void giftResearch(UDWORD from,UDWORD to,BOOL send)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give Power
-void giftPower(UDWORD from,UDWORD to,BOOL send)
+VOID giftPower(UDWORD from,UDWORD to,BOOL send)
 {
 	UDWORD gifval;
 	NETMSG m;

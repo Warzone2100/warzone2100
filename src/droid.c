@@ -68,6 +68,7 @@
 #include "research.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
+#include "scriptfuncs.h"			//for ThreatInRange()
 
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
@@ -5826,6 +5827,56 @@ UDWORD	passes;
 	return(FALSE);
 
 }
+
+//same as orig, but with threat check
+BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange, 
+					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y))
+{
+SDWORD	i,j;
+SDWORD	startX,endX,startY,endY;
+UDWORD	passes;
+ 
+
+	ASSERT((*x>=0 AND *x<mapWidth,"x coordinate is off-map for pickATileGen"));
+	ASSERT((*y>=0 AND *y<mapHeight,"y coordinate is off-map for pickATileGen"));
+
+	if(function(*x,*y) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, FALSE))))	//TODO: vtol check really not needed?
+	{
+		return(TRUE);
+	}
+
+	/* Initial box dimensions and set iteration count to zero */
+	startX = endX = *x;	startY = endY = *y;	passes = 0;
+
+	/* Keep going until we get a tile or we exceed distance */
+	while(passes<numIterations)
+	{
+		/* Process whole box */
+		for(i = startX; i <= endX; i++)
+		{
+			for(j = startY; j<= endY; j++)
+			{
+				/* Test only perimeter as internal tested previous iteration */
+				if(i==startX OR i==endX OR j==startY OR j==endY)
+				{
+					/* Good enough? */
+					if(function(i,j) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, i << TILE_SHIFT, j << TILE_SHIFT, FALSE))))		//TODO: vtols check really not needed?
+					{
+						/* Set exit conditions and get out NOW */
+						*x = i;	*y = j;
+						return(TRUE);
+					}
+				}
+			}
+		}
+		/* Expand the box out in all directions - off map handled by tileAcceptable */
+		startX--; startY--;	endX++;	endY++;	passes++;
+	}
+	/* If we got this far, then we failed - passed in values will be unchanged */
+	return(FALSE);
+
+}
+
 // ------------------------------------------------------------------------------------
 /* Improved pickATile - Replaces truly scary existing one. */
 /* AM 22 - 10 - 98 */

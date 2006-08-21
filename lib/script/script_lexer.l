@@ -326,58 +326,57 @@ NOT						return _NOT;
 
 	/* Match identifiers */
 [a-zA-Z_][0-9_a-zA-Z_]*		{
-						debug(LOG_SCRIPT, "looking up '%s'", scr_text);
+						//debug(LOG_SCRIPT, "looking up '%s'", scr_text);
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
 								{
-									debug(LOG_SCRIPT, "'%s' is a type", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a type", scr_text);
 									return TYPE;
 								}
 								/* See if this identifier has been defined as a variable */
 								else if (scriptLookUpVariable(scr_text, &scr_lval.vSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is a var", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a var", scr_text);
 									return scriptGetVarToken(scr_lval.vSymbol);
 								}
 								/* See if this identifier has been defined as a constant */
 								else if (scriptLookUpConstant(scr_text, &scr_lval.cSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is a constant", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a constant", scr_text);
 									return scriptGetConstToken(scr_lval.cSymbol);
 								}
 								/* See if this identifier has been defined as a function */
 								else if (scriptLookUpFunction(scr_text, &scr_lval.fSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is a function", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a function", scr_text);
 									return scriptGetFuncToken(scr_lval.fSymbol);
 								}
 
 								/* See if this identifier has been defined as a custom function */
 								else if (scriptLookUpCustomFunction(scr_text, &scr_lval.eSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is a cust func", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a cust func", scr_text);
 									return scriptGetCustomFuncToken(scr_lval.eSymbol);
 								}
 
 								else if (scriptLookUpTrigger(scr_text, &scr_lval.tSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is a trigger", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a trigger", scr_text);
 									return TRIG_SYM;
 								}
 								else if (scriptLookUpEvent(scr_text, &scr_lval.eSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is an event", scr_text);
-								
+									//debug(LOG_SCRIPT, "'%s' is an event", scr_text);
 									return EVENT_SYM;
 								}
 								else if (scriptLookUpCallback(scr_text, &scr_lval.cbSymbol))
 								{
-									debug(LOG_SCRIPT, "'%s' is a callback", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is a callback", scr_text);
 									return CALLBACK_SYM;
 								}
 								else
 								{
-									debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
+									//debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
 								
 									strcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
@@ -393,7 +392,7 @@ NOT						return _NOT;
 								strcpy(aText[currText], scr_text);
 								scr_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
-								debug(LOG_SCRIPT, "%s is QTEXT", scr_text);
+								//debug(LOG_SCRIPT, "%s is QTEXT", scr_text);
 								return QTEXT;
 							}
 
