@@ -762,7 +762,7 @@ void actionAddVtolAttackRun( DROID *psDroid )
 		 iX>(SDWORD)(GetWidthOfMap()<<TILE_SHIFT) ||
 		 iY>(SDWORD)(GetHeightOfMap()<<TILE_SHIFT)   )
 	{
-		DBPRINTF( ("*** actionAddVtolAttackRun: run off map! ***\n") );
+		debug( LOG_NEVER, "*** actionAddVtolAttackRun: run off map! ***\n" );
 	}
 	else
 	{
@@ -2447,7 +2447,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
 			{
 				// totally bunged up - give up
-				DBPRINTF(("DACTION_MOVETOREARM: couldn't find a clear tile near rearm pad - RTB\n"));
+				debug( LOG_NEVER, "DACTION_MOVETOREARM: couldn't find a clear tile near rearm pad - RTB\n" );
 				orderDroid(psDroid, DORDER_RTB);
 				break;
 			}

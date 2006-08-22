@@ -161,7 +161,8 @@ animObj_Update( void )
 			if ( hashTable_RemoveElement( g_pAnimObjTable, psObj,
 				(int) psObj->psParent, psObj->psAnim->uwID ) == FALSE )
 			{
-				DBERROR( ("animObj_Update: couldn't remove anim obj\n") );
+				debug( LOG_ERROR, "animObj_Update: couldn't remove anim obj\n" );
+				abort();
 			}
 		}
 
@@ -195,7 +196,8 @@ animObj_Add( void *pParentObj, int iAnimID,
 
 	if (psObj==NULL)
 	{
-		DBERROR( ("animObj_Add: No room in hash table\n") );
+		debug( LOG_ERROR, "animObj_Add: No room in hash table\n" );
+		abort();
 		return(NULL);
 	}
 
@@ -221,7 +223,8 @@ animObj_Add( void *pParentObj, int iAnimID,
 
 	if ( uwObj > ANIM_MAX_COMPONENTS )
 	{
-		DBERROR( ("animObj_Add: number of components too small\n") );
+		debug( LOG_ERROR, "animObj_Add: number of components too small\n" );
+		abort();
 	}
 
 	/* set parent pointer and shape pointer */

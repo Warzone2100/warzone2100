@@ -4733,7 +4733,8 @@ SDWORD	shift;
   		break;
 
   	default:
-  		DBERROR(("Weirdy direction for a structure in renderWall"));
+		debug( LOG_ERROR, "Weirdy direction for a structure in renderWall" );
+		abort();
   		break;
   	}
 /*

@@ -666,7 +666,8 @@ BOOL intInitialise(void)
 		MAXSTRUCTURES);
 	if (!apsStructStatsList)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -674,7 +675,8 @@ BOOL intInitialise(void)
 	ppResearchList = (RESEARCH **) MALLOC(sizeof(RESEARCH *) * MAXRESEARCH);
 	if (ppResearchList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for research list"));
+		debug( LOG_ERROR, "Unable to allocate memory for research list" );
+		abort();
 		return FALSE;
 	}
 
@@ -687,12 +689,14 @@ BOOL intInitialise(void)
 
 	if (pList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for research list"));
+		debug( LOG_ERROR, "Unable to allocate memory for research list" );
+		abort();
 		return FALSE;
 	}
 	if (pSList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for sorted research list"));
+		debug( LOG_ERROR, "Unable to allocate memory for sorted research list" );
+		abort();
 		return FALSE;
 	}
 
@@ -701,7 +705,8 @@ BOOL intInitialise(void)
 		MAXTEMPLATES);
 	if (apsTemplateList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for template list"));
+		debug( LOG_ERROR, "Unable to allocate memory for template list" );
+		abort();
 		return FALSE;
 	}
 
@@ -723,7 +728,8 @@ BOOL intInitialise(void)
 		MAXFEATURES);
 	if (apsFeatureList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for feature list"));
+		debug( LOG_ERROR, "Unable to allocate memory for feature list" );
+		abort();
 		return FALSE;
 	}
 
@@ -732,7 +738,8 @@ BOOL intInitialise(void)
 		MAXCOMPONENT);
 	if (apsComponentList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for component list"));
+		debug( LOG_ERROR, "Unable to allocate memory for component list" );
+		abort();
 		return FALSE;
 	}
 
@@ -741,7 +748,8 @@ BOOL intInitialise(void)
 		MAXEXTRASYS);
 	if (apsExtraSysList == NULL)
 	{
-		DBERROR(("Unable to allocate memory for extra systems list"));
+		debug( LOG_ERROR, "Unable to allocate memory for extra systems list" );
+		abort();
 		return FALSE;
 	}
 
@@ -749,7 +757,8 @@ BOOL intInitialise(void)
 	apsObjectList = (BASE_OBJECT **)MALLOC(sizeof(BASE_OBJECT *) * MAX_OBJECTS);
 	if (!apsObjectList)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -757,7 +766,8 @@ BOOL intInitialise(void)
 	apsListToOrder = (BASE_OBJECT **)MALLOC(sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
 	if (!apsListToOrder)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -796,7 +806,8 @@ BOOL intInitialise(void)
 
 	if (!widgCreateScreen(&psWScreen))
 	{
-		DBERROR(("intInitialise: Couldn't create widget screen (Out of memory ?)"));
+		debug( LOG_ERROR, "intInitialise: Couldn't create widget screen (Out of memory ?)" );
+		abort();
 		return FALSE;
 	}
 
@@ -806,13 +817,15 @@ BOOL intInitialise(void)
 
 		if (!intAddReticule())
 		{
-			DBERROR(("intInitialise: Couldn't create reticule widgets (Out of memory ?)"));
+			debug( LOG_ERROR, "intInitialise: Couldn't create reticule widgets (Out of memory ?)" );
+			abort();
 			return FALSE;
 		}
 
 		if (!intAddPower())
 		{
-			DBERROR(("intInitialise: Couldn't create power Bar widget(Out of memory ?)"));
+			debug( LOG_ERROR, "intInitialise: Couldn't create power Bar widget(Out of memory ?)" );
+			abort();
 			return FALSE;
 		}
 	}
@@ -843,7 +856,8 @@ BOOL intInitialise(void)
 	/*Initialise the video playback buffer*/
 	if (!seq_SetupVideoBuffers())
 	{
-		DBERROR(("intInitialise: Unable to initialise video playback buffer"));
+		debug( LOG_ERROR, "intInitialise: Unable to initialise video playback buffer" );
+		abort();
 		return FALSE;
 	}
 
@@ -1448,7 +1462,7 @@ INT_RETVAL intRunWidgets(void)
 		{
 			if(strlen(sRequestResult))
 			{
-				DBPRINTF(("Returned %s",sRequestResult));
+				debug( LOG_ERROR, "Returned %s", sRequestResult );
 				if(bRequestLoad)
 				{
 //					loadGame(sRequestResult,TRUE,FALSE,TRUE);
@@ -1951,7 +1965,7 @@ INT_RETVAL intRunWidgets(void)
         (intMode != INT_MISSIONRES) AND !getDebugMappingStatus())
 
 	{
-		DBPRINTF(("PlayerHasLost Or Won\n"));
+		debug( LOG_ERROR, "PlayerHasLost Or Won\n" );
 		intResetScreen(TRUE);
 		retCode = INT_QUIT;
 		quitting = TRUE;
@@ -5134,7 +5148,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 			if (sBFormInit.id > IDOBJ_OBJEND)
 			{
 				//can't fit any more on the screen!
-				DBMB(("This is just a Warning!\n Max buttons have been allocated"));
+				debug( LOG_NEVER, "This is just a Warning!\n Max buttons have been allocated" );
 				break;
 			}
 		} else {
@@ -5204,7 +5218,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 //	if ((objMode==IOBJ_RESEARCH) && bInTutorial)
 	if (bInTutorial)
 	{
-		DBPRINTF(("Go with object open callback!\n"));
+		debug( LOG_NEVER, "Go with object open callback!\n" );
 	 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTOPEN);
 	}
 
@@ -5270,7 +5284,7 @@ void intRemoveObject(void)
 
 	if (bInTutorial)
 	{
-		DBPRINTF(("Go with object close callback!\n"));
+		debug( LOG_NEVER, "Go with object close callback!\n" );
 	 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTCLOSE);
 	}
 
@@ -6071,7 +6085,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if (sBFormInit.id > IDSTAT_END)
 		{
 			//can't fit any more on the screen!
-			DBMB(("This is just a Warning!\n Max buttons have been allocated"));
+			debug( LOG_NEVER, "This is just a Warning!\n Max buttons have been allocated" );
 			break;
 		}
 
@@ -7914,7 +7928,7 @@ BOOL intSelectDroidsInDroidCluster(DROID *psCurDroid)
 	}
 
 //	intRefreshScreen();
-	DBPRINTF(("Selected %d droids\n",NumSelected));
+	debug( LOG_NEVER, "Selected %d droids\n", NumSelected );
 
 	return TRUE;
 }
@@ -8284,7 +8298,7 @@ void orderDroids(void)
 	SDWORD			i,j;
 	BASE_OBJECT		*psTemp;
 
-	DBPRINTF(("orderUnit\n"));
+	debug( LOG_NEVER, "orderUnit\n" );
 
 	// bubble sort on the ID - first built will always be first in the list
 	for(i=0; i<MAX_OBJECTS; i++)

@@ -116,7 +116,8 @@ BOOL playerInitialise(void)
 	asPlayerAI = (PLAYER_AI *)MALLOC(sizeof(PLAYER_AI) * MAX_PLAYERS);
 	if (!asPlayerAI)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(asPlayerAI, 0, sizeof(PLAYER_AI) * MAX_PLAYERS);

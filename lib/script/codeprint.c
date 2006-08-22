@@ -25,25 +25,25 @@ void cpPrintType(INTERP_TYPE type)
 	switch(type)
 	{
 	case VAL_BOOL:
-		DBPRINTF(("BOOL"));
+		debug( LOG_NEVER, "BOOL" );
 		break;
 	case VAL_INT:
-		DBPRINTF(("INT"));
+		debug( LOG_NEVER, "INT" );
 		break;
 /*	case VAL_FLOAT:
-		DBPRINTF(("FLOAT"));
+		debug( LOG_NEVER, "FLOAT" );
 		break;*/
 	case VAL_STRING:
-		DBPRINTF(("STRING"));
+		debug( LOG_NEVER, "STRING" );
 		break;
 	case VAL_TRIGGER:
-		DBPRINTF(("TRIGGER"));
+		debug( LOG_NEVER, "TRIGGER" );
 		break;
 	case VAL_EVENT:
-		DBPRINTF(("EVENT"));
+		debug( LOG_NEVER, "EVENT" );
 		break;
 	case VAL_VOID:
-		DBPRINTF(("VOID"));
+		debug( LOG_NEVER, "VOID" );
 		break;
 	default:
 		// See if it is a user defined type
@@ -53,7 +53,7 @@ void cpPrintType(INTERP_TYPE type)
 			{
 				if (asScrTypeTab[i].typeID == type)
 				{
-					DBPRINTF(("%s", asScrTypeTab[i].pIdent ));
+					debug( LOG_NEVER, "%s", asScrTypeTab[i].pIdent );
 					return;
 				}
 			}
@@ -64,7 +64,7 @@ void cpPrintType(INTERP_TYPE type)
 
 	if (ref)
 	{
-		DBPRINTF((" REF"));
+		debug( LOG_NEVER, " REF" );
 	}
 }
 
@@ -76,32 +76,31 @@ void cpPrintVal(INTERP_VAL *psVal)
 
 	if (psVal->type & VAL_REF)
 	{
-		DBPRINTF(("type: "));
+		debug( LOG_NEVER, "type: " );
 		cpPrintType(psVal->type);
-		DBPRINTF((" value: %x", psVal->v.ival));
+		debug( LOG_NEVER, " value: %x", psVal->v.ival );
 		return;
 	}
 
 	switch(psVal->type)
 	{
 	case VAL_BOOL:
-		DBPRINTF(("type: BOOL    value: %s",
-					psVal->v.bval ? "true" : "false"));
+		debug( LOG_NEVER, "type: BOOL    value: %s", psVal->v.bval ? "true" : "false" );
 		break;
 	case VAL_INT:
-		DBPRINTF(("type: INT     value: %d", psVal->v.ival ));
+		debug( LOG_NEVER, "type: INT     value: %d", psVal->v.ival );
 		break;
 /*	case VAL_FLOAT:
-		DBPRINTF(("type: FLOAT   value: %f", psVal->v.fval ));
+		debug( LOG_NEVER, "type: FLOAT   value: %f", psVal->v.fval );
 		break;*/
 	case VAL_STRING:
-		DBPRINTF(("type: STRING  value: %s", psVal->v.sval ));
+		debug( LOG_NEVER, "type: STRING  value: %s", psVal->v.sval );
 		break;
 	case VAL_TRIGGER:
-		DBPRINTF(("type: TRIGGER value: %d", psVal->v.ival ));
+		debug( LOG_NEVER, "type: TRIGGER value: %d", psVal->v.ival );
 		break;
 	case VAL_EVENT:
-		DBPRINTF(("type: EVENT   value: %d", psVal->v.ival ));
+		debug( LOG_NEVER, "type: EVENT   value: %d", psVal->v.ival );
 		break;
 	default:
 		// See if it is a user defined type
@@ -111,8 +110,7 @@ void cpPrintVal(INTERP_VAL *psVal)
 			{
 				if (asScrTypeTab[i].typeID == psVal->type)
 				{
-					DBPRINTF(("type: %s value: %x",
-							asScrTypeTab[i].pIdent, psVal->v.ival ));
+					debug( LOG_NEVER, "type: %s value: %x", asScrTypeTab[i].pIdent, psVal->v.ival );
 					return;
 				}
 			}
@@ -132,32 +130,31 @@ void cpPrintPackedVal(UDWORD *ip)
 
 	if (type & VAL_REF)
 	{
-		DBPRINTF(("type: "));
+		debug( LOG_NEVER, "type: " );
 		cpPrintType(type);
-		DBPRINTF((" value: %x", data));
+		debug( LOG_NEVER, " value: %x", data );
 		return;
 	}
 
 	switch(type)
 	{
 	case VAL_BOOL:
-		DBPRINTF(("BOOL   : %s",
-					((BOOL)data) ? "true" : "false"));
+		debug( LOG_NEVER, "BOOL    : %s", ((BOOL)data) ? "true" : "false" );
 		break;
 	case VAL_INT:
-		DBPRINTF(("INT     : %d", (SDWORD)data ));
+		debug( LOG_NEVER, "INT     : %d", (SDWORD)data );
 		break;
 /*	case VAL_FLOAT:
-		DBPRINTF(("FLOAT   : %f", (float)data ));
+		debug( LOG_NEVER, "FLOAT   : %f", (float)data );
 		break;*/
 	case VAL_STRING:
-		DBPRINTF(("STRING  : %s", (STRING *)data ));
+		debug( LOG_NEVER, "STRING  : %s", (STRING *)data );
 		break;
 	case VAL_TRIGGER:
-		DBPRINTF(("TRIGGER : %d", (SDWORD)data ));
+		debug( LOG_NEVER, "TRIGGER : %d", (SDWORD)data );
 		break;
 	case VAL_EVENT:
-		DBPRINTF(("EVENT   : %d", (SDWORD)data ));
+		debug( LOG_NEVER, "EVENT   : %d", (SDWORD)data );
 		break;
 	default:
 		// See if it is a user defined type
@@ -167,8 +164,7 @@ void cpPrintPackedVal(UDWORD *ip)
 			{
 				if (asScrTypeTab[i].typeID == type)
 				{
-					DBPRINTF(("type: %s value: %x",
-							asScrTypeTab[i].pIdent, data ));
+					debug( LOG_NEVER, "type: %s value: %x", asScrTypeTab[i].pIdent, data );
 					return;
 				}
 			}
@@ -185,46 +181,46 @@ void cpPrintMathsOp(UDWORD opcode)
 	switch (opcode)
 	{
 	case OP_ADD:
-		DBPRINTF(("ADD         "));
+		debug( LOG_NEVER, "ADD" );
 		break;
 	case OP_SUB:
-		DBPRINTF(("SUB         "));
+		debug( LOG_NEVER, "SUB" );
 		break;
 	case OP_MUL:
-		DBPRINTF(("MUL         "));
+		debug( LOG_NEVER, "MUL" );
 		break;
 	case OP_DIV:
-		DBPRINTF(("DIV         "));
+		debug( LOG_NEVER, "DIV" );
 		break;
 	case OP_NEG:
-		DBPRINTF(("NEG         "));
+		debug( LOG_NEVER, "NEG" );
 		break;
 	case OP_AND:
-		DBPRINTF(("AND         "));
+		debug( LOG_NEVER, "AND" );
 		break;
 	case OP_OR:
-		DBPRINTF(("OR          "));
+		debug( LOG_NEVER, "OR" );
 		break;
 	case OP_NOT:
-		DBPRINTF(("NOT         "));
+		debug( LOG_NEVER, "NOT" );
 		break;
 	case OP_EQUAL:
-		DBPRINTF(("EQUAL       "));
+		debug( LOG_NEVER, "EQUAL" );
 		break;
 	case OP_NOTEQUAL:
-		DBPRINTF(("NOT_EQUAL   "));
+		debug( LOG_NEVER, "NOT_EQUAL" );
 		break;
 	case OP_GREATEREQUAL:
-		DBPRINTF(("GRT_EQUAL   "));
+		debug( LOG_NEVER, "GRT_EQUAL" );
 		break;
 	case OP_LESSEQUAL:
-		DBPRINTF(("LESS_EQUAL  "));
+		debug( LOG_NEVER, "LESS_EQUAL" );
 		break;
 	case OP_GREATER:
-		DBPRINTF(("GREATER     "));
+		debug( LOG_NEVER, "GREATER" );
 		break;
 	case OP_LESS:
-		DBPRINTF(("LESS        "));
+		debug( LOG_NEVER, "LESS" );
 		break;
 	default:
 		ASSERT((FALSE, "cpPrintMathsOp: unknown operator"));
@@ -244,7 +240,7 @@ void cpPrintFunc(SCRIPT_FUNC pFunc)
 		{
 			if (asScrInstinctTab[i].pFunc == pFunc)
 			{
-				DBPRINTF(("%s", asScrInstinctTab[i].pIdent));
+				debug( LOG_NEVER, "%s", asScrInstinctTab[i].pIdent );
 				return;
 			}
 		}
@@ -257,7 +253,7 @@ void cpPrintFunc(SCRIPT_FUNC pFunc)
 		{
 			if (asScrCallbackTab[i].pFunc == pFunc)
 			{
-				DBPRINTF(("%s", asScrCallbackTab[i].pIdent));
+				debug( LOG_NEVER, "%s", asScrCallbackTab[i].pIdent );
 				return;
 			}
 		}
@@ -278,13 +274,13 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 			if (asScrExternalTab[i].set == pFunc &&
 				asScrExternalTab[i].index == index)
 			{
-				DBPRINTF(("%s (set)", asScrExternalTab[i].pIdent));
+				debug( LOG_NEVER, "%s (set)", asScrExternalTab[i].pIdent );
 				return;
 			}
 			else if (asScrExternalTab[i].get == pFunc &&
 					 asScrExternalTab[i].index == index)
 			{
-				DBPRINTF(("%s (get)", asScrExternalTab[i].pIdent));
+				debug( LOG_NEVER, "%s (get)", asScrExternalTab[i].pIdent );
 				return;
 			}
 		}
@@ -298,13 +294,13 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 			if (asScrObjectVarTab[i].set == pFunc &&
 				asScrObjectVarTab[i].index == index)
 			{
-				DBPRINTF(("%s (set)", asScrObjectVarTab[i].pIdent));
+				debug( LOG_NEVER, "%s (set)", asScrObjectVarTab[i].pIdent );
 				return;
 			}
 			else if (asScrObjectVarTab[i].get == pFunc &&
 					 asScrObjectVarTab[i].index == index)
 			{
-				DBPRINTF(("%s (get)", asScrObjectVarTab[i].pIdent));
+				debug( LOG_NEVER, "%s (get)", asScrObjectVarTab[i].pIdent );
 				return;
 			}
 		}
@@ -336,10 +332,10 @@ void cpPrintArrayInfo(UDWORD **pip, SCRIPT_CODE *psProg)
 		pElem += 1;
 	}*/
 
-	DBPRINTF(("%d->", base));
+	debug( LOG_NEVER, "%d->", base );
 	for(i=0; i<psProg->psArrayInfo[base].dimensions; i+= 1)
 	{
-		DBPRINTF(("[%d]", psProg->psArrayInfo[base].elements[i]));
+		debug( LOG_NEVER, "[%d]", psProg->psArrayInfo[base].elements[i] );
 	}
 	// calculate the number of DWORDs needed to store the number of elements for each dimension of the array
 //	elementDWords = (dimensions - 1)/4 + 1;
@@ -372,43 +368,39 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		// Print out the global variables
 		if (psProg->numGlobals > 0)
 		{
-			DBPRINTF(("index  storage  type variable name\n"));
+			debug( LOG_NEVER, "index  storage  type variable name\n" );
 			psCurrVar = psProg->psVarDebug;
 			for(i=0; i<psProg->numGlobals; i++)
 			{
-				DBPRINTF(("%-6d %s  %-4d %s\n", psCurrVar - psProg->psVarDebug,
-					psCurrVar->storage == ST_PUBLIC ? "Public " : "Private",
-					psProg->pGlobals[i], psCurrVar->pIdent));
+				debug( LOG_NEVER, "%-6d %s  %-4d %s\n", psCurrVar - psProg->psVarDebug, psCurrVar->storage == ST_PUBLIC ? "Public " : "Private", psProg->pGlobals[i], psCurrVar->pIdent );
 				psCurrVar++;
 			}
 		}
 
 		if (psProg->numArrays > 0)
 		{
-			DBPRINTF(("\narrays\n"));
+			debug( LOG_NEVER, "\narrays\n" );
 			psCurrArray = psProg->psArrayInfo;
 			psCurrArrayDebug = psProg->psArrayDebug;
 			for(i=0; i<psProg->numArrays; i++)
 			{
-				DBPRINTF(("%-6d %s  %-4d %s", i,
-					psCurrArrayDebug->storage == ST_PUBLIC ? "Public " : "Private",
-					psCurrArray->type, psCurrArrayDebug->pIdent));
+				debug( LOG_NEVER, "%-6d %s  %-4d %s", i, psCurrArrayDebug->storage == ST_PUBLIC ? "Public " : "Private", psCurrArray->type, psCurrArrayDebug->pIdent );
 				for(dim=0; dim < psCurrArray->dimensions; dim += 1)
 				{
-					DBPRINTF(("[%d]", psCurrArray->elements[dim]));
+					debug( LOG_NEVER, "[%d]", psCurrArray->elements[dim] );
 				}
-				DBPRINTF(("\n"));
+				debug( LOG_NEVER, "\n" );
 				psCurrArray++;
 				psCurrArrayDebug++;
 			}
 		}
 
-		DBPRINTF(("\nindex  line   offset\n"));
+		debug( LOG_NEVER, "\nindex line offset\n" );
 		psCurrDebug = psProg->psDebug;
 	}
 	else
 	{
-		DBPRINTF(("index         offset\n"));
+		debug( LOG_NEVER, "index offset\n" );
 	}
 
 	// Find the first trigger with code
@@ -433,7 +425,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			if ((UDWORD)(ip - psProg->pCode) == psCurrDebug->offset &&
 				psCurrDebug->pLabel != NULL)
 			{
-				DBPRINTF(("%s\n", psCurrDebug->pLabel));
+				debug( LOG_NEVER, "%s\n", psCurrDebug->pLabel );
 			}
 		}
 
@@ -442,7 +434,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		{
 			if (ip - psProg->pCode == psProg->pTriggerTab[jumpOffset])
 			{
-				DBPRINTF(("%-6d ", jumpOffset));
+				debug( LOG_NEVER, "%-6d", jumpOffset );
 				jumpOffset+= 1;
 				// Find the next trigger with code
 				while(jumpOffset < psProg->numTriggers)
@@ -462,19 +454,19 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			}
 			else
 			{
-				DBPRINTF(("       "));
+				debug( LOG_NEVER, "" );
 			}
 		}
 		else
 		{
 			if (ip - psProg->pCode == psProg->pEventTab[jumpOffset])
 			{
-				DBPRINTF(("%-6d ", jumpOffset));
+				debug( LOG_NEVER, "%-6d", jumpOffset );
 				jumpOffset+= 1;
 			}
 			else
 			{
-				DBPRINTF(("       "));
+				debug( LOG_NEVER, "" );
 			}
 		}
 
@@ -483,92 +475,89 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		{
 			if ((UDWORD)(ip - psProg->pCode) == psCurrDebug->offset)
 			{
-				DBPRINTF(("%-6d ", psCurrDebug->line));
+				debug( LOG_NEVER, "%-6d", psCurrDebug->line );
 				psCurrDebug++;
 			}
 			else
 			{
-				DBPRINTF(("       "));
+				debug( LOG_NEVER, "" );
 			}
 		}
 
 		// Display the code offset
-		DBPRINTF(("%-6d  ", ip - psProg->pCode));
+		debug( LOG_NEVER, "%-6d", ip - psProg->pCode );
 		switch (opcode)
 		{
 		case OP_PUSH:
-			DBPRINTF(("PUSH        "));
+			debug( LOG_NEVER, "PUSH" );
 			cpPrintPackedVal(ip);
-			DBPRINTF(("\n"));
+			debug( LOG_NEVER, "\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_PUSHREF:
-			DBPRINTF(("PUSHREF     "));
+			debug( LOG_NEVER, "PUSHREF" );
 			cpPrintPackedVal(ip);
-			DBPRINTF(("\n"));
+			debug( LOG_NEVER, "\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_POP:
-			DBPRINTF(("POP\n"));
+			debug( LOG_NEVER, "POP\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_PUSHGLOBAL:
-			DBPRINTF(("PUSHGLOBAL  %d\n", data));
+			debug( LOG_NEVER, "PUSHGLOBAL %d\n", data );
 			ip += aOpSize[opcode];
 			break;
 		case OP_POPGLOBAL:
-			DBPRINTF(("POPGLOBAL   %d\n", data));
+			debug( LOG_NEVER, "POPGLOBAL  %d\n", data );
 			ip += aOpSize[opcode];
 			break;
 		case OP_PUSHARRAYGLOBAL:
-			DBPRINTF(("PUSHARRAYGLOBAL  "));
+			debug( LOG_NEVER, "PUSHARRAYGLOBAL" );
 			cpPrintArrayInfo(&ip, psProg);
-			DBPRINTF(("\n"));
+			debug( LOG_NEVER, "\n" );
 			break;
 		case OP_POPARRAYGLOBAL:
-			DBPRINTF(("POPARRAYGLOBAL   "));
+			debug( LOG_NEVER, "POPARRAYGLOBAL" );
 			cpPrintArrayInfo(&ip, psProg);
-			DBPRINTF(("\n"));
+			debug( LOG_NEVER, "\n" );
 			break;
 		case OP_CALL:
-			DBPRINTF(("CALL        "));
+			debug( LOG_NEVER, "CALL" );
 			cpPrintFunc( (SCRIPT_FUNC)(*(ip+1)) );
-			DBPRINTF(("\n"));
+			debug( LOG_NEVER, "\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_VARCALL:
-			DBPRINTF(("VARCALL     "));
+			debug( LOG_NEVER, "VARCALL" );
 			cpPrintVarFunc( (SCRIPT_VARFUNC)(*(ip+1)), data);
-			DBPRINTF(("(%d)\n", data));
+			debug( LOG_NEVER, "(%d)\n", data );
 			ip += aOpSize[opcode];
 			break;
 		case OP_JUMP:
-			DBPRINTF(("JUMP        %d (%d)\n",
-					(SWORD)data, ip - psProg->pCode + (SWORD)data));
+			debug( LOG_NEVER, "JUMP       %d (%d)\n", (SWORD)data, ip - psProg->pCode + (SWORD)data );
 			ip += aOpSize[opcode];
 			break;
 		case OP_JUMPTRUE:
-			DBPRINTF(("JUMPTRUE    %d (%d)\n",
-					(SWORD)data, ip - psProg->pCode + (SWORD)data));
+			debug( LOG_NEVER, "JUMPTRUE   %d (%d)\n", (SWORD)data, ip - psProg->pCode + (SWORD)data );
 			ip += aOpSize[opcode];
 			break;
 		case OP_JUMPFALSE:
-			DBPRINTF(("JUMPFALSE   %d (%d)\n",
-					(SWORD)data, ip - psProg->pCode + (SWORD)data));
+			debug( LOG_NEVER, "JUMPFALSE  %d (%d)\n", (SWORD)data, ip - psProg->pCode + (SWORD)data );
 			ip += aOpSize[opcode];
 			break;
 		case OP_BINARYOP:
 		case OP_UNARYOP:
 			cpPrintMathsOp(data);
-			DBPRINTF(("\n"));
+			debug( LOG_NEVER, "\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_EXIT:
-			DBPRINTF(("EXIT\n"));
+			debug( LOG_NEVER, "EXIT\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_PAUSE:
-			DBPRINTF(("PAUSE       %d\n", data));
+			debug( LOG_NEVER, "PAUSE %d\n", data );
 			ip += aOpSize[opcode];
 			break;
 		default:

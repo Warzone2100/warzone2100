@@ -1364,7 +1364,8 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 								psTemplate->asWeaps[0]);
 		break;
 	default:
-		DBERROR( ("intSetDesignStats: unrecognised droid type") );
+		debug( LOG_ERROR, "intSetDesignStats: unrecognised droid type" );
+		abort();
 		return NULL;
 	}
 
@@ -1455,7 +1456,7 @@ STRING *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
-			DBPRINTF( ("GetDefaultTemplateName: name string too long %s+%s\n",aCurrName,pStr) );
+			debug( LOG_NEVER, "GetDefaultTemplateName: name string too long %s+%s\n", aCurrName, pStr );
 			return NULL;
 		}
 
@@ -1471,7 +1472,7 @@ STRING *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
-			DBPRINTF( ("GetDefaultTemplateName: name string too long %s+%s\n",aCurrName,pStr) );
+			debug( LOG_NEVER, "GetDefaultTemplateName: name string too long %s+%s\n", aCurrName, pStr );
 			return NULL;
 		}
 
@@ -2695,7 +2696,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 				sButInit.majorID += 1;
 				if (sButInit.majorID >= WFORM_MAXMAJOR)
 				{
-					DBPRINTF(("Too many buttons for component form"));
+					debug( LOG_NEVER, "Too many buttons for component form" );
 					return FALSE;
 				}
 			}
@@ -2714,7 +2715,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 				sButInit.minorID += 1;
 				if (sButInit.minorID >= WFORM_MAXMINOR)
 				{
-					DBPRINTF(("Too many buttons for component form"));
+					debug( LOG_NEVER, "Too many buttons for component form" );
 					return FALSE;
 				}
 			}
@@ -5106,7 +5107,7 @@ BOOL saveTemplate(void)
 			/* The design needs a new template in the list */
 			if (!HEAP_ALLOC(psTemplateHeap, (void**) &psTempl))
 			{
-				DBPRINTF( ("saveTemplate: heap alloc failed\n") );
+				debug( LOG_NEVER, "saveTemplate: heap alloc failed\n" );
 				return FALSE;
 			}
 

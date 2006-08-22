@@ -80,7 +80,8 @@ BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 		// allocate sample heap
 		if ( !HEAP_CREATE(&g_psSampleHeap, AUDIO_SAMPLE_HEAP_INIT, AUDIO_SAMPLE_HEAP_EXT, sizeof(AUDIO_SAMPLE)) )
 		{
-			DBERROR( ("audio_Init: couldn't create sample queue\n") );
+			debug( LOG_ERROR, "audio_Init: couldn't create sample queue\n" );
+			abort();
 			return FALSE;
 		}
 
@@ -546,7 +547,7 @@ void audio_UpdateQueue( void )
 			}
 			else
 			{
-				DBPRINTF( ("audio_UpdateQueue: couldn't play sample\n") );
+				debug( LOG_NEVER, "audio_UpdateQueue: couldn't play sample\n" );
 				HEAP_FREE( g_psSampleHeap, psSample );
 			}
 		}
@@ -705,7 +706,7 @@ BOOL audio_SetTrackVals
 	psTrack = resGetData( "WAV", szFileName );		//at this point we have 4 valid entries, and 8 invalid -Q
 	if ( psTrack == NULL )
 	{
-		DBPRINTF( ("audio_SetTrackVals: track %s resource not found\n", szFileName) );
+		debug( LOG_NEVER, "audio_SetTrackVals: track %s resource not found\n", szFileName );
 		return FALSE;
 	}
 	else
@@ -718,7 +719,7 @@ BOOL audio_SetTrackVals
 
 		if ( *piID == SAMPLE_NOT_ALLOCATED )
 		{
-			DBPRINTF( ("audio_SetTrackVals: couldn't get spare track ID\n") );
+			debug( LOG_NEVER, "audio_SetTrackVals: couldn't get spare track ID\n" );
 			return FALSE;
 		}
 		else
@@ -883,7 +884,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 		}
 		else
 		{
-			DBPRINTF( ("audio_Play3DTrack: couldn't play sample\n") );
+			debug( LOG_NEVER, "audio_Play3DTrack: couldn't play sample\n" );
 			HEAP_FREE( g_psSampleHeap, psSample );
 			return FALSE;
 		}
@@ -1072,7 +1073,7 @@ void audio_PlayTrack( int iTrack )
 		}
 		else
 		{
-			DBPRINTF( ("audio_PlayTrack: couldn't play sample\n") );
+			debug( LOG_NEVER, "audio_PlayTrack: couldn't play sample\n" );
 			HEAP_FREE( g_psSampleHeap, psSample );
 		}
 	}
@@ -1203,7 +1204,7 @@ void audio_StopAll( void )
 		return;
 	}
 
-	DBPRINTF( ("audio_StopAll called\n") );
+	debug( LOG_NEVER, "audio_StopAll called\n" );
 	g_bStopAll = TRUE;
 
 	//
@@ -1228,7 +1229,7 @@ void audio_StopAll( void )
 
 	g_psSampleQueue = NULL;
 	g_bStopAll = FALSE;
-	DBPRINTF( ("audio_StopAll done\n") );
+	debug( LOG_NEVER, "audio_StopAll done\n" );
 }
 
 //*

@@ -591,7 +591,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	RESEARCH		*psResearch;
 
 /*	ASSERT((psMessage->type == MSG_RESEARCH,
- *		"intAddMessageView: invalid message type")); 
+ *		"intAddMessageView: invalid message type"));
  *	had to comment out this check, since the 'Fast Play' tutorial triggered it
  *	with psMessage->type=MSG_MISSION and ((VIEWDATA)*psMessage->pViewData)->type=VIEW_RPL,
  * 	but which is probably using the wrong function. - Per
@@ -1018,7 +1018,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 //		sprintf(String,"seqadded %d of %d [%s]\n",Sequence,psViewReplay->numSeq,psViewReplay->pSeqList[Sequence].sequenceName);
 //		prnt(1,String,0,0);
 //	}
-	DBPRINTF(("sequence=%d\n",Sequence));
+			debug( LOG_NEVER, "sequence=%d\n", Sequence );
 			addVideoText(&psViewReplay->pSeqList[Sequence],Sequence);
 		}
 		//play first full screen video
@@ -1667,7 +1667,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 
 	if (psSeqDisplay->numText > 0)
 	{
-		DBPRINTF(("avt seq=%d [%s]\n",sequence,psSeqDisplay->ppTextMsg[0]));
+		debug( LOG_NEVER, "avt seq=%d [%s]\n", sequence, psSeqDisplay->ppTextMsg[0] );
 		//add each message, first at the top
 		x = VIDEO_TEXT_TOP_X;
 		y = VIDEO_TEXT_TOP_Y;

@@ -12,7 +12,7 @@
 #include "stack.h"
 #include "codeprint.h"
 #include "script.h"
-#include "event.h" //needed for eventGetEventID() 
+#include "event.h" //needed for eventGetEventID()
 
 
 // the maximum number of instructions to execute before assuming
@@ -60,7 +60,7 @@ BOOL	interpTrace;
 /* Print out trace info if tracing is turned on */
 #define TRCPRINTF(x) \
 	if (interpTrace) \
-		DBPRINTF(x)
+		debug( LOG_NEVER, x)
 
 #define TRCPRINTVAL(x) \
 	if (interpTrace) \
@@ -169,12 +169,12 @@ BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psPr
 	// print out the debug trace
 	if (interpTrace)
 	{
-		DBPRINTF(("%d->", base));
+		debug( LOG_NEVER, "%d->", base );
 		for(i=0; i<dimensions; i+= 1)
 		{
-			DBPRINTF(("[%d/%d]", vals[i], elements[i]));
+			debug( LOG_NEVER, "[%d/%d]", vals[i], elements[i] );
 		}
-		DBPRINTF(("(%d) ", index));
+		debug( LOG_NEVER, "(%d) ", index );
 	}
 
 	// check the index is valid
@@ -294,7 +294,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		return FALSE;
 	}
 
-	
+
 
 	// Get the first opcode
 	ip = pCodeStart;
@@ -337,7 +337,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 					CurEvent = *(ip+1);			//Current event = event to jump to
 
-					
+
 
 					if (CurEvent > psProg->numEvents)
 					{
@@ -364,7 +364,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 				//debug( LOG_SCRIPT, "OP_PUSHLOCAL");
 				//debug( LOG_SCRIPT, "OP_PUSHLOCAL, (CurEvent=%d, data =%d) num loc vars: %d; pushing: %d", CurEvent, data, psContext->psCode->numLocalVars[CurEvent], psContext->psCode->ppsLocalVarVal[CurEvent][data].v.ival);
-				
+
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCAL: variable index out of range");
@@ -374,7 +374,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 2");
 				//debug(LOG_SCRIPT, "OP_PUSHLOCAL type: %d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type);
-				
+
 				if (!stackPush( &(psContext->psCode->ppsLocalVarVal[CurEvent][data]) ))
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCAL: push failed");
@@ -382,11 +382,11 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 
 				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 3");
-				
+
 				ip += 1;//aOpSize[opcode];
 				break;
 			case OP_POPLOCAL:
-								
+
 				//debug( LOG_SCRIPT, "OP_POPLOCAL, event index: '%d', data: '%d'", CurEvent, data);
 				//debug( LOG_SCRIPT, "OP_POPLOCAL, numLocalVars: '%d'", psContext->psCode->numLocalVars[CurEvent]);
 
@@ -418,7 +418,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				sVal.type = (*ip) & OPCODE_DATAMASK;
 
 				/* get local var index */
-				data = *(ip + 1);	
+				data = *(ip + 1);
 
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
@@ -973,7 +973,7 @@ BOOL PopRetStack(UDWORD  *psVal)
 	}
 
 	*psVal = retStack[retStackPos];
-	
+
 	retStackPos = retStackPos - 1;
 
 	//debug( LOG_SCRIPT, "PopRetStack: val=%d", *psVal);

@@ -155,7 +155,8 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 
 	if (asFeatureStats == NULL)
 	{
-		DBERROR(("Feature Stats - Out of memory"));
+		debug( LOG_ERROR, "Feature Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -220,10 +221,11 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 		if (psFeature->psImd == NULL)
 		{
 #ifdef HASH_NAMES
-			DBERROR(("Cannot find the feature PIE for record %s",  strresGetString(NULL,psFeature->NameHash)));
+			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  strresGetString( NULL, psFeature->NameHash ) );
 #else
-			DBERROR(("Cannot find the feature PIE for record %s",  getName(psFeature->pName)));
+			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  getName( psFeature->pName ) );
 #endif
+			abort();
 			return FALSE;
 		}
 
@@ -749,7 +751,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	if ((psStats->subType == FEAT_OIL_RESOURCE) &&
 		!gwZoneReachable(gwGetZone(startX,startY)))
 	{
-		DBPRINTF(("Oil resource at (%d,%d) is unreachable", startX,startY));
+		debug( LOG_NEVER, "Oil resource at (%d,%d) is unreachable", startX, startY );
 	}
 
 	if(FromSave == TRUE) {

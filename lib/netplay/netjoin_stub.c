@@ -23,7 +23,8 @@ DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
 		return NetPlay.games[gameid].desc.dwUser4;
 		break;
 	default:
-		DBERROR(("Invalid flag for getgameflagsunjoined in netplay lib"));
+		debug( LOG_ERROR, "Invalid flag for NETgetGameFlagsUnjoined in netplay lib" );
+		abort();
 		break;
 	}
 	return 0;

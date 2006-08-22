@@ -759,7 +759,7 @@ void cleanSearchPath( void )
 		tmpSearchPath = curSearchPath->higherPriority;
 		free( curSearchPath );
 		curSearchPath = tmpSearchPath;
-	}	
+	}
 }
 
 // Register searchPath above the path with next lower priority
@@ -1017,7 +1017,8 @@ BOOL systemInitialise(void)
 	DisplayBuffer = MALLOC(displayBufferSize);
 	if (DisplayBuffer == NULL)
 	{
-		DBERROR(("Unable to allocate memory for display buffer"));
+		debug( LOG_ERROR, "Unable to allocate memory for display buffer" );
+		abort();
 		return FALSE;
 	}
 
@@ -1172,7 +1173,8 @@ init_ObjectDead( void * psObj )
 				break;
 
 			default:
-				DBERROR( ("init_ObjectAnimRemoved: unrecognised object type") );
+				debug( LOG_ERROR, "init_ObjectAnimRemoved: unrecognised object type" );
+				abort();
 		}
 	}
 
@@ -1616,7 +1618,8 @@ BOOL stageTwoInitialise(void)
 	if(!initMiscImds())			/* Set up the explosions */
 	{
 		iV_ShutDown();
-		DBERROR(("Can't find all the explosions PCX's"));
+		debug( LOG_ERROR, "Can't find all the explosions PCX's" );
+		abort();
 		return FALSE;
 	}
 

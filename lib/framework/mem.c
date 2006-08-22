@@ -166,7 +166,7 @@ void *memMalloc(STRING *pFileName, SDWORD LineNumber, size_t Size)
 
 
 		ASSERT((FALSE, "Warning: malloc returning NULL - [%s - %d]",pFileName,LineNumber));
-		DBPRINTF(("[%s - %d] %d bytes\n",pFileName,LineNumber,Size));
+		debug( LOG_NEVER, "[%s - %d] %d bytes\n", pFileName, LineNumber, Size );
 		return NULL;
 	}
 
@@ -176,7 +176,7 @@ void *memMalloc(STRING *pFileName, SDWORD LineNumber, size_t Size)
 	if (!psNode->pFile)
 	{
 		RFREE(pMemBase);
-		DBMB(("Warning: malloc returning NULL"));
+		debug( LOG_NEVER, "Warning: malloc returning NULL" );
 		return NULL;
 	}
 	strcpy(psNode->pFile, pFileName);

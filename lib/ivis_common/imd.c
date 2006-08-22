@@ -5,17 +5,17 @@
 #include <math.h>
 
 // we need BSPIMD defined if we want to read & use the BSP imd files
-		   
+
 // Define this if we are compile ivis for the BSP generating tool, also for PIEBIN tool
 //#define PIETOOL
 
 #ifdef PIETOOL
-#define BSPIMD				 
+#define BSPIMD
 #define SAVEIMD
 #endif
 
 #include "ivisdef.h"
-#include "imd.h"		  
+#include "imd.h"
 #include "bug.h"
 #include "tex.h"
 #include "ivispatch.h"
@@ -46,7 +46,7 @@
 // most of them are in ptrlist.c which is no longer included in ivis. See the source for BSPIMD
 // for this file. Becareful not to confuse this with the same named file in deliverance/src which
 // might or might not be the same.
-// 
+//
 #ifdef PIETOOL
 
 // Prototypes for the linked list handling
@@ -66,8 +66,8 @@ void OutputTriangleList(FILE *fp, PSBSPPTRLIST TriList)
 	int d;
 
 	if (TriList == NULL) return;
-	
-	Triangle = list_GetFirst(TriList);	
+
+	Triangle = list_GetFirst(TriList);
 
 	while (Triangle != NULL) {
 		fprintf(fp,"\t%8x %d",Triangle->flags,Triangle->npnts);
@@ -77,7 +77,7 @@ void OutputTriangleList(FILE *fp, PSBSPPTRLIST TriList)
 		if (Triangle->flags & iV_IMD_TEXANIM) {
 
 			if (Triangle->pTexAnim == NULL) {
-				DBPRINTF(("No TexAnim pointer!\n"));				
+				debug( LOG_NEVER, "No TexAnim pointer!\n" );
 			} else {
 				fprintf(fp," %d %d %d %d",
 					Triangle->pTexAnim->nFrames,
@@ -86,7 +86,7 @@ void OutputTriangleList(FILE *fp, PSBSPPTRLIST TriList)
 					Triangle->pTexAnim->textureHeight);
 			}
 		}
-		
+
 		// if textured write texture uv's
 		if (Triangle->flags & (iV_IMD_TEX | iV_IMD_PSXTEX)) {
 			for (d = 0; d < Triangle->npnts; d++) {
@@ -107,8 +107,8 @@ void CountTriangleList(PSBSPPTRLIST TriList)
 
 	if (TriList == NULL) return;
 	if (TriList->iNumNodes == 0) return;
-	
-	Triangle=list_GetFirst(TriList);	
+
+	Triangle=list_GetFirst(TriList);
 
 	while (Triangle != NULL) {
 		BSPPolyTable[BSPPolys] = Triangle;
@@ -127,7 +127,7 @@ void CountBSPPolys(PSBSPTREENODE psNode)
 
 	BSPNodeTable[BSPNodes] = psNode;
 	BSPNodes++;
-	
+
 	CountBSPPolys(psNode->link[LEFT]);
 	CountTriangleList(psNode->psTriSameDir);
 	CountTriangleList(psNode->psTriOppoDir);
@@ -175,7 +175,7 @@ int HuntPolyList(iIMDPoly *Poly)
 
 void DumpTriangleList(FILE *fp,PSBSPPTRLIST TriList)
 {
-	
+
 	iIMDPoly *Triangle;
 
 	assert(BSPPolys<iV_IMD_MAX_POLYS);
@@ -183,8 +183,8 @@ void DumpTriangleList(FILE *fp,PSBSPPTRLIST TriList)
 //	DBPRINTF(("Dumping TriList %p\n",TriList));
 
 	if (TriList==NULL) return;
-	
-	Triangle = list_GetFirst(TriList);	
+
+	Triangle = list_GetFirst(TriList);
 
 	while (Triangle != NULL) {
 		fprintf(fp,"%d ",HuntPolyList(Triangle));
@@ -236,7 +236,7 @@ void _imd_save_connectors(FILE *fp, iIMDShape *s)
 		fprintf(fp,"CONNECTORS %d\n",s->nconnectors);
 		p = s->connectors;
 		for (i=0; i<s->nconnectors; i++, p++) {
-			fprintf(fp,"\t%d %d %d\n", p->x,p->y,p->z);		
+			fprintf(fp,"\t%d %d %d\n", p->x,p->y,p->z);
 		}
 	}
 }
@@ -298,7 +298,7 @@ iBool iV_IMDSave(STRING *filename, iIMDShape *s, BOOL PieIMD)
 #ifdef PIETOOL
 		if (sp->BSPNode==NULL)
 #endif
-		{			
+		{
 			fprintf(fp,"POLYGONS %d\n",sp->npolys);
 			for (poly = sp->polys, j=0; j<sp->npolys; j++, poly++) {
 				fprintf(fp,"\t%8x %d",poly->flags,poly->npnts);
@@ -309,7 +309,7 @@ iBool iV_IMDSave(STRING *filename, iIMDShape *s, BOOL PieIMD)
 				if (poly->flags & iV_IMD_TEXANIM) {
 
 					if (poly->pTexAnim == NULL) {
-						printf("No TexAnim pointer!\n");				
+						printf("No TexAnim pointer!\n");
 					} else {
 						fprintf(fp," %d %d %d %d",
 							poly->pTexAnim->nFrames,
@@ -330,11 +330,11 @@ iBool iV_IMDSave(STRING *filename, iIMDShape *s, BOOL PieIMD)
 		}
 #ifdef PIETOOL
 		else
-		{		
+		{
 			int NodeCount;
 
 			fprintf(fp,"POLYGONS %d\n",GetBSPPolyCount(sp->BSPNode,&NodeCount) );
-			OutputBSPPolys(fp,sp->BSPNode);	// 
+			OutputBSPPolys(fp,sp->BSPNode);	//
 
 			fprintf(fp,"BSP %d\n",NodeCount );
 			OutputBSPNodes(fp,sp->BSPNode);

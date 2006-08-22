@@ -331,7 +331,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				sprintf(tempstr, "%d", psVal->v.ival);
 
 				*pData = tempstr;
-				
+
 				//itoa(psVal->v.ival,tmpstr,10);
 			}
 		}
@@ -424,7 +424,7 @@ void stackPrintTop(void)
 	}
 	else
 	{
-		DBPRINTF(("STACK EMPTY"));
+		debug( LOG_NEVER, "STACK EMPTY" );
 	}
 }
 
@@ -647,15 +647,15 @@ BOOL stackInitialise(void)
 	psStackBase = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
 	if (psStackBase == NULL)
 	{
-		debug(LOG_ERROR, "Out of memory");
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 	psStackBase->aVals = MALLOC(sizeof(INTERP_VAL) * INIT_SIZE);
 	if (!psStackBase->aVals)
 	{
-		debug(LOG_ERROR, "Out of memory");
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -679,7 +679,7 @@ void stackShutDown(void)
 
 	if ((psCurrChunk != psStackBase) && (currEntry != 0))
 	{
-		DBPRINTF(("stackShutDown: stack is not empty on shutdown"));
+		debug( LOG_NEVER, "stackShutDown: stack is not empty on shutdown" );
 	}
 
 	for(psCurr = psStackBase; psCurr != NULL; psCurr = psNext)

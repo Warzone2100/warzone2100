@@ -31,8 +31,8 @@ void res_error(const char *pMessage,...)
 	char	*pText;
 
 	resGetErrorData(&line, &pText);
-	DBERROR(("RES file parse error:\n%s at line %d\nText: '%s'\n",
-			  pMessage, line, pText));
+	debug( LOG_ERROR, "RES file parse error:\n%s at line %d\nText: '%s'\n", pMessage, line, pText );
+	abort();
 }
 
 %}
@@ -65,7 +65,7 @@ dir_line:			DIRECTORY QTEXT_T		{
 											UDWORD len;
 
 											// set a new input directory
-											DBP0(("directory: %s\n", $2));
+											debug( LOG_NEVER, "directory: %s\n", $2 );
 											if ($2[1] == ':' ||
 												$2[0] == '\\')
 											{

@@ -377,7 +377,7 @@ NOT						return _NOT;
 								else
 								{
 									//debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
-								
+
 									strcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
@@ -436,7 +436,8 @@ int scr_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reached end of file in a comment"));
+		debug( LOG_ERROR, "Warning: reached end of file in a comment" );
+		abort();
 	}
 	return 1;
 }

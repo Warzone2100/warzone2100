@@ -56,7 +56,8 @@ int pal_AddNewPalette(iColour *pal)
 		psGamePal = (iColour*) MALLOC(PALETTE_SIZE * sizeof(iColour));
 		if (psGamePal == NULL)
 		{
-			DBERROR(("pal_AddNewPalette - Out of memory"));
+			debug( LOG_ERROR, "pal_AddNewPalette - Out of memory" );
+			abort();
 			return FALSE;
 		}
 	}
@@ -65,7 +66,8 @@ int pal_AddNewPalette(iColour *pal)
 		psWinPal = (PALETTEENTRY*) MALLOC(PALETTE_SIZE * sizeof(PALETTEENTRY));
 		if (psGamePal == NULL)
 		{
-			DBERROR(("pal_AddNewPalette - Out of memory"));
+			debug( LOG_ERROR, "pal_AddNewPalette - Out of memory" );
+			abort();
 			return FALSE;
 		}
 	}

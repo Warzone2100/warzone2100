@@ -114,7 +114,7 @@ void driveInitVars(BOOL Restart)
 {
 	if(WasDriving && !Restart)
 	{
-		DBPRINTF(("driveInitVars: WasDriving\n"));
+		debug( LOG_NEVER, "driveInitVars: WasDriving\n" );
 		DrivingAudioTrack=-1;
 		psDrivenDroid = NULL;
 		DoFollowRangeCheck = TRUE;
@@ -127,7 +127,7 @@ void driveInitVars(BOOL Restart)
 		TargetFeatures = FALSE;
 
 	} else {
-		DBPRINTF(("driveInitVars: Driving\n"));
+		debug( LOG_NEVER, "driveInitVars: Driving\n" );
 		DrivingAudioTrack=-1;
 		psDrivenDroid = NULL;
 		DoFollowRangeCheck = TRUE;
@@ -193,7 +193,7 @@ BOOL StartDriverMode(DROID *psOldDroid)
 //					psDroid->sMove.Status = MOVEDRIVE;
 				}
 				psDrivenDroid = psDroid;
-				DBPRINTF(("New driven droid\n"));
+				debug( LOG_NEVER, "New driven droid\n" );
 			} else if(psDroid != psDrivenDroid) {
 				// All the others become followers of the driven droid.
 //				psDroid->sMove.Status = MOVEDRIVEFOLLOW;
@@ -232,14 +232,14 @@ BOOL StartDriverMode(DROID *psOldDroid)
 		setDrivingStatus(TRUE);
 
 		if(DriveInterfaceEnabled) {
-			DBPRINTF(("Interface enabled1 ! Disabling drive control\n"));
+			debug( LOG_NEVER, "Interface enabled1 ! Disabling drive control\n" );
 			DriveControlEnabled = FALSE;
 		} else {
 			DriveControlEnabled = TRUE;
 		}
 
 		if(psLastDriven != psDrivenDroid) {
-DBPRINTF(("camAllignWithTarget\n"));
+			debug( LOG_NEVER, "camAllignWithTarget\n" );
 			camAllignWithTarget((BASE_OBJECT*)psDrivenDroid);
 		}
 
@@ -264,7 +264,7 @@ void ChangeDriver(void)
 	DROID *psDroid;
 
 	if(psDrivenDroid != NULL) {
-		DBPRINTF(("Driver Changed\n"));
+		debug( LOG_NEVER, "Driver Changed\n" );
 
 //		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
@@ -294,7 +294,7 @@ void StopDriverMode(void)
 	DROID *psDroid;
 
 	if(psDrivenDroid != NULL) {
-		DBPRINTF(("Drive mode canceled\n"));
+		debug( LOG_NEVER, "Drive mode canceled\n" );
 
 //		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
@@ -882,7 +882,7 @@ void driveEnableTactical(void)
 
 	StartTacticalScroll(TRUE);
 	TacticalActive = TRUE;
-	DBPRINTF(("Tactical Mode Activated\n"));
+	debug( LOG_NEVER, "Tactical Mode Activated\n" );
 }
 
 
@@ -897,7 +897,7 @@ void driveDisableTactical(void)
 	//	SetMouseRange(0,16,16,639-16,479-16);
 	//	SetMousePos(0,320,160);
 		TacticalActive = FALSE;
-		DBPRINTF(("Tactical Mode Canceled\n"));
+		debug( LOG_NEVER, "Tactical Mode Canceled\n" );
 	}
 }
 
@@ -915,7 +915,7 @@ void driveTacticalSelectionChanged(void)
 {
 	if(TacticalActive && psDrivenDroid) {
 		StartTacticalScrollObj(TRUE,(BASE_OBJECT *)psDrivenDroid);
-		DBPRINTF(("driveTacticalSelectionChanged\n"));
+		debug( LOG_NEVER, "driveTacticalSelectionChanged\n" );
 	}
 }
 

@@ -577,7 +577,8 @@ BOOL levLoadBaseData(STRING *pName)
 	// find the level dataset
 	if (!levFindDataSet(pName, &psNewLevel))
 	{
-		DBERROR(("levLoadBaseData: couldn't find level data"));
+		debug( LOG_ERROR, "levLoadBaseData: couldn't find level data" );
+		abort();
 		return FALSE;
 	}
 
@@ -589,7 +590,8 @@ BOOL levLoadBaseData(STRING *pName)
         psNewLevel->type != LDS_MKEEP_LIMBO
 		)
 	{
-		DBERROR(("levLoadBaseData: incorect level type"));
+		debug( LOG_ERROR, "levLoadBaseData: incorect level type" );
+		abort();
 		return FALSE;
 	}
 
@@ -652,7 +654,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	// find the level dataset
 	if (!levFindDataSet(pName, &psNewLevel))
 	{
-		DBMB(("levLoadData: dataset %s not found - trying to load as WRF", pName));
+		debug( LOG_NEVER, "levLoadData: dataset %s not found - trying to load as WRF", pName );
 		return levLoadSingleWRF(pName);
 	}
 
@@ -704,14 +706,14 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 #ifdef DEBUG_GROUP0
 			if (psNewLevel->psBaseData != NULL)
 			{
-				DBP0(("levLoadData: Setting base dataset to load: %s\n", psNewLevel->psBaseData->pName));
+				debug( LOG_NEVER, "levLoadData: Setting base dataset to load: %s\n", psNewLevel->psBaseData->pName );
 			}
 #endif
 			psBaseData = psNewLevel->psBaseData;
 		}
 		else
 		{
-			DBP0(("levLoadData: No base dataset to load\n"));
+			debug( LOG_NEVER, "levLoadData: No base dataset to load\n" );
 			psBaseData = NULL;
 		}
 	}
@@ -721,7 +723,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)
 	{
-		DBP0(("levLoadData: reseting old mission data\n"));
+		debug( LOG_NEVER, "levLoadData: reseting old mission data\n" );
 		if (!gameReset())
 		{
 			return FALSE;
@@ -744,14 +746,14 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 
 
 	// basic game data is loaded in the game heap
-	DBP0(("levLoadData: Setting game heap\n"));
+	debug( LOG_NEVER, "levLoadData: Setting game heap\n" );
 	memSetBlockHeap(psGameHeap);
 
 	// initialise if necessary
 	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= MULTI_TYPE_START ||
 		psBaseData != NULL)
 	{
-		DBP0(("levLoadData: reset game heap\n"));
+		debug( LOG_NEVER, "levLoadData: reset game heap\n" );
 		BLOCK_RESET(psGameHeap);
 		if (!stageOneInitialise())
 		{
@@ -762,7 +764,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	// load up a base dataset if necessary
 	if (psBaseData != NULL)
 	{
-		DBP0(("levLoadData: loading base dataset %s\n", psBaseData->pName));
+		debug( LOG_NEVER, "levLoadData: loading base dataset %s\n", psBaseData->pName );
 		for(i=0; i<LEVEL_MAXFILES; i++)
 		{
 			if (psBaseData->apDataFiles[i])
@@ -789,7 +791,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	{
 		ASSERT((psNewLevel->type == LDS_BETWEEN,
 			"levLoadData: only BETWEEN missions do not need a .gam file"));
-		DBP0(("levLoadData: no .gam file for level: BETWEEN mission\n"));
+		debug( LOG_NEVER, "levLoadData: no .gam file for level: BETWEEN mission\n" );
 		if (pSaveName != NULL)
 		{
 			if (psBaseData != NULL)
@@ -800,24 +802,24 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 				}
 			}
 
-			DBP0(("levLoadData: setting map heap\n"));
+			debug( LOG_NEVER, "levLoadData: setting map heap\n" );
 			BLOCK_RESET(psMapHeap);
 			memSetBlockHeap(psMapHeap);
 
             //set the mission type before the saveGame data is loaded
 			if (saveType == GTYPE_SAVE_MIDMISSION)
 			{
-				DBP0(("levLoadData: init mission stuff\n"));
+				debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
 				if (!startMissionSave(psNewLevel->type))
 				{
 					return FALSE;
 				}
 
-				DBP0(("levLoadData: dataSetSaveFlag\n"));
+				debug( LOG_NEVER, "levLoadData: dataSetSaveFlag\n" );
 				dataSetSaveFlag();
 			}
 
-            DBP0(("levLoadData: loading savegame: %s\n", pSaveName));
+			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
 			if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
 			{
 				return FALSE;
@@ -832,14 +834,14 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 		if ((pSaveName == NULL) ||
 			(saveType == GTYPE_SAVE_START))
 		{
-			DBP0(("levLoadData: start mission - no .gam\n"));
+			debug( LOG_NEVER, "levLoadData: start mission - no .gam\n" );
 			if (!startMission(psNewLevel->type, NULL))
 			{
 				return FALSE;
 			}
 		}
 
-		DBP0(("levLoadData: setting mission heap\n"));
+		debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
 		BLOCK_RESET(psMissionHeap);
 		memSetBlockHeap(psMissionHeap);
 	}
@@ -847,7 +849,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
     //we need to load up the save game data here for a camchange
     if (bCamChangeSaveGame)
     {
-		DBP0(("levLoadData: no .gam file for level: BETWEEN mission\n"));
+		debug( LOG_NEVER, "levLoadData: no .gam file for level: BETWEEN mission\n" );
 		if (pSaveName != NULL)
 		{
 			if (psBaseData != NULL)
@@ -858,11 +860,11 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 				}
 			}
 
-			DBP0(("levLoadData: setting map heap\n"));
+			debug( LOG_NEVER, "levLoadData: setting map heap\n" );
 			BLOCK_RESET(psMapHeap);
 			memSetBlockHeap(psMapHeap);
 
-            DBP0(("levLoadData: loading savegame: %s\n", pSaveName));
+			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
 			if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
 			{
 				return FALSE;
@@ -884,7 +886,7 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 
 
 	// load the new data
-	DBP0(("levLoadData: loading mission dataset: %s\n", psNewLevel->pName));
+	debug( LOG_NEVER, "levLoadData: loading mission dataset: %s\n", psNewLevel->pName );
 	psCurrHeap = memGetBlockHeap();
 	for(i=0; i<LEVEL_MAXFILES; i++)
 	{
@@ -900,7 +902,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					return FALSE;
 				}
 
-				DBP0(("levLoadData: setting map heap\n"));
+				debug( LOG_NEVER, "levLoadData: setting map heap\n" );
 				BLOCK_RESET(psMapHeap);
 				memSetBlockHeap(psMapHeap);
 				psCurrHeap = psMapHeap;
@@ -913,7 +915,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 				  ) &&
 				pSaveName == NULL)
 			{
-				DBP0(("levLoadData: setting mission heap\n"));
+				debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
 				BLOCK_RESET(psMissionHeap);
 				memSetBlockHeap(psMissionHeap);
 				psCurrHeap = psMissionHeap;
@@ -923,7 +925,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 			if (pSaveName != NULL AND !bCamChangeSaveGame)
 			{
 				// make sure the map gets loaded into the right heap
-				DBP0(("levLoadData: setting map heap\n"));
+				debug( LOG_NEVER, "levLoadData: setting map heap\n" );
 				BLOCK_RESET(psMapHeap);
 				memSetBlockHeap(psMapHeap);
 				psCurrHeap = psMapHeap;
@@ -931,17 +933,17 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
                 //set the mission type before the saveGame data is loaded
 				if (saveType == GTYPE_SAVE_MIDMISSION)
 				{
-					DBP0(("levLoadData: init mission stuff\n"));
+					debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
 					if (!startMissionSave(psNewLevel->type))
 					{
 						return FALSE;
 					}
 
-					DBP0(("levLoadData: dataSetSaveFlag\n"));
+					debug( LOG_NEVER, "levLoadData: dataSetSaveFlag\n" );
 					dataSetSaveFlag();
 				}
 
-                DBP0(("levLoadData: loading save game %s\n", pSaveName));
+				debug( LOG_NEVER, "levLoadData: loading save game %s\n", pSaveName );
 				if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
 				{
 					return FALSE;
@@ -1022,7 +1024,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					break;
 				case LDS_MKEEP_LIMBO:
 					debug(LOG_WZ, "levLoadData: LDS_MKEEP_LIMBO");
-					DBPRINTF(("MKEEP_LIMBO\n"));
+					debug( LOG_NEVER, "MKEEP_LIMBO\n" );
 					//if (!startMission(MISSION_OFFKEEP, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
 					{
@@ -1058,7 +1060,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 			// set the mission heap now if it isn't already being used
 			if (memGetBlockHeap() != psMissionHeap)
 			{
-				DBP0(("levLoadData: setting mission heap\n"));
+				debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
 				BLOCK_RESET(psMissionHeap);
 				memSetBlockHeap(psMissionHeap);
 			}
@@ -1082,7 +1084,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 	// set the mission heap now if it isn't already being used
 	if (memGetBlockHeap() != psMissionHeap)
 	{
-		DBP0(("levLoadData: setting mission heap\n"));
+		debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
 		BLOCK_RESET(psMissionHeap);
 		memSetBlockHeap(psMissionHeap);
 		psCurrHeap = psMissionHeap;
@@ -1103,7 +1105,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
     {
 		//load script stuff
 		// load the event system state here for a save game
-		DBP0(("levLoadData: loading script system state\n"));
+		debug( LOG_NEVER, "levLoadData: loading script system state\n" );
 		if (!loadScriptState(pSaveName))
 		{
 			return FALSE;

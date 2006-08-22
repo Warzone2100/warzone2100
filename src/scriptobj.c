@@ -246,8 +246,8 @@ BOOL scrBaseObjGet(UDWORD index)
 
 	case OBJID_STRUCTSTAT:
 		//droid.stat - now returns the type of structure a truck is building for droids
-		
-	
+
+
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			type = ST_STRUCTURESTAT;
@@ -546,7 +546,8 @@ STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
 
 	if (pName == NULL)
 	{
-		DBERROR(("scrGetStatName: cannot get name for a base stat"));
+		debug( LOG_ERROR, "scrGetStatName: cannot get name for a base stat" );
+		abort();
 	}
 
 	return pName;
@@ -811,7 +812,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		{
 			if (!scrvGetBaseObj(*((UDWORD*)pBuffer), (BASE_OBJECT **)pData))
 			{
-				DBERROR(("scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer)));
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer) );
+				abort();
 			}
 		}
 		break;
@@ -822,7 +824,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getStructStatFromName((char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find structure stat %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find structure stat %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -831,7 +834,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getFeatureStatFromName((char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find feature stat %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find feature stat %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -840,7 +844,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_BODY, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find body component %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find body component %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -849,7 +854,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_PROPULSION, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find propulsion component %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find propulsion component %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -858,7 +864,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_ECM, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find ECM component %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find ECM component %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -867,7 +874,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_SENSOR, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find sensor component %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find sensor component %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -876,7 +884,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_CONSTRUCT, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find constructor component %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find constructor component %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -885,7 +894,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_WEAPON, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find weapon %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find weapon %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -894,7 +904,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_REPAIRUNIT, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find repair component %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find repair component %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -903,7 +914,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		index = getCompFromResName(COMP_BRAIN, (char *)pBuffer);
 		if (index == -1)
 		{
-			DBERROR(("scrValDefLoad: couldn't find repair brain %s", pBuffer));
+			debug( LOG_ERROR, "scrValDefLoad: couldn't find repair brain %s", pBuffer );
+			abort();
 			index = 0;
 		}
 		*pData = (UDWORD)index;
@@ -919,7 +931,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			*((DROID_TEMPLATE **)pData) = IdToTemplate(id, ANYPLAYER);
 			if (*pData == 0)
 			{
-				DBERROR(("scrValDefLoad: couldn't find template id %d", *((UDWORD *)pBuffer)));
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find template id %d", *((UDWORD *)pBuffer) );
+				abort();
 			}
 		}
 		break;
@@ -943,7 +956,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		{
 			if (!levFindDataSet((char *)pBuffer, &psLevel))
 			{
-				DBERROR(("scrValDefLoad: couldn't find level dataset %s", pBuffer));
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find level dataset %s", pBuffer );
+				abort();
 			}
 			*((STRING **)pData) = psLevel->pName;
 		}
@@ -959,7 +973,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			*pData = (UDWORD)getResearch((char *)pBuffer, TRUE);
 			if (*pData == 0)
 			{
-				DBERROR(("scrValDefLoad: couldn't find research %s", pBuffer));
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find research %s", pBuffer );
+				abort();
 			}
 		}
 		break;
@@ -968,7 +983,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		{
 			if (!grpCreate((DROID_GROUP **)pData))
 			{
-				DBERROR(("scrValDefLoad: out of memory"));
+				debug( LOG_ERROR, "scrValDefLoad: out of memory" );
+				abort();
 				break;
 			}
 			grpJoin(*((DROID_GROUP **)pData), NULL);
@@ -1019,7 +1035,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		{
 			if (!scrvGetBaseObj(*((UDWORD*)pPos), (BASE_OBJECT **)&psCDroid))
 			{
-				DBERROR(("scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer)));
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer) );
+				abort();
 			}
 			else
 			{
@@ -1039,7 +1056,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			index = audio_GetAvailableID();
 			if (index == SAMPLE_NOT_ALLOCATED)
 			{
-				DBERROR(("Sound ID not available %s not found", pBuffer));
+				debug( LOG_ERROR, "Sound ID not available %s not found", pBuffer );
+				abort();
 				break;
 			}
 			// set track vals

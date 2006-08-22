@@ -53,7 +53,8 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 //nothashed if (!resGetIDfromData("SCRIPT", psCCont->psCode, &hashedName))
 		if (!resGetHashfromData("SCRIPT", psCCont->psCode, &hashedName))
 		{
-			DBERROR(("eventSaveContext: couldn't find script resource id"));
+			debug( LOG_ERROR, "eventSaveContext: couldn't find script resource id" );
+			abort();
 			return FALSE;
 		}
 		numVars = psCCont->psCode->numGlobals + psCCont->psCode->arraySize;
@@ -122,7 +123,8 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 
 					if (!saveFunc(psVal->type, (UDWORD)psVal->v.ival, pPos, &valSize))
 					{
-						DBERROR(("eventSaveContext: couldn't get variable value size"));
+						debug( LOG_ERROR, "eventSaveContext: couldn't get variable value size" );
+						abort();
 						return FALSE;
 					}
 
@@ -192,7 +194,8 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 		numVars = psCode->numGlobals + psCode->arraySize;
 		if (numVars != *((SWORD*)pPos))
 		{
-			DBERROR(("eventLoadContext: number of context variables does not match the script code"));
+			debug( LOG_ERROR, "eventLoadContext: number of context variables does not match the script code" );
+			abort();
 			return FALSE;
 		}
 		pPos += sizeof(SWORD);
@@ -230,7 +233,8 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 				// set the value in the context
 				if (!eventSetContextVar(psCCont, (UDWORD)i, type, data))
 				{
-					DBERROR(("eventLoadContext: couldn't set variable value"));
+					debug( LOG_ERROR, "eventLoadContext: couldn't set variable value" );
+					abort();
 					return FALSE;
 				}
 			}
@@ -250,13 +254,15 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 				// into the variables data space.
 				if (!eventGetContextVal(psCCont, (UDWORD)i, &psVal))
 				{
-					DBERROR(("eventLoadContext: couldn't find variable in context"));
+					debug( LOG_ERROR, "eventLoadContext: couldn't find variable in context" );
+					abort();
 					return FALSE;
 				}
 
 				if (!loadFunc(version, type, pPos, valSize, (UDWORD *)&(psVal->v.ival)))
 				{
-					DBERROR(("eventLoadContext: couldn't get variable value"));
+					debug( LOG_ERROR, "eventLoadContext: couldn't get variable value" );
+					abort();
 					return FALSE;
 				}
 
@@ -310,7 +316,8 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 		numVars = psCode->numGlobals + psCode->arraySize;
 		if (numVars != *((SWORD*)pPos))
 		{
-			DBERROR(("eventLoadContext: number of context variables does not match the script code"));
+			debug( LOG_ERROR, "eventLoadContext: number of context variables does not match the script code" );
+			abort();
 			return FALSE;
 		}
 		pPos += sizeof(SWORD);
@@ -348,7 +355,8 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 				// set the value in the context
 				if (!eventSetContextVar(psCCont, (UDWORD)i, type, data))
 				{
-					DBERROR(("eventLoadContext: couldn't set variable value"));
+					debug( LOG_ERROR, "eventLoadContext: couldn't set variable value" );
+					abort();
 					return FALSE;
 				}
 			}
@@ -368,13 +376,15 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 				// into the variables data space.
 				if (!eventGetContextVal(psCCont, (UDWORD)i, &psVal))
 				{
-					DBERROR(("eventLoadContext: couldn't find variable in context"));
+					debug( LOG_ERROR, "eventLoadContext: couldn't find variable in context" );
+					abort();
 					return FALSE;
 				}
 
 				if (!loadFunc(version, type, pPos, valSize, (UDWORD *)&(psVal->v.ival)))
 				{
-					DBERROR(("eventLoadContext: couldn't get variable value"));
+					debug( LOG_ERROR, "eventLoadContext: couldn't get variable value" );
+					abort();
 					return FALSE;
 				}
 
@@ -455,7 +465,8 @@ BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *pSize)
 			pPos += sizeof(UDWORD);
 			if (!eventGetContextIndex(psCurr->psContext, &context))
 			{
-				DBERROR(("eventSaveTriggerList: couldn't find context"));
+				debug( LOG_ERROR, "eventSaveTriggerList: couldn't find context" );
+				abort();
 				return FALSE;
 			}
 			*((SWORD*)pPos) = (SWORD)context;
@@ -509,7 +520,8 @@ static BOOL eventLoadTriggerList(SDWORD version, char *pBuffer, UDWORD *pSize)
 		pPos += sizeof(SWORD);
 		if (!eventFindContext(context, &psContext))
 		{
-			DBERROR(("eventLoadTriggerList: couldn't find context"));
+			debug( LOG_ERROR, "eventLoadTriggerList: couldn't find context" );
+			abort();
 			return FALSE;
 		}
 
@@ -575,7 +587,8 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	pBuffer = MALLOC(totalSize);
 	if (pBuffer == NULL)
 	{
-		DBERROR(("eventSaveState: out of memory"));
+		debug( LOG_ERROR, "eventSaveState: out of memory" );
+		abort();
 		return FALSE;
 	}
 	pPos = pBuffer;
@@ -635,7 +648,8 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	psHdr = (EVENT_SAVE_HDR *)pPos;
 	if (strncmp(psHdr->aFileType, "evnt", 4) != 0)
 	{
-		DBERROR(("eventLoadState: invalid file header"));
+		debug( LOG_ERROR, "eventLoadState: invalid file header" );
+		abort();
 		return FALSE;
 	}
 /*	if ((psHdr->version != 1) &&
@@ -686,7 +700,8 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 
 	if (totalSize != fileSize)
 	{
-		DBERROR(("eventLoadState: corrupt save file"));
+		debug( LOG_ERROR, "eventLoadState: corrupt save file" );
+		abort();
 		return FALSE;
 	}
 

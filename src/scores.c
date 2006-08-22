@@ -148,7 +148,8 @@ void	scoreUpdateVar( DATA_INDEX var )
 		missionData.babasMowedDown++;	// Ran over a barbarian
 		break;
 	default:
-		DBERROR(("Weirdy variable request from scoreUpdateVar"));
+		debug( LOG_ERROR, "Weirdy variable request from scoreUpdateVar" );
+		abort();
 		break;
 	}
 }
@@ -472,7 +473,8 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	if(!pFileData)
 	{
 		/* Nope, so do one */
-		DBERROR(("Saving Score data : Cannot get the memory! (%d)",fileSize));
+		debug( LOG_ERROR, "Saving Score data : Cannot get the memory! (%d)", fileSize );
+		abort();
 		return(FALSE);
 	}
 
@@ -516,9 +518,8 @@ MISSION_DATA		*pScoreData;
 	psHeader = (SCORE_SAVEHEADER *)pFileData;
 	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 'c' ||
 		psHeader->aFileType[2] != 'd' || psHeader->aFileType[3] != 'a')	{
-		DBERROR(("Read Score data : Weird file type found? Has header letters \
-				  - %c %c %c %c", psHeader->aFileType[0],psHeader->aFileType[1],
-								  psHeader->aFileType[2],psHeader->aFileType[3]));
+		debug( LOG_ERROR, "Read Score data : Weird file type found? Has header letters  - %c %c %c %c", psHeader->aFileType[0],psHeader->aFileType[1], psHeader->aFileType[2],psHeader->aFileType[3] );
+		abort();
 		return FALSE;
 	}
 
@@ -529,7 +530,8 @@ MISSION_DATA		*pScoreData;
 	if(fileSize!=expectedFileSize)
 	{
 		/* No, so bomb out */
-		DBERROR(("Read Score data : Weird file size!"));
+		debug( LOG_ERROR, "Read Score data : Weird file size!" );
+		abort();
 		return(FALSE);
 	}
 

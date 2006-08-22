@@ -44,7 +44,7 @@ audio_ObjectDead( void * psObj )
 	/* check is valid simple object pointer */
 	if ( !PTRVALID(psSimpleObj, sizeof(SIMPLE_OBJECT)) )
 	{
-		DBPRINTF( ("audio_ObjectDead: simple object pointer invalid\n") );
+		debug( LOG_NEVER, "audio_ObjectDead: simple object pointer invalid\n" );
 		return TRUE;
 	}
 
@@ -54,7 +54,7 @@ audio_ObjectDead( void * psObj )
 		psProj = (PROJ_OBJECT *) psSimpleObj;
 		if ( !PTRVALID(psProj, sizeof(PROJ_OBJECT)) )
 		{
-			DBPRINTF( ("audio_ObjectDead: projectile object pointer invalid\n") );
+			debug( LOG_NEVER, "audio_ObjectDead: projectile object pointer invalid\n" );
 			return TRUE;
 		}
 		else
@@ -77,7 +77,7 @@ audio_ObjectDead( void * psObj )
 		/* check is valid pointer */
 		if ( !PTRVALID(psBaseObj, sizeof(BASE_OBJECT)) )
 		{
-			DBPRINTF( ("audio_ObjectDead: base object pointer invalid\n") );
+			debug( LOG_NEVER, "audio_ObjectDead: base object pointer invalid\n" );
 			return TRUE;
 		}
 		else
@@ -214,7 +214,7 @@ audio_GetClusterCentre( void *psClusterObj, SDWORD *piX, SDWORD *piY, SDWORD *pi
 	iClusterID = clustGetClusterID( psClusterObj );
 	if ( iClusterID == 0 )
 	{
-		DBPRINTF( ("audio_GetClusterCentre: empty cluster!\n") );
+		debug( LOG_NEVER, "audio_GetClusterCentre: empty cluster!\n" );
 		return FALSE;
 	}
 	else
@@ -274,7 +274,7 @@ audio_GetNewClusterObject( void **psClusterObj, SDWORD iClusterID )
 
 	if ( iClusterID == 0 )
 	{
-		DBPRINTF( ("audio_GetNewClusterObject: empty cluster!\n") );
+		debug( LOG_NEVER, "audio_GetNewClusterObject: empty cluster!\n" );
 		return FALSE;;
 	}
 	else

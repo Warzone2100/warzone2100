@@ -29,6 +29,7 @@
 #endif
 
 /* DBMB used to be 'show message box' */
+/*
 #ifndef _MSC_VER
 #define DBMB(x) _db_debug x
 #define DBPRINTF(x) _db_debug x
@@ -37,6 +38,7 @@
 #define DBMB(x)
 #define DBPRINTF(x)
 #endif
+*/
 
 /*
  *
@@ -79,7 +81,7 @@ do { \
  *
  * Arguments as for printf
  */
-
+/*
 #ifndef _MSC_VER
 #define DBERROR(x) _debug_error x
 #define _debug_error(...) 			\
@@ -90,6 +92,7 @@ do { \
 #else
 #define DBERROR(x)
 #endif
+*/
 
 
 /****************************************************************************************

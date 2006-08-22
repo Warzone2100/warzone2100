@@ -6,11 +6,11 @@
  */
 #ifdef DISP2D
 
-/* 
+/*
  * In order to reintroduce the 2D map editor, we will have to rewrite the
  * graphics code almost completely. It used a previous iteration of their
  * graphics interface. Although portions of it may still be in commented
- * out portions of the original source release, it is of doubtful value. 
+ * out portions of the original source release, it is of doubtful value.
  * Better to port it to the new interface and OpenGL. - Per
  */
 
@@ -635,7 +635,7 @@ removed cos types are different - am
 				sStructPos.y = ((worldY + TILE_UNITS/2) >> TILE_SHIFT) - sStructPos.height/2;
 			}
 			else
-			{	
+			{
 				sStructPos.y = (worldY >> TILE_SHIFT) - sStructPos.height/2;
 			}
 			//check for valid location
@@ -960,8 +960,8 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 					NULL, &sDDSDSrc, DDLOCK_WAIT, NULL);
 	if (ddrval != DD_OK)
 	{
-		DBERROR(("Lock failed for tile blit:\n%s",
-				 DDErrorToString(ddrval)));
+		debug( LOG_ERROR, "Lock failed for tile blit:\n%s", DDErrorToString(ddrval) );
+		abort();
 		return;
 	}
 
@@ -972,8 +972,8 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 					NULL, &sDDSDDest, DDLOCK_WAIT, NULL);
 	if (ddrval != DD_OK)
 	{
-		DBERROR(("Lock failed for tile blit:\n%s",
-				 DDErrorToString(ddrval)));
+		debug( LOG_ERROR, "Lock failed for tile blit:\n%s", DDErrorToString(ddrval) );
+		abort();
 		return;
 	}
 
@@ -986,7 +986,7 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 			/* P1 -> P2 is horizontal */
 			xDir = (psP1->x > psP2->x) ? -1 : 1;
 			yDir = (psP1->y > psP4->y) ? -1 : 1;
-			p8Dest = (UBYTE *)sDDSDDest.lpSurface + 
+			p8Dest = (UBYTE *)sDDSDDest.lpSurface +
 					 sDDSDDest.lPitch * psDestRect->top +
 					 psDestRect->left;
 			destInc = sDDSDDest.lPitch - (psDestRect->right - psDestRect->left);
@@ -1026,7 +1026,7 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 			/* P1 -> P2 is vertical */
 			xDir = (psP1->x > psP4->x) ? -1 : 1;
 			yDir = (psP1->y > psP2->y) ? -1 : 1;
-			p8Dest = (UBYTE *)sDDSDDest.lpSurface + 
+			p8Dest = (UBYTE *)sDDSDDest.lpSurface +
 					 sDDSDDest.lPitch * psDestRect->top +
 					 psDestRect->left;
 			destInc = sDDSDDest.lPitch - (psDestRect->right - psDestRect->left);
@@ -1059,7 +1059,7 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 			/* P1 -> P2 is horizontal */
 			xDir = (psP1->x > psP2->x) ? -1 : 1;
 			yDir = (psP1->y > psP4->y) ? -1 : 1;
-			p16Dest = (UWORD *)((UBYTE *)sDDSDDest.lpSurface + 
+			p16Dest = (UWORD *)((UBYTE *)sDDSDDest.lpSurface +
 								sDDSDDest.lPitch * psDestRect->top +
 								(psDestRect->left << 1));
 			destInc = sDDSDDest.lPitch - ((psDestRect->right - psDestRect->left) << 1);
@@ -1099,7 +1099,7 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 			/* P1 -> P2 is vertical */
 			xDir = (psP1->x > psP4->x) ? -1 : 1;
 			yDir = (psP1->y > psP2->y) ? -1 : 1;
-			p16Dest = (UWORD *)((UBYTE *)sDDSDDest.lpSurface + 
+			p16Dest = (UWORD *)((UBYTE *)sDDSDDest.lpSurface +
 								sDDSDDest.lPitch * psDestRect->top +
 								(psDestRect->left << 1));
 			destInc = sDDSDDest.lPitch - ((psDestRect->right - psDestRect->left) << 1);
@@ -1130,21 +1130,22 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 	case 32:
 		break;
 	default:
-		DBERROR(("blitTile: Unknown pixel format"));
+		debug( LOG_ERROR, "blitTile: Unknown pixel format" );
+		abort();
 	}
 
 	ddrval = psBack->lpVtbl->Unlock(psBack, NULL);
 	if (ddrval != DD_OK)
 	{
-		DBERROR(("Unlock failed for tileBlit:\n%s",
-				 DDErrorToString(ddrval)));
+		debug( LOG_ERROR, "Unlock failed for tileBlit:\n%s", DDErrorToString(ddrval) );
+		abort();
 	}
 
 	ddrval = psVidTiles->lpVtbl->Unlock(psTiles, NULL);
 	if (ddrval != DD_OK)
 	{
-		DBERROR(("Unlock failed for tileBlit:\n%s",
-				 DDErrorToString(ddrval)));
+		debug( LOG_ERROR, "Unlock failed for tileBlit:\n%s", DDErrorToString(ddrval) );
+		abort();
 	}
 }
 
@@ -1329,7 +1330,7 @@ static void display2DMap(void)
 				(((psDroid->x + TILE_SIZE2D/2) >> TILE_SHIFT) < (viewX + TILES_ACROSS)) &&
 				(((psDroid->y - TILE_SIZE2D/2) >> TILE_SHIFT) >= (viewY)) &&
 				(((psDroid->y + TILE_SIZE2D/2) >> TILE_SHIFT) < (viewY + TILES_DOWN)))
-			
+
 			{
 				if (psDroid->sMove.Status != MOVEINACTIVE)
 				{
@@ -1375,7 +1376,7 @@ static void display2DMap(void)
 				bmpDir = psDroid->direction + 180;
 				bmpDir = bmpDir >= 360 ? bmpDir - 360 : bmpDir;
 				bmpDir = (360 - bmpDir)/45;
-				screenBlitTile(scrX, scrY, psVidDroids, 
+				screenBlitTile(scrX, scrY, psVidDroids,
 							32,32, bmpDir);
 /*				switch (psDroid->action)
 				{
@@ -1458,7 +1459,7 @@ static void display2DMap(void)
 								>= (viewY)) &&
 				(((psStructure->y + breadth * TILE_SIZE2D/2) >> TILE_SHIFT)
 								< (viewY + TILES_DOWN)))
-			
+
 			{
 				scrX = (((psStructure->x - (viewX << TILE_SHIFT)) * TILE_SIZE2D)
 						>> TILE_SHIFT) - TILE_SIZE2D/2;
@@ -1482,7 +1483,7 @@ static void display2DMap(void)
 				{
 					for (k = 0; k < width; k++)
 					{
-						screenBlitTile(scrX, scrY, psVidStructures, 
+						screenBlitTile(scrX, scrY, psVidStructures,
 							32,32, psStructure->status);
 						scrX += TILE_SIZE2D;
 					}
@@ -1516,7 +1517,7 @@ static void display2DMap(void)
 							>= (viewY)) &&
 			(((psFeature->y + breadth * TILE_SIZE2D/2) >> TILE_SHIFT)
 							< (viewY + TILES_DOWN)))
-		
+
 		{
 			scrX = (((psFeature->x - (viewX << TILE_SHIFT)) * TILE_SIZE2D)
 					>> TILE_SHIFT) - TILE_SIZE2D/2;
@@ -1540,7 +1541,7 @@ static void display2DMap(void)
 			{
 				for (k = 0; k < width; k++)
 				{
-					screenBlitTile(scrX, scrY, psVidStructures, 
+					screenBlitTile(scrX, scrY, psVidStructures,
 						32,32, 3);
 					scrX += TILE_SIZE2D;
 				}
@@ -1622,7 +1623,7 @@ static void display2DBullets(void)
 					bmpDir = psCurr->psSource->direction + 180;
 					bmpDir = bmpDir >= 360 ? bmpDir - 360 : bmpDir;
 					bmpDir = (360 - bmpDir)/45;
-					flashFrame = ((gameTime >> 7) & 1) + 
+					flashFrame = ((gameTime >> 7) & 1) +
 						(bmpDir << 1);
 					screenBlitTile(scrX1 - FLASH_SIZE/2, scrY1 - FLASH_SIZE/2,
 									psVidFlash, FLASH_SIZE,FLASH_SIZE,
@@ -1724,7 +1725,7 @@ DROID		*psCurr;
 STRUCTURE	*psStruct;
 UDWORD		Count;
 
-	
+
 	screenTextOut(0,0,"Current Player: %d",selectedPlayer);
 	screenTextOut(200,0,"Current Frame Rate: %d",frameGetFrameRate());
 
@@ -1759,7 +1760,7 @@ UDWORD		Count;
 	}
 	screenTextOut(400, 16, "Player has %d Structures",Count);
 	screenTextOut(400,0,"Game Ticks: %d",gameTime);
-	
+
 //	if(apsDroidLists[0])
 //	{
 //		screenTextOut(400,48,"Droid Direction : %d",apsDroidLists[0]->direction);
@@ -1774,10 +1775,10 @@ void showDroidRange(DROID *psDroid)
 {
 UDWORD	radius;
 SDWORD	x0,y0,x1,y1;
-	
+
 	/* Get the droid's sensor range */
 	radius = psDroid->sensorRange;
-	
+
 	/* Convert droid's coordinates to screen coords */
 	disp2DFromWorld(psDroid->x-radius, psDroid->y-radius, &x0, &y0);
 	disp2DFromWorld(psDroid->x+radius, psDroid->y+radius, &x1, &y1);

@@ -91,7 +91,7 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 			0,
 			NULL
 		);
-		DBPRINTF( ("sound_Init: couldn't load compression manager MSACM32.DLL\n") );
+		debug( LOG_NEVER, "sound_Init: couldn't load compression manager MSACM32.DLL\n" );
 	}
 
 	if ( !LoadLibrary("MSADP32.ACM") )
@@ -106,12 +106,12 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 			0,
 			NULL
 		);
-		DBPRINTF( ("sound_Init: couldn't load ADPCM codec MSADP32.ACM\n") );
+		debug( LOG_NEVER, "sound_Init: couldn't load ADPCM codec MSADP32.ACM\n" );
 	}
 #endif
 	if ( sound_InitLibrary() == FALSE )
 	{
-		DBPRINTF( ("Cannot init sound library\n") );
+		debug( LOG_NEVER, "Cannot init sound library\n" );
 		return FALSE;
 	}
 
@@ -182,7 +182,8 @@ BOOL sound_SetTrackVals
 	{
 		if ( g_apTrack[iTrack] != NULL )
 		{
-			DBERROR( ("sound_SetTrackVals: track %i already set\n", iTrack) );
+			debug( LOG_ERROR, "sound_SetTrackVals: track %i already set\n", iTrack );
+			abort();
 			return FALSE;
 		}
 
@@ -229,7 +230,8 @@ BOOL sound_AddTrack( TRACK *pTrack )
 	}
 	else
 	{
-		DBERROR( ("sound_AddTrack: all tracks used: increase MAX_TRACKS\n") );
+		debug( LOG_ERROR, "sound_AddTrack: all tracks used: increase MAX_TRACKS\n" );
+		abort();
 		return FALSE;
 	}
 }
@@ -249,7 +251,8 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 	memset(pTrack, 0, sizeof(TRACK));
 	if ( pTrack == NULL )
 	{
-		DBERROR( ("sound_LoadTrackFromBuffer: couldn't allocate memory\n") );
+		debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
+		abort();
 		return NULL;
 	}
 	else
@@ -258,7 +261,8 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 		pTrack->pName = MALLOC( strlen(GetLastResourceFilename()) + 1 );
 		if ( pTrack->pName == NULL )
 		{
-			DBERROR( ("sound_LoadTrackFromBuffer: couldn't allocate memory\n") );
+			debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
+			abort();
 			FREE( pTrack );
 			return NULL;
 		}
@@ -275,7 +279,7 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 			// flag compressed audio load
 			if ( pTrack->bCompressed == TRUE )
 			{
-				DBPRINTF( ("sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName) );
+				debug( LOG_NEVER, "sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName );
 			}
 #endif
 			return pTrack;
@@ -301,7 +305,8 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 		pTrack->pName = MALLOC( strlen((char*) szFileName) + 1 );
 		if ( pTrack->pName == NULL )
 		{
-			DBERROR( ("sound_LoadTrackFromFile: Out of memory") );
+			debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );
+			abort();
 			return FALSE;
 		}
 
@@ -420,13 +425,13 @@ BOOL sound_CheckTrack( SDWORD iTrack )
 {
 	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
 	{
-		DBPRINTF( ("sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks) );
+		debug( LOG_NEVER, "sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks );
 		return FALSE;
 	}
 
 	if ( g_apTrack[iTrack] == NULL )
 	{
-		DBPRINTF( ("sound_CheckTrack: track %i NULL\n", iTrack) );
+		debug( LOG_NEVER, "sound_CheckTrack: track %i NULL\n", iTrack );
 		return FALSE;
 	}
 

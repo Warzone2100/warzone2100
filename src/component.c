@@ -78,7 +78,8 @@ BOOL setPlayerColour(UDWORD player, UDWORD col)
 {
 	if(player >MAX_PLAYERS || col >MAX_PLAYERS)
 	{
-		DBERROR(("setplayercolour: wrong values"));
+		debug( LOG_ERROR, "setplayercolour: wrong values" );
+		abort();
 		return FALSE;
 	}
 	PlayerColour[(UBYTE)player] = (UBYTE)col;
@@ -203,7 +204,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 	if ( (StatIsComponent(psComponent) != COMP_WEAPON) ||
 		  ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB )
 	{
-		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
+		debug( LOG_NEVER, "ComponentPIE == NULL : File : %s Line : %d\n", __FILE__, __LINE__ );
 	}
 
 	return COMPONENT_RADIUS;
@@ -219,7 +220,7 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 	}
 
 //	DBERROR(("Null IMD in getResearchRadius()"));
-	DBPRINTF(("ResearchPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
+	debug( LOG_NEVER, "ResearchPIE == NULL : File : %s Line : %d\n", __FILE__, __LINE__ );
 
 	return 100;
 }
@@ -521,7 +522,7 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 		 ((StatIsComponent(Stat) != COMP_WEAPON) ||
 		  ((WEAPON_STATS *)Stat)->weaponSubClass != WSC_BOMB) )
 	{
-		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
+		debug( LOG_NEVER, "ComponentPIE == NULL : File : %s Line : %d\n", __FILE__, __LINE__ );
 //		DBERROR(("ComponentIMD == NULL"));
 	}
 

@@ -354,7 +354,7 @@ BOOL recvDroidCheck(NETMSG *m)
 		if ( !(IdToDroid(ref,player,&pD)) )				// find the droid in question
 		{
 			NETlogEntry("Recvd Unknown droid info. val=player",0,player);
-			DBPRINTF(("Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n",player,ref));
+			debug( LOG_NEVER, "Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n", player, ref );
 			return TRUE;								//Recvd checking info for an unknown droid
 		}
 

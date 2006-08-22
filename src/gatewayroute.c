@@ -14,7 +14,7 @@ BOOL	gwrDoMessage;
 #undef DBP0
 #define DBP0( x ) \
 	if (gwrDoMessage) \
-		DBPRINTF( x )
+		debug( LOG_ERROR, x )
 
 
 #include "map.h"

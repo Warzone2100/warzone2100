@@ -260,7 +260,8 @@ BOOL Status = TRUE;
 			Status = FALSE;
 		break;
 	default:
-		DBERROR(("Weirdy status for tracking Camera"));
+		debug( LOG_ERROR, "Weirdy status for tracking Camera" );
+		abort();
 		break;
 	}
 	/* TBR
@@ -284,7 +285,7 @@ BOOL Status = TRUE;
 /* Flips states for camera active */
 void	setWarCamActive(BOOL status)
 {
-	DBPRINTF(("setWarCamActive(%d)\n",status));
+	debug( LOG_NEVER, "setWarCamActive(%d)\n", status );
 
 	/* We're trying to switch it on */
 	if(status == TRUE)

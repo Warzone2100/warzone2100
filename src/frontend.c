@@ -334,7 +334,8 @@ VOID changeTitleMode(tMode mode)
 		break;
 
 	default:
-		DBERROR(("Unknown title mode requested"));
+		debug( LOG_ERROR, "Unknown title mode requested" );
+		abort();
 		break;
 	}
 
@@ -1573,7 +1574,7 @@ VOID addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRI
 {
 	W_LABINIT	sLabInit;
 
-DBPRINTF(("addText : %s\n",txt));
+	debug( LOG_NEVER, "addText : %s\n", txt );
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 
 	sLabInit.formID = FormID;

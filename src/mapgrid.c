@@ -80,7 +80,7 @@ void gridClear(void)
 	GRID_ARRAY	*psCurr, *psNext;
 	SDWORD		x,y;
 
-	DBPRINTF(("gridClear %d %d\n",gridWidth,gridHeight));
+	debug( LOG_NEVER, "gridClear %d %d\n", gridWidth, gridHeight );
 //	for(x=0; x<GRID_WIDTH; x+=1)
 	for(x=0; x<gridWidth; x+=1)
 	{
@@ -409,7 +409,7 @@ void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 	// allocate a new array chunk
 	if (!HEAP_ALLOC(psGridHeap, (void*) &psNew))
 	{
-        DBPRINTF(("help - %d\n", psObj->id));
+		debug( LOG_NEVER, "help - %d\n", psObj->id );
 		return;
 	}
 
@@ -522,8 +522,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 		SDWORD		x,y, i;
 		GRID_ARRAY	*psCurr;
 
-		DBPRINTF(("Grid coverage for object %d (%d,%d) - range %d\n",
-			psObj->id, psObj->x,psObj->y, gridObjRange(psObj)));
+		debug( LOG_NEVER, "Grid coverage for object %d (%d,%d) - range %d\n", psObj->id, psObj->x, psObj->y, gridObjRange(psObj) );
 //		for (x=0; x<GRID_WIDTH; x++)
 		for (x=0; x<gridWidth; x++)
 		{
@@ -536,9 +535,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 				{
 					if (psCurr->apsObjects[i] == psObj)
 					{
-						DBPRINTF(("    %d,%d  [ %d,%d -> %d,%d ]\n",
-							x,y, x*GRID_UNITS,y*GRID_UNITS,
-							(x+1)*GRID_UNITS,(y+1)*GRID_UNITS));
+						debug( LOG_NEVER, "    %d,%d  [ %d,%d -> %d,%d ]\n", x, y, x*GRID_UNITS, y*GRID_UNITS, (x+1)*GRID_UNITS, (y+1)*GRID_UNITS );
 					}
 
 					i += 1;

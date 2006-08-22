@@ -279,7 +279,8 @@ BOOL gwProcessMap(void)
 			// check the zones havn't overflowed
 			if (currZone > UBYTE_MAX)
 			{
-				DBERROR(("gwProcessMap: too many zones\n"));
+				debug( LOG_ERROR, "gwProcessMap: too many zones\n" );
+				abort();
 				return FALSE;
 			}
 
@@ -328,7 +329,8 @@ BOOL gwProcessMap(void)
 				// check the zones havn't overflowed
 				if (currZone > UBYTE_MAX)
 				{
-					DBERROR(("gwProcessMap: too many zones\n"));
+					debug( LOG_ERROR, "gwProcessMap: too many zones\n" );
+					abort();
 					return FALSE;
 				}
 
@@ -343,7 +345,8 @@ BOOL gwProcessMap(void)
 				// check the zones havn't overflowed
 				if (currZone > UBYTE_MAX)
 				{
-					DBERROR(("gwProcessMap: too many zones\n"));
+					debug( LOG_ERROR, "gwProcessMap: too many zones\n" );
+					abort();
 					return FALSE;
 				}
 
@@ -505,7 +508,8 @@ BOOL gwCreateBlankZoneMap(void)
 	apRLEZones = MALLOC(sizeof(UBYTE *) * gwMapHeight());
 	if (apRLEZones == NULL)
 	{
-		DBERROR(("gwCreateBlankZoneMap: Out of memory"));
+		debug( LOG_ERROR, "gwCreateBlankZoneMap: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	for(i=0; i< gwMapHeight(); i++)
@@ -515,7 +519,8 @@ BOOL gwCreateBlankZoneMap(void)
 
 		if (apRLEZones[i] == NULL)
 		{
-			DBERROR(("gwCreateBlankZoneMap: Out of memory"));
+			debug( LOG_ERROR, "gwCreateBlankZoneMap: Out of memory" );
+			abort();
 			return FALSE;
 		}
 	}

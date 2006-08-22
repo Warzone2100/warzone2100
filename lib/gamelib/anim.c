@@ -46,7 +46,8 @@ anim_Init( GETSHAPEFUNC pGetShapeFunc )
 	/* ensure ANIM2D and ANIM3D structs same size */
 	if ( iSizeAnim2D != iSizeAnim3D )
 	{
-		DBERROR( ("anim_Init: ANIM2D and ANIM3D structs not same size in anim.h!") );
+		debug( LOG_ERROR, "anim_Init: ANIM2D and ANIM3D structs not same size in anim.h!" );
+		abort();
 	}
 
 	/* init globals */
@@ -91,7 +92,7 @@ anim_Shutdown( void )
 
 	if (g_animGlobals.psAnimList != NULL)
 	{
-		DBPRINTF(("anim_Shutdown: warning anims still allocated"));
+		debug( LOG_NEVER, "anim_Shutdown: warning: anims still allocated" );
 	}
 
 	/* empty anim list */
@@ -161,8 +162,9 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 	/* check frame count matches script */
 	if ( ubType == ANIM_3D_TRANS && uwObj != uwFrames )
 	{
-		DBERROR( ("anim_Create3D: frames in pie %s != script objects %i\n",
-					szPieFileName, uwObj ) );
+		debug( LOG_ERROR, "anim_Create3D: frames in pie %s != script objects %i\n",
+					szPieFileName, uwObj );
+		abort();
 		return FALSE;
 	}
 
@@ -211,7 +213,8 @@ anim_EndScript( void )
 
 	if ( g_animGlobals.uwCurState != psAnim->uwStates )
 	{
-		DBERROR( ("anim_End3D: states in current anim not consistent with header\n") );
+		debug( LOG_ERROR, "anim_End3D: states in current anim not consistent with header\n" );
+		abort();
 		return FALSE;
 	}
 
@@ -296,7 +299,8 @@ anim_SetVals( char szFileName[], UWORD uwAnimID )
 
 	if ( psAnim == NULL )
 	{
-		DBERROR( ("anim_SetVals: can't find anim %s\n", szFileName) );
+		debug( LOG_ERROR, "anim_SetVals: can't find anim %s\n", szFileName );
+		abort();
 		return ;
 	}
 
@@ -312,7 +316,8 @@ BASEANIM *anim_LoadFromBuffer(char *pBuffer, UDWORD size)
 {
 	if ( ParseResourceFile( pBuffer, size ) == FALSE )
 	{
-		DBERROR( ("anim_LoadFromBuffer: couldn't parse file\n") );
+		debug( LOG_ERROR, "anim_LoadFromBuffer: couldn't parse file\n" );
+		abort();
 		return NULL;
 	}
 
@@ -330,7 +335,8 @@ anim_GetAnimID( char *szName )
 
 	if ( cPos == NULL )
 	{
-		DBERROR( ("anim_GetAnimID: %s isn't .ani file\n", szName));
+		debug( LOG_ERROR, "anim_GetAnimID: %s isn't .ani file\n", szName );
+		abort();
 		return NO_ANIM;
 	}
 

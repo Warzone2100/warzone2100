@@ -32,14 +32,16 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	*ppsBlock = (STR_BLOCK*)MALLOC(sizeof(STR_BLOCK));
 	if (!*ppsBlock)
 	{
-		DBERROR(("strresAllocBlock: Out of memory - 1"));
+		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 1" );
+		abort();
 		return FALSE;
 	}
 
 	(*ppsBlock)->apStrings = (STRING**)MALLOC(sizeof(STRING *) * size);
 	if (!(*ppsBlock)->apStrings)
 	{
-		DBERROR(("strresAllocBlock: Out of memory - 2"));
+		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 2" );
+		abort();
 		FREE(*ppsBlock);
 		return FALSE;
 	}
@@ -62,7 +64,8 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 	psRes = (STR_RES*)MALLOC(sizeof(STR_RES));
 	if (!psRes)
 	{
-		DBERROR(("strresCreate: Out of memory"));
+		debug( LOG_ERROR, "strresCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	psRes->init = init;
@@ -71,7 +74,8 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 
 	if (!TREAP_CREATE(&psRes->psIDTreap, treapStringCmp, init, ext))
 	{
-		DBERROR(("strresCreate: Out of memory"));
+		debug( LOG_ERROR, "strresCreate: Out of memory" );
+		abort();
 		FREE(psRes);
 		return FALSE;
 	}
@@ -148,7 +152,7 @@ void strresDestroy(STR_RES *psRes)
 #ifdef DEBUG
 			else if (i < psRes->nextID)
 			{
-				DBPRINTF(("strresDestroy: No string loaded for id %d\n", i));
+				debug( LOG_NEVER, "strresDestroy: No string loaded for id %d\n", i );
 			}
 #endif
 		}
@@ -182,7 +186,8 @@ BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID)
 		// Store the ID string
 		if (!TREAP_ADD(psRes->psIDTreap, (UDWORD)psID->pIDStr, psID))
 		{
-			DBERROR(("strresLoadFixedID: Out of memory"));
+			debug( LOG_ERROR, "strresLoadFixedID: Out of memory" );
+			abort();
 			return FALSE;
 		}
 
@@ -261,13 +266,15 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 		psID = (STR_ID*)MALLOC(sizeof(STR_ID));
 		if (!psID)
 		{
-			DBERROR(("strresStoreString: Out of memory"));
+			debug( LOG_ERROR, "strresStoreString: Out of memory" );
+			abort();
 			return FALSE;
 		}
 		psID->pIDStr = (STRING*)MALLOC(sizeof(STRING) * (stringLen(pID) + 1));
 		if (!psID->pIDStr)
 		{
-			DBERROR(("strresStoreString: Out of memory"));
+			debug( LOG_ERROR, "strresStoreString: Out of memory" );
+			abort();
 			FREE(psID);
 			return FALSE;
 		}
@@ -298,7 +305,8 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 	// Put the new string in the string block
 	if (psBlock->apStrings[psID->id - psBlock->idStart] != NULL)
 	{
-		DBERROR(("strresStoreString: Duplicate string for id: %s", psID->pIDStr));
+		debug( LOG_ERROR, "strresStoreString: Duplicate string for id: %s", psID->pIDStr );
+		abort();
 		return FALSE;
 	}
 
@@ -306,7 +314,8 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 	pNew = (STRING*)MALLOC(sizeof(STRING) * (stringLen(pString) + 1));
 	if (!pNew)
 	{
-		DBERROR(("strresStoreString: Out of memory"));
+		debug( LOG_ERROR, "strresStoreString: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	stringCpy(pNew, pString);

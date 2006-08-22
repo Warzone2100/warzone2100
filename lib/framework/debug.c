@@ -299,6 +299,3 @@ void debug( code_part part, const char *str, ... )
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
 }
-
-
-

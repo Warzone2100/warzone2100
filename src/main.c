@@ -467,12 +467,14 @@ init://jump here from the end if re_initialising
 	psPaletteBuffer = (iColour*)MALLOC(256 * sizeof(iColour)+1);
 	if (psPaletteBuffer == NULL)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return -1;
 	}
 	if (!loadFileToBuffer("palette.bin", (char *)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
 	{
-		DBERROR(("Couldn't load palette data"));
+		debug( LOG_ERROR, "Couldn't load palette data" );
+		abort();
 		return -1;
 	}
 	pal_AddNewPalette(psPaletteBuffer);
@@ -543,13 +545,13 @@ init://jump here from the end if re_initialising
 				//after data is loaded check the research stats are valid
 				if (!checkResearchStats())
 				{
-					DBERROR(("Invalid Research Stats"));
+					debug( LOG_ERROR, "Invalid Research Stats" );
 					goto exit;
 				}
 				//and check the structure stats are valid
 				if (!checkStructureStats())
 				{
-					DBERROR(("Invalid Structure Stats"));
+					debug( LOG_ERROR, "Invalid Structure Stats" );
 					goto exit;
 				}
 
@@ -558,7 +560,8 @@ init://jump here from the end if re_initialising
 				screen_StopBackDrop();
 				break;
 			case GS_VIDEO_MODE:
-				DBERROR(("Video_mode no longer valid"));
+				debug( LOG_ERROR, "Video_mode no longer valid" );
+				abort();
 				if (introVideoControl == 0)
 				{
 					videoInitialised = TRUE;
@@ -566,7 +569,7 @@ init://jump here from the end if re_initialising
 				break;
 
 			default:
-				debug(LOG_ERROR, "Unknown game status on shutdown!");
+				debug( LOG_ERROR, "Unknown game status on shutdown!" );
 		}
 
 
@@ -850,6 +853,7 @@ exit:
 	pal_ShutDown();
 	frameShutDown();
 
+	debug_exit();
 	return 1;
 }
 

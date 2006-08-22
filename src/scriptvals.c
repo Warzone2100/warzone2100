@@ -83,13 +83,15 @@ BOOL scrvAddContext(STRING *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 	psNew = MALLOC(sizeof(SCRV_STORE));
 	if (!psNew)
 	{
-		DBERROR(("scrvAddContext: Out of memory"));
+		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	psNew->pIDString = MALLOC(strlen(pID) + 1);
 	if (!psNew->pIDString)
 	{
-		DBERROR(("scrvAddContext: Out of memory"));
+		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	strcpy(psNew->pIDString, pID);
@@ -209,7 +211,8 @@ BOOL scrvGetContext(STRING *pID, SCRIPT_CONTEXT **ppsContext)
 		}
 	}
 
-	DBERROR(("scrvGetContext: couldn't find context for id: %s", pID));
+	debug( LOG_ERROR, "scrvGetContext: couldn't find context for id: %s", pID );
+	abort();
 	return FALSE;
 }
 
@@ -240,7 +243,8 @@ BOOL scrvGetString(STRING *pStringID, STRING **ppString)
 	//get the ID for the string
 	if (!strresGetIDNum(psStringRes, pStringID, &id))
 	{
-		DBERROR(("Cannot find the string id %s ", pStringID));
+		debug( LOG_ERROR, "Cannot find the string id %s ", pStringID );
+		abort();
 		return FALSE;
 	}
 	//get the string from the id

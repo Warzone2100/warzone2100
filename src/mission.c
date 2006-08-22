@@ -309,7 +309,7 @@ void initMission(void)
 {
 	UDWORD		inc;
 
-DBPRINTF(("***Init Mission ***\n"));
+	debug( LOG_NEVER, "***Init Mission ***\n" );
 	//mission.type = MISSION_NONE;
 	mission.type = LDS_NONE;
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
@@ -518,7 +518,7 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 	{
 		/*mission type gets set to none when you have returned from a mission
 		so don't want to go another mission when already on one! - so ignore*/
-		DBMB(("Already on a mission"));
+		debug( LOG_NEVER, "Already on a mission" );
 		return TRUE;
 	}
 
@@ -624,14 +624,16 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 		default:
 		{
 			//error!
-			DBERROR(("Unknown Mission Type"));
+			debug( LOG_ERROR, "Unknown Mission Type" );
+			abort();
 			loaded = FALSE;
 		}
 	}
 
 	if (!loaded)
 	{
-		DBERROR(("Unable to load mission file"));
+		debug( LOG_ERROR, "Unable to load mission file" );
+		abort();
 		return FALSE;
 	}
 
@@ -1870,7 +1872,7 @@ void endMission(void)
 	if (mission.type == LDS_NONE)
 	{
 		//can't go back any further!!
-		DBMB(("Already returned from mission"));
+		debug( LOG_NEVER, "Already returned from mission" );
 		return;
 	}
 
@@ -1936,7 +1938,8 @@ void endMission(void)
 		default:
 		{
 			//error!
-			DBERROR(("Unknown Mission Type"));
+			debug( LOG_ERROR, "Unknown Mission Type" );
+			abort();
 		}
 	}
 
@@ -2558,7 +2561,7 @@ void missionResetDroids()
 					    TILE_UNITS) - TILE_UNITS ||	psDroid->y <= TILE_UNITS ||
 					    psDroid->y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
 				    {
-					    DBMB(("missionResetUnits: unit too close to edge of map - removing"));
+					    debug( LOG_NEVER, "missionResetUnits: unit too close to edge of map - removing" );
 						vanishDroid(psDroid);
 					    continue;
 				    }
@@ -2798,7 +2801,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 	}
 	else
 	{
-		DBPRINTF( ("missionMoveTransporterOffWorld: droid type not transporter!\n") );
+		debug( LOG_NEVER, "missionMoveTransporterOffWorld: droid type not transporter!\n" );
 	}
 }
 
@@ -3545,15 +3548,13 @@ void intRunMissionResult()
 	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 	frameSetCursorFromRes(IDC_DEFAULT);
 
-
-
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(FALSE))// check for file name.
 		{
 			if(strlen(sRequestResult))
 			{
-				DBPRINTF(("Returned %s",sRequestResult));
+				debug( LOG_NEVER, "Returned %s", sRequestResult );
 
 				if(bRequestLoad)
 				{
@@ -3711,7 +3712,7 @@ void launchMission(void)
 	}
 	else
 	{
-		DBMB(("Start Mission has not been called"));
+		debug( LOG_NEVER, "Start Mission has not been called" );
 	}
 }
 
@@ -4092,8 +4093,7 @@ void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEnt
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterEntry: entry point x %i outside scroll limits %i->%i\n",
-					iEntryTileX, scrollMinX, scrollMaxX ) );
+		debug( LOG_NEVER, "missionSetTransporterEntry: entry point x %i outside scroll limits %i->%i\n", iEntryTileX, scrollMinX, scrollMaxX );
 		mission.iTranspEntryTileX[iPlayer] = (UWORD) (scrollMinX + EDGE_SIZE);
 	}
 
@@ -4103,8 +4103,7 @@ void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEnt
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterEntry: entry point y %i outside scroll limits %i->%i\n",
-					iEntryTileY, scrollMinY, scrollMaxY ) );
+		debug( LOG_NEVER, "missionSetTransporterEntry: entry point y %i outside scroll limits %i->%i\n", iEntryTileY, scrollMinY, scrollMaxY );
 		mission.iTranspEntryTileY[iPlayer] = (UWORD) (scrollMinY + EDGE_SIZE);
 	}
 }
@@ -4119,8 +4118,7 @@ void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitT
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterExit: entry point x %i outside scroll limits %i->%i\n",
-					iExitTileX, scrollMinX, scrollMaxX ) );
+		debug( LOG_NEVER, "missionSetTransporterExit: entry point x %i outside scroll limits %i->%i\n", iExitTileX, scrollMinX, scrollMaxX );
 		mission.iTranspExitTileX[iPlayer] = (UWORD) (scrollMinX + EDGE_SIZE);
 	}
 
@@ -4130,8 +4128,7 @@ void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitT
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterExit: entry point y %i outside scroll limits %i->%i\n",
-					iExitTileY, scrollMinY, scrollMaxY ) );
+		debug( LOG_NEVER, "missionSetTransporterExit: entry point y %i outside scroll limits %i->%i\n", iExitTileY, scrollMinY, scrollMaxY );
 		mission.iTranspExitTileY[iPlayer] = (UWORD) (scrollMinY + EDGE_SIZE);
 	}
 }
@@ -4183,7 +4180,7 @@ void missionDestroyObjects(void)
 	STRUCTURE *psStruct;
 	UBYTE Player;
 
-	DBPRINTF(("missionDestroyObjects\n"));
+	debug( LOG_NEVER, "missionDestroyObjects\n" );
 	for(Player = 0; Player < MAX_PLAYERS; Player++) {
 		if(Player != selectedPlayer) {
 

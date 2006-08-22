@@ -684,7 +684,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 	}
 	else if (frame < 0) //an ERROR
 	{
-		DBPRINTF(("VIDEO FRAME ERROR %d\n",frame));
+		debug( LOG_NEVER, "VIDEO FRAME ERROR %d\n", frame );
 		return FALSE;
 	}
 

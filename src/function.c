@@ -46,7 +46,7 @@ static BOOL loadUpgradeFunction(char *pData, UBYTE type);
 
 
 //array of functions pointers for each load function
-BOOL (*pLoadFunction[NUMFUNCTIONS])(char *pData) = 
+BOOL (*pLoadFunction[NUMFUNCTIONS])(char *pData) =
 {
 	loadProduction,
 	loadProductionUpgradeFunction,
@@ -98,7 +98,8 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 	asFunctions = (FUNCTION**) MALLOC(totalFunctions*sizeof(FUNCTION*));
 	if (!asFunctions)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 	pStartList = asFunctions;
@@ -284,7 +285,8 @@ BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore)
 	pFunction->pName = (STRING *)MALLOC(strlen(pNameToStore)+1);
 	if (pFunction->pName == NULL)
 	{
-		DBERROR(("Function Name - Out of memory"));
+		debug( LOG_ERROR, "Function Name - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	strcpy(pFunction->pName,pNameToStore);
@@ -351,7 +353,8 @@ BOOL loadProduction(char *pData)
 	psFunction = (PRODUCTION_FUNCTION *)MALLOC(sizeof(PRODUCTION_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Production Function - Out of memory"));
+		debug( LOG_ERROR, "Production Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(PRODUCTION_FUNCTION));
@@ -446,7 +449,8 @@ BOOL loadProductionUpgradeFunction(char *pData)
 		(PRODUCTION_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Production Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Production Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(PRODUCTION_UPGRADE_FUNCTION));
@@ -510,7 +514,8 @@ BOOL loadResearchFunction(char *pData)
 	psFunction = (RESEARCH_FUNCTION *)MALLOC(sizeof(RESEARCH_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Research Function - Out of memory"));
+		debug( LOG_ERROR, "Research Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(RESEARCH_FUNCTION));
@@ -543,7 +548,8 @@ BOOL loadReArmFunction(char *pData)
 	psFunction = (REARM_FUNCTION *)MALLOC(sizeof(REARM_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("ReArm Function - Out of memory"));
+		debug( LOG_ERROR, "ReArm Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(REARM_FUNCTION));
@@ -649,7 +655,8 @@ BOOL loadUpgradeFunction(char *pData, UBYTE type)
 	psFunction = (UPGRADE_FUNCTION *)MALLOC(sizeof(UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(UPGRADE_FUNCTION));
@@ -694,7 +701,8 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 		sizeof(DROIDBODY_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("UnitBody Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "UnitBody Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(DROIDBODY_UPGRADE_FUNCTION));
@@ -760,7 +768,8 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
 		sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("UnitSensor Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "UnitSensor Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
@@ -808,7 +817,8 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 		(WEAPON_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Weapon Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Weapon Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(WEAPON_UPGRADE_FUNCTION));
@@ -847,7 +857,8 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 		incenDamage > UWORD_MAX OR
 		radiusHit > UWORD_MAX)
 	{
-		DBERROR(("A percentage increase for Weapon Upgrade function is too large"));
+		debug( LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large" );
+		abort();
 		return FALSE;
 	}
 
@@ -877,7 +888,8 @@ BOOL loadStructureUpgradeFunction(char *pData)
 		(STRUCTURE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Structure Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Structure Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(STRUCTURE_UPGRADE_FUNCTION));
@@ -903,7 +915,8 @@ BOOL loadStructureUpgradeFunction(char *pData)
 		body > UWORD_MAX OR
 		resistance > UWORD_MAX)
 	{
-		DBERROR(("A percentage increase for Structure Upgrade function is too large"));
+		debug( LOG_ERROR, "A percentage increase for Structure Upgrade function is too large" );
+		abort();
 		return FALSE;
 	}
 
@@ -926,7 +939,8 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 		(WALLDEFENCE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("WallDefence Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "WallDefence Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
@@ -951,7 +965,8 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	if (armour > UWORD_MAX OR
 		body > UWORD_MAX)
 	{
-		DBERROR(("A percentage increase for WallDefence Upgrade function is too large"));
+		debug( LOG_ERROR, "A percentage increase for WallDefence Upgrade function is too large" );
+		abort();
 		return FALSE;
 	}
 
@@ -1042,7 +1057,8 @@ BOOL loadPowerGenFunction(char *pData)
 		(POWER_GEN_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Power Gen Function - Out of memory"));
+		debug( LOG_ERROR, "Power Gen Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(POWER_GEN_FUNCTION));
@@ -1086,7 +1102,8 @@ BOOL loadResourceFunction(char *pData)
 		(RESOURCE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Resource Function - Out of memory"));
+		debug( LOG_ERROR, "Resource Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(RESOURCE_FUNCTION));
@@ -1188,7 +1205,8 @@ BOOL loadRepairDroidFunction(char *pData)
 		(REPAIR_DROID_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Repair Droid Function - Out of memory"));
+		debug( LOG_ERROR, "Repair Droid Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(REPAIR_DROID_FUNCTION));
@@ -1514,7 +1532,8 @@ BOOL loadWallFunction(char *pData)
 	psFunction = (WALL_FUNCTION *)MALLOC(sizeof(WALL_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Wall Function - Out of memory"));
+		debug( LOG_ERROR, "Wall Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(WALL_FUNCTION));
@@ -1550,7 +1569,8 @@ BOOL loadWallFunction(char *pData)
 #else
 	if (!allocateName(&psFunction->pStructName, structureName))
 	{
-		DBERROR(("Structure Stats Invalid for function - %s", functionName));
+		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
+		abort();
 		return FALSE;
 	}
 #endif

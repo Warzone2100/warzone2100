@@ -702,7 +702,7 @@ void	removeDroidFX(DROID *psDel)
 
 #if defined(PSX) && defined(LIBPAD)
 		if(EnableVibration) {
-			DBPRINTF(("SetVibro1\n"));
+	debug( LOG_NEVER, "SetVibro1\n" );
 			SetVibro1(0,100,512);
 		}
 #endif
@@ -831,7 +831,7 @@ void destroyDroid(DROID *psDel)
 
 #if defined(PSX) && defined(LIBPAD)
 		if(EnableVibration) {
-			DBPRINTF(("SetVibro1\n"));
+			debug( LOG_NEVER, "SetVibro1\n" );
 			SetVibro1(0,100,512);
 		}
 #endif
@@ -1044,7 +1044,8 @@ void droidBurntCallback( ANIM_OBJECT * psObj )
 											ID_ANIM_DROIDFLAMEFALL, 0, 1 );
 	if ( psDroid->psCurAnim == NULL )
 	{
-		DBERROR( ("unitBurntCallback: couldn't add fall over anim\n") );
+		debug( LOG_ERROR, "unitBurntCallback: couldn't add fall over anim\n" );
+		abort();
 		return;
 	}
 
@@ -1060,7 +1061,8 @@ void droidBurn( DROID * psDroid )
 
 	if ( psDroid->droidType != DROID_PERSON )
 	{
-		DBERROR( ("unitBurn: can't burn anything except babarians currently!\n") );
+		debug( LOG_ERROR, "unitBurn: can't burn anything except babarians currently!\n" );
+		abort();
 		return;
 	}
 
@@ -1085,7 +1087,8 @@ void droidBurn( DROID * psDroid )
 											ID_ANIM_DROIDBURN, 0, 3 );
 	if ( psDroid->psCurAnim == NULL )
 	{
-		DBERROR( ("unitBurn: couldn't add burn anim\n") );
+		debug( LOG_ERROR, "unitBurn: couldn't add burn anim\n" );
+		abort();
 		return;
 	}
 
@@ -1093,7 +1096,7 @@ void droidBurn( DROID * psDroid )
 	animObj_SetDoneFunc( psDroid->psCurAnim, droidBurntCallback );
 
 	/* add scream */
-DBPRINTF(("baba burn\n"));
+	debug( LOG_NEVER, "baba burn\n" );
 
 	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
 
@@ -1795,7 +1798,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		if (!droidNextToStruct(psDroid,  (BASE_OBJECT *)psStruct))
 		{
 			/* Nope - stop building */
-			DBPRINTF(("unitStartBuild: not next to structure\n"));
+			debug( LOG_NEVER, "unitStartBuild: not next to structure\n" );
 		}
 	}
 
@@ -2854,7 +2857,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 	{
 		if (!HEAP_ALLOC(psTemplateHeap, (void*) &pDroidDesign))
 		{
-			DBERROR(("Out of memory - Droid Templates"));
+			debug( LOG_ERROR, "Out of memory - Droid Templates" );
+			abort();
 			return FALSE;
 		}
 		memset(pDroidDesign, 0, sizeof(DROID_TEMPLATE));
@@ -2912,7 +2916,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		of STORE_RESOURCE_ID or RESOURCE_NAMES! - 25/06/98 AB*/
 		if (!strresGetIDNum(psStringRes, componentName, &id))
 		{
-			DBERROR(("Unable to find string resource for %s", componentName));
+			debug( LOG_ERROR, "Unable to find string resource for %s", componentName );
+			abort();
 			return FALSE;
 		}
 
@@ -2966,7 +2971,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-				DBERROR(("Body component not found for droid %s", getTemplateName(pDroidDesign)));
+				debug( LOG_ERROR, "Body component not found for droid %s", getTemplateName(pDroidDesign) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -3010,7 +3016,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-				DBERROR(("Brain component not found for droid %s", getTemplateName(pDroidDesign)));
+				debug( LOG_ERROR, "Brain component not found for droid %s", getTemplateName(pDroidDesign) );
+				abort();
 //				DBERROR(("Brain component not found for droid %s", pDroidDesign->pName));
 				return FALSE;
 			}
@@ -3055,7 +3062,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-				DBERROR(("Construct component not found for droid %s", getTemplateName(pDroidDesign)));
+				debug( LOG_ERROR, "Construct component not found for droid %s", getTemplateName(pDroidDesign) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -3099,7 +3107,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-				DBERROR(("ECM component not found for droid %s", getTemplateName(pDroidDesign)));
+				debug( LOG_ERROR, "ECM component not found for droid %s", getTemplateName(pDroidDesign) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -3150,7 +3159,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-				DBERROR(("Propulsion component not found for droid %s", getTemplateName(pDroidDesign)));
+				debug( LOG_ERROR, "Propulsion component not found for droid %s", getTemplateName(pDroidDesign) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -3194,7 +3204,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-				DBERROR(("Repair component not found for droid %s", getTemplateName(pDroidDesign)));
+				debug( LOG_ERROR, "Repair component not found for droid %s", getTemplateName(pDroidDesign) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -3276,10 +3287,11 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			if (!found)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("Sensor not found for droid Template: %s",strresGetString(NULL,pDroidDesign->NameHash)));
+				debug( LOG_ERROR, "Sensor not found for droid Template: %s", strresGetString( NULL, pDroidDesign->NameHash ) );
 #else
-				DBERROR(("Sensor not found for droid Template: %s",pDroidDesign->aName));
+				debug( LOG_ERROR, "Sensor not found for droid Template: %s", pDroidDesign->aName );
 #endif
+				abort();
 				return FALSE;
 			}
 		}
@@ -3294,10 +3306,11 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			pDroidDesign->numWeaps > DROID_MAXWEAPS)
 		{
 #ifdef HASH_NAMES
-			DBERROR(("Too many weapons have been allocated for droid Template: %s (%x)",strresGetString(NULL,pDroidDesign->NameHash),pDroidDesign->NameHash));
+			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s (%x)", strresGetString( NULL, pDroidDesign->NameHash ), pDroidDesign->NameHash );
 #else
-			DBERROR(("Too many weapons have been allocated for droid Template: %s",pDroidDesign->aName));
+			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName );
 #endif
+			abort();
 
 			return FALSE;
 		}
@@ -3345,7 +3358,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 
 	if ( bDefaultTemplateFound == FALSE )
 	{
-		DBERROR( ("loadUnitTemplates: default template not found\n") );
+		debug( LOG_ERROR, "loadUnitTemplates: default template not found\n" );
+		abort();
 		return FALSE;
 	}
 
@@ -3588,7 +3602,8 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 				if ( strcmp(TemplateName, pTemplate->aName) )
 #endif
 				{
-					DBERROR(("Unable to find Template - %s", TemplateName));
+					debug( LOG_ERROR, "Unable to find Template - %s", TemplateName );
+					abort();
 					return FALSE;
 				}
 			}
@@ -3597,8 +3612,8 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 			//if weapon not found - error
 			if (incW == -1)
 			{
-				DBERROR(("Unable to find Weapon %s for template %s",
-							WeaponName, TemplateName));
+				debug( LOG_ERROR, "Unable to find Weapon %s for template %s", WeaponName, TemplateName );
+				abort();
 				return FALSE;
 			}
 			else
@@ -3609,15 +3624,16 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 				if (pTemplate->storeCount >
 								(SDWORD)pTemplate->numWeaps)
 				{
-					DBERROR(("Trying to allocate more weapons than allowed for Template - %s",
-								TemplateName));
+					debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Template - %s", TemplateName );
+					abort();
 					return FALSE;
 				}
                 //check valid weapon/propulsion
                 if (!checkValidWeaponForProp(pTemplate))
                 {
 			// ffs
-                    DBERROR(("Weapon is invalid for air propulsion for template %s",pTemplate->aName));
+					debug( LOG_ERROR, "Weapon is invalid for air propulsion for template %s", pTemplate->aName );
+					abort();
 
 					return FALSE;
                 }
@@ -3637,7 +3653,8 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	if (SkippedWeaponCount > 0)
 	{
 
-		DBERROR(("Illegal player number in %d droid weapons",SkippedWeaponCount));
+		debug( LOG_ERROR, "Illegal player number in %d droid weapons", SkippedWeaponCount );
+		abort();
 
 	}
 
@@ -4151,7 +4168,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	//allocate memory
 	if (!createDroid(player, &psDroid))
 	{
-		DBPRINTF(("unit build: unable to create\n"));
+		debug( LOG_NEVER, "unit build: unable to create\n" );
 		ASSERT((FALSE,"Cannot get the memory for the unit"));
 		return NULL;
 	}
@@ -4213,7 +4230,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		if (!grpCreate(&psGrp))
 		{
-			DBPRINTF(("unit build: unable to create group\n"));
+			debug( LOG_NEVER, "unit build: unable to create group\n" );
 			ASSERT((FALSE,"Can't create unit because can't create group"));
 			HEAP_FREE(psDroidHeap, psDroid);
 			return NULL;
@@ -5829,13 +5846,13 @@ UDWORD	passes;
 }
 
 //same as orig, but with threat check
-BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange, 
+BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y))
 {
 SDWORD	i,j;
 SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
- 
+
 
 	ASSERT((*x>=0 AND *x<mapWidth,"x coordinate is off-map for pickATileGen"));
 	ASSERT((*y>=0 AND *y<mapHeight,"y coordinate is off-map for pickATileGen"));
@@ -6370,7 +6387,8 @@ BOOL getDroidResourceName(STRING *pName)
 	//see if the name has a resource associated with it by trying to get the ID for the string
 	if (!strresGetIDNum(psStringRes, pName, &id))
 	{
-		DBERROR(("Unable to find string resource for %s", pName));
+		debug( LOG_ERROR, "Unable to find string resource for %s", pName );
+		abort();
 		return FALSE;
 	}
 	//get the string from the id

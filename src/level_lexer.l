@@ -128,7 +128,8 @@ int lev_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reched end of file in a comment"));
+		debug( LOG_ERROR, "Warning: reched end of file in a comment" );
+		abort();
 	}
 	return 1;
 }

@@ -168,7 +168,8 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		apCompLists[inc][type] = (UBYTE *) MALLOC(sizeof(UBYTE) * number);
 		if (apCompLists[inc][type] == NULL)
 		{
-			DBERROR(("Out of memory assigning Player Component Lists"));
+			debug( LOG_ERROR, "Out of memory assigning Player Component Lists" );
+			abort();
 			return FALSE;
 		}
 
@@ -215,7 +216,8 @@ BOOL allocStructLists(void)
 								numStructureStats);
 			if (apStructTypeLists[inc] == NULL)
 			{
-				DBERROR(("Out of memory assigning Player Structure Lists"));
+				debug( LOG_ERROR, "Out of memory assigning Player Structure Lists" );
+				abort();
 				return FALSE;
 			}
 			for (stat = 0; stat < (SDWORD)numStructureStats; stat++)

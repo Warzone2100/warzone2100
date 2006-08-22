@@ -539,7 +539,8 @@ BOOL saveKeyMap(void)
 			count++);
 		if(keyMapSaveTable[count] == NULL)
 		{
-			DBERROR(("can't find keymapped function in the keymap save table!!"));
+			debug( LOG_ERROR, "can't find keymapped function in the keymap save table!!" );
+			abort();
 		}
 		WRITE(&count, sizeof(count));
 	}

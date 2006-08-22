@@ -790,7 +790,7 @@ void CheckStartWallDrag(void)
 				wallDrag.x1 = wallDrag.x2 = mouseTileX;
 				wallDrag.y1 = wallDrag.y2 = mouseTileY;
 				wallDrag.status = DRAG_PLACING;
-				DBPRINTF(("Start Wall Drag\n"));
+				debug( LOG_NEVER, "Start Wall Drag\n" );
 			}
 		}
 		else if (intBuildSelectMode())//if we were in build select mode
@@ -837,7 +837,7 @@ BOOL CheckFinishedFindPosition(void)
 
 					wallDrag.status = DRAG_RELEASED;
 				}
-	DBPRINTF(("BUILD3D_FINISHED\n"));
+				debug( LOG_NEVER, "BUILD3D_FINISHED\n" );
 				buildState = BUILD3D_FINISHED;
 				return TRUE;
 			} else {

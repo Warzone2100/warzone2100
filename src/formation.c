@@ -73,7 +73,7 @@ void formationShutDown(void)
 
 	while (psFormationList)
 	{
-		DBPRINTF(("formation with %d units still attached\n",psFormationList->refCount));
+		debug( LOG_NEVER, "formation with %d units still attached\n", psFormationList->refCount );
 		psNext = psFormationList->psNext;
 		HEAP_FREE(psFHeap, psFormationList);
 		psFormationList = psNext;

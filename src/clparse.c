@@ -91,7 +91,8 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 			// find the file name
 			token = argv[++i];
 			if (token == NULL) {
-				DBERROR( ("Missing filename?\n") );
+				debug( LOG_ERROR, "Missing filename?\n" );
+				abort();
 				return FALSE;
 			}
 			debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
@@ -203,7 +204,8 @@ BOOL ParseCommandLine(int argc, char** argv)
 			token = argv[++i];
 			if (token == NULL)
 			{
-				DBERROR( ("Unrecognised -game name\n") );
+				debug( LOG_ERROR, "Unrecognised -game name\n" );
+				abort();
 				return FALSE;
 			}
 			strncpy(pLevelName, token, 254);
@@ -215,7 +217,8 @@ BOOL ParseCommandLine(int argc, char** argv)
 			token = argv[++i];
 			if (token == NULL)
 			{
-				DBERROR( ("Unrecognised -savegame name\n") );
+				debug( LOG_ERROR, "Unrecognised -savegame name\n" );
+				abort();
 				return FALSE;
 			}
 			strcpy(saveGameName, SaveGamePath);

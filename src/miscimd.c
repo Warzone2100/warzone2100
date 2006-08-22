@@ -83,8 +83,8 @@ char	name[15];	// hopefully!
 		if(!miscImds[i].pImd)
 		{
 			/* Say which one and return FALSE */
-			DBERROR(("Can't find misselaneous PIE file : %s",miscImds[i].pName));
-			ASSERT((0,"NULL PIE"));
+			debug( LOG_ERROR, "Can't find misselaneous PIE file : %s", miscImds[i].pName );
+			ASSERT((FALSE,"NULL PIE"));
 			return(FALSE);
 		}
 		/*	If the next one's the end one, then get out now.
@@ -157,7 +157,8 @@ BOOL	initMiscImds( void )
 		pAssemblyPointIMDs[FACTORY_FLAG][i] = resGetData("IMD", facName);
 		if (!pAssemblyPointIMDs[FACTORY_FLAG][i])
 		{
-			DBERROR(("Can't find assembly point graphic for factory"));
+			debug( LOG_ERROR, "Can't find assembly point graphic for factory" );
+			abort();
 			return(FALSE);
 		}
 //#ifndef PSX
@@ -165,20 +166,23 @@ BOOL	initMiscImds( void )
 		pAssemblyPointIMDs[CYBORG_FLAG][i] = resGetData("IMD", cybName);
 		if (!pAssemblyPointIMDs[CYBORG_FLAG][i])
 		{
-			DBERROR(("Can't find assembly point graphic for cyborg factory"));
+			debug( LOG_ERROR, "Can't find assembly point graphic for cyborg factory" );
+			abort();
 			return(FALSE);
 		}
 		vtolName[6] = *pieNum;
 		pAssemblyPointIMDs[VTOL_FLAG][i] = resGetData("IMD", vtolName);
 		if (!pAssemblyPointIMDs[VTOL_FLAG][i])
 		{
-			DBERROR(("Can't find assembly point graphic for vtol factory"));
+			debug( LOG_ERROR, "Can't find assembly point graphic for vtol factory" );
+			abort();
 			return(FALSE);
 		}
 		pAssemblyPointIMDs[REPAIR_FLAG][i] = resGetData("IMD", "mirnum1.pie");
 		if (!pAssemblyPointIMDs[REPAIR_FLAG][i])
 		{
-			DBERROR(("Can't find assembly point graphic for repair facility"));
+			debug( LOG_ERROR, "Can't find assembly point graphic for repair facility" );
+			abort();
 			return(FALSE);
 		}
 //#else

@@ -136,7 +136,8 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 	*ppsHeap = (OBJ_HEAP *)MALLOC(sizeof(OBJ_HEAP));
 	if (*ppsHeap == NULL)
 	{
-		DBERROR(("heapCreate: Out of memory"));
+		debug( LOG_ERROR, "heapCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
 //	memset(*ppsHeap,0,sizeof(OBJ_HEAP));			//setting everything to 0 first (debug test)-Q
@@ -155,7 +156,8 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 
 	if ((*ppsHeap)->pMemory == NULL)
 	{
-		DBERROR(("heapCreate: Out of memory"));
+		debug( LOG_ERROR, "heapCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -183,7 +185,8 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 	}
 	if (HeapDebugList[Heap]!=*ppsHeap)
 	{
-		DBERROR(("heapCreate: MAXDEBUGHEAPS too small"));
+		debug( LOG_ERROR, "heapCreate: MAXDEBUGHEAPS too small" );
+		abort();
 	}
 
 #endif
@@ -440,8 +443,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 	/* Warn about any unfreed objects */
 	if (psHeap->currUsage > 0)
 	{
-		DBPRINTF(("heapDestroy: %s, line %d : %d objects in use\n",
-				psHeap->pFile, psHeap->line, psHeap->currUsage));
+		debug( LOG_NEVER, "heapDestroy: %s, line %d : %d objects in use\n", psHeap->pFile, psHeap->line, psHeap->currUsage );
 	}
 
 	/* Print out where the unfreed objects were allocated */
@@ -473,9 +475,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 	ASSERT((clean, "heapDestroy: unallocated memory has been overwritten"));
 
 #if HEAP_USAGE_REPORT
-	DBPRINTF(("heapDestory: %s, line %d : Max usage %d (Init %d Ext %d)\n",
-			psHeap->pFile, psHeap->line, psHeap->maxUsage,
-			psHeap->initAlloc, psHeap->extAlloc));
+	debug( LOG_NEVER, "heapDestory: %s, line %d : Max usage %d (Init %d Ext %d)\n", psHeap->pFile, psHeap->line, psHeap->maxUsage, psHeap->initAlloc, psHeap->extAlloc );
 #endif
 
 #if COPY_FILE_STRING
@@ -551,21 +551,17 @@ void heapReport(void)
 
 	OBJ_HEAP *psHeap;
 
-	DBPRINTF(("\nheapReport\n==========\n"));
+	debug( LOG_NEVER, "\nheapReport\n==========\n" );
 
 	for (Heap=0;Heap<MAXDEBUGHEAPS;Heap++)
 	{
 		if (HeapDebugList[Heap] != NULL)
 		{
 			psHeap=HeapDebugList[Heap];
-			DBPRINTF(("Heap: %s, line %d size=%d mem taken=%d\n",
-				psHeap->pFile, psHeap->line, psHeap->objSize, psHeap->objSize*psHeap->initAlloc));
-			
-			DBPRINTF((" Current Usage=%d ",psHeap->currUsage));
-			
-			DBPRINTF((" Max usage %d (Init %d Ext %d)\n",
-				psHeap->maxUsage,
-				psHeap->initAlloc, psHeap->extAlloc));
+			debug( LOG_NEVER, "Heap: %s, line %d size=%d mem taken=%d\n", psHeap->pFile, psHeap->line, psHeap->objSize, psHeap->objSize*psHeap->initAlloc );
+
+			debug( LOG_NEVER, " Current Usage=%d ", psHeap->currUsage );
+			debug( LOG_NEVER, " Max usage     %d (Init %d Ext %d)\n", psHeap->maxUsage, psHeap->initAlloc, psHeap->extAlloc );
 
 		}
 	}

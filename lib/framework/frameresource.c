@@ -162,7 +162,8 @@ static BOOL resAlloc(STRING *pType, RES_TYPE **ppsFunc)
 	psT = (RES_TYPE *)MALLOC(sizeof(RES_TYPE));
 	if (!psT)
 	{
-		DBERROR(("resAlloc: Out of memory"));
+		debug( LOG_ERROR, "resAlloc: Out of memory" );
+		abort();
 		return FALSE;
 	}
 

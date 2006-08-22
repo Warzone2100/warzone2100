@@ -60,7 +60,7 @@ static SDWORD			eventTraceLevel=3;
 #ifdef DEBUG
 #define DB_TRACE(x, level) \
 	if (eventTraceLevel >= (level)) \
-		DBPRINTF(x)
+		debug( LOG_NEVER, x)
 #else
 #define DB_TRACE(x,level)
 #endif
@@ -166,7 +166,7 @@ void eventReset(void)
 #ifdef DEBUG
 	if (count>0)
 	{
-		DBPRINTF(("eventReset: %d contexts still allocated at shutdown\n", count));
+		debug( LOG_NEVER, "eventReset: %d contexts still allocated at shutdown\n", count );
 	}
 #endif
 }
@@ -295,11 +295,10 @@ void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 	// find the debug info for the event
 	pEventLab = eventGetEventID(psCode, psTrigger->event);
 
-	DBPRINTF(("trigger %s at %d -> %s",
-		pTrigLab, psTrigger->testTime, pEventLab));
+	debug( LOG_NEVER, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab );
 	if (psTrigger->offset != 0)
 	{
-		DBPRINTF((" %d", psTrigger->offset));
+		debug( LOG_NEVER, " %d", psTrigger->offset );
 	}
 }
 
@@ -337,7 +336,8 @@ BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 {
 	if (type >= numFuncs)
 	{
-		debug(LOG_ERROR, "eventAddValueCreate: type out of range");
+		debug( LOG_ERROR, "eventAddValueCreate: type out of range" );
+		abort();
 		return FALSE;
 	}
 
@@ -351,8 +351,8 @@ BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 {
 	if (type >= numFuncs)
 	{
-		debug(LOG_ERROR, "eventAddValueRelease: type out of range");
-		DBERROR(("eventAddValueRelease: type out of range"));
+		debug( LOG_ERROR, "eventAddValueRelease: type out of range" );
+		abort();
 		return FALSE;
 	}
 
@@ -399,7 +399,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	//prepare local variables (initialize, store type)
 	//-------------------------------
-	psCode->ppsLocalVarVal = (INTERP_VAL **)MALLOC(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event 
+	psCode->ppsLocalVarVal = (INTERP_VAL **)MALLOC(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event
 
 	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
 
@@ -446,13 +446,13 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			}
 
 			//debug(LOG_SCRIPT,"------");
-			
+
 		}
 		else	//this event has no local vars
 		{
 			psCode->ppsLocalVarVal[i] = NULL;
 		}
-		
+
 	}
 
 	while (val >= 0)
@@ -878,7 +878,8 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 	// Get a trigger object
 	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
 	{
-		DBERROR(("eventLoadTrigger: out of memory"));
+		debug( LOG_ERROR, "eventLoadTrigger: out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -1401,10 +1402,10 @@ BOOL eventSetTraceLevel(void)
 //reset local vars
 BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 {
-	
+
 	SDWORD		i;
 
-	if(EventIndex >= psCode->numEvents) 
+	if(EventIndex >= psCode->numEvents)
 	{
 		if(psCode->psDebug != NULL)
 			debug(LOG_ERROR, "resetLocalVars: wrong event index: %d (Event name: %s, total events count = %d, stack depth = %d)", EventIndex, eventGetEventID(psCode, EventIndex), psCode->numEvents, GetCallDepth());
@@ -1433,7 +1434,7 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 		if (psCode->ppsLocalVarVal[EventIndex][i].type == ST_GROUP)
 		{
 			debug(LOG_SCRIPT, "resetLocalVars -  created");
-		
+
 			if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
 			{
 				debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");

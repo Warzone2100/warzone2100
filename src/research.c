@@ -152,7 +152,8 @@ BOOL researchInitVars(void)
 	asResearch = (RESEARCH *)MALLOC(sizeof(RESEARCH)* MAX_RESEARCH);
 	if (asResearch == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
@@ -164,7 +165,8 @@ BOOL researchInitVars(void)
 			sizeof(PLAYER_RESEARCH));
 		if (asPlayerResList[i] == NULL)
 		{
-			DBERROR(("Out of memory assigning Player_Research"));
+			debug( LOG_ERROR, "Out of memory assigning Player_Research" );
+			abort();
 			return FALSE;
 		}
 		memset(asPlayerResList[i], 0, (MAX_RESEARCH * sizeof(PLAYER_RESEARCH)));
@@ -178,7 +180,8 @@ BOOL researchInitVars(void)
     //pResearchPR = (UBYTE *) MALLOC(sizeof(UBYTE) * MAX_RESEARCH_PR);
 	if (pResearchPR == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     //needs to be UWORD sized for the Patches
@@ -188,7 +191,8 @@ BOOL researchInitVars(void)
     pResearchStructPR = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
 	if (pResearchStructPR == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
@@ -196,7 +200,8 @@ BOOL researchInitVars(void)
     pResearchFunc = (FUNCTION **) MALLOC(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
 	if (pResearchFunc == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
@@ -204,7 +209,8 @@ BOOL researchInitVars(void)
     pResearchStructRed = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
 	if (pResearchStructRed == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
@@ -212,7 +218,8 @@ BOOL researchInitVars(void)
     pResearchArteRed = (COMP_BASE_STATS **) MALLOC(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RED);
 	if (pResearchArteRed == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
@@ -220,7 +227,8 @@ BOOL researchInitVars(void)
     pResearchStructRes = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
 	if (pResearchStructRes == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
@@ -228,7 +236,8 @@ BOOL researchInitVars(void)
     pResearchArteRes = (COMP_BASE_STATS **) MALLOC(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRes == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
@@ -236,7 +245,8 @@ BOOL researchInitVars(void)
     pResearchArteRep = (COMP_BASE_STATS **) MALLOC(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRep == NULL)
 	{
-		DBERROR(("Research Stats - Out of memory"));
+		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
     memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
@@ -440,7 +450,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
         if (techCode > 1)
 		//if (pResearch->techCode != TC_MAJOR AND pResearch->techCode != TC_MINOR)
 		{
-			DBERROR(("Invalid tech code for research topic - %s ", getResearchName(pResearch)));
+			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
+			abort();
 			return FALSE;
 		}
         if (techCode == 0)
@@ -478,8 +489,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
             }
             else
             {
-                DBERROR(("Cannot find the structure Stat for Research %s",
-                    getResearchName(pResearch)));
+				debug( LOG_ERROR, "Cannot find the structure Stat for Research %s", getResearchName(pResearch) );
+				abort();
                 return FALSE;
             }
         }
@@ -493,8 +504,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 	        }
             else
             {
-                DBERROR(("Cannot find the component Stat for Research %s",
-                    getResearchName(pResearch)));
+				debug( LOG_ERROR, "Cannot find the component Stat for Research %s", getResearchName(pResearch) );
+				abort();
                 return FALSE;
             }
         }
@@ -507,7 +518,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			pResearch->pIMD = (iIMDShape *) resGetData("IMD", imdName);
 			if (pResearch->pIMD == NULL)
 			{
-				DBERROR(("Cannot find the research PIE for record %s", getResearchName(pResearch)));
+				debug( LOG_ERROR, "Cannot find the research PIE for record %s", getResearchName(pResearch) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -521,7 +533,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			pResearch->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
 			if (pResearch->pIMD2 == NULL)
 			{
-				DBERROR(("Cannot find the 2nd research PIE for record %s", getResearchName(pResearch)));
+				debug( LOG_ERROR, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -536,7 +549,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			//check its a major tech code
 			if (pResearch->techCode != TC_MAJOR)
 			{
-				DBERROR(("This research should not have a message associated with it, %s the message will be ignored!", getResearchName(pResearch)));
+				debug( LOG_ERROR, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(pResearch) );
+				abort();
 			}
 			else
 			{
@@ -556,7 +570,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED)
             {
-                DBERROR(("Out of memory assigning research artefacts - redundancies"));
+				debug( LOG_ERROR, "Out of memory assigning research artefacts - redundancies" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -577,7 +592,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchArteRed >= MAX_RESEARCH_ARTE_RES)
             {
-                DBERROR(("Out of memory assigning research artefacts - results"));
+				debug( LOG_ERROR, "Out of memory assigning research artefacts - results" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -599,7 +615,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchArteRep >= MAX_RESEARCH_ARTE_RES)
             {
-                DBERROR(("Out of memory assigning research artefacts - replacements"));
+				debug( LOG_ERROR, "Out of memory assigning research artefacts - replacements" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -621,7 +638,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchFunc >= MAX_RESEARCH_FUNC)
             {
-                DBERROR(("Out of memory assigning research functions"));
+				debug( LOG_ERROR, "Out of memory assigning research functions" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -643,7 +661,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchPR >= MAX_RESEARCH_PR)
             {
-                DBERROR(("Out of memory assigning research pre-requisities"));
+				debug( LOG_ERROR, "Out of memory assigning research pre-requisities" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -668,7 +687,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR)
             {
-                DBERROR(("Out of memory assigning research structures - requirements"));
+				debug( LOG_ERROR, "Out of memory assigning research structures - requirements" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -690,7 +710,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
             {
-                DBERROR(("Out of memory assigning research structures - redundancies"));
+				debug( LOG_ERROR, "Out of memory assigning research structures - redundancies" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -711,7 +732,8 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 			}*/
             if (numResearchStructRes >= MAX_RESEARCH_STRUCT_RES)
             {
-                DBERROR(("Out of memory assigning research structures - results"));
+				debug( LOG_ERROR, "Out of memory assigning research structures - results" );
+				abort();
                 return FALSE;
             }
             //don't MALLOC - get them from the pre-defined arrays
@@ -724,8 +746,9 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
         //set the researchPoints
         if (resPoints > UWORD_MAX)
         {
-			DBERROR(("Research Points too high for research topic - %s ",
-                getResearchName(pResearch)));
+			debug( LOG_ERROR, "Research Points too high for research topic - %s ",
+                getResearchName(pResearch) );
+			abort();
 			return FALSE;
         }
         pResearch->researchPoints = (UWORD)resPoints;
@@ -832,8 +855,8 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 						if ((pResearch[incR].storeCount + 1) >
 										(SDWORD)pResearch[incR].numPRRequired)
 						{
-							DBERROR(("Trying to allocate more pre-requisites than allowed for research %s",
-                                getResearchName(pResearch)));
+							debug( LOG_ERROR, "Trying to allocate more pre-requisites than allowed for research %s", getResearchName(pResearch) );
+							abort();
 							return FALSE;
 						}
 						//PRresearch found alloc this to the current Research
@@ -849,7 +872,8 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 				//if pre-requisite not found - error
 				if (!recFound)
 				{
-					DBERROR(("Unable to find Pre-requisite %s for research %s", PRName, ResearchName ));
+					debug( LOG_ERROR, "Unable to find Pre-requisite %s for research %s", PRName, ResearchName );
+					abort();
 					return FALSE;
 				}
 				else
@@ -861,7 +885,8 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 		//if Research not found - error
 		if (!recFound)
 		{
-			DBERROR(("Unable to find Research %s", ResearchName));
+			debug( LOG_ERROR, "Unable to find Research %s", ResearchName );
+			abort();
 			return FALSE;
 		}
         //quick check that haven't reached maxPR
@@ -967,7 +992,8 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 			maxArtefacts = pResearch->numArteResults;
 			break;
 		default:
-			DBERROR(("Unknown research list"));
+			debug( LOG_ERROR, "Unknown research list" );
+			abort();
 			return FALSE;
 		}
 		//deal with extra data
@@ -999,8 +1025,8 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 				//check the old and new types are the same
 				if (statType(pArtefact->ref) != newType)
 				{
-					DBERROR(("You are trying to replace one type of component with \
-						a different type for research %s in ResultComponents.txt", ResearchName));
+					debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
+					abort();
 					return FALSE;
 				}
 				//ArtefactResearch found - alloc the artefact to the current Research topic
@@ -1009,15 +1035,16 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 			}
 			break;
 		default:
-			DBERROR(("Unknown research list"));
+			debug( LOG_ERROR, "Unknown research list" );
+			abort();
 			return FALSE;
 		}
 
 		//check not allocating more than allowed
 		if (pResearch->storeCount > maxArtefacts)
 		{
-			DBERROR(("Trying to allocate more artefacts than allowed for research %s",
-                getResearchName(pResearch)));
+			debug( LOG_ERROR, "Trying to allocate more artefacts than allowed for research %s", getResearchName(pResearch) );
+			abort();
 			return FALSE;
 		}
 		pResearch->storeCount++;
@@ -1152,7 +1179,8 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 								break;
 							default:
 								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
-								DBERROR(("Unknown research list"));
+								debug( LOG_ERROR, "Unknown research list" );
+								abort();
 								return FALSE;
 						}
 						recFound = TRUE;
@@ -1160,7 +1188,8 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 						if (pResearch[incR].storeCount >
 										(SDWORD)numToFind)
 						{
-							DBERROR(("Trying to allocate more Structures than allowed for research %s",getResearchName(pResearch)));
+							debug( LOG_ERROR, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
+							abort();
 							return FALSE;
 						}
 						pResearch[incR].storeCount++;
@@ -1170,8 +1199,8 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 				//if Structure not found - error
 				if (!recFound)
 				{
-					DBERROR(("Unable to find Structure %s for research %s",
-						StructureName, ResearchName));
+					debug( LOG_ERROR, "Unable to find Structure %s for research %s", StructureName, ResearchName );
+					abort();
 					return FALSE;
 				}
 				else
@@ -1183,7 +1212,8 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 		//if Research not found - error
 		if (!recFound)
 		{
-			DBERROR(("Unable to allocate all Research Structures for %s", ResearchName));
+			debug( LOG_ERROR, "Unable to allocate all Research Structures for %s", ResearchName );
+			abort();
 			return FALSE;
 		}
 
@@ -1278,8 +1308,8 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 						if (pResearch[incR].storeCount >
 										(SDWORD)pResearch[incR].numFunctions)
 						{
-							DBERROR(("Trying to allocate more Functions than allowed \
-								for research %s", ResearchName));
+							debug( LOG_ERROR, "Trying to allocate more Functions than allowed for research %s", ResearchName );
+							abort();
 							return FALSE;
 						}
 						pResearch[incR].storeCount++;
@@ -1289,8 +1319,8 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 				//if Function not found - error
 				if (!recFound)
 				{
-					DBERROR(("Unable to find Function %s for research %s",
-						FunctionName, ResearchName));
+					debug( LOG_ERROR, "Unable to find Function %s for research %s", FunctionName, ResearchName );
+					abort();
 					return FALSE;
 				}
 				else
@@ -1302,7 +1332,8 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 		//if Research not found - error
 		if (!recFound)
 		{
-			DBERROR(("Unable to allocate all research Functions for %s", ResearchName));
+			debug( LOG_ERROR, "Unable to allocate all research Functions for %s", ResearchName );
+			abort();
 			return FALSE;
 		}
         //quick check that haven't reached maxPR
@@ -2279,7 +2310,7 @@ void CancelAllResearch(UDWORD pl)
 			 &&  ( ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject !=NULL )
 			   )
 			{
-				DBPRINTF(("canceling research for %p\n",psCurr));
+				debug( LOG_NEVER, "canceling research for %p\n", psCurr );
 				cancelResearch(psCurr);
 			}
 		}
@@ -2380,7 +2411,7 @@ static UWORD setIconIDFromHashedName(STRING *pIconName, UDWORD NameHash)
 
     //add more names as images are created
 //	ASSERT((FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName));
-	DBPRINTF(("Failed to matched research icon  %s #%d\n",pIconName,IconHash));
+	debug( LOG_NEVER, "Failed to matched research icon  %s #%d\n", pIconName, IconHash );
 
 	return 0;	// Should never get here.
 }
@@ -2717,7 +2748,8 @@ COMP_BASE_STATS * getComponentDetails(STRING *pName, STRING *pCompName)
 		default:
 		{
 			//COMP_UNKNOWN should be an error
-			DBERROR(("Unknown artefact type  - %s",pName));
+			debug( LOG_ERROR, "Unknown artefact type  - %s", pName );
+			abort();
 			return FALSE;
 		}
 	}
@@ -2741,7 +2773,8 @@ COMP_BASE_STATS * getComponentDetails(STRING *pName, STRING *pCompName)
 		pArtefact = (COMP_BASE_STATS*)address;
 	}
 
-	DBERROR(("Cannot find component %s",pCompName));
+	debug( LOG_ERROR, "Cannot find component %s", pCompName );
+	abort();
 	return NULL;
 }
 
@@ -2895,7 +2928,8 @@ void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pOldCompo
 				break;
 			default:
 				//unknown comp type
-				DBERROR(("Unknown component type - invalid Template"));
+				debug( LOG_ERROR, "Unknown component type - invalid Template" );
+				abort();
 				return;
 		}
 	}
@@ -3440,7 +3474,8 @@ void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 			break;
 		default:
 			//unknown comp type
-			DBERROR(("Unknown component type - invalid droid"));
+			debug( LOG_ERROR, "Unknown component type - invalid droid" );
+			abort();
 			return;
 	}
 }

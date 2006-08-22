@@ -273,7 +273,8 @@ TITLECODE titleLoop(void)
 			break;
 
 		default:
-			DBERROR(("unknown title screen mode "));
+			debug( LOG_ERROR, "unknown title screen mode" );
+			abort();
 	}
 
 	audio_Update();
@@ -314,7 +315,7 @@ void loadingScreenCallback(void)
 	if ((currTick - lastTick) > 500)
 	{
 		currTick -= lastTick;
-		DBPRINTF(("loadingScreenCallback: pause %d\n", currTick));
+		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
 	}
 	lastTick = GetTickCount();
 	pie_GlobalRenderBegin();

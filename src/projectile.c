@@ -648,7 +648,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	if ( worldOnMap( iX, iY ) == FALSE )
 	{
 	  	psObj->state = PROJ_IMPACT;
-		DBPRINTF( ("**** projectile off map - removed ****\n") );
+		debug( LOG_NEVER, "**** projectile off map - removed ****\n" );
 		return;
 	}
 	else
@@ -793,7 +793,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	if ( worldOnMap( iX, iY ) == FALSE )
 	{
 	  	psObj->state = PROJ_IMPACT;
-		DBPRINTF( ("**** projectile off map - removed ****\n") );
+		debug( LOG_NEVER, "**** projectile off map - removed ****\n" );
 		return;
 	}
 	else
@@ -1301,7 +1301,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		if ( hashTable_RemoveElement( g_pProjObjTable, psObj,
 										(int) psObj, UNUSED_KEY ) == FALSE )
 		{
-			DBPRINTF( ("proj_ImpactFunc: couldn't remove projectile from table\n") );
+			debug( LOG_NEVER, "proj_ImpactFunc: couldn't remove projectile from table\n" );
 		}
 		return;
 	}
@@ -1543,7 +1543,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 		if ( hashTable_RemoveElement( g_pProjObjTable, psObj,
 									(int) psObj, UNUSED_KEY ) == FALSE )
 		{
-			DBPRINTF( ("proj_PostImpactFunc: couldn't remove projectile from table\n") );
+			debug( LOG_NEVER, "proj_PostImpactFunc: couldn't remove projectile from table\n" );
 		}
 		return;
 	}
@@ -1868,7 +1868,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 		damage1 = baseDamage * Mod / 100;
 
 
-		DBPRINTF(("damage1=%d damage=%d baseDamage=%d mod=%d (weaponEffect=%d proptype=%d) \n",damage1,damage,baseDamage,Mod,weaponEffect,PropType);
+		debug( LOG_NEVER, "damage1=%d damage=%d baseDamage=%d mod=%d (weaponEffect=%d proptype=%d) \n", damage1, damage, baseDamage, Mod, weaponEffect, PropType );
 	}
 #endif
 
@@ -1935,7 +1935,8 @@ STRUCTURE	*psStructure;
 			return(TRUE);
 		break;
 	default:
-		DBERROR(("Weird object type in justBeenHitByEW"));
+		debug( LOG_ERROR, "Weird object type in justBeenHitByEW" );
+		abort();
 		break;
 	}
 

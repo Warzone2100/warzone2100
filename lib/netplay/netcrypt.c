@@ -195,7 +195,8 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 
 	if(msg->size > MaxMsgSize-NIBBLELENGTH)
 	{
-		DBERROR(("NETmanglePacket: can't encrypt huge packets. returning unencrypted packet"));
+		debug( LOG_ERROR, "NETmanglePacket: can't encrypt huge packets. returning unencrypted packet" );
+		abort();
 		return msg;
 	}
 
@@ -234,7 +235,8 @@ VOID NETunmanglePacket(NETMSG *msg)
 
 	if(msg->size%NIBBLELENGTH !=0)
 	{
-		DBERROR(("NETunmanglePacket: Incoming msg wrong length"));
+		debug( LOG_ERROR, "NETunmanglePacket: Incoming msg wrong length" );
+		abort();
 		NETlogEntry("NETunmanglePacket failure",msg->type,msg->size);
 		return;
 	}
@@ -266,7 +268,8 @@ BOOL NETmangleData(long *input,long *result, UDWORD dataSize)
 
 	if(dataSize%8 != 0)		//if message not multiple of 8 bytes,
 	{
-		DBERROR(("NETmangleData: msg not a multiple of 8 bytes"));
+		debug( LOG_ERROR, "NETmangleData: msg not a multiple of 8 bytes" );
+		abort();
 		return FALSE;
 	}
 
@@ -290,7 +293,8 @@ BOOL NETunmangleData(long *input, long *result, UDWORD dataSize)
 
 	if(dataSize%8 != 0)		//if message not multiple of 8 bytes,
 	{
-		DBERROR(("NETunmangleData: msg not a multiple of 8 bytes"));
+		debug( LOG_ERROR, "NETunmangleData: msg not a multiple of 8 bytes" );
+		abort();
 		return FALSE;
 	}
 

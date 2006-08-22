@@ -186,7 +186,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
 
-		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
+		debug( LOG_NEVER, "rayTerrainCallback: dist == 0, will divide by zero\n" );
 
 		dist = 1;
 	}

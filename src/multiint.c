@@ -219,11 +219,11 @@ void loadMapPreview(void)
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
-		DBPRINTF(("loadgame: Fail5\n"));
+		debug( LOG_NEVER, "loadgame: Fail5\n" );
 	}
 	if (!mapLoad(pFileData, fileSize))
 	{
-		DBPRINTF(("loadgame: Fail7\n"));
+		debug( LOG_NEVER, "loadgame: Fail7\n" );
 		return;
 	}
 	gwShutDown();
@@ -3031,7 +3031,7 @@ VOID runForceSelect(VOID)
 		{
 			if(strlen(sRequestResult))
 			{
-				DBPRINTF(("Returned %s",sRequestResult));
+				debug( LOG_NEVER, "Returned %s", sRequestResult );
 				if(bRequestLoad)
 				{
 					loadForce(sRequestResult);
@@ -3181,7 +3181,7 @@ BOOL startForceSelect(VOID)
 	strcpy(dir,"multiplay/forces/default.for");		// start with default force.
 	if(!loadForce(dir))
 	{
-		DBPRINTF(("Error Loading Force"));
+		debug( LOG_NEVER, "Error Loading Force" );
 	}
 
 	addBackdrop();

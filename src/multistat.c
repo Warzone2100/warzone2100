@@ -275,7 +275,7 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 		{
 			ASSERT((FALSE, "UseTheForce: Unable to find a free location"));
 		}
-		DBPRINTF(("force droid dropping at :%d,%d\n",x,y));
+		debug( LOG_NEVER, "force droid dropping at :%d,%d\n", x, y );
 
 		// copy template
 		psTempl = NameToTemplate(Force.pMembers->pTempl->aName,selectedPlayer);
@@ -382,7 +382,8 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	{
 		if (fwrite(pT, sizeof(DROID_TEMPLATE), 1, pFileHandle) != 1)	// template
 		{
-			DBERROR(("Write failed for %s", fileName));
+			debug( LOG_ERROR, "Write failed for %s", fileName );
+			abort();
 			return FALSE;
 		}
 		fputc(10,pFileHandle);											//seperator.
@@ -393,7 +394,8 @@ BOOL saveForce(char *name,FORCE *pfForce)
 	{
 		if (fwrite(&(pMember->pTempl->ref) ,sizeof(pMember->pTempl->ref), 1, pFileHandle) != 1)
 		{
-			DBERROR(("Write failed for %s", fileName));					// force type
+			debug( LOG_ERROR, "Write failed for %s", fileName );		// force type
+			abort();
 			return FALSE;
 		}
 	}
@@ -466,14 +468,16 @@ BOOL loadForce(char *name)
 	for(tcount;tcount!=0;tcount--)											// get templates
 	{
 		psTempl = MALLOC(sizeof(DROID_TEMPLATE));
-		if (psTempl == NULL)	//!HEAP_ALLOC(psTemplateHeap, &psTempl))
+		if (psTempl == NULL)	// !HEAP_ALLOC(psTemplateHeap, &psTempl))
 		{
-			DBERROR(("Couldn't allocate template for %s", fileName));
+			debug( LOG_ERROR, "Couldn't allocate template for %s", fileName );
+			abort();
 			return FALSE;
 		}
 		if (fread(psTempl, sizeof(DROID_TEMPLATE), 1, pFileHandle) != 1)	// read in a template.
 		{
-			DBERROR(("read failed for %s", fileName));
+			debug( LOG_ERROR, "read failed for %s", fileName );
+			abort();
 			fclose(pFileHandle);
 			return FALSE;
 		}
@@ -486,7 +490,8 @@ BOOL loadForce(char *name)
 	{
 		if (fread(&ref, sizeof(ref), 1, pFileHandle) != 1)					// read in a template ref code.
 		{
-			DBERROR(("read failed for %s", fileName));
+			debug( LOG_ERROR, "read failed for %s", fileName );
+			abort();
 			fclose(pFileHandle);
 			return FALSE;
 		}
@@ -497,7 +502,8 @@ BOOL loadForce(char *name)
 
 		if(!psTempl)
 		{
-			DBERROR(("failed to load. invalid file."));
+			debug( LOG_ERROR, "failed to load. invalid file." );
+			abort();
 			fclose(pFileHandle);
 			return FALSE;
 		}

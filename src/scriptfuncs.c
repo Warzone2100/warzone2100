@@ -882,7 +882,7 @@ BOOL scrAddDroidToMissionList(void)
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
-		DBPRINTF(("scrAddUnit : Max units reached ,player %d\n",player));
+		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
 #endif
@@ -934,7 +934,7 @@ BOOL scrAddDroid(void)
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
-		DBPRINTF(("scrAddUnit : Max units reached ,player %d\n",player));
+		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
 #endif
@@ -1175,7 +1175,7 @@ BOOL scrNumMB(void)
 /*	gameTimeStop();
 	DBERROR(("scrNumMB: called by script with value: %d", val));
 	gameTimeStart();*/
-	DBPRINTF(("scrNumMB: called by script with value: %d\n", val));
+	debug( LOG_NEVER, "scrNumMB: called by script with value: %d\n", val );
 
 	return TRUE;
 }
@@ -1687,7 +1687,7 @@ BOOL scrGetFeature(void)
 	// check to see if badly called
 	if(psFeatureStatToFind[bucket] == NULL)
 	{
-		DBPRINTF(("invalid feature to find. possibly due to save game\n"));
+		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
 		if(!stackPushResult((INTERP_TYPE)ST_FEATURE,(SDWORD)NULL))
 		{
 			ASSERT((FALSE, "scrGetFeature: Failed to push result"));
@@ -3527,7 +3527,8 @@ BOOL scrStartMission(void)
 	// find the level dataset
 	if (!levFindDataSet(pGame, &psNewLevel))
 	{
-		DBERROR(("scrStartMission: couldn't find level data"));
+		debug( LOG_ERROR, "scrStartMission: couldn't find level data" );
+		abort();
 		return FALSE;
 	}
 
@@ -3784,7 +3785,7 @@ BOOL scrRefTest(void)
 		return FALSE;
 	}
 
-	DBPRINTF(("scrRefTest: num: %d \n", Num));
+	debug( LOG_NEVER, "scrRefTest: num: %d \n", Num );
 
 	return TRUE;
 }
@@ -5640,11 +5641,11 @@ BOOL scrGetGameStatus(void)
 
 			if (result==TRUE)
 			{
-				DBPRINTF(("battle map active"));
+				debug( LOG_NEVER, "battle map active" );
 			}
 			else
 			{
-				DBPRINTF(("battle map notactive"));
+				debug( LOG_NEVER, "battle map notactive" );
 			}
 
 
@@ -5929,7 +5930,7 @@ BOOL scrTakeOverSingleStructure(void)
     if (playerToGain == (SDWORD)selectedPlayer AND StructIsFactory(psStructToTake) AND
         asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
     {
-        DBPRINTF(("scrTakeOverSingleStructure - factory ignored for selectedPlayer\n"));
+		debug( LOG_NEVER, "scrTakeOverSingleStructure - factory ignored for selectedPlayer\n" );
         psNewStruct = NULL;
     }
     else
@@ -6017,7 +6018,7 @@ BOOL scrTakeOverStructsInArea(void)
             if (toPlayer == (SDWORD)selectedPlayer AND StructIsFactory(psStruct) AND
                 asStructLimits[toPlayer][structureInc].currentQuantity >= MAX_FACTORY)
             {
-                DBPRINTF(("scrTakeOverStructsInArea - factory ignored for selectedPlayer\n"));
+				debug( LOG_NEVER, "scrTakeOverStructsInArea - factory ignored for selectedPlayer\n" );
             }
             else
             {
@@ -6302,7 +6303,8 @@ BOOL scrTutorialTemplates(void)
 	strcpy(pName,"ViperLtMGWheels");
 	if (!getResourceName(pName))
 	{
-		DBERROR(("tutorial template setup failed"));
+		debug( LOG_ERROR, "tutorial template setup failed" );
+		abort();
 		return FALSE;
 	}
 
@@ -6336,7 +6338,8 @@ BOOL scrTutorialTemplates(void)
 	}
 	else
 	{
-		DBERROR(("tutorial template setup failed"));
+		debug( LOG_ERROR, "tutorial template setup failed" );
+		abort();
 		return FALSE;
 	}
 	return TRUE;

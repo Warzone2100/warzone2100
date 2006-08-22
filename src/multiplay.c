@@ -143,7 +143,7 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 	{
 		if(bTemp == TRUE)
 		{
-			DBPRINTF(("\nturnoffmultimsg: multiple calls to turn off msging. \n"));
+			debug( LOG_NEVER, "\nturnoffmultimsg: multiple calls to turn off msging.\n" );
 		}
 		if(bMultiPlayer)
 		{
@@ -400,7 +400,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	else
 	{
 		// REALLY DANGEROUS!!! ID's are NOT assumed to be unique for TEMPLATES.
-		DBPRINTF(("Really Dodgy Check performed for a template"));
+		debug( LOG_NEVER, "Really Dodgy Check performed for a template" );
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 			for (psTempl = apsDroidTemplates[i];			// follow templates
@@ -558,7 +558,7 @@ UDWORD  whosResponsible(UDWORD player)
 	}
 	if(c == ANYPLAYER)
 	{
-		DBPRINTF(("failed to find a player for %d \n",player));
+		debug( LOG_NEVER, "failed to find a player for %d \n", player );
 	}
 	return c;
 }
@@ -1311,12 +1311,12 @@ BOOL recvTextMessage(NETMSG *pMsg)
 BOOL recvTextMessageAI(NETMSG *pMsg)
 {
 	SDWORD	sender, receiver;
-	
+
 	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
 
 	NetGet(pMsg,0,sender);
 	NetGet(pMsg,4,receiver);
-	
+
 	strcpy(msg, &(pMsg->body[8]));
 	strcat(msg,NetPlay.players[sender].name);		// name
 
@@ -1346,7 +1346,9 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	if(pTempl == NULL)
 	{
 #ifdef DEBUG
-		DBERROR(("sendTemplate: TELL ALEXL NOW!!!THIS IS THE BUG THAT ISNT FIXED!!!"));
+		// FIXME sendTemplate: TELL ALEXL NOW!!!THIS IS THE BUG THAT ISNT FIXED!!!
+		debug( LOG_ERROR, "sendTemplate: TELL ALEXL NOW!!!THIS IS THE BUG THAT ISNT FIXED!!!" );
+		abort();
 #endif
 		return TRUE;
 	}
@@ -1372,7 +1374,9 @@ BOOL recvTemplate(NETMSG * m)
 	if(m->size < sizeof(DROID_TEMPLATE))
 	{
 #ifdef DEBUG
-		DBERROR(("recvTemplate: invalid template recvd. THIS IS THE BUG THAT ISNT FIXED!!!"));
+		// FIXME recvTemplate: invalid template recvd. THIS IS THE BUG THAT ISNT FIXED!!!
+		debug( LOG_ERROR, "recvTemplate: invalid template recvd. THIS IS THE BUG THAT ISNT FIXED!!!" );
+		abort();
 #endif
 		return TRUE;
 	}
@@ -1747,7 +1751,7 @@ BOOL msgStackGetFrom(SDWORD  *psVal)
 	}
 
 	*psVal = msgPlFrom[0];
-	
+
 	return TRUE;
 }
 
@@ -1760,7 +1764,7 @@ BOOL msgStackGetTo(SDWORD  *psVal)
 	}
 
 	*psVal = msgPlTo[0];
-	
+
 	return TRUE;
 }
 
@@ -1773,7 +1777,7 @@ BOOL msgStackGetCallbackType(SDWORD  *psVal)
 	}
 
 	*psVal = callbackType[0];
-	
+
 	return TRUE;
 }
 
@@ -1787,7 +1791,7 @@ BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 
 	*psValx = locx[0];
 	*psValy = locy[0];
-	
+
 	return TRUE;
 }
 
@@ -1802,7 +1806,7 @@ BOOL msgStackGetMsg(STRING  *psVal)
 
 	strcpy(psVal, msgStr[0]);
 	//*psVal = msgPlTo[msgStackPos];
-	
+
 	return TRUE;
 }
 
@@ -1914,6 +1918,6 @@ BOOL msgStackFireTop()
 
 	if(!msgStackPop())
 		return FALSE;
-	
+
 	return TRUE;
 }

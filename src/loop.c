@@ -560,7 +560,7 @@ GAMECODE gameLoop(void)
 			{
 				if(strlen(sRequestResult))
 				{
-					DBPRINTF(("Returned %s",sRequestResult));
+					debug( LOG_NEVER, "Returned %s", sRequestResult );
 					if(bRequestLoad)
 					{
 						loopMissionState = LMS_LOADGAME;

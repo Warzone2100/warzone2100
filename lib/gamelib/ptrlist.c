@@ -161,7 +161,7 @@ ptrList_FreeElement( PTRLIST *ptrList, void *psElement )
 
 	if ( HEAP_FREE( ptrList->psElementHeap, psElement ) == FALSE )
 	{
-		DBPRINTF( ("ptrList_FreeElement: couldn't free element\n") );
+		debug( LOG_NEVER, "ptrList_FreeElement: couldn't free element\n" );
 	}
 }
 

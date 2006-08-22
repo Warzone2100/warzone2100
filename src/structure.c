@@ -550,8 +550,9 @@ void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 					GfxFile);
 				if (factoryModuleIMDs[module-1][0] == NULL)
 				{
-					DBERROR(("Cannot find the PIE for factory module %d - %s",
-							module, GfxFile));
+					debug( LOG_ERROR, "Cannot find the PIE for factory module %d - %s",
+							module, GfxFile );
+					abort();
 					return;// FALSE;
 				}
 			}
@@ -569,8 +570,8 @@ void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 					GfxFile);
 				if (factoryModuleIMDs[module-1][1] == NULL)
 				{
-					DBERROR(("Cannot find the PIE for vtol factory module %d - %s",
-							module, GfxFile));
+					debug( LOG_ERROR, "Cannot find the PIE for vtol factory module %d - %s", module, GfxFile );
+					abort();
 					return;// FALSE;
 				}
 			}
@@ -589,8 +590,8 @@ void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 					"IMD", GfxFile);
 				if (researchModuleIMDs[module-1] == NULL)
 				{
-					DBERROR(("Cannot find the PIE for research module %d - %s",
-							module, GfxFile));
+					debug( LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile );
+					abort();
 					return FALSE;
 				}
 			}
@@ -605,7 +606,8 @@ void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 			researchModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
 			if (researchModuleIMDs[0] == NULL)
 			{
-				DBERROR(("Cannot find the PIE for research module %d - %s", module, GfxFile));
+				debug( LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile );
+				abort();
 				return;// FALSE;
 			}
 
@@ -631,8 +633,8 @@ void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 					"IMD", GfxFile);
 				if (powerModuleIMDs[module-1] == NULL)
 				{
-					DBERROR(("Cannot find the PIE for power module %d - %s",
-							module, GfxFile));
+					debug( LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile );
+					abort();
 					return FALSE;
 				}
 			}
@@ -646,7 +648,8 @@ void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 			powerModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
 			if (powerModuleIMDs[0] == NULL)
 			{
-				DBERROR(("Cannot find the PIE for power module %d - %s", module, GfxFile));
+				debug( LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile );
+				abort();
 				return;// FALSE;
 			}
 
@@ -672,7 +675,8 @@ void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
 			factoryModuleIMDs[0][0] = (iIMDShape*) resGetData("IMD", GfxFile);
 			if (factoryModuleIMDs[0][0] == NULL)
 			{
-				DBERROR(("Cannot find the PIE for factory module %d - %s",module, GfxFile));
+				debug( LOG_ERROR, "Cannot find the PIE for factory module %d - %s",module, GfxFile );
+				abort();
 				return FALSE;
 			}
 			for (module = 1; module < NUM_FACTORY_MODULES; module++)
@@ -687,7 +691,8 @@ void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
  			factoryModuleIMDs[0][1] = (iIMDShape*) resGetData("IMD", GfxFile);
 			if (factoryModuleIMDs[0][1] == NULL)
 			{
-				DBERROR(("Cannot find the PIE for vtol factory module %d - %s", module, GfxFile));
+				debug( LOG_ERROR, "Cannot find the PIE for vtol factory module %d - %s", module, GfxFile );
+				abort();
 				return FALSE;
 			}
 			for (module = 1; module < NUM_FACTORY_MODULES; module++)
@@ -704,7 +709,8 @@ void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
 			researchModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
 			if (researchModuleIMDs[0] == NULL)
 			{
-				DBERROR(("Cannot find the PIE for research module %d - %s", module, GfxFile));
+				debug( LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile );
+				abort();
 				return FALSE;
 			}
 
@@ -724,7 +730,8 @@ void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
 			powerModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
 			if (powerModuleIMDs[0] == NULL)
 			{
-				DBERROR(("Cannot find the PIE for power module %d - %s", module, GfxFile));
+				debug( LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile );
+				abort();
 				return FALSE;
 			}
 
@@ -799,7 +806,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 
 	if (asStructureStats == NULL)
 	{
-		DBERROR(("Structure Stats - Out of memory"));
+		debug( LOG_ERROR, "Structure Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -890,8 +898,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 		psStructure->strength = getStructStrength(strength);
 		if (psStructure->strength == INVALID_STRENGTH)
 		{
-			DBERROR(("loadStructureStats: Unknown structure strength for %s",
-				getStatName(psStructure)));	//->pName));
+			debug( LOG_ERROR, "loadStructureStats: Unknown structure strength for %s", getStatName(psStructure) );	//->pName));
+			abort();
 			return FALSE;
 		}
 
@@ -961,8 +969,9 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			//if (psStructure->pSensor->location == LOC_TURRET AND psStructure->numWeaps)
             if (psStructure->pSensor->location == LOC_TURRET AND numWeaps)
 			{
-				DBERROR(("loadStructureStats: a Turret Sensor and weapon \
-					have been assigned to %s", StructureName));
+				debug( LOG_ERROR, "loadStructureStats: a Turret Sensor and weapon \
+					have been assigned to %s", StructureName );
+				abort();
 			}
 		}
 
@@ -970,7 +979,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 		psStructure->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
 		if (psStructure->pIMD == NULL)
 		{
-			DBERROR(("Cannot find the structure PIE for record %s", getStructName(psStructure) ));
+			debug( LOG_ERROR, "Cannot find the structure PIE for record %s", getStructName(psStructure) );
+			abort();
 			return FALSE;
 		}
 
@@ -979,7 +989,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			psStructure->pBaseIMD = (iIMDShape *) resGetData("IMD", baseIMD);
 			if (psStructure->pIMD == NULL)
 			{
-				DBERROR(("Cannot find the structure base PIE for record %s", getStructName(psStructure) ));
+				debug( LOG_ERROR, "Cannot find the structure base PIE for record %s", getStructName(psStructure) );
+				abort();
 				return FALSE;
 			}
 		}
@@ -1002,7 +1013,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
         if (weapSlots > STRUCT_MAXWEAPS OR numWeaps > weapSlots)
 		{
 			//DBERROR(("Allocated more weapons than allowed in Access DB for Structure"));
-            DBERROR(("Allocated more weapons than allowed for Structure"));
+			debug( LOG_ERROR, "Allocated more weapons than allowed for Structure" );
+			abort();
 			return FALSE;
 		}
         //Don't need to allocate space since thereis only one possible pointer now! AB 24/01/99
@@ -1027,7 +1039,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 				sizeof(FUNCTION*));
 			if (psStructure->asFuncList == NULL)
 			{
-				DBERROR(("Out of memory assigning structure Functions"));
+				debug( LOG_ERROR, "Out of memory assigning structure Functions" );
+				abort();
 				return FALSE;
 			}
 		}
@@ -1054,7 +1067,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 	//if ( iID == -1 )
 	if (iID > numStructureStats)
 	{
-		DBERROR( ("intAddObjectStats: destroy structure stat not found\n") );
+		debug( LOG_ERROR, "intAddObjectStats: destroy structure stat not found\n" );
+		abort();
 	}
 	g_psStatDestroyStruct = asStructureStats + iID;
 
@@ -1073,7 +1087,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			numStructureStats);
 		if (asStructLimits[player] == NULL)
 		{
-			DBERROR(("Unable to allocate structure limits"));
+			debug( LOG_ERROR, "Unable to allocate structure limits" );
+			abort();
 			return FALSE;
 		}
 	}
@@ -1237,7 +1252,8 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
                         //see if we have already allocated one
                         if (pStructure[incS].psWeapStat != NULL)
 						{
-							DBERROR(("Trying to allocate more weapons than allowed for Structure"));
+							debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Structure" );
+							abort();
 							return FALSE;
 						}
                         pStructure[incS].psWeapStat = &pWeapon[incW];
@@ -1247,8 +1263,8 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 				//if weapon not found - error
 				if (!weaponFound)
 				{
-					DBERROR(("Unable to find stats for weapon %s for structure %s",
-						WeaponName, StructureName));
+					debug( LOG_ERROR, "Unable to find stats for weapon %s for structure %s", WeaponName, StructureName );
+					abort();
 					return FALSE;
 				}
 			}
@@ -1256,7 +1272,8 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 		//if structure not found - error
 		if (!structureFound)
 		{
-			DBERROR(("Unable to find stats for structure %s", StructureName));
+			debug( LOG_ERROR, "Unable to find stats for structure %s", StructureName );
+			abort();
 			return FALSE;
 		}
 		//increment the pointer to the start of the next record
@@ -1333,7 +1350,8 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 						if (pStructure[incS].defaultFunc >
 										(SDWORD)pStructure[incS].numFuncs)
 						{
-							DBERROR(("Trying to allocate more functions than allowed for Structure"));
+							debug( LOG_ERROR, "Trying to allocate more functions than allowed for Structure" );
+							abort();
 							return FALSE;
 						}
 						pStructure[incS].asFuncList[pStructure[incS].defaultFunc] =
@@ -1345,8 +1363,8 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 				//if function not found - error
 				if (!functionFound)
 				{
-					DBERROR(("Unable to find stats for function %s for structure %s",
-						FunctionName, StructureName));
+					debug( LOG_ERROR, "Unable to find stats for function %s for structure %s", FunctionName, StructureName );
+					abort();
 					return FALSE;
 				}
 			}
@@ -1354,7 +1372,8 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 		//if structure not found - error
 		if (!structureFound)
 		{
-			DBERROR(("Unable to find stats for structure %s", StructureName));
+			debug( LOG_ERROR, "Unable to find stats for structure %s", StructureName );
+			abort();
 			return FALSE;
 		}
 		//increment the pointer to the start of the next record
@@ -1392,10 +1411,11 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 			if (!((WALL_FUNCTION *)pFunction)->pCornerStat)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("Unknown Corner Wall stat for function %x", pFunction->NameHash));
+				debug( LOG_ERROR, "Unknown Corner Wall stat for function %x", pFunction->NameHash );
 #else
-				DBERROR(("Unknown Corner Wall stat for function %s", pFunction->pName));
+				debug( LOG_ERROR, "Unknown Corner Wall stat for function %s", pFunction->pName );
 #endif
+				abort();
 				return FALSE;
 			}
 		}
@@ -1436,23 +1456,23 @@ BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD bufferSize)
 		effectInc = getWeaponEffect(weaponEffectName);
 		if (effectInc == INVALID_WEAPON_EFFECT)
 		{
-			DBERROR(("loadStructureStrengthModifiers: Invalid Weapon Effect - %s",
-				weaponEffectName));
+			debug( LOG_ERROR, "loadStructureStrengthModifiers: Invalid Weapon Effect - %s", weaponEffectName );
+			abort();
 			return FALSE;
 		}
 		//get the propulsion inc
 		strengthInc = getStructStrength(strengthName);
 		if (strengthInc == INVALID_STRENGTH)
 		{
-			DBERROR(("loadStructureStrengthModifiers: Invalid Strength type - %s",
-				strengthName));
+			debug( LOG_ERROR, "loadStructureStrengthModifiers: Invalid Strength type - %s", strengthName );
+			abort();
 			return FALSE;
 		}
 
 		if (modifier > UWORD_MAX)
 		{
-			DBERROR(("loadStructureStrengthModifiers: modifier for effect %s, strength %s is too large",
-				weaponEffectName, strengthName));
+			debug( LOG_ERROR, "loadStructureStrengthModifiers: modifier for effect %s, strength %s is too large", weaponEffectName, strengthName );
+			abort();
 			return FALSE;
 		}
 		//store in the appropriate index
@@ -2470,8 +2490,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 		psBuilding = getTileStructure(x>>TILE_SHIFT, y>>TILE_SHIFT);
 		if (psBuilding == NULL)
 		{
-			//DBERROR(("No owning structure for this module - %s", pStructureType->pName));
-			DBERROR(("No owning structure for this module - %s", getStructName(pStructureType)));
+			//debug( LOG_ERROR, "No owning structure for this module - %s", pStructureType->pName );
+			debug( LOG_ERROR, "No owning structure for this module - %s", getStructName(pStructureType) );
+			abort();
 			return FALSE;
 		}
 		if (pStructureType->type == REF_FACTORY_MODULE)
@@ -2749,23 +2770,26 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %x",	psBuilding));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %x", psBuilding );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			//allocate the necessary space
 			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(FACTORY));
 			if (psBuilding->pFunctionality == NULL)
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}*/
 			//allocate the necessary space
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}
 
@@ -2868,23 +2892,26 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",	strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			//allocate the necessary space
 			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(RESEARCH_FACILITY));
 			if (psBuilding->pFunctionality == NULL)
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}*/
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}
 			//initialise the memory
@@ -2935,10 +2962,11 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",	strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			//allocate the necessary space
@@ -2951,7 +2979,8 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}
 
@@ -2974,10 +3003,11 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",	strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			//allocate the necessary space
@@ -2990,7 +3020,8 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}
 			//initialise the memory
@@ -3015,10 +3046,11 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",	strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			//this function is called once the structure has been built
@@ -3031,10 +3063,11 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",	strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			break;
@@ -3045,10 +3078,11 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",	strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",	getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 
@@ -3056,13 +3090,15 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(REPAIR_FACILITY));
 			if (psBuilding->pFunctionality == NULL)
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}*/
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}
 			//initialise the memory
@@ -3075,7 +3111,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 
 			if ( !grpCreate(&((REPAIR_FACILITY *) psBuilding->pFunctionality)->psGroup) )
 			{
-				DBPRINTF( ("setFunctionality: couldn't create repair facility group") );
+				debug( LOG_NEVER, "setFunctionality: couldn't create repair facility group" );
 			}
 			else
 			{
@@ -3108,18 +3144,18 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
 #ifdef HASH_NAMES
-				DBERROR(("There must be a function assigned to this building - %s",
-					strresGetString(NULL,psBuilding->pStructureType->NameHash) ));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
 #else
-				DBERROR(("There must be a function assigned to this building - %s",
-					getName(psBuilding->pStructureType->pName)));
+				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
 #endif
+				abort();
 				return FALSE;
 			}
 			//try and create the Structure
 			if (!createStructFunc(&psBuilding->pFunctionality))
 			{
-				DBERROR(("Out of memory"));
+				debug( LOG_ERROR, "Out of memory" );
+				abort();
 				return FALSE;
 			}
 			//initialise the memory
@@ -4636,7 +4672,7 @@ void aiUpdateStructure(STRUCTURE *psStructure)
 
 				if ( psDroid->body >= psDroid->originalBody )
 				{
-					DBPRINTF( ("aiUpdateStructure: repair completed\n") );
+					debug( LOG_NEVER, "aiUpdateStructure: repair completed\n" );
 
 					psRepairFac->psObj = NULL;
 
@@ -7180,7 +7216,8 @@ STRUCTURE_STATS * structGetDemolishStat( void )
 {
 	if ( g_psStatDestroyStruct == NULL )
 	{
-		DBERROR( ("structGetDemolishStat: stat not initialised1\n") );
+		debug( LOG_ERROR, "structGetDemolishStat: stat not initialised1\n" );
+		abort();
 	}
 
 	return g_psStatDestroyStruct;

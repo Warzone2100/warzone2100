@@ -77,13 +77,15 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 	*ppsTreap = (TREAP*)MALLOC(sizeof(TREAP));
 	if (!(*ppsTreap))
 	{
-		DBERROR(("treapCreate: Out of memory"));
+		debug( LOG_ERROR, "treapCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
 
 	if (!HEAP_CREATE(&((*ppsTreap)->psNodes), sizeof(TREAP_NODE), init, ext))
 	{
-		DBERROR(("treapCreate: Out of memory"));
+		debug( LOG_ERROR, "treapCreate: Out of memory" );
+		abort();
 		FREE(*ppsTreap);
 		return FALSE;
 	}
@@ -147,7 +149,7 @@ void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
 	{
 		// Node less than root, insert to the left of the tree
 		treapAddNode(&(*ppsRoot)->psLeft, psNew, cmp);
-		
+
 		// Sort the priority
 		if ((*ppsRoot)->priority > (*ppsRoot)->psLeft->priority)
 		{
@@ -159,7 +161,7 @@ void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
 	{
 		// Node greater than root, insert to the right of the tree
 		treapAddNode(&(*ppsRoot)->psRight, psNew, cmp);
-		
+
 		// Sort the priority
 		if ((*ppsRoot)->priority > (*ppsRoot)->psRight->priority)
 		{
@@ -330,7 +332,7 @@ static void treapReportRec(TREAP_NODE *psRoot)
 {
 	if (psRoot)
 	{
-		DBPRINTF(("   %s, line %d\n", psRoot->pFile, psRoot->line));
+		debug( LOG_NEVER, (("   %s, line %d\n", psRoot->pFile, psRoot->line );
 		treapReportRec(psRoot->psLeft);
 		treapReportRec(psRoot->psRight);
 	}
@@ -369,8 +371,7 @@ void treapDestroy(TREAP *psTreap)
 #if DEBUG_TREAP
 	if (psTreap->psRoot)
 	{
-		DBPRINTF(("treapDestroy: %s, line %d : nodes still in the tree\n",
-					psTreap->pFile, psTreap->line));
+		debug( LOG_NEVER, "treapDestroy: %s, line %d : nodes still in the tree\n", psTreap->pFile, psTreap->line );
 		treapReportRec(psTreap->psRoot);
 	}
 	FREE(psTreap->pFile);
@@ -388,11 +389,9 @@ void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 
 	// Display the root
 #if DEBUG_TREAP
-	DBPRINTF(("%s, line %d : %d,%d\n",
-				psRoot->pFile, psRoot->line,
-				psRoot->key, psRoot->priority));
+	debug( LOG_NEVER, "%s, line %d : %d,%d\n", psRoot->pFile, psRoot->line, psRoot->key, psRoot->priority );
 #else
-	DBPRINTF(("%d,%d\n", psRoot->key, psRoot->priority));
+	debug( LOG_NEVER, "%d,%d\n", psRoot->key, psRoot->priority );
 #endif
 
 	// Display the left of the tree
@@ -400,9 +399,9 @@ void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 	{
 		for(i=0; i<indent; i++)
 		{
-			DBPRINTF(("   "));
+			debug( LOG_NEVER, "" );
 		}
-		DBPRINTF(("L "));
+		debug( LOG_NEVER, "L" );
 		treapDisplayRec(psRoot->psLeft, indent+1);
 	}
 
@@ -411,9 +410,9 @@ void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 	{
 		for(i=0; i<indent; i++)
 		{
-			DBPRINTF(("   "));
+			debug( LOG_NEVER, "" );
 		}
-		DBPRINTF(("R "));
+		debug( LOG_NEVER, "R" );
 		treapDisplayRec(psRoot->psRight, indent+1);
 	}
 }

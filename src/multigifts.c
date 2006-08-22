@@ -101,7 +101,8 @@ BOOL recvGift(NETMSG *pMsg)
 		giftPower(from,to,FALSE);
 		break;
 	default:
-		DBERROR(("Unknown Gift recvd"));
+		debug( LOG_ERROR, "Unknown Gift recvd" );
+		abort();
 		return FALSE;
 		break;
 	}
@@ -154,7 +155,8 @@ BOOL sendGift(UDWORD type,UDWORD to)
 		audio_QueueTrack(ID_POWER_TRANSMIT);
 		break;
 	default:
-		DBERROR(("Unknown Gift sent"));
+		debug( LOG_ERROR, "Unknown Gift sent" );
+		abort();
 		return FALSE;
 		break;
 	}
@@ -566,7 +568,8 @@ BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)
 		breakAlliance(from,to,FALSE,allowAudio);
 		break;
 	default:
-		DBERROR(("Unknown alliance state recvd."));
+		debug( LOG_ERROR, "Unknown alliance state recvd." );
+		abort();
 		break;
 	}
 

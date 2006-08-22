@@ -452,7 +452,8 @@ UDWORD		retVal;
 	/* Check it has a structure - cannot have owner otherwise */
 	if(!TILE_HAS_STRUCTURE(mapTile(x,y)))
 	{
-		DBERROR(("Asking for the owner of a tile with no structure on it!!!"));
+		debug( LOG_ERROR, "Asking for the owner of a tile with no structure on it!!!" );
+		abort();
 	}
 	else
 	{

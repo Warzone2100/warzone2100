@@ -67,7 +67,8 @@ BOOL allocPlayerPower(void)
 		asPower[player] = (PLAYER_POWER *) MALLOC (sizeof(PLAYER_POWER));
 		if (asPower[player] == NULL)
 		{
-			DBERROR(("Out of memory"));
+			debug( LOG_ERROR, "Out of memory" );
+			abort();
 			return FALSE;
 		}
 	}

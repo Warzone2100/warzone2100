@@ -463,7 +463,7 @@ BOOL NETinit(BOOL bFirstCall)
 
 	if(bFirstCall)
 	{
-		DBPRINTF(("NETPLAY: Init called, MORNIN' \n "));
+		debug( LOG_NEVER, "NETPLAY: Init called, MORNIN'\n" );
 
 		NetPlay.bLobbyLaunched		= FALSE;				// clean up
 		NetPlay.dpidPlayer		= 0;

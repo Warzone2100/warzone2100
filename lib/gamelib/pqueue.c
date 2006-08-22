@@ -29,7 +29,8 @@ queue_Init( QUEUE ** ppQueue, int iMaxElements, int iElementSize,
 
 	if ( (*ppQueue) == NULL )
 	{
-		DBERROR( ("queue_Init: couldn't allocate memory for queue") );
+		debug( LOG_ERROR, "queue_Init: couldn't allocate memory for queue" );
+		abort();
 		return FALSE;
 	}
 
@@ -42,7 +43,8 @@ queue_Init( QUEUE ** ppQueue, int iMaxElements, int iElementSize,
 
 		if ( (*ppQueue) == NULL )
 		{
-			DBERROR( ("queue_Init: couldn't allocate memory for queue node") );
+			debug( LOG_ERROR, "queue_Init: couldn't allocate memory for queue node" );
+			abort();
 			return FALSE;
 		}
 
@@ -154,7 +156,7 @@ queue_Enqueue( QUEUE * pQueue, void * psElement, int iPriority )
 	/* check list not empty */
 	if ( pQueue->psFreeNodeList == NULL )
 	{
-		DBPRINTF( ("queue_GetFreeElement: all nodes allocated: flushing queue.\n") );
+		debug( LOG_NEVER, "queue_GetFreeElement: all nodes allocated: flushing queue.\n" );
 		queue_Clear( pQueue );
 	}
 

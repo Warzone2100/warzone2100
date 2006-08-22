@@ -98,12 +98,12 @@ rpl_open(char* filename) {
 	rpl->f = f;
 
 	if (strcmp(readline(f, buf, len), "ARMovie") != 0)
-		DBPRINTF(("%s missing RPL magic number\n", filename));
+		debug( LOG_NEVER, "%s missing RPL magic number\n", filename );
 	readline(f, buf, len); /* discard filename */
 	readline(f, buf, len); /* discard copyright */
 	if (strcmp(readline(f, buf, len), "ESCAPE 2.0") != 0)
 		/* This field is really "author", but.. */
-		DBPRINTF(("%s not in \"ESCAPE 2.0\" format?\n", filename));
+		debug( LOG_NEVER, "%s not in \"ESCAPE 2.0\" format?\n", filename );
 
 
 	tmp = readint(f, buf, len);
@@ -113,7 +113,7 @@ rpl_open(char* filename) {
 			break;
 		default:
 			rpl->video_decoder = rpl_decode_video_unknown;
-			printf("Unknown video format %i\n", tmp);
+			debug( LOG_NEVER, "Unknown video format %i\n", tmp);
 			break;
 	}
 

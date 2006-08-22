@@ -223,7 +223,8 @@ BOOL mapNew(UDWORD width, UDWORD height)
 //	if (width > MAP_MAXWIDTH || height > MAP_MAXHEIGHT)
 	if (width*height > MAP_MAXAREA)
 	{
-		DBERROR(("mapNew: map too large : %d %d\n",width,height));
+		debug( LOG_ERROR, "mapNew: map too large : %d %d\n", width, height );
+		abort();
 		return FALSE;
 	}
 
@@ -252,7 +253,8 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
 	if (psMapTiles == NULL)
 	{
-		DBERROR(("mapNew: Out of memory"));
+		debug( LOG_ERROR, "mapNew: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
@@ -347,7 +349,8 @@ BOOL mapLoadV1(char *pFileData, UDWORD fileSize)
 	}
 	if ((char *)psTileData - pFileData > fileSize)
 	{
-		DBERROR(("mapLoad: unexpected end of file"));
+		debug( LOG_ERROR, "mapLoad: unexpected end of file" );
+		abort();
 		return FALSE;
 	}
 
@@ -393,7 +396,8 @@ BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
 
 	if ((char *)psTileData - pFileData > fileSize)
 	{
-		DBERROR(("mapLoad: unexpected end of file"));
+		debug( LOG_ERROR, "mapLoad: unexpected end of file" );
+		abort();
 		return FALSE;
 	}
 
@@ -456,7 +460,8 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 
 	for(i=0; i<psGateHeader->numGateways; i++) {
 		if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
-			DBERROR(("mapLoadV3: Unable to add gateway"));
+			debug( LOG_ERROR, "mapLoadV3: Unable to add gateway" );
+			abort();
 			return FALSE;
 		}
 		psGate++;
@@ -521,14 +526,16 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		if(psZoneHeader->numEquivZones > 0) {
 			// Load in the zone equivelance lists.
 			if(!gwNewEquivTable(psZoneHeader->numEquivZones)) {
-				DBERROR(("gwNewEquivTable failed"));
+				debug( LOG_ERROR, "gwNewEquivTable failed" );
+				abort();
 				return FALSE;
 			}
 
 			for(i=0; i<psZoneHeader->numEquivZones; i++) {
 				if(*pZone != 0) {
 					if(!gwSetZoneEquiv(i, (SDWORD)*pZone, pZone+1)) {
-						DBERROR(("gwSetZoneEquiv failed"));
+						debug( LOG_ERROR, "gwSetZoneEquiv failed" );
+						abort();
 						return FALSE;
 					}
 				}
@@ -539,7 +546,8 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 
 	if ((char *)pZone - pFileData > fileSize)
 	{
-		DBERROR(("mapLoadV3: unexpected end of file"));
+		debug( LOG_ERROR, "mapLoadV3: unexpected end of file" );
+		abort();
 		return FALSE;
 	}
 //#endif
@@ -587,7 +595,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	if (psHeader->aFileType[0] != 'm' || psHeader->aFileType[1] != 'a' ||
 		psHeader->aFileType[2] != 'p' || psHeader->aFileType[3] != ' ')
 	{
-		DBERROR(("mapLoad: Incorrect file type"));
+		debug( LOG_ERROR, "mapLoad: Incorrect file type" );
+		abort();
 		FREE(pFileData);
 		return FALSE;
 	}
@@ -601,7 +610,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	/* Check the file version */
 	if (psHeader->version < VERSION_7)
 	{
-		DBERROR(("MapLoad: unsupported save format version %d",psHeader->version));
+		debug( LOG_ERROR, "MapLoad: unsupported save format version %d", psHeader->version );
+		abort();
 		FREE(pFileData);
 		return FALSE;
 	}
@@ -615,7 +625,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	}
 	else
 	{
-		DBERROR(("MapLoad: undefined save format version %d",psHeader->version));
+		debug( LOG_ERROR, "MapLoad: undefined save format version %d", psHeader->version );
+		abort();
 		FREE(pFileData);
 		return FALSE;
 	}
@@ -627,7 +638,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 //	if (width > MAP_MAXWIDTH || height > MAP_MAXHEIGHT)
 	if (width*height > MAP_MAXAREA)
 	{
-		DBERROR(("mapLoad: map too large : %d %d\n",width,height));
+		debug( LOG_ERROR, "mapLoad: map too large : %d %d\n", width, height );
+		abort();
 		return FALSE;
 	}
 
@@ -683,7 +695,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 		psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
 		if (psMapTiles == NULL)
 		{
-			DBERROR(("mapLoad: Out of memory"));
+			debug( LOG_ERROR, "mapLoad: Out of memory" );
+			abort();
 			return FALSE;
 		}
 		memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
@@ -783,7 +796,8 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	*ppFileData = MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -921,7 +935,8 @@ BOOL mapSaveMission(char **ppFileData, UDWORD *pFileSize)
 	*ppFileData = MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -1607,7 +1622,8 @@ BOOL	writeVisibilityData( STRING *pFileName )
 	if(!pFileData)
 	{
 		/* Nope, so do one */
-		DBERROR(("Saving visibility data : Cannot get the memory! (%d)",fileSize));
+		debug( LOG_ERROR, "Saving visibility data : Cannot get the memory! (%d)", fileSize );
+		abort();
 		return(FALSE);
 	}
 
@@ -1677,8 +1693,8 @@ UBYTE				*pVisData;
 	if(fileSize!=expectedFileSize)
 	{
 		/* No, so bomb out */
-		DBERROR(("Read visibility data : Weird file size for %d by %d sized map?",
-					mapWidth,mapHeight));
+		debug( LOG_ERROR, "Read visibility data : Weird file size for %d by %d sized map?", mapWidth, mapHeight );
+		abort();
 		return(FALSE);
 	}
 

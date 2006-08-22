@@ -60,7 +60,8 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		fDifEnemyModifier = FRACTCONST(50,100);	// they do less damage!
 		break;
 	default:
-		DBERROR(("Invalid difficulty level selected - forcing NORMAL"));
+		debug( LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL" );
+		abort();
 		break;
 	}
 

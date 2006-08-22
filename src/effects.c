@@ -666,7 +666,8 @@ void	updateEffect(EFFECT *psEffect)
 		if(!gamePaused()) updateFirework(psEffect);
 		break;
 	default:
-		DBERROR(("Weirdy class of effect passed to updateEffect"));
+		debug( LOG_ERROR, "Weirdy class of effect passed to updateEffect" );
+		abort();
 		break;
 	}
 }
@@ -1626,7 +1627,8 @@ void	renderEffect(EFFECT *psEffect)
 		renderFirework(psEffect);
 		break;
 	default:
-		DBERROR(("Weirdy class of effect passed to renderEffect"));
+		debug( LOG_ERROR, "Weirdy class of effect passed to renderEffect" );
+		abort();
 		break;
 	}
 }
@@ -2929,7 +2931,8 @@ iIMDShape		*psOrig;
 	if(!pFileData)
 	{
 		/* Nope, so do one */
-		DBERROR(("Saving FX data : Cannot get the memory! (%d)",fileSize));
+		debug( LOG_ERROR, "Saving FX data : Cannot get the memory! (%d)", fileSize );
+		abort();
 		return(FALSE);
 	}
 
@@ -3021,7 +3024,8 @@ EFFECT				*pFXData;
 	if(fileSize!=expectedFileSize)
 	{
 		/* No, so bomb out */
-		DBERROR(("Read FX data : Weird file size!"));
+		debug( LOG_ERROR, "Read FX data : Weird file size!" );
+		abort();
 		return(FALSE);
 	}
 

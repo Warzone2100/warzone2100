@@ -163,7 +163,8 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	psNew = MALLOC(sizeof(GATEWAY));
 	if (!psNew)
 	{
-		DBERROR(("gwNewGateway: out of memory"));
+		debug( LOG_ERROR, "gwNewGateway: out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -234,7 +235,8 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 	psNew = MALLOC(sizeof(GATEWAY));
 	if (!psNew)
 	{
-		DBERROR(("gwNewGateway: out of memory"));
+		debug( LOG_ERROR, "gwNewGateway: out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -421,8 +423,7 @@ void gwCheckZoneSizes(void)
 
 			if (inzone > FPATH_NODEINIT)
 			{
-				DBPRINTF(("gwCheckZoneSizes: warning zone %d at (%d,%d) is too large %d tiles (max %d)\n",
-					zone, cx,cy, inzone, FPATH_NODEINIT));
+				debug( LOG_ERROR, "gwCheckZoneSizes: warning zone %d at (%d,%d) is too large %d tiles (max %d)\n",	zone, cx, cy, inzone, FPATH_NODEINIT );
 			}
 		}
 	}
@@ -437,7 +438,7 @@ BOOL gwGenerateLinkGates(void)
 	ASSERT((apEquivZones != NULL,
 		"gwGenerateLinkGates: no zone equivalence table"));
 
-	DBPRINTF(("Generating water link Gateways...."));
+	debug( LOG_ERROR, "Generating water link Gateways...." );
 
 	for(zone=1; zone<gwNumZones; zone += 1)
 	{
@@ -458,7 +459,7 @@ BOOL gwGenerateLinkGates(void)
 		}
 	}
 
-	DBPRINTF(("Done\n"));
+	debug( LOG_ERROR, "Done\n" );
 
 	return TRUE;
 }
@@ -621,10 +622,7 @@ SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 	if (ret == ASR_NEAREST)
 	{
 		zone = (psStart->zone1 == psEnd->zone1) || (psStart->zone1 == psEnd->zone2) ? psStart->zone1 : psStart->zone2;
-		DBPRINTF(("gwRouteLength: warning only partial route between gateways at %s(%d,%d) and %s(%d,%d) zone %d\n",
-			psStart->flags & GWR_WATERLINK ? "W" : "", sx,sy,
-			psStart->flags & GWR_WATERLINK ? "W" : "", ex,ey,
-			zone));
+		debug( LOG_ERROR, "gwRouteLength: warning only partial route between gateways at %s(%d,%d) and %s(%d,%d) zone %d\n", psStart->flags & GWR_WATERLINK ? "W" : "", sx,sy, psStart->flags & GWR_WATERLINK ? "W" : "", ex, ey, zone );
 	}
 #endif
 
@@ -710,7 +708,8 @@ BOOL gwLinkGateways(void)
 	aZoneReachable = MALLOC( sizeof(UBYTE) * gwNumZones );
 	if (aZoneReachable == NULL)
 	{
-		DBERROR(("gwLinkGateways: out of memory"));
+		debug( LOG_ERROR, "gwLinkGateways: out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(aZoneReachable, 0, sizeof(UBYTE) * gwNumZones);
@@ -799,7 +798,8 @@ BOOL gwLinkGateways(void)
 			psCurr->psLinks = MALLOC(sizeof(GATEWAY_LINK) * (zone1Links+zone2Links));
 			if (psCurr->psLinks == NULL)
 			{
-				DBERROR(("gwLinkGateways: out of memory"));
+				debug( LOG_ERROR, "gwLinkGateways: out of memory" );
+				abort();
 				return FALSE;
 			}
 		}
@@ -917,7 +917,8 @@ BOOL gwNewZoneMap(void)
 	apRLEZones = MALLOC(sizeof(UBYTE *) * gwMapHeight());
 	if (apRLEZones == NULL)
 	{
-		DBERROR(("gwNewZoneMap: Out of memory"));
+		debug( LOG_ERROR, "gwNewZoneMap: Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -943,7 +944,8 @@ UBYTE * gwNewZoneLine(UDWORD Line,UDWORD Size)
 	apRLEZones[Line] = MALLOC(Size);
 	if (apRLEZones[Line] == NULL)
 	{
-		DBERROR(("gwNewZoneLine: Out of memory"));
+		debug( LOG_ERROR, "gwNewZoneLine: Out of memory" );
+		abort();
 		return NULL;
 	}
 
@@ -1037,7 +1039,8 @@ BOOL gwNewEquivTable(SDWORD numZones)
 	aNumEquiv = MALLOC(sizeof(UBYTE) * numZones);
 	if (aNumEquiv == NULL)
 	{
-		DBERROR(("gwNewEquivTable: out of memory"));
+		debug( LOG_ERROR, "gwNewEquivTable: out of memory" );
+		abort();
 		return FALSE;
 	}
 	for(i=0; i<numZones; i+=1)
@@ -1048,7 +1051,8 @@ BOOL gwNewEquivTable(SDWORD numZones)
 	apEquivZones = MALLOC(sizeof(UBYTE *) * numZones);
 	if (apEquivZones == NULL)
 	{
-		DBERROR(("gwNewEquivTable: out of memory"));
+		debug( LOG_ERROR, "gwNewEquivTable: out of memory" );
+		abort();
 		return FALSE;
 	}
 	for(i=0; i<numZones; i+=1)
@@ -1098,7 +1102,8 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 	apEquivZones[zone] = MALLOC(sizeof(UBYTE) * numEquiv);
 	if (apEquivZones[zone] == NULL)
 	{
-		DBERROR(("gwSetZoneEquiv: out of memory"));
+		debug( LOG_ERROR, "gwSetZoneEquiv: out of memory" );
+		abort();
 		return FALSE;
 	}
 

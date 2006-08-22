@@ -1417,7 +1417,8 @@ BOOL scrSkCanBuildTemplate(void)
 	case DROID_DEFAULT:		        // Default droid
 	case DROID_ANY:
 	default:
-		DBERROR(("scrSkCanBuildTemplate: Unhandled template type"));
+		debug( LOG_ERROR, "scrSkCanBuildTemplate: Unhandled template type" );
+		abort();
 		break;
 	}
 
@@ -1973,8 +1974,8 @@ BOOL scrSkDefenseLocationB(void)
 	BOOL		noWater;
 
 	if (!stackPopParams(6,
-						VAL_REF|VAL_INT, &pX, 
-						VAL_REF|VAL_INT, &pY,	
+						VAL_REF|VAL_INT, &pX,
+						VAL_REF|VAL_INT, &pY,
 						ST_STRUCTURESTAT, &statIndex,
 						ST_STRUCTURESTAT, &statIndex2,
 						ST_DROID, &psDroid,
@@ -1994,7 +1995,7 @@ BOOL scrSkDefenseLocationB(void)
 	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
 
     // check for wacky coords.
-	if(		*pX < 0 
+	if(		*pX < 0
 		||	*pX > (SDWORD)(mapWidth<<TILE_SHIFT)
 		||	*pY < 0
 		||	*pY > (SDWORD)(mapHeight<<TILE_SHIFT)
@@ -2059,7 +2060,7 @@ BOOL scrSkDefenseLocationB(void)
 			}
 		}
 		if(count > 2 && noWater)	//<NEW> min 2 tiles
-		{	
+		{
 			// ok it's free. Is it the nearest one yet?
 			/* Get gateway midpoint */
 			gX = (psGate->x1 + psGate->x2)/2;
@@ -2192,7 +2193,7 @@ BOOL scrSkDefenseLocationB(void)
 	{
 		orderDroidStatsTwoLocAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3,x4,y4);
 	}
-	
+
 	return TRUE;
 
 failed:
@@ -2286,7 +2287,7 @@ BOOL scrInitIterateGroupB(void)
 
 	return TRUE;
 }
- 
+
 //script function - improved version
 // iterate through a groups members
 BOOL scrIterateGroupB(void)

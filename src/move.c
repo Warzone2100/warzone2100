@@ -28,7 +28,7 @@ BOOL	moveDoMessage;
 #undef DBP6
 #define DBP6( x ) \
 	if (moveDoMessage) \
-		DBPRINTF( x )
+		debug( LOG_NEVER, x )
 #endif
 
 
@@ -3514,7 +3514,7 @@ void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 		else
 		{
 			/* dreadful last-ditch crash-avoiding hack - sort this! - GJ */
-			DBPRINTF( ("**** droid about to go off map - fixed ****\n") );
+			debug( LOG_NEVER, "**** droid about to go off map - fixed ****\n" );
 			destroyDroid( psDroid );
 		}
 	}
@@ -3754,7 +3754,7 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 		{
 			// Only add the animation if the droid is on screen, saves memory and time.
 			if(clipXY(psDroid->x,psDroid->y)) {
-DBPRINTF(("Added person run anim\n"));
+				debug( LOG_NEVER, "Added person run anim\n" );
 				psDroid->psCurAnim = animObj_Add( (BASE_OBJECT *) psDroid,
 													ID_ANIM_DROIDRUN, 0, 0 );
 			}
@@ -3764,7 +3764,7 @@ DBPRINTF(("Added person run anim\n"));
 				bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
 				ASSERT( (bRet == TRUE, "moveUpdatePersonModel : animObj_Remove failed") );
 				psDroid->psCurAnim = NULL;
-DBPRINTF(("Removed person run anim\n"));
+				debug( LOG_NEVER, "Removed person run anim\n" );
 			}
 		}
 	}
@@ -4029,7 +4029,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 		{
 			if ( animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->uwID ) == FALSE )
 			{
-				DBPRINTF( ("moveUpdateCyborgModel: couldn't remove walk anim\n") );
+				debug( LOG_NEVER, "moveUpdateCyborgModel: couldn't remove walk anim\n" );
 			}
 			psDroid->psCurAnim = NULL;
 		}
@@ -4126,7 +4126,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 				  psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_PACK_RUN) &&
 				 (animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->uwID ) == FALSE) )
 			{
-				DBPRINTF( ("moveUpdateCyborgModel: couldn't remove walk anim\n") );
+				debug( LOG_NEVER, "moveUpdateCyborgModel: couldn't remove walk anim\n" );
 			}
 		}
 
@@ -4376,7 +4376,7 @@ if ( oldStatus != newStatus )
 	char	szOldStatus[100], szNewStatus[100];
 	moveGetStatusStr( oldStatus, szOldStatus );
 	moveGetStatusStr( newStatus, szNewStatus );
-	DBPRINTF( ("oldStatus = %s newStatus = %s\n", szOldStatus, szNewStatus) );
+	debug( LOG_NEVER, "oldStatus = %s newStatus = %s\n", szOldStatus, szNewStatus );
 }
 #endif
 
@@ -4595,7 +4595,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 				if ( psDroid->droidType == DROID_TRANSPORTER )
 				{
-					DBPRINTF(("a) dir %g,%g (%g)\n",tx,ty,tangle));
+					debug( LOG_NEVER, "a) dir %g,%g (%g)\n", tx, ty, tangle );
 				}
 
 				moveSpeed = moveCalcDroidSpeed(psDroid);

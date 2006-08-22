@@ -70,7 +70,8 @@ BOOL    environInit( void )
 	pEnvironData = MALLOC(sizeof(struct environ_data) * MAP_MAXWIDTH * MAP_MAXHEIGHT);
 	if(!pEnvironData)
 	{
-		DBERROR(("Can't get memory for the environment data"));
+		debug( LOG_ERROR, "Can't get memory for the environment data" );
+		abort();
 		return FALSE;
 	}
     return TRUE;
@@ -192,7 +193,8 @@ FRACT	fraction;
 					increment = ((MAKEFRACT(ENVIRON_LAND_SPEED)*pEnvironData[index].vec) * fraction);
 					break;
 				default:
-					DBERROR(("Weird environment type found"));
+					debug( LOG_ERROR, "Weird environment type found" );
+					abort();
 					break;
 				}
 

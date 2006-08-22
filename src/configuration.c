@@ -545,7 +545,7 @@ BOOL saveConfig()
 	}
 	else
 	{
-		DBPRINTF(("Writing multiplay prefs to registry\n"));
+		debug( LOG_NEVER, "Writing multiplay prefs to registry\n" );
 		if(NetPlay.bHost && ingame.localJoiningInProgress)
 		{
 			setWarzoneKeyString("gameName", game.name);				//  last hosted game

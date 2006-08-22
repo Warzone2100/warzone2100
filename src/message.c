@@ -463,7 +463,8 @@ BOOL initMessage(void)
 	pProximityMsgIMD = (iIMDShape *)resGetData("IMD", "arrow.pie");
 	if (pProximityMsgIMD == NULL)
 	{
-		DBERROR(("Unable to load Proximity Message PIE"));
+		debug( LOG_ERROR, "Unable to load Proximity Message PIE" );
+		abort();
 		return FALSE;
 	}
 
@@ -540,7 +541,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 	numData = numCR(pViewMsgData, bufferSize);
 	if (numData > UBYTE_MAX)
 	{
-		DBERROR(("loadViewData: Didn't expect 256 viewData messages!"));
+		debug( LOG_ERROR, "loadViewData: Didn't expect 256 viewData messages!" );
+		abort();
 		return NULL;
 	}
 
@@ -548,7 +550,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 	psViewData = (VIEWDATA *)MALLOC(numData * sizeof(VIEWDATA));
 	if (psViewData == NULL)
 	{
-		DBERROR(("Unable to allocate memory for viewdata"));
+		debug( LOG_ERROR, "Unable to allocate memory for viewdata" );
+		abort();
 		return NULL;
 	}
 
@@ -574,7 +577,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		//check not loading up too many text strings
 		if (numText > MAX_DATA)
 		{
-			DBERROR(("loadViewData: too many text strings for %s", psViewData->pName));
+			debug( LOG_ERROR, "loadViewData: too many text strings for %s", psViewData->pName );
+			abort();
 			return NULL;
 		}
 		psViewData->numText=(UBYTE)numText;
@@ -583,7 +587,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
  		psViewData->pName = (STRING *)MALLOC((strlen(name))+1);
 		if (psViewData->pName == NULL)
 		{
-			DBERROR(("ViewData Name - Out of memory"));
+			debug( LOG_ERROR, "ViewData Name - Out of memory" );
+			abort();
 			return NULL;
 		}
 		strcpy(psViewData->pName,name);
@@ -607,7 +612,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			//get the ID for the string
 			if (!strresGetIDNum(psStringRes, name, &id))
 			{
-				DBERROR(("Cannot find the view data string id %s ", name));
+				debug( LOG_ERROR, "Cannot find the view data string id %s ", name );
+				abort();
 				return NULL;
 			}
 			//get the string from the id
@@ -626,7 +632,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			psViewData->pData = (VIEW_RESEARCH *) MALLOC(sizeof(VIEW_RESEARCH));
 			if (psViewData->pData == NULL)
 			{
-				DBERROR(("Unable to allocate memory"));
+				debug( LOG_ERROR, "Unable to allocate memory" );
+				abort();
 				return NULL;
 			}
 			imdName[0] = '\0';
@@ -642,7 +649,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			psViewRes->pIMD = (iIMDShape *) resGetData("IMD", imdName);
 			if (psViewRes->pIMD == NULL)
 			{
-				DBERROR(("Cannot find the PIE for message %s", name));
+				debug( LOG_ERROR, "Cannot find the PIE for message %s", name );
+				abort();
 				return NULL;
 			}
 			if (strcmp(imdName2, "0"))
@@ -650,7 +658,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				psViewRes->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
 				if (psViewRes->pIMD2 == NULL)
 				{
-					DBERROR(("Cannot find the 2nd PIE for message %s", name));
+					debug( LOG_ERROR, "Cannot find the 2nd PIE for message %s", name );
+					abort();
 					return NULL;
 				}
 			}
@@ -666,7 +675,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				psViewRes->pAudio = (STRING *) MALLOC(strlen(audioName) + 1);
 				if (psViewRes->pAudio == NULL)
 				{
-					DBERROR(("loadViewData - Out of memory"));
+					debug( LOG_ERROR, "loadViewData - Out of memory" );
+					abort();
 					return NULL;
 				}
 				strcpy(psViewRes->pAudio, audioName);
@@ -685,7 +695,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			psViewData->pData = (VIEW_REPLAY *) MALLOC(sizeof(VIEW_REPLAY));
 			if (psViewData->pData == NULL)
 			{
-				DBERROR(("Unable to allocate memory"));
+				debug( LOG_ERROR, "Unable to allocate memory" );
+				abort();
 				return NULL;
 			}
 			psViewReplay = (VIEW_REPLAY *)psViewData->pData;
@@ -697,7 +708,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 
 			if (count > MAX_DATA)
 			{
-				DBERROR(("loadViewData: too many sequence for %s", psViewData->pName));
+				debug( LOG_ERROR, "loadViewData: too many sequence for %s", psViewData->pName );
+				abort();
 				return NULL;
 			}
 
@@ -718,7 +730,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
                                         pViewMsgData += cnt;
 					if (count > MAX_DATA)
 					{
-						DBERROR(("loadViewData: too many strings for %s", psViewData->pName));
+						debug( LOG_ERROR, "loadViewData: too many strings for %s", psViewData->pName );
+						abort();
 						return NULL;
 					}
 					psViewReplay->pSeqList[dataInc].numText = (UBYTE)count;
@@ -731,16 +744,16 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
                                         pViewMsgData += cnt;
 					if (count > MAX_DATA)
 					{
-						DBERROR(("loadViewData: invalid video playback flag %s",
-							psViewData->pName));
+						debug( LOG_ERROR, "loadViewData: invalid video playback flag %s", psViewData->pName );
+						abort();
 						return NULL;
 					}
 					psViewReplay->pSeqList[dataInc].flag = (UBYTE)count;
 					//check not loading up too many text strings
 					if (count2 > MAX_DATA)
 					{
-						DBERROR(("loadViewData: too many text strings for seq for %s",
-							psViewData->pName));
+						debug( LOG_ERROR, "loadViewData: too many text strings for seq for %s", psViewData->pName );
+						abort();
 						return NULL;
 					}
 					psViewReplay->pSeqList[dataInc].numText = (UBYTE)count2;
@@ -764,7 +777,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 					//get the ID for the string
 					if (!strresGetIDNum(psStringRes, name, &id))
 					{
-						DBERROR(("Cannot find the view data string id %s ", name));
+						debug( LOG_ERROR, "Cannot find the view data string id %s ", name );
+						abort();
 						return NULL;
 					}
 
@@ -790,7 +804,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 						strlen(audioName) + 1);
 					if (psViewReplay->pSeqList[dataInc].pAudio == NULL)
 					{
-						DBERROR(("loadViewData - Out of memory"));
+						debug( LOG_ERROR, "loadViewData - Out of memory" );
+						abort();
 						return NULL;
 					}
 					strcpy(psViewReplay->pSeqList[dataInc].pAudio, audioName);
@@ -807,7 +822,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			psViewData->pData = (VIEW_PROXIMITY *) MALLOC(sizeof(VIEW_PROXIMITY));
 			if (psViewData->pData == NULL)
 			{
-				DBERROR(("Unable to allocate memory"));
+				debug( LOG_ERROR, "Unable to allocate memory" );
+				abort();
 				return NULL;
 			}
 
@@ -826,16 +842,16 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			{
 				if ( audioID_GetIDFromStr( audioName, &audioID ) == FALSE )
 				{
-					DBERROR(("loadViewData: couldn't get ID %d for weapon sound %s",
-							audioID, audioName));
+					debug( LOG_ERROR, "loadViewData: couldn't get ID %d for weapon sound %s", audioID, audioName );
+					abort();
 					return FALSE;
 				}
 
 				if ( ((audioID < 0) || (audioID >= ID_MAX_SOUND)) &&
 					 (audioID != NO_SOUND) )
 				{
-					DBERROR(("Invalid Weapon Sound ID - %d for weapon %s",
-							audioID, audioName));
+					debug( LOG_ERROR, "Invalid Weapon Sound ID - %d for weapon %s", audioID, audioName );
+					abort();
 					return FALSE;
 				}
 			}
@@ -874,7 +890,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			((VIEW_PROXIMITY *)psViewData->pData)->proxType = proxType;
 			break;
 		default:
-			DBERROR(("Unknown ViewData type"));
+			debug( LOG_ERROR, "Unknown ViewData type" );
+			abort();
 			return NULL;
 		}
 		//increment the pointer to the start of the next record
@@ -911,7 +928,8 @@ VIEWDATA * getViewData(STRING *pName)
 		}
 	}
 
-	DBERROR(("Unable to find viewdata for message %s", pName));
+	debug( LOG_ERROR, "Unable to find viewdata for message %s", pName );
+	abort();
 	return NULL;
 }
 
