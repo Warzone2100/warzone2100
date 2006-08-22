@@ -73,6 +73,9 @@ static UDWORD	messageId;	// unique ID
 // Global string for new console messages.
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
+void printf_console(const char *pFormat, ...);
+void console(const char *pFormat, ...);
+
 
 /* MODULE CONSOLE PROTOTYPES */
 void	consolePrintf				( char *layout, ... );
@@ -749,5 +752,42 @@ BOOL	getConsoleDisplayStatus( void )
 void	conShowReplayWav( void )
 {
 
+
+}
+
+/* output warnings directly to the in-game console */
+void printf_console(const char *pFormat, ...)
+{
+#ifdef DEBUG
+	char		aBuffer[500];   // Output string buffer
+    va_list		pArgs;					  // Format arguments
+
+	/* Initialise the argument list */
+	va_start(pArgs, pFormat);
+
+	/* Print out the string */
+	(void)vsprintf(aBuffer, pFormat, pArgs);
+
+	/* Output it */
+
+	addConsoleMessage(aBuffer,RIGHT_JUSTIFY);		//debug messages are displayed right-aligned
+#endif
+}
+
+/* like printf_console, bu for release */
+void console(const char *pFormat, ...)
+{
+	char		aBuffer[500];   // Output string buffer
+    va_list		pArgs;					  // Format arguments
+	
+	/* Initialise the argument list */
+	va_start(pArgs, pFormat);
+
+	/* Print out the string */
+	(void)vsprintf(aBuffer, pFormat, pArgs);
+
+	/* Output it */
+
+	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY);
 
 }

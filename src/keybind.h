@@ -1,6 +1,8 @@
 #ifndef _keybind_h
 #define _keybind_h
 
+extern BOOL	processConsoleCommands( STRING *pName );
+
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );

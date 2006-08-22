@@ -67,6 +67,8 @@
 #include "text.h"
 #include "selection.h"
 #include "difficulty.h"
+#include "scriptcb.h"		/* for console callback */
+#include "aiexperience.h"	/* for console commands */
 
 #define	MAP_ZOOM_RATE	(1000)
 
@@ -89,6 +91,7 @@ extern char	ScreenDumpPath[];
 
 int fogCol = 0;//start in nicks mode
 
+BOOL	processConsoleCommands( STRING *pName );
 
 /* Support functions to minimise code size */
 void	kfsf_SelectAllSameProp	( PROPULSION_TYPE propType );
@@ -1811,6 +1814,8 @@ void kf_GiveTemplateSet(void)
 void kf_SendTextMessage(void)
 {
 	CHAR	ch;
+	STRING tmp[100];
+	SDWORD	i;
 
 	{
 		if(bAllowOtherKeyPresses)									// just starting.
@@ -1835,13 +1840,49 @@ void kf_SendTextMessage(void)
 				if(!strcmp(sTextToSend, ""))
 					return;
 
+				/* process console commands (only if skirmish or multiplayer, not a campaign) */
+				if((game.type == SKIRMISH) || bMultiPlayer)
+				{
+					if(processConsoleCommands(sTextToSend))
+					{
+						return;	//it was a console command, so don't send
+					}
+				}
+
+				//console callback message
+				//--------------------------
+				ConsolePlayer = selectedPlayer;
+				strcpy(ConsoleMsg,sTextToSend);
+				eventFireCallbackTrigger(CALL_CONSOLE);
+
+
 				if(bMultiPlayer && NetPlay.bComms)
 				{
 					sendTextMessage(sTextToSend,FALSE);
 				}
-				else if (getDebugMappingStatus())
+				else
 				{
-					(void) attemptCheatCode(sTextToSend);
+					//show the message we sent on our local console as well (even in skirmish, to see console commands)
+					//sprintf(tmp,"%d",selectedPlayer);
+					
+					sprintf(tmp,"%s",getPlayerName(selectedPlayer));
+					strcat(tmp," : ");											// seperator
+					strcat(tmp,sTextToSend);											// add message
+					addConsoleMessage(tmp,DEFAULT_JUSTIFY);
+
+					//in skirmish send directly to AIs, for command and chat procesing
+					for(i=0; i<game.maxPlayers; i++)		//don't use MAX_PLAYERS here, although possible
+					{
+						if(openchannels[i] && i != selectedPlayer)
+						{
+							(void)sendAIMessage(sTextToSend, selectedPlayer, i);
+						}
+					}
+
+					if (getDebugMappingStatus())
+					{
+						(void) attemptCheatCode(sTextToSend);
+					}
 				}
 				return;
 			}
@@ -2519,4 +2560,79 @@ void kf_ToggleRadarTerrain(void)
 		bDrawRadarTerrain = TRUE;
 		resetRadarRedraw();
 	}
+}
+
+
+//Returns TRUE if the engine should dofurther text processing, FALSE if just exit
+BOOL	processConsoleCommands( STRING *pName )
+{
+	BOOL	bFound = FALSE;
+	SDWORD	i;
+
+	if(strcmp(pName,"/loadai") == FALSE)
+	{
+		(void)LoadAIExperience(TRUE);
+		return TRUE;
+	}
+	else if(strcmp(pName,"/saveai") == FALSE)
+	{
+		(void)SaveAIExperience(TRUE);
+		return TRUE;
+	}
+	else if(strcmp(pName,"/maxplayers") == FALSE)
+	{
+		console("game.maxPlayers: &d", game.maxPlayers);
+		return TRUE;
+	}
+	else if(strcmp(pName,"/bd") == FALSE)
+	{
+		BaseExperienceDebug(selectedPlayer);
+
+		return TRUE;
+	}
+	else if(strcmp(pName,"/sm") == FALSE)
+	{
+		for(i=0; i<MAX_PLAYERS;i++)
+		{
+			console("%d - %d", i, game.skDiff[i]);
+		}
+
+		return TRUE;
+	}
+	else if(strcmp(pName,"/od") == FALSE)
+	{
+		OilExperienceDebug(selectedPlayer);
+
+		return TRUE;
+	}
+	else
+	{
+		char tmpStr[255];
+
+		
+
+		/* saveai x */
+		for(i=0;i<MAX_PLAYERS;i++)
+		{
+			sprintf(tmpStr,"/saveai %d", i);		//"saveai 0"
+			if(strcmp(pName,tmpStr) == FALSE)
+			{
+				SavePlayerAIExperience(i, TRUE);
+				return TRUE;
+			}
+		}
+
+		/* loadai x */
+		for(i=0;i<MAX_PLAYERS;i++)
+		{
+			sprintf(tmpStr,"/loadai %d", i);		//"loadai 0"
+			if(strcmp(pName,tmpStr) == FALSE)
+			{
+				LoadPlayerAIExperience(i, TRUE);
+				return TRUE;
+			}
+		}
+	}
+
+	return bFound;
 }

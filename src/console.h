@@ -62,6 +62,8 @@ extern void	setConsoleLineInfo			( UDWORD vis );
 extern UDWORD	getConsoleLineInfo		( void );
 extern void	permitNewConsoleMessages		( BOOL allow);
 extern	void	toggleConsoleDrop( void );
+extern void printf_console(const char *pFormat, ...);
+extern void console(const char *pFormat, ...);
 
 /* Basic wrapper to sprintf - allows convenient printf style game info to be displayed */
 

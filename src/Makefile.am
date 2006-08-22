@@ -9,6 +9,7 @@ warzone_SOURCES = \
 		scriptvals_lexer.l \
 		level_lexer.l \
 		ai.c \
+		aiexperience.c \
 		astar.c \
 		action.c \
 		advvis.c \
@@ -125,6 +126,7 @@ warzone_SOURCES = \
 		advvis.h \
 		aidef.h \
 		ai.h \
+		aiexperience.h \
 		anim_id.h \
 		arrow.h \
 		astar.h \

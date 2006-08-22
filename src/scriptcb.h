@@ -9,7 +9,10 @@
 
 //console callback stuff
 //---------------------------
+#ifndef MAXSTRLEN
 #define MAXSTRLEN 255
+#endif
+
 extern SDWORD ConsolePlayer;
 extern SDWORD MultiMsgPlayerTo;
 extern SDWORD MultiMsgPlayerFrom;

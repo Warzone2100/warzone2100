@@ -67,6 +67,7 @@
 #include "projectile.h"
 #include "cluster.h"
 #include "multigifts.h"			//because of giftRadar()
+#include "aiexperience.h"
 
 
 //used in the set nogoArea and LandingZone functions - use the ones defined in Map.h
@@ -8784,24 +8785,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 	return TRUE;
 }
 
-/* output warnings directly to the in-game console */
-void printf_console(const char *pFormat, ...)
-{
-#ifdef DEBUG
-	char		aBuffer[500];   // Output string buffer
-    va_list		pArgs;					  // Format arguments
 
-	/* Initialise the argument list */
-	va_start(pArgs, pFormat);
-
-	/* Print out the string */
-	(void)vsprintf(aBuffer, pFormat, pArgs);
-
-	/* Output it */
-
-	addConsoleMessage(aBuffer,RIGHT_JUSTIFY);		//debug messages are displayed right-aligned
-#endif
-}
 
 //Approx point of intersection of a circle and a line with start loc being circle's center point
 BOOL scrCirclePerimPoint(void)
@@ -9040,6 +9024,55 @@ BOOL scrPlayerLoaded(void)
 	if (!stackPushResult(VAL_BOOL, (BOOL)(game.skDiff[player])))
 	{
 		debug(LOG_ERROR,"scrPlayerLoaded(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+		/********************************/
+		/*		AI Experience Stuff		*/
+		/********************************/
+
+//Returns enemy base x and y for a certain player
+BOOL scrLearnPlayerBaseLoc(void)
+{
+	SDWORD				playerStoring,enemyPlayer, x, y;
+
+	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
+						VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrLearnPlayerBaseLoc(): stack failed");
+		return FALSE;
+	}
+
+	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
+	{
+		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: player index too high.");
+		return FALSE;
+	}
+
+	if((playerStoring < 0) || (enemyPlayer < 0))
+	{
+		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: player index too low.");
+		return FALSE;
+	}
+
+	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
+		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	{
+		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: coords off map");
+		return FALSE;
+	}
+
+	baseLocation[playerStoring][enemyPlayer][0] = x;
+	baseLocation[playerStoring][enemyPlayer][1] = y;
+
+	//addConsoleMessage("Learned player base.",RIGHT_JUSTIFY);
+
+	if (!stackPushResult(VAL_BOOL, TRUE))
+	{
 		return FALSE;
 	}
 
