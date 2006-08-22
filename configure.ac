@@ -212,7 +212,7 @@ if test "x$ogg" != "xno" ; then
   XIPH_PATH_OGG(have_ogg=yes, have_ogg=no)
   XIPH_PATH_VORBIS(have_vorbis=yes, have_vorbis=no)
   if test "x$have_ogg" = "xno" -o "x$have_vorbis" = "xno" ; then
-    if "x$ogg" = "xyes" ; then
+    if test "x$ogg" = "xyes" ; then
       AC_MSG_ERROR([You need to install OGG/Vorbis.])
     else
       ogg=no
