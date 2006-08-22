@@ -304,7 +304,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 // receive a check and update the local world state accordingly
 BOOL recvDroidCheck(NETMSG *m)
 {
-	FRACT			fx,fy;
+	FRACT			fx=0,fy=0;
 	UDWORD			ref,player,x = 0,y = 0,bod,target=0;//,dir;
 	UWORD			dir,numkills;
 	DROID_ORDER		ord;
