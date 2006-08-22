@@ -85,12 +85,6 @@ static unsigned int	music_rate;
 
 #endif
 
-#ifdef  _MSC_VER			//fixed for .net -Q
-#define inline __inline
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#endif
-
 
 void PlayList_Init();
 void PlayList_Quit();

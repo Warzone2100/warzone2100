@@ -26,10 +26,6 @@
 #include "tex.h"		// texture page loading
 #include "bspfunc.h"	// for imd functions
 
-#ifdef  _MSC_VER					//fixed for .net -Q
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#endif
 
 // Static variables
 static uint32 	_IMD_FLAGS;
