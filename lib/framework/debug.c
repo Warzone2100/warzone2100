@@ -91,6 +91,27 @@ void debug_callback_stderr( void ** data, const char * outputBuffer )
 	}
 }
 
+
+/**
+ * Callback for outputting to a win32 debugger
+ *
+ * \param	data			Ignored. Use NULL.
+ * \param	outputBuffer	Buffer containing the preprocessed text to output.
+ */
+void debug_callback_win32debug( void ** data, const char * outputBuffer )
+{
+#if defined WIN32 && defined DEBUG
+	char tmpStr[MAX_LEN_LOG_LINE];
+
+	strcpy( tmpStr, outputBuffer );
+	if ( !strchr( tmpStr, '\n' ) ) {
+		strcat( tmpStr, "\n" );
+	}
+	OutputDebugStringA( tmpStr );
+#endif // WIN32
+}
+
+
 /**
  * Callback for outputing to a file
  *
@@ -107,6 +128,7 @@ void debug_callback_file( void ** data, const char * outputBuffer )
 		fprintf( logfile, "%s", outputBuffer );
 	}
 }
+
 
 /**
  * Setup the file callback
@@ -131,6 +153,7 @@ void debug_callback_file_init( void ** data )
 		*data = logfile;
 	}
 }
+
 
 /**
  * Shutdown the file callback

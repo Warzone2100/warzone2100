@@ -73,9 +73,6 @@ static UDWORD	messageId;	// unique ID
 // Global string for new console messages.
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-void printf_console(const char *pFormat, ...);
-void console(const char *pFormat, ...);
-
 
 /* MODULE CONSOLE PROTOTYPES */
 void	consolePrintf				( char *layout, ... );

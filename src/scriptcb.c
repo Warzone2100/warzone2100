@@ -34,10 +34,6 @@ UDWORD	CBallFrom,CBallTo;
 
 //console callback stuff
 //---------------------------
-#ifndef MAXSTRLEN
-#define MAXSTRLEN 255
-#endif
-
 SDWORD ConsolePlayer = -2;
 SDWORD MultiMsgPlayerTo = -2;
 SDWORD beaconX = -1, beaconY = -1;

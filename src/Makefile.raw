@@ -2,6 +2,7 @@ MAKERULES=../makerules
 include $(MAKERULES)/configure.mk
 
 SRC=ai.c \
+	aiexperience.c \
 	astar.c \
 	action.c \
 	advvis.c \

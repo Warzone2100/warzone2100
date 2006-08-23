@@ -4,6 +4,11 @@
  */
 #include "lib/framework/frame.h"
 
+/* For SHGetFolderPath */
+#ifdef WIN32
+# include <shlobj.h>
+#endif // WIN32
+
 #include <physfs.h>
 
 #include "lib/widget/widget.h"
@@ -47,7 +52,7 @@
 #endif
 
 #ifdef WIN32
-# define WZ_WRITEDIR "Warzone-2.0"
+# define WZ_WRITEDIR "Warzone 2.0"
 #else
 # ifdef __APPLE__
 #  define WZ_WRITEDIR "Library/Application Support/Warzone-2.0"
@@ -84,6 +89,7 @@ char	UserMusicPath[255];
 char	RegFilePath[];
 
 void debug_callback_stderr( void**, const char * );
+void debug_callback_win32debug( void**, const char * );
 
 /*
 BOOL checkDisableLobby(void)
@@ -210,21 +216,29 @@ static void initialize_PhysicsFS(void)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-	strcpy( tmpstr, PHYSFS_getUserDir() );
-	strcat( tmpstr, WZ_WRITEDIR );
-	strcat( tmpstr, PHYSFS_getDirSeparator() );
-	if ( !PHYSFS_setWriteDir( PHYSFS_getUserDir() ) ) // Ugly workaround for PhysFS not creating the writedir as expected.
+#ifdef WIN32
+	if ( !SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
+#endif
+	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (Fallback when using Windows, default on others)
+
+	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
 	{
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
 			PHYSFS_getUserDir(), PHYSFS_getLastError() );
 		exit(1);
 	}
+
 	if ( !PHYSFS_mkdir( WZ_WRITEDIR ) ) // s.a.
 	{
 		debug( LOG_ERROR, "Error creating directory \"%s\": %s",
 			WZ_WRITEDIR, PHYSFS_getLastError() );
 		exit(1);
 	}
+
+	// Append the Warzone subdir
+	strcat( tmpstr, PHYSFS_getDirSeparator() );
+	strcat( tmpstr, WZ_WRITEDIR );
+
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) {
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
 			tmpstr, PHYSFS_getLastError() );
@@ -349,6 +363,7 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 	}
 }
 
+
 int main(int argc, char *argv[])
 {
 	FRAME_STATUS		frameRet;
@@ -364,23 +379,27 @@ int main(int argc, char *argv[])
 
 	/*** Initialize the debug subsystem ***/
 #ifdef _MSC_VER
-# ifdef _DEBUG
+# ifdef DEBUG
 	int tmpDbgFlag;
 	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
 
-	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG ); // Grab current flags
+#  ifdef DEBUG_MEMORY
 	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
+#  endif // DEBUG_MEMORY
 	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
 	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
 	_CrtSetDbgFlag( tmpDbgFlag );
-# endif
-# ifndef MAX_PATH
-#  define MAX_PATH 512
-# endif
-#endif
+# endif //DEBUG
+#endif // _MSC_VER
 
 	debug_init();
+	atexit( debug_exit );
+
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
+#if defined WIN32 && defined DEBUG
+	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
+#endif // WIN32
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
@@ -840,7 +859,6 @@ init://jump here from the end if re_initialising
 	pal_ShutDown();
 	frameShutDown();
 
-	debug_exit();
 	if (reInit) goto init;
 
 	return 0;
@@ -853,7 +871,6 @@ exit:
 	pal_ShutDown();
 	frameShutDown();
 
-	debug_exit();
 	return 1;
 }
 

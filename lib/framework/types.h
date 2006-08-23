@@ -16,15 +16,18 @@
 #endif
 
 #ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
 # include <windows.h>
-typedef signed char             int8_t;
-typedef short int               int16_t;
-typedef int                     int32_t;
+#endif // WIN32
+
+#ifdef _MSC_VER
+typedef signed __int8           int8_t;
+typedef signed __int16          int16_t;
+typedef signed __int32          int32_t;
 typedef signed __int64          int64_t;
-typedef unsigned char           uint8_t;
-typedef unsigned short int      uint16_t;
-typedef unsigned int            uint32_t;
+typedef unsigned __int8         uint8_t;
+typedef unsigned __int16        uint16_t;
+typedef unsigned __int32        uint32_t;
 typedef unsigned __int64        uint64_t;
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
@@ -36,9 +39,9 @@ typedef unsigned __int64        uint64_t;
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
 #else
-/* Platforms that have support for C99 have all of the above already defined */
+/* Compilers that have support for C99 have all of the above defined in stdint.h */
 # include <stdint.h>
-#endif
+#endif // _MSC_VER
 
 /* Basic numeric types */
 typedef unsigned	char	UBYTE;
@@ -74,11 +77,8 @@ typedef			int	SDWORD;
 
 #ifndef APIENTRY
 #define APIENTRY
-#endif
 
-#define cdecl
-
-#define __int64 long long 
+#endif // WIN32
 
 typedef void * HKEY;
 typedef int GUID;
