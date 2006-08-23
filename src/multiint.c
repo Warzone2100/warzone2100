@@ -2900,7 +2900,7 @@ static VOID CurrentForce(VOID)
 		sButInit.pTip = getTemplateName(pF->pTempl);
 
 		BufferID = GetObjectBuffer();
-		ASSERT((BufferID >= 0,"Unable to aquire Obj Buffer."));
+		ASSERT( BufferID >= 0,"Unable to aquire Obj Buffer." );
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		ObjectBuffers[BufferID].Data = (void*)pF->pTempl;
 		sButInit.pUserData = (void*)&ObjectBuffers[BufferID];

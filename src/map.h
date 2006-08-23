@@ -295,10 +295,10 @@ extern void	mapWaterProcess( void );
 FUNCINLINE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
 
-	ASSERT((x < mapWidth,
-		"mapTile: x coordinate bigger than map width"));
-	ASSERT((y < mapHeight,
-		"mapTile: y coordinate bigger than map height"));
+	ASSERT( x < mapWidth,
+		"mapTile: x coordinate bigger than map width" );
+	ASSERT( y < mapHeight,
+		"mapTile: y coordinate bigger than map height" );
 
 	//return psMapTiles + x + (y << mapShift); //width no longer a power of 2
 	return psMapTiles + x + (y * mapWidth);
@@ -318,10 +318,10 @@ FUNCINLINE SWORD map_TileHeight(UDWORD x, UDWORD y)
 FUNCINLINE void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 {
 
-	ASSERT((x < mapWidth,
-		"mapTile: x coordinate bigger than map width"));
-	ASSERT((y < mapHeight,
-		"mapTile: y coordinate bigger than map height"));
+	ASSERT( x < mapWidth,
+		"mapTile: x coordinate bigger than map width" );
+	ASSERT( y < mapHeight,
+		"mapTile: y coordinate bigger than map height" );
 
 	//psMapTiles[x + (y << mapShift)].height = height;//width no longer a power of 2
 	psMapTiles[x + (y * mapWidth)].height = (UBYTE) (height / ELEVATION_SCALE);
@@ -398,4 +398,6 @@ extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 extern BOOL	bDoneWater;
 
 #endif
+
+
 

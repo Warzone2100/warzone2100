@@ -512,14 +512,14 @@ BLOCK_HEAP  *psHeap;
 	/* Get some memory for our binding */
 	newMapping = (KEY_MAPPING*)MALLOC(sizeof(KEY_MAPPING));
 
-	ASSERT(((int)newMapping,"Couldn't allocate memory for a key mapping"));
+	ASSERT( (int)newMapping,"Couldn't allocate memory for a key mapping" );
 
 	/* Plus one for the terminator */
 
 
 
 	newMapping->pName = (STRING*)MALLOC(strlen(name)+1);
-	ASSERT(((int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping"));
+	ASSERT( (int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping" );
 
 	memSetBlockHeap(psHeap);
 

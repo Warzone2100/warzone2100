@@ -1605,8 +1605,8 @@ void	setUpRadarTarget(SDWORD x, SDWORD y)
 void	requestRadarTrack(SDWORD x, SDWORD y)
 {
 /*
-	ASSERT((x<mapWidth*TILE_UNITS,"Weirdy x coordinate for tracking"));
-	ASSERT((y<mapHeight*TILE_UNITS,"Weirdy y coordinate for tracking"));
+	ASSERT( x<mapWidth*TILE_UNITS,"Weirdy x coordinate for tracking" );
+	ASSERT( y<mapHeight*TILE_UNITS,"Weirdy y coordinate for tracking" );
 */
 
 	radarX = (SWORD)x;

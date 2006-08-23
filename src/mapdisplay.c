@@ -112,13 +112,13 @@ iSurface	*pMapSurface;
 	memset(bufSpace, 0, (width*height));
 
 	/* Exit if we can't get it! */
-	ASSERT((bufSpace!=NULL,"Can't get the memory for the map buffer"));
+	ASSERT( bufSpace!=NULL,"Can't get the memory for the map buffer" );
 
 	/* Build our new surface */
 	pMapSurface = iV_SurfaceCreate(REND_SURFACE_USR, width, height, 10, 10,bufSpace);
 
 	/* Exit if we can't get it! */
-	ASSERT((pMapSurface!=NULL,"Whoa - can't make surface for map"));
+	ASSERT( pMapSurface!=NULL,"Whoa - can't make surface for map" );
 
 	//set up the intel colours
 	//setUpIntelColours();
@@ -257,7 +257,7 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 		    }
             else
             {
-                ASSERT((FALSE, "intDisplayMessageButton: invalid stat"));
+                ASSERT( FALSE, "intDisplayMessageButton: invalid stat" );
                 IMDType = IMDTYPE_RESEARCH;
                 psResGraphic = (BASE_STATS *)psResearch;
             }
@@ -302,12 +302,14 @@ void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
 		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic,selectedPlayer,&Rotation,
             &Position,TRUE, scale);
 	} else {
-		ASSERT((FALSE, "renderResearchToBuffer: Unknown PIEType"));
+		ASSERT( FALSE, "renderResearchToBuffer: Unknown PIEType" );
 	}
 
 	// close matrix context
 	pie_MatEnd();
 }
+
+
 
 
 

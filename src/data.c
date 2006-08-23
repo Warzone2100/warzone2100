@@ -895,7 +895,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing old");
 		id = pie_ReloadTexPage(texfile, pBuffer);
-		ASSERT((id >=0,"pie_ReloadTexPage failed"));
+		ASSERT( id >=0,"pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
 	else
@@ -1011,8 +1011,8 @@ void dataAudioRelease( void *pData )
 	{
 		TRACK	*psTrack = (TRACK *) pData;
 
-		ASSERT( (PTRVALID(psTrack, sizeof(TRACK)),
-				"dataAudioRelease: invalid track pointer") );
+		ASSERT( PTRVALID(psTrack, sizeof(TRACK)),
+				"dataAudioRelease: invalid track pointer" );
 
 		audio_ReleaseTrack( psTrack );
 		FREE( psTrack );
@@ -1292,4 +1292,6 @@ BOOL dataInitLoadFuncs(void)
 
 	return TRUE;
 }
+
+
 

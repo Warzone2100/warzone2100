@@ -647,7 +647,7 @@ BOOL intAddTransButtonForm(void)
 			sBFormInit.pTip = droidGetName(psDroid);
 
 			BufferID = sBFormInit.id-IDTRANS_START;
-			ASSERT((BufferID < NUM_TOPICBUFFERS,"BufferID > NUM_TOPICBUFFERS"));
+			ASSERT( BufferID < NUM_TOPICBUFFERS,"BufferID > NUM_TOPICBUFFERS" );
 			ClearTopicButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&TopicBuffers[BufferID]);
 			TopicBuffers[BufferID].Data = (void*)psDroid;
@@ -673,7 +673,7 @@ BOOL intAddTransButtonForm(void)
 			sBFormInit2.pTip = NULL;
 
 			BufferID = (sBFormInit2.id-IDTRANS_STATSTART)*2+1;
-			ASSERT((BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS"));
+			ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
 			ClearObjectButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 			sBFormInit2.pUserData = (void*)&ObjectBuffers[BufferID];
@@ -687,7 +687,7 @@ BOOL intAddTransButtonForm(void)
 
 			/* Update the init struct for the next buttons */
 			sBFormInit.id += 1;
-			ASSERT((sBFormInit.id < IDTRANS_END,"Too many Transporter buttons"));
+			ASSERT( sBFormInit.id < IDTRANS_END,"Too many Transporter buttons" );
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > OBJ_WIDTH)
@@ -697,7 +697,7 @@ BOOL intAddTransButtonForm(void)
 			}
 
 			sBFormInit2.id += 1;
-			ASSERT((sBFormInit2.id < IDTRANS_STATEND,"Too many Transporter status buttons"));
+			ASSERT( sBFormInit2.id < IDTRANS_STATEND,"Too many Transporter status buttons" );
 
 			sBFormInit2.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit2.x + OBJ_BUTWIDTH + OBJ_GAP > OBJ_WIDTH)
@@ -786,7 +786,7 @@ BOOL intAddTransContentsForm(void)
 //			sBFormInit.pTip = psDroid->pName;
 			sBFormInit.pTip = droidGetName(psDroid);
 			BufferID = GetStatBuffer();
-			ASSERT((BufferID >= 0,"Unable to acquire stat buffer."));
+			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
 			RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
 			StatBuffers[BufferID].Data = (void*)psDroid;
 			sBFormInit.pUserData = (void*)&StatBuffers[BufferID];
@@ -800,7 +800,7 @@ BOOL intAddTransContentsForm(void)
 
 			/* Update the init struct for the next button */
 			sBFormInit.id += 1;
-			ASSERT((sBFormInit.id < IDTRANS_CONTEND,"Too many Transporter Droid buttons"));
+			ASSERT( sBFormInit.id < IDTRANS_CONTEND,"Too many Transporter Droid buttons" );
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > TRANSCONT_WIDTH)
@@ -1002,7 +1002,7 @@ BOOL intAddDroidsAvailForm(void)
 			// Set the tip and add the button
 			sBFormInit.pTip = psDroid->pName;
 			BufferID = GetSystem0Buffer();
-			ASSERT((BufferID >= 0,"Unable to acquire stat buffer."));
+			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
 			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
 			System0Buffers[BufferID].Data = (void*)psDroid;
 			sBFormInit.pUserData = (void*)&System0Buffers[BufferID];
@@ -1015,7 +1015,7 @@ BOOL intAddDroidsAvailForm(void)
 
 			// Update the init struct for the next button
 			sBFormInit.id += 1;
-			ASSERT((sBFormInit.id < IDTRANS_DROIDEND,"Too many Droids Built buttons"));
+			ASSERT( sBFormInit.id < IDTRANS_DROIDEND,"Too many Droids Built buttons" );
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > TRANSDROID_TABWIDTH)
@@ -1047,7 +1047,7 @@ BOOL intAddDroidsAvailForm(void)
 //			sBFormInit.pTip = psDroid->pName;
 			sBFormInit.pTip = droidGetName(psDroid);
 			BufferID = GetSystem0Buffer();
-			ASSERT((BufferID >= 0,"Unable to acquire stat buffer."));
+			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
 			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
 			System0Buffers[BufferID].Data = (void*)psDroid;
 			sBFormInit.pUserData = (void*)&System0Buffers[BufferID];
@@ -1079,7 +1079,7 @@ BOOL intAddDroidsAvailForm(void)
 
 			/* Update the init struct for the next button */
 			sBFormInit.id += 1;
-			ASSERT((sBFormInit.id < IDTRANS_DROIDEND,"Too many Droids Built buttons"));
+			ASSERT( sBFormInit.id < IDTRANS_DROIDEND,"Too many Droids Built buttons" );
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > TRANSDROID_TABWIDTH)
@@ -1159,7 +1159,7 @@ BOOL OrderDroidsToEmbark(void)
 		if( psDroid->droidType == DROID_TRANSPORTER ) {
 			psTransporters[NumTransporters] = psDroid;
 			NumTransporters++;
-			ASSERT((NumTransporters <= MAX_TRANSPORTERS,"MAX_TRANSPORTERS Exceeded"));
+			ASSERT( NumTransporters <= MAX_TRANSPORTERS,"MAX_TRANSPORTERS Exceeded" );
 		}
 	}
 
@@ -1498,7 +1498,7 @@ void transporterRemoveDroid(UDWORD id)
 	UDWORD		droidX, droidY;
 	DROID_GROUP	*psGroup;
 
-	ASSERT((psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units"));
+	ASSERT( psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units" );
 
 	currID = IDTRANS_CONTSTART;
 	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
@@ -1536,7 +1536,7 @@ void transporterRemoveDroid(UDWORD id)
             }
     		if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
 	    	{
-		    	ASSERT((FALSE, "transporterRemoveUnit: Unable to find a valid location"));
+		    	ASSERT( FALSE, "transporterRemoveUnit: Unable to find a valid location" );
     		}
 	    	psDroid->x = (UWORD)(droidX << TILE_SHIFT);
 		    psDroid->y = (UWORD)(droidY << TILE_SHIFT);
@@ -1586,7 +1586,7 @@ void intTransporterAddDroid(UDWORD id)
 	DROID		*psDroid, *psNext;
 	UDWORD		currID;
 
-	ASSERT((psCurrTransporter != NULL, "intTransporterAddUnit:can't remove units"));
+	ASSERT( psCurrTransporter != NULL, "intTransporterAddUnit:can't remove units" );
 
 	currID = IDTRANS_DROIDSTART;
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid = psNext)
@@ -1647,14 +1647,14 @@ BOOL checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
 
-	ASSERT((PTRVALID(psTransporter, sizeof(DROID)),
-		"checkTransporterSpace: Invalid droid pointer"));
-	ASSERT((PTRVALID(psAssigned, sizeof(DROID)),
-		"checkTransporterSpace: Invalid droid pointer"));
-	ASSERT((psTransporter->droidType == DROID_TRANSPORTER,
-		"checkTransporterSpace: Droid is not a Transporter"));
-    ASSERT((psTransporter->psGroup != NULL,
-        "checkTransporterSpace: tranporter doesn't have a group"));
+	ASSERT( PTRVALID(psTransporter, sizeof(DROID)),
+		"checkTransporterSpace: Invalid droid pointer" );
+	ASSERT( PTRVALID(psAssigned, sizeof(DROID)),
+		"checkTransporterSpace: Invalid droid pointer" );
+	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
+		"checkTransporterSpace: Droid is not a Transporter" );
+    ASSERT( psTransporter->psGroup != NULL,
+        "checkTransporterSpace: tranporter doesn't have a group" );
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
@@ -1697,7 +1697,7 @@ UDWORD transporterSpaceRequired(DROID *psDroid)
 		size = HEAVY_DROID;
 		break;
 	default:
-		ASSERT((FALSE, "transporterSpaceRequired: Unknown Droid size"));
+		ASSERT( FALSE, "transporterSpaceRequired: Unknown Droid size" );
 		size = 0;
 		break;
 	}
@@ -1780,7 +1780,7 @@ BOOL launchTransporter(DROID *psTransporter)
 	{
 		if (psTransporter->droidType != DROID_TRANSPORTER)
 		{
-			ASSERT((FALSE, "launchTransporter: Invalid Transporter Droid"));
+			ASSERT( FALSE, "launchTransporter: Invalid Transporter Droid" );
 			return FALSE;
 		}
 
@@ -1808,13 +1808,13 @@ BOOL launchTransporter(DROID *psTransporter)
 have arrived - returns TRUE when there*/
 BOOL updateTransporter(DROID *psTransporter)
 {
-	ASSERT((PTRVALID(psTransporter, sizeof(DROID)),
-		"updateTransporter: Invalid droid pointer"));
+	ASSERT( PTRVALID(psTransporter, sizeof(DROID)),
+		"updateTransporter: Invalid droid pointer" );
 
 
 	if (psTransporter->droidType != DROID_TRANSPORTER)
 	{
-		ASSERT((FALSE, "updateTransporter: Invalid droid type"));
+		ASSERT( FALSE, "updateTransporter: Invalid droid type" );
 		return TRUE;
 	}
 
@@ -1975,7 +1975,7 @@ void flashMissionButton(UDWORD buttonID)
             break;
         default:
             //do nothing other than in debug
-            ASSERT((FALSE, "flashMissionButton: Unknown button ID"));
+            ASSERT( FALSE, "flashMissionButton: Unknown button ID" );
             break;
         }
 	}
@@ -2002,7 +2002,7 @@ void stopMissionButtonFlash(UDWORD buttonID)
             break;
         default:
             //do nothing other than in debug
-            ASSERT((FALSE, "stopMissionButtonFlash: Unknown button ID"));
+            ASSERT( FALSE, "stopMissionButtonFlash: Unknown button ID" );
             break;
         }
 	}
@@ -2043,10 +2043,10 @@ void resetTransporter(DROID *psTransporter)
 /*checks the order of the droid to see if its currently flying*/
 BOOL transporterFlying(DROID *psTransporter)
 {
-	ASSERT((PTRVALID(psTransporter, sizeof(DROID)),
-		"transporterFlying: Invalid droid pointer"));
-	ASSERT((psTransporter->droidType == DROID_TRANSPORTER,
-		"transporterFlying: Droid is not a Transporter"));
+	ASSERT( PTRVALID(psTransporter, sizeof(DROID)),
+		"transporterFlying: Invalid droid pointer" );
+	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
+		"transporterFlying: Droid is not a Transporter" );
 
     if (psTransporter->order == DORDER_TRANSPORTOUT OR
         psTransporter->order == DORDER_TRANSPORTIN OR

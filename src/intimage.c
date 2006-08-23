@@ -269,7 +269,7 @@ void DrawEnd(void)
 	if(EnableLocks) {
 		LockRefs--;
 
-		ASSERT((LockRefs >= 0,"Inbalanced DrawEnd()"));
+		ASSERT( LockRefs >= 0,"Inbalanced DrawEnd()" );
 
 		if(LockRefs == 0) {
 			pie_LocalRenderEnd();
@@ -523,5 +523,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 
 	DrawEnd();
 }
+
+
 
 

@@ -362,7 +362,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-	ASSERT( (sound_CheckTrack(iTrack) == TRUE, "audio_QueueSample: track %i outside limits\n", iTrack) );
+	ASSERT( sound_CheckTrack(iTrack) == TRUE, "audio_QueueSample: track %i outside limits\n", iTrack );
 
 	// reject track if too many of same ID already in queue
 	if ( audio_CheckSameQueueTracksPlaying(iTrack) == FALSE )

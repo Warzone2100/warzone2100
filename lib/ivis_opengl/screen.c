@@ -652,8 +652,8 @@ void screenSetPalette(UDWORD first, UDWORD count, PALETTEENTRY *psEntries)
 {
 	UDWORD	i;
 
-	ASSERT(((first+count-1 < PAL_MAX),
-		"screenSetPalette: invalid entry range"));
+	ASSERT( (first+count-1 < PAL_MAX),
+		"screenSetPalette: invalid entry range" );
 
 	if (count == 0)
 	{
@@ -705,4 +705,6 @@ char* screenDumpToDisk(char* path) {
 void screenTextOut(UDWORD x, UDWORD y, STRING *pFormat, ...)
 {
 }
+
+
 

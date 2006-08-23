@@ -545,7 +545,7 @@ void DrawTransColourImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, SWORD Co
 
 void iV_SetMousePointer(IMAGEFILE *ImageFile,UWORD ImageID)
 {
-	ASSERT((ImageID < ImageFile->Header.NumImages,"iV_SetMousePointer : Invalid image id"));
+	ASSERT( ImageID < ImageFile->Header.NumImages,"iV_SetMousePointer : Invalid image id" );
 
 	MouseImageFile = ImageFile;
 	MouseImageID = ImageID;
@@ -764,7 +764,7 @@ iColour* psPalette = pie_GetGamePal();
 			break;
 
 		default:
-			ASSERT((FALSE,"Invalid transparency filter selection"));
+			ASSERT( FALSE,"Invalid transparency filter selection" );
 			break;
 		}
 
@@ -789,4 +789,6 @@ iColour* psPalette = pie_GetGamePal();
 }
 
 #endif
+
+
 

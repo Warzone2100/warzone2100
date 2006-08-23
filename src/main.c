@@ -79,14 +79,14 @@ BOOL	frontendInitialised = FALSE;
 BOOL	reInit = FALSE;
 BOOL	bDisableLobby;
 BOOL pQUEUE=TRUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
-char	SaveGamePath[255];
-char	ScreenDumpPath[255];
-char	MultiForcesPath[255];
-char	MultiCustomMapsPath[255];
-char	MultiPlayersPath[255];
-char	KeyMapPath[255];
-char	UserMusicPath[255];
-char	RegFilePath[];
+char	SaveGamePath[MAX_PATH];
+char	ScreenDumpPath[MAX_PATH];
+char	MultiForcesPath[MAX_PATH];
+char	MultiCustomMapsPath[MAX_PATH];
+char	MultiPlayersPath[MAX_PATH];
+char	KeyMapPath[MAX_PATH];
+char	UserMusicPath[MAX_PATH];
+char	RegFilePath[MAX_PATH];
 
 void debug_callback_stderr( void**, const char * );
 void debug_callback_win32debug( void**, const char * );
@@ -206,7 +206,7 @@ static void initialize_PhysicsFS(void)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-	char tmpstr[MAX_PATH];
+	char tmpstr[MAX_PATH] = { '\0' };
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -392,6 +392,7 @@ int main(int argc, char *argv[])
 	_CrtSetDbgFlag( tmpDbgFlag );
 # endif //DEBUG
 #endif // _MSC_VER
+
 
 	debug_init();
 	atexit( debug_exit );
@@ -882,13 +883,15 @@ UDWORD GetGameMode(void)
 
 void SetGameMode(UDWORD status)
 {
-	ASSERT((status == GS_TITLE_SCREEN ||
+	ASSERT( status == GS_TITLE_SCREEN ||
 			status == GS_MISSION_SCREEN ||
 			status == GS_NORMAL ||
 			status == GS_VIDEO_MODE ||
 			status == GS_SAVEGAMELOAD,
-		"SetGameMode: invalid game mode"));
+		"SetGameMode: invalid game mode" );
 
 	gameStatus = status;
 }
+
+
 

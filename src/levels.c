@@ -126,7 +126,7 @@ void levError(STRING *pError)
 	levGetErrorData(&line, &pText);
 
 #ifdef DEBUG
-	ASSERT((FALSE, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText));
+	ASSERT( FALSE, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
 #else
 	debug( LOG_ERROR, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
 #endif
@@ -227,7 +227,7 @@ BOOL levParse(char *pBuffer, SDWORD size, int datadir)
 					psDataSet->type = LDS_MKEEP_LIMBO;
 					break;
 				default:
-					ASSERT((FALSE,"eh?"));
+					ASSERT( FALSE,"eh?" );
 					break;
 				}
 			}
@@ -789,8 +789,8 @@ BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType)
 	}
 	if (psNewLevel->game == -1)  //no .gam file to load - BETWEEN missions (for Editor games only)
 	{
-		ASSERT((psNewLevel->type == LDS_BETWEEN,
-			"levLoadData: only BETWEEN missions do not need a .gam file"));
+		ASSERT( psNewLevel->type == LDS_BETWEEN,
+			"levLoadData: only BETWEEN missions do not need a .gam file" );
 		debug( LOG_NEVER, "levLoadData: no .gam file for level: BETWEEN mission\n" );
 		if (pSaveName != NULL)
 		{
@@ -1032,8 +1032,8 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 					}
 					break;
 				default:
-					ASSERT((psNewLevel->type >= MULTI_TYPE_START,
-						"levLoadData: Unexpected mission type"));
+					ASSERT( psNewLevel->type >= MULTI_TYPE_START,
+						"levLoadData: Unexpected mission type" );
 					debug(LOG_WZ, "levLoadData: default (MULTIPLAYER)");
 					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))

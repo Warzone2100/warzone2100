@@ -234,8 +234,8 @@ void frameSetCursor(HCURSOR hNewCursor)
 /* Set the current cursor from a Resource ID */
 void frameSetCursorFromRes(WORD resID)
 {
-	ASSERT((resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID"));
-	ASSERT((resID < CURSOR_OFFSET + MAX_CURSORS, "frameSetCursorFromRes: bad resource ID"));
+	ASSERT( resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID" );
+	ASSERT( resID < CURSOR_OFFSET + MAX_CURSORS, "frameSetCursorFromRes: bad resource ID" );
 
 	//If we are already using this cursor then  return
 	if (resID != currentCursorResID)

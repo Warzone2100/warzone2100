@@ -272,7 +272,7 @@ void ChangeDriver(void)
 
 		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
 			if( (psDroid->sMove.Status == MOVEDRIVE) ) {
-				ASSERT(((psDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter"));
+				ASSERT( (psDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter" );
 				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
@@ -302,7 +302,7 @@ void StopDriverMode(void)
 
 		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
 			if( (psDroid->sMove.Status == MOVEDRIVE) ) {
-				ASSERT(((psDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter"));
+				ASSERT( (psDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter" );
 				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
@@ -652,7 +652,7 @@ void driveUpdate(void)
 				// If control did something then force the droid's move status.
 				if(psDrivenDroid->sMove.Status != MOVEDRIVE) {
 					psDrivenDroid->sMove.Status = MOVEDRIVE;
-					ASSERT(((psDrivenDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter"));
+					ASSERT( (psDrivenDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter" );
 					driveDir = psDrivenDroid->direction % 360;
 				}
 
@@ -931,4 +931,6 @@ void driveProcessRadarInput(int x,int y)
 	CalcRadarPosition(x,y,(UDWORD *)&PosX,(UDWORD *)&PosY);
 	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS,PosY*TILE_UNITS);
 }
+
+
 

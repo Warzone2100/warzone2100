@@ -965,7 +965,7 @@ void drawTiles(iView *camera, iView *player)
 				tileIJ[i][j].depth = zMax;
 				if((UDWORD)i>mapHeight OR (UDWORD)j>mapWidth)
 				{
-					ASSERT((FALSE,"Weirdy tile coords"));
+					ASSERT( FALSE,"Weirdy tile coords" );
 				}
 				bucketAddTypeToList(RENDER_TILE, &tileIJ[i][j]);
 				bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
@@ -1401,8 +1401,8 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 	UDWORD		brightness, specular;
 //	SDWORD		centreX, centreZ;
 
-	ASSERT( (PTRVALID(psParentObj, sizeof(SIMPLE_OBJECT)),
-		"renderAnimComponent: invalid parent object pointer") );
+	ASSERT( PTRVALID(psParentObj, sizeof(SIMPLE_OBJECT)),
+		"renderAnimComponent: invalid parent object pointer" );
 
 	/* only draw visible bits */
 	if( (psParentObj->type == OBJ_DROID) AND !godMode AND !demoGetStatus())
@@ -2027,9 +2027,9 @@ void setPlayerPos(SDWORD x, SDWORD y)
 	SDWORD midX,midY;
 
 
-	ASSERT(((x > 0) && (x < (SDWORD)(mapWidth*TILE_UNITS)) &&
+	ASSERT( (x > 0) && (x < (SDWORD)(mapWidth*TILE_UNITS)) &&
 			(y > 0) && (y < (SDWORD)(mapHeight*TILE_UNITS)),
-		"setPlayerPos: position off map"));
+		"setPlayerPos: position off map" );
 
 	// Find centre of grid thats actually DRAWN
 	midX = (x>>TILE_SHIFT)-(visibleXTiles/2);
@@ -2195,7 +2195,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	}
 	else
 	{
-		ASSERT((FALSE,"Buggered proximity message type"));
+		ASSERT( FALSE,"Buggered proximity message type" );
 	}
 //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
@@ -2230,15 +2230,15 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 			proxImd = getImdFromIndex(MI_BLIP_ARTEFACT);
 			break;
 		default:
-			ASSERT((FALSE,"Buggered proximity message type"));
+			ASSERT( FALSE,"Buggered proximity message type" );
 			break;
 		}
 	}
 	else
 	{
 		//object Proximity displays are for oil resources and artefacts
-		ASSERT(( ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
-			OBJ_FEATURE, "renderProximityMsg: invalid feature" ));
+		ASSERT( ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
+			OBJ_FEATURE, "renderProximityMsg: invalid feature" );
 
 		if (((FEATURE *)psProxDisp->psMessage->pViewData)->psStats->subType ==
 			FEAT_OIL_RESOURCE)
@@ -2986,9 +2986,8 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	iV_TRANSLATE(rx,0,-rz);
 
 	//quick check for invalid data
-	//ASSERT((psPosition->factoryType < NUM_FACTORY_TYPES AND
-    ASSERT((psPosition->factoryType < NUM_FLAG_TYPES AND
-		psPosition->factoryInc < MAX_FACTORY, "Invalid assembly point"));
+	//ASSERT( psPosition->factoryType < NUM_FACTORY_TYPES AND
+    ASSERT( psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY, "Invalid assembly point" );
 
 	if(!psPosition->selected)
 	{
@@ -3236,13 +3235,13 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 void renderDroid( DROID *psDroid )
 {
 //PROPULSION_STATS	*psPropStats;
-//	ASSERT((psDroid->x != 0 && psDroid->y != 0,
-//		"moveUpdateUnit: unit at (0,0)"));
+//	ASSERT( psDroid->x != 0 && psDroid->y != 0,
+//		"moveUpdateUnit: unit at (0,0)" );
 
 
    //	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-   //	ASSERT( (PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
-	//		"moveUpdateDroid: invalid propulsion stats pointer") );
+   //	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	//		"moveUpdateDroid: invalid propulsion stats pointer" );
 
 	/*
 	if ( psPropStats->propulsionType == LIFT )
@@ -3397,7 +3396,7 @@ void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
 			scrR = scale * 20;
 			break;
 		default:
-			ASSERT((FALSE, "drawWeaponReloadBars: invalid object type"));
+			ASSERT( FALSE, "drawWeaponReloadBars: invalid object type" );
 			damLevel = 100;
 			break;
 		}
@@ -3807,7 +3806,7 @@ FRACT			mulH;
 	case BAR_NONE:
 		return;
 	default:
-		ASSERT((FALSE,"Invalid energy bar display value"));
+		ASSERT( FALSE,"Invalid energy bar display value" );
 		break;
 	}
 
@@ -4670,8 +4669,8 @@ SDWORD	shift;
 
 	// CHECK WHETHER THE NUMBER OF POINTS IN THE IMD WILL FIT IN THE ARRAY
 
-	ASSERT((imd->npoints < MAX_FLATTEN_POINTS,
-		"flattenImd: too many points in the PIE to flatten it"));
+	ASSERT( imd->npoints < MAX_FLATTEN_POINTS,
+		"flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
    	memcpy(alteredPoints,imd->points,imd->npoints*sizeof(iVector));
@@ -4801,8 +4800,8 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	/* Get the correct tile index for the y coordinate */
 	actualY = playerZTile + i;
 
-   //	ASSERT((actualX<mapWidth,"X Coordinate invalid in tile draw"));
-   //	ASSERT((actualY<mapWidth,"Y Coordinate invalid in tile draw"));
+   //	ASSERT( actualX<mapWidth,"X Coordinate invalid in tile draw" );
+   //	ASSERT( actualY<mapWidth,"Y Coordinate invalid in tile draw" );
 
 
 #ifdef SHOW_ZONES
@@ -5831,7 +5830,7 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 			gfxId = IMAGE_LEV_7;
 			break;
 		default:
-			ASSERT((FALSE, "Weird droid level in drawDroidRank"));
+			ASSERT( FALSE, "Weird droid level in drawDroidRank" );
 		break;
 	}
 //#else
@@ -5866,7 +5865,7 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 			gfxId = IMAGE_GN_8;
 			break;
 		default:
-			ASSERT((FALSE, "Weird droid level in drawDroidRank"));
+			ASSERT( FALSE, "Weird droid level in drawDroidRank" );
 		break;
 	}
 	*/

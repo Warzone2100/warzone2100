@@ -170,8 +170,8 @@ audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
 
 	/* check is valid pointer */
-	ASSERT( (PTRVALID(psBaseObj, sizeof(BASE_OBJECT)),
-			"audio_GetObjectPos: game object pointer invalid\n") );
+	ASSERT( PTRVALID(psBaseObj, sizeof(BASE_OBJECT)),
+			"audio_GetObjectPos: game object pointer invalid\n" );
 
 	*piX = psBaseObj->x;
 	*piZ = map_TileHeight( psBaseObj->x >> TILE_SHIFT,
@@ -205,8 +205,8 @@ audio_GetClusterCentre( void *psClusterObj, SDWORD *piX, SDWORD *piY, SDWORD *pi
 	BOOL	bDroidInClusterMoving = FALSE;
 
 	/* check valid pointer */
-	ASSERT( (PTRVALID(psDroid, sizeof(DROID)),
-			"audio_GetClusterCentre: game object pointer invalid\n") );
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+			"audio_GetClusterCentre: game object pointer invalid\n" );
 
 	iNumObj = *piX = *piY = *piZ = 0;
 
@@ -263,8 +263,8 @@ audio_GetNewClusterObject( void **psClusterObj, SDWORD iClusterID )
 	DROID	*psDroid = (DROID *) *psClusterObj;
 
 	/* check valid pointer */
-	ASSERT( (PTRVALID(psDroid, sizeof(DROID)),
-			"audio_GetNewClusterObject: game object pointer invalid\n") );
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+			"audio_GetNewClusterObject: game object pointer invalid\n" );
 
 	/* return if droid not dead */
 	if ( !psDroid->died )

@@ -262,7 +262,7 @@ TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, UDWORD key,
 		}
 		break;
 	default:
-		ASSERT((FALSE, "treapDelRec: invalid return from comparison"));
+		ASSERT( FALSE, "treapDelRec: invalid return from comparison" );
 		break;
 	}
 	return NULL;
@@ -312,7 +312,7 @@ void *treapFindRec(TREAP_NODE *psRoot, UDWORD key, TREAP_CMP cmp)
 		return treapFindRec(psRoot->psRight, key, cmp);
 		break;
 	default:
-		ASSERT((FALSE, "treapFindRec: invalid return from comparison"));
+		ASSERT( FALSE, "treapFindRec: invalid return from comparison" );
 		break;
 	}
 	return NULL;
@@ -452,4 +452,6 @@ void *treapGetSmallest(TREAP *psTreap)
 
 	return treapGetSmallestRec(psTreap->psRoot);
 }
+
+
 

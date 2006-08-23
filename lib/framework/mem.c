@@ -150,8 +150,8 @@ void *memMalloc(STRING *pFileName, SDWORD LineNumber, size_t Size)
 	void		*pMemBase;
 	MEM_NODE	*psNode;
 
-	ASSERT(((pFileName != NULL), "No filename passed to mem_Malloc"));
-	ASSERT((Size != 0, "Cannot allocate 0 bytes of memory."));
+	ASSERT( (pFileName != NULL), "No filename passed to mem_Malloc" );
+	ASSERT( Size != 0, "Cannot allocate 0 bytes of memory." );
 
 	if (psCurrBlockHeap != NULL)
 	{
@@ -165,7 +165,7 @@ void *memMalloc(STRING *pFileName, SDWORD LineNumber, size_t Size)
 	{
 
 
-		ASSERT((FALSE, "Warning: malloc returning NULL - [%s - %d]",pFileName,LineNumber));
+		ASSERT( FALSE, "Warning: malloc returning NULL - [%s - %d]",pFileName,LineNumber );
 		debug( LOG_NEVER, "[%s - %d] %d bytes\n", pFileName, LineNumber, Size );
 		return NULL;
 	}
@@ -243,9 +243,9 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 	(void)pFileName;
 
 
-	ASSERT(((pFileName != NULL), "No filename passed to mem_Free"));
-	ASSERT(((pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
-								  "File: %s\nLine: %d\n", pFileName, LineNumber));
+	ASSERT( (pFileName != NULL), "No filename passed to mem_Free" );
+	ASSERT( (pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
+								  "File: %s\nLine: %d\n", pFileName, LineNumber );
 
 
 	// see if the pointer was allocated in a block
@@ -268,11 +268,11 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 										(UDWORD)&sNode, memBlockCmp);
 
 
-	ASSERT((psDeleted != NULL,
+	ASSERT( psDeleted != NULL,
 			"Invalid pointer passed to mem_Free by:\n"
 			"File: %s\nLine: %d\n\n"
 			"Attempt to free already freed pointer?",
-			pFileName, LineNumber));
+			pFileName, LineNumber );
 	if (psDeleted)
 	{
 		/* The pointer is valid, check the buffer zones */
@@ -290,7 +290,7 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 			}
 		}
 
-		ASSERT(( !InvalidBottom && !InvalidTop,
+		ASSERT( !InvalidBottom && !InvalidTop,
 				"Safety zone on memory overwritten.\n"
 				"%d Invalid bytes (of %d) found below memory buffer.\n"
 				"%d Invalid bytes (of %d) found above memory buffer.\n\n"
@@ -298,7 +298,7 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 				"Memory freed by:\nFile: %s\nLine: %d\n",
 				InvalidBottom, SAFETY_ZONE_SIZE, InvalidTop, SAFETY_ZONE_SIZE,
 				psDeleted->pFile, psDeleted->line,
-				pFileName, LineNumber));
+				pFileName, LineNumber );
 
 		/* Trash the memory before it is freed (The PC already does this) */
 #ifdef MEMORY_SET
@@ -341,7 +341,7 @@ BOOL memPointerValid(void *pPtr, size_t size)
 {
 	MEM_NODE	sNode;
 
-	ASSERT((size, "memPointerValid: cannot check a pointer with zero size"));
+	ASSERT( size, "memPointerValid: cannot check a pointer with zero size" );
 
 	if (pPtr == NULL)
 	{

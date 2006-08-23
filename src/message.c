@@ -94,8 +94,8 @@ extern UDWORD selectedPlayer;
  * Order is now CAMPAIGN, MISSION, RESEARCH/PROXIMITY
  */
 #define ADD_MSG(list, msg, player) \
-	ASSERT((PTRVALID((msg), sizeof(MESSAGE)), \
-		"addMessage: Invalid message pointer")); \
+	ASSERT( PTRVALID((msg), sizeof(MESSAGE)), \
+		"addMessage: Invalid message pointer" ); \
 	if (list[player] == NULL) \
 	{ \
 		list[player] = msg; \
@@ -140,8 +140,8 @@ extern UDWORD selectedPlayer;
 
 void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
 {
-	ASSERT((PTRVALID((msg), sizeof(MESSAGE)),
-		"addMessage: Invalid message pointer"));
+	ASSERT( PTRVALID((msg), sizeof(MESSAGE)),
+		"addMessage: Invalid message pointer" );
 	if (list[player] == NULL)
 	{
 		list[player] = msg;
@@ -226,8 +226,8 @@ void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
  * del is a pointer to the message to remove
 */
 #define REMOVEMSG(list, heap, del, player) \
-	ASSERT((PTRVALID(del, sizeof(MESSAGE)), \
-		"removeMessage: Invalid message pointer")); \
+	ASSERT( PTRVALID(del, sizeof(MESSAGE)), \
+		"removeMessage: Invalid message pointer" ); \
 	if (list[player] == del) \
 	{ \
 		list[player] = list[player]->psNext; \
@@ -241,8 +241,8 @@ void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
 		{ \
 			psPrev = psCurr; \
 		} \
-		ASSERT((psCurr != NULL, \
-			"removeMessage: message not found")); \
+		ASSERT( psCurr != NULL, \
+			"removeMessage: message not found" ); \
 		if (psCurr != NULL) \
 		{ \
 			psPrev->psNext = psCurr->psNext; \
@@ -793,7 +793,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &count,&cnt);
                                 pViewMsgData += cnt;
 
-				ASSERT((count < UWORD_MAX, "loadViewData: numFrames too high for %s", name));
+				ASSERT( count < UWORD_MAX, "loadViewData: numFrames too high for %s", name );
 
 				psViewReplay->pSeqList[dataInc].numFrames = (UWORD)count;
 
@@ -861,22 +861,22 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 
 			if (LocX < 0)
 			{
-				ASSERT((FALSE,
-					"loadViewData: Negative X coord for prox message - %s",name));
+				ASSERT( FALSE,
+					"loadViewData: Negative X coord for prox message - %s",name );
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 			if (LocY < 0)
 			{
-				ASSERT((FALSE,
-					"loadViewData: Negative Y coord for prox message - %s",name));
+				ASSERT( FALSE,
+					"loadViewData: Negative Y coord for prox message - %s",name );
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 			if (LocZ < 0)
 			{
-				ASSERT((FALSE,
-					"loadViewData: Negative Z coord for prox message - %s",name));
+				ASSERT( FALSE,
+					"loadViewData: Negative Z coord for prox message - %s",name );
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->z = (UDWORD)LocZ;
@@ -884,7 +884,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			if (proxType > PROX_TYPES)
 			{
 //printf("proxType %d > %d\n",proxType,PROX_TYPES);
-				ASSERT((FALSE, "Invalid proximity message sub type - %s", name));
+				ASSERT( FALSE, "Invalid proximity message sub type - %s", name );
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->proxType = proxType;
@@ -913,7 +913,7 @@ VIEWDATA * getViewData(STRING *pName)
 	//UDWORD			i;
 	UBYTE			i;
 
-	ASSERT((strlen(pName)< MAX_STR_SIZE,"getViewData: verbose message name"));
+	ASSERT( strlen(pName)< MAX_STR_SIZE,"getViewData: verbose message name" );
 
 	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
 	{
@@ -1068,8 +1068,8 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
-		ASSERT(( ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
-			OBJ_FEATURE, "displayProximityMessage: invalid feature" ));
+		ASSERT( ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
+			OBJ_FEATURE, "displayProximityMessage: invalid feature" );
 
 		psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
 		if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
@@ -1103,7 +1103,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	}
 	else
 	{
-		ASSERT((FALSE, "Unable to find proximity display"));
+		ASSERT( FALSE, "Unable to find proximity display" );
 	}
 }*/
 
@@ -1177,6 +1177,8 @@ void addOilResourceProximities(void)
         }
     }
 }
+
+
 
 
 

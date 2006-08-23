@@ -47,8 +47,9 @@
  * Rewritten version of assert that allows a printf format text string to be passed
  * to ASSERT along with the condition.
  *
- * Arguments:	ASSERT((condition, "Format string with variables: %d, %d", var1, var2));
+ * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
+/*
 # define ASSERT(x) wz_assert x
 #ifdef _MSC_VER
 // MSVC doesn't understand __VAR_ARGS__ macros
@@ -71,6 +72,12 @@ do { \
 } \
 } while (FALSE)
 #endif
+*/
+#define ASSERT( x, ... ) \
+   (void)( x ? 0 : debug( LOG_ERROR, __VA_ARGS__ ) ); \
+   (void)( x ? 0 : debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s)", \
+		__FILE__, __LINE__, __FUNCTION__, (#x) ) ); \
+	assert( x );
 
 /*
  *

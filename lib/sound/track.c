@@ -169,13 +169,7 @@ BOOL sound_SetTrackVals
 		SDWORD	VagID
 	)
 {
-	ASSERT
-	(
-		(
-			iPriority >= LOW_PRIORITY
-		&&	iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority
-		)
-	);
+	ASSERT( iPriority >= LOW_PRIORITY && iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority );
 
 	// add to sound array
 	if ( iTrack < MAX_TRACKS )
@@ -362,7 +356,7 @@ void sound_CheckAllUnloaded( void )
 
 	for ( iTrack = 0; iTrack < MAX_TRACKS; iTrack++ )
 	{
-		ASSERT( (g_apTrack[iTrack] == NULL, "sound_CheckAllUnloaded: check audio.cfg for duplicate IDs\n") );
+		ASSERT( g_apTrack[iTrack] == NULL, "sound_CheckAllUnloaded: check audio.cfg for duplicate IDs\n" );
 	}
 }
 
@@ -402,15 +396,8 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 //
 void sound_CheckSample( AUDIO_SAMPLE *psSample )
 {
-	ASSERT( (PTRVALID(psSample, sizeof(AUDIO_SAMPLE)), "sound_CheckSample: sample pointer invalid\n") );
-	ASSERT
-	(
-		(
-			psSample->iSample >= 0
-		||	psSample->iSample == SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->
-				iSample
-		)
-	);
+	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)), "sound_CheckSample: sample pointer invalid\n" );
+	ASSERT( psSample->iSample >= 0 || psSample->iSample == SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->iSample );
 
 	//
 	// psSample;
@@ -485,7 +472,7 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 char *sound_GetTrackName( SDWORD iTrack )
 {
 	if ( iTrack == SAMPLE_NOT_FOUND ) return NULL;
-	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
+	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
 }
 
@@ -497,7 +484,7 @@ UDWORD sound_GetTrackHashName( SDWORD iTrack )
 {
 	if (iTrack == 0 || iTrack == SAMPLE_NOT_FOUND)
 		return 0;
-	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
+	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->resID : 0;
 }
 
@@ -664,7 +651,7 @@ SDWORD sound_GetAvailableID( void )
 		}
 	}
 
-	ASSERT( (i < MAX_TRACKS, "sound_GetTrackID: unused track not found!\n") );
+	ASSERT( i < MAX_TRACKS, "sound_GetTrackID: unused track not found!\n" );
 	if ( i < MAX_TRACKS )
 	{
 		return i;

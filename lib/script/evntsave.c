@@ -86,8 +86,8 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 				// store the variable type
 				if (pBuffer != NULL)
 				{
-					ASSERT((psVal->type < SWORD_MAX,
-						"eventSaveContext: variable type number too big"));
+					ASSERT( psVal->type < SWORD_MAX,
+						"eventSaveContext: variable type number too big" );
 					*((SWORD*)pPos) = (SWORD)psVal->type;
 					pPos += sizeof(SWORD);
 				}
@@ -110,8 +110,8 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 					// user defined type
 					saveFunc = asScrTypeTab[psVal->type - VAL_USERTYPESTART].saveFunc;
 
-					ASSERT((saveFunc != NULL,
-						"eventSaveContext: no save function for type %d\n", psVal->type));
+					ASSERT( saveFunc != NULL,
+						"eventSaveContext: no save function for type %d\n", psVal->type );
 
 					// reserve some space to store how many bytes the value uses
 					if (pBuffer != NULL)
@@ -140,14 +140,14 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 				if (numVars <= 0)
 				{
 					// done all the variables
-					ASSERT((psCVals->psNext == NULL,
-						"eventSaveContext: number of context variables does not match the script code"));
+					ASSERT( psCVals->psNext == NULL,
+						"eventSaveContext: number of context variables does not match the script code" );
 					break;
 				}
 			}
 		}
-		ASSERT((numVars == 0,
-			"eventSaveContext: number of context variables does not match the script code"));
+		ASSERT( numVars == 0,
+			"eventSaveContext: number of context variables does not match the script code" );
 	}
 
 	// actually store how many contexts have been saved
@@ -243,8 +243,8 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 				// user defined type
 				loadFunc = asScrTypeTab[type - VAL_USERTYPESTART].loadFunc;
 
-				ASSERT((loadFunc != NULL,
-					"eventLoadContext: no load function for type %d\n", type));
+				ASSERT( loadFunc != NULL,
+					"eventLoadContext: no load function for type %d\n", type );
 
 				valSize = *((UWORD *)pPos);
 				pPos += sizeof(UWORD);
@@ -365,8 +365,8 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 				// user defined type
 				loadFunc = asScrTypeTab[type - VAL_USERTYPESTART].loadFunc;
 
-				ASSERT((loadFunc != NULL,
-					"eventLoadContext: no load function for type %d\n", type));
+				ASSERT( loadFunc != NULL,
+					"eventLoadContext: no load function for type %d\n", type );
 
 				valSize = *((UWORD *)pPos);
 				pPos += sizeof(UWORD);

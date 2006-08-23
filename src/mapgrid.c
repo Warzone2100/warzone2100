@@ -241,7 +241,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
-							ASSERT((FALSE,"gridRemoveObject: grid out of sync"));
+							ASSERT( FALSE,"gridRemoveObject: grid out of sync" );
 							psCurr->apsObjects[i] = NULL;
 						}
 					}
@@ -257,12 +257,12 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 // could affect a location (x,y in world coords)
 void gridStartIterate(SDWORD x, SDWORD y)
 {
-//	ASSERT(( (x >= 0) && (x < GRID_WIDTH*GRID_UNITS) &&
+//	ASSERT( (x >= 0) && (x < GRID_WIDTH*GRID_UNITS) &&
 //			 (y >= 0) && (y < GRID_WIDTH*GRID_UNITS),
-//		"gridStartIterate: coords off grid"));
-	ASSERT(( (x >= 0) && (x < gridWidth*GRID_UNITS) &&
+//		"gridStartIterate: coords off grid" );
+	ASSERT( (x >= 0) && (x < gridWidth*GRID_UNITS) &&
 			 (y >= 0) && (y < gridHeight*GRID_UNITS),
-		"gridStartIterate: coords off grid"));
+		"gridStartIterate: coords off grid" );
 
 	x = x / GRID_UNITS;
 	y = y / GRID_UNITS;
@@ -357,7 +357,7 @@ void gridGarbageCollect(void)
 					if ( !((psCurr == psCheck) && (curr == check)) &&
 						(psCurr->apsObjects[curr] == psObj) )
 					{
-						ASSERT((FALSE, "mapGrid integrity check failed"));
+						ASSERT( FALSE, "mapGrid integrity check failed" );
 
 						psCurr->apsObjects[curr] = NULL;
 					}
@@ -651,4 +651,6 @@ SDWORD gridObjRange(BASE_OBJECT *psObj)
 
 	return (TILE_UNITS * 20);
 }
+
+
 

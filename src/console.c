@@ -202,8 +202,8 @@ CONSOLE_MESSAGE	*psMessage;
 	/* Is the string too long? */
 	textLength = strlen(messageText);
 
-	ASSERT(( textLength<MAX_CONSOLE_STRING_LENGTH,
-		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH"));
+	ASSERT( textLength<MAX_CONSOLE_STRING_LENGTH,
+		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
 
 	/* Are we using a defualt justification? */
 	if(jusType == DEFAULT_JUSTIFY)
@@ -708,7 +708,7 @@ BOOL	mouseOverConsoleBox( void )
 /* Sets up how many lines are allowed and how many are visible */
 void	setConsoleLineInfo(UDWORD vis)
 {
-	ASSERT((vis<=MAX_CONSOLE_MESSAGES,"Request for more visible lines in the console than exist"));
+	ASSERT( vis<=MAX_CONSOLE_MESSAGES,"Request for more visible lines in the console than exist" );
 	consoleVisibleLines = vis;
 }
 

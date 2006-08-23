@@ -209,8 +209,8 @@ BOOL bposGetLocation(SDWORD player, SDWORD clusterID, STRUCTURE_STATS *psStats, 
 	SDWORD		cluster, centerx,centery;
 	STRUCTURE	*psCurr;
 
-	ASSERT(((player >= 0) && (player < MAX_PLAYERS),
-		"bposGetLocation: invalid player"));
+	ASSERT( (player >= 0) && (player < MAX_PLAYERS),
+		"bposGetLocation: invalid player" );
 
 	// find the actual cluster number for the cluster ID
 	cluster = clustGetClusterFromID(clusterID);

@@ -273,7 +273,7 @@ VOID useTheForce(BOOL bAddTempl)//Luke
 
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
-			ASSERT((FALSE, "UseTheForce: Unable to find a free location"));
+			ASSERT( FALSE, "UseTheForce: Unable to find a free location" );
 		}
 		debug( LOG_NEVER, "force droid dropping at :%d,%d\n", x, y );
 
@@ -769,4 +769,6 @@ VOID updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 		ingame.skScores[player][1]++;
 	}
 }
+
+
 

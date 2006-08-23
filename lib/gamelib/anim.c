@@ -238,12 +238,12 @@ anim_AddFrameToAnim( int iFrame, VECTOR3D vecPos, VECTOR3D vecRot,
 	psAnim = g_animGlobals.psAnimList;
 
 	/* check current anim valid */
-	ASSERT( (psAnim != NULL, "anim_AddFrameToAnim: NULL current anim\n") );
+	ASSERT( psAnim != NULL, "anim_AddFrameToAnim: NULL current anim\n" );
 
 	/* check frame number in range */
-	ASSERT( (iFrame<psAnim->uwStates,
+	ASSERT( iFrame<psAnim->uwStates,
 			"anim_AddFrameToAnim: frame number %i > %i frames in imd\n",
-			iFrame, psAnim->uwObj) );
+			iFrame, psAnim->uwObj );
 
 	/* get state */
 	uwState = (g_animGlobals.uwCurObj * psAnim->uwStates) +
@@ -382,8 +382,8 @@ anim_GetShapeFromID( UWORD uwID )
 	{
 		psAnim3D = (ANIM3D *) psAnim;
 
-		ASSERT( (PTRVALID( psAnim3D, sizeof(ANIM3D)),
-				"anim_GetShapeFromID: invalid anim pointer\n" ) );
+		ASSERT( PTRVALID( psAnim3D, sizeof(ANIM3D)),
+				"anim_GetShapeFromID: invalid anim pointer\n" );
 
 		return psAnim3D->psFrames;
 	}
@@ -413,8 +413,8 @@ anim_GetFrame3D( ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime,
 							psAnim->uwFrameRate / 1000);
 
 	/* check in range */
-	ASSERT( (uwFrame<psAnim->uwStates,
-			"anim_GetObjectFrame3D: error in animation calculation\n") );
+	ASSERT( uwFrame<psAnim->uwStates,
+			"anim_GetObjectFrame3D: error in animation calculation\n" );
 
 	/* find current state */
 	uwState = (uwObj * psAnim->uwStates) + uwFrame;

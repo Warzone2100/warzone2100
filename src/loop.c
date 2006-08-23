@@ -576,7 +576,7 @@ GAMECODE gameLoop(void)
 							}
 							else
 							{
-								ASSERT((FALSE,"Mission Results: saveGame Failed"));
+								ASSERT( FALSE,"Mission Results: saveGame Failed" );
 								deleteSaveGame(sRequestResult);
 							}
 						}
@@ -588,13 +588,13 @@ GAMECODE gameLoop(void)
 							}
 							else
 							{
-								ASSERT((FALSE,"Mid Mission: saveGame Failed"));
+								ASSERT( FALSE,"Mid Mission: saveGame Failed" );
 								deleteSaveGame(sRequestResult);
 							}
       					}
 						else
 						{
-							ASSERT((FALSE, "Attempt to save game with incorrect load/save mode"));
+							ASSERT( FALSE, "Attempt to save game with incorrect load/save mode" );
 						}
 					}
 				}
@@ -849,7 +849,7 @@ GAMECODE gameLoop(void)
 		return GAMECODE_LOADGAME;
 		break;
 	default:
-		ASSERT((FALSE, "unknown loopMissionState"));
+		ASSERT( FALSE, "unknown loopMissionState" );
 		break;
 	}
 
@@ -1084,7 +1084,7 @@ void loop_ClearVideoPlaybackMode(void)
 	gameTimeStart();
 //	pie_SetFogStatus(TRUE);
 	cdAudio_Resume();
-	ASSERT((videoMode == 0,"loop_ClearVideoPlaybackMode: out of sync."));
+	ASSERT( videoMode == 0,"loop_ClearVideoPlaybackMode: out of sync." );
 }
 
 SDWORD loop_GetVideoMode(void)
@@ -1206,4 +1206,6 @@ void incNumConstructorDroids(UDWORD player)
 {
 	numConstructorDroids[player] += 1;
 }
+
+
 

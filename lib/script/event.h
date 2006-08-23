@@ -136,6 +136,8 @@ extern void eventTimeReset(UDWORD initTime);
 extern STRING *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
 extern STRING *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
 
+extern BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex);
 
 #endif
+
 

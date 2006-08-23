@@ -75,14 +75,14 @@ void widgSetTipColour(W_SCREEN *psScreen, UBYTE red, UBYTE green, UBYTE blue)
 void tipStart(WIDGET *psSource, STRING *pNewTip, int NewFontID,
 					 UDWORD *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
 {
-	ASSERT((PTRVALID(psSource, sizeof(WIDGET)),
-		"tipStart: Invalid widget pointer"));
-//	ASSERT((PTRVALID(pNewTip, WIDG_MAXSTR),
-//		"tipStart: Invalid tip pointer"));
-//	ASSERT((PTRVALID(psNewFont, sizeof(PROP_FONT)),
-//		"tipStart: Invalid font pointer"));
-	ASSERT((PTRVALID(pNewColours, sizeof(UDWORD) * WCOL_MAX),
-		"tipStart: Invalid colours pointer"));
+	ASSERT( PTRVALID(psSource, sizeof(WIDGET)),
+		"tipStart: Invalid widget pointer" );
+//	ASSERT( PTRVALID(pNewTip, WIDG_MAXSTR),
+//		"tipStart: Invalid tip pointer" );
+//	ASSERT( PTRVALID(psNewFont, sizeof(PROP_FONT)),
+//		"tipStart: Invalid font pointer" );
+	ASSERT( PTRVALID(pNewColours, sizeof(UDWORD) * WCOL_MAX),
+		"tipStart: Invalid colours pointer" );
 
 	tipState = TIP_WAIT;
 	startTime = GetTickCount();
@@ -102,8 +102,8 @@ void tipStart(WIDGET *psSource, STRING *pNewTip, int NewFontID,
  */
 void tipStop(WIDGET *psSource)
 {
-	ASSERT((PTRVALID(psSource, sizeof(WIDGET)),
-		"tipStop: Invalid widget pointer"));
+	ASSERT( PTRVALID(psSource, sizeof(WIDGET)),
+		"tipStop: Invalid widget pointer" );
 
 	if (tipState != TIP_NONE && psSource == psWidget)
 	{
@@ -218,4 +218,6 @@ void tipDisplay(void)
 		break;
 	}
 }
+
+
 

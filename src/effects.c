@@ -482,7 +482,7 @@ BOOL	bSmoke;
 			effectSetUpFirework(&asEffectsList[freeEffect]);
 			break;
 		default:
-			ASSERT((FALSE,"Weirdy group type for an effect"));
+			ASSERT( FALSE,"Weirdy group type for an effect" );
 			break;
 	}
 
@@ -497,14 +497,14 @@ BOOL	bSmoke;
 
 	/* Looks like we didn't establish an imd for the effect */
 	/*
-	ASSERT((asEffectsList[freeEffect].imd != NULL OR group == EFFECT_DESTRUCTION OR group == EFFECT_FIRE OR group == EFFECT_SAT_LASER,
-		"null effect imd"));
+	ASSERT( asEffectsList[freeEffect].imd != NULL OR group == EFFECT_DESTRUCTION OR group == EFFECT_FIRE OR group == EFFECT_SAT_LASER,
+		"null effect imd" );
 	*/
 
 #ifdef DEBUG
 	if(validatePie(group,type,asEffectsList[freeEffect].imd) == FALSE)
 	{
-		ASSERT((FALSE,"No PIE found or specified for an effect"));
+		ASSERT( FALSE,"No PIE found or specified for an effect" );
 	}
 #endif
 
@@ -1365,7 +1365,7 @@ UDWORD	height;
 			heightScatter = TILE_UNITS/6;
 			break;
 		default:
-			ASSERT((FALSE,"Weirdy destruction type effect"));
+			ASSERT( FALSE,"Weirdy destruction type effect" );
 			break;
 		}
 
@@ -2235,7 +2235,7 @@ void	effectSetupSmoke(EFFECT *psEffect)
 		psEffect->baseScale = 25;
 		break;
 	default:
-		ASSERT((FALSE,"Weird smoke type"));
+		ASSERT( FALSE,"Weird smoke type" );
 		break;
 	}
 
@@ -2283,7 +2283,7 @@ void	effectSetupGraviton(EFFECT *psEffect)
 		psEffect->velocity.y = GRAVITON_INIT_VEL_Y;
 		break;
 	default:
-		ASSERT((FALSE,"Weirdy type of graviton"));
+		ASSERT( FALSE,"Weirdy type of graviton" );
 		break;
 
 	}
@@ -3063,4 +3063,6 @@ void	addFireworksEffect( void )
 
 
 // ----------------------------------------------------------------------------------------
+
+
 

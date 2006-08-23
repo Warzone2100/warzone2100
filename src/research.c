@@ -287,9 +287,9 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 	}*/
 
 	numResearch = researchCount;
-	//ASSERT(((numResearch) < REF_RANGE, "Too many ResearchStats!!"));
-    ASSERT(((numResearch) <= MAX_RESEARCH,
-        "Too many ResearchStats!! - max allowed %d", MAX_RESEARCH));
+	//ASSERT( (numResearch) < REF_RANGE, "Too many ResearchStats!!" );
+    ASSERT( (numResearch) <= MAX_RESEARCH,
+        "Too many ResearchStats!! - max allowed %d", MAX_RESEARCH );
 
     //init all the counts
     numResearchPR = numResearchFunc = numResearchArteRed = numResearchArteRes =
@@ -808,7 +808,7 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 	NumToAlloc = numCR(pPRData, bufferSize);
 
     //check not going to go over max
-    ASSERT((NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!"));
+    ASSERT( NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!" );
     numResearchPR = 0;
 
 	for (i=0; i < NumToAlloc; i++)
@@ -930,13 +930,13 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 	switch (listNumber)
 	{
 	case RED_LIST:
-        ASSERT((NumToAlloc <= MAX_RESEARCH_ARTE_RED,
-            "loadResearchArtefacts: too many Redundant Components"));
+        ASSERT( NumToAlloc <= MAX_RESEARCH_ARTE_RED,
+            "loadResearchArtefacts: too many Redundant Components" );
         numResearchArteRed = 0;
         break;
 	case RES_LIST:
-        ASSERT((NumToAlloc <= MAX_RESEARCH_ARTE_RES,
-            "loadResearchArtefacts: too many Component Results"));
+        ASSERT( NumToAlloc <= MAX_RESEARCH_ARTE_RES,
+            "loadResearchArtefacts: too many Component Results" );
         numResearchArteRes = 0;
         numResearchArteRep = 0;
         break;
@@ -1096,17 +1096,17 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 	{
 	case REQ_LIST:
         //check not going to go over max
-        ASSERT((NumToAlloc <= MAX_RESEARCH_STRUCT_PR, "loadResearchStructures: too many Struct PRs"));
+        ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_PR, "loadResearchStructures: too many Struct PRs" );
         numResearchStructPR = 0;
 		break;
 	case RED_LIST:
         //check not going to go over max
-        ASSERT((NumToAlloc <= MAX_RESEARCH_STRUCT_RED, "loadResearchStructures: too many redundant structure"));
+        ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_RED, "loadResearchStructures: too many redundant structure" );
         numResearchStructRed = 0;
     	break;
 	case RES_LIST:
         //check not going to go over max
-        ASSERT((NumToAlloc <= MAX_RESEARCH_STRUCT_RES, "loadResearchStructures: too many structure results"));
+        ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_RES, "loadResearchStructures: too many structure results" );
         numResearchStructRes = 0;
         break;
     }
@@ -1258,7 +1258,7 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 
 	NumToAlloc = numCR(pFunctionData, bufferSize);
     //check not going to go over max
-    ASSERT((NumToAlloc <= MAX_RESEARCH_FUNC, "loadResearchFunctions: too many"));
+    ASSERT( NumToAlloc <= MAX_RESEARCH_FUNC, "loadResearchFunctions: too many" );
     numResearchFunc = 0;
 
 	for (i=0; i < NumToAlloc; i++)
@@ -1379,10 +1379,10 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 	BOOL				bPRFound, bStructFound;
 
     //needs to be UWORD sized for Patches
-	ASSERT((numResearch < UWORD_MAX,
-		"fillResearchList: only using a UWORD for storage - need more!"));
-	//ASSERT((numResearch < UBYTE_MAX,
-	//	"fillResearchList: only using a UBYTE for storage - need more!"));
+	ASSERT( numResearch < UWORD_MAX,
+		"fillResearchList: only using a UWORD for storage - need more!" );
+	//ASSERT( numResearch < UBYTE_MAX,
+	//	"fillResearchList: only using a UBYTE for storage - need more!" );
 	for (inc=0; inc < numResearch; inc++)
 	{
 		//if the inc matches the 'topic' - automatically add to the list
@@ -1488,7 +1488,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 	MESSAGE						*pMessage;
 	PLAYER_RESEARCH				*pPlayerRes = asPlayerResList[player];
 
-	ASSERT((researchIndex < numResearch, "researchResult: invalid research index"));
+	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
 
 	sendReseachStatus(NULL, researchIndex, player, FALSE);
 
@@ -2054,7 +2054,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 			}*/
 			default:
 			{
-				ASSERT((FALSE,"Invalid function type"));
+				ASSERT( FALSE,"Invalid function type" );
 			}
 		}//end of switch
 	}//end of function loop
@@ -2124,13 +2124,13 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
                 }
                 if (compInc >= 32)
                 {
-                    ASSERT((FALSE, "researchResult - more than 32 weapons now available"));
+                    ASSERT( FALSE, "researchResult - more than 32 weapons now available" );
                     //don't bother checking any more
                     break;
                 }
                 if (vtolCompInc >= 32)
                 {
-                    ASSERT((FALSE, "researchResult - more than 32 vtol weapons now available"));
+                    ASSERT( FALSE, "researchResult - more than 32 vtol weapons now available" );
                     //don't bother checking any more
                     break;
                 }
@@ -2252,8 +2252,8 @@ void holdResearch(STRUCTURE *psBuilding)
 
 	RESEARCH_FACILITY		*psResFac;
 
-	ASSERT((psBuilding->pStructureType->type == REF_RESEARCH,
-		"holdResearch: structure not a research facility"));
+	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
+		"holdResearch: structure not a research facility" );
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
@@ -2275,8 +2275,8 @@ void releaseResearch(STRUCTURE *psBuilding)
 {
 	RESEARCH_FACILITY		*psResFac;
 
-	ASSERT((psBuilding->pStructureType->type == REF_RESEARCH,
-		"releaseResearch: structure not a research facility"));
+	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
+		"releaseResearch: structure not a research facility" );
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
@@ -2326,14 +2326,14 @@ void cancelResearch(STRUCTURE *psBuilding)
 	PLAYER_RESEARCH	    *pPlayerRes;
 	RESEARCH_FACILITY	*psResFac;
 
-	ASSERT((psBuilding->pStructureType->type == REF_RESEARCH,
-		"cancelResearch: structure not a research facility"));
+	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
+		"cancelResearch: structure not a research facility" );
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
     topicInc = ((RESEARCH *)psResFac->psSubject) - asResearch;
     if (topicInc > numResearch)
     {
-        ASSERT((FALSE, "cancelResearch: invalid research topic"));
+        ASSERT( FALSE, "cancelResearch: invalid research topic" );
         return;
     }
     pPlayerRes = asPlayerResList[psBuilding->player] + topicInc;
@@ -2410,7 +2410,7 @@ static UWORD setIconIDFromHashedName(STRING *pIconName, UDWORD NameHash)
 	}
 
     //add more names as images are created
-//	ASSERT((FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName));
+//	ASSERT( FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName );
 	debug( LOG_NEVER, "Failed to matched research icon  %s #%d\n", pIconName, IconHash );
 
 	return 0;	// Should never get here.
@@ -2518,7 +2518,7 @@ static UWORD setIconID(STRING *pIconName, STRING *pName)
 	}
 
     //add more names as images are created
-	ASSERT((FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName));
+	ASSERT( FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName );
 
 	return 0;	// Should never get here.
 }
@@ -2592,7 +2592,7 @@ SDWORD	mapRIDToIcon( UDWORD rid )
 		break;
 
 	default:
-		ASSERT((FALSE,"Weirdy mapping request for RID to icon"));
+		ASSERT( FALSE,"Weirdy mapping request for RID to icon" );
 		return(-1); //pass back a value that can never have been set up
 		break;
 	}
@@ -3000,7 +3000,7 @@ static BOOL checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 		if (!strcmp(asResearch[inc].pName, pName))
 		{
 			//oops! found the name
-			ASSERT((FALSE, "Research name has already been used - %s", pName));
+			ASSERT( FALSE, "Research name has already been used - %s", pName );
 			return FALSE;
 		}
 	}
@@ -3018,7 +3018,7 @@ static BOOL checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 		if (asResearch[inc].NameHash==psResearch->NameHash)
 		{
 			//oops! found the name
-			ASSERT((FALSE, "Research name has already been used - %x", psResearch->NameHash));
+			ASSERT( FALSE, "Research name has already been used - %x", psResearch->NameHash );
 			return FALSE;
 		}
 	}
@@ -3040,7 +3040,7 @@ BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
 	inc = psResearch - asResearch;
 	if (inc > numResearch)
 	{
-		ASSERT((FALSE, "enableResearch: Invalid research topic - %s", getResearchName(psResearch)));
+		ASSERT( FALSE, "enableResearch: Invalid research topic - %s", getResearchName(psResearch) );
 		return FALSE;
 	}
 
@@ -3145,9 +3145,9 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pPRList != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: PreReq for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3157,9 +3157,9 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pPRList[inc] > numResearch)
 				{
-					ASSERT((FALSE,
+					ASSERT( FALSE,
 						"checkResearchStats: Invalid PreReq for topic %s",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 					return FALSE;
 				}
 
@@ -3169,9 +3169,9 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pStructList != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: StructureList for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3181,9 +3181,9 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pStructList[inc] > numStructureStats)
 				{
-					ASSERT((FALSE,
+					ASSERT( FALSE,
 						"checkResearchStats: Invalid Structure for topic %s",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 					return FALSE;
 				}
 			}
@@ -3192,9 +3192,9 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pFunctionList != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: FunctionList for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3205,8 +3205,8 @@ BOOL checkResearchStats(void)
 				if (asResearch[resInc].pFunctionList[inc]->ref -
 					REF_FUNCTION_START > numFunctions)
 				{
-					ASSERT((FALSE, "checkResearchStats: Invalid function for %s",
-					getResearchName(asResearch[resInc])));
+					ASSERT( FALSE, "checkResearchStats: Invalid function for %s",
+					getResearchName(asResearch[resInc]) );
 				}
 			}
 		}
@@ -3214,9 +3214,9 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pRedStructs != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: Redundant StructList for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3226,9 +3226,9 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pRedStructs[inc] > numStructureStats)
 				{
-					ASSERT((FALSE,
+					ASSERT( FALSE,
 						"checkResearchStats: Invalid Redundant Structure for topic %s",
-						getResearchName(asResearch[resInc])));
+						getResearchName(asResearch[resInc]) );
 					return FALSE;
 				}
 			}
@@ -3237,9 +3237,9 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pStructureResults != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: Result StructList for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3249,9 +3249,9 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pStructureResults[inc] > numStructureStats)
 				{
-					ASSERT((FALSE,
+					ASSERT( FALSE,
 						"checkResearchStats: Invalid Result Structure for topic %s",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 					return FALSE;
 				}
 			}
@@ -3260,9 +3260,9 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pArtefactResults != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: CompResultList for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3270,19 +3270,19 @@ BOOL checkResearchStats(void)
 		{
 			for (inc=0; inc < asResearch[resInc].numArteResults; inc++)
 			{
-				ASSERT((PTRVALID(asResearch[resInc].pArtefactResults[inc],
+				ASSERT( PTRVALID(asResearch[resInc].pArtefactResults[inc],
 					sizeof(COMP_BASE_STATS*)),
 					"checkResearchStats: Invalid Comp Result for topic %s",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 			}
 		}
 		if (asResearch[resInc].numRedArtefacts == 0)
 		{
 			if (asResearch[resInc].pRedArtefacts != NULL)
 			{
-				ASSERT((FALSE,
+				ASSERT( FALSE,
 					"checkResearchStats: RedundantCompList for topic %s should be NULL",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 				return FALSE;
 			}
 		}
@@ -3290,10 +3290,10 @@ BOOL checkResearchStats(void)
 		{
 			for (inc=0; inc < asResearch[resInc].numRedArtefacts; inc++)
 			{
-				ASSERT((PTRVALID(asResearch[resInc].pRedArtefacts[inc],
+				ASSERT( PTRVALID(asResearch[resInc].pRedArtefacts[inc],
 					sizeof(COMP_BASE_STATS*)),
 					"checkResearchStats: Invalid Redundant Comp for topic %s",
-					getResearchName(asResearch[resInc])));
+					getResearchName(asResearch[resInc]) );
 			}
 		}
 	}
@@ -3359,8 +3359,8 @@ void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
 {
     DROID       *psCurr;
 
-    ASSERT((psTransporter->droidType == DROID_TRANSPORTER,
-        "replaceTransUnitComponents: invalid unit type"));
+    ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
+        "replaceTransUnitComponents: invalid unit type" );
 
     for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
         psCurr->psGrpNext)
@@ -3432,8 +3432,8 @@ void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                      UDWORD newCompInc)
 {
 
-    ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-        "switchComponent:invalid droid pointer"));
+    ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+        "switchComponent:invalid droid pointer" );
 
 	switch(oldType)
 	{

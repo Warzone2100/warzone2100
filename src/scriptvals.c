@@ -189,8 +189,8 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 	psGroup = psVal->v.oval;
 	grpReset(psGroup);
 
-	ASSERT((psGroup->refCount == 1,
-		"scrvReleaseGroup: ref count is wrong"));
+	ASSERT( psGroup->refCount == 1,
+		"scrvReleaseGroup: ref count is wrong" );
 
 	// do a final grpLeave to free the group
 	grpLeave(psGroup, NULL);
@@ -447,5 +447,7 @@ BOOL scrvGetString(STRING *pStringID, STRING **ppString)
 
 	return TRUE;
 }*/
+
+
 
 

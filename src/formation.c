@@ -164,7 +164,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		psNew->asLines[0].member = -1;
 		break;
 	default:
-		ASSERT((FALSE,"fmNewFormation: unknown formation type"));
+		ASSERT( FALSE,"fmNewFormation: unknown formation type" );
 		break;
 	}
 
@@ -239,8 +239,8 @@ void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj)
 {
 	SDWORD	rankDist, size;
 
-	ASSERT((PTRVALID(psFormation, sizeof(FORMATION)),
-		"formationJoin: invalid formation"));
+	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
+		"formationJoin: invalid formation" );
 
 	DBP0(("formationJoin: %p, obj %d\n", psFormation, psObj->id));
 
@@ -270,10 +270,10 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 	F_MEMBER	*asMembers;
 	FORMATION	*psCurr, *psPrev;
 
-	ASSERT((PTRVALID(psFormation, sizeof(FORMATION)),
-		"formationLeave: invalid formation"));
-	ASSERT((psFormation->refCount > 0,
-		"formationLeave: refcount is zero"));
+	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
+		"formationLeave: invalid formation" );
+	ASSERT( psFormation->refCount > 0,
+		"formationLeave: refcount is zero" );
 
 	DBP0(("formationLeave: %p, obj %d\n", psFormation, psObj->id));
 
@@ -356,8 +356,8 @@ void formationReset(FORMATION *psFormation)
 				((DROID *)psObj)->sMove.psFormation = NULL;
 				break;
 			default:
-				ASSERT((FALSE,
-					"formationReset: unknown unit type"));
+				ASSERT( FALSE,
+					"formationReset: unknown unit type" );
 				break;
 			}
 		}
@@ -403,8 +403,8 @@ void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 
 	if (psFormation->free == -1)
 	{
-		ASSERT((FALSE,
-			"formationFindFree: no members left to allocate"));
+		ASSERT( FALSE,
+			"formationFindFree: no members left to allocate" );
 		*pX = psFormation->x;
 		*pY = psFormation->y;
 		return;
@@ -429,7 +429,7 @@ void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 		found = FALSE;
 		while (!found && rank <= MAX_RANK)
 		{
-			ASSERT((unit < F_MAXMEMBERS, "formationFindFree: unit out of range"));
+			ASSERT( unit < F_MAXMEMBERS, "formationFindFree: unit out of range" );
 
 			if (unit != -1)
 			{
@@ -749,8 +749,8 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	SDWORD		member, x,y;
 	F_MEMBER	*asMembers;
 
-	ASSERT((PTRVALID(psFormation, sizeof(FORMATION)),
-		"formationGetPos: invalid formation pointer"));
+	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
+		"formationGetPos: invalid formation pointer" );
 
 /*	if (psFormation->refCount == 1)
 	{
@@ -888,7 +888,7 @@ SDWORD formationObjRadius(BASE_OBJECT *psObj)
 		radius = psObj->sDisplay.imd->radius/2;
 		break;
 	default:
-		ASSERT((FALSE,"formationObjRadius: unknown object type"));
+		ASSERT( FALSE,"formationObjRadius: unknown object type" );
 		radius = 0;
 		break;
 	}
@@ -896,4 +896,6 @@ SDWORD formationObjRadius(BASE_OBJECT *psObj)
 	return radius;
 #endif
 }
+
+
 

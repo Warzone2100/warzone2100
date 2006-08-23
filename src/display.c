@@ -1001,14 +1001,14 @@ void processMouseClickInput(void)
 	}
 
 	selection = establishSelection(selectedPlayer);
-	ASSERT((selection<=POSSIBLE_SELECTIONS,"Weirdy selection!"));
+	ASSERT( selection<=POSSIBLE_SELECTIONS,"Weirdy selection!" );
 
 	if((selection != SC_INVALID) && !gamePaused())
 	{
 		BASE_OBJECT *ObjUnderMouse;
 
 		item = itemUnderMouse(&ObjUnderMouse);
-		ASSERT((item<POSSIBLE_TARGETS,"Weirdy target!"));
+		ASSERT( item<POSSIBLE_TARGETS,"Weirdy target!" );
 
 		// alliance override. If in alli then just use the move icon. - but not if its the same player
         //in single player, the genexp script defaults to setting an alliance between player 0 and selectedPlayer
@@ -1153,7 +1153,7 @@ void processMouseClickInput(void)
     		BASE_OBJECT *ObjUnderMouse;
 
             item = itemUnderMouse(&ObjUnderMouse);
-	    	ASSERT((item<POSSIBLE_TARGETS,"Weirdy target!"));
+	    	ASSERT( item<POSSIBLE_TARGETS,"Weirdy target!" );
             if (item == MT_ENEMYDROID OR item == MT_ENEMYSTR OR item == MT_DAMFEATURE)
             {
                 //display attack cursor
@@ -2505,7 +2505,7 @@ SELECTION_TYPE	selection;
 		}
 		else
 		{
-			ASSERT((FALSE,"Weirdy selection from LMB?!"));
+			ASSERT( FALSE,"Weirdy selection from LMB?!" );
 		}
 	}
 	else
@@ -2544,7 +2544,7 @@ SELECTION_TYPE	selection;
 				}
 				break;*/
 			default:
-				ASSERT((FALSE, "Unknown type from checkMouseLoc"));
+				ASSERT( FALSE, "Unknown type from checkMouseLoc" );
 			}
 		}
 		else
@@ -2882,7 +2882,7 @@ void dealWithRMB( void )
 		/* And if it's not a feature, then we're in trouble! */
 		else if (psClickedOn->type != OBJ_FEATURE)
 		{
-			ASSERT((FALSE,"Weirdy selection from RMB?!"));
+			ASSERT( FALSE,"Weirdy selection from RMB?!" );
 		}
 	}
 	else
@@ -2907,7 +2907,7 @@ void dealWithRMB( void )
 				}
 				break;
 			default:
-				ASSERT((FALSE, "Unknown type from checkMouseLoc"));
+				ASSERT( FALSE, "Unknown type from checkMouseLoc" );
 			}
 		}
 		else
@@ -3330,8 +3330,8 @@ SELECTION_TYPE	selectionClass;
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
 		if(psDroid->selected) {
-			ASSERT((psDroid->droidType < NUM_DROID_WEIGHTS,
-				"establishSelection : droidType exceeds NUM_DROID_WEIGHTS"));
+			ASSERT( psDroid->droidType < NUM_DROID_WEIGHTS,
+				"establishSelection : droidType exceeds NUM_DROID_WEIGHTS" );
 
 			atLeastOne = TRUE;
 			if(DroidSelectionWeights[psDroid->droidType] < CurrWeight) {
@@ -3412,7 +3412,7 @@ SELECTION_TYPE	selectionClass;
 			break;
 
 		default:
-			ASSERT((FALSE,"Weirdy droid type on what you've clicked on!!!"));
+			ASSERT( FALSE,"Weirdy droid type on what you've clicked on!!!" );
 			break;
 
 		}

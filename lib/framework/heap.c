@@ -123,8 +123,8 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 #if DEBUG_HEAP
 	int			Heap;
 #endif
-	ASSERT((size >= sizeof(FREE_OBJECT),
-		"heapCreate: object is too small to be stored in free list"));
+	ASSERT( size >= sizeof(FREE_OBJECT),
+		"heapCreate: object is too small to be stored in free list" );
 
 #if DEBUG_HEAP
 	/* Increase the object size to store the call position */
@@ -237,8 +237,8 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 	HEAP_OBJHDR	*psHdr;
 #endif
 
-	ASSERT((PTRVALID(psHeap, sizeof(OBJ_HEAP)),
-		"heapAlloc: Invalid heap pointer"));
+	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
+		"heapAlloc: Invalid heap pointer" );
 
 	if (psHeap->psFree == NULL)
 	{
@@ -320,8 +320,8 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 				break;
 			}
 		}
-		ASSERT((pBase == (UBYTE *)*ppObject + psHeap->objSize,
-			"heapAlloc: unallocated object memory has been overwritten"));
+		ASSERT( pBase == (UBYTE *)*ppObject + psHeap->objSize,
+			"heapAlloc: unallocated object memory has been overwritten" );
 	}
 
 	/* Store the call position */
@@ -347,8 +347,8 @@ BOOL heapFree(OBJ_HEAP *psHeap, void *pObject)
 #endif
 	FREE_OBJECT		*psFree;
 
-	ASSERT((PTRVALID(psHeap, sizeof(OBJ_HEAP)),
-		"heapFree: Invalid heap pointer"));
+	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
+		"heapFree: Invalid heap pointer" );
 
 #if DEBUG_HEAP
 	/* Adjust the pointer to include the call position */
@@ -382,7 +382,7 @@ BOOL heapFree(OBJ_HEAP *psHeap, void *pObject)
 			psPrevHdr = psCurrHdr;
 		}
 	}
-	ASSERT((found, "heapFree: object not allocated on this heap"));
+	ASSERT( found, "heapFree: object not allocated on this heap" );
 
 	/* Check the object hasn't been freed already */
 	found = FALSE;
@@ -393,7 +393,7 @@ BOOL heapFree(OBJ_HEAP *psHeap, void *pObject)
 			found = TRUE;
 		}
 	}
-	ASSERT((!found, "heapFree: Object has already been freed"));
+	ASSERT( !found, "heapFree: Object has already been freed" );
 
 	/* On the debug build we'll trash the memory as well - just to be sure */
 	memset(pObject, FREE_BYTE, psHeap->objSize);
@@ -436,8 +436,8 @@ void heapDestroy(OBJ_HEAP *psHeap)
 	int 			Heap;
 #endif
 
-	ASSERT((PTRVALID(psHeap, sizeof(OBJ_HEAP)),
-		"heapDestroy: invalid heap pointer"));
+	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
+		"heapDestroy: invalid heap pointer" );
 
 #if DEBUG_HEAP
 	/* Warn about any unfreed objects */
@@ -472,7 +472,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 			}
 		}
 	}
-	ASSERT((clean, "heapDestroy: unallocated memory has been overwritten"));
+	ASSERT( clean, "heapDestroy: unallocated memory has been overwritten" );
 
 #if HEAP_USAGE_REPORT
 	debug( LOG_NEVER, "heapDestory: %s, line %d : Max usage %d (Init %d Ext %d)\n", psHeap->pFile, psHeap->line, psHeap->maxUsage, psHeap->initAlloc, psHeap->extAlloc );
@@ -533,8 +533,8 @@ BOOL heapIntegrityCheck(OBJ_HEAP *psHeap)
 				break;
 			}
 		}
-		ASSERT((pBase == (UBYTE *)psCurr + psHeap->objSize,
-			"heapIntegrityCheck: unallocated object memory has been overwritten"));
+		ASSERT( pBase == (UBYTE *)psCurr + psHeap->objSize,
+			"heapIntegrityCheck: unallocated object memory has been overwritten" );
 	}
 #else
 	psHeap = psHeap;

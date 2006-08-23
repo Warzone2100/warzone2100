@@ -84,7 +84,7 @@ char	name[15];	// hopefully!
 		{
 			/* Say which one and return FALSE */
 			debug( LOG_ERROR, "Can't find misselaneous PIE file : %s", miscImds[i].pName );
-			ASSERT((FALSE,"NULL PIE"));
+			ASSERT( FALSE,"NULL PIE" );
 			return(FALSE);
 		}
 		/*	If the next one's the end one, then get out now.
@@ -98,7 +98,7 @@ char	name[15];	// hopefully!
 // Returns a pointer to the imd from a #define number passed in - see above
 iIMDShape	*getImdFromIndex(UDWORD	index)
 {
-	ASSERT((index<MI_TOO_MANY,"Out of range index in getImdFromIndex"));
+	ASSERT( index<MI_TOO_MANY,"Out of range index in getImdFromIndex" );
 
 	return(miscImds[index].pImd);
 }
@@ -129,7 +129,7 @@ iIMDShape	*getRandomDebrisImd( void )
 
 	DebrisIMD = getImdFromIndex(MI_DEBRIS0 + rand()%((MI_DEBRIS4-MI_DEBRIS0)+1));
 
-	ASSERT((DebrisIMD != NULL,"getRandomDebrisImd : NULL PIE"));
+	ASSERT( DebrisIMD != NULL,"getRandomDebrisImd : NULL PIE" );
 
 	return DebrisIMD;
 }

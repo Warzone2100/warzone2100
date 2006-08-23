@@ -127,7 +127,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj)
 			rangeSq = longRange * longRange;
 			break;
 		default:
-			ASSERT((FALSE, "actionInAttackRange: unknown attack range order"));
+			ASSERT( FALSE, "actionInAttackRange: unknown attack range order" );
 			longRange = proj_GetLongRange(psStats, dz);
 			rangeSq = longRange * longRange;
 			break;
@@ -248,8 +248,8 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj)
 		}
 		else
 		{
-			ASSERT((psDroid->order == DORDER_HELPBUILD,
-				"actionNewBuildPos: invalid order"));
+			ASSERT( psDroid->order == DORDER_HELPBUILD,
+				"actionNewBuildPos: invalid order" );
 			//psStructStats = ((STRUCTURE *)psDroid->psTarget)->pStructureType;
 			psStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget)->pStructureType;
 		}
@@ -270,13 +270,13 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj)
 		psStats = (BASE_STATS *)((FEATURE *)psDroid->psTarget)->psStats;
 		break;
 	default:
-		ASSERT((FALSE,
-			"actionNewBuildPos: invalid action"));
+		ASSERT( FALSE,
+			"actionNewBuildPos: invalid action" );
 		return FALSE;
 		break;
 	}
-	//ASSERT((PTRVALID(psStructStats, sizeof(STRUCTURE_STATS)),
-	//	"actionNewBuildPos: invalid structure stats pointer"));
+	//ASSERT( PTRVALID(psStructStats, sizeof(STRUCTURE_STATS)),
+	//	"actionNewBuildPos: invalid structure stats pointer" );
 
 	// find a new destination
 	//if (getDroidDestination(psStructStats, psDroid->orderX, psDroid->orderY,pX,pY))
@@ -330,7 +330,7 @@ void actionAlignTurret(BASE_OBJECT *psObj)
 		tRot = (UWORD)(((tRot + 360) - nearest) % 360);
 		break;
 	default:
-		ASSERT((FALSE, "actionAlignTurret: invalid object type"));
+		ASSERT( FALSE, "actionAlignTurret: invalid object type" );
 		return;
 		break;
 	}
@@ -409,7 +409,7 @@ void actionAlignTurret(BASE_OBJECT *psObj)
 		((STRUCTURE *)psObj)->turretPitch = tPitch;
 		break;
 	default:
-		ASSERT((FALSE, "actionAlignTurret: invalid object type"));
+		ASSERT( FALSE, "actionAlignTurret: invalid object type" );
 		return;
 		break;
 	}
@@ -787,8 +787,8 @@ void actionUpdateVtolAttack( DROID *psDroid )
     if (psDroid->asWeaps[0].nStat > 0)
 	{
 		psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-		ASSERT( (PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
-				"actionUpdateVtolAttack: invalid weapon stats pointer" ) );
+		ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
+				"actionUpdateVtolAttack: invalid weapon stats pointer" );
 	}
 
 	/* order back to base after fixed number of attack runs */
@@ -981,8 +981,8 @@ void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 {
 	STRUCTURE	*psStruct;
 
-	ASSERT((player >= 0 && player < MAX_PLAYERS,
-		"actionHomeBasePos: invalide player number"));
+	ASSERT( player >= 0 && player < MAX_PLAYERS,
+		"actionHomeBasePos: invalide player number" );
 
 	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
 	{
@@ -1080,11 +1080,11 @@ void actionUpdateDroid(DROID *psDroid)
 	MAPTILE				*psTile;
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( (PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
-			"actionUpdateUnit: invalid propulsion stats pointer") );
+	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+			"actionUpdateUnit: invalid propulsion stats pointer" );
 
-	ASSERT((psDroid->turretRotation < 360, "turretRotation out of range"));
-	ASSERT((psDroid->direction < 360, "unit direction out of range"));
+	ASSERT( psDroid->turretRotation < 360, "turretRotation out of range" );
+	ASSERT( psDroid->direction < 360, "unit direction out of range" );
 
 	/* check whether turret inverted for actionTargetTurret */
 	//if ( psDroid->droidType != DROID_CYBORG &&
@@ -1183,7 +1183,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
                 if (!droidRemove(psDroid, mission.apsDroidLists))
                 {
-                    ASSERT((FALSE, "actionUpdate: Unable to remove transporter from mission list"));
+                    ASSERT( FALSE, "actionUpdate: Unable to remove transporter from mission list" );
                 }
                 addDroid(psDroid, apsDroidLists);
                 //set the x/y up since they were set to INVALID_XY when moved offWorld
@@ -1368,8 +1368,8 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_ATTACK:
-		ASSERT((psDroid->psActionTarget != NULL,
-			"actionUpdateUnit: target is NULL while attacking"));
+		ASSERT( psDroid->psActionTarget != NULL,
+			"actionUpdateUnit: target is NULL while attacking" );
 
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
@@ -1588,8 +1588,8 @@ void actionUpdateDroid(DROID *psDroid)
 	    			!bChaseBloke)
 		    	{
 			    	/* Stop the droid moving any closer */
-//				    ASSERT((psDroid->x != 0 && psDroid->y != 0,
-//						"moveUpdateUnit: Unit at (0,0)"));
+//				    ASSERT( psDroid->x != 0 && psDroid->y != 0,
+//						"moveUpdateUnit: Unit at (0,0)" );
 
     				/* init vtol attack runs count if necessary */
 	    			if ( psPropStats->propulsionType == LIFT )
@@ -2217,10 +2217,10 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_FIRESUPPORT:
 		//can be either a droid or a structure now - AB 7/10/98
-		ASSERT(((psDroid->psTarget->type == OBJ_DROID OR
+		ASSERT( (psDroid->psTarget->type == OBJ_DROID OR
 			psDroid->psTarget->type == OBJ_STRUCTURE) &&
 				(psDroid->psTarget->player == psDroid->player),
-			"DACTION_FIRESUPPORT: incorrect target type"));
+			"DACTION_FIRESUPPORT: incorrect target type" );
 /*		if (orderState(((DROID *)psDroid->psTarget), DORDER_OBSERVE))
 		{
 			// move to attack
@@ -2455,7 +2455,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	default:
-		ASSERT((FALSE, "actionUpdateUnit: unknown action"));
+		ASSERT( FALSE, "actionUpdateUnit: unknown action" );
 		break;
 	}
 
@@ -2487,10 +2487,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	UDWORD			droidX,droidY;
 	BASE_OBJECT		*psTarget;
 
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"actionUnitBase: Invalid Unit pointer"));
-	ASSERT((psDroid->type == OBJ_DROID,
-		"actionUnitBase: Unit pointer does not reference a unit"));
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		"actionUnitBase: Invalid Unit pointer" );
+	ASSERT( psDroid->type == OBJ_DROID,
+		"actionUnitBase: Unit pointer does not reference a unit" );
 
 	switch (psAction->action)
 	{
@@ -2659,9 +2659,9 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 
 	case DACTION_BUILD:
-		ASSERT((psDroid->order == DORDER_BUILD || psDroid->order == DORDER_HELPBUILD ||
+		ASSERT( psDroid->order == DORDER_BUILD || psDroid->order == DORDER_HELPBUILD ||
 				psDroid->order == DORDER_LINEBUILD,
-			"actionUnitBase: cannot start build action without a build order"));
+			"actionUnitBase: cannot start build action without a build order" );
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
@@ -2677,27 +2677,27 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		}
 		break;
 	case DACTION_DEMOLISH:
-		ASSERT((psDroid->order == DORDER_DEMOLISH,
-			"actionUnitBase: cannot start demolish action without a demolish order"));
+		ASSERT( psDroid->order == DORDER_DEMOLISH,
+			"actionUnitBase: cannot start demolish action without a demolish order" );
 		psDroid->action = DACTION_MOVETODEMOLISH;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
-		ASSERT(( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_STRUCTURE),
-			"actionUnitBase: invalid target for demolish order" ));
+		ASSERT( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_STRUCTURE),
+			"actionUnitBase: invalid target for demolish order" );
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget)->pStructureType;
 		psDroid->psActionTarget = psAction->psObj;
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	case DACTION_REPAIR:
-		//ASSERT((psDroid->order == DORDER_REPAIR,
-		//	"actionDroidBase: cannot start repair action without a repair order"));
+		//ASSERT( psDroid->order == DORDER_REPAIR,
+		//	"actionDroidBase: cannot start repair action without a repair order" );
 		psDroid->action = DACTION_MOVETOREPAIR;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
 		//this needs setting so that automatic repair works
 		psDroid->psActionTarget = psAction->psObj;
-		ASSERT(( (psDroid->psActionTarget != NULL) && (psDroid->psActionTarget->type == OBJ_STRUCTURE),
-			"actionUnitBase: invalid target for demolish order" ));
+		ASSERT( (psDroid->psActionTarget != NULL) && (psDroid->psActionTarget->type == OBJ_STRUCTURE),
+			"actionUnitBase: invalid target for demolish order" );
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget)->pStructureType;
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
@@ -2769,8 +2769,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ensureRearmPadClear((STRUCTURE *)psAction->psObj, psDroid);
 		break;
 	case DACTION_DROIDREPAIR:
-//		ASSERT((psDroid->order == DORDER_DROIDREPAIR,
-//			"actionDroidBase: cannot start droid repair action without a repair order"));
+//		ASSERT( psDroid->order == DORDER_DROIDREPAIR,
+//			"actionDroidBase: cannot start droid repair action without a repair order" );
 		psDroid->action = DACTION_MOVETODROIDREPAIR;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
@@ -2780,31 +2780,31 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	case DACTION_RESTORE:
-		ASSERT((psDroid->order == DORDER_RESTORE,
-			"actionUnitBase: cannot start restore action without a restore order"));
+		ASSERT( psDroid->order == DORDER_RESTORE,
+			"actionUnitBase: cannot start restore action without a restore order" );
 		psDroid->action = DACTION_MOVETORESTORE;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
-		ASSERT(( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_STRUCTURE),
-			"actionUnitBase: invalid target for restore order" ));
+		ASSERT( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_STRUCTURE),
+			"actionUnitBase: invalid target for restore order" );
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget)->pStructureType;
 		psDroid->psActionTarget = psAction->psObj;
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	case DACTION_CLEARWRECK:
-		ASSERT((psDroid->order == DORDER_CLEARWRECK,
-			"actionUnitBase: cannot start clear action without a clear order"));
+		ASSERT( psDroid->order == DORDER_CLEARWRECK,
+			"actionUnitBase: cannot start clear action without a clear order" );
 		psDroid->action = DACTION_MOVETOCLEAR;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
-		ASSERT(( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_FEATURE),
-			"actionUnitBase: invalid target for demolish order" ));
+		ASSERT( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_FEATURE),
+			"actionUnitBase: invalid target for demolish order" );
 		psDroid->psTarStats = (BASE_STATS *)((FEATURE *)psDroid->psTarget)->psStats;
 		psDroid->psActionTarget = psDroid->psTarget;
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	default:
-		ASSERT((FALSE, "actionUnitBase: unknown action"));
+		ASSERT( FALSE, "actionUnitBase: unknown action" );
 		break;
 	}
 }
@@ -2952,8 +2952,8 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 	DROID	*psCurr;
 	BOOL	result;
 
-//	ASSERT(((psDroid->psActionTarget != NULL),
-//		"actionVTOLLandingPos: no rearm pad set for the VTOL"));
+//	ASSERT( (psDroid->psActionTarget != NULL),
+//		"actionVTOLLandingPos: no rearm pad set for the VTOL" );
 
 	/* Initial box dimensions and set iteration count to zero */
 //	startX = endX = (SDWORD)psDroid->psActionTarget->x >> TILE_SHIFT;
@@ -3037,5 +3037,7 @@ exit:
 	return result;
 
 }
+
+
 
 

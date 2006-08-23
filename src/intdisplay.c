@@ -216,7 +216,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 		return;
 	}
 
-//	ASSERT((!psObj->died,"intUpdateProgressBar: object is dead"));
+//	ASSERT( !psObj->died,"intUpdateProgressBar: object is dead" );
 	if(psObj->died AND psObj->died != NOT_CURRENT_LIST)
 	{
 		return;
@@ -228,9 +228,9 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 
 
 			if(DroidIsBuilding(Droid)) {		// Is it building.
-				ASSERT((Droid->asBits[COMP_CONSTRUCT].nStat,"intUpdateProgressBar: invalid droid type"));
+				ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intUpdateProgressBar: invalid droid type" );
 				Structure = DroidGetBuildStructure(Droid);				// Get the structure it's building.
-//				ASSERT((Structure != NULL,"intUpdateProgressBar : NULL Structure pointer."));
+//				ASSERT( Structure != NULL,"intUpdateProgressBar : NULL Structure pointer." );
 				if(Structure)
                 {
 				    //check if have all the power to build yet
@@ -383,7 +383,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 			break;
 
 		default:
-			ASSERT((FALSE, "intUpdateProgressBar: invalid object type"));
+			ASSERT( FALSE, "intUpdateProgressBar: invalid object type" );
 	}
 }
 
@@ -402,7 +402,7 @@ void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
 	if( (psObj != NULL) &&
 		(psObj->type == OBJ_STRUCTURE) && (StructureIsManufacturing(Structure)) )
 	{
-		ASSERT((!psObj->died,"intUpdateQuantity: object is dead"));
+		ASSERT( !psObj->died,"intUpdateQuantity: object is dead" );
 
 		/*Quantity = StructureGetFactory(Structure)->quantity;
 		if (Quantity == NON_STOP_PRODUCTION)
@@ -453,17 +453,17 @@ void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext)
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT((PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
-			"intAddFactoryInc: invalid structure pointer"));
+		ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+			"intAddFactoryInc: invalid structure pointer" );
 
-		ASSERT((!psObj->died,"intAddFactoryInc: object is dead"));
+		ASSERT( !psObj->died,"intAddFactoryInc: object is dead" );
 
 		Structure = (STRUCTURE*)psObj;
 
-		ASSERT(((Structure->pStructureType->type == REF_FACTORY OR
+		ASSERT( (Structure->pStructureType->type == REF_FACTORY OR
 			Structure->pStructureType->type == REF_CYBORG_FACTORY OR
 			Structure->pStructureType->type == REF_VTOL_FACTORY),
-			"intAddFactoryInc: structure is not a factory"));
+			"intAddFactoryInc: structure is not a factory" );
 
 		Label->aText[0] = (UBYTE)('0' + (((FACTORY *)Structure->pFunctionality)->
 			psAssemblyPoint->factoryInc+1));
@@ -491,8 +491,8 @@ void intAddProdQuantity(struct _widget *psWidget, struct _w_context *psContext)
 	psStat = (BASE_STATS *)Label->pUserData;
 	if (psStat != NULL)
 	{
-		ASSERT((PTRVALID(psStat, sizeof(DROID_TEMPLATE)),
-			"intAddProdQuantity: invalid template pointer"));
+		ASSERT( PTRVALID(psStat, sizeof(DROID_TEMPLATE)),
+			"intAddProdQuantity: invalid template pointer" );
 
 		psTemplate = (DROID_TEMPLATE *)psStat;
 
@@ -574,15 +574,15 @@ void intUpdateCommandSize(struct _widget *psWidget, struct _w_context *psContext
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT((PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
-			"intUpdateCommandSize: invalid droid pointer"));
+		ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+			"intUpdateCommandSize: invalid droid pointer" );
 
-		ASSERT((!psObj->died,"intUpdateCommandSize: droid has died"));
+		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
 
 		psDroid = (DROID *)psObj;
 
-		ASSERT((psDroid->droidType == DROID_COMMAND,
-			"intUpdateCommandSize: droid is not a command droid"));
+		ASSERT( psDroid->droidType == DROID_COMMAND,
+			"intUpdateCommandSize: droid is not a command droid" );
 
 		sprintf(Label->aText, "%d/%d", psDroid->psGroup ? grpNumMembers(psDroid->psGroup) : 0, cmdDroidMaxGroup(psDroid));
 		Label->style &= ~WIDG_HIDDEN;
@@ -606,15 +606,15 @@ void intUpdateCommandExp(struct _widget *psWidget, struct _w_context *psContext)
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT((PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
-			"intUpdateCommandSize: invalid droid pointer"));
+		ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+			"intUpdateCommandSize: invalid droid pointer" );
 
-		ASSERT((!psObj->died,"intUpdateCommandSize: droid has died"));
+		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
 
 		psDroid = (DROID *)psObj;
 
-		ASSERT((psDroid->droidType == DROID_COMMAND,
-			"intUpdateCommandSize: droid is not a command droid"));
+		ASSERT( psDroid->droidType == DROID_COMMAND,
+			"intUpdateCommandSize: droid is not a command droid" );
 
 		numStars = cmdDroidGetLevel(psDroid);
 		numStars = (numStars >= 1) ? (numStars - 1) : 0;
@@ -644,15 +644,15 @@ void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT((PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
-			"intUpdateCommandSize: invalid droid pointer"));
+		ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+			"intUpdateCommandSize: invalid droid pointer" );
 
-		ASSERT((!psObj->died,"intUpdateCommandSize: droid has died"));
+		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
 
 		psDroid = (DROID *)psObj;
 
-		ASSERT((psDroid->droidType == DROID_COMMAND,
-			"intUpdateCommandSize: droid is not a command droid"));
+		ASSERT( psDroid->droidType == DROID_COMMAND,
+			"intUpdateCommandSize: droid is not a command droid" );
 
 		// see which type of factory this is for
 		if (Label->id >= IDOBJ_COUNTSTART && Label->id < IDOBJ_COUNTEND)
@@ -933,7 +933,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 						}
 					} else if (DroidGoingToBuild(Droid)) {
 						Stats = DroidGetBuildStats(Droid);
-						ASSERT((Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer."));
+						ASSERT( Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer." );
 						Object = (void*)Stats;	//StatGetStructureIMD(Stats,selectedPlayer);
 						Player = selectedPlayer;
 						IMDType = IMDTYPE_STRUCTURESTAT;
@@ -941,7 +941,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 					} else if (orderState(Droid, DORDER_DEMOLISH))
                     {
 						Stats = (BASE_STATS *)structGetDemolishStat();
-						ASSERT((Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer."));
+						ASSERT( Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer." );
 						Object = (void*)Stats;
 						Player = selectedPlayer;
 						IMDType = IMDTYPE_STRUCTURESTAT;
@@ -1018,8 +1018,8 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 				                            }
                                             else
                                             {
-                                                ASSERT((FALSE,
-                                                    "intDisplayStatsButton:Invalid Stat for research button"));
+                                                ASSERT( FALSE,
+                                                    "intDisplayStatsButton:Invalid Stat for research button" );
                                                 Object = NULL;
                                                 IMDType = IMDTYPE_RESEARCH;
                                             }
@@ -1045,7 +1045,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 					break;
 
 				default:
-					ASSERT((FALSE, "intDisplayObjectButton: invalid structure type"));
+					ASSERT( FALSE, "intDisplayObjectButton: invalid structure type" );
 			}
 		} else
 		{
@@ -1152,7 +1152,7 @@ void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 					break;
 
 				default:
-					ASSERT((FALSE, "intDisplayStatusButton: invalid structure type"));
+					ASSERT( FALSE, "intDisplayStatusButton: invalid structure type" );
 			}
 		}
 
@@ -1279,8 +1279,8 @@ void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 				            }
                             else
                             {
-                                ASSERT((FALSE,
-                                    "intDisplayStatsButton:Invalid Stat for research button"));
+                                ASSERT( FALSE,
+                                    "intDisplayStatsButton:Invalid Stat for research button" );
                                 Object = NULL;
                                 IMDType = IMDTYPE_RESEARCH;
                             }
@@ -1826,7 +1826,7 @@ void intDisplayButtonFlash(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 	UDWORD Down = 0;
 	UWORD ImageID;
 
-	ASSERT((psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button"));
+	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button" );
 
 	if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
 	{
@@ -1866,7 +1866,7 @@ void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 	UBYTE	flashTime = (UBYTE)UNPACKDWORD_QUAD_B((UDWORD)psWidget->pUserData);
 	UWORD	ImageID;
 
-	ASSERT((psWidget->type == WIDG_BUTTON,"intDisplayReticuleButton : Not a button"));
+	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayReticuleButton : Not a button" );
 
 
 //	iV_DrawTransImage(IntImages,ImageID,x,y);
@@ -1944,7 +1944,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 {
 	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
 
-//	ASSERT((Number < 4,"intDisplayTab : Too many tabs."));
+//	ASSERT( Number < 4,"intDisplayTab : Too many tabs." );
     //Number represents which tab we are on but not interested since they all look the same now - AB 25/01/99
 	/*if(Number > 3) {
 		Number = 3;
@@ -1981,7 +1981,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //	UWORD ImageID;
 //#endif
 //
-////	ASSERT((Number < 4,"intDisplaySystemTab : Too many tabs."));
+////	ASSERT( Number < 4,"intDisplaySystemTab : Too many tabs." );
 //
 //	Number = Number%4;	// Make sure number never gets bigger than 3.
 //
@@ -2001,7 +2001,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //	}
 //	else
 //	{
-//		//ASSERT((FALSE,"intDisplaySystemTab : NOT CATERED FOR!!!"));
+//		//ASSERT( FALSE,"intDisplaySystemTab : NOT CATERED FOR!!!" );
 //		iV_DrawTransImage(IntImages,(UWORD)(Tab->MinorUp),x,y);
 //
 //		if(Hilight)
@@ -2111,8 +2111,8 @@ void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 	psStruct = psButton->pUserData;
 	if (psStruct)
 	{
-		ASSERT((StructIsFactory(psStruct),
-			"intDisplayDPButton: structure is not a factory"));
+		ASSERT( StructIsFactory(psStruct),
+			"intDisplayDPButton: structure is not a factory" );
 
 		if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 		{
@@ -2295,7 +2295,7 @@ void intDeleteGraphics(void)
 //{
 //	TestButtonBuffer.InUse=FALSE;
 //  	TestButtonBuffer.Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,0,0,NULL);	// This allocates the surface in psx VRAM
-//	ASSERT((TestButtonBuffer.Surface!=NULL,"intInitialise : Failed to create TestButton surface"));
+//	ASSERT( TestButtonBuffer.Surface!=NULL,"intInitialise : Failed to create TestButton surface" );
 //}
 //
 //#endif
@@ -2320,9 +2320,9 @@ void InitialiseButtonData(void)
 
 	for(i=0; i<NUM_OBJECTSURFACES; i++) {
 		ObjectSurfaces[i].Buffer = MALLOC(Width*Height);
-		ASSERT((ObjectSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Object surface"));
+		ASSERT( ObjectSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Object surface" );
 		ObjectSurfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,10,10,ObjectSurfaces[i].Buffer);
-		ASSERT((ObjectSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Object surface"));
+		ASSERT( ObjectSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Object surface" );
 	}
 
 	for(i=0; i<NUM_OBJECTBUFFERS; i++) {
@@ -2332,9 +2332,9 @@ void InitialiseButtonData(void)
 
 	for(i=0; i<NUM_SYSTEM0SURFACES; i++) {
 		System0Surfaces[i].Buffer = MALLOC(Width*Height);
-		ASSERT((System0Surfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate System0 surface"));
+		ASSERT( System0Surfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate System0 surface" );
 		System0Surfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,10,10,System0Surfaces[i].Buffer);
-		ASSERT((System0Surfaces[i].Surface!=NULL,"intInitialise : Failed to create System0 surface"));
+		ASSERT( System0Surfaces[i].Surface!=NULL,"intInitialise : Failed to create System0 surface" );
 	}
 
     for(i=0; i<NUM_SYSTEM0BUFFERS; i++) {
@@ -2344,9 +2344,9 @@ void InitialiseButtonData(void)
 
 	for(i=0; i<NUM_TOPICSURFACES; i++) {
 		TopicSurfaces[i].Buffer = MALLOC(WidthTopic*HeightTopic);
-		ASSERT((TopicSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Topic surface"));
+		ASSERT( TopicSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Topic surface" );
 		TopicSurfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,WidthTopic,HeightTopic,10,10,TopicSurfaces[i].Buffer);
-		ASSERT((TopicSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Topic surface"));
+		ASSERT( TopicSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Topic surface" );
 	}
 
 	for(i=0; i<NUM_TOPICBUFFERS; i++) {
@@ -2356,9 +2356,9 @@ void InitialiseButtonData(void)
 
 	for(i=0; i<NUM_STATSURFACES; i++) {
 		StatSurfaces[i].Buffer = MALLOC(Width*Height);
-		ASSERT((StatSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Stats surface"));
+		ASSERT( StatSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Stats surface" );
 		StatSurfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,10,10,StatSurfaces[i].Buffer);
-		ASSERT((StatSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Stat surface"));
+		ASSERT( StatSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Stat surface" );
 	}
 
 	for(i=0; i<NUM_STATBUFFERS; i++) {
@@ -2665,7 +2665,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 
 		Size = 2;
 		scale = DROID_BUT_SCALE;
-		ASSERT((Radius <= 128,"create PIE button big component found"));
+		ASSERT( Radius <= 128,"create PIE button big component found" );
 
 		ClearButton(Down, Size, buttonType);
 
@@ -2759,8 +2759,8 @@ void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Play
 			Size = 2;//small structure
 			scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 			//scale = COMP_BUT_SCALE;
-			//ASSERT((Radius <= OBJECT_RADIUS,"Object too big for button - %s",
-			//		((BASE_STATS*)Object)->pName));
+			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
+			//		((BASE_STATS*)Object)->pName );
 		}
 		else if(IMDType == IMDTYPE_RESEARCH)
 		{
@@ -3273,7 +3273,7 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 		return componentIMDs[ID];
 	}
 
-	ASSERT((0,"StatGetComponent : Unknown component"));*/
+	ASSERT( 0,"StatGetComponent : Unknown component" );*/
 
 //	COMP_BASE_STATS *CompStat = (COMP_BASE_STATS *)Stat;
 //	DBPRINTF(("%s\n",Stat->pName));
@@ -3289,9 +3289,9 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 //		return ((COMP_BASE_STATS *)Stat)->pIMD;
 
 	case COMP_BRAIN:
-//		ASSERT(( ((UBYTE*)Stat >= (UBYTE*)asCommandDroids) &&
+//		ASSERT( ((UBYTE*)Stat >= (UBYTE*)asCommandDroids) &&
 //				 ((UBYTE*)Stat < (UBYTE*)asCommandDroids + sizeof(asCommandDroids)),
-//				 "StatGetComponentIMD: This 'BRAIN_STATS' is actually meant to be a 'COMMAND_DROID'"));
+//				 "StatGetComponentIMD: This 'BRAIN_STATS' is actually meant to be a 'COMMAND_DROID'" );
 
 //		psWStat = asWeaponStats + ((COMMAND_DROID *)Stat)->nWeapStat;
 		psWStat = ((BRAIN_STATS *)Stat)->psWeaponStat;
@@ -3330,7 +3330,7 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 
 	default:
 		//COMP_UNKNOWN should be an error
-		ASSERT((FALSE, "StatGetComponent : Unknown component"));
+		ASSERT( FALSE, "StatGetComponent : Unknown component" );
 	}
 
 	return FALSE;
@@ -3602,8 +3602,8 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
     //allocate this outside of the if so the rank icons are always draw
     psDroid = (DROID*)Buffer->Data;
     //there should always be a droid associated with the button
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"intDisplayTransportButton: invalid droid pointer"));
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		"intDisplayTransportButton: invalid droid pointer" );
 
 	{
 		Hilight = Form->state & WCLICK_HILITE;
@@ -3620,8 +3620,8 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 		//psDroid = (DROID*)Buffer->Data;
 
 		//there should always be a droid associated with the button
-		//ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		//	"intDisplayTransportButton: invalid droid pointer"));
+		//ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		//	"intDisplayTransportButton: invalid droid pointer" );
 
 		if (psDroid)
 		{
@@ -3856,7 +3856,7 @@ void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
 	//VIEW_PROXIMITY		*pViewProximity;
 	SDWORD				x = 0, y = 0;
 
-	ASSERT((psMsg->type == MSG_PROXIMITY, "Invalid message type"));
+	ASSERT( psMsg->type == MSG_PROXIMITY, "Invalid message type" );
 
 	//if no data - ignore message
 	if (psMsg->pViewData == NULL)

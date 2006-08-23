@@ -251,10 +251,10 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 	UDWORD tileX, tileY, tileYOffset;
 	SDWORD h0, hx, hy, hxy;
 	SDWORD dx, dy, ox, oy;
-/*	ASSERT((x < (mapWidth << TILE_SHIFT),
-		"mapHeight: x coordinate bigger than map width"));
-	ASSERT((y < (mapHeight<< TILE_SHIFT),
-		"mapHeight: y coordinate bigger than map height"));
+/*	ASSERT( x < (mapWidth << TILE_SHIFT),
+		"mapHeight: x coordinate bigger than map width" );
+	ASSERT( y < (mapHeight<< TILE_SHIFT),
+		"mapHeight: y coordinate bigger than map height" );
 */
     x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
     x = x >= (mapWidth << TILE_SHIFT) ? ((mapWidth-1) << TILE_SHIFT) : x;
@@ -280,10 +280,10 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 //	ox = (SDWORD)x - (SDWORD)(tileX << TILE_SHIFT);
 //	oy = (SDWORD)y - (SDWORD)(tileY << TILE_SHIFT);
 
-	ASSERT((ox < TILE_UNITS, "mapHeight: x offset too big"));
-	ASSERT((oy < TILE_UNITS, "mapHeight: y offset too big"));
-	ASSERT((ox >= 0, "mapHeight: x offset too small"));
-	ASSERT((oy >= 0, "mapHeight: y offset too small"));
+	ASSERT( ox < TILE_UNITS, "mapHeight: x offset too big" );
+	ASSERT( oy < TILE_UNITS, "mapHeight: y offset too big" );
+	ASSERT( ox >= 0, "mapHeight: x offset too small" );
+	ASSERT( oy >= 0, "mapHeight: y offset too small" );
 
 	//different code for 4 different triangle cases
 	if (psMapTiles[tileX + tileYOffset].texture & TILE_TRIFLIP)
@@ -351,10 +351,10 @@ UDWORD map_TileMistValue(UDWORD x, UDWORD y)
     x = x >= (mapWidth) ? (mapWidth-1) : x;
 	y = y >= (mapHeight) ? (mapHeight-1) : y;
 
-	ASSERT((x < mapWidth,
-		"mapTile: x coordinate bigger than map width"));
-	ASSERT((y < mapHeight,
-		"mapTile: y coordinate bigger than map height"));
+	ASSERT( x < mapWidth,
+		"mapTile: x coordinate bigger than map width" );
+	ASSERT( y < mapHeight,
+		"mapTile: y coordinate bigger than map height" );
 
 	return (MAKEINT(pEnvironData[x + (y * mapWidth)].val)*4);
 }

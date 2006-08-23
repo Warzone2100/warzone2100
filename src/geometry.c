@@ -87,8 +87,8 @@ double	angle;
 	if (angleInt<0)
 		angleInt+=360;
 
-	ASSERT((angleInt >= 0 && angleInt < 360,
-		"calcDirection: droid direction out of range"));
+	ASSERT( angleInt >= 0 && angleInt < 360,
+		"calcDirection: droid direction out of range" );
 
 	return(angleInt);
 }
@@ -529,7 +529,7 @@ SDWORD	tileX,tileY;
 UDWORD	maxDisplacement;
 UDWORD	maxDistance;
 
-	ASSERT((severity<MAX_TILE_DAMAGE,"Damage is too severe"));
+	ASSERT( severity<MAX_TILE_DAMAGE,"Damage is too severe" );
 	/* Make sure it's odd */
 	if( !(tilesAcross & 0x01))
 	{
@@ -575,4 +575,6 @@ UDWORD	maxDistance;
 		}
 	}
 }
+
+
 

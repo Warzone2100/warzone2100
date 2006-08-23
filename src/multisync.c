@@ -585,7 +585,7 @@ static void offscreenUpdate(DROID *psDroid,
 
 	// snap droid(if on ground)  to terrain level at x,y.
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT((PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),"offscreenUpdate: invalid propulsion stats pointer"));
+	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),"offscreenUpdate: invalid propulsion stats pointer" );
 	if(	psPropStats->propulsionType != LIFT )		// if not airborne.
 	{
 		psDroid->z = map_Height(psDroid->x, psDroid->y);
@@ -877,7 +877,7 @@ BOOL recvStructureCheck( NETMSG *m)
 
 				default:
 					j=0;
-					ASSERT((FALSE,"Unknown Upgrade in structure checking!"));
+					ASSERT( FALSE,"Unknown Upgrade in structure checking!" );
 					return TRUE;
 					break;
 				}

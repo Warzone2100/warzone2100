@@ -543,9 +543,9 @@ passed through the object lists each cycle whilst there is some*/
 		warning++;
 		if (warning > 1000)
 		{
-			ASSERT((FALSE,
+			ASSERT( FALSE,
 				"spreading power round more than 1000 buildings for player %d?",
-				player));
+				player );
 			warning = 0;
 		}
 
@@ -808,7 +808,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
         }
         break;
     default:
-        ASSERT((FALSE, "accruePower: Invalid object type"));
+        ASSERT( FALSE, "accruePower: Invalid object type" );
     }
 
 	return bPowerUsed;
@@ -828,7 +828,7 @@ void powerDestroyObject(BASE_OBJECT *psObject)
 /*checks if the Object to be powered next - returns TRUE if power*/
 BOOL getLastPowered(BASE_OBJECT *psObject)
 {
-	ASSERT((psObject != NULL, "getLastPowered - invalid object"));
+	ASSERT( psObject != NULL, "getLastPowered - invalid object" );
 
 	if (asPower[psObject->player]->psLastPowered == NULL)
 	{
@@ -891,8 +891,8 @@ BOOL structUsesPower(STRUCTURE *psStruct)
 {
     BOOL    bUsesPower = FALSE;
 
-	ASSERT((PTRVALID(psStruct, sizeof(STRUCTURE)),
-		"structUsesPower: Invalid Structure pointer"));
+	ASSERT( PTRVALID(psStruct, sizeof(STRUCTURE)),
+		"structUsesPower: Invalid Structure pointer" );
 
     switch(psStruct->pStructureType->type)
     {
@@ -916,8 +916,8 @@ BOOL droidUsesPower(DROID *psDroid)
 {
     BOOL    bUsesPower = FALSE;
 
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"unitUsesPower: Invalid unit pointer"));
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		"unitUsesPower: Invalid unit pointer" );
 
     switch(psDroid->droidType)
     {
@@ -963,7 +963,7 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
         if (psLastPowered != NULL AND psLastPowered == asPower[player]->
             psLastPowered AND bPowerBefore)
         {
-            ASSERT((FALSE, "powerCheck: trouble at mill!"));
+            ASSERT( FALSE, "powerCheck: trouble at mill!" );
             //initialise so something can have some power next cycle
             asPower[player]->psLastPowered = NULL;
         }
@@ -1342,4 +1342,6 @@ has been used*/
 		powerCalculated = FALSE;
 	}
 }*/
+
+
 

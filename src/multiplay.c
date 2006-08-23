@@ -1369,7 +1369,7 @@ BOOL recvTemplate(NETMSG * m)
 
 	player = (UBYTE)(m->body[0]);
 
-	ASSERT((player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player));
+	ASSERT( player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player );
 
 	if(m->size < sizeof(DROID_TEMPLATE))
 	{
