@@ -56,7 +56,6 @@ line:			TEXT_T QTEXT_T
 								if (!strresStoreString(psCurrRes, $1, $2))
 								{
 									YYABORT;
-									printf("Hello. I'm the parser.\n");
 								}
 							}
 			;

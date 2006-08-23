@@ -438,7 +438,7 @@ BOOL gwGenerateLinkGates(void)
 	ASSERT( apEquivZones != NULL,
 		"gwGenerateLinkGates: no zone equivalence table" );
 
-	debug( LOG_ERROR, "Generating water link Gateways...." );
+	debug( LOG_NEVER, "Generating water link Gateways...." );
 
 	for(zone=1; zone<gwNumZones; zone += 1)
 	{
@@ -459,7 +459,7 @@ BOOL gwGenerateLinkGates(void)
 		}
 	}
 
-	debug( LOG_ERROR, "Done\n" );
+	debug( LOG_NEVER, "Done\n" );
 
 	return TRUE;
 }

@@ -143,7 +143,7 @@ rpl_open(char* filename) {
 			break;
 		default:
 			rpl->sound_decoder = rpl_decode_sound_unknown;
-			printf("Unknown sound format %i\n", tmp);
+			debug( LOG_VIDEO, "Unknown sound format %i\n", tmp );
 			break;
 	}
 	rpl->current_sound_frame = 0;
@@ -191,7 +191,7 @@ rpl_open(char* filename) {
 		for (i = 0; i < rpl->nb_chunks; ++i) {
 			readline(f, buf, len);
 			if (sscanf(buf, "%i,%i;%i", &rpl->chunks[i].offset, &rpl->chunks[i].video_size, &rpl->chunks[i].audio_size) != 3) {
-				printf("Error in chunk catalog\n");
+				debug( LOG_VIDEO, "Error in chunk catalog\n" );
 				goto error;
 			}
 
@@ -223,7 +223,7 @@ unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buff
 	char* tmp;
 	PHYSFS_file * out;
 
-	printf("Saving unknown sound stream to file\n");
+	debug( LOG_VIDEO, "Saving unknown sound stream to file\n" );
 	for (i = 0; i < rpl->nb_chunks; ++i) {
 		total_audio_size += rpl->chunks[i].audio_size;
 	}

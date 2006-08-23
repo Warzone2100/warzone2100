@@ -49,12 +49,12 @@ void	dbg_MONO_ClearRectangle(SDWORD	leftedge,
 			 ub_i, ub_j,
 			 ub_leftedge, ub_topedge,
 			 ub_width, ub_height;
-	
+
 	ub_leftedge = (UBYTE)leftedge;
 	ub_topedge = (UBYTE)topedge;
 	ub_width = (UBYTE)width;
 	ub_height = (UBYTE)height;
-	
+
 	/* do some clipping first */
 	ub_newwidth = ub_width;
 	ub_newheight = ub_height;
@@ -169,7 +169,7 @@ void	dbg_MONO_PrintString(SDWORD	 ub_leftedge,
 			/* get the next character */
 			aub_currentcharacter[0] = *pub_formatstringptr++;
 
-			/* is the character a %? */			
+			/* is the character a %? */
 			if (aub_currentcharacter[0] == '%')
 			{
 				/* yes, the character is a %; is the percent flag set? */
@@ -369,7 +369,6 @@ static UBYTE	DBug_ExpandString(UBYTE		*pub_stringbuffer,
 	switch (ub_percentchar)
 	{
 		case	'a':	/* attribute (char) */
-			printf("Warning (%s:%d): changed char to int, might not work.\n", __FILE__, __LINE__);
 			ub_newattribute = va_arg(val_arglist, int);
 // changed because gcc 4 says it'll crash here
 // was			ub_newattribute = va_arg(val_arglist, char);
@@ -378,8 +377,6 @@ static UBYTE	DBug_ExpandString(UBYTE		*pub_stringbuffer,
 
 
 		case	'c':	/* character */
-
-			printf("Warning (%s:%d): changed char to int, might not work.\n", __FILE__, __LINE__);
 			sprintf((char*)pub_stringbuffer, (const char*)pub_percentstring, va_arg(val_arglist, int));
 // changed because gcc 4 says it'll crash here
 // was			sprintf((char*)pub_stringbuffer, (const char*)pub_percentstring, va_arg(val_arglist, char));

@@ -3587,13 +3587,13 @@ void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	droidGetNaybors(psDroid);
 
 #ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	printf("%d ",speed);
+if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d ", speed );
 #endif
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 
 #ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	printf("%d ",speed);
+if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d ", speed );
 #endif
 
 //	moveUpdateDroidDirection( psDroid, &speed, direction, TRACKED_SPIN_ANGLE,
@@ -3602,7 +3602,7 @@ if(psDroid == driveGetDriven())	printf("%d ",speed);
 				spinSpeed, turnSpeed, &iDroidDir, &fSpeed );
 
 #ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	printf("%d ",speed);
+if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d ", speed );
 #endif
 
 	fNormalSpeed = moveCalcNormalSpeed( psDroid, fSpeed, iDroidDir,
@@ -3613,7 +3613,7 @@ if(psDroid == driveGetDriven())	printf("%d ",speed);
 										fPerpSpeed, iDroidDir );
 
 #ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	printf("%d\n",speed);
+if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d\n", speed );
 #endif
 
 //	if (psDroid->direction != psDroid->sMove.dir)

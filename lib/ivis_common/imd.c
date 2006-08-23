@@ -309,7 +309,7 @@ iBool iV_IMDSave(STRING *filename, iIMDShape *s, BOOL PieIMD)
 				if (poly->flags & iV_IMD_TEXANIM) {
 
 					if (poly->pTexAnim == NULL) {
-						printf("No TexAnim pointer!\n");
+						debug( LOG_3D, "No TexAnim pointer!\n" );
 					} else {
 						fprintf(fp," %d %d %d %d",
 							poly->pTexAnim->nFrames,

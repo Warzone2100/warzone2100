@@ -146,11 +146,7 @@ BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 		goto error;
 	}
 
-#ifdef NET_DEBUG
-printf("NETrecvMessage: received message of type %i and size %i.\n",
-						 message->type,
-							     message->size);
-#endif
+	debug( LOG_NET, "NETrecvMessage: received message of type %i and size %i.\n", message->type, message->size );
 
 	memcpy(pMsg, message, size);
 	bs->buffer_start += size;
@@ -490,7 +486,7 @@ BOOL NETinit(BOOL bFirstCall)
 	}
 
 	if (SDLNet_Init() == -1) {
-		printf("SDLNet_Init: %s\n", SDLNet_GetError());
+		debug( LOG_ERROR, "SDLNet_Init: %s\n", SDLNet_GetError() );
 		return FALSE;
 	}
 
@@ -524,9 +520,8 @@ HRESULT NETclose(VOID)
 {
 	unsigned int i;
 
-#ifdef NET_DEBUG
-printf("NETclose\n");
-#endif
+	debug( LOG_NET, "NETclose\n" );
+
 	NEThaltJoining();
 	is_server=FALSE;
 
@@ -662,10 +657,9 @@ UDWORD NETgetRecentPacketsRecvd(VOID)
 // Send a message to a player, option to guarantee message
 BOOL NETsend(NETMSG *msg, DPID player, BOOL guarantee)
 {
-#ifdef NET_DEBUG
-printf("NETsend\n");
-#endif
 	unsigned int size;
+
+	debug( LOG_NET, "NETsend\n" );
 
 	if(!NetPlay.bComms)
 	{
@@ -710,10 +704,9 @@ printf("NETsend\n");
 // broadcast a message to all players.
 BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 {
-#ifdef NET_DEBUG
-printf("NETbcast\n");
-#endif
 	unsigned int size;
+
+	debug( LOG_NET, "NETbcast\n" );
 
 	if(!NetPlay.bComms)
 	{
@@ -759,9 +752,8 @@ printf("NETbcast\n");
 // Check if a message is a system message
 BOOL NETprocessSystemMessage(NETMSG * pMsg)
 {
-#ifdef NET_DEBUG
-printf("NETprocessSystemMessage\n");
-#endif
+	debug( LOG_NET, "NETprocessSystemMessage\n" );
+
 	switch (pMsg->type) {
 		case MSG_PLAYER_INFO: {
 			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
@@ -962,9 +954,8 @@ receive_message:
 
 BOOL NETsetupTCPIP(LPVOID *addr, char * machine)
 {
-#ifdef NET_DEBUG
-printf("NETsetupTCPIP\n");
-#endif
+	debug( LOG_NET, "NETsetupTCPIP\n" );
+
 	if (   hostname != NULL
 	    && hostname != master_server) {
 		free(hostname);
@@ -1113,18 +1104,14 @@ void NETregisterServer(int state) {
 		switch(state) {
 			case 1: {
 				if(SDLNet_ResolveHost(&ip, master_server, MASTER_SERVER_PORT) == -1) {
-					printf("NETregisterServer: couldn't resolve master server (%s): %s\n",
-						master_server,
-						SDLNet_GetError());
+					debug( LOG_ERROR, "NETregisterServer: couldn't resolve master server (%s): %s\n", master_server, SDLNet_GetError() );
 					server_not_there = 1;
 					return;
 				}
 
 				if(!rs_socket) rs_socket = SDLNet_TCP_Open(&ip);
 				if(rs_socket == NULL) {
-					printf("NETregisterServer: Cannot connect to master server (%s): %s\n",
-						master_server,
-						SDLNet_GetError());
+					debug( LOG_ERROR, "NETregisterServer: Cannot connect to master server (%s): %s\n", master_server, SDLNet_GetError() );
 					server_not_there = 1;
 					return;
 				}
@@ -1159,8 +1146,7 @@ void NETallowJoining() {
 	if (tmp_socket_set == NULL) {
 		tmp_socket_set = SDLNet_AllocSocketSet(MAX_TMP_SOCKETS+1);
 		if (tmp_socket_set == NULL) {
-			printf("Couldn't create socket set: %s\n",
-							SDLNet_GetError());
+			debug( LOG_ERROR, "Couldn't create socket set: %s\n", SDLNet_GetError() );
 			return;
 		}
 		SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
@@ -1249,11 +1235,10 @@ BOOL NEThostGame(LPSTR SessionName, LPSTR PlayerName,
 		 DWORD one, DWORD two, DWORD three, DWORD four,
 		 UDWORD plyrs)	// # of players.
 {
-#ifdef NET_DEBUG
-printf("NEThostGame\n");
-#endif
 	IPaddress ip;
 	unsigned int i;
+
+	debug( LOG_NET, "NEThostGame\n" );
 
 	if(!NetPlay.bComms)
 	{
@@ -1264,8 +1249,7 @@ printf("NEThostGame\n");
 	}
 
 	if(SDLNet_ResolveHost(&ip, NULL, WARZONE_NET_PORT) == -1) {
-		printf("NEThostGame: couldn't resolve master self: %s\n",
-			SDLNet_GetError());
+		debug( LOG_ERROR, "NEThostGame: couldn't resolve master self: %s\n", SDLNet_GetError() );
 		return FALSE;
 	}
 
@@ -1277,8 +1261,7 @@ printf("NEThostGame\n");
 
 	if(!socket_set) socket_set = SDLNet_AllocSocketSet(MAX_CONNECTED_PLAYERS);
 	if (socket_set == NULL) {
-		printf("Couldn't create socket set: %s\n",
-						SDLNet_GetError());
+		debug( LOG_ERROR, "Couldn't create socket set: %s\n", SDLNet_GetError() );
 		return FALSE;
 	}
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i) {
@@ -1318,9 +1301,8 @@ printf("NEThostGame\n");
 // Stop the dplay interface from accepting more players.
 BOOL NEThaltJoining(VOID)
 {
-#ifdef NET_DEBUG
-printf("NEThaltJoining\n");
-#endif
+	debug( LOG_NET, "NEThaltJoining\n" );
+
 	allow_joining = FALSE;
 
 	return TRUE;
@@ -1332,13 +1314,11 @@ printf("NEThaltJoining\n");
 BOOL NETfindGame(BOOL async)	/// may (not) want to use async here...
 {
 	static UDWORD gamecount = 0, gamesavailable;
-
-#ifdef NET_DEBUG
-printf("NETfindGame\n");
-#endif
 	IPaddress ip;
 	char buffer[sizeof(GAMESTRUCT)*2];
 	GAMESTRUCT* tmpgame = (GAMESTRUCT*)buffer;
+
+	debug( LOG_NET, "NETfindGame\n" );
 
 	gamecount = 0;
 	NetPlay.games[0].desc.dwSize = 0;
@@ -1354,9 +1334,7 @@ printf("NETfindGame\n");
 
 	if (SDLNet_ResolveHost(&ip, hostname, (hostname == master_server) ? MASTER_SERVER_PORT
 								          : WARZONE_NET_PORT) == -1) {
-		printf("NETfindGame: couldn't resolve hostname (%s): %s\n",
-			hostname,
-			SDLNet_GetError());
+		debug( LOG_ERROR, "NETfindGame: couldn't resolve hostname (%s): %s\n", hostname, SDLNet_GetError() );
 		return FALSE;
 	}
 
@@ -1366,14 +1344,13 @@ printf("NETfindGame\n");
 
 	tcp_socket = SDLNet_TCP_Open(&ip);
 	if (tcp_socket == NULL) {
-		printf("SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+		debug( LOG_ERROR, "SDLNet_TCP_Open: %s\n", SDLNet_GetError() );
 		return FALSE;
 	}
 
 	socket_set = SDLNet_AllocSocketSet(1);
 	if (socket_set == NULL) {
-		printf("Couldn't create socket set: %s\n",
-						SDLNet_GetError());
+		debug( LOG_ERROR, "Couldn't create socket set: %s\n", SDLNet_GetError() );
 		return FALSE;
 	}
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
@@ -1386,9 +1363,7 @@ printf("NETfindGame\n");
 		gamesavailable=(UDWORD)buffer[0];
 	}
 
-	#ifdef NET_DEBUG
-	printf("receiving info of %d game(s)\n", gamesavailable);
-	#endif
+	debug( LOG_NET, "receiving info of %d game(s)\n", gamesavailable );
 
 	do {
 		if (   SDLNet_CheckSockets(socket_set, 1000) > 0
@@ -1424,14 +1399,12 @@ printf("NETfindGame\n");
 // Functions used to setup and join games.
 BOOL NETjoinGame(UDWORD gameNumber, LPSTR playername)
 {
-#ifdef NET_DEBUG
-printf("NETjoinGame gameNumber=%d\n", gameNumber);
-#endif
 	char* name;
 	IPaddress ip;
 	char buffer[sizeof(GAMESTRUCT)*2];
 	GAMESTRUCT* tmpgame = (GAMESTRUCT*)buffer;
 
+	debug( LOG_NET, "NETjoinGame gameNumber=%d\n", gameNumber );
 
 	NETclose();	// just to be sure :)
 
@@ -1441,9 +1414,7 @@ printf("NETjoinGame gameNumber=%d\n", gameNumber);
 	hostname = strdup(NetPlay.games[gameNumber].desc.host);
 
 	if(SDLNet_ResolveHost(&ip, hostname, WARZONE_NET_PORT) == -1) {
-		printf("NETjoinGame: couldn't resolve hostname (%s): %s\n",
-			hostname,
-			SDLNet_GetError());
+		debug( LOG_ERROR, "NETjoinGame: couldn't resolve hostname (%s): %s\n", hostname, SDLNet_GetError() );
 		return FALSE;
 	}
 
@@ -1453,14 +1424,13 @@ printf("NETjoinGame gameNumber=%d\n", gameNumber);
 
 	tcp_socket = SDLNet_TCP_Open(&ip);
  	if (tcp_socket == NULL) {
-		printf("SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+		debug( LOG_ERROR, "SDLNet_TCP_Open: %s\n", SDLNet_GetError() );
 		return FALSE;
 	}
 
 	socket_set = SDLNet_AllocSocketSet(1);
 	if (socket_set == NULL) {
-		printf("Couldn't create socket set: %s\n",
-						SDLNet_GetError());
+		debug( LOG_ERROR, "Couldn't create socket set: %s\n", SDLNet_GetError() );
  		return FALSE;
  	}
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);

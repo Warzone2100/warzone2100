@@ -64,7 +64,7 @@ void seq_start_sound(RPL* s) {
 BOOL seq_SetSequenceForBuffer(char* filename, int startTime, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
-	printf("seq_SetSequenceForBuffer %s -> novideo.rpl\n", filename);
+	debug( LOG_VIDEO, "seq_SetSequenceForBuffer %s -> novideo.rpl\n", filename );
 	filename = "novideo.rpl";
 #endif
 	if (current_sequence != NULL) {
@@ -86,7 +86,7 @@ BOOL seq_SetSequenceForBuffer(char* filename, int startTime, PERF_MODE perfMode)
 BOOL seq_SetSequence(char* filename, int startTime, char* lpBF, PERF_MODE perfMode)
 {
 #ifdef DUMMY_VIDEO
-	printf("seq_SetSequence %s -> novideo.rpl\n", filename);
+	debug( LOG_VIDEO, "seq_SetSequence %s -> novideo.rpl\n", filename );
 	filename = "novideo.rpl";
 #endif
 	if (current_sequence != NULL) {
@@ -104,7 +104,7 @@ BOOL seq_SetSequence(char* filename, int startTime, char* lpBF, PERF_MODE perfMo
 
 int seq_ClearMovie(void)
 {
-	printf("seq_ClearMovie\n");
+	debug( LOG_VIDEO, "seq_ClearMovie\n" );
 	if (current_sequence != NULL) {
 		rpl_close(current_sequence);
 		current_sequence = NULL;
@@ -162,7 +162,7 @@ BOOL	seq_RefreshVideoBuffers(void)
 
 BOOL	seq_ShutDown(void)
 {
-	printf("seq_ShutDown\n");
+	debug( LOG_VIDEO, "seq_ShutDown\n" );
 	if (current_sequence != NULL) {
 		if (seq_sound == TRUE) {
 			alSourceStop(seq_source);

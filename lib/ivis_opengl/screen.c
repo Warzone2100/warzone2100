@@ -167,7 +167,7 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 					exit( 1 );
 					break;
 				default:
-					debug( LOG_ERROR, "Error: Weird bit depth: %i", bpp );
+					debug( LOG_ERROR, "Error: Unsupported bit depth: %i", bpp );
 					exit( 1 );
 					break;
 			}
@@ -182,7 +182,7 @@ BOOL screenInitialise(	UDWORD		width,		// Display width
 
 		screen = SDL_SetVideoMode(width, height, bpp, video_flags);
 		if (!screen) {
-			printf("Error: SDL_SetVideoMode failed (%s).\n", SDL_GetError());
+			debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).\n", SDL_GetError() );
 			return FALSE;
 		}
 	}
@@ -615,7 +615,7 @@ void screenDoDumpToDiskIfRequired()
 		return;
 	}
 
-	printf("Saving screenshot %s\n", screendump_filename);
+	debug( LOG_3D, "Saving screenshot %s\n", screendump_filename );
 
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_compress(&cinfo);

@@ -353,8 +353,8 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
         {
-		printf("Error: Could not initialise SDL (%s).\n", SDL_GetError());
-		return FALSE;
+			debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
+			return FALSE;
         }
 
         SDL_WM_SetCaption(pWindowName, NULL);
