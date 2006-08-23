@@ -121,17 +121,21 @@ AC_PATH_SDLNET([
 
 
 if test "x$opengl" != "xno" ; then
-  AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
-  AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
-    [AC_CHECK_LIB(opengl32, main, GLLIB=-lopengl32 GL_lib=yes, GL_lib=no)])
-  AC_CHECK_LIB(GLU, main, GLULIB=-lGLU GLU_lib=yes,
-    [AC_CHECK_LIB(glu32, main, GLULIB=-lglu32 GLU_lib=yes, GLU_lib=no)])
   if test `uname` = "Darwin"; then
-    GL_lib=yes
-    GLU_lib=yes
-    GLLIB="-framework OpenGL"
-    GLULIB=""
+    AC_MSG_CHECKING([for OpenGL framework])
+    wz_ac_check_opengl_save_LIBS=$LIBS
+    LIBS="-framework OpenGL $LIBS"
+    AC_LINK_IFELSE([main() { }],[GL_h=mac ; GLU_h=mac ; GL_lib=yes ; GLU_lib=yes ; GLLIB="-framework OpenGL" ; GLULIB="" ; AC_MSG_RESULT([yes])],LIBS=$wz_ac_check_opengl_save_LIBS ; [AC_MSG_RESULT([no])])
   fi
+
+  if test "x$GL_lib" != "xyes" ; then
+    AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
+    AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
+      [AC_CHECK_LIB(opengl32, main, GLLIB=-lopengl32 GL_lib=yes, GL_lib=no)])
+    AC_CHECK_LIB(GLU, main, GLULIB=-lGLU GLU_lib=yes,
+      [AC_CHECK_LIB(glu32, main, GLULIB=-lglu32 GLU_lib=yes, GLU_lib=no)])
+  fi
+
   if test "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno" ; then
     if test "x$opengl" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenGL and GLU.])
@@ -161,14 +165,20 @@ else
 fi
 
 if test "x$openal" != "xno" ; then
-  AC_CHECK_HEADER(AL/al.h, AL_h=standard,
-               [AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
-  AC_CHECK_LIB(openal, main, ALLIB=-lopenal AL_lib=yes,
-               [AC_CHECK_LIB(openal32, main, ALLIB=-lopenal32 AL_lib=yes, AL_lib=no)])
   if test `uname` = "Darwin"; then
-    AL_lib=yes
-    ALLIB="-framework OpenAL"
+    AC_MSG_CHECKING([for OpenAL framework])
+    wz_ac_check_openal_save_LIBS=$LIBS
+    LIBS="-framework OpenAL $LIBS"
+    AC_LINK_IFELSE([main() { }],[AL_h=mac ; AL_lib=yes ; ALLIB="-framework OpenAL" ; AC_MSG_RESULT([yes])],[LIBS=$wz_ac_check_openal_save_LIBS ; AC_MSG_RESULT([no])])
   fi
+
+  if test "x$AL_lib" != "xyes" ; then
+    AC_CHECK_HEADER(AL/al.h, AL_h=standard,
+                 [AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
+    AC_CHECK_LIB(openal, main, ALLIB=-lopenal AL_lib=yes,
+                 [AC_CHECK_LIB(openal32, main, ALLIB=-lopenal32 AL_lib=yes, AL_lib=no)])
+  fi
+
   if test "x$AL_lib" = "xno" ; then
     if test "x$openal" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenAL.])
