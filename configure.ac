@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([warzone],[2.0.4_rc2],[http://gna.org/projects/warzone])
+AC_INIT([Warzone 2100],[2.0.4_rc2],[http://wz.rootzilla.de/])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
@@ -86,8 +86,8 @@ AC_DEFUN([WZ_EXPAND_DIR], [
         )`
 ])
 dnl export where the datadir is going to be installed; we will look for
-dnl $datadir/warzone/warzone.wz
-WZ_EXPAND_DIR(datadir, "$datadir/warzone")
+dnl $datadir/warzone2100/warzone.wz
+WZ_EXPAND_DIR(datadir, "$datadir/warzone2100")
 WZ_CFLAGS="${WZ_CFLAGS} -DDEFAULT_DATADIR=\\\"${datadir}\\\""
 
 
@@ -286,7 +286,7 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 
 echo ""
-echo "Warzone will compile with the following components:"
+echo "Warzone 2100 will compile with the following components:"
 echo ""
 echo " OpenGL acceleration:   $opengl"
 echo " OpenAL sound system:   $openal"

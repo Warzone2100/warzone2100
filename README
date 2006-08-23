@@ -1,4 +1,4 @@
-Warzone 2100 ReDev
+Warzone 2100 by Warzone Resurrection Project
 
 
 0) Welcome back !
@@ -43,8 +43,7 @@ be specified once, or when you want to change them. So,
 will start in fullscreen and in 1280x960 because this is what I specified just
 before (remember ?).
 
-For more groovy command-line options, check src/clparse.c (yes, we promise we'll
-document this properly some day).
+For more commandline options see: http://wz.rootzilla.de/wiki/user:command_line_options
 
 If you are on Linux and using X11, you can dynamically switch between windowed
 mode and fullscreen using ALT+ENTER at any time.
@@ -103,4 +102,4 @@ ogg and mp3 files are supported (provided all necessary libs are installed).
 
 
 
-                                                    The Warzone 2100 ReDev team.
+                                                    The Warzone 2100 Resurrection Project

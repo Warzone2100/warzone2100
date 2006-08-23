@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = "Warzone 2100 GPL"
+PROJECT_NAME           = "Warzone 2100"
 PROJECT_NUMBER         = 
 OUTPUT_DIRECTORY       = ./docs/
 CREATE_SUBDIRS         = NO

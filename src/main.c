@@ -48,16 +48,16 @@
 #include "version.h"
 
 #ifndef DEFAULT_DATADIR
-# define DEFAULT_DATADIR "/usr/share/warzone/"
+# define DEFAULT_DATADIR "/usr/share/warzone2100/"
 #endif
 
 #ifdef WIN32
-# define WZ_WRITEDIR "Warzone 2.0"
+# define WZ_WRITEDIR "Warzone 2100"
 #else
 # ifdef __APPLE__
-#  define WZ_WRITEDIR "Library/Application Support/Warzone-2.0"
+#  define WZ_WRITEDIR "Library/Application Support/Warzone 2100"
 # else
-#  define WZ_WRITEDIR ".warzone-2.0"
+#  define WZ_WRITEDIR ".warzone2100"
 # endif
 #endif
 
