@@ -15,15 +15,24 @@ xxxx-xx-xx: Version 2.0.4
    * Warzone uses AI from original version 1.10
    * AI reacts faster and builds stronger and more high-tech things
    * Fixed a bug which prevented the AI from creating oil derricks
+   * Data is now stored in "Documents and Settings\Username\My Documents\Warzone 2.0" (in your local language) on Windows
  * Scripting:
-   * Support for functions (including local variables)
-   * Script parse errors now report filename and line number
+   * Support for functions (including local variables, arguments and return values)
+   * String support
+   * AI can now send and recieve text messages
+   * Many new predefined functions
  * Debugging:
    * Cheat mode access changed
    * Logfile shows revision and version
+   * Script parse errors now report filename and line number
    * Warzone is now a full Windows app. Debug output goes to stdout.txt/stderr.txt
+   * You can now add any number of own debugging callbacks to output to various media
+     Current implementations: stderr, -debugfile and Windows debugger
+     See lib/framework/debug.c, src/clparse.c and src/main.c for examples
+   * Debuging now outputs the same on all compilers
  * Build system:
    * Makefile.raw system improved. Works without sh/MSys now.
+   * AutoMake build now requires version 1.8
 
 2006-07-01: Version 2.0.3
  * General:
