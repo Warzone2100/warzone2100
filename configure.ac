@@ -50,23 +50,15 @@ else
   AC_MSG_RESULT([no])
 fi
 
-#   --without-openal will build without OpenAL
-# Commented out as OpenAL is not curently an option,
-# but it will need to become optional someday.
-#AC_ARG_WITH(openal,
-#[  --with-openal           use OpenAL for sound [[auto]]],
-#[ openal=$withval ], [ openal=maybe ])
-openal=yes
+#   --disable-ogg will build without Ogg Vorbis support
+AC_ARG_ENABLE(ogg,
+[AC_HELP_STRING([--disable-ogg],[Do not built support for Ogg files])],
+[ ogg=$enableval ], [ ogg=maybe ])
 
-#   --without-ogg will build without Ogg vorbis support
-AC_ARG_WITH(ogg,
-[  --with-ogg              built support for Ogg files [[auto]]],
-[ ogg=$withval ], [ ogg=maybe ])
-
-#   --without-mp3 will build without MP3 support
-AC_ARG_WITH(mp3,
-[  --with-mp3              built support for Mp3 files [[auto]]],
-[ mp3=$withval ], [ mp3=maybe ])
+#   --disable-mp3 will build without Mp3 support
+AC_ARG_ENABLE(mp3,
+[AC_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
+[ mp3=$enableval ], [ mp3=maybe ])
 
 # windows conditional
 case $host_os in
