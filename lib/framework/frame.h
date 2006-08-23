@@ -20,7 +20,7 @@
 #endif
 
 #ifdef WIN32
-# ifdef __MINGW__
+# ifdef __MINGW32__
 #  include <w32api.h>
 #  define _WIN32_IE IE5
 # endif
