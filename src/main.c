@@ -51,14 +51,13 @@
 # define DEFAULT_DATADIR "/usr/share/warzone2100/"
 #endif
 
-#ifdef WIN32
+#if defined(WIN32)
+# define WZ_WRITEDIR "Warzone 2100"
+#elif defined(__APPLE__)
+# include <CoreServices/CoreServices.h>
 # define WZ_WRITEDIR "Warzone 2100"
 #else
-# ifdef __APPLE__
-#  define WZ_WRITEDIR "Library/Application Support/Warzone 2100"
-# else
-#  define WZ_WRITEDIR ".warzone2100"
-# endif
+# define WZ_WRITEDIR ".warzone2100"
 #endif
 
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
@@ -207,6 +206,13 @@ static void initialize_PhysicsFS(void)
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 	char tmpstr[MAX_PATH] = { '\0' };
+#ifdef __APPLE__
+	short vol_ref;
+	long dir_id;
+	FSSpec fsspec;
+	FSRef fsref;
+	OSErr error;
+#endif
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -216,8 +222,17 @@ static void initialize_PhysicsFS(void)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-#ifdef WIN32
+#if defined(WIN32)
 	if ( !SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
+#elif defined(__APPLE__)
+	error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
+	if (!error)
+		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
+	if (!error)
+		error = FSpMakeFSRef(&fsspec, &fsref);
+	if (!error)
+		error = FSRefMakePath(&fsref, tmpstr, 512);
+	if (error)
 #endif
 	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (Fallback when using Windows, default on others)
 
