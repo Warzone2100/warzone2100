@@ -52,6 +52,8 @@
 #define SUBTITLE_BOX_MIN 430
 #define SUBTITLE_BOX_MAX 480
 
+#define DUMMY_VIDEO
+
 
 typedef struct {
 	char pText[MAX_STR_LENGTH];
@@ -383,6 +385,11 @@ BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 {
 	bHoldSeqForAudio = FALSE;
+
+#ifdef DUMMY_VIDEO
+	debug( LOG_VIDEO, "seq_StartFullScreenVideo: Refusing to play video! (Not a bug)" );
+	return FALSE;
+#endif
 
 	frameSkip = 1;
 	switch(war_GetSeqMode())
