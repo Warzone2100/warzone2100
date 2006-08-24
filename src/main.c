@@ -231,7 +231,7 @@ static void initialize_PhysicsFS(void)
 	if (!error)
 		error = FSpMakeFSRef(&fsspec, &fsref);
 	if (!error)
-		error = FSRefMakePath(&fsref, tmpstr, 512);
+		error = FSRefMakePath(&fsref, tmpstr, MAX_PATH);
 	if (error)
 #endif
 	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (Fallback when using Windows, default on others)
@@ -251,8 +251,8 @@ static void initialize_PhysicsFS(void)
 	}
 
 	// Append the Warzone subdir
-	strcat( tmpstr, PHYSFS_getDirSeparator() );
 	strcat( tmpstr, WZ_WRITEDIR );
+	strcat( tmpstr, PHYSFS_getDirSeparator() );
 
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) {
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
@@ -422,7 +422,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	debug( LOG_WZ, "Warzone 2100 GPL, version %s, revision %s", version(), revision() );
+#ifdef DEBUG
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", version(), __DATE__ );
+#else
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", version(), __DATE__ );
+#endif
 
 	/*** Initialize PhysicsFS ***/
 

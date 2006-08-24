@@ -257,9 +257,6 @@ AC_SUBST(LFLAGS, "-olex.yy.c")
 # generates the kind of filename that automake expects.
 AC_SUBST(YFLAGS, "-oy.tab.c")
 
-# Set revision to be used by src/Makefile.am
-AC_SUBST(REVISION, ["\`svnversion -n .\`"])
-
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet

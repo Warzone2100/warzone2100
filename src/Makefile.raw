@@ -130,6 +130,6 @@ LIBS=framework \
 	sound \
 	widget
 
-EXE=warzone
+EXE=warzone2100
 
 include $(MAKERULES)/exe.mk

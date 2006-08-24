@@ -28,6 +28,7 @@
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
+#include "version.h"
 
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
@@ -64,51 +65,41 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 	for (i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
-// TODO: Support --GNU long-opts and -G short opts
-		if( stricmp(tokenType, "-help" ) == 0 ) {
-			// Show help
-			fprintf( stdout,
-				"Warzone2100:\n"
-				"   An OpenGL based 3D real time strategy game, scened in post-nuclear warfare\n"
-				"Usage:\n"
-				"   warzone [OPTIONS]\n"
-				"Options:\n"
-				"   -fullscreen :       Play in fullscreen mode\n"
-				"   -window :           Play in windowed mode\n"
-				"   -<WIDTH>x<HEIGHT> : Set the dimensions of the viewport (screen or window)\n"
-				"   -savegame <NAME> :  Load a saved game\n"
-				"   -help :             Show this help\n"
-				"   -cheat :            Allow cheat mode\n"
-				"   -debug FLAGS :      Show debug for FLAGS\n"
-				"   -debugfile FILE :   Log debug output in FILE\n"
-				"   -datadir DIR :      Set default datadir to DIR\n"
-				"   -mod MOD :          Enable global mod MOD\n"
-				"   -mp_mod MOD :       Enable multiplay only mod MOD\n"
-				"   -ca_mod MOD :       Enable campaign only mod MOD\n" );
+		if ( stricmp(tokenType, "--version") == 0 )
+		{
+#ifdef DEBUG
+			fprintf( stdout, "Warzone 2100 - Version %s - Built %s - DEBUG\n", version(), __DATE__ );
+#else
+			fprintf( stdout, "Warzone 2100 - Version %s - Built %s\n", version(), __DATE__ );
+#endif
 			return FALSE;
 		}
-		else if (stricmp(tokenType, "-debugfile") == 0) {
-			// find the file name
-			token = argv[++i];
-			if (token == NULL) {
-				debug( LOG_ERROR, "Missing filename?\n" );
-				abort();
-				return FALSE;
-			}
-			debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
+		else if ( stricmp(tokenType, "--help" ) == 0 )
+		{
+			// Show help
+			fprintf( stdout,
+				"Warzone 2100:\n"
+				"   An OpenGL based 3D real time strategy game, scened in post-nuclear warfare\n"
+				"Usage:\n"
+				"   warzone2100 [OPTIONS]\n"
+				"Options:\n"
+				"   --cheat                    Run in cheat mode\n"
+				"   --datadir DIR              Set default datadir to DIR\n"
+				"   --debug FLAGS              Show debug for FLAGS\n"
+				"   --debugfile FILE           Log debug output in FILE\n"
+				"   --fullscreen               Play in fullscreen mode\n"
+				"   --help                     Show this help and exit\n"
+				"   --mod MOD                  Enable global mod MOD\n"
+				"   --mod_ca MOD               Enable campaign only mod MOD\n"
+				"   --mod_mp MOD               Enable multiplay only mod MOD\n"
+				"   --savegame NAME            Load a saved game NAME\n"
+				"   --window                   Play in windowed mode\n"
+				"   --version                  Output version info and exit\n"
+				"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n" );
+			return FALSE;
 		}
-		else if (stricmp(tokenType, "-debug") == 0) {
-			// find the part name
-			token = argv[++i];
-			if (token == NULL) {
-				debug(LOG_ERROR, "Usage: -debug <flag>");
-				return FALSE;
-			}
-			if (!debug_enable_switch(token)) {
-				debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
-				return FALSE;
-			}
-		} else if (stricmp(tokenType, "-datadir") == 0) {
+		else if ( stricmp(tokenType, "--datadir") == 0 )
+		{
 			// find the quoted path name
 			token = argv[++i];
 			if (token == NULL)
@@ -117,6 +108,30 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				return FALSE;
 			}
 			strncpy(datadir, token, sizeof(datadir));
+		}
+		else if ( stricmp(tokenType, "--debug") == 0 )
+		{
+			// find the part name
+			token = argv[++i];
+			if (token == NULL) {
+				debug( LOG_ERROR, "Usage: --debug <flag>" );
+				return FALSE;
+			}
+			if (!debug_enable_switch(token)) {
+				debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
+				return FALSE;
+			}
+		}
+		else if ( stricmp(tokenType, "--debugfile") == 0 )
+		{
+			// find the file name
+			token = argv[++i];
+			if (token == NULL) {
+				debug( LOG_ERROR, "Missing filename?\n" );
+				abort();
+				return FALSE;
+			}
+			debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
 		}
 	}
 	return TRUE;
@@ -128,32 +143,38 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 **************************************************************************/
 BOOL ParseCommandLine(int argc, char** argv)
 {
-	char			*tokenType;
-	char			*token;
-	unsigned int		w, h;
+	char *tokenType=NULL, *token=NULL;
+	unsigned int width=0, height=0;
 	int i = 0, j = 0;
 
 	/* loop through command line */
 	for( i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
-		if ( stricmp( tokenType, "-window" ) == 0 )
+		if ( stricmp(tokenType, "--cheat") == 0 )
 		{
-			war_setFullscreen(FALSE);
+			fprintf(stdout, "  ** CHEAT MODE ACTIVATED! **\n");
+			bAllowDebugMode = TRUE;
 		}
-		else if ( stricmp( tokenType, "-fullscreen" ) == 0 )
+		else if ( stricmp( tokenType, "--fullscreen" ) == 0 )
 		{
 			war_setFullscreen(TRUE);
 		}
-		else if ( stricmp( tokenType, "-intro" ) == 0 )
+		else if ( stricmp( tokenType, "--game" ) == 0 )
 		{
-			SetGameMode(GS_VIDEO_MODE);
+			// find the game name
+			token = argv[++i];
+			if (token == NULL)
+			{
+				debug( LOG_ERROR, "Unrecognised game name\n" );
+				abort();
+				return FALSE;
+			}
+			strncpy(pLevelName, token, 254);
+			SetGameMode(GS_NORMAL);
 		}
-		else if ( stricmp( tokenType, "-title" ) == 0 )
+		else if ( stricmp(tokenType, "--mod") == 0 )
 		{
-			SetGameMode(GS_TITLE_SCREEN);
-		}
-		else if (stricmp(tokenType, "-mod") == 0) {
 			// find the file name
 			token = argv[++i];
 			if (token == NULL) {
@@ -165,13 +186,13 @@ BOOL ParseCommandLine(int argc, char** argv)
 			if( global_mods[j] != NULL )
 				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
 			global_mods[j] = token;
-
-			//set_global_mod(token);
 		}
-		else if (stricmp(tokenType, "-ca_mod") == 0) {
+		else if ( stricmp(tokenType, "--mod_ca") == 0 )
+		{
 			// find the file name
 			token = argv[++i];
-			if (token == NULL) {
+			if (token == NULL)
+			{
 				debug( LOG_ERROR, "Missing mod name?\n" );
 				return FALSE;
 			}
@@ -180,13 +201,13 @@ BOOL ParseCommandLine(int argc, char** argv)
 			if( campaign_mods[j] != NULL )
 				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
 			campaign_mods[j] = token;
-
-			//set_campaign_mod(token);
 		}
-		else if (stricmp(tokenType, "-mp_mod") == 0) {
+		else if ( stricmp(tokenType, "--mod_mp") == 0 )
+		{
 			// find the file name
 			token = argv[++i];
-			if (token == NULL) {
+			if (token == NULL)
+			{
 				debug( LOG_ERROR, "Missing mod name?\n" );
 				return FALSE;
 			}
@@ -195,29 +216,14 @@ BOOL ParseCommandLine(int argc, char** argv)
 			if( multiplay_mods[j] != NULL )
 				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
 			multiplay_mods[j] = token;
-
-			//set_multiplayer_mod(token);
 		}
-		else if ( stricmp( tokenType, "-game" ) == 0 )
+		else if ( stricmp( tokenType, "--savegame" ) == 0 )
 		{
 			// find the game name
 			token = argv[++i];
 			if (token == NULL)
 			{
-				debug( LOG_ERROR, "Unrecognised -game name\n" );
-				abort();
-				return FALSE;
-			}
-			strncpy(pLevelName, token, 254);
-			SetGameMode(GS_NORMAL);
-		}
-		else if ( stricmp( tokenType, "-savegame" ) == 0 )
-		{
-			// find the game name
-			token = argv[++i];
-			if (token == NULL)
-			{
-				debug( LOG_ERROR, "Unrecognised -savegame name\n" );
+				debug( LOG_ERROR, "Unrecognised savegame name\n" );
 				abort();
 				return FALSE;
 			}
@@ -226,46 +232,62 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
-		else if (stricmp(tokenType, "-cheat") == 0)
+		else if ( stricmp(tokenType, "--viewport") == 0 )
 		{
-			fprintf(stdout, "  ** CHEAT MODE PERMITTED! **\n");
-			bAllowDebugMode = TRUE;
+			token = argv[++i];
+			if ( !sscanf( token, "%ix%i", &width, &height ) == 2 )
+			{
+				debug( LOG_ERROR, "Invalid viewport\n" );
+				abort();
+				return FALSE;
+			}
+			pie_SetVideoBuffer( width, height );
 		}
-		else if( sscanf(tokenType,"-%ix%i", &w, &h) == 2)
+		else if ( stricmp( tokenType, "--window" ) == 0 )
 		{
-			pie_SetVideoBuffer(w, h);
+			war_setFullscreen(FALSE);
 		}
-		else if( stricmp( tokenType,"-noTranslucent") == 0)
+		else if ( stricmp( tokenType, "--intro" ) == 0 )
+		{
+			SetGameMode(GS_VIDEO_MODE);
+		}
+		else if ( stricmp( tokenType, "--title" ) == 0 )
+		{
+			SetGameMode(GS_TITLE_SCREEN);
+		}
+		else if ( stricmp( tokenType,"--noTranslucent") == 0 )
 		{
 			war_SetTranslucent(FALSE);
 		}
-		else if( stricmp( tokenType,"-noAdditive") == 0)
+		else if ( stricmp( tokenType,"--noAdditive") == 0)
 		{
 			war_SetAdditive(FALSE);
 		}
-		else if( stricmp( tokenType,"-noFog") == 0)
+		else if ( stricmp( tokenType,"--noFog") == 0 )
 		{
 			pie_SetFogCap(FOG_CAP_NO);
 		}
-		else if( stricmp( tokenType,"-greyFog") == 0)
+		else if ( stricmp( tokenType,"--greyFog") == 0 )
 		{
 			pie_SetFogCap(FOG_CAP_GREY);
 		}
-		else if (stricmp(tokenType, "-CDA") == 0) {
+		else if ( stricmp(tokenType, "--CDA") == 0 )
+		{
 			war_SetPlayAudioCDs(TRUE);
 		}
-		else if (stricmp(tokenType, "-noCDA") == 0) {
+		else if ( stricmp(tokenType, "--noCDA") == 0 )
+		{
 			war_SetPlayAudioCDs(FALSE);
 		}
-		else if( stricmp( tokenType,"-seqSmall") == 0)
+		else if ( stricmp( tokenType,"--seqSmall") == 0 )
 		{
 			war_SetSeqMode(SEQ_SMALL);
 		}
-		else if( stricmp( tokenType,"-seqSkip") == 0)
+		else if ( stricmp( tokenType,"--seqSkip") == 0 )
 		{
 			war_SetSeqMode(SEQ_SKIP);
 		}
-		else if( stricmp( tokenType,"-disableLobby") == 0)
+		else if ( stricmp( tokenType,"--disableLobby") == 0 )
 		{
 			bDisableLobby = TRUE;
 		}
