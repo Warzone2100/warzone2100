@@ -7,9 +7,9 @@
 	<key>CFBundleDisplayName</key>
 	<string>Warzone 2100</string>
 	<key>CFBundleExecutable</key>
-	<string>warzone</string>
+	<string>warzone2100.sh</string>
 	<key>CFBundleIconFile</key>
-	<string>warzone.icns</string>
+	<string>warzone2100.icns</string>
 	<key>CFBundleName</key>
 	<string>Warzone 2100</string>
 	<key>CFBundlePackageType</key>

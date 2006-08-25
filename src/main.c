@@ -55,7 +55,7 @@
 # define WZ_WRITEDIR "Warzone 2100"
 #elif defined(__APPLE__)
 # include <CoreServices/CoreServices.h>
-# define WZ_WRITEDIR "Warzone 2100"
+# define WZ_WRITEDIR "/Warzone 2100"
 #else
 # define WZ_WRITEDIR ".warzone2100"
 #endif
