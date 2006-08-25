@@ -43,9 +43,8 @@ static PARAM_BLOCK	*psCurrPBlock=NULL;
 
 //String support
 //-----------------------------
-#define				MAXSTRLEN	255		/* Must be the same as in stack.c */
 char 				msg[MAXSTRLEN];
-extern char			STRSTACK[6000][MAXSTRLEN];	// just a simple string "stack"
+extern char			STRSTACK[MAXSTACKLEN][MAXSTRLEN];	// just a simple string "stack"
 extern UDWORD		CURSTACKSTR;				//Current string index
 
 

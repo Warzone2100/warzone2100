@@ -6,12 +6,6 @@
 #ifndef _interp_h
 #define _interp_h
 
-//String support
-//-----------------------------
-static UDWORD		CURSTACKSTR	= 0;	//Points to the top of the string stack
-#define				MAXSTRLEN	255					//Max len of a single string
-#define				MAXSTACKLEN	6000
-static char			STRSTACK[MAXSTACKLEN][MAXSTRLEN];	//simple string 'stack'
 
 /* The possible value types for scripts */
 typedef enum _interp_type

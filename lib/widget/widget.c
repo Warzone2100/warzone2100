@@ -1624,14 +1624,14 @@ void widgSetReturn(WIDGET *psWidget)
 
 
 /* Display the widgets on a form */
-static void _widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
+static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 {
-	WIDGET	*psCurr;
-	SDWORD	xOrigin,yOrigin;
+	WIDGET	*psCurr = NULL;
+	SDWORD	xOrigin = 0, yOrigin = 0;
 
 
 	/* Display the form */
-	psForm->display((WIDGET *)psForm, xOffset, yOffset, psForm->aColours);
+	psForm->display( (WIDGET *)psForm, xOffset, yOffset, psForm->aColours );
 	if(psForm->disableChildren == TRUE) {
 		return;
 	}
@@ -1670,13 +1670,6 @@ static void _widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 			psCurr->display(psCurr, xOffset, yOffset, psForm->aColours);
 		}
 	}
-}
-
-
-
-static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
-{
-	_widgDisplayForm(psForm,xOffset,yOffset);
 }
 
 

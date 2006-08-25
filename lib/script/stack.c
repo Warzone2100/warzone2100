@@ -18,6 +18,8 @@
 #define INIT_SIZE		15
 #define EXT_SIZE		2
 
+char STRSTACK[MAXSTACKLEN][MAXSTRLEN]; //simple string 'stack'
+UDWORD CURSTACKSTR = 0;    //Points to the top of the string stack
 
 /* store for a 'chunk' of the stack */
 typedef struct _stack_chunk
@@ -39,6 +41,7 @@ static UDWORD			currEntry=0;
 
 /* The block heap the stack was created in */
 static BLOCK_HEAP		*psStackBlock;
+
 
 /* Check if the stack is empty */
 BOOL stackEmpty(void)
