@@ -1026,8 +1026,6 @@ void drawTiles(iView *camera, iView *player)
 
 BOOL	init3DView(void)
 {
-//	barMode = BAR_FULL;		now from registry.
-
 	// the world centre - used for decaying lighting etc
 	gridCentreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 	gridCentreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
@@ -1076,9 +1074,6 @@ BOOL	init3DView(void)
 	atmosInitSystem();
 
 	initDemoCamera();
-
-	/* HACK -  remove, although function of some form still necessary */
-//	initSmoke();
 
 	/* Set up the sine table for the bullets */
 	initBulletTable();

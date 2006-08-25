@@ -1,8 +1,6 @@
 #ifndef _debug_h
 #define _debug_h
 
-//#define ALWAYS_ASSERT	// Define this to always process ASSERT even on release builds.
-
 /* Check the header files have been included from frame.h if they
  * are used outside of the framework library.
  */
@@ -108,97 +106,29 @@ do { \
  * by file basis.
  *
  */
-/*
-#define  DEBUG_GROUP0
-#define  DEBUG_GROUP1
-#define  DEBUG_GROUP2
-#define  DEBUG_GROUP3
-#define  DEBUG_GROUP4
-#define  DEBUG_GROUP5
-#define  DEBUG_GROUP6
-#define  DEBUG_GROUP7
-#define  DEBUG_GROUP8
-#define  DEBUG_GROUP9
-*/
-#ifdef DEBUG_GROUP0
+
+#define DBPRINTF(x)
+#define DBMB(x)
 #define DBP0(x)							DBPRINTF(x)
 #define DBMB0(x)						DBMB(x)
-#else
-#define DBP0(x)
-#define DBMB0(x)
-#endif
-
-#ifdef DEBUG_GROUP1
 #define DBP1(x)							DBPRINTF(x)
 #define DBMB1(x)						DBMB(x)
-#else
-#define DBP1(x)
-#define DBMB1(x)
-#endif
-
-#ifdef DEBUG_GROUP2
 #define DBP2(x)							DBPRINTF(x)
 #define DBMB2(x)						DBMB(x)
-#else
-#define DBP2(x)
-#define DBMB2(x)
-#endif
-
-#ifdef DEBUG_GROUP3
 #define DBP3(x)							DBPRINTF(x)
 #define DBMB3(x)						DBMB(x)
-#else
-#define DBP3(x)
-#define DBMB3(x)
-#endif
-
-#ifdef DEBUG_GROUP4
 #define DBP4(x)							DBPRINTF(x)
 #define DBMB4(x)						DBMB(x)
-#else
-#define DBP4(x)
-#define DBMB4(x)
-#endif
-
-#ifdef DEBUG_GROUP5
 #define DBP5(x)							DBPRINTF(x)
 #define DBMB5(x)						DBMB(x)
-#else
-#define DBP5(x)
-#define DBMB5(x)
-#endif
-
-#ifdef DEBUG_GROUP6
 #define DBP6(x)							DBPRINTF(x)
 #define DBMB6(x)						DBMB(x)
-#else
-#define DBP6(x)
-#define DBMB6(x)
-#endif
-
-#ifdef DEBUG_GROUP7
 #define DBP7(x)							DBPRINTF(x)
 #define DBMB7(x)						DBMB(x)
-#else
-#define DBP7(x)
-#define DBMB7(x)
-#endif
-
-#ifdef DEBUG_GROUP8
 #define DBP8(x)							DBPRINTF(x)
 #define DBMB8(x)						DBMB(x)
-#else
-#define DBP8(x)
-#define DBMB8(x)
-#endif
-
-#ifdef DEBUG_GROUP9
 #define DBP9(x)							DBPRINTF(x)
 #define DBMB9(x)						DBMB(x)
-#else
-#define DBP9(x)
-#define DBMB9(x)
-#endif
 
 /***
  ***
