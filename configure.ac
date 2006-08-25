@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([Warzone 2100],[2.0.4_rc2],[http://wz.rootzilla.de/])
+AC_INIT([Warzone 2100],[2.0.4],[http://wz.rootzilla.de/])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
