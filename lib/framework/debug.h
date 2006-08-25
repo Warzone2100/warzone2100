@@ -26,18 +26,6 @@
 #endif
 #endif
 
-/* DBMB used to be 'show message box' */
-/*
-#ifndef _MSC_VER
-#define DBMB(x) _db_debug x
-#define DBPRINTF(x) _db_debug x
-#define _db_debug(...) debug(LOG_NEVER, __VA_ARGS__)
-#else
-#define DBMB(x)
-#define DBPRINTF(x)
-#endif
-*/
-
 /*
  *
  * ASSERT
@@ -47,57 +35,11 @@
  *
  * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
-/*
-# define ASSERT(x) wz_assert x
-#ifdef _MSC_VER
-// MSVC doesn't understand __VAR_ARGS__ macros
-# define wz_assert(x, ...) \
-do { \
-	if (!(x)) { \
-		debug( LOG_ERROR, "Assert in Warzone: file %s, line %d", \
-			__FILE__, __LINE__ ); \
-		assert(x); \
-} \
-} while (FALSE)
-#else
-# define wz_assert(x, ...) \
-do { \
-	if (!(x)) { \
-		debug( LOG_ERROR, "Assert in Warzone: file %s, function %s, line %d", \
-			__FILE__, __FUNCTION__, __LINE__ ); \
-		debug( LOG_ERROR, __VA_ARGS__ ); \
-		assert(x); \
-} \
-} while (FALSE)
-#endif
-*/
 #define ASSERT( x, ... ) \
    (void)( x ? 0 : debug( LOG_ERROR, __VA_ARGS__ ) ); \
    (void)( x ? 0 : debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s)", \
 		__FILE__, __LINE__, __FUNCTION__, (#x) ) ); \
 	assert( x );
-
-/*
- *
- * DBERROR
- *
- * Error message macro - use this if the error should be reported even in
- * production code (i.e. out of memory errors, file not found etc.)
- *
- * Arguments as for printf
- */
-/*
-#ifndef _MSC_VER
-#define DBERROR(x) _debug_error x
-#define _debug_error(...) 			\
-	do {					\
-		debug(LOG_ERROR, __VA_ARGS__);	\
-		abort();			\
-	} while (FALSE);
-#else
-#define DBERROR(x)
-#endif
-*/
 
 
 /****************************************************************************************
@@ -105,30 +47,30 @@ do { \
  * Conditional debugging macro's that can be selectively turned on or off on a file
  * by file basis.
  *
+ * Modified to not output nothing under no conditions
+ *
  */
 
-#define DBPRINTF(x)
-#define DBMB(x)
-#define DBP0(x)							DBPRINTF(x)
-#define DBMB0(x)						DBMB(x)
-#define DBP1(x)							DBPRINTF(x)
-#define DBMB1(x)						DBMB(x)
-#define DBP2(x)							DBPRINTF(x)
-#define DBMB2(x)						DBMB(x)
-#define DBP3(x)							DBPRINTF(x)
-#define DBMB3(x)						DBMB(x)
-#define DBP4(x)							DBPRINTF(x)
-#define DBMB4(x)						DBMB(x)
-#define DBP5(x)							DBPRINTF(x)
-#define DBMB5(x)						DBMB(x)
-#define DBP6(x)							DBPRINTF(x)
-#define DBMB6(x)						DBMB(x)
-#define DBP7(x)							DBPRINTF(x)
-#define DBMB7(x)						DBMB(x)
-#define DBP8(x)							DBPRINTF(x)
-#define DBMB8(x)						DBMB(x)
-#define DBP9(x)							DBPRINTF(x)
-#define DBMB9(x)						DBMB(x)
+#define DBP0(x)
+#define DBMB0(x)
+#define DBP1(x)
+#define DBMB1(x)
+#define DBP2(x)
+#define DBMB2(x)
+#define DBP3(x)
+#define DBMB3(x)
+#define DBP4(x)
+#define DBMB4(x)
+#define DBP5(x)
+#define DBMB5(x)
+#define DBP6(x)
+#define DBMB6(x)
+#define DBP7(x)
+#define DBMB7(x)
+#define DBP8(x)
+#define DBMB8(x)
+#define DBP9(x)
+#define DBMB9(x)
 
 /***
  ***
