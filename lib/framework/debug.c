@@ -149,6 +149,7 @@ void debug_callback_file_init( void ** data )
 	if (!logfile) {
 		fprintf( stderr, "Could not open %s for appending!\n", filename );
 	} else {
+		setbuf( logfile, NULL );
 		fprintf( logfile, "\n--- Starting log ---\n" );
 		*data = logfile;
 	}
