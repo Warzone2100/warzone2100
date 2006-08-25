@@ -55,7 +55,7 @@
 # define WZ_WRITEDIR "Warzone 2100"
 #elif defined(__APPLE__)
 # include <CoreServices/CoreServices.h>
-# define WZ_WRITEDIR "/Warzone 2100"
+# define WZ_WRITEDIR "Warzone 2100"
 #else
 # define WZ_WRITEDIR ".warzone2100"
 #endif
@@ -223,7 +223,9 @@ static void initialize_PhysicsFS(void)
 	      linked.major, linked.minor, linked.patch);
 
 #if defined(WIN32)
-	if ( !SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
+	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else
 #elif defined(__APPLE__)
 	error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
 	if (!error)
@@ -232,9 +234,11 @@ static void initialize_PhysicsFS(void)
 		error = FSpMakeFSRef(&fsspec, &fsref);
 	if (!error)
 		error = FSRefMakePath(&fsref, tmpstr, MAX_PATH);
-	if (error)
+	if (!error)
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else
 #endif
-	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (Fallback when using Windows, default on others)
+	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
 
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
 	{
