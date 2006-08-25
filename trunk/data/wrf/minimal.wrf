@@ -1,9 +1,0 @@
-
-
-
-
-/*save game must be loaded before script files*/
-directory	""
-file		SAVEGAME	"cam1.gam"
-
-

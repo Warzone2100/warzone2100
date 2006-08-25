@@ -52,6 +52,8 @@
 #define SUBTITLE_BOX_MIN 430
 #define SUBTITLE_BOX_MAX 480
 
+#define DUMMY_VIDEO
+
 
 typedef struct {
 	char pText[MAX_STR_LENGTH];
@@ -156,27 +158,27 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 
 		if (bHardPath)//use this first
 		{
-			ASSERT(((strlen(sequenceName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+			ASSERT( (strlen(sequenceName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
 			strcpy(aVideoName,aHardPath);
 			strcat(aVideoName,sequenceName);
 
 			// check it exists. If not then try CD.
 			if ( !PHYSFS_exists( aVideoName ) && bCDPath)
 			{
-				ASSERT(((strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+				ASSERT( (strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
 				strcpy(aVideoName,aCDPath);
 				strcat(aVideoName,sequenceName);
 			}
 		}
 		else if (bCDPath)
 		{
-			ASSERT(((strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+			ASSERT( (strlen(sequenceName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
 			strcpy(aVideoName,aCDPath);
 			strcat(aVideoName,sequenceName);
 		}
 		else
 		{
-			ASSERT((FALSE,"seq_StartFullScreenVideo: sequence path not found"));
+			ASSERT( FALSE,"seq_StartFullScreenVideo: sequence path not found" );
 			return FALSE;
 		}
 
@@ -193,7 +195,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 
 		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoFrameTime, perfMode)) == FALSE)
 		{
-			ASSERT((FALSE,"seq_RenderVideoToBuffer: unable to initialise sequence %s",aVideoName));
+			ASSERT( FALSE,"seq_RenderVideoToBuffer: unable to initialise sequence %s",aVideoName );
 			return FALSE;
 		}
 		bSeqPlaying = TRUE;
@@ -384,6 +386,11 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 {
 	bHoldSeqForAudio = FALSE;
 
+#ifdef DUMMY_VIDEO
+	debug( LOG_VIDEO, "seq_StartFullScreenVideo: Refusing to play video! (Not a bug)" );
+	return FALSE;
+#endif
+
 	frameSkip = 1;
 	switch(war_GetSeqMode())
 	{
@@ -410,27 +417,27 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 
 	if (bHardPath)//use this first
 	{
-		ASSERT(((strlen(videoName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+		ASSERT( (strlen(videoName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
 		strcpy(aVideoName,aHardPath);
 		strcat(aVideoName,videoName);
 
 		// check it exists. If not then try CD.
 		if ( !PHYSFS_exists( aVideoName ) && bCDPath)
 		{
-			ASSERT(((strlen(videoName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+			ASSERT( (strlen(videoName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
 			strcpy(aVideoName,aCDPath);
 			strcat(aVideoName,videoName);
 		}
 	}
 	else if (bCDPath)
 	{
-		ASSERT(((strlen(videoName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string"));
+		ASSERT( (strlen(videoName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
 		strcpy(aVideoName,aCDPath);
 		strcat(aVideoName,videoName);
 	}
 	else
 	{
-		ASSERT((FALSE,"seq_StartFullScreenVideo: sequence path not found"));
+		ASSERT( FALSE,"seq_StartFullScreenVideo: sequence path not found" );
 		return FALSE;
 	}
 
@@ -438,7 +445,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	//set audio path
 	if (audioName != NULL)
 	{
-		ASSERT((strlen(audioName)<244,"sequence path+name greater than max string"));
+		ASSERT( strlen(audioName)<244,"sequence path+name greater than max string" );
 		strcpy(aAudioName,"sequenceAudio\\");
 		strcat(aAudioName,audioName);
 	}
@@ -454,7 +461,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 
 	if (audioName != NULL)
 	{
-		ASSERT((strlen(audioName)<244,"sequence path+name greater than max string"));
+		ASSERT( strlen(audioName)<244,"sequence path+name greater than max string" );
 		strcpy(aAudioName,"sequenceAudio\\");
 		strcat(aAudioName,audioName);
 	}
@@ -467,7 +474,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	if (!seq_SetSequence(aVideoName, videoFrameTime + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
 	{
 		seq_StopFullScreenVideo();
-		ASSERT((FALSE,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName));
+		ASSERT( FALSE,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName );
 		return FALSE;
 	}
 	if (perfMode != VIDEO_PERF_SKIP_FRAMES)//JPS fix for video problems with some sound cards 9 may 99
@@ -486,7 +493,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	else
 	{
 		bAudioPlaying = audio_PlayStream( aAudioName, AUDIO_VOL_MAX, SeqEndCallBack );
-		ASSERT((bAudioPlaying == TRUE,"seq_StartFullScreenVideo: unable to initialise sound %s",aAudioName));
+		ASSERT( bAudioPlaying == TRUE,"seq_StartFullScreenVideo: unable to initialise sound %s",aAudioName );
 	}
 
 	return TRUE;
@@ -684,7 +691,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 	}
 	else if (frame < 0) //an ERROR
 	{
-		DBPRINTF(("VIDEO FRAME ERROR %d\n",frame));
+		debug( LOG_NEVER, "VIDEO FRAME ERROR %d\n", frame );
 		return FALSE;
 	}
 
@@ -732,8 +739,8 @@ static SDWORD lastX;
 
 	iV_SetFont(WFont);
 
-	ASSERT((aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS,
-		"seq_AddTextForVideo: too many text lines"));
+	ASSERT( aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS,
+		"seq_AddTextForVideo: too many text lines" );
 
 	sourceLength = strlen(pText);
 	currentLength = sourceLength;
@@ -877,13 +884,13 @@ BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 			{
 				//get the text
 				pText = strrchr(pCurrentLine,'"');
-				ASSERT ((pText != NULL,"seq_AddTextFromFile error parsing text file"));
+				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
 				if (pText != NULL)
 				{
 					*pText = (UBYTE)0;
 				}
 				pText = strchr(pCurrentLine,'"');
-				ASSERT ((pText != NULL,"seq_AddTextFromFile error parsing text file"));
+				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
 				if (pText != NULL)
 				{
 					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, bJustify,0);
@@ -921,7 +928,7 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 
 	if ((currentSeq) >=  MAX_SEQ_LIST)
 	{
-		ASSERT((FALSE, "seq_AddSeqToList: too many sequences"));
+		ASSERT( FALSE, "seq_AddSeqToList: too many sequences" );
 		return;
 	}
 #ifdef SEQ_LOOP
@@ -941,7 +948,7 @@ void seq_AddSeqToList(STRING *pSeqName, STRING *pAudioName, STRING *pTextName, B
 	{
 		//check for a subtitle file
 		strLen = strlen(pSeqName);
-		ASSERT((strLen < MAX_STR_LENGTH,"seq_AddSeqToList: sequence name error"));
+		ASSERT( strLen < MAX_STR_LENGTH,"seq_AddSeqToList: sequence name error" );
 		strcpy(aSubtitleName,pSeqName);
 		aSubtitleName[strLen - 4] = 0;
 		strcat(aSubtitleName,".txt");

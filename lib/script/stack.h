@@ -6,6 +6,11 @@
 #ifndef _stack_h
 #define _stack_h
 
+//String support
+//-----------------------------
+#define MAXSTRLEN	255					//Max len of a single string
+#define MAXSTACKLEN	6000
+
 /* Initialise the stack */
 extern BOOL stackInitialise(void);
 
@@ -45,5 +50,7 @@ extern BOOL stackUnaryOp(OPCODE opcode);
 
 /* Reset the stack to an empty state */
 extern void stackReset(void);
+
+
 
 #endif

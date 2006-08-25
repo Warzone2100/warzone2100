@@ -366,7 +366,7 @@ void deleteSaveGame(char* saveGameName)
 {
 	char **files, **i;
 
-	ASSERT((strlen(saveGameName) < MAX_STR_LENGTH,"deleteSaveGame; save game name too long"));
+	ASSERT( strlen(saveGameName) < MAX_STR_LENGTH,"deleteSaveGame; save game name too long" );
 
 	PHYSFS_delete(saveGameName);
 	saveGameName[strlen(saveGameName)-4] = '\0';// strip extension
@@ -685,4 +685,6 @@ void drawBlueBox(UDWORD x,UDWORD y, UDWORD w, UDWORD h)
 	pie_BoxFillIndex(x-1,y-1,x+w+1,y+h+1,light);
 	pie_BoxFillIndex(x,y,x+w,y+h,dark);
 }
+
+
 

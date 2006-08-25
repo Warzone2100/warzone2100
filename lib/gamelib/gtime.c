@@ -96,8 +96,8 @@ void gameTimeUpdate(void)
 {
 	UDWORD				currTime, fpMod;
 #ifdef TIME_FIX
-	unsigned __int64	newTime;
-	unsigned __int64	extraTime;
+	uint64_t	newTime;
+	uint64_t	extraTime;
 #else
 	unsigned long long	newTime;
 #endif

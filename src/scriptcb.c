@@ -32,6 +32,15 @@ BASE_OBJECT	*psScrCBAttacker, *psScrCBTarget;
 // alliance details
 UDWORD	CBallFrom,CBallTo;
 
+//console callback stuff
+//---------------------------
+SDWORD ConsolePlayer = -2;
+SDWORD MultiMsgPlayerTo = -2;
+SDWORD beaconX = -1, beaconY = -1;
+SDWORD MultiMsgPlayerFrom = -2;
+char ConsoleMsg[MAXSTRLEN]="ERROR!!!\0";	//Last console message
+char MultiplayMsg[MAXSTRLEN];	//Last multiplayer message
+
 BOOL scrCBDroidTaken(void)
 {
 	DROID		**ppsDroid;
@@ -79,7 +88,7 @@ BOOL scrCBNewDroid(void)
 	if (psScrCBNewDroid == NULL)
 	{
 		// eh? got called without setting the new droid
-		ASSERT((FALSE, "scrCBNewUnit: no unit has been set"));
+		ASSERT( FALSE, "scrCBNewUnit: no unit has been set" );
 		triggered = FALSE;
 		*ppsDroid = NULL;
 		*ppsStructure  = NULL;
@@ -116,7 +125,7 @@ BOOL scrCBStructAttacked(void)
 
 	if (psLastStructHit == NULL)
 	{
-		ASSERT((FALSE, "scrCBStructAttacked: no target has been set"));
+		ASSERT( FALSE, "scrCBStructAttacked: no target has been set" );
 		triggered = FALSE;
 		*ppsAttacker = NULL;
 		*ppsTarget = NULL;
@@ -159,7 +168,7 @@ BOOL scrCBDroidAttacked(void)
 
 	if (psLastDroidHit == NULL)
 	{
-		ASSERT((FALSE, "scrCBUnitAttacked: no target has been set"));
+		ASSERT( FALSE, "scrCBUnitAttacked: no target has been set" );
 		triggered = FALSE;
 		*ppsAttacker = NULL;
 		*ppsTarget = NULL;
@@ -202,7 +211,7 @@ BOOL scrCBAttacked(void)
 
 	if (psScrCBTarget == NULL)
 	{
-		ASSERT((FALSE, "scrCBAttacked: no target has been set"));
+		ASSERT( FALSE, "scrCBAttacked: no target has been set" );
 		triggered = FALSE;
 		*ppsAttacker = NULL;
 		*ppsTarget = NULL;
@@ -267,8 +276,8 @@ BOOL scrCBDroidSelected(void)
 		return FALSE;
 	}
 
-	ASSERT((PTRVALID(psCBSelectedDroid, sizeof(DROID)),
-		"scrSCUnitSelected: invalid unit pointer"));
+	ASSERT( PTRVALID(psCBSelectedDroid, sizeof(DROID)),
+		"scrSCUnitSelected: invalid unit pointer" );
 
 	*ppsDroid = psCBSelectedDroid;
 
@@ -437,7 +446,7 @@ BOOL scrCBObjectSeen(SDWORD callback)
 
 	if (psScrCBObjSeen == NULL)
 	{
-		ASSERT((FALSE,"scrCBObjectSeen: no object set"));
+		ASSERT( FALSE,"scrCBObjectSeen: no object set" );
 		return FALSE;
 	}
 
@@ -580,6 +589,59 @@ BOOL scrCBTransporterLanded( void )
 	return TRUE;
 }
 
+BOOL scrCBTransporterLandedB( void )
+{
+	SDWORD			player;
+	DROID_GROUP		*psGroup;
+	DROID			*psTransporter, *psDroid, *psNext;
+	BOOL			retval;
+	DROID			**ppsTransp;
+
+	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &player,
+		VAL_REF|ST_DROID, &ppsTransp))
+	{
+		debug(LOG_ERROR, "scrCBTransporterLandedB(): stack failed");
+		return FALSE;
+	}
+
+	psTransporter = transporterGetScriptCurrent();
+
+	if ( (psTransporter == NULL) ||
+		 (psTransporter->player != (UDWORD)player) )
+	{
+		retval = FALSE;
+	}
+	else
+	{
+		*ppsTransp = psTransporter;		//return landed transporter
+
+		/* if not selectedPlayer unload droids */
+		//if ( (UDWORD)player != selectedPlayer )
+		//{
+			/* transfer droids from transporter group to current group */
+			for(psDroid=psTransporter->psGroup->psList; psDroid; psDroid=psNext)
+			{
+				psNext = psDroid->psGrpNext;
+				if ( psDroid != psTransporter )
+				{
+					grpLeave( psTransporter->psGroup, psDroid );
+					grpJoin(psGroup, psDroid);
+				}
+			}
+		//}
+
+		retval = TRUE;
+	}
+
+	if (!stackPushResult(VAL_BOOL, retval))
+	{
+		debug(LOG_ERROR, "scrCBTransporterLandedB: push landed");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 
 // tell the scripts when a cluster is no longer valid
 SDWORD	scrCBEmptyClusterID;
@@ -618,7 +680,7 @@ BOOL scrCBVtolOffMap(void)
 
 	if (psScrCBVtolOffMap == NULL)
 	{
-		ASSERT((FALSE, "scrCBVtolAtBase: NULL vtol pointer"));
+		ASSERT( FALSE, "scrCBVtolAtBase: NULL vtol pointer" );
 		return FALSE;
 	}
 
@@ -651,7 +713,7 @@ BOOL scrCBResCompleted(void)
 
 	if (psCBLastResearch == NULL)
 	{
-		ASSERT((FALSE, "scrCBResCompleted: no research has been set"));
+		ASSERT( FALSE, "scrCBResCompleted: no research has been set" );
         retVal = FALSE;
         *ppsResearch = NULL;
     }
@@ -703,6 +765,222 @@ BOOL scrCBAllianceOffer(void)
 
 	if (!stackPushResult(VAL_BOOL, TRUE))
 	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+//------------------------------------------------------------------------------------------------
+										/* New callbacks */
+
+
+//console callback
+//---------------------------
+BOOL scrCallConsole(void)
+{
+	SDWORD	*player;
+	STRING	**ConsoleText = NULL;
+
+	if (!stackPopParams(2, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) ) 
+	{
+		debug(LOG_ERROR, "scrCallConsole(): stack failed");
+		return FALSE;
+	}
+
+	if(*ConsoleText == NULL)
+	{
+		debug(LOG_ERROR, "scrCallConsole(): passed string was not initialized");
+		return FALSE;
+	}
+
+	strcpy(*ConsoleText,ConsoleMsg);
+
+	*player = ConsolePlayer;
+
+	if (!stackPushResult(VAL_BOOL, TRUE))
+	{
+		debug(LOG_ERROR, "scrCallConsole(): stackPushResult failed");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+//multiplayer beacon
+//---------------------------
+/*
+BOOL scrCallBeacon(void)
+{
+	SDWORD	*playerFrom, playerTo;
+	STRING	**BeaconText = NULL;
+	SDWORD	*locX,*locY;
+
+	if (!stackPopParams(5, VAL_INT, &playerTo, VAL_REF | VAL_INT, &playerFrom,
+		VAL_REF | VAL_INT, &locX, VAL_REF | VAL_INT, &locY,
+		VAL_REF | VAL_STRING, &BeaconText)) 
+	{
+		MessageBox(frameGetWinHandle(), "scrCallBeacon() failed to pop parameters.", "failed", MB_OK);
+		return FALSE;
+	}
+
+	
+
+	//DbgMsg("x=%d,y=%d",locX >> TILE_SHIFT,locY >> TILE_SHIFT);
+	if(*BeaconText == NULL)
+	{
+		MessageBox(frameGetWinHandle(), "scrCallBeacon(): passed string was not initialized", "failed", MB_OK);
+		return FALSE;
+	}
+
+	//DbgMsg("scrCallMultiMsg");
+
+	//if(MultiMsgPlayerTo == playerTo)
+	if(MultiMsgPlayerTo >= 0 && MultiMsgPlayerFrom >= 0 && MultiMsgPlayerTo < MAX_PLAYERS && MultiMsgPlayerFrom < MAX_PLAYERS)
+	{
+		//DbgMsg("(%d - %d),  %d", MultiMsgPlayerTo, playerTo, MultiMsgPlayerFrom);
+
+		if(MultiMsgPlayerTo == playerTo)
+		{
+
+			//DbgMsg("triggered!!!!!!!!!!!");
+
+			strcpy(*BeaconText,MultiplayMsg);
+	 
+			*playerFrom = MultiMsgPlayerFrom;
+			*locX = beaconX;
+			*locY = beaconY;
+
+			if (!stackPushResult(VAL_BOOL, TRUE))	//triggered
+			{
+				DbgMsg("scrCallBeacon - faled to push");
+				return FALSE;
+			}
+
+			return TRUE;
+		}
+	}
+	else
+	{
+		DbgMsg("scrCallBeacon() - player indexes failed: %d - %d", MultiMsgPlayerFrom, MultiMsgPlayerTo);
+		if (!stackPushResult(VAL_BOOL, FALSE))	//not triggered
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	//return "not triggered"
+	if (!stackPushResult(VAL_BOOL, FALSE))
+	{
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+*/
+
+//multiplayer message callback
+//----------------------------
+BOOL scrCallMultiMsg(void)
+{
+	SDWORD	*player, playerTo;
+	STRING	**ConsoleText = NULL;
+
+	if (!stackPopParams(3, VAL_INT, &playerTo, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) ) 
+	{
+		debug(LOG_ERROR, "scrCallMultiMsg() failed to pop parameters.");
+		return FALSE;
+	}
+
+	if(*ConsoleText == NULL)
+	{
+		debug(LOG_ERROR, "scrCallMultiMsg(): passed string was not initialized");
+		return FALSE;
+	}
+
+	if(MultiMsgPlayerTo >= 0 && MultiMsgPlayerFrom >= 0 && MultiMsgPlayerTo < MAX_PLAYERS && MultiMsgPlayerFrom < MAX_PLAYERS)
+	{
+		if(MultiMsgPlayerTo == playerTo)
+		{
+			strcpy(*ConsoleText,MultiplayMsg);
+	 
+			*player = MultiMsgPlayerFrom;
+
+			if (!stackPushResult(VAL_BOOL, TRUE))	//triggered
+			{
+				debug(LOG_ERROR, "scrCallMultiMsg(): stackPushResult failed");
+				return FALSE;
+			}
+
+			return TRUE;
+		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "scrCallMultiMsg() - player indexes failed: %d - %d", MultiMsgPlayerFrom, MultiMsgPlayerTo);
+		if (!stackPushResult(VAL_BOOL, FALSE))	//not triggered
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	//return "not triggered"
+	if (!stackPushResult(VAL_BOOL, FALSE))
+	{
+		debug(LOG_ERROR, "scrCallMultiMsg: stackPushResult failed");
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+
+STRUCTURE	*psScrCBNewStruct = NULL;	//for scrCBStructBuilt callback
+DROID		*psScrCBNewStructTruck = NULL;
+//structure built callback
+//------------------------------
+BOOL scrCBStructBuilt(void)
+{
+	SDWORD		player;
+	STRUCTURE	**ppsStructure;
+	BOOL		triggered = FALSE;
+	DROID		**ppsDroid;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid, VAL_REF|ST_STRUCTURE, &ppsStructure) ) 
+	{
+		debug(LOG_ERROR, "scrCBStructBuilt() failed to pop parameters.");
+		return FALSE;
+	}
+
+	if (psScrCBNewStruct == NULL)
+	{
+		debug(LOG_ERROR, "scrCBStructBuilt: no structure has been set");
+		ASSERT( FALSE, "scrCBStructBuilt: no structure has been set" );
+		triggered = FALSE;
+		*ppsStructure  = NULL;
+		*ppsDroid = NULL;
+	}
+	else if(psScrCBNewStructTruck == NULL)
+	{
+		debug(LOG_ERROR, "scrCBStructBuilt: no builder has been set");
+		ASSERT( FALSE, "scrCBStructBuilt: no builder has been set" );
+		triggered = FALSE;
+		*ppsStructure  = NULL;
+		*ppsDroid = NULL;
+	}
+	else if (psScrCBNewStruct->player == (UDWORD)player)
+	{
+		triggered = TRUE;
+		*ppsStructure  = psScrCBNewStruct;		//pass to script
+		*ppsDroid = psScrCBNewStructTruck;
+	}
+
+	if (!stackPushResult(VAL_BOOL, triggered))
+	{
+		debug(LOG_ERROR, "scrCBStructBuilt: push failed");
 		return FALSE;
 	}
 

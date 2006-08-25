@@ -171,7 +171,7 @@ void pie_InitMaths(void)
 		{
 			bigC = a * b;
 			bigC /= UBYTE_MAX;
-			ASSERT((bigC <= UBYTE_MAX,"light_InitMaths; rounding error"));
+			ASSERT( bigC <= UBYTE_MAX,"light_InitMaths; rounding error" );
 			c = (UBYTE)bigC;
 			aByteScale[a][b] = c;
 		}

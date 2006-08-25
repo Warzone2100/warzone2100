@@ -44,7 +44,7 @@ audio_ObjectDead( void * psObj )
 	/* check is valid simple object pointer */
 	if ( !PTRVALID(psSimpleObj, sizeof(SIMPLE_OBJECT)) )
 	{
-		DBPRINTF( ("audio_ObjectDead: simple object pointer invalid\n") );
+		debug( LOG_NEVER, "audio_ObjectDead: simple object pointer invalid\n" );
 		return TRUE;
 	}
 
@@ -54,7 +54,7 @@ audio_ObjectDead( void * psObj )
 		psProj = (PROJ_OBJECT *) psSimpleObj;
 		if ( !PTRVALID(psProj, sizeof(PROJ_OBJECT)) )
 		{
-			DBPRINTF( ("audio_ObjectDead: projectile object pointer invalid\n") );
+			debug( LOG_NEVER, "audio_ObjectDead: projectile object pointer invalid\n" );
 			return TRUE;
 		}
 		else
@@ -77,7 +77,7 @@ audio_ObjectDead( void * psObj )
 		/* check is valid pointer */
 		if ( !PTRVALID(psBaseObj, sizeof(BASE_OBJECT)) )
 		{
-			DBPRINTF( ("audio_ObjectDead: base object pointer invalid\n") );
+			debug( LOG_NEVER, "audio_ObjectDead: base object pointer invalid\n" );
 			return TRUE;
 		}
 		else
@@ -170,8 +170,8 @@ audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
 
 	/* check is valid pointer */
-	ASSERT( (PTRVALID(psBaseObj, sizeof(BASE_OBJECT)),
-			"audio_GetObjectPos: game object pointer invalid\n") );
+	ASSERT( PTRVALID(psBaseObj, sizeof(BASE_OBJECT)),
+			"audio_GetObjectPos: game object pointer invalid\n" );
 
 	*piX = psBaseObj->x;
 	*piZ = map_TileHeight( psBaseObj->x >> TILE_SHIFT,
@@ -205,8 +205,8 @@ audio_GetClusterCentre( void *psClusterObj, SDWORD *piX, SDWORD *piY, SDWORD *pi
 	BOOL	bDroidInClusterMoving = FALSE;
 
 	/* check valid pointer */
-	ASSERT( (PTRVALID(psDroid, sizeof(DROID)),
-			"audio_GetClusterCentre: game object pointer invalid\n") );
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+			"audio_GetClusterCentre: game object pointer invalid\n" );
 
 	iNumObj = *piX = *piY = *piZ = 0;
 
@@ -214,7 +214,7 @@ audio_GetClusterCentre( void *psClusterObj, SDWORD *piX, SDWORD *piY, SDWORD *pi
 	iClusterID = clustGetClusterID( psClusterObj );
 	if ( iClusterID == 0 )
 	{
-		DBPRINTF( ("audio_GetClusterCentre: empty cluster!\n") );
+		debug( LOG_NEVER, "audio_GetClusterCentre: empty cluster!\n" );
 		return FALSE;
 	}
 	else
@@ -263,8 +263,8 @@ audio_GetNewClusterObject( void **psClusterObj, SDWORD iClusterID )
 	DROID	*psDroid = (DROID *) *psClusterObj;
 
 	/* check valid pointer */
-	ASSERT( (PTRVALID(psDroid, sizeof(DROID)),
-			"audio_GetNewClusterObject: game object pointer invalid\n") );
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+			"audio_GetNewClusterObject: game object pointer invalid\n" );
 
 	/* return if droid not dead */
 	if ( !psDroid->died )
@@ -274,7 +274,7 @@ audio_GetNewClusterObject( void **psClusterObj, SDWORD iClusterID )
 
 	if ( iClusterID == 0 )
 	{
-		DBPRINTF( ("audio_GetNewClusterObject: empty cluster!\n") );
+		debug( LOG_NEVER, "audio_GetNewClusterObject: empty cluster!\n" );
 		return FALSE;;
 	}
 	else

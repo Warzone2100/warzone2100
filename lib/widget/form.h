@@ -20,7 +20,7 @@ extern OBJ_HEAP	*psTFormHeap;
 	UWORD		Ax0,Ay0,Ax1,Ay1; 	/* Working coords for animations. */ \
 	UDWORD		animCount; 			/* Animation counter. */ \
 	UDWORD		startTime;			/* Animation start time */ \
-	SDWORD		aColours[WCOL_MAX];		/* Colours for the form and its widgets. signed since aColours -1 means use bitmap. */ \
+	UDWORD		aColours[WCOL_MAX];		/* Colours for the form and its widgets. signed since aColours -1 means use bitmap. */ \
 	WIDGET		*psLastHiLite;	/* The last widget to be hilited */ \
 								/* This is used to track when the mouse moves */ \
 								/* off something */ \

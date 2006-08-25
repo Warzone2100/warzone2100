@@ -87,8 +87,8 @@ double	angle;
 	if (angleInt<0)
 		angleInt+=360;
 
-	ASSERT((angleInt >= 0 && angleInt < 360,
-		"calcDirection: droid direction out of range"));
+	ASSERT( angleInt >= 0 && angleInt < 360,
+		"calcDirection: droid direction out of range" );
 
 	return(angleInt);
 }
@@ -452,7 +452,8 @@ UDWORD		retVal;
 	/* Check it has a structure - cannot have owner otherwise */
 	if(!TILE_HAS_STRUCTURE(mapTile(x,y)))
 	{
-		DBERROR(("Asking for the owner of a tile with no structure on it!!!"));
+		debug( LOG_ERROR, "Asking for the owner of a tile with no structure on it!!!" );
+		abort();
 	}
 	else
 	{
@@ -528,7 +529,7 @@ SDWORD	tileX,tileY;
 UDWORD	maxDisplacement;
 UDWORD	maxDistance;
 
-	ASSERT((severity<MAX_TILE_DAMAGE,"Damage is too severe"));
+	ASSERT( severity<MAX_TILE_DAMAGE,"Damage is too severe" );
 	/* Make sure it's odd */
 	if( !(tilesAcross & 0x01))
 	{
@@ -574,4 +575,6 @@ UDWORD	maxDistance;
 		}
 	}
 }
+
+
 

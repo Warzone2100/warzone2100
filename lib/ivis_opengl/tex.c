@@ -231,7 +231,7 @@ void pie_TexShutDown(void) {
 		i++;
 	}
 
-	DBPRINTF(("pie_TexShutDown successful - freed %d texture pages\n",j));
+	debug( LOG_NEVER, "pie_TexShutDown successful - freed %d texture pages\n", j );
 }
 
 void pie_TexInit(void) {

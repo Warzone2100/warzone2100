@@ -217,7 +217,7 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 	}
 
 	//check numTexturePages == pageNumber;
-	ASSERT((numTexturePages >= (SDWORD)pageNumber,"New Tertiles too large"));
+	ASSERT( numTexturePages >= (SDWORD)pageNumber,"New Tertiles too large" );
 
 exit:
 	FREE(tileStorage);

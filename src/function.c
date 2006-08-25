@@ -46,7 +46,7 @@ static BOOL loadUpgradeFunction(char *pData, UBYTE type);
 
 
 //array of functions pointers for each load function
-BOOL (*pLoadFunction[NUMFUNCTIONS])(char *pData) = 
+BOOL (*pLoadFunction[NUMFUNCTIONS])(char *pData) =
 {
 	loadProduction,
 	loadProductionUpgradeFunction,
@@ -98,7 +98,8 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 	asFunctions = (FUNCTION**) MALLOC(totalFunctions*sizeof(FUNCTION*));
 	if (!asFunctions)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 	pStartList = asFunctions;
@@ -284,7 +285,8 @@ BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore)
 	pFunction->pName = (STRING *)MALLOC(strlen(pNameToStore)+1);
 	if (pFunction->pName == NULL)
 	{
-		DBERROR(("Function Name - Out of memory"));
+		debug( LOG_ERROR, "Function Name - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	strcpy(pFunction->pName,pNameToStore);
@@ -351,7 +353,8 @@ BOOL loadProduction(char *pData)
 	psFunction = (PRODUCTION_FUNCTION *)MALLOC(sizeof(PRODUCTION_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Production Function - Out of memory"));
+		debug( LOG_ERROR, "Production Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(PRODUCTION_FUNCTION));
@@ -413,7 +416,7 @@ BOOL loadProduction(char *pData)
 	if (!getBodySize(bodySize, (UBYTE*)&psFunction->capacity))
 	{
 
-		ASSERT((FALSE, "loadProduction: unknown body size for %s",psFunction->pName));
+		ASSERT( FALSE, "loadProduction: unknown body size for %s",psFunction->pName );
 
 		return FALSE;
 	}
@@ -426,7 +429,7 @@ BOOL loadProduction(char *pData)
 	else
 	{
 
-		ASSERT((FALSE, "loadProduction: production Output too big for %s",psFunction->pName));
+		ASSERT( FALSE, "loadProduction: production Output too big for %s",psFunction->pName );
 
 		psFunction->productionOutput = 0;
 	}
@@ -446,7 +449,8 @@ BOOL loadProductionUpgradeFunction(char *pData)
 		(PRODUCTION_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Production Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Production Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(PRODUCTION_UPGRADE_FUNCTION));
@@ -510,7 +514,8 @@ BOOL loadResearchFunction(char *pData)
 	psFunction = (RESEARCH_FUNCTION *)MALLOC(sizeof(RESEARCH_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Research Function - Out of memory"));
+		debug( LOG_ERROR, "Research Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(RESEARCH_FUNCTION));
@@ -543,7 +548,8 @@ BOOL loadReArmFunction(char *pData)
 	psFunction = (REARM_FUNCTION *)MALLOC(sizeof(REARM_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("ReArm Function - Out of memory"));
+		debug( LOG_ERROR, "ReArm Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(REARM_FUNCTION));
@@ -649,7 +655,8 @@ BOOL loadUpgradeFunction(char *pData, UBYTE type)
 	psFunction = (UPGRADE_FUNCTION *)MALLOC(sizeof(UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(UPGRADE_FUNCTION));
@@ -672,7 +679,7 @@ BOOL loadUpgradeFunction(char *pData, UBYTE type)
 
 	if (modifier > UWORD_MAX)
 	{
-		ASSERT((FALSE, "loadUpgradeFunction: modifier too great for %s", functionName));
+		ASSERT( FALSE, "loadUpgradeFunction: modifier too great for %s", functionName );
 		return FALSE;
 	}
 
@@ -694,7 +701,8 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 		sizeof(DROIDBODY_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("UnitBody Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "UnitBody Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(DROIDBODY_UPGRADE_FUNCTION));
@@ -719,8 +727,8 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 	if (modifier > UWORD_MAX OR armourKinetic > UWORD_MAX OR
 		armourHeat > UWORD_MAX OR body > UWORD_MAX)
 	{
-		ASSERT((FALSE,
-			"loadUnitBodyUpgradeFunction: one or more modifiers too great"));
+		ASSERT( FALSE,
+			"loadUnitBodyUpgradeFunction: one or more modifiers too great" );
 		return FALSE;
 	}
 
@@ -760,7 +768,8 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
 		sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("UnitSensor Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "UnitSensor Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
@@ -783,8 +792,8 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
 
 	if (modifier > UWORD_MAX OR range > UWORD_MAX)
 	{
-		ASSERT((FALSE,
-			"loadUnitSensorUpgradeFunction: one or more modifiers too great"));
+		ASSERT( FALSE,
+			"loadUnitSensorUpgradeFunction: one or more modifiers too great" );
 		return FALSE;
 	}
 
@@ -808,7 +817,8 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 		(WEAPON_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Weapon Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Weapon Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(WEAPON_UPGRADE_FUNCTION));
@@ -847,7 +857,8 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 		incenDamage > UWORD_MAX OR
 		radiusHit > UWORD_MAX)
 	{
-		DBERROR(("A percentage increase for Weapon Upgrade function is too large"));
+		debug( LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large" );
+		abort();
 		return FALSE;
 	}
 
@@ -877,7 +888,8 @@ BOOL loadStructureUpgradeFunction(char *pData)
 		(STRUCTURE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Structure Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "Structure Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(STRUCTURE_UPGRADE_FUNCTION));
@@ -903,7 +915,8 @@ BOOL loadStructureUpgradeFunction(char *pData)
 		body > UWORD_MAX OR
 		resistance > UWORD_MAX)
 	{
-		DBERROR(("A percentage increase for Structure Upgrade function is too large"));
+		debug( LOG_ERROR, "A percentage increase for Structure Upgrade function is too large" );
+		abort();
 		return FALSE;
 	}
 
@@ -926,7 +939,8 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 		(WALLDEFENCE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("WallDefence Upgrade Function - Out of memory"));
+		debug( LOG_ERROR, "WallDefence Upgrade Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
@@ -951,7 +965,8 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	if (armour > UWORD_MAX OR
 		body > UWORD_MAX)
 	{
-		DBERROR(("A percentage increase for WallDefence Upgrade function is too large"));
+		debug( LOG_ERROR, "A percentage increase for WallDefence Upgrade function is too large" );
+		abort();
 		return FALSE;
 	}
 
@@ -1042,7 +1057,8 @@ BOOL loadPowerGenFunction(char *pData)
 		(POWER_GEN_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Power Gen Function - Out of memory"));
+		debug( LOG_ERROR, "Power Gen Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(POWER_GEN_FUNCTION));
@@ -1086,7 +1102,8 @@ BOOL loadResourceFunction(char *pData)
 		(RESOURCE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Resource Function - Out of memory"));
+		debug( LOG_ERROR, "Resource Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(RESOURCE_FUNCTION));
@@ -1188,7 +1205,8 @@ BOOL loadRepairDroidFunction(char *pData)
 		(REPAIR_DROID_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Repair Droid Function - Out of memory"));
+		debug( LOG_ERROR, "Repair Droid Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(REPAIR_DROID_FUNCTION));
@@ -1514,7 +1532,8 @@ BOOL loadWallFunction(char *pData)
 	psFunction = (WALL_FUNCTION *)MALLOC(sizeof(WALL_FUNCTION));
 	if (psFunction == NULL)
 	{
-		DBERROR(("Wall Function - Out of memory"));
+		debug( LOG_ERROR, "Wall Function - Out of memory" );
+		abort();
 		return FALSE;
 	}
 	memset(psFunction, 0, sizeof(WALL_FUNCTION));
@@ -1550,7 +1569,8 @@ BOOL loadWallFunction(char *pData)
 #else
 	if (!allocateName(&psFunction->pStructName, structureName))
 	{
-		DBERROR(("Structure Stats Invalid for function - %s", functionName));
+		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
+		abort();
 		return FALSE;
 	}
 #endif
@@ -1741,18 +1761,18 @@ void structureProductionUpgrade(STRUCTURE *psBuilding)
 		type = VTOL_FLAG;
 		break;
 	default:
-		ASSERT((FALSE, "structureProductionUpgrade: Invalid factory type"));
+		ASSERT( FALSE, "structureProductionUpgrade: Invalid factory type" );
 		return;
 	}
 
 	//upgrade the Output
 	pFact = (FACTORY*)psBuilding->pFunctionality;
-	ASSERT((PTRVALID(pFact, sizeof(FACTORY)),
-		"structureProductionUpgrade: invalid Factory pointer"));
+	ASSERT( PTRVALID(pFact, sizeof(FACTORY)),
+		"structureProductionUpgrade: invalid Factory pointer" );
 
 	pFactFunc = (PRODUCTION_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT((PTRVALID(pFactFunc, sizeof(PRODUCTION_FUNCTION)),
-		"structureProductionUpgrade: invalid Function pointer"));
+	ASSERT( PTRVALID(pFactFunc, sizeof(PRODUCTION_FUNCTION)),
+		"structureProductionUpgrade: invalid Function pointer" );
 
     //current base value depends on whether there are modules attached to the structure
     baseOutput = pFactFunc->productionOutput;
@@ -1778,12 +1798,12 @@ void structureResearchUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the research points
 	pRes = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
-	ASSERT((PTRVALID(pRes, sizeof(RESEARCH_FACILITY)),
-		"structureResearchUpgrade: invalid Research pointer"));
+	ASSERT( PTRVALID(pRes, sizeof(RESEARCH_FACILITY)),
+		"structureResearchUpgrade: invalid Research pointer" );
 
 	pResFunc = (RESEARCH_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT((PTRVALID(pResFunc, sizeof(RESEARCH_FUNCTION)),
-		"structureResearchUpgrade: invalid Function pointer"));
+	ASSERT( PTRVALID(pResFunc, sizeof(RESEARCH_FUNCTION)),
+		"structureResearchUpgrade: invalid Function pointer" );
 
     //current base value depends on whether there are modules attached to the structure
     baseOutput = pResFunc->researchPoints;
@@ -1806,12 +1826,12 @@ void structureReArmUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the reArm points
 	pPad = (REARM_PAD*)psBuilding->pFunctionality;
-	ASSERT((PTRVALID(pPad, sizeof(REARM_PAD)),
-		"structureReArmUpgrade: invalid ReArm pointer"));
+	ASSERT( PTRVALID(pPad, sizeof(REARM_PAD)),
+		"structureReArmUpgrade: invalid ReArm pointer" );
 
 	pPadFunc = (REARM_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT((PTRVALID(pPadFunc, sizeof(REARM_FUNCTION)),
-		"structureReArmUpgrade: invalid Function pointer"));
+	ASSERT( PTRVALID(pPadFunc, sizeof(REARM_FUNCTION)),
+		"structureReArmUpgrade: invalid Function pointer" );
 
 	pPad->reArmPoints = pPadFunc->reArmPoints + (pPadFunc->reArmPoints *
 		asReArmUpgrade[psBuilding->player].modifier) / 100;
@@ -1826,12 +1846,12 @@ void structurePowerUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the research points
 	pPowerGen = (POWER_GEN*)psBuilding->pFunctionality;
-	ASSERT((PTRVALID(pPowerGen, sizeof(POWER_GEN)),
-		"structurePowerUpgrade: invalid Power Gen pointer"));
+	ASSERT( PTRVALID(pPowerGen, sizeof(POWER_GEN)),
+		"structurePowerUpgrade: invalid Power Gen pointer" );
 
 	pPGFunc = (POWER_GEN_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT((PTRVALID(pPGFunc, sizeof(POWER_GEN_FUNCTION)),
-		"structurePowerUpgrade: invalid Function pointer"));
+	ASSERT( PTRVALID(pPGFunc, sizeof(POWER_GEN_FUNCTION)),
+		"structurePowerUpgrade: invalid Function pointer" );
 
     //current base value depends on whether there are modules attached to the structure
     baseOutput = pPGFunc->powerMultiplier;
@@ -1854,12 +1874,12 @@ void structureRepairUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the research points
 	pRepair = (REPAIR_FACILITY*)psBuilding->pFunctionality;
-	ASSERT((PTRVALID(pRepair, sizeof(REPAIR_FACILITY)),
-		"structureRepairUpgrade: invalid Repair pointer"));
+	ASSERT( PTRVALID(pRepair, sizeof(REPAIR_FACILITY)),
+		"structureRepairUpgrade: invalid Repair pointer" );
 
 	pRepairFunc = (REPAIR_DROID_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT((PTRVALID(pRepairFunc, sizeof(REPAIR_DROID_FUNCTION)),
-		"structureRepairUpgrade: invalid Function pointer"));
+	ASSERT( PTRVALID(pRepairFunc, sizeof(REPAIR_DROID_FUNCTION)),
+		"structureRepairUpgrade: invalid Function pointer" );
 
 	pRepair->power = pRepairFunc->repairPoints + (pRepairFunc->repairPoints *
 		asRepairFacUpgrade[psBuilding->player].modifier) / 100;
@@ -1981,8 +2001,8 @@ void droidBodyUpgrade(FUNCTION *pFunction, DROID *psDroid)
 	we will have to keep a copy of the baseResistancePoints per Structure like we do
 	with the body points, but I don't want to increase the size of STRUCTURE if we
 	don't need to! AB 01/07/98
-	ASSERT((TRUE,
-		"resistanceUpgrade - for this function to work, there has to be a code change"));
+	ASSERT( TRUE,
+		"resistanceUpgrade - for this function to work, there has to be a code change" );
 }*/
 
 //upgrade the weapon stats for the correct subclass
@@ -2193,8 +2213,8 @@ void upgradeTransporterDroids(DROID *psTransporter,
 {
     DROID   *psCurr;
 
-    ASSERT((psTransporter->droidType == DROID_TRANSPORTER,
-        "upgradeTransporterUnits: invalid unit type"));
+    ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
+        "upgradeTransporterUnits: invalid unit type" );
 
     //loop thru' each unit in the Transporter
     for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
@@ -2379,6 +2399,6 @@ UDWORD functionType(char* pType)
 		return HQ_TYPE;
 	}*/
 
-	ASSERT((FALSE, "Unknown Function Type"));
+	ASSERT( FALSE, "Unknown Function Type" );
 	return 0;
 }

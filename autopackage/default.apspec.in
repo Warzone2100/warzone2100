@@ -2,12 +2,12 @@
 
 [Meta]
 RootName: @gna.org/warzone:$SOFTWAREVERSION
-DisplayName: Warzone Strategy Game
-ShortName: warzone
+DisplayName: Warzone 2100
+ShortName: warzone2100
 Maintainer: Warzone Resurrection Project <warzone-dev@gna.org>
 Packager: Dennis Schridde <devurandom@gna.org>
-Summary: Warzone is a 3D realtime strategy game about a post nuklear war in the year 2100
-URL: http://gna.org/projects/warzone
+Summary: Warzone 2100 is a 3D realtime strategy game about a post nuklear war in the year 2100
+URL: http://wz.rootzilla.de/
 License: GNU General Public License, Version 2
 SoftwareVersion: @VERSION@
 AutopackageTarget: 1.0
@@ -19,7 +19,7 @@ AutopackageTarget: 1.0
 # InterfaceVersion: 0.0
 
 [Description]
-Warzone is a 3D realtime strategy game about a post nuklear war in the year 2100.
+Warzone 2100 is a 3D realtime strategy game about a post nuklear war in the year 2100.
 You got to design your own units, by choosing tons of various chassis from a huge research tree.
 Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studies in 1999, and released in 2004 under the GPL.
 

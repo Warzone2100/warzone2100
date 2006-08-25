@@ -28,8 +28,8 @@ void strres_error(const char *pMessage,...)
 	char	*pText;
 
 	strresGetErrorData(&line, &pText);
-	DBERROR(("STRRES file parse error:\n%s at line %d\nText: '%s'\n",
-			  pMessage, line, pText));
+	debug( LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'\n", pMessage, line, pText );
+	abort();
 }
 
 %}
@@ -56,7 +56,6 @@ line:			TEXT_T QTEXT_T
 								if (!strresStoreString(psCurrRes, $1, $2))
 								{
 									YYABORT;
-									printf("Hello. I'm the parser.\n");
 								}
 							}
 			;

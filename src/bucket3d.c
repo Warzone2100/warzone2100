@@ -132,7 +132,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		return(TRUE);
 	}
 	resourceCounter++;
-	ASSERT((resourceCounter <= NUM_OBJECTS, "bucketAddTypeToList: too many objects"));
+	ASSERT( resourceCounter <= NUM_OBJECTS, "bucketAddTypeToList: too many objects" );
 
 	//put the object data into the tag
 	newTag->objectType = objectType;

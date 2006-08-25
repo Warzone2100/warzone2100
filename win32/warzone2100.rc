@@ -1,6 +1,6 @@
 1 VERSIONINFO
-FILEVERSION 2,0,3,99
-PRODUCTVERSION 2,0,3,99
+FILEVERSION 2,0,3,993
+PRODUCTVERSION 2,0,3,993
 FILEOS 0x40004
 FILETYPE 0x2
 {
@@ -8,14 +8,14 @@ FILETYPE 0x2
 	{
 		BLOCK "040904B0"
 		{
-			VALUE "CompanyName", "Warzone Project"
-			VALUE "FileDescription", "Warzone 2100 GPL"
-			VALUE "FileVersion", "2.0.3.99"
-			VALUE "InternalName", "Warzone"
-			VALUE "LegalCopyright", "Copyright © 2006 Warzone Project"
+			VALUE "CompanyName", "Warzone Resurrection Project"
+			VALUE "FileDescription", "Warzone 2100"
+			VALUE "FileVersion", "2.0.4_rc3"
+			VALUE "InternalName", "Warzone 2100"
+			VALUE "LegalCopyright", "Copyright © 2006 Warzone Resurrection Project"
 			VALUE "OriginalFilename", "warzone.exe"
-			VALUE "ProductName", "Warzone 2100 GPL"
-			VALUE "ProductVersion", "2.0.3.99"
+			VALUE "ProductName", "Warzone 2100"
+			VALUE "ProductVersion", "2.0.4_rc3"
 		}
 	}
 

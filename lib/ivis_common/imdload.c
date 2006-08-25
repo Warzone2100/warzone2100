@@ -26,10 +26,6 @@
 #include "tex.h"		// texture page loading
 #include "bspfunc.h"	// for imd functions
 
-#ifdef  _MSC_VER					//fixed for .net -Q
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#endif
 
 // Static variables
 static uint32 	_IMD_FLAGS;
@@ -153,11 +149,11 @@ static UDWORD IMDConnectors = 0;
 
 void DumpIMDInfo(void)
 {
-	DBPRINTF(("imds loaded    =%d - using %d bytes\n",IMDcount,IMDcount*sizeof(iIMDShape)));
-	DBPRINTF(("polys loaded   =%d - using %d bytes\n",IMDPolycount,IMDPolycount*sizeof(iIMDPoly)));
-	DBPRINTF(("vertices loaded=%d - using %d bytes\n",IMDVertexcount,IMDVertexcount*(sizeof(VERTEXID)+sizeof(iVertex))));
-	DBPRINTF(("points loaded  =%d - using %d bytes\n",IMDPoints,IMDPoints*sizeof(iVector)));
-	DBPRINTF(("connectors     =%d - using %d bytes\n",IMDConnectors,IMDConnectors*sizeof(iVector) ));
+	debug( LOG_NEVER, "imds loaded    =%d - using %d bytes\n", IMDcount, IMDcount*sizeof(iIMDShape) );
+	debug( LOG_NEVER, "polys loaded   =%d - using %d bytes\n", IMDPolycount, IMDPolycount*sizeof(iIMDPoly) );
+	debug( LOG_NEVER, "vertices loaded=%d - using %d bytes\n", IMDVertexcount, IMDVertexcount*(sizeof(VERTEXID)+sizeof(iVertex)) );
+	debug( LOG_NEVER, "points loaded  =%d - using %d bytes\n", IMDPoints, IMDPoints*sizeof(iVector) );
+	debug( LOG_NEVER, "connectors     =%d - using %d bytes\n", IMDConnectors, IMDConnectors*sizeof(iVector) );
 }
 
 static STRING texfile[64];	//Last loaded texture page filename
@@ -415,7 +411,7 @@ static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape
 					int NewID;
 
 					if (sscanf(pFileData, "%d%n", &NewID,&cnt) != 1) {
-						DBPRINTF(("failed poly %d. point %d [%s]\n",i,j,_IMD_NAME));
+						debug( LOG_NEVER, "failed poly %d. point %d [%s]\n", i, j, _IMD_NAME );
 						iV_Error(0xff,"(_load_polys) [poly %d] error reading poly indices",i);
 						return FALSE;
 					}
@@ -467,8 +463,8 @@ static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape
 				}
 				pFileData += cnt;
 
-				ASSERT( (tWidth>0, "_imd_load_polys: texture width = %i", tWidth) );
-				ASSERT( (tHeight>0, "_imd_load_polys: texture height = %i", tHeight) );
+				ASSERT( tWidth>0, "_imd_load_polys: texture width = %i", tWidth );
+				ASSERT( tHeight>0, "_imd_load_polys: texture height = %i", tHeight );
 
 				poly->pTexAnim->nFrames = nFrames;
 

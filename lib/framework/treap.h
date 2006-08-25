@@ -52,7 +52,7 @@ typedef struct _treap_node
 {
 	TREAP_NODE_BASE;
 
-#if DEBUG_TREAP
+#ifdef DEBUG_TREAP
 	TREAP_NODE_DEBUG;
 #endif
 
@@ -65,7 +65,7 @@ typedef struct _treap
 	OBJ_HEAP		*psNodes;	// node heap
 	TREAP_NODE		*psRoot;	// root of the tree
 
-#if DEBUG_TREAP
+#ifdef DEBUG_TREAP
 	STRING			*pFile;		// file the treap was created in
 	SDWORD			line;		// line the treap was created at
 #endif
@@ -124,7 +124,7 @@ extern SDWORD treapStringCmp(UDWORD key1, UDWORD key2);
 /****************************************************************************************/
 /*                            Macro definitions                                         */
 
-#if DEBUG_TREAP
+#ifdef DEBUG_TREAP
 
 // debugging versions of the TREAP calls
 #define TREAP_CREATE(ppsTreap, cmp, init, ext) \

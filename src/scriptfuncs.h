@@ -7,9 +7,6 @@
 #ifndef _scriptfuncs_h
 #define _scriptfuncs_h
 
-extern BOOL scrInitEnumDroids(void);	
-extern BOOL scrEnumDroid(void);		
-
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 
@@ -186,11 +183,11 @@ extern BOOL scrSetAllStructureLimits(void);
 extern BOOL scrApplyLimitSet(void);
 
 
-// plays a sound for the specified player - only plays the sound if the 
+// plays a sound for the specified player - only plays the sound if the
 //specified player = selectedPlayer
 extern BOOL scrPlaySound(void);
 
-// plays a sound for the specified player - only plays the sound if the 
+// plays a sound for the specified player - only plays the sound if the
 // specified player = selectedPlayer - saves position
 extern BOOL scrPlaySoundPos(void);
 
@@ -320,7 +317,7 @@ extern BOOL scrDominatingAlliance(void);
 // push true if human player is responsible for 'player'
 extern BOOL	scrMyResponsibility(void);
 
-/*checks to see if a structure of the type specified exists within the 
+/*checks to see if a structure of the type specified exists within the
 specified range of an XY location */
 extern BOOL scrStructureBuiltInRange(void);
 
@@ -495,6 +492,80 @@ extern BOOL scrResetLimboMission(void);
 
 // skirmish lassat fire.
 extern BOOL scrSkFireLassat(void);
+
+//-----------------------------------------
+//New functions
+//-----------------------------------------
+
+extern BOOL scrStrcmp(void);
+extern BOOL scrConsole(void);
+extern BOOL scrDbgMsgOn(void);
+extern BOOL scrDbg(void);
+extern BOOL scrMsg(void);
+extern BOOL scrDebugFile(void);
+
+extern BOOL scrActionDroidObj(void);
+extern BOOL scrInitEnumDroids(void);
+extern BOOL scrEnumDroid(void);
+extern BOOL scrInitIterateGroupB(void);
+extern BOOL scrIterateGroupB(void);
+extern BOOL	scrFactoryGetTemplate(void);
+extern BOOL scrNumTemplatesInProduction(void);
+extern BOOL scrNumDroidsByComponent(void);
+extern BOOL scrGetStructureLimit(void);
+extern BOOL scrStructureLimitReached(void);
+extern BOOL scrGetNumStructures(void);
+extern BOOL scrGetUnitLimit(void);
+extern BOOL scrMin(void);
+extern BOOL scrMax(void);
+extern BOOL scrFogTileInRange(void);
+extern BOOL scrMapRevealedInRange(void);
+extern BOOL scrNumResearchLeft(void);
+extern BOOL scrResearchCompleted(void);
+extern BOOL scrResearchStarted(void);
+extern BOOL scrThreatInRange(void);
+extern BOOL scrNumEnemyWeapObjInRange(void);
+extern BOOL scrNumEnemyWeapDroidsInRange(void);
+extern BOOL scrNumEnemyWeapStructsInRange(void);
+extern BOOL scrNumFriendlyWeapObjInRange(void);
+extern BOOL scrNumFriendlyWeapDroidsInRange(void);
+extern BOOL scrNumFriendlyWeapStructsInRange(void);
+extern BOOL scrNumPlayerWeapObjInRange(void);
+extern BOOL scrNumEnemyObjInRange(void);
+extern BOOL scrNumStructsByStatInRange(void);
+extern BOOL scrNumStructsByStatInArea(void);
+extern BOOL scrNumStructsByTypeInRange(void);
+extern BOOL scrNumFeatByTypeInRange(void);
+extern BOOL scrNumStructsButNotWallsInRangeVis(void);
+extern BOOL scrGetStructureVis(void);
+extern BOOL scrChooseValidLoc(void);
+extern BOOL scrGetClosestEnemy(void);
+extern BOOL scrTransporterCapacity(void);
+extern BOOL scrTransporterFlying(void);
+extern BOOL scrUnloadTransporter(void);
+extern BOOL scrHasGroup(void);
+extern BOOL scrObjWeaponMaxRange(void);
+extern BOOL scrObjHasWeapon(void);
+extern BOOL scrObjectHasIndirectWeapon(void);
+extern BOOL scrGetClosestEnemyDroidByType(void);
+extern BOOL scrGetClosestEnemyStructByType(void);
+extern BOOL scrSkDefenseLocationB(void);
+extern BOOL scrCirclePerimPoint(void);
+extern BOOL scrGiftRadar(void);
+extern BOOL scrNumAllies(void);
+extern BOOL scrNumAAinRange(void);
+extern BOOL scrSelectDroid(void);
+extern BOOL scrSelectGroup(void);
+extern BOOL scrModulo(void);
+extern BOOL scrPlayerLoaded(void);
+
+
+extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
+extern BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
+extern BOOL skTopicAvail(UWORD inc, UDWORD player);
+extern UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
+extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY);
+extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
 
 #endif
 

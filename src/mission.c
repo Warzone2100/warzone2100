@@ -309,7 +309,7 @@ void initMission(void)
 {
 	UDWORD		inc;
 
-DBPRINTF(("***Init Mission ***\n"));
+	debug( LOG_NEVER, "***Init Mission ***\n" );
 	//mission.type = MISSION_NONE;
 	mission.type = LDS_NONE;
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
@@ -518,7 +518,7 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 	{
 		/*mission type gets set to none when you have returned from a mission
 		so don't want to go another mission when already on one! - so ignore*/
-		DBMB(("Already on a mission"));
+		debug( LOG_NEVER, "Already on a mission" );
 		return TRUE;
 	}
 
@@ -624,14 +624,16 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 		default:
 		{
 			//error!
-			DBERROR(("Unknown Mission Type"));
+			debug( LOG_ERROR, "Unknown Mission Type" );
+			abort();
 			loaded = FALSE;
 		}
 	}
 
 	if (!loaded)
 	{
-		DBERROR(("Unable to load mission file"));
+		debug( LOG_ERROR, "Unable to load mission file" );
+		abort();
 		return FALSE;
 	}
 
@@ -1216,7 +1218,7 @@ void saveMissionLimboData(void)
 		pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
 		if (pickRes == NO_FREE_TILE )
 		{
-			ASSERT((FALSE, "saveMissionLimboData: Unable to find a free location"));
+			ASSERT( FALSE, "saveMissionLimboData: Unable to find a free location" );
 		}
 		psDroid->x = (UWORD)(droidX << TILE_SHIFT);
 		psDroid->y = (UWORD)(droidY << TILE_SHIFT);
@@ -1284,7 +1286,7 @@ void placeLimboDroids(void)
 		    pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
 		    if (pickRes == NO_FREE_TILE )
 		    {
-			    ASSERT((FALSE, "placeLimboUnits: Unable to find a free location"));
+			    ASSERT( FALSE, "placeLimboUnits: Unable to find a free location" );
 		    }
 		    psDroid->x = (UWORD)(droidX << TILE_SHIFT);
 		    psDroid->y = (UWORD)(droidY << TILE_SHIFT);
@@ -1308,7 +1310,7 @@ void placeLimboDroids(void)
         }
         else
         {
-            ASSERT((FALSE, "placeLimboUnits: Unable to remove unit from Limbo list"));
+            ASSERT( FALSE, "placeLimboUnits: Unable to remove unit from Limbo list" );
         }
     }
 }
@@ -1335,8 +1337,8 @@ void restoreMissionLimboData(void)
             //the location of the droid should be valid!
         }
     }
-    ASSERT((mission.apsDroidLists[selectedPlayer] == NULL,
-        "restoreMissionLimboData: list should be empty"));
+    ASSERT( mission.apsDroidLists[selectedPlayer] == NULL,
+        "restoreMissionLimboData: list should be empty" );
 }
 
 /*Saves the necessary data when moving from one campaign to the start of the
@@ -1385,8 +1387,8 @@ void saveCampaignData(void)
                     }
                 }*/
                 //empty the transporter into the mission list
-                ASSERT((psDroid->psGroup != NULL,
-                    "saveCampaignData: Transporter does not have a group"));
+                ASSERT( psDroid->psGroup != NULL,
+                    "saveCampaignData: Transporter does not have a group" );
 
         		for (psCurr = psDroid->psGroup->psList; psCurr != NULL AND psCurr !=
                     psDroid; psCurr = psCurrNext)
@@ -1678,7 +1680,7 @@ void processMission()
     		pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
 	    	if (pickRes == NO_FREE_TILE )
 		    {
-			    ASSERT((FALSE, "processMission: Unable to find a free location"));
+			    ASSERT( FALSE, "processMission: Unable to find a free location" );
     		}
 	    	psDroid->x = (UWORD)(droidX << TILE_SHIFT);
 		    psDroid->y = (UWORD)(droidY << TILE_SHIFT);
@@ -1870,7 +1872,7 @@ void endMission(void)
 	if (mission.type == LDS_NONE)
 	{
 		//can't go back any further!!
-		DBMB(("Already returned from mission"));
+		debug( LOG_NEVER, "Already returned from mission" );
 		return;
 	}
 
@@ -1936,7 +1938,8 @@ void endMission(void)
 		default:
 		{
 			//error!
-			DBERROR(("Unknown Mission Type"));
+			debug( LOG_ERROR, "Unknown Mission Type" );
+			abort();
 		}
 	}
 
@@ -2040,14 +2043,14 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 
-	ASSERT((PTRVALID(psStructure, sizeof(STRUCTURE)),
-		"aiUpdateMissionStructure: invalid Structure pointer"));
+	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
+		"aiUpdateMissionStructure: invalid Structure pointer" );
 
-	ASSERT(((psStructure->pStructureType->type == REF_FACTORY  OR
+	ASSERT( (psStructure->pStructureType->type == REF_FACTORY  OR
 		psStructure->pStructureType->type == REF_CYBORG_FACTORY  OR
 		psStructure->pStructureType->type == REF_VTOL_FACTORY  OR
 		psStructure->pStructureType->type == REF_RESEARCH),
-		"aiUpdateMissionStructure: Structure is not a Factory or Research Facility"));
+		"aiUpdateMissionStructure: Structure is not a Factory or Research Facility" );
 
 	//only interested if the Structure "does" something!
 	if (psStructure->pFunctionality == NULL)
@@ -2307,8 +2310,8 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 void missionStructureUpdate(STRUCTURE *psBuilding)
 {
 
-	ASSERT((PTRVALID(psBuilding, sizeof(STRUCTURE)),
-		"structureUpdate: Invalid Structure pointer"));
+	ASSERT( PTRVALID(psBuilding, sizeof(STRUCTURE)),
+		"structureUpdate: Invalid Structure pointer" );
 
 	//update the manufacture/research of the building
 //	if (psBuilding->pStructureType->type == REF_FACTORY OR
@@ -2329,8 +2332,8 @@ void missionStructureUpdate(STRUCTURE *psBuilding)
 Only interested in Transporters at present*/
 void missionDroidUpdate(DROID *psDroid)
 {
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"unitUpdate: Invalid unit pointer"));
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		"unitUpdate: Invalid unit pointer" );
 
     /*This is required for Transporters that are moved offWorld so the
     saveGame doesn't try to set their position in the map - especially important
@@ -2480,7 +2483,7 @@ void missionResetDroids()
 		        pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
 		        if (pickRes == NO_FREE_TILE )
 		        {
-			        ASSERT((FALSE, "missionResetUnits: Unable to find a free location"));
+			        ASSERT( FALSE, "missionResetUnits: Unable to find a free location" );
                     psStruct = NULL;
 		        }
                 else
@@ -2514,7 +2517,7 @@ void missionResetDroids()
 		                pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
 		                if (pickRes == NO_FREE_TILE )
 		                {
-			                ASSERT((FALSE, "missionResetUnits: Unable to find a free location"));
+			                ASSERT( FALSE, "missionResetUnits: Unable to find a free location" );
                             psStruct = NULL;
 		                }
                         else
@@ -2558,7 +2561,7 @@ void missionResetDroids()
 					    TILE_UNITS) - TILE_UNITS ||	psDroid->y <= TILE_UNITS ||
 					    psDroid->y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
 				    {
-					    DBMB(("missionResetUnits: unit too close to edge of map - removing"));
+					    debug( LOG_NEVER, "missionResetUnits: unit too close to edge of map - removing" );
 						vanishDroid(psDroid);
 					    continue;
 				    }
@@ -2591,7 +2594,7 @@ void missionResetDroids()
 			else
 			{
 				//can't put it down so get rid of this droid!!
-				ASSERT((FALSE,"missionResetUnits: can't place unit - cancel to continue"));
+				ASSERT( FALSE,"missionResetUnits: can't place unit - cancel to continue" );
 				vanishDroid(psDroid);
 			}
 		}
@@ -2670,7 +2673,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 			if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
 			{
-				ASSERT((FALSE, "unloadTransporter: Unable to find a valid location"));
+				ASSERT( FALSE, "unloadTransporter: Unable to find a valid location" );
 			}
 			psDroid->x = (UWORD)(droidX << TILE_SHIFT);
 			psDroid->y = (UWORD)(droidY << TILE_SHIFT);
@@ -2798,7 +2801,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 	}
 	else
 	{
-		DBPRINTF( ("missionMoveTransporterOffWorld: droid type not transporter!\n") );
+		debug( LOG_NEVER, "missionMoveTransporterOffWorld: droid type not transporter!\n" );
 	}
 }
 
@@ -3123,7 +3126,7 @@ void intUpdateMissionTimer(struct _widget *psWidget, struct _w_context *psContex
     //check not gone over more than 5 hours - arbitary number of hours
     if (timeElapsed > 5*60*60*GAME_TICKS_PER_SEC)
 	{
-		ASSERT((FALSE,"You've taken too long for this mission!"));
+		ASSERT( FALSE,"You've taken too long for this mission!" );
 		return;
 	}
 
@@ -3207,8 +3210,8 @@ void intUpdateTransporterTimer(struct _widget *psWidget, struct _w_context *psCo
 	psTransporter = (DROID *)Label->pUserData;
 	if (psTransporter != NULL)
 	{
-		ASSERT((PTRVALID(psTransporter, sizeof(DROID)),
-			"intUpdateTransporterTimer: invalid Droid pointer"));
+		ASSERT( PTRVALID(psTransporter, sizeof(DROID)),
+			"intUpdateTransporterTimer: invalid Droid pointer" );
 
 		if (psTransporter->action == DACTION_TRANSPORTIN ||
 			psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN )
@@ -3545,15 +3548,13 @@ void intRunMissionResult()
 	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 	frameSetCursorFromRes(IDC_DEFAULT);
 
-
-
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(FALSE))// check for file name.
 		{
 			if(strlen(sRequestResult))
 			{
-				DBPRINTF(("Returned %s",sRequestResult));
+				debug( LOG_NEVER, "Returned %s", sRequestResult );
 
 				if(bRequestLoad)
 				{
@@ -3711,7 +3712,7 @@ void launchMission(void)
 	}
 	else
 	{
-		DBMB(("Start Mission has not been called"));
+		debug( LOG_NEVER, "Start Mission has not been called" );
 	}
 }
 
@@ -3898,7 +3899,7 @@ void resetMissionPauseState(void)
 //gets the coords for a no go area
 LANDING_ZONE* getLandingZone(SDWORD i)
 {
-	ASSERT(((i >= 0) && (i < MAX_NOGO_AREAS), "getLandingZone out of range."));
+	ASSERT( (i >= 0) && (i < MAX_NOGO_AREAS), "getLandingZone out of range." );
 	return &sLandingZone[i];
 }
 
@@ -4035,8 +4036,8 @@ BOOL withinLandingZone(UDWORD x, UDWORD y)
 {
 	UDWORD		inc;
 
-	ASSERT(( x < mapWidth, "withinLandingZone: x coord bigger than mapWidth"));
-	ASSERT(( y < mapHeight, "withinLandingZone: y coord bigger than mapHeight"));
+	ASSERT( x < mapWidth, "withinLandingZone: x coord bigger than mapWidth" );
+	ASSERT( y < mapHeight, "withinLandingZone: y coord bigger than mapHeight" );
 
 
 	for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
@@ -4053,7 +4054,7 @@ BOOL withinLandingZone(UDWORD x, UDWORD y)
 //returns the x coord for where the Transporter can land (for player 0)
 UWORD getLandingX( SDWORD iPlayer )
 {
-	ASSERT( (iPlayer<MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer) );
+	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer );
 	return (UWORD)((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
 		sLandingZone[iPlayer].x1)/2) << TILE_SHIFT);
 }
@@ -4061,7 +4062,7 @@ UWORD getLandingX( SDWORD iPlayer )
 //returns the y coord for where the Transporter can land
 UWORD getLandingY( SDWORD iPlayer )
 {
-	ASSERT( (iPlayer<MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer) );
+	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer );
 	return (UWORD)((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
 		sLandingZone[iPlayer].y1)/2) << TILE_SHIFT);
 }
@@ -4084,7 +4085,7 @@ UDWORD getHomeLandingY(void)
 
 void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEntryTileY )
 {
-	ASSERT( (iPlayer<MAX_PLAYERS, "missionSetTransporterEntry: player %i too high", iPlayer) );
+	ASSERT( iPlayer<MAX_PLAYERS, "missionSetTransporterEntry: player %i too high", iPlayer );
 
 	if( (iEntryTileX > scrollMinX) && (iEntryTileX < scrollMaxX) )
 	{
@@ -4092,8 +4093,7 @@ void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEnt
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterEntry: entry point x %i outside scroll limits %i->%i\n",
-					iEntryTileX, scrollMinX, scrollMaxX ) );
+		debug( LOG_NEVER, "missionSetTransporterEntry: entry point x %i outside scroll limits %i->%i\n", iEntryTileX, scrollMinX, scrollMaxX );
 		mission.iTranspEntryTileX[iPlayer] = (UWORD) (scrollMinX + EDGE_SIZE);
 	}
 
@@ -4103,15 +4103,14 @@ void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEnt
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterEntry: entry point y %i outside scroll limits %i->%i\n",
-					iEntryTileY, scrollMinY, scrollMaxY ) );
+		debug( LOG_NEVER, "missionSetTransporterEntry: entry point y %i outside scroll limits %i->%i\n", iEntryTileY, scrollMinY, scrollMaxY );
 		mission.iTranspEntryTileY[iPlayer] = (UWORD) (scrollMinY + EDGE_SIZE);
 	}
 }
 
 void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitTileY )
 {
-	ASSERT( (iPlayer<MAX_PLAYERS, "missionSetTransporterExit: player %i too high", iPlayer) );
+	ASSERT( iPlayer<MAX_PLAYERS, "missionSetTransporterExit: player %i too high", iPlayer );
 
 	if( (iExitTileX > scrollMinX) && (iExitTileX < scrollMaxX) )
 	{
@@ -4119,8 +4118,7 @@ void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitT
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterExit: entry point x %i outside scroll limits %i->%i\n",
-					iExitTileX, scrollMinX, scrollMaxX ) );
+		debug( LOG_NEVER, "missionSetTransporterExit: entry point x %i outside scroll limits %i->%i\n", iExitTileX, scrollMinX, scrollMaxX );
 		mission.iTranspExitTileX[iPlayer] = (UWORD) (scrollMinX + EDGE_SIZE);
 	}
 
@@ -4130,15 +4128,14 @@ void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitT
 	}
 	else
 	{
-		DBPRINTF( ("missionSetTransporterExit: entry point y %i outside scroll limits %i->%i\n",
-					iExitTileY, scrollMinY, scrollMaxY ) );
+		debug( LOG_NEVER, "missionSetTransporterExit: entry point y %i outside scroll limits %i->%i\n", iExitTileY, scrollMinY, scrollMaxY );
 		mission.iTranspExitTileY[iPlayer] = (UWORD) (scrollMinY + EDGE_SIZE);
 	}
 }
 
 void missionGetTransporterEntry( SDWORD iPlayer, UWORD *iX, UWORD *iY )
 {
-	ASSERT( (iPlayer<MAX_PLAYERS, "missionGetTransporterEntry: player %i too high", iPlayer) );
+	ASSERT( iPlayer<MAX_PLAYERS, "missionGetTransporterEntry: player %i too high", iPlayer );
 
 	*iX = (UWORD) (mission.iTranspEntryTileX[iPlayer] << TILE_SHIFT);
 	*iY = (UWORD) (mission.iTranspEntryTileY[iPlayer] << TILE_SHIFT);
@@ -4146,7 +4143,7 @@ void missionGetTransporterEntry( SDWORD iPlayer, UWORD *iX, UWORD *iY )
 
 void missionGetTransporterExit( SDWORD iPlayer, UWORD *iX, UWORD *iY )
 {
-	ASSERT( (iPlayer<MAX_PLAYERS, "missionGetTransporterExit: player %i too high", iPlayer) );
+	ASSERT( iPlayer<MAX_PLAYERS, "missionGetTransporterExit: player %i too high", iPlayer );
 
 	*iX = (UWORD) (mission.iTranspExitTileX[iPlayer] << TILE_SHIFT);
 	*iY = (UWORD) (mission.iTranspExitTileY[iPlayer] << TILE_SHIFT);
@@ -4183,7 +4180,7 @@ void missionDestroyObjects(void)
 	STRUCTURE *psStruct;
 	UBYTE Player;
 
-	DBPRINTF(("missionDestroyObjects\n"));
+	debug( LOG_NEVER, "missionDestroyObjects\n" );
 	for(Player = 0; Player < MAX_PLAYERS; Player++) {
 		if(Player != selectedPlayer) {
 
@@ -4264,8 +4261,8 @@ void processPreviousCampDroids(void)
                     bPlaced = pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,normalPAT);
                     if (!bPlaced)
 		            {
-			            ASSERT((FALSE, "processPreviousCampDroids: Unable to find a free location \
-                            cancel to continue"));
+			            ASSERT( FALSE, "processPreviousCampDroids: Unable to find a free location \
+                            cancel to continue" );
                         vanishDroid(psDroid);
 		            }
                     else
@@ -4336,8 +4333,8 @@ void moveDroidsToSafety(DROID *psTransporter)
 {
     DROID       *psDroid, *psNext;
 
-    ASSERT((psTransporter->droidType == DROID_TRANSPORTER,
-        "moveUnitsToSafety: unit not a Transporter"));
+    ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
+        "moveUnitsToSafety: unit not a Transporter" );
 
     //move droids out of Transporter into mission list
 	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL
@@ -4427,7 +4424,7 @@ void resetMissionWidgets(void)
 
 void	setCampaignNumber( UDWORD number )
 {
-	ASSERT((number<4,"Campaign Number too high!"));
+	ASSERT( number<4,"Campaign Number too high!" );
 	camNumber = number;
 }
 

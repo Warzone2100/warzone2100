@@ -137,7 +137,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 
 		default:
-		ASSERT((FALSE, "scrGenExternGet: unknown variable index"));
+		ASSERT( FALSE, "scrGenExternGet: unknown variable index" );
 		return FALSE;
 		break;
 	}
@@ -171,7 +171,7 @@ BOOL scrGenExternSet(UDWORD index)
 	case EXTID_GAMELEVEL:
 		if (type != VAL_INT)
 		{
-			ASSERT((FALSE,"invalid type for gameLevel"));
+			ASSERT( FALSE,"invalid type for gameLevel" );
 			return FALSE;
 		}
 		scrGameLevel = val;
@@ -179,7 +179,7 @@ BOOL scrGenExternSet(UDWORD index)
 	case EXTID_TUTORIAL:
 		if (type != VAL_BOOL)
 		{
-			ASSERT((FALSE,"invalid type for inTutorial"));
+			ASSERT( FALSE,"invalid type for inTutorial" );
 			return FALSE;
 		}
 		bInTutorial = val;
@@ -187,7 +187,7 @@ BOOL scrGenExternSet(UDWORD index)
 	case EXTID_EXTRAVICTORYFLAG:
 		if (type != VAL_BOOL)
 		{
-			ASSERT((FALSE,"invalid type for extraVictoryFlag"));
+			ASSERT( FALSE,"invalid type for extraVictoryFlag" );
 			return FALSE;
 		}
 		bExtraVictoryFlag = val;
@@ -195,17 +195,19 @@ BOOL scrGenExternSet(UDWORD index)
 	case EXTID_EXTRAFAILFLAG:
 		if (type != VAL_BOOL)
 		{
-			ASSERT((FALSE,"invalid type for extraFailFlag"));
+			ASSERT( FALSE,"invalid type for extraFailFlag" );
 			return FALSE;
 		}
 		bExtraFailFlag = val;
 		break;
 	default:
-		ASSERT((FALSE, "scrGenExternSet: unknown variable index"));
+		ASSERT( FALSE, "scrGenExternSet: unknown variable index" );
 		return FALSE;
 		break;
 	}
 
 	return TRUE;
 }
+
+
 

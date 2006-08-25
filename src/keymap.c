@@ -390,7 +390,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");                
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,      "Toggle ally-enemy radar view");
 
 	// Some extra non QWERTY mappings but functioning in same way
@@ -512,14 +512,14 @@ BLOCK_HEAP  *psHeap;
 	/* Get some memory for our binding */
 	newMapping = (KEY_MAPPING*)MALLOC(sizeof(KEY_MAPPING));
 
-	ASSERT(((int)newMapping,"Couldn't allocate memory for a key mapping"));
+	ASSERT( (int)newMapping,"Couldn't allocate memory for a key mapping" );
 
 	/* Plus one for the terminator */
 
 
 
 	newMapping->pName = (STRING*)MALLOC(strlen(name)+1);
-	ASSERT(((int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping"));
+	ASSERT( (int)newMapping->pName,"Couldn't allocate the memory for the string in a mapping" );
 
 	memSetBlockHeap(psHeap);
 
@@ -749,7 +749,8 @@ BOOL		bKeyProcessed;
 			break;
 
  			default:
- 				DBERROR(("Weirdy action on keymap processing"));
+				debug( LOG_ERROR, "Weirdy action on keymap processing" );
+				abort();
  				break;
 			}
  		}

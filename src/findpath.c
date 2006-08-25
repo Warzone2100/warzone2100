@@ -616,8 +616,8 @@ static void updateTurn(MOVE_CONTROL *psMove)
 			psMove->Direction3D = (UDWORD)newDir;
 		}
 	}
-	ASSERT((psMove->Direction3D < 360,
-		"updateTurn: droid direction out of range"));
+	ASSERT( psMove->Direction3D < 360,
+		"updateTurn: droid direction out of range" );
 }
 
 
@@ -913,8 +913,8 @@ UDWORD dirDiff(SDWORD start, SDWORD end)
 		}
 	}
 
-	ASSERT((retval >=0 && retval <=180,
-		"dirDiff: result out of range"));
+	ASSERT( retval >=0 && retval <=180,
+		"dirDiff: result out of range" );
 
 	return retval;
 }

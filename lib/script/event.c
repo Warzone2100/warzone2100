@@ -60,7 +60,7 @@ static SDWORD			eventTraceLevel=3;
 #ifdef DEBUG
 #define DB_TRACE(x, level) \
 	if (eventTraceLevel >= (level)) \
-		DBPRINTF(x)
+		debug( LOG_NEVER, x)
 #else
 #define DB_TRACE(x,level)
 #endif
@@ -87,16 +87,19 @@ BOOL eventInitialise(EVENT_INIT *psInit)
 	// Create the value heap
 	if (!HEAP_CREATE(&psValHeap, sizeof(VAL_CHUNK), psInit->valInit, psInit->valExt))
 	{
+		debug(LOG_ERROR, "eventInitialise: HEAP_CREATE failed for values");
 		return FALSE;
 	}
 	// Create the trigger heap
 	if (!HEAP_CREATE(&psTrigHeap, sizeof(ACTIVE_TRIGGER), psInit->trigInit, psInit->trigExt))
 	{
+		debug(LOG_ERROR, "eventInitialise: HEAP_CREATE failed for triggers");
 		return FALSE;
 	}
 	// Create the context heap
 	if (!HEAP_CREATE(&psContHeap, sizeof(SCRIPT_CONTEXT), psInit->contInit, psInit->contExt))
 	{
+		debug(LOG_ERROR, "eventInitialise: HEAP_CREATE failed for context");
 		return FALSE;
 	}
 
@@ -163,7 +166,7 @@ void eventReset(void)
 #ifdef DEBUG
 	if (count>0)
 	{
-		DBPRINTF(("eventReset: %d contexts still allocated at shutdown\n", count));
+		debug( LOG_NEVER, "eventReset: %d contexts still allocated at shutdown\n", count );
 	}
 #endif
 }
@@ -292,30 +295,32 @@ void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 	// find the debug info for the event
 	pEventLab = eventGetEventID(psCode, psTrigger->event);
 
-	DBPRINTF(("trigger %s at %d -> %s",
-		pTrigLab, psTrigger->testTime, pEventLab));
+	debug( LOG_NEVER, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab );
 	if (psTrigger->offset != 0)
 	{
-		DBPRINTF((" %d", psTrigger->offset));
+		debug( LOG_NEVER, " %d", psTrigger->offset );
 	}
 }
 
 // Initialise the create/release function array - specify the maximum value type
 BOOL eventInitValueFuncs(SDWORD maxType)
 {
-	ASSERT((asReleaseFuncs == NULL,
-		"eventInitValueFuncs: array already initialised"));
+	if(asReleaseFuncs != NULL)	//<NEW> 13.05.05
+		debug(LOG_ERROR, "eventInitValueFuncs: array already initialised");
+
+	ASSERT( asReleaseFuncs == NULL,
+		"eventInitValueFuncs: array already initialised" );
 
 	asCreateFuncs = (VAL_CREATE_FUNC *)MALLOC(sizeof(VAL_CREATE_FUNC) * maxType);
 	if (!asCreateFuncs)
 	{
-		DBERROR(("eventInitValueFuncs: Out of memory"));
+		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
 		return FALSE;
 	}
 	asReleaseFuncs = (VAL_RELEASE_FUNC *)MALLOC(sizeof(VAL_RELEASE_FUNC) * maxType);
 	if (!asReleaseFuncs)
 	{
-		DBERROR(("eventInitValueFuncs: Out of memory"));
+		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
 		return FALSE;
 	}
 
@@ -331,7 +336,8 @@ BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 {
 	if (type >= numFuncs)
 	{
-		DBERROR(("eventAddValueCreate: type out of range"));
+		debug( LOG_ERROR, "eventAddValueCreate: type out of range" );
+		abort();
 		return FALSE;
 	}
 
@@ -345,7 +351,8 @@ BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 {
 	if (type >= numFuncs)
 	{
-		DBERROR(("eventAddValueRelease: type out of range"));
+		debug( LOG_ERROR, "eventAddValueRelease: type out of range" );
+		abort();
 		return FALSE;
 	}
 
@@ -362,8 +369,8 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	SDWORD		val, storeIndex, type, arrayNum, i,j, arraySize;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
 
-	ASSERT((PTRVALID(psCode, sizeof(SCRIPT_CODE)),
-		"eventNewContext: Invalid code pointer"));
+	ASSERT( PTRVALID(psCode, sizeof(SCRIPT_CODE)),
+		"eventNewContext: Invalid code pointer" );
 
 	// Get a new context
 	if (!HEAP_ALLOC(psContHeap, (void*) &psContext))
@@ -392,7 +399,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	//prepare local variables (initialize, store type)
 	//-------------------------------
-	psCode->ppsLocalVarVal = (INTERP_VAL **)MALLOC(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event 
+	psCode->ppsLocalVarVal = (INTERP_VAL **)MALLOC(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event
 
 	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
 
@@ -415,9 +422,9 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//initialize Strings and integers
 				if(type == VAL_STRING)
 				{
-					debug(LOG_SCRIPT,"eventNewContext: STRING type variables are not implemented");
+					//debug(LOG_ERROR,"eventNewContext: STRING type variables are not implemented");
 
-					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(255);	//TODO: MAXSTRLEN
+					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(MAXSTRLEN);
 					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
 				}
 				else
@@ -438,14 +445,14 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//debug(LOG_SCRIPT, "i=%d, j=%d, value=%d",i,j,psCode->ppsLocalVarVal[i][j].v.ival);
 			}
 
-			debug(LOG_SCRIPT,"------");
-			
+			//debug(LOG_SCRIPT,"------");
+
 		}
 		else	//this event has no local vars
 		{
 			psCode->ppsLocalVarVal[i] = NULL;
 		}
-		
+
 	}
 
 	while (val >= 0)
@@ -474,7 +481,20 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				type = psCode->pGlobals[val];
 			}
 			psNewChunk->asVals[storeIndex].type = type;
-			psNewChunk->asVals[storeIndex].v.ival = 0;
+
+
+			//initialize Strings
+			if(type == VAL_STRING)
+			{
+				psNewChunk->asVals[storeIndex].v.sval = (char*)MALLOC(MAXSTRLEN);
+				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
+			}
+			else
+			{
+				psNewChunk->asVals[storeIndex].v.ival = 0;
+			}
+
+			//initialize objects
 			if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])
 			{
 				if (!asCreateFuncs[type](psNewChunk->asVals + storeIndex))
@@ -526,8 +546,8 @@ BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
 	SDWORD			val;
 	VAL_CHUNK		*psChunk, *psOChunk;
 
-	ASSERT((PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
-		"eventCopyContext: Invalid context pointer"));
+	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
+		"eventCopyContext: Invalid context pointer" );
 
 	// Get a new context
 	if (!eventNewContext(psContext->psCode, psContext->release, &psNew))
@@ -563,8 +583,8 @@ BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
 	TRIGGER_DATA	*psData;
 	SCRIPT_CODE		*psCode;
 
-	ASSERT((PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
-		"eventNewObject: Invalid context pointer"));
+	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
+		"eventNewObject: Invalid context pointer" );
 
 	// Now setup all the triggers
 	psContext->triggerCount = 0;
@@ -661,8 +681,8 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 			{
 				chunkStart += CONTEXT_VALS;
 				psCChunk = psCChunk->psNext;
-				ASSERT((psCChunk != NULL,
-					"eventRemoveContext: not enough value chunks"));
+				ASSERT( psCChunk != NULL,
+					"eventRemoveContext: not enough value chunks" );
 			}
 			psVal = psCChunk->asVals + (i - chunkStart);
 			if (psVal->type < numFuncs && asReleaseFuncs[psVal->type] != NULL)
@@ -700,7 +720,7 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 		}
 		else
 		{
-			ASSERT((FALSE, "eventRemoveContext: context not found"));
+			ASSERT( FALSE, "eventRemoveContext: context not found" );
 		}
 	}
 }
@@ -719,7 +739,7 @@ BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **pp
 	}
 	if (!psChunk)
 	{
-		ASSERT((FALSE, "eventGetContextVal: Variable not found"));
+		ASSERT( FALSE, "eventGetContextVal: Variable not found" );
 		return FALSE;
 	}
 
@@ -741,7 +761,7 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index,
 
 	if (psVal->type != type)
 	{
-		ASSERT((FALSE, "eventSetContextVar: Variable type mismatch"));
+		ASSERT( FALSE, "eventSetContextVar: Variable type mismatch" );
 		return FALSE;
 	}
 
@@ -812,10 +832,10 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	TRIGGER_DATA	*psTrigData;
 	UDWORD			testTime;
 
-	ASSERT((event < psContext->psCode->numEvents,
-		"eventAddTrigger: Event out of range"));
-	ASSERT((trigger < psContext->psCode->numTriggers,
-		"eventAddTrigger: Trigger out of range"));
+	ASSERT( event < psContext->psCode->numEvents,
+		"eventAddTrigger: Event out of range" );
+	ASSERT( trigger < psContext->psCode->numTriggers,
+		"eventAddTrigger: Trigger out of range" );
 	if (trigger == -1)
 	{
 		return FALSE;
@@ -850,15 +870,16 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 	ACTIVE_TRIGGER	*psNewTrig;
 	TRIGGER_DATA	*psTrigData;
 
-	ASSERT((event < psContext->psCode->numEvents,
-		"eventLoadTrigger: Event out of range"));
-	ASSERT((trigger < psContext->psCode->numTriggers,
-		"eventLoadTrigger: Trigger out of range"));
+	ASSERT( event < psContext->psCode->numEvents,
+		"eventLoadTrigger: Event out of range" );
+	ASSERT( trigger < psContext->psCode->numTriggers,
+		"eventLoadTrigger: Trigger out of range" );
 
 	// Get a trigger object
 	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
 	{
-		DBERROR(("eventLoadTrigger: out of memory"));
+		debug( LOG_ERROR, "eventLoadTrigger: out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -884,8 +905,8 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 	ACTIVE_TRIGGER	*psNewTrig;
 	SDWORD			trigger;
 
-	ASSERT((event < psContext->psCode->numEvents,
-		"eventAddTrigger: Event out of range"));
+	ASSERT( event < psContext->psCode->numEvents,
+		"eventAddTrigger: Event out of range" );
 
 	// Get a trigger object
 	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
@@ -952,8 +973,8 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 
 	if (interpProcessorActive())
 	{
-		ASSERT((FALSE,
-			"eventFireCallbackTrigger: script interpreter is already running"));
+		ASSERT( FALSE,
+			"eventFireCallbackTrigger: script interpreter is already running" );
 		return;
 	}
 
@@ -970,9 +991,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 			fired = FALSE;
 			if (psCurr->type != TR_PAUSE)
 			{
-				ASSERT((psCurr->trigger >= 0 &&
+				ASSERT( psCurr->trigger >= 0 &&
 						psCurr->trigger < psCurr->psContext->psCode->numTriggers,
-					"eventFireCallbackTrigger: invalid trigger number"));
+					"eventFireCallbackTrigger: invalid trigger number" );
 				psTrigDat = psCurr->psContext->psCode->psTriggerData + psCurr->trigger;
 			}
 			else
@@ -984,15 +1005,15 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 				if (!interpRunScript(psCurr->psContext, IRT_TRIGGER,
 							psCurr->trigger, 0))
 				{
-					ASSERT((FALSE, "eventFireCallbackTrigger: trigger %s: code failed",
-							eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger)));
+					ASSERT( FALSE, "eventFireCallbackTrigger: trigger %s: code failed",
+							eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger) );
 					psPrev = psCurr;
 					continue;
 				}
 				if (!stackPopParams(1, VAL_BOOL, &fired))
 				{
-					ASSERT((FALSE, "eventFireCallbackTrigger: trigger %s: code failed",
-							eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger)));
+					ASSERT( FALSE, "eventFireCallbackTrigger: trigger %s: code failed",
+							eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger) );
 					psPrev = psCurr;
 					continue;
 				}
@@ -1023,8 +1044,8 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 				if (!interpRunScript(psCurr->psContext,
 								IRT_EVENT, psCurr->event, psCurr->offset)) // this could set triggerChanged
 				{
-					ASSERT((FALSE, "eventFireCallbackTrigger: event %s: code failed",
-						eventGetEventID(psCurr->psContext->psCode, psCurr->event)));
+					ASSERT( FALSE, "eventFireCallbackTrigger: event %s: code failed",
+						eventGetEventID(psCurr->psContext->psCode, psCurr->event) );
 				}
 				if (triggerChanged)
 				{
@@ -1077,8 +1098,8 @@ static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 		if (!interpRunScript(psTrigger->psContext,
 						IRT_TRIGGER, psTrigger->trigger, 0))
 		{
-			ASSERT((FALSE, "eventFireTrigger: trigger %s: code failed",
-					eventGetTriggerID(psTrigger->psContext->psCode, psTrigger->trigger)));
+			ASSERT( FALSE, "eventFireTrigger: trigger %s: code failed",
+					eventGetTriggerID(psTrigger->psContext->psCode, psTrigger->trigger) );
 			return FALSE;
 		}
 		// Get the result
@@ -1105,8 +1126,8 @@ static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 			DB_TRACE(("\n\n********  script failed  *********\n"), 0);
 			DB_TRIGINF(psTrigger,0);
 			DB_TRACE(("\n"),0);
-			ASSERT((FALSE, "eventFireTrigger: event %s: code failed",
-				eventGetEventID(psTrigger->psContext->psCode, psTrigger->event)));
+			ASSERT( FALSE, "eventFireTrigger: event %s: code failed",
+				eventGetEventID(psTrigger->psContext->psCode, psTrigger->event) );
 			return FALSE;
 		}
 	}
@@ -1375,5 +1396,53 @@ BOOL eventSetTraceLevel(void)
 
 	eventTraceLevel = level;
 
+	return TRUE;
+}
+
+//reset local vars
+BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
+{
+
+	SDWORD		i;
+
+	if(EventIndex >= psCode->numEvents)
+	{
+		if(psCode->psDebug != NULL)
+			debug(LOG_ERROR, "resetLocalVars: wrong event index: %d (Event name: %s, total events count = %d, stack depth = %d)", EventIndex, eventGetEventID(psCode, EventIndex), psCode->numEvents, GetCallDepth());
+		else
+			debug(LOG_ERROR, "resetLocalVars: wrong event index: %d (total events count = %d, stack depth = %d)", EventIndex, psCode->numEvents, GetCallDepth());
+
+		return FALSE;
+	}
+
+	for(i=0; i < psCode->numLocalVars[EventIndex]; i++)
+	{
+		//Initialize main value
+		if(psCode->ppsLocalVarVal[EventIndex][i].type == VAL_STRING)
+		{
+			//debug(LOG_ERROR , "resetLocalVars: String type is not implemented");
+			psCode->ppsLocalVarVal[EventIndex][i].v.sval = (char*)MALLOC(MAXSTRLEN);
+
+			strcpy(psCode->ppsLocalVarVal[EventIndex][i].v.sval,"\0");
+		}
+		else
+		{
+			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
+		}
+
+		/* only group (!) must be re-created each time */
+		if (psCode->ppsLocalVarVal[EventIndex][i].type == ST_GROUP)
+		{
+			debug(LOG_SCRIPT, "resetLocalVars -  created");
+
+			if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
+			{
+				debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");
+				return FALSE;
+			}
+		}
+	}
+
+	//debug(LOG_SCRIPT, "Reset local vars for event %d", EventIndex);
 	return TRUE;
 }

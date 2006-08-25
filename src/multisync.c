@@ -304,7 +304,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 // receive a check and update the local world state accordingly
 BOOL recvDroidCheck(NETMSG *m)
 {
-	FRACT			fx,fy;
+	FRACT			fx=0,fy=0;
 	UDWORD			ref,player,x = 0,y = 0,bod,target=0;//,dir;
 	UWORD			dir,numkills;
 	DROID_ORDER		ord;
@@ -354,7 +354,7 @@ BOOL recvDroidCheck(NETMSG *m)
 		if ( !(IdToDroid(ref,player,&pD)) )				// find the droid in question
 		{
 			NETlogEntry("Recvd Unknown droid info. val=player",0,player);
-			DBPRINTF(("Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n",player,ref));
+			debug( LOG_NEVER, "Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n", player, ref );
 			return TRUE;								//Recvd checking info for an unknown droid
 		}
 
@@ -585,7 +585,7 @@ static void offscreenUpdate(DROID *psDroid,
 
 	// snap droid(if on ground)  to terrain level at x,y.
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT((PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),"offscreenUpdate: invalid propulsion stats pointer"));
+	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),"offscreenUpdate: invalid propulsion stats pointer" );
 	if(	psPropStats->propulsionType != LIFT )		// if not airborne.
 	{
 		psDroid->z = map_Height(psDroid->x, psDroid->y);
@@ -877,7 +877,7 @@ BOOL recvStructureCheck( NETMSG *m)
 
 				default:
 					j=0;
-					ASSERT((FALSE,"Unknown Upgrade in structure checking!"));
+					ASSERT( FALSE,"Unknown Upgrade in structure checking!" );
 					return TRUE;
 					break;
 				}

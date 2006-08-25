@@ -26,6 +26,7 @@
 //#include "mission.h"
 #include "levels.h"
 #include "order.h"
+#include "action.h"		//new member variable - .action
 #include "lib/gamelib/gtime.h"
 #include "mission.h"
 
@@ -698,6 +699,209 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "skFireLassat",			scrSkFireLassat,			VAL_VOID,
 	2, {VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
 
+	/* New functions */
+
+	{ "strcmp",			scrStrcmp,		VAL_BOOL,
+		2, { VAL_STRING, VAL_STRING} },
+
+	{ "console",			scrConsole,				VAL_VOID,
+		1, { VAL_STRING } },
+
+	//{ "MsgBox",			scrMsgBox,				VAL_VOID,
+	//	1, { VAL_STRING } },
+
+	{ "dbgMsgOn",			scrDbgMsgOn,				VAL_VOID,
+		2, { VAL_INT, VAL_BOOL } },
+	{ "dbg",			scrDbg,				VAL_VOID,
+		2, { VAL_STRING, VAL_INT } },
+	{ "msg",			scrMsg,				VAL_VOID,		//multiplayer msg
+		3, { VAL_STRING, VAL_INT, VAL_INT } },
+
+	{ "debug",			scrDebugFile,				VAL_VOID,
+		1, { VAL_STRING } },
+
+	//{ "addHelpMsg",				scrAddHelpMsg,			VAL_VOID,
+	//	6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	//{ "removeHelpMessage",				scrRemoveHelpMessage,			VAL_VOID,
+	//	2, { VAL_INT, VAL_INT } },
+
+	//droid functions
+	//-----------------------------------
+	{ "actionDroidObj",		scrActionDroidObj,			VAL_VOID,
+		3, { ST_DROID, VAL_INT, ST_BASEOBJECT } },
+
+	{ "InitEnumDroids",			scrInitEnumDroids,		VAL_VOID,
+		2, { VAL_INT, VAL_INT } },
+	{ "EnumDroid",			scrEnumDroid,		ST_DROID,
+		0, { VAL_VOID } },
+
+	{ "initIterateGroupB",	scrInitIterateGroupB,		VAL_VOID,
+		2, { ST_GROUP, VAL_INT } },
+
+	{ "iterateGroupB",		scrIterateGroupB,			ST_DROID,
+		2, { ST_GROUP, VAL_INT } },
+
+	//{ "closestDamagedGroupDroid",		scrClosestDamagedGroupDroid,			ST_DROID,
+	//	6, { VAL_INT, ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+
+	{ "factoryGetTemplate",			scrFactoryGetTemplate,		ST_TEMPLATE,
+		1, { ST_STRUCTURE } },
+
+	{ "numTemplatesInProduction",	scrNumTemplatesInProduction,		VAL_INT,
+		2, { ST_TEMPLATE, VAL_INT } },
+
+	{ "numDroidsByComponent",			scrNumDroidsByComponent,		VAL_INT,
+		3, { ST_COMPONENT, VAL_INT, VAL_INT } },
+
+	{ "getStructureLimit",	scrGetStructureLimit,		VAL_INT,
+		2, { ST_STRUCTURESTAT, VAL_INT } },
+
+	{ "structureLimitReached",	scrStructureLimitReached,		VAL_BOOL,
+		2, { ST_STRUCTURESTAT, VAL_INT } },
+
+	{ "getNumStructures",	scrGetNumStructures,		VAL_INT,
+		2, { ST_STRUCTURESTAT, VAL_INT } },
+
+	{ "getUnitLimit",	scrGetUnitLimit,		VAL_INT,
+		1, { VAL_INT } },
+
+	{ "min",	scrMin,		VAL_INT,
+		2, { VAL_INT, VAL_INT } },
+
+	{ "max",	scrMax,		VAL_INT,
+		2, { VAL_INT, VAL_INT } },
+
+	{ "fogTileInRange",	scrFogTileInRange,		VAL_BOOL,
+		9, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "mapRevealedInRange",	scrMapRevealedInRange,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "numResearchLeft",			scrNumResearchLeft,			VAL_INT,
+		2, { VAL_INT, ST_RESEARCH } },
+
+	{ "researchCompleted",			scrResearchCompleted,			VAL_BOOL,
+		2, { ST_RESEARCH, VAL_INT } },
+
+	{ "researchStarted",			scrResearchStarted,			VAL_BOOL,
+		2, { ST_RESEARCH, VAL_INT } },
+
+	{ "threatInRange",			scrThreatInRange,			VAL_BOOL,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyWeapObjInRange",			scrNumEnemyWeapObjInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyWeapDroidsInRange",			scrNumEnemyWeapDroidsInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyWeapStructsInRange",			scrNumEnemyWeapStructsInRange,			VAL_INT,
+		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT} },
+
+	{ "numFriendlyWeapObjInRange",			scrNumFriendlyWeapObjInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numFriendlyWeapDroidsInRange",			scrNumFriendlyWeapDroidsInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numFriendlyWeapStructsInRange",			scrNumFriendlyWeapStructsInRange,			VAL_INT,
+		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT} },
+
+	{ "numPlayerWeapObjInRange",			scrNumPlayerWeapObjInRange,			VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numEnemyObjInRange",			scrNumEnemyObjInRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+
+	//{ "alliancesLocked",			scrAlliancesLocked,			VAL_BOOL,
+	//	0, {VAL_VOID} },
+
+//num structures
+	{ "numStructsByStatInRange",			scrNumStructsByStatInRange,		VAL_INT,
+		6, { ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "numStructsByStatInArea",			scrNumStructsByStatInArea,		VAL_INT,
+		7, { ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "numStructsByTypeInRange",		scrNumStructsByTypeInRange,	VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "numFeatByTypeInRange",		scrNumFeatByTypeInRange,	VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "numStructsButNotWallsInRangeVis",			scrNumStructsButNotWallsInRangeVis,		VAL_INT,
+		5, { VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "getStructureVis",			scrGetStructureVis,		ST_STRUCTURE,
+		3, { ST_STRUCTURESTAT, VAL_INT, VAL_INT } },
+
+	{ "chooseValidLoc",			scrChooseValidLoc,		VAL_BOOL,
+		6, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+	{ "getClosestEnemy",			scrGetClosestEnemy,		ST_BASEOBJECT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT } },
+
+	{ "transporterCapacity",		scrTransporterCapacity,		VAL_INT,
+		1, { ST_DROID} },
+
+	{ "transporterFlying",		scrTransporterFlying,		VAL_BOOL,
+		1, { ST_DROID} },
+
+	{ "unloadTransporter",		scrUnloadTransporter,		VAL_VOID,
+		3, { ST_DROID, VAL_INT, VAL_INT} },
+
+	{ "hasGroup",		scrHasGroup,		VAL_BOOL,
+		1, { ST_DROID} },
+
+	{ "objWeaponMaxRange",		scrObjWeaponMaxRange,		VAL_INT,
+		1, { ST_BASEOBJECT} },
+
+	{ "objHasWeapon",			scrObjHasWeapon,		VAL_BOOL,
+		1, { ST_BASEOBJECT} },
+
+	{ "objectHasIndirectWeapon",		scrObjectHasIndirectWeapon,		VAL_BOOL,
+		1, { ST_BASEOBJECT} },
+
+	{ "getClosestEnemyDroidByType",			scrGetClosestEnemyDroidByType,		ST_DROID,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_INT } },
+
+	{ "getClosestEnemyStructByType",		scrGetClosestEnemyStructByType,	ST_STRUCTURE,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+
+	{ "skDefenseLocationB",		scrSkDefenseLocationB,		VAL_BOOL,
+	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, ST_STRUCTURESTAT, ST_STRUCTURESTAT, ST_DROID,VAL_INT } },
+
+	{ "circlePerimPoint",			scrCirclePerimPoint,		VAL_VOID,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT} },
+
+	{ "giftRadar",			scrGiftRadar,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_BOOL} },
+
+	{ "numAllies",			scrNumAllies,		VAL_INT,
+		1, { VAL_INT} },
+
+	{ "numAAinRange",			scrNumAAinRange,		VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "selectDroid",			scrSelectDroid,		VAL_VOID,
+		2, { ST_DROID, VAL_BOOL} },
+
+	{ "selectGroup",			scrSelectGroup,		VAL_VOID,
+		2, { ST_GROUP, VAL_BOOL} },
+
+	{ "modulo",			scrModulo,		VAL_INT,
+		2, { VAL_INT, VAL_INT} },
+
+	{ "playerLoaded",			scrPlayerLoaded,		VAL_BOOL,
+		1, { VAL_INT} },
+
+
+
+	/* END new functions */
+
 
 //	{ "skOrderDroidLineBuild",	scrSkOrderDroidLineBuild,	VAL_VOID,
 //	6, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
@@ -826,8 +1030,9 @@ VAR_SYMBOL asObjTable[] =
 		scrBaseObjGet,			NULL },
 
 	// structure variables
-	{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTAT,
-		scrBaseObjGet,			NULL },
+	//{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTAT,	
+	//	scrBaseObjGet,			NULL },
+
 
 	// group variables
 	{ "x",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_GROUP,		GROUPID_POSX,
@@ -839,7 +1044,26 @@ VAR_SYMBOL asObjTable[] =
 	{ "health",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_GROUP,		GROUPID_HEALTH,
 		scrGroupObjGet,			NULL },
 
+	/* new member variables */
+	//similiar to .order
+	{ "action",			VAL_INT,			(INTERP_TYPE)ST_OBJECT,	ST_DROID,		OBJID_ACTION,
+		scrBaseObjGet,			NULL },
 
+	//.stat - now supports droids, ST_STRUCTURE became ST_BASEOBJECT
+	{ "stat",			ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	ST_BASEOBJECT,	OBJID_STRUCTSTAT,
+		scrBaseObjGet,			NULL },
+
+	//object->psTarget
+	{ "target",			ST_BASEOBJECT,		(INTERP_TYPE)ST_OBJECT,	ST_BASEOBJECT,	OBJID_TARGET,
+		scrBaseObjGet,			NULL },
+
+	//returns psStruct->pStructureType->type
+	{ "stattype",			VAL_INT,		(INTERP_TYPE)ST_OBJECT,	ST_STRUCTURE,	OBJID_STRUCTSTATTYPE,
+		scrBaseObjGet,			NULL },
+
+	//returns if this unit is currently selected by a player (usually human)
+	{ "selected",			VAL_BOOL,		(INTERP_TYPE)ST_OBJECT,	ST_DROID,		OBJID_SELECTED,
+		scrBaseObjGet,			NULL },
 
 	/* This entry marks the end of the variable list */
 	{ NULL, VAL_VOID, (INTERP_TYPE)ST_OBJECT, VAL_VOID, 0, NULL, NULL }
@@ -981,6 +1205,52 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DORDER_EMBARK",		VAL_INT,	0,		DORDER_EMBARK,			0 },
 	{ "DORDER_DISEMBARK",	VAL_INT,	0,		DORDER_DISEMBARK,		0 },
 	{ "DORDER_SCOUT",		VAL_INT,	0,		DORDER_SCOUT,			0 },
+	{ "DORDER_DROIDREPAIR",		VAL_INT,	0,		DORDER_DROIDREPAIR,			0 },	//new one
+
+
+	//new member varialbe - constants for .action
+	//-----------------------------------------------------------
+	{ "DACTION_NONE",				VAL_INT,	0,		DACTION_NONE,				0 },
+	{ "DACTION_MOVE",				VAL_INT,	0,		DACTION_MOVE,				0 },
+	{ "DACTION_BUILD",				VAL_INT,	0,		DACTION_BUILD,				0 },
+	{ "DACTION_BUILD_FOUNDATION",	VAL_INT,	0,		DACTION_BUILD_FOUNDATION,	0 },
+	{ "DACTION_DEMOLISH",			VAL_INT,	0,		DACTION_DEMOLISH,			0 },
+	{ "DACTION_REPAIR",				VAL_INT,	0,		DACTION_REPAIR,				0 },
+	{ "DACTION_ATTACK",				VAL_INT,	0,		DACTION_ATTACK,				0 },
+	{ "DACTION_OBSERVE",			VAL_INT,	0,		DACTION_OBSERVE,			0 },
+	{ "DACTION_FIRESUPPORT",		VAL_INT,	0,		DACTION_FIRESUPPORT,		0 },
+	{ "DACTION_SULK",				VAL_INT,	0,		DACTION_SULK,				0 },
+
+	{ "DACTION_DESTRUCT",				VAL_INT,	0,		DACTION_DESTRUCT,				0 },
+	{ "DACTION_TRANSPORTOUT",			VAL_INT,	0,		DACTION_TRANSPORTOUT,				0 },
+	{ "DACTION_TRANSPORTWAITTOFLYIN",	VAL_INT,	0,		DACTION_TRANSPORTWAITTOFLYIN,				0 },
+	{ "DACTION_TRANSPORTIN",			VAL_INT,	0,		DACTION_TRANSPORTIN,				0 },
+	{ "DACTION_DROIDREPAIR",			VAL_INT,	0,		DACTION_DROIDREPAIR,				0 },
+	{ "DACTION_RESTORE",				VAL_INT,	0,		DACTION_RESTORE,				0 },
+	{ "DACTION_MOVEFIRE",				VAL_INT,	0,		DACTION_MOVEFIRE,				0 },
+	{ "DACTION_MOVETOBUILD",			VAL_INT,	0,		DACTION_MOVETOBUILD,				0 },
+	{ "DACTION_MOVETODEMOLISH",			VAL_INT,	0,		DACTION_MOVETODEMOLISH,				0 },
+
+	{ "DACTION_MOVETOREPAIR",			VAL_INT,	0,		DACTION_MOVETOREPAIR,				0 },
+	{ "DACTION_BUILDWANDER",			VAL_INT,	0,		DACTION_BUILDWANDER,				0 },
+	{ "DACTION_FOUNDATION_WANDER",		VAL_INT,	0,		DACTION_FOUNDATION_WANDER,				0 },
+	{ "DACTION_MOVETOATTACK",			VAL_INT,	0,		DACTION_MOVETOATTACK,				0 },
+	{ "DACTION_ROTATETOATTACK",			VAL_INT,	0,		DACTION_ROTATETOATTACK,				0 },
+	{ "DACTION_MOVETOOBSERVE",			VAL_INT,	0,		DACTION_MOVETOOBSERVE,				0 },
+	{ "DACTION_WAITFORREPAIR",			VAL_INT,	0,		DACTION_WAITFORREPAIR,				0 },
+	{ "DACTION_MOVETOREPAIRPOINT",		VAL_INT,	0,		DACTION_MOVETOREPAIRPOINT,				0 },
+	{ "DACTION_WAITDURINGREPAIR",		VAL_INT,	0,		DACTION_WAITDURINGREPAIR,				0 },
+	{ "DACTION_MOVETODROIDREPAIR",		VAL_INT,	0,		DACTION_MOVETODROIDREPAIR,				0 },
+
+	{ "DACTION_MOVETORESTORE",			VAL_INT,	0,		DACTION_MOVETORESTORE,				0 },
+	{ "DACTION_MOVETOREARM",			VAL_INT,	0,		DACTION_MOVETOREARM,				0 },
+	{ "DACTION_WAITFORREARM",			VAL_INT,	0,		DACTION_WAITFORREARM,				0 },
+	{ "DACTION_MOVETOREARMPOINT",		VAL_INT,	0,		DACTION_MOVETOREARMPOINT,				0 },
+	{ "DACTION_WAITDURINGREARM",		VAL_INT,	0,		DACTION_WAITDURINGREARM,				0 },
+	{ "DACTION_VTOLATTACK",				VAL_INT,	0,		DACTION_VTOLATTACK,				0 },
+	{ "DACTION_CLEARREARMPAD",			VAL_INT,	0,		DACTION_CLEARREARMPAD,				0 },
+	{ "DACTION_RETURNTOPOS",			VAL_INT,	0,		DACTION_RETURNTOPOS,				0 },
+	{ "DACTION_FIRESUPPORT_RETREAT",	VAL_INT,	0,		DACTION_FIRESUPPORT_RETREAT,				0 },
 
 	// secondary orders
 	{ "DSO_ATTACK_RANGE",	VAL_INT,	0,		DSO_ATTACK_RANGE,		0 },
@@ -1255,6 +1525,29 @@ CALLBACK_SYMBOL asCallbackTable[] =
 
 	{ "CALL_ALLIANCEOFFER",			(TRIGGER_TYPE)CALL_ALLIANCEOFFER,		scrCBAllianceOffer,
 		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_INT }},
+
+		// new callbacks 
+		//-------------------------------------------------------------------------------
+
+			//console callback
+	{ "CALL_CONSOLE",			(TRIGGER_TYPE)CALL_CONSOLE,		scrCallConsole,
+		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
+
+		//59
+	{ "CALL_AI_MSG",			(TRIGGER_TYPE)CALL_AI_MSG,		scrCallMultiMsg,
+		3,	{ VAL_INT, VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
+
+		//59
+	//{ "CALL_BEACON",			(TRIGGER_TYPE)CALL_BEACON,		scrCallBeacon,
+	//	5,	{ VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT,
+	//	VAL_REF|VAL_INT, VAL_REF|VAL_STRING }},
+
+	{ "CALL_STRUCTBUILT",				(TRIGGER_TYPE)CALL_STRUCTBUILT,			scrCBStructBuilt,
+		3,	{ VAL_INT, VAL_REF|ST_DROID, VAL_REF|ST_STRUCTURE	   } },
+
+		//new transporter landed callback
+	{ "CALL_TRANSPORTER_LANDED_B",	(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED_B,	scrCBTransporterLandedB,
+		3,	{ ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
 
 	/* This entry marks the end of the callback list */
 	{ "CALLBACK LIST END", 0 }

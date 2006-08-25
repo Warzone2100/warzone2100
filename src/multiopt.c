@@ -163,7 +163,8 @@ void recvOptions(NETMSG *pMsg)
 	{
 
 #ifndef DEBUG
-		DBERROR(("Host is running a different version of Warzone2100."));
+		debug( LOG_ERROR, "Host is running a different version of Warzone2100." );
+		abort();
 #endif
 	}
 	if(ingame.numStructureLimits)							// free old limits.
@@ -181,7 +182,7 @@ void recvOptions(NETMSG *pMsg)
 	NetGet(pMsg,pos,checkval);
 	pos += sizeof(checkval);
 /*
-	// This was set to a fixed value in earlier versions of post-Pumpkin code. 
+	// This was set to a fixed value in earlier versions of post-Pumpkin code.
 	// Commenting out to avoid confusion. Should probably be removed. - Per
 	if(checkval != NEThashVal(NetPlay.cryptKey[0]))
 	{
@@ -859,7 +860,8 @@ BOOL cleanMap(UDWORD player)
 	case CAMP_WALLS:												//everything.
 		break;
 	default:
-		DBERROR(("Unknown Campaign Style"));
+		debug( LOG_ERROR, "Unknown Campaign Style" );
+		abort();
 		break;
 	}
 

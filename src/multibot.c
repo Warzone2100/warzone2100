@@ -621,7 +621,7 @@ BOOL recvDroid(NETMSG * m)
 	if(!pT)
 	{
 		NETlogEntry("Couldn't find template to build recvd droid. val = player",0,player );
-		DBPRINTF(("Couldn't find template to build recvd droid" ));
+		debug( LOG_NEVER, "Couldn't find template to build recvd droid" );
 		sendRequestDroid(id);						// request the droid instead.
 		return FALSE;
 	}
@@ -1011,11 +1011,13 @@ static VOID ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWO
 			break;
 
 		case OBJ_BULLET:												// shouldn't be getting this!
-			DBERROR(("multibot: order specified destination as a bullet. what am i to do??"));
+			debug( LOG_ERROR, "multibot: order specified destination as a bullet. what am i to do??" );
+			abort();
 			break;
 
 		default:
-			DBERROR(("unknown object type"));
+			debug( LOG_ERROR, "unknown object type" );
+			abort();
 		}
 
 		if(!psObj)													// failed to find it;
@@ -1283,7 +1285,7 @@ BOOL sendRequestDroid(UDWORD droidId)
 	NetAdd(msg,0,droidId);
 	NetAdd(msg,4,player2dpid[selectedPlayer] );
 
-	DBPRINTF(("multibot: unknown droid %d, requesting info\n", droidId));
+	debug( LOG_NEVER, "multibot: unknown droid %d, requesting info\n", droidId );
 
 	msg.type = NET_REQUESTDROID;
 	msg.size = sizeof(DPID)+sizeof(UDWORD);

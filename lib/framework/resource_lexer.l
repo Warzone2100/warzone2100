@@ -124,7 +124,8 @@ int res_wrap(void)
 {
 	if (inComment)
 	{
-		DBERROR(("Warning: reached end of file in a comment"));
+		debug( LOG_ERROR, "Warning: reached end of file in a comment" );
+		abort();
 	}
 	return 1;
 }

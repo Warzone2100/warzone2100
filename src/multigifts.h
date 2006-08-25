@@ -23,6 +23,7 @@ extern VOID	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
 // deathmatch stuff
 extern BOOL	addOilDrum						(UDWORD count);
 extern VOID	giftPower						(UDWORD from,UDWORD to,BOOL send);
+extern VOID giftRadar							(UDWORD from, UDWORD to,BOOL send);
 //extern BOOL	addDMatchDroid					(UDWORD count);
 //extern BOOL	foundDMatchDroid				(UDWORD player,UDWORD x,UDWORD y);
 //extern BOOL deathmatchCheck					(VOID);

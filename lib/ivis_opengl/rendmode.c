@@ -75,7 +75,7 @@ iBool iV_VideoMemoryLock(int mode)
 	_VIDEO_SIZE = size;
 	_VIDEO_LOCK = TRUE;
 
-	printf("vid[VideoMemoryLock] = locked %dK of video memory\n",size/1024);
+	debug( LOG_3D, "vid[VideoMemoryLock] = locked %dK of video memory\n", size/1024 );
 
 	return TRUE;
 }

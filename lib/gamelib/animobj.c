@@ -113,8 +113,8 @@ animObj_HashFreeElementFunc( void * psElement )
 	ANIM_OBJECT	*psObj = (ANIM_OBJECT *) psElement;
 #endif
 
-	ASSERT( (PTRVALID(psObj, sizeof(ANIM_OBJECT)),
-		"animObj_HashFreeElementFunc: object pointer invalid\n") );
+	ASSERT( PTRVALID(psObj, sizeof(ANIM_OBJECT)),
+		"animObj_HashFreeElementFunc: object pointer invalid\n" );
 }
 
 /***************************************************************************/
@@ -161,7 +161,8 @@ animObj_Update( void )
 			if ( hashTable_RemoveElement( g_pAnimObjTable, psObj,
 				(int) psObj->psParent, psObj->psAnim->uwID ) == FALSE )
 			{
-				DBERROR( ("animObj_Update: couldn't remove anim obj\n") );
+				debug( LOG_ERROR, "animObj_Update: couldn't remove anim obj\n" );
+				abort();
 			}
 		}
 
@@ -185,8 +186,8 @@ animObj_Add( void *pParentObj, int iAnimID,
 	BASEANIM		*psAnim = anim_GetAnim( (UWORD) iAnimID );
 	UWORD			i, uwObj;
 
-	ASSERT( (psAnim != NULL,
-			"anim_AddAnimObject: anim id %i not found\n", iAnimID ) );
+	ASSERT( psAnim != NULL,
+			"anim_AddAnimObject: anim id %i not found\n", iAnimID );
 
 
 	/* get object from table */
@@ -195,7 +196,8 @@ animObj_Add( void *pParentObj, int iAnimID,
 
 	if (psObj==NULL)
 	{
-		DBERROR( ("animObj_Add: No room in hash table\n") );
+		debug( LOG_ERROR, "animObj_Add: No room in hash table\n" );
+		abort();
 		return(NULL);
 	}
 
@@ -221,7 +223,8 @@ animObj_Add( void *pParentObj, int iAnimID,
 
 	if ( uwObj > ANIM_MAX_COMPONENTS )
 	{
-		DBERROR( ("animObj_Add: number of components too small\n") );
+		debug( LOG_ERROR, "animObj_Add: number of components too small\n" );
+		abort();
 	}
 
 	/* set parent pointer and shape pointer */
@@ -268,8 +271,8 @@ animObj_GetFirst( void )
 
 	psObj = (ANIM_OBJECT *) hashTable_GetFirst( g_pAnimObjTable );
 
-	ASSERT( (psObj == NULL || PTRVALID(psObj, sizeof(ANIM_OBJECT)),
-		"animObj_GetFirst: object pointer not valid\n") );
+	ASSERT( psObj == NULL || PTRVALID(psObj, sizeof(ANIM_OBJECT)),
+		"animObj_GetFirst: object pointer not valid\n" );
 
 	return psObj;
 }

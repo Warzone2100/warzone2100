@@ -6,6 +6,7 @@
 #ifndef _interp_h
 #define _interp_h
 
+
 /* The possible value types for scripts */
 typedef enum _interp_type
 {
@@ -96,6 +97,9 @@ typedef enum _op_code
 	OP_OR,
 	OP_NOT,
 
+	//String cancatenation
+	OP_CANC,
+
 	// Comparison operators
 	OP_EQUAL,
 	OP_NOTEQUAL,
@@ -107,7 +111,7 @@ typedef enum _op_code
 	OP_FUNC,		//custom (in-script) function call
 	OP_POPLOCAL,	//local var
 	OP_PUSHLOCAL,
-	OP_PUSHLOCALREF,
+	OP_PUSHLOCALREF,	//variable of object type (pointer)
 } OPCODE;
 
 /* How far the opcode is shifted up a UDWORD to allow other data to be
@@ -214,7 +218,7 @@ typedef struct _script_code
 	INTERP_TYPE		*pGlobals;		// Types of the global variables
 
 
-	INTERP_TYPE		**ppsLocalVars;		//storage for local vars
+	INTERP_TYPE		**ppsLocalVars;		//storage for local vars (type)
 	UDWORD			*numLocalVars;		//number of local vars each event has
 	INTERP_VAL		**ppsLocalVarVal;	//Values of the local vars used during interpreting process
 	UDWORD			*numParams;			//number of arguments this event has

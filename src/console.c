@@ -202,8 +202,8 @@ CONSOLE_MESSAGE	*psMessage;
 	/* Is the string too long? */
 	textLength = strlen(messageText);
 
-	ASSERT(( textLength<MAX_CONSOLE_STRING_LENGTH,
-		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH"));
+	ASSERT( textLength<MAX_CONSOLE_STRING_LENGTH,
+		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
 
 	/* Are we using a defualt justification? */
 	if(jusType == DEFAULT_JUSTIFY)
@@ -230,7 +230,8 @@ CONSOLE_MESSAGE	*psMessage;
 		break;
 		/* Gone tits up by the looks of it */
 	default:
-		DBERROR(("Weirdy type of text justification for console print"));
+		debug( LOG_ERROR, "Weirdy type of text justification for console print" );
+		abort();
 		break;
 	}
 
@@ -647,7 +648,8 @@ void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
 		defJustification = defJ;
 		break;
 	default:
-		DBERROR(("Weird default text justification for console"));
+		debug( LOG_ERROR, "Weird default text justification for console" );
+		abort();
 		break;
 	}
 }
@@ -706,7 +708,7 @@ BOOL	mouseOverConsoleBox( void )
 /* Sets up how many lines are allowed and how many are visible */
 void	setConsoleLineInfo(UDWORD vis)
 {
-	ASSERT((vis<=MAX_CONSOLE_MESSAGES,"Request for more visible lines in the console than exist"));
+	ASSERT( vis<=MAX_CONSOLE_MESSAGES,"Request for more visible lines in the console than exist" );
 	consoleVisibleLines = vis;
 }
 
@@ -747,5 +749,42 @@ BOOL	getConsoleDisplayStatus( void )
 void	conShowReplayWav( void )
 {
 
+
+}
+
+/* output warnings directly to the in-game console */
+void printf_console(const char *pFormat, ...)
+{
+#ifdef DEBUG
+	char		aBuffer[500];   // Output string buffer
+    va_list		pArgs;					  // Format arguments
+
+	/* Initialise the argument list */
+	va_start(pArgs, pFormat);
+
+	/* Print out the string */
+	(void)vsprintf(aBuffer, pFormat, pArgs);
+
+	/* Output it */
+
+	addConsoleMessage(aBuffer,RIGHT_JUSTIFY);		//debug messages are displayed right-aligned
+#endif
+}
+
+/* like printf_console, bu for release */
+void console(const char *pFormat, ...)
+{
+	char		aBuffer[500];   // Output string buffer
+    va_list		pArgs;					  // Format arguments
+	
+	/* Initialise the argument list */
+	va_start(pArgs, pFormat);
+
+	/* Print out the string */
+	(void)vsprintf(aBuffer, pFormat, pArgs);
+
+	/* Output it */
+
+	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY);
 
 }

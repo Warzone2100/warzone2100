@@ -205,8 +205,8 @@ void cmdDroidUpdateKills(DROID *psKiller)
 {
 	DROID	*psCommander;
 
-	ASSERT((PTRVALID(psKiller, sizeof(DROID)),
-		"cmdUnitUpdateKills: invalid Unit pointer"));
+	ASSERT( PTRVALID(psKiller, sizeof(DROID)),
+		"cmdUnitUpdateKills: invalid Unit pointer" );
 
 	if ( (psKiller->psGroup != NULL) &&
 		 (psKiller->psGroup->type == GT_COMMAND) )
@@ -221,8 +221,8 @@ SDWORD cmdGetCommanderLevel(DROID *psDroid)
 {
 	DROID	*psCommander;
 
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"cmdGetCommanderLevel: invalid droid pointer"));
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		"cmdGetCommanderLevel: invalid droid pointer" );
 
 	if ( (psDroid->psGroup != NULL) &&
 		 (psDroid->psGroup->type == GT_COMMAND) )
@@ -256,10 +256,12 @@ DROID	*psCurr;
 // set the number of command droids for a player
 void cmdDroidSetAvailable(SDWORD player, SDWORD num)
 {
-	ASSERT(((player >= 0) && (player < MAX_PLAYERS),
-		"cmdUnitSetAvailable: invalid player number"));
-	ASSERT(((num > 0) && (num < MAX_CMDDROIDS),
-		"cmdUnitSetAvailable: invalid player number"));
+	ASSERT( (player >= 0) && (player < MAX_PLAYERS),
+		"cmdUnitSetAvailable: invalid player number" );
+	ASSERT( (num > 0) && (num < MAX_CMDDROIDS),
+		"cmdUnitSetAvailable: invalid player number" );
 }
+
+
 
 

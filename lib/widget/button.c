@@ -30,15 +30,15 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	if (psInit->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE |
 						  WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE ))
 	{
-		ASSERT((FALSE, "Unknown button style"));
+		ASSERT( FALSE, "Unknown button style" );
 		return FALSE;
 	}
 
 //#ifdef DEBUG
 //	if (psInit->pText)
 //	{
-//		ASSERT((PTRVALID(psInit->psFont, sizeof(PROP_FONT)),
-//			"buttonCreate: Invalid font pointer"));
+//		ASSERT( PTRVALID(psInit->psFont, sizeof(PROP_FONT)),
+//			"buttonCreate: Invalid font pointer" );
 //	}
 //#endif
 
@@ -50,7 +50,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	if (!HEAP_ALLOC(psButHeap, (void*) ppsWidget))
 #endif
 	{
-		ASSERT((FALSE, "buttonCreate: Out of memory"));
+		ASSERT( FALSE, "buttonCreate: Out of memory" );
 		return FALSE;
 	}
 	/* Allocate memory for the text and copy it if necessary */
@@ -59,7 +59,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 #if W_USE_STRHEAP
 		if (!widgAllocCopyString(&(*ppsWidget)->pText, psInit->pText))
 		{
-			ASSERT((FALSE, "buttonCreate: Out of memory"));
+			ASSERT( FALSE, "buttonCreate: Out of memory" );
 #if W_USE_MALLOC
 			FREE(*ppsWidget);
 #else
@@ -82,7 +82,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 		if (!widgAllocCopyString(&(*ppsWidget)->pTip, psInit->pTip))
 		{
 			/* Out of memory - just carry on without the tip */
-			ASSERT((FALSE, "buttonCreate: Out of memory"));
+			ASSERT( FALSE, "buttonCreate: Out of memory" );
 			(*ppsWidget)->pTip = NULL;
 		}
 #else
@@ -131,8 +131,8 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 /* Free the memory used by a button */
 void buttonFree(W_BUTTON *psWidget)
 {
-	ASSERT((PTRVALID(psWidget, sizeof(W_BUTTON)),
-		"buttonFree: invalid button pointer"));
+	ASSERT( PTRVALID(psWidget, sizeof(W_BUTTON)),
+		"buttonFree: invalid button pointer" );
 
 #if W_USE_STRHEAP
 	if (psWidget->pText)
@@ -156,8 +156,8 @@ void buttonFree(W_BUTTON *psWidget)
 /* Initialise a button widget before it is run */
 void buttonInitialise(W_BUTTON *psWidget)
 {
-	ASSERT((PTRVALID(psWidget, sizeof(W_BUTTON)),
-		"buttonDisplay: Invalid widget pointer"));
+	ASSERT( PTRVALID(psWidget, sizeof(W_BUTTON)),
+		"buttonDisplay: Invalid widget pointer" );
 
 	psWidget->state = WBUTS_NORMAL;
 }
@@ -208,8 +208,8 @@ void buttonClearFlash(W_BUTTON *psButton)
 /* Set a button's state */
 void buttonSetState(W_BUTTON *psButton, UDWORD state)
 {
-	ASSERT((!((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)),
-		"widgSetButtonState: Cannot have WBUT_LOCK and WBUT_CLICKLOCK"));
+	ASSERT( !((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)),
+		"widgSetButtonState: Cannot have WBUT_LOCK and WBUT_CLICKLOCK" );
 
 	if (state & WBUT_DISABLE)
 	{
@@ -335,8 +335,8 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 //	PROP_FONT	*psCurrFont;
 	int			CurrFontID;
 
-	ASSERT((PTRVALID(psWidget, sizeof(W_BUTTON)),
-		"buttonDisplay: Invalid widget pointer"));
+	ASSERT( PTRVALID(psWidget, sizeof(W_BUTTON)),
+		"buttonDisplay: Invalid widget pointer" );
 
 	psButton = (W_BUTTON *)psWidget;
 //	psCurrFont = psButton->psFont;
@@ -440,5 +440,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		}
 	}
 }
+
+
 
 

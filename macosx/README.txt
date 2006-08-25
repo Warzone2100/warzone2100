@@ -4,11 +4,14 @@ location on your hard drive.  You can then eject and throw away the
 disk image.  To run the game, simply double-click the Warzone icon
 on your hard drive.
 
-When you run the program, it will create a directory named .warzone-2.0
-in your home directory.  You can control settings such as the screen
-resolution in the 'config' file within that directory.  The setting to
-change the screen resolution is 'resolution=<setting>'.  To run in
-fullscreen mode, change the 'fullscreen=0' line to read 'fullscreen=1'.
+When you run the program, it will create a directory named 'Warzone 2100'
+in your personal Application Support directory.  You can control settings
+such as the screen resolution by editing the 'config' file within that
+directory.
+
+The setting to change the screen resolution is 'resolution=<setting>'.
+To switch between windows mode and fullscreen mode, find the line
+that begins with 'fullscreen=' and change its value between '0' and '1'.
 
 This program is distributed as a self-contained application bundle.
 It should run without requiring any additional software on MacOS X

@@ -49,3 +49,8 @@ extern BOOL recvResearchStatus		(NETMSG *pMsg);
 extern BOOL recvLasSat				(NETMSG *pMsg);
 extern BOOL	recvMapFileData				(NETMSG *pMsg);
 extern BOOL	recvMapFileRequested		(NETMSG *pMsg);
+
+
+extern BOOL recvTextMessageAI		(NETMSG *pMsg);		//AI multiplayer message
+//extern BOOL recvTeamsOn			(NETMSG *pMsg);
+//extern BOOL recvSetTeams			(NETMSG *pMsg);

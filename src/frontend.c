@@ -334,7 +334,8 @@ VOID changeTitleMode(tMode mode)
 		break;
 
 	default:
-		DBERROR(("Unknown title mode requested"));
+		debug( LOG_ERROR, "Unknown title mode requested" );
+		abort();
 		break;
 	}
 
@@ -1573,7 +1574,7 @@ VOID addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRI
 {
 	W_LABINIT	sLabInit;
 
-DBPRINTF(("addText : %s\n",txt));
+	debug( LOG_NEVER, "addText : %s\n", txt );
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 
 	sLabInit.formID = FormID;
@@ -1609,11 +1610,9 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetTextColour(-1);
 
 #ifdef DEBUG
-	snprintf( sTmp, sTmpSize, "Version %s - Revision %s - Built %s - DEBUG", version(), revision(),
-           __DATE__ );
+	snprintf( sTmp, sTmpSize, "Version %s - Built %s - DEBUG", version(), __DATE__ );
 #else
-	snprintf( sTmp, sTmpSize, "Version %s - Revision %s - Built %s", version(), revision(),
-           __DATE__ );
+	snprintf( sTmp, sTmpSize, "Version %s - Built %s", version(), __DATE__ );
 #endif
 
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);

@@ -132,7 +132,7 @@ void featureType(FEATURE_STATS* psFeature, char *pType)
 		psFeature->subType = FEAT_SKYSCRAPER;
 		return;
 	}
-	ASSERT((FALSE, "Unknown Feature Type"));
+	ASSERT( FALSE, "Unknown Feature Type" );
 }
 
 /* Load the feature stats */
@@ -155,7 +155,8 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 
 	if (asFeatureStats == NULL)
 	{
-		DBERROR(("Feature Stats - Out of memory"));
+		debug( LOG_ERROR, "Feature Stats - Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -220,10 +221,11 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 		if (psFeature->psImd == NULL)
 		{
 #ifdef HASH_NAMES
-			DBERROR(("Cannot find the feature PIE for record %s",  strresGetString(NULL,psFeature->NameHash)));
+			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  strresGetString( NULL, psFeature->NameHash ) );
 #else
-			DBERROR(("Cannot find the feature PIE for record %s",  getName(psFeature->pName)));
+			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  getName( psFeature->pName ) );
 #endif
+			abort();
 			return FALSE;
 		}
 
@@ -594,8 +596,8 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 	psStats->psImd = resGetData("IMD", "cyl_3_3.imd");
 
 	psStats++;
-	ASSERT((psStats - asFeatureStats == (SDWORD)numFeatureStats,
-		"loadFeatureStats: incorrect number of features"));
+	ASSERT( psStats - asFeatureStats == (SDWORD)numFeatureStats,
+		"loadFeatureStats: incorrect number of features" );
 
 	return TRUE;*/
 }
@@ -628,8 +630,8 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass,
 	/* this is ignored for features */
 	//(void)weaponClass;
 
-	ASSERT((PTRVALID(psFeature, sizeof(FEATURE)),
-		"featureDamage: Invalid feature pointer"));
+	ASSERT( PTRVALID(psFeature, sizeof(FEATURE)),
+		"featureDamage: Invalid feature pointer" );
 
 	DBP1(("featureDamage(%d): body %d armour %d damage: %d\n",
 		psFeature->id, psFeature->body, psFeature->psStats->armour, damage));
@@ -749,7 +751,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	if ((psStats->subType == FEAT_OIL_RESOURCE) &&
 		!gwZoneReachable(gwGetZone(startX,startY)))
 	{
-		DBPRINTF(("Oil resource at (%d,%d) is unreachable", startX,startY));
+		debug( LOG_NEVER, "Oil resource at (%d,%d) is unreachable", startX, startY );
 	}
 
 	if(FromSave == TRUE) {
@@ -843,19 +845,19 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		{
 			//check not outside of map - for load save game
 
-			ASSERT(((mapX+width) < mapWidth,
+			ASSERT( (mapX+width) < mapWidth,
 				"x coord bigger than map width - %s, id = %d",
-				getName(psFeature->psStats->pName), psFeature->id));
-			ASSERT(((mapY+breadth) < mapHeight,
+				getName(psFeature->psStats->pName), psFeature->id );
+			ASSERT( (mapY+breadth) < mapHeight,
 				"y coord bigger than map height - %s, id = %d",
-				getName(psFeature->psStats->pName), psFeature->id));
+				getName(psFeature->psStats->pName), psFeature->id );
 
 			psTile = mapTile(mapX+width, mapY+breadth);
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
-				ASSERT((!(TILE_HAS_FEATURE(mapTile(mapX+width,mapY+breadth))),
+				ASSERT( !(TILE_HAS_FEATURE(mapTile(mapX+width,mapY+breadth))),
 					"buildFeature - feature- %d already found at %d, %d",
-					psFeature->id, mapX+width,mapY+breadth));
+					psFeature->id, mapX+width,mapY+breadth );
 
 				SET_TILE_FEATURE(psTile);
 				// if it's a tall feature then flag it in the map.
@@ -949,14 +951,14 @@ void removeFeature(FEATURE *psDel)
 //	UWORD		uwFlameCycles, uwFlameAnims, i;
 //	UDWORD		x, y, udwFlameDelay;
 
-	ASSERT( (PTRVALID(psDel, sizeof(FEATURE)),
-		"removeFeature: invalid feature pointer\n") );
+	ASSERT( PTRVALID(psDel, sizeof(FEATURE)),
+		"removeFeature: invalid feature pointer\n" );
 
 	if (psDel->died)
 	{
 		// feature has already been killed, quit
-		ASSERT((FALSE,
-			"removeFeature: feature already dead"));
+		ASSERT( FALSE,
+			"removeFeature: feature already dead" );
 		return;
 	}
 
@@ -1049,8 +1051,8 @@ void destroyFeature(FEATURE *psDel)
 	UDWORD			texture;
 
 
-	ASSERT( (PTRVALID(psDel, sizeof(FEATURE)),
-		"destroyFeature: invalid feature pointer\n") );
+	ASSERT( PTRVALID(psDel, sizeof(FEATURE)),
+		"destroyFeature: invalid feature pointer\n" );
 
 //---------------------------------------------------------------------------------------
  	/* Only add if visible and damageable*/

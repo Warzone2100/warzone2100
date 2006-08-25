@@ -151,7 +151,7 @@ skip:
 #else
 	//	GODDAM *#!! LOWERCASE assert IS ABSOLUTELY NO %^$## USE ON THE PC
 //	assert(2+2==5);
-	ASSERT((FALSE, "gwSeedFill disabled"));
+	ASSERT( FALSE, "gwSeedFill disabled" );
 #endif
 }
 
@@ -279,7 +279,8 @@ BOOL gwProcessMap(void)
 			// check the zones havn't overflowed
 			if (currZone > UBYTE_MAX)
 			{
-				DBERROR(("gwProcessMap: too many zones\n"));
+				debug( LOG_ERROR, "gwProcessMap: too many zones\n" );
+				abort();
 				return FALSE;
 			}
 
@@ -328,7 +329,8 @@ BOOL gwProcessMap(void)
 				// check the zones havn't overflowed
 				if (currZone > UBYTE_MAX)
 				{
-					DBERROR(("gwProcessMap: too many zones\n"));
+					debug( LOG_ERROR, "gwProcessMap: too many zones\n" );
+					abort();
 					return FALSE;
 				}
 
@@ -343,7 +345,8 @@ BOOL gwProcessMap(void)
 				// check the zones havn't overflowed
 				if (currZone > UBYTE_MAX)
 				{
-					DBERROR(("gwProcessMap: too many zones\n"));
+					debug( LOG_ERROR, "gwProcessMap: too many zones\n" );
+					abort();
 					return FALSE;
 				}
 
@@ -505,7 +508,8 @@ BOOL gwCreateBlankZoneMap(void)
 	apRLEZones = MALLOC(sizeof(UBYTE *) * gwMapHeight());
 	if (apRLEZones == NULL)
 	{
-		DBERROR(("gwCreateBlankZoneMap: Out of memory"));
+		debug( LOG_ERROR, "gwCreateBlankZoneMap: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	for(i=0; i< gwMapHeight(); i++)
@@ -515,7 +519,8 @@ BOOL gwCreateBlankZoneMap(void)
 
 		if (apRLEZones[i] == NULL)
 		{
-			DBERROR(("gwCreateBlankZoneMap: Out of memory"));
+			debug( LOG_ERROR, "gwCreateBlankZoneMap: Out of memory" );
+			abort();
 			return FALSE;
 		}
 	}
@@ -547,8 +552,8 @@ void gwDecompressLine(SDWORD line, UBYTE *pBuffer)
 
 		for(store=0; store < count; store ++)
 		{
-			ASSERT((bufPos < gwMapWidth(),
-				"gwDecompressLine: Invalid RLE code"));
+			ASSERT( bufPos < gwMapWidth(),
+				"gwDecompressLine: Invalid RLE code" );
 
 			pBuffer[bufPos] = (UBYTE)zone;
 			bufPos += 1;
@@ -587,8 +592,8 @@ void gwSetZone(SDWORD x, SDWORD y, SDWORD zone)
 {
 	UBYTE	aBuffer[GW_MAP_MAXWIDTH];
 
-	ASSERT(((x >= 0) && (x < gwMapWidth()) && (y >= 0) && (y < gwMapHeight()),
-		"gwSetZone: invalid coordinates"));
+	ASSERT( (x >= 0) && (x < gwMapWidth()) && (y >= 0) && (y < gwMapHeight()),
+		"gwSetZone: invalid coordinates" );
 
 	gwDecompressLine(y, aBuffer);
 
@@ -652,6 +657,8 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y)
 }
 
 #endif
+
+
 
 
 

@@ -215,7 +215,7 @@ MAPTILE		*psTile;
                     }
                     else
                     {
-                        ASSERT((FALSE, "preProcessVisibility: should be a structure at %d, %d", i, j));
+                        ASSERT( FALSE, "preProcessVisibility: should be a structure at %d, %d", i, j );
                     }
 				}*/
 				/*

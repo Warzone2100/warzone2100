@@ -45,7 +45,7 @@
 // prototypes
 BOOL			recvGift						(NETMSG *pMsg);
 BOOL			sendGift						(UDWORD type,UDWORD to);
-static VOID		giftRadar						(UDWORD from, UDWORD to,BOOL send);
+VOID			giftRadar						(UDWORD from, UDWORD to,BOOL send);
 //static VOID		giftSingleDroid					(DROID *psD,UDWORD from,UDWORD to);
 static VOID		recvGiftDroids					(UDWORD from,UDWORD to,NETMSG *pMsg);
 static VOID		sendGiftDroids					(UDWORD from,UDWORD to);
@@ -101,7 +101,8 @@ BOOL recvGift(NETMSG *pMsg)
 		giftPower(from,to,FALSE);
 		break;
 	default:
-		DBERROR(("Unknown Gift recvd"));
+		debug( LOG_ERROR, "Unknown Gift recvd" );
+		abort();
 		return FALSE;
 		break;
 	}
@@ -154,7 +155,8 @@ BOOL sendGift(UDWORD type,UDWORD to)
 		audio_QueueTrack(ID_POWER_TRANSMIT);
 		break;
 	default:
-		DBERROR(("Unknown Gift sent"));
+		debug( LOG_ERROR, "Unknown Gift sent" );
+		abort();
 		return FALSE;
 		break;
 	}
@@ -163,7 +165,7 @@ BOOL sendGift(UDWORD type,UDWORD to)
 }
 // ////////////////////////////////////////////////////////////////////////////
 // give radar information
-void giftRadar(UDWORD from, UDWORD to,BOOL send)
+VOID giftRadar(UDWORD from, UDWORD to,BOOL send)
 {
 	NETMSG m;
 
@@ -321,7 +323,7 @@ static void giftResearch(UDWORD from,UDWORD to,BOOL send)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give Power
-void giftPower(UDWORD from,UDWORD to,BOOL send)
+VOID giftPower(UDWORD from,UDWORD to,BOOL send)
 {
 	UDWORD gifval;
 	NETMSG m;
@@ -566,7 +568,8 @@ BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)
 		breakAlliance(from,to,FALSE,allowAudio);
 		break;
 	default:
-		DBERROR(("Unknown alliance state recvd."));
+		debug( LOG_ERROR, "Unknown alliance state recvd." );
+		abort();
 		break;
 	}
 
@@ -592,7 +595,7 @@ VOID  technologyGiveAway(STRUCTURE *pS)
 		y = (pS->y >> TILE_SHIFT);
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
-			ASSERT((FALSE, "technologyGiveAway: Unable to find a free location"));
+			ASSERT( FALSE, "technologyGiveAway: Unable to find a free location" );
 		}
 
 		for(i=0; (i<numFeatureStats) && (asFeatureStats[i].subType != FEAT_GEN_ARTE); i++);
@@ -688,7 +691,7 @@ void addLoserGifts(void)
 			y = apsStructLists[selectedPlayer]->y >> TILE_SHIFT;
 			if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 			{
-				ASSERT((FALSE, "addlosergifts: Unable to find a free location"));
+				ASSERT( FALSE, "addlosergifts: Unable to find a free location" );
 			}
 
 			NETlogEntry("gift",0,0);
@@ -778,8 +781,8 @@ VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 
 	for(i=0; (i<numFeatureStats) && (asFeatureStats[i].subType != type); i++);
 
-	ASSERT((mapWidth>20,"map not big enough"));
-	ASSERT((mapHeight>20,"map not big enough"));
+	ASSERT( mapWidth>20,"map not big enough" );
+	ASSERT( mapHeight>20,"map not big enough" );
 
 	for(count = 0;count<quantity;count++)
 	{
@@ -787,7 +790,7 @@ VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 		y = (rand()% (mapHeight-20))+10 ;
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
-			ASSERT((FALSE, "addMultiPlayerRandomArtifacts: Unable to find a free location"));
+			ASSERT( FALSE, "addMultiPlayerRandomArtifacts: Unable to find a free location" );
 		}
 
 		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);

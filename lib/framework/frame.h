@@ -20,7 +20,11 @@
 #endif
 
 #ifdef WIN32
-#include <windows.h>
+# ifdef __MINGW32__
+#  include <w32api.h>
+#  define _WIN32_IE IE5
+# endif
+# include <windows.h>
 #endif
 
 #define MAX_MODS 100
@@ -34,7 +38,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#define MAX_PATH 250
+#define MAX_PATH 260
 
 char *unix_path(const char *path);
 FILE *unix_fopen(const char *filename, const char *mode);
@@ -47,6 +51,9 @@ FILE *unix_fopen(const char *filename, const char *mode);
 #define DeleteCriticalSection(x)
 #define EnterCriticalSection(x)
 #define LeaveCriticalSection(x)
+
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) < (b)) ? (b) : (a))
 
 #include "macros.h"
 

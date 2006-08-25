@@ -4,6 +4,11 @@
  */
 #include "lib/framework/frame.h"
 
+/* For SHGetFolderPath */
+#ifdef WIN32
+# include <shlobj.h>
+#endif // WIN32
+
 #include <physfs.h>
 
 #include "lib/widget/widget.h"
@@ -43,13 +48,16 @@
 #include "version.h"
 
 #ifndef DEFAULT_DATADIR
-# define DEFAULT_DATADIR "/usr/share/warzone/"
+# define DEFAULT_DATADIR "/usr/share/warzone2100/"
 #endif
 
-#ifdef WIN32
-# define WZ_WRITEDIR "Warzone-2.0"
+#if defined(WIN32)
+# define WZ_WRITEDIR "Warzone 2100"
+#elif defined(__APPLE__)
+# include <CoreServices/CoreServices.h>
+# define WZ_WRITEDIR "Warzone 2100"
 #else
-# define WZ_WRITEDIR ".warzone-2.0"
+# define WZ_WRITEDIR ".warzone2100"
 #endif
 
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
@@ -70,14 +78,17 @@ BOOL	frontendInitialised = FALSE;
 BOOL	reInit = FALSE;
 BOOL	bDisableLobby;
 BOOL pQUEUE=TRUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
-char	SaveGamePath[255];
-char	ScreenDumpPath[255];
-char	MultiForcesPath[255];
-char	MultiCustomMapsPath[255];
-char	MultiPlayersPath[255];
-char	KeyMapPath[255];
-char	UserMusicPath[255];
-extern char RegFilePath[];
+char	SaveGamePath[MAX_PATH];
+char	ScreenDumpPath[MAX_PATH];
+char	MultiForcesPath[MAX_PATH];
+char	MultiCustomMapsPath[MAX_PATH];
+char	MultiPlayersPath[MAX_PATH];
+char	KeyMapPath[MAX_PATH];
+char	UserMusicPath[MAX_PATH];
+char	RegFilePath[MAX_PATH];
+
+void debug_callback_stderr( void**, const char * );
+void debug_callback_win32debug( void**, const char * );
 
 /*
 BOOL checkDisableLobby(void)
@@ -194,7 +205,14 @@ static void initialize_PhysicsFS(void)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-	char tmpstr[MAX_PATH];
+	char tmpstr[MAX_PATH] = { '\0' };
+#ifdef __APPLE__
+	short vol_ref;
+	long dir_id;
+	FSSpec fsspec;
+	FSRef fsref;
+	OSErr error;
+#endif
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -204,21 +222,42 @@ static void initialize_PhysicsFS(void)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-	strcpy( tmpstr, PHYSFS_getUserDir() );
-	strcat( tmpstr, WZ_WRITEDIR );
-	strcat( tmpstr, PHYSFS_getDirSeparator() );
-	if ( !PHYSFS_setWriteDir( PHYSFS_getUserDir() ) ) // Ugly workaround for PhysFS not creating the writedir as expected.
+#if defined(WIN32)
+	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else
+#elif defined(__APPLE__)
+	error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
+	if (!error)
+		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
+	if (!error)
+		error = FSpMakeFSRef(&fsspec, &fsref);
+	if (!error)
+		error = FSRefMakePath(&fsref, tmpstr, MAX_PATH);
+	if (!error)
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else
+#endif
+	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+
+	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
 	{
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
 			PHYSFS_getUserDir(), PHYSFS_getLastError() );
 		exit(1);
 	}
+
 	if ( !PHYSFS_mkdir( WZ_WRITEDIR ) ) // s.a.
 	{
 		debug( LOG_ERROR, "Error creating directory \"%s\": %s",
 			WZ_WRITEDIR, PHYSFS_getLastError() );
 		exit(1);
 	}
+
+	// Append the Warzone subdir
+	strcat( tmpstr, WZ_WRITEDIR );
+	strcat( tmpstr, PHYSFS_getDirSeparator() );
+
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) {
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
 			tmpstr, PHYSFS_getLastError() );
@@ -281,7 +320,7 @@ void scanDataDirs( void )
 		{
 			// Relocation for AutoPackage
 			strcpy( tmpstr, prefix );
-			strcat( tmpstr, "/share/warzone/" );
+			strcat( tmpstr, "/share/warzone2100/" );
 			registerSearchPath( tmpstr, 4 );
 			rebuildSearchPath( mod_multiplay, TRUE );
 
@@ -343,6 +382,7 @@ static void make_dir(char *dest, char *dirname, char *subdir)
 	}
 }
 
+
 int main(int argc, char *argv[])
 {
 	FRAME_STATUS		frameRet;
@@ -358,29 +398,39 @@ int main(int argc, char *argv[])
 
 	/*** Initialize the debug subsystem ***/
 #ifdef _MSC_VER
-# ifdef _DEBUG
+# ifdef DEBUG
 	int tmpDbgFlag;
 	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
 
-	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG ); // Grab current flags
+#  ifdef DEBUG_MEMORY
 	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
+#  endif // DEBUG_MEMORY
 	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
 	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
 	_CrtSetDbgFlag( tmpDbgFlag );
-# endif
-# ifndef MAX_PATH
-#  define MAX_PATH 512
-# endif
-#endif
+# endif //DEBUG
+#endif // _MSC_VER
+
 
 	debug_init();
+	atexit( debug_exit );
+
+	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
+#if defined WIN32 && defined DEBUG
+	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
+#endif // WIN32
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
 		return -1;
 	}
 
-	debug( LOG_WZ, "Warzone 2100 GPL, version %s, revision %s", version(), revision() );
+#ifdef DEBUG
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", version(), __DATE__ );
+#else
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", version(), __DATE__ );
+#endif
 
 	/*** Initialize PhysicsFS ***/
 
@@ -460,12 +510,14 @@ init://jump here from the end if re_initialising
 	psPaletteBuffer = (iColour*)MALLOC(256 * sizeof(iColour)+1);
 	if (psPaletteBuffer == NULL)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return -1;
 	}
 	if (!loadFileToBuffer("palette.bin", (char *)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
 	{
-		DBERROR(("Couldn't load palette data"));
+		debug( LOG_ERROR, "Couldn't load palette data" );
+		abort();
 		return -1;
 	}
 	pal_AddNewPalette(psPaletteBuffer);
@@ -536,13 +588,13 @@ init://jump here from the end if re_initialising
 				//after data is loaded check the research stats are valid
 				if (!checkResearchStats())
 				{
-					DBERROR(("Invalid Research Stats"));
+					debug( LOG_ERROR, "Invalid Research Stats" );
 					goto exit;
 				}
 				//and check the structure stats are valid
 				if (!checkStructureStats())
 				{
-					DBERROR(("Invalid Structure Stats"));
+					debug( LOG_ERROR, "Invalid Structure Stats" );
 					goto exit;
 				}
 
@@ -551,7 +603,8 @@ init://jump here from the end if re_initialising
 				screen_StopBackDrop();
 				break;
 			case GS_VIDEO_MODE:
-				DBERROR(("Video_mode no longer valid"));
+				debug( LOG_ERROR, "Video_mode no longer valid" );
+				abort();
 				if (introVideoControl == 0)
 				{
 					videoInitialised = TRUE;
@@ -559,7 +612,7 @@ init://jump here from the end if re_initialising
 				break;
 
 			default:
-				debug(LOG_ERROR, "Unknown game status on shutdown!");
+				debug( LOG_ERROR, "Unknown game status on shutdown!" );
 		}
 
 
@@ -824,7 +877,7 @@ init://jump here from the end if re_initialising
 
 	} // End of !quit loop.
 
-  debug(LOG_MAIN, "Shuting down application");
+	debug(LOG_MAIN, "Shuting down application");
 
 	systemShutdown();
 	pal_ShutDown();
@@ -837,6 +890,7 @@ init://jump here from the end if re_initialising
 exit:
 
 	debug(LOG_ERROR, "Shutting down after failure");
+
 	systemShutdown();
 	pal_ShutDown();
 	frameShutDown();
@@ -852,13 +906,15 @@ UDWORD GetGameMode(void)
 
 void SetGameMode(UDWORD status)
 {
-	ASSERT((status == GS_TITLE_SCREEN ||
+	ASSERT( status == GS_TITLE_SCREEN ||
 			status == GS_MISSION_SCREEN ||
 			status == GS_NORMAL ||
 			status == GS_VIDEO_MODE ||
 			status == GS_SAVEGAMELOAD,
-		"SetGameMode: invalid game mode"));
+		"SetGameMode: invalid game mode" );
 
 	gameStatus = status;
 }
+
+
 

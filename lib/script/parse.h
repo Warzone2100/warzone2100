@@ -122,6 +122,7 @@ typedef struct _const_symbol
 	BOOL			bval;
 	SDWORD			ival;
 	void			*oval;
+	STRING			*sval;	//String values
 //	float			fval;
 } CONST_SYMBOL;
 
@@ -267,7 +268,7 @@ extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
 extern BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
 
 /* Add a new event symbol */
-extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, UDWORD numArgs);
+extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs);
 
 // Add the code to a defined event
 extern BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger);
@@ -308,6 +309,10 @@ extern BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym);
 
 /* Look up an in-script custom function symbol */
 extern BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym);
+
+extern BOOL popArguments(UDWORD **ip_temp, SDWORD numParams);
+
+extern void widgCopyString(STRING *pDest, STRING *pSrc);
 
 #endif
 

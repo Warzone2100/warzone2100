@@ -2,6 +2,7 @@ MAKERULES=../makerules
 include $(MAKERULES)/configure.mk
 
 SRC=ai.c \
+	aiexperience.c \
 	astar.c \
 	action.c \
 	advvis.c \
@@ -129,6 +130,6 @@ LIBS=framework \
 	sound \
 	widget
 
-EXE=warzone
+EXE=warzone2100
 
 include $(MAKERULES)/exe.mk

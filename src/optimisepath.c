@@ -206,7 +206,7 @@ UDWORD	retVal;
 
 	/* And make it point the other way - into larger arc */
 	retVal = (retVal + 180)%360;
-	ASSERT((retVal<360,"Weird angle found"));
+	ASSERT( retVal<360,"Weird angle found" );
 
 	return(retVal);
 }
@@ -223,7 +223,7 @@ UDWORD	retVal = 0;
 
 	accA = MAKEFRACT(angle);
 
-	ASSERT((angle<360,"Angle's too big!!!"));
+	ASSERT( angle<360,"Angle's too big!!!" );
 
 	if(accA<=22.5 OR accA>337.0)
 	{

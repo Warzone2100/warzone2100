@@ -78,7 +78,8 @@ BOOL setPlayerColour(UDWORD player, UDWORD col)
 {
 	if(player >MAX_PLAYERS || col >MAX_PLAYERS)
 	{
-		DBERROR(("setplayercolour: wrong values"));
+		debug( LOG_ERROR, "setplayercolour: wrong values" );
+		abort();
 		return FALSE;
 	}
 	PlayerColour[(UBYTE)player] = (UBYTE)col;
@@ -203,7 +204,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 	if ( (StatIsComponent(psComponent) != COMP_WEAPON) ||
 		  ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB )
 	{
-		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
+		debug( LOG_NEVER, "ComponentPIE == NULL : File : %s Line : %d\n", __FILE__, __LINE__ );
 	}
 
 	return COMPONENT_RADIUS;
@@ -219,7 +220,7 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 	}
 
 //	DBERROR(("Null IMD in getResearchRadius()"));
-	DBPRINTF(("ResearchPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
+	debug( LOG_NEVER, "ResearchPIE == NULL : File : %s Line : %d\n", __FILE__, __LINE__ );
 
 	return 100;
 }
@@ -521,7 +522,7 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 		 ((StatIsComponent(Stat) != COMP_WEAPON) ||
 		  ((WEAPON_STATS *)Stat)->weaponSubClass != WSC_BOMB) )
 	{
-		DBPRINTF(("ComponentPIE == NULL : File : %s Line : %d\n",__FILE__,__LINE__));
+		debug( LOG_NEVER, "ComponentPIE == NULL : File : %s Line : %d\n", __FILE__, __LINE__ );
 //		DBERROR(("ComponentIMD == NULL"));
 	}
 
@@ -907,8 +908,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 
 	/* get propulsion stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( (PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
-			"moveUpdateUnit: invalid propulsion stats pointer") );
+	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+			"moveUpdateUnit: invalid propulsion stats pointer" );
 
 	/* render vtol jet if flying - horrible hack - GJ */
 	if (((psPropStats->propulsionType == LIFT) &&
@@ -1219,7 +1220,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				// no extra mounts for people
 				break;
 			default:
-				ASSERT((FALSE, "Whoa! Weirdy type of droid found in drawComponentObject!!!"));
+				ASSERT( FALSE, "Whoa! Weirdy type of droid found in drawComponentObject!!!" );
 				break;
 			}
 		}
@@ -1456,4 +1457,6 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
+
+
 

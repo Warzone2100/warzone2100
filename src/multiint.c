@@ -219,11 +219,11 @@ void loadMapPreview(void)
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
-		DBPRINTF(("loadgame: Fail5\n"));
+		debug( LOG_NEVER, "loadgame: Fail5\n" );
 	}
 	if (!mapLoad(pFileData, fileSize))
 	{
-		DBPRINTF(("loadgame: Fail7\n"));
+		debug( LOG_NEVER, "loadgame: Fail7\n" );
 		return;
 	}
 	gwShutDown();
@@ -2900,7 +2900,7 @@ static VOID CurrentForce(VOID)
 		sButInit.pTip = getTemplateName(pF->pTempl);
 
 		BufferID = GetObjectBuffer();
-		ASSERT((BufferID >= 0,"Unable to aquire Obj Buffer."));
+		ASSERT( BufferID >= 0,"Unable to aquire Obj Buffer." );
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		ObjectBuffers[BufferID].Data = (void*)pF->pTempl;
 		sButInit.pUserData = (void*)&ObjectBuffers[BufferID];
@@ -3031,7 +3031,7 @@ VOID runForceSelect(VOID)
 		{
 			if(strlen(sRequestResult))
 			{
-				DBPRINTF(("Returned %s",sRequestResult));
+				debug( LOG_NEVER, "Returned %s", sRequestResult );
 				if(bRequestLoad)
 				{
 					loadForce(sRequestResult);
@@ -3181,7 +3181,7 @@ BOOL startForceSelect(VOID)
 	strcpy(dir,"multiplay/forces/default.for");		// start with default force.
 	if(!loadForce(dir))
 	{
-		DBPRINTF(("Error Loading Force"));
+		debug( LOG_NEVER, "Error Loading Force" );
 	}
 
 	addBackdrop();

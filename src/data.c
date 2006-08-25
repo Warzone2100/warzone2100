@@ -63,6 +63,8 @@ UDWORD	cheatHash[CHEAT_MAXCHEAT];
 
 void dataISpriteRelease(void *pData);
 
+extern int scr_lineno;
+
 /**********************************************************
  *
  * Source
@@ -708,7 +710,8 @@ BOOL dataIMDBufferLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	psIMD = iV_ProcessIMD(&pBufferPosition, pBufferPosition + size, "", "", FALSE);
 	if (psIMD == NULL) {
-		DBERROR(("IMD load failed - %s", GetLastResourceFilename()));
+		debug( LOG_ERROR, "IMD load failed - %s", GetLastResourceFilename() );
+		abort();
 		return FALSE;
 	}
 
@@ -892,7 +895,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing old");
 		id = pie_ReloadTexPage(texfile, pBuffer);
-		ASSERT((id >=0,"pie_ReloadTexPage failed"));
+		ASSERT( id >=0,"pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
 	else
@@ -1008,8 +1011,8 @@ void dataAudioRelease( void *pData )
 	{
 		TRACK	*psTrack = (TRACK *) pData;
 
-		ASSERT( (PTRVALID(psTrack, sizeof(TRACK)),
-				"dataAudioRelease: invalid track pointer") );
+		ASSERT( PTRVALID(psTrack, sizeof(TRACK)),
+				"dataAudioRelease: invalid track pointer" );
 
 		audio_ReleaseTrack( psTrack );
 		FREE( psTrack );
@@ -1112,14 +1115,16 @@ BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
 
-	DBPRINTF(("COMPILING SCRIPT ...%s\n",GetLastResourceFilename()));
+	debug(LOG_WZ, "COMPILING SCRIPT ...%s",GetLastResourceFilename());
 	// make sure the memory system uses normal malloc for a compile
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
 
+	scr_lineno = 1;
+
 	if (!scriptCompile(pBuffer, size, &psProg, SCRIPTTYPE))		// see script.h
 	{
-		DBERROR(("Script %s did not compile", GetLastResourceFilename()));
+		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
 		return FALSE;
 	}
 	memSetBlockHeap(psHeap);
@@ -1147,10 +1152,11 @@ BOOL dataScriptLoadVals(char *pBuffer, UDWORD size, void **ppData)
 		return TRUE;
 	}
 
-	DBPRINTF(("Loading script data %s\n",GetLastResourceFilename()));
+	debug(LOG_WZ, "Loading script data %s",GetLastResourceFilename());
 
 	if (!scrvLoad(pBuffer, size))
 	{
+		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
 		return FALSE;
 	}
 
@@ -1286,4 +1292,6 @@ BOOL dataInitLoadFuncs(void)
 
 	return TRUE;
 }
+
+
 

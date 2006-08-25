@@ -91,7 +91,7 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 			0,
 			NULL
 		);
-		DBPRINTF( ("sound_Init: couldn't load compression manager MSACM32.DLL\n") );
+		debug( LOG_NEVER, "sound_Init: couldn't load compression manager MSACM32.DLL\n" );
 	}
 
 	if ( !LoadLibrary("MSADP32.ACM") )
@@ -106,12 +106,12 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 			0,
 			NULL
 		);
-		DBPRINTF( ("sound_Init: couldn't load ADPCM codec MSADP32.ACM\n") );
+		debug( LOG_NEVER, "sound_Init: couldn't load ADPCM codec MSADP32.ACM\n" );
 	}
 #endif
 	if ( sound_InitLibrary() == FALSE )
 	{
-		DBPRINTF( ("Cannot init sound library\n") );
+		debug( LOG_NEVER, "Cannot init sound library\n" );
 		return FALSE;
 	}
 
@@ -169,20 +169,15 @@ BOOL sound_SetTrackVals
 		SDWORD	VagID
 	)
 {
-	ASSERT
-	(
-		(
-			iPriority >= LOW_PRIORITY
-		&&	iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority
-		)
-	);
+	ASSERT( iPriority >= LOW_PRIORITY && iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority );
 
 	// add to sound array
 	if ( iTrack < MAX_TRACKS )
 	{
 		if ( g_apTrack[iTrack] != NULL )
 		{
-			DBERROR( ("sound_SetTrackVals: track %i already set\n", iTrack) );
+			debug( LOG_ERROR, "sound_SetTrackVals: track %i already set\n", iTrack );
+			abort();
 			return FALSE;
 		}
 
@@ -229,7 +224,8 @@ BOOL sound_AddTrack( TRACK *pTrack )
 	}
 	else
 	{
-		DBERROR( ("sound_AddTrack: all tracks used: increase MAX_TRACKS\n") );
+		debug( LOG_ERROR, "sound_AddTrack: all tracks used: increase MAX_TRACKS\n" );
+		abort();
 		return FALSE;
 	}
 }
@@ -249,7 +245,8 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 	memset(pTrack, 0, sizeof(TRACK));
 	if ( pTrack == NULL )
 	{
-		DBERROR( ("sound_LoadTrackFromBuffer: couldn't allocate memory\n") );
+		debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
+		abort();
 		return NULL;
 	}
 	else
@@ -258,7 +255,8 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 		pTrack->pName = MALLOC( strlen(GetLastResourceFilename()) + 1 );
 		if ( pTrack->pName == NULL )
 		{
-			DBERROR( ("sound_LoadTrackFromBuffer: couldn't allocate memory\n") );
+			debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
+			abort();
 			FREE( pTrack );
 			return NULL;
 		}
@@ -275,7 +273,7 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 			// flag compressed audio load
 			if ( pTrack->bCompressed == TRUE )
 			{
-				DBPRINTF( ("sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName) );
+				debug( LOG_NEVER, "sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName );
 			}
 #endif
 			return pTrack;
@@ -301,7 +299,8 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 		pTrack->pName = MALLOC( strlen((char*) szFileName) + 1 );
 		if ( pTrack->pName == NULL )
 		{
-			DBERROR( ("sound_LoadTrackFromFile: Out of memory") );
+			debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );
+			abort();
 			return FALSE;
 		}
 
@@ -357,7 +356,7 @@ void sound_CheckAllUnloaded( void )
 
 	for ( iTrack = 0; iTrack < MAX_TRACKS; iTrack++ )
 	{
-		ASSERT( (g_apTrack[iTrack] == NULL, "sound_CheckAllUnloaded: check audio.cfg for duplicate IDs\n") );
+		ASSERT( g_apTrack[iTrack] == NULL, "sound_CheckAllUnloaded: check audio.cfg for duplicate IDs\n" );
 	}
 }
 
@@ -397,15 +396,8 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 //
 void sound_CheckSample( AUDIO_SAMPLE *psSample )
 {
-	ASSERT( (PTRVALID(psSample, sizeof(AUDIO_SAMPLE)), "sound_CheckSample: sample pointer invalid\n") );
-	ASSERT
-	(
-		(
-			psSample->iSample >= 0
-		||	psSample->iSample == SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->
-				iSample
-		)
-	);
+	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)), "sound_CheckSample: sample pointer invalid\n" );
+	ASSERT( psSample->iSample >= 0 || psSample->iSample == SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->iSample );
 
 	//
 	// psSample;
@@ -420,13 +412,13 @@ BOOL sound_CheckTrack( SDWORD iTrack )
 {
 	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
 	{
-		DBPRINTF( ("sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks) );
+		debug( LOG_NEVER, "sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks );
 		return FALSE;
 	}
 
 	if ( g_apTrack[iTrack] == NULL )
 	{
-		DBPRINTF( ("sound_CheckTrack: track %i NULL\n", iTrack) );
+		debug( LOG_NEVER, "sound_CheckTrack: track %i NULL\n", iTrack );
 		return FALSE;
 	}
 
@@ -480,7 +472,7 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 char *sound_GetTrackName( SDWORD iTrack )
 {
 	if ( iTrack == SAMPLE_NOT_FOUND ) return NULL;
-	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
+	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
 }
 
@@ -492,7 +484,7 @@ UDWORD sound_GetTrackHashName( SDWORD iTrack )
 {
 	if (iTrack == 0 || iTrack == SAMPLE_NOT_FOUND)
 		return 0;
-	ASSERT( (g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track") );
+	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->resID : 0;
 }
 
@@ -659,7 +651,7 @@ SDWORD sound_GetAvailableID( void )
 		}
 	}
 
-	ASSERT( (i < MAX_TRACKS, "sound_GetTrackID: unused track not found!\n") );
+	ASSERT( i < MAX_TRACKS, "sound_GetTrackID: unused track not found!\n" );
 	if ( i < MAX_TRACKS )
 	{
 		return i;

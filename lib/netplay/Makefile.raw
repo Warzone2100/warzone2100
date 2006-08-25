@@ -4,7 +4,6 @@ include $(MAKERULES)/configure.mk
 SRC=netaudio_stub.c \
 	netcrypt.c \
 	netjoin_stub.c \
-	netlobby_stub.c \
 	netlog.c \
 	netplay.c \
 	netusers_stub.c

@@ -1,7 +1,0 @@
-#!/bin/sh
-
-MYDIR=`dirname "$0"`
-cd "$MYDIR"
-cd ../Resources/data
-exec ./warzone
-

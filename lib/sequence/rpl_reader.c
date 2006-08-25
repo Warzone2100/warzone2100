@@ -98,12 +98,12 @@ rpl_open(char* filename) {
 	rpl->f = f;
 
 	if (strcmp(readline(f, buf, len), "ARMovie") != 0)
-		DBPRINTF(("%s missing RPL magic number\n", filename));
+		debug( LOG_NEVER, "%s missing RPL magic number\n", filename );
 	readline(f, buf, len); /* discard filename */
 	readline(f, buf, len); /* discard copyright */
 	if (strcmp(readline(f, buf, len), "ESCAPE 2.0") != 0)
 		/* This field is really "author", but.. */
-		DBPRINTF(("%s not in \"ESCAPE 2.0\" format?\n", filename));
+		debug( LOG_NEVER, "%s not in \"ESCAPE 2.0\" format?\n", filename );
 
 
 	tmp = readint(f, buf, len);
@@ -113,7 +113,7 @@ rpl_open(char* filename) {
 			break;
 		default:
 			rpl->video_decoder = rpl_decode_video_unknown;
-			printf("Unknown video format %i\n", tmp);
+			debug( LOG_NEVER, "Unknown video format %i\n", tmp);
 			break;
 	}
 
@@ -143,7 +143,7 @@ rpl_open(char* filename) {
 			break;
 		default:
 			rpl->sound_decoder = rpl_decode_sound_unknown;
-			printf("Unknown sound format %i\n", tmp);
+			debug( LOG_VIDEO, "Unknown sound format %i\n", tmp );
 			break;
 	}
 	rpl->current_sound_frame = 0;
@@ -191,7 +191,7 @@ rpl_open(char* filename) {
 		for (i = 0; i < rpl->nb_chunks; ++i) {
 			readline(f, buf, len);
 			if (sscanf(buf, "%i,%i;%i", &rpl->chunks[i].offset, &rpl->chunks[i].video_size, &rpl->chunks[i].audio_size) != 3) {
-				printf("Error in chunk catalog\n");
+				debug( LOG_VIDEO, "Error in chunk catalog\n" );
 				goto error;
 			}
 
@@ -223,7 +223,7 @@ unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buff
 	char* tmp;
 	PHYSFS_file * out;
 
-	printf("Saving unknown sound stream to file\n");
+	debug( LOG_VIDEO, "Saving unknown sound stream to file\n" );
 	for (i = 0; i < rpl->nb_chunks; ++i) {
 		total_audio_size += rpl->chunks[i].audio_size;
 	}

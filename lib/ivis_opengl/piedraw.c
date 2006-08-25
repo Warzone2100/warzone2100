@@ -45,13 +45,13 @@ BOOL check_extension(const char* extension_name) {
 
 		if (   extension_name_length == first_extension_length
 		    && strncmp(extension_name, tmp, first_extension_length) == 0) {
-			printf("%s is supported.\n", extension_name);
+			debug( LOG_3D, "%s is supported.\n", extension_name );
 			return TRUE;
 		}
 		tmp += first_extension_length + 1;
 	}
 
-	printf("%s is not supported.\n", extension_name);
+	debug( LOG_3D, "%s is not supported.\n", extension_name );
 
 	return FALSE;
 }

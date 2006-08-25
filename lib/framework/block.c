@@ -48,7 +48,7 @@ static BLOCK_HEAP	*psBlockList=NULL;
 // initialise the block system
 BOOL blkInitialise(void)
 {
-	ASSERT((psBlockList==NULL, "blkInitialise: Blocks already initialised"));	// blkShutDown() needs to be called
+	ASSERT( psBlockList==NULL, "blkInitialise: Blocks already initialised" );	// blkShutDown() needs to be called
 
 	LIST_INIT(psBlockList);
 
@@ -62,7 +62,7 @@ void blkShutDown(void)
 
 	if (psBlockList)
 	{
-		DBPRINTF(("blkShutDown: blocks still allocated:\n"));
+		debug( LOG_NEVER, "blkShutDown: blocks still allocated:\n" );
 		while (psBlockList)
 		{
 			psNext = psBlockList->psNext;
@@ -77,39 +77,42 @@ void blkCallPos(STRING *pFileName, SDWORD line)
 {
 	pCallFileName = pFileName;
 	callLine = line;
-}																					   
+}
 
 // Create a new block heap
 BOOL blkCreate(BLOCK_HEAP **ppsHeap, SDWORD init, SDWORD ext)
 {
-						 
-	DBPRINTF(("BLKCREATE CALLED !!!!!!!!!!!!!!!!!!!!!!\n"));
+
+	debug( LOG_NEVER, "BLKCREATE CALLED !!!!!!!!!!!!!!!!!!!!!!\n" );
 	*ppsHeap = (BLOCK_HEAP*)RMALLOC(sizeof(BLOCK_HEAP));
 	if (!*ppsHeap)
 	{
-		DBERROR(("blkCreate: Out of memory"));
+		debug( LOG_ERROR, "blkCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	(*ppsHeap)->psBlocks = (BLOCK_HEAP_MEM*)RMALLOC(sizeof(BLOCK_HEAP_MEM));
 	if (!(*ppsHeap)->psBlocks)
 	{
-		DBERROR(("blkCreate: Out of memory"));
+		debug( LOG_ERROR, "blkCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
 	(*ppsHeap)->psBlocks->pMem = (UBYTE*)RMALLOC(init);
 	if (!(*ppsHeap)->psBlocks->pMem)
 	{
 
-		DBERROR(("blkCreate: Out of memory"));
+		debug( LOG_ERROR, "blkCreate: Out of memory" );
+		abort();
 		return FALSE;
 	}
-																			  
+
 	(*ppsHeap)->init = init;
 	(*ppsHeap)->ext = ext;
 	(*ppsHeap)->psBlocks->size = init;
 	(*ppsHeap)->psBlocks->pFree = (*ppsHeap)->psBlocks->pMem;
 	(*ppsHeap)->psBlocks->psNext = NULL;
-	
+
 #ifdef DEBUG_BLOCK
 	(*ppsHeap)->pFileName = pCallFileName;
 	(*ppsHeap)->line = callLine;
@@ -131,8 +134,7 @@ void blkDestroy(BLOCK_HEAP *psHeap)
 #ifdef DEBUG_BLOCK
 	if (psHeap->psMemTreap != NULL)
 	{
-		DBPRINTF(("blkDestroy: %s at %d: memory allocated :\n",
-			psHeap->pFileName, psHeap->line));
+		debug( LOG_NEVER, "blkDestroy: %s at %d: memory allocated :\n", psHeap->pFileName, psHeap->line );
 		memRecReport(psHeap->psMemTreap);
 	}
 #endif
@@ -157,17 +159,17 @@ void blkPrintDetails(BLOCK_HEAP *psHeap)
 	{
 
 #ifdef DEBUG_BLOCK
-		UDWORD	Left=(UDWORD)((psHeap->psBlocks->pMem)+(psHeap->psBlocks->size)-(psHeap->psBlocks->pFree));
-		DBPRINTF(("ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n",psHeap,psHeap->init,psHeap->ext,psHeap->TotalAllocated,psHeap->psBlocks->pMem,psHeap->psBlocks->pFree,Left));
+		UDWORD Left = (UDWORD)((psHeap->psBlocks->pMem)+(psHeap->psBlocks->size)-(psHeap->psBlocks->pFree));
+		debug( LOG_NEVER, "ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n", psHeap,psHeap->init, psHeap->ext,psHeap->TotalAllocated, psHeap->psBlocks->pMem, psHeap->psBlocks->pFree, Left );
 		memMemoryDump(psHeap->psMemTreap);
 #else
-		DBPRINTF(("ptr=%p init=%d ext=%d\n",psHeap,psHeap->init,psHeap->ext));
+		debug( LOG_NEVER, "ptr=%p init=%d ext=%d\n", psHeap, psHeap->init, psHeap->ext );
 #endif
 
 	}
 	else
 	{
-		DBPRINTF(("NULL POINTER IN BLOCK LIST\n"));
+		debug( LOG_NEVER, "NULL POINTER IN BLOCK LIST\n" );
 	}
 
 }
@@ -177,24 +179,24 @@ void blkReport(void)
 {
 
 
-	
+
 #ifdef DEBUG
 	UDWORD BlockNumber=0;
 	BLOCK_HEAP *psCurHeap;
 
-	DBPRINTF(("\n\nBlock Report. Current Block=%p:\n",memGetBlockHeap() ));
+	debug( LOG_NEVER, "\n\nBlock Report. Current Block=%p:\n", memGetBlockHeap() );
 
 	psCurHeap=psBlockList;
 
 	while (psCurHeap)
 	{
-		DBPRINTF(("Block %d) ",BlockNumber++));
+		debug( LOG_NEVER, "Block %d)",BlockNumber++ );
 		blkPrintDetails(psCurHeap);
 
 		psCurHeap = psCurHeap->psNext;
 	}
-	DBPRINTF(("\n\n"));
-#endif	
+	debug( LOG_NEVER, "\n\n" );
+#endif
 }
 
 #if(0)	 // no longer used - uploaded in small chunks
@@ -203,7 +205,7 @@ void blkReport(void)
 //
 // This can be used for scratch memory ... Critical on the Playstation where memory is so tight
 //
-//  - e.g.   The sound data must be stored as one 400k file. This must be loaded into scratch memory 
+//  - e.g.   The sound data must be stored as one 400k file. This must be loaded into scratch memory
 //             we clearly do not have 400k of spare memory around.
 //
 //
@@ -221,9 +223,9 @@ BOOL blkSpecialFree(BLOCK_HEAP *psHeap, void *Ptr)
 		if ((UDWORD)psCurr->pLastAllocated == RequestedFreeMem)
 		{
 #ifdef DEBUG_BLOCK
-		
+
 			UDWORD BlockSize=((UDWORD)psCurr->pFree)-RequestedFreeMem;
-DBPRINTF(("FREED %d block bytes\n",BlockSize));	// /// del me now !
+			debug( LOG_NEVER, "FREED %d block bytes\n", BlockSize ); // del me now !
 			psHeap->TotalAllocated-=BlockSize;
 #endif
 
@@ -235,7 +237,7 @@ DBPRINTF(("FREED %d block bytes\n",BlockSize));	// /// del me now !
 		}
 	}
 	return(FALSE);			// unable to free mem
-	
+
 }
 #endif
 
@@ -259,7 +261,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 	// can't allocate 0 bytes
 	if (size <= 0)
 	{
-		ASSERT((FALSE, "blkAlloc: cannot allocate 0 bytes"));
+		ASSERT( FALSE, "blkAlloc: cannot allocate 0 bytes" );
 		return NULL;
 	}
 
@@ -267,9 +269,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 	// see if free has been called for this block
 	if (psHeap->free)
 	{
-		DBPRINTF(("Block Heap: %s at %d: Alloc after free:\n  free %s at %d\n  alloc %s at %d\n",
-			psHeap->pFileName, psHeap->line, psHeap->pFreeFile, psHeap->freeLine,
-			pCallFileName, callLine));
+		debug( LOG_NEVER, "Block Heap: %s at %d: Alloc after free:\n  free %s at %d\n  alloc %s at %d\n", psHeap->pFileName, psHeap->line, psHeap->pFreeFile, psHeap->freeLine, pCallFileName, callLine );
 		psHeap->free = FALSE;
 	}
 
@@ -298,7 +298,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 		psNew = (BLOCK_HEAP_MEM*)RMALLOC(sizeof(BLOCK_HEAP_MEM));
 		if (!psNew)
 		{
-			ASSERT((FALSE, "blkAlloc: warning out of memory"));
+			ASSERT( FALSE, "blkAlloc: warning out of memory" );
 
 			// Out of memory
 			return NULL;
@@ -318,7 +318,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 		{
 			// Out of memory
 			RFREE(psNew);
-			ASSERT((FALSE, "blkAlloc: warning out of memory"));
+			ASSERT( FALSE, "blkAlloc: warning out of memory" );
 			return NULL;
 		}
 		psNew->psNext = NULL;
@@ -337,7 +337,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 	{
 		// failed to allocate the memory
 
-		ASSERT((FALSE, "Warning: malloc returning NULL - [%s - %d] %d bytes",pCallFileName,callLine, size));
+		ASSERT( FALSE, "Warning: malloc returning NULL - [%s - %d] %d bytes",pCallFileName,callLine, size );
 		return NULL;
 	}
 
@@ -346,7 +346,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 	psNode->pFile = pCallFileName;
 	psNode->line = callLine;
 	psNode->size = allocSize;
-	
+
 	/* Store the new entry in the memory treap */
 	psNode->priority = (UDWORD)rand();
 	psNode->key = (UDWORD)psNode;
@@ -404,11 +404,11 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 	/* Get the node for the memory block */
 	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psHeap->psMemTreap,
 										(UDWORD)&sNode, memBlockCmp);
-	ASSERT((psDeleted != NULL,
+	ASSERT( psDeleted != NULL,
 			"Invalid pointer passed to mem_Free by:\n"
 			"File: %s\nLine: %d\n\n"
 			"Attempt to free already freed pointer?",
-			pCallFileName, callLine));
+			pCallFileName, callLine );
 	if (psDeleted)
 	{
 		/* The pointer is valid, check the buffer zones */
@@ -426,7 +426,7 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 			}
 		}
 // this breaks debug...  ***** look into why...
-//		ASSERT(( !InvalidBottom && !InvalidTop,
+//		ASSERT( !InvalidBottom && !InvalidTop,
 //				"Safety zone on memory overwritten.\n"
 //				"%d Invalid bytes (of %d) found below memory buffer.\n"
 //				"%d Invalid bytes (of %d) found above memory buffer.\n\n"
@@ -434,7 +434,7 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 //				"Memory freed by:\nFile: %s\nLine: %d\n",
 //				InvalidBottom, SAFETY_ZONE_SIZE, InvalidTop, SAFETY_ZONE_SIZE,
 //				psDeleted->pFile, psDeleted->line,
-//				pCallFileName, callLine));
+//				pCallFileName, callLine );
 
 		/* Trash the memory before it is freed */
 #if MEMORY_SET
@@ -454,7 +454,7 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 
 #if(1)
 
-		//DBPRINTF(("UNABLE TO FREE MEMORY\n"));		
+		//DBPRINTF(("UNABLE TO FREE MEMORY\n"));
 
 
 #else
@@ -462,17 +462,17 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 #ifdef DEBUG
 		if (bRes==TRUE)
 		{
-			DBPRINTF(("blkFree called - memory successfully released\n"));		
+			debug( LOG_NEVER, "blkFree called - memory successfully released\n" );
 		}
 		else
 		{
-//			DBPRINTF(("blkFree called - memory NOT released\n"));		
+//			debug( LOG_NEVER, "blkFree called - memory NOT released\n" );
 		}
 #endif
 #endif
 
 
-	}	
+	}
 
 }
 
@@ -490,8 +490,7 @@ void blkReset(BLOCK_HEAP *psHeap)
 #ifdef DEBUG_BLOCK
 	if (psHeap->psMemTreap != NULL)
 	{
-		DBPRINTF(("blkReset: %s at %d: memory allocated :\n",
-			psHeap->pFileName, psHeap->line));
+		debug( LOG_NEVER, "blkReset: %s at %d: memory allocated :\n", psHeap->pFileName, psHeap->line );
 		memRecReport(psHeap->psMemTreap);
 	}
 	psHeap->psMemTreap = NULL;
@@ -499,10 +498,9 @@ void blkReset(BLOCK_HEAP *psHeap)
 
 	psHeap->TotalAllocated=0;
 
-	DBP0(("blkReset: %s at %d: memory usage:\n",
-			psHeap->pFileName, psHeap->line));
+	debug( LOG_NEVER, "blkReset: %s at %d: memory usage:\n", psHeap->pFileName, psHeap->line );
 #else
-	DBP0(("blkReset: memory usage:\n"));
+	debug( LOG_NEVER, "blkReset: memory usage:\n" );
 #endif
 
 	psCurr = psHeap->psBlocks;
@@ -519,8 +517,7 @@ void blkReset(BLOCK_HEAP *psHeap)
 		psCurr = psCurr->psNext;
 	}
 
-	DBP0(("    Blocks allocated %dk, Memory allocated %dk\n",
-				block/1024, alloc/1024));
+	debug( LOG_NEVER, "    Blocks allocated %dk, Memory allocated %dk\n", block/1024, alloc/1024 );
 }
 
 
@@ -553,7 +550,7 @@ BOOL blkPointerValid(BLOCK_HEAP *psHeap, void *pData, SDWORD size)
 	MEM_NODE	sNode;
 	void *Tmp;
 
-	ASSERT((size, "blkPointerValid: cannot check a pointer with zero size"));
+	ASSERT( size, "blkPointerValid: cannot check a pointer with zero size" );
 
 	if (pData == NULL)
 	{
@@ -615,11 +612,11 @@ BLOCK_HEAP	*psSuspendedHeap=NULL;
 // if a block is already suspended then an assertion will occur.
 void  blockSuspendUsage(void)
 {
-	ASSERT((psSuspendedHeap==NULL, "a memory block is already suspended"));
+	ASSERT( psSuspendedHeap==NULL, "a memory block is already suspended" );
 
 	psSuspendedHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
-	
+
 }
 
 // restore the current block  - if there is one
@@ -640,13 +637,13 @@ void blockCurrentBlockInfo(void)
 	psCurHeap=memGetBlockHeap();
 	if (psCurHeap==NULL)
 	{
-		DBPRINTF(("*** No current block defined\n"));
+		debug( LOG_NEVER, "*** No current block defined\n" );
 	}
 	else
 	{
 		UDWORD	Left=(UDWORD)((psCurHeap->psBlocks->pMem)+(psCurHeap->psBlocks->size)-(psCurHeap->psBlocks->pFree));
-	
-		DBPRINTF(("ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n",psCurHeap,psCurHeap->init,psCurHeap->ext,psCurHeap->TotalAllocated,psCurHeap->psBlocks->pMem,psCurHeap->psBlocks->pFree,Left));
+
+		debug( LOG_NEVER, "ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n", psCurHeap, psCurHeap->init, psCurHeap->ext, psCurHeap->TotalAllocated, psCurHeap->psBlocks->pMem, psCurHeap->psBlocks->pFree, Left );
 	}
 #endif
 }

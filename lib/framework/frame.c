@@ -234,8 +234,8 @@ void frameSetCursor(HCURSOR hNewCursor)
 /* Set the current cursor from a Resource ID */
 void frameSetCursorFromRes(WORD resID)
 {
-	ASSERT((resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID"));
-	ASSERT((resID < CURSOR_OFFSET + MAX_CURSORS, "frameSetCursorFromRes: bad resource ID"));
+	ASSERT( resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID" );
+	ASSERT( resID < CURSOR_OFFSET + MAX_CURSORS, "frameSetCursorFromRes: bad resource ID" );
 
 	//If we are already using this cursor then  return
 	if (resID != currentCursorResID)
@@ -353,8 +353,8 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
         {
-		printf("Error: Could not initialise SDL (%s).\n", SDL_GetError());
-		return FALSE;
+			debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
+			return FALSE;
         }
 
         SDL_WM_SetCaption(pWindowName, NULL);

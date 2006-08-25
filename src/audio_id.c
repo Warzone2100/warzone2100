@@ -489,8 +489,8 @@ audioID_GetIDFromStr( STRING *pWavStr, SDWORD *piID )
 	{
 		if ( stricmp( pWavStr, asAudioID[i].pWavStr ) == 0 )
 		{
-			ASSERT( (i == asAudioID[i].iID,
-				"audioID_GetIDFromStr: %s stored IDs don't match", pWavStr ) );
+			ASSERT( i == asAudioID[i].iID,
+				"audioID_GetIDFromStr: %s stored IDs don't match", pWavStr );
 
 			*piID = asAudioID[i].iID;
 			return TRUE;

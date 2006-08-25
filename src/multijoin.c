@@ -314,7 +314,7 @@ BOOL MultiPlayerJoin(DPID dpid)
 				return TRUE;
 			}
 		}
-		ASSERT((NetPlay.playercount<=MAX_PLAYERS,"Too many players!"));
+		ASSERT( NetPlay.playercount<=MAX_PLAYERS,"Too many players!" );
 
 		// setup data for this player, then broadcast it to the other players.
 #if 0

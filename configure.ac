@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([warzone],[2.0.4_rc2],[http://gna.org/projects/warzone])
+AC_INIT([Warzone 2100],[2.0.4_rc2],[http://wz.rootzilla.de/])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
@@ -46,26 +46,19 @@ if test "x$debug" = "xyes" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -Wall -DDEBUG"
   AC_MSG_RESULT([yes])
 else
+  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
   AC_MSG_RESULT([no])
 fi
 
-#   --without-openal will build without OpenAL
-# Commented out as OpenAL is not curently an option,
-# but it will need to become optional someday.
-#AC_ARG_WITH(openal,
-#[  --with-openal           use OpenAL for sound [[auto]]],
-#[ openal=$withval ], [ openal=maybe ])
-openal=yes
+#   --disable-ogg will build without Ogg Vorbis support
+AC_ARG_ENABLE(ogg,
+[AC_HELP_STRING([--disable-ogg],[Do not built support for Ogg files])],
+[ ogg=$enableval ], [ ogg=maybe ])
 
-#   --without-ogg will build without Ogg vorbis support
-AC_ARG_WITH(ogg,
-[  --with-ogg              built support for Ogg files [[auto]]],
-[ ogg=$withval ], [ ogg=maybe ])
-
-#   --without-mp3 will build without MP3 support
-AC_ARG_WITH(mp3,
-[  --with-mp3              built support for Mp3 files [[auto]]],
-[ mp3=$withval ], [ mp3=maybe ])
+#   --disable-mp3 will build without Mp3 support
+AC_ARG_ENABLE(mp3,
+[AC_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
+[ mp3=$enableval ], [ mp3=maybe ])
 
 # windows conditional
 case $host_os in
@@ -93,8 +86,8 @@ AC_DEFUN([WZ_EXPAND_DIR], [
         )`
 ])
 dnl export where the datadir is going to be installed; we will look for
-dnl $datadir/warzone/warzone.wz
-WZ_EXPAND_DIR(datadir, "$datadir/warzone")
+dnl $datadir/warzone2100/warzone.wz
+WZ_EXPAND_DIR(datadir, "$datadir/warzone2100")
 WZ_CFLAGS="${WZ_CFLAGS} -DDEFAULT_DATADIR=\\\"${datadir}\\\""
 
 
@@ -128,17 +121,21 @@ AC_PATH_SDLNET([
 
 
 if test "x$opengl" != "xno" ; then
-  AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
-  AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
-    [AC_CHECK_LIB(opengl32, main, GLLIB=-lopengl32 GL_lib=yes, GL_lib=no)])
-  AC_CHECK_LIB(GLU, main, GLULIB=-lGLU GLU_lib=yes,
-    [AC_CHECK_LIB(glu32, main, GLULIB=-lglu32 GLU_lib=yes, GLU_lib=no)])
   if test `uname` = "Darwin"; then
-    GL_lib=yes
-    GLU_lib=yes
-    GLLIB="-framework OpenGL"
-    GLULIB=""
+    AC_MSG_CHECKING([for OpenGL framework])
+    wz_ac_check_opengl_save_LIBS=$LIBS
+    LIBS="-framework OpenGL $LIBS"
+    AC_LINK_IFELSE([main() { }],[GL_h=mac ; GLU_h=mac ; GL_lib=yes ; GLU_lib=yes ; GLLIB="-framework OpenGL" ; GLULIB="" ; AC_MSG_RESULT([yes])],LIBS=$wz_ac_check_opengl_save_LIBS ; [AC_MSG_RESULT([no])])
   fi
+
+  if test "x$GL_lib" != "xyes" ; then
+    AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
+    AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
+      [AC_CHECK_LIB(opengl32, main, GLLIB=-lopengl32 GL_lib=yes, GL_lib=no)])
+    AC_CHECK_LIB(GLU, main, GLULIB=-lGLU GLU_lib=yes,
+      [AC_CHECK_LIB(glu32, main, GLULIB=-lglu32 GLU_lib=yes, GLU_lib=no)])
+  fi
+
   if test "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno" ; then
     if test "x$opengl" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenGL and GLU.])
@@ -168,14 +165,20 @@ else
 fi
 
 if test "x$openal" != "xno" ; then
-  AC_CHECK_HEADER(AL/al.h, AL_h=standard,
-               [AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
-  AC_CHECK_LIB(openal, main, ALLIB=-lopenal AL_lib=yes,
-               [AC_CHECK_LIB(openal32, main, ALLIB=-lopenal32 AL_lib=yes, AL_lib=no)])
   if test `uname` = "Darwin"; then
-    AL_lib=yes
-    ALLIB="-framework OpenAL"
+    AC_MSG_CHECKING([for OpenAL framework])
+    wz_ac_check_openal_save_LIBS=$LIBS
+    LIBS="-framework OpenAL $LIBS"
+    AC_LINK_IFELSE([main() { }],[AL_h=mac ; AL_lib=yes ; ALLIB="-framework OpenAL" ; AC_MSG_RESULT([yes])],[LIBS=$wz_ac_check_openal_save_LIBS ; AC_MSG_RESULT([no])])
   fi
+
+  if test "x$AL_lib" != "xyes" ; then
+    AC_CHECK_HEADER(AL/al.h, AL_h=standard,
+                 [AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
+    AC_CHECK_LIB(openal, main, ALLIB=-lopenal AL_lib=yes,
+                 [AC_CHECK_LIB(openal32, main, ALLIB=-lopenal32 AL_lib=yes, AL_lib=no)])
+  fi
+
   if test "x$AL_lib" = "xno" ; then
     if test "x$openal" = "xyes" ; then
       AC_MSG_ERROR([You need to install OpenAL.])
@@ -211,7 +214,7 @@ if test "x$ogg" != "xno" ; then
   XIPH_PATH_OGG(have_ogg=yes, have_ogg=no)
   XIPH_PATH_VORBIS(have_vorbis=yes, have_vorbis=no)
   if test "x$have_ogg" = "xno" -o "x$have_vorbis" = "xno" ; then
-    if "x$ogg" = "xyes" ; then
+    if test "x$ogg" = "xyes" ; then
       AC_MSG_ERROR([You need to install OGG/Vorbis.])
     else
       ogg=no
@@ -254,9 +257,6 @@ AC_SUBST(LFLAGS, "-olex.yy.c")
 # generates the kind of filename that automake expects.
 AC_SUBST(YFLAGS, "-oy.tab.c")
 
-# Set revision to be used by src/Makefile.am
-AC_SUBST(REVISION, ["\`svnversion -n .\`"])
-
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
@@ -283,7 +283,7 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 
 echo ""
-echo "Warzone will compile with the following components:"
+echo "Warzone 2100 will compile with the following components:"
 echo ""
 echo " OpenGL acceleration:   $opengl"
 echo " OpenAL sound system:   $openal"

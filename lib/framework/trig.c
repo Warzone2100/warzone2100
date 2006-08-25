@@ -220,8 +220,8 @@ FRACT trigIntSqrt(UDWORD val)
 	}
 
 	// now generate the fractional part for the lookup table
-	ASSERT((val < SQRT_ACCURACY,
-		"trigIntSqrt: aargh - table index out of range"));
+	ASSERT( val < SQRT_ACCURACY,
+		"trigIntSqrt: aargh - table index out of range" );
 	return aSqrt[val] * (FRACT)((UDWORD)1 << ((UDWORD)exp/2));
 
 }
@@ -234,6 +234,8 @@ FRACT trigIntSqrt(UDWORD val)
 #define ARCMASK (ARCGAP-1)
 
 /* */
+
+
 
 
 

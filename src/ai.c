@@ -302,9 +302,9 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		//ASSERT((((STRUCTURE *)psObj)->numWeaps > 0,
-        ASSERT((((STRUCTURE *)psObj)->asWeaps[0].nStat > 0,
-			"aiChooseTarget: no weapons on structure"));
+		//ASSERT( ((STRUCTURE *)psObj)->numWeaps > 0,
+        ASSERT( ((STRUCTURE *)psObj)->asWeaps[0].nStat > 0,
+			"aiChooseTarget: no weapons on structure" );
 		psWStats = ((STRUCTURE *)psObj)->asWeaps[0].nStat + asWeaponStats;
 
 
@@ -646,8 +646,8 @@ void aiUpdateDroid(DROID *psDroid)
 	BOOL		lookForTarget;
 //	BOOL		bTemp;
 
-	ASSERT((PTRVALID(psDroid, sizeof(DROID)),
-		"updateUnitAI: invalid Unit pointer"));
+	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		"updateUnitAI: invalid Unit pointer" );
 
 	lookForTarget = TRUE;
 	// don't look for a target if sulking

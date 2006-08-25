@@ -12,9 +12,14 @@
 #include "codeprint.h"
 #include "script.h"
 
+#include "script_parser.h"
+
 /* number of values in each stack chunk */
 #define INIT_SIZE		15
 #define EXT_SIZE		2
+
+char STRSTACK[MAXSTACKLEN][MAXSTRLEN]; //simple string 'stack'
+UDWORD CURSTACKSTR = 0;    //Points to the top of the string stack
 
 /* store for a 'chunk' of the stack */
 typedef struct _stack_chunk
@@ -36,6 +41,7 @@ static UDWORD			currEntry=0;
 
 /* The block heap the stack was created in */
 static BLOCK_HEAP		*psStackBlock;
+
 
 /* Check if the stack is empty */
 BOOL stackEmpty(void)
@@ -92,6 +98,15 @@ BOOL stackPush(INTERP_VAL  *psVal)
 	   valid space */
 	memcpy(&(psCurrChunk->aVals[currEntry]), psVal, sizeof(INTERP_VAL));
 
+	/* String support: Copy the string, otherwise the stack will operate directly on the
+	original string (like & opcode will actually store the result in the first
+	variable which would point to the original string) */
+	if(psVal->type == VAL_STRING)
+	{
+		psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(MAXSTRLEN);
+		strcpy(psCurrChunk->aVals[currEntry].v.sval,psVal->v.sval);
+	}
+
 	/* Now update psCurrChunk and currEntry */
 	currEntry++;
 	if (currEntry == psCurrChunk->size)
@@ -100,6 +115,7 @@ BOOL stackPush(INTERP_VAL  *psVal)
 		if (!stackNewChunk(EXT_SIZE))
 		{
 			/* Out of memory */
+			debug(LOG_ERROR, "stackPush: Out of memory");
 			return FALSE;
 		}
 	}
@@ -114,7 +130,8 @@ BOOL stackPop(INTERP_VAL  *psVal)
 {
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
-		ASSERT((FALSE, "stackPop: stack empty"));
+		debug(LOG_ERROR, "stackPop: stack empty");
+		ASSERT( FALSE, "stackPop: stack empty" );
 		return FALSE;
 	}
 
@@ -147,7 +164,7 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackPopType: stack empty");
-		ASSERT((FALSE, "stackPopType: stack empty"));
+		ASSERT( FALSE, "stackPopType: stack empty" );
 		return FALSE;
 	}
 
@@ -171,11 +188,39 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 
 	//debug(LOG_SCRIPT, "stackPopType 4");
 
-	if (!interpCheckEquiv(psVal->type,psTop->type))
+	//String support
+	if(psVal->type == VAL_STRING)		//If we are about to assign something to a string variable (psVal)
 	{
-		debug(LOG_ERROR, "stackPopType: type mismatch");
-		ASSERT((FALSE, "stackPopType: type mismatch"));
-		return FALSE;
+		if(psTop->type != VAL_STRING)		//if assigning a non-string to a string, then convert it
+		{
+			/* Check for compatible types */
+			if((psTop->type == VAL_INT) || (psTop->type == VAL_BOOL))
+			{
+				STRING *tempstr;
+				tempstr = (char*)MALLOC(MAXSTRLEN);
+				sprintf(tempstr, "%d", psTop->v.ival);
+
+				psVal->v.sval = tempstr;
+			}
+			else
+			{
+				debug(LOG_ERROR, "stackPopType: trying to assign an incompatible data type to a string variable (type = %d)", psTop->type);
+				return FALSE;
+			}
+		}
+		else	//Assigning a string to a string, just do the default action
+		{
+			psVal->v.ival = psTop->v.ival;
+		}
+	}
+	else		// we are about to assign something to a non-string variable (psVal)
+	{
+		if (!interpCheckEquiv(psVal->type,psTop->type))
+		{
+			debug(LOG_ERROR, "stackPopType: type mismatch");
+			ASSERT( FALSE, "stackPopType: type mismatch" );
+			return FALSE;
+		}
 	}
 
 	//debug(LOG_SCRIPT, "stackPopType 5");
@@ -201,6 +246,8 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	INTERP_VAL	*psVal;
 	UDWORD		index, params;
 	STACK_CHUNK	*psCurr;
+
+	//debug(LOG_SCRIPT,"stackPopParams");
 
 	va_start(args, numParams);
 
@@ -232,12 +279,19 @@ BOOL stackPopParams(SDWORD numParams, ...)
 			}
 		}
 	}
+
+	//debug(LOG_SCRIPT,"stackPopParams 1");
+
 	if (!psCurr)
 	{
-		ASSERT((FALSE, "stackPopParams: not enough parameters on stack"));
+		debug(LOG_ERROR,"stackPopParams: not enough parameters on stack");
+		ASSERT( FALSE, "stackPopParams: not enough parameters on stack" );
 		return FALSE;
 	}
 
+	//debug(LOG_SCRIPT,"stackPopParams 2");
+
+	//string support
 	// Get the values, checking their types
 	index = currEntry;
 	for (i=0; i< numParams; i++)
@@ -245,14 +299,45 @@ BOOL stackPopParams(SDWORD numParams, ...)
 		type = va_arg(args, int);
 		pData = va_arg(args, UDWORD *);
 
+		//debug(LOG_SCRIPT,"stackPopParams 3 (%d parameter)", i);
+
 		psVal = psCurr->aVals + index;
-		if (!interpCheckEquiv(type,psVal->type))
+
+		if(type != VAL_STRING)	//Allow param to be any type, if function expects a string (auto-convert later)
 		{
-			ASSERT((FALSE, "stackPopParams: type mismatch"));
-			va_end(args);
-			return FALSE;
+			//debug(LOG_SCRIPT,"stackPopParams 4 - non string");
+
+			if (!interpCheckEquiv(type,psVal->type))
+			{
+				ASSERT( FALSE, "stackPopParams: type mismatch" );
+				va_end(args);
+				return FALSE;
+			}
+			*pData = (UDWORD)psVal->v.ival;
 		}
-		*pData = (UDWORD)psVal->v.ival;
+		else	//TODO: allow only compatible types
+		{
+			//debug(LOG_SCRIPT,"stackPopParams 5 - string");
+
+			if(psVal->type == VAL_STRING)	//Passing a String
+			{
+
+				//debug(LOG_SCRIPT, "stackPopParams - string");
+				*pData = (UDWORD)psVal->v.ival;
+				debug(LOG_SCRIPT, "%s",*pData);
+			}
+			else		//Integer
+			{
+				STRING *tempstr;
+				//debug(LOG_SCRIPT, "stackPopParams - non string");
+				tempstr = (char*)MALLOC(MAXSTRLEN);
+				sprintf(tempstr, "%d", psVal->v.ival);
+
+				*pData = tempstr;
+
+				//itoa(psVal->v.ival,tmpstr,10);
+			}
+		}
 
 		index += 1;
 		if (index >= psCurr->size)
@@ -261,6 +346,8 @@ BOOL stackPopParams(SDWORD numParams, ...)
 			index = 0;
 		}
 	}
+
+	//debug(LOG_SCRIPT,"END stackPopParams");
 
 	va_end(args);
 	return TRUE;
@@ -325,7 +412,7 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 	}
 
 	/* If we got here the index is off the bottom of the stack */
-	ASSERT((FALSE, "stackPeek: index too large"));
+	ASSERT( FALSE, "stackPeek: index too large" );
 	return FALSE;
 }
 
@@ -340,7 +427,7 @@ void stackPrintTop(void)
 	}
 	else
 	{
-		DBPRINTF(("STACK EMPTY"));
+		debug( LOG_NEVER, "STACK EMPTY" );
 	}
 }
 
@@ -356,7 +443,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 	// Get the parameters
 	if (psCurrChunk->psPrev == NULL && currEntry < 2)
 	{
-		ASSERT((FALSE, "stackBinaryOp: not enough entries on stack"));
+		debug(LOG_ERROR, "stackBinaryOp: not enough entries on stack");
+		ASSERT( FALSE, "stackBinaryOp: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -383,10 +471,14 @@ BOOL stackBinaryOp(OPCODE opcode)
 		psV2 = psCurrChunk->aVals + psCurrChunk->size - 1;
 	}
 
-	if (!interpCheckEquiv(psV1->type, psV2->type))
+	if(opcode != OP_CANC)		//string - Don't check if OP_CANC, since types can be mixed here
 	{
-		ASSERT((FALSE, "stackBinaryOp: type mismatch"));
-		return FALSE;
+		if (!interpCheckEquiv(psV1->type, psV2->type))
+		{
+			debug(LOG_ERROR, "stackBinaryOp: type mismatch");
+			ASSERT( FALSE, "stackBinaryOp: type mismatch" );
+			return FALSE;
+		}
 	}
 
 	// do the operation
@@ -434,8 +526,54 @@ BOOL stackBinaryOp(OPCODE opcode)
 		psV1->type = VAL_BOOL;
 		psV1->v.bval = psV1->v.ival < psV2->v.ival;
 		break;
+	case OP_CANC:	//String cancatenation
+		{
+			char *tempstr1[MAXSTRLEN];
+			char *tempstr2[MAXSTRLEN];
+
+			/* Check first value if it's compatible with Strings */
+			if((psV1->type == VAL_INT) || (psV1->type == VAL_BOOL))	//First value isn't string, but can be converted to string
+			{
+				sprintf(tempstr1,"%d",psV1->v.ival);	//Convert
+
+				psV1->type = VAL_STRING;		//Mark as string now
+			}
+			else if(psV1->type == VAL_STRING)	//Is a string
+			{
+				strcpy(tempstr1,psV1->v.sval);
+			}
+			else
+			{
+				debug(LOG_ERROR, "stackBinaryOp: OP_CANC: first parameter is not compatible with Strings");
+				return FALSE;
+			}
+
+			/* Check first value if it's compatible with Strings */
+			if((psV2->type == VAL_INT) || (psV2->type == VAL_BOOL))
+			{
+				sprintf(tempstr2,"%d",psV2->v.ival);		//Convert
+			}
+			else if(psV2->type == VAL_STRING)	//Is a string
+			{
+				strcpy(tempstr2,psV2->v.sval);
+			}
+			else
+			{
+				debug(LOG_ERROR, "stackBinaryOp: OP_CANC: first parameter is not compatible with Strings");
+				return FALSE;
+			}
+
+			strcat(tempstr1,tempstr2);
+
+			strcpy(psV1->v.sval,tempstr1);		//Assign
+
+			psV1->type = VAL_STRING;
+		}
+		break;
+
 	default:
-		ASSERT((FALSE, "stackBinaryOp: unknown opcode"));
+		debug(LOG_ERROR, "stackBinaryOp: unknown opcode");
+		ASSERT( FALSE, "stackBinaryOp: unknown opcode" );
 		return FALSE;
 		break;
 	}
@@ -455,7 +593,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 	// Get the value
 	if (psCurrChunk->psPrev == NULL && currEntry == 0)
 	{
-		ASSERT((FALSE, "stackUnaryOp: not enough entries on stack"));
+		ASSERT( FALSE, "stackUnaryOp: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -480,7 +618,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.ival = - psVal->v.ival;
 			break;
 		default:
-			ASSERT((FALSE, "stackUnaryOp: invalid type for negation"));
+			ASSERT( FALSE, "stackUnaryOp: invalid type for negation" );
 			break;
 		}
 		break;
@@ -491,12 +629,12 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.bval = !psVal->v.bval;
 			break;
 		default:
-			ASSERT((FALSE, "stackUnaryOp: invalid type for NOT"));
+			ASSERT( FALSE, "stackUnaryOp: invalid type for NOT" );
 			break;
 		}
 		break;
 	default:
-		ASSERT((FALSE, "stackUnaryOp: unknown opcode"));
+		ASSERT( FALSE, "stackUnaryOp: unknown opcode" );
 		break;
 	}
 
@@ -512,13 +650,15 @@ BOOL stackInitialise(void)
 	psStackBase = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
 	if (psStackBase == NULL)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 	psStackBase->aVals = MALLOC(sizeof(INTERP_VAL) * INIT_SIZE);
 	if (!psStackBase->aVals)
 	{
-		DBERROR(("Out of memory"));
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
 		return FALSE;
 	}
 
@@ -526,6 +666,9 @@ BOOL stackInitialise(void)
 	psStackBase->psPrev = NULL;
 	psStackBase->psNext = NULL;
 	psCurrChunk = psStackBase;
+
+	//string support
+	CURSTACKSTR = 0;		//initialize string 'stack'
 
 	return TRUE;
 }
@@ -539,7 +682,7 @@ void stackShutDown(void)
 
 	if ((psCurrChunk != psStackBase) && (currEntry != 0))
 	{
-		DBPRINTF(("stackShutDown: stack is not empty on shutdown"));
+		debug( LOG_NEVER, "stackShutDown: stack is not empty on shutdown" );
 	}
 
 	for(psCurr = psStackBase; psCurr != NULL; psCurr = psNext)
@@ -554,8 +697,8 @@ void stackShutDown(void)
 /* Reset the stack to an empty state */
 void stackReset(void)
 {
-	ASSERT(( ((psCurrChunk == psStackBase) && (currEntry == 0)),
-		"stackReset: stack is not empty"));
+	ASSERT( ((psCurrChunk == psStackBase) && (currEntry == 0)),
+		"stackReset: stack is not empty" );
 
 	psCurrChunk = psStackBase;
 	currEntry = 0;
@@ -573,7 +716,7 @@ void stackReset(void)
 
 	if (psCurrChunk->psPrev == NULL && currEntry == 0)
 	{
-		ASSERT((FALSE, "stackGetTop: not enough entries on stack"));
+		ASSERT( FALSE, "stackGetTop: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -604,7 +747,7 @@ void stackReset(void)
 
 	if (psCurrChunk->psPrev == NULL && currEntry == 0)
 	{
-		ASSERT((FALSE, "stackSetTop: not enough entries on stack"));
+		ASSERT( FALSE, "stackSetTop: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -637,7 +780,7 @@ void stackReset(void)
 
 	if (psCurrChunk->psPrev == NULL && currEntry < 2)
 	{
-		ASSERT((FALSE, "stackGetSecond: not enough entries on stack"));
+		ASSERT( FALSE, "stackGetSecond: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -667,7 +810,7 @@ void stackReset(void)
 
 	if (psCurrChunk->psPrev == NULL && currEntry < 2)
 	{
-		ASSERT((FALSE, "stackGetSecond: not enough entries on stack"));
+		ASSERT( FALSE, "stackGetSecond: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -705,7 +848,7 @@ void stackReset(void)
 
 	if (psCurrChunk->psPrev == NULL && currEntry < 2)
 	{
-		ASSERT((FALSE, "stackGetSecond: not enough entries on stack"));
+		ASSERT( FALSE, "stackGetSecond: not enough entries on stack" );
 		return FALSE;
 	}
 
@@ -735,5 +878,7 @@ void stackReset(void)
 
 	return TRUE;
 }*/
+
+
 
 

@@ -260,7 +260,8 @@ BOOL Status = TRUE;
 			Status = FALSE;
 		break;
 	default:
-		DBERROR(("Weirdy status for tracking Camera"));
+		debug( LOG_ERROR, "Weirdy status for tracking Camera" );
+		abort();
 		break;
 	}
 	/* TBR
@@ -284,7 +285,7 @@ BOOL Status = TRUE;
 /* Flips states for camera active */
 void	setWarCamActive(BOOL status)
 {
-	DBPRINTF(("setWarCamActive(%d)\n",status));
+	debug( LOG_NEVER, "setWarCamActive(%d)\n", status );
 
 	/* We're trying to switch it on */
 	if(status == TRUE)
@@ -1604,8 +1605,8 @@ void	setUpRadarTarget(SDWORD x, SDWORD y)
 void	requestRadarTrack(SDWORD x, SDWORD y)
 {
 /*
-	ASSERT((x<mapWidth*TILE_UNITS,"Weirdy x coordinate for tracking"));
-	ASSERT((y<mapHeight*TILE_UNITS,"Weirdy y coordinate for tracking"));
+	ASSERT( x<mapWidth*TILE_UNITS,"Weirdy x coordinate for tracking" );
+	ASSERT( y<mapHeight*TILE_UNITS,"Weirdy y coordinate for tracking" );
 */
 
 	radarX = (SWORD)x;

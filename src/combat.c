@@ -100,12 +100,12 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	SDWORD			level, cmdLevel;
 	BOOL			bMissVisible;
 
-	ASSERT((PTRVALID(psWeap, sizeof(WEAPON)),
-		"combFire: Invalid weapon pointer"));
-	ASSERT((PTRVALID(psAttacker, sizeof(BASE_OBJECT)),
-		"combFire: Invalid attacker pointer"));
-	ASSERT((PTRVALID(psTarget, sizeof(BASE_OBJECT)),
-		"combFire: Invalid target pointer"));
+	ASSERT( PTRVALID(psWeap, sizeof(WEAPON)),
+		"combFire: Invalid weapon pointer" );
+	ASSERT( PTRVALID(psAttacker, sizeof(BASE_OBJECT)),
+		"combFire: Invalid attacker pointer" );
+	ASSERT( PTRVALID(psTarget, sizeof(BASE_OBJECT)),
+		"combFire: Invalid target pointer" );
 
 	/* Get the stats for the weapon */
 	psStats = asWeaponStats + psWeap->nStat;

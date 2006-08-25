@@ -58,7 +58,7 @@ endif
 ifeq ($(strip $(MODE)),debug)
 CFLAGS+=-Wall -O0 -g3 -DDEBUG
 else
-CFLAGS+=-march=i686 -Os
+CFLAGS+=-march=i686 -Os -DNDEBUG
 LDFLAGS+=-Wl,-S
 endif
 

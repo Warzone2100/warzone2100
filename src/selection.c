@@ -91,11 +91,11 @@ char	selInfo[255];
 			retVal = selSelectAllSame(player,bOnScreen);
 			break;
 		default:
-			ASSERT((FALSE,"Invalid selection type in uniDroidSelection"));
+			ASSERT( FALSE,"Invalid selection type in uniDroidSelection" );
 		}
 		break;
 	default:
-		ASSERT((FALSE,"Invalid selection attempt in uniDroidSelection"));
+		ASSERT( FALSE,"Invalid selection attempt in uniDroidSelection" );
 		break;
 	}
 
@@ -152,8 +152,8 @@ UDWORD	count;
 		{
 			/* Get the propulsion type */
 			psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-			ASSERT( (PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
-				"moveUpdateUnit: invalid propulsion stats pointer") );
+			ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+				"moveUpdateUnit: invalid propulsion stats pointer" );
 			/* Same as that asked for - don't want Transporters*/
 			if ( psPropStats->propulsionType == propType AND psDroid->droidType != DROID_TRANSPORTER)
 			{
@@ -596,8 +596,8 @@ STRUCTURE	*psFirst;
 BOOL		bLaterInList;
 
 	/* Firstly, start coughing if the type is invalid */
-	ASSERT((structType>=REF_HQ AND structType<=NUM_DIFF_BUILDINGS,
-		"Invalid structure type in selNextSpecifiedBuilding"));
+	ASSERT( structType>=REF_HQ AND structType<=NUM_DIFF_BUILDINGS,
+		"Invalid structure type in selNextSpecifiedBuilding" );
 
 	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
 		psCurr AND !psResult; psCurr = psCurr->psNext)
@@ -723,5 +723,7 @@ void selCommander(SDWORD n)
 }
 
 // ---------------------------------------------------------------------
+
+
 
 
