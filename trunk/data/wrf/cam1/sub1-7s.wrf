@@ -1,0 +1,25 @@
+/*
+ * Sub1-7s.wrf	temporary to start off world
+ *
+ */
+
+/* Directory for Proximity messages and mission briefs */
+directory	"messages"
+
+file		SMSG		"brief1-7.txt"
+
+/* Directory for uncompiled script files */
+directory       "script\text"
+
+file		SCRIPT		"Cam1-7s.slo"
+file		SCRIPT		"cam1daynight.slo"
+
+
+/* Directory for compiled script files*/
+directory       "script\binary"
+
+/* Directory for script value files*/
+directory       "script\data"
+
+file            SCRIPTVAL       "Cam1-7s.vlo"
+file            SCRIPTVAL       "cam1day.vlo"

@@ -1,0 +1,12 @@
+20	432	20	180	"This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
+
+
+20	432	190	300	"We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
+
+20	432	315	450	"We were trying to reach your position, but have been ambushed."
+0	0	315	450	"We're holed up in  a valley at these coordinates."
+0	0	315	450	"Please assist."
+
+
+
+

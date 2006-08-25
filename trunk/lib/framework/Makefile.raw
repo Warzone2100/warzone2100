@@ -1,0 +1,25 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=block.c \
+	configfile.c \
+	debug.c \
+	frame.c \
+	frameresource.c \
+	heap.c \
+	ignorecase.c \
+	input.c \
+	mem.c \
+	mono.c \
+	resource_parser.c \
+	resource_lexer.c \
+	strres.c \
+	strres_parser.c \
+	strres_lexer.c \
+	treap.c \
+	trig.c \
+	SDL_framerate.c
+
+LIB=framework
+
+include $(MAKERULES)/lib.mk

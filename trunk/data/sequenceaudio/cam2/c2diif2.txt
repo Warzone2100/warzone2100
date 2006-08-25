@@ -1,0 +1,6 @@
+20	432	40	200	"Commander, a new launch has been detected."
+0	0	40	200	"It is likely to be targeted at your location."
+
+20	432	220	385	"You are to start the immediate evacuation of Beta Base to the safe haven."
+
+

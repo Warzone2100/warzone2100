@@ -1,0 +1,6 @@
+20	432	10	320	"Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
+
+20	432	325	500	"Nexus now asks us to crush the Project."
+0	0	325	500	"Cleanse and destroy!!"
+
+

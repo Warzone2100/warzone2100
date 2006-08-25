@@ -1,0 +1,82 @@
+/* General Script Strings */
+
+/* Generic Briefing Stuff */
+TRANS_MSG1			"Briefing Commences:"
+TRANS_MSG2			"End Of Briefing."
+
+/* Early mission script stuff (may not need?) */
+SCAVAPPR_MSG			"Armed Scavengers Approaching"
+BARBASE_MSG			"Scavenger Outpost"
+POWRES_MSG			"Power Resource"
+ART_MSG				"Unknown Artifact"
+POWSURGE_MSG			"Source of Power Surge"
+
+/* LZ stuff */
+LZ_MSG				"Landing Zone"
+LZ_MSG2				"Return to LZ"
+RUINS_MSG			"Mission Target"
+RUINS_MSG2			"Pre-Collapse Research Center"
+/* In flight brief TEXT */
+INFLIGHT_MSG1			"En-route To Mission Site"
+END_MSG1			"Mission Failed"
+WIN_MSG1			"Mission Successful"
+
+/* more proximity text */
+LZ_MSG3				"Enemy Landing Zone"
+ENEMYBASE_MSG			"Enemy Base"
+MISSIONTARGET_MSG		"Mission Target"
+
+/* incoming transmission */
+NP_MSG1				"Incoming transmission"
+
+REINFORCE_MSG			"Reinforcements are now available"
+
+/* Incoming intelligence report. */
+INCOM_INT		"Incoming intelligence report."
+
+/* Additional Messages */
+ADD_MSG01			"Civilian Rescued"
+ADD_MSG02			"Civilians Rescued"
+ADD_MSG03			"Unit Rescued"
+ADD_MSG04			"Units Rescued"
+ADD_MSG05			"Group Rescued"
+ADD_MSG06			"Unit Captured"
+ADD_MSG07			"Group Captured"
+ADD_MSG08			"Structure Captured"
+ADD_MSG09			"Structure Destroyed"
+ADD_MSG10			"Objective Captured"
+ADD_MSG11			"Objective Destroyed"
+ADD_MSG12			"Structure Infected"
+ADD_MSG13			"Unit Infected"
+ADD_MSG14			"Group Infected"
+ADD_MSG15			"Primary Objective Completed"
+ADD_MSG16			"Secondary Objective Completed"
+ADD_MSG17			"Time Limit Exceeded"
+ADD_MSG18			"Out Of Time"
+ADD_MSG19			"Enemy Escaped"
+ADD_MSG20			"Enemy Escaping"
+ADD_MSG21			"Enemy Transport Landing"
+ADD_MSG22			"Incoming Airstrike"
+
+ADD_MSG23			"Team Alpha Eradicated"
+ADD_MSG24			"Team Beta Eradicated"
+ADD_MSG25			"Team Gamma Eradicated"
+ADD_MSG26			"Team Alpha Rescued"
+ADD_MSG27			"Team Beta Rescued"
+ADD_MSG28			"Team Gamma Rescued"
+ADD_MSG29			"Team Alpha Liberated"
+ADD_MSG30			"Team Beta Liberated"
+ADD_MSG31			"Team Gamma Liberated"
+ADD_MSG32			"Civilians Eradicated"
+ADD_MSG33			"Civilians Liberated"
+ADD_MSG34			"Enemy Eradicated"
+ADD_MSG35			"New Paradigm base eradicated"
+ADD_MSG36			"Collective base eradicated"
+ADD_MSG37			"Nexus base eradicated"
+ADD_MSG38			"LasSat firing"
+ADD_MSG39			"LasSats firing"
+ADD_MSG40			"Satellite Uplink"
+ADD_MSG41			"NASDA Central"
+ADD_MSG42			"Nuclear Reactor"
+ADD_MSG43			"SAM Site"
+ADD_MSG44			"Missile Silo"

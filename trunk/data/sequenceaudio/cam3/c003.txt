@@ -1,0 +1,7 @@
+20	432	850	1025	"Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
+
+
+20	432	1150	1250	"Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
+
+
+20	432	1275	1350	"Commander, the success of the Project lies with you."

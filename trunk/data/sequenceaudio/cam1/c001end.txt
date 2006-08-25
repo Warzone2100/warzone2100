@@ -1,0 +1,7 @@
+20	20	0	60	"Incoming Transmission"
+
+20	20	70	250	"Transmission from Beta Base"
+20	452	70	250	"Mayday! Mayday!"
+0	0	70	250	"Please assist!..."
+
+20	20	730	844	"Commander you are to assist Team Beta"

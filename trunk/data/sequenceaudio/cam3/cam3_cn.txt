@@ -1,0 +1,14 @@
+20	432	75	220	"Commander, you're proving to be more resilient than I thought."
+0	0	75	220	"Such a pity that you refused to join me earlier."
+
+20	432	225	300	"But no matter, as you'll not be here much longer."
+
+20	432	325	425	"After much searching and reprogramming, I've finally got all my systems back on-line."
+
+20	432	450	700	"Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
+0	0	450	700	"I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+
+20	432	725	850	"My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
+
+
+

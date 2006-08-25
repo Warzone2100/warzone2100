@@ -1,0 +1,18 @@
+//VLO file for capturing NASDA central Uplink structure when player is near
+
+//cam2DX.VLO
+
+script "cam2DX.slo"
+run
+{
+player		int		0
+enemy		int		2
+uplinkPlayer	int		1
+uplink		STRUCTURE	3223
+failed_msg	TEXTSTRING	"ADD_MSG11"	//objective destroyed
+captured_msg	TEXTSTRING	"ADD_MSG10"	//objective captured
+capRange	int		512		//radius that needs to be clear of enemy structures before capturable
+
+goodSnd		SOUND		"PCV621.ogg"	//"Objective captured"
+badSnd		SOUND		"PCV622.ogg"	//"Objective destroyed"
+}

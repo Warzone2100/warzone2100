@@ -1,0 +1,16 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=bar.c \
+	button.c \
+	editbox.c \
+	form.c \
+	label.c \
+	scrap.c \
+	slider.c \
+	tip.c \
+	widget.c
+
+LIB=widget
+
+include $(MAKERULES)/lib.mk

@@ -1,0 +1,30 @@
+/*
+ * Cam3AB.wrf
+ *
+ */
+
+/* Directory for Proximity messages and mission briefs */
+directory	"messages"
+
+file		SMSG		"brief3A-B.txt"
+file		SMSG		"prox3AB.txt"
+
+/* Directory for uncompiled script files */
+directory       "script\text"
+
+file		SCRIPT		"setdisk.slo"
+file		SCRIPT		"genexp.slo"
+file		SCRIPT		"cam3A-BX.slo"
+file		SCRIPT		"VTOLS.slo"
+file		SCRIPT		"cam3daynight.slo"
+
+/* Directory for compiled script files*/
+directory       "script\binary"
+
+/* Directory for script value files*/
+directory       "script\data"
+file            SCRIPTVAL       "cam3A-B.vlo"
+file            SCRIPTVAL       "cam3A-BX.vlo"
+file            SCRIPTVAL       "VTOLS3A-B.vlo"
+file            SCRIPTVAL       "disk2.vlo"
+file            SCRIPTVAL       "cam3day.vlo"

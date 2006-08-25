@@ -1,0 +1,10 @@
+20	432	75	165	"Not long to go now, Commander. There's no where else for you to run to."
+
+
+20	432	210	325	"However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
+
+20	432	350	425	"You have five minutes to comply or else it's frying time!"
+
+
+
+

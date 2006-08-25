@@ -1,0 +1,15 @@
+20	432	75	165	"Ah, Commander, so good of you to join us here at Nexus base."
+
+20	432	175	320	"It was very useful having Gamma Team set up here in the mountains."
+0	0	175	320	"Their absorption was such a pleasure."
+
+20	432	325	400	"Thank you for all those useful technologies you've recovered."
+
+20	432	405	510	"You and not those fools in the New Paradigm and the Collective."
+
+20	432	530	620	"I'm now activating all your synaptic links so that your forces can meld with Nexus."
+
+20	432	630	720	"Your forces are now mine! Welcome to Nexus."
+
+
+//" for me. Had I known you'd be so useful, I'd have hired "

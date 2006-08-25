@@ -1,0 +1,12 @@
+20	432	100	200	"Transport destinations follow:"
+0	0	100	200	"Alpha - Western Sector...."
+
+20	432	225	350	"Alpha you are cleared for take-off."
+0	0	225	350	"Good luck and good hunting."
+
+20	432	750	875	"Approaching Landing Zone. Team Alpha Briefing commences."
+
+20	432	925	1150	"Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
+
+20	432	1175	1240	"Your destination lies in the western zone."
+

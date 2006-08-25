@@ -1,0 +1,22 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=bspimd.c \
+	ivi.c \
+	pieblitfunc.c \
+	piedraw.c \
+	piefunc.c \
+	piematrix.c \
+	piemode.c \
+	piepalette.c \
+	piestate.c \
+	pietexture.c \
+	rendfunc.c \
+	rendmode.c \
+	screen.c \
+	tex.c \
+	textdraw.c
+
+LIB=ivis_opengl
+
+include $(MAKERULES)/lib.mk

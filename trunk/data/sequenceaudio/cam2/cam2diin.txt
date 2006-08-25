@@ -1,0 +1,11 @@
+20	432	240	380	"Warriors of the Collective. You have performed well."
+0	0	240	380	"Your just reward is on its way."
+
+20	432	390	525	"The Project is fleeing its base and stealing your technology."
+0	0	390	525	"You must stop them!"
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+270	400	0	100	"CAMPAIGN TWO"
+265	420	0	100	"EASTERN SECTOR"
+
+20	20	105	285	"Morning, September 1st, 2100"
+0	0	105	285	"In-flight to Eastern Sector"
+0	0	105	285	"Team Alpha approaches Beta Base"
+
+20	20	320	912	"BETA BASE MISSION: Eastern Sector"
+20	447	320	912	"Upon arrival you are to assume command of the base."
+0	0	320	912	"You must defend and hold it at all costs."
+
+270	465	925	1125	"THE COLLECTIVE"
+
+20	20	1730	1770	"BETA BASE MISSION: Eastern Sector"
+
+20	20	1800	2127	"BETA BASE MISSION: Defend and Fortify"
+20	447	1800	2127	"Be sure to fortify the perimeter and establish anti-aircraft defenses."
+0	0	1800	2127	"New technologies are available."

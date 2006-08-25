@@ -1,0 +1,6 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432		25	125	"When we failed to respond it became threatening."
+
+

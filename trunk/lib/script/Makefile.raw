@@ -1,0 +1,16 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=codeprint.c \
+	event.c \
+	evntsave.c \
+	interp.c \
+	script.c \
+	script_parser.c \
+	script_lexer.c \
+	stack.c
+
+LIB=script
+
+include $(MAKERULES)/lib.mk
+

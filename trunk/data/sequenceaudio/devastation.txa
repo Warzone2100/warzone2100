@@ -1,0 +1,18 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	20		0	550	"Dusk, November 3rd, 2085"
+0	0		0	550	"Earth, High Orbit"
+0	0		0	550	"The Collapse"
+
+20	20		975	1450	"January 19th, 2086"
+0	0		975	1450	"North America"
+0	0		975	1450	"Nuclear Winter"
+
+20	20		1500	2000	"Midnight, April 10th, 2086"
+0	0		1500	2000	"Rocky Mountains"
+0	0		1500	2000	"Safety"
+
+20	20		2300	4000	"Dawn, April 4th, 2100"
+0	0		2300	4000	"North America"
+0	0		2300	4000	"A New Beginning"

@@ -1,0 +1,15 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=anim.c \
+	animobj.c \
+	audp_parser.c \
+	audp_lexer.c \
+	gtime.c \
+	hashtabl.c \
+	pqueue.c \
+	ptrlist.c
+
+LIB=gamelib
+
+include $(MAKERULES)/lib.mk

@@ -1,0 +1,14 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=bitimage.c \
+	bug.c \
+	imd.c \
+	imdload.c \
+	pcx.c \
+	pieclip.c \
+	piestate.c
+
+LIB=ivis_common
+
+include $(MAKERULES)/lib.mk

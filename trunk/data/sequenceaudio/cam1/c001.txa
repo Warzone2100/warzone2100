@@ -1,0 +1,14 @@
+270	400	0	100	"CAMPAIGN ONE"
+260	420	0	100	"WESTERN SECTOR"
+
+20	20	101	399	"Dawn, July 4th, 2100"
+0	0	101	399	"Project HQ"
+0	0	101	399	"A New Era"
+
+20	20	499	799	"Morning, July 4th, 2100"
+0	0	499	799	"In-flight to Western Sector"
+0	0	499	799	"Team Alpha nears its destination"
+
+20	20	1250	1725	"OBJECTIVE: Locate and recover neural synapse technology"
+20	447	1250	1725	"Establish a base, then search for a Pre-Collapse structure."
+0	0	1250	1725	"This structure contains technology vital for the success of the Project."

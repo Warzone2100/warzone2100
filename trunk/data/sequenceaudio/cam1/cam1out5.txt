@@ -1,0 +1,16 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432		25	190	"Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
+
+20	432		200	475	"We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
+
+20	432		500	710	"We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
+
+20	432		725	900	"It has technology and weapons. It knows about us, and it's not friendly."
+
+
+
+
+
+
