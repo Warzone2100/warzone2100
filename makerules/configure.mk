@@ -3,6 +3,12 @@ include $(MAKERULES)/config.mk
 
 # Check for unset config
 
+ifeq ($(strip $(VERSION)),)
+$(error You must set VERSION in $(MAKERULES)/config.mk)
+else
+$(info VERSION set to $(VERSION))
+endif
+
 ifeq ($(strip $(PLATFORM)),)
 $(error You must set PLATFORM in $(MAKERULES)/config.mk)
 else
@@ -42,7 +48,7 @@ endif
 
 # Setup paths and static values
 
-CFLAGS+=-m32 -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
+CFLAGS+=-m32 -DVERSION=$(VERSION) -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
 LDFLAGS+=-L$(DEVDIR)/lib
 
 

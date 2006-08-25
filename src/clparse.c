@@ -28,7 +28,6 @@
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
-#include "version.h"
 
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
@@ -68,9 +67,9 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 		if ( stricmp(tokenType, "--version") == 0 )
 		{
 #ifdef DEBUG
-			fprintf( stdout, "Warzone 2100 - Version %s - Built %s - DEBUG\n", version(), __DATE__ );
+			fprintf( stdout, "Warzone 2100 - Version %s - Built %s - DEBUG\n", VERSION, __DATE__ );
 #else
-			fprintf( stdout, "Warzone 2100 - Version %s - Built %s\n", version(), __DATE__ );
+			fprintf( stdout, "Warzone 2100 - Version %s - Built %s\n", VERSION, __DATE__ );
 #endif
 			return FALSE;
 		}

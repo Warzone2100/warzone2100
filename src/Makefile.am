@@ -4,7 +4,6 @@ bin_PROGRAMS = warzone2100
 BUILT_SOURCES = scriptvals_parser.h
 AM_CPPFLAGS = -I$(top_srcdir)
 warzone2100_SOURCES = \
-		version.c \
 		scriptvals_parser.y \
 		scriptvals_lexer.l \
 		level_lexer.l \
@@ -271,12 +270,3 @@ warzone_libs =  ../lib/framework/libframework.a \
 
 warzone2100_DEPENDENCIES = $(warzone_libs)
 warzone2100_LDADD        = $(warzone_libs)
-
-##
-## on every build, record the working copy revision string
-##
-.PHONY: version.c
-version.c:
-	echo -n 'const char* version(void) { return "'	> version.c
-	echo -n $(VERSION)	>> version.c
-	echo '"; }'			>> version.c

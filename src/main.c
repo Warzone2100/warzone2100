@@ -45,7 +45,6 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "modding.h"
-#include "version.h"
 
 #ifndef DEFAULT_DATADIR
 # define DEFAULT_DATADIR "/usr/share/warzone2100/"
@@ -427,9 +426,9 @@ int main(int argc, char *argv[])
 	}
 
 #ifdef DEBUG
-	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", version(), __DATE__ );
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", VERSION, __DATE__ );
 #else
-	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", version(), __DATE__ );
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", VERSION, __DATE__ );
 #endif
 
 	/*** Initialize PhysicsFS ***/

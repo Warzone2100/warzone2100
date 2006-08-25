@@ -981,10 +981,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\version.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\visibility.c"
 				>
 			</File>
@@ -1900,10 +1896,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\types.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\version.h"
 				>
 			</File>
 			<File

@@ -4,8 +4,8 @@ AC_PREREQ(2.56)
 AC_INIT([Warzone 2100],[2.0.4],[http://wz.rootzilla.de/])
 AM_INIT_AUTOMAKE
 
-AC_CONFIG_SRCDIR([lib/gamelib/anim.h])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_HEADER([src/config.h])
 
 # Checks for programs.
 AC_PROG_CC

@@ -64,9 +64,6 @@
 #include "multistat.h"
 #include "lib/netplay/netplay.h"
 
-
-#include "version.h"
-
 extern BOOL bSubtitles;
 
 extern VOID intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
@@ -1610,9 +1607,9 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_SetTextColour(-1);
 
 #ifdef DEBUG
-	snprintf( sTmp, sTmpSize, "Version %s - Built %s - DEBUG", version(), __DATE__ );
+	snprintf( sTmp, sTmpSize, "Version %s - Built %s - DEBUG", VERSION, __DATE__ );
 #else
-	snprintf( sTmp, sTmpSize, "Version %s - Built %s", version(), __DATE__ );
+	snprintf( sTmp, sTmpSize, "Version %s - Built %s", VERSION, __DATE__ );
 #endif
 
 	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
