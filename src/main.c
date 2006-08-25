@@ -320,7 +320,7 @@ void scanDataDirs( void )
 		{
 			// Relocation for AutoPackage
 			strcpy( tmpstr, prefix );
-			strcat( tmpstr, "/share/warzone/" );
+			strcat( tmpstr, "/share/warzone2100/" );
 			registerSearchPath( tmpstr, 4 );
 			rebuildSearchPath( mod_multiplay, TRUE );
 
