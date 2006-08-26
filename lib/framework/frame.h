@@ -8,7 +8,7 @@
 #define _frame_h
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"
 #endif
 
 #ifdef _MSC_VER

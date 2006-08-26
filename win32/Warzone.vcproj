@@ -675,10 +675,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\netplay\netlobby_stub.c"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\netplay\netlog.c"
 				>
 			</File>
@@ -1580,10 +1576,6 @@
 			</File>
 			<File
 				RelativePath="..\src\multistat.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\netplay\netlobby.h"
 				>
 			</File>
 			<File
