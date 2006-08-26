@@ -27,14 +27,14 @@ You'll have most chances to find us in the development section.
 Once the game is installed (see INSTALL in this directory), you can run it by
 changing to its directory and typing './warzone'. Here's a few of the most
 common command line options :
-	-fullscreen : runs in a full-screen window
-	-window : runs in a window
-	-WIDTHxHEIGHT : runs at WIDTH times HEIGHT resolution, replace WIDTH
+	--fullscreen : runs in a full-screen window
+	--window : runs in a window
+	--viewport WIDTHxHEIGHT : runs at WIDTH times HEIGHT resolution, replace WIDTH
 		and HEIGHT with your dimensions of choice. Beware, though,
 		as it needs to be a resolution supported by your X server.
 
 Note that you do need to type the dash in front of the option, like this :
-		./warzone -fullscreen -1280x960
+		./warzone --fullscreen --viewport 1280x960
 (this is my prefered mode).
 
 The fullscreen/window modes and the resolution are stored, so they only need to
@@ -102,4 +102,4 @@ ogg and mp3 files are supported (provided all necessary libs are installed).
 
 
 
-                                                    The Warzone 2100 Resurrection Project
+                                                    The Warzone Resurrection Project
