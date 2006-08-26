@@ -78,5 +78,7 @@ void incNumDroids(UDWORD player);
 void incNumCommandDroids(UDWORD player);
 void incNumConstructorDroids(UDWORD player);
 
+void fireWaitingCallbacks(void);	//Fire stored beacon messages
+
 #endif
 

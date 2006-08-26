@@ -809,7 +809,6 @@ BOOL scrCallConsole(void)
 
 //multiplayer beacon
 //---------------------------
-/*
 BOOL scrCallBeacon(void)
 {
 	SDWORD	*playerFrom, playerTo;
@@ -820,31 +819,22 @@ BOOL scrCallBeacon(void)
 		VAL_REF | VAL_INT, &locX, VAL_REF | VAL_INT, &locY,
 		VAL_REF | VAL_STRING, &BeaconText)) 
 	{
-		MessageBox(frameGetWinHandle(), "scrCallBeacon() failed to pop parameters.", "failed", MB_OK);
+		debug(LOG_ERROR, "scrCallBeacon() - failed to pop parameters.");
 		return FALSE;
 	}
 
 	
-
-	//DbgMsg("x=%d,y=%d",locX >> TILE_SHIFT,locY >> TILE_SHIFT);
 	if(*BeaconText == NULL)
 	{
-		MessageBox(frameGetWinHandle(), "scrCallBeacon(): passed string was not initialized", "failed", MB_OK);
+		debug(LOG_ERROR, "scrCallBeacon(): passed string was not initialized");
 		return FALSE;
 	}
 
-	//DbgMsg("scrCallMultiMsg");
-
-	//if(MultiMsgPlayerTo == playerTo)
 	if(MultiMsgPlayerTo >= 0 && MultiMsgPlayerFrom >= 0 && MultiMsgPlayerTo < MAX_PLAYERS && MultiMsgPlayerFrom < MAX_PLAYERS)
 	{
-		//DbgMsg("(%d - %d),  %d", MultiMsgPlayerTo, playerTo, MultiMsgPlayerFrom);
 
 		if(MultiMsgPlayerTo == playerTo)
 		{
-
-			//DbgMsg("triggered!!!!!!!!!!!");
-
 			strcpy(*BeaconText,MultiplayMsg);
 	 
 			*playerFrom = MultiMsgPlayerFrom;
@@ -853,7 +843,7 @@ BOOL scrCallBeacon(void)
 
 			if (!stackPushResult(VAL_BOOL, TRUE))	//triggered
 			{
-				DbgMsg("scrCallBeacon - faled to push");
+				debug(LOG_ERROR, "scrCallBeacon - faled to push");
 				return FALSE;
 			}
 
@@ -862,7 +852,7 @@ BOOL scrCallBeacon(void)
 	}
 	else
 	{
-		DbgMsg("scrCallBeacon() - player indexes failed: %d - %d", MultiMsgPlayerFrom, MultiMsgPlayerTo);
+		debug(LOG_ERROR, "scrCallBeacon() - player indexes failed: %d - %d", MultiMsgPlayerFrom, MultiMsgPlayerTo);
 		if (!stackPushResult(VAL_BOOL, FALSE))	//not triggered
 		{
 			return FALSE;
@@ -879,7 +869,6 @@ BOOL scrCallBeacon(void)
 	
 	return TRUE;
 }
-*/
 
 //multiplayer message callback
 //----------------------------

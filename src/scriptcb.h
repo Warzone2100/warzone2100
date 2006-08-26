@@ -118,7 +118,7 @@ extern UDWORD	CBallFrom,CBallTo;
 extern BOOL scrCallConsole(void);
 extern BOOL scrCBStructBuilt(void);
 extern BOOL scrCallMultiMsg(void);
-//extern BOOL scrCallBeacon(void);
+extern BOOL scrCallBeacon(void);
 extern BOOL scrCBTransporterLandedB(void);
 
 #endif

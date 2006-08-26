@@ -7,6 +7,8 @@
 #ifndef _scriptfuncs_h
 #define _scriptfuncs_h
 
+#include "messageDef.h"			//for VIEWDATA
+
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 
@@ -558,6 +560,8 @@ extern BOOL scrSelectDroid(void);
 extern BOOL scrSelectGroup(void);
 extern BOOL scrModulo(void);
 extern BOOL scrPlayerLoaded(void);
+extern BOOL scrRemoveHelpMessage(void);
+extern BOOL scrAddHelpMsg(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
@@ -566,7 +570,10 @@ extern BOOL skTopicAvail(UWORD inc, UDWORD player);
 extern UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
 extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY);
 extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
-
+extern BOOL addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, STRING * textMsg);
+extern BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRING * beaconMsg);
+extern VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY);
+extern MESSAGE * findHelpMsg(UDWORD player, SDWORD sender);
 #endif
 
 

@@ -434,6 +434,12 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
 
+	//make sure they can see our base location
+	if(bMultiPlayer || game.type == SKIRMISH)	//not campaign
+	{
+		giftRadar(p1,p2,FALSE);
+		giftRadar(p2,p1,FALSE);
+	}
 
 	if(allowAudio && (p1 == selectedPlayer || p2== selectedPlayer))
 	{
@@ -451,9 +457,6 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	// teamplay init others vis.
 	if(bMultiPlayer && game.type == TEAMPLAY && (p1 == selectedPlayer || p2== selectedPlayer))
 	{
-		giftRadar(p1,p2,FALSE);
-		giftRadar(p2,p1,FALSE);
-
 		// THIS BIT ADDED BY AJL 28th april
 		for(i=0;i<MAX_PLAYERS;i++)
 		{

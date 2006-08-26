@@ -411,7 +411,9 @@ BOOL scrGroupObjGet(UDWORD index)
 		return FALSE;
 	}
 
+	//fix: turn off caching, since it can screw up everything if returns outdated values
 	// recalculate the values if necessary
+/*
 	if (lgGameTime != gameTime || psScrLastGroup != psGroup)
 	{
 		lgGameTime = gameTime;
@@ -433,23 +435,65 @@ BOOL scrGroupObjGet(UDWORD index)
 			lgHealth = lgHealth / lgMembers;
 		}
 	}
-
-	// set the type and return value
+*/
 	switch (index)
 	{
 	case GROUPID_POSX:
+		lgX = 0;
+		lgMembers = 0;
+		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		{
+			lgMembers += 1;
+			lgX += (SDWORD)psCurr->x;
+		}
+
+		if (lgMembers > 0)
+		{
+			lgX = lgX / lgMembers;
+		}
 		type = VAL_INT;
 		val = lgX;
 		break;
 	case GROUPID_POSY:
+		lgY = 0;
+		lgMembers = 0;
+		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		{
+			lgMembers += 1;
+			lgY += (SDWORD)psCurr->y;
+		}
+
+		if (lgMembers > 0)
+		{
+			lgY = lgY / lgMembers;
+		}
+
 		type = VAL_INT;
 		val = lgY;
 		break;
 	case GROUPID_MEMBERS:
+		lgMembers = 0;
+		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		{
+			lgMembers += 1;
+		}
+
 		type = VAL_INT;
 		val = lgMembers;
 		break;
 	case GROUPID_HEALTH:
+		lgHealth = 0;
+		lgMembers = 0;
+		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		{
+			lgMembers += 1;
+			lgHealth += (SDWORD)((100 * psCurr->body)/psCurr->originalBody);
+		}
+
+		if (lgMembers > 0)
+		{
+			lgHealth = lgHealth / lgMembers;
+		}
 		type = VAL_INT;
 		val = lgHealth;
 		break;

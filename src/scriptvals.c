@@ -30,7 +30,7 @@ typedef struct _scrv_store
 static SCRV_STORE	*psContextStore=NULL;
 
 // keep a note of all base object pointers
-#define MAX_BASEPOINTER		200
+#define MAX_BASEPOINTER		700		//200 - local variables require more of these ("run" error)
 static INTERP_VAL	*asBasePointers[MAX_BASEPOINTER];
 
 // Initialise the script value module

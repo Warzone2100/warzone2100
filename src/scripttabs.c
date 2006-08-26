@@ -82,6 +82,8 @@ TYPE_SYMBOL asTypeTable[] =
 	{ (INTERP_TYPE)ST_POINTER_T,		AT_SIMPLE,	"" },
 	{ (INTERP_TYPE)ST_POINTER_S,		AT_SIMPLE,	"" },
 
+	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT,	AT_SIMPLE,	"" },	//for NULLSTRUCTURESTAT
+
 	/* This final entry marks the end of the type list */
 	{ 0,				AT_SIMPLE,	"END OF TYPE LIST" },
 };
@@ -720,11 +722,11 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "debug",			scrDebugFile,				VAL_VOID,
 		1, { VAL_STRING } },
 
-	//{ "addHelpMsg",				scrAddHelpMsg,			VAL_VOID,
-	//	6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "addHelpMsg",				scrAddHelpMsg,			VAL_VOID,
+		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
-	//{ "removeHelpMessage",				scrRemoveHelpMessage,			VAL_VOID,
-	//	2, { VAL_INT, VAL_INT } },
+	{ "removeHelpMessage",				scrRemoveHelpMessage,			VAL_VOID,
+		2, { VAL_INT, VAL_INT } },
 
 	//droid functions
 	//-----------------------------------
@@ -1136,6 +1138,8 @@ CONST_SYMBOL asConstantTable[] =
 	{ "NULLOBJECT",		(INTERP_TYPE)ST_POINTER_O,	0,		0,					NULL},
 	{ "NULLSTAT",		(INTERP_TYPE)ST_POINTER_S,	0,		0,					NULL},
 	{ "NULLSTRING",		(INTERP_TYPE)ST_TEXTSTRING,	0,		0,					NULL},
+
+	{ "NULLSTRUCTURESTAT",		(INTERP_TYPE)ST_POINTER_STRUCTSTAT,	0,	0,		NULL},	//for NULLSTRUCTURESTAT
 
 	//barbarian player ids
 	{ "BARBARIAN1",	VAL_INT,	0,		BARB1,				0},

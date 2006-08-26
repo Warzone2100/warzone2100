@@ -102,6 +102,8 @@ typedef enum _scr_user_types
 	ST_POINTER_T,								//used so we can check for NULL templates
 	ST_POINTER_S,								// NULL stats
 
+	ST_POINTER_STRUCTSTAT,						//for NULLSTRUCTURESTAT
+
 	ST_MAXTYPE,									// maximum possible type - should always be last
 } SCR_USER_TYPES;
 

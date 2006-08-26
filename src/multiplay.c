@@ -63,6 +63,8 @@ MULTIPLAYERINGAME			ingame;
 BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
 STRING						tempString[12];
+STRING						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
+BOOL						recvBeacon(NETMSG *pMsg);
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -131,6 +133,7 @@ BOOL	recvAudioMsg		(NETMSG *pMsg);
 BOOL	recvMapFileRequested	(NETMSG *pMsg);
 UBYTE	sendMap				(void);
 BOOL	recvMapFileData			(NETMSG *pMsg);
+BOOL	addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, STRING * textMsg);
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -705,10 +708,9 @@ BOOL recvMessage(VOID)
 			case NET_AITEXTMSG:					//multiplayer AI text message
 				recvTextMessageAI(&msg);
 				break;
-			//case NET_BEACONMSG:					//beacon (blip) message
-			//	recvBeacon(&msg);
-			//	break;
-
+			case NET_BEACONMSG:					//beacon (blip) message
+				recvBeacon(&msg);
+				break;
 
 			case NET_BUILD:						// a build order has been sent.
 				recvBuildStarted(&msg);
@@ -1238,6 +1240,47 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 
 		NetPlay.bEncryptAllPackets = bEncrypting;
 	}
+
+	return TRUE;
+}
+
+BOOL sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr)
+{
+	NETMSG	m;
+	SDWORD	sendPlayer;
+	BOOL	bEncrypting;
+
+	//debug(LOG_WZ, "sendBeaconToPlayerNet: '%s'",pStr);
+
+	bEncrypting = NetPlay.bEncryptAllPackets;
+	NetPlay.bEncryptAllPackets = FALSE;
+
+	NetAdd(m,0,sender);			//save the actual sender
+
+	//save the actual player that is to get this msg on the source machine (source can host many AIs)
+	NetAdd(m,4,forPlayer);			//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+
+	//save location
+	NetAdd(m,8,locX);
+	NetAdd(m,12,locY);
+
+	memcpy(&(m.body[16]),&(pStr[0]), strlen( &(pStr[0]) )+1);		// copy message in.
+
+	m.size = (UWORD)( strlen( &(pStr[0]) )+17);						// package the message up and send it.
+	m.type = NET_BEACONMSG;		//new type
+
+	//find machine that is hosting this human or AI
+	sendPlayer = whosResponsible(forPlayer);
+
+	if(sendPlayer >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "sendAIMessage() - whosResponsible() failed.");
+		return FALSE;
+	}
+
+	NETsend(&m,player2dpid[sendPlayer],FALSE);		//send to the player who is hosting 'to' player (might be himself if human and not AI)
+
+	NetPlay.bEncryptAllPackets = bEncrypting;
 
 	return TRUE;
 }
@@ -1872,10 +1915,9 @@ BOOL msgStackFireTop()
 	if(!msgStackGetCallbackType(&_callbackType))
 		return FALSE;
 
-
 	switch(_callbackType)
 	{
-		/*
+		
 		case CALL_BEACON:
 
 			if(!msgStackGetXY(&beaconX, &beaconY))
@@ -1894,7 +1936,7 @@ BOOL msgStackFireTop()
 
 			eventFireCallbackTrigger(CALL_BEACON);
 			break;
-*/
+
 		case CALL_AI_MSG:
 			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
 				return FALSE;
@@ -1920,4 +1962,25 @@ BOOL msgStackFireTop()
 		return FALSE;
 
 	return TRUE;
+}
+
+BOOL recvBeacon(NETMSG *pMsg)
+{
+	SDWORD	sender, receiver,locX, locY;
+	
+	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
+
+	NetGet(pMsg,0,sender);
+	NetGet(pMsg,4,receiver);
+	NetGet(pMsg,8,locX);
+	NetGet(pMsg,12,locY);
+	
+	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
+
+	strcpy(msg, &(pMsg->body[16]));
+	strcat(msg, NetPlay.players[sender].name);		// name
+	
+	strcpy(beaconReceiveMsg[sender], msg);
+
+	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
 }

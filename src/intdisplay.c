@@ -3670,6 +3670,9 @@ void drawRadarBlips()
 	UDWORD				VisWidth, VisHeight, delay = 150;
 	PROX_TYPE			proxType;
 
+	MESSAGE					*psCurr;
+	UDWORD i;
+
 /*#ifndef PSX
 	SDWORD				radarX,radarY;		// for multiplayer blips
 	//FEATURE				*psFeature;			// ditto. Needed always now!
@@ -3677,6 +3680,30 @@ void drawRadarBlips()
 
 	VisWidth = RADWIDTH;
 	VisHeight = RADHEIGHT;
+
+	//check if it's time to remove beacons
+	for(i=0; i<MAX_PLAYERS; i++)
+	{
+		/* Go through all the proximity Displays*/
+		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; 
+			psProxDisp = psProxDisp->psNext)
+		{
+			if(psProxDisp->psMessage->type == MSG_PROXIMITY)
+			{
+				psCurr = psProxDisp->psMessage;
+
+				if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_HELP)
+				{
+					if((((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->timeAdded + 60000) <= gameTime)
+					{
+						debug(LOG_WZ, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender));
+						removeMessage(psCurr, i);	//remove beacon
+						break;	//there can only be 1 beacon per player
+					}
+				}
+			}
+		}
+	}
 
 	/* Go through all the proximity Displays*/
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL;
@@ -3802,7 +3829,6 @@ void drawRadarBlips()
 //		}
 //	}
 //#endif
-
 }
 
 /*draws blips on world to represent Proximity Messages - no longer the Green Arrow!*/

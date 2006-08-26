@@ -127,7 +127,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	newTag = &tagResource[resourceCounter];
 	if(resourceCounter>=NUM_OBJECTS)
 	{
-//		DBPRINTF(("bucket sort too many objects"));
+		debug(LOG_NEVER, "bucket sort too many objects");
 		/* Just get out if there's too much to render already...! */
 		return(TRUE);
 	}
@@ -207,7 +207,6 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	else if(z<worldMin)
 	{
 		worldMin = z;
-
 	}
 
 	/* get min and max */

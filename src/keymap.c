@@ -218,6 +218,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadarTerrain,          //radar terrain on/off
 	kf_ToggleRadarAllyEnemy,        //enemy/ally radar color toggle
 	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
+	kf_AddHelpBlip,				//Add a beacon
 //#ifdef DEBUG	// debug mappings only
 	kf_AllAvailable,
 	kf_ToggleDebugMappings,
@@ -386,6 +387,8 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SetDroidMoveHold ,		strresGetString(psStringRes,STR_BIND_DSTOP));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,			strresGetString(psStringRes,STR_BIND_SENDT));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		strresGetString(psStringRes,STR_BIND_LONGR));
+
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_H,KEYMAP_PRESSED,kf_AddHelpBlip,		"Drop a beacon");
 
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");

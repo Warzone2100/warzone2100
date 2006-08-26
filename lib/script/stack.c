@@ -159,16 +159,12 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 {
 	INTERP_VAL	*psTop;
 
-	//debug(LOG_SCRIPT, "stackPopType 1");
-
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackPopType: stack empty");
 		ASSERT( FALSE, "stackPopType: stack empty" );
 		return FALSE;
 	}
-
-	//debug(LOG_SCRIPT, "stackPopType 2");
 
 	/* move the stack pointer down one */
 	if (currEntry == 0)
@@ -182,11 +178,7 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 		currEntry--;
 	}
 
-	//debug(LOG_SCRIPT, "stackPopType 3");
-
 	psTop = psCurrChunk->aVals + currEntry;
-
-	//debug(LOG_SCRIPT, "stackPopType 4");
 
 	//String support
 	if(psVal->type == VAL_STRING)		//If we are about to assign something to a string variable (psVal)
@@ -223,12 +215,8 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 		}
 	}
 
-	//debug(LOG_SCRIPT, "stackPopType 5");
-
 	/* copy the value off the stack */
 	psVal->v.ival = psTop->v.ival;
-
-	//debug(LOG_SCRIPT, "stackPopType 6");
 
 	return TRUE;
 }
@@ -280,8 +268,6 @@ BOOL stackPopParams(SDWORD numParams, ...)
 		}
 	}
 
-	//debug(LOG_SCRIPT,"stackPopParams 1");
-
 	if (!psCurr)
 	{
 		debug(LOG_ERROR,"stackPopParams: not enough parameters on stack");
@@ -289,7 +275,6 @@ BOOL stackPopParams(SDWORD numParams, ...)
 		return FALSE;
 	}
 
-	//debug(LOG_SCRIPT,"stackPopParams 2");
 
 	//string support
 	// Get the values, checking their types
@@ -299,14 +284,10 @@ BOOL stackPopParams(SDWORD numParams, ...)
 		type = va_arg(args, int);
 		pData = va_arg(args, UDWORD *);
 
-		//debug(LOG_SCRIPT,"stackPopParams 3 (%d parameter)", i);
-
 		psVal = psCurr->aVals + index;
 
 		if(type != VAL_STRING)	//Allow param to be any type, if function expects a string (auto-convert later)
 		{
-			//debug(LOG_SCRIPT,"stackPopParams 4 - non string");
-
 			if (!interpCheckEquiv(type,psVal->type))
 			{
 				ASSERT( FALSE, "stackPopParams: type mismatch" );
@@ -317,19 +298,13 @@ BOOL stackPopParams(SDWORD numParams, ...)
 		}
 		else	//TODO: allow only compatible types
 		{
-			//debug(LOG_SCRIPT,"stackPopParams 5 - string");
-
 			if(psVal->type == VAL_STRING)	//Passing a String
 			{
-
-				//debug(LOG_SCRIPT, "stackPopParams - string");
 				*pData = (UDWORD)psVal->v.ival;
-				debug(LOG_SCRIPT, "%s",*pData);
 			}
 			else		//Integer
 			{
 				STRING *tempstr;
-				//debug(LOG_SCRIPT, "stackPopParams - non string");
 				tempstr = (char*)MALLOC(MAXSTRLEN);
 				sprintf(tempstr, "%d", psVal->v.ival);
 
@@ -346,8 +321,6 @@ BOOL stackPopParams(SDWORD numParams, ...)
 			index = 0;
 		}
 	}
-
-	//debug(LOG_SCRIPT,"END stackPopParams");
 
 	va_end(args);
 	return TRUE;

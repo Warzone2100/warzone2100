@@ -69,6 +69,7 @@
 #include "difficulty.h"
 #include "scriptcb.h"		/* for console callback */
 #include "aiexperience.h"	/* for console commands */
+#include "scriptfuncs.h"
 
 #define	MAP_ZOOM_RATE	(1000)
 
@@ -87,7 +88,8 @@ STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
 STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 extern char	ScreenDumpPath[];
-
+STRING	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
+STRING	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
 int fogCol = 0;//start in nicks mode
 
@@ -1822,6 +1824,7 @@ void kf_SendTextMessage(void)
 		{
 			bAllowOtherKeyPresses = FALSE;
 			strcpy(sTextToSend,"");
+			strcpy(sCurrentConsoleText,"");							//for beacons
 			inputClearBuffer();
 		}
 
@@ -1835,6 +1838,8 @@ void kf_SendTextMessage(void)
 			{
 				bAllowOtherKeyPresses = TRUE;
 			 //	flushConsoleMessages();
+
+				strcpy(sCurrentConsoleText,"");		//reset beacon msg, since console is empty now
 
 				// don't send empty lines to other players
 				if(!strcmp(sTextToSend, ""))
@@ -1891,17 +1896,20 @@ void kf_SendTextMessage(void)
 				if(sTextToSend[0] != '\0')							// cant delete nothing!
 				{
 					sTextToSend[strlen(sTextToSend)-1]= '\0';
+					strcpy(sCurrentConsoleText,sTextToSend);		//beacons
 				}
 			}
 			else if(ch == INPBUF_ESC)								//abort.
 			{
 				bAllowOtherKeyPresses = TRUE;
+				strcpy(sCurrentConsoleText,"");
 			 //	flushConsoleMessages();
 				return;
 			}
 			else							 						// display
 			{
 				sprintf(sTextToSend,"%s%c",sTextToSend,inputGetCharKey());
+				strcpy(sCurrentConsoleText,sTextToSend);
 			}
 
 			ch = (CHAR)inputGetKey();
@@ -2635,4 +2643,48 @@ BOOL	processConsoleCommands( STRING *pName )
 	}
 
 	return bFound;
+}
+
+//Add a beacon (blip)
+void	kf_AddHelpBlip( void )
+{
+	SDWORD	worldX,worldY,i;
+	STRING	tempStr[255];
+
+	debug(LOG_SCRIPT, "%d", game.type);
+
+	/* not needed in campaign */
+	if(!bMultiPlayer)
+		return;
+ 
+	worldX = mouseTileX << TILE_SHIFT;
+	worldY = (mouseTileY << TILE_SHIFT) + TILE_UNITS/2;
+
+	debug(LOG_WZ,"Adding beacon='%s'",sCurrentConsoleText);
+
+	//if chat message is empty, just send player name
+
+	//if(!strcmp(sCurrentConsoleText, ""))
+	//{
+		sprintf(tempStr,"%s",getPlayerName(selectedPlayer));		//temporary solution
+	//}
+	//else
+	//{
+	//	strcpy(tempStr,sCurrentConsoleText);
+	//}
+
+
+	/* add beacon for the sender */
+	strcpy(beaconMsg[selectedPlayer], tempStr);
+	sendBeaconToPlayer(worldX +TILE_UNITS/2, worldY + TILE_UNITS/2, selectedPlayer, selectedPlayer, beaconMsg[selectedPlayer]);
+
+	/* send beacon to other players */
+	for(i=0;i<game.maxPlayers;i++)
+	{
+		if(openchannels[i] && (i != selectedPlayer))
+		{
+			strcpy(beaconMsg[i], tempStr);
+			sendBeaconToPlayer(worldX +TILE_UNITS/2, worldY + TILE_UNITS/2, i, selectedPlayer, beaconMsg[i]);
+		}
+	}
 }

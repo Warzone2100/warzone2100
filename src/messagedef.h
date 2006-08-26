@@ -26,6 +26,8 @@ typedef enum _view_type
 	VIEW_PROX,			// proximity view - no view really!
 	VIEW_RPLX,			// full screen view sequence - flic.	extended format
 
+	VIEW_HELP,			// Beacon message
+
 	VIEW_TYPES,
 } VIEW_TYPE;
 
@@ -82,6 +84,8 @@ typedef struct _view_proximity
 	UDWORD		z;
 	PROX_TYPE	proxType;
 	SDWORD		audioID;	/*ID of the audio track to play - if any */
+	SDWORD		sender;		//user who sent this msg
+	SDWORD		timeAdded;	//remember when was added, so can remove after certain period of time
 } VIEW_PROXIMITY;
 
 typedef struct _viewdata

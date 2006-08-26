@@ -288,6 +288,9 @@ GAMECODE gameLoop(void)
 				multiPlayerLoop();
 //		RecvMessage();
 			}
+
+			fireWaitingCallbacks();		//Now is the good time to fire waiting callbacks (since interpretrer is off now)
+
 			for(i=0; i<MAX_PLAYERS; i++)
 			{
 				//update the current power available for a player
@@ -1207,5 +1210,15 @@ void incNumConstructorDroids(UDWORD player)
 	numConstructorDroids[player] += 1;
 }
 
-
-
+/* Fire waiting beacon messages which we couldn't run before */
+void fireWaitingCallbacks(void)
+{
+	while(!isMsgStackEmpty())
+	{
+		if(!msgStackFireTop())
+		{
+			debug(LOG_ERROR, "msgStackFireTop failed");
+		}
+		//debug(LOG_ERROR,"fireWaitingCallbacks - count: %d", msgStackGetCount());
+	}
+}

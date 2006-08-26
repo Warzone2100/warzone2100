@@ -32,6 +32,7 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "multigifts.h"
+#include "aiexperience.h"	//for beacon messages
 // ////////////////////////////////////////////////////////////////////////////
 // GUID for warzone lobby and MPATH stuff.  i hate this stuff.
 #ifdef WIN32		//Not really (going to be) used. -Qamly
@@ -1083,6 +1084,10 @@ BOOL multiGameInit(VOID)
 //	{
 		campInit();
 //	}
+
+	InitializeAIExperience();
+	msgStackReset();	//for multiplayer msgs, reset message stack
+
 
 	return TRUE;
 }

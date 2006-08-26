@@ -214,6 +214,7 @@ void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
                 msg->psNext = NULL;
                 break;
 	default:
+		debug(LOG_ERROR, "add_msg: unknown message type");
 		break;
         }
 	}
@@ -308,10 +309,13 @@ void viewDataHeapShutDown(void)
  {
 	 MESSAGE *psMsgToAdd = NULL;
 
+	 debug(LOG_WZ, "addMessage: adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
+
 	 //first create a message of the required type
 	 CREATE_MSG(psMsgHeap, &psMsgToAdd, msgType);
 	 if (!psMsgToAdd)
 	 {
+		 debug(LOG_ERROR, "addMessage: CREATE_MSG failed");
 		 return NULL;
 	 }
 	 //then add to the players' list
@@ -372,6 +376,10 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 		psToAdd->selected = FALSE;
 		psToAdd->strobe = 0;
 	}
+	else
+	{
+		debug(LOG_ERROR, "addProximityDisplay() - HEAP_ALLOC failed");
+	}
 
 	//now add it to the top of the list
 	psToAdd->psNext = apsProxDisp[player];
@@ -387,6 +395,7 @@ void removeMessage(MESSAGE *psDel, UDWORD player)
 {
 	if (psDel->type == MSG_PROXIMITY)
 	{
+		debug(LOG_WZ, "removeMessage: removing message for player %d", player);
 		removeProxDisp(psDel, player);
 	}
 	REMOVEMSG(apsMessages, psMsgHeap, psDel, player);
@@ -401,6 +410,7 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 	if (apsProxDisp[player]->psMessage == psMessage)
 	{
 		psCurr = apsProxDisp[player];
+
 		apsProxDisp[player] = apsProxDisp[player]->psNext;
 		intRemoveProximityButton(psCurr);
 		HEAP_FREE(psProxDispHeap, psCurr);
@@ -1047,6 +1057,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	FEATURE			*psFeature;
 	VIEWDATA		*psViewData;
 	VIEW_PROXIMITY	*psViewProx;
+	STRING			msgStr[255];
 
 	if (psProxDisp->type == POS_PROXDATA)
 	{
@@ -1055,7 +1066,17 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		//display text - if any
 		if (psViewData->ppTextMsg)
 		{
-			addConsoleMessage( psViewData->ppTextMsg[0], DEFAULT_JUSTIFY );
+			//Beacon stuff: Add player number to the text
+			if(psViewData->type == VIEW_HELP)
+			{
+				//sprintf(msgStr, "%s: %s", getPlayerName(((VIEW_PROXIMITY *)psViewData->pData)->sender), psViewData->ppTextMsg[0]);
+				sprintf(msgStr, "%s", psViewData->ppTextMsg[0]);	//temporary solution
+				addConsoleMessage( msgStr, DEFAULT_JUSTIFY );
+			}
+			else
+			{
+				addConsoleMessage( psViewData->ppTextMsg[0], DEFAULT_JUSTIFY );
+			}
 		}
 
 		//play message - if any
