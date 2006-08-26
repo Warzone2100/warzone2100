@@ -2301,9 +2301,9 @@ event_list:			event_decl
 event_subdecl:		EVENT IDENT
 					{
 						EVENT_SYMBOL	*psEvent;
-
-						//debug(LOG_SCRIPT, "event_subdecl:		EVENT IDENT");
-
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_subdecl:		EVENT IDENT");
+#endif
 						if (!scriptDeclareEvent($2, &psEvent,0))
 						{
 							YYABORT;
@@ -2317,8 +2317,9 @@ event_subdecl:		EVENT IDENT
 					}
 				|	EVENT EVENT_SYM
 						{
-							//debug(LOG_SCRIPT, "EVENT EVENT_SYM");
-
+#ifdef DEBUG_SCRIPT
+							debug(LOG_SCRIPT, "EVENT EVENT_SYM");
+#endif
 							psCurEvent = $2;
 							$$ = $2;
 
@@ -2543,6 +2544,9 @@ function_declaration:		func_subdecl '(' argument_decl_head ')'	/* function was n
 
 event_decl:			event_subdecl ';'
 					{
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_decl: event_subdecl ';'");
+#endif
 						psCurEvent->bDeclared = TRUE;
 					}
 				|	func_subdecl argument_decl ';'	/* event (function) declaration can now include parameter declaration (optional) */
@@ -2554,8 +2558,9 @@ event_decl:			event_subdecl ';'
 
 				|	event_subdecl '(' TRIG_SYM ')' '{' var_list statement_list '}' 	/* 16.08.05 - local vars support */
 					{
-						//debug(LOG_SCRIPT, "event_decl 0 ");
-
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_decl: event_subdecl '(' TRIG_SYM ')'");
+#endif
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
 						{
@@ -2578,16 +2583,17 @@ event_decl:			event_subdecl ';'
 
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
-
-						//debug(LOG_SCRIPT, "event_decl 0. ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_decl 0. ");
+#endif
 					}
 				|	event_subdecl '(' trigger_subdecl ')'
 					{
 						// Get the line for the implicit trigger declaration
 						STRING	*pDummy;
-
-						//debug(LOG_SCRIPT, "event_decl:event_subdecl '(' trigger_subdecl ')' ");
-
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_decl:event_subdecl '(' trigger_subdecl ')' ");
+#endif
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
 						{
@@ -2597,7 +2603,9 @@ event_decl:			event_subdecl ';'
 						}
 
 						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
-						//debug(LOG_SCRIPT, "event_decl:event_subdecl '(' trigger_subdecl ')' .");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_decl:event_subdecl '(' trigger_subdecl ')' .");
+#endif
 					}
 				/* '{' statement_list '}' */
 				'{' var_list statement_list '}'	/* local vars support */

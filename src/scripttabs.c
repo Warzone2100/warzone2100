@@ -784,7 +784,7 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "numResearchLeft",			scrNumResearchLeft,			VAL_INT,
 		2, { VAL_INT, ST_RESEARCH } },
 
-	{ "researchCompleted",			scrResearchCompleted,			VAL_BOOL,
+	{ "researchFinished",			scrResearchCompleted,			VAL_BOOL,
 		2, { ST_RESEARCH, VAL_INT } },
 
 	{ "researchStarted",			scrResearchStarted,			VAL_BOOL,

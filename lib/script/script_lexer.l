@@ -326,7 +326,10 @@ NOT						return _NOT;
 
 	/* Match identifiers */
 [a-zA-Z_][0-9_a-zA-Z_]*		{
-						//debug(LOG_SCRIPT, "looking up '%s'", scr_text);
+
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "looking up '%s'", scr_text);
+#endif
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
 								{
@@ -376,8 +379,9 @@ NOT						return _NOT;
 								}
 								else
 								{
-									//debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
-
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
+#endif
 									strcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
