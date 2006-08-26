@@ -322,3 +322,4 @@ extern	void	msgStackReset(void);
 
 extern BOOL	sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr);
 extern BOOL msgStackFireTop();
+

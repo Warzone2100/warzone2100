@@ -7,7 +7,7 @@
 #ifndef _scriptfuncs_h
 #define _scriptfuncs_h
 
-#include "messageDef.h"			//for VIEWDATA
+#include "messagedef.h"			//for VIEWDATA
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);

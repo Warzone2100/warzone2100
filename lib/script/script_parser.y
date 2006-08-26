@@ -1812,7 +1812,10 @@ script:			header var_list
 
 					INTERP_TYPE		*pCurEvLocalVars;
 					UDWORD		j;
-
+					
+#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "script: header var_list");
+#endif
 					// Calculate the code size
 					size = 0;
 					debug_i = 0;
@@ -2042,6 +2045,10 @@ script:			header var_list
 						base += arraySize;
 					}
 				}
+				
+#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "END script: header var_list");
+#endif
 			;
 
 	/**************************************************************************************
@@ -2584,7 +2591,7 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
 #ifdef DEBUG_SCRIPT
-						debug(LOG_SCRIPT, "event_decl 0. ");
+						debug(LOG_SCRIPT, "END event_decl: event_subdecl '(' TRIG_SYM ')'");
 #endif
 					}
 				|	event_subdecl '(' trigger_subdecl ')'
@@ -2603,9 +2610,7 @@ event_decl:			event_subdecl ';'
 						}
 
 						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
-#ifdef DEBUG_SCRIPT
-						debug(LOG_SCRIPT, "event_decl:event_subdecl '(' trigger_subdecl ')' .");
-#endif
+
 					}
 				/* '{' statement_list '}' */
 				'{' var_list statement_list '}'	/* local vars support */
@@ -2629,13 +2634,17 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($8);
 						 FREE_BLOCK($8);
 
-						//debug(LOG_SCRIPT, "event_decl:event_subdecl '(' trigger_subdecl ')'. ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "END event_decl:event_subdecl '(' trigger_subdecl ')' .");
+#endif
 					}
 
 				/* local vars */
 				|	event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'
 					{
-						//debug(LOG_SCRIPT, "event_decl 1 ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'");
+#endif
 
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
@@ -2656,7 +2665,9 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
 
-						//debug(LOG_SCRIPT, "event_decl 1. ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "END event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'");
+#endif
 					}
 
 				/* function that was NOT declared before (atleast must look like this)!!! */
@@ -2666,7 +2677,9 @@ event_decl:			event_subdecl ';'
 						UDWORD line;
 						STRING *pDummy;
 
-						//debug(LOG_SCRIPT, "func_decl 1 ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "function_declaration  '{' var_list statement_list return_statement  '}'");
+#endif
 
 						/* stays the same if no params (just gets copied) */
 						ALLOC_BLOCK(psCurrBlock, $4->size + $5->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams)); /* statement_list + expression + EXIT + numParams */
@@ -2707,12 +2720,17 @@ event_decl:			event_subdecl ';'
 						/* free block since code was copied in scriptDefineEvent() */
 						FREE_DEBUG(psCurrBlock);
 						FREE_BLOCK(psCurrBlock);
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "END function_declaration  '{' var_list statement_list return_statement  '}'");
+#endif
 					}
 
 				/* function that WAS declared before!!! */
 				 |	func_subdecl '(' funcbody_var_def ')' '{' var_list statement_list return_statement '}'
 					{
-						//debug(LOG_SCRIPT, "func_decl 3 ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "func_subdecl '(' funcbody_var_def ')' '{' var_list statement_list return_statement '}'");
+#endif
 
 						if(!psCurEvent->bDeclared)
 						{
@@ -2757,7 +2775,9 @@ event_decl:			event_subdecl ';'
 						/* end of event */
 						psCurEvent = NULL;
 
-						//debug(LOG_SCRIPT, "END func_decl 3. ");
+#ifdef DEBUG_SCRIPT
+						debug(LOG_SCRIPT, "END func_subdecl '(' funcbody_var_def ')' '{' var_list statement_list return_statement '}'");
+#endif
 					}
 				;
 
