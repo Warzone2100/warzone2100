@@ -489,8 +489,26 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	/* Write out the version number - unlikely to change for FX data */
 	psHeader->version = CURRENT_VERSION_NUM;
 
+	/* SCORE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->entries);
+
 	/* Skip past the header to the raw data area */
 	pScoreData = (MISSION_DATA*)(pFileData + sizeof(struct _score_save_header));
+
+	/* MISSION_DATA */
+	endian_udword(&pScoreData->unitsBuilt);
+	endian_udword(&pScoreData->unitsKilled);
+	endian_udword(&pScoreData->unitsLost);
+	endian_udword(&pScoreData->strBuilt);
+	endian_udword(&pScoreData->strKilled);
+	endian_udword(&pScoreData->strLost);
+	endian_udword(&pScoreData->artefactsFound);
+	endian_udword(&pScoreData->missionStarted);
+	endian_udword(&pScoreData->shotsOnTarget);
+	endian_udword(&pScoreData->shotsOffTarget);
+	endian_udword(&pScoreData->babasMowedDown);
+
 
 	/* copy over the score data */
 	memcpy(pScoreData,&missionData,sizeof(struct mission_data));
@@ -523,6 +541,10 @@ MISSION_DATA		*pScoreData;
 		return FALSE;
 	}
 
+	/* SCORE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->entries);
+
 	/* How much data are we expecting? */
 	expectedFileSize = (sizeof(struct _score_save_header) + (psHeader->entries*sizeof(struct mission_data)) );
 
@@ -537,6 +559,19 @@ MISSION_DATA		*pScoreData;
 
 	/* Skip past the header gubbins - can check version number here too */
 	pScoreData = (MISSION_DATA*)(pFileData + sizeof(struct _score_save_header));
+
+	/* MISSION_DATA */
+	endian_udword(&pScoreData->unitsBuilt);
+	endian_udword(&pScoreData->unitsKilled);
+	endian_udword(&pScoreData->unitsLost);
+	endian_udword(&pScoreData->strBuilt);
+	endian_udword(&pScoreData->strKilled);
+	endian_udword(&pScoreData->strLost);
+	endian_udword(&pScoreData->artefactsFound);
+	endian_udword(&pScoreData->missionStarted);
+	endian_udword(&pScoreData->shotsOnTarget);
+	endian_udword(&pScoreData->shotsOffTarget);
+	endian_udword(&pScoreData->babasMowedDown);
 
 	memcpy(&missionData,pScoreData,sizeof(struct mission_data));
 

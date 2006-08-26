@@ -2947,6 +2947,10 @@ iIMDShape		*psOrig;
 	/* Write out the version number - unlikely to change for FX data */
 	psHeader->version = CURRENT_VERSION_NUM;
 
+	/* FX_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->entries);
+
 	/* Skip past the header to the raw data area */
 	pFXData = (EFFECT*)(pFileData + sizeof(struct _fx_save_header));
 
@@ -2976,8 +2980,29 @@ iIMDShape		*psOrig;
 			{
 				psOrig = asEffectsList[i].imd;
 				resGetHashfromData("IMD",psOrig,&imdHashedNumber);
+				endian_udword(&imdHashedNumber);
 				pFXData->imd = (iIMDShape*)imdHashedNumber;
 			}
+
+			/* EFFECT */
+			endian_uword(&pFXData->size);
+			endian_fract(&pFXData->position.x);
+			endian_fract(&pFXData->position.y);
+			endian_fract(&pFXData->position.z);
+			endian_fract(&pFXData->velocity.x);
+			endian_fract(&pFXData->velocity.y);
+			endian_fract(&pFXData->velocity.z);
+			endian_sdword(&pFXData->rotation.x);
+			endian_sdword(&pFXData->rotation.y);
+			endian_sdword(&pFXData->rotation.z);
+			endian_sdword(&pFXData->spin.x);
+			endian_sdword(&pFXData->spin.y);
+			endian_sdword(&pFXData->spin.z);
+			endian_udword(&pFXData->birthTime);
+			endian_udword(&pFXData->lastFrame);
+			endian_uword(&pFXData->frameDelay);
+			endian_uword(&pFXData->lifeSpan);
+			endian_uword(&pFXData->radius);
 
 			pFXData++;
 		}
@@ -3017,6 +3042,10 @@ EFFECT				*pFXData;
 		return FALSE;
 	}
 
+	/* FX_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->entries);
+
 	/* How much data are we expecting? */
 	expectedFileSize = (sizeof(struct _fx_save_header) + (psHeader->entries*sizeof(struct _effect_def)) );
 
@@ -3038,10 +3067,31 @@ EFFECT				*pFXData;
 	/* For every FX... */
 	for(i=0; i<psHeader->entries; i++)
 	{
+		/* EFFECT */
+		endian_uword(&pFXData->size);
+		endian_fract(&pFXData->position.x);
+		endian_fract(&pFXData->position.y);
+		endian_fract(&pFXData->position.z);
+		endian_fract(&pFXData->velocity.x);
+		endian_fract(&pFXData->velocity.y);
+		endian_fract(&pFXData->velocity.z);
+		endian_sdword(&pFXData->rotation.x);
+		endian_sdword(&pFXData->rotation.y);
+		endian_sdword(&pFXData->rotation.z);
+		endian_sdword(&pFXData->spin.x);
+		endian_sdword(&pFXData->spin.y);
+		endian_sdword(&pFXData->spin.z);
+		endian_udword(&pFXData->birthTime);
+		endian_udword(&pFXData->lastFrame);
+		endian_uword(&pFXData->frameDelay);
+		endian_uword(&pFXData->lifeSpan);
+		endian_uword(&pFXData->radius);
+
 		memcpy(&asEffectsList[i],pFXData++,sizeof(struct _effect_def));
 		if(asEffectsList[i].imd)
 		{
 			/* Restore the pointer from the hashed ID */
+			endian_udword(&((UDWORD)asEffectsList[i].imd));
 			asEffectsList[i].imd = (iIMDShape*)resGetDataFromHash("IMD",(UDWORD)asEffectsList[i].imd);
 		}
 	}
