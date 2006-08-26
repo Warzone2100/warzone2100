@@ -1,5 +1,5 @@
 %.o: %.rc
-	$(WINDRES) $< $@
+	$(WINDRES) -o$@ $<
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o$@ $<
