@@ -1324,8 +1324,8 @@ event useLassat(useLassatTr)
 				if(structureComplete(structure) == TRUE)
 				{
 					skFireLassat(player,allOutAttack);
-					structure= enumStruct();
 				}
+				structure= enumStruct();
 			}
 		}
 	}
