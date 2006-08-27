@@ -756,8 +756,6 @@ void pie_DrawShadows() {
 		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
 	}
 
-	glEndList();
-
 	if (stencil_one_pass()) {
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 	} else {
