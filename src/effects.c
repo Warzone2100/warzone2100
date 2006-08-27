@@ -3091,7 +3091,7 @@ EFFECT				*pFXData;
 		if(asEffectsList[i].imd)
 		{
 			/* Restore the pointer from the hashed ID */
-			endian_udword(&((UDWORD)asEffectsList[i].imd));
+			endian_udword(&asEffectsList[i].imd);
 			asEffectsList[i].imd = (iIMDShape*)resGetDataFromHash("IMD",(UDWORD)asEffectsList[i].imd);
 		}
 	}
