@@ -129,14 +129,12 @@ extern void frameSetCursorFromRes(WORD resID);
 /* Returns the current frame we're on - used to establish whats on screen */
 extern UDWORD	frameGetFrameNumber(void);
 
-/* Return the current frame rate */
-extern UDWORD frameGetFrameRate(void);
-
-/* Return the overall frame rate */
-extern UDWORD frameGetOverallRate(void);
-
-/* Return the frame rate for the last second */
-extern UDWORD frameGetRecentRate(void);
+/**
+ * Average framerate of the last seconds
+ *
+ * \return Average framerate
+ */
+extern UDWORD frameGetAverageRate(void);
 
 /* The handle for the application window */
 extern HANDLE	frameGetWinHandle(void);

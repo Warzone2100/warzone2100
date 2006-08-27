@@ -308,8 +308,7 @@ void	kf_SetToughUnitsLevel( void )
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d",
-	          frameGetFrameRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d", frameGetAverageRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
 	if (bMultiPlayer) {
 			CONPRINTF(ConsoleString,(ConsoleString,
 						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
@@ -1869,7 +1868,7 @@ void kf_SendTextMessage(void)
 				{
 					//show the message we sent on our local console as well (even in skirmish, to see console commands)
 					//sprintf(tmp,"%d",selectedPlayer);
-					
+
 					sprintf(tmp,"%s",getPlayerName(selectedPlayer));
 					strcat(tmp," : ");											// seperator
 					strcat(tmp,sTextToSend);											// add message
@@ -2617,7 +2616,7 @@ BOOL	processConsoleCommands( STRING *pName )
 	{
 		char tmpStr[255];
 
-		
+
 
 		/* saveai x */
 		for(i=0;i<MAX_PLAYERS;i++)
@@ -2656,7 +2655,7 @@ void	kf_AddHelpBlip( void )
 	/* not needed in campaign */
 	if(!bMultiPlayer)
 		return;
- 
+
 	worldX = mouseTileX << TILE_SHIFT;
 	worldY = (mouseTileY << TILE_SHIFT) + TILE_UNITS/2;
 

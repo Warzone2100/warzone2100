@@ -117,95 +117,75 @@ static BOOL displayMouse=TRUE;
 #define  IN_A_FRAME 70
 
 /* Global variables for the frame rate stuff */
-static SDWORD	FrameCounts[TIMESPAN];
-static SDWORD	Frames;						// Number of frames elapsed since start
-static SDWORD	LastFrames;
-static SDWORD	RecentFrames;				// Number of frames in last second
-static SDWORD	PresSeconds;				// Number of seconds since execution started
-static SDWORD	LastSeconds;
-static SDWORD	FrameRate;					// Average frame rate since start
-static SDWORD	FrameIndex;
-static SDWORD	Total;
-static SDWORD	RecentAverage;				// Average frame rate over last TIMSPAN seconds
+static Uint32	FrameCounts[TIMESPAN] = { 0 };
+static Uint32	FrameIndex = 0;
+static Uint64	curFrames = 0; // Number of frames elapsed since start
+static Uint64	lastFrames = 0;
+static Uint32	curTicks = 0; // Number of ticks since execution started
+static Uint32	lastTicks = 0;
 
 /* InitFrameStuff - needs to be called once before frame loop commences */
 static void	InitFrameStuff( void )
 {
-SDWORD i;
+	UDWORD i;
 
 	for (i=0; i<TIMESPAN; i++)
-		{
+	{
 		FrameCounts[i] = IN_A_FRAME;
-		}
+	}
 
-	Frames = 0;
-	LastFrames = 0;
-	RecentFrames = 0;
-	RecentAverage = 0;
-	PresSeconds = 0;
-	LastSeconds = 0;
-	LastSeconds = PresSeconds;
 	FrameIndex = 0;
+	curFrames = 0;
+	lastFrames = 0;
+	curTicks = 0;
+	lastTicks = 0;
 }
 
 /* MaintainFrameStuff - call this during completion of each frame loop */
 static void	MaintainFrameStuff( void )
 {
-SDWORD i;
+	curTicks = SDL_GetTicks();
+	curFrames++;
 
-	PresSeconds = clock()/CLOCKS_PER_SEC;
-	if (PresSeconds!=LastSeconds)
-		{
-		LastSeconds = PresSeconds;
-		RecentFrames = Frames-LastFrames;
-		LastFrames = Frames;
-		FrameCounts[FrameIndex++] = RecentFrames;
-		if (FrameIndex>=TIMESPAN)
+	// Update the framerate only once per second
+	if ( curTicks >= lastTicks + 1000 )
+	{
+		// TODO Would have to be normalized to be correct for < 1 fps:
+		// FrameCounts[FrameIndex++] = 1000 * (curFrames - lastFrames) / (curTicks - lastTicks);
+		FrameCounts[FrameIndex++] = curFrames - lastFrames;
+		if ( FrameIndex >= TIMESPAN )
 		{
 			FrameIndex = 0;
 		}
-
-		Total = 0;
-		for (i=0; i<TIMESPAN; i++)
-			{
-			Total+=FrameCounts[i];
-			}
-		RecentAverage = Total/TIMESPAN;
-
-		if (PresSeconds > 0)
-			FrameRate = Frames / PresSeconds;
-		}
-	Frames++;
+		lastTicks = curTicks;
+		lastFrames = curFrames;
+	}
 }
 
 /* replacement for win32 function */	//Check this.  [test] --Qamly
-#ifndef  _MSC_VER		//was WIN32, but gcc is OK with this?			//Note, I vote for name change, since we are using SDL now right? --Qamly
+#ifndef  _MSC_VER // was WIN32, but gcc is OK with this?
+// Note, I vote for name change, since we are using SDL now right? --Qamly
 DWORD GetTickCount()
 {
         return (DWORD) SDL_GetTicks();
 }
 #endif
-/* Return the current frame rate */
-UDWORD frameGetFrameRate(void)
+
+
+UDWORD frameGetAverageRate(void)
 {
-	return RecentAverage;
+	SDWORD averageFrames = 0, i = 0;
+	for ( i = 0; i < TIMESPAN; i++ )
+		averageFrames += FrameCounts[i];
+	averageFrames /= TIMESPAN;
+
+	return averageFrames;
 }
 
-/* Return the overall frame rate */
-UDWORD frameGetOverallRate(void)
-{
-	return FrameRate;
-}
-
-/* Return the frame rate for the last second */
-UDWORD frameGetRecentRate(void)
-{
-	return RecentFrames;
-}
 
 UDWORD	frameGetFrameNumber(void)
 {
-	return Frames;
+	return curFrames;
 }
 
 /* Return the handle for the application window */
