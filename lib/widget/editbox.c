@@ -733,7 +733,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 
 	/* Display the cursor if editing */
 #if CURSOR_BLINK
-	blink = (GetTickCount()/WEDB_BLINKRATE) % 2;
+	blink = (SDL_GetTicks()/WEDB_BLINKRATE) % 2;
 	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT && blink)
 #else
 	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT)

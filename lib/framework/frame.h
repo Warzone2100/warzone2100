@@ -76,10 +76,6 @@ FILE *unix_fopen(const char *filename, const char *mode);
 #include "win32fixes.h"
 #endif
 
-#ifndef WIN32
-DWORD GetTickCount();
-#endif
-
 /* Initialise the frame work library */
 extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance
 					 STRING *pWindowName,	// The text to appear in the window title bar

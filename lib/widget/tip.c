@@ -85,7 +85,7 @@ void tipStart(WIDGET *psSource, STRING *pNewTip, int NewFontID,
 		"tipStart: Invalid colours pointer" );
 
 	tipState = TIP_WAIT;
-	startTime = GetTickCount();
+	startTime = SDL_GetTicks();
 	mx = mouseX();
 	my = mouseY();
 	wx = x; wy = y;
@@ -130,7 +130,7 @@ void tipDisplay(void)
 		/* See if the tip has to be shown */
 		newMX = mouseX();
 		newMY = mouseY();
-		currTime = GetTickCount();
+		currTime = SDL_GetTicks();
 		if (newMX == mx &&
 			newMY == my &&
 			(currTime - startTime > TIP_PAUSE))
@@ -177,7 +177,7 @@ void tipDisplay(void)
 
 
 			/* Note the time */
-			startTime = GetTickCount();
+			startTime = SDL_GetTicks();
 		}
 		else if (newMX != mx ||
 				 newMY != my ||

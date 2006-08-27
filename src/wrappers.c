@@ -308,16 +308,16 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
 
 
-	if(GetTickCount()-lastTick < 16) {
+	if(SDL_GetTicks()-lastTick < 16) {
 		return;
 	}
- 	currTick = GetTickCount();
+	currTick = SDL_GetTicks();
 	if ((currTick - lastTick) > 500)
 	{
 		currTick -= lastTick;
 		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
 	}
-	lastTick = GetTickCount();
+	lastTick = SDL_GetTicks();
 	pie_GlobalRenderBegin();
 	DrawBegin();
 	pie_UniTransBoxFill(1, 1, 2, 2, 0x00010101, 32);

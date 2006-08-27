@@ -162,15 +162,6 @@ static void	MaintainFrameStuff( void )
 	}
 }
 
-/* replacement for win32 function */	//Check this.  [test] --Qamly
-#ifndef  _MSC_VER // was WIN32, but gcc is OK with this?
-// Note, I vote for name change, since we are using SDL now right? --Qamly
-DWORD GetTickCount()
-{
-        return (DWORD) SDL_GetTicks();
-}
-#endif
-
 
 UDWORD frameGetAverageRate(void)
 {

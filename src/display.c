@@ -1290,14 +1290,14 @@ void scroll(void)
 	}
 	/* Time to update scroll - change to should be time */
 	//scrollAccel = (float)SCROLL_SPEED_ACCEL * (float)(gameTime - scrollRefTime)/(float)GAME_TICKS_PER_SEC;
-	timeDiff = GetTickCount() - scrollRefTime;
+	timeDiff = SDL_GetTicks() - scrollRefTime;
     //WHEN its fixed - you can uncomment it!
 	//if(bRetardScroll AND FALSE)	//temp until fixed
 	//{
 	//	timeDiff/=2;
 	//}
 	/* Store reference time */
-	scrollRefTime = GetTickCount();
+	scrollRefTime = SDL_GetTicks();
 
 	if (timeDiff > GTIME_MAXFRAME)
 	{

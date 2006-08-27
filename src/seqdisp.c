@@ -191,7 +191,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 
 //for new timing
 		frame = 0;
-		videoFrameTime = GetTickCount();
+		videoFrameTime = SDL_GetTicks();
 
 		if ((bSeqPlaying = seq_SetSequenceForBuffer(aVideoName, videoFrameTime, perfMode)) == FALSE)
 		{
@@ -207,11 +207,11 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 	{
 		//new call with timing
 		//poll the sequence player while timing the video
-		videoTime = GetTickCount();
+		videoTime = SDL_GetTicks();
 		while (videoTime < (videoFrameTime + RPL_FRAME_TIME))
 		{
 			seq_RefreshVideoBuffers();
-			videoTime = GetTickCount();
+			videoTime = SDL_GetTicks();
 		}
 		frameLag = videoTime - videoFrameTime;
 		frameLag /= RPL_FRAME_TIME;// if were running slow frame lag will be greater than 1
@@ -469,7 +469,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 
 //for new timing
 	frame = 0;
-	videoFrameTime = GetTickCount();
+	videoFrameTime = SDL_GetTicks();
 
 	if (!seq_SetSequence(aVideoName, videoFrameTime + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
 	{
@@ -512,7 +512,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 	{
 //for new timing
 		frame = 0;
-		videoFrameTime = GetTickCount();
+		videoFrameTime = SDL_GetTicks();
 		textFrame = 0;
 	}
 
@@ -598,10 +598,10 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 			{
 				//version 1.00 release code
 				//poll the sequence player while timing the video
-				videoTime = GetTickCount();
+				videoTime = SDL_GetTicks();
 				while (videoTime < (videoFrameTime + (RPL_FRAME_TIME * frameSkip)))
 				{
-					videoTime = GetTickCount();
+					videoTime = SDL_GetTicks();
 					seq_RefreshVideoBuffers();
 				}
 				frameLag = videoTime - videoFrameTime;
@@ -614,10 +614,10 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 			{
 				//new version with timeing removed
 				//poll the sequence player while timing the video
-				videoTime = GetTickCount();
+				videoTime = SDL_GetTicks();
 				while (videoTime < (videoFrameTime + (RPL_FRAME_TIME * frameSkip)))
 				{
-					videoTime = GetTickCount();
+					videoTime = SDL_GetTicks();
 					seq_RefreshVideoBuffers();
 				}
 				videoFrameTime += frameSkip * RPL_FRAME_TIME;//frame Lag should be 1 (most of the time)
@@ -670,7 +670,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 			if (aSeqList[currentPlaySeq].bSeqLoop)
 			{
 				seq_ClearMovie();
-				if (!seq_SetSequence(aVideoName, GetTickCount() + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
+				if (!seq_SetSequence(aVideoName, SDL_GetTicks() + VIDEO_PLAYBACK_DELAY, pVideoBuffer, perfMode))
 				{
 					bHoldSeqForAudio = TRUE;
 				}

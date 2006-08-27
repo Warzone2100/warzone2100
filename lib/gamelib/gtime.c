@@ -57,7 +57,7 @@ BOOL gameTimeInit(void)
     for multiPlayer they will be processed as if they died*/
     gameTime = 2;
 	timeOffset = 0;
-	baseTime = GetTickCount();
+	baseTime = SDL_GetTicks();
 
 	gameTime2 = 0;
 	timeOffset2 = 0;
@@ -102,7 +102,7 @@ void gameTimeUpdate(void)
 	unsigned long long	newTime;
 #endif
 
-	currTime = GetTickCount();
+	currTime = SDL_GetTicks();
 
 	if (currTime < baseTime)
 	{
@@ -179,8 +179,8 @@ void gameTimeResetMod(void)
 	timeOffset = gameTime;
 	timeOffset2 = gameTime2;
 
-	baseTime = GetTickCount();
-	baseTime2 = GetTickCount();
+	baseTime = SDL_GetTicks();
+	baseTime2 = SDL_GetTicks();
 
 	modifier = FRACTCONST(1,1);
 }
@@ -210,7 +210,7 @@ void gameTimeStop(void)
 {
 	if (stopCount == 0)
 	{
-		pauseStart = GetTickCount();
+		pauseStart = SDL_GetTicks();
 		DBP1(("Clock paused at %d\n", pauseStart));
 	}
 	stopCount += 1;
@@ -223,7 +223,7 @@ void gameTimeStart(void)
 	{
 		// shift the base time to now
 		timeOffset = gameTime;
-		baseTime = GetTickCount();
+		baseTime = SDL_GetTicks();
 	}
 
 	if (stopCount > 0)
@@ -242,8 +242,8 @@ void gameTimeReset(UDWORD time)
 	gameTime2 = time;
 	timeOffset2 = time;
 
-	baseTime = GetTickCount();//used from save game only so GetTickCount is as valid as anything
-	baseTime2 = GetTickCount();
+	baseTime = SDL_GetTicks();//used from save game only so GetTickCount is as valid as anything
+	baseTime2 = SDL_GetTicks();
 
 
 	modifier = FRACTCONST(1,1);
