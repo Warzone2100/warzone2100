@@ -6,11 +6,17 @@ MYDIR=`pwd`
 cd ..
 WORKDIR=`pwd`
 
+cd "$MYDIR"
+
+if [ -d "Warzone 2100.app" ]; then
+  echo "Removing old application bundle..."
+  rm -rf "Warzone 2100.app"
+fi 
+
 echo "Creating application bundle in $MYDIR..."
 
-cd "$MYDIR"
-mkdir Warzone\ 2100.app
-cd Warzone\ 2100.app
+mkdir "Warzone 2100.app"
+cd "Warzone 2100.app"
 APPDIR=`pwd`
 mkdir Contents
 cd Contents
