@@ -71,13 +71,15 @@ endif
 ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F
+EXEEXT=.exe
 WINDRES=windres
 CFLAGS+=-mwindows -DWIN32
 LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32 -ljpeg6b -lpng13
 else
 DIRSEP=/
 RMF=rm -f
-WINDRES=windres
+EXEEXT=
+WINDRES=
 LDFLAGS+=-lGLU -lGL -lopenal -ljpeg -lpng
 endif
 
