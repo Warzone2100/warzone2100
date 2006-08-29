@@ -4607,10 +4607,10 @@ FIXME: This is function is not used. Should it be? - Per
 void renderSky(void)
 {
 	const int texPage = 0;
-	SDWORD	skyShift;
+	SDWORD	skyShift=2; // Initialized with 2 because former +=2 below
 
-	SDWORD index,width;
-	skyShift+=2;
+	SDWORD index=0,width=0;
+	//skyShift += 2;
 
 	index= (player.r.y + skyShift)/ 20;
 
