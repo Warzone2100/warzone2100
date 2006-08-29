@@ -701,13 +701,13 @@ void pie_DrawShadows() {
 	static BOOL dlist_defined = FALSE;
 	static GLuint dlist;
 	unsigned int i;
-	float l[4];
+	float pos_lgt0[4];
 	fVector light;
 	float invmat[9];
 	float width = pie_GetVideoBufferWidth();
 	float height = pie_GetVideoBufferHeight();
 
-	glGetLightfv(GL_LIGHT0, GL_POSITION, l);
+	glGetLightfv(GL_LIGHT0, GL_POSITION, pos_lgt0);
 
 	pie_SetTexturePage(-1);
 
@@ -730,6 +730,19 @@ void pie_DrawShadows() {
 		glActiveStencilFaceEXT(GL_FRONT);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
+
+		for (i = 0; i < nb_scshapes; ++i) {
+			glLoadIdentity();
+			glMultMatrixf(scshapes[i].matrix);
+			inverse_matrix(scshapes[i].matrix, invmat);
+			light.x = invmat[0]*pos_lgt0[0] + invmat[3]*pos_lgt0[1] + invmat[6]*pos_lgt0[2];
+			light.y = invmat[1]*pos_lgt0[0] + invmat[4]*pos_lgt0[1] + invmat[7]*pos_lgt0[2];
+			light.z = invmat[2]*pos_lgt0[0] + invmat[5]*pos_lgt0[1] + invmat[8]*pos_lgt0[2];
+			pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
+		}
+
+		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+
 	} else {
 		if (!dlist_defined) {
 			dlist = glGenLists(1);
@@ -742,32 +755,31 @@ void pie_DrawShadows() {
 		glCullFace(GL_BACK);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
-		// Start display list.
-		glNewList(dlist, GL_COMPILE_AND_EXECUTE);
-	}
-
-	for (i = 0; i < nb_scshapes; ++i) {
-		glLoadIdentity();
-		glMultMatrixf(scshapes[i].matrix);
-		inverse_matrix(scshapes[i].matrix, invmat);
-		light.x = invmat[0]*l[0] + invmat[3]*l[1] + invmat[6]*l[2];
-		light.y = invmat[1]*l[0] + invmat[4]*l[1] + invmat[7]*l[2];
-		light.z = invmat[2]*l[0] + invmat[5]*l[1] + invmat[8]*l[2];
-		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
-	}
-
-	if (stencil_one_pass()) {
-		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-	} else {
-		// End display list.
-		glEndList();
+		// Compute and draw shadows
+		for (i = 0; i < nb_scshapes; ++i) {
+			glLoadIdentity();
+			glMultMatrixf(scshapes[i].matrix);
+			inverse_matrix(scshapes[i].matrix, invmat);
+			light.x = invmat[0]*pos_lgt0[0] + invmat[3]*pos_lgt0[1] + invmat[6]*pos_lgt0[2];
+			light.y = invmat[1]*pos_lgt0[0] + invmat[4]*pos_lgt0[1] + invmat[7]*pos_lgt0[2];
+			light.z = invmat[2]*pos_lgt0[0] + invmat[5]*pos_lgt0[1] + invmat[8]*pos_lgt0[2];
+			pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
+		}
 
 		// Setup stencil for front faces.
 		glCullFace(GL_FRONT);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
 
-		// Draw display list
-		glCallList(dlist);
+		// Draw shadows again
+		for (i = 0; i < nb_scshapes; ++i) {
+			glLoadIdentity();
+			glMultMatrixf(scshapes[i].matrix);
+			inverse_matrix(scshapes[i].matrix, invmat);
+			light.x = invmat[0]*pos_lgt0[0] + invmat[3]*pos_lgt0[1] + invmat[6]*pos_lgt0[2];
+			light.y = invmat[1]*pos_lgt0[0] + invmat[4]*pos_lgt0[1] + invmat[7]*pos_lgt0[2];
+			light.z = invmat[2]*pos_lgt0[0] + invmat[5]*pos_lgt0[1] + invmat[8]*pos_lgt0[2];
+			pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
+		}
 	}
 
 	glEnable(GL_CULL_FACE);
