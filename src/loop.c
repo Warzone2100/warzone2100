@@ -1085,7 +1085,7 @@ void loop_ClearVideoPlaybackMode(void)
 	paused = FALSE;
 	video = FALSE;
 	gameTimeStart();
-//	pie_SetFogStatus(TRUE);
+	pie_SetFogStatus(TRUE);
 	cdAudio_Resume();
 	ASSERT( videoMode == 0,"loop_ClearVideoPlaybackMode: out of sync." );
 }
