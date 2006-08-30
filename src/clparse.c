@@ -30,7 +30,7 @@
 #include "init.h"
 
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
-BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
+extern BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
 extern char	datadir[MAX_PATH];
@@ -42,18 +42,26 @@ void debug_callback_file( void**, const char * );
 void debug_callback_file_init( void** );
 void debug_callback_file_exit( void** );
 
-// whether to play the intro video
+// Functions for --shadow toggle
+void setDrawShadows( BOOL val );
+BOOL setWarzoneKeyNumeric( STRING *pName, DWORD val );
+
+//! Whether to play the intro video
 BOOL	clIntroVideo;
 
-// let the end user into debug mode....
+//! Let the end user into debug mode....
 BOOL	bAllowDebugMode = FALSE;
 
-/**************************************************************************
-	First half of the command line parsing. Also see ParseCommandLine()
-	below. The parameters here are needed early in the boot process,
-	while the ones in ParseCommandLine can benefit from debugging being
-	set up first.
-**************************************************************************/
+
+//! Early parsing of the commandline
+/**
+ * First half of the command line parsing. Also see ParseCommandLine()
+ * below. The parameters here are needed early in the boot process,
+ * while the ones in ParseCommandLine can benefit from debugging being
+ * set up first.
+ * \param argc number of arguments given
+ * \param argv string array of the arguments
+ * \return Returns TRUE on success, FALSE on error */
 BOOL ParseCommandLineEarly(int argc, char** argv)
 {
 	char			*tokenType;
@@ -94,7 +102,8 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   --savegame NAME            Load a saved game NAME\n"
 				"   --window                   Play in windowed mode\n"
 				"   --version                  Output version info and exit\n"
-				"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n" );
+				"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n"
+				"   --shadows YES/NO           Toggles the shadows\n" );
 			return FALSE;
 		}
 		else if ( stricmp(tokenType, "--datadir") == 0 )
@@ -137,9 +146,15 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 }
 
 /**************************************************************************
-	Second half of command line parsing. See ParseCommandLineEarly() for
-	the first half. Note that render mode must come before resolution flag.
+
 **************************************************************************/
+//! second half of parsing the commandline
+/**
+ * Second half of command line parsing. See ParseCommandLineEarly() for
+ * the first half. Note that render mode must come before resolution flag.
+ * \param argc number of arguments given
+ * \param argv string array of the arguments
+ * \return Returns TRUE on success, FALSE on error */
 BOOL ParseCommandLine(int argc, char** argv)
 {
 	char *tokenType=NULL, *token=NULL;
@@ -231,6 +246,25 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
+		else if ( stricmp( tokenType,"--shadows") == 0 )
+		{
+			token = argv[++i];
+			if ( stricmp( token, "yes" ) == 0 )
+			{
+				setDrawShadows( TRUE );
+				setWarzoneKeyNumeric( "shadows", TRUE );
+			}
+			else if ( stricmp( token, "no" ) == 0 )
+			{
+				setDrawShadows( FALSE );
+				setWarzoneKeyNumeric( "shadows", FALSE );
+			}
+			else
+			{
+				debug( LOG_ERROR, "Shadow toggle must be \"yes\" or \"no\"! Aborting!" );
+				return FALSE;
+			}
+		}
 		else if ( stricmp(tokenType, "--viewport") == 0 )
 		{
 			token = argv[++i];
@@ -316,7 +350,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 
 
 // ////////////////////////////////////////////////////////
-// gamespy flags
+//! gamespy flags
 BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 {
 	static UBYTE count = 0;
