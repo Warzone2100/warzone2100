@@ -9359,7 +9359,7 @@ BOOL scrClosestDamagedGroupDroid(void)
 	if (!stackPopParams(6, VAL_INT, &player, ST_GROUP, &psGroup, VAL_INT, &healthLeft,
 		VAL_INT, &x, VAL_INT, &y, VAL_INT, &maxRepairedBy))
 	{
-		MessageBox(frameGetWinHandle(), "scrClosestDamagedGroupDroid: failed to pop", "ERROR", MB_OK);
+		debug(LOG_ERROR, "scrClosestDamagedGroupDroid: failed to pop");
 		return FALSE;
 	}
 
