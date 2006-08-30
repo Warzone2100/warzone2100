@@ -1,5 +1,21 @@
+xxxx-xx-xx: Version 2.0.5
+ * General:
+   * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, default key combination: Alt+H
+   * New: Allied players send vision to each other automatically (only once)
+   * New: Non-Mac versions can now load Mac-created savegames and the other way round
+   * New: Ctrl+MouseWheel makes game speed up or slow down
+   * New: MouseWheel over radar makes radar zoom in/out
+ * Graphics:
+   * Fix: Improve shadow performance and fix OpenGL specs violation
+   * Fix: Framerate counting gives correct results now
+ * Commandline options:
+   * New: --shadows no, switches off shadows for better performance
+ * Build system:
+   * Change: src/version.* not used anymore. In MSVC define VERSION=\"...\" in preprocessor settings instead
+
 2006-08-25: Version 2.0.4
  * General:
+   * Changed namings: Project: Warzone Resurrection Project, Product: Warzone 2100, Binary: warzone2100(.exe)
    * MacOS / big endian support
    * Desktopmenu entry for Linux (AutoPackage/Debian package)
    * Different minimap modes (backported from 0.2.3)
@@ -21,6 +37,10 @@
    * String support
    * AI can now send and recieve text messages
    * Many new predefined functions
+ * Commandline options:
+   * New option: --version shows current version and marks debug compiles
+   * Using --long-opts instead of -short-opts now
+   * -1234x456 has changed to --viewport 1234x456
  * Debugging:
    * Cheat mode access changed
    * Logfile shows revision and version
