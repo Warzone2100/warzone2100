@@ -9129,7 +9129,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRI
 
 		//if (((VIEW_PROXIMITY *)pTempData->pData)->z < height)
 		//{
-			((VIEW_PROXIMITY *)pTempData->pData)->z = height + 100;
+			((VIEW_PROXIMITY *)pTempData->pData)->z = height;
 		//}
 
 	}
@@ -9347,5 +9347,84 @@ BOOL scrRemoveHelpMessage(void)
 	//	return FALSE;
 	//}
 
+	return TRUE;
+}
+
+BOOL scrClosestDamagedGroupDroid(void)
+{
+	DROID_GROUP	*psGroup;
+	DROID		*psDroid,*psClosestDroid;
+	SDWORD		x,y,healthLeft,wBestDist,wDist,maxRepairedBy,player;
+
+	if (!stackPopParams(6, VAL_INT, &player, ST_GROUP, &psGroup, VAL_INT, &healthLeft,
+		VAL_INT, &x, VAL_INT, &y, VAL_INT, &maxRepairedBy))
+	{
+		MessageBox(frameGetWinHandle(), "scrClosestDamagedGroupDroid: failed to pop", "ERROR", MB_OK);
+		return FALSE;
+	}
+
+	wBestDist = 999999;
+	psClosestDroid = NULL;
+	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
+	{
+		if((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
+		{
+			wDist = (dirtySqrt(psDroid->x, psDroid->y, x, y) >> TILE_SHIFT);	//in tiles
+			if(wDist < wBestDist)
+			{
+				if((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))
+				{
+					psClosestDroid = psDroid;
+					wBestDist = wDist;
+				}
+			}
+		}
+	}
+
+	if (!stackPushResult(ST_DROID, (SDWORD)psClosestDroid))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
+{
+	DROID		*psDroid;
+	SDWORD		numRepaired = 0;
+
+	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		if((psDroid->droidType != DROID_REPAIR) && (psDroid->droidType != DROID_CYBORG_REPAIR))
+		{
+			continue;
+		}
+
+		if((psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_DROID))
+		{
+			if(((DROID *)psDroid->psTarget) == psDroidToCheck)
+				numRepaired++;
+		}
+	}
+
+	return numRepaired;
+}
+
+/* Uses printf_console() for console debug output right now */
+BOOL scrMsgBox(void)
+{
+	STRING	*ssval=NULL;
+	
+	if (!stackPopParams(1, VAL_STRING, &ssval))
+	{
+		debug(LOG_ERROR, "scrMsgBox(): stack failed");
+		return FALSE;
+	}
+
+	//dbg_console("DEBUG: %s", ssval);
+
+	printf_console("DEBUG: %s",ssval);
+	
 	return TRUE;
 }

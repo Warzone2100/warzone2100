@@ -2647,22 +2647,42 @@ BOOL	processConsoleCommands( STRING *pName )
 //Add a beacon (blip)
 void	kf_AddHelpBlip( void )
 {
-	SDWORD	worldX,worldY,i;
+	UDWORD 	worldX,worldY;
+	UDWORD	i;
 	STRING	tempStr[255];
-
-	debug(LOG_SCRIPT, "%d", game.type);
+	SDWORD	x,y;
+	BOOL	mOverR=FALSE;
 
 	/* not needed in campaign */
 	if(!bMultiPlayer)
 		return;
 
-	worldX = mouseTileX << TILE_SHIFT;
-	worldY = (mouseTileY << TILE_SHIFT) + TILE_UNITS/2;
-
 	debug(LOG_WZ,"Adding beacon='%s'",sCurrentConsoleText);
 
-	//if chat message is empty, just send player name
+	/* check if clicked on radar */
+	x = mouseX();
+	y = mouseY();
+	if(radarOnScreen AND getHQExists(selectedPlayer))
+	{
+		if(CoordInRadar(x,y))
+		{
+			mOverR = TRUE;
+			CalcRadarPosition(x,y,&worldX,&worldY);
 
+			worldX = worldX*TILE_UNITS+TILE_UNITS/2;
+			worldY = worldY*TILE_UNITS+TILE_UNITS/2;
+			//printf_console("Radar, x: %d, y: %d", worldX, worldY);
+		}
+	}
+
+	/* convert screen to world */
+	if(!mOverR)
+	{
+		worldX = mouseTileX*TILE_UNITS+TILE_UNITS/2;
+		worldY = mouseTileY*TILE_UNITS+TILE_UNITS/2;
+	}
+
+	//if chat message is empty, just send player name
 	//if(!strcmp(sCurrentConsoleText, ""))
 	//{
 		sprintf(tempStr,"%s",getPlayerName(selectedPlayer));		//temporary solution
@@ -2675,7 +2695,7 @@ void	kf_AddHelpBlip( void )
 
 	/* add beacon for the sender */
 	strcpy(beaconMsg[selectedPlayer], tempStr);
-	sendBeaconToPlayer(worldX +TILE_UNITS/2, worldY + TILE_UNITS/2, selectedPlayer, selectedPlayer, beaconMsg[selectedPlayer]);
+	sendBeaconToPlayer(worldX, worldY, selectedPlayer, selectedPlayer, beaconMsg[selectedPlayer]);
 
 	/* send beacon to other players */
 	for(i=0;i<game.maxPlayers;i++)
@@ -2683,7 +2703,7 @@ void	kf_AddHelpBlip( void )
 		if(openchannels[i] && (i != selectedPlayer))
 		{
 			strcpy(beaconMsg[i], tempStr);
-			sendBeaconToPlayer(worldX +TILE_UNITS/2, worldY + TILE_UNITS/2, i, selectedPlayer, beaconMsg[i]);
+			sendBeaconToPlayer(worldX, worldY, i, selectedPlayer, beaconMsg[i]);
 		}
 	}
 }

@@ -598,14 +598,46 @@ void processInput(void)
 
 	if(mousePressed(MOUSE_WUP))
 	{
-		for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
-			kf_ZoomIn();
+		/* CTRL+WheelUp makes game speed up */
+		if(keyDown(KEY_LCTRL))
+		{
+			kf_SpeedUp();
+		}
+		else
+		{
+			/* Decide if radar or world zoom in */
+			if(mOverR)
+			{
+				kf_RadarZoomIn();
+			}
+			else
+			{
+				for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
+					kf_ZoomIn();
+			}
+		}
 	}
 
 	if(mousePressed(MOUSE_WDN))
 	{
-		for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
-			kf_ZoomOut();
+		/* CTRL+WheelDown makes game slow down */
+		if(keyDown(KEY_LCTRL))
+		{
+			kf_SlowDown();
+		}
+		else
+		{
+			/* Decide if radar or world zoom out */
+			if(mOverR)
+			{
+				kf_RadarZoomOut();
+			}
+			else
+			{
+				for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
+					kf_ZoomOut();
+			}
+		}
 	}
 
 	if(intMode != INT_DESIGN)

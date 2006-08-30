@@ -196,9 +196,9 @@ extern	void	kf_FaceWest(void);
 extern	void	kf_ToggleRadarJump( void );
 extern	void	kf_MovePause( void );
 
-void kf_SpeedUp( void );
-void kf_SlowDown( void );
-void kf_NormalSpeed( void );
+extern void kf_SpeedUp( void );
+extern void kf_SlowDown( void );
+extern void kf_NormalSpeed( void );
 
 #define SPIN_SCALING	(360*DEG_1)
 #define	SECS_PER_SPIN	2

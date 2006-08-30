@@ -562,6 +562,8 @@ extern BOOL scrModulo(void);
 extern BOOL scrPlayerLoaded(void);
 extern BOOL scrRemoveHelpMessage(void);
 extern BOOL scrAddHelpMsg(void);
+extern BOOL scrClosestDamagedGroupDroid(void);
+extern BOOL scrMsgBox(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
@@ -574,6 +576,7 @@ extern BOOL addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, STR
 extern BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRING * beaconMsg);
 extern VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY);
 extern MESSAGE * findHelpMsg(UDWORD player, SDWORD sender);
+extern SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player);
 #endif
 
 

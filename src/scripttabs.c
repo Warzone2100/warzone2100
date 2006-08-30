@@ -709,8 +709,8 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "console",			scrConsole,				VAL_VOID,
 		1, { VAL_STRING } },
 
-	//{ "MsgBox",			scrMsgBox,				VAL_VOID,
-	//	1, { VAL_STRING } },
+	{ "MsgBox",			scrMsgBox,				VAL_VOID,
+		1, { VAL_STRING } },
 
 	{ "dbgMsgOn",			scrDbgMsgOn,				VAL_VOID,
 		2, { VAL_INT, VAL_BOOL } },
@@ -744,8 +744,8 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "iterateGroupB",		scrIterateGroupB,			ST_DROID,
 		2, { ST_GROUP, VAL_INT } },
 
-	//{ "closestDamagedGroupDroid",		scrClosestDamagedGroupDroid,			ST_DROID,
-	//	6, { VAL_INT, ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "closestDamagedGroupDroid",		scrClosestDamagedGroupDroid,			ST_DROID,
+		6, { VAL_INT, ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
 
 	{ "factoryGetTemplate",			scrFactoryGetTemplate,		ST_TEMPLATE,

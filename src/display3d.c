@@ -2172,6 +2172,14 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 			msgY = pViewProximity->y;
 			/* message sits at the height specified at input*/
 			dv.y = pViewProximity->z + 64;
+
+			/* in case of a beacon message put above objects */
+			if(((VIEWDATA *)psProxDisp->psMessage->pViewData)->type == VIEW_HELP)
+			{
+				if(TILE_OCCUPIED(mapTile(msgX / TILE_UNITS,msgY / TILE_UNITS)))
+					dv.y = pViewProximity->z + 150;
+			}
+
 		}
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
