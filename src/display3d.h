@@ -3,7 +3,7 @@
 #ifndef _display3d_h
 #define _display3d_h
 
-#include "display3ddef.h"	// This should be the only place including this file on the PC ... display3d_psx.h on the playstation
+#include "display3ddef.h"	// This should be the only place including this file
 #include "lib/ivis_common/pietypes.h"
 #include "lib/ivis_common/piedef.h"
 #include "objectdef.h"

@@ -183,8 +183,6 @@ extern void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colo
 extern void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint *offset);
 //PIEVERTEX poly draw for all hardware modes
 extern void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects);
-//PIEVERTEX triangle draw (glide specific)
-extern void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture* texPage, int pieFlag, int pieFlagData);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
 
@@ -197,9 +195,6 @@ extern void pie_D3DPoly(PIED3DPOLY *poly);
 // PNG
 BOOL pie_PNGLoadMemToBuffer(char *pngimage, iSprite *s, iColour *pal);
 iBool pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal);
-
-//necromancer
-extern void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3,  SDWORD texPage);
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 

@@ -222,7 +222,6 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 				)
 			{
 				avInformOfChange(x>>TILE_SHIFT,y>>TILE_SHIFT);
-//				SET_TILE_SENSOR(psTile);
 			}
 		}
 

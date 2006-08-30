@@ -33,9 +33,9 @@ extern BOOL drawing_interface;
 /***************************************************************************/
 
 BOOL check_extension(const char* extension_name) {
-	char* extension_list = (char*)glGetString(GL_EXTENSIONS);
+	const char *extension_list = (const char *)glGetString(GL_EXTENSIONS);
 	unsigned int extension_name_length = strlen(extension_name);
-	char* tmp = extension_list;
+	const char *tmp = extension_list;
 	unsigned int first_extension_length;
 
 	if (!extension_name || !extension_list) return FALSE;
@@ -172,7 +172,7 @@ UDWORD ShapeFrame;
 
 void DrawTriangleList(BSPPOLYID PolygonNumber) {
 	iIMDPoly *pPolys;
-	UDWORD n;
+	int n;
 
 	VERTEXID	*index;
 	iIMDPoly	imdPoly;
@@ -185,7 +185,7 @@ return;
 
 		index = pPolys->pindex;
 		imdPoly.flags = pPolys->flags;
-		for (n=0; n<(SDWORD)(pPolys->npnts); n++, index++)
+		for (n = 0; n < pPolys->npnts; n++, index++)
 		{
 			imdVrts[n].x = MAKEINT(scrPoints[*index].d3dx);
 			imdVrts[n].y = MAKEINT(scrPoints[*index].d3dy);
@@ -1126,11 +1126,6 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 	glEnd();
 }
 
-void	pie_DrawFastTriangle(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, iTexture* texPage, int pieFlag, int pieFlagData )
-{
-}
-
-
 void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
 {
 	FRACT		offset = 0;
@@ -1161,24 +1156,6 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 	}
 }
 
-//#ifdef NECROMANCER
-void pie_DrawTile(PIEVERTEX *pv0, PIEVERTEX *pv1, PIEVERTEX *pv2, PIEVERTEX *pv3, SDWORD texPage)
-{
-	tileCount++;
-
-	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetTexturePage(texPage);
-	pie_SetBilinear(TRUE);
-
-	memcpy(&pieVrts[0],pv0,sizeof(PIEVERTEX));
-	memcpy(&pieVrts[1],pv1,sizeof(PIEVERTEX));
-	memcpy(&pieVrts[2],pv2,sizeof(PIEVERTEX));
-	memcpy(&pieVrts[3],pv3,sizeof(PIEVERTEX));
-
-	pie_Polygon(4, pieVrts, 0.0, TRUE);
-}
-//#endif
-
 void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount)
 {
 	*pPieCount  = pieCount;
@@ -1192,4 +1169,3 @@ void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCoun
 	pieStateCount = 0;
 	return;
 }
-

@@ -1589,13 +1589,6 @@ BOOL	bEdgeTile;
 			}
 			pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-//temp
-//			pie_DrawTile(&tileScreenInfo[0][0],&tileScreenInfo[0][1],&tileScreenInfo[1][0],
-//				&tileScreenInfo[1][1],tileTexInfo[tileNumber & 0xff].texPage);
-//temp
-
-
-
 			/* Check for flipped and rotated tiles */
    			flipsAndRots(tileNumber & ~TILE_NUMMASK);
 
