@@ -145,19 +145,12 @@ typedef struct
 	iPalette *Palette;
 } TEXTUREPAGE;
 
-
-	typedef struct {
-		UDWORD flags;
-		SDWORD nVrts;
-		void *pVrts;
-		iTexAnim *pTexAnim;
-	} PIED3DPOLY;
-	typedef struct {
-		UDWORD flags;
-		SDWORD nVrts;
-		PIEVERTEX *pVrts;
-		iTexAnim *pTexAnim;
-	} PIEPOLY;
+typedef struct {
+	UDWORD flags;
+	SDWORD nVrts;
+	PIEVERTEX *pVrts;
+	iTexAnim *pTexAnim;
+} PIEPOLY;
 
 
 /***************************************************************************/
@@ -172,8 +165,6 @@ typedef struct
  */
 /***************************************************************************/
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
-//extern void pie_Draw3DIntelShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
-//extern void pie_Draw3DNowShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 extern void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 
@@ -188,9 +179,6 @@ extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pP
 
 extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
 extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
-
-//piedraw functions used in piefunc.c
-extern void pie_D3DPoly(PIED3DPOLY *poly);
 
 // PNG
 BOOL pie_PNGLoadMemToBuffer(char *pngimage, iSprite *s, iColour *pal);

@@ -381,7 +381,7 @@ void	kf_ToggleOutline( void )
 		{
 			terrainOutline = TRUE;
 		}
-//		addConsoleMessage("Tile outline display toggled",DEFAULT_JUSTIFY);
+		addConsoleMessage("Tile outline display toggled",DEFAULT_JUSTIFY);
 }
 
 // --------------------------------------------------------------------------
@@ -449,20 +449,14 @@ void	kf_ScreenDump( void )
 /* Make all functions available */
 void	kf_AllAvailable( void )
 {
-
-
 #ifndef DEBUG
 if(bMultiPlayer && (NetPlay.bComms != 0) )
 {
 	return;
 }
 #endif
-
-
-
-//		addConsoleMessage("All items made available",DEFAULT_JUSTIFY);
+		addConsoleMessage("All items made available",DEFAULT_JUSTIFY);
 		makeAllAvailable();
-
 }
 
 // --------------------------------------------------------------------------
@@ -470,11 +464,14 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 /* Flips the cut of a tile */
 void	kf_TriFlip( void )
 {
-iVector	pos;
-//MAPTILE	*psTile;
-//		psTile = mapTile(mouseTileX,mouseTileY);
-//		TOGGLE_TRIFLIP(psTile);
-//		addConsoleMessage("Triangle flip status toggled",DEFAULT_JUSTIFY);
+	MAPTILE	*psTile;
+	psTile = mapTile(mouseTileX,mouseTileY);
+	TOGGLE_TRIFLIP(psTile);
+//	addConsoleMessage("Triangle flip status toggled",DEFAULT_JUSTIFY);
+/*
+	// This seems to be some kind of fire effect test that was added
+	// here of all places for some unknown reason. - Per
+	iVector	pos;
 		pos.x = mouseTileX*TILE_UNITS + TILE_UNITS/2;
 		pos.z = mouseTileY*TILE_UNITS + TILE_UNITS/2;
 		pos.y = map_Height(pos.x,pos.x);
@@ -482,7 +479,7 @@ iVector	pos;
 		effectGiveAuxVarSec(10000);
 
 		addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,FALSE,NULL,0);
-
+*/
 }
 
 // --------------------------------------------------------------------------
@@ -677,8 +674,9 @@ void	kf_RaiseTile( void )
 /* Lowers the tile under the mouse */
 void	kf_LowerTile( void )
 {
-//	lowerTile(mouseTileX,mouseTileY);
-	selNextSpecifiedBuilding(REF_FACTORY);
+	lowerTile(mouseTileX,mouseTileY);
+	// Not sure why the below was here of all places - Per
+//	selNextSpecifiedBuilding(REF_FACTORY);
 }
 
 // --------------------------------------------------------------------------

@@ -113,9 +113,6 @@ static SDWORD		polyCount = 0;
 //old ivis style draw poly (low level) software mode only
 static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip);
 static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL bClip);
-//d3d draw poly (low level) D3D mode only
-void pie_D3DPoly(PIED3DPOLY *poly);
-//static void pie_D3DPolyFrame(PIED3DPOLY *poly, SDWORD frame);
 //pievertex draw poly (low level) //all modes from PIEVERTEX data
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
 static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);

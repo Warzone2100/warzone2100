@@ -219,7 +219,6 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadarAllyEnemy,        //enemy/ally radar color toggle
 	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
 	kf_AddHelpBlip,				//Add a beacon
-//#ifdef DEBUG	// debug mappings only
 	kf_AllAvailable,
 	kf_ToggleDebugMappings,
 	kf_NewPlayerPower,
@@ -239,7 +238,6 @@ _keymapsave keyMapSaveTable[] =
 	kf_ShowMappings,
 	kf_GiveTemplateSet,
 	kf_ToggleVisibility,
-//	kf_ToggleSensorDisplay,		//  Was commented out.  Re-enabled see above! --Q 5/10/05
 	kf_FinishResearch,
 	kf_LowerTile,
 	kf_ToggleDemoMode,
@@ -247,7 +245,9 @@ _keymapsave keyMapSaveTable[] =
 	kf_EndMissionOffWorld,
 	kf_SystemClose,
 	kf_ToggleShadows,
-//#endif
+	kf_RaiseTile,
+	kf_ToggleOutline,
+	kf_TriFlip,
 
 	NULL		// last function!
 };
@@ -426,30 +426,24 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,strresGetString(psStringRes,STR_BIND_REOPEN_BUILD));
 
 	// NOTE THIS!!!!!!!
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,				"Make all items available");
+	// available: ctrl+g, ctrl+e, ctrl+m
 	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_SCROLLLOCK,KEYMAP_PRESSED,kf_TogglePauseMode,	strresGetString(psStringRes,STR_BIND_PAUSE));
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_MaxScrollLimits,				"Maximum scroll limits");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_KillSelected,				"Kill Selected Unit(s)");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_LowerTile,						"Lower tile height");
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_RaiseTile,					"Raise tile height");
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_DOWN,kf_LowerTile,						"Lower tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,				"Toggles on/off DEMO Mode");
-//	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_ToggleSensorDisplay,			"Toggle Sensor display");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_B,KEYMAP_PRESSED,kf_EndMissionOffWorld,			"End Mission");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_KP_MINUS,KEYMAP_PRESSED,kf_SystemClose,			"System Close (EXIT)");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_E,KEYMAP_PRESSED,kf_DebugDroidInfo,				"Show unit info");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_I,KEYMAP_PRESSED,kf_RecalcLighting,				"Recalculate lighting");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_J,KEYMAP_PRESSED,kf_ToggleFog,					"Toggles All fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_ToggleMistFog,				"Toggle Mist Fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_ToggleFogColour,				"Toggle Fog Colour Fog");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_M,KEYMAP_PRESSED,kf_AddMissionOffWorld,			"Add Mission - Keep");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_N,KEYMAP_PRESSED,kf_NewPlayerPower,				"New game player power");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_P,KEYMAP_PRESSED,kf_TogglePower,					"Infinite power");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F1,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  0");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F2,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  1");
@@ -459,6 +453,9 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
+// would be nice, but does not currently work - Per
+//	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_P,KEYMAP_PRESSED,kf_ToggleOutline,				"Tile Outline");
 
 	saveKeyMap();	// save out the default key mappings.
 
@@ -468,28 +465,15 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F7,KEYMAP_DOWN,kf_DownGeoOffset,"Lower the geometric offset");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F8,KEYMAP_DOWN,kf_UpDroidScale,"Increase droid Scaling");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F9,KEYMAP_DOWN,kf_DownDroidScale,"Decrease droid Scaling");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,"Make all avilable");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_B,KEYMAP_PRESSED,kf_MaxScrollLimits,"Allows full area map viewing");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_C,KEYMAP_PRESSED,kf_SimCloseDown,"Simulate Screen Close Down");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode,"Toggle Driving Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_ToggleDroidInfo,"Display droid info whilst tracking");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F,KEYMAP_PRESSED,kf_TriFlip,"Flip terrain triangle");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_ToggleWidgets,"Toggle Widgets");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_ToggleRadarAllign,"Toggles Radar allignment");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_KillSelected,"Kill Selected Droid");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_L,KEYMAP_PRESSED,kf_RecalcLighting,"Recalculate Lighting");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,"Show Keyboard mappings");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_GiveTemplateSet,"Give Template Set");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_O,KEYMAP_PRESSED,kf_ToggleOutline,"Tile Outline");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_P,KEYMAP_PRESSED,kf_TogglePower,"Infinite power");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Q,KEYMAP_DOWN,kf_RaiseTile,"Raise tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_ShowNumObjects,"Show number of Objects");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_FrameRate,"Show Frame Rate");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,"Send Text Message");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_ToggleBackgroundFog,"Toggle Background Fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_BuildInfo,"Build date and time");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_LowerTile,"Lower tile height");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_X,KEYMAP_PRESSED,kf_DebugDroidInfo,"Droid Debug Info");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,"Toggles on/off DEMO Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_ShowGridInfo,"DBPRINTF map grid coverage");
 	*/
@@ -784,7 +768,8 @@ BOOL		bKeyProcessed;
 		{
 			if(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"DEBUG MAPPING : %s",keyToProcess->pName));
+				// this got really annoying. what purpose? - Per
+				// CONPRINTF(ConsoleString,(ConsoleString,"DEBUG MAPPING : %s",keyToProcess->pName));
 			}
 		}
 	}
