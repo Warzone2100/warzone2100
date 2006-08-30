@@ -845,7 +845,9 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 		}
 	}
 */
-//	pie_MatScale(droidScale);
+	if (droidScale != 100) {
+		pie_MatScale(droidScale);
+	}
 
 	/* set default components transparent */
 	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )

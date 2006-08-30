@@ -22,6 +22,7 @@ CHEAT_ENTRY	cheatCodes[] =
 //	{"PJKSVQZ,",kf_ToggleOutline},
 //	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
 
+	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
 	{"deity", kf_ToggleGodMode},	//from above
 	{"droidinfo", kf_DebugDroidInfo},	//show unit stats

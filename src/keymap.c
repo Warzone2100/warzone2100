@@ -248,6 +248,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_RaiseTile,
 	kf_ToggleOutline,
 	kf_TriFlip,
+	kf_UpDroidScale,
+	kf_DownDroidScale,
 
 	NULL		// last function!
 };
