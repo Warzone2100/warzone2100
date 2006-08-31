@@ -1,6 +1,4 @@
 Easy:
-- Add a shadow toggle to src/clparse.c
-
 - Add an option to directly host or join a multiplay game to src/clparse.c
 
 - Make Warzone respond to the SDL_QUIT event so it can be closed with ^C, ALT+F4 or closing the window.
@@ -28,17 +26,23 @@ More difficult:
 
 - Convert existing scripts to LUA (depends on [LUA])
 
-- [GUI] Rewrite the GUI to be scriptable (depends on [LUA])
+- [GUI] Rewrite the GUI to be scriptable. Use CEGUI? (depends on [LUA])
 
 - Improve the menus for usability (esp. networking) (depends on [GUI])
 
 - Improve loading of data / dataformat. Should be possible to load all maps
     in all techlevels for campaign as well as multiplay mode. This would hopefully
     fix those bugs where maps are missing or the campaign breaks because of maps.
-    Would involve modification of data and YaCC/Lex files.
+    Would involve modification of data and YaCC/Lex files. Use LUA?
 
 - [network] Rewrite the system how Warzone handles networking.
     New system should be more stable (no out of sync bugs)
     and handle cheat checking without preventing games between ppl using Windows and Linux
 
-- Adapt the master server to that system (depends on [network])
+- Integrate Karma's masterserver into Warzone
+
+- Use OGRE3D for rendering?
+
+- Remove dependencies on sound libraries?
+
+- Revise input handling to support multiple keymaps. (eg. for task #3506)
