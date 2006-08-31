@@ -11,11 +11,6 @@
 #include "lib/framework/frame.h"
 
 BOOL	gwrDoMessage;
-#undef DBP0
-#define DBP0( x ) \
-	if (gwrDoMessage) \
-		debug( LOG_ERROR, x )
-
 
 #include "map.h"
 #include "gateway.h"
@@ -243,15 +238,14 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 	while (psOpenList != NULL)
 	{
 		psCurr = gwrOpenGet();
-		DBP0(("processing gateway (%d,%d)->(%d,%d)\n",
-			psCurr->x1,psCurr->y1, psCurr->x2,psCurr->y2));
+// 		debug( LOG_NEVER, "processing gateway (%d,%d)->(%d,%d)\n", psCurr->x1, psCurr->y1, psCurr->x2, psCurr->y2 );
 
 		if (psCurr->zone1 == finalZone || psCurr->zone2 == finalZone ||
 			((psCurr->flags & GWR_WATERLINK) && gwZoneInEquiv(psCurr->zone1, finalZone)))
 		{
 			// reached the target
 			psRoute = psCurr;
-			DBP0(("Found route\n"));
+// 			debug( LOG_NEVER, "Found route\n" );
 			break;
 		}
 
@@ -312,22 +306,19 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 				psNew->psRoute = psCurr;
 				psNew->flags |= (psNew->zone1 == zone) ? GWR_ZONE1 : GWR_ZONE2;
 				gwrOpenAdd(psNew);
-				DBP0(("new gateway (%d,%d)->(%d,%d) dist %d est %d\n",
-					psNew->x1, psNew->y1, psNew->x2, psNew->y2, psNew->dist, psNew->est));
+// 				debug( LOG_NEVER, "new gateway (%d,%d)->(%d,%d) dist %d est %d\n", psNew->x1, psNew->y1, psNew->x2, psNew->y2, psNew->dist, psNew->est );
 			}
 			else if (psNew->flags & GWR_OPEN)
 			{
 				// already in the open list but this is shorter
-				DBP0(("new route to open gateway (%d,%d)->(%d,%d) dist %d->%d est %d\n",
-					psNew->x1, psNew->y1, psNew->x2, psNew->y2, currDist, psNew->dist, psNew->est));
+// 				debug( LOG_NEVER, "new route to open gateway (%d,%d)->(%d,%d) dist %d->%d est %d\n", psNew->x1, psNew->y1, psNew->x2, psNew->y2, currDist, psNew->dist, psNew->est );
 				psNew->dist = (SWORD)currDist;
 				psNew->psRoute = psCurr;
 			}
 			else if (psNew->flags & GWR_CLOSED)
 			{
 				// already in the closed list but this is shorter
-				DBP0(("new route to closed gateway (%d,%d)->(%d,%d) dist %d->%d est %d\n",
-					psNew->x1, psNew->y1, psNew->x2, psNew->y2, currDist, psNew->dist, psNew->est));
+// 				debug( LOG_NEVER, "new route to closed gateway (%d,%d)->(%d,%d) dist %d->%d est %d\n", psNew->x1, psNew->y1, psNew->x2, psNew->y2, currDist, psNew->dist, psNew->est );
 				psNew->dist = (SWORD)currDist;
 				psNew->psRoute = psCurr;
 				gwrOpenAdd(psNew);
@@ -344,7 +335,7 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 	retval = GWR_OK;
 	if (psRoute == NULL)
 	{
-		DBP0(("Partial route\n"));
+// 		debug( LOG_NEVER, "Partial route\n" );
 		psRoute = psNearest;
 		retval = GWR_NEAREST;
 	}

@@ -1345,7 +1345,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	if (startX == targetX && startY == targetY)
 	{
 		// return failed to stop them moving anywhere
-		DBP0(("Unit %d: route failed (same pos)\n", psDroid->id));
+// 		debug( LOG_NEVER, "Unit %d: route failed (same pos)\n", psDroid->id );
 		return FPR_FAILED;
 	}
 
@@ -1423,7 +1423,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			{
 				// surrounded by blocking tiles, give up
 				retVal = FPR_FAILED;
-				DBP0(("Unit %d: route failed (surrouned by blocking)\n", psDroid->id));
+// 				debug( LOG_NEVER, "Unit %d: route failed (surrouned by blocking)\n", psDroid->id );
 				goto exit;
 			}
 			else
@@ -1455,10 +1455,10 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			// no obstructions - trivial route
 			fpathSetDirectRoute( psObj, targetX, targetY );
 			retVal = FPR_OK;
-			DBP0(("Unit %d: trivial route\n", psDroid->id));
+// 			debug( LOG_NEVER, "Unit %d: trivial route\n", psDroid->id );
 			if (psPartialRouteObj != NULL)
 			{
-				DBP0(("Unit %d: trivial route during multi-frame route\n"));
+// 				debug( LOG_NEVER, "Unit %d: trivial route during multi-frame route\n" );
 			}
 			goto exit;
 		}
@@ -1475,10 +1475,10 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		// see if there is another unit with a usable route
 		if (fpathFindRoute((DROID *)psDroid, startX,startY, targetX,targetY))
 		{
-			DBP0(("Unit %d: found route\n", psDroid->id));
+// 			debug( LOG_NEVER, "Unit %d: found route\n", psDroid->id );
 			if (psPartialRouteObj != NULL)
 			{
-				DBP0(("Unit %d: found route during multi-frame route\n"));
+// 				debug( LOG_NEVER, "Unit %d: found route during multi-frame route\n" );
 			}
 			goto exit;
 		}
@@ -1504,7 +1504,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		}
 		else
 		{
-			DBP0(("Unit %d: reschedule\n"));
+// 			debug( LOG_NEVER, "Unit %d: reschedule\n" );
 			retVal = FPR_RESCHEDULE;
 			goto exit;
 		}
@@ -1519,7 +1519,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		goto exit;
 	}
 
-	DBP0(("Unit %d: ", psObj->id));
+// 	debug( LOG_NEVER, "Unit %d: ", psObj->id );
 	if (psPartialRouteObj == NULL)
 	{
 		retVal = fpathGatewayRoute(psObj, ASR_NEWROUTE, GWTerrain,

@@ -1674,7 +1674,7 @@ void actionUpdateDroid(DROID *psDroid)
         //hmmm, hope this doesn't cause any problems!
         if (gameTime > psDroid->actionStarted)
         {
-			DBP0(("sulk over.. %p\n",psDroid));
+// 			debug( LOG_NEVER, "sulk over.. %p\n", psDroid );
 			psDroid->action = DACTION_NONE;			// Sulking is over lets get back to the action ... is this all I need to do to get it back into the action?
 		}
 		break;
@@ -2727,7 +2727,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 
 		break;
 	case DACTION_SULK:
-		DBP0(("Go with sulk ... %p\n",psDroid));
+// 		debug( LOG_NEVER, "Go with sulk ... %p\n", psDroid );
 		psDroid->action = DACTION_SULK;
         //hmmm, hope this doesn't cause any problems!
 		//psDroid->actionStarted = gameTime;			// what is action started used for ? Certainly not used here!

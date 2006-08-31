@@ -120,8 +120,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		return FALSE;
 	}
 
-	DBP0(("formationNew: type %d, at (%d,%d), dir %d\n",
-				type, x,y, dir));
+// 	debug( LOG_NEVER, "formationNew: type %d, at (%d,%d), dir %d\n", type, x, y, dir );
 
 	// initialise it
 	psNew->refCount = 0;
@@ -242,7 +241,7 @@ void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj)
 	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
 		"formationJoin: invalid formation" );
 
-	DBP0(("formationJoin: %p, obj %d\n", psFormation, psObj->id));
+// 	debug( LOG_NEVER, "formationJoin: %p, obj %d\n", psFormation, psObj->id );
 
 	psFormation->refCount += 1;
 
@@ -275,7 +274,7 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 	ASSERT( psFormation->refCount > 0,
 		"formationLeave: refcount is zero" );
 
-	DBP0(("formationLeave: %p, obj %d\n", psFormation, psObj->id));
+// 	debug( LOG_NEVER, "formationLeave: %p, obj %d\n", psFormation, psObj->id );
 
 	asMembers = psFormation->asMembers;
 

@@ -845,11 +845,7 @@ BOOL gwLinkGateways(void)
 
 				if (bAddLink)
 				{
-					DBP0(("Linking %sgateway (%d,%d)->(%d,%d) through %s to gateway (%d,%d)->(%d,%d)\n",
-						(psCurr->flags & GWR_WATERLINK) ? "water " : "",
-						psCurr->x1,psCurr->y1, psCurr->x2,psCurr->y2,
-						bZone1 ? "zone1" : "zone2",
-						psLink->x1,psLink->y1, psLink->x2,psLink->y2));
+// 					debug( LOG_NEVER, "Linking %sgateway (%d,%d)->(%d,%d) through %s to gateway (%d,%d)->(%d,%d)\n", (psCurr->flags & GWR_WATERLINK) ? "water " : "", psCurr->x1,psCurr->y1, psCurr->x2, psCurr->y2, bZone1 ? "zone1" : "zone2", psLink->x1, psLink->y1, psLink->x2, psLink->y2 );
 					psCurr->psLinks[link].psGateway = psLink;
 					psCurr->psLinks[link].flags = 0;
 

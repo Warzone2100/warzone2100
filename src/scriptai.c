@@ -88,8 +88,7 @@ BOOL scrGroupAddArea(void)
 		return FALSE;
 	}
 
-	DBP0(("groupAddArea: player %d (%d,%d) -> (%d,%d)\n", player,
-		x1,y1,x2,y2));
+// 	debug( LOG_SCRIPT, "groupAddArea: player %d (%d,%d) -> (%d,%d)\n", player, x1, y1, x2, y2 );
 
 	for(psDroid=apsDroidLists[player]; psDroid; psDroid=psDroid->psNext)
 	{

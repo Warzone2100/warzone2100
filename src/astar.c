@@ -933,8 +933,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 	while (psOpen != NULL)
 	{
 		psCurr = fpathOpenGet();
-		DBP0(("\nStart          : %3d,%3d (%d,%d) = %d\n",
-				psCurr->x,psCurr->y, psCurr->dist, psCurr->est, psCurr->dist + psCurr->est));
+// 		debug( LOG_NEVER, "\nStart          : %3d,%3d (%d,%d) = %d\n", psCurr->x,psCurr->y, psCurr->dist, psCurr->est, psCurr->dist + psCurr->est );
 
 		if (psCurr->x == tileFX && psCurr->y == tileFY)
 		{
@@ -962,7 +961,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 			if (fpathBlockingTile(x,y))
 			{
 				// tile is blocked, skip it
-				DBP0(("blocked          : %3d, %3d\n", x,y));
+// 				debug( LOG_NEVER, "blocked          : %3d, %3d\n", x, y );
 				continue;
 			}
 
@@ -971,7 +970,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 			if (psOFound && psOFound->dist <= currDist)
 			{
 				// already in the open list by a shorter route
-				DBP0(("blocked open     : %3d, %3d dist %d\n", x,y, currDist));
+// 				debug( LOG_NEVER, "blocked open     : %3d, %3d dist %d\n", x, y, currDist );
 				continue;
 			}
 
@@ -982,7 +981,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 			if (psCFound && psCFound->dist <= currDist)
 			{
 				// already in the closed list by a shorter route
-				DBP0(("blocked closed   : %3d, %3d dist %d\n", x,y, currDist));
+// 				debug( LOG_NEVER, "blocked closed   : %3d, %3d dist %d\n", x, y, currDist );
 				continue;
 			}
 
@@ -996,8 +995,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 				psNew->est = fpathEstimate(x,y, tileFX, tileFY);
 				fpathOpenAdd(psNew);
 				fpathHashAdd(apsOpen, psNew);
-				DBP0(("new              : %3d, %3d (%d,%d) = %d\n",
-					x,y, currDist, psNew->est, currDist + psNew->est));
+// 				debug( LOG_NEVER, "new              : %3d, %3d (%d,%d) = %d\n", x, y, currDist, psNew->est, currDist + psNew->est );
 			}
 			else if (psOFound && !psCFound)
 			{
@@ -1009,8 +1007,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 				psOFound->psRoute = psCurr;
 				fpathOpenAdd(psOFound);
 				fpathHashAdd(apsOpen, psOFound);
-				DBP0(("replace open     : %3d, %3d dist %d\n",
-					x,y, currDist, psOFound->est, currDist + psOFound->est));
+// 				debug( LOG_NEVER, "replace open     : %3d, %3d dist %d\n", x, y, currDist, psOFound->est, currDist + psOFound->est );
 			}
 			else if (!psOFound && psCFound)
 			{
@@ -1019,8 +1016,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 				psCFound->psRoute = psCurr;
 				fpathOpenAdd(psCFound);
 				fpathHashAdd(apsOpen, psCFound);
-				DBP0(("replace closed   : %3d, %3d dist %d\n",
-					x,y, currDist, psCFound->est, currDist + psCFound->est));
+// 				debug( _LOG_NEVER, "replace closed   : %3d, %3d dist %d\n", x, y, currDist, psCFound->est, currDist + psCFound->est );
 			}
 			else
 			{
@@ -1034,8 +1030,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 		// add the current point to the closed nodes
 		fpathHashRemove(apsOpen, psCurr->x, psCurr->y);
 		fpathHashAdd(apsClosed, psCurr);
-		DBP0(("HashAdd - closed : %3d,%3d (%d,%d) = %d\n",
-				psCurr->x,psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est));
+// 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->x, psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
 
 	// optimise the route if one was found
@@ -1139,8 +1134,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 		}
 
 		psCurr = fpathOpenGet();
-		DBP0(("\nStart          : %3d,%3d (%d,%d) = %d\n",
-				psCurr->x,psCurr->y, psCurr->dist, psCurr->est, psCurr->dist + psCurr->est));
+// 		debug( LOG_NEVER, "\nStart          : %3d,%3d (%d,%d) = %d\n", psCurr->x, psCurr->y, psCurr->dist, psCurr->est, psCurr->dist + psCurr->est );
 
 		if (psCurr->x == tileFX && psCurr->y == tileFY)
 		{
@@ -1178,8 +1172,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			if (psFound && psFound->dist <= currDist)
 			{
 				// already visited node by a shorter route
-				DBP0(("blocked (%d)     : %3d, %3d dist %d\n",
-					psFound->type, x,y, currDist));
+// 				debug( LOG_NEVER, "blocked (%d)     : %3d, %3d dist %d\n", psFound->type, x, y, currDist );
 				continue;
 			}
 
@@ -1187,7 +1180,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			if (!psFound && fpathBlockingTile(x,y))
 			{
 				// tile is blocked, skip it
-				DBP0(("blocked          : %3d, %3d\n", x,y));
+// 				debug( LOG_NEVER, "blocked          : %3d, %3d\n", x, y );
 				continue;
 			}
 
@@ -1203,8 +1196,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 					psNew->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
 					fpathOpenAdd(psNew);
 					fpathHashAdd(apsNodes, psNew);
-					DBP0(("new              : %3d, %3d (%d,%d) = %d\n",
-						x,y, currDist, psNew->est, currDist + psNew->est));
+// 					debug( LOG_NEVER, "new              : %3d, %3d (%d,%d) = %d\n", x, y, currDist, psNew->est, currDist + psNew->est );
 				}
 			}
 			else if (psFound->type == NT_OPEN)
@@ -1214,8 +1206,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 				// already in the open list but this is shorter
 				psFound->dist = (SWORD)currDist;
 				psFound->psRoute = psCurr;
-				DBP0(("replace open     : %3d, %3d dist %d\n",
-					x,y, currDist, psFound->est, currDist + psFound->est));
+// 				debug( LOG_NEVER, "replace open     : %3d, %3d dist %d\n", x, y, currDist, psFound->est, currDist + psFound->est );
 			}
 			else if (psFound->type == NT_CLOSED)
 			{
@@ -1224,8 +1215,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 				psFound->dist = (SWORD)currDist;
 				psFound->psRoute = psCurr;
 				fpathOpenAdd(psFound);
-				DBP0(("replace closed   : %3d, %3d dist %d\n",
-					x,y, currDist, psFound->est, currDist + psFound->est));
+// 				debug( LOG_NEVER, "replace closed   : %3d, %3d dist %d\n", x, y, currDist, psFound->est, currDist + psFound->est );
 			}
 			else
 			{
@@ -1240,8 +1230,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 //		fpathHashRemove(apsOpen, psCurr->x, psCurr->y);
 //		fpathHashAdd(apsClosed, psCurr);
 		psCurr->type = NT_CLOSED;
-		DBP0(("HashAdd - closed : %3d,%3d (%d,%d) = %d\n",
-				psCurr->x,psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est));
+// 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->x, psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
 
 

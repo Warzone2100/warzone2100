@@ -4223,7 +4223,7 @@ void orderMoralCheck(UDWORD player)
 		// too many units, don't run
 		return;
 	}
-	DBP0(("moral check for player %d\n", player));
+// 	debug( LOG_NEVER, "moral check for player %d\n", player );
 
 	// calculate the overall leadership
 	leadership = asRunData[player].leadership + 10;
@@ -4248,7 +4248,7 @@ void orderMoralCheck(UDWORD player)
 		{
 			if (check > personLShip)
 			{
-				DBP0(("   DORDER_RUN: droid %d\n", psCurr->id));
+// 				debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id );
 				orderDroid(psCurr, DORDER_RUN);
 			}
 		}
@@ -4256,7 +4256,7 @@ void orderMoralCheck(UDWORD player)
 		{
 			if (check > leadership)
 			{
-				DBP0(("   DORDER_RUN: droid %d\n", psCurr->id));
+// 				debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id );
 				orderDroid(psCurr, DORDER_RUN);
 			}
 		}
@@ -4312,7 +4312,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 		{
 			if (check > personLShip)
 			{
-				DBP0(("   DORDER_RUN: droid %d\n", psCurr->id));
+// 				debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id );
 				orderDroidLoc(psCurr, DORDER_RUN, psRunData->sPos.x, psRunData->sPos.y);
 			}
 		}
@@ -4320,7 +4320,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 		{
 			if (check > leadership)
 			{
-				DBP0(("   DORDER_RUN: droid %d\n", psCurr->id));
+// 				debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id );
 				orderDroidLoc(psCurr, DORDER_RUN, psRunData->sPos.x, psRunData->sPos.y);
 			}
 		}
@@ -4427,7 +4427,7 @@ void orderHealthCheck(DROID *psDroid)
 			orderState(psDroid, DORDER_RTR) ||
 			orderState(psDroid, DORDER_DESTRUCT)))
 		{
-        	DBP0(("   DORDER_RUN: droid %d\n", psDroid->id));
+//         	debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psDroid->id );
 		    orderDroidLoc(psDroid, DORDER_RUN, retreatX, retreatY);
         }
 
@@ -4447,7 +4447,7 @@ void orderHealthCheck(DROID *psDroid)
 			        continue;
 		        }
 
-		        DBP0(("   DORDER_RUN: droid %d\n", psCurr->id));
+// 		        debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id );
 		        orderDroidLoc(psCurr, DORDER_RUN, retreatX, retreatY);
 	        }
         }

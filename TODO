@@ -41,7 +41,7 @@ More difficult:
 
 - Integrate Karma's masterserver into Warzone
 
-- Use OGRE3D for rendering?
+- Use OGRE3D for rendering? Also have a look at Irrlicht? It seems to be unstable...
 
 - Remove dependencies on sound libraries?
 

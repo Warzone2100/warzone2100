@@ -140,9 +140,7 @@ void strresDestroy(STR_RES *psRes)
 			if (psBlock->aUsage[i - psBlock->idStart] == 0
 				&& i != 0 && i < psRes->nextID)
 			{
-				DBP0(("strresDestroy: String id %d not used:\n"
-						  "               \"%s\"\n",
-					i, psBlock->apStrings[i - psBlock->idStart]));
+				debug( LOG_NEVER, "strresDestroy: String id %d not used:\n               \"%s\"\n", i, psBlock->apStrings[i - psBlock->idStart] );
 			}
 #endif
 			if (psBlock->apStrings[i - psBlock->idStart])

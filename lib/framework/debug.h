@@ -51,7 +51,6 @@
  *
  */
 
-#define DBP0(x)
 #define DBMB0(x)
 #define DBP1(x)
 #define DBMB1(x)
