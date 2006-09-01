@@ -20,27 +20,15 @@
 
 #define NUM_OTHER_PAGES		19
 
-iSprite	tempTexStore;
-iPalette	tempPal;
-/* Stores the graphics data for the terrain tiles textures */
+/* Stores the graphics data for the terrain tiles textures (in src/data.c) */
 iSprite tilesPCX;
-/* Stores the raw PCX data for the terrain tiles at load file time */
-iBitmap	**tilesRAW;
-/* How many tiles have we loaded */
-UDWORD	numPCXTiles;
+
 /* How many pages have we loaded */
 SDWORD	firstTexturePage;
 SDWORD	numTexturePages;
 int		pageId[MAX_TERRAIN_PAGES];
 
-/* Presently all texture pages are 256*256 big */
-typedef struct _texturePage
-{
-	UDWORD	pageNumber;
-	UDWORD	cardAddress;
-} TEXTURE_PAGE_3DFX;
-
-
+/* Texture page and coordinates for each tile */
 TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 
 static UDWORD	getTileXIndex(UDWORD tileNumber);
@@ -234,7 +222,6 @@ BOOL getTileRadarColours(void)
 
 	w = tilesPCX.width / TILE_WIDTH;
 	h = tilesPCX.height / TILE_HEIGHT;
-	numPCXTiles = w * h;
 
 	t = 0;
 	for (i=0; i<h; i++)

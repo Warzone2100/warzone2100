@@ -191,12 +191,6 @@ extern BOOL mapLoad(char *pFileData, UDWORD fileSize);
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 
-/* Load map texture info */
-extern void mapLoadTexture(void);
-
-/* Save the current map texture info */
-extern void mapSaveTexture(void);
-
 /* A post process for the water tiles in map to ensure height integrity */
 extern void	mapWaterProcess( void );
 
