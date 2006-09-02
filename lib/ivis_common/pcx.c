@@ -23,7 +23,7 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 	}
 }
 
-iBool pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal)
+BOOL pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal)
 {
 	unsigned int PNG_BYTES_TO_CHECK;
 	png_structp png_ptr = NULL;
@@ -141,9 +141,3 @@ error:
 
 	return FALSE;
 }
-
-BOOL pie_PNGLoadMemToBuffer(char *pngimage, iSprite *s, iColour *pal)
-{
-	return pie_PNGLoadMem(pngimage, s, pal);
-}
-

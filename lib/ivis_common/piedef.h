@@ -181,8 +181,7 @@ extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
 extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 
 // PNG
-BOOL pie_PNGLoadMemToBuffer(char *pngimage, iSprite *s, iColour *pal);
-iBool pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal);
+BOOL pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal);
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 
