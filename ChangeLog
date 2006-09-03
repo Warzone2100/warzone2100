@@ -10,7 +10,8 @@ xxxx-xx-xx: Version 2.0.5
    * Fix: Improve shadow performance and fix OpenGL specs violation
    * Fix: Framerate counting gives correct results now
  * Commandline options:
-   * New: --shadows no, switches off shadows for better performance
+   * New: --noshadows: switches off shadows for better performance (--shadows enables them again)
+   * New: --nosound: switches off sound (--sound enables it again)
  * Build system:
    * Change: src/version.* not used anymore. In MSVC define VERSION=\"...\" in preprocessor settings instead
 
