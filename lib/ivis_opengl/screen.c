@@ -644,48 +644,6 @@ void screenDoDumpToDiskIfRequired()
 	jpeg_destroy_compress(&cinfo);
 }
 
-/* Set palette entries for the display buffer
- * first specifies the first palette entry. count the number of entries
- * The psPalette should have at least first + count entries in it.
- */
-void screenSetPalette(UDWORD first, UDWORD count, PALETTEENTRY *psEntries)
-{
-	UDWORD	i;
-
-	ASSERT( (first+count-1 < PAL_MAX),
-		"screenSetPalette: invalid entry range" );
-
-	if (count == 0)
-	{
-		return;
-	}
-
-	/* ensure that colour 0 is black and 255 is white */
-	if ((first == 0 || first == 255) && count == 1)
-	{
-		return;
-	}
-
-	if (first == 0)
-	{
-		first = 1;
-		count -= 1;
-	}
-	if (first + count - 1 == PAL_MAX)
-	{
-		count -= 1;
-	}
-
-        for (i = 0; i < count; i++)
-        {
-                asPalEntries[first + i].r = psEntries[first + i].peRed;
-                asPalEntries[first + i].g = psEntries[first + i].peGreen;
-                asPalEntries[first + i].b = psEntries[first + i].peBlue;
-        }
-
-        SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, asPalEntries + first, first, count);
-}
-
 char* screenDumpToDisk(char* path) {
 	while (1) {
 		sprintf(screendump_filename, "%s%swz2100_shot_%03i.jpg", path, "/", ++screendump_num);
@@ -705,6 +663,4 @@ char* screenDumpToDisk(char* path) {
 void screenTextOut(UDWORD x, UDWORD y, STRING *pFormat, ...)
 {
 }
-
-
 

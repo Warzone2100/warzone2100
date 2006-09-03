@@ -49,7 +49,6 @@
 #define iV_PaletteShadeTableCreate	pal_BuildAdjustedShadeTable
 #define iV_PaletteNearestColour		pal_GetNearestColour
 #define	iV_PaletteAdd				pal_AddNewPalette
-#define	iV_PaletteSelect			pal_SelectPalette
 #include "piepalette.h"
 
 //matrixstuff

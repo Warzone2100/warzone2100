@@ -24,7 +24,6 @@ void pie_SetColourDefines(void);
 #define COLOUR_BALANCE	6		// 3 from the end. (two brighter shades!)
 
 iColour*			psGamePal = NULL;
-PALETTEENTRY*		psWinPal = NULL;
 uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 BOOL	bPaletteInitialised = FALSE;
 uint8	colours[16];
@@ -48,7 +47,6 @@ int pal_AddNewPalette(iColour *pal)
 //	long	entry;
 //	long	cardPal[256];
 	iColour *p;
-	PALETTEENTRY *w;
 
 	bPaletteInitialised = TRUE;
 	if (psGamePal == NULL)
@@ -61,19 +59,8 @@ int pal_AddNewPalette(iColour *pal)
 			return FALSE;
 		}
 	}
-	if (psWinPal == NULL)
-	{
-		psWinPal = (PALETTEENTRY*) MALLOC(PALETTE_SIZE * sizeof(PALETTEENTRY));
-		if (psGamePal == NULL)
-		{
-			debug( LOG_ERROR, "pal_AddNewPalette - Out of memory" );
-			abort();
-			return FALSE;
-		}
-	}
 
 	p = psGamePal;
-	w = psWinPal;
 
 	for (i=0; i<PALETTE_SIZE; i++)
 	{
@@ -106,35 +93,11 @@ int pal_AddNewPalette(iColour *pal)
 		p[i].r = pal[i].r;
 		p[i].g = pal[i].g;
 		p[i].b = pal[i].b;
-		//set copy of windows palette
-		w[i].peRed   = (uint8) pal[i].r;
-		w[i].peGreen = (uint8) pal[i].g;
-		w[i].peBlue  = (uint8) pal[i].b;
-		w[i].peFlags = 0;
 #endif
 	}
-	//set windows palette
-	screenSetPalette(0, PALETTE_SIZE, psWinPal);
-
 	pie_SetColourDefines();
 
 	return 0;
-}
-
-
-void pal_SelectPalette(int n)
-{
-}
-
-
-//*************************************************************************
-//***
-//*
-//******
-
-void pal_SetPalette(void)
-
-{
 }
 
 //*************************************************************************
@@ -164,23 +127,12 @@ void pie_SetColourDefines(void)
 	COL_WHITE 		= pal_GetNearestColour( 255, 255, 255);
 }
 
-//*************************************************************************
-//*** init palette (sets default palette and calc primary colours)
-//*
-//* on exit	psCurrentPalette = pointer to default palette (palette 0)
-//******
-
-void pal_Init(void)
-{
-}
-
 void pal_ShutDown(void)
 {
 	if (bPaletteInitialised)
 	{
 		bPaletteInitialised = FALSE;
 		FREE(psGamePal);
-		FREE(psWinPal);
 	}
 }
 
@@ -257,12 +209,4 @@ iColour*	pie_GetGamePal(void)
 	ASSERT( bPaletteInitialised,"pie_GetGamePal, palette not initialised" );
 	return 	psGamePal;
 }
-
-PALETTEENTRY*	pie_GetWinPal(void)
-{
-	ASSERT( bPaletteInitialised,"pie_GetWinPal, palette not initialised" );
-	return 	psWinPal;
-}
-
-
 

@@ -62,10 +62,4 @@ char* screenDumpToDisk(char* path);
 /* Toggle the display between full screen or windowed */
 extern void	screenToggleMode(void);
 
-/* Set palette entries for the display buffer
- * first specifies the first palette entry. count the number of entries
- * The psPalette should have at least first + count entries in it.
- */
-extern void screenSetPalette(UDWORD first, UDWORD count, PALETTEENTRY *psPalette);
-
 #endif
