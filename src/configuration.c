@@ -140,6 +140,18 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	}
 
 	// //////////////////////////
+	// enable sound
+	if(getWarzoneKeyNumeric("sound", &val))
+	{
+		war_setSoundEnabled( val );
+	}
+	else
+	{
+		war_setSoundEnabled( TRUE );
+		setWarzoneKeyNumeric( "sound", TRUE );
+	}
+
+	// //////////////////////////
 	// invert mouse
 	if(getWarzoneKeyNumeric("mouseflip", &val))
 	{

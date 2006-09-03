@@ -266,10 +266,12 @@ BOOL closeWarzoneKey( void )
 	return TRUE;
 }
 
-///
-// =======================================================================================================================
-// =======================================================================================================================
-//
+/**
+ * Read config setting pName into val
+ * \param	*pName	Config setting
+ * \param	*val	Place where to store the setting
+ * \return	Whether we succeed to find the setting
+ */
 BOOL getWarzoneKeyNumeric( STRING *pName, DWORD *val )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

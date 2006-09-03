@@ -37,6 +37,7 @@ typedef struct _warzoneGlobals
 	BOOL		allowSubtitles;
 	BOOL		playAudioCDs;
 	BOOL		Fullscreen;
+	BOOL		soundEnabled;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -67,6 +68,8 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetAdditive(FALSE);
 
 	war_SetPlayAudioCDs(TRUE);
+
+	war_setSoundEnabled( TRUE );
 }
 
 void war_SetPlayAudioCDs(BOOL b) {
@@ -161,39 +164,13 @@ SEQ_MODE war_GetSeqMode(void)
 	return  warGlobs.seqMode;
 }
 
-/***************************************************************************/
-/***************************************************************************/
-void war_SetDirectDrawDeviceName(char* pDDDeviceName)
+
+void war_setSoundEnabled( BOOL soundEnabled )
 {
-	ASSERT( strlen(pDDDeviceName) < 255,"DirectDraw device string exceeds max string length." );
-	if (strlen(pDDDeviceName) >= 255)
-	{
-		pDDDeviceName[255] = 0;
-	}
-	strcpy((char*)(warGlobs.DDrawDriverName),pDDDeviceName);
+	warGlobs.soundEnabled = soundEnabled;
 }
 
-char* war_GetDirectDrawDeviceName(void)
+BOOL war_getSoundEnabled( void )
 {
-	return (char*)(warGlobs.DDrawDriverName);
+	return warGlobs.soundEnabled;
 }
-
-/***************************************************************************/
-/***************************************************************************/
-void war_SetDirect3DDeviceName(char* pD3DDeviceName)
-{
-	ASSERT( strlen(pD3DDeviceName) < 255,"Direct3D device string exceeds max string length." );
-	if (strlen(pD3DDeviceName) >= 255)
-	{
-		pD3DDeviceName[255] = 0;
-	}
-	strcpy((char*)(warGlobs.D3DDriverName),pD3DDeviceName);
-}
-
-char* war_GetDirect3DDeviceName(void)
-{
-	return (char*)(warGlobs.D3DDriverName);
-}
-
-
-

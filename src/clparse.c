@@ -29,6 +29,9 @@
 #include "cheat.h"
 #include "init.h"
 
+// For setting shadows and sound options
+#include "lib/framework/configfile.h"
+
 extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
 extern BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
@@ -41,10 +44,6 @@ extern char * multiplay_mods[MAX_MODS];
 void debug_callback_file( void**, const char * );
 void debug_callback_file_init( void** );
 void debug_callback_file_exit( void** );
-
-// Functions for --shadow toggle
-void setDrawShadows( BOOL val );
-BOOL setWarzoneKeyNumeric( STRING *pName, DWORD val );
 
 //! Whether to play the intro video
 BOOL	clIntroVideo;
@@ -103,7 +102,9 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   --window                   Play in windowed mode\n"
 				"   --version                  Output version info and exit\n"
 				"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n"
-				"   --shadows YES/NO           Toggles the shadows\n" );
+				"   --(no)shadows              Toggles the shadows\n"
+				"   --(no)sound                Toggles the sound\n"
+			);
 			return FALSE;
 		}
 		else if ( stricmp(tokenType, "--datadir") == 0 )
@@ -246,26 +247,28 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
-		else if ( stricmp( tokenType,"--shadows") == 0 )
+		else if ( stricmp( tokenType, "--shadows" ) == 0 )
 		{
-			token = argv[++i];
-			if ( stricmp( token, "yes" ) == 0 )
-			{
-				setDrawShadows( TRUE );
-				setWarzoneKeyNumeric( "shadows", TRUE );
-			}
-			else if ( stricmp( token, "no" ) == 0 )
-			{
-				setDrawShadows( FALSE );
-				setWarzoneKeyNumeric( "shadows", FALSE );
-			}
-			else
-			{
-				debug( LOG_ERROR, "Shadow toggle must be \"yes\" or \"no\"! Aborting!" );
-				return FALSE;
-			}
+			// FIXME Should setDrawShadows go into warzoneconfig? Or how should config values be handled in general? By the system using it? Or by warzoneconfig? Or by config keys only?
+			//setDrawShadows( TRUE );
+			setWarzoneKeyNumeric( "shadows", TRUE );
 		}
-		else if ( stricmp(tokenType, "--viewport") == 0 )
+		else if ( stricmp( tokenType, "--noshadows" ) == 0 )
+		{
+			//setDrawShadows( FALSE );
+			setWarzoneKeyNumeric( "shadows", FALSE );
+		}
+		else if ( stricmp( tokenType, "--sound" ) == 0 )
+		{
+			war_setSoundEnabled( TRUE );
+			setWarzoneKeyNumeric( "sound", TRUE );
+		}
+		else if ( stricmp( tokenType, "--nosound" ) == 0 )
+		{
+			war_setSoundEnabled( FALSE );
+			setWarzoneKeyNumeric( "sound", FALSE );
+		}
+		else if ( stricmp( tokenType, "--viewport" ) == 0 )
 		{
 			token = argv[++i];
 			if ( !sscanf( token, "%ix%i", &width, &height ) == 2 )
