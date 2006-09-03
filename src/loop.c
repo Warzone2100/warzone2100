@@ -913,11 +913,13 @@ GAMECODE gameLoop(void)
 GAMECODE videoLoop(void)
 {
 	BOOL	bVolKilled = FALSE;
-
 	CLEAR_MODE bClear;
-static BOOL bActiveBackDrop = FALSE;
+
+	// There is something really odd here. - Per
+	static BOOL bActiveBackDrop = FALSE;
 
 #ifdef DEBUG
+	// Surely this should be: bActiveBackDrop = screen_GetBackDrop(); ?? - Per
 	screen_GetBackDrop();//test only remove JPS feb26
 #endif
 
@@ -940,7 +942,7 @@ static BOOL bActiveBackDrop = FALSE;
 
 	//toggling display mode disabled in video mode
 	// Check for quit
-	if (keyPressed(KEY_ESC))// || bQuitVideo)
+	if (keyPressed(KEY_ESC))
 	{
 		seq_StopFullScreenVideo();
 		bQuitVideo = FALSE;
@@ -952,22 +954,21 @@ static BOOL bActiveBackDrop = FALSE;
 			setMessageImmediate(FALSE);
 		}
 		//Script callback for video over
-#ifdef SCRIPTS
-        //don't do the callback if we're playing the win/lose video
-        if (!getScriptWinLoseVideo())
-        {
-		    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-        }
-        else
-        {
-            displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
-        }
-#endif
+		//don't do the callback if we're playing the win/lose video
+		if (!getScriptWinLoseVideo())
+		{
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+		}
+		else
+		{
+			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
+		}
 //		clearCount = 0;
 		pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 
 		if (bActiveBackDrop)
 		{
+			// We never get here presently - Per
  			screen_RestartBackDrop();
 		}
 		// remove the intelligence screen if necessary
@@ -1003,24 +1004,23 @@ static BOOL bActiveBackDrop = FALSE;
 				intResetScreen(TRUE);
 				setMessageImmediate(FALSE);
 			}
-#ifdef SCRIPTS
-            //don't do the callback if we're playing the win/lose video
-            if (!getScriptWinLoseVideo())
-            {
-			    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-            }
-            else
-            {
-                displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
-            }
-#endif
+			//don't do the callback if we're playing the win/lose video
+			if (!getScriptWinLoseVideo())
+			{
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+			}
+			else
+			{
+				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
+			}
 //		    clearCount = 0;
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 
-    		if (bActiveBackDrop)
-	    	{
-		    	screen_RestartBackDrop();
-		    }
+			if (bActiveBackDrop)
+			{
+				// We never get here presently - Per
+				screen_RestartBackDrop();
+			}
 			// remove the intelligence screen if necessary
 			/*if (messageIsImmediate())
 			{
@@ -1057,9 +1057,7 @@ static BOOL bActiveBackDrop = FALSE;
 	/* restore volume after video quit */
 	if ( bVolKilled == TRUE )
 	{
-
 		mixer_SetWavVolume( g_iGlobalVol );
-
 	}
 
 	return GAMECODE_CONTINUE;
@@ -1067,9 +1065,6 @@ static BOOL bActiveBackDrop = FALSE;
 
 void loop_SetVideoPlaybackMode(void)
 {
-#ifdef DEBUG
-	screen_GetBackDrop();//test only remove JPS feb26
-#endif
 	videoMode += 1;
 	paused = TRUE;
 	video = TRUE;

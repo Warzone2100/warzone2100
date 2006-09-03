@@ -995,21 +995,21 @@ void seqDispCDOK( void )
 	}
 	else
 	{
-		bPlayedOK = seq_StartFullScreenVideo( aSeqList[currentPlaySeq].pSeq,
-											  aSeqList[currentPlaySeq].pAudio );
+		bPlayedOK = seq_StartFullScreenVideo( aSeqList[currentPlaySeq].pSeq, aSeqList[currentPlaySeq].pAudio );
 	}
 
 	if ( bPlayedOK == FALSE )
 	{
-        //don't do the callback if we're playing the win/lose video
-        if (!getScriptWinLoseVideo())
-        {
-    		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-        }
-        else
-        {
-            displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
-        }
+		//don't do the callback if we're playing the win/lose video
+		if (!getScriptWinLoseVideo())
+		{
+			debug(LOG_SCRIPT, "*** Called video quit trigger!");
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+		}
+		else
+		{
+			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
+		}
 	}
 }
 
@@ -1033,18 +1033,3 @@ BOOL seq_GetSubtitles(void)
 {
 	return bSeqSubtitles;
 }
-
-
-/*play a video now and clear all other videos, front end use only*/
-/*
-BOOL seq_PlayVideo(char* pSeq, char* pAudio)
-{
-	seq_ClearSeqList();//other wise me might trigger these videos when we finish
-	seq_StartFullScreenVideo(pSeq, pAudio);
-	while (loop_GetVideoStatus())
-	{
-		videoLoop();
-	}
-	return TRUE;
-}
-*/
