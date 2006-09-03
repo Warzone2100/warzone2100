@@ -1022,12 +1022,15 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
-	if ( war_getSoundEnabled() && !audio_Init(droidAudioTrackStopped) )
-	{
-		debug( LOG_SOUND, "Couldn't initialise audio system: continuing without audio\n" );
+	if ( war_getSoundEnabled() )
+	{	
+		if( !audio_Init(droidAudioTrackStopped) )
+			debug( LOG_SOUND, "Couldn't initialise audio system: continuing without audio\n" );
 	}
 	else
+	{
 		debug( LOG_SOUND, "Sound disabled!" );
+	}
 
 	if (war_GetPlayAudioCDs()) {
 		cdAudio_Open(UserMusicPath);
