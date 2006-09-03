@@ -4958,7 +4958,7 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 
 	if(psStorage->storage == ST_LOCAL)
 	{
-		if(scriptLookUpVariable(psVarIdent->pIdent, &ppsVarSym))
+		if(scriptLookUpVariable(psVarIdent->pIdent, ppsVarSym))
 		{
 			debug(LOG_ERROR, "var found");
 			debug(LOG_ERROR, "var=%s, index=%d of %d", psVarIdent->pIdent, (*ppsVarSym)->index, psCurEvent->numParams);
@@ -5540,7 +5540,7 @@ void scriptSetTypeTab(TYPE_SYMBOL *psTypeTab)
 	{
 		ASSERT( psTypeTab[i].typeID == type,
 			"scriptSetTypeTab: ID's must be >= VAL_USERTYPESTART and sequential" );
-		type += 1;
+		type = type + 1;
 	}
 #endif
 
@@ -5583,7 +5583,7 @@ void scriptSetCallbackTab(CALLBACK_SYMBOL *psCallTab)
 	{
 		ASSERT( psCallTab[i].type == type,
 			"scriptSetCallbackTab: ID's must be >= VAL_CALLBACKSTART and sequential" );
-		type += 1;
+		type = type + 1;
 	}
 #endif
 

@@ -501,8 +501,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 		break;
 	case OP_CANC:	//String cancatenation
 		{
-			char *tempstr1[MAXSTRLEN];
-			char *tempstr2[MAXSTRLEN];
+			char tempstr1[MAXSTRLEN];
+			char tempstr2[MAXSTRLEN];
 
 			/* Check first value if it's compatible with Strings */
 			if((psV1->type == VAL_INT) || (psV1->type == VAL_BOOL))	//First value isn't string, but can be converted to string
