@@ -4145,7 +4145,6 @@ BOOL _intAddOptions(void)
 		return FALSE;
 	}
 
-
 #ifdef EDIT_OPTIONS
 	/* Add the map form */
 	sFormInit.formID = IDOPT_FORM;
@@ -4248,7 +4247,6 @@ BOOL _intAddOptions(void)
 	{
 		return FALSE;
 	}
-
 #endif
 
 	/* Add the edit button */
@@ -4260,10 +4258,12 @@ BOOL _intAddOptions(void)
 	sButInit.height = OPT_BUTHEIGHT;
 	sButInit.pText = "Edit";
 	sButInit.pTip = "Start Edit Mode";
+#ifdef EDIT_OPTIONS
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
 	}
+#endif
 
 	/* Add the add object buttons */
 	sButInit.id = IDOPT_DROID;
