@@ -202,7 +202,7 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 static UDWORD scanKeyBoardForBinding()
 {
 	UDWORD i;
-	for(i = 0; i <= KEY_MAXSCAN; i++)
+	for(i = 0; i < KEY_MAXSCAN; i++)
 	{
 		if(keyPressed(i))
 		{
