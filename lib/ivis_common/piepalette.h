@@ -31,7 +31,6 @@
 
 extern uint8		colours[];
 extern uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
-extern uint8		transLookup[PALETTE_SIZE][PALETTE_SIZE];
 
 
 //*************************************************************************
@@ -41,7 +40,6 @@ extern void		pal_BuildAdjustedShadeTable( void );
 extern uint8	pal_GetNearestColour(uint8 r, uint8 g, uint8 b);
 extern int		pal_AddNewPalette(iColour *pal);
 extern void		pal_PaletteSet(void);
-extern BOOL		pal_Make16BitPalette(void);
 extern iColour*	pie_GetGamePal(void);
 
 #endif

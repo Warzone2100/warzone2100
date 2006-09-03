@@ -19,19 +19,11 @@
  */
 /***************************************************************************/
 
-typedef struct _textureState
-{
-	UDWORD	lastPageDownloaded;
-	UDWORD	texPage;
-} TEXTURE_STATE;
-
 /***************************************************************************/
 /*
  *	Local Variables
  */
 /***************************************************************************/
-
-TEXTURE_STATE	textureStates;
 
 /***************************************************************************/
 /*
@@ -44,17 +36,6 @@ TEXTURE_STATE	textureStates;
  *	Source
  */
 /***************************************************************************/
-
-BOOL pie_Download8bitTexturePage(void* bitmap,UWORD Width,UWORD Height)
-{
-	return TRUE;
-}
-
-BOOL pie_Reload8bitTexturePage(void* bitmap,UWORD Width,UWORD Height, SDWORD index)
-{
-//	return dtm_ReLoadTexture(index);
-	return FALSE;
-}
 
 UDWORD pie_GetLastPageDownloaded(void)
 {

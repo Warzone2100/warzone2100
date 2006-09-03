@@ -574,22 +574,6 @@ UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDW
 
 	}
 
-
-//#ifdef PSX
-//#ifndef TESTBED
-//	// Need to take	FTEXT_LEFTJUSTIFYAPPEND into account here.
-//	if(DrawBack) {
-//		// Move y up to the top of the text.
-//		y += iV_GetTextAboveBase();
-//
-//		// and draw a transparent box behind the text.
-//		TransBoxFillRGB_psx(x,y, x+Width,
-//							jy-iV_GetTextLineSize()+iV_GetTextBelowBase(),
-//							16,16,128);
-//	}
-//#endif
-//#endif
-
 	return jy;
 }
 

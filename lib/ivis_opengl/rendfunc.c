@@ -37,7 +37,7 @@ static UWORD MouseImageID;
 void	iVBlitPixelTransRect(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1);
 
 /* Build a transparency look up table for the interface */
-void	pie_BuildTransTable(UDWORD tableNo);
+static void pie_BuildTransTable(UDWORD tableNo);
 
 // dummy prototypes for pointer build functions
 void (*iV_pBox)(int x0, int y0, int x1, int y1, uint32 colour);
@@ -52,136 +52,6 @@ void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
  *	Source
  */
 /***************************************************************************/
-
-//*************************************************************************
-//*** line plot 2D line - clipped
-//*
-//* params	x0,y0  = line point 1
-//*	 		x1,y1  = line point 2
-//*	 		colour = line colour value
-//*****
-
-void line(int x0, int y0, int x1, int y1, uint32 colour)
-
-{
-	int code1, code2, code;
-	int x = 0, y = 0;
-
-
-	code1 = code2 = 0;
-
-
-	if (y0>psRendSurface->clip.bottom)   	code1 = 1;
-	else if (y0<psRendSurface->clip.top) 	code1 = 2;
-	if (x0>psRendSurface->clip.right)	code1 |= 4;
-	else if (x0<psRendSurface->clip.left)	code1 |= 8;
-	if (y1>psRendSurface->clip.bottom)	code2 = 1;
-	else if (y1<psRendSurface->clip.top) 	code2 = 2;
-	if (x1>psRendSurface->clip.right)	code2 |= 4;
-	else if (x1<psRendSurface->clip.left)	code2 |= 8;
-
-	// line totally outside screen: reject
-
-	if ((code1 & code2) != 0)
-		return;
-
-	// line totally inside screen: accept
-
-	if ((code1 | code2) == 0) {
-		iV_pLine(x0,y0,x1,y1,colour);
-		return;
-	}
-
-	// at least one point needs clipping
-
-	code = (code1 != 0) ? code1 : code2;
-
-	if (code & 1) {
-		x = x0 + (x1-x0) * (psRendSurface->clip.bottom-y0)/(y1-y0);
-		y = psRendSurface->clip.bottom;
-	} else if (code & 2) {
-		x = x0 + (x1-x0) * (psRendSurface->clip.top-y0)/(y1-y0);
-		y = psRendSurface->clip.top;
-	} else if (code & 4) {
-		y = y0 + (y1-y0) * (psRendSurface->clip.right-x0)/(x1-x0);
-		x = psRendSurface->clip.right;
-	} else if (code & 8) {
-		y = y0 + (y1-y0) * (psRendSurface->clip.left-x0)/(x1-x0);
-		x = psRendSurface->clip.left;
-	}
-
-
-	if (code == code1) {
-		x0 = x;
-		y0 = y;
-	} else {
-		x1 = x;
-		y1 = y;
-	}
-
-	code1 = code2 = 0;
-
-
-	if (y0>psRendSurface->clip.bottom)		code1 = 1;
-	else if (y0<psRendSurface->clip.top)	code1 = 2;
-	if (x0>psRendSurface->clip.right)  	code1 |= 4;
-	else if (x0<psRendSurface->clip.left)	code1 |= 8;
-	if (y1>psRendSurface->clip.bottom)		code2 = 1;
-	else if (y1<psRendSurface->clip.top)	code2 = 2;
-	if (x1>psRendSurface->clip.right)		code2 |= 4;
-	else if (x1<psRendSurface->clip.left)	code2 |= 8;
-
-	if ((code1 & code2) != 0)
-		return;
-
-	if ((code1 | code2) == 0) {
-		iV_pLine(x0,y0,x1,y1,colour);
-		return;
-	}
-
-	code = (code1 != 0) ? code1 : code2;
-
-	if (code & 1) {
-		x = x0 + (x1-x0) * (psRendSurface->clip.bottom-y0)/(y1-y0);
-		y = psRendSurface->clip.bottom;
-	} else if (code & 2) {
-		x = x0 + (x1-x0) * (psRendSurface->clip.top-y0)/(y1-y0);
-		y = psRendSurface->clip.top;
-	} else if (code & 4) {
-		y = y0 + (y1-y0) * (psRendSurface->clip.right-x0)/(x1-x0);
-		x = psRendSurface->clip.right;
-	} else if (code & 8) {
-		y = y0 + (y1-y0) * (psRendSurface->clip.left-x0)/(x1-x0);
-		x = psRendSurface->clip.left;
-	}
-
-	if (code == code1)
-		iV_pLine(x,y,x1,y1,colour);
-	else
-		iV_pLine(x0,y0,x,y,colour);
-}
-
-//*************************************************************************
-
-void box(int x0, int y0, int x1, int y1, uint32 colour)
-{
-
-	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
-			y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-		return;
-
-	if (x0<psRendSurface->clip.left)
-		x0 = psRendSurface->clip.left;
-	if (x1>psRendSurface->clip.right)
-		x1 = psRendSurface->clip.right;
-	if (y0<psRendSurface->clip.top)
-		y0 = psRendSurface->clip.top;
-	if (y1>psRendSurface->clip.bottom)
-		y1 = psRendSurface->clip.bottom;
-
-	iV_pBox(x0,y0,x1,y1,colour);
-
-}
 
 //*************************************************************************
 
@@ -235,26 +105,6 @@ void	TransBoxFill(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 }
 
 //*************************************************************************
-
-void DrawImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y)
-{
-	Bmp += ((UDWORD)Image->Tu) + ((UDWORD)Image->Tv) * Modulus;
-
-	iV_ppBitmap(Bmp,
-			   	x+Image->XOffset,y+Image->YOffset,
-			   	Image->Width,Image->Height,Modulus);
-}
-
-
-void DrawSemiTransImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int TransRate)
-{
-	Bmp += ((UDWORD)Image->Tu) + ((UDWORD)Image->Tv) * Modulus;
-
-	iV_ppBitmapTrans(Bmp,
-			   	x+Image->XOffset,y+Image->YOffset,
-			   	Image->Width,Image->Height,Modulus);
-}
-
 
 void DrawImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 {
@@ -451,95 +301,6 @@ void DrawTransImageRect(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0,
 	}
 }
 
-//*************************************************************************
-
-void DrawTransColourImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, SWORD ColourIndex)
-{
-	IMAGEDEF *Image;
-	iBitmap *bmp;
-	UDWORD modulus;
-	SDWORD width;
-	SDWORD height;
-	SDWORD delta;
-	assert(ID < ImageFile->Header.NumImages);
-	Image = &ImageFile->ImageDefs[ID];
-
-	width = Image->Width;
-	height = Image->Height;
-	modulus = ImageFile->TexturePages[Image->TPageID].width;
-	bmp = ImageFile->TexturePages[Image->TPageID].bmp;
-
-	bmp += ((UDWORD)Image->Tu) + ((UDWORD)Image->Tv) * modulus;
-
-	x +=Image->XOffset;
-	y +=Image->YOffset;
-	//clip
-		//clip
-		if (x < psRendSurface->clip.left)//off left hand edge
-		{
-			delta = psRendSurface->clip.left - x;
-			if (delta < width)
-			{
-				bmp += delta;
-				x += delta;
-				width -= delta;
-			}
-			else
-			{
-				return;
-			}
-		}
-		if ((x + width) > (psRendSurface->clip.right + 1))
-		{
-			delta = (x + width) - (psRendSurface->clip.right + 1);
-			if (delta < width)
-			{
-				width -= delta;
-			}
-			else
-			{
-				return;
-			}
-		}
-		if (y < psRendSurface->clip.top)
-		{
-			delta = psRendSurface->clip.top - y;
-			if (delta < height)
-			{
-				bmp+= delta * modulus;
-				y += delta;
-				height -= delta;
-			}
-			else
-			{
-				return;
-			}
-		}
-		if ((y + height) > (psRendSurface->clip.bottom + 1))
-		{
-			delta = (y + height) - (psRendSurface->clip.bottom + 1);
-			if (delta < height)
-			{
-				height -= delta;
-			}
-			else
-			{
-				return;
-			}
-		}
-
-	if (ColourIndex == PIE_TEXT_WHITE) {
-		iV_ppBitmapColourTrans(bmp, x, y, width, height, modulus, 255);
-	} else if (ColourIndex == PIE_TEXT_LIGHTBLUE) {
-		pie_RenderBlueTintedBitmap(bmp,	x, y, width, height, modulus);
-	} else if (ColourIndex == PIE_TEXT_DARKBLUE) {
-		pie_RenderDeepBlueTintedBitmap(bmp, x, y, width, height, modulus);
-	} else {
-		iV_ppBitmapColourTrans(bmp, x, y, width, height, modulus, ColourIndex);
-	}
-}
-
-
 
 //*************************************************************************
 
@@ -567,14 +328,6 @@ void iV_DrawMousePointer(int x,int y)
 
 //*************************************************************************
 
-// Software version does nothing.
-void DownLoadRadar(unsigned char *buffer)
-{
-	return;
-}
-
-//*************************************************************************
-
 // Upload the current display back buffer into system memory.
 //
 void UploadDisplayBuffer(char *DisplayBuffer)
@@ -592,27 +345,6 @@ void UploadDisplayBuffer(char *DisplayBuffer)
 	}
 
 }
-
-// Download buffer in system memory to the display back buffer.
-//
-/*
-void DownloadDisplayBuffer(char *DisplayBuffer)
-{
-#ifndef PIEPSX		// was #ifndef PSX
-	UDWORD *Source = (UDWORD*)DisplayBuffer;
-	UDWORD *Dest = (UDWORD*) rendSurface.buffer;
-	UDWORD Size = rendSurface.size / 4;
-	UDWORD i;
-
-	for(i=0; i<Size; i++) {
-		*Dest = *Source;
-		Source++;
-		Dest++;
-	}
-#endif
-}
- */
-
 
 
 //*************************************************************************
@@ -650,21 +382,6 @@ void	DownloadDisplayBuffer(char *DisplayBuffer)
 	}
 }
 
-//*************************************************************************
-// Scale a bitmaps colours.
-//
-void ScaleBitmapRGB(char *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB)
-{
-	char *Ptr = DisplayBuffer;
-	UDWORD Size = Width*Height;
-	UDWORD i;
-
-	for(i=0; i<Size; i++) {
-		*Ptr = palShades[(*Ptr * PALETTE_SHADE_LEVEL) + 4];	//iV_PALETTE_SHADE_LEVEL-4];
-		Ptr++;
-	}
-}
-
 
 //*************************************************************************
 //
@@ -697,9 +414,8 @@ UDWORD	i,j;
 
 //*************************************************************************
 
-void	pie_BuildTransTable(UDWORD tableNo)
+static void pie_BuildTransTable(UDWORD tableNo)
 {
-
 UDWORD	i;
 UBYTE	red = 0, green = 0, blue = 0;
 iColour* psPalette = pie_GetGamePal();
@@ -789,6 +505,3 @@ iColour* psPalette = pie_GetGamePal();
 }
 
 #endif
-
-
-

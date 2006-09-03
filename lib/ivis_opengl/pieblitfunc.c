@@ -172,8 +172,6 @@ void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 	rgb = (pie_FILLRED<<16) | (pie_FILLGREEN<<8) | pie_FILLBLUE;//blue
 	transparency = pie_FILLTRANS;
 	pie_UniTransBoxFill(x0, y0, x1, y1, rgb, transparency);
-//	pie_doWeirdBoxFX(x0,y0,x1,y1);
-
 }
 
 /***************************************************************************/
@@ -573,16 +571,4 @@ void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX) {
 	}
 
 	screen_SetBackDropFromFile(backd);
-}
-
-void pie_D3DSetupRenderForFlip(SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride)
-{
-
-	gSurfaceOffsetX = surfaceOffsetX;
-	gSurfaceOffsetY = surfaceOffsetY;
-	pgSrcData		=	pSrcData;
-	gSrcWidth		=	srcWidth;
-	gSrcHeight		= srcHeight;
-	gSrcStride		= srcStride;
-	return;
 }

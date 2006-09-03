@@ -1693,9 +1693,6 @@ BOOL stageTwoInitialise(void)
 
 	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);	// Set the default cursor shape.
 	frameSetCursorFromRes(IDC_DEFAULT);
-//	drawRadar3dfx(64,64);
-//	iV_DownLoadRadar(radarBuffer3dfx);
-
 
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);

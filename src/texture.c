@@ -100,7 +100,6 @@ void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UD
 			/* Have we got all the tiles from the source!? */
 			if((tilesProcessed == tilesPerSource))	// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
 			{
-//			   	pie_Download8bitTexturePage(texturePage,PAGE_WIDTH,PAGE_HEIGHT);
 				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
 				goto exit;
 			}

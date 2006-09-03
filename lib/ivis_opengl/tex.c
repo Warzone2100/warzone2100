@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -87,11 +88,6 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 	/* Store away all the info */
 	/* DID come from a resource */
 	_TEX_PAGE[i].bResource = bResource;
-	// Default values
-	_TEX_PAGE[i].tex.bmp = NULL;
-	_TEX_PAGE[i].tex.width = 256;
-	_TEX_PAGE[i].tex.height = 256;
-	_TEX_PAGE[i].tex.xshift = 0;
 	_TEX_PAGE[i].tex.bmp = s->bmp;
 	_TEX_PAGE[i].tex.width = s->width;
 	_TEX_PAGE[i].tex.height = s->height;
@@ -107,10 +103,6 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 	    && (s->height & (s->height-1)) == 0) {
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
 			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
-/*
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, s->width, s->height, 0,
-			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
-*/
 	} else {
 		debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: non POT texture %s", filename);
 	}
@@ -247,44 +239,3 @@ void pie_TexInit(void) {
 		i++;
 	}
 }
-
-// Check that a texture is  <= 256x256 and 2^n x 2^n in size.
-//
-BOOL iV_TexSizeIsLegal(UDWORD Width,UDWORD Height)
-{
-	if ((Width > 256) || (Height > 256)) {
-		return FALSE;
-	}
-
-	if (!iV_IsPower2(Width)) {
-		return FALSE;
-	}
-
-//  For now don't limit height to 2^n.
-	if (!iV_IsPower2(Height)) {
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-
-// Return TRUE if the given value is 2^n.
-//
-BOOL iV_IsPower2(UDWORD Value) {
-	int Bits = 0;
-
-	while(Value) {
-		if(Value & 1) {
-			Bits++;
-		}
-		Value = Value >> 1;
-	}
-
-	if(Bits != 1) {
-		return FALSE;
-	}
-
-	return TRUE;
-}
-

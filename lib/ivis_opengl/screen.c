@@ -10,10 +10,6 @@
 #define XMD_H
 #endif
 
-/* Free up a COM object */
-#undef RELEASE
-#define RELEASE(x) if ((x) != NULL) {(void)(x)->lpVtbl->Release(x); (x) = NULL;}
-
 #include <stdio.h>
 #include <string.h>
 #include <SDL/SDL.h>
@@ -41,9 +37,6 @@ extern "C" {
 #include "lib/ivis_common/piestate.h"
 #include "screen.h"
 
-/* Control Whether the back buffer is in system memory for full screen */
-#define FULL_SCREEN_SYSTEM	TRUE
-
 /* The Current screen size and bit depth */
 UDWORD		screenWidth = 0;
 UDWORD		screenHeight = 0;
@@ -54,12 +47,6 @@ SDL_Surface     *screen;
 /* The actual palette entries for the display palette */
 #define PAL_MAX				256
 static SDL_Color			asPalEntries[PAL_MAX];
-
-/* The bit depth at which it is assumed the mode is palettised */
-#define PALETTISED_BITDEPTH   8
-
-/* The number of bits in one colour gun of the windows PALETTEENTRY struct */
-#define PALETTEENTRY_BITS 8
 
 //backDrop
 #define BACKDROP_WIDTH	640
@@ -81,10 +68,6 @@ static BOOL	g_bVidMem;
 static UDWORD	backDropWidth = BACKDROP_WIDTH;
 static UDWORD	backDropHeight = BACKDROP_HEIGHT;
 static GLuint backDropTexture = -1;
-
-SDL_Surface *screenGetSDL() {
-        return screen;
-}
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(	UDWORD		width,		// Display width
@@ -225,15 +208,6 @@ void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height)
 	backDropWidth = width;
 	backDropHeight = height;
 }
-
-
-/* Image structure */
-//typedef struct {
-//	unsigned int	width;
-//	unsigned int	height;
-//	unsigned int	channels;
-//	unsigned char*	data;
-//} pie_image;
 
 BOOL image_init(pie_image* image)
 {
@@ -461,12 +435,8 @@ BOOL screen_GetBackDrop(void)
 //bitmap MUST be 512x512 for now.  -Q
 void screen_Upload(UWORD* newBackDropBmp)
 {
-//	pie_image image;
-//	image_init(&image);
 	if(newBackDropBmp!=NULL)
 	{
-//	imagetest=malloc((sizeof(char)*512*512*512));
-//	image_load_from_jpg(&image, "texpages\\bdrops\\test1.jpg");
 	glGenTextures(1, &backDropTexture);
 	pie_SetTexturePage(-1);
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
@@ -479,48 +449,7 @@ void screen_Upload(UWORD* newBackDropBmp)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-/*
-//	image_delete(&image);
-//	free(image);
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(GL_FALSE);
-	pie_SetTexturePage(-1);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	glPolygonMode(GL_FRONT,GL_LINE);
-	glColor3f(1, 1, 1);
-	glPushMatrix();
-	glTranslatef(0,0,-13);
-//	glBegin(GL_QUADS);
-//		glVertex3f(-1.0f, 1.0f, 0.0f);				// Top Left
-//		glVertex3f( 1.0f, 1.0f, 0.0f);				// Top Right
-//		glVertex3f( 1.0f,-1.0f, 0.0f);				// Bottom Right
-//		glVertex3f(-1.0f,-1.0f, 0.0f);				// Bottom Left
-//		glEnd();
-glBegin(GL_TRIANGLE_FAN);
-glVertex3f(10, -12, 0);
-glVertex3f(10, 12, 0);
-glVertex3f(-10, 12, 0);
-glVertex3f(-10, -12, 0);
-glEnd();
-//	glTexCoord2f(0, 0);
-//	glVertex2f(0, 0);
-//	glTexCoord2f(512, 0);
-//	glVertex2f(screenWidth*2, 0);
-//	glTexCoord2f(0, 512);
-//	glVertex2f(0, screenHeight*2);
-//	glTexCoord2f(512, 512);
-//	glVertex2f(screenWidth*2, screenHeight*2);
-//	glEnd();
-	glPopMatrix();
-		SDL_GL_SwapBuffers();
-		SDL_GL_SwapBuffers();
-*/
-//	return;
-
-
 	}
-
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
@@ -662,5 +591,5 @@ char* screenDumpToDisk(char* path) {
  */
 void screenTextOut(UDWORD x, UDWORD y, STRING *pFormat, ...)
 {
+	/* Used only in now disabled code. Keep for now, though. - Per */
 }
-

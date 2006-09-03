@@ -49,12 +49,6 @@ extern void pie_TexInit(void);
 //*************************************************************************
 
 extern void pie_TexShutDown(void);
-
-extern BOOL iV_TexSizeIsLegal(UDWORD Width,UDWORD Height);
-extern BOOL iV_IsPower2(UDWORD Value);
-
-
-
 BOOL FindTextureNumber(UDWORD TexNum,int* TexPage);
 
 #endif

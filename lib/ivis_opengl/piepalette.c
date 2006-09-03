@@ -40,12 +40,7 @@ uint8	colours[16];
 
 int pal_AddNewPalette(iColour *pal)
 {
-// PSX version dos'nt use palettes as such, SetRGBLookup sets up a global palette instead which is generally
-// just used for colour index to RGB conversions.
 	int i;
-//	int rg;
-//	long	entry;
-//	long	cardPal[256];
 	iColour *p;
 
 	bPaletteInitialised = TRUE;
@@ -64,36 +59,10 @@ int pal_AddNewPalette(iColour *pal)
 
 	for (i=0; i<PALETTE_SIZE; i++)
 	{
-#ifdef RED_GREEN
-		rg = pal[i].r + pal[i].g;
-		rg /= 2;
-		//set pie palette
-		p[i].r = rg;
-		p[i].g = rg;
-		p[i].b = pal[i].b;
-		//set copy of windows palette
-		w[i].peRed   = (uint8) rg;
-		w[i].peGreen = (uint8) rg;
-		w[i].peBlue  = (uint8) pal[i].b;
-		w[i].peFlags = 0;
-#elif defined GREEN_BLUE
-		rg = pal[i].g + pal[i].b;
-		rg /= 2;
-		//set pie palette
-		p[i].r = pal[i].r;
-		p[i].g = rg;
-		p[i].b = rg;
-		//set copy of windows palette
-		w[i].peRed   = (uint8) pal[i].r;
-		w[i].peGreen = (uint8) rg;
-		w[i].peBlue  = (uint8) rg;
-		w[i].peFlags = 0;
-#else
 		//set pie palette
 		p[i].r = pal[i].r;
 		p[i].g = pal[i].g;
 		p[i].b = pal[i].b;
-#endif
 	}
 	pie_SetColourDefines();
 
@@ -148,15 +117,9 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 
 	for (c = 0; c < PALETTE_SIZE; c++) {
 
-#if(0)
-		distance_r = r - (int32) ((float) psGamePal[c].r * RED_CHROMATICITY);
-		distance_g = g - (int32) ((float) psGamePal[c].g * GREEN_CHROMATICITY);
-		distance_b = b - (int32) ((float) psGamePal[c].b * BLUE_CHROMATICITY);
-#else
 		distance_r = r -  psGamePal[c].r;
 		distance_g = g -  psGamePal[c].g;
 		distance_b = b -  psGamePal[c].b;
-#endif
 
 		squared_distance =  distance_r * distance_r + distance_g * distance_g + distance_b * distance_b;
 

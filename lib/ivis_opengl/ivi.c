@@ -40,8 +40,6 @@ void iV_ShutDown(void)
 	pie_ShutDown();
 	iV_DEBUG0("5\n");
 
-	iV_VideoMemoryUnlock();
-
 	iV_DEBUG0("6\n");
 
 	pie_TexShutDown();

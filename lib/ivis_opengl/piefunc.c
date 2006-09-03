@@ -52,12 +52,7 @@ static UBYTE		aByteScale[256][256];
 
 void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWORD srcWidth,UDWORD srcHeight,UDWORD srcStride)
 {
-	/*
-	if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-	{
-		pie_D3DSetupRenderForFlip(destX, destY, pSrcData, srcWidth, srcHeight, srcStride);
-	}
-	*/
+	/* Originally used to show video from seqdisp.c */
 	return;
 }
 
@@ -72,12 +67,6 @@ void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWOR
 void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour)
 {
 	iV_TransBoxFill(x0, y0, x1, y1);
-}
-
-/* ---------------------------------------------------------------------------------- */
-void	pie_CornerBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour,
-					  UBYTE a, UBYTE b, UBYTE c, UBYTE d)
-{
 }
 
 /* ---------------------------------------------------------------------------------- */
@@ -181,34 +170,4 @@ void pie_InitMaths(void)
 UBYTE pie_ByteScale(UBYTE a, UBYTE b)
 {
 	return (((UDWORD)a)*((UDWORD)b))>>8;
-}
-
-void	pie_doWeirdBoxFX(UDWORD x, UDWORD y, UDWORD x2, UDWORD y2, UDWORD	trans)
-{
-UDWORD	val;
-UDWORD	xDif;
-UDWORD	yDif;
-UDWORD	radius;
-
-	val = getTimeValueRange(5760, 360);
-	radius = 100;
-	xDif = radius * (SIN(DEG(val)));
-	yDif = radius * (COS(DEG(val)));
-
-	xDif = xDif/4096;	 // cos it's fixed point
-	yDif = yDif/4096;
-
- 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-   	pie_CornerBox(x,y,x2,y2,trans,20+(radius+xDif),20+(radius+yDif),20+(radius-xDif),20+(radius-yDif));
-	/*
-	val = 360-getTimeValueRange(2880,360);
-	xDif = radius * (SIN(DEG(val)));
-	yDif = radius * (COS(DEG(val)));
-
-	xDif = xDif/4096;	 // cos it's fixed point
-	yDif = yDif/4096;
-//	pie_BoxFill(100,100,200,200,234);
-   	pie_CornerBox(x,y,x2,y2,trans,20+(radius+xDif),20+(radius+yDif),20+(radius-xDif),20+(radius-yDif));
-   	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	*/
 }

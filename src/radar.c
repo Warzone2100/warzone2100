@@ -134,10 +134,6 @@ BOOL InitRadar(void)
 	if(radarBuffer==NULL) return FALSE;
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
 
-
-// Set up an image structure for the radar bitmap so we can draw
-// it useing iV_DrawImageDef().
-
 	RadarImage.TPageID = RADAR_3DFX_TPAGEID;	// 3dfx only,radar is hard coded to texture page 31 - sort this out?
 	RadarImage.Tu = 0;
 	RadarImage.Tv = 0;
@@ -444,10 +440,7 @@ void drawRadar(void)
 
 	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 
-	//iV_DrawSemiTransImageDef(&RadarImage,radarBuffer,RadarWidth,RADTLX,RADTLY,192);
-
 	pie_RenderRadar(&RadarImage,radarBuffer,RadarWidth,RADTLX,RADTLY);
-
 
 	DrawRadarExtras(boxSizeH,boxSizeV);
 

@@ -3275,8 +3275,6 @@ void	drawDragBox( void )
 				boxPulseColours[dragBox3D.boxColourIndex]);
 		if (war_GetTranslucent())
 		{
-		//	pie_doWeirdBoxFX(dragBox3D.x1+dragBox3D.boxColourIndex/2+1,dragBox3D.y1+dragBox3D.boxColourIndex/2+1,
-  		//			(mX-dragBox3D.boxColourIndex/2),(mY-dragBox3D.boxColourIndex/2));
   			pie_UniTransBoxFill(dragBox3D.x1+dragBox3D.boxColourIndex/2+1,dragBox3D.y1+dragBox3D.boxColourIndex/2+1,
   					(mX-dragBox3D.boxColourIndex/2)-1,(mY-dragBox3D.boxColourIndex/2)-1,
   					0x00ffffff,16);

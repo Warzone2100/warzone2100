@@ -58,8 +58,6 @@ extern void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,i
 extern void pie_UploadDisplayBuffer(char *DisplayBuffer);
 extern void pie_DownloadDisplayBuffer(char *DisplayBuffer);
 
-extern void pie_D3DSetupRenderForFlip(SDWORD surfaceOffsetX, SDWORD surfaceOffsetY, UWORD* pSrcData, SDWORD srcWidth, SDWORD srcHeight, SDWORD srcStride);
-extern void pie_D3DRenderForFlip(void);
 extern	void	pie_SetAdditiveSprites(BOOL	val);
 extern	void	pie_SetAdditiveSpriteLevel(UDWORD	val);
 
