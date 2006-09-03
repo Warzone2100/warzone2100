@@ -35,11 +35,11 @@
  *
  * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
-#define ASSERT( x, ... ) \
-   (void)( x ? 0 : debug( LOG_ERROR, __VA_ARGS__ ) ); \
-   (void)( x ? 0 : debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s)", \
-		__FILE__, __LINE__, __FUNCTION__, (#x) ) ); \
-	assert( x );
+#define ASSERT( expr, ... ) \
+	( (expr) ? (void)0 : (void)debug( LOG_ERROR, __VA_ARGS__ ) ); \
+	( (expr) ? (void)0 : (void)debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s)", \
+		__FILE__, __LINE__, __FUNCTION__, (#expr) ) ); \
+	assert( expr );
 
 
 /****************************************************************************************
@@ -158,6 +158,6 @@ BOOL debug_enable_switch(const char *str);
  * \param	str		printf style formatstring
  */
 void debug( code_part part, const char *str, ...)
-           wz__attribute((format (printf, 2, 3)) );
+		wz__attribute((format (printf, 2, 3)) );
 
 #endif
