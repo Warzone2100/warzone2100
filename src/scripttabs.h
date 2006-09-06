@@ -77,9 +77,9 @@ typedef enum _scr_callback_types
 	CALL_ALLIANCEOFFER,
 	CALL_CONSOLE,			//Gets fired when user types something in the console and presses enter
 	CALL_AI_MSG,			//player received msg from another player
+	CALL_BEACON,			//beacon help (blip) msg received
 	CALL_STRUCTBUILT,		//gets fired when a structure is built for a certain player, returns structure
 	CALL_TRANSPORTER_LANDED_B,
-	CALL_BEACON,			//beacon help (blip) msg received
 } SCR_CALLBACK_TYPES;
 
 // The table of user types for the compiler

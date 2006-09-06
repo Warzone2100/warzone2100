@@ -393,9 +393,10 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
  /*remove a message */
 void removeMessage(MESSAGE *psDel, UDWORD player)
 {
+	debug(LOG_WZ, "removeMessage: removing message for player %d", player);
+
 	if (psDel->type == MSG_PROXIMITY)
 	{
-		debug(LOG_WZ, "removeMessage: removing message for player %d", player);
 		removeProxDisp(psDel, player);
 	}
 	REMOVEMSG(apsMessages, psMsgHeap, psDel, player);

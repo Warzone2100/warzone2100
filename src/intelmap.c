@@ -1235,7 +1235,22 @@ void intCleanUpIntelMap(void)
 	cdAudio_Resume();
 
 	// FIXME: NOT SURE IT'S CORRECT. this makes the transports come.
-        eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+	//eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+
+	if (interpProcessorActive())
+	{
+		debug(LOG_SCRIPT, "intCleanUpIntelMap: interpreter running, storing CALL_VIDEO_QUIT");
+		if(!msgStackPush(CALL_VIDEO_QUIT,-1,-1,"/0",-1,-1))
+		{
+			debug(LOG_ERROR, "intCleanUpIntelMap() - msgStackPush - stack failed");
+			return;
+		}
+	}
+	else
+	{
+		debug(LOG_SCRIPT, "intCleanUpIntelMap: not running");
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+	}
 }
 
 
@@ -1262,6 +1277,9 @@ void intRemoveIntelMap(void)
 
 	// Start the window close animation.
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_FORM);
+
+	ASSERT(Form != NULL, "intRemoveIntelMap: Form is NULL");
+
 	Form->display = intClosePlainForm;
 	Form->disableChildren = TRUE;
 	Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.

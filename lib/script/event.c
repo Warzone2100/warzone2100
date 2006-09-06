@@ -971,6 +971,10 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 	TRIGGER_DATA	*psTrigDat;
 	BOOL			fired;
 
+	//FIXME: temporary check
+	if(callback == 15)
+		debug(LOG_SCRIPT, "eventFireCallbackTrigger: processing CALL_VIDEO_QUIT");
+
 	if (interpProcessorActive())
 	{
 		ASSERT( FALSE,

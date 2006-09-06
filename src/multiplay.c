@@ -1893,7 +1893,7 @@ BOOL msgStackPop()
 		return FALSE;
 	}
 
-	return msgStackSort();		//move allelements 1 pos lower
+	return msgStackSort();		//move all elements 1 pos lower
 }
 
 SDWORD msgStackGetCount()
@@ -1917,6 +1917,10 @@ BOOL msgStackFireTop()
 
 	switch(_callbackType)
 	{
+		case CALL_VIDEO_QUIT:
+			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
+			eventFireCallbackTrigger(CALL_VIDEO_QUIT);
+			break;
 		
 		case CALL_BEACON:
 
