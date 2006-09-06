@@ -971,7 +971,8 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 	TRIGGER_DATA	*psTrigDat;
 	BOOL			fired;
 
-	//FIXME: temporary check
+	// FIXME temporary check 
+	// FIXME This needs to be removed as soon as we are sure the transport comes and we don't have any more problems with the VIDEO_QUIT callback !!
 	if(callback == 15)
 		debug(LOG_SCRIPT, "eventFireCallbackTrigger: processing CALL_VIDEO_QUIT");
 
