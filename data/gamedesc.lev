@@ -221,7 +221,7 @@ game		"wrf\cam2\cam2start.gam"
 data		"wrf\cam2\cam2a.wrf"
 
 camchange	CAM_2A
-dataset		CAM_1
+dataset		CAM_2
 data		"wrf\cam2\cam2change.wrf"
 game		"wrf\cam2\cam2start.gam"
 data		"wrf\cam2\cam2a.wrf"
@@ -370,7 +370,7 @@ game		"wrf\cam3\cam3a.gam"
 data		"wrf\cam3\cam3a.wrf"
 
 camchange	CAM_3A
-dataset		CAM_2
+dataset		CAM_3
 data		"wrf\cam3\cam3change.wrf"
 game		"wrf\cam3\cam3a.gam"
 data		"wrf\cam3\cam3a.wrf"
