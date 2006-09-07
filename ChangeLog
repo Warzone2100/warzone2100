@@ -1,4 +1,4 @@
-xxxx-xx-xx: Version 2.0.5
+2006-09-07: Version 2.0.5 RC1
  * General:
    * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, default key combination: Alt+H
    * New: Allied players send vision to each other automatically (only once)
@@ -6,6 +6,7 @@ xxxx-xx-xx: Version 2.0.5
    * New: Ctrl+MouseWheel makes game speed up or slow down
    * New: MouseWheel over radar makes radar zoom in/out
    * New: Basic map editing in debug mode. 'w' and 'a' raise and lower terrain, 'k' flips tiles
+   * Fix: Nasty crashes related to (not) playing videos are fixed
  * Graphics:
    * Fix: Improve shadow performance and fix OpenGL specs violation
    * Fix: Framerate counting gives correct results now
