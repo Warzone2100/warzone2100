@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;2.0.5_pre\&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib png13.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib png13.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib shfolder.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
@@ -124,8 +124,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="3"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="&quot;D:\Dokumente und Einstellungen\Admin\Desktop\Warzone&quot;;&quot;D:\Programme\Warzone-DevPkg\include&quot;;&quot;D:\Programme\Microsoft Platform SDK\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H"
+				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;2.0.5_pre\&quot;"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib ogg.lib vorbis.lib vorbisfile.lib png13.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib user32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib ogg.lib vorbis.lib vorbisfile.lib png13.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib shfolder.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
 				IgnoreAllDefaultLibraries="false"
@@ -204,6 +204,10 @@
 			</File>
 			<File
 				RelativePath="..\src\ai.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\aiexperience.c"
 				>
 			</File>
 			<File
@@ -743,6 +747,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\ivis_common\piestate.c"
+				>
+			</File>
+			<File
 				RelativePath="..\lib\ivis_opengl\piestate.c"
 				>
 				<FileConfiguration
@@ -763,10 +771,6 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\piestate.c"
-				>
 			</File>
 			<File
 				RelativePath="..\lib\ivis_opengl\pietexture.c"
@@ -1020,6 +1024,10 @@
 			</File>
 			<File
 				RelativePath="..\src\aidef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\aiexperience.h"
 				>
 			</File>
 			<File
@@ -1420,10 +1428,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\ivis_opengl\ivis02.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ivis02.h"
 				>
 			</File>
 			<File
