@@ -8,11 +8,7 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "types.h"
-#include "debug.h"
-#include "mem.h"
-#include "heap.h"
-#include "treap.h"
+#include "frame.h"
 #include "strres.h"
 #include "strresly.h"
 
