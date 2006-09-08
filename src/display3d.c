@@ -754,7 +754,7 @@ void drawTiles(iView *camera, iView *player)
 	pie_MatRotY(player->r.y);
 	  /* Translate */
 	pie_TRANSLATE(-rx,-player->p.y,rz);
-	angle += 0.01;
+	angle += 0.01f;
 	// RODZ uncomment the following line to see an OpenGL lighting demo
 	if (getDrawShadows()) {
 		pie_BeginLighting(50, -300, -300);

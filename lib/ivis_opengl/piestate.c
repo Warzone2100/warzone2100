@@ -77,10 +77,10 @@ void pie_SetFogStatus(BOOL val)
 
 			if (rendStates.fog) {
 				fog.argb = pie_GetFogColour();
-				fog_colour[0] = fog.byte.r/255.0;
-				fog_colour[1] = fog.byte.g/255.0;
-				fog_colour[2] = fog.byte.b/255.0;
-				fog_colour[3] = fog.byte.a/255.0;
+				fog_colour[0] = fog.byte.r/255.0f;
+				fog_colour[1] = fog.byte.g/255.0f;
+				fog_colour[2] = fog.byte.b/255.0f;
+				fog_colour[3] = fog.byte.a/255.0f;
 
 				glFogi(GL_FOG_MODE, GL_LINEAR);
 				glFogfv(GL_FOG_COLOR, fog_colour);
@@ -132,7 +132,7 @@ void pie_SetColourKeyedBlack(BOOL keyingOn)
 
 		if (keyingOn == TRUE) {
 			glEnable(GL_ALPHA_TEST);
-			glAlphaFunc(GL_GREATER, 0.1);
+			glAlphaFunc(GL_GREATER, 0.1f);
 		} else {
 			glDisable(GL_ALPHA_TEST);
 		}

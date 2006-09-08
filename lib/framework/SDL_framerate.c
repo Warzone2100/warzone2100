@@ -20,7 +20,7 @@ void SDL_initFramerate(FPSmanager * manager)
      */
     manager->framecount = 0;
     manager->rate = FPS_DEFAULT;
-    manager->rateticks = (1000.0 / (float) FPS_DEFAULT);
+    manager->rateticks = (1000.0f / (float) FPS_DEFAULT);
     manager->lastticks = SDL_GetTicks();
 }
 

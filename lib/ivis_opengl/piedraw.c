@@ -130,10 +130,10 @@ static BOOL shadows = FALSE;
 
 void pie_BeginLighting(float x, float y, float z) {
 	float pos[4];
-	float zero[4] = {0, 0, 0, 0};
-	float ambient[4] = {0.2, 0.2, 0.2, 0};
-	float diffuse[4] = {0.5, 0.5, 0.5, 0};
-	float specular[4] = {1, 1, 1, 0};
+	float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	float ambient[4] = {0.2f, 0.2f, 0.2f, 0.0f};
+	float diffuse[4] = {0.5f, 0.5f, 0.5f, 0.0f};
+	float specular[4] = {1.0f, 1.0f, 1.0f, 0.0f};
 
 	pos[0] = x;
 	pos[1] = y;
