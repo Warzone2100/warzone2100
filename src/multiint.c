@@ -181,8 +181,6 @@ BOOL			recvColourRequest	(NETMSG *pMsg);
 static VOID		AvailableForces		(VOID);				// draw available templates
 static VOID		CurrentForce		(VOID);				// draw the current force
 
-#define MAX(a, b) (((a) < (b)) ? (b) : (a))
-
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 

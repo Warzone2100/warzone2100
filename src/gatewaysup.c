@@ -54,11 +54,11 @@ struct Segment {
 	int dy;			//
 };
 
-#define MAX 10000		/* max depth of stack */
+#define MAX_STACK 10000		/* max depth of stack */
 
 #define PUSH(Y, XL, XR, DY)	/* push new segment on stack */ \
 	DBP2(("PUSH y %d x %d->%d dy %d\n", Y, XL, XR, DY)); \
-    if (sp<stack+MAX) \
+    if (sp<stack+MAX_STACK) \
     {sp->y = Y; sp->xl = XL; sp->xr = XR; sp->dy = DY; sp++;}
 
 #define POP(Y, XL, XR, DY)	/* pop segment off stack */ \
@@ -80,7 +80,7 @@ BOOL gwGenerateZoneEquiv(SDWORD numZones);
 
 
 #ifdef ENABLEFILL
-struct Segment stack[MAX], *sp = stack;	/* stack of filled segments */
+struct Segment stack[MAX_STACK], *sp = stack;	/* stack of filled segments */
 #endif
 
 // Flood fill a map zone from a given point
@@ -96,7 +96,7 @@ void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
     int l, x1, x2, dy;
     Pixel ov;							/* old pixel value */
 
-    struct Segment stack[MAX], *sp = stack;	/* stack of filled segments */
+    struct Segment stack[MAX_STACK], *sp = stack;	/* stack of filled segments */
 
     ov = gwGetZone(x, y);		/* read pv at seed point */
 
