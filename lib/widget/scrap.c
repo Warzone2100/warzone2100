@@ -101,7 +101,7 @@ convert_format(int type)
 
 #elif defined(WIN_SCRAP)
 /* * */
-        return RegisterClipboardFormat(format);
+        return RegisterClipboardFormatA(format);
 
 #endif /* scrap type */
       }

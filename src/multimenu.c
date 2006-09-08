@@ -324,7 +324,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	W_BUTINIT		sButInit;
 	UDWORD			players,numButtons,butPerForm,i;
 #ifdef WIN32
-	WIN32_FIND_DATA	found;
+	WIN32_FIND_DATAA	found;
 	HANDLE			dir;
 	UDWORD			count;
 	STRING			ToFind[255];
@@ -339,20 +339,20 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	current_numplayers = numPlayers;
 
 #ifdef WIN32
-	if(GetCurrentDirectory(255,(char*)&ToFind) == 0)
+	if(GetCurrentDirectoryA(255,(char*)&ToFind) == 0) // What is this doing actually?
 	{
 		return;
 	}
 	strcat(ToFind,ToFindb);
 
 	// count buttons.
-	dir =FindFirstFile(ToFind,&found);
+	dir = FindFirstFileA(ToFind,&found);
 	if(dir != INVALID_HANDLE_VALUE)
 	{
 		while( TRUE )
 		{
 			numButtons++;
-			if(! FindNextFile(dir,&found ) )
+			if(! FindNextFileA(dir,&found ) )
 			{
 				break;
 			}
@@ -455,7 +455,7 @@ VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	sButInit.FontID		= WFont;
 
 #ifdef WIN32
-	dir =FindFirstFile(ToFind,&found);
+	dir = FindFirstFileA(ToFind,&found);
 	if(dir != INVALID_HANDLE_VALUE)
 	{
 		count=0;
