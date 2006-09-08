@@ -308,7 +308,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				tempstr = (char*)MALLOC(MAXSTRLEN);
 				sprintf(tempstr, "%d", psVal->v.ival);
 
-				*pData = tempstr;
+				*pData = tempstr; // FIXME UDWORD = STRING* is not sane! (eps. on 64bit)
 
 				//itoa(psVal->v.ival,tmpstr,10);
 			}

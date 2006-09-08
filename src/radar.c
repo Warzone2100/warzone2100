@@ -1003,7 +1003,7 @@ UDWORD	camNumber;
 	yDrop = ((visibleYTiles/2)-dif2/3) * boxSizeV;
 
 
- 	v[0].x = -longX;
+ 	v[0].x = -longX; // FIXME -unsigned will remain unsigned!!!
 	v[0].y = -yDropVar;
 
 	v[1].x = longX;
