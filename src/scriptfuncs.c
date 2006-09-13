@@ -2786,7 +2786,7 @@ BOOL scrSetStructureLimits(void)
 
 // -----------------------------------------------------------------------------------------
 // multiplayer limit handler.
-BOOL scrApplyLimitSet()
+BOOL scrApplyLimitSet(void)
 {
 	applyLimitSet();
 	return TRUE;

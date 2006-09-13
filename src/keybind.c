@@ -992,7 +992,7 @@ void	kf_SelectGrouping( UDWORD	groupNumber)
 // --------------------------------------------------------------------------
 
 #define DEFINE_NUMED_KF(x) \
-	void	kf_SelectGrouping_##x( ) { \
+	void	kf_SelectGrouping_##x( void ) { \
 		kf_SelectGrouping(x); \
 	} \
 	void	kf_AssignGrouping_##x( void ) { \

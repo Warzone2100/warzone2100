@@ -630,7 +630,7 @@ BOOL copyTemplateSet(UDWORD from,UDWORD to)
 
 // ////////////////////////////////////////////////////////////////////////////
 // setup templates
-BOOL multiTemplateSetup()
+BOOL multiTemplateSetup(void)
 {
 	UDWORD player, pcPlayer = 0;
 	CHAR			sTemp[256];
@@ -944,7 +944,7 @@ static BOOL dMatchInit()
 */
 // ////////////////////////////////////////////////////////////////////////////
 // setup a campaign game
-static BOOL campInit()
+static BOOL campInit(void)
 {
 	UDWORD			player;
 	UBYTE		newPlayerArray[MAX_PLAYERS];

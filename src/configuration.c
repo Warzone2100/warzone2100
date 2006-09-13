@@ -475,7 +475,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	return closeWarzoneKey();
 }
 
-BOOL loadRenderMode()
+BOOL loadRenderMode(void)
 {
 	char str[32];
 	DWORD val;
@@ -500,7 +500,7 @@ BOOL loadRenderMode()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL saveConfig()
+BOOL saveConfig(void)
 {
 
 	debug( LOG_WZ, "Writing prefs to registry\n" );

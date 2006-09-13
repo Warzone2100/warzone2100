@@ -72,7 +72,7 @@ void resetMultiVisibility(UDWORD player);
 // ////////////////////////////////////////////////////////////////////////////
 // Version Check
 
-BOOL sendVersionCheck()
+BOOL sendVersionCheck(void)
 {
 	NETMSG msg;
 

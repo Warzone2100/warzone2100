@@ -1212,7 +1212,7 @@ void visGetRayObjects(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 
 BOOL bDisplaySensorRange;
 
-void startSensorDisplay()
+void startSensorDisplay(void)
 {
 	MAPTILE		*psTile;
 	UDWORD		x;
@@ -1258,7 +1258,7 @@ void startSensorDisplay()
 	bDisplaySensorRange = TRUE;
 }
 
-void stopSensorDisplay()
+void stopSensorDisplay(void)
 {
 	// set the display flag off.
 	bDisplaySensorRange = FALSE;

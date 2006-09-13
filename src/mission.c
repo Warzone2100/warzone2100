@@ -3541,7 +3541,7 @@ void intRemoveMissionResultNoAnim(void)
 }
 
 
-void intRunMissionResult()
+void intRunMissionResult(void)
 {
 
 	processFrontendSnap(FALSE);

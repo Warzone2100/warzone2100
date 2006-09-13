@@ -771,7 +771,7 @@ void runConnectionScreen(void )
 // ////////////////////////////////////////////////////////////////////////////
 // Game Chooser Screen.
 
-static void addGames()
+static void addGames(void)
 {
 	UDWORD i,gcount=0;
 	W_BUTINIT	sButInit;
@@ -1566,7 +1566,7 @@ UDWORD addPlayerBox(BOOL players)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-static void SendFireUp()
+static void SendFireUp(void)
 {
 	NETMSG m;
 
@@ -3263,7 +3263,7 @@ BOOL startForceSelect(void)
 
 
 // removewhiteboard
-BOOL removeWhiteBoard()
+static BOOL removeWhiteBoard(void)
 {
 	bWhiteBoardUp = FALSE;
 	widgReleaseScreen(psWhiteScreen);
@@ -3272,7 +3272,7 @@ BOOL removeWhiteBoard()
 
 
 // runwhiteboard
-BOOL runWhiteBoard()
+static BOOL runWhiteBoard(void)
 {
 	NETMSG m;
 	static UDWORD lastSent=0;
@@ -3414,7 +3414,7 @@ void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 // add whiteboard
-BOOL addWhiteBoard()
+static BOOL addWhiteBoard(void)
 {
 	W_FORMINIT		sFormInit;
 
