@@ -30,6 +30,8 @@
 #include "audio.h"
 #include "cdaudio.h"
 
+#include "playlist.h"
+
 #ifdef WZ_CDA
 
 SDL_CD	*cdAudio_dev;
@@ -85,14 +87,6 @@ static unsigned int	music_rate;
 
 #endif
 
-
-void PlayList_Init();
-void PlayList_Quit();
-char PlayList_Read(const char* path);
-void PlayList_SetTrack(unsigned int t);
-char* PlayList_CurrentSong();
-char* PlayList_NextSong();
-void PlayList_DeleteCurrentSong();
 
 //*
 //

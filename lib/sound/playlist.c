@@ -3,6 +3,8 @@
 
 #include "lib/framework/frame.h"
 
+#include "playlist.h"
+
 #define BUFFER_SIZE 2048
 static char buffer[BUFFER_SIZE], ByteBuf='\0';
 static unsigned int ByteBufPos=0;
