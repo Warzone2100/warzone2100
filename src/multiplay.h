@@ -312,14 +312,14 @@ extern void displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to); //make AI p
 
 /* for multiplayer message stack */
 extern  UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, STRING *tStr, SDWORD x, SDWORD y);
-extern	BOOL	isMsgStackEmpty();
+extern	BOOL	isMsgStackEmpty(void);
 extern	BOOL	msgStackGetFrom(SDWORD  *psVal);
 extern	BOOL	msgStackGetTo(SDWORD  *psVal);
 extern	BOOL	msgStackGetMsg(STRING  *psVal);
-extern	BOOL	msgStackPop();
-extern	SDWORD	msgStackGetCount();
+extern	BOOL	msgStackPop(void);
+extern	SDWORD	msgStackGetCount(void);
 extern	void	msgStackReset(void);
 
 extern BOOL	sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr);
-extern BOOL msgStackFireTop();
+extern BOOL msgStackFireTop(void);
 

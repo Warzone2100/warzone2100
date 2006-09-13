@@ -120,7 +120,7 @@ typedef enum _secondary_state
 #define DSS_FIREDES_MASK	0x800000
 
 //call this *AFTER* every mission so it gets reset
-extern void initRunData();
+extern void initRunData(void);
 
 /* Update a droids order state */
 extern void orderUpdateDroid(DROID *psDroid);

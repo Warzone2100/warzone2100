@@ -1779,7 +1779,7 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, STRING *tStr, SDW
 	return TRUE;
 }
 
-BOOL isMsgStackEmpty()
+BOOL isMsgStackEmpty(void)
 {
 	if(msgStackPos == (-1)) return TRUE;
 	return FALSE;
@@ -1853,7 +1853,7 @@ BOOL msgStackGetMsg(STRING  *psVal)
 	return TRUE;
 }
 
-BOOL msgStackSort()
+BOOL msgStackSort(void)
 {
 	SDWORD i;
 
@@ -1885,7 +1885,7 @@ BOOL msgStackSort()
 	return TRUE;
 }
 
-BOOL msgStackPop()
+BOOL msgStackPop(void)
 {
 	if(msgStackPos < 0 || msgStackPos >= MAX_MSG_STACK)
 	{
@@ -1896,12 +1896,12 @@ BOOL msgStackPop()
 	return msgStackSort();		//move all elements 1 pos lower
 }
 
-SDWORD msgStackGetCount()
+SDWORD msgStackGetCount(void)
 {
 	return msgStackPos + 1;
 }
 
-BOOL msgStackFireTop()
+BOOL msgStackFireTop(void)
 {
 	SDWORD		_callbackType;
 	STRING		msg[255];

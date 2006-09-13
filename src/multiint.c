@@ -1794,7 +1794,7 @@ void	stopJoining(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-static void chooseSkirmishColours()
+static void chooseSkirmishColours(void)
 {
 	UDWORD col,i,k;
 	BOOL taken;

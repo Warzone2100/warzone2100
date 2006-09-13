@@ -3659,7 +3659,7 @@ void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 
 
 /*draws blips on radar to represent Proximity Display and damaged structures*/
-void drawRadarBlips()
+void drawRadarBlips(void)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
 //	STRUCTURE			*psBuilding;

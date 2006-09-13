@@ -72,9 +72,9 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
-BOOL closeLoadSave				();
+BOOL closeLoadSave				(void);
 BOOL runLoadSave				(BOOL bResetMissionWidgets);
-BOOL displayLoadSave			();
+BOOL displayLoadSave			(void);
 static BOOL _addLoadSave		(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *title);
 static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
 static void displayLoadBanner	(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);

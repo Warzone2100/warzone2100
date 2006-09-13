@@ -86,7 +86,7 @@ void clustInitialise(void)
 
 
 // check the cluster usage
-void clustValidateUsage()
+void clustValidateUsage(void)
 {
 	SDWORD		cluster, player, droidUsage, structUsage;
 	STRUCTURE	*psStruct;

@@ -55,7 +55,7 @@ extern BOOL		multiRequestUp;
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
-BOOL sendVersionCheck	();
+BOOL sendVersionCheck	(void);
 BOOL recvVersionCheck	(NETMSG *pMsg);
 BOOL intDisplayMultiJoiningStatus (UBYTE joinCount);
 void clearPlayer		(UDWORD player,BOOL quietly,BOOL removeOil);// what to do when a arena player leaves.

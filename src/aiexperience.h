@@ -26,7 +26,7 @@ extern	BOOL SaveAIExperience(BOOL bNotify);
 
 
 extern	BOOL ExperienceRecallOil(SDWORD nPlayer);
-extern	void InitializeAIExperience();
+extern	void InitializeAIExperience(void);
 extern	BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer);
 
 extern	BOOL ReadAISaveData(SDWORD nPlayer);

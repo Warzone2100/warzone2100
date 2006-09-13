@@ -7,7 +7,7 @@
 
 #include "lib/netplay/netplay.h"
 
-extern BOOL sendVersionCheck			();
+extern BOOL sendVersionCheck			(void);
 extern BOOL recvVersionCheck			(NETMSG *pMsg);
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
 extern BOOL MultiPlayerLeave			(DPID dp);						// A player has left the game.

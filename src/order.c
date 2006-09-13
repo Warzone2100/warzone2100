@@ -85,7 +85,7 @@ void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
 //////////////////////////////////////////////////////////////////
 
 //call this *AFTER* every mission so it gets reset
-void initRunData()
+void initRunData(void)
 {
     UBYTE   i;
 

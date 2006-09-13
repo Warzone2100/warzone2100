@@ -308,7 +308,7 @@ extern void WidgetAudioCallback(int AudioID);
 extern void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, UDWORD *pColours);
 /*draws blips on radar to represent Proximity Display*/
-extern void drawRadarBlips();
+extern void drawRadarBlips(void);
 
 /*Displays the proximity messages blips over the world*/
 extern void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,

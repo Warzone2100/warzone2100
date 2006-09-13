@@ -619,7 +619,7 @@ void addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 
 }
 
-void closeMultiRequester()
+void closeMultiRequester(void)
 {
 	widgDelete(psRScreen,M_REQUEST);
 	multiRequestUp = FALSE;

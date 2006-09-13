@@ -192,7 +192,7 @@ extern void droidBurn( DROID * psDroid );
 extern BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS]);
 
 //free the storage for the droid templates
-extern BOOL droidTemplateShutDown();
+extern BOOL droidTemplateShutDown(void);
 
 /* Return the type of a droid */
 extern DROID_TYPE droidType(DROID *psDroid);

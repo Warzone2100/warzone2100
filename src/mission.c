@@ -205,7 +205,7 @@ static void saveMissionData(void);
 static void restoreMissionData(void);
 static void saveCampaignData(void);
 static void aiUpdateMissionStructure(STRUCTURE *psStructure);
-static void missionResetDroids();
+static void missionResetDroids(void);
 static void saveMissionLimboData(void);
 static void restoreMissionLimboData(void);
 static void processMissionLimbo(void);
@@ -1645,7 +1645,7 @@ void clearCampaignUnits(void)
 }
 
 /*This deals with droids at the end of an offworld mission*/
-void processMission()
+void processMission(void)
 {
 	DROID			*psNext;
 	DROID			*psDroid;
@@ -2365,7 +2365,7 @@ void missionDroidUpdate(DROID *psDroid)
 }
 
 //reset variables in Droids such as order and position
-void missionResetDroids()
+void missionResetDroids(void)
 {
 	UDWORD			player;
 	DROID			*psDroid, *psNext;

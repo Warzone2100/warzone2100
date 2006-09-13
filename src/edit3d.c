@@ -287,7 +287,7 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 }
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-BOOL   tryingToGetLocation()
+BOOL tryingToGetLocation(void)
 {
     if (buildState == BUILD3D_NONE)
     {

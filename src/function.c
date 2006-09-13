@@ -2228,7 +2228,7 @@ void upgradeTransporterDroids(DROID *psTransporter,
     }
 }
 
-BOOL FunctionShutDown()
+BOOL FunctionShutDown(void)
 {
 	UDWORD		inc;//, player;
 	FUNCTION	*pFunction, **pStartList = asFunctions;

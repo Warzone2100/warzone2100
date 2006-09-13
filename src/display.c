@@ -428,7 +428,7 @@ BOOL dispInitialise(void)
 }
 
 /* Tidy up after a mode change */
-BOOL dispModeChange()
+BOOL dispModeChange(void)
 {
 	return TRUE;
 }

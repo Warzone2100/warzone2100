@@ -99,7 +99,7 @@ extern void upgradeTransporterDroids(DROID *psTransporter,
 //extern void bodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding);
 //extern void resistanceUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding);
 
-extern BOOL FunctionShutDown();
+extern BOOL FunctionShutDown(void);
 
 #endif //_function_h
 

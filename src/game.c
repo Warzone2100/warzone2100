@@ -1276,7 +1276,7 @@ static BOOL getNameFromComp(UDWORD compType, STRING *pDest, UDWORD compIndex);
 static BOOL getSaveObjectName(STRING *pName);
 
 /* set the global scroll values to use for the save game */
-static void setMapScroll();
+static void setMapScroll(void);
 
 char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
 {
@@ -11502,7 +11502,7 @@ BOOL loadScriptState(STRING *pFileName)
 
 // -----------------------------------------------------------------------------------------
 /* set the global scroll values to use for the save game */
-void setMapScroll()
+static void setMapScroll(void)
 {
 	//if loading in a pre version5 then scroll values will not have been set up so set to max poss
 	if (width == 0 AND height == 0)

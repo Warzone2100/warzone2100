@@ -47,7 +47,7 @@ void cleanSearchPath( void );
 void registerSearchPath( const char path[], unsigned int priority );
 BOOL rebuildSearchPath( searchPathMode mode, BOOL force );
 
-BOOL buildMapList();
+BOOL buildMapList(void);
 
 // the block heap for the game data
 extern BLOCK_HEAP	*psGameHeap;

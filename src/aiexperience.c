@@ -25,7 +25,7 @@ SDWORD oilDefendLocation[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS][2];
 SDWORD oilDefendLocPrior[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS];
 
 
-void InitializeAIExperience()
+void InitializeAIExperience(void)
 {
 	SDWORD i,j;
 

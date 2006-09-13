@@ -50,6 +50,6 @@ extern UDWORD buildState;
 extern UDWORD temp;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-extern BOOL   tryingToGetLocation();
+extern BOOL   tryingToGetLocation(void);
 
 #endif

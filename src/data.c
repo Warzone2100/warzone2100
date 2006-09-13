@@ -82,7 +82,7 @@ void calcCheatHash(char *pBuffer, UDWORD size, UDWORD cheat)
 	return;
 }
 
-void resetCheatHash()
+void resetCheatHash(void)
 {
 	UDWORD i;
 	for(i=0;i<CHEAT_MAXCHEAT;i++)

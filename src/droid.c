@@ -3796,7 +3796,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 }*/
 
 //free the storage for the droid templates
-BOOL droidTemplateShutDown()
+BOOL droidTemplateShutDown(void)
 {
 	DROID_TEMPLATE	*pTemplate, *pNext;
 	UDWORD			player;

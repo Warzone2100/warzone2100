@@ -48,7 +48,7 @@ extern void dataClearSaveFlag(void);
 
 #define CHEAT_MAXCHEAT	29	
 
-extern void resetCheatHash();
+extern void resetCheatHash(void);
 
 extern UDWORD cheatHash[CHEAT_MAXCHEAT];
 

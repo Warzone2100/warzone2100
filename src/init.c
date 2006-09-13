@@ -939,7 +939,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 }
 
 
-BOOL buildMapList()
+BOOL buildMapList(void)
 {
 	char ** filelist, ** file;
 	size_t len;
