@@ -18,10 +18,10 @@ SDWORD	mixer_GetWavVolume( void );
 void	mixer_SetWavVolume( SDWORD iVol );
 SDWORD	mixer_Get3dWavVolume( void );
 void	mixer_Set3dWavVolume( SDWORD iVol );
-WZ_DEPRECATED void	mixer_SaveWinVols();
-WZ_DEPRECATED void	mixer_RestoreWinVols();
-WZ_DEPRECATED void	mixer_SaveIngameVols();
-WZ_DEPRECATED void	mixer_RestoreIngameVols();
+WZ_DEPRECATED void	mixer_SaveWinVols(void);
+WZ_DEPRECATED void	mixer_RestoreWinVols(void);
+WZ_DEPRECATED void	mixer_SaveIngameVols(void);
+WZ_DEPRECATED void	mixer_RestoreIngameVols(void);
 
 /***************************************************************************/
 

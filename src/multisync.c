@@ -31,20 +31,20 @@
 #include "power.h"									// for power checks
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
-BOOL		sendCheck			(VOID);							// send/recv  check info
+BOOL		sendCheck			(void);							// send/recv  check info
 BOOL		recvDroidCheck		(NETMSG *pMsg);
 BOOL		recvStructureCheck	(NETMSG *pMsg);
 BOOL		recvPowerCheck		(NETMSG *pMsg);
 BOOL		recvPing			(NETMSG *pMsg);
-BOOL		sendScoreCheck		(VOID);							//score
+BOOL		sendScoreCheck		(void);							//score
 
-static BOOL sendStructureCheck	(VOID);							//Structure
+static BOOL sendStructureCheck	(void);							//Structure
 BOOL		sendPowerCheck		(BOOL now);						//power
 static void packageCheck		(UDWORD i, NETMSG *pMsg, DROID *pD);
 
-static BOOL sendDroidCheck		(VOID);							//droids
-UDWORD		averagePing			(VOID);
-BOOL		sendPing			(VOID);							// send/recv Ping information
+static BOOL sendDroidCheck		(void);							//droids
+UDWORD		averagePing			(void);
+BOOL		sendPing			(void);							// send/recv Ping information
 
 static void highLevelDroidUpdate(DROID *psDroid,
 								 UDWORD x,
@@ -102,7 +102,7 @@ static BOOL okToSend()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid checking info. keep position and damage in sync.
-BOOL sendCheck(VOID)
+BOOL sendCheck(void)
 {
 	UDWORD i;
 
@@ -145,7 +145,7 @@ BOOL sendCheck(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // pick a droid to send, NULL otherwise.
-static DROID* pickADroid(VOID)
+static DROID* pickADroid(void)
 {
 	DROID			*pD=NULL;						// current droid we're checking
 	UDWORD			i;
@@ -206,7 +206,7 @@ static DROID* pickADroid(VOID)
 
 // ///////////////////////////////////////////////////////////////////////////
 // send a droid info packet.
-static BOOL sendDroidCheck(VOID)
+static BOOL sendDroidCheck(void)
 {
 	DROID			*pD;
 	NETMSG			msg;
@@ -659,7 +659,7 @@ static  STRUCTURE *pickAStructure(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send structure information.
-static BOOL sendStructureCheck(VOID)
+static BOOL sendStructureCheck(void)
 {
 	static UDWORD	lastSent=0;					// last time a struct was sent.
 	NETMSG			m;
@@ -947,7 +947,7 @@ BOOL recvPowerCheck(NETMSG *pMsg)
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Score
-BOOL sendScoreCheck(VOID)
+BOOL sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
 	UDWORD			i;
@@ -1055,7 +1055,7 @@ BOOL recvScoreSubmission(NETMSG *pMsg)
 // ////////////////////////////////////////////////////////////////////////
 // Pings
 
-UDWORD averagePing(VOID)
+UDWORD averagePing(void)
 {
 	UDWORD i,count,total;
 
@@ -1073,7 +1073,7 @@ UDWORD averagePing(VOID)
 	return total/count;
 }
 
-BOOL sendPing(VOID)
+BOOL sendPing(void)
 {
 	NETMSG	ping;
 	UDWORD	i;

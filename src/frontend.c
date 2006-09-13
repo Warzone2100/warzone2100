@@ -66,11 +66,11 @@
 
 extern BOOL bSubtitles;
 
-extern VOID intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
+extern void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
 extern void set_active_data_directory(int);
 
 extern CURSORSNAP InterfaceSnap;
-extern VOID ProcessCursorSnap(VOID);
+extern void ProcessCursorSnap(VOID);
 
 int StartWithGame = 1;	// New game starts in Cam 1.
 
@@ -109,48 +109,48 @@ extern IMAGEFILE *FrontImages;
 // ////////////////////////////////////////////////////////////////////////////
 // Function Definitions
 
-VOID		processFrontendSnap		(BOOL bHideCursor);
-VOID		changeTitleMode			(tMode mode);
-BOOL		startTitleMenu			(VOID);
-BOOL		runTitleMenu			(VOID);
-VOID		startSinglePlayerMenu	(VOID);
-BOOL		runSinglePlayerMenu		(VOID);
-//BOOL		runDemoMenu				(VOID);
-//BOOL		startDemoMenu			(VOID);
-BOOL		startTutorialMenu		(VOID);
-BOOL		runTutorialMenu			(VOID);
-BOOL		startMultiPlayerMenu	(VOID);
-BOOL		runMultiPlayerMenu		(VOID);
-BOOL		startOptionsMenu		(VOID);
-BOOL		runOptionsMenu			(VOID);
-BOOL		startGameOptionsMenu	(VOID);
-BOOL		runGameOptionsMenu		(VOID);
-BOOL		startGameOptions2Menu	(VOID);
-BOOL		runGameOptions2Menu		(VOID);
-BOOL		startGameOptions3Menu	(VOID);
-BOOL		runGameOptions3Menu		(VOID);
-//BOOL		startVideoOptionsMenu	(VOID);
-//BOOL		runVideoOptionsMenu		(VOID);
-//BOOL		startGraphicsOptionsMenu(VOID);
-//BOOL		runGraphicsptionsMenu	(VOID);
+void		processFrontendSnap		(BOOL bHideCursor);
+void		changeTitleMode			(tMode mode);
+BOOL		startTitleMenu			(void);
+BOOL		runTitleMenu			(void);
+void		startSinglePlayerMenu	(void);
+BOOL		runSinglePlayerMenu		(void);
+//BOOL		runDemoMenu				(void);
+//BOOL		startDemoMenu			(void);
+BOOL		startTutorialMenu		(void);
+BOOL		runTutorialMenu			(void);
+BOOL		startMultiPlayerMenu	(void);
+BOOL		runMultiPlayerMenu		(void);
+BOOL		startOptionsMenu		(void);
+BOOL		runOptionsMenu			(void);
+BOOL		startGameOptionsMenu	(void);
+BOOL		runGameOptionsMenu		(void);
+BOOL		startGameOptions2Menu	(void);
+BOOL		runGameOptions2Menu		(void);
+BOOL		startGameOptions3Menu	(void);
+BOOL		runGameOptions3Menu		(void);
+//BOOL		startVideoOptionsMenu	(void);
+//BOOL		runVideoOptionsMenu		(void);
+//BOOL		startGraphicsOptionsMenu(void);
+//BOOL		runGraphicsptionsMenu	(void);
 
-VOID		addTopForm				(VOID);
-VOID		removeTopForm			(VOID);
-VOID		addBottomForm			(VOID);
-VOID		removeBottomForm		(VOID);
-VOID		addBackdrop				(VOID);
-VOID		removeBackdrop			(VOID);
+void		addTopForm				(void);
+void		removeTopForm			(void);
+void		addBottomForm			(void);
+void		removeBottomForm		(void);
+void		addBackdrop				(void);
+void		removeBackdrop			(void);
 
-VOID		addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlignLeft,BOOL bGrey);
-VOID 		addText					(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State);
-VOID		addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt);
-VOID		addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID);
+void		addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlignLeft,BOOL bGrey);
+void 		addText					(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State);
+void		addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt);
+void		addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID);
 
-VOID		displayLogo				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayTitleBitmap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayTextOption		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayTextAt270		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static VOID	displayBigSlider		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayLogo				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayTitleBitmap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayTextOption		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayTextAt270		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void	displayBigSlider		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 
 
@@ -158,7 +158,7 @@ static VOID	displayBigSlider		(struct _widget *psWidget, UDWORD xOffset, UDWORD 
 
 // Returns TRUE if escape key pressed on PC or close button pressed on Playstation.
 //
-BOOL CancelPressed(VOID)
+BOOL CancelPressed(void)
 {
 
 	if(keyPressed(KEY_ESC)) {
@@ -171,7 +171,7 @@ BOOL CancelPressed(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // for cursorsnap stuff on pc
 
-VOID processFrontendSnap(BOOL bHideCursor)
+void processFrontendSnap(BOOL bHideCursor)
 {
 	static POINT point,opoint;
 
@@ -237,7 +237,7 @@ VOID processFrontendSnap(BOOL bHideCursor)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Change Mode
-VOID changeTitleMode(tMode mode)
+void changeTitleMode(tMode mode)
 {
 	tMode oldMode;
 
@@ -342,7 +342,7 @@ VOID changeTitleMode(tMode mode)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-BOOL startTitleMenu(VOID)
+BOOL startTitleMenu(void)
 {
 
 
@@ -377,7 +377,7 @@ BOOL startTitleMenu(VOID)
 }
 
 
-BOOL runTitleMenu(VOID)
+BOOL runTitleMenu(void)
 {
 	UDWORD id;
 
@@ -418,7 +418,7 @@ BOOL runTitleMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // Tutorial Menu
 
-BOOL startTutorialMenu(VOID)
+BOOL startTutorialMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -437,7 +437,7 @@ BOOL startTutorialMenu(VOID)
 	return TRUE;
 }
 
-BOOL runTutorialMenu(VOID)
+BOOL runTutorialMenu(void)
 {
 	UDWORD id;
 
@@ -482,7 +482,7 @@ BOOL runTutorialMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // Single Player Menu
 
-VOID startSinglePlayerMenu(VOID)
+void startSinglePlayerMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -539,7 +539,7 @@ void loadOK( void )
 
 }
 
-BOOL runSinglePlayerMenu(VOID)
+BOOL runSinglePlayerMenu(void)
 {
 	UDWORD id;
 
@@ -646,7 +646,7 @@ BOOL runSinglePlayerMenu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
-BOOL startMultiPlayerMenu(VOID)
+BOOL startMultiPlayerMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -667,7 +667,7 @@ BOOL startMultiPlayerMenu(VOID)
 	return TRUE;
 }
 
-BOOL runMultiPlayerMenu(VOID)
+BOOL runMultiPlayerMenu(void)
 {
 	UDWORD id;
 
@@ -748,7 +748,7 @@ BOOL runMultiPlayerMenu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
-BOOL startOptionsMenu(VOID)
+BOOL startOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -771,7 +771,7 @@ BOOL startOptionsMenu(VOID)
 
 
 
-BOOL runOptionsMenu(VOID)
+BOOL runOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -829,7 +829,7 @@ BOOL runOptionsMenu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu 2!
-BOOL startGameOptions2Menu(VOID)
+BOOL startGameOptions2Menu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -951,7 +951,7 @@ BOOL startGameOptions2Menu(VOID)
 }
 
 
-BOOL runGameOptions2Menu(VOID)
+BOOL runGameOptions2Menu(void)
 {
 	UDWORD id;
 
@@ -1100,7 +1100,7 @@ BOOL runGameOptions2Menu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-BOOL startGameOptions3Menu(VOID)
+BOOL startGameOptions3Menu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -1128,7 +1128,7 @@ BOOL startGameOptions3Menu(VOID)
 	return TRUE;
 }
 
-BOOL runGameOptions3Menu(VOID)
+BOOL runGameOptions3Menu(void)
 {
 	UDWORD id;
 
@@ -1181,7 +1181,7 @@ BOOL runGameOptions3Menu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-BOOL startGameOptionsMenu(VOID)
+BOOL startGameOptionsMenu(void)
 {
 
 	UDWORD	w,h;
@@ -1237,7 +1237,7 @@ BOOL startGameOptionsMenu(VOID)
 	return TRUE;
 }
 
-BOOL runGameOptionsMenu(VOID)
+BOOL runGameOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -1381,7 +1381,7 @@ BOOL runGameOptionsMenu(VOID)
 // ////////////////////////////////////////////////////////////////////////////
 // common widgets.
 
-VOID addBackdrop(VOID)
+void addBackdrop(void)
 {
 	W_FORMINIT		sFormInit;
 
@@ -1399,14 +1399,14 @@ VOID addBackdrop(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID removeBackdrop(VOID)
+void removeBackdrop(void)
 {
 	widgDelete( psWScreen, FRONTEND_BACKDROP );
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID addBottomForm(VOID)
+void addBottomForm(void)
 {
 	W_FORMINIT		sFormInit;
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -1427,14 +1427,14 @@ VOID addBottomForm(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID removeBottomForm( VOID )
+void removeBottomForm( void )
 {
 	widgDelete( psWScreen, FRONTEND_BOTFORM );
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID addTopForm(VOID)
+void addTopForm(void)
 {
 	W_FORMINIT		sFormInit;
 
@@ -1474,13 +1474,13 @@ VOID addTopForm(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID removeTopForm( VOID )
+void removeTopForm( void )
 {
 	widgDelete( psWScreen, FRONTEND_TOPFORM );
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign,BOOL bGrey)
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign,BOOL bGrey)
 {
 	W_BUTINIT		sButInit;
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -1505,7 +1505,7 @@ VOID addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign
 	}
 
 
-	sButInit.pUserData = (VOID*)bGrey;				// store disable state
+	sButInit.pUserData = (void*)bGrey;				// store disable state
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
@@ -1521,7 +1521,7 @@ VOID addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID )
+void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID )
 {
 	W_SLDINIT		sSldInit;
 
@@ -1544,7 +1544,7 @@ VOID addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
+void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
 {
 #if !defined(PSX) || defined(ROTATEDTEXT)
 	W_LABINIT	sLabInit;
@@ -1567,7 +1567,7 @@ VOID addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
 }
 
 
-VOID addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State)
+void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State)
 {
 	W_LABINIT	sLabInit;
 
@@ -1597,7 +1597,7 @@ VOID addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRI
 // drawing functions
 
 // show a background piccy
-VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
     const size_t sTmpSize = 200;
 
@@ -1617,7 +1617,7 @@ VOID displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-VOID displayLogo(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayLogo(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	iV_DrawTransImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 }
@@ -1627,7 +1627,7 @@ VOID displayLogo(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-VOID displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
@@ -1698,7 +1698,7 @@ VOID displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 #if !defined(PSX) || defined(ROTATEDTEXT)
 
 // show text written on its side.
-VOID displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	SDWORD		fx,fy;
 	W_LABEL		*psLab;
@@ -1722,7 +1722,7 @@ VOID displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static VOID displayBigSlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayBigSlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	UDWORD x = xOffset+psWidget->x;

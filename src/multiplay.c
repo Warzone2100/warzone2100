@@ -95,7 +95,7 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 
 BOOL turnOffMultiMsg(BOOL bDoit);
 
-BOOL		multiPlayerLoop(VOID);
+BOOL		multiPlayerLoop(void);
 BOOL		IdToDroid	(UDWORD id, UDWORD player, DROID **psDroid);
 STRUCTURE	*IdToStruct	(UDWORD id,UDWORD player);
 BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player);
@@ -109,8 +109,8 @@ BOOL	myResponsibility	(UDWORD player);				// this pc has comms responsibility
 BOOL	responsibleFor		(UDWORD player,UDWORD player2);	// has player responsibility for player2
 UDWORD	whosResponsible		(UDWORD player);				// returns player responsible for 'player'
 iVector	cameraToHome		(UDWORD player,BOOL scroll);
-BOOL	DirectPlaySystemMessageHandler(LPVOID msg);			// interpret DP messages
-BOOL	recvMessage			(VOID);							// process an incoming message
+BOOL	DirectPlaySystemMessageHandler(void * msg);			// interpret DP messages
+BOOL	recvMessage			(void);							// process an incoming message
 BOOL	SendResearch		(UBYTE player,UDWORD index);	// send/recv Research issues
 BOOL	recvResearch		(NETMSG *pMsg);
 BOOL	sendTextMessage		(char *pStr,BOOL bcast);		// send/recv a text message
@@ -235,7 +235,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // MultiPlayer main game loop code.
-BOOL multiPlayerLoop(VOID)
+BOOL multiPlayerLoop(void)
 {
 	UDWORD		i;
 	UBYTE		joinCount;
@@ -646,7 +646,7 @@ iVector cameraToHome(UDWORD player,BOOL scroll)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Required by the net library. It's the system message handler..
-BOOL DirectPlaySystemMessageHandler(LPVOID mg)
+BOOL DirectPlaySystemMessageHandler(void * mg)
 {
 
 	return (TRUE);
@@ -657,7 +657,7 @@ BOOL DirectPlaySystemMessageHandler(LPVOID mg)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Recv Messages. Get a message and dispatch to relevant function.
-BOOL recvMessage(VOID)
+BOOL recvMessage(void)
 {
 	NETMSG msg;
 	DPID dp;
@@ -1921,7 +1921,7 @@ BOOL msgStackFireTop()
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
 			eventFireCallbackTrigger(CALL_VIDEO_QUIT);
 			break;
-		
+
 		case CALL_BEACON:
 
 			if(!msgStackGetXY(&beaconX, &beaconY))
@@ -1971,19 +1971,19 @@ BOOL msgStackFireTop()
 BOOL recvBeacon(NETMSG *pMsg)
 {
 	SDWORD	sender, receiver,locX, locY;
-	
+
 	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
 
 	NetGet(pMsg,0,sender);
 	NetGet(pMsg,4,receiver);
 	NetGet(pMsg,8,locX);
 	NetGet(pMsg,12,locY);
-	
+
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
 
 	strcpy(msg, &(pMsg->body[16]));
 	strcat(msg, NetPlay.players[sender].name);		// name
-	
+
 	strcpy(beaconReceiveMsg[sender], msg);
 
 	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);

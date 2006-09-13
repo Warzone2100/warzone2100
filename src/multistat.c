@@ -32,7 +32,7 @@ extern char	MultiPlayersPath[255];
 
 BOOL		removeFromForce			(UDWORD number);					// remove a droid from force
 BOOL		addToForce				(DROID_TEMPLATE  *templ);			// add a droid (templ) to force
-VOID		useTheForce				(BOOL bAddTempl);					// place the force in the game
+void		useTheForce				(BOOL bAddTempl);					// place the force in the game
 BOOL		saveForce				(char *name,FORCE *pfForce);
 BOOL		loadForce				(char *name);
 
@@ -45,11 +45,11 @@ BOOL		loadMultiStats			(STRING *sPlayerName, PLAYERSTATS *plStats);
 PLAYERSTATS getMultiStats			(UDWORD	player, BOOL bLocal);
 BOOL		setMultiStats			(DWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);
 
-VOID		updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
-VOID		updateMultiStatsGames	(void);
-VOID		updateMultiStatsWins	(void);
-VOID		updateMultiStatsLoses	(void);
-VOID		updateMultiStatsKills	(BASE_OBJECT *psKilled, UDWORD player);
+void		updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
+void		updateMultiStatsGames	(void);
+void		updateMultiStatsWins	(void);
+void		updateMultiStatsLoses	(void);
+void		updateMultiStatsKills	(BASE_OBJECT *psKilled, UDWORD player);
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ VOID chooseForceLoc(UDWORD *pX,UDWORD *pY)
 
 // ////////////////////////////////////////////////////////////////////////////
 // place the force on the map.
-VOID useTheForce(BOOL bAddTempl)//Luke
+void useTheForce(BOOL bAddTempl)//Luke
 {
 	DROID			*pDr;
 	DROID_TEMPLATE	*pTempl;
@@ -675,7 +675,7 @@ BOOL saveMultiStats(STRING *sFileName, STRING *sPlayerName,PLAYERSTATS *playerSt
 // score update functions
 
 // update players damage stats.
-VOID updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted)
+void updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
 	PLAYERSTATS st;
 
@@ -718,7 +718,7 @@ VOID updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 }
 
 // update games played.
-VOID updateMultiStatsGames(void)
+void updateMultiStatsGames(void)
 {
 	PLAYERSTATS	st;
 
@@ -728,7 +728,7 @@ VOID updateMultiStatsGames(void)
 }
 
 // games won
-VOID updateMultiStatsWins(void)
+void updateMultiStatsWins(void)
 {
 	PLAYERSTATS	st;
 	st  = getMultiStats(selectedPlayer,TRUE);
@@ -737,7 +737,7 @@ VOID updateMultiStatsWins(void)
 }
 
 //games lost.
-VOID updateMultiStatsLoses(void)
+void updateMultiStatsLoses(void)
 {
 	PLAYERSTATS	st;
 	st  = getMultiStats(selectedPlayer,TRUE);
@@ -746,7 +746,7 @@ VOID updateMultiStatsLoses(void)
 }
 
 // update kills
-VOID updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
+void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 {
 	PLAYERSTATS	st;
 

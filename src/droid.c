@@ -710,7 +710,7 @@ void	removeDroidFX(DROID *psDel)
 
 }
 
-VOID destroyDroid(DROID *psDel)
+void destroyDroid(DROID *psDel)
 {
 
 	if(psDel->lastHitWeapon==WSC_LAS_SAT)		// darken tile if lassat.

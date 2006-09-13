@@ -59,7 +59,7 @@ BOOL		SendGroupOrderSelected	(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psO
 BOOL		SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x,UDWORD y,BASE_OBJECT *psObj);
 BOOL		SendCmdGroup		(DROID_GROUP *group, UWORD x, UWORD y, BASE_OBJECT *psObj);
 BOOL		recvGroupOrder		(NETMSG *pMsg);
-static VOID ProcessDroidOrder	(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype,UDWORD destid);
+static void ProcessDroidOrder	(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype,UDWORD destid);
 BOOL		SendDestroyDroid	(DROID  *pD);
 BOOL		recvDestroyDroid	(NETMSG *pMsg);
 BOOL		sendWholeDroid		(DROID  *pD, DPID dest);
@@ -950,7 +950,7 @@ BOOL recvDroidInfo(NETMSG *pMsg)
 
 // ////////////////////////////////////////////////////////////////////////////
 // process droid order
-static VOID ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWORD y,
+static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWORD y,
 														 OBJECT_TYPE desttype,UDWORD destid)
 {
 	UDWORD		i;

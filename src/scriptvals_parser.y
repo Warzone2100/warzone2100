@@ -796,7 +796,7 @@ BOOL scrvLoad(char *pData, UDWORD size)
 }
 
 /* A simple error reporting routine */
-void scrv_error(char *pMessage,...)
+void scrv_error(const char *pMessage,...)
 {
 	int		line;
 	char	*pText;

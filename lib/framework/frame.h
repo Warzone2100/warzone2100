@@ -171,8 +171,8 @@ BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSi
 
 extern SDWORD ftol(float f);
 
-UINT HashString( char *String );
-UINT HashStringIgnoreCase( char *String );
+UINT HashString( const char *String );
+UINT HashStringIgnoreCase( const char *String );
 
 
 /* Endianness hacks */

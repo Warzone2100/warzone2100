@@ -396,7 +396,7 @@ extern void intSetShadowPower(UDWORD quantity);
 extern void intResetScreen(BOOL NoAnim);
 
 /* Refresh icons on the interface, without disturbing the layout. i.e. smartreset*/
-extern VOID intRefreshScreen(VOID);
+extern void intRefreshScreen(void);
 
 /* Add the options widgets to the widget screen */
 extern BOOL intAddOptions(void);

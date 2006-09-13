@@ -5,7 +5,7 @@
  */
 #include "group.h"
 
-// Different Message Structures allowed to be sent between players. 
+// Different Message Structures allowed to be sent between players.
 // Each message must have type = to one of these.
 typedef enum _msgtype
 {
@@ -32,10 +32,10 @@ typedef enum _msgtype
 
 	// JOINING TYPES. these msgs are used when a player joins a game in progress.
 	NET_PLAYERCOMPLETE,		//20 All Setup information about player x has been sent
-	NET_REQUESTPLAYER,		//21 NOTUSED please send me info about a player 
+	NET_REQUESTPLAYER,		//21 NOTUSED please send me info about a player
 	NET_STRUCT,				//22 a complete structure
 	NET_WHOLEDROID,			//23 a complete droid
-	NET_FEATURES,			//24 information regarding features.			
+	NET_FEATURES,			//24 information regarding features.
 	NET_PLAYERRESPONDING,	//25 computer that sent this is now playing warzone!
 
 	// RECENT TYPES
@@ -123,7 +123,7 @@ typedef struct {
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// Game Options and stats. 
+// Game Options and stats.
 extern MULTIPLAYERGAME		game;						// the game description.
 extern MULTIPLAYERINGAME	ingame;						// the game description.
 
@@ -140,13 +140,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define DEFAULTBYTESPERSEC		1000		// 1   Ks-1
 #define DEFAULTPACKETS			5
 
-#define MODEMBYTESPERSEC		1200	
+#define MODEMBYTESPERSEC		1200
 #define MODEMPACKETS			8
 
 #define INETBYTESPERSEC			1201
 #define INETPACKETS				5
 
-#define IPXBYTESPERSEC			2000	
+#define IPXBYTESPERSEC			2000
 #define IPXPACKETS				10
 
 #define CABLEBYTESPERSEC		1202
@@ -198,10 +198,10 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // macros For handling net messages, just copy things in & out of the msg buffer
 /*
 #define NetAdd(m,pos,thing) \
-	memcpy(&(m.body[pos]),&(thing),sizeof(thing)) 
+	memcpy(&(m.body[pos]),&(thing),sizeof(thing))
 
 #define NetAdd2(m,pos,thing) \
-	memcpy( &((*m).body[pos]), &(thing), sizeof(thing)) 
+	memcpy( &((*m).body[pos]), &(thing), sizeof(thing))
 
 #define NetAddSt(m,pos,stri) \
 	strcpy(&(m.body[pos]),stri)
@@ -229,13 +229,13 @@ extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
 extern UDWORD whosResponsible	(UDWORD player);
 extern iVector cameraToHome		(UDWORD player,BOOL scroll);
 
-extern BOOL	multiPlayerLoop		(VOID);							// for loop.c						
+extern BOOL	multiPlayerLoop		(void);							// for loop.c
 
-extern BOOL recvMessage			(VOID);	
-extern BOOL sendTemplate		(DROID_TEMPLATE *t);				
+extern BOOL recvMessage			(void);
+extern BOOL sendTemplate		(DROID_TEMPLATE *t);
 extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
 extern BOOL SendResearch		(UBYTE player,UDWORD index);
-extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.      
+extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(char *pStr,BOOL cast);			// send a text message
 extern BOOL sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
 
@@ -258,7 +258,7 @@ extern BOOL sendLasSat			(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj);
 // droids . multibot
 extern BOOL SendDroid			(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UBYTE player, UDWORD id);
 extern BOOL SendDestroyDroid	(DROID *d);
-extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);	
+extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 extern BOOL SendDroidInfo		(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, BASE_OBJECT *psObj);
 extern BOOL SendDroidMove		(DROID *psDroid, UDWORD x, UDWORD y,BOOL bFormation);
 extern BOOL SendGroupOrderSelected	(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psObj);
@@ -278,32 +278,32 @@ extern BOOL sendHappyVtol		(DROID *psDroid);
 extern BOOL sendVtolRearm		(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen);
 
 // Startup. mulitopt
-extern BOOL multiTemplateSetup	(VOID);
-extern BOOL multiInitialise		(VOID);							// for Init.c
-extern BOOL lobbyInitialise		(VOID);							// for Init.c
-extern BOOL multiShutdown		(VOID);	
-extern BOOL sendLeavingMsg		(VOID);
+extern BOOL multiTemplateSetup	(void);
+extern BOOL multiInitialise		(void);							// for Init.c
+extern BOOL lobbyInitialise		(void);							// for Init.c
+extern BOOL multiShutdown		(void);
+extern BOOL sendLeavingMsg		(void);
 
 extern BOOL hostCampaign		(STRING *sGame, STRING *sPlayer);
 extern BOOL joinCampaign		(UDWORD gameNumber, STRING *playername);
 //extern BOOL hostArena			(STRING *sGame, STRING *sPlayer);
 //extern BOOL joinArena			(UDWORD gameNumber, STRING *playername);
-extern VOID	playerResponding	(VOID);
-extern BOOL multiGameInit		(VOID);
-extern BOOL multiGameShutdown	(VOID);
+extern void	playerResponding	(void);
+extern BOOL multiGameInit		(void);
+extern BOOL multiGameShutdown	(void);
 extern BOOL copyTemplateSet		(UDWORD from,UDWORD to);
 extern BOOL addTemplateSet		(UDWORD from,UDWORD to);
 extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
 
 // syncing.
-extern BOOL sendCheck			(VOID);							//send/recv  check info
-extern BOOL sendScoreCheck		(VOID);							//score check only(frontend)
+extern BOOL sendCheck			(void);							//send/recv  check info
+extern BOOL sendScoreCheck		(void);							//score check only(frontend)
 extern BOOL sendPowerCheck		(BOOL now);
-extern BOOL sendPing			(VOID);							// allow game to request pings.
-extern UDWORD averagePing		(VOID);
+extern BOOL sendPing			(void);							// allow game to request pings.
+extern UDWORD averagePing		(void);
 
 // multijoin
-extern VOID modifyResources		(POWER_GEN_FUNCTION* psFunction);
+extern void modifyResources		(POWER_GEN_FUNCTION* psFunction);
 
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
 

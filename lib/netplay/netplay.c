@@ -259,7 +259,7 @@ void NET_DestroyPlayer(unsigned int id) {
 
 // ////////////////////////////////////////////////////////////////////////
 // count players. call with null to enumerate the game already joined.
-UDWORD NETplayerInfo()
+UDWORD NETplayerInfo(void)
 {
 	unsigned int i;
 
@@ -345,14 +345,14 @@ void resize_global_player_data(unsigned int i, unsigned int size) {
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetLocalPlayerData(DPID dpid,VOID *pData, DWORD *pSize)
+BOOL NETgetLocalPlayerData(DPID dpid,void *pData, DWORD *pSize)
 {
 	memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetGlobalPlayerData(DPID dpid,VOID *pData, DWORD *pSize)
+BOOL NETgetGlobalPlayerData(DPID dpid,void *pData, DWORD *pSize)
 {
 	if(!NetPlay.bComms)
 	{
@@ -365,7 +365,7 @@ BOOL NETgetGlobalPlayerData(DPID dpid,VOID *pData, DWORD *pSize)
 	return TRUE;
 }
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetLocalPlayerData(DPID dpid,VOID *pData, DWORD size)
+BOOL NETsetLocalPlayerData(DPID dpid,void *pData, DWORD size)
 {
 	local_player_data[dpid].size = size;
 	resize_local_player_data(dpid, size);
@@ -374,7 +374,7 @@ BOOL NETsetLocalPlayerData(DPID dpid,VOID *pData, DWORD size)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetGlobalPlayerData(DPID dpid, VOID *pData, DWORD size)
+BOOL NETsetGlobalPlayerData(DPID dpid, void *pData, DWORD size)
 {
 	if(!NetPlay.bComms)
 	{
@@ -496,7 +496,7 @@ BOOL NETinit(BOOL bFirstCall)
 
 // ////////////////////////////////////////////////////////////////////////
 // SHUTDOWN THE CONNECTION.
-HRESULT NETshutdown(VOID)
+HRESULT NETshutdown(void)
 {
 	unsigned int i;
 	debug( LOG_NET, "NETshutdown" );
@@ -516,7 +516,7 @@ HRESULT NETshutdown(VOID)
 
 // ////////////////////////////////////////////////////////////////////////
 //close the open game..
-HRESULT NETclose(VOID)
+HRESULT NETclose(void)
 {
 	unsigned int i;
 
@@ -571,7 +571,7 @@ HRESULT NETclose(VOID)
 
 // ////////////////////////////////////////////////////////////////////////
 // return bytes of data sent recently.
-UDWORD NETgetBytesSent(VOID)
+UDWORD NETgetBytesSent(void)
 {
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
@@ -586,13 +586,13 @@ UDWORD NETgetBytesSent(VOID)
 	return lastsec;
 }
 
-UDWORD NETgetRecentBytesSent(VOID)
+UDWORD NETgetRecentBytesSent(void)
 {
 	return nStats.bytesSent;
 }
 
 
-UDWORD NETgetBytesRecvd(VOID)
+UDWORD NETgetBytesRecvd(void)
 {
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
@@ -605,14 +605,14 @@ UDWORD NETgetBytesRecvd(VOID)
 	return lastsec;
 }
 
-UDWORD NETgetRecentBytesRecvd(VOID)
+UDWORD NETgetRecentBytesRecvd(void)
 {
 	return nStats.bytesRecvd;
 }
 
 
 //return number of packets sent last sec.
-UDWORD NETgetPacketsSent(VOID)
+UDWORD NETgetPacketsSent(void)
 {
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
@@ -628,13 +628,13 @@ UDWORD NETgetPacketsSent(VOID)
 }
 
 
-UDWORD NETgetRecentPacketsSent(VOID)
+UDWORD NETgetRecentPacketsSent(void)
 {
 	return nStats.packetsSent;
 }
 
 
-UDWORD NETgetPacketsRecvd(VOID)
+UDWORD NETgetPacketsRecvd(void)
 {
 	static UDWORD	lastsec=0;
 	static UDWORD	timy=0;
@@ -647,7 +647,7 @@ UDWORD NETgetPacketsRecvd(VOID)
 	return lastsec;
 }
 
-UDWORD NETgetRecentPacketsRecvd(VOID)
+UDWORD NETgetRecentPacketsRecvd(void)
 {
 	return nStats.packetsRecvd;
 }
@@ -952,7 +952,7 @@ receive_message:
 // ////////////////////////////////////////////////////////////////////////
 // Protocol functions
 
-BOOL NETsetupTCPIP(LPVOID *addr, char * machine)
+BOOL NETsetupTCPIP(void ** addr, char * machine)
 {
 	debug( LOG_NET, "NETsetupTCPIP\n" );
 
@@ -971,7 +971,7 @@ BOOL NETsetupTCPIP(LPVOID *addr, char * machine)
 }
 
 // select a current protocol. Call with a connection returned by findprotocol.
-BOOL NETselectProtocol(LPVOID lpConnection)
+BOOL NETselectProtocol(void * lpConnection)
 {
 	return TRUE;
 }
@@ -1299,7 +1299,7 @@ BOOL NEThostGame(LPSTR SessionName, LPSTR PlayerName,
 
 // ////////////////////////////////////////////////////////////////////////
 // Stop the dplay interface from accepting more players.
-BOOL NEThaltJoining(VOID)
+BOOL NEThaltJoining(void)
 {
 	debug( LOG_NET, "NEThaltJoining\n" );
 

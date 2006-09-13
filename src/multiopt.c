@@ -48,37 +48,37 @@ DEFINE_GUID(WARZONEGUID,0x48ab0b01,0xfec0,0x11d1,0x98,0xc,0x0,0xa0,0x24,0x38,0x7
 extern char	MultiForcesPath[255];
 
 extern char	buildTime[8];
-extern VOID	stopJoining(void);
+extern void	stopJoining(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
 
-VOID		sendOptions			(DPID dest,UDWORD player);
-VOID		recvOptions			(NETMSG *pMsg);
+void		sendOptions			(DPID dest,UDWORD player);
+void		recvOptions			(NETMSG *pMsg);
 //static BOOL dMatchInit			(VOID);
-static BOOL campInit			(VOID);
+static BOOL campInit			(void);
 BOOL		hostCampaign		(STRING *sGame,		STRING *sPlayer);
 BOOL		joinCampaign		(UDWORD gameNumber, STRING *playername);
 //BOOL		hostArena			(STRING *sGame,		STRING *sPlayer);
 //BOOL		joinArena			(UDWORD gameNumber, STRING *playername);
-BOOL		LobbyLaunched		(VOID);
-VOID		playerResponding	(VOID);
-BOOL		multiInitialise		(VOID);		//only once.
-BOOL		lobbyInitialise		(VOID);		//only once.
-BOOL		sendLeavingMsg		(VOID);
-BOOL		multiShutdown		(VOID);
+BOOL		LobbyLaunched		(void);
+void		playerResponding	(void);
+BOOL		multiInitialise		(void);		//only once.
+BOOL		lobbyInitialise		(void);		//only once.
+BOOL		sendLeavingMsg		(void);
+BOOL		multiShutdown		(void);
 BOOL		addTemplate			(UDWORD player, DROID_TEMPLATE *psNew);
 BOOL		addTemplateSet		(UDWORD from,UDWORD to);
 BOOL		copyTemplateSet		(UDWORD from,UDWORD to);
-BOOL		multiGameInit		(VOID);		// every game
-BOOL		multiGameShutdown	(VOID);
+BOOL		multiGameInit		(void);		// every game
+BOOL		multiGameShutdown	(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
 // send complete game info set!
 // dpid == 0 for no new players.
-VOID sendOptions(DPID dest,UDWORD play)
+void sendOptions(DPID dest,UDWORD play)
 {
 	NETMSG m;
 	UBYTE checkval;
@@ -447,7 +447,7 @@ BOOL joinArena(UDWORD gameNumber, STRING *playerName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Lobby launched. fires the correct routine when the game was lobby launched.
-BOOL LobbyLaunched(VOID)
+BOOL LobbyLaunched(void)
 {
 	UDWORD			i;
 	PLAYERSTATS		pl={0};
@@ -475,7 +475,7 @@ BOOL LobbyLaunched(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Init and shutdown routines
-BOOL lobbyInitialise(VOID)
+BOOL lobbyInitialise(void)
 {
 
 	if(!NETinit(TRUE))								// initialise, may change guid.
@@ -502,7 +502,7 @@ BOOL lobbyInitialise(VOID)
 	return TRUE;
 }
 
-BOOL multiInitialise(VOID)
+BOOL multiInitialise(void)
 {
 	// NET AUDIO CAPTURE
 	NETinitAudioCapture();
@@ -517,7 +517,7 @@ BOOL multiInitialise(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // say goodbye to everyone else
-BOOL sendLeavingMsg(VOID)
+BOOL sendLeavingMsg(void)
 {
 	NETMSG m;
         UBYTE bHost = (UBYTE)NetPlay.bHost;
@@ -534,7 +534,7 @@ BOOL sendLeavingMsg(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // called in Init.c to shutdown the whole netgame gubbins.
-BOOL multiShutdown(VOID)
+BOOL multiShutdown(void)
 {
 	FORCE_MEMBER *pF;
 
@@ -1036,7 +1036,7 @@ static BOOL campInit()
 
 // ////////////////////////////////////////////////////////////////////////////
 // say hi to everyone else....
-VOID playerResponding(VOID)
+void playerResponding(void)
 {
 	NETMSG	msg;
 	UDWORD	i;
@@ -1062,7 +1062,7 @@ VOID playerResponding(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 //called when the game finally gets fired up.
-BOOL multiGameInit(VOID)
+BOOL multiGameInit(void)
 {
 	UDWORD player;
 
@@ -1095,7 +1095,7 @@ BOOL multiGameInit(VOID)
 
 ////////////////////////////////
 // at the end of every game.
-BOOL multiGameShutdown(VOID)
+BOOL multiGameShutdown(void)
 {
 	PLAYERSTATS	st;
 

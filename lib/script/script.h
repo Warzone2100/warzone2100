@@ -63,9 +63,9 @@ extern void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab);
 extern void retStackReset(void);
 extern UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address);
 
-extern BOOL IsRetStackEmpty();
+extern BOOL IsRetStackEmpty(void);
 extern BOOL PopRetStack(UDWORD  *psVal);
-extern SDWORD GetCallDepth();
+extern SDWORD GetCallDepth(void);
 
 /***********************************************************************************
  *

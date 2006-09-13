@@ -67,7 +67,7 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 {
 	//~~~~~~~~~~~~~
 #ifdef USE_COMPRESSED_SPEECH
-	LPVOID	lpMsgBuf;
+	void *	lpMsgBuf;
 #endif
 	SDWORD	i;
 	//~~~~~~~~~~~~~

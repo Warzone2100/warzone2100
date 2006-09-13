@@ -22,7 +22,7 @@
 // Simple derived types
 typedef union {uint32 *dp; uint8 *bp; uint16 *wp;} iPointer;
 
-extern void iV_Error(long n, char *msge, ...);
+extern void iV_Error(long n, const char *msge, ...);
 
 // If its a final build we need to undefine iv_error so that it doesn't generate any code !
 #ifdef FINALBUILD

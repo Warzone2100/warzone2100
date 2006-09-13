@@ -958,7 +958,7 @@ static BOOL IntRefreshPending = FALSE;
 
 // Set widget refresh pending flag.
 //
-VOID intRefreshScreen(VOID)
+void intRefreshScreen(void)
 {
 	IntRefreshPending = TRUE;
 }

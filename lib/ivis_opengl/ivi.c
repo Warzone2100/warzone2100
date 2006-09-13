@@ -84,7 +84,7 @@ void iV_Abort(char *string, ...)
 //*************************************************************************
 
 #ifndef FINALBUILD
-void iV_Error(long errorn, char *msge, ...)
+void iV_Error(long errorn, const char *msge, ...)
 {
 	va_list argptr;
 

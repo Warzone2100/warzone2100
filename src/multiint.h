@@ -4,19 +4,19 @@
  * Alex Lee, pumpkin Studios.
  */
 
-extern	VOID	runConnectionScreen		(VOID);
-extern	BOOL	startConnectionScreen	(VOID);
-extern	VOID	intProcessConnection	(UDWORD id);
+extern	void	runConnectionScreen		(void);
+extern	BOOL	startConnectionScreen	(void);
+extern	void	intProcessConnection	(UDWORD id);
 
-extern	VOID	runGameFind				(VOID);
-extern	VOID	startGameFind			(VOID);
+extern	void	runGameFind				(void);
+extern	void	startGameFind			(void);
 
-extern	VOID	runMultiOptions			(VOID);
+extern	void	runMultiOptions			(void);
 extern	BOOL	startMultiOptions		(BOOL bReenter);
-extern	VOID	frontendMultiMessages	(VOID);
+extern	void	frontendMultiMessages	(void);
 
-extern	VOID	runForceSelect			(VOID);
-extern	BOOL	startForceSelect		(VOID);
+extern	void	runForceSelect			(void);
+extern	BOOL	startForceSelect		(void);
 
 extern	BOOL	chooseColour			(UDWORD);
 
@@ -26,7 +26,7 @@ extern	BOOL	addMultiBut				(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, 
 extern  char	sForceName[256];
 extern	char	sPlayer[128];
 
-VOID    kickPlayer                      (DPID dpid);
+void    kickPlayer                      (DPID dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box
 void loadMapPreview(void);
 
@@ -60,16 +60,16 @@ void loadMapPreview(void);
 #define FORCE_STATSHEIGHT		255
 
 #define FORCE_DROID				10304
-#define FORCE_DROIDX			70	
+#define FORCE_DROIDX			70
 #define FORCE_DROIDY			220
 
-//#define FORCE_LO				10304							
+//#define FORCE_LO				10304
 //#define FORCE_LOX				7
 //#define FORCE_LOY				220
-//#define FORCE_MED				10305							
+//#define FORCE_MED				10305
 //#define FORCE_MEDX				52
 //#define FORCE_MEDY				220
-//#define FORCE_HI				10306							
+//#define FORCE_HI				10306
 //#define FORCE_HIX				97
 //#define FORCE_HIY				220
 
@@ -95,7 +95,7 @@ void loadMapPreview(void);
 // CONNECTION SCREEN
 
 
-#define CON_CONTYPES		10103				
+#define CON_CONTYPES		10103
 #define CON_CONTYPESWIDTH	290
 #define CON_CONTYPES_FORM	10104
 #define CON_TYPESID_START	10105
@@ -107,7 +107,7 @@ void loadMapPreview(void);
 #define CON_SETTINGSX		220
 #define	CON_SETTINGSY		190
 #define CON_SETTINGSWIDTH	200
-#define CON_SETTINGSHEIGHT	100 
+#define CON_SETTINGSHEIGHT	100
 
 #define CON_OK				10101
 #define CON_OKX				CON_SETTINGSWIDTH-MULTIOP_OKW-3
@@ -229,7 +229,7 @@ void loadMapPreview(void);
 #define MULTIOP_BASE			10268
 #define MULTIOP_DEFENCE			10269
 
-#define MULTIOP_ALLIANCE_N		10270	
+#define MULTIOP_ALLIANCE_N		10270
 #define MULTIOP_ALLIANCE_Y		10271
 
 #define MULTIOP_POWLEV_LOW		10272
@@ -241,7 +241,7 @@ void loadMapPreview(void);
 #define MULTIOP_REFRESHY		453
 
 #define MULTIOP_HOST			10276
-#define MULTIOP_HOSTX			5			
+#define MULTIOP_HOSTX			5
 #define MULTIOP_HOSTY			MROW3+3
 
 #define MULTIOP_STRUCTLIMITS	10277
@@ -260,10 +260,10 @@ void loadMapPreview(void);
 #define MULTIOP_CHATBOXH		115
 
 #define MULTIOP_CHATEDIT		10279
-#define MULTIOP_CHATEDITX		4 
+#define MULTIOP_CHATEDITX		4
 #define	MULTIOP_CHATEDITY		MULTIOP_CHATBOXH-14
 #define	MULTIOP_CHATEDITW		MULTIOP_CHATBOXW-8
-#define MULTIOP_CHATEDITH		9 
+#define MULTIOP_CHATEDITH		9
 
 #define MULTIOP_COLCHOOSER_FORM	10280
 #define MULTIOP_COLCHOOSER		10281
@@ -275,7 +275,7 @@ void loadMapPreview(void);
 
 
 #define MULTIOP_LIMIT			10292	// 2 for this (+label)
-#define MULTIOP_GAMETYPE		10294	
+#define MULTIOP_GAMETYPE		10294
 #define MULTIOP_POWER			10296
 #define MULTIOP_ALLIANCES		10298
 #define MULTIOP_BASETYPE		10300
@@ -318,4 +318,4 @@ void loadMapPreview(void);
 #define MULTIOP_OKH			24
 
 #define MULTIOP_BUTW			35
-#define MULTIOP_BUTH			24	
+#define MULTIOP_BUTH			24

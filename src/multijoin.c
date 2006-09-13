@@ -58,16 +58,16 @@ extern BOOL		multiRequestUp;
 BOOL sendVersionCheck	();
 BOOL recvVersionCheck	(NETMSG *pMsg);
 BOOL intDisplayMultiJoiningStatus (UBYTE joinCount);
-VOID clearPlayer		(UDWORD player,BOOL quietly,BOOL removeOil);// what to do when a arena player leaves.
+void clearPlayer		(UDWORD player,BOOL quietly,BOOL removeOil);// what to do when a arena player leaves.
 BOOL MultiPlayerLeave	(DPID dp);								// remote player has left.
 BOOL MultiPlayerJoin	(DPID dp);								// remote player has just joined.
-VOID setupNewPlayer		(DPID dpid,UDWORD player);				// stuff to do when player joins.
+void setupNewPlayer		(DPID dpid,UDWORD player);				// stuff to do when player joins.
 //BOOL multiPlayerRequest	(NETMSG *pMsg);							// remote player has requested info
 //BOOL UpdateClient		(DPID dest, UDWORD playerToSend);		// send information to a remote player
 //BOOL ProcessDroidOrders	(VOID);									// ince setup, this player issues each droid order.
 //BOOL SendFeatures		(FEATURE *pFeature, DPID player);
 //BOOL recvFeatures		(NETMSG *pMsg);
-VOID resetMultiVisibility(UDWORD player);
+void resetMultiVisibility(UDWORD player);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Version Check
@@ -150,7 +150,7 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 
 // ////////////////////////////////////////////////////////////////////////////
 // when a remote player leaves an arena game do this!
-VOID clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
+void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 {
 	UDWORD			i;
 	BOOL			bTemp;
@@ -216,7 +216,7 @@ VOID clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 }
 
 // Reset visibilty, so a new player can't see the old stuff!!
-VOID resetMultiVisibility(UDWORD player)
+void resetMultiVisibility(UDWORD player)
 {
 	UDWORD		owned;
 	DROID		*pDroid;

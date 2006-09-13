@@ -318,7 +318,7 @@ unsigned int check_tip_index(unsigned int i) {
 // ////////////////////////////////////////////////////////////////////////////
 // FIXME: what is this, and why is there some code that only works in win32
 // here? - Per
-VOID addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
+void addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
@@ -932,9 +932,9 @@ void displayAllianceState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 		break;
 	}
 
-	psWidget->pUserData = (VOID *)PACKDWORD_TRI(a,b,c);
+	psWidget->pUserData = (void *)PACKDWORD_TRI(a,b,c);
 	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
-	psWidget->pUserData = (VOID *)player;
+	psWidget->pUserData = (void *)player;
 
 }
 
@@ -959,9 +959,9 @@ void displayChannelState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 		break;
 	}
 
-	psWidget->pUserData = (VOID *)PACKDWORD_TRI(a,b,c);
+	psWidget->pUserData = (void *)PACKDWORD_TRI(a,b,c);
 	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
-	psWidget->pUserData = (VOID *)player;
+	psWidget->pUserData = (void *)player;
 }
 
 
@@ -985,7 +985,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 	sFormInit.width			  = MULTIMENU_FORM_W -4;
 	sFormInit.height		  = MULTIMENU_PLAYER_H;
 	sFormInit.pDisplay		  = displayMultiPlayer;
-	sFormInit.pUserData		  = (VOID *)player;
+	sFormInit.pUserData		  = (void *)player;
 	widgAddForm(psWScreen, &sFormInit);
 
 	//name,
@@ -1008,7 +1008,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.id		= MULTIMENU_CHANNEL + player;
 		sButInit.pTip	= "channel";
 		sButInit.pDisplay = displayChannelState;
-		sButInit.pUserData = (VOID*)player;
+		sButInit.pUserData = (void*)player;
 		widgAddButton(psWScreen, &sButInit);
 	}
 
@@ -1023,7 +1023,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
 		sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_STATE);
 		sButInit.pDisplay = displayAllianceState;
-		sButInit.pUserData = (VOID*)player;
+		sButInit.pUserData = (void*)player;
 
 		widgAddButton(psWScreen, &sButInit);
 
@@ -1066,7 +1066,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 
 
 
-BOOL intAddMultiMenu(VOID)
+BOOL intAddMultiMenu(void)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
@@ -1147,7 +1147,7 @@ BOOL intAddMultiMenu(VOID)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID intCloseMultiMenuNoAnim(VOID)
+void intCloseMultiMenuNoAnim(void)
 {
 	widgDelete(psWScreen, MULTIMENU_CLOSE);
 	widgDelete(psWScreen, MULTIMENU_FORM);
@@ -1157,7 +1157,7 @@ VOID intCloseMultiMenuNoAnim(VOID)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL intCloseMultiMenu(VOID)
+BOOL intCloseMultiMenu(void)
 {
 	W_TABFORM *Form;
 
@@ -1180,7 +1180,7 @@ BOOL intCloseMultiMenu(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 // In Game Options house keeping stuff.
-BOOL intRunMultiMenu(VOID)
+BOOL intRunMultiMenu(void)
 {
 	return TRUE;
 }
@@ -1240,7 +1240,7 @@ BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
 
 // ////////////////////////////////////////////////////////////////////////////
 // process clicks made by user.
-VOID intProcessMultiMenu(UDWORD id)
+void intProcessMultiMenu(UDWORD id)
 {
 	UBYTE	i;
 

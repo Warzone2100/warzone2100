@@ -272,7 +272,7 @@ BOOL closeWarzoneKey( void )
  * \param	*val	Place where to store the setting
  * \return	Whether we succeed to find the setting
  */
-BOOL getWarzoneKeyNumeric( STRING *pName, DWORD *val )
+BOOL getWarzoneKeyNumeric( const STRING *pName, DWORD *val )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	char	*value = registry_get_key( pName );
@@ -292,7 +292,7 @@ BOOL getWarzoneKeyNumeric( STRING *pName, DWORD *val )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL getWarzoneKeyString( STRING *pName, STRING *pString )
+BOOL getWarzoneKeyString( const STRING *pName, STRING *pString )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	char	*value = registry_get_key( pName );
@@ -323,7 +323,7 @@ BOOL getWarzoneKeyBinary( STRING *pName, UCHAR *pData, UDWORD *pSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyNumeric( STRING *pName, DWORD val )
+BOOL setWarzoneKeyNumeric( const STRING *pName, DWORD val )
 {
 	//~~~~~~~~~~~~
 	char	buf[32];
@@ -338,7 +338,7 @@ BOOL setWarzoneKeyNumeric( STRING *pName, DWORD val )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyString( STRING *pName, STRING *pString )
+BOOL setWarzoneKeyString( const STRING *pName, const STRING *pString )
 {
 	registry_set_key( pName, pString );
 	return TRUE;
@@ -348,7 +348,7 @@ BOOL setWarzoneKeyString( STRING *pName, STRING *pString )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyBinary( STRING *pName, VOID *pData, UDWORD size )
+BOOL setWarzoneKeyBinary( STRING *pName, void *pData, UDWORD size )
 {
 	return FALSE;
 }

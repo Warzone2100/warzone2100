@@ -1,10 +1,10 @@
-/* 
+/*
  *multigifts. h
  *
  * multiplayer game, gifts and deathmatch relevant funcs.
  */
 
-extern void requestAlliance		(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);						
+extern void requestAlliance		(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
 extern void breakAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
 extern void formAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
 extern void sendAlliance		(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
@@ -13,17 +13,17 @@ extern BOOL recvAlliance		(NETMSG *pMsg,BOOL allowAudio);
 extern BOOL sendGift			(UDWORD type,UDWORD to);
 extern BOOL recvGift			(NETMSG *pMsg);
 
-extern VOID technologyGiveAway				(STRUCTURE *pS);
-extern VOID recvMultiPlayerRandomArtifacts	(NETMSG *pMsg);
-extern VOID addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
-extern VOID processMultiPlayerArtifacts		(VOID);
+extern void technologyGiveAway				(STRUCTURE *pS);
+extern void recvMultiPlayerRandomArtifacts	(NETMSG *pMsg);
+extern void addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
+extern void processMultiPlayerArtifacts		(void);
 
-extern VOID	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
+extern void	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
 
 // deathmatch stuff
 extern BOOL	addOilDrum						(UDWORD count);
-extern VOID	giftPower						(UDWORD from,UDWORD to,BOOL send);
-extern VOID giftRadar							(UDWORD from, UDWORD to,BOOL send);
+extern void	giftPower						(UDWORD from,UDWORD to,BOOL send);
+extern void giftRadar							(UDWORD from, UDWORD to,BOOL send);
 //extern BOOL	addDMatchDroid					(UDWORD count);
 //extern BOOL	foundDMatchDroid				(UDWORD player,UDWORD x,UDWORD y);
 //extern BOOL deathmatchCheck					(VOID);

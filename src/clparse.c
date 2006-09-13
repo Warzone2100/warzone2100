@@ -32,7 +32,7 @@
 // For setting shadows and sound options
 #include "lib/framework/configfile.h"
 
-extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
+extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 extern BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
@@ -358,7 +358,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 {
 	static UBYTE count = 0;
 //	UDWORD val;
-	LPVOID finalconnection;
+	void * finalconnection;
 
 #if 0
 	// check for gamespy flag...

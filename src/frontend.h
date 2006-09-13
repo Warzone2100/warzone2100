@@ -1,4 +1,4 @@
-/* 
+/*
  * Frontend.h
  */
 #ifndef _frontend_h
@@ -9,9 +9,9 @@ typedef enum _title_mode {
 		TITLE,						// 0 intro mode
 		SINGLE,						// 1 single player menu
 		MULTI,						// 2 multiplayer menu
-		OPTIONS,					// 3 options menu	
+		OPTIONS,					// 3 options menu
 		GAME,						// 4
-		TUTORIAL,					// 5  tutorial/fastplay	
+		TUTORIAL,					// 5  tutorial/fastplay
 		CREDITS,					// 6  credits
 		PROTOCOL,					// 7  MULTIPLAYER, select proto
 		MULTIOPTION,				// 8 MULTIPLAYER, select game options
@@ -51,23 +51,23 @@ extern BOOL	bUsingSlider;
 extern BOOL	bForceEditorLoaded;
 
 
-extern VOID	changeTitleMode			(tMode mode);  
-extern BOOL startTitleMenu			(VOID);
-extern BOOL runTitleMenu			(VOID);
-extern BOOL runSinglePlayerMenu		(VOID);
-extern BOOL runMultiPlayerMenu		(VOID);
-//extern BOOL runVideoOptionsMenu		(VOID);
-//extern BOOL runGraphicsOptionsMenu	(VOID);
-extern BOOL runGameOptionsMenu		(VOID);
-extern BOOL runDemoMenu				(VOID);
-extern BOOL runOptionsMenu			(VOID);
-extern BOOL runTutorialMenu			(VOID);
+extern void	changeTitleMode			(tMode mode);
+extern BOOL startTitleMenu			(void);
+extern BOOL runTitleMenu			(void);
+extern BOOL runSinglePlayerMenu		(void);
+extern BOOL runMultiPlayerMenu		(void);
+//extern BOOL runVideoOptionsMenu		(void);
+//extern BOOL runGraphicsOptionsMenu	(void);
+extern BOOL runGameOptionsMenu		(void);
+extern BOOL runDemoMenu				(void);
+extern BOOL runOptionsMenu			(void);
+extern BOOL runTutorialMenu			(void);
 
-extern VOID processFrontendSnap		(BOOL bHideCursor);
+extern void processFrontendSnap		(BOOL bHideCursor);
 
-extern void addTopForm				(VOID);
-extern void addBottomForm			(VOID);
-extern void addBackdrop				(VOID);
+extern void addTopForm				(void);
+extern void addBottomForm			(void);
+extern void addBackdrop				(void);
 extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlignLeft,BOOL bGrey);
 extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID );
@@ -77,10 +77,10 @@ extern void	displayTitleBitmap		(struct _widget *psWidget, UDWORD xOffset, UDWOR
 extern void	displayTextOption		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern void loadOK					(void);
-extern BOOL CancelPressed			(VOID);
+extern BOOL CancelPressed			(void);
 
-BOOL		runGameOptions2Menu		(VOID);
-BOOL		runGameOptions3Menu		(VOID);
+BOOL		runGameOptions2Menu		(void);
+BOOL		runGameOptions3Menu		(void);
 
 
 BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
@@ -121,11 +121,11 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
 #define FRONTEND_POS1Y			10
 #define FRONTEND_POS1M			290
 
-#define FRONTEND_POS2X			20			
+#define FRONTEND_POS2X			20
 #define FRONTEND_POS2Y			50
 #define FRONTEND_POS2M			290
 
-#define FRONTEND_POS3X			20		
+#define FRONTEND_POS3X			20
 #define FRONTEND_POS3Y			90
 #define FRONTEND_POS3M			290
 
@@ -151,7 +151,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
 #define FRONTEND_MULTIPLAYER	20004
 #define FRONTEND_QUIT			20005
 #define FRONTEND_OPTIONS		20006
-	
+
 #define FRONTEND_HOST			20007		//multiplayer screen
 #define FRONTEND_JOIN			20008
 #define FRONTEND_FORCEEDIT		20009
@@ -192,7 +192,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style);
 #define FE_P1					20032
 #define FE_P2					20033
 #define FE_P3					20034
-#define FE_P4					20035	
+#define FE_P4					20035
 #define FE_P5					20036
 #define FE_P6					20037
 #define FE_P7					20038

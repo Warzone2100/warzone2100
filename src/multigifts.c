@@ -45,32 +45,32 @@
 // prototypes
 BOOL			recvGift						(NETMSG *pMsg);
 BOOL			sendGift						(UDWORD type,UDWORD to);
-VOID			giftRadar						(UDWORD from, UDWORD to,BOOL send);
-//static VOID		giftSingleDroid					(DROID *psD,UDWORD from,UDWORD to);
-static VOID		recvGiftDroids					(UDWORD from,UDWORD to,NETMSG *pMsg);
-static VOID		sendGiftDroids					(UDWORD from,UDWORD to);
-static VOID		giftResearch					(UDWORD from,UDWORD to,BOOL send);
-VOID			giftPower						(UDWORD from,UDWORD to,BOOL send);
+void			giftRadar						(UDWORD from, UDWORD to,BOOL send);
+//static void		giftSingleDroid					(DROID *psD,UDWORD from,UDWORD to);
+static void		recvGiftDroids					(UDWORD from,UDWORD to,NETMSG *pMsg);
+static void		sendGiftDroids					(UDWORD from,UDWORD to);
+static void		giftResearch					(UDWORD from,UDWORD to,BOOL send);
+void			giftPower						(UDWORD from,UDWORD to,BOOL send);
 
-VOID			requestAlliance					(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
-VOID			breakAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
-VOID			formAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
-VOID			sendAlliance					(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
+void			requestAlliance					(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
+void			breakAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
+void			formAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
+void			sendAlliance					(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
 BOOL			recvAlliance					(NETMSG *pMsg,BOOL allowAudio);
-VOID			technologyGiveAway				(STRUCTURE *pS);
-VOID			addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
-VOID			recvMultiPlayerRandomArtifacts	(NETMSG *pMsg);
-VOID			giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
-VOID			processMultiPlayerArtifacts		(VOID);
+void			technologyGiveAway				(STRUCTURE *pS);
+void			addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
+void			recvMultiPlayerRandomArtifacts	(NETMSG *pMsg);
+void			giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
+void			processMultiPlayerArtifacts		(void);
 //DROID_TEMPLATE *pickDistribTempl				(UDWORD player);
 BOOL			addOilDrum						(UDWORD count);
 
 //BOOL			addDMatchDroid					(UDWORD count);
 //BOOL			foundDMatchDroid				(UDWORD player,UDWORD x,UDWORD y);
-//BOOL			deathmatchCheck					(VOID);
+//BOOL			deathmatchCheck					(void);
 //static BOOL		dMatchWinner					(UDWORD winplayer,BOOL bcast);
 //BOOL			recvdMatchWinner				(NETMSG *pMsg);
-VOID			addLoserGifts					(VOID);
+void			addLoserGifts					(void);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ BOOL sendGift(UDWORD type,UDWORD to)
 }
 // ////////////////////////////////////////////////////////////////////////////
 // give radar information
-VOID giftRadar(UDWORD from, UDWORD to,BOOL send)
+void giftRadar(UDWORD from, UDWORD to,BOOL send)
 {
 	NETMSG m;
 
@@ -323,7 +323,7 @@ static void giftResearch(UDWORD from,UDWORD to,BOOL send)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give Power
-VOID giftPower(UDWORD from,UDWORD to,BOOL send)
+void giftPower(UDWORD from,UDWORD to,BOOL send)
 {
 	UDWORD gifval;
 	NETMSG m;
@@ -582,7 +582,7 @@ BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)
 
 // ////////////////////////////////////////////////////////////////////////////
 // add an artifact on destruction if required.
-VOID  technologyGiveAway(STRUCTURE *pS)
+void  technologyGiveAway(STRUCTURE *pS)
 {
 	UDWORD	i;
 	UDWORD	x,y;
@@ -767,7 +767,7 @@ void addLoserGifts(void)
 
 ///////////////////////////////////////////////////////////////////////////////
 // splatter artifact gifts randomly about.
-VOID  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
+void  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 {
 	NETMSG m;
 	FEATURE	*pF;
@@ -835,7 +835,7 @@ BOOL addOilDrum(UDWORD count)
 
 // ///////////////////////////////////////////////////////////////
 // receive splattered artifacts
-VOID recvMultiPlayerRandomArtifacts(NETMSG *pMsg)
+void recvMultiPlayerRandomArtifacts(NETMSG *pMsg)
 {
 	UDWORD index,count,i,quantity,ref;
 	SDWORD type;
@@ -903,7 +903,7 @@ void giftArtifact(UDWORD owner,UDWORD x,UDWORD y)
 }
 
 // ///////////////////////////////////////////////////////////////
-VOID processMultiPlayerArtifacts(VOID)
+void processMultiPlayerArtifacts(void)
 {
 	static UDWORD lastCall;
 	FEATURE	*pF,*pFN;

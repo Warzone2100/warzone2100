@@ -62,12 +62,12 @@ extern void			intDisplayPlainForm	(struct _widget *psWidget, UDWORD xOffset,
 #define BUTPERFORM				8
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
-BOOL startLimitScreen	(VOID);
-VOID runLimitScreen		(VOID);
-VOID applyLimitSet		(VOID);
-VOID createLimitSet		(VOID);
+BOOL startLimitScreen	(void);
+void runLimitScreen		(void);
+void applyLimitSet		(void);
+void createLimitSet		(void);
 
-VOID displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -228,7 +228,7 @@ BOOL startLimitScreen(void)
 		if(useStruct(numButtons,i))
 		{
 			numButtons++;
-			sButInit.pUserData= (VOID*) i;
+			sButInit.pUserData= (void*) i;
 
 			widgAddForm(psWScreen, &sButInit);
 			sButInit.id	++;
@@ -256,7 +256,7 @@ BOOL startLimitScreen(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID runLimitScreen(void)
+void runLimitScreen(void)
 {
 	UDWORD id,statid;
 
@@ -319,10 +319,10 @@ VOID runLimitScreen(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID createLimitSet(VOID)
+void createLimitSet(void)
 {
 	UDWORD	i,numchanges;
-	VOID	*pChanges;
+	void	*pChanges;
 	UBYTE	*pEntry;
 
 	if(ingame.numStructureLimits)									// free the old set if required.
@@ -365,7 +365,7 @@ VOID createLimitSet(VOID)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID applyLimitSet(VOID)
+void applyLimitSet(void)
 {
 	UBYTE *pEntry;
 	UDWORD i;
@@ -410,7 +410,7 @@ VOID applyLimitSet(VOID)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-VOID displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

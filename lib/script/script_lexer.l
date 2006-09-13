@@ -286,7 +286,7 @@ pause					return PAUSE;
 
 	/* Match to type key words */
 void					{ scr_lval.tval = VAL_VOID; return TYPE; }
-VOID					{ scr_lval.tval = VAL_VOID; return TYPE; }
+void					{ scr_lval.tval = VAL_VOID; return TYPE; }
 string					{ scr_lval.tval = VAL_STRING; return TYPE; }
 STRING					{ scr_lval.tval = VAL_STRING; return TYPE; }
 bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }

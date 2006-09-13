@@ -57,14 +57,14 @@ typedef struct _res_type
 
 
 /* set the function to call when loading files with resloadfile*/
-extern VOID resSetLoadCallback(RESLOAD_CALLBACK funcToCall);
+extern void resSetLoadCallback(RESLOAD_CALLBACK funcToCall);
 
 
 /* callback type for res pre-load callback*/
 typedef BOOL (*RESPRELOAD_CALLBACK)(char *type, char *name, char *directory);
 
 /* set the function to call when loading files with resloadfile*/
-extern VOID resSetPreLoadCallback(RESPRELOAD_CALLBACK funcToCall);
+extern void resSetPreLoadCallback(RESPRELOAD_CALLBACK funcToCall);
 
 
 
@@ -108,14 +108,14 @@ extern BOOL resAddData(STRING *pType, STRING *pID, void *pData);
 
 /* Return the resource for a type and ID */
 extern void *resGetDataFromHash(STRING *pType, UDWORD HashedID);
-extern void *resGetData(STRING *pType, STRING *pID);
+extern void *resGetData(const STRING *pType, const STRING *pID);
 extern BOOL resPresent(STRING *pType, STRING *pID);
 void resToLower(STRING *pStr);
 
 // return the HashedID string for a piece of data
 extern BOOL resGetHashfromData(STRING *pType, void *pData, UDWORD *pHash);
 
-VOID resDoResLoadCallback();
+void resDoResLoadCallback(void);
 
 //return last imd resource
 char *GetLastResourceFilename(void);

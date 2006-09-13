@@ -2037,7 +2037,7 @@ void	setViewAngle(SDWORD angle)
 }
 
 
-UDWORD getViewDistance(VOID)
+UDWORD getViewDistance(void)
 {
 	return distance;
 }

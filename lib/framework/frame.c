@@ -269,7 +269,7 @@ static void processEvent(SDL_Event *event)
 
 
 
-static void initCursors()
+static void initCursors(void)
 {
         aCursors[CURSOR_ARROW - CURSOR_OFFSET] = init_system_cursor(cursor_arrow);
         aCursors[CURSOR_DEST - CURSOR_OFFSET] = init_system_cursor(cursor_dest);
@@ -300,7 +300,7 @@ static void initCursors()
 }
 
 
-static void freeCursors()
+static void freeCursors(void)
 {
 	unsigned int i = 0;
 	for( ; i < MAX_CURSORS; i++ )
@@ -653,10 +653,10 @@ BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSi
  * Accepts string and returns hashed integer.
  */
 /***************************************************************************/
-UINT HashString( char *String )
+UINT HashString( const char *String )
 {
 	UINT	iHashValue, i;
-	CHAR	*c = (CHAR *) String;
+	const CHAR *c = (const CHAR *) String;
 
 	assert(String!=NULL);
 	assert(*String!=0x0);
@@ -675,10 +675,10 @@ UINT HashString( char *String )
 	return iHashValue;
 }
 
-UINT HashStringIgnoreCase( char *String )
+UINT HashStringIgnoreCase( const char *String )
 {
 	UINT	iHashValue, i;
-	CHAR	*c = (CHAR *) String;
+	const CHAR	*c = (const CHAR *) String;
 
 	assert(String!=NULL);
 	assert(*String!=0x0);

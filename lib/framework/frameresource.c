@@ -48,13 +48,13 @@ void resSetPreLoadCallback(RESPRELOAD_CALLBACK funcToCall)
 }
 
 /* set the callback function for the res loader*/
-VOID resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
+void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
 {
 	resLoadCallback = funcToCall;
 }
 
 /* do the callback for the resload display function */
-VOID resDoResLoadCallback()
+void resDoResLoadCallback()
 {
 	if(resLoadCallback)
 	{
@@ -533,7 +533,7 @@ void *resGetDataFromHash(STRING *pType, UDWORD HashedID)
 
 
 /* Return the resource for a type and ID */
-void *resGetData(STRING *pType, STRING *pID)
+void *resGetData(const STRING *pType, const STRING *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;

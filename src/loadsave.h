@@ -1,5 +1,5 @@
 /***************************************************************************/
-/* 
+/*
  * loadsave.h
  */
 /***************************************************************************/
@@ -33,7 +33,7 @@ SAVE_FORCE
 extern BOOL		bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
 extern STRING saveGameName[256];
-extern STRING	sRequestResult[255];		
+extern STRING	sRequestResult[255];
 extern BOOL		bRequestLoad;
 
 /***************************************************************************/
@@ -45,9 +45,9 @@ extern BOOL		bRequestLoad;
 extern void		drawBlueBox		(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
 
 extern BOOL		addLoadSave		(LOADSAVE_MODE mode, CHAR *defaultdir,CHAR *extension,CHAR *title);
-extern BOOL		closeLoadSave	(VOID);
+extern BOOL		closeLoadSave	(void);
 extern BOOL		runLoadSave		(BOOL bResetMissionWidgets);
-extern BOOL		displayLoadSave	(VOID);
+extern BOOL		displayLoadSave	(void);
 
 extern void		removeWildcards	(char *pStr);
 

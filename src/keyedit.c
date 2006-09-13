@@ -62,7 +62,7 @@ static KEY_MAPPING	*selectedKeyMap;
 
 BOOL		runKeyMapEditor		(void);
 static BOOL keyMapToString		(STRING *pStr, KEY_MAPPING *psMapping);
-VOID		displayKeyMap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayKeyMap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 BOOL		startKeyMapEditor	(BOOL first);
 BOOL		saveKeyMap		(void);
 BOOL		loadKeyMap		(void);
@@ -289,7 +289,7 @@ static BOOL keyMapToString(STRING *pStr, KEY_MAPPING *psMapping)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-VOID displayKeyMap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayKeyMap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -424,7 +424,7 @@ BOOL startKeyMapEditor(BOOL first)
 
 
 	/* Add our first mapping to the form */
-	sButInit.pUserData= (VOID*)psPresent;
+	sButInit.pUserData= (void*)psPresent;
 	widgAddButton(psWScreen, &sButInit);
 	sButInit.id++;
 	sButInit.y +=  KM_ENTRYH +3;
@@ -457,7 +457,7 @@ BOOL startKeyMapEditor(BOOL first)
 		{
 			psPresent = psNext;
 			bubbleCount++;
-	 		sButInit.pUserData= (VOID*)psNext;
+			sButInit.pUserData= (void*)psNext;
 	 		widgAddButton(psWScreen, &sButInit);
 			 					// move on..
 	 		sButInit.id++;

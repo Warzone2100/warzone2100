@@ -9,27 +9,27 @@
 #include "netplay.h"
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETinitAudioCapture(VOID)
+BOOL NETinitAudioCapture(void)
 {
 	debug(LOG_SOUND, "NETinitAudioCapture");
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETshutdownAudioCapture(VOID)
+BOOL NETshutdownAudioCapture(void)
 {
 	debug(LOG_SOUND, "NETshutdownAudioCapture");
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETstartAudioCapture(VOID)
+BOOL NETstartAudioCapture(void)
 {
 	debug(LOG_SOUND, "NETstartAudioCapture");
 	return FALSE;
 }
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETstopAudioCapture(VOID)
+BOOL NETstopAudioCapture(void)
 {
 	debug(LOG_SOUND, "NETstopAudioCapture");
 	return FALSE;
@@ -38,7 +38,7 @@ BOOL NETstopAudioCapture(VOID)
 
 // ////////////////////////////////////////////////////////////////////////
 // update the pointers and process the buffer accordingly.
-BOOL NETprocessAudioCapture(VOID)
+BOOL NETprocessAudioCapture(void)
 {
 	debug(LOG_SOUND, "NETprocessAudioCapture");
 	return FALSE;
@@ -69,7 +69,7 @@ void NETplayIncomingAudio(NETMSG *pMsg)
 
 // ////////////////////////////////////////////////////////////////////////
 // close it all down
-BOOL NETshutdownAudioPlayback(VOID)
+BOOL NETshutdownAudioPlayback(void)
 {
 	debug(LOG_SOUND, "NETshutdownAudioPlayback");
 	return TRUE;

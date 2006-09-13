@@ -84,7 +84,7 @@ extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, U
 extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
-extern BOOL NETsetupTCPIP(LPVOID *addr, char * machine);
+extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
 BOOL						bHosted			= FALSE;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
@@ -126,60 +126,60 @@ extern int FEFont;
 // widget functions
 BOOL		addMultiBut					(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD width, UDWORD height,UDWORD tipres,UDWORD norm, UDWORD hi,BOOL showmouseover);
 BOOL		addMultiEditBox				(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD tip, STRING tipres[128],UDWORD icon,UDWORD iconid);
-static VOID addBlueForm					(UDWORD parent,UDWORD id,STRING *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
+static void addBlueForm					(UDWORD parent,UDWORD id,STRING *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
-VOID		displayChatEdit				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayMultiBut				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayWhiteBoard			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		intDisplayFeBox				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayRemoteGame			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayPlayer				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayMultiEditBox			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-VOID		displayForceDroid			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayChatEdit				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayMultiBut				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayWhiteBoard			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		intDisplayFeBox				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayRemoteGame			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayPlayer				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayMultiEditBox			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayForceDroid			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void Show_Map(char *imagedata); //added to show map -Q
 
 // find games
-static VOID addGames				(VOID);
-VOID		runGameFind				(VOID);
-VOID		startGameFind			(VOID);
+static void addGames				(void);
+void		runGameFind				(void);
+void		startGameFind			(void);
 
 // Connection option functions
 static BOOL	OptionsInet				(UDWORD);
-static VOID addConnections			(UDWORD);
-VOID		runConnectionScreen		(VOID);
-BOOL		startConnectionScreen	(VOID);
+static void addConnections			(UDWORD);
+void		runConnectionScreen		(void);
+BOOL		startConnectionScreen	(void);
 
 // Game option functions
-static	VOID	addOkBut			(VOID);
-static	VOID	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
+static	void	addOkBut			(void);
+static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
 UDWORD	addPlayerBox		(BOOL);				// players (mid) box
-static	VOID	addChatBox			(VOID);
-static	VOID	disableMultiButs	(VOID);
-static	VOID	processMultiopWidgets(UDWORD);
-static	VOID	SendFireUp			(VOID);
-VOID	kickPlayer			(DPID dpid);
-VOID			runMultiOptions		(VOID);
+static	void	addChatBox			(void);
+static	void	disableMultiButs	(void);
+static	void	processMultiopWidgets(UDWORD);
+static	void	SendFireUp			(void);
+void	kickPlayer			(DPID dpid);
+void			runMultiOptions		(void);
 BOOL			startMultiOptions	(BOOL);
-VOID			frontendMultiMessages(VOID);
+void			frontendMultiMessages(void);
 
 // whiteboard funcs
-static	BOOL	removeWhiteBoard	(VOID);
-static	BOOL	addWhiteBoard		(VOID);
-static	BOOL	runWhiteBoard		(VOID);
+static	BOOL	removeWhiteBoard	(void);
+static	BOOL	addWhiteBoard		(void);
+static	BOOL	runWhiteBoard		(void);
 
 static	UDWORD	bestPlayer			(UDWORD);
-static	VOID	decideWRF			(VOID);
+static	void	decideWRF			(void);
 
-static VOID		closeColourChooser	(VOID);
+static void		closeColourChooser	(void);
 static BOOL		SendColourRequest	(UDWORD player, UBYTE col,UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 BOOL			recvColourRequest	(NETMSG *pMsg);
 
 // Force selection functions
-static VOID		AvailableForces		(VOID);				// draw available templates
-static VOID		CurrentForce		(VOID);				// draw the current force
+static void		AvailableForces		(void);				// draw available templates
+static void		CurrentForce		(void);				// draw the current force
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -474,7 +474,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 
 // ////////////////////////////////////////////////////////////////////////////
 // Draw the connections screen.
-BOOL startConnectionScreen(VOID)
+BOOL startConnectionScreen(void)
 {
 	addBackdrop();										//background
 	addTopForm();										// logo
@@ -503,12 +503,12 @@ static void addConnections(UDWORD begin)
 	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, strresGetString(psStringRes,STR_CON_INTERNET),FALSE,FALSE);
 }
 
-VOID runConnectionScreen(void )
+void runConnectionScreen(void )
 {
 	UDWORD id;
 	static UDWORD chosenproto;
 	static char addr[128];
-	LPVOID finalconnection;
+	void * finalconnection;
 
 	processFrontendSnap(TRUE);
 
@@ -1334,7 +1334,7 @@ BOOL chooseColour(UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // colour chooser.
-static VOID addColourChooser(UDWORD player)
+static void addColourChooser(UDWORD player)
 {
 	UDWORD i;//,j;
 
@@ -1385,7 +1385,7 @@ static VOID addColourChooser(UDWORD player)
 	bColourChooserUp = TRUE;
 }
 
-static VOID closeColourChooser(void)
+static void closeColourChooser(void)
 {
 	bColourChooserUp = FALSE;
 
@@ -1576,7 +1576,7 @@ static void SendFireUp()
 }
 
 // host kick a player from a game.
-VOID kickPlayer(DPID dpid)
+void kickPlayer(DPID dpid)
 {
 	NETMSG m;
 	// send a kick msg
@@ -1588,7 +1588,7 @@ VOID kickPlayer(DPID dpid)
 }
 
 
-static VOID addOkBut(VOID)
+static void addOkBut(void)
 {
 	addMultiBut(psWScreen, MULTIOP_OPTIONS,CON_OK,
 		MULTIOP_OKX,MULTIOP_OKY,
@@ -1597,7 +1597,7 @@ static VOID addOkBut(VOID)
 		STR_MUL_OK,IMAGE_BIGOK,IMAGE_BIGOK,FALSE);
 }
 
-static VOID addChatBox(VOID)
+static void addChatBox(void)
 {
 	W_FORMINIT		sFormInit;
 	W_EDBINIT		sEdInit;
@@ -1720,7 +1720,7 @@ static void disableMultiButs(void)
 
 
 ////////////////////////////////////////////////////////////////////////////
-VOID	stopJoining(void)
+void	stopJoining(void)
 {
 	dwSelectedGame	 = 0;
 	saveConfig();
@@ -1794,7 +1794,7 @@ VOID	stopJoining(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-static VOID chooseSkirmishColours()
+static void chooseSkirmishColours()
 {
 	UDWORD col,i,k;
 	BOOL taken;
@@ -2468,7 +2468,7 @@ void frontendMultiMessages(void)
 	}
 }
 
-void runMultiOptions(VOID)
+void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh=0;
 	UDWORD			id,value;//,i;
@@ -2806,7 +2806,7 @@ BOOL startMultiOptions(BOOL bReenter)
 // ////////////////////////////////////////////////////////////////////////////
 
 
-static VOID CurrentForce(VOID)
+static void CurrentForce(void)
 {
 	W_FORMINIT		sFormInit;
 	UDWORD			numButtons, butPerForm;
@@ -2924,7 +2924,7 @@ static VOID CurrentForce(VOID)
 
 
 //////////////////////////////////
-static VOID AvailableForces(VOID)
+static void AvailableForces(void)
 {
 	W_FORMINIT		sFormInit;
 	DROID_TEMPLATE	*psTempl;
@@ -3010,7 +3010,7 @@ static VOID AvailableForces(VOID)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-VOID runForceSelect(VOID)
+void runForceSelect(void)
 {
 	UDWORD			currID,id,i;
 	DROID_TEMPLATE	*psTempl;
@@ -3162,7 +3162,7 @@ VOID runForceSelect(VOID)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL startForceSelect(VOID)
+BOOL startForceSelect(void)
 {
 	W_FORMINIT		sFormInit;
 	W_BARINIT		sBarInit;
@@ -3338,7 +3338,7 @@ BOOL runWhiteBoard()
 	return TRUE;
 }
 
-VOID displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = D_W+xOffset+psWidget->x;
 	UDWORD	y = D_H+yOffset+psWidget->y;

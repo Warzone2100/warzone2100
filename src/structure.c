@@ -1886,7 +1886,7 @@ void setStructTileDraw(STRUCTURE *psStruct)
 
 
 
-VOID buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD h )
+void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD h )
 {
 	UDWORD				x = atx >> TILE_SHIFT;
 	UDWORD				y = aty >> TILE_SHIFT;

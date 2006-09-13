@@ -99,7 +99,6 @@ typedef unsigned long ULONG;
 typedef unsigned char * LPBYTE;
 typedef signed int * LPDWORD;
 typedef char  * LPSTR;
-typedef void  * LPVOID;
 
 typedef struct
 {
@@ -127,7 +126,7 @@ typedef int DPID;
 
 #endif
 
-#ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly	
+#ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly
 #define _inline inline
 #define __inline inline
 #else
@@ -155,13 +154,9 @@ typedef int DPID;
 #define FALSE	(0)
 #endif
 
-/* locale types */
 
-#define VOID                    void
+/* defines for ONEINX - use
 
-
-/* defines for ONEINX - use 
-   
    if (ONEINX)
 		{
 		code.....

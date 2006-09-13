@@ -96,7 +96,7 @@ typedef struct TRACK
  */
 
 BOOL	sound_Init( SDWORD iMaxSameSamples );
-BOOL	sound_Shutdown();
+BOOL	sound_Shutdown(void);
 
 BOOL	sound_LoadTrackFromFile(char szFileName[]);
 void *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);

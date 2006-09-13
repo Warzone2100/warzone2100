@@ -12,8 +12,8 @@
 /***************************************************************************/
 
 extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
-extern BOOL		audio_Update();
-extern BOOL		audio_Shutdown();
+extern BOOL		audio_Update(void);
+extern BOOL		audio_Shutdown(void);
 extern BOOL		audio_Disabled( void );
 
 extern BOOL		audio_LoadTrackFromFile( char szFileName[] );

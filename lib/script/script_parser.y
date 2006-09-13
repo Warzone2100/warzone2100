@@ -4865,7 +4865,7 @@ BOOL scriptCompile(char *pData, UDWORD fileSize,
 
 
 /* A simple error reporting routine */
-void scr_error(char *pMessage, ...)
+void scr_error(const char *pMessage, ...)
 {
 	int		line;
 	char	*text;

@@ -3,7 +3,7 @@
  */
 
 
-extern BOOL startLimitScreen	(VOID);
-extern VOID runLimitScreen		(VOID);
-extern VOID applyLimitSet		(VOID);
-extern VOID createLimitSet		(VOID);
+extern BOOL startLimitScreen	(void);
+extern void runLimitScreen		(void);
+extern void applyLimitSet		(void);
+extern void createLimitSet		(void);

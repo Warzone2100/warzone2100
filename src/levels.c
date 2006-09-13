@@ -118,7 +118,7 @@ void levShutDown(void)
 
 
 // error report function for the level parser
-void levError(STRING *pError)
+void levError(const STRING *pError)
 {
 	char	*pText;
 	int		line;

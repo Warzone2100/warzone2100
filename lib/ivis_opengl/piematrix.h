@@ -84,8 +84,8 @@ extern int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD*
 
 //*************************************************************************
 
-extern void pie_PerspectiveBegin();
-extern void pie_PerspectiveEnd();
+extern void pie_PerspectiveBegin(void);
+extern void pie_PerspectiveEnd(void);
 
 //*************************************************************************
 

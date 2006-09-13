@@ -391,7 +391,7 @@ int32 pie_Transform(iVector *v3d, iPoint *v2d)
 
 //*************************************************************************
 
-void pie_PerspectiveBegin() {
+void pie_PerspectiveBegin(void) {
 	float width = pie_GetVideoBufferWidth();
 	float height = pie_GetVideoBufferHeight();
 	float xangle = width/6;
@@ -406,7 +406,7 @@ void pie_PerspectiveBegin() {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void pie_PerspectiveEnd() {
+void pie_PerspectiveEnd(void) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), 0, 1, -1);

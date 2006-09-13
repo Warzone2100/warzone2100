@@ -210,7 +210,7 @@ static BOOL _addLoadSave(BOOL bLoad,CHAR *sSearchPath,CHAR *sExtension, CHAR *ti
 	sFormInit.height = LOADSAVE_BANNER_DEPTH;
 	sFormInit.disableChildren = FALSE;
 	sFormInit.pDisplay = displayLoadBanner;
-	sFormInit.pUserData = (VOID *)bLoad;
+	sFormInit.pUserData = (void *)bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
 
 

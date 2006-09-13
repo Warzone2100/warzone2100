@@ -713,7 +713,7 @@ void	setConsoleLineInfo(UDWORD vis)
 }
 
 /* get how many lines are allowed and how many are visible */
-UDWORD getConsoleLineInfo(VOID)
+UDWORD getConsoleLineInfo(void)
 {
 	return consoleVisibleLines;
 }
@@ -776,7 +776,7 @@ void console(const char *pFormat, ...)
 {
 	char		aBuffer[500];   // Output string buffer
     va_list		pArgs;					  // Format arguments
-	
+
 	/* Initialise the argument list */
 	va_start(pArgs, pFormat);
 

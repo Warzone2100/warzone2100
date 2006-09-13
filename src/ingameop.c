@@ -58,7 +58,7 @@ void ResetMaxStringWidth(void);
 
 
 
-static BOOL addQuitOptions(VOID)
+static BOOL addQuitOptions(void)
 {
 	W_FORMINIT		sFormInit;
 //	UWORD WindowWidth;

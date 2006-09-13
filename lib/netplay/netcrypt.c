@@ -30,7 +30,7 @@ UDWORD	NEThashBuffer(char *pData, UDWORD size);
 
 BOOL	NETsetKey			(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
 NETMSG*	NETmanglePacket		(NETMSG *msg);
-VOID	NETunmanglePacket	(NETMSG *msg);
+void	NETunmanglePacket	(NETMSG *msg);
 
 BOOL	NETmangleData		( long *input, long *result, UDWORD dataSize);
 BOOL	NETunmangleData		( long *input, long *result, UDWORD dataSize);
@@ -228,7 +228,7 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 // decrypt a netplay packet
 // messages SHOULD be 8byte multiples, not required tho. will return padded out..
 
-VOID NETunmanglePacket(NETMSG *msg)
+void NETunmanglePacket(NETMSG *msg)
 {
 	NETMSG result;
 	UDWORD pos=0;

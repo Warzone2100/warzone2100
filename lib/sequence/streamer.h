@@ -27,8 +27,8 @@
 	#define TRUE 1
 #endif
 
-#define FAR      
-#define HUGE     
+#define FAR
+#define HUGE
 
 typedef unsigned int 			BOOL;
 
@@ -42,9 +42,6 @@ typedef char *					LPBYTE;
 typedef unsigned char *			LPSTR;
 typedef unsigned char  			UBYTE;
 typedef unsigned char *			LPUBYTE;
-
-typedef void					VOID;
-typedef void *					LPVOID;
 
 typedef float					FLOAT;
 
@@ -85,7 +82,7 @@ typedef	enum
 	ESCAPEUNKNOWN,
 	ESCAPE124=124,
 	ESCAPE130=130
-		
+
 } CODECTYPE;
 
 #define DFLAG_INVIEWPORT				1
@@ -130,10 +127,10 @@ typedef	enum
 #define ALPHA_MIX                     (128+3)
 #define ALPHA_MOSAIC                  (128+4)
 #define ALPHA_MIX_PHASED			  (128+5)
-#define RPL_VESA_MODE 0x110   
+#define RPL_VESA_MODE 0x110
 
 #define DOS 1
-                    
+
 #define DEFAULT_COLOUR_NONE                  0
 #define DEFAULT_COLOUR_NOT                   1
 #define DEFAULT_COLOUR_HALF                  2
@@ -171,7 +168,7 @@ typedef	enum
 
 #define	STREAMER_TIMERFACTOR							1
 #define	STREAMER_READSIZE								(1024<<3)
-#define	STREAMER_ACCURACY								100		
+#define	STREAMER_ACCURACY								100
 #define	STREAMER_FRAMERATE								0
 #define	STREAMER_INTERRUPTFREQ							1000
 #define	STREAMER_DOUBLEBUFFERSIZE						(1024<<4)
@@ -237,85 +234,85 @@ extern "C"
 {
 #endif
 
-LPSTR 
+LPSTR
 Movie_GetAuthor( LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetColourDepth( LPMOVIEHANDLE	mhandle );
 
-LPSTR 
+LPSTR
 Movie_GetCopyright( LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetCurrentAudioChunk(	LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetCurrentFrame( LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetCurrentVideoChunk(	LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetFormat( LPMOVIEHANDLE	mhandle );
 
-FLOAT 
+FLOAT
 Movie_GetFrameRate( LPMOVIEHANDLE mhandle);
 
-LONG 
+LONG
 Movie_GetFramesInBuffer( LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetFramesPerChunk(LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetMovieChunks( LPMOVIEHANDLE	mhandle );
 
-LPSTR 
+LPSTR
 Movie_GetName(	LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetSoundChannels( LPMOVIEHANDLE mhandle );
 
-LPSTR 
+LPSTR
 Movie_GetSoundFormatString(	LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetSoundPrecision( LPMOVIEHANDLE	mhandle );
 
-LONG 
+LONG
 Movie_GetSoundRate( LPMOVIEHANDLE mhandle);
 
 LONG
 Movie_GetSyncAdjust( LPSOUNDHANDLE shandle );
 
-LONG 
+LONG
 Movie_GetTotalFrames( LPMOVIEHANDLE	mhandle );
 
-FLOAT 
+FLOAT
 Movie_GetTotalTime( LPMOVIEHANDLE mhandle );
 
-LONG 
+LONG
 Movie_GetXSize( LPMOVIEHANDLE mhandle);
 
-LONG 
+LONG
 Movie_GetYSize( LPMOVIEHANDLE mhandle);
 
-VOID
+void
 Movie_SetFrameRate( LPMOVIEHANDLE mhandle, FLOAT framerate);
 
-VOID
+void
 Movie_SetSyncAdjust( LPMOVIEHANDLE mhandle, LPSOUNDHANDLE shandle, LONG adjust );
 
 
 
 
 
-STRESULT 
+STRESULT
 Streamer_AlphaApply(	LPVIDEOHANDLE vhandle,
 						LPALPHAHANDLE ahandle,
 						LPBYTE buffer);
 
-STRESULT 
+STRESULT
 Streamer_AlphaRemove(	LPVIDEOHANDLE vhandle,
 						LPALPHAHANDLE ahandle,
 						LPBYTE buffer);
@@ -328,25 +325,25 @@ STRESULT
 Streamer_DoPreload( LPMOVIEHANDLE mhandle,
 					LPSOUNDHANDLE shandle);
 
-unsigned char * 
+unsigned char *
 Streamer_GetSoundBuffer(	LPSOUNDHANDLE	shandle,
 							LONG			bufferno );
-LONG 
-Streamer_GetSoundDecodeMode( LPSOUNDHANDLE	shandle ); 
+LONG
+Streamer_GetSoundDecodeMode( LPSOUNDHANDLE	shandle );
 
-STRESULT 
+STRESULT
 Streamer_GetVideoPitch( LPVIDEOHANDLE vhandle , LONG *xpitch, LONG *ydepth);
 
 STRESULT
 Streamer_InitMovie(	LPMOVIEHANDLE	*handle,
-					VOID			(*ProgressCallback)(),
+					void			(*ProgressCallback)(),
 					LONG			progressDelta,
 					LPSTR			pathname,
 					ULONG			buffersize,
 					ULONG			properties);
 
-STRESULT 
-Streamer_InitSound(	VOID (*SoundBufferCallback)(LPSOUNDHANDLE ),
+STRESULT
+		Streamer_InitSound(	void (*SoundBufferCallback)(LPSOUNDHANDLE ),
 					LPSOUNDHANDLE *handle,
 					UINT dbufsize,
 					UINT compressionfactor,
@@ -374,12 +371,12 @@ Streamer_InitVideo(	LPVIDEOHANDLE	*handle,
 					LPLONG			bufferPixelWidth,
 					LPLONG			bufferPixelDepth);
 
-STRESULT 
+STRESULT
 Streamer_MapVideo(	LPVIDEOHANDLE	vhandle,
-					LPBYTE			buffer,		
+					LPBYTE			buffer,
 					LONG 			defop);
 
-STRESULT 
+STRESULT
 Streamer_NoMalloc_InitMovie(	LPMOVIEHANDLE	*handle,
 							void	(*ProgressCallback)(),
 							LONG	progressDelta,
@@ -388,7 +385,7 @@ Streamer_NoMalloc_InitMovie(	LPMOVIEHANDLE	*handle,
 							ULONG	memoryBufferSize,
 							ULONG	properties);
 
-STRESULT 
+STRESULT
 Streamer_NoMalloc_InitSound(	void (*SoundBufferCallback)(LPSOUNDHANDLE ),
 							LPSOUNDHANDLE *handle,
 							UINT dbufsize,
@@ -399,7 +396,7 @@ Streamer_NoMalloc_InitSound(	void (*SoundBufferCallback)(LPSOUNDHANDLE ),
 							LPBYTE memoryBuffer,
 							LONG memoryBufferSize);
 
-STRESULT 
+STRESULT
 Streamer_NoMalloc_InitVideo(	LPVIDEOHANDLE	*handle,
 							LPMOVIEHANDLE	mhandle,
 							UINT		   	moviexsize,
@@ -416,29 +413,29 @@ Streamer_NoMalloc_InitVideo(	LPVIDEOHANDLE	*handle,
 							LPBYTE			memoryBuffer,
 							LONG			memoryBufferSize);
 
-LONG 
+LONG
 Streamer_NoMalloc_MovieBufferRequired( void);
 
-STRESULT 
+STRESULT
 Streamer_NoMalloc_ShutDownMovie( LPMOVIEHANDLE * handle);
 
-STRESULT 
+STRESULT
 Streamer_NoMalloc_ShutDownSound(LPSOUNDHANDLE  *handle);
 
-STRESULT 
+STRESULT
 Streamer_NoMalloc_ShutDownVideo(LPVIDEOHANDLE *handle);
 
-LONG 
+LONG
 Streamer_NoMalloc_SoundBufferRequired( );
 
-LONG 
-Streamer_NoMalloc_VideoBufferRequired(	UINT moviex, 
-									UINT moviey, 
+LONG
+Streamer_NoMalloc_VideoBufferRequired(	UINT moviex,
+									UINT moviey,
 									LONG properties,
 									LPLONG	bufferPixelWidth,
 									LPLONG	bufferPixelDepth);
 
-STRESULT 
+STRESULT
 Streamer_SetPixelFormat(	LPVIDEOHANDLE	handle,
 							WORD			flags,
 							BYTE			ap,
@@ -450,7 +447,7 @@ Streamer_SetPixelFormat(	LPVIDEOHANDLE	handle,
 							BYTE			bp,
 							BYTE			bc);
 
-STRESULT 
+STRESULT
 Streamer_SetPreloadAmount(	LPMOVIEHANDLE mhandle,
 							ULONG amount);
 
@@ -464,44 +461,44 @@ Streamer_SetVideoMappings(	LPVIDEOHANDLE	handle,
 							UINT			viewportheight,
 							UINT			properties);
 
-STRESULT 
+STRESULT
 Streamer_SetVideoPitch( LPVIDEOHANDLE vhandle, LONG xpitch, LONG ydepth);
 
-STRESULT 
+STRESULT
 Streamer_ShutDownMovie( LPMOVIEHANDLE * handle);
 
-STRESULT 
+STRESULT
 Streamer_ShutDownSound( LPSOUNDHANDLE *handle);
 
-STRESULT 
+STRESULT
 Streamer_ShutDownVideo( LPVIDEOHANDLE *handle);
 
-STRESULT 
+STRESULT
 Streamer_Stream(	LPMOVIEHANDLE	mhandle,
 					LPVIDEOHANDLE	vhandle,
 					LPSOUNDHANDLE	shandle,
 					LPALPHAHANDLE	ahandle,
 					LONG 			   framestoplay,
 					LPBYTE 			videoFrameBuffer,
-					LPBYTE 			dataFrameBuffer,    
+					LPBYTE 			dataFrameBuffer,
 					LPBYTE 			ovlframe,
 					LONG 			   ovlindex);
 
 
-STRESULT 
+STRESULT
 Streamer_SetSoundBuffer(	LPSOUNDHANDLE	shandle,
 							LONG			bufferno,
 							unsigned char *	soundbuffer);
 
 STRESULT
-Streamer_SetSoundDecodeMode(	LPSOUNDHANDLE	handle, 
+Streamer_SetSoundDecodeMode(	LPSOUNDHANDLE	handle,
 								LONG 			mode );
 
-STRESULT 
-Streamer_SwitchToGraphicsMode( VOID );
+STRESULT
+		Streamer_SwitchToGraphicsMode( void );
 
 STRESULT
-Streamer_SwitchToTextMode( VOID );
+		Streamer_SwitchToTextMode( void );
 
 
 STRESULT
@@ -518,17 +515,17 @@ Streamer_ResetMovie( LPMOVIEHANDLE	mhandle,
 
 LONG
 Alpha_MapMemReq(	LPALPHAHANDLE	ahandle );
-	
+
 #if 0
-LONG 
+LONG
 Movie_GetVolume( LPSOUNDHANDLE shandle);
 #endif
 
 
-LPALPHAHANDLE 
+LPALPHAHANDLE
 Alpha_CreateEffects( LONG Width, LONG Height );
 
-VOID 
+void
 Alpha_FreeEffects( LPALPHAHANDLE );
 
 LPBYTE

@@ -40,7 +40,7 @@ extern void scrvGetErrorData(int *pLine, char **ppText);
 
 /* A simple error reporting routine */
 
-extern void scrv_error(char *pMessage,...);
+extern void scrv_error(const char *pMessage,...);
 
 
 // parse a value file
