@@ -54,7 +54,7 @@ void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
 }
 
 /* do the callback for the resload display function */
-void resDoResLoadCallback()
+void resDoResLoadCallback(void)
 {
 	if(resLoadCallback)
 	{

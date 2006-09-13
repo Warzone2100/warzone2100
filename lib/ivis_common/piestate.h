@@ -141,7 +141,7 @@ extern SDWORD	pieStateCount;
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_SetDefaultStates();//Sets all states
+extern void pie_SetDefaultStates(void);//Sets all states
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern WZ_DEPRECATED void pie_SetGammaValue(float val);
 //renderer capability

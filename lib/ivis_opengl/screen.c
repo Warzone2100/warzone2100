@@ -515,7 +515,7 @@ METHODDEF(void) term_destination(j_compress_ptr cinfo) {
 	free(dm->buffer);
 }
 
-void screenDoDumpToDiskIfRequired()
+void screenDoDumpToDiskIfRequired(void)
 {
 	static unsigned char* buffer = NULL;
 	static unsigned int buffer_size = 0;

@@ -152,7 +152,7 @@ void pie_BeginLighting(float x, float y, float z) {
 	shadows = TRUE;
 }
 
-void pie_EndLighting() {
+void pie_EndLighting(void) {
 	shadows = FALSE;
 	lighting = FALSE;
 }
@@ -824,7 +824,7 @@ void pie_DrawRemainingTransShapes() {
 	nb_tshapes = 0;
 }
 
-void pie_RemainingPasses() {
+void pie_RemainingPasses(void) {
 	pie_DrawShadows();
 	pie_DrawRemainingTransShapes();
 }

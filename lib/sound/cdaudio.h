@@ -11,7 +11,7 @@ BOOL	cdAudio_PlayTrack( SDWORD iTrack );
 BOOL	cdAudio_Stop( void );
 BOOL	cdAudio_Pause( void );
 BOOL	cdAudio_Resume( void );
-void	cdAudio_Update();
+void	cdAudio_Update(void);
 
 /***************************************************************************/
 

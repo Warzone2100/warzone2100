@@ -1,3 +1,5 @@
+#include "adpcm.h"
+
 char index_adjust[8] = { -1, -1, -1, -1, 2, 4, 6, 8 };
 
 short step_size[89] = {
@@ -62,7 +64,7 @@ short adpcm_decode_sample(char code) {
 	return pred_val;
 }
 
-void adpcm_init() {
+void adpcm_init(void) {
 	pred_val = 0;
 	step_idx = 0;
 }

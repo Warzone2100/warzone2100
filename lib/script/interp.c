@@ -958,7 +958,7 @@ UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address)
 	return TRUE;
 }
 
-BOOL IsRetStackEmpty()
+BOOL IsRetStackEmpty(void)
 {
 	if(retStackPos == (-1)) return TRUE;
 	return FALSE;
@@ -981,7 +981,7 @@ BOOL PopRetStack(UDWORD  *psVal)
 	return TRUE;
 }
 
-SDWORD GetCallDepth()
+SDWORD GetCallDepth(void)
 {
 	return (retStackPos + 1) / 2;
 }

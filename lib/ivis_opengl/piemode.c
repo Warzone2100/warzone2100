@@ -44,7 +44,7 @@ int32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
  *	Local ProtoTypes
  */
 /***************************************************************************/
-extern void screenDoDumpToDiskIfRequired();
+extern void screenDoDumpToDiskIfRequired(void);
 
 /***************************************************************************/
 /*

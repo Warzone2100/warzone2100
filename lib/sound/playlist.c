@@ -23,7 +23,7 @@ static WZ_TRACK playlist[NB_TRACKS];
 
 #define CURRENT_TRACK playlist[current_track]
 
-void PlayList_Init() {
+void PlayList_Init(void) {
 	unsigned int i;
 
 	for (i = 0; i < NB_TRACKS; ++i) {
@@ -34,7 +34,7 @@ void PlayList_Init() {
 	}
 }
 
-void PlayList_Quit() {
+void PlayList_Quit(void) {
 	unsigned int i, j;
 
 	for( i = 0; i < NB_TRACKS; ++i ) {
@@ -148,7 +148,7 @@ void PlayList_SetTrack(unsigned int t) {
 	current_song = 0;
 }
 
-char* PlayList_CurrentSong() {
+char* PlayList_CurrentSong(void) {
 	if (current_song >= CURRENT_TRACK.nb_songs) {
 		return NULL;
 	} else {
@@ -156,7 +156,7 @@ char* PlayList_CurrentSong() {
 	}
 }
 
-char* PlayList_NextSong() {
+char* PlayList_NextSong(void) {
 	if (++current_song >= CURRENT_TRACK.nb_songs) {
 		PlayList_Shuffle();
 		current_song = 0;
@@ -169,6 +169,6 @@ char* PlayList_NextSong() {
 	}
 }
 
-void PlayList_DeleteCurrentSong() {
+void PlayList_DeleteCurrentSong(void) {
 }
 

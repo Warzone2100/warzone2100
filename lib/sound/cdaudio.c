@@ -183,7 +183,7 @@ BOOL cdAudio_Close( void )
 
 #ifndef WZ_NOMP3
 
-void mp3_refill() {
+static void mp3_refill(void) {
 	while (mad_frame_decode(&mp3_frame, &mp3_stream)) {
 		int size;
 
