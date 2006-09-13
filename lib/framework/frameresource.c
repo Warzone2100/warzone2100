@@ -145,7 +145,7 @@ BOOL resLoad(STRING *pResFile, SDWORD blockID,
 
 
 /* Allocate a RES_TYPE structure */
-static BOOL resAlloc(STRING *pType, RES_TYPE **ppsFunc)
+static BOOL resAlloc(const STRING *pType, RES_TYPE **ppsFunc)
 {
 	RES_TYPE	*psT;
 
@@ -183,7 +183,7 @@ static BOOL resAlloc(STRING *pType, RES_TYPE **ppsFunc)
 
 
 /* Add a buffer load function for a file type */
-BOOL resAddBufferLoad(STRING *pType, RES_BUFFERLOAD buffLoad,
+BOOL resAddBufferLoad(const STRING *pType, RES_BUFFERLOAD buffLoad,
 					  RES_FREE release)
 {
 	RES_TYPE	*psT;
@@ -486,7 +486,7 @@ BOOL resLoadFile(STRING *pType, STRING *pFile)
 
 
 /* Return the resource for a type and hashedname */
-void *resGetDataFromHash(STRING *pType, UDWORD HashedID)
+void *resGetDataFromHash(const STRING *pType, UDWORD HashedID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -583,7 +583,7 @@ void *resGetData(const STRING *pType, const STRING *pID)
 }
 
 
-BOOL resGetHashfromData(STRING *pType, void *pData, UDWORD *pHash)
+BOOL resGetHashfromData(const STRING *pType, const void *pData, UDWORD *pHash)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -628,7 +628,7 @@ BOOL resGetHashfromData(STRING *pType, void *pData, UDWORD *pHash)
 
 
 /* Simply returns true if a resource is present */
-BOOL resPresent(STRING *pType, STRING *pID)
+BOOL resPresent(const STRING *pType, const STRING *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;

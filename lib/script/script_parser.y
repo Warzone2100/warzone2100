@@ -5184,7 +5184,7 @@ BOOL scriptLookUpVariable(STRING *pIdent, VAR_SYMBOL **ppsSym)
 
 
 /* Add a new trigger symbol */
-BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
+BOOL scriptAddTrigger(const STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 {
 	TRIGGER_SYMBOL		*psTrigger, *psCurr, *psPrev;
 

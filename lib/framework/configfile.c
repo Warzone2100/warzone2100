@@ -150,7 +150,7 @@ void registry_set_key( const char *k, const char *v )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL registry_load( char *filename )
+BOOL registry_load( const char *filename )
 {
 	char buffer[MAXLINESIZE];
 	char *bptr = NULL, *bufstart = NULL;
@@ -210,7 +210,7 @@ BOOL registry_load( char *filename )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL registry_save( char *filename )
+BOOL registry_save( const char *filename )
 {
 	char buffer[MAXLINESIZE * REGISTRY_HASH_SIZE];
 	unsigned int i;

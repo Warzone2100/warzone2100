@@ -265,7 +265,7 @@ extern BOOL scriptLookUpType(STRING *pIdent, INTERP_TYPE *pType);
 extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
 
 /* Add a new trigger symbol */
-extern BOOL scriptAddTrigger(STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
+extern BOOL scriptAddTrigger(const STRING *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
 
 /* Add a new event symbol */
 extern BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs);

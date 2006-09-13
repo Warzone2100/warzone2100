@@ -135,8 +135,8 @@ extern BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 //resets the event timer - updateTime
 extern void eventTimeReset(UDWORD initTime);
 
-extern STRING *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
-extern STRING *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
+extern const STRING *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
+extern const STRING *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
 
 extern BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex);
 

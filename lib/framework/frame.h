@@ -163,10 +163,10 @@ BOOL loadFile(const char *pFileName,		// The filename
 extern BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
 
 // load a file from disk into a fixed memory buffer
-BOOL loadFileToBuffer(char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
+BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
 // as above but returns quietly if no file found
-BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSize,
+BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
                              UDWORD *pSize);
 
 extern SDWORD ftol(float f);

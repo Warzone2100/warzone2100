@@ -608,14 +608,14 @@ BOOL loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
 }
 
 // load a file from disk into a fixed memory buffer
-BOOL loadFileToBuffer(char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(unix_path(pFileName), &pFileBuffer, pSize, FALSE, TRUE);
 }
 
 // as above but returns quietly if no file found
-BOOL loadFileToBufferNoError(char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(unix_path(pFileName), &pFileBuffer, pSize, FALSE, FALSE);
@@ -704,7 +704,7 @@ UINT HashStringIgnoreCase( const char *String )
 //
 // PosOfDot and/of PosOfSlash can be NULL and then nothing will be stored
 //
-void ScanFilename(char *Fullname, int *PosOfDot, int *PosOfSlash)
+void ScanFilename(const char *Fullname, int *PosOfDot, int *PosOfSlash)
 {
 	int Namelength;
 

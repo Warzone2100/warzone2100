@@ -14,7 +14,7 @@
 typedef struct AUDIO_ID
 {
 	SDWORD	iID;
-	STRING	*pWavStr;
+	const STRING	*pWavStr;
 }
 AUDIO_ID;
 
@@ -481,7 +481,7 @@ static AUDIO_ID asAudioID[] =
 /***************************************************************************/
 
 BOOL
-audioID_GetIDFromStr( STRING *pWavStr, SDWORD *piID )
+audioID_GetIDFromStr( const STRING *pWavStr, SDWORD *piID )
 {
 	SDWORD		i;
 

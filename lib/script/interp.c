@@ -222,7 +222,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	UDWORD		CurEvent;
 	BOOL		bStop,bEvent;
 	SDWORD		callDepth;
-	STRING		*pTrigLab, *pEventLab;
+	const STRING	*pTrigLab, *pEventLab;
 
 	//debug(LOG_SCRIPT, "interpRunScript 1");
 

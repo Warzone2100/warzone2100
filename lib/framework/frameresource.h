@@ -93,7 +93,7 @@ extern void resReleaseBlockData(SDWORD blockID);
 extern void resReleaseAllData(void);
 
 /* Add a buffer load and release function for a file type */
-extern BOOL	resAddBufferLoad(STRING *pType, RES_BUFFERLOAD buffLoad,
+extern BOOL	resAddBufferLoad(const STRING *pType, RES_BUFFERLOAD buffLoad,
 							 RES_FREE release);
 
 /* Add a file name load and release function for a file type */
@@ -107,13 +107,13 @@ extern BOOL resLoadFile(STRING *pType, STRING *pFile);
 extern BOOL resAddData(STRING *pType, STRING *pID, void *pData);
 
 /* Return the resource for a type and ID */
-extern void *resGetDataFromHash(STRING *pType, UDWORD HashedID);
+extern void *resGetDataFromHash(const STRING *pType, UDWORD HashedID);
 extern void *resGetData(const STRING *pType, const STRING *pID);
-extern BOOL resPresent(STRING *pType, STRING *pID);
+extern BOOL resPresent(const STRING *pType, const STRING *pID);
 void resToLower(STRING *pStr);
 
 // return the HashedID string for a piece of data
-extern BOOL resGetHashfromData(STRING *pType, void *pData, UDWORD *pHash);
+extern BOOL resGetHashfromData(const STRING *pType, const void *pData, UDWORD *pHash);
 
 void resDoResLoadCallback(void);
 

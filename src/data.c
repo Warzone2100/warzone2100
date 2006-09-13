@@ -1199,7 +1199,7 @@ BOOL dataSaveGameLoad(char *pFile, void **ppData)
 // this is also defined in frameresource.c - needs moving to a .h file
 typedef struct
 {
-	STRING *aType;				// points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
+	const STRING *aType;			// points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
 	RES_BUFFERLOAD buffLoad;		// routine to process the data for this type
 	RES_FREE release;			// routine to release the data (NULL indicates none)
 	void *ResourceData;			// Linked list of data - set to null initially
