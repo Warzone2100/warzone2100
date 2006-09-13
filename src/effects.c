@@ -57,7 +57,7 @@
 extern UWORD OffScreenEffects;
 
 /* Our list of all game world effects */
-EFFECT	asEffectsList[MAX_EFFECTS];
+static EFFECT	asEffectsList[MAX_EFFECTS];
 
 #define FIREWORK_EXPLODE_HEIGHT			400
 #define STARBURST_RADIUS				150
@@ -176,7 +176,7 @@ UDWORD IMDGetNumFrames(iIMDShape *Shape);
 static	FRACT	fraction;
 
 // ----------------------------------------------------------------------------------------
-BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
+static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 {
 	switch(group)
 	{
@@ -201,7 +201,7 @@ BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 		break;
 	}
 }
-BOOL	utterlyReject(EFFECT_GROUP group, EFFECT_TYPE type)
+static BOOL	utterlyReject(EFFECT_GROUP group, EFFECT_TYPE type)
 {
 	switch(group)
 	{
@@ -1788,7 +1788,7 @@ UDWORD	brightness,specular;
 }
 
 // ----------------------------------------------------------------------------------------
-BOOL	rejectLandLight(LAND_LIGHT_SPEC type)
+static BOOL	rejectLandLight(LAND_LIGHT_SPEC type)
 {
 UDWORD	timeSlice;
 

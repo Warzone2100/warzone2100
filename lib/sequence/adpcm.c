@@ -19,7 +19,7 @@ int step_idx = 0;
 
 /* This code is "borrowed" from the ALSA library 
    http://www.alsa-project.org */
-short adpcm_decode_sample(char code) {
+static short adpcm_decode_sample(char code) {
 	short pred_diff;	/* Predicted difference to next sample */
 	short step;		/* holds previous step_size value */
 	char sign;

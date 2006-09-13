@@ -7,7 +7,7 @@
 #include "miscimd.h"
 
 /* Our great big array of imds */
-MISC_IMD	miscImds[] =
+static MISC_IMD	miscImds[] =
 {						// Previous imd pointer names
 	{NULL,"fxsexp"},	// explosionSmallImd	MI_EXPLOSION_SMALL
 	{NULL,"fxlexp"},	// explosionMediumImd	MI_EXPLOSION_MEDIUM

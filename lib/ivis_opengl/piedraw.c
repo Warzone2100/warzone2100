@@ -69,7 +69,7 @@ typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 
-BOOL stencil_one_pass() {
+static BOOL stencil_one_pass(void) {
 	static BOOL initialised = FALSE;
 	static BOOL return_value;
 
@@ -694,7 +694,7 @@ void inverse_matrix(float* src, float * dst) {
 	dst[8] = invdet*(src[0]*src[5]-src[4]*src[1]);
 }
 
-void pie_DrawShadows() {
+static void pie_DrawShadows(void) {
 	static BOOL dlist_defined = FALSE;
 	static GLuint dlist;
 	unsigned int i;
@@ -809,7 +809,7 @@ void pie_DrawShadows() {
 	nb_scshapes = 0;
 }
 
-void pie_DrawRemainingTransShapes() {
+static void pie_DrawRemainingTransShapes(void) {
 	unsigned int i;
 
 	for (i = 0; i < nb_tshapes; ++i) {

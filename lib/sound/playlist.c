@@ -126,7 +126,7 @@ char PlayList_Read(const char* path) {
 	return 0;
 }
 
-void PlayList_Shuffle() {
+static void PlayList_Shuffle(void) {
 	if (CURRENT_TRACK.shuffle) {
 		unsigned int i;
 

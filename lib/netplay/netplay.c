@@ -38,7 +38,7 @@ char* master_server = "warzone2100.kicks-ass.org";
 
 static BOOL allow_joining = FALSE;
 
-void NETallowJoining();
+static void NETallowJoining(void);
 BOOL MultiPlayerJoin(DPID dpid);
 BOOL MultiPlayerLeave(DPID dpid);
 
@@ -69,7 +69,7 @@ typedef struct {
 	unsigned int	bytes;
 } NETBUFSOCKET;
 
-NETBUFSOCKET* NET_createBufferedSocket() {
+static NETBUFSOCKET* NET_createBufferedSocket(void) {
 	NETBUFSOCKET* bs = (NETBUFSOCKET*)malloc(sizeof(NETBUFSOCKET));
 
 	bs->socket = NULL;
@@ -221,7 +221,7 @@ typedef struct {
 
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
 
-void NET_InitPlayers() {
+static void NET_InitPlayers(void) {
 	unsigned int i;
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i) {
@@ -1134,7 +1134,7 @@ void NETregisterServer(int state) {
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 
-void NETallowJoining() {
+static void NETallowJoining(void) {
 	unsigned int i;
 	UDWORD numgames=1;	// always 1 on normal server
 	char buffer[5];

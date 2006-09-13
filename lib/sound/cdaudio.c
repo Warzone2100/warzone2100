@@ -233,7 +233,7 @@ static inline signed int scale_sample(mad_fixed_t sample)
 
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-int mp3_read_buffer(char *buffer, const int size) {
+static int mp3_read_buffer(char *buffer, const int size) {
 	int samples = 0;
 
 	while (samples < size) {
@@ -264,7 +264,7 @@ int mp3_read_buffer(char *buffer, const int size) {
 #endif
 
 #ifndef WZ_CDA
-BOOL cdAudio_OpenTrack(char* filename) {
+static BOOL cdAudio_OpenTrack(char* filename) {
 	if (!music_initialized) {
 		return FALSE;
 	}
@@ -356,7 +356,7 @@ BOOL cdAudio_OpenTrack(char* filename) {
 	return FALSE; // unhandled
 }
 
-BOOL cdAudio_CloseTrack() {
+static BOOL cdAudio_CloseTrack(void) {
 	if (music_track != 0) {
 		int queued, processed, all;
 
@@ -384,7 +384,7 @@ BOOL cdAudio_CloseTrack() {
 	return TRUE;
 }
 
-BOOL cdAudio_FillBuffer(ALuint b) {
+static BOOL cdAudio_FillBuffer(ALuint b) {
 	int  size = 0;
 	int  section;
 	int  result = 0;
@@ -549,7 +549,7 @@ BOOL cdAudio_Resume( void )
 // ======================================================================
 // ======================================================================
 //
-void cdAudio_SetVolume( SDWORD iVol )
+static void cdAudio_SetVolume( SDWORD iVol )
 {
 #ifdef WZ_CDA
 #else
