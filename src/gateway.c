@@ -259,7 +259,7 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 
 
 #ifndef EDITORWORLD
-BOOL gwBlockingTile(SDWORD x,SDWORD y)
+static BOOL gwBlockingTile(SDWORD x,SDWORD y)
 {
 	MAPTILE	*psTile;
 
@@ -580,7 +580,7 @@ BOOL gwZoneInEquiv(SDWORD mainZone, SDWORD checkZone)
 
 // find a route between two gateways and return
 // its length
-SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
+static SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 {
 #ifndef EDITORWORLD
 	SDWORD			ret, sx,sy, ex,ey, xdiff,ydiff, i;
@@ -650,7 +650,7 @@ SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 
 
 // check that the initial flood fill tiles are not on a blocking tile
-BOOL gwCheckFloodTiles(GATEWAY *psGate)
+static BOOL gwCheckFloodTiles(GATEWAY *psGate)
 {
 	SDWORD	floodX,floodY;
 

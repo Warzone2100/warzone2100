@@ -200,7 +200,7 @@ BOOL formationFind(FORMATION **ppsFormation, SDWORD x, SDWORD y)
 }
 
 // find formation speed (currently speed of slowest unit)
-void formationUpdateSpeed( FORMATION *psFormation, BASE_OBJECT *psNew )
+static void formationUpdateSpeed( FORMATION *psFormation, BASE_OBJECT *psNew )
 {
 	DROID		*psDroid;
 	SDWORD		iUnit;
@@ -364,7 +364,7 @@ void formationReset(FORMATION *psFormation)
 }
 
 // calculate the coordinates of a position on a line
-void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
+static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 					  SDWORD *pX, SDWORD *pY)
 {
 	SDWORD	dir, xoffset,yoffset, rank;
@@ -389,7 +389,7 @@ void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 
 
 // assign a unit to a free spot in the formation
-void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
+static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 					   SDWORD	*pX, SDWORD *pY)
 {
 	SDWORD		line, unit, objRadius, radius;

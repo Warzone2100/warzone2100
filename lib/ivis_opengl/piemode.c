@@ -162,5 +162,5 @@ void pie_LocalRenderEnd(void) {
 }
 
 
-void pie_RenderSetup(void) {
+static void pie_RenderSetup(void) {
 }

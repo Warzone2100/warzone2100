@@ -68,7 +68,7 @@ void featureInitVars(void)
 	oilResFeature = 0;
 }
 
-void featureType(FEATURE_STATS* psFeature, char *pType)
+static void featureType(FEATURE_STATS* psFeature, char *pType)
 {
 	if (!strcmp(pType,"HOVER WRECK"))
 	{

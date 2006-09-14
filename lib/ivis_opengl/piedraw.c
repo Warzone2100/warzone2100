@@ -278,33 +278,33 @@ typedef struct {
 	float z;
 } fVector;
 
-void fVector_Set(fVector* v, float x, float y, float z) {
+static void fVector_Set(fVector* v, float x, float y, float z) {
 	v->x = x;
 	v->y = y;
 	v->z = z;
 }
 
-void fVector_Sub(fVector* dest, fVector* op1, fVector* op2) {
+static void fVector_Sub(fVector* dest, fVector* op1, fVector* op2) {
 	dest->x = op1->x - op2->x;
 	dest->y = op1->y - op2->y;
 	dest->z = op1->z - op2->z;
 }
 
-float fVector_SP(fVector* op1, fVector* op2) {
+static float fVector_SP(fVector* op1, fVector* op2) {
 	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
 }
 
-void fVector_CP(fVector* dest, fVector* op1, fVector* op2) {
+static void fVector_CP(fVector* dest, fVector* op1, fVector* op2) {
 	dest->x = op1->y * op2->z - op1->z * op2->y;
 	dest->y = op1->z * op2->x - op1->x * op2->z;
 	dest->z = op1->x * op2->y - op1->y * op2->x;
 }
 
-float fVector_Length2(fVector* v) {
+static float fVector_Length2(fVector* v) {
 	return v->x*v->x + v->y*v->y + v->z*v->z;
 }
 
-void
+static void
 pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 {
 	SDWORD i;
@@ -393,7 +393,7 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
 		      int pieFlag, int pieFlagData) {
 	int32		tempY;
 	int i, n;
@@ -504,7 +504,7 @@ void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT spe
 	}
 }
 
-void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
+static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
 	int32		tempY;
 	int i, n;
 	iVector		*pVertices;
@@ -679,7 +679,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 }
 
-void inverse_matrix(float* src, float * dst) {
+static void inverse_matrix(float* src, float * dst) {
 	float det = src[0]*src[5]*src[10]+src[4]*src[9]*src[2]+src[8]*src[1]*src[6] -src[2]*src[5]*src[8]-src[6]*src[9]*src[0]-src[10]*src[1]*src[4];
 	float invdet = 1.0/det;
 

@@ -318,7 +318,7 @@ BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y)
 #endif
 
 // Calculate the distance to a tile from a point
-SDWORD fpathDistToTile(SDWORD tileX,SDWORD tileY, SDWORD pointX, SDWORD pointY)
+static SDWORD fpathDistToTile(SDWORD tileX,SDWORD tileY, SDWORD pointX, SDWORD pointY)
 {
 	SDWORD	xdiff,ydiff, dist;
 	SDWORD	tx,ty;
@@ -438,7 +438,7 @@ void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
 
 
 // append an astar route onto a move-control route
-void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute )
+static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute )
 {
 	SDWORD		mi, ai;
 
@@ -534,7 +534,7 @@ void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute )
 
 
 // check whether a WORLD coordinate point is within a gateway's tiles
-BOOL fpathPointInGateway(SDWORD x, SDWORD y, GATEWAY *psGate)
+static BOOL fpathPointInGateway(SDWORD x, SDWORD y, GATEWAY *psGate)
 {
 	x = x >> TILE_SHIFT;
 	y = y >> TILE_SHIFT;
@@ -550,7 +550,7 @@ BOOL fpathPointInGateway(SDWORD x, SDWORD y, GATEWAY *psGate)
 
 
 // set blocking flags for all gateways around a zone
-void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
+static void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 {
 	GATEWAY		*psCurr;
 	SDWORD		pos, tx,ty, blockZone;
@@ -624,7 +624,7 @@ void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 
 
 // clear blocking flags for all gateways around a zone
-void fpathClearGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
+static void fpathClearGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 {
 	GATEWAY		*psCurr;
 	SDWORD		pos, tx,ty, blockZone;
@@ -690,7 +690,7 @@ void fpathClearGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 
 
 // clear the routing ignore flags for the gateways
-void fpathClearIgnore(void)
+static void fpathClearIgnore(void)
 {
 	GATEWAY		*psCurr;
 	SDWORD		link, numLinks;
@@ -707,7 +707,7 @@ void fpathClearIgnore(void)
 }
 
 // find a clear tile on a gateway to route to
-void fpathGatewayCoords(GATEWAY *psGate, SDWORD *px, SDWORD *py)
+static void fpathGatewayCoords(GATEWAY *psGate, SDWORD *px, SDWORD *py)
 {
 	SDWORD	x = 0, y = 0, dist, mx, my, pos;
 
@@ -952,7 +952,7 @@ exit:
 
 
 // check if the route to a gateway has already been generated
-BOOL fpathCheckRouteMatch(MOVE_CONTROL *psMoveCntl, SDWORD *pPos, SDWORD gwx,SDWORD gwy)
+static BOOL fpathCheckRouteMatch(MOVE_CONTROL *psMoveCntl, SDWORD *pPos, SDWORD gwx,SDWORD gwy)
 {
 	SDWORD	pos = *pPos;
 
@@ -970,7 +970,7 @@ BOOL fpathCheckRouteMatch(MOVE_CONTROL *psMoveCntl, SDWORD *pPos, SDWORD gwx,SDW
 	return FALSE;
 }
 
-void fpathBlockGatewayLink(GATEWAY *psLast, GATEWAY *psCurr)
+static void fpathBlockGatewayLink(GATEWAY *psLast, GATEWAY *psCurr)
 {
 	SDWORD	link, numLinks;
 
@@ -1014,7 +1014,7 @@ void fpathBlockGatewayLink(GATEWAY *psLast, GATEWAY *psCurr)
 
 // check if a new route is closer to the target than the one stored in
 // the droid
-BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute, SDWORD tx,SDWORD ty)
+static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute, SDWORD tx,SDWORD ty)
 {
 	SDWORD	xdiff,ydiff, prevDist, nextDist;
 
@@ -1048,7 +1048,7 @@ BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute, SDWOR
 }
 
 // create a final route from a gateway route
-SDWORD fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerrain,
+static SDWORD fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerrain,
 						 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy,
 						 MOVE_CONTROL *psMoveCntl)
 {
@@ -1605,7 +1605,7 @@ exit:
 
 
 // find the first point on the route which has both droids on the same side of it
-BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
+static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	SDWORD	vx1,vy1, vx2,vy2;
 

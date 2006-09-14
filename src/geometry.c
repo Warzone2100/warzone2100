@@ -471,7 +471,7 @@ UDWORD		retVal;
 	return(retVal);
 }
 
-void getObjectsOnTile(MAPTILE *psTile)
+static void getObjectsOnTile(MAPTILE *psTile)
 {
 /*UDWORD	i;
 FEATURE	*psFeature;

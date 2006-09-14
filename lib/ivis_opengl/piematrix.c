@@ -129,7 +129,7 @@ SDWORD	aSinTable[SC_TABLESIZE + (SC_TABLESIZE/4)];
 //*
 //******
 
-void pie_MatReset(void)
+static void pie_MatReset(void)
 
 {
 // printf("pie_MatReset\n");
@@ -382,7 +382,7 @@ int32 pie_RotProj(iVector *v3d, iPoint *v2d)
 	return pie_RotateProject(v3d->x, v3d->y, v3d->z, &(v2d->x), &(v2d->y));
 }
 
-int32 pie_Transform(iVector *v3d, iPoint *v2d)
+static int32 pie_Transform(iVector *v3d, iPoint *v2d)
 {
 	v2d->x = v3d->x;
 	v2d->y = v3d->y;

@@ -725,7 +725,7 @@ BOOL InitialiseGlobals(void)
 }
 
 
-BOOL loadLevFile(const char* filename, int datadir) {
+static BOOL loadLevFile(const char* filename, int datadir) {
 	char *pBuffer;
 	UDWORD size;
 
@@ -1152,7 +1152,7 @@ BOOL systemShutdown(void)
 
 /***************************************************************************/
 
-BOOL
+static BOOL
 init_ObjectDead( void * psObj )
 {
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
@@ -1772,7 +1772,7 @@ BOOL stageTwoShutDown(void)
 /*****************************************************************************/
 /*      Initialise after all data is loaded                                  */
 
-void SetAllTilesVisible(void)
+static void SetAllTilesVisible(void)
 {
 	// Make all the tiles visible
 	MAPTILE *psTile = psMapTiles;
@@ -1791,7 +1791,7 @@ void SetAllTilesVisible(void)
 	- this is for the playstation, so that at the end of each level everything is set to visible
 	- this means that we don't have to save the visibilty area in the save game (this is good)
 */
-void SetScrollLimitsTilesVisible(void)
+static void SetScrollLimitsTilesVisible(void)
 {
 	MAPTILE	*psTile;
 	UWORD	MapX,MapY;

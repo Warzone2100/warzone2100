@@ -496,14 +496,14 @@ void startSinglePlayerMenu(void)
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 }
 
-void endSinglePlayerMenu( void )
+static void endSinglePlayerMenu( void )
 {
 	removeTopForm();
 	removeBottomForm();
 	removeBackdrop();
 }
 
-void frontEndNewGame( void )
+static void frontEndNewGame( void )
 {
 	switch(StartWithGame) {
 		case 1:

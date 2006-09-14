@@ -21,7 +21,7 @@ BOOL	gwrDoMessage;
 static GATEWAY	*psOpenList;
 
 // estimate the distance to the target from a gateway
-SDWORD gwrEstimate(GATEWAY *psGate, SDWORD x, SDWORD y)
+static SDWORD gwrEstimate(GATEWAY *psGate, SDWORD x, SDWORD y)
 {
 	SDWORD	gwx,gwy, dx,dy;
 
@@ -39,7 +39,7 @@ SDWORD gwrEstimate(GATEWAY *psGate, SDWORD x, SDWORD y)
 
 
 // add a gateway to the open list
-void gwrOpenAdd(GATEWAY *psGate)
+static void gwrOpenAdd(GATEWAY *psGate)
 {
 	psGate->flags &= ~GWR_CLOSED;
 	psGate->flags |= GWR_OPEN;
@@ -49,7 +49,7 @@ void gwrOpenAdd(GATEWAY *psGate)
 
 
 // get the next gateway from the open list
-GATEWAY *gwrOpenGet(void)
+static GATEWAY *gwrOpenGet(void)
 {
 	SDWORD		minDist, dist;
 	GATEWAY		*psCurr, *psPrev, *psParent = NULL, *psFound = NULL;
@@ -91,7 +91,7 @@ GATEWAY *gwrOpenGet(void)
 
 // check whether a gateway should be considered for routing
 // (i.e. whether it is inside the current scroll limits)
-BOOL gwrConsiderGateway(GATEWAY *psGate)
+static BOOL gwrConsiderGateway(GATEWAY *psGate)
 {
 	return (psGate->x1 >= scrollMinX) && (psGate->x1 <= scrollMaxX) &&
 		   (psGate->x2 >= scrollMinX) && (psGate->x2 <= scrollMaxX) &&
@@ -102,7 +102,7 @@ BOOL gwrConsiderGateway(GATEWAY *psGate)
 
 
 // check whether all the tiles on a gateway are blocked
-BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
+static BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
 {
 //	SDWORD	pos;
 	BOOL	blocked;

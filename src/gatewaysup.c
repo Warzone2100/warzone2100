@@ -90,7 +90,7 @@ struct Segment stack[MAX_STACK], *sp = stack;	/* stack of filled segments */
  * with the same pixel value to the new pixel value nv.
  * A 4-connected neighbor is a pixel above, below, left, or right of a pixel.
  */
-void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
+static void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
 {
 #ifdef ENABLEFILL
     int l, x1, x2, dy;
@@ -157,7 +157,7 @@ skip:
 
 
 // set the tiles a gateway covers to a zone
-void gwSetGatewayZone(GATEWAY *psGate, SDWORD zone)
+static void gwSetGatewayZone(GATEWAY *psGate, SDWORD zone)
 {
 	SDWORD	pos;
 
@@ -179,7 +179,7 @@ void gwSetGatewayZone(GATEWAY *psGate, SDWORD zone)
 
 
 // find the first zone on a line
-SDWORD gwFindFirstZone(SDWORD y)
+static SDWORD gwFindFirstZone(SDWORD y)
 {
 	SDWORD	x, zone;
 
@@ -538,7 +538,7 @@ BOOL gwCreateBlankZoneMap(void)
 
 // Decompress a line of the zone map
 // pBuffer should point to a buffer of gwMapWidth() bytes
-void gwDecompressLine(SDWORD line, UBYTE *pBuffer)
+static void gwDecompressLine(SDWORD line, UBYTE *pBuffer)
 {
 	SDWORD	rlePos, bufPos, count,zone, store;
 
@@ -563,7 +563,7 @@ void gwDecompressLine(SDWORD line, UBYTE *pBuffer)
 
 // Compress a line of the zone map
 // pBuffer should point to a buffer of gwMapWidth() bytes
-void gwCompressLine(SDWORD line, UBYTE *pBuffer)
+static void gwCompressLine(SDWORD line, UBYTE *pBuffer)
 {
 	SDWORD rlePos, bufPos, count,zone;
 

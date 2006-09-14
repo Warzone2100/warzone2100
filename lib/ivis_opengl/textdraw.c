@@ -194,7 +194,7 @@ int iV_GetTextWidth(STRING *String)
 }
 
 
-BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *YOffset, UBYTE *U, UBYTE *V, UWORD *TpageID)
+static BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *YOffset, UBYTE *U, UBYTE *V, UWORD *TpageID)
 {
 
 
@@ -309,13 +309,13 @@ RENDERTEXT_CALLBACK GetIndirectDrawTextCallback( void)
 UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 
 
-void SetExtentsMode_USELAST(void)
+static void SetExtentsMode_USELAST(void)
 {
 	ExtentsMode=EXTENTS_USELASTX;
 }
 
 
-void SetExtentsMode_USEMAX(void)
+static void SetExtentsMode_USEMAX(void)
 {
 	ExtentsMode=EXTENTS_USEMAXWIDTH;
 }
