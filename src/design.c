@@ -425,7 +425,7 @@ extern BOOL bRender3DOnly;
 
 
 /* Add the design widgets to the widget screen */
-BOOL _intAddDesign( BOOL bShowCentreScreen )
+static BOOL _intAddDesign( BOOL bShowCentreScreen )
 {
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
@@ -1387,7 +1387,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 
 	- This is used for generating cyborg names
 */
-DROID_TEMPLATE *MatchTemplate(DROID_TEMPLATE *SourceTemplate,UDWORD player)
+static DROID_TEMPLATE *MatchTemplate(DROID_TEMPLATE *SourceTemplate,UDWORD player)
 {
 	DROID_TEMPLATE *pDroidDesign;
 
@@ -3993,7 +3993,7 @@ void intRemoveDesign(void)
 }
 
 /* set flashing flag for button */
-void intSetButtonFlash( UDWORD id, BOOL bFlash )
+static void intSetButtonFlash( UDWORD id, BOOL bFlash )
 {
 #ifdef FLASH_BUTTONS
 	WIDGET	*psWidget = widgGetFromID( psWScreen, id );
@@ -4018,7 +4018,7 @@ void intSetButtonFlash( UDWORD id, BOOL bFlash )
  * Checks whether user has customised template name : template not
  * customised if not complete or if generated name same as current.
  */
-BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
+static BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
 {
 	if ( (psTemplate->droidType == DROID_DEFAULT) ||
 		 (strcmp( getTemplateName(psTemplate),
@@ -4034,7 +4034,7 @@ BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
 #endif
 
 /* checks whether to update name or has user already changed it */
-void desUpdateDesignName( DROID_TEMPLATE *psTemplate, STRING *szCurrName )
+static void desUpdateDesignName( DROID_TEMPLATE *psTemplate, STRING *szCurrName )
 {
 
 }

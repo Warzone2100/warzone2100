@@ -254,7 +254,7 @@ DROID	*psCurr;
 }
 
 // set the number of command droids for a player
-void cmdDroidSetAvailable(SDWORD player, SDWORD num)
+static void cmdDroidSetAvailable(SDWORD player, SDWORD num)
 {
 	ASSERT( (player >= 0) && (player < MAX_PLAYERS),
 		"cmdUnitSetAvailable: invalid player number" );

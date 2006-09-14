@@ -709,7 +709,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget)
 	return FALSE;
 }
 
-void actionAddVtolAttackRun( DROID *psDroid )
+static void actionAddVtolAttackRun( DROID *psDroid )
 {
 	FRACT_D		fA;
 	SDWORD		iVNx, iVNy, iA, iX, iY;
@@ -773,7 +773,7 @@ void actionAddVtolAttackRun( DROID *psDroid )
 	//psDroid->sMove.iAttackRuns++;
 }
 
-void actionUpdateVtolAttack( DROID *psDroid )
+static void actionUpdateVtolAttack( DROID *psDroid )
 {
 	WEAPON_STATS	*psWeapStats = NULL;
 
@@ -811,7 +811,7 @@ void actionUpdateVtolAttack( DROID *psDroid )
 	}
 }
 
-void actionUpdateTransporter( DROID *psDroid )
+static void actionUpdateTransporter( DROID *psDroid )
 {
 	//check if transporter has arrived
 	if (updateTransporter(psDroid))
@@ -869,7 +869,7 @@ void actionUpdateTransporter( DROID *psDroid )
 
 // calculate a position for units to pull back to if they
 // need to increase the range between them and a target
-void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, SDWORD *px, SDWORD *py)
+static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, SDWORD *px, SDWORD *py)
 {
 	SDWORD xdiff,ydiff, len;
 
@@ -2920,7 +2920,7 @@ void moveToRearm(DROID *psDroid)
 
 
 // whether a tile is suitable for a vtol to land on
-BOOL vtolLandingTile(SDWORD x, SDWORD y)
+static BOOL vtolLandingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
 

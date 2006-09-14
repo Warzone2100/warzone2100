@@ -86,7 +86,7 @@ void clustInitialise(void)
 
 
 // check the cluster usage
-void clustValidateUsage(void)
+static void clustValidateUsage(void)
 {
 	SDWORD		cluster, player, droidUsage, structUsage;
 	STRUCTURE	*psStruct;
@@ -217,7 +217,7 @@ void clustRemoveObject(BASE_OBJECT *psObj)
 
 
 // tell a droid to join a cluster
-void _clustAddDroid(DROID *psDroid, SDWORD cluster)
+static void _clustAddDroid(DROID *psDroid, SDWORD cluster)
 {
 	DROID	*psCurr;
 	SDWORD	xdiff, ydiff;
@@ -252,7 +252,7 @@ void _clustAddDroid(DROID *psDroid, SDWORD cluster)
 }
 
 
-void clustAddDroid(DROID *psDroid, SDWORD cluster)
+static void clustAddDroid(DROID *psDroid, SDWORD cluster)
 {
 	_clustAddDroid(psDroid,cluster);
 }
@@ -283,7 +283,7 @@ void clustNewDroid(DROID *psDroid)
 
 
 // tell a structure to join a cluster
-void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
+static void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 {
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
@@ -317,7 +317,7 @@ void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 	}
 }
 
-void clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
+static void clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 {
 	_clustAddStruct(psStruct,cluster);
 }
@@ -349,7 +349,7 @@ void clustNewStruct(STRUCTURE *psStruct)
 
 
 // find an unused cluster number for a droid
-SDWORD clustFindUnused(void)
+static SDWORD clustFindUnused(void)
 {
 	SDWORD	cluster;
 

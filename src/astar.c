@@ -107,13 +107,13 @@ void astarResetCounters(void)
 	astarOuter = 0;
 	astarRemove = 0;
 }
-void ClearAstarNodes(void)
+static void ClearAstarNodes(void)
 {
 	assert(apsNodes);
 	memset(apsNodes, 0, sizeof(FP_NODE *) * FPATH_TABLESIZE);
 }
 
-UDWORD GetApsNodesSize(void)
+static UDWORD GetApsNodesSize(void)
 {
 	return(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 }
@@ -199,7 +199,7 @@ void fpathShutDown(void)
  * Hack to use coordinates instead of a string by John.
  */
 /***************************************************************************/
-SDWORD fpathHashFunc(SDWORD x, SDWORD y)
+static SDWORD fpathHashFunc(SDWORD x, SDWORD y)
 {
 	UINT	iHashValue, i;
 	CHAR	*c;
@@ -229,7 +229,7 @@ SDWORD fpathHashFunc(SDWORD x, SDWORD y)
 }
 
 // Add a node to the hash table
-void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
+static void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
 {
 	SDWORD	index;
 
@@ -241,7 +241,7 @@ void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
 
 
 // See if a node is in the hash table
-FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
+static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 {
 	SDWORD		index;
 	FP_NODE		*psFound;
@@ -265,7 +265,7 @@ FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 
 
 // Remove a node from the hash table
-FP_NODE *fpathHashRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y)
+static FP_NODE *fpathHashRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 {
 	SDWORD		index;
 	FP_NODE		*psPrev, *psFound;
@@ -298,7 +298,7 @@ FP_NODE *fpathHashRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 }
 
 // Remove a node from the hash table
-FP_NODE *fpathHashCondRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y, SDWORD dist)
+static FP_NODE *fpathHashCondRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD		index;
 	FP_NODE		*psPrev, *psFound;
@@ -337,7 +337,7 @@ FP_NODE *fpathHashCondRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y, SDWORD dis
 
 
 // Reset the hash tables
-void fpathHashReset(void)
+static void fpathHashReset(void)
 {
 	SDWORD	i;
 	FP_NODE	*psNext;
@@ -372,7 +372,7 @@ void fpathHashReset(void)
 
 
 // Compare two nodes
-__inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
+static __inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 {
 	SDWORD	first,second;
 
@@ -404,7 +404,7 @@ __inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 
 // make a 50/50 random choice
 static UWORD seed = 1234;
-BOOL fpathRandChoice(void)
+static BOOL fpathRandChoice(void)
 {
 	UDWORD	val;
 
@@ -417,7 +417,7 @@ BOOL fpathRandChoice(void)
 #if OPEN_LIST == 0
 
 // Add a node to the open list
-void fpathOpenAdd(FP_NODE *psNode)
+static void fpathOpenAdd(FP_NODE *psNode)
 {
 	FP_NODE		*psCurr, *psPrev;
 	SDWORD		comp;
@@ -461,7 +461,7 @@ void fpathOpenAdd(FP_NODE *psNode)
 }
 
 // Remove a node from the open list
-void fpathOpenRemove(FP_NODE *psNode)
+static void fpathOpenRemove(FP_NODE *psNode)
 {
 	FP_NODE		*psCurr, *psParent, *psSubParent, *psInsert;
 	SDWORD		comp;
@@ -546,7 +546,7 @@ void fpathOpenRemove(FP_NODE *psNode)
 }
 
 // Get the nearest entry in the open list
-FP_NODE *fpathOpenGet(void)
+static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode, *psPrev;
 
@@ -610,7 +610,7 @@ BOOL fpathValidateTree(FP_NODE *psNode)
 #elif OPEN_LIST == 1
 
 // Add a node to the open list
-void fpathOpenAdd(FP_NODE *psNode)
+static void fpathOpenAdd(FP_NODE *psNode)
 {
 	FP_NODE		*psCurr,*psPrev;
 
@@ -639,7 +639,7 @@ void fpathOpenAdd(FP_NODE *psNode)
 
 
 // Get the nearest entry in the open list
-FP_NODE *fpathOpenGet(void)
+static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode;
 
@@ -652,14 +652,14 @@ FP_NODE *fpathOpenGet(void)
 #elif OPEN_LIST == 2
 
 // Add a node to the open list
-void fpathOpenAdd(FP_NODE *psNode)
+static void fpathOpenAdd(FP_NODE *psNode)
 {
 	psNode->psOpen = psOpen;
 	psOpen = psNode;
 }
 
 // Get the nearest entry in the open list
-FP_NODE *fpathOpenGet(void)
+static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode, *psCurr, *psPrev, *psParent = NULL;
 	SDWORD	comp;
@@ -701,7 +701,7 @@ FP_NODE *fpathOpenGet(void)
 
 #if OPEN_LIST == 1 || OPEN_LIST == 2
 // Remove a node from the open list
-void fpathOpenRemove(FP_NODE *psNode)
+static void fpathOpenRemove(FP_NODE *psNode)
 {
 	FP_NODE		*psCurr,*psPrev;
 
@@ -740,7 +740,7 @@ void fpathOpenRemove(FP_NODE *psNode)
 
 
 // estimate the distance to the target point
-SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
+static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 {
 	SDWORD xdiff, ydiff;
 
@@ -755,7 +755,7 @@ SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 
 
 // Generate a new node
-FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
+static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 {
 	FP_NODE	*psNode;
 
@@ -813,7 +813,7 @@ static SDWORD	finalX,finalY, vectorX,vectorY;
 static BOOL		obstruction;
 
 // The visibility ray callback
-BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	vx,vy;
 
@@ -862,7 +862,7 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 
 
 // Optimise the route
-void fpathOptimise(FP_NODE *psRoute)
+static void fpathOptimise(FP_NODE *psRoute)
 {
 	FP_NODE	*psCurr, *psSearch, *psTest;
 	BOOL	los;

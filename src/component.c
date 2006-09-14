@@ -239,7 +239,7 @@ UDWORD getStructureSize(STRUCTURE *psStructure)
 	return (size);
 }
 
-UDWORD getStructureRadius(STRUCTURE *psStructure)
+static UDWORD getStructureRadius(STRUCTURE *psStructure)
 {
 	iIMDShape *baseImd;
 	SDWORD Radius = GetRadius(psStructure->sDisplay.imd);
@@ -268,7 +268,7 @@ UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 	return (size);
 }
 
-UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player)
+static UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player)
 {
 	iIMDShape *baseImd;
 	SDWORD Radius = GetRadius(Stats->pIMD);

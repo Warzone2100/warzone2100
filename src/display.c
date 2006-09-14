@@ -434,19 +434,19 @@ BOOL dispModeChange(void)
 }
 
 
-BOOL GetMouseOverRadar(void)
+static BOOL GetMouseOverRadar(void)
 {
 	return mouseOverRadar;
 }
 
 
-void ClearMouseOverRadar(void)
+static void ClearMouseOverRadar(void)
 {
 	mouseOverRadar = FALSE;
 }
 
 
-void SetMouseOverRadar(void)
+static void SetMouseOverRadar(void)
 {
 	mouseOverRadar = TRUE;
 }
@@ -740,9 +740,9 @@ void processInput(void)
 //}
 
 
-BOOL OverRadarAndNotDragging(void)
+static BOOL OverRadarAndNotDragging(void)
 {
-BOOL OverRadar = mouseOverRadar;
+	BOOL OverRadar = mouseOverRadar;
 
 	if(getHQExists(selectedPlayer)==FALSE)
 	{
@@ -757,7 +757,7 @@ BOOL OverRadar = mouseOverRadar;
 }
 
 
-void CheckFinishedDrag(void)
+static void CheckFinishedDrag(void)
 {
 	if(driveModeActive()) {
 		return;
@@ -801,7 +801,7 @@ void CheckFinishedDrag(void)
 	}
 }
 
-void CheckStartWallDrag(void)
+static void CheckStartWallDrag(void)
 {
 	if(driveModeActive()) {
 		return;
@@ -835,7 +835,7 @@ void CheckStartWallDrag(void)
 
 //BOOL CheckFinishedWallDrag(void) - misleading name - sorry Paul!
 //this function is called when a location has been chosen to place a structure or a DP
-BOOL CheckFinishedFindPosition(void)
+static BOOL CheckFinishedFindPosition(void)
 {
 	BOOL OverRadar = OverRadarAndNotDragging();
 
@@ -883,7 +883,7 @@ BOOL CheckFinishedFindPosition(void)
 }
 
 
-void HandleDrag(void)
+static void HandleDrag(void)
 {
 	BOOL OverRadar = mouseOverRadar;
 	UDWORD	dragX,dragY;
@@ -1649,7 +1649,7 @@ void displayWorld(void)
 }
 
 
-void	mouseSetMXMY(void)
+static void mouseSetMXMY(void)
 {
 	mX = mouseX();
 	mY = mouseY();
@@ -1900,7 +1900,7 @@ void CancelDeliveryRepos(void)
 
 
 // check whether a clicked on droid is in a command group or assigned to a sensor
-BOOL droidHasLeader(DROID *psDroid)
+static BOOL droidHasLeader(DROID *psDroid)
 {
 	BASE_OBJECT		*psLeader;
 
@@ -2004,7 +2004,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 }
 
 
-void FeedbackOrderGiven(void)
+static void FeedbackOrderGiven(void)
 {
 	static UDWORD LastFrame = 0;
 	UDWORD ThisFrame = frameGetFrameNumber();
@@ -2017,7 +2017,7 @@ void FeedbackOrderGiven(void)
 }
 
 
-void FeedbackClickedOn(void)
+static void FeedbackClickedOn(void)
 {
 	FeedbackOrderGiven();
 }

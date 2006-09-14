@@ -746,7 +746,7 @@ BOOL	getConsoleDisplayStatus( void )
 	return(bConsoleDisplayEnabled);
 }
 
-void	conShowReplayWav( void )
+static void conShowReplayWav( void )
 {
 
 

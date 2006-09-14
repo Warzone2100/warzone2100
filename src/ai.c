@@ -183,7 +183,7 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 
 
 // see if a structure has the range to fire on a target
-BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget)
+static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget)
 {
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, longRange;
@@ -211,7 +211,7 @@ BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget)
 
 
 // see if an object is a wall
-BOOL aiObjIsWall(BASE_OBJECT *psObj)
+static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 {
 	if (psObj->type != OBJ_STRUCTURE)
 	{

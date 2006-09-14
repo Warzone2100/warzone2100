@@ -635,7 +635,7 @@ UDWORD	lastDroidRemove=0;
 UDWORD	droidRemoveKills=0;
 // -------------------------------------------------------------------------------
 */
-void	removeDroidFX(DROID *psDel)
+static void removeDroidFX(DROID *psDel)
 {
  	iVector	pos;
 
@@ -1153,7 +1153,7 @@ static void addNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 static DROID	*CurrentNaybors = NULL;
 static UDWORD	nayborTime = 0;
 
-void droidResetNaybors(void)
+static void droidResetNaybors(void)
 {
 	CurrentNaybors = NULL;
 }
@@ -1281,7 +1281,7 @@ void droidGetNaybors(DROID *psDroid)
 
 
 /* Display the neigbours of a droid */
-void displayNaybors(void)
+static void displayNaybors(void)
 {
 	UDWORD	count, y;
 	STRING	*pType = NULL;
@@ -1657,7 +1657,7 @@ BOOL droidStartFoundation(DROID *psDroid)
 
 
 
-BOOL
+static BOOL
 droidCheckBuildStillInProgress( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
@@ -4589,7 +4589,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 
 
 // Sets the parts array in a template given a droid.
-void templateSetParts(DROID *psDroid,DROID_TEMPLATE *psTemplate)
+static void templateSetParts(DROID *psDroid,DROID_TEMPLATE *psTemplate)
 {
 //	UDWORD inc;
 
@@ -5543,7 +5543,7 @@ UDWORD	getBound(UDWORD level)
 }
 
 /* Calculate the system points used by a template - NOT USED AT PRESENT*/
-UDWORD	calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
+static UDWORD calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
 {
 	UDWORD system, i;
 
@@ -5577,7 +5577,7 @@ UDWORD	calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
 
 
 /* Calculate the system points used by a droid - NOT USED AT PRESENT*/
-UDWORD	calcDroidSystemPoints(DROID *psDroid)
+static UDWORD calcDroidSystemPoints(DROID *psDroid)
 {
 	UDWORD      system;//, i;
 
@@ -5679,7 +5679,7 @@ BOOL noDroid(UDWORD x, UDWORD y)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns true when one droid on x,y square.
-BOOL oneDroid(UDWORD x, UDWORD y)
+static BOOL oneDroid(UDWORD x, UDWORD y)
 {
 	UDWORD i;
 	BOOL bFound = FALSE;
@@ -5781,7 +5781,7 @@ BOOL	zonedPAT(UDWORD x, UDWORD y)
 	}
 }
 // ------------------------------------------------------------------------------------
-BOOL	halfPAT(UDWORD x, UDWORD y)
+static BOOL halfPAT(UDWORD x, UDWORD y)
 {
  	if(sensiblePlace(x,y) AND oneDroid(x,y))
 	{
@@ -6272,7 +6272,7 @@ void setUpBuildModule(DROID *psDroid)
 
 
 // not written yet - needs merging with code in Dr Jones' Design.c
-void BuildNameFromDroid(DROID *psDroid, STRING *ConstructedName)
+static void BuildNameFromDroid(DROID *psDroid, STRING *ConstructedName)
 {
 }
 
