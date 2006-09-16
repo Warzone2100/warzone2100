@@ -14,7 +14,7 @@
 
 static PHYSFS_file	*pFileHandle;
 
-BOOL NETstartLogging()
+BOOL NETstartLogging(void)
 {
 	time_t aclock;
 	struct tm *newtime;
@@ -33,7 +33,7 @@ BOOL NETstartLogging()
 	return TRUE;
 }
 
-BOOL NETstopLogging()
+BOOL NETstopLogging(void)
 {
 	if (!PHYSFS_close(pFileHandle))
 	{

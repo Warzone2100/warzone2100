@@ -77,16 +77,25 @@ typedef struct _treap
 /*      These should not be called directly - use the macros below                      */
 
 
-/* Store the location in C code at which a call to the heap was made */
+/**
+ * Store the location in C code at which a call to the heap was made
+ *
+ * \param	pFileName	source filename
+ * \param	lineNumber	source file line number
+ */
 extern void treapSetCallPos(const char *pFileName, SDWORD lineNumber);
 
 /* Function type for object equality */
 //typedef BOOL (*TREAP_EQUAL)(void *pObj1, void *pObj2);
 
-/* Function to create a treap
- * Pass in key comparison function
- * Initial number of nodes to allocate
- * Number of additional nodes to allocate when extending
+/**
+ * Function to create a treap
+ *
+ * \param	ppsTreap	out-parameter which holds the created treap
+ * \param	cmp			comparison function to use
+ * \param	init		initial number of nodes to allocate
+ * \param	ext			number of additional nodes to allocate when extending
+ * \return true, if the treap creation was successfull
  */
 extern BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext);
 

@@ -669,7 +669,7 @@ static UDWORD		_baseOffset;
 /* Generate the code for a function call, checking the parameter
  * types match.
  */
-CODE_ERROR scriptCodeFunction(FUNC_SYMBOL		*psFSymbol,		// The function being called
+static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function being called
 							PARAM_BLOCK		*psPBlock,		// The functions parameters
 							BOOL			expContext,		// Whether the function is being
 															// called in an expression context
@@ -765,7 +765,7 @@ CODE_ERROR scriptCodeFunction(FUNC_SYMBOL		*psFSymbol,		// The function being ca
 
 
 /* Function call: Check the parameter types match, assumes param count matched */
-UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function being called
+static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function being called
 							PARAM_BLOCK		*psPBlock)	// The generated code block
 {
 	UDWORD		size, i, *ip;
@@ -796,7 +796,7 @@ UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function being call
 /*
  *  function call
  */
-CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The function being called
+static CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The function being called
 						PARAM_BLOCK		*psPBlock,		// The functions parameters
 						CODE_BLOCK		**ppsCBlock)	// The generated code block
 {
@@ -838,7 +838,7 @@ CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The function being
 /* Generate the code for a parameter callback, checking the parameter
  * types match.
  */
-CODE_ERROR scriptCodeCallbackParams(
+static CODE_ERROR scriptCodeCallbackParams(
 							CALLBACK_SYMBOL	*psCBSymbol,	// The callback being called
 							PARAM_BLOCK		*psPBlock,		// The callbacks parameters
 							TRIGGER_DECL	**ppsTDecl)		// The generated code block
@@ -907,7 +907,7 @@ CODE_ERROR scriptCodeCallbackParams(
 
 
 /* Generate code for assigning a value to a variable */
-CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assign to
+static CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assign to
 							  CODE_BLOCK	*psValue,		// The code for the value to
 															// assign
 							  CODE_BLOCK	**ppsBlock)		// Generated code
@@ -970,7 +970,7 @@ CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable to assig
 
 
 /* Generate code for assigning a value to an object variable */
-CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variable to assign to
+static CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variable to assign to
 								 CODE_BLOCK		*psValue,	// The code for the value to
 															// assign
 								 CODE_BLOCK		**ppsBlock)	// Generated code
@@ -1018,7 +1018,7 @@ CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variable to a
 
 
 /* Generate code for getting a value from an object variable */
-CODE_ERROR scriptCodeObjGet(OBJVAR_BLOCK	*psVariable,// The variable to get from
+static CODE_ERROR scriptCodeObjGet(OBJVAR_BLOCK	*psVariable,// The variable to get from
 						  CODE_BLOCK	**ppsBlock)	// Generated code
 {
 	ASSERT( PTRVALID(psVariable, sizeof(OBJVAR_BLOCK)),
@@ -1057,7 +1057,7 @@ CODE_ERROR scriptCodeObjGet(OBJVAR_BLOCK	*psVariable,// The variable to get from
 
 
 /* Generate code for assigning a value to an array variable */
-CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The variable to assign to
+static CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The variable to assign to
 								 CODE_BLOCK		*psValue,	// The code for the value to
 															// assign
 								 CODE_BLOCK		**ppsBlock)	// Generated code
@@ -1120,7 +1120,7 @@ CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The variable to 
 
 
 /* Generate code for getting a value from an array variable */
-CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to get from
+static CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to get from
 						  CODE_BLOCK	**ppsBlock)	// Generated code
 {
 //	SDWORD		elementDWords, i;
@@ -1174,7 +1174,7 @@ CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to get fro
 
 
 /* Generate the final code block for conditional statements */
-CODE_ERROR scriptCodeConditional(
+static CODE_ERROR scriptCodeConditional(
 					COND_BLOCK *psCondBlock,	// The intermediate conditional code
 					CODE_BLOCK **ppsBlock)		// The final conditional code
 {
@@ -1214,7 +1214,7 @@ CODE_ERROR scriptCodeConditional(
 }
 
 /* Generate code for function parameters */
-CODE_ERROR scriptCodeParameter(CODE_BLOCK		*psParam,		// Code for the parameter
+static CODE_ERROR scriptCodeParameter(CODE_BLOCK		*psParam,		// Code for the parameter
 							 INTERP_TYPE		type,			// Parameter type
 							 PARAM_BLOCK	**ppsBlock)		// Generated code
 {
@@ -1239,7 +1239,7 @@ CODE_ERROR scriptCodeParameter(CODE_BLOCK		*psParam,		// Code for the parameter
 
 
 /* Generate code for binary operators (e.g. 2 + 2) */
-CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for first parameter
+static CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for first parameter
 								  CODE_BLOCK	*psSecond,	// Code for second parameter
 								  OPCODE		opcode,		// Operator function
 								  CODE_BLOCK	**ppsBlock) // Generated code
@@ -1263,7 +1263,7 @@ CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for first param
 
 /* check if the arguments in the function definition body match the argument types
 and names from function declaration (if there was any) */
-BOOL checkFuncParamType(SDWORD argIndex, SDWORD argType)
+static BOOL checkFuncParamType(SDWORD argIndex, SDWORD argType)
 {
 	VAR_SYMBOL		*psCurr;
 	SDWORD			i,j;
@@ -1311,7 +1311,7 @@ BOOL checkFuncParamType(SDWORD argIndex, SDWORD argType)
  * stored with the code for the object value so that this block can be used for
  * both setting and retrieving an object value.
  */
-CODE_ERROR scriptCodeObjectVariable(CODE_BLOCK	*psObjCode,	// Code for the object value
+static CODE_ERROR scriptCodeObjectVariable(CODE_BLOCK	*psObjCode,	// Code for the object value
 								  VAR_SYMBOL	*psVar,		// The object variable symbol
 								  OBJVAR_BLOCK	**ppsBlock) // Generated code
 {
@@ -1346,7 +1346,7 @@ CODE_ERROR scriptCodeObjectVariable(CODE_BLOCK	*psObjCode,	// Code for the objec
  * stored with the code for the object value so that this block can be used for
  * both setting and retrieving an array value.
  */
-CODE_ERROR scriptCodeArrayVariable(ARRAY_BLOCK	*psArrayCode,	// Code for the array index
+static CODE_ERROR scriptCodeArrayVariable(ARRAY_BLOCK	*psArrayCode,	// Code for the array index
 								  VAR_SYMBOL	*psVar,			// The array variable symbol
 								  ARRAY_BLOCK	**ppsBlock)		// Generated code
 {
@@ -1381,7 +1381,7 @@ CODE_ERROR scriptCodeArrayVariable(ARRAY_BLOCK	*psArrayCode,	// Code for the arr
 
 
 /* Generate code for a constant */
-CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variable symbol
+static CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variable symbol
 							CODE_BLOCK		**ppsBlock)	// Generated code
 {
 	ASSERT( psConst != NULL,
@@ -1419,7 +1419,7 @@ CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variable symb
 
 
 /* Generate code for getting a variables value */
-CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symbol
+static CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symbol
 							CODE_BLOCK		**ppsBlock)		// Generated code
 {
 	SDWORD	size;
@@ -1470,7 +1470,7 @@ CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symb
 
 
 /* Generate code for getting a variables value */
-CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variable symbol
+static CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variable symbol
 							PARAM_BLOCK		**ppsBlock)		// Generated code
 {
 	SDWORD	size;
@@ -1514,7 +1514,7 @@ CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variable symb
 
 
 /* Generate the code for a trigger and store it in the trigger list */
-CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
+static CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
 {
 	CODE_BLOCK		*psNewBlock;
 	UDWORD			line;
@@ -1553,7 +1553,7 @@ CODE_ERROR scriptCodeTrigger(STRING *pIdent, CODE_BLOCK *psCode)
 
 
 /* Generate the code for an event and store it in the event list */
-CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_BLOCK *psCode)
+static CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_BLOCK *psCode)
 {
 	CODE_BLOCK		*psNewBlock;
 	UDWORD			line;

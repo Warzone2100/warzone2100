@@ -21,7 +21,6 @@ static SDWORD	cLine;
 static char *pCFile;
 static char	pCFileNone[] = "None";
 
-/* Store the location in C code at which a call to the heap was made */
 void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 {
 	cLine = lineNumber;
@@ -67,11 +66,6 @@ SDWORD treapStringCmp(UDWORD key1, UDWORD key2)
 }
 
 
-/* Function to create a treap
- * Pass in key comparison function,
- * initial number of nodes to allocate,
- * number of additional nodes to allocate when extending.
- */
 BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 {
 	*ppsTreap = (TREAP*)MALLOC(sizeof(TREAP));
