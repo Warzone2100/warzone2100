@@ -18,15 +18,15 @@
 
 /* Position of the last call */
 static SDWORD	cLine;
-static STRING	*pCFile;
-static STRING	pCFileNone[] = "None";
+static char *pCFile;
+static char	pCFileNone[] = "None";
 
 /* Store the location in C code at which a call to the heap was made */
-void treapSetCallPos(STRING *pFileName, SDWORD lineNumber)
+void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 {
 	cLine = lineNumber;
 
-	pCFile = (STRING *)MALLOC(strlen(pFileName) + 1);
+	pCFile = (char *)MALLOC(strlen(pFileName) + 1);
 	if (pCFile)
 	{
 		strcpy(pCFile, pFileName);
@@ -57,8 +57,8 @@ static SDWORD defaultCmp(UDWORD key1, UDWORD key2)
 SDWORD treapStringCmp(UDWORD key1, UDWORD key2)
 {
 	SDWORD result;
-	STRING	*pStr1 = (STRING *)key1;
-	STRING	*pStr2 = (STRING *)key2;
+	const char *pStr1 = (const char *)key1;
+	const char *pStr2 = (const char *)key2;
 
 	result = strcmp(pStr1,pStr2);
 	if (result<0) return -1;

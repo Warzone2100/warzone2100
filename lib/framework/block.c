@@ -39,8 +39,8 @@
 #define MEMORY_SET		TRUE
 
 // the filename and line number of the last call to the block functions
-STRING	*pCallFileName;
-SDWORD	callLine;
+static const char *pCallFileName;
+static SDWORD	callLine;
 
 // the list of allocated blocks
 static BLOCK_HEAP	*psBlockList=NULL;
@@ -73,7 +73,7 @@ void blkShutDown(void)
 }
 
 // Note the call position for a blkAlloc or blkFree
-void blkCallPos(STRING *pFileName, SDWORD line)
+void blkCallPos(const char *pFileName, SDWORD line)
 {
 	pCallFileName = pFileName;
 	callLine = line;

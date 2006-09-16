@@ -42,21 +42,21 @@ void memSetBlockHeap(struct _block_heap *psHeap);
 struct _block_heap *memGetBlockHeap(void);
 
 /* malloc replacements */
-void *memMalloc(STRING *pFileName, SDWORD LineNumber, size_t Size);
+void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size);
 void *memMallocRelease(size_t Size);
 
 /* free replacements */
-void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree);
+void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree);
 void memFreeRelease(void *pMemToFree);
 
 /* Check a pointer refers to a valid block of memory */
 BOOL memPointerValid(void *pPtr, size_t Size);
 
 /* Report on currently allocated memory */
-void memMemoryReport(STRING *pFileName);
+void memMemoryReport(const char *pFileName);
 
 /* Display the memory treap */
-void memDisplayTreap(STRING *pFileName);
+void memDisplayTreap(const char *pFileName);
 
 #ifdef DEBUG_MALLOC
 

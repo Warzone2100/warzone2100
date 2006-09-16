@@ -45,7 +45,7 @@ typedef SDWORD (*TREAP_CMP)(UDWORD key1, UDWORD key2);
 
 /* The debug info */
 #define TREAP_NODE_DEBUG \
-	STRING				*pFile;	/* file the node was created in */ \
+	const char			*pFile;	/* file the node was created in */ \
 	SDWORD				line	/* line the node was created at */
 
 typedef struct _treap_node
@@ -66,7 +66,7 @@ typedef struct _treap
 	TREAP_NODE		*psRoot;	// root of the tree
 
 #ifdef DEBUG_TREAP
-	STRING			*pFile;		// file the treap was created in
+	const char		*pFile;		// file the treap was created in
 	SDWORD			line;		// line the treap was created at
 #endif
 } TREAP;
@@ -78,7 +78,7 @@ typedef struct _treap
 
 
 /* Store the location in C code at which a call to the heap was made */
-extern void treapSetCallPos(STRING *pFileName, SDWORD lineNumber);
+extern void treapSetCallPos(const char *pFileName, SDWORD lineNumber);
 
 /* Function type for object equality */
 //typedef BOOL (*TREAP_EQUAL)(void *pObj1, void *pObj2);

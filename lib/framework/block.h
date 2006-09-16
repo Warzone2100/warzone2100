@@ -34,11 +34,11 @@ typedef struct _block_heap
 	SDWORD		init, ext;		// initial and extension block sizes
 	BLOCK_HEAP_MEM	*psBlocks;
 #ifdef DEBUG_BLOCK
-	STRING		*pFileName;
+	const char	*pFileName;
 	SDWORD		line;
 	MEM_NODE	*psMemTreap;	// treap of the memory blocks
 	BOOL		free;			// whether free has been called for this block
-	STRING		*pFreeFile;		// where the last free was called from
+	const char	*pFreeFile;		// where the last free was called from
 	SDWORD		freeLine;	
 	UDWORD		TotalAllocated;	// Total amount of bytes used in the block (sum of all alloc's)
 #endif
@@ -82,7 +82,7 @@ extern BOOL blkPointerValid(BLOCK_HEAP *psHeap, void *pData, SDWORD size);
 extern BOOL blkPointerValidAll(void *pData, SDWORD size);
 
 // Note the call position for a blkAlloc or blkFree
-extern void blkCallPos(STRING *pFileName, SDWORD line);
+extern void blkCallPos(const char *pFileName, SDWORD line);
 
 void blkPrintDetails(BLOCK_HEAP *psHeap);
 void blkReport(void);

@@ -177,7 +177,7 @@ UINT HashStringIgnoreCase( const char *String );
 
 /* Endianness hacks */
 
-static __inline void endian_uword(UWORD *uword) {
+static inline void endian_uword(UWORD *uword) {
 #ifdef __BIG_ENDIAN__
   UBYTE tmp, *ptr;
 
@@ -188,7 +188,7 @@ static __inline void endian_uword(UWORD *uword) {
 #endif
 }
 
-static __inline void endian_sword(SWORD *sword) {
+static inline void endian_sword(SWORD *sword) {
 #ifdef __BIG_ENDIAN__
   UBYTE tmp, *ptr;
 
@@ -199,7 +199,7 @@ static __inline void endian_sword(SWORD *sword) {
 #endif
 }
 
-static __inline void endian_udword(UDWORD *udword) {
+static inline void endian_udword(UDWORD *udword) {
 #ifdef __BIG_ENDIAN__
   UBYTE tmp, *ptr;
 
@@ -213,7 +213,7 @@ static __inline void endian_udword(UDWORD *udword) {
 #endif
 }
 
-static __inline void endian_sdword(SDWORD *sdword) {
+static inline void endian_sdword(SDWORD *sdword) {
 #ifdef __BIG_ENDIAN__
   UBYTE tmp, *ptr;
 
@@ -227,7 +227,7 @@ static __inline void endian_sdword(SDWORD *sdword) {
 #endif
 }
 
-static __inline void endian_fract(FRACT *fract) {
+static inline void endian_fract(FRACT *fract) {
 #ifdef __BIG_ENDIAN__
   UBYTE tmp, *ptr;
 
