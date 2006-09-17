@@ -900,13 +900,13 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	}
 	else
 	{
-		NewTexturePage = MALLOC(sizeof(TEXTUREPAGE));
+		NewTexturePage = (TEXTUREPAGE*)MALLOC(sizeof(TEXTUREPAGE));
 		if (!NewTexturePage) return FALSE;
 
 		NewTexturePage->Texture=NULL;
 		NewTexturePage->Palette=NULL;
 
-		psPal = MALLOC(sizeof(iPalette));
+		psPal = (iPalette*)MALLOC(sizeof(iPalette));
 		if (!psPal) return FALSE;
 
 		psSprite = (iSprite*)MALLOC(sizeof(iSprite));
@@ -1071,7 +1071,7 @@ BOOL dataAnimCfgLoad(char *pBuffer, UDWORD size, void **ppData)
 
 void dataAnimRelease( void *pData )
 {
-	anim_ReleaseAnim(pData);
+	anim_ReleaseAnim((BASEANIM*)pData);
 }
 
 /* Load a string resource file */

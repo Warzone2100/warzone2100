@@ -95,7 +95,7 @@ ANIM3D;
 
 /***************************************************************************/
 
-typedef void * (* GETSHAPEFUNC) ( STRING *pStr );
+typedef iIMDShape * (* GETSHAPEFUNC) ( STRING *pStr );
 
 typedef struct ANIMGLOBALS
 {

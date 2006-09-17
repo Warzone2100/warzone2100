@@ -128,7 +128,7 @@ BOOL astarInitialise(void)
 	}
 
 #if OPEN_LIST == 2
-	apsNodes = MALLOC(sizeof(FP_NODE *) * FPATH_TABLESIZE);
+	apsNodes = (FP_NODE**)MALLOC(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 	if (!apsNodes)
 	{
 		return FALSE;
@@ -759,7 +759,7 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 {
 	FP_NODE	*psNode;
 
-	if (!HEAP_ALLOC(psFPNodeHeap, (void*) &psNode))
+	if (!HEAP_ALLOC(psFPNodeHeap, (void**) &psNode))
 	{
 		return NULL;
 	}

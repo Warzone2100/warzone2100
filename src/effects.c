@@ -2925,7 +2925,7 @@ iIMDShape		*psOrig;
 	fileSize = ( sizeof(struct _fx_save_header) + ( fxEntries*sizeof(struct _effect_def) ) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = MALLOC(fileSize);
+	pFileData = (char*)MALLOC(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)
@@ -3091,7 +3091,7 @@ EFFECT				*pFXData;
 		if(asEffectsList[i].imd)
 		{
 			/* Restore the pointer from the hashed ID */
-			endian_udword(&asEffectsList[i].imd);
+			endian_udword((UDWORD*)&asEffectsList[i].imd);
 			asEffectsList[i].imd = (iIMDShape*)resGetDataFromHash("IMD",(UDWORD)asEffectsList[i].imd);
 		}
 	}

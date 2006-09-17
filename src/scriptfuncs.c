@@ -6600,7 +6600,7 @@ BOOL scrFactoryGetTemplate(void)
 	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
 		"scrFactoryGetTemplate: Invalid template pointer" );
 
-	if (!stackPushResult(ST_TEMPLATE, (UDWORD)psTemplate))
+	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, (UDWORD)psTemplate))
 	{
 		debug(LOG_ERROR, "scrFactoryGetTemplate: stackPushResult failed");
 		return FALSE;
@@ -8174,7 +8174,7 @@ BOOL scrGetStructureVis(void)
 		psStruct = NULL;
 	}
 
-	if (!stackPushResult(ST_STRUCTURE, (UDWORD)psStruct))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psStruct))
 	{
 		return FALSE;
 	}
@@ -8331,14 +8331,14 @@ BOOL scrGetClosestEnemy(void)
 
 	if(bFound)
 	{
-		if (!stackPushResult(ST_BASEOBJECT, (SDWORD)psObj))
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (SDWORD)psObj))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		if (!stackPushResult(ST_BASEOBJECT, (SDWORD)NULL))
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (SDWORD)NULL))
 		{
 			return FALSE;
 		}
@@ -8691,14 +8691,14 @@ BOOL scrGetClosestEnemyDroidByType(void)
 
 	if(bFound)
 	{
-		if (!stackPushResult(ST_DROID, (SDWORD)foundDroid))
+		if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)foundDroid))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		if (!stackPushResult(ST_DROID, (SDWORD)NULL))
+		if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)NULL))
 		{
 			return FALSE;
 		}
@@ -8772,14 +8772,14 @@ BOOL scrGetClosestEnemyStructByType(void)
 
 	if(bFound)
 	{
-		if (!stackPushResult(ST_STRUCTURE, (SDWORD)foundStruct))
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (SDWORD)foundStruct))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		if (!stackPushResult(ST_STRUCTURE, (SDWORD)NULL))
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (SDWORD)NULL))
 		{
 			return FALSE;
 		}
@@ -9381,7 +9381,7 @@ BOOL scrClosestDamagedGroupDroid(void)
 		}
 	}
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psClosestDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psClosestDroid))
 	{
 		return FALSE;
 	}

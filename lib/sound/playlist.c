@@ -29,7 +29,7 @@ void PlayList_Init(void) {
 	unsigned int i;
 
 	for (i = 0; i < NB_TRACKS; ++i) {
-		playlist[i].songs = malloc(2*sizeof(char*));
+		playlist[i].songs = (char**)malloc(2*sizeof(char*));
 		playlist[i].list_size = 2;
 		playlist[i].nb_songs = 0;
 		memset( playlist[i].songs, 0, playlist[i].list_size*sizeof(char*) );
@@ -100,10 +100,10 @@ char PlayList_Read(const char* path) {
 			char* filepath;
 
 			if (path_to_music == NULL) {
-				filepath = malloc(strlen(filename)+1);
+				filepath = (char*)malloc(strlen(filename)+1);
 				sprintf(filepath, "%s", filename);
 			} else {
-				filepath = malloc(  strlen(filename)
+				filepath = (char*)malloc(  strlen(filename)
 						  + strlen(path_to_music)+2);
 				sprintf(filepath, "%s/%s", path_to_music, filename);
 			}
@@ -111,7 +111,7 @@ char PlayList_Read(const char* path) {
 
 			if (CURRENT_TRACK.nb_songs == CURRENT_TRACK.list_size) {
 				CURRENT_TRACK.list_size <<= 1;
-				CURRENT_TRACK.songs = realloc(CURRENT_TRACK.songs,
+				CURRENT_TRACK.songs = (char**)realloc(CURRENT_TRACK.songs,
 							      CURRENT_TRACK.list_size*sizeof(char*));
 			}
 

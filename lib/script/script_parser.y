@@ -4086,7 +4086,6 @@ stringexp:
 					//debug(LOG_SCRIPT,"[YACC]: PUT_DATA VAL_STRING, val: '%s'",yyvsp[0].sval);
 
 					/* Manage string stack */
-					*STRSTACK[CURSTACKSTR] = (char)MALLOC(MAXSTRLEN);
 					widgCopyString(STRSTACK[CURSTACKSTR],yyvsp[0].sval);
 					CURSTACKSTR = CURSTACKSTR + 1;		/* Increment 'pointer' to the top of the string stack */
 

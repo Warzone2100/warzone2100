@@ -731,40 +731,40 @@ FUNC_SYMBOL asFuncTable[] =
 	//droid functions
 	//-----------------------------------
 	{ "actionDroidObj",		scrActionDroidObj,			VAL_VOID,
-		3, { ST_DROID, VAL_INT, ST_BASEOBJECT } },
+		3, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
 
 	{ "InitEnumDroids",			scrInitEnumDroids,		VAL_VOID,
 		2, { VAL_INT, VAL_INT } },
-	{ "EnumDroid",			scrEnumDroid,		ST_DROID,
+	{ "EnumDroid",			scrEnumDroid,		(INTERP_TYPE)ST_DROID,
 		0, { VAL_VOID } },
 
 	{ "initIterateGroupB",	scrInitIterateGroupB,		VAL_VOID,
-		2, { ST_GROUP, VAL_INT } },
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
 
-	{ "iterateGroupB",		scrIterateGroupB,			ST_DROID,
-		2, { ST_GROUP, VAL_INT } },
+	{ "iterateGroupB",		scrIterateGroupB,			(INTERP_TYPE)ST_DROID,
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
 
-	{ "closestDamagedGroupDroid",		scrClosestDamagedGroupDroid,			ST_DROID,
-		6, { VAL_INT, ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "closestDamagedGroupDroid",		scrClosestDamagedGroupDroid,			(INTERP_TYPE)ST_DROID,
+		6, { VAL_INT, (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
 
-	{ "factoryGetTemplate",			scrFactoryGetTemplate,		ST_TEMPLATE,
-		1, { ST_STRUCTURE } },
+	{ "factoryGetTemplate",			scrFactoryGetTemplate,		(INTERP_TYPE)ST_TEMPLATE,
+		1, { (INTERP_TYPE)ST_STRUCTURE } },
 
 	{ "numTemplatesInProduction",	scrNumTemplatesInProduction,		VAL_INT,
-		2, { ST_TEMPLATE, VAL_INT } },
+		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT } },
 
 	{ "numDroidsByComponent",			scrNumDroidsByComponent,		VAL_INT,
-		3, { ST_COMPONENT, VAL_INT, VAL_INT } },
+		3, { (INTERP_TYPE)ST_COMPONENT, VAL_INT, VAL_INT } },
 
 	{ "getStructureLimit",	scrGetStructureLimit,		VAL_INT,
-		2, { ST_STRUCTURESTAT, VAL_INT } },
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
 
 	{ "structureLimitReached",	scrStructureLimitReached,		VAL_BOOL,
-		2, { ST_STRUCTURESTAT, VAL_INT } },
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
 
 	{ "getNumStructures",	scrGetNumStructures,		VAL_INT,
-		2, { ST_STRUCTURESTAT, VAL_INT } },
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
 
 	{ "getUnitLimit",	scrGetUnitLimit,		VAL_INT,
 		1, { VAL_INT } },
@@ -782,13 +782,13 @@ FUNC_SYMBOL asFuncTable[] =
 		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
 
 	{ "numResearchLeft",			scrNumResearchLeft,			VAL_INT,
-		2, { VAL_INT, ST_RESEARCH } },
+		2, { VAL_INT, (INTERP_TYPE)ST_RESEARCH } },
 
 	{ "researchFinished",			scrResearchCompleted,			VAL_BOOL,
-		2, { ST_RESEARCH, VAL_INT } },
+		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT } },
 
 	{ "researchStarted",			scrResearchStarted,			VAL_BOOL,
-		2, { ST_RESEARCH, VAL_INT } },
+		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT } },
 
 	{ "threatInRange",			scrThreatInRange,			VAL_BOOL,
 		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
@@ -822,10 +822,10 @@ FUNC_SYMBOL asFuncTable[] =
 
 //num structures
 	{ "numStructsByStatInRange",			scrNumStructsByStatInRange,		VAL_INT,
-		6, { ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+		6, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
 
 	{ "numStructsByStatInArea",			scrNumStructsByStatInArea,		VAL_INT,
-		7, { ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+		7, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
 
 	{ "numStructsByTypeInRange",		scrNumStructsByTypeInRange,	VAL_INT,
 		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
@@ -836,45 +836,45 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "numStructsButNotWallsInRangeVis",			scrNumStructsButNotWallsInRangeVis,		VAL_INT,
 		5, { VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
 
-	{ "getStructureVis",			scrGetStructureVis,		ST_STRUCTURE,
-		3, { ST_STRUCTURESTAT, VAL_INT, VAL_INT } },
+	{ "getStructureVis",			scrGetStructureVis,		(INTERP_TYPE)ST_STRUCTURE,
+		3, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT } },
 
 	{ "chooseValidLoc",			scrChooseValidLoc,		VAL_BOOL,
 		6, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
-	{ "getClosestEnemy",			scrGetClosestEnemy,		ST_BASEOBJECT,
+	{ "getClosestEnemy",			scrGetClosestEnemy,		(INTERP_TYPE)ST_BASEOBJECT,
 		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT } },
 
 	{ "transporterCapacity",		scrTransporterCapacity,		VAL_INT,
-		1, { ST_DROID} },
+		1, { (INTERP_TYPE)ST_DROID} },
 
 	{ "transporterFlying",		scrTransporterFlying,		VAL_BOOL,
-		1, { ST_DROID} },
+		1, { (INTERP_TYPE)ST_DROID} },
 
 	{ "unloadTransporter",		scrUnloadTransporter,		VAL_VOID,
-		3, { ST_DROID, VAL_INT, VAL_INT} },
+		3, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT} },
 
 	{ "hasGroup",		scrHasGroup,		VAL_BOOL,
-		1, { ST_DROID} },
+		1, { (INTERP_TYPE)ST_DROID} },
 
 	{ "objWeaponMaxRange",		scrObjWeaponMaxRange,		VAL_INT,
-		1, { ST_BASEOBJECT} },
+		1, { (INTERP_TYPE)ST_BASEOBJECT} },
 
 	{ "objHasWeapon",			scrObjHasWeapon,		VAL_BOOL,
-		1, { ST_BASEOBJECT} },
+		1, { (INTERP_TYPE)ST_BASEOBJECT} },
 
 	{ "objectHasIndirectWeapon",		scrObjectHasIndirectWeapon,		VAL_BOOL,
-		1, { ST_BASEOBJECT} },
+		1, { (INTERP_TYPE)ST_BASEOBJECT} },
 
-	{ "getClosestEnemyDroidByType",			scrGetClosestEnemyDroidByType,		ST_DROID,
+	{ "getClosestEnemyDroidByType",			scrGetClosestEnemyDroidByType,		(INTERP_TYPE)ST_DROID,
 		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_INT } },
 
-	{ "getClosestEnemyStructByType",		scrGetClosestEnemyStructByType,	ST_STRUCTURE,
+	{ "getClosestEnemyStructByType",		scrGetClosestEnemyStructByType,	(INTERP_TYPE)ST_STRUCTURE,
 		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
 
 	{ "skDefenseLocationB",		scrSkDefenseLocationB,		VAL_BOOL,
-	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, ST_STRUCTURESTAT, ST_STRUCTURESTAT, ST_DROID,VAL_INT } },
+	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_DROID,VAL_INT } },
 
 	{ "circlePerimPoint",			scrCirclePerimPoint,		VAL_VOID,
 		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT} },
@@ -889,10 +889,10 @@ FUNC_SYMBOL asFuncTable[] =
 		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
 
 	{ "selectDroid",			scrSelectDroid,		VAL_VOID,
-		2, { ST_DROID, VAL_BOOL} },
+		2, { (INTERP_TYPE)ST_DROID, VAL_BOOL} },
 
 	{ "selectGroup",			scrSelectGroup,		VAL_VOID,
-		2, { ST_GROUP, VAL_BOOL} },
+		2, { (INTERP_TYPE)ST_GROUP, VAL_BOOL} },
 
 	{ "modulo",			scrModulo,		VAL_INT,
 		2, { VAL_INT, VAL_INT} },
@@ -1048,23 +1048,23 @@ VAR_SYMBOL asObjTable[] =
 
 	/* new member variables */
 	//similiar to .order
-	{ "action",			VAL_INT,			(INTERP_TYPE)ST_OBJECT,	ST_DROID,		OBJID_ACTION,
+	{ "action",			VAL_INT,			(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_ACTION,
 		scrBaseObjGet,			NULL },
 
 	//.stat - now supports droids, ST_STRUCTURE became ST_BASEOBJECT
-	{ "stat",			ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	ST_BASEOBJECT,	OBJID_STRUCTSTAT,
+	{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_STRUCTSTAT,
 		scrBaseObjGet,			NULL },
 
 	//object->psTarget
-	{ "target",			ST_BASEOBJECT,		(INTERP_TYPE)ST_OBJECT,	ST_BASEOBJECT,	OBJID_TARGET,
+	{ "target",			(INTERP_TYPE)ST_BASEOBJECT,		(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_TARGET,
 		scrBaseObjGet,			NULL },
 
 	//returns psStruct->pStructureType->type
-	{ "stattype",			VAL_INT,		(INTERP_TYPE)ST_OBJECT,	ST_STRUCTURE,	OBJID_STRUCTSTATTYPE,
+	{ "stattype",			VAL_INT,		(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTATTYPE,
 		scrBaseObjGet,			NULL },
 
 	//returns if this unit is currently selected by a player (usually human)
-	{ "selected",			VAL_BOOL,		(INTERP_TYPE)ST_OBJECT,	ST_DROID,		OBJID_SELECTED,
+	{ "selected",			VAL_BOOL,		(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_SELECTED,
 		scrBaseObjGet,			NULL },
 
 	/* This entry marks the end of the variable list */
@@ -1551,7 +1551,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 
 		//new transporter landed callback
 	{ "CALL_TRANSPORTER_LANDED_B",	(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED_B,	scrCBTransporterLandedB,
-		3,	{ ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
+		3,	{ (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
 
 	/* This entry marks the end of the callback list */
 	{ "CALLBACK LIST END", 0 }

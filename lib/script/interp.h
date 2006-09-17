@@ -158,7 +158,7 @@ typedef struct _var_debug
 typedef struct _array_data
 {
 	UDWORD			base;			// the base index of the array values
-	UBYTE			type;			// the array data type
+	INTERP_TYPE		type;			// the array data type
 	UBYTE			dimensions;
 	UBYTE			elements[VAR_MAX_DIMENSIONS];
 } ARRAY_DATA;
@@ -193,7 +193,7 @@ typedef enum _trigger_type
 /* Description of a trigger for the SCRIPT_CODE */
 typedef struct _trigger_data
 {
-	UWORD			type;		// Type of trigger
+	TRIGGER_TYPE		type;		// Type of trigger
 	UWORD			code;		// BOOL - is there code with this trigger
 	UDWORD			time;		// How often to check the trigger
 } TRIGGER_DATA;

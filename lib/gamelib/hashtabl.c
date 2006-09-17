@@ -74,9 +74,9 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	/* allocate and init table */
 
 
-	(*ppsTable) = MALLOC( sizeof(HASHTABLE) );
+	(*ppsTable) = (HASHTABLE*)MALLOC( sizeof(HASHTABLE) );
 	udwSize = udwTableSize * sizeof(HASHNODE *);
-	(*ppsTable)->ppsNode = MALLOC( udwSize );
+	(*ppsTable)->ppsNode = (HASHNODE**)MALLOC( udwSize );
 	memset( (*ppsTable)->ppsNode, 0, udwSize );
 
 	/* allocate heaps */
@@ -260,7 +260,7 @@ hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
 	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
 
 	/* get node from heap */
-	HEAP_ALLOC( psTable->psNodeHeap, (void*) &psNode );
+	HEAP_ALLOC( psTable->psNodeHeap, (void**) &psNode );
 
 	/* set node elements */
 	psNode->iKey1     = iKey1;

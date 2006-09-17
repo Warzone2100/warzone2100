@@ -42,7 +42,7 @@ void grpShutDown(void)
 // create a new group
 BOOL grpCreate(DROID_GROUP	**ppsGroup)
 {
-	if (!HEAP_ALLOC(psGrpHeap, (void*) ppsGroup))
+	if (!HEAP_ALLOC(psGrpHeap, (void**) ppsGroup))
 	{
 		return FALSE;
 	}

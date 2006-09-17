@@ -512,7 +512,7 @@ static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
 
 	if (AllocateMem == TRUE) {
 		// Allocate a buffer to store the data and a terminating zero
-		*ppFileData = MALLOC(filesize + 1);
+		*ppFileData = (char*)MALLOC(filesize + 1);
 		if (*ppFileData == NULL) {
 			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
 			assert(FALSE);

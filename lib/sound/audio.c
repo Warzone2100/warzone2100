@@ -371,7 +371,7 @@ AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 	}
 
 //	debug(LOG_SOUND, "audio_queuetrack called1" );
-	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
 	if ( psSample != NULL )
 	{
 		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );		//[check] -Q
@@ -650,7 +650,7 @@ BOOL audio_LoadTrackFromFile( char szFileName[] )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void *audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
+TRACK *audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 {
 	// if audio not enabled return TRUE to carry on game without audio
 	if ( g_bAudioEnabled == FALSE )
@@ -703,7 +703,7 @@ BOOL audio_SetTrackVals
 	}
 
 	// get track pointer from resource
-	psTrack = resGetData( "WAV", szFileName );		//at this point we have 4 valid entries, and 8 invalid -Q
+	psTrack = (TRACK*)resGetData( "WAV", szFileName );		//at this point we have 4 valid entries, and 8 invalid -Q
 	if ( psTrack == NULL )
 	{
 		debug( LOG_NEVER, "audio_SetTrackVals: track %s resource not found\n", szFileName );
@@ -755,7 +755,7 @@ BOOL audio_SetTrackValsHashName
 	}
 
 	// get track pointer from resource
-	psTrack = resGetDataFromHash( "WAV", hash );
+	psTrack = (TRACK*)resGetDataFromHash( "WAV", hash );
 	if ( psTrack == NULL )
 	{
 		return FALSE;
@@ -859,7 +859,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 		return FALSE;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
 	if ( psSample == NULL )
 	{
 		return FALSE;
@@ -987,7 +987,7 @@ BOOL audio_PlayStream( char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUserCallb
 		return FALSE;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
 	if ( psSample != NULL )
 	{
 		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
@@ -1058,7 +1058,7 @@ void audio_PlayTrack( int iTrack )
 		return;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, (void *) &psSample );
+	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
 	if ( psSample != NULL )
 	{
 		// setup sample
@@ -1259,7 +1259,7 @@ SDWORD audio_GetTrackID( char szFileName[] )
 	}
 	else
 	{
-		psTrack = resGetData( "WAV", szFileName );
+		psTrack = (TRACK*)resGetData( "WAV", szFileName );
 		if ( psTrack == NULL )
 		{
 			return SAMPLE_NOT_FOUND;
@@ -1290,7 +1290,7 @@ SDWORD audio_GetTrackIDFromHash( UDWORD hash )
 	}
 	else
 	{
-		psTrack = resGetDataFromHash( "WAV", hash );
+		psTrack = (TRACK*)resGetDataFromHash( "WAV", hash );
 		if ( psTrack == NULL )
 		{
 			return SAMPLE_NOT_FOUND;

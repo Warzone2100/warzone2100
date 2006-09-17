@@ -100,7 +100,6 @@ typedef	enum	ALPHA_MODE
 
 typedef struct	RENDER_STATE
 				{
-					DEPTH_MODE			depthBuffer;
 					BOOL				translucent;
 					BOOL				additive;
 					FOG_CAP				fogCap;

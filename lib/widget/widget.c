@@ -144,7 +144,7 @@ void widgShutDown(void)
 /* Get a string from the string heap */
 BOOL widgAllocString(STRING **ppStr)
 {
-	if (!HEAP_ALLOC(psStrHeap, (void*) ppStr))
+	if (!HEAP_ALLOC(psStrHeap, (void**) ppStr))
 	{
 		return FALSE;
 	}
@@ -174,7 +174,7 @@ void widgCopyString(STRING *pDest, STRING *pSrc)
  */
 BOOL widgAllocCopyString(STRING **ppDest, STRING *pSrc)
 {
-	if (!HEAP_ALLOC(psStrHeap, (void*) ppDest))
+	if (!HEAP_ALLOC(psStrHeap, (void**) ppDest))
 	{
 		*ppDest = NULL;
 		return FALSE;

@@ -1014,7 +1014,7 @@ BOOL systemInitialise(void)
 	{
 		displayBufferSize = 5000000;
 	}
-	DisplayBuffer = MALLOC(displayBufferSize);
+	DisplayBuffer = (char*)MALLOC(displayBufferSize);
 	if (DisplayBuffer == NULL)
 	{
 		debug( LOG_ERROR, "Unable to allocate memory for display buffer" );

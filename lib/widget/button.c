@@ -47,7 +47,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	*ppsWidget = (W_BUTTON *)MALLOC(sizeof(W_BUTTON));
 	if (*ppsWidget == NULL)
 #else
-	if (!HEAP_ALLOC(psButHeap, (void*) ppsWidget))
+	if (!HEAP_ALLOC(psButHeap, (void**) ppsWidget))
 #endif
 	{
 		ASSERT( FALSE, "buttonCreate: Out of memory" );

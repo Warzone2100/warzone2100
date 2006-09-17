@@ -54,7 +54,7 @@ BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
 	*ppsWidget = (W_EDITBOX *)MALLOC(sizeof(W_EDITBOX));
 	if (*ppsWidget == NULL)
 #else
-	if (!HEAP_ALLOC(psEdbHeap, (void*) ppsWidget))
+	if (!HEAP_ALLOC(psEdbHeap, (void**) ppsWidget))
 #endif
 	{
 		ASSERT( FALSE, "Out of memory" );

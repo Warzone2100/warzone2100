@@ -70,7 +70,7 @@ extern void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psC
 extern void set_active_data_directory(int);
 
 extern CURSORSNAP InterfaceSnap;
-extern void ProcessCursorSnap(VOID);
+extern void ProcessCursorSnap(void);
 
 int StartWithGame = 1;	// New game starts in Cam 1.
 

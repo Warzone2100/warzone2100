@@ -366,14 +366,15 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					 SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psContext;
-	SDWORD		val, storeIndex, type, arrayNum, i,j, arraySize;
+	SDWORD		val, storeIndex, arrayNum, i,j, arraySize;
+	INTERP_TYPE	type;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
 
 	ASSERT( PTRVALID(psCode, sizeof(SCRIPT_CODE)),
 		"eventNewContext: Invalid code pointer" );
 
 	// Get a new context
-	if (!HEAP_ALLOC(psContHeap, (void*) &psContext))
+	if (!HEAP_ALLOC(psContHeap, (void**) &psContext))
 	{
 		debug(LOG_ERROR,"eventNewContext: HEAP_ALLOC failed");
 		return FALSE;
@@ -382,7 +383,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	// Initialise the context
 	psContext->psCode = psCode;
 	psContext->triggerCount = 0;
-	psContext->release = (SWORD)(release == CR_RELEASE ? TRUE : FALSE);
+	psContext->release = release;
 	psContext->psGlobals = NULL;
 	psContext->id = -1;		// only used by the save game
 	val = psCode->numGlobals + psCode->arraySize - 1;
@@ -457,7 +458,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	while (val >= 0)
 	{
-		if (!HEAP_ALLOC(psValHeap, (void*) &psNewChunk))
+		if (!HEAP_ALLOC(psValHeap, (void**) &psNewChunk))
 		{
 			for(psNewChunk=psContext->psGlobals; psNewChunk; psNewChunk = psNextChunk)
 			{
@@ -842,7 +843,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	}
 
 	// Get a trigger object
-	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
+	if (!HEAP_ALLOC(psTrigHeap, (void**) &psNewTrig))
 	{
 		return FALSE;
 	}
@@ -876,7 +877,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 		"eventLoadTrigger: Trigger out of range" );
 
 	// Get a trigger object
-	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
+	if (!HEAP_ALLOC(psTrigHeap, (void**) &psNewTrig))
 	{
 		debug( LOG_ERROR, "eventLoadTrigger: out of memory" );
 		abort();
@@ -909,7 +910,7 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 		"eventAddTrigger: Event out of range" );
 
 	// Get a trigger object
-	if (!HEAP_ALLOC(psTrigHeap, (void*) &psNewTrig))
+	if (!HEAP_ALLOC(psTrigHeap, (void**) &psNewTrig))
 	{
 		return FALSE;
 	}

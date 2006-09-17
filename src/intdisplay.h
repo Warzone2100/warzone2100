@@ -59,7 +59,7 @@ typedef struct {
 
 
 typedef struct {
-	uint8 *Buffer;		// Bitmap buffer.
+	UBYTE *Buffer;		// Bitmap buffer.
 struct 	iSurface *Surface;	// Ivis surface definition.
 } BUTTON_SURFACE;
 

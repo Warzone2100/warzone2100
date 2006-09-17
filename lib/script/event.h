@@ -29,6 +29,13 @@ typedef struct _link_chunk
 	struct _link_chunk *psNext;
 } LINK_CHUNK;
 
+// Whether a context is released when there are no active triggers for it
+typedef enum _context_release
+{
+	CR_RELEASE,		// release the context
+	CR_NORELEASE,	// do not release the context
+} CONTEXT_RELEASE;
+
 
 /* The data needed within an object to run a script */
 typedef struct _script_context
@@ -36,7 +43,7 @@ typedef struct _script_context
 	SCRIPT_CODE		*psCode;		// The actual script to run
 	VAL_CHUNK		*psGlobals;		// The objects copy of the global variables
 	SDWORD			triggerCount;	// Number of currently active triggers
-	SWORD			release;		// Whether to release the context when there are no triggers
+	CONTEXT_RELEASE		release;		// Whether to release the context when there are no triggers
 	SWORD			id;
 
 	struct _script_context *psNext;

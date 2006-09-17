@@ -126,7 +126,7 @@ animObj_Update( void )
 	SDWORD		dwTime;
 	BOOL		bRemove;
 
-	psObj = hashTable_GetFirst( g_pAnimObjTable );
+	psObj = (ANIM_OBJECT*)hashTable_GetFirst( g_pAnimObjTable );
 
 	while ( psObj != NULL )
 	{
@@ -166,7 +166,7 @@ animObj_Update( void )
 			}
 		}
 
-		psObj = hashTable_GetNext( g_pAnimObjTable );
+		psObj = (ANIM_OBJECT*)hashTable_GetNext( g_pAnimObjTable );
 	}
 }
 
@@ -191,7 +191,7 @@ animObj_Add( void *pParentObj, int iAnimID,
 
 
 	/* get object from table */
-	psObj = hashTable_GetElement( g_pAnimObjTable );
+	psObj = (ANIM_OBJECT*)hashTable_GetElement( g_pAnimObjTable );
 
 
 	if (psObj==NULL)
@@ -282,7 +282,7 @@ animObj_GetFirst( void )
 ANIM_OBJECT *
 animObj_GetNext( void )
 {
-	return hashTable_GetNext( g_pAnimObjTable );
+	return (ANIM_OBJECT*)hashTable_GetNext( g_pAnimObjTable );
 }
 
 /***************************************************************************/
@@ -290,7 +290,7 @@ animObj_GetNext( void )
 ANIM_OBJECT *
 animObj_Find( void *pParentObj, int iAnimID )
 {
-	return hashTable_FindElement( g_pAnimObjTable,
+	return (ANIM_OBJECT*)hashTable_FindElement( g_pAnimObjTable,
 										(int) pParentObj, iAnimID );
 }
 

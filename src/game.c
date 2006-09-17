@@ -10153,7 +10153,7 @@ BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWO
 		psSaveMessage = (SAVE_MESSAGE *) pFileData;
 
 		/* SAVE_MESSAGE */
-		endian_sdword(&psSaveMessage->type);	/* FIXME: enum may not be this type! */
+		endian_sdword((SDWORD*)&psSaveMessage->type);	/* FIXME: enum may not be this type! */
 		endian_udword(&psSaveMessage->objId);
 		endian_udword(&psSaveMessage->player);
 
@@ -10317,7 +10317,7 @@ static BOOL writeMessageFile(STRING *pFileName)
 			psSaveMessage->read = psMessage->read;			//flag to indicate whether message has been read
 			psSaveMessage->player = psMessage->player;		//which player this message belongs to
 
-			endian_sdword(&psSaveMessage->type); /* FIXME: enum may be different type! */
+			endian_sdword((SDWORD*)&psSaveMessage->type); /* FIXME: enum may be different type! */
 			endian_udword(&psSaveMessage->objId);
 			endian_udword(&psSaveMessage->player);
 
@@ -10591,7 +10591,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psSaveflag = (SAVE_FLAG *) pFileData;
 
 		/* SAVE_FLAG */
-		endian_sdword(&psSaveflag->type); /* FIXME: enum may not be this type! */
+		endian_sdword((SDWORD*)psSaveflag->type); /* FIXME: enum may not be this type! */
 		endian_udword(&psSaveflag->frameNumber);
 		endian_udword(&psSaveflag->screenX);
 		endian_udword(&psSaveflag->screenY);
@@ -10791,7 +10791,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 			}
 
 			/* SAVE_FLAG */
-			endian_sdword(&psSaveflag->type); /* FIXME: enum may be different type! */
+			endian_sdword((SDWORD*)&psSaveflag->type); /* FIXME: enum may be different type! */
 			endian_udword(&psSaveflag->frameNumber);
 			endian_udword(&psSaveflag->screenX);
 			endian_udword(&psSaveflag->screenY);
@@ -10842,7 +10842,7 @@ static BOOL writeFlagFile(STRING *pFileName)
 							}
 
 							/* SAVE_FLAG */
-							endian_sdword(&psSaveflag->type); /* FIXME: enum may be different type! */
+							endian_sdword((SDWORD*)&psSaveflag->type); /* FIXME: enum may be different type! */
 							endian_udword(&psSaveflag->frameNumber);
 							endian_udword(&psSaveflag->screenX);
 							endian_udword(&psSaveflag->screenY);

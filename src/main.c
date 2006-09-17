@@ -3,6 +3,7 @@
  *
  */
 #include "lib/framework/frame.h"
+#include "lib/framework/configfile.h"
 
 /* For SHGetFolderPath */
 #ifdef WIN32
@@ -84,7 +85,6 @@ char	MultiCustomMapsPath[MAX_PATH];
 char	MultiPlayersPath[MAX_PATH];
 char	KeyMapPath[MAX_PATH];
 char	UserMusicPath[MAX_PATH];
-char	RegFilePath[MAX_PATH];
 
 void debug_callback_stderr( void**, const char * );
 void debug_callback_win32debug( void**, const char * );

@@ -505,7 +505,7 @@ BOOL gwCreateBlankZoneMap(void)
 		gwFreeZoneMap();
 	}
 
-	apRLEZones = MALLOC(sizeof(UBYTE *) * gwMapHeight());
+	apRLEZones = (UBYTE**)MALLOC(sizeof(UBYTE *) * gwMapHeight());
 	if (apRLEZones == NULL)
 	{
 		debug( LOG_ERROR, "gwCreateBlankZoneMap: Out of memory" );
@@ -515,7 +515,7 @@ BOOL gwCreateBlankZoneMap(void)
 	for(i=0; i< gwMapHeight(); i++)
 	{
 
-		apRLEZones[i] = MALLOC(gwMapWidth() * 2);
+		apRLEZones[i] = (UBYTE*)MALLOC(gwMapWidth() * 2);
 
 		if (apRLEZones[i] == NULL)
 		{

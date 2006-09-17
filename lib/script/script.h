@@ -94,13 +94,6 @@ extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
  * Event system functions
  */
 
-// Whether a context is released when there are no active triggers for it
-typedef enum _context_release
-{
-	CR_RELEASE,		// release the context
-	CR_NORELEASE,	// do not release the context
-} CONTEXT_RELEASE;
-
 // reset the event system
 extern void eventReset(void);
 

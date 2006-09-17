@@ -36,7 +36,7 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 	*ppsWidget = (W_LABEL *)MALLOC(sizeof(W_LABEL));
 	if (*ppsWidget == NULL)
 #else
-	if (!HEAP_ALLOC(psLabHeap, (void*) ppsWidget))
+	if (!HEAP_ALLOC(psLabHeap, (void**) ppsWidget))
 #endif
 	{
 		ASSERT( FALSE, "Out of memory" );

@@ -1855,7 +1855,7 @@ void kf_SendTextMessage(void)
 				//--------------------------
 				ConsolePlayer = selectedPlayer;
 				strcpy(ConsoleMsg,sTextToSend);
-				eventFireCallbackTrigger(CALL_CONSOLE);
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 
 
 				if(bMultiPlayer && NetPlay.bComms)

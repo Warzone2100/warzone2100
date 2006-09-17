@@ -2855,7 +2855,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 
 	for (i=0; i < NumDroids; i++)
 	{
-		if (!HEAP_ALLOC(psTemplateHeap, (void*) &pDroidDesign))
+		if (!HEAP_ALLOC(psTemplateHeap, (void**) &pDroidDesign))
 		{
 			debug( LOG_ERROR, "Out of memory - Droid Templates" );
 			abort();

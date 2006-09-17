@@ -18,7 +18,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetFogColour(0x00000000);//nicks colour
 
 	//depth Buffer on
-	rendStates.depthBuffer = FALSE;//to force reset to true
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
 	//set render mode

@@ -2320,7 +2320,7 @@ BOOL scrIterateGroupB(void)
 		psDroid = NULL;
 	}
 
-	if (!stackPushResult(ST_DROID, (SDWORD)psDroid))
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psDroid))
 	{
 		debug(LOG_ERROR, "scrIterateGroupB: stackPushResult failed");
 		return FALSE;

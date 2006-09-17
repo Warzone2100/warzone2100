@@ -48,7 +48,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	memset((*ppsBlock)->apStrings, 0, sizeof(STRING *) * size);
 
 #ifdef DEBUG
-	(*ppsBlock)->aUsage = MALLOC(sizeof(UDWORD) * size);
+	(*ppsBlock)->aUsage = (UDWORD*)MALLOC(sizeof(UDWORD) * size);
 	memset((*ppsBlock)->aUsage, 0, sizeof(UDWORD) * size);
 #endif
 

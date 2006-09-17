@@ -234,7 +234,7 @@ BOOL sound_AddTrack( TRACK *pTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
+TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 {
 	//~~~~~~~~~~~~
 	TRACK	*pTrack;
@@ -252,7 +252,7 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 	else
 	{
 		pTrack->bMemBuffer = TRUE;
-		pTrack->pName = MALLOC( strlen(GetLastResourceFilename()) + 1 );
+		pTrack->pName = (STRING*)MALLOC( strlen(GetLastResourceFilename()) + 1 );
 		if ( pTrack->pName == NULL )
 		{
 			debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
@@ -296,7 +296,7 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 	if ( pTrack != NULL )
 	{
 		pTrack->bMemBuffer = FALSE;
-		pTrack->pName = MALLOC( strlen((char*) szFileName) + 1 );
+		pTrack->pName = (STRING*)MALLOC( strlen((char*) szFileName) + 1 );
 		if ( pTrack->pName == NULL )
 		{
 			debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );
@@ -469,7 +469,7 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-char *sound_GetTrackName( SDWORD iTrack )
+const char *sound_GetTrackName( SDWORD iTrack )
 {
 	if ( iTrack == SAMPLE_NOT_FOUND ) return NULL;
 	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );

@@ -234,7 +234,7 @@ BOOL image_create(pie_image* image,
 	if (image->data != NULL) {
 		free(image->data);
 	}
-	image->data = malloc(width*height*channels);
+	image->data = (unsigned char*)malloc(width*height*channels);
 
 	return FALSE;
 }
@@ -534,7 +534,7 @@ void screenDoDumpToDiskIfRequired(void)
 			free(buffer);
 		}
 		buffer_size = row_stride * screen->h;
-		buffer = malloc(buffer_size);
+		buffer = (unsigned char*)malloc(buffer_size);
 	}
 	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 

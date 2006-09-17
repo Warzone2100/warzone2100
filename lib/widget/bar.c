@@ -48,7 +48,7 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 	*ppsWidget = (W_BARGRAPH *)MALLOC(sizeof(W_BARGRAPH));
 	if (*ppsWidget == NULL)
 #else
-	if (!HEAP_ALLOC(psBarHeap, (void*) ppsWidget))
+	if (!HEAP_ALLOC(psBarHeap, (void**) ppsWidget))
 #endif
 	{
 		ASSERT( FALSE, "barGraphCreate: Out of memory" );

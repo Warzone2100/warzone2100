@@ -99,7 +99,7 @@ BOOL	sound_Init( SDWORD iMaxSameSamples );
 BOOL	sound_Shutdown(void);
 
 BOOL	sound_LoadTrackFromFile(char szFileName[]);
-void *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
+TRACK *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
 			SDWORD iVol, SDWORD iPriority, SDWORD iAudibleRadius,
 			SDWORD VagID );
@@ -117,7 +117,7 @@ SDWORD	sound_GetTrackTime( SDWORD iTrack );
 SDWORD	sound_GetTrackPriority( SDWORD iTrack );
 SDWORD	sound_GetTrackAudibleRadius( SDWORD iTrack );
 SDWORD	sound_GetTrackVolume( SDWORD iTrack );
-char *	sound_GetTrackName( SDWORD iTrack );
+const char *	sound_GetTrackName( SDWORD iTrack );
 UDWORD	sound_GetTrackHashName( SDWORD iTrack );
 
 BOOL	sound_TrackLooped( SDWORD iTrack );

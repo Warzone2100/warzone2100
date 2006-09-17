@@ -9,3 +9,5 @@ extern BOOL closeWarzoneKey			(void);
 extern BOOL setWarzoneKeyNumeric	(const STRING *pName,DWORD val);
 extern BOOL getWarzoneKeyString(const STRING *pName, STRING *pString);
 extern BOOL setWarzoneKeyString(const STRING *pName, const STRING *pString);
+
+extern char RegFilePath[MAX_PATH];

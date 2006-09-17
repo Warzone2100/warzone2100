@@ -72,7 +72,7 @@ static BOOL stackNewChunk(UDWORD size)
 		{
 			return FALSE;
 		}
-		psCurrChunk->psNext->aVals = MALLOC(sizeof(INTERP_VAL) * size);
+		psCurrChunk->psNext->aVals = (INTERP_VAL*)MALLOC(sizeof(INTERP_VAL) * size);
 		if (!psCurrChunk->psNext->aVals)
 		{
 			FREE(psCurrChunk->psNext);
@@ -627,7 +627,7 @@ BOOL stackInitialise(void)
 		abort();
 		return FALSE;
 	}
-	psStackBase->aVals = MALLOC(sizeof(INTERP_VAL) * INIT_SIZE);
+	psStackBase->aVals = (INTERP_VAL*)MALLOC(sizeof(INTERP_VAL) * INIT_SIZE);
 	if (!psStackBase->aVals)
 	{
 		debug( LOG_ERROR, "Out of memory" );

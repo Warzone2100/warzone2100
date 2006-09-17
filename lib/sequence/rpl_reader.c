@@ -25,7 +25,7 @@ void resize_data_buffer(unsigned int size) {
 		if (data_buffer != NULL) {
 			free(data_buffer);
 		}
-		data_buffer = malloc(size);
+		data_buffer = (char*)malloc(size);
 		data_buffer_size = size;
 	}
 }
@@ -185,7 +185,7 @@ rpl_open(char* filename) {
 		unsigned int i;
 		unsigned int max_video_size = 0;
 
-		rpl->chunks = malloc(sizeof(RPL_chunk_info_t)*rpl->nb_chunks);
+		rpl->chunks = (RPL_chunk_info_t*)malloc(sizeof(RPL_chunk_info_t)*rpl->nb_chunks);
 		PHYSFS_seek(f, rpl->otcc);
 
 		for (i = 0; i < rpl->nb_chunks; ++i) {
@@ -228,7 +228,7 @@ unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buff
 		total_audio_size += rpl->chunks[i].audio_size;
 	}
 
-	audio_buffer = malloc(total_audio_size);
+	audio_buffer = (char*)malloc(total_audio_size);
 	tmp = audio_buffer;
 
 	for (i = 0; i < rpl->nb_chunks; ++i) {
@@ -289,7 +289,7 @@ unsigned int rpl_decode_sound_adpcm(RPL* rpl, short* buffer, unsigned int buffer
 		if (audio_frame_size > tmp_buffer_size) {
 			tmp_buffer_size = audio_frame_size << 1;
 			free(tmp_buffer);
-			tmp_buffer = malloc(tmp_buffer_size);
+			tmp_buffer = (unsigned char*)malloc(tmp_buffer_size);
 		}
 		PHYSFS_seek(rpl->f, rpl->chunks[cf].offset+rpl->chunks[cf].video_size);
 		PHYSFS_read(rpl->f, tmp_buffer, audio_frame_size, 1);

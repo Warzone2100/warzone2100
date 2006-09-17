@@ -1043,7 +1043,8 @@ void removeFeature(FEATURE *psDel)
 /* Remove a Feature and free it's memory */
 void destroyFeature(FEATURE *psDel)
 {
-	UDWORD			widthScatter,breadthScatter,heightScatter, i, explosionSize;
+	UDWORD			widthScatter,breadthScatter,heightScatter, i;
+	EFFECT_TYPE		explosionSize;
 	iVector			pos;
 	UDWORD			width,breadth;
 	UDWORD			mapX,mapY;

@@ -84,20 +84,20 @@ IMAGEFILE *iV_LoadImageFile(char *FileData, UDWORD FileSize)
 	endian_uword(&Header->BitDepth);
 	endian_uword(&Header->NumTPages);
 
-	ImageFile = MALLOC(sizeof(IMAGEFILE));
+	ImageFile = (IMAGEFILE*)MALLOC(sizeof(IMAGEFILE));
 	if(ImageFile == NULL) {
 		debug( LOG_ERROR, "Out of memory" );
 		return NULL;
 	}
 
 
-	ImageFile->TexturePages = MALLOC(sizeof(iSprite)*Header->NumTPages);
+	ImageFile->TexturePages = (iSprite*)MALLOC(sizeof(iSprite)*Header->NumTPages);
 	if(ImageFile->TexturePages == NULL) {
 		debug( LOG_ERROR, "Out of memory" );
 		return NULL;
 	}
 
-	ImageFile->ImageDefs = MALLOC(sizeof(IMAGEDEF)*Header->NumImages);
+	ImageFile->ImageDefs = (IMAGEDEF*)MALLOC(sizeof(IMAGEDEF)*Header->NumImages);
 	if(ImageFile->ImageDefs == NULL) {
 		debug( LOG_ERROR, "Out of memory" );
 		return NULL;

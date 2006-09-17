@@ -250,13 +250,13 @@ BOOL scrBaseObjGet(UDWORD index)
 
 		if (psObj->type == OBJ_STRUCTURE)
 		{
-			type = ST_STRUCTURESTAT;
+			type = (INTERP_TYPE)ST_STRUCTURESTAT;
 			val = ((STRUCTURE *)psObj)->pStructureType - asStructureStats;
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
 			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
-			type = ST_STRUCTURESTAT;
+			type = (INTERP_TYPE)ST_STRUCTURESTAT;
 			val = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
 		}
 		else		//Nothing else supported
@@ -272,13 +272,13 @@ BOOL scrBaseObjGet(UDWORD index)
 		//added object->psTarget
 		if (psObj->type == OBJ_STRUCTURE)
 		{
-			type = ST_BASEOBJECT;
+			type = (INTERP_TYPE)ST_BASEOBJECT;
 			val = (SDWORD)((STRUCTURE *)psObj)->psTarget;
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
 			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
-			type = ST_BASEOBJECT;
+			type = (INTERP_TYPE)ST_BASEOBJECT;
 			val = (SDWORD)(((DROID *)psObj)->psTarget);
 		}
 		else		//Nothing else supported

@@ -115,7 +115,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 	SDWORD		i;
 
 	// get a heap structure
-	if (!HEAP_ALLOC(psFHeap, (void*) &psNew))
+	if (!HEAP_ALLOC(psFHeap, (void**) &psNew))
 	{
 		return FALSE;
 	}

@@ -171,7 +171,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 	char				*pPos;
 	STRING				*pScriptID;
 	SCRIPT_CODE			*psCode;
-	SWORD				release;
+	CONTEXT_RELEASE			release;
 	INTERP_VAL			*psVal;
 
 	size = 0;
@@ -187,7 +187,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 	{
 		// get the script code
 		pScriptID = (STRING *)pPos;
-		psCode = resGetData("SCRIPT", pScriptID);
+		psCode = (SCRIPT_CODE*)resGetData("SCRIPT", pScriptID);
 		pPos += strlen(pScriptID) + 1;
 
 		// check the number of variables
@@ -200,7 +200,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 		}
 		pPos += sizeof(SWORD);
 
-		release = *pPos;
+		release = (CONTEXT_RELEASE)*pPos;
 		pPos += sizeof(UBYTE);
 
 		// create the context
@@ -218,7 +218,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 		for(i=0; i < numVars; i+= 1)
 		{
 			// get the variable type
-			type = *((SWORD*)pPos);
+			type = (INTERP_TYPE)*pPos;
 			pPos += sizeof(SWORD);
 			size += sizeof(SWORD);
 
@@ -289,7 +289,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 //not hashed	STRING				*pScriptID;
 	UDWORD				hashedName;
 	SCRIPT_CODE			*psCode;
-	SWORD				release;
+	CONTEXT_RELEASE			release;
 	INTERP_VAL			*psVal;
 
 	size = 0;
@@ -309,7 +309,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 //notHashed		pPos += strlen(pScriptID) + 1;
 		hashedName = *((UDWORD*)pPos);
 		pPos += sizeof(UDWORD);
-		psCode = resGetDataFromHash("SCRIPT", hashedName);
+		psCode = (SCRIPT_CODE*)resGetDataFromHash("SCRIPT", hashedName);
 
 
 		// check the number of variables
@@ -322,7 +322,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 		}
 		pPos += sizeof(SWORD);
 
-		release = *pPos;
+		release = (CONTEXT_RELEASE)*pPos;
 		pPos += sizeof(UBYTE);
 
 		// create the context
@@ -340,7 +340,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 		for(i=0; i < numVars; i+= 1)
 		{
 			// get the variable type
-			type = *((SWORD*)pPos);
+			type = (INTERP_TYPE)*pPos;
 			pPos += sizeof(SWORD);
 			size += sizeof(SWORD);
 
@@ -584,7 +584,7 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 
 
 	// Allocate the buffer to save to
-	pBuffer = MALLOC(totalSize);
+	pBuffer = (char*)MALLOC(totalSize);
 	if (pBuffer == NULL)
 	{
 		debug( LOG_ERROR, "eventSaveState: out of memory" );

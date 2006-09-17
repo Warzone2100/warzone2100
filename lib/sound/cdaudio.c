@@ -231,8 +231,6 @@ static inline signed int scale_sample(mad_fixed_t sample)
   return sample >> (MAD_F_FRACBITS + 1 - 16);
 }
 
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-
 static int mp3_read_buffer(char *buffer, const int size) {
 	int samples = 0;
 

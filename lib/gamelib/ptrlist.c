@@ -27,7 +27,7 @@ ptrList_Create( PTRLIST **ppsList, UDWORD udwInitElements,
 				UDWORD udwExtElements, UDWORD udwElementSize )
 {
 	/* create ptr list struct */
-	(*ppsList) = MALLOC( sizeof(PTRLIST) );
+	(*ppsList) = (PTRLIST*)MALLOC( sizeof(PTRLIST) );
 
 	/* allocate heaps */
 	if ( !HEAP_CREATE( &(*ppsList)->psNodeHeap, sizeof(LISTNODE),
@@ -178,7 +178,7 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 			"ptrList_InsertElement: element pointer invalid\n" );
 
 	/* get node from heap */
-	HEAP_ALLOC( ptrList->psNodeHeap, (void*) &psNode );
+	HEAP_ALLOC( ptrList->psNodeHeap, (void**) &psNode );
 
 	/* set node elements */
 	psNode->sdwKey    = sdwKey;

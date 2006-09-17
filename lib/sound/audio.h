@@ -17,7 +17,7 @@ extern BOOL		audio_Shutdown(void);
 extern BOOL		audio_Disabled( void );
 
 extern BOOL		audio_LoadTrackFromFile( char szFileName[] );
-extern void *	audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
+extern TRACK *	audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 extern BOOL		audio_SetTrackVals( char szFileName[], BOOL bLoop, int *piID,
 					int iVol, int iPriority, int iAudibleRadius, int VagID );
 extern BOOL		audio_SetTrackValsHashName( UDWORD hash, BOOL bLoop, int iTrack, int iVol,

@@ -66,7 +66,7 @@ typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_TYPE type, char *pBuffer, UD
 /* Type for a user type symbol */
 typedef struct _type_symbol
 {
-	SWORD			typeID;		// The type id to use in the type field of values
+	INTERP_TYPE		typeID;		// The type id to use in the type field of values
 	SWORD			accessType;	// Whether the type is an object or a simple value
 	STRING			*pIdent;	// Type identifier
 	SCR_VAL_SAVE	saveFunc;	// load and save functions
