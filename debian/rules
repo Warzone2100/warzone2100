@@ -67,8 +67,8 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	$(MAKE) install-exec DESTDIR=$(CURDIR)/debian/warzone
-	$(MAKE) install-data DESTDIR=$(CURDIR)/debian/warzone-data
+	$(MAKE) install-exec DESTDIR=$(CURDIR)/debian/warzone2100
+	$(MAKE) install-data DESTDIR=$(CURDIR)/debian/warzone2100-data
 
 
 # Build architecture-independent files here.
