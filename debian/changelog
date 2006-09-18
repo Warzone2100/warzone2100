@@ -1,3 +1,11 @@
+warzone2100 (2.0.5-0svn1) unstable; urgency=low
+
+  * Bump upstream version number again.
+  * Update packaging from "warzone" to less generic "warzone2100".
+    (Thanks upstream guys)
+
+ -- Angus Lees <gus@debian.org>  Sun, 17 Sep 2006 14:01:03 +0100
+
 warzone (2.0.3-0svn1) unstable; urgency=low
 
   * Fix upstream version number..

@@ -1,4 +1,4 @@
-Source: warzone
+Source: warzone2100
 Section: games
 Priority: optional
 Maintainer: Angus Lees <gus@debian.org>
@@ -6,15 +6,15 @@ Build-Depends: autotools-dev, libopenal-dev, zlib1g-dev, libsdl1.2-dev, libsdl-n
 Build-Depends-Indep: debhelper (>= 4.2.21), zip
 Standards-Version: 3.6.2
 
-Package: warzone
+Package: warzone2100
 Architecture: any
-Depends: warzone-data (= ${Source-Version}), ${shlibs:Depends}
-Description: Warzone 2100 real-time strategy game
+Depends: warzone2100-data (= ${Source-Version}), ${shlibs:Depends}
+Description: Post-nuclear 3D real-time strategy game
  Warzone 2100 was an innovative 3D real-time strategy game back in
  1999, and most will agree it didn't enjoy the commercial success it
  should have had. The game's source code was liberated on December
- 6th, 2004, under a GPL license. Soon after that, the Warzone 2100
- ReDev project was formed to take care of its future.
+ 6th, 2004, under a GPL license. Soon after that, the Warzone
+ Resurrection Project was formed to take care of its future.
  .
  Features include:
   - 400+ technologies to research
@@ -29,15 +29,15 @@ Description: Warzone 2100 real-time strategy game
   - set factories to constant production
   - automatically send each factory's units to where you want them.
 
-Package: warzone-data
+Package: warzone2100-data
 Architecture: all
-Recommends: warzone
+Recommends: warzone2100
 Description: data files for Warzone 2100 game
  Warzone 2100 was an innovative 3D real-time strategy game back in
  1999, and most will agree it didn't enjoy the commercial success it
  should have had. The game's source code was liberated on December
  6th, 2004, under a GPL license (see COPYING in this directory for
- details). Soon after that, the Warzone 2100 ReDev project was formed
- to take care of its future.
+ details). Soon after that, the Warzone Resurrection project was
+ formed to take care of its future.
  .
  This package contains the data files for the game.
