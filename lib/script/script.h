@@ -60,12 +60,15 @@ extern void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab);
  *
  * Return stack stuff
  */
-extern void retStackReset(void);
-extern UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address);
 
-extern BOOL IsRetStackEmpty(void);
-extern BOOL PopRetStack(UDWORD  *psVal);
-extern SDWORD GetCallDepth(void);
+/**
+ * Current call depth
+ *
+ * \return Number of calls on the return address stack
+ */
+extern inline Sint8 retStackCallDepth(void);
+
+
 
 /***********************************************************************************
  *

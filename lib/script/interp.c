@@ -19,7 +19,48 @@
 // an infinite loop
 #define INTERP_MAXINSTRUCTIONS		100000
 
+typedef struct
+{
+	UDWORD CallerIndex;
+	UDWORD *ReturnAddress;
+} ReturnAddressStack_t;
 
+/**
+ * Reset the return address stack
+ */
+static inline void retStackReset(void);
+
+/**
+ * Check whether the return address stack is empty
+ *
+ * \return True when empty, false otherwise
+ */
+static inline BOOL retStackIsEmpty(void);
+
+/**
+ * Check whether the return address stack is full
+ *
+ * \return True when full, false otherwise
+ */
+static inline BOOL retStackIsFull(void);
+
+/**
+ * Push a new address/event pair on the return address stack
+ *
+ * \param CallerIndex Index of the calling function
+ * \param ReturnAddress Address to return to
+ * \return False on failure (stack full)
+ */
+static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress);
+
+/**
+ * Pop an address/event pair from the return address stack
+ *
+ * \param CallerIndex Index of the calling function
+ * \param ReturnAddress Address to return to
+ * \return False on failure (stack empty)
+ */
+static BOOL retStackPop(UDWORD *CallerIndex, UDWORD **ReturnAddress);
 
 /* The size of each opcode */
 SDWORD aOpSize[] =
@@ -34,8 +75,8 @@ SDWORD aOpSize[] =
 	1,	// OP_PUSHARRAYGLOBAL | array_dimensions | array_base
 	1,	// OP_POPARRAYGLOBAL | array_dimensions | array_base
 
-	2,	// OP_CALL, func_pointer
-	2,  // OP_VARCALL, func_pointer
+	2,	// OP_CALL | func_pointer
+	2,  // OP_VARCALL | func_pointer
 
 	1,	// OP_JUMP | offset
 	1,  // OP_JUMPTRUE | offset
@@ -46,6 +87,30 @@ SDWORD aOpSize[] =
 
 	1,	// OP_EXIT
 	1,  // OP_PAUSE
+
+	-1, // OP_ADD
+	-1, // OP_SUB
+	-1, // OP_MUL
+	-1, // OP_DIV
+	-1, // OP_NEG
+
+	-1, // OP_AND
+	-1, // OP_OR
+	-1, // OP_NOT
+
+	-1, // OP_CANC
+
+	-1, // OP_EQUAL
+	-1, // OP_NOTEQUAL
+	-1, // OP_GREATEREQUAL
+	-1, // OP_LESSEQUAL
+	-1, // OP_GREATER
+	-1, // OP_LESS
+
+	2,  // OP_FUNC | func_pointer
+	1,  // OP_POPLOCAL
+	1,  // OP_PUSHLOCAL
+	2,  // OP_PUSHLOCALREF
 };
 
 /* The type equivalence table */
@@ -113,14 +178,14 @@ BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psPr
 	UBYTE		*elements; //[VAR_MAX_DIMENSIONS]
 	SDWORD		size, val;//, elementDWords;
 //	UBYTE		*pElem;
-	UDWORD		*ip = *pip;
+	UDWORD		*InstrPointer = *pip;
 	UDWORD		base, index;
 
 	// get the base index of the array
-	base = (*ip) & ARRAY_BASE_MASK;
+	base = (*InstrPointer) & ARRAY_BASE_MASK;
 
 	// get the number of dimensions
-	dimensions = ((*ip) & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
+	dimensions = ((*InstrPointer) & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
 
 	if (base >= psProg->numArrays)
 	{
@@ -208,7 +273,7 @@ BOOL interpInitialise(void)
 /* Run a compiled script */
 BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
 {
-	UDWORD		*ip, opcode, data;
+	UDWORD		*InstrPointer, opcode, data;
 	INTERP_VAL	sVal, *psVar;
 	VAL_CHUNK	*psGlobals;
 	UDWORD		numGlobals;
@@ -297,8 +362,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 
 	// Get the first opcode
-	ip = pCodeStart;
-	opcode = (*ip) >> OPCODE_SHIFT;
+	InstrPointer = pCodeStart;
+	opcode = (*InstrPointer) >> OPCODE_SHIFT;
 	instructionCount = 0;
 
 	CurEvent = index;
@@ -309,7 +374,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	while(!bStop)
 	{
 		// Run the code
-		if (ip < pCodeEnd)// && opcode != OP_EXIT)
+		if (InstrPointer < pCodeEnd)// && opcode != OP_EXIT)
 		{
 			if (instructionCount > INTERP_MAXINSTRUCTIONS)
 			{
@@ -320,24 +385,22 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			}
 			instructionCount += 1;
 
-			TRCPRINTF(("%-6d  ", ip - psProg->pCode));
-			opcode = (*ip) >> OPCODE_SHIFT;
-			data = (*ip) & OPCODE_DATAMASK;
+			TRCPRINTF(("%-6d  ", InstrPointer - psProg->pCode));
+			opcode = (*InstrPointer) >> OPCODE_SHIFT;
+			data = (*InstrPointer) & OPCODE_DATAMASK;
 			switch (opcode)
 			{
 				/* Custom function call */
 				case OP_FUNC:
 					//debug( LOG_SCRIPT, "-OP_FUNC" );
 					//debug( LOG_SCRIPT, "OP_FUNC: remember event %d, ip=%d", CurEvent, (ip + 2) );
-					if(!RetStackRemember(CurEvent, (ip + 2)))	//Remember where to jump back later
+					if(!retStackPush(CurEvent, (InstrPointer + aOpSize[opcode]))) //Remember where to jump back later
 					{
-						debug( LOG_ERROR, "interpRunScript() - RetStackRemember() failed.");
+						debug( LOG_ERROR, "interpRunScript() - retStackPush() failed.");
 						return FALSE;
 					}
 
-					CurEvent = *(ip+1);			//Current event = event to jump to
-
-
+					CurEvent = *(InstrPointer+1); //Current event = event to jump to
 
 					if (CurEvent > psProg->numEvents)
 					{
@@ -351,7 +414,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					pCodeStart = pCodeBase;
 					pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
 
-					ip = pCodeStart;				//Start at the beginning of the new event
+					InstrPointer = pCodeStart;				//Start at the beginning of the new event
 
 					//debug( LOG_SCRIPT, "-OP_FUNC: jumped to event %d; ip=%d, numLocalVars: %d", CurEvent, ip, psContext->psCode->numLocalVars[CurEvent] );
 
@@ -383,7 +446,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 3");
 
-				ip += 1;//aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_POPLOCAL:
 
@@ -408,17 +471,17 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				//debug(LOG_SCRIPT, "OP_POPLOCAL: type=%d, val=%d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type, psContext->psCode->ppsLocalVarVal[CurEvent][data].v.ival);
 
 				//debug( LOG_SCRIPT, "OP_POPLOCAL 3");
-				ip += 1; //aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 
 				break;
 
 			case OP_PUSHLOCALREF:
 
 				// The type of the variable is stored in with the opcode
-				sVal.type = (*ip) & OPCODE_DATAMASK;
+				sVal.type = (*InstrPointer) & OPCODE_DATAMASK;
 
 				/* get local var index */
-				data = *(ip + 1);
+				data = *(InstrPointer + 1);
 
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
@@ -440,14 +503,14 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCALREF: push failed");
 					goto exit_with_error;
 				}
-				ip += 2;
+				InstrPointer += aOpSize[opcode];
 				break;
 
 			case OP_PUSH:
 				// The type of the value is stored in with the opcode
-				sVal.type = (*ip) & OPCODE_DATAMASK;
+				sVal.type = (*InstrPointer) & OPCODE_DATAMASK;
 				// Copy the data as a DWORD
-				sVal.v.ival = (SDWORD)(*(ip+1));
+				sVal.v.ival = (SDWORD)(*(InstrPointer+1));
 				TRCPRINTF(("PUSH        "));
 				TRCPRINTVAL(&sVal);
 				TRCPRINTF(("\n"));
@@ -458,13 +521,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					ASSERT( FALSE, "interpRunScript: out of memory!" );
 					goto exit_with_error;
 				}
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_PUSHREF:
 				// The type of the variable is stored in with the opcode
-				sVal.type = (*ip) & OPCODE_DATAMASK;
+				sVal.type = (*InstrPointer) & OPCODE_DATAMASK;
 				// store the pointer
-				psVar = interpGetVarData(psGlobals, *(ip + 1));
+				psVar = interpGetVarData(psGlobals, *(InstrPointer + 1));
 				sVal.v.oval = &(psVar->v.ival);
 				TRCPRINTF(("PUSHREF     "));
 				TRCPRINTVAL(&sVal);
@@ -476,7 +539,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					ASSERT( FALSE, "interpRunScript: out of memory!" );
 					goto exit_with_error;
 				}
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_POP:
 				TRCPRINTF(("POP\n"));
@@ -486,7 +549,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					ASSERT( FALSE, "interpRunScript: could not do stack pop" );
 					goto exit_with_error;
 				}
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_BINARYOP:
 				TRCPRINTMATHSOP(data);
@@ -498,7 +561,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 				TRCPRINTSTACKTOP();
 				TRCPRINTF(("\n"));
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_UNARYOP:
 				TRCPRINTMATHSOP(data);
@@ -510,7 +573,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 				TRCPRINTSTACKTOP();
 				TRCPRINTF(("\n"));
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_PUSHGLOBAL:
 				TRCPRINTF(("PUSHGLOBAL  %d\n", data));
@@ -526,7 +589,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					ASSERT( FALSE, "interpRunScript: could not do stack push" );
 					goto exit_with_error;
 				}
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_POPGLOBAL:
 				TRCPRINTF(("POPGLOBAL   %d ", data));
@@ -544,7 +607,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					ASSERT( FALSE, "interpRunScript: could not do stack pop" );
 					goto exit_with_error;
 				}
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_PUSHARRAYGLOBAL:
 				// get the number of array elements
@@ -567,7 +630,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	//				goto exit_with_error;
 	//			}
 				TRCPRINTF(("PUSHARRAYGLOBAL  "));
-				if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
+				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data, CurEvent=%d", CurEvent );
 					ASSERT( FALSE, "interpRunScript: could not get array var data" );
@@ -611,7 +674,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 				ip += aOpSize[opcode];*/
 				TRCPRINTF(("POPARRAYGLOBAL   "));
-				if (!interpGetArrayVarData(&ip, psGlobals, psProg, &psVar))
+				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data" );
 					ASSERT( FALSE, "interpRunScript: could not get array var data" );
@@ -628,7 +691,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				break;
 			case OP_JUMPFALSE:
 				TRCPRINTF(("JUMPFALSE   %d (%d)",
-						(SWORD)data, ip - psProg->pCode + (SWORD)data));
+						   (SWORD)data, InstrPointer - psProg->pCode + (SWORD)data));
 				if (!stackPop(&sVal))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do pop of stack" );
@@ -639,8 +702,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				{
 					// Do the jump
 					TRCPRINTF((" - done -\n"));
-					ip += (SWORD)data;
-					if (ip < pCodeStart || ip > pCodeEnd)
+					InstrPointer += (SWORD)data;
+					if (InstrPointer < pCodeStart || InstrPointer > pCodeEnd)
 					{
 						debug( LOG_ERROR, "interpRunScript: jump out of range" );
 						ASSERT( FALSE, "interpRunScript: jump out of range" );
@@ -650,15 +713,15 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				else
 				{
 					TRCPRINTF(("\n"));
-					ip += aOpSize[opcode];
+					InstrPointer += aOpSize[opcode];
 				}
 				break;
 			case OP_JUMP:
 				TRCPRINTF(("JUMP        %d (%d)\n",
-						(SWORD)data, ip - psProg->pCode + (SWORD)data));
+						   (SWORD)data, InstrPointer - psProg->pCode + (SWORD)data));
 				// Do the jump
-				ip += (SWORD)data;
-				if (ip < pCodeStart || ip > pCodeEnd)
+				InstrPointer += (SWORD)data;
+				if (InstrPointer < pCodeStart || InstrPointer > pCodeEnd)
 				{
 					debug( LOG_ERROR, "interpRunScript: jump out of range" );
 					ASSERT( FALSE, "interpRunScript: jump out of range" );
@@ -667,9 +730,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				break;
 			case OP_CALL:
 				//debug(LOG_SCRIPT, "OP_CALL");
-				TRCPRINTFUNC( (SCRIPT_FUNC)(*(ip+1)) );
+				TRCPRINTFUNC( (SCRIPT_FUNC)(*(InstrPointer+1)) );
 				TRCPRINTF(("\n"));
-				scriptFunc = (SCRIPT_FUNC)*(ip+1);
+				scriptFunc = (SCRIPT_FUNC)*(InstrPointer+1);
 				//debug(LOG_SCRIPT, "OP_CALL 1");
 				if (!scriptFunc())
 				{
@@ -678,40 +741,40 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 				//debug(LOG_SCRIPT, "OP_CALL 2");
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				//debug(LOG_SCRIPT, "OP_CALL 3");
 				break;
 			case OP_VARCALL:
 				TRCPRINTF(("VARCALL     "));
-				TRCPRINTVARFUNC( (SCRIPT_VARFUNC)(*(ip+1)), data );
+				TRCPRINTVARFUNC( (SCRIPT_VARFUNC)(*(InstrPointer+1)), data );
 				TRCPRINTF(("(%d)\n", data));
-				scriptVarFunc = (SCRIPT_VARFUNC)*(ip+1);
+				scriptVarFunc = (SCRIPT_VARFUNC)*(InstrPointer+1);
 				if (!scriptVarFunc(data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do var func" );
 					ASSERT( FALSE, "interpRunScript: could not do var func" );
 					goto exit_with_error;
 				}
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_EXIT:
 				// jump out of the code
-				ip = pCodeEnd;
+				InstrPointer = pCodeEnd;
 				break;
 			case OP_PAUSE:
 				TRCPRINTF(("PAUSE       %d\n", data));
 				ASSERT( stackEmpty(),
 					"interpRunScript: OP_PAUSE without empty stack" );
-				ip += aOpSize[opcode];
+				InstrPointer += aOpSize[opcode];
 				// tell the event system to reschedule this event
-				if (!eventAddPauseTrigger(psContext, index, ip - pCodeBase, data))
+				if (!eventAddPauseTrigger(psContext, index, InstrPointer - pCodeBase, data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not add pause trigger" );
 					ASSERT( FALSE, "interpRunScript: could not add pause trigger" );
 					goto exit_with_error;
 				}
 				// now jump out of the event
-				ip = pCodeEnd;
+				InstrPointer = pCodeEnd;
 				break;
 			default:
 				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d", opcode);
@@ -725,7 +788,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		{
 			//debug(LOG_SCRIPT, "End of event reached");
 
-			if(!IsRetStackEmpty())		//There was a caller function before this one
+			if(!retStackIsEmpty())		//There was a caller function before this one
 			{
 				//debug(LOG_SCRIPT, "GetCallDepth = %d", GetCallDepth());
 
@@ -736,17 +799,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 
-				if(!PopRetStack((UDWORD *)&ip))		//Pop return address
+				if (!retStackPop(&CurEvent, &InstrPointer))
 				{
-					debug( LOG_ERROR, "interpRunScript() - PopRetStack(): failed to pop return adress.");
-					return FALSE;
-				}
-
-				//debug(LOG_SCRIPT, "Return adress = %d", ip);
-
- 				if(!PopRetStack(&CurEvent))	//Pop event index
-				{
-					debug( LOG_ERROR, "interpRunScript() - PopRetStack(): failed to pop return event index.");
+					debug( LOG_ERROR, "interpRunScript() - PopRetStack() failed.");
 					return FALSE;
 				}
 
@@ -754,7 +809,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 				//Set new boundries
 				//--------------------------
-				if(IsRetStackEmpty())	//if we jumped back to the original caller
+				if(retStackIsEmpty())	//if we jumped back to the original caller
 				{
 					if(!bEvent)		//original caller was a trigger (is it possible at all?)
 					{
@@ -800,7 +855,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	//debug(LOG_SCRIPT, "interpRunScript 3");
 
 
-	TRCPRINTF(("%-6d  EXIT\n", ip - psProg->pCode));
+	TRCPRINTF(("%-6d  EXIT\n", InstrPointer - psProg->pCode));
 
 	bInterpRunning = FALSE;
 	return TRUE;
@@ -815,7 +870,7 @@ exit_with_error:
 		debug(LOG_ERROR,"Original trigger ID: %d (of %d)", index, psProg->numTriggers);
 
 	debug(LOG_ERROR,"Current event ID: %d (of %d)", CurEvent, psProg->numEvents);
-	callDepth = GetCallDepth();
+	callDepth = retStackCallDepth();
 	debug(LOG_ERROR,"Call depth : %d", callDepth);
 
 	if(psProg->psDebug != NULL)
@@ -927,61 +982,70 @@ BOOL interpTraceOff(void)
 }
 
 
-
 /* Call stack stuff */
+#define RETSTACK_SIZE 100
 
-static UDWORD	retStack[200];	//Primitive stack
-static SDWORD	retStackPos;	//Current Position, always points to the last valid element
+static ReturnAddressStack_t retStack[RETSTACK_SIZE]; // Primitive stack of return addresses
+static Sint8 retStackPos = -1; // Current Position, always points to the last valid element
 
-void retStackReset(void)
+
+inline Sint8 retStackCallDepth(void)
 {
-	retStackPos = -1;		//Beginning of the stack
+	return (retStackPos + 1);
 }
 
-//Remember current script execution adress
-UDWORD RetStackRemember(UDWORD EvTrigIndex, UDWORD address)
+
+static inline void retStackReset(void)
 {
-	//DbgMsg("To remember: %d, %d, %d", EvTrigIndex, address, retStackPos);
-
-	if (retStackPos >= 200)
-	{
-		debug( LOG_ERROR, "RetStackRemember() - return address stack is full");
-		return FALSE;	//Stack full
-	}
-
-	retStackPos = retStackPos + 2;
-	retStack[retStackPos - 1] = EvTrigIndex;	//First store event index
-	retStack[retStackPos] = address;			//current ip
-
-	//debug( LOG_SCRIPT, "RetStackRemember: ip=%d, event=%d", address, EvTrigIndex);
-
-	return TRUE;
+	retStackPos = -1; // Beginning of the stack
 }
 
-BOOL IsRetStackEmpty(void)
+
+static inline BOOL retStackIsEmpty(void)
 {
-	if(retStackPos == (-1)) return TRUE;
+	if(retStackPos < 0) return TRUE;
 	return FALSE;
 }
 
-BOOL PopRetStack(UDWORD  *psVal)
+
+static inline BOOL retStackIsFull(void)
 {
-	if(retStackPos < 0)
+	if(retStackPos >= RETSTACK_SIZE) return TRUE;
+	return FALSE;
+}
+
+
+static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress)
+{
+	if (retStackIsFull())
 	{
-		debug( LOG_ERROR, "PopRetStack: retStackPos < 0");
-		return FALSE;
+		debug( LOG_ERROR, "retStackPush(): return address stack is full");
+		return FALSE; // Stack full
 	}
 
-	*psVal = retStack[retStackPos];
+	retStackPos++;
+	retStack[retStackPos].CallerIndex = CallerIndex;
+	retStack[retStackPos].ReturnAddress = ReturnAddress;
 
-	retStackPos = retStackPos - 1;
-
-	//debug( LOG_SCRIPT, "PopRetStack: val=%d", *psVal);
+	//debug( LOG_SCRIPT, "retStackPush: Event=%i Address=%p, ", EventTrigIndex, ReturnAddress);
 
 	return TRUE;
 }
 
-SDWORD GetCallDepth(void)
+
+static BOOL retStackPop(UDWORD *CallerIndex, UDWORD **ReturnAddress)
 {
-	return (retStackPos + 1) / 2;
+	if (retStackIsEmpty())
+	{
+		debug( LOG_ERROR, "retStackPop(): return address stack is empty");
+		return FALSE;
+	}
+
+	*CallerIndex = retStack[retStackPos].CallerIndex;
+	*ReturnAddress = retStack[retStackPos].ReturnAddress;
+	retStackPos--;
+
+	//debug( LOG_SCRIPT, "retStackPop: Event=%i Address=%p", *EventTrigIndex, *ReturnAddress);
+
+	return TRUE;
 }
