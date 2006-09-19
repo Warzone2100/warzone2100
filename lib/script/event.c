@@ -1216,7 +1216,7 @@ void eventProcessTriggers(UDWORD currTime)
 
 
 // remove a trigger from a list
-void eventRemoveTriggerFromList(ACTIVE_TRIGGER **ppsList,
+static void eventRemoveTriggerFromList(ACTIVE_TRIGGER **ppsList,
 								SCRIPT_CONTEXT *psContext,
 								SDWORD event, SDWORD *pTrigger)
 {

@@ -23,7 +23,7 @@ extern void *	g_ElementToBeRemoved;
 
 /***************************************************************************/
 
-UINT
+static UINT
 HashTest( int iKey1, int iKey2 )
 {
 	return (UINT) iKey1 + iKey2;
@@ -40,7 +40,7 @@ HashTest( int iKey1, int iKey2 )
  */
 /***************************************************************************/
 
-UINT
+static UINT
 HashPJW( int iKey1, int iKey2 )
 {
 	UINT	iHashValue, i;
@@ -232,7 +232,7 @@ hashTable_GetElement( HASHTABLE *psTable )
 
 /***************************************************************************/
 
-UDWORD
+static UDWORD
 hashTable_GetHashKey( HASHTABLE *psTable, int iKey1, int iKey2 )
 {
 	ASSERT( PTRVALID(psTable, sizeof(HASHTABLE)),

@@ -704,7 +704,7 @@ UINT HashStringIgnoreCase( const char *String )
 //
 // PosOfDot and/of PosOfSlash can be NULL and then nothing will be stored
 //
-void ScanFilename(const char *Fullname, int *PosOfDot, int *PosOfSlash)
+static void ScanFilename(const char *Fullname, int *PosOfDot, int *PosOfSlash)
 {
 	int Namelength;
 

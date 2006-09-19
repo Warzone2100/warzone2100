@@ -655,7 +655,7 @@ BOOL widgAddSlider(W_SCREEN *psScreen, W_SLDINIT *psInit)
 
 
 /* Delete a widget from a form */
-BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
+static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 {
 	WIDGET		*psPrev = NULL, *psCurr, *psNext;
 	W_TABFORM	*psTabForm;

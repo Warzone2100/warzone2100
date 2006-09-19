@@ -240,7 +240,7 @@ void	pie_SetAdditiveSpriteLevel(UDWORD val) {
 	addSpriteLevel = val;
 }
 
-BOOL	pie_GetAdditiveSprites( void ) {
+static BOOL pie_GetAdditiveSprites( void ) {
 	return bAddSprites;
 }
 
@@ -417,7 +417,7 @@ void pie_ImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,BOOL b
 	pie_SetBilinear(FALSE);	//changed by alex 19 oct 98
 }
 
-void pie_ImageDefTrans(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int TransRate)
+static void pie_ImageDefTrans(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int TransRate)
 {
 	pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
 }

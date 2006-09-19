@@ -400,7 +400,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 }
 
 // return the index of a context
-BOOL eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
+static BOOL eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 {
 	SCRIPT_CONTEXT	*psCurr;
 	SDWORD			index;
@@ -420,7 +420,7 @@ BOOL eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 }
 
 // find a context from it's id number
-BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
+static BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psCurr;
 
@@ -437,7 +437,7 @@ BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 }
 
 // save a list of triggers
-BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *pSize)
+static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *pSize)
 {
 	ACTIVE_TRIGGER		*psCurr;
 	UDWORD				size;

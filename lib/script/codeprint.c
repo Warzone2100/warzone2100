@@ -309,7 +309,7 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 
 
 /* Print the array information */
-void cpPrintArrayInfo(UDWORD **pip, SCRIPT_CODE *psProg)
+static void cpPrintArrayInfo(UDWORD **pip, SCRIPT_CODE *psProg)
 {
 	SDWORD		i, dimensions;//, elements[VAR_MAX_DIMENSIONS];
 //	SDWORD		elementDWords;

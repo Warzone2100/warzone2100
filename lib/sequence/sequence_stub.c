@@ -39,7 +39,7 @@ BOOL seq_sound = FALSE;
 ALuint 		seq_buffer;
 ALuint		seq_source;
 
-void seq_start_sound(RPL* s) {
+static void seq_start_sound(RPL* s) {
 	unsigned int buffer_size = rpl_decode_sound(s, sound_buffer, SOUND_BUFFER_SIZE);
 
 	if (buffer_size != 0) {

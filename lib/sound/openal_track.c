@@ -61,7 +61,7 @@ BOOL openal_initialized = FALSE;
 
 BOOL		cdAudio_Update( void );
 
-static void PrintOpenALVersion()
+static void PrintOpenALVersion(void)
 {
 	debug(LOG_ERROR, "OpenAL Vendor: %s\n"
 		   "OpenAL Version: %s\n"
@@ -429,7 +429,7 @@ int sound_GetMaxVolume( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
+static void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SAMPLE_LIST *tmp = (SAMPLE_LIST *) malloc( sizeof(SAMPLE_LIST) );

@@ -509,7 +509,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 }
 
 
-BOOL heapIntegrityCheck(OBJ_HEAP *psHeap)
+static BOOL heapIntegrityCheck(OBJ_HEAP *psHeap)
 {
 #if DEBUG_HEAP
 	FREE_OBJECT		*psCurr;

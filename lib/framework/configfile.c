@@ -49,7 +49,7 @@ void registry_clear( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-unsigned int registry_hash( const char *s )
+static unsigned int registry_hash( const char *s )
 {
 	//~~~~~~~~~~~~~~~~~~
 	unsigned int	i;
@@ -71,7 +71,7 @@ unsigned int registry_hash( const char *s )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-regkey_t *registry_find_key( const char *k )
+static regkey_t *registry_find_key( const char *k )
 {
 	//~~~~~~~~~~~
 	regkey_t	*i;
@@ -92,7 +92,7 @@ regkey_t *registry_find_key( const char *k )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-char *registry_get_key( const char *k )
+static char *registry_get_key( const char *k )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	regkey_t	*key = registry_find_key( k );
@@ -118,7 +118,7 @@ char *registry_get_key( const char *k )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void registry_set_key( const char *k, const char *v )
+static void registry_set_key( const char *k, const char *v )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	regkey_t	*key = registry_find_key( k );
@@ -150,7 +150,7 @@ void registry_set_key( const char *k, const char *v )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL registry_load( const char *filename )
+static BOOL registry_load( const char *filename )
 {
 	char buffer[MAXLINESIZE];
 	char *bptr = NULL, *bufstart = NULL;
@@ -210,7 +210,7 @@ BOOL registry_load( const char *filename )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL registry_save( const char *filename )
+static BOOL registry_save( const char *filename )
 {
 	char buffer[MAXLINESIZE * REGISTRY_HASH_SIZE];
 	unsigned int i;

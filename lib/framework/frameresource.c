@@ -303,7 +303,7 @@ static void ResetResourceFile(void)
 }
 
 // Returns an empty resource entry or -1 if none exsist
-SDWORD FindEmptyResourceFile(void)
+static SDWORD FindEmptyResourceFile(void)
 {
 	UWORD i;
 	for (i=0;i<MAXLOADEDRESOURCES ;i++ )
@@ -317,7 +317,7 @@ SDWORD FindEmptyResourceFile(void)
 
 
 // Get a resource data file ... either loads it or just returns a pointer
-BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
+static BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 {
 	SDWORD ResID;
 	RESOURCEFILE *ResData;
@@ -355,7 +355,7 @@ BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 
 
 // Free up the file depending on what type it is
-void FreeResourceFile(RESOURCEFILE *OldResource)
+static void FreeResourceFile(RESOURCEFILE *OldResource)
 {
 	switch (OldResource->type)
 	  {
@@ -370,7 +370,7 @@ void FreeResourceFile(RESOURCEFILE *OldResource)
 }
 
 
-void resDataInit(RES_DATA* psRes, STRING *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
+static void resDataInit(RES_DATA* psRes, STRING *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
 	psRes->pData = pData;
 	psRes->blockID = resBlockID;

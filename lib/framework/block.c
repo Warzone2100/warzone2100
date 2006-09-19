@@ -629,7 +629,7 @@ void blockUnsuspendUsage(void)
 
 
 
-void blockCurrentBlockInfo(void)
+static void blockCurrentBlockInfo(void)
 {
 #ifdef DEBUG
 	BLOCK_HEAP *psCurHeap;

@@ -20,7 +20,7 @@ unsigned int dec130_decode(RPL* rpl, char* in, unsigned int in_size, char* out);
 char* data_buffer = NULL;
 unsigned int data_buffer_size = 0;
 
-void resize_data_buffer(unsigned int size) {
+static void resize_data_buffer(unsigned int size) {
 	if (size > data_buffer_size) {
 		if (data_buffer != NULL) {
 			free(data_buffer);

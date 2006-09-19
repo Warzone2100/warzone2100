@@ -345,7 +345,7 @@ static BOOL audio_CheckSameQueueTracksPlaying( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
+static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample = NULL;
@@ -502,7 +502,7 @@ void audio_QueueTrackPos( SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void audio_UpdateQueue( void )
+static void audio_UpdateQueue( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample = NULL;

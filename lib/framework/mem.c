@@ -409,7 +409,7 @@ static UDWORD MemTotalAllocated;
 #endif
 
 /* Recursive function to total up the amount of mem allocated */
-void memSummary(MEM_NODE *psRoot)
+static void memSummary(MEM_NODE *psRoot)
 {
 #ifdef DEBUG_MALLOC
 
@@ -453,7 +453,7 @@ void memSummary(MEM_NODE *psRoot)
 #endif
 }
 
-void memMemorySummary(void)
+static void memMemorySummary(void)
 {
 	memMemoryDump(psMemRoot);
 }

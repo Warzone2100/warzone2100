@@ -36,7 +36,7 @@ static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_CheckDevice( void )
+static BOOL sound_CheckDevice( void )
 {
 	//
 	// * // Bah, not needed! --Qamly. #ifdef WIN32MM WAVEOUTCAPS waveCaps;
@@ -210,7 +210,7 @@ BOOL sound_SetTrackVals
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_AddTrack( TRACK *pTrack )
+static BOOL sound_AddTrack( TRACK *pTrack )
 {
 	// add to sound array
 	if ( g_iCurTracks < MAX_TRACKS )

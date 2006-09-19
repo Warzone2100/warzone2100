@@ -156,7 +156,7 @@ BOOL interpProcessorActive(void)
 }
 
 /* Find the value store for a global variable */
-__inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
+static __inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
 {
 	VAL_CHUNK	*psChunk;
 
@@ -172,7 +172,7 @@ __inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
 
 
 // get the array data for an array operation
-BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
+static BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
 {
 	SDWORD		i, dimensions, vals[VAR_MAX_DIMENSIONS];
 	UBYTE		*elements; //[VAR_MAX_DIMENSIONS]

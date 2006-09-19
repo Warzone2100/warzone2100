@@ -60,7 +60,7 @@ void strlwr(STRING *String)
 #endif
 
 
-BOOL AtEndOfFile(STRING *CurPos, STRING *EndOfFile)
+static BOOL AtEndOfFile(STRING *CurPos, STRING *EndOfFile)
 {
 	while ((*CurPos==0x09)||(*CurPos==0x0a)||(*CurPos==0x0d)||(*CurPos==0x20)||(*CurPos==0x00))
 	{
@@ -147,7 +147,7 @@ static UDWORD IMDPoints = 0;
 static UDWORD IMDTexAnims = 0;
 static UDWORD IMDConnectors = 0;
 
-void DumpIMDInfo(void)
+static void DumpIMDInfo(void)
 {
 	debug( LOG_NEVER, "imds loaded    =%d - using %d bytes\n", IMDcount, IMDcount*sizeof(iIMDShape) );
 	debug( LOG_NEVER, "polys loaded   =%d - using %d bytes\n", IMDPolycount, IMDPolycount*sizeof(iIMDPoly) );
@@ -158,7 +158,7 @@ void DumpIMDInfo(void)
 
 static STRING texfile[64];	//Last loaded texture page filename
 
-char *GetLastLoadedTexturePage(void)
+static char *GetLastLoadedTexturePage(void)
 {
 	return texfile;
 }
@@ -661,7 +661,7 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 #endif
 
 
-BOOL ReadPoints(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
+static BOOL ReadPoints(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
 {
 	STRING *pFileData = *ppFileData;
 	int cnt;
