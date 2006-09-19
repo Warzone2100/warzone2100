@@ -1,5 +1,8 @@
 /***************************************************************************/
-
+/*! \file ptrlist.h
+ * \brief Generic singly-linked list of elements
+ *
+ */
 #ifndef _PTRLIST_H_
 #define _PTRLIST_H_
 

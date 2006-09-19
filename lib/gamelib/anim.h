@@ -1,8 +1,6 @@
 /***************************************************************************/
-/*
- * Anim.h
- *
- * Animation types and function headers
+/*! \file anim.h
+ * \brief Animation types and function headers
  *
  * Gareth Jones 11/7/97
  */

@@ -1,8 +1,6 @@
 /***************************************************************************/
-/*
- * Animobj.h
- *
- * Animation object types and function headers
+/*! \file animobj.h
+ * \brief Animation object types and function headers
  *
  * Gareth Jones 14/11/97
  */

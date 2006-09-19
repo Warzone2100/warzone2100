@@ -1,7 +1,5 @@
-/*
- * GTime.h
- *
- * Interface to the game clock.
+/*! \file gtime.h
+ * \brief Interface to the game clock.
  *
  */
 #ifndef _gtime_h
