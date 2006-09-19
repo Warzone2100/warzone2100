@@ -329,7 +329,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				case OP_FUNC:
 					//debug( LOG_SCRIPT, "-OP_FUNC" );
 					//debug( LOG_SCRIPT, "OP_FUNC: remember event %d, ip=%d", CurEvent, (ip + 2) );
-					if(!RetStackRemember(CurEvent, *(ip + 2)))	//Remember where to jump back later
+					if(!RetStackRemember(CurEvent, (ip + 2)))	//Remember where to jump back later
 					{
 						debug( LOG_ERROR, "interpRunScript() - RetStackRemember() failed.");
 						return FALSE;
@@ -714,8 +714,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ip = pCodeEnd;
 				break;
 			default:
-				debug(LOG_ERROR, "interpRunScript: unknown opcode");
-				ASSERT( FALSE, "interpRunScript: unknown opcode" );
+				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d", opcode);
+				ASSERT( FALSE, "interpRunScript: unknown opcode: %d", opcode );
 				goto exit_with_error;
 				break;
 			}

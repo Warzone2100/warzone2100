@@ -79,6 +79,9 @@
 
 // -----------------------------------------------------------------------------------------
 BOOL	structHasModule(STRUCTURE *psStruct);
+SDWORD	guessPlayerFromMessage(STRING **str);
+SDWORD	getPlayerFromString(STRING *playerName);
+SDWORD	getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount);
 
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
@@ -1333,6 +1336,7 @@ BOOL scrAddMessage(void)
 	{
 		return FALSE;
 	}
+
 /*
 	if (!stackPop(&sVal))
 	{
@@ -9072,9 +9076,414 @@ BOOL scrLearnPlayerBaseLoc(void)
 	baseLocation[playerStoring][enemyPlayer][0] = x;
 	baseLocation[playerStoring][enemyPlayer][1] = y;
 
-	//addConsoleMessage("Learned player base.",RIGHT_JUSTIFY);
+	printf_console("Learned player base.");
 
 	if (!stackPushResult(VAL_BOOL, TRUE))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+//Saves enemy base x and y for a certain player
+BOOL scrRecallPlayerBaseLoc(void)
+{
+	SDWORD				playerStoring,enemyPlayer, *x, *y;
+
+	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
+						VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrRecallPlayerBaseLoc(): stack failed");
+		return FALSE;
+	}
+
+	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
+	{
+		debug(LOG_ERROR, "scrRecallPlayerBaseLoc: player index too high.");
+		return FALSE;
+	}
+
+	if((playerStoring < 0) || (enemyPlayer < 0))
+	{
+		debug(LOG_ERROR, "scrRecallPlayerBaseLoc: player index too low.");
+		return FALSE;
+	}
+
+	if(!CanRememberPlayerBaseLoc(playerStoring, enemyPlayer))		//return FALSE if this one not set yet
+	{
+		if (!stackPushResult(VAL_BOOL, FALSE))
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	*x = baseLocation[playerStoring][enemyPlayer][0];
+	*y = baseLocation[playerStoring][enemyPlayer][1];
+
+	if (!stackPushResult(VAL_BOOL, TRUE))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Checks if player base loc is stored */
+BOOL scrCanRememberPlayerBaseLoc(void)
+{
+	SDWORD				playerStoring,enemyPlayer;
+
+	if (!stackPopParams(2, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer))
+	{
+		debug(LOG_ERROR, "scrCanRememberPlayerBaseLoc(): stack failed");
+		return FALSE;
+	}
+
+	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
+	{
+		debug(LOG_ERROR,"scrCanRememberPlayerBaseLoc: player index too high.");
+		return FALSE;
+	}
+
+	if((playerStoring < 0) || (enemyPlayer < 0))
+	{
+		debug(LOG_ERROR,"scrCanRememberPlayerBaseLoc: player index too low.");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_BOOL, CanRememberPlayerBaseLoc(playerStoring, enemyPlayer)))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Stores the place where we were attacked at */
+BOOL scrLearnBaseDefendLoc(void)
+{
+	SDWORD				playerStoring,enemyPlayer, x, y;
+
+	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
+						VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrLearnBaseDefendLoc(): stack failed");
+		return FALSE;
+	}
+
+	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
+	{
+		debug(LOG_ERROR,"scrLearnBaseDefendLoc: player index too high.");
+		return FALSE;
+	}
+
+	if((playerStoring < 0) || (enemyPlayer < 0))
+	{
+		debug(LOG_ERROR,"scrLearnBaseDefendLoc: player index too low.");
+		return FALSE;
+	}
+
+	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
+		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	{
+		debug(LOG_ERROR,"scrLearnBaseDefendLoc: coords off map");
+		return FALSE;
+	}
+
+	StoreBaseDefendLoc(x, y, playerStoring);
+
+	if (!stackPushResult(VAL_BOOL, TRUE))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Stores the place where we were attacked at */
+BOOL scrLearnOilDefendLoc(void)
+{
+	SDWORD				playerStoring,enemyPlayer, x, y;
+
+	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
+						VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrLearnOilDefendLoc(): stack failed");
+		return FALSE;
+	}
+
+	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
+	{
+		debug(LOG_ERROR,"scrLearnOilDefendLoc: player index too high.");
+		return FALSE;
+	}
+
+	if((playerStoring < 0) || (enemyPlayer < 0))
+	{
+		debug(LOG_ERROR,"scrLearnOilDefendLoc: player index too low.");
+		return FALSE;
+	}
+
+	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
+		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	{
+		debug(LOG_ERROR,"scrLearnOilDefendLoc: coords off map");
+		return FALSE;
+	}
+
+	StoreOilDefendLoc(x, y, playerStoring);
+
+	if (!stackPushResult(VAL_BOOL, TRUE))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns -1 if this location is not stored yet, otherwise returns index */
+BOOL scrGetBaseDefendLocIndex(void)
+{
+	SDWORD				playerStoring, x, y;
+
+	if (!stackPopParams(3, VAL_INT, &playerStoring, VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrGetBaseDefendLocIndex(): stack failed");
+		return FALSE;
+	}
+
+	if(playerStoring >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: player index too high.");
+		return FALSE;
+	}
+
+	if(playerStoring < 0)
+	{
+		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: player index too low.");
+		return FALSE;
+	}
+
+	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
+		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	{
+		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: coords off map");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_INT, GetBaseDefendLocIndex(x,y,playerStoring)))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns -1 if this location is not stored yet, otherwise returns index */
+BOOL scrGetOilDefendLocIndex(void)
+{
+	SDWORD				playerStoring, x, y;
+
+	if (!stackPopParams(3, VAL_INT, &playerStoring, VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrGetOilDefendLocIndex(): stack failed");
+		return FALSE;
+	}
+
+	if(playerStoring >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "scrGetOilDefendLocIndex: player index too high.");
+
+		return FALSE;
+	}
+
+	if(playerStoring < 0)
+	{
+		debug(LOG_ERROR, "scrGetOilDefendLocIndex: player index too low.");
+		return FALSE;
+	}
+
+	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
+		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	{
+		debug(LOG_ERROR, "scrGetOilDefendLocIndex: coords off map");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_INT, GetOilDefendLocIndex(x,y,playerStoring)))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns number of available locations */
+BOOL scrGetBaseDefendLocCount(void)
+{
+	if (!stackPushResult(VAL_INT, MAX_BASE_DEFEND_LOCATIONS))
+	{
+		debug(LOG_ERROR, "scrGetBaseDefendLocCount: push failed");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns number of available locations*/
+BOOL scrGetOilDefendLocCount(void)
+{
+	if (!stackPushResult(VAL_INT, MAX_OIL_DEFEND_LOCATIONS))
+	{
+		debug(LOG_ERROR, "scrGetOilDefendLocCount: push failed");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns a locations and its priority */
+BOOL scrRecallBaseDefendLoc(void)
+{
+	SDWORD				player, *x, *y, *prior,index;
+
+	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &index,
+						VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y, VAL_REF|VAL_INT, &prior))
+	{
+		debug(LOG_ERROR, "scrRecallBaseDefendLoc(): stack failed");
+		return FALSE;
+	}
+
+	if(player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR,"scrRecallBaseDefendLoc: player index too high.");
+		return FALSE;
+	}
+
+	if(index < 0 || index >= MAX_BASE_DEFEND_LOCATIONS)
+	{
+		debug(LOG_ERROR,"scrRecallBaseDefendLoc: wrong index.");
+		return FALSE;
+	}
+
+	if(player < 0)
+	{
+		debug(LOG_ERROR,"scrRecallBaseDefendLoc: player index too low.");
+		return FALSE;
+	}
+
+	//check if can recall at this location
+	if(!CanRememberPlayerBaseDefenseLoc(player, index))
+	{
+		if (!stackPushResult(VAL_INT, FALSE))
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	*x = baseDefendLocation[player][index][0];
+	*y = baseDefendLocation[player][index][1];
+
+	*prior = baseDefendLocPrior[player][index];
+
+	if (!stackPushResult(VAL_INT, TRUE))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns number of available locations */
+BOOL scrRecallOilDefendLoc(void)
+{
+	SDWORD				player, *x, *y, *prior,index;
+
+	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &index,
+						VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y, VAL_REF|VAL_INT, &prior))
+	{
+		debug(LOG_ERROR, "scrRecallOilDefendLoc(): stack failed");
+		return FALSE;
+	}
+
+	if(player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR,"scrRecallOilDefendLoc: player index too high.");
+		return FALSE;
+	}
+
+	if(index < 0 || index >= MAX_OIL_DEFEND_LOCATIONS)
+	{
+		debug(LOG_ERROR,"scrRecallOilDefendLoc: wrong index: %d.", index);
+		return FALSE;
+	}
+
+	if(player < 0)
+	{
+		debug(LOG_ERROR,"scrRecallOilDefendLoc: player index too low.");
+		return FALSE;
+	}
+
+	//check if can recall at this location
+	if(!CanRememberPlayerOilDefenseLoc(player, index))
+	{
+		if (!stackPushResult(VAL_INT, FALSE))
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	*x = oilDefendLocation[player][index][0];
+	*y = oilDefendLocation[player][index][1];
+
+	*prior = oilDefendLocPrior[player][index];
+
+	if (!stackPushResult(VAL_INT, TRUE))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL scrSavePlayerAIExperience(void)
+{
+	SDWORD				player;
+	BOOL				bNotify;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bNotify))
+	{
+		debug(LOG_ERROR, "scrSavePlayerAIExperience(): stack failed");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_BOOL, SavePlayerAIExperience(player, bNotify)))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL scrLoadPlayerAIExperience(void)
+{
+	SDWORD				player;
+	BOOL				bNotify;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bNotify))
+	{
+		debug(LOG_ERROR, "scrLoadPlayerAIExperience(): stack failed");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_BOOL, LoadPlayerAIExperience(player, bNotify)))
 	{
 		return FALSE;
 	}
@@ -9287,9 +9696,8 @@ MESSAGE * findHelpMsg(UDWORD player, SDWORD sender)
 }
 
 /* Add beacon (radar blip) */
-BOOL scrAddHelpMsg(void)
+BOOL scrDropBeacon(void)
 {
-	
 	SDWORD			forPlayer,sender;
 	STRING			*ssval=NULL,ssval2[255];
 	UDWORD			locX,locY,locZ;
@@ -9297,12 +9705,12 @@ BOOL scrAddHelpMsg(void)
 	if (!stackPopParams(6, VAL_STRING, &ssval , VAL_INT, &forPlayer,
 				VAL_INT, &sender, VAL_INT, &locX, VAL_INT, &locY, VAL_INT, &locZ))
 	{
-		debug(LOG_ERROR,"scrAddHelpMsg failed to pop parameters");
+		debug(LOG_ERROR,"scrDropBeacon failed to pop parameters");
 		return FALSE;
 	}
 
 	if(!addHelpBlip(locX, locY, sender, sender, ssval))
-		debug(LOG_ERROR,"scrAddHelpMsg: addHelpBlip failed");
+		debug(LOG_ERROR,"scrDropBeacon: addHelpBlip failed");
 
 	sprintf(ssval2, "%s : %s", getPlayerName(sender), ssval);	//temporary solution
 
@@ -9427,4 +9835,586 @@ BOOL scrMsgBox(void)
 	printf_console("DEBUG: %s",ssval);
 	
 	return TRUE;
+}
+
+
+// Check for a struct being within a certain range of a position (must be visible)
+BOOL scrStructInRangeVis(void)
+{
+	SDWORD		range, player,lookingPlayer, x,y;
+	BOOL		found;
+
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &player , VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
+	{
+		debug(LOG_ERROR, "scrStructInRangeVis: failed to pop");
+		return FALSE;
+	}
+
+	if (player < 0 || player >= MAX_PLAYERS)
+	{
+		ASSERT(FALSE, "scrStructInRange: invalid player number");
+		return FALSE;
+	}
+
+	found = objectInRangeVis((BASE_OBJECT *)apsStructLists[player], x,y, range, lookingPlayer);
+
+	if (!stackPushResult(VAL_BOOL, found))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+// check for a base object being in range of a point
+BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer)
+{
+	BASE_OBJECT		*psCurr; 
+	SDWORD			xdiff, ydiff, rangeSq;
+
+	// See if there is a droid in range
+	rangeSq = range * range;
+	for(psCurr = psList; psCurr; psCurr = psCurr->psNext)
+	{
+		if(psCurr->type == OBJ_STRUCTURE)
+		{
+			if(!((STRUCTURE *)psCurr)->visible[lookingPlayer])
+				continue;
+		}
+
+		if(psCurr->type == OBJ_DROID)
+		{
+			if(!((DROID *)psCurr)->visible[lookingPlayer])
+				continue;
+		}
+
+		// skip partially build structures
+		//if ( (psCurr->type == OBJ_STRUCTURE) &&
+		//	 (((STRUCTURE *)psCurr)->status != SS_BUILT) )
+		//{
+		//	continue;
+		//}
+
+		// skip flying vtols
+		if ( (psCurr->type == OBJ_DROID) &&
+			vtolDroid((DROID *)psCurr) &&
+			((DROID *)psCurr)->sMove.Status != MOVEINACTIVE )
+		{
+			continue;
+		}
+
+		xdiff = (SDWORD)psCurr->x - x;
+		ydiff = (SDWORD)psCurr->y - y;
+		if (xdiff*xdiff + ydiff*ydiff < rangeSq)
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+/* Go after a certain research */
+BOOL scrPursueResearch(void)
+{
+	RESEARCH			*psResearch;
+	SDWORD				structure, player;
+	UWORD				cur,index,tempIndex,foundIndex;
+	SWORD				top;
+
+	UWORD				Stack[400];
+
+	BOOL				found;
+	PLAYER_RESEARCH		*pPlayerRes;
+
+	STRING				sTemp[128];
+	STRUCTURE			*psBuilding;
+	RESEARCH_FACILITY	*psResFacilty;
+	
+	RESEARCH			*pResearch;
+
+	if (!stackPopParams(3,ST_STRUCTURE, &structure, VAL_INT, &player, ST_RESEARCH, &psResearch ))
+	{
+		debug(LOG_ERROR, "scrPursueResearch(): stack failed");
+		return FALSE;
+	}
+
+	if(psResearch == NULL)
+	{	
+		ASSERT(FALSE, ": no such research topic");
+		return FALSE;
+	}
+
+
+	psBuilding	=	(STRUCTURE *) structure;
+	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
+
+	if(psResFacilty->psSubject != NULL)		// not finshed yet
+	{
+		if (!stackPushResult(VAL_BOOL, FALSE))
+		{
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	pPlayerRes = asPlayerResList[player];
+	index = psResearch - asResearch;
+
+	if (index >= numResearch)
+	{
+		ASSERT(FALSE, "scrPursueResearch: invalid research index");
+		return FALSE;
+	}
+
+	found = FALSE;
+
+	if(beingResearchedByAlly(index, player))		//an ally is already researching it
+	{
+		found = FALSE;
+	}
+	else if(IsResearchCompleted(&pPlayerRes[index]))
+	{
+		found = FALSE;
+		//DbgMsg("Research already completed: %d", index);
+	}
+	else if(IsResearchStarted(&pPlayerRes[index]))
+	{
+		found = FALSE;
+		//DbgMsg("Research already in progress, %d", index);
+	}
+	else if(IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
+	{
+		foundIndex = index;
+		found = TRUE;
+		//DbgMsg("Research possible or cancelled: %d", index);
+	}
+	else if(skTopicAvail(index,player))
+	{
+		foundIndex = index;
+		found = TRUE;
+		//DbgMsg("Research available: %d",index);
+	}
+	else
+	{
+		//DbgMsg("starting to search for: %d, %s", index, asResearch[index].pName);
+		top = -1;
+
+		cur = 0;				//start with first index's PR
+		tempIndex = -1;
+		while(TRUE)	//do
+		{
+			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].numPRRequired, asResearch[index].pName);
+
+			if(cur >= asResearch[index].numPRRequired)		//node has nodes?
+			{
+				//DbgMsg("cur >= numPRRequired : %d (%d >= %d)", index, cur, asResearch[index].numPRRequired);
+
+				top = top - 2;
+				if(top < (-1))
+				{
+					//DbgMsg("Nothing on stack");
+					break;		//end of stack
+				}
+				index = Stack[top + 2];	//if index = -1, then exit
+				cur = Stack[top + 1];		//go to next PR of the last node, since this one didn't work
+				
+			}
+			else		//end of nodes not reached
+			{
+				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
+				//DbgMsg("evaluating node: %d, (cur = %d), %s", tempIndex, cur, asResearch[tempIndex].pName);
+
+				if(skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added	
+				{
+					//DbgMsg("avail: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
+					found = TRUE;
+					foundIndex = tempIndex;		//done
+					break;
+				}
+				else if((IsResearchCompleted(&pPlayerRes[tempIndex])==FALSE) && (IsResearchStarted(&pPlayerRes[tempIndex])==FALSE))		//not avail and not busy with it, can check this PR's PR
+				{
+					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
+					if(asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					{
+						//DbgMsg("node has nodes, so selecting as main node: %d, %s", tempIndex, asResearch[tempIndex].pName);
+
+						Stack[top+1] = cur;								//so can go back to it further
+						Stack[top+2] = index;
+						top = top + 2;
+
+						index = tempIndex;		//go 1 level further
+						cur = -1;									//start with first PR of this PR next time
+					}
+					else		//has no PRs, choose it (?)
+					{
+						if(!beingResearchedByAlly(tempIndex, player))	//<NEW> ally check added
+						{
+							//DbgMsg("PR has no PRs, choosing it: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
+							found = TRUE;
+							foundIndex = tempIndex;	//done
+							break;
+						}
+					}
+				}
+			}
+
+			cur++;				//try next node of the main node
+			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
+			{
+				//DbgMsg("END");
+				break;
+			}
+
+		}//while((cur < asResearch[index].numPRRequired) && (top >= (-1)));
+	}
+
+	if(found)
+	{
+		if(foundIndex < numResearch)
+		{
+			pResearch = (asResearch + foundIndex);
+			pPlayerRes				= asPlayerResList[player]+ foundIndex;
+			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
+			
+			if (IsResearchCancelled(pPlayerRes))
+			{	
+				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			}
+			else
+			{
+				psResFacilty->powerAccrued = 0;
+			}
+
+			MakeResearchStarted(pPlayerRes);
+			psResFacilty->timeStarted = ACTION_START_TIME;
+			psResFacilty->timeStartHold = 0;
+			psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
+			if (psResFacilty->timeToResearch == 0)
+			{
+				psResFacilty->timeToResearch = 1;
+			}
+
+			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
+			NETlogEntry(sTemp,0,0);
+		}
+	}
+
+	if (!stackPushResult(VAL_BOOL, found))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL scrGetStructureType(void)
+{
+	STRUCTURE			*psStruct;
+
+	if (!stackPopParams(1, ST_STRUCTURE, &psStruct))
+	{
+		debug(LOG_ERROR, "scrGetStructureType(): stack failed");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_INT, psStruct->pStructureType->type))
+	{
+		debug(LOG_ERROR, "scrGetStructureType(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Get player name from index */
+BOOL scrGetPlayerName(void)
+{
+	SDWORD	player;
+
+	if (!stackPopParams(1, VAL_INT, &player))
+	{
+		debug(LOG_ERROR, "scrGetPlayerName(): stack failed");
+		return FALSE;
+	}
+
+	if (player < 0 || player >= MAX_PLAYERS)
+	{
+		ASSERT( FALSE, "scrGetPlayerName: invalid player number" );
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_STRING, (SDWORD)getPlayerName((UDWORD)player)))
+	{
+		debug(LOG_ERROR, "scrGetStructureType(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+
+SDWORD guessPlayerFromMessage(STRING **str)
+{
+	SDWORD	player,count=0;
+	STRING	*endOfPlayerList;
+	STRING	playerName[255];
+	SDWORD	playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+	SDWORD	storage=0;
+	BOOL	bOK=FALSE;
+
+	ASSERT(MAX_PLAYERS <= 8, "guessPlayerFromMessage: MAX_PLAYERS too high");
+
+
+	endOfPlayerList = *str;
+	player = 0;
+
+	debug(LOG_SCRIPT, "now checking string='%s'",*str);
+
+	while( sscanf(*str, "%[^,:;?! ]%*[,;?! ]%n", playerName, &count)	//didn't reach the end	//first field: what to stop on; second field: what to read (skip) afterwards
+		&& player >= 0										//last string was a player name
+		//&& *str < copyStr + strlen(copyStr) 
+		)
+	{
+		if(count==0)	/* nothing read ? */
+			break;
+
+		debug(LOG_SCRIPT, "playerName='%s' count=%d",playerName, count);
+
+		*str += count;
+		player = getPlayerFromString(playerName);
+
+		debug(LOG_SCRIPT, "player=%d",player);
+
+		if(player >= 0 && player < MAX_PLAYERS)
+		{
+			bOK = TRUE;
+			endOfPlayerList = *str;		//remember where target player list ends
+			storage = storage | playerFlag[player];		//set player flag
+			debug(LOG_SCRIPT, "storage=%d",storage);
+		}
+
+		debug(LOG_SCRIPT, "             ");
+		debug(LOG_SCRIPT, "now checking string='%s'",*str);
+	}
+
+	*str = endOfPlayerList;	//skip player list
+
+	if(bOK)
+		return storage;
+
+	return -1;
+}
+
+SDWORD getPlayerFromString(STRING *playerName)
+{
+	UDWORD	playerIndex;
+	STRING	sPlayerNumber[255];
+
+	for( playerIndex=0; playerIndex<MAX_PLAYERS; playerIndex++ )
+	{
+		/* check name */
+		debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
+		if(strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
+		{
+			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
+			return playerIndex;
+		}
+
+		/* check color */
+		debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColorName(playerIndex), playerName);
+		if(strncasecmp(getPlayerColorName(playerIndex),playerName, 255) == 0)
+		{
+			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
+			return playerIndex;
+		}
+
+		/* check player number */
+		sprintf(sPlayerNumber,"%d",playerIndex);
+		debug(LOG_SCRIPT, "checking (%s,%s)",sPlayerNumber, playerName);
+		if(strncasecmp(sPlayerNumber,playerName, 255) == 0)
+		{
+			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
+			return playerIndex;
+		}
+		
+	}
+
+	return -1;
+}
+
+BOOL scrGetTargetPlayers(void)
+{
+	STRING	*myMsg = NULL;
+	STRING	**ssval = NULL;
+	SDWORD	players=0;
+
+	if (!stackPopParams(1,  VAL_REF | VAL_STRING, &ssval))
+	{
+		debug(LOG_ERROR, "scrGetTargetPlayers(): stack failed");
+		return FALSE;
+	}
+
+	if(*ssval == NULL)
+	{
+		debug(LOG_ERROR, "scrGetTargetPlayers(): passed string was not initialized");
+		return FALSE;
+	}
+
+	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
+
+	myMsg = (STRING*)MALLOC(255);
+
+	strcpy(myMsg,*ssval);
+
+	debug(LOG_SCRIPT, "scrGetTargetPlayers: myMsg='%s'", myMsg);
+
+	players = guessPlayerFromMessage(&myMsg);
+
+	debug(LOG_SCRIPT, "scrGetTargetPlayers: myMsg new='%s'", myMsg);
+
+	strcpy(*ssval, myMsg);
+
+	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
+	
+	if (!stackPushResult(VAL_INT, players))
+	{
+		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
+		return FALSE;
+	}
+
+	FREE(myMsg);
+
+	return TRUE;
+
+}
+
+BOOL scrMatch(void)
+{
+	STRING	*sToParse = NULL, *sToMatch = NULL;
+	STRING	*sOrigToParse = NULL, *sOrigToMatch = NULL;
+	STRING	*wordNeed = NULL, *wordFound = NULL;
+	SDWORD	players=0,readCountParse=0,readCountMatch=0;
+	SDWORD	fieldAssignedParse=0,fieldAssignedMatch=0;
+	BOOL	ok = TRUE,bEndParse=FALSE,bEndMatch=FALSE;
+	SDWORD	*nResult;
+
+	if (!stackPopParams(3, VAL_STRING, &sOrigToParse, VAL_STRING, &sOrigToMatch, VAL_REF|VAL_INT, &nResult))
+	{
+		debug(LOG_ERROR, "scrMatch(): stack failed");
+		return FALSE;
+	}
+
+	if(sOrigToParse == NULL)
+	{
+		debug(LOG_ERROR, "scrMatch(): message to parse is null");
+		return FALSE;
+	}
+
+	if(sOrigToMatch == NULL)
+	{
+		debug(LOG_ERROR, "scrMatch(): string to match is null");
+		return FALSE;
+	}
+
+	sToParse = sOrigToParse;
+	sToMatch = sOrigToMatch;
+
+	debug(LOG_SCRIPT, " ");
+	debug(LOG_SCRIPT, "sOrigToParse='%s'", sOrigToParse);
+	debug(LOG_SCRIPT, "sOrigToMatch='%s'", sOrigToMatch);
+
+	wordFound = (STRING*)MALLOC(255);
+	wordNeed = (STRING*)MALLOC(255);
+
+	*nResult = -1;
+
+	while(ok)
+	{
+		/* get next word */
+		fieldAssignedParse = getFirstWord(sToParse,&wordFound,&readCountParse);
+		sToParse = sToParse + readCountParse;			/* next time start with next word */
+
+		/* get next word */
+		fieldAssignedMatch = getFirstWord(sToMatch,&wordNeed,&readCountMatch);
+		sToMatch = sToMatch + readCountMatch;			/* next time start with next word */
+
+		debug(LOG_SCRIPT, "wordFound '%s'", wordFound);
+		debug(LOG_SCRIPT, "wordNeed '%s'", wordNeed);
+
+		/* failed if *one* of the strings ended */
+		if((fieldAssignedParse > 0 && fieldAssignedMatch <= 0) 
+			|| (fieldAssignedMatch > 0 && fieldAssignedParse <= 0))
+		{
+			debug(LOG_SCRIPT, "exit condition FAILED");
+			ok = FALSE;
+			break;
+		}
+		else if(fieldAssignedParse <= 0 && fieldAssignedMatch <= 0)		/* no more words left in either of them */
+		{
+			debug(LOG_SCRIPT, "exit condition SUCCESS");
+			ok = TRUE;
+			break;
+		}
+
+		/*
+		 *	now compare both words 
+		 */
+		
+		if(strncasecmp(wordNeed,"<player>", 255) == 0)		/* if we are looking for player */
+		{
+			debug(LOG_SCRIPT, "matching <player>");
+			*nResult = getPlayerFromString(wordFound);
+			
+			if(*nResult == -1)	/* failed to match player, stop */
+			{
+				debug(LOG_SCRIPT, "failed to match <player>");
+				ok = FALSE;
+			}
+			else
+			{
+				debug(LOG_SCRIPT, "matched <player>");
+			}
+		}
+		else if(strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to se if they match */
+		{
+			debug(LOG_SCRIPT, "words did not match");
+			ok = FALSE;
+		}
+
+		debug(LOG_SCRIPT, " ");
+	}
+
+	debug(LOG_SCRIPT, "END");
+
+	FREE(wordFound);
+	FREE(wordNeed);
+	
+	if (!stackPushResult(VAL_BOOL, ok))
+	{
+		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+SDWORD getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount)
+{
+	SDWORD	count=0,fieldsAssigned=0;
+
+	debug(LOG_SCRIPT, "--getWord: now checking string='%s'",sText);
+
+	ASSERT(*sWord != NULL, "getFirstWord: sWord is NULL");
+
+	strcpy(*sWord,"");		/* clear */
+
+	fieldsAssigned = sscanf(sText, "%[^,:;?! ]%*[,;?! ]%n", *sWord, &count);
+
+	debug(LOG_SCRIPT, "--getWord: matched='%s', count=%d, fieldsAssigned=%d",*sWord, count, fieldsAssigned);
+
+	*readCount = count;
+
+	return fieldsAssigned;  
 }

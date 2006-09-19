@@ -332,7 +332,17 @@ BOOL stackPushResult(INTERP_TYPE type, SDWORD data)
 {
 	// Store the value
 	psCurrChunk->aVals[currEntry].type = type;
-	psCurrChunk->aVals[currEntry].v.ival = data;
+
+	/* deal with strings */
+	if(type == VAL_STRING)
+	{
+		psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(255);
+		strcpy(psCurrChunk->aVals[currEntry].v.sval,(STRING*)data);			//store string on stack
+	}
+	else
+	{
+		psCurrChunk->aVals[currEntry].v.ival = data;
+	}
 
 	// Now update psCurrChunk and currEntry
 	currEntry++;
@@ -661,6 +671,14 @@ void stackShutDown(void)
 	for(psCurr = psStackBase; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
+
+		/* Free strings */
+		if(psCurr->aVals->type == VAL_STRING)
+		{
+			ASSERT(psCurr->aVals->v.sval != NULL, "stackShutDown: attempting to free a null pointer");
+			FREE(psCurr->aVals->v.sval);
+		}
+
 		FREE(psCurr->aVals);
 		FREE(psCurr);
 	}

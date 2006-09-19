@@ -51,6 +51,32 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 {
 	UDWORD	i,j;
 
+	debug(LOG_WZ, "Unloading script data");
+
+
+	/* Free local vars */
+	for(i=0; i < psCode->numEvents; i++)
+	{
+		if(psCode->numLocalVars[i] > 0)		//only free if any defined
+		{
+			//free strings for event i
+			for(j=0; j < psCode->numLocalVars[i]; j++)
+			{
+
+				if(psCode->ppsLocalVarVal[i][j].type == VAL_STRING)	//if a string
+				{
+					if(psCode->ppsLocalVarVal[i][j].v.sval != NULL)		//doublecheck..
+					{
+						FREE(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
+					}
+				}
+			}
+
+			FREE(psCode->ppsLocalVars[i]);
+			FREE(psCode->ppsLocalVarVal[i]);	//free pointer to event i local vars
+		}
+	}
+
 	FREE(psCode->pCode);
 	if (psCode->pTriggerTab)
 	{
@@ -104,25 +130,7 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 		FREE(psCode->psArrayDebug);
 	}
 
-	/* Free local vars */
-	for(i=0; i < psCode->numEvents; i++)
-	{
-		if(psCode->numLocalVars[i] > 0)		//only free if any defined
-		{
-			//free strings for event i
-			for(j=0; j < psCode->numLocalVars[i]; j++)
-			{
-				if(psCode->ppsLocalVarVal[i][j].type == VAL_STRING);	//if a string
-				{
-					if(psCode->ppsLocalVarVal[i][j].v.sval != NULL)		//doublecheck..
-						FREE(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
-				}
-			}
 
-			FREE(psCode->ppsLocalVars[i]);
-			FREE(psCode->ppsLocalVarVal[i]);	//free pointer to event i local vars
-		}
-	}
 
 	FREE(psCode->numParams);
 	FREE(psCode->numLocalVars);

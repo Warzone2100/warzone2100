@@ -59,6 +59,9 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 		/* This is an object member variable */
 		if (object)
 		{
+#ifdef DEBUG_SCRIPT
+			debug(LOG_SCRIPT, "current variable is OBJ_OBJVAR");
+#endif
 			return OBJ_OBJVAR;
 		}
 		else
@@ -70,9 +73,15 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 				break;
 			case VAL_INT:
 //			case VAL_FLOAT:
+#ifdef DEBUG_SCRIPT
+				debug(LOG_SCRIPT, "current variable is NUM_OBJVAR");
+#endif
 				return NUM_OBJVAR;
 				break;
 			default:
+#ifdef DEBUG_SCRIPT
+				debug(LOG_SCRIPT, "current variable is USER_OBJVAR");
+#endif
 				return USER_OBJVAR;
 				break;
 			}
@@ -107,6 +116,9 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 		/* This is a standard variable */
 		if (object)
 		{
+#ifdef DEBUG_SCRIPT
+			debug(LOG_SCRIPT, "current variable is OBJ_VAR");
+#endif
 			return OBJ_VAR;
 		}
 		else
@@ -229,6 +241,9 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 			break;
 		case VAL_INT:
 //		case VAL_FLOAT:
+#ifdef DEBUG_SCRIPT
+			debug(LOG_SCRIPT, "current function is NUM_FUNC_CUST");
+#endif
 			return NUM_FUNC_CUST;
 			break;
 		case VAL_STRING:
@@ -285,8 +300,8 @@ exit					return EXIT;
 pause					return PAUSE;
 
 	/* Match to type key words */
-void					{ scr_lval.tval = VAL_VOID; return TYPE; }
-VOID					{ scr_lval.tval = VAL_VOID; return TYPE; }
+void					{ scr_lval.tval = VAL_VOID; return _VOID; }
+VOID					{ scr_lval.tval = VAL_VOID; return _VOID; }
 string					{ scr_lval.tval = VAL_STRING; return TYPE; }
 STRING					{ scr_lval.tval = VAL_STRING; return TYPE; }
 bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }
@@ -328,53 +343,69 @@ NOT						return _NOT;
 [a-zA-Z_][0-9_a-zA-Z_]*		{
 
 #ifdef DEBUG_SCRIPT
-						debug(LOG_SCRIPT, "looking up '%s'", scr_text);
+								debug(LOG_SCRIPT, "looking up '%s'", scr_text);
 #endif
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a type", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a type", scr_text);
+#endif
 									return TYPE;
 								}
 								/* See if this identifier has been defined as a variable */
 								else if (scriptLookUpVariable(scr_text, &scr_lval.vSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a var", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a var", scr_text);
+#endif
 									return scriptGetVarToken(scr_lval.vSymbol);
 								}
 								/* See if this identifier has been defined as a constant */
 								else if (scriptLookUpConstant(scr_text, &scr_lval.cSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a constant", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a constant", scr_text);
+#endif
 									return scriptGetConstToken(scr_lval.cSymbol);
 								}
 								/* See if this identifier has been defined as a function */
 								else if (scriptLookUpFunction(scr_text, &scr_lval.fSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a function", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a function", scr_text);
+#endif
 									return scriptGetFuncToken(scr_lval.fSymbol);
 								}
 
 								/* See if this identifier has been defined as a custom function */
 								else if (scriptLookUpCustomFunction(scr_text, &scr_lval.eSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a cust func", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a cust func", scr_text);
+#endif
 									return scriptGetCustomFuncToken(scr_lval.eSymbol);
 								}
 
 								else if (scriptLookUpTrigger(scr_text, &scr_lval.tSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a trigger", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a trigger", scr_text);
+#endif
 									return TRIG_SYM;
 								}
 								else if (scriptLookUpEvent(scr_text, &scr_lval.eSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is an event", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is an event", scr_text);
+#endif
 									return EVENT_SYM;
 								}
 								else if (scriptLookUpCallback(scr_text, &scr_lval.cbSymbol))
 								{
-									//debug(LOG_SCRIPT, "'%s' is a callback", scr_text);
+#ifdef DEBUG_SCRIPT
+									debug(LOG_SCRIPT, "'%s' is a callback", scr_text);
+#endif
 									return CALLBACK_SYM;
 								}
 								else

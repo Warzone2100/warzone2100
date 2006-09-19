@@ -722,7 +722,15 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "debug",			scrDebugFile,				VAL_VOID,
 		1, { VAL_STRING } },
 
-	{ "addHelpMsg",				scrAddHelpMsg,			VAL_VOID,
+
+	{ "getTargetPlayers",	scrGetTargetPlayers,	VAL_INT,
+		1, { VAL_REF|VAL_STRING } },
+
+	{ "match",	scrMatch,	VAL_BOOL,
+		3, { VAL_STRING, VAL_STRING, VAL_REF|VAL_INT } },
+
+
+	{ "dropBeacon",				scrDropBeacon,			VAL_VOID,
 		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
 	{ "removeHelpMessage",				scrRemoveHelpMessage,			VAL_VOID,
@@ -780,6 +788,9 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "mapRevealedInRange",	scrMapRevealedInRange,		VAL_BOOL,
 		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "pursueResearch",			scrPursueResearch,			VAL_BOOL,
+		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, (INTERP_TYPE)ST_RESEARCH } },
 
 	{ "numResearchLeft",			scrNumResearchLeft,			VAL_INT,
 		2, { VAL_INT, (INTERP_TYPE)ST_RESEARCH } },
@@ -879,6 +890,54 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "circlePerimPoint",			scrCirclePerimPoint,		VAL_VOID,
 		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT} },
 
+
+	/* learn functions */
+
+	{ "learnPlayerBaseLoc",			scrLearnPlayerBaseLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "recallPlayerBaseLoc",			scrRecallPlayerBaseLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT} },
+
+	{ "canRememberPlayerBaseLoc",			scrCanRememberPlayerBaseLoc,		VAL_BOOL,
+		2, { VAL_INT, VAL_INT} },
+
+	{ "learnBaseDefendLoc",			scrLearnBaseDefendLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "learnOilDefendLoc",			scrLearnOilDefendLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "getBaseDefendLocIndex",			scrGetBaseDefendLocIndex,		VAL_INT,
+		3, { VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "getOilDefendLocIndex",			scrGetOilDefendLocIndex,		VAL_INT,
+		3, { VAL_INT, VAL_INT, VAL_INT} },
+
+	{ "getBaseDefendLocCount",			scrGetBaseDefendLocCount,		VAL_INT,
+		0, { VAL_VOID} },
+
+	{ "getOilDefendLocCount",			scrGetOilDefendLocCount,		VAL_INT,
+		0, { VAL_VOID} },
+
+	{ "recallBaseDefendLoc",			scrRecallBaseDefendLoc,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT} },
+
+	{ "recallOilDefendLoc",			scrRecallOilDefendLoc,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT} },
+
+	{ "savePlayerAIExperience",			scrSavePlayerAIExperience,		VAL_BOOL,
+		2, { VAL_INT, VAL_BOOL} },
+
+	{ "loadPlayerAIExperience",			scrLoadPlayerAIExperience,		VAL_BOOL,
+	2, { VAL_INT, VAL_BOOL} },
+
+	/* end of learn functions */
+
+	{ "structInRangeVis",			scrStructInRangeVis,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+
+
 	{ "giftRadar",			scrGiftRadar,		VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_BOOL} },
 
@@ -900,7 +959,11 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "playerLoaded",			scrPlayerLoaded,		VAL_BOOL,
 		1, { VAL_INT} },
 
+	{ "getStructureType",			scrGetStructureType,		VAL_INT,
+		1, { (INTERP_TYPE)ST_STRUCTURE} },
 
+	{ "playerName",			scrGetPlayerName,		VAL_STRING,
+		1, { VAL_INT} },
 
 	/* END new functions */
 

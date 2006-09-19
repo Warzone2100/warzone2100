@@ -522,6 +522,7 @@ extern BOOL scrMin(void);
 extern BOOL scrMax(void);
 extern BOOL scrFogTileInRange(void);
 extern BOOL scrMapRevealedInRange(void);
+extern BOOL scrPursueResearch(void);
 extern BOOL scrNumResearchLeft(void);
 extern BOOL scrResearchCompleted(void);
 extern BOOL scrResearchStarted(void);
@@ -553,6 +554,23 @@ extern BOOL scrGetClosestEnemyDroidByType(void);
 extern BOOL scrGetClosestEnemyStructByType(void);
 extern BOOL scrSkDefenseLocationB(void);
 extern BOOL scrCirclePerimPoint(void);
+
+extern BOOL scrLearnPlayerBaseLoc(void);
+extern BOOL scrLearnBaseDefendLoc(void);
+extern BOOL scrLearnOilDefendLoc(void);
+extern BOOL scrSavePlayerAIExperience(void);
+extern BOOL scrLoadPlayerAIExperience(void);
+extern BOOL scrGetBaseDefendLocIndex(void);
+extern BOOL scrGetOilDefendLocIndex(void);
+extern BOOL scrRecallPlayerBaseLoc(void);
+extern BOOL scrCanRememberPlayerBaseLoc(void);
+extern BOOL scrStructInRangeVis(void);
+extern BOOL scrRecallBaseDefendLoc(void);
+extern BOOL scrRecallOilDefendLoc(void);
+extern BOOL scrGetBaseDefendLocCount(void);
+extern BOOL scrGetOilDefendLocCount(void);
+
+extern BOOL scrStructInRangeVis(void);
 extern BOOL scrGiftRadar(void);
 extern BOOL scrNumAllies(void);
 extern BOOL scrNumAAinRange(void);
@@ -561,9 +579,14 @@ extern BOOL scrSelectGroup(void);
 extern BOOL scrModulo(void);
 extern BOOL scrPlayerLoaded(void);
 extern BOOL scrRemoveHelpMessage(void);
-extern BOOL scrAddHelpMsg(void);
+extern BOOL scrDropBeacon(void);
 extern BOOL scrClosestDamagedGroupDroid(void);
 extern BOOL scrMsgBox(void);
+extern BOOL scrGetStructureType(void);
+extern BOOL scrGetPlayerName(void);
+
+extern BOOL scrGetTargetPlayers(void);
+extern BOOL scrMatch(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
@@ -577,6 +600,7 @@ extern BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWOR
 extern VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY);
 extern MESSAGE * findHelpMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player);
+extern BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
 #endif
 
 

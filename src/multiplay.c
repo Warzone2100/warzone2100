@@ -1335,7 +1335,7 @@ BOOL recvTextMessage(NETMSG *pMsg)
 	MultiMsgPlayerTo = selectedPlayer;
 
 	strcpy(MultiplayMsg,&(pMsg->body[4]));
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
+	eventFireCallbackTrigger(CALL_AI_MSG);
 
 	// make some noise!
 	if(titleMode == MULTIOPTION || titleMode == MULTILIMIT)
@@ -1919,7 +1919,7 @@ BOOL msgStackFireTop(void)
 	{
 		case CALL_VIDEO_QUIT:
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+			eventFireCallbackTrigger(CALL_VIDEO_QUIT);
 			break;
 
 		case CALL_BEACON:
@@ -1938,7 +1938,7 @@ BOOL msgStackFireTop(void)
 
 			strcpy(MultiplayMsg, msg);
 
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BEACON);
+			eventFireCallbackTrigger(CALL_BEACON);
 			break;
 
 		case CALL_AI_MSG:
@@ -1953,7 +1953,7 @@ BOOL msgStackFireTop(void)
 
 			strcpy(MultiplayMsg, msg);
 
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
+			eventFireCallbackTrigger(CALL_AI_MSG);
 			break;
 
 		default:
@@ -1987,4 +1987,37 @@ BOOL recvBeacon(NETMSG *pMsg)
 	strcpy(beaconReceiveMsg[sender], msg);
 
 	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
+}
+
+STRING *getPlayerColorName(SDWORD player)
+{
+	switch(getPlayerColour(player))
+	{
+	case 0:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_GREEN));
+		break;
+	case 1:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_ORANGE));
+		break;
+	case 2:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_GREY));
+		break;
+	case 3:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_BLACK));
+		break;
+	case 4:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_RED));
+		break;
+	case 5:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_BLUE));
+		break;
+	case 6:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_PINK));
+		break;
+	case 7:
+		strcpy(tempString,strresGetString(psStringRes, STR_FE_CYAN));
+		break;
+	}
+
+	return tempString;
 }
