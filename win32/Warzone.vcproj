@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;2.0.5_pre\&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;9.9.9\&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -125,7 +125,7 @@
 				Optimization="3"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;2.0.5_pre\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;9.9.9\&quot;"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -1668,6 +1668,10 @@
 			</File>
 			<File
 				RelativePath="..\src\player.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\playlist.h"
 				>
 			</File>
 			<File
