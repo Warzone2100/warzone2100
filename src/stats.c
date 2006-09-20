@@ -251,7 +251,7 @@ static BOOL allocateStatName(BASE_STATS* pStat, char *Name)
 
 
 /* body stats need the extra list removing */
-void deallocBodyStats(void)
+static void deallocBodyStats(void)
 {
 	BODY_STATS *psStat;
 	UDWORD		inc;
@@ -3365,7 +3365,7 @@ SDWORD	getCompFromResName(UDWORD compType, STRING *pName)
 	return getCompFromName(compType, pName);
 }
 
-void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize)
+static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize)
 {
 
 	switch (compType)
@@ -3509,7 +3509,7 @@ BOOL getResourceName(STRING *pName)
 }
 
 
-STRING* getNameFromStat(BASE_STATS* pStat)
+static STRING* getNameFromStat(BASE_STATS* pStat)
 {
 #ifdef HASH_NAMES
 	return(strresGetString(NULL,pStat->NameHash));

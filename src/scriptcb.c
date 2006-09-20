@@ -432,7 +432,7 @@ BASE_OBJECT		*psScrCBObjSeen;
 BASE_OBJECT		*psScrCBObjViewer;
 
 // deal with all the object seen functions
-BOOL scrCBObjectSeen(SDWORD callback)
+static BOOL scrCBObjectSeen(SDWORD callback)
 {
 	BASE_OBJECT		**ppsObj;
 	BASE_OBJECT		**ppsViewer;

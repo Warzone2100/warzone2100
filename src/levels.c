@@ -527,7 +527,7 @@ BOOL levReleaseAll(void)
 }
 
 // load up a single wrf file
-BOOL levLoadSingleWRF(STRING *pName)
+static BOOL levLoadSingleWRF(STRING *pName)
 {
 	// free the old data
 	levReleaseAll();

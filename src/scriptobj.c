@@ -514,7 +514,7 @@ BOOL scrGroupObjGet(UDWORD index)
 
 
 // get the name from a stat pointer
-STRING	*scrGetStatName(INTERP_TYPE type, UDWORD data)
+static STRING *scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
 	STRING	*pName = NULL;
 

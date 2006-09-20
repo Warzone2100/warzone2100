@@ -66,7 +66,7 @@ static MISC_IMD	miscImds[] =
 
 // -------------------------------------------------------------------------------
 // Load up all the imds into an array
-BOOL	multiLoadMiscImds( void )
+static BOOL multiLoadMiscImds( void )
 {
 UDWORD	i=0;
 BOOL	bMoreToProcess=TRUE;

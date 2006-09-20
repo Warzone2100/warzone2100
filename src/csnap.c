@@ -179,7 +179,7 @@ void RemoveCursorSnap(CURSORSNAP *SnapBuffer,UDWORD FormID)
 // NOTE that this function is slow and should be called infrequently,
 // ideally only during widget initialisation.
 //
-BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
+static BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
 {
 	struct _widget *psWidget = widgGetFromID(psWScreen,ID);
 

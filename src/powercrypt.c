@@ -63,7 +63,7 @@ void pwrcSetPlayerCryptPower(UDWORD player, UDWORD power)
 
 
 // get the current power value
-UDWORD pwrcGetPlayerCryptPower(UDWORD player)
+static UDWORD pwrcGetPlayerCryptPower(UDWORD player)
 {
 	ASSERT( player < MAX_PLAYERS,
 		"pwrcGetPlayerCryptPower: invalid player number" );

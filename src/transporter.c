@@ -155,7 +155,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld);
 static void _intProcessTransporter(UDWORD id);
 
 
-DROID *GetCurrTransporter(void)
+static DROID *GetCurrTransporter(void)
 {
 	return psCurrTransporter;
 }
@@ -1206,7 +1206,7 @@ BOOL OrderDroidToEmbark(DROID *psDroid)
 }
 
 
-void intSetTransCapacityLabel(char *Label)
+static void intSetTransCapacityLabel(char *Label)
 {
 	UDWORD capacity = TRANSPORTER_CAPACITY;
 

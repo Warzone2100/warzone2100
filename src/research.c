@@ -121,7 +121,7 @@ static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pO
 static BOOL checkResearchName(RESEARCH *psRes, UDWORD numStats);
 //static void enableSelfRepair(UBYTE player);
 
-char *getResearchName(RESEARCH *pResearch)
+static char *getResearchName(RESEARCH *pResearch)
 {
 #ifdef HASH_NAMES
 	return(strresGetString(NULL,pResearch->NameHash));

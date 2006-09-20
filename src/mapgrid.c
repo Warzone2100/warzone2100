@@ -147,7 +147,7 @@ void gridShutDown(void)
 
 // find the grid's that are covered by the object and either
 // add or remove the object
-void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVERAGE_MODE mode)
+static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVERAGE_MODE mode)
 {
 	SDWORD	range, x,y, minx,maxx, miny,maxy;
 

@@ -163,7 +163,7 @@ void	initWarCam( void )
 
 // Just turn it off.
 //
-void CancelWarCam(void)
+static void CancelWarCam(void)
 {
    	if(trackingCamera.target->type == OBJ_DROID) {
 		if( bTrackingTransporter && (((DROID*)trackingCamera.target)->droidType == DROID_TRANSPORTER) ) {
@@ -922,7 +922,7 @@ FRACT	fraction;
 	}
 }
 
-BOOL	nearEnough(void)
+static BOOL nearEnough(void)
 {
 BOOL	retVal = FALSE;
 SDWORD	xPos;

@@ -652,7 +652,7 @@ BOOL		bLaterInList;
 // ---------------------------------------------------------------------
 
 // see if a commander is the n'th command droid
-BOOL droidIsCommanderNum(DROID *psDroid, SDWORD n)
+static BOOL droidIsCommanderNum(DROID *psDroid, SDWORD n)
 {
 	DROID	*psCurr;
 	SDWORD	numLess;

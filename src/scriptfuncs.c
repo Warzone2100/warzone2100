@@ -697,7 +697,7 @@ BOOL scrDroidHasSeen(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid being within range of a position
-BOOL scrDroidInRangeOfPosition(void)
+static BOOL scrDroidInRangeOfPosition(void)
 {
 	SDWORD		range, player;
 	DROID		*psCurr;
@@ -5113,7 +5113,7 @@ UDWORD	campaignNumber;
 }
 // -----------------------------------------------------------------------------------------
 
-BOOL	scrGetUnitCount( void )
+static BOOL scrGetUnitCount( void )
 {
 	return TRUE;
 }
@@ -5402,7 +5402,7 @@ BOOL scrAddTemplate(void)
 // -----------------------------------------------------------------------------------------
 
 // additional structure check
-BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy)
+static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy)
 {
 	UDWORD x,y,xTL,yTL,xBR,yBR;
 	UBYTE count =0;

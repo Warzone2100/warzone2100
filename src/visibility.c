@@ -327,7 +327,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 // Call this once per game cycle to update visible terrain ray angle when spreading processor
 // load.
 //
-void visTilesUpdateLoadSpread(void)
+static void visTilesUpdateLoadSpread(void)
 {
 //	if(currRayPending) {
 //		currRayAng += VTRAYSTEP;
