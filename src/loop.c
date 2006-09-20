@@ -1034,7 +1034,7 @@ GAMECODE videoLoop(void)
 	if( clearCount < 1)
 	{
 		bClear = CLEAR_BLACK;
-		if ((void*)screen_GetBackDrop() != NULL)
+		if (screen_GetBackDrop())
 		{
 			bActiveBackDrop = TRUE;
 			screen_StopBackDrop();
