@@ -681,7 +681,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 
 static void inverse_matrix(float* src, float * dst) {
 	float det = src[0]*src[5]*src[10]+src[4]*src[9]*src[2]+src[8]*src[1]*src[6] -src[2]*src[5]*src[8]-src[6]*src[9]*src[0]-src[10]*src[1]*src[4];
-	float invdet = 1.0/det;
+	float invdet = 1.0f/det;
 
 	dst[0] = invdet*(src[5]*src[10]-src[9]*src[6]);
 	dst[1] = invdet*(src[9]*src[2]-src[1]*src[10]);

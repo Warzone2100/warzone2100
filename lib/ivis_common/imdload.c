@@ -102,7 +102,7 @@ iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
 	iV_DEBUG1("imd[IMDLoad] = loading shape file '%s':",filename);
 
 	strcpy(_IMD_NAME,filename);
-	strlwr(_IMD_NAME);
+	SDL_strlwr(_IMD_NAME);
 
 	_imd_get_path(filename,path);
 
@@ -276,7 +276,7 @@ iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpa
 		if (bTextured) {
 			//resToLower(texfile);
 //          printf("texfile cmp in imdload.c :%s\n", texfile);
-			if (strncasecmp(texfile, "page-", 5) == 0) {
+			if (SDL_strncasecmp(texfile, "page-", 5) == 0) {
 				for(i = 5; i < (SDWORD)strlen(texfile); i++) {
 					if (!isdigit(texfile[i])) {
 						break;

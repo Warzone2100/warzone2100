@@ -953,7 +953,7 @@ BOOL buildMapList(void)
 	for ( file = filelist; *file != NULL; ++file ) {
 		len = strlen( *file );
 		if ( len > 10 // Do not add addon.lev again
-				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
+				&& !SDL_strcasecmp( *file+(len-10), ".addon.lev") ) {
 			debug( LOG_WZ, "Loading lev file: %s\n", *file );
 			loadLevFile( *file, MOD_MULTIPLAY );
 		}

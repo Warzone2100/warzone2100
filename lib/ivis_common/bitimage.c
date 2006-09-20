@@ -179,7 +179,7 @@ static BOOL LoadTextureFile(STRING *FileName, iSprite *pSprite, int *texPageID)
 
 	/* We have already loaded this one? */
 	while (i < _TEX_INDEX) {
-		if (stricmp(real_filename, _TEX_PAGE[i].name) == 0) {
+		if (SDL_strcasecmp(real_filename, _TEX_PAGE[i].name) == 0) {
 			*texPageID = (_TEX_PAGE[i].textPage3dfx);
 			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
 			return TRUE;

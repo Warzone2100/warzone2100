@@ -2801,7 +2801,7 @@ RESEARCH * getResearch(STRING *pName, BOOL resName)
 #ifdef HASH_NAMES
 		if (asResearch[inc].NameHash==HashedName)
 #else
-		if (!stricmp(asResearch[inc].pName, pName))
+		if (!SDL_strcasecmp(asResearch[inc].pName, pName))
 #endif
 		{
 			return &asResearch[inc];

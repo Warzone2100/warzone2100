@@ -284,7 +284,7 @@ static void initialize_PhysicsFS(void)
  *
  * We need ParseCommandLine, before we can add any mods...
  *
- * \sa loadMods
+ * \sa rebuildSearchPath
  */
 static void scanDataDirs( void )
 {
@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
 
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
 #if defined WIN32 && defined DEBUG
-	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
+//	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WIN32
 
 	// find early boot info

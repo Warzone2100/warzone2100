@@ -343,7 +343,7 @@ anim_GetAnimID( char *szName )
 	/* find matching anim string in list */
 	psAnim = g_animGlobals.psAnimList;
 	while( psAnim != NULL &&
-			stricmp( psAnim->szFileName, szName ) != 0 )
+			SDL_strcasecmp( psAnim->szFileName, szName ) != 0 )
 	{
 		psAnim = psAnim->psNext;
 	}

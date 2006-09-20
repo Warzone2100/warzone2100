@@ -10216,7 +10216,7 @@ SDWORD getPlayerFromString(STRING *playerName)
 	{
 		/* check name */
 		debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
-		if(strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
+		if(SDL_strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10224,7 +10224,7 @@ SDWORD getPlayerFromString(STRING *playerName)
 
 		/* check color */
 		debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColorName(playerIndex), playerName);
-		if(strncasecmp(getPlayerColorName(playerIndex),playerName, 255) == 0)
+		if(SDL_strncasecmp(getPlayerColorName(playerIndex),playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10233,7 +10233,7 @@ SDWORD getPlayerFromString(STRING *playerName)
 		/* check player number */
 		sprintf(sPlayerNumber,"%d",playerIndex);
 		debug(LOG_SCRIPT, "checking (%s,%s)",sPlayerNumber, playerName);
-		if(strncasecmp(sPlayerNumber,playerName, 255) == 0)
+		if(SDL_strncasecmp(sPlayerNumber,playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10362,7 +10362,7 @@ BOOL scrMatch(void)
 		 *	now compare both words 
 		 */
 		
-		if(strncasecmp(wordNeed,"<player>", 255) == 0)		/* if we are looking for player */
+		if(SDL_strncasecmp(wordNeed,"<player>", 255) == 0)		/* if we are looking for player */
 		{
 			debug(LOG_SCRIPT, "matching <player>");
 			*nResult = getPlayerFromString(wordFound);
@@ -10377,7 +10377,7 @@ BOOL scrMatch(void)
 				debug(LOG_SCRIPT, "matched <player>");
 			}
 		}
-		else if(strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to se if they match */
+		else if(SDL_strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to se if they match */
 		{
 			debug(LOG_SCRIPT, "words did not match");
 			ok = FALSE;

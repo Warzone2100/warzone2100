@@ -20,6 +20,8 @@
 # include <windows.h>
 #endif // WIN32
 
+#include <SDL/SDL_types.h>
+
 #ifdef _MSC_VER
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
@@ -36,18 +38,17 @@
 #endif // _MSC_VER
 
 /* Basic numeric types */
-typedef unsigned	char	UBYTE;
-typedef signed		char	SBYTE;
-typedef 		char	STRING;
-typedef	unsigned	short	UWORD;
-typedef			short	SWORD;
-typedef	unsigned	int	UDWORD;
-typedef			int	SDWORD;
+typedef Uint8 UBYTE;
+typedef Sint8 SBYTE;
+typedef Uint16 UWORD;
+typedef Sint16 SWORD;
+typedef Uint32 UDWORD;
+typedef Sint32 SDWORD;
+typedef char STRING;
 
 #ifndef WIN32
 
 // win32 functions to POSIX
-#define stricmp(a,b) strcasecmp((a),(b))
 #define wsprintf sprintf
 
 #define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))

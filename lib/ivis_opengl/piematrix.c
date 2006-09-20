@@ -229,7 +229,7 @@ SDWORD	scaleFactor;
 	psMatrix->h = (psMatrix->h * scaleFactor) / 4096;
 	psMatrix->i = (psMatrix->i * scaleFactor) / 4096;
 
-	glScalef(0.01*percent, 0.01*percent, 0.01*percent);
+	glScalef(0.01f*percent, 0.01f*percent, 0.01f*percent);
 }
 
 
@@ -262,7 +262,7 @@ void pie_MatRotY(int y)
 		psMatrix->c = t;
 	}
 
-	glRotatef(y*22.5/4096.0, 0, 1, 0);
+	glRotatef(y*22.5f/4096.0f, 0.0f, 1.0f, 0.0f);
 }
 
 
@@ -295,7 +295,7 @@ void pie_MatRotZ(int z)
 		psMatrix->c = t;
 	}
 
-	glRotatef(z*22.5/4096.0, 0, 0, 1);
+	glRotatef(z*22.5f/4096.0f, 0.0f, 0.0f, 1.0f);
 }
 
 
@@ -327,7 +327,7 @@ void pie_MatRotX(int x)
 		psMatrix->f = t;
 	}
 
-	glRotatef(x*22.5/4096.0, 1, 0, 0);
+	glRotatef(x*22.5f/4096.0f, 1.0f, 0.0f, 0.0f);
 }
 
 

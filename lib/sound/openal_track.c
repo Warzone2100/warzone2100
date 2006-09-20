@@ -26,7 +26,7 @@
 
 #include "tracklib.h"
 #include "audio.h"
-#define ATTENUATION_FACTOR	0.0003
+#define ATTENUATION_FACTOR	0.0003f
 #ifndef M_PI
 	#define M_PI	3.1415926535897932385
 #endif // win32 doesn't define that...

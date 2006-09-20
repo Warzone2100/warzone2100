@@ -252,7 +252,7 @@ void inputProcessEvent(SDL_Event *event)
 
 			{
 
-				unsigned char char_code = event->key.keysym.unicode;
+				unsigned char char_code = event->key.keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
 
 //				DBP1(("Code: %x\n", vk));		//This breaks with .NET, [DBP1(("Code: %x\n", vk));]it don't want the ; at end. --Qamly
 

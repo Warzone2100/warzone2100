@@ -281,7 +281,7 @@ static BOOL cdAudio_OpenTrack(char* filename) {
 	music_file_format = WZ_NONE;
 
 #ifndef WZ_NOMP3
-	if (strncasecmp(filename+strlen(filename)-4, ".mp3", 4) == 0)
+	if (SDL_strncasecmp(filename+strlen(filename)-4, ".mp3", 4) == 0)
 	{
 		music_file = PHYSFS_openRead(filename);
 
@@ -323,7 +323,7 @@ static BOOL cdAudio_OpenTrack(char* filename) {
 #endif
 
 #ifndef WZ_NOOGG
-	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
+	if (SDL_strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
 	{
 		music_file = PHYSFS_openRead(filename);
 

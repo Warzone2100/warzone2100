@@ -487,7 +487,7 @@ audioID_GetIDFromStr( const STRING *pWavStr, SDWORD *piID )
 
 	for ( i=0; i<ID_MAX_SOUND; i++ )
 	{
-		if ( stricmp( pWavStr, asAudioID[i].pWavStr ) == 0 )
+		if ( SDL_strcasecmp( pWavStr, asAudioID[i].pWavStr ) == 0 )
 		{
 			ASSERT( i == asAudioID[i].iID,
 				"audioID_GetIDFromStr: %s stored IDs don't match", pWavStr );

@@ -518,7 +518,7 @@ void addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 
  nextone:
 
-			if(!FindNextFile(dir,&found ) )	/* find next one*/
+			if(!FindNextFileA(dir,&found ) )	/* find next one*/
 			{
 				break;
 			}
