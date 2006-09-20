@@ -21,8 +21,6 @@
 
 // ----------------------------------------------------------------------------------
 /* Function Prototypes */
-KEY_MAPPING	*keyAddMapping		( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
-								 KEY_ACTION action, void (*pKeyMapFunc)(void), STRING *name );
 BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
 BOOL	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
 KEY_MAPPING *keyFindMapping		( KEY_CODE metaCode, KEY_CODE subCode );
@@ -491,7 +489,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 /* Adds a new mapping to the list */
 //BOOL	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, STRING *name)
 KEY_MAPPING *keyAddMapping(KEY_STATUS status,KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,
-					  void (*pKeyMapFunc)(void), STRING *name)
+					  void (*pKeyMapFunc)(void), const STRING *name)
 {
 KEY_MAPPING	*newMapping;
 BLOCK_HEAP  *psHeap;
