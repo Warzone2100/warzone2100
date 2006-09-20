@@ -989,7 +989,7 @@ static ReturnAddressStack_t retStack[RETSTACK_SIZE]; // Primitive stack of retur
 static Sint8 retStackPos = -1; // Current Position, always points to the last valid element
 
 
-inline Sint8 retStackCallDepth(void)
+Sint8 retStackCallDepth(void)
 {
 	return (retStackPos + 1);
 }

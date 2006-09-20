@@ -1335,7 +1335,7 @@ BOOL recvTextMessage(NETMSG *pMsg)
 	MultiMsgPlayerTo = selectedPlayer;
 
 	strcpy(MultiplayMsg,&(pMsg->body[4]));
-	eventFireCallbackTrigger(CALL_AI_MSG);
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
 
 	// make some noise!
 	if(titleMode == MULTIOPTION || titleMode == MULTILIMIT)
@@ -1919,7 +1919,7 @@ BOOL msgStackFireTop(void)
 	{
 		case CALL_VIDEO_QUIT:
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
-			eventFireCallbackTrigger(CALL_VIDEO_QUIT);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
 			break;
 
 		case CALL_BEACON:
@@ -1938,7 +1938,7 @@ BOOL msgStackFireTop(void)
 
 			strcpy(MultiplayMsg, msg);
 
-			eventFireCallbackTrigger(CALL_BEACON);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BEACON);
 			break;
 
 		case CALL_AI_MSG:
@@ -1953,7 +1953,7 @@ BOOL msgStackFireTop(void)
 
 			strcpy(MultiplayMsg, msg);
 
-			eventFireCallbackTrigger(CALL_AI_MSG);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
 			break;
 
 		default:
