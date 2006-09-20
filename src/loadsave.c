@@ -336,7 +336,7 @@ BOOL closeLoadSave(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void loadSaveCDOK( void )
+static void loadSaveCDOK( void )
 {
 	bRequestLoad = TRUE;
 	closeLoadSave();
@@ -344,7 +344,7 @@ void loadSaveCDOK( void )
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void loadSaveCDCancel( void )
+static void loadSaveCDCancel( void )
 {
 	bRequestLoad = FALSE;
 	widgReveal(psRequestScreen,LOADSAVE_FORM);

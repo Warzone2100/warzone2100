@@ -43,7 +43,6 @@ extern BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOf
 
 //full screen render
 //extern BOOL seq_PlayVideo(char* pSeq, char* pAudio);
-//extern BOOL seq_StartFullScreenVideo(char* sequenceFile, char* audioFile);//start videos through seqList
 
 extern BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *bClear);
 

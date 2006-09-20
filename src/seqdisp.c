@@ -380,7 +380,7 @@ BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 }
 
 //full screenvideo functions
-BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
+static BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 {
 	bHoldSeqForAudio = FALSE;
 
@@ -841,7 +841,7 @@ BOOL seq_ClearTextForVideo(void)
 	return TRUE;
 }
 
-BOOL	seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
+static BOOL seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 {
 	char *pTextBuffer, *pCurrentLine, *pText;
 	UDWORD fileSize;
@@ -971,7 +971,7 @@ BOOL seq_AnySeqLeft(void)
 	}
 }
 
-void seqDispCDOK( void )
+static void seqDispCDOK( void )
 {
 	BOOL	bPlayedOK;
 
@@ -1005,7 +1005,7 @@ void seqDispCDOK( void )
 	}
 }
 
-void seqDispCDCancel( void )
+static void seqDispCDCancel( void )
 {
 }
 

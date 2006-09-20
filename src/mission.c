@@ -766,7 +766,7 @@ void addTransporterTimerInterface(void)
 #define OFFSCREEN_HEIGHT	600
 
 /* get offscreen point */
-void missionGetOffScreenPoint( UWORD iX, UWORD iY,
+static void missionGetOffScreenPoint( UWORD iX, UWORD iY,
 						UWORD *piOffX, UWORD *piOffY, UWORD *piOffZ )
 {
 //	UDWORD	iMapWidth  = GetWidthOfMap()  << TILE_SHIFT,
@@ -1645,7 +1645,7 @@ void clearCampaignUnits(void)
 }
 
 /*This deals with droids at the end of an offworld mission*/
-void processMission(void)
+static void processMission(void)
 {
 	DROID			*psNext;
 	DROID			*psDroid;
@@ -2806,7 +2806,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 }
 
 
-void intReAddMissionTimer(void)
+static void intReAddMissionTimer(void)
 {
 	if (widgGetFromID(psWScreen,IDTIMER_FORM) != NULL) {
 		void *UserData;
@@ -3307,7 +3307,7 @@ void intDisplayMissionBackDrop(struct _widget *psWidget, UDWORD xOffset, UDWORD 
 
 
 
-void missionResetInGameState( void )
+static void missionResetInGameState( void )
 {
 	//stop the game if in single player mode
 	setMissionPauseState();
@@ -3573,12 +3573,12 @@ void intRunMissionResult(void)
 
 }
 
-void missionCDCancelPressed( void )
+static void missionCDCancelPressed( void )
 {
 	intAddMissionResult( g_bMissionResult, TRUE );
 }
 
-void missionContineButtonPressed( void )
+static void missionContineButtonPressed( void )
 {
 	//SHOULDN'T BE ABLE TO BE ANY OTHER TYPE AT PRESENT!
 	// start the next mission if necessary

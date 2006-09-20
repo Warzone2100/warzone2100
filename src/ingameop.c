@@ -315,7 +315,7 @@ BOOL intAddInGameOptions(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-void ProcessOptionFinished(void)
+static void ProcessOptionFinished(void)
 {
 	intMode		= INT_NORMAL;
 

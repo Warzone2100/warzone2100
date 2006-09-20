@@ -209,7 +209,7 @@ proj_GetNext( void )
 /***************************************************************************/
 
 // update the kills after a target is destroyed
-void proj_UpdateKills(PROJ_OBJECT *psObj)
+static void proj_UpdateKills(PROJ_OBJECT *psObj)
 {
 	DROID	        *psDroid ;//, *psSensor;
     BASE_OBJECT     *psSensor;//, *psTarget;
@@ -1574,7 +1574,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 
 /***************************************************************************/
 
-void
+static void
 proj_Update( PROJ_OBJECT *psObj )
 {
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),

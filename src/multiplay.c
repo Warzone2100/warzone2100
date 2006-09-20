@@ -1811,7 +1811,7 @@ BOOL msgStackGetTo(SDWORD  *psVal)
 	return TRUE;
 }
 
-BOOL msgStackGetCallbackType(SDWORD  *psVal)
+static BOOL msgStackGetCallbackType(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1824,7 +1824,7 @@ BOOL msgStackGetCallbackType(SDWORD  *psVal)
 	return TRUE;
 }
 
-BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
+static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 {
 	if(msgStackPos < 0)
 	{
@@ -1853,7 +1853,7 @@ BOOL msgStackGetMsg(STRING  *psVal)
 	return TRUE;
 }
 
-BOOL msgStackSort(void)
+static BOOL msgStackSort(void)
 {
 	SDWORD i;
 

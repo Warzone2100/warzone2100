@@ -382,7 +382,7 @@ void resetFactoryNumFlag(void)
 	}
 }
 
-void structureType(STRUCTURE_STATS *pStructure, char *pType)
+static void structureType(STRUCTURE_STATS *pStructure, char *pType)
 {
 	if (!strcmp(pType,"HQ"))
 	{
@@ -493,7 +493,7 @@ void structureType(STRUCTURE_STATS *pStructure, char *pType)
 }
 
 
-char *getStructName(STRUCTURE_STATS	 *psStruct)
+static char *getStructName(STRUCTURE_STATS	 *psStruct)
 {
 #ifdef HASH_NAMES
 	return(	strresGetString(NULL,psStruct->NameHash));
@@ -503,7 +503,7 @@ char *getStructName(STRUCTURE_STATS	 *psStruct)
 }
 
 /*returns the structure strength based on the string name passed in */
-UBYTE	getStructStrength(STRING *pStrength)
+static UBYTE getStructStrength(STRING *pStrength)
 {
 	if (!strcmp(pStrength, "SOFT"))
 	{
@@ -530,7 +530,7 @@ UBYTE	getStructStrength(STRING *pStrength)
 
 #ifdef MODULE_PIES_ENABLED
 
-void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
+static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 {
 	STRING GfxFile[MAX_NAME_SIZE];
 	STRING charNum[2];
@@ -1737,7 +1737,7 @@ static SDWORD structWallScan(BOOL aWallPresent[5][5], SDWORD x,SDWORD y)
 }
 
 // Choose a type of wall for a location - and update any neighbouring walls
-SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
+static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 {
 	BOOL		aWallPresent[5][5];
 	SDWORD		xdiff,ydiff, x,y;
@@ -3791,7 +3791,7 @@ static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={300,300,300,300,
 //static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={10,10,10,10,10,10,10,10};
 
 
-UDWORD getMaxStructures(UDWORD PlayerNumber)
+static UDWORD getMaxStructures(UDWORD PlayerNumber)
 {
 	// PC currently doesn't limit number of structures a player can build, so just
 	// return an absurdly large number.
@@ -3829,7 +3829,7 @@ BOOL IsPlayerDroidLimitReached(UDWORD PlayerNumber)
 }
 
 
-BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
+static BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
 {
 	FACTORY		*psFact = (FACTORY *)psStructure->pFunctionality;
 
@@ -3881,7 +3881,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
  }
 
 
-void aiUpdateStructure(STRUCTURE *psStructure)
+static void aiUpdateStructure(STRUCTURE *psStructure)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
@@ -4936,7 +4936,7 @@ void aiUpdateStructure(STRUCTURE *psStructure)
 }
 
 /* Decides whether a structure should emit smoke when it's damaged */
-BOOL	canSmoke(STRUCTURE *psStruct)
+static BOOL canSmoke(STRUCTURE *psStruct)
 {
 	if(psStruct->pStructureType->type == REF_WALL OR
 		psStruct->pStructureType->type == REF_WALLCORNER)
@@ -8216,7 +8216,7 @@ UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player)
 }
 
 //access function for sensor stats
-UDWORD structureSensorRange(STRUCTURE_STATS *psStats)
+static UDWORD structureSensorRange(STRUCTURE_STATS *psStats)
 {
 	if (psStats->pSensor)
 	{
@@ -8227,7 +8227,7 @@ UDWORD structureSensorRange(STRUCTURE_STATS *psStats)
 		return 0;
 	}
 }
-UDWORD structureSensorPower(STRUCTURE_STATS *psStats)
+static UDWORD structureSensorPower(STRUCTURE_STATS *psStats)
 {
 	if (psStats->pSensor)
 	{

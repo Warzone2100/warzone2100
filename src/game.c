@@ -1278,12 +1278,12 @@ static BOOL getSaveObjectName(STRING *pName);
 /* set the global scroll values to use for the save game */
 static void setMapScroll(void);
 
-char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
+static char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
 {
 	return(psSaveStructure->name);
 }
 
-char *getSaveStructNameV(SAVE_STRUCTURE *psSaveStructure)
+static char *getSaveStructNameV(SAVE_STRUCTURE *psSaveStructure)
 {
 	return(psSaveStructure->name);
 }
@@ -3239,7 +3239,7 @@ BOOL gameLoad(char *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 // Get campaign number stuff is not needed in this form on the PSX (thank you very much)
-BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
+static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_GAME		*psSaveGame;
 	UDWORD			sizeOfSaveGame = 0;
@@ -4716,7 +4716,7 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 }
 
 // -----------------------------------------------------------------------------------------
-DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
+static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 {
 	DROID_TEMPLATE			*psTemplate, sTemplate;
 	DROID					*psDroid;
@@ -4828,7 +4828,7 @@ DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 }
 
 // -----------------------------------------------------------------------------------------
-DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD version)
+static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD version)
 {
 	DROID_TEMPLATE			*psTemplate, sTemplate;
 	DROID					*psDroid;
@@ -5066,7 +5066,7 @@ DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD version)
 
 // -----------------------------------------------------------------------------------------
 //version 20 + after names change
-DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
+static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 {
 	DROID_TEMPLATE			*psTemplate, sTemplate;
 	DROID					*psDroid;
@@ -5908,7 +5908,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_TYPE saveType)
+static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_TYPE saveType)
 {
 	UDWORD				i;
 
@@ -6676,7 +6676,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
 // -----------------------------------------------------------------------------------------
 //return id of a research topic based on the name
-UDWORD getResearchIdFromName(STRING *pName)
+static UDWORD getResearchIdFromName(STRING *pName)
 {
 	UDWORD inc;
 

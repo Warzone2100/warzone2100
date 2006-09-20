@@ -71,7 +71,7 @@ void displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 
 // ////////////////////////////////////////////////////////////////////////////
 
-BOOL useStruct(UDWORD count,UDWORD i)
+static BOOL useStruct(UDWORD count,UDWORD i)
 {
 //	STRUCTURE_STATS	*pStat = asStructureStats+i;
 
