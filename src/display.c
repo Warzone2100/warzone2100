@@ -364,7 +364,7 @@ void shakeStop(void)
 }
 
 
-void shakeUpdate(void)
+static void shakeUpdate(void)
 {
 	UDWORD	screenShakePercentage;
 

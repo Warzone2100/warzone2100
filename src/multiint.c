@@ -1720,7 +1720,7 @@ static void disableMultiButs(void)
 
 
 ////////////////////////////////////////////////////////////////////////////
-void	stopJoining(void)
+static void stopJoining(void)
 {
 	dwSelectedGame	 = 0;
 	saveConfig();

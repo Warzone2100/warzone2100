@@ -48,7 +48,6 @@ DEFINE_GUID(WARZONEGUID,0x48ab0b01,0xfec0,0x11d1,0x98,0xc,0x0,0xa0,0x24,0x38,0x7
 extern char	MultiForcesPath[255];
 
 extern char	buildTime[8];
-extern void	stopJoining(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -126,7 +125,7 @@ void sendOptions(DPID dest,UDWORD play)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL checkGameWdg(CHAR *nm)
+static BOOL checkGameWdg(CHAR *nm)
 {
 	LEVEL_DATASET *lev;
 
@@ -737,7 +736,7 @@ BOOL multiTemplateSetup(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // remove structures from map before campaign play.
-BOOL cleanMap(UDWORD player)
+static BOOL cleanMap(UDWORD player)
 {
 	DROID		*psD,*psD2;
 	STRUCTURE	*psStruct;

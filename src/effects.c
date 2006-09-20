@@ -3103,7 +3103,7 @@ EFFECT				*pFXData;
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------
-void	addFireworksEffect( void )
+static void addFireworksEffect( void )
 {
 
 }

@@ -859,7 +859,7 @@ BOOL scrSetDroidTarIgnore(void)
 
 
 // get the correct type mask for a structure target
-UDWORD scrStructTargetMask(STRUCTURE *psStruct)
+static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 {
 	UDWORD				mask = 0;
 	STRUCTURE_STATS		*psStats;
@@ -950,7 +950,7 @@ UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 
 
 // prioritise structure targets
-void scrStructTargetPriority(STRUCTURE **ppsTarget, STRUCTURE *psCurr)
+static void scrStructTargetPriority(STRUCTURE **ppsTarget, STRUCTURE *psCurr)
 {
 	// skip walls unless they are explicitly asked for
 	if ((scrStructPref & SCR_ST_WALL) ||
@@ -962,7 +962,7 @@ void scrStructTargetPriority(STRUCTURE **ppsTarget, STRUCTURE *psCurr)
 }
 
 
-UDWORD scrDroidTargetMask(DROID *psDroid)
+static UDWORD scrDroidTargetMask(DROID *psDroid)
 {
 	UDWORD				mask = 0;
 	WEAPON_STATS		*psWStats;
@@ -1081,7 +1081,7 @@ UDWORD scrDroidTargetMask(DROID *psDroid)
 }
 
 // prioritise droid targets
-void scrDroidTargetPriority(DROID **ppsTarget, DROID *psCurr)
+static void scrDroidTargetPriority(DROID **ppsTarget, DROID *psCurr)
 {
 	// priority to things with weapons
 	if ( ((*ppsTarget) == NULL) ||
@@ -1107,7 +1107,7 @@ typedef UDWORD (*TARGET_MASK)(BASE_OBJECT *);
 typedef void   (*TARGET_PREF)(BASE_OBJECT **, BASE_OBJECT *);
 
 // generic find a target in an area given preference data
-BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD tarType, SDWORD cluster,
+static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD tarType, SDWORD cluster,
 							 SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	BASE_OBJECT		*psTarget, *psCurr;

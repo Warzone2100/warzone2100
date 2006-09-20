@@ -286,7 +286,7 @@ static void initialize_PhysicsFS(void)
  *
  * \sa loadMods
  */
-void scanDataDirs( void )
+static void scanDataDirs( void )
 {
 	char tmpstr[MAX_PATH], prefix[MAX_PATH] = { '\0' };
 

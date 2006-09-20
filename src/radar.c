@@ -924,7 +924,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 
 // Rotate an array of 2d vectors about a given angle, also translates them after rotating.
 //
-void RotateVector2D(iVector *Vector,iVector *TVector,iVector *Pos,int Angle,int Count)
+static void RotateVector2D(iVector *Vector,iVector *TVector,iVector *Pos,int Angle,int Count)
 {
 	int Cos = COS(Angle);
 	int Sin = SIN(Angle);
@@ -956,7 +956,7 @@ void GetRadarPlayerPos(UDWORD *XPos,UDWORD *YPos)
 	*YPos = player.p.z + (visibleYTiles/2)*TILE_UNITS;
 }
 
-SDWORD	getDistanceAdjust( void )
+static SDWORD getDistanceAdjust( void )
 {
 UDWORD	origDistance;
 SDWORD	dif;
@@ -968,7 +968,7 @@ SDWORD	dif;
 	return(dif);
 }
 
-SDWORD	getLengthAdjust( void )
+static SDWORD getLengthAdjust( void )
 {
 SDWORD	pitch;
 UDWORD	lookingDown,lookingFar;
@@ -988,7 +988,7 @@ SDWORD	dif;
 
 
 /* Draws a Myth/FF7 style viewing window */
-void	drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH,UDWORD boxSizeV )
+static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH,UDWORD boxSizeV )
 {
 iVector	v[4],tv[4],centre;
 UDWORD	shortX,longX,yDrop,yDropVar;

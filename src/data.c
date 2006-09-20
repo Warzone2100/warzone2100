@@ -70,7 +70,7 @@ extern int scr_lineno;
  * Source
  *
  *********************************************************/
-void calcCheatHash(char *pBuffer, UDWORD size, UDWORD cheat)
+static void calcCheatHash(char *pBuffer, UDWORD size, UDWORD cheat)
 {
 	if(!bMultiPlayer)
 	{

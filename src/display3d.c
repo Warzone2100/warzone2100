@@ -331,12 +331,12 @@ SDWORD	pitch;
 /********************  Functions  ********************/
 
 
-UDWORD GetCameraDistance(void)
+static UDWORD GetCameraDistance(void)
 {
 	return distance;
 }
 
-void	displayMultiChat( void )
+static void displayMultiChat( void )
 {
 UDWORD	pixelLength;
 UDWORD	pixelHeight;
@@ -643,7 +643,7 @@ void displayTerrain(void)
 
 
 // Parameter is the vector to store the camera position
-void CalcBSPCameraPos(iVector *NewBSPCamera)
+static void CalcBSPCameraPos(iVector *NewBSPCamera)
 {
 		OBJPOS Camera;
 
@@ -3285,7 +3285,7 @@ void	drawDragBox( void )
 
 
 // display reload bars for structures and droids
-void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
+static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
 {
 	WEAPON_STATS	*psStats;
 	BOOL			bSalvo;
@@ -3694,22 +3694,22 @@ BASE_OBJECT		*psObj;
 	return(retVal);
 }
 
-void	drawDroidPowerBar(DROID *psDroid)
+static void drawDroidPowerBar(DROID *psDroid)
 {
 	return;
 }
 
-void	drawDroidRanking(DROID *psDroid)
+static void drawDroidRanking(DROID *psDroid)
 {
 	return;
 }
 
-void	drawDroidReloadBar(DROID *psDroid)
+static void drawDroidReloadBar(DROID *psDroid)
 {
 	return;
 }
 
-BOOL	doHighlight( DROID *psDroid )
+static BOOL doHighlight( DROID *psDroid )
 {
 	return(TRUE);
 }
@@ -5036,7 +5036,7 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 
 // Render a water edge tile
 //
-void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
+static void drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 {
 	UDWORD	actualX,actualY;
 	MAPTILE	*psTile;
@@ -5515,7 +5515,7 @@ UDWORD	getRubbleTileNum( void )
 
 UDWORD	lastSpinVal;
 
-void	testEffect2( UDWORD player )
+static void testEffect2( UDWORD player )
 {
 	SDWORD	val;
 	SDWORD	radius;
