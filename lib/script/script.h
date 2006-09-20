@@ -66,7 +66,7 @@ extern void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab);
  *
  * \return Number of calls on the return address stack
  */
-inline Sint8 retStackCallDepth(void);
+extern Sint8 retStackCallDepth(void);
 
 
 /***********************************************************************************
