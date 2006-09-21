@@ -1089,8 +1089,14 @@ static void addGameOptions(BOOL bRedo)
 				STR_MUL_ALLIANCEN,IMAGE_NOALLI,IMAGE_NOALLI_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_Y,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				STR_MUL_ALLIANCEY,IMAGE_ALLI,IMAGE_ALLI_HI,TRUE);
+
+		//add 'AIs vs humans' button
+		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_AI,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				STR_MUL_ALLIANCEAI,IMAGE_ALLIAI,IMAGE_ALLIAI_HI,TRUE);		//FIXME: add tooltip
+
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,0);
 		switch(game.alliance)
 		{
 		case NO_ALLIANCES:
@@ -1098,6 +1104,9 @@ static void addGameOptions(BOOL bRedo)
 			break;
 		case ALLIANCES:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
+			break;
+		case ALLIANCES_AI:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,WBUT_LOCK);
 			break;
 		}
 	}
@@ -1713,6 +1722,7 @@ static void disableMultiButs(void)
 		{
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
 			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
+			if(game.alliance != ALLIANCES_AI)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_AI ,WBUT_DISABLE);
 		}
 
 	}
@@ -2037,6 +2047,7 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_ALLIANCE_N:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,0);
 			game.alliance = NO_ALLIANCES;// 0;
 			if(bHosted)
 			{
@@ -2046,8 +2057,20 @@ static void processMultiopWidgets(UDWORD id)
 
 		case MULTIOP_ALLIANCE_Y:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,0);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
-			game.alliance = ALLIANCES;//2;
+			game.alliance = ALLIANCES;//1;
+			if(bHosted)
+			{
+				sendOptions(0,0);
+			}
+			break;
+
+		case MULTIOP_ALLIANCE_AI:	//AIs vs Humans
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,WBUT_LOCK);
+			game.alliance = ALLIANCES_AI;//2;
 			if(bHosted)
 			{
 				sendOptions(0,0);

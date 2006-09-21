@@ -54,8 +54,9 @@ void			giftPower						(UDWORD from,UDWORD to,BOOL send);
 
 void			requestAlliance					(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
 void			breakAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
-void			formAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
+void			formAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification);
 void			sendAlliance					(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
+void			createAI_alliances				(void);
 BOOL			recvAlliance					(NETMSG *pMsg,BOOL allowAudio);
 void			technologyGiveAway				(STRUCTURE *pS);
 void			addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
@@ -418,14 +419,14 @@ void breakAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	}
 }
 
-void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
+void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification)
 {
 	DROID	*psDroid;
 	CHAR	tm1[128];
 	UBYTE	i;
 
 	// dont add message if already allied,
-	if(bMultiPlayer && !(alliances[p1][p2] == ALLIANCE_FORMED) )
+	if(bMultiPlayer && !(alliances[p1][p2] == ALLIANCE_FORMED) && allowNotification )
 	{
 		strcpy(tm1,getPlayerName(p1));
 		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_ALLI_FRM),tm1,getPlayerName(p2) ));
@@ -435,11 +436,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	alliances[p2][p1] = ALLIANCE_FORMED;
 
 	//make sure they can see our base location
-	if(bMultiPlayer || game.type == SKIRMISH)	//not campaign
-	{
-		giftRadar(p1,p2,FALSE);
-		giftRadar(p2,p1,FALSE);
-	}
+
 
 	if(allowAudio && (p1 == selectedPlayer || p2== selectedPlayer))
 	{
@@ -467,7 +464,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 				{
 					if (!aiCheckAlliances(p2,i))
 					{
-						formAlliance(p2,i,TRUE,FALSE);;
+						formAlliance(p2,i,TRUE,FALSE,TRUE);
 					}
 				}
 			}
@@ -477,13 +474,17 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 				{
 					if (!aiCheckAlliances(p1,i))
 					{
-						formAlliance(p1,i,TRUE,FALSE);;
+						formAlliance(p1,i,TRUE,FALSE,TRUE);
 					}
 				}
 			}
 		}
 	}
-
+	else if((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_AI)	//not campaign and alliances are transitive
+	{
+		giftRadar(p1,p2,FALSE);
+		giftRadar(p2,p1,FALSE);
+	}
 
 	// clear out any attacking orders.
 	turnOffMultiMsg(TRUE);
@@ -565,7 +566,7 @@ BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)
 		requestAlliance(from,to,FALSE,allowAudio);
 		break;
 	case ALLIANCE_FORMED:
-		formAlliance(from,to,FALSE,allowAudio);
+		formAlliance(from,to,FALSE,allowAudio,TRUE);
 		break;
 	case ALLIANCE_BROKEN:
 		breakAlliance(from,to,FALSE,allowAudio);
@@ -969,6 +970,25 @@ void processMultiPlayerArtifacts(void)
 //			}
 //		}
 
+	}
+
+}
+
+
+/* Create 'humans vs AIs' allances */
+void createAI_alliances(void)
+{
+	UDWORD i,j;
+
+	debug(LOG_WZ, "creating 'Humans vs AIs' alliances");
+
+	for(i=0; i<MAX_PLAYERS; i++ )
+	{
+		for(j=0; j<MAX_PLAYERS; j++ )
+		{
+			if( i!=j && (isHumanPlayer(i) == isHumanPlayer(j)) && !aiCheckAlliances(i,j) )
+				formAlliance(i,j,FALSE,FALSE,FALSE);		//create silently
+		}
 	}
 
 }

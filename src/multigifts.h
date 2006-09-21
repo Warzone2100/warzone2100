@@ -1,14 +1,15 @@
 /*
- *multigifts. h
+ * multigifts.h
  *
  * multiplayer game, gifts and deathmatch relevant funcs.
  */
 
 extern void requestAlliance		(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
 extern void breakAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
-extern void formAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
+extern void formAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification);
 extern void sendAlliance		(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
 extern BOOL recvAlliance		(NETMSG *pMsg,BOOL allowAudio);
+extern void	createAI_alliances	(void);
 
 extern BOOL sendGift			(UDWORD type,UDWORD to);
 extern BOOL recvGift			(NETMSG *pMsg);

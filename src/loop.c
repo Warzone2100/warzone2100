@@ -289,7 +289,7 @@ GAMECODE gameLoop(void)
 //		RecvMessage();
 			}
 
-			fireWaitingCallbacks();		//Now is the good time to fire waiting callbacks (since interpretrer is off now)
+			fireWaitingCallbacks();		//Now is the good time to fire waiting callbacks (since interpreter is off now)
 
 			for(i=0; i<MAX_PLAYERS; i++)
 			{

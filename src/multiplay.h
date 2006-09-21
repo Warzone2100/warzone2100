@@ -94,7 +94,7 @@ typedef struct {
 	UDWORD		power;						// power level for arena game
 //	UDWORD		techLevel;					// tech levels to use . 0= all levels.
 	UBYTE		base;						// clean/base/base&defence
-	UBYTE		alliance;					// none/groupwin/nogroupwin.
+	UBYTE		alliance;					// no/yes/AIs vs Humans
 	UBYTE		limit;						// limit no/time/frag
 	UWORD		bytesPerSec;				// maximum bitrate achieved before dropping checks.
 	UBYTE		packetsPerSec;				// maximum packets to send before dropping checks.

@@ -3839,13 +3839,14 @@ BOOL scrCreateAlliance(void)
 
 	if(bMultiPlayer)
 	{
-		if(game.alliance==NO_ALLIANCES || player1 >= game.maxPlayers || player2>=game.maxPlayers)
+		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_AI
+			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
 		{
 			return TRUE;
 		}
 	}
 
-	formAlliance((UBYTE)player1, (UBYTE)player2,TRUE,FALSE);
+	formAlliance((UBYTE)player1, (UBYTE)player2,TRUE,FALSE,TRUE);
 
 /*
 #ifndef PSX
@@ -3884,7 +3885,7 @@ BOOL scrOfferAlliance(void)
 	{
 		return FALSE;
 	}
-	if (game.alliance==NO_ALLIANCES ||
+	if (game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_AI ||
 		player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
@@ -3932,7 +3933,8 @@ if(bMultiPlayer)
 
 	if(bMultiPlayer)
 	{
-		if(game.alliance==NO_ALLIANCES || player1 >= game.maxPlayers || player2>=game.maxPlayers)
+		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_AI
+			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
 		{
 			return TRUE;
 		}

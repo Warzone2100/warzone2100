@@ -231,6 +231,7 @@ void loadMapPreview(void);
 
 #define MULTIOP_ALLIANCE_N		10270
 #define MULTIOP_ALLIANCE_Y		10271
+#define MULTIOP_ALLIANCE_AI		102710		//ai vs humans
 
 #define MULTIOP_POWLEV_LOW		10272
 #define MULTIOP_POWLEV_MED		10273

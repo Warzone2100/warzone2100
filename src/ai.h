@@ -17,6 +17,7 @@
 
 #define NO_ALLIANCES		0			//alliance possibilities for games.
 #define ALLIANCES			1
+#define	ALLIANCES_AI		2			//AI vs Humans
 //#define GROUP_WINS		2
 
 // alliances

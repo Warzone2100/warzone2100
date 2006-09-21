@@ -1025,7 +1025,9 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.pDisplay = displayAllianceState;
 		sButInit.pUserData = (void*)player;
 
-		widgAddButton(psWScreen, &sButInit);
+		//can't break alliances in 'Humans vs AIs' mode
+		if(game.alliance != ALLIANCES_AI)
+			widgAddButton(psWScreen, &sButInit);
 
 		sButInit.pDisplay = intDisplayImageHilight;
 
@@ -1266,7 +1268,7 @@ void intProcessMultiMenu(UDWORD id)
 		case ALLIANCE_INVITATION:
 			if ( intCheckAllianceValid( (UBYTE)selectedPlayer, i ) )
 			{
-				formAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE);			// form an alliance
+				formAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE,TRUE);			// form an alliance
 			}
 			break;
 		case ALLIANCE_REQUESTED:

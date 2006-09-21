@@ -799,9 +799,10 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 
+				//pop caller function index and return address
 				if (!retStackPop(&CurEvent, &InstrPointer))
 				{
-					debug( LOG_ERROR, "interpRunScript() - PopRetStack() failed.");
+					debug( LOG_ERROR, "interpRunScript() - retStackPop() failed.");
 					return FALSE;
 				}
 
@@ -1027,7 +1028,7 @@ static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress)
 	retStack[retStackPos].CallerIndex = CallerIndex;
 	retStack[retStackPos].ReturnAddress = ReturnAddress;
 
-	//debug( LOG_SCRIPT, "retStackPush: Event=%i Address=%p, ", EventTrigIndex, ReturnAddress);
+	//debug( LOG_SCRIPT, "retStackPush: Event=%i Address=%p, ", CallerIndex, ReturnAddress);
 
 	return TRUE;
 }

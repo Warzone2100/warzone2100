@@ -88,7 +88,6 @@
 #include "lib/sound/mixer.h"
 #include "advvis.h"
 
-
 #include "mission.h"
 #include "transporter.h"
 #include "projectile.h"
@@ -103,6 +102,9 @@
 #include "lighting.h"
 
 #include "modding.h"
+
+#include "lib/netplay/netplay.h"
+#include "multigifts.h"
 
 extern char UserMusicPath[];
 
@@ -1902,7 +1904,9 @@ BOOL stageThreeInitialise(void)
 
 	setAllPauseStates(FALSE);
 
-
+	/* decide if we have to create 'Humans vs AIs' alliances */
+	if(game.alliance == ALLIANCES_AI)
+		createAI_alliances();
 
 
 	// ffs JS   (and its a global!)
