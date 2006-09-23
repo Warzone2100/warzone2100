@@ -102,7 +102,7 @@ iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
 	iV_DEBUG1("imd[IMDLoad] = loading shape file '%s':",filename);
 
 	strcpy(_IMD_NAME,filename);
-	SDL_strlwr(_IMD_NAME);
+	strlwr(_IMD_NAME);
 
 	_imd_get_path(filename,path);
 
