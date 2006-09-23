@@ -1,4 +1,5 @@
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"
 #include "base.h"
 #include "lib/ivis_common/piedef.h"

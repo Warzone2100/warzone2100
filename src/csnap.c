@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include "lib/widget/widget.h"
 #include "deliverance.h"
 #include "lib/framework/fractions.h"
