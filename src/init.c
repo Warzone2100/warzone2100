@@ -8,6 +8,7 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 

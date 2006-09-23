@@ -9,6 +9,7 @@
 #include <math.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/widget/widget.h"
 
 #include "objects.h"

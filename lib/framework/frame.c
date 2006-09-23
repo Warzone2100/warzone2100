@@ -21,6 +21,7 @@
 //#define DEBUG_GROUP1
 #include "frame.h"
 #include "frameint.h"
+#include "frameresource.h"
 
 #include "fractions.h"
 #include <assert.h>

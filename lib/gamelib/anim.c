@@ -12,6 +12,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/ivis_common/geo.h"
 
 #include "anim.h"

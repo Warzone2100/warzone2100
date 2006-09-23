@@ -8,6 +8,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/frameresource.h"
 #include "objects.h"
 #include "ai.h"
 #include "map.h"

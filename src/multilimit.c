@@ -5,6 +5,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 #include "csnap.h"
 #include "lib/widget/widget.h"

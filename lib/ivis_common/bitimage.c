@@ -8,6 +8,8 @@
 #include "tex.h"
 #include "ivispatch.h"
 #include "bitimage.h"
+#include "lib/framework/frameresource.h"
+
 
 static BOOL LoadTextureFile(STRING *FileName, iSprite *TPage, int *TPageID);
 

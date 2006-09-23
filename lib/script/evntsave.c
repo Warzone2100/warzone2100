@@ -6,6 +6,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "script.h"
 #include "evntsave.h"
 

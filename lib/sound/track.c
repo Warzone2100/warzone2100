@@ -4,6 +4,7 @@
 #include <windows.h>
 #endif
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "tracklib.h"
 #include "lib/gamelib/priority.h"
 

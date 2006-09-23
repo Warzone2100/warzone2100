@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/script/script.h"
 #include "src/scripttabs.h"
 #include "src/scriptvals.h"

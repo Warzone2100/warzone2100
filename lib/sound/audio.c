@@ -2,6 +2,7 @@
 //
 #include <stdio.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/gamelib/gtime.h"
 #include "tracklib.h"
 #include "lib/gamelib/priority.h"

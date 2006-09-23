@@ -15,6 +15,7 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameint.h"
 // FIXME Direct iVis implementation include!

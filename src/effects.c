@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code

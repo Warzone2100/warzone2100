@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 
 #include "lib/ivis_common/ivisdef.h" //ivis palette code

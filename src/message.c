@@ -7,6 +7,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/frameresource.h"
 #include "message.h"
 #include "stats.h"
 #include "text.h"

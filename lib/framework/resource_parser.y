@@ -17,6 +17,7 @@ int res_lex (void);
 #include <stdlib.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
 
 /*
