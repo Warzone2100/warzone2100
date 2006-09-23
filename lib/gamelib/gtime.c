@@ -5,6 +5,8 @@
  *
  */
 
+#include "SDL/SDL_timer.h"
+
 #include <time.h>
 
 //#define DEBUG_GROUP1

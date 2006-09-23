@@ -9,6 +9,7 @@
 
 #include <string.h>
 #include <SDL/SDL_opengl.h>
+#include <SDL/SDL_video.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"

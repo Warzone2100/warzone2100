@@ -4,6 +4,7 @@
  * Functions for the display of the Escape Sequences
  *
  */
+#include "SDL/SDL_timer.h"
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
