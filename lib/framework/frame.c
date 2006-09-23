@@ -22,6 +22,7 @@
 #include "frame.h"
 #include "frameint.h"
 #include "frameresource.h"
+#include "input.h"
 
 #include "fractions.h"
 #include <assert.h>
