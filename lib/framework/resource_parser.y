@@ -16,8 +16,8 @@ int res_lex (void);
 #include <string.h>
 #include <stdlib.h>
 
-#include "frame.h"
-#include "resly.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/resly.h"
 
 /*
  * A simple error reporting routine

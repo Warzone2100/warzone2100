@@ -10,6 +10,9 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+#include "lib/framework/input.h"
+
 #include "lib/widget/widget.h"
 #include "frontend.h"
 #include "frend.h"

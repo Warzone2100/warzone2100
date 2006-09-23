@@ -12,7 +12,7 @@
 #include "codeprint.h"
 #include "script.h"
 
-#include "script_parser.h"
+#include "lib/script/script_parser.h"
 
 /* number of values in each stack chunk */
 #define INIT_SIZE		15

@@ -5,6 +5,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "objmem.h"
 #include "console.h"

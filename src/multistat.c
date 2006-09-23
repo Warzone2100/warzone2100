@@ -11,6 +11,7 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "objmem.h"
 #include "power.h"
 #include "map.h"

@@ -10,8 +10,8 @@
 
 #include "lib/framework/frame.h"
 
-#include "levels.h"
-#include "levelint.h"
+#include "src/levels.h"
+#include "src/levelint.h"
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX

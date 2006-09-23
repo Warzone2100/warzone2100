@@ -16,6 +16,7 @@
 
 #include "anim.h"
 #include "parser.h"
+#include "lib/framework/listmacs.h"
 
 /***************************************************************************/
 /* structs */

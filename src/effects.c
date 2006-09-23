@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/piedef.h" //ivis matrix code
 #include "lib/ivis_common/piestate.h"

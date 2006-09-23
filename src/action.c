@@ -6,6 +6,8 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
+
 #include "objects.h"
 #include "action.h"
 #include "map.h"

@@ -10,6 +10,9 @@
 /* loop position printf's */
 //#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/strres.h"
+
 #include "loop.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piestate.h" //ivis render code

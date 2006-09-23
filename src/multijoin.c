@@ -9,6 +9,7 @@
 #include <stdio.h>					// for sprintf
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 
 #include "objmem.h"
 #include "statsdef.h"

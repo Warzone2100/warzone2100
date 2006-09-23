@@ -11,12 +11,13 @@
 #define FRAME_LIB_INCLUDE
 
 #include <string.h>
-#include "types.h"
-#include "debug.h"
-#include "resly.h"
+
+#include "lib/framework/types.h"
+#include "lib/framework/debug.h"
+#include "lib/framework/resly.h"
 
 /* Get the Yacc definitions */
-#include "resource_parser.h"
+#include "lib/framework/resource_parser.h"
 
 void res_error(const char *pMessage,...);
 

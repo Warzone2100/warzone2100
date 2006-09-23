@@ -10,16 +10,16 @@
 
 #include "lib/framework/frame.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
-#include "scriptvals.h"
-#include "objects.h"
+#include "src/scripttabs.h"
+#include "src/scriptvals.h"
+#include "src/objects.h"
 #include "lib/gamelib/gtime.h"
-#include "droid.h"
-#include "structure.h"
-#include "message.h"
+#include "src/droid.h"
+#include "src/structure.h"
+#include "src/message.h"
 #include "lib/sound/audio.h"
-#include "levels.h"
-#include "research.h"
+#include "src/levels.h"
+#include "src/research.h"
 
 extern int scrv_lex(void);
 

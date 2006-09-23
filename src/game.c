@@ -3,12 +3,11 @@
 */
 
 /* Standard library headers */
-#include <stdio.h>
-#include <assert.h>
 #include <physfs.h>
 
 /* Warzone src and library headers */
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/rendmode.h"

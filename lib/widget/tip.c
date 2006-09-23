@@ -13,7 +13,6 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 
-
 /* Time delay before showing the tool tip */
 #define TIP_PAUSE	200
 

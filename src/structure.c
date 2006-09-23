@@ -5,17 +5,9 @@
  * WARNING!!!!!!
  * Something wicked this way comes. This file is almost as evil as HCI.c
  */
-#include <stdio.h>
-#include <assert.h>
-/* extra structures required for demo */
-//#define DEMO
 
-/* Structure damage printf's */
-//#define DEBUG_GROUP1
-/* Struct clear tile printf's */
-//#define DEBUG_GROUP2
-/* fillStructureList printf's */
-//#define DEBUG_GROUP3
+#include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "objects.h"
 #include "ai.h"
 #include "map.h"

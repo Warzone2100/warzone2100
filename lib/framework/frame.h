@@ -7,74 +7,20 @@
 #ifndef _frame_h
 #define _frame_h
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#ifdef _MSC_VER
-# ifdef _DEBUG
-#  define _CRTDBG_MAP_ALLOC
-#  include <stdlib.h>
-#  include <crtdbg.h>
-# endif // _DEBUG
-#endif
-
-#ifdef WIN32
-# ifdef __MINGW32__
-#  include <w32api.h>
-#  define _WIN32_IE IE5
-# endif
-# include <windows.h>
-#endif
-
-#define MAX_MODS 100
-
-/* Linux specific stuff */
-#ifndef WIN32
-
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#define MAX_PATH 260
-
-char *unix_path(const char *path);
-FILE *unix_fopen(const char *filename, const char *mode);
-
-#define fopen unix_fopen
-
-#endif
-
-#define InitializeCriticalSection(x)
-#define DeleteCriticalSection(x)
-#define EnterCriticalSection(x)
-#define LeaveCriticalSection(x)
-
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) < (b)) ? (b) : (a))
-
+#include "platform.h"
 #include "macros.h"
 
 #include "types.h"
 #include "debug.h"
 #include "mem.h"
 
-#include "input.h"
-#include "font.h"
 #include "heap.h"
 #include "treap.h"
+#include "block.h"
+
 #include "fractions.h"
 #include "trig.h"
-#include "frameresource.h"
-#include "strres.h"
-#include "block.h"
-#include "listmacs.h"
 
-#ifdef _MSC_VER
-#include "win32fixes.h"
-#endif
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance

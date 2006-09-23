@@ -7,6 +7,8 @@
 #include <stdio.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+
 #include "function.h"
 #include "stats.h"
 #include "structure.h"

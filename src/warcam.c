@@ -8,6 +8,8 @@
 	Alex M. */
 #include <stdio.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
+
 #include "lib/ivis_common/geo.h"
 #include "lib/ivis_common/piedef.h" //ivis matrix code
 #include "objects.h"

@@ -11,6 +11,8 @@
 //#define DEBUG_GROUP1
 //#include <assert.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+
 #include "objects.h"
 #include "loop.h"
 #include "visibility.h"

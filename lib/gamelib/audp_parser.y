@@ -1,9 +1,9 @@
 %{
 
 #include "lib/framework/frame.h"
-#include "parser.h"
+#include "lib/gamelib/parser.h"
 #include "lib/sound/audio.h"
-#include "anim.h"
+#include "lib/gamelib/anim.h"
 
 static int		g_iCurAnimID = 0;
 static int		g_iDummy;

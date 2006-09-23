@@ -5,10 +5,12 @@
  *
  */
 
-#include <stdio.h>
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/strres.h"
+
 #include "init.h"
 #include "mechanics.h"
 #include "objects.h"

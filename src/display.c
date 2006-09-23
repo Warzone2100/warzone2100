@@ -8,6 +8,9 @@
 
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/strres.h"
+
 #include "display.h"
 #include "map.h"
 #include "disp2d.h"

@@ -7,6 +7,8 @@
 
 // -------------------------------------------------------------------------
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
+
 #include "base.h"
 #include "move.h"
 #include "map.h"

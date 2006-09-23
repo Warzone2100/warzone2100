@@ -6,6 +6,8 @@
 #ifndef _widgint_h
 #define _widgint_h
 
+#include "lib/framework/input.h"
+
 /* Control whether to use malloc for widgets */
 #define W_USE_MALLOC	FALSE
 

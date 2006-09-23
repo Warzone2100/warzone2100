@@ -48,9 +48,7 @@ ptrList_Create( PTRLIST **ppsList, UDWORD udwInitElements,
 	(*ppsList)->udwElementSize = udwElementSize;
 
 	ptrList_Init( *ppsList );
-#ifdef WIN321	//ffs		//Not really needed I guess?  -Qamly
-	InitializeCriticalSection( &critSecAudio );
-#endif
+
 	return TRUE;
 }
 
@@ -70,9 +68,6 @@ ptrList_Destroy( PTRLIST *ptrList )
 
 	/* free struct */
 	FREE( ptrList );
-#ifdef WIN321		// Not really needed I guess?  -Qamly
-	DeleteCriticalSection( &critSecAudio );
-#endif
 }
 
 /***************************************************************************/
@@ -187,9 +182,6 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 
 	psPrevNode = NULL;
 	psCurNode = ptrList->psNode;
-#ifdef WIN321	//ffs	//Not really needed I guess?  -Qamly
-	EnterCriticalSection( &critSecAudio );
-#endif
 
 	/* find correct position to insert node */
 	while ( psCurNode != NULL )
@@ -218,10 +210,6 @@ ptrList_InsertElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 		psPrevNode->psNext = psNode;
 		psNode->psNext = psCurNode;
 	}
-#ifdef WIN321		// ffs	//Not really needed I guess?  -Qamly
-	LeaveCriticalSection( &critSecAudio );
-#endif
-
 }
 
 /***************************************************************************/
@@ -237,9 +225,6 @@ ptrList_RemoveElement( PTRLIST *ptrList, void *psElement, SDWORD sdwKey )
 
 	psPrevNode = NULL;
 	psCurNode = ptrList->psNode;
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
-	EnterCriticalSection( &critSecAudio );
-#endif
 
 	/* find correct position to insert node */
 	while ( psCurNode != NULL &&
@@ -301,9 +286,7 @@ ASSERT( psCurNode->psElement == psElement,
 
 		bOK = TRUE;
 	}
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
-	LeaveCriticalSection( &critSecAudio );
-#endif
+
 	return bOK;
 }
 
@@ -313,9 +296,7 @@ void *
 ptrList_GetNext( PTRLIST *ptrList )
 {
 	void	*pElement = NULL;
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
-	EnterCriticalSection( &critSecAudio );
-#endif
+
 	if ( ptrList == NULL )
 	{
 		pElement = NULL;
@@ -345,9 +326,7 @@ ptrList_GetNext( PTRLIST *ptrList )
 			pElement = ptrList->psCurNode->psElement;
 		}
 	}
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
-	LeaveCriticalSection( &critSecAudio );
-#endif
+
 	return pElement;
 }
 
@@ -357,9 +336,7 @@ void *
 ptrList_GetFirst( PTRLIST *ptrList )
 {
 	void	*pElement = NULL;
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
-	EnterCriticalSection( &critSecAudio );
-#endif
+
 	ptrList->bDontGetNext = FALSE;
 	ptrList->psCurNode = ptrList->psNode;
 
@@ -371,9 +348,7 @@ ptrList_GetFirst( PTRLIST *ptrList )
 	{
 		pElement = ptrList->psCurNode->psElement;
 	}
-#ifdef WIN321	// ffs	//Not really needed I guess?  -Qamly
-	LeaveCriticalSection( &critSecAudio );
-#endif
+
 	return pElement;
 }
 

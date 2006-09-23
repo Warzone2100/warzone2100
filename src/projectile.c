@@ -8,6 +8,8 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
+
 #include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "move.h"

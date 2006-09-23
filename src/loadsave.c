@@ -6,14 +6,10 @@
  * return a filename to use for the ops.
  */
 
-#include <ctype.h>
-#include <string.h>
 #include <physfs.h>
-#ifndef  _MSC_VER
-#include <unistd.h>
-#endif		//above line not in .net --Qamly
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/piepalette.h"		// for predefined colours.
 #include "lib/ivis_common/rendmode.h"		// for boxfill

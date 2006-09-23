@@ -8,6 +8,8 @@
 #include <assert.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+
 #include "feature.h"
 #include "map.h"
 #include "hci.h"

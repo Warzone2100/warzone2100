@@ -7,6 +7,8 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+
 #include "objects.h"
 #include "base.h"
 #include "droiddef.h"

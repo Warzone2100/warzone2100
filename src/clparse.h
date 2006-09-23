@@ -7,6 +7,8 @@
 #ifndef _clparse_h
 #define _clparse_h
 
+#define MAX_MODS 100
+
 // whether to play the intro video
 extern BOOL	clIntroVideo;
 // parse the commandline

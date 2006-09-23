@@ -4,9 +4,9 @@
  * Functions for the messages shown in the Intelligence Map
  *
  */
-#include <stdio.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "message.h"
 #include "stats.h"
 #include "text.h"

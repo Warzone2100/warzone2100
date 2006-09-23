@@ -10,10 +10,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/script/script.h"
-#include "scriptvals.h"
+#include "src/scriptvals.h"
 
 /* Get the Yacc definitions */
-#include "scriptvals_parser.h"
+#include "src/scriptvals_parser.h"
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX

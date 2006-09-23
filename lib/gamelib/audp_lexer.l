@@ -5,10 +5,10 @@
 /* include framework */
 #include "lib/framework/frame.h"
 
-#include "parser.h"
+#include "lib/gamelib/parser.h"
 
 /* Get the Yacc definitions */
-#include "audp_parser.h"
+#include "lib/gamelib/audp_parser.h"
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255

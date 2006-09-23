@@ -1,4 +1,6 @@
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/strres.h"
 #include "lib/gamelib/gtime.h"
 #include "text.h"
 #include "keymap.h"

@@ -4,6 +4,9 @@
  * all the stuff relevant to a mission
  */
 #include <stdio.h>
+
+#include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "mission.h"
 #include "lib/gamelib/gtime.h"
 #include "game.h"

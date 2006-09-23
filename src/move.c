@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
 
 //#define DEBUG_DRIVE_SPEED
 #ifdef DEBUG

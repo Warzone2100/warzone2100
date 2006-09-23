@@ -11,16 +11,16 @@
 #define FRAME_LIB_INCLUDE
 
 #include <string.h>
-#include "types.h"
-#include "debug.h"
-#include "mem.h"
-#include "heap.h"
-#include "treap.h"
-#include "strres.h"
-#include "strresly.h"
+#include "lib/framework/types.h"
+#include "lib/framework/debug.h"
+#include "lib/framework/mem.h"
+#include "lib/framework/heap.h"
+#include "lib/framework/treap.h"
+#include "lib/framework/strres.h"
+#include "lib/framework/strresly.h"
 
 /* Get the Yacc definitions */
-#include "strres_parser.h"
+#include "lib/framework/strres_parser.h"
 
 void strres_error(const char *pMessage,...);
 

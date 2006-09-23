@@ -12,8 +12,8 @@
 ~	=	Triangle
 */
 
-#include <stdio.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "winmain.h"
 #include "objects.h"
 #include "display.h"

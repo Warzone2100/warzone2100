@@ -7,6 +7,8 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/strres.h"
 #include "map.h"
 
 #include "stats.h"									// for templates.

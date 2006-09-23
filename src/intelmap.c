@@ -4,8 +4,8 @@
  * Functions for the display of the Intelligence Map
  *
  */
-#include <time.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"

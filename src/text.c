@@ -5,6 +5,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "text.h"
 
 /* The numbers of strings that will be loaded */

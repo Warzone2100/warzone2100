@@ -12,6 +12,8 @@
 // order recieved printf's
 //#define DEBUG_GROUP2
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+
 #include "objects.h"
 #include "order.h"
 #include "action.h"

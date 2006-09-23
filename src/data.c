@@ -4,11 +4,8 @@
  * Data loading functions used by the framework resource module
  *
  */
-
-#include <assert.h>
-
-
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 //render library
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"

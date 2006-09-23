@@ -6,6 +6,7 @@
 
 // --------------------------------------------------------------------
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 #include "lib/gamelib/gtime.h"
 #include "console.h"
 #include "scores.h"

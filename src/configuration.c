@@ -4,6 +4,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
 
 #include "configuration.h"
 #include "lib/framework/configfile.h"

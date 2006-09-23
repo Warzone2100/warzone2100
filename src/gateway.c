@@ -12,35 +12,6 @@
 #include <malloc.h>
 #include <math.h>
 
-#define MALLOC(a) malloc(a)
-#define FREE(a) free(a); a = NULL;
-
-//	ASSERT( psCurr!=NULL, "LIST_REMOVE: " __FILE__ "(%d): entry not found", __LINE__ );
-
-#define LIST_REMOVE(psHead, psEntry, TYPE) \
-{ \
-	TYPE	*psPrev, *psCurr; \
-\
-	psPrev = NULL; \
-	for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
-	{ \
-		if (psCurr == (psEntry)) \
-		{ \
-			break; \
-		} \
-		psPrev = psCurr; \
-	} \
-	ASSERT( psCurr!=NULL, "LIST_REMOVE: entry not found" ); \
-	if (psPrev == NULL) \
-	{ \
-		(psHead) = (psHead)->psNext; \
-	} \
-	else if (psCurr != NULL) \
-	{ \
-		psPrev->psNext = psCurr->psNext; \
-	} \
-}
-
 #include "typedefs.h"
 
 #define MAP_MAXWIDTH	256
@@ -63,6 +34,7 @@
 #endif
 
 #include "gateway.h"
+#include "lib/framework/listmacs.h"
 
 // the list of gateways on the current map
 GATEWAY		*psGateways;

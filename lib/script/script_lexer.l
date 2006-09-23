@@ -6,12 +6,12 @@
  */
 
 #include "lib/framework/frame.h"
-#include "interp.h"
-#include "parse.h"
-#include "script.h"
+#include "lib/script/interp.h"
+#include "lib/script/parse.h"
+#include "lib/script/script.h"
 
 /* Get the Yacc definitions */
-#include "script_parser.h"
+#include "lib/script/script_parser.h"
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX

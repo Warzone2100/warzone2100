@@ -10,7 +10,7 @@
 #include <assert.h>
 
 #include "lib/framework/frame.h"
-//#include "widget.h"
+#include "lib/framework/strres.h"
 
 #include "objects.h"
 #include "loop.h"
@@ -3685,7 +3685,7 @@ void drawRadarBlips(void)
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
-		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; 
+		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL;
 			psProxDisp = psProxDisp->psNext)
 		{
 			if(psProxDisp->psMessage->type == MSG_PROXIMITY)

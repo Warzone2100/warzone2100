@@ -8,9 +8,9 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "frame.h"
-#include "strres.h"
-#include "strresly.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+#include "lib/framework/strresly.h"
 
 int strres_lex (void);
 
