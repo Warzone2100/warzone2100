@@ -68,7 +68,7 @@ static int code_part_from_str(const char *str)
 	int i;
 
 	for (i = 0; i < LOG_LAST; i++) {
-		if (SDL_strcasecmp(code_part_names[i], str) == 0) {
+		if (strcasecmp(code_part_names[i], str) == 0) {
 			return i;
 		}
 	}

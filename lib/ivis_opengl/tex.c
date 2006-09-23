@@ -65,7 +65,7 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 
 	/* Have we already loaded this one? (Should generally not happen here.) */
 	while (i < _TEX_INDEX) {
-		if (SDL_strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
+		if (strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
 			// this happens with terrain for some reason, which is necessary
 			debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s loaded again", filename);
 		}
@@ -152,7 +152,7 @@ int iV_GetTexture(char *filename)
 
 	/* Have we already loaded this one then? (Yes. Always.) */
 	while (i < _TEX_INDEX) {
-		if (SDL_strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
+		if (strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
 			return i;
 		}
 		i++;
@@ -182,7 +182,7 @@ int pie_ReloadTexPage(STRING *filename, char *pBuffer)
 	debug( LOG_NEVER, "pie_ReloadTexPage called" );
 
 	/* Have we already loaded this one then? */
-	while (SDL_strcasecmp(filename,_TEX_PAGE[i].name) != 0) {
+	while (strcasecmp(filename,_TEX_PAGE[i].name) != 0) {
 		i++;
 		if (i >= _TEX_INDEX) {
 			debug(LOG_TEXTURE, "Texture %s not in resources", filename);

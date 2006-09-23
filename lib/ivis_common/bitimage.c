@@ -144,7 +144,7 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 //	for(i=0; i<ImageFile->Header.NumTPages; i++) {
 //		FREE(ImageFile->TexturePages[i].bmp);
 //	}
-	
+
 	FREE(ImageFile->TexturePages);
 	FREE(ImageFile->ImageDefs);
 	FREE(ImageFile);
@@ -170,7 +170,7 @@ static BOOL LoadTextureFile(STRING *FileName, iSprite *pSprite, int *texPageID)
 		return FALSE;
 	} else {
 		*pSprite = *(iSprite*)resGetData("IMGPAGE", real_filename);
-		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)", 
+		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
 		      real_filename, pSprite->width, pSprite->height);
 	}
 
@@ -179,7 +179,7 @@ static BOOL LoadTextureFile(STRING *FileName, iSprite *pSprite, int *texPageID)
 
 	/* We have already loaded this one? */
 	while (i < _TEX_INDEX) {
-		if (SDL_strcasecmp(real_filename, _TEX_PAGE[i].name) == 0) {
+		if (strcasecmp(real_filename, _TEX_PAGE[i].name) == 0) {
 			*texPageID = (_TEX_PAGE[i].textPage3dfx);
 			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
 			return TRUE;

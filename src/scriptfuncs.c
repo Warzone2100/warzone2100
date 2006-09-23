@@ -9535,7 +9535,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRI
 		psMessage->pViewData = (MSG_VIEWDATA *)pTempData;
 
 		//check the z value is at least the height of the terrain
-		height = map_Height(((VIEW_PROXIMITY *)pTempData->pData)->x, 
+		height = map_Height(((VIEW_PROXIMITY *)pTempData->pData)->x,
 			((VIEW_PROXIMITY *)pTempData->pData)->y);
 
 		//if (((VIEW_PROXIMITY *)pTempData->pData)->z < height)
@@ -9561,7 +9561,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRI
 			return FALSE;
 		}
 	}
-	
+
 	return TRUE;
 }
 
@@ -9613,7 +9613,7 @@ VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY)
 	{
 		debug(LOG_ERROR,"prepairHelpViewData() - ViewData Name - Out of memory");
 		return NULL;
-	}	
+	}
 
 	strcpy(psViewData->pName,name);
 
@@ -9634,7 +9634,7 @@ VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY)
 		debug(LOG_ERROR,"prepairHelpViewData() - Unable to allocate memory");
 		return NULL;
 	}
-	
+
 
 	//store audio
 	audioID = NO_SOUND;
@@ -9646,7 +9646,7 @@ VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY)
 		debug(LOG_ERROR,"prepairHelpViewData() - Negative X coord for prox message");
 		return NULL;
 	}
-	
+
 	if (LocY < 0)
 	{
 		debug(LOG_ERROR,"prepairHelpViewData() - Negative X coord for prox message");
@@ -9752,7 +9752,7 @@ BOOL scrRemoveHelpMessage(void)
 	}
 	//else
 	//{
-	//	ASSERT((FALSE, "scrRemoveMessage:cannot find message - %s", 
+	//	ASSERT((FALSE, "scrRemoveMessage:cannot find message - %s",
 	//		psViewData->pName));
 	//	return FALSE;
 	//}
@@ -9825,7 +9825,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 BOOL scrMsgBox(void)
 {
 	STRING	*ssval=NULL;
-	
+
 	if (!stackPopParams(1, VAL_STRING, &ssval))
 	{
 		debug(LOG_ERROR, "scrMsgBox(): stack failed");
@@ -9835,7 +9835,7 @@ BOOL scrMsgBox(void)
 	//dbg_console("DEBUG: %s", ssval);
 
 	printf_console("DEBUG: %s",ssval);
-	
+
 	return TRUE;
 }
 
@@ -9871,7 +9871,7 @@ BOOL scrStructInRangeVis(void)
 // check for a base object being in range of a point
 BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer)
 {
-	BASE_OBJECT		*psCurr; 
+	BASE_OBJECT		*psCurr;
 	SDWORD			xdiff, ydiff, rangeSq;
 
 	// See if there is a droid in range
@@ -9932,7 +9932,7 @@ BOOL scrPursueResearch(void)
 	STRING				sTemp[128];
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
-	
+
 	RESEARCH			*pResearch;
 
 	if (!stackPopParams(3,ST_STRUCTURE, &structure, VAL_INT, &player, ST_RESEARCH, &psResearch ))
@@ -9942,7 +9942,7 @@ BOOL scrPursueResearch(void)
 	}
 
 	if(psResearch == NULL)
-	{	
+	{
 		ASSERT(FALSE, ": no such research topic");
 		return FALSE;
 	}
@@ -10020,14 +10020,14 @@ BOOL scrPursueResearch(void)
 				}
 				index = Stack[top + 2];	//if index = -1, then exit
 				cur = Stack[top + 1];		//go to next PR of the last node, since this one didn't work
-				
+
 			}
 			else		//end of nodes not reached
 			{
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
 				//DbgMsg("evaluating node: %d, (cur = %d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 
-				if(skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added	
+				if(skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
 				{
 					//DbgMsg("avail: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 					found = TRUE;
@@ -10078,9 +10078,9 @@ BOOL scrPursueResearch(void)
 			pResearch = (asResearch + foundIndex);
 			pPlayerRes				= asPlayerResList[player]+ foundIndex;
 			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-			
+
 			if (IsResearchCancelled(pPlayerRes))
-			{	
+			{
 				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
 			}
 			else
@@ -10176,7 +10176,7 @@ SDWORD guessPlayerFromMessage(STRING **str)
 
 	while( sscanf(*str, "%[^,:;?! ]%*[,;?! ]%n", playerName, &count)	//didn't reach the end	//first field: what to stop on; second field: what to read (skip) afterwards
 		&& player >= 0										//last string was a player name
-		//&& *str < copyStr + strlen(copyStr) 
+		//&& *str < copyStr + strlen(copyStr)
 		)
 	{
 		if(count==0)	/* nothing read ? */
@@ -10218,7 +10218,7 @@ SDWORD getPlayerFromString(STRING *playerName)
 	{
 		/* check name */
 		debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
-		if(SDL_strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
+		if (strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10226,7 +10226,7 @@ SDWORD getPlayerFromString(STRING *playerName)
 
 		/* check color */
 		debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColorName(playerIndex), playerName);
-		if(SDL_strncasecmp(getPlayerColorName(playerIndex),playerName, 255) == 0)
+		if (strncasecmp(getPlayerColorName(playerIndex),playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10235,12 +10235,12 @@ SDWORD getPlayerFromString(STRING *playerName)
 		/* check player number */
 		sprintf(sPlayerNumber,"%d",playerIndex);
 		debug(LOG_SCRIPT, "checking (%s,%s)",sPlayerNumber, playerName);
-		if(SDL_strncasecmp(sPlayerNumber,playerName, 255) == 0)
+		if (strncasecmp(sPlayerNumber,playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
 		}
-		
+
 	}
 
 	return -1;
@@ -10279,7 +10279,7 @@ BOOL scrGetTargetPlayers(void)
 	strcpy(*ssval, myMsg);
 
 	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
-	
+
 	if (!stackPushResult(VAL_INT, players))
 	{
 		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
@@ -10346,7 +10346,7 @@ BOOL scrMatch(void)
 		debug(LOG_SCRIPT, "wordNeed '%s'", wordNeed);
 
 		/* failed if *one* of the strings ended */
-		if((fieldAssignedParse > 0 && fieldAssignedMatch <= 0) 
+		if((fieldAssignedParse > 0 && fieldAssignedMatch <= 0)
 			|| (fieldAssignedMatch > 0 && fieldAssignedParse <= 0))
 		{
 			debug(LOG_SCRIPT, "exit condition FAILED");
@@ -10361,14 +10361,14 @@ BOOL scrMatch(void)
 		}
 
 		/*
-		 *	now compare both words 
+		 *	now compare both words
 		 */
-		
-		if(SDL_strncasecmp(wordNeed,"<player>", 255) == 0)		/* if we are looking for player */
+
+		if (strncasecmp(wordNeed,"<player>", 255) == 0)		/* if we are looking for player */
 		{
 			debug(LOG_SCRIPT, "matching <player>");
 			*nResult = getPlayerFromString(wordFound);
-			
+
 			if(*nResult == -1)	/* failed to match player, stop */
 			{
 				debug(LOG_SCRIPT, "failed to match <player>");
@@ -10379,7 +10379,7 @@ BOOL scrMatch(void)
 				debug(LOG_SCRIPT, "matched <player>");
 			}
 		}
-		else if(SDL_strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to se if they match */
+		else if (strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to se if they match */
 		{
 			debug(LOG_SCRIPT, "words did not match");
 			ok = FALSE;
@@ -10392,7 +10392,7 @@ BOOL scrMatch(void)
 
 	FREE(wordFound);
 	FREE(wordNeed);
-	
+
 	if (!stackPushResult(VAL_BOOL, ok))
 	{
 		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
@@ -10418,5 +10418,5 @@ SDWORD getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount)
 
 	*readCount = count;
 
-	return fieldsAssigned;  
+	return fieldsAssigned;
 }

@@ -955,7 +955,7 @@ BOOL buildMapList(void)
 	for ( file = filelist; *file != NULL; ++file ) {
 		len = strlen( *file );
 		if ( len > 10 // Do not add addon.lev again
-				&& !SDL_strcasecmp( *file+(len-10), ".addon.lev") ) {
+				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
 			debug( LOG_WZ, "Loading lev file: %s\n", *file );
 			loadLevFile( *file, MOD_MULTIPLAY );
 		}
@@ -1025,7 +1025,7 @@ BOOL systemInitialise(void)
 	}
 
 	if ( war_getSoundEnabled() )
-	{	
+	{
 		if( !audio_Init(droidAudioTrackStopped) )
 			debug( LOG_SOUND, "Couldn't initialise audio system: continuing without audio\n" );
 	}

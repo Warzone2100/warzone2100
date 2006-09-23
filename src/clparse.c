@@ -71,7 +71,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 	for (i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
-		if ( SDL_strcasecmp(tokenType, "--version") == 0 )
+		if ( strcasecmp(tokenType, "--version") == 0 )
 		{
 #ifdef DEBUG
 			fprintf( stdout, "Warzone 2100 - Version %s - Built %s - DEBUG\n", VERSION, __DATE__ );
@@ -80,7 +80,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 #endif
 			return FALSE;
 		}
-		else if ( SDL_strcasecmp(tokenType, "--help" ) == 0 )
+		else if ( strcasecmp(tokenType, "--help" ) == 0 )
 		{
 			// Show help
 			fprintf( stdout,
@@ -107,7 +107,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 			);
 			return FALSE;
 		}
-		else if ( SDL_strcasecmp(tokenType, "--datadir") == 0 )
+		else if ( strcasecmp(tokenType, "--datadir") == 0 )
 		{
 			// find the quoted path name
 			token = argv[++i];
@@ -118,7 +118,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 			}
 			strncpy(datadir, token, sizeof(datadir));
 		}
-		else if ( SDL_strcasecmp(tokenType, "--debug") == 0 )
+		else if ( strcasecmp(tokenType, "--debug") == 0 )
 		{
 			// find the part name
 			token = argv[++i];
@@ -131,7 +131,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				return FALSE;
 			}
 		}
-		else if ( SDL_strcasecmp(tokenType, "--debugfile") == 0 )
+		else if ( strcasecmp(tokenType, "--debugfile") == 0 )
 		{
 			// find the file name
 			token = argv[++i];
@@ -166,16 +166,16 @@ BOOL ParseCommandLine(int argc, char** argv)
 	for( i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
-		if ( SDL_strcasecmp(tokenType, "--cheat") == 0 )
+		if ( strcasecmp(tokenType, "--cheat") == 0 )
 		{
 			fprintf(stdout, "  ** CHEAT MODE ACTIVATED! **\n");
 			bAllowDebugMode = TRUE;
 		}
-		else if ( SDL_strcasecmp( tokenType, "--fullscreen" ) == 0 )
+		else if ( strcasecmp( tokenType, "--fullscreen" ) == 0 )
 		{
 			war_setFullscreen(TRUE);
 		}
-		else if ( SDL_strcasecmp( tokenType, "--game" ) == 0 )
+		else if ( strcasecmp( tokenType, "--game" ) == 0 )
 		{
 			// find the game name
 			token = argv[++i];
@@ -188,7 +188,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncpy(pLevelName, token, 254);
 			SetGameMode(GS_NORMAL);
 		}
-		else if ( SDL_strcasecmp(tokenType, "--mod") == 0 )
+		else if ( strcasecmp(tokenType, "--mod") == 0 )
 		{
 			// find the file name
 			token = argv[++i];
@@ -202,7 +202,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
 			global_mods[j] = token;
 		}
-		else if ( SDL_strcasecmp(tokenType, "--mod_ca") == 0 )
+		else if ( strcasecmp(tokenType, "--mod_ca") == 0 )
 		{
 			// find the file name
 			token = argv[++i];
@@ -217,7 +217,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
 			campaign_mods[j] = token;
 		}
-		else if ( SDL_strcasecmp(tokenType, "--mod_mp") == 0 )
+		else if ( strcasecmp(tokenType, "--mod_mp") == 0 )
 		{
 			// find the file name
 			token = argv[++i];
@@ -232,7 +232,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
 			multiplay_mods[j] = token;
 		}
-		else if ( SDL_strcasecmp( tokenType, "--savegame" ) == 0 )
+		else if ( strcasecmp( tokenType, "--savegame" ) == 0 )
 		{
 			// find the game name
 			token = argv[++i];
@@ -247,28 +247,28 @@ BOOL ParseCommandLine(int argc, char** argv)
 			strncat(saveGameName, token, 240);
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
-		else if ( SDL_strcasecmp( tokenType, "--shadows" ) == 0 )
+		else if ( strcasecmp( tokenType, "--shadows" ) == 0 )
 		{
 			// FIXME Should setDrawShadows go into warzoneconfig? Or how should config values be handled in general? By the system using it? Or by warzoneconfig? Or by config keys only?
 			//setDrawShadows( TRUE );
 			setWarzoneKeyNumeric( "shadows", TRUE );
 		}
-		else if ( SDL_strcasecmp( tokenType, "--noshadows" ) == 0 )
+		else if ( strcasecmp( tokenType, "--noshadows" ) == 0 )
 		{
 			//setDrawShadows( FALSE );
 			setWarzoneKeyNumeric( "shadows", FALSE );
 		}
-		else if ( SDL_strcasecmp( tokenType, "--sound" ) == 0 )
+		else if ( strcasecmp( tokenType, "--sound" ) == 0 )
 		{
 			war_setSoundEnabled( TRUE );
 			setWarzoneKeyNumeric( "sound", TRUE );
 		}
-		else if ( SDL_strcasecmp( tokenType, "--nosound" ) == 0 )
+		else if ( strcasecmp( tokenType, "--nosound" ) == 0 )
 		{
 			war_setSoundEnabled( FALSE );
 			setWarzoneKeyNumeric( "sound", FALSE );
 		}
-		else if ( SDL_strcasecmp( tokenType, "--viewport" ) == 0 )
+		else if ( strcasecmp( tokenType, "--viewport" ) == 0 )
 		{
 			token = argv[++i];
 			if ( !sscanf( token, "%ix%i", &width, &height ) == 2 )
@@ -279,62 +279,62 @@ BOOL ParseCommandLine(int argc, char** argv)
 			}
 			pie_SetVideoBuffer( width, height );
 		}
-		else if ( SDL_strcasecmp( tokenType, "--window" ) == 0 )
+		else if ( strcasecmp( tokenType, "--window" ) == 0 )
 		{
 			war_setFullscreen(FALSE);
 		}
-		else if ( SDL_strcasecmp( tokenType, "--intro" ) == 0 )
+		else if ( strcasecmp( tokenType, "--intro" ) == 0 )
 		{
 			SetGameMode(GS_VIDEO_MODE);
 		}
-		else if ( SDL_strcasecmp( tokenType, "--title" ) == 0 )
+		else if ( strcasecmp( tokenType, "--title" ) == 0 )
 		{
 			SetGameMode(GS_TITLE_SCREEN);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--noTranslucent") == 0 )
+		else if ( strcasecmp( tokenType,"--noTranslucent") == 0 )
 		{
 			war_SetTranslucent(FALSE);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--noAdditive") == 0)
+		else if ( strcasecmp( tokenType,"--noAdditive") == 0)
 		{
 			war_SetAdditive(FALSE);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--noFog") == 0 )
+		else if ( strcasecmp( tokenType,"--noFog") == 0 )
 		{
 			pie_SetFogCap(FOG_CAP_NO);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--greyFog") == 0 )
+		else if ( strcasecmp( tokenType,"--greyFog") == 0 )
 		{
 			pie_SetFogCap(FOG_CAP_GREY);
 		}
-		else if ( SDL_strcasecmp(tokenType, "--CDA") == 0 )
+		else if ( strcasecmp(tokenType, "--CDA") == 0 )
 		{
 			war_SetPlayAudioCDs(TRUE);
 		}
-		else if ( SDL_strcasecmp(tokenType, "--noCDA") == 0 )
+		else if ( strcasecmp(tokenType, "--noCDA") == 0 )
 		{
 			war_SetPlayAudioCDs(FALSE);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--seqSmall") == 0 )
+		else if ( strcasecmp( tokenType,"--seqSmall") == 0 )
 		{
 			war_SetSeqMode(SEQ_SMALL);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--seqSkip") == 0 )
+		else if ( strcasecmp( tokenType,"--seqSkip") == 0 )
 		{
 			war_SetSeqMode(SEQ_SKIP);
 		}
-		else if ( SDL_strcasecmp( tokenType,"--disableLobby") == 0 )
+		else if ( strcasecmp( tokenType,"--disableLobby") == 0 )
 		{
 			bDisableLobby = TRUE;
 		}
 
 	// gamespy flags
-		else if (   SDL_strcasecmp(tokenType, "+host") == 0		// host a multiplayer.
-			 || SDL_strcasecmp(tokenType, "+connect") == 0
-			 || SDL_strcasecmp(tokenType, "+name") == 0
-			 || SDL_strcasecmp(tokenType, "+ip") == 0
-			 || SDL_strcasecmp(tokenType, "+maxplayers") == 0
-			 || SDL_strcasecmp(tokenType, "+hostname") == 0)
+		else if ( strcasecmp(tokenType, "+host") == 0	// host a multiplayer.
+			 || strcasecmp(tokenType, "+connect") == 0
+			 || strcasecmp(tokenType, "+name") == 0
+			 || strcasecmp(tokenType, "+ip") == 0
+			 || strcasecmp(tokenType, "+maxplayers") == 0
+			 || strcasecmp(tokenType, "+hostname") == 0)
 		{
 			token = argv[++i];
 			scanGameSpyFlags(tokenType, token);
@@ -381,7 +381,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 		gameSpy.bGameSpy = TRUE;
 	}
 
-	if(	 SDL_strcasecmp( gflag,"+host") == 0)			// host a multiplayer.
+	if (strcasecmp( gflag,"+host") == 0)			// host a multiplayer.
 	{
 		NetPlay.bHost = 1;
 		game.bytesPerSec			= INETBYTESPERSEC;
@@ -389,7 +389,7 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 		NETsetupTCPIP(&finalconnection,"");
 		NETselectProtocol(finalconnection);
 	}
-	else if( SDL_strcasecmp( gflag,"+connect") == 0)	// join a multiplayer.
+	else if (strcasecmp( gflag,"+connect") == 0)	// join a multiplayer.
 	{
 		NetPlay.bHost = 0;
 		game.bytesPerSec			= INETBYTESPERSEC;
@@ -398,11 +398,11 @@ BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
 		NETselectProtocol(finalconnection);
 		// gflag is add to con to.
 	}
-	else if( SDL_strcasecmp( gflag,"+name") == 0)		// player name.
+	else if (strcasecmp( gflag,"+name") == 0)		// player name.
 	{
 		strcpy((char *)sPlayer,value);
 	}
-	else if( SDL_strcasecmp( gflag,"+hostname") == 0)	// game name.
+	else if (strcasecmp( gflag,"+hostname") == 0)	// game name.
 	{
 		strcpy(game.name,value);
 	}

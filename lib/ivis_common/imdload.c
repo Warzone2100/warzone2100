@@ -276,7 +276,7 @@ iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpa
 		if (bTextured) {
 			//resToLower(texfile);
 //          printf("texfile cmp in imdload.c :%s\n", texfile);
-			if (SDL_strncasecmp(texfile, "page-", 5) == 0) {
+			if (strncasecmp(texfile, "page-", 5) == 0) {
 				for(i = 5; i < (SDWORD)strlen(texfile); i++) {
 					if (!isdigit(texfile[i])) {
 						break;
