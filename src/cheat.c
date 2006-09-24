@@ -8,11 +8,11 @@
 
 typedef struct _cheat_entry
 {
-	STRING	*pName;
+	const char *pName;
 	void (*function)(void);	// pointer to void* function
 } CHEAT_ENTRY;
 
-CHEAT_ENTRY	cheatCodes[] =
+static CHEAT_ENTRY cheatCodes[] =
 {
 //	{"VQKZMY^\\Z",kf_ToggleOverlays},//interface
 //	{"LWPH R^OOVQXL",kf_ShowMappings},//show mappings

@@ -15,7 +15,7 @@
 /* The fixed id buffer for the string resource system
  * This just tells it what the keywords are for the fixed strings
  */
-STR_ID asFixedID[STR_MAX_ID] =
+static STR_ID asFixedID[STR_MAX_ID] =
 {
 	// Default string
 	{STR_DEFAULT,				"DEFAULT"},
