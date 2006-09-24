@@ -44,7 +44,7 @@ BOOL NETstopLogging(void)
 }
 
 
-BOOL NETlogEntry(CHAR *str,UDWORD a,UDWORD b)
+BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 {
 	static UDWORD lastframe = 0;
 	UDWORD frame= frameGetFrameNumber();

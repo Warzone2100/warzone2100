@@ -18,7 +18,7 @@
 // print out information about a base object
 void printBaseObjInfo(BASE_OBJECT *psObj)
 {
-	STRING	*pType;
+	const char *pType;
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
@@ -57,7 +57,7 @@ void printComponentInfo(COMP_BASE_STATS *psStats)
 // print out weapon information
 void printWeaponInfo(WEAPON_STATS *psStats)
 {
-	STRING	*pWC, *pWSC, *pMM;
+	const char *pWC, *pWSC, *pMM;
 
 	switch (psStats->weaponClass)
 	{

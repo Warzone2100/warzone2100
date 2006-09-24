@@ -36,7 +36,7 @@ extern void		audio_StopObjTrack( void * psObj, int iTrack );
 extern void		audio_PlayTrack( int iTrack );
 extern void		audio_PlayCallbackTrack( int iTrack,
 											AUDIO_CALLBACK pUserCallback );
-extern BOOL		audio_PlayStream( char szFileName[], SDWORD iVol,
+extern BOOL		audio_PlayStream( const char szFileName[], SDWORD iVol,
 											AUDIO_CALLBACK pUserCallback );
 extern void		audio_QueueTrack( SDWORD iTrack );
 extern void		audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay );

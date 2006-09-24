@@ -1,3 +1,3 @@
 BOOL NETstartLogging(void);
 BOOL NETstopLogging(void);
-BOOL NETlogEntry( CHAR *str, UDWORD a, UDWORD b );
+BOOL NETlogEntry( const char *str, UDWORD a, UDWORD b );

@@ -78,7 +78,7 @@ char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 /* MODULE CONSOLE PROTOTYPES */
 void	consolePrintf				( char *layout, ... );
 void	setConsoleSizePos			( UDWORD x, UDWORD y, UDWORD width );
-BOOL	addConsoleMessage			( STRING *messageText, CONSOLE_TEXT_JUSTIFICATION jusType );
+BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType );
 void	updateConsoleMessages		( void );
 void	displayConsoleMessages		( void );
 void	initConsoleMessages			( void );
@@ -183,7 +183,7 @@ void	toggleConsoleDrop( void )
 
 
 /* Adds a string to the console. */
-static BOOL _addConsoleMessage(STRING *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
+static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
 {
 UDWORD			textLength;
 CONSOLE_MESSAGE	*psMessage;
@@ -277,7 +277,7 @@ CONSOLE_MESSAGE	*psMessage;
 }
 
 
-BOOL addConsoleMessage(STRING *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
+BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
 {
 	return _addConsoleMessage(messageText,jusType);
 }

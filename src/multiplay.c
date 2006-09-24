@@ -1757,7 +1757,7 @@ void msgStackReset(void)
 	msgStackPos = -1;		//Beginning of the stack
 }
 
-UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, STRING *tStr, SDWORD x, SDWORD y)
+UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y)
 {
 	if (msgStackPos >= MAX_MSG_STACK)
 	{

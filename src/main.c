@@ -358,7 +358,7 @@ static void scanDataDirs( void )
 /***************************************************************************
 	Make a directory in write path and set a variable to point to it.
 ***************************************************************************/
-static void make_dir(char *dest, char *dirname, char *subdir)
+static void make_dir(char *dest, const char *dirname, const char *subdir)
 {
 	strcpy(dest, dirname);
 	if (subdir != NULL) {

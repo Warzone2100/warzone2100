@@ -850,7 +850,7 @@ static BOOL seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 //	WIN32_FIND_DATA findData;
 //	BOOL endOfFile = FALSE;
 	SDWORD xOffset, yOffset, startFrame, endFrame;
-	char *seps = "\n";
+	const char *seps = "\n";
 
 	strcpy(aTextName,"sequenceAudio\\");
 	strcat(aTextName,pTextName);

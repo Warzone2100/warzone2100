@@ -976,7 +976,7 @@ BOOL audio_PlayObjDynamicTrack( void *psObj, int iTrack, AUDIO_CALLBACK pUserCal
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_PlayStream( char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUserCallback )
+BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUserCallback )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
