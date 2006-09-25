@@ -12,10 +12,7 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#ifdef WIN32
-# define WIN32_LEAN_AND_MEAN
-# include <windows.h>
-#endif // WIN32
+#include "platform.h"
 
 #include <SDL/SDL_types.h>
 
