@@ -1,6 +1,6 @@
 2006-09-07: Version 2.0.5 RC1
  * General:
-   * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, default key combination: Alt+H
+   * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, only sent to the players to which you have an opened communication channel. Default key combination: Alt+H
    * New: Allied players send vision to each other automatically (only once)
    * New: Non-Mac versions can now load Mac-created savegames and the other way round
    * New: Ctrl+MouseWheel makes game speed up or slow down

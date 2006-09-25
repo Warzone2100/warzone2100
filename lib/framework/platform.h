@@ -15,7 +15,7 @@
 #  endif /* WZ_CC_GNU */
 
 #  if defined(WZ_CC_MSVC)
-#    if defined()_DEBUG)
+#    if defined(_DEBUG)
 #      define DEBUG
 #      define _CRTDBG_MAP_ALLOC
 #      include <stdlib.h>
