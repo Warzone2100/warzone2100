@@ -1,8 +1,5 @@
-/*
- * FrameInt.h
- *
- * Internal definitions for the framework library.
- *
+/*! \file frameint.h
+ *  \brief Internal definitions for the framework library.
  */
 #ifndef _frameint_h
 #define _frameint_h

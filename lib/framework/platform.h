@@ -1,5 +1,5 @@
-/*
-	Platform specific workarounds, defines and compat fixes
+/*! \file platform.h
+ *  \brief Platform specific workarounds, defines and compat fixes
 */
 
 #ifndef PLATFORM_H

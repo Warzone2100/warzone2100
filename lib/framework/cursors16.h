@@ -1,3 +1,7 @@
+/*! \file cursors16.h
+ *  \brief Cursor definition (16x16)
+ */
+
 #define CURSOR_OFFSET 100
 #define MAX_CURSORS 26 
 

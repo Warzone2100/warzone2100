@@ -1,7 +1,5 @@
-
-/*
-
- SDL_framerate: framerate manager
+/*! \file SDL_framerate.h
+ * \brief framerate manager
  
  LGPL (c) A. Schiffler
  

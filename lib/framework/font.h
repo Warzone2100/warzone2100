@@ -1,7 +1,5 @@
-/*
- * Font.h
- *
- * Definitions for the font system.
+/*! \file font.h
+ *  \brief Definitions for the font system.
  */
 #ifndef _font_h
 #define _font_h

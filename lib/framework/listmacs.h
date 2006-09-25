@@ -1,7 +1,5 @@
-/*
- * ListMacs.h
- *
- * Macros for some simple list operations
+/*! \file listmacs.h
+ * \brief Macros for some simple list operations
  *
  * The parameters for the macros are :
  *

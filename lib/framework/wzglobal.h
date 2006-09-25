@@ -1,5 +1,5 @@
-/*
-	Global definitions
+/*! \file wzglobal.h
+ *  \brief Global definitions
 
 	Shamelessly stolen from Qt4 (Qt/qglobal.h) by Dennis.
 	This has been greatly stripped down, feel free to add checks as you need them.

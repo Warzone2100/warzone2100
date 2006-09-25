@@ -1,7 +1,5 @@
-/*
- * ResLY.h
- *
- * Interface to the RES file lex and yacc functions.
+/*! \file resly.h
+ *  \brief Interface to the RES file lex and yacc functions.
  */
 #ifndef _resly_h
 #define _resly_h

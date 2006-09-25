@@ -1,3 +1,6 @@
+/*! \file macros.h
+ *  \brief Various macro definitions
+ */
 #ifndef MACROS_H
 #define MACROS_H
 

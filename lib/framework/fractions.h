@@ -1,5 +1,6 @@
-
-// Routines to provide simple maths functions that work on both PSX & PC
+/*! \file fractions.h
+ *  \brief Routines to provide simple maths functions that work on both PSX & PC
+ */
 
 // Use the type "FRACT" instead of FLOAT
 //  - This is defined as a float on PC and a 20.12 fixed point number on PSX

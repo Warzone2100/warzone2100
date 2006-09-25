@@ -1,7 +1,6 @@
-/*
- * Block.h
- *
- * Routines to allocate memory from one large block.
+/*! \file block.h
+ * \brief Routines to allocate memory from one large block.
+ * 
  * Any memory allocated is only available to be reallocated after
  * the whole block has been reset.
  */

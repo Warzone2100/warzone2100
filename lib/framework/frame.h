@@ -1,8 +1,5 @@
-/*
- * Frame.h
- *
- * The framework library initialisation and shutdown routines.
- *
+/*! \file frame.h
+ * \brief The framework library initialisation and shutdown routines.
  */
 #ifndef _frame_h
 #define _frame_h

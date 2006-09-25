@@ -1,8 +1,5 @@
-/*
- * types.h
- *
- * Simple type definitions.
- *
+/*! \file types.h
+ *  * \brief Simple type definitions.
  */
 #ifndef _types_h
 #define _types_h

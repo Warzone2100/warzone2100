@@ -1,8 +1,5 @@
-/*
- * Trig.h
- *
- * Interface to trig lookup tables
- *
+/*! \file trig.h
+ *  * \brief Interface to trig lookup tables
  */
 #ifndef _trig_h
 #define _trig_h

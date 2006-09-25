@@ -1,7 +1,5 @@
-/*
- * StrResLY.h
- *
- * Interface to the string resource lex and yacc functions.
+/*! \file strresly.h
+ *  * \brief Interface to the string resource lex and yacc functions.
  */
 #ifndef _strresly_h
 #define _strresly_h

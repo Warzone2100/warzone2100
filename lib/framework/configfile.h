@@ -1,6 +1,5 @@
-/*
- * config.h
- * load and save favourites to the registry.
+/*! \file configfile.h
+ * \brief load and save favourites to the registry.
  */
 
 extern BOOL getWarzoneKeyNumeric	(const STRING *pName,DWORD *val);

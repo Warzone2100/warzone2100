@@ -1,7 +1,5 @@
-/*
- * FrameResources.h
- *
- * Resource file processing functions
+/*! \file frameresource.h
+ * \brief Resource file processing functions
  */
 
 #ifndef _resource_h

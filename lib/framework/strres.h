@@ -1,8 +1,5 @@
-/*
- * StrRes.h
- *
- * String resource interface functions
- *
+/*! \file strres.h
+ *  * \brief String resource interface functions
  */
 #ifndef _strres_h
 #define _strres_h

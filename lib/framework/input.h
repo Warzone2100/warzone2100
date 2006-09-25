@@ -1,7 +1,5 @@
-/*
- * Input.h
- *
- * Prototypes for the keyboard and mouse input funcitons.
+/*! \file input.h
+ * \brief Prototypes for the keyboard and mouse input funcitons.
  */
 #ifndef _input_h
 #define _input_h

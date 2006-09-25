@@ -1,7 +1,5 @@
-/*
- * TreapInt.h
- *
- * Internal function calls for the treap system to allow it
+/*! \file treapint.h
+ *  * \brief Internal function calls for the treap system to allow it
  * to be used by the memory system.
  *
  */

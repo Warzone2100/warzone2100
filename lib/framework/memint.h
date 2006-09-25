@@ -1,8 +1,5 @@
-/*
- * MemInt.h
- *
- * Internal framework definitions for the memory system.
- *
+/*! \file memint.h
+ *  \brief Internal framework definitions for the memory system.
  */
 #ifndef _memint_h
 #define _memint_h

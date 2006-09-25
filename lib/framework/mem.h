@@ -1,7 +1,5 @@
-/*
- * mem.h
- *
- * Interface to the malloc/free replacements
+/*! \file mem.h
+ *  \brief Interface to the malloc/free replacements
  */
 
 #ifndef _mem_h

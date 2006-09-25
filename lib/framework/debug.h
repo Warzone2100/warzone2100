@@ -1,3 +1,7 @@
+/*! \file debug.h
+ *  \brief Debugging functions
+ */
+
 #ifndef _debug_h
 #define _debug_h
 

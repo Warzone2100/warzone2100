@@ -1,7 +1,5 @@
-/*
- * Treap.h
- *
- * A balanced binary tree implementation
+/*! \file treap.h
+ *  * \brief A balanced binary tree implementation
  *
  * Overhead for using the treap is -
  *		Overhead for the heap used by the treap :

@@ -1,7 +1,5 @@
-/*
- * Heap.h
- *
- * Interface to the heap memory routines.
+/*! \file heap.h
+ * \brief Interface to the heap memory routines.
  *
  * Overhead of using the heap is :
  *			24 bytes for the initial block
