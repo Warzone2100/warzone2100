@@ -769,9 +769,8 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function being called
 							PARAM_BLOCK		*psPBlock)	// The generated code block
 {
-	UDWORD		size, i, *ip;
+	UDWORD		i;
 	BOOL		typeError = FALSE;
-	STRING		aErrorString[255];
 
 	//debug(LOG_SCRIPT,"checkFuncParamTypes");
 
@@ -801,9 +800,8 @@ static CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The functio
 						PARAM_BLOCK		*psPBlock,		// The functions parameters
 						CODE_BLOCK		**ppsCBlock)	// The generated code block
 {
-	UDWORD		size, i, *ip;
+	UDWORD		size, *ip;
 	BOOL		typeError = FALSE;
-	STRING		aErrorString[255];
 
 	//debug(LOG_SCRIPT, "scriptCodeCallFunction");
 
@@ -3137,9 +3135,6 @@ event_decl:			event_subdecl ';'
 				/* function that was NOT declared before (atleast must look like this)!!! */
 				|	function_declaration  '{' var_list statement_list return_statement  '}'
 					{
-						UDWORD line;
-						STRING *pDummy;
-
 #ifdef DEBUG_SCRIPT
 						debug(LOG_SCRIPT, "function_declaration  '{' var_list statement_list return_statement  '}'");
 #endif
@@ -5322,8 +5317,6 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 {
 	VAR_SYMBOL		*psNew;
 	SDWORD			i;//, size;
-
-	VAR_SYMBOL **ppsVarSym;
 	
 	/* Allocate the memory for the symbol structure */
 	psNew = (VAR_SYMBOL *)MALLOC(sizeof(VAR_SYMBOL));
@@ -5722,9 +5715,6 @@ BOOL scriptDeclareEvent(STRING *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs)
 // Add the code to a defined event
 BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger)
 {
-	VAR_SYMBOL		*psCurr, *psNext;
-
-
 	if(psCode->size == 0)
 		debug(LOG_ERROR, "Event '%s' is empty, please add atleast 1 statement", psEvent->pIdent);
 
@@ -5864,7 +5854,6 @@ BOOL scriptLookUpFunction(STRING *pIdent, FUNC_SYMBOL **ppsSym)
 /* Look up a function symbol defined in script */
 BOOL scriptLookUpCustomFunction(STRING *pIdent, EVENT_SYMBOL **ppsSym)
 {
-	UDWORD i;
 	EVENT_SYMBOL	*psCurr;
 
 	//debug(LOG_SCRIPT, "scriptLookUpCustomFunction");
