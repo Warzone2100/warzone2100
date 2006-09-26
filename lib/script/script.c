@@ -132,11 +132,17 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 
 
 
-	FREE(psCode->numParams);
-	FREE(psCode->numLocalVars);
+	if(psCode->numParams != NULL)
+		FREE(psCode->numParams);
 
-	FREE(psCode->ppsLocalVars);
-	FREE(psCode->ppsLocalVarVal);
+	if(psCode->numLocalVars != NULL)
+		FREE(psCode->numLocalVars);
+
+	if(psCode->ppsLocalVars != NULL)
+		FREE(psCode->ppsLocalVars);
+
+	if(psCode->ppsLocalVarVal != NULL)
+		FREE(psCode->ppsLocalVarVal);
 
 	psCode->numEvents = 0;
 

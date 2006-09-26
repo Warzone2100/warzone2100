@@ -25,6 +25,8 @@ extern	BOOL	addMultiBut				(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, 
 										 UDWORD norm,UDWORD hi,BOOL showmouseover);
 extern  char	sForceName[256];
 extern	char	sPlayer[128];
+extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
+extern	SDWORD	playerTeam[MAX_PLAYERS];
 
 void    kickPlayer                      (DPID dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box
@@ -175,6 +177,18 @@ void loadMapPreview(void);
 #define MULTIOP_PLAYERSW		250
 #define MULTIOP_PLAYERSH		330
 
+#define MULTIOP_ROW_WIDTH		230
+
+//Team chooser
+#define MULTIOP_TEAMS_START		102310			//List of teams
+#define MULTIOP_TEAMS_END		102317
+#define MULTIOP_TEAMSWIDTH		35
+#define	MULTIOP_TEAMSHEIGHT		36
+
+#define MULTIOP_TEAMCHOOSER_FORM	102800
+#define MULTIOP_TEAMCHOOSER			102810
+#define MULTIOP_TEAMCHOOSER_END		102817
+
 #define MULTIOP_PLAYERWIDTH		230
 #define	MULTIOP_PLAYERHEIGHT		36
 
@@ -231,7 +245,7 @@ void loadMapPreview(void);
 
 #define MULTIOP_ALLIANCE_N		10270
 #define MULTIOP_ALLIANCE_Y		10271
-#define MULTIOP_ALLIANCE_AI		102710		//ai vs humans
+#define MULTIOP_ALLIANCE_TEAMS	102710		//locked teams
 
 #define MULTIOP_POWLEV_LOW		10272
 #define MULTIOP_POWLEV_MED		10273

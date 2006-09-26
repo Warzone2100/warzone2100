@@ -382,7 +382,7 @@ BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddForm: ID number has already been used" );
+		ASSERT( FALSE, "widgAddForm: ID number has already been used (%d)", psInit->id );
 		return FALSE;
 	}
 
@@ -430,7 +430,7 @@ BOOL widgAddLabel(W_SCREEN *psScreen, W_LABINIT *psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddLabel: ID number has already been used" );
+		ASSERT( FALSE, "widgAddLabel: ID number has already been used (%d)", psInit->id );
 		return FALSE;
 	}
 
@@ -477,7 +477,7 @@ BOOL widgAddButton(W_SCREEN *psScreen, W_BUTINIT *psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddButton: ID number has already been used" );
+		ASSERT( FALSE, "widgAddButton: ID number has already been used(%d)", psInit->id );
 		return FALSE;
 	}
 
@@ -524,7 +524,7 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddEditBox: ID number has already been used" );
+		ASSERT( FALSE, "widgAddEditBox: ID number has already been used (%d)", psInit->id );
 		return FALSE;
 	}
 
@@ -571,7 +571,7 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddBarGraph: ID number has already been used" );
+		ASSERT( FALSE, "widgAddBarGraph: ID number has already been used (%d)", psInit->id );
 		return FALSE;
 	}
 
@@ -618,7 +618,7 @@ BOOL widgAddSlider(W_SCREEN *psScreen, W_SLDINIT *psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT( FALSE, "widgSlider: ID number has already been used" );
+		ASSERT( FALSE, "widgSlider: ID number has already been used (%d)", psInit->id );
 		return FALSE;
 	}
 

@@ -3840,7 +3840,7 @@ BOOL scrCreateAlliance(void)
 
 	if(bMultiPlayer)
 	{
-		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_AI
+		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS
 			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
 		{
 			return TRUE;
@@ -3886,7 +3886,7 @@ BOOL scrOfferAlliance(void)
 	{
 		return FALSE;
 	}
-	if (game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_AI ||
+	if (game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS ||
 		player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
@@ -3934,7 +3934,7 @@ if(bMultiPlayer)
 
 	if(bMultiPlayer)
 	{
-		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_AI
+		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS
 			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
 		{
 			return TRUE;

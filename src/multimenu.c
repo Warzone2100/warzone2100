@@ -1023,8 +1023,8 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.pDisplay = displayAllianceState;
 		sButInit.pUserData = (void*)player;
 
-		//can't break alliances in 'Humans vs AIs' mode
-		if(game.alliance != ALLIANCES_AI)
+		//can't break alliances in 'Locked Teams' mode
+		if(game.alliance != ALLIANCES_TEAMS)
 			widgAddButton(psWScreen, &sButInit);
 
 		sButInit.pDisplay = intDisplayImageHilight;

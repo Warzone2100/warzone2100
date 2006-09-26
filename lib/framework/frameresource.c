@@ -685,7 +685,7 @@ void resReleaseAll(void)
 	{
 		for(psRes = psT->psRes; psRes; psRes = psNRes) {
 			if (psRes->usage == 0) {
-				debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType,
+				debug(LOG_WZ, "resReleaseAll: %s resource: %s(%04x) not used", psT->aType,
 				      psRes->aID, psRes->HashedID);
 			}
 			if(psT->release != NULL) {
@@ -720,7 +720,7 @@ void resReleaseBlockData(SDWORD blockID)
 
 			if (resGetResBlockID(psRes) == blockID) {
 				if (psRes->usage == 0) {
-					debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType, psRes->aID,
+					debug(LOG_WZ, "resReleaseBlockData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
 					      psRes->HashedID);
 				}
 				if(psT->release != NULL)
@@ -766,7 +766,7 @@ void resReleaseAllData(void)
 	for (psT = psResTypes; resValidType(psT); psT = psNT) {
 		for (psRes = psT->psRes; psRes; psRes = psNRes) {
 			if (psRes->usage == 0) {
-				debug(LOG_WZ, "%s resource: %s(%04x) not used", psT->aType, psRes->aID,
+				debug(LOG_WZ, "resReleaseAllData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
 				      psRes->HashedID);
 			}
 			if(psT->release != NULL) {

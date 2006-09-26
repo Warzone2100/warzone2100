@@ -137,7 +137,7 @@ MUL_MAPIC			"Select Map"
 MUL_GAMEIC			"Select Game Name"
 MUL_ALLIANCEN			"No Alliances"
 MUL_ALLIANCEY			"Allow Alliances"
-MUL_ALLIANCEAI			"Humans vs AIs"
+MUL_ALLIANCE_TEAMS		"Locked Teams"
 
 MUL_NOLIM			"No Limits"
 MUL_TIMELIM			"Time Limit"

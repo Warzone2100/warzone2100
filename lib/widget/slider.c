@@ -46,7 +46,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 
 	if (psInit->pos > psInit->numStops)
 	{
-		ASSERT( FALSE, "sliderCreate: slider position greater than stops" );
+		ASSERT( FALSE, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
 		return FALSE;
 	}
 

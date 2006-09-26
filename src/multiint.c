@@ -92,6 +92,9 @@ BOOL						bHosted			= FALSE;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 char						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
 static BOOL					bColourChooserUp= FALSE;
+static BOOL					bTeamChooserUp[MAX_PLAYERS]= {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
+SDWORD						playerTeamGUI[MAX_PLAYERS] = {0,1,2,3,4,5,6,7};		//team each player belongs to (in skirmish setup screen)
+SDWORD						playerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};		//team each player belongs to (in the game)
 static SWORD				SettingsUp		= 0;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
@@ -137,9 +140,11 @@ void		displayWhiteBoard			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 void		intDisplayFeBox				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayRemoteGame			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayPlayer				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayTeamChooser				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayMultiEditBox			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayForceDroid			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void Show_Map(char *imagedata); //added to show map -Q
+void		setLockedTeamsMode			(void);
 
 // find games
 static void addGames				(void);
@@ -174,10 +179,12 @@ static	UDWORD	bestPlayer			(UDWORD);
 static	void	decideWRF			(void);
 
 static void		closeColourChooser	(void);
+static void		closeTeamChooser	(void);
 static BOOL		SendColourRequest	(UDWORD player, UBYTE col,UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 BOOL			recvColourRequest	(NETMSG *pMsg);
+BOOL			recvTeamRequest		(NETMSG *pMsg);
 
 // Force selection functions
 static void		AvailableForces		(void);				// draw available templates
@@ -1092,13 +1099,23 @@ static void addGameOptions(BOOL bRedo)
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_Y,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				STR_MUL_ALLIANCEY,IMAGE_ALLI,IMAGE_ALLI_HI,TRUE);
 
-		//add 'AIs vs humans' button
-		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_AI,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_ALLIANCEAI,IMAGE_ALLIAI,IMAGE_ALLIAI_HI,TRUE);		//FIXME: add tooltip
+		//add 'Locked Teams' button
+		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_TEAMS,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
+			STR_MUL_ALLIANCE_TEAMS,IMAGE_ALLI_TEAMS,IMAGE_ALLI_TEAMS_HI,TRUE);		//FIXME: fix hover image
 
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
-		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,0);
+		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+
+		//can't have ALLIANCES_TEAMS in campaign mode 
+		if(game.type == CAMPAIGN)
+		{
+			if(game.alliance == ALLIANCES_TEAMS)
+				game.alliance = NO_ALLIANCES;
+
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS, WBUT_DISABLE);		//disable
+		}
+
 		switch(game.alliance)
 		{
 		case NO_ALLIANCES:
@@ -1107,8 +1124,8 @@ static void addGameOptions(BOOL bRedo)
 		case ALLIANCES:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
 			break;
-		case ALLIANCES_AI:
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,WBUT_LOCK);
+		case ALLIANCES_TEAMS:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
 			break;
 		}
 	}
@@ -1345,6 +1362,17 @@ BOOL chooseColour(UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // colour chooser.
+static SDWORD teamChooserUp(void)
+{
+	UDWORD i;
+	for(i=0;i<MAX_PLAYERS;i++)
+	{
+		if(bTeamChooserUp[i])
+			return i;
+	}
+
+	return -1;		//none
+}
 static void addColourChooser(UDWORD player)
 {
 	UDWORD i;//,j;
@@ -1352,11 +1380,14 @@ static void addColourChooser(UDWORD player)
 	// delete that players box,
 	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
 
+	// detele team chooser botton	
+	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
+
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
 				10,
 				((MULTIOP_PLAYERHEIGHT+5)*player)+4,
-				MULTIOP_PLAYERWIDTH,MULTIOP_PLAYERHEIGHT);
+				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
 	for(i=0;i<MAX_PLAYERS;i++)		//game.maxPlayers;i++)
@@ -1401,6 +1432,47 @@ static void closeColourChooser(void)
 	bColourChooserUp = FALSE;
 
 	widgDelete(psWScreen,MULTIOP_COLCHOOSER_FORM);
+}
+
+static BOOL SendTeamRequest(UDWORD player, UBYTE chosenTeam)
+{
+	NETMSG m;
+
+	m.body[0] =	(UBYTE)player;
+	m.body[1] = (UBYTE)chosenTeam;
+	m.type    = NET_TEAMREQUEST;
+	m.size    = 2;
+
+	if(NetPlay.bHost)			// do or request the change.
+	{
+		recvTeamRequest(&m);	// do the change, remember only the host can do this to avoid confusion.
+		return TRUE;
+	}
+	else
+	{
+		return NETbcast(&m,TRUE);
+	}
+}
+
+BOOL recvTeamRequest(NETMSG *pMsg)
+{
+	UDWORD	player,team;
+
+	if(!NetPlay.bHost)							//only host should act.
+	{
+		return TRUE;
+	}
+
+	player			= (UDWORD) pMsg->body[0];
+	team			= (UDWORD) pMsg->body[1];
+
+	playerTeamGUI[player] = team;
+
+	debug(LOG_WZ, "set %d as new team for player %d", team, player);
+
+	sendOptions(player2dpid[player],player);	// tell everyone && update requesting player.
+
+	return TRUE;
 }
 
 static BOOL SendColourRequest(UDWORD player, UBYTE col,UBYTE chosenPlayer)
@@ -1478,6 +1550,84 @@ BOOL recvColourRequest(NETMSG *pMsg)
 	return TRUE;
 }
 
+
+// Team chooser.
+static void addTeamChooser(UDWORD player)
+{
+	UDWORD i;
+
+	debug(LOG_WZ, "opened team chooser for %d, current team: %d", player, playerTeamGUI[player]);
+
+	// delete team chooser botton	
+	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
+
+	// delete that players box
+	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
+
+	// add form.
+	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
+				10,
+				((MULTIOP_TEAMSHEIGHT+5)*player)+4,
+				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
+
+	// add the teams
+
+	for(i=0;i<MAX_PLAYERS;i++)		//game.maxPlayers;i++)
+	{
+/*
+		addMultiBut(psWScreen,MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER+i,
+			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
+			4,													  //y
+			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
+			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
+			0, IMAGE_PLAYER0+i, IMAGE_PLAYER0+i,FALSE);
+*/
+		W_BUTINIT		sButInit;
+
+		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit.formID = MULTIOP_TEAMCHOOSER_FORM;
+		sButInit.id = MULTIOP_TEAMCHOOSER+i;
+		sButInit.style = WFORM_PLAIN;
+		sButInit.x = (short) (i*(iV_GetImageWidth(FrontImages,IMAGE_TEAM0) + 3)+3);
+		sButInit.y = (short) 6;
+		sButInit.width = (unsigned short) iV_GetImageWidth(FrontImages,IMAGE_TEAM0);
+		sButInit.height= (unsigned short) iV_GetImageHeight(FrontImages,IMAGE_TEAM0);
+
+		sButInit.pTip = "Team";
+		
+		sButInit.FontID = WFont;
+		sButInit.pDisplay = displayMultiBut;
+		sButInit.pUserData = (void*)PACKDWORD_TRI(FALSE,IMAGE_TEAM0+i , IMAGE_TEAM0+i);
+		sButInit.pText = "Team0";
+
+		if (!widgAddButton(psWScreen, &sButInit))
+		{
+			ASSERT(FALSE,"addTeamChooser: widgAddButton() failed");
+		}
+	}
+
+
+	bTeamChooserUp[player] = TRUE;
+}
+
+static void closeTeamChooser(void)
+{
+	UDWORD i;
+	for(i=0; i<MAX_PLAYERS;i++)
+	{
+		if(bTeamChooserUp[i])
+		{
+			debug(LOG_WZ, "closed team chooser for %d, current team: %d", i, playerTeamGUI[i]);
+
+			bTeamChooserUp[i] = FALSE;
+
+			ASSERT(teamChooserUp() < 0, "closeTeamChooser: more than one team chooser open (%d)", teamChooserUp());
+		}
+	}
+
+	widgDelete(psWScreen,MULTIOP_TEAMCHOOSER_FORM);	//only once!
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // box for players.
 
@@ -1522,29 +1672,57 @@ UDWORD addPlayerBox(BOOL players)
 	{
 		for(i=0;i<game.maxPlayers;i++)
 		{
+			if(ingame.localOptionsReceived && game.type == SKIRMISH)	// skirmish only
+			{
+				//add team chooser
+				memset(&sButInit, 0, sizeof(W_BUTINIT));
+				sButInit.formID = MULTIOP_PLAYERS;
+				sButInit.id = MULTIOP_TEAMS_START+i;
+				sButInit.style = WBUT_PLAIN;
+				sButInit.x = 10;
+				sButInit.y = (SHORT)(( (MULTIOP_TEAMSHEIGHT+5)*i)+4);
+				sButInit.width = MULTIOP_TEAMSWIDTH;
+				sButInit.height = MULTIOP_TEAMSHEIGHT;
+				sButInit.pTip = "Choose team";	//Players[i].name;
+				sButInit.FontID = WFont;
+				sButInit.pDisplay = displayTeamChooser;//intDisplayButtonHilight;
+				sButInit.pUserData = (void*) i;
+
+				if(bTeamChooserUp[i] && !bColourChooserUp /* && NetPlay.players[i].dpid == player2dpid[selectedPlayer] */ )
+				{
+					addTeamChooser(i);
+				}
+				else if(game.skDiff[i])	//only if not disabled
+				{
+					widgAddButton(psWScreen, &sButInit);
+				}
+			}
+
 			if(ingame.localOptionsReceived && NetPlay.players[i].dpid)					// only draw if real player!
 			{
 				memset(&sButInit, 0, sizeof(W_BUTINIT));
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
 				sButInit.style = WBUT_PLAIN;
-				sButInit.x = 10;
+				sButInit.x = 10 + MULTIOP_TEAMSWIDTH;
 				sButInit.y = (SHORT)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
-				sButInit.width = MULTIOP_PLAYERWIDTH;
+				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;//Players[i].name;
 				sButInit.FontID = WFont;
 				sButInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
 				sButInit.pUserData = (void*) i;
 
-				if(bColourChooserUp && NetPlay.players[i].dpid == player2dpid[selectedPlayer])
+				if(bColourChooserUp && (teamChooserUp() < 0)
+					&& NetPlay.players[i].dpid == player2dpid[selectedPlayer])
 				{
 					addColourChooser(i);
 				}
-				else
+				else if(i != teamChooserUp())	//display player number/color only if not selecting team for this player
 				{
 					widgAddButton(psWScreen, &sButInit);
 				}
+
 			}
 			else if(game.type == SKIRMISH)	// skirmish player
 			{
@@ -1554,7 +1732,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.style = WBUT_PLAIN;
 				sFormInit.x = 10;
 				sFormInit.y = (SHORT)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
-				sFormInit.width = MULTIOP_PLAYERWIDTH;
+				sFormInit.width = MULTIOP_ROW_WIDTH;
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
 				sFormInit.pTip = NULL;//Players[i].name;
 				sFormInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
@@ -1563,7 +1741,6 @@ UDWORD addPlayerBox(BOOL players)
 				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9,	  20,game.skDiff[i], 0);
 			}
 		}
-
 	}
 
 	if(ingame.bHostSetup) // if hosting.
@@ -1724,7 +1901,7 @@ static void disableMultiButs(void)
 		{
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
 			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
-			if(game.alliance != ALLIANCES_AI)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_AI ,WBUT_DISABLE);
+			if(game.alliance != ALLIANCES_TEAMS)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_TEAMS ,WBUT_DISABLE);
 		}
 
 	}
@@ -2049,8 +2226,13 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_ALLIANCE_N:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,0);
-			game.alliance = NO_ALLIANCES;// 0;
+
+			if(game.type != CAMPAIGN)
+				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+			else
+				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_DISABLE);
+
+			game.alliance = NO_ALLIANCES;	//0;
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -2059,24 +2241,22 @@ static void processMultiopWidgets(UDWORD id)
 
 		case MULTIOP_ALLIANCE_Y:
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,0);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
-			game.alliance = ALLIANCES;//1;
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+
+			if(game.type != CAMPAIGN)
+				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
+			else
+				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_DISABLE);
+
+			game.alliance = ALLIANCES;	//1;
 			if(bHosted)
 			{
 				sendOptions(0,0);
 			}
 			break;
 
-		case MULTIOP_ALLIANCE_AI:	//AIs vs Humans
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_AI,WBUT_LOCK);
-			game.alliance = ALLIANCES_AI;//2;
-			if(bHosted)
-			{
-				sendOptions(0,0);
-			}
+		case MULTIOP_ALLIANCE_TEAMS:	//locked teams
+			setLockedTeamsMode();
 			break;
 
 		case MULTIOP_POWLEV_LOW:								// set power level to low
@@ -2322,11 +2502,63 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 	}
 
+	//pop-up team chooser
+	if((id >= MULTIOP_TEAMS_START) && (id <= MULTIOP_TEAMS_END))	// clicked on a team chooser
+	{
+		UDWORD clickedMenuID = id-MULTIOP_TEAMS_START,playerNetID;
+		BOOL	bClickedOnMe = (NetPlay.players[clickedMenuID].dpid == player2dpid[selectedPlayer]);
+		
+		//find net player id
+		for(playerNetID=0;(playerNetID <= MAX_PLAYERS) && (player2dpid[selectedPlayer] != NetPlay.players[playerNetID].dpid);playerNetID++);
+
+		ASSERT(playerNetID < MAX_PLAYERS, "processMultiopWidgets: failed to find playerNetID for player %d", selectedPlayer);
+
+		//make sure team chooser is not up before adding new one for another player
+		if(teamChooserUp() < 0 && !bColourChooserUp)
+		{
+			if(bClickedOnMe		//player selecting team for himself	(clicked on his menu)
+				|| (NetPlay.bHost							//local player=host
+				&& !((NetPlay.players[clickedMenuID].dpid > 0) && !bClickedOnMe)	//human and not me
+				))
+				addTeamChooser(clickedMenuID);
+		}
+	}
+
+	//clicked on a team
+	if((id >= MULTIOP_TEAMCHOOSER) && (id <= MULTIOP_TEAMCHOOSER_END))
+	{
+		char msg[255];
+
+		ASSERT(teamChooserUp() >= 0, "processMultiopWidgets: teamChooserUp() < 0");
+		ASSERT((id - MULTIOP_TEAMCHOOSER) >= 0
+			&& (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
+
+		SendTeamRequest(teamChooserUp(),(UBYTE)id-MULTIOP_TEAMCHOOSER);
+
+		//playerTeamGUI[teamChooserUp()] = id - MULTIOP_TEAMCHOOSER;
+
+		debug(LOG_WZ, "Changed team for player %d to %d", teamChooserUp(), playerTeamGUI[teamChooserUp()]);
+
+		closeTeamChooser();
+		addPlayerBox(  !ingame.bHostSetup || bHosted);	//restore initial options screen
+
+		//enable locked teams mode
+		//-----------------------------
+		if(game.alliance != ALLIANCES_TEAMS && bHosted)		//only if host
+		{
+			setLockedTeamsMode();		//update GUI
+
+			sprintf( msg,"'%s' mode enabled", strresGetString(psStringRes, STR_MUL_ALLIANCE_TEAMS) );
+			addConsoleMessage(msg,DEFAULT_JUSTIFY);
+		}
+	}
+
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
 		if(NetPlay.players[id-MULTIOP_PLAYER_START].dpid == player2dpid[selectedPlayer] )
 		{
-			addColourChooser(id-MULTIOP_PLAYER_START);
+			if(teamChooserUp() < 0)		//not choosing team already
+				addColourChooser(id-MULTIOP_PLAYER_START);
 		}
 		else // options for kick out, etc..
 		{
@@ -2342,16 +2574,28 @@ static void processMultiopWidgets(UDWORD id)
 
 	if((id >= MULTIOP_SKSLIDE) && (id <=MULTIOP_SKSLIDE_END)) // choseskirmish difficulty.
 	{
-		game.skDiff[id-MULTIOP_SKSLIDE] = widgGetSliderPos(psWScreen,id);
+		UDWORD newValue, oldValue;
 
 		if(		(id-MULTIOP_SKSLIDE == game.maxPlayers-1)
 			&& 	(game.skDiff[id-MULTIOP_SKSLIDE] == 0)
+			//&& (widgGetSliderPos(psWScreen,id) == 0)
 			)
 		{
 			game.skDiff[id-MULTIOP_SKSLIDE] = 1;
 			widgSetSliderPos(psWScreen,id,1);
 		}
 
+		newValue = widgGetSliderPos(psWScreen,id);
+		oldValue = (UDWORD)game.skDiff[id-MULTIOP_SKSLIDE];
+
+		game.skDiff[id-MULTIOP_SKSLIDE] = (UBYTE)newValue;
+
+		//Show/hide team chooser if player was enabled/disabled
+		if((oldValue == 0 && newValue > 0) || (oldValue > 0 && newValue == 0) )
+		{
+			closeTeamChooser();
+			addPlayerBox(  !ingame.bHostSetup || bHosted);	//restore initial options screen
+		}
 
 		sendOptions(0,0);
 	}
@@ -2427,6 +2671,10 @@ void frontendMultiMessages(void)
 
 		case NET_COLOURREQUEST:
 			recvColourRequest(&msg);
+			break;
+
+		case NET_TEAMREQUEST:
+			recvTeamRequest(&msg);
 			break;
 
 		case NET_PING:						// diagnostic ping msg.
@@ -3602,6 +3850,28 @@ static UDWORD bestPlayer(UDWORD player)
 	return count;
 }
 
+void displayTeamChooser(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+{
+	UDWORD		x = xOffset+psWidget->x;
+	UDWORD		y = yOffset+psWidget->y;
+	BOOL		Hilight = FALSE;
+	UDWORD		i;
+
+	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+	{
+		Hilight = TRUE;
+	}
+	i = (int)psWidget->pUserData;
+
+	ASSERT(playerTeamGUI[i] >= 0 && playerTeamGUI[i] < MAX_PLAYERS,
+		"displayTeamChooser: playerTeamGUI out of bounds" ); 
+
+	//bluboxes.
+	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+
+	iV_DrawTransImage(FrontImages,IMAGE_TEAM0 + playerTeamGUI[i],x+3,y+6);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
@@ -3659,7 +3929,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 		switch(j)
 		{
 		case 0:
-			iV_DrawTransImage(IntImages,IMAGE_GN_0,x+4,y+29);;
+			iV_DrawTransImage(IntImages,IMAGE_GN_0,x+4,y+29);
 			break;
 		case 1:
 			iV_DrawTransImage(IntImages,IMAGE_GN_1,x+5,y+29);
@@ -3828,13 +4098,12 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	{
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
-		drawBlueBox(x,y,31,psWidget->height);										// left.
+		//drawBlueBox(x,y,31,psWidget->height);										// left.
 
-//		if(game.type == SKIRMISH && game.skirmishPlayers[i])
-		if(game.type == SKIRMISH && game.skDiff[i])
-		{
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
-		}
+		//if(game.type == SKIRMISH && game.skDiff[i])
+		//{
+		//	iV_DrawTransImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
+		//}
 	}
 	AddCursorSnap(&InterfaceSnap,
 				(SWORD)(x+(psWidget->width/2)),
@@ -4099,4 +4368,16 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 	return;
+}
+
+void setLockedTeamsMode(void)
+{
+	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
+	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
+	game.alliance = ALLIANCES_TEAMS;		//2
+	if(bHosted)
+	{
+		sendOptions(0,0);
+	}
 }

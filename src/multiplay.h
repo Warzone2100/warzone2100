@@ -67,7 +67,8 @@ typedef enum _msgtype
 	NET_AITEXTMSG,			//chat between AIs
 	NET_TEAMS_ON,
 	NET_BEACONMSG,
-	NET_SET_TEAMS
+	NET_SET_TEAMS,
+	NET_TEAMREQUEST
 
 } MESSAGE_TYPES;
 

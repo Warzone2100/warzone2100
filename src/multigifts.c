@@ -57,7 +57,7 @@ void			requestAlliance					(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
 void			breakAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
 void			formAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification);
 void			sendAlliance					(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
-void			createAI_alliances				(void);
+void			createTeamAlliances				(void);
 BOOL			recvAlliance					(NETMSG *pMsg,BOOL allowAudio);
 void			technologyGiveAway				(STRUCTURE *pS);
 void			addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
@@ -481,7 +481,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 			}
 		}
 	}
-	else if((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_AI)	//not campaign and alliances are transitive
+	else if((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)	//not campaign and alliances are transitive
 	{
 		giftRadar(p1,p2,FALSE);
 		giftRadar(p2,p1,FALSE);
@@ -976,18 +976,19 @@ void processMultiPlayerArtifacts(void)
 }
 
 
-/* Create 'humans vs AIs' allances */
-void createAI_alliances(void)
+/* Ally team members with each other */
+void createTeamAlliances(void)
 {
 	UDWORD i,j;
 
-	debug(LOG_WZ, "creating 'Humans vs AIs' alliances");
+	debug(LOG_WZ, "Creating teams");
 
 	for(i=0; i<MAX_PLAYERS; i++ )
 	{
 		for(j=0; j<MAX_PLAYERS; j++ )
 		{
-			if( i!=j && (isHumanPlayer(i) == isHumanPlayer(j)) && !aiCheckAlliances(i,j) )
+			if( i!=j && (playerTeam[i] == playerTeam[j])			//wto different players belonging to the same team
+				&& !aiCheckAlliances(i,j) && (playerTeam[i] >= 0))	//not allied and not ignoring teams
 				formAlliance(i,j,FALSE,FALSE,FALSE);		//create silently
 		}
 	}

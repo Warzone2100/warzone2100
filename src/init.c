@@ -1907,9 +1907,9 @@ BOOL stageThreeInitialise(void)
 
 	setAllPauseStates(FALSE);
 
-	/* decide if we have to create 'Humans vs AIs' alliances */
-	if(game.alliance == ALLIANCES_AI)
-		createAI_alliances();
+	/* decide if we have to create teams */
+	if(game.alliance == ALLIANCES_TEAMS)
+		createTeamAlliances();
 
 
 	// ffs JS   (and its a global!)

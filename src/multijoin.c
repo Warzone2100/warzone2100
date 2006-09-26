@@ -253,6 +253,8 @@ BOOL MultiPlayerLeave( DPID dp)
 
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
+	debug(LOG_NET, "Player %d is leaving", i);
+
 	if(i != MAX_PLAYERS)									// player not already removed
 	{
 		NETlogEntry("Player Unexpectedly leaving, came from directplay...",0,dp);
@@ -261,7 +263,7 @@ BOOL MultiPlayerLeave( DPID dp)
 
 		turnOffMultiMsg(TRUE);
 		clearPlayer(i,FALSE,FALSE);
-		game.skDiff[i] = 10;
+		game.skDiff[i] = 10;			//FIXME: must use menu id, not player ID as index! -slider ASSERT
 
 		turnOffMultiMsg(FALSE);
 

@@ -1,3 +1,6 @@
+SVN   * New: Added 'Locked Teams' alliance mode: human players and AIs can play in a group against other groups.
+SVN   * Fix: Skirmish difficulty slider now applies settings to the right players.
+
 2006-09-07: Version 2.0.5 RC1
  * General:
    * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, only sent to the players to which you have an opened communication channel. Default key combination: Alt+H

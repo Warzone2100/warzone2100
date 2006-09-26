@@ -52,7 +52,7 @@
 // globals.
 BOOL						bMultiPlayer				= FALSE;	// true when more than 1 player.
 STRING						sForceName[256]				= "Default";
-DWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8playerS)
+DWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8 players)
 //UDWORD						arenaPlayersReceived=0;
 BOOL						openchannels[MAX_PLAYERS]={TRUE};
 UBYTE						bDisplayMultiJoiningStatus;
@@ -850,6 +850,9 @@ BOOL recvMessage(void)
 			break;
 		case NET_COLOURREQUEST:
 			recvColourRequest(&msg);
+			break;
+		case NET_TEAMREQUEST:
+			recvTeamRequest(&msg);
 			break;
 		case NET_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts(&msg);

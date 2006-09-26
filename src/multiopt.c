@@ -33,6 +33,7 @@
 #include "multilimit.h"
 #include "multigifts.h"
 #include "aiexperience.h"	//for beacon messages
+#include "multiint.h"
 // ////////////////////////////////////////////////////////////////////////////
 // GUID for warzone lobby and MPATH stuff.  i hate this stuff.
 #ifdef WIN32		//Not really (going to be) used. -Qamly
@@ -106,6 +107,9 @@ void sendOptions(DPID dest,UDWORD play)
 
 	NetAdd(m,m.size,alliances);
 	m.size += sizeof(alliances);
+
+	NetAdd(m,m.size,playerTeamGUI);
+	m.size += sizeof(playerTeamGUI);
 
 	NetAdd(m,m.size,ingame.numStructureLimits);
 	m.size += sizeof(ingame.numStructureLimits);
@@ -202,6 +206,9 @@ void recvOptions(NETMSG *pMsg)
 	NetGet(pMsg,pos,alliances);
 	pos += sizeof(alliances);
 
+	NetGet(pMsg,pos,playerTeamGUI);
+	pos += sizeof(playerTeamGUI);
+
 	NetGet(pMsg,pos,ingame.numStructureLimits);
 	pos += sizeof(ingame.numStructureLimits);
 	if(ingame.numStructureLimits)
@@ -267,6 +274,8 @@ BOOL hostCampaign(STRING *sGame, STRING *sPlayer)
 {
 	PLAYERSTATS playerStats;
 	UDWORD		pl,numpl,i,j;
+
+	debug(LOG_WZ, "Hosting campaign: %s, player: %s", sGame, sPlayer);
 
 	freeMessages();
 	if(!NetPlay.bLobbyLaunched)
@@ -947,7 +956,8 @@ static BOOL campInit(void)
 {
 	UDWORD			player;
 	UBYTE		newPlayerArray[MAX_PLAYERS];
-	UDWORD		i,j;
+	UDWORD		i,j,lastAI;
+	SDWORD		newPlayerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};
 
 // if this is from a savegame, stop here!
 	if((getSaveGameType() == GTYPE_SAVE_START)
@@ -962,37 +972,39 @@ static BOOL campInit(void)
 		return TRUE;
 	}
 
-
-
-	// for each player, if it's a skirmish then assign a player or clear it off.
+	//Convert skirmish GUI player ids to in-game ids
 	if(game.type == SKIRMISH)
 	{
-		memset(newPlayerArray,1,MAX_PLAYERS);
-		j=0;
+		lastAI = 0;		//last used AI slot
+		memset(newPlayerArray,1,MAX_PLAYERS * sizeof(newPlayerArray[0]));		//'1' for humans
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(game.skDiff[i] == 0)						// no player.
+			if(game.skDiff[i] < UBYTE_MAX )		//slot with enabled or disabled AI 
 			{
-				// find a non human player and strip the lot.
-				for(;isHumanPlayer(j) && j<MAX_PLAYERS;j++);
-				if(j != MAX_PLAYERS)
-				{
-					clearPlayer(j,TRUE,FALSE);
-					newPlayerArray[j] = 0;
-					j++; // dont do this one again.
-				}
+				//find first unused slot
+				for(j=lastAI;j<MAX_PLAYERS && isHumanPlayer(j);j++);	//skip humans
+
+				ASSERT(j<MAX_PLAYERS,"campInit: couldn't find free slot while assigning AI %d", i);
+
+				newPlayerArray[j] = game.skDiff[i];		//copy over
+				newPlayerTeam[j] = playerTeamGUI[i];
+				lastAI = j;
+				lastAI++;
 			}
-			else if(game.skDiff[i] == UBYTE_MAX)		// human player.
+			else if(game.skDiff[i] == UBYTE_MAX)	//human player
 			{
-				// do nothing.
+				//find player net id
+				for(j=0;(j < MAX_PLAYERS) && (player2dpid[j] != NetPlay.players[i].dpid);j++);
+
+				ASSERT(j<MAX_PLAYERS,"campInit: couldn't find player id for GUI id %d", i);
+
+				newPlayerTeam[j] = playerTeamGUI[i];
 			}
-			else
-			{
-				newPlayerArray[j] = game.skDiff[i];		// skirmish player.
-				j++;
-			}
+
 		}
-		memcpy(game.skDiff,newPlayerArray,MAX_PLAYERS);
+
+		memcpy(game.skDiff,newPlayerArray,MAX_PLAYERS  * sizeof(newPlayerArray[0]));
+		memcpy(playerTeam,newPlayerTeam,MAX_PLAYERS * sizeof(newPlayerTeam[0]));
 	}
 
 
