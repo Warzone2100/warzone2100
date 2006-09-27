@@ -1,5 +1,7 @@
-SVN   * New: Added 'Locked Teams' alliance mode: human players and AIs can play in a group against other groups.
-SVN   * Fix: Skirmish difficulty slider now applies settings to the right players.
+0000-00-00: SVN
+ * General:
+   * New: Added 'Locked Teams' alliance mode: human players and AIs can play in a group against other groups.
+   * Fix: Skirmish difficulty slider now applies settings to the right players.
 
 2006-09-07: Version 2.0.5 RC1
  * General:
