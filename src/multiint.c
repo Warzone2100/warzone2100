@@ -1360,8 +1360,10 @@ BOOL chooseColour(UDWORD player)
 	return TRUE;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// colour chooser.
+/*
+ * Checks if a team chooser dialog is up
+ * returns index of the player who was choosing a team or -1 if none open
+ */
 static SDWORD teamChooserUp(void)
 {
 	UDWORD i;
@@ -1551,7 +1553,10 @@ BOOL recvColourRequest(NETMSG *pMsg)
 }
 
 
-// Team chooser.
+/*
+ * Opens a menu for a player to choose a team
+ * 'player' is a player id of the player who will get a new team assigned
+ */
 static void addTeamChooser(UDWORD player)
 {
 	UDWORD i;
@@ -1606,10 +1611,12 @@ static void addTeamChooser(UDWORD player)
 		}
 	}
 
-
 	bTeamChooserUp[player] = TRUE;
 }
 
+/*
+ * Closes Team Chooser dialog box, if there was any open
+ */
 static void closeTeamChooser(void)
 {
 	UDWORD i;
@@ -1753,7 +1760,9 @@ UDWORD addPlayerBox(BOOL players)
 	return i;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+/*
+ * Notify all players of host launching the game
+ */
 static void SendFireUp(void)
 {
 	NETMSG m;
@@ -2015,7 +2024,10 @@ static void chooseSkirmishColours(void)
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
+/*
+ * Process click events on the multiplayer/skirmish options screen
+ * 'id' is id of the button that was pressed
+ */
 static void processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
@@ -4371,6 +4383,10 @@ void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	return;
 }
 
+/*
+ * Set skirmish/multiplayer alliance mode to 'Locked teams',
+ * update GUI accordingly and notify other players
+ */
 void setLockedTeamsMode(void)
 {
 	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
