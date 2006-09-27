@@ -2438,6 +2438,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		disableMultiButs();
 
+		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
 		break;
 
 	case MULTIOP_CHATEDIT:
@@ -2577,8 +2578,8 @@ static void processMultiopWidgets(UDWORD id)
 		UDWORD newValue, oldValue;
 
 		if(		(id-MULTIOP_SKSLIDE == game.maxPlayers-1)
-			&& 	(game.skDiff[id-MULTIOP_SKSLIDE] == 0)
-			//&& (widgGetSliderPos(psWScreen,id) == 0)
+			//&& 	(game.skDiff[id-MULTIOP_SKSLIDE] == 0)
+			&& (widgGetSliderPos(psWScreen,id) == 0)
 			)
 		{
 			game.skDiff[id-MULTIOP_SKSLIDE] = 1;

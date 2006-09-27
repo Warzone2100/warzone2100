@@ -984,10 +984,15 @@ static BOOL campInit(void)
 				//find first unused slot
 				for(j=lastAI;j<MAX_PLAYERS && isHumanPlayer(j);j++);	//skip humans
 
-				ASSERT(j<MAX_PLAYERS,"campInit: couldn't find free slot while assigning AI %d", i);
+				ASSERT(j<MAX_PLAYERS,"campInit: couldn't find free slot while assigning AI %d , lastAI=%d", i, lastAI);
 
 				newPlayerArray[j] = game.skDiff[i];		//copy over
 				newPlayerTeam[j] = playerTeamGUI[i];
+
+				//remove player if it was disabled in menus
+				if(game.skDiff[i] == 0)
+					clearPlayer(j,TRUE,FALSE);
+
 				lastAI = j;
 				lastAI++;
 			}
