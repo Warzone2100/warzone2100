@@ -1576,17 +1576,8 @@ static void addTeamChooser(UDWORD player)
 				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
 
 	// add the teams
-
 	for(i=0;i<MAX_PLAYERS;i++)		//game.maxPlayers;i++)
 	{
-/*
-		addMultiBut(psWScreen,MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER+i,
-			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
-			4,													  //y
-			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
-			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
-			0, IMAGE_PLAYER0+i, IMAGE_PLAYER0+i,FALSE);
-*/
 		W_BUTINIT		sButInit;
 
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
