@@ -1421,7 +1421,6 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-
 	// debug mode only so use normal MALLOC
 	psHeap = memGetBlockHeap();
 	memSetBlockHeap(NULL);
@@ -1824,6 +1823,7 @@ BOOL stageThreeInitialise(void)
 //UDWORD	i,j;
 
 	STRUCTURE *psStr;
+	SDWORD i;
 
 	debug(LOG_MAIN, "stageThreeInitalise");
 	bTrackingTransporter = FALSE;
@@ -1908,9 +1908,23 @@ BOOL stageThreeInitialise(void)
 	setAllPauseStates(FALSE);
 
 	/* decide if we have to create teams */
-	if(game.alliance == ALLIANCES_TEAMS)
+	if(game.alliance == ALLIANCES_TEAMS && (game.type == TEAMPLAY || game.type == SKIRMISH))
+	{
 		createTeamAlliances();
 
+		/* Update ally vision for pre-placed structures */
+		for(i=0;i<MAX_PLAYERS;i++)
+		{
+			if(i != selectedPlayer)
+			{
+				for(psStr=apsStructLists[i]; psStr; psStr=psStr->psNext)
+				{
+					if(aiCheckAlliances(psStr->player,selectedPlayer))
+						visTilesUpdate((BASE_OBJECT *)psStr,FALSE);
+				}
+			}
+		}
+	}
 
 	// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)

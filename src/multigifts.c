@@ -483,7 +483,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 	}
 	else if((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)	//not campaign and alliances are transitive
 	{
-		giftRadar(p1,p2,FALSE);
+		giftRadar(p1,p2,FALSE);		//FIXME: reenable
 		giftRadar(p2,p1,FALSE);
 	}
 
@@ -989,7 +989,10 @@ void createTeamAlliances(void)
 		{
 			if( i!=j && (playerTeam[i] == playerTeam[j])			//wto different players belonging to the same team
 				&& !aiCheckAlliances(i,j) && (playerTeam[i] >= 0))	//not allied and not ignoring teams
-				formAlliance(i,j,FALSE,FALSE,FALSE);		//create silently
+			{
+				if(game.skDiff[i] && game.skDiff[j])		//make sure both players are enabled
+					formAlliance(i,j,FALSE,FALSE,FALSE);		//create silently
+			}
 		}
 	}
 

@@ -205,9 +205,10 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 		// new - ask alex M
 		if( (selectedPlayer!=rayPlayer) AND
-			(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,rayPlayer)) )
+			(bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
+			&& aiCheckAlliances(selectedPlayer,rayPlayer)) )
 		{
-			SET_TILE_VISIBLE(selectedPlayer,psTile);
+			SET_TILE_VISIBLE(selectedPlayer,psTile);		//reveal radar
 		}
 
 		// new - ask Alex M
@@ -217,11 +218,12 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 		{
 			if( ((UDWORD)rayPlayer == selectedPlayer) OR
 				// new - ask AM
-				(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,rayPlayer)) // can see opponent moving
+				(bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
+				&& aiCheckAlliances(selectedPlayer,rayPlayer)) // can see opponent moving
 				// new - ask AM
 				)
 			{
-				avInformOfChange(x>>TILE_SHIFT,y>>TILE_SHIFT);
+				avInformOfChange(x>>TILE_SHIFT,y>>TILE_SHIFT);		//reveal map
 			}
 		}
 
@@ -845,11 +847,10 @@ void processVisibility(BASE_OBJECT *psObj)
 
 
 	// get all the objects from the grid the droid is in
-
 	gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
 
-	// Fix for ally vis
-	if( bMultiPlayer && (game.type == TEAMPLAY) )
+	// Make sure allies can see us
+	if( bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS) )
 	{
 		for(player=0; player<MAX_PLAYERS; player++)
 		{
@@ -858,6 +859,21 @@ void processVisibility(BASE_OBJECT *psObj)
 				if(aiCheckAlliances(player,psObj->player))
 				{
 					currVis[player] = TRUE;
+				}
+			}
+		}
+	}
+
+	//forward out vision to our allies
+	if (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS))
+	{
+		for(player = 0; player < MAX_PLAYERS; player++)
+		{
+			for(ally = 0; ally < MAX_PLAYERS; ally++)
+			{
+				if (currVis[player] && aiCheckAlliances(player, ally))
+				{
+					currVis[ally] = TRUE;
 				}
 			}
 		}
@@ -901,20 +917,7 @@ void processVisibility(BASE_OBJECT *psObj)
 		psViewer = gridIterate();
 	}
 
-	// jiggle the visibility for team play
-	if (bMultiPlayer && (game.type == TEAMPLAY))
-	{
-		for(player = 0; player < MAX_PLAYERS; player++)
-		{
-			for(ally = 0; ally < MAX_PLAYERS; ally ++)
-			{
-				if (currVis[player] && aiCheckAlliances(player, ally))
-				{
-					currVis[ally] = TRUE;
-				}
-			}
-		}
-	}
+
 
 	// update the visibility levels
 	for(i=0; i<MAX_PLAYERS; i++)

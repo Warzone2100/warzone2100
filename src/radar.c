@@ -716,7 +716,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    		{
 			if(psDroid->visible[selectedPlayer]
 				OR godMode
-				OR (bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,psDroid->player))
+				OR (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
+				&& aiCheckAlliances(selectedPlayer,psDroid->player))
 				)
 			{
    				x=(psDroid->x/TILE_UNITS)-RadarScrollX;
@@ -795,7 +796,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    		{
 			if(psStruct->visible[selectedPlayer]
 				OR godMode
-				OR (bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(selectedPlayer,psStruct->player))
+				OR (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
+				&& aiCheckAlliances(selectedPlayer,psStruct->player))
 				)
 			{
    				x=(psStruct->x/TILE_UNITS)-RadarScrollX;
