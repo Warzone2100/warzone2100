@@ -55,7 +55,7 @@ extern char	buildTime[8];
 
 void		sendOptions			(DPID dest,UDWORD player);
 void		recvOptions			(NETMSG *pMsg);
-//static BOOL dMatchInit			(VOID);
+//static BOOL dMatchInit			(void);
 static BOOL campInit			(void);
 BOOL		hostCampaign		(STRING *sGame,		STRING *sPlayer);
 BOOL		joinCampaign		(UDWORD gameNumber, STRING *playername);

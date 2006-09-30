@@ -3492,7 +3492,7 @@ BOOL startForceSelect(void)
 	sFormInit.width			= 100;
 	sFormInit.height		= 100;
 	sFormInit.pDisplay		= displayForceDroid;
-//	sFormInit.pUserData		= (VOID*)Force->pTempl;
+//	sFormInit.pUserData		= (void*)Force->pTempl;
 	widgAddForm(psWScreen, &sFormInit);
 
 // name/techlevel/powerrequired/powerleft

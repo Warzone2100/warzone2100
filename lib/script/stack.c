@@ -230,7 +230,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	va_list		args;
 	SDWORD		i;
 	INTERP_TYPE	type;
-	VOID		*pData;
+	void		*pData;
 	INTERP_VAL	*psVal;
 	UDWORD		index, params;
 	STACK_CHUNK	*psCurr;
@@ -282,7 +282,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	for (i=0; i< numParams; i++)
 	{
 		type = va_arg(args, int);
-		pData = va_arg(args, VOID *);
+		pData = va_arg(args, void *);
 
 		psVal = psCurr->aVals + index;
 
@@ -308,9 +308,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				tempstr = (char*)MALLOC(MAXSTRLEN);
 				sprintf(tempstr, "%d", psVal->v.ival);
 
-				*((STRING**)pData) = tempstr; // FIXME UDWORD = STRING* is not sane! (eps. on 64bit)
-
-				//itoa(psVal->v.ival,tmpstr,10);
+				*((STRING**)pData) = tempstr;
 			}
 		}
 

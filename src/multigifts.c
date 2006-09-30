@@ -1082,7 +1082,7 @@ BOOL foundDMatchDroid(UDWORD player,UDWORD x,UDWORD y)
 /*
 // ///////////////////////////////////////////////////////////////
 // check for respawn or win situations.
-BOOL deathmatchCheck(VOID)
+BOOL deathmatchCheck(void)
 {
 	UDWORD			pl,maxScP;
 	SDWORD			maxSc;

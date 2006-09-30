@@ -182,7 +182,7 @@ BOOL removeFromForce(UDWORD number)
 
 /*
 // find a place for the force
-VOID chooseForceLoc(UDWORD *pX,UDWORD *pY)
+void chooseForceLoc(UDWORD *pX,UDWORD *pY)
 {
 	FEATURE			*pFeat;
 	UDWORD			x,y,chose,tcount=0;

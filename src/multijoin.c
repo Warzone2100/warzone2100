@@ -65,7 +65,7 @@ BOOL MultiPlayerJoin	(DPID dp);								// remote player has just joined.
 void setupNewPlayer		(DPID dpid,UDWORD player);				// stuff to do when player joins.
 //BOOL multiPlayerRequest	(NETMSG *pMsg);							// remote player has requested info
 //BOOL UpdateClient		(DPID dest, UDWORD playerToSend);		// send information to a remote player
-//BOOL ProcessDroidOrders	(VOID);									// ince setup, this player issues each droid order.
+//BOOL ProcessDroidOrders	(void);									// ince setup, this player issues each droid order.
 //BOOL SendFeatures		(FEATURE *pFeature, DPID player);
 //BOOL recvFeatures		(NETMSG *pMsg);
 void resetMultiVisibility(UDWORD player);
@@ -559,7 +559,7 @@ BOOL recvFeatures(NETMSG *pMsg)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Process the droids we previously recevied, issuing the orders..
-BOOL ProcessDroidOrders(VOID)
+BOOL ProcessDroidOrders(void)
 {
 	UDWORD		i;
 	DROID		*pD;

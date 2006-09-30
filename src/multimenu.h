@@ -24,7 +24,7 @@ extern BOOL		intAddMultiMenu			(void);
 extern BOOL		MultiMenuUp;
 extern BOOL		ClosingMultiMenu;
 
-//extern VOID		intDisplayMiniMultiMenu		(VOID);
+//extern void		intDisplayMiniMultiMenu		(void);
 
 #define MULTIMENU			10600
 #define MULTIMENU_FORM		MULTIMENU

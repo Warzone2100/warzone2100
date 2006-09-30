@@ -27,7 +27,7 @@ extern void	giftPower						(UDWORD from,UDWORD to,BOOL send);
 extern void giftRadar							(UDWORD from, UDWORD to,BOOL send);
 //extern BOOL	addDMatchDroid					(UDWORD count);
 //extern BOOL	foundDMatchDroid				(UDWORD player,UDWORD x,UDWORD y);
-//extern BOOL deathmatchCheck					(VOID);
+//extern BOOL deathmatchCheck					(void);
 
 //extern BOOL	dMatchWinner					(UDWORD winplayer,BOOL bcast);
 //extern BOOL	recvdMatchWinner				(NETMSG *pMsg);
