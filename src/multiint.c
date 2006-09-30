@@ -184,7 +184,6 @@ static BOOL		SendColourRequest	(UDWORD player, UBYTE col,UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 BOOL			recvColourRequest	(NETMSG *pMsg);
-BOOL			recvTeamRequest		(NETMSG *pMsg);
 
 // Force selection functions
 static void		AvailableForces		(void);				// draw available templates
@@ -1686,7 +1685,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.pDisplay = displayTeamChooser;//intDisplayButtonHilight;
 				sButInit.pUserData = (void*) i;
 
-				if(bTeamChooserUp[i] && !bColourChooserUp /* && NetPlay.players[i].dpid == player2dpid[selectedPlayer] */ )
+				if(bTeamChooserUp[i] && !bColourChooserUp )
 				{
 					addTeamChooser(i);
 				}

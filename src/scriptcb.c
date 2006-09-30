@@ -21,6 +21,9 @@
 // unit taken over..
 DROID		*psScrCBDroidTaken;
 
+DROID		*psScrCBOrderDroid = NULL;		//Callback droid that have received an order
+SDWORD		psScrCBOrder = DORDER_NONE;			//Order of the droid
+
 // The pointer to the droid that was just built for a CALL_NEWDROID
 DROID		*psScrCBNewDroid;
 STRUCTURE	*psScrCBNewDroidFact;	// id of factory that built it.
@@ -975,3 +978,73 @@ BOOL scrCBStructBuilt(void)
 
 	return TRUE;
 }
+
+/* Droid received stop order */
+BOOL scrCBDorderStop(void)
+{
+	SDWORD		player;
+	DROID		**ppsDroid;
+	BOOL	triggered = FALSE;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid))
+	{
+		debug(LOG_ERROR, "scrCBDorderStop: failed to pop");
+		return FALSE;
+	}
+
+	if (psScrCBOrderDroid == NULL)	//if droid that received stop order was destroyed
+	{
+		ASSERT( FALSE, "scrCBDorderStop: psScrCBOrderDroid is NULL" );
+		triggered = FALSE;
+		*ppsDroid = NULL;
+	}
+	else if (psScrCBOrderDroid->player == (UDWORD)player)
+	{
+		triggered = TRUE;
+		*ppsDroid = psScrCBOrderDroid;
+	}
+
+	if (!stackPushResult(VAL_BOOL, triggered))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Droid reached destination point and stopped on its own */
+BOOL scrCBDorderReachedLocation(void)
+{
+	SDWORD		player;
+	SDWORD		*Order = NULL;
+	DROID		**ppsDroid;
+	BOOL	triggered = FALSE;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid
+		,VAL_REF | VAL_INT, &Order))
+	{
+		debug(LOG_ERROR, "scrCBDorderReachedLocation: failed to pop");
+		return FALSE;
+	}
+
+	if (psScrCBOrderDroid == NULL)	//if droid was destroyed
+	{
+		ASSERT( FALSE, "scrCBDorderReachedLocation: psScrCBOrderDroid is NULL" );
+		triggered = FALSE;
+		*ppsDroid = NULL;
+	}
+	else if (psScrCBOrderDroid->player == (UDWORD)player)
+	{
+		triggered = TRUE;
+		*ppsDroid = psScrCBOrderDroid;
+		*Order = psScrCBOrder;
+	}
+
+	if (!stackPushResult(VAL_BOOL, triggered))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+

@@ -52,5 +52,4 @@ extern BOOL	recvMapFileRequested		(NETMSG *pMsg);
 
 
 extern BOOL recvTextMessageAI		(NETMSG *pMsg);		//AI multiplayer message
-//extern BOOL recvTeamsOn			(NETMSG *pMsg);
-//extern BOOL recvSetTeams			(NETMSG *pMsg);
+extern BOOL	recvTeamRequest			(NETMSG *pMsg);

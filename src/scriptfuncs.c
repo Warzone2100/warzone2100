@@ -10149,7 +10149,34 @@ BOOL scrGetPlayerName(void)
 
 	if (!stackPushResult(VAL_STRING, (SDWORD)getPlayerName((UDWORD)player)))
 	{
-		debug(LOG_ERROR, "scrGetStructureType(): failed to push result");
+		debug(LOG_ERROR, "scrGetPlayerName(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Set player name */
+BOOL scrSetPlayerName(void)
+{
+	SDWORD	player;
+	STRING	*sName = NULL;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_STRING, &sName))
+	{
+		debug(LOG_ERROR, "scrSetPlayerName(): stack failed");
+		return FALSE;
+	}
+
+	if (player < 0 || player >= MAX_PLAYERS)
+	{
+		ASSERT( FALSE, "scrSetPlayerName: invalid player number" );
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_BOOL, (SDWORD)setPlayerName(player,sName)))
+	{
+		debug(LOG_ERROR, "scrSetPlayerName(): failed to push result");
 		return FALSE;
 	}
 

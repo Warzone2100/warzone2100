@@ -293,6 +293,7 @@ BOOL hostCampaign(STRING *sGame, STRING *sPlayer)
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		player2dpid[i] =0;
+		(void)setPlayerName(i, "");			//Clear custom names (use default ones instead)
 	}
 
 
@@ -332,6 +333,8 @@ BOOL hostCampaign(STRING *sGame, STRING *sPlayer)
 			}
 		}
 	}
+	strcpy(playerName[selectedPlayer],sPlayer);
+
 	return TRUE;
 }
 

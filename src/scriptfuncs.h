@@ -584,6 +584,7 @@ extern BOOL scrClosestDamagedGroupDroid(void);
 extern BOOL scrMsgBox(void);
 extern BOOL scrGetStructureType(void);
 extern BOOL scrGetPlayerName(void);
+extern BOOL scrSetPlayerName(void);
 
 extern BOOL scrGetTargetPlayers(void);
 extern BOOL scrMatch(void);

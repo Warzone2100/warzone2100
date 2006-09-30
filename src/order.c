@@ -1491,6 +1491,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY = 0;
 		psDroid->orderX2 = 0;
 		psDroid->orderY2 = 0;
+
+		/* notify scripts that we were _forced_ to stop */
+		psScrCBOrderDroid = psDroid;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
+		psScrCBOrderDroid = NULL;
+
 		break;
 	case DORDER_MOVE:
 	case DORDER_SCOUT:

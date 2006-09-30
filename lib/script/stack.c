@@ -230,7 +230,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	va_list		args;
 	SDWORD		i;
 	INTERP_TYPE	type;
-	UDWORD		*pData;
+	VOID		*pData;
 	INTERP_VAL	*psVal;
 	UDWORD		index, params;
 	STACK_CHUNK	*psCurr;
@@ -282,7 +282,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	for (i=0; i< numParams; i++)
 	{
 		type = va_arg(args, int);
-		pData = va_arg(args, UDWORD *);
+		pData = va_arg(args, VOID *);
 
 		psVal = psCurr->aVals + index;
 
@@ -294,13 +294,13 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				va_end(args);
 				return FALSE;
 			}
-			*pData = (UDWORD)psVal->v.ival;
+			*((UDWORD*)pData) = (UDWORD)psVal->v.ival;
 		}
 		else	//TODO: allow only compatible types
 		{
 			if(psVal->type == VAL_STRING)	//Passing a String
 			{
-				*pData = (UDWORD)psVal->v.ival;
+				*((UDWORD*)pData) = (UDWORD)psVal->v.ival;
 			}
 			else		//Integer
 			{
@@ -308,7 +308,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				tempstr = (char*)MALLOC(MAXSTRLEN);
 				sprintf(tempstr, "%d", psVal->v.ival);
 
-				*pData = tempstr; // FIXME UDWORD = STRING* is not sane! (eps. on 64bit)
+				*((STRING**)pData) = tempstr; // FIXME UDWORD = STRING* is not sane! (eps. on 64bit)
 
 				//itoa(psVal->v.ival,tmpstr,10);
 			}
@@ -675,8 +675,10 @@ void stackShutDown(void)
 		/* Free strings */
 		if(psCurr->aVals->type == VAL_STRING)
 		{
-			ASSERT(psCurr->aVals->v.sval != NULL, "stackShutDown: attempting to free a null pointer");
-			FREE(psCurr->aVals->v.sval);
+			if(psCurr->aVals->v.sval != NULL)					//FIXME: seems to be causing problems sometimes
+				FREE(psCurr->aVals->v.sval);
+			else
+				debug(LOG_SCRIPT, "stackShutDown: VAL_STRING with null pointer");
 		}
 
 		FREE(psCurr->aVals);

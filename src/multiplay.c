@@ -66,7 +66,8 @@ BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
 STRING						tempString[12];
 STRING						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
-BOOL						recvBeacon(NETMSG *pMsg);
+BOOL							recvBeacon(NETMSG *pMsg);
+char								playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player names (humans and AIs)
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -467,7 +468,15 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 STRING *getPlayerName(UDWORD player)
 {
 	UDWORD i;
-//	STRING tempString[2];
+
+	ASSERT((player >= 0) && (player < MAX_PLAYERS), "getPlayerName: wrong player index: %d", player);
+
+	//Try NetPlay.playerName first (since supports AIs)
+	if(game.type != CAMPAIGN)
+		if(strcmp(playerName[player], "") != 0)
+			return (STRING*)&playerName[player];
+
+	//Use the ordinary way if failed
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		if(player2dpid[player] == NetPlay.players[i].dpid)
@@ -511,6 +520,19 @@ STRING *getPlayerName(UDWORD player)
 	}
 
 	return NetPlay.players[0].name;
+}
+
+BOOL setPlayerName(UDWORD player, STRING *sName)
+{
+	if(player < 0 || player > MAX_PLAYERS)
+	{
+		ASSERT(FALSE, "setPlayerName: wrong player index (%d)", player);
+		return FALSE;
+	}
+
+	strcpy(playerName[player],sName);
+
+	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1142,7 +1164,7 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(openchannels[i])
+			if(i != selectedPlayer && openchannels[i])
 			{
 				if(isHumanPlayer(i) )
 				{
@@ -1362,11 +1384,12 @@ BOOL recvTextMessageAI(NETMSG *pMsg)
 
 	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
 
-	NetGet(pMsg,0,sender);
-	NetGet(pMsg,4,receiver);
+	NetGet(pMsg,0,sender);			//in-game player index ('normal' one)
+	NetGet(pMsg,4,receiver);		//in-game player index
 
 	strcpy(msg, &(pMsg->body[8]));
-	strcat(msg,NetPlay.players[sender].name);		// name
+	//strcat(msg,NetPlay.players[sender].name);		// name
+	strcat(msg,getPlayerName(sender));				// name
 
 	//Display the message and make the script callback
 	displayAIMessage(msg, sender, receiver);
@@ -2025,4 +2048,23 @@ STRING *getPlayerColorName(SDWORD player)
 	}
 
 	return tempString;
+}
+
+/*
+ * returns player in-game index from a dpid or -1 if player not found (should not happen!)
+ */
+SDWORD dpidToPlayer(SDWORD dpid)
+{
+	UDWORD i;
+
+	for(i=0;(i<MAX_PLAYERS) && (dpid != player2dpid[i]); i++);
+
+	if(i >= MAX_PLAYERS)
+	{
+		ASSERT(i< MAX_PLAYERS, "dpidToPlayer: failed to find player with dpid %d", dpid);
+		debug(LOG_ERROR, "dpidToPlayer: failed to find player with dpid %d");
+		return -1;
+	}
+
+	return i;
 }

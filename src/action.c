@@ -31,6 +31,7 @@
 #include "fpath.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
+#include "scriptcb.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
@@ -1215,6 +1216,16 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			// Got to destination
 			psDroid->action = DACTION_NONE;
+
+			/* notify scripts we have reached the destination
+			 *  also triggers when patrolling and reached a waypoint
+			 */
+			psScrCBOrder = psDroid->order;
+			psScrCBOrderDroid = psDroid;
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+			psScrCBOrderDroid = NULL;
+			psScrCBOrder = DORDER_NONE;
+
 			//if vtol and offworld and empty - 'magic' it back home!
 /*			alternatively - lets not - John.
 			if (vtolEmpty(psDroid) AND missionIsOffworld())

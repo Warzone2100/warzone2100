@@ -28,6 +28,8 @@ extern DROID		*psScrCBNewStructTruck;	//for scrCBStructBuilt callback
 extern DROID		*psScrCBDroidTaken;
 extern DROID		*psScrCBNewDroid;
 extern STRUCTURE	*psScrCBNewDroidFact;
+extern DROID		*psScrCBOrderDroid;
+extern SDWORD		psScrCBOrder;
 
 // deal with unit takover(2)
 extern BOOL scrCBDroidTaken(void);
@@ -120,6 +122,9 @@ extern BOOL scrCBStructBuilt(void);
 extern BOOL scrCallMultiMsg(void);
 extern BOOL scrCallBeacon(void);
 extern BOOL scrCBTransporterLandedB(void);
+
+extern BOOL scrCBDorderStop(void);
+extern BOOL scrCBDorderReachedLocation(void);
 
 #endif
 

@@ -160,6 +160,8 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 	player2dpid[player] = 0;					// remove player, make computer controlled
 	ingame.JoiningInProgress[player] = FALSE;	// if they never joined, reset the flag
 
+	(void)setPlayerName(player,"");				//clear custom player name (will use default instead)
+
 	for(i = 0;i<MAX_PLAYERS;i++)				// remove alliances
 	{
 		alliances[player][i]	= ALLIANCE_BROKEN;

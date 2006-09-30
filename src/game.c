@@ -520,10 +520,20 @@ typedef struct save_game_v33
 	GAME_SAVE_V33;
 } SAVE_GAME_V33;
 
+#define GAME_SAVE_V34           \
+    GAME_SAVE_V33;				\
+	char		sPlayerName[MAX_PLAYERS][StringSize]
+
+//Now holds AI names for multiplayer
+typedef struct save_game_v34
+{
+	GAME_SAVE_V34;
+} SAVE_GAME_V34;
+
 
 typedef struct save_game
 {
-	GAME_SAVE_V33;
+	GAME_SAVE_V34;
 } SAVE_GAME;
 
 #define TEMP_DROID_MAXPROGS	3
@@ -1722,6 +1732,15 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 
     }
 
+	/* Get human and AI players names */
+	if (saveGameVersion >= VERSION_34)
+	{
+		for(i=0;i<MAX_PLAYERS;i++)
+		{
+			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
+		}
+	}
+
 	//clear the player Power structs
 	if ((gameType != GTYPE_SAVE_START) AND (gameType != GTYPE_SAVE_MIDMISSION) AND
 		(!keepObjects))
@@ -2811,6 +2830,8 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	BLOCK_HEAP		*psHeap;
 	DROID			*psDroid, *psNext;
 
+	debug(LOG_WZ, "saveGame: %s", aFileName);
+
 	strcpy( aFileName, unix_path( aFileName ) );
 
 	psHeap = memGetBlockHeap();
@@ -3179,6 +3200,8 @@ BOOL gameLoad(char *pFileData, UDWORD filesize)
 {
 	GAME_SAVEHEADER			*psHeader;
 
+	debug( LOG_WZ, "gameLoad" );
+
 	/* Check the file type */
 	psHeader = (GAME_SAVEHEADER *)pFileData;
 	if (psHeader->aFileType[0] != 'g' || psHeader->aFileType[1] != 'a' ||
@@ -3245,6 +3268,8 @@ static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
 	UDWORD			campaign;
 	int			i, j;
 
+	debug(LOG_WZ, "getCampaignV: version=%d", version);
+
 	psSaveGame = (SAVE_GAME *) pFileData;
 
 
@@ -3297,6 +3322,10 @@ static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
     {
         sizeOfSaveGame = sizeof(SAVE_GAME_V31);
     }
+	else if (version <= VERSION_33)
+    {
+        sizeOfSaveGame = sizeof(SAVE_GAME_V33);
+    }
 	else if (version <= CURRENT_VERSION_NUM)
 	{
 		sizeOfSaveGame = sizeof(SAVE_GAME);
@@ -3304,7 +3333,8 @@ static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
 
 	if ((sizeOfSaveGame + GAME_HEADER_SIZE) > filesize)
 	{
-		debug( LOG_ERROR, "getCampaign: unexpected end of file" );
+		debug( LOG_ERROR, "getCampaign: unexpected end of file (expected %d, have %d)" , 
+			(sizeOfSaveGame + GAME_HEADER_SIZE) , filesize);
 		abort();
 		return FALSE;
 	}
@@ -3459,6 +3489,8 @@ UDWORD getCampaign(STRING *pGameToLoad, BOOL *bSkipCDCheck)
 	char *pFileData = NULL;
 	UDWORD			fileSize;
 	GAME_SAVEHEADER			*psHeader;
+
+	debug(LOG_WZ, "getCampaign: %s", pGameToLoad);
 
 	/* Load in the chosen file data */
 	pFileData = DisplayBuffer;
@@ -3622,6 +3654,8 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	UDWORD			player;
 	char			date[MAX_STR_LENGTH];
 
+	debug(LOG_WZ, "gameLoadV: version %d", version);
+
 	psSaveGame = &saveGameData;
 
 	memcpy(psSaveGame, pFileData,sizeof(SAVE_GAME));
@@ -3692,6 +3726,10 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	else if (version <= VERSION_32)
     {
         sizeOfSaveGame = sizeof(SAVE_GAME_V31);
+    }
+	else if (version <= VERSION_33)
+    {
+        sizeOfSaveGame = sizeof(SAVE_GAME_V33);
     }
 	else if (version <= CURRENT_VERSION_NUM)
 	{
@@ -4129,6 +4167,13 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 		IsScenario = TRUE;
 	}
 
+	/* Get human and AI players names */
+	if (saveGameVersion >= VERSION_34)
+	{
+		for(i=0;i<MAX_PLAYERS;i++)
+			(void)setPlayerName(i, psSaveGame->sPlayerName[i]);
+	}
+
     //don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
     if (gameType != GTYPE_SCENARIO_START)
     {
@@ -4344,6 +4389,12 @@ BOOL writeGameFile(STRING *pFileName, SDWORD saveType)
 	for(inc=0;inc<MAX_PLAYERS;inc++)
 	{
 		psSaveGame->sPlayer2dpid[inc]= player2dpid[inc];
+	}
+
+	//version 34
+	for(inc=0;inc<MAX_PLAYERS;inc++)
+	{
+		strcpy(psSaveGame->sPlayerName[inc],getPlayerName(inc));
 	}
 
 	/* SAVE_GAME is GAME_SAVE_V33 */

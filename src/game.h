@@ -48,13 +48,14 @@
 #define VERSION_30              30              //script external variables saved
 #define VERSION_31              31              //mission cheat time saved
 #define VERSION_32              32              //factory secondary order saved
-#define VERSION_33              33              //skirmish save 
+#define VERSION_33              33              //skirmish save
+#define VERSION_34              34              //saves AI names for multiplayer (.gam file)
 
 
 #ifdef SAVE_TEST
 #define	CURRENT_VERSION_NUM		VERSION_33
 #else
-#define	CURRENT_VERSION_NUM		VERSION_33
+#define	CURRENT_VERSION_NUM		VERSION_34
 #endif
 
 //used in the loadGame

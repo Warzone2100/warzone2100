@@ -965,6 +965,12 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "playerName",			scrGetPlayerName,		VAL_STRING,
 		1, { VAL_INT} },
 
+	{ "getPlayerName",			scrGetPlayerName,		VAL_STRING,
+		1, { VAL_INT} },
+
+	{ "setPlayerName",			scrSetPlayerName,		VAL_BOOL,
+		2, { VAL_INT, VAL_STRING} },
+
 	/* END new functions */
 
 
@@ -1615,6 +1621,15 @@ CALLBACK_SYMBOL asCallbackTable[] =
 		//new transporter landed callback
 	{ "CALL_TRANSPORTER_LANDED_B",	(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED_B,	scrCBTransporterLandedB,
 		3,	{ (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
+
+		//fired when droid received DORDER_STOP order
+	{ "CALL_DORDER_STOP",	(TRIGGER_TYPE)CALL_DORDER_STOP,	scrCBDorderStop,
+		2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID	   } },
+
+		//fired when droid reached the destination and stopped on its own
+	{ "CALL_DROID_REACH_LOCATION",	(TRIGGER_TYPE)CALL_DROID_REACH_LOCATION,	scrCBDorderReachedLocation,
+		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF | VAL_INT	   } },
+
 
 	/* This entry marks the end of the callback list */
 	{ "CALLBACK LIST END", 0 }

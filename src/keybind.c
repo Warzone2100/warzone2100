@@ -2572,6 +2572,7 @@ void kf_ToggleRadarTerrain(void)
 //Returns TRUE if the engine should dofurther text processing, FALSE if just exit
 BOOL	processConsoleCommands( STRING *pName )
 {
+#ifdef DEBUG
 	BOOL	bFound = FALSE;
 	SDWORD	i;
 
@@ -2639,7 +2640,7 @@ BOOL	processConsoleCommands( STRING *pName )
 			}
 		}
 	}
-
+#endif
 	return bFound;
 }
 

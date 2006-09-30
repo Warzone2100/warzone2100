@@ -80,6 +80,8 @@ typedef enum _scr_callback_types
 	CALL_BEACON,			//beacon help (blip) msg received
 	CALL_STRUCTBUILT,		//gets fired when a structure is built for a certain player, returns structure
 	CALL_TRANSPORTER_LANDED_B,
+	CALL_DORDER_STOP,		//fired when droid is forced to stop via user interface
+	CALL_DROID_REACH_LOCATION,		//fired when droid reached the destination and stopped on its own
 } SCR_CALLBACK_TYPES;
 
 // The table of user types for the compiler

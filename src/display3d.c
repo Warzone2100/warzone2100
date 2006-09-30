@@ -1852,7 +1852,7 @@ void displayProximityMsgs( void )
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL;
 		psProxDisp = psProxDisp->psNext)
 	{
-	  	if(!((VIEW_PROXIMITY*)psProxDisp->psMessage->read))
+	  	if(!(psProxDisp->psMessage->read))
 		{
 			if (psProxDisp->type == POS_PROXDATA)
 			{
