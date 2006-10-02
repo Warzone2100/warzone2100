@@ -561,7 +561,8 @@ BOOL scrOrderDroidObj(void)
 		order != DORDER_REPAIR &&
 		order != DORDER_OBSERVE &&
 		order != DORDER_EMBARK &&
-		order != DORDER_FIRESUPPORT)
+		order != DORDER_FIRESUPPORT &&
+		order != DORDER_DROIDREPAIR)
 	{
 		ASSERT( FALSE,
 			"scrOrderUnitObj: Invalid order" );

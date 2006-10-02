@@ -706,12 +706,12 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 {
 	unsigned int size;
 
-	debug( LOG_NET, "NETbcast\n" );
-
 	if(!NetPlay.bComms)
 	{
 		return TRUE;
 	}
+
+	debug( LOG_NET, "NETbcast\n");
 
 	msg->destination = NET_ALL_PLAYERS;
 

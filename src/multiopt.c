@@ -275,7 +275,7 @@ BOOL hostCampaign(STRING *sGame, STRING *sPlayer)
 	PLAYERSTATS playerStats;
 	UDWORD		pl,numpl,i,j;
 
-	debug(LOG_WZ, "Hosting campaign: %s, player: %s", sGame, sPlayer);
+	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
 	freeMessages();
 	if(!NetPlay.bLobbyLaunched)
@@ -333,7 +333,6 @@ BOOL hostCampaign(STRING *sGame, STRING *sPlayer)
 			}
 		}
 	}
-	strcpy(playerName[selectedPlayer],sPlayer);
 
 	return TRUE;
 }
