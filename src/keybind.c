@@ -2640,8 +2640,10 @@ BOOL	processConsoleCommands( STRING *pName )
 			}
 		}
 	}
-#endif
 	return bFound;
+#else
+	return FALSE;
+#endif
 }
 
 //Add a beacon (blip)
