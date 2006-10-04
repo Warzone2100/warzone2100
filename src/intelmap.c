@@ -1240,7 +1240,7 @@ void intCleanUpIntelMap(void)
 	if (interpProcessorActive())
 	{
 		debug(LOG_SCRIPT, "intCleanUpIntelMap: interpreter running, storing CALL_VIDEO_QUIT");
-		if(!msgStackPush(CALL_VIDEO_QUIT,-1,-1,"/0",-1,-1))
+		if(!msgStackPush(CALL_VIDEO_QUIT,-1,-1,"/0",-1,-1,NULL))
 		{
 			debug(LOG_ERROR, "intCleanUpIntelMap() - msgStackPush - stack failed");
 			return;

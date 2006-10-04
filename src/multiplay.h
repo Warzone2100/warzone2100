@@ -316,7 +316,7 @@ extern void displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to); //make AI p
 
 
 /* for multiplayer message stack */
-extern  UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y);
+extern  UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid);
 extern	BOOL	isMsgStackEmpty(void);
 extern	BOOL	msgStackGetFrom(SDWORD  *psVal);
 extern	BOOL	msgStackGetTo(SDWORD  *psVal);
@@ -324,6 +324,7 @@ extern	BOOL	msgStackGetMsg(STRING  *psVal);
 extern	BOOL	msgStackPop(void);
 extern	SDWORD	msgStackGetCount(void);
 extern	void	msgStackReset(void);
+extern BOOL msgStackGetDroid(DROID **ppsDroid);
 
 extern BOOL	sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr);
 extern BOOL msgStackFireTop(void);

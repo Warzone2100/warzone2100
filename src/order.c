@@ -1494,7 +1494,11 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 		/* notify scripts that we were _forced_ to stop */
 		psScrCBOrderDroid = psDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
+		if(!msgStackPush(CALL_DORDER_STOP,-1,-1,"/0",-1,-1, psDroid))
+		{
+			debug(LOG_ERROR, "msgStackPush: failed to push CALL_DORDER_STOP");
+			return FALSE;
+		}
 		psScrCBOrderDroid = NULL;
 
 		break;

@@ -72,7 +72,7 @@ char								playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
 /////////////////////////////////////
-#define MAX_MSG_STACK	100
+#define MAX_MSG_STACK	50
 #define MAX_STR			255
 
 char msgStr[MAX_MSG_STACK][MAX_STR];
@@ -83,6 +83,8 @@ SDWORD msgPlTo[MAX_MSG_STACK];
 SDWORD callbackType[MAX_MSG_STACK];
 SDWORD locx[MAX_MSG_STACK];
 SDWORD locy[MAX_MSG_STACK];
+
+DROID		*msgDroid[MAX_MSG_STACK];
 
 SDWORD msgStackPos = -1;				//top element pointer
 
@@ -1222,7 +1224,7 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 		//Received a console message from a player callback
 		//store and call later
 		//-------------------------------------------------
-		if(!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1))
+		if(!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1,NULL))
 		{
 			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
 			return FALSE;
@@ -1397,7 +1399,7 @@ BOOL recvTextMessageAI(NETMSG *pMsg)
 	//Received a console message from a player callback
 	//store and call later
 	//-------------------------------------------------
-	if(!msgStackPush(CALL_AI_MSG,sender,receiver,msg,-1,-1))
+	if(!msgStackPush(CALL_AI_MSG,sender,receiver,msg,-1,-1,NULL))
 	{
 		debug(LOG_ERROR, "recvTextMessageAI() - msgStackPush - stack failed");
 		return FALSE;
@@ -1783,7 +1785,7 @@ void msgStackReset(void)
 	msgStackPos = -1;		//Beginning of the stack
 }
 
-UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y)
+UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid)
 {
 	if (msgStackPos >= MAX_MSG_STACK)
 	{
@@ -1803,6 +1805,8 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 	locy[msgStackPos] = y;
 
 	strcpy(msgStr[msgStackPos], tStr);
+
+	msgDroid[msgStackPos] = psDroid;
 
 	return TRUE;
 }
@@ -1924,6 +1928,19 @@ BOOL msgStackPop(void)
 	return msgStackSort();		//move all elements 1 pos lower
 }
 
+BOOL msgStackGetDroid(DROID **ppsDroid)
+{
+	if(msgStackPos < 0)
+	{
+		debug(LOG_ERROR, "msgStackGetDroid: msgStackPos < 0");
+		return FALSE;
+	}
+
+	*ppsDroid = msgDroid[0];
+
+	return TRUE;
+}
+
 SDWORD msgStackGetCount(void)
 {
 	return msgStackPos + 1;
@@ -1948,6 +1965,15 @@ BOOL msgStackFireTop(void)
 		case CALL_VIDEO_QUIT:
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+			break;
+
+		case CALL_DORDER_STOP:
+			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_DORDER_STOP");
+
+			if(!msgStackGetDroid(&psScrCBOrderDroid))
+				return FALSE;
+
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
 			break;
 
 		case CALL_BEACON:

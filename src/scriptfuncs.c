@@ -9556,7 +9556,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRI
 	//call beacon callback only if not adding for ourselves
 	if(forPlayer != sender)
 	{
-		if(!msgStackPush(CALL_BEACON,sender,forPlayer,textMsg,locX,locY))
+		if(!msgStackPush(CALL_BEACON,sender,forPlayer,textMsg,locX,locY,NULL))
 		{
 			debug(LOG_ERROR, "addHelpBlip() - msgStackPush - stack failed");
 			return FALSE;

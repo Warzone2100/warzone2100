@@ -1424,28 +1424,50 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 	for(i=0; i < psCode->numLocalVars[EventIndex]; i++)
 	{
 		//Initialize main value
-		if(psCode->ppsLocalVarVal[EventIndex][i].type == VAL_STRING)
+		switch (psCode->ppsLocalVarVal[EventIndex][i].type)
 		{
-			//debug(LOG_ERROR , "resetLocalVars: String type is not implemented");
-			psCode->ppsLocalVarVal[EventIndex][i].v.sval = (char*)MALLOC(MAXSTRLEN);
-
-			strcpy(psCode->ppsLocalVarVal[EventIndex][i].v.sval,"\0");
-		}
-		else
-		{
-			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
-		}
-
-		/* only group (!) must be re-created each time */
-		if (psCode->ppsLocalVarVal[EventIndex][i].type == ST_GROUP)
-		{
-			debug(LOG_SCRIPT, "resetLocalVars -  created");
-
-			if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
+		case VAL_STRING:
+			
+			if(psCode->ppsLocalVarVal[EventIndex][i].v.sval == NULL)
 			{
-				debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");
-				return FALSE;
+				if(psCode->psDebug != NULL)
+					debug(LOG_SCRIPT, "resetLocalVars: uninitialized string:  event index: %d, string index: %d (Event name: %s, total events count = %d, stack depth = %d)", EventIndex, i,eventGetEventID(psCode, EventIndex), psCode->numEvents, retStackCallDepth());
+				else
+					debug(LOG_SCRIPT, "resetLocalVars: uninitialized string:  event index: %d, string index: %d (total events count = %d, stack depth = %d)", EventIndex, i, psCode->numEvents, retStackCallDepth());
+
+				psCode->ppsLocalVarVal[EventIndex][i].v.sval = (char*)MALLOC(MAXSTRLEN);
 			}
+
+			//clear string
+			if(psCode->ppsLocalVarVal[EventIndex][i].v.sval != NULL)
+				strcpy(psCode->ppsLocalVarVal[EventIndex][i].v.sval,"");
+
+			break;
+		case ST_GROUP:	/* only groups (!) must be re-created each time */
+		
+			/* Only destroy group if it isn't a passed variable, otherwise will destroy the passed group */
+			if(i >=  psCode->numParams[EventIndex])		//only release if group was declared inside of function
+			{
+				debug(LOG_SCRIPT, "resetLocalVars -  group created");
+
+				//release
+				asReleaseFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]));
+
+				//recreate, done in scrvNewGroup()
+				if (!asCreateFuncs[psCode->ppsLocalVarVal[EventIndex][i].type](&(psCode->ppsLocalVarVal[EventIndex][i]) ))
+				{
+					debug(LOG_ERROR, "asCreateFuncs failed for local var (re-init)");
+					return FALSE;
+				}
+			}
+			break;
+		case VAL_INT:	/* Integers and other vars */
+		case VAL_BOOL:
+			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
+			break;
+		default:			/* reset object pointer */
+			psCode->ppsLocalVarVal[EventIndex][i].v.oval = NULL;
+			break;
 		}
 	}
 
