@@ -570,8 +570,7 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-
-#if defined(DEBUG) && !defined(PSX)
+#if defined(DEBUG)
 	gwCheckZoneSizes();
 #endif
 

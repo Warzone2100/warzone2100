@@ -2585,10 +2585,6 @@ statsGetAudioIDFromString( STRING *szStatName, STRING *szWavName, SDWORD *piWavI
 /*Load the weapon sounds from the file exported from Access*/
 BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize)
 {
-//#ifdef PSX
-//#warning "loadWeaponSounds : NOT IMPLEMENTED ON PSX"
-//	return TRUE;
-//#else
 	//SBYTE			*pData;
 	SDWORD			NumRecords = 0, i, weaponSoundID, explosionSoundID, inc, iDum;
 	STRING			WeaponName[MAX_NAME_SIZE];
@@ -2662,7 +2658,6 @@ BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize)
 
 //	return Ok;
 	return TRUE;
-//#endif
 }
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/

@@ -162,7 +162,6 @@ BOOL	initMiscImds( void )
 			abort();
 			return(FALSE);
 		}
-//#ifndef PSX
 		cybName[6] = *pieNum;
 		pAssemblyPointIMDs[CYBORG_FLAG][i] = resGetData("IMD", cybName);
 		if (!pAssemblyPointIMDs[CYBORG_FLAG][i])
@@ -186,11 +185,6 @@ BOOL	initMiscImds( void )
 			abort();
 			return(FALSE);
 		}
-//#else
-//		pAssemblyPointIMDs[CYBORG_FLAG][i] = pAssemblyPointIMDs[FACTORY_FLAG][i];
-//		pAssemblyPointIMDs[VTOL_FLAG][i] = pAssemblyPointIMDs[FACTORY_FLAG][i];
-//#endif
 	}
-
 	return(TRUE);
 }

@@ -25,12 +25,6 @@
  */
 /***************************************************************************/
 
-/*
-
-	Playstation and PC stuff   ... just the matrix stack & surface normal code is all thats needed on the PSX
-
-*/
-
 #define MATRIX_MAX	8
 #define	ONE_PERCENT	41	// 4096/100
 
@@ -432,7 +426,6 @@ void pie_SetGeometricOffset(int x, int y)
 	psRendSurface->ycentre = y;
 }
 
-// all these routines use the PC format of iVertex ... and are not used on the PSX
 //*************************************************************************
 
 BOOL pie_Clockwise(iVertex *s)

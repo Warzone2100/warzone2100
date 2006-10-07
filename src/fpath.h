@@ -64,19 +64,7 @@ extern void fpathSetDirectRoute( BASE_OBJECT *psObj,
 							SDWORD targetX, SDWORD targetY );
 
 /*
-#ifndef PSX
 #define FPATH_INLINE _inline
-#else
-
-#undef FPATH_INLINE
-#ifdef DEFINE_MAPINLINE
-#define FPATH_INLINE 
-#else
-#define FPATH_INLINE __inline extern
-#endif
-
-#endif
-
 
 
 // Check if the map tile at a location blocks a droid

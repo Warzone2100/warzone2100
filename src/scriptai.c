@@ -624,11 +624,6 @@ BOOL scrOrderDroidStatsLoc(void)
 	if(IsPlayerStructureLimitReached(psDroid->player) == FALSE) {
 		orderDroidStatsLoc(psDroid, order, psStats, (UDWORD)x,(UDWORD)y);
 	}
-//#ifdef PSX
-//	else {
-//		BeepMessage(STR_GAM_MAXSTRUCTSREACHED);
-//#endif
-//	}
 
 	return TRUE;
 }

@@ -28,8 +28,6 @@
 
 //#define CHECKBUFFER		// Do assertions for buffer overun\underun
 
-#define ALPHABLEND_RADAR	// Define this to do semi transparency on PSX radar.
-#define BLEND_RATE	0		// Semi-transparency rate for PSX radar.
 #define RADAR_3DFX_TPAGEID	31
 #define RADAR_3DFX_TU	0
 #define RADAR_3DFX_TV	0
@@ -68,10 +66,6 @@ static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 {165,165,165,165,255,165,165,165},
 {165,165,165,165,255,165,165,165},
 };
-
-
-
-
 
 
 static UBYTE		tileColours[NUM_TILES];
@@ -278,13 +272,8 @@ static void CalcRadarPixelSize(UWORD *SizeH,UWORD *SizeV)
 	*SizeV = Size;
 
 //#ifdef FORCEPIXELSIZE
-//#ifndef PSX
 //	*SizeH = 2;
 //	*SizeV = 2;
-//#else
-//	*SizeH = 2;
-//	*SizeV = 2;
-//#endif
 //#else
 //	UWORD boxSizeH,boxSizeV;
 //

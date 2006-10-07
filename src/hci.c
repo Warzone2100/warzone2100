@@ -227,7 +227,6 @@ static void orderDroids(void);
 
 //Design Screen uses		5000
 //Intelligence Map uses		6000
-//String entry uses			7000 (PSX only).
 //Droid order screen uses	8000
 //Transporter screen uses	9000
 //CD span screen uses		9800
@@ -240,8 +239,6 @@ static void orderDroids(void);
 //Frontend uses				20000
 //LOADSAVE uses				21000
 //MULTILIMITS uses			22000
-//Mouse Interface			23000 (PSX only).
-//Memory Card Interface		24000 (PSX only).
 
 #define	IDPROX_START		12000		//The first proximity button
 #define	IDPROX_END			12019		//The last proximity button - max of 20
@@ -1154,12 +1151,6 @@ void intResetScreen(BOOL NoAnim)
 
 	}
 
-//19 #ifdef PSX
-//19 	if(KeyboardIsActive()) {
-//19 		intRemoveStringEntry();
-//19 	}
-//19 #endif
-
 	/* Remove whatever extra screen was displayed */
 	switch (intMode)
 	{
@@ -1291,14 +1282,10 @@ void intResetScreen(BOOL NoAnim)
 		//remove 3dView
 		intRemoveMessageView();
 
-#ifndef PSX
 		if(!bMultiPlayer)
 		{
-#endif
 			gameTimeStart();
-#ifndef PSX
 		}
-#endif
 		break;*/
 
 	case INT_TRANSPORTER:
@@ -1835,7 +1822,6 @@ INT_RETVAL intRunWidgets(void)
 						}
 					}
 				}
-// CHECK THIS ON PSX (PD070199)
 //				if(!driveModeActive()) {
 //					((DROID *)psObjSelected)->selected = FALSE;//deselect the droid if build command successful
 //					DeSelectDroid((DROID*)psObjSelected);
@@ -1950,17 +1936,10 @@ INT_RETVAL intRunWidgets(void)
 		retCode = INT_INTERCEPT;
 	}
 
-//#ifndef PSX
 //	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgGetMouseOver(psWScreen) != 0)
 //	{
 //		retCode = INT_INTERCEPT;
 //	}
-//#else
-//	else if (retID || intMode == INT_MISSIONRES || widgGetMouseOver(psWScreen) != 0)
-//	{
-//		retCode = INT_INTERCEPT;
-//	}
-//#endif
 
 	if(	(testPlayerHasLost() OR (testPlayerHasWon() AND !bMultiPlayer)) AND // yeah yeah yeah - I know....
         (intMode != INT_MISSIONRES) AND !getDebugMappingStatus())
@@ -2482,7 +2461,6 @@ static void intRunStats(void)
 	STRUCTURE			*psStruct;
 	FACTORY				*psFactory;
 
-// No looped production on PSX.
 	if(intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE)
 	{
 		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_LOOP_LABEL);
@@ -3089,9 +3067,6 @@ static void intProcessStats(UDWORD id)
 						//if(driveGetDriven()->droidType != DROID_CONSTRUCT) {
                         if(driveGetDriven()->droidType != DROID_CONSTRUCT AND
                             driveGetDriven()->droidType != DROID_CYBORG_CONSTRUCT) {
-//PD30 #ifdef PSX
-//PD30 							intGotoNextDroidType(DROID_CONSTRUCT);
-//PD30 #endif
 //PD30 							driveSelectionChanged();
 							driveDisableControl();
 						}
@@ -3154,7 +3129,6 @@ static void intProcessStats(UDWORD id)
 		}
 	}
 #endif
-// No looped production on PSX.
 	else if(id == IDSTAT_LOOP_BUTTON)
 	{
 		// Process the loop button.
@@ -3494,11 +3468,8 @@ void intDisplayWidgets(void)
 			bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
 
 
-//#ifndef PSX
 //			if(bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) )
-//#else
 			if(bPlayerHasHQ)
-//#endif
 			{
 				drawRadar();
 			}
@@ -3518,13 +3489,7 @@ void intDisplayWidgets(void)
 
 	StartCursorSnap(&InterfaceSnap);
 
-//19 #ifdef PSX
-//19 	if(KeyboardIsActive()) {
-//19 		widgDisplayScreen(psKeyScreen);
-//19 	}
-//19 #endif
 	widgDisplayScreen(psWScreen);
-
 
 	if(bLoadSaveUp)
 	{
@@ -3739,7 +3704,6 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 			if ((STRUCTURE *)psObj == psBuilding)
 			{
 				intSetStats(structureID + IDOBJ_STATSTART, NULL);
- // No looped production on PSX.
         		//clear the loop button if interface is up
 				if (widgGetFromID(psWScreen,IDSTAT_LOOP_BUTTON))
 				{
@@ -3981,9 +3945,6 @@ BOOL _intAddReticule(void)
 		sButInit.pTip = strresGetString(psStringRes, STR_RET_CLOSE);
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_CANCEL_UP;
-	//#ifdef PSX
-	//	sButInit.pCallback = intUpdateReticuleButton;
-	//#endif
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -4486,14 +4447,6 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 	ASSERT( psSelected == NULL || PTRVALID(psSelected, sizeof(BASE_OBJECT)),
 		"intAddObject: Invalid object pointer" );
 
-//#ifdef PSX
-//// Is the stats form up?
-//	if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
-//		intRemoveStatsNoAnim();
-//		DBPRINTF(("Removing stats form\n");
-//	}
-//#endif
-
 // Is the form already up?
 	if(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) {
 		intRemoveObjectNoAnim();
@@ -4634,11 +4587,9 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 				psSelected = psFirst;
 			}
 		}
-//#ifndef PSX
 		//make sure this matches in game once decided - DON'T!
 		//clearSelection();
 		//psSelected->selected = TRUE;
-//#endif
 	}
 
 	/* Reset the current object and store the current list */
@@ -4668,14 +4619,6 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 	{
 		return FALSE;
 	}
-
-//#if defined(PSX) && defined(MOVETOFORM)
-//// Position the mouse in the center of this form.
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-//#endif
-
-
-
 
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -5193,7 +5136,6 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 		objStatID = statID;
 // We don't want to be locking the button for command droids.
 //		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
-// Don't want it to automaticly open order screen on PSX.
 
         //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
 		//intAddOrder((DROID *)psSelected);
@@ -5509,12 +5451,6 @@ void HandleClosingWindows(void)
 			ClosingMultiMenu = FALSE;
 		}
 	}
-
-
-
-//19 #ifdef PSX
-//19 	HandleKeyboardClose();
-//19 #endif
 }
 
 
@@ -5800,12 +5736,6 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 //DBPRINTF(("widgAdd failed : %d\n",__LINE__);
 		return FALSE;
 	}
-//#if defined(PSX) && defined(MOVETOFORM)
-//// Position the mouse in the center of this form.
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-//#endif
-
-
 
 #ifdef INCLUDE_PRODSLIDER
 	// Add the quantity slider ( if it's a factory ).
@@ -5891,7 +5821,6 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE)
 	{
-	// No delivery point button on PSX.
 		//add the Factory DP button
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
@@ -5910,12 +5839,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		{
 			return FALSE;
 		}
-	//#ifdef PSX
-	//	WidgSetOTIndex(OT2D_FARFARFORE);
-	//#endif
 
-
-	// No looped production on PSX thank you.
 		//add the Factory Loop button!
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
@@ -5950,13 +5874,8 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.formID = IDSTAT_FORM;
 		sLabInit.id = IDSTAT_LOOP_LABEL;
 		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
-//#ifndef PSX
 		sLabInit.x = (UWORD)(sButInit.x - 15);
 		sLabInit.y = sButInit.y;
-//#else
-//		sLabInit.x = sButInit.x - 15;
-//		sLabInit.y = sButInit.y;
-//#endif
 		sLabInit.width = 12;
 		sLabInit.height = 15;
 		sLabInit.FontID = WFont;
@@ -6945,14 +6864,12 @@ static void intStatsRMBPressed(UDWORD id)
 		// open up the design screen
 		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 
-/*#ifndef PSX
+/*
 		if( !bMultiPlayer)
 		{
-#endif
 		gameTimeStop();
-#ifndef PSX
 		}
-#endif*/
+*/
 
 		/*add the power bar - for looks! */
 		intShowPowerBar();
@@ -7006,11 +6923,7 @@ static void intObjStatRMBPressed(UDWORD id)
 	psObj = intGetObject(id);
 	if (psObj)
 	{
-//#ifndef PSX
 		intResetWindows(psObj);
-//#else
-//		intAddObjectStats(psObj, id);
-//#endif
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			psStructure = (STRUCTURE *)psObj;
@@ -7061,9 +6974,7 @@ static void intObjStatRMBPressed(UDWORD id)
 //void addIntelScreen(BOOL playImmediate)
 void addIntelScreen(void)
 {
-
 	BOOL	radOnScreen;
-
 
 	if(driveModeActive() && !driveInterfaceEnabled()) {
 		driveDisableControl();
@@ -7072,15 +6983,12 @@ void addIntelScreen(void)
 
 	intResetScreen(FALSE);
 
-/*#ifndef PSX
+/*
 	if(!bMultiPlayer)
 	{
-#endif
 		gameTimeStop();
-
-#ifndef PSX
 	}
-#endif*/
+*/
 
 	//done in intAddIntelMap()
 	//setIntelligencePauseState();
@@ -7108,7 +7016,6 @@ void addIntelScreen(void)
 		radarOnScreen = radOnScreen;
 		bRender3DOnly = FALSE;
 	}
-
 
 	//add all the intelligence screen interface
 	//(void)intAddIntelMap(playImmediate);
@@ -7250,10 +7157,6 @@ static BOOL _intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	W_FORMINIT			sBFormInit;
 	PROXIMITY_DISPLAY	*psProxDisp2;
 	UDWORD				cnt;
-
-//#ifdef PSX
-//	WidgSetOTIndex(OT2D_FARFORE);
-//#endif
 
 	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
 	sBFormInit.formID = 0;
@@ -7471,9 +7374,7 @@ void intCheckReticuleButtons(void)
 	DROID	*psDroid;
 	int i;
 
-//#ifndef PSX
 	ReticuleEnabled[RETBUT_CANCEL].Enabled = TRUE;
-//#endif
 	ReticuleEnabled[RETBUT_FACTORY].Enabled = FALSE;
 	ReticuleEnabled[RETBUT_RESEARCH].Enabled = FALSE;
 	ReticuleEnabled[RETBUT_BUILD].Enabled = FALSE;
@@ -7599,8 +7500,6 @@ BOOL intCheckReticuleButEnabled(UDWORD id)
 	return FALSE;
 }
 
-
-//#ifdef PSX
 
 BOOL InterfaceIsUp(UWORD Type) {
 	return ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == Type);
@@ -8331,20 +8230,8 @@ BASE_OBJECT * getCurrentSelected(void)
 
 BOOL intAddOptions(void)
 {
-//#ifdef PSX
-// If the stacks in the dcache then..
-//	if(SpInDCache()) {
-//		static BOOL ret;
-//		// Set the stack pointer to point to the alternative stack which is'nt limited to 1k.
-//		SetSpAlt();
-//		ret = _intAddOptions();
-//		SetSpAltNormal();
-//		return ret;
-//	}
-//#endif
 	return _intAddOptions();
 }
-
 
 
 BOOL intAddReticule(void)

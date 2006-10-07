@@ -1868,11 +1868,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			}
 		}
 		// no HQ go to the landing zone
-/*#ifndef PSX
-		if (!bMultiPlayer && selectedPlayer == 0)
-#else
-		if (selectedPlayer == 0)
-#endif*/
+//		if (!bMultiPlayer && selectedPlayer == 0)
         if (psDroid->order != DORDER_RTB)
         {
             //see if the LZ has been set up
@@ -2173,9 +2169,6 @@ BOOL orderState(DROID *psDroid, DROID_ORDER order)
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
-//#ifndef PSX
-//	BOOL bTemp = FALSE;
-//#endif
 //#warning memory report here !!!!!
 //	DBPRINTF(("test printf\n"));
 //	DBPRINTF(("droid=%p\n",psDroid);
@@ -4060,8 +4053,6 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 //  position. the route is therefore appended to the droid's movelist.
 
 /*
-// ajl 18thsep98, pulled from psx version. (no interface and not big enough move list.
-#ifndef PSX
 // append a new point to a droid's list.
 BOOL orderAddWayPoint(DROID *psDroid ,UDWORD dX,UDWORD dY)
 {
@@ -4162,13 +4153,11 @@ void orderSelectedWaypoint(UDWORD player, UDWORD x, UDWORD y)
 	iVector		position;
 	FORMATION	*psFormation = NULL;
 
-#ifndef PSX
 	if(bMultiPlayer)
 	{
 		SendDroidWaypoint((UBYTE)player,x,y);
 		turnOffMultiMsg(TRUE);
 	}
-#endif
 
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
@@ -4209,7 +4198,6 @@ void orderSelectedWaypoint(UDWORD player, UDWORD x, UDWORD y)
 
 	turnOffMultiMsg(FALSE);	//propagate consequences back on
 }
-#endif
 */
 
 // do a moral check for a player

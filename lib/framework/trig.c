@@ -36,7 +36,6 @@
 static FRACT	*aSin;
 static FRACT	*aCos;
 static FRACT	*aInvCos;
-/* Square root table - not needed on PSX cos there is a fast hardware sqrt */
 static FRACT	*aSqrt;
 static FRACT	*aInvSin;
 
@@ -72,14 +71,11 @@ BOOL trigInitialise(void)
 		return FALSE;
 	}
 
-
-//#ifndef PSX
 	aSqrt=(FRACT*)MALLOC(sizeof(FRACT) * SQRT_ACCURACY);
 	if (!aSqrt)
 	{
 		return FALSE;
 	}
-//#endif
 
 	// Initialise the tables
 	// inc = 2*PI/TRIG_DEGREES
@@ -100,16 +96,11 @@ BOOL trigInitialise(void)
 		val += inc;
 	}
 
-//#ifndef PSX
-	// Build the sqrt table
 	for(count=0; count < SQRT_ACCURACY; count++)
 	{
 		val = (FRACT)count / (FRACT)(SQRT_ACCURACY / 2);
 		aSqrt[count]= (FRACT)sqrt(val);
-  	}
-//#endif
-
-
+	}
 
 	return TRUE;
 }

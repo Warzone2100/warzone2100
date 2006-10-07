@@ -255,13 +255,9 @@ typedef enum {
 } INTMODE;
 
 //NOT ANYMORE! 10/08/98 AB
-//#ifndef PSX
 //#define INCLUDE_PRODSLIDER	// Include quantity slider in manufacture window.
-//#endif
 
-//#ifndef PSX
 #define INCLUDE_FACTORYLISTS
-//#endif
 
 extern INTMODE intMode;
 

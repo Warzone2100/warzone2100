@@ -57,9 +57,6 @@ static iVector *CurrentVertexList=NULL;
 
 extern BOOL NoCullBSP;	// Oh yes... a global externaly referenced variable....
 
-// General routines that work on both PC & PSX
-
-
 /***************************************************************************/
 /*
  * Calculates whether point is on same side, opposite side or in plane;

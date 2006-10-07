@@ -247,9 +247,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 			"rayLOSCallback: coords off map" );
 
 /*	if(dist == 0) {	//Complete hack PD.. John what should happen if dist is 0 ???
-#ifndef PSX
 		DBPRINTF(("rayTerrainCallback: dist == 0, will divide by zero\n"));
-#endif
 		dist = 1;
 	}*/
 
@@ -743,31 +741,6 @@ found:
 		return(FALSE);
 }*/
 
-
-//#ifndef PSX
-//
-//void processVisibility(BASE_OBJECT *psObj)
-//{
-//	processVis(psObj);
-//}
-//
-//#else
-//
-//
-//void processVisibility(BASE_OBJECT *psObj)
-//{
-//	static BASE_OBJECT *psTmpObj;
-//
-//	// Stack in the DCache.
-//	psTmpObj = psObj;
-//	SetSpDCache();
-//	processVis(psTmpObj);
-//	SetSpNormal();
-//}
-//
-//#endif
-//
-//
 /* Find out what can see this object */
 void processVisibility(BASE_OBJECT *psObj)
 {

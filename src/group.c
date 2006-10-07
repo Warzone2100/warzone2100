@@ -275,25 +275,21 @@ void grpReset(DROID_GROUP *psGroup)
 //	ASSERT( PTRVALID(psGroup, sizeof(DROID_GROUP)),
 //		"orderGroupBase: invalid droid group" );
 //
-//#ifndef PSX
 //	if (bMultiPlayer && SendGroupOrder(	psGroup, psData->x,	psData->y,	psData->psObj) )
 //	{	// turn off multiplay messages,since we've send a group one instead.
 //		bMultiPlayer =FALSE;
 //		usedgrouporder = TRUE;
 //	}
-//#endif
 //
 //	for (psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
 //	{
 //		orderDroidBase(psCurr, psData);
 //	}
 
-//#ifndef PSX
 //	if( usedgrouporder)
 //	{
 //		bMultiPlayer = TRUE;
 //	}
-//#endif
 //}
 
 /* Give a group an order */

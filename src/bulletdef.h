@@ -55,7 +55,7 @@ typedef struct PROJ_OBJECT
 	UDWORD			srcHeight;		/* Height of origin */
 	SDWORD			altChange;		/* Change in altitude */
 	UDWORD			born;
-	UDWORD			targetRadius;	// needed to backtrack the projectiles.. Apologies to psx..:-(
+	UDWORD			targetRadius;	// needed to backtrack the projectiles.
 	
 	PROJECTILE_FUNC	pInFlightFunc;
 }

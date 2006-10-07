@@ -235,7 +235,6 @@ void playerNewDroid(DROID *psDroid)
 	// Check it isn't the human player
 	player = psDroid->player;
 
-#ifndef PSX
 	if( (!bMultiPlayer) && (player == 0))
 	{
 		return;
@@ -244,12 +243,6 @@ void playerNewDroid(DROID *psDroid)
 	{
 		return;
 	}
-#else
-	if (player == 0)
-	{
-		return;
-	}
-#endif
 
 	// Add it to the attack group
 	psDroid->sAI.psGroup = asPlayerAI[player].psAttackGrp;
@@ -403,7 +396,6 @@ void attackLocation(UDWORD x, UDWORD y, UDWORD player)
 	DROID	*psDroid, *psCurr;
 	SDWORD	xdiff, ydiff, radSquared;
 
-#ifndef PSX
 	if( (!bMultiPlayer) && (player == 0))
 	{
 		return;
@@ -412,12 +404,6 @@ void attackLocation(UDWORD x, UDWORD y, UDWORD player)
 	{
 		return;
 	}
-#else
-	if (player == 0)
-	{
-		return;
-	}
-#endif
 
 	// send the droids to attack
 	psDroid = asPlayerAI[player].psAttackGrp;

@@ -865,9 +865,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				SET_TILE_FEATURE(psTile);
 				// if it's a tall feature then flag it in the map.
 				if(psFeature->sDisplay.imd->ymax > TALLOBJECT_YMAX) {
-//#ifdef PSX
-//DBPRINTF(("Tall feature %d, (%d x %d)\n",psFeature->sDisplay.imd->ymax,psStats->baseWidth,psStats->baseBreadth));
-//#endif
 					SET_TILE_TALLSTRUCTURE(psTile);
 				}
 
@@ -882,7 +879,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
 				// This sets the gourad shading to give 'as the artist drew it' levels
 
-//				psTile->illumination = ILLUMINATION_NONE;		// set the tile so that there is no illumination connecting to feature ... this value works on both psx & pc
+//				psTile->illumination = ILLUMINATION_NONE;		// set the tile so that there is no illumination connecting to feature ...
 			}
 
 		}
@@ -1137,8 +1134,6 @@ void destroyFeature(FEATURE *psDel)
 			}
 		}
 
-
-
 		/* Then a sequence of effects */
 		pos.x = psDel->x;
 		pos.z = psDel->y;
@@ -1156,11 +1151,6 @@ void destroyFeature(FEATURE *psDel)
 		{
 			audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_EXPLOSION );
 		}
-#if defined(PSX) && defined(LIBPAD)
-		if(EnableVibration) {
-			SetVibro1(0,120,512);
-		}
-#endif
 	}
 //---------------------------------------------------------------------------------------
 

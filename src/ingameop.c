@@ -117,7 +117,6 @@ static BOOL _addSlideOptions(void)
 
 	memset(&sFormInit,0, sizeof(W_FORMINIT));
 
-
 	// add form
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
@@ -131,9 +130,6 @@ static BOOL _addSlideOptions(void)
 	sFormInit.disableChildren= TRUE;
 
 	widgAddForm(psWScreen, &sFormInit);
-
-
-
 
 	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_4_Y,STR_GAME_RESUME,WBUT_PLAIN);
 
@@ -152,13 +148,9 @@ static BOOL _addSlideOptions(void)
 	addFESlider(INTINGAMEOP_CDVOL_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX,mixer_GetCDVolume(),INTINGAMEOP_CDVOL);
 
-
 	SetCurrentSnapID(&InterfaceSnap,INTINGAMEOP_RESUME);
 
-
-
 	/*
-#ifndef PSX
 	// gamma
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
@@ -170,7 +162,6 @@ static BOOL _addSlideOptions(void)
 		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gammaValue*25),INTINGAMEOP_GAMMA );
 
 	}
-#endif
 */
 
 	return TRUE;
