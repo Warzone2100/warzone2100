@@ -38,7 +38,7 @@ typedef Uint16 UWORD;
 typedef Sint16 SWORD;
 typedef Uint32 UDWORD;
 typedef Sint32 SDWORD;
-typedef char STRING;
+typedef char STRING; // Should be removed...
 
 #ifndef WIN32
 

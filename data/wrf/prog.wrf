@@ -3,7 +3,7 @@
 /*******************       WRF\prog.wrf      *******************/
 
 
-directory	"script\text"
+directory	"script/text"
 file		SCRIPT	"basic.slo"
-directory	"script\data"
+directory	"script/data"
 file		SCRIPTVAL	"basic.vlo"

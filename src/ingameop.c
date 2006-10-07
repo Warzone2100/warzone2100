@@ -433,7 +433,7 @@ void intProcessInGameOptions(UDWORD id)
 //		if(0!=strcmp(getLevelName(),"CAM_1A"))
 //		{
 //			loopMissionState = LMS_LOADGAME;
-//			strcpy(saveGameName, "replay\\replay.gam");
+//			strcpy(saveGameName, "replay/replay.gam");
 //			addConsoleMessage(strresGetString(psStringRes, STR_GAME_SAVED), LEFT_JUSTIFY);
 //		}
 //		break;

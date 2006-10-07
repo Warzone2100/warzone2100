@@ -9,18 +9,18 @@ directory	"messages"
 file		SMSG		"briefsub.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\fastplay"
+directory       "script/fastplay"
 
 file		SCRIPT		"s-demos.slo"
-directory       "script\text"
+directory       "script/text"
 file		SCRIPT		"cam1daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\fastplay"
+directory       "script/fastplay"
 
 file            SCRIPTVAL       "s-demos.vlo"
-directory       "script\data"
+directory       "script/data"
 file            SCRIPTVAL       "cam1day.vlo"

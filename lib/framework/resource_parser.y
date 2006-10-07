@@ -66,7 +66,7 @@ dir_line:			DIRECTORY QTEXT_T		{
 											// set a new input directory
 											debug( LOG_NEVER, "directory: %s\n", $2 );
 											if ($2[1] == ':' ||
-												$2[0] == '\\')
+												$2[0] == '/')
 											{
 												// the new dir is rooted
 												strcpy(aCurrResDir, $2);
@@ -79,9 +79,9 @@ dir_line:			DIRECTORY QTEXT_T		{
 											}
 											if (strlen($2) > 0)
 											{
-												// Add a trailing '\\'
+												// Add a trailing '/'
 												len = strlen(aCurrResDir);
-												aCurrResDir[len] = '\\';
+												aCurrResDir[len] = '/';
 												aCurrResDir[len+1] = 0;
 //												DBP0(("aCurrResDir: %s\n", aCurrResDir));
 											}

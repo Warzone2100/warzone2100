@@ -1160,7 +1160,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 			{
 				ASSERT( strlen(((VIEW_RESEARCH *)((VIEWDATA *)psMessage->pViewData)->
 					pData)->pAudio)<244,"sequence path+name greater than max string" );
-				strcpy(aAudioName,"sequenceAudio\\");
+				strcpy(aAudioName,"sequenceaudio/");
 				strcat(aAudioName,((VIEW_RESEARCH *)((VIEWDATA *)psMessage->
 					pViewData)->pData)->pAudio);
 
@@ -1174,28 +1174,28 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 				switch(psResearch->iconID)
 				{
 				case IMAGE_RES_DROIDTECH:
-					audio_PlayStream("sequenceAudio\\Res_Droid.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_droid.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_WEAPONTECH:
-					audio_PlayStream("sequenceAudio\\Res_Weapons.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_weapons.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_COMPUTERTECH:
-					audio_PlayStream("sequenceAudio\\Res_com.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_com.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_POWERTECH:
-					audio_PlayStream("sequenceAudio\\Res_Power.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_power.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_SYSTEMTECH:
-					audio_PlayStream("sequenceAudio\\Res_SysTech.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_systech.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_STRUCTURETECH:
-					audio_PlayStream("sequenceAudio\\Res_StruTech.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_strutech.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_CYBORGTECH:
-					audio_PlayStream("sequenceAudio\\Res_Droid.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_droid.wav", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_DEFENCE:
-					audio_PlayStream("sequenceAudio\\Res_StruTech.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_strutech.wav", AUDIO_VOL_MAX, NULL);
 						break;
 	//				default:
 				}

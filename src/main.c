@@ -801,7 +801,7 @@ init://jump here from the end if re_initialising
 								seq_ClearSeqList();
 
 								seq_AddSeqToList("factory.rpl",NULL,NULL, FALSE,0);
-								seq_StartNextFullScreenVideo();//"sequences\\factory.rpl","sequences\\factory.wav");
+								seq_StartNextFullScreenVideo();//"sequences/factory.rpl","sequences/factory.wav");
 								introVideoControl = 2;
 						}
 						else

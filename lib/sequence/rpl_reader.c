@@ -76,12 +76,6 @@ rpl_open(char* filename) {
 	int tmp;
 	size_t len = sizeof(buf);
 
-	/* FIXME: we should just clean up our data */
-	for (tmp = 0; tmp < strlen(filename); tmp++) {
-		if (filename[tmp] == '\\')
-			filename[tmp] = '/';
-	}
-
 	f = PHYSFS_openRead(filename);
 	if (f == NULL) {
 		debug( LOG_ERROR, "Error reading %s: %s",

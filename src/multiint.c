@@ -220,7 +220,7 @@ void loadMapPreview(void)
 	rebuildSearchPath(psLevel->dataDir, FALSE);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "\\game.map");
+	strcat(aFileName, "/game.map");
 
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -303,7 +303,7 @@ void Show_Map(char *imagedata)
 	pie_image image;
 	image_init(&image);
 //	imagetest=malloc((sizeof(char)*512*512*512));
-	image_load_from_jpg(&image, "texpages\\bdrops\\test1.jpg");
+	image_load_from_jpg(&image, "texpages/bdrops/test1.jpg");
 	glGenTextures(1, &Tex);
 	pie_SetTexturePage(-1);
 	glBindTexture(GL_TEXTURE_2D, Tex);
@@ -587,7 +587,7 @@ void runConnectionScreen(void )
 
 		else if(IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &SPGUID_MPLAYER) ) // mplayer
 		{
-			if(system("multiplay\\MplayNow\\mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
+			if(system("multiplay/mplaynow/mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
 			{
 				changeTitleMode(QUIT);									// shut down warzone...
 			}
@@ -1106,7 +1106,7 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
 
-		//can't have ALLIANCES_TEAMS in campaign mode 
+		//can't have ALLIANCES_TEAMS in campaign mode
 		if(game.type == CAMPAIGN)
 		{
 			if(game.alliance == ALLIANCES_TEAMS)
@@ -1381,7 +1381,7 @@ static void addColourChooser(UDWORD player)
 	// delete that players box,
 	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
 
-	// detele team chooser botton	
+	// detele team chooser botton
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
 
 	// add form.
@@ -1562,7 +1562,7 @@ static void addTeamChooser(UDWORD player)
 
 	debug(LOG_WZ, "opened team chooser for %d, current team: %d", player, playerTeamGUI[player]);
 
-	// delete team chooser botton	
+	// delete team chooser botton
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
 
 	// delete that players box
@@ -1589,7 +1589,7 @@ static void addTeamChooser(UDWORD player)
 		sButInit.height= (unsigned short) iV_GetImageHeight(FrontImages,IMAGE_TEAM0);
 
 		sButInit.pTip = "Team";
-		
+
 		sButInit.FontID = WFont;
 		sButInit.pDisplay = displayMultiBut;
 		sButInit.pUserData = (void*)PACKDWORD_TRI(FALSE,IMAGE_TEAM0+i , IMAGE_TEAM0+i);
@@ -2510,7 +2510,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		UDWORD clickedMenuID = id-MULTIOP_TEAMS_START,playerNetID;
 		BOOL	bClickedOnMe = (NetPlay.players[clickedMenuID].dpid == player2dpid[selectedPlayer]);
-		
+
 		//find net player id
 		for(playerNetID=0;(playerNetID <= MAX_PLAYERS) && (player2dpid[selectedPlayer] != NetPlay.players[playerNetID].dpid);playerNetID++);
 
@@ -3867,7 +3867,7 @@ void displayTeamChooser(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	i = (int)psWidget->pUserData;
 
 	ASSERT(playerTeamGUI[i] >= 0 && playerTeamGUI[i] < MAX_PLAYERS,
-		"displayTeamChooser: playerTeamGUI out of bounds" ); 
+		"displayTeamChooser: playerTeamGUI out of bounds" );
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right

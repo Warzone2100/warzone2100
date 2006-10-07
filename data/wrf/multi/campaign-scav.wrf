@@ -6,10 +6,10 @@
 directory	"messages"
 file		SMSG		"multiplay.txt"
 
-directory       "multiplay\script"
+directory       "multiplay/script"
 file		SCRIPT		"multiplay.slo"
-file 		SCRIPT		"scavFact.slo"
+file 		SCRIPT		"scavfact.slo"
 
-directory       "multiplay\script"
+directory       "multiplay/script"
 file            SCRIPTVAL       "multiplay.vlo"
-file            SCRIPTVAL       "scavFact.vlo"
+file            SCRIPTVAL       "scavfact.vlo"

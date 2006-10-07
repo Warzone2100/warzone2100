@@ -10,20 +10,20 @@ file		SMSG		"briefsub.txt"
 file		SMSG		"prox1-2.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\fastplay"
+directory       "script/fastplay"
 
 file		SCRIPT		"s-demo.slo"
 file		SCRIPT		"s-demo-ai.slo"
-directory       "script\text"
+directory       "script/text"
 file		SCRIPT		"cam1daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\fastplay"
+directory       "script/fastplay"
 
 file            SCRIPTVAL       "s-demo.vlo"
 file		SCRIPTVAL	"s-demo-ai.vlo"
-directory       "script\data"
+directory       "script/data"
 file            SCRIPTVAL       "cam1day.vlo"

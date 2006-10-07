@@ -27,7 +27,7 @@ cdspan_PlayInGameAudio( STRING szFileName[], SDWORD iVol )
 	/* try playing from hard disk */
 	if ( bPlaying == FALSE )
 	{
-		sprintf( szStream, "audio\\%s", szFileName );
+		sprintf( szStream, "audio/%s", szFileName );
 		bPlaying = audio_PlayStream( szStream, iVol, NULL );
 	}
 }

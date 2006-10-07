@@ -346,9 +346,9 @@ void seq_SetVideoPath(void)
 
 	if (!bHardPath)
 	{
-		strcpy(aHardPath, "sequences\\");
+		strcpy(aHardPath, "sequences/");
 /*#ifdef WIN32
-		fileHandle = FindFirstFile("sequences\\*.rpl",&findData);
+		fileHandle = FindFirstFile("sequences/*.rpl",&findData);
 		if (fileHandle == INVALID_HANDLE_VALUE)
 		{
 //			bHardPath = FALSE;	//If it fails, then why say true?  Cause we *ALWAYS* need the
@@ -440,7 +440,7 @@ static BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	if (audioName != NULL)
 	{
 		ASSERT( strlen(audioName)<244,"sequence path+name greater than max string" );
-		strcpy(aAudioName,"sequenceAudio\\");
+		strcpy(aAudioName,"sequenceaudio/");
 		strcat(aAudioName,audioName);
 	}
 
@@ -456,7 +456,7 @@ static BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	if (audioName != NULL)
 	{
 		ASSERT( strlen(audioName)<244,"sequence path+name greater than max string" );
-		strcpy(aAudioName,"sequenceAudio\\");
+		strcpy(aAudioName,"sequenceaudio/");
 		strcat(aAudioName,audioName);
 	}
 
@@ -852,7 +852,7 @@ static BOOL seq_AddTextFromFile(STRING *pTextName, BOOL bJustify)
 	SDWORD xOffset, yOffset, startFrame, endFrame;
 	const char *seps = "\n";
 
-	strcpy(aTextName,"sequenceAudio\\");
+	strcpy(aTextName,"sequenceaudio/");
 	strcat(aTextName,pTextName);
 
 /*

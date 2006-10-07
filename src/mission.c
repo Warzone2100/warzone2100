@@ -575,9 +575,9 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 				//play the cam 2 video
 				seq_ClearSeqList();
 			#ifndef PSX
-				seq_AddSeqToList("CAM2\\c002.rpl",NULL,"CAM2\\c002.txa",FALSE);
+				seq_AddSeqToList("cam2/c002.rpl",NULL,"cam2/c002.txa",FALSE);
 			#else
-				seq_AddSeqToList("CAM2\\C002.STR","1656f");
+				seq_AddSeqToList("cam2/c002.str","1656f");
 			#endif
 				seq_StartNextFullScreenVideo();
 			}
@@ -586,10 +586,10 @@ BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
 				//play the cam 3 video
 				seq_ClearSeqList();
 			#ifndef PSX
-				seq_AddSeqToList("CAM2\\cam2out.rpl",NULL,NULL,FALSE);
-				seq_AddSeqToList("CAM3\\c003.rpl",NULL,"CAM3\\c003.txa",FALSE);
+				seq_AddSeqToList("cam2/cam2out.rpl",NULL,NULL,FALSE);
+				seq_AddSeqToList("cam3/c003.rpl",NULL,"cam3/c003.txa",FALSE);
 			#else
-				seq_AddSeqToList("CAM3\\C003.STR","1656f");
+				seq_AddSeqToList("cam3/c003.str","1656f");
 			#endif
 				seq_StartNextFullScreenVideo();
 			}*/

@@ -3,7 +3,7 @@
 /*******************       MISCDATA      *******************/
 
 
-directory	"WRF\Multi"
+directory	"wrf/multi"
 file		MISCDATA	"skirmish2.wrf"
 file		MISCDATA	"skirmish4.wrf"
 file		MISCDATA	"skirmish8.wrf"
@@ -13,7 +13,7 @@ file		MISCDATA	"t2-skirmish8.wrf"
 file		MISCDATA	"t3-skirmish2.wrf"
 file		MISCDATA	"t3-skirmish4.wrf"
 file		MISCDATA	"t3-skirmish8.wrf"
-file		MISCDATA	"campaign-Scav2.wrf"
-file		MISCDATA	"campaign-Scav3.wrf"
+file		MISCDATA	"campaign-scav2.wrf"
+file		MISCDATA	"campaign-scav3.wrf"
 file		MISCDATA	"campaign2.wrf"
 file		MISCDATA	"campaign3.wrf"

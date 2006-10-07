@@ -129,7 +129,7 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 		//{
 		//	addConsoleMessage("Experience saved successfully.",RIGHT_JUSTIFY);
 		//}
-			
+
 	}
 
 	//addConsoleMessage("Experience saved successfully.",RIGHT_JUSTIFY);
@@ -143,7 +143,7 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 BOOL SetUpOutputFile(STRING * pMapName,SDWORD nPlayer)
 {
 	STRING			sPlayer[255] = "";
-	STRING			SaveDir[MAX_PATH] = "";		//"multiplay\\LearnData\\";
+	STRING			SaveDir[MAX_PATH] = "";		//"multiplay/learndata/";
 	STRING			FileName[255] = "";
 
 	//debug(LOG_ERROR,"SetUpOutputFile");
@@ -162,7 +162,7 @@ BOOL SetUpOutputFile(STRING * pMapName,SDWORD nPlayer)
 	/* Assemble dir string */
 	sprintf(sPlayer,"%d",nPlayer);
 
-	strcat( SaveDir, "player");	
+	strcat( SaveDir, "player");
 	strcat( SaveDir, sPlayer );
 	//strcat( SaveDir, "/" );	//like "multiplay\learndata\player0\"
 
@@ -196,7 +196,7 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 {
 	STRING			FileName[255] = "";
 	STRING			sPlayer[255] = "";
-	STRING			SaveDir[MAX_PATH] = "";		// "multiplay\\learndata\\";
+	STRING			SaveDir[MAX_PATH] = "";		// "multiplay/learndata/";
 
 	/* assemble "multiplay\learndata\" */
 	strcat( SaveDir, "multiplay/learndata/" );
@@ -325,7 +325,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 			debug(LOG_ERROR,"WriteAISaveData: failed to write defence locations priority for player %d",nPlayer);
 			return FALSE;
 		}
-		
+
 		//debug(LOG_ERROR,"WriteAISaveData - Base attack locations ok");
 
 		/************************************/
@@ -355,7 +355,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 		}
 
 		//debug(LOG_ERROR,"WriteAISaveData - Oil attack locations ok");
-		
+
 
 		/****************************/
 		/*		Oil Resources		*/
@@ -382,7 +382,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 
 			NumEntries++;
 		}
-		
+
 		/* now remember new ones that are not in memory yet (discovered this time) */
 		for(psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature = psFeature->psNext)
 		{
@@ -423,7 +423,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 							y = psCurr->y;
 
 							//printf_console("Found derrick at x: %d, y: %d,, width: %d",psCurr->x/128,psCurr->y/128,mapWidth);
-						
+
 							// Save X //
 							PosXY[NumEntries * 2] = psCurr->x;
 
@@ -438,7 +438,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 				}
 			}
 		}
-		
+
 
 		/* Write number of Oil Resources */
 		if(PHYSFS_write(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1) < 1)
@@ -446,7 +446,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 			debug(LOG_ERROR,"WriteAISaveData: failed to write stored oil locations count for player %d",nPlayer);
 			return FALSE;
 		}
-		
+
 		//printf_console("Num Oil Resources: %d ****",NumEntries);
 
 		/* Write Oil Resources coords */
@@ -720,7 +720,7 @@ BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
 	SDWORD	i, index;
 	BOOL	found;
-	
+
 	index = GetBaseDefendLocIndex(x, y, nPlayer);
 	if(index < 0)			//this one is new
 	{
@@ -871,7 +871,7 @@ BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
 	SDWORD	i, index;
 	BOOL	found;
-	
+
 	index = GetOilDefendLocIndex(x, y, nPlayer);
 	if(index < 0)			//this one is new
 	{
@@ -996,10 +996,10 @@ BOOL CanRememberPlayerBaseLoc(SDWORD lookingPlayer, SDWORD enemyPlayer)
 
 	if(lookingPlayer >= MAX_PLAYERS || enemyPlayer >= MAX_PLAYERS)
 		return FALSE;
-	
+
 	if(baseLocation[lookingPlayer][enemyPlayer][0] <= 0)
 		return FALSE;
-	if(baseLocation[lookingPlayer][enemyPlayer][1] <= 0) 
+	if(baseLocation[lookingPlayer][enemyPlayer][1] <= 0)
 		return FALSE;
 
 	return TRUE;
@@ -1015,7 +1015,7 @@ BOOL CanRememberPlayerBaseDefenseLoc(SDWORD player, SDWORD index)
 		return FALSE;
 	if(baseDefendLocation[player][index][0] <= 0)
 		return FALSE;
-	if(baseDefendLocation[player][index][1] <= 0) 
+	if(baseDefendLocation[player][index][1] <= 0)
 		return FALSE;
 
 	return TRUE;
@@ -1031,7 +1031,7 @@ BOOL CanRememberPlayerOilDefenseLoc(SDWORD player, SDWORD index)
 		return FALSE;
 	if(oilDefendLocation[player][index][0] <= 0)
 		return FALSE;
-	if(oilDefendLocation[player][index][1] <= 0) 
+	if(oilDefendLocation[player][index][1] <= 0)
 		return FALSE;
 
 	return TRUE;

@@ -10,21 +10,21 @@ file		SMSG		"brief3-4.txt"
 file		SMSG		"prox3-4.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\text"
+directory       "script/text"
 
 file		SCRIPT		"setdisk.slo"
 file		SCRIPT		"genexp.slo"
-file		SCRIPT		"VTOLS2.slo"
-file		SCRIPT		"cam3-4X.slo"
+file		SCRIPT		"vtols2.slo"
+file		SCRIPT		"cam3-4x.slo"
 file		SCRIPT		"cam3daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\data"
+directory       "script/data"
 file            SCRIPTVAL       "cam3-4.vlo"
 file            SCRIPTVAL       "disk1.vlo"
-file            SCRIPTVAL       "VTOLS3-4.vlo"
-file            SCRIPTVAL       "cam3-4X.vlo"
+file            SCRIPTVAL       "vtols3-4.vlo"
+file            SCRIPTVAL       "cam3-4x.vlo"
 file            SCRIPTVAL       "cam3mkday.vlo"

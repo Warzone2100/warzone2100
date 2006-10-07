@@ -44,10 +44,6 @@
 #  include <stdio.h>
 
 #  define MAX_PATH 260
-#  define fopen unix_fopen
-
-char *unix_path(const char *path);
-FILE *unix_fopen(const char *filename, const char *mode);
 
 #endif /* WZ_OS_UNIX */
 

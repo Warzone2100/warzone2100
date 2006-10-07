@@ -511,7 +511,7 @@ static void frontEndNewGame( void )
 			strcpy(pLevelName,DEFAULT_LEVEL);
 			seq_ClearSeqList();
 
-			seq_AddSeqToList("CAM1\\c001.rpl",NULL,"CAM1\\c001.txa",FALSE,0);
+			seq_AddSeqToList("cam1/c001.rpl",NULL,"CAM1/c001.txa",FALSE,0);
 
 			seq_StartNextFullScreenVideo();
             break;
@@ -690,21 +690,21 @@ BOOL runMultiPlayerMenu(void)
 		if(!bForceEditorLoaded)
 		{
 			initLoadingScreen( TRUE, TRUE);
-/*			if (!resLoad("wrf\\forcedit.wrf", 500,
+/*			if (!resLoad("wrf/forcedit.wrf", 500,
 						 DisplayBuffer, displayBufferSize,
 						 psGameHeap))				//need the object heaps to have been set up before loading
 			{
 				return FALSE;
 			}
 */
-			if (!resLoad("wrf\\piestats.wrf", 501,
+			if (!resLoad("wrf/piestats.wrf", 501,
 						 DisplayBuffer, displayBufferSize,
 						 psGameHeap))				//need the object heaps to have been set up before loading
 			{
 				return FALSE;
 			}
 
-			if (!resLoad("wrf\\forcedit2.wrf", 502,
+			if (!resLoad("wrf/forcedit2.wrf", 502,
 						 DisplayBuffer, displayBufferSize,
 						 psGameHeap))				//need the object heaps to have been set up before loading
 			{

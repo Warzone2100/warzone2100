@@ -6,18 +6,18 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 
-file		SMSG		"Cam1-Outro.txt"
+file		SMSG		"cam1-outro.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\text"
+directory       "script/text"
 
 file		SCRIPT		"cam1end.slo"
 file		SCRIPT		"cam1daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\data"
+directory       "script/data"
 file            SCRIPTVAL       "cam1end.vlo"
 file            SCRIPTVAL       "cam1day.vlo"

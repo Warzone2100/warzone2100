@@ -1715,7 +1715,7 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 
 		sprintf(mapStr,"%dc-%s",game.maxPlayers,mapName);
 		strcat(mapStr,".wz");//.wdg
-		sprintf(fixedname,"maps\\%s",mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
+		sprintf(fixedname,"maps/%s",mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
 		memcpy(mapStr,fixedname,256);
 		NETsendFile(TRUE,mapStr,0);
 	}

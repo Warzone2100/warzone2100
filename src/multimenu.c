@@ -692,7 +692,7 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValu
 //	if( id == M_REQUEST_CA)
 //	{
 //		closeMultiRequester();
-//		addMultiRequest("\\multiplay\\customMaps\\*.wrf",MULTIOP_MAP,0);
+//		addMultiRequest("/multiplay/custommaps/*.wrf",MULTIOP_MAP,0);
 //	}
 
 	return FALSE;

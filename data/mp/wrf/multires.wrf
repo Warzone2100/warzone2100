@@ -3,12 +3,12 @@
 /*******************       WRF\multiRes.wrf      *******************/
 
 
-directory	"stats\research\multiplayer"
-file		RESCH	"Research.txt"
-file		RPREREQ	"PRResearch.txt"
-file		RCOMPRED	"RedComponents.txt"
-file		RCOMPRES	"ResultComponent.txt"
-file		RSTRREQ	"ResearchStruct.txt"
+directory	"stats/research/multiplayer"
+file		RESCH	"research.txt"
+file		RPREREQ	"prresearch.txt"
+file		RCOMPRED	"redcomponents.txt"
+file		RCOMPRES	"resultcomponent.txt"
+file		RSTRREQ	"researchstruct.txt"
 file		RSTRRED	"redstructure.txt"
-file		RSTRRES	"ResultStructure.txt"
+file		RSTRRES	"resultstructure.txt"
 file		RFUNC	"researchfunctions.txt"

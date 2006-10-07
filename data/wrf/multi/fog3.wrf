@@ -1,8 +1,8 @@
 
-directory       "script\text"
+directory       "script/text"
 file			SCRIPT		"cam3daynight.slo"
 file			SCRIPT		"setdisk.slo"
 
-directory       "script\data"
+directory       "script/data"
 file			SCRIPTVAL	"cam3day.vlo"
 file 			SCRIPTVAL	"disk2.vlo"

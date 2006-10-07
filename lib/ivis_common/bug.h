@@ -3,7 +3,7 @@
 
 #include <assert.h>
 
-#define iV_DEBUG_FILE	"IVI.LOG"
+#define iV_DEBUG_FILE	"ivi.log"
 
 #ifdef _DEBUG
 //	#define iV_DEBUG

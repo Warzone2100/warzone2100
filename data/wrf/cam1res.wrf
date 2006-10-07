@@ -2,12 +2,12 @@
 /*  You may have to modify this file for it to be correct! */ 
 /*******************       wrf\cam1res.wrf      *******************/
 
-directory 	"stats\research\cam1"
-file		RESCH	"Research.txt"
-file		RPREREQ	"PRResearch.txt"
-file		RCOMPRED	"RedComponents.txt"
-file		RCOMPRES	"ResultComponent.txt"
-file		RSTRREQ	"ResearchStruct.txt"
+directory 	"stats/research/cam1"
+file		RESCH	"research.txt"
+file		RPREREQ	"prresearch.txt"
+file		RCOMPRED	"redcomponents.txt"
+file		RCOMPRES	"resultcomponent.txt"
+file		RSTRREQ	"researchstruct.txt"
 file		RSTRRED	"redstructure.txt"
-file		RSTRRES	"ResultStructure.txt"
+file		RSTRRES	"resultstructure.txt"
 file		RFUNC	"researchfunctions.txt"

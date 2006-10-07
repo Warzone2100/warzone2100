@@ -15,7 +15,6 @@
 #include <time.h>
 #include <SDL/SDL.h>
 #include <physfs.h>
-#include "ignorecase.h"
 
 // window focus messages
 //#define DEBUG_GROUP1
@@ -40,41 +39,6 @@
 
 static FPSmanager wzFPSmanager;
 
-
-char *unix_path(const char *path)
-{
-	static char returnval[512];
-	unsigned int i;
-
-	for (i = 0; path[i] != '\0'; ++i) {
-		if (path[i] >= 'A' && path[i] <= 'Z') {
-			returnval[i] = path[i]-'A'+'a';
-		} else if (path[i] == '\\') {
-			returnval[i] = '/';
-		} else {
-			returnval[i] = path[i];
-		}
-	}
-	for(;returnval[i-1] == '/'; --i);
-	returnval[i] = '\0';
-
-	return returnval;
-}
-
-#ifndef WIN32
-
-FILE *unix_fopen(const char *filename, const char *mode)
-{
-// ridiculous kludge because we redefine fopen to unix_fopen
-#undef fopen
-	return fopen(unix_path(filename), mode);
-#define fopen unix_fopen
-}
-
-#endif
-
-
-
 /* Handle for the main window */
 HANDLE	hWndMain;
 
@@ -86,7 +50,6 @@ static BOOL	bActiveDDraw;
 
 static WORD currentCursorResID = UWORD_MAX;
 SDL_Cursor *aCursors[MAX_CURSORS];
-
 
 /* Stores whether a windows quit message has been received */
 static BOOL winQuit=FALSE;
@@ -494,13 +457,6 @@ static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
 	PHYSFS_sint64 filesize;
 	PHYSFS_sint64 length_read;
 
-	if (PHYSFSEXT_locateCorrectCase(pFileName)) {
-		if (hard_fail) {
-			debug(LOG_ERROR, "loadFile2: %s not found", pFileName);
-			assert(FALSE);
-		}
-		return FALSE;
-	}
 	pfile = PHYSFS_openRead(pFileName);
 	if (!pfile) {
 		debug(LOG_ERROR, "loadFile2: %s could not be opened: %s", pFileName,
@@ -560,67 +516,64 @@ static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
 ***************************************************************************/
 BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 {
-	char filename[200]; // pFileName in lowercase
 	PHYSFS_file *pfile;
 	PHYSFS_uint32 size = fileSize;
 
-	strncpy(filename, unix_path(pFileName), sizeof(filename));
-	debug(LOG_WZ, "We are to write (%s) as (%s) of size %d", pFileName,
-	      filename, fileSize);
-	pfile = PHYSFS_openWrite(filename);
+	debug(LOG_WZ, "We are to write (%s) of size %d", pFileName, fileSize);
+	pfile = PHYSFS_openWrite(pFileName);
 	if (!pfile) {
-		const char *found = PHYSFS_getRealDir(filename);
+		const char *found = PHYSFS_getRealDir(pFileName);
 
-		debug(LOG_ERROR, "saveFile: %s could not be opened: %s", filename,
+		debug(LOG_ERROR, "saveFile: %s could not be opened: %s", pFileName,
 		      PHYSFS_getLastError());
 		if (found) {
-			debug(LOG_ERROR, "saveFile: %s found as %s", filename, found);
+			debug(LOG_ERROR, "saveFile: %s found as %s", pFileName, found);
 		}
 		assert(FALSE);
 		return FALSE;
 	}
 	if (PHYSFS_write(pfile, pFileData, 1, size) != size) {
-		debug(LOG_ERROR, "saveFile: %s could not write: %s", filename,
+		debug(LOG_ERROR, "saveFile: %s could not write: %s", pFileName,
 		      PHYSFS_getLastError());
 		assert(FALSE);
 		return FALSE;
 	}
 	if (!PHYSFS_close(pfile)) {
-		debug(LOG_ERROR, "saveFile: Error closing %s: %s", filename,
+		debug(LOG_ERROR, "saveFile: Error closing %s: %s", pFileName,
 		      PHYSFS_getLastError());
 		assert(FALSE);
 		return FALSE;
 	}
 
-	if (PHYSFS_getRealDir(filename) == NULL) {
+	if (PHYSFS_getRealDir(pFileName) == NULL) {
 		// weird
 		debug(LOG_ERROR, "saveFile: PHYSFS_getRealDir(%s) returns NULL?!",
-		      filename);
+		      pFileName);
 	} else {
 	  debug(LOG_WZ, "Successfully wrote to %s%s%s with %d bytes",
-		      PHYSFS_getRealDir(filename), PHYSFS_getDirSeparator(),
-		      filename, size);
+		      PHYSFS_getRealDir(pFileName), PHYSFS_getDirSeparator(),
+		      pFileName, size);
 	}
 	return TRUE;
 }
 
 BOOL loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
 {
-	return loadFile2(unix_path(pFileName), ppFileData, pFileSize, TRUE, TRUE);
+	return loadFile2(pFileName, ppFileData, pFileSize, TRUE, TRUE);
 }
 
 // load a file from disk into a fixed memory buffer
 BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
-	return loadFile2(unix_path(pFileName), &pFileBuffer, pSize, FALSE, TRUE);
+	return loadFile2(pFileName, &pFileBuffer, pSize, FALSE, TRUE);
 }
 
 // as above but returns quietly if no file found
 BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
-	return loadFile2(unix_path(pFileName), &pFileBuffer, pSize, FALSE, FALSE);
+	return loadFile2(pFileName, &pFileBuffer, pSize, FALSE, FALSE);
 }
 
 
@@ -727,7 +680,7 @@ static void ScanFilename(const char *Fullname, int *PosOfDot, int *PosOfSlash)
 
 	for (Pos=Namelength;Pos>=0;Pos--)
 	{
-		if (Fullname[Pos]=='\\')
+		if (Fullname[Pos]=='/')
 		{
 			SlashPos=Pos;
 			break;

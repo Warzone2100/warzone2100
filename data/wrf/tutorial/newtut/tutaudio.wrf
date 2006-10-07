@@ -2,7 +2,7 @@
 /* Tutorial files - Alex McLean */
 // New and improved audio
 
-directory	"audio\tutorial"
+directory	"audio/tutorial"
 file		WAV			"tut1.ogg"
 file		WAV			"tut2.ogg"
 file		WAV			"tut3.ogg"
