@@ -459,11 +459,9 @@ static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
 
 	pfile = PHYSFS_openRead(pFileName);
 	if (!pfile) {
-		if (hard_fail) {
-			debug(LOG_ERROR, "loadFile2: %s could not be opened: %d", pFileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "loadFile2: %s could not be opened: %s", pFileName, PHYSFS_getLastError());
+		if (hard_fail)
 			assert(FALSE);
-		}
-		debug(LOG_NEVER, "loadFile2: %s could not be opened: %d", pFileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 	filesize = PHYSFS_fileLength(pfile);
