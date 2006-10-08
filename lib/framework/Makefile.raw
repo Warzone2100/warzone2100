@@ -7,7 +7,6 @@ SRC=block.c \
 	frame.c \
 	frameresource.c \
 	heap.c \
-	ignorecase.c \
 	input.c \
 	mem.c \
 	mono.c \

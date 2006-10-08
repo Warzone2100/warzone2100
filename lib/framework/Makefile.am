@@ -15,7 +15,6 @@ libframework_a_SOURCES = \
 	frame.c \
 	frameresource.c \
 	heap.c \
-	ignorecase.c \
 	input.c \
 	mem.c \
 	strres.c \
@@ -27,7 +26,6 @@ libframework_a_SOURCES = \
 	memint.h \
 	treap.h \
 	fractions.h \
-	ignorecase.h \
 	mono.h \
 	strres.h \
 	treapint.h \
