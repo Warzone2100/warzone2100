@@ -265,7 +265,7 @@ BOOL MultiPlayerLeave( DPID dp)
 
 		turnOffMultiMsg(TRUE);
 		clearPlayer(i,FALSE,FALSE);
-		game.skDiff[i] = 10;			//FIXME: must use menu id, not player ID as index! -slider ASSERT
+		game.skDiff[dp-1] = 10;
 
 		turnOffMultiMsg(FALSE);
 

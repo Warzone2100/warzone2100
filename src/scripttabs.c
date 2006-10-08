@@ -601,7 +601,10 @@ FUNC_SYMBOL asFuncTable[] =
 	{"getGameStatus", 		scrGetGameStatus,	  		VAL_BOOL,	1, {VAL_INT} },
 
     //player colour access functions
-	{ "getPlayerColour",	scrGetPlayerColour,		    VAL_INT,
+	{ "getPlayerColor",	scrGetPlayerColor,		    VAL_INT,
+        1, { VAL_INT } },
+
+	{ "getPlayerColorName",	scrGetPlayerColorName,		    VAL_STRING,
         1, { VAL_INT } },
 
     { "setPlayerColour",	scrSetPlayerColour,		    VAL_VOID,
@@ -828,8 +831,8 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "numEnemyObjInRange",			scrNumEnemyObjInRange,			VAL_INT,
 		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
 
-	//{ "alliancesLocked",			scrAlliancesLocked,			VAL_BOOL,
-	//	0, {VAL_VOID} },
+	{ "alliancesLocked",			scrAlliancesLocked,			VAL_BOOL,
+		0, {VAL_VOID} },
 
 //num structures
 	{ "numStructsByStatInRange",			scrNumStructsByStatInRange,		VAL_INT,
@@ -971,6 +974,12 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "setPlayerName",			scrSetPlayerName,		VAL_BOOL,
 		2, { VAL_INT, VAL_STRING} },
 
+	{ "ASSERT",			scrASSERT,		VAL_VOID,
+		3, { VAL_BOOL, VAL_STRING, VAL_INT} },
+
+	{ "showRangeAtPos",		scrShowRangeAtPos,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT} },
+
 	/* END new functions */
 
 
@@ -1031,9 +1040,6 @@ VAR_SYMBOL asExternTable[] =
 	{ "extraFailFlag",	VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_EXTRAFAILFLAG,
 		scrGenExternGet,		scrGenExternSet },
 
-
-
-
 	{ "multiPlayerGameType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,	EXTID_MULTIGAMETYPE,
 		scrGenExternGet,			NULL },
 
@@ -1043,6 +1049,8 @@ VAR_SYMBOL asExternTable[] =
 	{ "multiPlayerBaseType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,EXTID_MULTIGAMEBASETYPE,
 		scrGenExternGet,			NULL },
 
+	{ "multiPlayerAlliancesType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,	EXTID_MULTIGAMEALLIANCESTYPE,
+		scrGenExternGet,			NULL },
 
 
 
@@ -1481,7 +1489,9 @@ CONST_SYMBOL asConstantTable[] =
 	{ "CAMP_BASE",			VAL_INT,	0,		CAMP_BASE,				0 },
 	{ "CAMP_WALLS",			VAL_INT,	0,		CAMP_WALLS,				0 },
 
-
+	{ "NO_ALLIANCES",			VAL_INT,	0,		NO_ALLIANCES,				0 },
+	{ "ALLIANCES",			VAL_INT,	0,		ALLIANCES,				0 },
+	{ "ALLIANCES_TEAMS",			VAL_INT,	0,		ALLIANCES_TEAMS,				0 },
 
 	/* This entry marks the end of the constant list */
 	{ "CONSTANT LIST END",	VAL_VOID }

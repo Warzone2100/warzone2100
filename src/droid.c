@@ -2048,8 +2048,18 @@ BOOL droidUpdateBuild(DROID *psDroid)
 					psStruct->x, psStruct->y, psStruct->z );
 			intRefreshScreen();		// update any open interface bars.
 		}
+
+		/* Not needed, but left for backward compatibility */
 		structureCompletedCallback(psStruct->pStructureType);
 
+		/* must reset here before the callback, droid must have DACTION_NONE
+		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
+		psDroid->action = DACTION_NONE;	
+
+		/* Notify scripts we just finished building a structure, pass builder and what was built */
+		psScrCBNewStruct	= psStruct;
+		psScrCBNewStructTruck= psDroid;
+		eventFireCallbackTrigger(CALL_STRUCTBUILT);
 
 		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
 

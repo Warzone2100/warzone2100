@@ -3910,6 +3910,9 @@ var_ref:		REF NUM_VAR
 
 conditional:		cond_clause_list
 					{
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "conditional: cond_clause_list");
+	#endif
 						codeRet = scriptCodeConditional($1, &psCurrBlock);
 						CHECK_CODE_ERROR(codeRet);
 
@@ -3917,6 +3920,9 @@ conditional:		cond_clause_list
 					}
 				|	cond_clause_list ELSE terminal_cond
 					{
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "conditional: cond_clause_list ELSE terminal_cond");
+	#endif
 						ALLOC_CONDBLOCK(psCondBlock,
 										$1->numOffsets + $3->numOffsets,
 										$1->size + $3->size);
@@ -3953,10 +3959,16 @@ conditional:		cond_clause_list
 
 cond_clause_list:	cond_clause
 					{
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "cond_clause_list:	cond_clause");
+	#endif
 						$$ = $1;
 					}
 				|	cond_clause_list ELSE cond_clause
 					{
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "cond_clause_list:	cond_clause_list ELSE cond_clause");
+	#endif
 						ALLOC_CONDBLOCK(psCondBlock,
 										$1->numOffsets + $3->numOffsets,
 										$1->size + $3->size);
@@ -3991,6 +4003,9 @@ cond_clause_list:	cond_clause
 
 terminal_cond:		'{' statement_list '}'
 					{
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "terminal_cond: '{' statement_list '}'");
+	#endif
 						/* Allocate the block */
 						ALLOC_CONDBLOCK(psCondBlock, 1, $2->size);
 						ALLOC_DEBUG(psCondBlock, $2->debugEntries);
@@ -4011,7 +4026,10 @@ terminal_cond:		'{' statement_list '}'
 cond_clause:		IF '(' boolexp ')'
 					{
 						STRING *pDummy;
-
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "cond_clause: IF '(' boolexp ')' '{' statement_list '}'");
+	#endif
+	
 						/* Get the line number for the end of the boolean expression */
 						/* and store it in debugLine.                                 */
 						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
@@ -4019,9 +4037,9 @@ cond_clause:		IF '(' boolexp ')'
 									'{' statement_list '}'
 					{
 						/* Allocate the block */
-						ALLOC_CONDBLOCK(psCondBlock, 1,
+						ALLOC_CONDBLOCK(psCondBlock, 1,	//1 offset
 										$3->size + $7->size +
-										sizeof(OPCODE)*2);
+										sizeof(OPCODE)*2);		//OP_JUMPFALSE + OP_JUMP
 						ALLOC_DEBUG(psCondBlock, $7->debugEntries + 1);
 						ip = psCondBlock->pCode;
 
@@ -4046,6 +4064,61 @@ cond_clause:		IF '(' boolexp ')'
 						PUT_BLOCK(ip, $7);
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
+
+						/* Store the location that has to be filled in   */
+						psCondBlock->aOffsets[0] = ip - psCondBlock->pCode;
+
+						/* Put in a jump to skip the rest of the conditional */
+						/* The correct offset will be set once the whole   */
+						/* conditional has been parsed                     */
+						/* The jump should be to the instruction after the */
+						/* entire conditonal block                         */
+						PUT_PKOPCODE(ip, OP_JUMP, 0);
+
+						$$ = psCondBlock;
+					}
+				/* 'Monoblock' */ 	
+				|			IF '(' boolexp ')'
+					{
+						STRING *pDummy;
+	#ifdef DEBUG_SCRIPT
+					debug(LOG_SCRIPT, "cond_clause: IF '(' boolexp ')' statement");
+	#endif
+						/* Get the line number for the end of the boolean expression */
+						/* and store it in debugLine.                                 */
+						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
+					}
+							statement
+					{
+						/* Allocate the block */
+						ALLOC_CONDBLOCK(psCondBlock, 1,
+										$3->size + $6->size +
+										sizeof(OPCODE)*2);
+						ALLOC_DEBUG(psCondBlock, $6->debugEntries + 1);
+						ip = psCondBlock->pCode;
+						
+						/* Store the boolean expression code */
+						PUT_BLOCK(ip, $3);
+						FREE_BLOCK($3);
+
+
+						/* Put in the jump to the end of the block if the */
+						/* condition is false */
+						PUT_PKOPCODE(ip, OP_JUMPFALSE, ($6->size / sizeof(UDWORD)) + 2);
+
+						/* Put in the debugging information */
+						if (genDebugInfo)
+						{
+							psCondBlock->debugEntries = 1;
+							psCondBlock->psDebug->line = debugLine;
+							psCondBlock->psDebug->offset = 0;
+							APPEND_DEBUG(psCondBlock, ip - psCondBlock->pCode, $6);
+						}
+
+						/* Store the statements */
+						PUT_BLOCK(ip, $6);
+						FREE_DEBUG($6);
+						FREE_BLOCK($6);
 
 						/* Store the location that has to be filled in   */
 						psCondBlock->aOffsets[0] = ip - psCondBlock->pCode;

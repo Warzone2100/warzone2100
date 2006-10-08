@@ -1,4 +1,4 @@
-/* Display3D.h */
+/* display3d.h */
 
 #ifndef _display3d_h
 #define _display3d_h
@@ -131,6 +131,8 @@ extern BOOL loadExtraIMDs(void);
 /*returns the graphic ID for a droid rank*/
 extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 
+/* Visualize radius at position */
+extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128

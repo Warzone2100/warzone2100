@@ -1824,6 +1824,7 @@ BOOL stageThreeInitialise(void)
 
 	STRUCTURE *psStr;
 	SDWORD i;
+	DROID		*psDroid;
 
 	debug(LOG_MAIN, "stageThreeInitalise");
 	bTrackingTransporter = FALSE;
@@ -1912,15 +1913,23 @@ BOOL stageThreeInitialise(void)
 	{
 		createTeamAlliances();
 
-		/* Update ally vision for pre-placed structures */
+		/* Update ally vision for pre-placed structures and droids */
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 			if(i != selectedPlayer)
 			{
+				/* Structures */
 				for(psStr=apsStructLists[i]; psStr; psStr=psStr->psNext)
 				{
 					if(aiCheckAlliances(psStr->player,selectedPlayer))
 						visTilesUpdate((BASE_OBJECT *)psStr,FALSE);
+				}
+
+				/* Droids */
+				for(psDroid=apsDroidLists[i]; psDroid; psDroid=psDroid->psNext)
+				{
+					if(aiCheckAlliances(psDroid->player,selectedPlayer))
+						visTilesUpdate((BASE_OBJECT *)psDroid,FALSE);
 				}
 			}
 		}

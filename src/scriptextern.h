@@ -37,6 +37,7 @@ enum _externids
 	EXTID_EXTRAFAILFLAG,
 	EXTID_TRACKTRANSPORTER,
 	EXTID_ISPSX,
+	EXTID_MULTIGAMEALLIANCESTYPE,
 };
 
 // reset the script externals for a new level

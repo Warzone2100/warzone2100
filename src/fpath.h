@@ -8,7 +8,7 @@
 #define _fpath_h
 
 // limit the number of iterations for astar
-#define FPATH_MAX_ROUTE_INIT	400
+#define FPATH_MAX_ROUTE_INIT	600			//was 400
 
 extern SDWORD	astarMaxRoute;
 #  ifdef DEBUG

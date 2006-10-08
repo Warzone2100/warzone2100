@@ -69,6 +69,7 @@
 #include "cluster.h"
 #include "multigifts.h"			//because of giftRadar()
 #include "aiexperience.h"
+#include "display3d.h"			//for showRangeAtPos()
 
 
 //used in the set nogoArea and LandingZone functions - use the ones defined in Map.h
@@ -5678,7 +5679,7 @@ BOOL scrGetGameStatus(void)
 }
 
 //get the colour number used by a player
-BOOL scrGetPlayerColour(void)
+BOOL scrGetPlayerColor(void)
 {
 	SDWORD		player, colour;
 
@@ -5689,7 +5690,7 @@ BOOL scrGetPlayerColour(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( FALSE, "scrGetPlayerColour:player number is too high" );
+		ASSERT( FALSE, "scrGetPlayerColor: player number is too high" );
 		return FALSE;
 	}
 
@@ -5697,6 +5698,31 @@ BOOL scrGetPlayerColour(void)
 
 	if (!stackPushResult(VAL_INT, colour))
 	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+//get the colour name of the player ("green", "black" etc)
+BOOL scrGetPlayerColorName(void)
+{
+	SDWORD		player;
+
+	if (!stackPopParams(1, VAL_INT, &player))
+	{
+		return FALSE;
+	}
+
+	if (player >= MAX_PLAYERS || player < 0)
+	{
+		ASSERT( FALSE, "scrGetPlayerColorName: wrong player index" );
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_STRING, (SDWORD)getPlayerColorName(player)))
+	{
+		debug(LOG_ERROR, "scrGetPlayerColorName(): failed to push result");
 		return FALSE;
 	}
 
@@ -6452,7 +6478,7 @@ BOOL scrMsg(void)
 		return FALSE;
 	}
 
-	//sendAIMessage(ssval, playerFrom, playerTo);		//TODO: implement multiplayer messages
+	sendAIMessage(ssval, playerFrom, playerTo);
 
 
 	//show the message we sent on our local console as well (even in skirmish, if player plays as this AI)
@@ -6479,8 +6505,7 @@ BOOL scrDbg(void)
 
 	if(scrDebug[player])
 	{
-		STRING	*sTmp;
-		sTmp = (char*)MALLOC(255);
+		STRING	sTmp[255];
 		sprintf(sTmp,"%d) %s",player,ssval);
 		addConsoleMessage(sTmp,DEFAULT_JUSTIFY);
 	}
@@ -8481,7 +8506,7 @@ BOOL scrHasGroup(void)
 	return TRUE;
 }
 
-
+/* Range is in world units! */
 BOOL scrObjWeaponMaxRange(void)
 {
 	BASE_OBJECT			*psObj;
@@ -10447,4 +10472,69 @@ SDWORD getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount)
 	*readCount = count;
 
 	return fieldsAssigned;
+}
+
+/* Can we create and break alliaces? */
+BOOL scrAlliancesLocked(void)
+{
+	BOOL		bResult = TRUE;
+
+	if(bMultiPlayer && (game.alliance == ALLIANCES))
+		bResult = FALSE;
+
+	if (!stackPushResult(VAL_BOOL, bResult))
+	{
+		debug(LOG_WZ, "scrAlliancesLocked(): failed to push result");
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+
+BOOL scrASSERT(void)
+{
+	BOOL				bExpression;
+	STRING			*sMsg = NULL;
+	SDWORD			player;
+	STRING			sTmp[255];
+
+	if (!stackPopParams(3, VAL_BOOL, &bExpression, VAL_STRING, &sMsg, VAL_INT, &player))
+	{
+		debug(LOG_ERROR, "scrASSERT(): stack failed");
+		return FALSE;
+	}
+
+#ifdef DEBUG
+	/* Just pass the expression and message from script */
+	sprintf(sTmp,"%d) %s",player,sMsg);
+	ASSERT(bExpression, sTmp);
+#else
+	if(scrDebug[player])
+	{
+		if(!bExpression)
+		{
+			sprintf(sTmp,"%d) %s",player,sMsg);
+			addConsoleMessage(sTmp,RIGHT_JUSTIFY);
+		}
+	}
+#endif
+
+	return TRUE;
+}
+
+/* Visualize radius at position */
+BOOL scrShowRangeAtPos(void)
+{
+	SDWORD		x,y,radius;
+
+	if (!stackPopParams(3, VAL_INT, &x, VAL_INT, &y, VAL_INT, &radius))
+	{
+		debug(LOG_ERROR, "scrShowRangeAtPos(): stack failed");
+		return FALSE;
+	}
+
+	//Turn on/off drawing
+	showRangeAtPos(x,y,radius);
+
+	return TRUE;
 }

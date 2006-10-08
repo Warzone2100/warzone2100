@@ -29,7 +29,7 @@ public	RESEARCHSTAT	baseRes[10];
 //	Other Stuff
 private	INT				count;
 private INT				playnum;
-private	BOOL			gamewon;
+private	BOOL			gamewon,gameLost;
 
 // Base Under Attack  
 private	STRUCTURE		hitStruc;
@@ -143,38 +143,89 @@ event checkEndConditions (endConditions)
 	if(	   ( not anyDroidsLeft(selectedPlayer))
   	  and  ( not anyFactoriesLeft(selectedPlayer))	
 	  )
-	{
-		gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
-		setEventTrigger(checkEndConditions, inactive);
+	{		
+		gameLost = TRUE;
+
+		/* If teams enabled check if all team members have lost  */
+		if(multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS)
+		{
+			playnum = 0;
+			while (playnum < multiPlayerMaxPlayers)
+			{
+				if((playnum != selectedPlayer)
+				 and allianceExistsBetween(selectedPlayer , playnum))
+				{
+					if(anyDroidsLeft(playnum) or anyFactoriesLeft(playnum))
+					{
+						gameLost = FALSE;	//someone from our team still alive
+						playnum = multiPlayerMaxPlayers;	//jump out
+					}
+				}
+				playnum = playnum + 1;
+			}
+			
+		}
+
+		if(gameLost)
+		{
+			console("YOU WERE DEFEATED!");
+			gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
+			setEventTrigger(checkEndConditions, inactive);
+		}
 	}
 	
-	// Winning Conditions. selected Player is the only remaining player
-	count =0;
+	// Winning Conditions
 	gamewon = TRUE;
 
-	while (count < multiPlayerMaxPlayers)
+	/* Skirmish */
+	if(multiPlayerGameType == SKIRMISH)
 	{
-		if ( (count != selectedPlayer) and not(isHumanPlayer(count))  )
+		// check if all enemies defeated
+		playnum = 0;
+		while (playnum < multiPlayerMaxPlayers)
 		{
-			if( anyDroidsLeft(count) or anyFactoriesLeft(count) ) 
+			if((playnum != selectedPlayer)
+			 and (not allianceExistsBetween(selectedPlayer , playnum))	//checking enemy player
+				)
 			{
-				gamewon = FALSE;
+				if(anyDroidsLeft(playnum) or anyFactoriesLeft(playnum))
+				{
+					gamewon = FALSE;	//one of the enemies still alive
+					playnum = multiPlayerMaxPlayers;	//jump out
+				}
+			}
+			playnum = playnum + 1;
+		}
+	}
+	else	/* All other game types */
+	{
+		// Check if all AIs were defeated
+		count = 0;
+		while (count < multiPlayerMaxPlayers)
+		{
+			if ( (count != selectedPlayer) and not(isHumanPlayer(count))  )
+			{
+				if( anyDroidsLeft(count) or anyFactoriesLeft(count) ) 
+				{
+					gamewon = FALSE;	//some of the AIs still alive
+				}
+			}
+			count = count + 1;
+		}
+
+		if(gamewon == TRUE)
+		{
+			gamewon = FALSE;
+			if(dominatingAlliance())	//if all humans are allied
+			{
+				gamewon = TRUE;
 			}
 		}
-		count = count + 1;			
 	}
 
 	if(gamewon == TRUE)
 	{
-		gamewon = FALSE;
-		if(dominatingAlliance())
-		{
-			gamewon = TRUE;
-		}
-	}
-
-	if(gamewon == TRUE)
-	{	
+		console("YOU ARE VICTORIOUS!");
 		gameOverMessage(winMsg, MISS_MSG, 0, TRUE);
 		setEventTrigger(checkEndConditions, inactive);
 	}	

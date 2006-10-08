@@ -235,6 +235,9 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 	BLOCK_HEAP	*psCurrBlk;
 #if DEBUG_HEAP
 	HEAP_OBJHDR	*psHdr;
+	FREE_OBJECT		*psFree;
+	BOOL			clean;
+	UBYTE			*pStart, *pEnd;
 #endif
 
 	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
@@ -323,6 +326,21 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 		ASSERT( pBase == (UBYTE *)*ppObject + psHeap->objSize,
 			"heapAlloc: unallocated object memory has been overwritten" );
 	}
+
+	/* Check for any memory overwrites on the free objects */
+	clean = TRUE;
+	for(psFree = psHeap->psFree; psFree != NULL; psFree = psFree->psNext)
+	{
+		pEnd = (UBYTE *)psFree + psHeap->objSize;
+		for(pStart = (UBYTE *)psFree + sizeof(FREE_OBJECT); pStart<pEnd; pStart++)
+		{
+			if (*pStart != FREE_BYTE)
+			{
+				clean = FALSE;
+			}
+		}
+	}
+	ASSERT( clean, "heapAlloc: unallocated memory has been overwritten" );
 
 	/* Store the call position */
 	psHdr = (HEAP_OBJHDR *)*ppObject;

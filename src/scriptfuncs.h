@@ -435,7 +435,8 @@ typedef enum gamestatus
 } GAMESTATUS;
 
 //get the colour number used by a player
-extern BOOL scrGetPlayerColour(void);
+extern BOOL scrGetPlayerColor(void);
+extern BOOL scrGetPlayerColorName(void);
 
 //set the colour number to use for a player
 extern BOOL scrSetPlayerColour(void);
@@ -588,6 +589,9 @@ extern BOOL scrSetPlayerName(void);
 
 extern BOOL scrGetTargetPlayers(void);
 extern BOOL scrMatch(void);
+extern BOOL scrAlliancesLocked(void);
+extern BOOL scrASSERT(void);
+extern BOOL scrShowRangeAtPos(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);

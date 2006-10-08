@@ -1322,7 +1322,7 @@ void displayAIMessage(STRING *pStr, SDWORD from, SDWORD to)
 	{
 		//addConsoleMessage(pStr,DEFAULT_JUSTIFY);
 		//console("%d: %s", from, pStr);
-		sprintf(tmp,"%d",from);
+		strcpy(tmp,getPlayerName(from));
 		strcat(tmp," : ");											// seperator
 		strcat(tmp,pStr);											// add message
 		addConsoleMessage(tmp,DEFAULT_JUSTIFY);
@@ -1389,9 +1389,9 @@ BOOL recvTextMessageAI(NETMSG *pMsg)
 	NetGet(pMsg,0,sender);			//in-game player index ('normal' one)
 	NetGet(pMsg,4,receiver);		//in-game player index
 
+	//strcpy(msg,getPlayerName(sender));		// name
+	//strcat(msg," : ");								// seperator
 	strcpy(msg, &(pMsg->body[8]));
-	//strcat(msg,NetPlay.players[sender].name);		// name
-	strcat(msg,getPlayerName(sender));				// name
 
 	//Display the message and make the script callback
 	displayAIMessage(msg, sender, receiver);

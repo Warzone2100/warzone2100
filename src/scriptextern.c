@@ -135,6 +135,10 @@ BOOL scrGenExternGet(UDWORD index)
 		type = VAL_INT;
 		val	= game.base;
 		break;
+	case EXTID_MULTIGAMEALLIANCESTYPE:
+		type = VAL_INT;
+		val	= game.alliance;
+		break;
 
 		default:
 		ASSERT( FALSE, "scrGenExternGet: unknown variable index" );

@@ -222,7 +222,7 @@ static BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_COD
 
 		if ( (val < 0) || (val >= elements[i]) )
 		{
-			ASSERT( FALSE, "interpGetArrayVarData: Array index for dimension %d out of range", i );
+			ASSERT( FALSE, "interpGetArrayVarData: Array index for dimension %d out of range (passed index = %d, max index = %d)", i , val, elements[i]);
 			return FALSE;
 		}
 

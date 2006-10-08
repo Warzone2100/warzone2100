@@ -837,21 +837,6 @@ void processVisibility(BASE_OBJECT *psObj)
 		}
 	}
 
-	//forward out vision to our allies
-	if (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS))
-	{
-		for(player = 0; player < MAX_PLAYERS; player++)
-		{
-			for(ally = 0; ally < MAX_PLAYERS; ally++)
-			{
-				if (currVis[player] && aiCheckAlliances(player, ally))
-				{
-					currVis[ally] = TRUE;
-				}
-			}
-		}
-	}
-
     //if a player has a SAT_UPLINK structure, they can see everything!
     for (player=0; player<MAX_PLAYERS; player++)
     {
@@ -890,6 +875,20 @@ void processVisibility(BASE_OBJECT *psObj)
 		psViewer = gridIterate();
 	}
 
+	//forward out vision to our allies
+	if (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS))
+	{
+		for(player = 0; player < MAX_PLAYERS; player++)
+		{
+			for(ally = 0; ally < MAX_PLAYERS; ally++)
+			{
+				if (currVis[player] && aiCheckAlliances(player, ally))
+				{
+					currVis[ally] = TRUE;
+				}
+			}
+		}
+	}
 
 
 	// update the visibility levels

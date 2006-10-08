@@ -119,13 +119,12 @@ run
 
 
 	// extra structs
-	numExtraStructs	INT					6
+	numExtraStructs	INT					5
 	extraStructs[0]	STRUCTURESTAT		"A0LightFactory"
 	extraStructs[1]	STRUCTURESTAT		"A0RepairCentre3"
-	extraStructs[2]	STRUCTURESTAT		"PillBox5"
-	extraStructs[3]	STRUCTURESTAT		"A0LightFactory"
-	extraStructs[4]	STRUCTURESTAT		"A0ResearchFacility"
-	extraStructs[5]	STRUCTURESTAT		"A0CyborgFactory"
+	extraStructs[2]	STRUCTURESTAT		"A0LightFactory"
+	extraStructs[3]	STRUCTURESTAT		"A0ResearchFacility"
+	extraStructs[4]	STRUCTURESTAT		"A0CyborgFactory"
 
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////

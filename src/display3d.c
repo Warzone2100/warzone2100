@@ -166,8 +166,11 @@ void	testEffect( void );
 void	showDroidSensorRanges(void);
 void	showSensorRange1(DROID *psDroid);
 void	showSensorRange2(BASE_OBJECT *psObj);
+void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 void	debugToggleSensorDisplay( void );
 BOOL	bSensorDisplay = TRUE;		//was FALSE	**COUGH and I spend 2 days making my own. LOL -Q 5-10-05
+BOOL	bRangeDisplay = FALSE;
+SDWORD rangeCenterX,rangeCenterY,rangeRadius;
 BOOL	doWeDrawRadarBlips( void );
 BOOL	doWeDrawProximitys( void );
 void	drawDroidRank(DROID *psDroid);
@@ -593,6 +596,9 @@ BOOL		bPlayerHasHQ = FALSE;
 		showDroidSensorRanges();		//shows sensor data for units/droids/whatever...-Q 5-10-05
 	}
 
+	//visualize radius if needed
+	if(bRangeDisplay)
+		drawRangeAtPos(rangeCenterX,rangeCenterY,rangeRadius);
 }
 
 /* Draws the 3D textured terrain */
@@ -5774,6 +5780,28 @@ BOOL	bBuilding=FALSE;
 	}
 }
 
+void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
+{
+	SDWORD	xDif,yDif;
+	iVector	pos;
+	UDWORD	i;
+
+	for(i=0; i<360; i++)
+	{
+		xDif = radius * (SIN(DEG(i)));
+		yDif = radius * (COS(DEG(i)));
+
+		xDif = xDif/4096;	 // cos it's fixed point
+		yDif = yDif/4096;
+   		pos.x = centerX - xDif;
+		pos.z = centerY - yDif;
+		pos.y = map_Height(pos.x,pos.z)+ 16;	// 64 up to get to base of spire
+		effectGiveAuxVar(80);	// half normal plasma size...
+		
+		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+	}
+}
+
 void debugToggleSensorDisplay( void )
 {
 	if(bSensorDisplay)
@@ -5784,6 +5812,21 @@ void debugToggleSensorDisplay( void )
 	{
 		bSensorDisplay = TRUE;
 	}
+}
+
+/* draw some effects at certain position to visualize the radius,
+  * negative radius turns this off
+  */
+void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
+{
+	rangeCenterX = centerX;
+	rangeCenterY = centerY;
+	rangeRadius = radius;
+
+	bRangeDisplay = TRUE;
+
+	if(radius <= 0)
+		bRangeDisplay = FALSE;
 }
 
 /*returns the graphic ID for a droid rank*/
