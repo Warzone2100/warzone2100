@@ -2043,7 +2043,7 @@ BOOL recvBeacon(NETMSG *pMsg)
 	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
 }
 
-STRING *getPlayerColorName(SDWORD player)
+STRING *getPlayerColourName(SDWORD player)
 {
 	switch(getPlayerColour(player))
 	{

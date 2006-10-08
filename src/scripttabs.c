@@ -601,10 +601,10 @@ FUNC_SYMBOL asFuncTable[] =
 	{"getGameStatus", 		scrGetGameStatus,	  		VAL_BOOL,	1, {VAL_INT} },
 
     //player colour access functions
-	{ "getPlayerColor",	scrGetPlayerColor,		    VAL_INT,
+	{ "getPlayerColour",	scrGetPlayerColour,		    VAL_INT,
         1, { VAL_INT } },
 
-	{ "getPlayerColorName",	scrGetPlayerColorName,		    VAL_STRING,
+	{ "getPlayerColourName",	scrGetPlayerColourName,		    VAL_STRING,
         1, { VAL_INT } },
 
     { "setPlayerColour",	scrSetPlayerColour,		    VAL_VOID,

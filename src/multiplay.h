@@ -225,7 +225,7 @@ extern DROID_TEMPLATE	*NameToTemplate(CHAR *sName,UDWORD player);
 
 extern STRING *getPlayerName	(UDWORD player);
 extern BOOL setPlayerName		(UDWORD player, STRING *sName);
-extern STRING *getPlayerColorName(SDWORD player);
+extern STRING *getPlayerColourName(SDWORD player);
 extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a computer or not.
 extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);

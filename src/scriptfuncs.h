@@ -435,8 +435,8 @@ typedef enum gamestatus
 } GAMESTATUS;
 
 //get the colour number used by a player
-extern BOOL scrGetPlayerColor(void);
-extern BOOL scrGetPlayerColorName(void);
+extern BOOL scrGetPlayerColour(void);
+extern BOOL scrGetPlayerColourName(void);
 
 //set the colour number to use for a player
 extern BOOL scrSetPlayerColour(void);

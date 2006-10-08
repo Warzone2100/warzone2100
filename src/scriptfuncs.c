@@ -5679,7 +5679,7 @@ BOOL scrGetGameStatus(void)
 }
 
 //get the colour number used by a player
-BOOL scrGetPlayerColor(void)
+BOOL scrGetPlayerColour(void)
 {
 	SDWORD		player, colour;
 
@@ -5690,7 +5690,7 @@ BOOL scrGetPlayerColor(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( FALSE, "scrGetPlayerColor: player number is too high" );
+		ASSERT( FALSE, "scrGetPlayerColour: player number is too high" );
 		return FALSE;
 	}
 
@@ -5705,7 +5705,7 @@ BOOL scrGetPlayerColor(void)
 }
 
 //get the colour name of the player ("green", "black" etc)
-BOOL scrGetPlayerColorName(void)
+BOOL scrGetPlayerColourName(void)
 {
 	SDWORD		player;
 
@@ -5716,13 +5716,13 @@ BOOL scrGetPlayerColorName(void)
 
 	if (player >= MAX_PLAYERS || player < 0)
 	{
-		ASSERT( FALSE, "scrGetPlayerColorName: wrong player index" );
+		ASSERT( FALSE, "scrGetPlayerColourName: wrong player index" );
 		return FALSE;
 	}
 
-	if (!stackPushResult(VAL_STRING, (SDWORD)getPlayerColorName(player)))
+	if (!stackPushResult(VAL_STRING, (SDWORD)getPlayerColourName(player)))
 	{
-		debug(LOG_ERROR, "scrGetPlayerColorName(): failed to push result");
+		debug(LOG_ERROR, "scrGetPlayerColourName(): failed to push result");
 		return FALSE;
 	}
 
@@ -10278,8 +10278,8 @@ SDWORD getPlayerFromString(STRING *playerName)
 		}
 
 		/* check color */
-		debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColorName(playerIndex), playerName);
-		if (strncasecmp(getPlayerColorName(playerIndex),playerName, 255) == 0)
+		debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColourName(playerIndex), playerName);
+		if (strncasecmp(getPlayerColourName(playerIndex),playerName, 255) == 0)
 		{
 			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
