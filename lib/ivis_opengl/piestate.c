@@ -11,6 +11,7 @@
 #ifdef _MSC_VER
 #include <windows.h>  //needed for gl.h!  --Qamly
 #endif
+#include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
 #include "lib/framework/frame.h"
@@ -207,6 +208,8 @@ void pie_SetColour(UDWORD colour)
 }
 
 /***************************************************************************/
-void pie_SetGammaValue(float val) // FIXME Remove if unused
+void pie_SetGammaValue(float val)
 {
+	debug(LOG_VIDEO, "%s(%f)", __FUNCTION__, val);
+	SDL_SetGamma(val, val, val);
 }

@@ -425,7 +425,8 @@ void	kf_RecalcLighting( void )
 /* Raises the 3dfx gamma value */
 void	kf_RaiseGamma( void )
 {
-
+	gammaValue += 0.05f;
+	pie_SetGammaValue(gammaValue);
 }
 
 // --------------------------------------------------------------------------
@@ -433,7 +434,8 @@ void	kf_RaiseGamma( void )
 /* Lowers the threedfx gamma value */
 void	kf_LowerGamma( void )
 {
-
+	gammaValue -= 0.05f;
+	pie_SetGammaValue(gammaValue);
 }
 
 // --------------------------------------------------------------------------
