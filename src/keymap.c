@@ -429,36 +429,25 @@ void	keyInitMappings( BOOL bForceDefaults )
 
 	// NOTE THIS!!!!!!!
 	// available: ctrl+e, ctrl+m
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");		//we need this one - Tr
 	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_SCROLLLOCK,KEYMAP_PRESSED,kf_TogglePauseMode,	strresGetString(psStringRes,STR_BIND_PAUSE));
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_MaxScrollLimits,				"Maximum scroll limits");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_RaiseTile,					"Raise tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_DOWN,kf_LowerTile,						"Lower tile height");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,				"Toggles on/off DEMO Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_B,KEYMAP_PRESSED,kf_EndMissionOffWorld,			"End Mission");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_KP_MINUS,KEYMAP_PRESSED,kf_SystemClose,			"System Close (EXIT)");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_I,KEYMAP_PRESSED,kf_RecalcLighting,				"Recalculate lighting");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_J,KEYMAP_PRESSED,kf_ToggleFog,					"Toggles All fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_ToggleMistFog,				"Toggle Mist Fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_ToggleFogColour,				"Toggle Fog Colour Fog");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_N,KEYMAP_PRESSED,kf_NewPlayerPower,				"New game player power");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F1,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  0");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F2,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  1");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F3,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  2");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F4,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  3");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F5,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  4");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
-// would be nice, but does not currently work - Per
-//	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_P,KEYMAP_PRESSED,kf_ToggleOutline,				"Tile Outline");
+
+	//These ones are necessary for debugging
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");	
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_K,KEYMAP_PRESSED,kf_KillSelected,						"Kill Selected Unit(s)");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
 
 	saveKeyMap();	// save out the default key mappings.
 
@@ -479,6 +468,26 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_BuildInfo,"Build date and time");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,"Toggles on/off DEMO Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_ShowGridInfo,"DBPRINTF map grid coverage");
+
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_SCROLLLOCK,KEYMAP_PRESSED,kf_TogglePauseMode,	strresGetString(psStringRes,STR_BIND_PAUSE));		//not needed, done with KEY_ESC
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_MaxScrollLimits,				"Maximum scroll limits");
+	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_KP_MINUS,KEYMAP_PRESSED,kf_SystemClose,			"System Close (EXIT)");			//not working right now
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_I,KEYMAP_PRESSED,kf_RecalcLighting,				"Recalculate lighting");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_N,KEYMAP_PRESSED,kf_NewPlayerPower,				"New game player power");
+
+	// This is not needed, use ctrl-o
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F1,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  0");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F2,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  1");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F3,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  2");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F4,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  3");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F5,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  4");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
+
+	// would be nice, but does not currently work - Per
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_P,KEYMAP_PRESSED,kf_ToggleOutline,				"Tile Outline");
 	*/
 
 //  ------------------------ OLD STUFF - Store here!

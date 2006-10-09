@@ -34,6 +34,8 @@
 #include "multigifts.h"
 #include "multijoin.h"
 #include "scores.h"
+#include "keymap.h"
+#include "loop.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -740,8 +742,17 @@ void displayExtraGubbins(UDWORD height)
 	iV_DrawText(strresGetString(psStringRes, STR_MUL_ALLIANCES), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(strresGetString(psStringRes, STR_MUL_SCORE), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(strresGetString(psStringRes, STR_MUL_KILLS), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText(strresGetString(psStringRes, STR_MUL_PING), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText(strresGetString(psStringRes, STR_MUL_PLAY), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	
+	if(getDebugMappingStatus())
+	{
+		iV_DrawText("Units", MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		iV_DrawText("Power", MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	}
+	else
+	{
+		iV_DrawText(strresGetString(psStringRes, STR_MUL_PING), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		iV_DrawText(strresGetString(psStringRes, STR_MUL_PLAY), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	}
 
 #ifdef DEBUG
 	sprintf(str,"Traf:%d/%d",NETgetBytesSent(),NETgetBytesRecvd());
@@ -833,23 +844,26 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 //		}
 		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 
-		//c10:ping
-		if(player != selectedPlayer)
+		if(!getDebugMappingStatus())
 		{
-			if(ingame.PingTimes[player] >2000)
+			//c10:ping
+			if(player != selectedPlayer)
 			{
-				sprintf(str,"***");
+				if(ingame.PingTimes[player] >2000)
+				{
+					sprintf(str,"***");
+				}
+				else
+				{
+					sprintf(str,"%d",ingame.PingTimes[player]);
+				}
+				iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 			}
-			else
-			{
-				sprintf(str,"%d",ingame.PingTimes[player]);
-			}
-			iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
-		}
 
-		//c11:played
-		sprintf(str,"%d",getMultiStats(player,TRUE).played);
-		iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
+			//c11:played
+			sprintf(str,"%d",getMultiStats(player,TRUE).played);
+			iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
+		}
 	}
 	else
 	{
@@ -859,7 +873,20 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		// estimated kills
 		sprintf(str,"%d",ingame.skScores[player][1]);
 		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+	}
 
+	/* Display player power instead of number of played games
+	  * and number of units instead of ping when in debug mode
+	  */
+	if(getDebugMappingStatus())			//Won't pass this when in both release and multiplayer modes
+	{
+		//c10: Total number of player units in possession
+		sprintf(str,"%d",getNumDroids(player));
+		iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
+
+		//c11: Player power
+		sprintf(str,"%d",asPower[player]->currentPower);
+		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11,  y+MULTIMENU_FONT_OSET);
 	}
 
 	// a droid of theirs.
