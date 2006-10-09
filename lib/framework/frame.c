@@ -51,9 +51,6 @@ static BOOL	bActiveDDraw;
 static WORD currentCursorResID = UWORD_MAX;
 SDL_Cursor *aCursors[MAX_CURSORS];
 
-/* Stores whether a windows quit message has been received */
-static BOOL winQuit=FALSE;
-
 typedef enum _focus_state
 {
 	FOCUS_OUT,		// Window does not have the focus
@@ -295,7 +292,6 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 
         SDL_WM_SetCaption(pWindowName, NULL);
 
-	winQuit = FALSE;
 	focusState = FOCUS_IN;
 	focusLast = FOCUS_IN;
 	mouseOn = TRUE;
@@ -358,6 +354,7 @@ FRAME_STATUS frameUpdate(void)
 {
 	SDL_Event event;
 	FRAME_STATUS	retVal;
+	BOOL wzQuit = FALSE;
 
 	/* Tell the input system about the start of another frame */
 	inputNewFrame();
@@ -366,15 +363,14 @@ FRAME_STATUS frameUpdate(void)
 	while ( SDL_PollEvent( &event ) != 0)
 	{
 		if (event.type == SDL_QUIT)
-		{
-			break;
-		}
-		processEvent(&event);
+			wzQuit = TRUE;
+		else
+			processEvent(&event);
 	}
 
 	/* Now figure out what to return */
 	retVal = FRAME_OK;
-	if (winQuit)
+	if (wzQuit)
 	{
 		retVal = FRAME_QUIT;
 	}
@@ -404,7 +400,7 @@ FRAME_STATUS frameUpdate(void)
 	}
 
 	/* If things are running normally update the framerate */
-	if ((!winQuit) && (focusState == FOCUS_IN))
+	if ((!wzQuit) && (focusState == FOCUS_IN))
 	{
 		/* Update the frame rate stuff */
 		MaintainFrameStuff();
