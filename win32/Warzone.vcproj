@@ -491,10 +491,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\ignorecase.c"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\ivis_common\imd.c"
 				>
 			</File>
@@ -1376,10 +1372,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\heap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\ignorecase.h"
 				>
 			</File>
 			<File
