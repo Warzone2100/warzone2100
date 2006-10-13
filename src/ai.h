@@ -20,6 +20,21 @@
 #define	ALLIANCES_TEAMS		2			//locked teams
 //#define GROUP_WINS		2
 
+/* Weights used for target selection code */
+#define	WEIGHT_DIST_TILE							11									//In points used in weaponmodifier.txt and structuremodifier.txt
+#define	WEIGHT_DIST_TILE_DROID				WEIGHT_DIST_TILE		//How much weight a distance of 1 tile (128 world units) has when looking for the best nearest target
+#define	WEIGHT_DIST_TILE_STRUCT			WEIGHT_DIST_TILE
+#define	WEIGHT_HEALTH_DROID					WEIGHT_DIST_TILE		//How much weight unit damage has (per 10% of damage, ie for each 10% of damage we add WEIGHT_HEALTH_DROID)
+																													//~100% damage should be ~8 tiles (max sensor range)
+#define	WEIGHT_HEALTH_STRUCT				WEIGHT_DIST_TILE
+
+#define	WEIGHT_NOT_VISIBLE_FACTOR		10														//We really don't like objects we can't see
+
+#define	WEIGHT_SERVICE_DROIDS				(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
+#define	WEIGHT_WEAPON_DROIDS				(WEIGHT_DIST_TILE_DROID * 3)		//We prefere to go after anything that has a gun and can hurt us
+#define	WEIGHT_MILITARY_STRUCT				WEIGHT_DIST_TILE_STRUCT			//Droid/cyborg factories, repair facility; shouldn't have too much weight
+#define	WEIGHT_WEAPON_STRUCT				WEIGHT_WEAPON_DROIDS				//Same as weapon droids (?)
+
 // alliances
 extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];
 
@@ -39,7 +54,7 @@ extern BOOL aiInitDroid(DROID *psDroid);
 extern void aiUpdateDroid(DROID *psDroid);
 
 // Find the nearest target to a droid
-extern BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj);
+extern BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj);
 
 /* See if there is a target in range */
 extern BOOL aiChooseTarget(BASE_OBJECT *psObj,

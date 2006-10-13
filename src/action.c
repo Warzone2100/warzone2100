@@ -837,7 +837,7 @@ static void actionUpdateTransporter( DROID *psDroid )
     {
 	    if (psDroid->psActionTarget == NULL)
 	    {
-		    aiNearestTarget(psDroid, &psDroid->psActionTarget);
+		    aiBestNearestTarget(psDroid, &psDroid->psActionTarget);
 	    }
 
 	    if ( psDroid->psActionTarget != NULL )
@@ -1262,7 +1262,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}*/
 
 /*		else if ((psDroid->order == DORDER_SCOUT) &&
-				 aiNearestTarget(psDroid, &psObj))
+				 aiBestNearestTarget(psDroid, &psObj))
 		{
 			if (psDroid->numWeaps > 0)
 			{
@@ -1279,7 +1279,7 @@ void actionUpdateDroid(DROID *psDroid)
 				 psDroid->asWeaps[0].nStat > 0 &&
 				 psWeapStats->rotate &&
 				 psWeapStats->fireOnMove != FOM_NO &&
-				 aiNearestTarget(psDroid, &psDroid->psActionTarget))
+				 aiBestNearestTarget(psDroid, &psDroid->psActionTarget))
 		{
 			if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
 			{

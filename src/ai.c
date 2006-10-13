@@ -76,12 +76,16 @@ BOOL aiShutdown(void)
 	return TRUE;
 }
 
-// Find the nearest target to a droid
-BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
+// Find the best nearest target for a droid
+BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 {
 	UDWORD			i;
-	BASE_OBJECT		*psTarget, *psObj;
+	SDWORD				bestMod,newMod,damage,targetTypeBonus;
+	BASE_OBJECT		*psTarget, *psObj, *bestTarget;
 	BOOL			electronic = FALSE;
+	WEAPON_EFFECT			weaponEffect;
+	STRUCTURE			*targetStructure;
+	DROID						*targetDroid;
 
 	if ((psDroid->id % 8) == (frameGetFrameNumber() % 8))
 	{
@@ -98,9 +102,18 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
         return FALSE;
     }
 
+	/* Return if have no weapons */
+	if(psDroid->asWeaps[0].nStat == 0)
+		return FALSE;
+
+	//weaponMod = asWeaponModifier[weaponEffect][(asPropulsionStats + ((DROID*)psObj)->asBits[COMP_PROPULSION].nStat)->propulsionType];
+	weaponEffect = ((WEAPON_STATS *)(asWeaponStats + psDroid->asWeaps[0].nStat))->weaponEffect;
+
 	//electronic warfare can only be used against structures at present - not any more! AB 6/11/98
 	electronic = electronicDroid(psDroid);
 	psTarget = NULL;
+	bestTarget = NULL;
+	bestMod = 0;
 	for (i=0; i< numNaybors; i++)
 	{
 		if (asDroidNaybors[i].psObj->player != psDroid->player &&
@@ -125,13 +138,13 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
                     {
                         //only a valid target if NOT a transporter
                         psTarget = psObj;
-					    break;
+					   // break;
                     }
                 }
                 else
 				{
 					psTarget = psObj;
-					break;
+					//break;
                 }
 			}
 			else if (psObj->type == OBJ_STRUCTURE)
@@ -149,7 +162,7 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
                     if (validStructResistance((STRUCTURE *)psObj))
 					{
 						psTarget = psObj;
-						break;
+						//break;
 					}
 				}
 				//else if (((STRUCTURE *)psObj)->numWeaps > 0)
@@ -157,7 +170,7 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 				{
 					// structure with weapons - go for this
 					psTarget = psObj;
-					break;
+					//break;
 				}
 				else if ( (  ((STRUCTURE *)psObj)->pStructureType->type != REF_WALL
 						   &&((STRUCTURE *)psObj)->pStructureType->type != REF_WALLCORNER
@@ -169,12 +182,105 @@ BOOL aiNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 					psTarget = psObj;
 				}
 			}
+
+			/* Check if our weapon is most effective against this object */
+			if(psTarget != NULL && psTarget == psObj)		//was assigned?
+			{
+				targetTypeBonus = 0;			//Sensors/ecm droids, non-military structures get lower priority
+
+				if(psTarget->type == OBJ_DROID)
+				{
+					targetDroid = (DROID *)psTarget;
+
+					/* Calculate damage this target suffered */
+					damage = targetDroid->originalBody - targetDroid->body;
+
+					/* See if this type of a droid should be prioritized */
+						switch (targetDroid->droidType)
+					{
+						case DROID_CYBORG:
+						case DROID_WEAPON:
+						case DROID_CYBORG_SUPER:
+						case DROID_COMMAND:			//or should it get more priority?
+							targetTypeBonus = WEIGHT_WEAPON_DROIDS;
+							break;
+						
+						case DROID_CONSTRUCT:	
+						case DROID_REPAIR:
+						case DROID_CYBORG_CONSTRUCT:
+						case DROID_CYBORG_REPAIR:
+							targetTypeBonus = WEIGHT_SERVICE_DROIDS;
+							break;
+					}
+
+					/* Now calculate the overal weight */
+					newMod = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType]		//Weapon effect
+									- (WEIGHT_DIST_TILE_DROID * (dirtySqrt(psDroid->x, psDroid->y,targetDroid->x,targetDroid->y) >> TILE_SHIFT) )								//substract WEIGHT_DIST_TILE_DROID per tile, 128 world units in a tile
+									+ (damage * 10 / targetDroid->originalBody ) * WEIGHT_HEALTH_DROID																//we prefere damaged droids
+									+ targetTypeBonus;																												//some droid types have higher priority
+				}
+				else if (psTarget->type == OBJ_STRUCTURE)
+				{
+					targetStructure = (STRUCTURE *)psTarget;
+
+					/* Calculate damage this target suffered */
+					damage = structureBody(targetStructure) - targetStructure->body;
+
+					/* See if this type of a structure should be prioritized */
+					switch(targetStructure->pStructureType->type)
+					{
+					case REF_DEFENSE:
+						targetTypeBonus = WEIGHT_WEAPON_STRUCT;
+							break;
+
+					case REF_FACTORY:
+					case REF_CYBORG_FACTORY:
+					case REF_REPAIR_FACILITY:
+						targetTypeBonus = WEIGHT_MILITARY_STRUCT;
+							break;
+					}
+
+					/* Now calculate the overal weight */
+					newMod = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength]						//Weapon effect
+									- (WEIGHT_DIST_TILE_STRUCT * (dirtySqrt(psDroid->x, psDroid->y,targetStructure->x,targetStructure->y) >> TILE_SHIFT) )		//substract WEIGHT_DIST_TILE_STRUCT per tile, 128 world units in a tile
+									+ (damage * 10 / structureBody(targetStructure) ) * WEIGHT_HEALTH_STRUCT											//we prefere damaged structures
+									+ targetTypeBonus;																											//some structure types have higher priority
+				}
+				else
+				{
+					continue;
+				}
+
+				/* We prefere objects we can see and can attack immediately */
+				if(!visibleObjWallBlock((BASE_OBJECT *)psDroid, psTarget))
+				{
+					newMod /= WEIGHT_NOT_VISIBLE_FACTOR;
+				}
+
+				/* Remember this one if it's our best target so far */
+				if( newMod > bestMod || bestTarget == NULL)
+				{
+					bestMod = newMod;
+					bestTarget = psObj;
+				}
+
+			}
 		}
 	}
 
-	if (psTarget)
+	if (bestTarget)
 	{
-		*ppsObj = psTarget;
+		/* See if target is blocked by a wall; only affects direct weapons */
+		if(proj_Direct( asWeaponStats +  psDroid->asWeaps[0].nStat) && visGetBlockingWall((BASE_OBJECT *)psDroid, bestTarget, &targetStructure) )
+		{
+			//are we any good against walls?
+			if(asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] >= 100)		//can attack atleast with default strength
+			{
+				bestTarget = (BASE_OBJECT *)targetStructure;			//attack wall
+			}
+		}
+
+		*ppsObj = bestTarget;
 		return TRUE;
 	}
 
@@ -284,7 +390,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
-		if (aiNearestTarget((DROID *)psObj, &psTarget))
+		if (aiBestNearestTarget((DROID *)psObj, &psTarget))
 		{
             /*check its a valid target*/
             if (validTarget(psObj, psTarget))
@@ -535,7 +641,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
-		if (aiNearestTarget((DROID *)psObj, &psTarget))
+		if (aiBestNearestTarget((DROID *)psObj, &psTarget))
 		{
 			/* See if in sensor range */
 			xdiff = psTarget->x - psObj->x;
