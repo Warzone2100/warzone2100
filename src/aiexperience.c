@@ -1,7 +1,7 @@
 //aiexperience.c
+#include <physfs.h>
 #include "objmem.h"
 #include "objectdef.h"
-
 #include "map.h"
 #include "lib/framework/frame.h"
 #include "lib/script/interp.h"
@@ -14,6 +14,8 @@
 #include "geometry.h"
 
 #include "aiexperience.h"
+
+static PHYSFS_file* aiSaveFile[8];
 
 SDWORD baseLocation[MAX_PLAYERS][MAX_PLAYERS][2];		//each player's visible enemy base x,y coords for each player (hence 3d)
 SDWORD oilLocation[MAX_PLAYERS][MAX_OIL_LOCATIONS][2];	//remembered oil locations

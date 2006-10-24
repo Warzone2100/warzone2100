@@ -1,7 +1,4 @@
 //aiexperience.h
-
-#include "physfs.h"
-
 #define MAX_OIL_ENTRIES 600				//(Max number of derricks or oil resources) / 2
 
 #define	MAX_OIL_DEFEND_LOCATIONS  100		//max number of attack locations to store
@@ -9,7 +6,6 @@
 #define	MAX_BASE_DEFEND_LOCATIONS  30	//max number of base locations to store
 #define SAME_LOC_RANGE 8				//if within this range, consider it the same loc
 
-static PHYSFS_file* aiSaveFile[8];
 extern SDWORD baseLocation[MAX_PLAYERS][MAX_PLAYERS][2];
 extern SDWORD oilLocation[MAX_PLAYERS][MAX_OIL_LOCATIONS][2];
 extern SDWORD baseDefendLocation[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS][2];

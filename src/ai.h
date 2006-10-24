@@ -28,12 +28,14 @@
 																													//~100% damage should be ~8 tiles (max sensor range)
 #define	WEIGHT_HEALTH_STRUCT				WEIGHT_DIST_TILE
 
-#define	WEIGHT_NOT_VISIBLE_FACTOR		10														//We really don't like objects we can't see
+#define	WEIGHT_NOT_VISIBLE_F					10														//We really don't like objects we can't see
 
 #define	WEIGHT_SERVICE_DROIDS				(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
 #define	WEIGHT_WEAPON_DROIDS				(WEIGHT_DIST_TILE_DROID * 3)		//We prefere to go after anything that has a gun and can hurt us
 #define	WEIGHT_MILITARY_STRUCT				WEIGHT_DIST_TILE_STRUCT			//Droid/cyborg factories, repair facility; shouldn't have too much weight
 #define	WEIGHT_WEAPON_STRUCT				WEIGHT_WEAPON_DROIDS				//Same as weapon droids (?)
+
+#define	WEIGHT_STRUCT_NOTBUILT_F		8						//Humans won't fool us anymore!
 
 // alliances
 extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];

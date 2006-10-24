@@ -732,6 +732,8 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "match",	scrMatch,	VAL_BOOL,
 		3, { VAL_STRING, VAL_STRING, VAL_REF|VAL_INT } },
 
+	{ "bitSet",	scrBitSet,	VAL_BOOL,
+		2, { VAL_INT, VAL_INT } },
 
 	{ "dropBeacon",				scrDropBeacon,			VAL_VOID,
 		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
@@ -1671,6 +1673,8 @@ TYPE_EQUIV asEquivTable[] =
 	{ (INTERP_TYPE)ST_CONSTRUCT,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_REPAIR,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_BRAIN,			1,	{ (INTERP_TYPE)ST_POINTER_S, } },
+	{ (INTERP_TYPE)ST_STRUCTURESTAT,		1,	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT, } },
+	
 
 	/* This marks the end of the equivalence list */
 	{ (INTERP_TYPE)0,0 }

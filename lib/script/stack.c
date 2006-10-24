@@ -517,7 +517,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 			{
 				sprintf(tempstr1,"%d",psV1->v.ival);	//Convert
 
-				psV1->type = VAL_STRING;		//Mark as string now
+				psV1->type = VAL_STRING;		//Mark as string
+				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of cancatenation will be saved here
 			}
 			else if(psV1->type == VAL_STRING)	//Is a string
 			{
@@ -529,7 +530,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				return FALSE;
 			}
 
-			/* Check first value if it's compatible with Strings */
+			/* Check second value if it's compatible with Strings */
 			if((psV2->type == VAL_INT) || (psV2->type == VAL_BOOL))
 			{
 				sprintf(tempstr2,"%d",psV2->v.ival);		//Convert
@@ -547,8 +548,6 @@ BOOL stackBinaryOp(OPCODE opcode)
 			strcat(tempstr1,tempstr2);
 
 			strcpy(psV1->v.sval,tempstr1);		//Assign
-
-			psV1->type = VAL_STRING;
 		}
 		break;
 

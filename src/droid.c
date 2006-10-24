@@ -2059,7 +2059,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		/* Notify scripts we just finished building a structure, pass builder and what was built */
 		psScrCBNewStruct	= psStruct;
 		psScrCBNewStructTruck= psDroid;
-		eventFireCallbackTrigger(CALL_STRUCTBUILT);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
 
 		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
 

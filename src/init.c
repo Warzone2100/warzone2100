@@ -734,6 +734,8 @@ static BOOL loadLevFile(const char* filename, int datadir) {
 	char *pBuffer;
 	UDWORD size;
 
+	debug( LOG_WZ, "Loading lev file: %s\n", filename );
+
 	if (   !PHYSFS_exists(filename)
 	    || !loadFile(filename, &pBuffer, &size)) {
 		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
@@ -959,7 +961,6 @@ BOOL buildMapList(void)
 		len = strlen( *file );
 		if ( len > 10 // Do not add addon.lev again
 				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
-			debug( LOG_WZ, "Loading lev file: %s\n", *file );
 			loadLevFile( *file, MOD_MULTIPLAY );
 		}
 	}

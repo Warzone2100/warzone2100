@@ -4398,7 +4398,7 @@ stringexp:
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
-		| 	stringexp '&' boolexp		//CHANGED: OP_CANC
+		| 	expression '&' stringexp		//CHANGED: OP_CANC
 				{
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_CANC, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -4406,7 +4406,22 @@ stringexp:
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
+		| 	stringexp '&' boolexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_CANC, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
 
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+		| 	boolexp '&' stringexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_CANC, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
 			|	'(' stringexp ')'
 				{
 					//debug(LOG_SCRIPT, "'(' stringexp ')'");
@@ -4491,14 +4506,6 @@ stringexp:
 
 					//debug(LOG_SCRIPT, "END STRING_VAR (%s)", $1->pIdent);
 				}
-		|	NUM_VAR
-				{
-					codeRet = scriptCodeVarGet($1, &psCurrBlock);
-					CHECK_CODE_ERROR(codeRet);
-
-					/* Return the code block */
-					$$ = psCurrBlock;
-				}
 		|	QTEXT
 				{
 					//debug(LOG_SCRIPT, "QTEXT found (%s)", yyvsp[0].sval);
@@ -4523,18 +4530,11 @@ stringexp:
 
 					//debug(LOG_SCRIPT, "END QTEXT found");
 				}
-		|	INTEGER
+		|		expression
 				{
-					ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(UDWORD));
-					ip = psCurrBlock->pCode;
-
-					/* Code to store the value on the stack */
-					PUT_PKOPCODE(ip, OP_PUSH, VAL_INT);
-					PUT_DATA(ip, $1);
-
-					/* Return the code block */
-					$$ = psCurrBlock;
-				}
+					/* Just pass the code up the tree */
+					$$ = $1;
+			}
 			;
 
 

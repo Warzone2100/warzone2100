@@ -245,6 +245,11 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 									- (WEIGHT_DIST_TILE_STRUCT * (dirtySqrt(psDroid->x, psDroid->y,targetStructure->x,targetStructure->y) >> TILE_SHIFT) )		//substract WEIGHT_DIST_TILE_STRUCT per tile, 128 world units in a tile
 									+ (damage * 10 / structureBody(targetStructure) ) * WEIGHT_HEALTH_STRUCT											//we prefere damaged structures
 									+ targetTypeBonus;																											//some structure types have higher priority
+
+					/* Go for unfinished structures only if nothing else found (same for non-visible structures) */
+					if(targetStructure->status != SS_BUILT)			//a decoy?
+						newMod /= WEIGHT_STRUCT_NOTBUILT_F;
+
 				}
 				else
 				{
@@ -254,7 +259,7 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 				/* We prefere objects we can see and can attack immediately */
 				if(!visibleObjWallBlock((BASE_OBJECT *)psDroid, psTarget))
 				{
-					newMod /= WEIGHT_NOT_VISIBLE_FACTOR;
+					newMod /= WEIGHT_NOT_VISIBLE_F;
 				}
 
 				/* Remember this one if it's our best target so far */

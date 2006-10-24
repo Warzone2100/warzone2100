@@ -79,6 +79,8 @@
 // If this is defined then check max number of units not reached before adding more.
 #define SCRIPT_CHECK_MAX_UNITS
 
+SDWORD		playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+
 // -----------------------------------------------------------------------------------------
 BOOL	structHasModule(STRUCTURE *psStruct);
 SDWORD	guessPlayerFromMessage(STRING **str);
@@ -10215,7 +10217,6 @@ SDWORD guessPlayerFromMessage(STRING **str)
 	SDWORD	player,count=0;
 	STRING	*endOfPlayerList;
 	STRING	playerName[255];
-	SDWORD	playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 	SDWORD	storage=0;
 	BOOL	bOK=FALSE;
 
@@ -10227,7 +10228,7 @@ SDWORD guessPlayerFromMessage(STRING **str)
 
 	debug(LOG_SCRIPT, "now checking string='%s'",*str);
 
-	while( sscanf(*str, "%[^,:;?! ]%*[,;?! ]%n", playerName, &count)	//didn't reach the end	//first field: what to stop on; second field: what to read (skip) afterwards
+	while( sscanf(*str, "%[^',:;?! ]%*[,';?! ]%n", playerName, &count)	//didn't reach the end	//first field: what to stop on; second field: what to read (skip) afterwards
 		&& player >= 0										//last string was a player name
 		//&& *str < copyStr + strlen(copyStr)
 		)
@@ -10251,15 +10252,12 @@ SDWORD guessPlayerFromMessage(STRING **str)
 		}
 
 		debug(LOG_SCRIPT, "             ");
-		debug(LOG_SCRIPT, "now checking string='%s'",*str);
+		debug(LOG_SCRIPT, "now checking string = '%s'",*str);
 	}
 
 	*str = endOfPlayerList;	//skip player list
 
-	if(bOK)
-		return storage;
-
-	return -1;
+	return storage;		//Must be 0 if no players
 }
 
 SDWORD getPlayerFromString(STRING *playerName)
@@ -10301,7 +10299,7 @@ SDWORD getPlayerFromString(STRING *playerName)
 
 BOOL scrGetTargetPlayers(void)
 {
-	STRING	*myMsg = NULL;
+	STRING	*myMsg = NULL,*freeMsg = NULL;
 	STRING	**ssval = NULL;
 	SDWORD	players=0;
 
@@ -10320,6 +10318,7 @@ BOOL scrGetTargetPlayers(void)
 	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
 
 	myMsg = (STRING*)MALLOC(255);
+	freeMsg = myMsg;
 
 	strcpy(myMsg,*ssval);
 
@@ -10339,7 +10338,7 @@ BOOL scrGetTargetPlayers(void)
 		return FALSE;
 	}
 
-	FREE(myMsg);
+	FREE(freeMsg);
 
 	return TRUE;
 
@@ -10390,10 +10389,14 @@ BOOL scrMatch(void)
 		/* get next word */
 		fieldAssignedParse = getFirstWord(sToParse,&wordFound,&readCountParse);
 		sToParse = sToParse + readCountParse;			/* next time start with next word */
+		if(readCountParse == 0)										/* sscanf returns 0 when last word is read */
+			sToParse = sToParse + strlen(wordFound);
 
 		/* get next word */
 		fieldAssignedMatch = getFirstWord(sToMatch,&wordNeed,&readCountMatch);
 		sToMatch = sToMatch + readCountMatch;			/* next time start with next word */
+		if(readCountMatch == 0)										/* sscanf returns 0 when last word is read */
+			sToMatch = sToMatch + strlen(wordNeed);	
 
 		debug(LOG_SCRIPT, "wordFound '%s'", wordFound);
 		debug(LOG_SCRIPT, "wordNeed '%s'", wordNeed);
@@ -10432,7 +10435,7 @@ BOOL scrMatch(void)
 				debug(LOG_SCRIPT, "matched <player>");
 			}
 		}
-		else if (strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to se if they match */
+		else if (strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to see if they match */
 		{
 			debug(LOG_SCRIPT, "words did not match");
 			ok = FALSE;
@@ -10465,13 +10468,35 @@ SDWORD getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount)
 
 	strcpy(*sWord,"");		/* clear */
 
-	fieldsAssigned = sscanf(sText, "%[^,:;?! ]%*[,;?! ]%n", *sWord, &count);
+	fieldsAssigned = sscanf(sText, "%[^',:;?! ]%*[,';?! ]%n", *sWord, &count);
 
 	debug(LOG_SCRIPT, "--getWord: matched='%s', count=%d, fieldsAssigned=%d",*sWord, count, fieldsAssigned);
 
 	*readCount = count;
 
 	return fieldsAssigned;
+}
+
+
+/* Checks if a particular bit is set in an integer */
+BOOL scrBitSet(void)
+{
+	SDWORD				val1,val2;
+
+	if (!stackPopParams(2, VAL_INT, &val1, VAL_INT, &val2))
+	{
+		debug(LOG_ERROR, "scrBitSet(): failed to pop");
+		return FALSE;
+	}
+
+	ASSERT(val2 < MAX_PLAYERS && val2 >= 0, "scrBitSet(): wrong player index (%d)", val2);
+
+	if (!stackPushResult(VAL_BOOL, val1 & playerFlag[val2] ))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* Can we create and break alliaces? */
