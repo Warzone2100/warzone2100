@@ -7,11 +7,11 @@ ShortName: warzone2100
 Maintainer: Warzone Resurrection Project <warzone-dev@gna.org>
 Packager: Dennis Schridde <devurandom@gna.org>
 Summary: Warzone 2100 is a 3D realtime strategy game about a post nuklear war in the year 2100
-URL: http://wz.rootzilla.de/
+URL: http://wz2100.net/
 License: GNU General Public License, Version 2
 SoftwareVersion: @VERSION@
 Repository: http://download.gna.org/warzone/.autopackage/$SHORTNAME.xml
-PackageDesktop: share/applications/warzone2100.desktop
+PackageDesktop: debian/warzone2100.desktop
 # PackageVersion: 2
 AutopackageTarget: 1.2
 
