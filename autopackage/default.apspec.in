@@ -11,14 +11,12 @@ URL: http://wz2100.net/
 License: GNU General Public License, Version 2
 SoftwareVersion: @VERSION@
 Repository: http://download.gna.org/warzone/.autopackage/$SHORTNAME.xml
-PackageDesktop: debian/warzone2100.desktop
+PackageDesktop: share/applications/warzone2100.desktop
 # PackageVersion: 2
 AutopackageTarget: 1.2
 
 [BuildPrepare]
 prepareBuild
-installIcon debian/warzone2100.png
-installDesktop "Games/TacticStrategy" debian/warzone2100.desktop
 
 [BuildUnprepare]
 unprepareBuild
@@ -47,6 +45,8 @@ removeOwningPackage $PREFIX/share/warzone2100
 # Put your installation script here
 installExe bin/warzone2100
 installData share/warzone2100
+installIcon share/icons/warzone2100.png
+installDesktop "Games/TacticStrategy" share/applications/warzone2100.desktop
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
