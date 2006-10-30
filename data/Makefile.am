@@ -7,11 +7,11 @@ PATCHLIST = addon.lev anims audio components effects \
 	messages multiplay stats structs texpages wrf
 
 install-data-local:
-	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz ; }
-	[ -f gamedesc.lev ] && { cd mp && { zip -ru9 ../mp.wz ${PATCHLIST} -x *svn* || zip -T ../mp.wz ; } && cd .. ; }
-	[ -d "$(DESTDIR)$(datadir)" ] || $(mkdir_p) "$(DESTDIR)$(datadir)"
-	[ -f warzone.wz ] && $(INSTALL_DATA) warzone.wz $(DESTDIR)$(datadir)/
-	[ -f mp.wz ] && $(INSTALL_DATA) mp.wz $(DESTDIR)$(datadir)/
+	zip -ru0 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz
+	cd mp && { zip -ru0 ../mp.wz $(PATCHLIST) -x *svn* || zip -T ../mp.wz ; } && cd ..
+	$(MKDIR_P) $(DESTDIR)$(datadir)/warzone2100
+	$(INSTALL_DATA) $(srcdir)/warzone.wz $(DESTDIR)$(datadir)/warzone2100/warzone.wz
+	$(INSTALL_DATA) $(srcdir)/mp.wz $(DESTDIR)$(datadir)/warzone2100/mp.wz
 
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/warzone.wz

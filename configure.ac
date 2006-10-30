@@ -2,7 +2,7 @@
 
 AC_PREREQ(2.56)
 AC_INIT([Warzone 2100],[2.0.5_rc1],[http://wz2100.net/])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([1.8])
 
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 AC_CONFIG_HEADER([lib/framework/config.h])
@@ -52,43 +52,23 @@ fi
 
 #   --disable-ogg will build without Ogg Vorbis support
 AC_ARG_ENABLE(ogg,
-[AC_HELP_STRING([--disable-ogg],[Do not built support for Ogg files])],
+[AS_HELP_STRING([--disable-ogg],[Do not built support for Ogg files])],
 [ ogg=$enableval ], [ ogg=maybe ])
 
 #   --disable-mp3 will build without Mp3 support
 AC_ARG_ENABLE(mp3,
-[AC_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
+[AS_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
 [ mp3=$enableval ], [ mp3=maybe ])
 
 # windows conditional
 case $host_os in
-  *mingw32* )
-        AC_DEFINE(WIN32, 1, [Windows build])
-        WZ_LIBS="${WZ_LIBS} -lmingw32"
-        ;;
-          * )
-        ;;
+	*mingw32* )
+		AC_DEFINE(WIN32, 1, [Windows build])
+		WZ_LIBS="${WZ_LIBS} -lmingw32"
+		;;
+	* )
+		;;
 esac
-
-dnl WZ_EXPAND_DIR(VARNAME, DIR)
-dnl expands occurrences of ${prefix} and ${exec_prefix} in the given DIR,
-dnl and assigns the resulting string to VARNAME
-dnl example: WZ_EXPAND_DIR(LOCALEDIR, "$datadir/locale")
-dnl eg, then: AC_DEFINE_UNQUOTED(LOCALEDIR, "$LOCALEDIR")
-dnl by Alexandre Oliva
-dnl from http://www.cygnus.com/ml/automake/1998-Aug/0040.html
-AC_DEFUN([WZ_EXPAND_DIR], [
-        $1=$2
-        $1=`(
-            test "x$prefix" = "xNONE" && prefix="${ac_default_prefix}"
-            test "x$exec_prefix" = "xNONE" && exec_prefix="${prefix}"
-            eval echo \""[$]$1"\"
-        )`
-])
-dnl export where the datadir is going to be installed; we will look for
-dnl $datadir/warzone2100/warzone.wz
-WZ_EXPAND_DIR(datadir, "$datadir/warzone2100")
-WZ_CFLAGS="${WZ_CFLAGS} -DDEFAULT_DATADIR=\\\"${datadir}\\\""
 
 
 # Checks for libraries:
@@ -260,7 +240,7 @@ AC_SUBST(YFLAGS, "-oy.tab.c")
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -m32"
+WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
 # only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
 # strange error messages when something is wrong
