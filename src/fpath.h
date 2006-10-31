@@ -64,11 +64,8 @@ extern void fpathSetDirectRoute( BASE_OBJECT *psObj,
 							SDWORD targetX, SDWORD targetY );
 
 /*
-#define FPATH_INLINE _inline
-
-
 // Check if the map tile at a location blocks a droid
-FPATH_INLINE BOOL fpathBlockingTile(SDWORD x, SDWORD y)
+static inline BOOL fpathBlockingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE	*psTile;
 

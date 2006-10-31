@@ -372,7 +372,7 @@ static void fpathHashReset(void)
 
 
 // Compare two nodes
-static __inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
+static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 {
 	SDWORD	first,second;
 

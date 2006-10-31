@@ -40,7 +40,7 @@ void DrawTriangleList(BSPPOLYID PolygonNumber);
 
 
 // Local prototypes
-_inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP );
+static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP );
 static iVector *IMDvec(int Vertex);
 static void TraverseTreeAndRender( PSBSPTREENODE psNode);
 
@@ -69,7 +69,7 @@ extern BOOL NoCullBSP;	// Oh yes... a global externaly referenced variable....
  * - psPlane structure containing the plane equation
  */
 /***************************************************************************/
-_inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
+static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
 {
 	iVectorf	vecP;
 	FRACT Dot;
@@ -160,7 +160,7 @@ PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode);
 static FRACT GetDist( PSTRIANGLE psTri, int pA, int pB );
 
 // little routine for getting an imd vector structure in the IMD from the vertex ID
-static _inline iVector *IMDvec(int Vertex)
+static inline iVector *IMDvec(int Vertex)
 {
 #ifdef BSP_MAXDEBUG
 	assert((Vertex>=0)&&(Vertex<CurrentVertexListCount));

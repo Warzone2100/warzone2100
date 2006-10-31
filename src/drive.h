@@ -1,48 +1,29 @@
-
-
-
-#ifdef _MSC_VER	  //   //sigh... well, we really need either __forceinline or __inline for win32(.net)...
-//#undef DRIVEFUNCINLINE
-#define DRIVEFUNCINLINE  __inline
-
-#else
-
-#ifdef DEFINE_DRIVE_INLINE
-#define DRIVEFUNCINLINE 
-#else
-#define DRIVEFUNCINLINE __inline extern
-#endif
-
-#endif
-
-
 extern BOOL DirectControl;
 extern DROID *psDrivenDroid;
 
-//DRIVEFUNCINLINE UWORD controlModeGet(void)
+//static inline UWORD controlModeGet(void)
 //{
 //	return ControlMode;
 //}
 //
 //
-//DRIVEFUNCINLINE void controlModeSet(UWORD Mode)
+//static inline void controlModeSet(UWORD Mode)
 //{
 //	ControlMode = Mode;
 //}
 //
 //
-//DRIVEFUNCINLINE void	setDrivingStatus( BOOL val )
+//static inline void setDrivingStatus( BOOL val )
 //{
 //	bDriveMode = val;
 //}
 //
-//DRIVEFUNCINLINE BOOL	getDrivingStatus( void )
+//static inline BOOL getDrivingStatus( void )
 //{
 //	return(bDriveMode);
 //}
 
-
-DRIVEFUNCINLINE BOOL driveHasDriven(void)
+static inline BOOL driveHasDriven(void)
 {
 	return (DirectControl) && (psDrivenDroid != NULL) ? TRUE : FALSE;
 }
@@ -50,7 +31,7 @@ DRIVEFUNCINLINE BOOL driveHasDriven(void)
 
 // Returns TRUE if drive mode is active.
 //
-DRIVEFUNCINLINE BOOL driveModeActive(void)
+static inline BOOL driveModeActive(void)
 {
 	return DirectControl;
 }
@@ -58,19 +39,19 @@ DRIVEFUNCINLINE BOOL driveModeActive(void)
 
 // Return TRUE if the specified droid is the driven droid.
 //
-DRIVEFUNCINLINE BOOL driveIsDriven(DROID *psDroid)
+static inline BOOL driveIsDriven(DROID *psDroid)
 {
 	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? TRUE : FALSE;
 }
 
 
-DRIVEFUNCINLINE BOOL driveIsFollower(DROID *psDroid)
+static inline BOOL driveIsFollower(DROID *psDroid)
 {
 	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? TRUE : FALSE;
 }
 
 
-DRIVEFUNCINLINE DROID *driveGetDriven(void)
+static inline DROID *driveGetDriven(void)
 {
 	return psDrivenDroid;
 }
@@ -118,4 +99,3 @@ SDWORD driveGetMoveSpeed(void);
 SDWORD driveGetMoveDir(void);
 BOOL driveSetDirectControl(BOOL Control);
 BOOL driveSetWasDriving(BOOL Driving);
-

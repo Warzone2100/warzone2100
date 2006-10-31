@@ -156,7 +156,7 @@ BOOL interpProcessorActive(void)
 }
 
 /* Find the value store for a global variable */
-static __inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
+static inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
 {
 	VAL_CHUNK	*psChunk;
 

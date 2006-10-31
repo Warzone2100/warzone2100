@@ -121,13 +121,6 @@ typedef int DPID;
 
 #endif
 
-#ifndef  _MSC_VER	// this breaks on .net, it wants the other format.  --Qamly
-#define _inline inline
-#define __inline inline
-#else
-#define _inline __inline
-#endif //_MSC_VER
-
 /* Numeric size defines */
 #define UBYTE_MAX	0xff
 #define SBYTE_MIN	(-128) //(0x80)

@@ -195,21 +195,8 @@ extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 extern void	mapWaterProcess( void );
 
 
-#ifdef _MSC_VER			//ack, not _inline, but __inline or __forceinline needed --Qamly.
-#define FUNCINLINE __inline
-#else
-
-#undef FUNCINLINE
-#ifdef DEFINE_MAPINLINE
-#define FUNCINLINE
-#else
-#define FUNCINLINE __inline extern
-#endif
-
-#endif
-
 /* Return a pointer to the tile structure at x,y */
-FUNCINLINE MAPTILE *mapTile(UDWORD x, UDWORD y)
+static inline MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
 
 	ASSERT( x < mapWidth,
@@ -222,8 +209,7 @@ FUNCINLINE MAPTILE *mapTile(UDWORD x, UDWORD y)
 }
 
 /* Return height of tile at x,y */
-//FUNCINLINE SDWORD map_TileHeight(UDWORD x, UDWORD y)
-FUNCINLINE SWORD map_TileHeight(UDWORD x, UDWORD y)
+static inline SWORD map_TileHeight(UDWORD x, UDWORD y)
 {
 	if((x>=mapWidth) || (y>=mapHeight)) {
 		return 0;
@@ -232,7 +218,7 @@ FUNCINLINE SWORD map_TileHeight(UDWORD x, UDWORD y)
 }
 
 /*sets the tile height */
-FUNCINLINE void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
+static inline void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 {
 
 	ASSERT( x < mapWidth,
@@ -245,25 +231,25 @@ FUNCINLINE void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 }
 
 /*increases the tile height by one */
-/*FUNCINLINE void incTileHeight(UDWORD x, UDWORD y)
+/*static inline void incTileHeight(UDWORD x, UDWORD y)
 {
 	psMapTiles[x + (y << mapShift)].height++;
 }*/
 
 /*decreases the tile height by one */
-/*FUNCINLINE void decTileHeight(UDWORD x, UDWORD y)
+/*static inline void decTileHeight(UDWORD x, UDWORD y)
 {
 	psMapTiles[x + (y << mapShift)].height--;
 }*/
 
 /* Return whether a tile coordinate is on the map */
-FUNCINLINE BOOL tileOnMap(SDWORD x, SDWORD y)
+static inline BOOL tileOnMap(SDWORD x, SDWORD y)
 {
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
 
 /* Return whether a world coordinate is on the map */
-FUNCINLINE BOOL worldOnMap(SDWORD x, SDWORD y)
+static inline BOOL worldOnMap(SDWORD x, SDWORD y)
 {
 	return (x >= 0) && (x < ((SDWORD)mapWidth << TILE_SHIFT)) &&
 		   (y >= 0) && (y < ((SDWORD)mapHeight << TILE_SHIFT));
