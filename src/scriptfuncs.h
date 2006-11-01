@@ -593,6 +593,9 @@ extern BOOL scrBitSet(void);
 extern BOOL scrAlliancesLocked(void);
 extern BOOL scrASSERT(void);
 extern BOOL scrShowRangeAtPos(void);
+extern BOOL scrToPow(void);
+extern BOOL scrDebugMenu(void);
+extern BOOL scrSetDebugMenuEntry(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);

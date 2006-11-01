@@ -31,6 +31,10 @@ extern STRUCTURE	*psScrCBNewDroidFact;
 extern DROID		*psScrCBOrderDroid;
 extern SDWORD		psScrCBOrder;
 
+//Script key event callback
+extern SDWORD		cbPressedMetaKey;
+extern SDWORD		cbPressedKey;
+
 // deal with unit takover(2)
 extern BOOL scrCBDroidTaken(void);
 
@@ -125,6 +129,7 @@ extern BOOL scrCBTransporterLandedB(void);
 
 extern BOOL scrCBDorderStop(void);
 extern BOOL scrCBDorderReachedLocation(void);
+extern BOOL scrCBProcessKeyPress(void);
 
 #endif
 

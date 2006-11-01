@@ -82,6 +82,7 @@ typedef enum _scr_callback_types
 	CALL_TRANSPORTER_LANDED_B,
 	CALL_DORDER_STOP,		//fired when droid is forced to stop via user interface
 	CALL_DROID_REACH_LOCATION,		//fired when droid reached the destination and stopped on its own
+	CALL_KEY_PRESSED,							//Allows to process key presses, mainly for debug purposes
 } SCR_CALLBACK_TYPES;
 
 // The table of user types for the compiler

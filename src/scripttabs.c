@@ -35,6 +35,8 @@
 
 #include "multiplay.h"
 #include "intfac.h"
+#include "multimenu.h"
+#include "lib/framework/input.h"		//for key constants
 
 
 /* The table of user defined types
@@ -982,6 +984,15 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "showRangeAtPos",		scrShowRangeAtPos,		VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_INT} },
 
+	{ "toPow",		scrToPow,		VAL_INT,
+		2, { VAL_INT, VAL_INT,} },
+
+	{ "debugMenu",		scrDebugMenu,		VAL_VOID,
+		1, { VAL_BOOL} },
+
+	{ "setDebugMenuEntry",		scrSetDebugMenuEntry,		VAL_VOID,
+		2, { VAL_STRING, VAL_INT} },
+
 	/* END new functions */
 
 
@@ -1495,6 +1506,43 @@ CONST_SYMBOL asConstantTable[] =
 	{ "ALLIANCES",			VAL_INT,	0,		ALLIANCES,				0 },
 	{ "ALLIANCES_TEAMS",			VAL_INT,	0,		ALLIANCES_TEAMS,				0 },
 
+	/* some key constants */
+	{ "KEY_LCTRL",			VAL_INT,	0,		KEY_LCTRL,				0 },
+	{ "KEY_RCTRL",			VAL_INT,	0,		KEY_RCTRL,				0 },
+	{ "KEY_LSHIFT",			VAL_INT,	0,		KEY_LSHIFT,				0 },
+	{ "KEY_RSHIFT",			VAL_INT,	0,		KEY_RSHIFT,				0 },
+	{ "KEY_LALT",				VAL_INT,	0,		KEY_LALT,					0 },
+	{ "KEY_RALT",			VAL_INT,	0,		KEY_RALT,					0 },
+	{ "KEY_SPACE",			VAL_INT,	0,		KEY_SPACE,				0 },
+	{ "KEY_RETURN",		VAL_INT,	0,		KEY_RETURN,			0 },
+	{ "KEY_ESC",				VAL_INT,	0,		KEY_ESC,					0 },
+	{ "KEY_A",					VAL_INT,	0,		KEY_A,						0 },
+	{ "KEY_B",					VAL_INT,	0,		KEY_B,						0 },
+	{ "KEY_C",					VAL_INT,	0,		KEY_C,						0 },
+	{ "KEY_D",					VAL_INT,	0,		KEY_D,						0 },
+	{ "KEY_E",					VAL_INT,	0,		KEY_E,						0 },
+	{ "KEY_F",					VAL_INT,	0,		KEY_F,						0 },
+	{ "KEY_G",					VAL_INT,	0,		KEY_G,						0 },
+	{ "KEY_H",					VAL_INT,	0,		KEY_H,						0 },
+	{ "KEY_I",					VAL_INT,	0,		KEY_I,						0 },
+	{ "KEY_J",					VAL_INT,	0,		KEY_J,						0 },
+	{ "KEY_K",					VAL_INT,	0,		KEY_K,						0 },
+	{ "KEY_L",					VAL_INT,	0,		KEY_L,						0 },
+	{ "KEY_M",					VAL_INT,	0,		KEY_M,						0 },
+	{ "KEY_N",					VAL_INT,	0,		KEY_N,						0 },
+	{ "KEY_O",					VAL_INT,	0,		KEY_O,						0 },
+	{ "KEY_P",					VAL_INT,	0,		KEY_P,						0 },
+	{ "KEY_Q",					VAL_INT,	0,		KEY_Q,						0 },
+	{ "KEY_R",					VAL_INT,	0,		KEY_R,						0 },
+	{ "KEY_S",					VAL_INT,	0,		KEY_S,						0 },
+	{ "KEY_T",					VAL_INT,	0,		KEY_T,						0 },
+	{ "KEY_U",					VAL_INT,	0,		KEY_U,						0 },
+	{ "KEY_V",					VAL_INT,	0,		KEY_V,						0 },
+	{ "KEY_W",					VAL_INT,	0,		KEY_W,						0 },
+	{ "KEY_X",					VAL_INT,	0,		KEY_X,						0 },
+	{ "KEY_Y",					VAL_INT,	0,		KEY_Y,						0 },
+	{ "KEY_Z",					VAL_INT,	0,		KEY_Z,						0 },
+
 	/* This entry marks the end of the constant list */
 	{ "CONSTANT LIST END",	VAL_VOID }
 };
@@ -1642,6 +1690,8 @@ CALLBACK_SYMBOL asCallbackTable[] =
 	{ "CALL_DROID_REACH_LOCATION",	(TRIGGER_TYPE)CALL_DROID_REACH_LOCATION,	scrCBDorderReachedLocation,
 		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF | VAL_INT	   } },
 
+	{ "CALL_KEY_PRESSED",	(TRIGGER_TYPE)CALL_KEY_PRESSED,	scrCBProcessKeyPress,
+		2,	{ VAL_REF | VAL_INT, VAL_REF| VAL_INT} },
 
 	/* This entry marks the end of the callback list */
 	{ "CALLBACK LIST END", 0 }
@@ -1685,6 +1735,7 @@ TYPE_EQUIV asEquivTable[] =
 BOOL scrTabInitialise(void)
 {
 	EVENT_INIT	sInit;
+	UDWORD	i;
 
 	sInit.valInit = 50;
 	sInit.valExt = 5;
@@ -1779,6 +1830,10 @@ BOOL scrTabInitialise(void)
 	// initialise various variables
 	scrGameLevel = 0;
 	bInTutorial = FALSE;
+
+	/* Initialize debug output */
+	for(i=0; i<DEBUGMENU_MAX_ENTRIES; i++)
+		debugMenuEntry[i][0] = '\0';
 
 	return TRUE;
 }

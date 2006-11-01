@@ -70,6 +70,7 @@
 #include "multigifts.h"			//because of giftRadar()
 #include "aiexperience.h"
 #include "display3d.h"			//for showRangeAtPos()
+#include "multimenu.h"
 
 
 //used in the set nogoArea and LandingZone functions - use the ones defined in Map.h
@@ -10509,7 +10510,7 @@ BOOL scrAlliancesLocked(void)
 
 	if (!stackPushResult(VAL_BOOL, bResult))
 	{
-		debug(LOG_WZ, "scrAlliancesLocked(): failed to push result");
+		debug(LOG_ERROR, "scrAlliancesLocked(): failed to push result");
 		return FALSE;
 	}
 	
@@ -10560,6 +10561,73 @@ BOOL scrShowRangeAtPos(void)
 
 	//Turn on/off drawing
 	showRangeAtPos(x,y,radius);
+
+	return TRUE;
+}
+
+BOOL scrToPow(void)
+{
+	SDWORD		x,y;
+
+	if (!stackPopParams(2, VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "scrToPow(): stack failed");
+		return FALSE;
+	}
+
+	if (!stackPushResult(VAL_INT, (SDWORD)pow((double)x,(int)y) ))
+	{
+		debug(LOG_ERROR, "scrToPow(): failed to push result");
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+
+/* Show/Hide multiplayer debug menu */
+BOOL scrDebugMenu(void)
+{
+	SDWORD		menuUp;
+
+	if (!stackPopParams(1, VAL_BOOL, &menuUp))
+	{
+		debug(LOG_ERROR, "scrDebugMenu(): stack failed");
+		return FALSE;
+	}
+
+	(void)addDebugMenu(menuUp);
+	
+	return TRUE;
+}
+
+/* Set debug menu output string */
+BOOL scrSetDebugMenuEntry(void)
+{
+	SDWORD		index;
+	STRING	*sEntry = NULL;
+	BOOL		bAddingNew = FALSE;
+
+	if (!stackPopParams(2, VAL_STRING, &sEntry, VAL_INT, &index))
+	{
+		debug(LOG_ERROR, "scrSetDebugMenuEntry(): stack failed");
+		return FALSE;
+	}
+
+	/* New one? */
+	if(!strcmp(debugMenuEntry[index],""))
+	{
+		bAddingNew = TRUE;
+	}
+
+	/* Set */
+	strcpy(debugMenuEntry[index], sEntry);
+
+	/* Re-open it if already open to recalculate height */
+	if(DebugMenuUp && bAddingNew)
+	{
+		intCloseDebugMenuNoAnim();
+		(void)addDebugMenu(TRUE);
+	}
 
 	return TRUE;
 }

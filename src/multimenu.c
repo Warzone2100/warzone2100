@@ -36,6 +36,7 @@
 #include "scores.h"
 #include "keymap.h"
 #include "loop.h"
+#include "lib/framework/frameint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -51,9 +52,17 @@ extern void	displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 BOOL	MultiMenuUp			= FALSE;
 BOOL	ClosingMultiMenu	= FALSE;
+BOOL	DebugMenuUp		= FALSE;
 static UDWORD	context = 0;
 static UDWORD	current_tech = 0;
 static UDWORD	current_numplayers = 0;
+
+#define DEBUGMENU_FORM_W		160
+#define DEBUGMENU_FORM_H		300
+#define DEBUGMENU_FORM_X		(screenWidth - DEBUGMENU_FORM_W)		//pie_GetVideoBufferWidth() ?
+#define DEBUGMENU_FORM_Y		110 + D_H
+
+#define DEBUGMENU_ENTRY_H		20
 
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
@@ -126,6 +135,7 @@ static UDWORD	current_numplayers = 0;
 BOOL			multiRequestUp = FALSE;				//multimenu is up.
 static BOOL		giftsUp[MAX_PLAYERS] = {TRUE};		//gift buttons for player are up.
 
+char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH]; 
 
 // ////////////////////////////////////////////////////////////////////////////
 // Map / force / name load save stuff.
@@ -923,6 +933,25 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 }
 
+void displayDebugMenu(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+{
+	char			str[128];
+	UDWORD			x					= xOffset+psWidget->x;
+	UDWORD			y					= yOffset+psWidget->y;
+	UDWORD			index;
+
+	index = (int)psWidget->pUserData;
+
+	iV_SetFont(WFont);											// font
+	iV_SetTextColour(-1);										//colour
+
+	if(strcmp(debugMenuEntry[index],""))
+	{
+		sprintf(str,"%s", debugMenuEntry[index]);
+		iV_DrawText(str, x, y+MULTIMENU_FONT_OSET);
+	}
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
@@ -1091,7 +1120,99 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 	}
 }
 
+void intCloseDebugMenuNoAnim(void)
+{
+	widgDelete(psWScreen, DEBUGMENU_CLOSE);
+	widgDelete(psWScreen, DEBUGMENU);
+	DebugMenuUp = FALSE;
+	//intMode		= INT_NORMAL;
+}
 
+BOOL addDebugMenu(BOOL bAdd)
+{
+	W_FORMINIT		sFormInit;
+	W_BUTINIT		sButInit;
+	UDWORD			i,pos = 0,formHeight=0;
+
+	/* Close */
+	if(!bAdd)	//|| widgGetFromID(psWScreen,DEBUGMENU)
+	{
+		intCloseDebugMenuNoAnim();
+		return TRUE;
+	}
+
+	intResetScreen(FALSE);
+
+	// calculate required height.
+	formHeight = 12;		//DEBUGMENU_ENTRY_H
+	for(i=0;i<DEBUGMENU_MAX_ENTRIES;i++)
+	{
+		if(strcmp(debugMenuEntry[i],""))
+			formHeight += DEBUGMENU_ENTRY_H;
+	}
+
+	// add form
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit.formID		  = 0;
+	sFormInit.id			  = DEBUGMENU;
+	sFormInit.style			  = WFORM_PLAIN;
+	sFormInit.x				  =(SWORD)(DEBUGMENU_FORM_X);
+	sFormInit.y				  =(SWORD)(DEBUGMENU_FORM_Y);
+	sFormInit.width			  = DEBUGMENU_FORM_W;
+	sFormInit.height		  = (UWORD)formHeight;			//MULTIMENU_FORM_H;
+	sFormInit.pDisplay		  = intOpenPlainForm;
+	sFormInit.disableChildren = TRUE;
+
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return FALSE;
+	}
+
+	// add debug info
+	pos = 0;
+	for(i=0;i<DEBUGMENU_MAX_ENTRIES;i++)
+	{
+		if(strcmp(debugMenuEntry[i],""))
+		{
+			// add form
+			memset(&sFormInit, 0, sizeof(W_FORMINIT));
+			sFormInit.formID		  = DEBUGMENU;
+			sFormInit.id			  = DEBUGMENU_CLOSE + pos + 1;
+			sFormInit.style			  = WFORM_PLAIN;
+			sFormInit.x				  = 5;
+			sFormInit.y				  = 5 + DEBUGMENU_ENTRY_H * pos;
+			sFormInit.width			  = DEBUGMENU_FORM_W;
+			sFormInit.height		  = DEBUGMENU_ENTRY_H;
+			sFormInit.pDisplay		  = displayDebugMenu;
+			sFormInit.pUserData		  = (void *)i;
+			widgAddForm(psWScreen, &sFormInit);
+
+			pos++;
+		}
+	}
+
+	// Add the close button.
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit.formID = DEBUGMENU;
+	sButInit.id = DEBUGMENU_CLOSE;
+	sButInit.style = WBUT_PLAIN;
+	sButInit.x = DEBUGMENU_FORM_W - CLOSE_WIDTH;
+	sButInit.y = 0;
+	sButInit.width = CLOSE_WIDTH;
+	sButInit.height = CLOSE_HEIGHT;
+	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.FontID = WFont;
+	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+
+	DebugMenuUp = TRUE;
+
+	return TRUE;
+}
 
 BOOL intAddMultiMenu(void)
 {

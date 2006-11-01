@@ -9,6 +9,9 @@
 #include "display3d.h"
 
 #include "keyedit.h"
+#include	"scriptcb.h"
+#include	"lib/script/script.h"
+#include	"scripttabs.h"
 
 
 /*
@@ -663,6 +666,7 @@ void	keyProcessMappings( BOOL bExclude )
 KEY_MAPPING	*keyToProcess;
 BOOL		bMetaKeyDown;
 BOOL		bKeyProcessed;
+SDWORD		i;
 
 	/* Bomb out if there are none */
 	if(!keyMappings OR !numActiveMappings OR !bKeyProcessing)
@@ -785,6 +789,48 @@ BOOL		bKeyProcessed;
 			}
 		}
 	}
+
+	/* Script callback - find out what meta key was pressed */
+	cbPressedMetaKey = KEY_IGNORE;
+
+	/* getLastMetaKey() can't be used here, have to do manually */
+	if(keyDown(KEY_LCTRL))
+		cbPressedMetaKey = KEY_LCTRL;
+	else if(keyDown(KEY_RCTRL))
+		cbPressedMetaKey = KEY_RCTRL;
+	else if(keyDown(KEY_LALT))
+		cbPressedMetaKey = KEY_LALT;
+	else if(keyDown(KEY_RALT))
+		cbPressedMetaKey = KEY_RALT;
+	else if(keyDown(KEY_LSHIFT))
+		cbPressedMetaKey = KEY_LSHIFT;
+	else if(keyDown(KEY_RSHIFT))
+		cbPressedMetaKey = KEY_RSHIFT;
+
+	/* Find out what keys were pressed */
+	for(i=0; i<KEY_MAXSCAN;i++)
+	{
+		/* Skip meta keys */
+		switch(i)
+		{
+			case KEY_LCTRL:
+			case KEY_RCTRL:
+			case KEY_LALT:
+			case KEY_RALT:
+			case KEY_LSHIFT:
+			case KEY_RSHIFT:
+				continue;
+			break;	
+		}
+
+		/* Let scripts process this key if it's pressed */
+		if(keyPressed((KEY_CODE)i))
+		{
+				cbPressedKey =  i;
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_KEY_PRESSED);
+		}
+	}
+
 }
 
 // ----------------------------------------------------------------------------------

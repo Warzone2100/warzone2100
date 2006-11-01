@@ -24,6 +24,10 @@ DROID		*psScrCBDroidTaken;
 DROID		*psScrCBOrderDroid = NULL;		//Callback droid that have received an order
 SDWORD		psScrCBOrder = DORDER_NONE;			//Order of the droid
 
+//Script key event callback
+SDWORD		cbPressedMetaKey;
+SDWORD		cbPressedKey;
+
 // The pointer to the droid that was just built for a CALL_NEWDROID
 DROID		*psScrCBNewDroid;
 STRUCTURE	*psScrCBNewDroidFact;	// id of factory that built it.
@@ -1048,3 +1052,24 @@ BOOL scrCBDorderReachedLocation(void)
 	return TRUE;
 }
 
+/* Process key-combo */
+BOOL scrCBProcessKeyPress(void)
+{
+	SDWORD		*key = NULL, *metaKey = NULL;
+
+	if (!stackPopParams(2,VAL_REF | VAL_INT, &key, VAL_REF | VAL_INT, &metaKey))
+	{
+		debug(LOG_ERROR, "scrCBProcessKeyPress: failed to pop");
+		return FALSE;
+	}
+
+	*key = cbPressedKey;
+	*metaKey = cbPressedMetaKey;
+
+	if (!stackPushResult(VAL_BOOL, TRUE))		//triggered
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
