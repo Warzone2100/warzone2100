@@ -446,7 +446,7 @@ void frameShutDown(void)
 
   If hard_fail is true, we will assert and report on failures.
 ***************************************************************************/
-static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
+static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
                       BOOL AllocateMem, BOOL hard_fail)
 {
 	PHYSFS_file *pfile;

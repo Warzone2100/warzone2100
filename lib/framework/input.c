@@ -83,7 +83,7 @@ void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
 		strcpy(ascii,"???");
 		return;
 	}
-	ASSERT( (code >= 0) && (code <= KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) <= KEY_MAXSCAN), "Invalid key code: %d", code );
 #ifndef _MSC_VER
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
 #else
@@ -399,21 +399,21 @@ void inputNewFrame(void)
 /* This returns true if the key is currently depressed */
 BOOL keyDown(KEY_CODE code)
 {
-	ASSERT( (code >= 0) && (code < KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) < KEY_MAXSCAN), "Invalid key code: %d", code );
 	return (aKeyState[code] != KEY_UP);
 }
 
 /* This returns true if the key went from being up to being down this frame */
 BOOL keyPressed(KEY_CODE code)
 {
-	ASSERT( (code >= 0) && (code < KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) < KEY_MAXSCAN), "Invalid key code: %d", code );
 	return ((aKeyState[code] == KEY_PRESSED) || (aKeyState[code] == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the key went from being down to being up this frame */
 BOOL keyReleased(KEY_CODE code)
 {
-	ASSERT( (code >= 0) && (code < KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) < KEY_MAXSCAN), "Invalid key code: %d", code );
 	return ((aKeyState[code] == KEY_RELEASED) || (aKeyState[code] == KEY_PRESSRELEASE));
 }
 
@@ -479,7 +479,7 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 	static int mousewarp = -1;
 
 	if (mousewarp == -1) {
-		int val;
+		DWORD val;
 
 		mousewarp = 1;
 		if (getWarzoneKeyNumeric("nomousewarp", &val)) {
@@ -518,6 +518,7 @@ void setMouseUp(MOUSE_KEY_CODE code)
 	event.button.y = mouseY();
 	SDL_PushEvent(&event);
 }
+
 
 
 
