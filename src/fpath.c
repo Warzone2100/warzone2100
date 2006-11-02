@@ -18,7 +18,7 @@ BOOL	fpathDoMessage;
 #undef DBP2
 #define DBP2( x ) \
 	if (fpathDoMessage) \
-		debug( LOG_NEVER, x )
+		debug( LOG_NEVER, (#x) )
 
 #include "objects.h"
 #include "map.h"

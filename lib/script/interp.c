@@ -125,7 +125,7 @@ BOOL	interpTrace;
 /* Print out trace info if tracing is turned on */
 #define TRCPRINTF(x) \
 	if (interpTrace) \
-		debug( LOG_NEVER, x)
+		debug( LOG_NEVER, (#x))
 
 #define TRCPRINTVAL(x) \
 	if (interpTrace) \

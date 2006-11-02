@@ -331,7 +331,7 @@ void objmemUpdate(void)
 
 #define CREATE(plyr, heap, new, objType, structType) \
 	ASSERT( plyr<MAX_PLAYERS, "addObject: invalid player number" ); \
-	if (!HEAP_ALLOC(heap, (void*) new)) \
+	if (!HEAP_ALLOC(heap, (void**)new)) \
 	{ \
 		return FALSE; \
 	} \
@@ -619,7 +619,7 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
 	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
 
-	if (!HEAP_ALLOC(psFlagPosHeap, (void*) ppsNew))
+	if (!HEAP_ALLOC(psFlagPosHeap, (void**) ppsNew))
 	{
 		return FALSE;
 	}

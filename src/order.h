@@ -77,6 +77,7 @@ typedef enum _secondary_order
 // the state of secondary orders
 typedef enum _secondary_state
 {
+	DSS_NONE						= 0x000000,
 	DSS_ARANGE_SHORT		= 0x000001,
 	DSS_ARANGE_LONG			= 0x000002,
 	DSS_ARANGE_DEFAULT		= 0x000003,
@@ -226,4 +227,5 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
 #endif
+
 

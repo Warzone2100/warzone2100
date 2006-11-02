@@ -324,7 +324,7 @@ void runLimitScreen(void)
 void createLimitSet(void)
 {
 	UDWORD	i,numchanges;
-	void	*pChanges;
+	UBYTE	*pChanges;
 	UBYTE	*pEntry;
 
 	if(ingame.numStructureLimits)									// free the old set if required.

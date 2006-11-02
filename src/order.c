@@ -728,7 +728,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
                     orderDroid(psDroid, DORDER_STOP);
     			    psDroid->psTarget = NULL;
 	    		    psDroid->psTarStats = NULL;
-		    	    secondarySetState(psDroid, DSO_RETURN_TO_LOC, 0);
+		    	    secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
                 }
 		    }
 		    else if(psDroid->action == DACTION_NONE)
@@ -767,7 +767,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 		if (psDroid->action == DACTION_NONE)
 		{
 			psDroid->order = DORDER_NONE;
-			secondarySetState(psDroid, DSO_RETURN_TO_LOC, 0);
+			secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 		}
 		break;
 	case DORDER_LEAVEMAP:
@@ -2781,7 +2781,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 		state == DSS_PATROL_SET)
 	{
 		order = DORDER_PATROL;
-		secondarySetState(psDroid, DSO_PATROL, 0);
+		secondarySetState(psDroid, DSO_PATROL, DSS_NONE);
 	}
 
 	return order;
@@ -3449,37 +3449,37 @@ BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 // get the state of a secondary order, return FALSE if unsupported
 BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
-	UDWORD	state;
+	SECONDARY_STATE	state;
 
 	state = psDroid->secondaryOrder;
 
 	switch (sec)
 	{
 	case DSO_ATTACK_RANGE:
-		*pState = state & DSS_ARANGE_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_ARANGE_MASK);
 		break;
 	case DSO_REPAIR_LEVEL:
-		*pState = state & DSS_REPLEV_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
 		break;
 	case DSO_ATTACK_LEVEL:
-		*pState = state & DSS_ALEV_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_ALEV_MASK);
 		break;
 	case DSO_ASSIGN_PRODUCTION:
 	case DSO_ASSIGN_CYBORG_PRODUCTION:
 	case DSO_ASSIGN_VTOL_PRODUCTION:
-		*pState = state & DSS_ASSPROD_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_ASSPROD_MASK);
 		break;
 	case DSO_RECYCLE:
-		*pState = state & DSS_RECYCLE_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_RECYCLE_MASK);
 		break;
 	case DSO_PATROL:
-		*pState = state & DSS_PATROL_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_PATROL_MASK);
 		break;
 	case DSO_HALTTYPE:
-		*pState = state & DSS_HALT_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
 		break;
 	case DSO_RETURN_TO_LOC:
-		*pState = state & DSS_RTL_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_RTL_MASK);
 		break;
 	case DSO_FIRE_DESIGNATOR:
 //		*pState = state & DSS_FIREDES_MASK;
@@ -3489,11 +3489,11 @@ BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pSt
 		}
 		else
 		{
-			*pState = 0;
+			*pState = DSS_NONE;
 		}
 		break;
 	default:
-		*pState = 0;
+		*pState = DSS_NONE;
 		break;
 	}
 
@@ -3541,24 +3541,25 @@ STRING *secondaryPrintFactories(UDWORD state)
 void secondaryCheckDamageLevel(DROID *psDroid)
 {
 	SECONDARY_STATE	State;
+    unsigned int repairLevel;
 
 	if( secondaryGetState(psDroid, DSO_REPAIR_LEVEL, &State) )
 	{
 		if (State == DSS_REPLEV_LOW)
 		{
-			State = REPAIRLEV_HIGH;			//repair often
+			repairLevel = REPAIRLEV_HIGH;			//repair often
 		}
 		else if(State == DSS_REPLEV_HIGH)
 		{
-			State = REPAIRLEV_LOW;	 		// don't repair often.
+			repairLevel = REPAIRLEV_LOW;	 		// don't repair often.
 		}
 		else
 		{
-			State = 0;						//never repair
+			repairLevel = 0;						//never repair
 		}
 
         //don't bother checking if 'do or die'
-		if( State && (SDWORD)(PERCENT(psDroid->body,psDroid->originalBody)) <= State)
+		if( repairLevel && PERCENT(psDroid->body,psDroid->originalBody) <= repairLevel)
 		{
 			if (psDroid->selected)
 			{
@@ -4537,19 +4538,19 @@ BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 	switch (sec)
 	{
 	case DSO_ATTACK_RANGE:
-		*pState = state & DSS_ARANGE_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_ARANGE_MASK);
 		break;
 	case DSO_REPAIR_LEVEL:
-		*pState = state & DSS_REPLEV_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
 		break;
 	case DSO_ATTACK_LEVEL:
-		*pState = state & DSS_ALEV_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_ALEV_MASK);
 		break;
 	case DSO_PATROL:
-		*pState = state & DSS_PATROL_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_PATROL_MASK);
 		break;
 	case DSO_HALTTYPE:
-		*pState = state & DSS_HALT_MASK;
+		*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
 		break;
 	default:
 		*pState = 0;

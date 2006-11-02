@@ -3219,17 +3219,17 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		if (typeFlag == FACTORY_FLAG)
 		{
 			secondarySetState(psFact->psCommander, DSO_CLEAR_PRODUCTION,
-					1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_SHIFT) );
+					(SECONDARY_STATE)(1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_SHIFT)) );
 		}
 		else if (typeFlag == CYBORG_FLAG)
 		{
 			secondarySetState(psFact->psCommander, DSO_CLEAR_PRODUCTION,
-					1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_CYBORG_SHIFT) );
+					(SECONDARY_STATE)(1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_CYBORG_SHIFT)) );
 		}
 		else
 		{
 			secondarySetState(psFact->psCommander, DSO_CLEAR_PRODUCTION,
-					1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_VTOL_SHIFT) );
+					(SECONDARY_STATE)(1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_VTOL_SHIFT)) );
 		}
 
 		psFact->psCommander = NULL;
@@ -4678,7 +4678,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			 //		bFinishRepair = TRUE;
 
 					// if completely repaired reset order
-					secondarySetState(psDroid, DSO_RETURN_TO_LOC, 0);
+					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 
 					if ((psDroid->psGroup != NULL) &&
 						(psDroid->psGroup->type == GT_COMMAND) &&
