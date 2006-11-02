@@ -685,7 +685,7 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 
 SDWORD mixer_GetWavVolume( void )
 {
-	return 100*sfx_volume;
+	return (SDWORD)(100*sfx_volume);
 }
 
 void mixer_SetWavVolume( SDWORD iVol )
@@ -701,7 +701,7 @@ void mixer_SetWavVolume( SDWORD iVol )
 
 SDWORD mixer_Get3dWavVolume( void )
 {
-	return 100*sfx3d_volume;
+	return (SDWORD)(100*sfx3d_volume);
 }
 
 void mixer_Set3dWavVolume( SDWORD iVol )

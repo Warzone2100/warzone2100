@@ -1673,7 +1673,7 @@ droidCheckBuildStillInProgress( AUDIO_SAMPLE *psSample )
 	}
 	else
 	{
-		psDroid = psSample->psObj;
+		psDroid = (DROID*)psSample->psObj;
 		ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 			"unitCheckBuildStillInProgress: unit pointer invalid\n" );
 	}
@@ -1696,7 +1696,7 @@ droidBuildStartAudioCallback( AUDIO_SAMPLE *psSample )
 	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)),
 		"unitBuildStartAudioCallback: audio sample pointer invalid\n" );
 
-	psDroid = psSample->psObj;
+	psDroid = (DROID*)psSample->psObj;
 
 	if ( psDroid != NULL )
 	{
@@ -4383,7 +4383,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		{
 			//psDroid->armour[inc] = (asBodyStats + pTemplate->asParts[COMP_BODY])->armourValue[inc];
 			psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->
-				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, inc);
+				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, (WEAPON_CLASS)inc);
 		}
 	}
 	else
@@ -4391,7 +4391,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
 		{
 			psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->
-				asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, inc);
+				asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, (WEAPON_CLASS)inc);
 		}
 	}
 
@@ -5976,7 +5976,7 @@ UDWORD	passes;
 	/* Exit if they're fine! */
 	if(sensiblePlace(*x,*y) AND oneDroid(*x,*y))
 	{
-		return(TRUE);
+		return HALF_FREE_TILE;
 	}
 
 	/* Initial box dimensions and set iteration count to zero */
@@ -7234,7 +7234,7 @@ BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
 
 	if ( psSample->psObj != NULL )
 	{
-		psDroid = psSample->psObj;
+		psDroid = (DROID*)psSample->psObj;
 
         if ( psDroid->type == OBJ_DROID && !psDroid->died )
 		{

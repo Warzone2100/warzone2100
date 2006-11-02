@@ -1830,7 +1830,7 @@ void	renderExplosionEffect(EFFECT *psEffect)
 
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
-		if(rejectLandLight(psEffect->specific))
+		if(rejectLandLight((LAND_LIGHT_SPEC)psEffect->specific))
 		{
 			return;
 		}
@@ -3116,6 +3116,7 @@ static void addFireworksEffect( void )
 
 
 // ----------------------------------------------------------------------------------------
+
 
 
 

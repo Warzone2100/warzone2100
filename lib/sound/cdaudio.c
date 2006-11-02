@@ -595,7 +595,7 @@ void cdAudio_Update( void )
 //
 SDWORD mixer_GetCDVolume( void )
 {
-	return 100*music_volume;
+	return (SDWORD)(100*music_volume);
 }
 
 //*
@@ -613,5 +613,6 @@ void mixer_SetCDVolume( SDWORD iVol )
 	}
 	alSourcef (music_source, AL_GAIN, music_volume);
 }
+
 
 

@@ -203,7 +203,7 @@ int seq_GetFrameTimeInClicks(void)
 {
 	//printf("seq_GetFrameTimeInClicks\n");
 	if (current_sequence != NULL) {
-		return (1000.0f / current_sequence->fps);
+		return (int)(1000.0f / current_sequence->fps);
 	} else {
 		return 0;
 	}
@@ -218,4 +218,5 @@ int seq_GetTotalFrames(void)
 		return -1;
 	}
 }
+
 

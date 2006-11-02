@@ -81,11 +81,11 @@ void	pie_DrawViewingWindow(iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y
 	pieVrts[0].sx = v[1].x;
 	pieVrts[0].sy = v[1].y;
 	//cull triangles with off screen points
-	pieVrts[0].sz  = INTERFACE_DEPTH;
+	pieVrts[0].sz  = (SDWORD)INTERFACE_DEPTH;
 
 
-	pieVrts[0].tu = 0.0;
-	pieVrts[0].tv = 0.0;
+	pieVrts[0].tu = (UWORD)0.0;
+	pieVrts[0].tv = (UWORD)0.0;
 	pieVrts[0].light.argb = colour;//0x7fffffff;
 	pieVrts[0].specular.argb = 0;
 

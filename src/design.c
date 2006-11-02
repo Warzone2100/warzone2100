@@ -1538,7 +1538,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	W_BARINIT		sBarInit;
 	W_LABINIT		sLabInit;
 //	W_LABINIT		sTitleInit;
-	DES_SYSMODE		newSysMode=0;
+	DES_SYSMODE		newSysMode=(DES_SYSMODE)0;
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
@@ -1980,7 +1980,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	W_BARINIT		sBarInit;
 	W_LABINIT		sLabInit;
 //	W_LABINIT		sTitleInit;
-	DES_PROPMODE	newPropMode=0;
+	DES_PROPMODE	newPropMode=(DES_PROPMODE)0;
 
 	ASSERT( PTRVALID(psStats, sizeof(PROPULSION_STATS)),
 		"intAddPropulsionForm: Invalid propulsion stats pointer" );
