@@ -19,7 +19,7 @@ void cpPrintType(INTERP_TYPE type)
 	if (type & VAL_REF)
 	{
 		ref = TRUE;
-		type = type & ~VAL_REF;
+		type = (INTERP_TYPE)(type & ~VAL_REF);
 	}
 
 	switch(type)
@@ -124,7 +124,7 @@ void cpPrintVal(INTERP_VAL *psVal)
 /* Display a value from a program that has been packed with an opcode */
 void cpPrintPackedVal(UDWORD *ip)
 {
-	INTERP_TYPE	type = (*ip) & OPCODE_DATAMASK;
+	INTERP_TYPE	type = (INTERP_TYPE)((*ip) & OPCODE_DATAMASK);
 	UDWORD		i;
 	UDWORD data = *(ip + 1);
 
@@ -415,7 +415,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	ip = psProg->pCode;
 	triggerCode = psProg->numTriggers > 0 ? TRUE : FALSE;
 	end = (UDWORD *)(((UBYTE *)ip) + psProg->size);
-	opcode = (*ip) >> OPCODE_SHIFT;
+	opcode = (OPCODE)((*ip) >> OPCODE_SHIFT);
 	data = (*ip) & OPCODE_DATAMASK;
 	while (ip < end)
 	{
@@ -568,7 +568,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		ASSERT( (ip <= end) || PTRVALID(ip, sizeof(UDWORD)),
 			"cpPrintProgram: instruction pointer no longer valid" );
 
-		opcode = (*ip) >> OPCODE_SHIFT;
+		opcode = (OPCODE)((*ip) >> OPCODE_SHIFT);
 		data = (*ip) & OPCODE_DATAMASK;
 	}
 }

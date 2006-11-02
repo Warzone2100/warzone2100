@@ -80,10 +80,10 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
-		secondarySetState(psDroid, DSO_ATTACK_RANGE, psCommander->secondaryOrder & DSS_ARANGE_MASK);
-		secondarySetState(psDroid, DSO_REPAIR_LEVEL, psCommander->secondaryOrder & DSS_REPLEV_MASK);
-		secondarySetState(psDroid, DSO_ATTACK_LEVEL, psCommander->secondaryOrder & DSS_ALEV_MASK);
-		secondarySetState(psDroid, DSO_HALTTYPE, psCommander->secondaryOrder & DSS_HALT_MASK);
+		secondarySetState(psDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ARANGE_MASK));
+		secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK));
+		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
+		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
 	}
@@ -261,6 +261,7 @@ static void cmdDroidSetAvailable(SDWORD player, SDWORD num)
 	ASSERT( (num > 0) && (num < MAX_CMDDROIDS),
 		"cmdUnitSetAvailable: invalid player number" );
 }
+
 
 
 
