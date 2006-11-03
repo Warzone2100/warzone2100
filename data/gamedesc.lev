@@ -15,9 +15,9 @@ data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
-//data		"wrf\cam1Res.wrf"
+//data		"wrf/cam1Res.wrf"
 game		"multiplay/maps/4c-rush.gam"
-//data		"wrf\multi\cm1.wrf"
+//data		"wrf/multi/cm1.wrf"
 data		"wrf/prog.wrf"
 
 level		DEMO
@@ -52,7 +52,7 @@ data 		"wrf/audio.wrf"
 data		"wrf/tutorial/tutaudio.wrf"
 data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
-//data		"wrf\tutorial\TutStats.wrf"
+//data		"wrf/tutorial/TutStats.wrf"
 data 		"wrf/cam1res.wrf"
 
 /* Tutorial Level 3 - Base Building. */
@@ -435,8 +435,8 @@ data		"wrf/cam3/sub3-4s.wrf"
 
 //camstart	CAM_3_4
 //dataset		CAM_3
-//game		"wrf\cam3\cam3-4.gam"
-//data		"wrf\cam3\sub3-4.wrf"
+//game		"wrf/cam3/cam3-4.gam"
+//data		"wrf/cam3/sub3-4.wrf"
 
 miss_keep	CAM_3_4
 dataset		CAM_3
@@ -449,8 +449,8 @@ data		"wrf/cam3/sub3-4.wrf"
 
 camstart	FASTPLAY
 dataset		CAM_1
-//game		"wrf\FastPlay\fastplay.gam"
-//data		"wrf\FastPlay\fastplay.wrf"
+//game		"wrf/FastPlay/fastplay.gam"
+//data		"wrf/FastPlay/fastplay.wrf"
 //changed for demo!
 game		"wrf/fastplay/fastdemo.gam"
 data		"wrf/fastplay/fastdemo.wrf"

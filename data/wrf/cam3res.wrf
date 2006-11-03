@@ -1,6 +1,6 @@
 /***********************************************************/
 /*  You may have to modify this file for it to be correct! */ 
-/*******************       wrf\cam3res.wrf      *******************/
+/*******************       wrf/cam3res.wrf      *******************/
 
 
 directory 	"stats/research/cam3"
