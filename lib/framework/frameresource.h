@@ -25,7 +25,7 @@ typedef void (*RESLOAD_CALLBACK)(void);
 
 typedef struct res_data
 {
-	STRING		aID[RESID_MAXCHAR];	// ID of the resource - filename from the .wrf - e.g. "TRON.PIE"
+	char		aID[RESID_MAXCHAR];	// ID of the resource - filename from the .wrf - e.g. "TRON.PIE"
 	void		*pData;				// pointer to the acutal data
 	SDWORD		blockID;			// which of the blocks is it in (so we can clear some of them...)
 
@@ -40,7 +40,7 @@ typedef struct res_data
 typedef struct _res_type
 {
 	// type is still needed on psx ... strings are defined in source - data.c (yak!)
-	STRING			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only aplicable when loading from wrf (not wdg)
+	char			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only aplicable when loading from wrf (not wdg)
 
 	RES_BUFFERLOAD buffLoad;	// routine to process the data for this type
 	RES_FREE release;			// routine to release the data (NULL indicates none)
@@ -73,7 +73,7 @@ extern BOOL resInitialise(void);
 extern void resShutDown(void);
 
 // set the base resource directory
-extern void resSetBaseDir(STRING *pResDir);
+extern void resSetBaseDir(char *pResDir);
 
 /* Parse the res file */
 struct _block_heap;
@@ -91,27 +91,27 @@ extern void resReleaseBlockData(SDWORD blockID);
 extern void resReleaseAllData(void);
 
 /* Add a buffer load and release function for a file type */
-extern BOOL	resAddBufferLoad(const STRING *pType, RES_BUFFERLOAD buffLoad,
+extern BOOL	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 							 RES_FREE release);
 
 /* Add a file name load and release function for a file type */
-extern BOOL	resAddFileLoad(STRING *pType, RES_FILELOAD fileLoad,
+extern BOOL	resAddFileLoad(char *pType, RES_FILELOAD fileLoad,
 						   RES_FREE release);
 
 /* Call the load function for a file */
-extern BOOL resLoadFile(STRING *pType, STRING *pFile);
+extern BOOL resLoadFile(char *pType, char *pFile);
 
 // Add data to the resource system
-extern BOOL resAddData(STRING *pType, STRING *pID, void *pData);
+extern BOOL resAddData(char *pType, char *pID, void *pData);
 
 /* Return the resource for a type and ID */
-extern void *resGetDataFromHash(const STRING *pType, UDWORD HashedID);
-extern void *resGetData(const STRING *pType, const STRING *pID);
-extern BOOL resPresent(const STRING *pType, const STRING *pID);
-void resToLower(STRING *pStr);
+extern void *resGetDataFromHash(const char *pType, UDWORD HashedID);
+extern void *resGetData(const char *pType, const char *pID);
+extern BOOL resPresent(const char *pType, const char *pID);
+void resToLower(char *pStr);
 
 // return the HashedID string for a piece of data
-extern BOOL resGetHashfromData(const STRING *pType, const void *pData, UDWORD *pHash);
+extern BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash);
 
 void resDoResLoadCallback(void);
 

@@ -188,7 +188,7 @@ extern void	kf_SelectCommander_9( void );
 void kf_ToggleReopenBuildMenu( void );
 
 // dirty but necessary
-extern	STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
+extern	char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
 extern	void	kf_FaceNorth(void);
 extern	void	kf_FaceSouth(void);
 extern	void	kf_FaceEast(void);

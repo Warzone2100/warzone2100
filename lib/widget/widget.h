@@ -130,7 +130,7 @@ typedef struct _w_init
 #define TAB_MAJOR 1
 
 typedef void (*TAB_DISPLAY)(struct _widget *psWidget,UDWORD TabType,UDWORD Position,UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
-typedef void (*FONT_DISPLAY)(UDWORD x,UDWORD y,STRING *String);
+typedef void (*FONT_DISPLAY)(UDWORD x,UDWORD y,char *String);
 
 /* Form initialisation structure */
 typedef struct _w_forminit
@@ -151,9 +151,9 @@ typedef struct _w_forminit
 	UWORD			tabMinorGap;						// The space between tabs
 	UWORD			numMajor;					// Number of major tabs
 	UWORD			aNumMinors[WFORM_MAXMAJOR];	// Number of minor tabs for each major
-	STRING			*pTip;						// Tool tip for the form itself
-	STRING			*apMajorTips[WFORM_MAXMAJOR];	// Tool tips for the major tabs
-	STRING			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];
+	char			*pTip;						// Tool tip for the form itself
+	char			*apMajorTips[WFORM_MAXMAJOR];	// Tool tips for the major tabs
+	char			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];
 													// Tool tips for the minor tabs
 	TAB_DISPLAY		pTabDisplay;		// Optional callback for displaying a tab.
 	WIDGET_DISPLAY	pFormDisplay;		// Optional callback to display the form.
@@ -165,8 +165,8 @@ typedef struct _w_labinit
 	/* The basic init entries */
 	WINIT_BASE;
 
-	STRING		*pText;			// label text
-	STRING		*pTip;			// Tool tip for the label.
+	char		*pText;			// label text
+	char		*pTip;			// Tool tip for the label.
 //	PROP_FONT	*psFont;		// label font
 	int			FontID;			// ID of the IVIS font to use for this widget.
 } W_LABINIT;
@@ -177,8 +177,8 @@ typedef struct _w_butinit
 	/* The basic init entries */
 	WINIT_BASE;
 
-	STRING		*pText;			// button text
-	STRING		*pTip;			// Tool tip text
+	char		*pText;			// button text
+	char		*pTip;			// Tool tip text
 //	PROP_FONT	*psFont;		// button font
 	int			FontID;			// ID of the IVIS font to use for this widget.
 } W_BUTINIT;
@@ -189,7 +189,7 @@ typedef struct _w_edbinit
 	/* The basic init entries */
 	WINIT_BASE;
 
-	STRING		*pText;			// initial contents of the edit box
+	char		*pText;			// initial contents of the edit box
 //	PROP_FONT	*psFont;		// edit box font
 	int			FontID;			// ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY	pBoxDisplay;		// Optional callback to display the form.
@@ -214,7 +214,7 @@ typedef struct _w_barinit
 	UWORD		iRange;			// Maximum range
 	W_COLOURDEF	sCol;			// Bar colour
 	W_COLOURDEF	sMinorCol;		// Minor bar colour
-	STRING		*pTip;			// Tool tip text
+	char		*pTip;			// Tool tip text
 } W_BARINIT;
 
 
@@ -234,7 +234,7 @@ typedef struct _w_sldinit
 	UWORD		numStops;		// Number of stops on the slider
 	UWORD		barSize;		// Size of the bar
 	UWORD		pos;			// Initial position of the slider bar
-	STRING		*pTip;			// Tip string
+	char		*pTip;			// Tip string
 } W_SLDINIT;
 
 /***********************************************************************************/
@@ -308,10 +308,10 @@ extern void widgReveal(W_SCREEN *psScreen, UDWORD id);
  * This will always return a valid string pointer.
  * NOTE: The string must be copied out of the buffer
  */
-extern STRING *widgGetString(W_SCREEN *psScreen, UDWORD id);
+extern char *widgGetString(W_SCREEN *psScreen, UDWORD id);
 
 /* Set the text in a widget */
-extern void widgSetString(W_SCREEN *psScreen, UDWORD id, STRING *pText);
+extern void widgSetString(W_SCREEN *psScreen, UDWORD id, char *pText);
 
 /* Set the current tabs for a tab form */
 extern void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor);
@@ -356,7 +356,7 @@ extern void *widgGetLastUserData(W_SCREEN *psScreen);
 extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /* Set tip string for a widget */
-extern void widgSetTip( W_SCREEN *psScreen, UDWORD id, STRING *pTip );
+extern void widgSetTip( W_SCREEN *psScreen, UDWORD id, char *pTip );
 
 /* Colour numbers */
 enum _w_colour

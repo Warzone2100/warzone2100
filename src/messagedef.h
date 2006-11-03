@@ -45,8 +45,8 @@ typedef struct _view_research
 {
 	struct	iIMDShape	*pIMD;
 	struct	iIMDShape	*pIMD2;				//allows base plates and turrets to be drawn as well
-	STRING	sequenceName[MAX_STR_LENGTH];	//which windowed flic to display
-	STRING	*pAudio;						/*name of audio track to play (for this seq)*/
+	char	sequenceName[MAX_STR_LENGTH];	//which windowed flic to display
+	char	*pAudio;						/*name of audio track to play (for this seq)*/
 	UWORD	numFrames;						/* On PSX if type is VIEW_RPL then
 											this is used as a number_of_frames_in_the_stream
 											count - NOT used on PC*/
@@ -54,13 +54,13 @@ typedef struct _view_research
 
 typedef struct _seq_display
 {
-	STRING		sequenceName[MAX_STR_LENGTH];
+	char		sequenceName[MAX_STR_LENGTH];
 
 	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish
 	UBYTE		numText;		//the number of textmessages associated with
 								//this sequence
-	STRING		**ppTextMsg;	//Pointer to text messages - if any
-	STRING		*pAudio;		/*name of audio track to play (for this seq)*/
+	char		**ppTextMsg;	//Pointer to text messages - if any
+	char		*pAudio;		/*name of audio track to play (for this seq)*/
 	UWORD		numFrames;		/* On PSX if type is VIEW_RPL then
 								this is used as a number_of_frames_in_the_stream
 								count - NOT used on PC*/
@@ -71,9 +71,9 @@ typedef struct _view_replay
 {
 	UBYTE		numSeq;
 	SEQ_DISPLAY *pSeqList;
-	//STRING		**ppSeqName;
+	//char		**ppSeqName;
 	//UBYTE		numText;	//the number of textmessages associated with this sequence
-	//STRING		**ppTextMsg;	//Pointer to text messages - if any
+	//char		**ppTextMsg;	//Pointer to text messages - if any
 } VIEW_REPLAY;
 
 // info required to view a proximity message
@@ -90,10 +90,10 @@ typedef struct _view_proximity
 
 typedef struct _viewdata
 {
-	STRING		*pName;		//name ID of the message - used for loading in and identifying
+	char		*pName;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
 	UBYTE		numText;	//the number of textmessages associated with this data
-	STRING		**ppTextMsg;	//Pointer to text messages - if any
+	char		**ppTextMsg;	//Pointer to text messages - if any
 	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
 } VIEWDATA;
@@ -133,7 +133,7 @@ typedef struct _text_display
 	UDWORD			startTime;				//time started text display
 	UDWORD			font;					//id of which font to use
 	UWORD			fontColour;				//colour number
-	STRING			text[MAX_STR_LENGTH-1];	//storage to hold the currently displayed text
+	char			text[MAX_STR_LENGTH-1];	//storage to hold the currently displayed text
 } TEXT_DISPLAY;
 
 typedef struct _viewData_list

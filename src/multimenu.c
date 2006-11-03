@@ -144,7 +144,7 @@ char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 // enumerates maps in the gamedesc file.
 // returns only maps that are valid the right 'type'
 
-BOOL enumerateMultiMaps(STRING *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
+BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
 {
 	static LEVEL_DATASET *lev;
 	UBYTE cam;
@@ -246,7 +246,7 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 //	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
 //	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	UDWORD	count;
-	STRING  butString[255];
+	char  butString[255];
 
 	strcpy(butString,((W_BUTTON *)psWidget)->pTip);
 
@@ -328,7 +328,7 @@ unsigned int check_tip_index(unsigned int i) {
 // ////////////////////////////////////////////////////////////////////////////
 // FIXME: what is this, and why is there some code that only works in win32
 // here? - Per
-void addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
+void addMultiRequest(char *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
@@ -337,10 +337,10 @@ void addMultiRequest(STRING *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers
 	WIN32_FIND_DATAA	found;
 	HANDLE			dir;
 	UDWORD			count;
-	STRING			ToFind[255];
+	char			ToFind[255];
 #endif
-	STRING			sTemp[64];
-	static STRING		tips[NBTIPS][MAX_STR_SIZE];
+	char			sTemp[64];
+	static char		tips[NBTIPS][MAX_STR_SIZE];
 
 	numButtons = 0;
 
@@ -638,7 +638,7 @@ void closeMultiRequester(void)
 	return;
 }
 
-BOOL runMultiRequester(UDWORD id,UDWORD *mode, STRING *chosen,UDWORD *chosenValue)
+BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 {
 	char tmp[255];
 
@@ -1489,7 +1489,7 @@ void intDisplayMiniMultiMenu(void)
 	UDWORD w = RADWIDTH;
 	UDWORD h = 50;
 	UDWORD players = 0;
-	STRING	sTmp[64];
+	char	sTmp[64];
 
 	if( ingame.localJoiningInProgress)
 	{

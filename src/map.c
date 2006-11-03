@@ -43,7 +43,7 @@ SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 /* Structure definitions for loading and saving map data */
 typedef struct _map_save_header
 {
-	STRING		aFileType[4];
+	char		aFileType[4];
 	UDWORD		version;
 	UDWORD		width;
 	UDWORD		height;
@@ -1598,7 +1598,7 @@ UDWORD GetHeightOfMap(void)
 
 // -----------------------------------------------------------------------------------
 /* This will save out the visibility data */
-BOOL	writeVisibilityData( STRING *pFileName )
+BOOL	writeVisibilityData( char *pFileName )
 {
 	char *pFileData;		// Pointer to the necessary allocated memory
 	char *pVisData;			// Pointer to the start of the map data

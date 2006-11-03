@@ -46,7 +46,7 @@ extern void releaseAllProxDisp(void);
 /*load the view data for the messages from the file exported from the world editor*/
 extern VIEWDATA* loadViewData(char *pViewMsgData, UDWORD bufferSize);
 /*get the view data that contains the text message pointer passed in */
-extern VIEWDATA* getViewData(STRING *pTextMsg);
+extern VIEWDATA* getViewData(char *pTextMsg);
 /* Release the viewdata memory */
 extern void viewDataShutDown(VIEWDATA *psViewData);
 

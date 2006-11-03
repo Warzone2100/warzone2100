@@ -288,14 +288,14 @@ static void orderDroids(void);
 #define STAT_BUTHEIGHT		46
 
 /* Close strings */
-static STRING pCloseText[] = "X";
+static char pCloseText[] = "X";
 
 /* Player button strings */
-static STRING	*apPlayerText[] =
+static char	*apPlayerText[] =
 {
 	"0", "1", "2", "3", "4", "5", "6", "7",
 };
-static STRING	*apPlayerTip[] =
+static char	*apPlayerTip[] =
 {
 	"Select Player 0",
 	"Select Player 1",
@@ -1958,8 +1958,8 @@ INT_RETVAL intRunWidgets(void)
 /*static void intGetMapSize(void)
 {
 	SDWORD	editWidth, editHeight;
-	STRING	*pStr;
-	STRING	aText[WIDG_MAXSTR];
+	char	*pStr;
+	char	aText[WIDG_MAXSTR];
 	UDWORD	i, tmp, bitCount;
 	BOOL	widthChanged=FALSE, heightChanged=FALSE;
 
@@ -4049,7 +4049,7 @@ BOOL _intAddOptions(void)
 	W_BUTINIT	sButInit;
 	W_LABINIT	sLabInit;
 	UDWORD		player;
-//	STRING		aText[WIDG_MAXSTR];//, aTip[WIDG_MAXSTR];
+//	char		aText[WIDG_MAXSTR];//, aTip[WIDG_MAXSTR];
 
 //	widgEndScreen(psWScreen);
 
@@ -5675,7 +5675,7 @@ static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 #ifdef INCLUDE_PRODSLIDER
 	W_SLDINIT			sSldInit;
 #endif
-	//STRING				sCaption[6];
+	//char				sCaption[6];
 
 	// should this ever be called with psOwner == NULL?
 

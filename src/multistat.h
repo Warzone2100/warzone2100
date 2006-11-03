@@ -24,7 +24,7 @@ typedef struct{
 } PLAYERSTATS, *LPPLAYERSTATS;
 
 typedef struct{								// complete info.
-	STRING		name[255];
+	char		name[255];
 	PLAYERSTATS	stats;
 	UBYTE		padding[4];					// used to fill encryption array & confuse enduser.
 }SAVEDPLAYERSTATS, *LPSAVEDPLAYERSTATS;
@@ -50,8 +50,8 @@ extern BOOL	saveForce				(char *name,FORCE *pfForce);
 extern BOOL	loadForce				(char *name);
 
 // stat defs
-extern BOOL			saveMultiStats			(STRING *sFName, STRING *sPlayerName,PLAYERSTATS *playerStats);	// to disk
-extern BOOL			loadMultiStats			(STRING *sPlayerName,PLAYERSTATS *playerStats);					// form disk
+extern BOOL			saveMultiStats			(char *sFName, char *sPlayerName,PLAYERSTATS *playerStats);	// to disk
+extern BOOL			loadMultiStats			(char *sPlayerName,PLAYERSTATS *playerStats);					// form disk
 extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
 extern BOOL			setMultiStats			(DWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
 extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);

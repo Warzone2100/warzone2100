@@ -33,12 +33,12 @@ KEY_CODE	metaKeyCode;
 KEY_CODE	altMetaKeyCode;
 KEY_CODE	subKeyCode;
 KEY_ACTION	action;
-STRING		*pName;
+char		*pName;
 struct _keyMapping	*psNext;
 } KEY_MAPPING;
 
 extern KEY_MAPPING	*keyAddMapping			( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode, 
-									 KEY_ACTION action, void (*pKeyMapFunc)(void), const STRING *name );
+									 KEY_ACTION action, void (*pKeyMapFunc)(void), const char *name );
 extern BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
 extern	KEY_MAPPING	*keyGetMappingFromFunction(void	*function);
 extern BOOL	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
@@ -56,11 +56,11 @@ extern void	keyAllMappingsActive	( void );
 extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
 extern void	processDebugMappings	( BOOL val );
 extern BOOL	getDebugMappingStatus	( void );
-extern	BOOL	keyReAssignMappingName(STRING *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
+extern	BOOL	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 							
 extern	BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode, 
 							KEY_CODE newMetaCode, KEY_CODE newSubCode );
-extern	KEY_MAPPING	*getKeyMapFromName(STRING *pName);
+extern	KEY_MAPPING	*getKeyMapFromName(char *pName);
 
 
 extern KEY_CODE	getQwertyKey		( void );

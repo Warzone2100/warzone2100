@@ -90,7 +90,7 @@ typedef struct _droid_template
 
 	// on the PC this contains the full editable ascii name of the template
 	// on the PSX this is not used, the full name is NON-EDITABLE and is generated from the template components e.g. Viper Mk I
-	STRING			aName[DROID_MAXNAME];
+	char			aName[DROID_MAXNAME];
 
 	UBYTE 			NameVersion;			// Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied to droid structure
 
@@ -130,7 +130,7 @@ typedef struct _droid
 
 
 	//Ascii name of the droid - This is generated from the droid template and can not be changed by the game player after creation.
-	STRING		aName[DROID_MAXNAME];
+	char		aName[DROID_MAXNAME];
 
 //	UBYTE 		NameVersion;			// Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 

@@ -122,7 +122,7 @@ BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid);
 BOOL	pickATile2(UDWORD *x, UDWORD *y, UDWORD numIterations);
 UDWORD	getBound(UDWORD level);
-STRING	*getDroidNameForRank(UDWORD rank);
+char	*getDroidNameForRank(UDWORD rank);
 
 
 /*time to move to a new location (when building foundation) */
@@ -1286,7 +1286,7 @@ void droidGetNaybors(DROID *psDroid)
 static void displayNaybors(void)
 {
 	UDWORD	count, y;
-	STRING	*pType = NULL;
+	char	*pType = NULL;
 
 	y = 100;
 	for(count=0; count<numNaybors; count++)
@@ -2836,9 +2836,9 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 	char				*pStartDroidData;
         int cnt;
 	UDWORD				NumDroids = 0, i, player;
-	STRING				componentName[MAX_NAME_SIZE];
+	char				componentName[MAX_NAME_SIZE];
 #ifdef HASH_NAMES
-	STRING droidName[MAX_NAME_SIZE];
+	char droidName[MAX_NAME_SIZE];
 #endif
 	BOOL				found = FALSE; //,EndOfFile;
 	DROID_TEMPLATE		*pDroidDesign;
@@ -2846,7 +2846,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 	UDWORD				size, inc, templateID;
 	BOOL				bDefaultTemplateFound = FALSE;
 #ifdef STORE_RESOURCE_ID
-//	STRING				*pDroidName = droidName;
+//	char				*pDroidName = droidName;
 #endif
 #ifdef RESOURCE_NAMES
 	UDWORD				id;
@@ -3533,7 +3533,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 {
 	char				*pStartWeaponData;
 	UDWORD				NumWeapons = 0, i, player;
-	STRING				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
+	char				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	DROID_TEMPLATE		*pTemplate;
 	BOOL				recFound;
 	UWORD				SkippedWeaponCount=0;
@@ -3679,7 +3679,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 {
 	char				*pStartProgramData;
 	UDWORD				NumPrograms = 0, i, incP, player;
-	STRING				ProgramName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
+	char				ProgramName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	DROID_TEMPLATE		*pTemplate;
 	PROGRAM_STATS		*pPrograms = asProgramStats;
 	BOOL				recFound;
@@ -5243,7 +5243,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
 /* IF YOU USE THIS FUNCTION - NOTE THAT selectedPlayer's TEMPLATES ARE NOT USED!!!!
    gets a template from its name - relies on the name being unique (or it will
    return the first one it finds!! */
-DROID_TEMPLATE * getTemplateFromName(STRING *pName)
+DROID_TEMPLATE * getTemplateFromName(char *pName)
 {
 	UDWORD			player;
 	DROID_TEMPLATE	*psCurr;
@@ -5417,7 +5417,7 @@ UDWORD	getDroidLevel(DROID *psDroid)
 
 
 
-STRING	*getDroidNameForRank(UDWORD rank)
+char	*getDroidNameForRank(UDWORD rank)
 {
 
 switch(rank)
@@ -5445,7 +5445,7 @@ switch(rank)
 	return NULL;
 }
 
-STRING	*getDroidLevelName(DROID *psDroid)
+char	*getDroidLevelName(DROID *psDroid)
 {
 //#ifndef PSX
 	return(getDroidNameForRank(getDroidLevel(psDroid)));
@@ -5628,17 +5628,17 @@ static UDWORD calcDroidSystemPoints(DROID *psDroid)
 
 // Get the name of a droid from it's DROID structure.
 //
-STRING *droidGetName(DROID *psDroid)
+char *droidGetName(DROID *psDroid)
 {
 #ifndef HASH_NAMES
 	return (psDroid->aName);
 #else
-	const STRING ConstructedName[]="Body Mk XXIV";	// dummy name
+	const char ConstructedName[]="Body Mk XXIV";	// dummy name
 
 	// if the hashed name is 0 - it must be a user created droid so we construct its name
 	if (psDroid->HashedDroidName!=0x0)
 	{
-		STRING *DroidName;
+		char *DroidName;
 		DroidName=strresGetString(NULL,psDroid->HashedDroidName);
 		if (DroidName!=NULL) return(DroidName);	// if we found a name then return it...  other wise build the name
 	}
@@ -5656,7 +5656,7 @@ STRING *droidGetName(DROID *psDroid)
 //
 // - only possible on the PC where you can adjust the names,
 //
-void droidSetName(DROID *psDroid,STRING *pName)
+void droidSetName(DROID *psDroid,char *pName)
 {
 #ifndef HASH_NAMES
 	strncpy(psDroid->aName,pName, DROID_MAXNAME);
@@ -6284,7 +6284,7 @@ void setUpBuildModule(DROID *psDroid)
 
 
 // not written yet - needs merging with code in Dr Jones' Design.c
-static void BuildNameFromDroid(DROID *psDroid, STRING *ConstructedName)
+static void BuildNameFromDroid(DROID *psDroid, char *ConstructedName)
 {
 }
 
@@ -6292,11 +6292,11 @@ static void BuildNameFromDroid(DROID *psDroid, STRING *ConstructedName)
 // We just need 1 buffer for the current displayed droid (or template) name
 #define MAXCONNAME WIDG_MAXSTR	//(32)
 #ifdef HASH_NAMES
-static STRING ConstructedName[MAXCONNAME+1]="Body Mk XXIV";	// dummy name
+static char ConstructedName[MAXCONNAME+1]="Body Mk XXIV";	// dummy name
 #endif
 
 
-STRING *getDroidName(DROID *psDroid)
+char *getDroidName(DROID *psDroid)
 {
 	DROID_TEMPLATE sTemplate;
 
@@ -6309,12 +6309,12 @@ STRING *getDroidName(DROID *psDroid)
 
 /*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
-STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
+char* getTemplateName(DROID_TEMPLATE *psTemplate)
 {
 #ifdef HASH_NAMES
-	STRING *TempName;
+	char *TempName;
 
-	STRING *NewName;
+	char *NewName;
 /*  - Performed in 	GetDefaultTemplateName   - with other droids
 
 	// On the PSX the NameHash entry points to the name for database generated templates
@@ -6347,11 +6347,11 @@ STRING* getTemplateName(DROID_TEMPLATE *psTemplate)
 	return(ConstructedName);
 
 #else
-	//STRING *pNameID=psTemplate->pName;
-	STRING *pNameID = psTemplate->aName;
+	//char *pNameID=psTemplate->pName;
+	char *pNameID = psTemplate->aName;
 #ifdef STORE_RESOURCE_ID
 	UDWORD			id;
-	STRING			*pName = NULL;
+	char			*pName = NULL;
 
 	/*see if the name has a resource associated with it by trying to get
 	the ID for the string*/
@@ -6392,7 +6392,7 @@ BOOL	droidIsDamaged(DROID *psDroid)
 }
 
 
-BOOL getDroidResourceName(STRING *pName)
+BOOL getDroidResourceName(char *pName)
 {
 	UDWORD		id;
 

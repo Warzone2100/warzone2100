@@ -51,7 +51,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
 BOOL						bMultiPlayer				= FALSE;	// true when more than 1 player.
-STRING						sForceName[256]				= "Default";
+char						sForceName[256]				= "Default";
 DWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8 players)
 //UDWORD						arenaPlayersReceived=0;
 BOOL						openchannels[MAX_PLAYERS]={TRUE};
@@ -64,8 +64,8 @@ MULTIPLAYERINGAME			ingame;
 
 BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
-STRING						tempString[12];
-STRING						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
+char						tempString[12];
+char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 BOOL							recvBeacon(NETMSG *pMsg);
 char								playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player names (humans and AIs)
 
@@ -108,7 +108,7 @@ FEATURE		*IdToFeature(UDWORD id,UDWORD player);
 DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player);
 DROID_TEMPLATE *NameToTemplate(CHAR *sName,UDWORD player);
 
-STRING *getPlayerName		(UDWORD player);
+char *getPlayerName		(UDWORD player);
 BOOL	isHumanPlayer		(UDWORD player);				// determine if human
 BOOL	myResponsibility	(UDWORD player);				// this pc has comms responsibility
 BOOL	responsibleFor		(UDWORD player,UDWORD player2);	// has player responsibility for player2
@@ -121,7 +121,7 @@ BOOL	recvResearch		(NETMSG *pMsg);
 BOOL	sendTextMessage		(char *pStr,BOOL bcast);		// send/recv a text message
 
 BOOL	sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
-void	displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to);
+void	displayAIMessage	(char *pStr, SDWORD from, SDWORD to);
 BOOL	recvTextMessageAI	(NETMSG *pMsg);					//AI multiplayer message
 
 BOOL	recvTextMessage		(NETMSG *pMsg);
@@ -138,7 +138,7 @@ BOOL	recvAudioMsg		(NETMSG *pMsg);
 BOOL	recvMapFileRequested	(NETMSG *pMsg);
 UBYTE	sendMap				(void);
 BOOL	recvMapFileData			(NETMSG *pMsg);
-BOOL	addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, STRING * textMsg);
+BOOL	addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -467,7 +467,7 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // return a players name.
-STRING *getPlayerName(UDWORD player)
+char *getPlayerName(UDWORD player)
 {
 	UDWORD i;
 
@@ -476,7 +476,7 @@ STRING *getPlayerName(UDWORD player)
 	//Try NetPlay.playerName first (since supports AIs)
 	if(game.type != CAMPAIGN)
 		if(strcmp(playerName[player], "") != 0)
-			return (STRING*)&playerName[player];
+			return (char*)&playerName[player];
 
 	//Use the ordinary way if failed
 	for(i=0;i<MAX_PLAYERS;i++)
@@ -517,14 +517,14 @@ STRING *getPlayerName(UDWORD player)
 				return tempString;
 			}
 
-			return (STRING*)&NetPlay.players[i].name;
+			return (char*)&NetPlay.players[i].name;
 		}
 	}
 
 	return NetPlay.players[0].name;
 }
 
-BOOL setPlayerName(UDWORD player, STRING *sName)
+BOOL setPlayerName(UDWORD player, char *sName)
 {
 	if(player < 0 || player > MAX_PLAYERS)
 	{
@@ -1314,9 +1314,9 @@ BOOL sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD se
 	return TRUE;
 }
 
-void displayAIMessage(STRING *pStr, SDWORD from, SDWORD to)
+void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 {
-	STRING tmp[255];
+	char tmp[255];
 
 	if(isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
 	{
@@ -1334,7 +1334,7 @@ BOOL recvTextMessage(NETMSG *pMsg)
 {
 	DPID	dpid;
 	UDWORD	i;
-	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
+	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	UDWORD  player,j;		//console callback - player who sent the message
 
 	NetGet(pMsg,0,dpid);
@@ -1384,7 +1384,7 @@ BOOL recvTextMessageAI(NETMSG *pMsg)
 {
 	SDWORD	sender, receiver;
 
-	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
+	char	msg[MAX_CONSOLE_STRING_LENGTH];
 
 	NetGet(pMsg,0,sender);			//in-game player index ('normal' one)
 	NetGet(pMsg,4,receiver);		//in-game player index
@@ -1871,7 +1871,7 @@ static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 }
 
 
-BOOL msgStackGetMsg(STRING  *psVal)
+BOOL msgStackGetMsg(char  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1910,7 +1910,7 @@ static BOOL msgStackSort(void)
 	locx[msgStackPos] = -2;
 	locy[msgStackPos] = -2;
 
-	strcpy(msgStr[msgStackPos], "ERROR STRING!!!!!!!!");
+	strcpy(msgStr[msgStackPos], "ERROR char!!!!!!!!");
 
 	msgStackPos--;		//since removed the top element
 
@@ -1949,7 +1949,7 @@ SDWORD msgStackGetCount(void)
 BOOL msgStackFireTop(void)
 {
 	SDWORD		_callbackType;
-	STRING		msg[255];
+	char		msg[255];
 
 	if(msgStackPos < 0)
 	{
@@ -2026,7 +2026,7 @@ BOOL recvBeacon(NETMSG *pMsg)
 {
 	SDWORD	sender, receiver,locX, locY;
 
-	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
+	char	msg[MAX_CONSOLE_STRING_LENGTH];
 
 	NetGet(pMsg,0,sender);
 	NetGet(pMsg,4,receiver);
@@ -2043,7 +2043,7 @@ BOOL recvBeacon(NETMSG *pMsg)
 	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
 }
 
-STRING *getPlayerColourName(SDWORD player)
+char *getPlayerColourName(SDWORD player)
 {
 	switch(getPlayerColour(player))
 	{

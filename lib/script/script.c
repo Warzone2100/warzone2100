@@ -151,7 +151,7 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 
 
 /* Lookup a script variable */
-BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, STRING *pID, UDWORD *pIndex)
+BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
 {
 	UDWORD	index;
 

@@ -193,10 +193,10 @@ void eventShutDown(void)
 
 
 // get the trigger id string
-const STRING *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
+const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
 {
-	const STRING	*pID, *pTrigType;
-	static STRING	aIDNum[255];
+	const char	*pID, *pTrigType;
+	static char	aIDNum[255];
 	SDWORD			i;
 	TRIGGER_TYPE	type;
 
@@ -257,10 +257,10 @@ const STRING *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
 }
 
 // get the event id string
-const STRING *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
+const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 {
-	const STRING	*pID;
-	static STRING	aIDNum[255];
+	const char	*pID;
+	static char	aIDNum[255];
 	SDWORD			i;
 
 	if ((psCode->psDebug == NULL) ||
@@ -288,7 +288,7 @@ void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 {
 	SCRIPT_CODE *psCode = psTrigger->psContext->psCode;
 //	BOOL		debugInfo = psCode->psDebug != NULL;
-	const STRING	*pTrigLab, *pEventLab;
+	const char	*pTrigLab, *pEventLab;
 
 	// find the debug info for the trigger
 	pTrigLab = eventGetTriggerID(psCode, psTrigger->trigger);
@@ -423,7 +423,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//initialize Strings and integers
 				if(type == VAL_STRING)
 				{
-					//debug(LOG_ERROR,"eventNewContext: STRING type variables are not implemented");
+					//debug(LOG_ERROR,"eventNewContext: char type variables are not implemented");
 
 					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(MAXSTRLEN);
 					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");

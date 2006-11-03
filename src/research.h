@@ -92,7 +92,7 @@ extern BOOL ResearchShutDown(void);
 extern BOOL ResearchRelease(void);
 
 /* For a given view data get the research this is related to */
-extern RESEARCH * getResearch(STRING *pName, BOOL resName);
+extern RESEARCH * getResearch(char *pName, BOOL resName);
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */

@@ -45,7 +45,7 @@ extern void removeFeature(FEATURE *psDel);
 extern void destroyFeature(FEATURE *psDel);
 
 /* get a feature stat id from its name */
-extern SDWORD getFeatureStatFromName( STRING *pName );
+extern SDWORD getFeatureStatFromName( char *pName );
 
 /*looks around the given droid to see if there is any building 
 wreckage to clear*/

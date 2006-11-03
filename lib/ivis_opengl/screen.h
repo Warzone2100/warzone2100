@@ -27,7 +27,7 @@ void *screenGetSurface(void); /* Return a pointer to the back buffer surface */
 void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 
 /* Output text to the display screen at location x,y. The remaining arguments are as printf. */
-void screenTextOut(UDWORD x, UDWORD y, STRING *pFormat, ...);
+void screenTextOut(UDWORD x, UDWORD y, char *pFormat, ...);
 
 /* ------------------------------------------------------------------------------------------- */
 

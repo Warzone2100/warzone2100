@@ -79,8 +79,8 @@ char OnString[]={"On "};
 char OffString[]={"Off"};
 
 
-STRING	strFog[MAX_STR_LENGTH];
-STRING	strTrans[MAX_STR_LENGTH];
+char	strFog[MAX_STR_LENGTH];
+char	strTrans[MAX_STR_LENGTH];
 
 tMode titleMode;					// the global case
 
@@ -142,9 +142,9 @@ void		removeBottomForm		(void);
 void		addBackdrop				(void);
 void		removeBackdrop			(void);
 
-void		addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlignLeft,BOOL bGrey);
-void 		addText					(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State);
-void		addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt);
+void		addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt,BOOL bAlignLeft,BOOL bGrey);
+void 		addText					(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State);
+void		addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt);
 void		addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID);
 
 void		displayLogo				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -1481,7 +1481,7 @@ void removeTopForm( void )
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlign,BOOL bGrey)
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt,BOOL bAlign,BOOL bGrey)
 {
 	W_BUTINIT		sButInit;
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -1545,7 +1545,7 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
+void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt)
 {
 #if !defined(PSX) || defined(ROTATEDTEXT)
 	W_LABINIT	sLabInit;
@@ -1568,7 +1568,7 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt)
 }
 
 
-void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt, UDWORD attachID,BOOL *State)
+void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State)
 {
 	W_LABINIT	sLabInit;
 
@@ -1602,7 +1602,7 @@ void displayTitleBitmap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 {
     const size_t sTmpSize = 200;
 
-	STRING	sTmp[200];			//Couldn't have sTmp[sTmpSize], .net did NOT like that, so for now...
+	char	sTmp[200];			//Couldn't have sTmp[sTmpSize], .net did NOT like that, so for now...
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);

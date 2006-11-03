@@ -14,7 +14,7 @@
 // the event save file header
 typedef struct _event_save_header
 {
-	STRING		aFileType[4];
+	char		aFileType[4];
 	UDWORD		version;
 } EVENT_SAVE_HDR;
 
@@ -29,7 +29,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 	INTERP_VAL			*psVal;
 	SCR_VAL_SAVE		saveFunc;
 	char				*pPos;
-//not hashed	STRING				*pScriptID;
+//not hashed	char				*pScriptID;
 	UDWORD				hashedName;
 	UWORD				*pValSize = NULL;
 
@@ -170,7 +170,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
 	char				*pPos;
-	STRING				*pScriptID;
+	char				*pScriptID;
 	SCRIPT_CODE			*psCode;
 	CONTEXT_RELEASE			release;
 	INTERP_VAL			*psVal;
@@ -187,7 +187,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 	for(context=0; context < numContext; context += 1)
 	{
 		// get the script code
-		pScriptID = (STRING *)pPos;
+		pScriptID = (char *)pPos;
 		psCode = (SCRIPT_CODE*)resGetData("SCRIPT", pScriptID);
 		pPos += strlen(pScriptID) + 1;
 
@@ -287,7 +287,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
 	char				*pPos;
-//not hashed	STRING				*pScriptID;
+//not hashed	char				*pScriptID;
 	UDWORD				hashedName;
 	SCRIPT_CODE			*psCode;
 	CONTEXT_RELEASE			release;
@@ -305,7 +305,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 	for(context=0; context < numContext; context += 1)
 	{
 		// get the script code
-//notHashed		pScriptID = (STRING *)pPos;
+//notHashed		pScriptID = (char *)pPos;
 //notHashed		psCode = resGetData("SCRIPT", pScriptID);
 //notHashed		pPos += strlen(pScriptID) + 1;
 		hashedName = *((UDWORD*)pPos);

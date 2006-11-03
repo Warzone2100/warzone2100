@@ -43,7 +43,7 @@ UDWORD		numFunctions;
 
 /*Returns the Function type based on the string - used for reading in data */
 static UDWORD functionType(char* pType);
-static BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore);
+static BOOL storeName(FUNCTION* pFunction, char* pNameToStore);
 static BOOL loadUpgradeFunction(char *pData, UBYTE type);
 
 
@@ -88,7 +88,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 {
 	char		*pStartFunctionData;
 	UDWORD		totalFunctions = 0, i, type;//, player;
-	STRING		FunctionType[MAX_NAME_SIZE];
+	char		FunctionType[MAX_NAME_SIZE];
 	FUNCTION	**pStartList;
 
 	//keep the start so we release it at the end
@@ -279,12 +279,12 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 }
 
 // Allocate storage for the name
-BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore)
+BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
 {
 #ifdef HASH_NAMES
 	pFunction->NameHash=HashString(pNameToStore);
 #else
-	pFunction->pName = (STRING *)MALLOC(strlen(pNameToStore)+1);
+	pFunction->pName = (char *)MALLOC(strlen(pNameToStore)+1);
 	if (pFunction->pName == NULL)
 	{
 		debug( LOG_ERROR, "Function Name - Out of memory" );
@@ -299,7 +299,7 @@ BOOL storeName(FUNCTION* pFunction, STRING* pNameToStore)
 /*BOOL loadFunction(char *pData, UDWORD functionType)
 {
 	FUNCTION*				psFunction;
-	STRING					functionName[50];
+	char					functionName[50];
 
 	//allocate storage
 	psFunction = (FUNCTION *)MALLOC(sizeof(FUNCTION));
@@ -344,9 +344,9 @@ BOOL loadProduction(char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
 	//UBYTE					propType;
-	STRING					functionName[MAX_NAME_SIZE], bodySize[MAX_NAME_SIZE];
+	char					functionName[MAX_NAME_SIZE], bodySize[MAX_NAME_SIZE];
 	UDWORD					productionOutput;
-	//STRING					propulsionType[MAX_NAME_SIZE];
+	//char					propulsionType[MAX_NAME_SIZE];
 	//PROPULSION_TYPES*		pPropulsionType;
 /*#ifdef HASH_NAMES
 	UDWORD	HashedName;
@@ -442,7 +442,7 @@ BOOL loadProduction(char *pData)
 BOOL loadProductionUpgradeFunction(char *pData)
 {
 	PRODUCTION_UPGRADE_FUNCTION*	psFunction;
-	STRING							functionName[MAX_NAME_SIZE];
+	char							functionName[MAX_NAME_SIZE];
 	UDWORD							factory, cyborg, vtol;
 	UDWORD outputModifier;
 
@@ -510,7 +510,7 @@ BOOL loadProductionUpgradeFunction(char *pData)
 BOOL loadResearchFunction(char *pData)
 {
 	RESEARCH_FUNCTION*			psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (RESEARCH_FUNCTION *)MALLOC(sizeof(RESEARCH_FUNCTION));
@@ -544,7 +544,7 @@ BOOL loadResearchFunction(char *pData)
 BOOL loadReArmFunction(char *pData)
 {
 	REARM_FUNCTION*				psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (REARM_FUNCTION *)MALLOC(sizeof(REARM_FUNCTION));
@@ -649,7 +649,7 @@ BOOL loadReArmUpgradeFunction(char *pData)
 //generic load function for upgrade type
 BOOL loadUpgradeFunction(char *pData, UBYTE type)
 {
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 	UDWORD						modifier;
 	UPGRADE_FUNCTION			*psFunction;
 
@@ -694,7 +694,7 @@ BOOL loadUpgradeFunction(char *pData, UBYTE type)
 BOOL loadDroidBodyUpgradeFunction(char *pData)
 {
 	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
-	STRING							functionName[MAX_NAME_SIZE];
+	char							functionName[MAX_NAME_SIZE];
 	UDWORD							modifier, armourKinetic, armourHeat,
 									body, droid, cyborg;
 
@@ -762,7 +762,7 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 BOOL loadDroidSensorUpgradeFunction(char *pData)
 {
 	DROIDSENSOR_UPGRADE_FUNCTION	*psFunction;
-	STRING							functionName[MAX_NAME_SIZE];
+	char							functionName[MAX_NAME_SIZE];
 	UDWORD							modifier, range;
 
 	//allocate storage
@@ -809,7 +809,7 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
 BOOL loadWeaponUpgradeFunction(char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION*	psFunction;
-	STRING						functionName[MAX_NAME_SIZE],
+	char						functionName[MAX_NAME_SIZE],
 								weaponSubClass[MAX_NAME_SIZE];
 	UDWORD						firePause, shortHit, longHit, damage,
 								radiusDamage, incenDamage, radiusHit;
@@ -882,7 +882,7 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 BOOL loadStructureUpgradeFunction(char *pData)
 {
 	STRUCTURE_UPGRADE_FUNCTION  *psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 	UDWORD						armour, body, resistance;
 
 	//allocate storage
@@ -933,7 +933,7 @@ BOOL loadStructureUpgradeFunction(char *pData)
 BOOL loadWallDefenceUpgradeFunction(char *pData)
 {
 	WALLDEFENCE_UPGRADE_FUNCTION  *psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 	UDWORD						armour, body;
 
 	//allocate storage
@@ -982,7 +982,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 /*BOOL loadBodyUpgradeFunction(char *pData)
 {
 	BODY_UPGRADE_FUNCTION*		psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (BODY_UPGRADE_FUNCTION *)MALLOC(sizeof
@@ -1018,7 +1018,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 /*BOOL loadRadarMapFunction(char *pData)
 {
 	RADAR_MAP_FUNCTION*			psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (RADAR_MAP_FUNCTION *)MALLOC(sizeof
@@ -1052,7 +1052,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 BOOL loadPowerGenFunction(char *pData)
 {
 	POWER_GEN_FUNCTION*			psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (POWER_GEN_FUNCTION *)MALLOC(sizeof
@@ -1097,7 +1097,7 @@ BOOL loadPowerGenFunction(char *pData)
 BOOL loadResourceFunction(char *pData)
 {
 	RESOURCE_FUNCTION			*psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (RESOURCE_FUNCTION *)MALLOC(sizeof
@@ -1132,7 +1132,7 @@ BOOL loadResourceFunction(char *pData)
 /*BOOL loadPowerRegFunction(char *pData)
 {
 	POWER_REG_FUNCTION*			psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (POWER_REG_FUNCTION *)MALLOC(sizeof
@@ -1166,7 +1166,7 @@ BOOL loadResourceFunction(char *pData)
 /*BOOL loadPowerRelayFunction(char *pData)
 {
 	POWER_RELAY_FUNCTION*			psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (POWER_RELAY_FUNCTION *)MALLOC(sizeof
@@ -1200,7 +1200,7 @@ BOOL loadResourceFunction(char *pData)
 BOOL loadRepairDroidFunction(char *pData)
 {
 	REPAIR_DROID_FUNCTION*		psFunction;
-	STRING						functionName[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (REPAIR_DROID_FUNCTION *)MALLOC(sizeof
@@ -1241,9 +1241,9 @@ BOOL loadRepairDroidFunction(char *pData)
 	//return FALSE;
 	DEFENSIVE_STRUCTURE_FUNCTION*	psFunction;
 	UDWORD							i;
-	STRING							functionName[MAX_NAME_SIZE];
-	STRING							sensorType[MAX_NAME_SIZE];
-	STRING							ecmType[MAX_NAME_SIZE];
+	char							functionName[MAX_NAME_SIZE];
+	char							sensorType[MAX_NAME_SIZE];
+	char							ecmType[MAX_NAME_SIZE];
 	SENSOR_STATS*					pSensorType;
 	ECM_STATS*						pECMType;
 
@@ -1316,7 +1316,7 @@ BOOL loadRepairDroidFunction(char *pData)
 /*BOOL loadHQFunction(SBYTE *pData)
 {
 	HQ_FUNCTION*		psFunction;
-	STRING				functionName[MAX_NAME_SIZE];
+	char				functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (HQ_FUNCTION *)MALLOC(sizeof(HQ_FUNCTION));
@@ -1350,8 +1350,8 @@ BOOL loadRepairDroidFunction(char *pData)
 {
 	ARMOUR_UPGRADE_FUNCTION*	psFunction;
 //	UDWORD						i;
-	STRING						functionName[MAX_NAME_SIZE];
-	//STRING						armourType[50];
+	char						functionName[MAX_NAME_SIZE];
+	//char						armourType[50];
 //	ARMOUR_STATS*				pArmourType;
 
 	//allocate storage
@@ -1409,8 +1409,8 @@ BOOL loadRepairDroidFunction(char *pData)
 {
 	REPAIR_UPGRADE_FUNCTION*	psFunction;
 	UDWORD						i;
-	STRING						functionName[MAX_NAME_SIZE];
-	STRING						repairType[MAX_NAME_SIZE];
+	char						functionName[MAX_NAME_SIZE];
+	char						repairType[MAX_NAME_SIZE];
 	REPAIR_STATS*				pRepairType;
 
 #ifdef HASH_NAMES
@@ -1486,7 +1486,7 @@ BOOL loadRepairDroidFunction(char *pData)
 /*BOOL loadResistanceUpgradeFunction(SBYTE *pData)
 {
 	RESISTANCE_UPGRADE_FUNCTION*		psFunction;
-	STRING								functionName[MAX_NAME_SIZE];
+	char								functionName[MAX_NAME_SIZE];
 
 	//allocate storage
 	psFunction = (RESISTANCE_UPGRADE_FUNCTION *)MALLOC(sizeof
@@ -1526,8 +1526,8 @@ BOOL loadWallFunction(char *pData)
 {
 	WALL_FUNCTION			*psFunction;
 //	UDWORD					i;
-	STRING					functionName[MAX_NAME_SIZE];
-	STRING					structureName[MAX_NAME_SIZE];
+	char					functionName[MAX_NAME_SIZE];
+	char					structureName[MAX_NAME_SIZE];
 //	STRUCTURE_STATS			*pStructStat;
 
 	//allocate storage
@@ -1559,7 +1559,7 @@ BOOL loadWallFunction(char *pData)
 
 	//store the structure name - cannot set the stat pointer here because structures
 	//haven't been loaded in yet!
-	/*psFunction->pStructName = (STRING *)MALLOC(strlen(structureName)+1);
+	/*psFunction->pStructName = (char *)MALLOC(strlen(structureName)+1);
 	if (psFunction->pStructName == NULL)
 	{
 		DBERROR(("Function Name - Out of memory"));

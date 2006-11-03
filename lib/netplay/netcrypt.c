@@ -41,7 +41,7 @@ UDWORD	NEThashFile(char *pFileName)
 {
 	UDWORD	hashval,c,*val;
 	PHYSFS_file	*pFileHandle;
-	STRING	fileName[255];
+	char	fileName[255];
 
 	UBYTE	inBuff[2048];		// must be multiple of 4 bytes.
 

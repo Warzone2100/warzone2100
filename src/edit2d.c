@@ -80,7 +80,7 @@ static void rotBox(PASTE_BOX *psBox);
 	UDWORD	fileSize;
 	UDWORD	line;
 	UDWORD	texNum;
-	STRING	aType[255], *pCurr;
+	char	aType[255], *pCurr;
 
 	// Allocate an array to store the type mapping
 	aDefaultType = MALLOC(sizeof(TERRAIN_TYPE) * maxTexTile);
@@ -97,7 +97,7 @@ static void rotBox(PASTE_BOX *psBox);
 	}
 
 	// Go through the file line by line - one mapping per line
-	pCurr = (STRING *)pFileData;
+	pCurr = (char *)pFileData;
 	for (line=0; line < maxTexTile; line++)
 	{
 		sscanf(pCurr, "%d %s", &texNum, aType);
@@ -130,7 +130,7 @@ static void rotBox(PASTE_BOX *psBox);
 			pCurr ++;
 		} while (*pCurr != '\n');
 
-		if (pCurr - (STRING *)pFileData > (SDWORD)fileSize)
+		if (pCurr - (char *)pFileData > (SDWORD)fileSize)
 		{
 			DBERROR(("Unexpected EOF in typemap.txt"));
 			FREE(pFileData);
@@ -957,7 +957,7 @@ static void rotBox(PASTE_BOX *psBox)
 /* Load in a new map */
 BOOL ed2dLoadMapFile(void)
 {
-	STRING			aFileName[256];
+	char			aFileName[256];
 	OPENFILENAME	sOFN;
 	UBYTE			*pFileData=NULL;
 	UDWORD			fileSize;
@@ -1005,7 +1005,7 @@ error:
 /* Save the current map */
 BOOL ed2dSaveMapFile(void)
 {
-	STRING			aFileName[256];
+	char			aFileName[256];
 	OPENFILENAME	sOFN;
 
 	/* Stop the game clock */

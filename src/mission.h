@@ -37,8 +37,8 @@ extern void releaseMission(void);
 extern void setMissionCountDown(void);
 
 
-//extern BOOL startMission(MISSION_TYPE missionType, STRING *pGame);
-extern BOOL startMission(UDWORD missionType, STRING *pGame);
+//extern BOOL startMission(MISSION_TYPE missionType, char *pGame);
+extern BOOL startMission(UDWORD missionType, char *pGame);
 extern void endMission(void);
 // initialise the mission stuff for a save game
 extern BOOL startMissionSave(SDWORD missionType);

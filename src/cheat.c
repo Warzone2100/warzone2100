@@ -48,10 +48,10 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"end of list",NULL}
 };
 
-BOOL	attemptCheatCode( STRING *pName )
+BOOL	attemptCheatCode( char *pName )
 {
 	UDWORD	index;
-	STRING	errorString[255];
+	char	errorString[255];
 
 	index = 0;
 

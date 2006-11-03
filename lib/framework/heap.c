@@ -27,7 +27,7 @@
 #define COPY_FILE_STRING	FALSE
 
 /* Store the call position */
-static STRING	*pCFile;
+static char	*pCFile;
 static SDWORD	cPos;
 
 
@@ -37,12 +37,12 @@ static OBJ_HEAP * HeapDebugList[MAXDEBUGHEAPS];
 #endif
 
 /* Store the location in C code at which a call to the heap was made */
-void heapSetCallPos(STRING *pFileName, SDWORD lineNumber)
+void heapSetCallPos(char *pFileName, SDWORD lineNumber)
 {
 	cPos = lineNumber;
 
 #if COPY_FILE_STRING
-	pCFile = (STRING *)MALLOC(strlen(pFileName) + 1);
+	pCFile = (char *)MALLOC(strlen(pFileName) + 1);
 	if (!pCFile)
 	{
 		return;

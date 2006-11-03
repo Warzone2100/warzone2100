@@ -541,10 +541,10 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
-	STRING				name[MAX_STR_LENGTH], imdName[MAX_NAME_SIZE],
+	char				name[MAX_STR_LENGTH], imdName[MAX_NAME_SIZE],
 						string[MAX_STR_LENGTH],
 						imdName2[MAX_NAME_SIZE];
-	STRING				audioName[MAX_STR_LENGTH];
+	char				audioName[MAX_STR_LENGTH];
 	SDWORD				LocX,LocY,LocZ, proxType, audioID;
         int cnt;
 	//keep the start so we release it at the end
@@ -596,7 +596,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		psViewData->numText=(UBYTE)numText;
 
 		//allocate storage for the name
- 		psViewData->pName = (STRING *)MALLOC((strlen(name))+1);
+ 		psViewData->pName = (char *)MALLOC((strlen(name))+1);
 		if (psViewData->pName == NULL)
 		{
 			debug( LOG_ERROR, "ViewData Name - Out of memory" );
@@ -608,8 +608,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		//allocate space for text strings
 		if (psViewData->numText)
 		{
-			psViewData->ppTextMsg = (STRING **) MALLOC(psViewData->numText *
-				sizeof(STRING *));
+			psViewData->ppTextMsg = (char **) MALLOC(psViewData->numText *
+				sizeof(char *));
 		}
 
 		//read in the data for the text strings
@@ -684,7 +684,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			if (strcmp(audioName, "0"))
 			{
 				//allocate space
-				psViewRes->pAudio = (STRING *) MALLOC(strlen(audioName) + 1);
+				psViewRes->pAudio = (char *) MALLOC(strlen(audioName) + 1);
 				if (psViewRes->pAudio == NULL)
 				{
 					debug( LOG_ERROR, "loadViewData - Out of memory" );
@@ -776,8 +776,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				//allocate space for text strings
 				if (psViewReplay->pSeqList[dataInc].numText)
 				{
-					psViewReplay->pSeqList[dataInc].ppTextMsg = (STRING **) MALLOC(
-						psViewReplay->pSeqList[dataInc].numText * sizeof(STRING *));
+					psViewReplay->pSeqList[dataInc].ppTextMsg = (char **) MALLOC(
+						psViewReplay->pSeqList[dataInc].numText * sizeof(char *));
 				}
 				//read in the data for the text strings
 				for (seqInc = 0; seqInc < psViewReplay->pSeqList[dataInc].numText;
@@ -812,7 +812,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				if (strcmp(audioName, "0"))
 				{
 					//allocate space
-					psViewReplay->pSeqList[dataInc].pAudio = (STRING *) MALLOC(
+					psViewReplay->pSeqList[dataInc].pAudio = (char *) MALLOC(
 						strlen(audioName) + 1);
 					if (psViewReplay->pSeqList[dataInc].pAudio == NULL)
 					{
@@ -918,7 +918,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 }
 
 /*get the view data identified by the name */
-VIEWDATA * getViewData(STRING *pName)
+VIEWDATA * getViewData(char *pName)
 {
 	//VIEWDATA		*psViewData;// = asViewData;
 	VIEWDATA_LIST	*psList;
@@ -1059,7 +1059,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	FEATURE			*psFeature;
 	VIEWDATA		*psViewData;
 	VIEW_PROXIMITY	*psViewProx;
-	STRING			msgStr[255];
+	char			msgStr[255];
 
 	if (psProxDisp->type == POS_PROXDATA)
 	{

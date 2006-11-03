@@ -87,18 +87,18 @@ BOOL		bAllowOtherKeyPresses = TRUE;
 extern BOOL	bAllowDebugMode;
 STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
-STRING	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
+char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 extern char	ScreenDumpPath[];
-STRING	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
-STRING	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
+char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
+char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
 int fogCol = 0;//start in nicks mode
 
-BOOL	processConsoleCommands( STRING *pName );
+BOOL	processConsoleCommands( char *pName );
 
 /* Support functions to minimise code size */
 void	kfsf_SelectAllSameProp	( PROPULSION_TYPE propType );
-void	kfsf_SelectAllSameName	( STRING *droidName );
+void	kfsf_SelectAllSameName	( char *droidName );
 void	kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
 /*
 	KeyBind.c
@@ -1816,7 +1816,7 @@ void kf_GiveTemplateSet(void)
 void kf_SendTextMessage(void)
 {
 	CHAR	ch;
-	STRING tmp[100];
+	char tmp[100];
 	SDWORD	i;
 
 	{
@@ -2138,7 +2138,7 @@ DROID	*psDroid;
 	*/
 }
 // --------------------------------------------------------------------------
-void	kfsf_SelectAllSameName( STRING *droidName )
+void	kfsf_SelectAllSameName( char *droidName )
 {
 	/*
 DROID	*psDroid;
@@ -2572,7 +2572,7 @@ void kf_ToggleRadarTerrain(void)
 
 
 //Returns TRUE if the engine should dofurther text processing, FALSE if just exit
-BOOL	processConsoleCommands( STRING *pName )
+BOOL	processConsoleCommands( char *pName )
 {
 #ifdef DEBUG
 	BOOL	bFound = FALSE;
@@ -2653,7 +2653,7 @@ void	kf_AddHelpBlip( void )
 {
 	UDWORD 	worldX,worldY;
 	UDWORD	i;
-	STRING	tempStr[255];
+	char	tempStr[255];
 	SDWORD	x,y;
 	BOOL	mOverR=FALSE;
 

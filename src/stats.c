@@ -102,8 +102,8 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
-static BOOL compareYes(STRING *strToCompare, STRING *strOwner);
-static SDWORD	getMovementModel(STRING *pMovement);
+static BOOL compareYes(char *strToCompare, char *strOwner);
+static SDWORD	getMovementModel(char *pMovement);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -453,7 +453,7 @@ BOOL statsAllocConstruct(UDWORD	numStats)
 	ALLOC_STATS(numStats, asConstructStats, numConstructStats, CONSTRUCT_STATS);
 }
 
-STRING *getStatName(void * Stat)
+char *getStatName(void * Stat)
 {
 	BASE_STATS *psStats=(BASE_STATS * )Stat;
 
@@ -477,12 +477,12 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 	WEAPON_STATS	sStats, *psStats, *psStartStats;
 	UDWORD			NumWeapons = 0, i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
-	STRING			WeaponName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
-	STRING			mountGfx[MAX_NAME_SIZE], flightGfx[MAX_NAME_SIZE],
+	char			WeaponName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
+	char			mountGfx[MAX_NAME_SIZE], flightGfx[MAX_NAME_SIZE],
 					hitGfx[MAX_NAME_SIZE], missGfx[MAX_NAME_SIZE],
 					waterGfx[MAX_NAME_SIZE], muzzleGfx[MAX_NAME_SIZE],
 					trailGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
-	STRING			fireOnMove[10], weaponClass[15], weaponSubClass[15],
+	char			fireOnMove[10], weaponClass[15], weaponSubClass[15],
 					weaponEffect[16], movement[15], facePlayer[5],		//weaponEffect[15] caused stack corruption. --Qamly
 					faceInFlight[5],lightWorld[5];
 	UDWORD			longRange, effectSize, numAttackRuns, designable;
@@ -922,7 +922,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 	UDWORD fileSize;
 	ARMOUR_STATS	*psStats, *psStartStats;
 	UDWORD	NumArmour = 0,i;
-	STRING  ArmourName[50];
+	char  ArmourName[50];
 	BOOL EndOfFile;
 
 
@@ -975,7 +975,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 			&psStats->strength);
 
 		//allocate storage for the name
-		psStats->pName = (STRING *)MALLOC((strlen(ArmourName))+1);
+		psStats->pName = (char *)MALLOC((strlen(ArmourName))+1);
 		if (psStats->pName == NULL)
 		{
 			DBERROR(("Armour Stats Name - Out of memory"));
@@ -1004,7 +1004,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	BODY_STATS		sStats, *psStats, *psStartStats;
 	UDWORD			NumBody = 0,i,designable;
-	STRING			BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
+	char			BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
                     flameIMD[MAX_NAME_SIZE];
 
@@ -1053,7 +1053,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 #endif
 
 		//allocate storage for the name
-		/*psStats->pName = (STRING *)MALLOC((strlen(BodyName))+1);
+		/*psStats->pName = (char *)MALLOC((strlen(BodyName))+1);
 		if (psStats->pName == NULL)
 		{
 			DBERROR(("Body Stats Name - Out of memory"));
@@ -1150,7 +1150,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 	//SBYTE		*pData;
 	BRAIN_STATS	sStats, *psStats, *psStartStats;
 	UDWORD		NumBrain = 0,i, incW;
-	STRING		BrainName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
+	char		BrainName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 				weaponName[MAX_NAME_SIZE];
 
 	//keep the start so we can release it at the end
@@ -1255,7 +1255,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 	UDWORD fileSize;
 	POWER_STATS	*psStats, *psStartStats;
 	UDWORD	NumPower = 0,i;
-	STRING  PowerName[50];
+	char  PowerName[50];
 	BOOL EndOfFile;
 
 
@@ -1308,7 +1308,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 			&psStats->output);
 
 		//allocate storage for the name
-		psStats->pName = (STRING *)MALLOC((strlen(PowerName))+1);
+		psStats->pName = (char *)MALLOC((strlen(PowerName))+1);
 		if (psStats->pName == NULL)
 		{
 			DBERROR(("Power Stats Name - Out of memory"));
@@ -1332,7 +1332,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 */
 
 /*returns the propulsion type based on the string name passed in */
-UBYTE	getPropulsionType(STRING *pType)
+UBYTE	getPropulsionType(char *pType)
 {
 	if (!strcmp(pType,"Wheeled"))
 	{
@@ -1380,7 +1380,7 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 	//SBYTE				*pData;
 	PROPULSION_STATS	sStats, *psStats, *psStartStats;
 	UDWORD				NumPropulsion = 0,i,designable;
-	STRING				PropulsionName[MAX_NAME_SIZE], imdName[MAX_NAME_SIZE],
+	char				PropulsionName[MAX_NAME_SIZE], imdName[MAX_NAME_SIZE],
 						techLevel[MAX_NAME_SIZE], type[MAX_NAME_SIZE];
 
 	//keep the start so we release it at the end
@@ -1521,9 +1521,9 @@ BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	SENSOR_STATS	sStats, *psStats, *psStartStats;
 	UDWORD			NumSensor = 0,i,designable;
-	STRING			SensorName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
+	char			SensorName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE],type[MAX_NAME_SIZE];
-	STRING			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 
 	//keep the start so we release it at the end
 	//pData = pSensorData;
@@ -1687,9 +1687,9 @@ BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
 	//SBYTE		*pData;
 	ECM_STATS	sStats, *psStats, *psStartStats;
 	UDWORD		NumECM = 0,i,designable;
-	STRING		ECMName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
+	char		ECMName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
 				GfxFile[MAX_NAME_SIZE];
-	STRING		mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char		mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 
 
 	//keep the start so we release it at the end
@@ -1829,7 +1829,7 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	REPAIR_STATS	sStats, *psStats, *psStartStats;
 	UDWORD			NumRepair = 0,i,designable;
-	STRING			RepairName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
+	char			RepairName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE],	mountGfx[MAX_NAME_SIZE],
 					location[MAX_NAME_SIZE];
 	//keep the start so we can release it at the end
@@ -1976,7 +1976,7 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	PROGRAM_STATS	sStats, *psStats, *psStartStats;
 	UDWORD			NumProgram = 0,i;
-	STRING			ProgramName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char			ProgramName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 
 	//keep the start so we can release it at the end
 	//pData = pProgramData;
@@ -2039,8 +2039,8 @@ BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	CONSTRUCT_STATS	sStats, *psStats, *psStartStats;
 	UDWORD			NumConstruct = 0,i,designable;
-	STRING			ConstructName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
-	STRING			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char			ConstructName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
+	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 
 	//keep the start so we release it at the end
 	//pData = pConstructData;
@@ -2162,7 +2162,7 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 	//SBYTE				*pData;
 	PROPULSION_TYPES	*pPropType;
 	UDWORD				NumTypes = 0, i, multiplier, type;
-	STRING				PropulsionName[MAX_NAME_SIZE], flightName[MAX_NAME_SIZE];
+	char				PropulsionName[MAX_NAME_SIZE], flightName[MAX_NAME_SIZE];
 
 	//keep the start so we can release it at the end
 	//pData = pPropTypeData;
@@ -2193,7 +2193,7 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 /*#ifdef HASH_NAMES
 		asPropulsionTypes->NameHash=HashString(PropulsionName);
 #else
-		asPropulsionTypes->pName = (STRING *)MALLOC((strlen(PropulsionName))+1);
+		asPropulsionTypes->pName = (char *)MALLOC((strlen(PropulsionName))+1);
 		if (asPropulsionTypes->pName == NULL)
 		{
 			DBERROR(("Propulsion Type Name - Out of memory"));
@@ -2330,7 +2330,7 @@ BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 	//SBYTE			*pData;
 	SPECIAL_ABILITY *pSAbility;
 	UDWORD			NumTypes = 0, i, accessID;
-	STRING			SAbilityName[MAX_NAME_SIZE];
+	char			SAbilityName[MAX_NAME_SIZE];
 
 	//keep the start so we can release it at the end
 	//pData = pSAbilityData;
@@ -2366,7 +2366,7 @@ BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 			return FALSE;
 		}
 		//allocate storage for the name
-		asSpecialAbility->pName = (STRING *)MALLOC((strlen(SAbilityName))+1);
+		asSpecialAbility->pName = (char *)MALLOC((strlen(SAbilityName))+1);
 		if (asSpecialAbility->pName == NULL)
 		{
 			debug( LOG_ERROR, "Special Ability Name - Out of memory" );
@@ -2393,7 +2393,7 @@ BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 	BODY_STATS			*psBodyStat;
 	PROPULSION_STATS	*psPropulsionStat;
 	UDWORD				NumTypes = 0, i, numStats;
-	STRING				bodyName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE],
+	char				bodyName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE],
 						leftIMD[MAX_NAME_SIZE], rightIMD[MAX_NAME_SIZE];
 	iIMDShape			**startIMDs;
 	BOOL				found;
@@ -2554,7 +2554,7 @@ BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 
 
 static BOOL
-statsGetAudioIDFromString( STRING *szStatName, STRING *szWavName, SDWORD *piWavID )
+statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 {
 	if ( strcmp( szWavName, "-1" ) == 0 )
 	{
@@ -2587,9 +2587,9 @@ BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize)
 {
 	//SBYTE			*pData;
 	SDWORD			NumRecords = 0, i, weaponSoundID, explosionSoundID, inc, iDum;
-	STRING			WeaponName[MAX_NAME_SIZE];
+	char			WeaponName[MAX_NAME_SIZE];
 
-	STRING			szWeaponWav[MAX_NAME_SIZE],	szExplosionWav[MAX_NAME_SIZE];
+	char			szWeaponWav[MAX_NAME_SIZE],	szExplosionWav[MAX_NAME_SIZE];
 
 
 #ifdef HASH_NAMES
@@ -2666,7 +2666,7 @@ BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize)
 	PROPULSION_TYPE		propInc;
 	WEAPON_EFFECT		effectInc;
 	UDWORD				NumRecords = 0, i, j, modifier;
-	STRING				weaponEffectName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE];
+	char				weaponEffectName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE];
 
 	//memset(asWeaponModifier, 0, (sizeof(WEAPON_MODIFIER)*WE_NUMEFFECTS*NUM_PROP_TYPES));
 	//initialise to 100%
@@ -2724,7 +2724,7 @@ BOOL loadPropulsionSounds(char *pPropSoundData, UDWORD bufferSize)
 {
 	SDWORD				NumRecords = 0, i, startID, idleID, moveOffID, moveID,
 						hissID, shutDownID, iDum;
-	STRING				propulsionName[MAX_NAME_SIZE], szStart[MAX_NAME_SIZE],
+	char				propulsionName[MAX_NAME_SIZE], szStart[MAX_NAME_SIZE],
 						szIdle[MAX_NAME_SIZE], szMoveOff[MAX_NAME_SIZE],
 						szMove[MAX_NAME_SIZE], szHiss[MAX_NAME_SIZE],
 						szShutDown[MAX_NAME_SIZE];
@@ -3324,7 +3324,7 @@ UDWORD componentType(char* pType)
 }
 
 //function to compare a value with yes/no - if neither warns player!
-BOOL compareYes(STRING *strToCompare, STRING *strOwner)
+BOOL compareYes(char *strToCompare, char *strOwner)
 {
 	if (!strcmp(strToCompare, "YES"))
 	{
@@ -3347,7 +3347,7 @@ BOOL compareYes(STRING *strToCompare, STRING *strOwner)
 //get the component Inc for a stat based on the Resource name and type
 //returns -1 if record not found
 //used in Scripts
-SDWORD	getCompFromResName(UDWORD compType, STRING *pName)
+SDWORD	getCompFromResName(UDWORD compType, char *pName)
 {
 #ifdef RESOURCE_NAMES
 	if (!getResourceName(pName))
@@ -3419,7 +3419,7 @@ static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnum
 
 //get the component Inc for a stat based on the name and type
 //returns -1 if record not found
-SDWORD	getCompFromName(UDWORD compType, STRING *pName)
+SDWORD	getCompFromName(UDWORD compType, char *pName)
 {
 	BASE_STATS	*psStats = NULL;
 	UDWORD		numStats = 0, count, statSize = 0;
@@ -3482,7 +3482,7 @@ SDWORD	getCompFromHash(UDWORD compType, UDWORD HashedName)
 #endif
 
 //converts the name read in from Access into the name which is used in the Stat lists
-BOOL getResourceName(STRING *pName)
+BOOL getResourceName(char *pName)
 {
 #ifdef RESOURCE_NAMES
 
@@ -3503,7 +3503,7 @@ BOOL getResourceName(STRING *pName)
 }
 
 
-static STRING* getNameFromStat(BASE_STATS* pStat)
+static char* getNameFromStat(BASE_STATS* pStat)
 {
 #ifdef HASH_NAMES
 	return(strresGetString(NULL,pStat->NameHash));
@@ -3513,12 +3513,12 @@ static STRING* getNameFromStat(BASE_STATS* pStat)
 }
 
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
-STRING* getName(STRING *pNameID)
+char* getName(char *pNameID)
 {
 #ifdef STORE_RESOURCE_ID
 	UDWORD			id;
-	STRING			*pName;
-	static STRING	Unknown[]="Name Unknown";
+	char			*pName;
+	static char	Unknown[]="Name Unknown";
 
 	/*see if the name has a resource associated with it by trying to get
 	the ID for the string*/
@@ -3546,7 +3546,7 @@ STRING* getName(STRING *pNameID)
 
 
 /*sets the tech level for the stat passed in - returns TRUE if set OK*/
-BOOL setTechLevel(BASE_STATS *psStats, STRING *pLevel)
+BOOL setTechLevel(BASE_STATS *psStats, char *pLevel)
 {
 	TECH_LEVEL		techLevel = MAX_TECH_LEVELS;
 
@@ -3616,7 +3616,7 @@ BOOL setTechLevel(BASE_STATS *psStats, STRING *pLevel)
 
 /*sets the store to the body size based on the name passed in - returns FALSE
 if doesn't compare with any*/
-BOOL getBodySize(STRING *pSize, UBYTE *pStore)
+BOOL getBodySize(char *pSize, UBYTE *pStore)
 {
 	if (!strcmp(pSize,"LIGHT"))
 	{
@@ -3642,7 +3642,7 @@ BOOL getBodySize(STRING *pSize, UBYTE *pStore)
 }
 
 /*returns the weapon sub class based on the string name passed in */
-SDWORD	getWeaponSubClass(STRING *pSubClass)
+SDWORD	getWeaponSubClass(char *pSubClass)
 {
 	if (!strcmp(pSubClass,"CANNON"))
 	{
@@ -3727,7 +3727,7 @@ SDWORD	getWeaponSubClass(STRING *pSubClass)
 }
 
 /*returns the movement model based on the string name passed in */
-SDWORD	getMovementModel(STRING *pMovement)
+SDWORD	getMovementModel(char *pMovement)
 {
 	if (!strcmp(pMovement,"DIRECT"))
 	{
@@ -3760,7 +3760,7 @@ SDWORD	getMovementModel(STRING *pMovement)
 
 
 /*returns the weapon effect based on the string name passed in */
-UBYTE	getWeaponEffect(STRING *pWeaponEffect)
+UBYTE	getWeaponEffect(char *pWeaponEffect)
 {
 	if (!strcmp(pWeaponEffect, "ANTI PERSONNEL"))
 	{
@@ -3798,7 +3798,7 @@ UBYTE	getWeaponEffect(STRING *pWeaponEffect)
 looks up the name to get the resource associated with it - or allocates space
 and stores the name. Eventually ALL names will be 'resourced' for translation
 */
-BOOL allocateName(STRING **ppStore, STRING *pName)
+BOOL allocateName(char **ppStore, char *pName)
 {
 #ifdef RESOURCE_NAMES
 
@@ -3828,7 +3828,7 @@ BOOL allocateName(STRING **ppStore, STRING *pName)
 
 #else
 	//need to allocate space for the name
-	*ppStore = (STRING *)MALLOC((strlen(pName))+1);
+	*ppStore = (char *)MALLOC((strlen(pName))+1);
 	if (ppStore == NULL)
 	{
 		debug( LOG_ERROR, "Name - Out of memory" );

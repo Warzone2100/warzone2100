@@ -493,7 +493,7 @@ UDWORD	marker = 0;
 UDWORD	linePitch;
 UDWORD	MesY;
 //UDWORD	buildWidth;
-//STRING	buildData[255];
+//char	buildData[255];
 
 	/* Check there actually are any messages */
 	thisIndex = messageId;
@@ -721,7 +721,7 @@ UDWORD getConsoleLineInfo(void)
 
 void	consolePrintf(char *layout, ...)
 {
-STRING	consoleString[MAX_CONSOLE_STRING_LENGTH];
+char	consoleString[MAX_CONSOLE_STRING_LENGTH];
 va_list	arguments;		// Formatting info
 
 	/* Boot off the argument List */

@@ -21,7 +21,7 @@
 #endif
 
 /* Store for any string values */
-static STRING aText[TEXT_BUFFERS][YYLMAX];
+static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
 // Note if we are in a comment

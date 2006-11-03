@@ -80,13 +80,13 @@ enum {
 
 typedef struct _vis_save_header
 {
-	STRING		aFileType[4];
+	char		aFileType[4];
 	UDWORD		version;
 }VIS_SAVEHEADER;
 
 typedef struct _fx_save_header
 {
-	STRING		aFileType[4];
+	char		aFileType[4];
 	UDWORD		version;
 	UDWORD		entries;
 
@@ -94,7 +94,7 @@ typedef struct _fx_save_header
 
 typedef struct _score_save_header
 {
-	STRING		aFileType[4];
+	char		aFileType[4];
 	UDWORD		version;
 	UDWORD		entries;	// should always be one for this?
 
@@ -106,26 +106,26 @@ typedef struct _score_save_header
  */
 /***************************************************************************/
 
-extern BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is TRUE when the save game is not a new level (User Save Game)
+extern BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is TRUE when the save game is not a new level (User Save Game)
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-extern BOOL loadGameInit(STRING *pGameToLoad);
+extern BOOL loadGameInit(char *pGameToLoad);
 
-extern BOOL loadMissionExtras(STRING *pGameToLoad, SWORD levelType);
+extern BOOL loadMissionExtras(char *pGameToLoad, SWORD levelType);
 
 // load the script state given a .gam name
-extern BOOL loadScriptState(STRING *pFileName);
+extern BOOL loadScriptState(char *pFileName);
 
 //direct access for forceloader
 extern BOOL gameLoad(char *pFileData, UDWORD filesize);
 
-extern BOOL saveGame(STRING *aFileName, SDWORD saveType);
+extern BOOL saveGame(char *aFileName, SDWORD saveType);
 
 // Get the campaign number for loadGameInit game
-extern UDWORD getCampaign(STRING *pGameToLoad, BOOL *bSkipCDCheck);
+extern UDWORD getCampaign(char *pGameToLoad, BOOL *bSkipCDCheck);
 
 /*calls windows find file tree*/
-extern BOOL getSaveGameName(STRING *pName);
+extern BOOL getSaveGameName(char *pName);
 
 /*set validty keys for save game debugging*/
 extern void game_SetValidityKey(UDWORD keys);

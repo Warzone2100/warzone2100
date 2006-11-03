@@ -253,7 +253,7 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 	else
 	{
 		pTrack->bMemBuffer = TRUE;
-		pTrack->pName = (STRING*)MALLOC( strlen(GetLastResourceFilename()) + 1 );
+		pTrack->pName = (char*)MALLOC( strlen(GetLastResourceFilename()) + 1 );
 		if ( pTrack->pName == NULL )
 		{
 			debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
@@ -297,7 +297,7 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 	if ( pTrack != NULL )
 	{
 		pTrack->bMemBuffer = FALSE;
-		pTrack->pName = (STRING*)MALLOC( strlen((char*) szFileName) + 1 );
+		pTrack->pName = (char*)MALLOC( strlen((char*) szFileName) + 1 );
 		if ( pTrack->pName == NULL )
 		{
 			debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );

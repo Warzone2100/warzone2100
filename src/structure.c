@@ -199,7 +199,7 @@ static UDWORD	lastMaxUnitMessage;
 //#ifdef DEMO
 //BOOL demoStructs(void);
 //BOOL createStructureStat(STRUCTURE_STATS *psBuilding, STRUCTURE_STATS *psNewStructure,
-//						 UDWORD ref, STRING *pName, UDWORD type);
+//						 UDWORD ref, char *pName, UDWORD type);
 //void printAvailStructs(void);
 //#endif
 
@@ -496,7 +496,7 @@ static char *getStructName(STRUCTURE_STATS	 *psStruct)
 }
 
 /*returns the structure strength based on the string name passed in */
-static UBYTE getStructStrength(STRING *pStrength)
+static UBYTE getStructStrength(char *pStrength)
 {
 	if (!strcmp(pStrength, "SOFT"))
 	{
@@ -525,8 +525,8 @@ static UBYTE getStructStrength(STRING *pStrength)
 
 static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 {
-	STRING GfxFile[MAX_NAME_SIZE];
-	STRING charNum[2];
+	char GfxFile[MAX_NAME_SIZE];
+	char charNum[2];
 	UDWORD length, module = 0;
 
 	strcpy(GfxFile,PIEName);
@@ -743,17 +743,17 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 {
 	char				*pData;
 	UDWORD				NumStructures = 0, i, inc, player, numWeaps, weapSlots;
-	STRING				StructureName[MAX_NAME_SIZE], foundation[MAX_NAME_SIZE],
+	char				StructureName[MAX_NAME_SIZE], foundation[MAX_NAME_SIZE],
 						type[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 						strength[MAX_NAME_SIZE];
-	STRING				GfxFile[MAX_NAME_SIZE], baseIMD[MAX_NAME_SIZE];
-	STRING				ecmType[MAX_NAME_SIZE],sensorType[MAX_NAME_SIZE];
+	char				GfxFile[MAX_NAME_SIZE], baseIMD[MAX_NAME_SIZE];
+	char				ecmType[MAX_NAME_SIZE],sensorType[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*psStructure, *pStartStats;
 	ECM_STATS*			pECMType;
 	SENSOR_STATS*		pSensorType;
     UDWORD				module;
 	//UDWORD				length, module;
-	//STRING				charNum[2];
+	//char				charNum[2];
 	UDWORD				iID;
     UDWORD              dummyVal;
 
@@ -860,7 +860,7 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 //#endif
 
 		//allocate storage for the name
- 		/*psStructure->pName = (STRING *)MALLOC((strlen(StructureName))+1);
+ 		/*psStructure->pName = (char *)MALLOC((strlen(StructureName))+1);
 		if (psStructure->pName == NULL)
 		{
 			DBERROR(("Structure Stats Name - Out of memory"));
@@ -1177,7 +1177,7 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 {
 	char				*pStartWeaponData;
 	UDWORD				NumToAlloc = 0, i,incS, incW;
-	STRING				StructureName[MAX_NAME_SIZE], WeaponName[MAX_NAME_SIZE];
+	char				StructureName[MAX_NAME_SIZE], WeaponName[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	WEAPON_STATS		*pWeapon = asWeaponStats;
 	BOOL				weaponFound, structureFound;
@@ -1281,7 +1281,7 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 {
 	char				*pStartFunctionData;
 	UDWORD				NumToAlloc = 0,i,incS, incF;
-	STRING				StructureName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
+	char				StructureName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	FUNCTION			*pFunction, **pStartFunctions = asFunctions;
 	BOOL				functionFound, structureFound;
@@ -1424,7 +1424,7 @@ BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD bufferSize)
 	STRUCT_STRENGTH		strengthInc;
 	WEAPON_EFFECT		effectInc;
 	UDWORD				NumRecords = 0, i, j, modifier;
-	STRING				weaponEffectName[MAX_NAME_SIZE], strengthName[MAX_NAME_SIZE];
+	char				weaponEffectName[MAX_NAME_SIZE], strengthName[MAX_NAME_SIZE];
 
 	//memset(asStructStrengthModifier, 0, (sizeof(STRUCTSTRENGTH_MODIFIER) *
 	//	WE_NUMEFFECTS * NUM_STRUCT_STRENGTH));
@@ -6714,7 +6714,7 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 /* gets a structure stat from its name - relies on the name being unique (or it will
    return the first one it finds!! */
 #ifdef HASH_NAMES
-SDWORD getStructStatFromName(STRING *pName)
+SDWORD getStructStatFromName(char *pName)
 {
 	UDWORD				inc;
 	STRUCTURE_STATS		*psStat;
@@ -6735,7 +6735,7 @@ SDWORD getStructStatFromName(STRING *pName)
 }
 
 #else
-SDWORD getStructStatFromName(STRING *pName)
+SDWORD getStructStatFromName(char *pName)
 {
 	UDWORD				inc;
 	STRUCTURE_STATS		*psStat;
@@ -7006,7 +7006,7 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
 #ifdef DEBUG
-	STRING			*pType;			//if you are going to do this, then make SURE you also do the same to anything
+	char			*pType;			//if you are going to do this, then make SURE you also do the same to anything
 #endif									//that uses the variable.
 
 	ASSERT( player < MAX_PLAYERS, "setFlagPositionInc: invalid player number" );
@@ -10049,7 +10049,7 @@ BOOL demoStructs(void)
 }
 
 BOOL createStructureStat(STRUCTURE_STATS *psBuilding, STRUCTURE_STATS *psNewStructure,
-						 UDWORD ref, STRING *pName, UDWORD type)
+						 UDWORD ref, char *pName, UDWORD type)
 {
 	UDWORD		i;
 
@@ -10059,7 +10059,7 @@ BOOL createStructureStat(STRUCTURE_STATS *psBuilding, STRUCTURE_STATS *psNewStru
 	psNewStructure->type = type;
 
 	//allocate storage for the name
-	psNewStructure->pName = (STRING *) MALLOC(MAX_NAME_SIZE);
+	psNewStructure->pName = (char *) MALLOC(MAX_NAME_SIZE);
 	if (psNewStructure->pName == NULL)
 	{
 		DBERROR(("Structure Stats Name - Out of memory"));

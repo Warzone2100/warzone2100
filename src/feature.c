@@ -144,7 +144,7 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 	char				*pData;
 	FEATURE_STATS		*psFeature;
 	UDWORD				i;
-	STRING				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE],
+	char				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE],
 						type[MAX_NAME_SIZE];
 						//compName[MAX_NAME_SIZE], compType[MAX_NAME_SIZE];
 
@@ -1157,7 +1157,7 @@ void destroyFeature(FEATURE *psDel)
 	removeFeature(psDel);
 }
 
-SDWORD getFeatureStatFromName( STRING *pName )
+SDWORD getFeatureStatFromName( char *pName )
 {
 	UDWORD			inc;
 	FEATURE_STATS	*psStat;

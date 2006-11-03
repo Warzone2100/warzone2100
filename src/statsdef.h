@@ -17,7 +17,7 @@
 /* Elements common to all stats structures */
 #define STATS_BASE \
 	UDWORD			ref;			/* Unique ID of the item */ \
-	STRING			*pName			/* pointer to the text id name (i.e. short language-independant name) */ 
+	char			*pName			/* pointer to the text id name (i.e. short language-independant name) */ 
 #endif
 
 /* Stats common to all stats structs */
@@ -445,7 +445,7 @@ typedef struct _propulsion_types
 /*#ifdef HASH_NAMES
 	UDWORD	NameHash;
 #else
-	STRING	*pName;				// Text name of the component
+	char	*pName;				// Text name of the component
 #endif*/
 	UWORD				powerRatioMult;		// Multiplier for the calculated power ratio of 
 											// the droid
@@ -468,7 +468,7 @@ typedef struct _terrain_table
 
 typedef struct _special_ability
 {
-	STRING *pName;				// Text name of the component
+	char *pName;				// Text name of the component
 } SPECIAL_ABILITY;
 
 typedef UWORD WEAPON_MODIFIER;

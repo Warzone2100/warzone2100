@@ -39,7 +39,7 @@ UDWORD	selSelectAllSameProp	( UDWORD player, PROPULSION_TYPE propType,
 UDWORD	selSelectAllCombat		( UDWORD player, BOOL bOnScreen);
 UDWORD	selSelectAllDamaged		( UDWORD player, BOOL bOnScreen);
 UDWORD	selSelectAllSame		( UDWORD player, BOOL bOnScreen);
-UDWORD	selNameSelect			( STRING *droidName, UDWORD player, BOOL bOnScreen );
+UDWORD	selNameSelect			( char *droidName, UDWORD player, BOOL bOnScreen );
 // ---------------------------------------------------------------------
 /*
 	Selects the units of a given player according to given criteria.
@@ -291,7 +291,7 @@ UDWORD	count;
 }
 // ---------------------------------------------------------------------
 // sub-function - selects all units with same name as one passed in
-UDWORD	selNameSelect( STRING *droidName, UDWORD player, BOOL bOnScreen )
+UDWORD	selNameSelect( char *droidName, UDWORD player, BOOL bOnScreen )
 {
 
 DROID	*psDroid;

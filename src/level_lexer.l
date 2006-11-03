@@ -19,7 +19,7 @@
 #endif
 
 /* Store for any string values */
-static STRING aText[YYLMAX];
+static char aText[YYLMAX];
 
 // Note if we are in a comment
 static BOOL inComment = FALSE;

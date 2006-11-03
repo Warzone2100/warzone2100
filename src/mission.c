@@ -191,12 +191,12 @@ static UBYTE   bPlayCountDown;
 
 //FUNCTIONS**************
 static void addLandingLights( UDWORD x, UDWORD y);
-static BOOL startMissionOffClear(STRING *pGame);
-static BOOL startMissionOffKeep(STRING *pGame);
-static BOOL startMissionCampaignStart(STRING *pGame);
-static BOOL startMissionCampaignChange(STRING *pGame);
-static BOOL startMissionCampaignExpand(STRING *pGame);
-static BOOL startMissionCampaignExpandLimbo(STRING *pGame);
+static BOOL startMissionOffClear(char *pGame);
+static BOOL startMissionOffKeep(char *pGame);
+static BOOL startMissionCampaignStart(char *pGame);
+static BOOL startMissionCampaignChange(char *pGame);
+static BOOL startMissionCampaignExpand(char *pGame);
+static BOOL startMissionCampaignExpandLimbo(char *pGame);
 static BOOL startMissionBetween(void);
 static void endMissionCamChange(void);
 static void endMissionOffClear(void);
@@ -221,7 +221,7 @@ static void saveMissionPower(void);
 static UDWORD getHomeLandingX(void);
 static UDWORD getHomeLandingY(void);
 void swapMissionPointers(void);
-static void fillTimeDisplay(STRING	*psText, UDWORD time, BOOL bHours);
+static void fillTimeDisplay(char	*psText, UDWORD time, BOOL bHours);
 static void processPreviousCampDroids(void);
 static BOOL intAddTransporterTimer(void);
 static void clearCampaignUnits(void);
@@ -469,8 +469,8 @@ void setMissionCountDown(void)
 }
 
 
-//BOOL startMission(MISSION_TYPE missionType, STRING *pGame)
-BOOL startMission(LEVEL_TYPE missionType, STRING *pGame)
+//BOOL startMission(MISSION_TYPE missionType, char *pGame)
+BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 {
 	BOOL	loaded = TRUE;
 
@@ -1496,7 +1496,7 @@ void saveCampaignData(void)
 
 
 //start an off world mission - clearing the object lists
-BOOL startMissionOffClear(STRING *pGame)
+BOOL startMissionOffClear(char *pGame)
 {
 	saveMissionData();
 
@@ -1522,7 +1522,7 @@ BOOL startMissionOffClear(STRING *pGame)
 }
 
 //start an off world mission - keeping the object lists
-BOOL startMissionOffKeep(STRING *pGame)
+BOOL startMissionOffKeep(char *pGame)
 {
 	saveMissionData();
 
@@ -1547,7 +1547,7 @@ BOOL startMissionOffKeep(STRING *pGame)
     return TRUE;
 }
 
-BOOL startMissionCampaignStart(STRING *pGame)
+BOOL startMissionCampaignStart(char *pGame)
 {
     //clear out all intelligence screen messages
     freeMessages();
@@ -1569,7 +1569,7 @@ BOOL startMissionCampaignStart(STRING *pGame)
 	return TRUE;
 }
 
-BOOL startMissionCampaignChange(STRING *pGame)
+BOOL startMissionCampaignChange(char *pGame)
 {
     //clear out all intelligence screen messages
     freeMessages();
@@ -1594,7 +1594,7 @@ BOOL startMissionCampaignChange(STRING *pGame)
 	return TRUE;
 }
 
-BOOL startMissionCampaignExpand(STRING *pGame)
+BOOL startMissionCampaignExpand(char *pGame)
 {
 	//load in the new game details
 	if (!loadGame(pGame, KEEPOBJECTS, !FREEMEM, FALSE))
@@ -1609,7 +1609,7 @@ BOOL startMissionCampaignExpand(STRING *pGame)
 	return TRUE;
 }
 
-BOOL startMissionCampaignExpandLimbo(STRING *pGame)
+BOOL startMissionCampaignExpandLimbo(char *pGame)
 {
     saveMissionLimboData();
 
@@ -3055,7 +3055,7 @@ UDWORD  missionGetReinforcementTime(void)
 }
 
 //fills in a hours(if bHours = TRUE), minutes and seconds display for a given time in 1000th sec
-void fillTimeDisplay(STRING *psText, UDWORD time, BOOL bHours)
+void fillTimeDisplay(char *psText, UDWORD time, BOOL bHours)
 {
 	UDWORD		calcTime, inc;
 

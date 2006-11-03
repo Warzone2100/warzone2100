@@ -25,7 +25,7 @@ typedef struct _free_object
 /* Header for each object in DEBUG_MALLOC mode */
 typedef struct _heap_objhdr
 {
-	STRING	*pFile;
+	char	*pFile;
 	SDWORD	line;
 	struct _heap_objhdr		*psNext;
 } HEAP_OBJHDR;
@@ -56,7 +56,7 @@ typedef struct _obj_heap
 	UDWORD		currUsage;		// The number of objects being used at the moment
 	HEAP_OBJHDR	*psInUse;		// The list of headers of objects currently allocated
 
-	STRING		*pFile;			// The name of the file the heap was created in
+	char		*pFile;			// The name of the file the heap was created in
 	SDWORD		line;			// The line of the file the heap was created on
 #endif
 } OBJ_HEAP;
@@ -68,7 +68,7 @@ typedef struct _obj_heap
 
 
 /* Store the location in C code at which a call to the heap was made */
-extern void heapSetCallPos(STRING *pFileName, SDWORD lineNumber);
+extern void heapSetCallPos(char *pFileName, SDWORD lineNumber);
 
 /* Function to create a heap
  * Takes the size of the objects to be managed by the heap,

@@ -1549,7 +1549,7 @@ BOOL scrSkDoResearch(void)
 	SDWORD				structure, player, bias;//,timeToResearch;//,*x,*y;
 	UWORD				i;
 
-	STRING				sTemp[128];
+	char				sTemp[128];
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 	PLAYER_RESEARCH		*pPlayerRes;

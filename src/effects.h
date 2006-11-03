@@ -232,7 +232,7 @@ extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z
 #define SKY_SHIMMY_BASE	((DEG(1)*SKY_MULT)/2)
 #define SKY_SHIMMY (SKY_SHIMMY_BASE - (rand()%(2*SKY_SHIMMY_BASE)))
 BOOL readFXData(char *pFileData, UDWORD fileSize);
-extern BOOL	writeFXData( STRING *pFileName );
+extern BOOL	writeFXData( char *pFileName );
 extern	void	effectSetSize(UDWORD size);
 extern void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 

@@ -1014,7 +1014,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 
 
 //	{
-//		STRING String[256];
+//		char String[256];
 //		sprintf(String,"seqadded %d of %d [%s]\n",Sequence,psViewReplay->numSeq,psViewReplay->pSeqList[Sequence].sequenceName);
 //		prnt(1,String,0,0);
 //	}
@@ -1908,7 +1908,7 @@ void setCurrentMsg(void)
 }*/
 
 /* scroll the text message from right to left - aka tickertape messages */
-/*void scrollMessage(STRING *pText, UDWORD startX, UDWORD endX, UDWORD y, UDWORD gap)
+/*void scrollMessage(char *pText, UDWORD startX, UDWORD endX, UDWORD y, UDWORD gap)
 {
 	UDWORD			frames, inc, strLen;
 	SDWORD			position, startChar, currentLength;

@@ -47,12 +47,12 @@ enum {
 };
 
 typedef struct {
-	STRING *Token;
+	char *Token;
 	SWORD ID;
 } TOKENID;
 
 typedef struct {
-	STRING *Token;
+	char *Token;
 	SWORD ID;
 	SWORD IMD;
 } RESEARCHICON;
@@ -287,8 +287,8 @@ BOOL StatIsResearch(BASE_STATS *Stat);
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
                           BASE_STATS **ppGraphicData, BOOL drawTechIcon);
 
-//SWORD GetTokenID(TOKENID *Tok,STRING *Token);
-//SWORD FindTokenID(TOKENID *Tok,STRING *Token);
+//SWORD GetTokenID(TOKENID *Tok,char *Token);
+//SWORD FindTokenID(TOKENID *Tok,char *Token);
 
 //displays a border for a form
 extern void intDisplayBorderForm(struct _widget *psWidget, UDWORD xOffset,

@@ -74,10 +74,10 @@ extern BOOL	scoreInitSystem			( void );
 extern void	scoreUpdateVar			( DATA_INDEX var );
 extern void	scoreDataToConsole		( void );
 extern void	scoreDataToScreen		( void );	
-extern void constructTime			( STRING *psText, UDWORD hours, UDWORD minutes, UDWORD seconds );
-extern void	getAsciiTime			( STRING *psText, UDWORD time );
+extern void constructTime			( char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds );
+extern void	getAsciiTime			( char *psText, UDWORD time );
 extern BOOL	readScoreData			( char *pFileData, UDWORD fileSize );
-extern BOOL	writeScoreData			( STRING *pFileName );
+extern BOOL	writeScoreData			( char *pFileName );
 
 #endif
 

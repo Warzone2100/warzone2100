@@ -37,7 +37,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 		return FALSE;
 	}
 
-	(*ppsBlock)->apStrings = (STRING**)MALLOC(sizeof(STRING *) * size);
+	(*ppsBlock)->apStrings = (char**)MALLOC(sizeof(char *) * size);
 	if (!(*ppsBlock)->apStrings)
 	{
 		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 2" );
@@ -45,7 +45,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 		FREE(*ppsBlock);
 		return FALSE;
 	}
-	memset((*ppsBlock)->apStrings, 0, sizeof(STRING *) * size);
+	memset((*ppsBlock)->apStrings, 0, sizeof(char *) * size);
 
 #ifdef DEBUG
 	(*ppsBlock)->aUsage = (UDWORD*)MALLOC(sizeof(UDWORD) * size);
@@ -198,7 +198,7 @@ BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID)
 
 
 /* Return the ID number for an ID string */
-BOOL strresGetIDNum(STR_RES *psRes, STRING *pIDStr, UDWORD *pIDNum)
+BOOL strresGetIDNum(STR_RES *psRes, char *pIDStr, UDWORD *pIDNum)
 {
 	STR_ID	*psID;
 
@@ -225,7 +225,7 @@ BOOL strresGetIDNum(STR_RES *psRes, STRING *pIDStr, UDWORD *pIDNum)
 
 
 /* Return the ID stored ID string that matches the string passed in */
-BOOL strresGetIDString(STR_RES *psRes, STRING *pIDStr, STRING **ppStoredID)
+BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID)
 {
 	STR_ID	*psID;
 
@@ -246,10 +246,10 @@ BOOL strresGetIDString(STR_RES *psRes, STRING *pIDStr, STRING **ppStoredID)
 
 
 /* Store a string */
-BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
+BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 {
 	STR_ID		*psID;
-	STRING		*pNew;
+	char		*pNew;
 	STR_BLOCK	*psBlock;
 	UDWORD		id;
 
@@ -268,7 +268,7 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 			abort();
 			return FALSE;
 		}
-		psID->pIDStr = (STRING*)MALLOC(sizeof(STRING) * (stringLen(pID) + 1));
+		psID->pIDStr = (char*)MALLOC(sizeof(char) * (stringLen(pID) + 1));
 		if (!psID->pIDStr)
 		{
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
@@ -309,7 +309,7 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 	}
 
 	// Allocate a copy of the string
-	pNew = (STRING*)MALLOC(sizeof(STRING) * (stringLen(pString) + 1));
+	pNew = (char*)MALLOC(sizeof(char) * (stringLen(pString) + 1));
 	if (!pNew)
 	{
 		debug( LOG_ERROR, "strresStoreString: Out of memory" );
@@ -324,7 +324,7 @@ BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString)
 
 
 /* Get the string from an ID number */
-STRING *strresGetString(STR_RES *psRes, UDWORD id)
+char *strresGetString(STR_RES *psRes, UDWORD id)
 {
 	STR_BLOCK	*psBlock;
 
@@ -374,8 +374,8 @@ BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size)
 }
 
 
-/* Return the the length of a STRING */
-UDWORD stringLen(STRING *pStr)
+/* Return the the length of a char */
+UDWORD stringLen(char *pStr)
 {
 	UDWORD	count=0;
 
@@ -387,8 +387,8 @@ UDWORD stringLen(STRING *pStr)
 	return count;
 }
 
-/* Copy a STRING */
-void stringCpy(STRING *pDest, STRING *pSrc)
+/* Copy a char */
+void stringCpy(char *pDest, char *pSrc)
 {
 	do
 	{
@@ -398,7 +398,7 @@ void stringCpy(STRING *pDest, STRING *pSrc)
 
 
 /* Get the ID number for a string*/
-UDWORD strresGetIDfromString(STR_RES *psRes, STRING *pString)
+UDWORD strresGetIDfromString(STR_RES *psRes, char *pString)
 {
 	STR_BLOCK	*psBlock, *psNext = NULL;
 	UDWORD		i;

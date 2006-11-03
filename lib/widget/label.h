@@ -18,10 +18,10 @@ typedef struct _w_label
 	WIDGET_BASE;
 
 	UDWORD		state;					// The current button state
-	STRING		aText[WIDG_MAXSTR];		// Text on the label
+	char		aText[WIDG_MAXSTR];		// Text on the label
 //	PROP_FONT	*psFont;				// Font for the label
 	int FontID;
-	STRING		*pTip;					// The tool tip for the button
+	char		*pTip;					// The tool tip for the button
 } W_LABEL;
 
 /* Create a button widget data structure */

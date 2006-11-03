@@ -787,7 +787,7 @@ BOOL scrCBAllianceOffer(void)
 BOOL scrCallConsole(void)
 {
 	SDWORD	*player;
-	STRING	**ConsoleText = NULL;
+	char	**ConsoleText = NULL;
 
 	if (!stackPopParams(2, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) ) 
 	{
@@ -819,7 +819,7 @@ BOOL scrCallConsole(void)
 BOOL scrCallBeacon(void)
 {
 	SDWORD	*playerFrom, playerTo;
-	STRING	**BeaconText = NULL;
+	char	**BeaconText = NULL;
 	SDWORD	*locX,*locY;
 
 	if (!stackPopParams(5, VAL_INT, &playerTo, VAL_REF | VAL_INT, &playerFrom,
@@ -882,7 +882,7 @@ BOOL scrCallBeacon(void)
 BOOL scrCallMultiMsg(void)
 {
 	SDWORD	*player, playerTo;
-	STRING	**ConsoleText = NULL;
+	char	**ConsoleText = NULL;
 
 	if (!stackPopParams(3, VAL_INT, &playerTo, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) ) 
 	{

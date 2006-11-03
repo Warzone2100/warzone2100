@@ -32,8 +32,8 @@ SAVE_FORCE
 
 extern BOOL		bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
-extern STRING saveGameName[256];
-extern STRING	sRequestResult[255];
+extern char saveGameName[256];
+extern char	sRequestResult[255];
 extern BOOL		bRequestLoad;
 
 /***************************************************************************/

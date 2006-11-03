@@ -142,31 +142,20 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 	return TRUE;
 }
 
-BOOL SetUpOutputFile(STRING * pMapName,SDWORD nPlayer)
+BOOL SetUpOutputFile(char * pMapName,SDWORD nPlayer) // FIXME pMapName is unused!!!
 {
-	STRING			sPlayer[255] = "";
-	STRING			SaveDir[MAX_PATH] = "";		//"multiplay/learndata/";
-	STRING			FileName[255] = "";
+	char			sPlayer[255] = "";
+	char			SaveDir[MAX_PATH] = "multiplay/learndata/";
+	char			FileName[255] = "";
 
 	//debug(LOG_ERROR,"SetUpOutputFile");
-
-	//strcpy( SaveDir, PHYSFS_getUserDir() );
-	//strcat( SaveDir, WZ_WRITEDIR );				//TODO: fix it
-	//strcat( SaveDir, PHYSFS_getDirSeparator() );
-
-	strcpy( SaveDir, "multiplay/learndata/" );
-
-	//strcat( SaveDir, "multiplay" );
-	//strcat( SaveDir, PHYSFS_getDirSeparator() );
-	//strcat( SaveDir, "learndata" );
-	//strcat( SaveDir, PHYSFS_getDirSeparator() );
 
 	/* Assemble dir string */
 	sprintf(sPlayer,"%d",nPlayer);
 
 	strcat( SaveDir, "player");
 	strcat( SaveDir, sPlayer );
-	//strcat( SaveDir, "/" );	//like "multiplay\learndata\player0\"
+	//strcat( SaveDir, "/" );	//like "multiplay/learndata/player0/"
 
 	/* Create dir on disk */
 	if ( !PHYSFS_mkdir(SaveDir))
@@ -180,11 +169,11 @@ BOOL SetUpOutputFile(STRING * pMapName,SDWORD nPlayer)
 	/* Create filename */
 	strcpy(FileName,SaveDir);
 	strcat(FileName,game.map);		//Map name
-	strcat(FileName,".lrn");		//Like "multiplay\learndata\player0\Rush.lrn"
+	strcat(FileName,".lrn");		//Like "multiplay/learndata/player0/Rush.lrn"
 
 	/* Open file */
 	aiSaveFile[nPlayer] = NULL;
-	aiSaveFile[nPlayer] = PHYSFS_openWrite(FileName);	//fopen(FileName, "wb");	//new write
+	aiSaveFile[nPlayer] = PHYSFS_openWrite(FileName);
 	if (!aiSaveFile[nPlayer])
 	{
 		debug(LOG_ERROR,"SetUpOutputFile(): Couldn't open debugging output file: '%s' for player %d", FileName,nPlayer);
@@ -196,9 +185,9 @@ BOOL SetUpOutputFile(STRING * pMapName,SDWORD nPlayer)
 
 BOOL SetUpInputFile(SDWORD nPlayer)
 {
-	STRING			FileName[255] = "";
-	STRING			sPlayer[255] = "";
-	STRING			SaveDir[MAX_PATH] = "";		// "multiplay/learndata/";
+	char			FileName[255] = "";
+	char			sPlayer[255] = "";
+	char			SaveDir[MAX_PATH] = "";		// "multiplay/learndata/";
 
 	/* assemble "multiplay\learndata\" */
 	strcat( SaveDir, "multiplay/learndata/" );

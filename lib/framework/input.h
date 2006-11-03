@@ -125,7 +125,7 @@ typedef enum _key_code
 extern void inputProcessEvent(SDL_Event *event);
 
 /* Converts the key code into an ascii string */
-extern void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize);
+extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 
 /* Initialise the input module */
 extern void inputInitialise(void);

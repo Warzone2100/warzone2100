@@ -41,8 +41,8 @@ FORCE		Force;														// the selected force.
 
 // ////////////////////////////////////////////////////////////////////////////
 //  Player Stat defs.
-BOOL		saveMultiStats			(STRING *sFName, STRING *sPlayerName, PLAYERSTATS *plStats);
-BOOL		loadMultiStats			(STRING *sPlayerName, PLAYERSTATS *plStats);
+BOOL		saveMultiStats			(char *sFName, char *sPlayerName, PLAYERSTATS *plStats);
+BOOL		loadMultiStats			(char *sPlayerName, PLAYERSTATS *plStats);
 PLAYERSTATS getMultiStats			(UDWORD	player, BOOL bLocal);
 BOOL		setMultiStats			(DWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);
 
@@ -343,7 +343,7 @@ void useTheForce(BOOL bAddTempl)//Luke
 
 BOOL saveForce(char *name,FORCE *pfForce)
 {
-	STRING			fileName[255]="";
+	char			fileName[255]="";
 	PHYSFS_file		*pFileHandle;
 	DROID_TEMPLATE	*pT;
 	FORCE_MEMBER	*pCount,*pMember;
@@ -424,8 +424,8 @@ BOOL saveForce(char *name,FORCE *pfForce)
 // load a force from a file.
 BOOL loadForce(char *name)
 {
-	STRING			fileName[255]="";
-//	STRING			tname[255]="";
+	char			fileName[255]="";
+//	char			tname[255]="";
 	PHYSFS_file		*pFileHandle;
 	UDWORD			tcount,fcount=0,ref;
 	DROID_TEMPLATE	*psTempl;
@@ -587,9 +587,9 @@ BOOL setMultiStats(DWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
-BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
+BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
 {
-	STRING				fileName[255]="";
+	char				fileName[255]="";
 	UDWORD				size;
 	char				*pFileData;
 	PLAYERSTATS			blankstats = {0};
@@ -644,9 +644,9 @@ BOOL loadMultiStats(STRING *sPlayerName,PLAYERSTATS *playerStats)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Save Player Stats
-BOOL saveMultiStats(STRING *sFileName, STRING *sPlayerName,PLAYERSTATS *playerStats)
+BOOL saveMultiStats(char *sFileName, char *sPlayerName,PLAYERSTATS *playerStats)
 {
-	STRING				fileName[255]="";
+	char				fileName[255]="";
 	SAVEDPLAYERSTATS	codedst,st;
 	UDWORD				tmp[4];
 

@@ -406,7 +406,7 @@ void clustDisplay(void)
 	SDWORD	cluster, map, player;
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
-	STRING	aBuff[255];
+	char	aBuff[255];
 	BOOL	found;
 	SDWORD	numUsed;
 

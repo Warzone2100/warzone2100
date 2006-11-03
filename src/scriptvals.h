@@ -22,7 +22,7 @@ typedef struct _var_init
 {
 	INIT_TYPE	type;
 	SDWORD		index;
-	STRING		*pString;
+	char		*pString;
 } VAR_INIT;
 
 
@@ -47,13 +47,13 @@ extern void scrv_error(const char *pMessage,...);
 extern int scrv_parse(void);
 
 // Lookup a type
-extern BOOL scrvLookUpType(STRING *pIdent, INTERP_TYPE *pType);
+extern BOOL scrvLookUpType(char *pIdent, INTERP_TYPE *pType);
 
 // Lookup a variable identifier
-extern BOOL scrvLookUpVar(STRING *pIdent, UDWORD *pIndex);
+extern BOOL scrvLookUpVar(char *pIdent, UDWORD *pIndex);
 
 // Lookup an array identifier
-extern BOOL scrvLookUpArray(STRING *pIdent, UDWORD *pIndex);
+extern BOOL scrvLookUpArray(char *pIdent, UDWORD *pIndex);
 
 // Whether the script is run immediately or stored for later use
 typedef enum _scrv_type
@@ -63,10 +63,10 @@ typedef enum _scrv_type
 } SCRV_TYPE;
 
 // Add a new context to the list
-extern BOOL scrvAddContext(STRING *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);
+extern BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);
 
 // Get a context from the list
-extern BOOL scrvGetContext(STRING *pID, SCRIPT_CONTEXT **ppsContext);
+extern BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext);
 
 // Add a new base pointer variable
 extern BOOL scrvAddBasePointer(INTERP_VAL *psVal);
@@ -102,6 +102,6 @@ extern BOOL scrvLoad(char *pData, UDWORD size);
 extern BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj);
 
 // Find a string from it's (string)id
-extern BOOL scrvGetString(STRING *pStringID, STRING **ppString);
+extern BOOL scrvGetString(char *pStringID, char **ppString);
 #endif
 

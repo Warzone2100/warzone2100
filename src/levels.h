@@ -43,9 +43,9 @@ typedef struct _level_dataset
 	SWORD	type;					// type of map
 	SWORD	players;				// number of players for the map
 	SWORD	game;					// index of WRF/WDG that loads the scenario file
-	STRING	*pName;					// title for the level
+	char	*pName;					// title for the level
 	int	dataDir;					// title for the level
-	STRING	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
+	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
 							// in load order
 	struct _level_dataset *psBaseData;		// LEVEL_DATASET that must be loaded for this level to load
 	struct _level_dataset *psChange;		// LEVEL_DATASET used when changing to this level from another
@@ -66,13 +66,13 @@ extern void levShutDown(void);
 extern BOOL levInitialise(void);
 
 // load up the base data set for a level (used by savegames)
-extern BOOL levLoadBaseData(STRING *pName);
+extern BOOL levLoadBaseData(char *pName);
 
 // load up the data for a level
-extern BOOL levLoadData(STRING *pName, STRING *pSaveName, SDWORD saveType);
+extern BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType);
 
 // find the level dataset
-extern BOOL levFindDataSet(STRING *pName, LEVEL_DATASET **ppsDataSet);
+extern BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet);
 
 // free the currently loaded dataset
 extern BOOL levReleaseAll(void);

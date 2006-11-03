@@ -38,15 +38,15 @@ static char		imagePath[MAX_FILE_PATH] = {""};
 extern void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v);
 
 // local prototypes
-static iIMDShape *_imd_load_level(STRING **FileData, STRING *FileDataEnd, int nlevels,
+static iIMDShape *_imd_load_level(char **FileData, char *FileDataEnd, int nlevels,
                                   int texpage);
-static char *_imd_get_path(STRING *filename, STRING *path);
+static char *_imd_get_path(char *filename, char *path);
 BOOL CheckColourKey(iIMDShape *psShape);
 
 
 #ifndef WIN32
 // convert a string to lower case... by Tim ... dedicated to JS ... with love
-void strlwr(STRING *String)
+void strlwr(char *String)
 {
 	while (*String != 0) {
 		// loop around till we reach the end of the zero terminated string
@@ -60,7 +60,7 @@ void strlwr(STRING *String)
 #endif
 
 
-static BOOL AtEndOfFile(STRING *CurPos, STRING *EndOfFile)
+static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 {
 	while ((*CurPos==0x09)||(*CurPos==0x0a)||(*CurPos==0x0d)||(*CurPos==0x20)||(*CurPos==0x00))
 	{
@@ -87,10 +87,10 @@ static BOOL AtEndOfFile(STRING *CurPos, STRING *EndOfFile)
 BOOL TESTDEBUG = FALSE;
 // load the polygon level ... then load the texture     .... Gareths code
 #define POST_LEVEL_TEXTURELOAD
-iIMDShape *iV_IMDLoad(STRING *filename, iBool palkeep)
+iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
 {
 	iIMDShape *pIMD;
-	STRING *pFileData,*pFileDataStart;
+	char *pFileData,*pFileDataStart;
 	UDWORD FileSize;
 	BOOL res;
 	char path[MAX_FILE_PATH];
@@ -156,7 +156,7 @@ static void DumpIMDInfo(void)
 	debug( LOG_NEVER, "connectors     =%d - using %d bytes\n", IMDConnectors, IMDConnectors*sizeof(iVector) );
 }
 
-static STRING texfile[64];	//Last loaded texture page filename
+static char texfile[64];	//Last loaded texture page filename
 
 static char *GetLastLoadedTexturePage(void)
 {
@@ -165,10 +165,10 @@ static char *GetLastLoadedTexturePage(void)
 
 
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpath,
-                         STRING *PCXpath,iBool palkeep)
+iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd, char *IMDpath,
+                         char *PCXpath,iBool palkeep)
 {
-	STRING		*pFileData = *ppFileData;
+	char		*pFileData = *ppFileData;
 	int 		cnt;
 	char		buffer[MAX_FILE_PATH],  texType[MAX_FILE_PATH], ch; //, *str;
 	int			i, nlevels, ptype, pwidth, pheight, texpage;
@@ -359,9 +359,9 @@ iIMDShape *iV_ProcessIMD(STRING **ppFileData, STRING *FileDataEnd, STRING *IMDpa
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******
-static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
+static iBool _imd_load_polys(char **ppFileData, char *FileDataEnd, iIMDShape *s)
 {
-	STRING *pFileData = *ppFileData;
+	char *pFileData = *ppFileData;
 	int cnt;
 	int i, j; //, anim;
 	iVector p0, p1, p2, *points;
@@ -517,9 +517,9 @@ static iBool _imd_load_polys(STRING **ppFileData, STRING *FileDataEnd, iIMDShape
 
 #define GETBSPTRIANGLE(polyid) (&(s->polys[(polyid)]))
 
-static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s, UWORD BSPNodeCount)
+static iBool _imd_load_bsp(char **ppFileData, char *FileDataEnd, iIMDShape *s, UWORD BSPNodeCount)
 {
-	STRING *pFileData = *ppFileData;
+	char *pFileData = *ppFileData;
 	int cnt;
 	UWORD Node;
 	PSBSPTREENODE NodeList;	// An pointer to an array of  nodes
@@ -661,9 +661,9 @@ static iBool _imd_load_bsp(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *
 #endif
 
 
-static BOOL ReadPoints(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
+static BOOL ReadPoints(char **ppFileData, char *FileDataEnd, iIMDShape *s)
 {
-	STRING *pFileData = *ppFileData;
+	char *pFileData = *ppFileData;
 	int cnt;
 	int i;
 	iVector *p;
@@ -737,7 +737,7 @@ static BOOL ReadPoints(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******
-static iBool _imd_load_points(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
+static iBool _imd_load_points(char **ppFileData, char *FileDataEnd, iIMDShape *s)
 {
 	int i ;
 	iVector *p;
@@ -959,9 +959,9 @@ static iBool _imd_load_points(STRING **ppFileData, STRING *FileDataEnd, iIMDShap
 }
 
 
-static iBool _imd_load_connectors(STRING **ppFileData, STRING *FileDataEnd, iIMDShape *s)
+static iBool _imd_load_connectors(char **ppFileData, char *FileDataEnd, iIMDShape *s)
 {
-	STRING *pFileData = *ppFileData;
+	char *pFileData = *ppFileData;
 	int cnt;
 	int i;
 	iVector *p;
@@ -1008,9 +1008,9 @@ static iBool _imd_load_connectors(STRING **ppFileData, STRING *FileDataEnd, iIMD
 //* returns	pointer to iFSDShape structure (or NULL on error)
 //*
 //******
-static iIMDShape *_imd_load_level(STRING **ppFileData, STRING *FileDataEnd, int nlevels, int texpage)
+static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlevels, int texpage)
 {
-	STRING *pFileData = *ppFileData;
+	char *pFileData = *ppFileData;
 	int cnt;
 	iIMDShape *s;
 	char buffer[MAX_FILE_PATH];
@@ -1168,7 +1168,7 @@ static iIMDShape *_imd_load_level(STRING **ppFileData, STRING *FileDataEnd, int 
 }
 
 
-BOOL iV_setImagePath(STRING *path)
+BOOL iV_setImagePath(char *path)
 {
 	int i;
 	strcpy(imagePath,path);
@@ -1182,7 +1182,7 @@ BOOL iV_setImagePath(STRING *path)
 }
 
 
-static char *_imd_get_path(STRING *filename, STRING *path)
+static char *_imd_get_path(char *filename, char *path)
 {
 	int n, i;
 

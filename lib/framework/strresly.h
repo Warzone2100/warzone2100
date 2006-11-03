@@ -23,7 +23,7 @@ extern void strresGetErrorData(int *pLine, char **ppText);
 extern int strres_parse(void);
 
 /* Store a string */
-extern BOOL strresStoreString(STR_RES *psRes, STRING *pID, STRING *pString);
+extern BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString);
 
 #endif
 

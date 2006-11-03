@@ -39,7 +39,7 @@ typedef struct _w_minortab
 {
 	/* Graphics data for the tab will go here */
 	WIDGET		*psWidgets;			// Widgets on the tab
-	STRING		*pTip;				// Tool tip
+	char		*pTip;				// Tool tip
 } W_MINORTAB;
 
 /* Information for a major tab */
@@ -49,7 +49,7 @@ typedef struct _w_majortab
 	UWORD			lastMinor;					// Store which was the last selected minor tab
 	UWORD			numMinor;
 	W_MINORTAB		asMinor[WFORM_MAXMINOR];	// Minor tab information
-	STRING			*pTip;
+	char			*pTip;
 } W_MAJORTAB;
 
 /* The tabbed form data structure */
@@ -99,7 +99,7 @@ typedef struct _w_clickform
 	FORM_BASE;
 
 	UDWORD		state;					// Button state of the form
-	STRING		*pTip;					// Tip for the form
+	char		*pTip;					// Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function

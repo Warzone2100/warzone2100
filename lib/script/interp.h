@@ -38,7 +38,7 @@ typedef struct _interp_val
 		BOOL		bval;		// VAL_BOOL
 		SDWORD		ival;		// VAL_INT
 //		float		fval;		// VAL_FLOAT
-		STRING		*sval;		// VAL_STRING
+		char		*sval;		// VAL_STRING
 		void		*oval;		// VAL_OBJECT
 		void		*pVoid;		// VAL_VOIDPTR
 	} v;
@@ -150,7 +150,7 @@ typedef UBYTE STORAGE_TYPE;
 /* Variable debugging info for a script */
 typedef struct _var_debug
 {
-	STRING			*pIdent;
+	char			*pIdent;
 	STORAGE_TYPE	storage;
 } VAR_DEBUG;
 
@@ -166,7 +166,7 @@ typedef struct _array_data
 /* Array debug info for a script */
 typedef struct _array_debug
 {
-	STRING			*pIdent;
+	char			*pIdent;
 	UBYTE			storage;
 } ARRAY_DEBUG;
 
@@ -175,7 +175,7 @@ typedef struct _script_debug
 {
 	UDWORD	offset;		// Offset in the compiled script that corresponds to
 	UDWORD	line;		// this line in the original script.
-	STRING	*pLabel;	// the trigger/event that starts at this line
+	char	*pLabel;	// the trigger/event that starts at this line
 } SCRIPT_DEBUG;
 
 /* Different types of triggers */

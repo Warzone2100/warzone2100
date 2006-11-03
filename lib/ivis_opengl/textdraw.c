@@ -14,7 +14,7 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
-extern	void	pie_DrawTextNew(STRING *string, int x, int y);
+extern	void	pie_DrawTextNew(char *string, int x, int y);
 extern SDWORD DisplayXFactor;
 
 /***************************************************************************/
@@ -165,7 +165,7 @@ int iV_GetTextBelowBase(void)
 
 
 
-int iV_GetTextWidth(STRING *String)
+int iV_GetTextWidth(char *String)
 {
 	int Index;
 	int MaxX = 0;
@@ -232,7 +232,7 @@ static BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, S
 }
 
 
-int iV_GetCharWidth(STRING Char)
+int iV_GetCharWidth(char Char)
 {
 	int Index;
 	UWORD ImageID;
@@ -267,8 +267,8 @@ enum {
 	EXTENTS_END
 };
 
-static STRING FString[256];		// Must do something about these wastefull static arrays.
-static STRING FWord[256];
+static char FString[256];		// Must do something about these wastefull static arrays.
+static char FWord[256];
 static int LastX;				// Cursor position after last draw.
 static int LastY;
 static int LastTWidth;			// Pixel width of the last string draw.
@@ -581,7 +581,7 @@ UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDW
 
 static SWORD OldTextColourIndex = -1;
 
-void pie_DrawText(STRING *string, UDWORD x, UDWORD y)
+void pie_DrawText(char *string, UDWORD x, UDWORD y)
 {
 	int Index;
 	UWORD ImageID;
@@ -682,7 +682,7 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 // Partial fix for rendering text on 'video', you can read it now. -Q
 // --still to do, add 'boxes' under text so you can see it better.
 //===========================================================
-void pie_DrawTextToSurface(STRING *string, int x, int y)
+void pie_DrawTextToSurface(char *string, int x, int y)
 {
 	int Index;
 	UWORD ImageID;
@@ -727,7 +727,7 @@ void pie_DrawTextToSurface(STRING *string, int x, int y)
 
 }
 
-void pie_DrawText270(STRING *String,int XPos,int YPos)
+void pie_DrawText270(char *String,int XPos,int YPos)
 {
 	int Index;
 	UWORD ImageID;

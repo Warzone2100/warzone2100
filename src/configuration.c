@@ -46,7 +46,7 @@ extern void registry_clear(void); // from configfile.c
 BOOL loadConfig(BOOL bResourceAvailable)
 {
 	DWORD	val;
-	STRING	sBuf[255];
+	char	sBuf[255];
 
 	if(!openWarzoneKey())
 	{
@@ -305,12 +305,12 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		{
 			if(getWarzoneKeyString("playerName",(char*)&sBuf))
 			{
-				strcpy((STRING*)sPlayer, sBuf);
+				strcpy((char*)sPlayer, sBuf);
 			}
 			else
 			{
-				strcpy((STRING*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
-				setWarzoneKeyString("playerName",(STRING*)sPlayer);
+				strcpy((char*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
+				setWarzoneKeyString("playerName",(char*)sPlayer);
 			}
 		}
 	}
@@ -576,7 +576,7 @@ BOOL saveConfig(void)
 		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
 		setWarzoneKeyNumeric("modemId", ingame.modem);			// modem to use.
 		setWarzoneKeyString("forceName", sForceName);			// force
-		setWarzoneKeyString("playerName",(STRING*)sPlayer);		// player name
+		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
 		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
 		setWarzoneKeyString("phrase1", ingame.phrases[1]);
 		setWarzoneKeyString("phrase2", ingame.phrases[2]);

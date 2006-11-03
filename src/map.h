@@ -293,7 +293,7 @@ MAPTILE *GetCurrentMap(void);	// returns a pointer to the current loaded map dat
 UDWORD GetHeightOfMap(void);
 UDWORD GetWidthOfMap(void);
 extern BOOL	readVisibilityData(char *pFileData, UDWORD fileSize);
-extern BOOL	writeVisibilityData( STRING *pFileName );
+extern BOOL	writeVisibilityData( char *pFileName );
 extern void	mapFreeTilesAndStrips( void );
 
 //scroll min and max values

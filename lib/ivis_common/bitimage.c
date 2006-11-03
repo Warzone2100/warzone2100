@@ -11,7 +11,7 @@
 #include "lib/framework/frameresource.h"
 
 
-static BOOL LoadTextureFile(STRING *FileName, iSprite *TPage, int *TPageID);
+static BOOL LoadTextureFile(char *FileName, iSprite *TPage, int *TPageID);
 
 UWORD iV_GetImageWidth(IMAGEFILE *ImageFile, UWORD ID)
 {
@@ -110,7 +110,7 @@ IMAGEFILE *iV_LoadImageFile(char *FileData, UDWORD FileSize)
 	// Load the texture pages.
 	for (i = 0; i < Header->NumTPages; i++) {
 		int tmp;	/* Workaround for MacOS gcc 4.0.0 bug. */
-		LoadTextureFile((STRING*)Header->TPageFiles[i],
+		LoadTextureFile((char*)Header->TPageFiles[i],
 				&ImageFile->TexturePages[i],
 				&tmp);
 		ImageFile->TPageIDs[i] = tmp;
@@ -153,7 +153,7 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 }
 
 
-static BOOL LoadTextureFile(STRING *FileName, iSprite *pSprite, int *texPageID)
+static BOOL LoadTextureFile(char *FileName, iSprite *pSprite, int *texPageID)
 {
 	SDWORD i;
 	char real_filename[200];

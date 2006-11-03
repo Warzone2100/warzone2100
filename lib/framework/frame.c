@@ -277,7 +277,7 @@ static void freeCursors(void)
  * Initialise the framework library. - PC version
  */
 BOOL frameInitialise(HANDLE hInst,			// The windows application instance
-					 STRING *pWindowName,	// The text to appear in the window title bar
+					 char *pWindowName,	// The text to appear in the window title bar
 					 UDWORD	width,			// The display width
 					 UDWORD height,			// The display height
 					 UDWORD bitDepth,		// The display bit depth

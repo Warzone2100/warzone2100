@@ -21,7 +21,7 @@
 typedef struct _scrv_store
 {
 	SCRV_TYPE		type;
-	STRING			*pIDString;
+	char			*pIDString;
 	SCRIPT_CONTEXT	*psContext;
 
 	struct _scrv_store *psNext;
@@ -77,7 +77,7 @@ void scrvReset(void)
 
 
 // Add a new context to the list
-BOOL scrvAddContext(STRING *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
+BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 {
 	SCRV_STORE		*psNew;
 
@@ -199,7 +199,7 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 
 
 // Get a context from the list
-BOOL scrvGetContext(STRING *pID, SCRIPT_CONTEXT **ppsContext)
+BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 {
 	SCRV_STORE	*psCurr;
 
@@ -237,7 +237,7 @@ BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj)
 }
 
 // Find a string from it's (string)id
-BOOL scrvGetString(STRING *pStringID, STRING **ppString)
+BOOL scrvGetString(char *pStringID, char **ppString)
 {
 	UDWORD			id;
 
@@ -264,7 +264,7 @@ BOOL scrvGetString(STRING *pStringID, STRING **ppString)
 	INTERP_VAL		*psVal;
 	BASE_OBJECT		*psObj;
 	SDWORD			compIndex;
-	STRING			*pStr;
+	char			*pStr;
 
 	for(psCurr = psContextStore; psCurr; psCurr=psCurr->psNext)
 	{

@@ -84,7 +84,7 @@ extern void scriptFreeCode(SCRIPT_CODE *psCode);
 extern void cpPrintProgram(SCRIPT_CODE *psProg);
 
 /* Lookup a script variable */
-extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, STRING *pID, UDWORD *pIndex);
+extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
 
 /* Run a compiled script */
 extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,

@@ -86,7 +86,7 @@ typedef struct TRACK
 	BOOL		bCompressed;			/* compression data flag    */
 
 	ALuint		iBufferName;				/* name of the openal buffer */
-	STRING		*pName;					// resource name of the track
+	char		*pName;					// resource name of the track
 	UDWORD		resID;					// hashed name of the WAV
 
 } TRACK;

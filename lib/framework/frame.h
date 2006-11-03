@@ -21,7 +21,7 @@
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance
-					 STRING *pWindowName,	// The text to appear in the window title bar
+					 char *pWindowName,	// The text to appear in the window title bar
 					 UDWORD	width,			// The display width
 					 UDWORD height,			// The display height
 					 UDWORD bitDepth,		// The display bit depth
@@ -86,7 +86,7 @@ extern SDWORD frameGetNumDDDevices(void);
 extern char* frameGetDDDeviceName(SDWORD);
 
 // Return a string for a windows error code
-extern STRING *winErrorToString(SDWORD error);
+extern char *winErrorToString(SDWORD error);
 
 /* The default window procedure for the library.
  * This is initially set to the standard DefWindowProc, but can be changed

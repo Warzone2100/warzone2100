@@ -56,7 +56,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
 static OBJ_HEAP		*psStrHeap;
 
 /* Buffer to return strings in */
-static STRING aStringRetBuffer[WIDG_MAXSTR];
+static char aStringRetBuffer[WIDG_MAXSTR];
 
 /* Initialise the widget module */
 BOOL widgInitialise(W_HEAPINIT *psInit)
@@ -142,7 +142,7 @@ void widgShutDown(void)
 
 
 /* Get a string from the string heap */
-BOOL widgAllocString(STRING **ppStr)
+BOOL widgAllocString(char **ppStr)
 {
 	if (!HEAP_ALLOC(psStrHeap, (void**) ppStr))
 	{
@@ -155,7 +155,7 @@ BOOL widgAllocString(STRING **ppStr)
 /* Copy one string to another
  * The string to copy will be truncated if it is longer than WIDG_MAXSTR.
  */
-void widgCopyString(STRING *pDest, STRING *pSrc)
+void widgCopyString(char *pDest, char *pSrc)
 {
 	/* See if we need to clip the string, then copy */
 	if (strlen(pSrc) >= WIDG_MAXSTR)
@@ -172,7 +172,7 @@ void widgCopyString(STRING *pDest, STRING *pSrc)
 /* Get a string from the heap and copy in some data.
  * The string to copy will be truncated if it is too long.
  */
-BOOL widgAllocCopyString(STRING **ppDest, STRING *pSrc)
+BOOL widgAllocCopyString(char **ppDest, char *pSrc)
 {
 	if (!HEAP_ALLOC(psStrHeap, (void**) ppDest))
 	{
@@ -187,7 +187,7 @@ BOOL widgAllocCopyString(STRING **ppDest, STRING *pSrc)
 
 
 /* Return a string to the string heap */
-void widgFreeString(STRING *pStr)
+void widgFreeString(char *pStr)
 {
 	HEAP_FREE(psStrHeap, pStr);
 }
@@ -1048,7 +1048,7 @@ void *widgGetLastUserData(W_SCREEN *psScreen)
 }
 
 /* Set tip string for a widget */
-void widgSetTip( W_SCREEN *psScreen, UDWORD id, STRING *pTip )
+void widgSetTip( W_SCREEN *psScreen, UDWORD id, char *pTip )
 {
 	WIDGET	*psWidget;
 
@@ -1228,7 +1228,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 /* Return a pointer to a buffer containing the current string of a widget.
  * NOTE: The string must be copied out of the buffer
  */
-STRING *widgGetString(W_SCREEN *psScreen, UDWORD id)
+char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 {
 	WIDGET	*psWidget;
 
@@ -1286,7 +1286,7 @@ STRING *widgGetString(W_SCREEN *psScreen, UDWORD id)
 
 
 /* Set the text in a widget */
-void widgSetString(W_SCREEN *psScreen, UDWORD id, STRING *pText)
+void widgSetString(W_SCREEN *psScreen, UDWORD id, char *pText)
 {
 	WIDGET	*psWidget;
 

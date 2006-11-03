@@ -503,14 +503,14 @@ BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize)
 
 	// get the number of gateways
 	pPos = pFileBuffer;
-	sscanf((STRING *)pPos, "%d", &numGW);
+	sscanf((char *)pPos, "%d", &numGW);
 	for (; *pPos != '\n' && pPos < (pFileBuffer + fileSize); pPos += 1)
 		;
 	pPos += 1;
 
 	while ((pPos < (pFileBuffer + fileSize)) && (numGW > 0))
 	{
-		sscanf((STRING *)pPos, "%d %d %d %d", &x1,&y1, &x2, &y2);
+		sscanf((char *)pPos, "%d %d %d %d", &x1,&y1, &x2, &y2);
 
 		if (!gwNewGateway(x1,y1, x2,y2))
 		{

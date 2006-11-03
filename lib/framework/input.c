@@ -76,7 +76,7 @@ static SDLKey keyCodeToSDLKey(KEY_CODE code)
 }
 
 
-void keyScanToString(KEY_CODE code, STRING *ascii, UDWORD maxStringSize)
+void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
 	if(keyCodeToSDLKey(code) == KEY_MAXSCAN)
 	{

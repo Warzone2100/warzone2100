@@ -26,7 +26,7 @@ void res_error(const char *pMessage,...);
 #endif
 
 /* Store for any string values */
-STRING aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
+char aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
 static UDWORD currText=0;
 
 // Note if we are in a comment

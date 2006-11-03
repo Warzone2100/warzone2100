@@ -28,7 +28,7 @@ void strres_error(const char *pMessage,...);
 #define YYLMAX	255
 
 /* Store for any string values */
-extern STRING aText[TEXT_BUFFERS][YYLMAX];
+extern char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
 // Note if in a comment

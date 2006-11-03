@@ -22,7 +22,7 @@ extern void tipInitialise(void);
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-extern void tipStart(WIDGET *psSource, STRING *pTip, int NewFontID,
+extern void tipStart(WIDGET *psSource, char *pTip, int NewFontID,
 					 UDWORD *pColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height);
 
 /* Stop a tool tip (e.g. if the hilite is lost on a button).

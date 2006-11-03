@@ -31,7 +31,7 @@ extern BOOL ed2dLoadMapFile(void);
 extern BOOL ed2dSaveMapFile(void);
 
 /* Write the data to the file */
-extern BOOL writeMapFile(STRING *pFileName);
+extern BOOL writeMapFile(char *pFileName);
 
 #endif
 

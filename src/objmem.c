@@ -83,7 +83,7 @@ typedef struct _morgue
 	SDWORD			type;
 	UDWORD			id;
 	UDWORD			player;
-	STRING			aName[50];
+	char			aName[50];
 	UDWORD			died;
 } MORGUE;
 
@@ -101,7 +101,7 @@ void initMorgue(void)
 void embalm(BASE_OBJECT *psDead)
 {
 	MORGUE	*psSlot;
-	STRING	*pName;
+	char	*pName;
 
 	psSlot = asMorgue + morgueEnd;
 

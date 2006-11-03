@@ -34,7 +34,7 @@ void cpPrintType(INTERP_TYPE type)
 		debug( LOG_NEVER, "FLOAT" );
 		break;*/
 	case VAL_STRING:
-		debug( LOG_NEVER, "STRING" );
+		debug( LOG_NEVER, "char" );
 		break;
 	case VAL_TRIGGER:
 		debug( LOG_NEVER, "TRIGGER" );
@@ -94,7 +94,7 @@ void cpPrintVal(INTERP_VAL *psVal)
 		debug( LOG_NEVER, "type: FLOAT   value: %f", psVal->v.fval );
 		break;*/
 	case VAL_STRING:
-		debug( LOG_NEVER, "type: STRING  value: %s", psVal->v.sval );
+		debug( LOG_NEVER, "type: char  value: %s", psVal->v.sval );
 		break;
 	case VAL_TRIGGER:
 		debug( LOG_NEVER, "type: TRIGGER value: %d", psVal->v.ival );
@@ -148,7 +148,7 @@ void cpPrintPackedVal(UDWORD *ip)
 		debug( LOG_NEVER, "FLOAT   : %f", (float)data );
 		break;*/
 	case VAL_STRING:
-		debug( LOG_NEVER, "STRING  : %s", (STRING *)data );
+		debug( LOG_NEVER, "char  : %s", (char *)data );
 		break;
 	case VAL_TRIGGER:
 		debug( LOG_NEVER, "TRIGGER : %d", (SDWORD)data );

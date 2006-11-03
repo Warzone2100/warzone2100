@@ -24,8 +24,8 @@ static RES_TYPE *psResTypes=NULL;
 #define resGetResBlockID(psRes) (psRes->blockID)
 
 /* The initial resource directory and the current resource directory */
-STRING	aResDir[FILE_MAXCHAR];
-STRING	aCurrResDir[FILE_MAXCHAR];
+char	aResDir[FILE_MAXCHAR];
+char	aCurrResDir[FILE_MAXCHAR];
 
 // the current resource block ID
 static SDWORD	resBlockID;
@@ -90,7 +90,7 @@ void resShutDown(void)
 
 
 // set the base resource directory
-void resSetBaseDir(STRING *pResDir)
+void resSetBaseDir(char *pResDir)
 {
 	strncpy(aResDir, pResDir, FILE_MAXCHAR - 1);
 }
@@ -145,7 +145,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 
 
 /* Allocate a RES_TYPE structure */
-static BOOL resAlloc(const STRING *pType, RES_TYPE **ppsFunc)
+static BOOL resAlloc(const char *pType, RES_TYPE **ppsFunc)
 {
 	RES_TYPE	*psT;
 
@@ -183,7 +183,7 @@ static BOOL resAlloc(const STRING *pType, RES_TYPE **ppsFunc)
 
 
 /* Add a buffer load function for a file type */
-BOOL resAddBufferLoad(const STRING *pType, RES_BUFFERLOAD buffLoad,
+BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 					  RES_FREE release)
 {
 	RES_TYPE	*psT;
@@ -205,7 +205,7 @@ BOOL resAddBufferLoad(const STRING *pType, RES_BUFFERLOAD buffLoad,
 
 
 /* Add a file name load function for a file type */
-BOOL resAddFileLoad(STRING *pType, RES_FILELOAD fileLoad,
+BOOL resAddFileLoad(char *pType, RES_FILELOAD fileLoad,
 					RES_FREE release)
 {
 	RES_TYPE	*psT;
@@ -228,13 +228,13 @@ BOOL resAddFileLoad(STRING *pType, RES_FILELOAD fileLoad,
 
 
 // Make a string lower case
-void resToLower(STRING *pStr)
+void resToLower(char *pStr)
 {
 	while (*pStr != 0)
 	{
 		if (isupper(*pStr))
 		{
-			*pStr = (STRING)(*pStr - (STRING)('A' - 'a'));
+			*pStr = (char)(*pStr - (char)('A' - 'a'));
 		}
 		pStr += 1;
 	}
@@ -370,7 +370,7 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 }
 
 
-static void resDataInit(RES_DATA* psRes, STRING *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
+static void resDataInit(RES_DATA* psRes, char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
 	psRes->pData = pData;
 	psRes->blockID = resBlockID;
@@ -382,12 +382,12 @@ static void resDataInit(RES_DATA* psRes, STRING *DebugName, UDWORD DataIDHash, v
 
 
 /* Call the load function for a file */
-BOOL resLoadFile(STRING *pType, STRING *pFile)
+BOOL resLoadFile(char *pType, char *pFile)
 {
 	RES_TYPE	*psT;
 	void		*pData;
 	RES_DATA	*psRes;
-	STRING		aFileName[FILE_MAXCHAR];
+	char		aFileName[FILE_MAXCHAR];
 	BOOL loadresource;
 	UDWORD HashedName;
 
@@ -486,7 +486,7 @@ BOOL resLoadFile(STRING *pType, STRING *pFile)
 
 
 /* Return the resource for a type and hashedname */
-void *resGetDataFromHash(const STRING *pType, UDWORD HashedID)
+void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -533,7 +533,7 @@ void *resGetDataFromHash(const STRING *pType, UDWORD HashedID)
 
 
 /* Return the resource for a type and ID */
-void *resGetData(const STRING *pType, const STRING *pID)
+void *resGetData(const char *pType, const char *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -583,7 +583,7 @@ void *resGetData(const STRING *pType, const STRING *pID)
 }
 
 
-BOOL resGetHashfromData(const STRING *pType, const void *pData, UDWORD *pHash)
+BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -628,7 +628,7 @@ BOOL resGetHashfromData(const STRING *pType, const void *pData, UDWORD *pHash)
 
 
 /* Simply returns true if a resource is present */
-BOOL resPresent(const STRING *pType, const STRING *pID)
+BOOL resPresent(const char *pType, const char *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;

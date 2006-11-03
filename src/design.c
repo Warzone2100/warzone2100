@@ -387,7 +387,7 @@ UDWORD ViewRotation = 0;
 iIMDShape *ViewShape = NULL;
 
 /* The current name of the design */
-static STRING			aCurrName[WIDG_MAXSTR];
+static char			aCurrName[WIDG_MAXSTR];
 
 /* Store a list of component stats pointers for the design screen */
 extern UDWORD			maxComponent;
@@ -1007,7 +1007,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	W_FORMINIT		sButInit;
 	W_BARINIT		sBarInit;
 	DROID_TEMPLATE	*psTempl = NULL;
-	STRING			aButText[DES_COMPBUTMAXCHAR + 1];
+	char			aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD			BufferID;
 	UDWORD			i;
 	char TempString[256];
@@ -1415,10 +1415,10 @@ static DROID_TEMPLATE *MatchTemplate(DROID_TEMPLATE *SourceTemplate,UDWORD playe
 
 
 
-STRING *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
+char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	COMP_BASE_STATS		*psStats;
-	STRING				*pStr;
+	char				*pStr;
 	/*
 		First we check for the special cases of the Transporter & Cyborgs
 	*/
@@ -2537,7 +2537,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
     W_TABFORM           *psTabForm;
 	UDWORD				i, maxComponents;
 	COMP_BASE_STATS		*psCurrStats;
-	STRING				aButText[DES_COMPBUTMAXCHAR + 1];
+	char				aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD				BufferID;
 	PROPULSION_STATS	*psPropStats;
 	BOOL				bVTol, bWeapon, bVtolWeapon;
@@ -2771,7 +2771,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 	UDWORD			compIndex=0, numStats=0;
 	COMP_BASE_STATS	*psCurrStats=0;
 	UBYTE			*aAvailable=0;
-	STRING			aButText[DES_COMPBUTMAXCHAR + 1];
+	char			aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD			BufferID;
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
@@ -4032,7 +4032,7 @@ static BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
 #endif
 
 /* checks whether to update name or has user already changed it */
-static void desUpdateDesignName( DROID_TEMPLATE *psTemplate, STRING *szCurrName )
+static void desUpdateDesignName( DROID_TEMPLATE *psTemplate, char *szCurrName )
 {
 
 }

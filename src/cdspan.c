@@ -11,12 +11,12 @@
 #include "lib/sound/track.h"
 #include "cdspan.h"
 
-static STRING		g_szCurDriveName[MAX_STR] = "";
+static char		g_szCurDriveName[MAX_STR] = "";
 
 void
-cdspan_PlayInGameAudio( STRING szFileName[], SDWORD iVol )
+cdspan_PlayInGameAudio( char szFileName[], SDWORD iVol )
 {
-	STRING szStream[MAX_STR];//	szDrive[MAX_STR] = "",
+	char szStream[MAX_STR];//	szDrive[MAX_STR] = "",
 	BOOL	bPlaying = FALSE;
 
 	audio_StopAll();

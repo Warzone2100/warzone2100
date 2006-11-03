@@ -323,7 +323,7 @@ audio_GetClusterIDFromObj( void *psClusterObj )
 /***************************************************************************/
 
 BOOL
-audio_GetIDFromStr( STRING *pWavStr, SDWORD *piID )
+audio_GetIDFromStr( char *pWavStr, SDWORD *piID )
 {
 	return audioID_GetIDFromStr( pWavStr, piID );
 }

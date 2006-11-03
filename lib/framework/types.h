@@ -16,7 +16,7 @@
 
 #include <SDL/SDL_types.h>
 
-#ifdef _MSC_VER
+#ifdef WZ_CC_MSVC
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
@@ -29,7 +29,7 @@
 #else
 /* Compilers that have support for C99 have all of the above defined in stdint.h */
 # include <stdint.h>
-#endif // _MSC_VER
+#endif // WZ_CC_MSVC
 
 /* Basic numeric types */
 typedef Uint8 UBYTE;
@@ -38,34 +38,28 @@ typedef Uint16 UWORD;
 typedef Sint16 SWORD;
 typedef Uint32 UDWORD;
 typedef Sint32 SDWORD;
-typedef char STRING; // Should be removed...
 
 #ifndef WIN32
 
-// win32 functions to POSIX
-#define wsprintf sprintf
+# define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
 
-#define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
+# define WARZONEGUID 0
+# define VER_PLATFORM_WIN32_WINDOWS 1
 
-#define WARZONEGUID 0
-#define VER_PLATFORM_WIN32_WINDOWS 1
+# define DRIVE_CDROM  5
+# define INVALID_HANDLE_VALUE       0
 
+# define REG_OPTION_NON_VOLATILE       0
+# define KEY_ALL_ACCESS       0
+# define ERROR_SUCCESS       0
+# define REG_DWORD       0
+# define REG_SZ       0
+# define REG_BINARY       0
+# define HKEY_LOCAL_MACHINE       0
 
-#define DRIVE_CDROM  5
-#define INVALID_HANDLE_VALUE       0
-
-#define REG_OPTION_NON_VOLATILE       0
-#define KEY_ALL_ACCESS       0
-#define ERROR_SUCCESS       0
-#define REG_DWORD       0
-#define REG_SZ       0
-#define REG_BINARY       0
-#define HKEY_LOCAL_MACHINE       0
-
-#ifndef APIENTRY
-#define APIENTRY
-
-#endif // WIN32
+# ifndef APIENTRY
+#  define APIENTRY
+# endif // APIENTRY
 
 typedef void * HKEY;
 typedef int GUID;
@@ -80,7 +74,7 @@ typedef int HCURSOR;
 typedef int WPARAM;
 typedef int LPARAM;
 
-typedef int     BOOL;
+typedef int BOOL;
 typedef char CHAR;
 typedef unsigned char UCHAR;
 typedef unsigned char BYTE;
@@ -93,7 +87,7 @@ typedef long LONG;
 typedef unsigned long ULONG;
 typedef unsigned char * LPBYTE;
 typedef signed int * LPDWORD;
-typedef char  * LPSTR;
+typedef char * LPSTR;
 
 typedef struct
 {

@@ -86,10 +86,10 @@ extern GAMESPY	gameSpy;
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
 	UBYTE		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
-	STRING		map[128];					// name of multiplayer map being used.
+	char		map[128];					// name of multiplayer map being used.
 	char		version[8];					// version of warzone
 	UBYTE		maxPlayers;					// max players to allow
-	STRING		name[128];					// game name   (to be used)
+	char		name[128];					// game name   (to be used)
 	BOOL		bComputerPlayers;			// Allow computer players
 	BOOL		fog;
 	UDWORD		power;						// power level for arena game
@@ -223,9 +223,9 @@ extern FEATURE			*IdToFeature(UDWORD id,UDWORD player);
 extern DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
 extern DROID_TEMPLATE	*NameToTemplate(CHAR *sName,UDWORD player);
 
-extern STRING *getPlayerName	(UDWORD player);
-extern BOOL setPlayerName		(UDWORD player, STRING *sName);
-extern STRING *getPlayerColourName(SDWORD player);
+extern char *getPlayerName	(UDWORD player);
+extern BOOL setPlayerName		(UDWORD player, char *sName);
+extern char *getPlayerColourName(SDWORD player);
 extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a computer or not.
 extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
@@ -289,10 +289,10 @@ extern BOOL lobbyInitialise		(void);							// for Init.c
 extern BOOL multiShutdown		(void);
 extern BOOL sendLeavingMsg		(void);
 
-extern BOOL hostCampaign		(STRING *sGame, STRING *sPlayer);
-extern BOOL joinCampaign		(UDWORD gameNumber, STRING *playername);
-//extern BOOL hostArena			(STRING *sGame, STRING *sPlayer);
-//extern BOOL joinArena			(UDWORD gameNumber, STRING *playername);
+extern BOOL hostCampaign		(char *sGame, char *sPlayer);
+extern BOOL joinCampaign		(UDWORD gameNumber, char *playername);
+//extern BOOL hostArena			(char *sGame, char *sPlayer);
+//extern BOOL joinArena			(UDWORD gameNumber, char *playername);
 extern void	playerResponding	(void);
 extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);
@@ -312,7 +312,7 @@ extern void modifyResources		(POWER_GEN_FUNCTION* psFunction);
 
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
 
-extern void displayAIMessage	(STRING *pStr, SDWORD from, SDWORD to); //make AI process a message
+extern void displayAIMessage	(char *pStr, SDWORD from, SDWORD to); //make AI process a message
 
 
 /* for multiplayer message stack */
@@ -320,7 +320,7 @@ extern  UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const cha
 extern	BOOL	isMsgStackEmpty(void);
 extern	BOOL	msgStackGetFrom(SDWORD  *psVal);
 extern	BOOL	msgStackGetTo(SDWORD  *psVal);
-extern	BOOL	msgStackGetMsg(STRING  *psVal);
+extern	BOOL	msgStackGetMsg(char  *psVal);
 extern	BOOL	msgStackPop(void);
 extern	SDWORD	msgStackGetCount(void);
 extern	void	msgStackReset(void);

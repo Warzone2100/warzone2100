@@ -84,9 +84,9 @@ SDWORD		playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 
 // -----------------------------------------------------------------------------------------
 BOOL	structHasModule(STRUCTURE *psStruct);
-SDWORD	guessPlayerFromMessage(STRING **str);
-SDWORD	getPlayerFromString(STRING *playerName);
-SDWORD	getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount);
+SDWORD	guessPlayerFromMessage(char **str);
+SDWORD	getPlayerFromString(char *playerName);
+SDWORD	getFirstWord(char *sText, char **sWord, SDWORD *readCount);
 
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
@@ -2863,7 +2863,7 @@ BOOL scrPlaySoundPos(void)
 /* add a text message to the top of the screen for the selected player*/
 BOOL scrShowConsoleText(void)
 {
-	STRING				*pText;
+	char				*pText;
 	SDWORD				player;
 
 	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &player))
@@ -2890,7 +2890,7 @@ BOOL scrShowConsoleText(void)
 /* add a text message to the top of the screen for the selected player*/
 BOOL scrAddConsoleText(void)
 {
-	STRING				*pText;
+	char				*pText;
 	SDWORD				player;
 
 	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &player))
@@ -2921,7 +2921,7 @@ BOOL scrAddConsoleText(void)
 /* add a text message to the top of the screen for the selected player - without clearing whats there*/
 BOOL scrTagConsoleText(void)
 {
-	STRING				*pText;
+	char				*pText;
 	SDWORD				player;
 
 	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &player))
@@ -2988,7 +2988,7 @@ BOOL scrTutorialEnd(void)
 //function to play a full-screen video in the middle of the game for the selected player
 BOOL scrPlayVideo(void)
 {
-	STRING				*pVideo, *pText;
+	char				*pVideo, *pText;
 
 	if (!stackPopParams(2, ST_TEXTSTRING, &pVideo, ST_TEXTSTRING, &pText))
 	{
@@ -3221,7 +3221,7 @@ BOOL scrAnyStructButWallsLeft(void)
 //defines the background audio to play
 BOOL scrPlayBackgroundAudio(void)
 {
-	STRING	*pText;
+	char	*pText;
 	SDWORD	iVol;
 
 	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &iVol))
@@ -3510,7 +3510,7 @@ BOOL scrSetGroupRetreatLeadership(void)
 //start a Mission - the missionType is ignored now - gets it from the level data ***********
 BOOL scrStartMission(void)
 {
-	STRING				*pGame;
+	char				*pGame;
 	SDWORD				missionType;
 	LEVEL_DATASET		*psNewLevel;
 
@@ -6337,7 +6337,7 @@ BOOL scrIsVtol(void)
 BOOL scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
-	STRING			pName[MAX_NAME_SIZE];
+	char			pName[MAX_NAME_SIZE];
 
 	// find ViperLtMGWheels
 	strcpy(pName,"ViperLtMGWheels");
@@ -6398,8 +6398,8 @@ BOOL scrTutorialTemplates(void)
 //compare two strings (0 means they are different)
 BOOL scrStrcmp(void)
 {
-	STRING	*ssval1=NULL;
-	STRING	*ssval2=NULL;
+	char	*ssval1=NULL;
+	char	*ssval2=NULL;
 
 	if (!stackPopParams(2, VAL_STRING, &ssval1, VAL_STRING, &ssval2))
 	{
@@ -6419,7 +6419,7 @@ BOOL scrStrcmp(void)
 /* Output a string to console */
 BOOL scrConsole(void)
 {
-	STRING	*ssval=NULL;
+	char	*ssval=NULL;
 
 	if (!stackPopParams(1, VAL_STRING, &ssval))
 	{
@@ -6460,8 +6460,8 @@ BOOL scrDbgMsgOn(void)
 BOOL scrMsg(void)
 {
 	SDWORD	playerTo,playerFrom;
-	STRING	*ssval=NULL;
-	STRING tmp[255];
+	char	*ssval=NULL;
+	char tmp[255];
 
 	if (!stackPopParams(3, VAL_STRING, &ssval, VAL_INT, &playerFrom, VAL_INT, &playerTo))
 	{
@@ -6496,7 +6496,7 @@ BOOL scrMsg(void)
 
 BOOL scrDbg(void)
 {
-	STRING	*ssval=NULL;
+	char	*ssval=NULL;
 	SDWORD	player;
 
 
@@ -6508,7 +6508,7 @@ BOOL scrDbg(void)
 
 	if(scrDebug[player])
 	{
-		STRING	sTmp[255];
+		char	sTmp[255];
 		sprintf(sTmp,"%d) %s",player,ssval);
 		addConsoleMessage(sTmp,DEFAULT_JUSTIFY);
 	}
@@ -6518,7 +6518,7 @@ BOOL scrDbg(void)
 
 BOOL scrDebugFile(void)
 {
-	STRING	*ssval=NULL;
+	char	*ssval=NULL;
 
 	if (!stackPopParams(1, VAL_STRING, &ssval))
 	{
@@ -9524,7 +9524,7 @@ BOOL scrLoadPlayerAIExperience(void)
 
 
 /* Add a beacon (blip) */
-BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRING * textMsg)
+BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
 {
 	UDWORD			height;
 	MESSAGE			*psMessage;
@@ -9594,7 +9594,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRI
 	return TRUE;
 }
 
-BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, STRING * beaconMsg)
+BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg)
 {
 	if(sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
 	{
@@ -9609,10 +9609,10 @@ BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 }
 
 //prepare viewdata for help blip
-VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY)
+VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 {
 	VIEWDATA			*psViewData;
-	STRING				name[MAX_STR_LENGTH];
+	char				name[MAX_STR_LENGTH];
 	SDWORD				audioID;
 	UDWORD				numText;
 
@@ -9637,7 +9637,7 @@ VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY)
 	name[2] = 'l';
 	name[3] = 'p';
 	name[4] = '\0';
- 	psViewData->pName = (STRING *)MALLOC((strlen(name))+1);
+ 	psViewData->pName = (char *)MALLOC((strlen(name))+1);
 	if (psViewData->pName == NULL)
 	{
 		debug(LOG_ERROR,"prepairHelpViewData() - ViewData Name - Out of memory");
@@ -9647,7 +9647,7 @@ VIEWDATA *HelpViewData(SDWORD sender, STRING *textMsg, UDWORD LocX, UDWORD LocY)
 	strcpy(psViewData->pName,name);
 
 	//allocate space for text strings
-	psViewData->ppTextMsg = (STRING **) MALLOC(sizeof(STRING *));
+	psViewData->ppTextMsg = (char **) MALLOC(sizeof(char *));
 
 	//store text message pointer
 	psViewData->ppTextMsg[0] = textMsg;
@@ -9730,7 +9730,7 @@ MESSAGE * findHelpMsg(UDWORD player, SDWORD sender)
 BOOL scrDropBeacon(void)
 {
 	SDWORD			forPlayer,sender;
-	STRING			*ssval=NULL,ssval2[255];
+	char			*ssval=NULL,ssval2[255];
 	UDWORD			locX,locY,locZ;
 
 	if (!stackPopParams(6, VAL_STRING, &ssval , VAL_INT, &forPlayer,
@@ -9853,7 +9853,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 /* Uses printf_console() for console debug output right now */
 BOOL scrMsgBox(void)
 {
-	STRING	*ssval=NULL;
+	char	*ssval=NULL;
 
 	if (!stackPopParams(1, VAL_STRING, &ssval))
 	{
@@ -9958,7 +9958,7 @@ BOOL scrPursueResearch(void)
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 
-	STRING				sTemp[128];
+	char				sTemp[128];
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
@@ -10188,7 +10188,7 @@ BOOL scrGetPlayerName(void)
 BOOL scrSetPlayerName(void)
 {
 	SDWORD	player;
-	STRING	*sName = NULL;
+	char	*sName = NULL;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_STRING, &sName))
 	{
@@ -10213,11 +10213,11 @@ BOOL scrSetPlayerName(void)
 
 
 
-SDWORD guessPlayerFromMessage(STRING **str)
+SDWORD guessPlayerFromMessage(char **str)
 {
 	SDWORD	player,count=0;
-	STRING	*endOfPlayerList;
-	STRING	playerName[255];
+	char	*endOfPlayerList;
+	char	playerName[255];
 	SDWORD	storage=0;
 	BOOL	bOK=FALSE;
 
@@ -10261,10 +10261,10 @@ SDWORD guessPlayerFromMessage(STRING **str)
 	return storage;		//Must be 0 if no players
 }
 
-SDWORD getPlayerFromString(STRING *playerName)
+SDWORD getPlayerFromString(char *playerName)
 {
 	UDWORD	playerIndex;
-	STRING	sPlayerNumber[255];
+	char	sPlayerNumber[255];
 
 	for( playerIndex=0; playerIndex<MAX_PLAYERS; playerIndex++ )
 	{
@@ -10300,8 +10300,8 @@ SDWORD getPlayerFromString(STRING *playerName)
 
 BOOL scrGetTargetPlayers(void)
 {
-	STRING	*myMsg = NULL,*freeMsg = NULL;
-	STRING	**ssval = NULL;
+	char	*myMsg = NULL,*freeMsg = NULL;
+	char	**ssval = NULL;
 	SDWORD	players=0;
 
 	if (!stackPopParams(1,  VAL_REF | VAL_STRING, &ssval))
@@ -10318,7 +10318,7 @@ BOOL scrGetTargetPlayers(void)
 
 	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
 
-	myMsg = (STRING*)MALLOC(255);
+	myMsg = (char*)MALLOC(255);
 	freeMsg = myMsg;
 
 	strcpy(myMsg,*ssval);
@@ -10347,9 +10347,9 @@ BOOL scrGetTargetPlayers(void)
 
 BOOL scrMatch(void)
 {
-	STRING	*sToParse = NULL, *sToMatch = NULL;
-	STRING	*sOrigToParse = NULL, *sOrigToMatch = NULL;
-	STRING	*wordNeed = NULL, *wordFound = NULL;
+	char	*sToParse = NULL, *sToMatch = NULL;
+	char	*sOrigToParse = NULL, *sOrigToMatch = NULL;
+	char	*wordNeed = NULL, *wordFound = NULL;
 	SDWORD	players=0,readCountParse=0,readCountMatch=0;
 	SDWORD	fieldAssignedParse=0,fieldAssignedMatch=0;
 	BOOL	ok = TRUE,bEndParse=FALSE,bEndMatch=FALSE;
@@ -10380,8 +10380,8 @@ BOOL scrMatch(void)
 	debug(LOG_SCRIPT, "sOrigToParse='%s'", sOrigToParse);
 	debug(LOG_SCRIPT, "sOrigToMatch='%s'", sOrigToMatch);
 
-	wordFound = (STRING*)MALLOC(255);
-	wordNeed = (STRING*)MALLOC(255);
+	wordFound = (char*)MALLOC(255);
+	wordNeed = (char*)MALLOC(255);
 
 	*nResult = -1;
 
@@ -10459,7 +10459,7 @@ BOOL scrMatch(void)
 	return TRUE;
 }
 
-SDWORD getFirstWord(STRING *sText, STRING **sWord, SDWORD *readCount)
+SDWORD getFirstWord(char *sText, char **sWord, SDWORD *readCount)
 {
 	SDWORD	count=0,fieldsAssigned=0;
 
@@ -10520,9 +10520,9 @@ BOOL scrAlliancesLocked(void)
 BOOL scrASSERT(void)
 {
 	BOOL				bExpression;
-	STRING			*sMsg = NULL;
+	char			*sMsg = NULL;
 	SDWORD			player;
-	STRING			sTmp[255];
+	char			sTmp[255];
 
 	if (!stackPopParams(3, VAL_BOOL, &bExpression, VAL_STRING, &sMsg, VAL_INT, &player))
 	{
@@ -10604,7 +10604,7 @@ BOOL scrDebugMenu(void)
 BOOL scrSetDebugMenuEntry(void)
 {
 	SDWORD		index;
-	STRING	*sEntry = NULL;
+	char	*sEntry = NULL;
 	BOOL		bAddingNew = FALSE;
 
 	if (!stackPopParams(2, VAL_STRING, &sEntry, VAL_INT, &index))

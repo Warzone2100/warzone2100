@@ -33,7 +33,7 @@ void strres_error(const char *pMessage,...)
 %name-prefix="strres_"
 
 %union {
-	STRING  *sval;
+	char  *sval;
 }
 
 	/* value tokens */

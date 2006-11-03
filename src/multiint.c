@@ -130,8 +130,8 @@ extern int FEFont;
 
 // widget functions
 BOOL		addMultiBut					(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD width, UDWORD height,UDWORD tipres,UDWORD norm, UDWORD hi,BOOL showmouseover);
-BOOL		addMultiEditBox				(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD tip, STRING tipres[128],UDWORD icon,UDWORD iconid);
-static void addBlueForm					(UDWORD parent,UDWORD id,STRING *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
+BOOL		addMultiEditBox				(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD tip, char tipres[128],UDWORD icon,UDWORD iconid);
+static void addBlueForm					(UDWORD parent,UDWORD id,char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
 void		displayChatEdit				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -198,7 +198,7 @@ extern UWORD backDropBmp[];
 #define myheight 512		//must match what we got now.
 void loadMapPreview(void)
 {
-	STRING			aFileName[256];
+	char			aFileName[256];
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
@@ -730,11 +730,11 @@ void runGameFind(void )
 //			loadMultiStats(sPlayer,&nullStats);
 //			if(NETgetGameFlagsUnjoined(gameNumber,1) == DMATCH)
 //			{
-//				joinArena(gameNumber,(STRING*)sPlayer);
+//				joinArena(gameNumber,(char*)sPlayer);
 //			}
 //			else
 //			{
-				joinCampaign(gameNumber,(STRING*)sPlayer);
+				joinCampaign(gameNumber,(char*)sPlayer);
 //			}
 
 			changeTitleMode(MULTIOPTION);
@@ -787,7 +787,7 @@ void startGameFind(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void addBlueForm(UDWORD parent,UDWORD id,STRING *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
+static void addBlueForm(UDWORD parent,UDWORD id,char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
 {
 	W_FORMINIT	sFormInit;
 	W_LABINIT	sLabInit;
@@ -899,7 +899,7 @@ static void addGameOptions(BOOL bRedo)
 	}
 
 	//just display the game options.
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_PNAME,MCOL0,MROW1, STR_MUL_PLAYERIC,(STRING*) sPlayer,IMAGE_EDIT_PLAYER,MULTIOP_PNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_PNAME,MCOL0,MROW1, STR_MUL_PLAYERIC,(char*) sPlayer,IMAGE_EDIT_PLAYER,MULTIOP_PNAME_ICON);
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_FNAME,MCOL0,MROW4, STR_MUL_FORCEIC, sForceName,IMAGE_EDIT_FORCE,MULTIOP_FNAME_ICON);
 
 
@@ -1859,7 +1859,7 @@ static void processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
 	UDWORD i;
-	STRING	tmp[255];
+	char	tmp[255];
 
 	// host, who is setting up the game
 	if((ingame.bHostSetup && !bHosted))
@@ -2211,13 +2211,13 @@ static void processMultiopWidgets(UDWORD id)
 		widgSetString(psWScreen, MULTIOP_PNAME,sPlayer);
 
 
-		removeWildcards((STRING*)sPlayer);
+		removeWildcards((char*)sPlayer);
 
 		sprintf(tmp,"-> %s",sPlayer);
 		sendTextMessage(tmp,TRUE);
 
-		NETchangePlayerName(NetPlay.dpidPlayer, (STRING*)sPlayer);			// update if joined.
-		loadMultiStats((STRING*)sPlayer,&playerStats);
+		NETchangePlayerName(NetPlay.dpidPlayer, (char*)sPlayer);			// update if joined.
+		loadMultiStats((char*)sPlayer,&playerStats);
 		setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
 		setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
 		break;
@@ -2236,21 +2236,21 @@ static void processMultiopWidgets(UDWORD id)
 		{
 			strcpy(sForceName,widgGetString(psWScreen, MULTIOP_FNAME));
 		}
-		strcpy((STRING*)game.name,widgGetString(psWScreen, MULTIOP_GNAME));	// game name
-		strcpy((STRING*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));	// pname
-		strcpy((STRING*)game.map,widgGetString(psWScreen, MULTIOP_MAP));		// add the name
+		strcpy((char*)game.name,widgGetString(psWScreen, MULTIOP_GNAME));	// game name
+		strcpy((char*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));	// pname
+		strcpy((char*)game.map,widgGetString(psWScreen, MULTIOP_MAP));		// add the name
 
-		removeWildcards((STRING*)sPlayer);
+		removeWildcards((char*)sPlayer);
 		removeWildcards(sForceName);
 
 //		if (game.type == DMATCH)
 //		{
-//			hostArena((STRING*)game.name,(STRING*)sPlayer);
+//			hostArena((char*)game.name,(char*)sPlayer);
 //			bHosted = TRUE;
 //		}
 //		else
 //		{
-			hostCampaign((STRING*)game.name,(STRING*)sPlayer);
+			hostCampaign((char*)game.name,(char*)sPlayer);
 			bHosted = TRUE;
 //		}
 
@@ -2585,12 +2585,12 @@ void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh=0;
 	UDWORD			id,value;//,i;
-	STRING			sTemp[128];
+	char			sTemp[128];
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
 
 	KEY_CODE		k;
-	STRING			str[3];
+	char			str[3];
 
 	processFrontendSnap(FALSE);
 
@@ -2729,14 +2729,14 @@ void runMultiOptions(void)
 			switch(id)
 			{
 			case MULTIOP_PNAME:
-				strcpy((STRING*)sPlayer,sTemp);
+				strcpy((char*)sPlayer,sTemp);
 				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
 
 				sprintf(sTemp," -> %s",sPlayer);
 				sendTextMessage(sTemp,TRUE);
 
-				NETchangePlayerName(NetPlay.dpidPlayer, (STRING*)sPlayer);
-				loadMultiStats((STRING*)sPlayer,&playerStats);
+				NETchangePlayerName(NetPlay.dpidPlayer, (char*)sPlayer);
+				loadMultiStats((char*)sPlayer,&playerStats);
 				setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
 				setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
 				break;
@@ -2876,7 +2876,7 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.packetsPerSec	= INETPACKETS;
 		}
 
-		loadMultiStats((STRING*)sPlayer,&nullStats);
+		loadMultiStats((char*)sPlayer,&nullStats);
 
 	}
 
@@ -2927,7 +2927,7 @@ static void CurrentForce(void)
 	FORCE_MEMBER	*pF;
 
 	W_FORMINIT		sButInit;
-	STRING			aButText[6]; //???
+	char			aButText[6]; //???
 	SDWORD			BufferID;
 
 	widgDelete(psWScreen,FORCE_CURRENT);
@@ -3129,7 +3129,7 @@ void runForceSelect(void)
 	DROID_TEMPLATE	*psTempl;
 	UDWORD			posx,posy;
 	FORCE_MEMBER	*pF;
-	STRING  dir[256];
+	char  dir[256];
 
 	posx = 5;
 	posy = 5;
@@ -3279,7 +3279,7 @@ BOOL startForceSelect(void)
 {
 	W_FORMINIT		sFormInit;
 	W_BARINIT		sBarInit;
-	STRING			dir[256];
+	char			dir[256];
 	DROID_TEMPLATE	*psTempl;
 
 	copyTemplateSet(DEATHMATCHTEMPLATES,FORCEEDITPLAYER);
@@ -3576,7 +3576,7 @@ void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	BOOL Hilight = FALSE;
 	BOOL Down = FALSE;
 	UDWORD	i;
-	STRING	tmp[8];
+	char	tmp[8];
 	UDWORD png;
 
 	i = (int)psWidget->pUserData;
@@ -4103,7 +4103,7 @@ void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y,UDWORD tip, STRING tipres[128],UDWORD icon,UDWORD iconid)
+BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y,UDWORD tip, char tipres[128],UDWORD icon,UDWORD iconid)
 {
 	W_EDBINIT		sEdInit;
 

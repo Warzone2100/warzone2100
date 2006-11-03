@@ -673,7 +673,7 @@ void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext
 		{
 			if ( psDroid->secondaryOrder & (1 << (i + start)) )
 			{
-				Label->aText[cIndex] = (STRING) ('0' + i + 1);
+				Label->aText[cIndex] = (char) ('0' + i + 1);
 				cIndex += 1;
 			}
 		}
@@ -3373,7 +3373,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 
 // Find a token in the specified token list and return it's ID.
 //
-/*SWORD GetTokenID(TOKENID *Tok,STRING *Token)
+/*SWORD GetTokenID(TOKENID *Tok,char *Token)
 {
 	while(Tok->Token!=NULL) {
 		if(strcmp(Tok->Token,Token) == 0) {
@@ -3389,7 +3389,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 
 // Find a token in the specified token list and return it's Index.
 //
-/*SWORD FindTokenID(TOKENID *Tok,STRING *Token)
+/*SWORD FindTokenID(TOKENID *Tok,char *Token)
 {
 	SWORD Index = 0;
 	while(Tok->Token!=NULL) {

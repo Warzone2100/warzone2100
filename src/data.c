@@ -54,7 +54,7 @@ BOOL	bTilesPCXLoaded = FALSE;
 
 // whether a save game is currently being loaded
 BOOL	saveFlag = FALSE;
-extern STRING	aCurrResDir[255];		// Arse
+extern char	aCurrResDir[255];		// Arse
 
 UDWORD	cheatHash[CHEAT_MAXCHEAT];
 
@@ -837,7 +837,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	TEXTUREPAGE *NewTexturePage;
 	iPalette	*psPal;
 	iSprite		*psSprite;
-	STRING		texfile[255];
+	char		texfile[255];
 	SDWORD		i, id;
 //	BOOL		bFound = FALSE;
 
@@ -1196,7 +1196,7 @@ BOOL dataSaveGameLoad(char *pFile, void **ppData)
 // this is also defined in frameresource.c - needs moving to a .h file
 typedef struct
 {
-	const STRING *aType;			// points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
+	const char *aType;			// points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
 	RES_BUFFERLOAD buffLoad;		// routine to process the data for this type
 	RES_FREE release;			// routine to release the data (NULL indicates none)
 	void *ResourceData;			// Linked list of data - set to null initially

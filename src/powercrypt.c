@@ -121,7 +121,7 @@ BOOL pwrcCheckPlayerCryptPower(UDWORD player, UDWORD power)
 void pwrcUpdate(void)
 {
 	SDWORD		i;
-	STRING		aBuff[1024];
+	char		aBuff[1024];
 
 	if (!bMultiPlayer || !NetPlay.bComms)
 	{

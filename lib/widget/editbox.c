@@ -35,7 +35,7 @@ OBJ_HEAP	*psEdbHeap;
 
 									// the other states
 /* Calculate how much of the start of a string can fit into the edit box */
-static void fitStringStart(STRING *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth);
+static void fitStringStart(char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth);
 
 /* Create an edit box widget data structure */
 BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
@@ -133,9 +133,9 @@ void editBoxInitialise(W_EDITBOX *psWidget)
 
 
 /* Insert a character into a text buffer */
-static void insertChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
+static void insertChar(char *pBuffer, UDWORD *pPos, char ch)
 {
-	STRING	*pSrc, *pDest;
+	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
 	if (ch == '\0') return;
@@ -169,9 +169,9 @@ static void insertChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
 
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-static void overwriteChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
+static void overwriteChar(char *pBuffer, UDWORD *pPos, char ch)
 {
-	STRING	*pDest;
+	char	*pDest;
 	UDWORD	len;
 
 	if (ch == '\0') return;
@@ -202,7 +202,7 @@ static void overwriteChar(STRING *pBuffer, UDWORD *pPos, STRING ch)
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-static void putSelection(STRING *pBuffer, UDWORD *pPos)
+static void putSelection(char *pBuffer, UDWORD *pPos)
 {
 	static char* scrap = NULL;
 	int scraplen;
@@ -218,9 +218,9 @@ static void putSelection(STRING *pBuffer, UDWORD *pPos)
 
 
 /* Delete a character to the left of the position */
-static void delCharLeft(STRING *pBuffer, UDWORD *pPos)
+static void delCharLeft(char *pBuffer, UDWORD *pPos)
 {
-	STRING	*pSrc, *pDest;
+	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
 	ASSERT( *pPos <= strlen(pBuffer),
@@ -249,9 +249,9 @@ static void delCharLeft(STRING *pBuffer, UDWORD *pPos)
 
 
 /* Delete a character to the right of the position */
-static void delCharRight(STRING *pBuffer, UDWORD *pPos)
+static void delCharRight(char *pBuffer, UDWORD *pPos)
 {
-	STRING	*pSrc, *pDest;
+	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
 	ASSERT( *pPos <= strlen(pBuffer),
@@ -277,11 +277,11 @@ static void delCharRight(STRING *pBuffer, UDWORD *pPos)
 
 
 /* Calculate how much of the start of a string can fit into the edit box */
-static void fitStringStart(STRING *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth)
+static void fitStringStart(char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth)
 {
 	UDWORD		len;
 	UWORD		printWidth, printChars, width;
-	STRING		*pCurr;
+	char		*pCurr;
 //	PROP_FONT	*psCurrFont;
 
 	len = strlen(pBuffer);
@@ -311,12 +311,12 @@ static void fitStringStart(STRING *pBuffer, UDWORD boxWidth, UWORD *pCount, UWOR
 
 
 /* Calculate how much of the end of a string can fit into the edit box */
-static void fitStringEnd(STRING *pBuffer, UDWORD boxWidth,
+static void fitStringEnd(char *pBuffer, UDWORD boxWidth,
 						 UWORD *pStart, UWORD *pCount, UWORD *pCharWidth)
 {
 	UDWORD		len;
 	UWORD		printWidth, printChars, width;
-	STRING		*pCurr;
+	char		*pCurr;
 //	PROP_FONT	*psCurrFont;
 
 	len = strlen(pBuffer);
@@ -353,7 +353,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 
 	UDWORD	key, len = 0, editState;
 	UDWORD	pos;
-	STRING	*pBuffer;
+	char	*pBuffer;
 	BOOL	done;
 	UWORD	printStart, printWidth, printChars;
 	SDWORD	mx,my;
@@ -568,7 +568,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 
 
 /* Set the current string for the edit box */
-void editBoxSetString(W_EDITBOX *psWidget, STRING *pText)
+void editBoxSetString(W_EDITBOX *psWidget, char *pText)
 {
 	ASSERT( PTRVALID(psWidget, sizeof(W_EDITBOX)),
 		"editBoxSetString: Invalid edit box pointer" );
@@ -681,7 +681,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 	SDWORD		x0,y0,x1,y1, fx,fy, cx,cy;
 //	PROP_FONT	*psCurrFont;
 	int CurrFontID;
-	STRING		ch, *pInsPoint, *pPrint;
+	char		ch, *pInsPoint, *pPrint;
 #if CURSOR_BLINK
 	BOOL		blink;
 #endif

@@ -188,7 +188,7 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 			/* Check for compatible types */
 			if((psTop->type == VAL_INT) || (psTop->type == VAL_BOOL))
 			{
-				STRING *tempstr;
+				char *tempstr;
 				tempstr = (char*)MALLOC(MAXSTRLEN);
 				sprintf(tempstr, "%d", psTop->v.ival);
 
@@ -304,11 +304,11 @@ BOOL stackPopParams(SDWORD numParams, ...)
 			}
 			else		//Integer
 			{
-				STRING *tempstr;
+				char *tempstr;
 				tempstr = (char*)MALLOC(MAXSTRLEN);
 				sprintf(tempstr, "%d", psVal->v.ival);
 
-				*((STRING**)pData) = tempstr;
+				*((char**)pData) = tempstr;
 			}
 		}
 
@@ -335,7 +335,7 @@ BOOL stackPushResult(INTERP_TYPE type, SDWORD data)
 	if(type == VAL_STRING)
 	{
 		psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(255);
-		strcpy(psCurrChunk->aVals[currEntry].v.sval,(STRING*)data);			//store string on stack
+		strcpy(psCurrChunk->aVals[currEntry].v.sval,(char*)data);			//store string on stack
 	}
 	else
 	{

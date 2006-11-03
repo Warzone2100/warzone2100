@@ -83,9 +83,9 @@ static	BOOL		mode;
 static	UDWORD		chosenSlotId;
 
 BOOL				bLoadSaveUp = FALSE;						// true when interface is up and should be run.
-STRING				saveGameName[256];			//the name of the save game to load from the front end
-STRING				sRequestResult[255];						// filename returned;
-STRING				sDelete[MAX_STR_LENGTH];
+char				saveGameName[256];			//the name of the save game to load from the front end
+char				sRequestResult[255];						// filename returned;
+char				sDelete[MAX_STR_LENGTH];
 BOOL				bRequestLoad = FALSE;
 LOADSAVE_MODE		bLoadSaveMode;
 
@@ -141,7 +141,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 // removed hardcoded values!  change with the defines above! -Q
-	static STRING	sSlots[totalslots][totalslotspace];
+	static char	sSlots[totalslots][totalslotspace];
 	char **i, **files;
 
 	mode = bLoad;
@@ -564,7 +564,7 @@ BOOL displayLoadSave(void)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// STRING HANDLER, replaces dos wildcards in a string with harmless chars.
+// char HANDLER, replaces dos wildcards in a string with harmless chars.
 void removeWildcards(char *pStr)
 {
 	UDWORD i;
@@ -636,7 +636,7 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 	UDWORD	y = yOffset+psWidget->y;
 //	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
 //	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
-	STRING  butString[64];
+	char  butString[64];
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 

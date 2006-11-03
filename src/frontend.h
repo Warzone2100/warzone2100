@@ -68,8 +68,8 @@ extern void processFrontendSnap		(BOOL bHideCursor);
 extern void addTopForm				(void);
 extern void addBottomForm			(void);
 extern void addBackdrop				(void);
-extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt,BOOL bAlignLeft,BOOL bGrey);
-extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, STRING *txt);
+extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt,BOOL bAlignLeft,BOOL bGrey);
+extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID );
 
 extern void	displayLogo				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);

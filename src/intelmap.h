@@ -51,7 +51,7 @@ extern void intRemoveIntelMapNoAnim(void);
 //extern void initTextDisplay(MESSAGE *psMessage, UDWORD fontID, UWORD fontColour);
 
 /* scroll the text message from left to right - aka tickertape messages */
-//extern void scrollMessage(STRING *pText, UDWORD startX, UDWORD endX, UDWORD y, UDWORD gap);
+//extern void scrollMessage(char *pText, UDWORD startX, UDWORD endX, UDWORD y, UDWORD gap);
 
 /*sets psCurrentMsg for the Intelligence screen*/
 extern void setCurrentMsg(void);

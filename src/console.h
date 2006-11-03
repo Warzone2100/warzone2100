@@ -32,7 +32,7 @@ BOOL	permanent;
 /* Definition of a message */
 typedef struct	_console_message 
 {
-STRING	text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
+char	text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
 UDWORD	timeAdded;								// When was it added to our list?
 //UDWORD	screenIndex;							// Info for justification
 UDWORD JustifyType;

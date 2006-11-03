@@ -86,13 +86,13 @@ extern void fontSetColour(UBYTE red, UBYTE green, UBYTE blue);
 extern void fontSetCacheColour(UDWORD colour);
 
 /* Print text in the current font at location x,y */
-extern void fontPrint(SDWORD x, SDWORD y, STRING *pFormat, ...);
+extern void fontPrint(SDWORD x, SDWORD y, char *pFormat, ...);
 
 /* Directly print a single font character from the PROP_CHAR struct */
 extern void fontPrintChar(SDWORD x,SDWORD y, PROP_CHAR *psChar, UDWORD height);
 
 /* Return the pixel width of a string */
-extern UDWORD fontPixelWidth(STRING *pString);
+extern UDWORD fontPixelWidth(char *pString);
 
 /* Return the index into the PROP_CHAR array for a character code.
  * If the code isn't printable, return 0 (space).

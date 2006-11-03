@@ -64,7 +64,7 @@ static KEY_MAPPING	*selectedKeyMap;
 // protos
 
 BOOL		runKeyMapEditor		(void);
-static BOOL keyMapToString		(STRING *pStr, KEY_MAPPING *psMapping);
+static BOOL keyMapToString		(char *pStr, KEY_MAPPING *psMapping);
 void		displayKeyMap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 BOOL		startKeyMapEditor	(BOOL first);
 BOOL		saveKeyMap		(void);
@@ -118,7 +118,7 @@ static BOOL pushedKeyCombo(UDWORD subkey)
    //	void (*function)(void);
    //	KEY_ACTION	action;
    //	KEY_STATUS	status;
-   //	STRING	name[255];
+   //	char	name[255];
 
 	// check for
 	// alt
@@ -267,17 +267,17 @@ BOOL runKeyMapEditor(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns key to press given a mapping.
-static BOOL keyMapToString(STRING *pStr, KEY_MAPPING *psMapping)
+static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 {
 	BOOL	onlySub = TRUE;
-	STRING	asciiSub[20],asciiMeta[20];
+	char	asciiSub[20],asciiMeta[20];
 
 	if(psMapping->metaKeyCode!=KEY_IGNORE)
 	{
-		keyScanToString(psMapping->metaKeyCode,(STRING *)&asciiMeta,20);
+		keyScanToString(psMapping->metaKeyCode,(char *)&asciiMeta,20);
 		onlySub = FALSE;
 	}
-	keyScanToString(psMapping->subKeyCode,(STRING *)&asciiSub,20);
+	keyScanToString(psMapping->subKeyCode,(char *)&asciiSub,20);
 
 	if(onlySub)
 	{
@@ -299,7 +299,7 @@ void displayKeyMap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 	UDWORD		w = psWidget->width;
 	UDWORD		h = psWidget->height;
 	KEY_MAPPING *psMapping = (KEY_MAPPING*)psWidget->pUserData;
-	STRING		sKey[MAX_NAME_SIZE];// was just 40
+	char		sKey[MAX_NAME_SIZE];// was just 40
 
 	if(psMapping == selectedKeyMap)
 	{
@@ -495,7 +495,7 @@ BOOL saveKeyMap(void)
 {
 	KEY_MAPPING	*psMapping;
 	SDWORD		count;
-	STRING		name[128];
+	char		name[128];
 	PHYSFS_file *pfile;
 
   // KeyMapPath
@@ -567,7 +567,7 @@ BOOL loadKeyMap(void)
 	KEY_CODE	metaCode;
 	KEY_CODE	subCode;
 	KEY_ACTION	action;
-	STRING		name[128];
+	char		name[128];
 	SDWORD		count;
 	UDWORD		funcmap;
 	char		ver[8];

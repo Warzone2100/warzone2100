@@ -23,7 +23,7 @@ typedef struct _w_editbox
 	WIDGET_BASE;
 
 	UDWORD		state;						// The current edit box state
-	STRING		aText[WIDG_MAXSTR];			// The text in the edit box
+	char		aText[WIDG_MAXSTR];			// The text in the edit box
 //	PROP_FONT	*psFont;					// The font for the edit box
 	int FontID;
 	UWORD		insPos;						// The insertion point in the buffer
@@ -47,7 +47,7 @@ extern void editBoxFree(W_EDITBOX *psWidget);
 extern void editBoxInitialise(W_EDITBOX *psWidget);
 
 /* Set the current string for the edit box */
-extern void editBoxSetString(W_EDITBOX *psWidget, STRING *pText);
+extern void editBoxSetString(W_EDITBOX *psWidget, char *pText);
 
 /* Respond to loss of focus */
 extern void editBoxFocusLost(W_EDITBOX *psWidget);

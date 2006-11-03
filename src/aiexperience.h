@@ -29,7 +29,7 @@ extern	BOOL ReadAISaveData(SDWORD nPlayer);
 extern	BOOL WriteAISaveData(SDWORD nPlayer);
 
 extern	BOOL SetUpInputFile(SDWORD nPlayer);
-extern	BOOL SetUpOutputFile(STRING * pMapName,SDWORD nPlayer);
+extern	BOOL SetUpOutputFile(char * pMapName,SDWORD nPlayer);
 
 extern	BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
 extern	BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);

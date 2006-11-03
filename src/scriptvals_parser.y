@@ -85,7 +85,7 @@ BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 %union {
 	BOOL			bval;
 	INTERP_TYPE		tval;
-	STRING			*sval;
+	char			*sval;
 	UDWORD			vindex;
 	SDWORD			ival;
 	VAR_INIT		sInit;
@@ -207,7 +207,7 @@ var_init:		var_entry TYPE var_value
 					SDWORD			compIndex;
 					DROID_TEMPLATE	*psTemplate;
 					VIEWDATA		*psViewData;
-					STRING			*pString;
+					char			*pString;
 					RESEARCH		*psResearch;
 
 					switch ($2)
@@ -718,7 +718,7 @@ var_value:		BOOLEAN_T
 %%
 
 // Lookup a type
-BOOL scrvLookUpType(STRING *pIdent, INTERP_TYPE *pType)
+BOOL scrvLookUpType(char *pIdent, INTERP_TYPE *pType)
 {
 	TYPE_SYMBOL		*psCurr;
 
@@ -736,7 +736,7 @@ BOOL scrvLookUpType(STRING *pIdent, INTERP_TYPE *pType)
 
 
 // Lookup a variable identifier
-BOOL scrvLookUpVar(STRING *pIdent, UDWORD *pIndex)
+BOOL scrvLookUpVar(char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
@@ -760,7 +760,7 @@ BOOL scrvLookUpVar(STRING *pIdent, UDWORD *pIndex)
 
 
 // Lookup an array identifier
-BOOL scrvLookUpArray(STRING *pIdent, UDWORD *pIndex)
+BOOL scrvLookUpArray(char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 

@@ -141,10 +141,10 @@ iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY];
 
 BOOL	initMiscImds( void )
 {
-	STRING		facName[] = "MINUM0.pie";
-	STRING		cybName[] = "MICNUM0.pie";
-	STRING		vtolName[] = "MIVNUM0.pie";
-	STRING		pieNum[2];
+	char		facName[] = "MINUM0.pie";
+	char		cybName[] = "MICNUM0.pie";
+	char		vtolName[] = "MIVNUM0.pie";
+	char		pieNum[2];
 	UDWORD		i;
 
 	/* Do the new loading system */

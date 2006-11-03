@@ -110,13 +110,13 @@ UDWORD					aDefaultECM[MAX_PLAYERS];
 UDWORD					aDefaultRepair[MAX_PLAYERS];
 
 #ifdef HASH_NAMES
-static UWORD setIconIDFromHashedName(STRING *pIconName, UDWORD NameHash);
+static UWORD setIconIDFromHashedName(char *pIconName, UDWORD NameHash);
 #else
 //set the iconID based on the name read in in the stats
-static UWORD setIconID(STRING *pIconName, STRING *pName);
+static UWORD setIconID(char *pIconName, char *pName);
 #endif
 
-static COMP_BASE_STATS * getComponentDetails(STRING *pName, STRING *pCompName);
+static COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName);
 static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pOldComponent,
 					  UBYTE player);
 static BOOL checkResearchName(RESEARCH *psRes, UDWORD numStats);
@@ -270,10 +270,10 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
     COMP_BASE_STATS     *psComp;
 	SDWORD				structID;
 	UDWORD		        researchCount = 0,i,keyTopic, techCode, resPoints;
-	STRING		        ResearchName[MAX_NAME_SIZE];
-	STRING		        msgName[MAX_STR_SIZE], iconID[MAX_NAME_SIZE];
-	STRING		        imdName[MAX_NAME_SIZE],	imdName2[MAX_NAME_SIZE];
-	STRING		        structName[MAX_NAME_SIZE], compName[MAX_NAME_SIZE],
+	char		        ResearchName[MAX_NAME_SIZE];
+	char		        msgName[MAX_STR_SIZE], iconID[MAX_NAME_SIZE];
+	char		        imdName[MAX_NAME_SIZE],	imdName2[MAX_NAME_SIZE];
+	char		        structName[MAX_NAME_SIZE], compName[MAX_NAME_SIZE],
                         compType[MAX_STR_SIZE];
 
 	//reserve the start of the data
@@ -792,7 +792,7 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 {
 	char				*pStartPRData;
 	UDWORD				NumToAlloc = 0, i;
-	STRING				ResearchName[MAX_NAME_SIZE], PRName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_NAME_SIZE], PRName[MAX_NAME_SIZE];
 	//UBYTE				incR, incPR;
     UWORD				incR, incPR;
 	RESEARCH			*pResearch = asResearch, *pPRResearch = asResearch;
@@ -908,7 +908,7 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 {
 	char				*pStartArteData;
 	UDWORD				NumToAlloc = 0, i;
-	STRING				ResearchName[MAX_NAME_SIZE], ArteName[MAX_NAME_SIZE],
+	char				ResearchName[MAX_NAME_SIZE], ArteName[MAX_NAME_SIZE],
 						TypeName[MAX_NAME_SIZE];
 	UDWORD				incR;
 	RESEARCH			*pResearch = asResearch;
@@ -1069,7 +1069,7 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 {
 	char				*pStartStructData;
 	UDWORD				NumToAlloc = 0, i;
-	STRING				ResearchName[MAX_NAME_SIZE], StructureName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_NAME_SIZE], StructureName[MAX_NAME_SIZE];
 	//UBYTE				incR;
     UWORD				incR;
     UWORD               incS;
@@ -1238,7 +1238,7 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 {
 	char				*pStartFunctionData;
 	UDWORD				NumToAlloc = 0, i;
-	STRING				ResearchName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
 	UDWORD				incR, incF;
 	RESEARCH			*pResearch = asResearch;
 	FUNCTION			**pFunction = asFunctions;
@@ -2393,7 +2393,7 @@ RESEARCH * getResearchForMsg(VIEWDATA *pViewData)
 
 #ifdef HASH_NAMES
 
-static UWORD setIconIDFromHashedName(STRING *pIconName, UDWORD NameHash)
+static UWORD setIconIDFromHashedName(char *pIconName, UDWORD NameHash)
 {
 	IMAGEDEF *Image;
 	UWORD i;
@@ -2420,7 +2420,7 @@ static UWORD setIconIDFromHashedName(STRING *pIconName, UDWORD NameHash)
 #else
 
 //set the iconID based on the name read in in the stats
-static UWORD setIconID(STRING *pIconName, STRING *pName)
+static UWORD setIconID(char *pIconName, char *pName)
 {
 	//compare the names with those created in 'Framer'
 	if (!strcmp(pIconName, "IMAGE_ROCKET"))
@@ -2671,7 +2671,7 @@ SDWORD	mapIconToRID(UDWORD iconID)
 
 
 /* returns a pointer to a component based on the name - used to load in the research */
-COMP_BASE_STATS * getComponentDetails(STRING *pName, STRING *pCompName)
+COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 {
 	UDWORD				stat, size, quantity, address, inc;
 	COMP_BASE_STATS		*pArtefact;
@@ -2780,7 +2780,7 @@ COMP_BASE_STATS * getComponentDetails(STRING *pName, STRING *pCompName)
 }
 
 //return a pointer to a research topic based on the name
-RESEARCH * getResearch(STRING *pName, BOOL resName)
+RESEARCH * getResearch(char *pName, BOOL resName)
 {
 	UDWORD inc;
 
