@@ -303,7 +303,7 @@ pause					return PAUSE;
 void					{ scr_lval.tval = VAL_VOID; return _VOID; }
 VOID					{ scr_lval.tval = VAL_VOID; return _VOID; }
 string					{ scr_lval.tval = VAL_STRING; return TYPE; }
-char					{ scr_lval.tval = VAL_STRING; return TYPE; }
+STRING					{ scr_lval.tval = VAL_STRING; return TYPE; }
 bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 BOOL					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 int						{ scr_lval.tval = VAL_INT; return TYPE; }
