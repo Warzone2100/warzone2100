@@ -1657,7 +1657,6 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %token INITIALISE
 %token LINK
 %token REF
-%token FUNCTION
 %token RET
 %token _VOID
 
