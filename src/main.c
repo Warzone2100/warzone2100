@@ -90,31 +90,6 @@ char	UserMusicPath[MAX_PATH];
 void debug_callback_stderr( void**, const char * );
 void debug_callback_win32debug( void**, const char * );
 
-/*
-BOOL checkDisableLobby(void)
-{
-	BOOL	disable;
-
-	disable = FALSE;
-	if(!openWarzoneKey())
-	{
-		return FALSE;
-	}
-
-	if (!getWarzoneKeyNumeric("DisableLobby",(DWORD*)&disable))
-	{
-		return FALSE;
-	}
-
-	if (!closeWarzoneKey())
-	{
-		return FALSE;
-	}
-
-	return disable;
-}
-*/
-
 static BOOL inList( char * list[], const char * item )
 {
 	int i = 0;
@@ -389,9 +364,8 @@ int main(int argc, char *argv[])
 	BOOL			quit = FALSE;
 	BOOL			Restart = FALSE;
 	BOOL			paused = FALSE;//, firstTime = TRUE;
-	BOOL			bVidMem = FALSE;
-	SDWORD			dispBitDepth = DISP_BITDEPTH;
 	SDWORD			introVideoControl = 3;
+	UDWORD			dispBitDepth = 0;
 	int			loopStatus = 0;
 	iColour*		psPaletteBuffer;
 	UDWORD			pSize;
@@ -477,7 +451,6 @@ init://jump here from the end if re_initialising
 	debug(LOG_MAIN, "reinitializing");
 
 	// find out if the lobby stuff has been disabled
-//	bDisableLobby = checkDisableLobby();
 	if (!bDisableLobby &&
 		!lobbyInitialise())			// ajl. Init net stuff. Lobby can modify startup conditions like commandline.
 	{
@@ -486,12 +459,7 @@ init://jump here from the end if re_initialising
 
 	reInit = FALSE;//just so we dont restart again
 
-	bVidMem = FALSE;
-	dispBitDepth = DISP_BITDEPTH;
-
-//	frameDDEnumerate();
-
-	if (!frameInitialise(NULL, "Warzone 2100", DISP_WIDTH,DISP_HEIGHT,dispBitDepth, war_getFullscreen(), bVidMem))
+	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(),pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{
 		return -1;
 	}
@@ -624,20 +592,6 @@ init://jump here from the end if re_initialising
 		while (!Restart)
 		{
 			frameRet = frameUpdate();
-
-/* Unused...
-			if (pie_GetRenderEngine() == ENGINE_OPENGL)	//Was ENGINE_D3D -Q
-			{
-				if ( frameRet == FRAME_SETFOCUS )
-				{
-//					D3DTestCooperativeLevel( TRUE );
-				}
-				else
-				{
-//					D3DTestCooperativeLevel( FALSE );
-				}
-			}
-*/
 
 			switch (frameRet)
 			{

@@ -551,7 +551,7 @@ PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 {
 	static PLAYERSTATS stat;
 	DWORD		statSize = sizeof(PLAYERSTATS);
-	DPID		playerDPID;
+	UDWORD		playerDPID;
 
 	playerDPID = player2dpid[player];
 
@@ -571,7 +571,7 @@ PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 // Set Player's stats
 BOOL setMultiStats(DWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 {
-	DPID	playerDPID = (DPID) dp;
+	UDWORD	playerDPID = (UDWORD) dp;
 
 	if(bLocal)
 	{

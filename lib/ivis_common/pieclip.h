@@ -32,7 +32,10 @@
 void pie_Set2DClip(int x0, int y0, int x1, int y1);
 int	pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip, BOOL bSpecular);
 int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PIEVERTEX *clipped, BOOL bSpecular);
-BOOL	pie_SetVideoBuffer(UDWORD width, UDWORD height);
+BOOL	pie_SetVideoBufferDepth(UDWORD depth);
+BOOL	pie_SetVideoBufferWidth(UDWORD width);
+BOOL	pie_SetVideoBufferHeight(UDWORD height);
+UDWORD	pie_GetVideoBufferDepth( void );
 UDWORD	pie_GetVideoBufferWidth( void );
 UDWORD	pie_GetVideoBufferHeight( void );
 

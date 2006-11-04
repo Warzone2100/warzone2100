@@ -39,8 +39,8 @@ char* master_server = "warzone2100.kicks-ass.org";
 static BOOL allow_joining = FALSE;
 
 static void NETallowJoining(void);
-BOOL MultiPlayerJoin(DPID dpid);
-BOOL MultiPlayerLeave(DPID dpid);
+BOOL MultiPlayerJoin(UDWORD dpid);
+BOOL MultiPlayerLeave(UDWORD dpid);
 
 // ////////////////////////////////////////////////////////////////////////
 // Variables
@@ -345,14 +345,14 @@ void resize_global_player_data(unsigned int i, unsigned int size) {
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetLocalPlayerData(DPID dpid,void *pData, DWORD *pSize)
+BOOL NETgetLocalPlayerData(UDWORD dpid, void *pData, DWORD *pSize)
 {
 	memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetGlobalPlayerData(DPID dpid,void *pData, DWORD *pSize)
+BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData, DWORD *pSize)
 {
 	if(!NetPlay.bComms)
 	{
@@ -365,7 +365,7 @@ BOOL NETgetGlobalPlayerData(DPID dpid,void *pData, DWORD *pSize)
 	return TRUE;
 }
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetLocalPlayerData(DPID dpid,void *pData, DWORD size)
+BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, DWORD size)
 {
 	local_player_data[dpid].size = size;
 	resize_local_player_data(dpid, size);
@@ -374,7 +374,7 @@ BOOL NETsetLocalPlayerData(DPID dpid,void *pData, DWORD size)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetGlobalPlayerData(DPID dpid, void *pData, DWORD size)
+BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, DWORD size)
 {
 	if(!NetPlay.bComms)
 	{
@@ -496,7 +496,7 @@ BOOL NETinit(BOOL bFirstCall)
 
 // ////////////////////////////////////////////////////////////////////////
 // SHUTDOWN THE CONNECTION.
-HRESULT NETshutdown(void)
+BOOL NETshutdown(void)
 {
 	unsigned int i;
 	debug( LOG_NET, "NETshutdown" );
@@ -516,7 +516,7 @@ HRESULT NETshutdown(void)
 
 // ////////////////////////////////////////////////////////////////////////
 //close the open game..
-HRESULT NETclose(void)
+BOOL NETclose(void)
 {
 	unsigned int i;
 
@@ -655,7 +655,7 @@ UDWORD NETgetRecentPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-BOOL NETsend(NETMSG *msg, DPID player, BOOL guarantee)
+BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 {
 	unsigned int size;
 
@@ -921,11 +921,11 @@ receive_message:
 				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
 				    && connected_bsocket[pMsg->destination] != NULL
 				    && connected_bsocket[pMsg->destination]->socket != NULL) {
-					//printf("Reflecting message to DPID %i\n", pMsg->destination);
+					//printf("Reflecting message to UDWORD %i\n", pMsg->destination);
 					SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket,
 							pMsg, size);
 				} else {
-					//printf("Cannot reflect message %i to DPID %i\n", pMsg->type, pMsg->destination);
+					//printf("Cannot reflect message %i to UDWORD %i\n", pMsg->type, pMsg->destination);
 				}
 
 				goto receive_message;
@@ -990,7 +990,7 @@ BOOL NETfindProtocol(BOOL Lob)
 
 // send file. it returns % of file sent. when 100 it's complete. call until it returns 100.
 
-UBYTE NETsendFile(BOOL newFile, CHAR *fileName, DPID player)
+UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
 {
 	static PHYSFS_sint64	fileSize,currPos;
 	static PHYSFS_file	*pFileHandle;
@@ -1231,7 +1231,7 @@ static void NETallowJoining(void) {
 	}
 }
 
-BOOL NEThostGame(LPSTR SessionName, LPSTR PlayerName,
+BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		 DWORD one, DWORD two, DWORD three, DWORD four,
 		 UDWORD plyrs)	// # of players.
 {
@@ -1397,7 +1397,7 @@ BOOL NETfindGame(BOOL async)	/// may (not) want to use async here...
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
-BOOL NETjoinGame(UDWORD gameNumber, LPSTR playername)
+BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
 	char* name;
 	IPaddress ip;

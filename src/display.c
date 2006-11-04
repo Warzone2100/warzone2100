@@ -1177,7 +1177,7 @@ void processMouseClickInput(void)
 			}
 
 			pie_SetMouse(IntImages,MPointerImageIDs[arnMPointers[item][selection]-IDC_DEST]);
-			frameSetCursorFromRes((WORD)arnMPointers[item][selection]);
+			frameSetCursorFromRes((SWORD)arnMPointers[item][selection]);
 		}
 	}
 	else

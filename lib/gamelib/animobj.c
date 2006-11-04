@@ -42,7 +42,7 @@ static	ANIMOBJDIEDTESTFUNC		g_pDiedFunc;
 /***************************************************************************/
 /* local functions */
 
-static UINT		animObj_HashFunction( int iKey1, int iKey2 );
+static UDWORD		animObj_HashFunction( int iKey1, int iKey2 );
 static void		animObj_HashFreeElementFunc( void * psElement );
 
 /***************************************************************************/
@@ -98,7 +98,7 @@ animObj_SetDoneFunc( ANIM_OBJECT *psObj, ANIMOBJDONEFUNC pDoneFunc )
  */
 /***************************************************************************/
 
-static UINT
+static UDWORD
 animObj_HashFunction( int iKey1, int iKey2 )
 {
 	return (iKey1 + iKey2)%ANIM_HASH_TABLE_SIZE;

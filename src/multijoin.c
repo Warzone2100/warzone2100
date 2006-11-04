@@ -60,9 +60,9 @@ BOOL sendVersionCheck	(void);
 BOOL recvVersionCheck	(NETMSG *pMsg);
 BOOL intDisplayMultiJoiningStatus (UBYTE joinCount);
 void clearPlayer		(UDWORD player,BOOL quietly,BOOL removeOil);// what to do when a arena player leaves.
-BOOL MultiPlayerLeave	(DPID dp);								// remote player has left.
-BOOL MultiPlayerJoin	(DPID dp);								// remote player has just joined.
-void setupNewPlayer		(DPID dpid,UDWORD player);				// stuff to do when player joins.
+BOOL MultiPlayerLeave	(UDWORD dp);								// remote player has left.
+BOOL MultiPlayerJoin	(UDWORD dp);								// remote player has just joined.
+void setupNewPlayer		(UDWORD dpid, UDWORD player);				// stuff to do when player joins.
 //BOOL multiPlayerRequest	(NETMSG *pMsg);							// remote player has requested info
 //BOOL UpdateClient		(DPID dest, UDWORD playerToSend);		// send information to a remote player
 //BOOL ProcessDroidOrders	(void);									// ince setup, this player issues each droid order.
@@ -91,7 +91,7 @@ BOOL recvVersionCheck(NETMSG *pMsg)
 {
 	UDWORD	extCheat[CHEAT_MAXCHEAT];
 	UBYTE	pl;
-	CHAR	sTmp[128];
+	char	sTmp[128];
 	NetGet(pMsg,1,extCheat);
 
 	if( memcmp(extCheat,cheatHash, CHEAT_MAXCHEAT*4) != 0)
@@ -129,7 +129,7 @@ FAILURE:
 BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 {
 	UDWORD			x,y,w,h;
-	CHAR			sTmp[6];
+	char			sTmp[6];
 
 	w = RET_FORMWIDTH;
 	h = RET_FORMHEIGHT;
@@ -248,7 +248,7 @@ void resetMultiVisibility(UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
-BOOL MultiPlayerLeave( DPID dp)
+BOOL MultiPlayerLeave( UDWORD dp)
 {
 	UDWORD	i = 0;
 	char	buf[255];
@@ -289,7 +289,7 @@ BOOL MultiPlayerLeave( DPID dp)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-BOOL MultiPlayerJoin(DPID dpid)
+BOOL MultiPlayerJoin(UDWORD dpid)
 {
 	UDWORD i;
 
@@ -353,7 +353,7 @@ BOOL MultiPlayerJoin(DPID dpid)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Setup Stuff for a new player.
-void setupNewPlayer(DPID dpid,UDWORD player)
+void setupNewPlayer(UDWORD dpid, UDWORD player)
 {
 	UDWORD i;//,col;
 	char buf[255];

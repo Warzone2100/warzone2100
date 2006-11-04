@@ -314,7 +314,7 @@ BOOL getWarzoneKeyString( const char *pName, char *pString )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL getWarzoneKeyBinary( char *pName, UCHAR *pData, UDWORD *pSize )
+BOOL getWarzoneKeyBinary( char *pName, UBYTE *pData, UDWORD *pSize )
 {
 	return FALSE;
 }

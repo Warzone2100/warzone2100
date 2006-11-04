@@ -92,7 +92,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	// gamma
 	if (getWarzoneKeyNumeric("gamma", &val))
 	{
-		gammaValue = val / 20.0f;
+		gammaValue = (float)val / 20.0f;
 		if (gammaValue < 0.5f)
 			gammaValue = 0.5f;
 		pie_SetGammaValue(gammaValue);
@@ -103,7 +103,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		if (gammaValue < 0.5f)
 			gammaValue = 0.5f;
 		pie_SetGammaValue(gammaValue);
-		setWarzoneKeyNumeric("gamma", gammaValue);
+		setWarzoneKeyNumeric("gamma", gammaValue * 20);
 	}
 
 	// //////////////////////////
@@ -481,7 +481,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 BOOL loadRenderMode(void)
 {
 	char str[32];
-	DWORD val;
+	UDWORD val;
 	unsigned int w, h;
 
 	if( !openWarzoneKey() ) {
@@ -496,8 +496,12 @@ BOOL loadRenderMode(void)
 	// note that we only do this if we havent changed renderer..
 	if( getWarzoneKeyString("resolution", str)
 		&& sscanf(str, "%ix%i", &w, &h) == 2 ) {
-			pie_SetVideoBuffer(w, h);
+			pie_SetVideoBufferWidth(w);
+			pie_SetVideoBufferHeight(h);
 	}
+
+	if ( getWarzoneKeyNumeric("bpp", &val) )
+		pie_SetVideoBufferDepth(val);
 
 	return closeWarzoneKey();
 }
@@ -528,6 +532,7 @@ BOOL saveConfig(void)
 			      pie_GetVideoBufferWidth(),
 				 pie_GetVideoBufferHeight());
 		setWarzoneKeyString("resolution", buf);
+		setWarzoneKeyNumeric("bpp", pie_GetVideoBufferDepth());
 	}
 
 	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());

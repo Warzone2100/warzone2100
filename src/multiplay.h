@@ -119,7 +119,7 @@ typedef struct {
 
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 
-	CHAR		phrases[5][255];					// 5 favourite text messages.
+	char		phrases[5][255];					// 5 favourite text messages.
 } MULTIPLAYERINGAME, *LPMULTIPLAYERINGAME;
 
 
@@ -221,7 +221,7 @@ extern STRUCTURE		*IdToStruct	(UDWORD id,UDWORD player);
 extern BOOL				IdToDroid	(UDWORD id, UDWORD player, DROID **psDroid);
 extern FEATURE			*IdToFeature(UDWORD id,UDWORD player);
 extern DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
-extern DROID_TEMPLATE	*NameToTemplate(CHAR *sName,UDWORD player);
+extern DROID_TEMPLATE	*NameToTemplate(const char *sName,UDWORD player);
 
 extern char *getPlayerName	(UDWORD player);
 extern BOOL setPlayerName		(UDWORD player, char *sName);

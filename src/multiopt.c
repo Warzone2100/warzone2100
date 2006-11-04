@@ -34,14 +34,6 @@
 #include "multigifts.h"
 #include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
-// ////////////////////////////////////////////////////////////////////////////
-// GUID for warzone lobby and MPATH stuff.  i hate this stuff.
-#ifdef WIN32		//Not really (going to be) used. -Qamly
-#include <initguid.h>
-//old guid {7B706E40-5A7E-11d1-94F6-006097B8260B}"
-DEFINE_GUID(WARZONEGUID,0x48ab0b01,0xfec0,0x11d1,0x98,0xc,0x0,0xa0,0x24,0x38,0x70,0xa8);
-// also change S_WARZONEGUID in multiplay.h
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -53,7 +45,7 @@ extern char	buildTime[8];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
 
-void		sendOptions			(DPID dest,UDWORD player);
+void		sendOptions			(UDWORD dest, UDWORD player);
 void		recvOptions			(NETMSG *pMsg);
 //static BOOL dMatchInit			(void);
 static BOOL campInit			(void);
@@ -78,7 +70,7 @@ BOOL		multiGameShutdown	(void);
 
 // send complete game info set!
 // dpid == 0 for no new players.
-void sendOptions(DPID dest,UDWORD play)
+void sendOptions(UDWORD dest, UDWORD play)
 {
 	NETMSG m;
 	UBYTE checkval;
@@ -129,7 +121,7 @@ void sendOptions(DPID dest,UDWORD play)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static BOOL checkGameWdg(CHAR *nm)
+static BOOL checkGameWdg(const char *nm)
 {
 	LEVEL_DATASET *lev;
 
@@ -157,13 +149,13 @@ static BOOL checkGameWdg(CHAR *nm)
 void recvOptions(NETMSG *pMsg)
 {
 	UDWORD	pos=0,play,id;
-	DPID	newPl;
+	UDWORD	newPl;
 	UBYTE	checkval;
 
 
 	NetGet(pMsg,0,game);									// get details.
 	pos += sizeof(game);
-	if(strncmp((CHAR*)game.version,buildTime,8) != 0)
+	if(strncmp((char*)game.version,buildTime,8) != 0)
 	{
 
 #ifndef DEBUG
@@ -591,7 +583,7 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 	}
 	memcpy(psTempl, psNew, sizeof(DROID_TEMPLATE));
 
-	psTempl->pName = (CHAR*)&psTempl->aName;
+	psTempl->pName = (char*)&psTempl->aName;
 	strncpy(psTempl->aName, psNew->aName,DROID_MAXNAME);
 	psTempl->pName[DROID_MAXNAME-1]=0;
 
@@ -643,7 +635,7 @@ BOOL copyTemplateSet(UDWORD from,UDWORD to)
 BOOL multiTemplateSetup(void)
 {
 	UDWORD player, pcPlayer = 0;
-	CHAR			sTemp[256];
+	char			sTemp[256];
 
 
 	if(game.type == CAMPAIGN && game.base == CAMP_WALLS)
@@ -892,7 +884,7 @@ static BOOL dMatchInit()
 	NETMSG	msg;
 	UDWORD	player;
 	BOOL	resourceFound = FALSE;
-	CHAR	sTemp[256];
+	char	sTemp[256];
 
 	turnOffMultiMsg(TRUE);
 
@@ -981,7 +973,7 @@ static BOOL campInit(void)
 		memset(newPlayerArray,1,MAX_PLAYERS * sizeof(newPlayerArray[0]));		//'1' for humans
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			if(game.skDiff[i] < UBYTE_MAX )		//slot with enabled or disabled AI 
+			if(game.skDiff[i] < UBYTE_MAX )		//slot with enabled or disabled AI
 			{
 				//find first unused slot
 				for(j=lastAI;j<MAX_PLAYERS && isHumanPlayer(j);j++);	//skip humans

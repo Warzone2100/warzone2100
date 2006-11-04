@@ -10,11 +10,11 @@
 extern BOOL sendVersionCheck			(void);
 extern BOOL recvVersionCheck			(NETMSG *pMsg);
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
-extern BOOL MultiPlayerLeave			(DPID dp);						// A player has left the game.
-extern BOOL MultiPlayerJoin				(DPID dp);						// A Player has joined the game.
-extern void setupNewPlayer				(DPID dpid,UDWORD player);		// stuff to do when player joins.
+extern BOOL MultiPlayerLeave			(UDWORD dp);						// A player has left the game.
+extern BOOL MultiPlayerJoin				(UDWORD dp);						// A Player has joined the game.
+extern void setupNewPlayer				(UDWORD dpid, UDWORD player);		// stuff to do when player joins.
 //extern BOOL UpdateClient				(DPID dest, UDWORD playerToSend);// send info about another player
-extern void clearPlayer					(UDWORD player,BOOL quietly,BOOL removeOil);// wipe a player off the face of the earth.
+extern void clearPlayer					(UDWORD player, BOOL quietly, BOOL removeOil);// wipe a player off the face of the earth.
 //extern BOOL ProcessDroidOrders			(void);
 //extern BOOL recvFeatures				(NETMSG *pMsg);
 //extern UDWORD							arenaPlayersReceived;

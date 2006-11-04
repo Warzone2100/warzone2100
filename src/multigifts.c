@@ -400,7 +400,7 @@ void requestAlliance(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio)
 
 void breakAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 {
-	CHAR	tm1[128];
+	char	tm1[128];
 	if(alliances[p1][p2] == ALLIANCE_FORMED)
 	{
 		strcpy(tm1,getPlayerName(p1));
@@ -423,7 +423,7 @@ void breakAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification)
 {
 	DROID	*psDroid;
-	CHAR	tm1[128];
+	char	tm1[128];
 	UBYTE	i;
 
 	// dont add message if already allied,
@@ -1088,7 +1088,7 @@ BOOL deathmatchCheck(void)
 	SDWORD			maxSc;
 	static BOOL		gameComplete=FALSE;
 	static UDWORD	lastCheck=0;
-	CHAR			sTemp[256];
+	char			sTemp[256];
 
 	// respawn check
 	if(apsDroidLists[selectedPlayer] == NULL)

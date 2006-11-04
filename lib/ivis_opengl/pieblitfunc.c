@@ -26,7 +26,7 @@
 #include "piematrix.h"
 #include "screen.h"
 
-extern BOOL dtm_LoadRadarSurface(BYTE* radarBuffer);
+extern BOOL dtm_LoadRadarSurface(UBYTE* radarBuffer);
 extern SDWORD dtm_GetRadarTexImageSize(void);
 
 /***************************************************************************/
@@ -530,7 +530,7 @@ void pie_ResetBackDrop(void)
 
 void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX) {
 	UDWORD	chooser0,chooser1;
-	CHAR	backd[128];
+	char	backd[128];
 
 	//randomly load in a backdrop piccy.
 	srand((unsigned)time( NULL ) );

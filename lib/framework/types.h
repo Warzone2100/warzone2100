@@ -41,58 +41,13 @@ typedef Sint32 SDWORD;
 
 #ifndef WIN32
 
-# define MAKELONG(low,high)     ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
-
-# define WARZONEGUID 0
-# define VER_PLATFORM_WIN32_WINDOWS 1
-
-# define DRIVE_CDROM  5
-# define INVALID_HANDLE_VALUE       0
-
-# define REG_OPTION_NON_VOLATILE       0
-# define KEY_ALL_ACCESS       0
-# define ERROR_SUCCESS       0
-# define REG_DWORD       0
-# define REG_SZ       0
-# define REG_BINARY       0
-# define HKEY_LOCAL_MACHINE       0
-
-# ifndef APIENTRY
-#  define APIENTRY
-# endif // APIENTRY
-
-typedef void * HKEY;
-typedef int GUID;
-typedef void * LPGUID;
-typedef int CRITICAL_SECTION;
-typedef int HWND;
-typedef void * HANDLE;
-typedef int HINSTANCE;
-typedef int HRESULT;
-typedef int LRESULT;
-typedef int HCURSOR;
-typedef int WPARAM;
-typedef int LPARAM;
-
 typedef int BOOL;
-typedef char CHAR;
-typedef unsigned char UCHAR;
-typedef unsigned char BYTE;
-typedef short SHORT;
-typedef unsigned short USHORT;
-typedef signed short WORD;
-typedef unsigned int UINT;
-typedef signed int DWORD;
-typedef long LONG;
-typedef unsigned long ULONG;
-typedef unsigned char * LPBYTE;
-typedef signed int * LPDWORD;
-typedef char * LPSTR;
-
-typedef struct
-{
-    CHAR      cFileName[260];
-} WIN32_FIND_DATA;
+typedef SWORD SHORT;
+typedef UWORD USHORT;
+typedef UDWORD UINT;
+typedef SDWORD DWORD;
+typedef SDWORD LONG;
+typedef UDWORD ULONG;
 
 typedef struct {
   UBYTE peRed;
@@ -109,11 +64,6 @@ typedef struct
 
 #endif /* !WIN32 */
 
-#ifndef INC_DIRECTX
-
-typedef int DPID;
-
-#endif
 
 /* Numeric size defines */
 #define UBYTE_MAX	0xff

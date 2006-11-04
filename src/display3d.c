@@ -4786,7 +4786,7 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	UDWORD renderFlag;
 	iPoint offset;
 	PIEVERTEX aVrts[3];
-	BYTE oldColours[4] = { 0, 0, 0, 0 };
+	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
 	SDWORD zone;
@@ -5794,7 +5794,7 @@ void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		pos.z = centerY - yDif;
 		pos.y = map_Height(pos.x,pos.z)+ 16;	// 64 up to get to base of spire
 		effectGiveAuxVar(80);	// half normal plasma size...
-		
+
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
 }

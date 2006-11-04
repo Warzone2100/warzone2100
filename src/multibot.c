@@ -62,7 +62,7 @@ BOOL		recvGroupOrder		(NETMSG *pMsg);
 static void ProcessDroidOrder	(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype,UDWORD destid);
 BOOL		SendDestroyDroid	(DROID  *pD);
 BOOL		recvDestroyDroid	(NETMSG *pMsg);
-BOOL		sendWholeDroid		(DROID  *pD, DPID dest);
+BOOL		sendWholeDroid		(DROID  *pD, UDWORD dest);
 BOOL		receiveWholeDroid	(NETMSG *pMsg);
 BOOL		sendRequestDroid	(UDWORD droidId);
 BOOL		recvRequestDroid	(NETMSG *pMsg);
@@ -1079,7 +1079,7 @@ BOOL recvDestroyDroid(NETMSG *pMsg)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // stuff for sending the WHOLE of a droid!
-BOOL sendWholeDroid(DROID *pD, DPID dest)
+BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 {
 	NETMSG	m;
 	UDWORD	sizecount=0;
@@ -1183,7 +1183,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	NetGet(m,sizecount,z);						sizecount+=sizeof(z);
 	NetGet(m,sizecount,player);					sizecount+=sizeof(player);
 
-	dt.pName = (CHAR*)&dt.aName;
+	dt.pName = (char*)&dt.aName;
 	strncpy(dt.aName, &(m->body[sizecount]), DROID_MAXNAME-1);
 	dt.aName[DROID_MAXNAME-1]=0;		// just in case.
 	sizecount+=strlen(dt.pName)+1;		// name is pointed at directly into the buffer.
@@ -1288,7 +1288,7 @@ BOOL sendRequestDroid(UDWORD droidId)
 	debug( LOG_NEVER, "multibot: unknown droid %d, requesting info\n", droidId );
 
 	msg.type = NET_REQUESTDROID;
-	msg.size = sizeof(DPID)+sizeof(UDWORD);
+	msg.size = sizeof(UDWORD)+sizeof(UDWORD); // DPID + UDWORD
 
 	NETbcast(&msg,FALSE);
 	return TRUE;

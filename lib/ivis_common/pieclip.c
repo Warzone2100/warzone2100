@@ -2,14 +2,30 @@
 #include "ivi.h"
 
 static BOOL bClipSpecular = TRUE;
-static UDWORD	videoBufferWidth = 640, videoBufferHeight = 480;
+static UDWORD videoBufferDepth = 32, videoBufferWidth = 640, videoBufferHeight = 480;
 extern iSurface	*psRendSurface;
 
-BOOL pie_SetVideoBuffer(UDWORD width, UDWORD height)
+BOOL pie_SetVideoBufferDepth(UDWORD depth)
+{
+	videoBufferDepth = depth;
+	return(TRUE);
+}
+
+BOOL pie_SetVideoBufferWidth(UDWORD width)
 {
 	videoBufferWidth = width;
+	return(TRUE);
+}
+
+BOOL pie_SetVideoBufferHeight(UDWORD height)
+{
 	videoBufferHeight = height;
 	return(TRUE);
+}
+
+UDWORD pie_GetVideoBufferDepth(void)
+{
+	return(videoBufferDepth);
 }
 
 UDWORD pie_GetVideoBufferWidth(void)

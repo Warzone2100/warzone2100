@@ -202,8 +202,8 @@ void fpathShutDown(void)
 static SDWORD fpathHashFunc(SDWORD x, SDWORD y)
 {
 	UINT	iHashValue, i;
-	CHAR	*c;
-	CHAR	aBuff[8];
+	char	*c;
+	char	aBuff[8];
 
 	memcpy(&aBuff[0], &x, 4);
 	memcpy(&aBuff[4], &y, 4);

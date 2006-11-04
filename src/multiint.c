@@ -165,7 +165,7 @@ static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-void	kickPlayer			(DPID dpid);
+void	kickPlayer			(UDWORD dpid);
 void			runMultiOptions		(void);
 BOOL			startMultiOptions	(BOOL);
 void			frontendMultiMessages(void);
@@ -1339,7 +1339,7 @@ BOOL recvColourRequest(NETMSG *pMsg)
 {
 	UDWORD	player,col,oldcol;
 	UBYTE	chosenPlayer;
-	DPID	dpid;
+	UDWORD	dpid;
 
 	if(!NetPlay.bHost)							//only host should act.
 	{
@@ -1600,7 +1600,7 @@ static void SendFireUp(void)
 }
 
 // host kick a player from a game.
-void kickPlayer(DPID dpid)
+void kickPlayer(UDWORD dpid)
 {
 	NETMSG m;
 	// send a kick msg
@@ -2465,7 +2465,7 @@ void frontendMultiMessages(void)
 {
 	NETMSG			msg;			// a blank msg.
 	UDWORD			i;
-	DPID			dp;
+	UDWORD			dp;
 	UBYTE			bTemp;
 
 	while(NETrecv(&msg))

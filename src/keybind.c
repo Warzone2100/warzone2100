@@ -1815,7 +1815,7 @@ void kf_GiveTemplateSet(void)
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTextMessage(void)
 {
-	CHAR	ch;
+	char	ch;
 	char tmp[100];
 	SDWORD	i;
 
@@ -1828,7 +1828,7 @@ void kf_SendTextMessage(void)
 			inputClearBuffer();
 		}
 
-		ch = (CHAR)inputGetKey();
+		ch = (char)inputGetKey();
 		while(ch != 0)												// in progress
 		{
 			// Kill if they hit return - it maxes out console or it's more than one line long
@@ -1912,7 +1912,7 @@ void kf_SendTextMessage(void)
 				strcpy(sCurrentConsoleText,sTextToSend);
 			}
 
-			ch = (CHAR)inputGetKey();
+			ch = (char)inputGetKey();
 		}
 
 		// macro store stuff

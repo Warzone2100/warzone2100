@@ -267,8 +267,8 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 //	UDWORD packtemp;
 	UWORD numkills;		//
 
-	pMsg->body[			i+0] =		(CHAR)pD->player;
-	pMsg->body[			i+1] =		(CHAR)pD->order;		// order being executed
+	pMsg->body[			i+0] =		(char)pD->player;
+	pMsg->body[			i+1] =		(char)pD->order;		// order being executed
 	NetAdd2( pMsg,		i+2,		pD->id);				// droid id
 	NetAdd2( pMsg,		i+6,		pD->secondaryOrder );
 	NetAdd2( pMsg,		i+10,		pD->body);				// damage points

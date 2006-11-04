@@ -16,13 +16,13 @@ BOOL NETuseNetwork(BOOL val)
 // ////////////////////////////////////////////////////////////////////////
 // Functions for spectators.
 
-BOOL NETspectate(GUID guidSessionInstance) // FIXME Remove if unused
+BOOL NETspectate(void) // FIXME Remove if unused
 {
 	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETisSpectator(DPID dpid) // FIXME Remove if unused
+BOOL NETisSpectator(UDWORD dpid) // FIXME Remove if unused
 {
 	UBYTE i;
 

@@ -71,7 +71,7 @@ void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
 BOOL closeLoadSave				(void);
 BOOL runLoadSave				(BOOL bResetMissionWidgets);
 BOOL displayLoadSave			(void);
-static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, CHAR *title);
+static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
 static void displayLoadBanner	(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 static void displayLoadSlot		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -89,8 +89,8 @@ char				sDelete[MAX_STR_LENGTH];
 BOOL				bRequestLoad = FALSE;
 LOADSAVE_MODE		bLoadSaveMode;
 
-static CHAR			sPath[255];
-static CHAR			sExt[4];
+static char			sPath[255];
+static char			sExt[4];
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -107,7 +107,7 @@ BOOL saveMidMission(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, CHAR *title)
+BOOL addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, const char *title)
 {
 BOOL bLoad;
 
@@ -134,7 +134,7 @@ BOOL bLoad;
 //****************************************************************************************
 // Load menu/save menu?
 //*****************************************************************************************
-static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExtension, CHAR *title)
+static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
@@ -391,7 +391,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 {
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
-	CHAR		sTemp[MAX_STR_LENGTH];
+	char		sTemp[MAX_STR_LENGTH];
 	UDWORD		i;
 	W_CONTEXT		context;
 	BOOL		bSkipCD = FALSE;

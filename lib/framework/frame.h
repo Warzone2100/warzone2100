@@ -20,13 +20,13 @@
 
 
 /* Initialise the frame work library */
-extern BOOL frameInitialise(HANDLE hInstance,		// The windows application instance
-					 char *pWindowName,	// The text to appear in the window title bar
-					 UDWORD	width,			// The display width
-					 UDWORD height,			// The display height
-					 UDWORD bitDepth,		// The display bit depth
-					 BOOL	fullScreen,		// Whether to start full screen or windowed
-					 BOOL	bVidMem);	 	// Whether to put surfaces in video memory
+extern BOOL frameInitialise(
+					const char *pWindowName,// The text to appear in the window title bar
+					UDWORD width,			// The display width
+					UDWORD height,			// The display height
+					UDWORD bitDepth,		// The display bit depth
+					BOOL fullScreen		// Whether to start full screen or windowed
+					);
 
 /* Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
@@ -55,15 +55,12 @@ extern FRAME_STATUS frameUpdate(void);
  */
 extern void frameShowCursor(BOOL cursorOn);
 
-/* Set the current cursor from a cursor handle */
-extern void frameSetCursor(HCURSOR hNewCursor);
-
 /* Set the current cursor from a Resource ID
  * This is the same as calling:
  *       frameSetCursor(LoadCursor(MAKEINTRESOURCE(resID)));
  * but with a bit of extra error checking.
  */
-extern void frameSetCursorFromRes(WORD resID);
+extern void frameSetCursorFromRes(SWORD resID);
 
 /* Returns the current frame we're on - used to establish whats on screen */
 extern UDWORD	frameGetFrameNumber(void);
@@ -75,27 +72,6 @@ extern UDWORD	frameGetFrameNumber(void);
  */
 extern UDWORD frameGetAverageRate(void);
 
-/* The handle for the application window */
-extern HANDLE	frameGetWinHandle(void);
-
-//enumerate all available direct draw devices
-extern BOOL frameDDEnumerate(void);
-
-extern SDWORD frameGetNumDDDevices(void);
-
-extern char* frameGetDDDeviceName(SDWORD);
-
-// Return a string for a windows error code
-extern char *winErrorToString(SDWORD error);
-
-/* The default window procedure for the library.
- * This is initially set to the standard DefWindowProc, but can be changed
- * by this function.
- * Call this function with NULL to reset to DefWindowProc.
- */
-typedef LRESULT (* DEFWINPROCTYPE)(HWND hWnd, UINT Msg,
-										 WPARAM wParam, LPARAM lParam);
-extern void frameSetWindowProc(DEFWINPROCTYPE winProc);
 
 /* Load the file with name pointed to by pFileName into a memory buffer. */
 BOOL loadFile(const char *pFileName,		// The filename
@@ -114,8 +90,8 @@ BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 
 extern SDWORD ftol(float f);
 
-UINT HashString( const char *String );
-UINT HashStringIgnoreCase( const char *String );
+UDWORD HashString( const char *String );
+UDWORD HashStringIgnoreCase( const char *String );
 
 
 /* Endianness hacks */

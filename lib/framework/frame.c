@@ -39,16 +39,7 @@
 
 static FPSmanager wzFPSmanager;
 
-/* Handle for the main window */
-HANDLE	hWndMain;
-
-/* Program hInstance */
-HINSTANCE       hInstance;
-
-/* Flag if directdraw is active*/
-static BOOL	bActiveDDraw;
-
-static WORD currentCursorResID = UWORD_MAX;
+static UWORD currentCursorResID = UWORD_MAX;
 SDL_Cursor *aCursors[MAX_CURSORS];
 
 typedef enum _focus_state
@@ -141,13 +132,6 @@ UDWORD	frameGetFrameNumber(void)
 	return curFrames;
 }
 
-/* Return the handle for the application window */
-HANDLE	frameGetWinHandle(void)
-{
-	return hWndMain;
-}
-
-
 
 /* If cursor on is TRUE the windows cursor will be displayed over the game window
  * (and in full screen mode).  If it is FALSE the cursor will not be displayed.
@@ -157,15 +141,9 @@ void frameShowCursor(BOOL cursorOn)
 	displayMouse = cursorOn;
 }
 
-/* Set the current cursor from a cursor handle */
-void frameSetCursor(HCURSOR hNewCursor)
-{
-}
-
-
 
 /* Set the current cursor from a Resource ID */
-void frameSetCursorFromRes(WORD resID)
+void frameSetCursorFromRes(SWORD resID)
 {
 	ASSERT( resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID" );
 	ASSERT( resID < CURSOR_OFFSET + MAX_CURSORS, "frameSetCursorFromRes: bad resource ID" );
@@ -180,11 +158,10 @@ void frameSetCursorFromRes(WORD resID)
 
 
 
-
 /*
- * Wndproc
+ * processEvent
  *
- * The windows message processing function.
+ * Event processing function
  */
 static void processEvent(SDL_Event *event)
 {
@@ -276,39 +253,26 @@ static void freeCursors(void)
  *
  * Initialise the framework library. - PC version
  */
-BOOL frameInitialise(HANDLE hInst,			// The windows application instance
-					 char *pWindowName,	// The text to appear in the window title bar
-					 UDWORD	width,			// The display width
-					 UDWORD height,			// The display height
-					 UDWORD bitDepth,		// The display bit depth
-					 BOOL	fullScreen,		// Whether to start full screen or windowed
-					 BOOL	bVidMem)	 	// Whether to put surfaces in video memory
+BOOL frameInitialise(
+					const char *pWindowName,// The text to appear in the window title bar
+					UDWORD width,			// The display width
+					UDWORD height,			// The display height
+					UDWORD bitDepth,		// The display bit depth
+					BOOL fullScreen		// Whether to start full screen or windowed
+					)
 {
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
-        {
-			debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
-			return FALSE;
-        }
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
+	{
+		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
+		return FALSE;
+	}
 
-        SDL_WM_SetCaption(pWindowName, NULL);
+	SDL_WM_SetCaption(pWindowName, NULL);
 
 	focusState = FOCUS_IN;
 	focusLast = FOCUS_IN;
 	mouseOn = TRUE;
 	displayMouse = TRUE;
-//	hInstance = hInst;
-	bActiveDDraw = TRUE;
-
-//	/* Initialise the memory system */
-//	if (!memInitialise())
-//	{
-//		return FALSE;
-//	}
-
-//	if (!blkInitialise())
-//	{
-//		return FALSE;
-//	}
 
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
@@ -320,7 +284,7 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
         initCursors();
 
         /* Initialise the Direct Draw Buffers */
-        if (!screenInitialise(width, height, bitDepth, fullScreen, bVidMem, bActiveDDraw, hWndMain))
+        if (!screenInitialise(width, height, bitDepth, fullScreen))
         {
                 return FALSE;
         }
@@ -576,12 +540,12 @@ BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UINT) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UINT) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))
+#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
+#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
+#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
 
-//#define	HIGH_BITS		((UINT)(0xf0000000))
-//#define	LOW_BITS		((UINT)(0x0fffffff))
+//#define	HIGH_BITS		((UDWORD)(0xf0000000))
+//#define	LOW_BITS		((UDWORD)(0x0fffffff))
 
 
 
@@ -604,13 +568,12 @@ BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
  * Accepts string and returns hashed integer.
  */
 /***************************************************************************/
-UINT HashString( const char *String )
+UDWORD HashString( const char *c )
 {
-	UINT	iHashValue, i;
-	const CHAR *c = (const CHAR *) String;
+	UDWORD	iHashValue, i;
 
-	assert(String!=NULL);
-	assert(*String!=0x0);
+	assert(c!=NULL);
+	assert(*c!=0x0);
 
 	for ( iHashValue=0; *c; ++c )
 	{
@@ -626,13 +589,12 @@ UINT HashString( const char *String )
 	return iHashValue;
 }
 
-UINT HashStringIgnoreCase( const char *String )
+UDWORD HashStringIgnoreCase( const char *c )
 {
-	UINT	iHashValue, i;
-	const CHAR	*c = (const CHAR *) String;
+	UDWORD	iHashValue, i;
 
-	assert(String!=NULL);
-	assert(*String!=0x0);
+	assert(c!=NULL);
+	assert(*c!=0x0);
 
 	for ( iHashValue=0; *c; ++c )
 	{

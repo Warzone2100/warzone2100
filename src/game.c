@@ -513,7 +513,7 @@ typedef struct save_game_v31
 	UDWORD			savePlayer;	\
 	char			sPName[32];	\
 	BOOL			multiPlayer;\
-	DPID			sPlayer2dpid[MAX_PLAYERS]
+	UDWORD			sPlayer2dpid[MAX_PLAYERS]
 
 typedef struct save_game_v33
 {
@@ -655,7 +655,7 @@ typedef struct _save_droid_v12
 
 #define DROID_SAVE_V14		\
 	DROID_SAVE_V12;			\
-	CHAR	tarStatName[MAX_STR_SIZE];\
+	char	tarStatName[MAX_STR_SIZE];\
     UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
@@ -672,7 +672,7 @@ typedef struct _save_droid_v14
 //DROID_SAVE_18 replaces DROID_SAVE_14
 #define DROID_SAVE_V18		\
 	DROID_SAVE_V12;			\
-	CHAR	tarStatName[MAX_SAVE_NAME_SIZE_V19];\
+	char	tarStatName[MAX_SAVE_NAME_SIZE_V19];\
     UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
@@ -711,7 +711,7 @@ typedef struct _save_droid_v18
 	UDWORD	actionStarted;	\
 	UDWORD	actionPoints;	\
 	UWORD	actionHeight;	\
-	CHAR	tarStatName[MAX_SAVE_NAME_SIZE];\
+	char	tarStatName[MAX_SAVE_NAME_SIZE];\
     UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
@@ -877,7 +877,7 @@ typedef struct _save_structure
 //PROGRAMS NEED TO BE REMOVED FROM DROIDS - 7/8/98
 // multiPlayerID for templates needs to be saved - 29/10/98
 #define TEMPLATE_SAVE_V2 \
-	CHAR				name[MAX_SAVE_NAME_SIZE_V19]; \
+	char				name[MAX_SAVE_NAME_SIZE_V19]; \
 	UDWORD				ref; \
 	UDWORD				player; \
 	UBYTE				droidType; \
@@ -889,7 +889,7 @@ typedef struct _save_structure
 
 // multiPlayerID for templates needs to be saved - 29/10/98
 #define TEMPLATE_SAVE_V14 \
-	CHAR				name[MAX_SAVE_NAME_SIZE_V19]; \
+	char				name[MAX_SAVE_NAME_SIZE_V19]; \
 	UDWORD				ref; \
 	UDWORD				player; \
 	UBYTE				droidType; \
@@ -899,7 +899,7 @@ typedef struct _save_structure
 	UDWORD				multiPlayerID
 
 #define TEMPLATE_SAVE_V20 \
-	CHAR				name[MAX_SAVE_NAME_SIZE]; \
+	char				name[MAX_SAVE_NAME_SIZE]; \
 	UDWORD				ref; \
 	UDWORD				player; \
 	UBYTE				droidType; \
@@ -964,13 +964,13 @@ typedef struct _save_feature
 
 
 #define COMPLIST_SAVE_V6 \
-	CHAR				name[MAX_SAVE_NAME_SIZE_V19]; \
+	char				name[MAX_SAVE_NAME_SIZE_V19]; \
 	UBYTE				type; \
 	UBYTE				state; \
 	UBYTE				player
 
 #define COMPLIST_SAVE_V20 \
-	CHAR				name[MAX_SAVE_NAME_SIZE]; \
+	char				name[MAX_SAVE_NAME_SIZE]; \
 	UBYTE				type; \
 	UBYTE				state; \
 	UBYTE				player
@@ -996,12 +996,12 @@ typedef struct _save_compList
 
 
 #define STRUCTLIST_SAVE_V6 \
-	CHAR				name[MAX_SAVE_NAME_SIZE_V19]; \
+	char				name[MAX_SAVE_NAME_SIZE_V19]; \
 	UBYTE				state; \
 	UBYTE				player
 
 #define STRUCTLIST_SAVE_V20 \
-	CHAR				name[MAX_SAVE_NAME_SIZE]; \
+	char				name[MAX_SAVE_NAME_SIZE]; \
 	UBYTE				state; \
 	UBYTE				player
 
@@ -1022,13 +1022,13 @@ typedef struct _save_structList
 
 
 #define RESEARCH_SAVE_V8 \
-	CHAR				name[MAX_SAVE_NAME_SIZE_V19]; \
+	char				name[MAX_SAVE_NAME_SIZE_V19]; \
 	UBYTE				possible[MAX_PLAYERS]; \
 	UBYTE				researched[MAX_PLAYERS]; \
 	UDWORD				currentPoints[MAX_PLAYERS]
 
 #define RESEARCH_SAVE_V20 \
-	CHAR				name[MAX_SAVE_NAME_SIZE]; \
+	char				name[MAX_SAVE_NAME_SIZE]; \
 	UBYTE				possible[MAX_PLAYERS]; \
 	UBYTE				researched[MAX_PLAYERS]; \
 	UDWORD				currentPoints[MAX_PLAYERS]
@@ -1053,7 +1053,7 @@ typedef struct _save_message
 {
 	MESSAGE_TYPE	type;			//The type of message
 	BOOL			bObj;
-	CHAR			name[MAX_STR_SIZE];
+	char			name[MAX_STR_SIZE];
 	UDWORD			objId;					//Id for Proximity messages!
 	BOOL			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
@@ -1120,7 +1120,7 @@ typedef struct _save_production
 } SAVE_PRODUCTION;
 
 #define STRUCTLIMITS_SAVE_V2 \
-	CHAR				name[MAX_SAVE_NAME_SIZE_V19]; \
+	char				name[MAX_SAVE_NAME_SIZE_V19]; \
 	UBYTE				limit; \
 	UBYTE				player
 
@@ -1130,7 +1130,7 @@ typedef struct _save_structLimits_v2
 } SAVE_STRUCTLIMITS_V2;
 
 #define STRUCTLIMITS_SAVE_V20 \
-	CHAR				name[MAX_SAVE_NAME_SIZE]; \
+	char				name[MAX_SAVE_NAME_SIZE]; \
 	UBYTE				limit; \
 	UBYTE				player
 
@@ -3329,7 +3329,7 @@ static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
 
 	if ((sizeOfSaveGame + GAME_HEADER_SIZE) > filesize)
 	{
-		debug( LOG_ERROR, "getCampaign: unexpected end of file (expected %d, have %d)" , 
+		debug( LOG_ERROR, "getCampaign: unexpected end of file (expected %d, have %d)" ,
 			(sizeOfSaveGame + GAME_HEADER_SIZE) , filesize);
 		abort();
 		return FALSE;

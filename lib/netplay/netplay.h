@@ -25,18 +25,8 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	DWORD dwSize;
 	DWORD dwFlags;
 	char host[16];	// host ip address
-//	GUID  guidInstance;
-//	GUID  guidApplication;
 	DWORD dwMaxPlayers;
 	DWORD dwCurrentPlayers;
-//    union  {
-//        LPWSTR lpszSessionName;
-//        LPSTR  lpszSessionNameA;};
-//    union  {
-//        LPWSTR lpszPassword;
-//        LPSTR  lpszPasswordA;  };
-//    DWORD dwReserved1;
-//    DWORD dwReserved2;
 	DWORD dwUser1;
 	DWORD dwUser2;
 	DWORD dwUser3;
@@ -69,7 +59,7 @@ typedef struct {
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Update using NETplayerinfo
 typedef struct {
-	DPID dpid;
+	UDWORD dpid;
 	char name[StringSize];
 	BOOL bHost;				// a bool.
 	BOOL bSpectator;
@@ -82,7 +72,7 @@ typedef struct {
 	PLAYER		players[MaxNumberOfPlayers];	// the array of players.
 	UDWORD		playercount;			// number of players in game.
 
-	DPID		dpidPlayer;			// ID of player created
+	UDWORD		dpidPlayer;			// ID of player created
 
 	BOOL		bComms;				// actually do the comms?
 	BOOL		bHost;				// TRUE if we are hosting the session
@@ -108,15 +98,15 @@ extern LPNETPLAY			lpNetPlay;
 extern BOOL   NETinit(BOOL bFirstCall);				//init(guid can be NULL)
 extern BOOL   NETfindProtocol(BOOL Lob);			//put connections in Protocols[] (Lobbies optional)
 extern BOOL   NETselectProtocol(void * lpConnection);		//choose one.
-extern BOOL   NETsend(NETMSG *msg, DPID player, BOOL guarantee);// send to player, possibly guaranteed
+extern BOOL   NETsend(NETMSG *msg, UDWORD player, BOOL guarantee);// send to player, possibly guaranteed
 extern BOOL   NETbcast(NETMSG *msg,BOOL guarantee);		// broadcast to everyone, possibly guaranteed
 extern BOOL   NETrecv(NETMSG *msg);				// recv a message if possible
 
-extern UCHAR   NETsendFile(BOOL newFile, CHAR *fileName, DPID player);	// send file chunk.
-extern UCHAR   NETrecvFile(NETMSG *pMsg);			// recv file chunk
+extern UBYTE   NETsendFile(BOOL newFile, const char *fileName, UDWORD player);	// send file chunk.
+extern UBYTE   NETrecvFile(NETMSG *pMsg);			// recv file chunk
 
-extern HRESULT NETclose	(void);					// close current game
-extern HRESULT NETshutdown(void);				// leave the game in play.
+extern BOOL NETclose	(void);					// close current game
+extern BOOL NETshutdown(void);				// leave the game in play.
 
 extern UDWORD  NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
 extern UDWORD  NETgetPacketsSent(void);				// return packets sent/recv.  call regularly for good results
@@ -133,21 +123,21 @@ extern DWORD	NETgetGameFlagsUnjoined(UDWORD gameid,UDWORD flag);	// return one o
 extern BOOL	NETsetGameFlags(UDWORD flag,DWORD value);	// set game flag(1-4) to value.
 extern BOOL	NEThaltJoining(void);				// stop new players joining this game
 extern BOOL	NETfindGame(BOOL asynchronously);		// find games being played(uses GAME_GUID);
-extern BOOL	NETjoinGame(UDWORD gameNumber, LPSTR playername);			// join game given with playername
-extern BOOL	NEThostGame(LPSTR SessionName, LPSTR PlayerName,// host a game
+extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
+extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    DWORD one, DWORD two, DWORD three, DWORD four, UDWORD plyrs);
 
 //from netusers.c
 extern BOOL	NETuseNetwork(BOOL val);	// TURN on/off networking.
 extern UDWORD	NETplayerInfo(void);		// count players in this game.
 extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
-extern BOOL	NETgetLocalPlayerData(DPID dpid, void *pData, DWORD *pSize);
-extern BOOL	NETgetGlobalPlayerData(DPID dpid, void *pData, DWORD *pSize);
-extern BOOL	NETsetLocalPlayerData(DPID dpid, void *pData, DWORD size);
-extern BOOL	NETsetGlobalPlayerData(DPID dpid, void *pData, DWORD size);
+extern BOOL	NETgetLocalPlayerData(UDWORD dpid, void *pData, DWORD *pSize);
+extern BOOL	NETgetGlobalPlayerData(UDWORD dpid, void *pData, DWORD *pSize);
+extern BOOL	NETsetLocalPlayerData(UDWORD dpid, void *pData, DWORD size);
+extern BOOL	NETsetGlobalPlayerData(UDWORD dpid, void *pData, DWORD size);
 
-extern WZ_DECL_DEPRECATED BOOL	NETspectate();			// create a spectator
-extern WZ_DECL_DEPRECATED BOOL	NETisSpectator(DPID dpid);	// check for spectator status.
+extern WZ_DECL_DEPRECATED BOOL	NETspectate(void);			// create a spectator
+extern WZ_DECL_DEPRECATED BOOL	NETisSpectator(UDWORD dpid);	// check for spectator status.
 
 #include "netlog.h"
 
@@ -170,7 +160,7 @@ extern void	NETunmanglePacket(NETMSG *msg);
 extern BOOL	NETmangleData(long *input, long *result, UDWORD dataSize);
 extern BOOL	NETunmangleData(long *input, long *result, UDWORD dataSize);
 extern UDWORD	NEThashFile(char *pFileName);
-extern UCHAR	NEThashVal(UDWORD value);
+extern UBYTE	NEThashVal(UDWORD value);
 extern UDWORD	NEThashBuffer(char *pData, UDWORD size);
 
 extern WZ_DECL_DEPRECATED BOOL NETcheckRegistryEntries	(char *name,char *guid);

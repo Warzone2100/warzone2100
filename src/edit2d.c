@@ -967,7 +967,6 @@ BOOL ed2dLoadMapFile(void)
 
 	memset(&sOFN, 0, sizeof(OPENFILENAME));
 	sOFN.lStructSize = sizeof(OPENFILENAME);
-	sOFN.hwndOwner = frameGetWinHandle();
 	sOFN.lpstrFilter = "Map File (*.MAP)\0*.MAP\0";
 	sOFN.lpstrFile = aFileName;
 	sOFN.nMaxFile = 256;
@@ -1013,7 +1012,6 @@ BOOL ed2dSaveMapFile(void)
 
 	memset(&sOFN, 0, sizeof(OPENFILENAME));
 	sOFN.lStructSize = sizeof(OPENFILENAME);
-	sOFN.hwndOwner = frameGetWinHandle();
 	sOFN.lpstrFilter = "Map File (*.MAP)\0*.MAP\0";
 	sOFN.lpstrFile = aFileName;
 	sOFN.nMaxFile = 256;

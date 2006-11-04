@@ -44,7 +44,7 @@ static UINT
 HashPJW( int iKey1, int iKey2 )
 {
 	UINT	iHashValue, i;
-	CHAR	*c = (CHAR *) iKey1;
+	char	*c = (char *) iKey1; // FIXME OUCH: Storing a pointer in an int!
 
 	/* don't use second key in this one */
 	iKey2 = UNUSED_KEY;

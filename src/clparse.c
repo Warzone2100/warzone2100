@@ -33,7 +33,6 @@
 #include "lib/framework/configfile.h"
 
 extern BOOL NETsetupTCPIP(void ** addr, char * machine);
-extern BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value);
 
 extern char	SaveGamePath[];
 extern char	datadir[MAX_PATH];
@@ -51,6 +50,44 @@ BOOL	clIntroVideo;
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = FALSE;
 
+//! Print usage info
+void printUsage(void)
+{
+	fprintf( stdout,
+		"Usage:\n"
+		"   warzone2100 [OPTIONS]\n"
+		"Try --help for additional info.\n"
+		   );
+
+}
+
+//! Print help and usage info
+void printHelp(void)
+{
+	// Show help
+	fprintf( stdout,
+		"Warzone 2100:\n"
+		"   An OpenGL based 3D real time strategy game, scened in post-nuclear warfare\n"
+		"Usage:\n"
+		"   warzone2100 [OPTIONS]\n"
+		"Options:\n"
+		"   --cheat                    Run in cheat mode\n"
+		"   --datadir DIR              Set default datadir to DIR\n"
+		"   --debug FLAGS              Show debug for FLAGS\n"
+		"   --debugfile FILE           Log debug output in FILE\n"
+		"   --fullscreen               Play in fullscreen mode\n"
+		"   --help                     Show this help and exit\n"
+		"   --mod MOD                  Enable global mod MOD\n"
+		"   --mod_ca MOD               Enable campaign only mod MOD\n"
+		"   --mod_mp MOD               Enable multiplay only mod MOD\n"
+		"   --savegame NAME            Load a saved game NAME\n"
+		"   --window                   Play in windowed mode\n"
+		"   --version                  Output version info and exit\n"
+		"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n"
+		"   --(no)shadows              Toggles the shadows\n"
+		"   --(no)sound                Toggles the sound\n"
+		   );
+}
 
 //! Early parsing of the commandline
 /**
@@ -67,6 +104,8 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 	char			*token;
 	int i;
 
+	// TODO Don't forget to add new options to ParseCommandLine also!
+
 	/* loop through command line */
 	for (i = 1; i < argc; ++i) {
 		tokenType = argv[i];
@@ -82,41 +121,8 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 		}
 		else if ( strcasecmp(tokenType, "--help" ) == 0 )
 		{
-			// Show help
-			fprintf( stdout,
-				"Warzone 2100:\n"
-				"   An OpenGL based 3D real time strategy game, scened in post-nuclear warfare\n"
-				"Usage:\n"
-				"   warzone2100 [OPTIONS]\n"
-				"Options:\n"
-				"   --cheat                    Run in cheat mode\n"
-				"   --datadir DIR              Set default datadir to DIR\n"
-				"   --debug FLAGS              Show debug for FLAGS\n"
-				"   --debugfile FILE           Log debug output in FILE\n"
-				"   --fullscreen               Play in fullscreen mode\n"
-				"   --help                     Show this help and exit\n"
-				"   --mod MOD                  Enable global mod MOD\n"
-				"   --mod_ca MOD               Enable campaign only mod MOD\n"
-				"   --mod_mp MOD               Enable multiplay only mod MOD\n"
-				"   --savegame NAME            Load a saved game NAME\n"
-				"   --window                   Play in windowed mode\n"
-				"   --version                  Output version info and exit\n"
-				"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n"
-				"   --(no)shadows              Toggles the shadows\n"
-				"   --(no)sound                Toggles the sound\n"
-			);
+			printHelp();
 			return FALSE;
-		}
-		else if ( strcasecmp(tokenType, "--datadir") == 0 )
-		{
-			// find the quoted path name
-			token = argv[++i];
-			if (token == NULL)
-			{
-				debug( LOG_ERROR, "Unrecognised datadir\n" );
-				return FALSE;
-			}
-			strncpy(datadir, token, sizeof(datadir));
 		}
 		else if ( strcasecmp(tokenType, "--debug") == 0 )
 		{
@@ -166,7 +172,21 @@ BOOL ParseCommandLine(int argc, char** argv)
 	for( i = 1; i < argc; ++i) {
 		tokenType = argv[i];
 
-		if ( strcasecmp(tokenType, "--cheat") == 0 )
+		if ( strcasecmp(tokenType, "--help") == 0 );
+		else if ( strcasecmp(tokenType, "--debug") == 0 || strcasecmp(tokenType, "--debugfile") == 0 )
+			i++; // Skip 1 argument to --debug and --debugfile
+		else if ( strcasecmp(tokenType, "--datadir") == 0 )
+		{
+			// find the quoted path name
+			token = argv[++i];
+			if (token == NULL)
+			{
+				debug( LOG_ERROR, "Unrecognised datadir\n" );
+				return FALSE;
+			}
+			strncpy(datadir, token, sizeof(datadir));
+		}
+		else if ( strcasecmp(tokenType, "--cheat") == 0 )
 		{
 			fprintf(stdout, "  ** CHEAT MODE ACTIVATED! **\n");
 			bAllowDebugMode = TRUE;
@@ -250,13 +270,13 @@ BOOL ParseCommandLine(int argc, char** argv)
 		else if ( strcasecmp( tokenType, "--shadows" ) == 0 )
 		{
 			// FIXME Should setDrawShadows go into warzoneconfig? Or how should config values be handled in general? By the system using it? Or by warzoneconfig? Or by config keys only?
-			//setDrawShadows( TRUE );
-			setWarzoneKeyNumeric( "shadows", TRUE );
+			setDrawShadows( TRUE );
+// 			setWarzoneKeyNumeric( "shadows", TRUE );
 		}
 		else if ( strcasecmp( tokenType, "--noshadows" ) == 0 )
 		{
-			//setDrawShadows( FALSE );
-			setWarzoneKeyNumeric( "shadows", FALSE );
+			setDrawShadows( FALSE );
+// 			setWarzoneKeyNumeric( "shadows", FALSE );
 		}
 		else if ( strcasecmp( tokenType, "--sound" ) == 0 )
 		{
@@ -268,16 +288,17 @@ BOOL ParseCommandLine(int argc, char** argv)
 			war_setSoundEnabled( FALSE );
 			setWarzoneKeyNumeric( "sound", FALSE );
 		}
-		else if ( strcasecmp( tokenType, "--viewport" ) == 0 )
+		else if ( strcasecmp( tokenType, "--resolution" ) == 0 )
 		{
 			token = argv[++i];
 			if ( !sscanf( token, "%ix%i", &width, &height ) == 2 )
 			{
-				debug( LOG_ERROR, "Invalid viewport\n" );
+				debug( LOG_ERROR, "Invalid resolution\n" );
 				abort();
 				return FALSE;
 			}
-			pie_SetVideoBuffer( width, height );
+			pie_SetVideoBufferWidth( width );
+			pie_SetVideoBufferHeight( height );
 		}
 		else if ( strcasecmp( tokenType, "--window" ) == 0 )
 		{
@@ -327,96 +348,13 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			bDisableLobby = TRUE;
 		}
-
-	// gamespy flags
-		else if ( strcasecmp(tokenType, "+host") == 0	// host a multiplayer.
-			 || strcasecmp(tokenType, "+connect") == 0
-			 || strcasecmp(tokenType, "+name") == 0
-			 || strcasecmp(tokenType, "+ip") == 0
-			 || strcasecmp(tokenType, "+maxplayers") == 0
-			 || strcasecmp(tokenType, "+hostname") == 0)
-		{
-			token = argv[++i];
-			scanGameSpyFlags(tokenType, token);
-		}
-	// end of gamespy
-
 		else
 		{
-			// ignore (gamespy requirement)
-		//	DBERROR( ("Unrecognised command-line token %s\n", tokenType) );
-		//	return FALSE;
+			debug( LOG_ERROR, "Unrecognised command-line option: %s\n", tokenType );
+			printUsage();
+			return FALSE;
 		}
 	}
-	return TRUE;
-}
-
-
-// ////////////////////////////////////////////////////////
-//! gamespy flags
-BOOL scanGameSpyFlags(LPSTR gflag,LPSTR value)
-{
-	static UBYTE count = 0;
-//	UDWORD val;
-	void * finalconnection;
-
-#if 0
-	// check for gamespy flag...
-
-	// if game spy not enabled....
-	if(!openWarzoneKey())
-		return FALSE;
-	if(!getWarzoneKeyNumeric("allowGameSpy",&val))
-	{
-		return TRUE;
-	}
-	closeWarzoneKey();
-#endif
-
-	count++;
-	if(count == 1)
-	{
-		lobbyInitialise();
-		bDisableLobby	 = TRUE;				// dont reset everything on boot!
-		gameSpy.bGameSpy = TRUE;
-	}
-
-	if (strcasecmp( gflag,"+host") == 0)			// host a multiplayer.
-	{
-		NetPlay.bHost = 1;
-		game.bytesPerSec			= INETBYTESPERSEC;
-		game.packetsPerSec			= INETPACKETS;
-		NETsetupTCPIP(&finalconnection,"");
-		NETselectProtocol(finalconnection);
-	}
-	else if (strcasecmp( gflag,"+connect") == 0)	// join a multiplayer.
-	{
-		NetPlay.bHost = 0;
-		game.bytesPerSec			= INETBYTESPERSEC;
-		game.packetsPerSec			= INETPACKETS;
-		NETsetupTCPIP(&finalconnection,value);
-		NETselectProtocol(finalconnection);
-		// gflag is add to con to.
-	}
-	else if (strcasecmp( gflag,"+name") == 0)		// player name.
-	{
-		strcpy((char *)sPlayer,value);
-	}
-	else if (strcasecmp( gflag,"+hostname") == 0)	// game name.
-	{
-		strcpy(game.name,value);
-	}
-
-/*not used from here on..
-+ip
-+maxplayers
-+game
-+team
-+skin
-+playerid
-+password
-tokenType = strtok( NULL, seps );
-*/
 	return TRUE;
 }
 

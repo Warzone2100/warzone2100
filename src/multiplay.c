@@ -106,7 +106,7 @@ STRUCTURE	*IdToStruct	(UDWORD id,UDWORD player);
 BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player);
 FEATURE		*IdToFeature(UDWORD id,UDWORD player);
 DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player);
-DROID_TEMPLATE *NameToTemplate(CHAR *sName,UDWORD player);
+DROID_TEMPLATE *NameToTemplate(const char *sName,UDWORD player);
 
 char *getPlayerName		(UDWORD player);
 BOOL	isHumanPlayer		(UDWORD player);				// determine if human
@@ -424,7 +424,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 }
 
 // the same as above, but only checks names in similarity.
-DROID_TEMPLATE *NameToTemplate(CHAR *sName,UDWORD player)
+DROID_TEMPLATE *NameToTemplate(const char *sName,UDWORD player)
 {
 	DROID_TEMPLATE *psTempl = NULL;
 
@@ -686,7 +686,7 @@ BOOL DirectPlaySystemMessageHandler(void * mg)
 BOOL recvMessage(void)
 {
 	NETMSG msg;
-	DPID dp;
+	UDWORD dp;
 	UDWORD a;
 
 	while(NETrecv(&msg) == TRUE)			// for all incoming messages.
@@ -1129,7 +1129,7 @@ BOOL sendTextMessage(char *pStr,BOOL all)
 	BOOL	normal = TRUE;
 	BOOL	sendto[MAX_PLAYERS];
 	UDWORD	i;
-	CHAR	display[MAX_CONSOLE_STRING_LENGTH];
+	char	display[MAX_CONSOLE_STRING_LENGTH];
 	BOOL	bEncrypting;
 
 
@@ -1332,7 +1332,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 // Write a message to the console.
 BOOL recvTextMessage(NETMSG *pMsg)
 {
-	DPID	dpid;
+	UDWORD	dpid;
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	UDWORD  player,j;		//console callback - player who sent the message
