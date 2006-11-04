@@ -15,7 +15,6 @@
 
 #include "lib/ivis_common/pieclip.h"
 #include "warzoneconfig.h"
-#include "configuration.h"
 
 #include "clparse.h"
 #include "lib/ivis_common/piestate.h"
@@ -28,9 +27,8 @@
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
-
-// For setting shadows and sound options
-#include "lib/framework/configfile.h"
+ // To set the shadow config:
+#include "display.h"
 
 extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
@@ -269,29 +267,24 @@ BOOL ParseCommandLine(int argc, char** argv)
 		}
 		else if ( strcasecmp( tokenType, "--shadows" ) == 0 )
 		{
-			// FIXME Should setDrawShadows go into warzoneconfig? Or how should config values be handled in general? By the system using it? Or by warzoneconfig? Or by config keys only?
 			setDrawShadows( TRUE );
-// 			setWarzoneKeyNumeric( "shadows", TRUE );
 		}
 		else if ( strcasecmp( tokenType, "--noshadows" ) == 0 )
 		{
 			setDrawShadows( FALSE );
-// 			setWarzoneKeyNumeric( "shadows", FALSE );
 		}
 		else if ( strcasecmp( tokenType, "--sound" ) == 0 )
 		{
 			war_setSoundEnabled( TRUE );
-			setWarzoneKeyNumeric( "sound", TRUE );
 		}
 		else if ( strcasecmp( tokenType, "--nosound" ) == 0 )
 		{
 			war_setSoundEnabled( FALSE );
-			setWarzoneKeyNumeric( "sound", FALSE );
 		}
 		else if ( strcasecmp( tokenType, "--resolution" ) == 0 )
 		{
 			token = argv[++i];
-			if ( !sscanf( token, "%ix%i", &width, &height ) == 2 )
+			if ( sscanf( token, "%ix%i", &width, &height ) != 2 )
 			{
 				debug( LOG_ERROR, "Invalid resolution\n" );
 				abort();
