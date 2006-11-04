@@ -771,7 +771,7 @@ typedef struct _save_droid_v24
 	UDWORD	actionStarted;	\
 	UDWORD	actionPoints;	\
 	UWORD	actionHeight;	\
-	CHAR	tarStatName[MAX_SAVE_NAME_SIZE];\
+	char	tarStatName[MAX_SAVE_NAME_SIZE];\
     UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
