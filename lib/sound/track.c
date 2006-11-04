@@ -413,13 +413,13 @@ BOOL sound_CheckTrack( SDWORD iTrack )
 {
 	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
 	{
-		debug( LOG_NEVER, "sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks );
+		debug( LOG_SOUND, "sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks );
 		return FALSE;
 	}
 
 	if ( g_apTrack[iTrack] == NULL )
 	{
-		debug( LOG_NEVER, "sound_CheckTrack: track %i NULL\n", iTrack );
+		debug( LOG_SOUND, "sound_CheckTrack: track %i NULL\n", iTrack );
 		return FALSE;
 	}
 
@@ -499,6 +499,9 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 	TRACK	*psTrack;
 	//~~~~~~~~~~~~~
 
+	if (!sound_CheckTrack(psSample->iTrack))
+	  return FALSE;
+
 	psTrack = g_apTrack[psSample->iTrack];
 
 	if (psTrack == NULL) return FALSE;
@@ -537,6 +540,9 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 	//~~~~~~~~~~~~~
 	TRACK	*psTrack;
 	//~~~~~~~~~~~~~
+
+	if (!sound_CheckTrack(psSample->iTrack))
+	  return FALSE;
 
 	psTrack = g_apTrack[psSample->iTrack];
 /*	if ( psTrack->bCompressed )

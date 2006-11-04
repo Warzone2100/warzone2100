@@ -377,7 +377,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToSensorUnits,	strresGetString(psStringRes,STR_BIND_SENJ));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToCommandUnits,	strresGetString(psStringRes,STR_BIND_COMJ));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_TAB,KEYMAP_PRESSED,kf_ToggleOverlays,			strresGetString(psStringRes,STR_BIND_OVERL));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_BACKQUOTE,KEYMAP_PRESSED,kf_ToggleConsoleDrop,strresGetString(psStringRes,STR_BIND_CONSOLE));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_BACKQUOTE,KEYMAP_PRESSED,kf_ToggleConsoleDrop,strresGetString(psStringRes,STR_BIND_CONSOLE));
 	//                                **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_B,KEYMAP_PRESSED,kf_CentreOnBase,			strresGetString(psStringRes,STR_BIND_CENTV));

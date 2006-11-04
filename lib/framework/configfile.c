@@ -272,7 +272,7 @@ BOOL closeWarzoneKey( void )
  * \param	*val	Place where to store the setting
  * \return	Whether we succeed to find the setting
  */
-BOOL getWarzoneKeyNumeric( const char *pName, DWORD *val )
+BOOL getWarzoneKeyNumeric( const char *pName, SDWORD *val )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	char	*value = registry_get_key( pName );
@@ -323,7 +323,7 @@ BOOL getWarzoneKeyBinary( char *pName, UBYTE *pData, UDWORD *pSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyNumeric( const char *pName, DWORD val )
+BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
 {
 	//~~~~~~~~~~~~
 	char	buf[32];
