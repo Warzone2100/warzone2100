@@ -345,14 +345,14 @@ void resize_global_player_data(unsigned int i, unsigned int size) {
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetLocalPlayerData(UDWORD dpid, void *pData, DWORD *pSize)
+BOOL NETgetLocalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize)
 {
 	memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData, DWORD *pSize)
+BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize)
 {
 	if(!NetPlay.bComms)
 	{
@@ -365,7 +365,7 @@ BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData, DWORD *pSize)
 	return TRUE;
 }
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, DWORD size)
+BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, SDWORD size)
 {
 	local_player_data[dpid].size = size;
 	resize_local_player_data(dpid, size);
@@ -374,7 +374,7 @@ BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, DWORD size)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, DWORD size)
+BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size)
 {
 	if(!NetPlay.bComms)
 	{
@@ -409,11 +409,11 @@ BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, DWORD size)
 // ///////////////////////////////////////////////////////////////////////
 // Game flags stuff...
 
-DWORD NetGameFlags[4];
+SDWORD NetGameFlags[4];
 
 // ////////////////////////////////////////////////////////////////////////
 // return one of the four user flags in the current sessiondescription.
-DWORD NETgetGameFlags(UDWORD flag)
+SDWORD NETgetGameFlags(UDWORD flag)
 {
 	if (flag < 1 || flag > 4) {
 		return 0;
@@ -424,7 +424,7 @@ DWORD NETgetGameFlags(UDWORD flag)
 
 // ////////////////////////////////////////////////////////////////////////
 // Set a game flag
-BOOL NETsetGameFlags(UDWORD flag, DWORD value)
+BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 {
 	if(!NetPlay.bComms) {
 		return TRUE;
@@ -1232,7 +1232,7 @@ static void NETallowJoining(void) {
 }
 
 BOOL NEThostGame(const char* SessionName, const char* PlayerName,
-		 DWORD one, DWORD two, DWORD three, DWORD four,
+		 SDWORD one, SDWORD two, SDWORD three, SDWORD four,
 		 UDWORD plyrs)	// # of players.
 {
 	IPaddress ip;

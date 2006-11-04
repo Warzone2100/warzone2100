@@ -39,15 +39,9 @@ typedef Sint16 SWORD;
 typedef Uint32 UDWORD;
 typedef Sint32 SDWORD;
 
-#ifndef WIN32
+#ifndef WZ_OS_WIN
 
 typedef int BOOL;
-typedef SWORD SHORT;
-typedef UWORD USHORT;
-typedef UDWORD UINT;
-typedef SDWORD DWORD;
-typedef SDWORD LONG;
-typedef UDWORD ULONG;
 
 typedef struct {
   UBYTE peRed;
@@ -62,7 +56,7 @@ typedef struct
   int  y;
 } POINT;
 
-#endif /* !WIN32 */
+#endif /* !WZ_OS_WIN */
 
 
 /* Numeric size defines */
@@ -83,6 +77,9 @@ typedef struct
 
 #ifndef TRUE
 #define TRUE	(1)
+#endif
+
+#ifndef FALSE
 #define FALSE	(0)
 #endif
 
@@ -90,9 +87,9 @@ typedef struct
 /* defines for ONEINX - use
 
    if (ONEINX)
-		{
+	{
 		code.....
-		}
+	}
 
 */
 
@@ -106,22 +103,6 @@ typedef struct
 #define ONEINNINE				rand()%9==0
 #define ONEINTEN				rand()%10==0
 
-#define ONEINTWENTY				rand()%20==0
-#define ONEINTHIRTY				rand()%30==0
-#define ONEINFORTY				rand()%40==0
-#define ONEINFIFTY				rand()%50==0
-#define ONEINSIXTY				rand()%60==0
-#define ONEINSEVENTY			rand()%70==0
-#define ONEINEIGHTY				rand()%80==0
-#define ONEINNINETY				rand()%90==0
-
-#define ONEINHUNDRED			rand()%100==0
-#define ONEINTHOUSAND			rand()%1000==0
-#define ONEINTENTHOUSAND		rand()%10000==0
-#define ONEINHUNDREDTHOUSAND	rand()%100000==0
-#define ONEINMILLION			rand()%1000000==0
-
-
 #define	ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
 #define CAT(a,b) a##b
 
@@ -129,11 +110,5 @@ typedef struct
 
 #define	AND &&
 #define OR ||
-#define NOT !
-
-/* Break loop construct */
-
-#define FOREVER for (;;)
-
 
 #endif

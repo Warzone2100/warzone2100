@@ -664,7 +664,7 @@ BOOL SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj)
 {
 	//NETMSG	m;
 	//DROID	*pDroid;
-	//USHORT	droidcount=0;
+	//UWORD	droidcount=0;
 
     return FALSE;	//doesnt fukin work. return FALSE and use other msgs to cope with this (about 2 packet overhead)
 /*
@@ -713,7 +713,7 @@ BOOL SendGroupOrderSelected(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psObj
 {
 	NETMSG	m;
 	DROID	*pDroid;
-	USHORT	droidcount=0;
+	UWORD	droidcount=0;
 
 	if (psObj == NULL)							//it's a position order
 	{
@@ -762,7 +762,7 @@ BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x,UDWORD
 {
 	NETMSG	m;
 	DROID	*pDroid;
-	USHORT	droidcount=0;
+	UWORD	droidcount=0;
 
 	if (psObj == NULL)							//it's a position order
 	{
@@ -808,7 +808,7 @@ BOOL recvGroupOrder(NETMSG *pMsg)
 	UDWORD		x,y,id,destid;
 	DROID		*psDroid=NULL;
 	OBJECT_TYPE	desttype;
-	USHORT		droidcount;
+	UWORD		droidcount;
 
 //	DROID		*psPrev = NULL;	// fomation vars.
 //	FORMATION	*psFormation = NULL;

@@ -15,18 +15,18 @@ extern void *	g_ElementToBeRemoved;
 
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UINT) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UINT) (BITS_IN_int / 8))
+#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
+#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
 
-//#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))       /* DOES NOT WORK ON THE PSX ! use the version below */
-#define	HIGH_BITS		((UINT)( ~((0xffffffff) >> ONE_EIGHTH )))
+//#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))       /* DOES NOT WORK ON THE PSX ! use the version below */
+#define	HIGH_BITS		((UDWORD)( ~((0xffffffff) >> ONE_EIGHTH )))
 
 /***************************************************************************/
 
-static UINT
+static UDWORD
 HashTest( int iKey1, int iKey2 )
 {
-	return (UINT) iKey1 + iKey2;
+	return (UDWORD) iKey1 + iKey2;
 }
 
 /***************************************************************************/
@@ -40,10 +40,10 @@ HashTest( int iKey1, int iKey2 )
  */
 /***************************************************************************/
 
-static UINT
+static UDWORD
 HashPJW( int iKey1, int iKey2 )
 {
-	UINT	iHashValue, i;
+	UDWORD	iHashValue, i;
 	char	*c = (char *) iKey1; // FIXME OUCH: Storing a pointer in an int!
 
 	/* don't use second key in this one */

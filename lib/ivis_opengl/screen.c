@@ -56,7 +56,7 @@ BOOL    bBackDrop = FALSE;
 BOOL    bUpload = FALSE;
 
 //fog
-DWORD	fogColour = 0;
+SDWORD	fogColour = 0;
 
 static char screendump_filename[255];
 static unsigned int screendump_num = 0;

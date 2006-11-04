@@ -247,7 +247,7 @@ void NETunmanglePacket(NETMSG *msg)
 
 	while(msg->size)
 	{
-		unmangle((LONG*)&msg->body[pos],(long*)&result.body[pos]);
+		unmangle((UDWORD*)&msg->body[pos],(long*)&result.body[pos]);
 		pos			+=NIBBLELENGTH;
 		msg->size	-=NIBBLELENGTH;
 		result.size	+=NIBBLELENGTH;

@@ -54,7 +54,7 @@ BOOL NETinitPlaybackBuffer(void *pSoundBuffer)
 
 // ////////////////////////////////////////////////////////////////////////
 // handle the playback buffer.
-BOOL NETqueueIncomingAudio( void *pSoundData, DWORD soundBytes,BOOL bStream)
+BOOL NETqueueIncomingAudio( void *pSoundData, SDWORD soundBytes,BOOL bStream)
 {
 	debug(LOG_SOUND, "NETqueueIncomingAudio");
 	return FALSE;

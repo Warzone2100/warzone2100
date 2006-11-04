@@ -22,15 +22,15 @@
 #define SESSION_JOINDISABLED	1
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
-	DWORD dwSize;
-	DWORD dwFlags;
+	SDWORD dwSize;
+	SDWORD dwFlags;
 	char host[16];	// host ip address
-	DWORD dwMaxPlayers;
-	DWORD dwCurrentPlayers;
-	DWORD dwUser1;
-	DWORD dwUser2;
-	DWORD dwUser3;
-	DWORD dwUser4;
+	SDWORD dwMaxPlayers;
+	SDWORD dwCurrentPlayers;
+	SDWORD dwUser1;
+	SDWORD dwUser2;
+	SDWORD dwUser3;
+	SDWORD dwUser4;
 } SESSIONDESC;
 
 // Games Storage Structures
@@ -118,23 +118,23 @@ extern UDWORD	NETgetRecentBytesRecvd(void);
 extern UDWORD	NETgetRecentPacketsRecvd(void);
 
 // from netjoin.c
-extern DWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-extern DWORD	NETgetGameFlagsUnjoined(UDWORD gameid,UDWORD flag);	// return one of the four flags(dword) about the game.
-extern BOOL	NETsetGameFlags(UDWORD flag,DWORD value);	// set game flag(1-4) to value.
+extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
+extern SDWORD	NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag);	// return one of the four flags(dword) about the game.
+extern BOOL	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern BOOL	NEThaltJoining(void);				// stop new players joining this game
 extern BOOL	NETfindGame(BOOL asynchronously);		// find games being played(uses GAME_GUID);
 extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
-			    DWORD one, DWORD two, DWORD three, DWORD four, UDWORD plyrs);
+			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 
 //from netusers.c
 extern BOOL	NETuseNetwork(BOOL val);	// TURN on/off networking.
 extern UDWORD	NETplayerInfo(void);		// count players in this game.
 extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
-extern BOOL	NETgetLocalPlayerData(UDWORD dpid, void *pData, DWORD *pSize);
-extern BOOL	NETgetGlobalPlayerData(UDWORD dpid, void *pData, DWORD *pSize);
-extern BOOL	NETsetLocalPlayerData(UDWORD dpid, void *pData, DWORD size);
-extern BOOL	NETsetGlobalPlayerData(UDWORD dpid, void *pData, DWORD size);
+extern BOOL	NETgetLocalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize);
+extern BOOL	NETgetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize);
+extern BOOL	NETsetLocalPlayerData(UDWORD dpid, void *pData, SDWORD size);
+extern BOOL	NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size);
 
 extern WZ_DECL_DEPRECATED BOOL	NETspectate(void);			// create a spectator
 extern WZ_DECL_DEPRECATED BOOL	NETisSpectator(UDWORD dpid);	// check for spectator status.
@@ -150,7 +150,7 @@ extern WZ_DECL_DEPRECATED BOOL	NETinitAudioCapture(void);
 
 extern WZ_DECL_DEPRECATED BOOL	NETinitPlaybackBuffer(void *pSoundBuffer);	// playback
 extern WZ_DECL_DEPRECATED void	NETplayIncomingAudio(NETMSG *pMsg);
-extern WZ_DECL_DEPRECATED BOOL	NETqueueIncomingAudio(void *pSoundData, DWORD soundBytes,BOOL bStream);
+extern WZ_DECL_DEPRECATED BOOL	NETqueueIncomingAudio(void *pSoundData, SDWORD soundBytes,BOOL bStream);
 extern WZ_DECL_DEPRECATED BOOL	NETshutdownAudioPlayback(void);
 
 // encryption

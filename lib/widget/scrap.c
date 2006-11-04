@@ -35,7 +35,7 @@ typedef Atom scrap_type;
 
 #elif defined(WIN_SCRAP)
 /* * */
-typedef UINT scrap_type;
+typedef UDWORD scrap_type;
 
 #elif defined(QNX_SCRAP)
 /* * */

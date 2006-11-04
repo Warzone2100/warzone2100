@@ -1080,7 +1080,7 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 	{
 		/* x dominant */
 		d = ay - ax/2;
-		FOREVER
+		for(;;)
 		{
 			DBP1(("(%3d, %3d)\n", x,y));
 			aMapLinePoints[*pNumPoints].x = x;
@@ -1112,7 +1112,7 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 	{
 		/* y dominant */
 		d = ax - ay/2;
-		FOREVER
+		for(;;)
 		{
 			DBP1(("(%3d, %3d)\n", x,y));
 			aMapLinePoints[*pNumPoints].x = x;

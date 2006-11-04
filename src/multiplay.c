@@ -52,7 +52,7 @@
 // globals.
 BOOL						bMultiPlayer				= FALSE;	// true when more than 1 player.
 char						sForceName[256]				= "Default";
-DWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8 players)
+SDWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8 players)
 //UDWORD						arenaPlayersReceived=0;
 BOOL						openchannels[MAX_PLAYERS]={TRUE};
 UBYTE						bDisplayMultiJoiningStatus;

@@ -9,16 +9,16 @@
  */
 
 typedef struct{
-	DWORD		played;						/// propogated stats.
-	DWORD		wins;
-	DWORD		loses;
-	DWORD		totalKills;
+	SDWORD		played;						/// propogated stats.
+	SDWORD		wins;
+	SDWORD		loses;
+	SDWORD		totalKills;
 	SDWORD		totalScore;
 
-	DWORD		recentKills;				// score/kills in last game.
+	SDWORD		recentKills;				// score/kills in last game.
 	SDWORD		recentScore;
 
-	DWORD		killsToAdd;					// things to add next time score is updated.
+	SDWORD		killsToAdd;					// things to add next time score is updated.
 	SDWORD		scoreToAdd;
 
 } PLAYERSTATS, *LPPLAYERSTATS;
@@ -53,7 +53,7 @@ extern BOOL	loadForce				(char *name);
 extern BOOL			saveMultiStats			(char *sFName, char *sPlayerName,PLAYERSTATS *playerStats);	// to disk
 extern BOOL			loadMultiStats			(char *sPlayerName,PLAYERSTATS *playerStats);					// form disk
 extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
-extern BOOL			setMultiStats			(DWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
+extern BOOL			setMultiStats			(SDWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
 extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 extern void			updateMultiStatsGames	(void);
 extern void			updateMultiStatsWins	(void);

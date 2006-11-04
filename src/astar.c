@@ -183,9 +183,9 @@ void fpathShutDown(void)
 
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UINT) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UINT) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UINT)(~0) >> ONE_EIGHTH ))
+#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
+#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
+#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
 
 /***************************************************************************/
 /*
@@ -201,7 +201,7 @@ void fpathShutDown(void)
 /***************************************************************************/
 static SDWORD fpathHashFunc(SDWORD x, SDWORD y)
 {
-	UINT	iHashValue, i;
+	SDWORD	iHashValue, i;
 	char	*c;
 	char	aBuff[8];
 

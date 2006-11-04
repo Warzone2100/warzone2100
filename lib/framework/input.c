@@ -479,7 +479,7 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 	static int mousewarp = -1;
 
 	if (mousewarp == -1) {
-		DWORD val;
+		SDWORD val;
 
 		mousewarp = 1;
 		if (getWarzoneKeyNumeric("nomousewarp", &val)) {

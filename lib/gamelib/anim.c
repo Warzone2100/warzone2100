@@ -397,7 +397,7 @@ anim_GetFrame3D( ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime,
 			UDWORD udwStartTime, UDWORD udwStartDelay,
 			VECTOR3D *psVecPos, VECTOR3D *psVecRot, VECTOR3D *psVecScale )
 {
-	DWORD		dwTime;
+	SDWORD		dwTime;
 	UWORD		uwState, uwFrame;
 	ANIM_STATE	*psState;
 

@@ -130,7 +130,7 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern UDWORD				selectedPlayer;
-extern DWORD				player2dpid[MAX_PLAYERS];	// note this is of type DPID, not DWORD
+extern SDWORD				player2dpid[MAX_PLAYERS];	// note this is of type DPID, not DWORD
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 

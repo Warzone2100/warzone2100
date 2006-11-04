@@ -44,7 +44,7 @@ FORCE		Force;														// the selected force.
 BOOL		saveMultiStats			(char *sFName, char *sPlayerName, PLAYERSTATS *plStats);
 BOOL		loadMultiStats			(char *sPlayerName, PLAYERSTATS *plStats);
 PLAYERSTATS getMultiStats			(UDWORD	player, BOOL bLocal);
-BOOL		setMultiStats			(DWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);
+BOOL		setMultiStats			(SDWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);
 
 void		updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void		updateMultiStatsGames	(void);
@@ -550,7 +550,7 @@ BOOL loadForce(char *name)
 PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 {
 	static PLAYERSTATS stat;
-	DWORD		statSize = sizeof(PLAYERSTATS);
+	SDWORD		statSize = sizeof(PLAYERSTATS);
 	UDWORD		playerDPID;
 
 	playerDPID = player2dpid[player];
@@ -569,7 +569,7 @@ PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Set Player's stats
-BOOL setMultiStats(DWORD dp, PLAYERSTATS plStats, BOOL bLocal)
+BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 {
 	UDWORD	playerDPID = (UDWORD) dp;
 

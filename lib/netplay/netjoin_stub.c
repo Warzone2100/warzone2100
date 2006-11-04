@@ -6,7 +6,7 @@
 #include "lib/framework/frame.h"
 #include "netplay.h"
 
-DWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
+SDWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
 {
 	switch(flag)
 	{

@@ -98,7 +98,7 @@ SDWORD						playerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};		//team each pl
 static SWORD				SettingsUp		= 0;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
-static DWORD				dwSelectedGame	=0;						//player[] and games[] indexes
+static SDWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
 static BOOL					safeSearch		= FALSE;				// allow auto game finding.
 
@@ -649,19 +649,19 @@ static void addGames(void)
 			if(gcount < 6)							// only center column needed.
 			{
 				sButInit.x = 125;
-				sButInit.y = (SHORT)(30+((5+GAMES_GAMEHEIGHT)*i) );
+				sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 			}
 			else
 			{
 				if(i<6)		//column 1
 				{
 					sButInit.x = 10;
-					sButInit.y = (SHORT)(30+((5+GAMES_GAMEHEIGHT)*i) );
+					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 				}
 				else		//column 2
 				{
 					sButInit.x = 20+GAMES_GAMEWIDTH;
-					sButInit.y = (SHORT)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
+					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
 				}
 			}
 
@@ -1514,7 +1514,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.id = MULTIOP_TEAMS_START+i;
 				sButInit.style = WBUT_PLAIN;
 				sButInit.x = 10;
-				sButInit.y = (SHORT)(( (MULTIOP_TEAMSHEIGHT+5)*i)+4);
+				sButInit.y = (UWORD)(( (MULTIOP_TEAMSHEIGHT+5)*i)+4);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
 				sButInit.pTip = "Choose team";	//Players[i].name;
@@ -1539,7 +1539,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.id = MULTIOP_PLAYER_START+i;
 				sButInit.style = WBUT_PLAIN;
 				sButInit.x = 10 + MULTIOP_TEAMSWIDTH;
-				sButInit.y = (SHORT)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
+				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;//Players[i].name;
@@ -1565,7 +1565,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.id = MULTIOP_PLAYER_START+i;
 				sFormInit.style = WBUT_PLAIN;
 				sFormInit.x = 10;
-				sFormInit.y = (SHORT)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
+				sFormInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
 				sFormInit.width = MULTIOP_ROW_WIDTH;
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
 				sFormInit.pTip = NULL;//Players[i].name;
