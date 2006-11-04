@@ -193,7 +193,9 @@ typedef struct _body_stats
 	UDWORD		weaponSlots;		// The number of weapon slots on the body
 	UDWORD		armourValue[NUM_WEAPON_CLASS];	// A measure of how much protection the armour provides
 												// cross-ref with the weapon types
-	UDWORD		powerOutput;		// A measure of how much energy the power plant outputs
+	// Watermelon:you just got trolled,sir...
+	// A measure of how much energy the power plant outputs
+	UDWORD		powerOutput;		// this is the engine output of the body
 	struct	iIMDShape	**ppIMDList;			//list of IMDs to use for propulsion unit - up to numPropulsionStats
     struct  iIMDShape   *pFlameIMD;     //pointer to which flame graphic to use - for VTOLs only at the moment
 } BODY_STATS;
@@ -417,8 +419,7 @@ typedef struct _weapon_stats
 	/* Audio */
 	SDWORD			iAudioFireID;
 	SDWORD			iAudioImpactID;
-}
-WEAPON_STATS;
+} WEAPON_STATS;
 
 typedef struct _construct_stats
 {

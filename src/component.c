@@ -56,7 +56,8 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 UDWORD	droidScale = 100;
 void displayComponentTemplate(DROID_TEMPLATE *psTemplate);
 //void displayComponentObject(BASE_OBJECT *psObj);
-static void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton);
+//Watermelon:updated protocol for displayCompObj
+static void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS], BOOL bButton);
 static iIMDShape *getLeftPropulsionIMD(DROID *psDroid);
 static iIMDShape *getRightPropulsionIMD(DROID *psDroid);
 
@@ -576,8 +577,18 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 {
 	static DROID Droid;	// Made static to reduce stack usage.
 	SDWORD difference;
-	iVector mountRotation = {0,0,0};
+	//Watermelon:make it contain DROID_MAXWEAPS Vector info
+	iVector		mountRotation[DROID_MAXWEAPS];
  	iVector TmpCamPos = {0,0,0};
+	int			i;
+
+	//Watermelon:I need to initialise the values of this,since DROID_MAXWEAPS is not a 'constant'
+	for(i = 0;i < psTemplate->numWeaps;i++)
+	{
+		mountRotation[i].x = 0;
+		mountRotation[i].y = 0;
+		mountRotation[i].z = 0;
+	}
 
 	/* init to NULL */
 	memset( &Droid, 0, sizeof(DROID) );
@@ -606,6 +617,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 	//draw multi component object as a button object
 	displayCompObj((BASE_OBJECT*)&Droid,&mountRotation,TRUE);
 
+
 	unsetMatrix();
 }
 
@@ -616,8 +628,18 @@ void displayComponentButtonObject(DROID *psDroid,
 								  iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
 {
 	SDWORD		difference;
-	iVector		mountRotation = {0,0,0};
+	//Watermelon:make it contain DROID_MAXWEAPS Vector info
+	iVector		mountRotation[DROID_MAXWEAPS];
  	iVector		TmpCamPos = {0,0,0};
+	int			i;
+
+	//Watermelon:I need to initialise the values of this,since DROID_MAXWEAPS is not a 'constant'
+	for(i = 0;i < psDroid->numWeaps;i++)
+	{
+		mountRotation[i].x = 0;
+		mountRotation[i].y = 0;
+		mountRotation[i].z = 0;
+	}
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
@@ -644,11 +666,14 @@ void displayComponentButtonObject(DROID *psDroid,
 
 
 /* Assumes matrix context is already set */
+// Watermelon:multiple turrets display
 void displayComponentObject(BASE_OBJECT *psObj)
 {
 DROID		*psDroid;
 //iIMDShape	*psShape;
-iVector		position,rotation,mountRotation;	//,null;
+//Watermelon:mountRotation is array now
+iVector		position,rotation;	//,null;
+iVector		mountRotation[DROID_MAXWEAPS];
 //iPoint		screenCoords;
 //SDWORD		dummyZ;
 int32		xShift,zShift;
@@ -658,10 +683,19 @@ SDWORD		frame;
 PROPULSION_STATS	*psPropStats;
 UDWORD	tileX,tileY;
 MAPTILE	*psTile;
+//Watermelon:added int iWeapons,i;
+int iWeapons = 0;
+int i = 0;
 
 	psDroid = (DROID *)psObj;
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
+	for(i = 0;i < psDroid->numWeaps;i++)
+	{
+		mountRotation[i].x = 0;
+		mountRotation[i].y = 0;
+		mountRotation[i].z = 0;
+	}
 
 	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
 	difference = (worldAngle-psObj->direction);
@@ -706,9 +740,31 @@ MAPTILE	*psTile;
 
 
 	/* Get rotation info for the mounting too (holds the gun */
-	mountRotation.y = -(SDWORD)psDroid->turretRotation;
-	mountRotation.x = psDroid->turretPitch;
-	mountRotation.z = 0;
+	// Watermelon:added check against droid type
+	if ( psDroid->type == OBJ_DROID )
+	{
+		if ( psDroid->droidType == DROID_WEAPON )
+		{
+			for(iWeapons = 0;iWeapons < psDroid->numWeaps;iWeapons++)
+			{
+				mountRotation[iWeapons].y = -(SDWORD)psDroid->turretRotation[iWeapons];
+				mountRotation[iWeapons].x = psDroid->turretPitch[iWeapons];
+				mountRotation[iWeapons].z = 0;
+			}
+		}
+		else
+		{
+			mountRotation[0].y = -(SDWORD)((DROID *)psObj)->turretRotation[0];
+			mountRotation[0].x = ((DROID *)psObj)->turretPitch[0];
+			mountRotation[0].z = 0;
+		}
+	}
+	else
+	{
+		mountRotation[0].y = -(SDWORD)((DROID *)psObj)->turretRotation[0];
+		mountRotation[0].x = ((DROID *)psObj)->turretPitch[0];
+		mountRotation[0].z = 0;
+	}
 
 	/* Translate origin */
 	pie_TRANSLATE(position.x,position.y,position.z);
@@ -739,6 +795,7 @@ MAPTILE	*psTile;
 	if (godMode || (psDroid->visible[selectedPlayer] == UBYTE_MAX) OR demoGetStatus())
 	{
 		//ingame not button object
+		//Watermelon:should render 3 mounted weapons now
 		displayCompObj(psObj,&mountRotation,FALSE);
 	}
 	else
@@ -770,10 +827,13 @@ MAPTILE	*psTile;
 
 
 /* Assumes matrix context is already set */
-void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
+// Watermelon:this is able to handle multiple weapon graphics now
+// mountRotation is iVector array contains mountRotation from all weapons now!!!
+void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS], BOOL bButton)
 {
 	DROID				*psDroid;
-	iIMDShape			*psShape, *psJet = NULL;
+	//Watermelon:I need another temp pointer to Shape
+	iIMDShape			*psShape, *psJet, *psShapeTemp = NULL;
 	iVector				null;
 	iPoint				screenCoords;
 	SDWORD				dummyZ, iConnector;
@@ -784,6 +844,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 //	SDWORD				centreX,centreZ;
 	UDWORD				colour;
 	UDWORD				bDarkSide = FALSE;
+	//Watermelon:i
+	int					i;
 
    	/* Cast the droid pointer */
 	psDroid = (DROID *)psObj;
@@ -860,10 +922,11 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 		iPieData = 0;
 	}
 
-	psShape = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
-	if(psShape!=NULL)
+	//Watermelon:uses psShapeTemp too separate it from turret's psShape
+	psShapeTemp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
+	if(psShapeTemp!=NULL)
 	{
-		pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
+		pie_Draw3DShape(psShapeTemp, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 	}
 
 	/* set default components transparent */
@@ -879,8 +942,9 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 	}
 
 	/* Get the body graphic now*/
-	psShape = BODY_IMD(psDroid,psDroid->player);
-	if(psShape!=NULL)
+	//Watermelon:uses psShapeTemp too separate it from turret's psShape
+	psShapeTemp = BODY_IMD(psDroid,psDroid->player);
+	if(psShapeTemp!=NULL)
 	{
 		// FIXME
 		if ( psDroid->droidType == DROID_PERSON)
@@ -890,7 +954,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			{
 				// FIXME - hideous....!!!!
 				pie_MatScale(75);
-				pie_Draw3DShape(psShape, 0, psDroid->player-6, brightness, specular, pieFlag, iPieData);
+				pie_Draw3DShape(psShapeTemp, 0, psDroid->player-6, brightness, specular, pieFlag, iPieData);
 			}
 		}
 		//else if( psDroid->droidType == DROID_CYBORG)
@@ -899,12 +963,12 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			/* draw body if cyborg not animating */
 			if ( psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == FALSE )
 			{
-				pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
+				pie_Draw3DShape(psShapeTemp, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 			}
 		}
 		else
 		{
-			pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData );
+			pie_Draw3DShape(psShapeTemp, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData );
 		}
 	}
 
@@ -959,9 +1023,10 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 
 	/* Indenting here is only to show new matrix context */
 	{
-		psShape = BODY_IMD(psDroid,psDroid->player);
-		pie_MatBegin();
-		if( psShape->nconnectors )
+		psShapeTemp = BODY_IMD(psDroid,psDroid->player);
+		//Watermelon:I moved it to 'for' loop
+		//pie_MatBegin();
+		if( psShapeTemp->nconnectors )
 		{
 			/* vtol weapons attach to connector 2 (underneath);
 			 * all others to connector 1 */
@@ -976,20 +1041,31 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 			}
 
 			/* Now we need to move for the mount point */
+			//Watermelon:I moved it to switch,this is called __inline__ j/k
+			/*
 			pie_TRANSLATE( psShape->connectors[iConnector].x,
 						   psShape->connectors[iConnector].z,
 						   psShape->connectors[iConnector].y  );
+						   */
 
 			/* Rotate the turret */
-			pie_MatRotY(DEG(mountRotation->y));
+			/*
+			if(&mountRotation[i])
+			{
+				pie_MatRotY(DEG(&mountRotation[i].y));
+			}
+			*/
 			//dont pitch the turret
 //			pie_MatRotZ(DEG(mountRotation->z));
 
+			//I moved it to 'for' loop
 			/* vtol weapons inverted */
+			/*
 			if ( iConnector == 1 )
 			{
 				pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 			}
+			*/
 
 		//SEPERATE Mount IMDs now...
 		/*	Get the mounting graphic - we've already moved to the right position
@@ -1009,84 +1085,159 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				/* Double check that the weapon droid actually has any */
+				//Watermelon:uses numWeaps
 				//if(psDroid->numWeaps)
-                if(psDroid->asWeaps[0].nStat > 0 OR psDroid->droidType == DROID_DEFAULT)
+				for (i = 0;i < psDroid->numWeaps;i++)
 				{
-					psShape = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
-					/* Draw it */
-					//if(psDroid->numWeaps) already done this check above?!
+					if (psDroid->asWeaps[i].nStat > 0 OR psDroid->droidType == DROID_DEFAULT)
 					{
-						pie_TRANSLATE(0,0,psDroid->asWeaps[0].recoilValue/3);
-					}
-					if(psShape)
-					{
-						pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
-					}
-
-					//if(psDroid->numWeaps) already done this check above?!
-					{
-						pie_TRANSLATE(0,0,psDroid->asWeaps[0].recoilValue);
-					}
-
-					/* translate for weapon mount point if cyborg */
-					//if( psDroid->droidType == DROID_CYBORG &&
-                    if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
-					{
-						pie_TRANSLATE( psShape->connectors[0].x,
-									   psShape->connectors[0].z,
-									   psShape->connectors[0].y  );
-					}
-
-					/* vtol weapons inverted */
-					if ( iConnector == 1 )
-					{
-						//pitch the barrel down
-						pie_MatRotX(DEG(-mountRotation->x));
-					}
-					else
-					{
-						//pitch the barrel up
-						pie_MatRotX(DEG(mountRotation->x));
-					}
-
-					/* Get the weapon (gun?) graphic */
-					psShape = WEAPON_IMD(psDroid,psDroid->player);
-					/* Draw it */
-					if(psShape)
-					{
-						pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
-					}
-					//we have a droid weapon so do we draw a muzzle flash
-					if( psShape && psShape->nconnectors )
-					{
-						/* Now we need to move to the end fo the barrel */
-						pie_TRANSLATE( psShape->connectors[0].x,
-									   psShape->connectors[0].z,
-									   psShape->connectors[0].y  );
-						//and draw the muzzle flash
-						//animate for the duration of the flash only
-						psShape = MUZZLE_FLASH_PIE(psDroid,psDroid->player);
-						if(psShape)
+						if ( psShapeTemp->connectors )
 						{
-							//assume no clan colours formuzzle effects
-							if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))//no anim so display one frame for a fixed time
+							pie_MatBegin();
+							//Watermelon:reset Z?
+							dummyZ = pie_RotProj(&null,&screenCoords);
+
+							//Watermelon:to skip connectors[1](VOTL hardpoint)
+							if ( i == 0 )
 							{
-								if (gameTime < (psDroid->asWeaps->lastFired + BASE_MUZZLE_FLASH_DURATION))
+								pie_TRANSLATE( psShapeTemp->connectors[iConnector].x,
+											   psShapeTemp->connectors[iConnector].z,
+											   psShapeTemp->connectors[iConnector].y  );
+							}
+							else if ( i > 0 )
+							{
+								if ( iConnector == 1 )
 								{
-   								pie_Draw3DShape(psShape, 0, 0, brightness, 0, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);//muzzle flash
-   //								pie_Draw3DShape(psShape, 0, 0, brightness, 0, pieFlag, 0);//muzzle flash
+									pie_TRANSLATE( psShapeTemp->connectors[iConnector].x,
+												   psShapeTemp->connectors[iConnector].z,
+												   psShapeTemp->connectors[iConnector].y  );
 								}
+								else
+								{
+									pie_TRANSLATE( psShapeTemp->connectors[i+1].x,
+												   psShapeTemp->connectors[i+1].z,
+												   psShapeTemp->connectors[i+1].y  );
+								}
+							}
+
+							if ( psDroid->turretRotation[i] )
+							{
+								pie_MatRotY(DEG( (-(SDWORD)psDroid->turretRotation[i])) );
+							}
+
+
+							/* vtol weapons inverted */
+							if ( iConnector == 1 )
+							{
+								pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+							}
+
+
+							//psShape = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
+							psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pMountGraphic;
+							/* Draw it */
+							//if(psDroid->numWeaps) already done this check above?!
+							{
+								pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue/3);
+							}
+							if(psShape)
+							{
+								pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
+							}
+
+							//if(psDroid->numWeaps) already done this check above?!
+							{
+								pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue);
+							}
+
+							/* translate for weapon mount point if cyborg */
+							//if( psDroid->droidType == DROID_CYBORG &&
+							if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
+							{
+								pie_TRANSLATE( psShape->connectors[0].x,
+											   psShape->connectors[0].z,
+											   psShape->connectors[0].y  );
+							}
+
+							/* vtol weapons inverted */
+							if ( iConnector == 1 )
+							{
+								//pitch the barrel down
+								pie_MatRotX(DEG( (-(psDroid->turretPitch[i])) ));
 							}
 							else
 							{
-								frame = (gameTime - psDroid->asWeaps->lastFired)/psShape->animInterval;
-								if (frame < psShape->numFrames)
+								//pitch the barrel up
+								pie_MatRotX(DEG(psDroid->turretPitch[i]));
+							}
+
+							/* Get the weapon (gun?) graphic */
+							//psShape = WEAPON_IMD(psDroid,psDroid->player);
+							psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pIMD;
+							/* Draw it */
+							if(psShape)
+							{
+								pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
+							}
+							//we have a droid weapon so do we draw a muzzle flash
+							if( psShape && psShape->nconnectors )
+							{
+								/* Now we need to move to the end fo the barrel */
+								//Watermelon:to skip connectors[1](VOTL hardpoint)
+								if ( i == 0 )
 								{
-									pie_Draw3DShape(psShape, frame, 0, brightness, 0, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);//muzzle flash
-	//								pie_Draw3DShape(psShape, frame, 0, brightness, 0, pieFlag, 0);//muzzle flash
+									pie_TRANSLATE( psShape->connectors[0].x,
+												   psShape->connectors[0].z,
+												   psShape->connectors[0].y  );
+								}
+								else if ( i > 0 )
+								{
+									//Watermelon:to skip VTOL connector 1
+									if ( iConnector == 1)
+									{
+										//Watermelon:VTOL untouched
+										pie_TRANSLATE( psShape->connectors[iConnector].x,
+													   psShape->connectors[iConnector].z,
+													   psShape->connectors[iConnector].y  );
+									}
+									else
+									{
+										//Watermelon:MUZZLE_FLASH_PIE for all weapons
+										pie_TRANSLATE( psShape->connectors[i+1].x,
+													   psShape->connectors[i+1].z,
+													   psShape->connectors[i+1].y  );
+									}
+								}
+								//and draw the muzzle flash
+								//animate for the duration of the flash only
+								//Watermelon:change macro to actual accessor for each turret effect
+								//psShape = MUZZLE_FLASH_PIE(psDroid,psDroid->player);
+								psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pMuzzleGraphic;
+								if(psShape)
+								{
+									//assume no clan colours formuzzle effects
+									if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))//no anim so display one frame for a fixed time
+									{
+										if (gameTime < (psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+										{
+   										pie_Draw3DShape(psShape, 0, 0, brightness, 0, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);//muzzle flash
+		   //								pie_Draw3DShape(psShape, 0, 0, brightness, 0, pieFlag, 0);//muzzle flash
+										}
+									}
+									else
+									{
+										frame = (gameTime - psDroid->asWeaps[i].lastFired)/psShape->animInterval;
+										if (frame < psShape->numFrames)
+										{
+											pie_Draw3DShape(psShape, frame, 0, brightness, 0, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);//muzzle flash
+			//								pie_Draw3DShape(psShape, frame, 0, brightness, 0, pieFlag, 0);//muzzle flash
+										}
+									}
 								}
 							}
 						}
+						/* Pop Matrix */
+						pie_MatEnd();
 					}
 				}
 				break;
@@ -1095,6 +1246,24 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
+				//Watermelon:sensor uses connectors[0]
+				pie_MatBegin();
+				//Watermelon:reset Z?
+				dummyZ = pie_RotProj(&null,&screenCoords);
+				/* vtol weapons inverted */
+				if ( iConnector == 1 )
+				{
+					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+				}
+
+				pie_TRANSLATE( psShapeTemp->connectors[0].x,
+							   psShapeTemp->connectors[0].z,
+							   psShapeTemp->connectors[0].y  );
+
+				if(psDroid->turretRotation[0])
+				{
+					pie_MatRotY(DEG( (-(SDWORD)(psDroid->turretRotation[0])) ));
+				}
 				psShape = SENSOR_MOUNT_IMD(psDroid,psDroid->player);
 				/* Draw it */
 				if(psShape)
@@ -1113,6 +1282,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 //					pie_MatRotY(DEG(psDroid->turretRotation));
 					pie_Draw3DShape(psShape, 0,colour/*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
+				/* Pop Matrix */
+				pie_MatEnd();
 				break;
 
 			case DROID_CONSTRUCT:
@@ -1120,6 +1291,23 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
+				//Watermelon:cyborg uses connectors[0]
+				pie_MatBegin();
+				//Watermelon:reset Z?
+				dummyZ = pie_RotProj(&null,&screenCoords);
+				/* vtol weapons inverted */
+				if ( iConnector == 1 )
+				{
+					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+				}
+				pie_TRANSLATE( psShapeTemp->connectors[0].x,
+							   psShapeTemp->connectors[0].z,
+							   psShapeTemp->connectors[0].y  );
+
+				if(psDroid->turretRotation[0])
+				{
+					pie_MatRotY(DEG( (-(SDWORD)(psDroid->turretRotation[0])) ));
+				}
 				psShape = CONSTRUCT_MOUNT_IMD(psDroid,psDroid->player);
 				/* Draw it */
 				if(psShape)
@@ -1143,12 +1331,30 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				{
 					pie_Draw3DShape(psShape, 0,colour/*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
-
+				/* Pop Matrix */
+				pie_MatEnd();
 				break;
 			case DROID_ECM:
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
+				//Watermelon:ecm uses connectors[0]
+				pie_MatBegin();
+				//Watermelon:reset Z?
+				dummyZ = pie_RotProj(&null,&screenCoords);
+				/* vtol weapons inverted */
+				if ( iConnector == 1 )
+				{
+					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+				}
+				pie_TRANSLATE( psShapeTemp->connectors[0].x,
+							   psShapeTemp->connectors[0].z,
+							   psShapeTemp->connectors[0].y  );
+
+				if(psDroid->turretRotation[0])
+				{
+					pie_MatRotY(DEG( (-(SDWORD)(psDroid->turretRotation[0])) ));
+				}
 				psShape = ECM_MOUNT_IMD(psDroid,psDroid->player);
 				/* Draw it */
 				if(psShape)
@@ -1163,12 +1369,31 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 				{
 					pie_Draw3DShape(psShape, 0, colour/*getPlayerColour(psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
-					break;
+				/* Pop Matrix */
+				pie_MatEnd();
+				break;
 			case DROID_REPAIR:
             case DROID_CYBORG_REPAIR:
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
+				//Watermelon:cyborg uses connectors[0]
+				pie_MatBegin();
+				//Watermelon:reset Z?
+				dummyZ = pie_RotProj(&null,&screenCoords);
+				/* vtol weapons inverted */
+				if ( iConnector == 1 )
+				{
+					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+				}
+				pie_TRANSLATE( psShapeTemp->connectors[0].x,
+							   psShapeTemp->connectors[0].z,
+							   psShapeTemp->connectors[0].y  );
+
+				if(psDroid->turretRotation[0])
+				{
+					pie_MatRotY(DEG( (-(SDWORD)(psDroid->turretRotation[0])) ));
+				}
 				psShape = REPAIR_MOUNT_IMD(psDroid,psDroid->player);
 				/* Draw it */
 				if(psShape)
@@ -1204,7 +1429,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 						pie_MatRotY(DEG((SDWORD)psDroid->direction));
 						pie_MatRotX(DEG(-psDroid->pitch));
 						pie_MatRotZ(DEG(-psDroid->roll));
-					   	pie_MatRotY(DEG(-mountRotation->y));
+						//Watermelon:rotate Y
+					   	pie_MatRotY(DEG( -( (-(SDWORD)(psDroid->turretRotation[0])) ) ));
 
 						iV_MatrixRotateY(-player.r.y);
 						iV_MatrixRotateX(-player.r.x);
@@ -1217,6 +1443,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 						iV_MatrixRotateY(player.r.y);
 					}
 				}
+				/* Pop Matrix */
+				pie_MatEnd();
 					break;
 			case DROID_PERSON:
 				// no extra mounts for people
@@ -1229,8 +1457,9 @@ void displayCompObj(BASE_OBJECT *psObj,iVector *mountRotation, BOOL bButton)
 		/*	We've also got a handle on the psShape here for the weapon which has a connector to point to
 			muzzle flash attachment points - just grab it from psShape->connectors->[x|y|z] */
 
+		//Watermelon:I moved it to 'for' loop
 		/* Pop Matrix */
-		pie_MatEnd();
+		//pie_MatEnd();
 	} // end of illustrative indentation - see above
 
 	/* set default components transparent */
@@ -1300,10 +1529,15 @@ iVector	pos;
             case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
 			case DROID_COMMAND:
+				//Watermelon:another commented-out crash...
+				//Re-added the safety check
 				//if(psDroid->numWeaps)
-				if(psDroid->asWeaps[0].nStat > 0)
-                {
-					psImd = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
+				if (psDroid->numWeaps > 0)
+				{
+					if(psDroid->asWeaps[0].nStat > 0)
+					{
+						psImd = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
+					}
 				}
 				else
 				{
@@ -1459,6 +1693,7 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
+
 
 
 

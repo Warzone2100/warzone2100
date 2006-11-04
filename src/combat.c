@@ -111,7 +111,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	psStats = asWeaponStats + psWeap->nStat;
 
     //check valid weapon/prop combination
-    if (!validTarget(psAttacker, psTarget))
+    if (validTarget(psAttacker, psTarget) == 1)
     {
         return;
     }
@@ -168,12 +168,14 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	}
 
 	/* Check we can see the target */
+	//Watermelon:Change actionInsideMinRange to int
 	if ( (psAttacker->type == OBJ_DROID) &&
 		 !vtolDroid((DROID *)psAttacker) &&
-		 (proj_Direct(psStats) ||
-		  actionInsideMinRange(psDroid, psDroid->psActionTarget)) )
+		 (proj_Direct(psStats) || 
+		 (actionInsideMinRange(psDroid, psDroid->psActionTarget) > 1))
+		)
 	{
-		if (!visibleObjWallBlock(psAttacker, psTarget))
+		if(!visibleObjWallBlock(psAttacker, psTarget))
 		{
 			// Can't see the target - can't hit it with direct fire
 			DBP3(("directLOS failed\n"));
@@ -372,9 +374,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	else if ((SDWORD)distSquared <= longRange * longRange &&
 			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
 			   ((psAttacker->type == OBJ_DROID) &&
-				!proj_Direct(psStats) &&
-			     actionInsideMinRange(psDroid, psDroid->psActionTarget)) ) )
+			   !proj_Direct(psStats) &&
+			   actionInsideMinRange(psDroid, psDroid->psActionTarget) > 1) ))
 	{
+		//Watermelon:Change actionInMinRange to int
 		/* note when the weapon fired */
 		psWeap->lastFired = gameTime;
 		/*reduce ammo if salvo*/

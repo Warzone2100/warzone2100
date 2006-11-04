@@ -261,6 +261,8 @@ void orderUpdateDroid(DROID *psDroid)
 	SECONDARY_STATE state;
 	BOOL			bAttack;
 	DROID			*psSpotter;
+	//Watermelon:int i
+	int i;
 
 
 	// clear the target if it has died
@@ -480,33 +482,37 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 		break;
 	case DORDER_MOVE_ATTACKWALL:
 	case DORDER_SCOUT_ATTACKWALL:
-		if (psDroid->psTarget == NULL)
+		//Watermelon:check against all weapons now
+		for(i = 0;i <psDroid->numWeaps;i++)
 		{
-			if (psDroid->order == DORDER_MOVE_ATTACKWALL)
+			if (psDroid->psTarget == NULL)
 			{
-				psDroid->order = DORDER_MOVE;
+				if (psDroid->order == DORDER_MOVE_ATTACKWALL)
+				{
+					psDroid->order = DORDER_MOVE;
+				}
+				else
+				{
+					psDroid->order = DORDER_SCOUT;
+				}
+				actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
 			}
-			else
+			else if ((((psDroid->action != DACTION_ATTACK) &&
+					   (psDroid->action != DACTION_MOVETOATTACK) &&
+					   (psDroid->action != DACTION_ROTATETOATTACK)) ||
+					  (psDroid->psActionTarget != psDroid->psTarget)) &&
+					 (actionInRange(psDroid, psDroid->psTarget) & (1 << i)) )
 			{
-				psDroid->order = DORDER_SCOUT;
+				actionDroidObj(psDroid, DACTION_ATTACK, psDroid->psTarget);
 			}
-			actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
-		}
-		else if ((((psDroid->action != DACTION_ATTACK) &&
-				   (psDroid->action != DACTION_MOVETOATTACK) &&
-				   (psDroid->action != DACTION_ROTATETOATTACK)) ||
-				  (psDroid->psActionTarget != psDroid->psTarget)) &&
-				 actionInRange(psDroid, psDroid->psTarget))
-		{
-			actionDroidObj(psDroid, DACTION_ATTACK, psDroid->psTarget);
-		}
-		else if (psDroid->action == DACTION_NONE)
-		{
-			if (psDroid->order == DORDER_SCOUT_ATTACKWALL)
+			else if (psDroid->action == DACTION_NONE)
 			{
-				psDroid->order = DORDER_SCOUT;
+				if (psDroid->order == DORDER_SCOUT_ATTACKWALL)
+				{
+					psDroid->order = DORDER_SCOUT;
+				}
+				actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->x, psDroid->psTarget->y);
 			}
-			actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->x, psDroid->psTarget->y);
 		}
 		break;
 	case DORDER_SCOUT:
@@ -618,64 +624,68 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 		break;
 	case DORDER_ATTACK:
 	case DORDER_ATTACKTARGET:
-		if ((psDroid->psTarget == NULL))// ||
-//			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
+		//Watermelon:check against all weapons
+		for(i = 0;i <psDroid->numWeaps;i++)
 		{
-            // if vtol then return to rearm pad as long as there are no other
-			// orders queued up
-            if (vtolDroid(psDroid))
-            {
-				if (!orderDroidList(psDroid))
+			if ((psDroid->psTarget == NULL))// ||
+	//			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
+			{
+				// if vtol then return to rearm pad as long as there are no other
+				// orders queued up
+				if (vtolDroid(psDroid))
 				{
-	       			psDroid->order = DORDER_NONE;
-		            moveToRearm(psDroid);
+					if (!orderDroidList(psDroid))
+					{
+	       				psDroid->order = DORDER_NONE;
+						moveToRearm(psDroid);
+					}
 				}
-            }
-            else
-            {
-       			psDroid->order = DORDER_NONE;
-        		actionDroid(psDroid, DACTION_NONE);
-            }
-		}
-		else if ( ((psDroid->action == DACTION_MOVE) ||
-				   (psDroid->action == DACTION_MOVEFIRE)) &&
-				   actionVisibleTarget(psDroid, psDroid->psTarget) && !vtolDroid(psDroid))
-		{
-			// moved near enough to attack change to attack action
-			actionDroidObj(psDroid, DACTION_ATTACK, psDroid->psTarget);
-		}
-		else if ( (psDroid->action == DACTION_MOVETOATTACK) &&
-				  !vtolDroid(psDroid) &&
-				  !actionVisibleTarget(psDroid, psDroid->psTarget) )
-		{
-			// lost sight of the target while chasing it - change to a move action so
-			// that the unit will fire on other things while moving
-			actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->x, psDroid->psTarget->y);
-		}
-		else if (!vtolDroid(psDroid) &&
-				 (psDroid->psTarget == psDroid->psActionTarget) &&
-				 actionInRange(psDroid, psDroid->psTarget) &&
-				 visGetBlockingWall((BASE_OBJECT *)psDroid, psDroid->psTarget, &psWall) &&
-				 (psWall->player != psDroid->player))
-		{
-			// there is a wall in the way - attack that
-			actionDroidObj(psDroid, DACTION_ATTACK, (BASE_OBJECT *)psWall);
-		}
-		else if ((psDroid->action == DACTION_NONE) ||
-				 (psDroid->action == DACTION_CLEARREARMPAD))
-		{
-			if ((psDroid->order == DORDER_ATTACKTARGET) &&
-				secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD) &&
-				!actionInRange(psDroid, psDroid->psTarget))
-			{
-				// on hold orders give up
-				psDroid->order = DORDER_NONE;
-				psDroid->psTarget = NULL;
+				else
+				{
+       				psDroid->order = DORDER_NONE;
+        			actionDroid(psDroid, DACTION_NONE);
+				}
 			}
-			else if (!vtolDroid(psDroid) ||
-				allVtolsRearmed(psDroid))
+			else if ( ((psDroid->action == DACTION_MOVE) ||
+					   (psDroid->action == DACTION_MOVEFIRE)) &&
+					   actionVisibleTarget(psDroid, psDroid->psTarget) && !vtolDroid(psDroid))
 			{
+				// moved near enough to attack change to attack action
 				actionDroidObj(psDroid, DACTION_ATTACK, psDroid->psTarget);
+			}
+			else if ( (psDroid->action == DACTION_MOVETOATTACK) &&
+					  !vtolDroid(psDroid) &&
+					  !actionVisibleTarget(psDroid, psDroid->psTarget) )
+			{
+				// lost sight of the target while chasing it - change to a move action so
+				// that the unit will fire on other things while moving
+				actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->x, psDroid->psTarget->y);
+			}
+			else if (!vtolDroid(psDroid) &&
+					 (psDroid->psTarget == psDroid->psActionTarget) &&
+					 ( actionInRange(psDroid, psDroid->psTarget) & (1 << i) ) &&
+					 visGetBlockingWall((BASE_OBJECT *)psDroid, psDroid->psTarget, &psWall) &&
+					 (psWall->player != psDroid->player))
+			{
+				// there is a wall in the way - attack that
+				actionDroidObj(psDroid, DACTION_ATTACK, (BASE_OBJECT *)psWall);
+			}
+			else if ((psDroid->action == DACTION_NONE) ||
+					 (psDroid->action == DACTION_CLEARREARMPAD))
+			{
+				if ((psDroid->order == DORDER_ATTACKTARGET) &&
+					secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD) &&
+					!( actionInRange(psDroid, psDroid->psTarget) & (1 << i)) )
+				{
+					// on hold orders give up
+					psDroid->order = DORDER_NONE;
+					psDroid->psTarget = NULL;
+				}
+				else if (!vtolDroid(psDroid) ||
+					allVtolsRearmed(psDroid))
+				{
+					actionDroidObj(psDroid, DACTION_ATTACK, psDroid->psTarget);
+				}
 			}
 		}
 		break;
@@ -1565,7 +1575,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_ATTACKTARGET:
 		// If there arn't any weapons stop
 		//if (psDroid->numWeaps == 0)
-        if ((psDroid->asWeaps[0].nStat == 0) ||
+		//Watermelon:re-added if(psDroid->numWeaps == 0)
+        if ((psDroid->numWeaps == 0) || 
+			(psDroid->asWeaps[0].nStat == 0) ||
 			(psDroid->droidType == DROID_TRANSPORTER))
 		{
 			break;
@@ -1602,8 +1614,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 //			psDroid->order = DORDER_ATTACK;
 			psDroid->order = psOrder->order;
 
+			//Watermelon:Changed actionInsideMinRange to int
 			if ( vtolDroid(psDroid) ||
-				 actionInsideMinRange(psDroid, psDroid->psTarget) ||
+				 (actionInsideMinRange(psDroid, psDroid->psTarget) > 1) ||
 				 ( (psOrder->order == DORDER_ATTACKTARGET) &&
 				   secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD) ) )
 			{
@@ -2926,7 +2939,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 			&& !aiCheckAlliances(psObj->player , psDroid->player) )
 	{
         //check valid weapon/prop combination
-        if (!validTarget((BASE_OBJECT *)psDroid, psObj))
+        if (validTarget((BASE_OBJECT *)psDroid, psObj) == 1)
         {
             order = DORDER_NONE;
         }

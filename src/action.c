@@ -79,156 +79,230 @@ typedef struct _droid_action_data
 BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
 /* Check if a target is at correct range to attack */
-BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj)
+int actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj)
 {
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	SECONDARY_STATE state;
 	WEAPON_STATS	*psStats;
+	//Watermelon:now tests against all weapons
+	int i = 0;
+	//this is a bitfield
+	int num_weapons = 0;
+	int weaponsInRange = 1;
 
 	//if (psDroid->numWeaps == 0)
-    if (psDroid->asWeaps[0].nStat == 0)
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
 	{
-		return FALSE;
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat != 0)
+			{
+				num_weapons += (1 << (i+1));
+			}
+		}
+	}
+	else
+	{
+		if (psDroid->asWeaps[0].nStat == 0)
+		{
+			return weaponsInRange;
+		}
+		num_weapons = 2;
 	}
 
-	psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-
+	//Watermelon:moved performance critical calc out of loop
 	dx = (SDWORD)psDroid->x - (SDWORD)psObj->x;
 	dy = (SDWORD)psDroid->y - (SDWORD)psObj->y;
 	dz = (SDWORD)psDroid->z - (SDWORD)psObj->z;
 
 	radSq = dx*dx + dy*dy;
 
-	if ((psDroid->order == DORDER_ATTACKTARGET) &&
-		secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
-		(state == DSS_HALT_HOLD))
+	for(i = 0;i < psDroid->numWeaps;i++)
 	{
-		longRange = proj_GetLongRange(psStats, dz);
-		rangeSq = longRange * longRange;
-	}
-	else
-	{
-		switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
+		if ( (num_weapons & (1 << (i+1))) )
 		{
-		case DSS_ARANGE_DEFAULT:
-			//if (psStats->shortHit > psStats->longHit)
-			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
-			{
-				rangeSq = psStats->shortRange * psStats->shortRange;
-			}
-			else
+			psStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+
+			if ((psDroid->order == DORDER_ATTACKTARGET) &&
+				secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
+				(state == DSS_HALT_HOLD))
 			{
 				longRange = proj_GetLongRange(psStats, dz);
 				rangeSq = longRange * longRange;
 			}
-			break;
-		case DSS_ARANGE_SHORT:
-			rangeSq = psStats->shortRange * psStats->shortRange;
-			break;
-		case DSS_ARANGE_LONG:
-			longRange = proj_GetLongRange(psStats, dz);
-			rangeSq = longRange * longRange;
-			break;
-		default:
-			ASSERT( FALSE, "actionInAttackRange: unknown attack range order" );
-			longRange = proj_GetLongRange(psStats, dz);
-			rangeSq = longRange * longRange;
-			break;
+			else
+			{
+				switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
+				{
+				case DSS_ARANGE_DEFAULT:
+					//if (psStats->shortHit > psStats->longHit)
+					if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
+					{
+						rangeSq = psStats->shortRange * psStats->shortRange;
+					}
+					else
+					{
+						longRange = proj_GetLongRange(psStats, dz);
+						rangeSq = longRange * longRange;
+					}
+					break;
+				case DSS_ARANGE_SHORT:
+					rangeSq = psStats->shortRange * psStats->shortRange;
+					break;
+				case DSS_ARANGE_LONG:
+					longRange = proj_GetLongRange(psStats, dz);
+					rangeSq = longRange * longRange;
+					break;
+				default:
+					ASSERT( FALSE, "actionInAttackRange: unknown attack range order" );
+					longRange = proj_GetLongRange(psStats, dz);
+					rangeSq = longRange * longRange;
+					break;
+				}
+			}
+
+			/* check max range */
+			if ( radSq <= rangeSq )
+			{
+				/* check min range */
+				rangeSq = psStats->minRange * psStats->minRange;
+				if ( radSq >= rangeSq || !proj_Direct( psStats ) )
+				{
+					weaponsInRange += (1 << (i+1));
+				}
+			}
+
 		}
 	}
 
-	/* check max range */
-	if ( radSq <= rangeSq )
-	{
-		/* check min range */
-		rangeSq = psStats->minRange * psStats->minRange;
-		if ( radSq >= rangeSq || !proj_Direct( psStats ) )
-		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-
-	return FALSE;
+	return weaponsInRange;
 }
 
 
 // check if a target is within weapon range
-BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj)
+int actionInRange(DROID *psDroid, BASE_OBJECT *psObj)
 {
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
+	//Watermelon:now tests against all weapons
+	int i = 0;
+	//this is a bitfield
+	int num_weapons = 0;
+	//Watermelon:another bitfield to store which weapon(s) are InRange
+	int weaponsInRange = 1;
 
 	//if (psDroid->numWeaps == 0)
-    if (psDroid->asWeaps[0].nStat == 0)
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
 	{
-		return FALSE;
-	}
-
-	psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-
-	dx = (SDWORD)psDroid->x - (SDWORD)psObj->x;
-	dy = (SDWORD)psDroid->y - (SDWORD)psObj->y;
-	dz = (SDWORD)psDroid->z - (SDWORD)psObj->z;
-
-	radSq = dx*dx + dy*dy;
-
-	longRange = proj_GetLongRange(psStats, dz);
-	rangeSq = longRange * longRange;
-
-	/* check max range */
-	if ( radSq <= rangeSq )
-	{
-		/* check min range */
-		rangeSq = psStats->minRange * psStats->minRange;
-		if ( radSq >= rangeSq || !proj_Direct( psStats ) )
+		for(i = 0;i < psDroid->numWeaps;i++)
 		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
+			if (psDroid->asWeaps[i].nStat != 0)
+			{
+				num_weapons += (1 << (i + 1));
+			}
 		}
 	}
+	else
+	{
+		if (psDroid->asWeaps[0].nStat == 0)
+		{
+			return weaponsInRange;
+		}
+		num_weapons = 2;
+	}
 
-	return FALSE;
+	for(i = 0;i < psDroid->numWeaps;i++)
+	{
+		if ( (num_weapons & (1 << (i+1))) )
+		{
+			psStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+
+			dx = (SDWORD)psDroid->x - (SDWORD)psObj->x;
+			dy = (SDWORD)psDroid->y - (SDWORD)psObj->y;
+			dz = (SDWORD)psDroid->z - (SDWORD)psObj->z;
+
+			radSq = dx*dx + dy*dy;
+
+			longRange = proj_GetLongRange(psStats, dz);
+			rangeSq = longRange * longRange;
+
+			/* check max range */
+			if ( radSq <= rangeSq )
+			{
+				/* check min range */
+				rangeSq = psStats->minRange * psStats->minRange;
+				if ( radSq >= rangeSq || !proj_Direct( psStats ) )
+				{
+					weaponsInRange += (1 << (i+1));
+				}
+			}
+		}
+	}
+
+	return weaponsInRange;
 }
 
 
 
 // check if a target is inside minimum weapon range
-BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj)
+int actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj)
 {
 	SDWORD			dx, dy, dz, radSq, rangeSq, minRange;
 	WEAPON_STATS	*psStats;
+	//Watermelon:now tests against all weapons
+	int i = 0;
+	//this is a bitfield
+	int num_weapons = 0;
+	//Watermelon:another bitfield to store which weapon(s) are InRange
+	int weaponsInRange = 1;
 
 	//if (psDroid->numWeaps == 0)
-    if (psDroid->asWeaps[0].nStat == 0)
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
 	{
-		return FALSE;
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat != 0)
+			{
+				num_weapons += (1 << (i + 1));
+			}
+		}
+	}
+	else
+	{
+		if (psDroid->asWeaps[0].nStat == 0)
+		{
+			return weaponsInRange;
+		}
+		num_weapons = 2;
 	}
 
-	psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-
-	dx = (SDWORD)psDroid->x - (SDWORD)psObj->x;
-	dy = (SDWORD)psDroid->y - (SDWORD)psObj->y;
-	dz = (SDWORD)psDroid->z - (SDWORD)psObj->z;
-
-	radSq = dx*dx + dy*dy;
-
-	minRange = (SDWORD)psStats->minRange;
-	rangeSq = minRange * minRange;
-
-	// check min range
-	if ( radSq <= rangeSq )
+	for(i = 0;i < psDroid->numWeaps;i++)
 	{
-		return TRUE;
+		if ( (num_weapons & (1 << (i+1))) )
+		{
+			psStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+
+			dx = (SDWORD)psDroid->x - (SDWORD)psObj->x;
+			dy = (SDWORD)psDroid->y - (SDWORD)psObj->y;
+			dz = (SDWORD)psDroid->z - (SDWORD)psObj->z;
+
+			radSq = dx*dx + dy*dy;
+
+			minRange = (SDWORD)psStats->minRange;
+			rangeSq = minRange * minRange;
+
+			// check min range
+			if ( radSq <= rangeSq )
+			{
+				weaponsInRange += (1 << (i+1));
+			}
+		}
 	}
 
-	return FALSE;
+	return weaponsInRange;
 }
 
 
@@ -308,8 +382,17 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj)
 void actionAlignTurret(BASE_OBJECT *psObj)
 {
 	UDWORD				rotation;
-	UWORD				tRot, tPitch, nearest = 0;
+	//Watermelon:multiple temp tRot, tPitch
+	UWORD				nearest = 0;
+	UWORD				tRot[DROID_MAXWEAPS];
+	UWORD				tPitch[DROID_MAXWEAPS];
+	//Watermelon:num_weapons,i
+	int					num_weapons = 0;
+	int					i;
 	//get the maximum rotation this frame
+
+	//Watermelon:struct default turret rotation 0
+	tRot[0] = 0;
 
 	//rotation = (psDroid->turretRotRate * frameTime) / (4 * GAME_TICKS_PER_SEC);
     rotation = (ACTION_TURRET_ROTATION_RATE * frameTime) / (4 * GAME_TICKS_PER_SEC);
@@ -321,16 +404,29 @@ void actionAlignTurret(BASE_OBJECT *psObj)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		tRot = ((DROID *)psObj)->turretRotation;
-		tPitch = ((DROID *)psObj)->turretPitch;
+		//Watermelon:multiple turrent rotation
+		if (((DROID *)psObj)->droidType == DROID_WEAPON)
+		{
+			for (i = 0;i < ((DROID *)psObj)->numWeaps;i++)
+			{
+				tRot[i] = ((DROID *)psObj)->turretRotation[i];
+				tPitch[i] = ((DROID *)psObj)->turretPitch[i];
+				num_weapons += (1 << (i+1));
+			}
+		}
+		else
+		{
+			tRot[0] = ((DROID *)psObj)->turretRotation[0];
+			tPitch[0] = ((DROID *)psObj)->turretPitch[0];
+		}
 		break;
 	case OBJ_STRUCTURE:
-		tRot = ((STRUCTURE *)psObj)->turretRotation;
-		tPitch = ((STRUCTURE *)psObj)->turretPitch;
+		tRot[0] = ((STRUCTURE *)psObj)->turretRotation;
+		tPitch[0] = ((STRUCTURE *)psObj)->turretPitch;
 
 		// now find the nearest 90 degree angle
-		nearest = (UWORD)(((tRot + 45) / 90) * 90);
-		tRot = (UWORD)(((tRot + 360) - nearest) % 360);
+		nearest = (UWORD)(((tRot[0] + 45) / 90) * 90);
+		tRot[0] = (UWORD)(((tRot[0] + 360) - nearest) % 360);
 		break;
 	default:
 		ASSERT( FALSE, "actionAlignTurret: invalid object type" );
@@ -345,71 +441,204 @@ void actionAlignTurret(BASE_OBJECT *psObj)
     DBP1(("unit=%x turret=%x\n",psDroid,ACTION_TURRET_ROTATION_RATE));
 
 
-	if (rotation > 180)//crop to 180 degrees, no point in turning more than all the way round
+	if (psObj->type == OBJ_DROID)
 	{
-		rotation = 180;
-	}
-	if (tRot < 180)// +ve angle 0 - 179 degrees
-	{
-		if (tRot > rotation)
+		if (((DROID *)psObj)->droidType == DROID_WEAPON)
 		{
-			tRot = (UWORD)(tRot - rotation);
-		}
-		else
-		{
-			tRot = 0;
-		}
-	}
-	else //angle greater than 180 rotate in opposite direction
-	{
-		if (tRot < (360 - rotation))
-		{
-			tRot = (UWORD)(tRot + rotation);
-		}
-		else
-		{
-			tRot = 0;
-		}
-	}
-	tRot %= 360;
+			for(i = 0;i < ((DROID *)psObj)->numWeaps;i++)
+			{
+				if (rotation > 180)//crop to 180 degrees, no point in turning more than all the way round
+				{
+					rotation = 180;
+				}
+				if (tRot[i] < 180)// +ve angle 0 - 179 degrees
+				{
+					if (tRot[i] > rotation)
+					{
+						tRot[i] = (UWORD)(tRot[i] - rotation);
+					}
+					else
+					{
+						tRot[i] = 0;
+					}
+				}
+				else //angle greater than 180 rotate in opposite direction
+				{
+					if (tRot[i] < (360 - rotation))
+					{
+						tRot[i] = (UWORD)(tRot[i] + rotation);
+					}
+					else
+					{
+						tRot[i] = 0;
+					}
+				}
+				tRot[i] %= 360;
 
-	// align the turret pitch
-	if (tPitch < 180)// +ve angle 0 - 179 degrees
-	{
-		if (tPitch > rotation/2)
-		{
-			tPitch = (UWORD)(tPitch - rotation/2);
+				// align the turret pitch
+				if (tPitch[i] < 180)// +ve angle 0 - 179 degrees
+				{
+					if (tPitch[i] > rotation/2)
+					{
+						tPitch[i] = (UWORD)(tPitch[i] - rotation/2);
+					}
+					else
+					{
+						tPitch[i] = 0;
+					}
+				}
+				else // -ve angle rotate in opposite direction
+				{
+					if (tPitch[i] < (360 -(SDWORD)rotation/2))
+					{
+						tPitch[i] = (UWORD)(tPitch[i] + rotation/2);
+					}
+					else
+					{
+						tPitch[i] = 0;
+					}
+				}
+				tPitch[i] %= 360;
+			}
 		}
 		else
 		{
-			tPitch = 0;
+			if (rotation > 180)//crop to 180 degrees, no point in turning more than all the way round
+			{
+				rotation = 180;
+			}
+			if (tRot[0] < 180)// +ve angle 0 - 179 degrees
+			{
+				if (tRot[0] > rotation)
+				{
+					tRot[0] = (UWORD)(tRot[0] - rotation);
+				}
+				else
+				{
+					tRot[0] = 0;
+				}
+			}
+			else //angle greater than 180 rotate in opposite direction
+			{
+				if (tRot[0] < (360 - rotation))
+				{
+					tRot[0] = (UWORD)(tRot[0] + rotation);
+				}
+				else
+				{
+					tRot[0] = 0;
+				}
+			}
+			tRot[0] %= 360;
+
+			// align the turret pitch
+			if (tPitch[0] < 180)// +ve angle 0 - 179 degrees
+			{
+				if (tPitch[0] > rotation/2)
+				{
+					tPitch[0] = (UWORD)(tPitch[0] - rotation/2);
+				}
+				else
+				{
+					tPitch[0] = 0;
+				}
+			}
+			else // -ve angle rotate in opposite direction
+			{
+				if (tPitch[0] < (360 -(SDWORD)rotation/2))
+				{
+					tPitch[0] = (UWORD)(tPitch[0] + rotation/2);
+				}
+				else
+				{
+					tPitch[0] = 0;
+				}
+			}
+			tPitch[0] %= 360;
 		}
 	}
-	else // -ve angle rotate in opposite direction
+	else
 	{
-		if (tPitch < (360 -(SDWORD)rotation/2))
+		if (rotation > 180)//crop to 180 degrees, no point in turning more than all the way round
 		{
-			tPitch = (UWORD)(tPitch + rotation/2);
+			rotation = 180;
 		}
-		else
+		if (tRot[0] < 180)// +ve angle 0 - 179 degrees
 		{
-			tPitch = 0;
+			if (tRot[0] > rotation)
+			{
+				tRot[0] = (UWORD)(tRot[0] - rotation);
+			}
+			else
+			{
+				tRot[0] = 0;
+			}
 		}
+		else //angle greater than 180 rotate in opposite direction
+		{
+			if (tRot[0] < (360 - rotation))
+			{
+				tRot[0] = (UWORD)(tRot[0] + rotation);
+			}
+			else
+			{
+				tRot[0] = 0;
+			}
+		}
+		tRot[0] %= 360;
+
+		// align the turret pitch
+		if (tPitch[0] < 180)// +ve angle 0 - 179 degrees
+		{
+			if (tPitch[0] > rotation/2)
+			{
+				tPitch[0] = (UWORD)(tPitch[0] - rotation/2);
+			}
+			else
+			{
+				tPitch[0] = 0;
+			}
+		}
+		else // -ve angle rotate in opposite direction
+		{
+			if (tPitch[0] < (360 -(SDWORD)rotation/2))
+			{
+				tPitch[0] = (UWORD)(tPitch[0] + rotation/2);
+			}
+			else
+			{
+				tPitch[0] = 0;
+			}
+		}
+		tPitch[0] %= 360;
 	}
-	tPitch %= 360;
 
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		((DROID *)psObj)->turretRotation = tRot;
-		((DROID *)psObj)->turretPitch = tPitch;
+		if (((DROID *)psObj)->droidType == DROID_WEAPON)
+		{
+			for(i = 0;i < ((DROID *)psObj)->numWeaps;i++)
+			{
+				if(num_weapons & (1 << (i+1)))
+				{
+					((DROID *)psObj)->turretRotation[i] = tRot[i];
+					((DROID *)psObj)->turretPitch[i] = tPitch[i];
+				}
+			}
+		}
+		else
+		{
+			((DROID *)psObj)->turretRotation[0] = tRot[0];
+			((DROID *)psObj)->turretPitch[0] = tPitch[0];
+		}
 		break;
 	case OBJ_STRUCTURE:
 		// now adjust back to the nearest 90 degree angle
-		tRot = (UWORD)((tRot + nearest) % 360);
+		tRot[0] = (UWORD)((tRot[0] + nearest) % 360);
 
-		((STRUCTURE *)psObj)->turretRotation = tRot;
-		((STRUCTURE *)psObj)->turretPitch = tPitch;
+		((STRUCTURE *)psObj)->turretRotation = tRot[0];
+		((STRUCTURE *)psObj)->turretPitch = tPitch[0];
 		break;
 	default:
 		ASSERT( FALSE, "actionAlignTurret: invalid object type" );
@@ -589,7 +818,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		 ( proj_Direct( psWeapStats ) ||
 		 ( (psAttacker->type == OBJ_DROID) &&
 			!proj_Direct( psWeapStats ) &&
-			actionInsideMinRange(psDroid, psDroid->psActionTarget) )) )
+			(actionInsideMinRange(psDroid, psDroid->psActionTarget) > 1) )) )
 	{
 // difference between muzzle position and droid origin is unlikely to affect aiming
 // particularly as target origin is used
@@ -673,15 +902,44 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget)
 {
 	WEAPON_STATS	*psStats;
+	//Watermelon:weapon_slot
+	UDWORD weapon_slot = DROID_MAXWEAPS + 1;
+	int i;
 
 	//if (psDroid->numWeaps == 0)
-    if ((psDroid->asWeaps[0].nStat == 0) ||
-		vtolDroid(psDroid))
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
+	{
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat != 0)
+			{
+				weapon_slot = i;
+				break;
+			}
+		}
+
+		if (weapon_slot == (DROID_MAXWEAPS + 1))
+		{
+			return visibleObject((BASE_OBJECT*)psDroid, psTarget);
+		}
+
+	}
+	else
+	{
+		if (psDroid->asWeaps[0].nStat == 0)
+		{
+			return visibleObject((BASE_OBJECT*)psDroid, psTarget);
+		}
+	}
+
+	//if (psDroid->numWeaps == 0)
+    if (vtolDroid(psDroid))
 	{
 		return visibleObject((BASE_OBJECT*)psDroid, psTarget);
 	}
 
-	psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
+	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 	if (proj_Direct(psStats))
 	{
 		if (visibleObjWallBlock((BASE_OBJECT*)psDroid, psTarget))
@@ -779,6 +1037,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 static void actionUpdateVtolAttack( DROID *psDroid )
 {
 	WEAPON_STATS	*psWeapStats = NULL;
+	int i;
 
 	/* don't do attack runs whilst returning to base */
 	if ( psDroid->order == DORDER_RTB )
@@ -786,12 +1045,29 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 		return;
 	}
 
-	//if (psDroid->numWeaps > 0)
-    if (psDroid->asWeaps[0].nStat > 0)
+	//if (psDroid->numWeaps == 0)
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
 	{
-		psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-		ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat != 0)
+			{
+				psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+				ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
 				"actionUpdateVtolAttack: invalid weapon stats pointer" );
+				break;
+			}
+		}
+	}
+	else
+	{
+		if (psDroid->asWeaps[0].nStat > 0)
+		{
+			psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
+			ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
+				"actionUpdateVtolAttack: invalid weapon stats pointer" );
+		}
 	}
 
 	/* order back to base after fixed number of attack runs */
@@ -816,6 +1092,13 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 
 static void actionUpdateTransporter( DROID *psDroid )
 {
+	//Watermelon:weapon_slot to store which turrent is InAttackRange
+	//num_weapons = 0 calculate number of weapons
+	int weapon_slot = DROID_MAXWEAPS + 1;
+	int i;
+	//this is a bit field
+	int num_weapons = 0;
+
 	//check if transporter has arrived
 	if (updateTransporter(psDroid))
 	{
@@ -831,42 +1114,79 @@ static void actionUpdateTransporter( DROID *psDroid )
         psDroid->psActionTarget = NULL;
     }
 
-    	/* check for weapon */
-	//if ( psDroid->numWeaps > 0 )
-    if (psDroid->asWeaps[0].nStat > 0)
-    {
-	    if (psDroid->psActionTarget == NULL)
-	    {
-		    aiBestNearestTarget(psDroid, &psDroid->psActionTarget);
-	    }
+	//if (psDroid->numWeaps == 0)
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
+	{
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat > 0)
+			{
+				weapon_slot = i;
+				num_weapons |= (1 << (i+1));
+				break;
+			}
+		}
 
-	    if ( psDroid->psActionTarget != NULL )
-	    {
-		    if ( visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget) )
-		    {
-			    /*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-						&(psDroid->turretRotation), &(psDroid->turretPitch),
-						psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-						//asWeaponStats[psDroid->asWeaps->nStat].direct))
-						proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-						TRUE))*/
-			    if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-						&(psDroid->turretRotation), &(psDroid->turretPitch),
-						&asWeaponStats[psDroid->asWeaps->nStat],
-						TRUE))
-			    {
-				    // In range - fire !!!
-				    combFire(psDroid->asWeaps, (BASE_OBJECT *)psDroid,
-						     psDroid->psActionTarget);
-			    }
-		    }
-		    else
-		    {
-			    // lost the target
-			    psDroid->psActionTarget = NULL;
-		    }
-        }
+		if (weapon_slot == (DROID_MAXWEAPS + 1))
+		{
+			return;
+		}
+
 	}
+	else
+	{
+		if (psDroid->asWeaps[0].nStat > 0)
+		{
+			weapon_slot = 0;
+		}
+	}
+
+    	/* check for weapon */
+	//Watermelon:used 'for loop' and 'bitwise and' to handle which slot is ready to fire
+	//if ( psDroid->numWeaps > 0 )
+	for(i = 0;i < psDroid->numWeaps;i++)
+	{
+		if ( (num_weapons & (1 << (i+1))) )
+		{
+			if (psDroid->asWeaps[i].nStat > 0)
+			{
+				if (psDroid->psActionTarget == NULL)
+				{
+					aiBestNearestTarget(psDroid, &psDroid->psActionTarget);
+				}
+
+				if ( psDroid->psActionTarget != NULL )
+				{
+					if ( visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget) )
+					{
+						/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+								&(psDroid->turretRotation), &(psDroid->turretPitch),
+								psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
+								//asWeaponStats[psDroid->asWeaps->nStat].direct))
+								proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
+								TRUE))*/
+						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+								&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
+								&asWeaponStats[psDroid->asWeaps[i].nStat],
+								TRUE))
+						{
+							// In range - fire !!!
+							combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
+									 psDroid->psActionTarget);
+						}
+					}
+					else
+					{
+						// lost the target
+						psDroid->psActionTarget = NULL;
+					}
+				}
+			}
+
+		}
+
+	}	
 }
 
 
@@ -1082,11 +1402,17 @@ void actionUpdateDroid(DROID *psDroid)
 	BOOL				bDoHelpBuild;
 	MAPTILE				*psTile;
 
+	//Watermelon:need another int to store valid target result
+	int vtResult;
+	int i = 0;
+	//this is a bit field
+	int num_weapons = 0;
+
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
 			"actionUpdateUnit: invalid propulsion stats pointer" );
 
-	ASSERT( psDroid->turretRotation < 360, "turretRotation out of range" );
+	ASSERT( psDroid->turretRotation[i] < 360, "turretRotation out of range" );
 	ASSERT( psDroid->direction < 360, "unit direction out of range" );
 
 	/* check whether turret inverted for actionTargetTurret */
@@ -1136,7 +1462,24 @@ void actionUpdateDroid(DROID *psDroid)
         }
     }
 
-
+	//if (psDroid->numWeaps == 0)
+	/* Watermelon:if I am a multi-turret droid */
+	if (psDroid->numWeaps > 1)
+	{
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat > 0)
+			{
+				num_weapons += (1 << (i+1));
+			}
+		}
+	}
+	else
+	{
+		num_weapons = 2;
+	}
+	
+	//Watermelon:safety check
 	//if (psDroid->numWeaps > 0)
     if (psDroid->asWeaps[0].nStat > 0)
 	{
@@ -1274,23 +1617,36 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}*/
 
-		//else if (psDroid->numWeaps > 0 &&
-        else if (!vtolDroid(psDroid) &&
-				 psDroid->asWeaps[0].nStat > 0 &&
-				 psWeapStats->rotate &&
-				 psWeapStats->fireOnMove != FOM_NO &&
-				 aiBestNearestTarget(psDroid, &psDroid->psActionTarget))
+		//Watermelon:added multiple weapon check
+		else if (psDroid->numWeaps > 0)
 		{
-			if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
+			for(i = 0;i < psDroid->numWeaps;i++)
 			{
-				if (state == DSS_ALEV_ALWAYS)
+				if ( (num_weapons & (1 << (i+1))) )
 				{
-					psDroid->action = DACTION_MOVEFIRE;
+					//Watermelon:I moved psWeapStats flag update there
+					psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+					if (!vtolDroid(psDroid) &&
+						 psDroid->asWeaps[i].nStat > 0 &&
+						 psWeapStats->rotate &&
+						 psWeapStats->fireOnMove != FOM_NO &&
+						 aiBestNearestTarget(psDroid, &psDroid->psActionTarget))
+					{
+						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
+						{
+							if (state == DSS_ALEV_ALWAYS)
+							{
+								psDroid->action = DACTION_MOVEFIRE;
+							}
+						}
+						else
+						{
+							psDroid->action = DACTION_MOVEFIRE;
+						}
+					}
+					//Watermelon:temp workaround
+					break;
 				}
-			}
-			else
-			{
-				psDroid->action = DACTION_MOVEFIRE;
 			}
 		}
 		break;
@@ -1317,6 +1673,17 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			moveToRearm(psDroid);
 		}
+
+		//Watermelon:vtResult
+		if (psDroid->psActionTarget != NULL)
+		{
+			vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+		}
+		else
+		{
+			vtResult = 1;
+		}
+
 		// firing on something while moving
 		if (DROID_STOPPED(psDroid))
 		{
@@ -1324,7 +1691,7 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 		}
 		else if ((psDroid->psActionTarget == NULL) ||
-				 !validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget) ||
+				 (vtResult == 1) ||
 				 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
 		{
 			// Target lost
@@ -1346,20 +1713,29 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			if (visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget))
 			{
-				/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										&(psDroid->turretRotation), &(psDroid->turretPitch),
-										psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-										//asWeaponStats[psDroid->asWeaps->nStat].direct))
-										proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-										bInvert))*/
-				if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										&(psDroid->turretRotation), &(psDroid->turretPitch),
-										&asWeaponStats[psDroid->asWeaps->nStat],
-										bInvert))
+				for(i = 0;i < psDroid->numWeaps;i++)
 				{
-					// In range - fire !!!
-					combFire(psDroid->asWeaps, (BASE_OBJECT *)psDroid,
-							 psDroid->psActionTarget);
+					//Watermelon:I moved psWeapStats flag update there
+					psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+					//Watermelon:to fix a AA-weapon attack ground unit exploit
+					if ( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
+					{
+						/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+											&(psDroid->turretRotation), &(psDroid->turretPitch),
+											psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
+											//asWeaponStats[psDroid->asWeaps->nStat].direct))
+											proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
+											bInvert))*/
+						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
+												&asWeaponStats[psDroid->asWeaps[i].nStat],
+												bInvert))
+						{
+							// In range - fire !!!
+							combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
+									 psDroid->psActionTarget);
+						}
+					}
 				}
 			}
 			else
@@ -1384,6 +1760,8 @@ void actionUpdateDroid(DROID *psDroid)
 		ASSERT( psDroid->psActionTarget != NULL,
 			"actionUpdateUnit: target is NULL while attacking" );
 
+		//Watermelon:uses vtResult
+		vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget);
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
 		{
@@ -1393,7 +1771,7 @@ void actionUpdateDroid(DROID *psDroid)
 
         //check the target hasn't become one the same player ID - Electronic Warfare
         if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget->player)) ||
-			!validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget))// ||
+			(vtResult == 1) )// ||
 //			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
         {
             psDroid->psActionTarget = NULL;
@@ -1402,40 +1780,47 @@ void actionUpdateDroid(DROID *psDroid)
         else if (actionVisibleTarget(psDroid, psDroid->psActionTarget) &&
 			actionInAttackRange(psDroid, psDroid->psActionTarget))
 		{
-			if (!psWeapStats->rotate)
+			for(i = 0;i < psDroid->numWeaps;i++)
 			{
-				// no rotating turret - need to check aligned with target
-				targetDir = (SDWORD)calcDirection(
-								psDroid->x,psDroid->y,
-								psDroid->psActionTarget->x,psDroid->psActionTarget->y);
-				dirDiff = labs(targetDir - (SDWORD)psDroid->direction);
-			}
-			else
-			{
-				dirDiff = 0;
-			}
-			if (dirDiff > FIXED_TURRET_DIR)
-			{
-				if (psDroid->sMove.Status != MOVESHUFFLE)
+				if ( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
 				{
-					psDroid->action = DACTION_ROTATETOATTACK;
-					moveTurnDroid(psDroid, psDroid->psActionTarget->x,psDroid->psActionTarget->y);
+					psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+					if (!psWeapStats->rotate)
+					{
+						// no rotating turret - need to check aligned with target
+						targetDir = (SDWORD)calcDirection(
+										psDroid->x,psDroid->y,
+										psDroid->psActionTarget->x,psDroid->psActionTarget->y);
+						dirDiff = labs(targetDir - (SDWORD)psDroid->direction);
+					}
+					else
+					{
+						dirDiff = 0;
+					}
+					if (dirDiff > FIXED_TURRET_DIR)
+					{
+						if (psDroid->sMove.Status != MOVESHUFFLE)
+						{
+							psDroid->action = DACTION_ROTATETOATTACK;
+							moveTurnDroid(psDroid, psDroid->psActionTarget->x,psDroid->psActionTarget->y);
+						}
+					}
+					else if (!psWeapStats->rotate ||
+							/*actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+												&(psDroid->turretRotation), &(psDroid->turretPitch),
+												psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
+												//asWeaponStats[psDroid->asWeaps->nStat].direct))
+												proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
+												bInvert))*/
+							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
+												&asWeaponStats[psDroid->asWeaps[i].nStat],
+												bInvert))
+					{
+						/* In range - fire !!! */
+						combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+					}
 				}
-			}
-			else if (!psWeapStats->rotate ||
-					/*actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										&(psDroid->turretRotation), &(psDroid->turretPitch),
-										psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-										//asWeaponStats[psDroid->asWeaps->nStat].direct))
-										proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-										bInvert))*/
-					actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										&(psDroid->turretRotation), &(psDroid->turretPitch),
-										&asWeaponStats[psDroid->asWeaps->nStat],
-										bInvert))
-			{
-				/* In range - fire !!! */
-				combFire(psDroid->asWeaps, (BASE_OBJECT *)psDroid, psDroid->psActionTarget);
 			}
 		}
 		else
@@ -1457,44 +1842,62 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_VTOLATTACK:
+		//Watermelon:uses vtResult
+		if (psDroid->psActionTarget != NULL)
+		{
+			vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+		}
+		else 
+		{
+			vtResult = 1;
+		}
+
 		//check if vtol that its armed
 		if ( (vtolEmpty(psDroid)) ||
 			 (psDroid->psActionTarget == NULL) ||
 	        //check the target hasn't become one the same player ID - Electronic Warfare
 			 (electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget->player)) ||
-			 !validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget) )// ||
+			 (vtResult == 1) )// ||
 //			 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
 		{
 			moveToRearm(psDroid);
 			break;
 		}
 
-        if (actionVisibleTarget(psDroid, psDroid->psActionTarget))
+		for(i = 0;i <psDroid->numWeaps;i++)
 		{
-			if (actionInRange(psDroid, psDroid->psActionTarget))
+			if ( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
 			{
-				if ( psDroid->player == selectedPlayer )
+				//Watermelon:I moved psWeapStats flag update there
+				psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+				if (actionVisibleTarget(psDroid, psDroid->psActionTarget))
 				{
-					audio_QueueTrackMinDelay( ID_SOUND_COMMENCING_ATTACK_RUN2,
-												VTOL_ATTACK_AUDIO_DELAY );
-				}
+					if ( (actionInRange(psDroid, psDroid->psActionTarget) & (1 << i)) )
+					{
+						if ( psDroid->player == selectedPlayer )
+						{
+							audio_QueueTrackMinDelay( ID_SOUND_COMMENCING_ATTACK_RUN2,
+														VTOL_ATTACK_AUDIO_DELAY );
+						}
 
-				if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										&(psDroid->turretRotation), &(psDroid->turretPitch),
-										&asWeaponStats[psDroid->asWeaps->nStat],
-										bInvert))
-				{
-					// In range - fire !!!
-					combFire(psDroid->asWeaps, (BASE_OBJECT *)psDroid,
-							 psDroid->psActionTarget);
+						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
+												&asWeaponStats[psDroid->asWeaps[i].nStat],
+												bInvert))
+						{
+								// In range - fire !!!
+								combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
+								psDroid->psActionTarget);
+						}
+					}
+					else
+					{
+						actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
+												&asWeaponStats[psDroid->asWeaps[i].nStat],
+												bInvert);
+					}
 				}
-			}
-			else
-			{
-				actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										&(psDroid->turretRotation), &(psDroid->turretPitch),
-										&asWeaponStats[psDroid->asWeaps->nStat],
-										bInvert);
 			}
 		}
 /*		else
@@ -1561,9 +1964,12 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 
+		//Watermelon:vtResult
+		vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+
         //check the target hasn't become one the same player ID - Electronic Warfare
         if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget->player)) ||
-			!validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget) )// ||
+			(vtResult == 1) )// ||
 //			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
         {
             psDroid->psActionTarget = NULL;
@@ -1573,69 +1979,76 @@ void actionUpdateDroid(DROID *psDroid)
         {
             if (actionVisibleTarget(psDroid, psDroid->psActionTarget))
 		    {
-			    if (psWeapStats->rotate)
-			    {
-				    /*actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										    &(psDroid->turretRotation), &(psDroid->turretPitch),
-										    psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-										    //asWeaponStats[psDroid->asWeaps->nStat].direct);
-										    proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-										    bInvert);*/
-				    actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-										    &(psDroid->turretRotation), &(psDroid->turretPitch),
-										    &asWeaponStats[psDroid->asWeaps->nStat],
-										    bInvert);
-			    }
+				for(i = 0;i < psDroid->numWeaps;i++)
+				{
+					if( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
+					{
+						psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+						if (psWeapStats->rotate)
+						{
+							/*actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+													&(psDroid->turretRotation), &(psDroid->turretPitch),
+													psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
+													//asWeaponStats[psDroid->asWeaps->nStat].direct);
+													proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
+													bInvert);*/
+							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
+													&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
+													&asWeaponStats[psDroid->asWeaps[i].nStat],
+													bInvert);
+						}
 
-    			bChaseBloke = FALSE;
-	    		if (!vtolDroid(psDroid) &&
-					psDroid->psActionTarget->type == OBJ_DROID &&
-		    		((DROID *)psDroid->psActionTarget)->droidType == DROID_PERSON &&
-			    	psWeapStats->fireOnMove != FOM_NO)
-			    {
-				    bChaseBloke = TRUE;
-			    }
+    					bChaseBloke = FALSE;
+	    				if (!vtolDroid(psDroid) &&
+							psDroid->psActionTarget->type == OBJ_DROID &&
+		    				((DROID *)psDroid->psActionTarget)->droidType == DROID_PERSON &&
+			    			psWeapStats->fireOnMove != FOM_NO)
+						{
+							bChaseBloke = TRUE;
+						}
 
 
-    			if (actionInAttackRange(psDroid, psDroid->psActionTarget) &&
-	    			!bChaseBloke)
-		    	{
-			    	/* Stop the droid moving any closer */
-//				    ASSERT( psDroid->x != 0 && psDroid->y != 0,
-//						"moveUpdateUnit: Unit at (0,0)" );
-
-    				/* init vtol attack runs count if necessary */
-	    			if ( psPropStats->propulsionType == LIFT )
-		    		{
-			    		psDroid->action = DACTION_VTOLATTACK;
-				    	//actionAddVtolAttackRun( psDroid );
-					    //actionUpdateVtolAttack( psDroid );
-    				}
-	    			else
-		    		{
-			    		moveStopDroid(psDroid);
-
-	    				if (psWeapStats->rotate)
+    					if ( (actionInAttackRange(psDroid, psDroid->psActionTarget) & (1 << (i+1))) &&
+	    					!bChaseBloke)
 		    			{
-						    psDroid->action = DACTION_ATTACK;
-			    		}
-				    	else
-					    {
-						    psDroid->action = DACTION_ROTATETOATTACK;
-    						moveTurnDroid(psDroid, psDroid->psActionTarget->x,psDroid->psActionTarget->y);
-	    				}
-		    		}
-			    }
-			    else if (actionInRange(psDroid, psDroid->psActionTarget))
-			    {
-				    // fire while closing range
-				    combFire(psDroid->asWeaps, (BASE_OBJECT *)psDroid, psDroid->psActionTarget);
-			    }
+			    			/* Stop the droid moving any closer */
+		//				    ASSERT( psDroid->x != 0 && psDroid->y != 0,
+		//						"moveUpdateUnit: Unit at (0,0)" );
+
+    						/* init vtol attack runs count if necessary */
+	    					if ( psPropStats->propulsionType == LIFT )
+		    				{
+			    				psDroid->action = DACTION_VTOLATTACK;
+				    			//actionAddVtolAttackRun( psDroid );
+								//actionUpdateVtolAttack( psDroid );
+    						}
+	    					else
+		    				{
+			    				moveStopDroid(psDroid);
+
+	    						if (psWeapStats->rotate)
+		    					{
+									psDroid->action = DACTION_ATTACK;
+			    				}
+				    			else
+								{
+									psDroid->action = DACTION_ROTATETOATTACK;
+    								moveTurnDroid(psDroid, psDroid->psActionTarget->x,psDroid->psActionTarget->y);
+	    						}
+		    				}
+						}
+						else if ( (actionInRange(psDroid, psDroid->psActionTarget) & (1 << (i+1))) )
+						{
+							// fire while closing range
+							combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+						}
+					}
+				}
 		    }
 		    else
 		    {
-    			if ((psDroid->turretRotation!=0) ||
-					(psDroid->turretPitch!=0))
+    			if ((psDroid->turretRotation[i]!=0) ||
+					(psDroid->turretPitch[i]!=0))
 				{
 	    			actionAlignTurret((BASE_OBJECT *)psDroid);
 				}
@@ -1648,8 +2061,10 @@ void actionUpdateDroid(DROID *psDroid)
 		    	{
 			    	psDroid->action = DACTION_NONE;			// on hold, give up.
 			    }
-			    else if (actionInsideMinRange(psDroid, psDroid->psActionTarget))
+			    else if ( actionInsideMinRange(psDroid, psDroid->psActionTarget) > 1 )
 				{
+					//Watermelon:'hack' to make the droid to check the primary turrent instead of all
+					psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
 					if ( proj_Direct( psWeapStats ) )
 					{
 						// try and extend the range
@@ -1928,8 +2343,9 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 		   		moveTurnDroid(psDroid,psDroid->psTarget->x,psDroid->psTarget->y);
 			}*/
+			// Watermelon:make construct droid to use turretRotation[0]
 			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-									&(psDroid->turretRotation), &(psDroid->turretPitch),
+									&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
 									NULL,FALSE);
 		}
 		else
@@ -2036,8 +2452,9 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		else if ( actionUpdateFunc(psDroid) )
 		{
+			//Watermelon:use 0 for non-combat(only 1 'weapon')
 			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-									&(psDroid->turretRotation), &(psDroid->turretPitch),
+									&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
 									NULL,FALSE);
 		}
 		else if (psDroid->action == DACTION_CLEARWRECK)
@@ -2160,7 +2577,7 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_OBSERVE:
 		// align the turret
 		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-						&(psDroid->turretRotation), &(psDroid->turretPitch),
+						&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
 						NULL,FALSE);
 
 		if (cbSensorDroid(psDroid))
@@ -2197,7 +2614,7 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_MOVETOOBSERVE:
 		// align the turret
 		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-						&(psDroid->turretRotation), &(psDroid->turretPitch),
+						&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
 						NULL,FALSE);
 
 		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget))
@@ -2318,9 +2735,10 @@ void actionUpdateDroid(DROID *psDroid)
 					psDroid->psActionTarget, &(psDroid->turretRotation),
 					&(psDroid->turretPitch), psDroid->turretRotRate,
 					(SWORD)(psDroid->turretRotRate/2), FALSE, FALSE))*/
+			//Watermelon:use 0 for repair droid
 			if (actionTargetTurret((BASE_OBJECT*)psDroid,
-					psDroid->psActionTarget, &(psDroid->turretRotation),
-					&(psDroid->turretPitch), NULL, FALSE))
+					psDroid->psActionTarget, &(psDroid->turretRotation[0]),
+					&(psDroid->turretPitch[0]), NULL, FALSE))
 			{
 				if (droidStartDroidRepair(psDroid))
 				{
@@ -2356,11 +2774,12 @@ void actionUpdateDroid(DROID *psDroid)
 					(SWORD)(psDroid->turretRotRate/2), FALSE, FALSE);*/
 
         //if not doing self-repair
+		//Watermelon:use 0 for repair droid
         if (psDroid->psActionTarget != (BASE_OBJECT *)psDroid)
         {
 		    actionTargetTurret((BASE_OBJECT*)psDroid,
-					psDroid->psActionTarget, &(psDroid->turretRotation),
-					&(psDroid->turretPitch), NULL, FALSE);
+					psDroid->psActionTarget, &(psDroid->turretRotation[0]),
+					&(psDroid->turretPitch[0]), NULL, FALSE);
         }
 
 		//check still next to the damaged droid
@@ -2482,8 +2901,9 @@ void actionUpdateDroid(DROID *psDroid)
 		psDroid->action != DACTION_MOVETOOBSERVE)
 	{
 
-		if ((psDroid->turretRotation!=0) ||
-			(psDroid->turretPitch !=0))
+		//Watermelon:use 0 for all non-combat droid types
+		if ((psDroid->turretRotation[0]!=0) ||
+			(psDroid->turretPitch[0] !=0))
 		{
 			actionAlignTurret((BASE_OBJECT *)psDroid);
 		}
@@ -2499,6 +2919,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	WEAPON_STATS	*psWeapStats;
 	UDWORD			droidX,droidY;
 	BASE_OBJECT		*psTarget;
+	//Watermelon:added MinRangeResult;
+	int MinRangeResult;
 
 	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 		"actionUnitBase: Invalid Unit pointer" );
@@ -2581,6 +3003,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionX = psDroid->x;
 		psDroid->actionY = psDroid->y;
 
+		//Watermelon:MinRangeResult
+		MinRangeResult = actionInsideMinRange(psDroid, psAction->psObj);
 		psDroid->psActionTarget = psAction->psObj;
 		if ( ( (psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_FIRESUPPORT) &&
 			   secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD)) ||
@@ -2590,7 +3014,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			psDroid->action = DACTION_ATTACK;		// holding, try attack straightaway
 			psDroid->psActionTarget = psAction->psObj;
 		}
-		else if (actionInsideMinRange(psDroid, psAction->psObj))
+		else if (MinRangeResult > 1)
 		{
 			psWeapStats = &asWeaponStats[psDroid->asWeaps[0].nStat];
 			if ( !proj_Direct( psWeapStats ) )
@@ -3050,6 +3474,9 @@ exit:
 	return result;
 
 }
+
+
+
 
 
 

@@ -3288,7 +3288,9 @@ void	drawDragBox( void )
 
 
 // display reload bars for structures and droids
-static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
+// Watermelon:make it to accept additional int value weapon_slot
+// this should fix the overlapped reloadbar problem
+static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 	BOOL			bSalvo;
@@ -3323,8 +3325,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
 		{
 			firingStage = (2*scrR) - 1;
 		}
-		pie_BoxFill(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),    6+scrY+3, 0x00020202);
-		pie_BoxFill(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage, 6+scrY+2, 0x00ffffff);
+		pie_BoxFill(scrX - scrR-1, 6+scrY + 0 - (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 - (weapon_slot * 5), 0x00020202);
+		pie_BoxFill(scrX - scrR,   6+scrY + 1 - (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 - (weapon_slot * 5), 0x00ffffff);
 		return;
 	}
 	/* ******** ********/
@@ -3416,8 +3418,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap)
 				firingStage = (2*scrR) - 1;
 			}
 			/* Power bars */
-			pie_BoxFill(scrX - scrR-1, 6+scrY + 0, scrX - scrR +(2*scrR),    6+scrY+3, 0x00020202);
-			pie_BoxFill(scrX - scrR,   6+scrY + 1, scrX - scrR +firingStage, 6+scrY+2, 0x00ffffff);
+			pie_BoxFill(scrX - scrR-1, 6+scrY + 0 - (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 - (weapon_slot * 5), 0x00020202);
+			pie_BoxFill(scrX - scrR,   6+scrY + 1 - (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 - (weapon_slot * 5), 0x00ffffff);
 		}
 	}
 }
@@ -3504,7 +3506,7 @@ FRACT		mulH;
 				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, 0x00020202);
 				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, longPowerCol);
 
-				drawWeaponReloadBar((BASE_OBJECT *)psStruct, psStruct->asWeaps);
+				drawWeaponReloadBar((BASE_OBJECT *)psStruct, psStruct->asWeaps, 0);
 			}
 			else
 			{
@@ -3933,7 +3935,11 @@ FRACT			mulH;
 
 			if (bReloadBars)
 			{
-				drawWeaponReloadBar((BASE_OBJECT *)psDroid, psDroid->asWeaps);
+				//Watermelon:1 reloadbar for each weapon
+				for(i = 0;i < psDroid->numWeaps;i++)
+				{
+					drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
+				}
 			}
 
 		}
@@ -4301,7 +4307,11 @@ void	calcScreenCoords(DROID *psDroid)
 	/* Pop matrices and get the screen corrdinates */
 	cZ = pie_ROTATE_PROJECT(centX, centY, centZ, cX, cY);
 
-	radius = ((radius * pie_GetResScalingFactor()) * 80 / cZ);
+	//Watermelon:added a crash protection hack...
+	if (cZ != 0)
+	{
+		radius = ((radius * pie_GetResScalingFactor()) * 80 / cZ);
+	}
 
 	/* Deselect all the droids if we've released the drag box */
 	if(dragBox3D.status == DRAG_RELEASED)

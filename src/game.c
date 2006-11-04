@@ -747,9 +747,54 @@ typedef struct _save_droid_v24
 	DROID_SAVE_V24;
 } SAVE_DROID_V24;
 
+//Watermelon: I need DROID_SAVE_V99...
+#define DROID_SAVE_V99		\
+	OBJECT_SAVE_V20;			\
+	SAVE_COMPONENT	asBits[DROID_MAXCOMP]; \
+	UDWORD		body;		\
+	UBYTE		droidType;	\
+	UDWORD		saveType;	\
+	UDWORD		numWeaps;	\
+	SAVE_WEAPON	asWeaps[TEMP_DROID_MAXPROGS];	\
+	UDWORD		numKills;	\
+	UWORD	turretRotation[DROID_MAXWEAPS];	\
+	UWORD	turretPitch[DROID_MAXWEAPS];	\
+	SDWORD	order;			\
+	UWORD	orderX,orderY;	\
+	UWORD	orderX2,orderY2;\
+	UDWORD	timeLastHit;	\
+	UDWORD	targetID;		\
+	UDWORD	secondaryOrder;	\
+	SDWORD	action;			\
+	UDWORD	actionX,actionY;\
+	UDWORD	actionTargetID;	\
+	UDWORD	actionStarted;	\
+	UDWORD	actionPoints;	\
+	UWORD	actionHeight;	\
+	CHAR	tarStatName[MAX_SAVE_NAME_SIZE];\
+    UDWORD	baseStructID;	\
+	UBYTE	group;			\
+	UBYTE	selected;		\
+	UBYTE	cluster_unused;		\
+	UBYTE	visible[MAX_PLAYERS];\
+	UDWORD	died;			\
+	UDWORD	lastEmission
+
+typedef struct _save_droid_v99
+{
+	DROID_SAVE_V99;
+} SAVE_DROID_V99;
+
+//Watermelon:V99 'test'
 typedef struct _save_droid
 {
-	DROID_SAVE_V24;
+	DROID_SAVE_V99;
+	UDWORD	commandId;
+	SDWORD	resistance;
+	SAVE_MOVE_CONTROL	sMove;
+	SWORD		formationDir;
+	SDWORD		formationX;
+	SDWORD		formationY;
 } SAVE_DROID;
 
 
@@ -4801,6 +4846,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		return NULL;
 	}
 	psTemplate->numWeaps = psSaveDroid->numWeaps;
+
 	found = TRUE;
 	for (i=0; i < psSaveDroid->numWeaps; i++)
 	{
@@ -4835,14 +4881,15 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		psSaveDroid->player, FALSE);
 
 	//copy the droid's weapon stats
-	//for (i=0; i < DROID_MAXWEAPS; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
+	for (i=0; i < psDroid->numWeaps; i++)
 	{
-        //only one weapon now
-        i = 0;
-		psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
-		psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
-		psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
+		if (psDroid->asWeaps[i].nStat > 0)
+		{
+			//only one weapon now
+			psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
+			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
+			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
+		}
 	}
 	//copy the values across
 	psDroid->id = psSaveDroid->id;
@@ -4863,8 +4910,11 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 
 	psDroid->numKills = (UWORD)psSaveDroid->numKills;
 	//version 11
-	psDroid->turretRotation = psSaveDroid->turretRotation;
-	psDroid->turretPitch = psSaveDroid->turretPitch;
+	for (i=0; i < psDroid->numWeaps; i++)
+	{
+		psDroid->turretRotation[i] = psSaveDroid->turretRotation;
+		psDroid->turretPitch[i] = psSaveDroid->turretPitch;
+	}
 
 
 	psDroid->psGroup = NULL;
@@ -4922,15 +4972,17 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	found = TRUE;
 	if (psSaveDroid->numWeaps > 0)
 	{
-
-		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[0].name);
-
-		if (psTemplate->asWeaps[0] < 0)
+		for(i = 0;i < psTemplate->numWeaps;i++)
 		{
+			psTemplate->asWeaps[i] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
 
-			debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[0].name );
-			abort();
-			found = FALSE;
+			if (psTemplate->asWeaps[i] < 0)
+			{
+
+				debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[i].name );
+				abort();
+				found = FALSE;
+			}
 		}
 	}
 	if (!found)
@@ -4975,12 +5027,14 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 
 	//copy the droid's weapon stats
-	//for (i=0; i < DROID_MAXWEAPS; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
+	for (i=0; i < psDroid->numWeaps; i++)
 	{
-		psDroid->asWeaps[0].hitPoints = psSaveDroid->asWeaps[0].hitPoints;
-		psDroid->asWeaps[0].ammo = psSaveDroid->asWeaps[0].ammo;
-		psDroid->asWeaps[0].lastFired = psSaveDroid->asWeaps[0].lastFired;
+		if (psDroid->asWeaps[i].nStat > 0)
+		{
+			psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
+			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
+			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
+		}
 	}
 	//copy the values across
 	psDroid->id = psSaveDroid->id;
@@ -5005,8 +5059,12 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 	if (version >= VERSION_11)//version 11
 	{
-		psDroid->turretRotation = psSaveDroid->turretRotation;
-		psDroid->turretPitch = psSaveDroid->turretPitch;
+		//Watermelon:make it back-compatible with older versions of save
+		for (i=0; i < psDroid->numWeaps; i++)
+		{
+			psDroid->turretRotation[i] = psSaveDroid->turretRotation;
+			psDroid->turretPitch[i] = psSaveDroid->turretPitch;
+		}
 	}
 	if (version >= VERSION_12)//version 12
 	{
@@ -5177,14 +5235,16 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	found = TRUE;
 	if (psSaveDroid->numWeaps > 0)
 	{
-
-		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[0].name);
-
-		if (psTemplate->asWeaps[0] < 0)
+		for(i = 0;i < psTemplate->numWeaps;i++)
 		{
-			debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[0].name );
-			abort();
-			found = FALSE;
+			psTemplate->asWeaps[i] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
+
+			if (psTemplate->asWeaps[i] < 0)
+			{
+				debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[i].name );
+				abort();
+				found = FALSE;
+			}
 		}
 	}
 	if (!found)
@@ -5233,12 +5293,14 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 
 
 	//copy the droid's weapon stats
-	//for (i=0; i < DROID_MAXWEAPS; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
+	for (i=0; i < psDroid->numWeaps; i++)
 	{
-		psDroid->asWeaps[0].hitPoints = psSaveDroid->asWeaps[0].hitPoints;
-		psDroid->asWeaps[0].ammo = psSaveDroid->asWeaps[0].ammo;
-		psDroid->asWeaps[0].lastFired = psSaveDroid->asWeaps[0].lastFired;
+		if (psDroid->asWeaps[i].nStat > 0)
+		{
+			psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
+			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
+			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
+		}
 	}
 	//copy the values across
 	psDroid->id = psSaveDroid->id;
@@ -5262,9 +5324,19 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	psDroid->resistance = droidResistance(psDroid);
 
 	//version 11
-	psDroid->turretRotation = psSaveDroid->turretRotation;
-	psDroid->turretPitch = psSaveDroid->turretPitch;
-
+	//Watermelon:make it back-compatible with older versions of save
+	for (i=0; i < psDroid->numWeaps; i++)
+	{
+		if (version >= VERSION_24)
+		{
+			psDroid->turretRotation[i] = psSaveDroid->turretRotation[i];
+		}
+		else
+		{
+			psDroid->turretRotation[i] = psSaveDroid->turretRotation;
+		}
+		psDroid->turretPitch[i] = psSaveDroid->turretPitch;
+	}
 	//version 12
 	psDroid->order				= psSaveDroid->order;
 	psDroid->orderX				= psSaveDroid->orderX;
@@ -5838,8 +5910,20 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_udword(&psSaveDroid->saveType);
 		endian_udword(&psSaveDroid->numWeaps);
 		endian_udword(&psSaveDroid->numKills);
-		endian_uword(&psSaveDroid->turretRotation);
-		endian_uword(&psSaveDroid->turretPitch);
+		//Watermelon:'hack' to make it read turretRotation,Pitch table properly
+		if( version == CURRENT_VERSION_NUM )
+		{
+			for(i = 0;i < psSaveDroid->numWeaps;i++)
+			{
+				endian_uword(&psSaveDroid->turretRotation[i]);
+				endian_uword(&psSaveDroid->turretPitch[i]);
+			}
+		}
+		else
+		{
+			endian_uword(&psSaveDroid->turretRotation);
+			endian_uword(&psSaveDroid->turretPitch);
+		}
 		endian_sdword(&psSaveDroid->order);
 		endian_uword(&psSaveDroid->orderX);
 		endian_uword(&psSaveDroid->orderY);
@@ -5999,33 +6083,39 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				psSaveDroid->asWeaps[i].ammo = psCurr->asWeaps[i].ammo;
 				psSaveDroid->asWeaps[i].lastFired = psCurr->asWeaps[i].lastFired;
 			}*/
-            psSaveDroid->numWeaps = 0;
-            if (psCurr->asWeaps[0].nStat > 0)
-            {
-                //there is only one weapon now
-                psSaveDroid->numWeaps = 1;
-                i = 0;
-
-				if (getNameFromComp(COMP_WEAPON, psSaveDroid->asWeaps[i].name, psCurr->asWeaps[i].nStat))
-
+			//Watermelon:loop thru all weapons
+            psSaveDroid->numWeaps = psCurr->numWeaps;
+			for(i = 0;i < psCurr->numWeaps;i++)
+			{
+				if (psCurr->asWeaps[i].nStat > 0)
 				{
-    				psSaveDroid->asWeaps[i].hitPoints = psCurr->asWeaps[i].hitPoints;
-	    			psSaveDroid->asWeaps[i].ammo = psCurr->asWeaps[i].ammo;
-		    		psSaveDroid->asWeaps[i].lastFired = psCurr->asWeaps[i].lastFired;
-                }
-            }
-            else
-            {
+					//there is only one weapon now
 
-                psSaveDroid->asWeaps[0].name[0] = '\0';
-            }
+					if (getNameFromComp(COMP_WEAPON, psSaveDroid->asWeaps[i].name, psCurr->asWeaps[i].nStat))
+
+					{
+    					psSaveDroid->asWeaps[i].hitPoints = psCurr->asWeaps[i].hitPoints;
+	    				psSaveDroid->asWeaps[i].ammo = psCurr->asWeaps[i].ammo;
+		    			psSaveDroid->asWeaps[i].lastFired = psCurr->asWeaps[i].lastFired;
+					}
+				}
+				else
+				{
+
+					psSaveDroid->asWeaps[i].name[i] = '\0';
+				}
+			}
 
 
             //save out experience level
 			psSaveDroid->numKills		= psCurr->numKills;
 			//version 11
-			psSaveDroid->turretRotation = psCurr->turretRotation;
-			psSaveDroid->turretPitch	= psCurr->turretPitch;
+			//Watermelon:endian_udword for new save format
+			for(i = 0;i < psCurr->numWeaps;i++)
+			{
+				psSaveDroid->turretRotation[i] = psCurr->turretRotation[i];
+				psSaveDroid->turretPitch[i]	= psCurr->turretPitch[i];
+			}
 			//version 12
 			psSaveDroid->order			= psCurr->order;
 			psSaveDroid->orderX			= psCurr->orderX;
@@ -6285,8 +6375,12 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 			}
 			endian_udword(&psSaveDroid->numKills);
-			endian_uword(&psSaveDroid->turretRotation);
-			endian_uword(&psSaveDroid->turretPitch);
+			//Watermelon:endian_udword for new save format
+			for(i = 0;i < psSaveDroid->numWeaps;i++)
+			{
+				endian_uword(&psSaveDroid->turretRotation[i]);
+				endian_uword(&psSaveDroid->turretPitch[i]);
+			}
 			endian_sdword(&psSaveDroid->order);
 			endian_uword(&psSaveDroid->orderX);
 			endian_uword(&psSaveDroid->orderY);

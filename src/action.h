@@ -94,13 +94,13 @@ extern BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, U
 extern void actionAlignTurret(BASE_OBJECT *psObj);
 
 /* Check if a target is at correct range to attack */
-extern BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj);
+extern int actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj);
 
 // check if a target is within weapon range
-extern BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj);
+extern int actionInRange(DROID *psDroid, BASE_OBJECT *psObj);
 
 // check if a target is inside minimum weapon range
-extern BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj);
+extern int actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj);
 
 // return whether a droid can see a target to fire on it
 BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget);
@@ -125,4 +125,5 @@ extern BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD x, SDWORD y);
 extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
 #endif
+
 

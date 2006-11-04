@@ -2602,44 +2602,72 @@ void	droidUpdateRecoil( DROID *psDroid )
 UDWORD	percent;
 UDWORD	recoil;
 FRACT	fraction;
+//Watermelon:added multiple weapon update
+int i = 0;
+int num_weapons = 0;
 
-	/* Check it's actually got a weapon */
-	//if(psDroid->numWeaps == 0)
-    if(psDroid->asWeaps[0].nStat == 0)
+	if (psDroid->numWeaps > 1)
 	{
-		return;
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (psDroid->asWeaps[i].nStat != 0)
+			{
+				num_weapons += (1 << (i+1));
+			}
+		}
 	}
-
-	/* We have a weapon */
-	if(gameTime > (psDroid->asWeaps[0].lastFired + DEFAULT_RECOIL_TIME) )
-	{
-		/* Recoil effect is over */
-		psDroid->asWeaps[0].recoilValue = 0;
-		return;
-	}
-
-	/* Where should the assembly be? */
-	percent = PERCENT((gameTime-psDroid->asWeaps[0].lastFired),DEFAULT_RECOIL_TIME);
-
-	/* Outward journey */
-	if(percent >= 50)
-	{
-		recoil = (100 - percent)/5;
-	}
-	/* Return journey */
 	else
 	{
-		recoil = percent/5;
+		if (psDroid->asWeaps[0].nStat == 0)
+		{
+			return FALSE;
+		}
+		num_weapons = 2;
 	}
 
-	fraction =
-		MAKEFRACT(asWeaponStats[psDroid->asWeaps[0].nStat].recoilValue)/
-		(MAKEFRACT(100));
+	for(i = 0;i < psDroid->numWeaps;i++)
+	{
+		if ( (num_weapons & (1 << (i+1))) )
+		{
+			/* Check it's actually got a weapon */
+			//if(psDroid->numWeaps == 0)
+			if(psDroid->asWeaps[i].nStat == 0)
+			{
+				continue;
+			}
 
-	recoil = MAKEINT( MAKEFRACT(recoil) * fraction);
+			/* We have a weapon */
+			if(gameTime > (psDroid->asWeaps[i].lastFired + DEFAULT_RECOIL_TIME) )
+			{
+				/* Recoil effect is over */
+				psDroid->asWeaps[i].recoilValue = 0;
+				continue;
+			}
 
-	/* Put it into the weapon data */
-	psDroid->asWeaps[0].recoilValue = recoil;
+			/* Where should the assembly be? */
+			percent = PERCENT((gameTime-psDroid->asWeaps[i].lastFired),DEFAULT_RECOIL_TIME);
+
+			/* Outward journey */
+			if(percent >= 50)
+			{
+				recoil = (100 - percent)/5;
+			}
+			/* Return journey */
+			else
+			{
+				recoil = percent/5;
+			}
+
+			fraction =
+				MAKEFRACT(asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue)/
+				(MAKEFRACT(100));
+
+			recoil = MAKEINT( MAKEFRACT(recoil) * fraction);
+
+			/* Put it into the weapon data */
+			psDroid->asWeaps[i].recoilValue = recoil;
+		}
+	}
 }
 
 
@@ -3313,9 +3341,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			&pDroidDesign->numProgs, &pDroidDesign->numWeaps);*/
 		sscanf(pDroidData,"%d", &pDroidDesign->numWeaps);
 		//check that not allocating more weapons than allowed
-		if (((asBodyStats + pDroidDesign->asParts[COMP_BODY])->weaponSlots <
-			 pDroidDesign->numWeaps) ||
-			pDroidDesign->numWeaps > DROID_MAXWEAPS)
+		//Watermelon:disable this check for now
+		/* if (((asBodyStats + pDroidDesign->asParts[COMP_BODY])->weaponSlots <
+			 pDroidDesign->numWeaps) || */
+		if (pDroidDesign->numWeaps > DROID_MAXWEAPS)
 		{
 #ifdef HASH_NAMES
 			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s (%x)", strresGetString( NULL, pDroidDesign->NameHash ), pDroidDesign->NameHash );
@@ -3520,6 +3549,11 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_WEAPON;
 	}
+	/* Watermelon:with more than weapon is still a DROID_WEAPON */
+	else if ( psTemplate->numWeaps > 1)
+	{
+		type = DROID_WEAPON;
+	}
 	else
 	{
 		type = DROID_DEFAULT;
@@ -3529,15 +3563,19 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 }
 
 //Load the weapons assigned to Droids in the Access database
+//Watermelon:reads 3 WeaponName for now?
 BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 {
 	char				*pStartWeaponData;
 	UDWORD				NumWeapons = 0, i, player;
 	char				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
+	//Watermelon:STRINGs,j
+	char				WeaponNameA[MAX_NAME_SIZE],WeaponNameB[MAX_NAME_SIZE];
+	int					j;
 	DROID_TEMPLATE		*pTemplate;
 	BOOL				recFound;
 	UWORD				SkippedWeaponCount=0;
-	SDWORD				incW;
+	SDWORD				incW[DROID_MAXWEAPS];
 #ifdef HASH_NAMES
 	UDWORD				HashedName;
 #endif
@@ -3562,7 +3600,10 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		TemplateName[0] = '\0';
 		WeaponName[0] = '\0';
-		sscanf(pWeaponData,"%[^','],%[^','],%d", TemplateName, WeaponName, &player);
+		WeaponNameA[0] = '\0';
+		WeaponNameB[0] = '\0';
+		//Watermelon:kcah
+		sscanf(pWeaponData,"%[^','],%[^','],%[^','],%[^','],%d", TemplateName, WeaponName, WeaponNameA, WeaponNameB, &player);
 		//loop through each droid to compare the name
 
 		player=RemapPlayerNumber(player);	// for psx ...
@@ -3620,37 +3661,52 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 				}
 			}
 
-			incW = getCompFromName(COMP_WEAPON, WeaponName);
-			//if weapon not found - error
-			if (incW == -1)
+			for (j = 0;j < pTemplate->numWeaps;j++)
 			{
-				debug( LOG_ERROR, "Unable to find Weapon %s for template %s", WeaponName, TemplateName );
-				abort();
-				return FALSE;
-			}
-			else
-			{
-				//Weapon found, alloc this to the current Template
-				pTemplate->asWeaps[pTemplate->storeCount] = incW;
-				//check not allocating more than allowed
-				if (pTemplate->storeCount >
-								(SDWORD)pTemplate->numWeaps)
+				//Watermelon:test
+				if (j == 0)
 				{
-					debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Template - %s", TemplateName );
+					incW[j] = getCompFromName(COMP_WEAPON, WeaponName);
+				}
+				else if (j == 1)
+				{
+					incW[j] = getCompFromName(COMP_WEAPON, WeaponNameA);
+				}
+				else if (j == 2)
+				{
+					incW[j] = getCompFromName(COMP_WEAPON, WeaponNameB);
+				}
+				//if weapon not found - error
+				if (incW[j] == -1)
+				{
+					debug( LOG_ERROR, "Unable to find Weapon %s for template %s", WeaponNameA[i], TemplateName );
 					abort();
 					return FALSE;
 				}
-                //check valid weapon/propulsion
-                if (!checkValidWeaponForProp(pTemplate))
-                {
-			// ffs
-					debug( LOG_ERROR, "Weapon is invalid for air propulsion for template %s", pTemplate->aName );
-					abort();
+				else
+				{
+					//Weapon found, alloc this to the current Template
+					pTemplate->asWeaps[pTemplate->storeCount] = incW[j];
+					//check not allocating more than allowed
+					if (pTemplate->storeCount >
+									(SDWORD)pTemplate->numWeaps)
+					{
+						debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Template - %s", TemplateName );
+						abort();
+						return FALSE;
+					}
+					//check valid weapon/propulsion
+					if (!checkValidWeaponForProp(pTemplate))
+					{
+				// ffs
+						debug( LOG_ERROR, "Weapon is invalid for air propulsion for template %s", pTemplate->aName );
+						abort();
 
-					return FALSE;
-                }
+						return FALSE;
+					}
 
-				pTemplate->storeCount++;
+					pTemplate->storeCount++;
+				}
 			}
 		}
 		else
@@ -3893,7 +3949,8 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 /* Calculate the base body points of a droid without upgrades*/
 UDWORD calcDroidBaseBody(DROID *psDroid)
 {
-	UDWORD      body; //, i;
+	//Watermelon:re-enabled i;
+	UDWORD      body, i;
 
 	if (psDroid == NULL)
 	{
@@ -3913,11 +3970,13 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->body) / 100);
 
 	/* Add the weapon body points */
-	//for(i=0; i<psDroid->numWeaps; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
+	for(i=0; i<psDroid->numWeaps; i++)
 	{
-		//body += (asWeaponStats + psDroid->asWeaps[i].nStat)->body;
-        body += (asWeaponStats + psDroid->asWeaps[0].nStat)->body;
+		if (psDroid->asWeaps[i].nStat > 0)
+		{
+			//body += (asWeaponStats + psDroid->asWeaps[i].nStat)->body;
+			body += (asWeaponStats + psDroid->asWeaps[i].nStat)->body;
+		}
 	}
 
 	return body;
@@ -3928,6 +3987,8 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
 	UDWORD	speed;
+	//Watermelon:engine output bonus? 150% 
+	float eoBonus = 1.5f;
 
 	//return ((asBodyStats + psTemplate->asParts[COMP_BODY])->
 	//	powerOutput * 100) / weight;
@@ -3970,6 +4031,12 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 		{
 			speed = 3 * speed / 4;
 		}
+	}
+
+	// Wateremelon:applies the engine output bonus if output > weight
+	if ( (asBodyStats + psTemplate->asParts[COMP_BODY])->powerOutput > weight )
+	{
+		speed *= eoBonus;
 	}
 
 	return speed;
@@ -4096,7 +4163,8 @@ UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
 /* Calculate the power points required to build/maintain a droid */
 UDWORD	calcDroidPower(DROID *psDroid)
 {
-	UDWORD      power;//, i;
+	//Watermelon:re-enabled i
+	UDWORD      power, i;
 
 	//get the component power
 	power = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower +
@@ -4112,11 +4180,13 @@ UDWORD	calcDroidPower(DROID *psDroid)
 		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower) / 100);
 
 	//add weapon power
-	//for(i=0; i<psDroid->numWeaps; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
+	for(i=0; i<psDroid->numWeaps; i++)
 	{
-		//power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
-        power += (asWeaponStats + psDroid->asWeaps[0].nStat)->buildPower;
+		if (psDroid->asWeaps[i].nStat > 0)
+		{
+			//power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
+			power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
+		}
 	}
 
 	//add program power
@@ -4344,8 +4414,12 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	//psDroid->turretRotRate = 360;
-	psDroid->turretRotation = 0;
-	psDroid->turretPitch = 0;
+	//Watermelon:initialize all weapon turrent rotation pitch info
+	for(i = 0;i < DROID_MAXWEAPS; i++)
+	{
+		psDroid->turretRotation[i] = 0;
+		psDroid->turretPitch[i] = 0;
+	}
 	psDroid->selected = FALSE;
 	psDroid->lastEmission = 0;
 		// ffs AM
@@ -4530,8 +4604,11 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	//psDroid->turretRotRate = 360;
-	psDroid->turretRotation = 0;
-	psDroid->turretPitch = 0;
+	for (inc = 0;inc < psDroid->numWeaps;inc++)
+	{
+		psDroid->turretRotation[inc] = 0;
+		psDroid->turretPitch[inc] = 0;
+	}
 
 //	psDroid->ECMMod = (asECMStats + pTemplate->asParts[COMP_ECM])->power;
 
@@ -4539,14 +4616,17 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->originalBody = psDroid->body;
 
 	//create the droids weapons
-	//psDroid->numWeaps = pTemplate->numWeaps;
-    psDroid->asWeaps[0].nStat = 0;
+	//Watermelon:Re-enabled this one,cause I need numWeaps in psDroid
+	psDroid->numWeaps = pTemplate->numWeaps;
 	if (pTemplate->numWeaps > 0)
 	{
-		//for (inc=0; inc < pTemplate->numWeaps; inc++)
+		
         //can only have one weapon now
-        inc = 0;
+		//Watermelon:re-enabled this for loop
+        for (inc=0; inc < pTemplate->numWeaps; inc++)
 		{
+			//Watermelon:moved psDroid->asWeaps[0].nStat = 0 here
+			psDroid->asWeaps[inc].nStat = 0;
 			psDroid->asWeaps[inc].lastFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].hitPoints = (asWeaponStats + psDroid->
@@ -4603,19 +4683,21 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 // Sets the parts array in a template given a droid.
 static void templateSetParts(DROID *psDroid,DROID_TEMPLATE *psTemplate)
 {
-//	UDWORD inc;
-
+	UDWORD inc;
+	psTemplate->numWeaps = 0;
 
 	psTemplate->droidType = psDroid->droidType;
 
-    //can only have one weapon now
-    if (psDroid->asWeaps[0].nStat > 0)
-    {
-        psTemplate->numWeaps = 1;
-		psTemplate->asWeaps[0] = psDroid->asWeaps[0].nStat;		// setup the weapon stat
-
-    } else {
-        psTemplate->numWeaps = 0;
+    //Watermelon:can only have DROID_MAXWEAPS weapon now
+	for (inc = 0;inc < DROID_MAXWEAPS;inc++)
+	{
+		//Watermelon:this should fix the NULL weapon stats for empty weaponslots
+		psTemplate->asWeaps[inc] = 0;
+		if (psDroid->asWeaps[inc].nStat > 0)
+		{
+			psTemplate->numWeaps += 1;
+			psTemplate->asWeaps[inc] = psDroid->asWeaps[inc].nStat;
+		}
 	}
 
 	psTemplate->asParts[COMP_BODY] = psDroid->asBits[COMP_BODY].nStat;
@@ -5170,7 +5252,10 @@ void	setSelectedCommander(UDWORD commander)
 	selectedCommander = commander;
 }
 
-/* calculate muzzle tip location in 3d world */
+/* calculate muzzle tip location in 3d world 
+ * Watermelon:note:only the 1st muzzleLocation is calculated,since WEAPON_IMD and WEAPON_MOUNT_IMD
+ * are #define pointing to asWeaps[0]...
+*/
 BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
 {
 //	UDWORD turretType;
@@ -5201,8 +5286,9 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
 					  -psShape->connectors->y);//note y and z flipped
 
 		//matrix = the gun and turret mount on the body
-		pie_MatRotY(DEG((SDWORD)psDroid->turretRotation));//+ve anticlockwise
-		pie_MatRotX(DEG(psDroid->turretPitch));//+ve up
+		//Watermelon:force it to use 0 thanks to the define weirdness...
+		pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[0]));//+ve anticlockwise
+		pie_MatRotX(DEG(psDroid->turretPitch[0]));//+ve up
    		pie_MatRotZ(DEG(0));
 		//matrix = the muzzle mount on turret
 		if( psWeapon AND psWeapon->nconnectors )
@@ -5592,7 +5678,8 @@ static UDWORD calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
 static UDWORD calcDroidSystemPoints(DROID *psDroid)
 {
 	UDWORD      system;//, i;
-
+	int i;
+	
 	//get the component system points
 	system = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->systemPoints +
 	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->systemPoints +
@@ -5607,11 +5694,15 @@ static UDWORD calcDroidSystemPoints(DROID *psDroid)
 		systemPoints) / 100);
 
 	//add weapon system
-	//for(i=0; i<psDroid->numWeaps; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
+	//Watermelon:re-enabled for loop added int keyword to variable i
+	//Because of VC weirdness...
+	for(i = 0; i < psDroid->numWeaps; i++)
 	{
-		//system += (asWeaponStats + psDroid->asWeaps[i].nStat)->systemPoints;
-        system += (asWeaponStats + psDroid->asWeaps[0].nStat)->systemPoints;
+		if (psDroid->asWeaps[i].nStat > 0)
+		{
+			//system += (asWeaponStats + psDroid->asWeaps[i].nStat)->systemPoints;
+			system += (asWeaponStats + psDroid->asWeaps[i].nStat)->systemPoints;
+		}
 	}
 
 	//add program system
@@ -6418,8 +6509,9 @@ BOOL electronicDroid(DROID *psDroid)
 	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 		"electronicUnit: Invalid unit pointer" );
 
+	//Watermelon:use slot 0 for now
 	//if (psDroid->numWeaps AND asWeaponStats[psDroid->asWeaps[0].nStat].
-    if (psDroid->asWeaps[0].nStat > 0 AND asWeaponStats[psDroid->asWeaps[0].nStat].
+    if (psDroid->numWeaps > 0 AND asWeaponStats[psDroid->asWeaps[0].nStat].
 		weaponSubClass == WSC_ELECTRONIC)
 	{
 		return TRUE;
@@ -7049,6 +7141,10 @@ SWORD   droidResistance(DROID *psDroid)
 /*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is
 direct fire. Also check numVTOLattackRuns for the weapon is not zero - return
 TRUE if valid weapon*/
+/* Watermelon:this will be buggy if the droid being checked has both AA weapon and non-AA weapon
+Cannot think of a solution without adding additional return value atm.
+*/
+
 BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
 	PROPULSION_STATS	*psPropStats;

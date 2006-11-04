@@ -13,7 +13,7 @@
 #define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)
 
 /* The maximum number of droid weapons and programs */
-#define DROID_MAXWEAPS		1//3
+#define DROID_MAXWEAPS		3//Watermelon:its 3 again now
 //#define DROID_MAXPROGS		3
 #define	DROID_DAMAGE_SCALING	400
 // This should really be logarithmic
@@ -165,8 +165,8 @@ typedef struct _droid
 //tjc	UDWORD		imdNum;
 	UWORD		numKills;
 	//UWORD		turretRotRate; THIS IS A CONSTANT
-	UWORD		turretRotation;
-	UWORD		turretPitch;	//*
+	UWORD		turretRotation[DROID_MAXWEAPS];		// Watermelon:turretRotation info for multiple turrents :)
+	UWORD		turretPitch[DROID_MAXWEAPS];	//* Watermelon:turrentPitch info for multiple turrents :)
 	UBYTE 		NameVersion;			// Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 	UBYTE		currRayAng;
 //	UDWORD		numKills;
@@ -174,7 +174,7 @@ typedef struct _droid
     SWORD       resistance;             //used in Electronic Warfare
 
 //	SDWORD		activeWeapon;		// The currently selected weapon
-	//UDWORD		numWeaps;
+	UDWORD		numWeaps;		// Watermelon:Re-enabled this,I need this one in droid.c
 	WEAPON		asWeaps[DROID_MAXWEAPS];
 
 	//SDWORD		activeProg;			// The currently running program

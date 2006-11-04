@@ -70,7 +70,9 @@ extern BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
-extern BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget);
+//Watermelon:protocol change to int
+extern int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget);
 
 #endif
+
 

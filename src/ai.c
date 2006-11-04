@@ -103,7 +103,9 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
     }
 
 	/* Return if have no weapons */
-	if(psDroid->asWeaps[0].nStat == 0)
+	// Watermelon:added a protection against no weapon droid 'numWeaps'
+	// The ai orders a non-combat droid to patrol = crash without it...
+	if(psDroid->asWeaps[0].nStat == 0 || psDroid->numWeaps == 0)
 		return FALSE;
 
 	//weaponMod = asWeaponModifier[weaponEffect][(asPropulsionStats + ((DROID*)psObj)->asBits[COMP_PROPULSION].nStat)->propulsionType];
@@ -123,7 +125,7 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 			 !aiCheckAlliances(asDroidNaybors[i].psObj->player,psDroid->player))
 		{
 			psObj = asDroidNaybors[i].psObj;
-			if (!validTarget((BASE_OBJECT *)psDroid, psObj))
+			if ( validTarget((BASE_OBJECT *)psDroid, psObj) == 1)
 			{
 				continue;
 			}
@@ -353,11 +355,41 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	DROID			*psCommander;
 	BOOL			bCommanderBlock;
 	UDWORD			sensorRange;
+	//Watermelon:weapon_slot to store which turrent is InAttackRange
+	int weapon_slot = DROID_MAXWEAPS + 1;
+	int i;
 
 	/* Get the sensor range */
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
+
+		//if (psDroid->numWeaps == 0)
+		/* Watermelon:if I am a multi-turret droid */
+		if (((DROID *)psObj)->numWeaps > 1)
+		{
+			for(i = 0;i < ((DROID *)psObj)->numWeaps;i++)
+			{
+				if (((DROID *)psObj)->asWeaps[i].nStat != 0)
+				{
+					weapon_slot = i;
+					break;
+				}
+			}
+
+			if (weapon_slot == (DROID_MAXWEAPS + 1))
+			{
+				return FALSE;
+			}
+
+		}
+		else
+		{
+			if (((DROID *)psObj)->asWeaps[0].nStat == 0)
+			{
+				return FALSE;
+			}
+		}
 		//if (((DROID *)psObj)->numWeaps == 0)
         if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
 			((DROID *)psObj)->droidType != DROID_SENSOR)
@@ -398,7 +430,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 		if (aiBestNearestTarget((DROID *)psObj, &psTarget))
 		{
             /*check its a valid target*/
-            if (validTarget(psObj, psTarget))
+			//Watermelon:Greater than 1 for now
+            if (validTarget(psObj, psTarget) > 1)
             {
     			/* See if in sensor range */
 			    xdiff = psTarget->x - psObj->x;
@@ -468,7 +501,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 					psCStruct->psTarget != NULL)
 				{
                     /*check its a valid target*/
-                    if (validTarget(psObj, psCStruct->psTarget) &&
+					//Watermelon:Greater than 1 for now
+                    if ( (validTarget(psObj, psCStruct->psTarget) > 1) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget))
                     {
 					    xdiff = (SDWORD)psCStruct->psTarget->x - (SDWORD)psObj->x;
@@ -486,7 +520,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 						 psCStruct->psTarget != NULL)
 				{
                     /*check its a valid target*/
-                    if (validTarget(psObj, psCStruct->psTarget) &&
+                    if ( (validTarget(psObj, psCStruct->psTarget) > 1) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget))
                     {
     					xdiff = (SDWORD)psCStruct->psTarget->x - (SDWORD)psObj->x;
@@ -518,7 +552,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 						!aiCheckAlliances(psCurr->player,psObj->player))
 					{
                         /*check its a valid target*/
-                        if (validTarget(psObj, psCurr) &&
+						//Watermelon:Greater than 1 for now
+                        if ( (validTarget(psObj, psCurr) > 1) &&
 							!aiObjIsWall(psCurr))
                         {
 						    // See if in sensor range and visible
@@ -861,12 +896,17 @@ void aiUpdateDroid(DROID *psDroid)
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
-BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
+//Watermelon:I need int validTarget
+int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 {
-	BOOL			bTargetInAir, bValidTarget;
+	//Watermelon:return value int
+	int				ValidTarget = 1;
+	int				i;
+	BOOL			bTargetInAir;
+	//BOOL			bTargetInAir, bValidTarget;
     UBYTE           surfaceToAir;
 
-    bValidTarget = FALSE;
+    //bValidTarget = FALSE;
 
     //need to check propulsion type of target
 	switch (psTarget->type)
@@ -902,7 +942,20 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 	case OBJ_DROID:
     	// Can't attack without a weapon
 		//if (((DROID *)psObject)->numWeaps != 0)
-        if (((DROID *)psObject)->asWeaps[0].nStat != 0)
+		//Watermelon:check against all weapons
+		for (i = 0;i < ((DROID *)psObject)->numWeaps;i++)
+		{
+			if ( ((DROID *)psObject)->asWeaps[i].nStat != 0 )
+			{
+				surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[i].nStat].surfaceToAir;
+				if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
+				{
+					ValidTarget += (1 << (i + 1));
+				}
+			}
+		}
+		/*
+        if (((DROID *)psObject)->asWeaps[0].nStat != 0 && ((DROID *)psObject)->numWeaps > 0)
 		{
             surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[0].nStat].surfaceToAir;
         }
@@ -910,6 +963,7 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 		{
 			 surfaceToAir = 0;
 		}
+		*/
 		break;
 	case OBJ_STRUCTURE:
         // Can't attack without a weapon
@@ -922,12 +976,19 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 		{
 			surfaceToAir = 0;
 		}
-		break;
-	default:
-        surfaceToAir = 0;
-		break;
-	}
 
+		//Watermelon:
+		if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
+		{
+			ValidTarget += 2;
+		}
+			break;
+		default:
+			surfaceToAir = 0;
+			break;
+		}
+
+	/*
     //if target is in the air and you can shoot in the air - OK
     if (bTargetInAir AND (surfaceToAir & SHOOT_IN_AIR))
     {
@@ -939,6 +1000,7 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
     {
         bValidTarget = TRUE;
     }
+	*/
 
-    return bValidTarget;
+    return ValidTarget;
 }

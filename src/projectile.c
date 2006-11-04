@@ -488,11 +488,12 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		}
 
 		/* if droid set muzzle pitch */
+		//Watermelon:use 0 for now
 		if (psAttacker != NULL)
 		{
 			if (psAttacker->type == OBJ_DROID)
 			{
-				((DROID *) psAttacker)->turretPitch = psObj->pitch;
+				((DROID *) psAttacker)->turretPitch[0] = &psObj->pitch;
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
@@ -1958,6 +1959,7 @@ void	objectShimmy(BASE_OBJECT *psObj)
 		}
 	}
 }
+
 
 
 
