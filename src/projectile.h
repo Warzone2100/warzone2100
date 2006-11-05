@@ -104,7 +104,6 @@ extern BOOL	justBeenHitByEW		( BASE_OBJECT *psObj );
 extern void	objectShimmy	( BASE_OBJECT *psObj );
 
 // Watermelon:naybor related functions
-extern void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr);
 extern void projGetNaybors(PROJ_OBJECT *psObj);
 
 
