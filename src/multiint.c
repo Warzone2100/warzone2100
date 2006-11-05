@@ -9,7 +9,6 @@
 #include <stdio.h>		// get rid of a couple of warnings.
 #ifdef WIN32
 #include <windows.h>
-#include <sdl/sdl.h>
 #endif
 #include <SDL/SDL_opengl.h>
 #include <physfs.h>

@@ -60,11 +60,13 @@ AC_ARG_ENABLE(mp3,
 [AS_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
 [ mp3=$enableval ], [ mp3=maybe ])
 
+
 # windows conditional
+AC_CANONICAL_HOST
 case $host_os in
 	*mingw32* )
 		AC_DEFINE(WIN32, 1, [Windows build])
-		WZ_LIBS="${WZ_LIBS} -lmingw32"
+		WIN32_LIBS="-lwsock32 -lwinmm"
 		;;
 	* )
 		;;
@@ -244,7 +246,7 @@ WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzon
 
 # only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
 # strange error messages when something is wrong
-LIBS="${LIBS} ${WZ_LIBS}"
+LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
 AC_CONFIG_FILES([Makefile
