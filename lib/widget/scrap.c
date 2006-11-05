@@ -9,6 +9,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 
+#include "lib/framework/frame.h"
 #include "scrap.h"
 
 /* Miscellaneous defines */
