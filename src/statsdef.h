@@ -117,6 +117,7 @@ typedef enum _weapon_class
 } WEAPON_CLASS;
 
 // weapon subclasses used to define which weapons are affected by weapon upgrade functions
+// Watermelon:added a new subclass to do some tests
 typedef enum _weapon_subclass
 {
 	WSC_MGUN,
@@ -138,6 +139,7 @@ typedef enum _weapon_subclass
     WSC_BOMB,
     WSC_COMMAND,
     WSC_EMP,
+	WSC_COUNTER,
 
 	NUM_WEAPON_SUBCLASS,
 } WEAPON_SUBCLASS;

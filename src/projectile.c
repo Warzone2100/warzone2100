@@ -41,6 +41,8 @@
 #include "multiplay.h"
 #include "multistat.h"
 
+// Watermelon:I need this one for map grid iteration
+#include "mapgrid.h"
 
 /***************************************************************************/
 /* max number of slots in hash table - prime numbers are best because hash
@@ -69,6 +71,45 @@
 /*#define GFX_VISIBLE(psObj)		 ((psObj->psSource != NULL) AND psObj->psSource->visible[selectedPlayer]) OR \
 								 ((psObj->psDest != NULL) AND psObj->psDest->visible[selectedPlayer] )*/
 
+// Watermelon:they are from droid.c
+/* The range for neighbouring objects */
+#define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
+
+// macro to see if an object is in NAYBOR_RANGE
+// used by projGetNayb
+#define IN_PROJ_NAYBOR_RANGE(psTempObj) \
+	xdiff = dx - (SDWORD)psTempObj->x; \
+	if (xdiff < 0) \
+	{ \
+		xdiff = -xdiff; \
+	} \
+	if (xdiff > PROJ_NAYBOR_RANGE) \
+	{ \
+		continue; \
+	} \
+\
+	ydiff = dy - (SDWORD)psTempObj->y; \
+	if (ydiff < 0) \
+	{ \
+		ydiff = -ydiff; \
+	} \
+	if (ydiff > PROJ_NAYBOR_RANGE) \
+	{ \
+		continue; \
+	} \
+\
+	distSqr = xdiff*xdiff + ydiff*ydiff; \
+	if (distSqr > PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE) \
+	{ \
+		continue; \
+	} \
+
+// Watermelon:neighbour global info ripped from droid.c
+PROJ_NAYBOR_INFO			asProjNaybors[MAX_NAYBORS];
+UDWORD				numProjNaybors=0;
+
+static BASE_OBJECT	*CurrentProjNaybors = NULL;
+static UDWORD	projnayborTime = 0;
 
 /***************************************************************************/
 
@@ -570,6 +611,23 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	SDWORD			dx, dy, dz, iX, iY, dist, xdiff,ydiff;
 	SDWORD			rad;
 	iVector			pos;
+	//Watermelon:int i
+	int				i;
+	//Watermelon:2 temp BASE_OBJECT pointer
+	BASE_OBJECT		*psTempObj;
+	BASE_OBJECT		*psNewTarget;
+	//Watermelon:Vector z diff not used atm
+	SDWORD			zdiff;
+	//Watermelon:Missile or not
+	BOOL			bMissile;
+	//Watermelon:extended 'lifespan' of a projectile
+	//no more disappeared projectiles.
+	SDWORD			extendRad;
+	//Watermelon:given explosive weapons some 'hit collision' bonus
+	//esp the AAGun,or it will never hit anything with the new hit system
+	int				wpRadius = 1;
+
+	bMissile = FALSE;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_InFlightDirectFunc: invalid projectile pointer" );
@@ -631,8 +689,8 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		// ffs
 //	rad = fastRoot(dx,dy);
 	rad = (SDWORD)iSQRT( dx*dx + dy*dy );
-
-
+	//Watermelon:extended life span
+	extendRad = (SDWORD)rad * 1.5f;
 
 
 	if (rad == 0)
@@ -716,6 +774,80 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 		}
+		bMissile = TRUE;
+		wpRadius = 4;
+	}
+
+	//Watermelon:weapon radius,or the 'real' projectile will never hit a moving target with the changes...
+	if (psStats->weaponSubClass == WSC_MGUN ||
+		psStats->weaponSubClass == WSC_FLAME ||
+		psStats->weaponSubClass == WSC_COMMAND)
+	{
+		wpRadius = 2;
+		//Watermelon:extended life span
+		extendRad = (SDWORD)rad * 1.2f;
+	}
+	else if (psStats->weaponSubClass == WSC_CANNON ||
+			psStats->weaponSubClass == WSC_ENERGY ||
+			psStats->weaponSubClass == WSC_GAUSS ||
+			psStats->weaponSubClass == WSC_BOMB ||
+			psStats->weaponSubClass == WSC_ELECTRONIC ||
+			psStats->weaponSubClass == WSC_EMP)
+	{
+		wpRadius = 3;
+		//Watermelon:extended life span
+		extendRad = (SDWORD)rad * 1.5f;
+	}
+	else if (psStats->weaponSubClass == WSC_AAGUN)
+	{
+		wpRadius = 16;
+		//Watermelon:extended life span
+		extendRad = (SDWORD)rad * 2;
+	}
+
+	//Watermelon:test test
+	for (i = 0;i < numProjNaybors;i++)
+	{
+		//if (asProjNaybors[i].psObj == psObj->psDest)
+		//{
+			//continue;
+		//}
+
+		if (asProjNaybors[i].psObj->player != psObj->player &&
+			(asProjNaybors[i].psObj->type == OBJ_DROID ||
+			asProjNaybors[i].psObj->type == OBJ_STRUCTURE ||
+			asProjNaybors[i].psObj->type == OBJ_BULLET ||
+			asProjNaybors[i].psObj->type == OBJ_FEATURE) &&
+			asProjNaybors[i].psObj->visible[psObj->player] &&
+			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player))
+		{
+			psTempObj = asProjNaybors[i].psObj;
+			//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
+			if ( psTempObj->type == OBJ_BULLET )
+			{
+				if ( !bMissile || (((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass != WSC_COUNTER) )
+				{
+					continue;
+				}
+			}
+			xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
+			ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
+			zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
+
+			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
+			if ( psTempObj->type == OBJ_STRUCTURE )
+			{
+				wpRadius = 1;
+			}
+
+			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) )
+			{
+				psNewTarget = psTempObj;
+				psObj->psDest = psNewTarget;
+		  		psObj->state = PROJ_IMPACT;
+				return;
+			}
+		}
 	}
 
 	/* See if effect has finished */
@@ -728,12 +860,33 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		  	psObj->state = PROJ_IMPACT;
 		}
 	}
-	else if ( dist > (rad-(SDWORD)psObj->targetRadius ) )
+	else if ( dist > (extendRad-(SDWORD)psObj->targetRadius ) )
 	{
 		/* It's damage time */
 //		psObj->x = psObj->tarX;		// leave it there, but use tarX and tarY for damage
 //		psObj->y = psObj->tarY;
-	  	psObj->state = PROJ_IMPACT;
+		if (psObj->psDest)
+		{
+			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
+			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
+			//Watermelon:'real' hit check even if the projectile is about to 'timeout'
+			if ( (xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest) ) * (SDWORD)(establishTargetRadius(psObj->psDest)) ) )
+			{
+		  		psObj->state = PROJ_IMPACT;
+			}
+			else
+			{
+				//Watermelon:missed.you can now 'dodge' projectile by micro,so cyborgs should be more useful now
+				psObj->state = PROJ_IMPACT;
+				psObj->psDest = NULL;
+			}
+		}
+		else
+		{
+			//Watermelon:missed. you can now 'dodge' projectile by micro,so cyborgs should be more useful now
+			psObj->state = PROJ_IMPACT;
+			psObj->psDest = NULL;
+		}
 	}
 
 #if CHECK_PROJ_ABOVE_GROUND
@@ -767,6 +920,12 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	iVector			pos;
 	FRACT			fVVert;
 	BOOL			bOver = FALSE;
+	//Watermelon:psTempObj,psNewTarget,i,xdiff,ydiff,zdiff
+	BASE_OBJECT		*psTempObj;
+	BASE_OBJECT		*psNewTarget;
+	int				i;
+	SDWORD			xdiff,ydiff,zdiff,extendRad;
+	int				wpRadius = 9;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_InFlightIndirectFunc: invalid projectile pointer" );
@@ -781,7 +940,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 
 		// ffs
-	iRad = fastRoot(dx,dy);
+	//Watermelon:this is too inaccurate for a 'real' projectle
+	//iRad = fastRoot(dx,dy);
+	iRad = (SDWORD)iSQRT( dx*dx + dy*dy );
 
 
 
@@ -815,6 +976,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	fVVert = MAKEFRACT(psObj->vZ - (iTime*ACC_GRAVITY/GAME_TICKS_PER_SEC));
 	psObj->pitch = (SWORD)( RAD_TO_DEG(atan2(fVVert, psObj->vXY)) );
 
+	//Watermelon:extended life span for artillery projectile
+	extendRad = (SDWORD)iRad * 1.2f;
 
 	if(psStats->weaponSubClass == WSC_FLAME)
 	{
@@ -868,8 +1031,51 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	}
 	*/
 
+	//Watermelon:test test
+	for (i = 0;i < numProjNaybors;i++)
+	{
+		//if (asProjNaybors[i].psObj == psObj->psDest)
+		//{
+			//continue;
+		//}
+
+		if (asProjNaybors[i].psObj->player != psObj->player &&
+			(asProjNaybors[i].psObj->type == OBJ_DROID ||
+			asProjNaybors[i].psObj->type == OBJ_STRUCTURE ||
+			asProjNaybors[i].psObj->type == OBJ_BULLET ||
+			asProjNaybors[i].psObj->type == OBJ_FEATURE) &&
+			asProjNaybors[i].psObj->visible[psObj->player] &&
+			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player))
+		{
+			psTempObj = asProjNaybors[i].psObj;
+			//Watermelon;dont collide with any other projectiles
+			if ( psTempObj->type == OBJ_BULLET )
+			{
+				continue;
+			}
+			xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
+			ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
+			zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
+
+			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
+			if ( psTempObj->type == OBJ_STRUCTURE )
+			{
+				wpRadius = 1;
+			}
+
+			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+				zdiff < 20 )
+			{
+				psNewTarget = psTempObj;
+				psObj->psDest = psNewTarget;
+		  		psObj->state = PROJ_IMPACT;
+				return;
+			}
+		}
+	}
+
 	/* See if effect has finished */
-	if ( iDist > (iRad-(SDWORD)psObj->targetRadius) )
+	if ( iDist > (extendRad-(SDWORD)psObj->targetRadius) )
 	{
 		pos.x = psObj->x;
 		pos.z = psObj->y;
@@ -878,9 +1084,40 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 		/* It's damage time */
 //		psObj->x = psObj->tarX;		 // leave it where it is, but use tarX, tarY for damage
 //		psObj->y = psObj->tarY;
-		psObj->z = (UWORD)(pos.y + 8);//map_Height(psObj->x,psObj->y) + 8;	// bring up the impact explosion
-		psObj->state = PROJ_IMPACT;
-		bOver = TRUE;
+		//Watermelon:'real' check
+		if ( psObj->psDest )
+		{
+			psObj->z = (UWORD)(pos.y + 8);//map_Height(psObj->x,psObj->y) + 8;	// bring up the impact explosion
+			psObj->state = PROJ_IMPACT;
+			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
+			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
+			zdiff = (SDWORD)psObj->z - (SDWORD)psObj->psDest->z;
+
+			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
+			if ( psObj->psDest->type == OBJ_STRUCTURE )
+			{
+				wpRadius = 1;
+			}
+
+			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest)) * (SDWORD)(establishTargetRadius(psObj->psDest))) &&
+				zdiff < 20 )
+			{
+		  		psObj->state = PROJ_IMPACT;
+			}
+			else
+			{
+				psObj->state = PROJ_IMPACT;
+				psObj->psDest = NULL;
+			}
+			bOver = TRUE;
+		}
+		else
+		{
+			psObj->state = PROJ_IMPACT;
+			/* miss registered if NULL target */
+			psObj->psDest = NULL;
+			bOver = TRUE;
+		}	
 	}
 
 #if CHECK_PROJ_ABOVE_GROUND
@@ -1595,6 +1832,13 @@ proj_Update( PROJ_OBJECT *psObj )
 		psObj->psDest = NULL;
 	}
 
+	//Watermelon:get naybors
+	//if(psObj->psWStats->weaponSubClass == WSC_ROCKET OR psObj->psWStats->weaponSubClass == WSC_MISSILE OR
+		//psObj->psWStats->weaponSubClass == WSC_SLOWROCKET OR psObj->psWStats->weaponSubClass == WSC_SLOWMISSILE)
+	//{
+		projGetNaybors((BASE_OBJECT *)psObj);
+	//}
+
 	switch (psObj->state)
 	{
 		case PROJ_INFLIGHT:
@@ -1773,11 +2017,14 @@ SDWORD proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz)
 #endif
 
 /***************************************************************************/
+//Watemelon:added case for OBJ_BULLET
 UDWORD	establishTargetRadius( BASE_OBJECT *psTarget )
 {
 UDWORD		radius;
 STRUCTURE	*psStructure;
 FEATURE		*psFeat;
+//Watermelon:droid pointer
+DROID		*psDroid = NULL;
 
 	radius = 0;
 
@@ -1790,7 +2037,32 @@ FEATURE		*psFeat;
 		switch(psTarget->type)
 		{
 		case OBJ_DROID:
-			radius = TILE_UNITS/4;	// how will we arrive at this?
+			psDroid = (DROID *)psTarget;
+			switch(psDroid->droidType)
+			{
+				case DROID_WEAPON:
+				case DROID_SENSOR:
+				case DROID_ECM:
+				case DROID_CONSTRUCT:
+				case DROID_COMMAND:
+				case DROID_REPAIR:
+					//Watermelon:'hitbox' size is now based on body size
+					//Watermelon:Light:16 Medium:32 Heavy:48 S.Heavy:64
+					radius = TILE_UNITS/8 + ( (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size * 16 );
+					break;
+				case DROID_PERSON:
+				case DROID_CYBORG:
+				case DROID_CYBORG_CONSTRUCT:
+				case DROID_CYBORG_REPAIR:
+				case DROID_CYBORG_SUPER:
+					//Watermelon:cyborg and person have smaller 'hitbox' now
+					radius = TILE_UNITS/8;
+					break;
+				case DROID_DEFAULT:
+				case DROID_TRANSPORTER:
+				default:
+					radius = TILE_UNITS/4;	// how will we arrive at this?
+			}
 			break;
 		case OBJ_STRUCTURE:
 			psStructure = (STRUCTURE*)psTarget;
@@ -1801,6 +2073,9 @@ FEATURE		*psFeat;
 			psFeat = (FEATURE *)psTarget;
 			radius = ((max(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth)) * TILE_UNITS)/2;
 			break;
+		case OBJ_BULLET:
+			//Watermelon 1/2 radius of a droid?
+			radius = TILE_UNITS/8;
 		default:
 			break;
 		}
@@ -1960,7 +2235,93 @@ void	objectShimmy(BASE_OBJECT *psObj)
 	}
 }
 
+// Watermelon:addProjNaybor ripped from droid.c
+/* Add a new object to the projectile naybor list */
+static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
+{
+	UDWORD	pos;
+
+	if (numProjNaybors >= MAX_NAYBORS)
+	{
+//		DBPRINTF(("Naybor list maxed out for id %d\n", psObj->id));
+		return;
+	}
+	else if (numProjNaybors == 0)
+	{
+		// No objects in the list
+		asProjNaybors[0].psObj = psObj;
+		asProjNaybors[0].distSqr = distSqr;
+		numProjNaybors++;
+	}
+	else if (distSqr >= asProjNaybors[numProjNaybors-1].distSqr)
+	{
+		// Simple case - this is the most distant object
+		asProjNaybors[numProjNaybors].psObj = psObj;
+		asProjNaybors[numProjNaybors].distSqr = distSqr;
+		numProjNaybors++;
+	}
+	else
+	{
+		// Move all the objects further away up the list
+		pos = numProjNaybors;
+		while (pos > 0 && asProjNaybors[pos - 1].distSqr > distSqr)
+		{
+			memcpy(asProjNaybors + pos, asProjNaybors + (pos - 1), sizeof(PROJ_NAYBOR_INFO));
+			pos --;
+		}
+
+		// Insert the object at the correct position
+		asProjNaybors[pos].psObj = psObj;
+		asProjNaybors[pos].distSqr = distSqr;
+		numProjNaybors++;
+	}
+
+	ASSERT( numProjNaybors <= MAX_NAYBORS,
+		"addNaybor: numNaybors > MAX_NAYBORS" );
+}
+
+//Watermelon: projGetNaybors ripped from droid.c
+/* Find all the objects close to the projectile */
+void projGetNaybors(PROJ_OBJECT *psObj)
+{
+//	DROID		*psCurrD;
+//	STRUCTURE	*psCurrS;
+//	FEATURE		*psCurrF;
+	SDWORD		xdiff, ydiff;
+//	UDWORD		player;
+	UDWORD		dx,dy, distSqr;
+	//Watermelon:renamed to psTempObj from psObj
+	BASE_OBJECT	*psTempObj;
+
+// Ensure only called max of once per droid per game cycle.
+	if(CurrentProjNaybors == (BASE_OBJECT *)psObj && projnayborTime == gameTime) {
+		return;
+	}
+	CurrentProjNaybors = (BASE_OBJECT *)psObj;
+	projnayborTime = gameTime;
 
 
+
+	// reset the naybor array
+	numProjNaybors = 0;
+#ifdef DEBUG
+	memset(asProjNaybors, 0xcd, sizeof(asProjNaybors));
+#endif
+
+	// search for naybor objects
+	dx = ((BASE_OBJECT *)psObj)->x;
+	dy = ((BASE_OBJECT *)psObj)->y;
+
+	gridStartIterate((SDWORD)dx, (SDWORD)dy);
+	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
+	{
+		if (psTempObj != (BASE_OBJECT *)psObj)
+		{
+			IN_PROJ_NAYBOR_RANGE(psTempObj);
+
+			addProjNaybor(psTempObj, distSqr);
+		}
+	}
+}
 
 

@@ -84,7 +84,7 @@ BOOL combShutdown(void)
 	return TRUE;
 }
 
-
+// Watermelon:real projectile
 /* Fire a weapon at something */
 void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 {
@@ -99,6 +99,13 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	DROID			*psDroid = NULL;
 	SDWORD			level, cmdLevel;
 	BOOL			bMissVisible;
+	//Watermelon:minOffset
+	int				minOffset = 5;
+	//Watermelon:predicted X,Y offset per sec
+	SDWORD			predictX;
+	SDWORD			predictY;
+	//Watermelon:dirty dist
+	SDWORD			dist;
 
 	ASSERT( PTRVALID(psWeap, sizeof(WEAPON)),
 		"combFire: Invalid weapon pointer" );
@@ -336,6 +343,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	xDiff = abs(psAttacker->x - psTarget->x);
 	yDiff = abs(psAttacker->y - psTarget->y);
 	distSquared = xDiff*xDiff + yDiff*yDiff;
+	//Watermelon:dirty dist
+	dist = dirtySqrt(psAttacker->x,psAttacker->y,psTarget->x,psTarget->y);
 	longRange = proj_GetLongRange(psStats, (SDWORD)psAttacker->z-(SDWORD)psTarget->z);
 	if (distSquared <= (psStats->shortRange * psStats->shortRange) AND
 		distSquared >= (psStats->minRange * psStats->minRange))
@@ -357,9 +366,22 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		if (dice <= (weaponShortHit(psStats,psAttacker->player) * hitMod /100) + hitInc)
 		{
 			/* Kerrrbaaang !!!!! a hit */
+			//Watermelon:Target prediction
+			if(psTarget->type == OBJ_DROID)
+			{
+				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictX += psTarget->x;
+				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictY += psTarget->y;
+			}
+			else
+			{
+				predictX = psTarget->x;
+				predictY = psTarget->y;
+			}
 			DBP3(("Shot hit (%d)\n", dice));
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-								psTarget->x, psTarget->y, psTarget->z, psTarget, FALSE))
+								predictX, predictY, psTarget->z, psTarget, FALSE))
 			{
 				/* Out of memory - we can safely ignore this */
 				DBP3(("Out of memory"));
@@ -395,9 +417,22 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		if (dice <= (weaponLongHit(psStats,psAttacker->player) * hitMod /100) + hitInc)
 		{
 			/* Kerrrbaaang !!!!! a hit */
+			//Watermelon:Target prediction
+			if(psTarget->type == OBJ_DROID)
+			{
+				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictX += psTarget->x;
+				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictY += psTarget->y;
+			}
+			else
+			{
+				predictX = psTarget->x;
+				predictY = psTarget->y;
+			}
 			DBP3(("Shot hit (%d)\n", dice));
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-								psTarget->x, psTarget->y, psTarget->z, psTarget, FALSE))
+								predictX, predictY, psTarget->z, psTarget, FALSE))
 			{
 				/* Out of memory - we can safely ignore this */
 				DBP3(("Out of memory"));
@@ -422,6 +457,7 @@ missed:
 	/* Deal with a missed shot */
 	DBP3(("Missed shot (%d)\n", dice));
 
+	/*
 	// Approximate the distance between the attacker and target
 	xDiff = ABSDIF(psAttacker->x,psTarget->x);
 	yDiff = ABSDIF(psAttacker->y,psTarget->y);
@@ -436,6 +472,13 @@ missed:
 	missDir = rand() % BUL_MAXSCATTERDIR;
 	missX = aScatterDir[missDir].x * (rand() % missDist) + psTarget->x;
 	missY = aScatterDir[missDir].y * (rand() % missDist) + psTarget->y;
+	*/
+	//Watermelon:add a more 'accurate' miss
+	missDist = 2 * (100 - (weaponLongHit(psStats,psAttacker->player) * hitMod /100) + hitInc);
+	missDir = rand() % BUL_MAXSCATTERDIR;
+	missX = aScatterDir[missDir].x * missDist + psTarget->x + minOffset;
+	missY = aScatterDir[missDir].y * missDist + psTarget->y + minOffset;
+
 	DBP3(("Miss Loc: w(%4d,%4d), t(%3d,%3d)\n",
 		missX, missY, missX>>TILE_SHIFT, missY>>TILE_SHIFT));
 

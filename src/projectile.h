@@ -51,6 +51,14 @@ BOOL	proj_Direct(WEAPON_STATS *psStats);
 // return the maximum range for a weapon
 SDWORD	proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz);
 
+// Watermelon:neighbour info ripped from droiddef.h
+/* Info stored for each projectile neighbour */
+typedef struct _proj_naybor_info
+{
+	BASE_OBJECT		*psObj;			// The neighbouring object
+	UDWORD			distSqr;		// The square of the distance to the object
+	//UDWORD			dist;			// The distance to the object
+} PROJ_NAYBOR_INFO;
 
 /*
 // The fattest macro around - change this little bastard at your peril
@@ -95,6 +103,9 @@ extern BOOL gfxVisible(PROJ_OBJECT *psObj);
 extern BOOL	justBeenHitByEW		( BASE_OBJECT *psObj );
 extern void	objectShimmy	( BASE_OBJECT *psObj );
 
+// Watermelon:naybor related functions
+extern void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr);
+extern void projGetNaybors(PROJ_OBJECT *psObj);
 
 
 #endif	/* _PROJECTILE_H_ */
