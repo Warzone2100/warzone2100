@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([Warzone 2100],[2.0.5_rc1],[http://wz2100.net/])
+AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/])
 AM_INIT_AUTOMAKE([1.8])
 
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
