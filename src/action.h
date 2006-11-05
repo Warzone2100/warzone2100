@@ -103,7 +103,8 @@ extern int actionInRange(DROID *psDroid, BASE_OBJECT *psObj);
 extern int actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj);
 
 // return whether a droid can see a target to fire on it
-BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget);
+// Watermelon:changed to int from BOOL
+int actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget);
 
 // check whether a droid is in the neighboring tile to a build position
 BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
@@ -125,5 +126,6 @@ extern BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD x, SDWORD y);
 extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
 #endif
+
 
 

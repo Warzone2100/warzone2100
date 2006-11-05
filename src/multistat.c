@@ -482,7 +482,7 @@ BOOL loadForce(char *name)
 			fclose(pFileHandle);
 			return FALSE;
 		}
-		psTempl->pName = (CHAR*)&psTempl->aName;
+		psTempl->pName = (char*)&psTempl->aName;
 		fgetc(pFileHandle);													// remove the template separator in the force file.
 		psTempl->psNext = Force.pForceTemplates;
 		Force.pForceTemplates=psTempl;

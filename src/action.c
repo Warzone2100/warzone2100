@@ -899,75 +899,81 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 
 
 // return whether a droid can see a target to fire on it
-BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget)
+int actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget)
 {
 	WEAPON_STATS	*psStats;
 	//Watermelon:weapon_slot
-	UDWORD weapon_slot = DROID_MAXWEAPS + 1;
-	int i;
+	int				num_weapons = 0;
+	int				result = 1;
+	int				i;
 
 	//if (psDroid->numWeaps == 0)
 	/* Watermelon:if I am a multi-turret droid */
-	if (psDroid->numWeaps > 1)
+	if (psDroid->numWeaps > 0)
 	{
 		for(i = 0;i < psDroid->numWeaps;i++)
 		{
 			if (psDroid->asWeaps[i].nStat != 0)
 			{
-				weapon_slot = i;
-				break;
+				num_weapons += (1 << (i+1));
 			}
 		}
-
-		if (weapon_slot == (DROID_MAXWEAPS + 1))
-		{
-			return visibleObject((BASE_OBJECT*)psDroid, psTarget);
-		}
-
 	}
 	else
 	{
 		if (psDroid->asWeaps[0].nStat == 0)
 		{
-			return visibleObject((BASE_OBJECT*)psDroid, psTarget);
+			if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
+			{
+				return 2;
+			}
 		}
 	}
 
 	//if (psDroid->numWeaps == 0)
     if (vtolDroid(psDroid))
 	{
-		return visibleObject((BASE_OBJECT*)psDroid, psTarget);
-	}
-
-	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
-	if (proj_Direct(psStats))
-	{
-		if (visibleObjWallBlock((BASE_OBJECT*)psDroid, psTarget))
+		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
 		{
-			return TRUE;
-		}
-	}
-	else
-	{
-		// indirect can only attack things they can see unless attacking
-		// through a sensor droid - see DORDER_FIRESUPPORT
-		if (orderState(psDroid, DORDER_FIRESUPPORT))
-		{
-			if (psTarget->visible[psDroid->player])
-			{
-				return TRUE;
-			}
-		}
-		else
-		{
-			if (visibleObject((BASE_OBJECT*)psDroid, psTarget))
-			{
-				return TRUE;
-			}
+			return 2;
 		}
 	}
 
-	return FALSE;
+	for(i = 0;i < psDroid->numWeaps;i++)
+	{
+		if (num_weapons & (1 << (i+1)))
+		{
+			psStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+			if (proj_Direct(psStats))
+			{
+				if (visibleObjWallBlock((BASE_OBJECT*)psDroid, psTarget))
+				{
+					result += (1 << (i+1));
+				}
+			}
+			else
+			{
+				// indirect can only attack things they can see unless attacking
+				// through a sensor droid - see DORDER_FIRESUPPORT
+				if (orderState(psDroid, DORDER_FIRESUPPORT))
+				{
+					if (psTarget->visible[psDroid->player])
+					{
+						result += (1 << (i+1));
+					}
+				}
+				else
+				{
+					if (visibleObject((BASE_OBJECT*)psDroid, psTarget))
+					{
+						result += (1 << (i+1));
+					}
+				}
+			}
+		}
+	}
+
+	return result;
 }
 
 static void actionAddVtolAttackRun( DROID *psDroid )
@@ -1404,6 +1410,8 @@ void actionUpdateDroid(DROID *psDroid)
 
 	//Watermelon:need another int to store valid target result
 	int vtResult;
+	//Watermelon actionVisibleTarget result;
+	int avtResult;
 	int i = 0;
 	//this is a bit field
 	int num_weapons = 0;
@@ -1762,6 +1770,10 @@ void actionUpdateDroid(DROID *psDroid)
 
 		//Watermelon:uses vtResult
 		vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+
+		//Watermelon:uses avtResult
+		avtResult = actionVisibleTarget(psDroid, psDroid->psActionTarget);
+
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
 		{
@@ -1777,12 +1789,12 @@ void actionUpdateDroid(DROID *psDroid)
             psDroid->psActionTarget = NULL;
             psDroid->action = DACTION_NONE;
         }
-        else if (actionVisibleTarget(psDroid, psDroid->psActionTarget) &&
+        else if (avtResult > 1 &&
 			actionInAttackRange(psDroid, psDroid->psActionTarget))
 		{
 			for(i = 0;i < psDroid->numWeaps;i++)
 			{
-				if ( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
+				if ( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) && (avtResult & (1 << (i+1))) )
 				{
 					psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
 					if (!psWeapStats->rotate)
@@ -1852,6 +1864,8 @@ void actionUpdateDroid(DROID *psDroid)
 			vtResult = 1;
 		}
 
+		avtResult = actionVisibleTarget(psDroid, psDroid->psActionTarget);
+
 		//check if vtol that its armed
 		if ( (vtolEmpty(psDroid)) ||
 			 (psDroid->psActionTarget == NULL) ||
@@ -1870,7 +1884,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				//Watermelon:I moved psWeapStats flag update there
 				psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
-				if (actionVisibleTarget(psDroid, psDroid->psActionTarget))
+				if (avtResult & (1 << (i+1)))
 				{
 					if ( (actionInRange(psDroid, psDroid->psActionTarget) & (1 << i)) )
 					{
@@ -1966,6 +1980,8 @@ void actionUpdateDroid(DROID *psDroid)
 
 		//Watermelon:vtResult
 		vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget);
+		//Watermelon:avtResult
+		avtResult = actionVisibleTarget(psDroid, psDroid->psActionTarget);
 
         //check the target hasn't become one the same player ID - Electronic Warfare
         if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget->player)) ||
@@ -1977,11 +1993,11 @@ void actionUpdateDroid(DROID *psDroid)
         }
         else
         {
-            if (actionVisibleTarget(psDroid, psDroid->psActionTarget))
+            if (avtResult > 1)
 		    {
 				for(i = 0;i < psDroid->numWeaps;i++)
 				{
-					if( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
+					if( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) && (avtResult & (1 << (i+1))) )
 					{
 						psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
 						if (psWeapStats->rotate)
@@ -3474,6 +3490,7 @@ exit:
 	return result;
 
 }
+
 
 
 
