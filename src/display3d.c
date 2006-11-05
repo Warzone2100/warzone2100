@@ -3325,8 +3325,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		{
 			firingStage = (2*scrR) - 1;
 		}
-		pie_BoxFill(scrX - scrR-1, 6+scrY + 0 - (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 - (weapon_slot * 5), 0x00020202);
-		pie_BoxFill(scrX - scrR,   6+scrY + 1 - (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 - (weapon_slot * 5), 0x00ffffff);
+		pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), 0x00020202);
+		pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), 0x00ffffff);
 		return;
 	}
 	/* ******** ********/
@@ -3418,8 +3418,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 				firingStage = (2*scrR) - 1;
 			}
 			/* Power bars */
-			pie_BoxFill(scrX - scrR-1, 6+scrY + 0 - (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 - (weapon_slot * 5), 0x00020202);
-			pie_BoxFill(scrX - scrR,   6+scrY + 1 - (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 - (weapon_slot * 5), 0x00ffffff);
+			pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), 0x00020202);
+			pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), 0x00ffffff);
 		}
 	}
 }
@@ -3505,7 +3505,6 @@ FRACT		mulH;
 				health*=2;
 				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, 0x00020202);
 				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, longPowerCol);
-
 				drawWeaponReloadBar((BASE_OBJECT *)psStruct, psStruct->asWeaps, 0);
 			}
 			else
