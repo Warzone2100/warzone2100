@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"

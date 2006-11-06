@@ -5,6 +5,8 @@
  */
 
 #include <stdarg.h>
+#include <string.h>
+
 
 #include "lib/framework/frame.h"
 #include "interp.h"

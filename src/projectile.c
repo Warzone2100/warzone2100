@@ -6,6 +6,7 @@
  *
  */
 /***************************************************************************/
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"

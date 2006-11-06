@@ -4,6 +4,8 @@
  * Parse command line arguments
  *
  */
+
+#include <string.h>
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif	// not for .net I should say..  --Qamly

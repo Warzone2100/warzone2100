@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <physfs.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 

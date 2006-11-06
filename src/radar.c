@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/rendmode.h"

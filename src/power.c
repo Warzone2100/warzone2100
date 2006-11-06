@@ -4,6 +4,7 @@
  * Store PlayerPower and other power related stuff!
  *
  */
+#include <string.h>
 #include "objectdef.h"
 #include "power.h"
 #include "hci.h"

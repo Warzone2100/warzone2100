@@ -11,6 +11,7 @@
 #include <SDL/SDL_thread.h>
 #include <SDL/SDL_net.h>
 #include <physfs.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "netplay.h"

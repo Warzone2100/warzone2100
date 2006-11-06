@@ -17,6 +17,7 @@
 #ifdef EDITORWORLD
 
 #include <malloc.h>
+#include <string.h>
 
 #define MALLOC(a) malloc(a)
 #define FREE(a) free(a); a = NULL;
@@ -37,6 +38,7 @@
 #endif
 
 #include <assert.h>
+#include <string.h>
 #include "gateway.h"
 
 // Structures and defines for SeedFill().

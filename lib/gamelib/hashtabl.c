@@ -2,6 +2,7 @@
 
 #include <limits.h>
 #include <memory.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 

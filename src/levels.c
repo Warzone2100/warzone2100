@@ -6,6 +6,7 @@
  */
 
 #include <ctype.h>
+#include <string.h>
 
 // levLoadData printf's
 #define DEBUG_GROUP0

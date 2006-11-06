@@ -5,6 +5,7 @@
  * WARNING!!!!!!
  * Something wicked this way comes. This file is almost as evil as HCI.c
  */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"

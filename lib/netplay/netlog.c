@@ -7,6 +7,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <physfs.h>
+#include <string.h>
 
 // ////////////////////////////////////////////////////////////////////////
 // Logging for degug only

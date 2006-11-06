@@ -12,6 +12,7 @@
 // summary info printf's
 //#define DEBUG_GROUP2
 #include <assert.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 

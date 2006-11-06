@@ -23,6 +23,7 @@
 #endif
 
 #include <physfs.h>
+#include <string.h>
 
 #include "tracklib.h"
 #include "audio.h"

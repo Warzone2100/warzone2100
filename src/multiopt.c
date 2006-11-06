@@ -5,6 +5,7 @@
  *
  * Routines for setting the game options and starting the init process.
  */
+#include <string.h>
 
 #include "lib/framework/frame.h"			// for everything
 #include "map.h"

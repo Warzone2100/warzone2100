@@ -3,6 +3,8 @@
 #include "configfile.h"
 
 #include <physfs.h>
+#include <stdio.h>
+#include <string.h>
 
 #define REGISTRY_HASH_SIZE	32
 #define MAXLINESIZE 255

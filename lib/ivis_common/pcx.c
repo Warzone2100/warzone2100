@@ -1,5 +1,7 @@
 #include <png.h>
 #include <setjmp.h>
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "ivisdef.h"
 #include "bug.h"

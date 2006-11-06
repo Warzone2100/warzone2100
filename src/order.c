@@ -4,6 +4,7 @@
  * Functions for setting the orders of a droid or group of droids
  *
  */
+#include <string.h>
 
 // moral check printf's
 //#define DEBUG_GROUP0

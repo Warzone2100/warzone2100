@@ -15,6 +15,7 @@
  */
 
 #include <physfs.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "netplay.h"

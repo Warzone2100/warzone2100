@@ -6,6 +6,8 @@
  * files to cope with multiplayer structure related stuff..
  */
 
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "droid.h"
 #include "droiddef.h"

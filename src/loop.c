@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 /* loop position printf's */
 //#define DEBUG_GROUP1

@@ -5,12 +5,13 @@
  *
  */
 
-#ifdef EDITORWORLD
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
+#include <string.h>
+
+#ifdef EDITORWORLD
 
 #include "typedefs.h"
 

@@ -4,6 +4,7 @@
  * all the stuff relevant to a mission
  */
 #include <stdio.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"

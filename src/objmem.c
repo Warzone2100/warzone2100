@@ -4,6 +4,7 @@
  * Object memory management functions.
  *
  */
+#include <string.h>
 
 //#define DEBUG_GROUP1
 #include "lib/framework/frame.h"

@@ -4,6 +4,7 @@
  * Form droids and structures into clusters
  *
  */
+#include <string.h>
 
 // cluster empty printf's
 //#define DEBUG_GROUP0

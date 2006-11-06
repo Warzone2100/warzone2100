@@ -4,6 +4,8 @@
  * Functions for the edit box widget.
  */
 
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "widget.h"
 #include "widgint.h"

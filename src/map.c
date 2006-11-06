@@ -5,6 +5,7 @@
  *
  */
 #include <stdio.h>
+#include <string.h>
 
 /* map line printf's */
 //#define DEBUG_GROUP1

@@ -4,6 +4,7 @@
  * Link droids together into a group for AI etc.
  *
  */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "objects.h"

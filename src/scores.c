@@ -4,6 +4,8 @@
 	Alex W. McLean
 */
 
+#include <string.h>
+
 // --------------------------------------------------------------------
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"

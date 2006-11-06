@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 /* Grab box printf's */
 //#define DEBUG_GROUP2

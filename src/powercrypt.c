@@ -5,6 +5,8 @@
  *
  */
 
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "powercrypt.h"
 #include "deliverance.h"

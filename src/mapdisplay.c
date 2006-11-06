@@ -11,6 +11,7 @@
 /* ----------------------------------------------------------------------------------------- */
 /* Included files */
 #include <stdio.h>
+#include <string.h>
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"

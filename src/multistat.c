@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <physfs.h>
 
 #include "lib/framework/frame.h"

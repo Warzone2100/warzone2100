@@ -4,6 +4,8 @@
  * Store common stats for weapons, components, brains, etc.
  *
  */
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"

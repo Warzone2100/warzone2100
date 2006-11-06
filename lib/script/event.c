@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 // event tracing printf's
 #define DEBUG_GROUP0

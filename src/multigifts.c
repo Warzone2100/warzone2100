@@ -4,6 +4,8 @@
  * Also home to Deathmatch hardcoded RULES.
  */
 
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"

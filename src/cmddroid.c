@@ -4,6 +4,7 @@
  * Code for command droids
  *
  */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "objects.h"

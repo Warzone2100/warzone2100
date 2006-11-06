@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <SDL/SDL.h>
 
 /* Allow frame header files to be singly included */

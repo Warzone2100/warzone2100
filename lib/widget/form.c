@@ -3,6 +3,7 @@
  *
  * Functionality for the form widget.
  */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "widget.h"

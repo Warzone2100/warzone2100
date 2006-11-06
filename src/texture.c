@@ -1,4 +1,5 @@
 /* Texture stuff. Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/pietypes.h"

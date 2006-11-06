@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"

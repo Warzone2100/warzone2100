@@ -10,6 +10,7 @@
 # include <shlobj.h>
 #endif // WIN32
 
+#include <string.h>
 #include <SDL/SDL_main.h>
 #include <physfs.h>
 

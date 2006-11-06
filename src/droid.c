@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 /* Droid damage printf's */
 //#define DEBUG_GROUP1

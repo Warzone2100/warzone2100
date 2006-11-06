@@ -4,6 +4,7 @@
 
 /* Standard library headers */
 #include <physfs.h>
+#include <string.h>
 
 /* Warzone src and library headers */
 #include "lib/framework/frame.h"

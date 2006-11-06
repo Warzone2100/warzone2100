@@ -3,6 +3,8 @@
  *  Handles the In Game MultiPlayer Screen, alliances etc...
  *  Also the selection of disk files..
  */
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"

@@ -4,6 +4,7 @@
 	Alex M, Pumpkin Studios, EIDOS Interactive, 1997.
 
 */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "base.h"

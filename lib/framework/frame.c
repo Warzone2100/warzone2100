@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 #include <SDL/SDL.h>
 #include <physfs.h>
 

@@ -4,6 +4,8 @@
  * Data loading functions used by the framework resource module
  *
  */
+#include <string.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 //render library

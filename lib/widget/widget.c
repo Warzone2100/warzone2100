@@ -4,6 +4,7 @@
  * The main interface functions to the widget library
  */
 
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"

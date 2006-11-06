@@ -3,6 +3,7 @@
  *
  * interface for setting limits to the game, bots, structlimits etc...
  */
+#include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"

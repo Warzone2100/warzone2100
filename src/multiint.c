@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>		// get rid of a couple of warnings.
+#include <string.h>
 #ifdef WIN32
 #include <windows.h>
 #endif

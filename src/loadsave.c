@@ -6,6 +6,7 @@
  * return a filename to use for the ops.
  */
 
+#include <string.h>
 #include <physfs.h>
 
 #include "lib/framework/frame.h"

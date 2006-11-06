@@ -1,5 +1,7 @@
 //aiexperience.c
 #include <physfs.h>
+#include <string.h>
+
 #include "objmem.h"
 #include "objectdef.h"
 #include "map.h"
