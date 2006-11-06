@@ -268,5 +268,9 @@ warzone_libs =  ../lib/framework/libframework.a \
 		../lib/sequence/libsequence.a \
 		../lib/widget/libwidget.a
 
+if MINGW32
+warzone_libs += ../win32/warzone2100.o
+endif
+
 warzone2100_DEPENDENCIES = $(warzone_libs)
 warzone2100_LDADD        = $(warzone_libs)

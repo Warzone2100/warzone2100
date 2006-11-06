@@ -7,6 +7,7 @@ AM_INIT_AUTOMAKE([1.8])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 AC_CONFIG_HEADER([lib/framework/config.h])
 
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
@@ -19,6 +20,19 @@ fi
 AM_PROG_LEX
 if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
+fi
+
+
+# Check for Windows.
+AC_CANONICAL_HOST
+AM_CONDITIONAL([MINGW32], [test x$host_os = xmingw32])
+if test x$host_os = xmingw32 ; then
+		AC_DEFINE([WIN32], 1, [Windows build])
+		AC_CHECK_TOOL([WINDRES], [windres], [no])
+		if test x$WINDRES = xno ; then
+			AC_MSG_ERROR([windres not found])
+		fi
+		WIN32_LIBS="-lwsock32 -lwinmm"
 fi
 
 
@@ -60,17 +74,6 @@ AC_ARG_ENABLE(mp3,
 [AS_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
 [ mp3=$enableval ], [ mp3=maybe ])
 
-
-# windows conditional
-AC_CANONICAL_HOST
-case $host_os in
-	*mingw32* )
-		AC_DEFINE(WIN32, 1, [Windows build])
-		WIN32_LIBS="-lwsock32 -lwinmm"
-		;;
-	* )
-		;;
-esac
 
 
 # Checks for libraries:
@@ -250,18 +253,19 @@ LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
 AC_CONFIG_FILES([Makefile
-                 lib/Makefile
-                 lib/framework/Makefile
-                 lib/gamelib/Makefile
-                 lib/ivis_opengl/Makefile
-                 lib/ivis_common/Makefile
-                 lib/netplay/Makefile
-                 lib/script/Makefile
-                 lib/sequence/Makefile
-                 lib/sound/Makefile
-                 lib/widget/Makefile
-                 data/Makefile
-                 src/Makefile])
+		win32/Makefile
+		lib/Makefile
+		lib/framework/Makefile
+		lib/gamelib/Makefile
+		lib/ivis_opengl/Makefile
+		lib/ivis_common/Makefile
+		lib/netplay/Makefile
+		lib/script/Makefile
+		lib/sequence/Makefile
+		lib/sound/Makefile
+		lib/widget/Makefile
+		data/Makefile
+		src/Makefile])
 AC_OUTPUT
 
 echo ""

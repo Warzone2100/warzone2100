@@ -4,7 +4,7 @@ else
 DSUBDIRS =
 endif
 
-SUBDIRS = $(DSUBDIRS) lib src
+SUBDIRS = $(DSUBDIRS) win32 lib src
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(datadir)/icons
