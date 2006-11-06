@@ -57,7 +57,7 @@ extern UDWORD	getSuggestedPitch			( void );
 
 extern BOOL	clipXY ( SDWORD x, SDWORD y);
 
-extern int init3DView(void);
+extern BOOL init3DView(void);
 extern void initViewPosition(void);
 extern iView player,camera;
 extern iVector	imdRot;

@@ -7,7 +7,7 @@ int makeTileTextures(void);
 int remakeTileTextures(void);
 void makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src);
 void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src);
-int	getTileRadarColours(void);
+BOOL	getTileRadarColours(void);
 void	freeTileTextures( void );
 
 typedef struct _tileTexInfo
