@@ -1837,7 +1837,7 @@ proj_Update( PROJ_OBJECT *psObj )
 	//if(psObj->psWStats->weaponSubClass == WSC_ROCKET OR psObj->psWStats->weaponSubClass == WSC_MISSILE OR
 		//psObj->psWStats->weaponSubClass == WSC_SLOWROCKET OR psObj->psWStats->weaponSubClass == WSC_SLOWMISSILE)
 	//{
-		projGetNaybors((BASE_OBJECT *)psObj);
+		projGetNaybors((PROJ_OBJECT *)psObj);
 	//}
 
 	switch (psObj->state)

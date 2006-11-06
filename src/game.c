@@ -5922,8 +5922,8 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		}
 		else
 		{
-			endian_uword(&psSaveDroid->turretRotation);
-			endian_uword(&psSaveDroid->turretPitch);
+			endian_uword(&psSaveDroid->turretRotation[0]);
+			endian_uword(&psSaveDroid->turretPitch[0]);
 		}
 		endian_sdword(&psSaveDroid->order);
 		endian_uword(&psSaveDroid->orderX);

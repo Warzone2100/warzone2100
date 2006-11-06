@@ -388,10 +388,8 @@ BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 
 	if (f == NULL) return FALSE;
 
-	// FIXME Ugly hack because PhysFS doesn't support reporting the filesize, nor seeking to the end
-	while( PHYSFS_read( f, seekbuf, 1, 1 ) );
-	size = PHYSFS_tell( f );
-	PHYSFS_seek( f, 0 );
+	size = PHYSFS_fileLength(f);
+	assert( size > -1 );
 
 	if (size > buffer_size) {
 		if (buffer != NULL) free(buffer);

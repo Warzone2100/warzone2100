@@ -48,13 +48,9 @@ BSPPTRLIST, *PSBSPPTRLIST;
 #define	LEFT		1
 #define	RIGHT		0
 
-
-#define BINTREE_STUFF(x)	struct x  *link[2] 
-
-
 typedef struct BNODE
 {
-	BINTREE_STUFF(BNODE);
+	struct BNODE *link[2];
 }
 BNODE, *PSBNODE;
 /***************************************************************************/
@@ -110,7 +106,7 @@ BINTREE, *PSBINTREE;
 
 typedef struct BSPTREENODE
 {
-	BINTREE_STUFF( BSPTREENODE );
+	struct BSPTREENODE *link[2];
 
 	PLANE 			Plane;
 	// points to first polygon in the BSP tree entry ... BSP_NextPoly in the iIMDPoly structure will point to the next entry

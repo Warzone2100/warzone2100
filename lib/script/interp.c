@@ -276,17 +276,17 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	UDWORD		*InstrPointer, opcode, data;
 	INTERP_VAL	sVal, *psVar;
 	VAL_CHUNK	*psGlobals;
-	UDWORD		numGlobals;
+	UDWORD		numGlobals = 0;
 	UDWORD		*pCodeStart, *pCodeEnd, *pCodeBase;
-	SCRIPT_FUNC		scriptFunc;
-	SCRIPT_VARFUNC	scriptVarFunc;
+	SCRIPT_FUNC		scriptFunc = 0;
+	SCRIPT_VARFUNC	scriptVarFunc = 0;
 	SCRIPT_CODE		*psProg;
 //	SDWORD			arrayIndex, dimensions, arrayElements[VAR_MAX_DIMENSIONS];
 	SDWORD			instructionCount = 0;
 
-	UDWORD		CurEvent;
-	BOOL		bStop,bEvent;
-	SDWORD		callDepth;
+	UDWORD		CurEvent = 0;
+	BOOL		bStop = FALSE, bEvent = FALSE;
+	SDWORD		callDepth = 0;
 	const char	*pTrigLab, *pEventLab;
 
 	//debug(LOG_SCRIPT, "interpRunScript 1");
