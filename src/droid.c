@@ -4605,6 +4605,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	//psDroid->turretRotRate = 360;
+	psDroid->numWeaps = pTemplate->numWeaps;
 	for (inc = 0;inc < psDroid->numWeaps;inc++)
 	{
 		psDroid->turretRotation[inc] = 0;
@@ -4618,7 +4619,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 
 	//create the droids weapons
 	//Watermelon:Re-enabled this one,cause I need numWeaps in psDroid
-	psDroid->numWeaps = pTemplate->numWeaps;
 	if (pTemplate->numWeaps > 0)
 	{
 		
