@@ -31,12 +31,14 @@
 #define BUCKET_RANGE	32000
 
 #define BUCKET_CLIP
-#define CLIP_LEFT	(0)
+#define CLIP_LEFT	((SDWORD)0)
 #define CLIP_RIGHT	((SDWORD)DISP_WIDTH)
-#define CLIP_TOP	(0)
+#define CLIP_TOP	((SDWORD)0)
 #define CLIP_BOTTOM ((SDWORD)DISP_HEIGHT)
 //scale depth = 1<<FP12_SHIFT>>STRETCHED_Z_SHIFT<<xpshift
-#define SCALE_DEPTH (FP12_MULTIPLIER)
+// Gerard - HACK Multiplied by 7 to fix clipping
+// someone needs to take a good look at the radius calculation
+#define SCALE_DEPTH (FP12_MULTIPLIER*7)
 
 typedef struct _bucket_tag
 {
@@ -443,7 +445,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			{
 				position.y = psSimpObj->z;
 #ifdef BUCKET_CLIP
-				radius = (((STRUCTURE*)pObject)->sDisplay.imd->radius) * 2;//other building clipping not so close
+				radius = (((STRUCTURE*)pObject)->sDisplay.imd->radius);
 #endif
 			}
 
