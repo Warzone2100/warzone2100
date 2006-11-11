@@ -9135,35 +9135,40 @@ FRACT	retVal;
 FIRE_SUPPORT order can be assigned*/
 BOOL structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid)
 {
-	//Standard Sensor Tower + indirect weapon droid (non VTOL)
-	//else if (structStandardSensor(psStruct) AND (psDroid->numWeaps AND
-    if (structStandardSensor(psStruct) AND (psDroid->asWeaps[0].nStat > 0 AND
-		!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) AND
-		!vtolDroid(psDroid))
+	//Watermelon:another crash when nStat is marked as 0xcd... FIXME: Why is nStat not initialized properly?
+	//Added a safety check: Only units with weapons can be assigned.
+	if (psDroid->numWeaps > 0)
 	{
-		return TRUE;
-	}
-	//CB Sensor Tower + indirect weapon droid (non VTOL)
-	//if (structCBSensor(psStruct) AND (psDroid->numWeaps AND
-    else if (structCBSensor(psStruct) AND (psDroid->asWeaps[0].nStat > 0 AND
-		!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) AND
-		!vtolDroid(psDroid))
-	{
-		return TRUE;
-	}
-	//VTOL Intercept Sensor Tower + any weapon VTOL droid
-	//else if (structVTOLSensor(psStruct) AND psDroid->numWeaps AND
-    else if (structVTOLSensor(psStruct) AND psDroid->asWeaps[0].nStat > 0 AND
-		vtolDroid(psDroid))
-	{
-		return TRUE;
-	}
-	//VTOL CB Sensor Tower + any weapon VTOL droid
-	//else if (structVTOLCBSensor(psStruct) AND psDroid->numWeaps AND
-    else if (structVTOLCBSensor(psStruct) AND psDroid->asWeaps[0].nStat > 0 AND
+		//Standard Sensor Tower + indirect weapon droid (non VTOL)
+		//else if (structStandardSensor(psStruct) && (psDroid->numWeaps &&
+	    if (structStandardSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
+			!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+			!vtolDroid(psDroid))
+		{
+			return TRUE;
+		}
+		//CB Sensor Tower + indirect weapon droid (non VTOL)
+		//if (structCBSensor(psStruct) && (psDroid->numWeaps &&
+    	else if (structCBSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
+			!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+			!vtolDroid(psDroid))
+		{
+			return TRUE;
+		}
+		//VTOL Intercept Sensor Tower + any weapon VTOL droid
+		//else if (structVTOLSensor(psStruct) && psDroid->numWeaps &&
+    	else if (structVTOLSensor(psStruct) && psDroid->asWeaps[0].nStat > 0 &&
 			vtolDroid(psDroid))
-	{
-		return TRUE;
+		{
+			return TRUE;
+		}
+		//VTOL CB Sensor Tower + any weapon VTOL droid
+		//else if (structVTOLCBSensor(psStruct) && psDroid->numWeaps &&
+    	else if (structVTOLCBSensor(psStruct) && psDroid->asWeaps[0].nStat > 0 &&
+			vtolDroid(psDroid))
+		{
+			return TRUE;
+		}
 	}
 
 	//case not matched

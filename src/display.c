@@ -3242,11 +3242,11 @@ STRUCTURE	*psStructure;
 				{
 					if(buildingDamaged(psStructure))
 					{
-						retVal = MT_SENSORSTRUCT;
+						retVal = MT_SENSORSTRUCTDAM;
 					}
 					else
 					{
-						retVal = MT_SENSORSTRUCTDAM;
+						retVal = MT_SENSORSTRUCT;
 					}
 				}
 
