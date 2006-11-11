@@ -384,7 +384,7 @@ BOOL recvLasSat(NETMSG *pMsg)
 	if(psStruct && psObj)
 	{
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->x,
-            psObj->y, psObj->z, psObj, TRUE);
+            psObj->y, psObj->z, psObj, TRUE, FALSE);
         //play 5 second countdown message
 		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->x, psObj->y,
             psObj->z );

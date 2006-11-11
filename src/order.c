@@ -4600,7 +4600,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 			}
             //ok to fire - so fire away
             proj_SendProjectile(&psStruct->asWeaps[0], NULL,
-                player, psObj->x, psObj->y, psObj->z, psObj, TRUE);
+                player, psObj->x, psObj->y, psObj->z, psObj, TRUE, FALSE);
             //set up last fires time
             psStruct->asWeaps[0].lastFired =  gameTime;
 

@@ -6173,7 +6173,7 @@ BOOL scrFireWeaponAtObj(void)
 	sWeapon.nStat = wIndex;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, psTarget->x,psTarget->y,psTarget->z, psTarget, TRUE);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, psTarget->x,psTarget->y,psTarget->z, psTarget, TRUE, FALSE);
 
 	return TRUE;
 }
@@ -6193,7 +6193,7 @@ BOOL scrFireWeaponAtLoc(void)
 	sWeapon.nStat = wIndex;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, x,y,map_Height(x,y), NULL, TRUE);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, x,y,map_Height(x,y), NULL, TRUE, FALSE);
 
 	return TRUE;
 }

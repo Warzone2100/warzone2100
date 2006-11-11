@@ -381,7 +381,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			}
 			DBP3(("Shot hit (%d)\n", dice));
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-								predictX, predictY, psTarget->z, psTarget, FALSE))
+								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE))
 			{
 				/* Out of memory - we can safely ignore this */
 				DBP3(("Out of memory"));
@@ -432,7 +432,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			}
 			DBP3(("Shot hit (%d)\n", dice));
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-								predictX, predictY, psTarget->z, psTarget, FALSE))
+								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE))
 			{
 				/* Out of memory - we can safely ignore this */
 				DBP3(("Out of memory"));
@@ -490,7 +490,7 @@ missed:
 	}
 
 	/* Fire off the bullet to the miss location */
-	if (!proj_SendProjectile( psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->z, NULL, bMissVisible) )
+	if (!proj_SendProjectile( psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->z, NULL, bMissVisible, FALSE) )
 	{
 		/* Out of memory */
 		DBP3(("Out of memory"));
