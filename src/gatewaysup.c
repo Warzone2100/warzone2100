@@ -16,7 +16,6 @@
 //#define DEBUG_GROUP5
 #ifdef EDITORWORLD
 
-#include <malloc.h>
 #include <string.h>
 
 #define MALLOC(a) malloc(a)
