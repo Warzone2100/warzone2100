@@ -57,87 +57,84 @@ void scrExternReset(void)
 BOOL scrGenExternGet(UDWORD index)
 {
 	INTERP_TYPE		type;
-	SDWORD			val;
+	INTERP_VAL	result;
 
 	switch (index)
 	{
 
 	case EXTID_TRACKTRANSPORTER:
 		type = VAL_BOOL;
-		val = bTrackTransporter;
+		result.v.bval = bTrackTransporter;
 		break;
 	case EXTID_ISPSX:
 		type = VAL_BOOL;
-		val = bIsPSX;
+		result.v.bval = bIsPSX;
 		break;
 	case EXTID_MAPWIDTH:
 		type = VAL_INT;
-		val = mapWidth;
+		result.v.ival = mapWidth;
 		break;
 	case EXTID_MAPHEIGHT:
 		type = VAL_INT;
-		val = mapHeight;
+		result.v.ival = mapHeight;
 		break;
 	case EXTID_GAMEINIT:
 		type = VAL_BOOL;
-		val = gameInitialised;
+		result.v.bval = gameInitialised;
 		break;
 	case EXTID_SELECTEDPLAYER:
 		type = VAL_INT;
-		val = selectedPlayer;
+		result.v.ival = selectedPlayer;
 		break;
 	case EXTID_GAMELEVEL:
 		type = VAL_INT;
-		val = scrGameLevel;
+		result.v.ival = scrGameLevel;
 		break;
 	case EXTID_GAMETIME:
 		type = VAL_INT;
-		val = (SDWORD)(gameTime/SCR_TICKRATE);
+		result.v.ival = (SDWORD)(gameTime/SCR_TICKRATE);
 		break;
 	case EXTID_TUTORIAL:
 		type = VAL_BOOL;
-		val = bInTutorial;
+		result.v.bval = bInTutorial;
 		break;
 	case EXTID_CURSOR:
 		type = VAL_INT;
-		val = iV_GetMouseFrame();	// from  rendfunc.c
+		result.v.ival = iV_GetMouseFrame();	// from  rendfunc.c
 //		DBPRINTF(("CURSOR = %d val\n",val));
 		break;
 	case EXTID_INTMODE:
 		type=VAL_INT;
-		val=intMode;
+		result.v.ival=intMode;
 		break;
 
 	case EXTID_TARGETTYPE:
 		type=VAL_INT;
-		val=getTargetType();
+		result.v.ival=getTargetType();
 		break;
 	case EXTID_EXTRAVICTORYFLAG:
 		type=VAL_BOOL;
-		val=bExtraVictoryFlag;
+		result.v.bval=bExtraVictoryFlag;
 		break;
 	case EXTID_EXTRAFAILFLAG:
 		type=VAL_BOOL;
-		val=bExtraFailFlag;
+		result.v.bval=bExtraFailFlag;
 		break;
-
-
-
 	case EXTID_MULTIGAMETYPE:		// multiplayer variable..
 		type = VAL_INT;
-		val = game.type;
+		result.v.ival = game.type;
 		break;
 	case EXTID_MULTIGAMEHUMANMAX:		// multiplayer variable..
 		type = VAL_INT;
-		val = game.maxPlayers;
+		result.v.ival = game.maxPlayers;
 		break;
 	case EXTID_MULTIGAMEBASETYPE:
 		type = VAL_INT;
-		val	= game.base;
+		result.v.ival	= game.base;
 		break;
 	case EXTID_MULTIGAMEALLIANCESTYPE:
 		type = VAL_INT;
-		val	= game.alliance;
+		result.v.ival	= game.alliance;
 		break;
 
 		default:
@@ -146,7 +143,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 	}
 
-	if (!stackPushResult(type, val))
+	if (!stackPushResult(type, &result))
 	{
 		return FALSE;
 	}

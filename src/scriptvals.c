@@ -121,6 +121,7 @@ BOOL scrvAddBasePointer(INTERP_VAL *psVal)
 		}
 	}
 
+	ASSERT(FALSE, "scrvAddBasePointer: not enough base pointers left (total :%d)", MAX_BASEPOINTER);
 	return FALSE;
 }
 
@@ -153,7 +154,7 @@ void scrvUpdateBasePointers(void)
 		if (asBasePointers[i] != NULL)
 		{
 			psVal = asBasePointers[i];
-			psObj = psVal->v.oval;
+			psObj = (BASE_OBJECT *)psVal->v.oval;
 
 			if (psObj && psObj->died && psObj->died != NOT_CURRENT_LIST)
 			{

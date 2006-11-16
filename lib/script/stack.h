@@ -48,6 +48,9 @@ extern BOOL stackBinaryOp(OPCODE opcode);
  */
 extern BOOL stackUnaryOp(OPCODE opcode);
 
+/* casts top of the stack to some other data type */
+extern	BOOL castTop(INTERP_TYPE neededType);
+
 /* Reset the stack to an empty state */
 extern void stackReset(void);
 

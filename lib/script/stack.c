@@ -56,8 +56,9 @@ BOOL stackEmpty(void)
 static BOOL stackNewChunk(UDWORD size)
 {
 	BLOCK_HEAP		*psHeap;
+	unsigned int						i;
 
-	/* see if a chunk has already been alocated */
+	/* see if a chunk has already been allocated */
 	if (psCurrChunk->psNext != NULL)
 	{
 		psCurrChunk = psCurrChunk->psNext;
@@ -87,6 +88,13 @@ static BOOL stackNewChunk(UDWORD size)
 		psCurrChunk = psCurrChunk->psNext;
 		currEntry = 0;
 
+		/* initialize pointers */
+		for (i = 0; i<size; i++)
+		{
+			psCurrChunk->psNext->aVals[i].v.ival = 0;
+			psCurrChunk->psNext->aVals[i].type = VAL_INT;		//default type, should be ok
+		}
+
 		memSetBlockHeap(psHeap);
 	}
 
@@ -97,16 +105,28 @@ static BOOL stackNewChunk(UDWORD size)
 BOOL stackPush(INTERP_VAL  *psVal)
 {
 	/* Store the value in the stack - psCurrChunk/currEntry always point to
-	   valid space */
-	memcpy(&(psCurrChunk->aVals[currEntry]), psVal, sizeof(INTERP_VAL));
+	valid space */
 
 	/* String support: Copy the string, otherwise the stack will operate directly on the
 	original string (like & opcode will actually store the result in the first
 	variable which would point to the original string) */
-	if(psVal->type == VAL_STRING)
+	if(psVal->type == VAL_STRING)		//pushing string
 	{
-		psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(MAXSTRLEN);
-		strcpy(psCurrChunk->aVals[currEntry].v.sval,psVal->v.sval);
+		/* strings should already have memory allocated */
+		if(psCurrChunk->aVals[currEntry].type != VAL_STRING)		//needs to have memory allocated for string
+			psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(MAXSTRLEN);
+
+		strcpy(psCurrChunk->aVals[currEntry].v.sval, psVal->v.sval);		//copy string to stack
+		psCurrChunk->aVals[currEntry].type = VAL_STRING;
+	}
+	else		/* pushing non-string */
+	{
+		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
+		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
+			FREE(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
+
+		/* copy type/data as union */
+		memcpy(&(psCurrChunk->aVals[currEntry]), psVal, sizeof(INTERP_VAL));
 	}
 
 	/* Now update psCurrChunk and currEntry */
@@ -149,7 +169,7 @@ BOOL stackPop(INTERP_VAL  *psVal)
 		currEntry--;
 	}
 
-	/* copy the value off the stack */
+	/* copy the entire value off the stack */
 	memcpy(psVal, &(psCurrChunk->aVals[currEntry]), sizeof(INTERP_VAL));
 
 	return TRUE;
@@ -185,26 +205,29 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 	//String support
 	if(psVal->type == VAL_STRING)		//If we are about to assign something to a string variable (psVal)
 	{
-		if(psTop->type != VAL_STRING)		//if assigning a non-string to a string, then convert it
+		if(psTop->type != VAL_STRING)		//if assigning a non-string value to a string variable, then convert the value
 		{
 			/* Check for compatible types */
-			if((psTop->type == VAL_INT) || (psTop->type == VAL_BOOL))
+			switch (psTop->type)
 			{
-				char *tempstr;
-				tempstr = (char*)MALLOC(MAXSTRLEN);
-				sprintf(tempstr, "%d", psTop->v.ival);
-
-				psVal->v.sval = tempstr;
-			}
-			else
-			{
-				debug(LOG_ERROR, "stackPopType: trying to assign an incompatible data type to a string variable (type = %d)", psTop->type);
-				return FALSE;
+				case VAL_INT:			/* int->string */
+					sprintf(psVal->v.sval, "%d", psTop->v.ival);
+					break;
+				case VAL_BOOL:		/* bool->string */
+					sprintf(psVal->v.sval, "%d", psTop->v.bval);
+					break;
+				case VAL_FLOAT:		/* float->string */
+					sprintf(psVal->v.sval, "%f", psTop->v.fval);
+					break;
+				default:
+					debug(LOG_ERROR, "stackPopType: trying to assign an incompatible data type to a string variable (type: %d)", psTop->type);
+					return FALSE;
+					break;
 			}
 		}
-		else	//Assigning a string to a string, just do the default action
+		else	//assigning string value to a string variable - COPY string
 		{
-			psVal->v.ival = psTop->v.ival;
+			strcpy(psVal->v.sval, psTop->v.sval);
 		}
 	}
 	else		// we are about to assign something to a non-string variable (psVal)
@@ -215,10 +238,10 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 			ASSERT( FALSE, "stackPopType: type mismatch" );
 			return FALSE;
 		}
-	}
 
-	/* copy the value off the stack */
-	psVal->v.ival = psTop->v.ival;
+		/* copy the entire union off the stack */
+		memcpy(&(psVal->v), &(psTop->v), sizeof(psTop->v));
+	}
 
 	return TRUE;
 }
@@ -288,7 +311,17 @@ BOOL stackPopParams(SDWORD numParams, ...)
 
 		psVal = psCurr->aVals + index;
 
-		if(type != VAL_STRING)	//Allow param to be any type, if function expects a string (auto-convert later)
+		if(type == VAL_FLOAT)		//expecting a float
+		{
+			/* if (!interpCheckEquiv(type,psVal->type))
+			{
+				ASSERT( FALSE, "stackPopParams: type mismatch (%d/%d)" , type, psVal->type);
+				va_end(args);
+				return FALSE;
+			} */
+			*((float*)pData) = psVal->v.fval;
+		}
+		else if(type != VAL_STRING)	//anything (including references)
 		{
 			if (!interpCheckEquiv(type,psVal->type))
 			{
@@ -296,21 +329,33 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				va_end(args);
 				return FALSE;
 			}
-			*((UDWORD*)pData) = (UDWORD)psVal->v.ival;
+			*((SDWORD*)pData) = psVal->v.ival;
 		}
 		else	//TODO: allow only compatible types
 		{
 			if(psVal->type == VAL_STRING)	//Passing a String
 			{
-				*((UDWORD*)pData) = (UDWORD)psVal->v.ival;
+				//*((char **)pData) = psVal->v.sval;
+				strcpy(((char *)pData), psVal->v.sval);		//COPY string
 			}
-			else		//Integer
+			else		//Integer or float
 			{
-				char *tempstr;
-				tempstr = (char*)MALLOC(MAXSTRLEN);
-				sprintf(tempstr, "%d", psVal->v.ival);
-
-				*((char**)pData) = tempstr;
+				switch (psVal->type)
+				{
+				case VAL_INT:
+					sprintf(((char *)pData), "%d", psVal->v.ival);
+					break;
+				case VAL_FLOAT:
+					sprintf(((char *)pData), "%f", psVal->v.fval);
+					break;
+				case VAL_BOOL:
+					sprintf(((char *)pData), "%d", psVal->v.bval);
+					break;
+				default:
+					ASSERT(FALSE, "StackPopParam - wrong data type being converted to string (type: %d)", psVal->type);
+					break;
+				}
+				//*((char **)pData) = psVal->v.sval;
 			}
 		}
 
@@ -327,21 +372,34 @@ BOOL stackPopParams(SDWORD numParams, ...)
 }
 
 
-/* Push a value onto the stack without using a value structure */
-BOOL stackPushResult(INTERP_TYPE type, SDWORD data)
+/* Push a value onto the stack without using a value structure
+	NOTE: result->type is _not_ set yet - use 'type' instead
+*/
+BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 {
-	// Store the value
-	psCurrChunk->aVals[currEntry].type = type;
+	/* assign type, wasn't done before */
+	result->type = type;
 
-	/* deal with strings */
-	if(type == VAL_STRING)
+	/* String support: Copy the string, otherwise the stack will operate directly on the
+	original string (like & opcode will actually store the result in the first
+	variable which would point to the original string) */
+	if(result->type == VAL_STRING)		//pushing string
 	{
-		psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(255);
-		strcpy(psCurrChunk->aVals[currEntry].v.sval,(char*)data);			//store string on stack
+		/* strings should already have memory allocated */
+		if(psCurrChunk->aVals[currEntry].type != VAL_STRING)		//needs to have memory allocated for string
+			psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(MAXSTRLEN);
+
+		strcpy(psCurrChunk->aVals[currEntry].v.sval, result->v.sval);		//copy string to stack
+		psCurrChunk->aVals[currEntry].type = VAL_STRING;
 	}
-	else
+	else		/* pushing non-string */
 	{
-		psCurrChunk->aVals[currEntry].v.ival = data;
+		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
+		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
+			FREE(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
+
+		/* copy type/data as union */
+		memcpy(&(psCurrChunk->aVals[currEntry]), result, sizeof(INTERP_VAL));
 	}
 
 	// Now update psCurrChunk and currEntry
@@ -454,7 +512,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 		psV2 = psCurrChunk->aVals + psCurrChunk->size - 1;
 	}
 
-	if(opcode != OP_CANC)		//string - Don't check if OP_CANC, since types can be mixed here
+	if(opcode != OP_CONC)		//string - Don't check if OP_CONC, since types can be mixed here
 	{
 		if (!interpCheckEquiv(psV1->type, psV2->type))
 		{
@@ -464,20 +522,72 @@ BOOL stackBinaryOp(OPCODE opcode)
 		}
 	}
 
+	/* find out if the result will be a float. Both or neither arguments are floats - should be taken care of by bison*/
+	if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
+	{
+		ASSERT(psV1->type == VAL_FLOAT && psV2->type == VAL_FLOAT, "Can't implicitly convert float->int (type1: %d, type2: %d)", psV1->type , psV2->type );
+	}
+
 	// do the operation
 	switch (opcode)
 	{
 	case OP_ADD:
-		psV1->v.ival = psV1->v.ival + psV2->v.ival;
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
+		{
+			psV1->type = VAL_FLOAT;
+			psV1->v.fval = psV1->v.fval + psV2->v.fval;
+		}
+		else
+		{
+			psV1->v.ival = psV1->v.ival + psV2->v.ival;
+		}
 		break;
 	case OP_SUB:
-		psV1->v.ival = psV1->v.ival - psV2->v.ival;
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
+		{
+			psV1->type = VAL_FLOAT;
+			psV1->v.fval = psV1->v.fval - psV2->v.fval;
+		}
+		else
+		{
+			psV1->v.ival = psV1->v.ival - psV2->v.ival;
+		}
 		break;
 	case OP_MUL:
-		psV1->v.ival = psV1->v.ival * psV2->v.ival;
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
+		{
+			psV1->type = VAL_FLOAT;
+			psV1->v.fval = psV1->v.fval * psV2->v.fval;
+		}
+		else
+		{
+			psV1->v.ival = psV1->v.ival * psV2->v.ival;
+		}
 		break;
 	case OP_DIV:
-		psV1->v.ival = psV1->v.ival / psV2->v.ival;
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
+		{
+			if(psV2->v.fval != 0.0f)
+			{
+				psV1->type = VAL_FLOAT;
+				psV1->v.fval = psV1->v.fval / psV2->v.fval;
+			}
+			else
+			{
+				ASSERT(FALSE, "stackBinaryOp: division by zero (float)");
+			}
+		}
+		else
+		{
+			if(psV2->v.ival != 0)
+			{
+				psV1->v.ival = psV1->v.ival / psV2->v.ival;
+			}
+			else
+			{
+				ASSERT(FALSE, "stackBinaryOp: division by zero (integer)");
+			}
+		}
 		break;
 	case OP_AND:
 		psV1->v.bval = psV1->v.bval && psV2->v.bval;
@@ -509,46 +619,68 @@ BOOL stackBinaryOp(OPCODE opcode)
 		psV1->type = VAL_BOOL;
 		psV1->v.bval = psV1->v.ival < psV2->v.ival;
 		break;
-	case OP_CANC:	//String cancatenation
+	case OP_CONC:	//String concatenation
 		{
 			char tempstr1[MAXSTRLEN];
 			char tempstr2[MAXSTRLEN];
 
 			/* Check first value if it's compatible with Strings */
-			if((psV1->type == VAL_INT) || (psV1->type == VAL_BOOL))	//First value isn't string, but can be converted to string
+			switch (psV1->type)
 			{
-				sprintf(tempstr1,"%d",psV1->v.ival);	//Convert
+			case VAL_INT:		//first value isn't string, but can be converted to string
+				sprintf(tempstr1,"%d",psV1->v.ival);	//int->string
+				psV1->type = VAL_STRING;			//Mark as string
+				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
+				break;
 
-				psV1->type = VAL_STRING;		//Mark as string
-				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of cancatenation will be saved here
-			}
-			else if(psV1->type == VAL_STRING)	//Is a string
-			{
+			case VAL_BOOL:
+				sprintf(tempstr1,"%d",psV1->v.bval);	//bool->string
+				psV1->type = VAL_STRING;			//Mark as string
+				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
+				break;
+
+			case VAL_FLOAT:
+				sprintf(tempstr1,"%f",psV1->v.fval);	//float->string
+				psV1->type = VAL_STRING;			//Mark as string
+				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
+				break;
+
+			case VAL_STRING:
 				strcpy(tempstr1,psV1->v.sval);
-			}
-			else
-			{
-				debug(LOG_ERROR, "stackBinaryOp: OP_CANC: first parameter is not compatible with Strings");
+				break;
+
+			default:
+				debug(LOG_ERROR, "stackBinaryOp: OP_CONC: first parameter is not compatible with Strings");
 				return FALSE;
+				break;
 			}
 
 			/* Check second value if it's compatible with Strings */
-			if((psV2->type == VAL_INT) || (psV2->type == VAL_BOOL))
+			switch (psV2->type)
 			{
-				sprintf(tempstr2,"%d",psV2->v.ival);		//Convert
-			}
-			else if(psV2->type == VAL_STRING)	//Is a string
-			{
+			case VAL_INT:
+				sprintf(tempstr2,"%d",psV2->v.ival);		//int->string
+				break;
+
+			case VAL_BOOL:
+				sprintf(tempstr2,"%d",psV2->v.bval);		//bool->string
+				break;
+
+			case VAL_FLOAT:
+				sprintf(tempstr2,"%f",psV2->v.fval);		//float->string
+				break;
+
+			case VAL_STRING:
 				strcpy(tempstr2,psV2->v.sval);
-			}
-			else
-			{
-				debug(LOG_ERROR, "stackBinaryOp: OP_CANC: first parameter is not compatible with Strings");
+				break;
+
+			default:
+				debug(LOG_ERROR, "stackBinaryOp: OP_CONC: first parameter is not compatible with Strings");
 				return FALSE;
+				break;
 			}
 
 			strcat(tempstr1,tempstr2);
-
 			strcpy(psV1->v.sval,tempstr1);		//Assign
 		}
 		break;
@@ -623,10 +755,82 @@ BOOL stackUnaryOp(OPCODE opcode)
 	return TRUE;
 }
 
+BOOL castTop(INTERP_TYPE neededType)
+{
+	INTERP_VAL	top;
+
+	//debug(LOG_WZ, "casting to %d", neededType);
+
+	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT, "stackCast: can't cast to %d", neededType);
+	
+	if (!stackPop(&top))
+	{
+		return FALSE;
+	}
+
+	//debug(LOG_WZ, "castTop: stack type %d", top.type);
+
+	/* see if we can cast this data type */
+	switch (top.type)
+	{
+	case VAL_BOOL:
+
+		switch (neededType)
+		{
+		case VAL_FLOAT:		/* casting from bool to float */
+
+			return stackPushResult(neededType, &top);
+
+			break;
+		default:
+			debug(LOG_ERROR, "cast error"); 
+			break;
+		}
+
+	case VAL_INT:
+
+		switch (neededType)
+		{
+		case VAL_FLOAT:		/* casting from int to float */
+
+			top.v.fval = (float)top.v.ival;
+			return  stackPushResult(neededType, &top);
+
+			break;
+		default:
+			debug(LOG_ERROR, "cast error"); 
+			break;
+		}
+
+	case VAL_FLOAT:
+
+		switch (neededType)
+		{
+		case VAL_INT:		/* casting from float to int */
+
+			top.v.ival = (SDWORD)top.v.fval;
+			return  stackPushResult(neededType, &top);
+
+			break;
+		default:
+			debug(LOG_ERROR, "cast error"); 
+			break;
+		}
+
+	default:
+		debug(LOG_ERROR, "can't cast from %d", top.type); 
+		break;
+	}
+
+	return FALSE;
+}
+
 
 /* Initialise the stack */
 BOOL stackInitialise(void)
 {
+	int				i;
+
 	psStackBlock = memGetBlockHeap();
 
 	psStackBase = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
@@ -649,6 +853,13 @@ BOOL stackInitialise(void)
 	psStackBase->psNext = NULL;
 	psCurrChunk = psStackBase;
 
+	/* initialize pointers */
+	for(i = 0; i<INIT_SIZE; i++)
+	{
+		psStackBase->aVals[i].v.ival = 0;
+		psStackBase->aVals[i].type = VAL_INT;		//default type, should be ok
+	}
+
 	//string support
 	CURSTACKSTR = 0;		//initialize string 'stack'
 
@@ -661,6 +872,7 @@ BOOL stackInitialise(void)
 void stackShutDown(void)
 {
 	STACK_CHUNK		*psCurr, *psNext;
+	UDWORD				i;
 
 	if ((psCurrChunk != psStackBase) && (currEntry != 0))
 	{
@@ -672,12 +884,20 @@ void stackShutDown(void)
 		psNext = psCurr->psNext;
 
 		/* Free strings */
-		if(psCurr->aVals->type == VAL_STRING)
+		for(i=0; i< psCurr->size; i++)		//go through all values on this chunk
 		{
-			if(psCurr->aVals->v.sval != NULL)					//FIXME: seems to be causing problems sometimes
-				FREE(psCurr->aVals->v.sval);
-			else
-				debug(LOG_SCRIPT, "stackShutDown: VAL_STRING with null pointer");
+			if(psCurr->aVals[i].type == VAL_STRING)
+			{
+				if(psCurr->aVals[i].v.sval != NULL)					//FIXME: seems to be causing problems sometimes
+				{
+					debug(LOG_WZ, "freeing '%s' ", psCurr->aVals[i].v.sval);
+					FREE(psCurr->aVals[i].v.sval);
+				}
+				else
+				{
+					debug(LOG_SCRIPT, "stackShutDown: VAL_STRING with null pointer");
+				}
+			}
 		}
 
 		FREE(psCurr->aVals);

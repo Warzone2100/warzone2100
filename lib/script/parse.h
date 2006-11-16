@@ -9,14 +9,20 @@
 /* Maximum number of TEXT items in any one Yacc rule */
 #define TEXT_BUFFERS 10
 
+#ifdef DEBUG_SCRIPT
+#define RULE(...) script_debug(__VA_ARGS__);
+#else
+#define RULE(...)
+#endif
+
 /* Definition for the chunks of code that are used within the compiler */
 typedef struct _code_block
 {
-	UDWORD		size;		// size of the code block
-	UDWORD		*pCode;		// pointer to the code data
-	UDWORD			debugEntries;
-	SCRIPT_DEBUG	*psDebug;	// Debugging info for the script.
-	INTERP_TYPE	type;		// The type of the code block
+	UDWORD				size;				// size of the code block
+	INTERP_VAL			*pCode;		// pointer to the code data
+	UDWORD				debugEntries;
+	SCRIPT_DEBUG		*psDebug;	// Debugging info for the script.
+	INTERP_TYPE			type;			// The type of the code block
 } CODE_BLOCK;
 
 /* The chunk of code returned from parsing a parameter list. */
@@ -25,7 +31,7 @@ typedef struct _param_block
 	UDWORD		numParams;
 	INTERP_TYPE	*aParams;	// List of parameter types
 	UDWORD		size;
-	UDWORD		*pCode;		// The code that puts the parameters onto the stack
+	INTERP_VAL	*pCode;		// The code that puts the parameters onto the stack
 }PARAM_BLOCK;
 
 /* The types of a functions parameters, returned from parsing a parameter declaration */
@@ -41,9 +47,9 @@ typedef struct _cond_block
 	UDWORD		numOffsets;
 	UDWORD		*aOffsets;	// Positions in the code that have to be
 							// replaced with the offset to the end of the
-							// conditional statment (for the jumps).
+							// conditional statement (for the jumps). - //TODO: change to INTERP_VAL - probbaly not necessary
 	UDWORD		size;
-	UDWORD		*pCode;
+	INTERP_VAL		*pCode;
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
 } COND_BLOCK;
@@ -104,7 +110,7 @@ typedef struct _array_block
 	SDWORD			dimensions;
 
 	UDWORD			size;
-	UDWORD			*pCode;
+	INTERP_VAL			*pCode;
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
 } ARRAY_BLOCK;
@@ -123,7 +129,7 @@ typedef struct _const_symbol
 	SDWORD			ival;
 	void			*oval;
 	char			*sval;	//String values
-//	float			fval;
+	float			fval;
 } CONST_SYMBOL;
 
 /* The chunk of code used to reference an object variable */
@@ -132,7 +138,7 @@ typedef struct _objvar_block
 	VAR_SYMBOL		*psObjVar;	// The object variables symbol
 
 	UDWORD			size;
-	UDWORD			*pCode;		// The code to get the object value on the stack
+	INTERP_VAL		*pCode;		// The code to get the object value on the stack
 } OBJVAR_BLOCK;
 
 /* The maximum number of parameters for an instinct function */
@@ -150,7 +156,7 @@ typedef struct _func_symbol
 	BOOL		script;		// Whether the function is defined in the script
 							// or a C instinct function
 	UDWORD		size;		// The size of script code
-	UDWORD		*pCode;		// The code for a function if it is defined in the script
+	INTERP_VAL	*pCode;		// The code for a function if it is defined in the script
 	UDWORD		location;	// The position of the function in the final code block
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
@@ -170,7 +176,7 @@ typedef struct _trigger_decl
 {
 	TRIGGER_TYPE	type;
 	UDWORD			size;
-	UDWORD			*pCode;
+	INTERP_VAL		*pCode;
 	UDWORD			time;
 } TRIGGER_DECL;
 
@@ -181,7 +187,7 @@ typedef struct _trigger_symbol
 	UDWORD			index;		// The triggers index number
 	TRIGGER_TYPE	type;		// Trigger type
 	UDWORD			size;		// Code size for the trigger
-	UDWORD			*pCode;		// The trigger code
+	INTERP_VAL		*pCode;		// The trigger code
 	UDWORD			time;		// How often to check the trigger
 
 	UDWORD			debugEntries;
@@ -208,7 +214,7 @@ typedef struct _event_symbol
 	char		*pIdent;	// Event's identifier
 	UDWORD		index;		// the events index number
 	UDWORD		size;		// Code size for the event
-	UDWORD		*pCode;		// Event code
+	INTERP_VAL		*pCode;		// Event code
 	SDWORD		trigger;	// Index of the event's trigger
 
 	UDWORD			debugEntries;
@@ -310,9 +316,12 @@ extern BOOL scriptLookUpFunction(char *pIdent, FUNC_SYMBOL **ppsSym);
 /* Look up an in-script custom function symbol */
 extern BOOL scriptLookUpCustomFunction(char *pIdent, EVENT_SYMBOL **ppsSym);
 
-extern BOOL popArguments(UDWORD **ip_temp, SDWORD numParams);
+extern BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams);
 
 extern void widgCopyString(char *pDest, char *pSrc);
 
+extern void script_debug(const char *pFormat, ...);
+
 #endif
+
 

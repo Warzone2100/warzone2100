@@ -6,6 +6,11 @@
 #ifndef _interp_h
 #define _interp_h
 
+/* The type of function called by an OP_CALL */
+typedef BOOL (*SCRIPT_FUNC)(void);
+
+/* The type of function called to access an object or in-game variable */
+typedef BOOL (*SCRIPT_VARFUNC)(UDWORD index);
 
 /* The possible value types for scripts */
 typedef enum _interp_type
@@ -13,15 +18,23 @@ typedef enum _interp_type
 	// Basic types
 	VAL_BOOL,
 	VAL_INT,
-//	VAL_FLOAT,
+	VAL_FLOAT,
 	VAL_STRING,
 
 	// events and triggers
 	VAL_TRIGGER,
-	VAL_EVENT,
+	VAL_EVENT,					//event (or in-script function)
 
 	/* Type used by the compiler for functions that do not return a value */
 	VAL_VOID,
+
+	//VAL_OBJECT,								//Droid/structure/feature/object pointer
+
+	VAL_OPCODE,							//Script opcode
+	VAL_PKOPCODE,						//Packed script opcode
+
+	VAL_OBJ_GETSET,						//Pointer to the object .set or .get function
+	VAL_FUNC_EXTERN,					//External function pointer
 
 	VAL_USERTYPESTART,		// user defined types should start with this id
 } INTERP_TYPE;
@@ -35,12 +48,14 @@ typedef struct _interp_val
 	INTERP_TYPE		type;
 	union
 	{
-		BOOL		bval;		// VAL_BOOL
-		SDWORD		ival;		// VAL_INT
-//		float		fval;		// VAL_FLOAT
-		char		*sval;		// VAL_STRING
-		void		*oval;		// VAL_OBJECT
-		void		*pVoid;		// VAL_VOIDPTR
+		char								*sval;			// VAL_STRING
+		SCRIPT_VARFUNC		pObjGetSet;		// VAL_OBJ_GETSET
+		SCRIPT_FUNC			pFuncExtern;		//VAL_FUNC_EXTERN
+		void					*oval;
+		void					*pVoid;		// VAL_VOIDPTR
+		float					fval;				// VAL_FLOAT
+		SDWORD					ival;				// VAL_INT
+		BOOL					bval;			// VAL_BOOL
 	} v;
 } INTERP_VAL;
 
@@ -97,8 +112,8 @@ typedef enum _op_code
 	OP_OR,
 	OP_NOT,
 
-	//String cancatenation
-	OP_CANC,
+	//String concatenation
+	OP_CONC,
 
 	// Comparison operators
 	OP_EQUAL,
@@ -111,7 +126,10 @@ typedef enum _op_code
 	OP_FUNC,		//custom (in-script) function call
 	OP_POPLOCAL,	//local var
 	OP_PUSHLOCAL,
+
 	OP_PUSHLOCALREF,	//variable of object type (pointer)
+	OP_TO_FLOAT,			//float cast
+	OP_TO_INT,				//int cast
 } OPCODE;
 
 /* How far the opcode is shifted up a UDWORD to allow other data to be
@@ -128,12 +146,6 @@ typedef enum _op_code
 #define ARRAY_BASE_MASK			0x000fffff
 #define ARRAY_DIMENSION_SHIFT	20
 #define ARRAY_DIMENSION_MASK	0x00f00000
-
-/* The type of function called by an OP_CALL */
-typedef BOOL (*SCRIPT_FUNC)(void);
-
-/* The type of function called to access an object or in-game variable */
-typedef BOOL (*SCRIPT_VARFUNC)(UDWORD index);
 
 /* The possible storage types for a variable */
 typedef enum _storage_type
@@ -202,7 +214,7 @@ typedef struct _trigger_data
 typedef struct _script_code
 {
 	UDWORD			size;			// The size (in bytes) of the compiled code
-	UDWORD			*pCode;			// Pointer to the compiled code
+	INTERP_VAL		*pCode;			// Pointer to the compiled code
 
 	UWORD			numTriggers;	// The number of triggers
 	UWORD			numEvents;		// The number of events
@@ -254,4 +266,5 @@ extern BOOL interpInitialise(void);
 extern BOOL interpProcessorActive(void);
 
 #endif
+
 

@@ -28,13 +28,14 @@
 #include "scriptvals.h"
 #include "research.h"
 
+INTERP_VAL	result;
+
 // Get values from a base object
 BOOL scrBaseObjGet(UDWORD index)
 {
 //	INTERP_VAL		sVal;
 	INTERP_TYPE		type = 0;
 	BASE_OBJECT		*psObj;
-	SDWORD			val = 0;
 	DROID			*psDroid;
 	STRUCTURE		*psStruct;
 	FEATURE			*psFeature;
@@ -65,27 +66,27 @@ BOOL scrBaseObjGet(UDWORD index)
 	{
 	case OBJID_POSX:
 		type = VAL_INT;
-		val = (SDWORD)psObj->x;
+		result.v.ival = (SDWORD)psObj->x;
 		break;
 	case OBJID_POSY:
 		type = VAL_INT;
-		val = (SDWORD)psObj->y;
+		result.v.ival = (SDWORD)psObj->y;
 		break;
 	case OBJID_POSZ:
 		type = VAL_INT;
-		val = (SDWORD)psObj->z;
+		result.v.ival = (SDWORD)psObj->z;
 		break;
 	case OBJID_ID:
 		type = VAL_INT;
-		val = (SDWORD)psObj->id;
+		result.v.ival = (SDWORD)psObj->id;
 		break;
 	case OBJID_PLAYER:
 		type = VAL_INT;
-		val = (SDWORD)psObj->player;
+		result.v.ival = (SDWORD)psObj->player;
 		break;
 	case OBJID_TYPE:
 		type = VAL_INT;
-		val = (SDWORD)psObj->type;
+		result.v.ival = (SDWORD)psObj->type;
 		break;
 	case OBJID_ORDER:
 		if (psObj->type != OBJ_DROID)
@@ -95,10 +96,10 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_INT;
-		val = (SDWORD)((DROID *)psObj)->order;
-		if ((val == DORDER_GUARD) && (((DROID *)psObj)->psTarget == NULL))
+		result.v.ival = (SDWORD)((DROID *)psObj)->order;
+		if ((result.v.ival == DORDER_GUARD) && (((DROID *)psObj)->psTarget == NULL))
 		{
-			val = DORDER_NONE;
+			result.v.ival = DORDER_NONE;
 		}
 		break;
 	//new member variable
@@ -110,7 +111,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_INT;
-		val = (SDWORD)((DROID *)psObj)->action;
+		result.v.ival = (SDWORD)((DROID *)psObj)->action;
 		break;
 	//new member variable - if droid is selected (humans only)
 	case OBJID_SELECTED:
@@ -121,14 +122,14 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_BOOL;
-		val = (SDWORD)((DROID *)psObj)->selected;
+		result.v.bval = (SDWORD)((DROID *)psObj)->selected;
 		break;
 
 	case OBJID_STRUCTSTATTYPE:
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			type = VAL_INT;
-			val = ((STRUCTURE *)psObj)->pStructureType->type;
+			result.v.ival = ((STRUCTURE *)psObj)->pStructureType->type;
 		}
 		else
 		{
@@ -145,7 +146,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_INT;
-		val = (SDWORD)((DROID *)psObj)->orderX;
+		result.v.ival = (SDWORD)((DROID *)psObj)->orderX;
 		break;
 	case OBJID_ORDERY:
 		if (psObj->type != OBJ_DROID)
@@ -155,7 +156,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_INT;
-		val = (SDWORD)((DROID *)psObj)->orderY;
+		result.v.ival = (SDWORD)((DROID *)psObj)->orderY;
 		break;
 	case OBJID_DROIDTYPE:
 		if (psObj->type != OBJ_DROID)
@@ -165,7 +166,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_INT;
-		val = (SDWORD)((DROID *)psObj)->droidType;
+		result.v.ival = (SDWORD)((DROID *)psObj)->droidType;
 		break;
 	case OBJID_CLUSTERID:
 		if (psObj->type == OBJ_FEATURE)
@@ -175,7 +176,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = VAL_INT;
-		val = clustGetClusterID(psObj);
+		result.v.ival = clustGetClusterID(psObj);
 		break;
 	case OBJID_HEALTH:
 		switch (psObj->type)
@@ -183,25 +184,25 @@ BOOL scrBaseObjGet(UDWORD index)
 		case OBJ_DROID:
 			psDroid = (DROID *)psObj;
 			type = VAL_INT;
-			val = psDroid->body * 100 / psDroid->originalBody;
+			result.v.ival = psDroid->body * 100 / psDroid->originalBody;
 			break;
 		case OBJ_FEATURE:
 			psFeature = (FEATURE *)psObj;
 			type = VAL_INT;
 			if (psFeature->psStats->damageable)
 			{
-				val = psFeature->body * 100 / psFeature->psStats->body;
+				result.v.ival = psFeature->body * 100 / psFeature->psStats->body;
 			}
 			else
 			{
-				val = 100;
+				result.v.ival = 100;
 			}
 			break;
 		case OBJ_STRUCTURE:
 			psStruct = (STRUCTURE *)psObj;
 			type = VAL_INT;
 			//val = psStruct->body * 100 / psStruct->baseBodyPoints;
-			val = psStruct->body * 100 / structureBody(psStruct);
+			result.v.ival = psStruct->body * 100 / structureBody(psStruct);
 			break;
 		default:
 			break;
@@ -215,7 +216,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = (INTERP_TYPE)ST_BODY;
-		val = ((DROID *)psObj)->asBits[COMP_BODY].nStat;
+		result.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_BODY].nStat;
 		break;
 	case OBJID_PROPULSION:
 		if (psObj->type != OBJ_DROID)
@@ -225,9 +226,9 @@ BOOL scrBaseObjGet(UDWORD index)
 			return FALSE;
 		}
 		type = (INTERP_TYPE)ST_PROPULSION;
-		val = ((DROID *)psObj)->asBits[COMP_PROPULSION].nStat;
+		result.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_PROPULSION].nStat;
 		break;
-	case OBJID_WEAPON:
+	case OBJID_WEAPON:		//TODO: only returns first weapon now
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: weapon only valid for a droid");
@@ -238,11 +239,11 @@ BOOL scrBaseObjGet(UDWORD index)
 		//if (((DROID *)psObj)->numWeaps == 0)
         if (((DROID *)psObj)->asWeaps[0].nStat == 0)
 		{
-			val = 0;
+			result.v.ival = 0;
 		}
 		else
 		{
-			val = ((DROID *)psObj)->asWeaps[0].nStat;
+			result.v.ival = (SDWORD)((DROID *)psObj)->asWeaps[0].nStat;
 		}
 		break;
 
@@ -253,13 +254,13 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
-			val = ((STRUCTURE *)psObj)->pStructureType - asStructureStats;
+			result.v.ival = ((STRUCTURE *)psObj)->pStructureType - asStructureStats;
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
 			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
-			val = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
+			result.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
 		}
 		else		//Nothing else supported
 		{
@@ -275,13 +276,13 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			val = (SDWORD)((STRUCTURE *)psObj)->psTarget;
+			result.v.oval = ((STRUCTURE *)psObj)->psTarget;
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
 			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			val = (SDWORD)(((DROID *)psObj)->psTarget);
+			result.v.oval = (((DROID *)psObj)->psTarget);
 		}
 		else		//Nothing else supported
 		{
@@ -300,7 +301,7 @@ BOOL scrBaseObjGet(UDWORD index)
 	}
 
 	// Return the value
-	if (!stackPushResult(type, val))
+	if (!stackPushResult(type, &result))
 	{
 		debug(LOG_ERROR, "scrBaseObjGet: stackPushResult() failed");
 		return FALSE;
@@ -335,7 +336,9 @@ BOOL scrObjToDroid(void)
 		psObj = NULL;
 	}
 
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psObj))
+
+	result.v.oval = psObj;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
 	{
 		return FALSE;
 	}
@@ -360,7 +363,8 @@ BOOL scrObjToStructure(void)
 		psObj = NULL;
 	}
 
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (SDWORD)psObj))
+	result.v.oval = psObj;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
 	{
 		return FALSE;
 	}
@@ -385,7 +389,8 @@ BOOL scrObjToFeature(void)
 		psObj = NULL;
 	}
 
-	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, (SDWORD)psObj))
+	result.v.oval = psObj;
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &result))
 	{
 		return FALSE;
 	}
@@ -405,7 +410,6 @@ BOOL scrGroupObjGet(UDWORD index)
 {
 	INTERP_TYPE		type;
 	DROID_GROUP		*psGroup;
-	SDWORD			val;
 	DROID			*psCurr;
 
 	if (!stackPopParams(1, ST_GROUP, &psGroup))
@@ -454,7 +458,7 @@ BOOL scrGroupObjGet(UDWORD index)
 			lgX = lgX / lgMembers;
 		}
 		type = VAL_INT;
-		val = lgX;
+		result.v.ival = lgX;
 		break;
 	case GROUPID_POSY:
 		lgY = 0;
@@ -471,7 +475,7 @@ BOOL scrGroupObjGet(UDWORD index)
 		}
 
 		type = VAL_INT;
-		val = lgY;
+		result.v.ival = lgY;
 		break;
 	case GROUPID_MEMBERS:
 		lgMembers = 0;
@@ -481,7 +485,7 @@ BOOL scrGroupObjGet(UDWORD index)
 		}
 
 		type = VAL_INT;
-		val = lgMembers;
+		result.v.ival = lgMembers;
 		break;
 	case GROUPID_HEALTH:
 		lgHealth = 0;
@@ -497,7 +501,7 @@ BOOL scrGroupObjGet(UDWORD index)
 			lgHealth = lgHealth / lgMembers;
 		}
 		type = VAL_INT;
-		val = lgHealth;
+		result.v.ival = lgHealth;
 		break;
 	default:
 		ASSERT( FALSE, "scrGroupObjGet: unknown variable index" );
@@ -506,7 +510,7 @@ BOOL scrGroupObjGet(UDWORD index)
 	}
 
 	// Return the value
-	if (!stackPushResult(type, val))
+	if (!stackPushResult(type, &result))
 	{
 		return FALSE;
 	}
@@ -600,6 +604,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 }
 
 // default value save routine
+//TODO: use union
 BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 {
 	VIEWDATA	*psIntMessage;
@@ -819,6 +824,7 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 }
 
 // default value load routine
+//TODO: use union
 BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size, UDWORD *pData)
 {
 	char			*pPos;

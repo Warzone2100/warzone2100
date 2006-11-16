@@ -156,7 +156,7 @@ extern void eventFireCallbackTrigger(TRIGGER_TYPE callback);
 extern BOOL stackPopParams(SDWORD numParams, ...);
 
 /* Push a value onto the stack without using a value structure */
-extern BOOL stackPushResult(INTERP_TYPE type, SDWORD data);
+extern BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result);
 
 /***********************************************************************************
  *

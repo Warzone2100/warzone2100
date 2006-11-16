@@ -28,6 +28,8 @@
 #include "power.h"
 #include "geometry.h"
 
+INTERP_VAL	result;
+
 // Add a droid to a group
 BOOL scrGroupAddDroid(void)
 {
@@ -200,7 +202,8 @@ BOOL scrGroupMember(void)
 		retval = FALSE;
 	}
 
-	if (!stackPushResult(VAL_BOOL, retval))
+	result.v.bval=retval;
+	if (!stackPushResult(VAL_BOOL, &result))
 	{
 		return FALSE;
 	}
@@ -233,7 +236,8 @@ BOOL scrIdleGroup(void)
 		}
 	}
 
-	if (!stackPushResult(VAL_INT, count))
+	result.v.ival = (SDWORD)count;
+	if (!stackPushResult(VAL_INT, &result))
 	{
 		return FALSE;
 	}
@@ -292,7 +296,8 @@ BOOL scrIterateGroup(void)
 		psDroid = NULL;
 	}
 
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psDroid))
+	result.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
 	{
 		return FALSE;
 	}
@@ -324,7 +329,8 @@ BOOL scrIterateCluster(void)
 
 	psObj = clustIterate();
 
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (SDWORD)psObj))
+	result.v.oval = psObj;
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))
 	{
 		return FALSE;
 	}
@@ -1206,7 +1212,6 @@ BOOL scrStructTargetInArea(void)
 {
 	SDWORD		x1,y1,x2,y2;
 	SDWORD		tarPlayer, visPlayer;
-	STRUCTURE	*psTarget;
 
 	if (!stackPopParams(6, VAL_INT, &tarPlayer, VAL_INT, &visPlayer,
 						   VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -1214,9 +1219,9 @@ BOOL scrStructTargetInArea(void)
 		return FALSE;
 	}
 
-	psTarget = (STRUCTURE *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_STRUCT, 0, x1,y1, x2,y2);
+	result.v.oval = (STRUCTURE *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_STRUCT, 0, x1,y1, x2,y2);
 
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psTarget))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
 	{
 		return FALSE;
 	}
@@ -1239,7 +1244,8 @@ BOOL scrStructTargetOnMap(void)
 									scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 									scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, (UDWORD)psTarget))
+	result.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
 	{
 		return FALSE;
 	}
@@ -1262,7 +1268,8 @@ BOOL scrDroidTargetInArea(void)
 
 	psTarget = (DROID *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_DROID, 0, x1,y1, x2,y2);
 
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)psTarget))
+	result.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
 	{
 		return FALSE;
 	}
@@ -1285,7 +1292,8 @@ BOOL scrDroidTargetOnMap(void)
 							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, (UDWORD)psTarget))
+	result.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
 	{
 		return FALSE;
 	}
@@ -1318,7 +1326,8 @@ BOOL scrTargetInCluster(void)
 							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (UDWORD)psTarget))
+	result.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))
 	{
 		return FALSE;
 	}
@@ -1417,14 +1426,16 @@ BOOL scrSkCanBuildTemplate(void)
 		break;
 	}
 
-	if (!stackPushResult(VAL_BOOL, TRUE))		// yes
+	result.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &result))		// yes
 	{
 		return FALSE;
 	}
 	return TRUE;
 
 failTempl:
-	if (!stackPushResult(VAL_BOOL, FALSE))		// no
+	result.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &result))		// no
 	{
 		return FALSE;
 	}
@@ -1458,14 +1469,16 @@ BOOL scrSkLocateEnemy(void)
 	// set the x and y accordingly..
 	if(psStruct)
 	{
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, (SDWORD)psStruct ))		// success!
+		result.v.oval = psStruct;
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))		// success!
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, 0))		// part success
+		result.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))		// part success
 		{
 			return FALSE;
 		}
@@ -1628,7 +1641,8 @@ BOOL scrSkDoResearch(void)
 
 	timeToResearch = (asResearch+i)->researchPoints / ((RESEARCH_FACILITY*)psResearch->pFunctionality)->researchPoints;;
 
-	if (!stackPushResult(VAL_INT, timeToResearch))		// return time to do it..
+	result.v.ival = timeToResearch;
+	if (!stackPushResult(VAL_INT, &result))		// return time to do it..
 	{
 		return FALSE;
 	}
@@ -1659,7 +1673,8 @@ BOOL scrSkVtolEnableCheck(void)
 			if((asPropulsionStats[i].propulsionType == LIFT)
 			 && apCompLists[player][COMP_PROPULSION][i] == AVAILABLE)
 			{
-				if (!stackPushResult(VAL_BOOL, TRUE))		// success!
+				result.v.bval = TRUE;
+				if (!stackPushResult(VAL_BOOL, &result))		// success!
 				{
 					return FALSE;
 				}
@@ -1668,7 +1683,8 @@ BOOL scrSkVtolEnableCheck(void)
 		}
 	}
 
-	if (!stackPushResult(VAL_BOOL, FALSE))		// success!
+	result.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &result))		// success!
 	{
 		return FALSE;
 	}
@@ -1692,7 +1708,8 @@ BOOL scrSkGetFactoryCapacity(void)
 		count = ((FACTORY *)psStructure->pFunctionality)->capacity;
 	}
 
-	if (!stackPushResult(VAL_INT, count))
+	result.v.ival = count;
+	if (!stackPushResult(VAL_INT, &result))
 	{
 		return FALSE;
 	}
@@ -1893,7 +1910,8 @@ BOOL scrSkDefenseLocation(void)
 	*pX = (x << TILE_SHIFT) + (TILE_UNITS/2);		// return centre of tile.
 	*pY = (y << TILE_SHIFT) + (TILE_UNITS/2);
 
-	if (!stackPushResult(VAL_BOOL,TRUE))		// success
+	result.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL,&result))		// success
 	{
 		return FALSE;
 	}
@@ -1950,7 +1968,8 @@ BOOL scrSkDefenseLocation(void)
 	return TRUE;
 
 failed:
-	if (!stackPushResult(VAL_BOOL,FALSE))		// failed!
+	result.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL,&result))		// failed!
 	{
 		return FALSE;
 	}
@@ -2109,7 +2128,8 @@ BOOL scrSkDefenseLocationB(void)
 	*pX = (x << TILE_SHIFT) + (TILE_UNITS/2);		// return centre of tile.
 	*pY = (y << TILE_SHIFT) + (TILE_UNITS/2);
 
-	if (!stackPushResult(VAL_BOOL,TRUE))		// success
+	result.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL,&result))		// success
 	{
 		return FALSE;
 	}
@@ -2192,7 +2212,8 @@ BOOL scrSkDefenseLocationB(void)
 	return TRUE;
 
 failed:
-	if (!stackPushResult(VAL_BOOL,FALSE))		// failed!
+	result.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL,&result))		// failed!
 	{
 		return FALSE;
 	}
@@ -2316,7 +2337,8 @@ BOOL scrIterateGroupB(void)
 		psDroid = NULL;
 	}
 
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, (SDWORD)psDroid))
+	result.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
 	{
 		debug(LOG_ERROR, "scrIterateGroupB: stackPushResult failed");
 		return FALSE;
@@ -2392,7 +2414,8 @@ BOOL skInitSkirmishTemplates(void)
 	{
 		skirmishStore[i] = NULL;
 	}
-	if (!stackPushResult(VAL_BOOL, TRUE))		// success!
+	result.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &result))		// success!
 	{
 		return FALSE;
 	}
@@ -2423,13 +2446,15 @@ BOOL skAddTemplate(void)
 	psT->psNext			= skirmishStore[pile];
 	skirmishStore[pile] = psT;
 
-	if (!stackPushResult(VAL_BOOL, TRUE))		// yes
+	result.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &result))		// yes
 	{
 		return FALSE;
 	}
 	return TRUE;
 fail:
-	if (!stackPushResult(VAL_BOOL, FALSE))		// no
+result.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &result))		// no
 	{
 		return FALSE;
 	}

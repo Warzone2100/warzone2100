@@ -77,32 +77,31 @@ typedef struct _active_trigger
 // ID numbers for each user type
 typedef enum _scr_user_types
 {
-	ST_INTMESSAGE = VAL_USERTYPESTART,		// Intelligence message ?? (6)
-	ST_BASEOBJECT,							// Base object
-	ST_DROID,								// Droid object
-	ST_STRUCTURE,							// Structure object
-	ST_FEATURE,								// Feature object
+	ST_INTMESSAGE = VAL_USERTYPESTART,		// Intelligence message ?? (6) - (pointer)
+	ST_BASEOBJECT,							// Base object (pointer)
+	ST_DROID,								// Droid object (pointer)
+	ST_STRUCTURE,							// Structure object (pointer)
+	ST_FEATURE,								// Feature object (pointer)
 	ST_BASESTATS,							// General stats type
 	ST_COMPONENT,							// General component
-	ST_BODY,								// Component types
-	ST_PROPULSION,
-	ST_ECM,
-	ST_SENSOR,
-	ST_CONSTRUCT,
-	ST_WEAPON,
-	ST_REPAIR,
+	ST_BODY,								// Component types (integer)
+	ST_PROPULSION,					//Propulsion type (integer)
+	ST_ECM,									//ECM type (integer)
+	ST_SENSOR,							//Sensor type (integer)
+	ST_CONSTRUCT,					//Construction type (integer)
+	ST_WEAPON,							//Droid weapon (integer)
+	ST_REPAIR,							//Repair component (integer)
 	ST_BRAIN,
-	ST_TEMPLATE,							// Template object
-	ST_STRUCTUREID,							/* A structure ID number (don't really 
-											   need this since just a number?)*/
-	ST_STRUCTURESTAT,						// structure stat type
-	ST_FEATURESTAT,							// feature stat type
-	ST_DROIDID,								// ID of a droid
-	ST_TEXTSTRING,							// text string for display messages in tutorial
-	ST_SOUND,
-	ST_LEVEL,								// The name of a game level
+	ST_TEMPLATE,							// Template object (pointer)
+	ST_STRUCTUREID,							/* A structure ID number (don't really need this since just a number?) - integer*/
+	ST_STRUCTURESTAT,						// structure stat type (integer/pointer offset with asStructureStats as base)
+	ST_FEATURESTAT,							// feature stat type (integer)
+	ST_DROIDID,								// ID of a droid (integer)
+	ST_TEXTSTRING,							// text string for display messages in tutorial (string pointer)
+	ST_SOUND,								//(integer)
+	ST_LEVEL,								// The name of a game level (string pointer)
 	ST_GROUP,								// A group of droids
-	ST_RESEARCH,							// A research topic
+	ST_RESEARCH,							// A research topic (pointer)
 
 	//private types for game code - not for use in script
 	ST_POINTER_O,								//used so we can check for NULL objects etc

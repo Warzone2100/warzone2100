@@ -30,6 +30,9 @@
 #endif
 #endif
 
+/* stores name of the last function or event called by scripts */
+char last_called_script_event[100];
+
 /*
  *
  * ASSERT
@@ -41,8 +44,8 @@
  */
 #define ASSERT( expr, ... ) \
 	( (expr) ? (void)0 : (void)debug( LOG_ERROR, __VA_ARGS__ ) ); \
-	( (expr) ? (void)0 : (void)debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s)", \
-		__FILE__, __LINE__, __FUNCTION__, (#expr) ) ); \
+	( (expr) ? (void)0 : (void)debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s), last script event: '%s'", \
+		__FILE__, __LINE__, __FUNCTION__, (#expr), last_called_script_event ) ); \
 	assert( expr );
 
 

@@ -59,9 +59,9 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 		/* This is an object member variable */
 		if (object)
 		{
-#ifdef DEBUG_SCRIPT
-			debug(LOG_SCRIPT, "current variable is OBJ_OBJVAR");
-#endif
+
+			RULE("current variable is OBJ_OBJVAR");
+
 			return OBJ_OBJVAR;
 		}
 		else
@@ -73,15 +73,15 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 				break;
 			case VAL_INT:
 //			case VAL_FLOAT:
-#ifdef DEBUG_SCRIPT
-				debug(LOG_SCRIPT, "current variable is NUM_OBJVAR");
-#endif
+
+				RULE( "current variable is NUM_OBJVAR");
+
 				return NUM_OBJVAR;
 				break;
 			default:
-#ifdef DEBUG_SCRIPT
-				debug(LOG_SCRIPT, "current variable is USER_OBJVAR");
-#endif
+
+				RULE( "current variable is USER_OBJVAR");
+
 				return USER_OBJVAR;
 				break;
 			}
@@ -101,8 +101,10 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 			case VAL_BOOL:
 				return BOOL_ARRAY;
 				break;
+			case VAL_FLOAT:
+				return FLOAT_ARRAY;
+				break;
 			case VAL_INT:
-//			case VAL_FLOAT:
 				return NUM_ARRAY;
 				break;
 			default:
@@ -116,20 +118,28 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 		/* This is a standard variable */
 		if (object)
 		{
-#ifdef DEBUG_SCRIPT
-			debug(LOG_SCRIPT, "current variable is OBJ_VAR");
-#endif
+
+			RULE( "current variable is OBJ_VAR");
+
 			return OBJ_VAR;
 		}
 		else
 		{
+
+			RULE( "ordinary var");
+
 			switch (psVar->type)
 			{
 			case VAL_BOOL:
 				return BOOL_VAR;
 				break;
+			case VAL_FLOAT:
+
+				RULE( "VAL_FLOAT");
+
+				return FLOAT_VAR;
+				break;
 			case VAL_INT:
-//			case VAL_FLOAT:
 				return NUM_VAR;
 				break;
 			case VAL_STRING:
@@ -163,8 +173,8 @@ SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 	case VAL_BOOL:
 		return BOOL_CONSTANT;
 		break;
-	case VAL_INT:
 //	case VAL_FLOAT:
+	case VAL_INT:
 		return NUM_CONSTANT;
 		break;
 	case VAL_STRING:
@@ -204,8 +214,10 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 	case VAL_BOOL:
 		return BOOL_FUNC;
 		break;
+	case VAL_FLOAT:
+		return FLOAT_FUNC;
+		break;
 	case VAL_INT:
-//	case VAL_FLOAT:
 		return NUM_FUNC;
 		break;
 	case VAL_STRING:
@@ -239,11 +251,16 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 		case VAL_BOOL:
 			return BOOL_FUNC_CUST;
 			break;
+		case VAL_FLOAT:
+
+			RULE( "current function is FLOAT_FUNC_CUST");
+
+			return FLOAT_FUNC_CUST;
+			break;
 		case VAL_INT:
-//		case VAL_FLOAT:
-#ifdef DEBUG_SCRIPT
-			debug(LOG_SCRIPT, "current function is NUM_FUNC_CUST");
-#endif
+
+			RULE( "current function is NUM_FUNC_CUST");
+
 			return NUM_FUNC_CUST;
 			break;
 		case VAL_STRING:
@@ -282,14 +299,15 @@ event					return EVENT;
 inactive				return INACTIVE;
 init					return INITIALISE;
 link					return LINK;
-ref					return REF;
+ref						return REF;
 return					return	RET;
-function					return	FUNCTION;
+function				return	FUNCTION;
 
 	/* function				return FUNCTION;*/
 	/* cond					return COND; */
 
-
+"("int")"				{ RULE("(int)"); return TO_INT_CAST; }
+"("float")"				{ RULE("(float)"); return TO_FLOAT_CAST; }
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 private					{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
 local					{ scr_lval.stype = ST_LOCAL; return STORAGE; }
@@ -308,10 +326,8 @@ bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 BOOL					{ scr_lval.tval = VAL_BOOL; return TYPE; }
 int						{ scr_lval.tval = VAL_INT; return TYPE; }
 INT						{ scr_lval.tval = VAL_INT; return TYPE; }
-	/*float					{ ais_lval.tval = VAL_FLOAT; return TYPE; }*/
-	/* string type isn't implemented yet */
-	/* string					{ ais_lval.tval = VAL_STRING; return TYPE; } */
-	/* object					{ scr_lval.tval = VAL_OBJECT; return TYPE; } */
+float					{ scr_lval.tval = VAL_FLOAT; return TYPE; }
+FLOAT					{ scr_lval.tval = VAL_FLOAT; return TYPE; }
 
 	/* Match boolean values */
 TRUE					{ scr_lval.bval = TRUE; return BOOLEAN_T; }
@@ -334,85 +350,89 @@ not						return _NOT;
 NOT						return _NOT;
 
 	/* Match floating point numbers */
-	/*-?[0-9]*"."[0-9]+			{ scr_lval.fval = (float)atof(scr_text); return FLOAT; }*/
+-?[0-9]*"."[0-9]+			{
+								RULE( "float matched '%s'", scr_text);
+
+								scr_lval.fval = (float)atof(scr_text);
+
+								return FLOAT_T;
+							}
 
 	/* Match integer numbers */
 -?[0-9]+					{ scr_lval.ival = atol(scr_text); return INTEGER; }
 
 	/* Match identifiers */
 [a-zA-Z_][0-9_a-zA-Z_]*		{
+								RULE( "looking up '%s'", scr_text);
 
-#ifdef DEBUG_SCRIPT
-								debug(LOG_SCRIPT, "looking up '%s'", scr_text);
-#endif
 								/* See if this identifier has been defined as a type */
-								if (scriptLookUpType(scr_text, &scr_lval.tval))
+								if (scriptLookUpType(scr_text, &scr_lval.tval))	//STRUCTURESTAT etc
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a type", scr_text);
-#endif
+
+									RULE( "'%s' is a user type", scr_text);
+
 									return TYPE;
 								}
 								/* See if this identifier has been defined as a variable */
 								else if (scriptLookUpVariable(scr_text, &scr_lval.vSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a var", scr_text);
-#endif
+
+									RULE( "'%s' is a var", scr_text);
+
 									return scriptGetVarToken(scr_lval.vSymbol);
 								}
 								/* See if this identifier has been defined as a constant */
 								else if (scriptLookUpConstant(scr_text, &scr_lval.cSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a constant", scr_text);
-#endif
+
+									RULE( "'%s' is a constant", scr_text);
+
 									return scriptGetConstToken(scr_lval.cSymbol);
 								}
 								/* See if this identifier has been defined as a function */
 								else if (scriptLookUpFunction(scr_text, &scr_lval.fSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a function", scr_text);
-#endif
+
+									RULE( "'%s' is a function", scr_text);
+
 									return scriptGetFuncToken(scr_lval.fSymbol);
 								}
 
 								/* See if this identifier has been defined as a custom function */
 								else if (scriptLookUpCustomFunction(scr_text, &scr_lval.eSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a cust func", scr_text);
-#endif
+
+									RULE( "'%s' is a cust func", scr_text);
+
 									return scriptGetCustomFuncToken(scr_lval.eSymbol);
 								}
 
 								else if (scriptLookUpTrigger(scr_text, &scr_lval.tSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a trigger", scr_text);
-#endif
+
+									RULE( "'%s' is a trigger", scr_text);
+
 									return TRIG_SYM;
 								}
 								else if (scriptLookUpEvent(scr_text, &scr_lval.eSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is an event", scr_text);
-#endif
+
+									RULE( "'%s' is an event", scr_text);
+
 									return EVENT_SYM;
 								}
 								else if (scriptLookUpCallback(scr_text, &scr_lval.cbSymbol))
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is a callback", scr_text);
-#endif
+
+									RULE( "'%s' is a callback", scr_text);
+
 									return CALLBACK_SYM;
 								}
 								else
 								{
-#ifdef DEBUG_SCRIPT
-									debug(LOG_SCRIPT, "'%s' is an ident", scr_text);
-#endif
+
+									RULE( "'%s' is an ident", scr_text);
+
 									strcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;

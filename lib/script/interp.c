@@ -22,7 +22,7 @@
 typedef struct
 {
 	UDWORD CallerIndex;
-	UDWORD *ReturnAddress;
+	INTERP_VAL *ReturnAddress;
 } ReturnAddressStack_t;
 
 /**
@@ -51,7 +51,7 @@ static inline BOOL retStackIsFull(void);
  * \param ReturnAddress Address to return to
  * \return False on failure (stack full)
  */
-static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress);
+static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
 
 /**
  * Pop an address/event pair from the return address stack
@@ -60,7 +60,7 @@ static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress);
  * \param ReturnAddress Address to return to
  * \return False on failure (stack empty)
  */
-static BOOL retStackPop(UDWORD *CallerIndex, UDWORD **ReturnAddress);
+static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress);
 
 /* The size of each opcode */
 SDWORD aOpSize[] =
@@ -98,7 +98,7 @@ SDWORD aOpSize[] =
 	-1, // OP_OR
 	-1, // OP_NOT
 
-	-1, // OP_CANC
+	-1, // OP_CONC
 
 	-1, // OP_EQUAL
 	-1, // OP_NOTEQUAL
@@ -110,7 +110,10 @@ SDWORD aOpSize[] =
 	2,  // OP_FUNC | func_pointer
 	1,  // OP_POPLOCAL
 	1,  // OP_PUSHLOCAL
+
 	2,  // OP_PUSHLOCALREF
+	1,	 //OP_TO_FLOAT
+	1,  //OP_TO_INT
 };
 
 /* The type equivalence table */
@@ -172,20 +175,20 @@ static inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
 
 
 // get the array data for an array operation
-static BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
+static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
 {
 	SDWORD		i, dimensions, vals[VAR_MAX_DIMENSIONS];
 	UBYTE		*elements; //[VAR_MAX_DIMENSIONS]
 	SDWORD		size, val;//, elementDWords;
 //	UBYTE		*pElem;
-	UDWORD		*InstrPointer = *pip;
+	INTERP_VAL	*InstrPointer = *pip;
 	UDWORD		base, index;
 
 	// get the base index of the array
-	base = (*InstrPointer) & ARRAY_BASE_MASK;
+	base = InstrPointer->v.ival & ARRAY_BASE_MASK;
 
 	// get the number of dimensions
-	dimensions = ((*InstrPointer) & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
+	dimensions = (InstrPointer->v.ival & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
 
 	if (base >= psProg->numArrays)
 	{
@@ -255,7 +258,7 @@ static BOOL interpGetArrayVarData(UDWORD **pip, VAL_CHUNK *psGlobals, SCRIPT_COD
 	// calculate the number of DWORDs needed to store the number of elements for each dimension of the array
 //	elementDWords = (dimensions - 1)/4 + 1;
 
-	// update the insrtuction pointer
+	// update the instruction pointer
 	*pip += 1;// + elementDWords;
 
 	return TRUE;
@@ -273,11 +276,12 @@ BOOL interpInitialise(void)
 /* Run a compiled script */
 BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
 {
-	UDWORD		*InstrPointer, opcode, data;
-	INTERP_VAL	sVal, *psVar;
+	SDWORD			data;
+	OPCODE			opcode;
+	INTERP_VAL	sVal, *psVar,*InstrPointer;
 	VAL_CHUNK	*psGlobals;
 	UDWORD		numGlobals = 0;
-	UDWORD		*pCodeStart, *pCodeEnd, *pCodeBase;
+	INTERP_VAL		*pCodeStart, *pCodeEnd, *pCodeBase;
 	SCRIPT_FUNC		scriptFunc = 0;
 	SCRIPT_VARFUNC	scriptVarFunc = 0;
 	SCRIPT_CODE		*psProg;
@@ -293,10 +297,11 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
 		"interpRunScript: invalid context pointer" );
-	psProg=psContext->psCode;
+
+	psProg = psContext->psCode;
+
 	ASSERT( PTRVALID(psProg, sizeof(SCRIPT_CODE)),
 		"interpRunScript: invalid script code pointer" );
-
 
 	if (bInterpRunning)
 	{
@@ -339,6 +344,11 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		pCodeBase = psProg->pCode + psProg->pTriggerTab[index];
 		pCodeStart = pCodeBase;
 		pCodeEnd  = psProg->pCode + psProg->pTriggerTab[index+1];
+
+		// find the debug info for the trigger
+		strcpy(last_called_script_event, eventGetTriggerID(psProg, index));
+		//debug(LOG_SCRIPT,"Trigger: %s", pTrigLab);
+
 		break;
 	case IRT_EVENT:
 		if (index > psProg->numEvents)
@@ -352,6 +362,12 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		pCodeEnd  = psProg->pCode + psProg->pEventTab[index+1];
 
 		bEvent = TRUE; //remember it's an event
+
+		// remember last called event/function
+		strcpy(last_called_script_event, eventGetEventID(psProg, index));
+
+		//debug(LOG_SCRIPT,"Original event name: %s", pEventLab);
+
 		break;
 	default:
 		debug(LOG_ERROR,"interpRunScript: unknown run type");
@@ -363,7 +379,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	// Get the first opcode
 	InstrPointer = pCodeStart;
-	opcode = (*InstrPointer) >> OPCODE_SHIFT;
+
+	/* Make sure we start with an opcode */
+	ASSERT(InstrPointer->type == VAL_PKOPCODE || InstrPointer->type == VAL_OPCODE,
+		"Expected an opcode at the beginning of the interpreting process (type=%d)", InstrPointer->type);
+
+	//opcode = InstrPointer->v.ival >> OPCODE_SHIFT;
+
 	instructionCount = 0;
 
 	CurEvent = index;
@@ -383,38 +405,45 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					"interpRunScript: max instruction count exceeded - infinite loop ?" );
 				goto exit_with_error;
 			}
-			instructionCount += 1;
+			instructionCount++;
 
 			TRCPRINTF(("%-6d  ", InstrPointer - psProg->pCode));
-			opcode = (*InstrPointer) >> OPCODE_SHIFT;
-			data = (*InstrPointer) & OPCODE_DATAMASK;
+			opcode = InstrPointer->v.ival >> OPCODE_SHIFT;			//get opcode
+			data = InstrPointer->v.ival & OPCODE_DATAMASK;		//get data - only used with packed opcodes
+			//debug(LOG_SCRIPT, "opcode: %d, type: %d, data: %d | next type: %d, next data: %d | next type: %d, next data: %d", opcode, InstrPointer->type, data, ((INTERP_VAL*)(InstrPointer+1))->type,  ((INTERP_VAL*)(InstrPointer+1))->v.ival & OPCODE_DATAMASK, ((INTERP_VAL*)(InstrPointer+2))->type,  ((INTERP_VAL*)(InstrPointer+2))->v.ival & OPCODE_DATAMASK);
 			switch (opcode)
 			{
 				/* Custom function call */
 				case OP_FUNC:
 					//debug( LOG_SCRIPT, "-OP_FUNC" );
 					//debug( LOG_SCRIPT, "OP_FUNC: remember event %d, ip=%d", CurEvent, (ip + 2) );
+
 					if(!retStackPush(CurEvent, (InstrPointer + aOpSize[opcode]))) //Remember where to jump back later
 					{
 						debug( LOG_ERROR, "interpRunScript() - retStackPush() failed.");
 						return FALSE;
 					}
 
-					CurEvent = *(InstrPointer+1); //Current event = event to jump to
+					ASSERT(((INTERP_VAL *)(InstrPointer+1))->type == VAL_EVENT, "wrong value type passed for OP_FUNC: %d", ((INTERP_VAL *)(InstrPointer+1))->type);
+
+					CurEvent = ((INTERP_VAL *)(InstrPointer+1))->v.ival; //Current event = event to jump to
 
 					if (CurEvent > psProg->numEvents)
 					{
 						debug( LOG_ERROR, "interpRunScript: trigger index out of range");
-						return FALSE;
+						goto exit_with_error;
 					}
 
-					//Set new code execution boundries
+					//Set new code execution boundaries
 					//----------------------------------
 					pCodeBase = psProg->pCode + psProg->pEventTab[CurEvent];
 					pCodeStart = pCodeBase;
 					pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
 
 					InstrPointer = pCodeStart;				//Start at the beginning of the new event
+
+					//remember last called event/index
+					strcpy(last_called_script_event, eventGetEventID(psProg, CurEvent));
 
 					//debug( LOG_SCRIPT, "-OP_FUNC: jumped to event %d; ip=%d, numLocalVars: %d", CurEvent, ip, psContext->psCode->numLocalVars[CurEvent] );
 
@@ -478,10 +507,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			case OP_PUSHLOCALREF:
 
 				// The type of the variable is stored in with the opcode
-				sVal.type = (INTERP_TYPE)((*InstrPointer) & OPCODE_DATAMASK);
+				sVal.type = (INTERP_TYPE)(InstrPointer->v.ival & OPCODE_DATAMASK);
+
+				ASSERT(  ((INTERP_VAL *)(InstrPointer + 1))->type == VAL_INT,
+					"wrong value type passed for OP_PUSHLOCALREF: %d", ((INTERP_VAL *)(InstrPointer + 1))->type);
 
 				/* get local var index */
-				data = *(InstrPointer + 1);
+				data = ((INTERP_VAL *)(InstrPointer + 1))->v.ival;
 
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
@@ -492,6 +524,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				/* get local variable */
 				psVar = &(psContext->psCode->ppsLocalVarVal[CurEvent][data]);
 
+				//TODO: fix
 				sVal.v.oval = &(psVar->v.ival);
 
 				TRCPRINTF(("PUSHREF     "));
@@ -508,9 +541,28 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 			case OP_PUSH:
 				// The type of the value is stored in with the opcode
-				sVal.type = (INTERP_TYPE)((*InstrPointer) & OPCODE_DATAMASK);
-				// Copy the data as a DWORD
-				sVal.v.ival = (SDWORD)(*(InstrPointer+1));
+				sVal.type = (INTERP_TYPE)(InstrPointer->v.ival & OPCODE_DATAMASK);
+
+				//ASSERT( ((INTERP_VAL *)(InstrPointer + 1))->type  == sVal.type,
+				//	"wrong value type passed for OP_PUSH: %d, expected: %d", ((INTERP_VAL *)(InstrPointer + 1))->type, sVal.type );
+
+				ASSERT(interpCheckEquiv(((INTERP_VAL *)(InstrPointer + 1))->type, sVal.type),
+					"wrong value type passed for OP_PUSH: %d, expected: %d", ((INTERP_VAL *)(InstrPointer + 1))->type, sVal.type);
+
+				// Copy data
+				/*
+				if(sVal.type == VAL_FLOAT)
+				{
+					debug( LOG_SCRIPT, "float: '%f' ",  ((INTERP_VAL *)(InstrPointer+1))->v.fval );
+					sVal.v.fval = ((INTERP_VAL *)(InstrPointer+1))->v.fval ;
+				}
+				else
+				{
+					//TODO: copy the whole union with memcpy
+					sVal.v.ival = ((INTERP_VAL *)(InstrPointer+1))->v.ival;
+				} */
+				memcpy(&sVal, (INTERP_VAL *)(InstrPointer + 1), sizeof(INTERP_VAL));
+
 				TRCPRINTF(("PUSH        "));
 				TRCPRINTVAL(&sVal);
 				TRCPRINTF(("\n"));
@@ -525,9 +577,10 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				break;
 			case OP_PUSHREF:
 				// The type of the variable is stored in with the opcode
-				sVal.type = (INTERP_TYPE)((*InstrPointer) & OPCODE_DATAMASK);
+				sVal.type = (INTERP_TYPE)(InstrPointer->v.ival & OPCODE_DATAMASK);
+
 				// store the pointer
-				psVar = interpGetVarData(psGlobals, *(InstrPointer + 1));
+				psVar = interpGetVarData(psGlobals, ((INTERP_VAL *)(InstrPointer + 1))->v.ival);
 				sVal.v.oval = &(psVar->v.ival);
 				TRCPRINTF(("PUSHREF     "));
 				TRCPRINTVAL(&sVal);
@@ -542,6 +595,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_POP:
+				ASSERT( InstrPointer->type == VAL_OPCODE,
+					"wrong value type passed for OP_POP: %d", InstrPointer->type);
+
 				TRCPRINTF(("POP\n"));
 				if (!stackPop(&sVal))
 				{
@@ -552,6 +608,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_BINARYOP:
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_BINARYOP: %d", InstrPointer->type);
+
 				TRCPRINTMATHSOP(data);
 				if (!stackBinaryOp((OPCODE)data))
 				{
@@ -564,6 +623,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_UNARYOP:
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_UNARYOP: %d", InstrPointer->type);
+
 				TRCPRINTMATHSOP(data);
 				if (!stackUnaryOp((OPCODE)data))
 				{
@@ -576,6 +638,10 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_PUSHGLOBAL:
+
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_PUSHGLOBAL: %d", InstrPointer->type);
+
 				TRCPRINTF(("PUSHGLOBAL  %d\n", data));
 				if (data >= numGlobals)
 				{
@@ -592,6 +658,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				InstrPointer += aOpSize[opcode];
 				break;
 			case OP_POPGLOBAL:
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_POPGLOBAL: %d", InstrPointer->type);
+
 				TRCPRINTF(("POPGLOBAL   %d ", data));
 				TRCPRINTSTACKTOP();
 				TRCPRINTF(("\n"));
@@ -629,6 +698,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	//				ASSERT( FALSE, "interpRunScript: array index out of range" );
 	//				goto exit_with_error;
 	//			}
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_PUSHARRAYGLOBAL: %d", InstrPointer->type);
+
 				TRCPRINTF(("PUSHARRAYGLOBAL  "));
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
@@ -673,6 +745,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 				ip += aOpSize[opcode];*/
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_POPARRAYGLOBAL: %d", InstrPointer->type);
+
 				TRCPRINTF(("POPARRAYGLOBAL   "));
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
@@ -689,9 +764,14 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 				break;
+
 			case OP_JUMPFALSE:
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_JUMPFALSE: %d", InstrPointer->type);
+
 				TRCPRINTF(("JUMPFALSE   %d (%d)",
 						   (SWORD)data, InstrPointer - psProg->pCode + (SWORD)data));
+
 				if (!stackPop(&sVal))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do pop of stack" );
@@ -717,6 +797,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 				break;
 			case OP_JUMP:
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_JUMP: %d", InstrPointer->type);
+
 				TRCPRINTF(("JUMP        %d (%d)\n",
 						   (SWORD)data, InstrPointer - psProg->pCode + (SWORD)data));
 				// Do the jump
@@ -730,9 +813,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				break;
 			case OP_CALL:
 				//debug(LOG_SCRIPT, "OP_CALL");
-				TRCPRINTFUNC( (SCRIPT_FUNC)(*(InstrPointer+1)) );
+
+				ASSERT( InstrPointer->type == VAL_OPCODE,
+					"wrong value type passed for OP_CALL: %d", InstrPointer->type);
+
+				TRCPRINTFUNC(  ((INTERP_VAL *)(InstrPointer+1))->v.pFuncExtern );
 				TRCPRINTF(("\n"));
-				scriptFunc = (SCRIPT_FUNC)*(InstrPointer+1);
+				scriptFunc = ((INTERP_VAL *)(InstrPointer+1))->v.pFuncExtern;
 				//debug(LOG_SCRIPT, "OP_CALL 1");
 				if (!scriptFunc())
 				{
@@ -745,10 +832,17 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				//debug(LOG_SCRIPT, "OP_CALL 3");
 				break;
 			case OP_VARCALL:
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_VARCALL: %d", InstrPointer->type);
+
 				TRCPRINTF(("VARCALL     "));
-				TRCPRINTVARFUNC( (SCRIPT_VARFUNC)(*(InstrPointer+1)), data );
+				TRCPRINTVARFUNC(  ((INTERP_VAL *)(InstrPointer+1))->v.pObjGetSet, data );
 				TRCPRINTF(("(%d)\n", data));
-				scriptVarFunc = (SCRIPT_VARFUNC)*(InstrPointer+1);
+
+				ASSERT( ((INTERP_VAL *)(InstrPointer+1))->type == VAL_OBJ_GETSET,
+					"wrong set/get function pointer type passed for OP_VARCALL: %d", ((INTERP_VAL *)(InstrPointer+1))->type);
+
+				scriptVarFunc =((INTERP_VAL *)(InstrPointer+1))->v.pObjGetSet;
 				if (!scriptVarFunc(data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do var func" );
@@ -757,17 +851,24 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 				InstrPointer += aOpSize[opcode];
 				break;
-			case OP_EXIT:
+			case OP_EXIT:	/* end of function/event, "exit" or "return" statements */
+				ASSERT( InstrPointer->type == VAL_OPCODE,
+					"wrong value type passed for OP_EXIT: %d", InstrPointer->type);
+
 				// jump out of the code
 				InstrPointer = pCodeEnd;
 				break;
-			case OP_PAUSE:
+			case OP_PAUSE:	
+				ASSERT( InstrPointer->type == VAL_PKOPCODE,
+					"wrong value type passed for OP_PAUSE: %d", InstrPointer->type);
+
 				TRCPRINTF(("PAUSE       %d\n", data));
 				ASSERT( stackEmpty(),
 					"interpRunScript: OP_PAUSE without empty stack" );
+
 				InstrPointer += aOpSize[opcode];
 				// tell the event system to reschedule this event
-				if (!eventAddPauseTrigger(psContext, index, InstrPointer - pCodeBase, data))
+				if (!eventAddPauseTrigger(psContext, index, InstrPointer - pCodeBase, data))	//only original caller can be paused since we pass index and not CurEvent (not sure if that's what we want)
 				{
 					debug( LOG_ERROR, "interpRunScript: could not add pause trigger" );
 					ASSERT( FALSE, "interpRunScript: could not add pause trigger" );
@@ -776,9 +877,31 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				// now jump out of the event
 				InstrPointer = pCodeEnd;
 				break;
+			case OP_TO_FLOAT:
+				ASSERT( InstrPointer->type == VAL_OPCODE,
+					"wrong value type passed for OP_TO_FLOAT: %d", InstrPointer->type);
+
+				if(!castTop(VAL_FLOAT))
+				{
+					debug( LOG_ERROR, "interpRunScript: OP_TO_FLOAT failed" );
+					goto exit_with_error;
+				}
+				InstrPointer += aOpSize[opcode];
+				break;
+			case OP_TO_INT:
+				ASSERT( InstrPointer->type == VAL_OPCODE,
+					"wrong value type passed for OP_TO_INT: %d", InstrPointer->type);
+
+				if(!castTop(VAL_INT))
+				{
+					debug( LOG_ERROR, "interpRunScript: OP_TO_INT failed" );
+					goto exit_with_error;
+				}
+				InstrPointer += aOpSize[opcode];
+				break; 
 			default:
-				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d", opcode);
-				ASSERT( FALSE, "interpRunScript: unknown opcode: %d", opcode );
+				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d, type: %d", opcode);
+				ASSERT( FALSE, "interpRunScript: unknown opcode: %d, type: %d", opcode, InstrPointer->type );
 				goto exit_with_error;
 				break;
 			}
@@ -806,6 +929,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					return FALSE;
 				}
 
+				//remember last called event/index
+				strcpy(last_called_script_event, eventGetEventID(psProg, CurEvent));
+
 				//debug( LOG_SCRIPT, "RETURNED TO CALLER EVENT %d", CurEvent );
 
 				//Set new boundries
@@ -832,7 +958,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					pCodeEnd  = psProg->pCode + psProg->pEventTab[CurEvent+1];
 				}
 			}
-			else
+			else		//we have returned to the original caller event/function
 			{
 				//debug( LOG_SCRIPT, " *** CALL STACK EMPTY ***" );
 
@@ -1016,7 +1142,7 @@ static inline BOOL retStackIsFull(void)
 }
 
 
-static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress)
+static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress)
 {
 	if (retStackIsFull())
 	{
@@ -1034,7 +1160,7 @@ static BOOL retStackPush(UDWORD CallerIndex, UDWORD *ReturnAddress)
 }
 
 
-static BOOL retStackPop(UDWORD *CallerIndex, UDWORD **ReturnAddress)
+static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 {
 	if (retStackIsEmpty())
 	{

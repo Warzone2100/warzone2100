@@ -111,6 +111,7 @@ BOOL eventInitialise(EVENT_INIT *psInit)
 	asCreateFuncs = NULL;
 	asReleaseFuncs = NULL;
 	numFuncs = 0;
+	strcpy(last_called_script_event, "<none>");
 	return TRUE;
 }
 
@@ -421,17 +422,22 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//debug(LOG_SCRIPT,"var %d's type: %d", i, type);
 
 
-				//initialize Strings and integers
-				if(type == VAL_STRING)
+				/* initialize Strings, integers, floats etc */
+				switch (type)
 				{
-					//debug(LOG_ERROR,"eventNewContext: char type variables are not implemented");
-
+				case VAL_STRING:
 					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(MAXSTRLEN);
 					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
-				}
-				else
-				{
+					break;
+
+				case VAL_FLOAT:
+					psCode->ppsLocalVarVal[i][j].v.fval  = 0.0f;
+					break;
+
+					/* mostly integers */
+				default:
 					psCode->ppsLocalVarVal[i][j].v.ival = 0;
+					break;
 				}
 
 				//Initialize objects
@@ -485,15 +491,21 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			psNewChunk->asVals[storeIndex].type = type;
 
 
-			//initialize Strings
-			if(type == VAL_STRING)
+			//initialize Strings, integers etc
+			switch (type)
 			{
+			case VAL_STRING:
 				psNewChunk->asVals[storeIndex].v.sval = (char*)MALLOC(MAXSTRLEN);
 				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
-			}
-			else
-			{
+				break;
+
+			case VAL_FLOAT:
+				psNewChunk->asVals[storeIndex].v.fval = 0.0f;
+				break;
+
+			default:
 				psNewChunk->asVals[storeIndex].v.ival = 0;
+				break;
 			}
 
 			//initialize objects
@@ -1463,8 +1475,13 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 			}
 			break;
 		case VAL_INT:	/* Integers and other vars */
-		case VAL_BOOL:
 			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
+			break;
+		case VAL_BOOL:
+			psCode->ppsLocalVarVal[EventIndex][i].v.bval = FALSE;
+			break;
+		case VAL_FLOAT:
+			psCode->ppsLocalVarVal[EventIndex][i].v.fval = 0.0f;
 			break;
 		default:			/* reset object pointer */
 			psCode->ppsLocalVarVal[EventIndex][i].v.oval = NULL;
