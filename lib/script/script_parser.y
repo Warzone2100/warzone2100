@@ -2428,6 +2428,7 @@ function_type:			VOID_FUNC_CUST
 			|	USER_FUNC_CUST
 			|	OBJ_FUNC_CUST
 			|	STRING_FUNC_CUST
+			|	FLOAT_FUNC_CUST
 			;
 
 /* function declaration rules */
@@ -3817,9 +3818,7 @@ assignment:			NUM_VAR '=' expression
 	 */
 func_call:		NUM_FUNC '(' param_list ')'
 					{
-
 						RULE( "func_call: NUM_FUNC '(' param_list ')'");
-
 
 						/* Generate the code for the function call */
 						codeRet = scriptCodeFunction($1, $3, FALSE, &psCurrBlock);
@@ -3830,8 +3829,6 @@ func_call:		NUM_FUNC '(' param_list ')'
 					}
 			|	BOOL_FUNC '(' param_list ')'
 					{
-
-
 						RULE( "func_call: BOOL_FUNC '(' param_list ')'");
 
 						/* Generate the code for the function call */
@@ -3843,8 +3840,6 @@ func_call:		NUM_FUNC '(' param_list ')'
 					}
 			|	USER_FUNC '(' param_list ')'
 					{
-
-
 						RULE( "func_call: USER_FUNC '(' param_list ')'");
 
 						/* Generate the code for the function call */
@@ -3856,8 +3851,6 @@ func_call:		NUM_FUNC '(' param_list ')'
 					}
 			|	OBJ_FUNC '(' param_list ')'
 					{
-
-
 						RULE( "func_call: OBJ_FUNC '(' param_list ')'");
 
 						/* Generate the code for the function call */
@@ -3881,9 +3874,19 @@ func_call:		NUM_FUNC '(' param_list ')'
 					}
 			|	STRING_FUNC '(' param_list ')'
 					{
-
 						RULE( "func_call: STRING_FUNC '(' param_list ')'");
 
+						/* Generate the code for the function call */
+						codeRet = scriptCodeFunction($1, $3, FALSE, &psCurrBlock);
+						CHECK_CODE_ERROR(codeRet);
+
+						/* Return the code block */
+						$$ = psCurrBlock;
+					}
+			|	FLOAT_FUNC '(' param_list ')'
+					{
+
+						RULE( "func_call: FLOAT_FUNC '(' param_list ')'");
 
 						/* Generate the code for the function call */
 						codeRet = scriptCodeFunction($1, $3, FALSE, &psCurrBlock);
@@ -4493,7 +4496,7 @@ expression:		expression '+' expression
 						if(!$1->bFunction)
 						{
 							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
-							scr_error("Can't cann an event");
+							scr_error("Can't call an event");
 							return CE_PARSE;
 						}
 
@@ -4672,6 +4675,82 @@ floatexp:		floatexp '+' floatexp
 					/* Just pass the code up the tree */
 					$$ = $2;
 				}
+			|	FLOAT_FUNC '(' param_list ')'
+				{
+					RULE("floatexp: FLOAT_FUNC '(' param_list ')'");
+
+					/* Generate the code for the function call */
+					codeRet = scriptCodeFunction($1, $3, TRUE, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			|	FLOAT_FUNC_CUST '(' param_list ')'
+				{
+						UDWORD line,paramNumber;
+						char *pDummy;
+
+						RULE("floatexp: FLOAT_FUNC_CUST '(' param_list ')'");
+
+						if($3->numParams != $1->numParams)
+						{
+							debug(LOG_ERROR, "Wrong number of arguments for function call: '%s'. Expected %d parameters instead of  %d.", $1->pIdent, $1->numParams, $3->numParams);
+							scr_error("Wrong number of arguments in function call");
+							return CE_PARSE;
+						}
+
+						if(!$1->bFunction)
+						{
+							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
+							scr_error("Can't call an event");
+							return CE_PARSE;
+						}
+
+						/* make sure function has a return type */
+						if($1->retType != VAL_FLOAT)
+						{
+							debug(LOG_ERROR, "'%s' does not return a float value", $1->pIdent);
+							scr_error("assignment type conflict");
+							return CE_PARSE;
+						}
+
+						/* check if right parameters were passed */
+						paramNumber = checkFuncParamTypes($1, $3);
+						if(paramNumber > 0)
+						{
+							debug(LOG_ERROR, "Parameter mismatch in function call: '%s'. Mismatch in parameter  %d.", $1->pIdent, paramNumber);
+							YYABORT;
+						}
+
+						/* Allocate the code block */
+						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
+						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
+
+						ALLOC_DEBUG(psCurrBlock, 1);
+						ip = psCurrBlock->pCode;
+
+						if($3->numParams > 0)	/* if any parameters declared */
+						{
+							/* Copy in the code for the parameters */
+							PUT_BLOCK(ip, $3);
+							FREE_PBLOCK($3);
+						}
+
+						/* Store the instruction */
+						PUT_OPCODE(ip, OP_FUNC);
+						PUT_EVENT(ip,$1->index);		//Put event/function index
+
+						/* Add the debugging information */
+						if (genDebugInfo)
+						{
+							psCurrBlock->psDebug[0].offset = 0;
+							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							psCurrBlock->psDebug[0].line = line;
+						}
+
+						$$ = psCurrBlock;
+				}
 			|	FLOAT_VAR
 				{
 
@@ -4724,6 +4803,8 @@ stringexp:
 				}
 		| 	stringexp '&' expression
 				{
+					RULE( "stringexp: stringexp '&' expression");
+
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_CONC, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
@@ -4732,6 +4813,8 @@ stringexp:
 				}
 		| 	expression '&' stringexp
 				{
+					RULE( "stringexp: expression '&' stringexp");
+
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_CONC, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
@@ -4740,6 +4823,8 @@ stringexp:
 				}
 		| 	stringexp '&' boolexp
 				{
+					RULE( "stringexp: stringexp '&' boolexp");
+
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_CONC, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
@@ -4748,6 +4833,28 @@ stringexp:
 				}
 		| 	boolexp '&' stringexp
 				{
+					RULE( "stringexp: boolexp '&' stringexp");
+
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_CONC, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+		| 	stringexp '&' floatexp
+				{
+					RULE( "stringexp: stringexp '&' floatexp");
+
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_CONC, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+		| 	floatexp '&' stringexp
+				{
+					RULE( "stringexp: floatexp '&' stringexp");
+
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_CONC, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
@@ -4788,7 +4895,7 @@ stringexp:
 						if(!$1->bFunction)
 						{
 							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
-							scr_error("Can't cann an event");
+							scr_error("Can't call an event");
 							return CE_PARSE;
 						}
 
@@ -4867,9 +4974,11 @@ stringexp:
 				}
 		|		expression
 				{
+					RULE( "stringexp: expression");
+
 					/* Just pass the code up the tree */
 					$$ = $1;
-			}
+				}
 			;
 
 
@@ -4962,7 +5071,7 @@ boolexp:		boolexp _AND boolexp
 						if(!$1->bFunction)
 						{
 							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
-							scr_error("Can't cann an event");
+							scr_error("Can't call an event");
 							return CE_PARSE;
 						}
 
@@ -5307,7 +5416,7 @@ objexp:			OBJ_VAR
 						if(!$1->bFunction)
 						{
 							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
-							scr_error("Can't cann an event");
+							scr_error("Can't call an event");
 							return CE_PARSE;
 						}
 

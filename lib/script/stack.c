@@ -520,12 +520,12 @@ BOOL stackBinaryOp(OPCODE opcode)
 			ASSERT( FALSE, "stackBinaryOp: type mismatch" );
 			return FALSE;
 		}
-	}
 
-	/* find out if the result will be a float. Both or neither arguments are floats - should be taken care of by bison*/
-	if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
-	{
-		ASSERT(psV1->type == VAL_FLOAT && psV2->type == VAL_FLOAT, "Can't implicitly convert float->int (type1: %d, type2: %d)", psV1->type , psV2->type );
+		/* find out if the result will be a float. Both or neither arguments are floats - should be taken care of by bison*/
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT)
+		{
+			ASSERT(psV1->type == VAL_FLOAT && psV2->type == VAL_FLOAT, "Can't implicitly convert float->int (type1: %d, type2: %d)", psV1->type , psV2->type );
+		}
 	}
 
 	// do the operation

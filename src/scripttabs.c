@@ -984,8 +984,8 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "showRangeAtPos",		scrShowRangeAtPos,		VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_INT} },
 
-	{ "toPow",		scrToPow,		VAL_INT,
-		2, { VAL_INT, VAL_INT,} },
+	{ "toPow",		scrToPow,		VAL_FLOAT,
+		2, { VAL_FLOAT, VAL_FLOAT,} },
 
 	{ "debugMenu",		scrDebugMenu,		VAL_VOID,
 		1, { VAL_BOOL} },

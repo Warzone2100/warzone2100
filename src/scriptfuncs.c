@@ -10706,16 +10706,16 @@ BOOL scrShowRangeAtPos(void)
 
 BOOL scrToPow(void)
 {
-	SDWORD		x,y;
+	float		x,y;
 
-	if (!stackPopParams(2, VAL_INT, &x, VAL_INT, &y))
+	if (!stackPopParams(2, VAL_FLOAT, &x, VAL_FLOAT, &y))
 	{
 		debug(LOG_ERROR, "scrToPow(): stack failed");
 		return FALSE;
 	}
 
-	result.v.ival = (SDWORD)pow((double)x,(int)y);
-	if (!stackPushResult(VAL_INT, &result))
+	result.v.fval = pow(x,y);
+	if (!stackPushResult(VAL_FLOAT, &result))
 	{
 		debug(LOG_ERROR, "scrToPow(): failed to push result");
 		return FALSE;
