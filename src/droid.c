@@ -2621,7 +2621,7 @@ int num_weapons = 0;
 	{
 		if (psDroid->asWeaps[0].nStat == 0)
 		{
-			return FALSE;
+			return;
 		}
 		num_weapons = 2;
 	}

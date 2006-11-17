@@ -213,7 +213,7 @@ typedef struct _droid
 	UDWORD				secondaryOrder;
 
 
-	UDWORD				lastSync;			// multiplayer synchronisation value.
+	UDWORD				lastSync;			// multiplayer synchronization value.
 
 
 	/* Action data */

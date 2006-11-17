@@ -274,7 +274,7 @@ void debug( code_part part, const char *str, ... )
 	va_end(ap);
 
 	if ( strncmp( inputBuffer[0], inputBuffer[1], MAX_LEN_LOG_LINE - 1 ) == 0 ) {
-		// Recieved again the same line
+		// Received again the same line
 		repeated++;
 		if (repeated == next) {
 			snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
@@ -291,9 +291,9 @@ void debug( code_part part, const char *str, ... )
 			next *= 2;
 		}
 	} else {
-		// Recieved another line, cleanup the old
+		// Received another line, cleanup the old
 		if (repeated > 0 && repeated != prev && repeated != 1) {
-			/* just repeat the previous message when only one repeat occured */
+			/* just repeat the previous message when only one repeat occurred */
 			snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
 			if (repeated > 2) {
 				cat_snprintf( outputBuffer, sizeof(outputBuffer), " (total %d repeats)", repeated );

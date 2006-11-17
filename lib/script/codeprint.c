@@ -122,11 +122,14 @@ void cpPrintVal(INTERP_VAL *psVal)
 
 
 /* Display a value from a program that has been packed with an opcode */
-void cpPrintPackedVal(UDWORD *ip)
+void cpPrintPackedVal(INTERP_VAL *ip)
 {
-	INTERP_TYPE	type = (INTERP_TYPE)((*ip) & OPCODE_DATAMASK);
+	INTERP_TYPE	type = (INTERP_TYPE)(ip->v.ival & OPCODE_DATAMASK);
 	UDWORD		i;
-	UDWORD data = *(ip + 1);
+	INTERP_VAL data;
+
+	/* copy value */
+	memcpy(&data, (INTERP_VAL *)(ip + 1), sizeof(INTERP_VAL));
 
 	if (type & VAL_REF)
 	{
@@ -139,22 +142,22 @@ void cpPrintPackedVal(UDWORD *ip)
 	switch(type)
 	{
 	case VAL_BOOL:
-		debug( LOG_NEVER, "BOOL    : %s", ((BOOL)data) ? "true" : "false" );
+		debug( LOG_NEVER, "BOOL    : %s", data.v.bval ? "true" : "false" );
 		break;
 	case VAL_INT:
-		debug( LOG_NEVER, "INT     : %d", (SDWORD)data );
+		debug( LOG_NEVER, "INT     : %d", data.v.ival);
 		break;
-/*	case VAL_FLOAT:
-		debug( LOG_NEVER, "FLOAT   : %f", (float)data );
-		break;*/
+	case VAL_FLOAT:
+		debug( LOG_NEVER, "FLOAT   : %f", data.v.fval );
+		break;
 	case VAL_STRING:
-		debug( LOG_NEVER, "char  : %s", (char *)data );
+		debug( LOG_NEVER, "char  : %s", data.v.sval );
 		break;
 	case VAL_TRIGGER:
-		debug( LOG_NEVER, "TRIGGER : %d", (SDWORD)data );
+		debug( LOG_NEVER, "TRIGGER : %d", data.v.ival );
 		break;
 	case VAL_EVENT:
-		debug( LOG_NEVER, "EVENT   : %d", (SDWORD)data );
+		debug( LOG_NEVER, "EVENT   : %d", data.v.ival );
 		break;
 	default:
 		// See if it is a user defined type
@@ -164,7 +167,7 @@ void cpPrintPackedVal(UDWORD *ip)
 			{
 				if (asScrTypeTab[i].typeID == type)
 				{
-					debug( LOG_NEVER, "type: %s value: %x", asScrTypeTab[i].pIdent, data );
+					debug( LOG_NEVER, "type: %s value: %x", asScrTypeTab[i].pIdent, data.v.oval );
 					return;
 				}
 			}
@@ -309,19 +312,19 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 
 
 /* Print the array information */
-static void cpPrintArrayInfo(UDWORD **pip, SCRIPT_CODE *psProg)
+static void cpPrintArrayInfo(INTERP_VAL **pip, SCRIPT_CODE *psProg)
 {
 	SDWORD		i, dimensions;//, elements[VAR_MAX_DIMENSIONS];
 //	SDWORD		elementDWords;
 //	UBYTE		*pElem;
-	UDWORD		*ip = *pip;
+	INTERP_VAL		*ip = *pip;
 	UDWORD		base;
 
 	// get the base index of the array
-	base = (*ip) & ARRAY_BASE_MASK;
+	base = ip->v.ival & ARRAY_BASE_MASK;
 
 	// get the number of dimensions
-	dimensions = ((*ip) & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
+	dimensions = (ip->v.ival & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
 
 	// get the number of elements for each dimension
 /*	pElem = (UBYTE *) (ip + 1);
@@ -340,7 +343,7 @@ static void cpPrintArrayInfo(UDWORD **pip, SCRIPT_CODE *psProg)
 	// calculate the number of DWORDs needed to store the number of elements for each dimension of the array
 //	elementDWords = (dimensions - 1)/4 + 1;
 
-	// update the insrtuction pointer
+	// update the instruction pointer
 	*pip += 1;// + elementDWords;
 }
 
@@ -348,7 +351,7 @@ static void cpPrintArrayInfo(UDWORD **pip, SCRIPT_CODE *psProg)
 /* Display the contents of a program in readable form */
 void cpPrintProgram(SCRIPT_CODE *psProg)
 {
-	UDWORD			*ip, *end;
+	INTERP_VAL		*ip, *end;
 	OPCODE			opcode;
 	UDWORD			data, i, dim;
 	SCRIPT_DEBUG	*psCurrDebug=NULL;
@@ -414,9 +417,9 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 
 	ip = psProg->pCode;
 	triggerCode = psProg->numTriggers > 0 ? TRUE : FALSE;
-	end = (UDWORD *)(((UBYTE *)ip) + psProg->size);
-	opcode = (OPCODE)((*ip) >> OPCODE_SHIFT);
-	data = (*ip) & OPCODE_DATAMASK;
+	end = (INTERP_VAL *)(((UBYTE *)ip) + psProg->size);
+	opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);
+	data = (ip->v.ival & OPCODE_DATAMASK);
 	while (ip < end)
 	{
 		// display a label if there is one
@@ -524,13 +527,13 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			break;
 		case OP_CALL:
 			debug( LOG_NEVER, "CALL" );
-			cpPrintFunc( (SCRIPT_FUNC)(*(ip+1)) );
+			cpPrintFunc( ((INTERP_VAL *)(ip+1))->v.pFuncExtern );
 			debug( LOG_NEVER, "\n" );
 			ip += aOpSize[opcode];
 			break;
 		case OP_VARCALL:
 			debug( LOG_NEVER, "VARCALL" );
-			cpPrintVarFunc( (SCRIPT_VARFUNC)(*(ip+1)), data);
+			cpPrintVarFunc( ((INTERP_VAL *)(ip+1))->v.pObjGetSet, data);
 			debug( LOG_NEVER, "(%d)\n", data );
 			ip += aOpSize[opcode];
 			break;
@@ -568,7 +571,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		ASSERT( (ip <= end) || PTRVALID(ip, sizeof(UDWORD)),
 			"cpPrintProgram: instruction pointer no longer valid" );
 
-		opcode = (OPCODE)((*ip) >> OPCODE_SHIFT);
-		data = (*ip) & OPCODE_DATAMASK;
+		opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);
+		data = ip->v.ival & OPCODE_DATAMASK;
 	}
 }

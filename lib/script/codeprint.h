@@ -14,7 +14,7 @@ extern void cpPrintType(INTERP_TYPE type);
 extern void cpPrintVal(INTERP_VAL *psVal);
 
 /* Display a value from a program that has been packed with an opcode */
-extern void cpPrintPackedVal(UDWORD *ip);
+extern void cpPrintPackedVal(INTERP_VAL *ip);
 
 /* Print a function name */
 extern void cpPrintFunc(SCRIPT_FUNC pFunc);

@@ -22,13 +22,11 @@ typedef enum _interp_type
 	VAL_STRING,
 
 	// events and triggers
-	VAL_TRIGGER,
+	VAL_TRIGGER,				//trigger index
 	VAL_EVENT,					//event (or in-script function)
 
 	/* Type used by the compiler for functions that do not return a value */
 	VAL_VOID,
-
-	//VAL_OBJECT,								//Droid/structure/feature/object pointer
 
 	VAL_OPCODE,							//Script opcode
 	VAL_PKOPCODE,						//Packed script opcode
@@ -45,17 +43,16 @@ typedef enum _interp_type
 /* A value consists of its type and value */
 typedef struct _interp_val
 {
-	INTERP_TYPE		type;
+	INTERP_TYPE		type;					//Value type for interpreter; opcode or value type for compiler
 	union
 	{
-		char								*sval;			// VAL_STRING
-		SCRIPT_VARFUNC		pObjGetSet;		// VAL_OBJ_GETSET
-		SCRIPT_FUNC			pFuncExtern;		//VAL_FUNC_EXTERN
-		void					*oval;
-		void					*pVoid;		// VAL_VOIDPTR
-		float					fval;				// VAL_FLOAT
-		SDWORD					ival;				// VAL_INT
-		BOOL					bval;			// VAL_BOOL
+		char					*sval;			//String value - VAL_STRING
+		SCRIPT_VARFUNC		pObjGetSet;		//Set/Get method for objects - VAL_OBJ_GETSET
+		SCRIPT_FUNC			pFuncExtern;		//External (C) function - VAL_FUNC_EXTERN
+		void					*oval;			//Object value - any in-game object
+		float					fval;				//Float value - VAL_FLOAT
+		SDWORD					ival;				// Integer value - VAL_INT
+		BOOL					bval;			//Boolean value - VAL_BOOL
 	} v;
 } INTERP_VAL;
 
