@@ -3839,7 +3839,7 @@ BOOL scrRefTest(void)
 {
 	SDWORD		Num = 0;
 
-	if (!stackPopParams(1,VAL_INT, Num));
+	if (!stackPopParams(1,VAL_INT, Num))
 	{
 		return FALSE;
 	}
@@ -7842,7 +7842,6 @@ BOOL scrNumPlayerWeapObjInRange(void)
 BOOL scrNumEnemyObjInRange(void)
 {
 	SDWORD				player,range,rangeX,rangeY;
-	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
@@ -10487,9 +10486,9 @@ BOOL scrMatch(void)
 {
 	char	*sToParse = NULL, *sToMatch = NULL;
 	char	*wordNeed = NULL, *wordFound = NULL;
-	SDWORD	players=0,readCountParse=0,readCountMatch=0;
+	SDWORD	readCountParse=0,readCountMatch=0;
 	SDWORD	fieldAssignedParse=0,fieldAssignedMatch=0;
-	BOOL	ok = TRUE,bEndParse=FALSE,bEndMatch=FALSE;
+	BOOL	ok = TRUE;
 	SDWORD	*nResult;
 
 	if (!stackPopParams(3, VAL_STRING, &strParam1, VAL_STRING, &strParam2, VAL_REF|VAL_INT, &nResult))
@@ -10714,7 +10713,7 @@ BOOL scrToPow(void)
 		return FALSE;
 	}
 
-	result.v.fval = pow(x,y);
+	result.v.fval = (float)pow(x,y);
 	if (!stackPushResult(VAL_FLOAT, &result))
 	{
 		debug(LOG_ERROR, "scrToPow(): failed to push result");

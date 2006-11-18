@@ -21,6 +21,8 @@
 #define MAX_LEN_LOG_LINE 512
 #define MAX_LEN_DEBUG_PART 12
 
+char last_called_script_event[MAX_EVENT_NAME_LEN];
+
 static debug_callback * callbackRegistry = NULL;
 static BOOL enabled_debug_parts[LOG_LAST];
 

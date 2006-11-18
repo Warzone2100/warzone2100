@@ -144,7 +144,7 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 	return TRUE;
 }
 
-BOOL SetUpOutputFile(char * pMapName,SDWORD nPlayer) // FIXME pMapName is unused!!!
+BOOL SetUpOutputFile(SDWORD nPlayer)
 {
 	char			sPlayer[255] = "";
 	char			SaveDir[MAX_PATH] = "multiplay/learndata/";
@@ -246,8 +246,8 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 	UDWORD					PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
 	SDWORD						i;
 
-	/* Prepair experience file for the current map */
-	if(!SetUpOutputFile(game.map,nPlayer))
+	/* prepare experience file for the current map */
+	if(!SetUpOutputFile(nPlayer))
 	{
 		debug(LOG_ERROR,"Failed to prepare experience file for player %d",nPlayer);
 		return FALSE;
@@ -485,7 +485,6 @@ BOOL canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y)
 BOOL ReadAISaveData(SDWORD nPlayer)
 {
 	FEATURE					*psFeature;
-	SDWORD					x=0,y=0;
 	SDWORD					NumEntries=0;	//How many derricks/oil resources will be saved
 	UDWORD					PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
 	SDWORD						i;
@@ -676,8 +675,6 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 {
 	FEATURE					*psFeature;
-	SDWORD					x=0,y=0;
-	SDWORD					NumEntries=0;	//How many derricks/oil resources will be saved
 	BOOL					Found;
 
 

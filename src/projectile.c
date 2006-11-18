@@ -703,7 +703,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 //	rad = fastRoot(dx,dy);
 	rad = (SDWORD)iSQRT( dx*dx + dy*dy );
 	//Watermelon:extended life span
-	extendRad = (SDWORD)rad * 1.5f;
+	extendRad = (SDWORD)(rad * 1.5f);
 
 
 	if (rad == 0)
@@ -797,7 +797,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	{
 		wpRadius = 2;
 		//Watermelon:extended life span
-		extendRad = (SDWORD)rad * 1.2f;
+		extendRad = (SDWORD)(rad * 1.2f);
 	}
 	else if (psStats->weaponSubClass == WSC_CANNON ||
 			psStats->weaponSubClass == WSC_FLAME ||
@@ -809,7 +809,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	{
 		wpRadius = 3;
 		//Watermelon:extended life span
-		extendRad = (SDWORD)rad * 1.5f;
+		extendRad = (SDWORD)(rad * 1.5f);
 	}
 	else if (psStats->weaponSubClass == WSC_AAGUN)
 	{
@@ -1022,7 +1022,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	psObj->pitch = (SWORD)( RAD_TO_DEG(atan2(fVVert, psObj->vXY)) );
 
 	//Watermelon:extended life span for artillery projectile
-	extendRad = (SDWORD)iRad * 1.2f;
+	extendRad = (SDWORD)(iRad * 1.2f);
 
 	if(psStats->weaponSubClass == WSC_FLAME)
 	{

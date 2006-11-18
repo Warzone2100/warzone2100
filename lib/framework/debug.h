@@ -31,7 +31,8 @@
 #endif
 
 /* stores name of the last function or event called by scripts */
-char last_called_script_event[100];
+#define MAX_EVENT_NAME_LEN	100
+extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
 /*
  *
