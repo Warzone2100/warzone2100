@@ -73,7 +73,7 @@
 #include "display3d.h"			//for showRangeAtPos()
 #include "multimenu.h"
 
-INTERP_VAL		result;
+static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 //used in the set nogoArea and LandingZone functions - use the ones defined in Map.h
 //#define MAX_MAP_WIDTH		192
@@ -151,8 +151,8 @@ BOOL scrObjectInRange(void)
 	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x,y, range) ||
 			objectInRange((BASE_OBJECT *)apsStructLists[player], x,y, range);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -180,8 +180,8 @@ BOOL scrDroidInRange(void)
 
 	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x,y, range);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -209,8 +209,8 @@ BOOL scrStructInRange(void)
 
 	found = objectInRange((BASE_OBJECT *)apsStructLists[player], x,y, range);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -233,8 +233,8 @@ BOOL scrPlayerPower(void)
 		return FALSE;
 	}
 
-	result.v.ival = asPower[player]->currentPower;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = asPower[player]->currentPower;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -292,8 +292,8 @@ BOOL scrObjectInArea(void)
 	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2) ||
 			objectInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -321,8 +321,8 @@ BOOL scrDroidInArea(void)
 
 	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -350,8 +350,8 @@ BOOL scrStructInArea(void)
 
 	found = objectInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -407,8 +407,8 @@ BOOL scrSeenStructInArea(void)
 		}
 	}
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -453,8 +453,8 @@ BOOL scrStructButNoWallsInArea(void)
 		}
 	}
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -515,8 +515,8 @@ BOOL scrNumObjectsInArea(void)
 	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2) +
 			numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	result.v.ival = count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -545,8 +545,8 @@ BOOL scrNumDroidsInArea(void)
 
 	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2);
 
-	result.v.ival = count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -575,8 +575,8 @@ BOOL scrNumStructsInArea(void)
 
 	count = numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	result.v.ival = count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -621,8 +621,8 @@ BOOL scrNumStructsButNotWallsInArea(void)
 		}
 	}
 
-	result.v.ival = count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -667,8 +667,8 @@ BOOL scrNumStructsByTypeInArea(void)
 		}
 	}
 
-	result.v.ival = count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -709,8 +709,8 @@ BOOL scrDroidHasSeen(void)
 		seen = TRUE;
 	}
 
-	result.v.bval = seen;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = seen;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -757,8 +757,8 @@ static BOOL scrDroidInRangeOfPosition(void)
 		}
 	}
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -919,8 +919,8 @@ BOOL scrAddDroidToMissionList(void)
 		psDroid = buildMissionDroid( psTemplate, 128, 128, player );
 	}
 
-	result.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -981,8 +981,8 @@ BOOL scrAddDroid(void)
 		}
 	}
 
-	result.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1070,8 +1070,8 @@ BOOL scrBuildingDestroyed(void)
 		}
 	}
 
-	result.v.bval = destroyed;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = destroyed;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1141,8 +1141,8 @@ BOOL scrIsStructureAvailable(void)
 		bResult = FALSE;
 	}
 
-	result.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bResult;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1186,8 +1186,8 @@ BOOL scrSelectDroidByID(void)
 	}
 
 	//store the result cos might need to check the droid exists before doing anything else
-	result.v.bval = selected;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = selected;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1228,14 +1228,14 @@ BOOL scrApproxRoot(void)
 
 	if (val1 < val2)
 	{
-		result.v.ival = val2 + (val1 >> 1);
+		scrFunctionResult.v.ival = val2 + (val1 >> 1);
 	}
 	else
 	{
-		result.v.ival = val1 + (val2 >> 1);
+		scrFunctionResult.v.ival = val1 + (val2 >> 1);
 	}
 
-	if (!stackPushResult(VAL_INT, &result))
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1604,8 +1604,8 @@ BOOL	scrStructureIdle(void)
 
 //	DBPRINTF(("structure %p is %d\n",psBuilding,idle));
 
-	result.v.bval = idle;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = idle;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1712,8 +1712,8 @@ BOOL scrGetFeature(void)
 
 	if(psFeat == NULL)		// no more to find.
 	{
-		result.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &result))
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
 			ASSERT( FALSE, "scrGetFeature: Failed to push result" );
 			return FALSE;
@@ -1725,8 +1725,8 @@ BOOL scrGetFeature(void)
 	if(psFeatureStatToFind[bucket] == NULL)
 	{
 		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
-		result.v.oval = NULL;
-		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &result))
+		scrFunctionResult.v.oval = NULL;
+		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
 			ASSERT( FALSE, "scrGetFeature: Failed to push result" );
 			return FALSE;
@@ -1743,8 +1743,8 @@ BOOL scrGetFeature(void)
 			&&!fireOnLocation(psFeat->x,psFeat->y)		// not burning.
 			)
 		{
-			result.v.oval = psFeat;
-			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &result))	//	push result
+			scrFunctionResult.v.oval = psFeat;
+			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
 			{
 				ASSERT( FALSE, "scrGetFeature: Failed to push result" );
 				return FALSE;
@@ -1758,8 +1758,8 @@ BOOL scrGetFeature(void)
 	}
 
 	// none found
-	result.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &result))
+	scrFunctionResult.v.oval = NULL;
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
 	{
 		ASSERT( FALSE, "scrGetFeature: Failed to push result" );
 		return FALSE;
@@ -1791,7 +1791,7 @@ BOOL scrGetFeature(void)
 			!TILE_HAS_STRUCTURE(mapTile(psCurrEnumFeature[bucket]->x>>TILE_SHIFT,psCurrEnumFeature[bucket]->y>>TILE_SHIFT) )
 		   )
 		{
-			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push result
+			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push scrFunctionResult
 			{
 				return FALSE;
 			}
@@ -1859,8 +1859,8 @@ BOOL scrAddFeature(void)
 		psFeat = buildFeature( psStat, iX, iY, FALSE );
 	}
 
-	result.v.oval = psFeat;
-	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &result))
+	scrFunctionResult.v.oval = psFeat;
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1930,8 +1930,8 @@ BOOL scrAddStructure(void)
 		}
 	}
 
-	result.v.oval = psStruct;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = psStruct;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2012,8 +2012,8 @@ BOOL scrEnumStruct(void)
 
 	if(psStruct == NULL)		// no more to find.
 	{
-		result.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -2028,8 +2028,8 @@ BOOL scrEnumStruct(void)
 			((playerVisibleStruct < 0) || (psStruct->visible[playerToEnumStruct]))	//fix: added playerVisibleStruct for visibility test
 		   )
 		{
-			result.v.oval = psStruct;
-			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))			//	push result
+			scrFunctionResult.v.oval = psStruct;
+			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))			//	push scrFunctionResult
 			{
 				return FALSE;
 			}
@@ -2040,8 +2040,8 @@ BOOL scrEnumStruct(void)
 		psStruct = psStruct->psNext;
 	}
 	// push NULL, none found;
-	result.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = NULL;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2090,8 +2090,8 @@ BOOL scrStructureBeingBuilt(void)
 		beingBuilt = TRUE;
 	}
 
-	result.v.bval = beingBuilt;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = beingBuilt;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2122,8 +2122,8 @@ BOOL scrStructureComplete(void)
 		bResult = FALSE;
 	}
 
-	result.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bResult;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2174,8 +2174,8 @@ BOOL scrStructureBuilt(void)
 		built = TRUE;
 	}
 
-	result.v.bval = built;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = built;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2270,8 +2270,8 @@ BOOL scrGetStructure(void)
 		psStruct = NULL;
 	}
 
-	result.v.oval = psStruct;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = psStruct;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2375,8 +2375,8 @@ BOOL scrGetTemplate(void)
 		psTemplate = NULL;
 	}
 
-	result.v.oval = psTemplate;
-	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &result))
+	scrFunctionResult.v.oval = psTemplate;
+	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -2480,8 +2480,8 @@ BOOL scrGetDroid(void)
 		psDroid = NULL;
 	}
 
-	result.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -3070,8 +3070,8 @@ BOOL scrAnyDroidsLeft(void)
 		droidsLeft = FALSE;
 	}
 
-	result.v.bval = droidsLeft;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = droidsLeft;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -3205,8 +3205,8 @@ BOOL scrAnyFactoriesLeft(void)
 		}
 	}
 
-	result.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bResult;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -3254,8 +3254,8 @@ BOOL scrAnyStructButWallsLeft(void)
 		}
 	}
 
-	result.v.bval = structuresLeft;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = structuresLeft;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -3861,8 +3861,8 @@ BOOL scrIsHumanPlayer(void)
 		return FALSE;
 	}
 
-	result.v.bval = isHumanPlayer(player);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = isHumanPlayer(player);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4017,8 +4017,8 @@ BOOL scrAllianceExists(void)
 		{
 			if(alliances[i][j] == ALLIANCE_FORMED)
 			{
-				result.v.bval = TRUE;
-				if (!stackPushResult(VAL_BOOL, &result))
+				scrFunctionResult.v.bval = TRUE;
+				if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 				{
 					return FALSE;
 				}
@@ -4027,8 +4027,8 @@ BOOL scrAllianceExists(void)
 		}
 	}
 
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4047,16 +4047,16 @@ BOOL scrAllianceExistsBetween(void)
 	}
 	if(alliances[i][j] == ALLIANCE_FORMED)
 	{
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 		return TRUE;
 	}
 
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4078,16 +4078,16 @@ BOOL scrPlayerInAlliance(void)
 	{
 		if(alliances[player][j] == ALLIANCE_FORMED)
 		{
-			result.v.bval = TRUE;
-			if (!stackPushResult(VAL_BOOL, &result))
+			scrFunctionResult.v.bval = TRUE;
+			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 			{
 				return FALSE;
 			}
 			return TRUE;
 		}
 	}
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4110,8 +4110,8 @@ BOOL scrDominatingAlliance(void)
 			   && i != j
 			   && alliances[i][j] != ALLIANCE_FORMED)
 			{
-				result.v.bval = FALSE;
-				if (!stackPushResult(VAL_BOOL, &result))
+				scrFunctionResult.v.bval = FALSE;
+				if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 				{
 					return FALSE;
 				}
@@ -4122,8 +4122,8 @@ BOOL scrDominatingAlliance(void)
 	}
 
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4143,16 +4143,16 @@ BOOL scrMyResponsibility(void)
 
 	if(	myResponsibility(player) )
 	{
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -4239,8 +4239,8 @@ BOOL scrStructureBuiltInRange(void)
 		psCurr = NULL;
 	}
 
-	result.v.oval = psCurr;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = psCurr;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4273,8 +4273,8 @@ BOOL scrRandom(void)
 		iResult = rand() % (-range);
 	}
 
-	result.v.ival = iResult;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = iResult;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -4715,8 +4715,8 @@ BOOL scrMissionTimeRemaining(void)
         timeRemaining /= 100;
     }
 
-	result.v.ival = timeRemaining;
-	if(!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = timeRemaining;
+	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return(FALSE);
 	}
@@ -4860,10 +4860,10 @@ SDWORD	retVal;
 	/* Approximate the distance */
 	retVal = dirtySqrt(x1,y1,x2,y2);
 
-	result.v.ival = retVal;
-	if(!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = retVal;
+	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		ASSERT( FALSE,"SCRIPT : Distance between two points - cannot return result" );
+		ASSERT( FALSE,"SCRIPT : Distance between two points - cannot return scrFunctionResult" );
 		return(FALSE);
 	}
 	return(TRUE);
@@ -4892,10 +4892,10 @@ BOOL		retVal;
 		retVal = visibleObject(psSource,psDest);
 	}
 
-	result.v.bval = retVal;
-	if(!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = retVal;
+	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		ASSERT( FALSE,"SCRIPT : scrLOSTwoBaseObjects - cannot return result" );
+		ASSERT( FALSE,"SCRIPT : scrLOSTwoBaseObjects - cannot return scrFunctionResult" );
 		return(FALSE);
 	}
 	return(TRUE);
@@ -5045,10 +5045,10 @@ BOOL	bVisible;
 		}
 	}
 //	DBPRINTF(("scrThreatInArea: returning %d\n", totalThreat));
-	result.v.ival = totalThreat;
-	if(!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = totalThreat;
+	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		ASSERT( FALSE,"SCRIPT : Cannot push result in scrThreatInArea" );
+		ASSERT( FALSE,"SCRIPT : Cannot push scrFunctionResult in scrThreatInArea" );
 		return(FALSE);
 	}
 	return(TRUE);
@@ -5110,10 +5110,10 @@ BOOL	success;
 	*rX = retX;
 	*rY = retY;
 
-	result.v.bval = success;
-	if(!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = success;
+	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		ASSERT( FALSE,"SCRIPT : Cannot return result for stackPushResult" );
+		ASSERT( FALSE,"SCRIPT : Cannot return scrFunctionResult for stackPushResult" );
 		return(FALSE);
 	}
 
@@ -5235,11 +5235,11 @@ BOOL	bFound;
 		}
 	}
 
-	/* Send back the result */
-	result.v.bval = bFound;
-	if(!stackPushResult(VAL_BOOL, &result))
+	/* Send back the scrFunctionResult */
+	scrFunctionResult.v.bval = bFound;
+	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		ASSERT( FALSE,"SCRIPT : Cannot push result for scrTestStructureModule" );
+		ASSERT( FALSE,"SCRIPT : Cannot push scrFunctionResult for scrTestStructureModule" );
 		return(FALSE);
 	}
 
@@ -5339,8 +5339,8 @@ UDWORD	count=0;
 		}
 	}
 
-	result.v.ival = count;
-	if(!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return(FALSE);
 	}
@@ -5452,16 +5452,16 @@ BOOL scrAddTemplate(void)
 
 	if(	addTemplate(player,psTemplate))
 	{
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -5624,8 +5624,8 @@ BOOL scrPickStructLocation(void)
 		*pX = (x << TILE_SHIFT) + (psStat->baseWidth * (TILE_UNITS/2));
 		*pY = (y << TILE_SHIFT) + (psStat->baseBreadth * (TILE_UNITS/2));
 
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))		// success!
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 		{
 			return FALSE;
 		}
@@ -5635,8 +5635,8 @@ BOOL scrPickStructLocation(void)
 	else
 	{
 failedstructloc:
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))		// failed!
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// failed!
 		{
 			return FALSE;
 		}
@@ -5709,7 +5709,7 @@ BOOL scrGetGameStatus(void)
 
 //	DBPRINTF(("getgamestatus choice=%d\n",GameChoice));
 
-	bResult=FALSE;		// the default result is false
+	bResult=FALSE;		// the default scrFunctionResult is false
 
 	switch (GameChoice)
 	{
@@ -5719,7 +5719,7 @@ BOOL scrGetGameStatus(void)
 			break;
 
 		case STATUS_BattleMapViewEnabled:
-//			if (driveTacticalActive()==TRUE) result=TRUE;
+//			if (driveTacticalActive()==TRUE) scrFunctionResult=TRUE;
 
 
 			if (bResult==TRUE)
@@ -5742,8 +5742,8 @@ BOOL scrGetGameStatus(void)
 		break;
 	}
 
-	result.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bResult;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -5766,8 +5766,8 @@ BOOL scrGetPlayerColour(void)
 		return FALSE;
 	}
 
-	result.v.ival = (SDWORD)getPlayerColour(player);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = (SDWORD)getPlayerColour(player);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -5791,8 +5791,8 @@ BOOL scrGetPlayerColourName(void)
 		return FALSE;
 	}
 
-	result.v.sval = getPlayerColourName(player);
-	if (!stackPushResult(VAL_STRING, &result))
+	scrFunctionResult.v.sval = getPlayerColourName(player);
+	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerColourName(): failed to push result");
 		return FALSE;
@@ -5887,8 +5887,8 @@ BOOL scrTakeOverDroidsInArea(void)
         }
     }
 
-	result.v.ival = numChanged;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numChanged;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -5924,8 +5924,8 @@ BOOL scrTakeOverSingleDroid(void)
 
     psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
 
-	result.v.oval = psNewDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psNewDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
     }
@@ -6002,8 +6002,8 @@ BOOL scrTakeOverDroidsInAreaExp(void)
 		}
     }
 
-	result.v.ival = numChanged;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numChanged;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -6065,8 +6065,8 @@ BOOL scrTakeOverSingleStructure(void)
         }
     }
 
-	result.v.oval = psNewStruct;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = psNewStruct;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
     }
@@ -6158,8 +6158,8 @@ BOOL scrTakeOverStructsInArea(void)
         }
     }
 
-	result.v.ival = numChanged;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numChanged;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -6215,8 +6215,8 @@ BOOL scrGetDroidCount(void)
 		return FALSE;
 	}
 
-	result.v.ival = getNumDroids(player);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = getNumDroids(player);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -6396,8 +6396,8 @@ BOOL scrIsVtol(void)
 		ASSERT( FALSE,"scrIsVtol: null droid passed in." );
 	}
 
-	result.v.bval = vtolDroid(psDroid) ;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = vtolDroid(psDroid) ;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -6478,8 +6478,8 @@ BOOL scrStrcmp(void)
 		return FALSE;
 	}
 
-	result.v.bval = !strcmp(strParam1, strParam2);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = !strcmp(strParam1, strParam2);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrStrcmp: failed to push result");
 		return FALSE;
@@ -6491,8 +6491,6 @@ BOOL scrStrcmp(void)
 /* Output a string to console */
 BOOL scrConsole(void)
 {
-	int	a=0,b=0;
-
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
 		debug(LOG_ERROR, "scrConsole(): stack failed");
@@ -6639,8 +6637,8 @@ BOOL scrEnumDroid(void)
 	{
 		if(psDroid->visible[playerVisibleDroid])
 		{
-			result.v.oval = psDroid;
-			if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))			//	push result
+			scrFunctionResult.v.oval = psDroid;
+			if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))			//	push scrFunctionResult
 			{
 				return FALSE;
 			}
@@ -6654,8 +6652,8 @@ BOOL scrEnumDroid(void)
 	}
 
 	// push NULLDROID, since didn't find any
-	result.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = NULL;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrEnumDroid() - push failed");
 		return FALSE;
@@ -6704,8 +6702,8 @@ BOOL scrFactoryGetTemplate(void)
 	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
 		"scrFactoryGetTemplate: Invalid template pointer" );
 
-	result.v.oval = psTemplate;
-	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &result))
+	scrFunctionResult.v.oval = psTemplate;
+	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrFactoryGetTemplate: stackPushResult failed");
 		return FALSE;
@@ -6756,8 +6754,8 @@ BOOL scrNumTemplatesInProduction(void)
 		}
 	}
 
-	result.v.ival = numTemplates;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numTemplates;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumTemplatesInProduction: stackPushResult failed");
 		return FALSE;
@@ -6855,8 +6853,8 @@ BOOL scrNumDroidsByComponent(void)
 		}
 	}
 
-	result.v.ival = numFound;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numFound;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumDroidsByComponent(): stackPushResult failed");
 		return FALSE;
@@ -6892,8 +6890,8 @@ BOOL scrGetStructureLimit(void)
 	psStructLimits = asStructLimits[player];
 	limit = (SDWORD)psStructLimits[structInc].limit;
 
-	result.v.ival = limit;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = limit;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetStructureLimit(): stackPushResult failed");
 		return FALSE;
@@ -6933,8 +6931,8 @@ BOOL scrStructureLimitReached(void)
 
 	if(psStructLimits[structInc].currentQuantity >= psStructLimits[structInc].limit) bLimit = TRUE;
 
-	result.v.bval = bLimit;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bLimit;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrStructureLimitReached(): stackPushResult failed");
 		return FALSE;
@@ -6968,8 +6966,8 @@ BOOL scrGetNumStructures(void)
 	psStructLimits = asStructLimits[player];
 	numStructures = (SDWORD)psStructLimits[structInc].currentQuantity;
 
-	result.v.ival = numStructures;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numStructures;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -6992,8 +6990,8 @@ BOOL scrGetUnitLimit(void)
 		ASSERT( FALSE, "scrSetStructureLimits:player number is too high" );
 		return FALSE;}
 
-	result.v.ival = getMaxDroids(player);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = getMaxDroids(player);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7011,8 +7009,8 @@ BOOL scrMin(void)
 		return FALSE;
 	}
 
-	result.v.ival = MIN(val2, val1);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = MIN(val2, val1);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7030,8 +7028,8 @@ BOOL scrMax(void)
 		return FALSE;
 	}
 
-	result.v.ival = MAX(val1, val2);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = MAX(val1, val2);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7192,8 +7190,8 @@ BOOL scrFogTileInRange(void)
 		*wTileX = tBestX<<TILE_SHIFT;
 		*wTileY = tBestY<<TILE_SHIFT;
 
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			debug(LOG_ERROR, "scrFogTileInRange: stackPushResult failed (found)");
 			return FALSE;
@@ -7201,8 +7199,8 @@ BOOL scrFogTileInRange(void)
 	}
 	else
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			debug(LOG_ERROR, "scrFogTileInRange: stackPushResult failed (not found)");
 			return FALSE;
@@ -7248,8 +7246,8 @@ BOOL scrMapRevealedInRange(void)
 				//within range
 				if((dirtySqrt(tRangeX, tRangeY, i, j) << TILE_SHIFT) < wRange)		//dist in world units between x/y and the tile
 				{
-					result.v.bval = TRUE;
-					if (!stackPushResult(VAL_BOOL, &result))
+					scrFunctionResult.v.bval = TRUE;
+					if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 					{
 						return FALSE;
 					}
@@ -7261,8 +7259,8 @@ BOOL scrMapRevealedInRange(void)
 	}
 
 	//nothing found
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7380,8 +7378,8 @@ BOOL scrNumResearchLeft(void)
 		}
 	}
 
-	result.v.ival = iResult;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = iResult;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7455,16 +7453,16 @@ BOOL scrResearchCompleted(void)
 
 	if(IsResearchCompleted(&pPlayerRes[index]))
 	{
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -7504,16 +7502,16 @@ BOOL scrResearchStarted(void)
 
 	if(IsResearchStarted(&pPlayerRes[index]))
 	{
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -7535,8 +7533,8 @@ BOOL scrThreatInRange(void)
 		return FALSE;
 	}
 
-	result.v.bval = ThreatInRange(player, range, rangeX, rangeY, bVTOLs);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = ThreatInRange(player, range, rangeX, rangeY, bVTOLs);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7570,8 +7568,8 @@ BOOL scrNumEnemyWeapObjInRange(void)
 		numEnemies = numEnemies + numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY);
 	}
 
-	result.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumEnemyWeapObjInRange(): failed to push result");
 		return FALSE;
@@ -7674,8 +7672,8 @@ BOOL scrNumEnemyWeapDroidsInRange(void)
 		numEnemies = numEnemies + numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
 	}
 
-	result.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapDroidsInRange(): failed to push result");
 		return FALSE;
@@ -7708,8 +7706,8 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 		numEnemies = numEnemies + numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY);
 	}
 
-	result.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumEnemyWeapStructsInRange(): failed to push result");
 		return FALSE;
@@ -7740,8 +7738,8 @@ BOOL scrNumFriendlyWeapObjInRange(void)
 		}
 	}
 
-	result.v.ival = numFriends;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numFriends;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -7771,8 +7769,8 @@ BOOL scrNumFriendlyWeapDroidsInRange(void)
 	}
 
 	//numEnemies = numEnemyWeapObjInRange(player, range, rangeX, rangeY, bVTOLs);
-	result.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapDroidsInRange(): failed to push result");
 		return FALSE;
@@ -7803,8 +7801,8 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 		}
 	}
 
-	result.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrNumFriendlyWeapStructsInRange(): failed to push result");
 		return FALSE;
@@ -7829,8 +7827,8 @@ BOOL scrNumPlayerWeapObjInRange(void)
 	numEnemies = numEnemies + numPlayerWeapDroidsInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs);
 	numEnemies = numEnemies + numPlayerWeapStructsInRange(player, lookingPlayer, range, rangeX, rangeY);
 
-	result.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumPlayerWeapObjInRange(): failed to push result");
 		return FALSE;
@@ -7851,8 +7849,8 @@ BOOL scrNumEnemyObjInRange(void)
 		return FALSE;
 	}
 
-	result.v.ival = numEnemyObjInRange(player, range, rangeX, rangeY, bVTOLs);;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numEnemyObjInRange(player, range, rangeX, rangeY, bVTOLs);;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): failed to push result");
 		return FALSE;
@@ -7988,8 +7986,8 @@ BOOL scrNumStructsByStatInRange(void)
 		}
 	}
 
-	result.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = NumStruct;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8050,8 +8048,8 @@ BOOL scrNumStructsByStatInArea(void)
 		}
 	}
 
-	result.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = NumStruct;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8118,8 +8116,8 @@ BOOL scrNumStructsByTypeInRange(void)
 		}
 	}
 
-	result.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = NumStruct;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8186,8 +8184,8 @@ BOOL scrNumFeatByTypeInRange(void)
 		}
 	}
 
-	result.v.ival = NumFeat;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = NumFeat;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8253,8 +8251,8 @@ BOOL scrNumStructsButNotWallsInRangeVis(void)
 		}
 	}
 
-	result.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = NumStruct;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8305,8 +8303,8 @@ BOOL scrGetStructureVis(void)
 		psStruct = NULL;
 	}
 
-	result.v.oval = psStruct;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = psStruct;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8344,16 +8342,16 @@ BOOL scrChooseValidLoc(void)
 	{
 		*x = (tx << TILE_SHIFT);
 		*y = (ty << TILE_SHIFT);
-		result.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -8465,16 +8463,16 @@ BOOL scrGetClosestEnemy(void)
 
 	if(bFound)
 	{
-		result.v.oval = psObj;
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))
+		scrFunctionResult.v.oval = psObj;
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -8506,8 +8504,8 @@ BOOL scrTransporterCapacity(void)
 		return FALSE;
 	}
 
-	result.v.ival = calcRemainingCapacity(psDroid);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = calcRemainingCapacity(psDroid);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrHasIndirectWeapon(): failed to push result");
 		return FALSE;
@@ -8539,8 +8537,8 @@ BOOL scrTransporterFlying(void)
 		return FALSE;
 	}
 
-	result.v.bval = transporterFlying(psDroid);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = transporterFlying(psDroid);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrTransporterFlying(): failed to push result");
 		return FALSE;
@@ -8604,8 +8602,8 @@ BOOL scrHasGroup(void)
 		retval = FALSE;
 	}
 
-	result.v.bval = retval;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = retval;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8634,8 +8632,8 @@ BOOL scrObjWeaponMaxRange(void)
 		if (psDroid->asWeaps[0].nStat != 0)
 		{
 			psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-			result.v.ival = psStats->longRange;
-			if (!stackPushResult(VAL_INT, &result))
+			scrFunctionResult.v.ival = psStats->longRange;
+			if (!stackPushResult(VAL_INT, &scrFunctionResult))
 			{
 				return FALSE;
 			}
@@ -8649,8 +8647,8 @@ BOOL scrObjWeaponMaxRange(void)
 		if (psStruct->asWeaps[0].nStat != 0)
 		{
 			psStats = asWeaponStats + psStruct->asWeaps[0].nStat;
-			result.v.ival = psStats->longRange;
-			if (!stackPushResult(VAL_INT, &result))
+			scrFunctionResult.v.ival = psStats->longRange;
+			if (!stackPushResult(VAL_INT, &scrFunctionResult))
 			{
 				return FALSE;
 			}
@@ -8659,8 +8657,8 @@ BOOL scrObjWeaponMaxRange(void)
 		}
 	}
 
-	result.v.ival = -1;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = -1;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrObjWeaponMaxRange: wrong object type");
 		return FALSE;
@@ -8687,8 +8685,8 @@ BOOL scrObjHasWeapon(void)
 		psDroid = (DROID*)psObj;
 		if (psDroid->asWeaps[0].nStat != 0)
 		{
-			result.v.bval = TRUE;
-			if (!stackPushResult(VAL_BOOL, &result))
+			scrFunctionResult.v.bval = TRUE;
+			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 			{
 				return FALSE;
 			}
@@ -8701,8 +8699,8 @@ BOOL scrObjHasWeapon(void)
 		psStruct = (STRUCTURE*)psObj;
 		if (psStruct->asWeaps[0].nStat != 0)
 		{
-			result.v.bval = TRUE;
-			if (!stackPushResult(VAL_BOOL, &result))
+			scrFunctionResult.v.bval = TRUE;
+			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 			{
 				return FALSE;
 			}
@@ -8711,8 +8709,8 @@ BOOL scrObjHasWeapon(void)
 		}
 	}
 
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -8756,8 +8754,8 @@ BOOL scrObjectHasIndirectWeapon(void)
 		}
 	}
 
-	result.v.bval = bIndirect;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bIndirect;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrHasIndirectWeapon(): failed to push result");
 		return FALSE;
@@ -8837,16 +8835,16 @@ BOOL scrGetClosestEnemyDroidByType(void)
 
 	if(bFound)
 	{
-		result.v.oval = foundDroid;
-		if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+		scrFunctionResult.v.oval = foundDroid;
+		if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -8920,16 +8918,16 @@ BOOL scrGetClosestEnemyStructByType(void)
 
 	if(bFound)
 	{
-		result.v.oval = foundStruct;
-		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+		scrFunctionResult.v.oval = foundStruct;
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -9045,8 +9043,8 @@ BOOL scrNumAllies(void)
 		}
 	}
 
-	result.v.ival = numAllies;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numAllies;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9092,8 +9090,8 @@ BOOL scrNumAAinRange(void)
 		}
 	}
 
-	result.v.ival = numFound;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = numFound;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrNumAAinRange(): failed to push result");
 		return FALSE;
@@ -9156,8 +9154,8 @@ BOOL scrModulo(void)
 		return FALSE;
 	}
 
-	result.v.ival =  (num1 % num2);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival =  (num1 % num2);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrModulo(): failed to push result");
 		return FALSE;
@@ -9176,8 +9174,8 @@ BOOL scrPlayerLoaded(void)
 		return FALSE;
 	}
 
-	result.v.bval = (game.skDiff[player] != 0);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = (game.skDiff[player] != 0);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrPlayerLoaded(): failed to push result");
 		return FALSE;
@@ -9227,8 +9225,8 @@ BOOL scrLearnPlayerBaseLoc(void)
 
 	printf_console("Learned player base.");
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9262,8 +9260,8 @@ BOOL scrRecallPlayerBaseLoc(void)
 
 	if(!CanRememberPlayerBaseLoc(playerStoring, enemyPlayer))		//return FALSE if this one not set yet
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -9274,8 +9272,8 @@ BOOL scrRecallPlayerBaseLoc(void)
 	*x = baseLocation[playerStoring][enemyPlayer][0];
 	*y = baseLocation[playerStoring][enemyPlayer][1];
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9306,8 +9304,8 @@ BOOL scrCanRememberPlayerBaseLoc(void)
 		return FALSE;
 	}
 
-	result.v.bval = CanRememberPlayerBaseLoc(playerStoring, enemyPlayer);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = CanRememberPlayerBaseLoc(playerStoring, enemyPlayer);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9348,8 +9346,8 @@ BOOL scrLearnBaseDefendLoc(void)
 
 	StoreBaseDefendLoc(x, y, playerStoring);
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9390,8 +9388,8 @@ BOOL scrLearnOilDefendLoc(void)
 
 	StoreOilDefendLoc(x, y, playerStoring);
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9429,8 +9427,8 @@ BOOL scrGetBaseDefendLocIndex(void)
 		return FALSE;
 	}
 
-	result.v.ival = GetBaseDefendLocIndex(x,y,playerStoring);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = GetBaseDefendLocIndex(x,y,playerStoring);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9469,8 +9467,8 @@ BOOL scrGetOilDefendLocIndex(void)
 		return FALSE;
 	}
 
-	result.v.ival = GetOilDefendLocIndex(x,y,playerStoring);
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = GetOilDefendLocIndex(x,y,playerStoring);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9481,8 +9479,8 @@ BOOL scrGetOilDefendLocIndex(void)
 /* Returns number of available locations */
 BOOL scrGetBaseDefendLocCount(void)
 {
-	result.v.ival = MAX_BASE_DEFEND_LOCATIONS;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = MAX_BASE_DEFEND_LOCATIONS;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetBaseDefendLocCount: push failed");
 		return FALSE;
@@ -9494,8 +9492,8 @@ BOOL scrGetBaseDefendLocCount(void)
 /* Returns number of available locations*/
 BOOL scrGetOilDefendLocCount(void)
 {
-	result.v.ival = MAX_OIL_DEFEND_LOCATIONS;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = MAX_OIL_DEFEND_LOCATIONS;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetOilDefendLocCount: push failed");
 		return FALSE;
@@ -9537,8 +9535,8 @@ BOOL scrRecallBaseDefendLoc(void)
 	//check if can recall at this location
 	if(!CanRememberPlayerBaseDefenseLoc(player, index))
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -9551,8 +9549,8 @@ BOOL scrRecallBaseDefendLoc(void)
 
 	*prior = baseDefendLocPrior[player][index];
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9593,8 +9591,8 @@ BOOL scrRecallOilDefendLoc(void)
 	//check if can recall at this location
 	if(!CanRememberPlayerOilDefenseLoc(player, index))
 	{
-		result.v.bval= FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval= FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -9607,8 +9605,8 @@ BOOL scrRecallOilDefendLoc(void)
 
 	*prior = oilDefendLocPrior[player][index];
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9627,8 +9625,8 @@ BOOL scrSavePlayerAIExperience(void)
 		return FALSE;
 	}
 
-	result.v.bval = SavePlayerAIExperience(player, bNotify);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = SavePlayerAIExperience(player, bNotify);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9647,8 +9645,8 @@ BOOL scrLoadPlayerAIExperience(void)
 		return FALSE;
 	}
 
-	result.v.bval = LoadPlayerAIExperience(player, bNotify);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = LoadPlayerAIExperience(player, bNotify);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -9954,8 +9952,8 @@ BOOL scrClosestDamagedGroupDroid(void)
 		}
 	}
 
-	result.v.oval = psClosestDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psClosestDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -10020,8 +10018,8 @@ BOOL scrStructInRangeVis(void)
 
 	found = objectInRangeVis((BASE_OBJECT *)apsStructLists[player], x,y, range, lookingPlayer);
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -10114,8 +10112,8 @@ BOOL scrPursueResearch(void)
 
 	if(psResFacilty->psSubject != NULL)		// not finished yet
 	{
-		result.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &result))
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			return FALSE;
 		}
@@ -10264,8 +10262,8 @@ BOOL scrPursueResearch(void)
 		}
 	}
 
-	result.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -10283,8 +10281,8 @@ BOOL scrGetStructureType(void)
 		return FALSE;
 	}
 
-	result.v.ival = psStruct->pStructureType->type;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = psStruct->pStructureType->type;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetStructureType(): failed to push result");
 		return FALSE;
@@ -10310,8 +10308,8 @@ BOOL scrGetPlayerName(void)
 		return FALSE;
 	}
 
-	result.v.sval = getPlayerName((UDWORD)player);
-	if (!stackPushResult(VAL_STRING, &result))
+	scrFunctionResult.v.sval = getPlayerName((UDWORD)player);
+	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerName(): failed to push result");
 		return FALSE;
@@ -10337,8 +10335,8 @@ BOOL scrSetPlayerName(void)
 		return FALSE;
 	}
 
-	result.v.bval = setPlayerName(player, strParam1);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = setPlayerName(player, strParam1);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrSetPlayerName(): failed to push result");
 		return FALSE;
@@ -10469,8 +10467,8 @@ BOOL scrGetTargetPlayers(void)
 
 	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
 
-	result.v.ival = players;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = players;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
 		return FALSE;
@@ -10586,8 +10584,8 @@ BOOL scrMatch(void)
 	FREE(wordFound);
 	FREE(wordNeed);
 
-	result.v.bval = ok;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = ok;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
 		return FALSE;
@@ -10629,8 +10627,8 @@ BOOL scrBitSet(void)
 
 	ASSERT(val2 < MAX_PLAYERS && val2 >= 0, "scrBitSet(): wrong player index (%d)", val2);
 
-	result.v.bval = ((val1 & playerFlag[val2]) != 0);
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = ((val1 & playerFlag[val2]) != 0);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -10646,8 +10644,8 @@ BOOL scrAlliancesLocked(void)
 	if(bMultiPlayer && (game.alliance == ALLIANCES))
 		bResult = FALSE;
 
-	result.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval = bResult;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrAlliancesLocked(): failed to push result");
 		return FALSE;
@@ -10713,8 +10711,8 @@ BOOL scrToPow(void)
 		return FALSE;
 	}
 
-	result.v.fval = (float)pow(x,y);
-	if (!stackPushResult(VAL_FLOAT, &result))
+	scrFunctionResult.v.fval = (float)pow(x,y);
+	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrToPow(): failed to push result");
 		return FALSE;

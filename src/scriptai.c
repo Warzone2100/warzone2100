@@ -28,7 +28,7 @@
 #include "power.h"
 #include "geometry.h"
 
-INTERP_VAL	result;
+static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // Add a droid to a group
 BOOL scrGroupAddDroid(void)
@@ -202,8 +202,8 @@ BOOL scrGroupMember(void)
 		retval = FALSE;
 	}
 
-	result.v.bval=retval;
-	if (!stackPushResult(VAL_BOOL, &result))
+	scrFunctionResult.v.bval=retval;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -236,8 +236,8 @@ BOOL scrIdleGroup(void)
 		}
 	}
 
-	result.v.ival = (SDWORD)count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = (SDWORD)count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -296,8 +296,8 @@ BOOL scrIterateGroup(void)
 		psDroid = NULL;
 	}
 
-	result.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -329,8 +329,8 @@ BOOL scrIterateCluster(void)
 
 	psObj = clustIterate();
 
-	result.v.oval = psObj;
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))
+	scrFunctionResult.v.oval = psObj;
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1219,9 +1219,9 @@ BOOL scrStructTargetInArea(void)
 		return FALSE;
 	}
 
-	result.v.oval = (STRUCTURE *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_STRUCT, 0, x1,y1, x2,y2);
+	scrFunctionResult.v.oval = (STRUCTURE *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_STRUCT, 0, x1,y1, x2,y2);
 
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1244,8 +1244,8 @@ BOOL scrStructTargetOnMap(void)
 									scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 									scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	result.v.oval = psTarget;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &result))
+	scrFunctionResult.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1268,8 +1268,8 @@ BOOL scrDroidTargetInArea(void)
 
 	psTarget = (DROID *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_DROID, 0, x1,y1, x2,y2);
 
-	result.v.oval = psTarget;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1292,8 +1292,8 @@ BOOL scrDroidTargetOnMap(void)
 							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	result.v.oval = psTarget;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1326,8 +1326,8 @@ BOOL scrTargetInCluster(void)
 							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
 							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
 
-	result.v.oval = psTarget;
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))
+	scrFunctionResult.v.oval = psTarget;
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1426,16 +1426,16 @@ BOOL scrSkCanBuildTemplate(void)
 		break;
 	}
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))		// yes
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// yes
 	{
 		return FALSE;
 	}
 	return TRUE;
 
 failTempl:
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))		// no
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// no
 	{
 		return FALSE;
 	}
@@ -1469,16 +1469,16 @@ BOOL scrSkLocateEnemy(void)
 	// set the x and y accordingly..
 	if(psStruct)
 	{
-		result.v.oval = psStruct;
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))		// success!
+		scrFunctionResult.v.oval = psStruct;
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))		// success!
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		result.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &result))		// part success
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))		// part success
 		{
 			return FALSE;
 		}
@@ -1641,8 +1641,8 @@ BOOL scrSkDoResearch(void)
 
 	timeToResearch = (asResearch+i)->researchPoints / ((RESEARCH_FACILITY*)psResearch->pFunctionality)->researchPoints;;
 
-	result.v.ival = timeToResearch;
-	if (!stackPushResult(VAL_INT, &result))		// return time to do it..
+	scrFunctionResult.v.ival = timeToResearch;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))		// return time to do it..
 	{
 		return FALSE;
 	}
@@ -1673,8 +1673,8 @@ BOOL scrSkVtolEnableCheck(void)
 			if((asPropulsionStats[i].propulsionType == LIFT)
 			 && apCompLists[player][COMP_PROPULSION][i] == AVAILABLE)
 			{
-				result.v.bval = TRUE;
-				if (!stackPushResult(VAL_BOOL, &result))		// success!
+				scrFunctionResult.v.bval = TRUE;
+				if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 				{
 					return FALSE;
 				}
@@ -1683,8 +1683,8 @@ BOOL scrSkVtolEnableCheck(void)
 		}
 	}
 
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))		// success!
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 	{
 		return FALSE;
 	}
@@ -1708,8 +1708,8 @@ BOOL scrSkGetFactoryCapacity(void)
 		count = ((FACTORY *)psStructure->pFunctionality)->capacity;
 	}
 
-	result.v.ival = count;
-	if (!stackPushResult(VAL_INT, &result))
+	scrFunctionResult.v.ival = count;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}
@@ -1910,8 +1910,8 @@ BOOL scrSkDefenseLocation(void)
 	*pX = (x << TILE_SHIFT) + (TILE_UNITS/2);		// return centre of tile.
 	*pY = (y << TILE_SHIFT) + (TILE_UNITS/2);
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL,&result))		// success
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// success
 	{
 		return FALSE;
 	}
@@ -1968,8 +1968,8 @@ BOOL scrSkDefenseLocation(void)
 	return TRUE;
 
 failed:
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL,&result))		// failed!
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// failed!
 	{
 		return FALSE;
 	}
@@ -2128,8 +2128,8 @@ BOOL scrSkDefenseLocationB(void)
 	*pX = (x << TILE_SHIFT) + (TILE_UNITS/2);		// return centre of tile.
 	*pY = (y << TILE_SHIFT) + (TILE_UNITS/2);
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL,&result))		// success
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// success
 	{
 		return FALSE;
 	}
@@ -2212,8 +2212,8 @@ BOOL scrSkDefenseLocationB(void)
 	return TRUE;
 
 failed:
-	result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL,&result))		// failed!
+	scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// failed!
 	{
 		return FALSE;
 	}
@@ -2337,8 +2337,8 @@ BOOL scrIterateGroupB(void)
 		psDroid = NULL;
 	}
 
-	result.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &result))
+	scrFunctionResult.v.oval = psDroid;
+	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrIterateGroupB: stackPushResult failed");
 		return FALSE;
@@ -2414,8 +2414,8 @@ BOOL skInitSkirmishTemplates(void)
 	{
 		skirmishStore[i] = NULL;
 	}
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))		// success!
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 	{
 		return FALSE;
 	}
@@ -2446,15 +2446,15 @@ BOOL skAddTemplate(void)
 	psT->psNext			= skirmishStore[pile];
 	skirmishStore[pile] = psT;
 
-	result.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &result))		// yes
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// yes
 	{
 		return FALSE;
 	}
 	return TRUE;
 fail:
-result.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &result))		// no
+scrFunctionResult.v.bval = FALSE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// no
 	{
 		return FALSE;
 	}

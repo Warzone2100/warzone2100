@@ -57,84 +57,84 @@ void scrExternReset(void)
 BOOL scrGenExternGet(UDWORD index)
 {
 	INTERP_TYPE		type;
-	INTERP_VAL	result;
+	INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 	switch (index)
 	{
 
 	case EXTID_TRACKTRANSPORTER:
 		type = VAL_BOOL;
-		result.v.bval = bTrackTransporter;
+		scrFunctionResult.v.bval = bTrackTransporter;
 		break;
 	case EXTID_ISPSX:
 		type = VAL_BOOL;
-		result.v.bval = bIsPSX;
+		scrFunctionResult.v.bval = bIsPSX;
 		break;
 	case EXTID_MAPWIDTH:
 		type = VAL_INT;
-		result.v.ival = mapWidth;
+		scrFunctionResult.v.ival = mapWidth;
 		break;
 	case EXTID_MAPHEIGHT:
 		type = VAL_INT;
-		result.v.ival = mapHeight;
+		scrFunctionResult.v.ival = mapHeight;
 		break;
 	case EXTID_GAMEINIT:
 		type = VAL_BOOL;
-		result.v.bval = gameInitialised;
+		scrFunctionResult.v.bval = gameInitialised;
 		break;
 	case EXTID_SELECTEDPLAYER:
 		type = VAL_INT;
-		result.v.ival = selectedPlayer;
+		scrFunctionResult.v.ival = selectedPlayer;
 		break;
 	case EXTID_GAMELEVEL:
 		type = VAL_INT;
-		result.v.ival = scrGameLevel;
+		scrFunctionResult.v.ival = scrGameLevel;
 		break;
 	case EXTID_GAMETIME:
 		type = VAL_INT;
-		result.v.ival = (SDWORD)(gameTime/SCR_TICKRATE);
+		scrFunctionResult.v.ival = (SDWORD)(gameTime/SCR_TICKRATE);
 		break;
 	case EXTID_TUTORIAL:
 		type = VAL_BOOL;
-		result.v.bval = bInTutorial;
+		scrFunctionResult.v.bval = bInTutorial;
 		break;
 	case EXTID_CURSOR:
 		type = VAL_INT;
-		result.v.ival = iV_GetMouseFrame();	// from  rendfunc.c
+		scrFunctionResult.v.ival = iV_GetMouseFrame();	// from  rendfunc.c
 //		DBPRINTF(("CURSOR = %d val\n",val));
 		break;
 	case EXTID_INTMODE:
 		type=VAL_INT;
-		result.v.ival=intMode;
+		scrFunctionResult.v.ival=intMode;
 		break;
 
 	case EXTID_TARGETTYPE:
 		type=VAL_INT;
-		result.v.ival=getTargetType();
+		scrFunctionResult.v.ival=getTargetType();
 		break;
 	case EXTID_EXTRAVICTORYFLAG:
 		type=VAL_BOOL;
-		result.v.bval=bExtraVictoryFlag;
+		scrFunctionResult.v.bval=bExtraVictoryFlag;
 		break;
 	case EXTID_EXTRAFAILFLAG:
 		type=VAL_BOOL;
-		result.v.bval=bExtraFailFlag;
+		scrFunctionResult.v.bval=bExtraFailFlag;
 		break;
 	case EXTID_MULTIGAMETYPE:		// multiplayer variable..
 		type = VAL_INT;
-		result.v.ival = game.type;
+		scrFunctionResult.v.ival = game.type;
 		break;
 	case EXTID_MULTIGAMEHUMANMAX:		// multiplayer variable..
 		type = VAL_INT;
-		result.v.ival = game.maxPlayers;
+		scrFunctionResult.v.ival = game.maxPlayers;
 		break;
 	case EXTID_MULTIGAMEBASETYPE:
 		type = VAL_INT;
-		result.v.ival	= game.base;
+		scrFunctionResult.v.ival	= game.base;
 		break;
 	case EXTID_MULTIGAMEALLIANCESTYPE:
 		type = VAL_INT;
-		result.v.ival	= game.alliance;
+		scrFunctionResult.v.ival	= game.alliance;
 		break;
 
 		default:
@@ -143,7 +143,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 	}
 
-	if (!stackPushResult(type, &result))
+	if (!stackPushResult(type, &scrFunctionResult))
 	{
 		return FALSE;
 	}
