@@ -1197,7 +1197,7 @@ init_ObjectDead( void * psObj )
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
 
-BOOL frontendInitialise(char *ResourceFile)
+BOOL frontendInitialise(const char *ResourceFile)
 {
 	debug(LOG_MAIN, "Initialising frontend : %s", ResourceFile);
 

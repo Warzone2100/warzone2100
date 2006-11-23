@@ -55,7 +55,7 @@ static int _tex_get_top_bit(uint32 n)
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddBMPtoTexPages(iSprite* s, char* filename, int type, iBool bColourKeyed,
+int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bColourKeyed,
                          iBool bResource) {
 	int	i = 0;
 

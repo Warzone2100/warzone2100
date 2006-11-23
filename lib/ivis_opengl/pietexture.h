@@ -37,7 +37,7 @@
 /***************************************************************************/
 extern UDWORD pie_GetLastPageDownloaded(void);
 
-extern int pie_AddBMPtoTexPages( 	iSprite* s, char* filename, int type,
+extern int pie_AddBMPtoTexPages( 	iSprite* s, const char* filename, int type,
 					iBool bColourKeyed, iBool bResource);
 
 #endif // _pieTexture_h

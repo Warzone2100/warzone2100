@@ -205,7 +205,7 @@ BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 
 /* Add a file name load function for a file type */
-BOOL resAddFileLoad(char *pType, RES_FILELOAD fileLoad,
+BOOL resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 					RES_FREE release)
 {
 	RES_TYPE	*psT;

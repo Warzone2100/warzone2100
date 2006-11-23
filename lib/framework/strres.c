@@ -375,7 +375,7 @@ BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size)
 
 
 /* Return the the length of a char */
-UDWORD stringLen(char *pStr)
+UDWORD stringLen(const char *pStr)
 {
 	UDWORD	count=0;
 
@@ -388,7 +388,7 @@ UDWORD stringLen(char *pStr)
 }
 
 /* Copy a char */
-void stringCpy(char *pDest, char *pSrc)
+void stringCpy(char *pDest, const char *pSrc)
 {
 	do
 	{

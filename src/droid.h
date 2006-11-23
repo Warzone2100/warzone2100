@@ -234,7 +234,7 @@ char	*getDroidLevelName(DROID *psDroid);
 extern char *droidGetName(DROID *psDroid);
 
 // Set a droid's name.
-extern void droidSetName(DROID *psDroid,char *pName);
+extern void droidSetName(DROID *psDroid, const char *pName);
 
 // Delete the name from a droid structure.
 extern void droidDeleteName(DROID *psDroid);

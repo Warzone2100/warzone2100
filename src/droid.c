@@ -1287,7 +1287,7 @@ void droidGetNaybors(DROID *psDroid)
 static void displayNaybors(void)
 {
 	UDWORD	count, y;
-	char	*pType = NULL;
+	const char *pType = NULL;
 
 	y = 100;
 	for(count=0; count<numNaybors; count++)
@@ -5748,7 +5748,7 @@ char *droidGetName(DROID *psDroid)
 //
 // - only possible on the PC where you can adjust the names,
 //
-void droidSetName(DROID *psDroid,char *pName)
+void droidSetName(DROID *psDroid,const char *pName)
 {
 #ifndef HASH_NAMES
 	strncpy(psDroid->aName,pName, DROID_MAXNAME);

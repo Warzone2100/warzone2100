@@ -119,7 +119,7 @@ BOOL	DirectPlaySystemMessageHandler(void * msg);			// interpret DP messages
 BOOL	recvMessage			(void);							// process an incoming message
 BOOL	SendResearch		(UBYTE player,UDWORD index);	// send/recv Research issues
 BOOL	recvResearch		(NETMSG *pMsg);
-BOOL	sendTextMessage		(char *pStr,BOOL bcast);		// send/recv a text message
+BOOL	sendTextMessage		(const char *pStr,BOOL bcast);		// send/recv a text message
 
 BOOL	sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
 void	displayAIMessage	(char *pStr, SDWORD from, SDWORD to);
@@ -1126,7 +1126,7 @@ BOOL recvResearchStatus(NETMSG *pMsg)
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
 // eg "123 hi there" sends "hi there" to players 1,2 and 3.
-BOOL sendTextMessage(char *pStr,BOOL all)
+BOOL sendTextMessage(const char *pStr,BOOL all)
 {
 	NETMSG	m;
 	BOOL	normal = TRUE;

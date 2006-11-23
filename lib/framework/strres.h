@@ -64,10 +64,10 @@ extern char *strresGetString(STR_RES *psRes, UDWORD id);
 extern BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size);
 
 /* Return the the length of a char */
-extern UDWORD stringLen(char *pStr);
+extern UDWORD stringLen(const char *pStr);
 
 /* Copy a char */
-extern void stringCpy(char *pDest, char *pSrc);
+extern void stringCpy(char *pDest, const char *pSrc);
 
 /* Get the ID number for a string*/
 extern UDWORD strresGetIDfromString(STR_RES *psRes, char *pString);

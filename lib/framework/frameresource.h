@@ -95,7 +95,7 @@ extern BOOL	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 							 RES_FREE release);
 
 /* Add a file name load and release function for a file type */
-extern BOOL	resAddFileLoad(char *pType, RES_FILELOAD fileLoad,
+extern BOOL	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 						   RES_FREE release);
 
 /* Call the load function for a file */
