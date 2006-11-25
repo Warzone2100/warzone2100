@@ -36,9 +36,8 @@ void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 	}
 }
 
-
-/* Default comparison function - assumes keys are ints */
-static SDWORD defaultCmp(UDWORD key1, UDWORD key2)
+/* nothing actually uses the default comparison function.... */
+static SDWORD defaultCmp(void *key1, void *key2)
 {
 	if (key1 < key2)
 	{
@@ -52,8 +51,8 @@ static SDWORD defaultCmp(UDWORD key1, UDWORD key2)
 	return 0;
 }
 
-/* A useful comparison function - keys are string pointers */
-SDWORD treapStringCmp(UDWORD key1, UDWORD key2)
+/* A useful comparison function - keys are char pointers */
+SDWORD treapStringCmp(void *key1, void *key2)
 {
 	SDWORD result;
 	const char *pStr1 = (const char *)key1;
@@ -168,7 +167,7 @@ void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
 
 /* Add an object to a treap
  */
-BOOL treapAdd(TREAP *psTreap, UDWORD key, void *pObj)
+BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 {
 	TREAP_NODE	*psNew;
 
@@ -194,7 +193,7 @@ BOOL treapAdd(TREAP *psTreap, UDWORD key, void *pObj)
 
 
 /* Recursively find and remove a node from the tree */
-TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, UDWORD key,
+TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key,
 							   TREAP_CMP cmp)
 {
 	TREAP_NODE	*psFound;
@@ -264,7 +263,7 @@ TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, UDWORD key,
 
 
 /* Remove an object from the treap */
-BOOL treapDel(TREAP *psTreap, UDWORD key)
+BOOL treapDel(TREAP *psTreap, void *key)
 {
 	TREAP_NODE	*psDel;
 
@@ -286,7 +285,7 @@ BOOL treapDel(TREAP *psTreap, UDWORD key)
 
 
 /* Recurisvely find an object in a treap */
-void *treapFindRec(TREAP_NODE *psRoot, UDWORD key, TREAP_CMP cmp)
+void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
 {
 	if (psRoot == NULL)
 	{
@@ -314,7 +313,7 @@ void *treapFindRec(TREAP_NODE *psRoot, UDWORD key, TREAP_CMP cmp)
 
 
 /* Find an object in a treap */
-void *treapFind(TREAP *psTreap, UDWORD key)
+void *treapFind(TREAP *psTreap, void *key)
 {
 	return treapFindRec(psTreap->psRoot, key, psTreap->cmp);
 }

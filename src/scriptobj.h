@@ -61,10 +61,10 @@ extern BOOL scrObjToFeature(void);
 extern BOOL scrGroupObjGet(UDWORD index);
 
 // default value save routine
-extern BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize);
+extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 
 // default value load routine
-extern BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size, UDWORD *pData);
+extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
 
 #endif

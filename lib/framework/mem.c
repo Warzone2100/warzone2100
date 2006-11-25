@@ -110,15 +110,13 @@ BLOCK_HEAP *memGetBlockHeap(void)
  * NOTE: key1 is always the block passed into the treap code
  *       and therefore not necessarily to be trusted
  */
-SDWORD	memBlockCmp(UDWORD	key1, UDWORD key2)
+SDWORD	memBlockCmp(void *key1, void *key2)
 {
-	UDWORD	start1,start2, end1,end2;
+	UBYTE *start1, *start2, *end1, *end2;
 
 	// Calculate the edges of the memory blocks
-	start1 = (UDWORD)((UBYTE *)((MEM_NODE *)key1)->pObj + sizeof(MEM_NODE)
-						+ SAFETY_ZONE_SIZE);
-	start2 = (UDWORD)((UBYTE *)((MEM_NODE *)key2)->pObj + sizeof(MEM_NODE)
-						+ SAFETY_ZONE_SIZE);
+	start1 = (UBYTE *)(((MEM_NODE *)key1)->pObj + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE);
+	start2 = (UBYTE *)(((MEM_NODE *)key2)->pObj + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE);
 	end1 = start1 + ((MEM_NODE *)key1)->size;
 	end2 = start2 + ((MEM_NODE *)key2)->size;
 
@@ -185,7 +183,7 @@ void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size)
 
 	/* Store the new entry in the memory treap */
 	psNode->priority = (UDWORD)rand();
-	psNode->key = (UDWORD)psNode;
+	psNode->key = (void*)psNode;
 	psNode->pObj = psNode;
 	psNode->psLeft = NULL;
 	psNode->psRight = NULL;
@@ -265,7 +263,7 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 
 	/* Get the node for the memory block */
 	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psMemRoot,
-										(UDWORD)&sNode, memBlockCmp);
+										(void*)&sNode, memBlockCmp);
 
 
 	ASSERT( psDeleted != NULL,
@@ -354,7 +352,7 @@ BOOL memPointerValid(void *pPtr, size_t size)
 	sNode.size = size;
 
 	// See if the block is in the treap
-	if (treapFindRec((TREAP_NODE *)psMemRoot, (UDWORD)&sNode, memBlockCmp))
+	if (treapFindRec((TREAP_NODE *)psMemRoot, (void*)&sNode, memBlockCmp))
 	{
 		return TRUE;
 	}

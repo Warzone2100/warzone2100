@@ -6665,17 +6665,14 @@ BOOL scrEnumDroid(void)
 //Return the template factory is currently building
 BOOL scrFactoryGetTemplate(void)
 {
-	SDWORD			structure;
 	STRUCTURE		*psStructure = NULL;
 	DROID_TEMPLATE	*psTemplate = NULL;
 
-	if (!stackPopParams(1, ST_STRUCTURE, &structure))
+	if (!stackPopParams(1, ST_STRUCTURE, &psStructure))
 	{
 		debug(LOG_ERROR, "scrFactoryGetTemplate() - stackPopParams failed");
 		return FALSE;
 	}
-
-	psStructure = (STRUCTURE *)structure;
 
 	if (psStructure == NULL)
 	{
@@ -10079,7 +10076,7 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 BOOL scrPursueResearch(void)
 {
 	RESEARCH			*psResearch;
-	SDWORD				structure, player;
+	SDWORD				player;
 	UWORD				cur,index,tempIndex,foundIndex;
 	SWORD				top;
 
@@ -10094,7 +10091,7 @@ BOOL scrPursueResearch(void)
 
 	RESEARCH			*pResearch;
 
-	if (!stackPopParams(3,ST_STRUCTURE, &structure, VAL_INT, &player, ST_RESEARCH, &psResearch ))
+	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, ST_RESEARCH, &psResearch ))
 	{
 		debug(LOG_ERROR, "scrPursueResearch(): stack failed");
 		return FALSE;
@@ -10106,8 +10103,6 @@ BOOL scrPursueResearch(void)
 		return FALSE;
 	}
 
-
-	psBuilding	=	(STRUCTURE *) structure;
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
 
 	if(psResFacilty->psSubject != NULL)		// not finished yet

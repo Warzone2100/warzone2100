@@ -33,8 +33,8 @@ BOOL	NETsetKey			(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
 NETMSG*	NETmanglePacket		(NETMSG *msg);
 void	NETunmanglePacket	(NETMSG *msg);
 
-BOOL	NETmangleData		( long *input, long *result, UDWORD dataSize);
-BOOL	NETunmangleData		( long *input, long *result, UDWORD dataSize);
+BOOL	NETmangleData		( UDWORD *input, UDWORD *result, UDWORD dataSize);
+BOOL	NETunmangleData		( UDWORD *input, UDWORD *result, UDWORD dataSize);
 
 // ////////////////////////////////////////////////////////////////////////
 // make a hash value from an exe name.
@@ -141,9 +141,9 @@ BOOL NETsetKey(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4)
 
 // ////////////////////////////////////////////////////////////////////////
 // encrypt a byte sequence of nibblelength
-static BOOL mangle	( long *v,  long *w)
+static BOOL mangle	( UDWORD *v,  UDWORD *w)
 {
-	unsigned long	y=v[0],
+	UDWORD	y=v[0],
 					z=v[1],
 					sum=0,
 					delta=0x9E3779B9,
@@ -161,9 +161,9 @@ static BOOL mangle	( long *v,  long *w)
 
 // ////////////////////////////////////////////////////////////////////////
 // decrypt a byte sequence of nibblelength
-static BOOL unmangle(long * v, long *w)
+static BOOL unmangle(UDWORD *v, UDWORD *w)
 {
-	unsigned long	y=v[0],
+	UDWORD	y=v[0],
 					z=v[1],
 					sum,
 					delta=0x9E3779B9,
@@ -216,7 +216,7 @@ NETMSG *NETmanglePacket(NETMSG *msg)
 
 	while(msg->size)
 	{
-		mangle((long*)&msg->body[pos],(long*)&result.body[pos]);
+		mangle((UDWORD*)&msg->body[pos],(UDWORD*)&result.body[pos]);
 		pos			+=NIBBLELENGTH;
 		msg->size	-=NIBBLELENGTH;
 	}
@@ -248,7 +248,7 @@ void NETunmanglePacket(NETMSG *msg)
 
 	while(msg->size)
 	{
-		unmangle((UDWORD*)&msg->body[pos],(long*)&result.body[pos]);
+		unmangle((UDWORD*)&msg->body[pos],(UDWORD*)&result.body[pos]);
 		pos			+=NIBBLELENGTH;
 		msg->size	-=NIBBLELENGTH;
 		result.size	+=NIBBLELENGTH;
@@ -261,9 +261,9 @@ void NETunmanglePacket(NETMSG *msg)
 
 // ////////////////////////////////////////////////////////////////////////
 // encrypt any datastream.
-BOOL NETmangleData(long *input,long *result, UDWORD dataSize)
+BOOL NETmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize)
 {
-	long	offset;
+	UDWORD	offset;
 
 	offset = 0;
 
@@ -274,8 +274,8 @@ BOOL NETmangleData(long *input,long *result, UDWORD dataSize)
 		return FALSE;
 	}
 
-	//  /4's are long form. since nibblelength is in char form
-	while(offset!=(long)(dataSize/4) )
+	//  /4's are UDWORD form. since nibblelength is in char form
+	while(offset!=(UDWORD)(dataSize/4) )
 	{
 		mangle( (input+offset),(result+offset) );
 		offset		+= NIBBLELENGTH/4 ;
@@ -285,9 +285,9 @@ BOOL NETmangleData(long *input,long *result, UDWORD dataSize)
 
 // ////////////////////////////////////////////////////////////////////////
 // decrypt any datastream.
-BOOL NETunmangleData(long *input, long *result, UDWORD dataSize)
+BOOL NETunmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize)
 {
-	long	offset;
+	UDWORD	offset;
 
 	memset(result,0,dataSize);
 	offset = 0;
@@ -299,8 +299,8 @@ BOOL NETunmangleData(long *input, long *result, UDWORD dataSize)
 		return FALSE;
 	}
 
-	//  /4's are long form. since nibblelength is in char form
-	while(offset!= (long)(dataSize/4))
+	//  /4's are UDWORD form. since nibblelength is in char form
+	while(offset!= (UDWORD)(dataSize/4))
 	{
 		unmangle( (input+offset) ,(result+offset));
 		offset	+= NIBBLELENGTH/4;

@@ -123,7 +123,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 					}
 					size += sizeof(UWORD);
 
-					if (!saveFunc(psVal->type, (UDWORD)psVal->v.ival, pPos, &valSize))
+					if (!saveFunc(psVal, pPos, &valSize))
 					{
 						debug( LOG_ERROR, "eventSaveContext: couldn't get variable value size" );
 						abort();
@@ -165,7 +165,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 // load the context information for the script system
 static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 {
-	UDWORD				size, valSize, data;
+	UDWORD				size, valSize;
 	SDWORD				numVars, i, numContext, context;
 	SCRIPT_CONTEXT		*psCCont;
 	INTERP_TYPE			type;
@@ -174,7 +174,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 	char				*pScriptID;
 	SCRIPT_CODE			*psCode;
 	CONTEXT_RELEASE			release;
-	INTERP_VAL			*psVal;
+	INTERP_VAL			*psVal, data;
 
 	size = 0;
 	pPos = pBuffer;
@@ -227,13 +227,50 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 			// get the variable value
 			if (type < VAL_USERTYPESTART)
 			{
-				// internal type - just get the DWORD value
-				data = *((UDWORD *)pPos);
-				pPos += sizeof(UDWORD);
-				size += sizeof(UDWORD);
+				data.type = type;
+
+				switch (type) {
+					case VAL_BOOL:
+						data.v.bval = *((BOOL*)pPos);
+						pPos += sizeof(BOOL);
+						size += sizeof(BOOL);
+						break;
+					case VAL_FLOAT:
+						data.v.fval = *((float*)pPos);
+						pPos += sizeof(float);
+						size += sizeof(float);
+						break;
+					case VAL_INT:
+					case VAL_TRIGGER:
+					case VAL_EVENT:
+					case VAL_VOID:
+					case VAL_OPCODE:
+					case VAL_PKOPCODE:
+						data.v.ival = *((UDWORD *)pPos);
+						pPos += sizeof(UDWORD);
+						size += sizeof(UDWORD);
+						break;
+					case VAL_STRING:
+						data.v.sval = pPos;
+						pPos += sizeof(char*);
+						size += sizeof(char*);
+						break;
+					case VAL_OBJ_GETSET:
+						data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
+						pPos += sizeof(SCRIPT_VARFUNC);
+						size += sizeof(SCRIPT_VARFUNC);
+						break;
+					case VAL_FUNC_EXTERN:
+						data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
+						pPos += sizeof(SCRIPT_FUNC);
+						size += sizeof(SCRIPT_FUNC);
+						break;
+					default:
+						ASSERT( FALSE, "eventLoadContext: invalid internal type" );
+				}
 
 				// set the value in the context
-				if (!eventSetContextVar(psCCont, (UDWORD)i, type, data))
+				if (!eventSetContextVar(psCCont, (UDWORD)i, &data))
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't set variable value" );
 					abort();
@@ -261,7 +298,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 					return FALSE;
 				}
 
-				if (!loadFunc(version, type, pPos, valSize, (UDWORD *)&(psVal->v.ival)))
+				if (!loadFunc(version, psVal, pPos, valSize))
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't get variable value" );
 					abort();
@@ -282,7 +319,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 // load the context information for the script system
 static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 {
-	UDWORD				size, valSize, data;
+	UDWORD				size, valSize;
 	SDWORD				numVars, i, numContext, context;
 	SCRIPT_CONTEXT		*psCCont;
 	INTERP_TYPE			type;
@@ -292,7 +329,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 	UDWORD				hashedName;
 	SCRIPT_CODE			*psCode;
 	CONTEXT_RELEASE			release;
-	INTERP_VAL			*psVal;
+	INTERP_VAL			*psVal, data;
 
 	size = 0;
 	pPos = pBuffer;
@@ -349,13 +386,50 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 			// get the variable value
 			if (type < VAL_USERTYPESTART)
 			{
-				// internal type - just get the DWORD value
-				data = *((UDWORD *)pPos);
-				pPos += sizeof(UDWORD);
-				size += sizeof(UDWORD);
+        data.type = type;
+
+        switch (type) {
+          case VAL_BOOL:
+            data.v.bval = *((BOOL*)pPos);
+            pPos += sizeof(BOOL);
+            size += sizeof(BOOL);
+            break;
+          case VAL_FLOAT:
+            data.v.fval = *((float*)pPos);
+            pPos += sizeof(float);
+            size += sizeof(float);
+            break;
+          case VAL_INT:
+          case VAL_TRIGGER:
+          case VAL_EVENT:
+          case VAL_VOID:
+          case VAL_OPCODE:
+          case VAL_PKOPCODE:
+            data.v.ival = *((UDWORD *)pPos);
+            pPos += sizeof(UDWORD);
+            size += sizeof(UDWORD);
+            break;
+          case VAL_STRING:
+            data.v.sval = pPos;
+            pPos += sizeof(char*);
+            size += sizeof(char*);
+            break;
+          case VAL_OBJ_GETSET:
+            data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
+            pPos += sizeof(SCRIPT_VARFUNC);
+            size += sizeof(SCRIPT_VARFUNC);
+            break;
+          case VAL_FUNC_EXTERN:
+            data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
+            pPos += sizeof(SCRIPT_FUNC);
+            size += sizeof(SCRIPT_FUNC);
+            break;
+          default:
+            ASSERT( FALSE, "eventLoadContext: invalid internal type" );
+        }
 
 				// set the value in the context
-				if (!eventSetContextVar(psCCont, (UDWORD)i, type, data))
+				if (!eventSetContextVar(psCCont, (UDWORD)i, &data))
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't set variable value" );
 					abort();
@@ -383,7 +457,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 					return FALSE;
 				}
 
-				if (!loadFunc(version, type, pPos, valSize, (UDWORD *)&(psVal->v.ival)))
+				if (!loadFunc(version, psVal, pPos, valSize))
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't get variable value" );
 					abort();

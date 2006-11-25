@@ -204,18 +204,23 @@ var_init_list:	/* NULL token */
 
 var_init:		var_entry TYPE var_value
 				{
-					BASE_OBJECT		*psObj;
-					SDWORD			compIndex;
+					INTERP_VAL		data;	/* structure to to hold all types */
 					DROID_TEMPLATE	*psTemplate;
+					BASE_OBJECT *psObj;
 					VIEWDATA		*psViewData;
 					char			*pString;
 					RESEARCH		*psResearch;
+					SDWORD   compIndex;
+
+					/* set type */
+					data.type = $2;
 
 					switch ($2)
 					{
 					case VAL_INT:
+						data.v.ival = $3.index;	//index = integer value of the variable, not var index
 						if ($3.type != IT_INDEX ||
-							!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)$3.index))
+							!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
@@ -232,6 +237,9 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Droid id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
+
+						data.v.oval = psObj;	/* store as pointer */
+
 						if (psObj->type != OBJ_DROID)
 						{
 							scrv_error("Object id %d is not a droid", (UDWORD)$3.index);
@@ -239,7 +247,7 @@ var_init:		var_entry TYPE var_value
 						}
 						else
 						{
-							if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psObj))
+							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
 								scrv_error("Set Value Failed for %s", $1);
 								YYABORT;
@@ -258,6 +266,9 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Structure id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
+
+						data.v.oval = psObj;
+
 						if (psObj->type != OBJ_STRUCTURE)
 						{
 							scrv_error("Object id %d is not a structure", (UDWORD)$3.index);
@@ -265,7 +276,7 @@ var_init:		var_entry TYPE var_value
 						}
 						else
 						{
-							if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psObj))
+							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
 								scrv_error("Set Value Failed for %s", $1);
 								YYABORT;
@@ -283,6 +294,9 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Feature id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
+
+						data.v.oval = psObj;
+
 						if (psObj->type != OBJ_FEATURE)
 						{
 							scrv_error("Object id %d is not a feature", (UDWORD)$3.index);
@@ -290,7 +304,7 @@ var_init:		var_entry TYPE var_value
 						}
 						else
 						{
-							if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psObj))
+							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
 								scrv_error("Set Value Failed for %s", $1);
 								YYABORT;
@@ -303,21 +317,24 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getFeatureStatFromName($3.pString);
-						if (compIndex == -1)
+
+						data.v.ival = getFeatureStatFromName($3.pString);
+
+						if (data.v.ival == -1)
 						{
 							scrv_error("Feature Stat %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
 						}
 						break;
 					case VAL_BOOL:
+						data.v.bval = $3.index;	//index = boolean value, not var index
 						if ($3.type != IT_BOOL ||
-							!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)$3.index))
+							!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
@@ -329,13 +346,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_BODY, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_BODY, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("body component %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -347,13 +364,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_PROPULSION, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_PROPULSION, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Propulsion component %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -365,13 +382,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_ECM, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_ECM, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("ECM component %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -383,13 +400,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_SENSOR, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_SENSOR, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Sensor component %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -401,13 +418,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_CONSTRUCT, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_CONSTRUCT, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Construct component %s not found",	$3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -419,13 +436,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_REPAIRUNIT, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_REPAIRUNIT, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Repair component %s not found",	$3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -437,13 +454,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_BRAIN, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_BRAIN, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Brain component %s not found",	$3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -455,13 +472,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getCompFromResName(COMP_WEAPON, $3.pString);
-						if (compIndex == -1)
+						data.v.ival = getCompFromResName(COMP_WEAPON, $3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Weapon component %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -473,13 +490,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						psTemplate = getTemplateFromName($3.pString);
-						if (psTemplate == NULL)
+						data.v.oval = getTemplateFromName($3.pString);	/* store pointer to the template */
+						if (data.v.oval == NULL)
 						{
 							scrv_error("Template %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psTemplate))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -491,13 +508,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						compIndex = getStructStatFromName($3.pString);
-						if (compIndex == -1)
+						data.v.ival = getStructStatFromName($3.pString);
+						if (data.v.ival == -1)
 						{
 							scrv_error("Structure Stat %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -514,6 +531,7 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Structure id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
+						data.v.ival = $3.index;	/* store structure id */
 						if (psObj->type != OBJ_STRUCTURE)
 						{
 							scrv_error("Object id %d is not a structure", (UDWORD)$3.index);
@@ -521,7 +539,7 @@ var_init:		var_entry TYPE var_value
 						}
 						else
 						{
-							if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)$3.index))
+							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
 								scrv_error("Set Value Failed for %s", $1);
 								YYABORT;
@@ -539,6 +557,7 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Droid id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
+						data.v.ival = $3.index;	/* store id*/
 						if (psObj->type != OBJ_DROID)
 						{
 							scrv_error("Object id %d is not a droid", (UDWORD)$3.index);
@@ -546,7 +565,7 @@ var_init:		var_entry TYPE var_value
 						}
 						else
 						{
-							if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)$3.index))
+							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
 								scrv_error("Set Value Failed for %s", $1);
 								YYABORT;
@@ -559,13 +578,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						psViewData = getViewData($3.pString);
-						if (psViewData == NULL)
+						data.v.oval = getViewData($3.pString);	/* store pointer to the intelligence message */
+						if (data.v.oval == NULL)
 						{
 							scrv_error("Message %s not found", $3.pString);
 							YYABORT;
 						}
-						if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psViewData))
+						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -582,7 +601,8 @@ var_init:		var_entry TYPE var_value
 							scrv_error("String %s not found", $3.pString);
 							YYABORT;
 						}
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)pString))
+						data.v.sval = pString;
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -603,7 +623,8 @@ var_init:		var_entry TYPE var_value
 								scrv_error("Level %s not found", $3.pString);
 								YYABORT;
 							}
-							if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psLevel->pName))
+							data.v.sval = psLevel->pName; /* store string pointer */
+							if (!eventSetContextVar(psCurrContext, $1, &data))
 							{
 								scrv_error("Set Value Failed for %s", $1);
 								YYABORT;
@@ -624,7 +645,8 @@ var_init:		var_entry TYPE var_value
 							audio_SetTrackVals( $3.pString, FALSE, &compIndex, 100, 1, 1800, 0 );
 						}
 						/* save track ID */
-						if (!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)compIndex))
+						data.v.ival = compIndex;
+						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;
@@ -636,13 +658,13 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						psResearch = getResearch($3.pString, TRUE);
-						if (psResearch == NULL)
+						data.v.oval = getResearch($3.pString, TRUE);	/* store pointer */
+						if (data.v.oval == NULL)
 						{
 							scrv_error("Research %s not found", $3.pString);
 							YYABORT;
 						}
-						if(!eventSetContextVar(psCurrContext, $1, $2, (UDWORD)psResearch))
+						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							scrv_error("Set Value Failed for %s", $1);
 							YYABORT;

@@ -417,27 +417,15 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			for(j=0; j < psCode->numLocalVars[i]; j++)
 			{
 				type = psCode->ppsLocalVars[i][j];
-				psCode->ppsLocalVarVal[i][j].type = type;	//store (copy) var type (data used during parsing -> data used during interpreting)
 
 				//debug(LOG_SCRIPT,"var %d's type: %d", i, type);
 
-
-				/* initialize Strings, integers, floats etc */
-				switch (type)
-				{
-				case VAL_STRING:
+				/* initialize Strings, integers, floats etc
+				   memset to 0, the only special case is strings */
+				memset (&(psCode->ppsLocalVarVal[i][j]), 0, sizeof(INTERP_VAL));
+				if (type == VAL_STRING) {
 					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(MAXSTRLEN);
 					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
-					break;
-
-				case VAL_FLOAT:
-					psCode->ppsLocalVarVal[i][j].v.fval  = 0.0f;
-					break;
-
-					/* mostly integers */
-				default:
-					psCode->ppsLocalVarVal[i][j].v.ival = 0;
-					break;
 				}
 
 				//Initialize objects
@@ -449,6 +437,8 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 						return FALSE;
 					}
 				}
+
+				psCode->ppsLocalVarVal[i][j].type = type; //store (copy) var type (data used during parsing -> data used during interpreting)
 
 				//debug(LOG_SCRIPT, "i=%d, j=%d, value=%d",i,j,psCode->ppsLocalVarVal[i][j].v.ival);
 			}
@@ -488,25 +478,17 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			{
 				type = psCode->pGlobals[val];
 			}
-			psNewChunk->asVals[storeIndex].type = type;
 
-
-			//initialize Strings, integers etc
-			switch (type)
-			{
-			case VAL_STRING:
+			// initialize Strings, integers etc
+			// memset to 0
+			memset(&(psNewChunk->asVals[storeIndex]), 0, sizeof(INTERP_VAL));
+			if (type == VAL_STRING) {
 				psNewChunk->asVals[storeIndex].v.sval = (char*)MALLOC(MAXSTRLEN);
 				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
-				break;
-
-			case VAL_FLOAT:
-				psNewChunk->asVals[storeIndex].v.fval = 0.0f;
-				break;
-
-			default:
-				psNewChunk->asVals[storeIndex].v.ival = 0;
-				break;
 			}
+
+			// set type
+			psNewChunk->asVals[storeIndex].type = type;
 
 			//initialize objects
 			if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])
@@ -763,24 +745,23 @@ BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **pp
 }
 
 // Set a global variable value for a context
-BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index,
-						INTERP_TYPE type, UDWORD data)
+BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *data)
 {
-	INTERP_VAL	*psVal;
+	INTERP_VAL *psVal;
 
 	if (!eventGetContextVal(psContext, index, &psVal))
 	{
 		return FALSE;
 	}
 
-	if (psVal->type != type)
+	if (psVal->type != data->type)
 	{
-		ASSERT( FALSE, "eventSetContextVar: Variable type mismatch" );
+		ASSERT( FALSE, "eventSetContextVar: Variable type mismatch (%d/%d)", psVal->type, data->type);
 		return FALSE;
 	}
 
 	// Store the data
-	psVal->v.ival = (SDWORD)data;
+	memcpy(psVal, data, sizeof(INTERP_VAL));
 
 	return TRUE;
 }
@@ -1423,6 +1404,7 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 {
 
 	SDWORD		i;
+	INTERP_TYPE type;
 
 	if(EventIndex >= psCode->numEvents)
 	{
@@ -1440,7 +1422,7 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 		switch (psCode->ppsLocalVarVal[EventIndex][i].type)
 		{
 		case VAL_STRING:
-			
+
 			if(psCode->ppsLocalVarVal[EventIndex][i].v.sval == NULL)
 			{
 				if(psCode->psDebug != NULL)
@@ -1457,7 +1439,7 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 
 			break;
 		case ST_GROUP:	/* only groups (!) must be re-created each time */
-		
+
 			/* Only destroy group if it isn't a passed variable, otherwise will destroy the passed group */
 			if(i >=  psCode->numParams[EventIndex])		//only release if group was declared inside of function
 			{
@@ -1474,17 +1456,11 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 				}
 			}
 			break;
-		case VAL_INT:	/* Integers and other vars */
-			psCode->ppsLocalVarVal[EventIndex][i].v.ival = 0;
-			break;
-		case VAL_BOOL:
-			psCode->ppsLocalVarVal[EventIndex][i].v.bval = FALSE;
-			break;
-		case VAL_FLOAT:
-			psCode->ppsLocalVarVal[EventIndex][i].v.fval = 0.0f;
-			break;
-		default:			/* reset object pointer */
-			psCode->ppsLocalVarVal[EventIndex][i].v.oval = NULL;
+		default:	/* Everything else */
+			// save the type, set to 0 (regardless of type size), put the type back
+			type = psCode->ppsLocalVarVal[EventIndex][i].type;
+			memset(&(psCode->ppsLocalVarVal[EventIndex][i]), 0, sizeof(INTERP_VAL));
+			psCode->ppsLocalVarVal[EventIndex][i].type = type;
 			break;
 		}
 	}

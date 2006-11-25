@@ -1592,9 +1592,6 @@ void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char
 }
 
 
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#endif
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
 

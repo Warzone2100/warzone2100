@@ -88,12 +88,14 @@ static BOOL stackNewChunk(UDWORD size)
 		psCurrChunk = psCurrChunk->psNext;
 		currEntry = 0;
 
-		/* initialize pointers */
-		for (i = 0; i<size; i++)
+		/* initialize pointers
+		   note: 0 means type == VAL_BOOL */
+		memset(psCurrChunk->psNext->aVals, 0, sizeof(INTERP_VAL) * size);
+		/*for (i = 0; i<size; i++)
 		{
 			psCurrChunk->psNext->aVals[i].v.ival = 0;
 			psCurrChunk->psNext->aVals[i].type = VAL_INT;		//default type, should be ok
-		}
+		}*/
 
 		memSetBlockHeap(psHeap);
 	}
@@ -329,7 +331,10 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				va_end(args);
 				return FALSE;
 			}
-			*((SDWORD*)pData) = psVal->v.ival;
+			if (scriptTypeIsPointer(psVal->type))
+				*((void**)pData) = psVal->v.oval;
+			else
+				*((SDWORD*)pData) = psVal->v.ival;
 		}
 		else	//TODO: allow only compatible types
 		{
@@ -762,7 +767,7 @@ BOOL castTop(INTERP_TYPE neededType)
 	//debug(LOG_WZ, "casting to %d", neededType);
 
 	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT, "stackCast: can't cast to %d", neededType);
-	
+
 	if (!stackPop(&top))
 	{
 		return FALSE;
@@ -783,7 +788,7 @@ BOOL castTop(INTERP_TYPE neededType)
 
 			break;
 		default:
-			debug(LOG_ERROR, "cast error"); 
+			debug(LOG_ERROR, "cast error");
 			break;
 		}
 
@@ -798,7 +803,7 @@ BOOL castTop(INTERP_TYPE neededType)
 
 			break;
 		default:
-			debug(LOG_ERROR, "cast error"); 
+			debug(LOG_ERROR, "cast error");
 			break;
 		}
 
@@ -813,12 +818,12 @@ BOOL castTop(INTERP_TYPE neededType)
 
 			break;
 		default:
-			debug(LOG_ERROR, "cast error"); 
+			debug(LOG_ERROR, "cast error");
 			break;
 		}
 
 	default:
-		debug(LOG_ERROR, "can't cast from %d", top.type); 
+		debug(LOG_ERROR, "can't cast from %d", top.type);
 		break;
 	}
 
@@ -853,12 +858,14 @@ BOOL stackInitialise(void)
 	psStackBase->psNext = NULL;
 	psCurrChunk = psStackBase;
 
-	/* initialize pointers */
-	for(i = 0; i<INIT_SIZE; i++)
+	/* initialize pointers
+	   note: this means type == VAL_BOOL */
+	memset(psStackBase->aVals, 0, sizeof(INTERP_VAL) * INIT_SIZE);
+/*	for(i = 0; i<INIT_SIZE; i++)
 	{
 		psStackBase->aVals[i].v.ival = 0;
 		psStackBase->aVals[i].type = VAL_INT;		//default type, should be ok
-	}
+	}*/
 
 	//string support
 	CURSTACKSTR = 0;		//initialize string 'stack'

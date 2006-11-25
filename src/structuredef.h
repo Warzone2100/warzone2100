@@ -186,11 +186,6 @@ typedef enum _struct_states
 	SS_BEING_DEMOLISHED,
 } STRUCT_STATES;
 
-//this is sizeof(FACTORY) the largest at present 11-2-99 - increased AB 22-04-99
-#define	MAX_FUNCTIONALITY_SIZE	40
-
-typedef UBYTE	FUNCTIONALITY[MAX_FUNCTIONALITY_SIZE];
-
 typedef struct _research_facility
 {
 	struct _base_stats	*psSubject;		/* the subject the structure is working on*/
@@ -236,6 +231,12 @@ typedef struct _factory
 	//struct _droid			*psGrpNext;
 
 } FACTORY;
+
+//this is sizeof(FACTORY) the largest at present 11-2-99 - increased AB 22-04-99
+//depends on pointer sizes - LB 22-11-06
+#define MAX_FUNCTIONALITY_SIZE sizeof(struct _factory)
+
+typedef UBYTE FUNCTIONALITY[MAX_FUNCTIONALITY_SIZE];
 
 typedef struct _res_extractor
 {

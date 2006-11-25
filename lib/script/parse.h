@@ -65,9 +65,9 @@ typedef enum _access_type
 // function pointer for script variable saving
 // if pBuffer is NULL the script system is just asking how much space the saved variable will require
 // otherwise pBuffer points to an array to store the value in
-typedef BOOL (*SCR_VAL_SAVE)(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize);
+typedef BOOL (*SCR_VAL_SAVE)(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 // function pointer for script variable loading
-typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size, UDWORD *pData);
+typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
 /* Type for a user type symbol */
 typedef struct _type_symbol

@@ -28,7 +28,7 @@
  *         1 for more
  *         0 for equal
  */
-typedef SDWORD (*TREAP_CMP)(UDWORD key1, UDWORD key2);
+typedef SDWORD (*TREAP_CMP)(void *key1, void *key2);
 
 
 /* The basic elements in the treap node.
@@ -36,7 +36,7 @@ typedef SDWORD (*TREAP_CMP)(UDWORD key1, UDWORD key2);
  * can use parts of the treap system.
  */
 #define TREAP_NODE_BASE \
-	UDWORD				key;				/* The key to sort the node on */ \
+	void				*key;				/* The key to sort the node on */ \
 	UDWORD				priority;			/* Treap priority */ \
 	void				*pObj;				/* The object stored in the treap */ \
 	struct _treap_node	*psLeft, *psRight	/* The sub trees */
@@ -99,13 +99,13 @@ extern BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext
 
 /* Add an object to a treap
  */
-extern BOOL treapAdd(TREAP *psTreap, UDWORD key, void *pObj);
+extern BOOL treapAdd(TREAP *psTreap, void *key, void *pObj);
 
 /* Remove an object from the treap */
-extern BOOL treapDel(TREAP *psTreap, UDWORD key);
+extern BOOL treapDel(TREAP *psTreap, void *key);
 
 /* Find an object in a treap */
-extern void *treapFind(TREAP *psTreap, UDWORD key);
+extern void *treapFind(TREAP *psTreap, void *key);
 
 /* Release all the nodes in the treap */
 extern void treapReset(TREAP *psTreap);
@@ -125,8 +125,8 @@ extern void *treapGetSmallest(TREAP *psTreap);
 /****************************************************************************************/
 /*                            Comparison Functions                                      */
 
-/* A useful comparison function - keys are string pointers */
-extern SDWORD treapStringCmp(UDWORD key1, UDWORD key2);
+/* A useful comparison function - keys are char pointers */
+extern SDWORD treapStringCmp(void *key1, void *key2);
 
 /****************************************************************************************/
 /*                            Macro definitions                                         */

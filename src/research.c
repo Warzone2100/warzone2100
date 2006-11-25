@@ -2675,7 +2675,7 @@ SDWORD	mapIconToRID(UDWORD iconID)
 /* returns a pointer to a component based on the name - used to load in the research */
 COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 {
-	UDWORD				stat, size, quantity, address, inc;
+	UDWORD stat, size, quantity, inc;
 	COMP_BASE_STATS		*pArtefact;
 #ifdef HASH_NAMES
 	UDWORD				HashedName;
@@ -2756,7 +2756,6 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 			return FALSE;
 		}
 	}
-	address = (UDWORD)pArtefact;
 
 #ifdef HASH_NAMES
 	HashedName=HashString(pCompName);
@@ -2772,8 +2771,7 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 		{
 			return pArtefact;
 		}
-		address += size;
-		pArtefact = (COMP_BASE_STATS*)address;
+		pArtefact = (COMP_BASE_STATS*)((void*)pArtefact + size);
 	}
 
 	debug( LOG_ERROR, "Cannot find component %s", pCompName );

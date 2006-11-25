@@ -615,7 +615,7 @@ BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
 	//decode packet;
 	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
 	NETsetKey(11974,224351,2023901,21080);
-	NETunmangleData((long int*)codedst,(long int*)&st,sizeof(SAVEDPLAYERSTATS));
+	NETunmangleData((UDWORD*)codedst,(UDWORD*)&st,sizeof(SAVEDPLAYERSTATS));
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	//set stats.
@@ -660,7 +660,7 @@ BOOL saveMultiStats(char *sFileName, char *sPlayerName,PLAYERSTATS *playerStats)
 	//encode packet;
 	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
 	NETsetKey(11974,224351,2023901,21080);
-	NETmangleData((long int*)&st,(long int*)&codedst,sizeof(SAVEDPLAYERSTATS));
+	NETmangleData((UDWORD*)&st,(UDWORD*)&codedst,sizeof(SAVEDPLAYERSTATS));
 	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	strcpy(fileName,MultiPlayersPath);

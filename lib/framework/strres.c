@@ -109,7 +109,7 @@ void strresReleaseIDStrings(STR_RES *psRes)
 	for(psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap); psID;
 		psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap))
 	{
-		TREAP_DEL(psRes->psIDTreap, (UDWORD)psID->pIDStr);
+		TREAP_DEL(psRes->psIDTreap, (void*)psID->pIDStr);
 		if (psID->id & ID_ALLOC)
 		{
 			FREE(psID->pIDStr);
@@ -182,7 +182,7 @@ BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID)
 			"strresLoadFixedID: id out of sequence" );
 
 		// Store the ID string
-		if (!TREAP_ADD(psRes->psIDTreap, (UDWORD)psID->pIDStr, psID))
+		if (!TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID))
 		{
 			debug( LOG_ERROR, "strresLoadFixedID: Out of memory" );
 			abort();
@@ -205,7 +205,7 @@ BOOL strresGetIDNum(STR_RES *psRes, char *pIDStr, UDWORD *pIDNum)
 	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
 		"strresLoadFixedID: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (UDWORD)pIDStr);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
 	if (!psID)
 	{
 		*pIDNum = 0;
@@ -232,7 +232,7 @@ BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID)
 	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
 		"strresLoadFixedID: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (UDWORD)pIDStr);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
 	if (!psID)
 	{
 		*ppStoredID = NULL;
@@ -257,7 +257,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	// Find the id for the string
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (UDWORD)pID);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pID);
 	if (!psID)
 	{
 		// No ID yet so generate a new one
@@ -279,9 +279,16 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 		stringCpy(psID->pIDStr, pID);
 		psID->id = psRes->nextID | ID_ALLOC;
 		psRes->nextID += 1;
-		TREAP_ADD(psRes->psIDTreap, (UDWORD)psID->pIDStr, psID);
+		TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID);
 	}
-	id = psID->id & ~ID_ALLOC;
+  if (psID->id & ID_ALLOC)
+  {
+    id = psID->id & ~ID_ALLOC;
+  }
+  else
+  {
+    id = psID->id;
+  }
 
 	// Find the block to store the string in
 	for(psBlock = psRes->psStrings; psBlock->idEnd < id;
@@ -301,7 +308,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 	}
 
 	// Put the new string in the string block
-	if (psBlock->apStrings[psID->id - psBlock->idStart] != NULL)
+	if (psBlock->apStrings[id - psBlock->idStart] != NULL)
 	{
 		debug( LOG_ERROR, "strresStoreString: Duplicate string for id: %s", psID->pIDStr );
 		abort();
@@ -317,7 +324,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 		return FALSE;
 	}
 	stringCpy(pNew, pString);
-	psBlock->apStrings[psID->id - psBlock->idStart] = pNew;
+	psBlock->apStrings[id - psBlock->idStart] = pNew;
 
 	return TRUE;
 }

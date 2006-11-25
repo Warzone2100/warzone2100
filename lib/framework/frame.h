@@ -96,30 +96,34 @@ UDWORD HashStringIgnoreCase( const char *String );
 
 /* Endianness hacks */
 
-static inline void endian_uword(UWORD *uword) {
 #ifdef __BIG_ENDIAN__
+static inline void endian_uword(UWORD *uword) {
   UBYTE tmp, *ptr;
 
   ptr = (UBYTE *) uword;
   tmp = ptr[0];
   ptr[0] = ptr[1];
   ptr[1] = tmp;
-#endif
 }
+#else
+# define endian_uword(x)
+#endif
 
-static inline void endian_sword(SWORD *sword) {
 #ifdef __BIG_ENDIAN__
+static inline void endian_sword(SWORD *sword) {
   UBYTE tmp, *ptr;
 
   ptr = (UBYTE *) sword;
   tmp = ptr[0];
   ptr[0] = ptr[1];
   ptr[1] = tmp;
-#endif
 }
+#else
+# define endian_sword(x)
+#endif
 
-static inline void endian_udword(UDWORD *udword) {
 #ifdef __BIG_ENDIAN__
+static inline void endian_udword(UDWORD *udword) {
   UBYTE tmp, *ptr;
 
   ptr = (UBYTE *) udword;
@@ -129,11 +133,13 @@ static inline void endian_udword(UDWORD *udword) {
   tmp = ptr[1];
   ptr[1] = ptr[2];
   ptr[2] = tmp;
-#endif
 }
+#else
+# define endian_udword(x)
+#endif
 
-static inline void endian_sdword(SDWORD *sdword) {
 #ifdef __BIG_ENDIAN__
+static inline void endian_sdword(SDWORD *sdword) {
   UBYTE tmp, *ptr;
 
   ptr = (UBYTE *) sdword;
@@ -143,11 +149,13 @@ static inline void endian_sdword(SDWORD *sdword) {
   tmp = ptr[1];
   ptr[1] = ptr[2];
   ptr[2] = tmp;
-#endif
 }
+#else
+# define endian_sdword(x)
+#endif
 
-static inline void endian_fract(FRACT *fract) {
 #ifdef __BIG_ENDIAN__
+static inline void endian_fract(FRACT *fract) {
   UBYTE tmp, *ptr;
 
   ptr = (UBYTE *) fract;
@@ -157,8 +165,10 @@ static inline void endian_fract(FRACT *fract) {
   tmp = ptr[1];
   ptr[1] = ptr[2];
   ptr[2] = ptr[1];
-#endif
 }
+#else
+# define endian_fract(x)
+#endif
 
 
 #endif

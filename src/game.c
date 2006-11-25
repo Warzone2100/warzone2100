@@ -5331,12 +5331,13 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		if (version >= VERSION_24)
 		{
 			psDroid->turretRotation[i] = psSaveDroid->turretRotation[i];
+			psDroid->turretPitch[i] = psSaveDroid->turretPitch[i];
 		}
 		else
 		{
-			psDroid->turretRotation[i] = psSaveDroid->turretRotation;
+			psDroid->turretRotation[i] = psSaveDroid->turretRotation[0];
+			psDroid->turretPitch[i] = psSaveDroid->turretPitch[0];
 		}
-		psDroid->turretPitch[i] = psSaveDroid->turretPitch;
 	}
 	//version 12
 	psDroid->order				= psSaveDroid->order;
@@ -11786,7 +11787,7 @@ SDWORD getCompFromNamePreV7(UDWORD compType, char *pName)
 		{
 			return count;
 		}
-		psStats = (BASE_STATS *)((UDWORD)psStats + statSize);
+		psStats = (BASE_STATS *)((void*)psStats + statSize);
 	}
 
 	//return -1 if record not found or an invalid component type is passed in
@@ -11843,7 +11844,7 @@ SDWORD getStatFromNamePreV7(BOOL isFeature, char *pName)
 		{
 			return count;
 		}
-		psStats = (BASE_STATS *)((UDWORD)psStats + statSize);
+		psStats = (BASE_STATS *)((void*)psStats + statSize);
 	}
 
 	//return -1 if record not found or an invalid component type is passed in

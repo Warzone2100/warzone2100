@@ -1346,15 +1346,12 @@ BOOL scrSkCanBuildTemplate(void)
 	STRUCTURE *psStructure;
 	DROID_TEMPLATE *psTempl;
 
-	SDWORD player, structure, templ;
+	SDWORD player;
 
-	if (!stackPopParams(3,VAL_INT, &player,ST_STRUCTURE, &structure, ST_TEMPLATE, &templ))
+	if (!stackPopParams(3,VAL_INT, &player,ST_STRUCTURE, &psStructure, ST_TEMPLATE, &psTempl))
 	{
 		return FALSE;
 	}
-
-	psTempl =  (DROID_TEMPLATE*) templ;
-	psStructure = (STRUCTURE *) structure;
 
 	// is factory big enough?
 	if(!validTemplateForFactory(psTempl, psStructure) )
@@ -1559,7 +1556,7 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 // ********************************************************************************************
 BOOL scrSkDoResearch(void)
 {
-	SDWORD				structure, player, bias;//,timeToResearch;//,*x,*y;
+	SDWORD				player, bias;//,timeToResearch;//,*x,*y;
 	UWORD				i;
 
 	char				sTemp[128];
@@ -1568,15 +1565,12 @@ BOOL scrSkDoResearch(void)
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH			*pResearch;
 
-	if (!stackPopParams(3,ST_STRUCTURE, &structure, VAL_INT, &player, VAL_INT,&bias ))
+	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, VAL_INT,&bias ))
 	{
 		return FALSE;
 	}
 
-	psBuilding	=	(STRUCTURE *) structure;
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
-
-
 
 	if(psResFacilty->psSubject != NULL)
 	{
@@ -1697,11 +1691,10 @@ BOOL scrSkGetFactoryCapacity(void)
 	SDWORD count=0,structure;
 	STRUCTURE *psStructure;
 
-	if (!stackPopParams(1,ST_STRUCTURE, &structure))
+	if (!stackPopParams(1,ST_STRUCTURE, &psStructure))
 	{
 		return FALSE;
 	}
-	psStructure = (STRUCTURE *) structure;
 
 	if(psStructure && StructIsFactory(psStructure))
 	{

@@ -244,8 +244,7 @@ AC_SUBST(YFLAGS, "-oy.tab.c")
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
-# -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
-WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
 # only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
 # strange error messages when something is wrong

@@ -605,7 +605,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 
 // default value save routine
 //TODO: use union
-BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
+BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 {
 	VIEWDATA	*psIntMessage;
 	char		*pName;
@@ -617,16 +617,17 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 #ifdef _DEBUG
 	BASE_OBJECT	*psObj;
 #endif
-	switch (type)
+
+	switch (psVal->type)
 	{
 	case ST_INTMESSAGE:
 		// save the name
-		psIntMessage = (VIEWDATA *)data;
+		psIntMessage = (VIEWDATA *)psVal->v.oval;
 		if (psIntMessage != NULL)
 		{
 			if (pBuffer)
 			{
-				strcpy((char *)pBuffer, psIntMessage->pName);
+				strcpy(pBuffer, psIntMessage->pName);
 			}
 			*pSize = strlen(psIntMessage->pName)+1;
 		}
@@ -634,7 +635,7 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 		{
 			if (pBuffer)
 			{
-				*((UBYTE *)pBuffer) = 0;
+				*pBuffer = '\0';
 			}
 			*pSize = 1;
 		}
@@ -646,15 +647,15 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 		// just save the id
 		if (pBuffer)
 		{
-			if (data == 0)
+			if (psVal->v.oval == NULL)
 			{
 				*((UDWORD*)pBuffer) = UDWORD_MAX;
 			}
 			else
 			{
-				*((UDWORD*)pBuffer) = ((BASE_OBJECT *)data)->id;
+				*((UDWORD*)pBuffer) = ((BASE_OBJECT *)psVal->v.oval)->id;
 #ifdef _DEBUG
-				psObj = getBaseObjFromId(((BASE_OBJECT *)data)->id);
+				psObj = getBaseObjFromId(((BASE_OBJECT *)psVal->v.oval)->id);
 				ASSERT( psObj == (BASE_OBJECT *)data,"scrValDefSave failed to find object, continue" );
 #endif
 			}
@@ -673,12 +674,12 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 	case ST_WEAPON:
 	case ST_REPAIR:
 	case ST_BRAIN:
-		pName = scrGetStatName(type, data);
+		pName = scrGetStatName(psVal->type, psVal->v.ival);
 		if (pName != NULL)
 		{
 			if (pBuffer)
 			{
-				strcpy((char *)pBuffer, pName);
+				strcpy(pBuffer, pName);
 			}
 			*pSize = strlen(pName) + 1;
 		}
@@ -690,13 +691,13 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 	case ST_TEMPLATE:
 		if (pBuffer)
 		{
-			if (data == 0)
+			if (psVal->v.oval == NULL)
 			{
 				*((UDWORD*)pBuffer) = UDWORD_MAX;
 			}
 			else
 			{
-				*((UDWORD*)pBuffer) = ((DROID_TEMPLATE *)data)->multiPlayerID;
+				*((UDWORD*)pBuffer) = ((DROID_TEMPLATE *)psVal->v.oval)->multiPlayerID;
 			}
 		}
 		*pSize = sizeof(UDWORD);
@@ -704,42 +705,42 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 	case ST_TEXTSTRING:
 		if (pBuffer)
 		{
-			if (data == 0)
+			if (psVal->v.sval == NULL)
 			{
 				*((UDWORD*)pBuffer) = UDWORD_MAX;
 			}
 			else
 			{
-				*((UDWORD*)pBuffer) = strresGetIDfromString(psStringRes, (char *)data);
+				*((UDWORD*)pBuffer) = strresGetIDfromString(psStringRes, psVal->v.sval);
 			}
 		}
 		*pSize = sizeof(UDWORD);
 		break;
 	case ST_LEVEL:
-		if (data != 0)
+		if (psVal->v.sval != NULL)
 		{
 			if (pBuffer)
 			{
-				strcpy((char *)pBuffer, (char *)data);
+				strcpy(pBuffer, psVal->v.sval);
 			}
-			*pSize = strlen((char *)data)+1;
+			*pSize = strlen(psVal->v.sval)+1;
 		}
 		else
 		{
 			if (pBuffer)
 			{
-				*((UBYTE *)pBuffer) = 0;
+				*pBuffer = '\0';
 			}
 			*pSize = 1;
 		}
 		break;
 	case ST_RESEARCH:
-		psResearch = (RESEARCH *)data;
+		psResearch = (RESEARCH *)psVal->v.oval;
 		if (psResearch != NULL)
 		{
 			if (pBuffer)
 			{
-				strcpy((char *)pBuffer, psResearch->pName);
+				strcpy(pBuffer, psResearch->pName);
 			}
 			*pSize = strlen(psResearch->pName)+1;
 		}
@@ -747,15 +748,15 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 		{
 			if (pBuffer)
 			{
-				*((UBYTE *)pBuffer) = 0;
+				*pBuffer = '\0';
 			}
 			*pSize = 1;
 		}
 		break;
 	case ST_GROUP:
-		if (data != 0)
+		if (psVal->v.oval != NULL)
 		{
-			members = grpNumMembers((DROID_GROUP *)data);
+			members = grpNumMembers((DROID_GROUP *)psVal->v.oval);
 		}
 		else
 		{
@@ -764,7 +765,7 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 		if (pBuffer != NULL)
 		{
 			pPos = pBuffer;
-			psGroup = (DROID_GROUP *)data;
+			psGroup = (DROID_GROUP *)psVal->v.oval;
 
 			// store the run data
 			*((SDWORD *)pPos) = psGroup->sRunData.sPos.x;
@@ -779,7 +780,7 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 			pPos += sizeof(SDWORD);
 
 			// now store the droids
-			for(psCDroid=((DROID_GROUP *)data)->psList; psCDroid; psCDroid=psCDroid->psGrpNext)
+			for(psCDroid=((DROID_GROUP *)psVal->v.oval)->psList; psCDroid; psCDroid=psCDroid->psGrpNext)
 			{
 				checkValidId(psCDroid->id);
 				*((UDWORD *)pPos) = psCDroid->id;
@@ -802,30 +803,28 @@ BOOL scrValDefSave(INTERP_TYPE type, UDWORD data, char *pBuffer, UDWORD *pSize)
 		*pSize = strlen((char *)pName) + 1;*/
 		if (pBuffer)
 		{
-			*((UDWORD *) pBuffer) = sound_GetTrackHashName((SDWORD)data);
+			*((UDWORD *) pBuffer) = sound_GetTrackHashName((SDWORD)psVal->v.ival);
 		}
 		*pSize = sizeof(UDWORD);
 		break;
 	case ST_STRUCTUREID:
 	case ST_DROIDID:
-	default:
-		ASSERT( (type == ST_STRUCTUREID) ||
-				 (type == ST_DROIDID),
-				"scrValDefSave: unknown script variable type for save" );
 		// just save the variable contents directly
 		if (pBuffer)
 		{
-			*((UDWORD *)pBuffer) = data;
+			*((UDWORD *)pBuffer) = psVal->v.ival;
 		}
 		*pSize = sizeof(UDWORD);
 		break;
+  default:
+    ASSERT( FALSE, "scrValDefSave: unknown script variable type for save" );
+    break;
 	}
 	return TRUE;
 }
 
 // default value load routine
-//TODO: use union
-BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size, UDWORD *pData)
+BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size)
 {
 	char			*pPos;
 	DROID			*psCDroid;
@@ -834,18 +833,18 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 	LEVEL_DATASET	*psLevel;
 	DROID_GROUP		*psGroup;
 
-	switch (type)
+	switch (psVal->type)
 	{
 	case ST_INTMESSAGE:
 		if ((size == 1) &&
 			(*pBuffer == 0))
 		{
-			*pData = 0;
+			psVal->v.oval = NULL;
 		}
 		else
 		{
-			*pData = (UDWORD)getViewData((char *)pBuffer);
-			if (*pData == 0)
+			psVal->v.oval = (void*)getViewData(pBuffer);
+			if (psVal->v.oval == NULL)
 			{
 				return FALSE;
 			}
@@ -858,11 +857,11 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		id = *((UDWORD *)pBuffer);
 		if (id == UDWORD_MAX)
 		{
-			*pData = 0;
+			psVal->v.oval = NULL;
 		}
 		else
 		{
-			if (!scrvGetBaseObj(*((UDWORD*)pBuffer), (BASE_OBJECT **)pData))
+			if (!scrvGetBaseObj(*((UDWORD*)pBuffer), (BASE_OBJECT **)&(psVal->v.oval)))
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer) );
 				abort();
@@ -873,115 +872,115 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 	case ST_COMPONENT:
 		break;
 	case ST_STRUCTURESTAT:
-		index = getStructStatFromName((char *)pBuffer);
+		index = getStructStatFromName(pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find structure stat %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_FEATURESTAT:
-		index = getFeatureStatFromName((char *)pBuffer);
+		index = getFeatureStatFromName(pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find feature stat %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_BODY:
-		index = getCompFromResName(COMP_BODY, (char *)pBuffer);
+		index = getCompFromResName(COMP_BODY, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find body component %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_PROPULSION:
-		index = getCompFromResName(COMP_PROPULSION, (char *)pBuffer);
+		index = getCompFromResName(COMP_PROPULSION, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find propulsion component %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_ECM:
-		index = getCompFromResName(COMP_ECM, (char *)pBuffer);
+		index = getCompFromResName(COMP_ECM, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find ECM component %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_SENSOR:
-		index = getCompFromResName(COMP_SENSOR, (char *)pBuffer);
+		index = getCompFromResName(COMP_SENSOR, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find sensor component %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_CONSTRUCT:
-		index = getCompFromResName(COMP_CONSTRUCT, (char *)pBuffer);
+		index = getCompFromResName(COMP_CONSTRUCT, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find constructor component %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_WEAPON:
-		index = getCompFromResName(COMP_WEAPON, (char *)pBuffer);
+		index = getCompFromResName(COMP_WEAPON, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find weapon %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_REPAIR:
-		index = getCompFromResName(COMP_REPAIRUNIT, (char *)pBuffer);
+		index = getCompFromResName(COMP_REPAIRUNIT, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find repair component %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_BRAIN:
-		index = getCompFromResName(COMP_BRAIN, (char *)pBuffer);
+		index = getCompFromResName(COMP_BRAIN, pBuffer);
 		if (index == -1)
 		{
 			debug( LOG_ERROR, "scrValDefLoad: couldn't find repair brain %s", pBuffer );
 			abort();
 			index = 0;
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_TEMPLATE:
 		id = *((UDWORD *)pBuffer);
 		if (id == UDWORD_MAX)
 		{
-			*((DROID_TEMPLATE **)pData) = NULL;
+			psVal->v.oval = NULL;
 		}
 		else
 		{
-			*((DROID_TEMPLATE **)pData) = IdToTemplate(id, ANYPLAYER);
-			if (*pData == 0)
+			psVal->v.oval = (void*)IdToTemplate(id, ANYPLAYER);
+			if ((DROID_TEMPLATE*)(psVal->v.oval) == NULL)
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find template id %d", *((UDWORD *)pBuffer) );
 				abort();
@@ -991,39 +990,39 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 	case ST_TEXTSTRING:
 		if (*((UDWORD *)pBuffer) == UDWORD_MAX)
 		{
-			*pData = 0;
+			psVal->v.sval = '\0';
 		}
 		else
 		{
-			*pData = (UDWORD)(strresGetString(psStringRes, *((UDWORD *)pBuffer)));
+			psVal->v.sval = strresGetString(psStringRes, *((UDWORD *)pBuffer));
 		}
 		break;
 	case ST_LEVEL:
 		if ((size == 1) &&
 			(*pBuffer == 0))
 		{
-			*pData = 0;
+			psVal->v.sval = '\0';
 		}
 		else
 		{
-			if (!levFindDataSet((char *)pBuffer, &psLevel))
+			if (!levFindDataSet(pBuffer, &psLevel))
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find level dataset %s", pBuffer );
 				abort();
 			}
-			*((char **)pData) = psLevel->pName;
+			psVal->v.sval = psLevel->pName;
 		}
 		break;
 	case ST_RESEARCH:
 		if ((size == 1) &&
 			(*pBuffer == 0))
 		{
-			*pData = 0;
+			psVal->v.oval = NULL;
 		}
 		else
 		{
-			*pData = (UDWORD)getResearch((char *)pBuffer, TRUE);
-			if (*pData == 0)
+			psVal->v.oval = (void*)getResearch(pBuffer, TRUE);
+			if (psVal->v.oval == NULL)
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find research %s", pBuffer );
 				abort();
@@ -1031,15 +1030,15 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 		}
 		break;
 	case ST_GROUP:
-		if (*pData == 0)
+		if (psVal->v.oval == NULL)
 		{
-			if (!grpCreate((DROID_GROUP **)pData))
+			if (!grpCreate((DROID_GROUP**)&(psVal->v.oval)))
 			{
 				debug( LOG_ERROR, "scrValDefLoad: out of memory" );
 				abort();
 				break;
 			}
-			grpJoin(*((DROID_GROUP **)pData), NULL);
+			grpJoin((DROID_GROUP*)(psVal->v.oval), NULL);
 		}
 
 		if (version == 1)
@@ -1053,7 +1052,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			pPos = pBuffer;
 
 			// load the retreat data
-			psGroup = *((DROID_GROUP **)pData);
+			psGroup = (DROID_GROUP*)(psVal->v.oval);
 			psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
 			pPos += sizeof(SDWORD);
 			psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
@@ -1069,7 +1068,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			pPos = pBuffer;
 
 			// load the retreat data
-			psGroup = *((DROID_GROUP **)pData);
+			psGroup = (DROID_GROUP*)(psVal->v.oval);
 			psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
 			pPos += sizeof(SDWORD);
 			psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
@@ -1092,7 +1091,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			}
 			else
 			{
-				grpJoin(*((DROID_GROUP **)pData), psCDroid);
+				grpJoin((DROID_GROUP*)(psVal->v.oval), psCDroid);
 			}
 
 			pPos += sizeof(UDWORD);
@@ -1116,13 +1115,13 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			audio_SetTrackValsHashName( *((UDWORD *)pBuffer), FALSE, index, 100,
 									1, 1800, 0 );
 		}
-		*pData = (UDWORD)index;
+		psVal->v.ival = index;
 		break;
 	case ST_STRUCTUREID:
 	case ST_DROIDID:
 	default:
 		// just set the contents directly
-		*pData = *((UDWORD *)pBuffer);
+		psVal->v.ival = *((UDWORD *)pBuffer);
 		break;
 	}
 

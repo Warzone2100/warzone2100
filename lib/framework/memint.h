@@ -25,7 +25,7 @@ typedef struct _mem_node
 } MEM_NODE;
 
 /* compare two memory blocks */
-extern SDWORD	memBlockCmp(UDWORD	key1, UDWORD key2);
+extern SDWORD	memBlockCmp(void *key1, void *key2);
 
 /* Recursive function to print out the list of memory blocks */
 extern SDWORD memRecReport(MEM_NODE *psRoot);

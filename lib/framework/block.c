@@ -349,7 +349,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 
 	/* Store the new entry in the memory treap */
 	psNode->priority = (UDWORD)rand();
-	psNode->key = (UDWORD)psNode;
+	psNode->key = (void*)psNode;
 	psNode->pObj = psNode;
 	psNode->psLeft = NULL;
 	psNode->psRight = NULL;
@@ -403,7 +403,7 @@ void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 
 	/* Get the node for the memory block */
 	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psHeap->psMemTreap,
-										(UDWORD)&sNode, memBlockCmp);
+										(void*)&sNode, memBlockCmp);
 	ASSERT( psDeleted != NULL,
 			"Invalid pointer passed to mem_Free by:\n"
 			"File: %s\nLine: %d\n\n"
@@ -563,9 +563,9 @@ BOOL blkPointerValid(BLOCK_HEAP *psHeap, void *pData, SDWORD size)
 	sNode.size = size;
 
 	// See if the block is in the treap
-	Tmp = treapFindRec((TREAP_NODE *)psHeap->psMemTreap, (UDWORD)&sNode, memBlockCmp);
+	Tmp = treapFindRec((TREAP_NODE *)psHeap->psMemTreap, (void*)&sNode, memBlockCmp);
 	if (Tmp != NULL)
-//	if (treapFindRec((TREAP_NODE *)psHeap->psMemTreap, (UDWORD)&sNode, memBlockCmp))
+//	if (treapFindRec((TREAP_NODE *)psHeap->psMemTreap, (void*)&sNode, memBlockCmp))
 	{
 		return TRUE;
 	}

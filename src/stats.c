@@ -3440,7 +3440,8 @@ SDWORD	getCompFromName(UDWORD compType, char *pName)
 //			DBPRINTF(("found at %d\n",count));
 			return count;
 		}
-		psStats = (BASE_STATS *)((UDWORD)psStats + statSize);
+    // psStats += statSize; doesn't work, structure alignment?
+		psStats = (BASE_STATS*)((void*)psStats + statSize);
 	}
 //	DBPRINTF(("not found\n"));
 	//return -1 if record not found or an invalid component type is passed in
@@ -3475,7 +3476,7 @@ SDWORD	getCompFromHash(UDWORD compType, UDWORD HashedName)
 //			DBPRINTF(("found at %d\n",count);
 			return count;
 		}
-		psStats = (BASE_STATS *)((UDWORD)psStats + statSize);
+		psStats = (BASE_STATS *)((void*)psStats + statSize);
 	}
 //	DBPRINTF(("not found\n");
 	//return -1 if record not found or an invalid component type is passed in

@@ -171,3 +171,61 @@ BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
 
 	return FALSE;
 }
+
+/* returns true if passed INTERP_TYPE is used as a pointer in INTERP_VAL, false otherwise.
+   all types are listed explicitly, with asserts/warnings for invalid/unrecognised types, as
+   getting this wrong will cause segfaults if sizeof(void*) != sizeof(SDWORD) (eg. amd64). a lot of
+   these aren't currently checked for, but it's a lot clearer what's going on if they're all here */
+BOOL scriptTypeIsPointer(INTERP_TYPE type)
+{
+	ASSERT( ((type < ST_MAXTYPE) || (type >= VAL_REF)), "scriptTypeIsPointer: invalid type" );
+	// any value or'ed with VAL_REF is a pointer
+	if (type >= VAL_REF) return TRUE;
+	switch (type) {
+		case VAL_STRING:
+		case VAL_OBJ_GETSET:
+		case VAL_FUNC_EXTERN:
+		case ST_INTMESSAGE:
+		case ST_BASEOBJECT:
+		case ST_DROID:
+		case ST_STRUCTURE:
+		case ST_FEATURE:
+		case ST_TEMPLATE:
+		case ST_TEXTSTRING:
+		case ST_LEVEL:
+		case ST_RESEARCH:
+		case ST_GROUP:
+		case ST_POINTER_O:
+		case ST_POINTER_T:
+		case ST_POINTER_S:
+		case ST_POINTER_STRUCTSTAT:
+			return TRUE;
+		case VAL_BOOL:
+		case VAL_INT:
+		case VAL_FLOAT:
+		case VAL_TRIGGER:
+		case VAL_EVENT:
+		case VAL_VOID:
+		case VAL_OPCODE:
+		case VAL_PKOPCODE:
+		case ST_BASESTATS:
+		case ST_COMPONENT:
+		case ST_BODY:
+		case ST_PROPULSION:
+		case ST_ECM:
+		case ST_SENSOR:
+		case ST_CONSTRUCT:
+		case ST_WEAPON:
+		case ST_REPAIR:
+		case ST_BRAIN:
+		case ST_STRUCTUREID:
+		case ST_STRUCTURESTAT:
+		case ST_FEATURESTAT:
+		case ST_DROIDID:
+		case ST_SOUND:
+			return FALSE;
+		default:
+			ASSERT(FALSE, "scriptTypeIsPointer: unhandled type");
+			return FALSE;
+	}
+}
