@@ -11787,7 +11787,7 @@ SDWORD getCompFromNamePreV7(UDWORD compType, char *pName)
 		{
 			return count;
 		}
-		psStats = (BASE_STATS *)((void*)psStats + statSize);
+		psStats = (BASE_STATS *)((char*)psStats + statSize);
 	}
 
 	//return -1 if record not found or an invalid component type is passed in
@@ -11844,7 +11844,7 @@ SDWORD getStatFromNamePreV7(BOOL isFeature, char *pName)
 		{
 			return count;
 		}
-		psStats = (BASE_STATS *)((void*)psStats + statSize);
+		psStats = (BASE_STATS *)((char*)psStats + statSize);
 	}
 
 	//return -1 if record not found or an invalid component type is passed in

@@ -2771,7 +2771,7 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 		{
 			return pArtefact;
 		}
-		pArtefact = (COMP_BASE_STATS*)((void*)pArtefact + size);
+		pArtefact = (COMP_BASE_STATS*)((char*)pArtefact + size);
 	}
 
 	debug( LOG_ERROR, "Cannot find component %s", pCompName );

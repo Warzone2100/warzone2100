@@ -115,8 +115,8 @@ SDWORD	memBlockCmp(void *key1, void *key2)
 	UBYTE *start1, *start2, *end1, *end2;
 
 	// Calculate the edges of the memory blocks
-	start1 = (UBYTE *)(((MEM_NODE *)key1)->pObj + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE);
-	start2 = (UBYTE *)(((MEM_NODE *)key2)->pObj + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE);
+	start1 = (UBYTE *)((char *)(((MEM_NODE *)key1)->pObj) + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE);
+	start2 = (UBYTE *)((char *)(((MEM_NODE *)key2)->pObj) + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE);
 	end1 = start1 + ((MEM_NODE *)key1)->size;
 	end2 = start2 + ((MEM_NODE *)key2)->size;
 

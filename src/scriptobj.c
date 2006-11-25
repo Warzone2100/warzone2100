@@ -656,7 +656,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 				*((UDWORD*)pBuffer) = ((BASE_OBJECT *)psVal->v.oval)->id;
 #ifdef _DEBUG
 				psObj = getBaseObjFromId(((BASE_OBJECT *)psVal->v.oval)->id);
-				ASSERT( psObj == (BASE_OBJECT *)data,"scrValDefSave failed to find object, continue" );
+				ASSERT( psObj == (BASE_OBJECT *)psVal->v.oval,"scrValDefSave failed to find object, continue" );
 #endif
 			}
 		}
