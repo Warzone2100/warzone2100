@@ -77,7 +77,7 @@ BOOL aiShutdown(void)
 }
 
 // Find the best nearest target for a droid
-BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
+BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot)
 {
 	UDWORD			i;
 	SDWORD				bestMod,newMod,damage,targetTypeBonus;
@@ -109,7 +109,7 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 		return FALSE;
 
 	//weaponMod = asWeaponModifier[weaponEffect][(asPropulsionStats + ((DROID*)psObj)->asBits[COMP_PROPULSION].nStat)->propulsionType];
-	weaponEffect = ((WEAPON_STATS *)(asWeaponStats + psDroid->asWeaps[0].nStat))->weaponEffect;
+	weaponEffect = ((WEAPON_STATS *)(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))->weaponEffect;
 
 	//electronic warfare can only be used against structures at present - not any more! AB 6/11/98
 	electronic = electronicDroid(psDroid);
@@ -168,7 +168,7 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 					}
 				}
 				//else if (((STRUCTURE *)psObj)->numWeaps > 0)
-                else if (((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+                else if (((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0)
 				{
 					// structure with weapons - go for this
 					psTarget = psObj;
@@ -278,7 +278,7 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 	if (bestTarget)
 	{
 		/* See if target is blocked by a wall; only affects direct weapons */
-		if(proj_Direct( asWeaponStats +  psDroid->asWeaps[0].nStat) && visGetBlockingWall((BASE_OBJECT *)psDroid, bestTarget, &targetStructure) )
+		if(proj_Direct( asWeaponStats +  psDroid->asWeaps[weapon_slot].nStat) && visGetBlockingWall((BASE_OBJECT *)psDroid, bestTarget, &targetStructure) )
 		{
 			//are we any good against walls?
 			if(asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] >= 100)		//can attack atleast with default strength
@@ -296,18 +296,18 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 
 
 // see if a structure has the range to fire on a target
-static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget)
+static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, longRange;
 
-    if (psStruct->asWeaps[0].nStat == 0)
+    if (psStruct->numWeaps == 0 || psStruct->asWeaps[0].nStat == 0)
 	{
 		// Can't attack without a weapon
 		return FALSE;
 	}
 
-	psWStats = psStruct->asWeaps[0].nStat + asWeaponStats;
+	psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
 
 	xdiff = (SDWORD)psStruct->x - (SDWORD)psTarget->x;
 	ydiff = (SDWORD)psStruct->y - (SDWORD)psTarget->y;
@@ -342,8 +342,9 @@ static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 
 
 /* See if there is a target in range */
+// Watermelon:to accept another int value weapon_slot
 BOOL aiChooseTarget(BASE_OBJECT *psObj,
-					BASE_OBJECT **ppsTarget)
+					BASE_OBJECT **ppsTarget,int weapon_slot)
 {
 	UDWORD	radSquared;
 //	UDWORD	player;
@@ -356,7 +357,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	BOOL			bCommanderBlock;
 	UDWORD			sensorRange;
 	//Watermelon:weapon_slot to store which turrent is InAttackRange
-	int weapon_slot = DROID_MAXWEAPS + 1;
 	int i;
 
 	/* Get the sensor range */
@@ -365,31 +365,11 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	case OBJ_DROID:
 
 		//if (psDroid->numWeaps == 0)
-		/* Watermelon:if I am a multi-turret droid */
-		if (((DROID *)psObj)->numWeaps > 1)
+		if (((DROID *)psObj)->asWeaps[weapon_slot].nStat == 0)
 		{
-			for(i = 0;i < ((DROID *)psObj)->numWeaps;i++)
-			{
-				if (((DROID *)psObj)->asWeaps[i].nStat != 0)
-				{
-					weapon_slot = i;
-					break;
-				}
-			}
-
-			if (weapon_slot == (DROID_MAXWEAPS + 1))
-			{
-				return FALSE;
-			}
-
+			return FALSE;
 		}
-		else
-		{
-			if (((DROID *)psObj)->asWeaps[0].nStat == 0)
-			{
-				return FALSE;
-			}
-		}
+
 		//if (((DROID *)psObj)->numWeaps == 0)
         if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
 			((DROID *)psObj)->droidType != DROID_SENSOR)
@@ -402,7 +382,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 		break;
 	case OBJ_STRUCTURE:
 		//if (((STRUCTURE *)psObj)->numWeaps == 0)
-        if (((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
+        if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
 		{
 			// Can't attack without a weapon
 			return FALSE;
@@ -412,7 +392,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 		// increase the sensor range for AA sites
 		// AA sites are defensive structures that can only shoot in the air
 		if ( (((STRUCTURE *)psObj)->pStructureType->type == REF_DEFENSE) &&
-			 (asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
+			 (asWeaponStats[((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat].surfaceToAir == SHOOT_IN_AIR) )
 		{
 			sensorRange = 3 * sensorRange / 2;
 		}
@@ -427,11 +407,11 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
-		if (aiBestNearestTarget((DROID *)psObj, &psTarget))
+		if (aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot))
 		{
             /*check its a valid target*/
 			//Watermelon:Greater than 1 for now
-            if (validTarget(psObj, psTarget) > 1)
+            if (validTarget(psObj, psTarget) & (1 << (weapon_slot+1)))
             {
     			/* See if in sensor range */
 			    xdiff = psTarget->x - psObj->x;
@@ -447,9 +427,9 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
 		//ASSERT( ((STRUCTURE *)psObj)->numWeaps > 0,
-        ASSERT( ((STRUCTURE *)psObj)->asWeaps[0].nStat > 0,
+        ASSERT( ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0,
 			"aiChooseTarget: no weapons on structure" );
-		psWStats = ((STRUCTURE *)psObj)->asWeaps[0].nStat + asWeaponStats;
+		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
 
 
 		// see if there is a target from the command droids
@@ -457,20 +437,20 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 		psCommander = cmdDroidGetDesignator(psObj->player);
 		bCommanderBlock = FALSE;
 		if (!proj_Direct(psWStats) && (psCommander != NULL) &&
-			aiStructHasRange((STRUCTURE *)psObj, (BASE_OBJECT *)psCommander))
+			aiStructHasRange((STRUCTURE *)psObj, (BASE_OBJECT *)psCommander, weapon_slot))
 		{
 			// there is a commander that can fire designate for this structure
 			// set bCommanderBlock so that the structure does not fire until the commander
 			// has a target - (slow firing weapons will not be ready to fire otherwise).
 			bCommanderBlock = TRUE;
 			if (psCommander->action == DACTION_ATTACK &&
-				psCommander->psActionTarget != NULL)
+				psCommander->psActionTarget[weapon_slot] != NULL)
 			{
 				// the commander has a target to fire on
-				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget))
+				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget[weapon_slot], weapon_slot))
 				{
 					// target in range - fire on it
-					psTarget = psCommander->psActionTarget;
+					psTarget = psCommander->psActionTarget[weapon_slot];
 				}
 				else
 				{
@@ -498,39 +478,39 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 
 				if (!bCBTower &&
 					structStandardSensor(psCStruct) &&
-					psCStruct->psTarget != NULL)
+					psCStruct->psTarget[0] != NULL)
 				{
                     /*check its a valid target*/
 					//Watermelon:Greater than 1 for now
-                    if ( (validTarget(psObj, psCStruct->psTarget) > 1) &&
-						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget))
+                    if ( (validTarget(psObj, psCStruct->psTarget[0]) > 1) &&
+						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
                     {
-					    xdiff = (SDWORD)psCStruct->psTarget->x - (SDWORD)psObj->x;
-					    ydiff = (SDWORD)psCStruct->psTarget->y - (SDWORD)psObj->y;
+					    xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
+					    ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
 					    distSq = xdiff*xdiff + ydiff*ydiff;
 					    if ((distSq < tarDist) &&
 						    (distSq > minDist))
 					    {
 						    tarDist = distSq;
-						    psTarget = psCStruct->psTarget;
+						    psTarget = psCStruct->psTarget[0];
 					    }
                     }
 				}
 				else if (structCBSensor(psCStruct) &&
-						 psCStruct->psTarget != NULL)
+						 psCStruct->psTarget[0] != NULL)
 				{
                     /*check its a valid target*/
-                    if ( (validTarget(psObj, psCStruct->psTarget) > 1) &&
-						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget))
+                    if ( (validTarget(psObj, psCStruct->psTarget[0]) > 1) &&
+						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
                     {
-    					xdiff = (SDWORD)psCStruct->psTarget->x - (SDWORD)psObj->x;
-	    				ydiff = (SDWORD)psCStruct->psTarget->y - (SDWORD)psObj->y;
+    					xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
+	    				ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
 		    			distSq = xdiff*xdiff + ydiff*ydiff;
 					    if ((!bCBTower || (distSq < tarDist)) &&
 						    (distSq > minDist))
 					    {
 						    tarDist = distSq;
-						    psTarget = psCStruct->psTarget;
+						    psTarget = psCStruct->psTarget[0];
 						    bCBTower = TRUE;
 					    }
                     }
@@ -681,7 +661,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
-		if (aiBestNearestTarget((DROID *)psObj, &psTarget))
+		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0))
 		{
 			/* See if in sensor range */
 			xdiff = psTarget->x - psObj->x;
@@ -787,7 +767,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 /* Do the AI for a droid */
 void aiUpdateDroid(DROID *psDroid)
 {
-	BASE_OBJECT	*psTarget;
+	//Watermelon:psTarget Array
+	BASE_OBJECT	*psTarget[DROID_MAXWEAPS];
 	SECONDARY_STATE		state;
 	BOOL		lookForTarget;
 //	BOOL		bTemp;
@@ -872,20 +853,19 @@ void aiUpdateDroid(DROID *psDroid)
 
 	/* Null target - see if there is an enemy to attack */
 	if (lookForTarget &&
-		aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget))
+		aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget[0], 0))
 	{
 //			my_error("",0,"","Droid(%s) attacking : %d\n",
 //					psDroid->pName, psTarget->id );
 
-
 		turnOffMultiMsg(TRUE);
 		if (psDroid->droidType == DROID_SENSOR)
 		{
-			orderDroidObj(psDroid, DORDER_OBSERVE, psTarget);
+			orderDroidObj(psDroid, DORDER_OBSERVE, psTarget[0]);
 		}
 		else
 		{
-			orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget);
+			orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget[0]);
 		}
 			DBP1(("Unit(%s) attacking : %d\n",
 					psDroid->pName, psTarget->id));

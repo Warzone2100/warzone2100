@@ -56,6 +56,7 @@ typedef enum _droid_action
 	DACTION_CLEARREARMPAD,			// (37) a VTOL droid being told to get off a rearm pad
 	DACTION_RETURNTOPOS,			// (38) used by scout/patrol order when returning to route
 	DACTION_FIRESUPPORT_RETREAT,	// (39) used by firesupport order when sensor retreats
+	DACTION_ATTACK_M,				// (40) attack with multiple weapons
 } DROID_ACTION;
 
 // after failing a route ... this is the amount of time that the droid goes all defensive untill it can start going aggressive
@@ -87,8 +88,9 @@ void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,
 								SWORD pitchRate, BOOL bDirectFire, BOOL bInvert);*/
 //								UDWORD *pRotation, UDWORD *pPitch, SDWORD rotRate,
 //								SDWORD pitchRate, BOOL bDirectFire, BOOL bInvert);
+//Watermelon:added int weapon_slot
 extern BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *pRotation,
-		UWORD *pPitch, WEAPON_STATS *psWeapStats, BOOL bInvert);
+		UWORD *pPitch, WEAPON_STATS *psWeapStats, BOOL bInvert, int weapon_slot);
 
 // Realign turret
 extern void actionAlignTurret(BASE_OBJECT *psObj);
@@ -126,6 +128,8 @@ extern BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD x, SDWORD y);
 extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
 #endif
+
+
 
 
 

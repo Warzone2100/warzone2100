@@ -74,7 +74,7 @@
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
-#define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
+#define PROJ_NAYBOR_RANGE		(TILE_UNITS*2)
 
 // macro to see if an object is in NAYBOR_RANGE
 // used by projGetNayb
@@ -297,7 +297,7 @@ static void proj_UpdateKills(PROJ_OBJECT *psObj)
 		if (psDroid != NULL)
 		{
 			if ((psDroid->action == DACTION_ATTACK) &&
-				(psDroid->psActionTarget == psObj->psDest))
+				(psDroid->psActionTarget[0] == psObj->psDest))
 			{
 				psDroid->numKills ++;
 			}
@@ -309,7 +309,7 @@ static void proj_UpdateKills(PROJ_OBJECT *psObj)
 
 BOOL
 proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
-					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate )
+					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot )
 {
 	PROJ_OBJECT		*psObj;
 	SDWORD			tarHeight, srcHeight, iMinSq;
@@ -337,13 +337,13 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	}
 	else if (psAttacker->type == OBJ_DROID)
 	{
-		calcDroidMuzzleLocation( (DROID *) psAttacker, &muzzle);
+		calcDroidMuzzleLocation( (DROID *) psAttacker, &muzzle, weapon_slot);
         /*update attack runs for VTOL droid's each time a shot is fired*/
         updateVtolAttackRun((DROID *)psAttacker);
 	}
 	else if (psAttacker->type == OBJ_STRUCTURE)
 	{
-		calcStructureMuzzleLocation( (STRUCTURE *) psAttacker, &muzzle);
+		calcStructureMuzzleLocation( (STRUCTURE *) psAttacker, &muzzle, weapon_slot);
 	}
 	else // incase anything wants a projectile
 	{
@@ -370,6 +370,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	if (bPenetrate)
 	{
 		psObj->psSource		= ((PROJ_OBJECT *)psAttacker)->psSource;
+		psObj->psDamaged	= ((PROJ_OBJECT *)psAttacker)->psDest;
 	}
 	else
 	{
@@ -547,7 +548,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
-				((STRUCTURE *) psAttacker)->turretPitch = psObj->pitch;
+				((STRUCTURE *) psAttacker)->turretPitch[0] = psObj->pitch;
 			}
 		}
 
@@ -691,7 +692,9 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	{
 		dx = (SDWORD)psObj->tarX-(SDWORD)psObj->startX;
 		dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
-		dz = (SDWORD)(psObj->srcHeight+psObj->altChange)-(SDWORD)psObj->srcHeight;
+		//Watermelon:huh?
+		//dz = (SDWORD)(psObj->srcHeight+psObj->altChange)-(SDWORD)psObj->srcHeight;
+		dz = (SDWORD)(psObj->altChange);
 	}
 
 	/*
@@ -731,7 +734,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		psObj->y = (UWORD)iY;
 	}
 
-	psObj->z = (UWORD)(psObj->srcHeight + (dist * dz / rad));
+	psObj->z = (UWORD)(psObj->srcHeight) + (UWORD)(dist * dz / rad);
 
 	if(psStats->weaponSubClass == WSC_FLAME)
 	{
@@ -800,9 +803,6 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		extendRad = (SDWORD)(rad * 1.2f);
 	}
 	else if (psStats->weaponSubClass == WSC_CANNON ||
-			psStats->weaponSubClass == WSC_FLAME ||
-			psStats->weaponSubClass == WSC_ENERGY ||
-			psStats->weaponSubClass == WSC_GAUSS ||
 			psStats->weaponSubClass == WSC_BOMB ||
 			psStats->weaponSubClass == WSC_ELECTRONIC ||
 			psStats->weaponSubClass == WSC_EMP)
@@ -819,12 +819,14 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	}
 
 	//Watermelon:these 3 types of weapon should have the ability to pentrate targets and damage the enemies behind
-	if (psStats->weaponSubClass == WSC_ELECTRONIC ||
-		psStats->weaponSubClass == WSC_FLAME ||
+	if (psStats->weaponSubClass == WSC_FLAME ||
+		psStats->weaponSubClass == WSC_ENERGY ||
 		psStats->weaponSubClass == WSC_GAUSS)
 	{
-		//Watermelon:extended life span
 		bPenetrate = TRUE;
+		wpRadius = 3;
+		//Watermelon:extended life span
+		extendRad = (SDWORD)rad * 2;
 	}
 
 	//Watermelon:test test
@@ -844,6 +846,11 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player))
 		{
 			psTempObj = asProjNaybors[i].psObj;
+			if ( psTempObj == psObj->psDamaged )
+			{
+				continue;
+			}
+
 			//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
 			if ( psTempObj->type == OBJ_BULLET )
 			{
@@ -853,44 +860,104 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 				}
 			}
 
-			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE)
 			{
-				wpRadius = 1;
+				//Watermelon:ignore oil resource and pickup
+				if ( psTempObj->type == OBJ_FEATURE )
+				{
+					if ( ((FEATURE *)psTempObj)->psStats->damageable == 0)
+					{
+						continue;
+					}
+				}
+
 				//Watermelon:AA weapon shouldnt hit buildings
 				if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
 				{
 					continue;
 				}
+
+				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
+				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
+				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
+
+				if (psTempObj->type == OBJ_STRUCTURE)
+				{
+					//Watermelon:tower and hardpoint are much easier to hit now
+					if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_SOFT ||
+						((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_HARD)
+					{
+						zdiff -= 100;
+					}
+					else if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_MEDIUM)
+					{
+						zdiff -= 50;
+					}
+				}
+
+				if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < 50)
+				{
+					if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
+					{
+						if (psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj))
+						{
+							continue;
+						}
+					}
+
+					if (bPenetrate && psTempObj->type != OBJ_STRUCTURE)
+					{
+						if ( (abs(psObj->x - psObj->startX) + abs(psObj->y - psObj->startY)) > 100 )
+						{
+							continue;
+						}
+						asWeap.nStat = psObj->psWStats - asWeaponStats;
+						//Watermelon:just assume we damaged the chosen target
+						psObj->psDamaged = psTempObj;
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, psObj->tarX, psObj->tarY, psObj->z, NULL, TRUE, bPenetrate, -1 );
+					}
+
+					psNewTarget = psTempObj;
+					psObj->psDest = psNewTarget;
+		  			psObj->state = PROJ_IMPACT;
+					return;
+				}
 			}
-
-			xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
-			ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-
-			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) )
+			else
 			{
-				if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
-				{
-					if (psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj))
-					{
-						continue;
-					}
-				}
+				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
+				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
+				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
 
-				if (bPenetrate && psTempObj->type != OBJ_STRUCTURE)
+				if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < 50)
 				{
-					if ( (abs(psObj->x - psObj->startX) + abs(psObj->y - psObj->startY)) > 100 && timeSoFar > 500)
+					if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
 					{
-						continue;
+						if (psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj))
+						{
+							continue;
+						}
 					}
-					asWeap.nStat = psObj->psWStats - asWeaponStats;
-					proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + (UDWORD)(extendRad * dx /rad)),(psObj->startY + (UDWORD)(extendRad * dy /rad)), psObj->z, NULL, TRUE, bPenetrate );
-				}
 
-				psNewTarget = psTempObj;
-				psObj->psDest = psNewTarget;
-		  		psObj->state = PROJ_IMPACT;
-				return;
+					if (bPenetrate && psTempObj->type != OBJ_STRUCTURE)
+					{
+						if ( (abs(psObj->x - psObj->startX) + abs(psObj->y - psObj->startY)) > 100 )
+						{
+							continue;
+						}
+						//Watermelon:just assume we damaged the chosen target
+						psObj->psDamaged = psTempObj;
+						asWeap.nStat = psObj->psWStats - asWeaponStats;
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + (UDWORD)(extendRad * dx /rad)),(psObj->startY + (UDWORD)(extendRad * dy /rad)), psObj->z, NULL, TRUE, bPenetrate, -1 );
+					}
+
+					psNewTarget = psTempObj;
+					psObj->psDest = psNewTarget;
+		  			psObj->state = PROJ_IMPACT;
+					return;
+				}
 			}
 		}
 	}
@@ -1098,23 +1165,59 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			{
 				continue;
 			}
-			xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
-			ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-			zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
 
-			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
-			if ( psTempObj->type == OBJ_STRUCTURE )
+			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
 			{
-				wpRadius = 1;
+				//Watermelon:ignore oil resource and pickup
+				if ( psTempObj->type == OBJ_FEATURE )
+				{
+					if ( ((FEATURE *)psTempObj)->psStats->damageable == 0)
+					{
+						continue;
+					}
+				}
+
+				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
+				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
+				zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
+
+				if (psTempObj->type == OBJ_STRUCTURE)
+				{
+					//Watermelon:tower and hardpoint are much easier to hit now
+					if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_SOFT ||
+						((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_HARD)
+					{
+						zdiff -= 40;
+					}
+					else if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_MEDIUM)
+					{
+						zdiff -= 20;
+					}
+				}
+
+				if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < 20 )
+				{
+					psNewTarget = psTempObj;
+					psObj->psDest = psNewTarget;
+		  			psObj->state = PROJ_IMPACT;
+					return;
+				}
 			}
-
-			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
-				zdiff < 20 )
+			else
 			{
-				psNewTarget = psTempObj;
-				psObj->psDest = psNewTarget;
-		  		psObj->state = PROJ_IMPACT;
-				return;
+				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
+				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
+				zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
+
+				if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < 20 )
+				{
+					psNewTarget = psTempObj;
+					psObj->psDest = psNewTarget;
+		  			psObj->state = PROJ_IMPACT;
+					return;
+				}
 			}
 		}
 	}
@@ -1415,7 +1518,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
                         else if (psObj->psSource->type == OBJ_STRUCTURE)
                         {
                             //the droid has lost all resistance - init the structures target
-                            ((STRUCTURE *)psObj->psSource)->psTarget = NULL;
+                            ((STRUCTURE *)psObj->psSource)->psTarget[0] = NULL;
                         }
 					}
 				}
@@ -1456,6 +1559,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				if(bKilled)
 				{
 					proj_UpdateKills(psObj);
+				}
+				else
+				{
+					psObj->psDamaged = psObj->psDest;
 				}
 
 				// do the attacked callback
@@ -1525,6 +1632,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				if(bKilled)
 				{
 					proj_UpdateKills(psObj);
+				}
+				else
+				{
+					psObj->psDamaged = psObj->psDest;
 				}
 				// do the attacked callback
 /*				psScrCBAttacker = psObj->psSource;
@@ -2368,5 +2479,9 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 		}
 	}
 }
+
+
+
+
 
 

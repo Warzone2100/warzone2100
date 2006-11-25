@@ -230,7 +230,7 @@ BOOL scrIdleGroup(void)
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{
 		if(  psDroid->order == DORDER_NONE
-		  || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
+		  || (psDroid->order == DORDER_GUARD && psDroid->psTarget[0] == NULL))
 		{
 			count++;
 		}
@@ -451,7 +451,8 @@ BOOL scrOrderGroupObj(void)
 		order != DORDER_REPAIR &&
 		order != DORDER_OBSERVE &&
 		order != DORDER_EMBARK &&
-		order != DORDER_FIRESUPPORT)
+		order != DORDER_FIRESUPPORT &&
+		order != DORDER_ATTACK_M)
 	{
 		ASSERT( FALSE,
 			"scrOrderGroupObj: Invalid order" );
@@ -568,7 +569,8 @@ BOOL scrOrderDroidObj(void)
 		order != DORDER_OBSERVE &&
 		order != DORDER_EMBARK &&
 		order != DORDER_FIRESUPPORT &&
-		order != DORDER_DROIDREPAIR)
+		order != DORDER_DROIDREPAIR &&
+		order != DORDER_ATTACK_M)
 	{
 		ASSERT( FALSE,
 			"scrOrderUnitObj: Invalid order" );
@@ -894,7 +896,7 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
         else if (psStats->psWeapStat != NULL)
 		{
 			//psWStats = psStats->asWeapList[0];
-            psWStats = psStats->psWeapStat;
+            psWStats = psStats->psWeapStat[0];
 			if (!proj_Direct(psWStats))
 			{
 				mask = SCR_ST_DEF_IDF;

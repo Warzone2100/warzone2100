@@ -2283,7 +2283,10 @@ void	renderStructure(STRUCTURE *psStructure)
 //MAPTILE		*psTile;
 SDWORD			structX,structY;
 SDWORD			sX,sY;
-iIMDShape		*baseImd,*strImd,*mountImd,*weaponImd,*flashImd;
+iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd,*flashImd;
+iIMDShape		*mountImd[STRUCT_MAXWEAPS];
+iIMDShape		*weaponImd[STRUCT_MAXWEAPS];
+iIMDShape		*flashImd[STRUCT_MAXWEAPS];
 SDWORD			rotation;
 SDWORD			frame;
 SDWORD			playerFrame;
@@ -2469,122 +2472,223 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 				imd->points = temp;
 			}
 
-			if(psStructure->sDisplay.imd->nconnectors == 1)
+			if((psStructure->sDisplay.imd->nconnectors > 0 
+				&& psStructure->numWeaps == psStructure->sDisplay.imd->nconnectors) ||
+				psStructure->sDisplay.imd->nconnectors == 1)
 			{
-				weaponImd = NULL;
-				mountImd = NULL;
-				flashImd = NULL;
+				for (i = 0;i < STRUCT_MAXWEAPS;i++)
+				{
+					weaponImd[i] = NULL;
+					mountImd[i] = NULL;
+					flashImd[i] = NULL;
+				}
 				strImd = psStructure->sDisplay.imd;
 
-                if (psStructure->asWeaps[0].nStat > 0)
+				if (psStructure->numWeaps > 0)
 				{
-					nWeaponStat = psStructure->asWeaps[0].nStat;
-					weaponImd =  asWeaponStats[nWeaponStat].pIMD;
-					mountImd =  asWeaponStats[nWeaponStat].pMountGraphic;
-					flashImd =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					for (i = 0;i < psStructure->numWeaps;i++)
+					{
+						if (psStructure->asWeaps[i].nStat > 0)
+						{
+							nWeaponStat = psStructure->asWeaps[i].nStat;
+							weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
+							mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
+							flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+						}
+					}
+				}
+				else
+				{
+					if (psStructure->asWeaps[0].nStat > 0)
+					{
+						nWeaponStat = psStructure->asWeaps[0].nStat;
+						weaponImd[0] =  asWeaponStats[nWeaponStat].pIMD;
+						mountImd[0] =  asWeaponStats[nWeaponStat].pMountGraphic;
+						flashImd[0] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					}
 				}
 
-				if (weaponImd == NULL)
+				if (weaponImd[0] == NULL)
 				{
 					//check for ECM
 					if (psStructure->pStructureType->pECM != NULL)
 					{
-						weaponImd =  psStructure->pStructureType->pECM->pIMD;
-						mountImd =  psStructure->pStructureType->pECM->pMountGraphic;
-						flashImd = NULL;
+						weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
+						mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
+						flashImd[0] = NULL;
 					}
 				}
 
-				if (weaponImd == NULL)
+				if (weaponImd[0] == NULL)
 				{
 					//check for sensor
 					if (psStructure->pStructureType->pSensor != NULL)
 					{
-						weaponImd =  psStructure->pStructureType->pSensor->pIMD;
+						weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
 						/* No recoil for sensors */
 						psStructure->asWeaps[0].recoilValue = 0;
-						mountImd  =  psStructure->pStructureType->pSensor->pMountGraphic;
-						flashImd = NULL;
+						mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
+						flashImd[0] = NULL;
 					}
 				}
 
 				//draw Weapon/ECM/Sensor for structure
-				if(weaponImd != NULL)
+				if(weaponImd[0] != NULL)
 				{
-					iV_MatrixBegin();
-					iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
-					pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
-					if (mountImd != NULL)
+					if (psStructure->numWeaps > 0)
 					{
-						pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue/3);
-
-						pie_Draw3DShape(mountImd, animFrame, 0, buildingBrightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
-						if(mountImd->nconnectors)
+						for (i = 0;i < psStructure->numWeaps;i++)
 						{
-							iV_TRANSLATE(mountImd->connectors->x,mountImd->connectors->z,mountImd->connectors->y);
-						}
-					}
-					iV_MatrixRotateX(DEG(psStructure->turretPitch));
-					pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue);
-
-					pie_Draw3DShape(weaponImd, playerFrame, 0, buildingBrightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
-				 	if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
-					{
-						psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
-                        //draw repair flash if the Repair Facility has a target which it has started work on
-						if(weaponImd->nconnectors AND psRepairFac->psObj!=NULL
-                            AND psRepairFac->psObj->type == OBJ_DROID AND
-                            ((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
-						{
-							iV_TRANSLATE(weaponImd->connectors->x,weaponImd->connectors->z-12,weaponImd->connectors->y);
-							pRepImd = getImdFromIndex(MI_FLAME);
-
-							pie_MatRotY(DEG((SDWORD)psStructure->turretRotation));
-
-							iV_MatrixRotateY(-player.r.y);
-							iV_MatrixRotateX(-player.r.x);
-							pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, 0, pie_ADDITIVE, 192);
-
-					  		iV_MatrixRotateX(player.r.x);
-					  		iV_MatrixRotateY(player.r.y);
-							pie_MatRotY(DEG((SDWORD)psStructure->turretRotation));
-						}
-					}
-					//we have a droid weapon so do we draw a muzzle flash
-					else if( weaponImd->nconnectors AND psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
-					{
-						/* Now we need to move to the end fo the barrel */
-						pie_TRANSLATE( weaponImd->connectors[0].x,
-									   weaponImd->connectors[0].z,
-									   weaponImd->connectors[0].y  );
-						//and draw the muzzle flash
-						//animate for the duration of the flash only
-						if(flashImd)
-						{
-							//assume no clan colours formuzzle effects
-						  	if ((flashImd->numFrames == 0) || (flashImd->animInterval <= 0))//no anim so display one frame for a fixed time
+							iV_MatrixBegin();
+							iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[i])));
+							if (mountImd[i] != NULL)
 							{
-						  		if (gameTime < (psStructure->asWeaps->lastFired + BASE_MUZZLE_FLASH_DURATION))
+								pie_TRANSLATE(0,0,psStructure->asWeaps[i].recoilValue/3);
+
+								pie_Draw3DShape(mountImd[i], animFrame, 0, buildingBrightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
+								if(mountImd[i]->nconnectors)
 								{
-									pie_Draw3DShape(flashImd, 0, 0, buildingBrightness, specular, pie_ADDITIVE, 12);//muzzle flash
+									iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 								}
 							}
+							iV_MatrixRotateX(DEG(psStructure->turretPitch[i]));
+							pie_TRANSLATE(0,0,psStructure->asWeaps[i].recoilValue);
 
-							else
+							pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
+				 			if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 							{
-							   	frame = (gameTime - psStructure->asWeaps->lastFired)/flashImd->animInterval;
-								if (frame < flashImd->numFrames)
+								psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
+								//draw repair flash if the Repair Facility has a target which it has started work on
+								if(weaponImd[i]->nconnectors AND psRepairFac->psObj!=NULL
+									AND psRepairFac->psObj->type == OBJ_DROID AND
+									((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
 								{
-									pie_Draw3DShape(flashImd, frame, 0, buildingBrightness, specular, pie_ADDITIVE, 12);//muzzle flash
+									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
+									pRepImd = getImdFromIndex(MI_FLAME);
+
+									pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[i]));
+
+									iV_MatrixRotateY(-player.r.y);
+									iV_MatrixRotateX(-player.r.x);
+									pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, 0, pie_ADDITIVE, 192);
+
+					  				iV_MatrixRotateX(player.r.x);
+					  				iV_MatrixRotateY(player.r.y);
+									pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[i]));
 								}
 							}
+							//we have a droid weapon so do we draw a muzzle flash
+							else if( weaponImd[i]->nconnectors AND psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
+							{
+								/* Now we need to move to the end fo the barrel */
+								pie_TRANSLATE( weaponImd[i]->connectors[0].x,
+											   weaponImd[i]->connectors[0].z,
+											   weaponImd[i]->connectors[0].y  );
+								//and draw the muzzle flash
+								//animate for the duration of the flash only
+								if(flashImd[i])
+								{
+									//assume no clan colours formuzzle effects
+						  			if ((flashImd[i]->numFrames == 0) || (flashImd[i]->animInterval <= 0))//no anim so display one frame for a fixed time
+									{
+						  				if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+										{
+											pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, specular, pie_ADDITIVE, 12);//muzzle flash
+										}
+									}
 
+									else
+									{
+							   			frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
+										if (frame < flashImd[i]->numFrames)
+										{
+											pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, specular, pie_ADDITIVE, 12);//muzzle flash
+										}
+									}
+
+								}
+							}
+							iV_MatrixEnd();
 						}
 					}
-					iV_MatrixEnd();
+					else
+					{
+						iV_MatrixBegin();
+						iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
+						pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
+						if (mountImd[0] != NULL)
+						{
+							pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue/3);
+
+							pie_Draw3DShape(mountImd[0], animFrame, 0, buildingBrightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
+							if(mountImd[0]->nconnectors)
+							{
+								iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
+							}
+						}
+						iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
+						pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue);
+
+						pie_Draw3DShape(weaponImd[0], playerFrame, 0, buildingBrightness, specular, 0,0);//pie_TRANSLUCENT, psStructure->visible[selectedPlayer]);
+				 		if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
+						{
+							psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
+							//draw repair flash if the Repair Facility has a target which it has started work on
+							if(weaponImd[0]->nconnectors AND psRepairFac->psObj!=NULL
+								AND psRepairFac->psObj->type == OBJ_DROID AND
+								((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
+							{
+								iV_TRANSLATE(weaponImd[0]->connectors->x,weaponImd[0]->connectors->z-12,weaponImd[0]->connectors->y);
+								pRepImd = getImdFromIndex(MI_FLAME);
+
+								pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[0]));
+
+								iV_MatrixRotateY(-player.r.y);
+								iV_MatrixRotateX(-player.r.x);
+								pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, 0, pie_ADDITIVE, 192);
+
+					  			iV_MatrixRotateX(player.r.x);
+					  			iV_MatrixRotateY(player.r.y);
+								pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[0]));
+							}
+						}
+						//we have a droid weapon so do we draw a muzzle flash
+						else if( weaponImd[0]->nconnectors AND psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
+						{
+							/* Now we need to move to the end fo the barrel */
+							pie_TRANSLATE( weaponImd[0]->connectors[0].x,
+										   weaponImd[0]->connectors[0].z,
+										   weaponImd[0]->connectors[0].y  );
+							//and draw the muzzle flash
+							//animate for the duration of the flash only
+							if(flashImd[0])
+							{
+								//assume no clan colours formuzzle effects
+						  		if ((flashImd[0]->numFrames == 0) || (flashImd[0]->animInterval <= 0))//no anim so display one frame for a fixed time
+								{
+						  			if (gameTime < (psStructure->asWeaps[0].lastFired + BASE_MUZZLE_FLASH_DURATION))
+									{
+										pie_Draw3DShape(flashImd[0], 0, 0, buildingBrightness, specular, pie_ADDITIVE, 12);//muzzle flash
+									}
+								}
+
+								else
+								{
+							   		frame = (gameTime - psStructure->asWeaps[0].lastFired)/flashImd[0]->animInterval;
+									if (frame < flashImd[0]->numFrames)
+									{
+										pie_Draw3DShape(flashImd[0], frame, 0, buildingBrightness, specular, pie_ADDITIVE, 12);//muzzle flash
+									}
+								}
+
+							}
+						}
+						iV_MatrixEnd();
+					}
 				}
 			}
-			else if(psStructure->sDisplay.imd->nconnectors > 1)// add some lights if we have the connectors for it
+			else if(psStructure->sDisplay.imd->nconnectors > 1 && psStructure->numWeaps < psStructure->sDisplay.imd->nconnectors)// add some lights if we have the connectors for it
 			{
 				for (i = 0; i < psStructure->sDisplay.imd->nconnectors; i++)
 				{
@@ -2599,45 +2703,45 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 			{
 			    if (psStructure->asWeaps[0].nStat > 0)
 				{
-					flashImd = NULL;
+					flashImd[0] = NULL;
 					strImd = psStructure->sDisplay.imd;
 					//get an imd to draw on the connector priority is weapon, ECM, sensor
 					//check for weapon
 					nWeaponStat = psStructure->asWeaps[0].nStat;
-					flashImd =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					flashImd[0] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
 					//draw Weapon/ECM/Sensor for structure
-					if(flashImd != NULL)
+					if(flashImd[0] != NULL)
 					{
 						iV_MatrixBegin();
 						if (strImd->ymax > 80)//babatower
 						{
 							iV_TRANSLATE(0,80,0);
-							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
+							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
 							iV_TRANSLATE(0,0,-20);
 						}
 						else//baba bunker
 						{
 							iV_TRANSLATE(0,10,0);
-							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
+							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
 							iV_TRANSLATE(0,0,-40);
 						}
-						iV_MatrixRotateX(DEG(psStructure->turretPitch));
+						iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
 						//and draw the muzzle flash
 						//animate for the duration of the flash only
 						//assume no clan colours formuzzle effects
-						if ((flashImd->numFrames == 0) || (flashImd->animInterval <= 0))//no anim so display one frame for a fixed time
+						if ((flashImd[0]->numFrames == 0) || (flashImd[0]->animInterval <= 0))//no anim so display one frame for a fixed time
 						{
-							if (gameTime < (psStructure->asWeaps->lastFired + BASE_MUZZLE_FLASH_DURATION))
+							if (gameTime < (psStructure->asWeaps[0].lastFired + BASE_MUZZLE_FLASH_DURATION))
 							{
-								pie_Draw3DShape(flashImd, 0, 0, buildingBrightness, specular, 0, 0);//muzzle flash
+								pie_Draw3DShape(flashImd[0], 0, 0, buildingBrightness, specular, 0, 0);//muzzle flash
 							}
 						}
 						else
 						{
-							frame = (gameTime - psStructure->asWeaps->lastFired)/flashImd->animInterval;
-							if (frame < flashImd->numFrames)
+							frame = (gameTime - psStructure->asWeaps[0].lastFired)/flashImd[0]->animInterval;
+							if (frame < flashImd[0]->numFrames)
 							{
-								pie_Draw3DShape(flashImd, 0, 0, buildingBrightness, specular, 0, 0);//muzzle flash
+								pie_Draw3DShape(flashImd[0], 0, 0, buildingBrightness, specular, 0, 0);//muzzle flash
 							}
 						}
 						iV_MatrixEnd();
@@ -2663,7 +2767,10 @@ void	renderDefensiveStructure(STRUCTURE *psStructure)
 
 SDWORD			structX,structY;
 SDWORD			sX,sY;
-iIMDShape		*strImd,*mountImd,*weaponImd,*flashImd;
+iIMDShape		*strImd;//,*weaponImd,*mountImd,*flashImd;;
+iIMDShape		*weaponImd[STRUCT_MAXWEAPS];
+iIMDShape		*mountImd[STRUCT_MAXWEAPS];
+iIMDShape		*flashImd[STRUCT_MAXWEAPS];
 SDWORD			rotation;
 SDWORD			frame;
 SDWORD			playerFrame;
@@ -2780,101 +2887,179 @@ SDWORD			brightVar;
 			imd->points = temp;
 
 			// It might have weapons on it
-			if(psStructure->sDisplay.imd->nconnectors == 1)
+			if((psStructure->sDisplay.imd->nconnectors > 0 && psStructure->numWeaps == psStructure->sDisplay.imd->nconnectors) ||
+				psStructure->sDisplay.imd->nconnectors > 0)
 			{
-				weaponImd = NULL;//weapon is gun ecm or sensor
-				mountImd = NULL;
-				flashImd = NULL;
+				for (i = 0;i < STRUCT_MAXWEAPS;i++)
+				{
+					weaponImd[i] = NULL;//weapon is gun ecm or sensor
+					mountImd[i] = NULL;
+					flashImd[i] = NULL;
+				}
 				strImd = psStructure->sDisplay.imd;
 				//get an imd to draw on the connector priority is weapon, ECM, sensor
 				//check for weapon
-				if (psStructure->asWeaps[0].nStat > 0)
+				if (psStructure->numWeaps > 0)
 				{
-					nWeaponStat = psStructure->asWeaps[0].nStat;
-					weaponImd =  asWeaponStats[nWeaponStat].pIMD;
-					mountImd =  asWeaponStats[nWeaponStat].pMountGraphic;
-					flashImd =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					for (i = 0;i < psStructure->numWeaps;i++)
+					{
+						if (psStructure->asWeaps[0].nStat > 0)
+						{
+							nWeaponStat = psStructure->asWeaps[0].nStat;
+							weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
+							mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
+							flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+						}
+					}
+				}
+				else
+				{
+					if (psStructure->asWeaps[0].nStat > 0)
+					{
+						nWeaponStat = psStructure->asWeaps[0].nStat;
+						weaponImd[0] =  asWeaponStats[nWeaponStat].pIMD;
+						mountImd[0] =  asWeaponStats[nWeaponStat].pMountGraphic;
+						flashImd[0] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					}
 				}
 
-				if (weaponImd == NULL)
+				if (weaponImd[0] == NULL)
 				{
 					//check for ECM
 					if (psStructure->pStructureType->pECM != NULL)
 					{
-						weaponImd =  psStructure->pStructureType->pECM->pIMD;
-						mountImd =  psStructure->pStructureType->pECM->pMountGraphic;
-						flashImd = NULL;
+						weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
+						mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
+						flashImd[0] = NULL;
 					}
 				}
 
-				if (weaponImd == NULL)
+				if (weaponImd[0] == NULL)
 				{
 					//check for sensor
 					if (psStructure->pStructureType->pSensor != NULL)
 					{
-						weaponImd =  psStructure->pStructureType->pSensor->pIMD;
+						weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
 						/* No recoil for sensors */
 						psStructure->asWeaps[0].recoilValue = 0;
-						mountImd  =  psStructure->pStructureType->pSensor->pMountGraphic;
-						flashImd = NULL;
+						mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
+						flashImd[0] = NULL;
 					}
 				}
 
 				//draw Weapon/ECM/Sensor for structure
-				if(weaponImd != NULL)
+				if(weaponImd[0] != NULL)
 				{
-					iV_MatrixBegin();
-					iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
-					pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
-					if (mountImd != NULL)
+					if (psStructure->numWeaps > 0)
 					{
-						pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue/3);
-
-						pie_Draw3DShape(mountImd, animFrame, 0, brightness, specular, 0,0);
-						if(mountImd->nconnectors)
+						for (i = 0;i < psStructure->numWeaps;i++)
 						{
-							iV_TRANSLATE(mountImd->connectors->x,mountImd->connectors->z,mountImd->connectors->y);
-						}
-					}
-					iV_MatrixRotateX(DEG(psStructure->turretPitch));
-					pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue);
-
-					pie_Draw3DShape(weaponImd, animFrame, 0, brightness, specular, 0,0);
-					//we have a droid weapon so do we draw a muzzle flash
-					if( weaponImd->nconnectors AND psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
-					{
-						/* Now we need to move to the end fo the barrel */
-						pie_TRANSLATE( weaponImd->connectors[0].x,
-									   weaponImd->connectors[0].z,
-									   weaponImd->connectors[0].y  );
-						//and draw the muzzle flash
-						//animate for the duration of the flash only
-						if(flashImd)
-						{
-							//assume no clan colours formuzzle effects
-						 	if ((flashImd->numFrames == 0) || (flashImd->animInterval <= 0))//no anim so display one frame for a fixed time
+							iV_MatrixBegin();
+							iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[i])));
+							if (mountImd[i] != NULL)
 							{
-						  		if (gameTime < (psStructure->asWeaps->lastFired + BASE_MUZZLE_FLASH_DURATION))
+								pie_TRANSLATE(0,0,psStructure->asWeaps[i].recoilValue/3);
+
+								pie_Draw3DShape(mountImd[i], animFrame, 0, brightness, specular, 0,0);
+								if(mountImd[i]->nconnectors)
 								{
-									pie_Draw3DShape(flashImd, 0, 0, brightness, specular, pie_ADDITIVE, 128);//muzzle flash
+									iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 								}
 							}
+							iV_MatrixRotateX(DEG(psStructure->turretPitch[i]));
+							pie_TRANSLATE(0,0,psStructure->asWeaps[i].recoilValue);
 
-							else
+							pie_Draw3DShape(weaponImd[i], animFrame, 0, brightness, specular, 0,0);
+							//we have a droid weapon so do we draw a muzzle flash
+							if( weaponImd[i]->nconnectors AND psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
 							{
-								frame = (gameTime - psStructure->asWeaps->lastFired)/flashImd->animInterval;
-								if (frame < flashImd->numFrames)
+								/* Now we need to move to the end fo the barrel */
+								pie_TRANSLATE( weaponImd[i]->connectors[0].x,
+											   weaponImd[i]->connectors[0].z,
+											   weaponImd[i]->connectors[0].y  );
+								//and draw the muzzle flash
+								//animate for the duration of the flash only
+								if(flashImd[i])
 								{
-									pie_Draw3DShape(flashImd, frame, 0, brightness, specular, pie_ADDITIVE, 20);//muzzle flash
+									//assume no clan colours formuzzle effects
+						 			if ((flashImd[i]->numFrames == 0) || (flashImd[i]->animInterval <= 0))//no anim so display one frame for a fixed time
+									{
+						  				if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+										{
+											pie_Draw3DShape(flashImd[i], 0, 0, brightness, specular, pie_ADDITIVE, 128);//muzzle flash
+										}
+									}
+
+									else
+									{
+										frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
+										if (frame < flashImd[i]->numFrames)
+										{
+											pie_Draw3DShape(flashImd[i], frame, 0, brightness, specular, pie_ADDITIVE, 20);//muzzle flash
+										}
+									}
+
 								}
 							}
-
+							iV_MatrixEnd();
 						}
 					}
-					iV_MatrixEnd();
+					else
+					{
+						iV_MatrixBegin();
+						iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
+						pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
+						if (mountImd[0] != NULL)
+						{
+							pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue/3);
+
+							pie_Draw3DShape(mountImd[0], animFrame, 0, brightness, specular, 0,0);
+							if(mountImd[0]->nconnectors)
+							{
+								iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
+							}
+						}
+						iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
+						pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue);
+
+						pie_Draw3DShape(weaponImd[0], animFrame, 0, brightness, specular, 0,0);
+						//we have a droid weapon so do we draw a muzzle flash
+						if( weaponImd[0]->nconnectors AND psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
+						{
+							/* Now we need to move to the end fo the barrel */
+							pie_TRANSLATE( weaponImd[0]->connectors[0].x,
+										   weaponImd[0]->connectors[0].z,
+										   weaponImd[0]->connectors[0].y  );
+							//and draw the muzzle flash
+							//animate for the duration of the flash only
+							if(flashImd[0])
+							{
+								//assume no clan colours formuzzle effects
+						 		if ((flashImd[0]->numFrames == 0) || (flashImd[0]->animInterval <= 0))//no anim so display one frame for a fixed time
+								{
+						  			if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+									{
+										pie_Draw3DShape(flashImd[0], 0, 0, brightness, specular, pie_ADDITIVE, 128);//muzzle flash
+									}
+								}
+
+								else
+								{
+									frame = (gameTime - psStructure->asWeaps[0].lastFired)/flashImd[0]->animInterval;
+									if (frame < flashImd[0]->numFrames)
+									{
+										pie_Draw3DShape(flashImd[0], frame, 0, brightness, specular, pie_ADDITIVE, 20);//muzzle flash
+									}
+								}
+
+							}
+						}
+						iV_MatrixEnd();
+					}
 				}
 			}
-			else if(psStructure->sDisplay.imd->nconnectors > 1)// add some lights if we have the connectors for it
+			else if(psStructure->sDisplay.imd->nconnectors > 1 && psStructure->numWeaps < psStructure->sDisplay.imd->nconnectors)// add some lights if we have the connectors for it
 			{
 				for (i = 0; i < psStructure->sDisplay.imd->nconnectors; i++)
 				{
@@ -2889,12 +3074,12 @@ SDWORD			brightVar;
 			{
                 if (psStructure->asWeaps[0].nStat > 0)
 				{
-					flashImd = NULL;
+					flashImd[0] = NULL;
 					strImd = psStructure->sDisplay.imd;
 					//get an imd to draw on the connector priority is weapon, ECM, sensor
 					//check for weapon
 					nWeaponStat = psStructure->asWeaps[0].nStat;
-					flashImd =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					flashImd[0] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
 					//draw Weapon/ECM/Sensor for structure
 					if(flashImd != NULL)
 					{
@@ -2903,32 +3088,32 @@ SDWORD			brightVar;
 						if (strImd->ymax > 80)//babatower
 						{
 							iV_TRANSLATE(0,80,0);
-							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
+							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
 							iV_TRANSLATE(0,0,-20);
 						}
 						else//baba bunker
 						{
 							iV_TRANSLATE(0,10,0);
-							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
+							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
 							iV_TRANSLATE(0,0,-40);
 						}
-						iV_MatrixRotateX(DEG(psStructure->turretPitch));
+						iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
 						//and draw the muzzle flash
 						//animate for the duration of the flash only
 						//assume no clan colours formuzzle effects
-						if ((flashImd->numFrames == 0) || (flashImd->animInterval <= 0))//no anim so display one frame for a fixed time
+						if ((flashImd[0]->numFrames == 0) || (flashImd[0]->animInterval <= 0))//no anim so display one frame for a fixed time
 						{
-							if (gameTime < (psStructure->asWeaps->lastFired + BASE_MUZZLE_FLASH_DURATION))
+							if (gameTime < (psStructure->asWeaps[0].lastFired + BASE_MUZZLE_FLASH_DURATION))
 							{
-								pie_Draw3DShape(flashImd, 0, 0, brightness, specular, 0, 0);//muzzle flash
+								pie_Draw3DShape(flashImd[0], 0, 0, brightness, specular, 0, 0);//muzzle flash
 							}
 						}
 						else
 						{
-							frame = (gameTime - psStructure->asWeaps->lastFired)/flashImd->animInterval;
-							if (frame < flashImd->numFrames)
+							frame = (gameTime - psStructure->asWeaps[0].lastFired)/flashImd[0]->animInterval;
+							if (frame < flashImd[0]->numFrames)
 							{
-								pie_Draw3DShape(flashImd, 0, 0, brightness, specular, 0, 0);//muzzle flash
+								pie_Draw3DShape(flashImd[0], 0, 0, brightness, specular, 0, 0);//muzzle flash
 							}
 						}
 						iV_MatrixEnd();
@@ -6005,11 +6190,11 @@ UDWORD	i;
 				{
 					if(psDroid->action == DACTION_BUILD)
 					{
-						if(psDroid->psTarget)
+						if(psDroid->psTarget[0])
 						{
-							if(psDroid->psTarget->type == OBJ_STRUCTURE)
+							if(psDroid->psTarget[0]->type == OBJ_STRUCTURE)
 							{
-								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psTarget);
+								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psTarget[0]);
 							}
 						}
 					}
@@ -6019,11 +6204,11 @@ UDWORD	i;
 							(psDroid->action == DACTION_CLEARWRECK) OR
 							(psDroid->action == DACTION_RESTORE))
 					{
-						if(psDroid->psActionTarget)
+						if(psDroid->psActionTarget[0])
 						{
-							if(psDroid->psActionTarget->type == OBJ_STRUCTURE)
+							if(psDroid->psActionTarget[0]->type == OBJ_STRUCTURE)
 							{
-								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psActionTarget);
+								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psActionTarget[0]);
 							}
 						}
 					}

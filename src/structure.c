@@ -1011,6 +1011,8 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			abort();
 			return FALSE;
 		}
+		//Watermelon:I need numWeaps to draw multiple weapons
+		psStructure->numWeaps = numWeaps;
         //Don't need to allocate space since thereis only one possible pointer now! AB 24/01/99
 		//if (psStructure->numWeaps > 0)
         /*if (numWeaps > 0)
@@ -1178,10 +1180,13 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 {
 	char				*pStartWeaponData;
 	UDWORD				NumToAlloc = 0, i,incS, incW;
-	char				StructureName[MAX_NAME_SIZE], WeaponName[MAX_NAME_SIZE];
+	char				StructureName[MAX_NAME_SIZE];//, WeaponName[MAX_NAME_SIZE];
+	//Watermelon:weaponName array
+	char				WeaponName[STRUCT_MAXWEAPS][MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	WEAPON_STATS		*pWeapon = asWeaponStats;
 	BOOL				weaponFound, structureFound;
+	int					j;
 
 #ifdef HASH_NAMES
 	UDWORD				StructureHash;
@@ -1197,14 +1202,18 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 	{
 		//read the data into the storage - the data is delimeted using comma's
 		StructureName[0] = '\0';
-		WeaponName[0] = '\0';
-		sscanf(pWeaponData, "%[^','],%[^','],%*d", StructureName, WeaponName);
+		for (j = 0;j < STRUCT_MAXWEAPS;j++)
+		{
+			WeaponName[j][0] = '\0';
+		}
+
+		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%[^','],%*d", StructureName, &WeaponName[0], &WeaponName[1], &WeaponName[2], &WeaponName[3]);
 
 		if (!getResourceName(StructureName))
 		{
 			return FALSE;
 		}
-		if (!getResourceName(WeaponName))
+		if (!getResourceName(WeaponName[0]))
 		{
 			return FALSE;
 		}
@@ -1227,39 +1236,46 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 			{
 				//Structure found, so loop through each weapon
 				structureFound = TRUE;
-				for (incW=0; incW < numWeaponStats; incW++)
+				for (j = 0;j < pStructure[incS].numWeaps;j++)
 				{
-#ifdef HASH_NAMES
-					if (pWeapon[incW].NameHash==WeaponHash)
-#else
-					if (!(strcmp(WeaponName, pWeapon[incW].pName)))
-#endif
+					for (incW=0; incW < numWeaponStats; incW++)
 					{
-						weaponFound = TRUE;
-						//weapon found alloc this weapon to the current Structure
-						//pStructure[incS].defaultWeap++;
-						//pStructure[incS].asWeapList[pStructure[incS].defaultWeap] =
-						//	&pWeapon[incW];
-						//check not allocating more than allowed
-						//if (pStructure[incS].defaultWeap >
-						//				(SDWORD)pStructure[incS].weaponSlots)
-                        //see if we have already allocated one
-                        if (pStructure[incS].psWeapStat != NULL)
+	#ifdef HASH_NAMES
+						if (pWeapon[incW].NameHash==WeaponHash)
+	#else
+						if (!(strcmp(WeaponName[j], pWeapon[incW].pName)))
+	#endif
 						{
-							debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Structure" );
-							abort();
-							return FALSE;
+							weaponFound = TRUE;
+							//weapon found alloc this weapon to the current Structure
+							//pStructure[incS].defaultWeap++;
+							//pStructure[incS].asWeapList[pStructure[incS].defaultWeap] =
+							//	&pWeapon[incW];
+							//check not allocating more than allowed
+							//if (pStructure[incS].defaultWeap >
+							//				(SDWORD)pStructure[incS].weaponSlots)
+							//see if we have already allocated one
+							//Watermelon:no longer valid for multiple weapons,disabled.
+							/*
+							if (pStructure[incS].psWeapStat != NULL)
+							{
+								debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Structure" );
+								abort();
+								return FALSE;
+							}
+							*/
+							//Watermelon:read and store multiple weapon Stats
+							pStructure[incS].psWeapStat[j] = &pWeapon[incW];
+							break;
 						}
-                        pStructure[incS].psWeapStat = &pWeapon[incW];
-						break;
 					}
-				}
-				//if weapon not found - error
-				if (!weaponFound)
-				{
-					debug( LOG_ERROR, "Unable to find stats for weapon %s for structure %s", WeaponName, StructureName );
-					abort();
-					return FALSE;
+					//if weapon not found - error
+					if (!weaponFound)
+					{
+						debug( LOG_ERROR, "Unable to find stats for weapon %s for structure %s", WeaponName[i], StructureName );
+						abort();
+						return FALSE;
+					}
 				}
 			}
 		}
@@ -1934,6 +1950,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 	BOOL		bUpgraded;
 //	BOOL bTemp=FALSE;
 	UDWORD		min,max;
+	int			i;
 
 //#ifdef FILTER_WALLS
 //		if( (pStructureType->type == REF_WALL) || (pStructureType->type == REF_WALLCORNER) ) {
@@ -1985,8 +2002,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
                 }
             }
             //HARD_CODE don't ever want more than one Las Sat structure
-            if (pStructureType->psWeapStat AND pStructureType->psWeapStat->
-                weaponSubClass == WSC_LAS_SAT AND getLasSatExists(selectedPlayer))
+            if (pStructureType->psWeapStat[0] AND pStructureType->psWeapStat[0]->
+				weaponSubClass == WSC_LAS_SAT AND getLasSatExists(selectedPlayer))
             {
                 return NULL;
             }
@@ -2169,11 +2186,14 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 
 		//set up the rest of the data
 		//psBuilding->z = pStructureType->height;
-		psBuilding->turretRotation = 0;
-		//psBuilding->turretRotRate = 360;
-		psBuilding->turretPitch = 0;
+		for (i = 0;i < STRUCT_MAXWEAPS;i++)
+		{
+			psBuilding->turretRotation[i] = 0;
+			//psBuilding->turretRotRate = 360;
+			psBuilding->turretPitch[i] = 0;
+			psBuilding->psTarget[i] = 0;
+		}
 		psBuilding->targetted = 0;
-		psBuilding->psTarget = 0;
 		// these three will come out and into stats
 		//psBuilding->lastEventTime = 0;
 		//psBuilding->eventFrame = 0;
@@ -2248,27 +2268,57 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 		//psBuilding->numWeaps = (UWORD)pStructureType->numWeaps;
 //        psBuilding->asWeaps[0].nStat = 0;
 		memset(psBuilding->asWeaps, 0, sizeof(WEAPON));
-		//for(weapon=0; weapon < pStructureType->numWeaps; weapon++)
-        //can only have the one weapon now - AB 24/01/99
-        if (pStructureType->psWeapStat)
+		//Watermelon:can only have the STRUCT_MAXWEAPS weapon now
+		psBuilding->numWeaps = 0;
+		if (pStructureType->numWeaps > 0)
 		{
-            weapon = 0;
-			memset(psBuilding->asWeaps + weapon, 0, sizeof(WEAPON));
-			psBuilding->asWeaps[weapon].lastFired = 0;
-            //in multiPlayer make the Las-Sats require re-loading from the start
-            if (bMultiPlayer AND pStructureType->psWeapStat->
-                weaponSubClass == WSC_LAS_SAT)
-            {
-                psBuilding->asWeaps[weapon].lastFired = gameTime;
-            }
-			//psBuilding->asWeaps[weapon].nStat =	pStructureType->
-			//	asWeapList[weapon] - asWeaponStats;
-            psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat - asWeaponStats;
-			psBuilding->asWeaps[weapon].hitPoints = (asWeaponStats + psBuilding->
-				asWeaps[weapon].nStat)->hitPoints;
-			psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->
-				asWeaps[weapon].nStat)->numRounds;
-			psBuilding->asWeaps[weapon].recoilValue = 0;
+			for(weapon=0; weapon < pStructureType->numWeaps; weapon++)
+			{
+
+				//can only have the one weapon now - AB 24/01/99
+				if (pStructureType->psWeapStat[weapon])
+				{
+					//memset(psBuilding->asWeaps + weapon, 0, sizeof(WEAPON));
+					psBuilding->asWeaps[weapon].lastFired = 0;
+					//in multiPlayer make the Las-Sats require re-loading from the start
+					if (bMultiPlayer AND pStructureType->psWeapStat[0]->
+						weaponSubClass == WSC_LAS_SAT)
+					{
+						psBuilding->asWeaps[0].lastFired = gameTime;
+					}
+					//psBuilding->asWeaps[weapon].nStat =	pStructureType->
+					//	asWeapList[weapon] - asWeaponStats;
+					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
+					psBuilding->asWeaps[weapon].hitPoints = (asWeaponStats + psBuilding->
+						asWeaps[weapon].nStat)->hitPoints;
+					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->
+						asWeaps[weapon].nStat)->numRounds;
+					psBuilding->asWeaps[weapon].recoilValue = 0;
+					psBuilding->numWeaps++;
+				}
+			}
+		}
+		else
+		{
+			if (pStructureType->psWeapStat[0])
+			{
+				//memset(psBuilding->asWeaps + weapon, 0, sizeof(WEAPON));
+				psBuilding->asWeaps[0].lastFired = 0;
+				//in multiPlayer make the Las-Sats require re-loading from the start
+				if (bMultiPlayer AND pStructureType->psWeapStat[0]->
+					weaponSubClass == WSC_LAS_SAT)
+				{
+					psBuilding->asWeaps[0].lastFired = gameTime;
+				}
+				//psBuilding->asWeaps[weapon].nStat =	pStructureType->
+				//	asWeapList[weapon] - asWeaponStats;
+				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
+				psBuilding->asWeaps[0].hitPoints = (asWeaponStats + psBuilding->
+					asWeaps[0].nStat)->hitPoints;
+				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->
+					asWeaps[0].nStat)->numRounds;
+				psBuilding->asWeaps[0].recoilValue = 0;
+			}
 		}
 
 		//psBuilding->baseBodyPoints = psBuilding->body;
@@ -3897,89 +3947,112 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 #ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
+	int					i;
 
 	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"aiUpdateStructure: invalid Structure pointer" );
 
-	if (psStructure->psTarget &&
-		psStructure->psTarget->died)
+	if (psStructure->numWeaps > 0)
 	{
-		psStructure->psTarget = NULL;
+		for (i = 0;i < psStructure->numWeaps;i++)
+		{
+			if (psStructure->psTarget[i] &&
+				psStructure->psTarget[i]->died)
+			{
+				psStructure->psTarget[i] = NULL;
+			}
+		}
+	}
+	else
+	{
+		if (psStructure->psTarget[0] &&
+			psStructure->psTarget[0]->died)
+		{
+			psStructure->psTarget[0] = NULL;
+		}
 	}
 
 	// Will go out into a building EVENT stats/text file
 	/* Spin round yer sensors! */
-	//if (psStructure->numWeaps == 0)
-    if ((psStructure->asWeaps[0].nStat == 0) &&
-		(psStructure->pStructureType->type != REF_REPAIR_FACILITY))
+	if (psStructure->numWeaps == 0)
 	{
+		if ((psStructure->asWeaps[0].nStat == 0) &&
+			(psStructure->pStructureType->type != REF_REPAIR_FACILITY))
+		{
 
-//////
-// - radar should rotate every three seconds ... 'cause we timed it at Heathrow !
-// gameTime is in milliseconds - one rotation every 3 seconds = 1 rotation event 3000 millisecs
-		psStructure->turretRotation = (UWORD)(((gameTime*360)/3000)%360);
+	//////
+	// - radar should rotate every three seconds ... 'cause we timed it at Heathrow !
+	// gameTime is in milliseconds - one rotation every 3 seconds = 1 rotation event 3000 millisecs
+			psStructure->turretRotation[0] = (UWORD)(((gameTime*360)/3000)%360);
 
-		psStructure->turretPitch = 0;
+			psStructure->turretPitch[0] = 0;
+		}
 	}
 
 	structUpdateRecoil(psStructure);
 
 	/* See if there is an enemy to attack */
 	//if (psStructure->numWeaps > 0) - don't bother looking for a target if Las Sat weapon
-    if (psStructure->asWeaps[0].nStat > 0 AND
-        asWeaponStats[psStructure->asWeaps[0].nStat].weaponSubClass != WSC_LAS_SAT)
+	if (psStructure->numWeaps > 0)
 	{
-		if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
+		for (i = 0;i < psStructure->numWeaps;i++)
 		{
-			if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObj))
+			if (psStructure->asWeaps[i].nStat > 0 AND
+				asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
-				DBP1(("Struct(%d) attacking : %d\n",
-						psStructure->id, psChosenObj->id));
-				psStructure->psTarget = psChosenObj;
-			}
-			else
-			{
-				psStructure->psTarget = NULL;
-				psChosenObj = NULL;
-			}
-		}
-		else
-		{
-			psChosenObj = psStructure->psTarget;
-		}
+				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
+				{
+					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObj, i))
+					{
+						DBP1(("Struct(%d) attacking : %d\n",
+								psStructure->id, psChosenObj->id));
+						psStructure->psTarget[i] = psChosenObj;
+					}
+					else
+					{
+						psStructure->psTarget[i] = NULL;
+						psChosenObj = NULL;
+					}
+				}
+				else
+				{
+					psChosenObj = psStructure->psTarget[0];
+				}
 
-		if (psChosenObj != NULL)
-		{
-			// get the weapon stat to see if there is a visible turret to rotate
-			psWStats = asWeaponStats + psStructure->asWeaps[0].nStat;
+				if (psChosenObj != NULL)
+				{
+					// get the weapon stat to see if there is a visible turret to rotate
+					psWStats = asWeaponStats + psStructure->asWeaps[i].nStat;
 
-			//if were going to shoot at something move the turret first then fire when locked on
-			if (psWStats->pMountGraphic == NULL)//no turret so lock on whatever
-			{
-				psStructure->turretRotation = (UWORD)calcDirection(psStructure->x,
-					psStructure->y, psChosenObj->x, psChosenObj->y);
-				combFire(psStructure->asWeaps, (BASE_OBJECT *)psStructure, psChosenObj);
-			}
-			/*else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
-									&(psStructure->turretRotation),
-									&(psStructure->turretPitch),psStructure->turretRotRate,
-									(UWORD)(psStructure->turretRotRate/2),
-									proj_Direct(psWStats),   FALSE))*/
-			else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
-									&(psStructure->turretRotation),
-									&(psStructure->turretPitch),
-									psWStats, FALSE))
-			{
-				combFire(psStructure->asWeaps, (BASE_OBJECT *)psStructure, psChosenObj);
-			}
-		}
-		else
-		{
-			// realign the turret
-			if ( ((psStructure->turretRotation % 90) != 0) ||
-				 (psStructure->turretPitch != 0) )
-			{
-				actionAlignTurret((BASE_OBJECT *)psStructure);
+					//if were going to shoot at something move the turret first then fire when locked on
+					if (psWStats->pMountGraphic == NULL)//no turret so lock on whatever
+					{
+						psStructure->turretRotation[i] = (UWORD)calcDirection(psStructure->x,
+							psStructure->y, psChosenObj->x, psChosenObj->y);
+						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObj, i);
+					}
+					/*else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
+											&(psStructure->turretRotation),
+											&(psStructure->turretPitch),psStructure->turretRotRate,
+											(UWORD)(psStructure->turretRotRate/2),
+											proj_Direct(psWStats),   FALSE))*/
+					else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
+											&(psStructure->turretRotation[i]),
+											&(psStructure->turretPitch[i]),
+											psWStats, FALSE, i))
+					{
+						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObj, i);
+					}
+				}
+				else
+				{
+					// realign the turret
+					if ( ((psStructure->turretRotation[i] % 90) != 0) ||
+						 (psStructure->turretPitch[i] != 0) )
+					{
+						actionAlignTurret((BASE_OBJECT *)psStructure);
+					}
+				}
 			}
 		}
 	}
@@ -3995,27 +4068,27 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				{
 					DBP1(("Struct(%d) attacking : %d\n",
 						psStructure->id, psChosenObj->id));
-					psStructure->psTarget = psChosenObj;
+					psStructure->psTarget[0] = psChosenObj;
 				}
 				else
 				{
-					psStructure->psTarget = NULL;
+					psStructure->psTarget[0] = NULL;
 				}
 			}
-			psChosenObj = psStructure->psTarget;
+			psChosenObj = psStructure->psTarget[0];
 		}
 		else
 		{
-			psChosenObj = psStructure->psTarget;
+			psChosenObj = psStructure->psTarget[0];
 		}
 
 		// you can always see anything that a CB sensor is targeting
 		// Anyone commenting this out again will get a knee capping from John.
 		// You have been warned!!
 		if ((structCBSensor(psStructure) OR structVTOLCBSensor(psStructure)) &&
-			psStructure->psTarget != NULL)
+			psStructure->psTarget[0] != NULL)
 		{
-			psStructure->psTarget->visible[psStructure->player] = UBYTE_MAX;
+			psStructure->psTarget[0]->visible[psStructure->player] = UBYTE_MAX;
 		}
 	}
 	//only interested if the Structure "does" something!
@@ -4096,7 +4169,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			// skip droids that are doing anything else
 			if (	(psDroid != NULL)
 				&&	(!orderState(psDroid, DORDER_RTR)
-				||   psDroid->psTarget != (BASE_OBJECT *)psStructure) )
+				||   psDroid->psTarget[0] != (BASE_OBJECT *)psStructure) )
 			{
 //				if(psDroid->psGroup != NULL)
 //				{
@@ -4536,9 +4609,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 			if ( psDroid->action == DACTION_WAITDURINGREPAIR &&
 				 actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
-									&(psStructure->turretRotation),
-									&(psStructure->turretPitch),
-									NULL, FALSE))
+									&(psStructure->turretRotation[0]),
+									&(psStructure->turretPitch[0]),
+									NULL, FALSE, 0))
 			{
                 //Do repair gradually as power comes in
 //				POWER REQUIRMENTS REMOVED - AB  22/09/98 - and back again 07/01/99
@@ -5279,7 +5352,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
                     }
                 }
                 //HARD_CODE don't ever want more than one Las Sat structure
-                if (psBuilding->psWeapStat AND psBuilding->psWeapStat->
+                if (psBuilding->psWeapStat[0] AND psBuilding->psWeapStat[0]->
                     weaponSubClass == WSC_LAS_SAT AND getLasSatExists(selectedPlayer))
                 {
                     continue;
@@ -7275,67 +7348,130 @@ BOOL getLasSatExists(UDWORD player)
 
 
 /* calculate muzzle tip location in 3d world */
-BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle)
+BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle, int weapon_slot)
 {
 	iVector			barrel;
  	iIMDShape		*psShape, *psWeaponImd;
 
 	psShape       = psStructure->pStructureType->pIMD;
-	//if (psStructure->numWeaps > 0)
-    if (psStructure->asWeaps[0].nStat > 0)
+
+	if (weapon_slot >= 0)
 	{
-		psWeaponImd =  asWeaponStats[psStructure->asWeaps[0].nStat].pIMD;
-	}
-	else
-	{
-		psWeaponImd =  NULL;
-	}
-
-	if(psShape AND psShape->nconnectors)
-	{
-
-		// This code has not been translated to the PSX Yet !!!!                                     (sorry)
-		pie_MatBegin();
-
-		pie_TRANSLATE(psStructure->x,-(SDWORD)psStructure->z,psStructure->y);
-		//matrix = the center of droid
-		pie_MatRotY(DEG((SDWORD) psStructure->direction));
-		pie_MatRotX(DEG(psStructure->pitch));
-		pie_MatRotZ(DEG(-(SDWORD)psStructure->roll));
-//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
-		pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
-					  -psShape->connectors->y);//note y and z flipped
-
-		//matrix = the gun and turret mount on the body
-		pie_MatRotY(DEG((SDWORD)psStructure->turretRotation));//+ve anticlockwise
-		pie_MatRotX(DEG(psStructure->turretPitch));//+ve up
-   		pie_MatRotZ(DEG(0));
-		//matrix = the muzzle mount on turret
-		if( psWeaponImd AND psWeaponImd->nconnectors )
+		//if (psStructure->numWeaps > 0)
+		if (psStructure->asWeaps[weapon_slot].nStat > 0)
 		{
-			barrel.x = psWeaponImd->connectors->x;
-			barrel.y = -psWeaponImd->connectors->y;
-			barrel.z = -psWeaponImd->connectors->z;
+			psWeaponImd =  asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
 		}
 		else
 		{
-			barrel.x = 0;
-			barrel.y = 0;
-			barrel.z = 0;
+			psWeaponImd =  NULL;
 		}
 
-		pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
-		muzzle->z = -muzzle->z;
+		if(psShape AND psShape->nconnectors)
+		{
 
-		pie_MatEnd();
+			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
+			pie_MatBegin();
+
+			pie_TRANSLATE(psStructure->x,-(SDWORD)psStructure->z,psStructure->y);
+			//matrix = the center of droid
+			pie_MatRotY(DEG((SDWORD) psStructure->direction));
+			pie_MatRotX(DEG(psStructure->pitch));
+			pie_MatRotZ(DEG(-(SDWORD)psStructure->roll));
+	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
+			pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+						  -psShape->connectors[weapon_slot].y);//note y and z flipped
+
+			//matrix = the gun and turret mount on the body
+			pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[weapon_slot]));//+ve anticlockwise
+			pie_MatRotX(DEG(psStructure->turretPitch[weapon_slot]));//+ve up
+   			pie_MatRotZ(DEG(0));
+			//matrix = the muzzle mount on turret
+			if( psWeaponImd AND psWeaponImd->nconnectors )
+			{
+				barrel.x = psWeaponImd->connectors->x;
+				barrel.y = -psWeaponImd->connectors->y;
+				barrel.z = -psWeaponImd->connectors->z;
+			}
+			else
+			{
+				barrel.x = 0;
+				barrel.y = 0;
+				barrel.z = 0;
+			}
+
+			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			muzzle->z = -muzzle->z;
+
+			pie_MatEnd();
 
 
+		}
+		else
+		{
+			muzzle->x = psStructure->x;
+			muzzle->y = psStructure->y;
+			muzzle->z = psStructure->z + psStructure->sDisplay.imd->ymax;;
+		}
 	}
 	else
 	{
-		muzzle->x = psStructure->x;
-		muzzle->y = psStructure->y;
-		muzzle->z = psStructure->z + psStructure->sDisplay.imd->ymax;;
+		//if (psStructure->numWeaps > 0)
+		if (psStructure->asWeaps[weapon_slot].nStat > 0)
+		{
+			psWeaponImd =  asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
+		}
+		else
+		{
+			psWeaponImd =  NULL;
+		}
+
+		if(psShape AND psShape->nconnectors)
+		{
+
+			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
+			pie_MatBegin();
+
+			pie_TRANSLATE(psStructure->x,-(SDWORD)psStructure->z,psStructure->y);
+			//matrix = the center of droid
+			pie_MatRotY(DEG((SDWORD) psStructure->direction));
+			pie_MatRotX(DEG(psStructure->pitch));
+			pie_MatRotZ(DEG(-(SDWORD)psStructure->roll));
+	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
+			pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
+						  -psShape->connectors->y);//note y and z flipped
+
+			//matrix = the gun and turret mount on the body
+			pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[0]));//+ve anticlockwise
+			pie_MatRotX(DEG(psStructure->turretPitch[0]));//+ve up
+   			pie_MatRotZ(DEG(0));
+			//matrix = the muzzle mount on turret
+			if( psWeaponImd AND psWeaponImd->nconnectors )
+			{
+				barrel.x = psWeaponImd->connectors->x;
+				barrel.y = -psWeaponImd->connectors->y;
+				barrel.z = -psWeaponImd->connectors->z;
+			}
+			else
+			{
+				barrel.x = 0;
+				barrel.y = 0;
+				barrel.z = 0;
+			}
+
+			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			muzzle->z = -muzzle->z;
+
+			pie_MatEnd();
+
+
+		}
+		else
+		{
+			muzzle->x = psStructure->x;
+			muzzle->y = psStructure->y;
+			muzzle->z = psStructure->z + psStructure->sDisplay.imd->ymax;;
+		}
 	}
 	return TRUE;
 }
@@ -9441,11 +9577,15 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
             //check through the 'attackPlayer' players list of droids to see if any are targetting it
             for (psCurr = apsDroidLists[attackPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
             {
-                if (psCurr->psTarget == (BASE_OBJECT *)psStructure OR
-                    psCurr->psActionTarget == (BASE_OBJECT *)psStructure)
-                {
-                    orderDroid(psCurr, DORDER_STOP);
-                }
+				for (i = 0;i < psCurr->numWeaps;i++)
+				{
+					if (psCurr->psTarget[i] == (BASE_OBJECT *)psStructure OR
+						psCurr->psActionTarget[i] == (BASE_OBJECT *)psStructure)
+					{
+						orderDroid(psCurr, DORDER_STOP);
+						break;
+					}
+				}
                 //check through order list
                 for (i = 0; i < psCurr->listSize; i++)
                 {
@@ -9466,9 +9606,9 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
             for (psStruct = apsStructLists[attackPlayer]; psStruct != NULL; psStruct =
                 psStruct->psNext)
             {
-                if (psStruct->psTarget == (BASE_OBJECT *)psStructure)
+                if (psStruct->psTarget[0] == (BASE_OBJECT *)psStructure)
                 {
-                    psStruct->psTarget = NULL;
+                    psStruct->psTarget[0] = NULL;
                 }
             }
 

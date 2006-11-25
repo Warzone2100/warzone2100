@@ -28,12 +28,14 @@ extern BOOL combInitialise(void);
 /* Shutdown the combat system */
 extern BOOL combShutdown(void);
 
-/* Fire a weapon at something */
-extern void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
+/* Fire a weapon at something added int weapon_slot*/
+extern void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
 
 /*checks through the target players list of structures and droids to see
 if any support a counter battery sensor*/
 extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
 #endif
+
+
 

@@ -3377,6 +3377,7 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
                       UDWORD newCompInc, UBYTE player)
 {
     STRUCTURE   *psStructure;
+	int			inc;
 
     //if the type is not one we are interested in, then don't bother checking
     if (!(oldType == COMP_ECM OR oldType == COMP_SENSOR OR oldType == COMP_WEAPON))
@@ -3407,17 +3408,20 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 				}
 				break;
 			case COMP_WEAPON:
-				//for (inc=0; inc < psStructure->numWeaps; inc++)
-                //can only be one weapon now
-                if (psStructure->asWeaps[0].nStat > 0)
+				//Watermelon:can only be STRUCT_MAXWEAPS weapons now
+				for (inc=0; inc < psStructure->numWeaps; inc++)
 				{
-					/*if (psStructure->asWeaps[inc].nStat == oldCompInc)
+					//can only be one weapon now
+					if (psStructure->asWeaps[inc].nStat > 0)
 					{
-						psStructure->asWeaps[inc].nStat = newCompInc;
-					}*/
-					if (psStructure->asWeaps[0].nStat == oldCompInc)
-					{
-						psStructure->asWeaps[0].nStat = newCompInc;
+						/*if (psStructure->asWeaps[inc].nStat == oldCompInc)
+						{
+							psStructure->asWeaps[inc].nStat = newCompInc;
+						}*/
+						if (psStructure->asWeaps[inc].nStat == oldCompInc)
+						{
+							psStructure->asWeaps[inc].nStat = newCompInc;
+						}
 					}
 				}
 				break;

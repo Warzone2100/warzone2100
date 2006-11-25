@@ -55,12 +55,12 @@ extern BOOL aiInitDroid(DROID *psDroid);
 /* Do the AI for a droid */
 extern void aiUpdateDroid(DROID *psDroid);
 
-// Find the nearest target to a droid
-extern BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj);
+// Find the nearest target to a droid added int weapon_slot
+extern BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot);
 
-/* See if there is a target in range */
+/* See if there is a target in range added int weapon_slot*/
 extern BOOL aiChooseTarget(BASE_OBJECT *psObj,
-						   BASE_OBJECT **ppsTarget);
+						   BASE_OBJECT **ppsTarget, int weapon_slot);
 
 /*set the droid to attack if wihin range otherwise move to target*/
 extern void attackTarget(DROID *psDroid, BASE_OBJECT *psTarget);
@@ -70,9 +70,10 @@ extern BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
-//Watermelon:protocol change to int
 extern int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget);
 
 #endif
+
+
 
 

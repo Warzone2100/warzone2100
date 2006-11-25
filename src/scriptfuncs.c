@@ -6247,7 +6247,7 @@ BOOL scrFireWeaponAtObj(void)
 	sWeapon.nStat = wIndex;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, psTarget->x,psTarget->y,psTarget->z, psTarget, TRUE, FALSE);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, psTarget->x,psTarget->y,psTarget->z, psTarget, TRUE, FALSE, 0);
 
 	return TRUE;
 }
@@ -6267,7 +6267,7 @@ BOOL scrFireWeaponAtLoc(void)
 	sWeapon.nStat = wIndex;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, x,y,map_Height(x,y), NULL, TRUE, FALSE);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, x,y,map_Height(x,y), NULL, TRUE, FALSE, 0);
 
 	return TRUE;
 }
@@ -9970,7 +9970,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 			continue;
 		}
 
-		if((psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_DROID))
+		if((psDroid->psTarget[0] != NULL) && (psDroid->psTarget[0]->type == OBJ_DROID))
 		{
 			if(((DROID *)psDroid->psTarget) == psDroidToCheck)
 				numRepaired++;

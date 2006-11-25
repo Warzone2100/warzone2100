@@ -317,12 +317,16 @@ void displayIMDButton(iIMDShape *IMDShape,
 
 
 
+//Watermelon:changed it to loop thru and draw all weapons
 void displayStructureButton(STRUCTURE *psStructure,
 						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
 {
-	iIMDShape *baseImd,*strImd,*mountImd,*weaponImd;
+	iIMDShape *baseImd,*strImd;//*mountImd,*weaponImd;
+	iIMDShape *mountImd[STRUCT_MAXWEAPS];
+	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
 	UDWORD			nWeaponStat;
 	iVector TmpCamPos = {0,0,0};
+	int		i;
 
     /*HACK HACK HACK!
     if its a 'tall thin (ie tower)' structure with something on the top - offset the
@@ -347,57 +351,122 @@ void displayStructureButton(STRUCTURE *psStructure,
 	//and draw the turret
 	if(psStructure->sDisplay.imd->nconnectors)
 	{
-		weaponImd = NULL;//weapon is gun ecm or sensor
-		mountImd = NULL;
+		for (i = 0;i < STRUCT_MAXWEAPS;i++)
+		{
+			weaponImd[i] = NULL;//weapon is gun ecm or sensor
+			mountImd[i] = NULL;
+		}
+
 		strImd = psStructure->sDisplay.imd;
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
-		//if (psStructure->numWeaps > 0)
-		if (psStructure->asWeaps[0].nStat > 0)
+		//Watermelon:re-enabled if (psStructure->numWeaps > 0)
+		if (psStructure->numWeaps > 0)
 		{
-			nWeaponStat = psStructure->asWeaps[0].nStat;
-			weaponImd =  asWeaponStats[nWeaponStat].pIMD;
-			mountImd =  asWeaponStats[nWeaponStat].pMountGraphic;
-		}
-
-		if (weaponImd == NULL)
-		{
-			//check for ECM
-			if (psStructure->pStructureType->pECM != NULL)
+			for (i = 0;i < psStructure->numWeaps;i++)
 			{
-				weaponImd =  psStructure->pStructureType->pECM->pIMD;
-				mountImd =  psStructure->pStructureType->pECM->pMountGraphic;
+				if (psStructure->asWeaps[i].nStat > 0)
+				{
+					nWeaponStat = psStructure->asWeaps[i].nStat;
+					weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
+					mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
+				}
+
+				if (weaponImd[i] == NULL)
+				{
+					//check for ECM
+					if (psStructure->pStructureType->pECM != NULL)
+					{
+						weaponImd[i] =  psStructure->pStructureType->pECM->pIMD;
+						mountImd[i] =  psStructure->pStructureType->pECM->pMountGraphic;
+					}
+				}
+
+				if (weaponImd[i] == NULL)
+				{
+					//check for sensor
+					if (psStructure->pStructureType->pSensor != NULL)
+					{
+						weaponImd[i] =  psStructure->pStructureType->pSensor->pIMD;
+						mountImd[i]  =  psStructure->pStructureType->pSensor->pMountGraphic;
+					}
+				}
 			}
 		}
-
-		if (weaponImd == NULL)
+		else
 		{
-			//check for sensor
-			if (psStructure->pStructureType->pSensor != NULL)
+			if (psStructure->asWeaps[0].nStat > 0)
 			{
-				weaponImd =  psStructure->pStructureType->pSensor->pIMD;
-				mountImd  =  psStructure->pStructureType->pSensor->pMountGraphic;
+				nWeaponStat = psStructure->asWeaps[0].nStat;
+				weaponImd[0] =  asWeaponStats[nWeaponStat].pIMD;
+				mountImd[0] =  asWeaponStats[nWeaponStat].pMountGraphic;
 			}
+
+			if (weaponImd[0] == NULL)
+			{
+				//check for ECM
+				if (psStructure->pStructureType->pECM != NULL)
+				{
+					weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
+					mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
+				}
+			}
+
+			if (weaponImd[0] == NULL)
+			{
+				//check for sensor
+				if (psStructure->pStructureType->pSensor != NULL)
+				{
+					weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
+					mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
+				}
+			}
+
 		}
 
 		//draw Weapon/ECM/Sensor for structure
-		if(weaponImd != NULL)
+		//Watermelon:uses 0
+		if(weaponImd[0] != NULL)
 		{
-			iV_MatrixBegin();
-			iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
-			pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation)));
-			if (mountImd != NULL)
+			if (psStructure->numWeaps > 0)
 			{
-				pie_Draw3DShape(mountImd, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-				if(mountImd->nconnectors)
+				for (i = 0;i < psStructure->numWeaps;i++)
 				{
-					iV_TRANSLATE(mountImd->connectors->x,mountImd->connectors->z,mountImd->connectors->y);
+					iV_MatrixBegin();
+					iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+					pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[i])));
+					if (mountImd[i] != NULL)
+					{
+						pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+						if(mountImd[i]->nconnectors)
+						{
+							iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+						}
+					}
+					iV_MatrixRotateX(DEG(psStructure->turretPitch[i]));
+					pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+					//we have a droid weapon so do we draw a muzzle flash
+					iV_MatrixEnd();
 				}
 			}
-			iV_MatrixRotateX(DEG(psStructure->turretPitch));
-			pie_Draw3DShape(weaponImd, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-			//we have a droid weapon so do we draw a muzzle flash
-			iV_MatrixEnd();
+			else
+			{
+				iV_MatrixBegin();
+				iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
+				pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
+				if (mountImd[0] != NULL)
+				{
+					pie_Draw3DShape(mountImd[0], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+					if(mountImd[0]->nconnectors)
+					{
+						iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
+					}
+				}
+				iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
+				pie_Draw3DShape(weaponImd[0], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+				//we have a droid weapon so do we draw a muzzle flash
+				iV_MatrixEnd();
+			}
 		}
 	}
 	unsetMatrix();
@@ -406,9 +475,12 @@ void displayStructureButton(STRUCTURE *psStructure,
 void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
 {
-	iIMDShape		*baseImd,*strImd,*mountImd,*weaponImd;
+	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd;
+	iIMDShape *mountImd[STRUCT_MAXWEAPS];
+	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
 	iVector TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
+	int		i;
 
     /*HACK HACK HACK!
     if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
@@ -433,60 +505,132 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 	//and draw the turret
 	if(Stats->pIMD->nconnectors)
 	{
-		weaponImd = NULL;//weapon is gun ecm or sensor
-		mountImd = NULL;
+		if (Stats->numWeaps > 0)
+		{
+			for (i = 0;i < Stats->numWeaps;i++)
+			{
+				weaponImd[i] = NULL;//weapon is gun ecm or sensor
+				mountImd[i] = NULL;
+			}
+		}
+		else
+		{
+			weaponImd[0] = NULL;
+			mountImd[0] = NULL;
+		}
 		strImd = Stats->pIMD;
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
-		//if (Stats->numWeaps > 0)
-        //can only have the one
-        if (Stats->psWeapStat != NULL)
+		//Watermelon:can only have the STRUCT_MAXWEAPS
+		if (Stats->numWeaps > 0)
 		{
-			/*nWeaponStat = Stats->defaultWeap;
-			weaponImd =  Stats->asWeapList[nWeaponStat]->pIMD;
-			mountImd =  Stats->asWeapList[nWeaponStat]->pMountGraphic;*/
-            weaponImd = Stats->psWeapStat->pIMD;
-            mountImd = Stats->psWeapStat->pMountGraphic;
-		}
-
-		if (weaponImd == NULL)
-		{
-			//check for ECM
-			if (Stats->pECM != NULL)
+			for (i = 0;i < Stats->numWeaps;i++)
 			{
-				weaponImd =  Stats->pECM->pIMD;
-				mountImd =  Stats->pECM->pMountGraphic;
+				//can only have the one
+				if (Stats->psWeapStat[i] != NULL)
+				{
+					/*nWeaponStat = Stats->defaultWeap;
+					weaponImd =  Stats->asWeapList[nWeaponStat]->pIMD;
+					mountImd =  Stats->asWeapList[nWeaponStat]->pMountGraphic;*/
+					weaponImd[i] = Stats->psWeapStat[i]->pIMD;
+					mountImd[i] = Stats->psWeapStat[i]->pMountGraphic;
+				}
+
+				if (weaponImd[i] == NULL)
+				{
+					//check for ECM
+					if (Stats->pECM != NULL)
+					{
+						weaponImd[i] =  Stats->pECM->pIMD;
+						mountImd[i] =  Stats->pECM->pMountGraphic;
+					}
+				}
+
+				if (weaponImd[i] == NULL)
+				{
+					//check for sensor
+					if (Stats->pSensor != NULL)
+					{
+						weaponImd[i] =  Stats->pSensor->pIMD;
+						mountImd[i]  =  Stats->pSensor->pMountGraphic;
+					}
+				}
 			}
 		}
-
-		if (weaponImd == NULL)
+		else
 		{
-			//check for sensor
-			if (Stats->pSensor != NULL)
+			if (Stats->psWeapStat[0] != NULL)
 			{
-				weaponImd =  Stats->pSensor->pIMD;
-				mountImd  =  Stats->pSensor->pMountGraphic;
+				/*nWeaponStat = Stats->defaultWeap;
+				weaponImd =  Stats->asWeapList[nWeaponStat]->pIMD;
+				mountImd =  Stats->asWeapList[nWeaponStat]->pMountGraphic;*/
+				weaponImd[0] = Stats->psWeapStat[0]->pIMD;
+				mountImd[0] = Stats->psWeapStat[0]->pMountGraphic;
+			}
+
+			if (weaponImd[0] == NULL)
+			{
+				//check for ECM
+				if (Stats->pECM != NULL)
+				{
+					weaponImd[0] =  Stats->pECM->pIMD;
+					mountImd[0] =  Stats->pECM->pMountGraphic;
+				}
+			}
+
+			if (weaponImd[0] == NULL)
+			{
+				//check for sensor
+				if (Stats->pSensor != NULL)
+				{
+					weaponImd[0] =  Stats->pSensor->pIMD;
+					mountImd[0]  =  Stats->pSensor->pMountGraphic;
+				}
 			}
 		}
 
 		//draw Weapon/ECM/Sensor for structure
-		if(weaponImd != NULL)
+		if(weaponImd[0] != NULL)
 		{
-			iV_MatrixBegin();
-			iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
-			pie_MatRotY(DEG(0));
-			if (mountImd != NULL)
+			if (Stats->numWeaps > 0)
 			{
-				pie_Draw3DShape(mountImd, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-				if(mountImd->nconnectors)
+				for (i = 0;i < Stats->numWeaps;i++)
 				{
-					iV_TRANSLATE(mountImd->connectors->x,mountImd->connectors->z,mountImd->connectors->y);
+					iV_MatrixBegin();
+					iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+					pie_MatRotY(DEG(0));
+					if (mountImd[i] != NULL)
+					{
+						pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+						if(mountImd[i]->nconnectors)
+						{
+							iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+						}
+					}
+					iV_MatrixRotateX(DEG(0));
+					pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+					//we have a droid weapon so do we draw a muzzle flash
+					iV_MatrixEnd();
 				}
 			}
-			iV_MatrixRotateX(DEG(0));
-			pie_Draw3DShape(weaponImd, 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-			//we have a droid weapon so do we draw a muzzle flash
-			iV_MatrixEnd();
+			else
+			{
+				iV_MatrixBegin();
+				iV_TRANSLATE(strImd->connectors[0].x,strImd->connectors[0].z,strImd->connectors[0].y);
+				pie_MatRotY(DEG(0));
+				if (mountImd[0] != NULL)
+				{
+					pie_Draw3DShape(mountImd[0], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+					if(mountImd[0]->nconnectors)
+					{
+						iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
+					}
+				}
+				iV_MatrixRotateX(DEG(0));
+				pie_Draw3DShape(weaponImd[0], 0, getPlayerColour(selectedPlayer), pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
+				//we have a droid weapon so do we draw a muzzle flash
+				iV_MatrixEnd();
+			}
 		}
 	}
 
@@ -1101,9 +1245,21 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 							//Watermelon:to skip connectors[1](VOTL hardpoint)
 							if ( i == 0 )
 							{
-								pie_TRANSLATE( psShapeTemp->connectors[iConnector].x,
-											   psShapeTemp->connectors[iConnector].z,
-											   psShapeTemp->connectors[iConnector].y  );
+								//Watermelon:midpoint for heavybody with only 1 weapon
+								if ( psDroid->numWeaps == 1 && 
+									((asBodyStats[psDroid->asBits[COMP_BODY].nStat]).weaponSlots == 3 ||
+									(asBodyStats[psDroid->asBits[COMP_BODY].nStat]).size >= SIZE_HEAVY))
+								{
+									pie_TRANSLATE( (SDWORD)((psShapeTemp->connectors[0].x + psShapeTemp->connectors[2].x) /2),
+												   psShapeTemp->connectors[0].z,
+												   (SDWORD)((psShapeTemp->connectors[0].y + psShapeTemp->connectors[2].y) /2)  );
+								}
+								else
+								{
+									pie_TRANSLATE( psShapeTemp->connectors[iConnector].x,
+												   psShapeTemp->connectors[iConnector].z,
+												   psShapeTemp->connectors[iConnector].y  );
+								}
 							}
 							else if ( i > 0 )
 							{
@@ -1184,31 +1340,10 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 							if( psShape && psShape->nconnectors )
 							{
 								/* Now we need to move to the end fo the barrel */
-								//Watermelon:to skip connectors[1](VOTL hardpoint)
-								if ( i == 0 )
-								{
-									pie_TRANSLATE( psShape->connectors[0].x,
-												   psShape->connectors[0].z,
-												   psShape->connectors[0].y  );
-								}
-								else if ( i > 0 )
-								{
-									//Watermelon:to skip VTOL connector 1
-									if ( iConnector == 1)
-									{
-										//Watermelon:VTOL untouched
-										pie_TRANSLATE( psShape->connectors[iConnector].x,
-													   psShape->connectors[iConnector].z,
-													   psShape->connectors[iConnector].y  );
-									}
-									else
-									{
-										//Watermelon:MUZZLE_FLASH_PIE for all weapons
-										pie_TRANSLATE( psShape->connectors[i+1].x,
-													   psShape->connectors[i+1].z,
-													   psShape->connectors[i+1].y  );
-									}
-								}
+								//Watermelon:fixed the bug,I mingled body connector and weapon connector :/
+								pie_TRANSLATE( psShape->connectors[0].x,
+											   psShape->connectors[0].z,
+											   psShape->connectors[0].y  );
 								//and draw the muzzle flash
 								//animate for the duration of the flash only
 								//Watermelon:change macro to actual accessor for each turret effect
@@ -1694,6 +1829,8 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
+
+
 
 
 

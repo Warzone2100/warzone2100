@@ -720,27 +720,27 @@ BOOL accruePower(BASE_OBJECT *psObject)
         case DROID_CONSTRUCT:
         case DROID_CYBORG_CONSTRUCT:
             //check trying to build something (and that hasn't been blown up)
-            if (DroidIsBuilding(psDroid) AND psDroid->psTarget AND !psDroid->psTarget->died)
+            if (DroidIsBuilding(psDroid) AND psDroid->psTarget[0] AND !psDroid->psTarget[0]->died)
             {
 			    //powerDiff = ((STRUCTURE *)psDroid->psTarget)->pStructureType->
                 //    powerToBuild - ((STRUCTURE *)psDroid->psTarget)->
                 //    currentPowerAccrued;
-                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget) -
-                    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued;
+                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget[0]) -
+                    ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued;
 			    //if equal then don't need power
 			    if (powerDiff)
 			    {
 				    if (POWER_PER_CYCLE >= powerDiff)
 				    {
 					    usePower(psDroid->player, powerDiff);
-					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
+					    ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued +=
                             powerDiff;
 					    bPowerUsed = TRUE;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psDroid->player, POWER_PER_CYCLE);
-					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
+					    ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued +=
                             POWER_PER_CYCLE;
 					    bPowerUsed = TRUE;
 				    }
@@ -753,7 +753,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
             psTarget = NULL;
             if (DroidIsRepairing(psDroid))
             {
-                psTarget = (DROID *)psDroid->psTarget;
+                psTarget = (DROID *)psDroid->psTarget[0];
             }
             else
             {
@@ -761,13 +761,13 @@ BOOL accruePower(BASE_OBJECT *psObject)
                 if (orderState(psDroid, DORDER_GUARD) AND psDroid->action ==
                     DACTION_DROIDREPAIR)
                 {
-                    psTarget = (DROID *)psDroid->psActionTarget;
+                    psTarget = (DROID *)psDroid->psActionTarget[0];
                 }
             }
             //check the droid hasn't died in the meantime
             if (psTarget AND psTarget->died)
             {
-                psDroid->psTarget = NULL;
+                psDroid->psTarget[0] = NULL;
                 psTarget = NULL;
             }
             if (psTarget)
@@ -1321,6 +1321,8 @@ has been used*/
 		powerCalculated = FALSE;
 	}
 }*/
+
+
 
 
 

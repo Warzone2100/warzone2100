@@ -1727,12 +1727,12 @@ BOOL droidStartBuild(DROID *psDroid)
 		"unitStartBuild: invalid unit pointer" );
 
 	/* See if we are starting a new structure */
-	if ((psDroid->psTarget == NULL) &&
+	if ((psDroid->psTarget[0] == NULL) &&
 		(psDroid->order == DORDER_BUILD ||
 		 psDroid->order == DORDER_LINEBUILD))
 	{
 		//need to check structLimits have not been exceeded
-		psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats;
+		psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats[0];
 		if (asStructLimits[psDroid->player][psStructStat - asStructureStats].
 			currentQuantity >= asStructLimits[psDroid->player][psStructStat -
 			asStructureStats].limit)
@@ -1797,7 +1797,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	else
 	{
 		/* Check the structure is still there to build (joining a partially built struct) */
-		psStruct = (STRUCTURE *)psDroid->psTarget;
+		psStruct = (STRUCTURE *)psDroid->psTarget[0];
 		if (!droidNextToStruct(psDroid,  (BASE_OBJECT *)psStruct))
 		{
 			/* Nope - stop building */
@@ -1810,8 +1810,8 @@ BOOL droidStartBuild(DROID *psDroid)
 	{
 		psDroid->actionStarted = gameTime;
 		psDroid->actionPoints = 0;
-		psDroid->psTarget = (BASE_OBJECT *)psStruct;
-		psDroid->psActionTarget = (BASE_OBJECT *)psStruct;
+		psDroid->psTarget[0] = (BASE_OBJECT *)psStruct;
+		psDroid->psActionTarget[0] = (BASE_OBJECT *)psStruct;
 	}
 
 
@@ -1874,7 +1874,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 	ASSERT( psDroid->action == DACTION_BUILD,
 		"unitUpdateBuild: unit is not building" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->psTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateBuild: target is not a structure" );
 	ASSERT( psDroid->asBits[COMP_CONSTRUCT].nStat < numConstructStats,
@@ -2264,7 +2264,7 @@ BOOL droidStartDemolishing( DROID *psDroid )
 
 	ASSERT( psDroid->order == DORDER_DEMOLISH,
 		"unitStartDemolishing: unit is not demolishing" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->psTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitStartDemolishing: target is not a structure" );
 
@@ -2295,7 +2295,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 
 	ASSERT( psDroid->action == DACTION_DEMOLISH,
 		"unitUpdateDemolishing: unit is not demolishing" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->psTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateDemolishing: target is not a structure" );
 
@@ -2396,7 +2396,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 		removeStruct( psStruct, TRUE );
 
 		/* reset target stats*/
-	    psDroid->psTarStats = NULL;
+	    psDroid->psTarStats[0] = NULL;
 
 		return FALSE;
 	}
@@ -2415,7 +2415,7 @@ BOOL droidStartClearing( DROID *psDroid )
 
 	ASSERT( psDroid->order == DORDER_CLEARWRECK,
 		"unitStartClearing: unit is not clearing wreckage" );
-	psFeature = (FEATURE *)psDroid->psTarget;
+	psFeature = (FEATURE *)psDroid->psTarget[0];
 	ASSERT( psFeature->type == OBJ_FEATURE,
 		"unitStartClearing: target is not a feature" );
 	ASSERT( psFeature->psStats->subType == FEAT_BUILD_WRECK,
@@ -2436,7 +2436,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 
 	ASSERT( psDroid->action == DACTION_CLEARWRECK,
 		"unitUpdateClearing: unit is not clearing wreckage" );
-	psFeature = (FEATURE *)psDroid->psTarget;
+	psFeature = (FEATURE *)psDroid->psTarget[0];
 	ASSERT( psFeature->type == OBJ_FEATURE,
 		"unitStartClearing: target is not a feature" );
 	ASSERT( psFeature->psStats->subType == FEAT_BUILD_WRECK,
@@ -2463,7 +2463,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 		removeFeature(psFeature);
 
 		/* reset target stats */
-		psDroid->psTarStats = NULL;
+		psDroid->psTarStats[0] = NULL;
 
 		return FALSE;
 	}
@@ -2478,7 +2478,7 @@ BOOL droidStartRepair( DROID *psDroid )
 	//ASSERT( psDroid->order == DORDER_REPAIR,
 	//	"droidStartRepair: droid does not have repair order" );
 	//psStruct = (STRUCTURE *)psDroid->psTarget;
-	psStruct = (STRUCTURE *)psDroid->psActionTarget;
+	psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitStartRepair: target is not a structure" );
 
@@ -2496,7 +2496,7 @@ BOOL droidStartDroidRepair( DROID *psDroid )
 
 //	ASSERT( psDroid->order == DORDER_DROIDREPAIR,
 //		"droidStartDroidRepair: droid does not have droid repair order" );
-	psDroidToRepair = (DROID *)psDroid->psActionTarget;
+	psDroidToRepair = (DROID *)psDroid->psActionTarget[0];
 	ASSERT( psDroidToRepair->type == OBJ_DROID,
 		"unitStartUnitRepair: target is not a unit" );
 
@@ -2517,7 +2517,7 @@ void droidSelfRepair(DROID *psDroid)
 		    {
 			    psDroid->action = DACTION_DROIDREPAIR;
 //			    psDroid->psTarget = (BASE_OBJECT *)psDroid;
-                psDroid->psActionTarget = (BASE_OBJECT *)psDroid;
+                psDroid->psActionTarget[0] = (BASE_OBJECT *)psDroid;
 			    psDroid->actionStarted = gameTime;
 			    psDroid->actionPoints  = 0;
 		    }
@@ -2533,7 +2533,7 @@ BOOL droidStartRestore( DROID *psDroid )
 
 	ASSERT( psDroid->order == DORDER_RESTORE,
 		"unitStartRestore: unit is not restoring" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->psTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitStartRestore: target is not a structure" );
 
@@ -2552,7 +2552,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 
 	ASSERT( psDroid->action == DACTION_RESTORE,
 		"unitUpdateRestore: unit is not restoring" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->psTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateRestore: target is not a structure" );
 	ASSERT( psStruct->pStructureType->resistance != 0,
@@ -2680,7 +2680,7 @@ BOOL droidUpdateRepair( DROID *psDroid )
 	ASSERT( psDroid->action == DACTION_REPAIR,
 		"unitUpdateRepair: unit does not have repair order" );
 	//psStruct = (STRUCTURE *)psDroid->psTarget;
-	psStruct = (STRUCTURE *)psDroid->psActionTarget;
+	psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateRepair: target is not a structure" );
 
@@ -2724,7 +2724,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	ASSERT( psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0,
 		"unitUpdateUnitRepair: unit does not have a repair turret" );
 
-	psDroidToRepair = (DROID *)psRepairDroid->psActionTarget;
+	psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
 	ASSERT( psDroidToRepair->type == OBJ_DROID,
 		"unitUpdateUnitRepair: target is not a unit" );
 
@@ -3570,7 +3570,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	char				*pStartWeaponData;
 	UDWORD				NumWeapons = 0, i, player;
 	char				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
-	//Watermelon:STRINGs,j
+	//Watermelon:TODO:fix this temp naming one day,WeaponName[DROID_MAXWEAPS][MAX_NAME_SIZE] causes stack corruption
 	char				WeaponNameA[MAX_NAME_SIZE],WeaponNameB[MAX_NAME_SIZE];
 	int					j;
 	DROID_TEMPLATE		*pTemplate;
@@ -4326,13 +4326,17 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->orderY = 0;
 	psDroid->orderX2 = 0;
 	psDroid->orderY2 = 0;
-	psDroid->psTarget = NULL;
-	psDroid->psTarStats = NULL;
+	psDroid->psTarStats[0] = NULL;
 	psDroid->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
 	psDroid->action = DACTION_NONE;
 	psDroid->actionX = 0;
 	psDroid->actionY = 0;
-	psDroid->psActionTarget = NULL;
+
+	for(i = 0;i < DROID_MAXWEAPS;i++)
+	{
+		psDroid->psActionTarget[i] = NULL;
+		psDroid->psTarget[i] = NULL;
+	}
 
 		// ffs je
 	psDroid->listSize = 0;
@@ -5257,7 +5261,7 @@ void	setSelectedCommander(UDWORD commander)
  * Watermelon:note:only the 1st muzzleLocation is calculated,since WEAPON_IMD and WEAPON_MOUNT_IMD
  * are #define pointing to asWeaps[0]...
 */
-BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
+BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot)
 {
 //	UDWORD turretType;
 //	UDWORD bodyType;
@@ -5265,62 +5269,105 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle)
  	iIMDShape		*psShape, *psWeapon, *psWeaponMount;
 
 	psShape       = BODY_IMD(psDroid,psDroid->player);
-	psWeapon      = WEAPON_IMD(psDroid,psDroid->player);
-	psWeaponMount = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
-
-
-	if(psShape AND psShape->nconnectors)
+	//Watermelon:got rid of the macros...
+	//psWeapon      = WEAPON_IMD(psDroid,psDroid->player);
+	//psWeaponMount = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
+	if (weapon_slot >= 0)
 	{
-
-
-
-		// This code has not been translated to the PSX Yet !!!!                                     (sorry)
-		pie_MatBegin();
-
-		pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
-		//matrix = the center of droid
-		pie_MatRotY(DEG((SDWORD) psDroid->direction));
-		pie_MatRotX(DEG(psDroid->pitch));
-		pie_MatRotZ(DEG(-(SDWORD)psDroid->roll));
-//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
-		pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
-					  -psShape->connectors->y);//note y and z flipped
-
-		//matrix = the gun and turret mount on the body
-		//Watermelon:force it to use 0 thanks to the define weirdness...
-		pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[0]));//+ve anticlockwise
-		pie_MatRotX(DEG(psDroid->turretPitch[0]));//+ve up
-   		pie_MatRotZ(DEG(0));
-		//matrix = the muzzle mount on turret
-		if( psWeapon AND psWeapon->nconnectors )
+		psWeapon	  = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
+		psWeaponMount = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pMountGraphic;
+		if(psShape AND psShape->nconnectors)
 		{
-			barrel.x = psWeapon->connectors->x;
-			barrel.y = -psWeapon->connectors->y;
-			barrel.z = -psWeapon->connectors->z;
+			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
+			pie_MatBegin();
+
+			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
+			//matrix = the center of droid
+			pie_MatRotY(DEG((SDWORD) psDroid->direction));
+			pie_MatRotX(DEG(psDroid->pitch));
+			pie_MatRotZ(DEG(-(SDWORD)psDroid->roll));
+		//	pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
+			pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+						  -psShape->connectors[weapon_slot].y);//note y and z flipped
+
+			//matrix = the gun and turret mount on the body
+			pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[weapon_slot]));//+ve anticlockwise
+			pie_MatRotX(DEG(psDroid->turretPitch[weapon_slot]));//+ve up
+   			pie_MatRotZ(DEG(0));
+			//matrix = the muzzle mount on turret
+			if( psWeapon AND psWeapon->nconnectors )
+			{
+				barrel.x = psWeapon->connectors->x;
+				barrel.y = -psWeapon->connectors->y;
+				barrel.z = -psWeapon->connectors->z;
+			}
+			else
+			{
+				barrel.x = 0;
+				barrel.y = 0;
+				barrel.z = 0;
+			}
+
+			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			muzzle->z = -muzzle->z;
+
+			pie_MatEnd();
 		}
 		else
 		{
-			barrel.x = 0;
-			barrel.y = 0;
-			barrel.z = 0;
+			muzzle->x = psDroid->x;
+			muzzle->y = psDroid->y;
+			muzzle->z = psDroid->z+32;
 		}
-
-		pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
-		muzzle->z = -muzzle->z;
-
-		pie_MatEnd();
-
-
-
-
 	}
-
-
-  else
+	else
 	{
-		muzzle->x = psDroid->x;
-		muzzle->y = psDroid->y;
-		muzzle->z = psDroid->z+32;
+		psWeapon	  = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD;
+		psWeaponMount = (asWeaponStats[psDroid->asWeaps[0].nStat]).pMountGraphic;
+		if(psShape AND psShape->nconnectors)
+		{
+			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
+			pie_MatBegin();
+
+			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
+			//matrix = the center of droid
+			pie_MatRotY(DEG((SDWORD) psDroid->direction));
+			pie_MatRotX(DEG(psDroid->pitch));
+			pie_MatRotZ(DEG(-(SDWORD)psDroid->roll));
+	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
+			pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
+						  -psShape->connectors->y);//note y and z flipped
+
+			//matrix = the gun and turret mount on the body
+			//Watermelon:force it to use 0 thanks to the define weirdness...
+			pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[0]));//+ve anticlockwise
+			pie_MatRotX(DEG(psDroid->turretPitch[0]));//+ve up
+   			pie_MatRotZ(DEG(0));
+			//matrix = the muzzle mount on turret
+			if( psWeapon AND psWeapon->nconnectors )
+			{
+				barrel.x = psWeapon->connectors->x;
+				barrel.y = -psWeapon->connectors->y;
+				barrel.z = -psWeapon->connectors->z;
+			}
+			else
+			{
+				barrel.x = 0;
+				barrel.y = 0;
+				barrel.z = 0;
+			}
+
+			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			muzzle->z = -muzzle->z;
+
+			pie_MatEnd();
+		}
+		else
+		{
+			muzzle->x = psDroid->x;
+			muzzle->y = psDroid->y;
+			muzzle->z = psDroid->z+32;
+		}
 	}
   return TRUE;
 }
@@ -6335,7 +6382,7 @@ void setUpBuildModule(DROID *psDroid)
 		{
 			//set up the help build scenario
 			psDroid->order = DORDER_HELPBUILD;
-			psDroid->psTarget = (BASE_OBJECT *)psStruct;
+			psDroid->psTarget[0] = (BASE_OBJECT *)psStruct;
 			if (droidStartBuild(psDroid))
 			{
 				psDroid->action = DACTION_BUILD;
@@ -6550,7 +6597,7 @@ BOOL droidUnderRepair(DROID *psDroid)
 			//if (psCurr->droidType == DROID_REPAIR AND psCurr->action ==
             if ((psCurr->droidType == DROID_REPAIR OR psCurr->droidType ==
                 DROID_CYBORG_REPAIR) AND psCurr->action ==
-				DACTION_DROIDREPAIR AND psCurr->psTarget == (BASE_OBJECT *)psDroid)
+				DACTION_DROIDREPAIR AND psCurr->psTarget[0] == (BASE_OBJECT *)psDroid)
 			{
 				return TRUE;
 			}
@@ -6634,8 +6681,8 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 		return FALSE;
 	}
 
-	if ((psDroid->psActionTarget != NULL) &&
-		(psDroid->psActionTarget->cluster != psStruct->cluster))
+	if ((psDroid->psActionTarget[0] != NULL) &&
+		(psDroid->psActionTarget[0]->cluster != psStruct->cluster))
 	{
 		// vtol is rearming at a different base
 		return FALSE;
@@ -6708,7 +6755,7 @@ BOOL allVtolsRearmed(DROID *psDroid)
 	{
 		if (vtolRearming(psCurr) &&
 			psCurr->order == psDroid->order &&
-			psCurr->psTarget == psDroid->psTarget)
+			psCurr->psTarget[0] == psDroid->psTarget[0])
 		{
 			stillRearming = TRUE;
 			break;
@@ -7013,8 +7060,8 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //check through the 'to' players list of droids to see if any are targetting it
         for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
         {
-            if (psCurr->psTarget == (BASE_OBJECT *)psD OR
-                psCurr->psActionTarget == (BASE_OBJECT *)psD)
+            if (psCurr->psTarget[0] == (BASE_OBJECT *)psD OR
+                psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
             {
                 orderDroid(psCurr, DORDER_STOP);
             }
@@ -7038,9 +7085,9 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct =
             psStruct->psNext)
         {
-            if (psStruct->psTarget == (BASE_OBJECT *)psD)
+            if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
             {
-                psStruct->psTarget = NULL;
+                psStruct->psTarget[0] = NULL;
             }
         }
 

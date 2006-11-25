@@ -55,6 +55,8 @@ typedef enum _droid_order
 	DORDER_RECOVER,				// pick up an artifact
 	DORDER_LEAVEMAP,			// 36 - vtol flying off the map
 	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
+	DORDER_ATTACK_M,			// 38 - attack with multiple weapons
+	DORDER_ATTACKTARGET_M,		// 39 - attack multiple targets
 } DROID_ORDER;
 
 // secondary orders for droids
@@ -227,5 +229,7 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
 #endif
+
+
 
 

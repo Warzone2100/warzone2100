@@ -310,6 +310,7 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
 {
     DROID			*psDroid;
 	UDWORD			id,player;
+	int				i;
 
 	NetGet(pMsg,0,id);
 	player = pMsg->body[4];
@@ -325,8 +326,11 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
         droidRemove(psDroid, apsDroidLists);
         //init the order for when disembark
         psDroid->order = DORDER_NONE;
-    	psDroid->psTarget = NULL;
-        psDroid->psTarStats = NULL;
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+    		psDroid->psTarget[i] = NULL;
+		}
+        psDroid->psTarStats[0] = NULL;
     }
 
     return TRUE;
@@ -1088,14 +1092,20 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	UDWORD	noTarget =0;
 	SDWORD	asParts[DROID_MAXCOMP];
 	UDWORD	asWeaps[DROID_MAXWEAPS];
+	int		i;
+	BOOL	bNoTarget;
 
-    if (pD->asWeaps[0].nStat > 0)									// build some bits for the template.
+	//Watermelon:pfft
+	if (pD->numWeaps == 0)
 	{
-           asWeaps[0] = pD->asWeaps[0].nStat;
-	}
-	else
-	{
-		asWeaps[0] = 0;
+		if (pD->asWeaps[0].nStat > 0)									// build some bits for the template.
+		{
+			   asWeaps[0] = pD->asWeaps[0].nStat;
+		}
+		else
+		{
+			asWeaps[0] = 0;
+		}
 	}
 
 	asParts[COMP_BODY]		=	pD->asBits[COMP_BODY].nStat;		//allocate the components
@@ -1107,7 +1117,8 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	asParts[COMP_CONSTRUCT]	=	pD->asBits[COMP_CONSTRUCT].nStat;
 	asParts[COMP_WEAPON]	=	pD->asBits[COMP_WEAPON].nStat;
 	NetAdd(m,sizecount,asParts);					sizecount+=sizeof(asParts);
-	NetAdd(m,sizecount,asWeaps);					sizecount+=sizeof(asWeaps);			// to build a template.
+	NetAdd(m,sizecount,pD->numWeaps);				sizecount+=sizeof(pD->numWeaps);
+	NetAdd(m,sizecount,pD->asWeaps);				sizecount+=sizeof(pD->asWeaps);			// to build a template.
 
 	NetAdd(m,sizecount,pD->x);						sizecount+=sizeof(pD->x);
 	NetAdd(m,sizecount,pD->y);						sizecount+=sizeof(pD->y);
@@ -1137,18 +1148,25 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	NetAdd(m,sizecount,pD->orderX2);				sizecount+=sizeof(pD->orderX2);
 	NetAdd(m,sizecount,pD->orderY2);				sizecount+=sizeof(pD->orderY2);
 
-	if (pD->psTarget)
+	bNoTarget = TRUE;
+	//Watermelon:net packet size increase
+	for (i = 0;i < pD->numWeaps;i++)
 	{
-		NetAdd(m,sizecount,pD->psTarget->id);		sizecount+=sizeof(pD->psTarget->id);
+		if (pD->psTarget[i])
+		{
+			NetAdd(m,sizecount,pD->psTarget[i]->id);		sizecount+=sizeof(pD->psTarget[i]->id);
+			bNoTarget = FALSE;
+		}
 	}
-	else
+
+	if (bNoTarget)
 	{
 		NetAdd(m,sizecount,noTarget);				sizecount+=sizeof(noTarget);
 	}
 
-	if (pD->psTarStats)
+	if (pD->psTarStats[0])
 	{
-		NetAdd(m,sizecount,pD->psTarStats->ref);	sizecount+=sizeof(pD->psTarStats->ref);
+		NetAdd(m,sizecount,pD->psTarStats[0]->ref);	sizecount+=sizeof(pD->psTarStats[0]->ref);
 	}
 	else
 	{
@@ -1175,11 +1193,13 @@ BOOL receiveWholeDroid(NETMSG *m)
 	UWORD x,y,z;
 	UDWORD id;
 	UBYTE player;
+	int	i;
 
 	// get the stuff
 	NetGet(m,sizecount,dt.asParts);				sizecount+=sizeof(dt.asParts);		// build a template
 //	NetGet(m,sizecount,dt.powerPoints);			sizecount+=sizeof(dt.powerPoints);
 	NetGet(m,sizecount,dt.asWeaps);				sizecount+=sizeof(dt.asWeaps);
+	NetGet(m,sizecount,dt.numWeaps);			sizecount+=sizeof(dt.numWeaps);		// numWeaps
 	NetGet(m,sizecount,x);						sizecount+=sizeof(x);				// edit it.
 	NetGet(m,sizecount,y);						sizecount+=sizeof(y);
 	NetGet(m,sizecount,z);						sizecount+=sizeof(z);
@@ -1194,10 +1214,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	{
 		dt.numWeaps =0;
 	}
-	else
-	{
-		dt.numWeaps = 1;
-	}
+
 	dt.powerPoints = calcTemplatePower(&dt);
 
 	NetGet(m,sizecount,id);						sizecount+=sizeof(id);
@@ -1246,8 +1263,12 @@ BOOL receiveWholeDroid(NETMSG *m)
 		NetGet(m,sizecount,pD->orderX2);			sizecount+=sizeof(pD->orderX2);
 		NetGet(m,sizecount,pD->orderY2);			sizecount+=sizeof(pD->orderY2);
 
-		NetGet(m,sizecount,pD->psTarget);			sizecount+=sizeof(pD->psTarget);	//later!
-		NetGet(m,sizecount,pD->psTarStats);			sizecount+=sizeof(pD->psTarStats);	//later!
+		//Watermelon:recieve packet changes to cope with psTarget[] array change
+		for (i = 0;i < dt.numWeaps;i++)
+		{
+			NetGet(m,sizecount,pD->psTarget[i]);			sizecount+=sizeof(pD->psTarget[i]);	//later!
+		}
+		NetGet(m,sizecount,pD->psTarStats[0]);			sizecount+=sizeof(pD->psTarStats[0]);	//later!
 
 		//store the droid for later.
 		tempDroid = MALLOC(sizeof(DROIDSTORE));
@@ -1261,8 +1282,12 @@ BOOL receiveWholeDroid(NETMSG *m)
 		pD->orderX    = 0;
 		pD->orderY    = 0;
 
-		pD->psTarget  = 0;
-		pD->psTarStats= 0;
+		//Watermelon:recieve packet changes to cope with psTarget[] array change
+		for (i = 0;i < dt.numWeaps;i++)
+		{
+			NetGet(m,sizecount,pD->psTarget[i]);			sizecount+=sizeof(pD->psTarget[i]);	//later!
+		}
+		pD->psTarStats[0] = 0;
 
 		addDroid(pD, apsDroidLists);
 	}
@@ -1318,4 +1343,6 @@ BOOL recvRequestDroid(NETMSG *pMsg)
 
 	return TRUE;
 }
+
+
 

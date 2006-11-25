@@ -80,16 +80,16 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 	player = (UBYTE)psDroid->player;
 	order = (UBYTE)psDroid->order;
 	NetAdd(msg,0,player);			//player
-	NetAdd(msg,1,psDroid->psTarStats->ref);	//id of thing to build
+	NetAdd(msg,1,psDroid->psTarStats[0]->ref);	//id of thing to build
 	NetAdd(msg,5,psDroid->orderX);					// x
 	NetAdd(msg,7,psDroid->orderY);					// y
 	NetAdd(msg,11,psDroid->id);						// droid to order to build it
 	NetAdd(msg,15,psStruct->id);					// building id to create
 	NetAdd(msg,19,order);			// building id to create
 
-	if(psDroid->psTarget && (psDroid->psTarget->type == OBJ_STRUCTURE))
+	if(psDroid->psTarget[0] && (psDroid->psTarget[0]->type == OBJ_STRUCTURE))
 	{
-		NetAdd(msg,20,((STRUCTURE*)psDroid->psTarget)->id);
+		NetAdd(msg,20,((STRUCTURE*)psDroid->psTarget[0])->id);
 	}
 	else
 	{
@@ -140,14 +140,14 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 			}
 			psDroid->orderX = x;
 			psDroid->orderY = y;
-			psDroid->psTarStats = (BASE_STATS *) psStats;
+			psDroid->psTarStats[0] = (BASE_STATS *) psStats;
 			if(targetId)
 			{
-				psDroid->psTarget = IdToPointer(targetId,ANYPLAYER);
+				psDroid->psTarget[0] = IdToPointer(targetId,ANYPLAYER);
 			}
 			else
 			{
-				psDroid->psTarget = 0;
+				psDroid->psTarget[0] = 0;
 			}
 
 			if (IsStatExpansionModule(psStats))
@@ -163,9 +163,9 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 		}
 
 
-		if (psDroid->psTarget)									//sync id's
+		if (psDroid->psTarget[0])									//sync id's
 		{
-			((STRUCTURE*)psDroid->psTarget)->id = structId;
+			((STRUCTURE*)psDroid->psTarget[0])->id = structId;
 		}
 	}
 
@@ -296,9 +296,9 @@ BOOL recvDemolishFinished(NETMSG *m)
 	if(psStruct)
 	{
 		removeStruct( psStruct, TRUE );				// demolish it.
-		if(psDroid && psDroid->psTarStats)
+		if(psDroid && psDroid->psTarStats[0])
 		{
-			psDroid->psTarStats = NULL;		// update droid if reqd.
+			psDroid->psTarStats[0] = NULL;		// update droid if reqd.
 		}
 	}
 	return TRUE;
@@ -384,7 +384,7 @@ BOOL recvLasSat(NETMSG *pMsg)
 	if(psStruct && psObj)
 	{
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->x,
-            psObj->y, psObj->z, psObj, TRUE, FALSE);
+            psObj->y, psObj->z, psObj, TRUE, FALSE, 0);
         //play 5 second countdown message
 		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->x, psObj->y,
             psObj->z );

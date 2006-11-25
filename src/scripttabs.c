@@ -1345,6 +1345,9 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DACTION_CLEARREARMPAD",			VAL_INT,	0,		DACTION_CLEARREARMPAD,				0 },
 	{ "DACTION_RETURNTOPOS",			VAL_INT,	0,		DACTION_RETURNTOPOS,				0 },
 	{ "DACTION_FIRESUPPORT_RETREAT",	VAL_INT,	0,		DACTION_FIRESUPPORT_RETREAT,				0 },
+	//Watermelon:scriptable variable string for DACTION_ATTACK_M,DACTION_MOVE_ENGAGE
+	{ "DACTION_ATTACK_M",				VAL_INT,	0,		DACTION_ATTACK_M,				0 },
+
 
 	// secondary orders
 	{ "DSO_ATTACK_RANGE",	VAL_INT,	0,		DSO_ATTACK_RANGE,		0 },
@@ -1845,5 +1848,7 @@ void scrShutDown(void)
 	scrvShutDown();
 	scriptShutDown();
 }
+
+
 
 

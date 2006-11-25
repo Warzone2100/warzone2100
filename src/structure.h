@@ -195,7 +195,8 @@ extern void setLasSatExists(BOOL state, UDWORD player);
 /*returns the status of the flag*/
 extern BOOL getLasSatExists(UDWORD player);
 
-extern BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle);
+/* added int weapon_slot to fix the alway slot 0 hack */
+extern BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
 extern void buildingComplete(STRUCTURE *psBuilding);
@@ -374,4 +375,5 @@ selected - returns TRUE if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
 #endif
+
 

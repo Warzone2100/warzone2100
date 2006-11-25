@@ -97,7 +97,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		}
 		type = VAL_INT;
 		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->order;
-		if ((scrFunctionResult.v.ival == DORDER_GUARD) && (((DROID *)psObj)->psTarget == NULL))
+		if ((scrFunctionResult.v.ival == DORDER_GUARD) && (((DROID *)psObj)->psTarget[0] == NULL))
 		{
 			scrFunctionResult.v.ival = DORDER_NONE;
 		}
@@ -260,7 +260,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		{
 			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
-			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
+			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats[0]) - asStructureStats);
 		}
 		else		//Nothing else supported
 		{
@@ -276,13 +276,13 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			scrFunctionResult.v.oval = ((STRUCTURE *)psObj)->psTarget;
+			scrFunctionResult.v.oval = ((STRUCTURE *)psObj)->psTarget[0];
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
 			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			scrFunctionResult.v.oval = (((DROID *)psObj)->psTarget);
+			scrFunctionResult.v.oval = (((DROID *)psObj)->psTarget[0]);
 		}
 		else		//Nothing else supported
 		{
@@ -1127,6 +1127,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 	return TRUE;
 }
+
+
 
 
 

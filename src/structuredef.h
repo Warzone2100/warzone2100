@@ -107,7 +107,8 @@ typedef struct _flag_position
 #endif
 
 //only allowed one weapon per structure (more memory for Tim) 
-#define STRUCT_MAXWEAPS		1
+//Watermelon:only allowed 4 weapons per structure(sorry Tim...)
+#define STRUCT_MAXWEAPS		4
 
 typedef enum _struct_strength
 {
@@ -164,14 +165,16 @@ typedef struct _structure_stats
 	struct _sensor_stats *pSensor;	/*Which Sensor is standard for the structure - 
 									  if any*/
     //NOT USED ANYMORE - AB 24/01/99
-	/*UDWORD		weaponSlots;		/Number of weapons that can be attached to the
-									  building/
-	UDWORD		numWeaps;			/Number of weapons for default /
-	SDWORD		defaultWeap;		/The default weapon/
+	//Watermelon:pfft
+	UDWORD		weaponSlots;		/*Number of weapons that can be attached to the
+									  building*/
+	UDWORD		numWeaps;			/*Number of weapons for default */
+	//SDWORD		defaultWeap;		/The default weapon/
     
-	struct _weapon_stats **asWeapList;		/List of pointers to default weapons/
-    */
-    struct _weapon_stats    *psWeapStat;    //can only have one weapon now
+	//struct _weapon_stats **asWeapList;		/*List of pointers to default weapons*/
+
+	//Watermelon:can only have STRUCT_MAXWEAPS now...
+    struct _weapon_stats    *psWeapStat[STRUCT_MAXWEAPS];    //can only have one weapon now
 
 	UDWORD		numFuncs;			/*Number of functions for default*/
 	SDWORD		defaultFunc;		/*The default function*/
@@ -323,9 +326,9 @@ typedef struct _structure
 	/*UDWORD		turretRotation;				// weapon, ECM and sensor direction and pitch
 	UDWORD		turretRotRate;				// weapon, ECM and sensor direction and pitch
 	UDWORD		turretPitch;				// weapon, ECM and sensor direction and pitch*/
-	UWORD		turretRotation;				// weapon, ECM and sensor direction and pitch
+	UWORD		turretRotation[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
 	//UWORD		turretRotRate;				// weapon, ECM and sensor direction and pitch - THIS IS A CONSTANT
-	UWORD		turretPitch;				// weapon, ECM and sensor direction and pitch
+	UWORD		turretPitch[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
 
 	UDWORD		timeLastHit;				//the time the structure was last attacked
 
@@ -340,10 +343,12 @@ typedef struct _structure
 	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
 											   necessary for functionality */
 	/* The weapons on the structure */
-	//UWORD		numWeaps;
+	//Watermelon:re-enabled again...
+	UWORD		numWeaps;
 	UBYTE		targetted;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];
-	BASE_OBJECT	*psTarget;
+	//Watermelon:more targets
+	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
 
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;

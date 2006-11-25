@@ -42,9 +42,9 @@ PROJ_OBJECT *	proj_GetFirst( void );
 PROJ_OBJECT *	proj_GetNext( void );
 
 void	proj_FreeAllProjectiles( void );
-//Watermelon:added another BOOL value bPenetrate
+//Watermelon:added another BOOL value bPenetrate added weapon_slot
 BOOL	proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
-					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate );
+					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot );
 
 // return whether a weapon is direct or indirect
 BOOL	proj_Direct(WEAPON_STATS *psStats);

@@ -478,7 +478,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 
 		if ((structCBSensor((STRUCTURE *)psViewer) ||
 			 structVTOLCBSensor((STRUCTURE *)psViewer)) &&
-			 ((STRUCTURE *)psViewer)->psTarget == psTarget)
+			 ((STRUCTURE *)psViewer)->psTarget[0] == psTarget)
 		{
 			// if a unit is targetted by a counter battery sensor
 			// it is automatically seen

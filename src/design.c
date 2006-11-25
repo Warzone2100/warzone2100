@@ -4320,14 +4320,14 @@ void intProcessDesign(UDWORD id)
 				widgHide( psWScreen, IDDES_WPABUTTON );
 				widgHide( psWScreen, IDDES_WPBBUTTON );
 
-				// Watermelon:reveal,flash,reset additional buttons Medium has 2 Heavy/S.Heavy has 3 atm
-				if (psTempl->numWeaps == 2 && (asBodyStats + psTempl->asParts[COMP_BODY])->size == SIZE_MEDIUM )
+				// Watermelon:reveal,flash,reset additional buttons
+				if (psTempl->numWeaps == 2 && (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots == 2 )
 				{
 					widgReveal( psWScreen, IDDES_WPABUTTON );
 					intSetButtonFlash( IDDES_WPABUTTON,   FALSE );
 					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
 				}
-				else if (psTempl->numWeaps == 3 && (asBodyStats + psTempl->asParts[COMP_BODY])->size > SIZE_MEDIUM )
+				else if (psTempl->numWeaps == 3 && (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots == 3 )
 				{
 					widgReveal( psWScreen, IDDES_WPABUTTON );
 					widgReveal( psWScreen, IDDES_WPBBUTTON );
@@ -4451,8 +4451,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
-			//Watemelon:body >= SIZE_MEDIUM 
-			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size >= SIZE_MEDIUM &&
+			//Watemelon:weaponslots >= 2
+			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots >= 2 &&
 				!checkTemplateIsVtol(&sCurrDesign) )
 			{
 				/* reveal turret_a button if hidden */
@@ -4480,8 +4480,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
-			//Watemelon:body > SIZE_MEDIUM = HEAVY and SUPERHEAVY
-			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_MEDIUM &&
+			//Watemelon:weaponSlots > 2
+			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 &&
 				!checkTemplateIsVtol(&sCurrDesign) )
 			{
 				/* reveal turret_b button if hidden */
@@ -4526,6 +4526,22 @@ void intProcessDesign(UDWORD id)
 				asBodyStats;
 			/* Set the new stats on the display */
 			intSetBodyStats((BODY_STATS *)apsComponentList[id - IDDES_COMPSTART]);
+
+			if (sCurrDesign.numWeaps > 1 && (sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots < sCurrDesign.numWeaps )
+			{
+				if ( (sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots == 1 )
+				{
+					sCurrDesign.asWeaps[1] = 0;
+					sCurrDesign.asWeaps[2] = 0;
+					widgHide( psWScreen, IDDES_WPABUTTON );
+					widgHide( psWScreen, IDDES_WPBBUTTON );
+				}
+				else if( (sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots == 2 )
+				{
+					sCurrDesign.asWeaps[2] = 0;
+					widgHide( psWScreen, IDDES_WPBBUTTON );
+				}			
+			}
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
@@ -4638,8 +4654,8 @@ void intProcessDesign(UDWORD id)
 				case IDES_BRAIN:
 				case IDES_SYSTEM:
 				case IDES_TURRET:
-					//Watermelon:if body size > light,+ 1 turret else fall back to body button
-					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_LIGHT )
+					//Watermelon:if weaponSlots > 1,+ 1 turret else fall back to body button
+					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
 					{
 						widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
 					}
@@ -4649,8 +4665,8 @@ void intProcessDesign(UDWORD id)
 					}
 				//Watermelon: hope these hacks will work
 				case IDES_TURRET_A:
-					//Watermelon:if body size > medium,+ 1 turret else fall back to body button
-					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_MEDIUM )
+					//Watermelon:if body weaponSlots > 2,+ 1 turret else fall back to body button
+					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 					{
 						widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
 					}
@@ -4981,8 +4997,8 @@ void intProcessDesign(UDWORD id)
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-				//Watermelon:MEDIUM+ check
-				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_LIGHT )
+				//Watermelon:weaponSlots > 1 check
+				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
 				{
 					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
 				}
@@ -5024,8 +5040,8 @@ void intProcessDesign(UDWORD id)
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_WPABUTTON,   WBUT_CLICKLOCK);
-				//Watermelon:HEAVY+ check
-				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_MEDIUM )
+				//Watermelon:weaponSlots > 2 checks
+				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 				{
 					widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
 				}
@@ -5184,8 +5200,8 @@ void intProcessDesign(UDWORD id)
 				case IDES_BRAIN:
 				case IDES_SYSTEM:
 				case IDES_TURRET:
-					//Watermelon:uses body size now
-					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_LIGHT )
+					//Watermelon:uses weaponSlots now
+					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
 					{
 						intSetDesignMode( IDES_TURRET_A );
 						widgReveal(psWScreen, IDDES_WPABUTTON);
@@ -5197,8 +5213,8 @@ void intProcessDesign(UDWORD id)
 					}
 					break;
 				case IDES_TURRET_A:
-					//Watermelon:uses body size now
-					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size > SIZE_MEDIUM )
+					//Watermelon:uses weaponSlots now
+					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 					{
 						intSetDesignMode( IDES_TURRET_B );
 						widgReveal(psWScreen, IDDES_WPBBUTTON);

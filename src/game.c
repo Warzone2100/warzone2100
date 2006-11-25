@@ -5082,7 +5082,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		psDroid->actionX				= psSaveDroid->actionX;
 		psDroid->actionY				= psSaveDroid->actionY;
 		//rebuild the object pointer from the ID
-		FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget, psSaveDroid->actionTargetID);
+		FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 		psDroid->actionStarted		= psSaveDroid->actionStarted;
 		psDroid->actionPoints		= psSaveDroid->actionPoints;
         //actionHeight has been renamed to powerAccrued - AB 7/1/99
@@ -5102,19 +5102,19 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		psSaveDroidV14 = (SAVE_DROID_V14*)psSaveDroid;
 		if (psSaveDroidV14->tarStatName[0] == 0)
 		{
-			psDroid->psTarStats = NULL;
+			psDroid->psTarStats[0] = NULL;
 		}
 		else
 	 	{
 			id = getStructStatFromName(psSaveDroidV14->tarStatName);
 			if (id != -1)
 			{
-				psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
+				psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
 			}
 			else
 			{
 				ASSERT( FALSE,"loadUnit TargetStat not found" );
-				psDroid->psTarStats = NULL;
+				psDroid->psTarStats[0] = NULL;
                 orderDroid(psDroid, DORDER_STOP);
 			}
 		}
@@ -5138,19 +5138,19 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 		if (psSaveDroid->tarStatName[0] == 0)
 		{
-			psDroid->psTarStats = NULL;
+			psDroid->psTarStats[0] = NULL;
 		}
 		else
 		{
 			id = getStructStatFromName(psSaveDroid->tarStatName);
 			if (id != -1)
 			{
-				psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
+				psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
 			}
 			else
 			{
 				ASSERT( FALSE,"loadUnit TargetStat not found" );
-				psDroid->psTarStats = NULL;
+				psDroid->psTarStats[0] = NULL;
 			}
 		}
 		//rebuild the object pointer from the ID
@@ -5347,13 +5347,13 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	psDroid->orderY2				= psSaveDroid->orderY2;
 	psDroid->timeLastHit			= psSaveDroid->timeLastHit;
 	//rebuild the object pointer from the ID
-	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
+	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget[0], psSaveDroid->targetID);
 	psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
 	psDroid->action				= psSaveDroid->action;
 	psDroid->actionX				= psSaveDroid->actionX;
 	psDroid->actionY				= psSaveDroid->actionY;
 	//rebuild the object pointer from the ID
-	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget, psSaveDroid->actionTargetID);
+	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 	psDroid->actionStarted		= psSaveDroid->actionStarted;
 	psDroid->actionPoints		= psSaveDroid->actionPoints;
     //actionHeight has been renamed to powerAccrued - AB 7/1/99
@@ -5365,19 +5365,19 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//version 18
 	if (psSaveDroid->tarStatName[0] == 0)
 	{
-		psDroid->psTarStats = NULL;
+		psDroid->psTarStats[0] = NULL;
 	}
 	else
 	{
 		id = getStructStatFromName(psSaveDroid->tarStatName);
 		if (id != -1)
 		{
-			psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
+			psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
 		}
 		else
 		{
 			ASSERT( FALSE,"loadUnit TargetStat not found" );
-			psDroid->psTarStats = NULL;
+			psDroid->psTarStats[0] = NULL;
 		}
 	}
 	//rebuild the object pointer from the ID
@@ -5465,36 +5465,36 @@ BOOL loadDroidSetPointers(void)
 			while (psDroid)
 			{
 				//Target rebuild the object pointer from the ID
-				id = (UDWORD)(psDroid->psTarget);
+				id = (UDWORD)(psDroid->psTarget[0]);
 				ASSERT( id != 0xdddddddd,"LoadUnit found freed target" );
 				if (id != UDWORD_MAX)
 				{
-					psDroid->psTarget			= getBaseObjFromId(id);
-					ASSERT( psDroid->psTarget != NULL,"Saved Droid psTarget getBaseObjFromId() failed" );
-					if (psDroid->psTarget == NULL)
+					psDroid->psTarget[0]			= getBaseObjFromId(id);
+					ASSERT( psDroid->psTarget[0] != NULL,"Saved Droid psTarget getBaseObjFromId() failed" );
+					if (psDroid->psTarget[0] == NULL)
 					{
 						psDroid->order = DORDER_NONE;
 					}
 				}
 				else
 				{
-					psDroid->psTarget = NULL;//psSaveDroid->targetID
+					psDroid->psTarget[0] = NULL;//psSaveDroid->targetID
 				}
 				//ActionTarget rebuild the object pointer from the ID
-				id = (UDWORD)(psDroid->psActionTarget);
+				id = (UDWORD)(psDroid->psActionTarget[0]);
 				ASSERT( id != 0xdddddddd,"LoadUnit found freed action target" );
 				if (id != UDWORD_MAX)
 				{
-					psDroid->psActionTarget			= getBaseObjFromId(id);
-					ASSERT( psDroid->psActionTarget != NULL,"Saved Droid psActionTarget getBaseObjFromId() failed" );
-					if (psDroid->psActionTarget == NULL)
+					psDroid->psActionTarget[0]			= getBaseObjFromId(id);
+					ASSERT( psDroid->psActionTarget[0] != NULL,"Saved Droid psActionTarget getBaseObjFromId() failed" );
+					if (psDroid->psActionTarget[0] == NULL)
 					{
 						psDroid->action = DACTION_NONE;
 					}
 				}
 				else
 				{
-					psDroid->psActionTarget	= NULL;//psSaveDroid->targetID
+					psDroid->psActionTarget[0]	= NULL;//psSaveDroid->targetID
 				}
 				//BaseStruct rebuild the object pointer from the ID
 				id = (UDWORD)(psDroid->psBaseStruct);
@@ -5666,8 +5666,11 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		else if (psSaveDroid->saveType == DROID_ON_TRANSPORT)
 		{
    			//add the droid to the list
-			psDroid->psTarget = NULL;
-			psDroid->psActionTarget = NULL;
+			for(i = 0;i < psDroid->numWeaps;i++)
+			{
+				psDroid->psTarget[i] = NULL;
+				psDroid->psActionTarget[i] = NULL;
+			}
 			psDroid->psBaseStruct = NULL;
 			ASSERT( psCurrentTransGroup != NULL,"loadSaveUnitV9; Transporter unit without group " );
 			grpJoin(psCurrentTransGroup, psDroid);
@@ -5816,9 +5819,20 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		{
   			//add the droid to the list
 			psDroid->order = DORDER_NONE;
-			psDroid->psTarget = NULL;
 			psDroid->action = DACTION_NONE;
-			psDroid->psActionTarget = NULL;
+			if (psDroid->numWeaps > 0)
+			{
+				for(i = 0;i < psDroid->numWeaps;i++)
+				{
+					psDroid->psTarget[i] = NULL;
+					psDroid->psActionTarget[i] = NULL;
+				}
+			}
+			else
+			{
+				psDroid->psTarget[0] = NULL;
+				psDroid->psActionTarget[0] = NULL;
+			}
 			psDroid->psBaseStruct = NULL;
 			//add the droid to the list
 			ASSERT( psCurrentTransGroup != NULL,"loadSaveUnitV9; Transporter unit without group " );
@@ -5997,9 +6011,12 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		{
   			//add the droid to the list
 			psDroid->order = DORDER_NONE;
-			psDroid->psTarget = NULL;
 			psDroid->action = DACTION_NONE;
-			psDroid->psActionTarget = NULL;
+			for(i = 0;i < psDroid->numWeaps;i++)
+			{
+				psDroid->psTarget[i] = NULL;
+				psDroid->psActionTarget[i] = NULL;
+			}
 			psDroid->psBaseStruct = NULL;
 			//add the droid to the list
 			psDroid->psGroup = NULL;
@@ -6125,12 +6142,12 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->orderX2		= psCurr->orderX2;
 			psSaveDroid->orderY2		= psCurr->orderY2;
 			psSaveDroid->timeLastHit	= psCurr->timeLastHit;
-			if (psCurr->psTarget != NULL)
+			if (psCurr->psTarget[0] != NULL)
 			{
-				ASSERT( psCurr->psTarget->id != 0xdddddddd,"SaveUnit found freed target" );
-				if (psCurr->psTarget->died <= 1)
+				ASSERT( psCurr->psTarget[0]->id != 0xdddddddd,"SaveUnit found freed target" );
+				if (psCurr->psTarget[0]->died <= 1)
 				{
-					psSaveDroid->targetID		= psCurr->psTarget->id;
+					psSaveDroid->targetID		= psCurr->psTarget[0]->id;
 					if	(!checkValidId(psSaveDroid->targetID))
 					{
 						psSaveDroid->targetID		= UDWORD_MAX;
@@ -6149,12 +6166,12 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->action			= psCurr->action;
 			psSaveDroid->actionX		= psCurr->actionX;
 			psSaveDroid->actionY		= psCurr->actionY;
-			if (psCurr->psActionTarget != NULL)
+			if (psCurr->psActionTarget[0] != NULL)
 			{
-				ASSERT( psCurr->psActionTarget->id != 0xdddddddd,"SaveUnit found freed action target" );
-				if (psCurr->psActionTarget->died <= 1)
+				ASSERT( psCurr->psActionTarget[0]->id != 0xdddddddd,"SaveUnit found freed action target" );
+				if (psCurr->psActionTarget[0]->died <= 1)
 				{
-					psSaveDroid->actionTargetID		= psCurr->psActionTarget->id;
+					psSaveDroid->actionTargetID		= psCurr->psActionTarget[0]->id;
 					if	(!checkValidId(psSaveDroid->actionTargetID))
 					{
 						psSaveDroid->actionTargetID		= UDWORD_MAX;
@@ -6177,10 +6194,10 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
             psSaveDroid->actionHeight	= psCurr->powerAccrued;
 
 			//version 14
-			if (psCurr->psTarStats != NULL)
+			if (psCurr->psTarStats[0] != NULL)
 			{
-				ASSERT( strlen(psCurr->psTarStats->pName) < MAX_NAME_SIZE,"writeUnitFile; psTarStat pName Error" );
-				strcpy(psSaveDroid->tarStatName,psCurr->psTarStats->pName);
+				ASSERT( strlen(psCurr->psTarStats[0]->pName) < MAX_NAME_SIZE,"writeUnitFile; psTarStat pName Error" );
+				strcpy(psSaveDroid->tarStatName,psCurr->psTarStats[0]->pName);
 			}
 			else
 			{

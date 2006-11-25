@@ -3607,7 +3607,7 @@ void intBuildStarted(DROID *psDroid)
 				if (psCurr == psDroid)
 				{
 					intSetStats(droidID + IDOBJ_STATSTART, ((BASE_STATS *)(
-						(STRUCTURE *)psCurr->psTarget)->pStructureType));
+						(STRUCTURE *)psCurr->psTarget[0])->pStructureType));
 					break;
 				}
 				droidID++;
@@ -6311,7 +6311,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 	} else if( orderStateObj(psDroid, DORDER_BUILD,(BASE_OBJECT**)&Structure) &&
 				 psDroid->order == DORDER_BUILD ) { // Is building
 //		DBPRINTF(("BUILDING %p : %d %p %p\n",psDroid,psDroid->order,psDroid->psTarStats,psDroid->psTarget));
-		return psDroid->psTarStats;
+		return psDroid->psTarStats[0];
 	} else if( orderStateObj(psDroid, DORDER_HELPBUILD,(BASE_OBJECT**)&Structure) &&
 		 (psDroid->order == DORDER_HELPBUILD || psDroid->order == DORDER_LINEBUILD)) { //Is helping
 //		DBPRINTF(("HELPING  %p : %d %p %p\n",psDroid,psDroid->order,psDroid->psTarStats,psDroid->psTarget));

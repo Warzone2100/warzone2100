@@ -86,7 +86,7 @@ BOOL combShutdown(void)
 
 // Watermelon:real projectile
 /* Fire a weapon at something */
-void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
+void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 	UDWORD			xDiff, yDiff, distSquared;
@@ -104,7 +104,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	//Watermelon:predicted X,Y offset per sec
 	SDWORD			predictX;
 	SDWORD			predictY;
-	//Watermelon:dirty dist
+	//Watermelon:dist
 	SDWORD			dist;
 
 	ASSERT( PTRVALID(psWeap, sizeof(WEAPON)),
@@ -179,7 +179,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	if ( (psAttacker->type == OBJ_DROID) &&
 		 !vtolDroid((DROID *)psAttacker) &&
 		 (proj_Direct(psStats) || 
-		 (actionInsideMinRange(psDroid, psDroid->psActionTarget) > 1))
+		 (actionInsideMinRange(psDroid, psDroid->psActionTarget[weapon_slot]) > 1))
 		)
 	{
 		if(!visibleObjWallBlock(psAttacker, psTarget))
@@ -343,8 +343,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	xDiff = abs(psAttacker->x - psTarget->x);
 	yDiff = abs(psAttacker->y - psTarget->y);
 	distSquared = xDiff*xDiff + yDiff*yDiff;
-	//Watermelon:dirty dist
-	dist = dirtySqrt(psAttacker->x,psAttacker->y,psTarget->x,psTarget->y);
+	//Watermelon:dist
+	dist = (SDWORD)sqrt(distSquared);
 	longRange = proj_GetLongRange(psStats, (SDWORD)psAttacker->z-(SDWORD)psTarget->z);
 	if (distSquared <= (psStats->shortRange * psStats->shortRange) AND
 		distSquared >= (psStats->minRange * psStats->minRange))
@@ -369,9 +369,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
 				predictX += psTarget->x;
-				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
 				predictY += psTarget->y;
 			}
 			else
@@ -381,7 +381,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			}
 			DBP3(("Shot hit (%d)\n", dice));
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE))
+								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE, weapon_slot))
 			{
 				/* Out of memory - we can safely ignore this */
 				DBP3(("Out of memory"));
@@ -397,7 +397,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
 			   ((psAttacker->type == OBJ_DROID) &&
 			   !proj_Direct(psStats) &&
-			   actionInsideMinRange(psDroid, psDroid->psActionTarget) > 1) ))
+			   actionInsideMinRange(psDroid, psDroid->psActionTarget[weapon_slot]) > 1) ))
 	{
 		//Watermelon:Change actionInMinRange to int
 		/* note when the weapon fired */
@@ -420,9 +420,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
 				predictX += psTarget->x;
-				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * sqrt(distSquared)) /psStats->flightSpeed;
+				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
 				predictY += psTarget->y;
 			}
 			else
@@ -432,7 +432,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			}
 			DBP3(("Shot hit (%d)\n", dice));
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE))
+								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE, weapon_slot))
 			{
 				/* Out of memory - we can safely ignore this */
 				DBP3(("Out of memory"));
@@ -490,7 +490,7 @@ missed:
 	}
 
 	/* Fire off the bullet to the miss location */
-	if (!proj_SendProjectile( psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->z, NULL, bMissVisible, FALSE) )
+	if (!proj_SendProjectile( psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->z, NULL, bMissVisible, FALSE, weapon_slot) )
 	{
 		/* Out of memory */
 		DBP3(("Out of memory"));
@@ -565,7 +565,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 				}
 				else if (psViewer->type == OBJ_STRUCTURE)
 				{
-					((STRUCTURE *)psViewer)->psTarget = psAttacker;
+					((STRUCTURE *)psViewer)->psTarget[0] = psAttacker;
 				}
 			}
 		}
