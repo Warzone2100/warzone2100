@@ -215,10 +215,10 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 							break;
 					}
 
-					/* Now calculate the overal weight */
+					/* Now calculate the overall weight */
 					newMod = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType]		//Weapon effect
 									- (WEIGHT_DIST_TILE_DROID * (dirtySqrt(psDroid->x, psDroid->y,targetDroid->x,targetDroid->y) >> TILE_SHIFT) )								//substract WEIGHT_DIST_TILE_DROID per tile, 128 world units in a tile
-									+ (damage * 10 / targetDroid->originalBody ) * WEIGHT_HEALTH_DROID																//we prefere damaged droids
+									+ (damage * 10 / targetDroid->originalBody ) * WEIGHT_HEALTH_DROID																//we prefer damaged droids
 									+ targetTypeBonus;																												//some droid types have higher priority
 				}
 				else if (psTarget->type == OBJ_STRUCTURE)
@@ -242,10 +242,10 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 							break;
 					}
 
-					/* Now calculate the overal weight */
+					/* Now calculate the overall weight */
 					newMod = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength]						//Weapon effect
 									- (WEIGHT_DIST_TILE_STRUCT * (dirtySqrt(psDroid->x, psDroid->y,targetStructure->x,targetStructure->y) >> TILE_SHIFT) )		//substract WEIGHT_DIST_TILE_STRUCT per tile, 128 world units in a tile
-									+ (damage * 10 / structureBody(targetStructure) ) * WEIGHT_HEALTH_STRUCT											//we prefere damaged structures
+									+ (damage * 10 / structureBody(targetStructure) ) * WEIGHT_HEALTH_STRUCT											//we prefer damaged structures
 									+ targetTypeBonus;																											//some structure types have higher priority
 
 					/* Go for unfinished structures only if nothing else found (same for non-visible structures) */
@@ -258,7 +258,7 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj)
 					continue;
 				}
 
-				/* We prefere objects we can see and can attack immediately */
+				/* We prefer objects we can see and can attack immediately */
 				if(!visibleObjWallBlock((BASE_OBJECT *)psDroid, psTarget))
 				{
 					newMod /= WEIGHT_NOT_VISIBLE_F;

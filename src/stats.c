@@ -3441,7 +3441,7 @@ SDWORD	getCompFromName(UDWORD compType, char *pName)
 			return count;
 		}
     // psStats += statSize; doesn't work, structure alignment?
-		psStats = (BASE_STATS*)((void*)psStats + statSize);
+		psStats = (BASE_STATS*)((char*)psStats + statSize);
 	}
 //	DBPRINTF(("not found\n"));
 	//return -1 if record not found or an invalid component type is passed in
