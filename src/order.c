@@ -866,7 +866,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 					{
 						psDroid->psTarget[0] = NULL;
 					}
-	    		    psDroid->psTarStats[i] = NULL;
+	    		    psDroid->psTarStats[0] = NULL;
 		    	    secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
                 }
 		    }

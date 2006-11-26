@@ -544,7 +544,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		{
 			if (psAttacker->type == OBJ_DROID)
 			{
-				((DROID *) psAttacker)->turretPitch[0] = &psObj->pitch;
+				((DROID *) psAttacker)->turretPitch[0] = psObj->pitch;
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
@@ -639,6 +639,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	//Watermelon:Penetrate or not
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
+	int				HeightBonus;
 
 	bMissile = FALSE;
 	bPenetrate = FALSE;
@@ -734,7 +735,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		psObj->y = (UWORD)iY;
 	}
 
-	psObj->z = (UWORD)(psObj->srcHeight) + (UWORD)(dist * dz / rad);
+	psObj->z = (UWORD)(psObj->srcHeight) + (dist * dz / rad);
 
 	if(psStats->weaponSubClass == WSC_FLAME)
 	{
@@ -805,7 +806,10 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	else if (psStats->weaponSubClass == WSC_CANNON ||
 			psStats->weaponSubClass == WSC_BOMB ||
 			psStats->weaponSubClass == WSC_ELECTRONIC ||
-			psStats->weaponSubClass == WSC_EMP)
+			psStats->weaponSubClass == WSC_EMP ||
+			psStats->weaponSubClass == WSC_FLAME ||
+			psStats->weaponSubClass == WSC_ENERGY ||
+			psStats->weaponSubClass == WSC_GAUSS)
 	{
 		wpRadius = 3;
 		//Watermelon:extended life span
@@ -819,14 +823,9 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	}
 
 	//Watermelon:these 3 types of weapon should have the ability to pentrate targets and damage the enemies behind
-	if (psStats->weaponSubClass == WSC_FLAME ||
-		psStats->weaponSubClass == WSC_ENERGY ||
-		psStats->weaponSubClass == WSC_GAUSS)
+	if (psStats->penetrate)
 	{
 		bPenetrate = TRUE;
-		wpRadius = 3;
-		//Watermelon:extended life span
-		extendRad = (SDWORD)rad * 2;
 	}
 
 	//Watermelon:test test
@@ -862,6 +861,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE)
 			{
+				HeightBonus = 0;
 				//Watermelon:ignore oil resource and pickup
 				if ( psTempObj->type == OBJ_FEATURE )
 				{
@@ -887,16 +887,16 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 					if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_SOFT ||
 						((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_HARD)
 					{
-						zdiff -= 100;
+						HeightBonus = 100;
 					}
 					else if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_MEDIUM)
 					{
-						zdiff -= 50;
+						HeightBonus = 50;
 					}
 				}
 
-				if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
-					zdiff < 50)
+				if ( (xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < (50 + HeightBonus) )
 				{
 					if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
 					{
@@ -908,10 +908,6 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 					if (bPenetrate && psTempObj->type != OBJ_STRUCTURE)
 					{
-						if ( (abs(psObj->x - psObj->startX) + abs(psObj->y - psObj->startY)) > 100 )
-						{
-							continue;
-						}
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
 						psObj->psDamaged = psTempObj;
@@ -930,8 +926,15 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
 
-				if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
-					zdiff < 50)
+				HeightBonus = 0;
+				//Watermelon:to make VTOL easier to hit
+				if (psTempObj->type == OBJ_DROID && vtolDroid((DROID *)psTempObj))
+				{
+					HeightBonus = 100;
+				}
+
+				if ( (xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < (50 + HeightBonus) )
 				{
 					if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
 					{
@@ -943,10 +946,6 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 					if (bPenetrate && psTempObj->type != OBJ_STRUCTURE)
 					{
-						if ( (abs(psObj->x - psObj->startX) + abs(psObj->y - psObj->startY)) > 100 )
-						{
-							continue;
-						}
 						//Watermelon:just assume we damaged the chosen target
 						psObj->psDamaged = psTempObj;
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
@@ -967,7 +966,10 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	{
 		xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 		ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-		if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)psObj->targetRadius * (SDWORD)psObj->targetRadius))
+		zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
+
+		if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)psObj->targetRadius * (SDWORD)psObj->targetRadius) &&
+			zdiff < 50)
 		{
 		  	psObj->state = PROJ_IMPACT;
 		}
@@ -981,8 +983,11 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		{
 			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
+			zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
+
 			//Watermelon:'real' hit check even if the projectile is about to 'timeout'
-			if ( (xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest) ) * (SDWORD)(establishTargetRadius(psObj->psDest)) ) )
+			if ( (xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest) ) * (SDWORD)(establishTargetRadius(psObj->psDest)) ) &&
+				zdiff < 25)
 			{
 		  		psObj->state = PROJ_IMPACT;
 			}
@@ -1038,6 +1043,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	int				i;
 	SDWORD			xdiff,ydiff,zdiff,extendRad;
 	int				wpRadius = 9;
+	int				HeightBonus;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_InFlightIndirectFunc: invalid projectile pointer" );
@@ -1168,6 +1174,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
 			{
+				HeightBonus = 0;
 				//Watermelon:ignore oil resource and pickup
 				if ( psTempObj->type == OBJ_FEATURE )
 				{
@@ -1187,16 +1194,16 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 					if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_SOFT ||
 						((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_HARD)
 					{
-						zdiff -= 40;
+						HeightBonus = 100;
 					}
 					else if (((STRUCTURE *)psTempObj)->pStructureType->strength == STRENGTH_MEDIUM)
 					{
-						zdiff -= 20;
+						HeightBonus = 50;
 					}
 				}
 
-				if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
-					zdiff < 20 )
+				if ( (xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+					zdiff < (50 + HeightBonus) )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
@@ -1210,8 +1217,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
 
-				if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
-					zdiff < 20 )
+				if ((xdiff*xdiff + ydiff*ydiff) < ((wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj)))) &&
+					zdiff < 25 )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
@@ -1239,16 +1246,27 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			psObj->state = PROJ_IMPACT;
 			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-			zdiff = (SDWORD)psObj->z - (SDWORD)psObj->psDest->z;
+			zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
 
+			HeightBonus = 0;
 			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
 			if ( psObj->psDest->type == OBJ_STRUCTURE )
 			{
+				//Watermelon:tower and hardpoint are much easier to hit now
+				if (((STRUCTURE *)psObj->psDest)->pStructureType->strength == STRENGTH_SOFT ||
+					((STRUCTURE *)psObj->psDest)->pStructureType->strength == STRENGTH_HARD)
+				{
+					HeightBonus = 100;
+				}
+				else if (((STRUCTURE *)psObj->psDest)->pStructureType->strength == STRENGTH_MEDIUM)
+				{
+					HeightBonus = 50;
+				}
 				wpRadius = 1;
 			}
 
 			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest)) * (SDWORD)(establishTargetRadius(psObj->psDest))) &&
-				zdiff < 20 )
+				zdiff < (50 + HeightBonus) )
 			{
 		  		psObj->state = PROJ_IMPACT;
 			}

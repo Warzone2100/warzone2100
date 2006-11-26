@@ -403,6 +403,7 @@ typedef struct _weapon_stats
 	BOOL			lightWorld;			// flag to indicate whether the effect lights up the world
 	UBYTE			surfaceToAir;		// indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
 	UBYTE			vtolAttackRuns;		// number of attack runs a VTOL droid can do with this weapon
+	BOOL			penetrate;			// flag to indicate whether pentrate droid or not
 
 	/* Graphics control stats */
 	UDWORD			directLife;			// How long a direct fire weapon is visible

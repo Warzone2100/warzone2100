@@ -369,10 +369,20 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-				predictX += psTarget->x;
-				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-				predictY += psTarget->y;
+				if (vtolDroid((DROID *)psTarget))
+				{
+					predictX = (cos((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
+					predictX += psTarget->x;
+					predictY = (sin((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
+					predictY += psTarget->y;
+				}
+				else
+				{
+					predictX = (cos((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+					predictX += psTarget->x;
+					predictY = (sin((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+					predictY += psTarget->y;
+				}
 			}
 			else
 			{
@@ -420,10 +430,20 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (cos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-				predictX += psTarget->x;
-				predictY = (sin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-				predictY += psTarget->y;
+				if (vtolDroid((DROID *)psTarget))
+				{
+					predictX = (cos((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
+					predictX += psTarget->x;
+					predictY = (sin((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
+					predictY += psTarget->y;
+				}
+				else
+				{
+					predictX = (cos((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+					predictX += psTarget->x;
+					predictY = (sin((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+					predictY += psTarget->y;
+				}
 			}
 			else
 			{

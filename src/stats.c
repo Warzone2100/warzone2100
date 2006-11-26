@@ -491,6 +491,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 	UDWORD			numRounds;
 
 	char			*StatsName;
+	UDWORD			penetrate;
 
 	//keep the start so we release it at the end
 	//pData = pWeaponData;
@@ -539,7 +540,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 			%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%d,\
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],%[^','],%d,%d,\
-			%[^','],%d,%d,%d,%d",
+			%[^','],%d,%d,%d,%d,%d",
 			(char *)&WeaponName, (char *)&techLevel, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body, (char *)&GfxFile, (char *)&mountGfx, (char *)&muzzleGfx, (char *)&flightGfx,
@@ -553,7 +554,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 			(char *)&fireOnMove, (char *)&weaponClass, (char *)&weaponSubClass, (char *)&movement, (char *)&weaponEffect,
 			&rotate, &maxElevation, &minElevation, (char *)&facePlayer, (char *)&faceInFlight,
 			&psStats->recoilValue, &psStats->minRange,	(char *)&lightWorld,
-			&effectSize, &surfaceToAir, &numAttackRuns, &designable);
+			&effectSize, &surfaceToAir, &numAttackRuns, &designable, &penetrate);
 
 			psStats->numRounds = (UBYTE)numRounds;
 
@@ -872,6 +873,16 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 		else
 		{
 			psStats->design = FALSE;
+		}
+
+		//set penetrate flag
+		if (penetrate)
+		{
+			psStats->penetrate = TRUE;
+		}
+		else
+		{
+			psStats->penetrate = FALSE;
 		}
 
 		// error check the ranges
