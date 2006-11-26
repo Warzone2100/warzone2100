@@ -241,9 +241,6 @@ UDWORD	xMoved,yMoved;
 //DROID	*psSelected3D = NULL;
 BOOL	gameStats = FALSE;
 STRUCTURE	*psBuilding;
-BOOL	mouseAtEdge = FALSE;
-/* Will be used to do diagonal scroll */
-BOOL	mouseAtBottom,mouseAtTop,mouseAtRight,mouseAtLeft;
 SDWORD	direction = 0;
 BOOL	edgeOfMap	= FALSE;
 UDWORD	scrollRefTime;
@@ -575,8 +572,6 @@ void processInput(void)
 
 	psBuilding = NULL;
 
-	mouseAtEdge = FALSE;
-	ResetMouseBoundryConditions();
 	edgeOfMap = FALSE;
 
 	ignoreRMBC = FALSE;
@@ -1223,6 +1218,8 @@ void scroll(void)
 #endif
 	UDWORD	timeDiff;
 	BOOL	bRetardScroll = FALSE;
+	BOOL mouseAtLeft = FALSE, mouseAtRight = FALSE,
+	     mouseAtTop = FALSE, mouseAtBottom = FALSE;
 
 	if(InGameOpUp || bDisplayMultiJoiningStatus )		// cant scroll when menu up. or when over radar
 	{
@@ -1235,7 +1232,6 @@ void scroll(void)
 		if (keyDown(KEY_LEFTARROW) OR (mX<BOUNDARY_X))
   		{
 			mouseAtLeft = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_LEFTARROW) AND mX > BOUNDARY_X/2)
 			{
 				bRetardScroll = TRUE;
@@ -1246,7 +1242,6 @@ void scroll(void)
 		if (keyDown(KEY_RIGHTARROW) OR (mX>(SDWORD)(DISP_WIDTH-BOUNDARY_X)))
 		{
 			mouseAtRight = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_RIGHTARROW) AND mX<(SDWORD)(DISP_WIDTH-(BOUNDARY_X/2)))
 			{
 				bRetardScroll = TRUE;
@@ -1257,7 +1252,6 @@ void scroll(void)
 		if (keyDown(KEY_UPARROW) OR (mY<BOUNDARY_Y))
 		{
 			mouseAtBottom = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_UPARROW) AND mY>BOUNDARY_Y/2)
 			{
 				bRetardScroll = TRUE;
@@ -1268,7 +1262,6 @@ void scroll(void)
  		if (keyDown(KEY_DOWNARROW) OR (mY>(SDWORD)(DISP_HEIGHT-BOUNDARY_Y)))
 		{
 			mouseAtTop = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_DOWNARROW) AND mY<(SDWORD)(DISP_HEIGHT-(BOUNDARY_Y/2)))
 			{
 				bRetardScroll = TRUE;
@@ -1282,7 +1275,6 @@ void scroll(void)
 		if ((mX<BOUNDARY_X))
   		{
 			mouseAtLeft = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_LEFTARROW) AND mX > BOUNDARY_X/2)
 			{
 				bRetardScroll = TRUE;
@@ -1293,7 +1285,6 @@ void scroll(void)
 		if ((mX>(SDWORD)(DISP_WIDTH-BOUNDARY_X)))
 		{
 			mouseAtRight = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_RIGHTARROW) AND mX<(SDWORD)(DISP_WIDTH-(BOUNDARY_X/2)))
 			{
 				bRetardScroll = TRUE;
@@ -1304,7 +1295,6 @@ void scroll(void)
 		if ((mY<BOUNDARY_Y))
 		{
 			mouseAtBottom = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_UPARROW) AND mY>BOUNDARY_Y/2)
 			{
 				bRetardScroll = TRUE;
@@ -1315,7 +1305,6 @@ void scroll(void)
  		if ((mY>(SDWORD)(DISP_HEIGHT-BOUNDARY_Y)))
 		{
 			mouseAtTop = TRUE;
-			mouseAtEdge = TRUE;
 			if(!keyDown(KEY_DOWNARROW) AND mY<(SDWORD)(DISP_HEIGHT-(BOUNDARY_Y/2)))
 			{
 				bRetardScroll = TRUE;
@@ -1464,14 +1453,6 @@ void scroll(void)
 #endif
 
 	edgeOfMap = CheckScrollLimits();
-
-	mouseAtLeft = FALSE;
-	mouseAtRight = FALSE;
-	mouseAtTop = FALSE;
-	mouseAtBottom = FALSE;
-
-	//end of scroll code
-	return;
 }
 
 
@@ -2975,37 +2956,6 @@ void dealWithRMB( void )
             }
 		}
 	}
-}
-
-
-
-
-
-
-// wrapper functions ... for psx
-void ResetMouseBoundryConditions(void)
-{
-	mouseAtLeft = FALSE;
-	mouseAtRight = FALSE;
-	mouseAtTop = FALSE;
-	mouseAtBottom = FALSE;
-}
-
-BOOL IsMouseAtLeft(void)
-{
-	return mouseAtLeft;
-}
-BOOL IsMouseAtRight(void)
-{
-	return mouseAtRight;
-}
-BOOL IsMouseAtTop(void)
-{
-	return mouseAtTop;
-}
-BOOL IsMouseAtBottom(void)
-{
-	return mouseAtBottom;
 }
 
 

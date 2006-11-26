@@ -164,7 +164,6 @@ MT_NOTARGET		//leave as last one
 } MOUSE_TARGET;
 
 
-extern BOOL		mouseAtEdge;
 extern BOOL		edgeOfMap;
 extern BOOL		gameStats;
 extern BOOL		bigBlueInWorld;
@@ -177,11 +176,6 @@ extern UWORD	RadarZoomLevel;
 // reset the input state
 void resetInput(void);
 
-void ResetMouseBoundryConditions(void);
-BOOL IsMouseAtBottom(void);
-BOOL IsMouseAtTop(void);
-BOOL IsMouseAtRight(void);
-BOOL IsMouseAtLeft(void);
 BOOL CheckObjInScrollLimits(UWORD *xPos,UWORD *zPos);
 BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
 extern BOOL CheckScrollLimits(void);
