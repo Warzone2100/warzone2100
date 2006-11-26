@@ -512,7 +512,7 @@ static void frontEndNewGame( void )
 			strcpy(pLevelName,DEFAULT_LEVEL);
 			seq_ClearSeqList();
 
-			seq_AddSeqToList("cam1/c001.rpl",NULL,"cam1/c001.txa",FALSE,0);
+			seq_AddSeqToList("cam1/c001.rpl",NULL,"cam1/c001.txa",FALSE);
 
 			seq_StartNextFullScreenVideo();
             break;
@@ -1548,7 +1548,7 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 // ////////////////////////////////////////////////////////////////////////////
 void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt)
 {
-#if !defined(PSX) || defined(ROTATEDTEXT)
+#if defined(ROTATEDTEXT)
 	W_LABINIT	sLabInit;
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 
@@ -1662,10 +1662,6 @@ void displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if(hilight)													// hilight
 		{
 			iV_SetTextColour(PIE_TEXT_WHITE);
-//#ifdef PSX
-//			displayHilightPulseBox( fx-4,fy+iV_GetTextAboveBase()-iV_GetTextBelowBase(),
-//									fx+fw,fy+iV_GetTextBelowBase());
-//#endif
 		}
 		else														// dont highlight
 		{
@@ -1694,7 +1690,7 @@ void displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 // ////////////////////////////////////////////////////////////////////////////
-#if !defined(PSX) || defined(ROTATEDTEXT)
+#if defined(ROTATEDTEXT)
 
 // show text written on its side.
 void displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)

@@ -48,9 +48,6 @@ static SDWORD	rayHDist[NUM_RAYS], rayVDist[NUM_RAYS];
 static SDWORD	rayFPTan[NUM_RAYS], rayFPInvTan[NUM_RAYS];
 static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 
-#define MAX_FRACT (0x7fffffff)
-#define angle_PSX2WORLD(ang) ((((ang)%4096)*360)/4096)
-
 /* Initialise the ray tables */
 
 BOOL rayInitialise(void)
@@ -122,18 +119,7 @@ BOOL rayInitialise(void)
 }
 
 
-
-//void rayC(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback);
-//
-////#ifndef PSX
-//
-//void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
-//{
-//	rayC(x, y, ray, length, callback);
-//}
-
-//#else
-//
+// playstation
 //void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
 //{
 //	static UDWORD Tx;
@@ -152,8 +138,6 @@ BOOL rayInitialise(void)
 //	rayC(Tx, Ty, Tray, Tlength, Tcallback);
 //	SetSpNormal();
 //}
-//
-//#endif
 
 /* cast a ray from x,y (world coords) at angle ray (0-360)
  * The ray angle starts at zero along the positive y axis and

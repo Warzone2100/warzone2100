@@ -319,7 +319,6 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 BOOL intAddTransporterContents(void)
 {
 	W_FORMINIT		sFormInit;
-
 	W_BUTINIT		sButInit;
 	W_FORMINIT		sButFInit;
 	BOOL			Animate = TRUE;
@@ -333,14 +332,11 @@ BOOL intAddTransporterContents(void)
 		AlreadyUp = TRUE;
 	}
 
-
 	if(intIsRefreshing()) {
 		Animate = FALSE;
 	}
 
-
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-
 
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANS_CONTENTFORM;
@@ -365,9 +361,6 @@ BOOL intAddTransporterContents(void)
 	{
 		return FALSE;
 	}
-
-
-
 
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -401,13 +394,8 @@ BOOL intAddTransporterContents(void)
 		sLabInit.formID = IDTRANS_CONTENTFORM;
 		sLabInit.id = IDTRANS_CAPACITY;
 		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
-	#ifndef PSX
 		sLabInit.x = STAT_SLDX + STAT_SLDWIDTH + 4;
 		sLabInit.y = STAT_SLDY + 3;
-	#else
-		sLabInit.x = STAT_SLDX + STAT_SLDWIDTH + 4;
-		sLabInit.y = STAT_SLDY - 4;
-	#endif
 		sLabInit.width = 16;
 		sLabInit.height = 16;
 		sLabInit.pText = "10";
@@ -419,12 +407,9 @@ BOOL intAddTransporterContents(void)
 		}
 	}*/
 
-	//add the Launch button - if on a mission, or all the time on the PSX
-
+	//add the Launch button if on a mission
 	if (onMission)
-
 	{
-
 		memset(&sButFInit, 0, sizeof(W_FORMINIT));
 		sButFInit.formID = IDTRANS_CONTENTFORM;
 		sButFInit.id = IDTRANS_LAUNCH;
@@ -450,9 +435,6 @@ BOOL intAddTransporterContents(void)
 		if(!AlreadyUp) {
 			intSetCurrentCursorPosition(&InterfaceSnap,sButFInit.id);
 		}
-
-
-
 	}
 
 	if (!intAddTransContentsForm())

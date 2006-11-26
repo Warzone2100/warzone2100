@@ -69,13 +69,9 @@
 #include "arrow.h"
 #endif
 
-
 #include "texture.h"
 
-
 #include "frend.h"
-
-
 
 #include "intimage.h"
 #include "power.h"
@@ -85,8 +81,6 @@
 #include "intdisplay.h"
 #include "formationdef.h"
 #include "formation.h"
-
-
 
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
@@ -150,14 +144,9 @@ BLOCK_HEAP	*psMissionHeap;
 
 
 // Ascii to font image id lookup table for frontend font.
-// Same for WIN32 and PSX.
 //
 
 UWORD FEAsciiLookup[256] =
-//#else
-//// We can use bytes as long as we ensure the font images are the 1st 256 in the image file.
-//UBYTE FEAsciiLookup[256] =
-//#endif
 {
 	IMAGE_TFONT_63,	//0		0..32 are all mapped to question marks
 	IMAGE_TFONT_63,	//1
@@ -419,14 +408,9 @@ UWORD FEAsciiLookup[256] =
 
 
 // Ascii to font image id lookup table for in game font.
-// Same for WIN32 and PSX.
 //
-//#ifndef PSX
-//UWORD AsciiLookup[256] =
-//#else
 //// We can use bytes as long as we ensure the font images are the 1st 256 in the image file.
 UWORD AsciiLookup[256] =
-//#endif
 {
 	IMAGE_ASCII63,	//0		0..32 are all mapped to question marks
 	IMAGE_ASCII63,	//1
@@ -1278,7 +1262,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 	keyClearMappings();
 	keyInitMappings(FALSE);
 
-
 #ifdef OLD_PALETTE
 	iV_PaletteSelect(iV_PaletteAdd(&gamePal[0]));
 #endif
@@ -1302,13 +1285,9 @@ BOOL frontendInitialise(const char *ResourceFile)
 	return TRUE;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// !PSX version. Called at frontend Shutdown, before game runs.
-//
+
 BOOL frontendShutdown(void)
 {
-
 	debug(LOG_MAIN, "Shuting down frontend");
 
 	saveConfig();			// save settings to registry.
@@ -1338,7 +1317,7 @@ BOOL frontendShutdown(void)
 		return FALSE;
 	}
 
-    ResearchRelease();
+	ResearchRelease();
 
 	if ( !anim_Shutdown() )
 	{
@@ -1814,11 +1793,6 @@ static void SetScrollLimitsTilesVisible(void)
 }
 
 
-// FromLoad flag used to indicate that this is the first call
-// to stageThreeInitialise when loading a saved game so don't close the
-// loading screen, onlyt relevant on PSX.
-//
-
 BOOL stageThreeInitialise(void)
 {
 //MAPTILE	*psTile;
@@ -1882,13 +1856,10 @@ BOOL stageThreeInitialise(void)
 		intRemoveMissionResultNoAnim();
 	}
 
-//#ifndef PSX
 //	if(bMultiPlayer)
 //	{
 //		multiGameInit();
 //	}
-//#endif
-
 
 	// determine if to use radar
 	for(psStr = apsStructLists[selectedPlayer];psStr;psStr=psStr->psNext){
@@ -2099,7 +2070,6 @@ BOOL newMapInitialise(void)
 //	initViewPosition();
 
 // initialise the gateway stuff
-//#ifndef PSX
 	// this no longer necessary when RLE map zones are loaded
 //	gwProcessMap();	// now loaded with map.
 
@@ -2109,7 +2079,6 @@ BOOL newMapInitialise(void)
 		return FALSE;
 	}
 */
-//#endif
 
 	return TRUE;
 }

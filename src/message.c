@@ -338,11 +338,7 @@ void viewDataHeapShutDown(void)
 //	 else
 //	 {
 //		 //make the reticule button flash as long as not prox msg or multiplayer game.
-//#ifndef PSX
 //		if (player == selectedPlayer && !bMultiPlayer)
-//#else
-//		if (player == selectedPlayer )
-//#endif
 //		{
 //			flashReticuleButton(IDRET_INTEL_MAP);
 //		}

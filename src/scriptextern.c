@@ -37,10 +37,6 @@ BOOL		bExtraFailFlag = FALSE;
 // whether or not to track the player's transporter as it comes
 // into an offworld mission.
 BOOL		bTrackTransporter = FALSE;
-// whether or not we're running on the PSX.
-BOOL		bIsPSX = FALSE;
-
-
 
 
 // reset the script externals for a new level
@@ -65,10 +61,6 @@ BOOL scrGenExternGet(UDWORD index)
 	case EXTID_TRACKTRANSPORTER:
 		type = VAL_BOOL;
 		scrFunctionResult.v.bval = bTrackTransporter;
-		break;
-	case EXTID_ISPSX:
-		type = VAL_BOOL;
-		scrFunctionResult.v.bval = bIsPSX;
 		break;
 	case EXTID_MAPWIDTH:
 		type = VAL_INT;

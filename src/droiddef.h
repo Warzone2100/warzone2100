@@ -114,10 +114,8 @@ typedef struct _droid_template
 	//UDWORD			asProgs[DROID_MAXPROGS];	/* program indices*/
 
 	DROID_TYPE		droidType;					// The type of droid
-//#ifndef PSX
 	UDWORD			multiPlayerID;				// multiplayer unique descriptor(cant use id's for templates)
 												// used for save games as well now - AB 29/10/98
-//#endif
 	struct _droid_template	*psNext;			/* Pointer to next template*/
 
 } DROID_TEMPLATE;

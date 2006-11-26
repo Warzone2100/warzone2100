@@ -71,7 +71,7 @@ typedef struct _player_research
 
 
 	UDWORD		currentPoints;			// If the research has been suspended then this value contains the number of points generated at the suspension/cancel point
-										// normally it is null  ... on the PSX if we cancel we lose all research so far... so it's not needed
+										// normally it is null
 
 	UBYTE		ResearchStatus;			// Bit flags   ...  see below
 

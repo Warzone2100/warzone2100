@@ -468,7 +468,6 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		psGate++;
 	}
 
-//#ifndef PSX
 //	if (!gwProcessMap())
 //	{
 //		return FALSE;
@@ -479,7 +478,6 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 //	{
 //		return FALSE;
 //	}
-//#else
 	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
 
 	/* ZONEMAP_SAVEHEADER */
@@ -551,7 +549,6 @@ BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		abort();
 		return FALSE;
 	}
-//#endif
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 

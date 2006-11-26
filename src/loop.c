@@ -240,10 +240,6 @@ GAMECODE gameLoop(void)
 
 //		intRetVal = INT_NONE;
 
-
-		// we need two versions of the loop conditions, since PSX doesn't have
-		// multiplayer stuff.
-
 		// Don't update the game world if the design screen is up and single player game
 		//if (((intRetVal != INT_FULLSCREENPAUSE) || bMultiPlayer) AND ((intRetVal !=
 		//	INT_INTELPAUSE) || bMultiPlayer))
@@ -252,7 +248,7 @@ GAMECODE gameLoop(void)
 			// check all flag positions for duplicate delivery points
 			checkFactoryFlags();
 #endif
-			//handles callbacks for positioning of DP's - like PSX
+			//handles callbacks for positioning of DP's
 			process3DBuilding();
 
 			// Update the base movement stuff
@@ -726,9 +722,6 @@ GAMECODE gameLoop(void)
 		/*else if (!quitting)
 		{
 			// Display the in game interface
-	//#ifdef PSX
-	//		DrawMousePointer(mouseX(),mouseY());	// add the mouse pointer as a primative
-	//#endif
 
 			DBP1(("loop: Display widgets\n"));
 			if(widgetsOn)

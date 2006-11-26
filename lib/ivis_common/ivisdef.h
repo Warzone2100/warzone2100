@@ -110,7 +110,7 @@ typedef uint16 BSPPOLYID;			// lets hope this can work as a byte ... that will l
 #include "bspimd.h" //structure defintions only
 
 
-typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure (32bits on pc 16bits on PSX)
+typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
 
 typedef struct {
 	uint32 flags;

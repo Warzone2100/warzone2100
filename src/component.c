@@ -20,11 +20,6 @@
 #include "lib/ivis_common/bspfunc.h"
 #include "loop.h"
 
-
-#define TESTLOWPOLY
-
-#define GAME2PSX(x) (((x)*4096)/360)
-
 #define GetRadius(x) ((x)->sradius)
 
 #include "stats.h"
@@ -757,7 +752,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 	droidSetBits(psTemplate,&Droid);
 	Droid.player = (UBYTE)selectedPlayer;
 
-	Droid.x=Droid.y=Droid.z=0;	// important for psx stuff ...
+	Droid.x = Droid.y = Droid.z = 0;
 
 	//draw multi component object as a button object
 	displayCompObj((BASE_OBJECT*)&Droid,&mountRotation,TRUE);

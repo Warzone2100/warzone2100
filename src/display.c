@@ -1564,7 +1564,6 @@ BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 //
 BOOL CheckScrollLimits(void)
 {
-	// need to be carefull here, player position uses SDWORD's on PC and SWORDS on PSX.
 	SDWORD xp = player.p.x;
 	SDWORD zp = player.p.z;
 	BOOL ret = CheckInScrollLimits(&xp,&zp);
@@ -2140,7 +2139,6 @@ SELECTION_TYPE	selection;
 					orderSelectedObj(selectedPlayer, psClickedOn);
 				}
 				*/
-// Like to get this working on PSX.
 				else
 
 				if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
@@ -2362,7 +2360,6 @@ SELECTION_TYPE	selection;
 				}
 				if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
 				{
-					// Like to implement this on PSX as well.
 					// try to attack your own structure
 					for(psCurr=apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 					{

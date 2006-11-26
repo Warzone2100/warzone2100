@@ -1374,13 +1374,11 @@ error:
 	/* Start the game clock */
 	gameTimeStart();
 
-//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
 //		multiPlayerInUse = FALSE;
 //	}
-//#endif
 	return FALSE;
 }
 
@@ -1800,20 +1798,13 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 	//before loading the data - turn power off so don't get any power low warnings
 	powerCalculated = FALSE;
 	/* Load in the chosen file data */
-/*#ifndef PSX
+/*
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
 		DBPRINTF(("loadgame: Fail2\n"));
 		goto error;
 	}
-#else
-	if (loadFileFromWDG(aFileName,&pFileData,&fileSize,WDG_USESUPPLIED)!=WDG_OK)
-	{
-		DBPRINTF(("loadgame: Fail3\n"));
-		goto error;
-	}
-#endif
 	if (!gameLoad(pFileData, fileSize))
 	{
 		DBPRINTF(("loadgame: Fail4\n"));
@@ -2120,8 +2111,6 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 			goto error;
 		}
 
-		// on the PSX we check for a fail ... in case we run out of mem (likely!)
-		// well if it is good enough for the PSX it's good enough for the PC - John.
 		if (!mapLoad(pFileData, fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
@@ -2133,16 +2122,12 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 /*		aFileName[fileExten] = '\0';
 		strcat(aFileName, "gates.txt");
 		// Load in the chosen file data
-#ifndef PSX
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 		{
 			DBPRINTF(("loadgame: Failed to load gates.txt\n"));
 			goto error;
 		}
-#else
-		if (!LoadGameLoad(aFileName,&pFileData,&fileSize,UserSaveGame)) goto error;
-#endif
 
 		if (!gwLoadGateways(pFileData, fileSize))
 		{
@@ -2181,16 +2166,12 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resstate.bjo");
 		// Load in the chosen file data
-//#ifndef PSX
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail32\n" );
 			goto error;
 		}
-//#else
-//		if (!LoadGameLoad(aFileName,&pFileData,&fileSize,UserSaveGame)) goto error;
-//#endif
 
 		//load the research status data
 		if (pFileData)
@@ -2781,13 +2762,11 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 	//after the clock has been reset need to check if any res_extractors are active
 	checkResExtractorsActive();
 
-//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
 //		multiPlayerInUse = FALSE;
 //	}
-//#endif
    //	initViewPosition();
 	setViewAngle(INITIAL_STARTING_PITCH);
 	setDesiredPitch(INITIAL_DESIRED_PITCH);
@@ -2855,13 +2834,11 @@ error:
 
 	/* Start the game clock */
 	gameTimeStart();
-//#ifndef PSX
 //	if (multiPlayerInUse)
 //	{
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
 //		multiPlayerInUse = FALSE;
 //	}
-//#endif
 
 	return FALSE;
 }

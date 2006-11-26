@@ -21,10 +21,4 @@ UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile,UWORD ID);
 IMAGEFILE *iV_LoadImageFile(char *FileData, UDWORD FileSize);
 void iV_FreeImageFile(IMAGEFILE *ImageFile);
 
-
-// Load a clut file into VRAM.
-BOOL iV_LoadClut_PSX(UBYTE *Data,CLUTLIST **ClutList,BOOL HalfBright);
-// Free up a clut list alloceted by iV_LoadClut_PSX.
-void iV_FreeClut_PSX(CLUTLIST *ClutList);
-
 #endif

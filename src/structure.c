@@ -2376,9 +2376,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 
 //		//set up the imd to use for the display
 //		psBuilding->sDisplay.imd = pStructureType->pIMD;
-//#ifndef PSX
 //		psBuilding->sDisplay.animFrame = 0;
-//#endif
 
         //do the visiblilty stiff before setFunctionality - so placement of DP's can work
 //		memset(psBuilding->visible, 0, sizeof(psBuilding->visible));
@@ -3728,7 +3726,6 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 					      &&(psFlag->factorySub == i));									// correct flag.
 					    psFlag = psFlag->psNext);
 
-#ifndef PSX
 					    if(bMultiPlayer)
 					    {
 						    bMultiPlayer = FALSE;
@@ -3744,10 +3741,6 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 					    {
 						    bMultiPlayer = TRUE;
 					    }
-#else
-    					// psx version, only one delivery point, no waypoint, so just order droid.
-	    				orderDroidLoc(psNewDroid,DORDER_MOVE,psFlag->coords.x,psFlag->coords.y);
-//#endif
                }
 			*/
 			}
@@ -4782,14 +4775,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				{
 					// release droid from structure
 					((REPAIR_FACILITY*)psStructure->pFunctionality)->psObj = NULL;
-#ifndef PSX
 					// This is very new Alex M - Ask John????
 			   //		if(psDroid->psOldCommander AND !psDroid->psOldCommander->died)
 			   //		{
 			   //			cmdDroidAddDroid(psDroid->psOldCommander, psDroid);
 			   //		}
 					// This is very new Alex M - Ask John????
-#endif
 				}
 				else*/
 				if (psStructure->visible[selectedPlayer] AND psDroid->visible[selectedPlayer])
@@ -5501,12 +5492,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 //	/* Can't build too near the edge - problem solved - at least for now */
 //	if(x<=2 OR y<=2 OR x>=mapWidth-5 OR y>=mapHeight-5)
 //	{
-//#ifdef PSX
-//		SetHilightColourNotOK();
-//#else
 //		outlineColour = outlineNotOK;
 //		outlineColour3D = outlineNotOK3D;
-//#endif
 //		return(FALSE);
 //	}
 
@@ -5764,36 +5751,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 								{
 									if (TILE_HAS_STRUCTURE(mapTile(i,j)))
 									{
-//// On Playstation, to try and reduce the number of structures on screen.. defence
-//// structures can only be build next to walls, otherwise there has to be a gap.
-//#ifdef PSX
-//										psStruct = getTileStructure(i,j);
-//										if (psStruct)
-//                                        {
-//										    //defence structures can be built next to a wall, but nothing else.
-//										    if (psBuilding->type == REF_DEFENSE)
-//										    {
-//												if (!(psStruct->pStructureType->type == REF_WALL OR
-//													psStruct->pStructureType->type == REF_WALLCORNER))
-//												{
-//													valid = FALSE;
-//												}
-//    										}
-//                                            //and walls can be built next to corner walls and defensive structures
-//	    									else if (psBuilding->type == REF_WALL)
-//                                            {
-//												if (!(psStruct->pStructureType->type == REF_DEFENSE OR
-//													psStruct->pStructureType->type == REF_WALLCORNER))
-//												{
-//													valid = FALSE;
-//												}
-//                                            }
-//                                            else
-//		    								{
-//			    								valid = FALSE;
-//				    						}
-//                                        }
-//#else
 										psStruct = getTileStructure(i,j);
 
 
@@ -7311,12 +7268,10 @@ void setHQExists(BOOL state, UDWORD player)
 /*returns the status of the flag*/
 BOOL getHQExists(UDWORD player)
 {
-//#ifndef PSX
 //	if(bMultiPlayer && game.type == DMATCH)
 //	{
 //		return TRUE;
 //	}
-//#endif
 
 	return hqExists[player];
 }
@@ -7369,8 +7324,6 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle, int we
 
 		if(psShape AND psShape->nconnectors)
 		{
-
-			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
 			pie_MatBegin();
 
 			pie_TRANSLATE(psStructure->x,-(SDWORD)psStructure->z,psStructure->y);
@@ -8139,10 +8092,8 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 			}
         }
         /* called in droidDamage now - AB 17/06/99
-#ifndef PSX
 		psDroid->timeLastHit = gameTime;
 		psDroid->lastHitWeapon = WSC_ELECTRONIC;
-#endif
         */
 
     }
@@ -8865,9 +8816,6 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 				asProductionRun[factoryType][factoryInc][inc].quantity++;
 				if (asProductionRun[factoryType][factoryInc][inc].quantity > MAX_IN_RUN)
 				{
-//#ifdef PSX	// Don't wrap around, just max out.
-//					asProductionRun[factoryType][factoryInc][inc].quantity = MAX_IN_RUN;
-//#else
 					asProductionRun[factoryType][factoryInc][inc].quantity = 0;
 					//initialise the template
 					asProductionRun[factoryType][factoryInc][inc].psTemplate = NULL;
@@ -8879,17 +8827,13 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
                         //set the factory's power accrued back to zero
                         psFactory->powerAccrued = 0;
                     }
-//#endif
 				}
 			}
 			else
 			{
 				if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)
 				{
-//#ifdef PSX	// Don't wrap around
-//#else
 					asProductionRun[factoryType][factoryInc][inc].quantity = MAX_IN_RUN;
-//#endif
 				}
 				else
 				{
@@ -8904,12 +8848,9 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 
 					if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)
 					{
-//#ifdef PSX	// Don't wrap around
-//#else
 						//initialise the template
 						asProductionRun[factoryType][factoryInc][inc].psTemplate = NULL;
 						bCheckForCancel = TRUE;
-//#endif
 					}
 				}
 			}
@@ -8933,11 +8874,8 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 		}
 		else
 		{
-//#ifdef PSX	// Don't wrap around.
-//#else
 			//wrap around to max value
 			asProductionRun[factoryType][factoryInc][spare].quantity = MAX_IN_RUN;
-//#endif
 		}
 	}
 	//if nothing is allocated then the current factory may have been cancelled

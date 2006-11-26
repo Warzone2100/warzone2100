@@ -314,7 +314,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	PROJ_OBJECT		*psObj;
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
-	FRACT_D			fR, fA, fS, fT, fC;			// 52.12 fixed point on PSX, float on PC.
+	FRACT_D			fR, fA, fS, fT, fC;
 	iVector			muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
 	UDWORD			heightVariance;
@@ -1329,9 +1329,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	{
 		if ( psStats->iAudioImpactID == NO_SOUND)
 		{
-
-	// ID_SOUND_RICOCHET_1 is -1 on PSX so code below must be PC only.
-
 			/* play richochet if MG */
 			if ( psObj->psDest != NULL && psObj->psWStats->weaponSubClass == WSC_MGUN
 					&& ONEINTHREE )
@@ -1549,13 +1546,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass);
 
-
-	//#ifndef PSX
 	//			if(bMultiTemp)
 	//			{
 	//				bMultiPlayer = TRUE;
 	//			}
-	//#endif
+
 				if(bKilled)
 				{
 					proj_UpdateKills(psObj);
@@ -1622,12 +1617,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 				bKilled = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass);
 
-//#ifndef PSX
 //				if(bMultiTemp)
 //				{
 //					bMultiPlayer = TRUE;
 //				}
-//#endif
 
 				if(bKilled)
 				{
@@ -2095,7 +2088,6 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 						DBP1(("Burn damage of %d to object %d, player %d\n",
 								damageToDo, psCurr->id, psCurr->player));
 
-//#ifndef PSX
 //						if(bMultiPlayer)
 //						{
 //							bMultiPlayer = FALSE;
@@ -2105,7 +2097,6 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 //						{
 //							bMultiTemp = FALSE;
 //						}
-//#endif
 
 						//bKilled = psCurr->damage(psCurr, damageToDo, psStats->weaponClass);
 
@@ -2113,12 +2104,10 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 
 						psCurr->burnDamage += damageToDo;
 
-//#ifndef PSX
 //						if(bMultiTemp)
 //						{
 //							bMultiPlayer = TRUE;
 //						}
-//#endif
 
 						if(bKilled)
 						{

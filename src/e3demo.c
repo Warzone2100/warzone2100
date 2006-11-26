@@ -11,8 +11,6 @@
 
 // -------------------------------------------------------------------------
 
-#if !defined(PSX) || defined(E3DEMO)
-
 #include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "map.h"
@@ -457,23 +455,3 @@ BOOL	tooNearEdge( UDWORD x, UDWORD y )
 		return(TRUE);
 	}
 }
-
-#else
-/* empty demo functions */
-BOOL demoGetStatus ( void )
-{
-	return(FALSE);
-}
-
-void initDemoCamera( void )
-{
-}
-
-void processDemoCam( void )
-{
-}
-
-void toggleDemoStatus( void )
-{
-}
-#endif

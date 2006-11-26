@@ -725,7 +725,7 @@ BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight)
 #define MIN_JUSTIFICATION 40
 
 // add a string at x,y or add string below last line if x and y are 0
-BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify, UDWORD PSXSeqNumber)
+BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;
@@ -818,7 +818,7 @@ static SDWORD lastX;
 		{
 			bJustify = SEQ_TEXT_POSITION;
 		}
-		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startFrame, endFrame, bJustify,0);
+		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startFrame, endFrame, bJustify);
 	}
 	return TRUE;
 }
@@ -888,7 +888,7 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
 				if (pText != NULL)
 				{
-					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, bJustify,0);
+					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, bJustify);
 				}
 			}
 		}
@@ -915,7 +915,7 @@ void seq_ClearSeqList(void)
 }
 
 //add a sequence to the list to be played
-void seq_AddSeqToList(char *pSeqName, char *pAudioName, const char *pTextName, BOOL bLoop, UDWORD PSXSeqNumber)
+void seq_AddSeqToList(char *pSeqName, char *pAudioName, const char *pTextName, BOOL bLoop)
 {
 	SDWORD strLen;
 	currentSeq++;

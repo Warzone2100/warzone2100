@@ -58,11 +58,9 @@ extern CURSORSNAP InterfaceSnap;
 
 
 //Height to view the world from in Intelligence Screen
-/*#ifndef PSX
+/*
 #define INTELMAP_VIEWHEIGHT		2250
-#else
-#define INTELMAP_VIEWHEIGHT		(2250)
-#endif*/
+*/
 
 /* Intelligence Map screen IDs */
 //#define IDINTMAP_FORM			6000	//The intelligence map base form
@@ -113,21 +111,12 @@ extern CURSORSNAP InterfaceSnap;
 #define	INTEL_TXT_LIFE			2000
 
 //define the 3D View sizes and positions that are required - relative to INTMAP_FORM
-//#ifndef PSX
 #define	INTMAP_RESEARCHX		(100 + D_W)
 #define INTMAP_RESEARCHY		(30	+ D_H)
 
 #define	INTMAP_RESEARCHWIDTH	440
 #define INTMAP_RESEARCHHEIGHT	288
 
-//#else
-//// PSX versions need to be a multiple of 16 pixels wide and high as thats the
-//// clipping rectangle limitations ( I Think? ). So far only tested for CAMPAIGN windows.
-//#define	INTMAP_RESEARCHX		(32*2)
-//#define INTMAP_RESEARCHY		(32)
-//#define	INTMAP_RESEARCHWIDTH	(320-(32*2))
-//#define INTMAP_RESEARCHHEIGHT	(16*11)
-//#endif
 
 //define the 3D View sizes and positions that are required - relative to INTMAP_FORM
 /*#define INTMAP_MISSIONX			(OBJ_BACKX)
@@ -138,18 +127,6 @@ extern CURSORSNAP InterfaceSnap;
 #define INTMAP_PROXIMITYY		(70)
 #define INTMAP_PROXIMITYWIDTH	(200)
 #define INTMAP_PROXIMITYHEIGHT	(175)*/
-//#else
-// PSX versions need to be a multiple of 16 pixels wide and high as thats the
-// clipping rectangle limitations ( I Think? ). So far only tested for CAMPAIGN windows.
-/*#define INTMAP_MISSIONX			(OBJ_BACKX)
-#define INTMAP_MISSIONY			(40)
-#define INTMAP_MISSIONWIDTH		(OBJ_WIDTH)
-#define INTMAP_MISSIONHEIGHT	(240)
-#define INTMAP_PROXIMITYX		(350)
-#define INTMAP_PROXIMITYY		(70)
-#define INTMAP_PROXIMITYWIDTH	(200)
-#define INTMAP_PROXIMITYHEIGHT	(200)*/
-//#endif
 
 /*dimensions for Title view section relative to IDINTMAP_MSGVIEW*/
 /*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
@@ -376,11 +353,6 @@ BOOL _intAddIntelMap(void)
 	{
 		return FALSE;
 	}
-
-//#ifdef PSX
-//	SetCurrentSnapFormID(&InterfaceSnap,sFormInit.id);
-////	SetMouseFormPosition(&sFormInit);
-//#endif
 
 	if (!intAddMessageForm(playCurrent))
 	{
@@ -971,7 +943,7 @@ static void intDisplaySeqTextView(struct _widget *psWidget,
 }
 
 
-// Add all the Video Sequences for a message ... works on PC &  PSX
+// Add all the Video Sequences for a message
 void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 {
 
@@ -1012,7 +984,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 			}
 
 
-			seq_AddSeqToList(psViewReplay->pSeqList[Sequence].sequenceName,psViewReplay->pSeqList[Sequence].pAudio, NULL, bLoop,Sequence);
+			seq_AddSeqToList(psViewReplay->pSeqList[Sequence].sequenceName, psViewReplay->pSeqList[Sequence].pAudio, NULL, bLoop);
 
 
 //	{
@@ -1038,7 +1010,7 @@ void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		psViewReplay = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 
 		seq_ClearSeqList();
-		seq_AddSeqToList(psViewReplay->sequenceName,psViewReplay->pAudio, NULL, FALSE,0);
+		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->pAudio, NULL, FALSE);
 		//play first full screen video
 		if (Start==TRUE)
 		{
@@ -1516,9 +1488,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD			x0,y0,x1,y1;
 	VIEW_RESEARCH	*psViewResearch;
 	SWORD			image = -1;
-//#ifndef PSX
     RESEARCH        *psResearch;
-//#endif
 
 
 	//shouldn't have any proximity messages here...
@@ -1576,10 +1546,6 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
 	UDWORD			x0,y0,x1,y1;
 	VIEW_RESEARCH	*psViewResearch;
-//#ifdef PSX
-//	RECT			DrawArea;
-//	UWORD			OTIndex;
-//#endif
 
 	//shouldn't have any proximity messages here...
 	if (psMessage->type == MSG_PROXIMITY)
@@ -1605,24 +1571,11 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 		}
 		//render a frame of the current movie
 		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
-//#ifndef PSX
 		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName,
 			gameTime2, SEQUENCE_HOLD);
 		//download to screen now
 		seq_BlitBufferToScreen((SBYTE *)rendSurface.buffer, rendSurface.scantable[1],
 			x0, y0);
-//#else
-//	// PSXSequencesCountdown is the time until the playstation research seq. starts
-//	// ... This gives the rest of the display a chance to have a head start.
-//	//  ... avoiding screen flickers
-//		if (PSXSequencesCountdown>0) PSXSequencesCountdown--;
-//		if (PSXSequencesCountdown==1)
-//		{
-//			StartMessageSequences(psMessage,FALSE);	// PSX Version just starts the sequences
-//			loop_SetVideoPlaybackMode();		// set so that the main loop plays the video !
-//
-//		}
-//#endif
 		CloseButtonRender();
 	}
 
@@ -1694,7 +1647,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		y = VIDEO_TEXT_TOP_Y;
 
 
-		seq_AddTextForVideo(psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE, sequence); //startframe endFrame
+		seq_AddTextForVideo(psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE); //startframe endFrame
 
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
@@ -1702,7 +1655,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		i = 1;
 		while (i < psSeqDisplay->numText)
 		{
-			seq_AddTextForVideo(psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE, sequence); //startframe endFrame
+			seq_AddTextForVideo(psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE); //startframe endFrame
 			//initialise after the first setting
 			x = y = 0;
 			i++;
@@ -1722,11 +1675,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		viewHeight = player.p.y;
 		//rotate to top down view
 		player.r.x = DEG(-90);
-#ifndef PSX
 		player.p.y = INTELMAP_VIEWHEIGHT;
-#else
-		camera.p.y = INTELMAP_VIEWHEIGHT;
-#endif
 	}
 	else
 	{
@@ -1802,22 +1751,11 @@ appropriate sized image for the view*/
 		ASSERT( FALSE, "Unknown message type" );
 	}
 
-#ifdef PSX
-	DisplayControlDiag();
-#endif
-
-//#ifdef PSX
-//	iV_DrawText(psMessage->pViewData->pTextMsg,x1,y);
-//#else
 //	screenSetTextColour(255,255,255);
 //	screenTextOut(x+1,y+1,psMessage->pViewData->pTextMsg);
 	//scrollMessage(psMessage->pViewData->pTextMsg, x2, x1, y, 5);
 
-#ifdef PSX
-	setConsoleSizePos(x1+2,y-32-iV_GetTextLineSize()*2,(x2-x1)-4);
-#else
 	setConsoleSizePos(x1, y, (x2-x1));
-#endif
 	setConsolePermanence(TRUE);
 	addConsoleMessage(psMessage->pViewData->pTextMsg, LEFT_JUSTIFY);
 }

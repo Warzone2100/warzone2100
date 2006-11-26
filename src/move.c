@@ -828,10 +828,9 @@ void moveReallyStopDroid(DROID *psDroid)
 }
 
 
-
 #define PITCH_LIMIT 150
 
-/* Get pitch and roll from direction and tile data - NOT VERY PSX FRIENDLY */
+/* Get pitch and roll from direction and tile data */
 void updateDroidOrientation(DROID *psDroid)
 {
 	SDWORD hx0, hx1, hy0, hy1, w;
@@ -1277,15 +1276,9 @@ static SDWORD moveObjRadius(BASE_OBJECT *psObj)
 
 		xdiff = MAKEFRACT(psDroid->x) + mx - MAKEFRACT(psInfo->psObj->x);
 		ydiff = MAKEFRACT(psDroid->y) + my - MAKEFRACT(psInfo->psObj->y);
-#ifndef PSX
 
 		distSq = FRACTmul(xdiff,xdiff) + FRACTmul(ydiff,ydiff);
 		distSq1 = MAKEINT(distSq);
-#else
-		x1 = MAKEINT (xdiff);
-		y1 = MAKEINT (ydiff);
-		distSq1 = (x1*x1)+(y1*y1);
-#endif
 
 		if (radSq > (distSq1))
 		{
@@ -3130,7 +3123,6 @@ BOOL moveFormationSpeedLimitingOn( void )
 }
 
 #define MAX_SPEED_PITCH  60
-#define PSX_SPEED_ADJUST 40
 
 // Calculate the new speed for a droid
 SDWORD moveCalcDroidSpeed(DROID *psDroid)
@@ -3144,14 +3136,11 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, TERRAIN_TYPE(mapTile(mapX,mapY)),
 							  psDroid->asBits[COMP_PROPULSION].nStat);
 
-
-
 /*	if ( vtolDroid(psDroid) &&
 		 ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size == SIZE_HEAVY) )
 	{
 		speed /= 2;
 	}*/
-
 
 	pitch = psDroid->pitch;
 	if (pitch > MAX_SPEED_PITCH)
@@ -3165,20 +3154,12 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	// now offset the speed for the slope of the droid
 	speed = (MAX_SPEED_PITCH - pitch) * speed / MAX_SPEED_PITCH;
 
-
-//#ifdef PSX
-//	pitch=0;		// hack for the demo
-//#endif
-
-
-
 	// slow down damaged droids
 	damLevel = PERCENT(psDroid->body, psDroid->originalBody);
 	if (damLevel < HEAVY_DAMAGE_LEVEL)
 	{
 		speed = 2 * speed / 3;
 	}
-
 
 	// stop droids that have just fired a no fire while moving weapon
 	//if (psDroid->numWeaps > 0 && psDroid->asWeaps[0].lastFired + FOM_MOVEPAUSE > gameTime)
@@ -3201,12 +3182,10 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		SDWORD FrmSpeed = (SDWORD)psDroid->sMove.psFormation->iSpeed;
 
-
 		if ( speed > FrmSpeed )
 		{
 			speed = FrmSpeed;
 		}
-
 	}
 
 	// slow down shuffling VTOLs
@@ -3467,41 +3446,6 @@ void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 //	psDroid->sMove.dx = dx;
 //	psDroid->sMove.dy = dy;
 
-//#ifdef PSX
-//	psDroid->x = (UDWORD)MAKEINT(psDroid->sMove.fx);
-//	psDroid->y = (UDWORD)MAKEINT(psDroid->sMove.fy);
-//
-//	if ( psDroid->x > 0x80000000)
-//	{
-//		DBPRINTF(("Droid off edge of map ... fixing (a)\n"));
-//		psDroid->x=1;
-//	}
-//	else
-//	{
-//		if ( psDroid->x > mapWidth*TILE_UNITS )
-//		{
-//			DBPRINTF(("Droid off edge of map ... fixing (b)\n"));
-//			psDroid->x= mapWidth*TILE_UNITS-1;
-//
-//		}
-//	}
-//
-//
-//	if ( psDroid->y > 0x80000000)
-//	{
-//		DBPRINTF(("Droid off edge of map ... fixing (c)\n"));
-//		psDroid->y=1;
-//	}
-//	else
-//	{
-//		if ( psDroid->y > mapHeight*TILE_UNITS )
-//		{
-//			DBPRINTF(("Droid off edge of map ... fixing (d)\n"));
-//			psDroid->y= mapHeight*TILE_UNITS-1;
-//
-//		}
-//	}
-//#else
 	iX = MAKEINT(psDroid->sMove.fx);
 	iY = MAKEINT(psDroid->sMove.fy);
 
@@ -3539,8 +3483,6 @@ void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 			psDroid->y = 1;
 		}
 	}
-
-//#endif
 }
 
 /* Update a tracked droids position and speed given target values */
@@ -3689,19 +3631,8 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 		{
 //			DBPRINTF(("droid anim stopped %p\n",psDroid);
 //DBPRINTF(("vis 1 off %p\n",psDroid);
-
-
-// On the pc we make the animation non-visible
-//
-// on the psx we remove the animation totally, and reallocate it when it is next needed
-//    ... this is so we can allow the playstation to use far fewer animation entries
-
-
 			psDroid->psCurAnim->bVisible = FALSE;
-
-
 		}
-
 		return;
 	}
 

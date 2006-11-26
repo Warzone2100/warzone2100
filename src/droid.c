@@ -686,31 +686,19 @@ static void removeDroidFX(DROID *psDel)
 			if(psDel->visible[selectedPlayer])
 			{
 // The babarian has been run over ...
-
 				audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_BARB_SQUISH );
-
-
 			}
 		}
 	}
 	else if(psDel->visible[selectedPlayer])
 	{
 		destroyFXDroid(psDel);
-		// this sounds a bit crap on the psx
 		pos.x = psDel->x;
 		pos.z = psDel->y;
 		pos.y = psDel->z;
 		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_DROID,FALSE,NULL,0);
 		audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_EXPLOSION );
-
-#if defined(PSX) && defined(LIBPAD)
-		if(EnableVibration) {
-	debug( LOG_NEVER, "SetVibro1\n" );
-			SetVibro1(0,100,512);
-		}
-#endif
 	}
-
 }
 
 void destroyDroid(DROID *psDel)
@@ -823,21 +811,12 @@ void destroyDroid(DROID *psDel)
 			}
 		}
 
-
-		// this sounds a bit crap on the psx
 		/* And then a destruction sequence...*/
 		pos.x = psDel->x;
 		pos.z = psDel->y;
 		pos.y = psDel->z;
 		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_DROID,FALSE,NULL,0);
 		audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_EXPLOSION );
-
-#if defined(PSX) && defined(LIBPAD)
-		if(EnableVibration) {
-			debug( LOG_NEVER, "SetVibro1\n" );
-			SetVibro1(0,100,512);
-		}
-#endif
 	}
 
 	/* remove animation if present */
@@ -1162,28 +1141,6 @@ static void droidResetNaybors(void)
 }
 
 
-//#ifndef PSX
-//
-//void droidGetNaybors(DROID *psDroid)
-//{
-//	droidGetNayb(psDroid);
-//}
-//
-//#else
-//
-//void droidGetNaybors(DROID *psDroid)
-//{
-//	static DROID *psTmpDroid;
-//	psTmpDroid = psDroid;
-//
-//	SetSpDCache();
-//	droidGetNayb(psTmpDroid);
-//	SetSpNormal();
-//}
-//
-//#endif
-
-
 // macro to see if an object is in NAYBOR_RANGE
 // used by droidGetNayb
 #define IN_NAYBOR_RANGE(psObj) \
@@ -1368,16 +1325,7 @@ void droidUpdate(DROID *psDroid)
     }
 
 	// ai update droid
-//#ifndef PSX
 	aiUpdateDroid(psDroid);
-//#else
-//	PROFILE_START(4);
-//	psTmpDroid = psDroid;
-//	SetSpDCache();
-//	aiUpdateDroid(psTmpDroid);
-//	SetSpNormal();
-//	PROFILE_END(4);
-//#endif
 
 	// update the droids order
 	orderUpdateDroid(psDroid);
@@ -1385,17 +1333,8 @@ void droidUpdate(DROID *psDroid)
 	// update the action of the droid
 	actionUpdateDroid(psDroid);
 
-//#ifndef PSX
 	// update the move system
 	moveUpdateDroid(psDroid);
-//#else
-//	PROFILE_START(5);
-//	psTmpDroid = psDroid;
-//	SetSpDCache();
-//	moveUpdateDroid(psTmpDroid);
-//	SetSpNormal();
-//	PROFILE_END(5);
-//#endif
 
 	/* Only add smoke if they're visible */
 	if((psDroid->visible[selectedPlayer]) AND psDroid->droidType != DROID_PERSON)
@@ -1519,9 +1458,7 @@ void droidUpdate(DROID *psDroid)
 
 	droidUpdateRecoil(psDroid);
 
-	// on the psx version, we do this in DisplayCompObj() in component.c
 	calcDroidIllumination(psDroid);
-
 
     //check the resistance level of the droid
 	if (psDroid->id % 50 == frameGetFrameNumber() % 50)
@@ -1538,22 +1475,10 @@ void droidUpdate(DROID *psDroid)
 //		"unitUpdate (end): Unit at (0,0)" );
 }
 
-//#ifndef PSX
 //void droidUpdate(DROID *psDroid)
 //{
 //	droidUpd(psDroid);
 //}
-//#else
-//void droidUpdate(DROID *psDroid)
-//{
-//	static DROID *psTmpDroid;
-//	psTmpDroid = psDroid;
-//
-//	SetSpDCache();
-//	droidUpd(psTmpDroid);
-//	SetSpNormal();
-//}
-//#endif
 
 // calculate the experience level of a droid
 /*SDWORD droidCalcExp(DROID *psDroid)
@@ -1841,8 +1766,6 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 	UDWORD		widthRange,breadthRange;
 	iVector		temp;
 
-// We definitly still want this called on the PSX.
-
 	//FIXME
 	if((ONEINTEN) AND (psStruct->visible[selectedPlayer]))
 	{
@@ -1957,11 +1880,6 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 	if (current != prev)
 	{
-#ifdef PSX
-		FRACT divisor1,divisor2;
-		divisor1= (MAKEFRACT(FOUNDATION_ILLUMIN + prev) - ((MAKEFRACT(FOUNDATION_ILLUMIN * prev))/100))/100;
-		divisor2= (MAKEFRACT(FOUNDATION_ILLUMIN + current) - ((MAKEFRACT(FOUNDATION_ILLUMIN * current))/100))/100;
-#endif
 		//set the illumination of the tiles back to original value as building is completed
 
 		mapX = (psStruct->x - psStruct->pStructureType->baseWidth *
@@ -1969,13 +1887,10 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		mapY = (psStruct->y - psStruct->pStructureType->baseBreadth *
 			TILE_UNITS / 2) >> TILE_SHIFT;
 
-
-
 		for (i = 0; i < psStruct->pStructureType->baseWidth+1; i++)
 		{
 			for (j = 0; j < psStruct->pStructureType->baseBreadth+1; j++)
 			{
-#ifndef PSX
 				FRACT	divisor,illumin, currentIllumin;
 
 				divisor = (FOUNDATION_ILLUMIN + prev -
@@ -1987,15 +1902,6 @@ BOOL droidUpdateBuild(DROID *psDroid)
 																			/ (FRACT)100;
 				illumin = illumin * divisor;
 				mapTile(mapX+i, mapY+j)->illumination = (UBYTE)illumin;
-
-#else
-				FRACT	illumin;
-				MAPTILE *map;
-
-				map=mapTile(mapX+i,mapY+j);
-				illumin = FRACTdiv_1(MAKEFRACT(map->illumination),divisor1);	// Calculate the old illumination before we built
-				map->illumination = (UBYTE)MAKEINT(FRACTmul_1(illumin,divisor2)); // new calculate the new adjust illumination
-#endif
 			}
 		}
 		prev = current;
@@ -2967,7 +2873,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		pDroidDesign->aName[DROID_MAXNAME-1] = 0;
 #endif
 
-		//store the unique template id - NOT ON PSX
+		//store the unique template id
 
 		pDroidDesign->multiPlayerID = templateID;
 
@@ -3372,9 +3278,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 
 		pDroidDesign->ref = REF_TEMPLATE_START + i;
 /*	Loaded in from the database now AB 29/10/98
-#ifndef PSX
 			pDroidDesign->multiPlayerID = i;			// another unique number, just for multiplayer stuff.
-#endif
 */
 		/* store global default design if found else
 		 * store in the appropriate array
@@ -3607,8 +3511,6 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 		sscanf(pWeaponData,"%[^','],%[^','],%[^','],%[^','],%d", TemplateName, WeaponName, WeaponNameA, WeaponNameB, &player);
 		//loop through each droid to compare the name
 
-		player=RemapPlayerNumber(player);	// for psx ...
-
 		/*if (!getResourceName(TemplateName))
 		{
 			return FALSE;
@@ -3773,12 +3675,10 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 		//{
 		//	return FALSE;
 		//}
-#ifndef PSX
 		if (!getDroidResourceName(TemplateName))
 		{
 			return FALSE;
 		}
-#endif
 		if (!getResourceName(ProgramName))
 		{
 			return FALSE;
@@ -4907,12 +4807,10 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 		}
 	}
 	//fail safe in case haven't managed to work out a valid number!
-#ifndef PSX		// currently psx only has 2 droid imds .. so this check will not work
 	if (imdNum > NUM_DROID_TYPES - 1)
 	{
 		imdNum = 0;
 	}
-#endif
 	psDroid->sDisplay.imd = BODY_IMD(psDroid, psDroid->player);
 	psDroid->imdNum = imdNum; // use the imdnum to define which body and which turret
 }*/
@@ -5121,11 +5019,7 @@ FLAG_POSITION	*psFlagPos;
 				{
 	//				camToggleStatus();
 					/* Centre display on him if warcam isn't active */
-//#ifndef PSX
 					setViewPos(psCentreDroid->x>>TILE_SHIFT,psCentreDroid->y>>TILE_SHIFT,TRUE);
-//#else
-//					camPanToLocation(psCentreDroid->x, psCentreDroid->y);
-//#endif
 				}
 
 			}
@@ -5276,9 +5170,8 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot)
 	{
 		psWeapon	  = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
 		psWeaponMount = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pMountGraphic;
-		if(psShape AND psShape->nconnectors)
+		if(psShape && psShape->nconnectors)
 		{
-			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
 			pie_MatBegin();
 
 			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
@@ -5407,9 +5300,8 @@ DROID_TEMPLATE * getTemplateFromName(char *pName)
         //don't use selectedPlayer's templates if not multiplayer
         //this was written for use in the scripts and we don't want the scripts to use
         //selectedPlayer's templates because we cannot guarentee they will exist!
-/*#ifndef PSX
+/*
         if (!bMultiPlayer)
-#endif
         {
             if (player == selectedPlayer)
             {
@@ -5581,7 +5473,6 @@ switch(rank)
 
 char	*getDroidLevelName(DROID *psDroid)
 {
-//#ifndef PSX
 	return(getDroidNameForRank(getDroidLevel(psDroid)));
 	/*
 	switch (getDroidLevel(psDroid))
@@ -5606,9 +5497,6 @@ char	*getDroidLevelName(DROID *psDroid)
 		return strresGetString(psStringRes, STR_DL_LEVEL_ACE);
 	}
 	*/
-//#else
-//		return "Rank";
-//#endif
 }
 
 UDWORD	getNumDroidsForLevel(UDWORD	level)
@@ -6456,8 +6344,6 @@ char* getTemplateName(DROID_TEMPLATE *psTemplate)
 	char *NewName;
 /*  - Performed in 	GetDefaultTemplateName   - with other droids
 
-	// On the PSX the NameHash entry points to the name for database generated templates
-	// - user generated templates are NULL'ed
 	// We only want database name if it's a cyborg.
 	if(psTemplate->droidType == DROID_CYBORG) {
 		if (psTemplate->NameHash!=NULL)

@@ -575,23 +575,15 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 			{
 				//play the cam 2 video
 				seq_ClearSeqList();
-			#ifndef PSX
 				seq_AddSeqToList("cam2/c002.rpl",NULL,"cam2/c002.txa",FALSE);
-			#else
-				seq_AddSeqToList("cam2/c002.str","1656f");
-			#endif
 				seq_StartNextFullScreenVideo();
 			}
 			else
 			{
 				//play the cam 3 video
 				seq_ClearSeqList();
-			#ifndef PSX
 				seq_AddSeqToList("cam2/cam2out.rpl",NULL,NULL,FALSE);
 				seq_AddSeqToList("cam3/c003.rpl",NULL,"cam3/c003.txa",FALSE);
-			#else
-				seq_AddSeqToList("cam3/c003.str","1656f");
-			#endif
 				seq_StartNextFullScreenVideo();
 			}*/
 
@@ -2959,16 +2951,12 @@ BOOL intAddTransporterTimer(void)
 //add the Transporter timer into the top left hand corner of the screen
 BOOL intAddTransporterTimer(void)
 {
-#ifndef PSX
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 	W_BUTINIT		sButInit;
 
 	// Add the background - invisible since the button image caters for this
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-//#ifdef PSX
-//	WidgSetOTIndex(OT2D_FARBACK);
-//#endif
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANSTIMER_FORM;
 	sFormInit.style = WFORM_PLAIN | WFORM_INVISIBLE;
@@ -2982,10 +2970,6 @@ BOOL intAddTransporterTimer(void)
 	{
 		return FALSE;
 	}
-
-//#ifdef PSX
-//	WidgSetOTIndex(OT2D_BACK);
-//#endif
 
 	//add labels for the time display
 	memset(&sLabInit,0,sizeof(W_LABINIT));
@@ -3012,9 +2996,6 @@ BOOL intAddTransporterTimer(void)
 		return FALSE;
 	}
 
-//#ifdef PSX
-//	WidgSetOTIndex(OT2D_FARBACK);
-//#endif
 	//set up button data
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDTRANSTIMER_FORM;
@@ -3030,17 +3011,10 @@ BOOL intAddTransporterTimer(void)
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_TRANSETA_DOWN,
 		IMAGE_TRANSETA_UP);
-//#ifdef PSX
-//	AddCursorSnap(&InterfaceSnap,
-//					sFormInit.x+sButInit.x+sButInit.width/2,
-//					sFormInit.y+sButInit.y+sButInit.height/2,sButInit.formID);
-//#endif
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
 	}
-
-#endif
 	return TRUE;
 }
 */
@@ -3359,8 +3333,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		return FALSE;
 	}
 
-//#endif
-
 	// TITLE
 	sFormInit.formID		= IDMISSIONRES_BACKFORM;
 
@@ -3372,13 +3344,11 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sFormInit.height		= MISSIONRES_TITLE_H;
 	sFormInit.disableChildren = TRUE;
 	sFormInit.pDisplay		= intOpenPlainForm;	//intDisplayPlainForm;
-// removed for more space
-//#ifdef PSX
+
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;
 	}
-//#endif
 
 	// add form
 	sFormInit.formID		= IDMISSIONRES_BACKFORM;
@@ -3395,7 +3365,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	{
 		return FALSE;
 	}
-
 
 	// description of success/fail
 	memset(&sLabInit,0,sizeof(W_LABINIT));
@@ -3421,13 +3390,10 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	  	sLabInit.pText = strresGetString(psStringRes,STR_MR_OBJECTIVE_FAILED);//"Objective Failed;
 	}
 	sLabInit.FontID = WFont;
-//removed for more space
-//#ifdef PSX
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
 	}
-//#endif
 	// options.
 	memset(&sButInit,0,sizeof(W_BUTINIT));
 	sButInit.formID		= IDMISSIONRES_FORM;
@@ -3741,12 +3707,6 @@ void intCDCancel( void )
 //BOOL setUpMission(MISSION_TYPE type)
 BOOL setUpMission(UDWORD type)
 {
-/*#ifndef PSX
-	CD_INDEX	CDrequired;
-#endif*/
-
-	//MISSION_TYPE	oldMission;
-
 	//close the interface
 	intResetScreen(TRUE);
 

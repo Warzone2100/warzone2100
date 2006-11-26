@@ -48,7 +48,6 @@ RESEARCH                *psCBLastResearch;
 
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
 //changing above a UBYTE size will require changes throughout research - put the designers off if you can!
-//PC and PSX are different because of the multiplayer research trees
 
 //#define MAX_RESEARCH        (216 + 20)
 //#define MAX_RESEARCH        (255)

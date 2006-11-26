@@ -465,11 +465,6 @@ in the case of location and degrees of arc in the case of rotation.
 
 //-----------------------------------------------------------------------------------
 
-
-//-----------------------------------------------------------------------------------
-/*	N.B. the code from here on in is not very PSX friendly as there's lots of
-	unfriendly little floats - essentially the next 6 functions */
-
 void	updateCameraAcceleration(UBYTE update)
 {
 FRACT	separation;

@@ -1016,9 +1016,6 @@ FUNC_SYMBOL asFuncTable[] =
  */
 VAR_SYMBOL asExternTable[] =
 {
-	{ "isPSX",			VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_ISPSX,
-		scrGenExternGet,		NULL },
-
 	{ "trackTransporter",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_TRACKTRANSPORTER,
 		scrGenExternGet,		NULL },
 

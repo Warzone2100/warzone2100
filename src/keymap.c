@@ -89,7 +89,7 @@ SDWORD	spin;
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
 
-static	BOOL			bDoingDebugMappings = FALSE; // PSX needs this too...
+static	BOOL			bDoingDebugMappings = FALSE;
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------

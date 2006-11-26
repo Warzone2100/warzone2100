@@ -688,9 +688,7 @@ void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext
 }
 
 
-//#ifndef PSX
 #define DRAW_POWER_BAR_TEXT TRUE
-//#endif
 
 #define BARXOFFSET	46
 
@@ -704,7 +702,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
 	SDWORD		iX,iY;
-#if	DRAW_POWER_BAR_TEXT && !defined(PSX)
+#if	DRAW_POWER_BAR_TEXT
 	static char		szVal[8];
 #endif
 		//SDWORD Used,Avail,ManPow;
@@ -717,7 +715,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	realPower = asPower[selectedPlayer]->currentPower - ManuPower;
 
 	BarWidth = BarGraph->width;
-#if	DRAW_POWER_BAR_TEXT && !defined(PSX)
+#if	DRAW_POWER_BAR_TEXT
     iV_SetFont(WFont);
 	sprintf( szVal, "%d", realPower );
 	textWidth = iV_GetTextWidth( szVal );
@@ -780,7 +778,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	iV_DrawTransImage(IntImages,IMAGE_PBAR_TOP,x0,y0);
 
-#if	DRAW_POWER_BAR_TEXT && !defined(PSX)
+#if	DRAW_POWER_BAR_TEXT
 	iX = x0 + 3;
 	iY = y0 + 9;
 #else
@@ -860,7 +858,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 
 
-#if	DRAW_POWER_BAR_TEXT && !defined(PSX)
+#if	DRAW_POWER_BAR_TEXT
 	iV_SetTextColour(-1);
 	iV_DrawText( szVal, iX, iY );
 #endif
@@ -1977,15 +1975,11 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //				   UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
 //{
 //	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
-//#ifdef PSX
-//	UWORD ImageID;
-//#endif
 //
 ////	ASSERT( Number < 4,"intDisplaySystemTab : Too many tabs." );
 //
 //	Number = Number%4;	// Make sure number never gets bigger than 3.
 //
-//#ifndef PSX
 //	if(TabType == TAB_MAJOR)
 //	{
 //		iV_DrawTransImage(IntImages,(UWORD)(Tab->MajorUp+Number),x,y);
@@ -2013,41 +2007,6 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //			iV_DrawTransImage(IntImages,Tab->MinorSelected,x,y);
 //		}
 //	}
-//#else
-//	if(TabType == TAB_MAJOR)
-//	{
-//		if(Hilight)
-//		{
-//			iV_DrawTransImage(IntImages,Tab->MajorHilight,x,y);
-//		}
-//		else if(Selected)
-//		{
-//			iV_DrawTransImage(IntImages,(UWORD)(Tab->MajorSelected+Number),x,y);
-//		}
-//
-//		ImageID = (UWORD)(Tab->MajorUp+Number);
-//		iV_DrawTransImage(IntImages,ImageID,x,y);
-//	}
-//	else
-//	{
-//		if(Hilight)
-//		{
-//			iV_DrawTransImage(IntImages,Tab->MinorHilight,x,y);
-//		}
-//		else if(Selected)
-//		{
-//			iV_DrawTransImage(IntImages,Tab->MinorSelected,x,y);
-//		}
-//
-//		ImageID = (UWORD)(Tab->MinorUp);
-//		iV_DrawTransImage(IntImages,ImageID,x,y);
-//	}
-//
-//	AddCursorSnap(&InterfaceSnap,
-//					x+(iV_GetImageXOffset(IntImages,ImageID))+iV_GetImageWidth(IntImages,ImageID)/2,
-//					y+(iV_GetImageYOffset(IntImages,ImageID))+iV_GetImageHeight(IntImages,ImageID)/2,
-//					psWidget->formID,psWidget->id,NULL);
-//#endif
 //}
 
 //static void intUpdateSliderCount(struct _widget *psWidget, struct _w_context *psContext)
@@ -2288,22 +2247,6 @@ void intDeleteGraphics(void)
 	DeleteButtonData();
 	imageDeleteBitmaps();
 }
-
-//#ifdef PSX
-//// This sets up a test button for rendering on the playstation
-//void InitialiseTestButton(UDWORD Width,UDWORD Height)
-//{
-//	TestButtonBuffer.InUse=FALSE;
-//  	TestButtonBuffer.Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,0,0,NULL);	// This allocates the surface in psx VRAM
-//	ASSERT( TestButtonBuffer.Surface!=NULL,"intInitialise : Failed to create TestButton surface" );
-//}
-//
-//#endif
-
-
-
-
-
 
 
 // Initialise data for interface buttons.
@@ -3421,8 +3364,6 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 #define	DRAW_BAR_TEXT	1
 
 
-
-
 /* Draws a stats bar for the design screen */
 void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
@@ -3441,7 +3382,7 @@ void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	y0 += 3;
 
 	/* indent to allow text value */
-#if	DRAW_BAR_TEXT && !defined(PSX)
+#if	DRAW_BAR_TEXT
 	iX = x0 + iV_GetTextWidth( szCheckWidth );
 	iY = y0 + (iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR) - iV_GetTextLineSize())/2 -
 					iV_GetTextAboveBase();
@@ -3455,7 +3396,7 @@ void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 			BarGraph->majorSize, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
 
 	/* draw text value */
-#if	DRAW_BAR_TEXT && !defined(PSX)
+#if	DRAW_BAR_TEXT
 	sprintf( szVal, "%d", BarGraph->iValue );
 	iV_SetTextColour(-1);
 	iV_DrawText( szVal, x0, iY );
@@ -3509,7 +3450,7 @@ void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
 	y0 += arbitaryOffset;
 
 	/* indent to allow text value */
-#if	DRAW_BAR_TEXT && !defined(PSX)
+#if	DRAW_BAR_TEXT
 	iX = x0 + iV_GetTextWidth( szCheckWidth );
 	iY = y0 + (iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR) - iV_GetTextLineSize())/2 -
 					iV_GetTextAboveBase();
@@ -3533,7 +3474,7 @@ void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
                         width, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
 
 	/* draw text value */
-#if	DRAW_BAR_TEXT && !defined(PSX)
+#if	DRAW_BAR_TEXT
 	sprintf( szVal, "%d", BarGraph->iValue );
 	iV_SetTextColour(-1);
 	iV_DrawText( szVal, x0, iY );
@@ -3673,10 +3614,10 @@ void drawRadarBlips(void)
 	MESSAGE					*psCurr;
 	UDWORD i;
 
-/*#ifndef PSX
+/*
 	SDWORD				radarX,radarY;		// for multiplayer blips
 	//FEATURE				*psFeature;			// ditto. Needed always now!
-#endif*/
+*/
 
 	VisWidth = RADWIDTH;
 	VisHeight = RADHEIGHT;
@@ -3796,13 +3737,8 @@ void drawRadarBlips(void)
 				//draw the 'blip'
 				if (imageID)
 				{
-#ifndef PSX
 					iV_DrawTransImage(IntImages,imageID, psBuilding->radarX + RADTLX,
 						psBuilding->radarY + RADTLY);
-#else
-					iV_DrawTransImage(IntImages,imageID, psBuilding->radarX*2 + RADTLX,
-									psBuilding->radarY*2 + RADTLY);
-#endif
 				}
 			}
 		}
@@ -3810,7 +3746,6 @@ void drawRadarBlips(void)
 	*/
 
 // deathmatch code
-//#ifndef PSX
 //	if(bMultiPlayer && (game.type == DMATCH))
 //	{
 //		for (psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature =
@@ -3828,7 +3763,6 @@ void drawRadarBlips(void)
 //			}
 //		}
 //	}
-//#endif
 }
 
 /*draws blips on world to represent Proximity Messages - no longer the Green Arrow!*/

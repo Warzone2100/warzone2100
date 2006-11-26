@@ -43,8 +43,6 @@
 #include "difficulty.h"
 
 
-
-
 #include "intorder.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
@@ -654,7 +652,6 @@ void	kf_ToggleCamera( void )
 /*
 void	kf_SimCloseDown( void )
 {
-#ifndef PSX
   		bScreenClose = TRUE;
 		audio_PlayTrack( ID_SOUND_THX_SHUTDOWN );
 
@@ -663,7 +660,6 @@ void	kf_SimCloseDown( void )
 		spinScene = TRUE;
 		radarOnScreen = FALSE;
 		screenCloseState = SC_CLOSING_DOWN;
-#endif
 }
 */
 // --------------------------------------------------------------------------

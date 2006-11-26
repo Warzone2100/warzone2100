@@ -280,9 +280,6 @@ void ChangeDriver(void)
 		}
 	}
 
-//	#ifdef PSX
-//	MouseMovement(TRUE);
-//	#endif
 //	setDrivingStatus(FALSE);
 //	DriveControlEnabled = FALSE;
 }
@@ -395,16 +392,6 @@ BOOL driveDroidKilled(DROID *psDroid)
 	//			}
 	//
 	//			if((!StartDriverMode()) || (NewDroid == psDroid)) {
-	//#ifdef PSX
-	//				// Failed to find a droid to track!
-	//				DBPRINTF(("No droid to drive!\n"));
-	//
-	//		DBPRINTF(("no droids, find a structure\n");
-	//				if(StartObjectOrbit((BASE_OBJECT*)intFindAStructure())) {
-	//				} else {
-	//		DBPRINTF(("no structures or droids, should be game over!\n");
-	//				}
-	//#endif
 					return FALSE;
 	//			}
 			}

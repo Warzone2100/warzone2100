@@ -527,10 +527,10 @@ init://jump here from the end if re_initialising
 				if (introVideoControl <= 1)
 				{
 					seq_ClearSeqList();
-					seq_AddSeqToList("eidos-logo.rpl",NULL, NULL, FALSE,0);
-					seq_AddSeqToList("pumpkin.rpl",NULL, NULL, FALSE,0);
-					seq_AddSeqToList("titles.rpl",NULL, NULL, FALSE,0);
-					seq_AddSeqToList("devastation.rpl",NULL,"devastation.txa", FALSE,0);
+					seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
+					seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
+					seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
+					seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
 
 					seq_StartNextFullScreenVideo();
 					introVideoControl = 2;
@@ -658,10 +658,10 @@ init://jump here from the end if re_initialising
 							case TITLECODE_SHOWINTRO:
 								debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 								seq_ClearSeqList();
-								seq_AddSeqToList("eidos-logo.rpl",NULL,NULL, FALSE,0);
-								seq_AddSeqToList("pumpkin.rpl",NULL,NULL, FALSE,0);
-								seq_AddSeqToList("titles.rpl",NULL,NULL, FALSE,0);
-								seq_AddSeqToList("devastation.rpl",NULL,"devastation.txa", FALSE,0);
+								seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
+								seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
+								seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
+								seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
 								seq_StartNextFullScreenVideo();
 								introVideoControl = 2;//play the video but dont init the sound system
 								break;
@@ -755,7 +755,7 @@ init://jump here from the end if re_initialising
 						{
 								seq_ClearSeqList();
 
-								seq_AddSeqToList("factory.rpl",NULL,NULL, FALSE,0);
+								seq_AddSeqToList("factory.rpl",NULL,NULL, FALSE);
 								seq_StartNextFullScreenVideo();//"sequences/factory.rpl","sequences/factory.wav");
 								introVideoControl = 2;
 						}

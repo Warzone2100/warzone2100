@@ -3039,7 +3039,7 @@ BOOL scrPlayVideo(void)
 	}
 
 		seq_ClearSeqList();
-		seq_AddSeqToList(pVideo, NULL, pText, FALSE,0);		// Arpzzzzzzzzzzzzzzzlksht!
+		seq_AddSeqToList(pVideo, NULL, pText, FALSE);		// Arpzzzzzzzzzzzzzzzlksht!
 		seq_StartNextFullScreenVideo();
 
 	return TRUE;
@@ -3161,7 +3161,7 @@ BOOL scrGameOver(void)
 
     	    seq_ClearSeqList();
 
-	        seq_AddSeqToList("outro.rpl",NULL,"outro.txa", FALSE,0);
+	        seq_AddSeqToList("outro.rpl", NULL, "outro.txa", FALSE);
 	        seq_StartNextFullScreenVideo();
 
         }
@@ -3901,7 +3901,6 @@ BOOL scrCreateAlliance(void)
 	formAlliance((UBYTE)player1, (UBYTE)player2,TRUE,FALSE,TRUE);
 
 /*
-#ifndef PSX
 	if(bMultiPlayer)
 	{
 
@@ -3918,7 +3917,6 @@ BOOL scrCreateAlliance(void)
 			sendAlliance((UBYTE)player1,(UBYTE)player2,ALLIANCE_FORMED,0);
 		}
 	}
-#endif
 
 	alliances[player1][player2] = ALLIANCE_FORMED;
 	alliances[player2][player1] = ALLIANCE_FORMED;
@@ -4640,7 +4638,6 @@ BOOL scrSetRadarZoom(void)
 		return TRUE;
 	}
 
-	// MAX_RADARZOOM is different on PC and PSX
 	if (level < 0 || level > 2)
 	{
 		ASSERT( FALSE, "scrSetRadarZoom: zoom level out of range" );
@@ -5685,8 +5682,6 @@ BOOL scrFlyTransporterIn(void)
 
 /*
  ** scrGetGameStatus
- *
- *  FILENAME: C:\Deliverance\SrcPSX\ScriptFuncs.c
  *
  *  PARAMETERS: The parameter passed must be one of the STATUS_ variable
  *
