@@ -1548,7 +1548,6 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 // ////////////////////////////////////////////////////////////////////////////
 void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt)
 {
-#if defined(ROTATEDTEXT)
 	W_LABINIT	sLabInit;
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
 
@@ -1565,7 +1564,6 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt)
 	sLabInit.pDisplay = displayTextAt270;
 	sLabInit.pText = txt;
 	widgAddLabel(psWScreen, &sLabInit);
-#endif
 }
 
 
@@ -1690,8 +1688,6 @@ void displayTextOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 // ////////////////////////////////////////////////////////////////////////////
-#if defined(ROTATEDTEXT)
-
 // show text written on its side.
 void displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
@@ -1712,7 +1708,6 @@ void displayTextAt270(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 	iV_DrawText270( psLab->aText, fx, fy);
 }
-#endif
 
 
 // ////////////////////////////////////////////////////////////////////////////

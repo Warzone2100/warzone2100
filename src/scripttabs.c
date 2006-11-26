@@ -48,46 +48,46 @@
  */
 TYPE_SYMBOL asTypeTable[] =
 {
-	{ (INTERP_TYPE)ST_INTMESSAGE,	AT_SIMPLE, "INTMESSAGE",	scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_BASEOBJECT,	AT_OBJECT, "BASEOBJ",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_DROID,			AT_OBJECT, "DROID",			scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_STRUCTURE,		AT_OBJECT, "STRUCTURE",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_FEATURE,		AT_OBJECT, "FEATURE",		scrValDefSave, scrValDefLoad },
+	{ "INTMESSAGE",	(INTERP_TYPE)ST_INTMESSAGE,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "BASEOBJ",	(INTERP_TYPE)ST_BASEOBJECT,	AT_OBJECT,	scrValDefSave,	scrValDefLoad },
+	{ "DROID",		(INTERP_TYPE)ST_DROID,		AT_OBJECT,	scrValDefSave,	scrValDefLoad },
+	{ "STRUCTURE",	(INTERP_TYPE)ST_STRUCTURE,	AT_OBJECT,	scrValDefSave,	scrValDefLoad },
+	{ "FEATURE",	(INTERP_TYPE)ST_FEATURE,	AT_OBJECT,	scrValDefSave,	scrValDefLoad },
 
-	{ (INTERP_TYPE)ST_BASESTATS,		AT_SIMPLE, "BASESTATS",		scrValDefSave, scrValDefLoad },
+	{ "BASESTATS",	(INTERP_TYPE)ST_BASESTATS,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
 
 	// Component types
-	{ (INTERP_TYPE)ST_COMPONENT,		AT_SIMPLE, "COMPONENT",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_BODY,			AT_SIMPLE, "BODY",			scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_PROPULSION,	AT_SIMPLE, "PROPULSION",	scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_ECM,			AT_SIMPLE, "ECM",			scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_SENSOR,		AT_SIMPLE, "SENSOR",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_CONSTRUCT,		AT_SIMPLE, "CONSTRUCT",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_WEAPON,		AT_SIMPLE, "WEAPON",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_REPAIR,		AT_SIMPLE, "REPAIR",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_BRAIN,			AT_SIMPLE, "BRAIN",			scrValDefSave, scrValDefLoad },
+	{ "COMPONENT",	(INTERP_TYPE)ST_COMPONENT,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "BODY",		(INTERP_TYPE)ST_BODY,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "PROPULSION",	(INTERP_TYPE)ST_PROPULSION,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "ECM",		(INTERP_TYPE)ST_ECM,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "SENSOR",		(INTERP_TYPE)ST_SENSOR,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "CONSTRUCT",	(INTERP_TYPE)ST_CONSTRUCT,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "WEAPON",		(INTERP_TYPE)ST_WEAPON,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "REPAIR",		(INTERP_TYPE)ST_REPAIR,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "BRAIN",		(INTERP_TYPE)ST_BRAIN,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
 
-	{ (INTERP_TYPE)ST_TEMPLATE,		AT_SIMPLE, "TEMPLATE",		scrValDefSave, scrValDefLoad },
+	{ "TEMPLATE",	(INTERP_TYPE)ST_TEMPLATE,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
 
-	{ (INTERP_TYPE)ST_STRUCTUREID,	AT_SIMPLE, "STRUCTUREID",	scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_STRUCTURESTAT,	AT_SIMPLE, "STRUCTURESTAT",	scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_FEATURESTAT,	AT_SIMPLE, "FEATURESTAT",	scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_DROIDID,		AT_SIMPLE, "DROIDID",		scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_TEXTSTRING,	AT_SIMPLE, "TEXTSTRING",	scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_SOUND,			AT_SIMPLE, "SOUND",			scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_LEVEL,			AT_SIMPLE, "LEVEL",			scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_GROUP,			AT_OBJECT, "GROUP",			scrValDefSave, scrValDefLoad },
-	{ (INTERP_TYPE)ST_RESEARCH,		AT_SIMPLE, "RESEARCHSTAT",	scrValDefSave, scrValDefLoad },
+	{ "STRUCTUREID",(INTERP_TYPE)ST_STRUCTUREID,AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "STRUCTURESTAT",(INTERP_TYPE)ST_STRUCTURESTAT,AT_SIMPLE,scrValDefSave,	scrValDefLoad },
+	{ "FEATURESTAT",(INTERP_TYPE)ST_FEATURESTAT,AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "DROIDID",	(INTERP_TYPE)ST_DROIDID,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "TEXTSTRING",	(INTERP_TYPE)ST_TEXTSTRING,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "SOUND",		(INTERP_TYPE)ST_SOUND,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "LEVEL",		(INTERP_TYPE)ST_LEVEL,		AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
+	{ "GROUP",		(INTERP_TYPE)ST_GROUP,		AT_OBJECT,	scrValDefSave,	scrValDefLoad },
+	{ "RESEARCHSTAT",(INTERP_TYPE)ST_RESEARCH,	AT_SIMPLE,	scrValDefSave,	scrValDefLoad },
 
 	//private types for code - NOT used in the scripts - hence the ""
-	{ (INTERP_TYPE)ST_POINTER_O,		AT_OBJECT,	"" },
-	{ (INTERP_TYPE)ST_POINTER_T,		AT_SIMPLE,	"" },
-	{ (INTERP_TYPE)ST_POINTER_S,		AT_SIMPLE,	"" },
+	{ "",			(INTERP_TYPE)ST_POINTER_O,	AT_OBJECT,	NULL,	NULL },
+	{ "",			(INTERP_TYPE)ST_POINTER_T,	AT_SIMPLE,	NULL,	NULL },
+	{ "",			(INTERP_TYPE)ST_POINTER_S,	AT_SIMPLE,	NULL,	NULL },
 
-	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT,	AT_SIMPLE,	"" },	//for NULLSTRUCTURESTAT
+	{ "",			(INTERP_TYPE)ST_POINTER_STRUCTSTAT,AT_SIMPLE,NULL,NULL },	//for NULLSTRUCTURESTAT
 
 	/* This final entry marks the end of the type list */
-	{ 0,				AT_SIMPLE,	"END OF TYPE LIST" },
+	{ "END OF TYPE LIST",(INTERP_TYPE)NULL,		AT_SIMPLE,	NULL,	NULL },
 };
 
 
@@ -1119,7 +1119,7 @@ VAR_SYMBOL asObjTable[] =
 		scrBaseObjGet,			NULL },
 
 	// structure variables
-	//{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTAT,	
+	//{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTAT,
 	//	scrBaseObjGet,			NULL },
 
 
@@ -1176,14 +1176,15 @@ CONST_SYMBOL asConstantTable[] =
 
 	//reticule button IDs	- for scrFlashOn & Off
 	// original annette styley
-	{ "OPTIONS",	VAL_INT,	0,		IDRET_OPTIONS,		0 },
-	{ "CANCEL",		VAL_INT,	0,		IDRET_CANCEL,		0 },
-	{ "BUILD",		VAL_INT,	0,		IDRET_BUILD,		0 },
-	{ "MANUFACTURE",VAL_INT,	0,		IDRET_MANUFACTURE,	0 },
-	{ "RESEARCH",	VAL_INT,	0,		IDRET_RESEARCH,		0 },
-	{ "INTELMAP",	VAL_INT,	0,		IDRET_INTEL_MAP,	0 },
-	{ "DESIGN",		VAL_INT,	0,		IDRET_DESIGN,		0 },
-	{ "COMMAND",	VAL_INT,	0,		IDRET_COMMAND,		0 },
+	{ "OPTIONS",	VAL_INT,	FALSE,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
+	{ "CANCEL",		VAL_INT,	FALSE,	IDRET_CANCEL,		NULL, NULL, 0.0f },
+	{ "BUILD",		VAL_INT,	FALSE,	IDRET_BUILD,		NULL, NULL, 0.0f },
+	{ "MANUFACTURE",VAL_INT,	FALSE,	IDRET_MANUFACTURE,	NULL, NULL, 0.0f },
+	{ "RESEARCH",	VAL_INT,	FALSE,	IDRET_RESEARCH,		NULL, NULL, 0.0f },
+	{ "INTELMAP",	VAL_INT,	FALSE,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
+	{ "DESIGN",		VAL_INT,	FALSE,	IDRET_DESIGN,		NULL, NULL, 0.0f },
+	{ "COMMAND",	VAL_INT,	FALSE,	IDRET_COMMAND,		NULL, NULL, 0.0f },
+
 
 	// new styley that supports many other buttons
 	{ "IDRET_OPTIONS",		VAL_INT,	0,		IDRET_OPTIONS,		0 },
@@ -1659,7 +1660,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 	{ "CALL_ALLIANCEOFFER",			(TRIGGER_TYPE)CALL_ALLIANCEOFFER,		scrCBAllianceOffer,
 		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_INT }},
 
-		// new callbacks 
+		// new callbacks
 		//-------------------------------------------------------------------------------
 
 			//console callback
@@ -1724,7 +1725,7 @@ TYPE_EQUIV asEquivTable[] =
 	{ (INTERP_TYPE)ST_REPAIR,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_BRAIN,			1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_STRUCTURESTAT,		1,	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT, } },
-	
+
 
 	/* This marks the end of the equivalence list */
 	{ (INTERP_TYPE)0,0 }

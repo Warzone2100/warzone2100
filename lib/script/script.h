@@ -75,7 +75,7 @@ extern Sint8 retStackCallDepth(void);
  */
 
 /* Compile a script program */
-extern BOOL scriptCompile(char *pData, UDWORD fileSize, SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType);
+extern BOOL scriptCompile(const char *pData, UDWORD fileSize, SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType);
 
 /* Free a SCRIPT_CODE structure */
 extern void scriptFreeCode(SCRIPT_CODE *psCode);

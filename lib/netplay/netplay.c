@@ -560,6 +560,7 @@ BOOL NETclose(void)
 		SDLNet_TCP_Close(tcp_socket);
 		tcp_socket=NULL;
 	}
+	return FALSE;
 }
 
 

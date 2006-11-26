@@ -498,7 +498,7 @@ void script_debug(const char *pFormat, ...);
 	(ip)->type = VAL_BOOL; \
 	(ip)->v.bval = (BOOL)(value); \
 	(ip)++
-	
+
 #define PUT_DATA_INT(ip, value) \
 	(ip)->type = VAL_INT; \
 	(ip)->v.bval = (SDWORD)(value); \
@@ -741,7 +741,7 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 
 	//size = psPBlock->size + sizeof(OPCODE) + sizeof(SCRIPT_FUNC);
 	size = psPBlock->size + 1 + 1;	//size + opcode + sizeof(SCRIPT_FUNC)
-	
+
 	if (!expContext && (psFSymbol->type != VAL_VOID))
 	{
 		//size += sizeof(OPCODE);
@@ -944,7 +944,7 @@ static CODE_ERROR scriptCodeAssignment(VAR_SYMBOL	*psVariable,	// The variable t
 
 	//size = psValue->size + sizeof(OPCODE);
 	size = psValue->size + 1;		//1 - for assignment opcode
-	
+
 	if (psVariable->storage == ST_EXTERN)
 	{
 		// Check there is a set function
@@ -1010,7 +1010,7 @@ static CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variab
 		"scriptCodeObjAssignment: Invalid value code pointer" );
 	ASSERT( ppsBlock != NULL,
 		"scriptCodeObjAssignment: Invalid generated code block pointer" );
-	
+
 	// Check there is an access function for the variable
 	if (psVariable->psObjVar->set == NULL)
 	{
@@ -1020,7 +1020,7 @@ static CODE_ERROR scriptCodeObjAssignment(OBJVAR_BLOCK	*psVariable,// The variab
 
 	//ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + sizeof(OPCODE) + sizeof(SCRIPT_VARFUNC));
 	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + 1 + 1);	//size + size + opcode + 'sizeof(SCRIPT_VARFUNC)'
-					
+
 	ip = (*ppsBlock)->pCode;
 
 	/* Copy in the code for the value */
@@ -1116,7 +1116,7 @@ static CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The varia
 //	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + sizeof(OPCODE) + elementDWords*4);
 	//ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + sizeof(OPCODE));
 	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + 1);	//size + size + opcode
-	
+
 	ip = (*ppsBlock)->pCode;
 
 	/* Copy in the code for the value */
@@ -1481,7 +1481,7 @@ static CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variab
 			scr_error("No get function for external variable");
 			return CE_PARSE;
 		}
-		
+
 		//size += sizeof(SCRIPT_VARFUNC);
 		size += 1;
 	}
@@ -1525,7 +1525,7 @@ static CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variab
 
 	//size = sizeof(OPCODE) + sizeof(SDWORD);
 	size = 1 + 1;	//OP_PUSHREF opcode + variable index
-	
+
 	ALLOC_PBLOCK(*ppsBlock, size, 1);
 	ip = (*ppsBlock)->pCode;
 
@@ -2828,9 +2828,9 @@ void_function_declaration:		void_func_subdecl '(' argument_decl_head ')'	/* func
 				}
 			|	void_func_subdecl '(' ')'
 				{
-	
+
 						RULE( "void_function_declaration: void_func_subdecl '(' ')'");
-	
+
 					/* remember that local var declaration is over */
 					localVariableDef = FALSE;
 					//debug(LOG_SCRIPT, "localVariableDef = FALSE 3");
@@ -2950,7 +2950,7 @@ statement_list:		/* NULL token */
 							RULE("statement_list: statement_list statement");
 
 							ALLOC_BLOCK(psCurrBlock, $1->size + $2->size);
-							
+
 							ALLOC_DEBUG(psCurrBlock, $1->debugEntries +
 													 $2->debugEntries);
 							ip = psCurrBlock->pCode;
@@ -2960,10 +2960,10 @@ statement_list:		/* NULL token */
 							PUT_BLOCK(ip, $2);
 							PUT_DEBUG(psCurrBlock, $1);
 							APPEND_DEBUG(psCurrBlock, $1->size / sizeof(INTERP_VAL), $2);
-							
+
 							ASSERT($1 != NULL, "$1 == NULL");
 							ASSERT($1->psDebug != NULL, "psDebug == NULL");
-														
+
 							FREE_DEBUG($1);
 							FREE_DEBUG($2);
 							FREE_BLOCK($1);
@@ -2977,9 +2977,9 @@ statement_list:		/* NULL token */
 
 event_decl:			event_subdecl ';'
 					{
-	
+
 						RULE( "event_decl: event_subdecl ';'");
-	
+
 						psCurEvent->bDeclared = TRUE;
 					}
 				|	func_subdecl argument_decl ';'	/* event (function) declaration can now include parameter declaration (optional) */
@@ -2991,9 +2991,9 @@ event_decl:			event_subdecl ';'
 
 				|	void_func_subdecl argument_decl ';'	/* event (function) declaration can now include parameter declaration (optional) */
 					{
-	
+
 						RULE( "event_decl: void_func_subdecl argument_decl ';'");
-	
+
 						//debug(LOG_SCRIPT, "localVariableDef = FALSE new ");
 						localVariableDef = FALSE;
 						psCurEvent->bDeclared = TRUE;
@@ -3001,9 +3001,9 @@ event_decl:			event_subdecl ';'
 
 				|	event_subdecl '(' TRIG_SYM ')' '{' var_list statement_list '}' 	/* 16.08.05 - local vars support */
 					{
-	
+
 						RULE( "event_decl: event_subdecl '(' TRIG_SYM ')'");
-	
+
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
 						{
@@ -3026,17 +3026,17 @@ event_decl:			event_subdecl ';'
 
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
-	
+
 						RULE( "END event_decl: event_subdecl '(' TRIG_SYM ')'");
-	
+
 					}
 				|	event_subdecl '(' trigger_subdecl ')'
 					{
 						// Get the line for the implicit trigger declaration
 						char	*pDummy;
-	
+
 						RULE( "event_decl:event_subdecl '(' trigger_subdecl ')' ");
-	
+
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
 						{
@@ -3072,17 +3072,17 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($8);
 						FREE_BLOCK($8);
 
-	
+
 						RULE( "END event_decl:event_subdecl '(' trigger_subdecl ')' .");
-	
+
 					}
 
 				/* local vars */
 				|	event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'
 					{
-	
+
 						RULE( "event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'");
-	
+
 
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
@@ -3103,17 +3103,17 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
 
-	
+
 						RULE( "END event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'");
-	
+
 					}
 
 				/* VOID function that was NOT declared before */
 				|	void_function_declaration  '{' var_list statement_list  '}'
 					{
-	
+
 						RULE( "void_function_declaration  '{' var_list statement_list  '}'");
-	
+
 
 						/* stays the same if no params (just gets copied) */
 						ALLOC_BLOCK(psCurrBlock, $4->size + 1 + $1->numParams); /* statement_list + opcode + numParams */
@@ -3149,18 +3149,18 @@ event_decl:			event_subdecl ';'
 						/* free block since code was copied in scriptDefineEvent() */
 						FREE_DEBUG(psCurrBlock);
 						FREE_BLOCK(psCurrBlock);
-	
+
 						RULE( "END void_function_declaration  '{' var_list statement_list  '}'");
-	
+
 					}
 
 
 					/* void function that was declared before */
 				 |	void_funcbody_var_def '{' var_list statement_list '}'
 					{
-	
+
 						RULE( "void_funcbody_var_def '{' var_list statement_list '}'");
-	
+
 
 						/* stays the same if no params (just gets copied) */
 						//ALLOC_BLOCK(psCurrBlock, $4->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams));
@@ -3242,17 +3242,17 @@ event_decl:			event_subdecl ';'
 						/* free block since code was copied in scriptDefineEvent() */
 						FREE_DEBUG(psCurrBlock);
 						FREE_BLOCK(psCurrBlock);
-	
+
 						RULE( "END function_declaration  '{' var_list statement_list return_statement  '}'");
-	
+
 					}
 
 				/* function that WAS declared before */
 				 |	funcbody_var_def '{' var_list statement_list return_statement '}'
 					{
-	
+
 						RULE( "func_subdecl '(' funcbody_var_def_body ')' '{' var_list statement_list return_statement '}'");
-	
+
 
 						/* stays the same if no params (just gets copied) */
 						//ALLOC_BLOCK(psCurrBlock, $4->size + $5->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams));
@@ -3284,9 +3284,9 @@ event_decl:			event_subdecl ';'
 						/* end of event */
 						psCurEvent = NULL;
 
-	
+
 						RULE( "END func_subdecl '(' funcbody_var_def_body ')' '{' var_list statement_list return_statement '}'");
-	
+
 					}
 				;
 
@@ -3488,9 +3488,9 @@ statement:			assignment ';'
 						UDWORD line;
 						char *pDummy;
 
-	
+
 						RULE( "statement: return_statement");
-	
+
 
 						if(psCurEvent == NULL)
 						{
@@ -3796,7 +3796,7 @@ assignment:			NUM_VAR '=' expression
 
 							RULE( "assignment: obj_array_var '=' objexp");
 
-	
+
 							if (!interpCheckEquiv($1->psArrayVar->type, $3->type))
 							{
 								scr_error("User type mismatch for assignment");
@@ -3863,10 +3863,10 @@ func_call:		NUM_FUNC '(' param_list ')'
 			|	FUNC '(' param_list ')'
 					{
 						RULE("func_call: FUNC '(' param_list ')'");
-						
+
 						/* Generate the code for the function call */
 						codeRet = scriptCodeFunction($1, $3, FALSE, &psCurrBlock);
-						
+
 						CHECK_CODE_ERROR(codeRet);
 
 						/* Return the code block */
@@ -4212,11 +4212,11 @@ cond_clause:		IF '(' boolexp ')'
 						//ALLOC_CONDBLOCK(psCondBlock, 1,	//1 offset
 						//				$3->size + $7->size +
 						//				sizeof(OPCODE)*2);		//OP_JUMPFALSE + OP_JUMP
-						
+
 						ALLOC_CONDBLOCK(psCondBlock, 1,	//1 offset
 										$3->size + $7->size +
 										1 + 1);		//size + size + OP_JUMPFALSE + OP_JUMP
-										
+
 						ALLOC_DEBUG(psCondBlock, $7->debugEntries + 1);
 						ip = psCondBlock->pCode;
 
@@ -4272,11 +4272,11 @@ cond_clause:		IF '(' boolexp ')'
 						//ALLOC_CONDBLOCK(psCondBlock, 1,
 						//				$3->size + $6->size +
 						//				sizeof(OPCODE)*2);
-						
+
 						ALLOC_CONDBLOCK(psCondBlock, 1,
 										$3->size + $6->size +
 										1 + 1);		//size + size + opcode + opcode
-										
+
 						ALLOC_DEBUG(psCondBlock, $6->debugEntries + 1);
 						ip = psCondBlock->pCode;
 
@@ -4342,7 +4342,7 @@ loop:		WHILE '(' boolexp ')'
 
 					//ALLOC_BLOCK(psCurrBlock, $3->size + $7->size + sizeof(OPCODE) * 2);
 					ALLOC_BLOCK(psCurrBlock, $3->size + $7->size + 1 + 1);	//size + size + opcode + opcode
-					
+
 					ALLOC_DEBUG(psCurrBlock, $7->debugEntries + 1);
 					ip = psCurrBlock->pCode;
 
@@ -4519,7 +4519,7 @@ expression:		expression '+' expression
 						/* Allocate the code block */
 						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
-	
+
 						ALLOC_DEBUG(psCurrBlock, 1);
 						ip = psCurrBlock->pCode;
 
@@ -4775,7 +4775,7 @@ floatexp:		floatexp '+' floatexp
 					/* Code to store the value on the stack */
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_FLOAT);
 					PUT_DATA_FLOAT(ip, $1);
-					
+
 					debug(LOG_WZ, "putting float '%f'", $1);
 
 					/* Return the code block */
@@ -5744,7 +5744,7 @@ static void scriptResetTables(void)
 }
 
 /* Compile a script program */
-BOOL scriptCompile(char *pData, UDWORD fileSize,
+BOOL scriptCompile(const char *pData, UDWORD fileSize,
 				   SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType)
 {
 	// Tell lex about the input buffer
@@ -5802,7 +5802,7 @@ void scr_error(const char *pMessage, ...)
 
 
 /* Look up a type symbol */
-BOOL scriptLookUpType(char *pIdent, INTERP_TYPE *pType)
+BOOL scriptLookUpType(const char *pIdent, INTERP_TYPE *pType)
 {
 	UDWORD	i;
 
@@ -5954,7 +5954,7 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 
 
 /* Look up a variable symbol */
-BOOL scriptLookUpVariable(char *pIdent, VAR_SYMBOL **ppsSym)
+BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 {
 	VAR_SYMBOL		*psCurr;
 	UDWORD			i;
@@ -6155,7 +6155,7 @@ BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 
 
 /* Lookup a trigger symbol */
-BOOL scriptLookUpTrigger(char *pIdent, TRIGGER_SYMBOL **ppsTrigger)
+BOOL scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 {
 	TRIGGER_SYMBOL	*psCurr;
 
@@ -6178,7 +6178,7 @@ BOOL scriptLookUpTrigger(char *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 
 
 /* Lookup a callback trigger symbol */
-BOOL scriptLookUpCallback(char *pIdent, CALLBACK_SYMBOL **ppsCallback)
+BOOL scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback)
 {
 	CALLBACK_SYMBOL		*psCurr;
 
@@ -6204,7 +6204,7 @@ BOOL scriptLookUpCallback(char *pIdent, CALLBACK_SYMBOL **ppsCallback)
 }
 
 /* Add a new event symbol */
-BOOL scriptDeclareEvent(char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs)
+BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs)
 {
 	EVENT_SYMBOL		*psEvent, *psCurr, *psPrev;
 
@@ -6311,7 +6311,7 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 }
 
 /* Lookup an event symbol */
-BOOL scriptLookUpEvent(char *pIdent, EVENT_SYMBOL **ppsEvent)
+BOOL scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent)
 {
 	EVENT_SYMBOL	*psCurr;
 	//debug(LOG_SCRIPT, "scriptLookUpEvent");
@@ -6331,7 +6331,7 @@ BOOL scriptLookUpEvent(char *pIdent, EVENT_SYMBOL **ppsEvent)
 
 
 /* Look up a constant variable symbol */
-BOOL scriptLookUpConstant(char *pIdent, CONST_SYMBOL **ppsSym)
+BOOL scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym)
 {
 	CONST_SYMBOL	*psCurr;
 
@@ -6357,7 +6357,7 @@ BOOL scriptLookUpConstant(char *pIdent, CONST_SYMBOL **ppsSym)
 
 
 /* Look up a function symbol */
-BOOL scriptLookUpFunction(char *pIdent, FUNC_SYMBOL **ppsSym)
+BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
 {
 	UDWORD i;
 	FUNC_SYMBOL	*psCurr;
@@ -6395,7 +6395,7 @@ BOOL scriptLookUpFunction(char *pIdent, FUNC_SYMBOL **ppsSym)
 }
 
 /* Look up a function symbol defined in script */
-BOOL scriptLookUpCustomFunction(char *pIdent, EVENT_SYMBOL **ppsSym)
+BOOL scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym)
 {
 	EVENT_SYMBOL	*psCurr;
 

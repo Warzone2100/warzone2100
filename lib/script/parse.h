@@ -72,11 +72,11 @@ typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, U
 /* Type for a user type symbol */
 typedef struct _type_symbol
 {
+	const char		*pIdent;	// Type identifier
 	INTERP_TYPE		typeID;		// The type id to use in the type field of values
 	SWORD			accessType;	// Whether the type is an object or a simple value
-	char			*pIdent;	// Type identifier
 	SCR_VAL_SAVE	saveFunc;	// load and save functions
-	SCR_VAL_LOAD	loadFunc;	// 
+	SCR_VAL_LOAD	loadFunc;	//
 } TYPE_SYMBOL;
 
 /* Type for a variable identifier declaration */
@@ -84,7 +84,7 @@ typedef struct _var_ident_decl
 {
 	char			*pIdent;						// variable identifier
 	SDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
-	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array 
+	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array
 } VAR_IDENT_DECL;
 
 /* Type for a variable symbol */
@@ -97,7 +97,7 @@ typedef struct _var_symbol
 	UDWORD			index;		// Index of the variable in its data space
 	SCRIPT_VARFUNC	get, set;	// Access functions if the variable is stored in an object/in-game
 	SDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
-	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array 
+	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array
 
 	struct _var_symbol *psNext;
 } VAR_SYMBOL;
@@ -118,10 +118,10 @@ typedef struct _array_block
 /* Type for a constant symbol */
 typedef struct _const_symbol
 {
-	char			*pIdent;	// variable's identifier
+	const char		*pIdent;	// variable's identifier
 	INTERP_TYPE		type;		// variable type
 
-	/* The actual value of the constant. 
+	/* The actual value of the constant.
 	 * Only one of these will be valid depending on type.
 	 * A union is not used as a union cannot be statically initialised
 	 */
@@ -199,7 +199,7 @@ typedef struct _trigger_symbol
 /* The type for a callback trigger symbol */
 typedef struct _callback_symbol
 {
-	char			*pIdent;	// Callback identifier
+	const char		*pIdent;	// Callback identifier
 	TRIGGER_TYPE	type;		// user defined callback id >= TR_CALLBACKSTART
 	SCRIPT_FUNC		pFunc;		// Pointer to the instinct function
 	UDWORD			numParams;	// Number of parameters to the function
@@ -251,7 +251,7 @@ extern CONST_SYMBOL		*asScrConstantTab;
 extern CALLBACK_SYMBOL	*asScrCallbackTab;
 
 /* Set the current input buffer for the lexer */
-extern void scriptSetInputBuffer(char *pBuffer, UDWORD size);
+extern void scriptSetInputBuffer(const char *pBuffer, UDWORD size);
 
 /* Initialise the parser ready for a new script */
 extern BOOL scriptInitParser(void);
@@ -265,7 +265,7 @@ void scr_error(const char *pMessage, ...);
 extern void scriptGetErrorData(int *pLine, char **ppText);
 
 /* Look up a type symbol */
-extern BOOL scriptLookUpType(char *pIdent, INTERP_TYPE *pType);
+extern BOOL scriptLookUpType(const char *pIdent, INTERP_TYPE *pType);
 
 /* Add a new variable symbol */
 extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
@@ -274,31 +274,31 @@ extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
 extern BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
 
 /* Add a new event symbol */
-extern BOOL scriptDeclareEvent(char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs);
+extern BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs);
 
 // Add the code to a defined event
 extern BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger);
 
 /* Look up a variable symbol */
-extern BOOL scriptLookUpVariable(char *pIdent, VAR_SYMBOL **ppsSym);
+extern BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym);
 
 /* Look up a constant variable symbol */
-extern BOOL scriptLookUpConstant(char *pIdent, CONST_SYMBOL **ppsSym);
+extern BOOL scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym);
 
 /* Lookup a trigger symbol */
-extern BOOL scriptLookUpTrigger(char *pIdent, TRIGGER_SYMBOL **ppsTrigger);
+extern BOOL scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger);
 
 /* Lookup a callback trigger symbol */
-extern BOOL scriptLookUpCallback(char *pIdent, CALLBACK_SYMBOL **ppsCallback);
+extern BOOL scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback);
 
 /* Lookup an event symbol */
-extern BOOL scriptLookUpEvent(char *pIdent, EVENT_SYMBOL **ppsEvent);
+extern BOOL scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent);
 
 /* Reset the local variable symbol table */
 extern void scriptClearLocalVariables(void);
 
 /* Add a new function symbol */
-extern BOOL scriptStartFunctionDef(char		*pIdent,	// Functions name
+extern BOOL scriptStartFunctionDef(const char *pIdent,	// Functions name
 						  INTERP_TYPE		type);		// return type
 
 /* Store the parameter types for the current script function definition  */
@@ -311,10 +311,10 @@ extern BOOL scriptSetParameters(UDWORD		numParams,	// number of parameters
 extern BOOL scriptSetCode(CODE_BLOCK  *psBlock);	// The code block
 
 /* Look up a function symbol */
-extern BOOL scriptLookUpFunction(char *pIdent, FUNC_SYMBOL **ppsSym);
+extern BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym);
 
 /* Look up an in-script custom function symbol */
-extern BOOL scriptLookUpCustomFunction(char *pIdent, EVENT_SYMBOL **ppsSym);
+extern BOOL scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym);
 
 extern BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams);
 
