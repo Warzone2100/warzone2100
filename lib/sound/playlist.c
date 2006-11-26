@@ -7,8 +7,6 @@
 #include "playlist.h"
 
 #define BUFFER_SIZE 2048
-static char buffer[BUFFER_SIZE], ByteBuf='\0';
-static unsigned int ByteBufPos=0;
 
 #define NB_TRACKS 3
 
@@ -51,6 +49,8 @@ void PlayList_Quit(void) {
 char PlayList_Read(const char* path) {
 	PHYSFS_file * f;
 	char* path_to_music = NULL;
+	char buffer[BUFFER_SIZE], ByteBuf = '\0';
+	unsigned int ByteBufPos = 0;
 
 	sprintf(buffer, "%s/music.wpl", path);
 
@@ -63,7 +63,7 @@ char PlayList_Read(const char* path) {
 	while (!PHYSFS_eof(f)) {
 		char* filename;
 
-		while( ByteBufPos < BUFFER_SIZE-1 && PHYSFS_read( f, &ByteBuf, 1, 1 ) && ByteBuf != '\n' )
+		while( ByteBufPos < BUFFER_SIZE - 1 && PHYSFS_read( f, &ByteBuf, 1, 1 ) && ByteBuf != '\n' && ByteBuf != '\r' )
 		{
 			buffer[ByteBufPos]=ByteBuf;
 			ByteBufPos++;
@@ -142,7 +142,7 @@ static void PlayList_Shuffle(void) {
 }
 
 void PlayList_SetTrack(unsigned int t) {
-	if (t >= 0 && t < NB_TRACKS) {
+	if (t < NB_TRACKS) {
 		current_track = t;
 	} else {
 		current_track = 0;
