@@ -32,8 +32,6 @@ typedef struct _warzoneGlobals
 	BOOL		bTranslucent;
 	BOOL		bAdditive;
 	SWORD		effectsLevel;
-	char		DDrawDriverName[256];
-	char		D3DDriverName[256];
 	BOOL		allowSubtitles;
 	BOOL		playAudioCDs;
 	BOOL		Fullscreen;

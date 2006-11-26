@@ -119,9 +119,6 @@ typedef struct	RENDER_STATE
 					BOOL				textured;
 					UBYTE				lightLevel;
 #endif
-					// FIXME Needed???
-					// 	UBYTE				DDrawDriverName[256];
-					// 	UBYTE				D3DDriverName[256];
 				}
 				RENDER_STATE;
 

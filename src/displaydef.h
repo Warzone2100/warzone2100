@@ -15,8 +15,6 @@
 #define DISP_WIDTH		(pie_GetVideoBufferWidth())
 #define DISP_HEIGHT		(pie_GetVideoBufferHeight())
 
-#define DISP_BITDEPTH	(pie_GetVideoBufferDepth())
-
 #define	BOUNDARY_X			(16)
 #define BOUNDARY_Y			(16)
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M

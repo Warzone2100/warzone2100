@@ -13,11 +13,6 @@ extern void					*g_ElementToBeRemoved;
 
 /***************************************************************************/
 
-#ifdef WIN321	// ffs			//Not really needed I guess?  [Don't delete yet, possible future use?] -Qamly
-static CRITICAL_SECTION		critSecAudio;
-#endif
-/***************************************************************************/
-
 static void	ptrList_Init( PTRLIST *ptrList );
 
 /***************************************************************************/

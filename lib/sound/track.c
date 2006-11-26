@@ -74,9 +74,6 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 	SDWORD	i;
 	//~~~~~~~~~~~~~
 
-	//
-	// hWnd;
-	//
 	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
 	g_bDevVolume = sound_CheckDevice();

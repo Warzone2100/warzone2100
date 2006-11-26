@@ -59,7 +59,7 @@ static void (*Unlock_Display)(void);
 
 #elif defined(WIN_SCRAP)
 /* * */
-static HWND SDL_Window;
+static int SDL_Window;
 
 #elif defined(QNX_SCRAP)
 /* * */

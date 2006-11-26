@@ -1166,7 +1166,7 @@ void dispTerrain(UDWORD x, UDWORD y, TYPE_OF_TERRAIN type)
 	sDestRect.bottom = y + 3*TILE_SIZE2D/4;
 /*	memset(&sDDBltFX, 0, sizeof(DDBLTFX));
 	sDDBltFX.dwSize = sizeof(DDBLTFX);
-#if DISP_BITDEPTH == 8
+#if DISP_BITDEPTH == 8 // DISP_BITDEPTH is pie_GetVideoBufferDepth() now!
 	switch (type)
 	{
 	case TER_SANDYBRUSH:

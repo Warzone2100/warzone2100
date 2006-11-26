@@ -54,11 +54,6 @@ static AUDIO_SAMPLE g_sPreviousSample =
 };
 static SDWORD		g_i3DVolume = AUDIO_VOL_MAX;
 
-// ifdef WIN32 //Not needed ?--Qamly
-//
-// static CRITICAL_SECTION critSecAudio;
-//
-// endif
 
 //*
 // =======================================================================================================================
@@ -112,12 +107,6 @@ BOOL audio_Shutdown( void )
 	sound_StopAll();
 	bOK = sound_Shutdown();
 
-	// empty sample heap
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// EnterCriticalSection( &critSecAudio );
-	//
-	// endif
 	// empty sample list
 	psSample = g_psSampleList;
 	while ( psSample != NULL )
@@ -136,22 +125,12 @@ BOOL audio_Shutdown( void )
 		psSample = psSampleTemp;
 	}
 
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// LeaveCriticalSection( &critSecAudio );
-	//
-	// endif
 	// free sample heap
 	HEAP_DESTROY( g_psSampleHeap );
 	g_psSampleHeap = NULL;
 	g_psSampleList = NULL;
 	g_psSampleQueue = NULL;
 
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// DeleteCriticalSection( &critSecAudio );
-	//
-	// endif
 	return bOK;
 }
 
@@ -194,11 +173,6 @@ BOOL audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 //
 static void audio_AddSampleToHead( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample )
 {
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// EnterCriticalSection( &critSecAudio );
-	//
-	// endif
 	psSample->psNext = ( *ppsSampleList );
 	psSample->psPrev = NULL;
 	if ( (*ppsSampleList) != NULL )
@@ -206,12 +180,6 @@ static void audio_AddSampleToHead( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *p
 		( *ppsSampleList )->psPrev = psSample;
 	}
 	( *ppsSampleList ) = psSample;
-
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// LeaveCriticalSection( &critSecAudio );
-	//
-	// endif
 }
 
 //*
@@ -224,11 +192,6 @@ static void audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *p
 	AUDIO_SAMPLE	*psSampleTail = NULL;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// EnterCriticalSection( &critSecAudio );
-	//
-	// endif
 	if ( (*ppsSampleList) == NULL )
 	{
 		( *ppsSampleList ) = psSample;
@@ -245,12 +208,6 @@ static void audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *p
 		psSample->psPrev = psSampleTail;
 		psSample->psNext = NULL;
 	}
-
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// LeaveCriticalSection( &critSecAudio );
-	//
-	// endif
 }
 
 //*
@@ -268,11 +225,6 @@ static void audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSa
 		return;
 	}
 
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// EnterCriticalSection( &critSecAudio );
-	//
-	// endif
 	if ( psSample == (*ppsSampleList) )
 	{
 		// first sample in list
@@ -294,12 +246,6 @@ static void audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSa
 	// set sample pointers NULL for safety
 	psSample->psPrev = NULL;
 	psSample->psNext = NULL;
-
-	// ifdef WIN32 //Not needed ?--Qamly
-	//
-	// LeaveCriticalSection( &critSecAudio );
-	//
-	// endif
 }
 
 //*

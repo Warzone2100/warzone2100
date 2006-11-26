@@ -551,7 +551,6 @@ BOOL NETclose(void)
 		}
 	}
 
-
 	if(socket_set) {
 		SDLNet_FreeSocketSet(socket_set);
 		socket_set=NULL;
@@ -561,8 +560,6 @@ BOOL NETclose(void)
 		SDLNet_TCP_Close(tcp_socket);
 		tcp_socket=NULL;
 	}
-
-	return 0;
 }
 
 
