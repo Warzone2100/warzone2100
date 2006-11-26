@@ -267,7 +267,7 @@ TEXT_DISPLAY	currentTextDisplay;
 
 /* Add the Intelligence Map widgets to the widget screen */
 //BOOL intAddIntelMap(BOOL playCurrent)
-BOOL _intAddIntelMap(void)
+BOOL intAddIntelMap(void)
 {
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
@@ -578,7 +578,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		Animate = FALSE;
 	}
 
-
 	/* Add the base form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = 0;
@@ -636,8 +635,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return FALSE;
 	}
 
-
-
 	/* Add the close box */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDINTMAP_MSGVIEW;
@@ -654,7 +651,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		return FALSE;
 	}
-
 
 	if (psMessage->type != MSG_RESEARCH &&
 	    ((VIEWDATA*)psMessage->pViewData)->type == VIEW_RPL)
@@ -694,7 +690,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 						  sFormInit.width, sFormInit.height,
 						  FALSE, &cur_seq, &cur_seqpage));
 
-
 		sFormInit.pFormDisplay = intDisplayObjectForm;
 		sFormInit.pUserData = (void*)&StandardTab;
 		sFormInit.pTabDisplay = intDisplayTab;
@@ -703,7 +698,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		{
 			return FALSE;
 		}
-
 
 		memset(&sTabForm, 0, sizeof(W_FORMINIT));
 		sTabForm.formID = IDINTMAP_SEQTEXT;
@@ -731,7 +725,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return TRUE;
 	}
 
-
 	/*Add the Title box*/
 	/*memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -746,7 +739,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		return FALSE;
 	}*/
-
 
 	/*add the Label for the title box*/
 	memset(&sLabInit,0,sizeof(W_LABINIT));
@@ -774,7 +766,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return FALSE;
 	}
 
-
 	/*Add the PIE box*/
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -791,7 +782,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		return FALSE;
 	}
-
 
 #ifndef NO_VIDEO
 	/*Add the Flic box */
@@ -810,7 +800,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return FALSE;
 	}
 #endif
-
 
 	/*Add the text box*/
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -944,7 +933,7 @@ static void intDisplaySeqTextView(struct _widget *psWidget,
 
 
 // Add all the Video Sequences for a message
-void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
+static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 {
 
 	BOOL bLoop = FALSE;
@@ -1038,7 +1027,7 @@ MESSAGE TimsMessage=
 deal with the actual button press - proxMsg is set to true if a proximity
 button has been pressed
 */
-void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
+void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 {
 	MESSAGE			*psMessage;
 	UDWORD			currID;//, i;
@@ -1188,7 +1177,7 @@ void _intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 }
 
 
-void intCleanUpIntelMap(void)
+static void intCleanUpIntelMap(void)
 {
 	MESSAGE		*psMessage, *psNext;
 
@@ -2092,11 +2081,8 @@ void setCurrentMsg(void)
 /*sets which states need to be paused when the intelligence screen is up*/
 void setIntelligencePauseState(void)
 {
-
-
 	if (!bMultiPlayer)
 	{
-
 		gameTimeStop();
 		setGameUpdatePause(TRUE);
 		if(!bInTutorial)
@@ -2105,20 +2091,14 @@ void setIntelligencePauseState(void)
 			setConsolePause(TRUE);
 		}
 		setScrollPause(TRUE);
-
-
 	}
-
-
 }
 
 /*resets the pause states */
 void resetIntelligencePauseState(void)
 {
-
 	if (!bMultiPlayer)
 	{
-
 		setGameUpdatePause(FALSE);
 		if(!bInTutorial) {
 			setScriptPause(FALSE);
@@ -2126,24 +2106,16 @@ void resetIntelligencePauseState(void)
 		setScrollPause(FALSE);
 		setConsolePause(FALSE);
 		gameTimeStart();
-
-
 	}
-
 }
-
-
 
 
 // play this message immediately, but definitely donot tell the intelligence screen to start
 
-
-void _displayImmediateMessage(MESSAGE *psMessage)
+void displayImmediateMessage(MESSAGE *psMessage)
 {
-
 	/*
 		This has to be changed to support a script calling a message in the intellegence screen
-
 	*/
 
 #ifdef NO_VIDEO
@@ -2162,14 +2134,6 @@ void _displayImmediateMessage(MESSAGE *psMessage)
 }
 
 
-void displayImmediateMessage(MESSAGE *psMessage)
-{
-
-
-	_displayImmediateMessage(psMessage);
-}
-
-
 // return whether a message is immediate
 BOOL messageIsImmediate(void)
 {
@@ -2181,25 +2145,3 @@ void setMessageImmediate(BOOL state)
 {
 	immediateMessage = state;
 }
-
-
-BOOL intAddIntelMap(void)
-{
-
-	return _intAddIntelMap();
-}
-
-
-void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
-{
-
-
-	_intIntelButtonPressed(proxMsg,id);
-}
-
-
-
-
-
-
-

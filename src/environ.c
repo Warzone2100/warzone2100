@@ -6,9 +6,10 @@ used for the mist and water effects. These are preprocessed.
 
 // -------------------------------------------------------------------------------
 #include "lib/framework/frame.h"
-#include "map.h"
-#include "display3d.h"
 #include "lib/gamelib/gtime.h"
+#include "display3d.h"
+#include "environ.h"
+#include "map.h"
 
 // -------------------------------------------------------------------------------
 #define RANDOMLY_ONE_OR_MINUS_ONE	(rand()%2 ? -1 : 1)
@@ -48,15 +49,6 @@ FRACT	vec;
 // -------------------------------------------------------------------------------
 ENVIRON_DATA	*pEnvironData = NULL;
 static	BOOL	bWaterOnMap = FALSE;
-
-// -------------------------------------------------------------------------------
-BOOL	waterOnMap				( void );
-BOOL	environInit				( void );
-void	environUpdate			( void );
-UDWORD	environGetValue			( UDWORD x, UDWORD y );
-UDWORD	environGetData			( UDWORD x, UDWORD y );
-extern UDWORD map_MistValue		( UDWORD x, UDWORD y );
-UDWORD map_TileMistValue( UDWORD x, UDWORD y );
 
 // -------------------------------------------------------------------------------
 BOOL	waterOnMap(void)

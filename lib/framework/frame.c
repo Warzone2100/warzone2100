@@ -53,12 +53,6 @@ typedef enum _focus_state
 
 FOCUS_STATE		focusState, focusLast;
 
-/* Whether the mouse is currently being displayed or not */
-static BOOL mouseOn=TRUE;
-
-/* Whether the mouse should be displayed in the app workspace */
-static BOOL displayMouse=TRUE;
-
 /************************************************************************************
  *
  * Alex's frame rate stuff
@@ -131,15 +125,6 @@ UDWORD frameGetAverageRate(void)
 UDWORD	frameGetFrameNumber(void)
 {
 	return curFrames;
-}
-
-
-/* If cursor on is TRUE the windows cursor will be displayed over the game window
- * (and in full screen mode).  If it is FALSE the cursor will not be displayed.
- */
-void frameShowCursor(BOOL cursorOn)
-{
-	displayMouse = cursorOn;
 }
 
 
@@ -272,8 +257,6 @@ BOOL frameInitialise(
 
 	focusState = FOCUS_IN;
 	focusLast = FOCUS_IN;
-	mouseOn = TRUE;
-	displayMouse = TRUE;
 
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
@@ -609,46 +592,4 @@ UDWORD HashStringIgnoreCase( const char *c )
 	}
 //	printf("%%%%%%%% (Ignorcase) String:%s Hash:%0x\n",String,iHashValue);
 	return iHashValue;
-}
-
-
-
-// Examine a filename for the last dot and slash
-// and so giving the extension of the file and the directory
-//
-// PosOfDot and/of PosOfSlash can be NULL and then nothing will be stored
-//
-static void ScanFilename(const char *Fullname, int *PosOfDot, int *PosOfSlash)
-{
-	int Namelength;
-
-	int DotPos=-1;
-	int SlashPos=-1;
-	int Pos;
-
-	Namelength=strlen(Fullname);
-
-	for (Pos=Namelength;Pos>=0;Pos--)
-	{
-		if (Fullname[Pos]=='.')
-		{
-			DotPos=Pos;
-			break;
-		}
-	}
-
-	for (Pos=Namelength;Pos>=0;Pos--)
-	{
-		if (Fullname[Pos]=='/')
-		{
-			SlashPos=Pos;
-			break;
-		}
-	}
-
-	if (PosOfDot!=NULL)
-		*PosOfDot=DotPos;
-
-	if (PosOfSlash!=NULL)
-		*PosOfSlash=SlashPos;
 }

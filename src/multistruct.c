@@ -24,6 +24,7 @@
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "multiplay.h"
 #include "multigifts.h"
+#include "multirecv.h"
 #include "audio_id.h"
 
 // ////////////////////////////////////////////////////////////////////////////

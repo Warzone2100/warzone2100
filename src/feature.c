@@ -626,8 +626,7 @@ void featureStatsShutDown(void)
 }
 
 /* Deal with damage to a feature */
-BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass,
-                   UDWORD weaponSubClass)
+BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 {
 	UDWORD		penDamage;
 

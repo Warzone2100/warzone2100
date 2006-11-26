@@ -50,11 +50,6 @@ typedef enum _frame_status
  */
 extern FRAME_STATUS frameUpdate(void);
 
-/* If cursor on is TRUE the windows cursor will be displayed over the game window
- * (and in full screen mode).  If it is FALSE the cursor will not be displayed.
- */
-extern void frameShowCursor(BOOL cursorOn);
-
 /* Set the current cursor from a Resource ID
  * This is the same as calling:
  *       frameSetCursor(LoadCursor(MAKEINTRESOURCE(resID)));

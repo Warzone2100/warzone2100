@@ -1883,8 +1883,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 							(BASE_OBJECT *)psCurrF), psStats->weaponClass);*/
 						bKilled = featureDamage(psCurrF, calcDamage(weaponRadDamage(
 							psStats, psObj->player), psStats->weaponEffect,
-							(BASE_OBJECT *)psCurrF), psStats->weaponClass,
-                            psStats->weaponSubClass);
+							(BASE_OBJECT *)psCurrF), psStats->weaponSubClass);
 						if(bKilled)
 						{
 							proj_UpdateKills(psObj);
@@ -2316,7 +2315,7 @@ BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD w
 			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass);
 			break;
 		case OBJ_FEATURE:
-			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass);
+			return featureDamage((FEATURE *)psObj, damage, weaponSubClass);
 			break;
 		default:
 			ASSERT( FALSE, "objectDamage - unknown object type" );

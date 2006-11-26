@@ -25,7 +25,6 @@ BOOL gameStatStart(void);
 void gameStatEnd(void);
 
 
-
 /* Initialise the mechanics system */
 //BOOL mechInitialise(void)
 //{
