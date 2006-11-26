@@ -49,17 +49,16 @@ Windows Compilation:
 			Download a source tarball (tar.bz2) and extract it to the new folder.
 
 		SVN version:
-			Right-click on it and choose “SVN Checkout...”
+			Right-click on the new folder and choose “SVN Checkout...”
 			Set “URL of repository” to svn://svn.gna.org/warzone/trunk, leave everything else as is and click OK
- 			TortoiseSVN will now checkout the up to date sourcecode from out SVN repository. This may take a while, especially on slow internet connections
+ 			TortoiseSVN will now checkout the up to date sourcecode from our SVN repository. This may take a while, especially on slow internet connections
 
 	Preparing:
 		Extract the Developer’s Package to a folder of your choice. Remember the location!
-		Open the “src” folder in the newly checked out sourcecode directory
-		Only when using the SVN version: Copy “version.c.tmpl” to “version.c” and change the version numbers according to the current version and the revision you checked out. If you want to distribute the compiled binary these versions need to be correct! (Otherwise you can leave them as is.)
+		Only when using the SVN version: Open the “src” folder and copy “version.c.tmpl” to “version.c” and change the version numbers according to the current version and the revision you checked out. If you want to distribute the compiled binary these versions need to be correct! (Otherwise you can leave them as is.)
 
 		MinGW:
-			Open the “makerules” folder in the newly checked out sourcecode directory
+			Open the “makerules” folder
 			Copy “config.mk.tmpl” to “config.mk” and change the settings and paths according to your needs
 
 		MSVC:
