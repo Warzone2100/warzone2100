@@ -34,7 +34,7 @@
 
 #define DEFAULTFXVOL	80
 #define DEFAULTCDVOL	60
-#define DEFAULTGAMMA	20.0f
+#define DEFAULTGAMMA	20
 #define DEFAULTSCROLL	800
 #define DEFAULTMAPNAME	"Rush"
 
@@ -93,18 +93,18 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	// gamma
 	if (getWarzoneKeyNumeric("gamma", &val))
 	{
-		gammaValue = (float)val / 20.0f;
-		if (gammaValue < 0.5f)
-			gammaValue = 0.5f;
-		pie_SetGammaValue(gammaValue);
+		gammaValue = val;
+		if (gammaValue < 10)
+			gammaValue = 10;
+		pie_SetGammaValue((float)gammaValue / 20.0f);
 	}
 	else
 	{
-		gammaValue = DEFAULTGAMMA / 20.0f;
-		if (gammaValue < 0.5f)
-			gammaValue = 0.5f;
-		pie_SetGammaValue(gammaValue);
-		setWarzoneKeyNumeric("gamma", gammaValue * 20);
+		gammaValue = DEFAULTGAMMA;
+		if (gammaValue < 10)
+			gammaValue = 10;
+		pie_SetGammaValue((float)gammaValue / 20.0f);
+		setWarzoneKeyNumeric("gamma", gammaValue);
 	}
 
 	// //////////////////////////
@@ -532,7 +532,7 @@ BOOL saveConfig(void)
 		setDifficultyLevel(DL_NORMAL);
 	}
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
-	setWarzoneKeyNumeric("gamma", (SDWORD)(gammaValue * 20.0f));
+	setWarzoneKeyNumeric("gamma", (SDWORD)(gammaValue));
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
 	setWarzoneKeyNumeric("barmode",(SDWORD)barMode);			//energybars
