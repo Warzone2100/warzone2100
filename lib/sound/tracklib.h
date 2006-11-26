@@ -20,8 +20,6 @@
 #define	KHZ11					(11025L)
 #define	MAX_AUDIO_SAMPLES		20
 
-#undef	USE_COMPRESSED_SPEECH
-
 /***************************************************************************/
 
 BOOL	sound_InitLibrary( void );

@@ -71,11 +71,11 @@ audio_list:				audio_list audio_track |
 
 audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, TRUE, &g_iDummy, $4, $5, $6, 0 );
+							audio_SetTrackVals( $2, TRUE, &g_iDummy, $4, $5, $6 );
 						}
 						| AUDIO QTEXT ONESHOT INTEGER INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, FALSE, &g_iDummy, $4, $5, $6, 0 );
+							audio_SetTrackVals( $2, FALSE, &g_iDummy, $4, $5, $6 );
 						}
 						;
 

@@ -68,46 +68,12 @@ static BOOL sound_CheckDevice( void )
 BOOL sound_Init( SDWORD iMaxSameSamples )
 {
 	//~~~~~~~~~~~~~
-#ifdef USE_COMPRESSED_SPEECH
-	void *	lpMsgBuf;
-#endif
 	SDWORD	i;
 	//~~~~~~~~~~~~~
 
 	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
 	g_bDevVolume = sound_CheckDevice();
-#ifdef USE_COMPRESSED_SPEECH
-	if ( !LoadLibrary("MSACM32.DLL") )
-	{
-		FormatMessage
-		(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-			NULL,
-			GetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR) & lpMsgBuf,
-			0,
-			NULL
-		);
-		debug( LOG_NEVER, "sound_Init: couldn't load compression manager MSACM32.DLL\n" );
-	}
-
-	if ( !LoadLibrary("MSADP32.ACM") )
-	{
-		FormatMessage
-		(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-			NULL,
-			GetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR) & lpMsgBuf,
-			0,
-			NULL
-		);
-		debug( LOG_NEVER, "sound_Init: couldn't load ADPCM codec MSADP32.ACM\n" );
-	}
-#endif
 	if ( sound_InitLibrary() == FALSE )
 	{
 		debug( LOG_NEVER, "Cannot init sound library\n" );
@@ -150,10 +116,6 @@ BOOL sound_GetSystemActive( void )
 }
 
 //*
-//
-// Vag ID is just used on PSX szFileName just used on PC
-
-//*
 // =======================================================================================================================
 // =======================================================================================================================
 //
@@ -164,8 +126,7 @@ BOOL sound_SetTrackVals
 		SDWORD	iTrack,
 		SDWORD	iVol,
 		SDWORD	iPriority,
-		SDWORD	iAudibleRadius,
-		SDWORD	VagID
+		SDWORD	iAudibleRadius
 	)
 {
 	ASSERT( iPriority >= LOW_PRIORITY && iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority );
@@ -188,12 +149,7 @@ BOOL sound_SetTrackVals
 		psTrack->iTime =0;			//added, since they really should init all the values. -Q
 		psTrack->iTimeLastFinished = 0;
 		psTrack->iNumPlaying = 0;
-		psTrack->bCompressed =0;	//added  this was the bugger that caused grief for .net.  It was never defined. -Q
 
-		// I didn't comment the below value out, so I guess NOT needed. -Q
-		//
-		// VagID;
-		//
 		// set global
 		g_apTrack[iTrack] = psTrack;
 
@@ -268,13 +224,6 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 		}
 		else
 		{
-#ifdef USE_COMPRESSED_SPEECH
-			// flag compressed audio load
-			if ( pTrack->bCompressed == TRUE )
-			{
-				debug( LOG_NEVER, "sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName );
-			}
-#endif
 			return pTrack;
 		}
 	}
@@ -504,28 +453,6 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 
 	if (psTrack == NULL) return FALSE;
 
-/*	// check only playing compressed audio on queue channel
-#ifdef USE_COMPRESSED_SPEECH
-	if ( bQueued && !psTrack->bCompressed )
-	{
-		DBPRINTF( ("sound_PlayTrack: trying to play uncompressed speech %s!\n", psTrack->pName) );
-		return FALSE;
-	}
-
-	if ( !bQueued && psTrack->bCompressed )
-	{
-		DBPRINTF( ("sound_PlayTrack: trying to play compressed audio %s!\n", psTrack->pName) );
-		return FALSE;
-	}
-
-#else
-	if ( psTrack->bCompressed )
-	{
-		DBPRINTF( ("sound_PlayTrack: trying to play compressed speech %s!\n", psTrack->pName) );
-		return FALSE;
-	}
-#endif
-*/
 	return sound_Play2DSample( psTrack, psSample, bQueued );
 }
 
@@ -543,12 +470,6 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 	  return FALSE;
 
 	psTrack = g_apTrack[psSample->iTrack];
-/*	if ( psTrack->bCompressed )
-	{
-		DBPRINTF( ("sound_PlayTrack: trying to play compressed audio %s!\n", psTrack->pName) );
-		return FALSE;
-	}
-*/
 	return sound_Play3DSample( psTrack, psSample );
 }
 

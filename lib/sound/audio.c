@@ -636,8 +636,7 @@ BOOL audio_SetTrackVals
 		int		*piID,
 		int		iVol,
 		int		iPriority,
-		int		iAudibleRadius,
-		int		VagID
+		int		iAudibleRadius
 	)
 {
 	//~~~~~~~~~~~~~
@@ -672,7 +671,7 @@ BOOL audio_SetTrackVals
 		}
 		else
 		{
-			return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius, VagID );	//now psTrack should be fully set. -Q
+			return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius );	//now psTrack should be fully set. -Q
 		}
 	}
 }
@@ -688,8 +687,7 @@ BOOL audio_SetTrackValsHashName
 		int		iTrack,
 		int		iVol,
 		int		iPriority,
-		int		iAudibleRadius,
-		int		VagID
+		int		iAudibleRadius
 	)
 {
 	//~~~~~~~~~~~~~
@@ -710,7 +708,7 @@ BOOL audio_SetTrackValsHashName
 	}
 	else
 	{
-		return sound_SetTrackVals( psTrack, bLoop, iTrack, iVol, iPriority, iAudibleRadius, VagID );
+		return sound_SetTrackVals( psTrack, bLoop, iTrack, iVol, iPriority, iAudibleRadius );
 	}
 }
 

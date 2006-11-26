@@ -83,8 +83,6 @@ typedef struct TRACK
 	UDWORD		iTimeLastFinished;		/* time last finished in ms */
 	UDWORD		iNumPlaying;
 	BOOL		bMemBuffer;				/* memory buffer flag       */
-	BOOL		bCompressed;			/* compression data flag    */
-
 	ALuint		iBufferName;				/* name of the openal buffer */
 	char		*pName;					// resource name of the track
 	UDWORD		resID;					// hashed name of the WAV
@@ -101,8 +99,7 @@ BOOL	sound_Shutdown(void);
 BOOL	sound_LoadTrackFromFile(char szFileName[]);
 TRACK *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
-			SDWORD iVol, SDWORD iPriority, SDWORD iAudibleRadius,
-			SDWORD VagID );
+			SDWORD iVol, SDWORD iPriority, SDWORD iAudibleRadius);
 BOOL	sound_ReleaseTrack( TRACK * psTrack );
 
 void	sound_StopTrack( AUDIO_SAMPLE *psSample );
