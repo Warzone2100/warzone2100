@@ -1205,12 +1205,13 @@ void incNumConstructorDroids(UDWORD player)
 /* Fire waiting beacon messages which we couldn't run before */
 void fireWaitingCallbacks(void)
 {
-	while(!isMsgStackEmpty())
+	BOOL bOK = TRUE;
+
+	while(!isMsgStackEmpty() && bOK)
 	{
-		if(!msgStackFireTop())
-		{
-			debug(LOG_ERROR, "msgStackFireTop failed");
+		bOK = msgStackFireTop();
+		if(!bOK){
+			ASSERT(FALSE, "fireWaitingCallbacks: msgStackFireTop() failed (stack count: %d)", msgStackGetCount());
 		}
-		//debug(LOG_ERROR,"fireWaitingCallbacks - count: %d", msgStackGetCount());
 	}
 }

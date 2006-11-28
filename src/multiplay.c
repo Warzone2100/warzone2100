@@ -1338,7 +1338,7 @@ BOOL recvTextMessage(NETMSG *pMsg)
 	UDWORD	dpid;
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
-	UDWORD  player,j;		//console callback - player who sent the message
+	UDWORD  player=MAX_PLAYERS,j;		//console callback - player who sent the message
 
 	NetGet(pMsg,0,dpid);
 	for(i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
@@ -1352,6 +1352,8 @@ BOOL recvTextMessage(NETMSG *pMsg)
 			break;
 		}
 	}
+
+	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid); 
 
 	//sprintf(msg, "%d", i);
 	strcpy(msg,NetPlay.players[i].name);
@@ -1790,6 +1792,8 @@ void msgStackReset(void)
 
 UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid)
 {
+	debug(LOG_WZ, "msgStackPush: pushing message type %d to pos %d", CBtype, msgStackPos + 1);
+
 	if (msgStackPos >= MAX_MSG_STACK)
 	{
 		debug(LOG_ERROR, "msgStackPush() - stack full");
@@ -1816,7 +1820,7 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 
 BOOL isMsgStackEmpty(void)
 {
-	if(msgStackPos == (-1)) return TRUE;
+	if(msgStackPos <= (-1)) return TRUE;
 	return FALSE;
 }
 
@@ -1922,9 +1926,11 @@ static BOOL msgStackSort(void)
 
 BOOL msgStackPop(void)
 {
-	if(msgStackPos < 0 || msgStackPos >= MAX_MSG_STACK)
+	debug(LOG_WZ, "msgStackPop: stack size %d", msgStackPos);
+
+	if(msgStackPos < 0 || msgStackPos > MAX_MSG_STACK)
 	{
-		debug(LOG_ERROR, "msgStackPop: wrong msgStackPos index");
+		debug(LOG_ERROR, "msgStackPop: wrong msgStackPos index: %d", msgStackPos);
 		return FALSE;
 	}
 
