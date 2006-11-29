@@ -59,7 +59,7 @@ static void (*Unlock_Display)(void);
 
 #elif defined(WIN_SCRAP)
 /* * */
-static int SDL_Window;
+static HWND SDL_Window;
 
 #elif defined(QNX_SCRAP)
 /* * */
@@ -324,7 +324,7 @@ lost_scrap(void)
 
 #elif defined(WIN_SCRAP)
 /* * */
-  retval = ( GetClipboardOwner() != SDL_Window );
+  retval = ( GetClipboardOwner()->i != SDL_Window->i );
 
 #elif defined(QNX_SCRAP)
 /* * */
