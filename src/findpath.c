@@ -565,7 +565,7 @@ void TurnToTarget(BASE_OBJECT *Obj, MOVE_CONTROL *MoveData,
 	dDif = dirDiff(MoveData->Direction3D, MoveData->TargetDir);
 	MoveData->arrivalTime = dDif * GAME_TICKS_PER_SEC/TURN_RATE + gameTime;
 
-	DBP1(("StartDir: %d  TargetDir: %d\n", MoveData->Direction3D, MoveData->TargetDir));
+	debug( LOG_MOVEMENT, "StartDir: %d  TargetDir: %d\n", MoveData->Direction3D, MoveData->TargetDir);
 }
 
 
@@ -693,7 +693,7 @@ FRACT		fraction;
 		{
 			/* Figure out how far we should have turned */
 			updateTurn(MoveData);
-			DBP1(("     update %d\n", MoveData->Direction3D));
+			debug( LOG_MOVEMENT, "     update %d\n", MoveData->Direction3D);
 		}
 	}
 

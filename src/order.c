@@ -1536,25 +1536,25 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	if (lastFrame != frameGetFrameNumber())
 	{
 		lastFrame = frameGetFrameNumber();
-		DBP2(("\nNEW FRAME %d\n\n", lastFrame));
+		debug( LOG_NEVER, "\nNEW FRAME %d\n\n", lastFrame);
 	}
 
-	DBP2(("D %d P %d at (%d,%d) O %d: (%d,%d) (%d,%d)",
+	debug( LOG_NEVER, "D %d P %d at (%d,%d) O %d: (%d,%d) (%d,%d)",
 		psDroid->id, psDroid->player, psDroid->x,psDroid->y,
-		psOrder->order, psOrder->x,psOrder->y, psOrder->x2,psOrder->y2));
+		psOrder->order, psOrder->x,psOrder->y, psOrder->x2,psOrder->y2);
 	if (psOrder->psObj != NULL)
 	{
-		DBP2((" T: "));
+		debug( LOG_NEVER, " T: ");
 		switch (psOrder->psObj->type)
 		{
 		case OBJ_DROID:
-			DBP2((" D %d P %d", psOrder->psObj->id, psOrder->psObj->player));
+			debug( LOG_NEVER, " D %d P %d", psOrder->psObj->id, psOrder->psObj->player);
 			break;
 		case OBJ_STRUCTURE:
-			DBP2((" S %d P %d", psOrder->psObj->id, psOrder->psObj->player));
+			debug( LOG_NEVER, " S %d P %d", psOrder->psObj->id, psOrder->psObj->player);
 			break;
 		case OBJ_FEATURE:
-			DBP2((" F %d P %d", psOrder->psObj->id, psOrder->psObj->player));
+			debug( LOG_NEVER, " F %d P %d", psOrder->psObj->id, psOrder->psObj->player);
 			break;
 		}
 	}
@@ -1562,14 +1562,14 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	{
 		if (psOrder->psStats->pName != NULL)
 		{
-			DBP2((" TS: %s", psOrder->psStats->pName));
+			debug( LOG_NEVER, " TS: %s", psOrder->psStats->pName);
 		}
 		else
 		{
-			DBP2((" TS: %d", psOrder->psStats->ref));
+			debug( LOG_NEVER, " TS: %d", psOrder->psStats->ref);
 		}
 	}
-	DBP2(("\n"));
+	debug( LOG_NEVER, "\n");
 #endif
 
 	// deal with a droid receiving a primary order
@@ -3876,7 +3876,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		case DSO_ASSIGN_PRODUCTION:
 		case DSO_ASSIGN_CYBORG_PRODUCTION:
 		case DSO_ASSIGN_VTOL_PRODUCTION:
-			DBP1(("order factories %s\n", secondaryPrintFactories(State)));
+			debug( LOG_NEVER, "order factories %s\n", secondaryPrintFactories(State));
 			if ( sec == DSO_ASSIGN_PRODUCTION)
 			{
 				prodType = REF_FACTORY;
@@ -3941,7 +3941,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					CurrState &= ~DSS_ASSPROD_VTOL_MASK;
 				}
 				CurrState |= (State & DSS_ASSPROD_MASK);
-				DBP1(("final factories %s\n", secondaryPrintFactories(CurrState)));
+				debug( LOG_NEVER, "final factories %s\n", secondaryPrintFactories(CurrState));
 			}
 			break;
 
@@ -4586,7 +4586,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 			continue;
 		}
 
-		DBP0(("   DORDER_RUN: droid %d\n", psCurr->id));
+		debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id);
 		orderDroidLoc(psCurr, DORDER_RUN, psRunData->sPos.x, psRunData->sPos.y);
 	}
 }*/

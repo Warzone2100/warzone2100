@@ -1058,8 +1058,8 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 	ASSERT( (endX < mapWidth) && (endY < mapHeight),
 		"mapCalcLine: end point off map" );
 
-	DBP1(("\nmapCalcLine: (%3d,%3d) -> (%3d,%3d)\n",
-		startX,startY, endX,endY));
+	debug( LOG_NONE, "\nmapCalcLine: (%3d,%3d) -> (%3d,%3d)\n",
+		startX,startY, endX,endY);
 
 	/* Do some initial set up for the line */
 	dx = endX - startX;
@@ -1080,7 +1080,7 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 		d = ay - ax/2;
 		for(;;)
 		{
-			DBP1(("(%3d, %3d)\n", x,y));
+			debug( LOG_NONE, "(%3d, %3d)\n", x,y);
 			aMapLinePoints[*pNumPoints].x = x;
 			aMapLinePoints[*pNumPoints].y = y;
 			aMapLinePoints[*pNumPoints].psTile = psCurrTile;
@@ -1095,7 +1095,7 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 				y = y + sy;
 				d = d - ax;
 				psCurrTile += lineChange;
-				DBP1(("(%3d, %3d)\n", x,y));
+				debug( LOG_NONE, "(%3d, %3d)\n", x,y);
 				aMapLinePoints[*pNumPoints].x = x;
 				aMapLinePoints[*pNumPoints].y = y;
 				aMapLinePoints[*pNumPoints].psTile = psCurrTile;
@@ -1112,7 +1112,7 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 		d = ax - ay/2;
 		for(;;)
 		{
-			DBP1(("(%3d, %3d)\n", x,y));
+			debug( LOG_NONE, "(%3d, %3d)\n", x,y);
 			aMapLinePoints[*pNumPoints].x = x;
 			aMapLinePoints[*pNumPoints].y = y;
 			aMapLinePoints[*pNumPoints].psTile = psCurrTile;
@@ -1127,7 +1127,7 @@ void mapCalcLine(UDWORD startX, UDWORD startY,
 				x = x + sx;
 				d = d - ay;
 				psCurrTile += sx;
-				DBP1(("(%3d, %3d)\n", x,y));
+				debug( LOG_NONE, "(%3d, %3d)\n", x,y);
 				aMapLinePoints[*pNumPoints].x = x;
 				aMapLinePoints[*pNumPoints].y = y;
 				aMapLinePoints[*pNumPoints].psTile = psCurrTile;

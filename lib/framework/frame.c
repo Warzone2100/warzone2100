@@ -159,19 +159,19 @@ static void processEvent(SDL_Event *event)
 			{
 				if (event->active.gain == 1)
 				{
-					DBP1(("WM_SETFOCUS\n"));
+					debug( LOG_NEVER, "WM_SETFOCUS\n");
 					if (focusState != FOCUS_IN)
 					{
-						DBP1(("FOCUS_SET\n"));
+						debug( LOG_NEVER, "FOCUS_SET\n");
 						focusState = FOCUS_SET;
 					}
 				}
 				else
 				{
-					DBP1(("WM_KILLFOCUS\n"));
+					debug( LOG_NEVER, "WM_KILLFOCUS\n");
 					if (focusState != FOCUS_OUT)
 					{
-						DBP1(("FOCUS_KILL\n"));
+						debug( LOG_NEVER, "FOCUS_KILL\n");
 						focusState = FOCUS_KILL;
 					}
 					/* Have to tell the input system that we've lost focus */
@@ -324,13 +324,13 @@ FRAME_STATUS frameUpdate(void)
 	}
 	else if ((focusState == FOCUS_SET) && (focusLast == FOCUS_OUT))
 	{
-		DBP1(("Returning SETFOCUS\n"));
+		debug( LOG_NEVER, "Returning SETFOCUS\n");
 		focusState = FOCUS_IN;
 		retVal = FRAME_SETFOCUS;
 	}
 	else if ((focusState == FOCUS_KILL) && (focusLast == FOCUS_IN))
 	{
-		DBP1(("Returning KILLFOCUS\n"));
+		debug( LOG_NEVER, "Returning KILLFOCUS\n");
 		focusState = FOCUS_OUT;
 		retVal = FRAME_KILLFOCUS;
 	}
@@ -343,7 +343,7 @@ FRAME_STATUS frameUpdate(void)
 	}
 	else if (focusLast != focusState)
 	{
-		DBP1(("focusLast changing from %d to %d\n", focusLast, focusState));
+		debug( LOG_NEVER, "focusLast changing from %d to %d\n", focusLast, focusState);
 		focusLast = focusState;
 	}
 

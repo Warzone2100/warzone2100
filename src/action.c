@@ -452,12 +452,6 @@ void actionAlignTurret(BASE_OBJECT *psObj)
 	}
 
 
-//	DBP1(("rotrate=%d framTime=%d rotation=%d\n",psDroid->turretRotRate,frameTime,rotation));
-
-	//DBP1(("droid=%x turret=%x\n",psDroid,psDroid->turretRotation));
-    DBP1(("unit=%x turret=%x\n",psDroid,ACTION_TURRET_ROTATION_RATE));
-
-
 	if (psObj->type == OBJ_DROID)
 	{
 		if (((DROID *)psObj)->droidType == DROID_WEAPON)
@@ -840,11 +834,6 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	//and point the turret at target
 	targetRotation = calcDirection(psAttacker->x, psAttacker->y, psTarget->x, psTarget->y);
 
-	//DBP1(("att: rotrate=%d framTime=%d rotation=%d target=%d   startrot=%d ",psAttacker->turretRotRate,frameTime,rotation,targetRotation,tRotation));
-    DBP1(("att: rotrate=%d framTime=%d rotation=%d target=%d   startrot=%d ",
-        ACTION_TURRET_ROTATION_RATE,frameTime,rotation,targetRotation,tRotation));
-
-
 	rotationError = targetRotation - (tRotation + psAttacker->direction);
 	//restrict rotationerror to =/- 180 degrees
 	while (rotationError > 180)
@@ -885,7 +874,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		{
 			tRotation = (SWORD)(targetRotation - psAttacker->direction);
 		}
-			DBP1(("locked on target...\n"));
+			debug( LOG_NEVER, "locked on target...\n");
 		onTarget = TRUE;
 	}
 	tRotation %= 360;
@@ -984,7 +973,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	*pRotation = tRotation;
 	*pPitch = tPitch;
 
-	DBP1(("endrot=%d\n",tRotation));
+	debug( LOG_NEVER, "endrot=%d\n",tRotation);
 
 	return onTarget;
 }
@@ -2179,7 +2168,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVETOATTACK:
-		DBP1(("MOVETOATTACK - %x\n",psDroid));
+		debug( LOG_NEVER, "MOVETOATTACK - %x\n",psDroid);
 
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
@@ -2371,7 +2360,7 @@ void actionUpdateDroid(DROID *psDroid)
 			ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->actionY;
 			if ( xdiff*xdiff + ydiff*ydiff >= TILE_UNITS*TILE_UNITS )
 			{
-				DBP2(("DACTION_MOVETOBUILD: new location\n"));
+				debug( LOG_NEVER, "DACTION_MOVETOBUILD: new location\n");
 				// Couldn't reach destination - try and find a new one
 				if (actionNewBuildPos(psDroid, &droidX,&droidY))
 				{
@@ -2381,7 +2370,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				else
 				{
-					DBP2(("DACTION_MOVETOBUILD: giving up\n"));
+					debug( LOG_NEVER, "DACTION_MOVETOBUILD: giving up\n");
 					psDroid->action = DACTION_NONE;
 				}
 			}
@@ -2409,7 +2398,7 @@ void actionUpdateDroid(DROID *psDroid)
 					//unless its a module!
 					if (IsStatExpansionModule(psStructStats))
 					{
-						DBP2(("DACTION_MOVETOBUILD: setUpBuildModule\n"));
+						debug( LOG_NEVER, "DACTION_MOVETOBUILD: setUpBuildModule\n");
 						setUpBuildModule(psDroid);
 					}
 					else if ( TILE_HAS_STRUCTURE(mapTile(psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT)) )
@@ -2429,7 +2418,7 @@ void actionUpdateDroid(DROID *psDroid)
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
 							{
-								DBP2(("DACTION_MOVETOBUILD: start foundation\n"));
+								debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation\n");
 								psDroid->action = DACTION_BUILD;
 							}
 							else
@@ -2446,17 +2435,17 @@ void actionUpdateDroid(DROID *psDroid)
 //						psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT))
 						tlx >> TILE_SHIFT, tly >> TILE_SHIFT, psDroid->player, FALSE))
 					{
-						DBP2(("DACTION_MOVETOBUILD: !validLocation\n"));
+						debug( LOG_NEVER, "DACTION_MOVETOBUILD: !validLocation\n");
 						psDroid->action = DACTION_NONE;
 					}
 					else if (droidStartFoundation(psDroid))
 					{
-						DBP2(("DACTION_MOVETOBUILD: start foundation\n"));
+						debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation\n");
 						psDroid->action = DACTION_BUILD_FOUNDATION;
 					}
 					else
 					{
-						DBP2(("DACTION_MOVETOBUILD: giving up (2)\n"));
+						debug( LOG_NEVER, "DACTION_MOVETOBUILD: giving up (2)\n");
 						psDroid->action = DACTION_NONE;
 					}
 				}
@@ -2486,7 +2475,7 @@ void actionUpdateDroid(DROID *psDroid)
 								// building a gun tower over a wall - OK
 								if (droidStartBuild(psDroid))
 								{
-									DBP2(("DACTION_MOVETOBUILD: start foundation\n"));
+									debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation\n");
 									psDroid->action = DACTION_BUILD;
 								}
 								else
@@ -2525,13 +2514,13 @@ void actionUpdateDroid(DROID *psDroid)
 					// continuing a partially built structure (order = helpBuild)
 					if (droidStartBuild(psDroid))
 					{
-						DBP2(("DACTION_MOVETOBUILD: starting help build\n"));
+						debug( LOG_NEVER, "DACTION_MOVETOBUILD: starting help build\n");
 						psDroid->action = DACTION_BUILD;
 						intBuildStarted(psDroid);
 					}
 					else
 					{
-						DBP2(("DACTION_MOVETOBUILD: giving up (3)\n"));
+						debug( LOG_NEVER, "DACTION_MOVETOBUILD: giving up (3)\n");
 						psDroid->action = DACTION_NONE;
 					}
 				}
@@ -2587,7 +2576,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			DBP2(("DACTION_BUILD: done\n"));
+			debug( LOG_NEVER, "DACTION_BUILD: done\n");
 			psDroid->action = DACTION_NONE;
 		}
 		break;
@@ -2749,7 +2738,7 @@ void actionUpdateDroid(DROID *psDroid)
 			//randomly move the droid around the construction site
 			/*if ((rand() % 50) < 1)
 			{
-				DBP2(("DACTION_BUILD_FOUNDATION: start wander\n"));
+				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start wander\n");
 				psStructStats = (STRUCTURE_STATS *)psDroid->psTarStats;
 				if (getDroidDestination(psStructStats, psDroid->orderX, psDroid->orderY,
 					&droidX, &droidY))
@@ -2796,7 +2785,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if ( psDroid->action != DACTION_NONE &&
 				 droidStartBuild(psDroid))
 			{
-				DBP2(("DACTION_BUILD_FOUNDATION: start build\n"));
+				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build\n");
 				psDroid->action = DACTION_BUILD;
 
 
@@ -2806,7 +2795,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 			else
 			{
-				DBP2(("DACTION_BUILD_FOUNDATION: giving up\n"));
+				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: giving up\n");
 				psDroid->action = DACTION_NONE;
 			}
 		}
@@ -3096,12 +3085,12 @@ void actionUpdateDroid(DROID *psDroid)
 		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]))
 		{
 			// got close to the rearm pad - now find a clear one
-			DBP4(("Unit %d: seen rearm pad\n", psDroid->id));
+			debug( LOG_NEVER, "Unit %d: seen rearm pad\n", psDroid->id );
 			psStruct = findNearestReArmPad(psDroid, (STRUCTURE *)psDroid->psActionTarget[0], TRUE);
 			if (psStruct != NULL)
 			{
 				// found a clear landing pad - go for it
-				DBP4(("Found clear rearm pad\n"));
+				debug( LOG_NEVER, "Found clear rearm pad\n" );
 				psDroid->psActionTarget[0] = (BASE_OBJECT *)psStruct;
 			}
 
@@ -3316,7 +3305,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		moveDroidToDirect(psDroid, droidX, droidY);
 		break;
 	case DACTION_CLEARREARMPAD:
-		DBP4(("Unit %d clearing rearm pad\n", psDroid->id));
+		debug( LOG_NEVER, "Unit %d clearing rearm pad\n", psDroid->id);
 		psDroid->action = DACTION_CLEARREARMPAD;
 		psDroid->psActionTarget[0] = psAction->psObj;
 		droidX = psDroid->psActionTarget[0]->x;
@@ -3441,7 +3430,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->action = DACTION_WAITDURINGREPAIR;
 		break;
 	case DACTION_MOVETOREARMPOINT:
-		DBP4(("Unit %d moving to rearm point\n", psDroid->id));
+		debug( LOG_NEVER, "Unit %d moving to rearm point\n", psDroid->id);
 		psDroid->action = psAction->action;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
@@ -3684,7 +3673,7 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 					if(vtolLandingTile(i,j))
 					{
 						/* Set exit conditions and get out NOW */
-						DBP4(("Unit %d landing pos (%d,%d)\n",psDroid->id, i,j));
+						debug( LOG_NEVER, "Unit %d landing pos (%d,%d)\n",psDroid->id, i,j);
 						*px = (i << TILE_SHIFT) + TILE_UNITS/2;
 						*py = (j << TILE_SHIFT) + TILE_UNITS/2;
 						result = TRUE;

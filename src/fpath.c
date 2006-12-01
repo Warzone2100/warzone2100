@@ -14,12 +14,6 @@
 
 #include "lib/framework/frame.h"
 
-BOOL	fpathDoMessage;
-#undef DBP2
-#define DBP2( x ) \
-	if (fpathDoMessage) \
-		debug( LOG_NEVER, (#x) )
-
 #include "objects.h"
 #include "map.h"
 #include "raycast.h"
@@ -582,11 +576,11 @@ static void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 
 	// now set the blocking flags next to the two gateways that the route
 	// is going through
-	DBP2(("Blocking gateways for zones :"));
+	debug( LOG_MOVEMENT, "Blocking gateways for zones :");
 	if (psLast != NULL)
 	{
 		blockZone = (psLast->flags & GWR_ZONE1) ? psLast->zone1 : psLast->zone2;
-		DBP2((" %d", blockZone));
+		debug( LOG_MOVEMENT, " %d", blockZone);
 		for(tx = psLast->x1 - 1; tx <= psLast->x2 + 1; tx ++)
 		{
 			for(ty = psLast->y1 - 1; ty <= psLast->y2 + 1; ty ++)
@@ -603,7 +597,7 @@ static void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 	if (psNext != NULL)
 	{
 		blockZone = (psNext->flags & GWR_ZONE1) ? psNext->zone2 : psNext->zone1;
-		DBP2((" %d", blockZone));
+		debug( LOG_MOVEMENT, " %d", blockZone);
 		for(tx = psNext->x1 - 1; tx <= psNext->x2 + 1; tx ++)
 		{
 			for(ty = psNext->y1 - 1; ty <= psNext->y2 + 1; ty ++)
@@ -617,7 +611,7 @@ static void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 			}
 		}
 	}
-	DBP2(("\n"));
+	debug( LOG_MOVEMENT, "\n");
 }
 
 
@@ -772,7 +766,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 		{
 			firstRoute = FALSE;
 
-			DBP2(("Gateway route - droid %d\n", psObj->id));
+			debug( LOG_MOVEMENT, "Gateway route - droid %d\n", psObj->id);
 			gwRet = gwrAStarRoute(psObj->player, GWTerrain,
 								  sx,sy, fx,fy, &psGWRoute);
 			switch (gwRet)
@@ -790,7 +784,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 				}
 				else
 				{
-					DBP2(("   GW route returned GWR_NEAREST for second route\n"));
+					debug( LOG_MOVEMENT, "   GW route returned GWR_NEAREST for second route\n");
 					// can't find a better route than the last one
 					if (psMoveCntl->numPoints > 0)
 					{
@@ -799,7 +793,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 					}
 					else
 					{
-						DBP2(("     no points - route failed\n"));
+						debug( LOG_MOVEMENT, "     no points - route failed\n");
 						retval = FPR_FAILED;
 					}
 					goto exit;
@@ -811,7 +805,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 				psGWRoute = NULL;
 				break;
 			case GWR_FAILED:
-				DBP2(("   Gateway route failed\n"));
+				debug( LOG_MOVEMENT, "   Gateway route failed\n");
 				retval = FPR_FAILED;
 				goto exit;
 				break;
@@ -853,7 +847,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 			gwy = gwy * TILE_UNITS + TILE_UNITS/2;*/
 			fpathGatewayCoords(psCurrRoute, &gwx, &gwy);
 
-			DBP2(("   astar route : (%d,%d) -> (%d,%d)\n",
+			debug( LOG_MOVEMENT, "   astar route : (%d,%d) -> (%d,%d)n",
 				linkx>>TILE_SHIFT, linky>>TILE_SHIFT,
 				gwx>>TILE_SHIFT, gwy>>TILE_SHIFT));
 			asret = fpathAStarRoute(routeMode, &sAStarRoute, linkx,linky, gwx,gwy);
@@ -871,7 +865,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 			{
 				// no route found - try ditching this gateway
 				// and trying a new gateway route
-				DBP2(("   Route failed - trying new gatway route\n"));
+				debug( LOG_MOVEMENT, "   Route failed - trying new gatway route\n");
 				psCurrRoute->flags |= GWR_IGNORE;
 				bRouting = TRUE;
 				fpathClearGatewayBlock();
@@ -880,7 +874,7 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 			else if (asret == ASR_PARTIAL)
 			{
 				// routing hasn't finished yet
-				DBP2(("   Reschedule\n"));
+				debug( LOG_MOVEMENT, "   Reschedule\n");
 				retval = FPR_WAIT;
 				goto exit;
 			}
@@ -913,21 +907,21 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 			{
 				// no route found - try ditching the last gateway
 				// and trying a new gateway route
-				DBP2(("   Route failed - trying new gatway route\n"));
+				debug( LOG_MOVEMENT, "   Route failed - trying new gatway route\n");
 				psLastGW->flags |= GWR_IGNORE;
 				bRouting = TRUE;
 				fpathClearGatewayBlock();
 			}
 			else if (asret == ASR_FAILED)
 			{
-				DBP2(("   Final route failed\n"));
+				debug( LOG_MOVEMENT, "   Final route failed\n");
 				retval = FPR_FAILED;
 				goto exit;
 			}
 			else if (asret == ASR_PARTIAL)
 			{
 				// routing hasn't finished yet
-				DBP2(("   Reschedule\n"));
+				debug( LOG_MOVEMENT, "   Reschedule\n");
 				retval = FPR_WAIT;
 				goto exit;
 			}
@@ -974,24 +968,24 @@ static void fpathBlockGatewayLink(GATEWAY *psLast, GATEWAY *psCurr)
 
 	if ((psLast == NULL) && (psCurr != NULL))
 	{
-		DBP2(("   Blocking first gateway\n"));
+		debug( LOG_MOVEMENT, "   Blocking first gateway\n");
 		psCurr->flags |= GWR_IGNORE;
 	}
 	else if ((psCurr == NULL) && (psLast != NULL))
 	{
-		DBP2(("   Blocking last gateway\n"));
+		debug( LOG_MOVEMENT, "   Blocking last gateway\n");
 		psLast->flags |= GWR_IGNORE;
 	}
 	else if ((psLast != NULL) && (psCurr != NULL))
 	{
-		DBP2(("   Blocking link between gateways"));
+		debug( LOG_MOVEMENT, "   Blocking link between gateways");
 		numLinks = psLast->zone1Links + psLast->zone2Links;
 		for(link = 0; link < numLinks; link += 1)
 		{
 //			if (psLast->psLinks[link].psGateway == psCurr)
 			if (psLast->psLinks[link].flags & GWRL_CHILD)
 			{
-				DBP2((" last link %d", link));
+				debug( LOG_MOVEMENT, " last link %d", link);
 				psLast->psLinks[link].flags |= GWRL_BLOCKED;
 			}
 		}
@@ -1001,11 +995,11 @@ static void fpathBlockGatewayLink(GATEWAY *psLast, GATEWAY *psCurr)
 //			if (psCurr->psLinks[link].psGateway == psLast)
 			if (psCurr->psLinks[link].flags & GWRL_PARENT)
 			{
-				DBP2((" curr link %d", link));
+				debug( LOG_MOVEMENT, " curr link %d", link);
 				psCurr->psLinks[link].flags |= GWRL_BLOCKED;
 			}
 		}
-		DBP2(("\n"));
+		debug( LOG_MOVEMENT, "\n");
 	}
 }
 
@@ -1073,7 +1067,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 	{
 		if (routeMode == ASR_NEWROUTE)
 		{
-			DBP2(("Gateway route - droid %d\n", psObj->id));
+			debug( LOG_MOVEMENT, "Gateway route - droid %d\n", psObj->id);
 			gwRet = gwrAStarRoute(psObj->player, GWTerrain,
 								  sx,sy, fx,fy, &psGWRoute);
 			switch (gwRet)
@@ -1086,13 +1080,13 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 				{
 					if (psMoveCntl->numPoints > 0)
 					{
-						DBP2(("   Gateway route nearest - Use previous route\n"));
+						debug( LOG_MOVEMENT, "   Gateway route nearest - Use previous route\n");
 						retval = FPR_OK;
 						goto exit;
 					}
 					else
 					{
-						DBP2(("   Gateway route nearest - No points - failed\n"));
+						debug( LOG_MOVEMENT, "   Gateway route nearest - No points - failed\n");
 						retval = FPR_FAILED;
 						goto exit;
 					}
@@ -1104,7 +1098,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 				psGWRoute = NULL;
 				break;
 			case GWR_FAILED:
-				DBP2(("   Gateway route failed\n"));
+				debug( LOG_MOVEMENT, "   Gateway route failed\n");
 				if ((psObj->type == OBJ_DROID) && vtolDroid((DROID *)psObj))
 				{
 					// just fail for VTOLs - they can set a direct route
@@ -1165,16 +1159,16 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 			{
 //				psMoveCntl->numPoints = (UBYTE)matchPoints;
 
-				DBP2(("   astar route : (%d,%d) -> (%d,%d) zone %d\n",
+				debug( LOG_MOVEMENT, "   astar route : (%d,%d) -> (%d,%d) zone %d\n",
 					linkx>>TILE_SHIFT, linky>>TILE_SHIFT,
-					gwx>>TILE_SHIFT, gwy>>TILE_SHIFT, zone));
+					gwx>>TILE_SHIFT, gwy>>TILE_SHIFT, zone);
 				fpathSetGatewayBlock(zone, psLastGW, psCurrRoute);
 				asret = fpathAStarRoute(routeMode, &sAStarRoute, linkx,linky, gwx,gwy);
 				fpathClearGatewayBlock(zone, psLastGW, psCurrRoute);
 				if (asret == ASR_PARTIAL)
 				{
 					// routing hasn't finished yet
-					DBP2(("   Reschedule\n"));
+					debug( LOG_MOVEMENT, "   Reschedule\n");
 					retval = FPR_WAIT;
 					goto exit;
 				}
@@ -1189,14 +1183,14 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 					actionRouteBlockingPos((DROID *)psObj, sAStarRoute.finalX,sAStarRoute.finalY))
 				{
 					// found a blocking wall - route to that
-					DBP2(("   Got blocking wall\n"));
+					debug( LOG_MOVEMENT, "   Got blocking wall\n");
 					retval = FPR_OK;
 					goto exit;
 				}
 				else if ((asret == ASR_NEAREST) && (psGWRoute == NULL))
 				{
 					// all routing was in one zone - this is as good as it's going to be
-					DBP2(("   Nearest route in same zone\n"));
+					debug( LOG_MOVEMENT, "   Nearest route in same zone\n");
 					if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
 					{
 						psMoveCntl->numPoints = 0;
@@ -1208,7 +1202,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 				else if ((asret == ASR_FAILED) && (psGWRoute == NULL))
 				{
 					// all routing was in one zone - can't retry
-					DBP2(("   Failed route in same zone\n"));
+					debug( LOG_MOVEMENT, "   Failed route in same zone\n");
 					retval = FPR_FAILED;
 					goto exit;
 				}
@@ -1217,7 +1211,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 				{
 					// no route found - try ditching this gateway
 					// and trying a new gateway route
-					DBP2(("   Route failed - ignore gateway/link and reroute\n"));
+					debug( LOG_MOVEMENT, "   Route failed - ignore gateway/link and reroute\n");
 					if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
 					{
 						psMoveCntl->numPoints = 0;
@@ -1231,7 +1225,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 #ifdef DEBUG_GROUP2
 /*			else
 			{
-				DBP2(("   matched previous route : (%d,%d) -> (%d,%d)\n",
+				debug( LOG_MOVEMENT, "   matched previous route : (%d,%d) -> (%d,%d)n",
 					linkx>>TILE_SHIFT, linky>>TILE_SHIFT,
 					gwx>>TILE_SHIFT, gwy>>TILE_SHIFT));
 			}*/
@@ -1587,15 +1581,15 @@ exit:
 	{
 		SDWORD	pos;
 
-		DBP1(("Waypoints:"));
+		debug( LOG_MOVEMENT, "Waypoints:");
 
 		for(pos = 0; pos < psMoveCntl->numPoints; pos += 1)
 		{
-			DBP1(("  (%d,%d)",
+			debug( LOG_MOVEMENT, "  (%d,%d)",
 				psMoveCntl->asPath[pos].x,
-				psMoveCntl->asPath[pos].y));
+				psMoveCntl->asPath[pos].y);
 		}
-		DBP1(("\n"));
+		debug( LOG_MOVEMENT, "\n");
 	}
 #endif
 

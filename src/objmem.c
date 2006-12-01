@@ -241,12 +241,12 @@ void objmemUpdate(void)
 		switch (psDestroyedObj->type)
 		{
 		case OBJ_DROID:
-			DBP1(("objmemUpdate: freeing droid\n"));
+			debug( LOG_MEMORY, "objmemUpdate: freeing droid\n");
 			droidRelease((DROID *)psDestroyedObj);
 			HEAP_FREE(psDroidHeap, psDestroyedObj);
 			break;
 		case OBJ_STRUCTURE:
-			DBP1(("objmemUpdate: freeing structure\n"));
+			debug( LOG_MEMORY, "objmemUpdate: freeing structure\n");
 			structureRelease((STRUCTURE *)psDestroyedObj);
 			HEAP_FREE(psStructHeap, psDestroyedObj);
 			break;

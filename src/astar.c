@@ -620,7 +620,7 @@ static void fpathOpenAdd(FP_NODE *psNode)
 		// Add to start
 		psNode->psOpen = psOpen;
 		psOpen = psNode;
-		DBP1(("OpenAdd: start\n"));
+		debug( LOG_NEVER, "OpenAdd: start\n");
 	}
 	else
 	{
@@ -633,8 +633,8 @@ static void fpathOpenAdd(FP_NODE *psNode)
 		}
 		psNode->psOpen = psCurr;
 		psPrev->psOpen = psNode;
-		DBP1(("OpenAdd: after %d,%d dist %d\n",
-			psPrev->x,psPrev->y, psPrev->dist));
+		debug( LOG_MOVEMENT, ("OpenAdd: after %d,%d dist %d\n",
+			psPrev->x,psPrev->y, psPrev->dist);
 	}
 }
 

@@ -636,8 +636,8 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	ASSERT( PTRVALID(psFeature, sizeof(FEATURE)),
 		"featureDamage: Invalid feature pointer" );
 
-	DBP1(("featureDamage(%d): body %d armour %d damage: %d\n",
-		psFeature->id, psFeature->body, psFeature->psStats->armour, damage));
+	debug( LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d\n",
+		psFeature->id, psFeature->body, psFeature->psStats->armour, damage);
 
     //EMP cannons do not work on Features
     if (weaponSubClass == WSC_EMP)
@@ -649,11 +649,11 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	{
 		/* Damage has penetrated - reduce body points */
 		penDamage = damage - psFeature->psStats->armour;
-		DBP1(("        penetrated: %d\n", penDamage));
+		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
 		if (penDamage >= psFeature->body)
 		{
 			/* feature destroyed */
-			DBP1(("        DESTROYED\n"));
+			debug( LOG_ATTACK, "        DESTROYED\n");
 			destroyFeature(psFeature);
 			return TRUE;
 		}
@@ -665,11 +665,11 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	else
 	{
 		/* Do one point of damage to body */
-		DBP1(("        not penetrated - 1 point damage\n"));
+		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
 		if (psFeature->body == 1)
 		{
 			destroyFeature(psFeature);
-			DBP1(("        DESTROYED\n"));
+			debug( LOG_ATTACK, "        DESTROYED\n");
 			return TRUE;
 		}
 		else

@@ -231,7 +231,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			if (!visibleObjWallBlock(psAttacker, psTarget))
 			{
 				// Can't see the target - can't hit it with direct fire
-				DBP3(("directLOS failed\n"));
+				debug( LOG_ATTACK, "directLOS failed\n" );
 				return;
 			}
 			break;
@@ -239,7 +239,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			if (!visibleObject(psAttacker, psTarget))
 			{
 				// Can't see the target - can't hit it with direct fire
-				DBP3(("directLOS failed\n"));
+				debug( LOG_ATTACK, "directLOS failed\n" );
 				return;
 			}
 			break;
@@ -250,7 +250,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!psTarget->visible[psAttacker->player])
 		{
 			// Can't get an indirect LOS - can't hit it with the weapon
-			DBP3(("indirectLOS failed\n"));
+			debug( LOG_ATTACK, "indirectLOS failed\n");
 			return;
 		}
 	}*/

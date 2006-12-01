@@ -58,13 +58,13 @@ struct Segment {
 #define MAX_STACK 10000		/* max depth of stack */
 
 #define PUSH(Y, XL, XR, DY)	/* push new segment on stack */ \
-	DBP2(("PUSH y %d x %d->%d dy %d\n", Y, XL, XR, DY)); \
+	debug( LOG_MOVEMENT, "PUSH y %d x %d->%d dy %d\n", Y, XL, XR, DY); \
     if (sp<stack+MAX_STACK) \
     {sp->y = Y; sp->xl = XL; sp->xr = XR; sp->dy = DY; sp++;}
 
 #define POP(Y, XL, XR, DY)	/* pop segment off stack */ \
     {sp--; Y = sp->y+(DY = sp->dy); XL = sp->xl; XR = sp->xr;} \
-	DBP2(("POP  y %d x %d->%d dy %d\n", Y, XL, XR, DY));
+	debug( LOG_MOVEMENT, "POP  y %d x %d->%d dy %d\n", Y, XL, XR, DY);
 
 
 // whether the flood fill is running over water
@@ -115,11 +115,11 @@ static void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
 		 * segment of scan line y-dy for x1<=x<=x2 was previously filled,
 		 * now explore adjacent pixels in scan line y
 		 */
-		DBP1(("-ve (%d,%d)->", x1,y));
+		debug( LOG_MOVEMENT, "-ve (%d,%d)->", x1,y);
 		for (x=x1; !gwFloodBlock(x,y) && (gwGetZone(x, y)==ov); x--) {
 			gwSetZone(x, y, nv);
 		}
-		DBP1(("(%d,%d) %s\n", x+1,y, x<x1?"OK":""));
+		debug( LOG_MOVEMENT, "(%d,%d) %s\n", x+1,y, x<x1?"OK":"");
 
 		if (x>=x1) {
 			goto skip;
@@ -132,11 +132,11 @@ static void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
 		x = x1+1;
 
 		do {
-			DBP1(("+ve (%d,%d)->", x,y));
+			debug( LOG_MOVEMENT, "+ve (%d,%d)->", x,y);
 			for (;!gwFloodBlock(x,y) && (gwGetZone(x, y)==ov); x++) {
 				gwSetZone(x, y, nv);
 			}
-			DBP1(("(%d,%d) %s\n", x-1,y, (x>l)&&(x>x1+1)?"OK":""));
+			debug( LOG_MOVEMENT, "(%d,%d) %s\n", x-1,y, (x>l)&&(x>x1+1)?"OK":"");
 
 			PUSH(y, l, x-1, dy);
 
@@ -231,8 +231,8 @@ BOOL gwProcessMap(void)
 	currZone = 1;
 	do
 	{
-		DBP3(("Processing gateway (%d,%d)->(%d,%d)\n",
-			psCurr->x1,psCurr->y1, psCurr->x2,psCurr->y2));
+		debug( LOG_MOVEMENT, "Processing gateway (%d,%d)->(%d,%d)\n",
+			psCurr->x1,psCurr->y1, psCurr->x2,psCurr->y2);
 
 		// do a flood fill from the current gateway
 		if (psCurr->zone1 == 0)
@@ -395,8 +395,8 @@ BOOL gwProcessMap(void)
 			}
 		}
 
-		DBP4(("Gateway Zones : %d\n", currZone));
-		DBP4(("RLE Zone map size: %d\n", size));
+		debug( LOG_MOVEMENT, "Gateway Zones : %d\n", currZone);
+		debug( LOG_MOVEMENT, "RLE Zone map size: %d\n", size);
 	}
 #endif
 
@@ -436,7 +436,7 @@ static void gwCheckNeighbourEquiv(SDWORD zone, SDWORD x, SDWORD y)
 		!gwFloodBlock(x,y) &&
 		!gwEquivZonePresent(apEquivZones[zone], aNumEquiv[zone], nZone))
 	{
-		DBP5(("zone %d equivalent to zone %d\n", zone, nZone));
+		debug( LOG_MOVEMENT, "zone %d equivalent to zone %d\n", zone, nZone);
 		apEquivZones[zone][aNumEquiv[zone]] = (UBYTE)nZone;
 		aNumEquiv[zone] += 1;
 	}

@@ -334,7 +334,7 @@ BOOL disp2DShutdown(void)
 /* Tidy up after a mode change */
 BOOL disp2DModeChange()
 {
-	DBP2(("VidTiles\n"));
+	debug( LOG_NEVER, "VidTiles\n");
 	if (!surfRecreate(&psVidTiles))
 	{
 		return FALSE;
@@ -343,7 +343,7 @@ BOOL disp2DModeChange()
 	{
 		return FALSE;
 	}
-	DBP2(("VidDroids\n"));
+	debug( LOG_NEVER, "VidDroids\n");
 	if (!surfRecreate(&psVidDroids))
 	{
 		return FALSE;
@@ -352,7 +352,7 @@ BOOL disp2DModeChange()
 	{
 		return FALSE;
 	}
-	DBP2(("VidExp\n"));
+	debug( LOG_NEVER, "VidExp\n");
 	if (!surfRecreate(&psVidExp))
 	{
 		return FALSE;
@@ -361,7 +361,7 @@ BOOL disp2DModeChange()
 	{
 		return FALSE;
 	}
-	DBP2(("VidFlash\n"));
+	debug( LOG_NEVER, "VidFlash\n");
 	if (!surfRecreate(&psVidFlash))
 	{
 		return FALSE;
@@ -370,7 +370,7 @@ BOOL disp2DModeChange()
 	{
 		return FALSE;
 	}
-	DBP2(("VidFlame\n"));
+	debug( LOG_NEVER, "VidFlame\n");
 	if (!surfRecreate(&psVidFlame))
 	{
 		return FALSE;
@@ -379,7 +379,7 @@ BOOL disp2DModeChange()
 	{
 		return FALSE;
 	}
-	DBP2(("VidBullet\n"));
+	debug( LOG_NEVER, "VidBullet\n");
 	if (!surfRecreate(&psVidBullet))
 	{
 		return FALSE;
@@ -388,7 +388,7 @@ BOOL disp2DModeChange()
 	{
 		return FALSE;
 	}
-	DBP2(("VidStructures\n"));
+	debug( LOG_NEVER, "VidStructures\n");
 	if (!surfRecreate(&psVidStructures))
 	{
 		return FALSE;
@@ -923,7 +923,7 @@ void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 		psP2 = psP3;
 		psP3 = psPTemp;
 	}
-	DBP1(("Rotation : %d\n", (texture & TILE_ROTMASK) >> TILE_ROTSHIFT));
+	debug( LOG_NEVER, "Rotation : %d\n", (texture & TILE_ROTMASK) >> TILE_ROTSHIFT);
 	switch ((texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
 	{
 	case 1:

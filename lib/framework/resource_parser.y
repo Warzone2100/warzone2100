@@ -83,7 +83,7 @@ dir_line:			DIRECTORY QTEXT_T		{
 												len = strlen(aCurrResDir);
 												aCurrResDir[len] = '/';
 												aCurrResDir[len+1] = 0;
-//												DBP0(("aCurrResDir: %s\n", aCurrResDir));
+//												debug( LOG_NEVER, "aCurrResDir: %s\n", aCurrResDir);
 											}
 										}
 				;
@@ -92,7 +92,7 @@ dir_line:			DIRECTORY QTEXT_T		{
 file_line:			FILETOKEN TEXT_T QTEXT_T
 										{
 											/* load a data file */
-											DBP1(("file: %s %s\n", $2, $3));
+											debug( LOG_NEVER, "file: %s %s\n", $2, $3);
 											if (!resLoadFile($2, $3))
 											{
 												YYABORT;

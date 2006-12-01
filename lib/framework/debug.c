@@ -29,7 +29,7 @@ static BOOL enabled_debug_parts[LOG_LAST];
 /* This list _must_ match the enum in debug.h! */
 static const char *code_part_names[] = {
   "all", "main", "sound", "video", "wz", "3d", "texture",
-  "net", "memory", "error", "never", "script", "last"
+  "net", "memory", "error", "never", "script", "movement", "attack", "last"
 };
 
 /**********************************************************************

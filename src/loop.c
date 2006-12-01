@@ -205,7 +205,7 @@ GAMECODE gameLoop(void)
 		}
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
-		DBP1(("loop: Run Widgets Update\n"));
+		debug( LOG_NEVER, "loop: Run Widgets Update\n");
 	  	if( (!rotActive) && getWidgetsStatus() &&
 			(dragBox3D.status != DRAG_DRAGGING) &&
 			(wallDrag.status != DRAG_DRAGGING) )
@@ -269,7 +269,7 @@ GAMECODE gameLoop(void)
 			// update the command droids
 			cmdDroidUpdate();
 
-			DBP1(("loop: Object Update\n"));
+			debug( LOG_NEVER, "loop: Object Update\n");
 
 			/* Update the AI for a player */
 			for(i=0; i<MAX_PLAYERS; i++)
@@ -463,7 +463,7 @@ GAMECODE gameLoop(void)
 			}
 
 
-			DBP1(("loop: Smoke/Explosion Update\n"));
+			debug( LOG_NEVER, "loop: Smoke/Explosion Update\n");
 
 			/* Ensure smoke drifts up! */
 //			raiseSmoke();
@@ -496,7 +496,7 @@ GAMECODE gameLoop(void)
 		// Don't update the game world if the design screen is up and single player game
 		//if ((intRetVal != INT_FULLSCREENPAUSE ) || bMultiPlayer)
 		//{
-//			DBP1(("Radar update \n"));
+//			debug( LOG_NEVER, "Radar update \n");
 //			/* Make radar line sweep and colour cycle */
 //			updateRadar();
 		//}
@@ -505,11 +505,11 @@ GAMECODE gameLoop(void)
 		//if ((intRetVal != INT_FULLSCREENPAUSE AND intRetVal !=
 		//	INT_INTELPAUSE) || bMultiPlayer)
 		//{
-			DBP1(("loop: Objmem Update\n"));
+			debug( LOG_NEVER, "loop: Objmem Update\n");
 
 			objmemUpdate();
 
-			DBP1(("loop: audio Update\n"));
+			debug( LOG_NEVER, "loop: audio Update\n");
 
 		}
 		if (!consolePaused())
@@ -659,7 +659,7 @@ GAMECODE gameLoop(void)
 	//				if (intRetVal == INT_INTELPAUSE)
 					if (intRetVal == INT_NONE && !InGameOpUp)// OR intRetVal == INT_INTELPAUSE)
 					{
-						DBP1(("loop: 3D input\n"));
+						debug( LOG_NEVER, "loop: 3D input\n");
 						//quitting = processInput();
 						//don't want to handle the mouse input here when in intelligence screen
 						//if (intRetVal != INT_INTELPAUSE)
@@ -667,7 +667,7 @@ GAMECODE gameLoop(void)
 							processMouseClickInput();
 						//}
 					}
-					DBP1(("loop: display3D\n"));
+					debug( LOG_NEVER, "loop: display3D\n");
 					downloadAtStartOfFrame();
 					displayWorld();
 				}
@@ -676,12 +676,12 @@ GAMECODE gameLoop(void)
 					//no key clicks or in Intelligence Screen
 					if (intRetVal == INT_NONE)// OR intRetVal == INT_INTELPAUSE)
 					{
-						DBP1(("loop: 2D input\n"));
+						debug( LOG_NEVER, "loop: 2D input\n");
 #ifdef DISP2D
 						quitting = process2DInput();
 #endif
 					}
-					DBP1(("loop: display2D\n"));
+					debug( LOG_NEVER, "loop: display2D\n");
 #ifdef DISP2D
 					display2DWorld();
 #endif
@@ -723,7 +723,7 @@ GAMECODE gameLoop(void)
 		{
 			// Display the in game interface
 
-			DBP1(("loop: Display widgets\n"));
+			debug( LOG_NEVER, "loop: Display widgets\n");
 			if(widgetsOn)
 			{
 				pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -737,7 +737,7 @@ GAMECODE gameLoop(void)
 		}*/
 	}
 
-	DBP1(("loop: key presses\n"));
+	debug( LOG_NEVER, "loop: key presses\n");
 
 
 	/* Check for toggling video playbackmode */
@@ -770,7 +770,7 @@ GAMECODE gameLoop(void)
 //		}
 //	}		// ALL THIS GUBBINS DONE IN A PROPER KEYMAPPING NOW (A DEBUG ONE THOUGH!).
 
-	DBP1(("loop: flip\n"));
+	debug( LOG_NEVER, "loop: flip\n");
 
 	pie_GetResetCounts(&loopPieCount, &loopTileCount, &loopPolyCount, &loopStateChanges);
 

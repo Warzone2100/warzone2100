@@ -156,8 +156,8 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 		"unitDamage: Invalid Unit pointer" );
 
-	DBP1(("unitDamage(%d): body %d armour %d damage: %d\n",
-		psDroid->id, psDroid->body, psDroid->armour[WC_KINETIC], damage));
+	debug( LOG_ATTACK, "unitDamage(%d): body %d armour %d damage: %d\n",
+		psDroid->id, psDroid->body, psDroid->armour[WC_KINETIC], damage);
 
     //EMP cannons do not do body damage
     if (weaponSubClass == WSC_EMP)
@@ -248,7 +248,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			penDamage = (penDamage * (100 - 6 * cmdLevel)) / 100;
 		}
 
-		DBP1(("        penetrated: %d\n", penDamage));
+		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
 		if (penDamage >= psDroid->body)
 		{
             //we don't want this in multiPlayer
@@ -262,7 +262,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
                 }
             }
 			/* Droid destroyed */
-			DBP1(("        DESTROYED\n"));
+			debug( LOG_ATTACK, "        DESTROYED\n");
 			if(psDroid->player == selectedPlayer)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_UNITLOST)));
@@ -294,7 +294,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		/* Do damage to armour */
 //		armourDamage = (damage / PEN_ARMOUR_DAMAGE_FACTOR) + 1;
 
-//		DBP1(("penetrated: %d, armour: %d\n", penDamage, armourDamage));
+//		debug( LOG_ATTACK, "penetrated: %d, armour: %d\n", penDamage, armourDamage);
 	}
 	else
 	{
@@ -302,7 +302,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		armourDamage = (damage / ARMOUR_DAMAGE_FACTOR) + 1;
 
 		/* Do one point of damage to body */
-		DBP1(("        not penetrated - 1 point damage\n"));
+		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
 		if(psDroid->droidType == DROID_PERSON AND weaponClass == WC_HEAT)
 		{
 			droidBurn(psDroid);
@@ -333,7 +333,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
   			destroyDroid(psDroid);
 
-			DBP1(("        DESTROYED\n"));
+			debug( LOG_ATTACK, "        DESTROYED\n");
 			return TRUE;
 		}
 		else
@@ -341,7 +341,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			psDroid->body -= 1;
 		}
 
-//		DBP1(("armour: %d\n", armourDamage));
+//		debug( LOG_ATTACK, "armour: %d\n", armourDamage);
 	}
 
 	/* Actually reduce the droids armour */
@@ -354,8 +354,8 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		psDroid->armour -= armourDamage;
 	}*/
 
-	DBP1(("        body left: %d armour left: %d\n",
-		psDroid->body, psDroid->armour));
+	debug( LOG_ATTACK, "        body left: %d armour left: %d\n",
+		psDroid->body, psDroid->armour);
 
 	/* now check for auto return on droid's secondary orders */
 	secondaryCheckDamageLevel(psDroid);

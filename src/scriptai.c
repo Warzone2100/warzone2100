@@ -384,7 +384,7 @@ BOOL scrOrderGroup(void)
 		return FALSE;
 	}
 
-	DBP1(("scrOrderGroup: group %p (%d) order %d\n", psGroup, grpNumMembers(psGroup), order));
+	debug( LOG_NEVER, "scrOrderGroup: group %p (%d) order %d\n", psGroup, grpNumMembers(psGroup), order);
 	orderGroup(psGroup, order);
 
 	return TRUE;
@@ -420,8 +420,8 @@ BOOL scrOrderGroupLoc(void)
 		return FALSE;
 	}
 
-	DBP1(("scrOrderGroupLoc: group %p (%d) order %d (%d,%d)\n",
-		psGroup, grpNumMembers(psGroup), order, x,y));
+	debug( LOG_NEVER, "scrOrderGroupLoc: group %p (%d) order %d (%d,%d)\n",
+		psGroup, grpNumMembers(psGroup), order, x,y);
 	orderGroupLoc(psGroup, order, (UDWORD)x,(UDWORD)y);
 
 	return TRUE;
@@ -459,8 +459,8 @@ BOOL scrOrderGroupObj(void)
 		return FALSE;
 	}
 
-	DBP1(("scrOrderGroupObj: group %p (%d) order %d,  obj type %d player %d id %d\n",
-		psGroup, grpNumMembers(psGroup), order, psObj->type, psObj->player, psObj->id));
+	debug( LOG_NEVER, "scrOrderGroupObj: group %p (%d) order %d,  obj type %d player %d id %d\n",
+		psGroup, grpNumMembers(psGroup), order, psObj->type, psObj->player, psObj->id);
 	orderGroupObj(psGroup, order, psObj);
 
 	return TRUE;

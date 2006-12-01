@@ -236,7 +236,7 @@ BOOL ed2dProcessInput(void)
 		keyPressed(KEY_Z))
 	{
 		putBox(&sUndoBox, sUndoBox.x,sUndoBox.y);
-		DBP2(("MS_GAME\n"));
+		debug( LOG_NEVER, "MS_GAME\n");
 		mState = MS_GAME;
 	}
 
@@ -251,11 +251,11 @@ BOOL ed2dProcessInput(void)
 		}
 		if (getBox(&sPasteBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
 		{
-			DBP2(("MS_GAME\n"));
+			debug( LOG_NEVER, "MS_GAME\n");
 			mState = MS_GAME;
 		}
-		DBP3(("Copy area: (%d,%d) %d x %d\n", sPasteBox.x,sPasteBox.y,
-					sPasteBox.width,sPasteBox.height));
+		debug( LOG_NEVER, "Copy area: (%d,%d) %d x %d\n", sPasteBox.x,sPasteBox.y,
+					sPasteBox.width,sPasteBox.height);
 	}
 
 	disp2DToWorld(mouseX(), mouseY(), &worldX,&worldY);
@@ -269,11 +269,11 @@ BOOL ed2dProcessInput(void)
 		selEX = selSX + sPasteBox.width - 1;
 		selEY = selSY + sPasteBox.height - 1;
 
-		DBP2(("MS_PASTE\n"));
+		debug( LOG_NEVER, "MS_PASTE\n");
 		mState = MS_PASTE;
 
-		DBP3(("Paste area: (%d,%d) %d x %d\n", selSX,selSY,
-					sPasteBox.width,sPasteBox.height));
+		debug( LOG_NEVER, "Paste area: (%d,%d) %d x %d\n", selSX,selSY,
+					sPasteBox.width,sPasteBox.height);
 	}
 
 	/* Process mouse clicks, dependant on mouse mode */
@@ -288,13 +288,13 @@ BOOL ed2dProcessInput(void)
 			disp2DToWorld(mouseX(), mouseY(), &dragSX,&dragSY);
 			dragSX = dragSX >> TILE_SHIFT;
 			dragSY = dragSY >> TILE_SHIFT;
-			DBP2(("MS_GRABSTART\n"));
+			debug( LOG_NEVER, "MS_GRABSTART\n");
 		}
 
 		/* Clear the grab start if the mouse button has gone up */
 		if ((mouseReleased(MOUSE_LMB) || !mouseDown(MOUSE_LMB)) && mState != MS_GAME)
 		{
-			DBP2(("MS_GAME\n"));
+			debug( LOG_NEVER, "MS_GAME\n");
 			mState = MS_GAME;
 		}
 
@@ -305,7 +305,7 @@ BOOL ed2dProcessInput(void)
 			mState = MS_GRAB;
 			selSX = selEX = dragEX = dragSX;
 			selSY = selEY = dragEY = dragSY;
-			DBP2(("MS_GRAB\n"));
+			debug( LOG_NEVER, "MS_GRAB\n");
 			break;
 		}
 		else if (mouseDown(MOUSE_RMB))
@@ -359,7 +359,7 @@ BOOL ed2dProcessInput(void)
 	case MS_PASTESTART:
 		if (!mouseDown(MOUSE_LMB) && mState != MS_GRABBED)
 		{
-			DBP2(("MS_GRABBED\n"));
+			debug( LOG_NEVER, "MS_GRABBED\n");
 			mState = MS_GRABBED;
 		}
 		tileX = worldX >> TILE_SHIFT;
@@ -372,11 +372,11 @@ BOOL ed2dProcessInput(void)
 				tileY < selSY || tileY > selEY)
 			{
 				/* Clear the selection */
-				DBP2(("MS_GAME\n"));
+				debug( LOG_NEVER, "MS_GAME\n");
 				mState = MS_GAME;
 				break;
 			}
-			DBP2(("MS_PASTESTART\n"));
+			debug( LOG_NEVER, "MS_PASTESTART\n");
 			mState = MS_PASTESTART;
 			dragSX = tileX;
 			dragSY = tileY;
@@ -419,7 +419,7 @@ BOOL ed2dProcessInput(void)
 				}
 			}
 
-			DBP2(("MS_PASTE\n"));
+			debug( LOG_NEVER, "MS_PASTE\n");
 			mState = MS_PASTE;
 		}
 		break;
@@ -446,7 +446,7 @@ BOOL ed2dProcessInput(void)
 			}
 
 			putBox(&sPasteBox, selSX, selSY);
-			DBP2(("MS_GAME\n"));
+			debug( LOG_NEVER, "MS_GAME\n");
 			mState = MS_GAME;
 			break;
 		}
@@ -506,8 +506,8 @@ BOOL ed2dProcessInput(void)
 		if (keyPressed(KEY_X) &&
 			getBox(&sGrabBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
 		{
-			DBP3(("flip box X: (%d,%d) %d x %d\n", sGrabBox.x,sGrabBox.y,
-						sGrabBox.width,sGrabBox.height));
+			debug( LOG_NEVER, "flip box X: (%d,%d) %d x %d\n", sGrabBox.x,sGrabBox.y,
+						sGrabBox.width,sGrabBox.height);
 			flipBoxX(&sGrabBox);
 			putBox(&sGrabBox, selSX,selSY);
 			FREE(sGrabBox.psTiles);
@@ -516,8 +516,8 @@ BOOL ed2dProcessInput(void)
 		if (keyPressed(KEY_Y) &&
 			getBox(&sGrabBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
 		{
-			DBP3(("flip box Y: (%d,%d) %d x %d\n", sGrabBox.x,sGrabBox.y,
-						sGrabBox.width,sGrabBox.height));
+			debug( LOG_NEVER, "flip box Y: (%d,%d) %d x %d\n", sGrabBox.x,sGrabBox.y,
+						sGrabBox.width,sGrabBox.height);
 			flipBoxY(&sGrabBox);
 			putBox(&sGrabBox, selSX,selSY);
 			FREE(sGrabBox.psTiles);
@@ -527,8 +527,8 @@ BOOL ed2dProcessInput(void)
 			selEX - selSX == selEY - selSY &&
 			getBox(&sGrabBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
 		{
-			DBP3(("rotate box: (%d,%d) %d x %d\n", sGrabBox.x,sGrabBox.y,
-						sGrabBox.width,sGrabBox.height));
+			debug( LOG_NEVER, "rotate box: (%d,%d) %d x %d\n", sGrabBox.x,sGrabBox.y,
+						sGrabBox.width,sGrabBox.height);
 			rotBox(&sGrabBox);
 			putBox(&sGrabBox, selSX,selSY);
 			FREE(sGrabBox.psTiles);

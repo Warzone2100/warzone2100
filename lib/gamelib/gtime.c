@@ -213,7 +213,7 @@ void gameTimeStop(void)
 	if (stopCount == 0)
 	{
 		pauseStart = SDL_GetTicks();
-		DBP1(("Clock paused at %d\n", pauseStart));
+		debug( LOG_NEVER, "Clock paused at %d\n", pauseStart);
 	}
 	stopCount += 1;
 }

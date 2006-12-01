@@ -188,12 +188,12 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 	finalZone = gwGetZone(tileFX, tileFY);
 	if (zone == finalZone)
 	{
-		DBP1(("Route same zone\n"));
+		debug( LOG_MOVEMENT, "Route same zone\n");
 		return GWR_SAMEZONE;
 	}
 	if (zone == 0 || finalZone == 0)
 	{
-		DBP1(("Route no zone info\n"));
+		debug( LOG_MOVEMENT, "Route no zone info\n");
 		return GWR_NOZONE;
 	}
 	psOpenList = NULL;
@@ -373,11 +373,11 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 		}
 		psRoute = psParent;
 
-		DBP1(("Final route:\n"));
+		debug( LOG_MOVEMENT, "Final route:\n");
 		for(psCurr=psRoute; psCurr; psCurr=psCurr->psRoute)
 		{
-			DBP1(("   (%d,%d)->(%d,%d) dist %d est %d\n",
-				psCurr->x1, psCurr->y1, psCurr->x2, psCurr->y2, psCurr->dist, psCurr->est));
+			debug( LOG_MOVEMENT, "   (%d,%d)->(%d,%d) dist %d est %d\n",
+				psCurr->x1, psCurr->y1, psCurr->x2, psCurr->y2, psCurr->dist, psCurr->est);
 		}
 
 		*ppsRoute = psRoute;

@@ -806,7 +806,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 							&x,&y);
 /*		// a unit has just joined the formation - find a location for it
 		formationFindFree(psFormation, psObj, &x,&y);
-		DBP0(("formation new member : (%d, %d)\n",
+		debug( LOG_NEVER, "formation new member : (%d, %d)n",
 					x,y));*/
 	}
 	else

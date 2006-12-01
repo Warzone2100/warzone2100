@@ -1544,8 +1544,8 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"structureDamage: Invalid Structure pointer" );
 
-	DBP1(("structureDamage(%d): body %d armour %d damage: %d\n",
-		psStructure->id, psStructure->body, psStructure->armour, damage));
+	debug( LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d\n",
+		psStructure->id, psStructure->body, psStructure->armour, damage);
 
     //EMP cannons do not work on Structures
     if (weaponSubClass == WSC_EMP)
@@ -1573,11 +1573,11 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	{
 		/* Damage has penetrated - reduce armour and body points */
 		penDamage = damage - psStructure->armour;
-		DBP1(("        penetrated: %d\n", penDamage));
+		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
 		if (penDamage >= psStructure->body)
 		{
 			/* structure destroyed */
-			DBP1(("        DESTROYED\n"));
+			debug( LOG_ATTACK, "        DESTROYED\n");
 			return destroyStruct(psStructure);
 		}
 		else
@@ -1588,7 +1588,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 		/* Do damage to armour */
 		armourDamage = (damage / PEN_ARMOUR_DAMAGE_FACTOR) + 1;
 
-//		DBP1(("penetrated: %d, armour: %d\n", penDamage, armourDamage));
+//		debug( LOG_ATTACK, "penetrated: %d, armour: %d\n", penDamage, armourDamage);
 	}
 	else
 	{
@@ -1596,10 +1596,10 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 		armourDamage = (damage / ARMOUR_DAMAGE_FACTOR) + 1;
 
 		/* Do one point of damage to body */
-		DBP1(("        not penetrated - 1 point damage\n"));
+		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
 		if (psStructure->body == 1)
 		{
-			DBP1(("        DESTROYED\n"));
+			debug( LOG_ATTACK, "        DESTROYED\n");
 			return destroyStruct(psStructure);
 //			return TRUE;
 		}
@@ -1608,7 +1608,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 			psStructure->body -= 1;
 		}
 
-//		DBP1(("armour: %d\n", armourDamage));
+//		debug( LOG_ATTACK, "armour: %d\n", armourDamage);
 	}
 
 	/* Actually reduce the Structure's armour */
@@ -1623,8 +1623,8 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	}
 #endif
 
-	DBP1(("        body left: %d armour left: %d\n",
-		psStructure->body, psStructure->armour));
+	debug( LOG_ATTACK, "        body left: %d armour left: %d\n",
+		psStructure->body, psStructure->armour);
 
     //only overwrite if the last weapon to hit was not an EMP - need the time value for this
     if (psStructure->lastHitWeapon != WSC_EMP)
@@ -3404,7 +3404,7 @@ static BOOL structClearTile(UWORD x, UWORD y)
 //psor	if (mapTile(x,y)->psObject != NULL)
 	if(fpathBlockingTile(x,y))
 	{
-		DBP2(("structClearTile: failed\n"));
+		debug( LOG_NEVER, "structClearTile: failed\n");
 		return FALSE;
 	}
 
@@ -3416,13 +3416,13 @@ static BOOL structClearTile(UWORD x, UWORD y)
 			if (psCurr->x >> TILE_SHIFT == x &&
 				psCurr->y >> TILE_SHIFT == y)
 			{
-				DBP2(("structClearTile: failed\n"));
+				debug( LOG_NEVER, "structClearTile: failed\n");
 				return FALSE;
 			}
 		}
 	}
 
-	DBP2(("structClearTile: succeeded\n"));
+	debug( LOG_NEVER, "structClearTile: succeeded\n");
 	return TRUE;
 }
 
@@ -3997,8 +3997,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				{
 					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObj, i))
 					{
-						DBP1(("Struct(%d) attacking : %d\n",
-								psStructure->id, psChosenObj->id));
+						debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
+								psStructure->id, psChosenObj->id );
 						psStructure->psTarget[i] = psChosenObj;
 					}
 					else
@@ -4059,8 +4059,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			{
 				if (aiChooseSensorTarget((BASE_OBJECT *)psStructure, &psChosenObj))
 				{
-					DBP1(("Struct(%d) attacking : %d\n",
-						psStructure->id, psChosenObj->id));
+					debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
+						psStructure->id, psChosenObj->id );
 					psStructure->psTarget[0] = psChosenObj;
 				}
 				else
@@ -5357,8 +5357,8 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
                     }
                 }
 
-				DBP3(("fillStructureList: adding %s (%x)\n",
-					psBuilding->pName, apStructTypeLists[selectedPlayer][inc]));
+				debug( LOG_NEVER, "fillStructureList: adding %s (%x)\n",
+					psBuilding->pName, apStructTypeLists[selectedPlayer][inc]);
 				ppList[count++] = psBuilding;
 				//count++;
 				//check haven't reached limit

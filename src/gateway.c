@@ -427,7 +427,7 @@ BOOL gwGenerateLinkGates(void)
 			{
 				return FALSE;
 			}
-			DBP1(("\nnew water link gateway at (%d,%d) for zone %d ", cx,cy, zone));
+			debug( LOG_MOVEMENT, "\nnew water link gateway at (%d,%d) for zone %d ", cx,cy, zone);
 		}
 	}
 

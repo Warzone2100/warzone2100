@@ -49,36 +49,6 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 		__FILE__, __LINE__, __FUNCTION__, (#expr), last_called_script_event ) ); \
 	assert( expr );
 
-
-/****************************************************************************************
- *
- * Conditional debugging macro's that can be selectively turned on or off on a file
- * by file basis.
- *
- * Modified to not output nothing under no conditions
- *
- */
-
-#define DBMB0(x)
-#define DBP1(x)
-#define DBMB1(x)
-#define DBP2(x)
-#define DBMB2(x)
-#define DBP3(x)
-#define DBMB3(x)
-#define DBP4(x)
-#define DBMB4(x)
-#define DBP5(x)
-#define DBMB5(x)
-#define DBP6(x)
-#define DBMB6(x)
-#define DBP7(x)
-#define DBMB7(x)
-#define DBP8(x)
-#define DBMB8(x)
-#define DBP9(x)
-#define DBMB9(x)
-
 /***
  ***
  ***  New debug logging output interface below. Heavily inspired
@@ -113,6 +83,8 @@ typedef enum {
   LOG_ERROR, /* special; on by default */
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
   LOG_SCRIPT,
+  LOG_MOVEMENT,
+  LOG_ATTACK,
   LOG_LAST /* _must_ be last! */
 } code_part;
 
