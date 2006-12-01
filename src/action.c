@@ -1249,14 +1249,14 @@ static void actionUpdateTransporter( DROID *psDroid )
 		{
 			if (psDroid->asWeaps[i].nStat > 0)
 			{
-				if (psDroid->psActionTarget[i] == NULL)
+				if (psDroid->psActionTarget[0] == NULL)
 				{
-					aiBestNearestTarget(psDroid, &psDroid->psActionTarget[i], i);
+					aiBestNearestTarget(psDroid, &psDroid->psActionTarget[0], i);
 				}
 
-				if ( psDroid->psActionTarget[i] != NULL )
+				if ( psDroid->psActionTarget[0] != NULL )
 				{
-					if ( visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i]) )
+					if ( visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0]) )
 					{
 						/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
 								&(psDroid->turretRotation), &(psDroid->turretPitch),
@@ -1264,20 +1264,20 @@ static void actionUpdateTransporter( DROID *psDroid )
 								//asWeaponStats[psDroid->asWeaps->nStat].direct))
 								proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
 								TRUE))*/
-						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i],
+						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
 								&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
 								&asWeaponStats[psDroid->asWeaps[i].nStat],
 								TRUE,i))
 						{
 							// In range - fire !!!
 							combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
-									 psDroid->psActionTarget[i], i);
+									 psDroid->psActionTarget[0], i);
 						}
 					}
 					else
 					{
 						// lost the target
-						psDroid->psActionTarget[i] = NULL;
+						psDroid->psActionTarget[0] = NULL;
 					}
 				}
 			}
@@ -1446,7 +1446,9 @@ BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD tx, SDWORD ty)
 				if (psTile->tileInfoBits & BITS_WALL)
 				{
 					psWall = getTileStructure((UDWORD)i,(UDWORD)j);
-					if (psWall->player != psDroid->player)
+					//Watermelon:fixes AI try to destroy ally's wall bug
+					if (psWall->player != psDroid->player &&
+						!aiCheckAlliances(psWall->player, psDroid->player))
 					{
 						goto done;
 					}

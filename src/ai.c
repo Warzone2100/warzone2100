@@ -444,13 +444,13 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 			// has a target - (slow firing weapons will not be ready to fire otherwise).
 			bCommanderBlock = TRUE;
 			if (psCommander->action == DACTION_ATTACK &&
-				psCommander->psActionTarget[weapon_slot] != NULL)
+				psCommander->psActionTarget[0] != NULL)
 			{
 				// the commander has a target to fire on
-				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget[weapon_slot], weapon_slot))
+				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget[0], weapon_slot))
 				{
 					// target in range - fire on it
-					psTarget = psCommander->psActionTarget[weapon_slot];
+					psTarget = psCommander->psActionTarget[0];
 				}
 				else
 				{
