@@ -1037,9 +1037,9 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 	}
 
 
-	debug( LOG_NEVER, "path %d: diff %f\n", path, diff);
-
 #ifdef DEBUG			//Don't forget that if you don't define the variable, then we error out.
+        debug( LOG_NEVER, "path %d: diff %f\n", path, diff);
+
 	ASSERT( MAKEINT(*pCurr) < 360 && MAKEINT(*pCurr) >= 0,
 			 "moveCalcTurn: angle out of range - path %d\n"
 			 "   NOTE - ANYONE WHO SEES THIS PLEASE REMEMBER: path %d", path, path );

@@ -3876,7 +3876,9 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		case DSO_ASSIGN_PRODUCTION:
 		case DSO_ASSIGN_CYBORG_PRODUCTION:
 		case DSO_ASSIGN_VTOL_PRODUCTION:
+#ifdef DEBUG
 			debug( LOG_NEVER, "order factories %s\n", secondaryPrintFactories(State));
+#endif
 			if ( sec == DSO_ASSIGN_PRODUCTION)
 			{
 				prodType = REF_FACTORY;
@@ -3941,7 +3943,9 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					CurrState &= ~DSS_ASSPROD_VTOL_MASK;
 				}
 				CurrState |= (State & DSS_ASSPROD_MASK);
+#ifdef DEBUG
 				debug( LOG_NEVER, "final factories %s\n", secondaryPrintFactories(CurrState));
+#endif
 			}
 			break;
 
