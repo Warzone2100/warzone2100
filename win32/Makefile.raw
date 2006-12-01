@@ -1,0 +1,9 @@
+MAKERULES=../makerules
+include $(MAKERULES)/configure.mk
+
+ifeq ($(strip $(PLATFORM)),windows)
+all: warzone2100.o
+endif
+
+clean:
+	$(RMF) warzone2100.o

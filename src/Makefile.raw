@@ -119,15 +119,19 @@ SRC=ai.c \
 	target.c \
 	warzoneconfig.c
 
-LIBS=framework \
-	gamelib \
-	ivis_common \
-	ivis_opengl \
-	netplay \
-	script \
-	sequence \
-	sound \
-	widget
+LIBS=../lib/libframework.a \
+	../lib/libgamelib.a \
+	../lib/libivis_common.a \
+	../lib/libivis_opengl.a \
+	../lib/libnetplay.a \
+	../lib/libscript.a \
+	../lib/libsequence.a \
+	../lib/libsound.a \
+	../lib/libwidget.a
+
+ifeq ($(strip $(PLATFORM)),windows)
+LIBS += ../win32/warzone2100.o
+endif
 
 EXE=warzone2100
 
