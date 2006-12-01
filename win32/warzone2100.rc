@@ -1,28 +1,47 @@
-1 VERSIONINFO
-FILEVERSION 9,9,9,9
-PRODUCTVERSION 9,9,9,9
-FILEOS 0x40004
-FILETYPE 0x2
-{
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 9,9,9,9
+ PRODUCTVERSION 9,9,9,9
+ FILEFLAGSMASK 0x0L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
 	BLOCK "StringFileInfo"
-	{
-		BLOCK "040904B0"
-		{
-			VALUE "OriginalFilename", "warzone2100.exe"
-			VALUE "FileVersion", "9.9.9"
-			VALUE "FileDescription", "Warzone 2100"
-			VALUE "ProductVersion", "9.9.9"
-			VALUE "ProductName", "Warzone 2100"
-			VALUE "InternalName", "Warzone 2100"
+	BEGIN
+		BLOCK "040704b0"
+		BEGIN
 			VALUE "CompanyName", "Warzone Resurrection Project"
+			VALUE "FileDescription", "Warzone 2100"
+			VALUE "FileVersion", "TRUNK"
+			VALUE "InternalName", "Warzone 2100"
 			VALUE "LegalCopyright", "Copyright © 2006 Warzone Resurrection Project"
-		}
-	}
-
+			VALUE "OriginalFilename", "warzone2100.exe"
+			VALUE "ProductName", "Warzone 2100"
+			VALUE "ProductVersion", "TRUNK"
+		END
+	END
 	BLOCK "VarFileInfo"
-	{
-		VALUE "Translation", 0x0409, 0x04B0
-	}
-}
+	BEGIN
+		VALUE "Translation", 0x0407, 0x04b0
+	END
+END
 
-2 ICON "warzone2100.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+1 ICON "warzone2100.ico"
