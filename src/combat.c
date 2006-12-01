@@ -179,13 +179,13 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if ( (psAttacker->type == OBJ_DROID) &&
 		 !vtolDroid((DROID *)psAttacker) &&
 		 (proj_Direct(psStats) || 
-		 (actionInsideMinRange(psDroid, psDroid->psActionTarget[weapon_slot]) > 1))
+		 (actionInsideMinRange(psDroid, psDroid->psActionTarget[0]) & (1 << (1 + weapon_slot))))
 		)
 	{
 		if(!visibleObjWallBlock(psAttacker, psTarget))
 		{
 			// Can't see the target - can't hit it with direct fire
-			DBP3(("directLOS failed\n"));
+			debug(LOG_NEVER, "directLOS failed\n");
 			return;
 		}
 	}
@@ -197,7 +197,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!visibleObjWallBlock(psAttacker, psTarget))
 		{
 			// Can't see the target - can't hit it with direct fire
-			DBP3(("directLOS failed\n"));
+			debug(LOG_NEVER, "directLOS failed\n");
 			return;
 		}
 	}
@@ -206,7 +206,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!visibleObject(psAttacker, psTarget))
 		{
 			// Can't see the target - can't hit it with direct fire
-			DBP3(("directLOS failed\n"));
+			debug(LOG_NEVER, "directLOS failed\n");
 			return;
 		}
 	}
@@ -215,7 +215,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!psTarget->visible[psAttacker->player])
 		{
 			// Can't get an indirect LOS - can't hit it with the weapon
-			DBP3(("indirectLOS failed\n"));
+			debug(LOG_NEVER, "indirectLOS failed\n");
 			return;
 		}
 	}
@@ -337,7 +337,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		hitMod = 50*hitMod/100;
 	}
 
-	DBP3(("%s Hit mod %d : ", psStats->pName, hitMod));
+	debug(LOG_NEVER, "%s Hit mod %d : ", psStats->pName, hitMod);
 
 	/* Now see if the target is in range  - also check not too near*/
 	xDiff = abs(psAttacker->x - psTarget->x);
@@ -369,32 +369,22 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				if (vtolDroid((DROID *)psTarget))
-				{
-					predictX = (cos((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
-					predictX += psTarget->x;
-					predictY = (sin((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
-					predictY += psTarget->y;
-				}
-				else
-				{
-					predictX = (cos((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-					predictX += psTarget->x;
-					predictY = (sin((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-					predictY += psTarget->y;
-				}
+				predictX = (sinf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictX += psTarget->x;
+				predictY = (cosf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictY += psTarget->y;
 			}
 			else
 			{
 				predictX = psTarget->x;
 				predictY = psTarget->y;
 			}
-			DBP3(("Shot hit (%d)\n", dice));
+			debug(LOG_NEVER, "Shot hit (%d)\n", dice);
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
 								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE, weapon_slot))
 			{
 				/* Out of memory - we can safely ignore this */
-				DBP3(("Out of memory"));
+				debug(LOG_NEVER, "Out of memory");
 				return;
 			}
 		}
@@ -430,32 +420,22 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				if (vtolDroid((DROID *)psTarget))
-				{
-					predictX = (cos((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
-					predictX += psTarget->x;
-					predictY = (sin((FRACT)((DROID *)psTarget)->direction) * moveCalcDroidSpeed((DROID *)psTarget) * dist) /psStats->flightSpeed;
-					predictY += psTarget->y;
-				}
-				else
-				{
-					predictX = (cos((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-					predictX += psTarget->x;
-					predictY = (sin((FRACT)((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
-					predictY += psTarget->y;
-				}
+				predictX = (sinf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictX += psTarget->x;
+				predictY = (cosf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictY += psTarget->y;
 			}
 			else
 			{
 				predictX = psTarget->x;
 				predictY = psTarget->y;
 			}
-			DBP3(("Shot hit (%d)\n", dice));
+			debug(LOG_NEVER, "Shot hit (%d)\n", dice);
 			if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
 								predictX, predictY, psTarget->z, psTarget, FALSE, FALSE, weapon_slot))
 			{
 				/* Out of memory - we can safely ignore this */
-				DBP3(("Out of memory"));
+				debug(LOG_NEVER, "Out of memory");
 				return;
 			}
 		}
@@ -467,7 +447,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	else
 	{
 		/* Out of range */
-		DBP3(("Out of range\n"));
+		debug(LOG_NEVER, "Out of range\n");
 		return;
 	}
 
@@ -475,7 +455,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 missed:
 	/* Deal with a missed shot */
-	DBP3(("Missed shot (%d)\n", dice));
+	debug(LOG_NEVER, "Missed shot (%d)\n", dice);
 
 	/*
 	// Approximate the distance between the attacker and target
@@ -499,8 +479,8 @@ missed:
 	missX = aScatterDir[missDir].x * missDist + psTarget->x + minOffset;
 	missY = aScatterDir[missDir].y * missDist + psTarget->y + minOffset;
 
-	DBP3(("Miss Loc: w(%4d,%4d), t(%3d,%3d)\n",
-		missX, missY, missX>>TILE_SHIFT, missY>>TILE_SHIFT));
+	debug(LOG_NEVER, "Miss Loc: w(%4d,%4d), t(%3d,%3d)\n",
+		missX, missY, missX>>TILE_SHIFT, missY>>TILE_SHIFT);
 
 	// decide if a miss is visible
 	bMissVisible = FALSE;
@@ -513,7 +493,7 @@ missed:
 	if (!proj_SendProjectile( psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->z, NULL, bMissVisible, FALSE, weapon_slot) )
 	{
 		/* Out of memory */
-		DBP3(("Out of memory"));
+		debug(LOG_NEVER, "Out of memory");
 		return;
 	}
 
