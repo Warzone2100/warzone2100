@@ -6,13 +6,12 @@
 #ifndef _hci_h
 #define _hci_h
 
+#include "lib/ivis_common/pieclip.h"
 #include "lib/widget/widget.h"
-#include "message.h"
 
 #include "cdspan.h"
-#include "lib/ivis_common/pieclip.h"
-
-//#include "intimage.h"
+#include "csnap.h"
+#include "message.h"
 
 // store the objects that are being used for the object bar
 #define			MAX_OBJECTS		15//10 we need at least 15 for the 3 different types of factory
@@ -306,6 +305,7 @@ as big as Pie View in Research Msg now*/
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
 
+extern CURSORSNAP InterfaceSnap;
 
 extern char	*DisplayBuffer;
 extern UDWORD	displayBufferSize;

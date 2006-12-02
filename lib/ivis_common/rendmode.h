@@ -9,21 +9,14 @@
 //*************************************************************************
 //patch
 
-#define iV_RenderBegin			pie_LocalRenderBegin
-#define iV_RenderEnd			pie_LocalRenderEnd
-#define	iV_Line				pie_Line	
-#define	iV_Box				pie_Box	
+#define	iV_Line				pie_Line
+#define	iV_Box				pie_Box
 #define	iV_BoxFill			pie_BoxFillIndex
-#define	iV_TransBoxFill			pie_TransBoxFill		
-#define	iV_UniTransBoxFill		pie_UniTransBoxFill		
+#define	iV_TransBoxFill			pie_TransBoxFill
 #define	iV_DrawImage			pie_ImageFileID
 #define	iV_DrawImageRect		pie_ImageFileIDTile
 #define	iV_DrawTransImage		pie_ImageFileID
 #define	iV_DrawTransImageRect		pie_ImageFileIDTile
-#define	iV_DrawStretchImage		pie_ImageFileIDStretch
-#define iV_UploadDisplayBuffer		pie_UploadDisplayBuffer
-#define iV_DownloadDisplayBuffer	pie_DownloadDisplayBuffer
-#define iV_ScaleBitmapRGB		pie_ScaleBitmapRGB
 
 //*************************************************************************
 
@@ -47,7 +40,7 @@
 #define PIE_NO_CULL			0x00002000
 //#define PIE_TEXANIM			0x00004000	// PIE_TEX must be set also
 #define PIE_PSXTEX			0x00008000	// - use playstation texture allocation method
-#define PIE_BSPFRESH			0x00010000	// Freshly created by the BSP 
+#define PIE_BSPFRESH			0x00010000	// Freshly created by the BSP
 #define PIE_NOHALFPSXTEX		0x00020000
 #define PIE_ALPHA			0x00040000
 
@@ -90,7 +83,7 @@ extern char* (*iV_ScreenDumpToDisk)(void);
 extern void (*iV_ppBitmap)(iBitmap *bmp, int x, int y, int w, int h, int ow);
 extern void (*iV_ppBitmapTrans)(iBitmap *bmp, int x, int y, int w, int h, int ow);
 extern void (*iV_SetTransFilter)(UDWORD rgb,UDWORD tablenumber);
-extern void (*iV_UniBitmapDepth)(int texPage, int u, int v, int srcWidth, int srcHeight, 
+extern void (*iV_UniBitmapDepth)(int texPage, int u, int v, int srcWidth, int srcHeight,
 							int x, int y, int destWidth, int destHeight, unsigned char brightness, int depth);
 
 extern void (*iV_SetTransImds)(BOOL trans);

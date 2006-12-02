@@ -40,8 +40,6 @@
 
 #include "csnap.h"
 
-extern CURSORSNAP InterfaceSnap;
-
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_TABFORM			9001	//The Transporter tabbed form
 #define IDTRANS_CLOSE			9002	//The close button icon

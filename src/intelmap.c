@@ -46,7 +46,6 @@
 
 
 #include "csnap.h"
-extern CURSORSNAP InterfaceSnap;
 
 #define NO_VIDEO
 

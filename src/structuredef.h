@@ -7,6 +7,10 @@
 #ifndef _structuredef_h
 #define _structuredef_h
 
+#include "lib/gamelib/animobj.h"
+#include "statsdef.h"
+#include "weapons.h"
+
 #define NUM_FACTORY_MODULES	2
 #define NUM_RESEARCH_MODULES 4
 #define NUM_POWER_MODULES 4

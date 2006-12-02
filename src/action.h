@@ -7,6 +7,8 @@
 #ifndef _action_h
 #define _action_h
 
+#include "droiddef.h"
+
 // What a droid is currently doing
 // Not necessarily the same as it's order as the AI may get a droid to do
 // something else whilst carrying out an order

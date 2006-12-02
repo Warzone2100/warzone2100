@@ -1,6 +1,8 @@
 #ifndef _design_h
 #define _design_h
 
+#include "lib/widget/widgbase.h"
+
 /* Design screen ID's */
 #define IDDES_FORM			5000		// The base form for the design screen
 #define IDDES_STATSFORM		5001		// The design screen stats form

@@ -34,7 +34,6 @@
 
 extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
-extern char	SaveGamePath[];
 extern char	datadir[MAX_PATH];
 extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];

@@ -1,6 +1,8 @@
 #ifndef _edit3d_h
 #define _edit3d_h
 
+#include "map.h"
+
 #define TILE_RAISE	1
 #define TILE_LOWER	-1
 #define MAX_TILE_HEIGHT 255

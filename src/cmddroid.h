@@ -8,6 +8,7 @@
 #define _cmddroid_h
 
 #include "cmddroiddef.h"
+#include "droiddef.h"
 
 // The number of available command droids for each player
 //extern SWORD	numCommandDroids[MAX_PLAYERS];

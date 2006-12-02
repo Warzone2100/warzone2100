@@ -9,40 +9,31 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/netplay/netplay.h"
+#include "lib/ivis_common/piestate.h"		// for getrendertype
+#include "lib/ivis_common/rendmode.h"
+#include "lib/sound/audio.h"					// for sound.
+#include "lib/sound/cdaudio.h"
+#include "lib/sound/mixer.h"
+
 #include "display3d.h"
 #include "intdisplay.h"
 #include "hci.h"			// for wFont def.& intmode.
 #include "loop.h"
 #include "text.h"
-#include "lib/ivis_common/piestate.h"		// for getrendertype
 #include "resource.h"
-//#include "display.h"		// for gammaValue.
 #include "frontend.h"		// for textdisplay function
 #include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
-
 #include "scriptextern.h"	// for tutorial
-#include "lib/ivis_common/rendmode.h"
 #include "keybind.h"
-
-#include "lib/sound/audio.h"					// for sound.
-
-#include "lib/sound/cdaudio.h"
-#include "lib/sound/mixer.h"
 #include "multiplay.h"
-
-
 #include "csnap.h"
 #include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
-#include "lib/netplay/netplay.h"
+#include "winmain.h"
 
-
-extern char	SaveGamePath[];
-
-//extern W_SCREEN *psWScreen;
-extern CURSORSNAP InterfaceSnap;
 extern void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State);
 
 //status bools.(for hci.h)

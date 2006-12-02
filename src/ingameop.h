@@ -14,7 +14,6 @@ extern void intProcessInGameOptions		(UDWORD);
 // status bools.
 extern BOOL	ClosingInGameOp;
 extern BOOL	InGameOpUp;
-extern BOOL	bSubtitles;
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines

@@ -5,27 +5,17 @@
  *
  */
 
-/* Droid attack printf's */
 #include "lib/framework/frame.h"
-#include "objects.h"
-#include "map.h"
-#include "findpath.h"
-#include "visibility.h"
-#include "lib/gamelib/gtime.h"
-#include "combat.h"
-#include "hci.h"
-#include "player.h"
-#include "power.h"
-#include "geometry.h"
-#include "order.h"
-#include "action.h"
-#include "mapgrid.h"
-#include "drive.h"
-#include "projectile.h"
-#include "cmddroid.h"
-#include "group.h"
 
+#include "action.h"
+#include "cmddroid.h"
+#include "combat.h"
+#include "drive.h"
+#include "map.h"
+#include "mapgrid.h"
 #include "multiplay.h"
+#include "player.h"
+#include "projectile.h"
 
 // alliances
 UBYTE	alliances[MAX_PLAYERS][MAX_PLAYERS];

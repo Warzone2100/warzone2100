@@ -7,6 +7,9 @@
 #ifndef _cluster_h
 #define _cluster_h
 
+#include "droiddef.h"
+#include "structuredef.h"
+
 // maximum number of clusters in a game
 #define CLUSTER_MAX		UBYTE_MAX
 

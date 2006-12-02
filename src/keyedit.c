@@ -20,6 +20,7 @@
 #include "text.h"
 #include "lib/ivis_common/textdraw.h"
 #include "hci.h"
+#include "init.h"
 #include "loadsave.h"
 #include "keymap.h"
 #include "csnap.h"
@@ -57,8 +58,6 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // variables
-extern IMAGEFILE	*FrontImages;
-extern CURSORSNAP	InterfaceSnap;
 
 static KEY_MAPPING	*selectedKeyMap;
 // ////////////////////////////////////////////////////////////////////////////

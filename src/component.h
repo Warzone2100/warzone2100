@@ -1,6 +1,9 @@
 #ifndef _component_h
 #define _component_h
 
+#include "droiddef.h"
+#include "structuredef.h"
+
 /*
 	Header file for component.c 
 	Pumpkin Studios, EIDOS Interactive. 

@@ -72,7 +72,6 @@ STAR	stars[30];	// quick hack for loading stuff
 #define LOAD_BOX_SHADES	6
 
 
-extern IMAGEFILE	*FrontImages;
 extern int WFont;
 extern BOOL bLoadSaveUp;
 

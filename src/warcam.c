@@ -38,7 +38,6 @@
 #endif
 
 
-
 #define MODFRACT(value,mod) \
 	while((value) < 0)	{ (value) += (mod); } \
 	while((value) > (mod)) { (value) -= (mod); }
@@ -76,43 +75,6 @@ SDWORD	presAvAngle = 0;;
 #define CAM_DEFAULT_Y_OFFSET	-400
 #define	MINCAMROTX	-20
 
-
-/* Function Prototypes... */
-/* Firstly for tracking position */
-void	updateCameraAcceleration	( UBYTE update );
-void	updateCameraVelocity		( UBYTE update );
-void	updateCameraPosition		( UBYTE update );
-
-/* And now, rotation */
-void	updateCameraRotationAcceleration( UBYTE update );
-void	updateCameraRotationVelocity( UBYTE update );
-void	updateCameraRotationPosition( UBYTE update );
-
-void	initWarCam					( void );
-BOOL	processWarCam				( void );
-void	setWarCamActive				( BOOL status );
-BASE_OBJECT	*camFindTarget			( void );
-void	camAllignWithTarget			( BASE_OBJECT *psTarget );
-BOOL	camTrackCamera				( void );
-void	camSwitchOff				( void );
-BOOL	getWarCamStatus				( void );
-void	camToggleInfo				( void );
-//void	setUpRadarTarget			( SDWORD x, SDWORD y );
-void	setUpRadarTarget			( SDWORD x, SDWORD y );
-void	requestRadarTrack			( SDWORD x, SDWORD y );
-BOOL	getRadarTrackingStatus		( void );
-void	dispWarCamLogo				( void );
-UDWORD	getPositionMagnitude		( void );
-UDWORD	getRotationMagnitude		( void );
-void	toggleRadarAllignment		( void );
-void	camInformOfRotation			( iVector *rotation );
-void	processLeaderSelection		( void );
-SDWORD	getAverageTrackAngle		( BOOL bCheckOnScreen );
-SDWORD	getGroupAverageTrackAngle	( UDWORD groupNumber, BOOL bCheckOnScreen );
-void	getTrackingConcerns			( SDWORD *x,SDWORD *y, SDWORD *z );
-void	getGroupTrackingConcerns	( SDWORD *x,SDWORD *y, SDWORD *z,UDWORD groupNumber, BOOL bOnScreen );
-
-UDWORD	getNumDroidsSelected		( void );
 
 /*	These used to be #defines but they're variable now as it may be necessary
 	to allow the player	to customise tracking speed? Jim?
@@ -176,6 +138,222 @@ static void CancelWarCam(void)
 	trackingCamera.status = CAM_INACTIVE;
 }
 
+
+/* Static function that switches off tracking - and might not be desirable? - Jim?*/
+static void camSwitchOff( void )
+{
+ 	/* Restore the angles */
+//	player.r.x = trackingCamera.oldView.r.x;
+	player.r.z = trackingCamera.oldView.r.z;
+
+	/* And height */
+	/* Is this desirable??? */
+//	player.p.y = trackingCamera.oldView.p.y;
+
+	/* Restore distance */
+	setViewDistance(trackingCamera.oldDistance);
+}
+
+
+#define	LEADER_LEFT			1
+#define	LEADER_RIGHT		2
+#define	LEADER_UP			3
+#define	LEADER_DOWN			4
+#define LEADER_STATIC		5
+
+static void processLeaderSelection( void )
+{
+	DROID *psDroid;
+	DROID *psPresent;
+	DROID *psNew = NULL;
+	UDWORD leaderClass;
+	BOOL bSuccess;
+	UDWORD dif;
+	UDWORD bestSoFar;
+
+	if (demoGetStatus())
+	{
+		return;
+	}
+
+	if (getWarCamStatus())
+	{
+		/* Only do if we're tracking a droid */
+		if (trackingCamera.target->type != OBJ_DROID)
+		{
+			return;
+		}
+	}
+	else
+	{
+		return;
+	}
+
+	/* Don't do if we're driving?! */
+	if (getDrivingStatus())
+	{
+		return;
+	}
+
+	psPresent = (DROID*)trackingCamera.target;
+
+	if (keyPressed(KEY_LEFTARROW))
+	{
+		leaderClass = LEADER_LEFT;
+	}
+
+	else if (keyPressed(KEY_RIGHTARROW))
+	{
+		leaderClass = LEADER_RIGHT;
+	}
+
+	else if (keyPressed(KEY_UPARROW))
+	{
+		leaderClass = LEADER_UP;
+	}
+
+	else if (keyPressed(KEY_DOWNARROW))
+	{
+		leaderClass = LEADER_DOWN;
+	}
+	else
+	{
+		leaderClass = LEADER_STATIC;
+	}
+
+	bSuccess = FALSE;
+	bestSoFar = UDWORD_MAX;
+
+	switch (leaderClass)
+	{
+	case	LEADER_LEFT:
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			/* Is it even on the sscreen? */
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			{
+				if (psDroid->sDisplay.screenX < psPresent->sDisplay.screenX)
+				{
+					dif = psPresent->sDisplay.screenX - psDroid->sDisplay.screenX;
+					if (dif < bestSoFar)
+					{
+						bestSoFar = dif;
+						bSuccess = TRUE;
+						psNew = psDroid;
+					}
+				}
+			}
+		}
+		break;
+	case	LEADER_RIGHT:
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			/* Is it even on the sscreen? */
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			{
+				if (psDroid->sDisplay.screenX > psPresent->sDisplay.screenX)
+				{
+					dif = psDroid->sDisplay.screenX - psPresent->sDisplay.screenX;
+					if (dif < bestSoFar)
+					{
+						bestSoFar = dif;
+						bSuccess = TRUE;
+						psNew = psDroid;
+					}
+				}
+			}
+		}
+		break;
+	case	LEADER_UP:
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			/* Is it even on the sscreen? */
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			{
+				if (psDroid->sDisplay.screenY < psPresent->sDisplay.screenY)
+				{
+					dif = psPresent->sDisplay.screenY - psDroid->sDisplay.screenY;
+					if (dif < bestSoFar)
+					{
+						bestSoFar = dif;
+						bSuccess = TRUE;
+						psNew = psDroid;
+					}
+				}
+			}
+		}
+		break;
+	case	LEADER_DOWN:
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			/* Is it even on the sscreen? */
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			{
+				if (psDroid->sDisplay.screenY > psPresent->sDisplay.screenY)
+				{
+					dif = psDroid->sDisplay.screenY - psPresent->sDisplay.screenY;
+					if (dif < bestSoFar)
+					{
+						bestSoFar = dif;
+						bSuccess = TRUE;
+						psNew = psDroid;
+					}
+				}
+			}
+		}
+		break;
+	case	LEADER_STATIC:
+		break;
+	}
+	if (bSuccess)
+	{
+		camAllignWithTarget((BASE_OBJECT*)psNew);
+	}
+}
+
+
+/* Sets up the dummy target for the camera */
+static void setUpRadarTarget(SDWORD x, SDWORD y)
+{
+	radarTarget.x = x;
+	radarTarget.y = y;
+
+	if ((x < 0) OR (y < 0) OR (x > (SDWORD)((mapWidth - 1) * TILE_UNITS))
+	    OR (y > (SDWORD)((mapHeight - 1) * TILE_UNITS)))
+	{
+		radarTarget.z = 128 * ELEVATION_SCALE;
+	}
+	else
+	{
+		radarTarget.z = map_Height(x,y);
+	}
+	radarTarget.direction = (UWORD)calcDirection(player.p.x, player.p.z, x, y);
+	radarTarget.pitch = 0;
+	radarTarget.roll = 0;
+	radarTarget.type = OBJ_TARGET;
+	radarTarget.died = 0;
+}
+
+
+/* Attempts to find the target for the camera to track */
+static BASE_OBJECT *camFindTarget(void)
+{
+	/*	See if we can find a selected droid. If there's more than one
+		droid selected for the present player, then we track the oldest
+		one. */
+
+	if (bRadarTrackingRequested)
+	{
+		setUpRadarTarget(radarX, radarY);
+		bRadarTrackingRequested = FALSE;
+		return(&radarTarget);
+	}
+
+	return camFindDroidTarget();
+}
+
+
+BOOL camTrackCamera(void);
 
 /* Updates the camera position/angle along with the object movement */
 BOOL	processWarCam( void )
@@ -350,24 +528,6 @@ BASE_OBJECT	*camFindDroidTarget(void)
 }
 
 
-
-/* Attempts to find the target for the camera to track */
-BASE_OBJECT	*camFindTarget(void)
-{
-	/*	See if we can find a selected droid. If there's more than one
-		droid selected for the present player, then we track the oldest
-		one. */
-
-	if(bRadarTrackingRequested)
-	{
-		setUpRadarTarget(radarX, radarY);
-		bRadarTrackingRequested = FALSE;
-		return(&radarTarget);
-	}
-
-	return camFindDroidTarget();
-}
-
 //-----------------------------------------------------------------------------------
 UDWORD	getTestAngle(void)
 {
@@ -420,10 +580,149 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 	OldViewValid = TRUE;
 }
 
+
 //-----------------------------------------------------------------------------------
+static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
+{
+	DROID *psDroid;
+	FRACT xShift, yShift;
+	FRACT xTotal = 0.0, yTotal = 0.0;
+	FRACT averageAngleFloat = 0;
+	SDWORD droidCount = 0, averageAngle = 0;
+	SDWORD retVal;
+
+	/* Got thru' all droids */
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Is he worth selecting? */
+		if (psDroid->selected)
+		{
+			if (bCheckOnScreen ? droidOnScreen(psDroid, DISP_WIDTH / 6) : TRUE)
+			{
+					droidCount++;
+					averageAngle += psDroid->direction;
+					xShift = trigSin(psDroid->direction);
+					yShift = trigCos(psDroid->direction);
+					xTotal += xShift;
+					yTotal += yShift;
+			}
+		}
+	}
+	if (droidCount)
+	{
+		retVal = (averageAngle / droidCount);
+		averageAngleFloat = (float)RAD_TO_DEG(atan2(xTotal, yTotal));
+	}
+	else
+	{
+		retVal = 0;
+	}
+	// FIXME: Should we return 0 when retVal is 0?
+	presAvAngle = MAKEINT(averageAngleFloat);//retVal;
+	return presAvAngle;
+}
 
 
+//-----------------------------------------------------------------------------------
+static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
+{
+	DROID *psDroid;
+	FRACT xShift, yShift;
+	FRACT xTotal = 0.0, yTotal = 0.0;
+	FRACT averageAngleFloat = 0;
+	SDWORD droidCount = 0, averageAngle = 0;
+	SDWORD retVal;
 
+	/* Got thru' all droids */
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Is he worth considering? */
+		if (psDroid->group == groupNumber)
+		{
+			if (bCheckOnScreen ? droidOnScreen(psDroid, DISP_WIDTH / 6) : TRUE)
+			{
+					droidCount++;
+					averageAngle += psDroid->direction;
+					xShift = trigSin(psDroid->direction);
+					yShift = trigCos(psDroid->direction);
+					xTotal += xShift;
+					yTotal += yShift;
+			}
+		}
+	}
+	if (droidCount)
+	{
+		retVal = (averageAngle / droidCount);
+		averageAngleFloat = RAD_TO_DEG(atan2(xTotal, yTotal));
+	}
+	else
+	{
+		retVal = 0;
+	}
+	// FIXME: Return 0 when retVal is 0?
+	presAvAngle = MAKEINT(averageAngleFloat);//retVal;
+	return presAvAngle;
+}
+
+
+//-----------------------------------------------------------------------------------
+static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z)
+{
+	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
+	DROID *psDroid;
+	UDWORD count;
+
+	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			if (psDroid->selected)
+			{
+				if (droidOnScreen(psDroid, DISP_WIDTH / 4))
+				{
+					count++;
+					xTotals += psDroid->x;
+					yTotals += psDroid->z;	// note the flip
+					zTotals += psDroid->y;
+				}
+			}
+		}
+
+	if (count)	// necessary!!!!!!!
+	{
+		*x = xTotals / count;
+		*y = yTotals / count;
+		*z = zTotals / count;
+	}
+}
+
+
+//-----------------------------------------------------------------------------------
+static void getGroupTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNumber, BOOL bOnScreen)
+{
+	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
+	DROID *psDroid;
+	UDWORD count;
+
+	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			if (psDroid->group == groupNumber)
+			{
+				if (bOnScreen ? droidOnScreen(psDroid, DISP_WIDTH / 4) : TRUE)
+				{
+				 		count++;
+						xTotals += psDroid->x;
+						yTotals += psDroid->z;	// note the flip
+						zTotals += psDroid->y;
+				}
+			}
+		}
+
+	if (count)	// necessary!!!!!!!
+	{
+		*x = xTotals / count;
+		*y = yTotals / count;
+		*z = zTotals / count;
+	}
+}
 
 
 //-----------------------------------------------------------------------------------
@@ -465,7 +764,7 @@ in the case of location and degrees of arc in the case of rotation.
 
 //-----------------------------------------------------------------------------------
 
-void	updateCameraAcceleration(UBYTE update)
+static void updateCameraAcceleration(UBYTE update)
 {
 FRACT	separation;
 SDWORD	realPos;
@@ -625,7 +924,7 @@ SDWORD	angle;
 
 //-----------------------------------------------------------------------------------
 
-void	updateCameraVelocity( UBYTE	update )
+static void updateCameraVelocity( UBYTE update )
 {
 //UDWORD	frameTime;
 FRACT	fraction;
@@ -656,7 +955,7 @@ FRACT	fraction;
 
 //-----------------------------------------------------------------------------------
 
-void	updateCameraPosition(UBYTE update)
+static void	updateCameraPosition(UBYTE update)
 {
 //UDWORD	frameTime;
 BOOL	bFlying;
@@ -709,7 +1008,7 @@ PROPULSION_STATS	*psPropStats;
 
 //-----------------------------------------------------------------------------------
 /* Calculate the acceleration that the camera spins around at */
-void	updateCameraRotationAcceleration( UBYTE update )
+static void updateCameraRotationAcceleration( UBYTE update )
 {
 SDWORD	worldAngle;
 FRACT	separation;
@@ -872,7 +1171,7 @@ SDWORD	xPos,yPos,zPos;
 //-----------------------------------------------------------------------------------
 /*	Calculate the velocity that the camera spins around at - just add previously
 	calculated acceleration */
-void	updateCameraRotationVelocity( UBYTE update )
+static void updateCameraRotationVelocity( UBYTE update )
 {
 //UDWORD	frameTime;
 FRACT	fraction;
@@ -897,7 +1196,7 @@ FRACT	fraction;
 
 //-----------------------------------------------------------------------------------
 /* Move the camera around by adding the velocity */
-void	updateCameraRotationPosition( UBYTE update )
+static void updateCameraRotationPosition( UBYTE update )
 {
 //UDWORD	frameTime;
 FRACT	fraction;
@@ -936,6 +1235,35 @@ SDWORD	yPos;
 	return(retVal);
 }
 
+
+/* Returns how far away we are from our goal in a radar track */
+static UDWORD getPositionMagnitude( void )
+{
+	iVector dif;
+	UDWORD val;
+
+	dif.x = abs(player.p.x - oldPosition.x);
+	dif.y = abs(player.p.y - oldPosition.y);
+	dif.z = abs(player.p.z - oldPosition.z);
+	val = (dif.x * dif.x) + (dif.y * dif.y) + (dif.z * dif.z);
+	return val;
+}
+
+
+static UDWORD getRotationMagnitude( void )
+{
+	iVector dif;
+	UDWORD val;
+
+	dif.x = abs(player.r.x - oldRotation.x);
+	dif.y = abs(player.r.y - oldRotation.y);
+	dif.z = abs(player.r.z - oldRotation.z);
+	val = (dif.x * dif.x) + (dif.y * dif.y) + (dif.z * dif.z);
+	return val;
+}
+
+
+/* Returns how far away we are from our goal in rotation */
 /* Updates the viewpoint according to the object being tracked */
 BOOL	camTrackCamera( void )
 {
@@ -1087,311 +1415,12 @@ BOOL	bFlying;
 	return(TRUE);
 }
 //-----------------------------------------------------------------------------------
-#define	LEADER_LEFT			1
-#define	LEADER_RIGHT		2
-#define	LEADER_UP			3
-#define	LEADER_DOWN			4
-#define LEADER_STATIC		5
-
-void	processLeaderSelection( void )
-{
-DROID	*psDroid;
-DROID	*psPresent;
-DROID	*psNew=NULL;
-UDWORD	leaderClass;
-BOOL	bSuccess;
-UDWORD	dif;
-UDWORD	bestSoFar;
-
-	if(demoGetStatus())
-	{
-		return;
-	}
-
-	if(getWarCamStatus())
-	{
-		/* Only do if we're tracking a droid */
-		if(trackingCamera.target->type != OBJ_DROID)
-		{
-			return;
-		}
-	}
-	else
-	{
-		return;
-	}
-
-	/* Don't do if we're driving?! */
-	if(getDrivingStatus())
-	{
-		return;
-	}
-
-	psPresent = (DROID*)trackingCamera.target;
-
-	if(keyPressed(KEY_LEFTARROW))
-	{
-		leaderClass = LEADER_LEFT;
-	}
-
-	else if(keyPressed(KEY_RIGHTARROW))
-	{
-		leaderClass = LEADER_RIGHT;
-	}
-
-	else if(keyPressed(KEY_UPARROW))
-	{
-		leaderClass = LEADER_UP;
-	}
-
-	else if(keyPressed(KEY_DOWNARROW))
-	{
-		leaderClass = LEADER_DOWN;
-	}
-	else
-	{
-		leaderClass = LEADER_STATIC;
-	}
-
-	bSuccess = FALSE;
-	bestSoFar = UDWORD_MAX;
-	switch(leaderClass)
-	{
-	case	LEADER_LEFT:
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
-		{
-			/* Is it even on the sscreen? */
-			if(DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid!=psPresent)
-			{
-				if(psDroid->sDisplay.screenX<psPresent->sDisplay.screenX)
-				{
-					dif = psPresent->sDisplay.screenX - psDroid->sDisplay.screenX;
-					if(dif<bestSoFar)
-					{
-						bestSoFar = dif;
-						bSuccess = TRUE;
-						psNew = psDroid;
-					}
-				}
-			}
-		}
-		break;
-	case	LEADER_RIGHT:
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
-		{
-			/* Is it even on the sscreen? */
-			if(DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid!=psPresent)
-			{
-				if(psDroid->sDisplay.screenX>psPresent->sDisplay.screenX)
-				{
-					dif = psDroid->sDisplay.screenX - psPresent->sDisplay.screenX;
-					if(dif<bestSoFar)
-					{
-						bestSoFar = dif;
-						bSuccess = TRUE;
-						psNew = psDroid;
-					}
-				}
-			}
-		}
-		break;
-	case	LEADER_UP:
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
-		{
-			/* Is it even on the sscreen? */
-			if(DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid!=psPresent)
-			{
-				if(psDroid->sDisplay.screenY<psPresent->sDisplay.screenY)
-				{
-					dif = psPresent->sDisplay.screenY - psDroid->sDisplay.screenY;
-					if(dif<bestSoFar)
-					{
-						bestSoFar = dif;
-						bSuccess = TRUE;
-						psNew = psDroid;
-					}
-				}
-			}
-		}
-		break;
-	case	LEADER_DOWN:
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
-		{
-			/* Is it even on the sscreen? */
-			if(DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid!=psPresent)
-			{
-				if(psDroid->sDisplay.screenY>psPresent->sDisplay.screenY)
-				{
-					dif = psDroid->sDisplay.screenY - psPresent->sDisplay.screenY;
-					if(dif<bestSoFar)
-					{
-						bestSoFar = dif;
-						bSuccess = TRUE;
-						psNew = psDroid;
-					}
-				}
-			}
-		}
-		break;
-	case	LEADER_STATIC:
-		break;
-	}
-	if(bSuccess)
-	{
-		camAllignWithTarget((BASE_OBJECT*)psNew);
-	}
-}
-//-----------------------------------------------------------------------------------
 DROID *getTrackingDroid( void )
 {
 	if(!getWarCamStatus()) return(NULL);
 	if(trackingCamera.status != CAM_TRACKING) return(NULL);
 	if(trackingCamera.target->type != OBJ_DROID) return(NULL);
 	return((DROID*)trackingCamera.target);
-}
-
-//-----------------------------------------------------------------------------------
-SDWORD	getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen )
-{
-DROID	*psDroid;
-FRACT	xShift,yShift;
-FRACT	xTotal,yTotal;
-FRACT	averageAngleFloat = 0;
-SDWORD	droidCount, averageAngle;
-SDWORD	retVal;
-
-	/* Initialise all the stuff */
-	droidCount = 0;
-	averageAngle = 0;
-	/* Set totals to zero */
-	xTotal = yTotal = 0.0f;
-
-	/* Got thru' all droids */
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Is he worth considering? */
-		if(psDroid->group == groupNumber)
-		{
-			if(bCheckOnScreen ? droidOnScreen(psDroid,DISP_WIDTH/6) : TRUE)
-			{
-					droidCount++;
-					averageAngle+=psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
-					xTotal += xShift;
-					yTotal += yShift;
-			}
-			/*
-			if(bCheckOnScreen)
-			{
-				if(droidOnScreen(psDroid,DISP_WIDTH/6))
-				{
-					droidCount++;
-					averageAngle+=psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
-					xTotal += xShift;
-					yTotal += yShift;
-
-				}
-			}
-			else
-			{
-					droidCount++;
-					averageAngle+=psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
-					xTotal += xShift;
-					yTotal += yShift;
-
-
-			}
-			*/
-		}
-	}
-	if(droidCount)
-	{
-		retVal = (averageAngle/droidCount);
-		averageAngleFloat = RAD_TO_DEG(atan2(xTotal,yTotal));
-	}
-	else
-	{
-		retVal = 0;
-	}
-	presAvAngle = MAKEINT(averageAngleFloat);//retVal;
-	return(presAvAngle);
-}
-
-//-----------------------------------------------------------------------------------
-SDWORD	getAverageTrackAngle( BOOL bCheckOnScreen )
-{
-DROID	*psDroid;
-FRACT	xShift,yShift;
-FRACT	xTotal,yTotal;
-FRACT	averageAngleFloat = 0;
-SDWORD	droidCount, averageAngle;
-SDWORD	retVal;
-
-	/* Initialise all the stuff */
-	droidCount = 0;
-	averageAngle = 0;
-	/* Set totals to zero */
-	xTotal = yTotal = 0.0f;
-
-	/* Got thru' all droids */
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Is he worth selecting? */
-		if(psDroid->selected)
-		{
-			if(bCheckOnScreen ? droidOnScreen(psDroid,DISP_WIDTH/6) : TRUE)
-			{
-					droidCount++;
-					averageAngle+=psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
-					xTotal += xShift;
-					yTotal += yShift;
-			}
-			/*
-			if(bCheckOnScreen)
-			{
-				if(droidOnScreen(psDroid,DISP_WIDTH/6))
-				{
-			 		droidCount++;
-					averageAngle+=psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
-					xTotal += xShift;
-					yTotal += yShift;
-
-				}
-			}
-			else
-			{
-					droidCount++;
-					averageAngle+=psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
-					xTotal += xShift;
-					yTotal += yShift;
-
-
-			}
-			*/
-		}
-	}
-	if(droidCount)
-	{
-		retVal = (averageAngle/droidCount);
-		averageAngleFloat = (float)RAD_TO_DEG(atan2(xTotal,yTotal));
-	}
-	else
-	{
-		retVal = 0;
-	}
-	presAvAngle = MAKEINT(averageAngleFloat);//retVal;
-	return(presAvAngle);
 }
 
 //-----------------------------------------------------------------------------------
@@ -1423,80 +1452,6 @@ UDWORD	count;
 }
 
 //-----------------------------------------------------------------------------------
-void	getTrackingConcerns(SDWORD *x,SDWORD *y, SDWORD *z)
-{
-SDWORD	xTotals,yTotals,zTotals;
-DROID	*psDroid;
-UDWORD	count;
-
-	xTotals = yTotals = zTotals = 0;
-	for(count = 0, psDroid = apsDroidLists[selectedPlayer];
-		psDroid; psDroid = psDroid->psNext)
-		{
-			if(psDroid->selected)
-			{
-				if(droidOnScreen(psDroid,DISP_WIDTH/4))
-				{
-					count++;
-					xTotals+=psDroid->x;
-					yTotals+=psDroid->z;	// note the flip
-					zTotals+=psDroid->y;
-				}
-			}
-		}
-
-	if(count)	// necessary!!!!!!!
-	{
-		*x = xTotals/count;
-		*y = yTotals/count;
-		*z = zTotals/count;
-	}
-}
-//-----------------------------------------------------------------------------------
-void	getGroupTrackingConcerns(SDWORD *x,SDWORD *y, SDWORD *z,UDWORD groupNumber, BOOL bOnScreen)
-{
-SDWORD	xTotals,yTotals,zTotals;
-DROID	*psDroid;
-UDWORD	count;
-
-	xTotals = yTotals = zTotals = 0;
-	for(count = 0, psDroid = apsDroidLists[selectedPlayer];
-		psDroid; psDroid = psDroid->psNext)
-		{
-			if(psDroid->group == groupNumber)
-			{
-				if(bOnScreen ? droidOnScreen(psDroid,DISP_WIDTH/4) : TRUE)
-				{
-//					if(droidOnScreen(psDroid,DISP_WIDTH/4))
-//					{
-				 		count++;
-						xTotals+=psDroid->x;
-						yTotals+=psDroid->z;	// note the flip
-						zTotals+=psDroid->y;
-//					}
-				}
-//				else
-//				{
-//						count++;
-//						xTotals+=psDroid->x;
-//						yTotals+=psDroid->z;	// note the flip
-//						zTotals+=psDroid->y;
-//				}
-			}
-		}
-
-	if(count)	// necessary!!!!!!!
-	{
-		*x = xTotals/count;
-		*y = yTotals/count;
-		*z = zTotals/count;
-	}
-}
-//-----------------------------------------------------------------------------------
-
-
-
-
 void camSetOldView(int x,int y,int z,int rx,int ry,int dist)
 {
 //DBPRINTF(("camSetOldView(%d %d %d %d %d %d)\n",x,y,z,rx,ry,dist));
@@ -1509,23 +1464,6 @@ void camSetOldView(int x,int y,int z,int rx,int ry,int dist)
 //	trackingCamera.oldDistance = dist;
 }
 
-
-/* Static function that switches off tracking - and might not be desirable? - Jim?*/
-void	camSwitchOff( void )
-{
- 	/* Restore the angles */
-
-//	player.r.x = trackingCamera.oldView.r.x;
-	player.r.z = trackingCamera.oldView.r.z;
-
-	/* And height */
-	/* Is this desirable??? */
-//	player.p.y = trackingCamera.oldView.p.y;
-
-	/* Restore distance */
-	setViewDistance(trackingCamera.oldDistance);
-
-}
 
 //-----------------------------------------------------------------------------------
 
@@ -1574,28 +1512,6 @@ void	camToggleStatus( void )
 void	camToggleInfo(void)
 {
 	bFullInfo = !bFullInfo;
-}
-
-/* Sets up the dummy target for the camera */
-//void	setUpRadarTarget(SDWORD x, SDWORD y)
-void	setUpRadarTarget(SDWORD x, SDWORD y)
-{
-
-	radarTarget.x = x;
-	radarTarget.y = y;
-	if( (x<0) OR (y<0) OR (x > (SDWORD)((mapWidth-1)*TILE_UNITS)) OR (y > (SDWORD)((mapHeight-1)*TILE_UNITS)) )
-	{
-		radarTarget.z = 128 * ELEVATION_SCALE;
-	}
-	else
-	{
-		radarTarget.z = map_Height(x,y);
-	}
-	radarTarget.direction = (UWORD)calcDirection(player.p.x,player.p.z,x,y);
-	radarTarget.pitch = 0;
-	radarTarget.roll = 0;
-	radarTarget.type = OBJ_TARGET;
-	radarTarget.died = 0;
 }
 
 /* Informs the tracking camera that we want to start tracking to a new radar target */
@@ -1667,32 +1583,6 @@ void	dispWarCamLogo( void )
 void	toggleRadarAllignment( void )
 {
 	bRadarAllign = !bRadarAllign;
-}
-
-/* Returns how far away we are from our goal in a radar track */
-UDWORD	getPositionMagnitude( void )
-{
-iVector	dif;
-UDWORD	val;
-
-	dif.x = abs(player.p.x - oldPosition.x);
-	dif.y = abs(player.p.y - oldPosition.y);
-	dif.z = abs(player.p.z - oldPosition.z);
-	val = (dif.x*dif.x) + (dif.y*dif.y) + (dif.z*dif.z);
-	return(val);
-}
-
-/* Rteurns how far away we are from our goal in rotation */
-UDWORD	getRotationMagnitude( void )
-{
-iVector	dif;
-UDWORD	val;
-
-	dif.x = abs(player.r.x - oldRotation.x);
-	dif.y = abs(player.r.y - oldRotation.y);
-	dif.z = abs(player.r.z - oldRotation.z);
-	val = (dif.x*dif.x) + (dif.y*dif.y) + (dif.z*dif.z);
-	return(val);
 }
 
 void	camInformOfRotation( iVector *rotation )

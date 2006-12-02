@@ -10,30 +10,10 @@
 #ifndef _piefunc_h
 #define _piefunc_h
 
-/***************************************************************************/
-
 #include "lib/framework/frame.h"
+#include "lib/ivis_common/piedef.h"
 
 
-
-
-/***************************************************************************/
-/*
- *	Global Definitions
- */
-/***************************************************************************/
-
-/***************************************************************************/
-/*
- *	Global Variables
- */
-/***************************************************************************/
-
-/***************************************************************************/
-/*
- *	Global ProtoTypes
- */
-/***************************************************************************/
 extern void pie_DownLoadBufferToScreen(void *srcData, UDWORD destX, UDWORD
 							destY,UDWORD srcWidth,UDWORD srcHeight,UDWORD srcStride);
 extern void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour);

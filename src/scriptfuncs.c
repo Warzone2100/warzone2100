@@ -1243,7 +1243,6 @@ BOOL scrApproxRoot(void)
 }
 
 // -----------------------------------------------------------------------------------------
-extern void intShowReticuleButton(UDWORD id,BOOL Show);
 // Add a reticule button to the interface
 BOOL scrAddReticuleButton(void)
 {

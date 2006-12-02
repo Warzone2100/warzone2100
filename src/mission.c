@@ -31,6 +31,7 @@
 #include "frontend.h"		// for displaytextoption.
 #include "csnap.h"			// cursor snapping
 #include "intdisplay.h"
+#include "winmain.h"
 #include "display.h"
 #include "loadsave.h"
 #include "lib/script/script.h"
@@ -71,7 +72,6 @@
 #include "texture.h"
 
 
-extern CURSORSNAP InterfaceSnap;
 //DEFINES**************
 //#define		IDTIMER_FORM			11000		// has to be in the header..boohoo
 //#define		IDTIMER_DISPLAY			11001
@@ -149,10 +149,6 @@ extern CURSORSNAP InterfaceSnap;
 #define NOT_PLAYED_TEN          0x10
 #define NOT_PLAYED_ACTIVATED    0x20
 
-
-//EXTERNALS*************
-
-extern char	SaveGamePath[];
 
 MISSION		mission;
 

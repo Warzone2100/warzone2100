@@ -16,97 +16,41 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
-#include "winmain.h"
-#include "objects.h"
-#include "display.h"
-#include "lib/widget/widget.h"
-/* Includes direct access to render library */
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/piestate.h"
-
-#include "keyedit.h"
-#include "lib/ivis_common/piefunc.h"
-#include "warzoneconfig.h"
-
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
-
-#include "display3d.h"
-#include "intdisplay.h"
-#include "lib/sound/audio.h"					// for sound.
-#include "audio_id.h"				// for sound..
-
-#include "lib/sound/cdaudio.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
-#include "configuration.h"
-
-
-#include "design.h"					// for intadddesign
-#include "hci.h"					// for intShowPower
-#include "text.h"					// to get at string resources.
-#include "frontend.h"
-#include "console.h"
-#include "wrappers.h"
-#include "component.h"
-#include "loadsave.h"
-#include "csnap.h"
-//#include "wrappers.h"				// for bUsingKeyboard.
-#include "frend.h"
-#include "game.h"
-#include "init.h"
-#include "difficulty.h"
-#include "ingameop.h"
-
+#include "lib/widget/widget.h"
 
 #include "advvis.h"
-#include "seqdisp.h"
-#include "multiplay.h"
+#include "component.h"
+#include "difficulty.h"
+#include "display.h"
+#include "frend.h"
+#include "frontend.h"
+#include "hci.h"
+#include "ingameop.h"
+#include "init.h"
+#include "intdisplay.h"
+#include "keyedit.h"
+#include "loadsave.h"
 #include "multiint.h"
 #include "multilimit.h"
-#include "multistat.h"
-#include "lib/netplay/netplay.h"
+#include "multiplay.h"
+#include "seqdisp.h"
+#include "text.h"
+#include "warzoneconfig.h"
+#include "winmain.h"
+#include "wrappers.h"
 
-extern BOOL bSubtitles;
-
-extern void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
-extern void set_active_data_directory(int);
-
-extern CURSORSNAP InterfaceSnap;
-extern void ProcessCursorSnap(void);
-
-int StartWithGame = 1;	// New game starts in Cam 1.
-
-char OnString[]={"On "};
-char OffString[]={"Off"};
-
-
-char	strFog[MAX_STR_LENGTH];
-char	strTrans[MAX_STR_LENGTH];
+static int StartWithGame = 1; // New game starts in Cam 1.
 
 tMode titleMode;					// the global case
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// Local Definitions
-// iPalette			titlePalette;
 int				FEFont;
-//int				FEBigFont;
 char			pLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
 BOOL			bForceEditorLoaded = FALSE;
 BOOL			bUsingKeyboard = FALSE;		// to disable mouse pointer when using keys.
 BOOL			bUsingSlider   = FALSE;
-
-// ////////////////////////////////////////////////////////////////////////////
-// extern Definitions
-
-//extern W_SCREEN		*psWScreen;					//The widget screen
-
-extern char	SaveGamePath[];
-
-extern BOOL firstcall;
-extern IMAGEFILE *FrontImages;
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // Function Definitions

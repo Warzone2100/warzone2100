@@ -78,8 +78,6 @@ extern char	MultiForcesPath[255];
 extern char	MultiCustomMapsPath[255];
 extern char	MultiPlayersPath[255];
 
-extern IMAGEFILE			*FrontImages;
-extern CURSORSNAP			InterfaceSnap;
 extern BOOL				bSendingMap;
 
 extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -121,8 +119,6 @@ static UDWORD hideTime=0;
 #define DEFAULTCAMPAIGNMAP	"Rush"
 #define DEFAULTSKIRMISHMAP	"Sk-Rush"
 
-
-extern int FEFont;
 
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////

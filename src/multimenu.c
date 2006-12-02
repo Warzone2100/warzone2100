@@ -21,6 +21,7 @@
 #include "objmem.h"		 	//for droid lists.
 #include "component.h"		// for disaplycomponentobj.
 #include "hci.h"			// for wFont def.& intmode.
+#include "init.h"
 //#include "intfac.h"		// for images.
 #include "power.h"
 #include "loadsave.h"		// for drawbluebox
@@ -47,9 +48,6 @@ W_SCREEN  *psRScreen;			// requester stuff.
 
 extern char	MultiCustomMapsPath[255];
 
-extern CURSORSNAP InterfaceSnap;
-//extern W_SCREEN *psWScreen;
-extern IMAGEFILE *FrontImages;
 extern void	displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 BOOL	MultiMenuUp			= FALSE;

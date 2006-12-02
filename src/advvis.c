@@ -3,16 +3,12 @@
 /* Makes smooth transitions for terrain visibility */
 
 #include "lib/framework/frame.h"
-#include "objects.h"
-#include "base.h"
-#include "map.h"
 #include "lib/gamelib/gtime.h"
-#include "display3d.h"
+
 #include "advvis.h"
+#include "display3d.h"
 #include "hci.h"
-#include "lib/ivis_common/piestate.h"
-#include "component.h"
-#include "geometry.h"
+#include "map.h"
 
 /* This uses oodles of memory and so can only be done on the PC */
 
@@ -20,18 +16,11 @@
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
 
-UDWORD	avConsidered;
-UDWORD	avCalculated;
-UDWORD	avIgnored;
+static UDWORD avConsidered;
+static UDWORD avCalculated;
+static UDWORD avIgnored;
 
-// ------------------------------------------------------------------------------------
-BOOL	bRevealActive = FALSE;
-// ------------------------------------------------------------------------------------
-void	avInformOfChange(SDWORD x, SDWORD y);
-void	avUpdateTiles( void );
-void	processAVTile(UDWORD x, UDWORD y );
-UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel);
-void	avGetStats(UDWORD *considered, UDWORD *ignored, UDWORD *calculated);
+static BOOL bRevealActive = FALSE;
 
 
 // ------------------------------------------------------------------------------------
@@ -72,6 +61,34 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 		return;
 	}
 }
+
+
+// ------------------------------------------------------------------------------------
+static void processAVTile(UDWORD x, UDWORD y)
+{
+	FRACT time;
+	MAPTILE *psTile;
+	UDWORD newLevel;
+
+	psTile = mapTile(x, y);
+	if (psTile->level == UBYTE_MAX OR psTile->bMaxed)
+	{
+		return;
+	}
+
+	time = (MAKEFRACT(frameTime) / GAME_TICKS_PER_SEC);
+	newLevel = MAKEINT(psTile->level + (time * FADE_IN_TIME));
+	if (newLevel >= psTile->illumination)
+	{
+		psTile->level = psTile->illumination;
+		psTile->bMaxed = TRUE;
+	}
+	else
+	{
+		psTile->level = (UBYTE)newLevel;
+	}
+}
+
 
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
@@ -124,32 +141,6 @@ UDWORD	i,j;
 	avConsidered = (visibleXTiles * visibleYTiles);
 }
 
-
-// ------------------------------------------------------------------------------------
-void	processAVTile(UDWORD x, UDWORD y )
-{
-FRACT	time;
-MAPTILE	*psTile;
-UDWORD	newLevel;
-
-	psTile = mapTile(x,y);
-	if(psTile->level == UBYTE_MAX OR psTile->bMaxed)
-	{
-		return;
-	}
-
-	time = (MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC);
-	newLevel = MAKEINT(psTile->level + (time*FADE_IN_TIME));
-	if(newLevel >= psTile->illumination)
-	{
-		psTile->level = psTile->illumination;
-		psTile->bMaxed = TRUE;
-	}
-	else
-	{
-		psTile->level =(UBYTE)newLevel;
-	}
-}
 
 // ------------------------------------------------------------------------------------
 UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)

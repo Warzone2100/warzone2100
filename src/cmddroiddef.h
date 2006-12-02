@@ -7,6 +7,8 @@
 #ifndef _cmddroiddef_h
 #define _cmddroiddef_h
 
+#include "statsdef.h"
+
 // the maximum number of command droids per side
 #define MAX_CMDDROIDS	5
 

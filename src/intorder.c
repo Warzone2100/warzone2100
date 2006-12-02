@@ -428,7 +428,7 @@ BOOL intUpdateOrder(DROID *psDroid)
 //
 //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
 //BOOL _intAddOrder(DROID *Droid)
-BOOL _intAddOrder(BASE_OBJECT *psObj)
+BOOL intAddOrder(BASE_OBJECT *psObj)
 {
 	W_FORMINIT			sFormInit;
 	W_BUTINIT			sButInit;
@@ -854,7 +854,7 @@ void intRunOrder(void)
 
 // Process the droid order screen.
 //
-void _intProcessOrder(UDWORD id)
+void intProcessOrder(UDWORD id)
 {
 	UWORD i;
 	UWORD OrdIndex;
@@ -1018,23 +1018,6 @@ BOOL intRefreshOrder(void)
 //	DBPRINTF(("intRefreshOrder\n"));
 
 	return _intRefreshOrder();
-}
-
-
-//changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-//BOOL intAddOrder(DROID *Droid)
-BOOL intAddOrder(BASE_OBJECT *psObj)
-{
-
-    //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-	//return _intAddOrder(Droid);
-    return _intAddOrder(psObj);
-}
-
-void intProcessOrder(UDWORD id)
-{
-
-	_intProcessOrder(id);
 }
 
 

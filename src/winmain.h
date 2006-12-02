@@ -18,4 +18,6 @@ extern	BOOL	bDisableLobby;
 extern	UDWORD GetGameMode(void);
 extern	void SetGameMode(UDWORD status);
 
+extern char SaveGamePath[];
+
 #endif

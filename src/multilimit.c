@@ -38,8 +38,6 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // externs
-extern IMAGEFILE	*FrontImages;
-extern CURSORSNAP	InterfaceSnap;
 extern void			intDisplayPlainForm	(struct _widget *psWidget, UDWORD xOffset,
 										 UDWORD yOffset, UDWORD *pColours);
 

@@ -3,88 +3,50 @@
  *
  * Functions for the in game interface.
  *
- *
  */
 
-#include <stdio.h>
-#include <math.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
-#include "lib/widget/widget.h"
-
-#include "objects.h"
-#include "loop.h"
-#include "edit2d.h"
-#include "map.h"
-/* Includes direct access to render library */
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/gamelib/gtime.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
+#include "lib/script/script.h"
 
-#include "display3d.h"
-#include "edit3d.h"
-#include "disp2d.h"
-#include "structure.h"
-#include "research.h"
-#include "function.h"
-#include "lib/gamelib/gtime.h"
-#include "hci.h"
-#include "stats.h"
-#include "game.h"
-#include "power.h"
-#include "lib/sound/audio.h"
-#include "audio_id.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
-#include "lib/widget/form.h"
-#include "lib/widget/label.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
-#include "lib/framework/fractions.h"
-#include "order.h"
 #include "action.h"
-#include "intimage.h"
-#include "intdisplay.h"
+#include "audio_id.h"
+#include "console.h"
 #include "design.h"
+#include "display.h"
+#include "display3d.h"
+#include "drive.h"
+#include "edit3d.h"
+#include "effects.h"
+#include "game.h"
+#include "hci.h"
+#include "ingameop.h"
+#include "intdisplay.h"
 #include "intelmap.h"
 #include "intorder.h"
-#include "radar.h"
+#include "keymap.h"
+#include "loadsave.h"
+#include "loop.h"
 #include "mapdisplay.h"
-#include "objects.h"
-#include "display.h"
-#include "text.h"
-#include "deliverance.h"
-#include "winmain.h"
 #include "mission.h"
-#include "csnap.h"					// cursor snapping
-#include "ingameop.h"				// ingame options screen.
+#include "multimenu.h"
+#include "multiplay.h"
+#include "radar.h"
+#include "research.h"
+#include "scriptcb.h"
+#include "scriptextern.h"
+#include "scripttabs.h"
+#include "seqdisp.h"
+#include "text.h"
 #include "transporter.h"
 #include "warcam.h"
-#include "lib/script/script.h"
-#include "scripttabs.h"
-#include "scriptextern.h"
-#include "scriptcb.h"
-#include "console.h"
-#include "loadsave.h"
+#include "winmain.h"
 #include "wrappers.h"
-
-#include "seqdisp.h"
-#include "multiplay.h"
-#include "multistat.h"
-#include "multimenu.h"
-#include "cdspan.h"
-
-#include "drive.h"
-#include "levels.h"
-#include "frontend.h"
-#include "effects.h"
-#include "keymap.h"
 
 #define	MAX_INTERFACE_SNAPS	64
 #define	MAX_RADAR_SNAPS 1
@@ -135,11 +97,9 @@ BUTSTATE ReticuleEnabled[NUMRETBUTS] = {	// Reticule button enable states.
 };
 
 
-
-
 // Set the x,y members of a button widget initialiser given a reticule button index.
 //
-void SetReticuleButPos(UWORD ButId,W_BUTINIT *sButInit)
+static void SetReticuleButPos(UWORD ButId, W_BUTINIT *sButInit)
 {
 	ASSERT( ButId < NUMRETBUTS,"SetReticuleButPos : Bad button index" );
 
@@ -147,9 +107,6 @@ void SetReticuleButPos(UWORD ButId,W_BUTINIT *sButInit)
 	sButInit->y = (SWORD)(ReticuleOffsets[ButId].y + RETYOFFSET);
 }
 
-
-
-CURSORSNAP InterfaceSnap;
 
 static BOOL ClosingObject = FALSE;
 static BOOL ClosingStats = FALSE;
@@ -163,20 +120,11 @@ BOOL ClosingTransDroids = FALSE;
 BOOL ReticuleUp = FALSE;
 BOOL Refreshing = FALSE;
 
+CURSORSNAP InterfaceSnap;
 
 char	*DisplayBuffer;
 UDWORD	displayBufferSize;
 
-
-//hides the power bar from the display - NB static function now
-static void intHidePowerBar(void);
-
-void	setKeyButtonMapping( UDWORD	val );
-
-static void orderObjectInterface(void);
-static void orderFactories(void);
-static void orderResearch(void);
-static void orderDroids(void);
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -422,7 +370,7 @@ static UWORD			objNumTabs;
 static UWORD			objMajor, objMinor;
 
 /* The current map width and height in the new map edit boxes */
-//static UDWORD			newMapWidth, newMapHeight;
+static UDWORD			newMapWidth, newMapHeight;
 
 /* Store a list of stats pointers from the main structure stats */
 static STRUCTURE_STATS	**apsStructStatsList;
@@ -502,30 +450,6 @@ static BOOL				bReopenBuildMenu = FALSE;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
-
-/* Add the options widgets to the widget screen */
-BOOL intAddOptions(void);
-/* Remove the options widgets from the widget screen */
-static void intRemoveOptions(void);
-/* Process return codes from the Options screen */
-static void intProcessOptions(UDWORD id);
-/* Process return codes from the object placement stats screen */
-static void intProcessEditStats(UDWORD id);
-
-#ifdef EDIT_OPTIONS
-/* Add the edit widgets to the widget screen */
-static BOOL intAddEdit(void);
-/* Remove the edit widgets from the widget screen */
-static void intRemoveEdit(void);
-/* Process return codes from the edit screen */
-static void intProcessEdit(UDWORD id);
-#endif
-
-
-/* The int AddObject function is only called by :
- * intAddBuild, intAddManufacture and intAddResearch
- */
-static BOOL intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, BOOL bForceStats);
 static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats);
 /* Remove the object widgets from the widget screen */
 void intRemoveObject(void);
@@ -975,7 +899,7 @@ BOOL intIsRefreshing(void)
 
 
 // see if a delivery point is selected
-FLAG_POSITION *intFindSelectedDelivPoint(void)
+static FLAG_POSITION *intFindSelectedDelivPoint(void)
 {
 	FLAG_POSITION *psFlagPos;
 
@@ -993,7 +917,7 @@ FLAG_POSITION *intFindSelectedDelivPoint(void)
 
 // Refresh widgets once per game cycle if pending flag is set.
 //
-void intDoScreenRefresh(void)
+static void intDoScreenRefresh(void)
 {
 	UWORD			objMajor=0, objMinor=0, statMajor=0, statMinor=0;
 	FLAG_POSITION	*psFlag;
@@ -1129,6 +1053,204 @@ void intDoScreenRefresh(void)
 
 	IntRefreshPending = FALSE;
 }
+
+
+//hides the power bar from the display
+static void intHidePowerBar(void)
+{
+	//only hides the power bar if the player has requested no power bar
+	if (!powerBarUp)
+	{
+		if (widgGetFromID(psWScreen, IDPOW_POWERBAR_T))
+		{
+			widgHide(psWScreen, IDPOW_POWERBAR_T);
+		}
+	}
+}
+
+
+/* Remove the options widgets from the widget screen */
+static void intRemoveOptions(void)
+{
+//	widgEndScreen(psWScreen);
+	widgDelete(psWScreen, IDOPT_FORM);
+//	widgStartScreen(psWScreen);
+}
+
+
+#ifdef EDIT_OPTIONS
+/* Add the edit widgets to the widget screen */
+static BOOL intAddEdit(void)
+{
+	W_FORMINIT sFormInit;
+	W_LABINIT sLabInit;
+	W_BUTINIT sButInit;
+
+//	widgEndScreen(psWScreen);
+
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
+
+	/* Add the edit form */
+	sFormInit.formID = 0;
+	sFormInit.id = IDED_FORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = ED_X;
+	sFormInit.y = ED_Y;
+	sFormInit.width = ED_WIDTH;
+	sFormInit.height = ED_HEIGHT;
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the Option screen label */
+	sLabInit.formID = IDED_FORM;
+	sLabInit.id = IDED_LABEL;
+	sLabInit.style = WLAB_PLAIN;
+	sLabInit.x = ED_GAP;
+	sLabInit.y = ED_GAP;
+	sLabInit.width = ED_WIDTH;
+	sLabInit.height = ED_BUTHEIGHT;
+	sLabInit.pText = "Edit";
+	sLabInit.FontID = WFont;
+	if (!widgAddLabel(psWScreen, &sLabInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the close box */
+	sButInit.formID = IDED_FORM;
+	sButInit.id = IDED_CLOSE;
+	sButInit.style = WBUT_PLAIN;
+	sButInit.x = ED_WIDTH - ED_GAP - CLOSE_SIZE;
+	sButInit.y = ED_GAP;
+	sButInit.width = CLOSE_SIZE;
+	sButInit.height = CLOSE_SIZE;
+	sButInit.FontID = WFont;
+	sButInit.pText = pCloseText;
+	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+/* Remove the edit widgets from the widget screen */
+static void intRemoveEdit(void)
+{
+//	widgEndScreen(psWScreen);
+	widgDelete(psWScreen, IDED_FORM);
+//	widgStartScreen(psWScreen);
+}
+
+
+/* Get  and validate the new map size from the options screen */
+static void intGetMapSize(void)
+{
+	SDWORD editWidth, editHeight;
+	STRING aText[WIDG_MAXSTR];
+	UDWORD i, tmp, bitCount;
+	BOOL widthChanged = FALSE, heightChanged = FALSE;
+	STRING *pStr = widgGetString(psWScreen, IDOPT_MAPWIDTH);
+
+	if (isdigit(*pStr))
+	{
+		// There is a number in the string
+		sscanf(pStr, "%d", &editWidth);
+	}
+	else
+	{
+		// No number in the string, restore the old value
+		editWidth = newMapWidth;
+		widthChanged = TRUE;
+	}
+
+	// Get the new height
+	pStr = widgGetString(psWScreen, IDOPT_MAPHEIGHT);
+	if (isdigit(*pStr))
+	{
+		// There is a number in the string
+		sscanf(pStr, "%d", &editHeight);
+	}
+	else
+	{
+		// No number in the string, restore the old value
+		editHeight = newMapHeight;
+		heightChanged = TRUE;
+	}
+
+	// now validate the sizes
+	if (editWidth <= 0 || editWidth > MAP_MAXWIDTH)
+	{
+		editWidth = newMapWidth;
+		widthChanged = TRUE;
+	}
+	else
+	{
+		// Check it is a power of 2
+		bitCount = 0;
+		tmp = editWidth;
+		for (i = 0; i < 32; i++)
+		{
+			if (tmp & 1)
+			{
+				bitCount ++;
+			}
+			tmp = tmp >> 1;
+		}
+		if (bitCount != 1)
+		{
+			editWidth = newMapWidth;
+			widthChanged = TRUE;
+		}
+	}
+	if (editHeight <= 0 || editHeight > MAP_MAXHEIGHT)
+	{
+		editHeight = newMapHeight;
+		heightChanged = TRUE;
+	}
+	else
+	{
+		// Check it is a power of 2
+		bitCount = 0;
+		tmp = editHeight;
+		for (i = 0; i < 32; i++)
+		{
+			if (tmp & 1)
+			{
+				bitCount ++;
+			}
+			tmp = tmp >> 1;
+		}
+		if (bitCount != 1)
+		{
+			editHeight = newMapHeight;
+			heightChanged = TRUE;
+		}
+	}
+
+	// Store the new size
+	newMapWidth = editWidth;
+	newMapHeight = editHeight;
+
+	// Syncronise the edit boxes if necessary
+	if (widthChanged)
+	{
+		sprintf(aText, "%d", newMapWidth);
+		widgSetString(psWScreen, IDOPT_MAPWIDTH, aText);
+	}
+	if (heightChanged)
+	{
+		sprintf(aText, "%d", newMapHeight);
+		widgSetString(psWScreen, IDOPT_MAPHEIGHT, aText);
+	}
+}
+#endif
+
 
 /* Reset the widget screen to just the reticule */
 void intResetScreen(BOOL NoAnim)
@@ -1314,7 +1436,7 @@ void intResetScreen(BOOL NoAnim)
 
 // calulate the center world coords for a structure stat given
 // top left tile coords
-void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex,UDWORD tiley, UDWORD *pcx, UDWORD *pcy)
+static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, UDWORD *pcx, UDWORD *pcy)
 {
 	SDWORD	width, height;
 
@@ -1328,7 +1450,7 @@ void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex,UDWORD tiley, UD
 
 // Returns TRUE if the widget specified by id should filter input.
 //
-BOOL AllowWidgetIntercept(UDWORD id)
+static BOOL AllowWidgetIntercept(UDWORD id)
 {
 	switch(id) {
 		case	IDPOW_POWERBAR_T:
@@ -1340,6 +1462,214 @@ BOOL AllowWidgetIntercept(UDWORD id)
 
 	return TRUE;
 }
+
+
+/* Process return codes from the Options screen */
+static void intProcessOptions(UDWORD id)
+{
+	UDWORD i;
+	DROID_TEMPLATE *psTempl;
+
+	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
+	{
+		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
+		selectedPlayer = id - IDOPT_PLAYERSTART;
+		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
+	}
+	else
+	{
+		switch (id)
+		{
+#ifdef EDIT_OPTIONS
+		case IDOPT_MAPLOAD:
+#ifdef DISP2D
+			if (ed2dLoadMapFile())
+#endif
+			{
+				/* Managed to load so quit the option screen */
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+			}
+			break;
+		case IDOPT_MAPSAVE:
+#ifdef DISP2D
+			if (ed2dSaveMapFile())
+#endif
+			{
+				/* Managed to save so quit the option screen */
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+			}
+			break;
+
+		case IDOPT_MAPNEW:
+			intGetMapSize();
+			if (mapNew(newMapWidth, newMapHeight))
+			{
+				/* Managed to create a new map so quit the option screen */
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+			}
+			break;
+		case IDOPT_MAPWIDTH:
+			intGetMapSize();
+			break;
+		case IDOPT_MAPHEIGHT:
+			intGetMapSize();
+			break;
+		case IDOPT_EDIT:
+			if (!display3D)
+			{
+				intRemoveOptions();
+				intAddEdit();
+				intMode = INT_EDIT;
+			}
+			break;
+#endif
+			/* The add object buttons */
+		case IDOPT_DROID:
+			intRemoveOptions();
+			i = 0;
+			psTempl = apsDroidTemplates[selectedPlayer];
+			while ((psTempl != NULL) && (i < MAXTEMPLATES))
+			{
+				apsTemplateList[i] = psTempl;
+				psTempl = psTempl->psNext;
+				i++;
+			}
+			ppsStatsList = (BASE_STATS**)apsTemplateList;
+			objMode = IOBJ_MANUFACTURE;
+			intAddStats(ppsStatsList, i, NULL, NULL);
+			intMode = INT_EDITSTAT;
+			editPosMode = IED_NOPOS;
+//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
+			break;
+		case IDOPT_STRUCT:
+			intRemoveOptions();
+			for (i = 0; i < numStructureStats && i < MAXSTRUCTURES; i++)
+			{
+				apsStructStatsList[i] = asStructureStats + i;
+			}
+			ppsStatsList = (BASE_STATS**)apsStructStatsList;
+			objMode = IOBJ_BUILD;
+			intAddStats(ppsStatsList, i, NULL, NULL);
+			intMode = INT_EDITSTAT;
+			editPosMode = IED_NOPOS;
+//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
+			break;
+		case IDOPT_FEATURE:
+			intRemoveOptions();
+			for (i = 0; i < numFeatureStats && i < MAXFEATURES; i++)
+			{
+				apsFeatureList[i] = asFeatureStats + i;
+			}
+			ppsStatsList = (BASE_STATS**)apsFeatureList;
+			intAddStats(ppsStatsList, i, NULL, NULL);
+			intMode = INT_EDITSTAT;
+			editPosMode = IED_NOPOS;
+//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
+			break;
+			/* Close window buttons */
+		case IDOPT_CLOSE:
+			intRemoveOptions();
+			intMode = INT_NORMAL;
+//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
+			break;
+			/* Ignore these */
+		case IDOPT_FORM:
+		case IDOPT_LABEL:
+		case IDOPT_MAPFORM:
+		case IDOPT_MAPLABEL:
+		case IDOPT_PLAYERFORM:
+		case IDOPT_PLAYERLABEL:
+			break;
+		case IDOPT_SAVEGAME:
+			/* NO LONGER AVAILABLE HERE - 14/04/98 AB*/
+//#ifdef DEBUG	// We need this so that Keith can save maps to import into the editor. PD 13/05/98.
+//			if (saveGame())
+//			{
+//				intRemoveOptions();
+//				intMode = INT_NORMAL;
+//				widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
+//			}
+//#endif
+			break;
+		case IDOPT_LOADGAME:
+			/* NO LONGER AVAILABLE HERE - 14/04/98 AB
+			if (loadGame(NULL, FALSE, TRUE))
+			{
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+				widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
+			}*/
+			break;
+		default:
+			ASSERT( FALSE, "intProcessOptions: Unknown return code" );
+			break;
+		}
+	}
+}
+
+
+/* Process return codes from the object placement stats screen */
+static void intProcessEditStats(UDWORD id)
+{
+	if (id >= IDSTAT_START && id <= IDSTAT_END)
+	{
+		/* Clicked on a stat button - need to look for a location for it */
+		psPositionStats = ppsStatsList[id - IDSTAT_START];
+		/*if it is a structure - need to check there is enough power available
+		to build */
+		if (psPositionStats->ref >= REF_STRUCTURE_START &&
+		    psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
+		{
+			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild, TRUE))
+			{
+				return;
+			}
+		}
+		/*if it is a template - need to check there is enough power available
+		to build */
+		if (psPositionStats->ref >= REF_TEMPLATE_START &&
+		    psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
+		{
+			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints, TRUE))
+			{
+				return;
+			}
+		}
+		intStartStructPosition(psPositionStats, NULL);
+		editPosMode = IED_POS;
+	}
+	else if (id == IDSTAT_CLOSE)
+	{
+		intRemoveStats();
+		intStopStructPosition();
+		intMode = INT_NORMAL;
+		objMode = IOBJ_NONE;
+	}
+}
+
+
+#ifdef EDIT_OPTIONS
+/* Process return codes from the edit screen */
+static void intProcessEdit(UDWORD id)
+{
+	switch (id)
+	{
+	case IDED_CLOSE:
+		intRemoveEdit();
+		intMode = INT_NORMAL;
+		break;
+	case IDED_FORM:
+	case IDED_LABEL:
+		break;
+	default:
+		ASSERT( FALSE, "intProcessEdit: Unknown return code" );
+		break;
+	}
+}
+#endif
 
 
 /* Run the widgets for the in game interface */
@@ -1955,112 +2285,7 @@ INT_RETVAL intRunWidgets(void)
 }
 
 
-/* Get  and validate the new map size from the options screen */
-/*static void intGetMapSize(void)
-{
-	SDWORD	editWidth, editHeight;
-	char	*pStr;
-	char	aText[WIDG_MAXSTR];
-	UDWORD	i, tmp, bitCount;
-	BOOL	widthChanged=FALSE, heightChanged=FALSE;
-
-	// Get the new width
-	pStr = widgGetString(psWScreen, IDOPT_MAPWIDTH);
-	if (isdigit(*pStr))
-	{
-		// There is a number in the string
-		sscanf(pStr, "%d", &editWidth);
-	}
-	else
-	{
-		// No number in the string, restore the old value
-		editWidth = newMapWidth;
-		widthChanged = TRUE;
-	}
-
-	// Get the new height
-	pStr = widgGetString(psWScreen, IDOPT_MAPHEIGHT);
-	if (isdigit(*pStr))
-	{
-		// There is a number in the string
-		sscanf(pStr, "%d", &editHeight);
-	}
-	else
-	{
-		// No number in the string, restore the old value
-		editHeight = newMapHeight;
-		heightChanged = TRUE;
-	}
-
-	// now validate the sizes
-	if (editWidth <= 0 || editWidth > MAP_MAXWIDTH)
-	{
-		editWidth = newMapWidth;
-		widthChanged = TRUE;
-	}
-	else
-	{
-		// Check it is a power of 2
-		bitCount = 0;
-		tmp = editWidth;
-		for(i=0; i<32; i++)
-		{
-			if (tmp & 1)
-			{
-				bitCount ++;
-			}
-			tmp = tmp >> 1;
-		}
-		if (bitCount != 1)
-		{
-			editWidth = newMapWidth;
-			widthChanged = TRUE;
-		}
-	}
-	if (editHeight <= 0 || editHeight > MAP_MAXHEIGHT)
-	{
-		editHeight = newMapHeight;
-		heightChanged = TRUE;
-	}
-	else
-	{
-		// Check it is a power of 2
-		bitCount = 0;
-		tmp = editHeight;
-		for(i=0; i<32; i++)
-		{
-			if (tmp & 1)
-			{
-				bitCount ++;
-			}
-			tmp = tmp >> 1;
-		}
-		if (bitCount != 1)
-		{
-			editHeight = newMapHeight;
-			heightChanged = TRUE;
-		}
-	}
-
-	// Store the new size
-	newMapWidth = editWidth;
-	newMapHeight = editHeight;
-
-	// Syncronise the edit boxes if necessary
-	if (widthChanged)
-	{
-		sprintf(aText, "%d", newMapWidth);
-		widgSetString(psWScreen, IDOPT_MAPWIDTH, aText);
-	}
-	if (heightChanged)
-	{
-		sprintf(aText, "%d", newMapHeight);
-		widgSetString(psWScreen, IDOPT_MAPHEIGHT, aText);
-	}
-}*/
-
-
-void intIncrementPlayerNumber(void)
+static void intIncrementPlayerNumber(void)
 {
 	intResetScreen(FALSE);
 
@@ -2074,7 +2299,7 @@ void intIncrementPlayerNumber(void)
 
 
 
-void intAddEditDroids(void)
+static void intAddEditDroids(void)
 {
 	UDWORD			i;
 	DROID_TEMPLATE	*psTempl;
@@ -2095,7 +2320,7 @@ void intAddEditDroids(void)
 }
 
 
-void intAddEditStructures(void)
+static void intAddEditStructures(void)
 {
 	UDWORD i;
 
@@ -2110,218 +2335,6 @@ void intAddEditStructures(void)
 	editPosMode = IED_NOPOS;
 }
 
-
-
-/* Process return codes from the Options screen */
-static void intProcessOptions(UDWORD id)
-{
-	UDWORD			i;
-	DROID_TEMPLATE	*psTempl;
-
-	if (id >= IDOPT_PLAYERSTART &&
-		id <= IDOPT_PLAYEREND)
-	{
-		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
-		selectedPlayer = id - IDOPT_PLAYERSTART;
-		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
-	}
-	else
-	{
-		switch (id)
-		{
-#ifdef EDIT_OPTIONS
-
-		case IDOPT_MAPLOAD:
-#ifdef DISP2D
-			if (ed2dLoadMapFile())
-#endif
-			{
-				/* Managed to load so quit the option screen */
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-			}
-			break;
-		case IDOPT_MAPSAVE:
-#ifdef DISP2D
-			if (ed2dSaveMapFile())
-#endif
-			{
-				/* Managed to save so quit the option screen */
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-			}
-			break;
-
-		case IDOPT_MAPNEW:
-			intGetMapSize();
-			if (mapNew(newMapWidth,newMapHeight))
-			{
-				/* Managed to create a new map so quit the option screen */
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-			}
-			break;
-		case IDOPT_MAPWIDTH:
-			intGetMapSize();
-			break;
-		case IDOPT_MAPHEIGHT:
-			intGetMapSize();
-			break;
-		case IDOPT_EDIT:
-			if (!display3D)
-			{
-				intRemoveOptions();
-				intAddEdit();
-				intMode = INT_EDIT;
-			}
-			break;
-#endif
-			/* The add object buttons */
-		case IDOPT_DROID:
-			intRemoveOptions();
-			i=0;
-			psTempl = apsDroidTemplates[selectedPlayer];
-			while ((psTempl != NULL) && (i < MAXTEMPLATES))
-			{
-				apsTemplateList[i] = psTempl;
-				psTempl=psTempl->psNext;
-				i++;
-			}
-			ppsStatsList = (BASE_STATS **)apsTemplateList;
-			objMode = IOBJ_MANUFACTURE;
-			intAddStats(ppsStatsList, i, NULL, NULL);
-			intMode = INT_EDITSTAT;
-			editPosMode = IED_NOPOS;
-//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			break;
-		case IDOPT_STRUCT:
-			intRemoveOptions();
-			for(i=0; i< numStructureStats && i<MAXSTRUCTURES; i++)
-			{
-				apsStructStatsList[i] = asStructureStats + i;
-			}
-			ppsStatsList = (BASE_STATS **)apsStructStatsList;
-			objMode = IOBJ_BUILD;
-			intAddStats(ppsStatsList, i, NULL, NULL);
-			intMode = INT_EDITSTAT;
-			editPosMode = IED_NOPOS;
-//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			break;
-		case IDOPT_FEATURE:
-			intRemoveOptions();
-			for(i=0; i< numFeatureStats && i<MAXFEATURES; i++)
-			{
-				apsFeatureList[i] = asFeatureStats + i;
-			}
-			ppsStatsList = (BASE_STATS **)apsFeatureList;
-			intAddStats(ppsStatsList, i, NULL, NULL);
-			intMode = INT_EDITSTAT;
-			editPosMode = IED_NOPOS;
-//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			break;
-			/* Close window buttons */
-		case IDOPT_CLOSE:
-			intRemoveOptions();
-			intMode = INT_NORMAL;
-//			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			break;
-			/* Ignore these */
-		case IDOPT_FORM:
-		case IDOPT_LABEL:
-		case IDOPT_MAPFORM:
-		case IDOPT_MAPLABEL:
-		case IDOPT_PLAYERFORM:
-		case IDOPT_PLAYERLABEL:
-			break;
-		case IDOPT_SAVEGAME:
-			/* NO LONGER AVAILABLE HERE - 14/04/98 AB*/
-//#ifdef DEBUG	// We need this so that Keith can save maps to import into the editor. PD 13/05/98.
-//			if (saveGame())
-//			{
-//				intRemoveOptions();
-//				intMode = INT_NORMAL;
-//				widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-//			}
-//#endif
-			break;
-		case IDOPT_LOADGAME:
-			/* NO LONGER AVAILABLE HERE - 14/04/98 AB
-			if (loadGame(NULL, FALSE, TRUE))
-			{
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-				widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			}*/
-			break;
-		default:
-			ASSERT( FALSE, "intProcessOptions: Unknown return code" );
-			break;
-		}
-	}
-}
-
-
-/* Process return codes from the object placement stats screen */
-static void intProcessEditStats(UDWORD id)
-{
-	if (id >= IDSTAT_START && id <= IDSTAT_END)
-	{
-		/* Clicked on a stat button - need to look for a location for it */
-		psPositionStats = ppsStatsList[id - IDSTAT_START];
-		/*if it is a structure - need to check there is enough power available
-		to build */
-		if (psPositionStats->ref >= REF_STRUCTURE_START &&
-			psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
-		{
-			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS *)psPositionStats)->
-				powerToBuild, TRUE))
-			{
-				return;
-			}
-		}
-		/*if it is a template - need to check there is enough power available
-		to build */
-		if (psPositionStats->ref >= REF_TEMPLATE_START &&
-			psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
-		{
-			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE *)psPositionStats)->
-				powerPoints, TRUE))
-			{
-				return;
-			}
-		}
-		intStartStructPosition(psPositionStats,NULL);
-		editPosMode = IED_POS;
-	}
-	else if (id == IDSTAT_CLOSE)
-	{
-		intRemoveStats();
-		intStopStructPosition();
-		intMode = INT_NORMAL;
-        objMode = IOBJ_NONE;
-	}
-}
-
-
-#ifdef EDIT_OPTIONS
-/* Process return codes from the edit screen */
-static void intProcessEdit(UDWORD id)
-{
-	switch (id)
-	{
-	case IDED_CLOSE:
-		intRemoveEdit();
-		intMode = INT_NORMAL;
-		break;
-	case IDED_FORM:
-	case IDED_LABEL:
-		break;
-	default:
-		ASSERT( FALSE, "intProcessEdit: Unknown return code" );
-		break;
-	}
-}
-#endif
 
 /* Set the shadow for the PowerBar */
 static void intRunPower(void)
@@ -3454,7 +3467,7 @@ void intDisplayWidgets(void)
 
 			screen_RestartBackDrop();
 			// Download buffer in system memory to the display back buffer.
-			iV_DownloadDisplayBuffer(DisplayBuffer);
+			pie_DownloadDisplayBuffer(DisplayBuffer);
 
 	//			DISP_WIDTH, DISP_HEIGHT);
 			/*Add the radar to the design screen - only if player has HQ*/
@@ -3637,7 +3650,7 @@ BOOL intBuildMode(void)
 // Just tell the interface the build placement was canceled.
 // currently only relevant on the Playstation.
 //
-void intBuildCancel(void)
+static void intBuildCancel(void)
 {
 
 // nasty crash ... 12-3-99
@@ -3662,6 +3675,132 @@ void intDemolishCancel(void)
         objMode = IOBJ_NONE;
     }
 }
+
+
+//reorder the research facilities so that first built is first in the list
+static void orderResearch(void)
+{
+	BASE_OBJECT *psTemp;
+	UDWORD i, maxLoop  = (UDWORD)(numObjects / 2);
+
+	for (i = 0; i < maxLoop; i++)
+	{
+		psTemp = apsObjectList[i];
+		apsObjectList[i] = apsObjectList[(numObjects - 1) - i];
+		apsObjectList[(numObjects - 1) - i] = psTemp;
+	}
+}
+
+
+// reorder the commanders
+static void orderDroids(void)
+{
+	SDWORD i, j;
+	BASE_OBJECT *psTemp;
+
+	debug( LOG_NEVER, "orderUnit\n" );
+
+	// bubble sort on the ID - first built will always be first in the list
+	for (i = 0; i < MAX_OBJECTS; i++)
+	{
+		for(j = i + 1; j < MAX_OBJECTS; j++)
+		{
+			if (apsObjectList[i] != NULL && apsObjectList[j] != NULL &&
+				apsObjectList[i]->id > apsObjectList[j]->id)
+			{
+				psTemp = apsObjectList[i];
+				apsObjectList[i] = apsObjectList[j];
+				apsObjectList[j] = psTemp;
+			}
+		}
+	}
+}
+
+
+/*puts the selected players factories in order - Standard factories 1-5, then
+cyborg factories 1-5 and then Vtol factories 1-5*/
+static void orderFactories(void)
+{
+	STRUCTURE *psStruct, *psNext;
+	SDWORD entry = 0;
+	UDWORD inc = 0, type = FACTORY_FLAG, objectInc = 0;
+
+	ASSERT( numObjects <= NUM_FACTORY_TYPES * MAX_FACTORY, "orderFactories : too many factories!" );
+
+	//copy the object list into the list to order
+	memcpy(apsListToOrder, apsObjectList, sizeof(BASE_OBJECT*) * ORDERED_LIST_SIZE);
+
+	//go through the list of structures and extract them in order
+	while (entry < numObjects)
+	{
+		for (psStruct = (STRUCTURE*)apsListToOrder[objectInc]; psStruct != NULL; psStruct = psNext)
+		{
+			psNext = (STRUCTURE*)apsListToOrder[++objectInc];
+			if ((SDWORD)objectInc >= numObjects)
+			{
+				psNext = NULL;
+			}
+
+			ASSERT( StructIsFactory(psStruct), "orderFactories: structure is not a factory" );
+
+			if (((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryInc == inc
+			    AND ((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryType == type)
+			{
+				apsObjectList[entry++] = (BASE_OBJECT*)psStruct;
+				//quick check that don't end up with more!
+				if (entry > numObjects)
+				{
+					ASSERT( FALSE, "orderFactories: too many objects!" );
+					return;
+				}
+				break;
+			}
+		}
+		inc++;
+		if (inc > MAX_FACTORY)
+		{
+			inc = 0;
+			type++;
+		}
+		objectInc = 0;
+	}
+}
+
+
+/*order the objects in the bottom bar according to their type*/
+static void orderObjectInterface(void)
+{
+
+	if (apsObjectList == NULL)
+	{
+		//no objects so nothing to order!
+		return;
+	}
+
+	switch(apsObjectList[0]->type)
+	{
+	case OBJ_STRUCTURE:
+		//if (((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_FACTORY OR
+		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_CYBORG_FACTORY OR
+		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_VTOL_FACTORY)
+        if (StructIsFactory((STRUCTURE *)apsObjectList[0]))
+		{
+			orderFactories();
+		}
+        else if (((STRUCTURE *)apsObjectList[0])->pStructureType->type ==
+            REF_RESEARCH)
+        {
+            orderResearch();
+        }
+		break;
+	case OBJ_DROID:
+		orderDroids();
+	default:
+		//nothing to do as yet!
+		break;
+	}
+}
+
 
 /* Tell the interface a factory has completed building ALL droids */
 void intManufactureFinished(STRUCTURE *psBuilding)
@@ -3790,22 +3929,8 @@ UWORD numForms(UDWORD total, UDWORD perForm)
 }
 
 
-// Add...
-//	Droid order button	( always )
-//	Transporter button,	( if transporter available )
-//	Re-enforcements button, ( if in off world map and re-enforcements available )
-//
-// Currently only used on Playstation.
-//
-BOOL intAddReticuleExtras(void)
-{
-
-	return TRUE;
-}
-
-
 /* Add the reticule widgets to the widget screen */
-BOOL _intAddReticule(void)
+BOOL intAddReticule(void)
 {
 	if(ReticuleUp == FALSE) {
 		W_FORMINIT		sFormInit;
@@ -3958,7 +4083,7 @@ BOOL _intAddReticule(void)
 }
 
 
-BOOL intReticuleIsUp(void)
+static BOOL intReticuleIsUp(void)
 {
 	return ReticuleUp;
 }
@@ -4043,14 +4168,16 @@ void intSetShadowPower(UDWORD quantity)
 
 
 /* Add the options widgets to the widget screen */
-BOOL _intAddOptions(void)
+BOOL intAddOptions(void)
 {
 	W_FORMINIT	sFormInit;
 	W_EDBINIT	sEdInit;
 	W_BUTINIT	sButInit;
 	W_LABINIT	sLabInit;
 	UDWORD		player;
-//	char		aText[WIDG_MAXSTR];//, aTip[WIDG_MAXSTR];
+#ifdef EDIT_OPTIONS
+	char		aText[WIDG_MAXSTR];
+#endif
 
 //	widgEndScreen(psWScreen);
 
@@ -4329,88 +4456,6 @@ BOOL _intAddOptions(void)
 
 	return TRUE;
 }
-
-
-/* Remove the options widgets from the widget screen */
-static void intRemoveOptions(void)
-{
-//	widgEndScreen(psWScreen);
-	widgDelete(psWScreen, IDOPT_FORM);
-//	widgStartScreen(psWScreen);
-}
-
-
-
-#ifdef EDIT_OPTIONS
-/* Add the edit widgets to the widget screen */
-static BOOL intAddEdit(void)
-{
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-	W_BUTINIT		sButInit;
-
-//	widgEndScreen(psWScreen);
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-
-	/* Add the edit form */
-	sFormInit.formID = 0;
-	sFormInit.id = IDED_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = ED_X;
-	sFormInit.y = ED_Y;
-	sFormInit.width = ED_WIDTH;
-	sFormInit.height = ED_HEIGHT;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return FALSE;
-	}
-
-	/* Add the Option screen label */
-	sLabInit.formID = IDED_FORM;
-	sLabInit.id = IDED_LABEL;
-	sLabInit.style = WLAB_PLAIN;
-	sLabInit.x = ED_GAP;
-	sLabInit.y = ED_GAP;
-	sLabInit.width = ED_WIDTH;
-	sLabInit.height = ED_BUTHEIGHT;
-	sLabInit.pText = "Edit";
-	sLabInit.FontID = WFont;
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return FALSE;
-	}
-
-	/* Add the close box */
-	sButInit.formID = IDED_FORM;
-	sButInit.id = IDED_CLOSE;
-	sButInit.style = WBUT_PLAIN;
-	sButInit.x = ED_WIDTH - ED_GAP - CLOSE_SIZE;
-	sButInit.y = ED_GAP;
-	sButInit.width = CLOSE_SIZE;
-	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = WFont;
-	sButInit.pText = pCloseText;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-
-/* Remove the edit widgets from the widget screen */
-static void intRemoveEdit(void)
-{
-//	widgEndScreen(psWScreen);
-	widgDelete(psWScreen, IDED_FORM);
-//	widgStartScreen(psWScreen);
-}
-#endif
 
 
 /* Add the object screen widgets to the widget screen.
@@ -5170,7 +5215,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 }
 
 
-static BOOL _intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
+static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
 
 	_intAddObjectWindow(psObjects,psSelected,bForceStats);
@@ -5497,7 +5542,7 @@ found:	// Jump to here if an object is found
 
 
 /* Reset the stats button for an object */
-static void _intSetStats(UDWORD id, BASE_STATS *psStats)
+static void intSetStats(UDWORD id, BASE_STATS *psStats)
 {
 	W_FORMINIT	sFormInit;
 	W_BARINIT	sBarInit;
@@ -5638,7 +5683,7 @@ static void _intSetStats(UDWORD id, BASE_STATS *psStats)
 }
 
 
-void intUpdateManufactureLimits(struct _widget *psWidget, struct _w_context *psContext)
+static void intUpdateManufactureLimits(struct _widget *psWidget, struct _w_context *psContext)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 	UDWORD MaxDroids = getMaxDroids(selectedPlayer);
@@ -5660,7 +5705,7 @@ void intUpdateManufactureLimits(struct _widget *psWidget, struct _w_context *psC
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
-static BOOL _intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
+static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 						BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
 	W_FORMINIT			sFormInit;
@@ -6686,6 +6731,12 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 }
 
 
+static BOOL intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
+{
+	return _intAddObject(psObjects, psSelected,bForceStats);
+}
+
+
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
 static BOOL intAddBuild(DROID *psSelected)
@@ -7129,19 +7180,6 @@ void intShowPowerBar(void)
 	}
 }
 
-//hides the power bar from the display
-void intHidePowerBar(void)
-{
-	//only hides the power bar if the player has requested no power bar
-	if (!powerBarUp)
-	{
-		if (widgGetFromID(psWScreen,IDPOW_POWERBAR_T))
-		{
-			widgHide(psWScreen, IDPOW_POWERBAR_T);
-		}
-	}
-}
-
 //hides the power bar from the display - regardless of what player requested!
 void forceHidePowerBar(void)
 {
@@ -7343,7 +7381,7 @@ SDWORD intNumSelectedDroids(UDWORD droidType)
 }
 
 
-void intShowReticuleButton(UDWORD id,BOOL Show)
+static void intShowReticuleButton(UDWORD id, BOOL Show)
 {
 	int i;
 
@@ -7502,13 +7540,13 @@ BOOL intCheckReticuleButEnabled(UDWORD id)
 }
 
 
-BOOL InterfaceIsUp(UWORD Type) {
+static BOOL InterfaceIsUp(UWORD Type) {
 	return ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == Type);
 }
 
 // Do any maintenance on the interface that's needed when a structure is destroyed.
 //
-void intDestroyStructure(STRUCTURE *psStruct)
+static void intDestroyStructure(STRUCTURE *psStruct)
 {
 	if(psStruct == CurrentStruct) {
 		intInitStructureCycle();
@@ -7518,7 +7556,7 @@ void intDestroyStructure(STRUCTURE *psStruct)
 
 // Do any maintenance on the interface that's needed when a droid is destroyed.
 //
-void intDestroyDroid(DROID *psDroid)
+static void intDestroyDroid(DROID *psDroid)
 {
 	if(psDroid == CurrentDroid) {
 		intInitDroidCycle();
@@ -7526,7 +7564,7 @@ void intDestroyDroid(DROID *psDroid)
 }
 
 
-void intInitObjectCycle(void)
+static void intInitObjectCycle(void)
 {
 	intInitStructureCycle();
 	intInitDroidCycle();
@@ -7666,7 +7704,7 @@ enum {
 };
 
 
-UDWORD GetWeaponMajorClass(WEAPON_STATS *psWeapStats)
+static UDWORD GetWeaponMajorClass(WEAPON_STATS *psWeapStats)
 {
 	switch(psWeapStats->weaponSubClass) {
 		case WSC_FLAME:
@@ -7726,7 +7764,7 @@ UDWORD GetWeaponMajorClass(WEAPON_STATS *psWeapStats)
 
 // Used for selecting similar types of units.
 //
-BOOL DroidTypesMatch(DROID *psDroid1,DROID *psDroid2)
+static BOOL DroidTypesMatch(DROID *psDroid1, DROID *psDroid2)
 {
 	UDWORD Type1 = psDroid1->droidType;
 	UDWORD Type2 = psDroid2->droidType;
@@ -7760,7 +7798,7 @@ BOOL DroidTypesMatch(DROID *psDroid1,DROID *psDroid2)
 // Select all droids of the same type with the same cluster id as
 // the specified droid, deselects all others.
 //
-BOOL intSelectDroidsInDroidCluster(DROID *psCurDroid)
+static BOOL intSelectDroidsInDroidCluster(DROID *psCurDroid)
 {
 	DROID *psDroid;
 	UWORD NumSelected = 0;
@@ -8083,188 +8121,8 @@ void GotoPrevObject(void)
 #endif
 
 
-
-
-
-
-/*order the objects in the bottom bar according to their type*/
-void orderObjectInterface(void)
-{
-
-	if (apsObjectList == NULL)
-	{
-		//no objects so nothing to order!
-		return;
-	}
-
-	switch(apsObjectList[0]->type)
-	{
-	case OBJ_STRUCTURE:
-		//if (((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_FACTORY OR
-		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_CYBORG_FACTORY OR
-		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_VTOL_FACTORY)
-        if (StructIsFactory((STRUCTURE *)apsObjectList[0]))
-		{
-			orderFactories();
-		}
-        else if (((STRUCTURE *)apsObjectList[0])->pStructureType->type ==
-            REF_RESEARCH)
-        {
-            orderResearch();
-        }
-		break;
-	case OBJ_DROID:
-		orderDroids();
-	default:
-		//nothing to do as yet!
-		break;
-	}
-}
-
-/*puts the selected players factories in order - Standard factories 1-5, then
-cyborg factories 1-5 and then Vtol factories 1-5*/
-void orderFactories(void)
-{
-	STRUCTURE	*psStruct, *psNext;
-	SDWORD		entry;
-	UDWORD		inc, type, objectInc;
-
-	ASSERT( numObjects <= NUM_FACTORY_TYPES * MAX_FACTORY,
-		"orderFactories : too many factories!" );
-
-	//copy the object list into the list to order
-	memcpy(apsListToOrder, apsObjectList, sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
-
-	entry = objectInc = inc = 0;
-	type = FACTORY_FLAG;
-	//go through the list of structures and extract them in order
-	while(entry < numObjects)
-	{
-		for(psStruct = (STRUCTURE *)apsListToOrder[objectInc]; psStruct != NULL;
-			psStruct = psNext)
-		{
-			psNext = (STRUCTURE *)apsListToOrder[++objectInc];
-			if ((SDWORD)objectInc >= numObjects)
-			{
-				psNext = NULL;
-			}
-
-			ASSERT( StructIsFactory(psStruct),
-				"orderFactories: structure is not a factory" );
-
-			if (((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint->
-				factoryInc == inc AND
-				((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint->
-				factoryType == type)
-			{
-				apsObjectList[entry++] = (BASE_OBJECT *)psStruct;
-				//quick check that don't end up with more!
-				if (entry > numObjects)
-				{
-					ASSERT( FALSE, "orderFactories: too many objects!" );
-					return;
-				}
-				break;
-			}
-		}
-		inc++;
-		if (inc > MAX_FACTORY)
-		{
-			inc = 0;
-			type++;
-		}
-		objectInc = 0;
-	}
-}
-
-//reorder the research facilities so that first built is first in the list
-void orderResearch(void)
-{
-    BASE_OBJECT     *psTemp;
-    UDWORD          i, maxLoop;
-
-    maxLoop = (UDWORD)(numObjects/2);
-    for (i=0; i < maxLoop; i++)
-    {
-        psTemp = apsObjectList[i];
-        apsObjectList[i] = apsObjectList[(numObjects-1)-i];
-        apsObjectList[(numObjects-1)-i] = psTemp;
-    }
-}
-
-
-// reorder the commanders
-void orderDroids(void)
-{
-	SDWORD			i,j;
-	BASE_OBJECT		*psTemp;
-
-	debug( LOG_NEVER, "orderUnit\n" );
-
-	// bubble sort on the ID - first built will always be first in the list
-	for(i=0; i<MAX_OBJECTS; i++)
-	{
-		for(j=i+1; j<MAX_OBJECTS; j++)
-		{
-			if (apsObjectList[i] != NULL && apsObjectList[j] != NULL &&
-				apsObjectList[i]->id > apsObjectList[j]->id)
-			{
-				psTemp = apsObjectList[i];
-				apsObjectList[i] = apsObjectList[j];
-				apsObjectList[j] = psTemp;
-			}
-		}
-	}
-}
-
-
 //access function for selected object in the interface
 BASE_OBJECT * getCurrentSelected(void)
 {
 	return psObjSelected;
-}
-
-
-//
-// Stack friendly wrappers for those greedy interface initialisation functions.
-//
-
-BOOL intAddOptions(void)
-{
-	return _intAddOptions();
-}
-
-
-BOOL intAddReticule(void)
-{
-	return _intAddReticule();
-}
-
-
-static BOOL intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
-{
-
-	return _intAddObject(psObjects, psSelected,bForceStats);
-}
-
-
-static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
-{
-
-	return _intUpdateObject(psObjects, psSelected,bForceStats);
-}
-
-
-static void intSetStats(UDWORD id, BASE_STATS *psStats)
-{
-
-	_intSetStats(id, psStats);
-}
-
-
-static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
-						BASE_STATS *psSelected, BASE_OBJECT *psOwner)
-{
-
-	return _intAddStats(ppsStatsList, numStats, psSelected, psOwner);
 }

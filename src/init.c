@@ -12,97 +12,67 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
-
-#include "init.h"
-#include "mechanics.h"
-#include "objects.h"
-#include "display.h"
-#include "ai.h"
-#include "astar.h"
-#include "disp2d.h"
-#include "hci.h"
-#include "lib/sound/audio.h"
-#include "csnap.h"
-#include "wrappers.h"
-#include <time.h>
-#include "game.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/gamelib/ani.h"
-#include "drive.h"
-#include "bucket3d.h"
-#include "message.h"
-#include "data.h"
-#include "raycast.h"
-#include "text.h"
-#include "console.h"
-
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-
-#include "configuration.h"
 #include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/tex.h"
-
-#include "resource.h"
+#include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/ivi.h"
-#include "group.h"
-#include "wrappers.h"
-#include "display3d.h"
-
-#include "atmos.h"
-#include "environ.h"
-#include "warzoneconfig.h"
-#include "multiplay.h"
-
+#include "lib/ivis_common/tex.h"
+#include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
+#include "lib/sound/cdaudio.h"
+
+#include "advvis.h"
+#include "astar.h"
+#include "atmos.h"
+#include "audio_id.h"
+#include "cluster.h"
+#include "cmddroid.h"
+#include "component.h"
+#include "configuration.h"
+#include "console.h"
+#include "data.h"
+#include "display.h"
+#include "display3d.h"
+#include "drive.h"
+#include "edit3d.h"
+#include "effects.h"
+#include "environ.h"
+#include "formation.h"
+#include "fpath.h"
+#include "frend.h"
+#include "frontend.h"
+#include "game.h"
+#include "gateway.h"
+#include "hci.h"
+#include "init.h"
+#include "intdisplay.h"
+#include "keymap.h"
+#include "levels.h"
+#include "lighting.h"
+#include "loop.h"
+#include "mapgrid.h"
+#include "mechanics.h"
+#include "miscimd.h"
+#include "mission.h"
+#include "modding.h"
+#include "multigifts.h"
+#include "multiplay.h"
+#include "projectile.h"
+#include "radar.h"
+#include "raycast.h"
+#include "resource.h"
+#include "scriptextern.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
-#include "miscimd.h"
-#include "keymap.h"
-#include "edit3d.h"
-#include "component.h"
-#include "fpath.h"
+#include "text.h"
+#include "transporter.h"
+#include "warzoneconfig.h"
 #include "winmain.h"
+#include "wrappers.h"
 
 #ifdef ARROWS
 #include "arrow.h"
 #endif
-
-#include "texture.h"
-
-#include "frend.h"
-
-#include "intimage.h"
-#include "power.h"
-#include "deliverance.h"
-#include "radar.h"
-#include "audio_id.h"
-#include "intdisplay.h"
-#include "formationdef.h"
-#include "formation.h"
-
-#include "lib/sound/cdaudio.h"
-#include "lib/sound/mixer.h"
-#include "advvis.h"
-
-#include "mission.h"
-#include "transporter.h"
-#include "projectile.h"
-#include "levels.h"
-#include "loop.h"
-#include "cmddroid.h"
-#include "effects.h"
-#include "scriptextern.h"
-#include "mapgrid.h"
-#include "cluster.h"
-#include "gateway.h"
-#include "lighting.h"
-
-#include "modding.h"
-
-#include "lib/netplay/netplay.h"
-#include "multigifts.h"
 
 extern char UserMusicPath[];
 
@@ -680,11 +650,6 @@ UWORD AsciiLookup[256] =
 IMAGEFILE *FrontImages;
 
 BOOL DirectControl = FALSE;
-
-
-
-extern int FEFont;
-//extern int FEBigFont;
 
 
 // Each module in the game should have a call from here to initialise

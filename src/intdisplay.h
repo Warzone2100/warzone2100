@@ -175,6 +175,8 @@ void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext
 
 void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext);
 
+void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
+
 void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext);
 //callback to display the factory number
 extern void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext);
