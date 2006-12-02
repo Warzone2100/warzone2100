@@ -110,26 +110,12 @@ void	kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
 // --------------------------------------------------------------------------
 void	kf_ToggleMissionTimer( void )
 {
-	if(mission.cheatTime)
-	{
-		setMissionCheatTime(FALSE);
-	}
-	else
-	{
-		setMissionCheatTime(TRUE);
-	}
+	setMissionCheatTime(!mission.cheatTime);
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleRadarJump( void )
 {
-	if(getRadarJumpStatus())
-	{
-		setRadarJump(FALSE);
-	}
-	else
-	{
-		setRadarJump(TRUE);
-	}
+	setRadarJump(!getRadarJumpStatus());
 }
 // --------------------------------------------------------------------------
 void	kf_NoFaults( void )
@@ -1363,26 +1349,12 @@ void	kf_ChooseOptions( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleBlips( void )
 {
-	if(doWeDrawRadarBlips())
-	{
-		setBlipDraw(FALSE);
-	}
-	else
-	{
-		setBlipDraw(TRUE);
-	}
+	setBlipDraw(!doWeDrawRadarBlips());
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleProximitys( void )
 {
-	if(doWeDrawProximitys())
-	{
-		setProximityDraw(FALSE);
-	}
-	else
-	{
-		setProximityDraw(TRUE);
-	}
+	setProximityDraw(!doWeDrawProximitys());
 }
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor( void )
