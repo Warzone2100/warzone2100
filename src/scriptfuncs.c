@@ -1974,9 +1974,9 @@ static	SDWORD			playerVisibleStruct;		//player whose structures must be visible
 // init enum visible structures.
 BOOL scrInitEnumStruct(void)
 {
-	SDWORD			player,iStat,targetplayer,any;
+	SDWORD		lookingPlayer,iStat,targetPlayer,any;
 
-	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &player, VAL_INT, &targetplayer) )
+	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer) )
 	{
 		return FALSE;
 	}
@@ -1990,8 +1990,8 @@ BOOL scrInitEnumStruct(void)
 		structfindany = FALSE;
 	}
 	psStructStatToFind	= (STRUCTURE_STATS *)(asStructureStats + iStat);
-	playerToEnumStruct	= (UDWORD)player;
-	playerVisibleStruct = targetplayer;		//fix: remember who must be able to see the structure
+	playerToEnumStruct	= (UDWORD)targetPlayer;
+	playerVisibleStruct = lookingPlayer;		//fix: remember who must be able to see the structure
 	enumStructCount		= 0;
 	return TRUE;
 }
@@ -2024,8 +2024,8 @@ BOOL scrEnumStruct(void)
 //		if(	(structfindany || (psStruct->pStructureType->type == psStructStatToFind->type))
 		if(	(structfindany || (psStruct->pStructureType->ref == psStructStatToFind->ref))
 			&&
-			((playerVisibleStruct < 0) || (psStruct->visible[playerToEnumStruct]))	//fix: added playerVisibleStruct for visibility test
-		   )
+			((playerVisibleStruct < 0) || (psStruct->visible[playerVisibleStruct]))	//fix: added playerVisibleStruct for visibility test
+			)
 		{
 			scrFunctionResult.v.oval = psStruct;
 			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))			//	push scrFunctionResult
@@ -2033,6 +2033,7 @@ BOOL scrEnumStruct(void)
 				return FALSE;
 			}
 			enumStructCount++;
+
 			return TRUE;
 		}
 		enumStructCount++;
@@ -7028,6 +7029,43 @@ BOOL scrMax(void)
 	return TRUE;
 }
 
+BOOL scrFMin(void)
+{
+	float				fval1,fval2;
+
+	if (!stackPopParams(2, VAL_FLOAT, &fval1, VAL_FLOAT, &fval2))
+	{
+		return FALSE;
+	}
+
+	scrFunctionResult.v.fval = MIN(fval2, fval1);
+	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+// Return maximum of 2 floats
+BOOL scrFMax(void)
+{
+	float				fval1,fval2;
+
+	if (!stackPopParams(2, VAL_FLOAT, &fval1, VAL_FLOAT, &fval2))
+	{
+		return FALSE;
+	}
+
+	scrFunctionResult.v.fval = MAX(fval1, fval2);
+	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
 {
 	UDWORD				i,structType,tx,ty;
@@ -7571,11 +7609,8 @@ BOOL scrNumEnemyWeapObjInRange(void)
 
 UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
 {
-	UDWORD				tx,ty,numEnemies;
+	UDWORD				numEnemies;
 	DROID				*psDroid;
-
-	tx = rangeX >> TILE_SHIFT;
-	ty = rangeY >> TILE_SHIFT;
 
 	numEnemies = 0;
 
@@ -7598,8 +7633,7 @@ UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 				continue;
 			}
 
-			if((range < 0) || ((dirtySqrt(tx, ty , psDroid->x >> TILE_SHIFT, psDroid->y >> TILE_SHIFT)
-				<< TILE_SHIFT) < range))	//enemy in range
+			if((range < 0) || (dirtySqrt(rangeX, rangeY , psDroid->x, psDroid->y) < range))	//enemy in range
 			{
 				numEnemies++;
 			}
@@ -7796,6 +7830,51 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrNumFriendlyWeapStructsInRange(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL scrNumPlayerWeapDroidsInRange(void)
+{
+	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
+	BOOL		bVTOLs;
+
+	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	{
+		debug(LOG_ERROR,"scrNumPlayerWeapDroidsInRange(): stack failed");
+		return FALSE;
+	}
+
+	scrFunctionResult.v.ival = numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrNumPlayerWeapDroidsInRange(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL scrNumPlayerWeapStructsInRange(void)
+{
+	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
+
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range))
+	{
+		debug(LOG_ERROR,"scrNumPlayerWeapStructsInRange(): stack failed");
+		return FALSE;
+	}
+
+	scrFunctionResult.v.ival = numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY);
+
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrNumPlayerWeapStructsInRange(): failed to push result");
 		return FALSE;
 	}
 
@@ -9157,7 +9236,9 @@ BOOL scrModulo(void)
 
 BOOL scrPlayerLoaded(void)
 {
-	SDWORD				player;
+	SDWORD			player;
+	BOOL			bPlayerHasFactories=FALSE;
+	STRUCTURE		*psCurr;
 
 	if (!stackPopParams(1, VAL_INT, &player))
 	{
@@ -9165,7 +9246,22 @@ BOOL scrPlayerLoaded(void)
 		return FALSE;
 	}
 
-	scrFunctionResult.v.bval = (game.skDiff[player] != 0);
+	/* see if there are any player factories left */
+	if(apsStructLists[player])
+	{
+		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		{
+			if(StructIsFactory(psCurr))
+			{
+				bPlayerHasFactories = TRUE;
+				break;
+			}
+		}
+	}
+
+	/* player is active if he has at least a unit or some factory */
+	scrFunctionResult.v.bval = (apsDroidLists[player] != NULL || bPlayerHasFactories);
+
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrPlayerLoaded(): failed to push result");

@@ -229,28 +229,35 @@ BOOL scrBaseObjGet(UDWORD index)
 		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_PROPULSION].nStat;
 		break;
 	case OBJID_WEAPON:		//TODO: only returns first weapon now
-		if (psObj->type != OBJ_DROID)
-		{
-			debug(LOG_ERROR, "scrBaseObjGet: weapon only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: weapon only valid for a droid" );
-			return FALSE;
-		}
 		type = (INTERP_TYPE)ST_WEAPON;
-		//if (((DROID *)psObj)->numWeaps == 0)
-        if (((DROID *)psObj)->asWeaps[0].nStat == 0)
+		switch (psObj->type)
 		{
-			scrFunctionResult.v.ival = 0;
+		case OBJ_DROID:
+			if (((DROID *)psObj)->asWeaps[0].nStat == 0)
+			{
+				scrFunctionResult.v.ival = 0;
+			}else{
+				scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asWeaps[0].nStat;
+			}
+			break;
+		case OBJ_STRUCTURE:
+			if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
+			{
+				scrFunctionResult.v.ival = 0;
+			}else{
+				scrFunctionResult.v.ival = (SDWORD)((STRUCTURE *)psObj)->asWeaps[0].nStat;
+			}
+			break;
+		default:		//only droids and structures can have a weapon
+			ASSERT( FALSE,"scrBaseObjGet: weapon only valid for droids and structures" );
+			return FALSE;
+			break;
 		}
-		else
-		{
-			scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asWeaps[0].nStat;
-		}
+
 		break;
 
 	case OBJID_STRUCTSTAT:
 		//droid.stat - now returns the type of structure a truck is building for droids
-
-
 		if (psObj->type == OBJ_STRUCTURE)
 		{
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;

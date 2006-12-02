@@ -799,6 +799,7 @@ static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function bei
 			if (!interpCheckEquiv(psFSymbol->aParams[i], psPBlock->aParams[i]))
 			{
 				debug(LOG_ERROR, "checkFuncParamTypes: Type mismatch for paramter %d ('1' based) in Function '%s' (provided type: %d, expected: %d)", (i+1), psFSymbol->pIdent, psPBlock->aParams[i], psFSymbol->aParams[i]);
+				scr_error("Parameter type mismatch");
 				return i+1;
 			}
 		//}
@@ -1731,6 +1732,8 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %token _AND
 %token _OR
 %token _NOT
+%token _INC
+%token _DEC
 
 %left _AND _OR
 %left BOOLEQUAL NOTEQUAL GREATEQUAL LESSEQUAL GREATER LESS
@@ -1740,6 +1743,7 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %right TO_INT_CAST
 %right TO_FLOAT_CAST
 %nonassoc UMINUS
+%left _INC _DEC
 
 	/* value tokens */
 %token <bval> BOOLEAN_T
@@ -1807,6 +1811,7 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 %type <cblock> objexp
 %type <cblock> objexp_dot
 %type <cblock> userexp
+%type <cblock> inc_dec_exp
 %type <objVarBlock> num_objvar
 %type <objVarBlock> bool_objvar
 %type <objVarBlock> user_objvar
@@ -3300,6 +3305,26 @@ statement:			assignment ';'
 						UDWORD line;
 						char *pDummy;
 
+						RULE("statement: assignment");
+
+						/* Put in debugging info */
+						if (genDebugInfo)
+						{
+							ALLOC_DEBUG($1, 1);
+							$1->psDebug[0].offset = 0;
+							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							$1->psDebug[0].line = line;
+						}
+
+						$$ = $1;
+					}
+				|	inc_dec_exp ';'
+					{
+						UDWORD line;
+						char *pDummy;
+
+						RULE("statement: inc_dec_exp");
+
 						/* Put in debugging info */
 						if (genDebugInfo)
 						{
@@ -4375,6 +4400,64 @@ loop:		WHILE '(' boolexp ')'
 				}
 		;
 
+/* Increment/Decrement expressions */
+inc_dec_exp:	NUM_VAR _INC
+				{
+					RULE("expression: NUM_VAR++");
+					
+					ALLOC_BLOCK(psCurrBlock, 1 + 1);	//NUM_VAR index + inc opcode
+					ip = psCurrBlock->pCode;
+					psCurrBlock->type = $1->type;
+					
+					/* Put variable index */
+					switch ($1->storage)
+					{
+					case ST_PRIVATE:
+						PUT_PKOPCODE(ip, OP_PUSHGLOBAL, $1->index);
+						break;
+					case ST_LOCAL:
+						PUT_PKOPCODE(ip, OP_PUSHLOCAL, $1->index);
+						break;
+					default:
+						scr_error("Wrong variable storage type for increment operator");
+						break;
+					}
+
+					/* Put inc opcode */
+					PUT_PKOPCODE(ip, OP_UNARYOP, OP_INC);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			|	NUM_VAR _DEC
+				{
+					RULE("expression: NUM_VAR--");
+
+					ALLOC_BLOCK(psCurrBlock, 1 + 1);	//NUM_VAR index + dec opcode
+					ip = psCurrBlock->pCode;
+					psCurrBlock->type = $1->type;
+					
+					/* Put variable index */
+					switch ($1->storage)
+					{
+					case ST_PRIVATE:
+						PUT_PKOPCODE(ip, OP_PUSHGLOBAL, $1->index);
+						break;
+					case ST_LOCAL:
+						PUT_PKOPCODE(ip, OP_PUSHLOCAL, $1->index);
+						break;
+					default:
+						scr_error("Wrong variable storage type for decrement operator");
+						break;
+					}
+
+					/* Put inc opcode */
+					PUT_PKOPCODE(ip, OP_UNARYOP, OP_DEC);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			;
 
 	/**************************************************************************************
 	 *
@@ -4454,15 +4537,6 @@ expression:		expression '+' expression
 
 					$$ = psCurrBlock;
 				}
-			//TODO:
-			//|	floatexp
-			//	{
-			//
-			//		RULE( "expression: floatexp");
-			//
-			//		/* Just pass the code up the tree */
-			//		$$ = $1;
-			//	}
 			|	NUM_FUNC '(' param_list ')'
 				{
 
@@ -4478,71 +4552,71 @@ expression:		expression '+' expression
 
 			|	NUM_FUNC_CUST '(' param_list ')'
 				{
-						UDWORD line,paramNumber;
-						char *pDummy;
+					UDWORD line,paramNumber;
+					char *pDummy;
 
 
 					RULE( "expression: NUM_FUNC_CUST '(' param_list ')'");
 
 
-						/* if($4->numParams != $3->numParams) */
-						if($3->numParams != $1->numParams)
-						{
-							debug(LOG_ERROR, "Wrong number of arguments for function call: '%s'. Expected %d parameters instead of  %d.", $1->pIdent, $1->numParams, $3->numParams);
-							scr_error("Wrong number of arguments in function call");
-							return CE_PARSE;
-						}
+					/* if($4->numParams != $3->numParams) */
+					if($3->numParams != $1->numParams)
+					{
+						debug(LOG_ERROR, "Wrong number of arguments for function call: '%s'. Expected %d parameters instead of  %d.", $1->pIdent, $1->numParams, $3->numParams);
+						scr_error("Wrong number of arguments in function call");
+						return CE_PARSE;
+					}
 
-						if(!$1->bFunction)
-						{
-							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
-							scr_error("Can't call an event");
-							return CE_PARSE;
-						}
+					if(!$1->bFunction)
+					{
+						debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
+						scr_error("Can't call an event");
+						return CE_PARSE;
+					}
 
-						/* make sure function has a return type */
-						if($1->retType != VAL_INT)
-						{
-							debug(LOG_ERROR, "'%s' does not return an integer value", $1->pIdent);
-							scr_error("assignment type conflict");
-							return CE_PARSE;
-						}
+					/* make sure function has a return type */
+					if($1->retType != VAL_INT)
+					{
+						debug(LOG_ERROR, "'%s' does not return an integer value", $1->pIdent);
+						scr_error("assignment type conflict");
+						return CE_PARSE;
+					}
 
-						/* check if right parameters were passed */
-						paramNumber = checkFuncParamTypes($1, $3);
-						if(paramNumber > 0)
-						{
-							debug(LOG_ERROR, "Parameter mismatch in function call: '%s'. Mismatch in parameter  %d.", $1->pIdent, paramNumber);
-							YYABORT;
-						}
+					/* check if right parameters were passed */
+					paramNumber = checkFuncParamTypes($1, $3);
+					if(paramNumber > 0)
+					{
+						debug(LOG_ERROR, "Parameter mismatch in function call: '%s'. Mismatch in parameter  %d.", $1->pIdent, paramNumber);
+						YYABORT;
+					}
 
-						/* Allocate the code block */
-						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
-						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
+					/* Allocate the code block */
+					//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
+					ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
 
-						ALLOC_DEBUG(psCurrBlock, 1);
-						ip = psCurrBlock->pCode;
+					ALLOC_DEBUG(psCurrBlock, 1);
+					ip = psCurrBlock->pCode;
 
-						if($3->numParams > 0)	/* if any parameters declared */
-						{
-							/* Copy in the code for the parameters */
-							PUT_BLOCK(ip, $3);		//PUT_BLOCK(ip, psPBlock);
-							FREE_PBLOCK($3);		//FREE_PBLOCK(psPBlock);
-						}
+					if($3->numParams > 0)	/* if any parameters declared */
+					{
+						/* Copy in the code for the parameters */
+						PUT_BLOCK(ip, $3);		//PUT_BLOCK(ip, psPBlock);
+						FREE_PBLOCK($3);		//FREE_PBLOCK(psPBlock);
+					}
 
-						/* Store the instruction */
-						PUT_OPCODE(ip, OP_FUNC);
-						PUT_EVENT(ip,$1->index);			//Put event index
+					/* Store the instruction */
+					PUT_OPCODE(ip, OP_FUNC);
+					PUT_EVENT(ip,$1->index);			//Put event index
 
-						/* Add the debugging information */
-						if (genDebugInfo)
-						{
-							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
-							psCurrBlock->psDebug[0].line = line;
-						}
+					/* Add the debugging information */
+					if (genDebugInfo)
+					{
+						psCurrBlock->psDebug[0].offset = 0;
+						scriptGetErrorData((SDWORD *)&line, &pDummy);
+						psCurrBlock->psDebug[0].line = line;
+					}
 
-						$$ = psCurrBlock;
+					$$ = psCurrBlock;
 				}
 			|	NUM_VAR
 				{
@@ -5178,6 +5252,14 @@ boolexp:		boolexp _AND boolexp
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
+			|	floatexp BOOLEQUAL floatexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_EQUAL, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
 			|	userexp BOOLEQUAL userexp
 				{
 					if (!interpCheckEquiv($1->type,$3->type))
@@ -5205,6 +5287,14 @@ boolexp:		boolexp _AND boolexp
 					$$ = psCurrBlock;
 				}
 			|	expression NOTEQUAL expression
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_NOTEQUAL, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			|	floatexp NOTEQUAL floatexp
 				{
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5246,7 +5336,23 @@ boolexp:		boolexp _AND boolexp
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
+			|	floatexp LESSEQUAL floatexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_LESSEQUAL, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
 			|	expression GREATEQUAL expression
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_GREATEREQUAL, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			|	floatexp GREATEQUAL floatexp
 				{
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_GREATEREQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
@@ -5262,7 +5368,23 @@ boolexp:		boolexp _AND boolexp
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
+			|	floatexp GREATER floatexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_GREATER, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
 			|	expression LESS expression
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_LESS, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			|	floatexp LESS floatexp
 				{
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_LESS, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);

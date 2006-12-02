@@ -101,6 +101,8 @@ typedef enum _op_code
 	OP_MUL,
 	OP_DIV,
 	OP_NEG,
+	OP_INC,
+	OP_DEC,
 
 	// Boolean operators
 	OP_AND,

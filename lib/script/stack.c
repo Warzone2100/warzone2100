@@ -56,7 +56,6 @@ BOOL stackEmpty(void)
 static BOOL stackNewChunk(UDWORD size)
 {
 	BLOCK_HEAP		*psHeap;
-	unsigned int						i;
 
 	/* see if a chunk has already been allocated */
 	if (psCurrChunk->psNext != NULL)
@@ -91,11 +90,6 @@ static BOOL stackNewChunk(UDWORD size)
 		/* initialize pointers
 		   note: 0 means type == VAL_BOOL */
 		memset(psCurrChunk->psNext->aVals, 0, sizeof(INTERP_VAL) * size);
-		/*for (i = 0; i<size; i++)
-		{
-			psCurrChunk->psNext->aVals[i].v.ival = 0;
-			psCurrChunk->psNext->aVals[i].type = VAL_INT;		//default type, should be ok
-		}*/
 
 		memSetBlockHeap(psHeap);
 	}
@@ -601,28 +595,54 @@ BOOL stackBinaryOp(OPCODE opcode)
 		psV1->v.bval = psV1->v.bval || psV2->v.bval;
 		break;
 	case OP_EQUAL:
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+			psV1->v.bval = psV1->v.fval == psV2->v.fval;
+		}else{
+			psV1->v.bval = psV1->v.ival == psV2->v.ival;
+		}
 		psV1->type = VAL_BOOL;
-		psV1->v.ival = psV1->v.ival == psV2->v.ival;
 		break;
 	case OP_NOTEQUAL:
+		
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+			psV1->v.bval = psV1->v.fval != psV2->v.fval;
+		}else{
+			psV1->v.bval = psV1->v.ival != psV2->v.ival;
+		}
+
 		psV1->type = VAL_BOOL;
-		psV1->v.ival = psV1->v.ival != psV2->v.ival;
 		break;
 	case OP_GREATEREQUAL:
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+			psV1->v.bval = psV1->v.fval >= psV2->v.fval;
+		}else{
+			psV1->v.bval = psV1->v.ival >= psV2->v.ival;
+		}
 		psV1->type = VAL_BOOL;
-		psV1->v.bval = psV1->v.ival >= psV2->v.ival;
 		break;
 	case OP_LESSEQUAL:
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+			psV1->v.bval = psV1->v.fval <= psV2->v.fval;
+		}else{
+			psV1->v.bval = psV1->v.ival <= psV2->v.ival;
+		}
 		psV1->type = VAL_BOOL;
-		psV1->v.bval = psV1->v.ival <= psV2->v.ival;
 		break;
 	case OP_GREATER:
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+			psV1->v.bval = psV1->v.fval > psV2->v.fval;
+		}else{
+			psV1->v.bval = psV1->v.ival > psV2->v.ival;
+		}
 		psV1->type = VAL_BOOL;
-		psV1->v.bval = psV1->v.ival > psV2->v.ival;
 		break;
 	case OP_LESS:
+		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+			psV1->v.bval = psV1->v.fval < psV2->v.fval;
+		}else{
+			psV1->v.bval = psV1->v.ival < psV2->v.ival;
+		}
 		psV1->type = VAL_BOOL;
-		psV1->v.bval = psV1->v.ival < psV2->v.ival;
 		break;
 	case OP_CONC:	//String concatenation
 		{
@@ -730,11 +750,37 @@ BOOL stackUnaryOp(OPCODE opcode)
 	// Do the operation
 	switch (opcode)
 	{
+	case OP_INC:
+		switch (psVal->type)
+		{
+		case VAL_INT:
+			psVal->v.ival++;
+			break;
+		default:
+			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_INC" );
+			break;
+		}
+		break;
+	case OP_DEC:
+		switch (psVal->type)
+		{
+		case VAL_INT:
+			psVal->v.ival--;
+			break;
+		default:
+			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_DEC" );
+			break;
+		}
+		break;
+
 	case OP_NEG:
 		switch (psVal->type)
 		{
 		case VAL_INT:
 			psVal->v.ival = - psVal->v.ival;
+			break;
+		case VAL_FLOAT:
+			psVal->v.fval = - psVal->v.fval;
 			break;
 		default:
 			ASSERT( FALSE, "stackUnaryOp: invalid type for negation" );
@@ -834,8 +880,6 @@ BOOL castTop(INTERP_TYPE neededType)
 /* Initialise the stack */
 BOOL stackInitialise(void)
 {
-	int				i;
-
 	psStackBlock = memGetBlockHeap();
 
 	psStackBase = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
@@ -861,11 +905,6 @@ BOOL stackInitialise(void)
 	/* initialize pointers
 	   note: this means type == VAL_BOOL */
 	memset(psStackBase->aVals, 0, sizeof(INTERP_VAL) * INIT_SIZE);
-/*	for(i = 0; i<INIT_SIZE; i++)
-	{
-		psStackBase->aVals[i].v.ival = 0;
-		psStackBase->aVals[i].type = VAL_INT;		//default type, should be ok
-	}*/
 
 	//string support
 	CURSTACKSTR = 0;		//initialize string 'stack'

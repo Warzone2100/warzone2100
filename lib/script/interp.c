@@ -17,7 +17,7 @@
 
 // the maximum number of instructions to execute before assuming
 // an infinite loop
-#define INTERP_MAXINSTRUCTIONS		100000
+#define INTERP_MAXINSTRUCTIONS		200000
 
 typedef struct
 {
@@ -93,6 +93,8 @@ SDWORD aOpSize[] =
 	-1, // OP_MUL
 	-1, // OP_DIV
 	-1, // OP_NEG
+	-1, // OP_INC
+	-1, // OP_DEC
 
 	-1, // OP_AND
 	-1, // OP_OR
@@ -981,7 +983,7 @@ void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab)
 	for(i=0; psTypeTab[i].base != 0; i++)
 	{
 		ASSERT( psTypeTab[i].base >= VAL_USERTYPESTART,
-			"scriptSetTypeEquiv: can only set type equivalence for user types" );
+			"scriptSetTypeEquiv: can only set type equivalence for user types (%d)", i );
 	}
 #endif
 

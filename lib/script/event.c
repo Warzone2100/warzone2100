@@ -1402,9 +1402,7 @@ BOOL eventSetTraceLevel(void)
 //reset local vars
 BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 {
-
 	SDWORD		i;
-	INTERP_TYPE type;
 
 	if(EventIndex >= psCode->numEvents)
 	{
@@ -1458,9 +1456,11 @@ BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 			break;
 		default:	/* Everything else */
 			// save the type, set to 0 (regardless of type size), put the type back
-			type = psCode->ppsLocalVarVal[EventIndex][i].type;
-			memset(&(psCode->ppsLocalVarVal[EventIndex][i]), 0, sizeof(INTERP_VAL));
-			psCode->ppsLocalVarVal[EventIndex][i].type = type;
+			//type = psCode->ppsLocalVarVal[EventIndex][i].type;
+			//memset(&(psCode->ppsLocalVarVal[EventIndex][i]), 0, sizeof(INTERP_VAL));
+			//psCode->ppsLocalVarVal[EventIndex][i].type = type;
+
+			memset(&(psCode->ppsLocalVarVal[EventIndex][i].v), 0, sizeof(psCode->ppsLocalVarVal[EventIndex][i].v));
 			break;
 		}
 	}

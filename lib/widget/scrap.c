@@ -324,7 +324,7 @@ lost_scrap(void)
 
 #elif defined(WIN_SCRAP)
 /* * */
-  retval = ( GetClipboardOwner()->i != SDL_Window->i );
+  retval = ( GetClipboardOwner() != SDL_Window );
 
 #elif defined(QNX_SCRAP)
 /* * */

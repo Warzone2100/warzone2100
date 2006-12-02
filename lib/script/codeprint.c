@@ -198,6 +198,12 @@ void cpPrintMathsOp(UDWORD opcode)
 	case OP_NEG:
 		debug( LOG_NEVER, "NEG" );
 		break;
+	case OP_DEC:
+		debug( LOG_NEVER, "DED" );
+		break;
+	case OP_INC:
+		debug( LOG_NEVER, "INC" );
+		break;
 	case OP_AND:
 		debug( LOG_NEVER, "AND" );
 		break;

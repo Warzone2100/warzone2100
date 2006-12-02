@@ -57,7 +57,7 @@ static UDWORD	context = 0;
 static UDWORD	current_tech = 0;
 static UDWORD	current_numplayers = 0;
 
-#define DEBUGMENU_FORM_W		160
+#define DEBUGMENU_FORM_W		200
 #define DEBUGMENU_FORM_H		300
 #define DEBUGMENU_FORM_X		(screenWidth - DEBUGMENU_FORM_W)		//pie_GetVideoBufferWidth() ?
 #define DEBUGMENU_FORM_Y		110 + D_H

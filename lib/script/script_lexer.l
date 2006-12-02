@@ -287,6 +287,7 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 %x COMMENT
 %x SLCOMMENT
 %x QUOTE
+%x _MACRO
 
 %%
 	/* Match to key words */
@@ -336,6 +337,8 @@ FALSE					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
 false					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
 
 	/* Match boolean operators */
+"++"					{RULE("++"); return _INC; }
+"--"					{RULE("++"); return _DEC; }
 "=="					return BOOLEQUAL;
 "!="					return NOTEQUAL;
 ">="					return GREATEQUAL;
@@ -439,6 +442,11 @@ NOT						return _NOT;
 									return IDENT;
 								}
 							}
+	/* Strip macros */
+"#"							{ BEGIN _MACRO; }
+<_MACRO>\n					{ BEGIN 0; }
+<_MACRO>. |
+<_MACRO>\n					;
 
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
