@@ -197,7 +197,7 @@ void SetFormAudioIDs(int OpenID,int CloseID)
 
 // Widget callback to update the progress bar in the object stats screen.
 //
-void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT			*psObj;
 	DROID				*Droid;
@@ -388,7 +388,7 @@ void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext
 }
 
 
-void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*Structure;
@@ -443,7 +443,7 @@ void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext)
 }
 
 //callback to display the factory number
-void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext)
+void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT			*psObj;
 	STRUCTURE			*Structure;
@@ -478,7 +478,7 @@ void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext)
 }
 
 //callback to display the production quantity number for a template
-void intAddProdQuantity(struct _widget *psWidget, struct _w_context *psContext)
+void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_STATS			*psStat;
 	DROID_TEMPLATE		*psTemplate;
@@ -522,7 +522,7 @@ void intAddProdQuantity(struct _widget *psWidget, struct _w_context *psContext)
 }
 
 //callback to display the production loop quantity number for a factory
-void intAddLoopQuantity(struct _widget *psWidget, struct _w_context *psContext)
+void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	FACTORY				*psFactory = NULL;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
@@ -564,7 +564,7 @@ void intAddLoopQuantity(struct _widget *psWidget, struct _w_context *psContext)
 }
 
 // callback to update the command droid size label
-void intUpdateCommandSize(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT			*psObj;
 	DROID				*psDroid;
@@ -595,7 +595,7 @@ void intUpdateCommandSize(struct _widget *psWidget, struct _w_context *psContext
 }
 
 // callback to update the command droid experience
-void intUpdateCommandExp(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT			*psObj;
 	DROID				*psDroid;
@@ -633,7 +633,7 @@ void intUpdateCommandExp(struct _widget *psWidget, struct _w_context *psContext)
 }
 
 // callback to update the command droid factories
-void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT			*psObj;
 	DROID				*psDroid;
@@ -694,7 +694,7 @@ void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext
 
 // Widget callback to update and display the power bar.
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
-void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_BARGRAPH *BarGraph = (W_BARGRAPH*)psWidget;
 	SDWORD		x0,y0;
@@ -868,7 +868,7 @@ void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 // Widget callback to display a rendered status button, ie the progress of a manufacturing or
 // building task.
 //
-void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM         *Form = (W_CLICKFORM*)psWidget;
 	BASE_OBJECT         *psObj;
@@ -1098,7 +1098,7 @@ void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 // Widget callback to display a rendered object button.
 //
-void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM *Form = (W_CLICKFORM*)psWidget;
 	BASE_OBJECT *psObj;
@@ -1179,7 +1179,7 @@ void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 // Widget callback to display a rendered stats button, ie the job selection window buttons.
 //
-void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM     *Form = (W_CLICKFORM*)psWidget;
 	BASE_STATS      *Stat, *psResGraphic;
@@ -1392,7 +1392,7 @@ void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *
 }
 
 
-void intDisplayObjectForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayObjectForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 //	W_TABFORM *Form = (W_TABFORM*)psWidget;
 //	UDWORD x0,y0,x1,y1;
@@ -1411,7 +1411,7 @@ void intDisplayObjectForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 
 // Widget callback function to do the open form animation. Doesn't just open Plain Forms!!
 //
-void intOpenPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM	*Form = (W_TABFORM*)psWidget;
 	UDWORD		Tx0,Ty0,Tx1,Ty1;
@@ -1481,7 +1481,7 @@ void intOpenPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 // Widget callback function to do the close form animation.
 //
-void intClosePlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD Tx0,Ty0,Tx1,Ty1;
@@ -1534,7 +1534,7 @@ void intClosePlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 
-void intDisplayPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -1548,7 +1548,7 @@ void intDisplayPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 }
 
 
-void intDisplayStatsForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -1566,7 +1566,7 @@ void intDisplayStatsForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 
 // Display an image for a widget.
 //
-void intDisplayImage(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1576,7 +1576,7 @@ void intDisplayImage(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 
 
 //draws the mission clock - flashes when below a predefined time
-void intDisplayMissionClock(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD  x = xOffset+psWidget->x;
 	UDWORD  y = yOffset+psWidget->y;
@@ -1596,7 +1596,7 @@ void intDisplayMissionClock(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayImageHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y, flash;
@@ -1662,7 +1662,7 @@ void intDisplayImageHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 }
 
 
-void GetButtonState(struct _widget *psWidget,BOOL *Hilight,UDWORD *Down,BOOL *Grey)
+void GetButtonState(WIDGET *psWidget,BOOL *Hilight,UDWORD *Down,BOOL *Grey)
 {
 	switch(psWidget->type) {
 		case WIDG_FORM:
@@ -1714,7 +1714,7 @@ void GetButtonState(struct _widget *psWidget,BOOL *Hilight,UDWORD *Down,BOOL *Gr
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1787,7 +1787,7 @@ void intDisplayButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yO
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayAltButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayAltButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1816,7 +1816,7 @@ void intDisplayAltButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD
 
 // Flash one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayButtonFlash(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1852,7 +1852,7 @@ void intDisplayButtonFlash(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
 
 }
 
-void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -1937,7 +1937,7 @@ void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 }
 
 
-void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
+void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 				   UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
 {
 	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
@@ -1971,7 +1971,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 
 }
 
-//void intDisplaySystemTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
+//void intDisplaySystemTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 //				   UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
 //{
 //	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
@@ -2009,7 +2009,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 //	}
 //}
 
-//static void intUpdateSliderCount(struct _widget *psWidget, struct _w_context *psContext)
+//static void intUpdateSliderCount(WIDGET *psWidget, W_CONTEXT *psContext)
 //{
 //	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 //	UDWORD Quantity = Slider->pos + 1;
@@ -2020,7 +2020,7 @@ void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
 
 // Display one of three images depending on if the widget is currently depressed (ah!).
 //
-void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 							 UDWORD yOffset, UDWORD *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
@@ -2057,7 +2057,7 @@ void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset,
 }
 
 // Display DP images depending on factory and if the widget is currently depressed
-void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 						UDWORD yOffset, UDWORD *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
@@ -2116,7 +2116,7 @@ void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset,
 }
 
 
-void intDisplaySlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	UDWORD x = xOffset+psWidget->x;
@@ -2134,7 +2134,7 @@ void intDisplaySlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 
 /* display highlighted edit box from left, middle and end edit box graphics */
-void intDisplayEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 
 	W_EDITBOX	*psEditBox = (W_EDITBOX *) psWidget;
@@ -2180,7 +2180,7 @@ void intDisplayEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 
-void intDisplayNumber(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 	UDWORD		i = 0;
@@ -3346,7 +3346,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 	return -1;
 }*/
 
-//void intDisplayBorderForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+//void intDisplayBorderForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 //{
 //	W_TABFORM *Form = (W_TABFORM*)psWidget;
 //	UDWORD x0,y0,x1,y1;
@@ -3365,7 +3365,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 
 
 /* Draws a stats bar for the design screen */
-void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_BARGRAPH		*BarGraph = (W_BARGRAPH*)psWidget;
 	SDWORD			x0, y0, iX, iY;
@@ -3416,7 +3416,7 @@ void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 
 
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours)
 {
 	W_BARGRAPH      *BarGraph = (W_BARGRAPH*)psWidget;
@@ -3525,7 +3525,7 @@ void WidgetAudioCallback(int AudioID)
 
 
 // Widget callback to display a contents button for the Transporter
-void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM			*Form = (W_CLICKFORM*)psWidget;
@@ -3804,7 +3804,7 @@ void drawRadarBlips(void)
 }*/
 
 /*Displays the proximity messages blips over the world*/
-void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
 					UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;
@@ -3916,7 +3916,7 @@ static UWORD sliderMouseUnit(W_SLIDER *Slider)
 	return posStops;
 }
 
-void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 
@@ -3943,13 +3943,13 @@ void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psCont
 	}
 }
 
-void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 }
 
 
 
-void intDisplayResSubGroup(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 	UDWORD		x = Label->x + xOffset;
@@ -3962,7 +3962,7 @@ void intDisplayResSubGroup(struct _widget *psWidget, UDWORD xOffset, UDWORD yOff
     }
 }
 
-void intDisplayAllyIcon(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_LABEL		*Label =  (W_LABEL*)psWidget;
 //	UDWORD		i = Label->pUserData;

@@ -48,7 +48,7 @@ W_SCREEN  *psRScreen;			// requester stuff.
 
 extern char	MultiCustomMapsPath[255];
 
-extern void	displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 BOOL	MultiMenuUp			= FALSE;
 BOOL	ClosingMultiMenu	= FALSE;
@@ -135,7 +135,7 @@ static UDWORD	current_numplayers = 0;
 BOOL			multiRequestUp = FALSE;				//multimenu is up.
 static BOOL		giftsUp[MAX_PLAYERS] = {TRUE};		//gift buttons for player are up.
 
-char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH]; 
+char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Map / force / name load save stuff.
@@ -238,7 +238,7 @@ BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE camToUse,
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 
 	UDWORD	x = xOffset+psWidget->x;
@@ -275,7 +275,7 @@ void displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-void displayCamTypeBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -292,7 +292,7 @@ void displayCamTypeBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 }
 
-void displayNumPlayersBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -752,7 +752,7 @@ void displayExtraGubbins(UDWORD height)
 	iV_DrawText(strresGetString(psStringRes, STR_MUL_ALLIANCES), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(strresGetString(psStringRes, STR_MUL_SCORE), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(strresGetString(psStringRes, STR_MUL_KILLS), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	
+
 	if(getDebugMappingStatus())
 	{
 		iV_DrawText("Units", MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
@@ -775,7 +775,7 @@ void displayExtraGubbins(UDWORD height)
 }
 
 
-void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	char			str[128];
 	UDWORD			x					= xOffset+psWidget->x;
@@ -933,7 +933,7 @@ void displayMultiPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 }
 
-void displayDebugMenu(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	char			str[128];
 	UDWORD			x					= xOffset+psWidget->x;
@@ -956,7 +956,7 @@ void displayDebugMenu(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, 
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-void displayAllianceState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD a,b,c,player;
 
@@ -993,7 +993,7 @@ void displayAllianceState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffs
 }
 
 
-void displayChannelState(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD a,b,c,player;
 

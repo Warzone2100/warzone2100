@@ -382,7 +382,7 @@ extern BOOL ClosingOrder;
 extern W_SCREEN *psWScreen;
 extern int WFont;
 extern UDWORD currentGameFrame;
-extern void intDisplayPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 static BOOL BuildSelectedDroidList(void);
 //static BOOL factorySelected(void);

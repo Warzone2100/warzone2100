@@ -12,12 +12,12 @@
 /* Elements common to all stats structures */
 #define STATS_BASE \
 	UDWORD			ref;			/* Unique ID of the item */ \
-	UDWORD			NameHash	/* unique hash value of the item (hashed version of pName below) */ 
+	UDWORD			NameHash	/* unique hash value of the item (hashed version of pName below) */
 #else
 /* Elements common to all stats structures */
 #define STATS_BASE \
 	UDWORD			ref;			/* Unique ID of the item */ \
-	char			*pName			/* pointer to the text id name (i.e. short language-independant name) */ 
+	char			*pName			/* pointer to the text id name (i.e. short language-independant name) */
 #endif
 
 /* Stats common to all stats structs */
@@ -27,14 +27,14 @@ typedef struct _base_stats
 } BASE_STATS;
 
 /*
-if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be 
+if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
 altered since it loops through the components from 1->MAX_COMP
 */
 typedef enum _component_type
 {
 	COMP_UNKNOWN,
 	//COMP_ARMOUR,
-	COMP_BODY,			
+	COMP_BODY,
 	COMP_BRAIN,
 	//COMP_POWERPLANT,
 	COMP_PROPULSION,
@@ -109,11 +109,11 @@ typedef enum _size
 typedef enum _weapon_class
 {
 	WC_KINETIC,		//bullets etc
-	//WC_EXPLOSIVE,	//rockets etc - classed as WC_KINETIC now to save space in struct _droid AB 25/11/98 
+	//WC_EXPLOSIVE,	//rockets etc - classed as WC_KINETIC now to save space in struct _droid AB 25/11/98
 	WC_HEAT,		//laser etc
-	//WC_MISC,		//others we haven't thought of! - classed as WC_HEAT now to save space in struct _droid AB 25/11/98 
+	//WC_MISC,		//others we haven't thought of! - classed as WC_HEAT now to save space in struct _droid AB 25/11/98
 
-	NUM_WEAPON_CLASS,
+	NUM_WEAPON_CLASS
 } WEAPON_CLASS;
 
 // weapon subclasses used to define which weapons are affected by weapon upgrade functions
@@ -216,7 +216,7 @@ typedef struct _brain_stats
 #if(0)
 typedef struct _power_stats
 {
-	// Common stats 
+	// Common stats
 	COMPONENT_STATS;
 
 	UDWORD		output;				// Power output from the power plant
@@ -255,7 +255,7 @@ typedef struct _propulsion_stats
 	COMPONENT_STATS;
 
 	UDWORD		maxSpeed;			// Max speed for the droid
-	UBYTE		propulsionType;		// Type of propulsion used - index 
+	UBYTE		propulsionType;		// Type of propulsion used - index
 									// into PropulsionTable
 } PROPULSION_STATS;
 
@@ -298,7 +298,7 @@ typedef struct _ecm_stats
 #if (0)
 typedef struct _armour_stats
 {
-	// Common stats 
+	// Common stats
 	COMPONENT_STATS;
 
 	UDWORD		strength;			// How much protection the armour provides
@@ -316,7 +316,7 @@ typedef struct _repair_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD				repairPoints;		// How much damage is restored to Body Points 
+	UDWORD				repairPoints;		// How much damage is restored to Body Points
 											// and armour each Repair Cycle
 	BOOL				repairArmour;		// whether armour can be repaired or not
 	UDWORD				location;			// specifies whether the Repair is default or for the Turret
@@ -329,7 +329,7 @@ typedef struct _repair_stats
 /*typedef struct _program_stats
 {
 	// Common stats - This structure doesn't actually need all the stats
-	COMPONENT_STATS;		
+	COMPONENT_STATS;
 	UDWORD		slots;				// How many brain slots the program takes
 	UDWORD		order;				// The order activated by the program if any
 	UDWORD		special;			// The special ability that the droid can perform
@@ -387,7 +387,7 @@ typedef struct _weapon_stats
 	UDWORD			indirectHeight;		// how high the ammo travels for indirect fire
 	FIREONMOVE		fireOnMove;			// indicates whether the droid has to stop before firing
 	WEAPON_CLASS	weaponClass;		// the class of weapon - see enum WEAPON_CLASS
-	WEAPON_SUBCLASS weaponSubClass;		// the subclass to which the weapon belongs - see 
+	WEAPON_SUBCLASS weaponSubClass;		// the subclass to which the weapon belongs - see
 										// enum WEAPON_SUBCLASS
 	MOVEMENT_MODEL	movementModel;		// which projectile model to use for the bullet
 	WEAPON_EFFECT	weaponEffect;		// which type of warhead is associated with the weapon
@@ -395,7 +395,7 @@ typedef struct _weapon_stats
 	//BOOL			homingRound;		// flag to indicate whether homing or not
 	UDWORD			recoilValue;		// used to compare with weight to see if recoils or not
 	UBYTE			rotate;				// amount the weapon(turret) can rotate 0 = none
-	UBYTE			maxElevation;		// max amount the turret can be elevated up			
+	UBYTE			maxElevation;		// max amount the turret can be elevated up
 	SBYTE			minElevation;		// min amount the turret can be elevated down
 	UBYTE			facePlayer;			// flag to make the (explosion) effect face the player when drawn
 	UBYTE			faceInFlight;		// flag to make the inflight effect face the player when drawn
@@ -409,10 +409,10 @@ typedef struct _weapon_stats
 	UDWORD			directLife;			// How long a direct fire weapon is visible
 										// Measured in 1/100 sec.
 	UDWORD			radiusLife;			// How long a blast radius is visible
-	
+
 	/* Graphics used for the weapon */
 	struct	iIMDShape		*pMountGraphic;		// The turret mount to use
-	struct	iIMDShape		*pMuzzleGraphic;	// The muzzle flash 
+	struct	iIMDShape		*pMuzzleGraphic;	// The muzzle flash
 	struct	iIMDShape		*pInFlightGraphic;	// The ammo in flight
 	struct	iIMDShape		*pTargetHitGraphic;	// The ammo hitting a target
 	struct	iIMDShape		*pTargetMissGraphic;// The ammo missing a target
@@ -437,7 +437,7 @@ typedef struct _construct_stats
 *	Additional stats tables
 ************************************************************************************/
 
-typedef enum _travel_medium 
+typedef enum _travel_medium
 {
 	GROUND,
 	AIR
@@ -451,7 +451,7 @@ typedef struct _propulsion_types
 #else
 	char	*pName;				// Text name of the component
 #endif*/
-	UWORD				powerRatioMult;		// Multiplier for the calculated power ratio of 
+	UWORD				powerRatioMult;		// Multiplier for the calculated power ratio of
 											// the droid
 	UDWORD				travel;				// Which medium the propulsion travels in
 	SWORD				startID;			//sound to play when this prop type starts
@@ -465,7 +465,7 @@ typedef struct _propulsion_types
 
 typedef struct _terrain_table
 {
-	UDWORD	speedFactor;		// factor to multiply the speed by depending on the 
+	UDWORD	speedFactor;		// factor to multiply the speed by depending on the
 								// method of propulsion and the terrain type - to be
 								// divided by 100 before use
 } TERRAIN_TABLE;

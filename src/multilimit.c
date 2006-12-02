@@ -38,7 +38,7 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // externs
-extern void			intDisplayPlainForm	(struct _widget *psWidget, UDWORD xOffset,
+extern void			intDisplayPlainForm	(WIDGET *psWidget, UDWORD xOffset,
 										 UDWORD yOffset, UDWORD *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void runLimitScreen		(void);
 void applyLimitSet		(void);
 void createLimitSet		(void);
 
-void displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -411,7 +411,7 @@ void applyLimitSet(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-void displayStructureBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

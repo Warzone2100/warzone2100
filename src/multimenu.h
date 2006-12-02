@@ -12,7 +12,7 @@ extern void		addMultiRequest(char *ToFind, UDWORD id,UBYTE mapCam, UBYTE numPlay
 extern BOOL		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 extern BOOL		runMultiRequester(UDWORD id,UDWORD *contextmode, char *chosen,UDWORD *chosenValue);
-extern void		displayRequestOption(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void		displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 // multimenu
 extern void		intProcessMultiMenu		(UDWORD id);

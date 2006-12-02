@@ -129,7 +129,7 @@ typedef struct _w_init
 #define TAB_MINOR 0	// Tab types passed into tab display callbacks.
 #define TAB_MAJOR 1
 
-typedef void (*TAB_DISPLAY)(struct _widget *psWidget,UDWORD TabType,UDWORD Position,UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
+typedef void (*TAB_DISPLAY)(WIDGET *psWidget,UDWORD TabType,UDWORD Position,UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
 typedef void (*FONT_DISPLAY)(UDWORD x,UDWORD y,char *String);
 
 /* Form initialisation structure */

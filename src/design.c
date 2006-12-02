@@ -289,7 +289,7 @@ extern	UDWORD				objID;					// unique ID creation thing..
 /* default droid design template */
 DROID_TEMPLATE	sDefaultDesignTemplate;
 
-extern void intDisplayPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void desSetupDesignTemplates( void );
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
@@ -356,7 +356,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats);
 /* Check whether a droid template is valid */
 static BOOL intValidTemplate(DROID_TEMPLATE *psTempl);
 /* General display window for the design form */
-void intDisplayDesignForm(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset,
 								 UDWORD yOffset, UDWORD *pColours);
 /* Sets the Design Power Bar for a given Template */
 static void intSetDesignPower(DROID_TEMPLATE *psTemplate);
@@ -412,13 +412,13 @@ DROID_TEMPLATE			sCurrDesign;
 /* Flag to indictate whether a 'spare' template button is required */
 static BOOL				newTemplate = FALSE;
 
-void intDisplayTemplateForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayStatusForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayComponentForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayStatForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayComponentButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayTemplateForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayStatusForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayComponentForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern void RenderCompositeDroid(UDWORD Index,iVector *Rotation,iVector *Position,iVector *TurretRotation,
 								 DROID *psDroid,BOOL RotXYZ);
@@ -2653,8 +2653,8 @@ static BOOL intAddSystemButtons(SDWORD mode)
 
     //if currently got a VTOL proplusion attached then don't add the system buttons
 	//Watermelon:dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
-    if (!checkTemplateIsVtol(&sCurrDesign) && 
-		mode != IDES_TURRET_A && 
+    if (!checkTemplateIsVtol(&sCurrDesign) &&
+		mode != IDES_TURRET_A &&
 		mode != IDES_TURRET_B &&
 		sCurrDesign.numWeaps < 2)
     {
@@ -4540,7 +4540,7 @@ void intProcessDesign(UDWORD id)
 				{
 					sCurrDesign.asWeaps[2] = 0;
 					widgHide( psWScreen, IDDES_WPBBUTTON );
-				}			
+				}
 			}
 			// do the callback if in the tutorial
 			if (bInTutorial)
@@ -5322,7 +5322,7 @@ void intRunDesign(void)
 
 
 
-/*void intDisplayTemplateForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+/*void intDisplayTemplateForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -5339,7 +5339,7 @@ void intRunDesign(void)
 }*/
 
 
-/*void intDisplayStatusForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+/*void intDisplayStatusForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -5356,7 +5356,7 @@ void intRunDesign(void)
 }*/
 
 
-/*void intDisplayComponentForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+/*void intDisplayComponentForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -5375,7 +5375,7 @@ void intRunDesign(void)
 
 extern void BoxBlueWash(UWORD x,UWORD y,UWORD w,UWORD h,BOOL Animate);
 
-void intDisplayStatForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
 	UWORD			x0, y0;
@@ -5436,7 +5436,7 @@ void intDisplayStatForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 }
 
 /* Displays the 3D view of the droid in a window on the design form */
-void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_FORM			*Form = (W_FORM*)psWidget;
 	UDWORD			x0,y0,x1,y1;
@@ -5485,13 +5485,13 @@ void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 }
 
 
-void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	intDisplayStatsButton(psWidget, xOffset, yOffset, pColours);
 }
 
 
-void intDisplayComponentButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 //	iIMDShape *OldCurShape = CurrentStatsShape;
 //	SWORD OldCurIndex = CurrentStatsIndex;
@@ -5505,7 +5505,7 @@ void intDisplayComponentButton(struct _widget *psWidget, UDWORD xOffset, UDWORD 
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
-void intDisplayDesignForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;

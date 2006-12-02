@@ -14,15 +14,6 @@
 /* Control whether the internal widget string heap should be used */
 #define W_USE_STRHEAP	FALSE
 
-/* Context information to pass into the widget functions */
-typedef struct _w_context
-{
-	W_SCREEN	*psScreen;			// Parent screen of the widget
-	struct _w_form	*psForm;			// Parent form of the widget
-	SDWORD		xOffset,yOffset;	// Screen offset of the parent form
-	SDWORD		mx,my;				// mouse position on the form
-} W_CONTEXT;
-
 /* Set the id number for widgRunScreen to return */
 extern void widgSetReturn(WIDGET *psWidget);
 

@@ -10,6 +10,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/ivis_common/rendmode.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
@@ -369,9 +370,6 @@ static UWORD			objNumTabs;
 /* The tab positions of the object form when the structure form is displayed */
 static UWORD			objMajor, objMinor;
 
-/* The current map width and height in the new map edit boxes */
-static UDWORD			newMapWidth, newMapHeight;
-
 /* Store a list of stats pointers from the main structure stats */
 static STRUCTURE_STATS	**apsStructStatsList;
 
@@ -501,8 +499,6 @@ static SWORD CurrentStructType = 0;
 static DROID *CurrentDroid = NULL;
 static SWORD CurrentDroidType = 0;
 
-static void intInitStructureCycle(void);
-static void intInitDroidCycle(void);
 /******************Power Bar Stuff!**************/
 /* Add the power bars */
 static BOOL intAddPower(void);
@@ -1448,22 +1444,6 @@ static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD t
 }
 
 
-// Returns TRUE if the widget specified by id should filter input.
-//
-static BOOL AllowWidgetIntercept(UDWORD id)
-{
-	switch(id) {
-		case	IDPOW_POWERBAR_T:
-		case	IDTIMER_FORM:
-		case	IDTIMER_DISPLAY:
-		case	IDTRANTIMER_DISPLAY:
-			return FALSE;
-	}
-
-	return TRUE;
-}
-
-
 /* Process return codes from the Options screen */
 static void intProcessOptions(UDWORD id)
 {
@@ -2283,58 +2263,6 @@ INT_RETVAL intRunWidgets(void)
 	}
 	return retCode;
 }
-
-
-static void intIncrementPlayerNumber(void)
-{
-	intResetScreen(FALSE);
-
-	selectedPlayer++;
-	if(selectedPlayer >= MAX_PLAYERS) {
-		selectedPlayer = 0;
-	}
-
-	CONPRINTF(ConsoleString,(ConsoleString,"New Player ID : %d",selectedPlayer));
-}
-
-
-
-static void intAddEditDroids(void)
-{
-	UDWORD			i;
-	DROID_TEMPLATE	*psTempl;
-
-	i=0;
-	psTempl = apsDroidTemplates[selectedPlayer];
-	while ((psTempl != NULL) && (i < MAXTEMPLATES))
-	{
-		apsTemplateList[i] = psTempl;
-		psTempl=psTempl->psNext;
-		i++;
-	}
-	ppsStatsList = (BASE_STATS **)apsTemplateList;
-	objMode = IOBJ_MANUFACTURE;
-	intAddStats(ppsStatsList, i, NULL, NULL);
-	intMode = INT_EDITSTAT;
-	editPosMode = IED_NOPOS;
-}
-
-
-static void intAddEditStructures(void)
-{
-	UDWORD i;
-
-	for(i=0; i< numStructureStats && i<MAXSTRUCTURES; i++)
-	{
-		apsStructStatsList[i] = asStructureStats + i;
-	}
-	ppsStatsList = (BASE_STATS **)apsStructStatsList;
-	objMode = IOBJ_BUILD;
-	intAddStats(ppsStatsList, i, NULL, NULL);
-	intMode = INT_EDITSTAT;
-	editPosMode = IED_NOPOS;
-}
-
 
 /* Set the shadow for the PowerBar */
 static void intRunPower(void)
@@ -3647,26 +3575,6 @@ BOOL intBuildMode(void)
 	return (objMode == IOBJ_BUILD);
 }
 
-// Just tell the interface the build placement was canceled.
-// currently only relevant on the Playstation.
-//
-static void intBuildCancel(void)
-{
-
-// nasty crash ... 12-3-99
-//
-// when positioning the factory delivery point with the production bar up causes a crash
-//
-// so what we need to do is check for a building mode and only clear the mode if we are placing a building
-
-//
-
-	if (objMode==IOBJ_BUILD || objMode==IOBJ_BUILDSEL)		//
-	{
-		objMode = IOBJ_NONE;
-	}
-}
-
 //Written to allow demolish order to be added to the queuing system
 void intDemolishCancel(void)
 {
@@ -4082,13 +3990,6 @@ BOOL intAddReticule(void)
 	return TRUE;
 }
 
-
-static BOOL intReticuleIsUp(void)
-{
-	return ReticuleUp;
-}
-
-
 void intRemoveReticule(void)
 {
 	if(ReticuleUp == TRUE) {
@@ -4465,7 +4366,7 @@ BOOL intAddOptions(void)
  * for the object.
  * If psSelected != NULL it specifies which object should be hilited.
  */
-static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
+static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
 	W_FORMINIT		sFormInit;
 	W_FORMINIT		sBFormInit,sBFormInit2;
@@ -5218,7 +5119,7 @@ static BOOL _intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,
 static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
 
-	_intAddObjectWindow(psObjects,psSelected,bForceStats);
+	intAddObjectWindow(psObjects,psSelected,bForceStats);
 
 	// if the stats screen is up and..
 	if(StatsUp) {
@@ -5234,17 +5135,6 @@ static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL
 
 	return TRUE;
 }
-
-
-static BOOL _intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
-{
-
-
-	_intAddObjectWindow(psObjects,psSelected,bForceStats);
-
-	return TRUE;
-}
-
 
 /* Remove the build widgets from the widget screen */
 void intRemoveObject(void)
@@ -5681,26 +5571,6 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 
 
 }
-
-
-static void intUpdateManufactureLimits(struct _widget *psWidget, struct _w_context *psContext)
-{
-	W_LABEL		*Label = (W_LABEL*)psWidget;
-	UDWORD MaxDroids = getMaxDroids(selectedPlayer);
-	UDWORD CurDroids = getNumDroids(selectedPlayer) +
-						getNumMissionDroids(selectedPlayer) +
-						getNumTransporterDroids(selectedPlayer);
-
-	if(CurDroids > MaxDroids) {
-		CurDroids = MaxDroids;
-	}
-
-	Label->aText[0] = (UBYTE)('0'+CurDroids / 10);
-	Label->aText[1] = (UBYTE)('0'+CurDroids % 10);
-	Label->aText[3] = (UBYTE)('0'+MaxDroids / 10);
-	Label->aText[4] = (UBYTE)('0'+MaxDroids % 10);
-}
-
 
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
@@ -6731,12 +6601,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 }
 
 
-static BOOL intAddObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
-{
-	return _intAddObject(psObjects, psSelected,bForceStats);
-}
-
-
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
 static BOOL intAddBuild(DROID *psSelected)
@@ -6753,8 +6617,8 @@ static BOOL intAddBuild(DROID *psSelected)
 
 	/* Create the object screen with the required data */
 
-	return intAddObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],
-						(BASE_OBJECT *)psSelected,TRUE);
+	return intAddObjectWindow((BASE_OBJECT *)apsDroidLists[selectedPlayer],
+							   (BASE_OBJECT *)psSelected,TRUE);
 }
 
 
@@ -6775,8 +6639,8 @@ static BOOL intAddManufacture(STRUCTURE *psSelected)
 	/* Create the object screen with the required data */
 	//return intAddObject((BASE_OBJECT *)apsStructLists[selectedPlayer],
 
-	return intAddObject((BASE_OBJECT *)interfaceStructList(),
-				(BASE_OBJECT *)psSelected,TRUE);
+	return intAddObjectWindow((BASE_OBJECT *)interfaceStructList(),
+							   (BASE_OBJECT *)psSelected,TRUE);
 }
 
 
@@ -6796,8 +6660,8 @@ static BOOL intAddResearch(STRUCTURE *psSelected)
 	/* Create the object screen with the required data */
 	//return intAddObject((BASE_OBJECT *)apsStructLists[selectedPlayer],
 
-	return intAddObject((BASE_OBJECT *)interfaceStructList(),
-						(BASE_OBJECT *)psSelected,TRUE);
+	return intAddObjectWindow((BASE_OBJECT *)interfaceStructList(),
+							   (BASE_OBJECT *)psSelected,TRUE);
 }
 
 
@@ -6817,8 +6681,8 @@ static BOOL intAddCommand(DROID *psSelected)
 	/* Create the object screen with the required data */
 	//return intAddObject((BASE_OBJECT *)apsStructLists[selectedPlayer],
 
-	return intAddObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],
-						(BASE_OBJECT *)psSelected,TRUE);
+	return intAddObjectWindow((BASE_OBJECT *)apsDroidLists[selectedPlayer],
+							   (BASE_OBJECT *)psSelected,TRUE);
 
 }
 
@@ -7191,7 +7055,7 @@ void forceHidePowerBar(void)
 
 
 /* Add the Proximity message buttons */
-static BOOL _intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
+BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 {
 	W_FORMINIT			sBFormInit;
 	PROXIMITY_DISPLAY	*psProxDisp2;
@@ -7243,15 +7107,6 @@ static BOOL _intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 		return FALSE;
 	}
 	return TRUE;
-}
-
-
-/* Add the Proximity message buttons */
-BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
-{
-
-
-	return _intAddProximityButton(psProxDisp, inc);
 }
 
 
@@ -7379,20 +7234,6 @@ SDWORD intNumSelectedDroids(UDWORD droidType)
 
 	return num;
 }
-
-
-static void intShowReticuleButton(UDWORD id, BOOL Show)
-{
-	int i;
-
-	for (i=0; i<NUMRETBUTS; i++) {
-		if(ReticuleEnabled[i].id == id) {
-			ReticuleEnabled[i].Hidden = !Show;
-			break;
-		}
-	}
-}
-
 
 static void intInitialiseReticule(void)
 {
@@ -7539,68 +7380,6 @@ BOOL intCheckReticuleButEnabled(UDWORD id)
 	return FALSE;
 }
 
-
-static BOOL InterfaceIsUp(UWORD Type) {
-	return ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == Type);
-}
-
-// Do any maintenance on the interface that's needed when a structure is destroyed.
-//
-static void intDestroyStructure(STRUCTURE *psStruct)
-{
-	if(psStruct == CurrentStruct) {
-		intInitStructureCycle();
-	}
-}
-
-
-// Do any maintenance on the interface that's needed when a droid is destroyed.
-//
-static void intDestroyDroid(DROID *psDroid)
-{
-	if(psDroid == CurrentDroid) {
-		intInitDroidCycle();
-	}
-}
-
-
-static void intInitObjectCycle(void)
-{
-	intInitStructureCycle();
-	intInitDroidCycle();
-}
-
-
-static void intInitStructureCycle(void)
-{
-	CurrentStruct = NULL;
-	CurrentStructType = 0;
-}
-
-static void intInitDroidCycle(void)
-{
-	CurrentDroid = NULL;
-	CurrentDroidType = 0;
-}
-
-
-// Begin drive mode.
-//
-// Selects a construction droid and activates the droid cam and driving mode.
-// If it can't find a construction droid then it tries for a weapon droid.
-//
-//void BeginDriveMode(void)
-//{
-//	DROID *psDroid;
-//
-//	if( (psDroid = intGotoNextDroidType(DROID_CONSTRUCT)) == NULL) {
-//		psDroid = intGotoNextDroidType(DROID_WEAPON);
-//	}
-//
-//	camToggleStatus();
-//}
-
-
 // Find any structure. Returns NULL if none found.
 //
 STRUCTURE *intFindAStructure(void)
@@ -7689,190 +7468,6 @@ STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDri
 	return CurrentStruct;
 }
 
-// Major weapon classes, used to group weapon classes for selection purposes.
-enum {
-	WMC_FLAME,
-	WMC_SHELL,
-	WMC_MISSILE,
-	WMC_MUZZLE,
-	WMC_ELECTRONIC,
-	WMC_AA,
-	WMC_LAS_SAT,
-	WMC_BOMB,
-    WMC_COMMAND,
-    WMC_EMP,
-};
-
-
-static UDWORD GetWeaponMajorClass(WEAPON_STATS *psWeapStats)
-{
-	switch(psWeapStats->weaponSubClass) {
-		case WSC_FLAME:
-			return WMC_FLAME;
-			break;
-
-    	case WSC_MORTARS:
-    	case WSC_HOWITZERS:
-			return WMC_SHELL;
-			break;
-
-		case WSC_MISSILE:
-		case WSC_ROCKET:
-    	case WSC_SLOWMISSILE:
-    	case WSC_SLOWROCKET:
-			return WMC_MISSILE;
-			break;
-
-		case WSC_MGUN:
-		case WSC_CANNON:
-		case WSC_ENERGY:
-		case WSC_GAUSS:
-			return WMC_MUZZLE;
-			break;
-
-		case WSC_ELECTRONIC:
-			return WMC_ELECTRONIC;
-			break;
-
-    	case WSC_AAGUN:
-			return WMC_AA;
-			break;
-
-    	case WSC_LAS_SAT:
-			return WMC_LAS_SAT;
-			break;
-
-    	case WSC_BOMB:
-			return WMC_BOMB;
-			break;
-
-        case WSC_COMMAND:
-            return WMC_COMMAND;
-            break;
-
-        case WSC_EMP:
-            return WMC_EMP;
-            break;
-	default:
-		break;
-	}
-
-	ASSERT( FALSE,"Unknown weapon class" );
-	return 0;
-}
-
-
-// Used for selecting similar types of units.
-//
-static BOOL DroidTypesMatch(DROID *psDroid1, DROID *psDroid2)
-{
-	UDWORD Type1 = psDroid1->droidType;
-	UDWORD Type2 = psDroid2->droidType;
-	BOOL IsLift1 = ((asPropulsionStats + psDroid1->asBits[COMP_PROPULSION].nStat)->propulsionType == LIFT);
-	BOOL IsLift2 = ((asPropulsionStats + psDroid2->asBits[COMP_PROPULSION].nStat)->propulsionType == LIFT);
-
-	// Don't match ground units with flying units.
-	if(IsLift1 != IsLift2) {
-		return FALSE;
-	}
-
-	// Allow matching cyborgs with tanks.
-	if((Type1 == DROID_WEAPON) || (Type1 == DROID_CYBORG) || (Type1 == DROID_CYBORG_SUPER)) {
-		if((Type2 == DROID_WEAPON) || (Type2 == DROID_CYBORG) || (Type2 == DROID_CYBORG_SUPER)) {
-			return TRUE;
-		}
-	}
-
-	if(Type1 == Type2) {
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-
-
-
-#define MAX_GROUP_SIZE	10
-
-// Select all droids of the same type with the same cluster id as
-// the specified droid, deselects all others.
-//
-static BOOL intSelectDroidsInDroidCluster(DROID *psCurDroid)
-{
-	DROID *psDroid;
-	UWORD NumSelected = 0;
-
-	typedef struct {
-		DROID *psDroid;
-		UDWORD Dist;
-	} DROIDDIST;
-
-	DROIDDIST NearDroids[MAX_GROUP_SIZE];
-	int i,j;
-	WEAPON_STATS *psWeapStats = asWeaponStats+psCurDroid->asWeaps[0].nStat;
-	UDWORD WeapClass = GetWeaponMajorClass(psWeapStats);
-
-	// Can't select a transporter.
-	if(psCurDroid->droidType == DROID_TRANSPORTER) {
-		return TRUE;
-	}
-
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext) {
-		if( (psDroid->cluster == psCurDroid->cluster) &&
-			(DroidTypesMatch(psDroid,psCurDroid)) ) {
-
-			UDWORD dx = abs(psCurDroid->x - psDroid->x);
-			UDWORD dy = abs(psCurDroid->y - psDroid->y);
-			UDWORD dist = dx*dx + dy*dy;
-			int Index;//,k;
-			WEAPON_STATS *psWStats = asWeaponStats+psDroid->asWeaps[0].nStat;
-
-			if(GetWeaponMajorClass(psWStats) != WeapClass) {
-				continue;
-			}
-
-			DeSelectDroid(psDroid);
-
-			Index = -1;
-			// Maintain a sorted list of the MAX_GROUP_SIZE nearest droids.
-			for(i=0; i<NumSelected; i++) {
-				if(dist < NearDroids[i].Dist) {	// Nearer?
-					// Move the rest down.
-					for(j=MAX_GROUP_SIZE-2; j>=i; j--) {
-						NearDroids[j+1] = NearDroids[j];
-					}
-
-					Index = i;
-					break;
-				}
-			}
-
-			if(Index >= 0) {
-				NearDroids[Index].Dist = dist;
-				NearDroids[Index].psDroid = psDroid;
-				if(NumSelected < MAX_GROUP_SIZE) {
-					NumSelected++;
-				}
-			} else if(i < MAX_GROUP_SIZE) {
-				NearDroids[i].Dist = dist;
-				NearDroids[i].psDroid = psDroid;
-				NumSelected++;
-			}
-		}
-	}
-
-	for(i=0; i<NumSelected; i++) {
-		SelectDroid(NearDroids[i].psDroid);
-	}
-
-//	intRefreshScreen();
-	debug( LOG_NEVER, "Selected %d droids\n", NumSelected );
-
-	return TRUE;
-}
-
-
 // Look through the players droids and find the next one of type droidType.
 // If Current=NULL then start at the beginning overwise start at Current.
 //
@@ -7952,174 +7547,6 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,BOOL AllowGroup)
 
 	return NULL;
 }
-
-#if (0)
-void GotoNextObject(void)
-{
-	BASE_OBJECT	*psObj;
-//	iPoint World,Screen;
-
-	if(ObjectSnap == NULL) {
-		//ObjectSnap = apsStructLists[selectedPlayer];
-		ObjectSnap = (BASE_OBJECT*)interfaceStructList();
-		SnapType = SNAP_TO_STRUCTURES;
-
-		if(ObjectSnap == NULL) {
-			ObjectSnap = (BASE_OBJECT*)apsDroidLists[selectedPlayer];
-			SnapType = SNAP_TO_DROIDS;
-		}
-	} else {
-		ObjectSnap = ObjectSnap->psNext;
-	}
-
-
-	psObj = ObjectSnap;
-
-	if(ObjectSnap == NULL) {
-		if(SnapType == SNAP_TO_STRUCTURES) {
-			ObjectSnap = (BASE_OBJECT*)apsDroidLists[selectedPlayer];
-			SnapType = SNAP_TO_DROIDS;
-
-			if(ObjectSnap == NULL) {
-				//ObjectSnap = apsStructLists[selectedPlayer];
-				ObjectSnap = (BASE_OBJECT*)interfaceStructList();
-				SnapType = SNAP_TO_STRUCTURES;
-			}
-		} else {
-			//ObjectSnap = apsStructLists[selectedPlayer];
-			ObjectSnap = (BASE_OBJECT*)interfaceStructList();
-			SnapType = SNAP_TO_STRUCTURES;
-
-			if(ObjectSnap == NULL) {
-				ObjectSnap = (BASE_OBJECT*)apsDroidLists[selectedPlayer];
-				SnapType = SNAP_TO_DROIDS;
-			}
-		}
-	}
-
-	psObj = ObjectSnap;
-	if(ObjectSnap) {
-//		DBPRINTF(("Next Object, ");
-		intSetMapPos(psObj->x, psObj->y);
-
-//		World.x = psObj->x;
-//		World.y = psObj->y;
-//		WorldPointToScreen(&World,&Screen);
-//		DBPRINTF(("%d,%d : ",Screen.x,Screen.y);
-//		SetMousePos(0,Screen.x,Screen.y);
-
-
-		if(psObj->type == OBJ_STRUCTURE) {					// If it's a structure...
-			clearSelection();
-			((STRUCTURE*)psObj)->selected = TRUE;
-			//DBPRINTF(("Structure: %s\n",((STRUCTURE*)psObj)->pStructureType->pName);
-//			DBPRINTF(("Structure: %s\n",getName(((STRUCTURE*)psObj)->pStructureType->pName));
-		}
-
-		if(psObj->type == OBJ_DROID) {						// If it's a droid...
-			clearSelection();
-//			((DROID*)psObj)->selected = TRUE;
-			SelectDroid((DROID*)psObj);
-//			DBPRINTF(("Droid\n");
-		}
-	}
-}
-#endif
-
-#if(0)
-void GotoPrevObject(void)
-{
-	BASE_OBJECT	*psObj;
-	BASE_OBJECT *psDroidListEnd = NULL;
-	BASE_OBJECT *psStructListEnd = NULL;
-	iPoint World,Screen;
-
-	if(apsDroidLists[selectedPlayer]) {
-		apsDroidLists[selectedPlayer]->psPrev = NULL;
-		for(psObj = apsDroidLists[selectedPlayer]; psObj; psObj = psObj->psNext) {
-			if(psObj->psNext) {
-				psObj->psNext->psPrev = psObj;
-			}
-			psDroidListEnd = psObj;
-		}
-	}
-
-	//if(apsStructLists[selectedPlayer]) {
-	if(interfaceStructList()) {
-		//apsStructLists[selectedPlayer]->psPrev = NULL;
-		interfaceStructList()->psPrev = NULL;
-		//for(psObj = apsStructLists[selectedPlayer]; psObj; psObj = psObj->psNext) {
-		for(psObj = interfaceStructList(); psObj; psObj = psObj->psNext) {
-			if(psObj->psNext) {
-				psObj->psNext->psPrev = psObj;
-			}
-			psStructListEnd = psObj;
-		}
-	}
-
-	if(ObjectSnap == NULL) {
-		ObjectSnap = psStructListEnd;
-		SnapType = SNAP_TO_STRUCTURES;
-
-		if(ObjectSnap == NULL) {
-			ObjectSnap = psDroidListEnd;
-			SnapType = SNAP_TO_DROIDS;
-		}
-	} else {
-		ObjectSnap = ObjectSnap->psPrev;
-	}
-
-
-	psObj = ObjectSnap;
-
-	if(ObjectSnap == NULL) {
-		if(SnapType == SNAP_TO_STRUCTURES) {
-			ObjectSnap = psDroidListEnd;
-			SnapType = SNAP_TO_DROIDS;
-
-			if(ObjectSnap == NULL) {
-				ObjectSnap = psStructListEnd;
-				SnapType = SNAP_TO_STRUCTURES;
-			}
-		} else {
-			ObjectSnap = psStructListEnd;
-			SnapType = SNAP_TO_STRUCTURES;
-
-			if(ObjectSnap == NULL) {
-				ObjectSnap = psDroidListEnd;
-				SnapType = SNAP_TO_DROIDS;
-			}
-		}
-	}
-
-	psObj = ObjectSnap;
-	if(ObjectSnap) {
-//		DBPRINTF(("Prev Object, ");
-		intSetMapPos(psObj->x, psObj->y);
-
-//		World.x = psObj->x;
-//		World.y = psObj->y;
-//		WorldPointToScreen(&World,&Screen);
-//		DBPRINTF(("%d,%d : ",Screen.x,Screen.y);
-//		SetMousePos(0,Screen.x,Screen.y);
-
-		if(psObj->type == OBJ_STRUCTURE) {					// If it's a structure...
-			clearSelection();
-			((STRUCTURE*)psObj)->selected = TRUE;
-			//DBPRINTF(("Structure: %s\n",((STRUCTURE*)psObj)->pStructureType->pName);
-//			DBPRINTF(("Structure: %s\n",getName(((STRUCTURE*)psObj)->pStructureType->pName));
-		}
-
-		if(psObj->type == OBJ_DROID) {						// If it's a droid...
-			clearSelection();
-//			((DROID*)psObj)->selected = TRUE;
-			SelectDroid((DROID*)psObj);
-//			DBPRINTF(("Droid\n");
-		}
-	}
-}
-#endif
-
 
 //access function for selected object in the interface
 BASE_OBJECT * getCurrentSelected(void)

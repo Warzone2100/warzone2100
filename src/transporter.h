@@ -47,7 +47,7 @@ extern BOOL OrderDroidsToEmbark(void);
 // Order a single droid to embark any available transporters.
 extern BOOL OrderDroidToEmbark(DROID *psDroid);
 
-extern void intUpdateTransCapacity(struct _widget *psWidget, struct _w_context *psContext);
+extern void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 /* Remove the Transporter Launch widget from the screen*/
 extern void intRemoveTransporterLaunch(void);

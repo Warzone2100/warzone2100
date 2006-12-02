@@ -140,7 +140,7 @@ static  UWORD           objMajor = 0, objMinor = 0;
 static BOOL intAddTransporterContents(void);
 static void transporterRemoveDroid(UDWORD id);
 static void setCurrentTransporter(UDWORD id);
-//static void intUpdateTransCapacity(struct _widget *psWidget, struct _w_context *psContext);
+//static void intUpdateTransCapacity(struct _widget *psWidget, W_CONTEXT *psContext);
 static void intRemoveTransContentNoAnim(void);
 static BOOL intAddTransButtonForm(void);
 static BOOL intAddTransContentsForm(void);
@@ -1225,7 +1225,7 @@ static void intSetTransCapacityLabel(char *Label)
 
 
 /*updates the capacity of the current Transporter*/
-void intUpdateTransCapacity(struct _widget *psWidget, struct _w_context *psContext)
+void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	//DROID		*psDroid, *psNext;
 //	UDWORD		capacity = TRANSPORTER_CAPACITY;

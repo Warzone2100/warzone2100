@@ -357,7 +357,6 @@ int main(int argc, char *argv[])
 	BOOL			Restart = FALSE;
 	BOOL			paused = FALSE;//, firstTime = TRUE;
 	SDWORD			introVideoControl = 3;
-	UDWORD			dispBitDepth = 0;
 	int			loopStatus = 0;
 	iColour*		psPaletteBuffer;
 	UDWORD			pSize;

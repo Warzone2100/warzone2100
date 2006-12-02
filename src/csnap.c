@@ -182,7 +182,7 @@ void RemoveCursorSnap(CURSORSNAP *SnapBuffer,UDWORD FormID)
 //
 static BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
 {
-	struct _widget *psWidget = widgGetFromID(psWScreen,ID);
+	WIDGET *psWidget = widgGetFromID(psWScreen,ID);
 
 	if(psWidget != NULL) {
 		int x,y,w,h;
@@ -193,7 +193,7 @@ static BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
 		h = psWidget->height;
 
 		while(psWidget->formID) {
-			struct _widget *psParent = widgGetFromID(psWScreen,psWidget->formID);
+			WIDGET *psParent = widgGetFromID(psWScreen,psWidget->formID);
 			if(psParent) {
 				x += psParent->x;
 				y += psParent->y;

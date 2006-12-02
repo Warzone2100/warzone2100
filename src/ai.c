@@ -11,11 +11,13 @@
 #include "cmddroid.h"
 #include "combat.h"
 #include "drive.h"
+#include "geometry.h"
 #include "map.h"
 #include "mapgrid.h"
 #include "multiplay.h"
 #include "player.h"
 #include "projectile.h"
+#include "visibility.h"
 
 // alliances
 UBYTE	alliances[MAX_PLAYERS][MAX_PLAYERS];
@@ -196,8 +198,8 @@ BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot)
 						case DROID_COMMAND:			//or should it get more priority?
 							targetTypeBonus = WEIGHT_WEAPON_DROIDS;
 							break;
-						
-						case DROID_CONSTRUCT:	
+
+						case DROID_CONSTRUCT:
 						case DROID_REPAIR:
 						case DROID_CYBORG_CONSTRUCT:
 						case DROID_CYBORG_REPAIR:

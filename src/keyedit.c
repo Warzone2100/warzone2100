@@ -65,7 +65,7 @@ static KEY_MAPPING	*selectedKeyMap;
 
 BOOL		runKeyMapEditor		(void);
 static BOOL keyMapToString		(char *pStr, KEY_MAPPING *psMapping);
-void		displayKeyMap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayKeyMap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 BOOL		startKeyMapEditor	(BOOL first);
 BOOL		saveKeyMap		(void);
 BOOL		loadKeyMap		(void);
@@ -292,7 +292,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-void displayKeyMap(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;

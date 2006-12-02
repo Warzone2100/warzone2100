@@ -74,9 +74,9 @@ BOOL runLoadSave				(BOOL bResetMissionWidgets);
 BOOL displayLoadSave			(void);
 static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
-static void displayLoadBanner	(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void displayLoadSlot		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void displayLoadSaveEdit	(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		removeWildcards		(char *pStr);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
@@ -608,7 +608,7 @@ void removeWildcards(char *pStr)
 // ////////////////////////////////////////////////////////////////////////////
 // DISPLAY FUNCTIONS
 
-static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	//UDWORD col;
     UBYTE   col;
@@ -630,7 +630,7 @@ static void displayLoadBanner(struct _widget *psWidget, UDWORD xOffset, UDWORD y
 
 }
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 
 	UDWORD	x = xOffset+psWidget->x;
@@ -661,7 +661,7 @@ static void displayLoadSlot(struct _widget *psWidget, UDWORD xOffset, UDWORD yOf
 
 }
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSaveEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

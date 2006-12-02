@@ -80,7 +80,7 @@ extern char	MultiPlayersPath[255];
 
 extern BOOL				bSendingMap;
 
-extern void intDisplayTemplateButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
@@ -130,15 +130,15 @@ BOOL		addMultiEditBox				(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD tip
 static void addBlueForm					(UDWORD parent,UDWORD id,char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
-void		displayChatEdit				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayMultiBut				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayWhiteBoard			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		intDisplayFeBox				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayRemoteGame			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayPlayer				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayTeamChooser				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayMultiEditBox			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayForceDroid			(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayWhiteBoard			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayTeamChooser				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayForceDroid			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void Show_Map(char *imagedata); //added to show map -Q
 void		setLockedTeamsMode			(void);
 
@@ -1948,7 +1948,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	// host who is setting up or has hosted
-	if(ingame.bHostSetup);// || NetPlay.bHost)
+	if(ingame.bHostSetup);// || NetPlay.bHost) // FIXME if;{} ???
 	{
 		switch(id)
 		{
@@ -3447,7 +3447,7 @@ static BOOL runWhiteBoard(void)
 	return TRUE;
 }
 
-void displayWhiteBoard(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayWhiteBoard(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = D_W+xOffset+psWidget->x;
 	UDWORD	y = D_H+yOffset+psWidget->y;
@@ -3549,7 +3549,7 @@ static BOOL addWhiteBoard(void)
 /////////////////////////////////////////////////////////////////////////////////////////
 // Drawing functions
 
-void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
@@ -3565,7 +3565,7 @@ void displayChatEdit(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayRemoteGame(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -3686,7 +3686,7 @@ static UDWORD bestPlayer(UDWORD player)
 	return count;
 }
 
-void displayTeamChooser(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -3709,7 +3709,7 @@ void displayTeamChooser(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -3951,7 +3951,7 @@ void displayPlayer(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
-void intDisplayFeBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -3964,7 +3964,7 @@ void intDisplayFeBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, U
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display edit box
-void displayMultiEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -3989,7 +3989,7 @@ void displayMultiEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffse
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display one of two images depending on if the widget is hilighted by the mouse.
-void displayMultiBut(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -4172,7 +4172,7 @@ BOOL addMultiBut(W_SCREEN *screen,UDWORD formid,UDWORD id,UDWORD x, UDWORD y,
 }
 
 
-void displayForceDroid(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayForceDroid(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	iVector			Rotation,Position;
 	UDWORD			x			= psWidget->x+xOffset;

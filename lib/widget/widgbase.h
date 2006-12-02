@@ -8,17 +8,6 @@
 
 #include "lib/framework/frame.h"
 
-/* The different base types of widget */
-typedef enum _widget_type
-{
-	WIDG_FORM,
-	WIDG_LABEL,
-	WIDG_BUTTON,
-	WIDG_EDITBOX,
-	WIDG_BARGRAPH,
-	WIDG_SLIDER,
-} WIDGET_TYPE;
-
 /* Button colours */
 #define WBUTC_TEXT		0			// Colour for button text
 #define WBUTC_BKGRND	1			// Colour for button background
@@ -26,15 +15,19 @@ typedef enum _widget_type
 #define WBUTC_BORDER2	3			// 2nd border colour
 #define	WBUTC_HILITE	4			// Hilite colour
 
-/* The display function prototype */
+
+/* Forward definitions */
+enum _widget_type;
 struct _widget;
+struct _w_context;
+
+/* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 /* The optional user callback function */
-struct _w_context;
 typedef void (*WIDGET_CALLBACK)(struct _widget *psWidget, struct _w_context *psContext);
-
 typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
+
 
 /* The common widget data */
 #define WIDGET_BASE \
@@ -53,6 +46,18 @@ typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
 	struct _widget	*psNext			/* Pointer to the next widget in the screen list */
 
 
+/* The different base types of widget */
+typedef enum _widget_type
+{
+	WIDG_FORM,
+	WIDG_LABEL,
+	WIDG_BUTTON,
+	WIDG_EDITBOX,
+	WIDG_BARGRAPH,
+	WIDG_SLIDER,
+} WIDGET_TYPE;
+
+
 /* The base widget data type */
 typedef struct _widget
 {
@@ -69,6 +74,15 @@ typedef struct _w_screen
 //	PROP_FONT	*psTipFont;			// The font for tool tips
 	int			TipFontID;			// ID of the IVIS font to use for tool tips.
 } W_SCREEN;
+
+/* Context information to pass into the widget functions */
+typedef struct _w_context
+{
+	W_SCREEN	*psScreen;			// Parent screen of the widget
+	struct _w_form	*psForm;			// Parent form of the widget
+	SDWORD		xOffset,yOffset;	// Screen offset of the parent form
+	SDWORD		mx,my;				// mouse position on the form
+} W_CONTEXT;
 
 #endif
 

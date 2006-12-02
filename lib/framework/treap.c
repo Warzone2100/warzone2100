@@ -383,9 +383,9 @@ void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 
 	// Display the root
 #if DEBUG_TREAP
-	debug( LOG_NEVER, "%s, line %d : %d,%d\n", psRoot->pFile, psRoot->line, psRoot->key, psRoot->priority );
+	debug( LOG_NEVER, "%s, line %d : %p,%d\n", psRoot->pFile, psRoot->line, psRoot->key, psRoot->priority );
 #else
-	debug( LOG_NEVER, "%d,%d\n", psRoot->key, psRoot->priority );
+	debug( LOG_NEVER, "%p,%d\n", psRoot->key, psRoot->priority );
 #endif
 
 	// Display the left of the tree

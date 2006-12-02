@@ -195,17 +195,17 @@ static BOOL				playCurrent;
 /* functions declarations ****************/
 static BOOL intAddMessageForm(BOOL playCurrent);
 /*Displays the buttons used on the intelligence map */
-static void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
+static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours);
 /* displays the 3D view for the current message */
-//static void intDisplayMessageView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+//static void intDisplayMessageView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 //					  UDWORD *pColours);
 
 /* Add the Proximity message buttons */
 //static BOOL intAddProximityButton(MESSAGE *pMessage, UDWORD inc);
 
 /*Displays the proximity messages used on the intelligence map */
-//static void intDisplayProximityButton(struct _widget *psWidget, UDWORD xOffset,
+//static void intDisplayProximityButton(WIDGET *psWidget, UDWORD xOffset,
 //							  UDWORD yOffset, UDWORD *pColours);
 
 /*deal with the actual button press - proxMsg is set to true if a proximity
@@ -227,17 +227,17 @@ appropriate sized image for the view*/
 /* Remove the Message View from the Intelligence screen without animation*/
 //static void intRemoveMessageViewNoAnim(BOOL animated);
 
-static void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
 #ifndef NO_VIDEO
-static void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
 #endif
-static void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
-static void intDisplaySeqTextView(struct _widget *psWidget,
+static void intDisplaySeqTextView(WIDGET *psWidget,
 				  UDWORD xOffset, UDWORD yOffset,
 				  UDWORD *pColours);
 static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
@@ -902,7 +902,7 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	return TRUE;		/* done */
 }
 
-static void intDisplaySeqTextView(struct _widget *psWidget,
+static void intDisplaySeqTextView(WIDGET *psWidget,
 				  UDWORD xOffset, UDWORD yOffset,
 				  UDWORD *pColours)
 {
@@ -1337,7 +1337,7 @@ void intRemoveMessageView(BOOL animated)
 
 
 /*Displays the buttons used on the intelligence map */
-void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
@@ -1468,7 +1468,7 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 
 
 /* displays the PIE view for the current message */
-void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
@@ -1526,7 +1526,7 @@ void intDisplayPIEView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 #ifndef NO_VIDEO
 /* displays the FLIC view for the current message */
-void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
 {
 
@@ -1571,7 +1571,7 @@ void intDisplayFLICView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset
 #endif
 
 /* displays the TEXT view for the current message */
-void intDisplayTEXTView(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
@@ -1944,7 +1944,7 @@ void setCurrentMsg(void)
 
 
 /*Displays the proximity messages used on the intelligence map */
-/*void intDisplayProximityButton(struct _widget *psWidget, UDWORD xOffset,
+/*void intDisplayProximityButton(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;

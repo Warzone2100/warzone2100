@@ -165,67 +165,67 @@ void ClearSystem0ButtonBuffer(SDWORD BufferID);
 SDWORD GetSystem0Buffer(void);
 
 // callback to update the command droid size label
-void intUpdateCommandSize(struct _widget *psWidget, struct _w_context *psContext);
+void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext);
 
 // callback to update the command droid experience
-void intUpdateCommandExp(struct _widget *psWidget, struct _w_context *psContext);
+void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext);
 
 // callback to update the command droid factories
-void intUpdateCommandFact(struct _widget *psWidget, struct _w_context *psContext);
+void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intUpdateProgressBar(struct _widget *psWidget, struct _w_context *psContext);
+void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intUpdateOptionText(struct _widget *psWidget, struct _w_context *psContext);
+void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intUpdateQuantity(struct _widget *psWidget, struct _w_context *psContext);
+void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 //callback to display the factory number
-extern void intAddFactoryInc(struct _widget *psWidget, struct _w_context *psContext);
+extern void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext);
 //callback to display the production quantity number for a template
-extern void intAddProdQuantity(struct _widget *psWidget, struct _w_context *psContext);
+extern void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayPowerBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayStatusButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayObjectButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayStatsButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *y1);
 
-void intDisplayObjectForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayObjectForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayStatsForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intOpenPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intClosePlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayPlainForm(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayImage(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayImageHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayAltButtonHilight(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayAltButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayButtonFlash(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayButtonPressed(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayReticuleButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
+void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 					UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
-void intDisplaySystemTab(struct _widget *psWidget,UDWORD TabType, UDWORD Position,
+void intDisplaySystemTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 					UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
-void intDisplaySlider(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-void intDisplayNumber(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intAddLoopQuantity(struct _widget *psWidget, struct _w_context *psContext);
+void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayEditBox(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height);
 void CloseButtonRender(void);
@@ -293,42 +293,42 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 //SWORD FindTokenID(TOKENID *Tok,char *Token);
 
 //displays a border for a form
-extern void intDisplayBorderForm(struct _widget *psWidget, UDWORD xOffset,
+extern void intDisplayBorderForm(WIDGET *psWidget, UDWORD xOffset,
 								 UDWORD yOffset, UDWORD *pColours);
 
 /* Draws a stats bar for the design screen */
-extern void intDisplayStatsBar(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset,
+extern void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 							   UDWORD *pColours);
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(struct _widget *psWidget, UDWORD xOffset,
+void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours);
 
 // Widget callback function to play an audio track.
 extern void WidgetAudioCallback(int AudioID);
 
 // Widget callback to display a contents button for the Transporter
-extern void intDisplayTransportButton(struct _widget *psWidget, UDWORD xOffset,
+extern void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, UDWORD *pColours);
 /*draws blips on radar to represent Proximity Display*/
 extern void drawRadarBlips(void);
 
 /*Displays the proximity messages blips over the world*/
-extern void intDisplayProximityBlips(struct _widget *psWidget, UDWORD xOffset,
+extern void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
 					UDWORD yOffset, UDWORD *pColours);
 
-extern void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psContext);
+extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 
 
 
-extern void intDisplayDPButton(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-extern void intDisplayTime(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void intDisplayNum(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayTime(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayNum(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-extern void intDisplayResSubGroup(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-extern void intDisplayMissionClock(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-extern void intDisplayAllyIcon(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 #endif

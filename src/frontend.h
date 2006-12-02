@@ -4,6 +4,8 @@
 #ifndef _frontend_h
 #define _frontend_h
 
+#include "lib/widget/widgbase.h"
+
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 typedef enum _title_mode {
 		TITLE,						// 0 intro mode
@@ -73,9 +75,9 @@ extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt,BOO
 extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID );
 
-extern void	displayLogo				(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void	displayTitleBitmap		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void	displayTextOption		(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void	displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void	displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern void loadOK					(void);
 extern BOOL CancelPressed			(void);
