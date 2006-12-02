@@ -1948,7 +1948,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	// host who is setting up or has hosted
-	if(ingame.bHostSetup);// || NetPlay.bHost) // FIXME if;{} ???
+	if(ingame.bHostSetup)// || NetPlay.bHost) // FIXME Was: if(ingame.bHostSetup);{} ??? Note the ; !
 	{
 		switch(id)
 		{
