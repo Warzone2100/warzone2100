@@ -101,897 +101,1202 @@ TYPE_SYMBOL asTypeTable[] =
  */
 FUNC_SYMBOL asFuncTable[] =
 {
-	{ "InitEnumDroids",			scrInitEnumDroids,		VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-	{ "EnumDroid",			scrEnumDroid,		(INTERP_TYPE)ST_DROID,
-		0, { VAL_VOID } },
+	{ "InitEnumDroids",		scrInitEnumDroids,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "EnumDroid",			scrEnumDroid,			(INTERP_TYPE)ST_DROID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// These functions are part of the script library
-	{ "traceOn",				interpTraceOn,			VAL_VOID,
-		0, { VAL_VOID } },
-	{ "traceOff",				interpTraceOff,			VAL_VOID,
-		0, { VAL_VOID } },
-	{ "setEventTrigger",		eventSetTrigger,		VAL_VOID,
-		2, { VAL_EVENT, VAL_TRIGGER } },
-	{ "eventTraceLevel",		eventSetTraceLevel,		VAL_VOID,
-		1, { VAL_INT } },
+	{ "traceOn",			interpTraceOn,			VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "traceOff",			interpTraceOff,			VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "setEventTrigger",	eventSetTrigger,		VAL_VOID,
+		2, { VAL_EVENT, VAL_TRIGGER },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "eventTraceLevel",	eventSetTraceLevel,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// Trigger functions
-	{ "objectInRange",			scrObjectInRange,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "objectInRange",		scrObjectInRange,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "droidInRange",			scrDroidInRange,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "droidInRange",		scrDroidInRange,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structInRange",			scrStructInRange,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "structInRange",		scrStructInRange,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "playerPower",			scrPlayerPower,			VAL_INT,
-		1, { VAL_INT } },
+	{ "playerPower",		scrPlayerPower,			VAL_INT,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "objectInArea",			scrObjectInArea,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "objectInArea",		scrObjectInArea,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "droidInArea",			scrDroidInArea,			VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "droidInArea",		scrDroidInArea,			VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structInArea",			scrStructInArea,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "structInArea",		scrStructInArea,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "seenStructInArea",		scrSeenStructInArea,	VAL_BOOL,
-		7, { VAL_INT, VAL_INT, VAL_BOOL,VAL_INT,VAL_INT, VAL_INT, VAL_INT } },
+	{ "seenStructInArea",	scrSeenStructInArea,	VAL_BOOL,
+		7, { VAL_INT, VAL_INT, VAL_BOOL,VAL_INT,VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structButNoWallsInArea",	scrStructButNoWallsInArea,	VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "structButNoWallsInArea",scrStructButNoWallsInArea,VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numObjectsInArea",		scrNumObjectsInArea,	VAL_INT,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numObjectsInArea",	scrNumObjectsInArea,	VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numDroidsInArea",		scrNumDroidsInArea,		VAL_INT,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numDroidsInArea",	scrNumDroidsInArea,		VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numStructsInArea",		scrNumStructsInArea,	VAL_INT,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numStructsInArea",	scrNumStructsInArea,	VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numStructsButNotWallsInArea",	scrNumStructsButNotWallsInArea,	VAL_INT,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numStructsButNotWallsInArea",scrNumStructsButNotWallsInArea,VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numStructsByTypeInArea",		scrNumStructsByTypeInArea,	VAL_INT,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numStructsByTypeInArea",scrNumStructsByTypeInArea,VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
-	{ "droidHasSeen",			scrDroidHasSeen,		VAL_BOOL,
-		2, { (INTERP_TYPE)ST_BASEOBJECT, VAL_INT } },
+	{ "droidHasSeen",		scrDroidHasSeen,		VAL_BOOL,
+		2, { (INTERP_TYPE)ST_BASEOBJECT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "buildingDestroyed",		scrBuildingDestroyed,	VAL_BOOL,
-		2, { (INTERP_TYPE)ST_STRUCTUREID, VAL_INT } },
+	{ "buildingDestroyed",	scrBuildingDestroyed,	VAL_BOOL,
+		2, { (INTERP_TYPE)ST_STRUCTUREID, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structureIdle",			scrStructureIdle,		VAL_BOOL,
-		1, { (INTERP_TYPE)ST_STRUCTURE } },
+	{ "structureIdle",		scrStructureIdle,		VAL_BOOL,
+		1, { (INTERP_TYPE)ST_STRUCTURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "initEnumStruct",			scrInitEnumStruct,		VAL_VOID,
-		4, { VAL_BOOL, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT,VAL_INT } },
+	{ "initEnumStruct",		scrInitEnumStruct,		VAL_VOID,
+		4, { VAL_BOOL, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT,VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "enumStruct",				scrEnumStruct,			(INTERP_TYPE)ST_STRUCTURE,
-		0, { VAL_VOID} },
+	{ "enumStruct",			scrEnumStruct,			(INTERP_TYPE)ST_STRUCTURE,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structureBeingBuilt",	scrStructureBeingBuilt,	VAL_BOOL,
-		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
+	{ "structureBeingBuilt",scrStructureBeingBuilt,	VAL_BOOL,
+		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structureComplete",	scrStructureComplete,		VAL_BOOL,		// pc multiplayer only
-		1,	{ (INTERP_TYPE)ST_STRUCTURE } },
+	{ "structureComplete",	scrStructureComplete,	VAL_BOOL,		// pc multiplayer only
+		1,	{ (INTERP_TYPE)ST_STRUCTURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structureBuilt",			scrStructureBuilt,		VAL_BOOL,
-		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
+	{ "structureBuilt",		scrStructureBuilt,		VAL_BOOL,
+		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "anyDroidsLeft",			scrAnyDroidsLeft,		VAL_BOOL,
-		1,	{ VAL_INT } },
+	{ "anyDroidsLeft",		scrAnyDroidsLeft,		VAL_BOOL,
+		1,	{ VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "anyStructButWallsLeft",	scrAnyStructButWallsLeft, VAL_BOOL,
-		1,	{ VAL_INT } },
+	{ "anyStructButWallsLeft",scrAnyStructButWallsLeft,VAL_BOOL,
+		1,	{ VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "anyFactoriesLeft",		scrAnyFactoriesLeft,	VAL_BOOL,
-		1,	{ VAL_INT } },
+	{ "anyFactoriesLeft",	scrAnyFactoriesLeft,	VAL_BOOL,
+		1,	{ VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// event functions
-	{ "enableComponent",		scrEnableComponent,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT } },
-
-	{ "makeComponentAvailable",	scrMakeComponentAvailable,VAL_VOID,
-		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT } },
-
-	{ "enableStructure",		scrEnableStructure,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
-
-	{ "isStructureAvailable",		scrIsStructureAvailable,VAL_BOOL,	// pc multiplay only
-		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
-
-	{ "addDroid",		scrAddDroid,					(INTERP_TYPE)ST_DROID,
-		4, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "addDroidToMissionList",	scrAddDroidToMissionList,(INTERP_TYPE)ST_DROID,
-		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT } },
-
-	{ "buildDroid",		scrBuildDroid,					VAL_VOID,
-		4, { (INTERP_TYPE)ST_TEMPLATE, (INTERP_TYPE)ST_STRUCTURE, VAL_INT, VAL_INT } },
-
-	{ "addTemplate",		scrAddTemplate,				VAL_BOOL,
-		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT } },
-
-	{ "addReticuleButton",		scrAddReticuleButton,	VAL_VOID,
-		1, { VAL_INT } },
-
-	{ "removeReticuleButton",	scrRemoveReticuleButton,VAL_VOID,
-		2, { VAL_INT, VAL_BOOL } },
-
-	{ "addMessage",				scrAddMessage,			VAL_VOID,
-		4, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT, VAL_BOOL } },
-
-	{ "removeMessage",			scrRemoveMessage,		VAL_VOID,
-		3, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT } },
-
-/*	{ "addTutorialMessage",		scrAddTutorialMessage,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT } },*/
-
-	{ "selectDroidByID",		scrSelectDroidByID,		VAL_BOOL,
-		2, { (INTERP_TYPE)ST_DROIDID, VAL_INT } },
-
-	{ "setAssemblyPoint",		scrSetAssemblyPoint,	VAL_VOID,
-		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, VAL_INT } },
-
-	{ "attackLocation",			scrAttackLocation,		VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "initGetFeature",			scrInitGetFeature,		VAL_VOID,
-		3, { (INTERP_TYPE)ST_FEATURESTAT, VAL_INT, VAL_INT } },
-
-	{ "getFeature",				scrGetFeature,			(INTERP_TYPE)ST_FEATURE,
-		1, { VAL_INT} },
-
-	{ "addFeature",				scrAddFeature,			(INTERP_TYPE)ST_FEATURE,
-		3, { (INTERP_TYPE)ST_FEATURESTAT, VAL_INT, VAL_INT } },
-
-	{ "destroyFeature",			scrDestroyFeature,		VAL_VOID,
-		1, { (INTERP_TYPE)ST_FEATURE } },
-
-	{ "addStructure",			scrAddStructure,		(INTERP_TYPE)ST_STRUCTURE,
-		4, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "destroyStructure",		scrDestroyStructure,	VAL_VOID,
-		1, { (INTERP_TYPE)ST_STRUCTURE } },
-
-	{ "centreView",				scrCentreView,			VAL_VOID,
-		1, { (INTERP_TYPE)ST_BASEOBJECT } },
-
-	{ "centreViewPos",			scrCentreViewPos,		VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-
-	{ "getStructure",			scrGetStructure,		(INTERP_TYPE)ST_STRUCTURE,
-		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
-
-	{ "getTemplate",			scrGetTemplate,			(INTERP_TYPE)ST_TEMPLATE,
-		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT } },
-
-	{ "getDroid",				scrGetDroid,			(INTERP_TYPE)ST_DROID,
-		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT } },
-
-	{ "setScrollParams",		scrSetScrollParams,		VAL_VOID,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
-
-	{ "setScrollMinX",		scrSetScrollMinX,			VAL_VOID,
-		1, { VAL_INT } },
-
-	{ "setScrollMinY",		scrSetScrollMinY,			VAL_VOID,
-		1, { VAL_INT } },
-
-	{ "setScrollMaxX",		scrSetScrollMaxX,			VAL_VOID,
-		1, { VAL_INT } },
-
-	{ "setScrollMaxY",		scrSetScrollMaxY,			VAL_VOID,
-		1, { VAL_INT } },
-
-	{ "setDefaultSensor",	scrSetDefaultSensor,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_SENSOR, VAL_INT } },
-
-	{ "setDefaultECM",		scrSetDefaultECM,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_ECM, VAL_INT } },
-
-	{ "setDefaultRepair",	scrSetDefaultRepair,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_REPAIR, VAL_INT } },
-
-	{ "setStructureLimits",	scrSetStructureLimits,		VAL_VOID,
-		3, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT } },
-
-	{ "setAllStructureLimits",	scrSetAllStructureLimits,	VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-
-	{ "applyLimitSet",		scrApplyLimitSet,			VAL_VOID,
-		0, { VAL_VOID } },
-
-	{ "playSound",			scrPlaySound,				VAL_VOID,
-		2, { (INTERP_TYPE)ST_SOUND, VAL_INT } },
-
-	{ "playSoundPos",		scrPlaySoundPos,			VAL_VOID,
-		5, { (INTERP_TYPE)ST_SOUND, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "addConsoleText",		scrAddConsoleText,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT } },
-
-	{ "showConsoleText",		scrShowConsoleText,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT } },
-
-	{ "tagConsoleText",		scrTagConsoleText,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT } },
-
-	{ "turnPowerOn",		scrTurnPowerOn,				VAL_VOID,
-		0, { VAL_VOID } },
-
-	{ "turnPowerOff",		scrTurnPowerOff,			VAL_VOID,
-		0, { VAL_VOID } },
-
-	{ "tutorialEnd",		scrTutorialEnd,				VAL_VOID,
-		0, { VAL_VOID } },
-	{ "clearConsole",		scrClearConsole,			VAL_VOID,
-	0, { VAL_VOID} },
-
-	{ "playVideo",			scrPlayVideo,				VAL_VOID,
-		2, { (INTERP_TYPE)ST_TEXTSTRING, (INTERP_TYPE)ST_TEXTSTRING } },
-
-	{ "gameOverMessage",	scrGameOverMessage,			VAL_VOID,
-		4, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT, VAL_BOOL } },
-
-	{ "gameOver",			scrGameOver,				VAL_VOID,
-		1, { VAL_BOOL } },
-
-	{ "playBackgroundAudio", scrPlayBackgroundAudio,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT } },
-
-	{ "playCDAudio",		scrPlayCDAudio,				VAL_VOID,
-		1, { VAL_INT } },
-
-	{ "stopCDAudio",		scrStopCDAudio,				VAL_VOID,
-		0, { VAL_VOID } },
-
-	{ "pauseCDAudio",		scrPauseCDAudio,			VAL_VOID,
-		0, { VAL_VOID } },
-
-	{ "resumeCDAudio",		scrResumeCDAudio,			VAL_VOID,
-		0, { VAL_VOID } },
-
-	{ "setRetreatPoint",	scrSetRetreatPoint,			VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "setRetreatForce",	scrSetRetreatForce,			VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-
-	{ "setRetreatLeadership",	scrSetRetreatLeadership,	VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-
-	{ "setGroupRetreatForce",	scrSetGroupRetreatForce,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
-
-	{ "setGroupRetreatLeadership",	scrSetGroupRetreatLeadership,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
-
-	{ "setGroupRetreatPoint",	scrSetGroupRetreatPoint,			VAL_VOID,
-		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT } },
-
-	{ "setRetreatHealth",	    scrSetRetreatHealth,		VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-
-	{ "setGroupRetreatHealth",	scrSetGroupRetreatHealth,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
-
-    { "startMission",		scrStartMission,			VAL_VOID,
-		2, { VAL_INT, (INTERP_TYPE)ST_LEVEL } },
-
-	{ "setSnow",			scrSetSnow,					VAL_VOID,
-		1, { VAL_BOOL } },
-
-	{ "setRain",			scrSetRain,					VAL_VOID,
-		1, { VAL_BOOL } },
-
-	{ "setBackgroundFog",	scrSetBackgroundFog,		VAL_VOID,
-		1, { VAL_BOOL } },
-
-	{ "setDepthFog",		scrSetDepthFog,				VAL_VOID,
-		1, { VAL_BOOL } },
-
-	{ "setFogColour",		scrSetFogColour,			VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "setTransporterExit",	scrSetTransporterExit,		VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_INT } },
-
-	{ "flyTransporterIn",	scrFlyTransporterIn,		VAL_VOID,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL } },
-
-	{ "addDroidToTransporter",	scrAddDroidToTransporter,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_DROID } },
-
-	/*{ "endMission",			scrEndMission,				VAL_VOID,
-		1, { VAL_BOOL } },*/
-
-	{ "structureBuiltInRange",	scrStructureBuiltInRange,	(INTERP_TYPE)ST_STRUCTURE,
-		5, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "enableComponent",	scrEnableComponent,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "makeComponentAvailable",scrMakeComponentAvailable,VAL_VOID,
+		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "enableStructure",	scrEnableStructure,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "isStructureAvailable",scrIsStructureAvailable,VAL_BOOL,	// pc multiplay only
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addDroid",			scrAddDroid,			(INTERP_TYPE)ST_DROID,
+		4, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addDroidToMissionList",scrAddDroidToMissionList,(INTERP_TYPE)ST_DROID,
+		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "buildDroid",			scrBuildDroid,			VAL_VOID,
+		4, { (INTERP_TYPE)ST_TEMPLATE, (INTERP_TYPE)ST_STRUCTURE, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addTemplate",		scrAddTemplate,			VAL_BOOL,
+		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addReticuleButton",	scrAddReticuleButton,	VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "removeReticuleButton",scrRemoveReticuleButton,VAL_VOID,
+		2, { VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addMessage",			scrAddMessage,			VAL_VOID,
+		4, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "removeMessage",		scrRemoveMessage,		VAL_VOID,
+		3, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+/*	{ "addTutorialMessage",	scrAddTutorialMessage,	VAL_VOID,
+		2, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },*/
+
+	{ "selectDroidByID",	scrSelectDroidByID,		VAL_BOOL,
+		2, { (INTERP_TYPE)ST_DROIDID, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setAssemblyPoint",	scrSetAssemblyPoint,	VAL_VOID,
+		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "attackLocation",		scrAttackLocation,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "initGetFeature",		scrInitGetFeature,		VAL_VOID,
+		3, { (INTERP_TYPE)ST_FEATURESTAT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getFeature",			scrGetFeature,			(INTERP_TYPE)ST_FEATURE,
+		1, { VAL_INT},
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addFeature",			scrAddFeature,			(INTERP_TYPE)ST_FEATURE,
+		3, { (INTERP_TYPE)ST_FEATURESTAT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "destroyFeature",		scrDestroyFeature,		VAL_VOID,
+		1, { (INTERP_TYPE)ST_FEATURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addStructure",		scrAddStructure,		(INTERP_TYPE)ST_STRUCTURE,
+		4, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "destroyStructure",	scrDestroyStructure,	VAL_VOID,
+		1, { (INTERP_TYPE)ST_STRUCTURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "centreView",			scrCentreView,			VAL_VOID,
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "centreViewPos",		scrCentreViewPos,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getStructure",		scrGetStructure,		(INTERP_TYPE)ST_STRUCTURE,
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getTemplate",		scrGetTemplate,			(INTERP_TYPE)ST_TEMPLATE,
+		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getDroid",			scrGetDroid,			(INTERP_TYPE)ST_DROID,
+		2, { (INTERP_TYPE)ST_COMPONENT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setScrollParams",	scrSetScrollParams,		VAL_VOID,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setScrollMinX",		scrSetScrollMinX,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setScrollMinY",		scrSetScrollMinY,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setScrollMaxX",		scrSetScrollMaxX,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setScrollMaxY",		scrSetScrollMaxY,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setDefaultSensor",	scrSetDefaultSensor,	VAL_VOID,
+		2, { (INTERP_TYPE)ST_SENSOR, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setDefaultECM",		scrSetDefaultECM,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_ECM, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setDefaultRepair",	scrSetDefaultRepair,	VAL_VOID,
+		2, { (INTERP_TYPE)ST_REPAIR, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setStructureLimits",	scrSetStructureLimits,	VAL_VOID,
+		3, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setAllStructureLimits",scrSetAllStructureLimits,VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "applyLimitSet",		scrApplyLimitSet,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "playSound",			scrPlaySound,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_SOUND, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "playSoundPos",		scrPlaySoundPos,		VAL_VOID,
+		5, { (INTERP_TYPE)ST_SOUND, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addConsoleText",		scrAddConsoleText,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "showConsoleText",	scrShowConsoleText,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "tagConsoleText",		scrTagConsoleText,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "turnPowerOn",		scrTurnPowerOn,			VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "turnPowerOff",		scrTurnPowerOff,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "tutorialEnd",		scrTutorialEnd,			VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "clearConsole",		scrClearConsole,		VAL_VOID,
+		0, { VAL_VOID},
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "playVideo",			scrPlayVideo,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_TEXTSTRING, (INTERP_TYPE)ST_TEXTSTRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "gameOverMessage",	scrGameOverMessage,		VAL_VOID,
+		4, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "gameOver",			scrGameOver,			VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "playBackgroundAudio",scrPlayBackgroundAudio,	VAL_VOID,
+		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "playCDAudio",		scrPlayCDAudio,			VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "stopCDAudio",		scrStopCDAudio,			VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "pauseCDAudio",		scrPauseCDAudio,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "resumeCDAudio",		scrResumeCDAudio,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setRetreatPoint",	scrSetRetreatPoint,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setRetreatForce",	scrSetRetreatForce,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setRetreatLeadership",scrSetRetreatLeadership,VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setGroupRetreatForce",scrSetGroupRetreatForce,VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setGroupRetreatLeadership",scrSetGroupRetreatLeadership,VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setGroupRetreatPoint",scrSetGroupRetreatPoint,VAL_VOID,
+		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setRetreatHealth",	scrSetRetreatHealth,	VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setGroupRetreatHealth",scrSetGroupRetreatHealth,VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+    { "startMission",		scrStartMission,		VAL_VOID,
+		2, { VAL_INT, (INTERP_TYPE)ST_LEVEL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setSnow",			scrSetSnow,				VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setRain",			scrSetRain,				VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setBackgroundFog",	scrSetBackgroundFog,	VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setDepthFog",		scrSetDepthFog,			VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setFogColour",		scrSetFogColour,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setTransporterExit",	scrSetTransporterExit,	VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "flyTransporterIn",	scrFlyTransporterIn,	VAL_VOID,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "addDroidToTransporter",scrAddDroidToTransporter,VAL_VOID,
+		2, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	/*{ "endMission",		scrEndMission,			VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },*/
+
+	{ "structureBuiltInRange",scrStructureBuiltInRange,(INTERP_TYPE)ST_STRUCTURE,
+		5, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "random",				scrRandom,				VAL_INT,
-		1, { VAL_INT } },
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "randomiseSeed",		scrRandomiseSeed,		VAL_VOID,
-		0, { VAL_VOID } },
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "enableResearch",		scrEnableResearch,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT } },
+		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "completeResearch",	scrCompleteResearch,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT } },
+		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "flashOn",			scrFlashOn,				VAL_VOID,
-		1, { VAL_INT } },
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 	{ "flashOff",			scrFlashOff,			VAL_VOID,
-		1, { VAL_INT } },
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setPowerLevel",		scrSetPowerLevel,		VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "addPower",		    scrAddPower,		    VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setLandingZone",		scrSetLandingZone,		VAL_VOID,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setLimboLanding",	scrSetLimboLanding,		VAL_VOID,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setNoGoArea",		scrSetNoGoArea,			VAL_VOID,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "initAllNoGoAreas",	scrInitAllNoGoAreas,	VAL_VOID,
-		0, { VAL_VOID } },
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setRadarZoom",		scrSetRadarZoom,		VAL_VOID,
-		1, { VAL_INT } },
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setReinforcementTime", scrSetReinforcementTime, VAL_VOID,
-		1, { VAL_INT } },
+	{ "setReinforcementTime",scrSetReinforcementTime,VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setMissionTime",		scrSetMissionTime,		VAL_VOID,
-		1, { VAL_INT } },
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "missionTimeRemaining",	scrMissionTimeRemaining,    VAL_INT,
-		0, { VAL_VOID } },
+	{ "missionTimeRemaining",scrMissionTimeRemaining,VAL_INT,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "flushConsoleMessages",	scrFlushConsoleMessages,		VAL_VOID,
-		0, { VAL_VOID } },
+    { "flushConsoleMessages",scrFlushConsoleMessages,VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "pickStructLocation",		scrPickStructLocation,	VAL_BOOL,
-		4, {(INTERP_TYPE)ST_STRUCTURESTAT, VAL_REF | VAL_INT, VAL_REF | VAL_INT, VAL_INT } },
+	{ "pickStructLocation",	scrPickStructLocation,	VAL_BOOL,
+		4, {(INTERP_TYPE)ST_STRUCTURESTAT, VAL_REF | VAL_INT, VAL_REF | VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// AI functions
-	{ "groupAddDroid",		scrGroupAddDroid,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_DROID } },
-	{ "groupAddArea",		scrGroupAddArea,			VAL_VOID,
-		6, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT,VAL_INT, VAL_INT,VAL_INT } },
-	{ "groupAddAreaNoGroup",scrGroupAddArea,			VAL_VOID,
-		6, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT,VAL_INT, VAL_INT,VAL_INT } },
-	{ "groupAddGroup",		scrGroupAddGroup,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_GROUP } },
-	{ "groupMember",		scrGroupMember,				VAL_BOOL,
-		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_DROID } },
-	{ "idleGroup",			scrIdleGroup,				VAL_INT,
-		1, { (INTERP_TYPE)ST_GROUP } },
-	{ "initIterateGroup",	scrInitIterateGroup,		VAL_VOID,
-		1, { (INTERP_TYPE)ST_GROUP } },
-	{ "iterateGroup",		scrIterateGroup,			(INTERP_TYPE)ST_DROID,
-		1, { (INTERP_TYPE)ST_GROUP } },
-	{ "droidLeaveGroup",	scrDroidLeaveGroup,			VAL_VOID,
-		1, { (INTERP_TYPE)ST_DROID } },
+	{ "groupAddDroid",		scrGroupAddDroid,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "groupAddArea",		scrGroupAddArea,		VAL_VOID,
+		6, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT,VAL_INT, VAL_INT,VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "groupAddAreaNoGroup",scrGroupAddArea,		VAL_VOID,
+		6, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT,VAL_INT, VAL_INT,VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "groupAddGroup",		scrGroupAddGroup,		VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_GROUP },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "groupMember",		scrGroupMember,			VAL_BOOL,
+		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "idleGroup",			scrIdleGroup,			VAL_INT,
+		1, { (INTERP_TYPE)ST_GROUP },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "initIterateGroup",	scrInitIterateGroup,	VAL_VOID,
+		1, { (INTERP_TYPE)ST_GROUP },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "iterateGroup",		scrIterateGroup,		(INTERP_TYPE)ST_DROID,
+		1, { (INTERP_TYPE)ST_GROUP },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "droidLeaveGroup",	scrDroidLeaveGroup,		VAL_VOID,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "orderDroid",			scrOrderDroid,				VAL_VOID,
-		2, { (INTERP_TYPE)ST_DROID, VAL_INT } },
-	{ "orderDroidLoc",		scrOrderDroidLoc,			VAL_VOID,
-		4, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT, VAL_INT } },
-	{ "orderDroidObj",		scrOrderDroidObj,			VAL_VOID,
-		3, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
-	{ "orderDroidStatsLoc",	scrOrderDroidStatsLoc,		VAL_VOID,
-		5, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASESTATS, VAL_INT, VAL_INT } },
+	{ "orderDroid",			scrOrderDroid,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_DROID, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "orderDroidLoc",		scrOrderDroidLoc,		VAL_VOID,
+		4, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "orderDroidObj",		scrOrderDroidObj,		VAL_VOID,
+		3, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "orderDroidStatsLoc",	scrOrderDroidStatsLoc,	VAL_VOID,
+		5, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASESTATS, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "orderGroup",			scrOrderGroup,				VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
-	{ "orderGroupLoc",		scrOrderGroupLoc,			VAL_VOID,
-		4, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT, VAL_INT } },
-	{ "orderGroupObj",		scrOrderGroupObj,			VAL_VOID,
-		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
+	{ "orderGroup",			scrOrderGroup,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "orderGroupLoc",		scrOrderGroupLoc,		VAL_VOID,
+		4, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "orderGroupObj",		scrOrderGroupObj,		VAL_VOID,
+		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setDroidSecondary",	scrSetDroidSecondary,		VAL_VOID,
-		3, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT } },
-	{ "setGroupSecondary",	scrSetGroupSecondary,		VAL_VOID,
-		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT } },
+	{ "setDroidSecondary",	scrSetDroidSecondary,	VAL_VOID,
+		3, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "setGroupSecondary",	scrSetGroupSecondary,	VAL_VOID,
+		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "initIterateCluster", scrInitIterateCluster,		VAL_VOID,
-		1, { VAL_INT } },
-	{ "iterateCluster",		scrIterateCluster,			(INTERP_TYPE)ST_BASEOBJECT,
-		0, { VAL_VOID } },
-	{ "cmdDroidAddDroid",	scrCmdDroidAddDroid,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_DROID } },
+	{ "initIterateCluster", scrInitIterateCluster,	VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "iterateCluster",		scrIterateCluster,		(INTERP_TYPE)ST_BASEOBJECT,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "cmdDroidAddDroid",	scrCmdDroidAddDroid,	VAL_VOID,
+		2, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// a couple of example functions
-	{ "numMessageBox",			scrNumMB,				VAL_VOID,
-		1, { VAL_INT } },
-	{ "debugBox",				scrNumMB,				VAL_VOID,
-		1, { VAL_INT } },
-	{ "approxRoot",				scrApproxRoot,			VAL_INT,
-		2, { VAL_INT, VAL_INT } },
-	{ "refTest",				scrRefTest,				VAL_VOID,
-		1, { VAL_INT} },
+	{ "numMessageBox",		scrNumMB,				VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "debugBox",			scrNumMB,				VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "approxRoot",			scrApproxRoot,			VAL_INT,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "refTest",			scrRefTest,				VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// geo funcs
-	{ "distBetweenTwoPoints",	scrDistanceTwoPts,		VAL_INT,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "distBetweenTwoPoints",scrDistanceTwoPts,		VAL_INT,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "losTwoObjects",			scrLOSTwoBaseObjects,	VAL_BOOL,
-		3, { (INTERP_TYPE)ST_BASEOBJECT, (INTERP_TYPE)ST_BASEOBJECT, VAL_BOOL } },
+	{ "losTwoObjects",		scrLOSTwoBaseObjects,	VAL_BOOL,
+		3, { (INTERP_TYPE)ST_BASEOBJECT, (INTERP_TYPE)ST_BASEOBJECT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "killStructsInArea",		scrDestroyStructuresInArea,	VAL_VOID,
-		8, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL} },
+	{ "killStructsInArea",	scrDestroyStructuresInArea,	VAL_VOID,
+		8, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getThreatInArea",		scrThreatInArea,		VAL_INT,
-		10, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "getThreatInArea",	scrThreatInArea,		VAL_INT,
+		10, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getNearestGateway",		scrGetNearestGateway,	VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT } },
+	{ "getNearestGateway",	scrGetNearestGateway,	VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setWaterTile",			scrSetWaterTile,		VAL_VOID,
-		1, { VAL_INT } },
+	{ "setWaterTile",		scrSetWaterTile,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setRubbleTile",			scrSetRubbleTile,		VAL_VOID,
-		1, { VAL_INT } },
+	{ "setRubbleTile",		scrSetRubbleTile,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setCampaignNumber",		scrSetCampaignNumber,	VAL_VOID,
-		1, { VAL_INT } },
+	{ "setCampaignNumber",	scrSetCampaignNumber,	VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "testStructureModule",	scrTestStructureModule, VAL_BOOL,
-		3, {VAL_INT,(INTERP_TYPE)ST_STRUCTURE,VAL_INT} },
+	{ "testStructureModule",scrTestStructureModule, VAL_BOOL,
+		3, {VAL_INT,(INTERP_TYPE)ST_STRUCTURE,VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "killDroidsInArea",		scrDestroyUnitsInArea,	VAL_INT,
-	5, {VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "killDroidsInArea",	scrDestroyUnitsInArea,	VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "vanishUnit",				scrRemoveDroid,			VAL_VOID,
-		1, {(INTERP_TYPE)ST_DROID} },
+	{ "vanishUnit",			scrRemoveDroid,			VAL_VOID,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "forceDamageObject",		scrForceDamage,			VAL_VOID,
-		2, {(INTERP_TYPE)ST_BASEOBJECT,VAL_INT}},
+	{ "forceDamageObject",	scrForceDamage,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_BASEOBJECT, VAL_INT},
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	//multiplayer stuff.
-	{ "isHumanPlayer",		scrIsHumanPlayer,			VAL_BOOL,
-	    1, { VAL_INT } },
+	{ "isHumanPlayer",		scrIsHumanPlayer,		VAL_BOOL,
+	    1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "offerAlliance",		scrOfferAlliance,			VAL_VOID,
-		2, { VAL_INT, VAL_INT }},
+	{ "offerAlliance",		scrOfferAlliance,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "createAlliance",		scrCreateAlliance,			VAL_VOID,
-		2, { VAL_INT, VAL_INT }},
+	{ "createAlliance",		scrCreateAlliance,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "breakAlliance",		scrBreakAlliance,			VAL_VOID,
-		2, { VAL_INT, VAL_INT }},
+	{ "breakAlliance",		scrBreakAlliance,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "allianceExists",		scrAllianceExists,			VAL_BOOL,
-		0, {VAL_VOID } },
+	{ "allianceExists",		scrAllianceExists,		VAL_BOOL,
+		0, {VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "allianceExistsBetween",scrAllianceExistsBetween,	VAL_BOOL,
-		2, { VAL_INT, VAL_INT }},
+	{ "allianceExistsBetween",scrAllianceExistsBetween,VAL_BOOL,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "playerInAlliance",	scrPlayerInAlliance,		VAL_BOOL,
-		1, {VAL_INT } },
+	{ "playerInAlliance",	scrPlayerInAlliance,	VAL_BOOL,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "dominatingAlliance",	scrDominatingAlliance,		VAL_BOOL,
-		0, {VAL_VOID } },
+	{ "dominatingAlliance",	scrDominatingAlliance,	VAL_BOOL,
+		0, { VAL_VOID } ,
+		0, 0, NULL, 0, 0, NULL, NULL},
 
-	{ "myResponsibility",	scrMyResponsibility,		VAL_BOOL,
-		1, {VAL_INT } },
+	{ "myResponsibility",	scrMyResponsibility,	VAL_BOOL,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// object conversion routines
-	{ "objToDroid",			scrObjToDroid,				(INTERP_TYPE)ST_DROID,
-		1, { (INTERP_TYPE)ST_BASEOBJECT } },
-	{ "objToStructure",		scrObjToStructure,			(INTERP_TYPE)ST_STRUCTURE,
-		1, { (INTERP_TYPE)ST_BASEOBJECT } },
-	{ "objToFeature",		scrObjToFeature,			(INTERP_TYPE)ST_FEATURE,
-		1, { (INTERP_TYPE)ST_BASEOBJECT } },
+	{ "objToDroid",			scrObjToDroid,			(INTERP_TYPE)ST_DROID,
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "objToStructure",		scrObjToStructure,		(INTERP_TYPE)ST_STRUCTURE,
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "objToFeature",		scrObjToFeature,		(INTERP_TYPE)ST_FEATURE,
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
-	{"getGameStatus", 		scrGetGameStatus,	  		VAL_BOOL,	1, {VAL_INT} },
+	{ "getGameStatus", 		scrGetGameStatus,		VAL_BOOL,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
     //player colour access functions
-	{ "getPlayerColour",	scrGetPlayerColour,		    VAL_INT,
-        1, { VAL_INT } },
+	{ "getPlayerColour",	scrGetPlayerColour,		VAL_INT,
+        1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getPlayerColourName",	scrGetPlayerColourName,		    VAL_STRING,
-        1, { VAL_INT } },
+	{ "getPlayerColourName",scrGetPlayerColourName,	VAL_STRING,
+        1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "setPlayerColour",	scrSetPlayerColour,		    VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
+    { "setPlayerColour",	scrSetPlayerColour,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "takeOverDroidsInArea",	scrTakeOverDroidsInArea,	VAL_INT,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+    { "takeOverDroidsInArea",scrTakeOverDroidsInArea,VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "takeOverDroidsInAreaExp",scrTakeOverDroidsInAreaExp,	VAL_INT,
-		8, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+    { "takeOverDroidsInAreaExp",scrTakeOverDroidsInAreaExp,VAL_INT,
+		8, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "takeOverStructsInArea",	scrTakeOverStructsInArea,	VAL_INT,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+    { "takeOverStructsInArea",scrTakeOverStructsInArea,VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "takeOverSingleDroid",	scrTakeOverSingleDroid,	    (INTERP_TYPE)ST_DROID,
-		2, { (INTERP_TYPE)ST_DROID, VAL_INT} },
+    { "takeOverSingleDroid",scrTakeOverSingleDroid,	(INTERP_TYPE)ST_DROID,
+		2, { (INTERP_TYPE)ST_DROID, VAL_INT},
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-    { "takeOverSingleStructure",    scrTakeOverSingleStructure,	    (INTERP_TYPE)ST_STRUCTURE,
-		2, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT} },
+    { "takeOverSingleStructure",scrTakeOverSingleStructure,(INTERP_TYPE)ST_STRUCTURE,
+		2, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT},
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "resetStructTargets",	scrResetStructTargets,			VAL_VOID,
-		0, { VAL_VOID }, },
-	{ "resetDroidTargets",	scrResetDroidTargets,			VAL_VOID,
-		0, { VAL_VOID }, },
-	{ "setStructTarPref",	scrSetStructTarPref,			VAL_VOID,
-		1, { VAL_INT }, },
-	{ "setStructTarIgnore",	scrSetStructTarIgnore,			VAL_VOID,
-		1, { VAL_INT }, },
-	{ "setDroidTarPref",	scrSetDroidTarPref,				VAL_VOID,
-		1, { VAL_INT }, },
-	{ "setDroidTarIgnore",	scrSetDroidTarIgnore,			VAL_VOID,
-		1, { VAL_INT }, },
-	{ "structTargetInArea",	scrStructTargetInArea,			(INTERP_TYPE)ST_STRUCTURE,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, }, },
-	{ "structTargetOnMap",	scrStructTargetOnMap,			(INTERP_TYPE)ST_STRUCTURE,
-		2, { VAL_INT, VAL_INT }, },
-	{ "droidTargetInArea",	scrDroidTargetInArea,			(INTERP_TYPE)ST_DROID,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, }, },
-	{ "droidTargetOnMap",	scrDroidTargetOnMap,			(INTERP_TYPE)ST_DROID,
-		2, { VAL_INT, VAL_INT }, },
-	{ "targetInCluster",	scrTargetInCluster,				(INTERP_TYPE)ST_DROID,
-		2, { VAL_INT, VAL_INT }, },
+	{ "resetStructTargets",	scrResetStructTargets,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "resetDroidTargets",	scrResetDroidTargets,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "setStructTarPref",	scrSetStructTarPref,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "setStructTarIgnore",	scrSetStructTarIgnore,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "setDroidTarPref",	scrSetDroidTarPref,			VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "setDroidTarIgnore",	scrSetDroidTarIgnore,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "structTargetInArea",	scrStructTargetInArea,		(INTERP_TYPE)ST_STRUCTURE,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "structTargetOnMap",	scrStructTargetOnMap,		(INTERP_TYPE)ST_STRUCTURE,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "droidTargetInArea",	scrDroidTargetInArea,		(INTERP_TYPE)ST_DROID,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "droidTargetOnMap",	scrDroidTargetOnMap,		(INTERP_TYPE)ST_DROID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "targetInCluster",	scrTargetInCluster,			(INTERP_TYPE)ST_DROID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setDroidsToSafetyFlag",	scrSetDroidsToSafetyFlag,	VAL_VOID,
-		1, { VAL_BOOL } },
+	{ "setDroidsToSafetyFlag",scrSetDroidsToSafetyFlag,	VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setPlayCountDown",       scrSetPlayCountDown,	    VAL_VOID,
-		1, { VAL_BOOL } },
+	{ "setPlayCountDown",	scrSetPlayCountDown,	    VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getDroidCount",	        scrGetDroidCount,		    VAL_INT,
-        1, { VAL_INT } },
+	{ "getDroidCount",		scrGetDroidCount,		    VAL_INT,
+        1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "fireWeaponAtObj",		scrFireWeaponAtObj,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_WEAPON, (INTERP_TYPE)ST_BASEOBJECT } },
-	{ "fireWeaponAtLoc",		scrFireWeaponAtLoc,			VAL_VOID,
-		3, { (INTERP_TYPE)ST_WEAPON, VAL_INT,VAL_INT } },
+	{ "fireWeaponAtObj",	scrFireWeaponAtObj,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_WEAPON, (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "fireWeaponAtLoc",	scrFireWeaponAtLoc,			VAL_VOID,
+		3, { (INTERP_TYPE)ST_WEAPON, VAL_INT,VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setDroidKills",			scrSetDroidKills,			VAL_VOID,
-		2, { (INTERP_TYPE)ST_DROID, VAL_INT } },
-	{ "resetPlayerVisibility",	scrResetPlayerVisibility,	VAL_VOID,
-		1, { VAL_INT } },
+	{ "setDroidKills",		scrSetDroidKills,			VAL_VOID,
+		2, { (INTERP_TYPE)ST_DROID, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "resetPlayerVisibility",scrResetPlayerVisibility,	VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setVTOLReturnPos",		scrSetVTOLReturnPos,		VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_INT } },
+	{ "setVTOLReturnPos",	scrSetVTOLReturnPos,		VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "isVtol",					scrIsVtol,					VAL_BOOL,
-		1, { (INTERP_TYPE)ST_DROID } },
+	{ "isVtol",				scrIsVtol,					VAL_BOOL,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "tutorialTemplates",		scrTutorialTemplates,		VAL_VOID,
-		0, { VAL_VOID } },
+	{ "tutorialTemplates",	scrTutorialTemplates,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "resetLimboMission",		scrResetLimboMission,		VAL_VOID,
-		0, { VAL_VOID } },
+	{ "resetLimboMission",	scrResetLimboMission,		VAL_VOID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 //ajl skirmish funcs
-	{ "skDoResearch",			scrSkDoResearch,			VAL_VOID,
-		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, VAL_INT } },
+	{ "skDoResearch",		scrSkDoResearch,			VAL_VOID,
+		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skLocateEnemy",			scrSkLocateEnemy,			(INTERP_TYPE)ST_BASEOBJECT,
-		1, { VAL_INT } },
+	{ "skLocateEnemy",		scrSkLocateEnemy,			(INTERP_TYPE)ST_BASEOBJECT,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skCanBuildTemplate",		scrSkCanBuildTemplate,		VAL_BOOL,
-		3, { VAL_INT, (INTERP_TYPE)ST_STRUCTURE, (INTERP_TYPE)ST_TEMPLATE } },
+	{ "skCanBuildTemplate",	scrSkCanBuildTemplate,		VAL_BOOL,
+		3, { VAL_INT, (INTERP_TYPE)ST_STRUCTURE, (INTERP_TYPE)ST_TEMPLATE },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skVtolEnableCheck",		scrSkVtolEnableCheck,		VAL_BOOL,
-		1, { VAL_INT } },
+	{ "skVtolEnableCheck",	scrSkVtolEnableCheck,		VAL_BOOL,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skGetFactoryCapacity",	scrSkGetFactoryCapacity,	VAL_INT,
-	1, { (INTERP_TYPE)ST_STRUCTURE } },
+	{ "skGetFactoryCapacity",scrSkGetFactoryCapacity,	VAL_INT,
+	1, { (INTERP_TYPE)ST_STRUCTURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skDifficultyModifier",	scrSkDifficultyModifier,	VAL_VOID,
-	1, { VAL_INT } },
+	{ "skDifficultyModifier",scrSkDifficultyModifier,	VAL_VOID,
+	1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skDefenseLocation",		scrSkDefenseLocation,		VAL_BOOL,
-	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_DROID,VAL_INT } },
+	{ "skDefenseLocation",	scrSkDefenseLocation,		VAL_BOOL,
+	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_DROID,VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "skFireLassat",			scrSkFireLassat,			VAL_VOID,
-	2, {VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
+	{ "skFireLassat",		scrSkFireLassat,			VAL_VOID,
+	2, {VAL_INT, (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* New functions */
 
-	{ "strcmp",			scrStrcmp,		VAL_BOOL,
-		2, { VAL_STRING, VAL_STRING} },
+	{ "strcmp",				scrStrcmp,					VAL_BOOL,
+		2, { VAL_STRING, VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "console",			scrConsole,				VAL_VOID,
-		1, { VAL_STRING } },
+	{ "console",			scrConsole,					VAL_VOID,
+		1, { VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "MsgBox",			scrMsgBox,				VAL_VOID,
-		1, { VAL_STRING } },
+	{ "MsgBox",				scrMsgBox,					VAL_VOID,
+		1, { VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "dbgMsgOn",			scrDbgMsgOn,				VAL_VOID,
-		2, { VAL_INT, VAL_BOOL } },
-	{ "dbg",			scrDbg,				VAL_VOID,
-		2, { VAL_STRING, VAL_INT } },
-	{ "msg",			scrMsg,				VAL_VOID,		//multiplayer msg
-		3, { VAL_STRING, VAL_INT, VAL_INT } },
+		2, { VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "dbg",				scrDbg,						VAL_VOID,
+		2, { VAL_STRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "msg",				scrMsg,						VAL_VOID, //multiplayer msg
+		3, { VAL_STRING, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "debug",			scrDebugFile,				VAL_VOID,
-		1, { VAL_STRING } },
+	{ "debug",				scrDebugFile,				VAL_VOID,
+		1, { VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
-	{ "getTargetPlayers",	scrGetTargetPlayers,	VAL_INT,
-		1, { VAL_REF|VAL_STRING } },
+	{ "getTargetPlayers",	scrGetTargetPlayers,		VAL_INT,
+		1, { VAL_REF|VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "match",	scrMatch,	VAL_BOOL,
-		3, { VAL_STRING, VAL_STRING, VAL_REF|VAL_INT } },
+	{ "match",				scrMatch,					VAL_BOOL,
+		3, { VAL_STRING, VAL_STRING, VAL_REF|VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "bitSet",	scrBitSet,	VAL_BOOL,
-		2, { VAL_INT, VAL_INT } },
+	{ "bitSet",				scrBitSet,					VAL_BOOL,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "dropBeacon",				scrDropBeacon,			VAL_VOID,
-		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "dropBeacon",			scrDropBeacon,				VAL_VOID,
+		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "removeHelpMessage",				scrRemoveHelpMessage,			VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
+	{ "removeHelpMessage",	scrRemoveHelpMessage,		VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	//droid functions
 	//-----------------------------------
 	{ "actionDroidObj",		scrActionDroidObj,			VAL_VOID,
-		3, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT } },
+		3, { (INTERP_TYPE)ST_DROID, VAL_INT, (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "InitEnumDroids",			scrInitEnumDroids,		VAL_VOID,
-		2, { VAL_INT, VAL_INT } },
-	{ "EnumDroid",			scrEnumDroid,		(INTERP_TYPE)ST_DROID,
-		0, { VAL_VOID } },
+	{ "InitEnumDroids",		scrInitEnumDroids,			VAL_VOID,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+	{ "EnumDroid",			scrEnumDroid,				(INTERP_TYPE)ST_DROID,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "initIterateGroupB",	scrInitIterateGroupB,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "iterateGroupB",		scrIterateGroupB,			(INTERP_TYPE)ST_DROID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_INT } },
+		2, { (INTERP_TYPE)ST_GROUP, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "closestDamagedGroupDroid",		scrClosestDamagedGroupDroid,			(INTERP_TYPE)ST_DROID,
-		6, { VAL_INT, (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "closestDamagedGroupDroid",scrClosestDamagedGroupDroid,(INTERP_TYPE)ST_DROID,
+		6, { VAL_INT, (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
-	{ "factoryGetTemplate",			scrFactoryGetTemplate,		(INTERP_TYPE)ST_TEMPLATE,
-		1, { (INTERP_TYPE)ST_STRUCTURE } },
+	{ "factoryGetTemplate",	scrFactoryGetTemplate,		(INTERP_TYPE)ST_TEMPLATE,
+		1, { (INTERP_TYPE)ST_STRUCTURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numTemplatesInProduction",	scrNumTemplatesInProduction,		VAL_INT,
-		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT } },
+	{ "numTemplatesInProduction",scrNumTemplatesInProduction,VAL_INT,
+		2, { (INTERP_TYPE)ST_TEMPLATE, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numDroidsByComponent",			scrNumDroidsByComponent,		VAL_INT,
-		3, { (INTERP_TYPE)ST_COMPONENT, VAL_INT, VAL_INT } },
+	{ "numDroidsByComponent",scrNumDroidsByComponent,	VAL_INT,
+		3, { (INTERP_TYPE)ST_COMPONENT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getStructureLimit",	scrGetStructureLimit,		VAL_INT,
-		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "structureLimitReached",	scrStructureLimitReached,		VAL_BOOL,
-		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
+	{ "structureLimitReached",scrStructureLimitReached,	VAL_BOOL,
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getNumStructures",	scrGetNumStructures,		VAL_INT,
-		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT } },
+		2, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getUnitLimit",	scrGetUnitLimit,		VAL_INT,
-		1, { VAL_INT } },
+	{ "getUnitLimit",		scrGetUnitLimit,			VAL_INT,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "min",	scrMin,		VAL_INT,
-		2, { VAL_INT, VAL_INT } },
+	{ "min",				scrMin,						VAL_INT,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "max",	scrMax,		VAL_INT,
-		2, { VAL_INT, VAL_INT } },
+	{ "max",				scrMax,						VAL_INT,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "fogTileInRange",	scrFogTileInRange,		VAL_BOOL,
-		9, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "fogTileInRange",		scrFogTileInRange,			VAL_BOOL,
+		9, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "mapRevealedInRange",	scrMapRevealedInRange,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "pursueResearch",			scrPursueResearch,			VAL_BOOL,
-		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, (INTERP_TYPE)ST_RESEARCH } },
+	{ "pursueResearch",		scrPursueResearch,			VAL_BOOL,
+		3, { (INTERP_TYPE)ST_STRUCTURE, VAL_INT, (INTERP_TYPE)ST_RESEARCH },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numResearchLeft",			scrNumResearchLeft,			VAL_INT,
-		2, { VAL_INT, (INTERP_TYPE)ST_RESEARCH } },
+	{ "numResearchLeft",	scrNumResearchLeft,			VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_RESEARCH },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "researchFinished",			scrResearchCompleted,			VAL_BOOL,
-		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT } },
+	{ "researchFinished",	scrResearchCompleted,		VAL_BOOL,
+		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "researchStarted",			scrResearchStarted,			VAL_BOOL,
-		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT } },
+	{ "researchStarted",	scrResearchStarted,			VAL_BOOL,
+		2, { (INTERP_TYPE)ST_RESEARCH, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "threatInRange",			scrThreatInRange,			VAL_BOOL,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "threatInRange",		scrThreatInRange,			VAL_BOOL,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numEnemyWeapObjInRange",			scrNumEnemyWeapObjInRange,			VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "numEnemyWeapObjInRange",scrNumEnemyWeapObjInRange,VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numEnemyWeapDroidsInRange",			scrNumEnemyWeapDroidsInRange,			VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "numEnemyWeapDroidsInRange",scrNumEnemyWeapDroidsInRange,VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numEnemyWeapStructsInRange",			scrNumEnemyWeapStructsInRange,			VAL_INT,
-		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT} },
+	{ "numEnemyWeapStructsInRange",scrNumEnemyWeapStructsInRange,VAL_INT,
+		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numFriendlyWeapObjInRange",			scrNumFriendlyWeapObjInRange,			VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "numFriendlyWeapObjInRange",scrNumFriendlyWeapObjInRange,VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numFriendlyWeapDroidsInRange",			scrNumFriendlyWeapDroidsInRange,			VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "numFriendlyWeapDroidsInRange",scrNumFriendlyWeapDroidsInRange,VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numFriendlyWeapStructsInRange",			scrNumFriendlyWeapStructsInRange,			VAL_INT,
-		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT} },
+	{ "numFriendlyWeapStructsInRange",scrNumFriendlyWeapStructsInRange,VAL_INT,
+		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numPlayerWeapObjInRange",			scrNumPlayerWeapObjInRange,			VAL_INT,
-		6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "numPlayerWeapObjInRange",scrNumPlayerWeapObjInRange,VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numEnemyObjInRange",			scrNumEnemyObjInRange,			VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "numEnemyObjInRange",		scrNumEnemyObjInRange,	VAL_INT,
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "alliancesLocked",			scrAlliancesLocked,			VAL_BOOL,
-		0, {VAL_VOID} },
+	{ "alliancesLocked",		scrAlliancesLocked,		VAL_BOOL,
+		0, {VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 //num structures
-	{ "numStructsByStatInRange",			scrNumStructsByStatInRange,		VAL_INT,
-		6, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "numStructsByStatInRange",scrNumStructsByStatInRange,VAL_INT,
+		6, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numStructsByStatInArea",			scrNumStructsByStatInArea,		VAL_INT,
-		7, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "numStructsByStatInArea",	scrNumStructsByStatInArea,VAL_INT,
+		7, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numStructsByTypeInRange",		scrNumStructsByTypeInRange,	VAL_INT,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numStructsByTypeInRange",scrNumStructsByTypeInRange,VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numFeatByTypeInRange",		scrNumFeatByTypeInRange,	VAL_INT,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "numFeatByTypeInRange",	scrNumFeatByTypeInRange,VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numStructsButNotWallsInRangeVis",			scrNumStructsButNotWallsInRangeVis,		VAL_INT,
-		5, { VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "numStructsButNotWallsInRangeVis",scrNumStructsButNotWallsInRangeVis,VAL_INT,
+		5, { VAL_INT , VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getStructureVis",			scrGetStructureVis,		(INTERP_TYPE)ST_STRUCTURE,
-		3, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT } },
+	{ "getStructureVis",		scrGetStructureVis,		(INTERP_TYPE)ST_STRUCTURE,
+		3, { (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "chooseValidLoc",			scrChooseValidLoc,		VAL_BOOL,
-		6, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+		6, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getClosestEnemy",			scrGetClosestEnemy,		(INTERP_TYPE)ST_BASEOBJECT,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT } },
+	{ "getClosestEnemy",		scrGetClosestEnemy,		(INTERP_TYPE)ST_BASEOBJECT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "transporterCapacity",		scrTransporterCapacity,		VAL_INT,
-		1, { (INTERP_TYPE)ST_DROID} },
+	{ "transporterCapacity",	scrTransporterCapacity,	VAL_INT,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "transporterFlying",		scrTransporterFlying,		VAL_BOOL,
-		1, { (INTERP_TYPE)ST_DROID} },
+	{ "transporterFlying",		scrTransporterFlying,	VAL_BOOL,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "unloadTransporter",		scrUnloadTransporter,		VAL_VOID,
-		3, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT} },
+	{ "unloadTransporter",		scrUnloadTransporter,	VAL_VOID,
+		3, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "hasGroup",		scrHasGroup,		VAL_BOOL,
-		1, { (INTERP_TYPE)ST_DROID} },
+	{ "hasGroup",				scrHasGroup,			VAL_BOOL,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "objWeaponMaxRange",		scrObjWeaponMaxRange,		VAL_INT,
-		1, { (INTERP_TYPE)ST_BASEOBJECT} },
+	{ "objWeaponMaxRange",		scrObjWeaponMaxRange,	VAL_INT,
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "objHasWeapon",			scrObjHasWeapon,		VAL_BOOL,
-		1, { (INTERP_TYPE)ST_BASEOBJECT} },
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "objectHasIndirectWeapon",		scrObjectHasIndirectWeapon,		VAL_BOOL,
-		1, { (INTERP_TYPE)ST_BASEOBJECT} },
+	{ "objectHasIndirectWeapon",scrObjectHasIndirectWeapon,VAL_BOOL,
+		1, { (INTERP_TYPE)ST_BASEOBJECT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getClosestEnemyDroidByType",			scrGetClosestEnemyDroidByType,		(INTERP_TYPE)ST_DROID,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_INT } },
+	{ "getClosestEnemyDroidByType",scrGetClosestEnemyDroidByType,(INTERP_TYPE)ST_DROID,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getClosestEnemyStructByType",		scrGetClosestEnemyStructByType,	(INTERP_TYPE)ST_STRUCTURE,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "getClosestEnemyStructByType",scrGetClosestEnemyStructByType,(INTERP_TYPE)ST_STRUCTURE,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
 	{ "skDefenseLocationB",		scrSkDefenseLocationB,		VAL_BOOL,
-	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_DROID,VAL_INT } },
+	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_DROID, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "circlePerimPoint",			scrCirclePerimPoint,		VAL_VOID,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT} },
+	{ "circlePerimPoint",		scrCirclePerimPoint,		VAL_VOID,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
 	/* learn functions */
 
-	{ "learnPlayerBaseLoc",			scrLearnPlayerBaseLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "learnPlayerBaseLoc",		scrLearnPlayerBaseLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "recallPlayerBaseLoc",			scrRecallPlayerBaseLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT} },
+	{ "recallPlayerBaseLoc",	scrRecallPlayerBaseLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "canRememberPlayerBaseLoc",			scrCanRememberPlayerBaseLoc,		VAL_BOOL,
-		2, { VAL_INT, VAL_INT} },
+	{ "canRememberPlayerBaseLoc",scrCanRememberPlayerBaseLoc,VAL_BOOL,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "learnBaseDefendLoc",			scrLearnBaseDefendLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "learnBaseDefendLoc",		scrLearnBaseDefendLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "learnOilDefendLoc",			scrLearnOilDefendLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "learnOilDefendLoc",		scrLearnOilDefendLoc,		VAL_BOOL,
+		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getBaseDefendLocIndex",			scrGetBaseDefendLocIndex,		VAL_INT,
-		3, { VAL_INT, VAL_INT, VAL_INT} },
+	{ "getBaseDefendLocIndex",	scrGetBaseDefendLocIndex,	VAL_INT,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getOilDefendLocIndex",			scrGetOilDefendLocIndex,		VAL_INT,
-		3, { VAL_INT, VAL_INT, VAL_INT} },
+	{ "getOilDefendLocIndex",	scrGetOilDefendLocIndex,	VAL_INT,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getBaseDefendLocCount",			scrGetBaseDefendLocCount,		VAL_INT,
-		0, { VAL_VOID} },
+	{ "getBaseDefendLocCount",	scrGetBaseDefendLocCount,	VAL_INT,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getOilDefendLocCount",			scrGetOilDefendLocCount,		VAL_INT,
-		0, { VAL_VOID} },
+	{ "getOilDefendLocCount",	scrGetOilDefendLocCount,	VAL_INT,
+		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "recallBaseDefendLoc",			scrRecallBaseDefendLoc,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT} },
+	{ "recallBaseDefendLoc",	scrRecallBaseDefendLoc,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "recallOilDefendLoc",			scrRecallOilDefendLoc,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT} },
+	{ "recallOilDefendLoc",		scrRecallOilDefendLoc,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "savePlayerAIExperience",			scrSavePlayerAIExperience,		VAL_BOOL,
-		2, { VAL_INT, VAL_BOOL} },
+	{ "savePlayerAIExperience",	scrSavePlayerAIExperience,	VAL_BOOL,
+		2, { VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "loadPlayerAIExperience",			scrLoadPlayerAIExperience,		VAL_BOOL,
-	2, { VAL_INT, VAL_BOOL} },
+	{ "loadPlayerAIExperience",	scrLoadPlayerAIExperience,	VAL_BOOL,
+	2, { VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* end of learn functions */
 
-	{ "structInRangeVis",			scrStructInRangeVis,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
+	{ "structInRangeVis",		scrStructInRangeVis,		VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 
-	{ "giftRadar",			scrGiftRadar,		VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_BOOL} },
+	{ "giftRadar",				scrGiftRadar,				VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numAllies",			scrNumAllies,		VAL_INT,
-		1, { VAL_INT} },
+	{ "numAllies",				scrNumAllies,				VAL_INT,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numAAinRange",			scrNumAAinRange,		VAL_INT,
-		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT} },
+	{ "numAAinRange",			scrNumAAinRange,			VAL_INT,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "selectDroid",			scrSelectDroid,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_DROID, VAL_BOOL} },
+	{ "selectDroid",			scrSelectDroid,				VAL_VOID,
+		2, { (INTERP_TYPE)ST_DROID, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "selectGroup",			scrSelectGroup,		VAL_VOID,
-		2, { (INTERP_TYPE)ST_GROUP, VAL_BOOL} },
+	{ "selectGroup",			scrSelectGroup,				VAL_VOID,
+		2, { (INTERP_TYPE)ST_GROUP, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "modulo",			scrModulo,		VAL_INT,
-		2, { VAL_INT, VAL_INT} },
+	{ "modulo",					scrModulo,					VAL_INT,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "playerLoaded",			scrPlayerLoaded,		VAL_BOOL,
-		1, { VAL_INT} },
+	{ "playerLoaded",			scrPlayerLoaded,			VAL_BOOL,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getStructureType",			scrGetStructureType,		VAL_INT,
-		1, { (INTERP_TYPE)ST_STRUCTURE} },
+	{ "getStructureType",		scrGetStructureType,		VAL_INT,
+		1, { (INTERP_TYPE)ST_STRUCTURE },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "playerName",			scrGetPlayerName,		VAL_STRING,
-		1, { VAL_INT} },
+	{ "playerName",				scrGetPlayerName,			VAL_STRING,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getPlayerName",			scrGetPlayerName,		VAL_STRING,
-		1, { VAL_INT} },
+	{ "getPlayerName",			scrGetPlayerName,			VAL_STRING,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setPlayerName",			scrSetPlayerName,		VAL_BOOL,
-		2, { VAL_INT, VAL_STRING} },
+	{ "setPlayerName",			scrSetPlayerName,			VAL_BOOL,
+		2, { VAL_INT, VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "ASSERT",			scrASSERT,		VAL_VOID,
-		3, { VAL_BOOL, VAL_STRING, VAL_INT} },
+	{ "ASSERT",					scrASSERT,					VAL_VOID,
+		3, { VAL_BOOL, VAL_STRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "showRangeAtPos",		scrShowRangeAtPos,		VAL_VOID,
-		3, { VAL_INT, VAL_INT, VAL_INT} },
+	{ "showRangeAtPos",			scrShowRangeAtPos,			VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "toPow",		scrToPow,		VAL_FLOAT,
-		2, { VAL_FLOAT, VAL_FLOAT,} },
+	{ "toPow",					scrToPow,					VAL_FLOAT,
+		2, { VAL_FLOAT, VAL_FLOAT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "debugMenu",		scrDebugMenu,		VAL_VOID,
-		1, { VAL_BOOL} },
+	{ "debugMenu",				scrDebugMenu,				VAL_VOID,
+		1, { VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "setDebugMenuEntry",		scrSetDebugMenuEntry,		VAL_VOID,
-		2, { VAL_STRING, VAL_INT} },
+		2, { VAL_STRING, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* END new functions */
 
@@ -1000,9 +1305,10 @@ FUNC_SYMBOL asFuncTable[] =
 //	6, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
     /* This final entry marks the end of the function list */
-	{ "FUNCTION LIST END",		NULL,					VAL_VOID,
-		0, { VAL_VOID } }
+	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
 };
+
+
 /*
  * The table of external variables and their access functions.
  * The table is laid out as follows :
@@ -1016,56 +1322,54 @@ FUNC_SYMBOL asFuncTable[] =
  */
 VAR_SYMBOL asExternTable[] =
 {
-	{ "trackTransporter",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_TRACKTRANSPORTER,
-		scrGenExternGet,		NULL },
+	{ "trackTransporter",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_TRACKTRANSPORTER,	scrGenExternGet,	NULL, 0, {}, NULL },
 
-	{ "mapWidth",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_MAPWIDTH,
-		scrGenExternGet,		NULL },
-	{ "mapHeight",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_MAPHEIGHT,
-		scrGenExternGet,		NULL },
+	{ "mapWidth",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_MAPWIDTH,		scrGenExternGet,		NULL, 0, {}, NULL },
+	{ "mapHeight",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_MAPHEIGHT,	scrGenExternGet,		NULL, 0, {}, NULL },
 
-	{ "gameInitialised",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_GAMEINIT,
-		scrGenExternGet,		NULL },
+	{ "gameInitialised",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_GAMEINIT,		scrGenExternGet,		NULL, 0, {}, NULL },
 
-	{ "selectedPlayer",	VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_SELECTEDPLAYER,
-		scrGenExternGet,		NULL },
-	{ "gameTime",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_GAMETIME,
-		scrGenExternGet,		NULL },
+	{ "selectedPlayer",	VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_SELECTEDPLAYER,	scrGenExternGet,	NULL, 0, {}, NULL },
+	{ "gameTime",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_GAMETIME,		scrGenExternGet,		NULL, 0, {}, NULL },
 
-	{ "gameLevel",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_GAMELEVEL,
-		scrGenExternGet,		scrGenExternSet },
-	{ "inTutorial",		VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_TUTORIAL,
-		scrGenExternGet,		scrGenExternSet },
-	{ "cursorType",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_CURSOR,
-		scrGenExternGet, NULL },
-
-
-	{ "intMode",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_INTMODE,
-		scrGenExternGet, NULL },
-
-	{ "targetedObjectType",	VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_TARGETTYPE,
-		scrGenExternGet, NULL },
-	{ "extraVictoryFlag",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_EXTRAVICTORYFLAG,
-		scrGenExternGet,		scrGenExternSet },
-	{ "extraFailFlag",	VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,		EXTID_EXTRAFAILFLAG,
-		scrGenExternGet,		scrGenExternSet },
-
-	{ "multiPlayerGameType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,	EXTID_MULTIGAMETYPE,
-		scrGenExternGet,			NULL },
-
-	{ "multiPlayerMaxPlayers",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,EXTID_MULTIGAMEHUMANMAX,
-		scrGenExternGet,			NULL },
-
-	{ "multiPlayerBaseType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,EXTID_MULTIGAMEBASETYPE,
-		scrGenExternGet,			NULL },
-
-	{ "multiPlayerAlliancesType",VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,	EXTID_MULTIGAMEALLIANCESTYPE,
-		scrGenExternGet,			NULL },
+	{ "gameLevel",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_GAMELEVEL,	scrGenExternGet,		scrGenExternSet, 0, {}, NULL },
+	{ "inTutorial",		VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_TUTORIAL,		scrGenExternGet,		scrGenExternSet, 0, {}, NULL },
+	{ "cursorType",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_CURSOR,		scrGenExternGet,		NULL, 0, {}, NULL },
 
 
+	{ "intMode",		VAL_INT,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_INTMODE,		scrGenExternGet,		NULL, 0, {}, NULL },
+
+	{ "targetedObjectType",	VAL_INT,(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_TARGETTYPE,	scrGenExternGet,		NULL, 0, {}, NULL },
+	{ "extraVictoryFlag",VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_EXTRAVICTORYFLAG,	scrGenExternGet,	scrGenExternSet, 0, {}, NULL },
+	{ "extraFailFlag",	VAL_BOOL,	(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_EXTRAFAILFLAG,scrGenExternGet,		scrGenExternSet, 0, {}, NULL },
+
+	{ "multiPlayerGameType",VAL_INT,(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_MULTIGAMETYPE,scrGenExternGet,		NULL, 0, {}, NULL },
+
+	{ "multiPlayerMaxPlayers",VAL_INT,(INTERP_TYPE)ST_EXTERN,0,
+		EXTID_MULTIGAMEHUMANMAX,scrGenExternGet,	NULL, 0, {}, NULL },
+
+	{ "multiPlayerBaseType",VAL_INT,(INTERP_TYPE)ST_EXTERN,	0,
+		EXTID_MULTIGAMEBASETYPE,scrGenExternGet,	NULL, 0, {}, NULL },
+
+	{ "multiPlayerAlliancesType",VAL_INT,(INTERP_TYPE)ST_EXTERN,0,
+		EXTID_MULTIGAMEALLIANCESTYPE,scrGenExternGet,NULL, 0, {}, NULL },
 
 	/* This entry marks the end of the variable list */
-	{ NULL, VAL_VOID, (INTERP_TYPE)ST_EXTERN, 0, 0, NULL, NULL }
+	{ NULL, VAL_VOID, (INTERP_TYPE)ST_EXTERN, 0, 0, NULL, NULL, 0, {}, NULL }
 };
 
 
@@ -1085,38 +1389,38 @@ VAR_SYMBOL asExternTable[] =
 VAR_SYMBOL asObjTable[] =
 {
 	// base object variables
-	{ "x",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_POSX,
-		scrBaseObjGet,			NULL },
-	{ "y",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_POSY,
-		scrBaseObjGet,			NULL },
-	{ "z",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_POSZ,
-		scrBaseObjGet,			NULL },
-	{ "id",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_ID,
-		scrBaseObjGet,			NULL },
-	{ "player",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_PLAYER,
-		scrBaseObjGet,			NULL },
-	{ "type",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_TYPE,
-		scrBaseObjGet,			NULL },
-	{ "clusterID",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_CLUSTERID,
-		scrBaseObjGet,			NULL },
-	{ "health",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_HEALTH,
-		scrBaseObjGet,			NULL },
+	{ "x",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_POSX,		scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "y",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_POSY,		scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "z",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_POSZ,		scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "id",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_ID,		scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "player",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_PLAYER,	scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "type",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_TYPE,		scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "clusterID",	VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_CLUSTERID,scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "health",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_HEALTH,	scrBaseObjGet,	NULL, 0, {}, NULL },
 
 	// droid variables
-	{ "order",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_ORDER,
-		scrBaseObjGet,			NULL },
-	{ "droidType",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_DROIDTYPE,
-		scrBaseObjGet,			NULL },
-	{ "body",			(INTERP_TYPE)ST_BODY,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_BODY,
-		scrBaseObjGet,			NULL },
-	{ "propulsion",		(INTERP_TYPE)ST_PROPULSION,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_PROPULSION,
-		scrBaseObjGet,			NULL },
-	{ "weapon",			(INTERP_TYPE)ST_WEAPON,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_WEAPON,
-		scrBaseObjGet,			NULL },
-	{ "orderx",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_ORDERX,
-		scrBaseObjGet,			NULL },
-	{ "ordery",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_ORDERY,
-		scrBaseObjGet,			NULL },
+	{ "order",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_ORDER,	scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "droidType",	VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_DROIDTYPE,scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "body",		(INTERP_TYPE)ST_BODY,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_BODY,		scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "propulsion",	(INTERP_TYPE)ST_PROPULSION,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_PROPULSION,scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "weapon",		(INTERP_TYPE)ST_WEAPON,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_WEAPON,	scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "orderx",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_ORDERX,	scrBaseObjGet,	NULL, 0, {}, NULL },
+	{ "ordery",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_ORDERY,	scrBaseObjGet,	NULL, 0, {}, NULL },
 
 	// structure variables
 	//{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTAT,
@@ -1124,38 +1428,38 @@ VAR_SYMBOL asObjTable[] =
 
 
 	// group variables
-	{ "x",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_GROUP,		GROUPID_POSX,
-		scrGroupObjGet,			NULL },
-	{ "y",				VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_GROUP,		GROUPID_POSY,
-		scrGroupObjGet,			NULL },
-	{ "members",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_GROUP,		GROUPID_MEMBERS,
-		scrGroupObjGet,			NULL },
-	{ "health",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_GROUP,		GROUPID_HEALTH,
-		scrGroupObjGet,			NULL },
+	{ "x",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_GROUP,		GROUPID_POSX,	scrGroupObjGet,	NULL, 0, {}, NULL },
+	{ "y",			VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_GROUP,		GROUPID_POSY,	scrGroupObjGet,	NULL, 0, {}, NULL },
+	{ "members",	VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_GROUP,		GROUPID_MEMBERS,scrGroupObjGet,	NULL, 0, {}, NULL },
+	{ "health",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_GROUP,		GROUPID_HEALTH,	scrGroupObjGet,	NULL, 0, {}, NULL },
 
 	/* new member variables */
 	//similiar to .order
-	{ "action",			VAL_INT,			(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_ACTION,
-		scrBaseObjGet,			NULL },
+	{ "action",		VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_ACTION,	scrBaseObjGet,	NULL, 0, {}, NULL },
 
 	//.stat - now supports droids, ST_STRUCTURE became ST_BASEOBJECT
-	{ "stat",			(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_STRUCTSTAT,
-		scrBaseObjGet,			NULL },
+	{ "stat",		(INTERP_TYPE)ST_STRUCTURESTAT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_STRUCTSTAT,scrBaseObjGet,	NULL, 0, {}, NULL },
 
 	//object->psTarget
-	{ "target",			(INTERP_TYPE)ST_BASEOBJECT,		(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_BASEOBJECT,	OBJID_TARGET,
-		scrBaseObjGet,			NULL },
+	{ "target",		(INTERP_TYPE)ST_BASEOBJECT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_TARGET,	scrBaseObjGet,	NULL, 0, {}, NULL },
 
 	//returns psStruct->pStructureType->type
-	{ "stattype",			VAL_INT,		(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTATTYPE,
-		scrBaseObjGet,			NULL },
+	{ "stattype",	VAL_INT,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_STRUCTURE,	OBJID_STRUCTSTATTYPE,scrBaseObjGet,NULL, 0, {}, NULL },
 
 	//returns if this unit is currently selected by a player (usually human)
-	{ "selected",			VAL_BOOL,		(INTERP_TYPE)ST_OBJECT,	(INTERP_TYPE)ST_DROID,		OBJID_SELECTED,
-		scrBaseObjGet,			NULL },
+	{ "selected",	VAL_BOOL,	(INTERP_TYPE)ST_OBJECT,
+		(INTERP_TYPE)ST_DROID,		OBJID_SELECTED,	scrBaseObjGet,	NULL, 0, {}, NULL },
 
 	/* This entry marks the end of the variable list */
-	{ NULL, VAL_VOID, (INTERP_TYPE)ST_OBJECT, VAL_VOID, 0, NULL, NULL }
+	{ NULL, VAL_VOID, (INTERP_TYPE)ST_OBJECT, VAL_VOID, 0, NULL, NULL, 0, {}, NULL }
 };
 
 /* The table of constant variables
@@ -1187,365 +1491,364 @@ CONST_SYMBOL asConstantTable[] =
 
 
 	// new styley that supports many other buttons
-	{ "IDRET_OPTIONS",		VAL_INT,	FALSE,		IDRET_OPTIONS,		0 },
-	{ "IDRET_CANCEL",		VAL_INT,	FALSE,		IDRET_CANCEL,		0 },
-	{ "IDRET_BUILD",		VAL_INT,	FALSE,		IDRET_BUILD,		0 },
-	{ "IDRET_MANUFACTURE",	VAL_INT,	FALSE,		IDRET_MANUFACTURE,	0 },
-	{ "IDRET_RESEARCH",		VAL_INT,	FALSE,		IDRET_RESEARCH,		0 },
-	{ "IDRET_INTELMAP",		VAL_INT,	FALSE,		IDRET_INTEL_MAP,	0 },
-	{ "IDRET_DESIGN",		VAL_INT,	FALSE,		IDRET_DESIGN,		0 },
-	{ "IDRET_COMMAND",		VAL_INT,	FALSE,		IDRET_COMMAND,		0 },
-	{ "IDRET_ORDER",		VAL_INT,	FALSE,		IDRET_ORDER,		0 },
-	{ "IDRET_TRANSPORTER",	VAL_INT,	FALSE,		IDRET_TRANSPORTER,	0 },
+	{ "IDRET_OPTIONS",		VAL_INT,	FALSE,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
+	{ "IDRET_CANCEL",		VAL_INT,	FALSE,	IDRET_CANCEL,		NULL, NULL, 0.0f },
+	{ "IDRET_BUILD",		VAL_INT,	FALSE,	IDRET_BUILD,		NULL, NULL, 0.0f },
+	{ "IDRET_MANUFACTURE",	VAL_INT,	FALSE,	IDRET_MANUFACTURE,	NULL, NULL, 0.0f },
+	{ "IDRET_RESEARCH",		VAL_INT,	FALSE,	IDRET_RESEARCH,		NULL, NULL, 0.0f },
+	{ "IDRET_INTELMAP",		VAL_INT,	FALSE,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
+	{ "IDRET_DESIGN",		VAL_INT,	FALSE,	IDRET_DESIGN,		NULL, NULL, 0.0f },
+	{ "IDRET_COMMAND",		VAL_INT,	FALSE,	IDRET_COMMAND,		NULL, NULL, 0.0f },
+	{ "IDRET_ORDER",		VAL_INT,	FALSE,	IDRET_ORDER,		NULL, NULL, 0.0f },
+	{ "IDRET_TRANSPORTER",	VAL_INT,	FALSE,	IDRET_TRANSPORTER,	NULL, NULL, 0.0f },
 
 	    // Design screen buttons
-	{ "IDDES_TEMPLSTART",	VAL_INT,	0,		IDDES_TEMPLSTART,	0 },
-	{ "IDDES_SYSTEMBUTTON",	VAL_INT,	0,		IDDES_SYSTEMBUTTON,	0 },
-	{ "IDDES_BODYBUTTON",	VAL_INT,	0,		IDDES_BODYBUTTON,	0 },
-	{ "IDDES_PROPBUTTON",	VAL_INT,	0,		IDDES_PROPBUTTON,	0 },
+	{ "IDDES_TEMPLSTART",	VAL_INT,	FALSE,	IDDES_TEMPLSTART,	NULL, NULL, 0.0f },
+	{ "IDDES_SYSTEMBUTTON",	VAL_INT,	FALSE,	IDDES_SYSTEMBUTTON,	NULL, NULL, 0.0f },
+	{ "IDDES_BODYBUTTON",	VAL_INT,	FALSE,	IDDES_BODYBUTTON,	NULL, NULL, 0.0f },
+	{ "IDDES_PROPBUTTON",	VAL_INT,	FALSE,	IDDES_PROPBUTTON,	NULL, NULL, 0.0f },
 
 	// the first (top-left)  button on the object window (right of the reticule window)
-	{ "IDOBJ_STATSTART",	VAL_INT,	0,		IDOBJ_STATSTART,	0 },
+	{ "IDOBJ_STATSTART",	VAL_INT,	FALSE,	IDOBJ_STATSTART,	NULL, NULL, 0.0f },
 
 	// one below obj_statstart
-	{ "IDOBJ_OBJSTART",		VAL_INT,	0,		IDOBJ_OBJSTART,	0 },
+	{ "IDOBJ_OBJSTART",		VAL_INT,	FALSE,	IDOBJ_OBJSTART,		NULL, NULL, 0.0f },
 
 	// the first (top-left) button on the list window (up from the reticule)
-	{ "IDSTAT_START",		VAL_INT,	0,		IDSTAT_START,	0 },
+	{ "IDSTAT_START",		VAL_INT,	FALSE,	IDSTAT_START,		NULL, NULL, 0.0f },
 
 
 	//message Types
-	{ "RES_MSG",	VAL_INT,	0,		MSG_RESEARCH,		0},
-	{ "CAMP_MSG",	VAL_INT,	0,		MSG_CAMPAIGN,		0},
-	{ "MISS_MSG",	VAL_INT,	0,		MSG_MISSION,		0},
-	{ "PROX_MSG",	VAL_INT,	0,		MSG_PROXIMITY,		0},
-	//{ "TUT_MSG",	VAL_INT,	0,		MSG_TUTORIAL,		0}, NOT NEEDED
+	{ "RES_MSG",	VAL_INT,	FALSE,	MSG_RESEARCH,	NULL, NULL, 0.0f },
+	{ "CAMP_MSG",	VAL_INT,	FALSE,	MSG_CAMPAIGN,	NULL, NULL, 0.0f },
+	{ "MISS_MSG",	VAL_INT,	FALSE,	MSG_MISSION,	NULL, NULL, 0.0f },
+	{ "PROX_MSG",	VAL_INT,	FALSE,	MSG_PROXIMITY,	NULL, NULL, 0.0f },
+	//{ "TUT_MSG",	VAL_INT,	FALSE,	MSG_TUTORIAL,	NULL, NULL, 0.0f }, NOT NEEDED
 
 	//used for null pointers
-	{ "NULLTEMPLATE",	(INTERP_TYPE)ST_POINTER_T,	0,		0,					NULL},
-	{ "NULLOBJECT",		(INTERP_TYPE)ST_POINTER_O,	0,		0,					NULL},
-	{ "NULLSTAT",		(INTERP_TYPE)ST_POINTER_S,	0,		0,					NULL},
-	{ "NULLSTRING",		(INTERP_TYPE)ST_TEXTSTRING,	0,		0,					NULL},
-
-	{ "NULLSTRUCTURESTAT",		(INTERP_TYPE)ST_POINTER_STRUCTSTAT,	0,	0,		NULL},	//for NULLSTRUCTURESTAT
+	{ "NULLTEMPLATE",	(INTERP_TYPE)ST_POINTER_T,	FALSE,	0,	NULL, NULL, 0.0f },
+	{ "NULLOBJECT",		(INTERP_TYPE)ST_POINTER_O,	FALSE,	0,	NULL, NULL, 0.0f },
+	{ "NULLSTAT",		(INTERP_TYPE)ST_POINTER_S,	FALSE,	0,	NULL, NULL, 0.0f },
+	{ "NULLSTRING",		(INTERP_TYPE)ST_TEXTSTRING,	FALSE,	0,	NULL, NULL, 0.0f },
+	{ "NULLSTRUCTURESTAT",(INTERP_TYPE)ST_POINTER_STRUCTSTAT,	FALSE,	0,	NULL, NULL, 0.0f },	//for NULLSTRUCTURESTAT
 
 	//barbarian player ids
-	{ "BARBARIAN1",	VAL_INT,	0,		BARB1,				0},
-	{ "BARBARIAN2",	VAL_INT,	0,		BARB2,				0},
+	{ "BARBARIAN1",	VAL_INT,	FALSE,	BARB1,	NULL, NULL, 0.0f },
+	{ "BARBARIAN2",	VAL_INT,	FALSE,	BARB2,	NULL, NULL, 0.0f },
 
     //#define used to set the reinforcement timer with
-	{ "LZ_COMPROMISED_TIME",	VAL_INT,    0,	SCR_LZ_COMPROMISED_TIME,		0 },
+	{ "LZ_COMPROMISED_TIME",VAL_INT,	FALSE,	SCR_LZ_COMPROMISED_TIME,	NULL, NULL, 0.0f },
 
     // BASEOBJ types
-	{ "OBJ_DROID",		VAL_INT,	0,		OBJ_DROID,				0},
-	{ "OBJ_STRUCTURE",	VAL_INT,	0,		OBJ_STRUCTURE,			0},
-	{ "OBJ_FEATURE",	VAL_INT,	0,		OBJ_FEATURE,			0},
+	{ "OBJ_DROID",		VAL_INT,	FALSE,	OBJ_DROID,		NULL, NULL, 0.0f },
+	{ "OBJ_STRUCTURE",	VAL_INT,	FALSE,	OBJ_STRUCTURE,	NULL, NULL, 0.0f },
+	{ "OBJ_FEATURE",	VAL_INT,	FALSE,	OBJ_FEATURE,	NULL, NULL, 0.0f },
 	//mission Types
-	{ "CAMP_START",	VAL_INT,	0,		LDS_CAMSTART,		0},
-	{ "CAMP_EXPAND",VAL_INT,	0,		LDS_EXPAND,		0},
-	{ "OFF_KEEP",	VAL_INT,	0,		LDS_MKEEP,			0},
-	{ "OFF_CLEAR",	VAL_INT,	0,		LDS_MCLEAR,			0},
-	{ "BETWEEN",	VAL_INT,	0,		LDS_BETWEEN,		0},
+	{ "CAMP_START",	VAL_INT,	FALSE,	LDS_CAMSTART,		NULL, NULL, 0.0f },
+	{ "CAMP_EXPAND",VAL_INT,	FALSE,	LDS_EXPAND,			NULL, NULL, 0.0f },
+	{ "OFF_KEEP",	VAL_INT,	FALSE,	LDS_MKEEP,			NULL, NULL, 0.0f },
+	{ "OFF_CLEAR",	VAL_INT,	FALSE,	LDS_MCLEAR,			NULL, NULL, 0.0f },
+	{ "BETWEEN",	VAL_INT,	FALSE,	LDS_BETWEEN,		NULL, NULL, 0.0f },
 	// droid types
-	{ "DROID_WEAPON",		VAL_INT,	0,		DROID_WEAPON,			0 },
-	{ "DROID_SENSOR",		VAL_INT,	0,		DROID_SENSOR,			0 },
-	{ "DROID_ECM",			VAL_INT,	0,		DROID_ECM,				0 },
-	{ "DROID_CONSTRUCT",	VAL_INT,	0,		DROID_CONSTRUCT,		0 },
-	{ "DROID_PERSON",		VAL_INT,	0,		DROID_PERSON,			0 },
-	{ "DROID_CYBORG",		VAL_INT,	0,		DROID_CYBORG,			0 },
-	{ "DROID_TRANSPORTER",	VAL_INT,	0,		DROID_TRANSPORTER,		0 },
-	{ "DROID_COMMAND",		VAL_INT,	0,		DROID_COMMAND,			0 },
-	{ "DROID_REPAIR",		VAL_INT,	0,		DROID_REPAIR,			0 },
+	{ "DROID_WEAPON",		VAL_INT,	FALSE,	DROID_WEAPON,		NULL, NULL, 0.0f },
+	{ "DROID_SENSOR",		VAL_INT,	FALSE,	DROID_SENSOR,		NULL, NULL, 0.0f },
+	{ "DROID_ECM",			VAL_INT,	FALSE,	DROID_ECM,			NULL, NULL, 0.0f },
+	{ "DROID_CONSTRUCT",	VAL_INT,	FALSE,	DROID_CONSTRUCT,	NULL, NULL, 0.0f },
+	{ "DROID_PERSON",		VAL_INT,	FALSE,	DROID_PERSON,		NULL, NULL, 0.0f },
+	{ "DROID_CYBORG",		VAL_INT,	FALSE,	DROID_CYBORG,		NULL, NULL, 0.0f },
+	{ "DROID_TRANSPORTER",	VAL_INT,	FALSE,	DROID_TRANSPORTER,	NULL, NULL, 0.0f },
+	{ "DROID_COMMAND",		VAL_INT,	FALSE,	DROID_COMMAND,		NULL, NULL, 0.0f },
+	{ "DROID_REPAIR",		VAL_INT,	FALSE,	DROID_REPAIR,		NULL, NULL, 0.0f },
 
 	// structure types
-	{ "REF_HQ",				VAL_INT,	0,		REF_HQ,					0 },
-	{ "REF_FACTORY",		VAL_INT,	0,		REF_FACTORY,			0 },
-	{ "REF_FACTORY_MODULE",	VAL_INT,	0,		REF_FACTORY_MODULE,		0 },
-	{ "REF_POWER_GEN",		VAL_INT,	0,		REF_POWER_GEN,			0 },
-	{ "REF_POWER_MODULE",	VAL_INT,	0,		REF_POWER_MODULE,		0 },
-	{ "REF_RESOURCE_EXTRACTOR",	VAL_INT,	0,		REF_RESOURCE_EXTRACTOR,	0 },
-	{ "REF_DEFENSE",		VAL_INT,	0,		REF_DEFENSE,			0 },
-	{ "REF_WALL",			VAL_INT,	0,		REF_WALL,				0 },
-	{ "REF_WALLCORNER",		VAL_INT,	0,		REF_WALLCORNER,			0 },
-	{ "REF_RESEARCH",		VAL_INT,	0,		REF_RESEARCH,			0 },
-	{ "REF_RESEARCH_MODULE",	VAL_INT,	0,		REF_RESEARCH_MODULE,	0 },
-	{ "REF_REPAIR_FACILITY",	VAL_INT,	0,		REF_REPAIR_FACILITY,	0 },
-	{ "REF_COMMAND_CONTROL",	VAL_INT,	0,		REF_COMMAND_CONTROL,	0 },
-	{ "REF_CYBORG_FACTORY",		VAL_INT,	0,		REF_CYBORG_FACTORY,		0 },
-	{ "REF_VTOL_FACTORY",		VAL_INT,	0,		REF_VTOL_FACTORY,		0 },
-	{ "REF_REARM_PAD",		    VAL_INT,	0,		REF_REARM_PAD,		    0 },
-	{ "REF_MISSILE_SILO",		VAL_INT,	0,		REF_MISSILE_SILO,		0 },
+	{ "REF_HQ",				VAL_INT,	FALSE,	REF_HQ,					NULL, NULL, 0.0f },
+	{ "REF_FACTORY",		VAL_INT,	FALSE,	REF_FACTORY,			NULL, NULL, 0.0f },
+	{ "REF_FACTORY_MODULE",	VAL_INT,	FALSE,	REF_FACTORY_MODULE,		NULL, NULL, 0.0f },
+	{ "REF_POWER_GEN",		VAL_INT,	FALSE,	REF_POWER_GEN,			NULL, NULL, 0.0f },
+	{ "REF_POWER_MODULE",	VAL_INT,	FALSE,	REF_POWER_MODULE,		NULL, NULL, 0.0f },
+	{ "REF_RESOURCE_EXTRACTOR",VAL_INT,	FALSE,	REF_RESOURCE_EXTRACTOR,	NULL, NULL, 0.0f },
+	{ "REF_DEFENSE",		VAL_INT,	FALSE,	REF_DEFENSE,			NULL, NULL, 0.0f },
+	{ "REF_WALL",			VAL_INT,	FALSE,	REF_WALL,				NULL, NULL, 0.0f },
+	{ "REF_WALLCORNER",		VAL_INT,	FALSE,	REF_WALLCORNER,			NULL, NULL, 0.0f },
+	{ "REF_RESEARCH",		VAL_INT,	FALSE,	REF_RESEARCH,			NULL, NULL, 0.0f },
+	{ "REF_RESEARCH_MODULE",VAL_INT,	FALSE,	REF_RESEARCH_MODULE,	NULL, NULL, 0.0f },
+	{ "REF_REPAIR_FACILITY",VAL_INT,	FALSE,	REF_REPAIR_FACILITY,	NULL, NULL, 0.0f },
+	{ "REF_COMMAND_CONTROL",VAL_INT,	FALSE,	REF_COMMAND_CONTROL,	NULL, NULL, 0.0f },
+	{ "REF_CYBORG_FACTORY",	VAL_INT,	FALSE,	REF_CYBORG_FACTORY,		NULL, NULL, 0.0f },
+	{ "REF_VTOL_FACTORY",	VAL_INT,	FALSE,	REF_VTOL_FACTORY,		NULL, NULL, 0.0f },
+	{ "REF_REARM_PAD",		VAL_INT,	FALSE,	REF_REARM_PAD,		    NULL, NULL, 0.0f },
+	{ "REF_MISSILE_SILO",	VAL_INT,	FALSE,	REF_MISSILE_SILO,		NULL, NULL, 0.0f },
 
 
 	// primary orders
-	{ "DORDER_NONE",		VAL_INT,	0,		DORDER_NONE,			0 },
-	{ "DORDER_STOP",		VAL_INT,	0,		DORDER_STOP,			0 },
-	{ "DORDER_MOVE",		VAL_INT,	0,		DORDER_MOVE,			0 },
-	{ "DORDER_ATTACK",		VAL_INT,	0,		DORDER_ATTACK,			0 },
-	{ "DORDER_BUILD",		VAL_INT,	0,		DORDER_BUILD,			0 },
-	{ "DORDER_HELPBUILD",	VAL_INT,	0,		DORDER_HELPBUILD,		0 },
-	{ "DORDER_LINEBUILD",	VAL_INT,	0,		DORDER_LINEBUILD,		0 },
-	{ "DORDER_DEMOLISH",	VAL_INT,	0,		DORDER_DEMOLISH,		0 },
-	{ "DORDER_REPAIR",		VAL_INT,	0,		DORDER_REPAIR,			0 },
-	{ "DORDER_OBSERVE",		VAL_INT,	0,		DORDER_OBSERVE,			0 },
-	{ "DORDER_FIRESUPPORT",	VAL_INT,	0,		DORDER_FIRESUPPORT,		0 },
-	{ "DORDER_RETREAT",		VAL_INT,	0,		DORDER_RETREAT,			0 },
-	{ "DORDER_DESTRUCT",	VAL_INT,	0,		DORDER_DESTRUCT,		0 },
-	{ "DORDER_RTB",			VAL_INT,	0,		DORDER_RTB,				0 },
-	{ "DORDER_RTR",			VAL_INT,	0,		DORDER_RTR,				0 },
-	{ "DORDER_RUN",			VAL_INT,	0,		DORDER_RUN,				0 },
-	{ "DORDER_EMBARK",		VAL_INT,	0,		DORDER_EMBARK,			0 },
-	{ "DORDER_DISEMBARK",	VAL_INT,	0,		DORDER_DISEMBARK,		0 },
-	{ "DORDER_SCOUT",		VAL_INT,	0,		DORDER_SCOUT,			0 },
-	{ "DORDER_DROIDREPAIR",		VAL_INT,	0,		DORDER_DROIDREPAIR,			0 },	//new one
+	{ "DORDER_NONE",		VAL_INT,	FALSE,	DORDER_NONE,		NULL, NULL, 0.0f },
+	{ "DORDER_STOP",		VAL_INT,	FALSE,	DORDER_STOP,		NULL, NULL, 0.0f },
+	{ "DORDER_MOVE",		VAL_INT,	FALSE,	DORDER_MOVE,		NULL, NULL, 0.0f },
+	{ "DORDER_ATTACK",		VAL_INT,	FALSE,	DORDER_ATTACK,		NULL, NULL, 0.0f },
+	{ "DORDER_BUILD",		VAL_INT,	FALSE,	DORDER_BUILD,		NULL, NULL, 0.0f },
+	{ "DORDER_HELPBUILD",	VAL_INT,	FALSE,	DORDER_HELPBUILD,	NULL, NULL, 0.0f },
+	{ "DORDER_LINEBUILD",	VAL_INT,	FALSE,	DORDER_LINEBUILD,	NULL, NULL, 0.0f },
+	{ "DORDER_DEMOLISH",	VAL_INT,	FALSE,	DORDER_DEMOLISH,	NULL, NULL, 0.0f },
+	{ "DORDER_REPAIR",		VAL_INT,	FALSE,	DORDER_REPAIR,		NULL, NULL, 0.0f },
+	{ "DORDER_OBSERVE",		VAL_INT,	FALSE,	DORDER_OBSERVE,		NULL, NULL, 0.0f },
+	{ "DORDER_FIRESUPPORT",	VAL_INT,	FALSE,	DORDER_FIRESUPPORT,	NULL, NULL, 0.0f },
+	{ "DORDER_RETREAT",		VAL_INT,	FALSE,	DORDER_RETREAT,		NULL, NULL, 0.0f },
+	{ "DORDER_DESTRUCT",	VAL_INT,	FALSE,	DORDER_DESTRUCT,	NULL, NULL, 0.0f },
+	{ "DORDER_RTB",			VAL_INT,	FALSE,	DORDER_RTB,			NULL, NULL, 0.0f },
+	{ "DORDER_RTR",			VAL_INT,	FALSE,	DORDER_RTR,			NULL, NULL, 0.0f },
+	{ "DORDER_RUN",			VAL_INT,	FALSE,	DORDER_RUN,			NULL, NULL, 0.0f },
+	{ "DORDER_EMBARK",		VAL_INT,	FALSE,	DORDER_EMBARK,		NULL, NULL, 0.0f },
+	{ "DORDER_DISEMBARK",	VAL_INT,	FALSE,	DORDER_DISEMBARK,	NULL, NULL, 0.0f },
+	{ "DORDER_SCOUT",		VAL_INT,	FALSE,	DORDER_SCOUT,		NULL, NULL, 0.0f },
+	{ "DORDER_DROIDREPAIR",	VAL_INT,	FALSE,	DORDER_DROIDREPAIR,	NULL, NULL, 0.0f },
 
 
 	//new member varialbe - constants for .action
 	//-----------------------------------------------------------
-	{ "DACTION_NONE",				VAL_INT,	0,		DACTION_NONE,				0 },
-	{ "DACTION_MOVE",				VAL_INT,	0,		DACTION_MOVE,				0 },
-	{ "DACTION_BUILD",				VAL_INT,	0,		DACTION_BUILD,				0 },
-	{ "DACTION_BUILD_FOUNDATION",	VAL_INT,	0,		DACTION_BUILD_FOUNDATION,	0 },
-	{ "DACTION_DEMOLISH",			VAL_INT,	0,		DACTION_DEMOLISH,			0 },
-	{ "DACTION_REPAIR",				VAL_INT,	0,		DACTION_REPAIR,				0 },
-	{ "DACTION_ATTACK",				VAL_INT,	0,		DACTION_ATTACK,				0 },
-	{ "DACTION_OBSERVE",			VAL_INT,	0,		DACTION_OBSERVE,			0 },
-	{ "DACTION_FIRESUPPORT",		VAL_INT,	0,		DACTION_FIRESUPPORT,		0 },
-	{ "DACTION_SULK",				VAL_INT,	0,		DACTION_SULK,				0 },
+	{ "DACTION_NONE",				VAL_INT,	FALSE,	DACTION_NONE,				NULL, NULL, 0.0f },
+	{ "DACTION_MOVE",				VAL_INT,	FALSE,	DACTION_MOVE,				NULL, NULL, 0.0f },
+	{ "DACTION_BUILD",				VAL_INT,	FALSE,	DACTION_BUILD,				NULL, NULL, 0.0f },
+	{ "DACTION_BUILD_FOUNDATION",	VAL_INT,	FALSE,	DACTION_BUILD_FOUNDATION,	NULL, NULL, 0.0f },
+	{ "DACTION_DEMOLISH",			VAL_INT,	FALSE,	DACTION_DEMOLISH,			NULL, NULL, 0.0f },
+	{ "DACTION_REPAIR",				VAL_INT,	FALSE,	DACTION_REPAIR,				NULL, NULL, 0.0f },
+	{ "DACTION_ATTACK",				VAL_INT,	FALSE,	DACTION_ATTACK,				NULL, NULL, 0.0f },
+	{ "DACTION_OBSERVE",			VAL_INT,	FALSE,	DACTION_OBSERVE,			NULL, NULL, 0.0f },
+	{ "DACTION_FIRESUPPORT",		VAL_INT,	FALSE,	DACTION_FIRESUPPORT,		NULL, NULL, 0.0f },
+	{ "DACTION_SULK",				VAL_INT,	FALSE,	DACTION_SULK,				NULL, NULL, 0.0f },
 
-	{ "DACTION_DESTRUCT",				VAL_INT,	0,		DACTION_DESTRUCT,				0 },
-	{ "DACTION_TRANSPORTOUT",			VAL_INT,	0,		DACTION_TRANSPORTOUT,				0 },
-	{ "DACTION_TRANSPORTWAITTOFLYIN",	VAL_INT,	0,		DACTION_TRANSPORTWAITTOFLYIN,				0 },
-	{ "DACTION_TRANSPORTIN",			VAL_INT,	0,		DACTION_TRANSPORTIN,				0 },
-	{ "DACTION_DROIDREPAIR",			VAL_INT,	0,		DACTION_DROIDREPAIR,				0 },
-	{ "DACTION_RESTORE",				VAL_INT,	0,		DACTION_RESTORE,				0 },
-	{ "DACTION_MOVEFIRE",				VAL_INT,	0,		DACTION_MOVEFIRE,				0 },
-	{ "DACTION_MOVETOBUILD",			VAL_INT,	0,		DACTION_MOVETOBUILD,				0 },
-	{ "DACTION_MOVETODEMOLISH",			VAL_INT,	0,		DACTION_MOVETODEMOLISH,				0 },
+	{ "DACTION_DESTRUCT",			VAL_INT,	FALSE,	DACTION_DESTRUCT,			NULL, NULL, 0.0f },
+	{ "DACTION_TRANSPORTOUT",		VAL_INT,	FALSE,	DACTION_TRANSPORTOUT,		NULL, NULL, 0.0f },
+	{ "DACTION_TRANSPORTWAITTOFLYIN",VAL_INT,	FALSE,	DACTION_TRANSPORTWAITTOFLYIN,NULL, NULL, 0.0f },
+	{ "DACTION_TRANSPORTIN",		VAL_INT,	FALSE,	DACTION_TRANSPORTIN,		NULL, NULL, 0.0f },
+	{ "DACTION_DROIDREPAIR",		VAL_INT,	FALSE,	DACTION_DROIDREPAIR,		NULL, NULL, 0.0f },
+	{ "DACTION_RESTORE",			VAL_INT,	FALSE,	DACTION_RESTORE,			NULL, NULL, 0.0f },
+	{ "DACTION_MOVEFIRE",			VAL_INT,	FALSE,	DACTION_MOVEFIRE,			NULL, NULL, 0.0f },
+	{ "DACTION_MOVETOBUILD",		VAL_INT,	FALSE,	DACTION_MOVETOBUILD,		NULL, NULL, 0.0f },
+	{ "DACTION_MOVETODEMOLISH",		VAL_INT,	FALSE,	DACTION_MOVETODEMOLISH,		NULL, NULL, 0.0f },
 
-	{ "DACTION_MOVETOREPAIR",			VAL_INT,	0,		DACTION_MOVETOREPAIR,				0 },
-	{ "DACTION_BUILDWANDER",			VAL_INT,	0,		DACTION_BUILDWANDER,				0 },
-	{ "DACTION_FOUNDATION_WANDER",		VAL_INT,	0,		DACTION_FOUNDATION_WANDER,				0 },
-	{ "DACTION_MOVETOATTACK",			VAL_INT,	0,		DACTION_MOVETOATTACK,				0 },
-	{ "DACTION_ROTATETOATTACK",			VAL_INT,	0,		DACTION_ROTATETOATTACK,				0 },
-	{ "DACTION_MOVETOOBSERVE",			VAL_INT,	0,		DACTION_MOVETOOBSERVE,				0 },
-	{ "DACTION_WAITFORREPAIR",			VAL_INT,	0,		DACTION_WAITFORREPAIR,				0 },
-	{ "DACTION_MOVETOREPAIRPOINT",		VAL_INT,	0,		DACTION_MOVETOREPAIRPOINT,				0 },
-	{ "DACTION_WAITDURINGREPAIR",		VAL_INT,	0,		DACTION_WAITDURINGREPAIR,				0 },
-	{ "DACTION_MOVETODROIDREPAIR",		VAL_INT,	0,		DACTION_MOVETODROIDREPAIR,				0 },
+	{ "DACTION_MOVETOREPAIR",		VAL_INT,	FALSE,	DACTION_MOVETOREPAIR,		NULL, NULL, 0.0f },
+	{ "DACTION_BUILDWANDER",		VAL_INT,	FALSE,	DACTION_BUILDWANDER,		NULL, NULL, 0.0f },
+	{ "DACTION_FOUNDATION_WANDER",	VAL_INT,	FALSE,	DACTION_FOUNDATION_WANDER,	NULL, NULL, 0.0f },
+	{ "DACTION_MOVETOATTACK",		VAL_INT,	FALSE,	DACTION_MOVETOATTACK,		NULL, NULL, 0.0f },
+	{ "DACTION_ROTATETOATTACK",		VAL_INT,	FALSE,	DACTION_ROTATETOATTACK,		NULL, NULL, 0.0f },
+	{ "DACTION_MOVETOOBSERVE",		VAL_INT,	FALSE,	DACTION_MOVETOOBSERVE,		NULL, NULL, 0.0f },
+	{ "DACTION_WAITFORREPAIR",		VAL_INT,	FALSE,	DACTION_WAITFORREPAIR,		NULL, NULL, 0.0f },
+	{ "DACTION_MOVETOREPAIRPOINT",	VAL_INT,	FALSE,	DACTION_MOVETOREPAIRPOINT,	NULL, NULL, 0.0f },
+	{ "DACTION_WAITDURINGREPAIR",	VAL_INT,	FALSE,	DACTION_WAITDURINGREPAIR,	NULL, NULL, 0.0f },
+	{ "DACTION_MOVETODROIDREPAIR",	VAL_INT,	FALSE,	DACTION_MOVETODROIDREPAIR,	NULL, NULL, 0.0f },
 
-	{ "DACTION_MOVETORESTORE",			VAL_INT,	0,		DACTION_MOVETORESTORE,				0 },
-	{ "DACTION_MOVETOREARM",			VAL_INT,	0,		DACTION_MOVETOREARM,				0 },
-	{ "DACTION_WAITFORREARM",			VAL_INT,	0,		DACTION_WAITFORREARM,				0 },
-	{ "DACTION_MOVETOREARMPOINT",		VAL_INT,	0,		DACTION_MOVETOREARMPOINT,				0 },
-	{ "DACTION_WAITDURINGREARM",		VAL_INT,	0,		DACTION_WAITDURINGREARM,				0 },
-	{ "DACTION_VTOLATTACK",				VAL_INT,	0,		DACTION_VTOLATTACK,				0 },
-	{ "DACTION_CLEARREARMPAD",			VAL_INT,	0,		DACTION_CLEARREARMPAD,				0 },
-	{ "DACTION_RETURNTOPOS",			VAL_INT,	0,		DACTION_RETURNTOPOS,				0 },
-	{ "DACTION_FIRESUPPORT_RETREAT",	VAL_INT,	0,		DACTION_FIRESUPPORT_RETREAT,				0 },
+	{ "DACTION_MOVETORESTORE",		VAL_INT,	FALSE,	DACTION_MOVETORESTORE,		NULL, NULL, 0.0f },
+	{ "DACTION_MOVETOREARM",		VAL_INT,	FALSE,	DACTION_MOVETOREARM,		NULL, NULL, 0.0f },
+	{ "DACTION_WAITFORREARM",		VAL_INT,	FALSE,	DACTION_WAITFORREARM,		NULL, NULL, 0.0f },
+	{ "DACTION_MOVETOREARMPOINT",	VAL_INT,	FALSE,	DACTION_MOVETOREARMPOINT,	NULL, NULL, 0.0f },
+	{ "DACTION_WAITDURINGREARM",	VAL_INT,	FALSE,	DACTION_WAITDURINGREARM,	NULL, NULL, 0.0f },
+	{ "DACTION_VTOLATTACK",			VAL_INT,	FALSE,	DACTION_VTOLATTACK,			NULL, NULL, 0.0f },
+	{ "DACTION_CLEARREARMPAD",		VAL_INT,	FALSE,	DACTION_CLEARREARMPAD,		NULL, NULL, 0.0f },
+	{ "DACTION_RETURNTOPOS",		VAL_INT,	FALSE,	DACTION_RETURNTOPOS,		NULL, NULL, 0.0f },
+	{ "DACTION_FIRESUPPORT_RETREAT",VAL_INT,	FALSE,	DACTION_FIRESUPPORT_RETREAT,NULL, NULL, 0.0f },
+
 	//Watermelon:scriptable variable string for DACTION_ATTACK_M,DACTION_MOVE_ENGAGE
-	{ "DACTION_ATTACK_M",				VAL_INT,	0,		DACTION_ATTACK_M,				0 },
-
+	{ "DACTION_ATTACK_M",	VAL_INT,	FALSE,	DACTION_ATTACK_M,	NULL, NULL, 0.0f },
 
 	// secondary orders
-	{ "DSO_ATTACK_RANGE",	VAL_INT,	0,		DSO_ATTACK_RANGE,		0 },
-	{ "DSO_REPAIR_LEVEL",	VAL_INT,	0,		DSO_REPAIR_LEVEL,		0 },
-	{ "DSO_ATTACK_LEVEL",	VAL_INT,	0,		DSO_ATTACK_LEVEL,		0 },
-	{ "DSO_RECYCLE",		VAL_INT,	0,		DSO_RECYCLE,			0 },
-	{ "DSO_PATROL",			VAL_INT,	0,		DSO_PATROL,				0 },
-	{ "DSO_HALTTYPE",		VAL_INT,	0,		DSO_HALTTYPE,			0 },
-	{ "DSO_RETURN_TO_LOC",	VAL_INT,	0,		DSO_RETURN_TO_LOC,		0 },
+	{ "DSO_ATTACK_RANGE",	VAL_INT,	FALSE,	DSO_ATTACK_RANGE,	NULL, NULL, 0.0f },
+	{ "DSO_REPAIR_LEVEL",	VAL_INT,	FALSE,	DSO_REPAIR_LEVEL,	NULL, NULL, 0.0f },
+	{ "DSO_ATTACK_LEVEL",	VAL_INT,	FALSE,	DSO_ATTACK_LEVEL,	NULL, NULL, 0.0f },
+	{ "DSO_RECYCLE",		VAL_INT,	FALSE,	DSO_RECYCLE,		NULL, NULL, 0.0f },
+	{ "DSO_PATROL",			VAL_INT,	FALSE,	DSO_PATROL,			NULL, NULL, 0.0f },
+	{ "DSO_HALTTYPE",		VAL_INT,	FALSE,	DSO_HALTTYPE,		NULL, NULL, 0.0f },
+	{ "DSO_RETURN_TO_LOC",	VAL_INT,	FALSE,	DSO_RETURN_TO_LOC,	NULL, NULL, 0.0f },
 
 	// secondary order stats
-	{ "DSS_ARANGE_SHORT",	VAL_INT,	0,		DSS_ARANGE_SHORT,		0 },
-	{ "DSS_ARANGE_LONG",	VAL_INT,	0,		DSS_ARANGE_LONG,		0 },
-	{ "DSS_ARANGE_DEFAULT",	VAL_INT,	0,		DSS_ARANGE_DEFAULT,		0 },
-	{ "DSS_REPLEV_LOW",		VAL_INT,	0,		DSS_REPLEV_LOW,			0 },
-	{ "DSS_REPLEV_HIGH",	VAL_INT,	0,		DSS_REPLEV_HIGH,		0 },
-	{ "DSS_REPLEV_NEVER",	VAL_INT,	0,		DSS_REPLEV_NEVER,		0 },
-	{ "DSS_ALEV_ALWAYS",	VAL_INT,	0,		DSS_ALEV_ALWAYS,		0 },
-	{ "DSS_ALEV_ATTACKED",	VAL_INT,	0,		DSS_ALEV_ATTACKED,		0 },
-	{ "DSS_ALEV_NEVER",		VAL_INT,	0,		DSS_ALEV_NEVER,			0 },
-	{ "DSS_HALT_HOLD",		VAL_INT,	0,		DSS_HALT_HOLD,			0 },
-	{ "DSS_HALT_GUARD",		VAL_INT,	0,		DSS_HALT_GUARD,			0 },
-	{ "DSS_HALT_PERSUE",	VAL_INT,	0,		DSS_HALT_PERSUE,		0 },
-	{ "DSS_RECYCLE_SET",	VAL_INT,	0,		DSS_RECYCLE_SET,		0 },
-	{ "DSS_ASSPROD_START",	VAL_INT,	0,		DSS_ASSPROD_START,		0 },
-	{ "DSS_ASSPROD_END ",	VAL_INT,	0,		DSS_ASSPROD_END ,		0 },
-	{ "DSS_RTL_REPAIR",		VAL_INT,	0,		DSS_RTL_REPAIR,			0 },
-	{ "DSS_RTL_BASE",		VAL_INT,	0,		DSS_RTL_BASE,			0 },
-	{ "DSS_RTL_TRANSPORT",	VAL_INT,	0,		DSS_RTL_TRANSPORT,		0 },
-	{ "DSS_PATROL_SET",		VAL_INT,	0,		DSS_PATROL_SET,			0 },
+	{ "DSS_ARANGE_SHORT",	VAL_INT,	FALSE,	DSS_ARANGE_SHORT,	NULL, NULL, 0.0f },
+	{ "DSS_ARANGE_LONG",	VAL_INT,	FALSE,	DSS_ARANGE_LONG,	NULL, NULL, 0.0f },
+	{ "DSS_ARANGE_DEFAULT",	VAL_INT,	FALSE,	DSS_ARANGE_DEFAULT,	NULL, NULL, 0.0f },
+	{ "DSS_REPLEV_LOW",		VAL_INT,	FALSE,	DSS_REPLEV_LOW,		NULL, NULL, 0.0f },
+	{ "DSS_REPLEV_HIGH",	VAL_INT,	FALSE,	DSS_REPLEV_HIGH,	NULL, NULL, 0.0f },
+	{ "DSS_REPLEV_NEVER",	VAL_INT,	FALSE,	DSS_REPLEV_NEVER,	NULL, NULL, 0.0f },
+	{ "DSS_ALEV_ALWAYS",	VAL_INT,	FALSE,	DSS_ALEV_ALWAYS,	NULL, NULL, 0.0f },
+	{ "DSS_ALEV_ATTACKED",	VAL_INT,	FALSE,	DSS_ALEV_ATTACKED,	NULL, NULL, 0.0f },
+	{ "DSS_ALEV_NEVER",		VAL_INT,	FALSE,	DSS_ALEV_NEVER,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_HOLD",		VAL_INT,	FALSE,	DSS_HALT_HOLD,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_GUARD",		VAL_INT,	FALSE,	DSS_HALT_GUARD,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_PERSUE",	VAL_INT,	FALSE,	DSS_HALT_PERSUE,	NULL, NULL, 0.0f },
+	{ "DSS_RECYCLE_SET",	VAL_INT,	FALSE,	DSS_RECYCLE_SET,	NULL, NULL, 0.0f },
+	{ "DSS_ASSPROD_START",	VAL_INT,	FALSE,	DSS_ASSPROD_START,	NULL, NULL, 0.0f },
+	{ "DSS_ASSPROD_END ",	VAL_INT,	FALSE,	DSS_ASSPROD_END ,	NULL, NULL, 0.0f },
+	{ "DSS_RTL_REPAIR",		VAL_INT,	FALSE,	DSS_RTL_REPAIR,		NULL, NULL, 0.0f },
+	{ "DSS_RTL_BASE",		VAL_INT,	FALSE,	DSS_RTL_BASE,		NULL, NULL, 0.0f },
+	{ "DSS_RTL_TRANSPORT",	VAL_INT,	FALSE,	DSS_RTL_TRANSPORT,	NULL, NULL, 0.0f },
+	{ "DSS_PATROL_SET",		VAL_INT,	FALSE,	DSS_PATROL_SET,		NULL, NULL, 0.0f },
 
 	// button id's
-	{ "IDRET_OPTIONS",		VAL_INT,	0,		IDRET_OPTIONS,			0 },
-	{ "IDRET_BUILD",		VAL_INT,	0,		IDRET_BUILD,			0 },
-	{ "IDRET_MANUFACTURE",	VAL_INT,	0,		IDRET_MANUFACTURE,		0 },
-	{ "IDRET_RESEARCH",		VAL_INT,	0,		IDRET_RESEARCH,			0 },
-	{ "IDRET_INTELMAP",		VAL_INT,	0,		IDRET_INTEL_MAP,		0 },
-	{ "IDRET_DESIGN",		VAL_INT,	0,		IDRET_DESIGN,			0 },
-	{ "IDRET_CANCEL",		VAL_INT,	0,		IDRET_CANCEL,			0 },
-	{ "IDRET_COMMAND",		VAL_INT,	0,		IDRET_COMMAND,			0 },
+	{ "IDRET_OPTIONS",		VAL_INT,	FALSE,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
+	{ "IDRET_BUILD",		VAL_INT,	FALSE,	IDRET_BUILD,		NULL, NULL, 0.0f },
+	{ "IDRET_MANUFACTURE",	VAL_INT,	FALSE,	IDRET_MANUFACTURE,	NULL, NULL, 0.0f },
+	{ "IDRET_RESEARCH",		VAL_INT,	FALSE,	IDRET_RESEARCH,		NULL, NULL, 0.0f },
+	{ "IDRET_INTELMAP",		VAL_INT,	FALSE,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
+	{ "IDRET_DESIGN",		VAL_INT,	FALSE,	IDRET_DESIGN,		NULL, NULL, 0.0f },
+	{ "IDRET_CANCEL",		VAL_INT,	FALSE,	IDRET_CANCEL,		NULL, NULL, 0.0f },
+	{ "IDRET_COMMAND",		VAL_INT,	FALSE,	IDRET_COMMAND,		NULL, NULL, 0.0f },
 
 	// Cursor types
-	{ "IMAGE_CURSOR_SELECT", VAL_INT,	0,		IMAGE_CURSOR_SELECT,	0 },
-	{ "IMAGE_CURSOR_ATTACK", VAL_INT,	0,  	IMAGE_CURSOR_ATTACK,	0 },
-	{ "IMAGE_CURSOR_MOVE",	 VAL_INT,	0,		IMAGE_CURSOR_MOVE,		0 },
+	{ "IMAGE_CURSOR_SELECT", VAL_INT,	FALSE,	IMAGE_CURSOR_SELECT,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_ATTACK", VAL_INT,	FALSE,	IMAGE_CURSOR_ATTACK,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_MOVE",	 VAL_INT,	FALSE,	IMAGE_CURSOR_MOVE,		NULL, NULL, 0.0f },
 
-	{ "IMAGE_CURSOR_ECM",	 VAL_INT,	0, 		IMAGE_CURSOR_ECM,		0 },
-	{ "IMAGE_CURSOR_REPAIR", VAL_INT,	0,		IMAGE_CURSOR_REPAIR, 0 },
+	{ "IMAGE_CURSOR_ECM",	 VAL_INT,	FALSE,	IMAGE_CURSOR_ECM,		NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_REPAIR", VAL_INT,	FALSE,	IMAGE_CURSOR_REPAIR,	NULL, NULL, 0.0f },
 
-	{ "IMAGE_CURSOR_PICKUP",  VAL_INT,	0, 		IMAGE_CURSOR_PICKUP,	0 },
-	{ "IMAGE_CURSOR_DEFAULT", VAL_INT,	0, 		IMAGE_CURSOR_DEFAULT,	0 },
+	{ "IMAGE_CURSOR_PICKUP",  VAL_INT,	FALSE,	IMAGE_CURSOR_PICKUP,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_DEFAULT", VAL_INT,	FALSE,	IMAGE_CURSOR_DEFAULT,	NULL, NULL, 0.0f },
 
-	{ "IMAGE_CURSOR_BUILD",	   VAL_INT,	0,		IMAGE_CURSOR_BUILD,		0 },
-	{ "IMAGE_CURSOR_GUARD",	  VAL_INT,	0,	 	IMAGE_CURSOR_GUARD,		0 },
-	{ "IMAGE_CURSOR_BRIDGE",  VAL_INT,	0,	 	IMAGE_CURSOR_BRIDGE,	0 },
-	{ "IMAGE_CURSOR_ATTACH",  VAL_INT,	0,	 	IMAGE_CURSOR_ATTACH,	0 },
-	{ "IMAGE_CURSOR_LOCKON",  VAL_INT,	0,	 	IMAGE_CURSOR_LOCKON,	0 },
-	{ "IMAGE_CURSOR_FIX",	  VAL_INT,	0,		IMAGE_CURSOR_FIX,	    0 },
-	{ "IMAGE_CURSOR_EMBARK",  VAL_INT,	0,	 	IMAGE_CURSOR_EMBARK, 	0 },
+	{ "IMAGE_CURSOR_BUILD",	  VAL_INT,	FALSE,	IMAGE_CURSOR_BUILD,		NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_GUARD",	  VAL_INT,	FALSE,	IMAGE_CURSOR_GUARD,		NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_BRIDGE",  VAL_INT,	FALSE,	IMAGE_CURSOR_BRIDGE,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_ATTACH",  VAL_INT,	FALSE,	IMAGE_CURSOR_ATTACH,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_LOCKON",  VAL_INT,	FALSE,	IMAGE_CURSOR_LOCKON,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_FIX",	  VAL_INT,	FALSE,	IMAGE_CURSOR_FIX,	    NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_EMBARK",  VAL_INT,	FALSE,	IMAGE_CURSOR_EMBARK, 	NULL, NULL, 0.0f },
 
 	// game mode types  (possible values for intMode)
-	{ "INT_NORMAL",			VAL_INT,	0,		INT_NORMAL,	0 },		// Standard mode (just the reticule)
+	{ "INT_NORMAL",			VAL_INT,	FALSE,	INT_NORMAL,		NULL, NULL, 0.0f }, // Standard mode (just the reticule)
 
-	{ "INT_OPTION",			VAL_INT,	0,		INT_OPTION,0 },	// Option screen
+	{ "INT_OPTION",			VAL_INT,	FALSE,	INT_OPTION,		NULL, NULL, 0.0f }, // Option screen
 
-	{ "INT_EDITSTAT",		VAL_INT,	0,		INT_EDITSTAT,0 },	// Stat screen up for placing objects
+	{ "INT_EDITSTAT",		VAL_INT,	FALSE,	INT_EDITSTAT,	NULL, NULL, 0.0f }, // Stat screen up for placing objects
 
-	{ "INT_EDIT",			VAL_INT,	0,		INT_EDIT,0 },		// Edit mode
+	{ "INT_EDIT",			VAL_INT,	FALSE,	INT_EDIT,		NULL, NULL, 0.0f }, // Edit mode
 
-	{ "INT_OBJECT",			VAL_INT,	0,		INT_OBJECT,0 },	// Object screen
-	{ "INT_STAT",			VAL_INT,	0,		INT_STAT,0 },		// Object screen with stat screen
-	{ "INT_CMDORDER",		VAL_INT,	0,		INT_CMDORDER,0 },	// Object screen with command droids and orders screen
-	{ "INT_DESIGN",			VAL_INT,	0,		INT_DESIGN,0 },		// Design screen
-	{ "INT_INTELMAP",		VAL_INT,	0,		INT_INTELMAP,0 },	// Intelligence Map
-	{ "INT_ORDER",			VAL_INT,	0,		INT_ORDER,0 },
-	{ "INT_INGAMEOP",		VAL_INT,	0,		INT_INGAMEOP,0 },	// in game options.
-	{ "INT_TRANSPORTER",	VAL_INT,	0,		INT_TRANSPORTER,0 }, //Loading/unloading a Transporter
-	{ "INT_MISSIONRES",		VAL_INT,	0,		INT_MISSIONRES,0 },	// Results of a mission display.
-	{ "INT_MULTIMENU",		VAL_INT,	0,		INT_MULTIMENU,0 },	// multiplayer only, player stats etc...
+	{ "INT_OBJECT",			VAL_INT,	FALSE,	INT_OBJECT,		NULL, NULL, 0.0f }, // Object screen
+	{ "INT_STAT",			VAL_INT,	FALSE,	INT_STAT,		NULL, NULL, 0.0f }, // Object screen with stat screen
+	{ "INT_CMDORDER",		VAL_INT,	FALSE,	INT_CMDORDER,	NULL, NULL, 0.0f }, // Object screen with command droids and orders screen
+	{ "INT_DESIGN",			VAL_INT,	FALSE,	INT_DESIGN,		NULL, NULL, 0.0f }, // Design screen
+	{ "INT_INTELMAP",		VAL_INT,	FALSE,	INT_INTELMAP,	NULL, NULL, 0.0f }, // Intelligence Map
+	{ "INT_ORDER",			VAL_INT,	FALSE,	INT_ORDER,		NULL, NULL, 0.0f },
+	{ "INT_INGAMEOP",		VAL_INT,	FALSE,	INT_INGAMEOP,	NULL, NULL, 0.0f }, // in game options.
+	{ "INT_TRANSPORTER",	VAL_INT,	FALSE,	INT_TRANSPORTER,NULL, NULL, 0.0f }, //Loading/unloading a Transporter
+	{ "INT_MISSIONRES",		VAL_INT,	FALSE,	INT_MISSIONRES,	NULL, NULL, 0.0f }, // Results of a mission display.
+	{ "INT_MULTIMENU",		VAL_INT,	FALSE,	INT_MULTIMENU,	NULL, NULL, 0.0f }, // multiplayer only, player stats etc...
 
 	// parameters for getGameStatus
-	{ "STATUS_ReticuleIsOpen",		VAL_INT,	0, STATUS_ReticuleIsOpen,0 },		// is the reticule current being displayed (TRUE=yes)
-	{ "STATUS_BattleMapViewEnabled",VAL_INT,	0, STATUS_BattleMapViewEnabled,0 },	// Are we currently in the battlemap view (tactical display) true=yes
-	{ "STATUS_DeliveryReposInProgress",VAL_INT,0, STATUS_DeliveryReposInProgress,0 },	// Are we currently in the delivery repos mode
+	{ "STATUS_ReticuleIsOpen",		VAL_INT,	FALSE, STATUS_ReticuleIsOpen,		NULL, NULL, 0.0f },		// is the reticule current being displayed (TRUE=yes)
+	{ "STATUS_BattleMapViewEnabled",VAL_INT,	FALSE, STATUS_BattleMapViewEnabled,	NULL, NULL, 0.0f },	// Are we currently in the battlemap view (tactical display) true=yes
+	{ "STATUS_DeliveryReposInProgress",VAL_INT,FALSE, STATUS_DeliveryReposInProgress,	NULL, NULL, 0.0f },	// Are we currently in the delivery repos mode
 
 
 	//possible values for externed 	targetedObjectType
-	{"MT_TERRAIN",VAL_INT,0,MT_TERRAIN,0},
-	{"MT_RESOURCE",VAL_INT,0,MT_RESOURCE,0},
-	{"MT_BLOCKING",VAL_INT,0,MT_BLOCKING,0},
-	{"MT_RIVER",VAL_INT,0,MT_RIVER,0},
-	{"MT_TRENCH",VAL_INT,0,MT_TRENCH,0},
-	{"MT_OWNSTRDAM",VAL_INT,0,MT_OWNSTRDAM,0},
-	{"MT_OWNSTROK",VAL_INT,0,MT_OWNSTROK,0},
-	{"MT_OWNSTRINCOMP",VAL_INT,0,MT_OWNSTRINCOMP,0},
-	{"MT_REPAIR",VAL_INT,0,MT_REPAIR,0},
-	{"MT_REPAIRDAM",VAL_INT,0,MT_REPAIRDAM,0},
-	{"MT_ENEMYSTR",VAL_INT,0,MT_ENEMYSTR,0},
-	{"MT_TRANDROID",VAL_INT,0,MT_TRANDROID,0},
-	{"MT_OWNDROID",VAL_INT,0,MT_OWNDROID,0},
-	{"MT_OWNDROIDDAM",VAL_INT,0,MT_OWNDROIDDAM,0},
-	{"MT_ENEMYDROID",VAL_INT,0,MT_ENEMYDROID,0},
-	{"MT_COMMAND",VAL_INT,0,MT_COMMAND,0},
-	{"MT_ARTIFACT",VAL_INT,0,MT_ARTIFACT,0},
-	{"MT_DAMFEATURE",VAL_INT,0,MT_DAMFEATURE,0},
-	{"MT_SENSOR",VAL_INT,0,MT_SENSOR,0},
+	{ "MT_TERRAIN",		VAL_INT,	FALSE,	MT_TERRAIN,			NULL, NULL, 0.0f },
+	{ "MT_RESOURCE",	VAL_INT,	FALSE,	MT_RESOURCE,		NULL, NULL, 0.0f },
+	{ "MT_BLOCKING",	VAL_INT,	FALSE,	MT_BLOCKING,		NULL, NULL, 0.0f },
+	{ "MT_RIVER",		VAL_INT,	FALSE,	MT_RIVER,			NULL, NULL, 0.0f },
+	{ "MT_TRENCH",		VAL_INT,	FALSE,	MT_TRENCH,			NULL, NULL, 0.0f },
+	{ "MT_OWNSTRDAM",	VAL_INT,	FALSE,	MT_OWNSTRDAM,		NULL, NULL, 0.0f },
+	{ "MT_OWNSTROK",	VAL_INT,	FALSE,	MT_OWNSTROK,		NULL, NULL, 0.0f },
+	{ "MT_OWNSTRINCOMP",VAL_INT,	FALSE,	MT_OWNSTRINCOMP,	NULL, NULL, 0.0f },
+	{ "MT_REPAIR",		VAL_INT,	FALSE,	MT_REPAIR,			NULL, NULL, 0.0f },
+	{ "MT_REPAIRDAM",	VAL_INT,	FALSE,	MT_REPAIRDAM,		NULL, NULL, 0.0f },
+	{ "MT_ENEMYSTR",	VAL_INT,	FALSE,	MT_ENEMYSTR,		NULL, NULL, 0.0f },
+	{ "MT_TRANDROID",	VAL_INT,	FALSE,	MT_TRANDROID,		NULL, NULL, 0.0f },
+	{ "MT_OWNDROID",	VAL_INT,	FALSE,	MT_OWNDROID,		NULL, NULL, 0.0f },
+	{ "MT_OWNDROIDDAM",	VAL_INT,	FALSE,	MT_OWNDROIDDAM,		NULL, NULL, 0.0f },
+	{ "MT_ENEMYDROID",	VAL_INT,	FALSE,	MT_ENEMYDROID,		NULL, NULL, 0.0f },
+	{ "MT_COMMAND",		VAL_INT,	FALSE,	MT_COMMAND,			NULL, NULL, 0.0f },
+	{ "MT_ARTIFACT",	VAL_INT,	FALSE,	MT_ARTIFACT,		NULL, NULL, 0.0f },
+	{ "MT_DAMFEATURE",	VAL_INT,	FALSE,	MT_DAMFEATURE,		NULL, NULL, 0.0f },
+	{ "MT_SENSOR",		VAL_INT,	FALSE,	MT_SENSOR,			NULL, NULL, 0.0f },
 
 	// structure target types
-	{ "ST_HQ",					VAL_INT,	0,	SCR_ST_HQ,					0 },
-	{ "ST_FACTORY",				VAL_INT,	0,	SCR_ST_FACTORY,				0 },
-	{ "ST_POWER_GEN",			VAL_INT,	0,	SCR_ST_POWER_GEN,			0 },
-	{ "ST_RESOURCE_EXTRACTOR",	VAL_INT,	0,	SCR_ST_RESOURCE_EXTRACTOR,	0 },
-	{ "ST_WALL",				VAL_INT,	0,	SCR_ST_WALL,				0 },
-	{ "ST_RESEARCH",			VAL_INT,	0,	SCR_ST_RESEARCH,			0 },
-	{ "ST_REPAIR_FACILITY",		VAL_INT,	0,	SCR_ST_REPAIR_FACILITY,		0 },
-	{ "ST_COMMAND_CONTROL",		VAL_INT,	0,	SCR_ST_COMMAND_CONTROL,		0 },
-	{ "ST_CYBORG_FACTORY",		VAL_INT,	0,	SCR_ST_CYBORG_FACTORY,		0 },
-	{ "ST_VTOL_FACTORY",		VAL_INT,	0,	SCR_ST_VTOL_FACTORY,		0 },
-	{ "ST_REARM_PAD",			VAL_INT,	0,	SCR_ST_REARM_PAD,			0 },
-	{ "ST_SENSOR",				VAL_INT,	0,	SCR_ST_SENSOR,				0 },
-	{ "ST_DEF_GROUND",			VAL_INT,	0,	SCR_ST_DEF_GROUND,			0 },
-	{ "ST_DEF_AIR",				VAL_INT,	0,	SCR_ST_DEF_AIR,				0 },
-	{ "ST_DEF_IDF",				VAL_INT,	0,	SCR_ST_DEF_IDF,				0 },
-	{ "ST_DEF_ALL",				VAL_INT,	0,	SCR_ST_DEF_ALL,				0 },
+	{ "ST_HQ",					VAL_INT,	FALSE,	SCR_ST_HQ,					NULL, NULL, 0.0f },
+	{ "ST_FACTORY",				VAL_INT,	FALSE,	SCR_ST_FACTORY,				NULL, NULL, 0.0f },
+	{ "ST_POWER_GEN",			VAL_INT,	FALSE,	SCR_ST_POWER_GEN,			NULL, NULL, 0.0f },
+	{ "ST_RESOURCE_EXTRACTOR",	VAL_INT,	FALSE,	SCR_ST_RESOURCE_EXTRACTOR,	NULL, NULL, 0.0f },
+	{ "ST_WALL",				VAL_INT,	FALSE,	SCR_ST_WALL,				NULL, NULL, 0.0f },
+	{ "ST_RESEARCH",			VAL_INT,	FALSE,	SCR_ST_RESEARCH,			NULL, NULL, 0.0f },
+	{ "ST_REPAIR_FACILITY",		VAL_INT,	FALSE,	SCR_ST_REPAIR_FACILITY,		NULL, NULL, 0.0f },
+	{ "ST_COMMAND_CONTROL",		VAL_INT,	FALSE,	SCR_ST_COMMAND_CONTROL,		NULL, NULL, 0.0f },
+	{ "ST_CYBORG_FACTORY",		VAL_INT,	FALSE,	SCR_ST_CYBORG_FACTORY,		NULL, NULL, 0.0f },
+	{ "ST_VTOL_FACTORY",		VAL_INT,	FALSE,	SCR_ST_VTOL_FACTORY,		NULL, NULL, 0.0f },
+	{ "ST_REARM_PAD",			VAL_INT,	FALSE,	SCR_ST_REARM_PAD,			NULL, NULL, 0.0f },
+	{ "ST_SENSOR",				VAL_INT,	FALSE,	SCR_ST_SENSOR,				NULL, NULL, 0.0f },
+	{ "ST_DEF_GROUND",			VAL_INT,	FALSE,	SCR_ST_DEF_GROUND,			NULL, NULL, 0.0f },
+	{ "ST_DEF_AIR",				VAL_INT,	FALSE,	SCR_ST_DEF_AIR,				NULL, NULL, 0.0f },
+	{ "ST_DEF_IDF",				VAL_INT,	FALSE,	SCR_ST_DEF_IDF,				NULL, NULL, 0.0f },
+	{ "ST_DEF_ALL",				VAL_INT,	FALSE,	SCR_ST_DEF_ALL,				NULL, NULL, 0.0f },
 
 	// droid target types
-	{ "DT_COMMAND",		VAL_INT,	0,	SCR_DT_COMMAND,		0 },
-	{ "DT_SENSOR",		VAL_INT,	0,	SCR_DT_SENSOR,		0 },
-	{ "DT_CONSTRUCT",	VAL_INT,	0,	SCR_DT_CONSTRUCT,	0 },
-	{ "DT_REPAIR",		VAL_INT,	0,	SCR_DT_REPAIR,		0 },
-	{ "DT_WEAP_GROUND",	VAL_INT,	0,	SCR_DT_WEAP_GROUND,	0 },
-	{ "DT_WEAP_AIR",	VAL_INT,	0,	SCR_DT_WEAP_AIR,	0 },
-	{ "DT_WEAP_IDF",	VAL_INT,	0,	SCR_DT_WEAP_IDF,	0 },
-	{ "DT_WEAP_ALL",	VAL_INT,	0,	SCR_DT_WEAP_ALL,	0 },
-	{ "DT_LIGHT",		VAL_INT,	0,	SCR_DT_LIGHT,		0 },
-	{ "DT_MEDIUM",		VAL_INT,	0,	SCR_DT_MEDIUM,		0 },
-	{ "DT_HEAVY",		VAL_INT,	0,	SCR_DT_HEAVY,		0 },
-	{ "DT_SUPER_HEAVY",	VAL_INT,	0,	SCR_DT_SUPER_HEAVY,	0 },
-	{ "DT_TRACK",		VAL_INT,	0,	SCR_DT_TRACK,		0 },
-	{ "DT_HTRACK",		VAL_INT,	0,	SCR_DT_HTRACK,		0 },
-	{ "DT_WHEEL",		VAL_INT,	0,	SCR_DT_WHEEL,		0 },
-	{ "DT_LEGS",		VAL_INT,	0,	SCR_DT_LEGS,		0 },
-	{ "DT_GROUND",		VAL_INT,	0,	SCR_DT_GROUND,		0 },
-	{ "DT_VTOL",		VAL_INT,	0,	SCR_DT_VTOL,		0 },
-	{ "DT_HOVER",		VAL_INT,	0,	SCR_DT_HOVER,		0 },
+	{ "DT_COMMAND",		VAL_INT,	FALSE,	SCR_DT_COMMAND,		NULL, NULL, 0.0f },
+	{ "DT_SENSOR",		VAL_INT,	FALSE,	SCR_DT_SENSOR,		NULL, NULL, 0.0f },
+	{ "DT_CONSTRUCT",	VAL_INT,	FALSE,	SCR_DT_CONSTRUCT,	NULL, NULL, 0.0f },
+	{ "DT_REPAIR",		VAL_INT,	FALSE,	SCR_DT_REPAIR,		NULL, NULL, 0.0f },
+	{ "DT_WEAP_GROUND",	VAL_INT,	FALSE,	SCR_DT_WEAP_GROUND,	NULL, NULL, 0.0f },
+	{ "DT_WEAP_AIR",	VAL_INT,	FALSE,	SCR_DT_WEAP_AIR,	NULL, NULL, 0.0f },
+	{ "DT_WEAP_IDF",	VAL_INT,	FALSE,	SCR_DT_WEAP_IDF,	NULL, NULL, 0.0f },
+	{ "DT_WEAP_ALL",	VAL_INT,	FALSE,	SCR_DT_WEAP_ALL,	NULL, NULL, 0.0f },
+	{ "DT_LIGHT",		VAL_INT,	FALSE,	SCR_DT_LIGHT,		NULL, NULL, 0.0f },
+	{ "DT_MEDIUM",		VAL_INT,	FALSE,	SCR_DT_MEDIUM,		NULL, NULL, 0.0f },
+	{ "DT_HEAVY",		VAL_INT,	FALSE,	SCR_DT_HEAVY,		NULL, NULL, 0.0f },
+	{ "DT_SUPER_HEAVY",	VAL_INT,	FALSE,	SCR_DT_SUPER_HEAVY,	NULL, NULL, 0.0f },
+	{ "DT_TRACK",		VAL_INT,	FALSE,	SCR_DT_TRACK,		NULL, NULL, 0.0f },
+	{ "DT_HTRACK",		VAL_INT,	FALSE,	SCR_DT_HTRACK,		NULL, NULL, 0.0f },
+	{ "DT_WHEEL",		VAL_INT,	FALSE,	SCR_DT_WHEEL,		NULL, NULL, 0.0f },
+	{ "DT_LEGS",		VAL_INT,	FALSE,	SCR_DT_LEGS,		NULL, NULL, 0.0f },
+	{ "DT_GROUND",		VAL_INT,	FALSE,	SCR_DT_GROUND,		NULL, NULL, 0.0f },
+	{ "DT_VTOL",		VAL_INT,	FALSE,	SCR_DT_VTOL,		NULL, NULL, 0.0f },
+	{ "DT_HOVER",		VAL_INT,	FALSE,	SCR_DT_HOVER,		NULL, NULL, 0.0f },
 
 	// multiplayer
 
-//	{ "DMATCH",				VAL_INT,	0,		DMATCH,					0 },
-	{ "CAMPAIGN",			VAL_INT,	0,		CAMPAIGN,				0 },
-	{ "TEAMPLAY",			VAL_INT,	0,		TEAMPLAY,				0 },
-	{ "SKIRMISH",			VAL_INT,	0,		SKIRMISH,				0 },
+//	{ "DMATCH",			VAL_INT,	FALSE,	DMATCH,				NULL, NULL, 0.0f },
+	{ "CAMPAIGN",		VAL_INT,	FALSE,	CAMPAIGN,			NULL, NULL, 0.0f },
+	{ "TEAMPLAY",		VAL_INT,	FALSE,	TEAMPLAY,			NULL, NULL, 0.0f },
+	{ "SKIRMISH",		VAL_INT,	FALSE,	SKIRMISH,			NULL, NULL, 0.0f },
 
-	{ "CAMP_CLEAN",			VAL_INT,	0,		CAMP_CLEAN,				0 },
-	{ "CAMP_BASE",			VAL_INT,	0,		CAMP_BASE,				0 },
-	{ "CAMP_WALLS",			VAL_INT,	0,		CAMP_WALLS,				0 },
+	{ "CAMP_CLEAN",		VAL_INT,	FALSE,	CAMP_CLEAN,			NULL, NULL, 0.0f },
+	{ "CAMP_BASE",		VAL_INT,	FALSE,	CAMP_BASE,			NULL, NULL, 0.0f },
+	{ "CAMP_WALLS",		VAL_INT,	FALSE,	CAMP_WALLS,			NULL, NULL, 0.0f },
 
-	{ "NO_ALLIANCES",			VAL_INT,	0,		NO_ALLIANCES,				0 },
-	{ "ALLIANCES",			VAL_INT,	0,		ALLIANCES,				0 },
-	{ "ALLIANCES_TEAMS",			VAL_INT,	0,		ALLIANCES_TEAMS,				0 },
+	{ "NO_ALLIANCES",	VAL_INT,	FALSE,	NO_ALLIANCES,		NULL, NULL, 0.0f },
+	{ "ALLIANCES",		VAL_INT,	FALSE,	ALLIANCES,			NULL, NULL, 0.0f },
+	{ "ALLIANCES_TEAMS",VAL_INT,	FALSE,	ALLIANCES_TEAMS,	NULL, NULL, 0.0f },
 
 	/* some key constants */
-	{ "KEY_LCTRL",			VAL_INT,	0,		KEY_LCTRL,				0 },
-	{ "KEY_RCTRL",			VAL_INT,	0,		KEY_RCTRL,				0 },
-	{ "KEY_LSHIFT",			VAL_INT,	0,		KEY_LSHIFT,				0 },
-	{ "KEY_RSHIFT",			VAL_INT,	0,		KEY_RSHIFT,				0 },
-	{ "KEY_LALT",				VAL_INT,	0,		KEY_LALT,					0 },
-	{ "KEY_RALT",			VAL_INT,	0,		KEY_RALT,					0 },
-	{ "KEY_SPACE",			VAL_INT,	0,		KEY_SPACE,				0 },
-	{ "KEY_RETURN",		VAL_INT,	0,		KEY_RETURN,			0 },
-	{ "KEY_ESC",				VAL_INT,	0,		KEY_ESC,					0 },
-	{ "KEY_A",					VAL_INT,	0,		KEY_A,						0 },
-	{ "KEY_B",					VAL_INT,	0,		KEY_B,						0 },
-	{ "KEY_C",					VAL_INT,	0,		KEY_C,						0 },
-	{ "KEY_D",					VAL_INT,	0,		KEY_D,						0 },
-	{ "KEY_E",					VAL_INT,	0,		KEY_E,						0 },
-	{ "KEY_F",					VAL_INT,	0,		KEY_F,						0 },
-	{ "KEY_G",					VAL_INT,	0,		KEY_G,						0 },
-	{ "KEY_H",					VAL_INT,	0,		KEY_H,						0 },
-	{ "KEY_I",					VAL_INT,	0,		KEY_I,						0 },
-	{ "KEY_J",					VAL_INT,	0,		KEY_J,						0 },
-	{ "KEY_K",					VAL_INT,	0,		KEY_K,						0 },
-	{ "KEY_L",					VAL_INT,	0,		KEY_L,						0 },
-	{ "KEY_M",					VAL_INT,	0,		KEY_M,						0 },
-	{ "KEY_N",					VAL_INT,	0,		KEY_N,						0 },
-	{ "KEY_O",					VAL_INT,	0,		KEY_O,						0 },
-	{ "KEY_P",					VAL_INT,	0,		KEY_P,						0 },
-	{ "KEY_Q",					VAL_INT,	0,		KEY_Q,						0 },
-	{ "KEY_R",					VAL_INT,	0,		KEY_R,						0 },
-	{ "KEY_S",					VAL_INT,	0,		KEY_S,						0 },
-	{ "KEY_T",					VAL_INT,	0,		KEY_T,						0 },
-	{ "KEY_U",					VAL_INT,	0,		KEY_U,						0 },
-	{ "KEY_V",					VAL_INT,	0,		KEY_V,						0 },
-	{ "KEY_W",					VAL_INT,	0,		KEY_W,						0 },
-	{ "KEY_X",					VAL_INT,	0,		KEY_X,						0 },
-	{ "KEY_Y",					VAL_INT,	0,		KEY_Y,						0 },
-	{ "KEY_Z",					VAL_INT,	0,		KEY_Z,						0 },
+	{ "KEY_LCTRL",		VAL_INT,	FALSE,		KEY_LCTRL,		NULL, NULL, 0.0f },
+	{ "KEY_RCTRL",		VAL_INT,	FALSE,		KEY_RCTRL,		NULL, NULL, 0.0f },
+	{ "KEY_LSHIFT",		VAL_INT,	FALSE,		KEY_LSHIFT,		NULL, NULL, 0.0f },
+	{ "KEY_RSHIFT",		VAL_INT,	FALSE,		KEY_RSHIFT,		NULL, NULL, 0.0f },
+	{ "KEY_LALT",		VAL_INT,	FALSE,		KEY_LALT,		NULL, NULL, 0.0f },
+	{ "KEY_RALT",		VAL_INT,	FALSE,		KEY_RALT,		NULL, NULL, 0.0f },
+	{ "KEY_SPACE",		VAL_INT,	FALSE,		KEY_SPACE,		NULL, NULL, 0.0f },
+	{ "KEY_RETURN",		VAL_INT,	FALSE,		KEY_RETURN,		NULL, NULL, 0.0f },
+	{ "KEY_ESC",		VAL_INT,	FALSE,		KEY_ESC,		NULL, NULL, 0.0f },
+	{ "KEY_A",			VAL_INT,	FALSE,		KEY_A,			NULL, NULL, 0.0f },
+	{ "KEY_B",			VAL_INT,	FALSE,		KEY_B,			NULL, NULL, 0.0f },
+	{ "KEY_C",			VAL_INT,	FALSE,		KEY_C,			NULL, NULL, 0.0f },
+	{ "KEY_D",			VAL_INT,	FALSE,		KEY_D,			NULL, NULL, 0.0f },
+	{ "KEY_E",			VAL_INT,	FALSE,		KEY_E,			NULL, NULL, 0.0f },
+	{ "KEY_F",			VAL_INT,	FALSE,		KEY_F,			NULL, NULL, 0.0f },
+	{ "KEY_G",			VAL_INT,	FALSE,		KEY_G,			NULL, NULL, 0.0f },
+	{ "KEY_H",			VAL_INT,	FALSE,		KEY_H,			NULL, NULL, 0.0f },
+	{ "KEY_I",			VAL_INT,	FALSE,		KEY_I,			NULL, NULL, 0.0f },
+	{ "KEY_J",			VAL_INT,	FALSE,		KEY_J,			NULL, NULL, 0.0f },
+	{ "KEY_K",			VAL_INT,	FALSE,		KEY_K,			NULL, NULL, 0.0f },
+	{ "KEY_L",			VAL_INT,	FALSE,		KEY_L,			NULL, NULL, 0.0f },
+	{ "KEY_M",			VAL_INT,	FALSE,		KEY_M,			NULL, NULL, 0.0f },
+	{ "KEY_N",			VAL_INT,	FALSE,		KEY_N,			NULL, NULL, 0.0f },
+	{ "KEY_O",			VAL_INT,	FALSE,		KEY_O,			NULL, NULL, 0.0f },
+	{ "KEY_P",			VAL_INT,	FALSE,		KEY_P,			NULL, NULL, 0.0f },
+	{ "KEY_Q",			VAL_INT,	FALSE,		KEY_Q,			NULL, NULL, 0.0f },
+	{ "KEY_R",			VAL_INT,	FALSE,		KEY_R,			NULL, NULL, 0.0f },
+	{ "KEY_S",			VAL_INT,	FALSE,		KEY_S,			NULL, NULL, 0.0f },
+	{ "KEY_T",			VAL_INT,	FALSE,		KEY_T,			NULL, NULL, 0.0f },
+	{ "KEY_U",			VAL_INT,	FALSE,		KEY_U,			NULL, NULL, 0.0f },
+	{ "KEY_V",			VAL_INT,	FALSE,		KEY_V,			NULL, NULL, 0.0f },
+	{ "KEY_W",			VAL_INT,	FALSE,		KEY_W,			NULL, NULL, 0.0f },
+	{ "KEY_X",			VAL_INT,	FALSE,		KEY_X,			NULL, NULL, 0.0f },
+	{ "KEY_Y",			VAL_INT,	FALSE,		KEY_Y,			NULL, NULL, 0.0f },
+	{ "KEY_Z",			VAL_INT,	FALSE,		KEY_Z,			NULL, NULL, 0.0f },
 
 	/* This entry marks the end of the constant list */
-	{ "CONSTANT LIST END",	VAL_VOID }
+	{ "CONSTANT LIST END",VAL_VOID,	FALSE,		0,	NULL, NULL, 0.0f }
 };
 
 /* The Table of callback triggers
@@ -1558,144 +1861,142 @@ CONST_SYMBOL asConstantTable[] =
  */
 CALLBACK_SYMBOL asCallbackTable[] =
 {
-	{ "CALL_GAMEINIT",			(TRIGGER_TYPE)CALL_GAMEINIT,				NULL, 0 },
-	{ "CALL_DELIVPOINTMOVED",		(TRIGGER_TYPE)CALL_DELIVPOINTMOVED,		NULL, 0 },
-	{ "CALL_DROIDDESIGNED",			(TRIGGER_TYPE)CALL_DROIDDESIGNED,			NULL, 0 },
-	//{ "CALL_RESEARCHCOMPLETED",		(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,		NULL, 0 }, - callback function added
-	{ "CALL_DROIDBUILT",			(TRIGGER_TYPE)CALL_DROIDBUILT,			NULL, 0 },
-	{ "CALL_POWERGEN_BUILT",		(TRIGGER_TYPE)CALL_POWERGEN_BUILT,		NULL, 0 },
-	{ "CALL_RESEX_BUILT",			(TRIGGER_TYPE)CALL_RESEX_BUILT,			NULL, 0 },
-	{ "CALL_RESEARCH_BUILT",		(TRIGGER_TYPE)CALL_RESEARCH_BUILT,		NULL, 0 },
-	{ "CALL_FACTORY_BUILT",			(TRIGGER_TYPE)CALL_FACTORY_BUILT,			NULL, 0 },
-	{ "CALL_MISSION_START",			(TRIGGER_TYPE)CALL_MISSION_START,			NULL, 0 },
-	{ "CALL_MISSION_END",			(TRIGGER_TYPE)CALL_MISSION_END,			NULL, 0 },
-	{ "CALL_VIDEO_QUIT",			(TRIGGER_TYPE)CALL_VIDEO_QUIT,			NULL, 0 },
-	{ "CALL_LAUNCH_TRANSPORTER",	(TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER,	NULL, 0 },
-	{ "CALL_START_NEXT_LEVEL",		(TRIGGER_TYPE)CALL_START_NEXT_LEVEL,		NULL, 0 },
-	{ "CALL_TRANSPORTER_REINFORCE",	(TRIGGER_TYPE)CALL_TRANSPORTER_REINFORCE,	NULL, 0 },
-	{ "CALL_MISSION_TIME",			(TRIGGER_TYPE)CALL_MISSION_TIME,			NULL, 0 },
-	{ "CALL_ELECTRONIC_TAKEOVER",	(TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER,	NULL, 0 },
+	{ "CALL_GAMEINIT",			(TRIGGER_TYPE)CALL_GAMEINIT,			NULL, 0, {} },
+	{ "CALL_DELIVPOINTMOVED",	(TRIGGER_TYPE)CALL_DELIVPOINTMOVED,		NULL, 0, {} },
+	{ "CALL_DROIDDESIGNED",		(TRIGGER_TYPE)CALL_DROIDDESIGNED,		NULL, 0, {} },
+	//{ "CALL_RESEARCHCOMPLETED",	(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,	NULL, 0, {} }, - callback function added
+	{ "CALL_DROIDBUILT",		(TRIGGER_TYPE)CALL_DROIDBUILT,			NULL, 0, {} },
+	{ "CALL_POWERGEN_BUILT",	(TRIGGER_TYPE)CALL_POWERGEN_BUILT,		NULL, 0, {} },
+	{ "CALL_RESEX_BUILT",		(TRIGGER_TYPE)CALL_RESEX_BUILT,			NULL, 0, {} },
+	{ "CALL_RESEARCH_BUILT",	(TRIGGER_TYPE)CALL_RESEARCH_BUILT,		NULL, 0, {} },
+	{ "CALL_FACTORY_BUILT",		(TRIGGER_TYPE)CALL_FACTORY_BUILT,		NULL, 0, {} },
+
+	{ "CALL_MISSION_START",		(TRIGGER_TYPE)CALL_MISSION_START,		NULL, 0, {} },
+	{ "CALL_MISSION_END",		(TRIGGER_TYPE)CALL_MISSION_END,			NULL, 0, {} },
+	{ "CALL_VIDEO_QUIT",		(TRIGGER_TYPE)CALL_VIDEO_QUIT,			NULL, 0, {} },
+	{ "CALL_LAUNCH_TRANSPORTER",(TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER,	NULL, 0, {} },
+	{ "CALL_START_NEXT_LEVEL",	(TRIGGER_TYPE)CALL_START_NEXT_LEVEL,	NULL, 0, {} },
+	{ "CALL_TRANSPORTER_REINFORCE",(TRIGGER_TYPE)CALL_TRANSPORTER_REINFORCE,NULL, 0, {} },
+	{ "CALL_MISSION_TIME",		(TRIGGER_TYPE)CALL_MISSION_TIME,		NULL, 0, {} },
+	{ "CALL_ELECTRONIC_TAKEOVER",(TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER,NULL, 0, {} },
 
 	// tutorial only callbacks
-	{ "CALL_BUILDLIST",				(TRIGGER_TYPE)CALL_BUILDLIST,				NULL, 0 },
-	{ "CALL_BUILDGRID",				(TRIGGER_TYPE)CALL_BUILDGRID,				NULL, 0 },
-	{ "CALL_RESEARCHLIST",			(TRIGGER_TYPE)CALL_RESEARCHLIST,			NULL, 0 },
-	{ "CALL_MANURUN",				(TRIGGER_TYPE)CALL_MANURUN,				NULL, 0 },
-	{ "CALL_MANULIST",				(TRIGGER_TYPE)CALL_MANULIST,				NULL, 0 },
-	{ "CALL_BUTTON_PRESSED",		(TRIGGER_TYPE)CALL_BUTTON_PRESSED,		scrCBButtonPressed,
-		1,	{ VAL_INT } },
-	{ "CALL_DROID_SELECTED",		(TRIGGER_TYPE)CALL_DROID_SELECTED,		scrCBDroidSelected,
-		1,	{ VAL_REF|(INTERP_TYPE)ST_DROID } },
-	{ "CALL_DESIGN_QUIT",			(TRIGGER_TYPE)CALL_DESIGN_QUIT,			NULL, 0 },
-	{ "CALL_DESIGN_WEAPON",			(TRIGGER_TYPE)CALL_DESIGN_WEAPON,			NULL, 0 },
-	{ "CALL_DESIGN_SYSTEM",			(TRIGGER_TYPE)CALL_DESIGN_SYSTEM,			NULL, 0 },
-	{ "CALL_DESIGN_COMMAND",		(TRIGGER_TYPE)CALL_DESIGN_COMMAND,		NULL, 0 },
-	{ "CALL_DESIGN_BODY",			(TRIGGER_TYPE)CALL_DESIGN_BODY,			NULL, 0 },
-	{ "CALL_DESIGN_PROPULSION",		(TRIGGER_TYPE)CALL_DESIGN_PROPULSION,		NULL, 0 },
+	{ "CALL_BUILDLIST",			(TRIGGER_TYPE)CALL_BUILDLIST,			NULL, 0, {} },
+	{ "CALL_BUILDGRID",			(TRIGGER_TYPE)CALL_BUILDGRID,			NULL, 0, {} },
+	{ "CALL_RESEARCHLIST",		(TRIGGER_TYPE)CALL_RESEARCHLIST,		NULL, 0, {} },
+	{ "CALL_MANURUN",			(TRIGGER_TYPE)CALL_MANURUN,				NULL, 0, {} },
+	{ "CALL_MANULIST",			(TRIGGER_TYPE)CALL_MANULIST,			NULL, 0, {} },
+	{ "CALL_BUTTON_PRESSED",	(TRIGGER_TYPE)CALL_BUTTON_PRESSED,		scrCBButtonPressed,	1,	{ VAL_INT } },
+	{ "CALL_DROID_SELECTED",	(TRIGGER_TYPE)CALL_DROID_SELECTED,		scrCBDroidSelected,	1,	{ VAL_REF|(INTERP_TYPE)ST_DROID } },
+	{ "CALL_DESIGN_QUIT",		(TRIGGER_TYPE)CALL_DESIGN_QUIT,			NULL, 0, {} },
+	{ "CALL_DESIGN_WEAPON",		(TRIGGER_TYPE)CALL_DESIGN_WEAPON,		NULL, 0, {} },
+	{ "CALL_DESIGN_SYSTEM",		(TRIGGER_TYPE)CALL_DESIGN_SYSTEM,		NULL, 0, {} },
+	{ "CALL_DESIGN_COMMAND",	(TRIGGER_TYPE)CALL_DESIGN_COMMAND,		NULL, 0, {} },
+	{ "CALL_DESIGN_BODY",		(TRIGGER_TYPE)CALL_DESIGN_BODY,			NULL, 0, {} },
+	{ "CALL_DESIGN_PROPULSION",	(TRIGGER_TYPE)CALL_DESIGN_PROPULSION,	NULL, 0, {} },
 
 	// callback triggers with parameters
-    { "CALL_RESEARCHCOMPLETED",     (TRIGGER_TYPE)CALL_RESEARCHCOMPLETED, scrCBResCompleted,
-		1,	{ VAL_REF|(INTERP_TYPE)ST_RESEARCH } },
+    { "CALL_RESEARCHCOMPLETED",	(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,
+		scrCBResCompleted,	1,	{ VAL_REF|(INTERP_TYPE)ST_RESEARCH } },
 
-	{ "CALL_NEWDROID",				(TRIGGER_TYPE)CALL_NEWDROID,			scrCBNewDroid,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID,VAL_REF|(INTERP_TYPE)ST_STRUCTURE	   } },
+	{ "CALL_NEWDROID",			(TRIGGER_TYPE)CALL_NEWDROID,
+		scrCBNewDroid,		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF|(INTERP_TYPE)ST_STRUCTURE } },
 
-	{ "CALL_STRUCT_ATTACKED",		(TRIGGER_TYPE)CALL_STRUCT_ATTACKED,	scrCBStructAttacked,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_STRUCTURE, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_STRUCT_ATTACKED",	(TRIGGER_TYPE)CALL_STRUCT_ATTACKED,
+		scrCBStructAttacked,3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_STRUCTURE, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_DROID_ATTACKED",		(TRIGGER_TYPE)CALL_DROID_ATTACKED,	scrCBDroidAttacked,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_DROID_ATTACKED",	(TRIGGER_TYPE)CALL_DROID_ATTACKED,
+		scrCBDroidAttacked,	3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_ATTACKED",				(TRIGGER_TYPE)CALL_ATTACKED,			scrCBAttacked,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_ATTACKED",			(TRIGGER_TYPE)CALL_ATTACKED,
+		scrCBAttacked,		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_STRUCT_SEEN",			(TRIGGER_TYPE)CALL_STRUCT_SEEN,		scrCBStructSeen,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_STRUCTURE, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_STRUCT_SEEN",		(TRIGGER_TYPE)CALL_STRUCT_SEEN,
+		scrCBStructSeen,	3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_STRUCTURE, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_DROID_SEEN",			(TRIGGER_TYPE)CALL_DROID_SEEN,		scrCBDroidSeen,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_DROID_SEEN",		(TRIGGER_TYPE)CALL_DROID_SEEN,
+		scrCBDroidSeen,		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_FEATURE_SEEN",			(TRIGGER_TYPE)CALL_FEATURE_SEEN,		scrCBFeatureSeen,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_FEATURE, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_FEATURE_SEEN",		(TRIGGER_TYPE)CALL_FEATURE_SEEN,
+		scrCBFeatureSeen,	3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_FEATURE, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_OBJ_SEEN",				(TRIGGER_TYPE)CALL_OBJ_SEEN,			scrCBObjSeen,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_OBJ_SEEN",			(TRIGGER_TYPE)CALL_OBJ_SEEN,
+		scrCBObjSeen,		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_OBJ_DESTROYED",			(TRIGGER_TYPE)CALL_OBJ_DESTROYED,		scrCBObjDestroyed,
-		2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
+	{ "CALL_OBJ_DESTROYED",		(TRIGGER_TYPE)CALL_OBJ_DESTROYED,
+		scrCBObjDestroyed,	2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_BASEOBJECT } },
 
-	{ "CALL_STRUCT_DESTROYED",		(TRIGGER_TYPE)CALL_STRUCT_DESTROYED,	scrCBStructDestroyed,
-		2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_STRUCTURE } },
+	{ "CALL_STRUCT_DESTROYED",	(TRIGGER_TYPE)CALL_STRUCT_DESTROYED,
+		scrCBStructDestroyed,2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_STRUCTURE } },
 
-	{ "CALL_DROID_DESTROYED",		(TRIGGER_TYPE)CALL_DROID_DESTROYED,	scrCBDroidDestroyed,
-		2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID } },
+	{ "CALL_DROID_DESTROYED",	(TRIGGER_TYPE)CALL_DROID_DESTROYED,
+		scrCBDroidDestroyed,2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID } },
 
-	{ "CALL_FEATURE_DESTROYED",		(TRIGGER_TYPE)CALL_FEATURE_DESTROYED,	scrCBFeatureDestroyed,
-		1,	{ VAL_REF|(INTERP_TYPE)ST_FEATURE } },
+	{ "CALL_FEATURE_DESTROYED",	(TRIGGER_TYPE)CALL_FEATURE_DESTROYED,
+		scrCBFeatureDestroyed,1,	{ VAL_REF|(INTERP_TYPE)ST_FEATURE } },
 
-	{ "CALL_OBJECTOPEN",		(TRIGGER_TYPE)CALL_OBJECTOPEN, 	NULL, 0 },
-	{ "CALL_OBJECTCLOSE",		(TRIGGER_TYPE)CALL_OBJECTCLOSE, 	NULL, 0 },
+	{ "CALL_OBJECTOPEN",		(TRIGGER_TYPE)CALL_OBJECTOPEN, 		NULL, 0, {} },
+	{ "CALL_OBJECTCLOSE",		(TRIGGER_TYPE)CALL_OBJECTCLOSE, 	NULL, 0, {} },
 
-	{ "CALL_TRANSPORTER_OFFMAP",	(TRIGGER_TYPE)CALL_TRANSPORTER_OFFMAP,	scrCBTransporterOffMap,
-		1,	{ VAL_INT } },
-	{ "CALL_TRANSPORTER_LANDED",	(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED,	scrCBTransporterLanded,
-		2,	{ (INTERP_TYPE)ST_GROUP, VAL_INT } },
+	{ "CALL_TRANSPORTER_OFFMAP",(TRIGGER_TYPE)CALL_TRANSPORTER_OFFMAP,
+		scrCBTransporterOffMap,1,	{ VAL_INT } },
+	{ "CALL_TRANSPORTER_LANDED",(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED,
+		scrCBTransporterLanded,2,	{ (INTERP_TYPE)ST_GROUP, VAL_INT } },
 
-	{ "CALL_ALL_ONSCREEN_DROIDS_SELECTED",		(TRIGGER_TYPE)CALL_ALL_ONSCREEN_DROIDS_SELECTED, 	NULL, 0 },
+	{ "CALL_ALL_ONSCREEN_DROIDS_SELECTED",(TRIGGER_TYPE)CALL_ALL_ONSCREEN_DROIDS_SELECTED,	NULL, 0, {} },
 
-    { "CALL_NO_REINFORCEMENTS_LEFT",    (TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT,    NULL, 0 },
+    { "CALL_NO_REINFORCEMENTS_LEFT",(TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT,	NULL, 0, {} },
 
-	{ "CALL_CLUSTER_EMPTY",				(TRIGGER_TYPE)CALL_CLUSTER_EMPTY,		scrCBClusterEmpty,
-		1,	{ VAL_REF|VAL_INT } },
+	{ "CALL_CLUSTER_EMPTY",		(TRIGGER_TYPE)CALL_CLUSTER_EMPTY,
+		scrCBClusterEmpty,	1,	{ VAL_REF|VAL_INT } },
 
-	{ "CALL_VTOL_OFF_MAP",				(TRIGGER_TYPE)CALL_VTOL_OFF_MAP,		scrCBVtolOffMap,
-		2,  { VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID } },
+	{ "CALL_VTOL_OFF_MAP",		(TRIGGER_TYPE)CALL_VTOL_OFF_MAP,
+		scrCBVtolOffMap,	2,  { VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID } },
 
-	{ "CALL_UNITTAKEOVER",			(TRIGGER_TYPE)CALL_UNITTAKEOVER,		scrCBDroidTaken,
-		1,	{VAL_REF|(INTERP_TYPE)ST_DROID} },
+	{ "CALL_UNITTAKEOVER",		(TRIGGER_TYPE)CALL_UNITTAKEOVER,
+		scrCBDroidTaken,	1,	{VAL_REF|(INTERP_TYPE)ST_DROID} },
 
-	{ "CALL_PLAYERLEFT",			(TRIGGER_TYPE)CALL_PLAYERLEFT,		scrCBPlayerLeft,
-		1,	{ VAL_INT }},
+	{ "CALL_PLAYERLEFT",		(TRIGGER_TYPE)CALL_PLAYERLEFT,
+		scrCBPlayerLeft,	1,	{ VAL_INT }},
 
-	{ "CALL_ALLIANCEOFFER",			(TRIGGER_TYPE)CALL_ALLIANCEOFFER,		scrCBAllianceOffer,
-		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_INT }},
+	{ "CALL_ALLIANCEOFFER",		(TRIGGER_TYPE)CALL_ALLIANCEOFFER,
+		scrCBAllianceOffer,	2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_INT }},
 
 		// new callbacks
 		//-------------------------------------------------------------------------------
 
 			//console callback
-	{ "CALL_CONSOLE",			(TRIGGER_TYPE)CALL_CONSOLE,		scrCallConsole,
-		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
+	{ "CALL_CONSOLE",			(TRIGGER_TYPE)CALL_CONSOLE,
+		scrCallConsole,		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
 
 		//59
-	{ "CALL_AI_MSG",			(TRIGGER_TYPE)CALL_AI_MSG,		scrCallMultiMsg,
-		3,	{ VAL_INT, VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
+	{ "CALL_AI_MSG",			(TRIGGER_TYPE)CALL_AI_MSG,
+		scrCallMultiMsg,	3,	{ VAL_INT, VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
 
 		//59
-	{ "CALL_BEACON",			(TRIGGER_TYPE)CALL_BEACON,		scrCallBeacon,
-		5,	{ VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT,
-		VAL_REF|VAL_INT, VAL_REF|VAL_STRING }},
+	{ "CALL_BEACON",			(TRIGGER_TYPE)CALL_BEACON,
+		scrCallBeacon,		5,	{ VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_STRING }},
 
-	{ "CALL_STRUCTBUILT",				(TRIGGER_TYPE)CALL_STRUCTBUILT,			scrCBStructBuilt,
-		3,	{ VAL_INT, VAL_REF|ST_DROID, VAL_REF|ST_STRUCTURE	   } },
+	{ "CALL_STRUCTBUILT",		(TRIGGER_TYPE)CALL_STRUCTBUILT,
+		scrCBStructBuilt,	3,	{ VAL_INT, VAL_REF|ST_DROID, VAL_REF|ST_STRUCTURE } },
 
 		//new transporter landed callback
-	{ "CALL_TRANSPORTER_LANDED_B",	(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED_B,	scrCBTransporterLandedB,
-		3,	{ (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
+	{ "CALL_TRANSPORTER_LANDED_B",(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED_B,
+		scrCBTransporterLandedB,3,	{ (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
 
 		//fired when droid received DORDER_STOP order
-	{ "CALL_DORDER_STOP",	(TRIGGER_TYPE)CALL_DORDER_STOP,	scrCBDorderStop,
-		2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID	   } },
+	{ "CALL_DORDER_STOP",	(TRIGGER_TYPE)CALL_DORDER_STOP,
+		scrCBDorderStop,	2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID } },
 
 		//fired when droid reached the destination and stopped on its own
-	{ "CALL_DROID_REACH_LOCATION",	(TRIGGER_TYPE)CALL_DROID_REACH_LOCATION,	scrCBDorderReachedLocation,
-		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF | VAL_INT	   } },
+	{ "CALL_DROID_REACH_LOCATION",(TRIGGER_TYPE)CALL_DROID_REACH_LOCATION,
+		scrCBDorderReachedLocation,3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF | VAL_INT } },
 
-	{ "CALL_KEY_PRESSED",	(TRIGGER_TYPE)CALL_KEY_PRESSED,	scrCBProcessKeyPress,
-		2,	{ VAL_REF | VAL_INT, VAL_REF| VAL_INT} },
+	{ "CALL_KEY_PRESSED",	(TRIGGER_TYPE)CALL_KEY_PRESSED,
+		scrCBProcessKeyPress,2,	{ VAL_REF | VAL_INT, VAL_REF| VAL_INT} },
 
 	/* This entry marks the end of the callback list */
-	{ "CALLBACK LIST END", 0 }
+	{ "CALLBACK LIST END", 0, NULL, 0, {} }
 };
 
 
@@ -1708,11 +2009,11 @@ CALLBACK_SYMBOL asCallbackTable[] =
 TYPE_EQUIV asEquivTable[] =
 {
 	{ (INTERP_TYPE)ST_BASEOBJECT,	3,	{ (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURE, (INTERP_TYPE)ST_FEATURE, } },
-	{ (INTERP_TYPE)ST_COMPONENT,		8,	{ (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_ECM, (INTERP_TYPE)ST_SENSOR, (INTERP_TYPE)ST_CONSTRUCT, (INTERP_TYPE)ST_WEAPON, (INTERP_TYPE)ST_REPAIR, (INTERP_TYPE)ST_BRAIN } },
-	{ (INTERP_TYPE)ST_BASESTATS,		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_FEATURESTAT } },
+	{ (INTERP_TYPE)ST_COMPONENT,	8,	{ (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_ECM, (INTERP_TYPE)ST_SENSOR, (INTERP_TYPE)ST_CONSTRUCT, (INTERP_TYPE)ST_WEAPON, (INTERP_TYPE)ST_REPAIR, (INTERP_TYPE)ST_BRAIN } },
+	{ (INTERP_TYPE)ST_BASESTATS,	2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_FEATURESTAT } },
 
-	{ (INTERP_TYPE)ST_DROID,			1,	{ (INTERP_TYPE)ST_POINTER_O, } },
-	{ (INTERP_TYPE)ST_STRUCTURE,		1,	{ (INTERP_TYPE)ST_POINTER_O, } },
+	{ (INTERP_TYPE)ST_DROID,		1,	{ (INTERP_TYPE)ST_POINTER_O, } },
+	{ (INTERP_TYPE)ST_STRUCTURE,	1,	{ (INTERP_TYPE)ST_POINTER_O, } },
 	{ (INTERP_TYPE)ST_FEATURE,		1,	{ (INTERP_TYPE)ST_POINTER_O, } },
 	{ (INTERP_TYPE)ST_BASEOBJECT,	1,	{ (INTERP_TYPE)ST_POINTER_O, } },
 	{ (INTERP_TYPE)ST_TEMPLATE,		1,	{ (INTERP_TYPE)ST_POINTER_T, } },
@@ -1721,14 +2022,14 @@ TYPE_EQUIV asEquivTable[] =
 	{ (INTERP_TYPE)ST_WEAPON,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_ECM,			1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_SENSOR,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
-	{ (INTERP_TYPE)ST_CONSTRUCT,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
+	{ (INTERP_TYPE)ST_CONSTRUCT,	1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_REPAIR,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
-	{ (INTERP_TYPE)ST_BRAIN,			1,	{ (INTERP_TYPE)ST_POINTER_S, } },
-	{ (INTERP_TYPE)ST_STRUCTURESTAT,		1,	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT, } },
+	{ (INTERP_TYPE)ST_BRAIN,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
+	{ (INTERP_TYPE)ST_STRUCTURESTAT,1,	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT, } },
 
 
 	/* This marks the end of the equivalence list */
-	{ (INTERP_TYPE)0,0 }
+	{ (INTERP_TYPE)0, 0, {} }
 };
 
 
