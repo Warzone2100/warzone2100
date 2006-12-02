@@ -80,6 +80,7 @@ typedef enum {
   LOG_TEXTURE,
   LOG_NET,
   LOG_MEMORY,
+  LOG_WARNING, /* special; on in debug mode */
   LOG_ERROR, /* special; on by default */
   LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
   LOG_SCRIPT,

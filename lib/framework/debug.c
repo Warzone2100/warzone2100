@@ -28,8 +28,22 @@ static BOOL enabled_debug_parts[LOG_LAST];
 
 /* This list _must_ match the enum in debug.h! */
 static const char *code_part_names[] = {
-  "all", "main", "sound", "video", "wz", "3d", "texture",
-  "net", "memory", "error", "never", "script", "movement", "attack", "last"
+	"all",
+	"main",
+	"sound",
+	"video",
+	"wz",
+	"3d",
+	"texture",
+	"net",
+	"memory",
+	"warning",
+	"error",
+	"never",
+	"script",
+	"movement",
+	"attack",
+	"last"
 };
 
 /**********************************************************************
@@ -191,6 +205,9 @@ void debug_init(void)
 	}
 	memset( enabled_debug_parts, FALSE, sizeof(enabled_debug_parts) );
 	enabled_debug_parts[LOG_ERROR] = TRUE;
+#ifdef DEBUG
+	enabled_debug_parts[LOG_WARNING] = TRUE;
+#endif
 }
 
 
