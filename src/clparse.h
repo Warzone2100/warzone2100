@@ -13,7 +13,9 @@
 extern BOOL	clIntroVideo;
 // parse the commandline
 extern BOOL ParseCommandLine( int argc, char** argv );
-BOOL ParseCommandLineEarly(int argc, char** argv);
+extern BOOL ParseCommandLineEarly(int argc, char** argv);
+
+extern BOOL bAllowDebugMode;
 
 #endif
 

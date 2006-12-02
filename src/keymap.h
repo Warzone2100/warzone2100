@@ -52,6 +52,7 @@ extern KEY_CODE	getLastMetaKey		( void );
 extern KEY_MAPPING	*getLastMapping	( void );
 extern void	keyEnableProcessing		( BOOL val );
 extern void keyStatusAllInactive	( void );
+extern void keyAllMappingsInactive(void);
 extern void	keyAllMappingsActive	( void );
 extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
 extern void	processDebugMappings	( BOOL val );

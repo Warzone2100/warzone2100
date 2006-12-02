@@ -1,3 +1,13 @@
+/*
+	KeyMap.c
+	Alex McLean
+	Pumpkin Studios, EIDOS Interactive.
+	Internal Use Only
+	-----------------
+
+	Handles the assignment of functions to keys.
+*/
+
 #include <string.h>
 
 #include "lib/framework/frame.h"
@@ -9,55 +19,12 @@
 #include "console.h"
 #include "keybind.h"
 #include "display3d.h"
-
+#include "keymap.h"
 #include "keyedit.h"
-#include	"scriptcb.h"
-#include	"lib/script/script.h"
-#include	"scripttabs.h"
+#include "scriptcb.h"
+#include "lib/script/script.h"
+#include "scripttabs.h"
 
-
-/*
-	KeyMap.c
-	Alex McLean
-	Pumpkin Studios, EIDOS Interactive.
-	Internal Use Only
-	-----------------
-
-	Handles the assignment of functions to keys.
-*/
-
-// ----------------------------------------------------------------------------------
-/* Function Prototypes */
-BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
-BOOL	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
-KEY_MAPPING *keyFindMapping		( KEY_CODE metaCode, KEY_CODE subCode );
-void	keyClearMappings		( void );
-void	keyProcessMappings		( BOOL bExclude );
-UDWORD	getNumMappings			( void );
-void	keyInitMappings			( BOOL bForceDefaults );
-void	keyShowMapping			( KEY_MAPPING *psMapping );
-void	keyAllMappingsInactive	( void );
-void	keyAllMappingsActive	( void );
-void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
-void	processDebugMappings	( BOOL val );
-BOOL	getDebugMappingStatus	( void );
-BOOL	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
-
-BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
-							KEY_CODE newMetaCode, KEY_CODE newSubCode );
-KEY_MAPPING	*getKeyMapFromName(char *pName);
-
-extern BOOL	bAllowDebugMode;
-
-// ----------------------------------------------------------------------------------
-/* WIN 32 specific */
-
-BOOL	checkQwertyKeys			( void );
-UDWORD	asciiKeyCodeToTable		( KEY_CODE code );
-KEY_CODE	getQwertyKey		( void );
-UDWORD	getMarkerX				( KEY_CODE code );
-UDWORD	getMarkerY				( KEY_CODE code );
-SDWORD	getMarkerSpin			( KEY_CODE code );
 
 // ----------------------------------------------------------------------------------
 KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
@@ -77,7 +44,7 @@ KEY_MAPPING	*psMapping,*psReturn;
 	return(psReturn);
 }
 // ----------------------------------------------------------------------------------
-/* Some win32 specific stuff allowing the user to add key mappings themselves */
+/* Some stuff allowing the user to add key mappings themselves */
 
 #define	NUM_QWERTY_KEYS	26
 typedef	struct	_keymap_Marker
@@ -662,6 +629,43 @@ UDWORD	getNumMappings( void )
 
 
 // ----------------------------------------------------------------------------------
+/* Allows _new_ mappings to be made at runtime */
+static BOOL checkQwertyKeys( void )
+{
+	KEY_CODE qKey;
+	UDWORD tableEntry;
+	BOOL aquired = FALSE;
+
+	/* Are we trying to make a new map marker? */
+	if (keyDown(KEY_LALT))
+	{
+		/* Did we press a key */
+		qKey = getQwertyKey();
+		if (qKey)
+		{
+			tableEntry = asciiKeyCodeToTable(qKey);
+			/* We're assigning something to the key */
+			if (qwertyKeyMappings[tableEntry].psMapping)
+			{
+				/* Get rid of the old mapping on this key if there was one */
+				keyRemoveMappingPt(qwertyKeyMappings[tableEntry].psMapping);
+			}
+			/* Now add the new one for this location */
+			qwertyKeyMappings[tableEntry].psMapping =
+				keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, qKey, KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
+			aquired = TRUE;
+
+			/* Store away the position and view angle */
+			qwertyKeyMappings[tableEntry].xPos = player.p.x;
+			qwertyKeyMappings[tableEntry].yPos = player.p.z;
+			qwertyKeyMappings[tableEntry].spin = player.r.y;
+		}
+	}
+	return aquired;
+}
+
+
+// ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
 void	keyProcessMappings( BOOL bExclude )
 {
@@ -835,61 +839,10 @@ SDWORD		i;
 
 }
 
-// ----------------------------------------------------------------------------------
-
-/* Allows _new_ mappings to be made at runtime */
-BOOL	checkQwertyKeys( void )
-{
-KEY_CODE	qKey;
-UDWORD		tableEntry;
-BOOL		aquired;
-
-	aquired = FALSE;
-	/* Are we trying to make a new map marker? */
-	if( keyDown(KEY_LALT))
-	{
-		/* Did we press a key */
-		qKey = getQwertyKey();
-		if(qKey)
-		{
-			tableEntry = asciiKeyCodeToTable(qKey);
-			/* We're assigning something to the key */
-			if(qwertyKeyMappings[tableEntry].psMapping)
-			{
-				/* Get rid of the old mapping on this key if there was one */
-				keyRemoveMappingPt(qwertyKeyMappings[tableEntry].psMapping);
-			}
-			/* Now add the new one for this location */
-			qwertyKeyMappings[tableEntry].psMapping =
-				keyAddMapping(KEYMAP_ALWAYS,KEY_LSHIFT,qKey,KEYMAP_PRESSED,kf_JumpToMapMarker,"Jump to new map marker");
-			aquired = TRUE;
-
-			/* Store away the position and view angle */
-			qwertyKeyMappings[tableEntry].xPos = player.p.x;
-			qwertyKeyMappings[tableEntry].yPos = player.p.z;
-			qwertyKeyMappings[tableEntry].spin = player.r.y;
-		}
-	}
-	return(aquired);
-}
-
-
-
-
-// ----------------------------------------------------------------------------------
-// this function isn't really module static - should be removed - debug only
-void	keyShowMappings( void )
-{
-KEY_MAPPING	*psMapping;
-	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
-	{
-		keyShowMapping(psMapping);
-	}
-}
 
 // ----------------------------------------------------------------------------------
 /* Sends a particular key mapping to the console */
-void	keyShowMapping(KEY_MAPPING *psMapping)
+static void keyShowMapping(KEY_MAPPING *psMapping)
 {
 char	asciiSub[20],asciiMeta[20];
 BOOL	onlySub;
@@ -909,6 +862,18 @@ BOOL	onlySub;
 	else
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,"%s and %s - %s",asciiMeta,asciiSub,psMapping->pName));
+	}
+}
+
+// ----------------------------------------------------------------------------------
+// this function isn't really module static - should be removed - debug only
+void keyShowMappings( void )
+{
+	KEY_MAPPING *psMapping;
+
+	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	{
+		keyShowMapping(psMapping);
 	}
 }
 

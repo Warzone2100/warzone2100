@@ -71,6 +71,7 @@
 #include "scriptcb.h"		/* for console callback */
 #include "aiexperience.h"	/* for console commands */
 #include "scriptfuncs.h"
+#include "clparse.h"
 
 #define	MAP_ZOOM_RATE	(1000)
 
@@ -84,7 +85,6 @@
 
 
 BOOL		bAllowOtherKeyPresses = TRUE;
-extern BOOL	bAllowDebugMode;
 STRUCTURE	*psOldRE = NULL;
 extern		void shakeStop(void);
 char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
@@ -2442,7 +2442,7 @@ void kf_SpeedUp( void )
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
-		int i;
+		unsigned int i;
 
 		// get the current modifier
 		gameTimeGetMod(&mod);
