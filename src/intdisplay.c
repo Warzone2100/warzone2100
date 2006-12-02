@@ -3928,7 +3928,7 @@ void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psCont
 			{
 				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
 				bUsingSlider = TRUE;
-				SetMousePos(0,sliderMousePos(Slider),mouseY());	// move mouse
+				SetMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
 		else if(keyDown(KEY_RIGHTARROW))
@@ -3937,8 +3937,7 @@ void intUpdateQuantitySlider(struct _widget *psWidget, struct _w_context *psCont
 			{
 				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
 				bUsingSlider = TRUE;
-
-				SetMousePos(0,sliderMousePos(Slider),mouseY());	// move mouse
+				SetMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
 	}

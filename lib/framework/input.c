@@ -1,3 +1,4 @@
+
 /*
  * Input.c
  *
@@ -84,7 +85,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 		strcpy(ascii,"???");
 		return;
 	}
-	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) <= KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
 }
 
@@ -393,21 +394,21 @@ void inputNewFrame(void)
 /* This returns true if the key is currently depressed */
 BOOL keyDown(KEY_CODE code)
 {
-	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) < KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return (aKeyState[code] != KEY_UP);
 }
 
 /* This returns true if the key went from being up to being down this frame */
 BOOL keyPressed(KEY_CODE code)
 {
-	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) < KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return ((aKeyState[code] == KEY_PRESSED) || (aKeyState[code] == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the key went from being down to being up this frame */
 BOOL keyReleased(KEY_CODE code)
 {
-	ASSERT( (code >= 0) && (keyCodeToSDLKey(code) < KEY_MAXSCAN), "Invalid key code: %d", code );
+	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return ((aKeyState[code] == KEY_RELEASED) || (aKeyState[code] == KEY_PRESSRELEASE));
 }
 
@@ -426,21 +427,18 @@ SDWORD mouseY(void)
 /* This returns true if the mouse key is currently depressed */
 BOOL mouseDown(MOUSE_KEY_CODE code)
 {
-	ASSERT( (code >= 0), "Invalid mouse key code: %d", code );
 	return (aMouseState[code] != KEY_UP);
 }
 
 /* This returns true if the mouse key was double clicked */
 BOOL mouseDClicked(MOUSE_KEY_CODE code)
 {
-	ASSERT( code >= 0, "Invalid mouse key code: %d", code );
 	return (aMouseState[code] == KEY_DOUBLECLICK);
 }
 
 /* This returns true if the mouse key went from being up to being down this frame */
 BOOL mousePressed(MOUSE_KEY_CODE code)
 {
-	ASSERT( (code >= 0), "Invalid mouse key code: %d", code );
 	return ((aMouseState[code] == KEY_PRESSED) ||
 			(aMouseState[code] == KEY_PRESSRELEASE));
 }
@@ -448,7 +446,6 @@ BOOL mousePressed(MOUSE_KEY_CODE code)
 /* This returns true if the mouse key went from being down to being up this frame */
 BOOL mouseReleased(MOUSE_KEY_CODE code)
 {
-	ASSERT( (code >= 0), "Invalid mouse key code: %d", code );
 	return ((aMouseState[code] == KEY_RELEASED) ||
 			(aMouseState[code] == KEY_DOUBLECLICK) ||
 			(aMouseState[code] == KEY_PRESSRELEASE));
@@ -457,7 +454,6 @@ BOOL mouseReleased(MOUSE_KEY_CODE code)
 /* Check for a mouse drag, return the drag start coords if dragging */
 BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 {
-	ASSERT( (code >= 0), "Invalid mouse key code: %d", code );
 	if (aMouseState[code] == KEY_DRAG)
 	{
 		*px = dragX;
@@ -468,7 +464,7 @@ BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	return FALSE;
 }
 
-void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
+void SetMousePos(UDWORD x, UDWORD y)
 {
 	static int mousewarp = -1;
 
@@ -482,7 +478,8 @@ void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y)
 			}
 		}
 	}
-	if (mousewarp) SDL_WarpMouse(x, y);
+	if (mousewarp)
+		SDL_WarpMouse(x, y);
 }
 
 /* Sets the state of the mouse key to down */

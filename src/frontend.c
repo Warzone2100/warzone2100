@@ -290,8 +290,6 @@ void changeTitleMode(tMode mode)
 // Title Screen
 BOOL startTitleMenu(void)
 {
-
-
 //	widgDelete(psWScreen,1);	// close reticule if it's open. MAGIC NUMBERS?
 	intRemoveReticule();
 
@@ -311,13 +309,10 @@ BOOL startTitleMenu(void)
 
 	addTextButton(FRONTEND_QUIT,		FRONTEND_POS6X,FRONTEND_POS6Y, strresGetString(psStringRes, STR_FE_QUIT),FALSE,FALSE);
 
-
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,strresGetString(psStringRes, STR_FE_SIDEMAIN));
 
-
-	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS2Y);
+	SetMousePos(320, FRONTEND_BOTFORMY + FRONTEND_POS2Y);
 	SnapToID(&InterfaceSnap,4);
-
 
 	return TRUE;
 }
@@ -608,7 +603,7 @@ BOOL startMultiPlayerMenu(void)
 
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
-	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS3Y);
+	SetMousePos(320, FRONTEND_BOTFORMY + FRONTEND_POS3Y);
 	SnapToID(&InterfaceSnap,3);
 	return TRUE;
 }
@@ -707,14 +702,11 @@ BOOL startOptionsMenu(void)
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS5X,FRONTEND_POS5Y, strresGetString(psStringRes, STR_KM_KEYMAP),FALSE,FALSE);
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
-	SetMousePos(0,320,FRONTEND_BOTFORMY+FRONTEND_POS3Y);
+	SetMousePos(320, FRONTEND_BOTFORMY + FRONTEND_POS3Y);
 	SnapToID(&InterfaceSnap,3);
-
-
 
 	return TRUE;
 }
-
 
 
 BOOL runOptionsMenu(void)
@@ -1087,7 +1079,7 @@ BOOL runGameOptions3Menu(void)
 	case FRONTEND_FX:
 	case FRONTEND_3D_FX:
 	case FRONTEND_MUSIC:
-		SetMousePos(0,FRONTEND_BOTFORMX+FRONTEND_POS1M+5,mouseY()-3);	// move mouse
+		SetMousePos(FRONTEND_BOTFORMX + FRONTEND_POS1M + 5, mouseY() - 3);	// move mouse
 		break;
 
 	case FRONTEND_FX_SL:
@@ -1195,7 +1187,7 @@ BOOL runGameOptionsMenu(void)
 
 //	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
-		SetMousePos(0,FRONTEND_BOTFORMX+FRONTEND_POS1M+5,mouseY()-3);	// move mouse
+		SetMousePos(FRONTEND_BOTFORMX + FRONTEND_POS1M + 5, mouseY() - 3);	// move mouse
 		break;
 
 /*	case FRONTEND_FOGTYPE:

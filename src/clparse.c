@@ -39,10 +39,6 @@ extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
 
-void debug_callback_file( void**, const char * );
-void debug_callback_file_init( void** );
-void debug_callback_file_exit( void** );
-
 //! Whether to play the intro video
 BOOL	clIntroVideo;
 

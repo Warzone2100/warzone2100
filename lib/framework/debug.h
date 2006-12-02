@@ -123,6 +123,12 @@ void debug_exit( void );
  */
 void debug_register_callback( debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void * data );
 
+void debug_callback_file(void **data, const char *outputBuffer);
+void debug_callback_file_init(void **data);
+void debug_callback_file_exit(void **data);
+
+void debug_callback_stderr(void **data, const char *outputBuffer);
+
 /**
  * Toggle debug output for part associated with str
  *

@@ -224,7 +224,7 @@ void SetCurrentSnapFormID(CURSORSNAP *SnapBuffer,UDWORD FormID)
 			// Get the screen extents of the specified form and move the mouse there.
 			if(widgGetScreenExtents(FormID,&x,&y,&w,&h) == TRUE) {
 		//		DBPRINTF(("%d %d,%d %d\n",x,y,w,h);
-				SetMousePos(0,x+w/2,y+h/2);
+				SetMousePos(x + w / 2, y + h / 2);
 			}
 		}
 	}
@@ -243,7 +243,7 @@ void SetCurrentSnapID(CURSORSNAP *SnapBuffer,UDWORD ID)
 			// Get the screen extents of the specified widget and move the mouse there.
 			if(widgGetScreenExtents(ID,&x,&y,&w,&h) == TRUE) {
 		//		DBPRINTF(("%d %d,%d %d\n",x,y,w,h);
-				SetMousePos(0,x+w/2,y+h/2);
+				SetMousePos(x + w / 2, y + h / 2);
 			}
 		}
 	}
@@ -276,8 +276,8 @@ void SetCursorSnap(CURSORSNAP *SnapBuffer,UWORD Index,SWORD PosX,SWORD PosY,UDWO
 void GotoSnap(CURSORSNAP *SnapBuffer)
 {
 	if(SnapBuffer->NumSnaps > 0) {
-		SetMousePos(0,SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapX,
-					SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapY);
+		SetMousePos(SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapX,
+		            SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapY);
 	}
 }
 
@@ -291,8 +291,8 @@ void GotoNextSnap(CURSORSNAP *SnapBuffer)
 		}
 	}
 
-	SetMousePos(0,SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapX,
-					SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapY);
+	SetMousePos(SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapX,
+	            SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapY);
 }
 
 
@@ -305,8 +305,8 @@ void GotoPreviousSnap(CURSORSNAP *SnapBuffer)
 		}
 	}
 
-	SetMousePos(0,SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapX,
-					SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapY);
+	SetMousePos(SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapX,
+	            SnapBuffer->SnapCoords[SnapBuffer->CurrentSnap].SnapY);
 }
 
 
@@ -428,8 +428,8 @@ void GotoDirectionalSnap(CURSORSNAP *SnapBuffer,SNAPDIRECTION Direction,SWORD Cu
 
 	if(NearestSnap >= 0) {
 		SnapBuffer->CurrentSnap = NearestSnap;
-		SetMousePos(0,SnapBuffer->SnapCoords[NearestSnap].SnapX,
-					SnapBuffer->SnapCoords[NearestSnap].SnapY);
+		SetMousePos(SnapBuffer->SnapCoords[NearestSnap].SnapX,
+		            SnapBuffer->SnapCoords[NearestSnap].SnapY);
 	}
 }
 
@@ -437,12 +437,6 @@ void GotoDirectionalSnap(CURSORSNAP *SnapBuffer,SNAPDIRECTION Direction,SWORD Cu
 void SnapToID(CURSORSNAP *SnapBuffer,UWORD snp)
 {
 	SnapBuffer->CurrentSnap = snp;
-}
-
-
-void SnapCursorTo(UWORD x,UWORD y)
-{
-	SetMousePos(0,x,y);
 }
 
 

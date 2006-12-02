@@ -67,8 +67,6 @@ void SetCurrentSnap(CURSORSNAP *SnapBuffer,UDWORD FormID);
 void SetCurrentSnapID(CURSORSNAP *SnapBuffer,UDWORD ID);
 void SnapToID(CURSORSNAP *SnapBuffer,UWORD snp);
 
-void SnapCursorTo(UWORD x,UWORD y);
-
 extern void intSetCurrentCursorPosition(CURSORSNAP *Snap,UDWORD id);
 
 #endif

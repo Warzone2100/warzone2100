@@ -15,6 +15,7 @@
 #include "mem.h"
 #include "heap.h"
 #include "treap.h"
+#include "treapint.h"
 
 /* Position of the last call */
 static SDWORD	cLine;
@@ -193,8 +194,7 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 
 
 /* Recursively find and remove a node from the tree */
-TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key,
-							   TREAP_CMP cmp)
+TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 {
 	TREAP_NODE	*psFound;
 
@@ -284,7 +284,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 }
 
 
-/* Recurisvely find an object in a treap */
+/* Recursively find an object in a treap */
 void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
 {
 	if (psRoot == NULL)
@@ -376,6 +376,7 @@ void treapDestroy(TREAP *psTreap)
 }
 
 /* Recursively display the treap structure */
+void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent);
 void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 {
 	UDWORD	i;
@@ -392,7 +393,7 @@ void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 	{
 		for(i=0; i<indent; i++)
 		{
-			debug( LOG_NEVER, "" );
+			debug( LOG_NEVER, "." );
 		}
 		debug( LOG_NEVER, "L" );
 		treapDisplayRec(psRoot->psLeft, indent+1);
@@ -403,7 +404,7 @@ void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 	{
 		for(i=0; i<indent; i++)
 		{
-			debug( LOG_NEVER, "" );
+			debug( LOG_NEVER, "." );
 		}
 		debug( LOG_NEVER, "R" );
 		treapDisplayRec(psRoot->psRight, indent+1);
@@ -420,8 +421,7 @@ void treapDisplay(TREAP *psTreap)
 	}
 }
 
-
-void *treapGetSmallestRec(TREAP_NODE *psRoot)
+static void *treapGetSmallestRec(TREAP_NODE *psRoot)
 {
 	if (psRoot->psLeft == NULL)
 	{

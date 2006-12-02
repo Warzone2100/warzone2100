@@ -116,9 +116,9 @@ void debug_callback_stderr( void ** data, const char * outputBuffer )
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
+#if defined WIN32 && defined DEBUG
 void debug_callback_win32debug( void ** data, const char * outputBuffer )
 {
-#if defined WIN32 && defined DEBUG
 	char tmpStr[MAX_LEN_LOG_LINE];
 
 	strcpy( tmpStr, outputBuffer );
@@ -126,8 +126,8 @@ void debug_callback_win32debug( void ** data, const char * outputBuffer )
 		strcat( tmpStr, "\n" );
 	}
 	OutputDebugStringA( tmpStr );
-#endif // WIN32
 }
+#endif // WIN32
 
 
 /**

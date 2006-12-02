@@ -84,7 +84,7 @@ static void memTreapDestroy(TREAP_NODE *psRoot)
 void memShutDown(void)
 {
 	// Report any memory still allocated
-	memMemoryReport(NULL);
+	memMemoryReport();
 
 	// Free up the allocated memory
 	memTreapDestroy((TREAP_NODE *)psMemRoot);
@@ -388,6 +388,7 @@ SDWORD memRecReport(MEM_NODE *psRoot)
 			   psRoot->size;
 	}
 #endif
+	psRoot = psRoot;
 	return 0;
 }
 
@@ -451,11 +452,6 @@ static void memSummary(MEM_NODE *psRoot)
 #endif
 }
 
-static void memMemorySummary(void)
-{
-	memMemoryDump(psMemRoot);
-}
-
 void memMemoryDump(MEM_NODE *Node)
 {
 #ifdef DEBUG_MALLOC
@@ -478,10 +474,8 @@ void memMemoryDump(MEM_NODE *Node)
 }
 
 /* Report on currently allocated memory.
- * If pFileName is not NULL send the report to the specified file.
- * If pFileName is NULL the report goes to DBPRINTF
  */
-void memMemoryReport(const char *pFileName)
+void memMemoryReport(void)
 {
 #ifdef DEBUG_MALLOC
 	SDWORD		TotMem;
@@ -509,7 +503,7 @@ void memMemoryReport(const char *pFileName)
 
 
 /* Display the memory treap */
-void memDisplayTreap(const char *pFileName)
+void memDisplayTreap(void)
 {
 #ifdef DEBUG_MALLOC
 	debug(LOG_MEMORY, "Memory Allocation Treap:");

@@ -91,7 +91,7 @@ static BOOL addQuitOptions(void)
 	//  quit
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM,INTINGAMEOP_2_Y,STR_GAME_QUIT,OPALIGN);
 
-	SetMousePos(0,INTINGAMEOP3_X+INTINGAMEOP_1_X,INTINGAMEOP3_Y+INTINGAMEOP_1_Y); // move mouse to resume.
+	SetMousePos(INTINGAMEOP3_X + INTINGAMEOP_1_X, INTINGAMEOP3_Y + INTINGAMEOP_1_Y); // move mouse to resume.
 
 	return TRUE;
 }
@@ -283,7 +283,7 @@ static BOOL _intAddInGameOptions(void)
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= TRUE;					// inform interface.
-	SetMousePos(0,INTINGAMEOP_X+INTINGAMEOP_1_X,INTINGAMEOP_Y+INTINGAMEOP_1_Y); // move mouse to resume.
+	SetMousePos(INTINGAMEOP_X + INTINGAMEOP_1_X, INTINGAMEOP_Y + INTINGAMEOP_1_Y); // move mouse to resume.
 
 	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);			// reset cursor (hw)
 	frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
@@ -436,7 +436,7 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_3DFXVOL:
 	case INTINGAMEOP_CDVOL:
 //	case INTINGAMEOP_GAMMA:
-		SetMousePos(0,INTINGAMEOP2_X+INTINGAMEOP_MID+5 ,mouseY());	// move mouse
+		SetMousePos(INTINGAMEOP2_X + INTINGAMEOP_MID + 5, mouseY());	// move mouse
 		break;
 
 

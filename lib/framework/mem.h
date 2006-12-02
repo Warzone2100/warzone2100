@@ -51,10 +51,10 @@ void memFreeRelease(void *pMemToFree);
 BOOL memPointerValid(void *pPtr, size_t Size);
 
 /* Report on currently allocated memory */
-void memMemoryReport(const char *pFileName);
+void memMemoryReport(void);
 
 /* Display the memory treap */
-void memDisplayTreap(const char *pFileName);
+void memDisplayTreap(void);
 
 #ifdef DEBUG_MALLOC
 

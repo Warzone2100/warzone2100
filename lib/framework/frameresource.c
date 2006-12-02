@@ -373,7 +373,7 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 static void resDataInit(RES_DATA* psRes, char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
 	psRes->pData = pData;
-	psRes->blockID = resBlockID;
+	psRes->blockID = BlockID;
 	psRes->HashedID=DataIDHash;
 
 	strcpy(psRes->aID, DebugName);

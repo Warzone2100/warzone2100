@@ -159,7 +159,9 @@ GAMECODE gameLoop(void)
 
 //	dumpimdpoints();
 
-//	heapIntegrityCheck(psDroidHeap);
+#ifdef DEBUG
+	heapIntegrityCheck(psDroidHeap);
+#endif
 
 //JPS 24 feb???
 	if (fogStatus & FOG_BACKGROUND)

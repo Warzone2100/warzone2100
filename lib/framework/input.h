@@ -172,7 +172,7 @@ extern BOOL mouseReleased(MOUSE_KEY_CODE code);
 extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
 /* Warps the mouse to the given position */
-extern void SetMousePos(UDWORD nowt,UDWORD x,UDWORD y);
+extern void SetMousePos(UDWORD x, UDWORD y);
 
 /* Sets the state of the mouse key to down */
 extern void setMouseDown(MOUSE_KEY_CODE code);

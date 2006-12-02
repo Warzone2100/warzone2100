@@ -27,7 +27,7 @@
 #define COPY_FILE_STRING	FALSE
 
 /* Store the call position */
-static char	*pCFile;
+static const char	*pCFile;
 static SDWORD	cPos;
 
 
@@ -37,7 +37,7 @@ static OBJ_HEAP * HeapDebugList[MAXDEBUGHEAPS];
 #endif
 
 /* Store the location in C code at which a call to the heap was made */
-void heapSetCallPos(char *pFileName, SDWORD lineNumber)
+void heapSetCallPos(const char *pFileName, SDWORD lineNumber)
 {
 	cPos = lineNumber;
 
@@ -527,7 +527,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 }
 
 
-static BOOL heapIntegrityCheck(OBJ_HEAP *psHeap)
+void heapIntegrityCheck(OBJ_HEAP *psHeap)
 {
 #if DEBUG_HEAP
 	FREE_OBJECT		*psCurr;
@@ -536,7 +536,7 @@ static BOOL heapIntegrityCheck(OBJ_HEAP *psHeap)
 	if (psHeap->objSize < sizeof(FREE_OBJECT))
 	{
 		// too small to check
-		return TRUE;
+		return;
 	}
 
 	for(psCurr = psHeap->psFree; psCurr; psCurr=psCurr->psNext)
@@ -557,7 +557,6 @@ static BOOL heapIntegrityCheck(OBJ_HEAP *psHeap)
 #else
 	psHeap = psHeap;
 #endif
-	return TRUE;
 }
 
 
