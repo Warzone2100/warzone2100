@@ -35,10 +35,9 @@ typedef enum _interp_type
 	VAL_FUNC_EXTERN,					//External function pointer
 
 	VAL_USERTYPESTART,		// user defined types should start with this id
+	VAL_REF = 0x00100000 // flag to specify a variable reference rather than simple value
 } INTERP_TYPE;
 
-// flag to specify a variable reference rather than simple value
-#define VAL_REF		0x00100000
 
 /* A value consists of its type and value */
 typedef struct _interp_val
@@ -65,8 +64,7 @@ typedef struct _interp_typeequiv
 {
 	INTERP_TYPE		base;		// the type that the others are equivalent to
 	SDWORD			numEquiv;	// number of equivalent types
-	INTERP_TYPE		aEquivTypes[INTERP_MAXEQUIV];
-								// the equivalent types
+	INTERP_TYPE		aEquivTypes[INTERP_MAXEQUIV]; // the equivalent types
 } TYPE_EQUIV;
 
 /* Opcodes for the script interpreter */
