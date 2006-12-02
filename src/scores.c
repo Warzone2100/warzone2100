@@ -70,7 +70,7 @@ STAT_BAR	infoBars[]=
 	{RC_X,240,RANK_BAR_WIDTH,16,80,STR_MR_LEVEL_SPECIAL,0,FALSE,TRUE,0,117}, 		 			//	STAT_SPECIAL
 	{RC_X,260,RANK_BAR_WIDTH,16,90,STR_MR_LEVEL_ACE,0,FALSE,TRUE,0,117}, 			 			//	STAT_ACE
 
-	{0,0,0,0,0,0,0}
+	{0, 0, 0, 0, 0, 0, 0, FALSE, FALSE, 0, 0 }
 };
 
 // --------------------------------------------------------------------
