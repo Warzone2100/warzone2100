@@ -1977,6 +1977,8 @@ BOOL msgStackFireTop(void)
 			break;
 
 		case CALL_DORDER_STOP:
+			ASSERT(FALSE,"CALL_DORDER_STOP is currently disabled");
+
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_DORDER_STOP");
 
 			if(!msgStackGetDroid(&psScrCBOrderDroid))

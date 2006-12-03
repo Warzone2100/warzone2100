@@ -1643,12 +1643,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY2 = 0;
 
 		/* notify scripts that we were _forced_ to stop */
-		psScrCBOrderDroid = psDroid;
-		if(!msgStackPush(CALL_DORDER_STOP,-1,-1,"\0",-1,-1, psDroid))
-		{
-			debug(LOG_ERROR, "msgStackPush: failed to push CALL_DORDER_STOP");
-		}
-		psScrCBOrderDroid = NULL;
+		//psScrCBOrderDroid = psDroid;
+		//if(!msgStackPush(CALL_DORDER_STOP,-1,-1,"\0",-1,-1, psDroid))
+		//{
+		//	debug(LOG_ERROR, "msgStackPush: failed to push CALL_DORDER_STOP");
+		//}
+		//psScrCBOrderDroid = NULL;
 
 		break;
 	case DORDER_MOVE:
