@@ -7,12 +7,14 @@
 #include <physfs.h>
 #include <string.h>
 
-/* For SHGetFolderPath */
-#ifdef WIN32
-# include <shlobj.h>
-#endif // WIN32
-
+// Get platform defines before checking for them!
 #include "lib/framework/frame.h"
+
+/* For SHGetFolderPath */
+#ifdef WZ_OS_WIN
+# include <shlobj.h>
+#endif // WZ_OS_WIN
+
 #include "lib/framework/configfile.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
@@ -44,9 +46,9 @@
 # define DEFAULT_DATADIR "/usr/share/warzone2100/"
 #endif
 
-#if defined(WIN32)
+#if defined(WZ_OS_WIN)
 # define WZ_WRITEDIR "Warzone 2100"
-#elif defined(__APPLE__)
+#elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # define WZ_WRITEDIR "Warzone 2100"
 #else
@@ -189,11 +191,11 @@ static void initialize_PhysicsFS(void)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-#if defined(WIN32)
+#if defined(WZ_OS_WIN)
 	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
 		strcat( tmpstr, PHYSFS_getDirSeparator() );
 	else
-#elif defined(__APPLE__)
+#elif defined(WZ_OS_MAC)
 	error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
 	if (!error)
 		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
@@ -362,7 +364,7 @@ int main(int argc, char *argv[])
 	UDWORD			pSize;
 
 	/*** Initialize the debug subsystem ***/
-#ifdef _MSC_VER
+#ifdef WZ_CC_MSVC
 # ifdef DEBUG
 	int tmpDbgFlag;
 	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
@@ -375,16 +377,16 @@ int main(int argc, char *argv[])
 	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
 	_CrtSetDbgFlag( tmpDbgFlag );
 # endif //DEBUG
-#endif // _MSC_VER
+#endif // WZ_CC_MSVC
 
 
 	debug_init();
 	atexit( debug_exit );
 
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
-#if defined WIN32 && defined DEBUG
+#if defined WZ_OS_WIN && defined DEBUG
 //	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
-#endif // WIN32
+#endif // WZ_OS_WIN
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
