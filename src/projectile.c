@@ -128,9 +128,7 @@ static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,U
 /***************************************************************************/
 BOOL gfxVisible(PROJ_OBJECT *psObj)
 {
-  	BOOL	bVisible;
-
-	bVisible = FALSE;
+	BOOL bVisible = FALSE;
 
 	// already know it is visible
 	if (psObj->bVisible)
@@ -648,7 +646,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	/* impact if about to go off map else update coordinates */
 	if ( worldOnMap( iX, iY ) == FALSE )
 	{
-	  	psObj->state = PROJ_IMPACT;
+		psObj->state = PROJ_IMPACT;
 		debug( LOG_NEVER, "**** projectile off map - removed ****\n" );
 		return;
 	}
