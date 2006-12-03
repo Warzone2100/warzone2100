@@ -52,25 +52,14 @@
  * Table of nearest primes in Binstock+Rex, "Practical Algorithms" p 91.
  */
 
-
 #define	PROJ_HASH_TABLE_SIZE	97
 #define PROJ_INIT				200
-
-
-
 #define PROJ_EXT				10
-
+#define	PROJ_MAX_PITCH			30
 #define	ACC_GRAVITY				1000
 #define	DIRECT_PROJ_SPEED		500
-
-#define	PROJ_MAX_PITCH			30
-
 #define	CHECK_PROJ_ABOVE_GROUND	1
-
 #define NOMINAL_DAMAGE	5
-
-/*#define GFX_VISIBLE(psObj)		 ((psObj->psSource != NULL) AND psObj->psSource->visible[selectedPlayer]) OR \
-								 ((psObj->psDest != NULL) AND psObj->psDest->visible[selectedPlayer] )*/
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
@@ -106,7 +95,7 @@
 	} \
 
 // Watermelon:neighbour global info ripped from droid.c
-PROJ_NAYBOR_INFO			asProjNaybors[MAX_NAYBORS];
+PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
 UDWORD				numProjNaybors=0;
 
 static BASE_OBJECT	*CurrentProjNaybors = NULL;
@@ -152,43 +141,44 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 	// you fired it
 	if(psObj->player == selectedPlayer)
 	{
-		return(TRUE);
+		return TRUE;
 	}
 
 	// always see in this mode
 	if(godMode)
 	{
-		return(TRUE);
+		return TRUE;
 	}
 
 	// you can see the source
-	if( (psObj->psSource!=NULL) AND (psObj->psSource->visible[selectedPlayer]) )
+	if( (psObj->psSource!=NULL) && (psObj->psSource->visible[selectedPlayer]) )
 	{
 		bVisible = TRUE;
 	}
 
 	// you can see the destination
-	if( (psObj->psDest!=NULL) AND (psObj->psDest->visible[selectedPlayer]) )
+	if( (psObj->psDest!=NULL) && (psObj->psDest->visible[selectedPlayer]) )
 	{
 		bVisible = TRUE;
 	}
 
 	// someone elses structure firing at something you can't see
-	if( (psObj->psSource != NULL) AND (psObj->psSource->type == OBJ_STRUCTURE) AND
-		(psObj->psSource->player!=selectedPlayer) AND
-		( (psObj->psDest == NULL) OR (!psObj->psDest->visible[selectedPlayer]) ) )
+	if ( psObj->psSource != NULL &&
+		psObj->psSource->type == OBJ_STRUCTURE &&
+		psObj->psSource->player!=selectedPlayer &&
+		( psObj->psDest == NULL || !psObj->psDest->visible[selectedPlayer] ) )
 	{
 		bVisible = FALSE;
 	}
 
 	// something you cannot see firing at a structure that isn't yours
-	if ( (psObj->psDest != NULL) AND (psObj->psDest->type == OBJ_STRUCTURE) AND
-		 (psObj->psDest->player != selectedPlayer) AND
-		 ( (psObj->psSource == NULL) OR (!psObj->psSource->visible[selectedPlayer]) ) )
+	if ( psObj->psDest != NULL &&
+		psObj->psDest->type == OBJ_STRUCTURE &&
+		psObj->psDest->player != selectedPlayer &&
+		( psObj->psSource == NULL || !psObj->psSource->visible[selectedPlayer] ) )
 	{
 		bVisible = FALSE;
 	}
-
 
 	return(bVisible);
 }
@@ -197,12 +187,9 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 BOOL
 proj_InitSystem( void )
 {
-
-
 	/* allocate object hashtable */
 	hashTable_Create( &g_pProjObjTable, PROJ_HASH_TABLE_SIZE,
 						PROJ_INIT, PROJ_EXT, sizeof(PROJ_OBJECT) );
-
 	return TRUE;
 }
 
@@ -222,13 +209,8 @@ proj_FreeAllProjectiles( void )
 BOOL
 proj_Shutdown( void )
 {
-#if 0
-	heapReport();
-#endif
-
 	/* destroy hash table */
 	hashTable_Destroy( g_pProjObjTable );
-
 	g_pProjObjTable = NULL;
 
 	return TRUE;
@@ -364,22 +346,27 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->tarX			= tarX;
 	psObj->tarY			= tarY;
 	psObj->targetRadius = establishTargetRadius(psTarget);	// New - needed to backtrack FX
-	//Watermelon:use the source of the source of psObj :)
-	if (bPenetrate)
-	{
-		psObj->psSource		= ((PROJ_OBJECT *)psAttacker)->psSource;
-		psObj->psDamaged	= ((PROJ_OBJECT *)psAttacker)->psDest;
-	}
-	else
-	{
-	psObj->psSource		= psAttacker;
-	}
 	psObj->psDest		= psTarget;
 	psObj->born			= gameTime;
 	psObj->player		= (UBYTE)player;
 	psObj->bVisible		= FALSE;
-	psObj->airTarget	= (UBYTE)(((psTarget != NULL) && (psTarget->type == OBJ_DROID) && (vtolDroid((DROID *)psTarget))) ||
-						          ((psTarget == NULL) && ((SDWORD)tarZ > map_Height(tarX,tarY))));
+	psObj->airTarget	= (UBYTE)( ( psTarget != NULL &&
+				psTarget->type == OBJ_DROID &&
+				vtolDroid((DROID*)psTarget) ) ||
+			( psTarget == NULL &&
+				(SDWORD)tarZ > map_Height(tarX,tarY) ) );
+
+	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
+	if (bPenetrate)
+	{
+		psObj->psSource = ((PROJ_OBJECT *)psAttacker)->psSource;
+		psObj->psDamaged = ((PROJ_OBJECT *)psAttacker)->psDest;
+		((PROJ_OBJECT *)psAttacker)->state = PROJ_IMPACT;
+	}
+	else
+	{
+		psObj->psSource = psAttacker;
+	}
 
 	if (psTarget)
 	{
@@ -387,22 +374,22 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		heightVariance = 0;
 		switch(psTarget->type)
 		{
-		case	OBJ_DROID:
-		case	OBJ_FEATURE:
-			if( ((DROID*)psTarget)->droidType == DROID_PERSON )
-			{
-				heightVariance = rand()%4;
-			}
-			else
-			{
-				heightVariance = rand()%8;
-			}
-			break;
-		case	OBJ_STRUCTURE:
-			heightVariance = (rand()%psTarget->sDisplay.imd->ymax);
-			break;
-		default:
-			break;
+			case OBJ_DROID:
+			case OBJ_FEATURE:
+				if( ((DROID*)psTarget)->droidType == DROID_PERSON )
+				{
+					heightVariance = rand()%4;
+				}
+				else
+				{
+					heightVariance = rand()%8;
+				}
+				break;
+			case OBJ_STRUCTURE:
+				heightVariance = (rand()%psTarget->sDisplay.imd->ymax);
+				break;
+			default:
+				break;
 		}
 		tarHeight = psTarget->z + heightVariance;
 	}
@@ -425,7 +412,6 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	/* roll never set */
 	psObj->roll = 0;
 
-
 	fR = (FRACT_D) atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
@@ -440,20 +426,14 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	iMinSq = (SDWORD)(psWeapStats->minRange * psWeapStats->minRange);
 
 	if ( proj_Direct(psObj->psWStats) ||
-		 (!proj_Direct(psWeapStats) && (iRadSq <= iMinSq)) )
+		 ( !proj_Direct(psWeapStats) && (iRadSq <= iMinSq) ) )
 	{
-
 		fR = (FRACT_D) atan2(dz, fR);
 		if ( fR < 0.0 )
 		{
 			fR += (FRACT_D) (2*PI);
 		}
 		psObj->pitch = (SWORD)( RAD_TO_DEG(fR) );
-
-
-//	DBPRINTF(("dx=%d dy=%d dir=%d\n",dx,dy,psObj->direction);
-//DBPRINTF(("direct- pitch=%d direction=%d\n",psObj->pitch,psObj->direction);
-		/* set function pointer */
 		psObj->pInFlightFunc = proj_InFlightDirectFunc;
 	}
 	else
@@ -471,18 +451,9 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			/* set optimal pitch */
 			psObj->pitch = PROJ_MAX_PITCH;
 
-			/* increase velocity: tan angle could be hard-coded but is variable here */
-//			fS = trigSin(PROJ_MAX_PITCH);
-//			fC = trigCos(PROJ_MAX_PITCH);
-//			fT = FRACTdiv( fS, fC );
-//			fS = ACC_GRAVITY*(1+(fT*fT)) / (MAKEFRACT(2) * (fR*fT - MAKEFRACT(dz)));
-//			iVel = MAKEINT_D( trigIntSqrt(MAKEINT(fS*fR*fR)) );
-
 			fS = (FRACT_D)trigSin(PROJ_MAX_PITCH);
 			fC = (FRACT_D)trigCos(PROJ_MAX_PITCH);
 			fT = FRACTdiv_D( fS, fC );
-//			fS = ACC_GRAVITY*(1+(fT*fT)) / (MAKEFRACT(2) * (fR*fT - MAKEFRACT(dz)));
-//			iVel = MAKEINT( trigIntSqrt(MAKEINT(fS*fR*fR)) );
 			fS = ACC_GRAVITY*(MAKEFRACT_D(1)+FRACTmul_D(fT,fT));
 			fS = FRACTdiv_D(fS,(2 * (FRACTmul_D(fR,fT) - MAKEFRACT_D(dz))));
 			{
@@ -499,8 +470,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			/* get floating point square root */
 			fS = trigIntSqrt( MAKEINT_D(fS) );
 
-
 			fT = (FRACT_D) atan2(fR+fS, 2*fA);
+
 			/* make sure angle positive */
 			if ( fT < 0 )
 			{
@@ -562,10 +533,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	/* play firing audio */
 	// only play if either object is visible, i know it's a bit of a hack, but it avoids the problem
 	// of having to calculate real visibility values for each projectile.
-//	if(  ((psObj->psSource != NULL) && psObj->psSource->visible[selectedPlayer] ) ||
-//		 ((psObj->psDest != NULL) && psObj->psDest->visible[selectedPlayer]     )    )
-//	if(GFX_VISIBLE(psObj))
-	if(bVisible || gfxVisible(psObj))
+	if ( bVisible || gfxVisible(psObj) )
 	{
 		// note that the projectile is visible
 		psObj->bVisible = TRUE;
@@ -573,7 +541,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		if ( psObj->psWStats->iAudioFireID != NO_SOUND )
 		{
 
-            if (psObj->psSource)
+            if ( psObj->psSource )
             {
 				/* firing sound emitted from source */
     			audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj->psSource,
@@ -585,21 +553,15 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 									ID_SOUND_HOWITZ_FLIGHT, NULL );
 				}
             }
-            else
-            {
-                //don't play the sound for a LasSat in multiPlayer
-                if (!(bMultiPlayer AND psWeapStats->weaponSubClass == WSC_LAS_SAT))
-                {
+			//don't play the sound for a LasSat in multiPlayer
+            else if (!(bMultiPlayer AND psWeapStats->weaponSubClass == WSC_LAS_SAT))
+			{
                     audio_PlayObjStaticTrack(psObj, psObj->psWStats->iAudioFireID);
-                }
             }
-
-
 		}
 	}
 
-	if ((psAttacker != NULL) &&
-		!proj_Direct(psWeapStats))
+	if ((psAttacker != NULL) && !proj_Direct(psWeapStats))
 	{
 		//check for Counter Battery Sensor in range of target
 		counterBatteryFire(psAttacker, psTarget);
@@ -615,31 +577,27 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			timeSoFar;
-	SDWORD			dx, dy, dz, iX, iY, dist, xdiff,ydiff;
+	//Watermelon: Vector z diff not used atm
+	SDWORD			dx, dy, dz, iX, iY, dist, xdiff, ydiff, zdiff;
 	SDWORD			rad;
 	iVector			pos;
 	//Watermelon:int i
-	int				i;
+	UDWORD			i;
 	//Watermelon:2 temp BASE_OBJECT pointer
 	BASE_OBJECT		*psTempObj;
 	BASE_OBJECT		*psNewTarget;
-	//Watermelon:Vector z diff not used atm
-	SDWORD			zdiff;
 	//Watermelon:Missile or not
-	BOOL			bMissile;
+	BOOL			bMissile = FALSE;
 	//Watermelon:extended 'lifespan' of a projectile
 	//no more disappeared projectiles.
 	SDWORD			extendRad;
 	//Watermelon:given explosive weapons some 'hit collision' bonus
 	//esp the AAGun,or it will never hit anything with the new hit system
-	int				wpRadius = 1;
+	UDWORD			wpRadius = 1;
 	//Watermelon:Penetrate or not
-	BOOL			bPenetrate;
+	BOOL			bPenetrate = FALSE;
 	WEAPON			asWeap;
 	DROID			*psTempDroid;
-
-	bMissile = FALSE;
-	bPenetrate = FALSE;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_InFlightDirectFunc: invalid projectile pointer" );
@@ -648,66 +606,36 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
 		"proj_InFlightDirectFunc: Invalid weapon stats pointer" );
 
+	bPenetrate = psStats->penetrate;
 	timeSoFar = gameTime - psObj->born;
 
     //we want a delay between Las-Sats firing and actually hitting in multiPlayer
-    if (bMultiPlayer)
-    {
-        if (psStats->weaponSubClass == WSC_LAS_SAT)
-        {
-            //magic number but that's how long the audio countdown message lasts!
-            if (timeSoFar < 8 * GAME_TICKS_PER_SEC)
-            {
-                return;
-            }
-        }
+		//magic number but that's how long the audio countdown message lasts!
+    if ( bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT && timeSoFar < 8 * GAME_TICKS_PER_SEC )
+	{
+		return;
     }
 
-/*
-	if(psObj->psDest)
-	{
-		erraticX = 128-rand()%256;
-		erraticY = 128-rand()%256;
-
-		dx = ( (SDWORD)psObj->psDest->x+erraticX) -(SDWORD)psObj->x;
-		dy = ( (SDWORD)psObj->psDest->y+erraticY) -(SDWORD)psObj->y;
-
-	}
-	else
-	{
-*/
-
-//	}
-
 	/* If it's homing and it has a target (not a miss)... */
-	if(psStats->movementModel == MM_HOMINGDIRECT AND psObj->psDest)
+	if ( psStats->movementModel == MM_HOMINGDIRECT && psObj->psDest )
 	{
-		dx = (SDWORD)psObj->psDest->x-(SDWORD)psObj->startX;
-		dy = (SDWORD)psObj->psDest->y-(SDWORD)psObj->startY;
-		dz = (SDWORD)psObj->psDest->z-(SDWORD)psObj->srcHeight;
+		dx = (SDWORD)psObj->psDest->x - (SDWORD)psObj->startX;
+		dy = (SDWORD)psObj->psDest->y - (SDWORD)psObj->startY;
+		dz = (SDWORD)psObj->psDest->z - (SDWORD)psObj->srcHeight;
 	}
 	else
 	{
-		dx = (SDWORD)psObj->tarX-(SDWORD)psObj->startX;
-		dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
-		//Watermelon:huh?
-		//dz = (SDWORD)(psObj->srcHeight+psObj->altChange)-(SDWORD)psObj->srcHeight;
+		dx = (SDWORD)psObj->tarX - (SDWORD)psObj->startX;
+		dy = (SDWORD)psObj->tarY - (SDWORD)psObj->startY;
 		dz = (SDWORD)(psObj->altChange);
 	}
 
-	/*
-	dx = (SDWORD)psObj->tarX-(SDWORD)psObj->startX;
-	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
-	*/
-
-		// ffs
-//	rad = fastRoot(dx,dy);
+	// ffs
 	rad = (SDWORD)iSQRT( dx*dx + dy*dy );
 	//Watermelon:extended life span
 	extendRad = (SDWORD)(rad * 1.5f);
 
-
-	if (rad == 0)
+	if (rad == 0) // Prevent div by zero
 	{
 		rad = 1;
 	}
@@ -716,8 +644,6 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 	iX = psObj->startX + (dist * dx / rad);
 	iY = psObj->startY + (dist * dy / rad);
-//	iX = psObj->x + MAKEINT(FRACTmul(baseSpeed, MAKEFRACT(dx))) / rad;
-//	iY = psObj->y + MAKEINT(FRACTmul(baseSpeed, MAKEFRACT(dy))) / rad;
 
 	/* impact if about to go off map else update coordinates */
 	if ( worldOnMap( iX, iY ) == FALSE )
@@ -731,13 +657,11 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		psObj->x = (UWORD)iX;
 		psObj->y = (UWORD)iY;
 	}
-
 	psObj->z = (UWORD)(psObj->srcHeight) + (dist * dz / rad);
 
-	if(psStats->weaponSubClass == WSC_FLAME)
+	if ( gfxVisible(psObj) )
 	{
-//		if(GFX_VISIBLE(psObj))
-	if(gfxVisible(psObj))
+		if ( psStats->weaponSubClass == WSC_FLAME )
 		{
 			effectGiveAuxVar(PERCENT(dist,rad));
 			pos.x = psObj->x;
@@ -745,97 +669,72 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
 		}
-	}
-
-	else
-	if(psStats->weaponSubClass == WSC_COMMAND OR
-        psStats->weaponSubClass == WSC_ELECTRONIC OR
-        psStats->weaponSubClass == WSC_EMP)
-	{
-	    if(gfxVisible(psObj))
-//		if(GFX_VISIBLE(psObj))
+		else if ( psStats->weaponSubClass == WSC_COMMAND ||
+			psStats->weaponSubClass == WSC_ELECTRONIC ||
+			psStats->weaponSubClass == WSC_EMP )
 		{
 			effectGiveAuxVar((PERCENT(dist,rad)/2));
 			pos.x = psObj->x;
 			pos.y = psObj->z-8;
 			pos.z = psObj->y;
   			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-	  //		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
-		}
-	}
-	/*
-	else
-	if(psStats->weaponSubClass == WSC_ROCKET OR psStats->weaponSubClass == WSC_MISSILE OR
-        psStats->weaponSubClass == WSC_SLOWROCKET OR psStats->weaponSubClass == WSC_SLOWMISSILE)
-	{
-		if(GFX_VISIBLE(psObj))
-		{
-			pos.x = psObj->x;
-			pos.y = psObj->z-8;
-			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
-	}
-	*/
-	if(psStats->weaponSubClass == WSC_ROCKET OR psStats->weaponSubClass == WSC_MISSILE OR
-        psStats->weaponSubClass == WSC_SLOWROCKET OR psStats->weaponSubClass == WSC_SLOWMISSILE)
-	{
-	if(gfxVisible(psObj))
-//		if(GFX_VISIBLE(psObj))
+		else if ( psStats->weaponSubClass == WSC_ROCKET ||
+			psStats->weaponSubClass == WSC_MISSILE ||
+			psStats->weaponSubClass == WSC_SLOWROCKET ||
+			psStats->weaponSubClass == WSC_SLOWMISSILE )
 		{
 			pos.x = psObj->x;
 			pos.y = psObj->z+8;
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
-		bMissile = TRUE;
-		wpRadius = 2;
 	}
 
 	//Watermelon:weapon radius,or the 'real' projectile will never hit a moving target with the changes...
-	if (psStats->weaponSubClass == WSC_MGUN ||
-		psStats->weaponSubClass == WSC_COMMAND)
+	if ( psStats->weaponSubClass == WSC_ROCKET ||
+		psStats->weaponSubClass == WSC_MISSILE ||
+		psStats->weaponSubClass == WSC_SLOWROCKET ||
+		psStats->weaponSubClass == WSC_SLOWMISSILE )
 	{
-		wpRadius = 2;
+		wpRadius = 2; // Increase hitradius
+		bMissile = TRUE;
+	}
+	else if ( psStats->weaponSubClass == WSC_MGUN ||
+			psStats->weaponSubClass == WSC_COMMAND )
+	{
+		wpRadius = 2; // Increase hitradius
 		//Watermelon:extended life span
 		extendRad = (SDWORD)(rad * 1.2f);
 	}
-	else if (psStats->weaponSubClass == WSC_CANNON ||
+	else if ( psStats->weaponSubClass == WSC_CANNON ||
 			psStats->weaponSubClass == WSC_BOMB ||
 			psStats->weaponSubClass == WSC_ELECTRONIC ||
 			psStats->weaponSubClass == WSC_EMP ||
 			psStats->weaponSubClass == WSC_FLAME ||
 			psStats->weaponSubClass == WSC_ENERGY ||
-			psStats->weaponSubClass == WSC_GAUSS)
+			psStats->weaponSubClass == WSC_GAUSS )
 	{
-		wpRadius = 2;
+		wpRadius = 2; // Increase hitradius
 		//Watermelon:extended life span
 		extendRad = (SDWORD)(rad * 1.5f);
 	}
-	else if (psStats->weaponSubClass == WSC_AAGUN)
+	else if ( psStats->weaponSubClass == WSC_AAGUN )
 	{
 		wpRadius = 16;
 		extendRad = rad;
 	}
 
-	if (psStats->penetrate)
-	{
-		bPenetrate = TRUE;
-	}
-
 	for (i = 0;i < numProjNaybors;i++)
 	{
-		//if (asProjNaybors[i].psObj == psObj->psDest)
-		//{
-			//continue;
-		//}
-
-		if (asProjNaybors[i].psObj->player != psObj->player &&
-			(asProjNaybors[i].psObj->type == OBJ_DROID ||
+		if ( asProjNaybors[i].psObj->player != psObj->player &&
+			( asProjNaybors[i].psObj->type == OBJ_DROID ||
 			asProjNaybors[i].psObj->type == OBJ_STRUCTURE ||
 			asProjNaybors[i].psObj->type == OBJ_BULLET ||
-			asProjNaybors[i].psObj->type == OBJ_FEATURE) &&
-			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player))
+			asProjNaybors[i].psObj->type == OBJ_FEATURE ) &&
+			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player) )
 		{
 			psTempObj = asProjNaybors[i].psObj;
 			if ( psTempObj == psObj->psDamaged )
@@ -844,25 +743,20 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			}
 
 			//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
-			if ( psTempObj->type == OBJ_BULLET )
+			if ( psTempObj->type == OBJ_BULLET && ( !bMissile || ((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass != WSC_COUNTER ) )
 			{
-				if ( !bMissile || (((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass != WSC_COUNTER) )
-				{
-					continue;
-				}
+				continue;
 			}
 
-			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE)
+			//Watermelon:ignore oil resource and pickup
+			if ( psTempObj->type == OBJ_FEATURE &&
+				((FEATURE *)psTempObj)->psStats->damageable == 0 )
 			{
-				//Watermelon:ignore oil resource and pickup
-				if ( psTempObj->type == OBJ_FEATURE )
-				{
-					if ( ((FEATURE *)psTempObj)->psStats->damageable == 0)
-					{
-						continue;
-					}
-				}
+				continue;
+			}
 
+			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
+			{
 				//Watermelon:AA weapon shouldnt hit buildings
 				if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR )
 				{
@@ -873,30 +767,23 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
 
-				if ( (xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+				if ( (xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
 					zdiff < psTempObj->sDisplay.imd->ymax )
 				{
-					if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR && psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj))
-					{
-						continue;
-					}
-
-					if (bPenetrate && psTempObj->type != OBJ_STRUCTURE)
-					{
-						asWeap.nStat = psObj->psWStats - asWeaponStats;
-						//Watermelon:just assume we damaged the chosen target
-						psObj->psDamaged = psTempObj;
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, psObj->tarX, psObj->tarY, psObj->z, NULL, TRUE, bPenetrate, -1 );
-					}
-
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
-		  			psObj->state = PROJ_IMPACT;
+					psObj->state = PROJ_IMPACT;
 					return;
 				}
 			}
 			else
 			{
+				if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR &&
+					psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj) )
+				{
+					continue;
+				}
+
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
@@ -909,60 +796,57 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 					{
 						zdiff -= 100;
 					}
-					else if ( !(cyborgDroid(psTempDroid)) && psTempDroid->droidType != DROID_PERSON )
+					else if ( !(cyborgDroid(psTempDroid)) &&
+							psTempDroid->droidType != DROID_PERSON &&
+							strcmp(asPropulsionStats[psTempDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") ) // Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
 					{
-						// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-						if (strcmp(asPropulsionStats[psTempDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp"))
+						//appends the turret height to the droid z,since there is no real geometries in wz
+						if ( psTempDroid->numWeaps > 0 )
 						{
-							//appends the turret height to the droid z,since there is no real geometries in wz
-							if ( psTempDroid->numWeaps > 0 )
+							zdiff -= (asWeaponStats[psTempDroid->asWeaps[0].nStat]).pIMD->ymax;
+						}
+						else
+						{
+							switch (psTempDroid->droidType)
 							{
-								zdiff -= (asWeaponStats[psTempDroid->asWeaps[0].nStat]).pIMD->ymax;
-							}
-							else
-							{
-								switch (psTempDroid->droidType)
-								{
-									case DROID_CONSTRUCT:
-										zdiff -= (asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
-										break;
-									case DROID_REPAIR:
-										zdiff -= (asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
-										break;
-									case DROID_SENSOR:
-										zdiff -= (asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
-										break;
-									case DROID_COMMAND:
-										zdiff -= (asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax;
-										break;
-									case DROID_ECM:
-										zdiff -= (asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
-										break;
-								}
+								case DROID_CONSTRUCT:
+									zdiff -= (asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
+									break;
+								case DROID_REPAIR:
+									zdiff -= (asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
+									break;
+								case DROID_SENSOR:
+									zdiff -= (asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
+									break;
+								case DROID_COMMAND:
+									zdiff -= (asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax;
+									break;
+								case DROID_ECM:
+									zdiff -= (asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
+									break;
 							}
 						}
 					}
 				}
 
-				if ( (xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+				if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
 					zdiff < psTempObj->sDisplay.imd->ymax )
 				{
-					if ( psObj->psWStats->surfaceToAir == SHOOT_IN_AIR && psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj))
-					{
-						continue;
-					}
+					psNewTarget = psTempObj;
+					psObj->psDest = psNewTarget;
 
 					if (bPenetrate)
 					{
-						//Watermelon:just assume we damaged the chosen target
-						psObj->psDamaged = psTempObj;
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + (UDWORD)(extendRad * dx /rad)),(psObj->startY + (UDWORD)(extendRad * dy /rad)), psObj->z, NULL, TRUE, bPenetrate, -1 );
-					}
+						//Watermelon:just assume we damaged the chosen target
+						psObj->psDamaged = psNewTarget;
 
-					psNewTarget = psTempObj;
-					psObj->psDest = psNewTarget;
-		  			psObj->state = PROJ_IMPACT;
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + extendRad * dx / rad), (psObj->startY + extendRad * dy / rad), psObj->z, NULL, TRUE, bPenetrate, -1 );
+					}
+					else
+					{
+						psObj->state = PROJ_IMPACT;
+					}
 					return;
 				}
 			}
@@ -970,7 +854,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	}
 
 	/* See if effect has finished */
-	if ( (psStats->movementModel == MM_HOMINGDIRECT) AND psObj->psDest )
+	if ( psStats->movementModel == MM_HOMINGDIRECT && psObj->psDest )
 	{
 		xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 		ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
@@ -982,11 +866,11 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		  	psObj->state = PROJ_IMPACT;
 		}
 	}
-	else if ( dist > (extendRad-(SDWORD)psObj->targetRadius ) )
+	else if ( dist > extendRad - (SDWORD)psObj->targetRadius )
 	{
+		psObj->state = PROJ_IMPACT;
+
 		/* It's damage time */
-//		psObj->x = psObj->tarX;		// leave it there, but use tarX and tarY for damage
-//		psObj->y = psObj->tarY;
 		if (psObj->psDest)
 		{
 			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
@@ -994,23 +878,15 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
 
 			//Watermelon:'real' hit check even if the projectile is about to 'timeout'
-			if ( (xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest) ) * (SDWORD)(establishTargetRadius(psObj->psDest)) ) &&
-				zdiff < 50)
+			if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psObj->psDest) * (SDWORD)establishTargetRadius(psObj->psDest) ) &&
+				zdiff < 50 )
 			{
-		  		psObj->state = PROJ_IMPACT;
 			}
 			else
 			{
 				//Watermelon:missed.you can now 'dodge' projectile by micro,so cyborgs should be more useful now
-				psObj->state = PROJ_IMPACT;
 				psObj->psDest = NULL;
 			}
-		}
-		else
-		{
-			//Watermelon:missed. you can now 'dodge' projectile by micro,so cyborgs should be more useful now
-			psObj->state = PROJ_IMPACT;
-			psObj->psDest = NULL;
 		}
 	}
 
@@ -1048,9 +924,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	//Watermelon:psTempObj,psNewTarget,i,xdiff,ydiff,zdiff
 	BASE_OBJECT		*psTempObj;
 	BASE_OBJECT		*psNewTarget;
-	int				i;
+	UDWORD			i;
 	SDWORD			xdiff,ydiff,zdiff,extendRad;
-	int				wpRadius = 3;
+	UDWORD			wpRadius = 3;
 	DROID			*psTempDroid;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
@@ -1065,14 +941,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	dx = (SDWORD)psObj->tarX-(SDWORD)psObj->startX;
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 
-		// ffs
-	//Watermelon:this is too inaccurate for a 'real' projectle
-	//iRad = fastRoot(dx,dy);
+	// ffs
 	iRad = (SDWORD)iSQRT( dx*dx + dy*dy );
-
-
-
-//DBPRINTF(("dx=%d dy=%d irad=%d\n",dx,dy,iRad);
 
 	iDist = iTime * psObj->vXY / GAME_TICKS_PER_SEC;
 
@@ -1096,19 +966,15 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 				iTime / GAME_TICKS_PER_SEC;
 	psObj->z = (UWORD)(psObj->srcHeight + dz);
 
-//DBPRINTF(("missile: dist=%d time=%d x=%d y=%d z=%d vxy=%d\n",iDist,iTime,psObj->x,psObj->y,psObj->z,psObj->vXY);
-
-
 	fVVert = MAKEFRACT(psObj->vZ - (iTime*ACC_GRAVITY/GAME_TICKS_PER_SEC));
 	psObj->pitch = (SWORD)( RAD_TO_DEG(atan2(fVVert, psObj->vXY)) );
 
 	//Watermelon:extended life span for artillery projectile
 	extendRad = (SDWORD)(iRad * 1.2f);
 
-	if(psStats->weaponSubClass == WSC_FLAME)
+	if( gfxVisible(psObj) )
 	{
-	if(gfxVisible(psObj))
-//		if(GFX_VISIBLE(psObj))
+		if ( psStats->weaponSubClass == WSC_FLAME )
 		{
 			effectGiveAuxVar(PERCENT(iDist,iRad));
 			pos.x = psObj->x;
@@ -1116,55 +982,33 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			pos.z = psObj->y;
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
 		}
-	}
-	else
-	if(psStats->weaponSubClass == WSC_COMMAND OR
-        psStats->weaponSubClass == WSC_ELECTRONIC OR
-        psStats->weaponSubClass == WSC_EMP)
-	{
-    	if(gfxVisible(psObj))
-//		if(GFX_VISIBLE(psObj))
+		else if ( psStats->weaponSubClass == WSC_COMMAND ||
+        		psStats->weaponSubClass == WSC_ELECTRONIC ||
+        		psStats->weaponSubClass == WSC_EMP)
 		{
 			effectGiveAuxVar((PERCENT(iDist,iRad)/2));
 			pos.x = psObj->x;
 			pos.y = psObj->z-8;
 			pos.z = psObj->y;
   			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-	  //		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
-	}
-	/*
-	else
-	if(psStats->weaponSubClass == WSC_ROCKET)
-	{
-		if(GFX_VISIBLE(psObj))
+		else if ( psStats->weaponSubClass == WSC_ROCKET ||
+			psStats->weaponSubClass == WSC_MISSILE ||
+			psStats->weaponSubClass == WSC_SLOWROCKET ||
+			psStats->weaponSubClass == WSC_SLOWMISSILE )
 		{
 			pos.x = psObj->x;
-			pos.y = psObj->z-8;
+			pos.y = psObj->z+8;
 			pos.z = psObj->y;
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
 	}
-	else
-	{
-		if(GFX_VISIBLE(psObj))
-		{
-			pos.x = psObj->x;
-			pos.y = psObj->z;
-			pos.z = psObj->y;
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
-		}
-	}
-	*/
 
 	//Watermelon:test test
 	for (i = 0;i < numProjNaybors;i++)
 	{
-		//if (asProjNaybors[i].psObj == psObj->psDest)
-		//{
-			//continue;
-		//}
-
 		if (asProjNaybors[i].psObj->player != psObj->player &&
 			(asProjNaybors[i].psObj->type == OBJ_DROID ||
 			asProjNaybors[i].psObj->type == OBJ_STRUCTURE ||
@@ -1179,22 +1023,20 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 				continue;
 			}
 
+			//Watermelon:ignore oil resource and pickup
+			if ( psTempObj->type == OBJ_FEATURE &&
+				((FEATURE *)psTempObj)->psStats->damageable == 0 )
+			{
+				continue;
+			}
+
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
 			{
-				//Watermelon:ignore oil resource and pickup
-				if ( psTempObj->type == OBJ_FEATURE )
-				{
-					if ( ((FEATURE *)psTempObj)->psStats->damageable == 0)
-					{
-						continue;
-					}
-				}
-
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
 
-				if ( (xdiff*xdiff + ydiff*ydiff) < ((SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj))) &&
+				if ( (xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
 					zdiff < psTempObj->sDisplay.imd->ymax )
 				{
 					psNewTarget = psTempObj;
@@ -1217,42 +1059,40 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 					{
 						zdiff -= 100;
 					}
-					else if ( !(cyborgDroid(psTempDroid)) && psTempDroid->droidType != DROID_PERSON )
+					else if ( !(cyborgDroid(psTempDroid)) &&
+							psTempDroid->droidType != DROID_PERSON &&
+							strcmp(asPropulsionStats[psTempDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp")) // Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
 					{
-						// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-						if (strcmp(asPropulsionStats[psTempDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp"))
+						//appends the turret height to the droid z,since there is no real geometries in wz
+						if ( psTempDroid->numWeaps > 0 )
 						{
-							//appends the turret height to the droid z,since there is no real geometries in wz
-							if ( psTempDroid->numWeaps > 0 )
+							zdiff -= (asWeaponStats[psTempDroid->asWeaps[0].nStat]).pIMD->ymax;
+						}
+						else
+						{
+							switch (psTempDroid->droidType)
 							{
-								zdiff -= (asWeaponStats[psTempDroid->asWeaps[0].nStat]).pIMD->ymax;
-							}
-							else
-							{
-								switch (psTempDroid->droidType)
-								{
-									case DROID_CONSTRUCT:
-										zdiff -= (asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
-										break;
-									case DROID_REPAIR:
-										zdiff -= (asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
-										break;
-									case DROID_SENSOR:
-										zdiff -= (asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
-										break;
-									case DROID_COMMAND:
-										zdiff -= (asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax;
-										break;
-									case DROID_ECM:
-										zdiff -= (asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
-										break;
-								}
+								case DROID_CONSTRUCT:
+									zdiff -= (asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
+									break;
+								case DROID_REPAIR:
+									zdiff -= (asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
+									break;
+								case DROID_SENSOR:
+									zdiff -= (asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
+									break;
+								case DROID_COMMAND:
+									zdiff -= (asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax;
+									break;
+								case DROID_ECM:
+									zdiff -= (asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
+									break;
 							}
 						}
 					}
 				}
 
-				if ((xdiff*xdiff + ydiff*ydiff) < ((wpRadius * (SDWORD)(establishTargetRadius(psTempObj)) * (SDWORD)(establishTargetRadius(psTempObj)))) &&
+				if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
 					zdiff < psTempObj->sDisplay.imd->ymax )
 				{
 					psNewTarget = psTempObj;
@@ -1267,18 +1107,18 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	/* See if effect has finished */
 	if ( iDist > (extendRad - (SDWORD)psObj->targetRadius) )
 	{
+		psObj->state = PROJ_IMPACT;
+
 		pos.x = psObj->x;
 		pos.z = psObj->y;
 		pos.y = map_Height(pos.x,pos.z) + 8;
 
 		/* It's damage time */
-//		psObj->x = psObj->tarX;		 // leave it where it is, but use tarX, tarY for damage
-//		psObj->y = psObj->tarY;
 		//Watermelon:'real' check
 		if ( psObj->psDest )
 		{
-			psObj->z = (UWORD)(pos.y + 8);//map_Height(psObj->x,psObj->y) + 8;	// bring up the impact explosion
-			psObj->state = PROJ_IMPACT;
+			psObj->z = (UWORD)(pos.y + 8); // bring up the impact explosion
+
 			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
 			zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
@@ -1289,25 +1129,16 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 				wpRadius = 1;
 			}
 
-			if ((xdiff*xdiff + ydiff*ydiff) < (wpRadius * (SDWORD)(establishTargetRadius(psObj->psDest)) * (SDWORD)(establishTargetRadius(psObj->psDest))) &&
+			if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psObj->psDest) * (SDWORD)establishTargetRadius(psObj->psDest) ) &&
 				zdiff < psObj->psDest->sDisplay.imd->ymax )
 			{
-		  		psObj->state = PROJ_IMPACT;
 			}
 			else
 			{
-				psObj->state = PROJ_IMPACT;
 				psObj->psDest = NULL;
 			}
-			bOver = TRUE;
 		}
-		else
-		{
-			psObj->state = PROJ_IMPACT;
-			/* miss registered if NULL target */
-			psObj->psDest = NULL;
-			bOver = TRUE;
-		}	
+		bOver = TRUE;
 	}
 
 #if CHECK_PROJ_ABOVE_GROUND
@@ -1324,14 +1155,14 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	/* Add smoke particle at projectile location (in world coords) */
 	/* Add a trail graphic */
 	/* If it's indirect and not a flamethrower - add a smoke trail! */
-	/* MAKE IT ADD A 'TRAIL GRAPHIC'? */
-	if(psStats->weaponSubClass != WSC_FLAME AND psStats->weaponSubClass !=
-        WSC_ENERGY AND psStats->weaponSubClass != WSC_COMMAND
-		AND psStats->weaponSubClass != WSC_ELECTRONIC AND psStats->
-        weaponSubClass != WSC_EMP AND !bOver)
+	if ( psStats->weaponSubClass != WSC_FLAME &&
+		psStats->weaponSubClass != WSC_ENERGY &&
+		psStats->weaponSubClass != WSC_COMMAND &&
+		psStats->weaponSubClass != WSC_ELECTRONIC &&
+		psStats->weaponSubClass != WSC_EMP &&
+		!bOver )
 	{
-	if(gfxVisible(psObj))
-//		if(GFX_VISIBLE(psObj))// AND psStats->pTrailGraphic )
+		if(gfxVisible(psObj))
 		{
 			pos.x = psObj->x;
 			pos.y = psObj->z+4;
@@ -1380,7 +1211,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				iAudioImpactID = ID_SOUND_RICOCHET_1 + (rand()%3);
 				audio_PlayStaticTrack( psObj->psDest->x, psObj->psDest->y, iAudioImpactID );
 			}
-
 		}
 		else
 		{
@@ -1400,16 +1230,12 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	g_pProjLastAttacker = psObj->psSource;
 
 	if(gfxVisible(psObj))
-//	if(GFX_VISIBLE(psObj))
 	{
 		/* Set stuff burning if it's a flame droid... */
 //		if(psStats->weaponSubClass == WSC_FLAME)
 //		{
-//			position.x = psObj->tarX;
-//			position.z = psObj->tarY;
-//			position.y = map_Height(position.x, position.z);
 			/* Shouldn't need to do this check but the stats aren't all at a value yet... */ // FIXME
-			if(psStats->incenRadius AND psStats->incenTime)
+			if ( psStats->incenRadius && psStats->incenTime )
 			{
 				position.x = psObj->tarX;
 				position.z = psObj->tarY;
@@ -1421,7 +1247,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 //		}
 		// may want to add both a fire effect and the las sat effect
 		if (psStats->weaponSubClass == WSC_LAS_SAT)
-//		else if (psStats->weaponSubClass == 100)
 		{
 			position.x = psObj->tarX;
 			position.z = psObj->tarY;
@@ -1432,7 +1257,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				shakeStart();
 			}
 		}
-
 	}
 	/* Nothings been killed */
 	bKilled = FALSE;
@@ -1443,7 +1267,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	}
 
 	if ( psObj->psDest == NULL )
-//		 (psObj->x != psObj->psDest->x) || (psObj->y != psObj->psDest->y) )
 	{
 		/* The bullet missed or the target was destroyed in flight */
 		/* So show the MISS effect */
@@ -1452,73 +1275,56 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;//jps
 		scatter.x = psStats->radius; scatter.y = 0;	scatter.z = psStats->radius;
 
-		// you got to have at least 1 in the numExplosions field or you'll see nowt..:-)
-		if (psObj->airTarget)
+		if ( gfxVisible(psObj) )
 		{
-			if ((psStats->surfaceToAir & SHOOT_IN_AIR) && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
+			// you got to have at least 1 in the numExplosions field or you'll see nowt..:-)
+			if (psObj->airTarget)
 			{
-				if(psStats->facePlayer)
+				if ((psStats->surfaceToAir & SHOOT_IN_AIR) && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
 				{
-					if(gfxVisible(psObj))
-//					if(GFX_VISIBLE(psObj))
+					if (psStats->facePlayer)
+					{
+						addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+					}
+					else
+					{
+						addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+					}
+					/* Add some smoke to flak */
+					addMultiEffect(&position,&scatter,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,3,0,0);
+				}
+			}
+			else if( TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER )
+			{
+				if (psStats->facePlayer)
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
+				else
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
+			}
+			else
+			{
+				if (psStats->facePlayer)
+				{
 					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
 				}
 				else
 				{
-					if(gfxVisible(psObj))
-//					if(GFX_VISIBLE(psObj))
 					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
 				}
-				/* Add some smoke to flak */
-				addMultiEffect(&position,&scatter,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,3,0,0);
-			}
-		}
-		else
-
-		if(TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER)
-		{
-			if(psStats->facePlayer)
-			{
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic);
-			}
-			else
-			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-			}
-		}
-		else
-
-		{
-			if(psStats->facePlayer)
-			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetMissGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-			}
-			else
-			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetMissGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
 			}
 		}
 	}
 	else
 	{
-		if (psObj->psDest->type == OBJ_FEATURE && 
+		if (psObj->psDest->type == OBJ_FEATURE &&
 			((FEATURE *)psObj->psDest)->psStats->damageable == 0)
 		{
 			debug( LOG_NEVER, "proj_ImpactFunc: trying to damage non-damageable target,projectile removed\n");
-			if ( hashTable_RemoveElement( g_pProjObjTable, psObj,
-											(int) psObj, UNUSED_KEY ) == FALSE )
+			if ( hashTable_RemoveElement( g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY ) == FALSE )
 			{
 				debug( LOG_NEVER, "proj_ImpactFunc: couldn't remove projectile from table\n" );
 			}
@@ -1529,42 +1335,37 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;
 		scatter.x = psStats->radius; scatter.y = 0;	scatter.z = psStats->radius;
 
-		/* Watermelon:gives AA gun explosive field and smoke effect even if it hits the target */
-		if (psObj->airTarget)
+		if(gfxVisible(psObj))
 		{
-			if ((psStats->surfaceToAir & SHOOT_IN_AIR) && 
-				!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
-				psStats->weaponSubClass == WSC_AAGUN)
+			/* Watermelon:gives AA gun explosive field and smoke effect even if it hits the target */
+			if (psObj->airTarget)
 			{
-				if(psStats->facePlayer)
+				if ((psStats->surfaceToAir & SHOOT_IN_AIR) &&
+					!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
+					psStats->weaponSubClass == WSC_AAGUN)
 				{
-					if(gfxVisible(psObj))
-					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+					if(psStats->facePlayer)
+					{
+						addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+					}
+					else
+					{
+						addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+					}
+					/* Add some smoke to flak */
+					addMultiEffect(&position,&scatter,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,3,0,0);
 				}
-				else
-				{
-					if(gfxVisible(psObj))
-					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetMissGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-				}
-				/* Add some smoke to flak */
-				addMultiEffect(&position,&scatter,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,3,0,0);
-			}
-		}
-		else
-		{
-			if(psStats->facePlayer)
-			{
-	//			addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic);
-						if(gfxVisible(psObj))
-	//			if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
 			}
 			else
 			{
-	//			addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic);
-						if(gfxVisible(psObj))
-	//			if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				if(psStats->facePlayer)
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
+				else
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
 			}
 		}
 
@@ -1589,10 +1390,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 							((DROID *)psObj->psSource)->order = DORDER_NONE;
 							actionDroid((DROID *)(psObj->psSource), DACTION_NONE);
 						}
-						/*else
-						{
-							ASSERT( FALSE, "proj_ImpactFunc: EW Weapon not attached to a droid" );
-						}*/
                         else if (psObj->psSource->type == OBJ_STRUCTURE)
                         {
                             //the droid has lost all resistance - init the structures target
@@ -1604,8 +1401,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			else
 			{
 				/* Just assume a direct fire weapon hits the target */
-
-
 				damage = calcDamage(weaponDamage(psStats,psObj->player), psStats->weaponEffect, psObj->psDest);
 				if(bMultiPlayer)
 				{
@@ -1613,24 +1408,13 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 					{
 						updateMultiStatsDamage(psObj->psSource->player,psObj->psDest->player,damage);
 					}
-	//				bMultiTemp = TRUE;
-	//				bMultiPlayer = FALSE;
 				}
-	//			else
-	//			{
-	//				bMultiTemp = FALSE;
-	//			}
 
 				debug(LOG_NEVER, "Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player);
 				/*the damage depends on the weapon effect and the target propulsion type or structure strength*/
 
 	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass);
-
-	//			if(bMultiTemp)
-	//			{
-	//				bMultiPlayer = TRUE;
-	//			}
 
 				if(bKilled)
 				{
@@ -1640,13 +1424,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					psObj->psDamaged = psObj->psDest;
 				}
-
-				// do the attacked callback
-	/*			psScrCBAttacker = psObj->psSource;
-				psScrCBTarget = psObj->psObj->psDest;
-				eventFireCallbackTrigger(CALL_ATTACKED);
-				psScrCBAttacker = NULL;
-				psScrCBTarget = NULL;*/
 			}
 		}
 		else
@@ -1678,30 +1455,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 							//psObj->psDest->player,	calcDamage(psStats->damage,
 							psObj->psDest->player, damage	);
 					}
-//					bMultiPlayer = FALSE;
-//					bMultiTemp = TRUE;
 				}
-//				else
-//				{
-//					bMultiTemp = FALSE;
-//				}
-
-//my_error("",0,"","Damage to object %d, player %d\n",psObj->psDest->id, psObj->psDest->player);
-
 				debug(LOG_NEVER, "Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player);
-				//bKilled = psObj->psDest->damage(psObj->psDest, psStats->damage,psStats->weaponClass);
-				/*bKilled = psObj->psDest->damage(psObj->psDest, calcDamage(
-					//psStats->damage, psStats->weaponEffect, psObj->psDest),
-					weaponDamage(psStats,psObj->player), psStats->
-					weaponEffect, psObj->psDest), psStats->weaponClass);*/
-
 				bKilled = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass);
-
-//				if(bMultiTemp)
-//				{
-//					bMultiPlayer = TRUE;
-//				}
 
 				if(bKilled)
 				{
@@ -1711,12 +1468,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					psObj->psDamaged = psObj->psDest;
 				}
-				// do the attacked callback
-/*				psScrCBAttacker = psObj->psSource;
-				psScrCBTarget = psObj->psObj->psDest;
-				eventFireCallbackTrigger(CALL_ATTACKED);
-				psScrCBAttacker = NULL;
-				psScrCBTarget = NULL;*/
 			}
 		}
 	}
@@ -1725,51 +1476,37 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	{
 		position.x = psObj->x;
 		position.z = psObj->y;
-		position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;//jps
+		position.y = psObj->z;
 		scatter.x = psStats->radius; scatter.y = 0;	scatter.z = psStats->radius;
 
-
-		if(TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER)
+		if(gfxVisible(psObj))
 		{
-			if(psStats->facePlayer)
+			if(TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER)
 			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				if(psStats->facePlayer)
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
+				else
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
 			}
 			else
 			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-
-			}
-		}
-		else
-
-		{
-			if(psStats->facePlayer)
-			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-			}
-			else
-			{
-//				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic);
-					if(gfxVisible(psObj))
-//				if(GFX_VISIBLE(psObj))
-				addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-
+				if(psStats->facePlayer)
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
+				else
+				{
+					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
+				}
 			}
 		}
 
 		/* This was just a simple bullet - release it and return */
-		if ( hashTable_RemoveElement( g_pProjObjTable, psObj,
-										(int) psObj, UNUSED_KEY ) == FALSE )
+		if ( hashTable_RemoveElement( g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY ) == FALSE )
 		{
 			debug( LOG_NEVER, "proj_ImpactFunc: couldn't remove projectile from table\n" );
 		}
@@ -1829,7 +1566,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						if ((xDiff*xDiff + yDiff*yDiff + zDiff*zDiff) <= radSquared)
 						{
 							HIT_ROLL(dice);
-							//if (dice < psStats->radiusHit)
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
 								debug(LOG_NEVER, "Damage to object %d, player %d\n",
@@ -1848,16 +1584,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 									turnOffMultiMsg(TRUE);
 								}
 
-
-								//bKilled = psCurrD->damage(psCurrD, psStats->radiusDamage, psStats->weaponClass);
-								/*bKilled = psCurrD->damage(psCurrD, calcDamage(
-									//psStats->radiusDamage, psStats->weaponEffect,
-									weaponRadDamage(psStats,psObj->player),
-									psStats->weaponEffect,
-									(BASE_OBJECT *)psCurrD), psStats->weaponClass);*/
-
 								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass);
-
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -1901,7 +1628,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						if ((xDiff*xDiff + yDiff*yDiff) <= radSquared)
 						{
 							HIT_ROLL(dice);
-							//if (dice < psStats->radiusHit)
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
 								debug(LOG_NEVER, "Damage to object %d, player %d\n",
@@ -1920,16 +1646,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 									turnOffMultiMsg(TRUE);
 								}
 
-
-								//bKilled = psCurrD->damage(psCurrD, psStats->radiusDamage, psStats->weaponClass);
-								/*bKilled = psCurrD->damage(psCurrD, calcDamage(
-									//psStats->radiusDamage, psStats->weaponEffect,
-									weaponRadDamage(psStats,psObj->player),
-									psStats->weaponEffect,
-									(BASE_OBJECT *)psCurrD), psStats->weaponClass);*/
-
 								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass);
-
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -1959,13 +1676,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						if ((xDiff*xDiff + yDiff*yDiff) <= radSquared)
 						{
 							HIT_ROLL(dice);
-							//if (dice < psStats->radiusHit)
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
 							damage = calcDamage(weaponRadDamage(
 						   		psStats, psObj->player),
 											psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
-
 
 								if(bMultiPlayer)
 								{
@@ -2033,16 +1748,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				if ((xDiff*xDiff + yDiff*yDiff) <= radSquared)
 				{
 					HIT_ROLL(dice);
-					//if (dice < psStats->radiusHit)
 					if (dice < weaponRadiusHit(psStats, psObj->player))
 					{
 						debug(LOG_NEVER, "Damage to object %d, player %d\n",
 								psCurrF->id, psCurrF->player);
-						//(void)psCurrF->damage(psCurrF, psStats->radiusDamage, psStats->weaponClass);
-						//(void)psCurrF->damage(psCurrF, calcDamage(psStats->radiusDamage,
-						/*(void)psCurrF->damage(psCurrF, calcDamage(weaponRadDamage(
-							psStats, psObj->player), psStats->weaponEffect,
-							(BASE_OBJECT *)psCurrF), psStats->weaponClass);*/
+
 						bKilled = featureDamage(psCurrF, calcDamage(weaponRadDamage(
 							psStats, psObj->player), psStats->weaponEffect,
 							(BASE_OBJECT *)psCurrF), psStats->weaponSubClass);
@@ -2065,8 +1775,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		psObj->born = gameTime;
 	}
 	/* Something was blown up */
-
-
 }
 
 /***************************************************************************/
