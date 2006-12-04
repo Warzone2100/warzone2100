@@ -17,7 +17,6 @@
 
 
 /* Forward definitions */
-enum _widget_type;
 struct _widget;
 struct _w_context;
 
