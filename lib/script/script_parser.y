@@ -501,7 +501,7 @@ void script_debug(const char *pFormat, ...);
 
 #define PUT_DATA_INT(ip, value) \
 	(ip)->type = VAL_INT; \
-	(ip)->v.bval = (SDWORD)(value); \
+	(ip)->v.ival = (SDWORD)(value); \
 	(ip)++
 
 #define PUT_DATA_STRING(ip, value) \
@@ -1513,6 +1513,37 @@ static CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variab
 		return CE_PARSE;
 		break;
 	}
+
+	return CE_OK;
+}
+
+/* Code Increment/Decrement operators */
+static void scriptCodeIncDec(VAR_SYMBOL		*psVariable,	// The object variable symbol
+							CODE_BLOCK		**ppsBlock, OPCODE op_dec_inc)
+{
+
+	ALLOC_BLOCK(*ppsBlock, 1 + 1 + 1);	//OP_PUSHREF opcode + variable index + inc opcode
+	ip = (*ppsBlock)->pCode;
+	(*ppsBlock)->type = psVariable->type;
+
+	/* Put variable index */
+	switch (psVariable->storage)
+	{
+	case ST_PRIVATE:
+		PUT_PKOPCODE(ip, OP_PUSHREF, psVariable->type | VAL_REF);
+		PUT_DATA_INT(ip, psVariable->index);
+		break;
+	case ST_LOCAL:
+		PUT_PKOPCODE(ip, OP_PUSHLOCALREF, psVariable->type | VAL_REF);
+		PUT_DATA_INT(ip, psVariable->index);
+		break;
+	default:
+		scr_error("Wrong variable storage type for increment/decrement operator");
+		break;
+	}
+
+	/* Put inc/dec opcode */
+	PUT_PKOPCODE(ip, OP_UNARYOP, op_dec_inc);
 
 	return CE_OK;
 }
@@ -4404,27 +4435,8 @@ loop:		WHILE '(' boolexp ')'
 inc_dec_exp:	NUM_VAR _INC
 				{
 					RULE("expression: NUM_VAR++");
-					
-					ALLOC_BLOCK(psCurrBlock, 1 + 1);	//NUM_VAR index + inc opcode
-					ip = psCurrBlock->pCode;
-					psCurrBlock->type = $1->type;
-					
-					/* Put variable index */
-					switch ($1->storage)
-					{
-					case ST_PRIVATE:
-						PUT_PKOPCODE(ip, OP_PUSHGLOBAL, $1->index);
-						break;
-					case ST_LOCAL:
-						PUT_PKOPCODE(ip, OP_PUSHLOCAL, $1->index);
-						break;
-					default:
-						scr_error("Wrong variable storage type for increment operator");
-						break;
-					}
 
-					/* Put inc opcode */
-					PUT_PKOPCODE(ip, OP_UNARYOP, OP_INC);
+					scriptCodeIncDec($1, &psCurrBlock, OP_INC);
 
 					/* Return the code block */
 					$$ = psCurrBlock;
@@ -4433,26 +4445,7 @@ inc_dec_exp:	NUM_VAR _INC
 				{
 					RULE("expression: NUM_VAR--");
 
-					ALLOC_BLOCK(psCurrBlock, 1 + 1);	//NUM_VAR index + dec opcode
-					ip = psCurrBlock->pCode;
-					psCurrBlock->type = $1->type;
-					
-					/* Put variable index */
-					switch ($1->storage)
-					{
-					case ST_PRIVATE:
-						PUT_PKOPCODE(ip, OP_PUSHGLOBAL, $1->index);
-						break;
-					case ST_LOCAL:
-						PUT_PKOPCODE(ip, OP_PUSHLOCAL, $1->index);
-						break;
-					default:
-						scr_error("Wrong variable storage type for decrement operator");
-						break;
-					}
-
-					/* Put inc opcode */
-					PUT_PKOPCODE(ip, OP_UNARYOP, OP_DEC);
+					scriptCodeIncDec($1, &psCurrBlock, OP_DEC);
 
 					/* Return the code block */
 					$$ = psCurrBlock;

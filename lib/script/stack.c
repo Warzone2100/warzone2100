@@ -753,22 +753,39 @@ BOOL stackUnaryOp(OPCODE opcode)
 	case OP_INC:
 		switch (psVal->type)
 		{
-		case VAL_INT:
-			psVal->v.ival++;
+		case (VAL_REF | VAL_INT):
+			*((SDWORD *)psVal->v.oval) = *((SDWORD *)psVal->v.oval) + 1;
+
+			/* Just get rid of the variable pointer, since already increased it */
+			if (!stackPop(psVal))
+			{
+				debug( LOG_ERROR, "stackUnaryOpcode: OP_INC: could not pop" );
+				return FALSE;
+			}
+
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_INC" );
+			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_INC (type: %d)", psVal->type );
+			return FALSE;
 			break;
 		}
 		break;
 	case OP_DEC:
 		switch (psVal->type)
 		{
-		case VAL_INT:
-			psVal->v.ival--;
+		case (VAL_REF | VAL_INT):
+			*((SDWORD *)psVal->v.oval) = *((SDWORD *)psVal->v.oval) - 1;
+
+			/* Just get rid of the variable pointer, since already decreased it */
+			if (!stackPop(psVal))
+			{
+				debug( LOG_ERROR, "stackUnaryOpcode: OP_DEC: could not pop" );
+				return FALSE;
+			}
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_DEC" );
+			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_DEC (type: %d)", psVal->type );
+			return FALSE;
 			break;
 		}
 		break;
@@ -783,7 +800,8 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.fval = - psVal->v.fval;
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for negation" );
+			ASSERT( FALSE, "stackUnaryOp: invalid type for negation (type: %d)", psVal->type );
+			return FALSE;
 			break;
 		}
 		break;
@@ -794,12 +812,14 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.bval = !psVal->v.bval;
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for NOT" );
+			ASSERT( FALSE, "stackUnaryOp: invalid type for NOT (type: %d)", psVal->type );
+			return FALSE;
 			break;
 		}
 		break;
 	default:
-		ASSERT( FALSE, "stackUnaryOp: unknown opcode" );
+		ASSERT( FALSE, "stackUnaryOp: unknown opcode (opcode: %d)", opcode );
+		return FALSE;
 		break;
 	}
 
