@@ -2472,7 +2472,7 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 				imd->points = temp;
 			}
 
-			if((psStructure->sDisplay.imd->nconnectors > 0 
+			if((psStructure->sDisplay.imd->nconnectors > 0
 				&& psStructure->numWeaps == psStructure->sDisplay.imd->nconnectors) ||
 				psStructure->sDisplay.imd->nconnectors == 1)
 			{

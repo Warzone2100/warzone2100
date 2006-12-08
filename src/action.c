@@ -866,7 +866,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		{
 			tRotation = (SWORD)(targetRotation - psAttacker->direction);
 		}
-			debug( LOG_NEVER, "locked on target...\n");
+// 			debug( LOG_NEVER, "locked on target...\n");
 		onTarget = TRUE;
 	}
 	tRotation %= 360;
@@ -965,7 +965,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	*pRotation = tRotation;
 	*pPitch = tPitch;
 
-	debug( LOG_NEVER, "endrot=%d\n",tRotation);
+// 	debug( LOG_NEVER, "endrot=%d\n",tRotation);
 
 	return onTarget;
 }
@@ -1265,7 +1265,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 
 		}
 
-	}	
+	}
 }
 
 
@@ -1564,7 +1564,7 @@ void actionUpdateDroid(DROID *psDroid)
 	}
 
 	psTarget = psDroid->psTarget[0];
-	
+
 	//Watermelon:safety check
 	//if (psDroid->numWeaps > 0)
     if (psDroid->asWeaps[0].nStat > 0)
@@ -2058,7 +2058,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			vtResult = validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]);
 		}
-		else 
+		else
 		{
 			vtResult = 1;
 		}

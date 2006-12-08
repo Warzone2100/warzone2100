@@ -25,24 +25,6 @@ UWORD iV_GetImageHeight(IMAGEFILE *ImageFile, UWORD ID)
 	return ImageFile->ImageDefs[ID].Height;
 }
 
-
-// Get image width with no coordinate conversion.
-//
-UWORD iV_GetImageWidthNoCC(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].Width;
-}
-
-// Get image height with no coordinate conversion.
-//
-UWORD iV_GetImageHeightNoCC(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].Height;
-}
-
-
 SWORD iV_GetImageXOffset(IMAGEFILE *ImageFile, UWORD ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
@@ -155,33 +137,23 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 
 static BOOL LoadTextureFile(char *FileName, iSprite *pSprite, int *texPageID)
 {
-	SDWORD i;
-	char real_filename[200];
+	int i=0;
 
-	// this is a hideous kludge to avoid having to change .img files, which
-	// still contain pcx references
-	strcpy(real_filename, FileName);
-	real_filename[strlen(real_filename) - 4] = '\0'; // strip extension
-	strcat(real_filename, ".png");
+	debug(LOG_TEXTURE, "LoadTextureFile: %s", FileName);
 
-	debug(LOG_TEXTURE, "LoadTextureFile: %s", real_filename);
-
-	if (!resPresent("IMGPAGE",real_filename)) {
-		debug(LOG_ERROR, "Texture file \"%s\" not preloaded.", real_filename);
+	if (!resPresent("IMGPAGE",FileName)) {
+		debug(LOG_ERROR, "Texture file \"%s\" not preloaded.", FileName);
 		assert(FALSE);
 		return FALSE;
 	} else {
-		*pSprite = *(iSprite*)resGetData("IMGPAGE", real_filename);
+		*pSprite = *(iSprite*)resGetData("IMGPAGE", FileName);
 		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
-		      real_filename, pSprite->width, pSprite->height);
+		      FileName, pSprite->width, pSprite->height);
 	}
-
-	/* Back to beginning */
-	i = 0;
 
 	/* We have already loaded this one? */
 	while (i < _TEX_INDEX) {
-		if (strcasecmp(real_filename, _TEX_PAGE[i].name) == 0) {
+		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0) {
 			*texPageID = (_TEX_PAGE[i].textPage3dfx);
 			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
 			return TRUE;
@@ -192,7 +164,7 @@ static BOOL LoadTextureFile(char *FileName, iSprite *pSprite, int *texPageID)
 #ifdef PIETOOL
 	*texPageID=NULL;
 #else
-	*texPageID = pie_AddBMPtoTexPages(pSprite, real_filename, 1, TRUE, TRUE);
+	*texPageID = pie_AddBMPtoTexPages(pSprite, FileName, 1, TRUE, TRUE);
 #endif
 	return TRUE;
 }

@@ -16,6 +16,7 @@
 #define MAX_TERRAIN_PAGES	20
 #define PAGE_WIDTH		512
 #define PAGE_HEIGHT		512
+// 4 byte depth == 32 bpp
 #define PAGE_DEPTH		4
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
 
@@ -56,7 +57,7 @@ static void buildTileIndexes(void);
 	We must then make sure that we source in that texture page and set the
 	texture coordinate for a complete tile to be its position.
 */
-void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
+void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
 {
 	UDWORD	i,j;
 	UDWORD	pageNumber;
@@ -70,8 +71,7 @@ void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UD
 	/* This is how many pages are already used on hardware */
 	firstTexturePage = pie_GetLastPageDownloaded() + 1;
 
-	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", srcWidth,
-	      srcHeight, tileWidth, tileHeight, firstTexturePage);
+	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", srcWidth, srcHeight, tileWidth, tileHeight, firstTexturePage);
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
@@ -79,7 +79,6 @@ void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UD
 	sprite.bmp = MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
-//	memset(sprite.bmp,0,TEXTURE_PAGE_SIZE);
 	tilesProcessed = 0;
 	tilesAcross = srcWidth/tileWidth;
 	tilesDown = srcHeight/tileHeight;
@@ -99,7 +98,7 @@ void	makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UD
 			presentLoc+=tileWidth*PAGE_DEPTH;
 			src+=tileWidth*PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
-			if((tilesProcessed == tilesPerSource))	// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
+			if((tilesProcessed == tilesPerSource))
 			{
 				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
 				goto exit;
@@ -292,7 +291,7 @@ static UDWORD	getTileYIndex(UDWORD tileNumber)
    chunk	*/
 static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest)
 {
-UDWORD	i,j;
+	UDWORD	i,j;
 
 	for (i=0; i<height; i++)
 	{

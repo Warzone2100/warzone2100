@@ -985,7 +985,7 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 
 
 
-	debug( LOG_NEVER, "change : %f\n", change);
+// 	debug( LOG_NEVER, "change : %f\n", change);
 
 
 	if ((diff >= 0 && diff < change) ||
@@ -1038,7 +1038,7 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 
 
 #ifdef DEBUG			//Don't forget that if you don't define the variable, then we error out.
-        debug( LOG_NEVER, "path %d: diff %f\n", path, diff);
+//         debug( LOG_NEVER, "path %d: diff %f\n", path, diff);
 
 	ASSERT( MAKEINT(*pCurr) < 360 && MAKEINT(*pCurr) >= 0,
 			 "moveCalcTurn: angle out of range - path %d\n"
@@ -2344,13 +2344,13 @@ void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 			// Create the avoid vector
 			if (FRACTmul(*pX, normY) + FRACTmul(*pY,-normX) < 0)
 			{
-				debug( LOG_NEVER, "First perp\n");
+// 				debug( LOG_NEVER, "First perp\n");
 				avoidX = -normY;
 				avoidY = normX;
 			}
 			else
 			{
-				debug( LOG_NEVER, "Second perp\n");
+// 				debug( LOG_NEVER, "Second perp\n");
 				avoidX = normY;
 				avoidY = -normX;
 			}
@@ -2456,13 +2456,13 @@ void moveGetObstVector3(DROID *psDroid, FRACT *pX, FRACT *pY)
 		angleToVector(dirTot, &ox, &oy);
 		if (FRACTmul((*pX), oy) + FRACTmul((*pY),-ox) < 0)
 		{
-			debug( LOG_NEVER, "First perp\n");
+// 			debug( LOG_NEVER, "First perp\n");
 			avoidX = -oy;
 			avoidY = ox;
 		}
 		else
 		{
-			debug( LOG_NEVER, "Second perp\n");
+// 			debug( LOG_NEVER, "Second perp\n");
 			avoidX = oy;
 			avoidY = -ox;
 		}
@@ -2612,13 +2612,13 @@ void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 			oy = dirY / omag;
 			if (FRACTmul((*pX), oy) + FRACTmul((*pY),-ox) < 0)
 			{
-				debug( LOG_NEVER, "First perp\n");
+// 				debug( LOG_NEVER, "First perp\n");
 				avoidX = -oy;
 				avoidY = ox;
 			}
 			else
 			{
-				debug( LOG_NEVER, "Second perp\n");
+// 				debug( LOG_NEVER, "Second perp\n");
 				avoidX = oy;
 				avoidY = -ox;
 			}
@@ -3243,14 +3243,14 @@ void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD direction,
 	if (adiff > iSpinAngle)
 	{
 		// large change in direction, spin on the spot
-		debug( LOG_NEVER, "Spin ");
+// 		debug( LOG_NEVER, "Spin ");
 		moveCalcTurn(&temp, MKF(direction), iSpinSpeed);
 		*pSpeed = 0;
 	}
 	else
 	{
 		// small change in direction, turn while moving
-		debug( LOG_NEVER, "Curve ");
+// 		debug( LOG_NEVER, "Curve ");
 		moveCalcTurn(&temp, MKF(direction), iTurnSpeed);
 	}
 
