@@ -1216,9 +1216,10 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 			}
 		}
 
-		// get units in a command group to attack the commanders target
-		if ((psDroid->droidType != DROID_COMMAND) &&
-			psDroid->psGroup && (psDroid->psGroup->type == GT_COMMAND))
+		// get combat units in a command group to attack the commanders target
+		if ( (psDroid->droidType != DROID_COMMAND) &&
+			psDroid->psGroup && (psDroid->psGroup->type == GT_COMMAND) &&
+			(psDroid->numWeaps > 0) )
 		{
 			if ((psDroid->psGroup->psCommander->action == DACTION_ATTACK) &&
 				(psDroid->psGroup->psCommander->psActionTarget[0] != NULL))
