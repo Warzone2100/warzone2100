@@ -52,6 +52,7 @@ static INTERP_VAL parameter;
 %option yylineno
 %option prefix="chat_"
 %option nounput
+%option case-insensitive
 
 %%
 
