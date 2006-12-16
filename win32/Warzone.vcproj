@@ -299,6 +299,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\script\chat_lexer.c"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\chat_parser.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\cheat.c"
 				>
 			</File>
@@ -1128,6 +1136,14 @@
 			</File>
 			<File
 				RelativePath="..\src\cdspan.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\chat_parser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\chat_processing.h"
 				>
 			</File>
 			<File

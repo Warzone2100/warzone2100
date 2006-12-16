@@ -87,7 +87,7 @@ extern void cpPrintProgram(SCRIPT_CODE *psProg);
 extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
 
 /* returns true if passed INTERP_TYPE is used as a pointer in INTERP_VAL, false otherwise */
-BOOL scriptTypeIsPointer(INTERP_TYPE type);
+extern BOOL scriptTypeIsPointer(INTERP_TYPE type);
 
 /* Run a compiled script */
 extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,

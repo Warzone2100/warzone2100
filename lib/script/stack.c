@@ -44,6 +44,9 @@ static UDWORD			currEntry=0;
 /* The block heap the stack was created in */
 static BLOCK_HEAP		*psStackBlock;
 
+/* Get rid of the top value without returning it */
+static inline BOOL stackRemoveTop(void);
+
 
 /* Check if the stack is empty */
 BOOL stackEmpty(void)
@@ -296,8 +299,6 @@ BOOL stackPopParams(SDWORD numParams, ...)
 		return FALSE;
 	}
 
-
-	//string support
 	// Get the values, checking their types
 	index = currEntry;
 	for (i=0; i< numParams; i++)
@@ -326,9 +327,28 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				return FALSE;
 			}
 			if (scriptTypeIsPointer(psVal->type))
-				*((void**)pData) = psVal->v.oval;
+			{
+				if(psVal->type >= VAL_REF)	//if it's a reference
+				{
+					INTERP_VAL	*refVal;
+
+					refVal = psVal->v.oval;	//oval is a pointer to INTERP_VAL in this case
+
+					/* doublecheck types */
+					ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type), "stackPopParams: type mismatch for a reference: %d/%d",
+						type & ~VAL_REF, refVal->type);		//type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
+
+					*((void**)pData) = &(refVal->v.ival);		/* get pointer to the union */
+				}
+				else		//some pointer type
+				{
+					*((void**)pData) = psVal->v.oval;
+				}
+			}
 			else
+			{
 				*((SDWORD*)pData) = psVal->v.ival;
+			}
 		}
 		else	//TODO: allow only compatible types
 		{
@@ -595,17 +615,20 @@ BOOL stackBinaryOp(OPCODE opcode)
 		psV1->v.bval = psV1->v.bval || psV2->v.bval;
 		break;
 	case OP_EQUAL:
-		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+		if(psV1->type == VAL_FLOAT && psV2->type == VAL_FLOAT){
 			psV1->v.bval = psV1->v.fval == psV2->v.fval;
+		}else if(psV1->type == VAL_STRING && psV2->type == VAL_STRING){
+			psV1->v.bval = (strcasecmp(psV1->v.sval,psV2->v.sval) == 0);	/* case-insensitive */
 		}else{
 			psV1->v.bval = psV1->v.ival == psV2->v.ival;
 		}
 		psV1->type = VAL_BOOL;
 		break;
 	case OP_NOTEQUAL:
-		
-		if(psV1->type == VAL_FLOAT || psV2->type == VAL_FLOAT){
+		if(psV1->type == VAL_FLOAT && psV2->type == VAL_FLOAT){
 			psV1->v.bval = psV1->v.fval != psV2->v.fval;
+		}else if(psV1->type == VAL_STRING && psV2->type == VAL_STRING){
+			psV1->v.bval = (strcasecmp(psV1->v.sval,psV2->v.sval) != 0);	/* case-insensitive */
 		}else{
 			psV1->v.bval = psV1->v.ival != psV2->v.ival;
 		}
@@ -754,10 +777,15 @@ BOOL stackUnaryOp(OPCODE opcode)
 		switch (psVal->type)
 		{
 		case (VAL_REF | VAL_INT):
-			*((SDWORD *)psVal->v.oval) = *((SDWORD *)psVal->v.oval) + 1;
+
+			psVal = psVal->v.oval;		//get variable
+
+			ASSERT(psVal->type == VAL_INT, "Invalid type for increment opcode: %d", psVal->type);
+
+			psVal->v.ival++;
 
 			/* Just get rid of the variable pointer, since already increased it */
-			if (!stackPop(psVal))
+			if (!stackRemoveTop())
 			{
 				debug( LOG_ERROR, "stackUnaryOpcode: OP_INC: could not pop" );
 				return FALSE;
@@ -774,10 +802,15 @@ BOOL stackUnaryOp(OPCODE opcode)
 		switch (psVal->type)
 		{
 		case (VAL_REF | VAL_INT):
-			*((SDWORD *)psVal->v.oval) = *((SDWORD *)psVal->v.oval) - 1;
+
+			psVal = psVal->v.oval;		//get variable
+
+			ASSERT(psVal->type == VAL_INT, "Invalid type for decrement opcode: %d", psVal->type);
+
+			psVal->v.ival--;
 
 			/* Just get rid of the variable pointer, since already decreased it */
-			if (!stackPop(psVal))
+			if (!stackRemoveTop())
 			{
 				debug( LOG_ERROR, "stackUnaryOpcode: OP_DEC: could not pop" );
 				return FALSE;
@@ -969,6 +1002,31 @@ void stackShutDown(void)
 		FREE(psCurr->aVals);
 		FREE(psCurr);
 	}
+}
+
+/* Get rid of the top value without returning it */
+static inline BOOL stackRemoveTop(void)
+{
+	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	{
+		debug(LOG_ERROR, "stackRemoveTop: stack empty");
+		ASSERT( FALSE, "stackRemoveTop: stack empty" );
+		return FALSE;
+	}
+
+	/* move the stack pointer down one */
+	if (currEntry == 0)
+	{
+		/* have to move onto the previous chunk. */
+		psCurrChunk = psCurrChunk->psPrev;
+		currEntry = psCurrChunk->size -1;
+	}
+	else
+	{
+		currEntry--;
+	}
+
+	return TRUE;
 }
 
 

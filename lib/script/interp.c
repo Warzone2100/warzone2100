@@ -523,10 +523,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 				/* get local variable */
-				psVar = &(psContext->psCode->ppsLocalVarVal[CurEvent][data]);
-
-				//TODO: fix
-				sVal.v.oval = &(psVar->v.ival);
+				sVal.v.oval = &(psContext->psCode->ppsLocalVarVal[CurEvent][data]);
 
 				TRCPRINTF(("PUSHREF     "));
 				TRCPRINTVAL(&sVal);
@@ -569,9 +566,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				// The type of the variable is stored in with the opcode
 				sVal.type = (INTERP_TYPE)(InstrPointer->v.ival & OPCODE_DATAMASK);
 
-				// store the pointer
-				psVar = interpGetVarData(psGlobals, ((INTERP_VAL *)(InstrPointer + 1))->v.ival);
-				sVal.v.oval = &(psVar->v.ival);
+				// store pointer to INTERP_VAL
+				sVal.v.oval = interpGetVarData(psGlobals, ((INTERP_VAL *)(InstrPointer + 1))->v.ival);
+
 				TRCPRINTF(("PUSHREF     "));
 				TRCPRINTVAL(&sVal);
 				TRCPRINTF(("\n"));
@@ -801,7 +798,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				// jump out of the code
 				InstrPointer = pCodeEnd;
 				break;
-			case OP_PAUSE:	
+			case OP_PAUSE:
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_PAUSE: %d", InstrPointer->type);
 
@@ -841,7 +838,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
-				break; 
+				break;
 			default:
 				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d, type: %d", opcode);
 				ASSERT( FALSE, "interpRunScript: unknown opcode: %d, type: %d", opcode, InstrPointer->type );
@@ -1011,6 +1008,15 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 	if (toRef != fromRef)
 	{
 		return FALSE;
+	}
+
+	/* Void pointer is compatible with any other type */
+	if(toRef == TRUE && fromRef == TRUE)
+	{
+		if(to == VAL_VOID)
+		{
+			return TRUE;
+		}
 	}
 
 	if (to == from)

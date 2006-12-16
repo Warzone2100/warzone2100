@@ -178,7 +178,7 @@ BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
    these aren't currently checked for, but it's a lot clearer what's going on if they're all here */
 BOOL scriptTypeIsPointer(INTERP_TYPE type)
 {
-	ASSERT( ((type < ST_MAXTYPE) || (type >= VAL_REF)), "scriptTypeIsPointer: invalid type" );
+	ASSERT( ((type < ST_MAXTYPE) || (type >= VAL_REF)), "scriptTypeIsPointer: invalid type: %d", type );
 	// any value or'ed with VAL_REF is a pointer
 	if (type >= VAL_REF) return TRUE;
 	switch (type) {
@@ -225,7 +225,7 @@ BOOL scriptTypeIsPointer(INTERP_TYPE type)
 		case ST_SOUND:
 			return FALSE;
 		default:
-			ASSERT(FALSE, "scriptTypeIsPointer: unhandled type");
+			ASSERT(FALSE, "scriptTypeIsPointer: unhandled type: %d", type );
 			return FALSE;
 	}
 }

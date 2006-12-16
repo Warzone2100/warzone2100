@@ -5253,6 +5253,14 @@ boolexp:		boolexp _AND boolexp
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
+			|	stringexp BOOLEQUAL stringexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_EQUAL, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
 			|	userexp BOOLEQUAL userexp
 				{
 					if (!interpCheckEquiv($1->type,$3->type))
@@ -5288,6 +5296,14 @@ boolexp:		boolexp _AND boolexp
 					$$ = psCurrBlock;
 				}
 			|	floatexp NOTEQUAL floatexp
+				{
+					codeRet = scriptCodeBinaryOperator($1, $3, OP_NOTEQUAL, &psCurrBlock);
+					CHECK_CODE_ERROR(codeRet);
+
+					/* Return the code block */
+					$$ = psCurrBlock;
+				}
+			|	stringexp NOTEQUAL stringexp
 				{
 					codeRet = scriptCodeBinaryOperator($1, $3, OP_NOTEQUAL, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);

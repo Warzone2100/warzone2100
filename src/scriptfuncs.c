@@ -72,6 +72,7 @@
 #include "aiexperience.h"
 #include "display3d.h"			//for showRangeAtPos()
 #include "multimenu.h"
+#include "lib/script/chat_processing.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -82,14 +83,11 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 // If this is defined then check max number of units not reached before adding more.
 #define SCRIPT_CHECK_MAX_UNITS
 
-SDWORD		playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
-char			strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
+static SDWORD	playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
 // -----------------------------------------------------------------------------------------
 BOOL	structHasModule(STRUCTURE *psStruct);
-SDWORD	guessPlayerFromMessage(char **str);
-SDWORD	getPlayerFromString(char *playerName);
-SDWORD	getFirstWord(char *sText, char **sWord, SDWORD *readCount);
 
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
@@ -5054,14 +5052,14 @@ BOOL	bVisible;
 // returns the nearest gateway bottleneck to a specified point
 BOOL scrGetNearestGateway( void )
 {
-SDWORD	x,y;
-SDWORD	gX,gY;
-UDWORD	nearestSoFar;
-UDWORD	dist;
-GATEWAY	*psGateway;
-SDWORD	retX,retY;
-SDWORD	*rX,*rY;
-BOOL	success;
+	SDWORD	x,y;
+	SDWORD	gX,gY;
+	UDWORD	nearestSoFar;
+	UDWORD	dist;
+	GATEWAY	*psGateway;
+	SDWORD	retX,retY;
+	SDWORD	*rX,*rY;
+	BOOL	success;
 
 	if(!stackPopParams(4, VAL_INT, &x, VAL_INT, &y, VAL_REF|VAL_INT, &rX, VAL_REF|VAL_INT, &rY))
 	{
@@ -10166,11 +10164,8 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 BOOL scrPursueResearch(void)
 {
 	RESEARCH			*psResearch;
-	SDWORD				player;
-	UWORD				cur,index,tempIndex,foundIndex;
+	SDWORD				foundIndex,index,player,cur,tempIndex,Stack[400];
 	SWORD				top;
-
-	UWORD				Stack[400];
 
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
@@ -10430,56 +10425,6 @@ BOOL scrSetPlayerName(void)
 	return TRUE;
 }
 
-
-
-SDWORD guessPlayerFromMessage(char **str)
-{
-	SDWORD	player,count=0;
-	char	*endOfPlayerList;
-	char	playerName[255];
-	SDWORD	storage=0;
-	BOOL	bOK=FALSE;
-
-	ASSERT(MAX_PLAYERS <= 8, "guessPlayerFromMessage: MAX_PLAYERS too high");
-
-
-	endOfPlayerList = *str;
-	player = 0;
-
-	debug(LOG_SCRIPT, "now checking string='%s'",*str);
-
-	while( sscanf(*str, "%[^',:;?! ]%*[,';?! ]%n", playerName, &count)	//didn't reach the end	//first field: what to stop on; second field: what to read (skip) afterwards
-		&& player >= 0										//last string was a player name
-		//&& *str < copyStr + strlen(copyStr)
-		)
-	{
-		if(count==0)	/* nothing read ? */
-			break;
-
-		debug(LOG_SCRIPT, "playerName='%s' count=%d",playerName, count);
-
-		*str += count;
-		player = getPlayerFromString(playerName);
-
-		debug(LOG_SCRIPT, "player=%d",player);
-
-		if(player >= 0 && player < MAX_PLAYERS)
-		{
-			bOK = TRUE;
-			endOfPlayerList = *str;		//remember where target player list ends
-			storage = storage | playerFlag[player];		//set player flag
-			debug(LOG_SCRIPT, "storage=%d",storage);
-		}
-
-		debug(LOG_SCRIPT, "             ");
-		debug(LOG_SCRIPT, "now checking string = '%s'",*str);
-	}
-
-	*str = endOfPlayerList;	//skip player list
-
-	return storage;		//Must be 0 if no players
-}
-
 SDWORD getPlayerFromString(char *playerName)
 {
 	UDWORD	playerIndex;
@@ -10488,27 +10433,27 @@ SDWORD getPlayerFromString(char *playerName)
 	for( playerIndex=0; playerIndex<MAX_PLAYERS; playerIndex++ )
 	{
 		/* check name */
-		debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
+		//debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
 		if (strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
 		{
-			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
+			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
 		}
 
 		/* check color */
-		debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColourName(playerIndex), playerName);
+		//debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColourName(playerIndex), playerName);
 		if (strncasecmp(getPlayerColourName(playerIndex),playerName, 255) == 0)
 		{
-			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
+			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
 		}
 
 		/* check player number */
 		sprintf(sPlayerNumber,"%d",playerIndex);
-		debug(LOG_SCRIPT, "checking (%s,%s)",sPlayerNumber, playerName);
+		//debug(LOG_SCRIPT, "checking (%s,%s)",sPlayerNumber, playerName);
 		if (strncasecmp(sPlayerNumber,playerName, 255) == 0)
 		{
-			debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
+			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
 		}
 
@@ -10516,188 +10461,6 @@ SDWORD getPlayerFromString(char *playerName)
 
 	return -1;
 }
-
-BOOL scrGetTargetPlayers(void)
-{
-	char	*myMsg = NULL,*freeMsg = NULL;
-	char	**ssval = NULL;
-	SDWORD	players=0;
-
-	if (!stackPopParams(1,  VAL_REF | VAL_STRING, &ssval))
-	{
-		debug(LOG_ERROR, "scrGetTargetPlayers(): stack failed");
-		return FALSE;
-	}
-
-	if(*ssval == NULL)
-	{
-		debug(LOG_ERROR, "scrGetTargetPlayers(): passed string was not initialized");
-		return FALSE;
-	}
-
-	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
-
-	myMsg = (char*)MALLOC(255);
-	freeMsg = myMsg;
-
-	strcpy(myMsg,*ssval);
-
-	debug(LOG_SCRIPT, "scrGetTargetPlayers: myMsg='%s'", myMsg);
-
-	players = guessPlayerFromMessage(&myMsg);
-
-	debug(LOG_SCRIPT, "scrGetTargetPlayers: myMsg new='%s'", myMsg);
-
-	strcpy(*ssval, myMsg);
-
-	debug(LOG_SCRIPT, "scrGetTargetPlayers: ssval='%s'", *ssval);
-
-	scrFunctionResult.v.ival = players;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
-		return FALSE;
-	}
-
-	FREE(freeMsg);
-
-	return TRUE;
-
-}
-
-BOOL scrMatch(void)
-{
-	char	*sToParse = NULL, *sToMatch = NULL;
-	char	*wordNeed = NULL, *wordFound = NULL;
-	SDWORD	readCountParse=0,readCountMatch=0;
-	SDWORD	fieldAssignedParse=0,fieldAssignedMatch=0;
-	BOOL	ok = TRUE;
-	SDWORD	*nResult;
-
-	if (!stackPopParams(3, VAL_STRING, &strParam1, VAL_STRING, &strParam2, VAL_REF|VAL_INT, &nResult))
-	{
-		debug(LOG_ERROR, "scrMatch(): stack failed");
-		return FALSE;
-	}
-
-	if(strParam1 == NULL)
-	{
-		debug(LOG_ERROR, "scrMatch(): message to parse is null");
-		return FALSE;
-	}
-
-	if(strParam2 == NULL)
-	{
-		debug(LOG_ERROR, "scrMatch(): string to match is null");
-		return FALSE;
-	}
-
-	sToParse = strParam1;
-	sToMatch = strParam2;
-
-	debug(LOG_SCRIPT, " ");
-	debug(LOG_SCRIPT, "sOrigToParse='%s'", strParam1);
-	debug(LOG_SCRIPT, "sOrigToMatch='%s'", strParam2);
-
-	wordFound = (char*)MALLOC(255);
-	wordNeed = (char*)MALLOC(255);
-
-	*nResult = -1;
-
-	while(ok)
-	{
-		/* get next word */
-		fieldAssignedParse = getFirstWord(sToParse,&wordFound,&readCountParse);
-		sToParse = sToParse + readCountParse;			/* next time start with next word */
-		if(readCountParse == 0)										/* sscanf returns 0 when last word is read */
-			sToParse = sToParse + strlen(wordFound);
-
-		/* get next word */
-		fieldAssignedMatch = getFirstWord(sToMatch,&wordNeed,&readCountMatch);
-		sToMatch = sToMatch + readCountMatch;			/* next time start with next word */
-		if(readCountMatch == 0)										/* sscanf returns 0 when last word is read */
-			sToMatch = sToMatch + strlen(wordNeed);	
-
-		debug(LOG_SCRIPT, "wordFound '%s'", wordFound);
-		debug(LOG_SCRIPT, "wordNeed '%s'", wordNeed);
-
-		/* failed if *one* of the strings ended */
-		if((fieldAssignedParse > 0 && fieldAssignedMatch <= 0)
-			|| (fieldAssignedMatch > 0 && fieldAssignedParse <= 0))
-		{
-			debug(LOG_SCRIPT, "exit condition FAILED");
-			ok = FALSE;
-			break;
-		}
-		else if(fieldAssignedParse <= 0 && fieldAssignedMatch <= 0)		/* no more words left in either of them */
-		{
-			debug(LOG_SCRIPT, "exit condition SUCCESS");
-			ok = TRUE;
-			break;
-		}
-
-		/*
-		 *	now compare both words
-		 */
-
-		if (strncasecmp(wordNeed,"<player>", 255) == 0)		/* if we are looking for player */
-		{
-			debug(LOG_SCRIPT, "matching <player>");
-			*nResult = getPlayerFromString(wordFound);
-
-			if(*nResult == -1)	/* failed to match player, stop */
-			{
-				debug(LOG_SCRIPT, "failed to match <player>");
-				ok = FALSE;
-			}
-			else
-			{
-				debug(LOG_SCRIPT, "matched <player>");
-			}
-		}
-		else if (strncasecmp(wordNeed,wordFound,255) != 0)	/* just compare words to see if they match */
-		{
-			debug(LOG_SCRIPT, "words did not match");
-			ok = FALSE;
-		}
-
-		debug(LOG_SCRIPT, " ");
-	}
-
-	debug(LOG_SCRIPT, "END");
-
-	FREE(wordFound);
-	FREE(wordNeed);
-
-	scrFunctionResult.v.bval = ok;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrGetTargetPlayers(): failed to push result");
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-SDWORD getFirstWord(char *sText, char **sWord, SDWORD *readCount)
-{
-	SDWORD	count=0,fieldsAssigned=0;
-
-	debug(LOG_SCRIPT, "--getWord: now checking string='%s'",sText);
-
-	ASSERT(*sWord != NULL, "getFirstWord: sWord is NULL");
-
-	strcpy(*sWord,"");		/* clear */
-
-	fieldsAssigned = sscanf(sText, "%[^',:;?! ]%*[,';?! ]%n", *sWord, &count);
-
-	debug(LOG_SCRIPT, "--getWord: matched='%s', count=%d, fieldsAssigned=%d",*sWord, count, fieldsAssigned);
-
-	*readCount = count;
-
-	return fieldsAssigned;
-}
-
 
 /* Checks if a particular bit is set in an integer */
 BOOL scrBitSet(void)
@@ -10850,5 +10613,210 @@ BOOL scrSetDebugMenuEntry(void)
 		(void)addDebugMenu(TRUE);
 	}
 
+	return TRUE;
+}
+
+/* Parse chat message and return number of commands that could be extracted */
+BOOL scrProcessChatMsg(void)
+{
+	if (!stackPopParams(1, VAL_STRING, &strParam1))
+	{
+		debug(LOG_ERROR, "scrProcessChatMsg(): stack failed");
+		return FALSE;
+	}
+
+	debug(LOG_WZ, "Now preparing to parse '%s'", strParam1);
+
+	if (!chatLoad(strParam1, strlen(strParam1)))
+	{
+		ASSERT("Couldn't process chat message: %s", strParam1);
+		return FALSE;
+	}
+
+	scrFunctionResult.v.ival = chat_msg.numCommands;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrProcessChatMsg(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns number of command arguments for a certain
+ * chat command that could be extracted
+ */
+BOOL scrGetNumArgsInCmd(void)
+{
+	SDWORD		cmdIndex;
+
+	if (!stackPopParams(1, VAL_INT, &cmdIndex))
+	{
+		debug(LOG_ERROR, "scrGetNumArgsInCmd(): stack failed");
+		return FALSE;
+	}
+
+	/* Check command bounds */
+	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	{
+		ASSERT(FALSE, "scrGetNumArgsInCmd: command inxed out of bounds: %d (num commands: %d)",
+			cmdIndex, chat_msg.numCommands);
+		return FALSE;
+	}
+
+
+	scrFunctionResult.v.ival = chat_msg.cmdData[cmdIndex].numCmdParams;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrGetNumArgsInCmd(): failed to push result");
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+
+/* Returns a string representing a certain chat command,
+ * based on the command index provided
+ */
+BOOL scrGetChatCmdDescription(void)
+{
+	SDWORD			cmdIndex;
+	char			*pChatCommand=NULL;
+
+	if (!stackPopParams(1, VAL_INT, &cmdIndex))
+	{
+		debug(LOG_ERROR, "scrGetCommandDescription(): stack failed");
+		return FALSE;
+	}
+
+	/* Check command bounds */
+	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	{
+		ASSERT(FALSE, "scrGetCommandDescription: command inxed out of bounds: %d (num commands: %d)",
+			cmdIndex, chat_msg.numCommands);
+		return FALSE;
+	}
+
+	/* Allocate memory for the comamnd string */
+	pChatCommand = (char*)MALLOC(MAXSTRLEN);
+
+	ASSERT(pChatCommand != NULL, "scrGetCommandDescription: out of memory");
+
+	/* Copy command */
+	strcpy(pChatCommand, chat_msg.cmdData[cmdIndex].pCmdDescription);
+
+	/* Make scrFunctionResult point to the valid command */ 
+	scrFunctionResult.v.sval = pChatCommand;
+
+	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrGetCommandDescription(): failed to push result");
+		FREE(pChatCommand);
+		return FALSE;
+	}
+
+	FREE(pChatCommand);
+	
+	return TRUE;
+}
+
+/* Returns a certain parameter of a certain chat command
+ * Returns FALSE if failed
+ */
+BOOL scrGetChatCmdParam(void)
+{
+	SDWORD			cmdIndex, argIndex;
+	void			*pArgument=NULL;
+	INTERP_TYPE		argType=VAL_VOID;
+	BOOL			bSuccess=TRUE;		//failure on type mismatch
+
+	//if (!stackPopParams(3, VAL_INT, &cmdIndex, VAL_INT, &argIndex, VAL_REF | VAL_VOID, &pArgument))
+	//{
+	//	debug(LOG_ERROR, "scrGetChatCmdParam(): stack failed");
+	//	return FALSE;
+	//}
+
+	if (!stackPopParams(2, VAL_INT, &cmdIndex, VAL_INT, &argIndex))
+	{
+		debug(LOG_ERROR, "scrGetChatCmdParam(): stack failed");
+		return FALSE;
+	}
+
+	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	{
+		ASSERT(FALSE, "scrGetChatCmdParam: command index out of bounds: %d", cmdIndex);
+		return FALSE;
+	}
+
+	if(argIndex < 0 || argIndex >= chat_msg.cmdData[cmdIndex].numCmdParams )
+	{
+		ASSERT(FALSE, "scrGetChatCmdParam: argument index for command %d is out of bounds: %d", cmdIndex, argIndex);
+		return FALSE;
+	}
+
+	/* Find out the type of the argument we are going to pass to the script */
+	argType = chat_msg.cmdData[cmdIndex].parameter[argIndex].type;
+
+	if (!stackPopParams(1, VAL_REF | argType, &pArgument))
+	{
+		debug(LOG_ERROR, "scrGetChatCmdParam(): stack failed or argument mismatch (expected type of argument: %d)", argType);
+		bSuccess = FALSE;		//return type mismatch
+		//return FALSE;
+	}
+
+	if(pArgument == NULL)
+	{
+		ASSERT(FALSE, "scrGetChatCmdParam: nullpointer check failed");
+		bSuccess = FALSE;
+		//return FALSE;
+	}
+
+	/* Return command argument to the script */
+	if(bSuccess){
+		memcpy(pArgument, &(chat_msg.cmdData[cmdIndex].parameter[argIndex].v), sizeof(chat_msg.cmdData[cmdIndex].parameter[argIndex].v));
+	}
+
+	scrFunctionResult.v.bval = bSuccess;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrGetChatCmdParam(): failed to push result");
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/* Returns true if a certain command was addressed to a certain player */
+BOOL scrChatCmdIsPlayerAddressed(void)
+{
+	SDWORD		cmdIndex,playerInQuestion;
+
+	if (!stackPopParams(2, VAL_INT, &cmdIndex, VAL_INT, &playerInQuestion))
+	{
+		debug(LOG_ERROR, "scrChatCmdIsPlayerAddressed(): stack failed");
+		return FALSE;
+	}
+
+	/* Check command bounds */
+	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	{
+		ASSERT(FALSE, "scrChatCmdIsPlayerAddressed: command inxed out of bounds: %d (num commands: %d)",
+			cmdIndex, chat_msg.numCommands);
+		return FALSE;
+	}
+
+	/* Check player bounds */
+	if(playerInQuestion < 0 || playerInQuestion >= MAX_PLAYERS)
+	{
+		ASSERT(FALSE, "scrChatCmdIsPlayerAddressed: player inxed out of bounds: %d", playerInQuestion);
+		return FALSE;
+	}
+
+	scrFunctionResult.v.bval = chat_msg.cmdData[cmdIndex].bPlayerAddressed[playerInQuestion];
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrChatCmdIsPlayerAddressed(): failed to push result");
+		return FALSE;
+	}
+	
 	return TRUE;
 }

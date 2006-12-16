@@ -37,6 +37,7 @@
 #include "intfac.h"
 #include "multimenu.h"
 #include "lib/framework/input.h"		//for key constants
+#include "lib/script/chat_processing.h"
 
 
 /* The table of user defined types
@@ -947,15 +948,6 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { VAL_STRING },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-
-	{ "getTargetPlayers",	scrGetTargetPlayers,		VAL_INT,
-		1, { VAL_REF|VAL_STRING },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "match",				scrMatch,					VAL_BOOL,
-		3, { VAL_STRING, VAL_STRING, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
 	{ "bitSet",				scrBitSet,					VAL_BOOL,
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1316,11 +1308,28 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_STRING, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	//scripting engine chat interface functions
+	{ "processChatMsg",			scrProcessChatMsg,			VAL_INT,
+		1, { VAL_STRING },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getChatCmdDescription",	scrGetChatCmdDescription,	VAL_STRING,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getNumArgsInCmd",		scrGetNumArgsInCmd,			VAL_INT,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getChatCmdParam",		scrGetChatCmdParam,			VAL_BOOL,
+		3, { VAL_REF | VAL_VOID, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "chatCmdIsPlayerAddressed",	scrChatCmdIsPlayerAddressed,	VAL_BOOL,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
-
-
-//	{ "skOrderDroidLineBuild",	scrSkOrderDroidLineBuild,	VAL_VOID,
-//	6, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT, VAL_INT, VAL_INT, VAL_INT } },
 
     /* This final entry marks the end of the function list */
 	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
@@ -2154,6 +2163,10 @@ BOOL scrTabInitialise(void)
 	/* Initialize debug output */
 	for(i=0; i<DEBUGMENU_MAX_ENTRIES; i++)
 		debugMenuEntry[i][0] = '\0';
+
+	/* Initialize chat message struct */
+	chat_msg.numCommands = 0;
+	strcpy(chat_msg.lastMessage, "");
 
 	return TRUE;
 }

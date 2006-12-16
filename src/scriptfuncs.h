@@ -591,8 +591,6 @@ extern BOOL scrGetStructureType(void);
 extern BOOL scrGetPlayerName(void);
 extern BOOL scrSetPlayerName(void);
 
-extern BOOL scrGetTargetPlayers(void);
-extern BOOL scrMatch(void);
 extern BOOL scrBitSet(void);
 extern BOOL scrAlliancesLocked(void);
 extern BOOL scrASSERT(void);
@@ -600,6 +598,11 @@ extern BOOL scrShowRangeAtPos(void);
 extern BOOL scrToPow(void);
 extern BOOL scrDebugMenu(void);
 extern BOOL scrSetDebugMenuEntry(void);
+extern BOOL scrProcessChatMsg(void);
+extern BOOL scrGetChatCmdDescription(void);
+extern BOOL	scrGetNumArgsInCmd(void);
+extern BOOL	scrGetChatCmdParam(void);
+extern BOOL scrChatCmdIsPlayerAddressed(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
@@ -614,6 +617,8 @@ extern VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD 
 extern MESSAGE * findHelpMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player);
 extern BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
+
+extern SDWORD getPlayerFromString(char *playerName);
 #endif
 
 
