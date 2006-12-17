@@ -32,6 +32,7 @@
 
 
 
+
 /* The different types of droid */
 // NOTE, if you add to, or change this list then you'll need
 // to update the DroidSelectionWeights lookup table in Display.c
@@ -164,7 +165,8 @@ typedef struct _droid
 	UDWORD		ECMMod;
 	UDWORD		originalBody;		//the original body points
 	UDWORD		body;				// the current body points
-	UDWORD		armour[NUM_WEAPON_CLASS];
+	//Watermleon:armour of all sides
+	UDWORD		armour[NUM_HIT_SIDES][NUM_WEAPON_CLASS];
 	//UDWORD		power;
 //tjc	UDWORD		imdNum;
 	UWORD		numKills;

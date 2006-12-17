@@ -49,11 +49,14 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 
 #define	DROID_EMP_SPREAD	(20 - rand()%40)
 
+//Watermelon:VTOL weapon connector start
+#define VTOL_CONNECTOR_START 5
+
 UDWORD	droidScale = 100;
 void displayComponentTemplate(DROID_TEMPLATE *psTemplate);
 //void displayComponentObject(BASE_OBJECT *psObj);
-//Watermelon:updated protocol for displayCompObj
-static void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS], BOOL bButton);
+//Watermelon:updated prototype for displayCompObj again
+static void displayCompObj(BASE_OBJECT *psObj, BOOL bButton);
 static iIMDShape *getLeftPropulsionIMD(DROID *psDroid);
 static iIMDShape *getRightPropulsionIMD(DROID *psDroid);
 
@@ -717,18 +720,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 {
 	static DROID Droid;	// Made static to reduce stack usage.
 	SDWORD difference;
-	//Watermelon:make it contain DROID_MAXWEAPS Vector info
-	iVector		mountRotation[DROID_MAXWEAPS];
  	iVector TmpCamPos = {0,0,0};
-	int			i;
-
-	//Watermelon:I need to initialise the values of this,since DROID_MAXWEAPS is not a 'constant'
-	for(i = 0;i < psTemplate->numWeaps;i++)
-	{
-		mountRotation[i].x = 0;
-		mountRotation[i].y = 0;
-		mountRotation[i].z = 0;
-	}
 
 	/* init to NULL */
 	memset( &Droid, 0, sizeof(DROID) );
@@ -755,7 +747,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 	Droid.x = Droid.y = Droid.z = 0;
 
 	//draw multi component object as a button object
-	displayCompObj((BASE_OBJECT*)&Droid,&mountRotation,TRUE);
+	displayCompObj((BASE_OBJECT*)&Droid, TRUE);
 
 
 	unsetMatrix();
@@ -768,18 +760,7 @@ void displayComponentButtonObject(DROID *psDroid,
 								  iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
 {
 	SDWORD		difference;
-	//Watermelon:make it contain DROID_MAXWEAPS Vector info
-	iVector		mountRotation[DROID_MAXWEAPS];
  	iVector		TmpCamPos = {0,0,0};
-	int			i;
-
-	//Watermelon:I need to initialise the values of this,since DROID_MAXWEAPS is not a 'constant'
-	for(i = 0;i < psDroid->numWeaps;i++)
-	{
-		mountRotation[i].x = 0;
-		mountRotation[i].y = 0;
-		mountRotation[i].z = 0;
-	}
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
@@ -798,7 +779,7 @@ void displayComponentButtonObject(DROID *psDroid,
 
 // And render the composite object.
 	//draw multi component object as a button object
-	displayCompObj((BASE_OBJECT*)psDroid,&mountRotation,TRUE);
+	displayCompObj((BASE_OBJECT*)psDroid, TRUE);
 
 	unsetMatrix();
 }
@@ -806,14 +787,12 @@ void displayComponentButtonObject(DROID *psDroid,
 
 
 /* Assumes matrix context is already set */
-// Watermelon:multiple turrets display
+// Watermelon:multiple turrets display removed the pointless mountRotation
 void displayComponentObject(BASE_OBJECT *psObj)
 {
 DROID		*psDroid;
 //iIMDShape	*psShape;
-//Watermelon:mountRotation is array now
 iVector		position,rotation;	//,null;
-iVector		mountRotation[DROID_MAXWEAPS];
 //iPoint		screenCoords;
 //SDWORD		dummyZ;
 int32		xShift,zShift;
@@ -823,19 +802,9 @@ SDWORD		frame;
 PROPULSION_STATS	*psPropStats;
 UDWORD	tileX,tileY;
 MAPTILE	*psTile;
-//Watermelon:added int iWeapons,i;
-int iWeapons = 0;
-int i = 0;
 
 	psDroid = (DROID *)psObj;
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-
-	for(i = 0;i < psDroid->numWeaps;i++)
-	{
-		mountRotation[i].x = 0;
-		mountRotation[i].y = 0;
-		mountRotation[i].z = 0;
-	}
 
 	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
 	difference = (worldAngle-psObj->direction);
@@ -880,31 +849,7 @@ int i = 0;
 
 
 	/* Get rotation info for the mounting too (holds the gun */
-	// Watermelon:added check against droid type
-	if ( psDroid->type == OBJ_DROID )
-	{
-		if ( psDroid->droidType == DROID_WEAPON )
-		{
-			for(iWeapons = 0;iWeapons < psDroid->numWeaps;iWeapons++)
-			{
-				mountRotation[iWeapons].y = -(SDWORD)psDroid->turretRotation[iWeapons];
-				mountRotation[iWeapons].x = psDroid->turretPitch[iWeapons];
-				mountRotation[iWeapons].z = 0;
-			}
-		}
-		else
-		{
-			mountRotation[0].y = -(SDWORD)((DROID *)psObj)->turretRotation[0];
-			mountRotation[0].x = ((DROID *)psObj)->turretPitch[0];
-			mountRotation[0].z = 0;
-		}
-	}
-	else
-	{
-		mountRotation[0].y = -(SDWORD)((DROID *)psObj)->turretRotation[0];
-		mountRotation[0].x = ((DROID *)psObj)->turretPitch[0];
-		mountRotation[0].z = 0;
-	}
+	// Watermelon:obsolete,since I move it to displayCompObj
 
 	/* Translate origin */
 	pie_TRANSLATE(position.x,position.y,position.z);
@@ -936,7 +881,7 @@ int i = 0;
 	{
 		//ingame not button object
 		//Watermelon:should render 3 mounted weapons now
-		displayCompObj(psObj,&mountRotation,FALSE);
+		displayCompObj(psObj,FALSE);
 	}
 	else
 	{
@@ -968,8 +913,8 @@ int i = 0;
 
 /* Assumes matrix context is already set */
 // Watermelon:this is able to handle multiple weapon graphics now
-// mountRotation is iVector array contains mountRotation from all weapons now!!!
-void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS], BOOL bButton)
+// removed mountRotation,they get such stuff from psObj directly now
+void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 {
 	DROID				*psDroid;
 	//Watermelon:I need another temp pointer to Shape
@@ -1170,10 +1115,12 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 		{
 			/* vtol weapons attach to connector 2 (underneath);
 			 * all others to connector 1 */
+			/* Watermelon:VTOL's now skip the first 5 connectors(0 to 4),
+			VTOL's use 5,6,7,8 etc now */
 			if ( (psPropStats->propulsionType == LIFT) &&
 				  psDroid->droidType == DROID_WEAPON )
 			{
-				iConnector = 1;
+				iConnector = VTOL_CONNECTOR_START;
 			}
 			else
 			{
@@ -1237,8 +1184,8 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 							//Watermelon:reset Z?
 							dummyZ = pie_RotProj(&null,&screenCoords);
 
-							//Watermelon:to skip connectors[1](VOTL hardpoint)
-							if ( i == 0 )
+							//Watermelon:to skip number of VTOL_CONNECTOR_START ground unit connectors
+							if ( iConnector < VTOL_CONNECTOR_START )
 							{
 								//Watermelon:midpoint for heavybody with only 1 weapon
 								if ( psDroid->numWeaps == 1 && 
@@ -1251,25 +1198,16 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 								}
 								else
 								{
-									pie_TRANSLATE( psShapeTemp->connectors[iConnector].x,
-												   psShapeTemp->connectors[iConnector].z,
-												   psShapeTemp->connectors[iConnector].y  );
+									pie_TRANSLATE( psShapeTemp->connectors[i].x,
+												   psShapeTemp->connectors[i].z,
+												   psShapeTemp->connectors[i].y  );
 								}
 							}
-							else if ( i > 0 )
+							else
 							{
-								if ( iConnector == 1 )
-								{
-									pie_TRANSLATE( psShapeTemp->connectors[iConnector].x,
-												   psShapeTemp->connectors[iConnector].z,
-												   psShapeTemp->connectors[iConnector].y  );
-								}
-								else
-								{
-									pie_TRANSLATE( psShapeTemp->connectors[i+1].x,
-												   psShapeTemp->connectors[i+1].z,
-												   psShapeTemp->connectors[i+1].y  );
-								}
+								pie_TRANSLATE( psShapeTemp->connectors[iConnector + i].x,
+											   psShapeTemp->connectors[iConnector + i].z,
+											   psShapeTemp->connectors[iConnector + i].y  );
 							}
 
 							if ( psDroid->turretRotation[i] )
@@ -1279,7 +1217,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 
 
 							/* vtol weapons inverted */
-							if ( iConnector == 1 )
+							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
 								pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 							}
@@ -1312,7 +1250,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 							}
 
 							/* vtol weapons inverted */
-							if ( iConnector == 1 )
+							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
 								//pitch the barrel down
 								pie_MatRotX(DEG( (-(psDroid->turretPitch[i])) ));
@@ -1382,7 +1320,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 				//Watermelon:reset Z?
 				dummyZ = pie_RotProj(&null,&screenCoords);
 				/* vtol weapons inverted */
-				if ( iConnector == 1 )
+				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
 					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 				}
@@ -1427,7 +1365,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 				//Watermelon:reset Z?
 				dummyZ = pie_RotProj(&null,&screenCoords);
 				/* vtol weapons inverted */
-				if ( iConnector == 1 )
+				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
 					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 				}
@@ -1474,7 +1412,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 				//Watermelon:reset Z?
 				dummyZ = pie_RotProj(&null,&screenCoords);
 				/* vtol weapons inverted */
-				if ( iConnector == 1 )
+				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
 					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 				}
@@ -1513,7 +1451,7 @@ void displayCompObj(BASE_OBJECT *psObj,iVector (*mountRotation)[DROID_MAXWEAPS],
 				//Watermelon:reset Z?
 				dummyZ = pie_RotProj(&null,&screenCoords);
 				/* vtol weapons inverted */
-				if ( iConnector == 1 )
+				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
 					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 				}
@@ -1824,6 +1762,7 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
+
 
 
 

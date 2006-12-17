@@ -1051,14 +1051,21 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 		size[0] = '\0';
 		GfxFile[0] = '\0';
         flameIMD[0] = '\0';
+		//Watermelon:added 10 %d to store FRONT,REAR,LEFT,RIGHT,TOP,BOTTOM armour values
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pBodyData,"%[^','],%[^','],%[^','],%d,%d,%d,%d,%[^','],\
-			%d,%d,%d,%d,%d,%[^','],%d",
+			%d,%d,%d, \
+			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%d",
 			(char*)&BodyName, (char*)&techLevel, (char*)&size, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->body, (char*)&GfxFile, &psStats->systemPoints,
 			&psStats->weaponSlots, &psStats->powerOutput,
-			&psStats->armourValue[WC_KINETIC],
-			&psStats->armourValue[WC_HEAT], (char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
+			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC],
+			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_KINETIC],
+			(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_LEFT][WC_KINETIC],
+			(int*)&psStats->armourValue[HIT_SIDE_LEFT][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_KINETIC],
+			(int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_KINETIC],
+			(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_KINETIC],
+			(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT], (char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
 			//&psStats->armourValue[WC_MISC]);
 
 #if (MAX_PLAYERS!=4 && MAX_PLAYERS!=8)
@@ -1141,8 +1148,9 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
         //set the max stat values for the design screen
         if (psStats->design)
         {
-            setMaxBodyArmour(psStats->armourValue[WC_KINETIC]);
-            setMaxBodyArmour(psStats->armourValue[WC_HEAT]);
+			//use front armour value to prevent bodyStats corrupt problems
+            setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
+            setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT]);
             setMaxBodyPower(psStats->powerOutput);
             setMaxBodyPoints(psStats->body);
 		    setMaxComponentWeight(psStats->weight);
@@ -3955,20 +3963,20 @@ UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType)
 }
 
 UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
-				   WEAPON_CLASS weaponClass)
+				   WEAPON_CLASS weaponClass, int side)
 {
 	switch (weaponClass)
 	{
 	case WC_KINETIC:
 	//case WC_EXPLOSIVE:
-		return (psStats->armourValue[WC_KINETIC] + (psStats->
-			armourValue[WC_KINETIC] * asBodyUpgrade[player][bodyType].
+		return (psStats->armourValue[side][WC_KINETIC] + (psStats->
+			armourValue[side][WC_KINETIC] * asBodyUpgrade[player][bodyType].
 			armourValue[WC_KINETIC])/100);
 		break;
 	case WC_HEAT:
 	//case WC_MISC:
-		return (psStats->armourValue[WC_HEAT] + (psStats->
-			armourValue[WC_HEAT] * asBodyUpgrade[player][bodyType].
+		return (psStats->armourValue[side][WC_HEAT] + (psStats->
+			armourValue[side][WC_HEAT] * asBodyUpgrade[player][bodyType].
 			armourValue[WC_HEAT])/100);
 		break;
 	default:

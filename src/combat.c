@@ -114,6 +114,17 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	ASSERT( PTRVALID(psTarget, sizeof(BASE_OBJECT)),
 		"combFire: Invalid target pointer" );
 
+	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */
+	if (psAttacker->type == OBJ_DROID &&
+		vtolDroid(((DROID *)psAttacker)))
+	{
+		if (((DROID *)psAttacker)->sMove.iAttackRuns[weapon_slot] >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
+		{
+			debug(LOG_NEVER, "VTOL slot %d is empty", weapon_slot);
+			return;
+		}
+	}
+
 	/* Get the stats for the weapon */
 	psStats = asWeaponStats + psWeap->nStat;
 

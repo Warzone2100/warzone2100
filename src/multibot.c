@@ -101,6 +101,7 @@ BOOL recvHappyVtol(NETMSG *pMsg)
 	DROID	*pD;
 	UBYTE	player;
 	UDWORD	id;
+	int		i;
 
 	NetGet(pMsg,0,player);
 	NetGet(pMsg,1,id);
@@ -110,10 +111,13 @@ BOOL recvHappyVtol(NETMSG *pMsg)
 		return FALSE;
 	}
 
-	pD->sMove.iAttackRuns =0;						// finish it for next time round.
-	pD->body = pD->originalBody;
-	pD->asWeaps[0].ammo = asWeaponStats[pD->asWeaps[0].nStat].numRounds;
-	pD->asWeaps[0].lastFired = 0;
+	for (i = 0;i < pD->numWeaps;i++)
+	{
+		pD->sMove.iAttackRuns[i] =0;						// finish it for next time round.
+		pD->body = pD->originalBody;
+		pD->asWeaps[i].ammo = asWeaponStats[pD->asWeaps[i].nStat].numRounds;
+		pD->asWeaps[i].lastFired = 0;
+	}
 
 	return TRUE;
 }
@@ -123,8 +127,9 @@ BOOL sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen)
 {
 	NETMSG msg;
 	UDWORD	blank=0;
-	UBYTE attackRuns, ammo;
+	UBYTE attackRuns[DROID_MAXWEAPS], ammo[DROID_MAXWEAPS];
 	UBYTE player;
+	int	i = 0;
 
 	if(!myResponsibility(psDroid->player))
 	{
@@ -144,12 +149,15 @@ BOOL sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen)
 		NetAdd(msg,6,blank);
 	}
 
-	attackRuns = (UBYTE)(psDroid->sMove.iAttackRuns);
-	ammo = (UBYTE)(psDroid->asWeaps[0].ammo);
-	NetAdd(msg,10,attackRuns);
-	NetAdd(msg,11,ammo);
+	for (i = 0;i < psDroid->numWeaps;i ++)
+	{
+		attackRuns[i] = (UBYTE)(psDroid->sMove.iAttackRuns[i]);
+		ammo[i] = (UBYTE)(psDroid->asWeaps[i].ammo);
+		NetAdd(msg,(10 + i),attackRuns[i]);
+		NetAdd(msg,(11 + i),ammo[i]);
+	}
 
-	msg.size = 12;
+	msg.size = (12 + i);
 	msg.type = NET_VTOLREARM;
 	return TRUE;
 }
@@ -158,21 +166,25 @@ BOOL sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen)
 BOOL recvVtolRearm(NETMSG *pMsg)
 {
 	DROID	*psDroid;
-	UBYTE	player,chosen,aruns,amm;
+	UBYTE	player,chosen,aruns[DROID_MAXWEAPS],amm[DROID_MAXWEAPS];
 	UDWORD	id,ids;
 	STRUCTURE *psStruct = NULL;
+	int	i;
 
 	NetGet(pMsg,0,player);
 	NetGet(pMsg,1,id);
 	NetGet(pMsg,5,chosen);
 	NetGet(pMsg,6,ids);
 
-	NetGet(pMsg,10,aruns);
-	NetGet(pMsg,11,amm);
-
 	if(!IdToDroid(id,player,&psDroid))			//find droid.
 	{
 		return FALSE;
+	}
+
+	for (i = 0;i < psDroid->numWeaps;i++)
+	{
+		NetGet(pMsg,(10 + i),aruns[i]);
+		NetGet(pMsg,(11 + i),amm[i]);
 	}
 
 	if(ids)										// find rearm pad.
@@ -188,8 +200,11 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 		}
 	}
 
-	psDroid->sMove.iAttackRuns = aruns;
-	psDroid->asWeaps[0].ammo = amm;
+	for (i = 0;i < psDroid->numWeaps;i++)
+	{
+		psDroid->sMove.iAttackRuns[i] = aruns[i];
+		psDroid->asWeaps[i].ammo = amm[i];
+	}
 
 	turnOffMultiMsg(TRUE);
 	switch(chosen)
@@ -1343,6 +1358,7 @@ BOOL recvRequestDroid(NETMSG *pMsg)
 
 	return TRUE;
 }
+
 
 
 

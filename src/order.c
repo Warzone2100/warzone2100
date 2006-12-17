@@ -83,6 +83,9 @@ void orderClearDroidList(DROID *psDroid);
 void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
 						BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 
+//Watermelon:add a timestamp to order circle
+static UDWORD orderStarted;
+
 //////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////
@@ -264,6 +267,8 @@ void orderUpdateDroid(DROID *psDroid)
 	DROID			*psSpotter;
 	//Watermelon:int i
 	int i;
+	float			radToAction;
+	SDWORD			xoffset,yoffset;
 
 
 	// clear the target if it has died
@@ -635,6 +640,94 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 			if (xdiff*xdiff + ydiff*ydiff > SCOUT_ATTACK_DIST*SCOUT_ATTACK_DIST)
 			{
 				actionDroidLoc(psDroid, DACTION_RETURNTOPOS, psDroid->actionX,psDroid->actionY);
+			}
+		}
+		break;
+case DORDER_CIRCLE:
+		// if there is an enemy around, attack it
+		if ( (psDroid->action == DACTION_MOVE) &&
+			 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state == DSS_ALEV_ALWAYS)) &&
+			 aiBestNearestTarget(psDroid, &psObj, 0) )
+		{
+			switch (psDroid->droidType)
+			{
+			case DROID_WEAPON:
+			case DROID_CYBORG:
+			case DROID_CYBORG_SUPER:
+			case DROID_PERSON:
+			case DROID_COMMAND:
+				actionDroidObj(psDroid, DACTION_ATTACK, psObj);
+				break;
+			case DROID_SENSOR:
+				actionDroidObj(psDroid, DACTION_OBSERVE, psObj);
+				break;
+			default:
+				actionDroid(psDroid, DACTION_NONE);
+				break;
+			}
+		}
+		else if (psDroid->action == DACTION_NONE || psDroid->action == DACTION_MOVE)
+		{
+			if (psDroid->action == DACTION_MOVE)
+			{
+				if ( orderStarted && ((orderStarted + 500) > gameTime) )
+				{
+					break;
+				}
+				orderStarted = gameTime;
+			}
+			psDroid->action = DACTION_NONE;
+
+			xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->orderX;
+			ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->orderY;
+			//if (xdiff*xdiff + ydiff*ydiff < psDroid->sMove.iGuardRadius * psDroid->sMove.iGuardRadius)
+			if (xdiff*xdiff + ydiff*ydiff <= 2000 * 2000)
+			{
+				if (psDroid->order == DORDER_CIRCLE)
+				{
+					//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
+					radToAction = atan2f((float)xdiff, (float)ydiff);
+					xoffset = sinf(radToAction) * 1500;
+					yoffset = cosf(radToAction) * 1500;
+					xdiff = (SDWORD)psDroid->x - (SDWORD)(psDroid->orderX + xoffset);
+					ydiff = (SDWORD)psDroid->y - (SDWORD)(psDroid->orderY + yoffset);
+					if (xdiff*xdiff + ydiff*ydiff < TILE_UNITS * TILE_UNITS)
+					{
+						//Watermelon:conter-clockwise 30 degree's per action
+						radToAction -= pi * 30 / 180;
+						xoffset = sinf(radToAction) * 1500;
+						yoffset = cosf(radToAction) * 1500;
+						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
+					}
+					else
+					{
+						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
+					}
+				}
+				else
+				{
+					psDroid->order = DORDER_NONE;
+				}
+			}
+			else
+			{
+				
+			}
+		}
+		else if ((psDroid->action == DACTION_ATTACK) ||
+				 (psDroid->action == DACTION_MOVETOATTACK) ||
+				 (psDroid->action == DACTION_ROTATETOATTACK) ||
+				 (psDroid->action == DACTION_OBSERVE) ||
+				 (psDroid->action == DACTION_MOVETOOBSERVE))
+		{
+			// attacking something - see if the droid has gone too far
+			xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->actionX;
+			ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->actionY;
+			//if (xdiff*xdiff + ydiff*ydiff > psDroid->sMove.iGuardRadius * psDroid->sMove.iGuardRadius)
+			if (xdiff*xdiff + ydiff*ydiff > 2000 * 2000)
+			{
+				// head back to the target location
+				actionDroidLoc(psDroid, DACTION_RETURNTOPOS, psDroid->orderX,psDroid->orderY);
 			}
 		}
 		break;
@@ -2319,6 +2412,16 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroidObj( psDroid,DACTION_MOVETOREARM, psOrder->psObj);
         assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
+	case DORDER_CIRCLE:
+		if (!vtolDroid(psDroid))
+		{
+			break;
+		}
+		psDroid->order = psOrder->order;
+		psDroid->orderX = psOrder->x;
+		psDroid->orderY = psOrder->y;
+		actionDroidLoc(psDroid, DACTION_MOVE, psOrder->x,psOrder->y);
+		break;
 	default:
 		ASSERT( FALSE, "orderUnitBase: unknown order" );
 		break;
@@ -2395,7 +2498,8 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 			order == DORDER_TRANSPORTOUT ||
 			order == DORDER_TRANSPORTIN  ||
 			order == DORDER_TRANSPORTRETURN ||
-            order == DORDER_DISEMBARK,
+            order == DORDER_DISEMBARK ||
+			order == DORDER_CIRCLE,
 		"orderUnitLoc: Invalid order for location" );
 
 	orderClearDroidList(psDroid);
@@ -2989,6 +3093,12 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
         {
             order = DORDER_DISEMBARK;
         }
+	}
+	else if (secondaryGetState(psDroid, DSO_CIRCLE, &state) &&
+		state == DSS_CIRCLE_SET)
+	{
+		order = DORDER_CIRCLE;
+		secondarySetState(psDroid, DSO_CIRCLE, DSS_NONE);
 	}
 	else if (secondaryGetState(psDroid, DSO_PATROL, &state) &&
 		state == DSS_PATROL_SET)
@@ -3622,6 +3732,13 @@ BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 		}
 		break;
 
+	case DSO_CIRCLE:
+		if (!vtolDroid(psDroid))
+		{
+			supported = FALSE;
+		}
+		break;
+
 	case DSO_REPAIR_LEVEL:
 	case DSO_PATROL:
 	case DSO_HALTTYPE:
@@ -3687,6 +3804,9 @@ BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pSt
 		break;
 	case DSO_PATROL:
 		*pState = (SECONDARY_STATE)(state & DSS_PATROL_MASK);
+		break;
+	case DSO_CIRCLE:
+		*pState = (SECONDARY_STATE)(state & DSS_CIRCLE_MASK);
 		break;
 	case DSO_HALTTYPE:
 		*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
@@ -3997,7 +4117,16 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 				CurrState &= ~DSS_RECYCLE_MASK;
 			}
 			break;
-
+		case DSO_CIRCLE:
+			if (State & DSS_CIRCLE_SET)
+			{
+				CurrState |= DSS_CIRCLE_SET;
+			}
+			else
+			{
+				CurrState &= ~DSS_CIRCLE_MASK;
+			}
+			break;
 		case DSO_PATROL:
 			if (State & DSS_PATROL_SET)
 			{

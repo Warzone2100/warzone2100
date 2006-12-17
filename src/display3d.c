@@ -3540,9 +3540,9 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			vtolDroid((DROID *)psObj))
 		{
 			//deal with VTOLs
-			firingStage = getNumAttackRuns((DROID *)psObj) - ((DROID *)psObj)->sMove.iAttackRuns;
+			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->sMove.iAttackRuns[weapon_slot];
     		//compare with max value
-			interval = getNumAttackRuns((DROID *)psObj);
+			interval = getNumAttackRuns((DROID *)psObj, weapon_slot);
 		}
 		else
 		{

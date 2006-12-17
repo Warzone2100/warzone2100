@@ -316,7 +316,7 @@ extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a body*/
 extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
 extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, 
-				   WEAPON_CLASS weaponClass);
+				   WEAPON_CLASS weaponClass, int side);
 /*dummy function for John*/
 extern void brainAvailable(BRAIN_STATS *psStat);
 
@@ -337,4 +337,5 @@ extern UDWORD getMaxWeaponDamage(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
 #endif
+
 

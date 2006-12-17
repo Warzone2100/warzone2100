@@ -349,7 +349,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 	BOOL			bCommanderBlock;
 	UDWORD			sensorRange;
 	//Watermelon:weapon_slot to store which turrent is InAttackRange
-	int i;
 
 	/* Get the sensor range */
 	switch (psObj->type)

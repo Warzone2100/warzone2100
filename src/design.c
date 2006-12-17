@@ -1471,7 +1471,6 @@ static COMP_BASE_STATS *
 intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 {
 	COMP_BASE_STATS		*psStats = NULL;
-	int					i;
 
 
 	// Check for a command droid
@@ -1630,7 +1629,7 @@ char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 	if ( psTemplate->numWeaps > 1 )
 	{
-		strcat( aCurrName, " hydra " );
+		strcat( aCurrName, "Hydra " );
 	}
 
 	psStats = (COMP_BASE_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
@@ -3569,11 +3568,11 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	//do kinetic armour
 	//widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, psStats->armourValue[WC_KINETIC]);
 	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats,
-		(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC));
+		(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC, 0));
 	//do heat armour
 	//widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, psStats->armourValue[WC_HEAT] );
 	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats,
-		(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT));
+		(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT, 0));
 	/* body points */
 	/*size = WBAR_SCALE * psStats->body/DBAR_BODYMAXPOINTS;
 	if (size > WBAR_SCALE)
@@ -3613,11 +3612,11 @@ static void intSetBodyShadowStats(BODY_STATS *psStats)
 		//size = WBAR_SCALE * psStats->armourValue/DBAR_BODYMAXARMOUR;
 		//widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K,psStats->armourValue[WC_KINETIC]);
 		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats,
-			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC));
+			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC, 0));
 		//armour - heat
 		//widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H,psStats->armourValue[WC_HEAT]);
 		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H,bodyArmour(psStats,
-			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT));
+			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT, 0));
 		/* body points */
 //			size = WBAR_SCALE * psStats->bodyPoints/DBAR_BODYMAXPOINTS;
 //			if (size > WBAR_SCALE)
@@ -4452,8 +4451,7 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
 			//Watemelon:weaponslots >= 2
-			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots >= 2 &&
-				!checkTemplateIsVtol(&sCurrDesign) )
+			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots >= 2 )
 			{
 				/* reveal turret_a button if hidden */
 				widgReveal( psWScreen, IDDES_WPABUTTON );
@@ -4481,8 +4479,7 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
 			//Watemelon:weaponSlots > 2
-			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 &&
-				!checkTemplateIsVtol(&sCurrDesign) )
+			if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 			{
 				/* reveal turret_b button if hidden */
 				widgReveal( psWScreen, IDDES_WPBBUTTON );
@@ -4556,6 +4553,8 @@ void intProcessDesign(UDWORD id)
 			/* Set the new stats on the display */
 			intSetPropulsionStats((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
+			//Watermelon:no need to do this now
+			/*
 			if(checkTemplateIsVtol(&sCurrDesign))
 			{
 				//Watermelon:hide WeaponA and WeaponB button,or it will problematic
@@ -4563,6 +4562,7 @@ void intProcessDesign(UDWORD id)
 				widgHide( psWScreen, IDDES_WPABUTTON );
 				widgHide( psWScreen, IDDES_WPBBUTTON );
 			}
+			*/
 
 			//check that the weapon is valid for this propulsion
 			if (!intCheckValidWeaponForProp())
@@ -4578,6 +4578,7 @@ void intProcessDesign(UDWORD id)
 					//Reset slot 2,3 weapons so it wont cause more than one weapon on VTOL problem
 					sCurrDesign.asWeaps[1] = 0;
 					sCurrDesign.asWeaps[2] = 0;
+					/*
 					if(checkTemplateIsVtol(&sCurrDesign))
 					{
 						//Watermelon:hide WeaponA and WeaponB button,or it will problematic
@@ -4585,6 +4586,7 @@ void intProcessDesign(UDWORD id)
 						widgHide( psWScreen, IDDES_WPABUTTON );
 						widgHide( psWScreen, IDDES_WPBBUTTON );
 					}
+					*/
 				}
 				//not valid weapon so initialise the weapon stat
 				sCurrDesign.asWeaps[0] = 0;

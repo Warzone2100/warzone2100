@@ -145,19 +145,17 @@ BOOL droidInit(void)
  */
 
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
-BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass)
+BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, int angle)
 {
 	UDWORD		penDamage, armourDamage;
 	BOOL		penetrated = FALSE;
 	UDWORD		armour=0;
 	SECONDARY_STATE		state;
 	SDWORD		level, cmdLevel;
+	DROID_HIT_SIDE	impact_side;
 
 	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 		"unitDamage: Invalid Unit pointer" );
-
-	debug( LOG_ATTACK, "unitDamage(%d): body %d armour %d damage: %d\n",
-		psDroid->id, psDroid->body, psDroid->armour[WC_KINETIC], damage);
 
     //EMP cannons do not do body damage
     if (weaponSubClass == WSC_EMP)
@@ -206,23 +204,58 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		}
 	}
 
+	//Watermelon:use 361 for TOP and 362 for BOTTOM
+	//TOP
+	if (angle == HIT_ANGLE_TOP)
+	{
+		impact_side = HIT_SIDE_TOP;		//4
+	}
+	//BOTTOM
+	else if (angle == HIT_ANGLE_BOTTOM)
+	{
+		impact_side = HIT_SIDE_BOTTOM;		//5
+	}
+	//FRONT
+	else if (angle <= 45 || angle >= 315)
+	{
+		impact_side = HIT_SIDE_FRONT;		//0
+	}
+	//RIGHT
+	else if (angle > 45 && angle < 135)
+	{
+		impact_side = HIT_SIDE_RIGHT;		//3
+	}
+	//REAR
+	else if (angle >= 135 && angle <= 225)
+	{
+		impact_side = HIT_SIDE_REAR;		//1
+	}
+	//LEFT
+	else if (angle > 225 && angle < 315)
+	{
+		impact_side = HIT_SIDE_LEFT;		//2
+	}
+
+	debug( LOG_ATTACK, "unitDamage(%d): body %d armour %d damage: %d\n",
+		psDroid->id, psDroid->body, psDroid->armour[impact_side][WC_KINETIC], damage);
+
 	switch (weaponClass)
 	{
 		case WC_KINETIC:
 		//case WC_EXPLOSIVE:
-			if (damage > psDroid->armour[WC_KINETIC])
+			if (damage > psDroid->armour[impact_side][WC_KINETIC])
 			{
 				penetrated = TRUE;
 			}
-			armour = psDroid->armour[WC_KINETIC];
+			armour = psDroid->armour[impact_side][WC_KINETIC];
 			break;
 		case WC_HEAT:
 		//case WC_MISC:
-			if (damage > psDroid->armour[WC_HEAT])
+			if (damage > psDroid->armour[impact_side][WC_HEAT])
 			{
 				penetrated = TRUE;
 			}
-			armour = psDroid->armour[WC_HEAT];
+			armour = psDroid->armour[impact_side][WC_HEAT];
 			break;
 	}
 
@@ -1442,7 +1475,8 @@ void droidUpdate(DROID *psDroid)
 					psDroid->burnDamage += damageToDo;
 					//psDroid->damage(psDroid, damageToDo, WC_HEAT);
 
-					(void)droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME);
+					//Watermelon:just assume the burn damage is from FRONT
+					(void)droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, 0);
 
 				}
 			}
@@ -3582,7 +3616,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 				//if weapon not found - error
 				if (incW[j] == -1)
 				{
-					debug( LOG_ERROR, "Unable to find Weapon %s for template %s", WeaponNameA[i], TemplateName );
+					debug( LOG_ERROR, "Unable to find Weapon %s for template %s", WeaponNameA, TemplateName );
 					abort();
 					return FALSE;
 				}
@@ -4113,6 +4147,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 //	UDWORD			tileX,tileY;
 //	BOOL			gotPos;
 //	UDWORD			numIts;
+	DROID_HIT_SIDE	impact_side;
 
 
 	/*
@@ -4360,17 +4395,23 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
 		{
-			//psDroid->armour[inc] = (asBodyStats + pTemplate->asParts[COMP_BODY])->armourValue[inc];
-			psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->
-				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, (WEAPON_CLASS)inc);
+			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+			{
+				//psDroid->armour[inc] = (asBodyStats + pTemplate->asParts[COMP_BODY])->armourValue[inc];
+				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
+				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
+			}
 		}
 	}
 	else
 	{
 		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
 		{
-			psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->
-				asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, (WEAPON_CLASS)inc);
+			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+			{
+				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
+					asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
+			}
 		}
 	}
 
@@ -6518,6 +6559,11 @@ BOOL vtolDroid(DROID *psDroid)
 /*returns TRUE if a VTOL Weapon Droid which has completed all runs*/
 BOOL vtolEmpty(DROID *psDroid)
 {
+	int i;
+	int numVtolWeaps = 0;
+	int emptyWeaps = 0;
+	BOOL bEmpty = TRUE;
+
 	if (!vtolDroid(psDroid))
 	{
 		return FALSE;
@@ -6527,14 +6573,30 @@ BOOL vtolEmpty(DROID *psDroid)
 		return FALSE;
 	}
 
-	if (psDroid->sMove.iAttackRuns >= getNumAttackRuns(psDroid))
+	if (psDroid->numWeaps > 0)
 	{
-		return TRUE;
+		for (i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
+			{
+				numVtolWeaps += (1 << (1 + i));
+				if (psDroid->sMove.iAttackRuns[i] >= getNumAttackRuns(psDroid, i))
+				{
+					emptyWeaps += (1 << (1 + i));
+				}
+			}
+		}
 	}
-	else
+
+	for (i = 0;i < psDroid->numWeaps;i++)
 	{
-		return FALSE;
+		if ((numVtolWeaps & (1 << (1 + i))) && !(emptyWeaps & (1 << (1 + i))))
+		{
+			bEmpty = FALSE;
+			break;
+		}
 	}
+	return bEmpty;
 }
 
 // true if a vtol is waiting to be rearmed by a particular rearm pad
@@ -6653,7 +6715,8 @@ BOOL allVtolsRearmed(DROID *psDroid)
 
 
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
-UWORD   getNumAttackRuns(DROID *psDroid)
+//Watermelon:adds int weapon_slot
+UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 {
     UWORD   numAttackRuns;
 
@@ -6661,14 +6724,14 @@ UWORD   getNumAttackRuns(DROID *psDroid)
 
     /*if weapon attached to the droid is a salvo weapon, then number of shots that
     can be fired = vtolAttackRuns*numRounds */
-    if (asWeaponStats[psDroid->asWeaps[0].nStat].reloadTime)
+    if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].reloadTime)
     {
-        numAttackRuns = (UWORD)(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds *
-            asWeaponStats[psDroid->asWeaps[0].nStat].vtolAttackRuns);
+        numAttackRuns = (UWORD)(asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].numRounds *
+            asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns);
     }
     else
     {
-        numAttackRuns = asWeaponStats[psDroid->asWeaps[0].nStat].vtolAttackRuns;
+        numAttackRuns = asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns;
     }
 
     return numAttackRuns;
@@ -6678,29 +6741,65 @@ UWORD   getNumAttackRuns(DROID *psDroid)
 leave reArm pad */
 BOOL  vtolHappy(DROID *psDroid)
 {
+	int i;
+	int numVtolWeaps = 0;
+	int rearmedWeaps = 0;
+	BOOL bHappy = TRUE;
+
 	ASSERT( vtolDroid(psDroid), "vtolHappy: not a VTOL droid" );
 	ASSERT( psDroid->droidType == DROID_WEAPON, "vtolHappy: not a weapon droid" );
 
 	//check full complement of ammo
-	if (psDroid->sMove.iAttackRuns == 0)
+	if (psDroid->numWeaps > 0)
 	{
-		//check fully repaired
-		if (psDroid->body == psDroid->originalBody)
+		for (i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
+			{
+				numVtolWeaps += (1 << (1 + i));
+				if (psDroid->sMove.iAttackRuns[i] == 0)
+				{
+					rearmedWeaps += (1 << (1 + i));
+				}
+			}
+		}
+
+		for (i = 0;i < psDroid->numWeaps;i++)
+		{
+			if ((numVtolWeaps & (1 << (1 + i))) && !(rearmedWeaps & (1 << (1 + i))))
+			{
+				bHappy = FALSE;
+				break;
+			}
+		}
+
+		if (bHappy &&
+			psDroid->body == psDroid->originalBody)
 		{
 			return TRUE;
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 	return FALSE;
 }
 
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
-void updateVtolAttackRun(DROID *psDroid)
+void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
 {
     if (vtolDroid(psDroid))
     {
-        psDroid->sMove.iAttackRuns++;
-        //quick check doesn't go over limit
-        ASSERT( psDroid->sMove.iAttackRuns < UWORD_MAX, "updateVtolAttackRun: too many attack runs" );
+		if (psDroid->numWeaps > 0)
+		{
+			if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns > 0)
+			{
+				psDroid->sMove.iAttackRuns[weapon_slot]++;
+				//quick check doesn't go over limit
+				ASSERT( psDroid->sMove.iAttackRuns[weapon_slot] < UWORD_MAX, "updateVtolAttackRun: too many attack runs" );
+			}
+		}
     }
 }
 
@@ -6708,14 +6807,18 @@ void updateVtolAttackRun(DROID *psDroid)
 offworld mission*/
 void mendVtol(DROID *psDroid)
 {
+	int i;
 	ASSERT( vtolEmpty(psDroid), "mendVtol: droid is not an empty weapon VTOL!" );
 
 	/* set rearm value to no runs made */
-	psDroid->sMove.iAttackRuns = 0;
-	//reset ammo and lastTimeFired
-	psDroid->asWeaps[0].ammo = asWeaponStats[psDroid->
-		asWeaps[0].nStat].numRounds;
-	psDroid->asWeaps[0].lastFired = 0;
+	for (i = 0;i < psDroid->numWeaps;i++)
+	{
+		psDroid->sMove.iAttackRuns[i] = 0;
+		//reset ammo and lastTimeFired
+		psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->
+			asWeaps[i].nStat].numRounds;
+		psDroid->asWeaps[i].lastFired = 0;
+	}
 	/* set droid points to max */
 	psDroid->body = psDroid->originalBody;
 }
@@ -6874,7 +6977,8 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
     UWORD               x, y, numKills, direction, i;
     DROID               *psNewDroid, *psCurr;
     STRUCTURE           *psStruct;
-    UDWORD              body, armourK, armourH;
+    UDWORD              body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
+	DROID_HIT_SIDE		impact_side;
 
     //leave any group it belongs to  - this gets called in droidRemove()
 	/*if(psD->psGroup)
@@ -7000,8 +7104,11 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         x = psD->x;
         y = psD->y;
         body = psD->body;
-        armourK = psD->armour[WC_KINETIC];
-        armourH = psD->armour[WC_HEAT];
+		for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+		{
+			armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
+			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
+		}
         numKills = psD->numKills;
         direction = psD->direction;
         //only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
@@ -7022,8 +7129,11 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         {
             addDroid(psNewDroid, apsDroidLists);
             psNewDroid->body = body;
-            psNewDroid->armour[WC_KINETIC] = armourK;
-            psNewDroid->armour[WC_HEAT] = armourH;
+			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+			{
+				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
+				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
+			}
             psNewDroid->numKills = numKills;
             psNewDroid->direction = direction;
     		if(!(psNewDroid->droidType == DROID_PERSON OR

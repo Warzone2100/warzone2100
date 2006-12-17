@@ -179,6 +179,23 @@ typedef enum _weapon_effect
 #define    SHOOT_ON_GROUND  0x01
 #define    SHOOT_IN_AIR     0x02
 
+
+//Sides used for droid impact
+typedef enum _droid_hit_sides
+{
+	HIT_SIDE_FRONT,
+	HIT_SIDE_REAR,
+	HIT_SIDE_LEFT,
+	HIT_SIDE_RIGHT,
+	HIT_SIDE_TOP,
+	HIT_SIDE_BOTTOM,
+	NUM_HIT_SIDES		//should be last one
+}DROID_HIT_SIDE;
+
+//Special angles representing top or bottom hit
+#define HIT_ANGLE_TOP 361
+#define HIT_ANGLE_BOTTOM 362
+
 typedef struct _body_stats
 {
 	/* common stats - N.B. system points for a body
@@ -193,7 +210,7 @@ typedef struct _body_stats
 	UBYTE		size;				// How big the body is - affects how hit
 	//UDWORD		bodyPoints;			// How much damage the body can take before destruction
 	UDWORD		weaponSlots;		// The number of weapon slots on the body
-	UDWORD		armourValue[NUM_WEAPON_CLASS];	// A measure of how much protection the armour provides
+	UDWORD		armourValue[NUM_HIT_SIDES][NUM_WEAPON_CLASS];	// A measure of how much protection the armour provides
 												// cross-ref with the weapon types
 	// Watermelon:you just got trolled,sir...
 	// A measure of how much energy the power plant outputs

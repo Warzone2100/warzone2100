@@ -587,7 +587,10 @@ typedef struct _save_move_control
 
 	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
-	UWORD	iAttackRuns;
+	/* Watermelon:I need num of DROID_MAXWEAPS of iAttackRuns */
+	UWORD	iAttackRuns[DROID_MAXWEAPS];
+	/* Watermelon:guard radius */
+	//UDWORD	iGuardRadius;
 
 	/* Only needed for Alex's movement update ? */
 //	UDWORD	timeStarted;
@@ -5962,7 +5965,18 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_uword(&psSaveDroid->sMove.bumpY);
 		endian_udword(&psSaveDroid->sMove.shuffleStart);
 		endian_sword(&psSaveDroid->sMove.iVertSpeed);
-		endian_uword(&psSaveDroid->sMove.iAttackRuns);
+		if( version == CURRENT_VERSION_NUM )
+		{
+			for(i = 0;i < psSaveDroid->numWeaps;i++)
+			{
+				endian_uword(&psSaveDroid->sMove.iAttackRuns[i]);
+			}
+			//endian_uword(&psSaveDroid->sMove.iGuardRadius);
+		}
+		else
+		{
+			endian_uword(&psSaveDroid->sMove.iAttackRuns[0])
+		}
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON */
 			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
@@ -6355,7 +6369,13 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			}
 */
 			endian_sword(&psSaveDroid->sMove.iVertSpeed);
-			endian_uword(&psSaveDroid->sMove.iAttackRuns);
+
+			for(i = 0;i < psSaveDroid->numWeaps;i++)
+			{
+				endian_uword(&psSaveDroid->sMove.iAttackRuns[i]);
+			}
+			//endian_uword(&psSaveDroid->sMove.iGuardRadius);
+
 			endian_sword(&psSaveDroid->formationDir);
 			endian_sdword(&psSaveDroid->formationX);
 			endian_sdword(&psSaveDroid->formationY);

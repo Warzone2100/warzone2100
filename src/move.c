@@ -4820,7 +4820,6 @@ void moveUpdateDroid(DROID *psDroid)
 //			}
 //		}
 		break;
-
 	default:
 		ASSERT( FALSE, "moveUpdateUnit: unknown move state" );
 		break;

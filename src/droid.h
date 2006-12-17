@@ -123,7 +123,8 @@ BOOL idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
 
-extern BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass);
+//Watermelon:added int angle,no need to use float since the difference between them is superficial.
+extern BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle);
 
 
 /* The main update routine for all droids */
@@ -327,9 +328,9 @@ extern BOOL  vtolHappy(DROID *psDroid);
 offworld mission*/
 extern void mendVtol(DROID *psDroid);
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
-extern void updateVtolAttackRun(DROID *psDroid);
+extern void updateVtolAttackRun(DROID *psDroid, int weapon_slot);
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
-extern UWORD   getNumAttackRuns(DROID *psDroid);
+extern UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot);
 //assign rearmPad to the VTOL
 extern void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 //don't use this function any more - the droid checks each frame for this to have died
@@ -386,5 +387,6 @@ extern BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample );
 extern BOOL cyborgDroid(DROID *psDroid);
 
 #endif
+
 
 

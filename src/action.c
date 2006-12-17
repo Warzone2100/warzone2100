@@ -891,7 +891,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		 ( proj_Direct( psWeapStats ) ||
 		 ( (psAttacker->type == OBJ_DROID) &&
 			!proj_Direct( psWeapStats ) &&
-			(actionInsideMinRange(psDroid, psDroid->psActionTarget[weapon_slot]) > 1) )) )
+			(actionInsideMinRange(psDroid, psDroid->psActionTarget[0]) & (1 << (1 + weapon_slot))) )) )
 	{
 // difference between muzzle position and droid origin is unlikely to affect aiming
 // particularly as target origin is used
@@ -975,24 +975,10 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 int actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget)
 {
 	WEAPON_STATS	*psStats;
-	//Watermelon:weapon_slot
-	int				num_weapons = 0;
 	int				result = 1;
 	int				i;
 
-	//if (psDroid->numWeaps == 0)
-	/* Watermelon:if I am a multi-turret droid */
-	if (psDroid->numWeaps > 0)
-	{
-		for(i = 0;i < psDroid->numWeaps;i++)
-		{
-			if (psDroid->asWeaps[i].nStat != 0)
-			{
-				num_weapons += (1 << (i+1));
-			}
-		}
-	}
-	else
+	if (psDroid->numWeaps == 0)
 	{
 		if (psDroid->asWeaps[0].nStat == 0)
 		{
@@ -1008,39 +994,41 @@ int actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget)
 	{
 		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
 		{
-			return 2;
+			for (i = 0;i < psDroid->numWeaps;i++)
+			{
+				result += (1 << (i + 1));
+			}
+			return result;
 		}
+		return result;
 	}
 
 	for(i = 0;i < psDroid->numWeaps;i++)
 	{
-		if (num_weapons & (1 << (i+1)))
+		psStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+		if (proj_Direct(psStats))
 		{
-			psStats = asWeaponStats + psDroid->asWeaps[i].nStat;
-			if (proj_Direct(psStats))
+			if (visibleObjWallBlock((BASE_OBJECT*)psDroid, psTarget))
 			{
-				if (visibleObjWallBlock((BASE_OBJECT*)psDroid, psTarget))
+				result += (1 << (i+1));
+			}
+		}
+		else
+		{
+			// indirect can only attack things they can see unless attacking
+			// through a sensor droid - see DORDER_FIRESUPPORT
+			if (orderState(psDroid, DORDER_FIRESUPPORT))
+			{
+				if (psTarget->visible[psDroid->player])
 				{
 					result += (1 << (i+1));
 				}
 			}
 			else
 			{
-				// indirect can only attack things they can see unless attacking
-				// through a sensor droid - see DORDER_FIRESUPPORT
-				if (orderState(psDroid, DORDER_FIRESUPPORT))
+				if (visibleObject((BASE_OBJECT*)psDroid, psTarget))
 				{
-					if (psTarget->visible[psDroid->player])
-					{
-						result += (1 << (i+1));
-					}
-				}
-				else
-				{
-					if (visibleObject((BASE_OBJECT*)psDroid, psTarget))
-					{
-						result += (1 << (i+1));
-					}
+					result += (1 << (i+1));
 				}
 			}
 		}
@@ -1115,7 +1103,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 
 static void actionUpdateVtolAttack( DROID *psDroid )
 {
-	WEAPON_STATS	*psWeapStats = NULL;
+	WEAPON_STATS	*psWeapStats[DROID_MAXWEAPS];
 	int i;
 
 	/* don't do attack runs whilst returning to base */
@@ -1132,7 +1120,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 		{
 			if (psDroid->asWeaps[i].nStat != 0)
 			{
-				psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+				psWeapStats[i] = asWeaponStats + psDroid->asWeaps[i].nStat;
 				ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
 				"actionUpdateVtolAttack: invalid weapon stats pointer" );
 				break;
@@ -1143,14 +1131,14 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 	{
 		if (psDroid->asWeaps[0].nStat > 0)
 		{
-			psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
+			psWeapStats[0] = asWeaponStats + psDroid->asWeaps[0].nStat;
 			ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
 				"actionUpdateVtolAttack: invalid weapon stats pointer" );
 		}
 	}
 
 	/* order back to base after fixed number of attack runs */
-	if ( psWeapStats != NULL )
+	if ( psWeapStats[0] != NULL )
 	{
 		//if ( psDroid->sMove.iAttackRuns >= psWeapStats->vtolAttackRuns )
         if (vtolEmpty(psDroid))
@@ -2085,7 +2073,7 @@ void actionUpdateDroid(DROID *psDroid)
 				psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
 				if (avtResult & (1 << (i+1)))
 				{
-					if ( (actionInRange(psDroid, psDroid->psActionTarget[i]) & (1 << i)) )
+					if ( (actionInRange(psDroid, psDroid->psActionTarget[0]) & (1 << i)) )
 					{
 						if ( psDroid->player == selectedPlayer )
 						{
@@ -2093,19 +2081,19 @@ void actionUpdateDroid(DROID *psDroid)
 														VTOL_ATTACK_AUDIO_DELAY );
 						}
 
-						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i],
+						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
 												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
 												&asWeaponStats[psDroid->asWeaps[i].nStat],
 												bInvert,i))
 						{
 								// In range - fire !!!
 								combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
-								psDroid->psActionTarget[i], i);
+								psDroid->psActionTarget[0], i);
 						}
 					}
 					else
 					{
-						actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i],
+						actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
 												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
 												&asWeaponStats[psDroid->asWeaps[i].nStat],
 												bInvert,i);
@@ -3468,6 +3456,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->psActionTarget[0] = psDroid->psTarget[0];
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
+
 	default:
 		ASSERT( FALSE, "actionUnitBase: unknown action" );
 		break;
@@ -3702,6 +3691,7 @@ exit:
 	return result;
 
 }
+
 
 
 

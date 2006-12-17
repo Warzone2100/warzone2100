@@ -57,6 +57,7 @@ typedef enum _droid_order
 	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
 	DORDER_ATTACK_M,			// 38 - attack with multiple weapons
 	DORDER_ATTACKTARGET_M,		// 39 - attack multiple targets
+	DORDER_CIRCLE,				// circles target location and engage
 } DROID_ORDER;
 
 // secondary orders for droids
@@ -74,6 +75,7 @@ typedef enum _secondary_order
 	DSO_RETURN_TO_LOC,			// return to various locations
 	DSO_FIRE_DESIGNATOR,		// command droid controlling IDF structures
 	DSO_ASSIGN_VTOL_PRODUCTION,
+	DSO_CIRCLE,					// circling target position and engage
 } SECONDARY_ORDER;
 
 // the state of secondary orders
@@ -100,6 +102,7 @@ typedef enum _secondary_state
 	DSS_RTL_BASE			= 0x100000,
 	DSS_RTL_TRANSPORT		= 0x200000,
 	DSS_PATROL_SET			= 0x400000,
+	DSS_CIRCLE_SET			= 0x400100,
 	DSS_FIREDES_SET			= 0x800000,
 	DSS_VTOLPROD_START		= 0x01000000,
 	DSS_VTOLPROD_END		= 0x10000000,
@@ -121,6 +124,7 @@ typedef enum _secondary_state
 #define DSS_RTL_MASK		0x380000
 #define DSS_PATROL_MASK		0x400000
 #define DSS_FIREDES_MASK	0x800000
+#define DSS_CIRCLE_MASK		0x400100
 
 //call this *AFTER* every mission so it gets reset
 extern void initRunData(void);
@@ -229,6 +233,7 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
 #endif
+
 
 
 

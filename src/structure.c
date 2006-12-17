@@ -4844,23 +4844,34 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 						//amount required is a factor of the droids' weight
 						pointsRequired = psDroid->weight / REARM_FACTOR;
-						pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) /
+						//Watermelon:take numWeaps into consideration
+						pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) * psDroid->numWeaps /
 							GAME_TICKS_PER_SEC;
 						//if ((SDWORD)(psDroid->sMove.iAttackRuns - pointsToAdd) <= 0)
 						if (pointsToAdd >= pointsRequired)
 						{
-							/* set rearm value to no runs made */
-							psDroid->sMove.iAttackRuns = 0;
-							//reset ammo and lastTimeFired
-							psDroid->asWeaps[0].ammo = asWeaponStats[psDroid->
-								asWeaps[0].nStat].numRounds;
-							psDroid->asWeaps[0].lastFired = 0;
+							for (i = 0;i < psDroid->numWeaps;i++)
+							{
+								/* set rearm value to no runs made */
+								psDroid->sMove.iAttackRuns[i] = 0;
+								//reset ammo and lastTimeFired
+								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->
+									asWeaps[i].nStat].numRounds;
+								psDroid->asWeaps[i].lastFired = 0;
+							}
 						}
 						else
 						{
-							if (pointsToAdd >= pointsRequired/psDroid->sMove.iAttackRuns)
+							for (i = 0;i < psDroid->numWeaps;i++)
 							{
-								psDroid->sMove.iAttackRuns--;
+								//Watermelon:make sure that slot is depleted and dont divide integer by zero
+								if ( psDroid->sMove.iAttackRuns[i] > 0 )
+								{
+									if (pointsToAdd >= pointsRequired/psDroid->sMove.iAttackRuns[i])
+									{
+										psDroid->sMove.iAttackRuns[i]--;
+									}
+								}
 							}
 						}
 					}

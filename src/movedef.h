@@ -10,6 +10,8 @@
 
 #define TRAVELSIZE			100
 
+//Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
+#define VTOL_MAXWEAPS		3
 
 typedef struct _path_point
 {
@@ -64,7 +66,10 @@ typedef struct _move_control
 
 	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
-	UWORD	iAttackRuns;
+	/* Watermelon:I need num of DROID_MAXWEAPS of iAttackRuns */
+	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
+	/* Watermelon:guard radius */
+	//UDWORD	iGuardRadius;
 
 	// added for vtol movement
 
@@ -82,5 +87,6 @@ typedef struct _move_control
 
 
 #endif
+
 
 

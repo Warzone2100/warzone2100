@@ -59,6 +59,7 @@ typedef enum _droid_action
 	DACTION_RETURNTOPOS,			// (38) used by scout/patrol order when returning to route
 	DACTION_FIRESUPPORT_RETREAT,	// (39) used by firesupport order when sensor retreats
 	DACTION_ATTACK_M,				// (40) attack with multiple weapons
+	DACTION_CIRCLE,					// (41) circling while engaging
 } DROID_ACTION;
 
 // after failing a route ... this is the amount of time that the droid goes all defensive untill it can start going aggressive
@@ -130,6 +131,7 @@ extern BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD x, SDWORD y);
 extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
 #endif
+
 
 
 

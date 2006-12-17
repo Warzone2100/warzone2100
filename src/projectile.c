@@ -123,7 +123,7 @@ static void	proj_PostImpactFunc( PROJ_OBJECT *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 									FIRE_BOX *pFireBox );
 
-static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass);
+static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass,int angle);
 
 /***************************************************************************/
 BOOL gfxVisible(PROJ_OBJECT *psObj)
@@ -319,7 +319,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	{
 		calcDroidMuzzleLocation( (DROID *) psAttacker, &muzzle, weapon_slot);
 		/*update attack runs for VTOL droid's each time a shot is fired*/
-		updateVtolAttackRun((DROID *)psAttacker);
+		updateVtolAttackRun((DROID *)psAttacker, weapon_slot);
 	}
 	else if (psAttacker->type == OBJ_STRUCTURE && weapon_slot >= 0)
 	{
@@ -593,7 +593,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	//esp the AAGun,or it will never hit anything with the new hit system
 	UDWORD			wpRadius = 1;
 	//Watermelon:Penetrate or not
-	BOOL			bPenetrate = FALSE;
+	BOOL			bPenetrate;
 	WEAPON			asWeap;
 	DROID			*psTempDroid;
 
@@ -808,27 +808,27 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 							switch (psTempDroid->droidType)
 							{
 								case DROID_CONSTRUCT:
-									zdiff -= (asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
+									zdiff -= abs((asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
 									break;
 								case DROID_REPAIR:
-									zdiff -= (asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
+									zdiff -= abs((asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
 									break;
 								case DROID_SENSOR:
-									zdiff -= (asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
+									zdiff -= abs((asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax);
 									break;
 								case DROID_COMMAND:
-									zdiff -= (asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax;
+									zdiff -= abs((asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax);
 									break;
 								case DROID_ECM:
-									zdiff -= (asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
+									zdiff -= abs((asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax);
 									break;
 							}
 						}
 					}
 				}
 
-				if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
-					zdiff < psTempObj->sDisplay.imd->ymax )
+				if ( zdiff < abs(psTempObj->sDisplay.imd->ymax) &&
+					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
@@ -926,11 +926,14 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	SDWORD			xdiff,ydiff,zdiff,extendRad;
 	UDWORD			wpRadius = 3;
 	DROID			*psTempDroid;
+	BOOL			bPenetrate;
+	WEAPON			asWeap;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_InFlightIndirectFunc: invalid projectile pointer" );
 
 	psStats = psObj->psWStats;
+	bPenetrate = psStats->penetrate;
 	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
 		"proj_InFlightIndirectFunc: Invalid weapon stats pointer" );
 
@@ -1071,31 +1074,43 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 							switch (psTempDroid->droidType)
 							{
 								case DROID_CONSTRUCT:
-									zdiff -= (asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
+									zdiff -= abs((asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
 									break;
 								case DROID_REPAIR:
-									zdiff -= (asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
+									zdiff -= abs((asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
 									break;
 								case DROID_SENSOR:
-									zdiff -= (asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
+									zdiff -= abs((asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax);
 									break;
 								case DROID_COMMAND:
-									zdiff -= (asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax;
+									zdiff -= abs((asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax);
 									break;
 								case DROID_ECM:
-									zdiff -= (asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
+									zdiff -= abs((asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax);
 									break;
 							}
 						}
 					}
 				}
 
-				if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
-					zdiff < psTempObj->sDisplay.imd->ymax )
+				if ( zdiff < abs(psTempObj->sDisplay.imd->ymax) &&
+					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
-		  			psObj->state = PROJ_IMPACT;
+
+					if (bPenetrate)
+					{
+						asWeap.nStat = psObj->psWStats - asWeaponStats;
+						//Watermelon:just assume we damaged the chosen target
+						psObj->psDamaged = psNewTarget;
+
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + extendRad * dx / iRad), (psObj->startY + extendRad * dy / iRad), psObj->z, NULL, TRUE, bPenetrate, -1 );
+					}
+					else
+					{
+						psObj->state = PROJ_IMPACT;
+					}
 					return;
 				}
 			}
@@ -1128,8 +1143,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			}
 
 			if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psObj->psDest) * (SDWORD)establishTargetRadius(psObj->psDest) ) &&
-				zdiff < psObj->psDest->sDisplay.imd->ymax )
+				zdiff < abs(psObj->psDest->sDisplay.imd->ymax) )
 			{
+				psObj->state = PROJ_IMPACT;
 			}
 			else
 			{
@@ -1188,6 +1204,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
 	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
 	SDWORD			tarZ0,tarZ1,zDiff;
+	int				impact_angle;
 
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
@@ -1412,7 +1429,32 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						psObj->psDest->id, psObj->psDest->player);
 				/*the damage depends on the weapon effect and the target propulsion type or structure strength*/
 
-	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass);
+				if (psObj->psDest->type == OBJ_DROID)
+				{
+					if (psObj->altChange > 300)
+					{
+						impact_angle = HIT_ANGLE_TOP;
+					}
+					else if (psObj->z < (psObj->psDest->z - 50))
+					{
+						impact_angle = HIT_ANGLE_BOTTOM;
+					}
+					else
+					{
+						xDiff = psObj->startX - psObj->psDest->x;
+						yDiff = psObj->startY - psObj->psDest->y;
+						impact_angle = abs(psObj->psDest->direction - (180 * atan2f((float)xDiff, (float)yDiff) /PI));
+						if (impact_angle >= 360)
+						{
+							impact_angle -= 360;
+						}
+					}
+				}
+				else
+				{
+					impact_angle = 0;
+				}
+	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 				if(bKilled)
 				{
@@ -1456,7 +1498,16 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				}
 				debug(LOG_NEVER, "Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player);
-				bKilled = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass);
+				//Watermelon:just assume it as from TOP for indirect artillery
+				if (psObj->psDest->type == OBJ_DROID)
+				{
+					impact_angle = HIT_ANGLE_TOP;
+				}
+				else
+				{
+					impact_angle = HIT_SIDE_FRONT;
+				}
+				bKilled = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 				if(bKilled)
 				{
@@ -1582,7 +1633,27 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 									turnOffMultiMsg(TRUE);
 								}
 
-								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass);
+								//Watermelon:uses a slightly different check for angle,
+								// since fragment of a project is from the explosion spot not from the projectile start position
+								if (psObj->altChange > 300)
+								{
+									impact_angle = HIT_ANGLE_TOP;
+								}
+								else if (psObj->z < (psCurrD->z - 50))
+								{
+									impact_angle = HIT_ANGLE_BOTTOM;
+								}
+								else
+								{
+									xDiff = psObj->x - psCurrD->x;
+									yDiff = psObj->y - psCurrD->y;
+									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) /PI));
+									if (impact_angle >= 360)
+									{
+										impact_angle -= 360;
+									}
+								}
+								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -1644,7 +1715,27 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 									turnOffMultiMsg(TRUE);
 								}
 
-								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass);
+								//Watermelon:uses a slightly different check for angle,
+								// since fragment of a project is from the explosion spot not from the projectile start position
+								if (psObj->altChange > 300)
+								{
+									impact_angle = HIT_ANGLE_TOP;
+								}
+								else if (psObj->z < (psCurrD->z - 50))
+								{
+									impact_angle = HIT_ANGLE_BOTTOM;
+								}
+								else
+								{
+									xDiff = psObj->x - psCurrD->x;
+									yDiff = psObj->y - psCurrD->y;
+									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) /PI));
+									if (impact_angle >= 360)
+									{
+										impact_angle -= 360;
+									}
+								}
+								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -1967,7 +2058,8 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 
 						//bKilled = psCurr->damage(psCurr, damageToDo, psStats->weaponClass);
 
-	  					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass);
+						//Watermelon:just assume the burn damage is from FRONT
+	  					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
 
 						psCurr->burnDamage += damageToDo;
 
@@ -2062,7 +2154,7 @@ FEATURE		*psFeat;
 				case DROID_CYBORG_REPAIR:
 				case DROID_CYBORG_SUPER:
 					//Watermelon:'hitbox' size is now based on imd size
-					radius = (psTarget->sDisplay.imd->xmax + psTarget->sDisplay.imd->zmax)/2;
+					radius = abs(psTarget->sDisplay.imd->radius);
 					break;
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
@@ -2166,12 +2258,12 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 }
 
 
-BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass)
+BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle)
 {
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass);
+			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass, angle);
 			break;
 		case OBJ_STRUCTURE:
 			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass);
@@ -2329,6 +2421,7 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 		}
 	}
 }
+
 
 
 
