@@ -995,8 +995,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 				break;
 			case WSC_ROCKET:
-			case WSC_MISSILE
-			case WSC_SLOWROCKE:
+			case WSC_MISSILE:
+			case WSC_SLOWROCKET:
 			case WSC_SLOWMISSILE:
 				pos.x = psObj->x;
 				pos.y = psObj->z+8;

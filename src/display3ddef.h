@@ -12,7 +12,7 @@
 #define	RADBRX		(RADTLX + RADWIDTH)	-1
 #define	RADBRY		(RADTLY + RADHEIGHT) -1
 //assigned to variable visibleXtiles, visibleYTiles 25/02/98 AB
-#define VISIBLE_XTILES	32	
+#define VISIBLE_XTILES	32
 #define VISIBLE_YTILES	32
 
 #define MIN_TILE_X		(VISIBLE_XTILES/4)
@@ -32,6 +32,6 @@
 #define NUM_TILES	100		//5 pages of 16 tiles.
 
 #define BOX_PULSE_SIZE	10
-extern UBYTE	boxPulseColours[BOX_PULSE_SIZE]; 
+extern UBYTE	boxPulseColours[BOX_PULSE_SIZE];
 
 #endif

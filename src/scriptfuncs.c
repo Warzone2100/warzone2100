@@ -10164,7 +10164,8 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 BOOL scrPursueResearch(void)
 {
 	RESEARCH			*psResearch;
-	SDWORD				foundIndex,index,player,cur,tempIndex,Stack[400];
+	SDWORD				foundIndex,player,cur,tempIndex,Stack[400];
+	UDWORD				index;
 	SWORD				top;
 
 	BOOL				found;
@@ -10498,7 +10499,7 @@ BOOL scrAlliancesLocked(void)
 		debug(LOG_ERROR, "scrAlliancesLocked(): failed to push result");
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -10565,7 +10566,7 @@ BOOL scrToPow(void)
 		debug(LOG_ERROR, "scrToPow(): failed to push result");
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -10581,7 +10582,7 @@ BOOL scrDebugMenu(void)
 	}
 
 	(void)addDebugMenu(menuUp);
-	
+
 	return TRUE;
 }
 
@@ -10671,7 +10672,7 @@ BOOL scrGetNumArgsInCmd(void)
 		debug(LOG_ERROR, "scrGetNumArgsInCmd(): failed to push result");
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -10705,7 +10706,7 @@ BOOL scrGetChatCmdDescription(void)
 	/* Copy command */
 	strcpy(pChatCommand, chat_msg.cmdData[cmdIndex].pCmdDescription);
 
-	/* Make scrFunctionResult point to the valid command */ 
+	/* Make scrFunctionResult point to the valid command */
 	scrFunctionResult.v.sval = pChatCommand;
 
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
@@ -10716,7 +10717,7 @@ BOOL scrGetChatCmdDescription(void)
 	}
 
 	FREE(pChatCommand);
-	
+
 	return TRUE;
 }
 
@@ -10817,6 +10818,6 @@ BOOL scrChatCmdIsPlayerAddressed(void)
 		debug(LOG_ERROR, "scrChatCmdIsPlayerAddressed(): failed to push result");
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }

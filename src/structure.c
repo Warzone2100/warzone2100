@@ -3940,7 +3940,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 #ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
-	int					i;
+	UDWORD				i;
 
 	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"aiUpdateStructure: invalid Structure pointer" );
