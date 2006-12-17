@@ -6,6 +6,8 @@ SRC=codeprint.c \
 	evntsave.c \
 	interp.c \
 	script.c \
+	chat_parser.c \
+	chat_lexer.c \
 	script_parser.c \
 	script_lexer.c \
 	stack.c

@@ -2,10 +2,12 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 noinst_LIBRARIES = libscript.a
 AM_CPPFLAGS = -I$(top_srcdir)
-BUILT_SOURCES = script_parser.h
+BUILT_SOURCES = script_parser.h chat_parser.h
 libscript_a_SOURCES = \
 	script_lexer.l \
 	script_parser.y \
+	chat_lexer.l \
+	chat_parser.y \
 	codeprint.c \
 	event.c \
 	evntsave.c \
@@ -18,6 +20,7 @@ libscript_a_SOURCES = \
 	interp.h \
 	parse.h \
 	script.h \
+	chat_processing.h \
 	stack.h
 
 libscript_a_libs = ../framework/libframework.a
