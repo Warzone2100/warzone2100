@@ -43,7 +43,7 @@ typedef Uint8 iBitmap;
 typedef struct { Uint8 r, g, b; } iColour;
 typedef BOOL iBool;
 typedef struct { Sint32 x, y; } iPoint;
-typedef struct { Uint32 width, height; iBitmap *bmp; } iSprite;
+typedef struct { Uint32 width, height, depth; iBitmap *bmp; } iSprite;
 typedef iColour iPalette[256];
 typedef struct { Uint8 r, g, b, p; } iRGB8;
 typedef struct { Uint16 r, g, b, p; } iRGB16;

@@ -951,7 +951,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	iY = psObj->startY + (iDist * dy / iRad);
 
 	/* impact if about to go off map else update coordinates */
-	if ( worldOnMap( iX, iY ) == FALSE )
+	if ( !worldOnMap( iX, iY ) )
 	{
 	  	psObj->state = PROJ_IMPACT;
 		debug( LOG_NEVER, "**** projectile off map - removed ****\n" );
@@ -975,35 +975,35 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 
 	if( gfxVisible(psObj) )
 	{
-		if ( psStats->weaponSubClass == WSC_FLAME )
+		switch(psStats->weaponSubClass)
 		{
-			effectGiveAuxVar(PERCENT(iDist,iRad));
-			pos.x = psObj->x;
-			pos.y = psObj->z-8;
-			pos.z = psObj->y;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
-		}
-		else if ( psStats->weaponSubClass == WSC_COMMAND ||
-        		psStats->weaponSubClass == WSC_ELECTRONIC ||
-        		psStats->weaponSubClass == WSC_EMP)
-		{
-			effectGiveAuxVar((PERCENT(iDist,iRad)/2));
-			pos.x = psObj->x;
-			pos.y = psObj->z-8;
-			pos.z = psObj->y;
-  			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
-		}
-		else if ( psStats->weaponSubClass == WSC_ROCKET ||
-			psStats->weaponSubClass == WSC_MISSILE ||
-			psStats->weaponSubClass == WSC_SLOWROCKET ||
-			psStats->weaponSubClass == WSC_SLOWMISSILE )
-		{
-			pos.x = psObj->x;
-			pos.y = psObj->z+8;
-			pos.z = psObj->y;
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
+			case WSC_FLAME:
+				effectGiveAuxVar(PERCENT(iDist,iRad));
+				pos.x = psObj->x;
+				pos.y = psObj->z-8;
+				pos.z = psObj->y;
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
+				break;
+			case WSC_COMMAND:
+			case WSC_ELECTRONIC:
+			case WSC_EMP:
+				effectGiveAuxVar((PERCENT(iDist,iRad)/2));
+				pos.x = psObj->x;
+				pos.y = psObj->z-8;
+				pos.z = psObj->y;
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
+				break;
+			case WSC_ROCKET:
+			case WSC_MISSILE
+			case WSC_SLOWROCKE:
+			case WSC_SLOWMISSILE:
+				pos.x = psObj->x;
+				pos.y = psObj->z+8;
+				pos.z = psObj->y;
+				addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
+				break;
 		}
 	}
 

@@ -148,11 +148,10 @@ void	releaseMapSurface(iSurface *pSurface)
 void	tileLayouts(int texture)
 {
 	/* Store the source rect as four points */
-	sP1.x = 0;
-	sP1.y = 0;
-	sP2.x = 63;
-	sP2.y = 0;
-	sP3.x = 63; sP3.y = 63; sP4.x = 0; 	sP4.y = 63;
+	sP1.x = 0; sP1.y = 0;
+	sP2.x = 63; sP2.y = 0;
+	sP3.x = 63; sP3.y = 63;
+	sP4.x = 0; sP4.y = 63;
 
 	/* Store pointers to the points */
 	psP1 = &sP1; psP2 = &sP2; psP3 = &sP3; psP4 = &sP4;

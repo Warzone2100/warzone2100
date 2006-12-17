@@ -323,8 +323,8 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 			float specular[4] = { 1, 1, 1, 1 };
 			float shininess = 10;
 
-			 glEnable(GL_LIGHTING);
-			 glEnable(GL_NORMALIZE);
+			glEnable(GL_LIGHTING);
+			glEnable(GL_NORMALIZE);
 
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
@@ -349,7 +349,6 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 		}
 	}
 	for (i = 0; i < numVerts; i++) {
-		//glColor4ub(255, 255, 255, 255);
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
 		glTexCoord2f(pVrts[i].tu, pVrts[i].tv+texture_offset);
 		//d3dVrts[i].specular = pVrts[i].specular.argb;
@@ -1130,8 +1129,6 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the
 		polygons.
-
-
 	*/
 	tileCount++;
 	pie_SetTexturePage(texPage);

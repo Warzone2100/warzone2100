@@ -108,7 +108,7 @@ int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bColo
 	}
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -127,10 +127,6 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 	/* DID come from a resource */
 	_TEX_PAGE[tex_index].bResource = bResource;
 	// Default values
-	_TEX_PAGE[tex_index].tex.bmp = NULL;
-	_TEX_PAGE[tex_index].tex.width = 256;
-	_TEX_PAGE[tex_index].tex.height = 256;
-	_TEX_PAGE[tex_index].tex.xshift = 0;
 	_TEX_PAGE[tex_index].tex.bmp = s->bmp;
 	_TEX_PAGE[tex_index].tex.width = s->width;
 	_TEX_PAGE[tex_index].tex.height = s->height;
