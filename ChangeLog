@@ -2,6 +2,10 @@
  * General:
    * New: Added 'Locked Teams' alliance mode: human players and AIs can play in a group against other groups.
    * New: Allies now have shared vision in 'Teamplay' and 'Locked Teams' modes.
+   * New: Multi-Turret support for units and structures.
+   * New: 'Circle' command for VTOLs - upon activation will make VTOLs fly in circles and engage approaching enemies.
+   * New: A more realistic miss/hit evaluation system - allows to dodge projectiles.
+   * New: Top, bottom, left, right, front and rear armor types for units.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
 
 2006-09-07: Version 2.0.5 RC1
