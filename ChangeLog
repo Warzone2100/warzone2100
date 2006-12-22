@@ -7,10 +7,16 @@
    * New: A more realistic miss/hit evaluation system - allows to dodge projectiles.
    * New: Top, bottom, left, right, front and rear armor types for units.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
+ * Unit AI:
+   * New: Multi-criteria target selection routine to automatically choose the best suitable target
+   * New: Units and structures will constantly look for a better target takeing into consideration
+          targets of the friendly units nearby - won't lock on one target forever anymore
 
 2006-09-07: Version 2.0.5 RC1
  * General:
-   * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, only sent to the players to which you have an opened communication channel. Default key combination: Alt+H
+   * New: Added beacons for skirmish and multiplayer, can be placed on map and radar,
+          only sent to the players to which you have an opened communication channel.
+		  Default key combination: Alt+H.
    * New: Allied players send vision to each other automatically (only once)
    * New: Non-Mac versions can now load Mac-created savegames and the other way round
    * New: Ctrl+MouseWheel makes game speed up or slow down
