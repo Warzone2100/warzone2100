@@ -208,17 +208,12 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	//TOP
 	if (angle == HIT_ANGLE_TOP)
 	{
-		impact_side = HIT_SIDE_TOP;		//4
+		impact_side = HIT_SIDE_TOP;			//4
 	}
 	//BOTTOM
 	else if (angle == HIT_ANGLE_BOTTOM)
 	{
 		impact_side = HIT_SIDE_BOTTOM;		//5
-	}
-	//FRONT
-	else if (angle <= 45 || angle >= 315)
-	{
-		impact_side = HIT_SIDE_FRONT;		//0
 	}
 	//RIGHT
 	else if (angle > 45 && angle < 135)
@@ -234,6 +229,11 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	else if (angle > 225 && angle < 315)
 	{
 		impact_side = HIT_SIDE_LEFT;		//2
+	}
+	//FRONT - default
+	else //if (angle <= 45 || angle >= 315)
+	{
+		impact_side = HIT_SIDE_FRONT;		//0
 	}
 
 	debug( LOG_ATTACK, "unitDamage(%d): body %d armour %d damage: %d\n",

@@ -158,7 +158,6 @@ _keymapsave keyMapSaveTable[] =
 	kf_SelectAllUnits,
 	kf_SelectAllVTOLs,
 	kf_SelectAllWheeled,
-	kf_FinishResearch,
 	kf_FrameRate,
 	kf_SelectAllSameType,
 	kf_SelectNextFactory,
@@ -224,6 +223,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_DownDroidScale,
 	kf_RaiseGamma,
 	kf_LowerGamma,
+	kf_ToggleWatchWindow,
 
 	NULL		// last function!
 };
@@ -424,6 +424,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_SPACE,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
 
 	saveKeyMap();	// save out the default key mappings.
 

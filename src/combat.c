@@ -129,7 +129,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	psStats = asWeaponStats + psWeap->nStat;
 
     //check valid weapon/prop combination
-    if (validTarget(psAttacker, psTarget) == 1)
+    if (validTarget(psAttacker, psTarget) == INVALID_TARGET)
     {
         return;
     }

@@ -31,7 +31,7 @@ extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 
 
 /* The range for neighbouring objects */
-#define NAYBOR_RANGE		(TILE_UNITS*8)
+#define NAYBOR_RANGE		(TILE_UNITS*9)	//range of lancer, BB, TK etc
 
 //used to stop structures being built too near the edge and droids being placed down - pickATile
 #define TOO_NEAR_EDGE	3
@@ -52,7 +52,7 @@ typedef enum
 } PICKTILE;
 
 /* Store for the objects near the droid currently being updated */
-#define MAX_NAYBORS		100
+#define MAX_NAYBORS		120
 extern NAYBOR_INFO		asDroidNaybors[MAX_NAYBORS];
 extern UDWORD			numNaybors;
 

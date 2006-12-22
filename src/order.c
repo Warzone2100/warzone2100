@@ -101,6 +101,7 @@ void initRunData(void)
     }
 }
 
+//FIXME: unit doesn't shoot while returning to the guard position
 // check whether a droid has to move back to the thing it is guarding
 void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 {
@@ -580,9 +581,9 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
-		if ( (psDroid->action == DACTION_MOVE) &&
-			 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state == DSS_ALEV_ALWAYS)) &&
-			 aiBestNearestTarget(psDroid, &psObj, 0) )
+		if ( (psDroid->action == DACTION_MOVE) && CAN_UPDATE_NAYBORS(psDroid) &&
+			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state == DSS_ALEV_ALWAYS)) &&
+			 aiBestNearestTarget(psDroid, &psObj, 0) >= 0 )
 		{
 			switch (psDroid->droidType)
 			{
@@ -643,11 +644,11 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 			}
 		}
 		break;
-case DORDER_CIRCLE:
+	case DORDER_CIRCLE:
 		// if there is an enemy around, attack it
-		if ( (psDroid->action == DACTION_MOVE) &&
-			 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state == DSS_ALEV_ALWAYS)) &&
-			 aiBestNearestTarget(psDroid, &psObj, 0) )
+		if ( (psDroid->action == DACTION_MOVE) && CAN_UPDATE_NAYBORS(psDroid) &&
+			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state == DSS_ALEV_ALWAYS)) &&
+			 aiBestNearestTarget(psDroid, &psObj, 0) >= 0)
 		{
 			switch (psDroid->droidType)
 			{
@@ -3249,7 +3250,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 			&& !aiCheckAlliances(psObj->player , psDroid->player) )
 	{
         //check valid weapon/prop combination
-        if (validTarget((BASE_OBJECT *)psDroid, psObj) == 1)
+        if (validTarget((BASE_OBJECT *)psDroid, psObj) == INVALID_TARGET)
         {
             order = DORDER_NONE;
         }

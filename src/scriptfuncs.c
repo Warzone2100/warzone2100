@@ -10590,7 +10590,6 @@ BOOL scrDebugMenu(void)
 BOOL scrSetDebugMenuEntry(void)
 {
 	SDWORD		index;
-	BOOL		bAddingNew = FALSE;
 
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_INT, &index))
 	{
@@ -10598,21 +10597,7 @@ BOOL scrSetDebugMenuEntry(void)
 		return FALSE;
 	}
 
-	/* New one? */
-	if(!strcmp(debugMenuEntry[index],""))
-	{
-		bAddingNew = TRUE;
-	}
-
-	/* Set */
-	strcpy(debugMenuEntry[index], strParam1);
-
-	/* Re-open it if already open to recalculate height */
-	if(DebugMenuUp && bAddingNew)
-	{
-		intCloseDebugMenuNoAnim();
-		(void)addDebugMenu(TRUE);
-	}
+	setDebugMenuEntry(strParam1, index);
 
 	return TRUE;
 }

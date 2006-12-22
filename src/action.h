@@ -130,6 +130,21 @@ extern BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD x, SDWORD y);
 // choose a landing position for a VTOL when it goes to rearm
 extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 
+// Try to find a better target
+extern BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
+
+//How many frames to skip before updating naybors
+#define NAYBOR_SKIP_FRAMES 8
+
+/* How many frames to skip before looking for a better target */
+#define TARGET_UPD_SKIP_FRAMES 1000
+
+#define	INVALID_TARGET 1
+
+/* Macro to check if it's time to update naybor list */
+#define CAN_UPDATE_NAYBORS(object)\
+(((object)->id % NAYBOR_SKIP_FRAMES) == (frameGetFrameNumber() % NAYBOR_SKIP_FRAMES))
+
 #endif
 
 

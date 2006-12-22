@@ -1218,9 +1218,9 @@ static void actionUpdateTransporter( DROID *psDroid )
 		{
 			if (psDroid->asWeaps[i].nStat > 0)
 			{
-				if (psDroid->psActionTarget[0] == NULL)
+				if (psDroid->psActionTarget[0] == NULL && CAN_UPDATE_NAYBORS(psDroid))
 				{
-					aiBestNearestTarget(psDroid, &psDroid->psActionTarget[0], i);
+					(void)aiBestNearestTarget(psDroid, &psDroid->psActionTarget[0], i);
 				}
 
 				if ( psDroid->psActionTarget[0] != NULL )
@@ -1461,7 +1461,7 @@ void actionUpdateDroid(DROID *psDroid)
 	UDWORD				tlx,tly;
 	STRUCTURE			*psStruct;
 	STRUCTURE_STATS		*psStructStats;
-	BASE_OBJECT			*psTarget;//, *psObj;
+	BASE_OBJECT			*psTarget;
 	WEAPON_STATS		*psWeapStats;
 	SDWORD				targetDir, dirDiff, pbx,pby;
 	SDWORD				xdiff,ydiff, rangeSq;
@@ -1704,7 +1704,8 @@ void actionUpdateDroid(DROID *psDroid)
 						 psDroid->asWeaps[i].nStat > 0 &&
 						 psWeapStats->rotate &&
 						 psWeapStats->fireOnMove != FOM_NO &&
-						 aiBestNearestTarget(psDroid, &psDroid->psActionTarget[0], 0))
+						 CAN_UPDATE_NAYBORS(psDroid) &&
+						 (aiBestNearestTarget(psDroid, &psDroid->psActionTarget[0], i) >= 0))
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
 						{
@@ -1755,7 +1756,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			vtResult = 1;
+			vtResult = INVALID_TARGET;
 		}
 
 		// firing on something while moving
@@ -1765,7 +1766,7 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 		}
 		else if ((psDroid->psActionTarget[0] == NULL) ||
-				 (vtResult == 1) ||
+				 (vtResult == INVALID_TARGET) ||
 				 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
 		{
 			// Target lost
@@ -1788,6 +1789,7 @@ void actionUpdateDroid(DROID *psDroid)
         }
 		else
 		{
+			/* Deal with target */
 			if (visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0]))
 			{
 				for(i = 0;i < psDroid->numWeaps;i++)
@@ -1797,12 +1799,6 @@ void actionUpdateDroid(DROID *psDroid)
 					//Watermelon:to fix a AA-weapon attack ground unit exploit
 					if ( (num_weapons & (1 << (i+1))) && (vtResult & (1 << (i+1))) )
 					{
-						/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-											&(psDroid->turretRotation), &(psDroid->turretPitch),
-											psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-											//asWeaponStats[psDroid->asWeaps->nStat].direct))
-											proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-											bInvert))*/
 						if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
 												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
 												&asWeaponStats[psDroid->asWeaps[i].nStat],
@@ -1852,7 +1848,7 @@ void actionUpdateDroid(DROID *psDroid)
 
         //check the target hasn't become one the same player ID - Electronic Warfare
         if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
-			(vtResult == 1) )// ||
+			(vtResult == INVALID_TARGET) )// ||
 //			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
         {
 			psDroid->psActionTarget[0] = NULL;
@@ -2048,7 +2044,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			vtResult = 1;
+			vtResult = INVALID_TARGET;
 		}
 
 		avtResult = actionVisibleTarget(psDroid, psDroid->psActionTarget[0]);
@@ -2058,7 +2054,7 @@ void actionUpdateDroid(DROID *psDroid)
 			 (psDroid->psActionTarget[0] == NULL) ||
 	        //check the target hasn't become one the same player ID - Electronic Warfare
 			 (electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
-			 (vtResult == 1) )// ||
+			 (vtResult == INVALID_TARGET) )// ||
 //			 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
 		{
 			moveToRearm(psDroid);
@@ -2172,7 +2168,7 @@ void actionUpdateDroid(DROID *psDroid)
 
         //check the target hasn't become one the same player ID - Electronic Warfare
         if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
-			(vtResult == 1) )// ||
+			(vtResult == INVALID_TARGET) )// ||
 //			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
         {
 			for (i = 0;i < psDroid->numWeaps;i++)

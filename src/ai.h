@@ -20,22 +20,27 @@
 #define	ALLIANCES_TEAMS		2			//locked teams
 //#define GROUP_WINS		2
 
-/* Weights used for target selection code */
-#define	WEIGHT_DIST_TILE							11									//In points used in weaponmodifier.txt and structuremodifier.txt
-#define	WEIGHT_DIST_TILE_DROID				WEIGHT_DIST_TILE		//How much weight a distance of 1 tile (128 world units) has when looking for the best nearest target
-#define	WEIGHT_DIST_TILE_STRUCT			WEIGHT_DIST_TILE
-#define	WEIGHT_HEALTH_DROID					WEIGHT_DIST_TILE		//How much weight unit damage has (per 10% of damage, ie for each 10% of damage we add WEIGHT_HEALTH_DROID)
-																													//~100% damage should be ~8 tiles (max sensor range)
-#define	WEIGHT_HEALTH_STRUCT				WEIGHT_DIST_TILE
+/* Weights used for target selection code,
+ * target distance is used as 'common currency'
+ */
+#define	WEIGHT_DIST_TILE			11						//In points used in weaponmodifier.txt and structuremodifier.txt
+#define	WEIGHT_DIST_TILE_DROID		WEIGHT_DIST_TILE		//How much weight a distance of 1 tile (128 world units) has when looking for the best nearest target
+#define	WEIGHT_DIST_TILE_STRUCT		WEIGHT_DIST_TILE
+#define	WEIGHT_HEALTH_DROID			WEIGHT_DIST_TILE		//How much weight unit damage has (per 10% of damage, ie for each 10% of damage we add WEIGHT_HEALTH_DROID)
+															//~100% damage should be ~8 tiles (max sensor range)
+#define	WEIGHT_HEALTH_STRUCT		WEIGHT_DIST_TILE
 
-#define	WEIGHT_NOT_VISIBLE_F					10														//We really don't like objects we can't see
+#define	WEIGHT_NOT_VISIBLE_F		10						//We really don't like objects we can't see
 
-#define	WEIGHT_SERVICE_DROIDS				(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
-#define	WEIGHT_WEAPON_DROIDS				(WEIGHT_DIST_TILE_DROID * 3)		//We prefer to go after anything that has a gun and can hurt us
-#define	WEIGHT_MILITARY_STRUCT				WEIGHT_DIST_TILE_STRUCT			//Droid/cyborg factories, repair facility; shouldn't have too much weight
-#define	WEIGHT_WEAPON_STRUCT				WEIGHT_WEAPON_DROIDS				//Same as weapon droids (?)
+#define	WEIGHT_SERVICE_DROIDS		(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
+#define	WEIGHT_WEAPON_DROIDS		(WEIGHT_DIST_TILE_DROID * 3)		//We prefer to go after anything that has a gun and can hurt us
+#define	WEIGHT_MILITARY_STRUCT		WEIGHT_DIST_TILE_STRUCT				//Droid/cyborg factories, repair facility; shouldn't have too much weight
+#define	WEIGHT_WEAPON_STRUCT		WEIGHT_WEAPON_DROIDS				//Same as weapon droids (?)
+#define	WEIGHT_DERRICK_STRUCT		(WEIGHT_WEAPON_STRUCT +	WEIGHT_DIST_TILE_STRUCT * 4)	//Even if it's 4 tiles further away than defenses we still choose it
 
-#define	WEIGHT_STRUCT_NOTBUILT_F		8						//Humans won't fool us anymore!
+#define	WEIGHT_STRUCT_NOTBUILT_F	8						//Humans won't fool us anymore!
+
+#define OLD_TARGET_THRESHOLD		(WEIGHT_DIST_TILE * 4)	//it only makes sense to switch target if new one is 4+ tiles closer
 
 // alliances
 extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];
@@ -55,12 +60,13 @@ extern BOOL aiInitDroid(DROID *psDroid);
 /* Do the AI for a droid */
 extern void aiUpdateDroid(DROID *psDroid);
 
-// Find the nearest target to a droid added int weapon_slot
-extern BOOL aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot);
+// Find the nearest best target for a droid
+// returns integer representing quality of choice, -1 if failed
+extern SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot);
 
 /* See if there is a target in range added int weapon_slot*/
 extern BOOL aiChooseTarget(BASE_OBJECT *psObj,
-						   BASE_OBJECT **ppsTarget, int weapon_slot);
+						   BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget);
 
 /*set the droid to attack if wihin range otherwise move to target*/
 extern void attackTarget(DROID *psDroid, BASE_OBJECT *psTarget);

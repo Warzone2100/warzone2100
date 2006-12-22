@@ -207,6 +207,8 @@ extern void kf_NormalSpeed( void );
 void kf_ToggleRadarTerrain( void );          //radar terrain
 void kf_ToggleRadarAllyEnemy( void );        //enemy/ally color toggle
 
+extern void	kf_ToggleWatchWindow( void );
+
 extern int fogCol;
 
 #endif

@@ -632,6 +632,12 @@ void	kf_ToggleCamera( void )
 		camToggleStatus();
 }
 
+/* Toggle 'watch' window on/off */
+void kf_ToggleWatchWindow( void )
+{
+	(void)addDebugMenu(!DebugMenuUp);
+}
+
 // --------------------------------------------------------------------------
 
 /* Simulates a close down */

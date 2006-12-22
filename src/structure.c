@@ -3995,7 +3995,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			{
 				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
 				{
-					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObj, i))
+					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObj, i, TRUE))	//structures always update their targets
 					{
 						debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
 								psStructure->id, psChosenObj->id );

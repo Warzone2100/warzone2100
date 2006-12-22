@@ -1120,9 +1120,31 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 	}
 }
 
+/* Output some text to the debug menu */
+void setDebugMenuEntry(char *entry, SDWORD index)
+{
+	BOOL		bAddingNew = FALSE;
+
+	/* New one? */
+	if(!strcmp(debugMenuEntry[index],""))
+	{
+		bAddingNew = TRUE;
+	}
+
+	/* Set */
+	strcpy(debugMenuEntry[index], entry);
+
+	/* Re-open it if already open to recalculate height */
+	if(DebugMenuUp && bAddingNew)
+	{
+		intCloseDebugMenuNoAnim();
+		(void)addDebugMenu(TRUE);
+	}
+}
+
 void intCloseDebugMenuNoAnim(void)
 {
-	widgDelete(psWScreen, DEBUGMENU_CLOSE);
+	//widgDelete(psWScreen, DEBUGMENU_CLOSE);
 	widgDelete(psWScreen, DEBUGMENU);
 	DebugMenuUp = FALSE;
 	//intMode		= INT_NORMAL;
@@ -1192,7 +1214,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	}
 
 	// Add the close button.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	/* memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = DEBUGMENU;
 	sButInit.id = DEBUGMENU_CLOSE;
 	sButInit.style = WBUT_PLAIN;
@@ -1207,7 +1229,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
-	}
+	} */
 
 	DebugMenuUp = TRUE;
 

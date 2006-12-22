@@ -1690,7 +1690,7 @@ BOOL scrSkVtolEnableCheck(void)
 // ********************************************************************************************
 BOOL scrSkGetFactoryCapacity(void)
 {
-	SDWORD count=0,structure;
+	SDWORD count=0;
 	STRUCTURE *psStructure;
 
 	if (!stackPopParams(1,ST_STRUCTURE, &psStructure))
