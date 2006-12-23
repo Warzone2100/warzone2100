@@ -477,9 +477,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 
 BOOL loadRenderMode()
 {
-	char str[32];
 	DWORD val;
-	unsigned int w, h;
 
 	if( !openWarzoneKey() ) {
 		return FALSE;
@@ -491,10 +489,10 @@ BOOL loadRenderMode()
 
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
-	if( getWarzoneKeyString("resolution", str)
-		&& sscanf(str, "%ix%i", &w, &h) == 2 ) {
-			pie_SetVideoBuffer(w, h);
-	}
+	if ( getWarzoneKeyNumeric("width", &val) )
+		pie_SetVideoBufferWidth(val);
+	if ( getWarzoneKeyNumeric("height", &val) )
+		pie_SetVideoBufferHeight(val);
 
 	return closeWarzoneKey();
 }
@@ -517,16 +515,8 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("cdvol", mixer_GetCDVolume());
 	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
 
-	// res.
-	{
-		char buf[32];
-
-		sprintf(buf, "%ix%i",
-			      pie_GetVideoBufferWidth(),
-				 pie_GetVideoBufferHeight());
-		setWarzoneKeyString("resolution", buf);
-	}
-
+	setWarzoneKeyNumeric("width", pie_GetVideoBufferWidth());
+	setWarzoneKeyNumeric("height", pie_GetVideoBufferHeight());
 	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
 
 	// dont save out the cheat mode.
@@ -543,6 +533,7 @@ BOOL saveConfig()
 	setWarzoneKeyNumeric("shake",(DWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(DWORD)(getInvertMouseStatus()));	// flipmouse
 	setWarzoneKeyNumeric("shadows",(DWORD)(getDrawShadows()));	// shadows
+	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("sequences",(DWORD)(war_GetSeqMode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(DWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("reopenBuild",(DWORD)(intGetReopenBuild()));	// build menu

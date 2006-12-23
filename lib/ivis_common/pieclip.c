@@ -5,9 +5,14 @@ static BOOL bClipSpecular = TRUE;
 static UDWORD	videoBufferWidth = 640, videoBufferHeight = 480;
 extern iSurface	*psRendSurface;
 
-BOOL pie_SetVideoBuffer(UDWORD width, UDWORD height)
+BOOL pie_SetVideoBufferWidth(UDWORD width)
 {
 	videoBufferWidth = width;
+	return(TRUE);
+}
+
+BOOL pie_SetVideoBufferHeight(UDWORD height)
+{
 	videoBufferHeight = height;
 	return(TRUE);
 }
