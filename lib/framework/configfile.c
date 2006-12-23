@@ -272,7 +272,7 @@ BOOL closeWarzoneKey( void )
  * \param	*val	Place where to store the setting
  * \return	Whether we succeed to find the setting
  */
-BOOL getWarzoneKeyNumeric( STRING *pName, DWORD *val )
+BOOL getWarzoneKeyNumeric( STRING *pName, SDWORD *val )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	char	*value = registry_get_key( pName );
@@ -323,7 +323,7 @@ BOOL getWarzoneKeyBinary( STRING *pName, UCHAR *pData, UDWORD *pSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyNumeric( STRING *pName, DWORD val )
+BOOL setWarzoneKeyNumeric( STRING *pName, SDWORD val )
 {
 	//~~~~~~~~~~~~
 	char	buf[32];

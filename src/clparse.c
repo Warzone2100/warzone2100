@@ -99,7 +99,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 				"   --savegame NAME            Load a saved game NAME\n"
 				"   --window                   Play in windowed mode\n"
 				"   --version                  Output version info and exit\n"
-				"   --viewport WIDTHxHEIGHT    Set the dimensions of the viewport (screen or window)\n"
+				"   --resolution WIDTHxHEIGHT  Set the resolution (screen or window)\n"
 				"   --(no)shadows              Toggles the shadows\n"
 				"   --(no)sound                Toggles the sound\n"
 			);
