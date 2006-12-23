@@ -256,8 +256,8 @@ BOOL sound_QueueSamplePlaying( void )
 //
 static void sound_SaveTrackData( TRACK *psTrack, ALuint buffer )
 {
-	// save data pointer in track
-	psTrack->pMem = (void *) buffer;
+	// save buffer name in track
+	psTrack->iBufferName = buffer;
 }
 
 //*
@@ -411,7 +411,7 @@ BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 //
 void sound_FreeTrack( TRACK *psTrack )
 {
-	ALuint buffer = (ALuint)(psTrack->pMem);
+	ALuint buffer = psTrack->iBufferName;
 
 	alDeleteBuffers( 1, &buffer );
 }
@@ -478,7 +478,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	alSourcef( psSample->iSample, AL_GAIN, sfx_volume );
 	alSourcefv( psSample->iSample, AL_POSITION, zero );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
-	alSourcei( psSample->iSample, AL_BUFFER, (ALuint) (psTrack->pMem) );
+	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_SOURCE_RELATIVE, AL_TRUE );
 	sound_SetupChannel( psSample, &iLoops );
 	alSourcei( psSample->iSample, AL_LOOPING, (iLoops) ? AL_TRUE : AL_FALSE );
@@ -513,7 +513,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	alSourcef( psSample->iSample, AL_GAIN, sfx3d_volume );
 	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
-	alSourcei( psSample->iSample, AL_BUFFER, (ALuint) (psTrack->pMem) );
+	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	sound_SetupChannel( psSample, &iLoops );
 	alSourcei( psSample->iSample, AL_LOOPING, (iLoops) ? AL_TRUE : AL_FALSE );
 	alSourcePlay( psSample->iSample );
@@ -524,7 +524,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_PlayStream( AUDIO_SAMPLE *psSample, char szFileName[], SDWORD iVol )
+BOOL sound_PlayStream( AUDIO_SAMPLE *psSample, const char szFileName[], SDWORD iVol )
 {
 	return TRUE;
 }

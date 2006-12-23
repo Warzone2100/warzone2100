@@ -39,7 +39,7 @@ void	sound_StopSample( UDWORD iSample );
 void	sound_PauseSample( AUDIO_SAMPLE * psSample );
 void	sound_ResumeSample( AUDIO_SAMPLE * psSample );
 
-BOOL	sound_PlayStream( AUDIO_SAMPLE *psSample, char szFileName[],
+BOOL	sound_PlayStream( AUDIO_SAMPLE *psSample, const char szFileName[],
 							SDWORD iVol );
 
 void	sound_SetSamplePan( AUDIO_SAMPLE * psSample, SDWORD iPan );
