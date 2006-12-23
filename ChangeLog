@@ -8,12 +8,15 @@
    * New: Basic map editing in debug mode. 'w' and 'a' raise and lower terrain, 'k' flips tiles
    * Fix: Nasty crashes related to (not) playing videos are fixed
    * Fix: License clarification
+ * Sound:
+   * Fix: Playlists with DOS line endings should work now
  * Graphics:
    * Fix: Improve shadow performance and fix OpenGL specs violation
    * Fix: Framerate counting gives correct results now
  * Commandline options:
    * New: --noshadows: switches off shadows for better performance (--shadows enables them again)
    * New: --nosound: switches off sound (--sound enables it again)
+   * Change: --viewport becomes --resolution
  * Build system:
    * New: MinGW32 crosscompilation support
    * Change: src/version.* not used anymore. In MSVC define VERSION=\"...\" in preprocessor settings instead
