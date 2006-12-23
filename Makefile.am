@@ -6,6 +6,9 @@ endif
 
 SUBDIRS = $(DSUBDIRS) win32 lib src
 
+# Remove this line when Automake 1.10 becomes standard
+MKDIR_P=$(mkdir_p)
+
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(datadir)/icons
 	$(MKDIR_P) $(DESTDIR)$(datadir)/applications

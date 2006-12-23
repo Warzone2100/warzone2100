@@ -6,6 +6,9 @@ BASELIST = anims audio components effects features \
 PATCHLIST = addon.lev anims audio components effects \
 	messages multiplay stats structs texpages wrf
 
+# Remove this line when Automake 1.10 becomes standard
+MKDIR_P=$(mkdir_p)
+
 install-data-local:
 	zip -ru0 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz
 	cd mp && { zip -ru0 ../mp.wz $(PATCHLIST) -x *svn* || zip -T ../mp.wz ; } && cd ..
