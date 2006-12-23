@@ -1,4 +1,4 @@
-2006-09-07: Version 2.0.5 RC1
+2006-09-07: Version 2.0.5
  * General:
    * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, default key combination: Alt+H
    * New: Allied players send vision to each other automatically (only once)
@@ -7,6 +7,7 @@
    * New: MouseWheel over radar makes radar zoom in/out
    * New: Basic map editing in debug mode. 'w' and 'a' raise and lower terrain, 'k' flips tiles
    * Fix: Nasty crashes related to (not) playing videos are fixed
+   * Fix: License clarification
  * Graphics:
    * Fix: Improve shadow performance and fix OpenGL specs violation
    * Fix: Framerate counting gives correct results now
@@ -14,7 +15,10 @@
    * New: --noshadows: switches off shadows for better performance (--shadows enables them again)
    * New: --nosound: switches off sound (--sound enables it again)
  * Build system:
+   * New: MinGW32 crosscompilation support
    * Change: src/version.* not used anymore. In MSVC define VERSION=\"...\" in preprocessor settings instead
+   * Change: Raw Makefile improvements for WIN32: Now adding an icon ressource
+   * Change: Install desktop icons via "make install"
 
 2006-08-25: Version 2.0.4
  * General:

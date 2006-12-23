@@ -128,6 +128,19 @@ LIBS=framework \
 	sequence \
 	sound \
 	widget
+LIBS=../lib/libframework.a \
+	../lib/libgamelib.a \
+	../lib/libivis_common.a \
+	../lib/libivis_opengl.a \
+	../lib/libnetplay.a \
+	../lib/libscript.a \
+	../lib/libsequence.a \
+	../lib/libsound.a \
+	../lib/libwidget.a
+
+ifeq ($(strip $(PLATFORM)),windows)
+LIBS+=../win32/warzone2100.o
+endif
 
 EXE=warzone2100
 

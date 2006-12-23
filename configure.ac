@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([Warzone 2100],[2.0.5_rc1],[http://wz2100.net/])
+AC_INIT([Warzone 2100],[2.0.5],[http://wz2100.net/])
 AM_INIT_AUTOMAKE([1.8])
 
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
@@ -253,6 +253,7 @@ LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
 AC_CONFIG_FILES([Makefile
+		data/Makefile
 		win32/Makefile
 		lib/Makefile
 		lib/framework/Makefile
@@ -264,7 +265,6 @@ AC_CONFIG_FILES([Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
-		data/Makefile
 		src/Makefile])
 AC_OUTPUT
 
