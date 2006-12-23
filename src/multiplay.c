@@ -515,8 +515,10 @@ STRING *getPlayerName(UDWORD player)
 // to determine human/computer players and responsibilities of each..
 BOOL isHumanPlayer(UDWORD player)
 {
-	BOOL val = (player2dpid[player] != 0);
-	return val;
+	if (player < 0 || player >= MAX_PLAYERS)
+		return FALSE;
+
+	return (BOOL) (player2dpid[player] != 0);
 }
 
 // returns player responsible for 'player'
