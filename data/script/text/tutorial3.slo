@@ -261,7 +261,7 @@ event delivPointMoved;
 event buildSelectedFactory;
 event soundBug;
 event firstDroidBuilt;
-event videoDone;
+//event videoDone; // not used.. see end of file
 
 // -------------------------------------------------------------
 /* Main entry event - performs setup and the like */
@@ -1085,11 +1085,19 @@ event	firstDroidBuilt(droidBuilt)
 	// Remove Button
 	removeReticuleButton(MANUFACTURE,TRUE);
 
-	playVideo(factoryRPL,NULLSTRING);
-
+	//playVideo(factoryRPL,NULLSTRING); // we don't have cut-scenes, to this would cause the bare sky-box to be shown
+	
+	//#REGION copied from videoDone(...)
+	pause(20);
+	playSound(SND_TUT81,0);
+	addConsoleText(m_msg24,0);
+	pause(80);
+	gameOver(TRUE);
+	//#END-REGION
+	
 	setEventTrigger(firstDroidBuilt,inactive);
 }
-
+/* not called anymore
 // the video is over
 event	videoDone(CALL_VIDEO_QUIT)
 {
@@ -1100,6 +1108,7 @@ event	videoDone(CALL_VIDEO_QUIT)
 	gameOver(TRUE);
 	setEventTrigger(videoDone,inactive);
 }
+//*/
 
 
 
