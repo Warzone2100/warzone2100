@@ -1,8 +1,8 @@
-SUBDIRS=lib win32 src
+SUBDIRS=win32 lib src
 all clean: $(SUBDIRS)
 
 .PHONY: $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
-src: lib win32
+src: win32 lib

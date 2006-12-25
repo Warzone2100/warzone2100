@@ -57,10 +57,10 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -Wall -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition -DDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -DDEBUG -Wall -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
   AC_MSG_RESULT([yes])
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g0 -O2 -DNDEBUG"
   AC_MSG_RESULT([no])
 fi
 
@@ -252,6 +252,7 @@ LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
 AC_CONFIG_FILES([Makefile
+		data/Makefile
 		win32/Makefile
 		lib/Makefile
 		lib/framework/Makefile
@@ -263,7 +264,6 @@ AC_CONFIG_FILES([Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
-		data/Makefile
 		src/Makefile])
 AC_OUTPUT
 

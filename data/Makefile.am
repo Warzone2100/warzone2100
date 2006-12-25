@@ -9,9 +9,15 @@ PATCHLIST = addon.lev anims audio components effects \
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)
 
-install-data-local:
-	zip -ru0 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz
+all: mp.wz warzone.wz
+
+mp.wz:
 	cd mp && { zip -ru0 ../mp.wz $(PATCHLIST) -x *svn* || zip -T ../mp.wz ; } && cd ..
+
+warzone.wz:
+	zip -ru0 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz
+
+install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(datadir)/warzone2100
 	$(INSTALL_DATA) $(srcdir)/warzone.wz $(DESTDIR)$(datadir)/warzone2100/warzone.wz
 	$(INSTALL_DATA) $(srcdir)/mp.wz $(DESTDIR)$(datadir)/warzone2100/mp.wz
