@@ -57,10 +57,10 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -Wall -DDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -DDEBUG -Wall"
   AC_MSG_RESULT([yes])
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g0 -O2 -DNDEBUG"
   AC_MSG_RESULT([no])
 fi
 
