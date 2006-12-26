@@ -4842,9 +4842,7 @@ BOOL scrFlushConsoleMessages(void)
 // Establishes the distance between two points - uses an approximation
 BOOL scrDistanceTwoPts( void )
 {
-SDWORD	x1,y1,x2,y2;
-SDWORD	retVal;
-
+	SDWORD	x1,y1,x2,y2;
 
 	if(!stackPopParams(4,VAL_INT,&x1,VAL_INT,&y1,VAL_INT,&x2,VAL_INT,&y2))
 	{
@@ -4853,9 +4851,7 @@ SDWORD	retVal;
 	}
 
 	/* Approximate the distance */
-	retVal = dirtySqrt(x1,y1,x2,y2);
-
-	scrFunctionResult.v.ival = retVal;
+	scrFunctionResult.v.ival = (SDWORD)dirtySqrt(x1,y1,x2,y2);
 	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT( FALSE,"SCRIPT : Distance between two points - cannot return scrFunctionResult" );
@@ -10803,6 +10799,27 @@ BOOL scrChatCmdIsPlayerAddressed(void)
 		debug(LOG_ERROR, "scrChatCmdIsPlayerAddressed(): failed to push result");
 		return FALSE;
 	}
+
+	return TRUE;
+}
+
+/* Modifies height of a tile */
+BOOL scrSetTileHeight(void)
+{
+	UDWORD		tileX,tileY,newHeight;
+	MAPTILE		*psTile;
+
+	if (!stackPopParams(3, VAL_INT, &tileX, VAL_INT, &tileY, VAL_INT, &newHeight))
+	{
+		debug(LOG_ERROR, "scrSetTileHeight(): stack failed");
+		return FALSE;
+	}
+
+	ASSERT(newHeight <= 255, "scrSetTileHeight: height out of bounds");
+
+	psTile = mapTile(tileX,tileY);
+
+	psTile->height = (UBYTE)newHeight;
 
 	return TRUE;
 }

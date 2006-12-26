@@ -603,6 +603,7 @@ extern BOOL scrGetChatCmdDescription(void);
 extern BOOL	scrGetNumArgsInCmd(void);
 extern BOOL	scrGetChatCmdParam(void);
 extern BOOL scrChatCmdIsPlayerAddressed(void);
+extern BOOL scrSetTileHeight(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);

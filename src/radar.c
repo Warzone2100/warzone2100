@@ -46,11 +46,15 @@
 #define RADAR_TRIANGLE_HEIGHT	RADAR_TRIANGLE_SIZE
 #define RADAR_TRIANGLE_WIDTH	(RADAR_TRIANGLE_SIZE/2)
 
-static UDWORD		sweep;
-static UBYTE colBlack, colWhite, colRadarBorder, colGrey, colRadarEnemy, colRadarAlly, colRadarMe;
+static UDWORD	sweep;
+static UBYTE	colBlack,colWhite,colRadarBorder,colGrey;
+static UBYTE	colRadarAlly[NUM_RADAR_MODES-1],colRadarMe[NUM_RADAR_MODES-1],
+				colRadarEnemy[NUM_RADAR_MODES-1];
 
-BOOL bDrawRadarTerrain = TRUE;         //radar terrain on/off
 BOOL bEnemyAllyRadarColor = FALSE;     //enemy/ally radar color
+
+//current mini-map mode
+RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
 
 // colours for each clan on the radar map.
 
@@ -71,9 +75,10 @@ static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 
 
 static UBYTE		tileColours[NUM_TILES];
-static BOOL		radarStrobe;
+static BOOL			radarStrobe;
 static UDWORD		radarStrobeX,radarStrobeY,radarStrobeIndex,sweepStrobeIndex;
 static UBYTE		*radarBuffer;
+static UBYTE		heightMapColors[255];		//precalculated colors for heightmap mode
 
 static SDWORD RadarScrollX;
 static SDWORD RadarScrollY;
@@ -125,6 +130,7 @@ void resetRadarRedraw(void)
 
 BOOL InitRadar(void)
 {
+	UBYTE color;
 
 	radarBuffer = MALLOC(RADWIDTH*RADHEIGHT);
 	if(radarBuffer==NULL) return FALSE;
@@ -143,10 +149,28 @@ BOOL InitRadar(void)
 	colGrey = COL_DARKGREY;
 	colWhite = COL_WHITE;
 
-	//for enemy/ally radar color mode
-	colRadarAlly = COL_YELLOW;
-	colRadarEnemy = COL_LIGHTRED;
-	colRadarMe = COL_WHITE;
+	//Ally/enemy colors for Objects-Only minimap mode
+	colRadarAlly[RADAR_MODE_NO_TERRAIN] = COL_YELLOW;
+	colRadarEnemy[RADAR_MODE_NO_TERRAIN] = COL_LIGHTRED;
+	colRadarMe[RADAR_MODE_NO_TERRAIN] = COL_WHITE;
+
+	//Ally/enemy colors for texture minimap mode
+	colRadarAlly[RADAR_MODE_TERRAIN] = colRadarAlly[RADAR_MODE_NO_TERRAIN];
+	colRadarEnemy[RADAR_MODE_TERRAIN] = colRadarEnemy[RADAR_MODE_NO_TERRAIN];
+	colRadarMe[RADAR_MODE_TERRAIN] = colRadarMe[RADAR_MODE_NO_TERRAIN];
+
+	//Ally/enemy colors for heightmap minimap mode
+	colRadarAlly[RADAR_MODE_HEIGHT_MAP] = COL_LIGHTBLUE;
+	colRadarEnemy[RADAR_MODE_HEIGHT_MAP] = COL_LIGHTRED;
+	colRadarMe[RADAR_MODE_HEIGHT_MAP] = COL_YELLOW;			//should stand out from the grey background
+
+	//Pre-calculate paletted colors for heightmap minimap mode
+	color = 0;
+	do{
+		heightMapColors[color] = (UBYTE)iV_PaletteNearestColour(color,color,color);
+		color++;
+	}
+	while(color != 0);
 
 	pie_InitRadar();
 
@@ -557,13 +581,25 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 				ASSERT( ((UDWORD)WScr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WScr Overrun" );
 #endif
 				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) OR godMode) {
-					if (bDrawRadarTerrain) {
-						//draw radar terrain on/off feature
-						int i = tileColours[(WTile->texture & TILE_NUMMASK)] * iV_PALETTE_SHADE_LEVEL;
-						int j = WTile->illumination >> ShadeDiv;
-						*WScr = iV_SHADE_TABLE[i + j];
-					} else {
-						*WScr = colBlack;
+					switch(radarDrawMode)
+					{
+						case RADAR_MODE_TERRAIN:
+							{
+								//draw radar terrain on/off feature
+								int i = tileColours[(WTile->texture & TILE_NUMMASK)] * iV_PALETTE_SHADE_LEVEL;
+								int j = WTile->illumination >> ShadeDiv;
+								*WScr = iV_SHADE_TABLE[i + j];
+							}
+							break;
+						case RADAR_MODE_NO_TERRAIN:
+							*WScr = colBlack;
+							break;
+						case RADAR_MODE_HEIGHT_MAP:
+							*WScr = heightMapColors[WTile->height];
+							break;
+						default:
+							ASSERT(FALSE,"RadarDrawTiles: unknown mini-map draw mode: %d", radarDrawMode);
+							break;
 					}
 				} else {
 					*WScr = colBlack;
@@ -601,11 +637,20 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 							ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
 							ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
 #endif
-							if (bDrawRadarTerrain) {
-								//radar terrain
-								*WPtr = Val;
-							} else {
-								*WPtr = colBlack;
+							switch(radarDrawMode)
+							{
+								case RADAR_MODE_TERRAIN:
+									*WPtr = Val;
+									break;
+								case RADAR_MODE_NO_TERRAIN:
+									*WPtr = colBlack;
+									break;
+								case RADAR_MODE_HEIGHT_MAP:
+									*WPtr = heightMapColors[WTile->height];
+									break;
+								default:
+									ASSERT(FALSE,"RadarDrawTiles: unknown mini-map draw mode: %d", radarDrawMode);
+									break;
 							}
    							WPtr++;
    						}
@@ -687,13 +732,13 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    	/* Show droids on map - go through all players */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
    	{
-		//draw enemies in red, allies in yellow, if bEnemyAllyRadarColor is TRUE
+		//see if have to draw enemy/ally color
 		if (bEnemyAllyRadarColor) {
 			if (clan == selectedPlayer) {
-				playerCol = colRadarMe; // grey
+				playerCol = colRadarMe[radarDrawMode];
 			} else {
-				//enemy or ally (red or yellow)
-				playerCol = (aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
+				playerCol = (aiCheckAlliances(selectedPlayer, clan) ?
+							colRadarAlly[radarDrawMode] : colRadarEnemy[radarDrawMode]);
 			}
 		} else {
 			//original 8-color mode
@@ -768,16 +813,16 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    	/* Do the same for structures */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
    	{
-		//draw enemies in red, allies in yellow, if bEnemyAllyRadarColor is TRUE
+		//see if have to draw enemy/ally color
 		if (bEnemyAllyRadarColor) {
 			if (clan == selectedPlayer) {
-				playerCol = colRadarMe; //grey
+				playerCol = colRadarMe[radarDrawMode];
 			} else {
-				//enemy or ally (red or yellow)
-				playerCol = (aiCheckAlliances(selectedPlayer,clan) ? colRadarAlly: colRadarEnemy);
+				playerCol = (aiCheckAlliances(selectedPlayer,clan) ?
+							colRadarAlly[radarDrawMode]: colRadarEnemy[radarDrawMode]);
 			}
 		} else {
-			//original 8-color mode 
+			//original 8-color mode
 			playerCol = clanColours[camNum][getPlayerColour(clan)];
 		}
 		flashCol = flashColours[camNum][getPlayerColour(clan)];

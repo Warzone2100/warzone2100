@@ -2525,25 +2525,18 @@ void kf_ToggleReopenBuildMenu( void )
 
 void kf_ToggleRadarAllyEnemy(void)
 {
-	if (bEnemyAllyRadarColor == TRUE) {
-               bEnemyAllyRadarColor = FALSE;
-		resetRadarRedraw();
-	} else {
-		bEnemyAllyRadarColor = TRUE;
-		resetRadarRedraw();
-	}
+	bEnemyAllyRadarColor = !bEnemyAllyRadarColor;
+	resetRadarRedraw();
 }
 
 void kf_ToggleRadarTerrain(void)
 {
-	if(bDrawRadarTerrain == TRUE)
-	{
-		bDrawRadarTerrain = FALSE;
-		resetRadarRedraw();
-	} else {
-		bDrawRadarTerrain = TRUE;
-		resetRadarRedraw();
-	}
+	radarDrawMode++;
+
+	if(radarDrawMode >= NUM_RADAR_MODES)
+		radarDrawMode = 0;
+
+	resetRadarRedraw();
 }
 
 

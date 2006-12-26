@@ -23,6 +23,9 @@ extern BOOL stackPush(INTERP_VAL  *psVal);
 /* Pop a value off the stack */
 extern BOOL stackPop(INTERP_VAL  *psVal);
 
+/* Return pointer to the top value without poping it */
+extern BOOL stackPeekTop(INTERP_VAL  **ppsVal);
+
 /* Pop a value off the stack, checking that the type matches what is passed in */
 extern BOOL stackPopType(INTERP_VAL  *psVal);
 

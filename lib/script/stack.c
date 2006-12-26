@@ -17,8 +17,8 @@
 #include "lib/script/script_parser.h"
 
 /* number of values in each stack chunk */
-#define INIT_SIZE		15
-#define EXT_SIZE		2
+#define INIT_SIZE		30	//15
+#define EXT_SIZE		10	//2
 
 char STRSTACK[MAXSTACKLEN][MAXSTRLEN]; //simple string 'stack'
 UDWORD CURSTACKSTR = 0;    //Points to the top of the string stack
@@ -170,6 +170,35 @@ BOOL stackPop(INTERP_VAL  *psVal)
 
 	/* copy the entire value off the stack */
 	memcpy(psVal, &(psCurrChunk->aVals[currEntry]), sizeof(INTERP_VAL));
+
+	return TRUE;
+}
+
+/* Return pointer to the top value without poping it */
+BOOL stackPeekTop(INTERP_VAL  **ppsVal)
+{
+	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	{
+		debug(LOG_ERROR, "stackPeekTop: stack empty");
+		ASSERT( FALSE, "stackPeekTop: stack empty" );
+		return FALSE;
+	}
+
+	if (currEntry == 0)
+	{
+		STACK_CHUNK	*pPrevChunck;
+
+		/* have to move onto the previous chunk */
+		pPrevChunck = psCurrChunk->psPrev;
+
+		/* Return top value */
+		*ppsVal = &(pPrevChunck->aVals[pPrevChunck->size - 1]);
+	}
+	else
+	{
+		/* Return top value of the current chunk */
+		*ppsVal = &(psCurrChunk->aVals[currEntry - 1]);
+	}
 
 	return TRUE;
 }
@@ -861,21 +890,22 @@ BOOL stackUnaryOp(OPCODE opcode)
 
 BOOL castTop(INTERP_TYPE neededType)
 {
-	INTERP_VAL	top;
+	INTERP_VAL	*pTop=NULL;
 
 	//debug(LOG_WZ, "casting to %d", neededType);
 
 	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT, "stackCast: can't cast to %d", neededType);
 
-	if (!stackPop(&top))
+	if (!stackPeekTop(&pTop) || pTop==NULL)
 	{
+		ASSERT(FALSE, "castTop: failed to peek stack");
 		return FALSE;
 	}
 
-	//debug(LOG_WZ, "castTop: stack type %d", top.type);
+	//debug(LOG_WZ, "castTop: stack type %d", pTop->type);
 
 	/* see if we can cast this data type */
-	switch (top.type)
+	switch (pTop->type)
 	{
 	case VAL_BOOL:
 
@@ -883,46 +913,47 @@ BOOL castTop(INTERP_TYPE neededType)
 		{
 		case VAL_FLOAT:		/* casting from bool to float */
 
-			return stackPushResult(neededType, &top);
+			pTop->v.fval = (float)pTop->v.bval;
+			pTop->type = VAL_FLOAT;
+			return TRUE;
 
 			break;
 		default:
-			debug(LOG_ERROR, "cast error");
+			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
 			break;
 		}
-
+		break;
 	case VAL_INT:
 
 		switch (neededType)
 		{
 		case VAL_FLOAT:		/* casting from int to float */
-
-			top.v.fval = (float)top.v.ival;
-			return  stackPushResult(neededType, &top);
-
+			pTop->v.fval = (float)pTop->v.ival;
+			pTop->type = VAL_FLOAT;
+			return TRUE;
 			break;
 		default:
-			debug(LOG_ERROR, "cast error");
+			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
 			break;
 		}
-
+		break;
 	case VAL_FLOAT:
 
 		switch (neededType)
 		{
 		case VAL_INT:		/* casting from float to int */
-
-			top.v.ival = (SDWORD)top.v.fval;
-			return  stackPushResult(neededType, &top);
-
+			pTop->v.ival = (SDWORD)pTop->v.fval;
+			pTop->type = VAL_INT;
+			return TRUE;
 			break;
 		default:
-			debug(LOG_ERROR, "cast error");
+			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
 			break;
 		}
+		break;
 
 	default:
-		debug(LOG_ERROR, "can't cast from %d", top.type);
+		debug(LOG_ERROR, "can't cast from %d to %d", pTop->type, neededType);
 		break;
 	}
 

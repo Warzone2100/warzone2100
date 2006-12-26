@@ -1329,6 +1329,10 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "setTileHeight",	scrSetTileHeight,	VAL_VOID,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */
@@ -1873,6 +1877,17 @@ CONST_SYMBOL asConstantTable[] =
 	{ "KEY_X",			VAL_INT,	FALSE,		KEY_X,			NULL, NULL, 0.0f },
 	{ "KEY_Y",			VAL_INT,	FALSE,		KEY_Y,			NULL, NULL, 0.0f },
 	{ "KEY_Z",			VAL_INT,	FALSE,		KEY_Z,			NULL, NULL, 0.0f },
+
+	{ "KEY_KP_0",		VAL_INT,	FALSE,		KEY_KP_0,		NULL, NULL, 0.0f },
+	{ "KEY_KP_1",		VAL_INT,	FALSE,		KEY_KP_1,		NULL, NULL, 0.0f },
+	{ "KEY_KP_2",		VAL_INT,	FALSE,		KEY_KP_2,		NULL, NULL, 0.0f },
+	{ "KEY_KP_3",		VAL_INT,	FALSE,		KEY_KP_3,		NULL, NULL, 0.0f },
+	{ "KEY_KP_4",		VAL_INT,	FALSE,		KEY_KP_4,		NULL, NULL, 0.0f },
+	{ "KEY_KP_5",		VAL_INT,	FALSE,		KEY_KP_5,		NULL, NULL, 0.0f },
+	{ "KEY_KP_6",		VAL_INT,	FALSE,		KEY_KP_6,		NULL, NULL, 0.0f },
+	{ "KEY_KP_7",		VAL_INT,	FALSE,		KEY_KP_7,		NULL, NULL, 0.0f },
+	{ "KEY_KP_8",		VAL_INT,	FALSE,		KEY_KP_8,		NULL, NULL, 0.0f },
+	{ "KEY_KP_9",		VAL_INT,	FALSE,		KEY_KP_9,		NULL, NULL, 0.0f },
 
 	/* This entry marks the end of the constant list */
 	{ "CONSTANT LIST END",VAL_VOID,	FALSE,		0,	NULL, NULL, 0.0f }

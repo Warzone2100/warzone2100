@@ -29,7 +29,17 @@ extern	void	downloadAtStartOfFrame( void );
 
 //#define RADAR_ROT	1
 
-extern BOOL bDrawRadarTerrain;         //radar terrain on/off
-extern BOOL bEnemyAllyRadarColor;      //enemy/ally radar color
+//different mini-map draw modes
+typedef enum _radar_draw_mode
+{
+	RADAR_MODE_TERRAIN,						//draw texture map
+	RADAR_MODE_DEFAULT = RADAR_MODE_TERRAIN,
+	RADAR_MODE_HEIGHT_MAP,					//draw height map
+	RADAR_MODE_NO_TERRAIN,					//draw only objects
+	NUM_RADAR_MODES
+}RADAR_DRAW_MODE;
+
+extern BOOL		bEnemyAllyRadarColor;		//enemy/ally radar color
+extern RADAR_DRAW_MODE	radarDrawMode;		//current mini-map mode
 
 #endif

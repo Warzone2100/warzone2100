@@ -27,8 +27,7 @@
 #include "lib/sound/mixer.h"
 #include "hci.h"
 #include "fpath.h"
-
-#include "radar.h" //because of bDrawRadarTerrain
+#include "radar.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -467,13 +466,18 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setWarzoneKeyNumeric("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);
 	}
 
-	// no-terrain radar view
+	// mini-map terrain mode
 	if(getWarzoneKeyNumeric("radarTerrainMode", &val))
 	{
-		bDrawRadarTerrain =(BOOL)val;
+		radarDrawMode = val;
+
+		if(radarDrawMode >= NUM_RADAR_MODES){
+			ASSERT(FALSE, "loadConfig: wrong mini-map mode: %d", radarDrawMode);
+			radarDrawMode = RADAR_MODE_DEFAULT;
+		}
 	} else {
-		bDrawRadarTerrain = TRUE;
-		setWarzoneKeyNumeric("radarTerrainMode", (SDWORD)bDrawRadarTerrain);
+		radarDrawMode = RADAR_MODE_DEFAULT;
+		setWarzoneKeyNumeric("radarTerrainMode", radarDrawMode);
 	}
 
 	return closeWarzoneKey();
@@ -547,7 +551,7 @@ BOOL saveConfig(void)
 //	setWarzoneKeyNumeric("maxRoute",(SDWORD)(fpathGetMaxRoute()));			// maximum routing
 
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
-	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)bDrawRadarTerrain);
+	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 
 	if(!bMultiPlayer)
 	{
