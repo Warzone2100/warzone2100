@@ -1,16 +1,17 @@
 0000-00-00: SVN
  * General:
-   * New: Added 'Locked Teams' alliance mode: human players and AIs can play in a group against other groups.
+   * New: 'Locked Teams' alliance mode: human players and AIs can play in a team against other teams.
    * New: Allies now have shared vision in 'Teamplay' and 'Locked Teams' modes.
+   * New: Height-map mini-map mode (Default key combination to cycle through mini-map modes: Ctrl+Tab).
    * New: Multi-Turret support for units and structures.
    * New: 'Circle' command for VTOLs - upon activation will make VTOLs fly in circles and engage approaching enemies.
    * New: A more realistic miss/hit evaluation system - allows to dodge projectiles.
    * New: Top, bottom, left, right, front and rear armor types for units.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
  * Unit AI:
-   * New: Multi-criteria target selection routine to automatically choose the best suitable target
-   * New: Units and structures will constantly look for a better target takeing into consideration
-          targets of the friendly units nearby - won't lock on one target forever anymore
+   * New: Multi-criteria target selection routine to automatically choose the best suitable target.
+   * New: Units and structures will constantly look for a better target taking into consideration
+          targets of the friendly units nearby - won't lock on one target forever anymore.
 
 2006-09-07: Version 2.0.5
  * General:
