@@ -805,7 +805,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
 							x0,y0,
 							0,0,
-							textWidth, iV_GetImageWidth(IntImages,IMAGE_PBAR_EMPTY));
+							textWidth, iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY));
 		x0 += textWidth;
 	}
 
@@ -819,14 +819,14 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_USED,
 							x0,y0,
 							0,0,
-							ManPow, iV_GetImageWidth(IntImages,IMAGE_PBAR_USED));
+							ManPow, iV_GetImageHeight(IntImages,IMAGE_PBAR_USED));
 	}
 	else
 	{
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_REQUIRED,
 							x0,y0,
 							0,0,
-							ManPow, iV_GetImageWidth(IntImages,IMAGE_PBAR_REQUIRED));
+							ManPow, iV_GetImageHeight(IntImages,IMAGE_PBAR_REQUIRED));
 	}
 
 	x0 += ManPow;
@@ -837,7 +837,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_AVAIL,
 							x0,y0,
 							0,0,
-							Avail-ManPow, iV_GetImageWidth(IntImages,IMAGE_PBAR_AVAIL));
+							Avail-ManPow, iV_GetImageHeight(IntImages,IMAGE_PBAR_AVAIL));
 
 		x0 += Avail-ManPow;
 	}
@@ -848,7 +848,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
 							x0,y0,
 							0,0,
-							Empty, iV_GetImageWidth(IntImages,IMAGE_PBAR_EMPTY));
+							Empty, iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY));
 		x0 += Empty;
 	}
 
