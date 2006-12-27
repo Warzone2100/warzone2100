@@ -48,7 +48,7 @@ endif
 
 # Setup paths and static values
 
-CFLAGS+=-m32 -DVERSION=$(VERSION) -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
+CFLAGS+=-m32 -DVERSION=\"$(VERSION)\" -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
 LDFLAGS+=-L$(DEVDIR)/lib
 
 
@@ -74,15 +74,15 @@ RMF=del /F
 EXEEXT=.exe
 WINDRES=windres
 CFLAGS+=-mwindows -DWIN32
-LDFLAGS+=-lmingw32 -lglu32 -lopengl32 -lopenal32 -ljpeg6b -lpng13
+LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
 else
 DIRSEP=/
 RMF=rm -f
 EXEEXT=
 WINDRES=
-LDFLAGS+=-lGLU -lGL -lopenal -ljpeg -lpng
+LDFLAGS+=-lGLU -lGL -lopenal
 endif
 
-LDFLAGS+=-lmad -lvorbisfile -lvorbis -logg -lphysfs -lSDLmain -lSDL -lSDL_net
+LDFLAGS+=-ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lphysfs -lSDLmain -lSDL -lSDL_net
 
 include $(MAKERULES)/common.mk

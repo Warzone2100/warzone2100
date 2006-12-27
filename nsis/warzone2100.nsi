@@ -88,8 +88,8 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 ;--------------------------------
 ;License Language String
 
-  LicenseLangString MUILicense ${LANG_ENGLISH} "${MISCDIR}\COPYING"
-  LicenseLangString MUILicense ${LANG_GERMAN} "${MISCDIR}\COPYING"
+  LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYING"
+  LicenseLangString MUILicense ${LANG_GERMAN} "..\COPYING"
 
 ;--------------------------------
 ;Reserve Files
@@ -114,19 +114,19 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "${SRCDIR}\warzone2100.exe"
+  File "..\src\warzone2100.exe"
 
   ; Required runtime libs
   File "${LIBDIR}\OpenAL32.dll"
   File "${LIBDIR}\wrap_oal.dll"
 
   ; Data files
-  File "${DATADIR}\mp.wz"
-  File "${DATADIR}\warzone.wz"
+  File "..\data\mp.wz"
+  File "..\data\warzone.wz"
 
   ; Information/documentation files
-  File "/oname=License.txt" "${MISCDIR}\COPYING"
-  File "/oname=Readme.txt" "${MISCDIR}\README"
+  File "/oname=License.txt" "..\COPYING"
+  File "/oname=Readme.txt" "..\README"
 
 
   ;Store installation folder
@@ -162,7 +162,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "${DATADIR}\grim.wz"
+  File "..\data\grim.wz"
 
   SetOutPath "$INSTDIR"
 

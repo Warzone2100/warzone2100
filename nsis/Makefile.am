@@ -1,0 +1,9 @@
+INSTALLERFILE=warzone2100-$(VERSION).exe
+
+all: $(INSTALLERFILE)
+
+$(INSTALLERFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/grim.wz
+	$(MAKENSIS) "/DVERSION=$(VERSION)" "/DVERSIONNUM=$(INSTALLER_VERSION)" "/DLIBDIR=$(INSTALLER_LIBDIR)" $<
+
+clean:
+	$(RM) $(INSTALLERFILE)

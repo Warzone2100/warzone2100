@@ -38,31 +38,76 @@ fi
 
 # Commandline options:
 
-AC_ARG_ENABLE(make_data,
-[  --disable-make-data     do not recurse make into data directories
-                          (ok to disable unless you will 'make install')],
-[ make_data="$enableval" ], [make_data=yes])
-AC_MSG_CHECKING([whether to make data])
-AM_CONDITIONAL(MAKE_DATA, test "x$make_data" = "xyes" )
-if test "x$make_data" = "xyes" ; then
-	AC_MSG_RESULT([yes])
-else
-	AC_MSG_RESULT([no])
-fi
+AC_ARG_WITH(makensis,
+[AS_HELP_STRING([--with-makensis],[Path to makensis])],
+[ makensis=$withval ], [ makensis=auto ])
 
+
+AC_ARG_WITH(installer_libdir,
+[AS_HELP_STRING([--with-installer-libdir],[Path to libraries for NSIS script])],
+[ installer_libdir=$withval ], [ installer_libdir=auto ])
+
+
+AC_ARG_WITH(installer_version,
+[AS_HELP_STRING([--with-installer-version],[Version of the installer. Workaround till we have some automagic.])],
+[ installer_version=$withval ], [ installer_version=auto ])
+
+
+AC_ARG_ENABLE(data,
+[AS_HELP_STRING([--disable-data],[Do not build data packages])],
+[ data="$enableval" ], [ data=no ])
+AM_CONDITIONAL(DATA, test "x$data" = "xyes" )
+AC_MSG_CHECKING([whether to build data packages])
+AC_MSG_RESULT([$data])
+
+
+AC_ARG_ENABLE(installer,
+[AS_HELP_STRING([--enable-installer],[Build NSIS installer])],
+[ installer=$enableval ], [ installer=no ])
+AM_CONDITIONAL(INSTALLER, test "x$installer" = "xyes" )
+AC_MSG_CHECKING([whether to build NSIS installer])
+AC_MSG_RESULT([$installer])
+
+if test "x$installer" = "xyes" ; then
+	if test "x$makensis" = "xauto" ; then
+		AC_CHECK_TOOL([MAKENSIS], [makensis], [no])
+		if test "x$MAKENSIS" = "xno" ; then
+			AC_MSG_ERROR([makensis not found])
+		fi
+	else
+		AC_MSG_CHECKING([for makensis])
+		AC_MSG_RESULT([$makensis])
+		AC_SUBST(MAKENSIS, $makensis)
+	fi
+	if test "x$installer_version" = "xauto" ; then
+		AC_MSG_ERROR([installer version invalid])
+	else
+		AC_MSG_CHECKING([for installer version])
+		AC_MSG_RESULT([$installer_version])
+		AC_SUBST(INSTALLER_VERSION, $installer_version)
+	fi
+	if test "x$installer_libdir" = "xauto" ; then
+		AC_MSG_ERROR([installer libdir not found])
+	else
+		AC_MSG_CHECKING([for installer libdir])
+		AC_MSG_RESULT([$installer_libdir])
+		AC_SUBST(INSTALLER_LIBDIR, $installer_libdir)
+	fi
+fi
+  
 
 AC_ARG_ENABLE(debug,
-[  --enable-debug          run in debug mode],
+[AS_HELP_STRING([--enable-debug],[Compile debug version])],
 [ debug=$enableval ], [ debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
+AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
   WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -DDEBUG -Wall -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
-  AC_MSG_RESULT([yes])
 else
   WZ_CFLAGS="${WZ_CFLAGS} -g0 -O2 -DNDEBUG"
-  AC_MSG_RESULT([no])
 fi
+
 
 #   --disable-ogg will build without Ogg Vorbis support
 AC_ARG_ENABLE(ogg,
@@ -253,6 +298,7 @@ CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
 AC_CONFIG_FILES([Makefile
 		data/Makefile
+		nsis/Makefile
 		win32/Makefile
 		lib/Makefile
 		lib/framework/Makefile

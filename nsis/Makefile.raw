@@ -8,7 +8,7 @@ SETUPFILE=warzone2100-$(VERSION).exe
 all: $(SETUPFILE)
 
 $(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/grim.wz
-	makensis "/DVERSION=$(VERSION)" "/DVERSIONNUM=$(VERSION)" "/DLIBDIR=$(DEVDIR)\lib" "/DSRCDIR=..\src" "/DDATADIR=..\data" "/DMISCDIR=.." $<
+	$(MAKENSIS) "/DVERSION=$(VERSION)" "/DVERSIONNUM=$(INSTALLER_VERSION)" "/DLIBDIR=$(DEVDIR)\lib" $<
 
 clean:
 	$(RM) $(SETUPFILE)
