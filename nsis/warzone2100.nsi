@@ -24,6 +24,19 @@
   SetCompressor /FINAL /SOLID lzma
 
 ;--------------------------------
+;Versioninfo
+
+VIProductVersion "9.9.9.9"
+VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
+VIAddVersionKey "FileDescription"	"Warzone 2100 Installer"
+VIAddVersionKey "FileVersion"		"TRUNK"
+VIAddVersionKey "InternalName"		"Warzone 2100"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
+VIAddVersionKey "OriginalFilename"	"warzone2100.exe"
+VIAddVersionKey "ProductName"		"Warzone 2100"
+VIAddVersionKey "ProductVersion"	"TRUNK"
+
+;--------------------------------
 ;Variables
 
   Var MUI_TEMP
