@@ -2531,7 +2531,7 @@ void kf_ToggleRadarAllyEnemy(void)
 
 void kf_ToggleRadarTerrain(void)
 {
-	radarDrawMode++;
+	radarDrawMode = radarDrawMode + 1;
 
 	if(radarDrawMode >= NUM_RADAR_MODES)
 		radarDrawMode = 0;
