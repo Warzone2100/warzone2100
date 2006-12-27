@@ -12,8 +12,7 @@
 
   ;Name and file
   Name "Warzone 2100"
-  ;OutFile "Warzone 2100.exe"
-  OutFile "${OUTFILE}"
+  OutFile "warzone2100-${VERSION}.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Warzone 2100"
@@ -26,15 +25,15 @@
 ;--------------------------------
 ;Versioninfo
 
-VIProductVersion "9.9.9.9"
+VIProductVersion "${VERSIONNUM}"
 VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
 VIAddVersionKey "FileDescription"	"Warzone 2100 Installer"
-VIAddVersionKey "FileVersion"		"TRUNK"
+VIAddVersionKey "FileVersion"		"${VERSION}"
 VIAddVersionKey "InternalName"		"Warzone 2100"
 VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
-VIAddVersionKey "OriginalFilename"	"warzone2100.exe"
+VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.exe"
 VIAddVersionKey "ProductName"		"Warzone 2100"
-VIAddVersionKey "ProductVersion"	"TRUNK"
+VIAddVersionKey "ProductVersion"	"${VERSION}"
 
 ;--------------------------------
 ;Variables
@@ -89,8 +88,8 @@ VIAddVersionKey "ProductVersion"	"TRUNK"
 ;--------------------------------
 ;License Language String
 
-  LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYING"
-  LicenseLangString MUILicense ${LANG_GERMAN} "..\COPYING"
+  LicenseLangString MUILicense ${LANG_ENGLISH} "${MISCDIR}\COPYING"
+  LicenseLangString MUILicense ${LANG_GERMAN} "${MISCDIR}\COPYING"
 
 ;--------------------------------
 ;Reserve Files
@@ -115,19 +114,19 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "..\src\warzone2100.exe"
+  File "${SRCDIR}\warzone2100.exe"
 
   ; Required runtime libs
-  File "${DEVDIR}\lib\OpenAL32.dll"
-  File "${DEVDIR}\lib\wrap_oal.dll"
+  File "${LIBDIR}\OpenAL32.dll"
+  File "${LIBDIR}\wrap_oal.dll"
 
   ; Data files
-  File "..\data\mp.wz"
-  File "..\data\warzone.wz"
+  File "${DATADIR}\mp.wz"
+  File "${DATADIR}\warzone.wz"
 
   ; Information/documentation files
-  File "/oname=License.txt" "..\COPYING"
-  File "/oname=Readme.txt" "..\README"
+  File "/oname=License.txt" "${MISCDIR}\COPYING"
+  File "/oname=Readme.txt" "${MISCDIR}\README"
 
 
   ;Store installation folder
@@ -137,7 +136,7 @@ Section $(TEXT_SecBase) SecBase
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayName" "Warzone 2100"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayIcon" "$INSTDIR\warzone2100.exe,0"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "Publisher" "Warzone Resurrection Project"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayVersion" "$VERSION"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayVersion" "${VERSION}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "NoModify" 1
   WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "NoRepair" 1
@@ -163,7 +162,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "..\data\grim.wz"
+  File "${DATADIR}\grim.wz"
 
   SetOutPath "$INSTDIR"
 
