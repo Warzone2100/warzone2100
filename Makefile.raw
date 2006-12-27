@@ -1,4 +1,4 @@
-SUBDIRS=win32 lib src
+SUBDIRS=win32 lib src data nsis
 all clean: $(SUBDIRS)
 
 .PHONY: $(SUBDIRS)
@@ -6,3 +6,4 @@ $(SUBDIRS):
 	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
 src: win32 lib
+nsis: data src
