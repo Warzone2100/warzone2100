@@ -1,4 +1,5 @@
 SUBDIRS=win32 lib src data nsis
+
 all clean: $(SUBDIRS)
 
 .PHONY: $(SUBDIRS)

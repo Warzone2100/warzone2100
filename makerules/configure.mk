@@ -45,10 +45,16 @@ else
 $(info FLEX is set to $(FLEX))
 endif
 
+ifeq ($(strip $(MAKENSIS)),)
+$(error You must set MAKENSIS in $(MAKERULES)/config.mk)
+else
+$(info MAKENSIS is set to $(MAKENSIS))
+endif
+
 
 # Setup paths and static values
 
-CFLAGS+=-m32 -DVERSION=\"$(VERSION)\" -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
+CFLAGS+=-DVERSION=\"$(VERSION)\" -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
 LDFLAGS+=-L$(DEVDIR)/lib
 
 
@@ -62,9 +68,9 @@ CC=gcc
 endif
 
 ifeq ($(strip $(MODE)),debug)
-CFLAGS+=-Wall -O0 -g3 -DDEBUG
+CFLAGS+=-O0 -g2 -DDEBUG -Wall
 else
-CFLAGS+=-march=i686 -Os -DNDEBUG
+CFLAGS+=-O2 -g0 -DNDEBUG
 LDFLAGS+=-Wl,-S
 endif
 
@@ -72,17 +78,27 @@ ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F
 EXEEXT=.exe
+AR=ar
 WINDRES=windres
 CFLAGS+=-mwindows -DWIN32
-LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
+LDFLAGS+=-lmingw32
 else
 DIRSEP=/
 RMF=rm -f
 EXEEXT=
+AR=ar
 WINDRES=
 LDFLAGS+=-lGLU -lGL -lopenal
 endif
 
+# Generic libs
+
 LDFLAGS+=-ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lphysfs -lSDLmain -lSDL -lSDL_net
+
+# Additional Windows libs
+
+ifeq ($(strip $(PLATFORM)),windows)
+LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
+endif
 
 include $(MAKERULES)/common.mk
