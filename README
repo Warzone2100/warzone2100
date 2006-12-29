@@ -18,7 +18,7 @@ heard of it running on BSD with no particular issue.
 What you get here is the early product of our collective work. We're not pros,
 we just like the game, so bear with us, and feel free to join us if you think
 you can do better. We can be found at :
-http://wz.rootzilla.de/
+http://wz2100.net/
 You'll have most chances to find us in the development section.
 
 
@@ -29,7 +29,7 @@ changing to its directory and typing './warzone'. Here's a few of the most
 common command line options :
 	--fullscreen : runs in a full-screen window
 	--window : runs in a window
-	--viewport WIDTHxHEIGHT : runs at WIDTH times HEIGHT resolution, replace WIDTH
+	--resolution WIDTHxHEIGHT : runs at WIDTH times HEIGHT resolution, replace WIDTH
 		and HEIGHT with your dimensions of choice. Beware, though,
 		as it needs to be a resolution supported by your X server.
 
@@ -43,7 +43,7 @@ be specified once, or when you want to change them. So,
 will start in fullscreen and in 1280x960 because this is what I specified just
 before (remember ?).
 
-For more commandline options see: http://wz.rootzilla.de/wiki/user:command_line_options
+For more commandline options see: http://wz2100.net/wiki/user:command_line_options
 
 If you are on Linux and using X11, you can dynamically switch between windowed
 mode and fullscreen using ALT+ENTER at any time.
@@ -99,7 +99,5 @@ the playlist is found. If no path is set, all filenames must be given with
 absolute path. All filenames must be lowercase.
 
 ogg and mp3 files are supported (provided all necessary libs are installed).
-
-
 
                                                     The Warzone Resurrection Project

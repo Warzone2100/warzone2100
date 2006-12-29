@@ -113,6 +113,7 @@ extern BOOL	godMode;
 /***************************************************************************/
 
 static UDWORD	establishTargetRadius( BASE_OBJECT *psTarget );
+static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_InFlightDirectFunc( PROJ_OBJECT *psObj );
 static void	proj_InFlightIndirectFunc( PROJ_OBJECT *psObj );
 static void	proj_ImpactFunc( PROJ_OBJECT *psObj );
@@ -384,7 +385,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 				}
 				break;
 			case OBJ_STRUCTURE:
-				heightVariance = (rand()%psTarget->sDisplay.imd->ymax);
+				heightVariance = rand()%8;
 				break;
 			default:
 				break;
@@ -575,8 +576,9 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			timeSoFar;
-	//Watermelon: Vector z diff not used atm
-	SDWORD			dx, dy, dz, iX, iY, dist, xdiff, ydiff, zdiff;
+	SDWORD			dx, dy, dz, iX, iY, dist, xdiff, ydiff;
+	//Watermelon: make zdiff always positive
+	UDWORD			zdiff;
 	SDWORD			rad;
 	iVector			pos;
 	//Watermelon:int i
@@ -595,7 +597,6 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	//Watermelon:Penetrate or not
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
-	DROID			*psTempDroid;
 
 	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
 		"proj_InFlightDirectFunc: invalid projectile pointer" );
@@ -741,7 +742,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			}
 
 			//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
-			if ( psTempObj->type == OBJ_BULLET && ( !bMissile || ((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass != WSC_COUNTER ) )
+			if ( psTempObj->type == OBJ_BULLET && !( bMissile || ((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass == WSC_COUNTER ) )
 			{
 				continue;
 			}
@@ -763,10 +764,10 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
+				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
 
-				if ( (xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
-					zdiff < psTempObj->sDisplay.imd->ymax )
+				if ( zdiff < establishTargetHeight(psTempObj) && 
+					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
@@ -784,51 +785,10 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = abs((SDWORD)psObj->z - (SDWORD)psTempObj->z);
-
-				if (psTempObj->type == OBJ_DROID )
-				{
-					psTempDroid = (DROID *)psTempObj;
-					//Watermelon:to make VTOL easier to hit
-					if (vtolDroid(psTempDroid))
-					{
-						zdiff -= 100;
-					}
-					else if ( !(cyborgDroid(psTempDroid)) &&
-							psTempDroid->droidType != DROID_PERSON &&
-							strcmp(asPropulsionStats[psTempDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") ) // Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-					{
-						//appends the turret height to the droid z,since there is no real geometries in wz
-						if ( psTempDroid->numWeaps > 0 )
-						{
-							zdiff -= (asWeaponStats[psTempDroid->asWeaps[0].nStat]).pIMD->ymax;
-						}
-						else
-						{
-							switch (psTempDroid->droidType)
-							{
-								case DROID_CONSTRUCT:
-									zdiff -= abs((asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
-									break;
-								case DROID_REPAIR:
-									zdiff -= abs((asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
-									break;
-								case DROID_SENSOR:
-									zdiff -= abs((asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax);
-									break;
-								case DROID_COMMAND:
-									zdiff -= abs((asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax);
-									break;
-								case DROID_ECM:
-									zdiff -= abs((asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax);
-									break;
-							}
-						}
-					}
-				}
-
-				if ( zdiff < abs(psTempObj->sDisplay.imd->ymax) &&
-					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
+				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
+		
+				if ( zdiff < establishTargetHeight(psTempObj) &&
+					(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psTempObj) * establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
@@ -856,10 +816,10 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	{
 		xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 		ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-		zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
+		zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
 
-		if ((xdiff*xdiff + ydiff*ydiff) < ((SDWORD)psObj->targetRadius * (SDWORD)psObj->targetRadius) &&
-			zdiff < psObj->psDest->sDisplay.imd->ymax)
+		if (zdiff < establishTargetHeight(psObj->psDest) &&
+			(xdiff*xdiff + ydiff*ydiff) < ((SDWORD)psObj->targetRadius * (SDWORD)psObj->targetRadius) )
 		{
 		  	psObj->state = PROJ_IMPACT;
 		}
@@ -873,11 +833,11 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		{
 			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-			zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
+			zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
 
 			//Watermelon:'real' hit check even if the projectile is about to 'timeout'
-			if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psObj->psDest) * (SDWORD)establishTargetRadius(psObj->psDest) ) &&
-				zdiff < 50 )
+			if ( zdiff < establishTargetHeight(psObj->psDest) &&
+				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
 			{
 			}
 			else
@@ -900,7 +860,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 #endif
 
 	/* add smoke trail to indirect weapons firing directly */
-	if( !proj_Direct( psStats ) AND gfxVisible(psObj))//GFX_VISIBLE(psObj) )
+	if( !proj_Direct( psStats ) && gfxVisible(psObj))
 	{
 		pos.x = psObj->x;
 		pos.y = psObj->z+8;
@@ -923,9 +883,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	BASE_OBJECT		*psTempObj;
 	BASE_OBJECT		*psNewTarget;
 	UDWORD			i;
-	SDWORD			xdiff,ydiff,zdiff,extendRad;
+	SDWORD			xdiff,ydiff,extendRad;
+	UDWORD			zdiff;
 	UDWORD			wpRadius = 3;
-	DROID			*psTempDroid;
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
 
@@ -1035,10 +995,10 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			{
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
+				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
 
-				if ( (xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) &&
-					zdiff < psTempObj->sDisplay.imd->ymax )
+				if ( zdiff < establishTargetHeight(psTempObj) &&
+					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					psObj->psDest = psNewTarget;
@@ -1050,50 +1010,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			{
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = (SDWORD)psObj->z - (SDWORD)psTempObj->z;
+				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
 
-				if (psTempObj->type == OBJ_DROID )
-				{
-					psTempDroid = (DROID *)psTempObj;
-					//Watermelon:to make VTOL easier to hit
-					if (vtolDroid(psTempDroid))
-					{
-						zdiff -= 100;
-					}
-					else if ( !(cyborgDroid(psTempDroid)) &&
-							psTempDroid->droidType != DROID_PERSON &&
-							strcmp(asPropulsionStats[psTempDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp")) // Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-					{
-						//appends the turret height to the droid z,since there is no real geometries in wz
-						if ( psTempDroid->numWeaps > 0 )
-						{
-							zdiff -= (asWeaponStats[psTempDroid->asWeaps[0].nStat]).pIMD->ymax;
-						}
-						else
-						{
-							switch (psTempDroid->droidType)
-							{
-								case DROID_CONSTRUCT:
-									zdiff -= abs((asConstructStats[psTempDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
-									break;
-								case DROID_REPAIR:
-									zdiff -= abs((asRepairStats[psTempDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
-									break;
-								case DROID_SENSOR:
-									zdiff -= abs((asSensorStats[psTempDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax);
-									break;
-								case DROID_COMMAND:
-									zdiff -= abs((asBrainStats[psTempDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax);
-									break;
-								case DROID_ECM:
-									zdiff -= abs((asECMStats[psTempDroid->asBits[COMP_ECM].nStat]).pIMD->ymax);
-									break;
-							}
-						}
-					}
-				}
-
-				if ( zdiff < abs(psTempObj->sDisplay.imd->ymax) &&
+				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
@@ -1134,7 +1053,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 
 			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
 			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-			zdiff = abs((SDWORD)psObj->z - (SDWORD)psObj->psDest->z);
+			zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
 
 			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
 			if ( psObj->psDest->type == OBJ_STRUCTURE )
@@ -1142,8 +1061,8 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 				wpRadius = 1;
 			}
 
-			if ( (UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psObj->psDest) * (SDWORD)establishTargetRadius(psObj->psDest) ) &&
-				zdiff < abs(psObj->psDest->sDisplay.imd->ymax) )
+			if ( zdiff < establishTargetHeight(psObj->psDest) &&
+				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
 			{
 				psObj->state = PROJ_IMPACT;
 			}
@@ -2422,8 +2341,82 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 	}
 }
 
+UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
+{
+	UDWORD		height;
+	DROID		*psDroid;
 
+	if(psTarget == NULL)	// Can this happen?
+	{
+		return( 0 );
+	}
+	else
+	{
+		//Get absolute ymax+ymin
+		height = abs(psTarget->sDisplay.imd->ymax) + abs(psTarget->sDisplay.imd->ymin);
 
+		switch(psTarget->type)
+		{
+		case OBJ_DROID:
+			psDroid = (DROID*)psTarget;
+			// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
+			if (!strcmp(asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") )
+			{
+				return (height);
+			}
+			switch(psDroid->droidType)
+			{
+				case DROID_WEAPON:
+					if ( psDroid->numWeaps > 0 )
+					{
+						height += abs((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->ymax);
+						height += abs((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->ymin);
+					}
+					break;
+				case DROID_SENSOR:
+					height += abs((asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax);
+					height += abs((asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymin);
+					break;
+				case DROID_ECM:
+					height += abs((asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->ymax);
+					height += abs((asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->ymin);
+					break;
+				case DROID_CONSTRUCT:
+					height += abs((asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
+					height += abs((asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymin);
+					break;
+				case DROID_COMMAND:
+					height += abs((asBrainStats[psDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax);
+					height += abs((asBrainStats[psDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymin);
+					break;
+				case DROID_REPAIR:
+					height += abs((asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
+					height += abs((asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymin);
+					break;
+				case DROID_PERSON:
+					//TODO:add person 'state'checks here(stand, knee, crouch, prone etc)
+				case DROID_CYBORG:
+				case DROID_CYBORG_CONSTRUCT:
+				case DROID_CYBORG_REPAIR:
+				case DROID_CYBORG_SUPER:
+				case DROID_DEFAULT:
+				case DROID_TRANSPORTER:
+				default:
+					break;
+			}
+			break;
+		case OBJ_STRUCTURE:
+		case OBJ_FEATURE:
+			//Just use imd ymax+ymin,since HeightScale is not available atm
+			break;
+		case OBJ_BULLET:
+			//16 for bullet
+			height = 16;
+			break;
+		default:
+			break;
+		}
+	}
 
-
-
+	return (height);
+}
