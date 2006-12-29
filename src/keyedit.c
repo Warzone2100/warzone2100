@@ -257,10 +257,8 @@ BOOL runKeyMapEditor(void)
 		}
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
-	DrawEnd();
 
 	return TRUE;
 }

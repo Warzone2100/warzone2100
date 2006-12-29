@@ -417,16 +417,9 @@ void pie_ImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,BOOL b
 	pie_SetBilinear(FALSE);	//changed by alex 19 oct 98
 }
 
-static void pie_ImageDefTrans(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int TransRate)
-{
-	pie_ImageDef(Image,Bmp,Modulus,x,y,FALSE);
-}
-
 void pie_UploadDisplayBuffer(char *DisplayBuffer)
 {
-	pie_GlobalRenderEnd(FALSE);
 	screen_Upload(NULL);
-	pie_GlobalRenderBegin();
 }
 
 void pie_DownloadDisplayBuffer(char *DisplayBuffer)

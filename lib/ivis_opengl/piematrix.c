@@ -376,13 +376,6 @@ int32 pie_RotProj(iVector *v3d, iPoint *v2d)
 	return pie_RotateProject(v3d->x, v3d->y, v3d->z, &(v2d->x), &(v2d->y));
 }
 
-static int32 pie_Transform(iVector *v3d, iPoint *v2d)
-{
-	v2d->x = v3d->x;
-	v2d->y = v3d->y;
-	return v3d->z;
-}
-
 //*************************************************************************
 
 void pie_PerspectiveBegin(void) {

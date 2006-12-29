@@ -1043,7 +1043,7 @@ BOOL systemInitialise(void)
 #endif
 
 	iV_Reset(TRUE);								// Reset the IV library.
-	initLoadingScreen(TRUE, FALSE);
+	initLoadingScreen(TRUE);
 
 	return TRUE;
 }

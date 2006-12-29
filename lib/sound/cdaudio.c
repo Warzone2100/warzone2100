@@ -548,18 +548,6 @@ BOOL cdAudio_Resume( void )
 // ======================================================================
 // ======================================================================
 //
-static WZ_DECL_DEPRECATED void cdAudio_SetVolume( SDWORD iVol ) // FIXME Currently not used nowhere!
-{
-#ifdef WZ_CDA
-#else
-	//alSourcef(music_source, AL_GAIN, 0.01*iVol);
-#endif
-}
-
-//*
-// ======================================================================
-// ======================================================================
-//
 void cdAudio_Update( void )
 {
 #ifndef WZ_CDA

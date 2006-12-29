@@ -194,44 +194,6 @@ int iV_GetTextWidth(char *String)
 }
 
 
-static BOOL iV_GetTextDetails(unsigned char Char, UWORD *Width, UWORD *Height, SWORD *YOffset, UBYTE *U, UBYTE *V, UWORD *TpageID)
-{
-
-
-	int Index;
-	UWORD ImageID;
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
-
-	Index = Char;
-
-	if(Index != ASCII_COLOURMODE) {
-		if(Index != ASCII_SPACE) {
-			ImageID = (UWORD)Font->AsciiTable[Index];
-
-			*Width = iV_GetImageWidth(Font->FontFile,ImageID) ;
-			*Height = iV_GetImageHeight(Font->FontFile,ImageID);
-			*YOffset = iV_GetImageYOffset(Font->FontFile,ImageID);
-
-			return TRUE;
-		}
-		else
-		{
-			*Width = Font->FontSpaceSize;
-			*Height=0;
-			*YOffset=0;
-			return TRUE;
-		}
-	}
-	*Width=0;
-	*Height=0;
-	*YOffset=0;
-
-	return TRUE;
-
-
-}
-
-
 int iV_GetCharWidth(char Char)
 {
 	int Index;
@@ -307,18 +269,6 @@ RENDERTEXT_CALLBACK GetIndirectDrawTextCallback( void)
 //UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 
 UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
-
-
-static void SetExtentsMode_USELAST(void)
-{
-	ExtentsMode=EXTENTS_USELASTX;
-}
-
-
-static void SetExtentsMode_USEMAX(void)
-{
-	ExtentsMode=EXTENTS_USEMAXWIDTH;
-}
 
 
 // Draws formatted text with word wrap, long word splitting, embedded

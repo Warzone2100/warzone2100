@@ -82,7 +82,7 @@ static BOOL		bPlayerHasWon = FALSE;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
 
-void	startCreditsScreen	( BOOL bRenderActive);
+void	startCreditsScreen	( void );
 void	runCreditsScreen	( void );
 UDWORD	lastTick=0;
 
@@ -117,7 +117,6 @@ TITLECODE titleLoop(void)
 {
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
-	pie_GlobalRenderBegin();
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
 	screen_RestartBackDrop();
@@ -248,7 +247,7 @@ TITLECODE titleLoop(void)
 		case STARTGAME:
 		case LOADSAVEGAME:
 
-			initLoadingScreen(TRUE,TRUE);//render active
+			initLoadingScreen(TRUE);//render active
 
   			if (titleMode == LOADSAVEGAME)
 			{
@@ -258,8 +257,6 @@ TITLECODE titleLoop(void)
 			{
 				RetCode = TITLECODE_STARTGAME;
 			}
-
-			pie_GlobalRenderEnd(TRUE);//force to black
 
 			return RetCode;			// don't flip!
 			break;
@@ -281,8 +278,6 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 
-
-	pie_GlobalRenderEnd(FALSE);//force to black  //[movie]  --We got no videos yet, so better to display the backdrop... -Q
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
@@ -320,8 +315,6 @@ void loadingScreenCallback(void)
 		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
 	}
 	lastTick = SDL_GetTicks();
-	pie_GlobalRenderBegin();
-	DrawBegin();
 	pie_UniTransBoxFill(1, 1, 2, 2, 0x00010101, 32);
 	/* Draw the black rectangle at the bottom */
 
@@ -346,15 +339,13 @@ void loadingScreenCallback(void)
 
    	}
 
-	DrawEnd();
-	pie_GlobalRenderEnd(TRUE);//force to black
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
 	audio_Update();
 }
 
 
 // fill buffers with the static screen
-void initLoadingScreen( BOOL drawbdrop, BOOL bRenderActive)
+void initLoadingScreen( BOOL drawbdrop )
 {
 	if (!drawbdrop)	// fill buffers
 	{
@@ -366,10 +357,6 @@ void initLoadingScreen( BOOL drawbdrop, BOOL bRenderActive)
 		resSetLoadCallback(loadingScreenCallback);
 		loadScreenCallNo = 0;
 		return;
-	}
-	if (bRenderActive)
-	{
-		pie_GlobalRenderEnd(TRUE);//force to black
 	}
 
 	pie_ResetBackDrop();
@@ -383,41 +370,23 @@ void initLoadingScreen( BOOL drawbdrop, BOOL bRenderActive)
 	loadScreenCallNo = 0;
 
 	screen_StopBackDrop();
-
-	if (bRenderActive)
-	{
-		pie_GlobalRenderBegin();
-	}
-
 }
 
 UDWORD lastChange = 0;
 
 // fill buffers with the static screen
-void startCreditsScreen( BOOL bRenderActive)
+void startCreditsScreen(void)
 {
 	SCREENTYPE	screen = SCREEN_CREDITS;
 
 	lastChange = gameTime;
 	// fill buffers
 
-	{
-		pie_LoadBackDrop(screen,FALSE);
-	}
-
-	if (bRenderActive)
-	{
-		pie_GlobalRenderEnd(TRUE);//force to black
-	}
+	pie_LoadBackDrop(screen,FALSE);
 
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//flip to set back buffer
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
-
-	if (bRenderActive)
-	{
-		pie_GlobalRenderBegin();
-	}
 }
 
 /* This function does nothing - since it's already been drawn */

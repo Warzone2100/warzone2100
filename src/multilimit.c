@@ -98,34 +98,27 @@ BOOL startLimitScreen(void)
 	UDWORD			numButtons = 0;
 	UDWORD			i;
 
-	addBackdrop();											//background
-//printf("[startLimitScreen]========= Enable priority here?\n");
+	addBackdrop();//background
+
 	// load stats...
 	if(!bForceEditorLoaded)
 	{
-		initLoadingScreen( TRUE, TRUE);//changed by jeremy mar8
-/*		if (!resLoad("wrf/forcedit.wrf", 500,
-					 DisplayBuffer, displayBufferSize,
-					 psGameHeap))				//need the object heaps to have been set up before loading
-		{
-			return FALSE;
-		}
-*/
+		initLoadingScreen( TRUE );//changed by jeremy mar8
+
 		if (!resLoad("wrf/piestats.wrf", 501,
 					 DisplayBuffer, displayBufferSize,
-					 psGameHeap))				//need the object heaps to have been set up before loading
+					 psGameHeap))//need the object heaps to have been set up before loading
 		{
 			return FALSE;
 		}
 
 		if (!resLoad("wrf/forcedit2.wrf", 502,
 					 DisplayBuffer, displayBufferSize,
-					 psGameHeap))				//need the object heaps to have been set up before loading
+					 psGameHeap))//need the object heaps to have been set up before loading
 		{
 			return FALSE;
 		}
 
-		pie_GlobalRenderBegin();//force to black
 		bForceEditorLoaded = TRUE;
 		closeLoadingScreen();
 	}
@@ -314,9 +307,7 @@ void runLimitScreen(void)
 
 	StartCursorSnap(&InterfaceSnap);
 
-	DrawBegin();
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

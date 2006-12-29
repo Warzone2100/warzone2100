@@ -51,16 +51,9 @@
 
 #include "intimage.h"
 
-
 #define TRANSRECT
 
-static BOOL	EnableLocks = TRUE;
-static SDWORD LockRefs = 0;
-
 IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
-
-
-
 
 // Form frame definitions.
 IMAGEFRAME FrameNormal = {
@@ -233,50 +226,7 @@ BOOL imageInitBitmaps(void)
 {
   	IntImages = (IMAGEFILE*)resGetData("IMG","intfac.img");
 
-//	IntImages = iV_LoadImageFile("intpc.img");
-
 	return TRUE;
-}
-
-void imageDeleteBitmaps(void)
-{
-//	iV_FreeImageFile(IntImages);
-}
-
-
-void DrawEnableLocks(BOOL Enable)
-{
-	EnableLocks = Enable;
-}
-
-
-void DrawBegin(void)
-{
-
-	if(EnableLocks) {
-		if(LockRefs == 0) {
-			pie_LocalRenderBegin();
-		}
-
-		LockRefs++;
-	}
-
-}
-
-
-void DrawEnd(void)
-{
-
-	if(EnableLocks) {
-		LockRefs--;
-
-		ASSERT( LockRefs >= 0,"Inbalanced DrawEnd()" );
-
-		if(LockRefs == 0) {
-			pie_LocalRenderEnd();
-		}
-	}
-
 }
 
 void RenderWindowFrame(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
@@ -290,9 +240,7 @@ void RenderOpaqueWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD 
 }
 
 
-
 #define INCEND	(0)
-
 
 
 // Render a window frame.
@@ -421,11 +369,6 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 		}
 	}
 
-
-	DrawBegin();
-
-
-
 	if(Frame->TopLeft >= 0) {
 		WTopLeft = (SWORD)iV_GetImageWidth(IntImages,Frame->TopLeft);
 		HTopLeft = (SWORD)iV_GetImageHeight(IntImages,Frame->TopLeft);
@@ -521,8 +464,6 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 								Height-HTopRight-HBottomRight);
 		}
 	}
-
-	DrawEnd();
 }
 
 

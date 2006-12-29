@@ -798,7 +798,7 @@ init://jump here from the end if re_initialising
 			case GS_NORMAL:
 				if (loopStatus != GAMECODE_NEWLEVEL)
 				{
-					initLoadingScreen(TRUE,FALSE);	// returning to f.e. do a loader.render not active
+					initLoadingScreen(TRUE);	// returning to f.e. do a loader.render not active
 					pie_EnableFog(FALSE);//dont let the normal loop code set status on
 					fogStatus = 0;
 					if (loopStatus != GAMECODE_LOADGAME)

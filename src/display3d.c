@@ -392,12 +392,6 @@ BOOL		bPlayerHasHQ = FALSE;
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
 
-
-	/* Lock the surface */
-	pie_GlobalRenderBegin();//only begins scene if it wasn't already begun
-
-	pie_LocalRenderBegin();
-
 	/* Build the drag quad */
 	if(dragBox3D.status == DRAG_RELEASED)
 	{
@@ -442,10 +436,6 @@ BOOL		bPlayerHasHQ = FALSE;
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(TRUE);
 	}
-
-
-	/* Unlock the surface */
-	pie_LocalRenderEnd();
 
 	if(!bRender3DOnly)
 	{

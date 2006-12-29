@@ -3389,10 +3389,7 @@ void intDisplayWidgets(void)
 	{
  // When will they ever learn!!!!
 		if (!bMultiPlayer)
-
 		{
-			DrawBegin();
-
 			screen_RestartBackDrop();
 			// Download buffer in system memory to the display back buffer.
 			pie_DownloadDisplayBuffer(DisplayBuffer);
@@ -3422,7 +3419,6 @@ void intDisplayWidgets(void)
 				displayConsoleMessages();
 			}
 
-			DrawEnd();
 		}
 	}
 

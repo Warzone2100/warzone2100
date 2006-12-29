@@ -461,10 +461,6 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 					jumpOffset = 0;
 				}
 			}
-			else
-			{
-				debug( LOG_NEVER, "" );
-			}
 		}
 		else
 		{
@@ -472,10 +468,6 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			{
 				debug( LOG_NEVER, "%-6d", jumpOffset );
 				jumpOffset+= 1;
-			}
-			else
-			{
-				debug( LOG_NEVER, "" );
 			}
 		}
 
@@ -486,10 +478,6 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			{
 				debug( LOG_NEVER, "%-6d", psCurrDebug->line );
 				psCurrDebug++;
-			}
-			else
-			{
-				debug( LOG_NEVER, "" );
 			}
 		}
 

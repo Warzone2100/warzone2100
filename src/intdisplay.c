@@ -2245,7 +2245,6 @@ void intInitialiseGraphics(void)
 void intDeleteGraphics(void)
 {
 	DeleteButtonData();
-	imageDeleteBitmaps();
 }
 
 
@@ -3428,16 +3427,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 	x0 = xOffset + BarGraph->x;
 	y0 = yOffset + BarGraph->y;
 
-    //this is a % so need to work out how much of the bar to draw
-    /*
-	// If power required is greater than Design Power bar then set to max
-	if (BarGraph->majorSize > BarGraph->width)
-	{
-		BarGraph->majorSize = BarGraph->width;
-	}*/
-
-	DrawBegin();
-
 	//draw the background image
 	iV_DrawImage(IntImages,IMAGE_DES_POWERBAR_LEFT,x0,y0);
 	iV_DrawImage(IntImages,IMAGE_DES_POWERBAR_RIGHT,
@@ -3494,7 +3483,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
         iV_DrawTransImage(IntImages, IMAGE_DES_STATSCOMP, iX + width ,y0);
 	}
 
-	DrawEnd();
 }
 
 

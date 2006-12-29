@@ -301,10 +301,6 @@ static void fVector_CP(fVector* dest, fVector* op1, fVector* op2) {
 	dest->z = op1->x * op2->y - op1->y * op2->x;
 }
 
-static float fVector_Length2(fVector* v) {
-	return v->x*v->x + v->y*v->y + v->z*v->z;
-}
-
 static void
 pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 {

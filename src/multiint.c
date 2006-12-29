@@ -597,15 +597,12 @@ void runConnectionScreen(void )
 	}
 
 	StartCursorSnap(&InterfaceSnap);
-	DrawBegin();
 
 	widgDisplayScreen(psWScreen);							// show the widgets currently running
 	if(SettingsUp == 1)
 	{
 		widgDisplayScreen(psConScreen);						// show the widgets currently running
 	}
-
-	DrawEnd();
 }
 
 
@@ -742,15 +739,12 @@ FAIL:
 
 	StartCursorSnap(&InterfaceSnap);
 
-	DrawBegin();
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if(safeSearch)
 	{
 		iV_SetFont(FEFont);
 		pie_DrawText(strresGetString(psStringRes, STR_MUL_SEARCHING), D_W+260, D_H+460);
 	}
-
-	DrawEnd();
 }
 
 
@@ -2772,7 +2766,6 @@ void runMultiOptions(void)
 
 	StartCursorSnap(&InterfaceSnap);
 
-	DrawBegin();
 	widgDisplayScreen(psWScreen);									// show the widgets currently running
 
 	if(multiRequestUp)
@@ -2787,13 +2780,6 @@ void runMultiOptions(void)
 	}
 
 	runWhiteBoard();
-
-//	if(psMapTiles)
-//	{
-//		displayMapPreview();
-//	}
-
-	DrawEnd();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3259,13 +3245,12 @@ void runForceSelect(void)
 
 	StartCursorSnap(&InterfaceSnap);
 
-	DrawBegin();
 	widgDisplayScreen(psWScreen);							// show the widgets currently running
 	if(bLoadSaveUp)
 	{
 		displayLoadSave();
 	}
-	DrawEnd();
+
 	return;
 }
 

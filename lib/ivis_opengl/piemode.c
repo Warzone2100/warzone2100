@@ -132,18 +132,6 @@ void pie_ScreenFlip(CLEAR_MODE clearMode) {
 }
 
 /***************************************************************************/
-
-void pie_Clear(UDWORD colour) {
-}
-/***************************************************************************/
-
-void pie_GlobalRenderBegin(void) {
-}
-
-void pie_GlobalRenderEnd(BOOL bForceClearToBlack) {
-}
-
-/***************************************************************************/
 UDWORD	pie_GetResScalingFactor( void ) {
 //	UDWORD	resWidth;	//n.b. resolution width implies resolution height...!
 
@@ -154,13 +142,3 @@ UDWORD	pie_GetResScalingFactor( void ) {
 	}
 }
 
-/***************************************************************************/
-void pie_LocalRenderBegin(void) {
-}
-
-void pie_LocalRenderEnd(void) {
-}
-
-
-static void pie_RenderSetup(void) {
-}

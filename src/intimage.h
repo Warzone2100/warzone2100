@@ -1,6 +1,8 @@
 #ifndef __INCLUDED_INTIMAGE__
 #define __INCLUDED_INTIMAGE__
 
+#include "intfac.h" // Interface image id's.
+
 #define FILLRED 16
 #define FILLGREEN 16
 #define FILLBLUE 128
@@ -92,38 +94,9 @@ extern TABDEF SystemTab;
 extern TABDEF SmallTab;
 
 
-
-#include "intfac.h"		// Interface image id's.
-
-
 extern BOOL imageInitBitmaps(void);
 
 extern void imageDeleteBitmaps(void);
-
-// Draw an image to a surface.
-//extern void DrawImageSR(IMAGE *Image,UDWORD x,UDWORD y);
-
-// Draw an image to a display memory.
-//extern void DrawImage4101(IMAGE *Image,UDWORD x,UDWORD y);
-
-//extern void DrawImageRect4101(IMAGE *Image,UDWORD x,UDWORD y,UDWORD x0,UDWORD y0,UDWORD Width,UDWORD Height);
-
-//extern void DrawTransImageRect4101(IMAGE *Image,UDWORD x,UDWORD y,UDWORD x0,UDWORD y0,UDWORD Width,UDWORD Height);
-
-// Draw an image to a surface with colour 0 transparent.
-//extern void DrawTransImageSR(IMAGE *Image,UDWORD x,UDWORD y);
-
-// Draw an image to a display memory with colour 0 transparent.
-//extern void DrawTransImage4101(IMAGE *Image,UDWORD x,UDWORD y);
-
-// Enable / Dissable locks.
-extern void DrawEnableLocks(BOOL Enable);
-
-// Begin a rendering lock.
-extern void DrawBegin(void);
-
-// End a rendering lock.
-extern void DrawEnd(void);
 
 // Draws a transparent window
 extern void RenderWindowFrame(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);

@@ -1120,17 +1120,10 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 
 	}
 
+	drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
+	RenderWindowFrame(&FrameRadar,RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
 
-
-
-
-  		drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
-		DrawEnableLocks(FALSE);
-		RenderWindowFrame(&FrameRadar,RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
-		DrawEnableLocks(TRUE);
-
-
-		// Draw the radar border.
+	// Draw the radar border.
 }
 
 

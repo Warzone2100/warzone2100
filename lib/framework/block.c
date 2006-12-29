@@ -626,24 +626,3 @@ void blockUnsuspendUsage(void)
 	psSuspendedHeap=NULL;
 
 }
-
-
-
-static void blockCurrentBlockInfo(void)
-{
-#ifdef DEBUG
-	BLOCK_HEAP *psCurHeap;
-
-	psCurHeap=memGetBlockHeap();
-	if (psCurHeap==NULL)
-	{
-		debug( LOG_NEVER, "*** No current block defined\n" );
-	}
-	else
-	{
-		UDWORD	Left=(UDWORD)((psCurHeap->psBlocks->pMem)+(psCurHeap->psBlocks->size)-(psCurHeap->psBlocks->pFree));
-
-		debug( LOG_NEVER, "ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n", psCurHeap, psCurHeap->init, psCurHeap->ext, psCurHeap->TotalAllocated, psCurHeap->psBlocks->pMem, psCurHeap->psBlocks->pFree, Left );
-	}
-#endif
-}

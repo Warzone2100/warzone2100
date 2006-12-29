@@ -5396,8 +5396,6 @@ void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	x0 = (UWORD)(xOffset+Form->x);
 	y0 = (UWORD)(yOffset+Form->y);
 
-	DrawBegin();
-
 	iV_DrawImage(IntImages,(UWORD)(IMAGE_DES_STATBACKLEFT),x0,y0);
 	iV_DrawImageRect(IntImages,IMAGE_DES_STATBACKMID,
 				x0+iV_GetImageWidth(IntImages,IMAGE_DES_STATBACKLEFT),y0,
@@ -5433,8 +5431,6 @@ void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	falseScale = (falseScale/2) + (DESIGN_COMPONENT_SCALE/2);
 	//display component in bottom design screen window
 	displayComponentButton( psStats, &Rotation, &Position, TRUE, falseScale);
-
-	DrawEnd();
 }
 
 /* Displays the 3D view of the droid in a window on the design form */

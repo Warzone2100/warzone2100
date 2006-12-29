@@ -183,8 +183,6 @@ GAMECODE gameLoop(void)
 
 	fastExit = FALSE;
 
-	pie_GlobalRenderBegin();
-
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
 	audio_Update();
@@ -779,7 +777,6 @@ GAMECODE gameLoop(void)
 
 	if (fogStatus & FOG_BACKGROUND)
 	{
-		pie_GlobalRenderEnd(FALSE);//screen clear to fog colour 3DFX
 		clearMode = CLEAR_FOG;//screen clear to fog colour D3D
 		if (loopMissionState == LMS_SAVECONTINUE)
 		{
@@ -789,7 +786,6 @@ GAMECODE gameLoop(void)
 	}
 	else
 	{
-		pie_GlobalRenderEnd(TRUE);//force to black 3DFX
 		clearMode = CLEAR_BLACK;//force to black 3DFX
 	}
 
@@ -922,8 +918,6 @@ GAMECODE videoLoop(void)
 	screen_GetBackDrop();//test only remove JPS feb26
 #endif
 
-	pie_GlobalRenderBegin();
-
 	bClear = CLEAR_OFF;
 
 	if (video)
@@ -1027,8 +1021,6 @@ GAMECODE videoLoop(void)
 			}*/
 		}
 	}
-
-	pie_GlobalRenderEnd(TRUE);//force to black
 
 	if( clearCount < 1)
 	{

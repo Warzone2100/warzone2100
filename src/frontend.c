@@ -226,12 +226,11 @@ void changeTitleMode(tMode mode)
 		startTitleMenu();
 		break;
 
-
 //	case GRAPHICS:
 //		startGraphicsOptionsMenu();
 //		break;
 	case CREDITS:
-		startCreditsScreen(FALSE);
+		startCreditsScreen();
 		break;
 
  	case MULTI:
@@ -347,10 +346,8 @@ BOOL runTitleMenu(void)
 			break;
 		}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
 
 	return TRUE;
 }
@@ -411,12 +408,10 @@ BOOL runTutorialMenu(void)
 		changeTitleMode(TITLE);
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
-	return TRUE;
 
+	return TRUE;
 }
 
 
@@ -521,7 +516,7 @@ BOOL runSinglePlayerMenu(void)
  #ifdef LOADINGBACKDROPS
 				AddLoadingBackdrop(TRUE);
  #else
-				initLoadingScreen(TRUE,TRUE);
+				initLoadingScreen(TRUE);
  #endif
  #endif
 				break;
@@ -538,7 +533,7 @@ BOOL runSinglePlayerMenu(void)
  #ifdef LOADINGBACKDROPS
 				AddLoadingBackdrop(TRUE);
  #else
-				initLoadingScreen(TRUE,TRUE);
+				initLoadingScreen(TRUE);
  #endif
  #endif
 				break;
@@ -564,7 +559,6 @@ BOOL runSinglePlayerMenu(void)
 
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 
 	if(!bLoadSaveUp)										// if save/load screen is up
@@ -576,11 +570,6 @@ BOOL runSinglePlayerMenu(void)
 		displayLoadSave();
 	}
 
-
-
-
-
-	DrawEnd();
 	return TRUE;
 }
 
@@ -629,7 +618,7 @@ BOOL runMultiPlayerMenu(void)
 
 		if(!bForceEditorLoaded)
 		{
-			initLoadingScreen( TRUE, TRUE);
+			initLoadingScreen( TRUE );
 /*			if (!resLoad("wrf/forcedit.wrf", 500,
 						 DisplayBuffer, displayBufferSize,
 						 psGameHeap))				//need the object heaps to have been set up before loading
@@ -678,10 +667,8 @@ BOOL runMultiPlayerMenu(void)
 		break;
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);					// show the widgets currently running
-	DrawEnd();
 
 	return TRUE;
 }
@@ -757,10 +744,8 @@ BOOL runOptionsMenu(void)
 
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
 
 	return TRUE;
 }
@@ -1027,10 +1012,8 @@ BOOL runGameOptions2Menu(void)
 		changeTitleMode(OPTIONS);
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
 
 	return TRUE;
 }
@@ -1108,10 +1091,9 @@ BOOL runGameOptions3Menu(void)
 		changeTitleMode(TITLE);
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
+
 	return TRUE;
 }
 
@@ -1305,10 +1287,9 @@ BOOL runGameOptionsMenu(void)
 		changeTitleMode(TITLE);
 	}
 
-	DrawBegin();
 	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
-	DrawEnd();
+
 	return TRUE;
 }
 

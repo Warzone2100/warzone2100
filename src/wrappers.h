@@ -23,11 +23,11 @@ extern TITLECODE	titleLoop			    ( void );
 extern void			clearTitle	 		    ( void );
 extern void			displayTitleScreen 	    ( void );
 
-extern void			initLoadingScreen	    ( BOOL drawbdrop, BOOL bRenderActive);
+extern void			initLoadingScreen		( BOOL drawbdrop );
 extern void			closeLoadingScreen	    ( void );
 extern void			loadingScreenCallback   ( void );
 
-extern void			startCreditsScreen	    ( BOOL bRenderActive);
+extern void			startCreditsScreen	    ( void );
 
 extern BOOL			displayGameOver		    ( BOOL success);
 extern void			setPlayerHasLost	    ( BOOL val );
@@ -40,7 +40,7 @@ extern UBYTE        getScriptWinLoseVideo   ( void );
 
 // PC version calls the loading bar code directly.
 //#define LOADBARCALLBACK() loadingScreenCallback()
-#define LOADBARCALLBACK() 
+#define LOADBARCALLBACK()
 
 
 #endif

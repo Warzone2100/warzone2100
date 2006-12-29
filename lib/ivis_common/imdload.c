@@ -147,22 +147,7 @@ static UDWORD IMDPoints = 0;
 static UDWORD IMDTexAnims = 0;
 static UDWORD IMDConnectors = 0;
 
-static void DumpIMDInfo(void)
-{
-	debug( LOG_NEVER, "imds loaded    =%d - using %d bytes\n", IMDcount, IMDcount*sizeof(iIMDShape) );
-	debug( LOG_NEVER, "polys loaded   =%d - using %d bytes\n", IMDPolycount, IMDPolycount*sizeof(iIMDPoly) );
-	debug( LOG_NEVER, "vertices loaded=%d - using %d bytes\n", IMDVertexcount, IMDVertexcount*(sizeof(VERTEXID)+sizeof(iVertex)) );
-	debug( LOG_NEVER, "points loaded  =%d - using %d bytes\n", IMDPoints, IMDPoints*sizeof(iVector) );
-	debug( LOG_NEVER, "connectors     =%d - using %d bytes\n", IMDConnectors, IMDConnectors*sizeof(iVector) );
-}
-
 static char texfile[64];	//Last loaded texture page filename
-
-static char *GetLastLoadedTexturePage(void)
-{
-	return texfile;
-}
-
 
 // ppFileData is incremented to the end of the file on exit!
 iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd, char *IMDpath,
