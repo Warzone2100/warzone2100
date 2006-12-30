@@ -60,6 +60,7 @@
 #define	DIRECT_PROJ_SPEED		500
 #define	CHECK_PROJ_ABOVE_GROUND	1
 #define NOMINAL_DAMAGE	5
+#define VTOL_HITBOX_MODIFICATOR 100
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
@@ -766,7 +767,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
 
-				if ( zdiff < establishTargetHeight(psTempObj) && 
+				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
@@ -786,7 +787,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
 				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
 				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
-		
+
 				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psTempObj) * establishTargetRadius(psTempObj) ) )
 				{
@@ -818,7 +819,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
 		zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
 
-		if (zdiff < establishTargetHeight(psObj->psDest) &&
+		if ( zdiff < establishTargetHeight(psObj->psDest ) &&
 			(xdiff*xdiff + ydiff*ydiff) < ((SDWORD)psObj->targetRadius * (SDWORD)psObj->targetRadius) )
 		{
 		  	psObj->state = PROJ_IMPACT;
@@ -1859,11 +1860,7 @@ proj_Update( PROJ_OBJECT *psObj )
 	}
 
 	//Watermelon:get naybors
-	//if(psObj->psWStats->weaponSubClass == WSC_ROCKET OR psObj->psWStats->weaponSubClass == WSC_MISSILE OR
-		//psObj->psWStats->weaponSubClass == WSC_SLOWROCKET OR psObj->psWStats->weaponSubClass == WSC_SLOWMISSILE)
-	//{
-		projGetNaybors((PROJ_OBJECT *)psObj);
-	//}
+	projGetNaybors((PROJ_OBJECT *)psObj);
 
 	switch (psObj->state)
 	{
@@ -1965,27 +1962,10 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 						debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
 								damageToDo, psCurr->id, psCurr->player);
 
-//						if(bMultiPlayer)
-//						{
-//							bMultiPlayer = FALSE;
-//							bMultiTemp = TRUE;
-//						}
-//						else
-//						{
-//							bMultiTemp = FALSE;
-//						}
-
-						//bKilled = psCurr->damage(psCurr, damageToDo, psStats->weaponClass);
-
 						//Watermelon:just assume the burn damage is from FRONT
 	  					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
 
 						psCurr->burnDamage += damageToDo;
-
-//						if(bMultiTemp)
-//						{
-//							bMultiPlayer = TRUE;
-//						}
 
 						if(bKilled)
 						{
@@ -2050,14 +2030,8 @@ FEATURE		*psFeat;
 
 	radius = 0;
 
-	if(psTarget == NULL)	// Can this happen?
+	switch(psTarget->type)
 	{
-		return( 0 );
-	}
-	else
-	{
-		switch(psTarget->type)
-		{
 		case OBJ_DROID:
 			switch(((DROID *)psTarget)->droidType)
 			{
@@ -2095,7 +2069,6 @@ FEATURE		*psFeat;
 			radius = TILE_UNITS/8;
 		default:
 			break;
-		}
 	}
 
 	return(radius);
@@ -2346,17 +2319,11 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 	UDWORD		height;
 	DROID		*psDroid;
 
-	if(psTarget == NULL)	// Can this happen?
-	{
-		return( 0 );
-	}
-	else
-	{
 		//Get absolute ymax+ymin
 		height = abs(psTarget->sDisplay.imd->ymax) + abs(psTarget->sDisplay.imd->ymin);
 
-		switch(psTarget->type)
-		{
+	switch(psTarget->type)
+	{
 		case OBJ_DROID:
 			psDroid = (DROID*)psTarget;
 			// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
@@ -2364,6 +2331,13 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 			{
 				return (height);
 			}
+
+			// VTOL's don't have pIMD either it seems...
+			if (vtolDroid(psDroid))
+			{
+				return (height + VTOL_HITBOX_MODIFICATOR);
+			}
+
 			switch(psDroid->droidType)
 			{
 				case DROID_WEAPON:
@@ -2415,7 +2389,6 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 			break;
 		default:
 			break;
-		}
 	}
 
 	return (height);

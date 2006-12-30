@@ -6,7 +6,7 @@
 /***************************************************************************/
 /* defines */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #ifdef WZ_OPENAL_MAC_H
 #include <openal/al.h>
