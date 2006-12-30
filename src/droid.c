@@ -4395,7 +4395,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
 		{
-			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{
 				//psDroid->armour[inc] = (asBodyStats + pTemplate->asParts[COMP_BODY])->armourValue[inc];
 				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
@@ -4407,7 +4407,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
 		{
-			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{
 				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
 					asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
@@ -7104,7 +7104,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         x = psD->x;
         y = psD->y;
         body = psD->body;
-		for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+		for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 		{
 			armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
 			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
@@ -7129,7 +7129,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         {
             addDroid(psNewDroid, apsDroidLists);
             psNewDroid->body = body;
-			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side++)
+			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{
 				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
