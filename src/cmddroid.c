@@ -64,7 +64,6 @@ void cmdDroidUpdate(void)
 void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 {
 	DROID_GROUP	*psGroup;
-	DROID_OACTION_INFO oaInfo = {NULL};
 
 	if (psCommander->psGroup == NULL)
 	{
@@ -78,6 +77,8 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 	if (grpNumMembers(psCommander->psGroup) < cmdDroidMaxGroup(psCommander))
 	{
+		DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT*)psCommander}};
+
 		grpJoin(psCommander->psGroup, psDroid);
 		psDroid->group = UBYTE_MAX;
 
@@ -87,7 +88,6 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
 		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
 
-		oaInfo.objects[0] = (BASE_OBJECT *)psCommander; 
 		orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
 	}
 

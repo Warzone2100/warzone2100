@@ -3654,8 +3654,7 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			if (idfDroid(psNewDroid) ||
 				vtolDroid(psNewDroid))
 			{
-				DROID_OACTION_INFO oaInfo = {NULL};
-				oaInfo.objects[0] = (BASE_OBJECT *)psFact->psCommander;
+				DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psFact->psCommander}};
 				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, &oaInfo);
 				moveToRearm(psNewDroid);
 			}
@@ -3944,7 +3943,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
-	DROID_OACTION_INFO oaInfo = {NULL};
 
 	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"aiUpdateStructure: invalid Structure pointer" );
@@ -3953,8 +3951,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	{
 		for (i = 0;i < psStructure->numWeaps;i++)
 		{
-			if (psStructure->psTarget[i] &&
-				psStructure->psTarget[i]->died)
+			if (psStructure->psTarget[i] && psStructure->psTarget[i]->died)
 			{
 				psStructure->psTarget[i] = NULL;
 			}
@@ -3962,8 +3959,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	}
 	else
 	{
-		if (psStructure->psTarget[0] &&
-			psStructure->psTarget[0]->died)
+		if (psStructure->psTarget[0] && psStructure->psTarget[0]->died)
 		{
 			psStructure->psTarget[0] = NULL;
 		}
@@ -4123,19 +4119,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		    //check if this structure is due some power
 		    if (getLastPowered((BASE_OBJECT *)psStructure))
 		    {
-
-//DBPRINTF(("pStructureType  %d\n",psStructure->pStructureType->type));
-//if(psStructure->pStructureType->type == REF_FACTORY) {
-//	FACTORY *Fact = psStructure->pFunctionality;
-//	DBPRINTF(("Subject %p\n",Fact->psSubject));
-//	DBPRINTF(("Accrued %d\n",Fact->powerAccrued));
-//	DBPRINTF(("Started %d\n",Fact->timeStarted));
-//	DBPRINTF(("Start Hold %d\n",Fact->timeStartHold));
-//	if(Fact->psSubject) {
-//		DBPRINTF(("Required %d\n",((DROID_TEMPLATE*)Fact->psSubject)->powerPoints ));
-//	}
-//}
-
 			    //get some power if necessary
 			    if (accruePower((BASE_OBJECT *)psStructure))
 			    {
@@ -4272,6 +4255,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		}
 		case REF_REARM_PAD:
 		{
+			DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psStructure}};
+
 			psReArmPad = (REARM_PAD *) psStructure->pFunctionality;
 			psChosenObj = psReArmPad->psObj;
 			structureMode = REF_REARM_PAD;
@@ -4293,7 +4278,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid != NULL)
 				{
-					oaInfo.objects[0] = (BASE_OBJECT *)psStructure;
 					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT,
 									&oaInfo);
 				}
@@ -4305,7 +4289,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					  psDroid->sMove.Status == MOVEHOVER       ) &&
 					 psDroid->action == DACTION_WAITFORREARM        )
 				{
-					oaInfo.objects[0] = (BASE_OBJECT *)psStructure;
 					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT,
 									&oaInfo);
 				}
@@ -4779,8 +4762,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						// return a droid to it's command group
 						DROID	*psCommander = psDroid->psGroup->psCommander;
 
-						DROID_OACTION_INFO oaInfo = {NULL};
-						oaInfo.objects[0] = (BASE_OBJECT *)psCommander;
+						DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psCommander}};
 //						orderDroidLoc(psDroid, DORDER_MOVE, psCommander->x, psCommander->y);
 						orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
 					}
@@ -9446,8 +9428,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 			 (vtolDroid(psCurr))
 			)
 		{
-			DROID_OACTION_INFO oaInfo = {NULL};
-			oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
+			DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psStruct}};
 			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, &oaInfo);
 		}
 	}

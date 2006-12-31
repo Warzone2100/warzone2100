@@ -170,14 +170,14 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 	UDWORD	id,ids;
 	STRUCTURE *psStruct = NULL;
 	UBYTE	i;
-	DROID_OACTION_INFO oaInfo = {NULL};
+	DROID_OACTION_INFO oaInfo = {{NULL}};
 
 	NetGet(pMsg,0,player);
 	NetGet(pMsg,1,id);
 	NetGet(pMsg,5,chosen);
 	NetGet(pMsg,6,ids);
 
-	if(!IdToDroid(id,player,&psDroid))			//find droid.
+	if(!IdToDroid(id,player,&psDroid))// find droid.
 	{
 		return FALSE;
 	}
@@ -188,7 +188,7 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 		NetGet(pMsg,(11 + i),amm[i]);
 	}
 
-	if(ids)										// find rearm pad.
+	if(ids)// find rearm pad.
 	{
 		psStruct = IdToStruct(id,psDroid->player);
 		if(!psStruct)
@@ -210,20 +210,20 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 	turnOffMultiMsg(TRUE);
 	switch(chosen)
 	{
-	case 1:
-		psDroid->order = DORDER_NONE;
-		oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
-		orderDroidObj(psDroid, DORDER_REARM, &oaInfo);
-		break;
-	case 2:
-		oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
-		actionDroidObj(psDroid,DACTION_MOVETOREARM, &oaInfo);
-		break;
-	case 3:
-		orderDroid( psDroid, DORDER_RTB );
-		break;
-	default:
-		break;
+		case 1:
+			psDroid->order = DORDER_NONE;
+			oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
+			orderDroidObj(psDroid, DORDER_REARM, &oaInfo);
+			break;
+		case 2:
+			oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
+			actionDroidObj(psDroid,DACTION_MOVETOREARM, &oaInfo);
+			break;
+		case 3:
+			orderDroid( psDroid, DORDER_RTB );
+			break;
+		default:
+			break;
 	}
 	turnOffMultiMsg(FALSE);
 
@@ -974,20 +974,19 @@ BOOL recvDroidInfo(NETMSG *pMsg)
 
 // ////////////////////////////////////////////////////////////////////////////
 // process droid order
-static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWORD y,
-														 OBJECT_TYPE desttype,UDWORD destid)
+static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype, UDWORD destid)
 {
 	UDWORD		i;
 	DROID		*pD;
 	STRUCTURE	*pS;
 	FEATURE		*pF;
-	BASE_OBJECT *psObj= NULL;
-	DROID_OACTION_INFO oaInfo = {NULL};
+	BASE_OBJECT *psObj = NULL;
+	DROID_OACTION_INFO oaInfo = {{NULL}};
 
 	if(destid==0 && desttype==0)							// target is a location
 	{
-		if(    abs(psDroid->x - x )< (TILE_UNITS/2)
-			&& abs(psDroid->y - y )< (TILE_UNITS/2) )		// don't bother if close.
+		if( abs(psDroid->x - x) < (TILE_UNITS/2)
+			&& abs(psDroid->y - y) < (TILE_UNITS/2) )		// don't bother if close.
 		{
 			return;
 		}
@@ -1035,7 +1034,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWO
 			}
 			break;
 
-		case OBJ_BULLET:												// shouldn't be getting this!
+		case OBJ_BULLET: // shouldn't be getting this!
 			debug( LOG_ERROR, "multibot: order specified destination as a bullet. what am i to do??" );
 			abort();
 			break;

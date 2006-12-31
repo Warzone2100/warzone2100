@@ -341,6 +341,7 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID	*psCurr;
+	DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psObj}};
 
 	ASSERT( PTRVALID(psGroup, sizeof(DROID_GROUP)),
 		"orderGroupObj: invalid droid group" );
@@ -352,8 +353,6 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			DROID_OACTION_INFO oaInfo = {NULL};
-			oaInfo.objects[0] = (BASE_OBJECT *)psObj;
 			orderDroidObj(psCurr, order, &oaInfo);
 		}
 
@@ -363,8 +362,6 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	{
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			DROID_OACTION_INFO oaInfo = {NULL};
-			oaInfo.objects[0] = (BASE_OBJECT *)psObj;
 			orderDroidObj(psCurr, order, &oaInfo);
 		}
 	}

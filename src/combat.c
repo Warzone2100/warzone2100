@@ -188,7 +188,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	/* Check we can see the target */
 	if ( (psAttacker->type == OBJ_DROID) &&
 		 !vtolDroid((DROID *)psAttacker) &&
-		 (proj_Direct(psStats) || 
+		 (proj_Direct(psStats) ||
 		 actionInsideMinRange(psDroid, psTarget, weapon_slot)) )
 	{
 		if(!visibleObjWallBlock(psAttacker, psTarget))
@@ -570,8 +570,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 				//inform viewer of target
 				if (psViewer->type == OBJ_DROID)
 				{
-					DROID_OACTION_INFO oaInfo = {NULL};
-					oaInfo.objects[0] = psAttacker;
+					DROID_OACTION_INFO oaInfo = {{psAttacker}};
 					orderDroidObj((DROID *)psViewer, DORDER_OBSERVE, &oaInfo);
 				}
 				else if (psViewer->type == OBJ_STRUCTURE)

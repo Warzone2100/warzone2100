@@ -547,7 +547,7 @@ BOOL scrOrderDroidObj(void)
 	DROID			*psDroid;
 	SDWORD			order;
 	BASE_OBJECT		*psObj;
-	DROID_OACTION_INFO oaInfo = {NULL};
+	DROID_OACTION_INFO oaInfo = {{NULL}};
 
 	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &order, ST_BASEOBJECT, &psObj))
 	{
@@ -2244,7 +2244,7 @@ BOOL scrActionDroidObj(void)
 	DROID			*psDroid;
 	SDWORD			action;
 	BASE_OBJECT		*psObj;
-	DROID_OACTION_INFO oaInfo = {NULL};
+	DROID_OACTION_INFO oaInfo = {{NULL}};
 
 	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &action, ST_BASEOBJECT, &psObj))
 	{
@@ -2267,7 +2267,7 @@ BOOL scrActionDroidObj(void)
 		debug(LOG_ERROR, "scrActionDroidObj: this action is not supported");
 		return FALSE;
 	}
-	
+
 	oaInfo.objects[0] = (BASE_OBJECT *)psObj;
 	actionDroidObj(psDroid, action, &oaInfo);
 

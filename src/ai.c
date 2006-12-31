@@ -136,9 +136,9 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 							if(friendlyDroid->order != DORDER_ATTACK)
 							{
 								//(WEAPON_STATS *)(asWeaponStats + ((DROID *)friendlyObj)->asWeaps[0].nStat)->;
-								
+
 								// make sure target is near enough
-								if(dirtySqrt(psDroid->x,psDroid->y,tempTarget->x,tempTarget->y) 
+								if(dirtySqrt(psDroid->x,psDroid->y,tempTarget->x,tempTarget->y)
 									< (psDroid->sensorRange * 2))
 								{
 									targetInQuestion = tempTarget;		//consider this target
@@ -888,9 +888,9 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = FALSE;
 	}
 
-	/* Don't update target if we are sent to attack and reached 
+	/* Don't update target if we are sent to attack and reached
 		attack destination (attacking our target) */
-	if((orderState(psDroid, DORDER_ATTACK) || orderState(psDroid, DORDER_ATTACK_M)) 
+	if((orderState(psDroid, DORDER_ATTACK) || orderState(psDroid, DORDER_ATTACK_M))
 		&& (psDroid->psActionTarget[0] == psDroid->psTarget[0]))
 	{
 		updateTarget = FALSE;
@@ -978,7 +978,7 @@ void aiUpdateDroid(DROID *psDroid)
 		if((psDroid->numWeaps > 0) && ((psDroid->droidType == DROID_COMMAND) ||
 			!(psDroid->psGroup && (psDroid->psGroup->type == GT_COMMAND))))	//not assigned to commander
 		{
-			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) == 
+			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) ==
 				(frameGetFrameNumber() % TARGET_UPD_SKIP_FRAMES))
 			{
 				(void)updateAttackTarget((BASE_OBJECT*)psDroid, 0);
@@ -1146,8 +1146,7 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 {
 	BASE_OBJECT		*psBetterTarget=NULL;
 	DROID			*psDroid;
-	DROID_OACTION_INFO oaInfo = {NULL};
-	
+
 	psBetterTarget = NULL;
 
 	if(aiChooseTarget(psAttacker, &psBetterTarget, weapon_slot, TRUE))	//update target
@@ -1162,7 +1161,7 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 				orderState(psDroid, DORDER_GUARD) ||
 				orderState(psDroid, DORDER_ATTACKTARGET))
 			{
-				oaInfo.objects[0] = psBetterTarget;
+				DROID_OACTION_INFO oaInfo = {{psBetterTarget}};
 				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, &oaInfo);
 			}
 			else	//can't override current order
