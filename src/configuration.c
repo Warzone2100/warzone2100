@@ -88,6 +88,16 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		war_SetPlayAudioCDs(val);
 	}
 
+	if (getWarzoneKeyNumeric("framerate", &val))
+	{
+		setFramerateLimit(val);
+	}
+	else
+	{
+		setFramerateLimit(60);
+		setWarzoneKeyNumeric("framerate", 60);
+	}
+
 	// //////////////////////////
 	// gamma
 	if (getWarzoneKeyNumeric("gamma", &val))
@@ -536,7 +546,8 @@ BOOL saveConfig(void)
 		setDifficultyLevel(DL_NORMAL);
 	}
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
-	setWarzoneKeyNumeric("gamma", (SDWORD)(gammaValue));
+	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
+	setWarzoneKeyNumeric("gamma", (SDWORD)gammaValue);
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
 	setWarzoneKeyNumeric("barmode",(SDWORD)barMode);			//energybars

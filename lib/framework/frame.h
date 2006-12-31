@@ -68,8 +68,22 @@ extern UDWORD	frameGetFrameNumber(void);
 extern UDWORD frameGetAverageRate(void);
 
 
+/**
+ * Set the framerate limit
+ *
+ * \param fpsLimit Desired framerate
+ */
+extern void setFramerateLimit(Uint32 fpsLimit);
+
+/**
+ * Get the framerate limit
+ *
+ * \return Desired framerate
+ */
+extern Uint32 getFramerateLimit(void);
+
 /* Load the file with name pointed to by pFileName into a memory buffer. */
-BOOL loadFile(const char *pFileName,		// The filename
+extern BOOL loadFile(const char *pFileName,		// The filename
               char **ppFileData,	// A buffer containing the file contents
               UDWORD *pFileSize);	// The size of this buffer
 

@@ -143,6 +143,16 @@ void frameSetCursorFromRes(SWORD resID)
 }
 
 
+void setFramerateLimit(Uint32 fpsLimit)
+{
+	SDL_setFramerate( &wzFPSmanager, fpsLimit );
+}
+
+Uint32 getFramerateLimit(void)
+{
+	return SDL_getFramerate( &wzFPSmanager );
+}
+
 
 /*
  * processEvent
@@ -279,7 +289,6 @@ BOOL frameInitialise(
 	InitFrameStuff();
 
 	SDL_initFramerate( &wzFPSmanager );
-	SDL_setFramerate( &wzFPSmanager, 60 );
 
 	// Initialise the resource stuff
 	if (!resInitialise())

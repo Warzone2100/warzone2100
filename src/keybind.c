@@ -295,7 +295,7 @@ void	kf_SetToughUnitsLevel( void )
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d", frameGetAverageRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d", frameGetAverageRate(), getFramerateLimit(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
 	if (bMultiPlayer) {
 			CONPRINTF(ConsoleString,(ConsoleString,
 						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
