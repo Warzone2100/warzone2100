@@ -345,7 +345,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->startY		= muzzle.y;
 	psObj->tarX			= tarX;
 	psObj->tarY			= tarY;
-	psObj->targetRadius = establishTargetRadius(psTarget);	// New - needed to backtrack FX
+	psObj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
 	psObj->psDest		= psTarget;
 	psObj->born			= gameTime;
 	psObj->player		= (UBYTE)player;
