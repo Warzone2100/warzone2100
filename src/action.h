@@ -8,6 +8,7 @@
 #define _action_h
 
 #include "droiddef.h"
+#include "structuredef.h" //STRUCT_MAXWEAPS
 
 // What a droid is currently doing
 // Not necessarily the same as it's order as the AI may get a droid to do
@@ -62,6 +63,11 @@ typedef enum _droid_action
 	DACTION_CIRCLE,					// (41) circling while engaging
 } DROID_ACTION;
 
+//Watermelon:a simple struct to avoid passing struct array pointer to functions
+typedef struct _droid_oaction_info {
+	BASE_OBJECT *objects[STRUCT_MAXWEAPS];
+} DROID_OACTION_INFO;
+
 // after failing a route ... this is the amount of time that the droid goes all defensive untill it can start going aggressive
 #define MIN_SULK_TIME (1500)		// 1.5 sec
 #define MAX_SULK_TIME (4000)		// 4 secs
@@ -79,7 +85,7 @@ extern void actionDroid(DROID *psDroid, DROID_ACTION action);
 extern void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y);
 
 /* Give a droid an action with an object target */
-extern void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
+extern void actionDroidObj(DROID *psDroid, DROID_ACTION action, DROID_OACTION_INFO *psObj);
 
 /* Give a droid an action with an object target and a location */
 void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,
@@ -96,20 +102,20 @@ extern BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, U
 		UWORD *pPitch, WEAPON_STATS *psWeapStats, BOOL bInvert, int weapon_slot);
 
 // Realign turret
-extern void actionAlignTurret(BASE_OBJECT *psObj);
+extern void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
 
 /* Check if a target is at correct range to attack */
-extern int actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj);
+extern BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
 // check if a target is within weapon range
-extern int actionInRange(DROID *psDroid, BASE_OBJECT *psObj);
+extern BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
 // check if a target is inside minimum weapon range
-extern int actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj);
+extern BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
 // return whether a droid can see a target to fire on it
-// Watermelon:changed to int from BOOL
-int actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget);
+// Watermelon:added int weapon_slot
+BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
 
 // check whether a droid is in the neighboring tile to a build position
 BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
@@ -139,13 +145,12 @@ extern BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
 /* How many frames to skip before looking for a better target */
 #define TARGET_UPD_SKIP_FRAMES 1000
 
-#define	INVALID_TARGET 1
-
 /* Macro to check if it's time to update naybor list */
 #define CAN_UPDATE_NAYBORS(object)\
 (((object)->id % NAYBOR_SKIP_FRAMES) == (frameGetFrameNumber() % NAYBOR_SKIP_FRAMES))
 
 #endif
+
 
 
 

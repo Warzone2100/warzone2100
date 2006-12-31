@@ -1186,7 +1186,7 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	WEAPON_STATS		*pWeapon = asWeaponStats;
 	BOOL				weaponFound, structureFound;
-	int					j;
+	UBYTE				j;
 
 #ifdef HASH_NAMES
 	UDWORD				StructureHash;
@@ -3654,7 +3654,9 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			if (idfDroid(psNewDroid) ||
 				vtolDroid(psNewDroid))
 			{
-				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander);
+				DROID_OACTION_INFO oaInfo = {NULL};
+				oaInfo.objects[0] = (BASE_OBJECT *)psFact->psCommander;
+				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, &oaInfo);
 				moveToRearm(psNewDroid);
 			}
 			else
@@ -3925,6 +3927,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[psStructure->player];
 	UDWORD				structureMode = 0;
 	DROID				*psDroid;
+	BASE_OBJECT			*psChosenObjs[STRUCT_MAXWEAPS] = {NULL};
 	BASE_OBJECT			*psChosenObj = NULL;
 	UBYTE				Quantity;
 	SDWORD				iDt;
@@ -3941,6 +3944,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
+	DROID_OACTION_INFO oaInfo = {NULL};
 
 	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
 		"aiUpdateStructure: invalid Structure pointer" );
@@ -3988,6 +3992,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	//if (psStructure->numWeaps > 0) - don't bother looking for a target if Las Sat weapon
 	if (psStructure->numWeaps > 0)
 	{
+		//structures always update their targets
 		for (i = 0;i < psStructure->numWeaps;i++)
 		{
 			if (psStructure->asWeaps[i].nStat > 0 AND
@@ -3995,24 +4000,42 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			{
 				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
 				{
-					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObj, i, TRUE))	//structures always update their targets
+					if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, TRUE) )
 					{
 						debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
-								psStructure->id, psChosenObj->id );
-						psStructure->psTarget[i] = psChosenObj;
+								psStructure->id, psChosenObjs[i]->id );
+						psStructure->psTarget[i] = psChosenObjs[i];
 					}
 					else
 					{
-						psStructure->psTarget[i] = NULL;
-						psChosenObj = NULL;
+						if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[0], 0, TRUE) )
+						{
+							if (psChosenObjs[0])
+							{
+								debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
+										psStructure->id, psChosenObjs[0]->id );
+								psStructure->psTarget[i] = psChosenObjs[0];
+								psChosenObjs[i] = psChosenObjs[0];
+							}
+							else
+							{
+								psStructure->psTarget[i] = NULL;
+								psChosenObjs[i] = NULL;
+							}
+						}
+						else
+						{
+							psStructure->psTarget[i] = NULL;
+							psChosenObjs[i] = NULL;
+						}
 					}
 				}
 				else
 				{
-					psChosenObj = psStructure->psTarget[0];
+					psChosenObjs[i] = psStructure->psTarget[0];
 				}
 
-				if (psChosenObj != NULL)
+				if (psChosenObjs[i] != NULL)
 				{
 					// get the weapon stat to see if there is a visible turret to rotate
 					psWStats = asWeaponStats + psStructure->asWeaps[i].nStat;
@@ -4021,20 +4044,20 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					if (psWStats->pMountGraphic == NULL)//no turret so lock on whatever
 					{
 						psStructure->turretRotation[i] = (UWORD)calcDirection(psStructure->x,
-							psStructure->y, psChosenObj->x, psChosenObj->y);
-						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObj, i);
+							psStructure->y, psChosenObjs[i]->x, psChosenObjs[i]->y);
+						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObjs[i], i);
 					}
 					/*else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
 											&(psStructure->turretRotation),
 											&(psStructure->turretPitch),psStructure->turretRotRate,
 											(UWORD)(psStructure->turretRotRate/2),
 											proj_Direct(psWStats),   FALSE))*/
-					else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
+					else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObjs[i],
 											&(psStructure->turretRotation[i]),
 											&(psStructure->turretPitch[i]),
 											psWStats, FALSE, i))
 					{
-						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObj, i);
+						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObjs[i], i);
 					}
 				}
 				else
@@ -4043,7 +4066,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					if ( ((psStructure->turretRotation[i] % 90) != 0) ||
 						 (psStructure->turretPitch[i] != 0) )
 					{
-						actionAlignTurret((BASE_OBJECT *)psStructure);
+						actionAlignTurret((BASE_OBJECT *)psStructure, i);
 					}
 				}
 			}
@@ -4270,8 +4293,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid != NULL)
 				{
+					oaInfo.objects[0] = (BASE_OBJECT *)psStructure;
 					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT,
-									(BASE_OBJECT *) psStructure );
+									&oaInfo);
 				}
 			}
 			else
@@ -4281,8 +4305,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					  psDroid->sMove.Status == MOVEHOVER       ) &&
 					 psDroid->action == DACTION_WAITFORREARM        )
 				{
+					oaInfo.objects[0] = (BASE_OBJECT *)psStructure;
 					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT,
-									(BASE_OBJECT *) psStructure );
+									&oaInfo);
 				}
 			}
 
@@ -4754,8 +4779,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						// return a droid to it's command group
 						DROID	*psCommander = psDroid->psGroup->psCommander;
 
+						DROID_OACTION_INFO oaInfo = {NULL};
+						oaInfo.objects[0] = (BASE_OBJECT *)psCommander;
 //						orderDroidLoc(psDroid, DORDER_MOVE, psCommander->x, psCommander->y);
-						orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+						orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
 					}
 					else if (psRepairFac->psDeliveryPoint != NULL)
 					{
@@ -9419,7 +9446,9 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 			 (vtolDroid(psCurr))
 			)
 		{
-			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
+			DROID_OACTION_INFO oaInfo = {NULL};
+			oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
+			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, &oaInfo);
 		}
 	}
 }

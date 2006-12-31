@@ -352,7 +352,9 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			orderDroidObj(psCurr, order, psObj);
+			DROID_OACTION_INFO oaInfo = {NULL};
+			oaInfo.objects[0] = (BASE_OBJECT *)psObj;
+			orderDroidObj(psCurr, order, &oaInfo);
 		}
 
 		bMultiPlayer = TRUE;
@@ -361,7 +363,9 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	{
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			orderDroidObj(psCurr, order, psObj);
+			DROID_OACTION_INFO oaInfo = {NULL};
+			oaInfo.objects[0] = (BASE_OBJECT *)psObj;
+			orderDroidObj(psCurr, order, &oaInfo);
 		}
 	}
 }

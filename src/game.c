@@ -5575,7 +5575,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 	DROID_GROUP				*psGrp;
-	int i;
+	UBYTE	i;
 
 	psCurrentTransGroup = NULL;
 
@@ -5699,7 +5699,7 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 	DROID_GROUP				*psGrp;
-	int i;
+	UBYTE	i;
 
 	psCurrentTransGroup = NULL;
 
@@ -5862,7 +5862,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 //	DROID_GROUP				*psGrp;
-	int i;
+	UBYTE	i;
 
 	psCurrentTransGroup = NULL;
 

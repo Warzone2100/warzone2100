@@ -1155,8 +1155,10 @@ BOOL OrderDroidsToEmbark(void)
 		{
 			if( psDroid->selected  && (psDroid->droidType != DROID_TRANSPORTER) )
 			{
+				DROID_OACTION_INFO oaInfo = {NULL};
+				oaInfo.objects[0] = (BASE_OBJECT *)psTransporters[CurrentTransporter];
 				orderDroidObj(psDroid, DORDER_EMBARK,
-					(BASE_OBJECT *)psTransporters[CurrentTransporter]);
+					&oaInfo);
 
 				// Step through the available transporters.
 				CurrentTransporter++;
@@ -1182,7 +1184,9 @@ BOOL OrderDroidToEmbark(DROID *psDroid)
 	psTransporter = FindATransporter();
 
 	if(psTransporter != NULL) {
-		orderDroidObj(psDroid, DORDER_EMBARK, (BASE_OBJECT *)psTransporter);
+		DROID_OACTION_INFO oaInfo = {NULL};
+		oaInfo.objects[0] = (BASE_OBJECT *)psTransporter;
+		orderDroidObj(psDroid, DORDER_EMBARK, &oaInfo);
 		return TRUE;
 	}
 

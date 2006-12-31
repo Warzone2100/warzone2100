@@ -169,7 +169,8 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 	UBYTE	player,chosen,aruns[DROID_MAXWEAPS],amm[DROID_MAXWEAPS];
 	UDWORD	id,ids;
 	STRUCTURE *psStruct = NULL;
-	int	i;
+	UBYTE	i;
+	DROID_OACTION_INFO oaInfo = {NULL};
 
 	NetGet(pMsg,0,player);
 	NetGet(pMsg,1,id);
@@ -211,10 +212,12 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 	{
 	case 1:
 		psDroid->order = DORDER_NONE;
-		orderDroidObj(psDroid, DORDER_REARM, (BASE_OBJECT *)psStruct);
+		oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
+		orderDroidObj(psDroid, DORDER_REARM, &oaInfo);
 		break;
 	case 2:
-		actionDroidObj(psDroid,DACTION_MOVETOREARM, (BASE_OBJECT *)psStruct);
+		oaInfo.objects[0] = (BASE_OBJECT *)psStruct;
+		actionDroidObj(psDroid,DACTION_MOVETOREARM, &oaInfo);
 		break;
 	case 3:
 		orderDroid( psDroid, DORDER_RTB );
@@ -979,6 +982,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWO
 	STRUCTURE	*pS;
 	FEATURE		*pF;
 	BASE_OBJECT *psObj= NULL;
+	DROID_OACTION_INFO oaInfo = {NULL};
 
 	if(destid==0 && desttype==0)							// target is a location
 	{
@@ -1053,7 +1057,8 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order,UDWORD x,		 UDWO
 		}
 
 		turnOffMultiMsg(TRUE);
-		orderDroidObj(psDroid, order, psObj);
+		oaInfo.objects[0] = (BASE_OBJECT *)psObj;
+		orderDroidObj(psDroid, order, &oaInfo);
 		turnOffMultiMsg(FALSE);
 	}
 
@@ -1208,7 +1213,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	UWORD x,y,z;
 	UDWORD id;
 	UBYTE player;
-	int	i;
+	UBYTE i;
 
 	// get the stuff
 	NetGet(m,sizecount,dt.asParts);				sizecount+=sizeof(dt.asParts);		// build a template
@@ -1358,6 +1363,7 @@ BOOL recvRequestDroid(NETMSG *pMsg)
 
 	return TRUE;
 }
+
 
 
 

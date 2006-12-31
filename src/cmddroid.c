@@ -64,6 +64,7 @@ void cmdDroidUpdate(void)
 void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 {
 	DROID_GROUP	*psGroup;
+	DROID_OACTION_INFO oaInfo = {NULL};
 
 	if (psCommander->psGroup == NULL)
 	{
@@ -86,7 +87,8 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
 		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
 
-		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+		oaInfo.objects[0] = (BASE_OBJECT *)psCommander; 
+		orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
 	}
 
 //	if(bMultiPlayer && myResponsibility(psDroid->player) )
@@ -262,6 +264,7 @@ static void cmdDroidSetAvailable(SDWORD player, SDWORD num)
 	ASSERT( (num > 0) && (num < MAX_CMDDROIDS),
 		"cmdUnitSetAvailable: invalid player number" );
 }
+
 
 
 

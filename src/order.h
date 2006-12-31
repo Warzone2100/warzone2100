@@ -8,6 +8,7 @@
 #define _order_h
 
 #include "orderdef.h"
+#include "action.h" //Watermelon:needs DROID_OACTION_INFO
 
 //turn off the build queue availability until desired release date!
 //#define DISABLE_BUILD_QUEUE
@@ -145,7 +146,7 @@ extern void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 extern BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with an object target */
-extern void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj);
+extern void orderDroidObj(DROID *psDroid, DROID_ORDER order, DROID_OACTION_INFO *psObj);
 
 /* Get the state of a droid order with an object */
 extern BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj);
@@ -233,6 +234,7 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
 #endif
+
 
 
 

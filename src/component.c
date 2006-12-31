@@ -478,7 +478,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
 	iVector TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
-	int		i;
+	UBYTE	i;
 
     /*HACK HACK HACK!
     if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
@@ -930,7 +930,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	UDWORD				colour;
 	UDWORD				bDarkSide = FALSE;
 	//Watermelon:i
-	int					i;
+	UBYTE	i;
 
    	/* Cast the droid pointer */
 	psDroid = (DROID *)psObj;
@@ -1762,6 +1762,7 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
+
 
 
 

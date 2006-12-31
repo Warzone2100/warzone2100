@@ -2544,8 +2544,8 @@ UDWORD	percent;
 UDWORD	recoil;
 FRACT	fraction;
 //Watermelon:added multiple weapon update
-int i = 0;
-int num_weapons = 0;
+UBYTE	i = 0;
+UBYTE	num_weapons = 0;
 
 	if (psDroid->numWeaps > 1)
 	{
@@ -3510,7 +3510,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	char				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	//Watermelon:TODO:fix this temp naming one day,WeaponName[DROID_MAXWEAPS][MAX_NAME_SIZE] causes stack corruption
 	char				WeaponNameA[MAX_NAME_SIZE],WeaponNameB[MAX_NAME_SIZE];
-	int					j;
+	UBYTE				j;
 	DROID_TEMPLATE		*pTemplate;
 	BOOL				recFound;
 	UWORD				SkippedWeaponCount=0;
@@ -5655,7 +5655,7 @@ static UDWORD calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
 static UDWORD calcDroidSystemPoints(DROID *psDroid)
 {
 	UDWORD      system;//, i;
-	int i;
+	UBYTE	 i;
 	
 	//get the component system points
 	system = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->systemPoints +
@@ -6559,10 +6559,10 @@ BOOL vtolDroid(DROID *psDroid)
 /*returns TRUE if a VTOL Weapon Droid which has completed all runs*/
 BOOL vtolEmpty(DROID *psDroid)
 {
-	int i;
-	int numVtolWeaps = 0;
-	int emptyWeaps = 0;
-	BOOL bEmpty = TRUE;
+	UBYTE	i;
+	UBYTE	numVtolWeaps = 0;
+	UBYTE	emptyWeaps = 0;
+	BOOL	bEmpty = TRUE;
 
 	if (!vtolDroid(psDroid))
 	{
@@ -6741,10 +6741,10 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 leave reArm pad */
 BOOL  vtolHappy(DROID *psDroid)
 {
-	int i;
-	int numVtolWeaps = 0;
-	int rearmedWeaps = 0;
-	BOOL bHappy = TRUE;
+	UBYTE	i;
+	UBYTE	numVtolWeaps = 0;
+	UBYTE	rearmedWeaps = 0;
+	BOOL	bHappy = TRUE;
 
 	ASSERT( vtolDroid(psDroid), "vtolHappy: not a VTOL droid" );
 	ASSERT( psDroid->droidType == DROID_WEAPON, "vtolHappy: not a weapon droid" );
@@ -6807,7 +6807,7 @@ void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
 offworld mission*/
 void mendVtol(DROID *psDroid)
 {
-	int i;
+	UBYTE	i;
 	ASSERT( vtolEmpty(psDroid), "mendVtol: droid is not an empty weapon VTOL!" );
 
 	/* set rearm value to no runs made */

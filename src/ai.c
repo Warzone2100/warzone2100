@@ -163,7 +163,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			 !aiCheckAlliances(targetInQuestion->player,psDroid->player))
 		{
 
-			if ( validTarget((BASE_OBJECT *)psDroid, targetInQuestion) == INVALID_TARGET)
+			if ( !validTarget((BASE_OBJECT *)psDroid, targetInQuestion, weapon_slot) )
 			{
 				continue;
 			}
@@ -492,8 +492,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 			))
 		{
             /*check its a valid target*/
-			//Watermelon:Greater than 1 for now
-            if (validTarget(psObj, psTarget) & (1 << (weapon_slot+1)))
+            if (validTarget(psObj, psTarget, weapon_slot))
             {
     			/* See if in sensor range */
 			    xdiff = psTarget->x - psObj->x;
@@ -566,7 +565,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 				{
                     /*check its a valid target*/
 					//Watermelon:Greater than 1 for now
-                    if ( (validTarget(psObj, psCStruct->psTarget[0]) > INVALID_TARGET) &&
+                    if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
                     {
 					    xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
@@ -584,7 +583,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 						 psCStruct->psTarget[0] != NULL)
 				{
                     /*check its a valid target*/
-                    if ( (validTarget(psObj, psCStruct->psTarget[0]) > INVALID_TARGET) &&
+                    if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
                     {
     					xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
@@ -617,7 +616,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 					{
                         /*check its a valid target*/
 						//Watermelon:Greater than 1 for now
-                        if ( (validTarget(psObj, psCurr) > INVALID_TARGET) &&
+                        if ( validTarget(psObj, psCurr, weapon_slot) &&
 							!aiObjIsWall(psCurr))
                         {
 						    // See if in sensor range and visible
@@ -704,7 +703,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 {
 	UDWORD	radSquared;
 //	UDWORD	player;
-	BASE_OBJECT		*psCurr, *psTarget;
+	BASE_OBJECT		*psCurr,*psTemp = NULL;
+	BASE_OBJECT		*psTarget = NULL;
 	SDWORD	xdiff,ydiff, distSq, tarDist;
 //    BOOL    bSuperSensor = FALSE;
 
@@ -809,7 +809,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
         else*/
         {
 		    tarDist = SDWORD_MAX;
-		    psTarget = NULL;
+		    //psTarget->objects[0] = NULL;
 		    gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
 		    psCurr = gridIterate();
 		    while (psCurr != NULL)
@@ -829,7 +829,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 						    psCurr->visible[psObj->player] &&
 						    distSq < tarDist)
 					    {
-						    psTarget = psCurr;
+						    psTemp = psCurr;
 						    tarDist = distSq;
 					    }
 				    }
@@ -838,9 +838,9 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		    }
         }
 
-		if (psTarget)
+		if (psTemp)
 		{
-			*ppsTarget = psTarget;
+			*ppsTarget = psTemp;
 			return TRUE;
 		}
 	}
@@ -851,11 +851,13 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 /* Do the AI for a droid */
 void aiUpdateDroid(DROID *psDroid)
 {
-	//Watermelon:psTarget Array
-	BASE_OBJECT	*psTarget[DROID_MAXWEAPS];
+	//static oaInfo Array
+	BASE_OBJECT		*psTargets[DROID_MAXWEAPS];
+	DROID_OACTION_INFO	oaInfo;
 	SECONDARY_STATE		state;
 	BOOL		lookForTarget,updateTarget;
 //	BOOL		bTemp;
+	UBYTE		i,targetResult = 1;
 
 	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 		"updateUnitAI: invalid Unit pointer" );
@@ -985,21 +987,46 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	/* Null target - see if there is an enemy to attack */
-	if (lookForTarget && !updateTarget &&
-		aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget[0], 0, FALSE))
+
+	if (lookForTarget && !updateTarget)
 	{
 		//console("Choosing first-time target");
 //			my_error("",0,"","Droid(%s) attacking : %d\n",
 //					psDroid->pName, psTarget->id );
-
 		turnOffMultiMsg(TRUE);
 		if (psDroid->droidType == DROID_SENSOR)
 		{
-			orderDroidObj(psDroid, DORDER_OBSERVE, psTarget[0]);
+			//Watermelon:only 1 target for sensor droid
+			if ( aiChooseTarget((BASE_OBJECT *)psDroid, &psTargets[0], 0, TRUE) )
+			{
+				oaInfo.objects[0] = psTargets[0];
+				orderDroidObj(psDroid, DORDER_OBSERVE, &oaInfo);
+			}
 		}
 		else
 		{
-			orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget[0]);
+			for (i = 0;i < psDroid->numWeaps;i++)
+			{
+				if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTargets[i], i, TRUE))
+				{
+					oaInfo.objects[i] = psTargets[i];
+					targetResult |= (1 << (i+1));
+				}
+			}
+
+			//This is a must,because the first target cannot be NULL
+			if (targetResult & 2)
+			{
+				//The droid has at least 2 targets.
+				if (targetResult > 3)
+				{
+					orderDroidObj(psDroid, DORDER_ATTACKTARGET_M, &oaInfo);
+				}
+				else
+				{
+					orderDroidObj(psDroid, DORDER_ATTACKTARGET, &oaInfo);
+				}
+			}
 		}
 			//debug( LOG_NEVER, "Unit(%s) attacking : %d\n",
 			//		psDroid->pName, psTarget->id);
@@ -1010,15 +1037,11 @@ void aiUpdateDroid(DROID *psDroid)
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
-//Watermelon:I need int validTarget
-int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
+//Watermelon:added weapon_slot
+BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	//Watermelon:return value int
-	int				ValidTarget = INVALID_TARGET;
-	int				i;
-	BOOL			bTargetInAir;
-	//BOOL			bTargetInAir, bValidTarget;
-    UBYTE           surfaceToAir;
+	BOOL	bTargetInAir, bValidTarget = FALSE;
+    UBYTE	surfaceToAir;
 
     //bValidTarget = FALSE;
 
@@ -1055,18 +1078,19 @@ int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 	{
 	case OBJ_DROID:
     	// Can't attack without a weapon
-		//if (((DROID *)psObject)->numWeaps != 0)
-		//Watermelon:check against all weapons
-		for (i = 0;i < ((DROID *)psObject)->numWeaps;i++)
+		//Watermelon:re-enabled if (((DROID *)psObject)->numWeaps != 0) to prevent crash
+		if ( ((DROID *)psObject)->numWeaps != 0 &&
+			((DROID *)psObject)->asWeaps[weapon_slot].nStat != 0 )
 		{
-			if ( ((DROID *)psObject)->asWeaps[i].nStat != 0 )
+			surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
+			if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
 			{
-				surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[i].nStat].surfaceToAir;
-				if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
-				{
-					ValidTarget += (1 << (i + 1));
-				}
+				return TRUE;
 			}
+		}
+		else
+		{
+			return FALSE;
 		}
 		/*
         if (((DROID *)psObject)->asWeaps[0].nStat != 0 && ((DROID *)psObject)->numWeaps > 0)
@@ -1081,20 +1105,20 @@ int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 		break;
 	case OBJ_STRUCTURE:
         // Can't attack without a weapon
-		//if (((STRUCTURE *)psObject)->numWeaps != 0)
-        if (((STRUCTURE *)psObject)->asWeaps[0].nStat != 0)
+		//Watermelon:re-enabled if (((DROID *)psObject)->numWeaps != 0) to prevent crash
+		if ( ((STRUCTURE *)psObject)->numWeaps != 0 &&
+			((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0 )
 		{
-            surfaceToAir = asWeaponStats[((STRUCTURE *)psObject)->asWeaps[0].nStat].surfaceToAir;
+            surfaceToAir = asWeaponStats[((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
         }
 		else
 		{
 			surfaceToAir = 0;
 		}
 
-		//Watermelon:
 		if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
 		{
-			ValidTarget += 2;
+			return TRUE;
 		}
 			break;
 		default:
@@ -1102,7 +1126,6 @@ int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 			break;
 		}
 
-	/*
     //if target is in the air and you can shoot in the air - OK
     if (bTargetInAir AND (surfaceToAir & SHOOT_IN_AIR))
     {
@@ -1114,9 +1137,8 @@ int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
     {
         bValidTarget = TRUE;
     }
-	*/
 
-    return ValidTarget;
+    return bValidTarget;
 }
 
 /* Make droid/structure look for a better target */
@@ -1124,6 +1146,7 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 {
 	BASE_OBJECT		*psBetterTarget=NULL;
 	DROID			*psDroid;
+	DROID_OACTION_INFO oaInfo = {NULL};
 	
 	psBetterTarget = NULL;
 
@@ -1139,7 +1162,8 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 				orderState(psDroid, DORDER_GUARD) ||
 				orderState(psDroid, DORDER_ATTACKTARGET))
 			{
-				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, psBetterTarget);
+				oaInfo.objects[0] = psBetterTarget;
+				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, &oaInfo);
 			}
 			else	//can't override current order
 			{

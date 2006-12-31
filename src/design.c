@@ -1550,7 +1550,7 @@ static DROID_TEMPLATE *MatchTemplate(DROID_TEMPLATE *SourceTemplate,UDWORD playe
 {
 	DROID_TEMPLATE *pDroidDesign;
 	BOOL weapons_check;
-	int i;
+	UBYTE i;
 
 	for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL;
 		pDroidDesign = pDroidDesign->psNext)

@@ -824,6 +824,12 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		{
 		  	psObj->state = PROJ_IMPACT;
 		}
+		//Watermelon:no more homing for ever?
+		else
+		{
+			psObj->psDest = NULL;
+			psObj->state = PROJ_IMPACT;
+		}
 	}
 	else if ( dist > extendRad - (SDWORD)psObj->targetRadius )
 	{

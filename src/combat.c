@@ -129,7 +129,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	psStats = asWeaponStats + psWeap->nStat;
 
     //check valid weapon/prop combination
-    if (validTarget(psAttacker, psTarget) == INVALID_TARGET)
+    if (!validTarget(psAttacker, psTarget, weapon_slot))
     {
         return;
     }
@@ -186,12 +186,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Check we can see the target */
-	//Watermelon:Change actionInsideMinRange to int
 	if ( (psAttacker->type == OBJ_DROID) &&
 		 !vtolDroid((DROID *)psAttacker) &&
 		 (proj_Direct(psStats) || 
-		 (actionInsideMinRange(psDroid, psDroid->psActionTarget[0]) & (1 << (1 + weapon_slot))))
-		)
+		 actionInsideMinRange(psDroid, psTarget, weapon_slot)) )
 	{
 		if(!visibleObjWallBlock(psAttacker, psTarget))
 		{
@@ -408,7 +406,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
 			   ((psAttacker->type == OBJ_DROID) &&
 			   !proj_Direct(psStats) &&
-			   actionInsideMinRange(psDroid, psDroid->psActionTarget[weapon_slot]) > 1) ))
+			   actionInsideMinRange(psDroid, psTarget, weapon_slot)) ))
 	{
 		//Watermelon:Change actionInMinRange to int
 		/* note when the weapon fired */
@@ -572,7 +570,9 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 				//inform viewer of target
 				if (psViewer->type == OBJ_DROID)
 				{
-					orderDroidObj((DROID *)psViewer, DORDER_OBSERVE, psAttacker);
+					DROID_OACTION_INFO oaInfo = {NULL};
+					oaInfo.objects[0] = psAttacker;
+					orderDroidObj((DROID *)psViewer, DORDER_OBSERVE, &oaInfo);
 				}
 				else if (psViewer->type == OBJ_STRUCTURE)
 				{

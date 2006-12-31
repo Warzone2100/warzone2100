@@ -2044,6 +2044,7 @@ FEATURE			*psFeature;
 OBJECT_POSITION	*psLocation;
 UDWORD			i;
 SELECTION_TYPE	selection;
+DROID_OACTION_INFO oaInfo = {NULL};
 
 
 	/* Don't process if in game options are on screen */
@@ -2135,18 +2136,21 @@ SELECTION_TYPE	selection;
 								(psCurr->droidType == DROID_CYBORG_SUPER) ||
 							    (psCurr->droidType == DROID_COMMAND))
 							{
-								orderDroidObj(psCurr, DORDER_ATTACK, psClickedOn);
+								oaInfo.objects[0] = psClickedOn;
+								orderDroidObj(psCurr, DORDER_ATTACK, &oaInfo);
 								FeedbackOrderGiven();
 							}
 							else if (psCurr->droidType == DROID_SENSOR)
 							{
-								orderDroidObj(psCurr, DORDER_OBSERVE, psClickedOn);
+								oaInfo.objects[0] = psClickedOn;
+								orderDroidObj(psCurr, DORDER_OBSERVE, &oaInfo);
 								FeedbackOrderGiven();
 							}
 							else if (psCurr->droidType == DROID_REPAIR OR
                                 psCurr->droidType == DROID_CYBORG_REPAIR)
 							{
-								orderDroidObj(psCurr, DORDER_DROIDREPAIR, psClickedOn);
+								oaInfo.objects[0] = psClickedOn;
+								orderDroidObj(psCurr, DORDER_DROIDREPAIR, &oaInfo);
 								FeedbackOrderGiven();
 							}
 						}
@@ -2225,7 +2229,8 @@ SELECTION_TYPE	selection;
 							{
 								//bWeapDroidSelected = TRUE;
 								bSensorAssigned = TRUE;
-								orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid);
+								oaInfo.objects[0] = (BASE_OBJECT *)psDroid;
+								orderDroidObj(psCurr, DORDER_FIRESUPPORT, &oaInfo);
 								FeedbackOrderGiven();
 							}
 						}
@@ -2350,12 +2355,14 @@ SELECTION_TYPE	selection;
                             if ((psCurr->droidType == DROID_WEAPON) || cyborgDroid(psCurr) ||
 								(psCurr->droidType == DROID_COMMAND))
 							{
-								orderDroidObj(psCurr, DORDER_ATTACK, psClickedOn);
+								oaInfo.objects[0] = psClickedOn;
+								orderDroidObj(psCurr, DORDER_ATTACK, &oaInfo);
 								FeedbackOrderGiven();
 							}
 							else if (psCurr->droidType == DROID_SENSOR)
 							{
-								orderDroidObj(psCurr, DORDER_OBSERVE, psClickedOn);
+								oaInfo.objects[0] = psClickedOn;
+								orderDroidObj(psCurr, DORDER_OBSERVE, &oaInfo);
 								FeedbackOrderGiven();
 							}
 						}
@@ -2472,8 +2479,9 @@ SELECTION_TYPE	selection;
 					/* If so then find the nearest unit! */
 					if(psNearestUnit)	// bloody well should be!!!
 					{
+						oaInfo.objects[0] = (BASE_OBJECT *)psClickedOn;
 //						orderDroidLoc(psNearestUnit,DORDER_MOVE, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-						orderDroidObj(psNearestUnit, DORDER_RECOVER, psClickedOn);
+						orderDroidObj(psNearestUnit, DORDER_RECOVER, &oaInfo);
 						FeedbackOrderGiven();
 					}
 					else

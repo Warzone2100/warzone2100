@@ -8,6 +8,7 @@
 #define _ai_h
 
 #include "objectdef.h"
+#include "action.h" //DROID_OACTION_INFO
 
 #define ALLIANCE_BROKEN		0			// states of alliance between players
 #define ALLIANCE_REQUESTED	1
@@ -76,9 +77,11 @@ extern BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
-extern int validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget);
+extern BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
 
 #endif
+
+
 
 
 

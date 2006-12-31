@@ -445,6 +445,8 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 								 UDWORD state, UDWORD order,
 								 BASE_OBJECT *psTarget,UDWORD numKills)
 {
+	DROID_OACTION_INFO oaInfo = {NULL};
+
 	// update kill rating.
 	psDroid->numKills = (UWORD)numKills;
 
@@ -452,7 +454,8 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 	if(order == DORDER_ATTACK && psDroid->order != DORDER_ATTACK && psTarget)
 	{
 		turnOffMultiMsg(TRUE);
-		orderDroidObj(psDroid, DORDER_ATTACK, psTarget);
+		oaInfo.objects[0] = psTarget; 
+		orderDroidObj(psDroid, DORDER_ATTACK, &oaInfo);
 		turnOffMultiMsg(FALSE);
 	}
 	// secondary orders.
