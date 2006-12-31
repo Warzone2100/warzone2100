@@ -1272,42 +1272,6 @@ void droidGetNaybors(DROID *psDroid)
 
 }
 
-
-/* Display the neigbours of a droid */
-static void displayNaybors(void)
-{
-	UDWORD	count, y;
-	const char *pType = NULL;
-
-	y = 100;
-	for(count=0; count<numNaybors; count++)
-	{
-		switch(asDroidNaybors[count].psObj->type)
-		{
-		case OBJ_DROID:
-			pType = "UNIT  ";
-			break;
-		case OBJ_STRUCTURE:
-			pType = "STRUCT ";
-			break;
-		case OBJ_FEATURE:
-			pType = "FEATURE";
-			break;
-		default:
-			break;
-		}
-
-		screenTextOut(450, y, "%s %d", pType,
-			asDroidNaybors[count].psObj->id);
-
-		y+= 15;
-	}
-}
-
-//static DROID *psTmpDroid;
-
-
-
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {

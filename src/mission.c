@@ -3314,7 +3314,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	// add some funky beats
 	cdAudio_PlayTrack(2);	// 2= frontend music.
 
-	pie_LoadBackDrop(SCREEN_MISSIONEND,FALSE);
+	pie_LoadBackDrop(SCREEN_MISSIONEND);
 
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;

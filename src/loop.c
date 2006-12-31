@@ -618,7 +618,7 @@ GAMECODE gameLoop(void)
 			quitting = TRUE;
 
 			{
-				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
+				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			}
 		}
 		else //if in video mode esc kill video

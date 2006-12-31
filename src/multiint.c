@@ -1800,9 +1800,9 @@ static void stopJoining(void)
 
 		if (ingame.bHostSetup) {
 #ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT,FALSE);
+				pie_LoadBackDrop(SCREEN_COVERMOUNT);
 #else
-				pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
+				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 #endif
 		}
 	}

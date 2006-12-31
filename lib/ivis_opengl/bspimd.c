@@ -26,11 +26,7 @@
 //#define BSP_MAXDEBUG		// define this if you want max debug options (runs very slow)
 
 #include "lib/ivis_common/bspimd.h"
-
-
-
 #include "lib/ivis_common/bspfunc.h"
-
 
 #include <stdio.h>
 #include <assert.h>
@@ -42,7 +38,6 @@ void DrawTriangleList(BSPPOLYID PolygonNumber);
 // Local prototypes
 static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP );
 static iVector *IMDvec(int Vertex);
-static void TraverseTreeAndRender( PSBSPTREENODE psNode);
 
 iIMDShape *BSPimd=NULL;		// This is a global ... it is used in imddraw.c (for speed)
 
@@ -99,51 +94,6 @@ static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
 	}
 	return SAME_SIDE;
 }
-
-
-
-/*
-	This is the main BSP Traversal routine. It Zaps through the tree (recursively) - and draws all the polygons
-	for the IMD in the correct order ... pretty clever eh ..
-*/
-
-static void TraverseTreeAndRender( PSBSPTREENODE psNode)
-{
-	/* is viewer on same side? */
-// On the playstation we need the list in reverse order (front most polygon first)
-// so we just do the list the opposite way around - this affects the BACKFACE culling as well
-	if ( IsPointOnPlane( &psNode->Plane, BSPScrPos ) == SAME_SIDE )
-	{
-		/* recurse on opposite side, render this node on same side,
-		 * recurse on same side.
-		 */
-
-		if (psNode->link[LEFT]!=NULL) TraverseTreeAndRender( psNode->link[LEFT]);
-		if (psNode->TriSameDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriSameDir);
-#ifndef BSP_BACKFACECULL
-		if (psNode->TriOppoDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriOppoDir);
-#warning	LETS_FORCE_AN_ERROR_TO_MAKE_SURE_THAT_THIS_CODE_ISNT_COMPILED
-#endif
-		if (psNode->link[RIGHT]!=NULL) TraverseTreeAndRender( psNode->link[RIGHT]);
-	}
-	else
-	/* viewer in plane or on opposite side */
-	{
-		/* recurse on same side, render this node on opposite side
-		 * recurse on opposite side.
-		 */
-		if (psNode->link[RIGHT]!=NULL) TraverseTreeAndRender( psNode->link[RIGHT]);
-		if (psNode->TriOppoDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriOppoDir);
-
-#ifndef BSP_BACKFACECULL
-		if (psNode->TriSameDir!=BSPPOLYID_TERMINATE) DrawTriangleList(psNode->TriSameDir);
-#endif
-		if (psNode->link[LEFT]!=NULL) 	TraverseTreeAndRender( psNode->link[LEFT]);
-	}
-}
-
-
-
 
 
 /*
@@ -357,10 +307,6 @@ PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode)
 	return psBSPNode;
 }
 
-
-// PC Specific drawing routines
-
-
 // Calculate the real camera position based on the coordinates of the camera and the camera
 // distance - the result is stores in CameraLoc ,,  up is +ve Y
 void GetRealCameraPos(OBJPOS *Camera,SDWORD Distance, iVector *CameraLoc)
@@ -382,14 +328,6 @@ void GetRealCameraPos(OBJPOS *Camera,SDWORD Distance, iVector *CameraLoc)
 //	DBPRINTF(("out) camera x=%d y=%d z=%d\n",CameraLoc->x,CameraLoc->y,CameraLoc->z));
 //	DBPRINTF(("t=%d t1=%d t2=%d t3=%d z=%d\n",t,t1,t2,t3,CameraLoc->z));
 
-}
-
-void DrawBSPIMD(iIMDShape *IMDdef, iVector *pPos)
-{
-	BSPScrPos=pPos;
-	BSPimd=IMDdef;
-
-	TraverseTreeAndRender(IMDdef->BSPNode);
 }
 
 #endif			// #ifdef BSPIMD

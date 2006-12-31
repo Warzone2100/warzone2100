@@ -44,10 +44,6 @@ UDWORD		screenDepth = 0;
 
 SDL_Surface     *screen;
 
-/* The actual palette entries for the display palette */
-#define PAL_MAX				256
-static SDL_Color			asPalEntries[PAL_MAX];
-
 //backDrop
 #define BACKDROP_WIDTH	640
 #define BACKDROP_HEIGHT	480
@@ -64,7 +60,9 @@ static BOOL screendump_required = FALSE;
 
 static UDWORD	backDropWidth = BACKDROP_WIDTH;
 static UDWORD	backDropHeight = BACKDROP_HEIGHT;
-static GLuint backDropTexture = -1;
+static GLuint backDropTexture = -1; // FIXME: this is an unsigned value, and so cannot be negative!! - Per
+
+static void my_error_exit(j_common_ptr cinfo);
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(
@@ -244,7 +242,7 @@ typedef struct my_error_mgr {
   jmp_buf setjmp_buffer;
 }* my_error_ptr;
 
-void my_error_exit(j_common_ptr cinfo)
+static void my_error_exit(j_common_ptr cinfo)
 {
   my_error_ptr myerr = (my_error_ptr) cinfo->err;
   longjmp(myerr->setjmp_buffer, 1);
@@ -378,7 +376,8 @@ static GLuint image_create_texture(char* filename) {
 #endif
 //=====================================================================
 
-void screen_SetBackDropFromFile(char* filename) {
+void screen_SetBackDropFromFile(char* filename) 
+{
 	pie_image image;
 
 	image_init(&image);
@@ -576,8 +575,9 @@ char* screenDumpToDisk(char* path) {
 
 /* Output text to the display screen at location x,y.
  * The remaining arguments are as printf.
- */
+ * Used only in now disabled code. Keep for now, though. - Per
+ *
 void screenTextOut(UDWORD x, UDWORD y, const char *pFormat, ...)
 {
-	/* Used only in now disabled code. Keep for now, though. - Per */
 }
+ */

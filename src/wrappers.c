@@ -382,7 +382,7 @@ void startCreditsScreen(void)
 	lastChange = gameTime;
 	// fill buffers
 
-	pie_LoadBackDrop(screen,FALSE);
+	pie_LoadBackDrop(screen);
 
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//flip to set back buffer

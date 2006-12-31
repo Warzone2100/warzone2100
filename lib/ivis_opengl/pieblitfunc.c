@@ -521,7 +521,8 @@ void pie_ResetBackDrop(void)
 }
 
 
-void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX) {
+void pie_LoadBackDrop(SCREENTYPE screenType) 
+{
 	UDWORD	chooser0,chooser1;
 	char	backd[128];
 

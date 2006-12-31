@@ -100,7 +100,6 @@ static BOOL stencil_one_pass(void) {
 
 static PIEPIXEL		scrPoints[pie_MAX_POINTS];
 static PIEVERTEX	pieVrts[pie_MAX_POLY_VERTS];
-static iVertex		imdVrts[pie_MAX_POLY_VERTS];
 static SDWORD		pieCount = 0;
 static SDWORD		tileCount = 0;
 static SDWORD		polyCount = 0;
@@ -111,9 +110,6 @@ static SDWORD		polyCount = 0;
  */
 /***************************************************************************/
 
-//old ivis style draw poly (low level) software mode only
-static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip);
-static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL bClip);
 //pievertex draw poly (low level) //all modes from PIEVERTEX data
 static void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
 static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
@@ -159,54 +155,6 @@ void pie_EndLighting(void) {
 }
 
 #ifdef BSPIMD
-extern iIMDShape *BSPimd;	// global defined here for speed
-extern	iIMDPoly *BSPScrVertices;
-UDWORD ShapeTexPage;
-UDWORD ShapeFrame;
-
-	// This is a BSP routine that draws a linked list of polygon
-	// .. Its in here becuase it uses in inline function "DrawPoly"
-	#define IMD_POLYGON(poly) (	&BSPimd->polys[(poly)])
-
-void DrawTriangleList(BSPPOLYID PolygonNumber) {
-	iIMDPoly *pPolys;
-	int n;
-
-	VERTEXID	*index;
-	iIMDPoly	imdPoly;
-
-return;
-//	DBPRINTF(("poly %d\n",PolygonNumber));
-
-	while (PolygonNumber!=BSPPOLYID_TERMINATE) {
-		pPolys= IMD_POLYGON(PolygonNumber);
-
-		index = pPolys->pindex;
-		imdPoly.flags = pPolys->flags;
-		for (n = 0; n < pPolys->npnts; n++, index++)
-		{
-			imdVrts[n].x = MAKEINT(scrPoints[*index].d3dx);
-			imdVrts[n].y = MAKEINT(scrPoints[*index].d3dy);
-			imdVrts[n].z = 0;
-
-			//cull triangles with off screen points
-			if (scrPoints[*index].d3dy > (float)LONG_TEST)
-				imdPoly.flags = 0;
-
-			imdVrts[n].u = pPolys->vrt[n].u;
-			imdVrts[n].v = pPolys->vrt[n].v;
-			imdVrts[n].g  = 128;//(red + green + blue + alpha)>>2;
-		}
-		imdPoly.npnts = pPolys->npnts;
-		imdPoly.vrt = &imdVrts[0];
-		imdPoly.pTexAnim = pPolys->pTexAnim;
-		if (imdPoly.flags > 0) {
-			pie_IvisPolyFrame(ShapeTexPage, &imdPoly,ShapeFrame,TRUE);	   // draw the polygon ... this is an inline function
-		}
-
-		PolygonNumber=pPolys->BSP_NextPoly;
-	}
-}
 
 // BSP object position
 static iVector BSPObject;
@@ -247,30 +195,6 @@ void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z)
 	BSPCamera.z=z;
 }
 
-
-
-/*
-static void AddIMDPrimativesBSP2(iIMDShape *IMDdef,iIMDPoly *ScrVertices, UDWORD frame) {
-	iVector pPos;
-
-	SDWORD xDif,zDif;
-
-// Camera ---- X is map colums +ve is going left, Z is map rows  +ve is going down the map, Y is map height +ve is up in the air
-
-	ShapeTexPage=IMDdef->texpage;
-	ShapeFrame=frame;
-
-	xDif= (BSPCamera.x - BSPObject.x);
-	zDif= (BSPCamera.z - BSPObject.z);
-
-	pPos.x = (((COS(BSPObject_Yaw)*xDif)/4096)-((SIN(BSPObject_Yaw)*zDif)/4096));
-	pPos.z = (-(((SIN(BSPObject_Yaw)*xDif)/4096)+((COS(BSPObject_Yaw)*zDif)/4096)));
-
-	pPos.y = (BSPCamera.y - BSPObject.y);		// map height (up in the air)
-
-	DrawBSPIMD(IMDdef, &pPos ,ScrVertices);		// in bspimd.c
-}
-*/
 #endif
 
 typedef struct {
@@ -1018,83 +942,6 @@ int	uFrame, vFrame, j, framesPerLine;
 #ifndef NO_RENDER
 	//draw with new texture data
 	pie_PiePoly(poly, light);
-#endif
-}
-
-//old ivis style draw poly
-/***************************************************************************
- * pie_IvisPoly
- *
- * optimised poly draw function for software
- *
- * Assumes render mode NOT set up externally
- *                     ---
- ***************************************************************************/
-static void pie_IvisPoly(SDWORD texPage, iIMDPoly *poly, BOOL bClip) {
-	polyCount++;
-
-	if (poly->npnts >= 3) {
-		SDWORD i;
-
-		if (poly->flags & PIE_COLOURKEYED) {
-			pie_SetColourKeyedBlack(TRUE);
-		} else {
-			pie_SetColourKeyedBlack(FALSE);
-		}
-		glBegin(GL_TRIANGLE_FAN);
-		for (i = 0; i < poly->npnts; ++i) {
-			glColor3ub(poly->vrt[i].g*16, poly->vrt[i].g*16, poly->vrt[i].g*16);
-			glTexCoord2f(poly->vrt[i].u, poly->vrt[i].v);
-			glVertex3f(poly->vrt[i].x, poly->vrt[i].y, poly->vrt[i].z);
-		}
-		glEnd();
-	}
-}
-
-static void pie_IvisPolyFrame(SDWORD texPage, iIMDPoly *poly, SDWORD frame, BOOL bClip)
-{
-	int	uFrame, vFrame, j, framesPerLine;
-
-	polyCount++;
-
-	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
-	{
-
-		if (poly->pTexAnim != NULL)
-		{
-			if (poly->pTexAnim->nFrames >=0)
-			{
-				frame %= poly->pTexAnim->nFrames;
-			}
-			else //frame is colour key
-			{
-				frame %= (-poly->pTexAnim->nFrames);
-			}
-			if (frame > 0)
-			{
-				framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
-				vFrame = 0;
-				while (frame >= framesPerLine)
-				{
-					frame -= framesPerLine;
-					vFrame += poly->pTexAnim->textureHeight;
-				}
-				uFrame = frame * poly->pTexAnim->textureWidth;
-				// shift the textures for animation
-				if (poly->flags & iV_IMD_TEXANIM)
-				{
-					for (j=0; j<poly->npnts; j++)
-					{
-						poly->vrt[j].u += uFrame;
-						poly->vrt[j].v += vFrame;
-					}
-				}
-			}
-		}
-
-	}
-#ifndef NO_RENDER
-	pie_IvisPoly(texPage, poly, bClip);
 #endif
 }
 

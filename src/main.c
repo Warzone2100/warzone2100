@@ -484,7 +484,7 @@ init://jump here from the end if re_initialising
 	pal_AddNewPalette(psPaletteBuffer);
 	FREE(psPaletteBuffer);
 
-	pie_LoadBackDrop(SCREEN_RANDOMBDROP,FALSE);
+	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
 

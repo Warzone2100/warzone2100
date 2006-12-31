@@ -74,7 +74,7 @@ typedef enum _screenType
 	SCREEN_COVERMOUNT,
 } SCREENTYPE;
 
-extern void pie_LoadBackDrop(SCREENTYPE screenType, BOOL b3DFX);
+extern void pie_LoadBackDrop(SCREENTYPE screenType);
 extern void pie_ResetBackDrop(void);
 
 #endif //
