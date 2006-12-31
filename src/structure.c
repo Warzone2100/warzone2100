@@ -7960,8 +7960,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
                 //add a console message for the selected Player
 		        if (psDroid->player == selectedPlayer)
 		        {
-    			    CONPRINTF(ConsoleString,(ConsoleString,strresGetString(
-                        psStringRes,STR_GAM_ELECDAM)));
+    			    CONPRINTF(ConsoleString, (ConsoleString, strresGetString(psStringRes,STR_GAM_ELECDAM), "Unit"));
                     //tell the scripts if selectedPlayer has lost a droid
                     eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
