@@ -298,6 +298,10 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { VAL_INT},
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "getFeatureB",		scrGetFeatureB,			(INTERP_TYPE)ST_FEATURE,
+		1, { VAL_INT},
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	{ "addFeature",			scrAddFeature,			(INTERP_TYPE)ST_FEATURE,
 		3, { (INTERP_TYPE)ST_FEATURESTAT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },

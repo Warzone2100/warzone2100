@@ -108,6 +108,7 @@ extern BOOL	scrAttackLocation(void);
 // enumerate features;
 extern BOOL scrInitGetFeature(void);
 extern BOOL scrGetFeature(void);
+extern BOOL scrGetFeatureB(void);
 
 //Add a feature
 extern BOOL scrAddFeature(void);

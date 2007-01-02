@@ -6,6 +6,10 @@
 #ifndef _parse_h
 #define _parse_h
 
+#ifndef MAXSTRLEN
+#define MAXSTRLEN 255
+#endif
+
 /* Maximum number of TEXT items in any one Yacc rule */
 #define TEXT_BUFFERS 10
 
@@ -14,6 +18,29 @@
 #else
 #define RULE(...)
 #endif
+
+/* Script includes */
+#define MAX_SCR_INCLUDE_DEPTH	10
+
+extern char *pScrInputBuffer[];
+extern SDWORD scr_include_stack_ptr;
+
+/* Script defines */
+#define MAX_SCR_MACRO_DEPTH		10
+#define MAX_SCR_MACROS			150		/* Max defines in a file */
+#define MAX_SCR_MACRO_LEN		30
+
+extern SDWORD scr_num_macros;			/* Number of mactos defined so far */
+extern SDWORD scr_macro_stack_ptr;		/* Pointer to the current flex macro input buffer */
+
+extern char *pScrMacroBuffer[];
+
+/* Structure to hold script define directive information */
+typedef struct _scr_define
+{
+	char scr_define_macro[MAX_SCR_MACRO_LEN];
+	char scr_define_body[MAXSTRLEN];
+}SCR_MACRO;
 
 /* Definition for the chunks of code that are used within the compiler */
 typedef struct _code_block

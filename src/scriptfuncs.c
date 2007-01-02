@@ -1663,7 +1663,7 @@ BOOL scrDestroyFeature(void)
 static	FEATURE_STATS	*psFeatureStatToFind[MAX_PLAYERS];
 static	SDWORD			playerToEnum[MAX_PLAYERS];
 static  SDWORD			getFeatureCount[MAX_PLAYERS]={0};
-//static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
+static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
 
 // -----------------------------------------------------------------------------------------
 // init enum visible features.
@@ -1678,7 +1678,7 @@ BOOL scrInitGetFeature(void)
 
 	psFeatureStatToFind[bucket]		= (FEATURE_STATS *)(asFeatureStats + iFeat);				// find this stat
 	playerToEnum[bucket]			= player;				// that this player can see
-//	psCurrEnumFeature[bucket]		= apsFeatureLists[0];
+	psCurrEnumFeature[bucket]		= apsFeatureLists[0];
 	getFeatureCount[bucket]			= 0;					// start at the beginning of list.
 	return TRUE;
 }
@@ -1759,6 +1759,65 @@ BOOL scrGetFeature(void)
 	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
 	{
 		ASSERT( FALSE, "scrGetFeature: Failed to push result" );
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/* Faster implementation of scrGetFeature -  assumes no features
+ * are deleted between calls, unlike scrGetFeature also returns
+ * burning features (mainly relevant for burning oil resources)
+ */
+BOOL scrGetFeatureB(void)
+{
+	SDWORD	bucket;
+
+	if ( !stackPopParams(1,VAL_INT,&bucket) )
+	{
+		ASSERT( FALSE, "scrGetFeatureB: Failed to pop player number from stack" );
+		return FALSE;
+	}
+
+	// check to see if badly called
+	if(psFeatureStatToFind[bucket] == NULL)
+	{
+		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
+		scrFunctionResult.v.oval = NULL;
+		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
+		{
+			ASSERT( FALSE, "scrGetFeatureB: Failed to push result" );
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	// begin searching the feature list for the required stat.
+	while(psCurrEnumFeature[bucket])
+	{
+		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
+			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
+			&&!TILE_HAS_STRUCTURE(mapTile(psCurrEnumFeature[bucket]->x>>TILE_SHIFT,psCurrEnumFeature[bucket]->y>>TILE_SHIFT) )
+			 /*&&!fireOnLocation(psCurrEnumFeature[bucket]->x,psCurrEnumFeature[bucket]->y )*/		// not burning.
+			)
+		{
+			scrFunctionResult.v.oval = psCurrEnumFeature[bucket];
+			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
+			{
+				ASSERT( FALSE, "scrGetFeatureB: Failed to push result" );
+				return FALSE;
+			}
+			psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
+			return TRUE;
+		}
+
+		psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
+	}
+
+	// none found
+	scrFunctionResult.v.oval = NULL;
+	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
+	{
+		ASSERT( FALSE, "scrGetFeatureB: Failed to push result" );
 		return FALSE;
 	}
 	return TRUE;
@@ -7237,7 +7296,6 @@ BOOL scrMapRevealedInRange(void)
 {
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
 	UDWORD		i,j;
-	MAPTILE		*psTile;
 
 	if (!stackPopParams(4, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
 		VAL_INT, &wRange, VAL_INT, &player))
@@ -7263,8 +7321,7 @@ BOOL scrMapRevealedInRange(void)
 	{
 		for(j=0; j<mapHeight; j++)
 		{
-			psTile = mapTile(i,j);
-		   	if(TEST_TILE_VISIBLE(player,psTile))	//not vis
+		   	if(TEST_TILE_VISIBLE( player,mapTile(i,j) ))	//not vis
 		  	{
 				//within range
 				if((dirtySqrt(tRangeX, tRangeY, i, j) << TILE_SHIFT) < wRange)		//dist in world units between x/y and the tile
@@ -8721,7 +8778,7 @@ BOOL scrObjWeaponMaxRange(void)
 		}
 	}
 
-	scrFunctionResult.v.ival = -1;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR,"scrObjWeaponMaxRange: wrong object type");

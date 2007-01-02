@@ -18,6 +18,15 @@
 /* this will give us a more detailed error output */
 #define YYERROR_VERBOSE TRUE
 
+/* Script includes stack */
+SDWORD scr_include_stack_ptr = 0;
+char *pScrInputBuffer[MAX_SCR_INCLUDE_DEPTH];
+
+/* Script defines stack */
+SDWORD scr_num_macros = 0;			/* Number of macros defined so far */
+SDWORD scr_macro_stack_ptr = 0;
+char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
+
 extern int scr_lex(void);
 
 /* Error return codes for code generation functions */
@@ -44,6 +53,9 @@ static OBJVAR_BLOCK	*psObjVarBlock=NULL;
 
 /* Pointer to current block of compiled parameter code */
 static PARAM_BLOCK	*psCurrPBlock=NULL;
+
+/* Any errors occured? */
+static BOOL bError=FALSE;
 
 //String support
 //-----------------------------
@@ -786,7 +798,6 @@ static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function bei
 							PARAM_BLOCK		*psPBlock)	// The generated code block
 {
 	UDWORD		i;
-	BOOL		typeError = FALSE;
 
 	//debug(LOG_SCRIPT,"checkFuncParamTypes");
 
@@ -819,7 +830,6 @@ static CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The functio
 {
 	UDWORD		size;
 	INTERP_VAL	*ip;
-	BOOL		typeError = FALSE;
 
 	//debug(LOG_SCRIPT, "scriptCodeCallFunction");
 
@@ -1518,7 +1528,7 @@ static CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variab
 }
 
 /* Code Increment/Decrement operators */
-static void scriptCodeIncDec(VAR_SYMBOL		*psVariable,	// The object variable symbol
+static CODE_ERROR scriptCodeIncDec(VAR_SYMBOL		*psVariable,	// The object variable symbol
 							CODE_BLOCK		**ppsBlock, OPCODE op_dec_inc)
 {
 
@@ -2427,15 +2437,15 @@ event_subdecl:		EVENT IDENT
 						//debug(LOG_SCRIPT, "END event_subdecl:		EVENT IDENT");
 					}
 				|	EVENT EVENT_SYM
-						{
+					{
 
-							RULE("EVENT EVENT_SYM");
+						RULE("EVENT EVENT_SYM");
 
-							psCurEvent = $2;
-							$$ = $2;
+						psCurEvent = $2;
+						$$ = $2;
 
-							//debug(LOG_SCRIPT, "END EVENT EVENT_SYM");
-						}
+						//debug(LOG_SCRIPT, "END EVENT EVENT_SYM");
+					}
 				;
 
 
@@ -2459,17 +2469,17 @@ function_def:		FUNCTION TYPE function_type
 			;
 
 function_type:			VOID_FUNC_CUST
-			|	BOOL_FUNC_CUST
-			|	NUM_FUNC_CUST
-			|	USER_FUNC_CUST
-			|	OBJ_FUNC_CUST
-			|	STRING_FUNC_CUST
-			|	FLOAT_FUNC_CUST
-			;
+					|	BOOL_FUNC_CUST
+					|	NUM_FUNC_CUST
+					|	USER_FUNC_CUST
+					|	OBJ_FUNC_CUST
+					|	STRING_FUNC_CUST
+					|	FLOAT_FUNC_CUST
+					;
 
 /* function declaration rules */
 func_subdecl:		FUNCTION TYPE IDENT
-				{
+					{
 						EVENT_SYMBOL	*psEvent;
 
 						RULE("func_subdecl: FUNCTION TYPE IDENT");
@@ -2490,12 +2500,12 @@ func_subdecl:		FUNCTION TYPE IDENT
 						$$ = psEvent;
 
 						//debug(LOG_SCRIPT, "END func_subdecl:FUNCTION TYPE IDENT. ");
-				}
+					}
 				;
 
 
 /* void function declaration rules */
-void_func_subdecl:	FUNCTION _VOID IDENT	/* declaration of a function */
+void_func_subdecl:		FUNCTION _VOID IDENT	/* declaration of a function */
 						{
 							EVENT_SYMBOL	*psEvent;
 
@@ -2520,7 +2530,7 @@ void_func_subdecl:	FUNCTION _VOID IDENT	/* declaration of a function */
 						}
 					;
 
-void_function_def:	FUNCTION _VOID function_type	/* definition of a function that was declated before */
+void_function_def:		FUNCTION _VOID function_type	/* definition of a function that was declated before */
 						{
 							//debug(LOG_SCRIPT, "func_subdecl:FUNCTION EVENT_SYM ");
 							psCurEvent = $3;
@@ -2544,38 +2554,38 @@ void_function_def:	FUNCTION _VOID function_type	/* definition of a function that
 
 
 funcvar_decl_types:		TYPE NUM_VAR
-				{
-					$$=$1;
-				}
-			|	TYPE FLOAT_VAR
-				{
-					$$=$1;
-				}
-			|	TYPE BOOL_VAR
-				{
-					$$=$1;
-				}
-			|	TYPE STRING_VAR
-				{
-					$$=$1;
-				}
-			|	TYPE OBJ_VAR
-				{
-					$$=$1;
-				}
-			|	TYPE OBJ_OBJVAR
-				{
-					$$=$1;
-				}
-			|	TYPE OBJ_ARRAY
-				{
-					$$=$1;
-				}
-			|	TYPE VAR	/* STRUCTURESTAT, RESEARCHSTAT etc */
-				{
-					$$=$1;
-				}
-			;
+						{
+							$$=$1;
+						}
+					|	TYPE FLOAT_VAR
+						{
+							$$=$1;
+						}
+					|	TYPE BOOL_VAR
+						{
+							$$=$1;
+						}
+					|	TYPE STRING_VAR
+						{
+							$$=$1;
+						}
+					|	TYPE OBJ_VAR
+						{
+							$$=$1;
+						}
+					|	TYPE OBJ_OBJVAR
+						{
+							$$=$1;
+						}
+					|	TYPE OBJ_ARRAY
+						{
+							$$=$1;
+						}
+					|	TYPE VAR	/* STRUCTURESTAT, RESEARCHSTAT etc */
+						{
+							$$=$1;
+						}
+					;
 
 
 funcbody_var_def_body:		 funcvar_decl_types
@@ -2813,7 +2823,6 @@ function_declaration:		func_subdecl '(' argument_decl_head ')'	/* function was n
 
 					RULE( "function_declaration: func_subdecl '(' argument_decl_head ')'");
 
-
 					/* remember that local var declaration is over */
 					localVariableDef = FALSE;
 					//debug(LOG_SCRIPT, "localVariableDef = FALSE 2");
@@ -2886,7 +2895,7 @@ void_function_declaration:		void_func_subdecl '(' argument_decl_head ')'	/* func
 return_statement_void:	RET ';'
 			;
 
-return_statement:	return_statement_void	//return_statement_void
+return_statement:	return_statement_void
 					{
 
 						RULE( "return_statement: return_statement_void");
@@ -2922,7 +2931,6 @@ return_statement:	return_statement_void	//return_statement_void
 					{
 
 						RULE( "return_statement: RET return_exp ';'");
-
 
 						if(psCurEvent == NULL)	/* no events declared or defined yet */
 						{
@@ -2967,7 +2975,6 @@ return_statement:	return_statement_void	//return_statement_void
 
 statement_list:		/* NULL token */
 						{
-
 							RULE( "statement_list: NULL");
 
 							// Allocate a dummy code block
@@ -3013,7 +3020,6 @@ statement_list:		/* NULL token */
 
 event_decl:			event_subdecl ';'
 					{
-
 						RULE( "event_decl: event_subdecl ';'");
 
 						psCurEvent->bDeclared = TRUE;
@@ -3024,20 +3030,16 @@ event_decl:			event_subdecl ';'
 						localVariableDef = FALSE;
 						psCurEvent->bDeclared = TRUE;
 					}
-
 				|	void_func_subdecl argument_decl ';'	/* event (function) declaration can now include parameter declaration (optional) */
 					{
-
 						RULE( "event_decl: void_func_subdecl argument_decl ';'");
 
 						//debug(LOG_SCRIPT, "localVariableDef = FALSE new ");
 						localVariableDef = FALSE;
 						psCurEvent->bDeclared = TRUE;
 					}
-
 				|	event_subdecl '(' TRIG_SYM ')' '{' var_list statement_list '}' 	/* 16.08.05 - local vars support */
 					{
-
 						RULE( "event_decl: event_subdecl '(' TRIG_SYM ')'");
 
 						/* make sure this event is not declared as function */
@@ -3082,9 +3084,7 @@ event_decl:			event_subdecl ';'
 						}
 
 						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
-
 					}
-				/* '{' statement_list '}' */
 				'{' var_list statement_list '}'	/* local vars support */
 					{
 						RULE("event_decl: '{' var_list statement_list '}'");
@@ -3108,17 +3108,13 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($8);
 						FREE_BLOCK($8);
 
-
 						RULE( "END event_decl:event_subdecl '(' trigger_subdecl ')' .");
-
 					}
 
 				/* local vars */
 				|	event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'
 					{
-
 						RULE( "event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'");
-
 
 						/* make sure this event is not declared as function */
 						if(psCurEvent->bFunction)
@@ -3385,7 +3381,6 @@ statement:			assignment ';'
 
 						$$ = $1;
 					}
-
 			|	VOID_FUNC_CUST '(' param_list ')'  ';'
 					{
 						UDWORD line,paramNumber;
@@ -3455,9 +3450,7 @@ statement:			assignment ';'
 						UDWORD line;
 						char *pDummy;
 
-
 						RULE( "statement: EVENT_SYM '(' param_list ')'  ';'");
-
 
 						/* allow to call EVENTs to reuse the code only if no actual parameters are specified in function call, like "myEvent();" */
 						if(!$1->bFunction && $3->numParams > 0)
@@ -3506,7 +3499,6 @@ statement:			assignment ';'
 
 						$$ = psCurrBlock;
 					}
-
 				|	conditional
 					{
 						$$ = $1;
@@ -3538,15 +3530,12 @@ statement:			assignment ';'
 
 						$$ = psCurrBlock;
 					}
-
 				|	return_statement
 					{
 						UDWORD line;
 						char *pDummy;
 
-
 						RULE( "statement: return_statement");
-
 
 						if(psCurEvent == NULL)
 						{
@@ -3586,8 +3575,6 @@ statement:			assignment ';'
 
 						$$ = psCurrBlock;
 					}
-
-
 				|	PAUSE '(' INTEGER ')' ';'
 					{
 						UDWORD line;
@@ -3674,17 +3661,6 @@ assignment:			NUM_VAR '=' expression
 						{
 
 							RULE( "assignment: NUM_VAR '=' expression");
-
-							codeRet = scriptCodeAssignment($1, $3, &psCurrBlock);
-							CHECK_CODE_ERROR(codeRet);
-
-							/* Return the code block */
-							$$ = psCurrBlock;
-						}
-				|	FLOAT_VAR '=' expression
-						{
-
-							RULE( "assignment: FLOAT_VAR '=' expression");
 
 							codeRet = scriptCodeAssignment($1, $3, &psCurrBlock);
 							CHECK_CODE_ERROR(codeRet);
@@ -4140,7 +4116,6 @@ var_ref:		REF NUM_VAR
 
 conditional:		cond_clause_list
 					{
-
 						RULE( "conditional: cond_clause_list");
 
 						codeRet = scriptCodeConditional($1, &psCurrBlock);
@@ -4150,7 +4125,6 @@ conditional:		cond_clause_list
 					}
 				|	cond_clause_list ELSE terminal_cond
 					{
-
 						RULE( "conditional: cond_clause_list ELSE terminal_cond");
 
 						ALLOC_CONDBLOCK(psCondBlock, $1->numOffsets + $3->numOffsets, $1->size + $3->size);
@@ -4187,14 +4161,12 @@ conditional:		cond_clause_list
 
 cond_clause_list:	cond_clause
 					{
-
 						RULE( "cond_clause_list:	cond_clause");
 
 						$$ = $1;
 					}
 				|	cond_clause_list ELSE cond_clause
 					{
-
 						RULE( "cond_clause_list:	cond_clause_list ELSE cond_clause");
 
 						ALLOC_CONDBLOCK(psCondBlock,
@@ -4262,7 +4234,7 @@ cond_clause:		IF '(' boolexp ')'
 						/* and store it in debugLine.                                 */
 						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
 					}
-									'{' statement_list '}'
+						'{' statement_list '}'
 					{
 						/* Allocate the block */
 						//ALLOC_CONDBLOCK(psCondBlock, 1,	//1 offset
@@ -4312,7 +4284,7 @@ cond_clause:		IF '(' boolexp ')'
 						$$ = psCondBlock;
 					}
 				/* 'Monoblock' */
-				|			IF '(' boolexp ')'
+				|		IF '(' boolexp ')'
 					{
 						char *pDummy;
 
@@ -4384,7 +4356,7 @@ cond_clause:		IF '(' boolexp ')'
 	 *    i = i + 1;
 	 * }
 	 */
-loop:		WHILE '(' boolexp ')'
+loop:			WHILE '(' boolexp ')'
 				{
 					char *pDummy;
 
@@ -4548,9 +4520,7 @@ expression:		expression '+' expression
 					UDWORD line,paramNumber;
 					char *pDummy;
 
-
 					RULE( "expression: NUM_FUNC_CUST '(' param_list ')'");
-
 
 					/* if($4->numParams != $3->numParams) */
 					if($3->numParams != $1->numParams)
@@ -5036,6 +5006,11 @@ stringexp:
 					/* Manage string stack */
 					widgCopyString(STRSTACK[CURSTACKSTR],yyvsp[0].sval);
 					CURSTACKSTR = CURSTACKSTR + 1;		/* Increment 'pointer' to the top of the string stack */
+
+					if(CURSTACKSTR >= MAXSTACKLEN)
+					{
+						scr_error("Can't store more than %d strings", MAXSTACKLEN);
+					}
 
 					//debug(LOG_SCRIPT, "END QTEXT found");
 				}
@@ -5622,7 +5597,6 @@ objexp:			OBJ_VAR
 	 */
 objexp_dot:		objexp '.'
 				{
-
 					RULE( "objexp_dot: objexp '.', type=%d", $1->type);
 
 					// Store the object type for the variable lookup
@@ -5878,8 +5852,35 @@ static void scriptResetTables(void)
 BOOL scriptCompile(const char *pData, UDWORD fileSize,
 				   SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType)
 {
-	// Tell lex about the input buffer
-	scriptSetInputBuffer(pData, fileSize);
+	UDWORD i;
+
+	/* Reset include stack */
+	scr_include_stack_ptr = 0;
+
+	/* Initialize include input buffers */
+	for(i=0;i<MAX_SCR_INCLUDE_DEPTH;i++)
+	{
+		pScrInputBuffer[i] = NULL;
+	}
+
+	/* Set the initial input buffer */
+	pScrInputBuffer[0] = (char *)pData;
+
+
+	/* Reset number of macros */
+	scr_num_macros = 0;
+
+	/* Reset macro stack */
+	scr_macro_stack_ptr = 0;
+
+	/* Initialize macro input buffers */
+	for(i=0;i<MAX_SCR_MACRO_DEPTH;i++)
+	{
+		pScrMacroBuffer[i] = NULL;
+	}
+
+	/* Feed flex with initial input buffer */
+	scriptSetInputBuffer(pScrInputBuffer[0], fileSize);
 
 	scriptResetTables();
 	psFinalProg = NULL;
@@ -5892,7 +5893,7 @@ BOOL scriptCompile(const char *pData, UDWORD fileSize,
 		genDebugInfo = FALSE;
 	}
 
-	if (scr_parse() != 0)
+	if (scr_parse() != 0 || bError)
 	{
 		return FALSE;
 	}
@@ -5917,6 +5918,9 @@ void scr_error(const char *pMessage, ...)
 	vsprintf(aBuff, pMessage, args);
 	va_end(args);
 	scriptGetErrorData(&line, &text);
+
+	bError = TRUE;
+
 #ifdef DEBUG
 	debug( LOG_ERROR, "script parse error:\n%s at %s:%d\nToken: %d, Text: '%s'\n",
 			  aBuff, GetLastResourceFilename(), line, scr_char, text );
@@ -6082,7 +6086,6 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 
 	return TRUE;
 }
-
 
 /* Look up a variable symbol */
 BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)

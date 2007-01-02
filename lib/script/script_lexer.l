@@ -4,7 +4,7 @@
  *
  * Script file lexer.
  */
-
+#include <physfs.h>
 #include "lib/framework/frame.h"
 #include "lib/script/interp.h"
 #include "lib/script/parse.h"
@@ -25,19 +25,19 @@ static UDWORD currText=0;
 // Note if we are in a comment
 static BOOL inComment = FALSE;
 
-/* Pointer to the input buffer */
-static const char *pInputBuffer = NULL;
-static const char *pEndBuffer = NULL;
+/* FLEX include buffer stack */
+static YY_BUFFER_STATE include_stack[MAX_SCR_INCLUDE_DEPTH];
 
-#define YY_INPUT(buf, result, max_size) \
-      if (pInputBuffer != pEndBuffer) { \
-        buf[0] = *(pInputBuffer++); result = 1; \
-      } else { \
-        buf[0] = EOF; result = YY_NULL; \
-      }
+/* FLEX define buffer stack */
+static YY_BUFFER_STATE macro_stack[MAX_SCR_MACRO_DEPTH];
+static SCR_MACRO scr_macro[MAX_SCR_MACROS];
+static char *tmpMacroBuffer;
 
-#undef scr_getc
-#define scr_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
+static PHYSFS_file *newInput;
+
+static PHYSFS_sint64 InputLen = 0;
+
+static YYSTYPE dummy;
 
 /* Get the token type for a variable symbol */
 SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
@@ -276,6 +276,121 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 	}
 }
 
+/* Look up defined macro and return new define buffer */
+BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
+{
+	UDWORD i;
+	for(i=0;i<scr_num_macros;i++)
+	{
+		if(strcmp(pMacro, &(scr_macro[i].scr_define_macro[0]) ) == 0)
+		{
+			*ppMacroBody = (char *)malloc(MAXSTRLEN);
+			strcpy( *ppMacroBody, &(scr_macro[i].scr_define_body[0]) );		//copy macro body into buffer so we can process it
+			//*pMacroBody = &(scr_macro[i].scr_define_body[0]);	//return macro body
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+/* Return to the previous macto buffer */
+void popMacroStack(void)
+{
+	ASSERT(scr_macro_stack_ptr <= MAX_SCR_MACRO_DEPTH,
+		"FLEX: macro stack pointer out of bounds: %d", scr_macro_stack_ptr);
+
+	/* Free current macro buffer */
+	free(pScrMacroBuffer[scr_macro_stack_ptr]);
+	pScrMacroBuffer[scr_macro_stack_ptr] = NULL;
+
+	/* Delete flex buffer */
+	yy_delete_buffer( YY_CURRENT_BUFFER );
+
+	/* Switch one level lower in the macro stack */
+	yy_switch_to_buffer( macro_stack[scr_macro_stack_ptr - 1] );
+
+	scr_macro_stack_ptr--;
+}
+
+/* Store macro name */
+void storeMacroName(const char *pMacroName)
+{
+	ASSERT(scr_num_macros >= 0 && scr_num_macros < MAX_SCR_MACROS,
+		"FLEX: macro count out of bounds: %d", scr_num_macros);
+
+	/* Make sure this name isn't already reserved */
+	if((scriptLookUpType(pMacroName, &dummy.tval)) ||
+	(scriptLookUpVariable(pMacroName, &dummy.vSymbol)) ||
+	(scriptLookUpConstant(pMacroName, &dummy.cSymbol)) ||
+	(scriptLookUpFunction(pMacroName, &dummy.fSymbol)) ||
+	(scriptLookUpCustomFunction(pMacroName, &dummy.eSymbol)) ||
+	(scriptLookUpTrigger(pMacroName, &dummy.tSymbol)) ||
+	(scriptLookUpEvent(pMacroName, &dummy.eSymbol)) ||
+	(scriptLookUpCallback(pMacroName, &dummy.cbSymbol)))
+	{
+		scr_error("FLEX: macro name '%s' is already reserved", pMacroName);
+	}
+
+	/* Store define macro */
+	strcpy( &(scr_macro[scr_num_macros].scr_define_macro[0]), pMacroName );
+}
+
+/* Store macro body */
+void storeMacroBody(const char *pMacroBody)
+{
+	ASSERT(scr_num_macros >= 0 && scr_num_macros < MAX_SCR_MACROS,
+		"FLEX: macro count out of bounds: %d", scr_num_macros);
+
+	/* Store macro body */
+	strcpy( &(scr_macro[scr_num_macros].scr_define_body[0]), pMacroBody);
+
+	scr_num_macros++;
+}
+
+/* include directive encountered - push current buffer, set up new one */
+void pushInclude(const char *pIncludePath)
+{
+	if ( scr_include_stack_ptr >= MAX_SCR_INCLUDE_DEPTH ){
+		scr_error("FLEX: Includes nested too deeply" );
+	}
+
+	if(!PHYSFS_exists(pIncludePath)){
+		scr_error("FLEX: '%s' include doesn't exist", pIncludePath );
+	}
+
+	/* Open include */
+	newInput = PHYSFS_openRead(pIncludePath);
+
+	if(!newInput){
+		scr_error("FLEX: Couldn't open include: '%s'\n%s",
+			pIncludePath, PHYSFS_getLastError() );
+	}
+
+	/* Push current flex buffer */
+	include_stack[scr_include_stack_ptr] = YY_CURRENT_BUFFER;
+	scr_include_stack_ptr++;
+
+	/* Get file length */
+	InputLen = PHYSFS_fileLength(newInput);
+
+	ASSERT(scr_include_stack_ptr > 0 && scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
+		"FLEX: scr_include_stack_ptr out of bounds: %d", scr_include_stack_ptr);
+
+	/* Allocate enough space for the new include */
+	pScrInputBuffer[scr_include_stack_ptr] = (char *)malloc(InputLen);
+
+	/* Read include */
+	if (PHYSFS_read(newInput, pScrInputBuffer[scr_include_stack_ptr], 1, InputLen ) != InputLen ){
+		scr_error( "FLEX: Couldn't read include: '%s'", pIncludePath);
+	}
+
+	/* Close include */
+	if(newInput){
+		(void)PHYSFS_close(newInput);
+	}
+}
+
 
 
 %}
@@ -288,11 +403,17 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 %x SLCOMMENT
 %x QUOTE
 %x _MACRO
+%x _INCL
+%x _INCL_END_QUOTE
+%x _DEF_MACRO
+%x _DEF_BODY_START
+%x _DEF_BODY
+
+_IDENTIFIER[a-zA-Z_][0-9_a-zA-Z_]*
 
 %%
-	/* Match to key words */
-	/*begin					return START;*/
-	/*end						return END;*/
+
+	/* Match keywords */
 wait					return WAIT;
 every					return EVERY;
 trigger					return TRIGGER;
@@ -303,10 +424,6 @@ link					return LINK;
 ref						return REF;
 return					return	RET;
 function				return	FUNCTION;
-
-	/* function				return FUNCTION;*/
-	/* cond					return COND; */
-
 "("int")"				{ RULE("(int)"); return TO_INT_CAST; }
 "("float")"				{ RULE("(float)"); return TO_FLOAT_CAST; }
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
@@ -318,7 +435,7 @@ else					return ELSE;
 exit					return EXIT;
 pause					return PAUSE;
 
-	/* Match to type key words */
+	/* Match type keywords */
 void					{ scr_lval.tval = VAL_VOID; return _VOID; }
 VOID					{ scr_lval.tval = VAL_VOID; return _VOID; }
 string					{ scr_lval.tval = VAL_STRING; return TYPE; }
@@ -336,9 +453,11 @@ true					{ scr_lval.bval = TRUE; return BOOLEAN_T; }
 FALSE					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
 false					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
 
-	/* Match boolean operators */
+	/* Match increment/decrement operators */
 "++"					{RULE("++"); return _INC; }
 "--"					{RULE("++"); return _DEC; }
+
+	/* Match boolean operators */
 "=="					return BOOLEQUAL;
 "!="					return NOTEQUAL;
 ">="					return GREATEQUAL;
@@ -347,10 +466,114 @@ false					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
 "<"						return LESS;
 and						return _AND;
 AND						return _AND;
+"&&"					return _AND;
 or						return _OR;
 OR						return _OR;
+"||"					return _OR;
 not						return _NOT;
 NOT						return _NOT;
+"!"						return _NOT;
+
+	/* Start of a #define */
+"#define"[ \t]+				{ BEGIN (_DEF_MACRO); }
+
+	/* Start of the #define macro name */
+<_DEF_MACRO>{_IDENTIFIER}	{
+								RULE("FLEX: matched define macro: '#define %s'", scr_text);
+
+								/* Store macro name */
+								storeMacroName(scr_text);
+
+								BEGIN (_DEF_BODY_START);
+							}
+
+<_DEF_BODY_START>[ \t]+		{ BEGIN (_DEF_BODY); }	/* Eat space between macro and body */
+
+<_DEF_BODY>[^\r\n]*			{	/* Anything until the end of the line is macro body */
+
+								RULE("FLEX: matched define body: '#define %s %s' (%d)",
+									scr_macro[scr_num_macros].scr_define_macro, scr_text, scr_num_macros + 1);
+
+								/* Store macro body */
+								storeMacroBody(scr_text);
+
+								BEGIN (INITIAL);
+							}
+
+	/* Handle Includes */
+"#include"[ \t]+\"			{ BEGIN (_INCL); }	/* Match '#include' and skip whitespace until quotation */
+
+<_INCL>[^ \t\n\"]+   		{ 	/* got the include file name */
+								RULE("FLEX: Opening include '%s' (scr_include_stack_ptr: %d)", scr_text, scr_include_stack_ptr);
+
+								/* Set up new input buffer, push current one to stack */
+								pushInclude(scr_text);
+
+								/* Match the ending quote */
+						        BEGIN(_INCL_END_QUOTE);
+							}
+
+<_INCL_END_QUOTE>\"			{
+								ASSERT(scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
+									"FLEX:  scr_include_stack_ptr out of bounds: %d", scr_include_stack_ptr);
+
+								ASSERT(pScrInputBuffer[scr_include_stack_ptr] != NULL, "FLEX: failed to load include");
+
+								yy_switch_to_buffer( yy_scan_bytes(pScrInputBuffer[scr_include_stack_ptr], InputLen) );
+
+								BEGIN (INITIAL);
+							}
+
+<<EOF>> 						{
+								RULE("FLEX: EOF: scr_include_stack_ptr: %d; scr_macro_stack_ptr: %d",
+									scr_include_stack_ptr, scr_macro_stack_ptr);
+
+								ASSERT(pScrInputBuffer[scr_include_stack_ptr] != NULL, "FLEX: can't unload, buffer is NULL");
+
+								if ( scr_include_stack_ptr == 0 )
+								{
+									/* We finished scanning top level script or macro */
+									if(scr_macro_stack_ptr > 0)
+									{
+										RULE("FLEX: Finished parsing macro %d", scr_macro_stack_ptr);
+
+										popMacroStack();
+									}
+									else	//both stacks are empty
+									{
+										RULE("FLEX: Finished parsing all input");
+										yyterminate();
+									}
+								}
+								else
+								{
+									/* First finish scanning all macros */
+									if(scr_macro_stack_ptr > 0)
+									{
+										RULE("FLEX: Finished parsing macro %d in include %d",
+											scr_macro_stack_ptr, scr_include_stack_ptr);
+
+										popMacroStack();
+									}
+									else	//no macros, return to previous include
+									{
+										RULE("FLEX: returning from parsing include %d", scr_include_stack_ptr);
+
+										/* Free include buffer */
+										free(pScrInputBuffer[scr_include_stack_ptr]);
+										pScrInputBuffer[scr_include_stack_ptr] = NULL;
+
+										/* Delete flex buffer */
+										yy_delete_buffer( YY_CURRENT_BUFFER );
+
+										/* Pop previous script file */
+										yy_switch_to_buffer( include_stack[scr_include_stack_ptr - 1] );
+
+										scr_include_stack_ptr--;
+									}
+								}
+					        }
+
 
 	/* Match floating point numbers */
 -?[0-9]*"."[0-9]+			{
@@ -365,7 +588,7 @@ NOT						return _NOT;
 -?[0-9]+					{ scr_lval.ival = atol(scr_text); return INTEGER; }
 
 	/* Match identifiers */
-[a-zA-Z_][0-9_a-zA-Z_]*		{
+{_IDENTIFIER}				{
 								RULE( "looking up '%s'", scr_text);
 
 								/* See if this identifier has been defined as a type */
@@ -431,9 +654,29 @@ NOT						return _NOT;
 
 									return CALLBACK_SYM;
 								}
+								else if(scriptLoopUpMacro(scr_text, &tmpMacroBuffer))
+								{
+									RULE( "'%s' is a macro", scr_text);
+
+									ASSERT(tmpMacroBuffer != NULL,
+										"FLEX: failed to allocate memory for macro buffer %d", scr_macro_stack_ptr);
+
+									ASSERT(scr_macro_stack_ptr >= 0 && scr_macro_stack_ptr < MAX_SCR_MACRO_DEPTH,
+										"FLEX: flex macro buffer pointer out of bounds: %d", scr_macro_stack_ptr );
+
+									/* Push current buffer we are processing;
+									 * can be either macro buffer, include buffer or top level script
+									 */
+									macro_stack[scr_macro_stack_ptr] = YY_CURRENT_BUFFER;
+									scr_macro_stack_ptr++;
+
+									pScrMacroBuffer[scr_macro_stack_ptr] = tmpMacroBuffer;	//assign to the new input buffer
+
+									/* Feed flex with the new macro buffer */
+									yy_switch_to_buffer( yy_scan_string( pScrMacroBuffer[scr_macro_stack_ptr] ) );
+								}
 								else
 								{
-
 									RULE( "'%s' is an ident", scr_text);
 
 									strcpy(aText[currText], scr_text);
@@ -443,14 +686,14 @@ NOT						return _NOT;
 								}
 							}
 	/* Strip macros */
-"#"							{ BEGIN _MACRO; }
-<_MACRO>\n					{ BEGIN 0; }
+"#"							{ BEGIN (_MACRO); }
+<_MACRO>\n					{ BEGIN (INITIAL); }
 <_MACRO>. |
 <_MACRO>\n					;
 
 	/* Match quoted text */
-\"							{ BEGIN QUOTE; }
-<QUOTE>\"					{ BEGIN 0; }
+\"							{ BEGIN (QUOTE); }
+<QUOTE>\"					{ BEGIN (INITIAL); }
 <QUOTE>[^\"\n]*				{
 								strcpy(aText[currText], scr_text);
 								scr_lval.sval = aText[currText];
@@ -460,18 +703,18 @@ NOT						return _NOT;
 							}
 
 	/* Skip white space */
-[ \t\n\x0d\x0a]						;
+[ \t\n\x0d\x0a]				;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN COMMENT; }
+"/*"						{ inComment=TRUE; BEGIN (COMMENT); }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN 0; }
+<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN (INITIAL); }
 <COMMENT>. |
 <COMMENT>\n					;
 
 	/* Strip single line comments */
-"//"						{ BEGIN SLCOMMENT; }
-<SLCOMMENT>\n				{ BEGIN 0; }
+"//"						{ BEGIN (SLCOMMENT); }
+<SLCOMMENT>\n				{ BEGIN (INITIAL); }
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
@@ -482,11 +725,11 @@ NOT						return _NOT;
 /* Set the current input buffer for the lexer */
 void scriptSetInputBuffer(const char *pBuffer, UDWORD size)
 {
-	pInputBuffer = pBuffer;
-	pEndBuffer = pBuffer + size;
-
 	/* Reset the lexer in case it's been used before */
 	scr__flush_buffer( YY_CURRENT_BUFFER );
+
+	//yy_scan_string(pBuffer);
+	YY_CURRENT_BUFFER = yy_scan_bytes(pBuffer, size);
 }
 
 void scriptGetErrorData(int *pLine, char **ppText)
