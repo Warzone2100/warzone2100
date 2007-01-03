@@ -646,11 +646,11 @@ UWORD AsciiLookup[256] =
 };
 
 
-
-
 IMAGEFILE *FrontImages;
 
 BOOL DirectControl = FALSE;
+
+static wzSearchPath * searchPathRegistry = NULL;
 
 
 // Each module in the game should have a call from here to initialise
@@ -700,9 +700,6 @@ static BOOL loadLevFile(const char* filename, int datadir) {
 
 	return TRUE;
 }
-
-
-static wzSearchPath * searchPathRegistry = NULL;
 
 void cleanSearchPath( void )
 {
