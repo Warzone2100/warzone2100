@@ -1676,6 +1676,12 @@ BOOL scrInitGetFeature(void)
 		return FALSE;
 	}
 
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
+		"scrInitGetFeature: bucket out of bounds: %d", bucket);
+
+	ASSERT(player >= 0 && player < MAX_PLAYERS,
+		"scrInitGetFeature: player out of bounds: %d", player);
+
 	psFeatureStatToFind[bucket]		= (FEATURE_STATS *)(asFeatureStats + iFeat);				// find this stat
 	playerToEnum[bucket]			= player;				// that this player can see
 	psCurrEnumFeature[bucket]		= apsFeatureLists[0];
@@ -1699,6 +1705,9 @@ BOOL scrGetFeature(void)
 		ASSERT( FALSE, "scrGetFeature: Failed to pop player number from stack" );
 		return FALSE;
 	}
+
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
+		"scrGetFeature: bucket out of bounds: %d", bucket);
 
 	count =0;
 	// go to the correct start point in the feature list.
@@ -1777,6 +1786,9 @@ BOOL scrGetFeatureB(void)
 		ASSERT( FALSE, "scrGetFeatureB: Failed to pop player number from stack" );
 		return FALSE;
 	}
+
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
+		"scrGetFeatureB: bucket out of bounds: %d", bucket);
 
 	// check to see if badly called
 	if(psFeatureStatToFind[bucket] == NULL)

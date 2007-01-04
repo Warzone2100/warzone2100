@@ -728,8 +728,7 @@ void scriptSetInputBuffer(const char *pBuffer, UDWORD size)
 	/* Reset the lexer in case it's been used before */
 	scr__flush_buffer( YY_CURRENT_BUFFER );
 
-	//yy_scan_string(pBuffer);
-	YY_CURRENT_BUFFER = yy_scan_bytes(pBuffer, size);
+	yy_switch_to_buffer(yy_scan_bytes(pBuffer, size));
 }
 
 void scriptGetErrorData(int *pLine, char **ppText)
