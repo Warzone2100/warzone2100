@@ -656,7 +656,7 @@ UDWORD NETgetRecentPacketsRecvd(void)
 // Send a message to a player, option to guarantee message
 BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 {
-	unsigned int size;
+	int size;
 
 	debug( LOG_NET, "NETsend\n" );
 
@@ -703,7 +703,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 // broadcast a message to all players.
 BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 {
-	unsigned int size;
+	int size;
 
 	if(!NetPlay.bComms)
 	{

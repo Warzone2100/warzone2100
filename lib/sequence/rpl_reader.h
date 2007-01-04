@@ -6,7 +6,7 @@
 
 typedef struct RPL_chunk_info_t {
 	int offset;
-	int video_size;
+	unsigned int video_size;
 	int audio_size;
 } RPL_chunk_info_t;
 
@@ -30,7 +30,7 @@ typedef struct RPL {
 	unsigned int		current_sound_frame;
 
 	// Chunk-related info
-	int			nb_chunks;
+	unsigned int		nb_chunks;
 	RPL_chunk_info_t*	chunks;
 	int			ocs;
 	int			ecs;
