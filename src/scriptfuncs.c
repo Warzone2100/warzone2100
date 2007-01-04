@@ -2040,27 +2040,34 @@ static	UDWORD			enumStructCount;
 static	BOOL			structfindany;
 static	SDWORD			playerVisibleStruct;		//player whose structures must be visible
 
+//for the bucket version
+static	STRUCTURE_STATS	*psStructStatToFindB[MAX_PLAYERS];
+static	UDWORD			playerToEnumStructB[MAX_PLAYERS];
+static	UDWORD			enumStructCountB[MAX_PLAYERS];
+static	BOOL			structfindanyB[MAX_PLAYERS];
+static	SDWORD			playerVisibleStructB[MAX_PLAYERS];		//player whose structures must be visible
 // init enum visible structures.
 BOOL scrInitEnumStruct(void)
 {
-	SDWORD		lookingPlayer,iStat,targetPlayer,any;
+	SDWORD		lookingPlayer,iStat,targetPlayer;
+	BOOL		any;
 
 	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer) )
 	{
 		return FALSE;
 	}
 
-	if(any == 1)
-	{
-		structfindany = TRUE;
-	}
-	else
-	{
-		structfindany = FALSE;
-	}
+	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
+		"scrInitEnumStructB: targetPlayer out of bounds: %d", targetPlayer);
+
+	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
+		"scrInitEnumStructB: lookingPlayer out of bounds: %d", lookingPlayer);
+
+	structfindany = any;
+
 	psStructStatToFind	= (STRUCTURE_STATS *)(asStructureStats + iStat);
 	playerToEnumStruct	= (UDWORD)targetPlayer;
-	playerVisibleStruct = lookingPlayer;		//fix: remember who must be able to see the structure
+	playerVisibleStruct = lookingPlayer;		//remember who must be able to see the structure
 	enumStructCount		= 0;
 	return TRUE;
 }
@@ -2117,7 +2124,97 @@ BOOL scrEnumStruct(void)
 	return TRUE;
 }
 
+// init enum visible structures - takes bucket as additional parameter
+BOOL scrInitEnumStructB(void)
+{
+	SDWORD		lookingPlayer,iStat,targetPlayer,bucket;
+	BOOL		any;
 
+	if ( !stackPopParams(5,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,
+		VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket) )
+	{
+		return FALSE;
+	}
+
+	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
+		"scrInitEnumStructB: targetPlayer out of bounds: %d", targetPlayer);
+
+	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
+		"scrInitEnumStructB: lookingPlayer out of bounds: %d", lookingPlayer);
+
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
+		"scrInitEnumStructB: bucket out of bounds: %d", bucket);
+
+	/* Any structure type regardless of the passed type? */
+	structfindanyB[bucket] = any;
+
+	psStructStatToFindB[bucket]	= (STRUCTURE_STATS *)(asStructureStats + iStat);
+	playerToEnumStructB[bucket]	= (UDWORD)targetPlayer;
+	playerVisibleStructB[bucket] = lookingPlayer;		//remember who must be able to see the structure
+	enumStructCountB[bucket] = 0;
+
+	return TRUE;
+}
+
+// Similar to scrEnumStruct, but uses bucket
+BOOL scrEnumStructB(void)
+{
+	SDWORD		bucket;
+	UDWORD		count;
+	STRUCTURE	*psStruct;
+
+	if ( !stackPopParams(1, VAL_INT, &bucket) )
+	{
+		return FALSE;
+	}
+
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
+		"scrEnumStructB: bucket out of bounds: %d", bucket);
+
+	// go to the correct start point in the structure list.
+	count = 0;
+	for(psStruct=apsStructLists[playerToEnumStructB[bucket]];psStruct && count<enumStructCountB[bucket];count++)
+	{
+		psStruct = psStruct->psNext;
+	}
+
+	if(psStruct == NULL)		// no more to find.
+	{
+		scrFunctionResult.v.oval = NULL;
+		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+		{
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	while(psStruct)	// find a visible structure of required type.
+	{
+		if(	(structfindanyB[bucket] || (psStruct->pStructureType->ref == psStructStatToFindB[bucket]->ref))
+			&&
+			((playerVisibleStructB[bucket] < 0) || (psStruct->visible[playerVisibleStructB[bucket]]))	//perform visibility test
+			)
+		{
+			scrFunctionResult.v.oval = psStruct;
+			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))			//	push scrFunctionResult
+			{
+				return FALSE;
+			}
+			enumStructCountB[bucket]++;
+
+			return TRUE;
+		}
+		enumStructCountB[bucket]++;
+		psStruct = psStruct->psNext;
+	}
+	// push NULL, none found;
+	scrFunctionResult.v.oval = NULL;
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
 
 // -----------------------------------------------------------------------------------------
 /*looks to see if a structure (specified by type) exists and is being built*/

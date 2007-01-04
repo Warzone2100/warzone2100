@@ -201,6 +201,14 @@ FUNC_SYMBOL asFuncTable[] =
 		0, { VAL_VOID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "initEnumStructB",	scrInitEnumStructB,		VAL_VOID,
+		5, { VAL_BOOL, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT,VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "enumStructB",		scrEnumStructB,			(INTERP_TYPE)ST_STRUCTURE,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	{ "structureBeingBuilt",scrStructureBeingBuilt,	VAL_BOOL,
 		2,	{ (INTERP_TYPE)ST_STRUCTURESTAT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },

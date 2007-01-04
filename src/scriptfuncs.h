@@ -125,6 +125,8 @@ extern BOOL scrDestroyStructure(void);
 // enumerate structures
 extern BOOL scrInitEnumStruct(void);
 extern BOOL scrEnumStruct(void);
+extern BOOL scrInitEnumStructB(void);
+extern BOOL scrEnumStructB(void);
 
 /*looks to see if a structure (specified by type) exists */
 extern BOOL scrStructureBeingBuilt(void);
