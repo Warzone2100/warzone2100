@@ -12,7 +12,7 @@ extern void *	g_ElementToBeRemoved;
 
 /***************************************************************************/
 
-#define	HASHTEST		1
+#define	HASHTEST
 
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
@@ -30,6 +30,7 @@ HashTest( int iKey1, int iKey2 )
 	return (UDWORD) iKey1 + iKey2;
 }
 
+#ifndef HASHTEST
 /***************************************************************************/
 /*
  * HashPJW
@@ -63,6 +64,7 @@ HashPJW( int iKey1, int iKey2 )
 
 	return iHashValue;
 }
+#endif
 
 /***************************************************************************/
 
@@ -104,7 +106,7 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	(*ppsTable)->pFreeFunc      = NULL;
 
 	/* set hash function to internal */
-#if HASHTEST
+#ifdef HASHTEST
 	hashTable_SetHashFunction( (*ppsTable), HashTest );
 #else
 	hashTable_SetHashFunction( (*ppsTable), HashPJW );

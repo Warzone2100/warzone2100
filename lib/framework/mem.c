@@ -177,7 +177,7 @@ void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size)
 		debug( LOG_NEVER, "Warning: malloc returning NULL" );
 		return NULL;
 	}
-	strcpy(psNode->pFile, pFileName);
+	strcpy((char *)psNode->pFile, pFileName);
 	psNode->line = LineNumber;
 	psNode->size = Size;
 
@@ -204,6 +204,8 @@ void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size)
 }
 #endif
 
+#ifndef DEBUG_MALLOC
+
 /* Replacement for malloc for release builds. */
 void *memMallocRelease(size_t Size)
 {
@@ -215,6 +217,7 @@ void *memMallocRelease(size_t Size)
 
 	return RMALLOC(Size);
 }
+#endif
 
 #ifdef DEBUG_MALLOC
 
@@ -306,12 +309,14 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 
 		/* Now free the memory */
 
-		RFREE(psDeleted->pFile);
+		RFREE((char *)psDeleted->pFile);
 		RFREE(psDeleted);
 	}
 
 }
 #endif
+
+#ifndef DEBUG_MALLOC
 
 /* Replacement for Free for release builds */
 void memFreeRelease(void *pMemToFree)
@@ -330,6 +335,7 @@ void memFreeRelease(void *pMemToFree)
 
 	RFREE(pMemToFree);
 }
+#endif
 
 
 /* Checks whether the memory buffer pointed to by pPtr of size Size

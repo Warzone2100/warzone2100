@@ -368,7 +368,8 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					 SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psContext;
-	SDWORD		val, storeIndex, arrayNum, i,j, arraySize;
+	SDWORD		val, storeIndex, arrayNum, arraySize;
+	UDWORD		i, j;
 	INTERP_TYPE	type;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
 
@@ -1402,7 +1403,7 @@ BOOL eventSetTraceLevel(void)
 //reset local vars
 BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex)
 {
-	SDWORD		i;
+	UDWORD		i;
 
 	if(EventIndex >= psCode->numEvents)
 	{

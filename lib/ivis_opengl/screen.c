@@ -60,7 +60,7 @@ static BOOL screendump_required = FALSE;
 
 static UDWORD	backDropWidth = BACKDROP_WIDTH;
 static UDWORD	backDropHeight = BACKDROP_HEIGHT;
-static GLuint backDropTexture = -1; // FIXME: this is an unsigned value, and so cannot be negative!! - Per
+static GLuint backDropTexture = ~0;
 
 static void my_error_exit(j_common_ptr cinfo);
 
@@ -383,7 +383,7 @@ void screen_SetBackDropFromFile(char* filename)
 	image_init(&image);
 
 	if (!image_load_from_jpg(&image, filename)) {
-		if (backDropTexture == -1) {
+		if (~backDropTexture == 0) {
 			glGenTextures(1, &backDropTexture);
 		}
 

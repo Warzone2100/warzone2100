@@ -43,8 +43,6 @@ iIMDShape *BSPimd=NULL;		// This is a global ... it is used in imddraw.c (for sp
 
 
 // Local static variables
-static iVector *BSPScrPos=NULL;
-
 static iVector *CurrentVertexList=NULL;
 //static int CurrentVertexListCount=0;
 

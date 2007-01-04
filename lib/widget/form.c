@@ -882,7 +882,7 @@ static BOOL formPickVTab(TAB_POS *psTabPos,
 
 	x1 = x0 + width;
 	y = y0;
-	for (i=0; i < (SDWORD)number; i++)
+	for (i=0; i < number; i++)
 	{
 		if (fx >= x0 && fx <= x1 &&
 			fy >= y && fy <= y + (SDWORD)(height))
@@ -1475,7 +1475,7 @@ static void formDisplayLTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 	x1 = x0 + width;
 	y = y0+2;
 	y1 = y + height - 2;
-	for (i=0; i < (SDWORD)number; i++)
+	for (i=0; i < number; i++)
 	{
 		if(psForm->pTabDisplay) {
 			psForm->pTabDisplay((WIDGET*)psForm,TabType,WFORM_TABLEFT,i,i==selected,i==hilite,x0,y,width,height);
@@ -1531,7 +1531,7 @@ static void formDisplayRTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 	x1 = x0 + width;
 	y = y0+2;
 	y1 = y + height - 2;
-	for (i=0; i < (SDWORD)number; i++)
+	for (i=0; i < number; i++)
 	{
 		if(psForm->pTabDisplay) {
 			psForm->pTabDisplay((WIDGET*)psForm,TabType,WFORM_TABRIGHT,i,i==selected,i==hilite,x0,y,width,height);

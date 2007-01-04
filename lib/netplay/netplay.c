@@ -238,7 +238,7 @@ void NETBroadcastPlayerInfo(int dpid) {
 	NETbcast(&message, TRUE);
 }
 
-int NET_CreatePlayer(const char* name, unsigned int flags) {
+unsigned int NET_CreatePlayer(const char* name, unsigned int flags) {
 	unsigned int i;
 
 	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i) {
@@ -1188,7 +1188,7 @@ static void NETallowJoining(void) {
 					int j;
 
 					char* name = message.body;
-					int dpid = NET_CreatePlayer(name, 0);
+					unsigned int dpid = NET_CreatePlayer(name, 0);
 					unsigned int* message_dpid = (unsigned int*)(message.body);
 
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
