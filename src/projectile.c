@@ -2332,6 +2332,10 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 				return (height);
 			}
 
+			// Commanders don't have pIMD either
+			if (psDroid->droidType == DROID_COMMAND)
+				return height;
+
 			// VTOL's don't have pIMD either it seems...
 			if (vtolDroid(psDroid))
 			{
@@ -2358,10 +2362,6 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 				case DROID_CONSTRUCT:
 					height += abs((asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
 					height += abs((asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymin);
-					break;
-				case DROID_COMMAND:
-					height += abs((asBrainStats[psDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymax);
-					height += abs((asBrainStats[psDroid->asBits[COMP_BRAIN].nStat]).pIMD->ymin);
 					break;
 				case DROID_REPAIR:
 					height += abs((asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
