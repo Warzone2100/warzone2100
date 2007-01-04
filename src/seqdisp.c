@@ -57,10 +57,10 @@
 
 typedef struct {
 	char pText[MAX_STR_LENGTH];
-	SDWORD x;
-	SDWORD y;
-	SDWORD startFrame;
-	SDWORD endFrame;
+	UDWORD x;
+	UDWORD y;
+	UDWORD startFrame;
+	UDWORD endFrame;
 	BOOL	bSubtitle;
 } SEQTEXT;
 

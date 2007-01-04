@@ -59,9 +59,13 @@ void memFreeRelease(void *pMemToFree);
 /* Check a pointer refers to a valid block of memory */
 BOOL memPointerValid(void *pPtr, size_t Size);
 
+#ifdef REALLY_DEBUG_MALLOC
 /* Report on currently allocated memory */
 void memMemoryReport(void);
 
+/* Recursive function to print out the list of memory blocks */
+extern SDWORD memRecReport(MEM_NODE *psRoot);
+#endif
 /* Display the memory treap */
 void memDisplayTreap(void);
 
@@ -80,5 +84,4 @@ void memDisplayTreap(void);
 
 #endif // DEBUG_MALLOC
 
-
-#endif
+#endif // _mem_h_

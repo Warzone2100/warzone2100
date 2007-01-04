@@ -294,11 +294,11 @@ UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 //
 UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, BOOL DrawBack)
 {
-	int i,si,osi;
-	int Len = strlen(String);
+	int i,osi;
+	UDWORD si, Len = strlen(String);
 	int jx = x;		// Default to left justify.
 	int jy = y;
-	int WWidth;
+	UDWORD WWidth;
 	BOOL GotSpace;
 	BOOL NewLine;
 	BOOL AddLeadingSpace = FALSE;
@@ -313,7 +313,7 @@ UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDW
 	while(si < Len) {
 		// Remove leading spaces, usefull when doing centre justify.
 		if(FFlags & FTEXTF_SKIP_LEADING_SPACES) {
-			while( (si < strlen((char*)String)) && (String[si] == ' ') ) {
+			while( (si < strlen(String)) && (String[si] == ' ') ) {
 				si++;
 			}
 		}
@@ -632,7 +632,7 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 // Partial fix for rendering text on 'video', you can read it now. -Q
 // --still to do, add 'boxes' under text so you can see it better.
 //===========================================================
-void pie_DrawTextToSurface(char *string, int x, int y)
+void pie_DrawTextToSurface(char *string, UDWORD x, UDWORD y)
 {
 	int Index;
 	UWORD ImageID;

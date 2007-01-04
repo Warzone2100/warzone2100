@@ -32,7 +32,11 @@
  * is trashed before it is freed.
  * This is done automatically by Visual C's memory routines.
  */
-#define MEMORY_SET		TRUE
+// No piece of code should ever depend upon memory being initialized (RAII: Resource Acquisition Is Initialization)
+// Therefore I humbly comment this line out, which might very well result in
+// buggy code becoming even buggier (just search this file for the next
+// instance of MEMORY_SET). -- Giel
+//#define MEMORY_SET		TRUE
 
 /* Number of bytes after which memory amounts are displayed in Kb */
 #define SHOW_KB_LIMIT	(0x400)
@@ -84,7 +88,9 @@ static void memTreapDestroy(TREAP_NODE *psRoot)
 void memShutDown(void)
 {
 	// Report any memory still allocated
+#ifdef REALLY_DEBUG_MALLOC
 	memMemoryReport();
+#endif
 
 	// Free up the allocated memory
 	memTreapDestroy((TREAP_NODE *)psMemRoot);
@@ -169,6 +175,8 @@ void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size)
 	}
 
 	/* Got the main bit of memory - set up the node entry */
+	// This part of code adds information about which file requested
+	// on what line what amount of memory.
 	psNode = (MEM_NODE *)pMemBase;
 	psNode->pFile = (char *)RMALLOC( strlen(pFileName)+1 );
 	if (!psNode->pFile)
@@ -190,12 +198,15 @@ void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size)
 	treapAddNode((TREAP_NODE **)&psMemRoot, (TREAP_NODE *)psNode, memBlockCmp);
 
 	/* Now initialise the memory - try to catch unitialised variables */
-	memset((UBYTE *)(pMemBase) + sizeof(MEM_NODE),
+	// Fill up the safety zone left of (or before) and right of (or after)
+	// the requested memory page, with SAFETY_ZONE_BYTE to be able to
+	// catch writing out of bounds.
+	memset((UBYTE *)(pMemBase) + sizeof(MEM_NODE),                           // Left or before the requested memchunk
 			SAFETY_ZONE_BYTE, SAFETY_ZONE_SIZE);
-	memset((UBYTE *)(pMemBase) + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE + Size,
+	memset((UBYTE *)(pMemBase) + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE + Size, // Right or after chunck
 			SAFETY_ZONE_BYTE, SAFETY_ZONE_SIZE);
 #ifdef MEMORY_SET
-	/* The PC initialises malloc'ed memory already, no need to do it again */
+	// Initialize memory before returning its address (WRONG!!! The code that requests mem should ensure initialization)
 	memset((UBYTE *)(pMemBase) + sizeof(MEM_NODE) + SAFETY_ZONE_SIZE,
 			INITIALISE_BYTE, Size);
 #endif
@@ -232,25 +243,14 @@ void *memMallocRelease(size_t Size)
  */
 void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 {
-	MEM_NODE	sNode, *psDeleted;
-	SDWORD		i, InvalidBottom, InvalidTop;
-	UBYTE		*pMemBase;
-	BLOCK_HEAP	*psBlock;
-#ifdef MEMORY_SET
-	SDWORD		Size;
-#endif
-
-	(void)LineNumber;
-	(void)pFileName;
-
-
-	ASSERT( (pFileName != NULL), "No filename passed to mem_Free" );
+	ASSERT( (pFileName != NULL), "No filename passed to memFree" );
 	ASSERT( (pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
 								  "File: %s\nLine: %d\n", pFileName, LineNumber );
 
+	if (pMemToFree == NULL) return;
 
 	// see if the pointer was allocated in a block
-	psBlock = blkFind(pMemToFree);
+	BLOCK_HEAP	*psBlock = blkFind(pMemToFree);
 	if (psBlock != NULL)
 	{
 		// use a block heap rather than normal free
@@ -261,24 +261,28 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 
 	// Create a dummy node for the search
 	// This is only looked at by memBlockCmp so only need to set the object and size
+	MEM_NODE sNode;
+
 	sNode.pObj = ((UBYTE *)pMemToFree) - sizeof(MEM_NODE) - SAFETY_ZONE_SIZE;
 	sNode.size = 1;
 
 	/* Get the node for the memory block */
-	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psMemRoot,
+	MEM_NODE* psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psMemRoot,
 										(void*)&sNode, memBlockCmp);
 
 
 	ASSERT( psDeleted != NULL,
-			"Invalid pointer passed to mem_Free by:\n"
+			"Invalid pointer passed to memFree by:\n"
 			"File: %s\nLine: %d\n\n"
 			"Attempt to free already freed pointer?",
 			pFileName, LineNumber );
 	if (psDeleted)
 	{
 		/* The pointer is valid, check the buffer zones */
-		pMemBase = (UBYTE *)(pMemToFree) - SAFETY_ZONE_SIZE;
-		InvalidBottom = InvalidTop = 0;
+		UBYTE* pMemBase = (UBYTE *)(pMemToFree) - SAFETY_ZONE_SIZE;
+		UWORD InvalidBottom = 0, InvalidTop = 0, i = 0;
+
+		// Check wether out of bound writes have occured since memMalloc()
 		for(i=0; i<SAFETY_ZONE_SIZE; i++)
 		{
 			if (pMemBase[i] != SAFETY_ZONE_BYTE)
@@ -301,12 +305,6 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 				psDeleted->pFile, psDeleted->line,
 				pFileName, LineNumber );
 
-		/* Trash the memory before it is freed (The PC already does this) */
-#ifdef MEMORY_SET
-		Size = psDeleted->size;
-		memset(pMemToFree, FREE_BYTE, Size);
-#endif
-
 		/* Now free the memory */
 
 		RFREE((char *)psDeleted->pFile);
@@ -321,17 +319,14 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 /* Replacement for Free for release builds */
 void memFreeRelease(void *pMemToFree)
 {
-	BLOCK_HEAP	*psBlock;
-
 	// see if the pointer was allocated in a block
-	psBlock = blkFind(pMemToFree);
+	BLOCK_HEAP* psBlock = blkFind(pMemToFree);
 	if (psBlock != NULL)
 	{
 		// use a block heap rather than normal free
 		blkFree(psBlock, pMemToFree);
 		return;
 	}
-
 
 	RFREE(pMemToFree);
 }
@@ -372,10 +367,10 @@ BOOL memPointerValid(void *pPtr, size_t size)
 }
 
 
+#ifdef REALLY_DEBUG_MALLOC
 /* Recursive function to print out the list of memory blocks */
 SDWORD memRecReport(MEM_NODE *psRoot)
 {
-#ifdef REALLY_DEBUG_MALLOC
 	if (psRoot)
 	{
 		if (psRoot->size < SHOW_KB_LIMIT)
@@ -393,10 +388,9 @@ SDWORD memRecReport(MEM_NODE *psRoot)
 			   memRecReport((MEM_NODE *)psRoot->psRight) +
 			   psRoot->size;
 	}
-#endif
-	psRoot = psRoot;
 	return 0;
 }
+#endif
 
 #ifdef DEBUG_MALLOC
 #define MAXMODULES (32)
@@ -479,11 +473,11 @@ void memMemoryDump(MEM_NODE *Node)
 
 }
 
+#ifdef REALLY_DEBUG_MALLOC
 /* Report on currently allocated memory.
  */
 void memMemoryReport(void)
 {
-#ifdef DEBUG_MALLOC
 	SDWORD		TotMem;
 
 	if (!psMemRoot)
@@ -504,9 +498,8 @@ void memMemoryReport(void)
 		}
 
 	}
-#endif
 }
-
+#endif
 
 /* Display the memory treap */
 void memDisplayTreap(void)

@@ -135,7 +135,9 @@ void blkDestroy(BLOCK_HEAP *psHeap)
 	if (psHeap->psMemTreap != NULL)
 	{
 		debug( LOG_NEVER, "blkDestroy: %s at %d: memory allocated :\n", psHeap->pFileName, psHeap->line );
+#ifdef REALLY_DEBUG_MALLOC
 		memRecReport(psHeap->psMemTreap);
+#endif
 	}
 #endif
 
@@ -491,7 +493,9 @@ void blkReset(BLOCK_HEAP *psHeap)
 	if (psHeap->psMemTreap != NULL)
 	{
 		debug( LOG_NEVER, "blkReset: %s at %d: memory allocated :\n", psHeap->pFileName, psHeap->line );
+#ifdef REALLY_DEBUG_MALLOC
 		memRecReport(psHeap->psMemTreap);
+#endif
 	}
 	psHeap->psMemTreap = NULL;
 	psHeap->free = FALSE;
