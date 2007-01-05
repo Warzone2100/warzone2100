@@ -243,6 +243,12 @@ void *memMallocRelease(size_t Size)
  */
 void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 {
+	MEM_NODE	sNode, *psDeleted;
+	UWORD		i, InvalidBottom, InvalidTop;
+	UBYTE		*pMemBase;
+	BLOCK_HEAP	*psBlock;
+
+
 	ASSERT( (pFileName != NULL), "No filename passed to memFree" );
 	ASSERT( (pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
 								  "File: %s\nLine: %d\n", pFileName, LineNumber );
@@ -250,7 +256,7 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 	if (pMemToFree == NULL) return;
 
 	// see if the pointer was allocated in a block
-	BLOCK_HEAP	*psBlock = blkFind(pMemToFree);
+	psBlock = blkFind(pMemToFree);
 	if (psBlock != NULL)
 	{
 		// use a block heap rather than normal free
@@ -261,13 +267,11 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 
 	// Create a dummy node for the search
 	// This is only looked at by memBlockCmp so only need to set the object and size
-	MEM_NODE sNode;
-
 	sNode.pObj = ((UBYTE *)pMemToFree) - sizeof(MEM_NODE) - SAFETY_ZONE_SIZE;
 	sNode.size = 1;
 
 	/* Get the node for the memory block */
-	MEM_NODE* psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psMemRoot,
+	psDeleted = (MEM_NODE *)treapDelRec((TREAP_NODE **)&psMemRoot,
 										(void*)&sNode, memBlockCmp);
 
 
@@ -279,8 +283,8 @@ void memFree(const char *pFileName, SDWORD LineNumber, void *pMemToFree)
 	if (psDeleted)
 	{
 		/* The pointer is valid, check the buffer zones */
-		UBYTE* pMemBase = (UBYTE *)(pMemToFree) - SAFETY_ZONE_SIZE;
-		UWORD InvalidBottom = 0, InvalidTop = 0, i = 0;
+		pMemBase = (UBYTE *)(pMemToFree) - SAFETY_ZONE_SIZE;
+		InvalidBottom = InvalidTop = 0;
 
 		// Check wether out of bound writes have occured since memMalloc()
 		for(i=0; i<SAFETY_ZONE_SIZE; i++)
