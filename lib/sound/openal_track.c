@@ -48,8 +48,6 @@ typedef struct	SAMPLE_LIST
 
 static SAMPLE_LIST *active_samples = NULL;
 
-static ALfloat		listenerPos[3] = { 0.0, 0.0, 0.0 };
-
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
 
@@ -121,7 +119,7 @@ BOOL sound_InitLibrary( void )
 	debug(LOG_SOUND, "OpenAL Extensions : %s",alGetString(AL_EXTENSIONS));
 
 
-	alListenerfv( AL_POSITION, listenerPos );
+	alListener3i( AL_POSITION, 0, 0, 0 );
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
@@ -384,7 +382,6 @@ BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 	static char* buffer = NULL;
 	static unsigned int buffer_size = 0;
 	unsigned int size;
-	char seekbuf[1];
 
 	if (f == NULL) return FALSE;
 
@@ -557,24 +554,31 @@ void sound_SetSampleVolAll( int iVol )
 //
 void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
-	listenerPos[0] = iX;
-	listenerPos[1] = iY;
-	listenerPos[2] = iZ;
-	alListenerfv( AL_POSITION, listenerPos );
+	alListener3i( AL_POSITION, iX, iY, iZ );
 }
 
 //
 // =======================================================================================================================
 // =======================================================================================================================
 //
+/** sets player's sound orientation
+ * \param iX pitch in degree (current function implementation ignores this)
+ * \param iY roll in degree (current function implementation ignores this)
+ * \param iZ yaw in degree
+ */
 void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 	//~~~~~~~~~~~
 	float	ori[6];
 	//~~~~~~~~~~~
 
-	ori[0] = -sin( ((float) iZ) * M_PI / 180.0f );
-	ori[1] = cos( ((float) iZ) * M_PI / 180.0f );
+	// convert params to rad
+	float pitch = (float)iX * M_PI / 180;
+	float roll = (float)iY * M_PI / 180;
+	float yaw = (float)iZ * M_PI / 180;
+
+	ori[0] = -sin( yaw );
+	ori[1] = cos( yaw );
 	ori[2] = 0;
 	ori[3] = 0;
 	ori[4] = 0;
@@ -589,13 +593,22 @@ void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	float	pos[3];
-	float	vx = iX - listenerPos[0];
-	float	vy = iY - listenerPos[1];
-	float	vz = iZ - listenerPos[2];
-	float	l2 = vx * vx + vy * vy + vz * vz;
-	float	gain = 1 - sqrt( l2 ) * ATTENUATION_FACTOR;
+	// coordinates
+	float	listenerX, listenerY, listenerZ, dX, dY, dZ;
+
+	// calculation results
+	float	distance, gain;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	// compute distance
+	alGetListener3f( AL_POSITION, &listenerX, &listenerY, &listenerZ );
+	dX = iX - listenerX; // distances on all axis
+	dY = iY - listenerY;
+	dZ = iZ - listenerZ;
+	distance = sqrt(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
+
+	// compute gain
+	gain = 1 - distance * ATTENUATION_FACTOR;
 
 	if ( gain < 0.0 )
 	{
@@ -604,10 +617,7 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 
 	alSourcef( iSample, AL_GAIN, gain * sfx3d_volume );
 
-	pos[0] = iX;
-	pos[1] = iY;
-	pos[2] = iZ;
-	alSourcefv( iSample, AL_POSITION, pos );
+	alSource3i( iSample, AL_POSITION, iX, iY, iZ );
 }
 
 //*
