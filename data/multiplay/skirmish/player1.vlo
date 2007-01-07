@@ -33,6 +33,7 @@ run
 	sensorTower		STRUCTURESTAT		"Sys-SensoTower02"
 	lassat			STRUCTURESTAT		"A0LasSatCommand"
 	nexusDefence	RESEARCHSTAT		"R-Sys-Resistance-Circuits"
+	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	// incendry emplacements.
 	numIncendrys	INT					8
@@ -75,7 +76,17 @@ run
 	structs[11]		STRUCTURESTAT		"X-Super-MassDriver"
 	structs[12]		STRUCTURESTAT		"X-Super-Missile"
 
-	
+	/* Base structures */
+	numBaseStruct	INT					8
+	baseStruct[0]	STRUCTURESTAT		"A0PowerGenerator"
+	baseStruct[1]	STRUCTURESTAT		"A0LightFactory"	
+	baseStruct[2]	STRUCTURESTAT		"A0CommandCentre"
+	baseStruct[3]	STRUCTURESTAT		"A0ResearchFacility"
+	baseStruct[4]	STRUCTURESTAT		"A0CyborgFactory"
+	baseStruct[5]	STRUCTURESTAT		"A0LasSatCommand"
+	baseStruct[6]	STRUCTURESTAT		"A0Sat-linkCentre"
+	baseStruct[7]	STRUCTURESTAT		"A0VTolFactory1"
+
 	// defensive structs.
 	numDefStructs	INT					22
 	defStructs[0]	STRUCTURESTAT		"PillBox1"

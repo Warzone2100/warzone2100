@@ -1,12 +1,34 @@
 /////////////////////////////////////////////////////////////////////
 // general ai for skirmish game
 /////////////////////////////////////////////////////////////////////
-// Warzone2100, Pumpkin Studios, 
+// Warzone2100, Pumpkin Studios,
 // alex lee.98/99.
 //
 /////////////////////////////////////////////////////////////////////
 
-public	INT				player;				// player for this instance.
+// These are final rules of the lexical parser
+#define	R_REQUEST_HELP			"help me"
+#define	R_REQUEST_BEACON		"drop a beacon"
+#define	R_REPORT_SAFETY			"i'm ok"
+
+// These are our own messages - lexical parser should be able to handle them
+#define M_REQUEST_HELP			"help me!!"
+#define M_REQUEST_BEACON		"drop a beacon"
+#define M_AFFIRMATIVE_OK		"ok"
+#define M_AFFIRMATIVE_ROGER		"roger"
+#define M_ANNOYED				"bug off"
+#define M_HELPERS_KILLED		"that was all I had.."
+
+// Base threat range in world units
+#define	W_BASE_THREAT_RANGE		(15 * 128)
+#define ALL_ALLIES				-1
+#define	MAX_PLAYERS				8
+
+// Delay before we repeat our request, in 1/10 of a second
+#define HELP_REQUEST_INTERVAL	(3 * 60 * 10)
+#define HELP_TIMEOUT			(6 * 60 * 10)
+
+public	INT				player;			// player for this instance.
 public	INT				tileExpand;			// rate of exploration
 
 public	INT				numScouts;			// aim for...
@@ -15,9 +37,10 @@ public	INT				numAttackers;
 
 // structures
 private INT				baseX,baseY,minx,miny,maxx,maxy;
-public	INT				numStructs,numIncendrys,numDefStructs,numExtraStructs,numWallWeaps;							
+public	INT				numStructs,numIncendrys,numDefStructs,numExtraStructs,numWallWeaps,numBaseStruct;
 public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[6],structChoice[5],wallWeaps[11];
-public	STRUCTURESTAT	sensorTower,wallStruct,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,vtolDefStruct[5],vtolPad,vtolFactory,repairFacility;
+public	STRUCTURESTAT	sensorTower,wallStruct,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
+						vtolDefStruct[5],vtolPad,vtolFactory,repairFacility,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
 public	INT				extraStruct;
 
@@ -34,7 +57,7 @@ public	INT				numVtolTemplates;
 public	TEMPLATE		sense[11];
 public	INT				numSenseTemplates;
 
-public	TEMPLATE		constructor,repairUnit;				
+public	TEMPLATE		constructor,repairUnit;
 public	INT				numCyborgs,numRepairUnits;
 private INT				currentCyborgs,currentCyborgTemplate;
 
@@ -70,8 +93,11 @@ private BASEOBJ			baseobj,baseobj2;
 private INT				count,count2,result,result2,tempx,tempy;
 private BOOL			boolResult,boolResult2;
 
-private BOOL			powerSave;
+private BOOL			powerSave,_DEBUG;
 private	INT				allianceTime[8];
+private INT				sender,x,y,beaconX[8],beaconY[8],tBeacon[8],tBeaconTimeout,
+						tLastHelpRequest,lastHelpPlayer,tHelp,helpX,helpY;
+private string			message;
 
 /////////////////////////////////////////////////////////////////////
 // triggers.
@@ -104,17 +130,45 @@ trigger defendWatchTr				(CALL_STRUCT_ATTACKED, player, ref structure, ref baseo
 trigger defendReturnTr				(every,	500	);
 trigger doResearchTr				(every, 450 );
 trigger vtolDefendTr				(CALL_STRUCT_ATTACKED, player, ref structure, ref baseobj);
-trigger vtolStructsTr				(every, 360);		
-trigger buildVtolsTr				(every, 360);		
-trigger vtolAttackTr				(every, 460);			
+trigger vtolStructsTr				(every, 360);
+trigger buildVtolsTr				(every, 360);
+trigger vtolAttackTr				(every, 460);
 trigger vtolEnablerTr				(every, 2100);
 trigger takeoverTr					(CALL_UNITTAKEOVER, ref droid);
 trigger useLassatTr					(every, 3000);
-trigger reassignTr					(CALL_PLAYERLEFT,count);	
+trigger reassignTr					(CALL_PLAYERLEFT,count);
 trigger formAllianceEventTr			(every,170);
 trigger breakAllianceEventTr		(every,3000);
 trigger difficultyModifierTr		(every,600);
 trigger humanAllianceTr				(CALL_ALLIANCEOFFER,ref count, ref count2);
+trigger multiMsgTr					(CALL_AI_MSG, player, ref sender, ref message);
+trigger	beaconTr					(CALL_BEACON, player, ref sender, ref x, ref y, ref message);
+trigger watchBaseThreatTr			(every, 120);
+trigger manageAllyHelpTr			(every, 80);
+
+/* Events */
+event	multiMsgEv;
+event	beaconEv;
+event	watchBaseThreat;
+event	manageAllyHelp;
+
+/* Function prototypes */
+function bool haveBeacon(int _player);
+function bool beaconTimeout(int _player);
+function void processCommand(string _message, int _sender, bool _bBlipMessage);
+function bool helpPlayer(int _playerToHelp, int _helpX, int _helpY);
+function void messageAlly(int _playerToMessage, string _message);
+function bool canSeeAllies();
+function bool baseInTrouble();
+function void requestHelp(int _helpX, int _helpY);
+function bool helpAllyTimeout();
+function void stopHelpingAlly();
+function bool canStopHelpingAlly();
+function bool helpingAlly();
+function bool allyBaseAtLoc(int _ally, int _x, int _y);
+function string m_affirmative();
+function bool attemptToHelp(int _playerToHelp, int _x, int _y);
+function bool haveHelpers();
 
 /////////////////////////////////////////////////////////////////////
 // HouseKeeping
@@ -122,15 +176,25 @@ trigger humanAllianceTr				(CALL_ALLIANCEOFFER,ref count, ref count2);
 event initialisedEvent(CALL_GAMEINIT)
 {
 	// initialise
+	_DEBUG = FALSE;
+	dbgMsgOn(player, _DEBUG);
 	extraStruct = 0;
 	numRepairUnits = 0;
 	allOutAttack = NULLOBJECT;
 	currentCyborgTemplate = 0;
 	powerSave = FALSE;
-	
+
+	tBeaconTimeout = 30;	//in secs
+	tLastHelpRequest = 0;	//when we requested help for the last time
+
+	lastHelpPlayer = -1;		//we are not currently helping anyone
+	tHelp = -1;					//when we started helping last time
+	helpX = -1;
+	helpY = -1;
+
 	// setup build group
-	//all initial droids are in buildgroup! 
-	groupAddArea(buildGroup, player, 0, 0, (mapWidth*128), (mapHeight*128));  
+	//all initial droids are in buildgroup!
+	groupAddArea(buildGroup, player, 0, 0, (mapWidth*128), (mapHeight*128));
 	initGetFeature(oilRes,player,player);		// use bucket = player
 
 	// note where our base is.
@@ -149,11 +213,11 @@ event initialisedEvent(CALL_GAMEINIT)
 
 	// defence.
 	defendbusy = FALSE;
-	
+
 	// setup scouts
 	structure = getStructure(factory, player);
 	if(structure != NULLOBJECT)
-	{	
+	{
 		scoutTLX		= structure.x;
 		scoutTLY		= structure.y;
 	}
@@ -170,7 +234,7 @@ event initialisedEvent(CALL_GAMEINIT)
 
 
 	// clear the alliance array...
-	allianceTime[0] = 0;		
+	allianceTime[0] = 0;
 	allianceTime[1] = 0;
 	allianceTime[2] = 0;
 	allianceTime[3] = 0;
@@ -184,9 +248,9 @@ event initialisedEvent(CALL_GAMEINIT)
 // initial force setup thing. plonk down a force.
 event givehelp(every, 100)
 {
- 	if( (player == selectedPlayer) or (not myResponsibility(player)) )
+ 	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
 	{
-		setEventTrigger(givehelp,	inactive);			
+		setEventTrigger(givehelp,	inactive);
 	}
 	else
 	{
@@ -204,19 +268,20 @@ event givehelp(every, 100)
 				{
 					tempx = baseX;
 					tempy = baseY;
-					 
-				
+
+
 					boolResult = pickStructLocation(defStructs[0], ref tempx, ref tempy,player);
 					if(boolResult == TRUE)
 					{
-						addDroid(tmpl[ random(6) ]  , tempx, tempy, player);
+						droid = addDroid(tmpl[ random(6) ]  , tempx, tempy, player);
+						//groupAddDroid(defendGroup, droid);
 					}
 
 					count = count + 1;
 				}
 			}
 		}
-		setEventTrigger(givehelp,	inactive);			
+		setEventTrigger(givehelp,	inactive);
 
 	}
 }
@@ -225,9 +290,9 @@ event givehelp(every, 100)
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
 	{
-		setEventTrigger(basedetails,	inactive);			
+		setEventTrigger(basedetails,	inactive);
 	}
 	else
 	{
@@ -237,13 +302,13 @@ event basedetails(basedetailsTr)
 		miny = (mapHeight*128);
 		minx = (mapWidth*128);
 
-		// now find the extremities of our vital structures.	
+		// now find the extremities of our vital structures.
 		count = 0;
 		while(count < numStructs)
 		{
-			initEnumStruct(FALSE,structs[count],player,player);					
+			initEnumStruct(FALSE,structs[count],player,player);
 			structure= enumStruct();
-			while(structure != NULLOBJECT)	
+			while(structure != NULLOBJECT)
 			{
 				if(structure.x < minx)
 				{
@@ -251,7 +316,7 @@ event basedetails(basedetailsTr)
 				}
 				if(structure.x > maxx)
 				{
-					maxx = structure.x;	
+					maxx = structure.x;
 				}
 				if(structure.y < miny)
 				{
@@ -274,9 +339,9 @@ event basedetails(basedetailsTr)
 // build derricks on oil.
 event buildDerrick(buildDerrickTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(buildDerrick,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(buildDerrick,	inactive);
 	}
 	else
 	{
@@ -326,9 +391,9 @@ event buildDerrick(buildDerrickTr)
 // if idle and derrick in range and no defense then build defense, else ret to base .
 event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(buildOilDefenseOrRetreat,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(buildOilDefenseOrRetreat,	inactive);
 	}
 	else
 	{
@@ -339,13 +404,13 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 		{
 			if(droid.order == DORDER_NONE)
 			{
-				// if in range of a derrick				 
+				// if in range of a derrick
 				structure = structureBuiltInRange(derrick, droid.x, droid.y, (5*128), player);
 
 				// if inside base limits then presume ok..
 				if( structure != NULLOBJECT)
 				{
-					if((structure.x > minx) and (structure.y > miny) and (structure.x < maxx) and (structure.y <maxy))	
+					if((structure.x > minx) and (structure.y > miny) and (structure.x < maxx) and (structure.y <maxy))
 					{
 						structure = NULLOBJECT;
 					}
@@ -355,15 +420,15 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 				{
 					buildX = structure.x;
 					buildY = structure.y;
-					
+
 					count = 0;							// if derrick has no defense near it.
 					result = 0;
 					while(count < numDefStructs)
-					{	
+					{
 						structure = structureBuiltInRange(defStructs[count], buildX, buildX,(3*128), player);
 						if(structure != NULLOBJECT)
-						{				
-							result = result + 1;							// found a defense. 
+						{
+							result = result + 1;							// found a defense.
 						}
 						count = count + 1;
 					}
@@ -390,7 +455,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 
 								structChoice[count2] = defStructs[count];
 								count2 = count2 + 1;
-								
+
 							}
 							count = count - 1;
 						}
@@ -398,33 +463,33 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 						if(count2 > 0)
 						{
 							count = random(count2);						 //count = choice!
-							// pick a location 
+							// pick a location
 							boolResult = pickStructLocation(structChoice[count], ref buildX, ref buildY,player);
 							if(boolResult == TRUE)
-							{	
+							{
 								// build it.
 								orderDroidStatsLoc(droid, DORDER_BUILD,structChoice[count], buildX,buildY);
 							}
-						}				
+						}
 					}
 					else
-					{	
-						structure = structureBuiltInRange(playerHQ, droid.x, droid.y, (5*128), player);	
+					{
+						structure = structureBuiltInRange(playerHQ, droid.x, droid.y, (5*128), player);
 						if(structure == NULLOBJECT)
 						{
 							orderDroid(droid,DORDER_RTB);				// return to base;
 						}
-					}					
+					}
 				}
 				else
 				{
-					structure = structureBuiltInRange(playerHQ, droid.x, droid.y, (5*128), player);	
+					structure = structureBuiltInRange(playerHQ, droid.x, droid.y, (5*128), player);
 					if(structure == NULLOBJECT)
 					{
 						orderDroid(droid,DORDER_RTB);					// return to base;
 					}
 				}
-			}	
+			}
 			droid = iterateGroup(buildGroup);
 		}
 	}
@@ -434,44 +499,44 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 //mortar etc.. rules. build sensor towers and emplacements.
 event incendry(incendryTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(incendry,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(incendry,	inactive);
 	}
 	else
 	{
 		initEnumStruct(FALSE,sensorTower,player,player);
-		
+
 		count = 0;
 		structure = enumStruct();
-		while(structure != NULLOBJECT) 
+		while(structure != NULLOBJECT)
 		{
 			count = count + 1;
 			structure = enumStruct();
 		}
-	
+
 		if(count < (gameTime/4200) )		// every 7 mins
 		{
 			// if not found build a sensor tower.
 			// find a place to build.
 			buildX = 0;
 			buildY = 0;
-			initEnumStruct(FALSE,derrick,player,player);			
+			initEnumStruct(FALSE,derrick,player,player);
 			structure= enumStruct();
 			while(structure != NULLOBJECT)
 			{
-				count = 0;			
+				count = 0;
 				result = 0;
 				while(count < numDefStructs)
-				{	
+				{
 					structure2 = structureBuiltInRange(defStructs[count], structure.x, structure.y,(4*128), player);
 					if(structure2 != NULLOBJECT)
-					{				
-						result = result + 1;				
+					{
+						result = result + 1;
 					}
 					count = count + 1;
 				}
-				
+
 				// check for sensor nearby,
 				structure2 = structureBuiltInRange(sensorTower, structure.x, structure.y,(5*128), player);
 				if(structure2 != NULLOBJECT)
@@ -490,14 +555,14 @@ event incendry(incendryTr)
 					structure = enumStruct();
 				}
 			}
-		
+
 			if(buildX != 0)
 			{
 				boolResult = pickStructLocation(sensorTower, ref buildX, ref buildY,player);	// pick spot.
 				if(boolResult == TRUE)
 				{
 					// find unit
-					initIterateGroup(buildGroup);				
+					initIterateGroup(buildGroup);
 					droid = iterateGroup(buildGroup);
 					while(droid != NULLOBJECT)
 					{
@@ -510,7 +575,7 @@ event incendry(incendryTr)
 						{
 							droid = iterateGroup(buildGroup);
 						}
-					}	
+					}
 				}
 			}
 		}
@@ -518,22 +583,22 @@ event incendry(incendryTr)
 		{
 			// find a sensor tower with least incencdry structs around it..
 			buildX = 0;
-			buildY = 0;	
+			buildY = 0;
 
-			initEnumStruct(FALSE,sensorTower,player,player);			
+			initEnumStruct(FALSE,sensorTower,player,player);
 			structure= enumStruct();
 			count = 999;
 			while(structure != NULLOBJECT)
 			{
-				// count incendrys near this tower.		
+				// count incendrys near this tower.
 				result = 0;
 				count2 = 0;
 				while(count2 < numIncendrys)
-				{	
+				{
 					structure2 = structureBuiltInRange(incendrys[count2], structure.x, structure.y,(4*128), player);
 					if(structure2 != NULLOBJECT)
-					{				
-						result = result + 1;				
+					{
+						result = result + 1;
 					}
 					count2 = count2 + 1;
 				}
@@ -565,8 +630,8 @@ event incendry(incendryTr)
 						count = count - 1;
 					}
 				}
-				
-			
+
+
 				// find a unit and build an incendry device.
 				if(result != 99)
 				{
@@ -574,7 +639,7 @@ event incendry(incendryTr)
 					if(boolResult == TRUE)
 					{
 
-						initIterateGroup(buildGroup);				
+						initIterateGroup(buildGroup);
 						droid = iterateGroup(buildGroup);
 						while(droid != NULLOBJECT)
 						{
@@ -584,8 +649,8 @@ event incendry(incendryTr)
 							}
 							droid = iterateGroup(buildGroup);
 						}
-					}	
-				}	
+					}
+				}
 			}
 		}
 
@@ -601,38 +666,38 @@ event incendry(incendryTr)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(buildPowerGeneratorsTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(buildPowerGenerators,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(buildPowerGenerators,	inactive);
 	}
 	else
 	{
 		initEnumStruct(FALSE,derrick,player,player);					// count = numderricks
 		structure= enumStruct();
 		count	 = 0;
-		while(structure != NULLOBJECT)	
+		while(structure != NULLOBJECT)
 		{
 			count = count + 1;
 			structure= enumStruct();
 		}
-			
+
 		initEnumStruct(FALSE,powGen,player,player);					// count2 = numpowgens
 		structure= enumStruct();
 		count2	 = 0;
-		while(structure != NULLOBJECT)	
+		while(structure != NULLOBJECT)
 		{
 			count2 = count2 + 1;
 			structure= enumStruct();
 		}
-								
+
 		if( (count2 * 4) < count )								// if we need powergen
 		{
 			buildX = baseX;										// try build powergen.
 			buildY = baseY;
 			boolResult = pickStructLocation(powGen, ref buildX, ref buildY,player);
 			if(boolResult == TRUE)
-			{	
-				initIterateGroup(buildGroup);				
+			{
+				initIterateGroup(buildGroup);
 				droid = iterateGroup(buildGroup);
 				while(droid != NULLOBJECT)
 				{
@@ -641,8 +706,8 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 						orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
 					}
 					droid = iterateGroup(buildGroup);
-				}	
-					
+				}
+
 			}
 		}
 	}
@@ -653,9 +718,9 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 // ensure we have everything in the vital structs list.
 event buildBase(buildBaseTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(buildBase,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(buildBase,	inactive);
 	}
 	else
 	{
@@ -670,15 +735,15 @@ event buildBase(buildBaseTr)
 				{
 					if(isStructureAvailable(structs[count],player))
 					{
-						buildX = baseX;						// pick a location 
+						buildX = baseX;						// pick a location
 						buildY = baseY;
 						boolResult = pickStructLocation(structs[count], ref buildX, ref buildY,player);
 						if(boolResult == TRUE)
-						{	
+						{
 							initIterateGroup(buildGroup);				// find idle droids in build group.
 							droid = iterateGroup(buildGroup);
 							while(droid != NULLOBJECT)
-							{				
+							{
 								if((droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
 								{
 									orderDroidStatsLoc(droid, DORDER_BUILD,structs[count], buildX,buildY);	// build it
@@ -699,9 +764,9 @@ event buildBase(buildBaseTr)
 event buildExpand( buildExpandTr )
 {
 
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(buildExpand,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(buildExpand,inactive);
 	}
 	else
 	{
@@ -711,18 +776,18 @@ event buildExpand( buildExpandTr )
 			extraStruct = 0;
 		}
 
-		buildX = baseX;						// pick a location 
+		buildX = baseX;						// pick a location
 		buildY = baseY;
 		boolResult = pickStructLocation(extraStructs[extraStruct], ref buildX, ref buildY,player);
-	
+
 		if(boolResult == TRUE)
-		{	
+		{
 			initIterateGroup(buildGroup);				// find idle droids in build group.
 			droid = iterateGroup(buildGroup);
 			while(droid != NULLOBJECT)
 			{
 				if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
-				{	
+				{
 					orderDroidStatsLoc(droid, DORDER_BUILD,extraStructs[extraStruct], buildX,buildY);// build it.
 				}
 				droid = iterateGroup(buildGroup);
@@ -737,9 +802,9 @@ event buildExpand( buildExpandTr )
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(upgradeStructures,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(upgradeStructures,inactive);
 	}
 	else
 	{
@@ -748,48 +813,48 @@ event upgradeStructures(upgradeStructuresTr )
 		while(droid != NULLOBJECT)
 		{
 			if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
-			{	
+			{
 				// got an idle constructor vehicle.
 				//powergen
-				initEnumStruct(FALSE,powGen,player,player);									
+				initEnumStruct(FALSE,powGen,player,player);
 				structure= enumStruct();
 				while(structure != NULLOBJECT)
 				{
 					// if upgrade is available && struct is not upgraded
-					if( isStructureAvailable(powModule,player) and (not testStructureModule(player, structure, 0)))			
+					if( isStructureAvailable(powModule,player) and (not testStructureModule(player, structure, 0)))
 					{
-						orderDroidStatsLoc(droid,DORDER_BUILD,powModule, structure.x,structure.y);// upgrade it.				
+						orderDroidStatsLoc(droid,DORDER_BUILD,powModule, structure.x,structure.y);// upgrade it.
 					}
 					structure= enumStruct();
 				}
-			
+
 				//factory
 				if(droid.order != DORDER_BUILD)
 				{
 					initEnumStruct(FALSE,factory,player,player);
 					structure= enumStruct();
-					while(structure != NULLOBJECT)	
+					while(structure != NULLOBJECT)
 					{
 						// if upgrade is available && struct is not upgraded
-						if( isStructureAvailable(facModule,player) and (skGetFactoryCapacity(structure) < 2 ))			
+						if( isStructureAvailable(facModule,player) and (skGetFactoryCapacity(structure) < 2 ))
 						{
-							orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.			
+							orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.
 						}
 						structure= enumStruct();
 					}
-				}	
+				}
 
 				//research
 				if(droid.order != DORDER_BUILD)
 				{
 					initEnumStruct(FALSE,resLab,player,player);
 					structure= enumStruct();
-					while(structure != NULLOBJECT)	
+					while(structure != NULLOBJECT)
 					{
 						// if upgrade is available && struct is not upgraded
-						if( isStructureAvailable(resModule,player) and (not testStructureModule(player, structure, 0)))			
-						{			
-							orderDroidStatsLoc(droid, DORDER_BUILD,resModule, structure.x,structure.y);	// upgrade it.			
+						if( isStructureAvailable(resModule,player) and (not testStructureModule(player, structure, 0)))
+						{
+							orderDroidStatsLoc(droid, DORDER_BUILD,resModule, structure.x,structure.y);	// upgrade it.
 						}
 						structure= enumStruct();
 					}
@@ -800,45 +865,45 @@ event upgradeStructures(upgradeStructuresTr )
 				{
 					initEnumStruct(FALSE,vtolFactory,player,player);
 					structure= enumStruct();
-					while(structure != NULLOBJECT)	
+					while(structure != NULLOBJECT)
 					{
 						// if upgrade is available && struct is not upgraded
-						if( isStructureAvailable(facModule,player) and (not testStructureModule(player, structure, 0)))			
-						{			
-							orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.			
+						if( isStructureAvailable(facModule,player) and (not testStructureModule(player, structure, 0)))
+						{
+							orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.
 						}
 						structure= enumStruct();
-					}		
-				}	
+					}
+				}
 			}
-			droid = iterateGroup(buildGroup);	
+			droid = iterateGroup(buildGroup);
 		}
 	}
 }
 
 
 /////////////////////////////////////////////////////////////////////
-//	Finish Building Part Built Structures 
+//	Finish Building Part Built Structures
 event finishStructs(finishStructsTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(finishStructs,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(finishStructs,	inactive);
 	}
 	else
 	{
 		initEnumStruct(TRUE,factory,player,player);
 		structure= enumStruct();
-		while(structure != NULLOBJECT)	
-		{	
+		while(structure != NULLOBJECT)
+		{
 			if(not structureComplete(structure))
 			{
 				initIterateGroup(buildGroup);				// find idle droids in build group.
 				droid = iterateGroup(buildGroup);
 				while(droid != NULLOBJECT)
 				{
-					if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD)) 
-					{	
+					if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+					{
 						orderDroidObj(droid,DORDER_HELPBUILD,structure);
 					}
 					droid = iterateGroup(buildGroup);
@@ -856,9 +921,9 @@ event finishStructs(finishStructsTr)
 
 event newfortify(fortifyTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(newfortify,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(newfortify,	inactive);
 	}
 	else
 	{
@@ -868,9 +933,9 @@ event newfortify(fortifyTr)
 		while((boolResult == FALSE) and (droid != NULLOBJECT))
 		{
 			if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
-			{	
+			{
 				boolResult = TRUE;					// dont do this again!
-							
+
 				tempx = baseX;
 				tempy = baseY;
 
@@ -892,7 +957,7 @@ event newfortify(fortifyTr)
 					count = random(count2);
 					skDefenseLocation(ref tempx,ref tempy,wallStruct,structChoice[count],droid,player);
 				}
-				
+
 			}
 			droid = iterateGroup(buildGroup);
 
@@ -904,12 +969,12 @@ event newfortify(fortifyTr)
 /////////////////////////////////////////////////////////////////////
 // droid building rules
 /////////////////////////////////////////////////////////////////////
-// deal with a droid being built 
+// deal with a droid being built
 event droidBuilt(droidBuiltTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(droidBuilt,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(droidBuilt,	inactive);
 	}
 	else
 	{
@@ -923,8 +988,8 @@ event droidBuilt(droidBuiltTr)
 			{
 				numRepairUnits = numRepairUnits + 1;
 			}
-			if(droid.droidType == DROID_CONSTRUCT)				// if not constructor droid 
-			{	
+			if(droid.droidType == DROID_CONSTRUCT)				// if not constructor droid
+			{
 				groupAddDroid(buildGroup, droid);
 			}
 			else
@@ -934,9 +999,9 @@ event droidBuilt(droidBuiltTr)
 					groupAddDroid(defendGroup, droid);
 				}
 				else
-				{	
+				{
 					if(scoutGroup.members < numScouts)
-					{	
+					{
 						groupAddDroid(scoutGroup, droid);
 					}
 					else if( attackGroup.members < numAttackers)
@@ -947,9 +1012,9 @@ event droidBuilt(droidBuiltTr)
 					{
 						groupAddDroid(defendGroup, droid);
 					}
-				
+
 					else		// just make them scouts.
-					{	
+					{
 						if(attackGroup.members > scoutGroup.members)
 						{
 							groupAddDroid(scoutGroup, droid);
@@ -963,7 +1028,7 @@ event droidBuilt(droidBuiltTr)
 			}
 
 			structure = getStructure(repairFacility,player);
-			if(structure == NULLOBJECT)				
+			if(structure == NULLOBJECT)
 			{
 				setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
 			}
@@ -971,19 +1036,19 @@ event droidBuilt(droidBuiltTr)
 			{
 				setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);
 			}
-		
+
 
 		}
-	}	
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
-// deal with attacks. 
+// deal with attacks.
 event droidDestroyed(droidDestroyedTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(droidDestroyed,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(droidDestroyed,inactive);
 	}
 	else
 	{
@@ -992,7 +1057,7 @@ event droidDestroyed(droidDestroyedTr)
 			numRepairUnits = numRepairUnits - 1;
 		}
 
-		if(droid.droidType == DROID_CONSTRUCT)					// if constructor droid 
+		if(droid.droidType == DROID_CONSTRUCT)					// if constructor droid
 		{
 			initEnumStruct(FALSE,factory,player,player);
 			structure= enumStruct();							// find factory.
@@ -1011,12 +1076,12 @@ event droidDestroyed(droidDestroyedTr)
 // build more con droids.
 event conDroids(conDroidsTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(conDroids,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(conDroids,inactive);
 	}
 	else
-	{	
+	{
 		initEnumStruct(FALSE,factory,player,player);
 		structure= enumStruct();							// find factory.
 
@@ -1031,9 +1096,9 @@ event conDroids(conDroidsTr)
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(repairDroids,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(repairDroids,inactive);
 	}
 	else
 	{
@@ -1055,9 +1120,9 @@ event repairDroids(repairDroidsTr)
 /////////////////////////////////////////////////////////////////////
 event factoryEvent(factoryEventTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(factoryEvent,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(factoryEvent,	inactive);
 	}
 	else
 	{
@@ -1069,7 +1134,7 @@ event factoryEvent(factoryEventTr)
 			while(structure != NULLOBJECT)
 			{
 				if( structureIdle(structure) == TRUE)
-				{	
+				{
 
 					count = numTemplates - 1;
 					count2 = 0;
@@ -1086,9 +1151,9 @@ event factoryEvent(factoryEventTr)
 					if(count2 > 0)
 					{
 						buildDroid(tmplChoice[random(count2)],structure,player,1);
-					}				
+					}
 				}
-				structure= enumStruct();		
+				structure= enumStruct();
 
 			}
 		}
@@ -1099,9 +1164,9 @@ event factoryEvent(factoryEventTr)
 // put cyborg factories to work
 event cyborgFactoryEvent(cyborgFactoryEventTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(cyborgFactoryEvent,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(cyborgFactoryEvent,	inactive);
 	}
 	else
 	{
@@ -1111,7 +1176,7 @@ event cyborgFactoryEvent(cyborgFactoryEventTr)
 		while(structure != NULLOBJECT)
 		{
 			if( structureIdle(structure) == TRUE)
-			{	
+			{
 				if( (defendGroup.members < numCyborgs) and (getDroidCount(player) < 80) )
 				{
 					count = 3;
@@ -1133,12 +1198,12 @@ event cyborgFactoryEvent(cyborgFactoryEventTr)
 					else
 					{
 						buildDroid(cybTempl[currentCyborgTemplate], structure, player, 1);
-					}	
-				}			
+					}
+				}
 			}
 			structure= enumStruct();							// find factory.
 		}
-		
+
 		// increment cyborg template counter, wrapping if required.
 		currentCyborgTemplate = currentCyborgTemplate + 1;
 		if( currentCyborgTemplate > 3)
@@ -1156,12 +1221,12 @@ event cyborgFactoryEvent(cyborgFactoryEventTr)
 // scout an area
 event chooseScoutArea(chooseScoutAreaTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(chooseScoutArea,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(chooseScoutArea,	inactive);
 	}
 	else
-	{	
+	{
 		scoutX = scoutTLX + random(scoutW);
 		scoutY = scoutTLY + random(scoutH);
 	}
@@ -1172,9 +1237,9 @@ event chooseScoutArea(chooseScoutAreaTr)
 
 event expandScoutArea(expandScoutAreaTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(expandScoutArea,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(expandScoutArea,	inactive);
 	}
 	else
 	{
@@ -1219,16 +1284,16 @@ event expandScoutArea(expandScoutAreaTr)
 
 event scoutMain(scoutMainTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(scoutMain,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(scoutMain,	inactive);
 	}
 	else
 	{
 		// find any new scouts
 		// if scouts aren't busy, send them to a new spot.
 		if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
-		{	
+		{
 			orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
 		}
 	}
@@ -1238,15 +1303,15 @@ event scoutMain(scoutMainTr)
 // process new visibility reports
 event newObjectReport(newObjectReportTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(newObjectReport,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(newObjectReport,	inactive);
 	}
 	else
 	{
 		if( baseobj2 != NULLOBJECT )
 		{
-			if((baseobj2.type == OBJ_DROID) and (baseobj.player != player))				
+			if((baseobj2.type == OBJ_DROID) and (baseobj.player != player))
 			{
 				attackObj = baseobj;// got a new unseen  target from a scout.
 
@@ -1274,9 +1339,9 @@ event newObjectReport(newObjectReportTr)
 
 event takeover(takeoverTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(takeover,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(takeover,	inactive);
 	}
 	else
 	{
@@ -1289,16 +1354,16 @@ event takeover(takeoverTr)
 
 event takeoverDefend(takeoverTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(takeoverDefend,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(takeoverDefend,	inactive);
 	}
 	else
 	{
 		if( droid.player != player )
 		{
 			completeResearch(nexusDefence,player);
-			setEventTrigger(takeoverDefend,	inactive);			
+			setEventTrigger(takeoverDefend,	inactive);
 		}
 	}
 }
@@ -1306,20 +1371,20 @@ event takeoverDefend(takeoverTr)
 
 event useLassat(useLassatTr)
 {
-	
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(useLassat,	inactive);			
+
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(useLassat,	inactive);
 	}
 	else
 	{
 		// find my lassat
 		// fire it at my attack objective.
 		if(allOutAttack != NULLOBJECT)
-		{		
+		{
 			initEnumStruct(FALSE,lassat,player,player);
 			structure= enumStruct();
-			while(structure != NULLOBJECT)	
+			while(structure != NULLOBJECT)
 			{
 				if(structureComplete(structure) == TRUE)
 				{
@@ -1337,9 +1402,9 @@ event useLassat(useLassatTr)
 
 event findEnemy(attackStuffTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(findEnemy,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(findEnemy,	inactive);
 	}
 	else
 	{
@@ -1365,29 +1430,28 @@ event findEnemy(attackStuffTr)
 // send attack team out to cause trouble near things scout found.
 event attackStuff(attackStuffTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(attackStuff,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(attackStuff,	inactive);
 	}
 	else
 	{
-		if( idleGroup(attackGroup) >= (attackGroup.members /2)) 
-		{	
-			if(attackObj != NULLOBJECT)
+		if( idleGroup(attackGroup) >= (attackGroup.members /2))
+		{
+			if( (attackObj != NULLOBJECT) and (not helpingAlly()) )
 			{
 				if (not allianceExistsBetween(player, attackObj.player))
 				{
-					if(attackGroup.members > (6+random(6)) ) 
-					{		
+					if(attackGroup.members > (6+random(6)) )
+					{
 						orderGroupLoc(attackGroup, DORDER_SCOUT,attackObj.x,attackObj.y);
 					}
 					if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
-					{	
+					{
 						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
 					}
 				}
 			}
-
 		}
 	}
 }
@@ -1395,21 +1459,21 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(attackStuff,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(attackStuff,	inactive);
 	}
 	else
 	{
-		if( allOutAttack != NULLOBJECT)
-		{	
+		if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
+		{
 			if(not allianceExistsBetween(player, allOutAttack.player))
 			{
 				if( getDroidCount(player) > 40)	// plenty of units.
 				{
-						orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
-						orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-						orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+					orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
+					orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+					orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
 				}
 			}
 		}
@@ -1423,9 +1487,9 @@ event doAllOutAttack(allOutAttackTr)
 // defend attacked objects.
 event defendWatch(defendWatchTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(defendWatch,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(defendWatch,	inactive);
 	}
 	else
 	{
@@ -1439,18 +1503,18 @@ event defendWatch(defendWatchTr)
 					defendbusy = TRUE;
 					// if not too busy, attack.
 					if( idleGroup(defendGroup) >= (defendGroup.members /2) )
-					{			
+					{
 						orderGroupObj(defendGroup, DORDER_ATTACK, defendObj);
 					}
 
 					if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
-					{	
+					{
 						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
 					}
 
 				}
 			}
-		}		
+		}
 	}
 }
 
@@ -1458,9 +1522,9 @@ event defendWatch(defendWatchTr)
 // defenders  return after they are finished.
 event defendReturn(defendReturnTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(defendReturn,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(defendReturn,	inactive);
 	}
 	else
 	{
@@ -1479,9 +1543,9 @@ event defendReturn(defendReturnTr)
 
 event doResearch(doResearchTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(doResearch,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(doResearch,	inactive);
 	}
 	else
 	{
@@ -1489,7 +1553,7 @@ event doResearch(doResearchTr)
 		initEnumStruct(FALSE,resLab,player,player);
 		structure= enumStruct();
 		count = 0;
-		while(structure != NULLOBJECT)	
+		while(structure != NULLOBJECT)
 		{
 			skDoResearch(structure,player,0);
 			structure= enumStruct();
@@ -1506,9 +1570,9 @@ event doResearch(doResearchTr)
 // form alliances
 event formAllianceEvent(formAllianceEventTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(formAllianceEvent,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(formAllianceEvent,	inactive);
 	}
 	else
 	{
@@ -1529,7 +1593,7 @@ event formAllianceEvent(formAllianceEventTr)
 					}
 				}
 			}
-			count = count + 1;	
+			count = count + 1;
 		}
 	}
 }
@@ -1538,9 +1602,9 @@ event formAllianceEvent(formAllianceEventTr)
 // break the alliance too.
 event breakAllianceEvent(breakAllianceEventTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(breakAllianceEvent,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(breakAllianceEvent,	inactive);
 	}
 	else
 	{
@@ -1557,26 +1621,26 @@ event breakAllianceEvent(breakAllianceEventTr)
 						if( (random(30) == 1) and ( (gameTime - allianceTime[count]) > 6000) )	// rand and more than 10 minutes.
 						{
 							allianceTime[count] = gameTime;
-							breakAlliance(player,count); 
-						}	
-						
+							breakAlliance(player,count);
+						}
+
 						// rules for breaking alliances with humans.
 						// built within my base
 						if(numStructsInArea(count,minx,miny,maxx,maxy) > 1)
 						{
 							allianceTime[count] = gameTime;
-							breakAlliance(player,count); 
+							breakAlliance(player,count);
 						}
 
 						// you've got lots of units in my area.
 						if(numDroidsInArea(count,minx,miny,maxx,maxy) > 3)
 						{
 							allianceTime[count] = gameTime;
-							breakAlliance(player,count); 
+							breakAlliance(player,count);
 						}
-						
+
 						// you've wiped out one of my allies ??.
-					}		
+					}
 				}
 			}
 			count = count + 1;
@@ -1587,9 +1651,9 @@ event breakAllianceEvent(breakAllianceEventTr)
 /////////////////////////////////////////////////////////////////////
 event formHumanAlliances(humanAllianceTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(formHumanAlliances,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(formHumanAlliances,	inactive);
 	}
 	else
 	{
@@ -1629,7 +1693,7 @@ event formHumanAlliances(humanAllianceTr)
 						result = result + 1;
 					}
 				}
-			
+
 			}
 		}
 	}
@@ -1642,30 +1706,32 @@ event formHumanAlliances(humanAllianceTr)
 // bring forces back together to consolidate attacks
 event consolidateEvent(consolidateEventTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(consolidateEvent,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(consolidateEvent,	inactive);
 	}
 	else
 	{
-		if(random(3 ) == 1)				// order all droids home to rejoin forces.!
+		if(not helpingAlly())
 		{
-			orderGroupLoc(scoutGroup, DORDER_MOVE,baseX,baseY);
-			orderGroupLoc(defendGroup, DORDER_MOVE,baseX,baseY);
-		}
-
-		if(attackObj != NULLOBJECT)	// consolidate any ongoing attack.
-		{
-			if(not allianceExistsBetween(player, attackObj.player))
+			if(random(3 ) == 1)				// order all droids home to rejoin forces.!
 			{
-				orderGroupObj(attackGroup, DORDER_ATTACK,attackObj);
+				orderGroupLoc(scoutGroup, DORDER_MOVE,baseX,baseY);
+				orderGroupLoc(defendGroup, DORDER_MOVE,baseX,baseY);
+			}
+
+			if(attackObj != NULLOBJECT)	// consolidate any ongoing attack.
+			{
+				if(not allianceExistsBetween(player, attackObj.player))
+				{
+					orderGroupObj(attackGroup, DORDER_ATTACK,attackObj);
+				}
+			}
+			else
+			{
+				orderGroupLoc(attackGroup, DORDER_MOVE,baseX,baseY);
 			}
 		}
-		else
-		{
-			orderGroupLoc(attackGroup, DORDER_MOVE,baseX,baseY);
-		}
-
 	}
 }
 
@@ -1676,15 +1742,15 @@ event consolidateEvent(consolidateEventTr)
 // if running low on power put some power eating stuff on hold for a while.
 event managePower(managePowerTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(managePower,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(managePower,	inactive);
 	}
 	else
 	{
 		if( playerPower(player) < 250 )	// turn off some events.
 		{
-			powerSave = TRUE;	
+			powerSave = TRUE;
 
 //			setEventTrigger(fortify,			inactive);	// stop building defenses.
 			setEventTrigger(upgradeStructures,	inactive);	// stop building oil defenses.
@@ -1696,7 +1762,7 @@ event managePower(managePowerTr)
 			if(powerSave == TRUE)		// turn events back on.
 			{
 			powerSave = FALSE;
-				
+
 //			setEventTrigger(fortify,			fortifyTr);			 //  building defenses.
 			setEventTrigger(upgradeStructures,	upgradeStructuresTr);//  building oil defenses.
 		//	setEventTrigger(buildExpand,		buildExpandTr);		 //  building extra buildings.
@@ -1709,9 +1775,9 @@ event managePower(managePowerTr)
 
 event difficultyModifier(difficultyModifierTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(difficultyModifier,	inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(difficultyModifier,	inactive);
 	}
 	else
 	{
@@ -1725,17 +1791,17 @@ event difficultyModifier(difficultyModifierTr)
 // build vtol strucutures.
 event vtolStructs(inactive)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(vtolStructs,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(vtolStructs,inactive);
 	}
 	else
 	{
 		structure = getStructure(vtolFactory,player);	// if we dont have vtol factory
 		if(structure == NULLOBJECT)						// if missing build it.
-		{		
+		{
 			// build factory
-			buildX = baseX;								// pick a location 
+			buildX = baseX;								// pick a location
 			buildY = baseY;
 			boolResult = pickStructLocation(vtolFactory, ref buildX, ref buildY,player);
 			if(boolResult == TRUE)
@@ -1760,7 +1826,7 @@ event vtolStructs(inactive)
 			initEnumStruct(FALSE,vtolPad,player,player);
 			structure= enumStruct();
 			count	 = 0;
-			while(structure != NULLOBJECT)	
+			while(structure != NULLOBJECT)
 			{
 				count = count + 1;
 				structure= enumStruct();
@@ -1770,7 +1836,7 @@ event vtolStructs(inactive)
 			if(count < 3)
 			{
 				// build vtol rearm pads.
-				buildX = baseX;								// pick a location 
+				buildX = baseX;								// pick a location
 				buildY = baseY;
 				boolResult = pickStructLocation(vtolPad, ref buildX, ref buildY,player);
 				if(boolResult == TRUE)
@@ -1779,7 +1845,7 @@ event vtolStructs(inactive)
 					droid = iterateGroup(buildGroup);
 					while( droid != NULLOBJECT)
 					{
-						if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD)) 
+						if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
 						{
 							orderDroidStatsLoc(droid, DORDER_BUILD,vtolPad, buildX,buildY);
 						}
@@ -1799,17 +1865,17 @@ event vtolStructs(inactive)
 
 event buildVtols(inactive)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(buildVtols,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(buildVtols,inactive);
 	}
 	else
 	{
 		structure = getStructure(vtolPad,player);			// got vtol pads?
-		if(structure != NULLOBJECT)					
+		if(structure != NULLOBJECT)
 		{
-			structure = getStructure(vtolFactory,player);	// got a vtolfac?	
-			if(structure != NULLOBJECT)					
+			structure = getStructure(vtolFactory,player);	// got a vtolfac?
+			if(structure != NULLOBJECT)
 			{
 				if(vtolGroup.members < 5)					// got enough vtols?
 				{
@@ -1831,7 +1897,7 @@ event buildVtols(inactive)
 						if(count2 > 0)
 						{
 							buildDroid(tmplChoice[random(count2)],structure,player,1);
-						}			
+						}
 					}
 				}
 			}
@@ -1844,17 +1910,17 @@ event buildVtols(inactive)
 
 event vtolAttack(inactive)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(vtolAttack,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(vtolAttack,inactive);
 	}
 	else
 	{
 		// if vtol group is not busy..
 		if(  (idleGroup(vtolGroup) >= (vtolGroup.members /2)) and (vtolGroup.members > 2) )
-		{	
+		{
 			if(attackObj != NULLOBJECT)
-			{ 
+			{
 				if(not allianceExistsBetween(player, attackObj.player))
 				{
 					orderGroupObj(vtolGroup, DORDER_ATTACK,attackObj);	// get the attack target.
@@ -1880,9 +1946,9 @@ event vtolAttack(inactive)
 // watch for incoming vtols
 event vtolDefend(vtolDefendTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(vtolDefend,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(vtolDefend,inactive);
 	}
 	else
 	{
@@ -1894,9 +1960,9 @@ event vtolDefend(vtolDefendTr)
 				if(isVtol(objToDroid(baseobj)))
 				{
 					// activate other vtol functions..
-					setEventTrigger(vtolStructs,vtolStructsTr);			
-					setEventTrigger(buildVtols,	buildVtolsTr);			
-					setEventTrigger(vtolAttack,	vtolAttackTr);			
+					setEventTrigger(vtolStructs,vtolStructsTr);
+					setEventTrigger(buildVtols,	buildVtolsTr);
+					setEventTrigger(vtolAttack,	vtolAttackTr);
 
 					// build defenses.
 					initIterateGroup(buildGroup);		// find idle droids in build group.
@@ -1905,8 +1971,8 @@ event vtolDefend(vtolDefendTr)
 					while( droid != NULLOBJECT)
 					{
 						if( (structure != NULLOBJECT) and (droid.order != DORDER_BUILD) )
-						{	
-							buildX = structure.x;				
+						{
+							buildX = structure.x;
 							buildY = structure.y;
 							//	if ! vtol defense already built...
 
@@ -1930,12 +1996,12 @@ event vtolDefend(vtolDefendTr)
 //									boolResult2 = TRUE;
 								}
 							}
-							
+
 						}
 						droid = iterateGroup(buildGroup);
 					}
 				}
-			}	
+			}
 		}
 	}
 }
@@ -1943,20 +2009,20 @@ event vtolDefend(vtolDefendTr)
 /////////////////////////////////////////////////////////////////////
 event vtolEnabler(vtolEnablerTr)
 {
-	if( (player == selectedPlayer) or (not myResponsibility(player)) )
-	{	
-		setEventTrigger(vtolEnabler,inactive);			
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(vtolEnabler,inactive);
 	}
 	else
 	{
 		if( skVtolEnableCheck(player) )					// check to see if we have vtol technologies.
 		{
 			setEventTrigger(vtolEnabler,inactive);		// turn off this event.
-			setEventTrigger(vtolStructs,vtolStructsTr);	// activate other vtol functions..		
-			setEventTrigger(buildVtols,	buildVtolsTr);			
-			setEventTrigger(vtolAttack,	vtolAttackTr);	
+			setEventTrigger(vtolStructs,vtolStructsTr);	// activate other vtol functions..
+			setEventTrigger(buildVtols,	buildVtolsTr);
+			setEventTrigger(vtolAttack,	vtolAttackTr);
 		}
-	}	
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1973,7 +2039,7 @@ event reassignPlayers(reassignTr)
 	setEventTrigger(buildExpand,buildExpandTr );
 	setEventTrigger(upgradeStructures,upgradeStructuresTr );
 	setEventTrigger(finishStructs,finishStructsTr );
-	setEventTrigger(newfortify,fortifyTr );	
+	setEventTrigger(newfortify,fortifyTr );
 	setEventTrigger(droidBuilt,droidBuiltTr);
 	setEventTrigger(droidDestroyed,droidDestroyedTr);
 	setEventTrigger(conDroids,conDroidsTr);
@@ -2003,5 +2069,514 @@ event reassignPlayers(reassignTr)
 	setEventTrigger(vtolDefend,vtolDefendTr);
 	setEventTrigger(vtolEnabler,vtolEnablerTr);
 	setEventTrigger(formHumanAlliances,humanAllianceTr);
+	setEventTrigger(multiMsgEv, multiMsgTr);
+	setEventTrigger(beaconEv, beaconTr);
+	setEventTrigger(watchBaseThreat, watchBaseThreatTr);
+	setEventTrigger(manageAllyHelp, manageAllyHelpTr);
 }
 
+/* Returns true if we just received a beacon from a certain player */
+function bool haveBeacon(int _player)
+{
+		if((tBeacon[_player] > 0) and (not beaconTimeout(_player)))
+		{
+			return TRUE;	//have beacon for this player
+		}
+
+		return FALSE;
+}
+
+/* See if last beacon was placed long ago */
+function bool beaconTimeout(int _player)
+{
+	if((tBeacon[_player] > 0) and
+		((tBeacon[_player] + tBeaconTimeout) < (gameTime / 10)))	//not too long ago
+	{
+		return TRUE;	//this beacon is still 'fresh'
+	}
+
+	return FALSE;
+}
+
+/* Deal with beacons */
+event beaconEv(beaconTr)
+{
+	local	int			_players;
+	local	string		_processedString;
+
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(beaconEv,	inactive);
+		exit;
+	}
+
+	if(_DEBUG)
+		debug(player & ") beaconEv: from " & sender);
+
+	ASSERT(sender >= 0 and sender < 8,
+		"beaconEv: sender out of bounds: " & sender , player);
+
+	beaconX[sender] = x;
+	beaconY[sender] = y;
+	tBeacon[sender] = gameTime / 10;
+
+	processCommand(message, sender, TRUE);
+}
+
+/* Deal with a chat message */
+event multiMsgEv(multiMsgTr)
+{
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(multiMsgEv,	inactive);
+		exit;
+	}
+
+	if(_DEBUG)
+		debug(player & ") multiMsgEv: from " & sender);
+
+	if(not allianceExistsBetween(player, sender)){
+		exit;
+	}
+
+	if(sender == player){
+		exit;
+	}
+
+	processCommand(message, sender, FALSE);
+}
+
+/* Process multiplayer messages */
+function void processCommand(string _message, int _sender, bool _bBlipMessage)
+{
+	local	int 		_numMsgs,_curMsg,_players,_x,_y;
+	local	string		_msg,_processedString;
+
+	/* Extract semantic information */
+	_curMsg = 0;
+	_numMsgs = processChatMsg(_message);
+
+	debug(player & ") processCommand: '" & _message & "' from " & _sender);
+	dbg("processCommand: '" & _message & "' from " & _sender, player);
+	dbg("got " & _numMsgs & " commands", player);
+
+	/* Process all messages */
+	while(_curMsg < _numMsgs)
+	{
+		if(chatCmdIsPlayerAddressed(_curMsg, player))
+		{
+			dbg("i'm addressed", player);
+			_msg = getChatCmdDescription(_curMsg);
+
+			/* Someone requested help */
+			if(_msg == R_REQUEST_HELP)
+			{
+				dbg("'help' command", player);
+
+				if(haveBeacon(_sender))
+				{
+					dbg("got beacon", player);
+
+					_x = beaconX[_sender];
+					_y = beaconY[_sender];
+
+					if(attemptToHelp(_sender, _x, _y))
+					{
+						messageAlly(_sender, m_affirmative());
+					}
+				}
+				else
+				{
+					/* Ask player to drop a beacon so we would know where to help */
+					messageAlly(_sender, R_REQUEST_BEACON);
+				}
+			}
+			/* Someone requested a beacon from us -
+			 * did we request help and our beacon timed out??
+			 */
+			else if(_msg == M_REQUEST_BEACON)
+			{
+				/* If our base is really in trouble drop a beacon for the requester again */
+				if(baseInTrouble()){
+					dropBeacon(getPlayerName(player), _sender, player, baseX, baseY, 0);
+				}
+			}
+			else if(_msg == R_REPORT_SAFETY)
+			{
+				dbg("helping " & lastHelpPlayer, player);
+
+				/* Make sure we were helping him */
+				if(helpingAlly() and (lastHelpPlayer == _sender))
+				{
+					stopHelpingAlly();
+					messageAlly(_sender, m_affirmative());
+				}
+			}
+			else
+			{
+				dbg("unknown message", player);
+			}
+
+		}
+		else
+		{
+			dbg("i'm not addressed", player);
+		}
+
+		_curMsg++;
+	}
+}
+
+function bool attemptToHelp(int _playerToHelp, int _x, int _y)
+{
+	if(_playerToHelp < 0 or _playerToHelp >= MAX_PLAYERS){
+		return FALSE;
+	}
+
+	if(_x <= 0 or _y <= 0){
+		return FALSE;
+	}
+
+	dbg("attemptToHelp - checking", player);
+
+	if(not baseInTrouble())
+	{
+		dbg("i'm not in trouble", player);
+		if(not (helpingAlly() and (lastHelpPlayer != _playerToHelp)) )	//not helping any other ally
+		{
+			dbg("not busy helping", player);
+
+			//if(haveBeacon(_playerToHelp) and (attackGroup.members > 0))
+			if(haveHelpers() or _DEBUG)
+			{
+				//_x = beaconX[_playerToHelp];
+				//_y = beaconY[_playerToHelp];
+
+				dbg("got attackers", player);
+				if(allyBaseAtLoc(_playerToHelp, _x, _y))	//is he just trying to misuse us?
+				{
+					if(helpPlayer(_playerToHelp, _x, _y))
+					{
+						return TRUE;
+					}
+				}
+				else if( random(10) < 5)
+				{
+					dbg("ally needs no help", player);
+					messageAlly(_playerToHelp, M_ANNOYED);
+				}
+			}
+			//else
+			//{
+			//	/* Ask player to drop a beacon so we would know where to help */
+			//	messageAlly(_playerToHelp, R_REQUEST_BEACON);
+			//}
+		}
+		else if((lastHelpPlayer >= 0) and (lastHelpPlayer < MAX_PLAYERS))
+		{
+			messageAlly(_playerToHelp, "helping " & getPlayerName(lastHelpPlayer) & " already");
+		}
+	}
+
+	return FALSE;
+}
+
+/* Returns a random affirmative responce */
+function string m_affirmative()
+{
+	local int _rnd;
+
+	_rnd = random(4);
+	if(_rnd == 3)
+	{
+		return M_AFFIRMATIVE_ROGER;
+	}
+
+	return M_AFFIRMATIVE_OK;
+}
+
+/* See if there are any base structures belonging to ally at a certain location */
+function bool allyBaseAtLoc(int _ally, int _x, int _y)
+{
+	local int _structIndex;
+
+	if(_x <= 0 or _y <= 0){
+		return FALSE;
+	}
+
+	if(_ally < 0 or _ally >= MAX_PLAYERS){
+		return FALSE;
+	}
+
+	_structIndex = 0;
+	while(_structIndex < numBaseStruct)
+	{
+		if(numStructsByStatInRange(baseStruct[_structIndex], _x, _y, (7 * 128), player, _ally) > 0 )
+		{
+			return TRUE;
+		}
+
+		_structIndex++;
+	}
+
+	return FALSE;
+}
+
+/* Attempt to help a player */
+function bool helpPlayer(int _playerToHelp, int _helpX, int _helpY)
+{
+	dbg("attempting to help " & _playerToHelp, player);
+
+	if(_DEBUG)
+		debug(player & ") helpPlayer: '" & _playerToHelp);
+
+	/* Can only help allies */
+	if(not allianceExistsBetween(player, _playerToHelp)){
+		return FALSE;
+	}
+
+	if(_playerToHelp == player){
+		return FALSE;
+	}
+
+	tHelp = gameTime;
+	lastHelpPlayer = _playerToHelp;
+	helpX = _helpX;
+	helpY = _helpY;
+
+	/* Scouts and attackers go to help */
+	orderGroupLoc(scoutGroup, DORDER_SCOUT, _helpX, _helpY);
+	orderGroupLoc(attackGroup, DORDER_SCOUT, _helpX, _helpY);
+
+	return TRUE;
+}
+
+event manageAllyHelp(manageAllyHelpTr)
+{
+	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(manageAllyHelp,	inactive);
+		exit;
+	}
+
+	if(helpingAlly())
+	{
+		if(canStopHelpingAlly())
+		{
+			stopHelpingAlly();
+		}
+		else
+		{
+			/* See if all units we sent were killed */
+			if(not haveHelpers())
+			{
+				if(random(4) == 0)
+				{
+					messageAlly(lastHelpPlayer, M_HELPERS_KILLED);
+				}
+
+				if(not attemptToHelp(lastHelpPlayer, helpX, helpY))
+				{
+					dbg("NO UNITS, STOPPED HELPING", player);
+					stopHelpingAlly();		//don't make sense to try again
+				}
+				else
+				{
+					dbg("SENDING REINFORCEMENTS", player);
+				}
+			}
+		}
+	}
+}
+
+/* DO we have any units we can send to help ally ? */
+function bool haveHelpers()
+{
+	if(attackGroup.members == 0)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+function bool helpingAlly()
+{
+	if(lastHelpPlayer >= 0){
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/* Returns true if we were helping long enough */
+function bool helpAllyTimeout()
+{
+	if(tHelp + HELP_TIMEOUT < gameTime){
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+function bool canStopHelpingAlly()
+{
+	if(lastHelpPlayer < 0)
+	{
+		ASSERT(FALSE, "canStopHelpingAlly: lastHelpPlayer < 0", player);
+		return TRUE;
+	}
+
+	/* Were helping long enough or someone's backstabbing */
+	if(helpAllyTimeout() or (not allianceExistsBetween(player, lastHelpPlayer)))
+	{
+		return TRUE;
+	}
+
+	/* Nothing to defend anymore */
+	if(not allyBaseAtLoc(lastHelpPlayer, helpX, helpY))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+function void stopHelpingAlly()
+{
+	dbg("stopped helping", player);
+
+	tHelp = -1;
+	lastHelpPlayer = -1;
+	helpX = -1;
+	helpY = -1;
+
+	orderGroupLoc(scoutGroup, DORDER_SCOUT,baseX,baseY);
+	orderGroupLoc(attackGroup, DORDER_SCOUT,baseX,baseY);
+}
+
+/* Send a multiplayer message to an ally */
+function void messageAlly(int _playerToMessage, string _message)
+{
+	local int	_player;
+
+	ASSERT(_playerToMessage >= -1 && _playerToMessage < MAX_PLAYERS,
+		"messageAlly: player out of bounds: " & _playerToMessage, player);
+
+	_player = 0;
+	if(_playerToMessage == ALL_ALLIES)	//everyone
+	{
+		while(_player < MAX_PLAYERS)
+		{
+			/* Send message (allies only)) */
+			if(allianceExistsBetween(player, _player)){
+				msg(_message, player, _player);
+			}
+
+			_player++;
+		}
+	}
+	else	//a certain player
+	{
+		/* Send message (allies only)) */
+		if(allianceExistsBetween(player, _playerToMessage)){
+			msg(_message, player, _playerToMessage);
+		}
+	}
+}
+
+/* Returns true if we can see our allies on the map */
+function bool canSeeAllies()
+{
+	local STRUCTURE _uplink;
+
+	/* Can see allies when team mode is on */
+	if(multiPlayerAlliancesType == ALLIANCES_TEAMS)
+	{
+		return TRUE;
+	}
+
+	/* Can see whole map if we have uplink */
+	_uplink = getStructure(uplink, player);
+	if(_uplink != NULLOBJECT)
+	{
+		/* Make sure finished building */
+		if(structureComplete(_uplink))
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+/* Call for help when our base is in danger */
+event watchBaseThreat(watchBaseThreatTr)
+{
+ 	if( (not _DEBUG) and ((player == selectedPlayer) or (not myResponsibility(player))) )
+	{
+		setEventTrigger(watchBaseThreat, inactive);
+		exit;
+	}
+
+	if(baseInTrouble())
+	{
+
+		if(_DEBUG)
+			debug(player & ") watchBaseThreat: base in trouble");
+
+		requestHelp(baseX, baseY);
+
+		/* Bring our forces back if needed */
+		if(helpingAlly())
+		{
+			stopHelpingAlly();
+		}
+	}
+}
+
+/* Returns true if our base is in trouble */
+function bool baseInTrouble()
+{
+	local int _enemyForce,_friendlyForce;
+
+	_friendlyForce = numFriendlyWeapObjInRange(player, baseX, baseY, W_BASE_THREAT_RANGE, FALSE);
+	_enemyForce = numEnemyWeapObjInRange(player, baseX, baseY, W_BASE_THREAT_RANGE, FALSE);
+
+	/* See if we are in trouble */
+	if(_enemyForce > _friendlyForce){
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/* Request help from allies */
+function void requestHelp(int _helpX, int _helpY)
+{
+	local int _ally;
+
+	/* Don't do this too frequently */
+	if(tLastHelpRequest + HELP_REQUEST_INTERVAL > gameTime){
+		return;
+	}
+
+	/* Remember when we requested help last time */
+	tLastHelpRequest = gameTime;
+
+	/* Drop beacon for all allies so they would know where to help */
+	_ally = 0;
+	while(_ally < MAX_PLAYERS)
+	{
+		if(allianceExistsBetween(player, _ally)){
+			if(_DEBUG)
+				debug(player & ") requestHelp: " & _ally);
+
+			dropBeacon(getPlayerName(player), _ally, player, _helpX, _helpY, 0);
+		}
+		_ally++;
+	}
+
+	/* Now send message with help request */
+	messageAlly(ALL_ALLIES, M_REQUEST_HELP);
+}
