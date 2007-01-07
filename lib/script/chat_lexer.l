@@ -100,6 +100,7 @@ static INTERP_VAL parameter;
 "let's"						{ return _T_LETS; }
 "me"						{ return _T_ME; }
 "no"						{ return _T_NO; }
+"now"						{ return _T_NOW; }
 "of course"					{ return _T_OFCOURSE; }
 "ok"+						{ return _T_OK; }
 "place"						{ return _T_PLACE; }
@@ -113,6 +114,8 @@ static INTERP_VAL parameter;
 "status"					{ return _T_STATUS; }
 "stop"						{ return _T_STOP; }
 "sure"						{ return _T_SURE; }
+"thank you"					{ return _T_THANK_YOU; }
+"thanks"					{ return _T_THANKS; }
 "u"							{ return _T_U; }
 "units"						{ return _T_UNITS; }
 "vtols"						{ return _T_VTOLS; }

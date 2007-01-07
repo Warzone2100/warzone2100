@@ -223,6 +223,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_LETS
 %token _T_ME
 %token _T_NO
+%token _T_NOW
 %token _T_OFCOURSE
 %token _T_OK
 %token _T_PLACE
@@ -236,6 +237,8 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_STATUS
 %token _T_STOP
 %token _T_SURE
+%token _T_THANK_YOU
+%token _T_THANKS
 %token _T_U
 %token _T_UNITS
 %token _T_VTOLS
@@ -257,7 +260,7 @@ static void chat_reset_command(SDWORD cmdIndex)
  * one or more sentences: commands or addressed commands
  * or unrecognized messages (handled in R_COMMAND)
  */
-R_PHRASE:							R_ADDRESSED_COMMAND
+R_PHRASE:								R_ADDRESSED_COMMAND
 									|	R_COMMAND
 										{
 											chat_store_player(chat_msg.numCommands - 1, -1);	/* No player list means current command is addressed to everyone */
@@ -278,7 +281,7 @@ R_PHRASE:							R_ADDRESSED_COMMAND
 
 /* A command addressed to one or more players
  */
-R_ADDRESSED_COMMAND:			R_PLAYER_LIST _T_COLON R_COMMAND			/* "Red, Black: attack yellow" */
+R_ADDRESSED_COMMAND:					R_PLAYER_LIST _T_COLON R_COMMAND			/* "Red, Black: attack yellow" */
 											//{console("RULE: player list: command");}
 									|	R_PLAYER_LIST _T_SEMICOLON R_COMMAND			/* "Red, Black; attack yellow" */
 											//{console("RULE: player list; command");}
@@ -389,28 +392,8 @@ R_A_OR_EMPTY:					/* Empty */
 								|	_T_A
 								;
 
-/* ?????
-R_QM_REPETITION:				_T_QM
-								|	R_QM_REPETITION _T_QM */
-								;
-
-/* QM or nothing */
-//R_QM_OR_EMPTY:				/* Empty */
-//								|	_T_QM	/* ????? or nothing */
-//								;
-
-/* !!!!!!
-R_EM_REPETITION:			_T_EM
-								|	R_EM_REPETITION _T_EM */
-								;
-
-/* EM or nothing */
-//R_EM_OR_EMPTY:				/* Empty */
-//								|	_T_EM	/* !!!!! or nothing */
-//								;
-
 /* Punctuation mark */
-R_PUNCTUATION_MARK:			_T_QM
+R_PUNCTUATION_MARK:					_T_QM
 								|	_T_EM
 								|	R_PUNCTUATION_MARK _T_QM	/* ?????!!!!??! */
 								|	R_PUNCTUATION_MARK _T_EM	/* ?????!!!!??! */
@@ -419,7 +402,7 @@ R_PUNCTUATION_MARK:			_T_QM
 /* Full stop or end of file
  * (a 'virtual' rule)
  */
-R_FULLSTOP_OR_EOF:			/* Empty */				/* Needed for other rules */
+R_FULLSTOP_OR_EOF:					/* Empty */				/* Needed for other rules */
 								|	_T_EOF					/* End of input */
 								|	_T_FULLSTOP			/* . */
 								;
@@ -427,14 +410,14 @@ R_FULLSTOP_OR_EOF:			/* Empty */				/* Needed for other rules */
 /* End of a declarative sentence
  * can't be a question
  */
-R_EOD:							_T_EM								/* !!!! */
+R_EOD:								_T_EM								/* !!!! */
 								|	R_FULLSTOP_OR_EOF
 								;
 
 /* End of a question
  * can't end with an exclamation mark
  */
-R_EOQ:							_T_QM
+R_EOQ:								_T_QM
 								|	R_FULLSTOP_OR_EOF
 								;
 
@@ -442,73 +425,73 @@ R_EOQ:							_T_QM
  * to "End of a declarative sentence",
  * but can additionally end with a question.
  */
-R_EOS:							R_EOD				/* End of a declarative sentence */
+R_EOS:								R_EOD				/* End of a declarative sentence */
 								|	R_PUNCTUATION_MARK		/* ???!!?!?!?!? */
 								;
 
 /* Express attack intention */
-R_ATTACKING:					_T_ATTACKING
+R_ATTACKING:						_T_ATTACKING
 								|	_T_GOING
 								|	_T_GOING _T_AFTER
 								;
 
 /* Attack */
-R_INITIATE_ATTACK:			_T_ATTACK
+R_INITIATE_ATTACK:					_T_ATTACK
 								|	_T_GET
 								;
 
 R_PUT_DOWN:						_T_PUT | _T_DROP | _T_PLACE;	/* put */
 
-R_INCREASING_NUMBER:		_T_PUMPING						/* pumping/getting */
+R_INCREASING_NUMBER:				_T_PUMPING						/* pumping/getting */
 								|	_T_GETTING
 								|	_T_BUILDING
 								;
 
-R_YOU:										_T_YOU
+R_YOU:											_T_YOU
 											|	_T_U						/* u */
 											;
 
 /* 'You' - pronoun for questions */
-R_DO_YOU:									R_YOU						/* like in "you got any..." */
+R_DO_YOU:										R_YOU						/* like in "you got any..." */
 											|	_T_DO R_YOU				/* do you */
 											;
 
 /* Used in questions */
-R_POSSESSION_Q:							_T_HAVE
+R_POSSESSION_Q:									_T_HAVE
 											|	_T_GOT
 											;
 
-R_POSSESSES:								_T_HAS
+R_POSSESSES:									_T_HAS
 											|	_T_GOT
 											;
 
 
-R_QUANTITY:									_T_ANY
+R_QUANTITY:										_T_ANY
 											|	_T_SOME
 											;
 
-R_DO_YOU_HAVE_ANY:						R_DO_YOU R_POSSESSION_Q R_QUANTITY
+R_DO_YOU_HAVE_ANY:								R_DO_YOU R_POSSESSION_Q R_QUANTITY
 											|	R_DO_YOU R_POSSESSION_Q
 											|	R_POSSESSION_Q R_QUANTITY						/* got any.. */
 											|	R_POSSESSION_Q									/* got <substantive>? */
 											|	R_QUANTITY											/* any <substantive>? */
 											;
 
-R_YES_FORMS:								_T_YES
+R_YES_FORMS:									_T_YES
 											|	_T_YEA
 											|	_T_YEAH
 											;
 
-R_CONFIDENCE_EXPRESSION:				_T_SURE
+R_CONFIDENCE_EXPRESSION:						_T_SURE
 											|	_T_OFCOURSE
 											;
 
-R_AGREEMENT_EXPRESSION:				R_YES_FORMS
+R_AGREEMENT_EXPRESSION:							R_YES_FORMS
 											|	_T_FINE
 											|	_T_OK
 											;
 
-R_AFFIRMATIVE_FORMS:					R_AGREEMENT_EXPRESSION
+R_AFFIRMATIVE_FORMS:							R_AGREEMENT_EXPRESSION
 											|	R_CONFIDENCE_EXPRESSION
 											|	_T_ROGER								/* roger */
 											|	_T_AFFIRMATIVE
@@ -518,7 +501,7 @@ R_AFFIRMATIVE_FORMS:					R_AGREEMENT_EXPRESSION
 					/*******************************************/
 
 /* Ask a player to ally myself */
-R_ALLY_OFFER:								_T_ALLY _T_ME R_EOS			/* ally me */
+R_ALLY_OFFER:									_T_ALLY _T_ME R_EOS			/* ally me */
 											|	_T_ALLY 	R_EOS				/* "ally" at the end (otherwise breaks "ally me") */
 										/*	|	_T_ALLY */
 											;
@@ -529,7 +512,7 @@ R_ALLY_OFFER:								_T_ALLY _T_ME R_EOS			/* ally me */
 R_ASK_READINESS:							_T_GO _T_QM;		/* go? */
 
 /* Tell to start some action */
-R_INITIATE_ACTION:						_T_GO R_EOD;			/* go!! */
+R_INITIATE_ACTION:							_T_GO R_EOD;			/* go!! */
 
 /* Tell to drop a beacon */
 R_DEMAND_BEACON:							R_PUT_DOWN R_A_OR_EMPTY _T_BEACON;		/* put a beacon */
@@ -541,40 +524,52 @@ R_MEET_CENTER:								_T_GO _T_CENTER R_EOS;		/* go center */
 R_ASK_STATUS:								_T_STATUS R_EOS;				/* status? */
 
 /* Player is building units */
-R_BUILDING_UNITS:						R_INCREASING_NUMBER _T_UNITS R_EOD;		/* pumping units */
+R_BUILDING_UNITS:							R_INCREASING_NUMBER _T_UNITS R_EOD;		/* pumping units */
 
 /* Stop command */
 R_STOP:										_T_STOP R_EOD;			/* stop */
 
 /* Ask if player has power */
-R_WONDER_IF_HAVE_POWER:				R_DO_YOU_HAVE_ANY _T_POWER R_EOQ;		/* do you have power? */
+R_WONDER_IF_HAVE_POWER:						R_DO_YOU_HAVE_ANY _T_POWER R_EOQ;		/* do you have power? */
 
 /* Ask for help */
-R_DEMAND_HELP:								_T_HELP _T_ME R_EOS		/* help me!!!!! */
+R_DEMAND_HELP:									_T_HELP _T_ME R_EOS		/* help me!!!!! */
 											|	_T_HELP R_EOS				/* help!?!? */
 											;
 
+R_GRATITUDE:									_T_THANK_YOU
+											|	_T_THANKS
+											;
+
 /* Tell player i'm safe - no danger anymore */
-R_REPORT_SAFETY:							_T_IM _T_OK;							/* i'm ok */
+R_REPORT_SAFETY:								_T_IM _T_OK	R_EOD		/* i'm ok */
+											|	_T_IM _T_FINE R_EOD
+											|	R_REPORT_SAFETY _T_NOW R_EOD
+											|	R_REPORT_SAFETY R_GRATITUDE R_EOD
+											|	R_REPORT_SAFETY _T_COMMA R_GRATITUDE R_EOD
+											|	R_GRATITUDE R_REPORT_SAFETY R_EOD
+											|	R_GRATITUDE _T_COMMA R_REPORT_SAFETY R_EOD
+											|	R_GRATITUDE R_GRATITUDE R_EOD
+											;
 
 
 /* Positive order feedback */
-R_AFFIRMATIVE:								R_AFFIRMATIVE_FORMS		/* yes, roger etc */
-											|	R_AFFIRMATIVE R_AFFIRMATIVE_FORMS		/* accept repetitions: "yes yes yeah" */
-											|	R_AFFIRMATIVE R_EOD							/* can also be emotional: "yea!!! yeah! yes!!!!" */
+R_AFFIRMATIVE:									R_AFFIRMATIVE_FORMS R_EOD		/* yes, roger etc */
+											|	R_AFFIRMATIVE R_AFFIRMATIVE_FORMS R_EOD		/* accept repetitions: "yes yes yeah" */
+											// |	R_AFFIRMATIVE 						/* can also be emotional: "yea!!! yeah! yes!!!!" */
 											;
 
 /* Ask to ally a player */
 R_ALLY_PLAYER:								_T_ALLY R_PLAYER R_EOD		/* ally blue */
+											{
+												/* Store for scripts */
+												scrParameter.type = VAL_INT;
+												scrParameter.v.ival = $2;
+												if(!chat_store_parameter(&scrParameter))
 												{
-													/* Store for scripts */
-													scrParameter.type = VAL_INT;
-													scrParameter.v.ival = $2;
-													if(!chat_store_parameter(&scrParameter))
-													{
-														chat_error("chat command: Too many parameters in the message");
-													}
+													chat_error("chat command: Too many parameters in the message");
 												}
+											}
 											;
 
 /* Ask to start attack a player */
@@ -601,7 +596,7 @@ R_ATTACK_PLAYER:							R_INITIATE_ATTACK R_PLAYER R_EOD		/* attack blue */
 											;
 
 /* Notify i'm attacking player */
-R_ATTACKING_PLAYER:						R_ATTACKING R_PLAYER R_EOD				/* attacking blue */
+R_ATTACKING_PLAYER:							R_ATTACKING R_PLAYER R_EOD				/* attacking blue */
 												{
 													/* Store for scripts */
 													scrParameter.type = VAL_INT;
@@ -614,7 +609,7 @@ R_ATTACKING_PLAYER:						R_ATTACKING R_PLAYER R_EOD				/* attacking blue */
 											;
 
 /* Notify about player using VTOLs */
-R_PLAYER_HAS_VTOLS:						R_PLAYER R_POSSESSES _T_VTOLS R_EOD	/* blue has VTOLS */
+R_PLAYER_HAS_VTOLS:							R_PLAYER R_POSSESSES _T_VTOLS R_EOD	/* blue has VTOLS */
 												{
 													/* Store for scripts */
 													scrParameter.type = VAL_INT;
@@ -633,7 +628,7 @@ BOOL chatLoad(char *pData, UDWORD size)
 	SDWORD	cmdIndex,parseResult;
 
 	/* Don't parse the same message again for a different player */
-	if(strcmp(pData, chat_msg.lastMessage) == 0)	//just parsed this message for some other player
+	if(strcmp(pData, &(chat_msg.lastMessage[0])) == 0)	//just parsed this message for some other player
 	{
 		return TRUE;			//keep all the parsed data unmodified
 	}
@@ -677,8 +672,8 @@ void chat_error(const char *pMessage,...)
 
 	vsprintf(aTxtBuf, pMessage, args);
 	chatGetErrorData(&line, &pText);
-	debug(LOG_WARNING, "multiplayer message parse error: %s at line %d, token: %d, text: '%s'",
-	      aTxtBuf, line, chat_char, pText);
+	//debug(LOG_WARNING, "multiplayer message parse error: %s at line %d, token: %d, text: '%s'",
+	//      aTxtBuf, line, chat_char, pText);
 
 	va_end(args);
 }
