@@ -1056,7 +1056,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	FEATURE			*psFeature;
 	VIEWDATA		*psViewData;
 	VIEW_PROXIMITY	*psViewProx;
-	char			msgStr[255];
+	//char			msgStr[255];
 
 	if (psProxDisp->type == POS_PROXDATA)
 	{
@@ -1066,16 +1066,19 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		if (psViewData->ppTextMsg)
 		{
 			//Beacon stuff: Add player number to the text
-			if(psViewData->type == VIEW_HELP)
-			{
-				//sprintf(msgStr, "%s: %s", getPlayerName(((VIEW_PROXIMITY *)psViewData->pData)->sender), psViewData->ppTextMsg[0]);
-				sprintf(msgStr, "%s", psViewData->ppTextMsg[0]);	//temporary solution
-				addConsoleMessage( msgStr, DEFAULT_JUSTIFY );
-			}
-			else
-			{
-				addConsoleMessage( psViewData->ppTextMsg[0], DEFAULT_JUSTIFY );
-			}
+			//if(psViewData->type == VIEW_HELP)
+			//{
+			//	//NOTE: this seems to cause GFX artefacts for some players
+			//	sprintf(msgStr, "%s", psViewData->ppTextMsg[0]);	//temporary solution
+			//	addConsoleMessage( msgStr, DEFAULT_JUSTIFY );
+			//}
+			//else
+			//{
+				if(psViewData->type != VIEW_HELP)
+				{
+					addConsoleMessage( psViewData->ppTextMsg[0], DEFAULT_JUSTIFY );
+				}
+			//}
 		}
 
 		//play message - if any
