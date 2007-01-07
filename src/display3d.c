@@ -3436,6 +3436,9 @@ void renderDroid( DROID *psDroid )
 /* Draws the strobing 3D drag box that is used for multiple selection */
 void	drawDragBox( void )
 {
+	int minX, maxX;		// SHURCOOL: These 4 ints will hold the corners of the selection box
+	int minY, maxY;
+
 	if(dragBox3D.status == DRAG_DRAGGING AND buildState == BUILD3D_NONE)
 	{
 		if(gameTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
@@ -3447,15 +3450,28 @@ void	drawDragBox( void )
 			}
 			dragBox3D.lastTime = gameTime;
 		}
+
+		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
+		minX = min(dragBox3D.x1, mX);
+		maxX = max(dragBox3D.x1, mX);
+		minY = min(dragBox3D.y1, mY);
+		maxY = max(dragBox3D.y1, mY);
+
+		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
+		minX += dragBox3D.boxColourIndex/2;
+		maxX -= dragBox3D.boxColourIndex/2;
+		minY += dragBox3D.boxColourIndex/2;
+		maxY -= dragBox3D.boxColourIndex/2;
+
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
-	   	iV_Box(dragBox3D.x1+dragBox3D.boxColourIndex/2,dragBox3D.y1+dragBox3D.boxColourIndex/2,
-				mX-dragBox3D.boxColourIndex/2,mY-dragBox3D.boxColourIndex/2,
+	   	iV_Box(minX, minY,
+				maxX, maxY,
 				boxPulseColours[dragBox3D.boxColourIndex]);
 		if (war_GetTranslucent())
 		{
-  			pie_UniTransBoxFill(dragBox3D.x1+dragBox3D.boxColourIndex/2+1,dragBox3D.y1+dragBox3D.boxColourIndex/2+1,
-  					(mX-dragBox3D.boxColourIndex/2)-1,(mY-dragBox3D.boxColourIndex/2)-1,
-  					0x00ffffff,16);
+  			pie_UniTransBoxFill(minX+1, minY+1,
+  					maxX-1, maxY-1,
+  					0x00ffffff, 16);
 		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}

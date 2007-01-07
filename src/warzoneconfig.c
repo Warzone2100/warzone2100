@@ -62,8 +62,8 @@ void war_SetDefaultStates(void)//Sets all states
 	//set those here and reset in clParse or loadConfig
 	pie_SetFogCap(FOG_CAP_UNDEFINED);
 	war_SetFog(FALSE);
-	war_SetTranslucent(FALSE);
-	war_SetAdditive(FALSE);
+	war_SetTranslucent(TRUE);	// SHURCOOL: These two should be true (ie. enabled) by default; not false
+	war_SetAdditive(TRUE);		// SHURCOOL: It means that the renderer should be allowed to use translucency/additive rendering modes
 
 	war_SetPlayAudioCDs(TRUE);
 
