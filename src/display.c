@@ -1239,30 +1239,30 @@ void scroll(void)
 		}
 
 		/* Scroll right */
-		if (keyDown(KEY_RIGHTARROW) OR (mX>(SDWORD)(DISP_WIDTH-BOUNDARY_X)))
+		if (keyDown(KEY_RIGHTARROW) || (mX > (SDWORD)(pie_GetVideoBufferWidth()-BOUNDARY_X)))
 		{
 			mouseAtRight = TRUE;
-			if(!keyDown(KEY_RIGHTARROW) AND mX<(SDWORD)(DISP_WIDTH-(BOUNDARY_X/2)))
+			if(!keyDown(KEY_RIGHTARROW) && mX < (SDWORD)(pie_GetVideoBufferWidth()-(BOUNDARY_X/2)))
 			{
 				bRetardScroll = TRUE;
 			}
 		}
 
 		/* Scroll up */
-		if (keyDown(KEY_UPARROW) OR (mY<BOUNDARY_Y))
+		if (keyDown(KEY_UPARROW) || (mY < BOUNDARY_Y))
 		{
 			mouseAtBottom = TRUE;
-			if(!keyDown(KEY_UPARROW) AND mY>BOUNDARY_Y/2)
+			if(!keyDown(KEY_UPARROW) && mY > BOUNDARY_Y/2)
 			{
 				bRetardScroll = TRUE;
 			}
    		}
 
 		/* Scroll down */
- 		if (keyDown(KEY_DOWNARROW) OR (mY>(SDWORD)(DISP_HEIGHT-BOUNDARY_Y)))
+ 		if (keyDown(KEY_DOWNARROW) || (mY > (SDWORD)(pie_GetVideoBufferHeight()-BOUNDARY_Y)))
 		{
 			mouseAtTop = TRUE;
-			if(!keyDown(KEY_DOWNARROW) AND mY<(SDWORD)(DISP_HEIGHT-(BOUNDARY_Y/2)))
+			if(!keyDown(KEY_DOWNARROW) && mY < (SDWORD)(pie_GetVideoBufferHeight()-(BOUNDARY_Y/2)))
 			{
 				bRetardScroll = TRUE;
 			}
@@ -1282,30 +1282,30 @@ void scroll(void)
 		}
 
 		/* Scroll right */
-		if ((mX>(SDWORD)(DISP_WIDTH-BOUNDARY_X)))
+		if ((mX > (SDWORD)(pie_GetVideoBufferWidth()-BOUNDARY_X)))
 		{
 			mouseAtRight = TRUE;
-			if(!keyDown(KEY_RIGHTARROW) AND mX<(SDWORD)(DISP_WIDTH-(BOUNDARY_X/2)))
+			if(!keyDown(KEY_RIGHTARROW) && mX < (SDWORD)(pie_GetVideoBufferWidth()-(BOUNDARY_X/2)))
 			{
 				bRetardScroll = TRUE;
 			}
 		}
 
 		/* Scroll up */
-		if ((mY<BOUNDARY_Y))
+		if ((mY < BOUNDARY_Y))
 		{
 			mouseAtBottom = TRUE;
-			if(!keyDown(KEY_UPARROW) AND mY>BOUNDARY_Y/2)
+			if(!keyDown(KEY_UPARROW) && mY > BOUNDARY_Y/2)
 			{
 				bRetardScroll = TRUE;
 			}
    		}
 
 		/* Scroll down */
- 		if ((mY>(SDWORD)(DISP_HEIGHT-BOUNDARY_Y)))
+ 		if ((mY > (SDWORD)(pie_GetVideoBufferHeight()-BOUNDARY_Y)))
 		{
 			mouseAtTop = TRUE;
-			if(!keyDown(KEY_DOWNARROW) AND mY<(SDWORD)(DISP_HEIGHT-(BOUNDARY_Y/2)))
+			if(!keyDown(KEY_DOWNARROW) && mY < (SDWORD)(pie_GetVideoBufferHeight()-(BOUNDARY_Y/2)))
 			{
 				bRetardScroll = TRUE;
 			}

@@ -32,7 +32,6 @@ void	audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ );
 void	audio_Get2DPlayerRotAboutVerticalAxis( SDWORD *piA );
 void	audio_Get3DPlayerRotAboutVerticalAxis( SDWORD *piA );
 BOOL	audio_Display3D( void );
-UWORD	audio_GetScreenWidth( void );
 BOOL	audio_GetIDFromStr( char *pWavStr, SDWORD *piID );
 
 /***************************************************************************/

@@ -182,14 +182,6 @@ audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 }
 
 /***************************************************************************/
-
-UWORD
-audio_GetScreenWidth( void )
-{
-	return (UWORD) DISP_WIDTH;
-}
-
-/***************************************************************************/
 /*
  * audio_GetClusterCentre
  *

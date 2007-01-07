@@ -216,8 +216,7 @@ BOOL ed2dProcessInput(void)
 	{
 		mapX --;
 	}
-	else if (mapX < mapWidth -1 && mouseX() >= DISP_WIDTH - TILE_SIZE2D/2 &&
-			 mouseX() <= DISP_WIDTH)
+	else if (mapX < mapWidth -1 && mouseX() >= pie_GetVideoBufferWidth() - TILE_SIZE2D/2 && mouseX() <= pie_GetVideoBufferWidth())
 	{
 		mapX ++;
 	}
@@ -225,8 +224,8 @@ BOOL ed2dProcessInput(void)
 	{
 		mapY --;
 	}
-	else if (mapY < mapWidth -1 && mouseY() >= DISP_HEIGHT - TILE_SIZE2D/2 &&
-			 mouseY() <= DISP_HEIGHT)
+	else if (mapY < mapWidth -1 && mouseY() >= pie_GetVideoBufferHeight() - TILE_SIZE2D/2 &&
+			 mouseY() <= pie_GetVideoBufferHeight())
 	{
 		mapY ++;
 	}

@@ -349,13 +349,13 @@ UDWORD	pixelHeight;
 
 		if(gameTime2%500<250)
 		{
-			iV_BoxFill(RET_X+pixelLength+3,474+E_H-(pixelHeight/4),RET_X+pixelLength+10,473+E_H,255);
+			iV_BoxFill( RET_X + pixelLength + 3, 474 + E_H - (pixelHeight/4), RET_X + pixelLength + 10, 473 + E_H, 255 );
 		}
 
-			/* GET RID OF THE MAGIC NUMBERS BELOW */
-		iV_TransBoxFill(RET_X+1,474+E_H-pixelHeight,RET_X+1+pixelLength+2,473+E_H);
+		/* GET RID OF THE MAGIC NUMBERS BELOW */
+		iV_TransBoxFill( RET_X + 1, 474 + E_H - pixelHeight, RET_X + 1 + pixelLength + 2, 473 + E_H );
 
-		iV_DrawText(sTextToSend,RET_X+3,469+E_H);
+		iV_DrawText( sTextToSend, RET_X + 3, 469 + E_H );
 }
 
 // Optimisation to stop it being calculated every frame
@@ -479,8 +479,8 @@ BOOL		bPlayerHasHQ = FALSE;
 		// FIXME: This wasn't shown before. Do we want to keep it? Or change it?
 		if(gamePaused())
 		{
-			iV_DrawText("Developed by Pumpkin Studios",RET_X+3,467+E_H);
-			iV_DrawText("Published by EIDOS Interactive",pie_GetVideoBufferWidth()-196,467+E_H);
+			iV_DrawText( "Developed by Pumpkin Studios", RET_X + 3, 467 + E_H );
+			iV_DrawText( "Published by EIDOS Interactive", pie_GetVideoBufferWidth() - 196, 467 + E_H );
 		}
 	}
 
@@ -506,18 +506,18 @@ BOOL		bPlayerHasHQ = FALSE;
  //----------------------------------------------------------
 //----------------------------------------------------------
 //----------------------------------------------------------
- 	if(getDebugMappingStatus() AND !demoGetStatus() AND !gamePaused())
+ 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
  	{
- 		iV_DrawText("DEBUG ",RET_X+134,440+E_H);
+ 		iV_DrawText( "DEBUG ", RET_X + 134, 440 + E_H );
   	}
  	else
  	{
 #ifdef DEBUG
 		if(!gamePaused())
 		{
- 			iV_DrawText(getLevelName(),RET_X+134,420+E_H);
+ 			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
  			getAsciiTime(buildInfo,gameTime);
- 			iV_DrawText(buildInfo,RET_X+134,434+E_H);
+ 			iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
 		}
 #endif
  	}
@@ -3943,8 +3943,7 @@ SDWORD			scrX,scrY,scrR;
 			scrY = psDelivPoint->screenY;
 			scrR = psDelivPoint->screenR;
 			/* Three DFX clips properly right now - not sure if software does */
-			if ((scrX + scrR) > 0 AND (scrY + scrR) > 0 AND (scrX - scrR) < DISP_WIDTH
-					AND (scrY - scrR) < DISP_HEIGHT)
+			if ((scrX + scrR) > 0 && (scrY + scrR) > 0 && (scrX - scrR) < pie_GetVideoBufferWidth() && (scrY - scrR) < pie_GetVideoBufferHeight())
 			{
 				iV_Box(scrX - scrR, scrY - scrR, scrX + scrR, scrY + scrR, 110);
 			}
@@ -4104,8 +4103,7 @@ FRACT			mulH;
 				}
 
 				/* Write the droid rank out */
-				if((scrX+scrR)>0 AND (scrY+scrR)>0 AND (scrX-scrR)<DISP_WIDTH
-					AND (scrY-scrR)<DISP_HEIGHT)
+				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
 				{
 					drawDroidRank(psDroid);
 					drawDroidSensorLock(psDroid);
@@ -4193,7 +4191,7 @@ FRACT			mulH;
 
 				/* Yeah, yeah yeah - hardcoded palette entries - need to change to #defined colour names */
 				/* Three DFX clips properly right now - not sure if software does */
-				if((scrX+scrR)>0 AND (scrY+scrR)>0 AND (scrX-scrR)<DISP_WIDTH AND (scrY-scrR)<DISP_HEIGHT)
+				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
 				{
 					if(!driveModeActive() || driveIsDriven(psDroid)) {
 						boxCol = defaultColours.white;

@@ -597,7 +597,7 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 		/* Is he worth selecting? */
 		if (psDroid->selected)
 		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, DISP_WIDTH / 6) : TRUE)
+			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : TRUE)
 			{
 					droidCount++;
 					averageAngle += psDroid->direction;
@@ -639,7 +639,7 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 		/* Is he worth considering? */
 		if (psDroid->group == groupNumber)
 		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, DISP_WIDTH / 6) : TRUE)
+			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : TRUE)
 			{
 					droidCount++;
 					averageAngle += psDroid->direction;
@@ -676,7 +676,7 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z)
 		{
 			if (psDroid->selected)
 			{
-				if (droidOnScreen(psDroid, DISP_WIDTH / 4))
+				if (droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
 				{
 					count++;
 					xTotals += psDroid->x;
@@ -706,7 +706,7 @@ static void getGroupTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD gro
 		{
 			if (psDroid->group == groupNumber)
 			{
-				if (bOnScreen ? droidOnScreen(psDroid, DISP_WIDTH / 4) : TRUE)
+				if (bOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4) : TRUE)
 				{
 				 		count++;
 						xTotals += psDroid->x;

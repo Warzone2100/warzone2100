@@ -104,7 +104,7 @@ void	initConsoleMessages( void )
 	messageIndex = 0;
 
 	/* Console can extend to half screen height */
-	maxDrop = ((DISP_HEIGHT/iV_GetTextLineSize())/2);
+	maxDrop = ((pie_GetVideoBufferHeight()/iV_GetTextLineSize())/2);
 
 	if(maxDrop>32) maxDrop = 32;
 
@@ -136,7 +136,7 @@ void	initConsoleMessages( void )
 
 	/*	Set up the console size and postion
 		x,y,width */
-	setConsoleSizePos(16,16,DISP_WIDTH-32);
+	setConsoleSizePos(16, 16, pie_GetVideoBufferWidth()-32);
 
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES/4 + 4);
 
@@ -457,9 +457,9 @@ UDWORD	exceed;
 		boxDepth+=exceed;
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
 		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
-		if(clipDepth > (DISP_HEIGHT-linePitch))
+		if(clipDepth > (pie_GetVideoBufferHeight() - linePitch))
 		{
-			clipDepth = (DISP_HEIGHT - linePitch);
+			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
 		}
 		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
 			mainConsole.topX+mainConsole.width ,clipDepth);
@@ -470,7 +470,7 @@ UDWORD	exceed;
 	/* Stop when we've drawn enough or we're at the end */
 	MesY = mainConsole.topY + drop;
 	for(psMessage = consoleMessages,numProcessed = 0;
-		psMessage AND numProcessed<consoleVisibleLines AND MesY<(DISP_HEIGHT-linePitch);
+		psMessage && numProcessed<consoleVisibleLines && MesY < (pie_GetVideoBufferHeight()-linePitch);
 		psMessage = psMessage->psNext)
 	{
  		/* Draw the text string */

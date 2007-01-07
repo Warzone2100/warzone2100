@@ -578,8 +578,7 @@ BOOL process2DInput(void)
 	{
 		mapX --;
 	}
-	else if (mapX < mapWidth -1 && mouseX() >= DISP_WIDTH - TILE_SIZE2D/2 &&
-			 mouseX() <= DISP_WIDTH)
+	else if (mapX < mapWidth -1 && mouseX() >= pie_GetVideoBufferWidth() - TILE_SIZE2D/2 && mouseX() <= pie_GetVideoBufferWidth())
 	{
 		mapX ++;
 	}
@@ -587,8 +586,7 @@ BOOL process2DInput(void)
 	{
 		mapY --;
 	}
-	else if (mapY < mapWidth -1 && mouseY() >= DISP_HEIGHT - TILE_SIZE2D/2 &&
-			 mouseY() <= DISP_HEIGHT)
+	else if (mapY < mapWidth -1 && mouseY() >= pie_GetVideoBufferHeight() - TILE_SIZE2D/2 && mouseY() <= pie_GetVideoBufferHeight())
 	{
 		mapY ++;
 	}
@@ -1262,9 +1260,9 @@ static void display2DMap(void)
 	sDestRect.right = TILE_SIZE2D;
 	sSrcRect.top = 0;
 	sSrcRect.bottom = TILE_SIZE2D;
-	for(scrX = 0; scrX < DISP_WIDTH; scrX += TILE_SIZE2D)
+	for(scrX = 0; scrX < pie_GetVideoBufferWidth(); scrX += TILE_SIZE2D)
 	{
-		for(scrY = 0; scrY < DISP_HEIGHT; scrY += TILE_SIZE2D)
+		for(scrY = 0; scrY < pie_GetVideoBufferHeight(); scrY += TILE_SIZE2D)
 		{
 			psTile = mapTile(x,y);
 //			if (psTile->tileVisible[selectedPlayer] OR godMode)

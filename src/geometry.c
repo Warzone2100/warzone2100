@@ -504,9 +504,9 @@ SDWORD	dX,dY;
 			dX = psDroid->sDisplay.screenX;
 			dY = psDroid->sDisplay.screenY;
 			/* Is it on screen */
-			if(dX>(0-tolerance) AND dY>(0-tolerance)
-				AND dX < (SDWORD)(DISP_WIDTH+tolerance)
-				AND dY < (SDWORD)(DISP_HEIGHT+tolerance))
+			if(dX > (0-tolerance) && dY > (0-tolerance)
+				&& dX < (SDWORD)(pie_GetVideoBufferWidth()+tolerance)
+				&& dY < (SDWORD)(pie_GetVideoBufferHeight()+tolerance))
 			{
 				return(TRUE);
 			}

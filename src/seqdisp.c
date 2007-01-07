@@ -497,10 +497,10 @@ static BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 {
 	SDWORD i, x, y, w, h;
-	SDWORD	frame, frameLag, realFrame;
-	SDWORD	subMin, subMax;
-	int	videoTime;
-	static int videoFrameTime = 0, textFrame = 0;
+	SDWORD frame, frameLag;
+	UDWORD subMin, subMax;
+	UDWORD videoTime, realFrame;
+	static UDWORD videoFrameTime = 0, textFrame = 0;
 	BOOL bMoreThanOneSequenceLine = FALSE;
 
 	if (seq_GetCurrentFrame() == 0)
@@ -513,8 +513,8 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 
 	seq_GetFrameSize(&w,&h);
 
-	x = (DISP_WIDTH - w)/2;
-	y = (DISP_HEIGHT - h)/2;
+	x = (pie_GetVideoBufferWidth() - w)/2;
+	y = (pie_GetVideoBufferHeight() - h)/2;
 
 	subMin = SUBTITLE_BOX_MAX + D_H;
 	subMax = SUBTITLE_BOX_MIN + D_H;

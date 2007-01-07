@@ -372,8 +372,8 @@ BOOL recvDroidCheck(NETMSG *m)
 		//////////////////////////////////////
 		// decide how to sync it.
 		if( DrawnInLastFrame(pD->sDisplay.frameNumber)
-			&& (pD->sDisplay.screenX < DISP_WIDTH)
-			&& (pD->sDisplay.screenY < DISP_HEIGHT)		)  // check for onscreen
+			&& (pD->sDisplay.screenX < pie_GetVideoBufferWidth())
+			&& (pD->sDisplay.screenY < pie_GetVideoBufferHeight()) )  // check for onscreen
 		{
 			if(pD->visible[selectedPlayer])
 			{

@@ -13,8 +13,8 @@
 #define TILE_SIZE2D 32
 #define SCR_TILE_SHIFT 5
 
-#define TILES_ACROSS	(DISP_WIDTH/TILE_SIZE2D)
-#define TILES_DOWN		(DISP_HEIGHT/TILE_SIZE2D)
+#define TILES_ACROSS	(pie_GetVideoBufferWidth()/TILE_SIZE2D)
+#define TILES_DOWN		(pie_GetVideoBufferHeight()/TILE_SIZE2D)
 
 /* Number of tiles across the tile texture page */
 extern UDWORD tilesPerLine;

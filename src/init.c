@@ -962,8 +962,7 @@ BOOL systemInitialise(void)
 	pie_SetTranslucent(war_GetTranslucent());
 	pie_SetAdditive(war_GetAdditive());
 
-//	displayBufferSize = iV_GetDisplayWidth()*iV_GetDisplayHeight()*iV_GetDisplayBytesPP();
-	displayBufferSize = DISP_WIDTH*DISP_HEIGHT*2;
+	displayBufferSize = pie_GetVideoBufferWidth()*pie_GetVideoBufferHeight()*2;
 	if (displayBufferSize < 5000000)
 	{
 		displayBufferSize = 5000000;

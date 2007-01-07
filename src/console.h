@@ -10,8 +10,6 @@
 #define CON_BORDER_WIDTH				4
 #define CON_BORDER_HEIGHT				4
 
-#define	DISPLAY_ACROSS (DISP_WIDTH)
-
 typedef enum
 {
 LEFT_JUSTIFY,
@@ -30,7 +28,7 @@ BOOL	permanent;
 } CONSOLE;
 
 /* Definition of a message */
-typedef struct	_console_message 
+typedef struct	_console_message
 {
 char	text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
 UDWORD	timeAdded;								// When was it added to our list?
@@ -68,7 +66,7 @@ extern void console(const char *pFormat, ...); /// Print allways to the ingame c
 /* Basic wrapper to sprintf - allows convenient printf style game info to be displayed */
 
 
-//	#ifdef DEBUG 
+//	#ifdef DEBUG
 //	#define DBCONPRINTF(x)			consolePrintf x
 //	#else
 //	#define DBCONPRINTF(x)
@@ -98,14 +96,14 @@ extern void console(const char *pFormat, ...); /// Print allways to the ingame c
 	sprintf x; \
 	addConsoleMessage(s,DEFAULT_JUSTIFY); \
 
-#ifdef DEBUG 
+#ifdef DEBUG
 #define DBCONPRINTF(s,x) \
 	sprintf x; \
 	addConsoleMessage(s,DEFAULT_JUSTIFY)
 #else
 #define DBCONPRINTF(s,x)
 #endif
-								
+
 #endif
 
 

@@ -11,10 +11,6 @@
 		// ffs am
 #include "lib/ivis_common/pieclip.h"
 
-
-#define DISP_WIDTH		(pie_GetVideoBufferWidth())
-#define DISP_HEIGHT		(pie_GetVideoBufferHeight())
-
 #define	BOUNDARY_X			(16)
 #define BOUNDARY_Y			(16)
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M

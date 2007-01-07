@@ -2711,7 +2711,7 @@ static void intProcessObject(UDWORD id)
 			    			{
 				    			if (((asJumpPos[butIndex].x == 0) && (asJumpPos[butIndex].y == 0)) ||
 					    			!DrawnInLastFrame((SDWORD)psObj->sDisplay.frameNumber) ||
-						    		((psObj->sDisplay.screenX > DISP_WIDTH) || (psObj->sDisplay.screenY > DISP_HEIGHT)))
+						    		((psObj->sDisplay.screenX > pie_GetVideoBufferWidth()) || (psObj->sDisplay.screenY > pie_GetVideoBufferHeight())))
 							    {
 								    getPlayerPos((SDWORD*)&asJumpPos[butIndex].x, (SDWORD*)&asJumpPos[butIndex].y);
 

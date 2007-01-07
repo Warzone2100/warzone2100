@@ -1308,8 +1308,8 @@ void addBackdrop(void)
 	sFormInit.formID = 0;
 	sFormInit.id = FRONTEND_BACKDROP;
 	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)( (DISP_WIDTH - HIDDEN_FRONTEND_WIDTH)/2);
-	sFormInit.y = (SWORD)( (DISP_HEIGHT - HIDDEN_FRONTEND_HEIGHT)/2);
+	sFormInit.x = (SWORD)( (pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH)/2);
+	sFormInit.y = (SWORD)( (pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT)/2);
 	sFormInit.width = HIDDEN_FRONTEND_WIDTH-1;
 	sFormInit.height = HIDDEN_FRONTEND_HEIGHT-1;
 	sFormInit.pDisplay = displayTitleBitmap;
@@ -1526,7 +1526,7 @@ void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	snprintf( sTmp, sTmpSize, "Version %s - Built %s", VERSION, __DATE__ );
 #endif
 
-	pie_DrawText270(sTmp,DISP_WIDTH-10,DISP_HEIGHT-15);
+	pie_DrawText270(sTmp, pie_GetVideoBufferWidth()-10, pie_GetVideoBufferHeight()-15);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

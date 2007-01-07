@@ -14,19 +14,14 @@
 #include "message.h"
 
 // store the objects that are being used for the object bar
-#define			MAX_OBJECTS		15//10 we need at least 15 for the 3 different types of factory
+#define MAX_OBJECTS 15 //10 we need at least 15 for the 3 different types of factory
 
-
-#define	BASE_COORDS_X	(640)
-#define	BASE_COORDS_Y	(480)
-
-
-#define	BASE_COORDS_X	(640)
-#define	BASE_COORDS_Y	(480)
-#define E_W (DISP_WIDTH - BASE_COORDS_X)
-#define E_H (DISP_HEIGHT - BASE_COORDS_Y)
-#define	D_W	((DISP_WIDTH - BASE_COORDS_X)/2)
-#define	D_H ((DISP_HEIGHT - BASE_COORDS_Y)/2)
+#define BASE_COORDS_X	(640)
+#define BASE_COORDS_Y	(480)
+#define E_W (pie_GetVideoBufferWidth() - BASE_COORDS_X)
+#define E_H (pie_GetVideoBufferHeight() - BASE_COORDS_Y)
+#define D_W	((pie_GetVideoBufferWidth() - BASE_COORDS_X)/2)
+#define D_H ((pie_GetVideoBufferHeight() - BASE_COORDS_Y)/2)
 
 
 #define IDRET_FORM				1		// The reticule form

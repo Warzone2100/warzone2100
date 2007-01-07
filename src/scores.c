@@ -247,12 +247,12 @@ UDWORD	div;
 
 	fillUpStats();
 
-	pie_UniTransBoxFill(16+D_W,MT_Y_POS-16,DISP_WIDTH-D_W-16,MT_Y_POS+256,0x00000088,128);
-	iV_Box(16+D_W,MT_Y_POS-16,DISP_WIDTH-D_W-16,MT_Y_POS+256,1);
+	pie_UniTransBoxFill( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 0x00000088, 128 );
+	iV_Box( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 1);
 
-	iV_DrawText(strresGetString(psStringRes,STR_MR_UNIT_LOSSES),LC_X+D_W,80+16+D_H);
-	iV_DrawText(strresGetString(psStringRes,STR_MR_STRUCTURE_LOSSES),LC_X+D_W,140+16+D_H);
-	iV_DrawText(strresGetString(psStringRes,STR_MR_FORCE_INFO),LC_X+D_W,200+16+D_H);
+	iV_DrawText( strresGetString(psStringRes,STR_MR_UNIT_LOSSES), LC_X + D_W, 80 + 16 + D_H );
+	iV_DrawText( strresGetString(psStringRes,STR_MR_STRUCTURE_LOSSES), LC_X + D_W, 140 + 16 + D_H );
+	iV_DrawText( strresGetString(psStringRes,STR_MR_FORCE_INFO), LC_X + D_W, 200 + 16 + D_H );
 
 
 	index = 0;
@@ -328,36 +328,38 @@ UDWORD	div;
 	}
 	dispAdditionalInfo();
 }
+
 // -----------------------------------------------------------------------------------
 void	dispAdditionalInfo( void )
 {
 
-	/* We now need to dsiplay the mission time, game time,
+	/* We now need to display the mission time, game time,
 		average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
-	sprintf(text,strresGetString(psStringRes,STR_MR_ARTEFACTS_FOUND),missionData.artefactsFound);
-	iV_DrawText(text,(DISP_WIDTH - iV_GetTextWidth(text))/2,300+D_H);
+	sprintf( text, strresGetString(psStringRes,STR_MR_ARTEFACTS_FOUND), missionData.artefactsFound );
+	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 300 + D_H );
 
 	/* Get the mission result time in a string - and write it out */
-	getAsciiTime((char*)&text2,gameTime-missionData.missionStarted);
-	sprintf(text,strresGetString(psStringRes,STR_MR_MISSION_TIME),text2);
-	iV_DrawText(text,(DISP_WIDTH - iV_GetTextWidth(text))/2,320+D_H);
+	getAsciiTime( (char*)&text2, gameTime - missionData.missionStarted );
+	sprintf( text, strresGetString(psStringRes,STR_MR_MISSION_TIME), text2 );
+	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 320 + D_H);
 
 	/* Write out total game time so far */
-	getAsciiTime((char*)&text2,gameTime);
-	sprintf(text,strresGetString(psStringRes,STR_MR_GAME_TIME),text2);
-	iV_DrawText(text,(DISP_WIDTH - iV_GetTextWidth(text))/2,340+D_H);
+	getAsciiTime( (char*)&text2, gameTime );
+	sprintf( text, strresGetString(psStringRes,STR_MR_GAME_TIME), text2 );
+	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 340 + D_H );
 }
+
 // -----------------------------------------------------------------------------------
 void	fillUpStats( void )
 {
-UDWORD	i;
-UDWORD	maxi,num;
-FRACT	scaleFactor;
-UDWORD	length;
-UDWORD	numUnits;
-DROID	*psDroid;
+	UDWORD	i;
+	UDWORD	maxi,num;
+	FRACT	scaleFactor;
+	UDWORD	length;
+	UDWORD	numUnits;
+	DROID	*psDroid;
 
 	/* Do rankings first cos they're easier */
 	for(i=0,maxi=0; i<DROID_LEVELS; i++)
