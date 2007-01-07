@@ -115,7 +115,9 @@ typedef enum _key_code
 	KEY_PAGEDOWN		=SDLK_PAGEDOWN,
 	KEY_INSERT		=SDLK_INSERT,
 	KEY_DELETE		=SDLK_DELETE,
-	KEY_KPENTER		=SDLK_KP_ENTER
+	KEY_KPENTER		=SDLK_KP_ENTER,
+
+	KEY_IGNORE		=5190
 } KEY_CODE;
 
 /* The largest possible scan code (probably a lot less than this but ...) */

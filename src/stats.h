@@ -277,7 +277,7 @@ extern SDWORD	getCompFromResName(UDWORD compType, char *pName);
 /*sets the tech level for the stat passed in */
 extern BOOL setTechLevel(BASE_STATS *psStats, char *pLevel);
 /*returns the weapon sub class based on the string name passed in */
-extern SDWORD	getWeaponSubClass(char *pSubClass);
+extern WEAPON_SUBCLASS	getWeaponSubClass(char *pSubClass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
 extern BOOL allocateName(char **ppStore, char *pName);
 //converts the name read in from Access into the name which is used in the Stat lists (or ignores it)
@@ -292,9 +292,9 @@ extern BOOL getBodySize(char *pSize, UBYTE *pStore);
 extern char* getStatName(void * pStat);
 
 /*returns the propulsion type based on the string name passed in */
-extern UBYTE	getPropulsionType(char *pType);
+extern PROPULSION_TYPE	getPropulsionType(char *pType);
 /*returns the weapon effect based on the string name passed in */
-extern UBYTE	getWeaponEffect(char *pWeaponEffect);
+extern WEAPON_EFFECT	getWeaponEffect(char *pWeaponEffect);
 
 /*Access functions for the upgradeable stats of a weapon*/
 extern UDWORD	weaponFirePause(WEAPON_STATS *psStats, UBYTE player);

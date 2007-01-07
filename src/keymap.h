@@ -21,7 +21,8 @@ KEYMAP_ALWAYS_PROCESS,
 KEYMAP___HIDE
 }KEY_STATUS;
 
-#define KEY_IGNORE	5190
+// moved to lib/framework/input.h
+//#define KEY_IGNORE	5190
 
 typedef struct _keyMapping
 {

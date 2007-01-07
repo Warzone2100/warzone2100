@@ -1351,7 +1351,8 @@ BOOL scrRemoveReticuleButton(void)
 BOOL scrAddMessage(void)
 {
 	MESSAGE			*psMessage;
-	SDWORD			msgType, player;
+	MESSAGE_TYPE		msgType;
+	SDWORD			player;
 	BOOL			playImmediate;
 //	INTERP_VAL		sVal;
 	VIEWDATA		*psViewData;
@@ -1418,7 +1419,8 @@ BOOL scrAddMessage(void)
 BOOL scrRemoveMessage(void)
 {
 	MESSAGE			*psMessage;
-	SDWORD			msgType, player;
+	MESSAGE_TYPE		msgType;
+	SDWORD			player;
 	VIEWDATA		*psViewData;
 
 
@@ -3252,7 +3254,8 @@ BOOL scrGameOverMessage(void)
 {
 	BOOL			gameOver;
 	MESSAGE			*psMessage;
-	SDWORD			msgType, player;
+	MESSAGE_TYPE		msgType;
+	SDWORD			player;
 	VIEWDATA		*psViewData;
 	//UDWORD			height;
 

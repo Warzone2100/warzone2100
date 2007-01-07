@@ -969,15 +969,15 @@ UDWORD	asciiKeyCodeToTable(KEY_CODE code)
 {
 	if(code<=KEY_P)
 	{
-		code = code - KEY_Q;  // q is the first of the ascii scan codes
+		return code - KEY_Q;  // q is the first of the ascii scan codes
 	}
 	else if(code <=KEY_L)
 	{
-		code = (code - KEY_A) + 10;	// ten keys from q to p
+		return (code - KEY_A) + 10;	// ten keys from q to p
 	}
 	else if(code<=KEY_M)
 	{
-		code = (code - KEY_Z) + 19;	// 19 keys before, the 10 from q..p and the 9 from a..l
+		return (code - KEY_Z) + 19;	// 19 keys before, the 10 from q..p and the 9 from a..l
 	}
 
 	return((UDWORD) code);

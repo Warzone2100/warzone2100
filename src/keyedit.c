@@ -109,7 +109,7 @@ static BOOL pushedKeyMap(UDWORD key)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-static BOOL pushedKeyCombo(UDWORD subkey)
+static BOOL pushedKeyCombo(KEY_CODE subkey)
 {
 	KEY_CODE	metakey=KEY_IGNORE;
 	KEY_MAPPING	*pExist;
@@ -155,7 +155,7 @@ static BOOL pushedKeyCombo(UDWORD subkey)
 	keyReAssignMapping( metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN );
 
 	/* Try and see if its there already - damn well should be! */
-	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
+	psMapping = keyGetMappingFromFunction((void*)selectedKeyMap->function);
 
 	/* Cough if it's not there */
 	ASSERT( psMapping!=NULL,"Trying to patch a non-existant function mapping - whoop whoop!!!" );
@@ -217,7 +217,7 @@ static UDWORD scanKeyBoardForBinding(void)
 			&& i != KEY_LSHIFT
 			)
 			{
-				return(i);	// top row key pressed
+				return i;	// top row key pressed
 			}
 		}
 	}

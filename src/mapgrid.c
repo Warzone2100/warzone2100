@@ -408,7 +408,7 @@ void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 	}
 
 	// allocate a new array chunk
-	if (!HEAP_ALLOC(psGridHeap, (void*) &psNew))
+	if (!HEAP_ALLOC(psGridHeap, (void**) &psNew))
 	{
 		debug( LOG_NEVER, "help - %d\n", psObj->id );
 		return;

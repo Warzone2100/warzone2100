@@ -4240,7 +4240,7 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 
 	/* Allocate the data buffer */
 	fileSize = GAME_HEADER_SIZE + sizeof(SAVE_GAME);
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -6470,7 +6470,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 
 	/* Allocate the data buffer */
 	fileSize = DROID_HEADER_SIZE + totalDroids*sizeof(SAVE_DROID);
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -7780,7 +7780,7 @@ BOOL writeStructFile(char *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = STRUCT_HEADER_SIZE + totalStructs*sizeof(SAVE_STRUCTURE);
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -8546,7 +8546,7 @@ BOOL writeFeatureFile(char *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = FEATURE_HEADER_SIZE + totalFeatures * sizeof(SAVE_FEATURE);
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -8717,7 +8717,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTemplate))
+		if (!HEAP_ALLOC(psTemplateHeap, (void**) &psTemplate))
 		{
 			debug( LOG_ERROR, "Out of memory" );
 			abort();
@@ -8849,7 +8849,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTemplate))
+		if (!HEAP_ALLOC(psTemplateHeap, (void**) &psTemplate))
 		{
 			debug( LOG_ERROR, "Out of memory" );
 			abort();
@@ -9012,7 +9012,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		if (!HEAP_ALLOC(psTemplateHeap, (void*) &psTemplate))
+		if (!HEAP_ALLOC(psTemplateHeap, (void**) &psTemplate))
 		{
 			debug( LOG_ERROR, "Out of memory" );
 			abort();
@@ -9179,7 +9179,7 @@ BOOL writeTemplateFile(char *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = TEMPLATE_HEADER_SIZE + totalTemplates*sizeof(SAVE_TEMPLATE);
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -9353,7 +9353,7 @@ static BOOL writeTerrainTypeMapFile(char *pFileName)
 
 	// Calculate the file size
 	fileSize = TILETYPE_HEADER_SIZE + sizeof(UWORD) * MAX_TILE_TEXTURES;
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeTerrainTypeMapFile: Out of memory" );
@@ -9582,7 +9582,7 @@ static BOOL writeCompListFile(char *pFileName)
 		numProgramStats) * MAX_PLAYERS;
 	fileSize = COMPLIST_HEADER_SIZE + (sizeof(SAVE_COMPLIST) * totalComp);
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeCompListFile: Out of memory" );
@@ -9907,7 +9907,7 @@ static BOOL writeStructTypeListFile(char *pFileName)
 		numStructureStats * MAX_PLAYERS);
 
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeStructTypeListFile: Out of memory" );
@@ -10184,7 +10184,7 @@ static BOOL writeResearchFile(char *pFileName)
 		numResearch);
 
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeResearchFile: Out of memory" );
@@ -10409,7 +10409,7 @@ static BOOL writeMessageFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeMessageFile: Out of memory" );
@@ -10607,7 +10607,7 @@ static BOOL writeProximityFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeProximityFile: Out of memory" );
@@ -10906,7 +10906,7 @@ static BOOL writeFlagFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeflagFile: Out of memory" );
@@ -11132,7 +11132,7 @@ static BOOL writeProductionFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeProductionFile: Out of memory" );
@@ -11247,7 +11247,7 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	STRUCTURE_STATS			*psStats;
 	int SkippedRecords=0;
 
-	psSaveLimits = (SAVE_STRUCTLIMITS_V2 *) MALLOC (sizeof(SAVE_STRUCTLIMITS_V2));
+	psSaveLimits = (typeof(psSaveLimits)) MALLOC (sizeof(SAVE_STRUCTLIMITS_V2));
 	if (!psSaveLimits)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11318,7 +11318,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	STRUCTURE_STATS			*psStats;
 	int SkippedRecords=0;
 
-	psSaveLimits = (SAVE_STRUCTLIMITS*) MALLOC (sizeof(SAVE_STRUCTLIMITS));
+	psSaveLimits = (typeof(psSaveLimits)) MALLOC (sizeof(SAVE_STRUCTLIMITS));
 	if (!psSaveLimits)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11396,7 +11396,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 
 	// Allocate the data buffer
 	fileSize = STRUCTLIMITS_HEADER_SIZE + (totalLimits * (sizeof(SAVE_STRUCTLIMITS)));
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11539,7 +11539,7 @@ BOOL writeCommandLists(char *pFileName)
 
 	// Allocate the data buffer
 	fileSize = COMMAND_HEADER_SIZE + (totalDroids * (sizeof(SAVE_COMMAND)));
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );

@@ -1111,7 +1111,7 @@ void kf_multiAudioStop(void)
 void	kf_JumpToMapMarker( void )
 {
 
-UDWORD	entry;
+KEY_CODE	entry;
 	if(!getRadarTrackingStatus())
 	{
 		entry = getLastSubKey();

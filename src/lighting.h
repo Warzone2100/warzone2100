@@ -23,7 +23,7 @@ typedef struct _light
 iVector	position;
 UBYTE	type;
 UDWORD	range;
-UDWORD	colour;
+LIGHT_COLOUR	colour;
 } LIGHT;
 
 extern void	processLight(LIGHT *psLight);

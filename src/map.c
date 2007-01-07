@@ -790,7 +790,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		*pFileSize += 1+aNumEquiv[i];
 	}
 
-	*ppFileData = MALLOC(*pFileSize);
+	*ppFileData = (typeof(*ppFileData))MALLOC(*pFileSize);
 	if (*ppFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -1613,7 +1613,7 @@ BOOL	writeVisibilityData( char *pFileName )
 	fileSize = ( sizeof(struct _vis_save_header) + ( mapEntries*sizeof(UBYTE) ) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = MALLOC(fileSize);
+	pFileData = (typeof(pFileData))MALLOC(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)

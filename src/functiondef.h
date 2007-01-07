@@ -192,7 +192,7 @@ typedef struct _weapon_upgrade_function
 // GNU C complains about this...
 //	enum _weapon_class	subClass;		/*which weapons are affected */
 // So need to do it this way...
-	WEAPON_CLASS	subClass;			/*which weapons are affected */
+	WEAPON_SUBCLASS		subClass;			/*which weapons are affected */
 	UBYTE			firePause;			/*The % to decrease the fire pause */
 	UWORD			shortHit;			/*The % to increase the  short range accuracy */
 	UWORD			longHit;			/*The % to increase the long range accuracy */

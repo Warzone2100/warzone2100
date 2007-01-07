@@ -495,7 +495,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 
 BOOL loadRenderMode(void)
 {
-	UDWORD val;
+	SDWORD val;
 
 	if( !openWarzoneKey() ) {
 		return FALSE;

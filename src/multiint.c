@@ -248,7 +248,7 @@ void loadMapPreview(void)
 		scale = 5;
 	}
 	oursize=sizeof(unsigned char) *mywidth*myheight;
-  imageData = malloc(oursize *3);
+  imageData = (typeof(imageData))malloc(oursize *3);
   ptr=imageData;
   memset(ptr,0x45,sizeof(unsigned char) *mywidth*myheight*3 );	//dunno about background color
   psTile = psMapTiles;

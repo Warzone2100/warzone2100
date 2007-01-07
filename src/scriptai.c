@@ -362,7 +362,7 @@ BOOL scrDroidLeaveGroup(void)
 BOOL scrOrderGroup(void)
 {
 	DROID_GROUP		*psGroup;
-	SDWORD			order;
+	DROID_ORDER		order;
 
 	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &order))
 	{
@@ -395,7 +395,8 @@ BOOL scrOrderGroup(void)
 BOOL scrOrderGroupLoc(void)
 {
 	DROID_GROUP		*psGroup;
-	SDWORD			order, x,y;
+	DROID_ORDER		order;
+	SDWORD			x,y;
 
 	if (!stackPopParams(4, ST_GROUP, &psGroup, VAL_INT, &order, VAL_INT, &x, VAL_INT, &y))
 	{
@@ -432,7 +433,7 @@ BOOL scrOrderGroupLoc(void)
 BOOL scrOrderGroupObj(void)
 {
 	DROID_GROUP		*psGroup;
-	SDWORD			order;
+	DROID_ORDER		order;
 	BASE_OBJECT		*psObj;
 
 	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &order, ST_BASEOBJECT, &psObj))
@@ -470,7 +471,7 @@ BOOL scrOrderGroupObj(void)
 BOOL scrOrderDroid(void)
 {
 	DROID			*psDroid;
-	SDWORD			order;
+	DROID_ORDER		order;
 
 	if (!stackPopParams(2, ST_DROID, &psDroid, VAL_INT, &order))
 	{
@@ -506,7 +507,8 @@ BOOL scrOrderDroid(void)
 BOOL scrOrderDroidLoc(void)
 {
 	DROID			*psDroid;
-	SDWORD			order, x,y;
+	DROID_ORDER		order;
+	SDWORD			x,y;
 
 	if (!stackPopParams(4, ST_DROID, &psDroid, VAL_INT, &order, VAL_INT, &x, VAL_INT, &y))
 	{
@@ -545,7 +547,7 @@ BOOL scrOrderDroidLoc(void)
 BOOL scrOrderDroidObj(void)
 {
 	DROID			*psDroid;
-	SDWORD			order;
+	DROID_ORDER		order;
 	BASE_OBJECT		*psObj;
 	DROID_OACTION_INFO oaInfo = {{NULL}};
 
@@ -588,7 +590,8 @@ BOOL scrOrderDroidObj(void)
 BOOL scrOrderDroidStatsLoc(void)
 {
 	DROID			*psDroid;
-	SDWORD			order, x,y, statIndex;
+	DROID_ORDER		order;
+	SDWORD			x,y, statIndex;
 	BASE_STATS		*psStats;
 
 	if (!stackPopParams(5, ST_DROID, &psDroid, VAL_INT, &order, ST_STRUCTURESTAT, &statIndex,
@@ -643,7 +646,8 @@ BOOL scrOrderDroidStatsLoc(void)
 BOOL scrSetDroidSecondary(void)
 {
 	DROID		*psDroid;
-	SDWORD		sec, state;
+	SECONDARY_ORDER	sec;
+	SECONDARY_STATE	state;
 
 	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &sec, VAL_INT, &state))
 	{
@@ -666,7 +670,8 @@ BOOL scrSetDroidSecondary(void)
 BOOL scrSetGroupSecondary(void)
 {
 	DROID_GROUP		*psGroup;
-	SDWORD			sec, state;
+	SECONDARY_ORDER		sec;
+	SECONDARY_STATE		state;
 
 	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &sec, VAL_INT, &state))
 	{
@@ -2242,7 +2247,7 @@ BOOL scrSkFireLassat(void)
 BOOL scrActionDroidObj(void)
 {
 	DROID			*psDroid;
-	SDWORD			action;
+	DROID_ACTION		action;
 	BASE_OBJECT		*psObj;
 	DROID_OACTION_INFO oaInfo = {{NULL}};
 

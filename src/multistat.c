@@ -98,7 +98,7 @@ BOOL addToForce(DROID_TEMPLATE  *templ)
 	}
 
 	// add droid.
-	pF = MALLOC(sizeof(FORCE_MEMBER));						// create a slot in the force.
+	pF = (typeof(pF))MALLOC(sizeof(FORCE_MEMBER));						// create a slot in the force.
 	if (!pF)
 	{
 		return FALSE;

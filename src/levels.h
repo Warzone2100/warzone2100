@@ -7,6 +7,7 @@
 #ifndef _levels_h
 #define _levels_h
 
+#include "init.h"
 
 // maximum number of WRF/WDG files
 
@@ -44,7 +45,7 @@ typedef struct _level_dataset
 	SWORD	players;				// number of players for the map
 	SWORD	game;					// index of WRF/WDG that loads the scenario file
 	char	*pName;					// title for the level
-	int	dataDir;					// title for the level
+	searchPathMode	dataDir;					// title for the level
 	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
 							// in load order
 	struct _level_dataset *psBaseData;		// LEVEL_DATASET that must be loaded for this level to load
@@ -58,7 +59,7 @@ typedef struct _level_dataset
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern BOOL levParse(char *pBuffer, SDWORD size, int datadir);
+extern BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir);
 
 // shutdown the level system
 extern void levShutDown(void);

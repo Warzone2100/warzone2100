@@ -156,7 +156,7 @@ BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet)
 }
 
 // parse a level description data file
-BOOL levParse(char *pBuffer, SDWORD size, int datadir)
+BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 {
 	SDWORD			token, state, currData=0;
 	LEVEL_DATASET	*psDataSet = NULL;
@@ -183,7 +183,7 @@ BOOL levParse(char *pBuffer, SDWORD size, int datadir)
 			if (state == LP_START || state == LP_WAITDATA)
 			{
 				// start a new level data set
-				psDataSet = MALLOC(sizeof(LEVEL_DATASET));
+				psDataSet = (typeof(psDataSet))MALLOC(sizeof(LEVEL_DATASET));
 				if (!psDataSet)
 				{
 					levError("Out of memory");
@@ -356,7 +356,7 @@ BOOL levParse(char *pBuffer, SDWORD size, int datadir)
 					psFoundData->psChange = psDataSet;
 				}
 				// store the level name
-				psDataSet->pName = MALLOC(strlen(pLevToken) + 1);
+				psDataSet->pName = (typeof(psDataSet->pName))MALLOC(strlen(pLevToken) + 1);
 				if (!psDataSet->pName)
 				{
 					levError("Out of memory");
@@ -397,7 +397,7 @@ BOOL levParse(char *pBuffer, SDWORD size, int datadir)
 				}
 
 				// store the data name
-				psDataSet->apDataFiles[currData] = MALLOC(strlen(pLevToken) + 1);
+				psDataSet->apDataFiles[currData] = (typeof(psDataSet->apDataFiles[currData]))MALLOC(strlen(pLevToken) + 1);
 				if (!psDataSet->apDataFiles[currData])
 				{
 					levError("Out of memory");

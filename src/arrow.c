@@ -59,7 +59,7 @@ arrowAdd( SDWORD iBaseX, SDWORD iBaseY, SDWORD iBaseZ,
 {
 	ARROW	*psArrow;
 
-	if ( !HEAP_ALLOC( g_psArrowHeap, (void*) &psArrow) )
+	if ( !HEAP_ALLOC( g_psArrowHeap, (void**) &psArrow) )
 	{
 		return FALSE;
 	}

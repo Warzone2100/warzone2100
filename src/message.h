@@ -35,7 +35,7 @@ extern BOOL messageShutdown(void);
 extern void viewDataHeapShutDown(void);
 
 /*Add a messgae to the list */
-extern MESSAGE * addMessage(UDWORD msgType, BOOL proxPos, UDWORD player);
+extern MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
  /*remove a message */
 extern void removeMessage(MESSAGE *psDel, UDWORD player);
 /* Remove all Messages*/

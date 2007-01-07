@@ -105,7 +105,7 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static BOOL compareYes(char *strToCompare, char *strOwner);
-static SDWORD	getMovementModel(char *pMovement);
+static MOVEMENT_MODEL	getMovementModel(char *pMovement);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -1353,7 +1353,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 */
 
 /*returns the propulsion type based on the string name passed in */
-UBYTE	getPropulsionType(char *pType)
+PROPULSION_TYPE	getPropulsionType(char *pType)
 {
 	if (!strcmp(pType,"Wheeled"))
 	{
@@ -3664,7 +3664,7 @@ BOOL getBodySize(char *pSize, UBYTE *pStore)
 }
 
 /*returns the weapon sub class based on the string name passed in */
-SDWORD	getWeaponSubClass(char *pSubClass)
+WEAPON_SUBCLASS	getWeaponSubClass(char *pSubClass)
 {
 	if (!strcmp(pSubClass,"CANNON"))
 	{
@@ -3749,7 +3749,7 @@ SDWORD	getWeaponSubClass(char *pSubClass)
 }
 
 /*returns the movement model based on the string name passed in */
-SDWORD	getMovementModel(char *pMovement)
+MOVEMENT_MODEL	getMovementModel(char *pMovement)
 {
 	if (!strcmp(pMovement,"DIRECT"))
 	{
@@ -3782,7 +3782,7 @@ SDWORD	getMovementModel(char *pMovement)
 
 
 /*returns the weapon effect based on the string name passed in */
-UBYTE	getWeaponEffect(char *pWeaponEffect)
+WEAPON_EFFECT	getWeaponEffect(char *pWeaponEffect)
 {
 	if (!strcmp(pWeaponEffect, "ANTI PERSONNEL"))
 	{

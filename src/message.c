@@ -83,7 +83,7 @@ static void checkMessages(MSG_VIEWDATA *psViewData);
 extern UDWORD selectedPlayer;
 
 #define CREATE_MSG(heap, new, msgType) \
-	if (HEAP_ALLOC(heap, ((void*) new))) \
+	if (HEAP_ALLOC(heap, ((void**) new))) \
 	{ \
 		(*(new))->type = msgType; \
 		(*(new))->id = (msgID<<3)|selectedPlayer; \
@@ -307,7 +307,7 @@ void viewDataHeapShutDown(void)
 }
 
 /*Add a message to the list */
- MESSAGE * addMessage(UDWORD msgType, BOOL proxPos, UDWORD player)
+ MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
  {
 	 MESSAGE *psMsgToAdd = NULL;
 
@@ -354,7 +354,7 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	PROXIMITY_DISPLAY *psToAdd;
 
 	//create the proximity display
-	if (HEAP_ALLOC(psProxDispHeap, (void*) &psToAdd))
+	if (HEAP_ALLOC(psProxDispHeap, (void**) &psToAdd))
 	{
 		if (proxPos)
 		{
@@ -542,7 +542,8 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 						string[MAX_STR_LENGTH],
 						imdName2[MAX_NAME_SIZE];
 	char				audioName[MAX_STR_LENGTH];
-	SDWORD				LocX,LocY,LocZ, proxType, audioID;
+	SDWORD				LocX,LocY,LocZ, audioID;
+	PROX_TYPE	proxType;
         int cnt;
 	//keep the start so we release it at the end
 	//pData = pViewMsgData;

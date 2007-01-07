@@ -681,7 +681,7 @@ BOOL InitialiseGlobals(void)
 }
 
 
-static BOOL loadLevFile(const char* filename, int datadir) {
+static BOOL loadLevFile(const char* filename, searchPathMode datadir) {
 	char *pBuffer;
 	UDWORD size;
 
@@ -899,17 +899,17 @@ BOOL buildMapList(void)
 	char ** filelist, ** file;
 	size_t len;
 
-	if ( !loadLevFile( "gamedesc.lev", MOD_CAMPAIGN ) ) {
+	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) ) {
 		return FALSE;
 	}
-	loadLevFile( "addon.lev", MOD_MULTIPLAY );
+	loadLevFile( "addon.lev", mod_multiplay );
 
 	filelist = PHYSFS_enumerateFiles("");
 	for ( file = filelist; *file != NULL; ++file ) {
 		len = strlen( *file );
 		if ( len > 10 // Do not add addon.lev again
 				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
-			loadLevFile( *file, MOD_MULTIPLAY );
+			loadLevFile( *file, mod_multiplay );
 		}
 	}
 	PHYSFS_freeList( filelist );

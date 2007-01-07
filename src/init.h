@@ -32,10 +32,6 @@ extern BOOL campaignReset(void);
 // Reset the game when loading a save game
 extern BOOL saveGameReset(void);
 
-#define MOD_NONE 0
-#define MOD_CAMPAIGN 1
-#define MOD_MULTIPLAY 2
-
 typedef struct _wzSearchPath
 {
 	char path[MAX_PATH];
@@ -62,5 +58,4 @@ extern BLOCK_HEAP	*psMissionHeap;
 
 extern IMAGEFILE	*FrontImages;
 
-#endif
-
+#endif // _init_h
