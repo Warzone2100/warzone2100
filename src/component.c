@@ -1630,8 +1630,8 @@ iVector	pos;
             case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
 			case DROID_COMMAND:
-				//if(psDroid->numWeaps)
-                if(psDroid->asWeaps[0].nStat > 0)
+				//if(psDroid->asWeaps[0].nStat > 0)
+				if(psDroid->numWeaps)
 				{
 					psImd = WEAPON_IMD(psDroid,psDroid->player);
 				}
