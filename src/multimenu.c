@@ -1150,6 +1150,9 @@ void intCloseDebugMenuNoAnim(void)
 	//intMode		= INT_NORMAL;
 }
 
+/* Opens/closes a 'watch' window (Default key combo: Alt+Space),
+ * only available in debug mode
+ */
 BOOL addDebugMenu(BOOL bAdd)
 {
 	W_FORMINIT		sFormInit;

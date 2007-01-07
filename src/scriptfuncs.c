@@ -10773,11 +10773,11 @@ BOOL scrProcessChatMsg(void)
 		return FALSE;
 	}
 
-	debug(LOG_WZ, "Now preparing to parse '%s'", strParam1);
+	debug(LOG_NEVER, "Now preparing to parse '%s'", strParam1);
 
 	if (!chatLoad(strParam1, strlen(strParam1)))
 	{
-		ASSERT("Couldn't process chat message: %s", strParam1);
+		ASSERT(FALSE, "Couldn't process chat message: %s", strParam1);
 		return FALSE;
 	}
 
