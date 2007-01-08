@@ -617,7 +617,8 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 
 	alSourcef( iSample, AL_GAIN, gain * sfx3d_volume );
 
-	alSource3i( iSample, AL_POSITION, iX, iY, iZ );
+	// the alSource3i variant would be better, if it wouldn't provide linker errors however
+	alSource3f( iSample, AL_POSITION, iX, iY, iZ );
 }
 
 //*
