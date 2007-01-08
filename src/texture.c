@@ -75,8 +75,8 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = (typeof(tileStorage))MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
-	sprite.bmp = (typeof(sprite.bmp))MALLOC(TEXTURE_PAGE_SIZE);
+	tileStorage = (unsigned char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
+	sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 	tilesProcessed = 0;
@@ -112,7 +112,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 				      tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				/* If so, download this one and reset to start again */
 				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
-				sprite.bmp = (typeof(sprite.bmp))MALLOC(TEXTURE_PAGE_SIZE);
+				sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
 			}
@@ -151,12 +151,12 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = (typeof(tileStorage))MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
+	tileStorage = (unsigned char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
 //	texturePage = (typeof(texturePage))MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 
-	sprite.bmp = (typeof(sprite.bmp))MALLOC(TEXTURE_PAGE_SIZE);
+	sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
 //	memset(sprite.bmp,0,TEXTURE_PAGE_SIZE);
 	tilesProcessed = 0;
 	tilesAcross = srcWidth/tileWidth;

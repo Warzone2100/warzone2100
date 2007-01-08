@@ -206,7 +206,7 @@ void recvOptions(NETMSG *pMsg)
 	pos += sizeof(ingame.numStructureLimits);
 	if(ingame.numStructureLimits)
 	{
-		ingame.pStructureLimits = (typeof(ingame.pStructureLimits))MALLOC(ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));	// malloc some room
+		ingame.pStructureLimits = (UBYTE*)MALLOC(ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));	// malloc some room
 		memcpy(ingame.pStructureLimits, &(pMsg->body[pos]) ,ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));
 	}
 

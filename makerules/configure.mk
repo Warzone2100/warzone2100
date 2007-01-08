@@ -65,6 +65,7 @@ CC=g++
 CFLAGS+=-fpermissive
 else
 CC=gcc
+CFLAGS+=-fno-gnu-keywords
 endif
 
 ifeq ($(strip $(MODE)),debug)

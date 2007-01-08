@@ -333,7 +333,7 @@ void createLimitSet(void)
 	}
 
 	//close your eyes now
-	pChanges = (typeof(pChanges))MALLOC(numchanges*(sizeof(UDWORD)+sizeof(UBYTE)));			// allocate some mem for this.
+	pChanges = (UBYTE*)MALLOC(numchanges*(sizeof(UDWORD)+sizeof(UBYTE)));			// allocate some mem for this.
 	pEntry = pChanges;
 
 	for(i=0;i<numStructureStats;i++)								// prepare chunk.

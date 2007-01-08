@@ -132,7 +132,7 @@ BOOL InitRadar(void)
 {
 	UBYTE color;
 
-	radarBuffer = (typeof(radarBuffer))MALLOC(RADWIDTH*RADHEIGHT);
+	radarBuffer = (UBYTE*)MALLOC(RADWIDTH*RADHEIGHT);
 	if(radarBuffer==NULL) return FALSE;
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
 

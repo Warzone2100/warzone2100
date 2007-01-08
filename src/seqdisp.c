@@ -311,13 +311,13 @@ BOOL seq_SetupVideoBuffers(void)
 	UBYTE r,g,b;
 	//assume 320 * 240 * 16bit playback surface
 	mallocSize = (RPL_WIDTH*RPL_HEIGHT*RPL_DEPTH);
-	if ((pVideoBuffer = (typeof(pVideoBuffer))MALLOC(mallocSize)) == NULL)
+	if ((pVideoBuffer = (char*)MALLOC(mallocSize)) == NULL)
 	{
 		return FALSE;
 	}
 
 	mallocSize = 1<<(RPL_BITS_555);//palette only used in 555mode
-	if ((pVideoPalette = (typeof(pVideoPalette))MALLOC(mallocSize)) == NULL)
+	if ((pVideoPalette = (char*)MALLOC(mallocSize)) == NULL)
 	{
 		return FALSE;
 	}

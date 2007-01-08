@@ -472,7 +472,7 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	fileSize = ( sizeof(struct _score_save_header) + sizeof(struct mission_data) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = (typeof(pFileData))MALLOC(fileSize);
+	pFileData = (char*)MALLOC(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)

@@ -82,14 +82,14 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 {
 	SCRV_STORE		*psNew;
 
-	psNew = (typeof(psNew))MALLOC(sizeof(SCRV_STORE));
+	psNew = (SCRV_STORE*)MALLOC(sizeof(SCRV_STORE));
 	if (!psNew)
 	{
 		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
 		abort();
 		return FALSE;
 	}
-	psNew->pIDString = (typeof(psNew->pIDString))MALLOC(strlen(pID) + 1);
+	psNew->pIDString = (char*)MALLOC(strlen(pID) + 1);
 	if (!psNew->pIDString)
 	{
 		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
