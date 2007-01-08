@@ -143,7 +143,7 @@ typedef enum _weapon_subclass
 
 	NUM_WEAPON_SUBCLASS,
 
-	INVALID_SUBCLASS	= NUM_WEAPON_SUBCLASS + 1
+	INVALID_SUBCLASS
 } WEAPON_SUBCLASS;
 
 // used to define which projectile model to use for the weapon
@@ -158,7 +158,7 @@ typedef enum _movement_model
 
 	NUM_MOVEMENT_MODEL,
 
-	INVALID_MOVEMENT	= NUM_MOVEMENT_MODEL + 1
+	INVALID_MOVEMENT
 } MOVEMENT_MODEL;
 
 //used to modify the damage to a propuslion type (or structure) based on weapon
@@ -173,7 +173,7 @@ typedef enum _weapon_effect
 
 	WE_NUMEFFECTS,
 
-	INVALID_WEAPON_EFFECT	= WE_NUMEFFECTS + 1
+	INVALID_WEAPON_EFFECT
 } WEAPON_EFFECT;
 
 #define    SHOOT_ON_GROUND  0x01
@@ -263,7 +263,7 @@ typedef enum _propulsion_type
 
 	NUM_PROP_TYPES,
 
-	INVALID_PROP_TYPE	= NUM_PROP_TYPES + 1
+	INVALID_PROP_TYPE
 } PROPULSION_TYPE;
 
 typedef struct _propulsion_stats
