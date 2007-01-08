@@ -88,17 +88,18 @@ RMF=rm -f
 EXEEXT=
 AR=ar
 WINDRES=
-LDFLAGS+=-lGLU -lGL -lopenal
 endif
 
 # Generic libs
 
 LDFLAGS+=-lSDL -lSDL_net -ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lphysfs
 
-# Additional Windows libs
+# Additional platform-dependend libs
 
 ifeq ($(strip $(PLATFORM)),windows)
 LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
+else
+LDFLAGS+=-lGLU -lGL -lopenal
 endif
 
 include $(MAKERULES)/common.mk
