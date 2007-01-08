@@ -19,21 +19,11 @@ extern BOOL	godMode;
 // The surface to render Message information into for the Intelligence Screen
 extern iSurface	*mapSurface;
 
-/*	Sets up a map surface by allocating the necessary memory and assigning world
-	variables for the renderer to work with */
-extern iSurface* setUpMapSurface(UDWORD width, UDWORD height);
-
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map */
 extern void renderIMDToBuffer(struct iSurface *pSurface, struct iIMDShape *pIMD,
 							  struct iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
 							  UDWORD OriginX,UDWORD OriginY);
-extern void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
+extern void renderResearchToBuffer(RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY);
 
-
-extern void	releaseMapSurface(struct iSurface *pSurface);
-
-
-
-#endif
-
+#endif // _mapdisplay_h

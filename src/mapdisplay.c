@@ -96,55 +96,6 @@ UDWORD	intelColours[MAX_INTEL_SHADES];
 
 /* ----------------------------------------------------------------------------------------- */
 /* Functions */
-iSurface*	setUpMapSurface(UDWORD width, UDWORD height)
-{
-void		*bufSpace;
-iSurface	*pMapSurface;
-
-
-	/*	Release the old buffer if necessary - we may use many different intel maps
-		before resetting the game back to init/close */
-	//releaseIntelMap();
-
-	/* Get the required memory for the render surface */
-	bufSpace = MALLOC(width*height);
-
-	//initialise the buffer
-	memset(bufSpace, 0, (width*height));
-
-	/* Exit if we can't get it! */
-	ASSERT( bufSpace!=NULL,"Can't get the memory for the map buffer" );
-
-	/* Build our new surface */
-	pMapSurface = iV_SurfaceCreate(REND_SURFACE_USR, width, height, 10, 10,bufSpace);
-
-	/* Exit if we can't get it! */
-	ASSERT( pMapSurface!=NULL,"Whoa - can't make surface for map" );
-
-	//set up the intel colours
-	//setUpIntelColours();
-
-	/*	Return a pointer to our surface - from this they can get the rendered buffer
-		as well as info about width and height etc. */
-	return(pMapSurface);
-}
-
-void	releaseMapSurface(iSurface *pSurface)
-{
-	/* Free up old alloaction if necessary */
-	if(pSurface!=NULL)
-	{
-
-		/* Free up old buffer if necessary */
-		if(pSurface->buffer!=NULL)
-		{
-			FREE(pSurface->buffer);
-		}
-
-		FREE(pSurface);
-	}
-}
-
 void	tileLayouts(int texture)
 {
 	/* Store the source rect as four points */
@@ -181,7 +132,7 @@ void	tileLayouts(int texture)
 
 /* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */
-void renderResearchToBuffer(iSurface *pSurface, RESEARCH *psResearch,
+void renderResearchToBuffer(RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY)
 {
 	UDWORD   angle = 0;

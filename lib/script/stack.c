@@ -361,7 +361,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 				{
 					INTERP_VAL	*refVal;
 
-					refVal = psVal->v.oval;	//oval is a pointer to INTERP_VAL in this case
+					refVal = (INTERP_VAL*)psVal->v.oval;	//oval is a pointer to INTERP_VAL in this case
 
 					/* doublecheck types */
 					ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type), "stackPopParams: type mismatch for a reference: %d/%d",
@@ -807,7 +807,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 		{
 		case (VAL_REF | VAL_INT):
 
-			psVal = psVal->v.oval;		//get variable
+			psVal = (INTERP_VAL*)psVal->v.oval;		//get variable
 
 			ASSERT(psVal->type == VAL_INT, "Invalid type for increment opcode: %d", psVal->type);
 
@@ -832,7 +832,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 		{
 		case (VAL_REF | VAL_INT):
 
-			psVal = psVal->v.oval;		//get variable
+			psVal = (INTERP_VAL*)psVal->v.oval;		//get variable
 
 			ASSERT(psVal->type == VAL_INT, "Invalid type for decrement opcode: %d", psVal->type);
 

@@ -290,8 +290,6 @@ extern UDWORD	outlineNotOK;
 extern UDWORD	outlineColour;
 extern UDWORD	outlineColour3D;
 
-//Buffer to hold the 3D view for the Intelligence Screen
-extern iSurface *pIntelMapSurface;
 /*Message View Buffer width and height - MAXIMUM Sizes! - only need to be
 as big as Pie View in Research Msg now*/
 #define	MSG_BUFFER_WIDTH		INTMAP_PIEWIDTH//DISP_WIDTH//640

@@ -429,9 +429,6 @@ static BASE_OBJECT		*psStatsScreenOwner = NULL;
 static UBYTE			ProductionRun = 1;
 #endif
 
-//Buffer to hold the 3D view for the Intelligence Screen
-iSurface	*pIntelMapSurface = NULL;
-
 /* pointer to hold the imd to use for a new template in the design screen */
 //iIMDShape	*pNewDesignIMD = NULL;
 
@@ -766,9 +763,6 @@ BOOL intInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	/*initialise the messages 3D view buffer */
-	pIntelMapSurface = setUpMapSurface(MSG_BUFFER_WIDTH, MSG_BUFFER_HEIGHT);
-
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 
@@ -858,10 +852,6 @@ void intShutDown(void)
 	FREE(apsExtraSysList);
 	FREE(apsObjectList);
 	FREE(apsListToOrder);
-
-	//release the message buffer
-	releaseMapSurface(pIntelMapSurface);
-
 
 	//release the video buffers
 	seq_ReleaseVideoBuffers();

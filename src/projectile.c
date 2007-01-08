@@ -221,7 +221,7 @@ proj_Shutdown( void )
 PROJ_OBJECT *
 proj_GetFirst( void )
 {
-	return hashTable_GetFirst( g_pProjObjTable );
+	return (PROJ_OBJECT*)hashTable_GetFirst( g_pProjObjTable );
 }
 
 /***************************************************************************/
@@ -229,7 +229,7 @@ proj_GetFirst( void )
 PROJ_OBJECT *
 proj_GetNext( void )
 {
-	return hashTable_GetNext( g_pProjObjTable );
+	return (PROJ_OBJECT*)hashTable_GetNext( g_pProjObjTable );
 }
 
 /***************************************************************************/
@@ -306,7 +306,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			"proj_SendProjectile: invalid weapon stats" );
 
 	/* get unused projectile object from hashtable*/
-	psObj = hashTable_GetElement( g_pProjObjTable );
+	psObj = (PROJ_OBJECT*)hashTable_GetElement( g_pProjObjTable );
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)

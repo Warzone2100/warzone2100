@@ -189,7 +189,7 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 {
 	DROID_GROUP		*psGroup;
 
-	psGroup = psVal->v.oval;
+	psGroup = (DROID_GROUP*)psVal->v.oval;
 	grpReset(psGroup);
 
 	ASSERT( psGroup->refCount == 1,

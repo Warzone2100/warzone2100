@@ -1511,7 +1511,7 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
-		renderResearchToBuffer(pIntelMapSurface, psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
+		renderResearchToBuffer(psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
 
 		CloseButtonRender();
 
