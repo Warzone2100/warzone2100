@@ -80,8 +80,8 @@ RMF=del /F
 EXEEXT=.exe
 AR=ar
 WINDRES=windres
-CFLAGS+=-mwindows -DWIN32
-LDFLAGS+=-lmingw32
+CFLAGS+=-mwindows -DWIN32 -Dmain=SDLmain
+LDFLAGS+=-lmingw32 -lSDLmain
 else
 DIRSEP=/
 RMF=rm -f
@@ -93,7 +93,7 @@ endif
 
 # Generic libs
 
-LDFLAGS+=-ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lphysfs -lSDLmain -lSDL -lSDL_net
+LDFLAGS+=-lSDL -lSDL_net -ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lphysfs
 
 # Additional Windows libs
 
