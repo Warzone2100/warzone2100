@@ -1,5 +1,5 @@
 %.o: %.rc
-	$(WINDRES) -o$@ $<
+	$(WINDRES) -DVERSION="\"$(VERSION)\"" -o$@ $<
 
 dist_noinst_DATA = \
 		warzone2100.rc \

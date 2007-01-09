@@ -10,29 +10,19 @@ PATCHLIST = addon.lev anims audio components effects \
 BASEARCHIVE=warzone.wz
 PATCHARCHIVE=mp.wz
 
+all:
+ifdef DATA
 all: $(BASEARCHIVE) $(PATCHARCHIVE)
+endif
 
-ifeq ($(strip $(COMPRESS)),)
-
-$(BASEARCHIVE):
+$(BASEARCHIVE): $(BASELIST)
 	zip -ru0 $@ $(BASELIST) -x *svn*
 	zip -T $@
 
-$(PATCHARCHIVE):
+$(PATCHARCHIVE): $(PATCHLIST)
 	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
 	zip -T $@
 
-else
-
-$(BASEARCHIVE):
-	zip -ru9 $@ $(BASELIST) -x *svn*
-	zip -T $@
-
-$(PATCHARCHIVE):
-	cd mp && zip -ru9 ../$@ $(PATCHLIST) -x *svn*
-	zip -T $@
-
-endif
-
 clean:
-	$(RMF) $(BASEARCHIVE) $(PATCHARCHIVE)
+	$(RMF) $(BASEARCHIVE)
+	$(RMF) $(PATCHARCHIVE)

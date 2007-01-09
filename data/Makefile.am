@@ -6,35 +6,41 @@ BASELIST = anims audio components effects features \
 PATCHLIST = addon.lev anims audio components effects \
 	messages multiplay stats structs texpages wrf
 
+BASEARCHIVE=warzone.wz
+PATCHARCHIVE=mp.wz
+
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)
 
-all: mp.wz warzone.wz
+if DATA
+all: $(BASEARCHIVE) $(PATCHARCHIVE)
+endif
 
-mp.wz:
-	cd mp && { zip -ru0 ../mp.wz $(PATCHLIST) -x *svn* || zip -T ../mp.wz ; } && cd ..
+$(BASEARCHIVE): $(BASELIST)
+	zip -ru0 $@ $(BASELIST) -x *svn*
+	zip -T $@
 
-warzone.wz:
-	zip -ru0 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz
+$(PATCHARCHIVE): $(PATCHLIST)
+	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
+	zip -T $@
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(datadir)/warzone2100
-	$(INSTALL_DATA) $(srcdir)/warzone.wz $(DESTDIR)$(datadir)/warzone2100/warzone.wz
-	$(INSTALL_DATA) $(srcdir)/mp.wz $(DESTDIR)$(datadir)/warzone2100/mp.wz
+	$(INSTALL_DATA) $(srcdir)/$(BASEARCHIVE) $(DESTDIR)$(datadir)/warzone2100/$(BASEARCHIVE)
+	$(INSTALL_DATA) $(srcdir)/$(PATCHARCHIVE) $(DESTDIR)$(datadir)/warzone2100/$(PATCHARCHIVE)
 
 uninstall-local:
-	rm -f $(DESTDIR)$(datadir)/warzone.wz
-	rm -f $(DESTDIR)$(datadir)/mp.wz
+	rm -f $(DESTDIR)$(datadir)/$(BASEARCHIVE)
+	rm -f $(DESTDIR)$(datadir)/$(PATCHARCHIVE)
 
 clean-local:
-	rm -f warzone.wz
-	rm -f mp.wz
+	rm -f $(BASEARCHIVE)
+	rm -f $(PATCHARCHIVE)
 
 installcheck:
-	[ -f warzone.wz ] && zip -T warzone.wz
-	[ -f mp.wz ] && zip -T mp.wz
+	[ -f $(BASEARCHIVE) ] && zip -T $(BASEARCHIVE)
+	[ -f $(PATCHARCHIVE) ] && zip -T $(PATCHARCHIVE)
 
-dist-hook:
-	[ -f gamedesc.lev ] && { zip -ru9 warzone.wz $(BASELIST) -x *svn* || zip -T warzone.wz; }
-	[ -f gamedesc.lev ] && { cd mp && { zip -ru9 ../mp.wz ${PATCHLIST} -x *svn* || zip -T ../mp.wz ; } && cd .. ; }
-	[ -f warzone.wz ] && cp -fu warzone.wz mp.wz $(DESTDIR)$(distdir)
+dist-hook: $(BASEARCHIVE) $(PATCHARCHIVE)
+	cp -fu $(BASEARCHIVE) $(DESTDIR)$(distdir)
+	cp -fu $(PATCHARCHIVE) $(DESTDIR)$(distdir)

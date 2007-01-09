@@ -3,8 +3,11 @@ include $(MAKERULES)/configure.mk
 
 SETUPFILE=warzone2100-$(VERSION).exe
 
+all:
+ifdef INSTALLER
 ifeq ($(strip $(PLATFORM)),windows)
 all: $(SETUPFILE)
+endif
 endif
 
 $(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/grim.wz

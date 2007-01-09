@@ -15,12 +15,6 @@ else
 $(info PLATFORM set to $(PLATFORM))
 endif
 
-ifeq ($(strip $(COMPILER)),)
-$(error You must set COMPILER in $(MAKERULES)/config.mk)
-else
-$(info COMPILER set to $(COMPILER))
-endif
-
 ifeq ($(strip $(MODE)),)
 $(error You must set MODE in $(MAKERULES)/config.mk)
 else
@@ -45,12 +39,6 @@ else
 $(info FLEX is set to $(FLEX))
 endif
 
-ifeq ($(strip $(MAKENSIS)),)
-$(error You must set MAKENSIS in $(MAKERULES)/config.mk)
-else
-$(info MAKENSIS is set to $(MAKENSIS))
-endif
-
 
 # Setup paths and static values
 
@@ -59,13 +47,6 @@ LDFLAGS+=-L$(DEVDIR)/lib
 
 
 # Setup build environment with config values
-
-ifeq ($(strip $(COMPILER)),g++)
-CC=g++
-CFLAGS+=-fpermissive
-else
-CC=gcc
-endif
 
 ifeq ($(strip $(MODE)),debug)
 CFLAGS+=-O0 -g2 -DDEBUG -Wall
@@ -78,15 +59,17 @@ ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F
 EXEEXT=.exe
-AR=ar
-WINDRES=windres
-CFLAGS+=-mwindows -DWIN32 -Dmain=SDLmain
+AR=mingw32-ar
+CC=mingw32-gcc
+WINDRES=mingw32-windres
+CFLAGS+=-mwindows -DWIN32
 LDFLAGS+=-lmingw32 -lSDLmain
 else
 DIRSEP=/
 RMF=rm -f
 EXEEXT=
 AR=ar
+CC=gcc
 WINDRES=
 endif
 

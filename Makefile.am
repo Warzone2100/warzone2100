@@ -1,19 +1,4 @@
-if MINGW32
-SUBDIRS = win32
-else
-SUBDIRS =
-endif
-
-SUBDIRS += lib src
-
-if DATA
-SUBDIRS += data
-endif
-
-if INSTALLER
-SUBDIRS += nsis
-endif
-
+SUBDIRS = win32 lib src data nsis
 
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)
