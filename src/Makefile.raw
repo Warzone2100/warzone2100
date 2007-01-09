@@ -45,7 +45,7 @@ SRC=ai.c \
 	intelmap.c \
 	keybind.c \
 	keymap.c \
-	level_lexer.c \
+	level_lexer.lex.c \
 	levels.c \
 	lighting.c \
 	loop.c \
@@ -79,8 +79,8 @@ SRC=ai.c \
 	scriptobj.c \
 	scripttabs.c \
 	scriptvals.c \
-	scriptvals_parser.c \
-	scriptvals_lexer.c \
+	scriptvals_parser.tab.c \
+	scriptvals_lexer.lex.c \
 	selection.c \
 	stats.c \
 	text.c \

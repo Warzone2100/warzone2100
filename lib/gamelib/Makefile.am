@@ -1,13 +1,19 @@
+%.tab.h %.tab.c: %.y
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
+
+%.lex.c: %.l
+	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
+
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 noinst_LIBRARIES = libgamelib.a
 AM_CPPFLAGS = -I$(top_srcdir)
-BUILT_SOURCES = audp_parser.h
+BUILT_SOURCES = audp_parser.tab.h
 libgamelib_a_SOURCES = \
 	anim.c \
 	animobj.c \
-	audp_lexer.l \
-	audp_parser.y \
+	audp_lexer.lex.c \
+	audp_parser.tab.c \
 	gtime.c \
 	hashtabl.c \
 	pqueue.c \

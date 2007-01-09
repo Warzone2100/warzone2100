@@ -3,8 +3,8 @@ include $(MAKERULES)/configure.mk
 
 SRC=anim.c \
 	animobj.c \
-	audp_parser.c \
-	audp_lexer.c \
+	audp_parser.tab.c \
+	audp_lexer.lex.c \
 	gtime.c \
 	hashtabl.c \
 	pqueue.c \

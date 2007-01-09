@@ -10,11 +10,11 @@ SRC=block.c \
 	input.c \
 	mem.c \
 	mono.c \
-	resource_parser.c \
-	resource_lexer.c \
+	resource_parser.tab.c \
+	resource_lexer.lex.c \
 	strres.c \
-	strres_parser.c \
-	strres_lexer.c \
+	strres_parser.tab.c \
+	strres_lexer.lex.c \
 	treap.c \
 	trig.c \
 	SDL_framerate.c

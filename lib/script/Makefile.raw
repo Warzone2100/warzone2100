@@ -6,10 +6,10 @@ SRC=codeprint.c \
 	evntsave.c \
 	interp.c \
 	script.c \
-	chat_parser.c \
-	chat_lexer.c \
-	script_parser.c \
-	script_lexer.c \
+	chat_parser.tab.c \
+	chat_lexer.lex.c \
+	script_parser.tab.c \
+	script_lexer.lex.c \
 	stack.c
 
 LIB=script
