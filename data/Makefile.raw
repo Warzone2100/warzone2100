@@ -1,0 +1,28 @@
+MAKERULES=../makerules
+include $(MAKERULES)/configure.mk
+
+BASELIST = anims audio components effects features \
+	gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script \
+	sequenceaudio stats structs texpages wrf
+PATCHLIST = addon.lev anims audio components effects \
+	messages multiplay stats structs texpages wrf
+
+BASEARCHIVE=warzone.wz
+PATCHARCHIVE=mp.wz
+
+all:
+ifdef DATA
+all: $(BASEARCHIVE) $(PATCHARCHIVE)
+endif
+
+$(BASEARCHIVE): $(BASELIST)
+	zip -ru0 $@ $(BASELIST) -x *svn*
+	zip -T $@
+
+$(PATCHARCHIVE): $(PATCHLIST)
+	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
+	zip -T $@
+
+clean:
+	$(RMF) $(BASEARCHIVE)
+	$(RMF) $(PATCHARCHIVE)
