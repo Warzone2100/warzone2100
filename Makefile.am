@@ -1,10 +1,4 @@
-if MAKE_DATA
-DSUBDIRS = data
-else
-DSUBDIRS =
-endif
-
-SUBDIRS = $(DSUBDIRS) win32 lib src
+SUBDIRS = win32 lib src data nsis
 
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)

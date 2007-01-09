@@ -1,5 +1,5 @@
 %.o: %.rc
-	$(WINDRES) -o$@ $<
+	$(WINDRES) -DVERSION=\"$(VERSION)\" -o$@ $<
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o$@ $<

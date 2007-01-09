@@ -9,6 +9,7 @@
 # include <shlobj.h>
 #endif // WIN32
 
+#include <SDL/SDL_main.h>
 #include <physfs.h>
 
 #include "lib/widget/widget.h"
