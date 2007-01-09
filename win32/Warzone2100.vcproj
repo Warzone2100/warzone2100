@@ -50,7 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;D:\Dokumente und Einstellungen\Admin\Desktop\Warzone2100&quot;;&quot;D:\Programme\DevPkg\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..&quot;;&quot;__DEVPKG__\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -74,7 +74,7 @@
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;D:\Programme\DevPkg\lib&quot;"
+				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
 				IgnoreDefaultLibraryNames="msvcrt.lib libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;D:\Dokumente und Einstellungen\Admin\Desktop\Warzone2100&quot;;&quot;D:\Programme\DevPkg\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..&quot;;&quot;__DEVPKG__\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -157,7 +157,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;D:\Programme\DevPkg\lib&quot;"
+				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
