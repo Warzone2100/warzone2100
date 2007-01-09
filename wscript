@@ -84,7 +84,7 @@ def configure(conf):
 	conf.check_library2('jpeg')
 
 	# Common defines
-	conf.env['CCFLAGS'] += ['-Idebug/lib/framework', '-Idebug/lib/script', '-Idebug/src']
+	conf.env['CCFLAGS'] += ['-Idebug/lib/framework', '-Idebug/lib/script', '-Idebug/src', '-Idefault/lib/framework', '-Idefault/lib/script', '-Idefault/src']
 	conf.add_define('VERSION', VERSION)
 	conf.add_define('DEFAULT_DATADIR', Params.g_options.prefix + 'warzone2100')
 	conf.add_define('YY_STATIC', 1)
