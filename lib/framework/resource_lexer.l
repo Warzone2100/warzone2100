@@ -17,7 +17,7 @@
 #include "lib/framework/resly.h"
 
 /* Get the Yacc definitions */
-#include "lib/framework/resource_parser.h"
+#include "resource_parser.tab.h"
 
 void res_error(const char *pMessage,...);
 
@@ -130,4 +130,5 @@ int res_wrap(void)
 	}
 	return 1;
 }
+
 

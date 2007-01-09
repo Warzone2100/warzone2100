@@ -14,7 +14,7 @@
 #include "codeprint.h"
 #include "script.h"
 
-#include "lib/script/script_parser.h"
+#include "script_parser.tab.h"
 
 /* number of values in each stack chunk */
 #define INIT_SIZE		30	//15
@@ -1245,6 +1245,7 @@ void stackReset(void)
 
 	return TRUE;
 }*/
+
 
 
 

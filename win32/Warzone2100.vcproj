@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="Warzone"
+	Name="Warzone2100"
 	ProjectGUID="{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}"
-	RootNamespace="Warzone"
+	RootNamespace="Warzone2100"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -13,6 +13,9 @@
 		/>
 	</Platforms>
 	<ToolFiles>
+		<ToolFile
+			RelativePath=".\FlexBison.rules"
+		/>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -26,7 +29,14 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="FlexGenerator"
+			/>
+			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="BisonParser"
+				Defines="true"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -40,8 +50,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;9.9.9\&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;D:\Dokumente und Einstellungen\Admin\Desktop\Warzone2100&quot;;&quot;D:\Programme\DevPkg\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -49,7 +59,6 @@
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
-				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -62,12 +71,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib png13.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib shfolder.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
-				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="msvcrt.lib,libcmt.lib"
+				AdditionalLibraryDirectories="&quot;D:\Programme\DevPkg\lib&quot;"
+				IgnoreDefaultLibraryNames="msvcrt.lib libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -109,7 +117,13 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="FlexGenerator"
+			/>
+			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="BisonParser"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -122,16 +136,13 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
-				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="&quot;__WARZONE_SRC__&quot;;&quot;__DEVPKG__\include&quot;;&quot;__PLATFORM_SDK__\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;9.9.9\&quot;"
-				StringPooling="true"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;D:\Dokumente und Einstellungen\Admin\Desktop\Warzone2100&quot;;&quot;D:\Programme\DevPkg\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
+				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				CompileAs="1"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -144,16 +155,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg6b.lib ogg.lib vorbis.lib vorbisfile.lib png13.lib mad.lib OpenAL32.lib OpenGL32.lib GLU32.lib physfs.lib shfolder.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;;&quot;__PLATFORM_SDK__\Lib&quot;"
-				IgnoreAllDefaultLibraries="false"
+				AdditionalLibraryDirectories="&quot;D:\Programme\DevPkg\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="1"
-				SetChecksum="true"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -247,11 +256,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\gamelib\audp_lexer.c"
+				RelativePath=".\audp_lexer.lex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\gamelib\audp_parser.c"
+				RelativePath=".\audp_parser.tab.c"
 				>
 			</File>
 			<File
@@ -299,11 +308,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\chat_lexer.c"
+				RelativePath=".\chat_lexer.lex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\chat_parser.c"
+				RelativePath=".\chat_parser.tab.c"
 				>
 			</File>
 			<File
@@ -559,7 +568,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\level_lexer.c"
+				RelativePath=".\level_lexer.lex.c"
 				>
 			</File>
 			<File
@@ -829,11 +838,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\resource_lexer.c"
+				RelativePath=".\resource_lexer.lex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\resource_parser.c"
+				RelativePath=".\resource_parser.tab.c"
 				>
 			</File>
 			<File
@@ -857,11 +866,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\script_lexer.c"
+				RelativePath=".\script_lexer.lex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\script_parser.c"
+				RelativePath=".\script_parser.tab.c"
 				>
 			</File>
 			<File
@@ -893,11 +902,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_lexer.c"
+				RelativePath=".\scriptvals_lexer.lex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.c"
+				RelativePath=".\scriptvals_parser.tab.c"
 				>
 			</File>
 			<File
@@ -933,11 +942,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\strres_lexer.c"
+				RelativePath=".\strres_lexer.lex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\strres_parser.c"
+				RelativePath=".\strres_parser.tab.c"
 				>
 			</File>
 			<File
@@ -1075,7 +1084,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\gamelib\audp_parser.h"
+				RelativePath=".\audp_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1139,7 +1148,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\chat_parser.h"
+				RelativePath=".\chat_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1192,6 +1201,14 @@
 			</File>
 			<File
 				RelativePath="..\src\csnap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\cursors.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\cursors16.h"
 				>
 			</File>
 			<File
@@ -1675,11 +1692,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\framework\platform.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\player.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\playlist.h"
+				RelativePath="..\lib\sound\playlist.h"
 				>
 			</File>
 			<File
@@ -1739,7 +1760,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\resource_parser.h"
+				RelativePath=".\resource_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1763,7 +1784,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\script_parser.h"
+				RelativePath=".\script_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1795,7 +1816,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1839,7 +1860,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\strres_parser.h"
+				RelativePath=".\strres_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1907,10 +1928,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_opengl\vid.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\visibility.h"
 				>
 			</File>
@@ -1939,15 +1956,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\win32fixes.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\winmain.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\wrappers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\wzglobal.h"
 				>
 			</File>
 		</Filter>
@@ -1957,7 +1974,63 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="warzone2100.rc"
+				RelativePath="..\win32\warzone2100.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="FlexBison"
+			>
+			<File
+				RelativePath="..\lib\gamelib\audp_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\gamelib\audp_parser.y"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\chat_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\chat_parser.y"
+				>
+			</File>
+			<File
+				RelativePath="..\src\level_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\resource_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\resource_parser.y"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\script_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\script\script_parser.y"
+				>
+			</File>
+			<File
+				RelativePath="..\src\scriptvals_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\src\scriptvals_parser.y"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\strres_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\strres_parser.y"
 				>
 			</File>
 		</Filter>

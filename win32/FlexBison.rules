@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* FlexBison.rules
+*
+*       Copyright 2006(c) Microsoft Corporation. All rights reserved.
+*
+-->
+<VisualStudioToolFile
+	Name="Flex and Bison Tools"
+	Version="8.00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="FlexGenerator"
+			DisplayName="Flex Generator"
+			CommandLine="flex.exe [AllOptions] [AdditionalOptions] [Inputs]"
+			Outputs="$(InputName).lex.c"
+			FileExtensions="*.l"
+			ExecutionDescription="Generating lexical analyser..."
+			>
+			<Properties>
+				<BooleanProperty
+					Name="BackingUpInfo"
+					DisplayName="Generate backing-up information"
+					Category="Debug information"
+					Description="Generates the file &apos;lex.backup&apos; that contains a list of scanner states which require backing up and the input characters on which they do so."
+					Switch="-b"
+				/>
+				<BooleanProperty
+					Name="DebuggerOn"
+					DisplayName="Run in debug mode"
+					Category="Debug information"
+					Description="Turn on debug mode in generated scanner"
+					Switch="-d"
+				/>
+				<BooleanProperty
+					Name="GenFast"
+					DisplayName="Generate fast large scanner"
+					PropertyPageName="Performance"
+					Description="Generate fast, large scanner"
+					Switch="-f"
+				/>
+				<BooleanProperty
+					Name="CaseInsensitive"
+					DisplayName="Case insensitive scanner"
+					Description="The case of letters given in the flex input patterns will be ignored, and tokens in the input will be matched regardless of case"
+					Switch="-i"
+				/>
+				<BooleanProperty
+					Name="CompatibilityOn"
+					DisplayName="Maximum compatibility with lex"
+					Description="Turns on maximum compatibility with the original AT&amp;T lex implementation. Note that this does not mean full compatibility."
+					Switch="-l"
+				/>
+				<BooleanProperty
+					Name="PerformanceReport"
+					DisplayName="Generate performance report"
+					PropertyPageName="Performance"
+					Description="Generates a performance report to stderr. The report consists of comments regarding features of the flex input file which will cause a serious loss of performance in the resulting scanner."
+					Switch="-p"
+				/>
+				<BooleanProperty
+					Name="SuppressDefault"
+					DisplayName="Suppress the default rule"
+					Description="Causes the default rule (that unmatched scanner input is echoed to stdout) to be suppressed. If the scanner encounters input that does not match any of its rules, it aborts with an error."
+					Switch="-s"
+				/>
+				<BooleanProperty
+					Name="SuppressWarnings"
+					DisplayName="Suppress warning messages"
+					Description="Suppress warning messages."
+					Switch="-w"
+				/>
+				<BooleanProperty
+					Name="BatchScanner"
+					DisplayName="Generate Batch Scanner"
+					PropertyPageName="Performance"
+					Description="Instructs flex to generate a batch scanner. In general, you use &apos;-B&apos; when you are certain that your scanner will never be used interactively, and you want to squeeze a little more performance out of it."
+					Switch="-B"
+				/>
+				<BooleanProperty
+					Name="FastScanner"
+					DisplayName="Use fast scanner table representation"
+					PropertyPageName="Performance"
+					Description="Specifies that the fast scanner table representation should be used (and stdio bypassed). This representation is about as fast as the full table representation &apos;(-f)&apos;, and for some sets of patterns will be considerably smaller (and for others, larger)."
+					Switch="-F"
+				/>
+				<BooleanProperty
+					Name="InteractiveScanner"
+					DisplayName="Generate an interactive scanner"
+					PropertyPageName="Performance"
+					Description="Instructs flex to generate an interactive scanner. An interactive scanner is one that only looks ahead to decide what token has been matched if it absolutely must."
+					Switch="-I"
+				/>
+				<BooleanProperty
+					Name="NoGenLineDirectives"
+					DisplayName="Don&apos;t generate #line directives"
+					Category="Debug information"
+					Description="Instructs flex not to generate &apos;#line&apos; directives. Without this option, flex peppers the generated scanner with #line directives so error messages in the actions will be correctly located with respect to either the original flex input file."
+					Switch="-L"
+				/>
+				<BooleanProperty
+					Name="TraceMode"
+					DisplayName="Trace mode"
+					Category="Debug information"
+					Description="Makes flex run in trace mode. It will generate a lot of messages to stderr concerning the form of the input and the resultant non-deterministic and deterministic finite automata."
+					Switch="-T"
+				/>
+				<StringProperty
+					Name="OutputFile"
+					DisplayName="Output File"
+					Description="The output file containing the implementation of the analyser"
+					Switch="-o[value]"
+					DefaultValue="$(InputName).lex.c"
+				/>
+				<StringProperty
+					Name="ScannerPrefix"
+					DisplayName="Scanner Prefix"
+					Description="Specify scanner prefix other than yy"
+					Switch="-P[value]"
+					DefaultValue="$(InputName)"
+				/>
+				<EnumProperty
+					Name="TableCompression"
+					DisplayName="Table Compression"
+					PropertyPageName="Performance"
+					Description="Controls the degree of table compression and, more generally, trade-offs between small scanners and fast scanners."
+					>
+					<Values>
+						<EnumValue
+							Value="0"
+							Switch="-Cem"
+							DisplayName="Equivalence classes and meta-equivalence classes (slowest &amp; smallest)"
+						/>
+						<EnumValue
+							Value="1"
+							Switch="-Cm"
+							DisplayName="Meta-equivalence classes"
+						/>
+						<EnumValue
+							Value="2"
+							Switch="-Ce"
+							DisplayName="Equivalence classes"
+						/>
+						<EnumValue
+							Value="3"
+							Switch="-C"
+							DisplayName="Compress scanner tables"
+						/>
+						<EnumValue
+							Value="4"
+							Switch="-Cfe"
+							DisplayName="Full scanner tables and equivalence classes"
+						/>
+						<EnumValue
+							Value="5"
+							Switch="-CFe"
+							DisplayName="Alternate fast scanner representation and equivalence classes"
+						/>
+						<EnumValue
+							Value="6"
+							Switch="-Cf"
+							DisplayName="Full scanner tables"
+						/>
+						<EnumValue
+							Value="7"
+							Switch="-CF"
+							DisplayName="Alternate fast scanner representation"
+						/>
+						<EnumValue
+							Value="8"
+							Switch="-Cfa"
+							DisplayName="Align data in full scanner tables (fastest &amp; largest)"
+						/>
+						<EnumValue
+							Value="9"
+							Switch="-CFa"
+							DisplayName="Align data in the alternate fast scanner representation (fastest &amp; largest)"
+						/>
+					</Values>
+				</EnumProperty>
+				<StringProperty
+					Name="SkeletonFile"
+					DisplayName="Use custom skeleton"
+					Description="Overrides the default skeleton file from which flex constructs its scanners"
+					Switch="-S[value]"
+				/>
+			</Properties>
+		</CustomBuildRule>
+		<CustomBuildRule
+			Name="BisonParser"
+			DisplayName="Bison Parser"
+			CommandLine="bison.exe [AllOptions] [AdditionalOptions] [Inputs]"
+			Outputs="$(InputName).tab.c"
+			FileExtensions="*.y"
+			ExecutionDescription="Generating parser based on grammar..."
+			>
+			<Properties>
+				<StringProperty
+					Name="FilePrefix"
+					DisplayName="File Prefix"
+					Description="Specify a prefix to use for all Bison output file names"
+					Switch="-b [value]"
+					DefaultValue="$(InputName)"
+				/>
+				<BooleanProperty
+					Name="Defines"
+					DisplayName="Use defines"
+					Description="Write an extra output file containing macro definitions for the token type names defined in the grammar and the semantic value type YYSTYPE, as well as a few extern variable declarations"
+					Switch="-d"
+				/>
+				<BooleanProperty
+					Name="NoGenLineDirectives"
+					DisplayName="Don&apos;t generate &apos;#line&apos; directives"
+					Description="Don&apos;t put any #line preprocessor commands in the parser file. Ordinarily Bison puts them in the parser file so that the C compiler and debuggers will associate errors with your source file, the grammar file."
+					Switch="-l"
+				/>
+				<StringProperty
+					Name="OutputFile"
+					DisplayName="Output file name"
+					Description="Specify the name outfile for the parser file"
+					Switch="-o [value]"
+				/>
+				<StringProperty
+					Name="RenameExternalSymbols"
+					DisplayName="Rename External Symbols"
+					Description="Rename the external symbols used in the parser so that they start with prefix instead of `yy&apos;."
+					Switch="-p [value]"
+					DefaultValue="$(InputName)"
+				/>
+				<BooleanProperty
+					Name="DebuggerOn"
+					DisplayName="Compile debugging facilities"
+					Description="Output a definition of the macro YYDEBUG into the parser file, so that the debugging facilities are compiled"
+					Switch="-t"
+				/>
+				<BooleanProperty
+					Name="Verbose"
+					DisplayName="Output parser states"
+					Description="Write an extra output file containing verbose descriptions of the parser states and what is done for each type of look-ahead token in that state"
+					Switch="-v"
+				/>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>

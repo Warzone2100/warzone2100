@@ -19,7 +19,7 @@
 #include "lib/script/chat_processing.h"
 
 /* Get the Yacc definitions */
-#include "lib/script/chat_parser.h"
+#include "chat_parser.tab.h"
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
@@ -179,4 +179,5 @@ int chat_wrap(void)
 {
 	return 1;
 }
+
 
