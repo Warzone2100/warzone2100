@@ -167,36 +167,22 @@ void printSearchPath( void )
 }
 
 
-/***************************************************************************
-	Initialize the PhysicsFS library.
-***************************************************************************/
-static void initialize_PhysicsFS(void)
+static void getPlatformUserDir(char * tmpstr)
 {
-	PHYSFS_Version compiled;
-	PHYSFS_Version linked;
-	char tmpstr[MAX_PATH] = { '\0' };
-#ifdef __APPLE__
+#if defined(WZ_OS_WIN)
+	if ( GetDllVersion(TEXT("shell32.dll")) >= PACKVERSION(5,0) &&
+			SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) )
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else if ( GetDllVersion(TEXT("shell32.dll")) >= PACKVERSION(4,71) &&
+			SUCCEEDED( SHGetSpecialFolderPath( NULL, tmpstr, CSIDL_PERSONAL, TRUE ) ) )
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else
+#elif defined(WZ_OS_MAC)
 	short vol_ref;
 	long dir_id;
 	FSSpec fsspec;
 	FSRef fsref;
-	OSErr error;
-#endif
-
-	PHYSFS_VERSION(&compiled);
-	PHYSFS_getLinkedVersion(&linked);
-
-	debug(LOG_WZ, "Compiled against PhysFS version: %d.%d.%d",
-	      compiled.major, compiled.minor, compiled.patch);
-	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
-	      linked.major, linked.minor, linked.patch);
-
-#if defined(WZ_OS_WIN)
-	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
-		strcat( tmpstr, PHYSFS_getDirSeparator() );
-	else
-#elif defined(WZ_OS_MAC)
-	error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
+	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
 	if (!error)
 		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
 	if (!error)
@@ -206,8 +192,30 @@ static void initialize_PhysicsFS(void)
 	if (!error)
 		strcat( tmpstr, PHYSFS_getDirSeparator() );
 	else
+#else
+		strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
 #endif
-	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+}
+
+
+/***************************************************************************
+	Initialize the PhysicsFS library.
+***************************************************************************/
+static void initialize_PhysicsFS(void)
+{
+	PHYSFS_Version compiled;
+	PHYSFS_Version linked;
+	char tmpstr[MAX_PATH] = { '\0' };
+
+	PHYSFS_VERSION(&compiled);
+	PHYSFS_getLinkedVersion(&linked);
+
+	debug(LOG_WZ, "Compiled against PhysFS version: %d.%d.%d",
+	      compiled.major, compiled.minor, compiled.patch);
+	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
+	      linked.major, linked.minor, linked.patch);
+
+	getPlatformUserDir(tmpstr);
 
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
 	{
