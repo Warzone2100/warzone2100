@@ -3,7 +3,6 @@ include $(MAKERULES)/configure.mk
 
 SRC=audio.c \
 	cdaudio.c \
-	mixer_stub.c \
 	openal_track.c \
 	playlist.c \
 	track.c

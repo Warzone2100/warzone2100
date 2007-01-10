@@ -987,7 +987,6 @@ BOOL systemInitialise(void)
 
 	if (war_GetPlayAudioCDs()) {
 		cdAudio_Open(UserMusicPath);
-		mixer_Open();
 	}
 
 	if (!bDisableLobby && !multiInitialise()) // ajl. Init net stuff
@@ -1086,7 +1085,6 @@ BOOL systemShutdown(void)
 		debug(LOG_MAIN, "shutting down CD audio");
 		cdAudio_Stop();
 		cdAudio_Close();
-		mixer_Close();
 	}
 
 	if ( audio_Disabled() == FALSE && !audio_Shutdown() )
