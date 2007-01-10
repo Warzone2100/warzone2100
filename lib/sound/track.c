@@ -31,35 +31,12 @@ static SDWORD			g_iMaxSameSamples;
 
 // flag set when system is active (for callbacks etc)
 static BOOL				g_bSystemActive = FALSE;
-static BOOL				g_bDevVolume = FALSE;
 static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
 
 //*
-// =======================================================================================================================
-// =======================================================================================================================
 //
-static BOOL sound_CheckDevice( void )
-{
-	//
-	// * // Bah, not needed! --Qamly. #ifdef WIN32MM WAVEOUTCAPS waveCaps;
-	// * MMRESULT mmRes;
-	// * // check wave out device(s) present if ( waveOutGetNumDevs() == 0 ) { DBPRINTF(
-	// * ("sound_CheckDevice: error in waveOutGetNumDevs\n") );
-	// * return FALSE;
-	// * } // default to using first device: check volume control caps mmRes =
-	// * waveOutGetDevCaps( 0, (LPWAVEOUTCAPS) &waveCaps, sizeof(WAVEOUTCAPS) );
-	// * if ( mmRes != MMSYSERR_NOERROR ) { DBPRINTF( ("sound_CheckDevice: error in
-	// * waveOutGetDevCaps\n") );
-	// * return FALSE;
-	// * } // verify device supports volume changes // if ( waveCaps.dwSupport &
-	// * WAVECAPS_VOLUME ) { return TRUE;
-	// * } else { DBPRINTF( ("sound_CheckDevice: wave out device doesn't support volume
-	// * changes\n") );
-	// * return FALSE;
-	// * } #endif Checking if needed
-	//
-	return TRUE;
-}
+// Function prototypes
+static void sound_CheckSample( AUDIO_SAMPLE *psSample );
 
 //*
 // =======================================================================================================================
@@ -73,7 +50,6 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 
 	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
-	g_bDevVolume = sound_CheckDevice();
 	if ( sound_InitLibrary() == FALSE )
 	{
 		debug( LOG_NEVER, "Cannot init sound library\n" );
@@ -342,14 +318,10 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_CheckSample( AUDIO_SAMPLE *psSample )
+static void sound_CheckSample( AUDIO_SAMPLE *psSample )
 {
 	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)), "sound_CheckSample: sample pointer invalid\n" );
 	ASSERT( psSample->iSample >= 0 || psSample->iSample == SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->iSample );
-
-	//
-	// psSample;
-	//
 }
 
 //*
@@ -616,6 +588,3 @@ void sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime )
 	sound_CheckTrack( iTrack );
 	g_apTrack[iTrack]->iTimeLastFinished = iTime;
 }
-
-//*
-//

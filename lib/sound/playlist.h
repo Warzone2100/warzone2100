@@ -11,7 +11,6 @@ char PlayList_Read(const char* path);
 void PlayList_SetTrack(unsigned int t);
 char* PlayList_CurrentSong(void);
 char* PlayList_NextSong(void);
-void PlayList_DeleteCurrentSong(void);
 
 /***************************************************************************/
 

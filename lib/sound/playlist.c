@@ -46,7 +46,8 @@ void PlayList_Quit(void) {
 	}
 }
 
-char PlayList_Read(const char* path) {
+char PlayList_Read(const char* path) 
+{
 	PHYSFS_file * f;
 	char* path_to_music = NULL;
 	char buffer[BUFFER_SIZE], ByteBuf = '\0';
@@ -89,12 +90,12 @@ char PlayList_Read(const char* path) {
 			} else {
 				path_to_music = strdup(path_to_music);
 			}
-			debug( LOG_WZ, "  path = %s\n", path_to_music );
+			debug( LOG_SOUND, "  path = %s\n", path_to_music );
 		} else if (strncmp(buffer, "shuffle=", 8) == 0) {
 			if (strcmp(strtok(buffer+8, "\n"), "yes") == 0) {
 				CURRENT_TRACK.shuffle = TRUE;
 			}
-			debug( LOG_WZ, "  shuffle = yes\n" );
+			debug( LOG_SOUND, "  shuffle = yes\n" );
 		} else if (   buffer[0] != '\0'
 			   && (filename = strtok(buffer, "\n")) != NULL
 			   && strlen(filename) != 0) {
@@ -108,7 +109,7 @@ char PlayList_Read(const char* path) {
 						  + strlen(path_to_music)+2);
 				sprintf(filepath, "%s/%s", path_to_music, filename);
 			}
-			debug( LOG_WZ, "  adding song %s\n", filepath );
+			debug( LOG_SOUND, "  adding song %s\n", filepath );
 
 			if (CURRENT_TRACK.nb_songs == CURRENT_TRACK.list_size) {
 				CURRENT_TRACK.list_size <<= 1;
@@ -171,7 +172,3 @@ char* PlayList_NextSong(void) {
 		return CURRENT_TRACK.songs[current_song];
 	}
 }
-
-void PlayList_DeleteCurrentSong(void) {
-}
-
