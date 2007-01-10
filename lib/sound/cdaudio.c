@@ -3,12 +3,6 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef WZ_CDA
-
-#include <SDL/SDL.h>
-
-#else
-
 #ifdef WZ_OPENAL_MAC_H
 #include <openal/al.h>
 #else
@@ -26,18 +20,10 @@
 #include <vorbis/vorbisfile.h>
 #endif
 
-#endif
-
 #include "audio.h"
 #include "cdaudio.h"
-
+#include "mixer.h"
 #include "playlist.h"
-
-#ifdef WZ_CDA
-
-SDL_CD	*cdAudio_dev;
-
-#else
 
 extern BOOL		openal_initialized;
 
@@ -63,7 +49,6 @@ static unsigned char	mp3_buffer[MP3_BUFFER_SIZE + MAD_BUFFER_GUARD];
 static unsigned int	mp3_buffer_length;
 static unsigned int	mp3_size;
 static unsigned int	mp3_pos_in_frame;
-#endif
 
 #ifndef WZ_NOOGG
 static OggVorbis_File	ogg_stream;
@@ -114,24 +99,6 @@ int wz_ogg_close( void *datasource )
 //
 BOOL cdAudio_Open( char* user_musicdir )
 {
-#ifdef WZ_CDA
-	if ( !SDL_CDNumDrives() )
-	{
-		debug( LOG_SOUND, "No CDROM devices available\n" );
-		return FALSE;
-	}
-
-	cdAudio_dev = SDL_CDOpen( 0 );
-	if ( !cdAudio_dev )
-	{
-		debug( LOG_SOUND, "Couldn't open drive: %s\n", SDL_GetError() );
-		return FALSE;
-	}
-
-	SDL_CDStatus( cdAudio_dev );
-
-	return TRUE;
-#else
 	if (!openal_initialized) {
 		return FALSE;
 	}
@@ -155,7 +122,6 @@ BOOL cdAudio_Open( char* user_musicdir )
 	music_initialized = TRUE;
 
 	return TRUE;
-#endif
 }
 
 //*
@@ -164,12 +130,6 @@ BOOL cdAudio_Open( char* user_musicdir )
 //
 BOOL cdAudio_Close( void )
 {
-#ifdef WZ_CDA
-	if ( cdAudio_dev != NULL )
-	{
-		SDL_CDClose( cdAudio_dev );
-	}
-#endif
 	alDeleteBuffers(NB_BUFFERS, music_buffers);
 	alDeleteSources(1, &music_source);
 	PlayList_Quit();
@@ -262,7 +222,6 @@ static int mp3_read_buffer(char *buffer, const int size) {
 
 #endif
 
-#ifndef WZ_CDA
 static BOOL cdAudio_OpenTrack(char* filename) {
 	if (!music_initialized) {
 		return FALSE;
@@ -435,7 +394,6 @@ static BOOL cdAudio_FillBuffer(ALuint b) {
 
 	return TRUE;
 }
-#endif
 
 //*
 // ======================================================================
@@ -443,14 +401,6 @@ static BOOL cdAudio_FillBuffer(ALuint b) {
 //
 BOOL cdAudio_PlayTrack( SDWORD iTrack )
 {
-#ifdef WZ_CDA
-	if ( cdAudio_dev != NULL )
-	{
-		SDL_CDPlayTracks( cdAudio_dev, iTrack - 1, 0, 1, 0 );
-	}
-
-	return TRUE;
-#else
 	unsigned int i;
 
 	cdAudio_CloseTrack();
@@ -486,7 +436,6 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 	alSourcePlay(music_source);
 
 	return TRUE;
-#endif
 }
 
 //*
@@ -495,17 +444,8 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 //
 BOOL cdAudio_Stop( void )
 {
-#ifdef WZ_CDA
-	if ( cdAudio_dev != NULL )
-	{
-		SDL_CDStop( cdAudio_dev );
-	}
-
-	return TRUE;
-#else
 	cdAudio_CloseTrack();
 	return TRUE;
-#endif
 }
 
 //*
@@ -514,16 +454,7 @@ BOOL cdAudio_Stop( void )
 //
 BOOL cdAudio_Pause( void )
 {
-#ifdef WZ_CDA
-	if ( cdAudio_dev != NULL )
-	{
-		SDL_CDPause( cdAudio_dev );
-	}
-
 	return TRUE;
-#else
-	return TRUE;
-#endif
 }
 
 //*
@@ -532,16 +463,7 @@ BOOL cdAudio_Pause( void )
 //
 BOOL cdAudio_Resume( void )
 {
-#ifdef WZ_CDA
-	if ( cdAudio_dev != NULL )
-	{
-		SDL_CDResume( cdAudio_dev );
-	}
-
 	return TRUE;
-#else
-	return TRUE;
-#endif
 }
 
 //*
@@ -550,7 +472,6 @@ BOOL cdAudio_Resume( void )
 //
 void cdAudio_Update( void )
 {
-#ifndef WZ_CDA
 	if (   music_track != 0
 	    && music_volume != 0.0) {
 		int processed = 0;
@@ -575,7 +496,6 @@ void cdAudio_Update( void )
 			}
 		}
 	}
-#endif
 }
 
 //*
@@ -602,6 +522,3 @@ void mixer_SetCDVolume( SDWORD iVol )
 	}
 	alSourcef (music_source, AL_GAIN, music_volume);
 }
-
-
-
