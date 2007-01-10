@@ -8,6 +8,6 @@ dist_noinst_DATA = \
 if MINGW32
 nodist_noinst_DATA = \
 		warzone2100.o
+endif
 
 CLEANFILES = $(nodist_noinst_DATA)
-endif

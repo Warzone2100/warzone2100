@@ -6,8 +6,8 @@ SRC=codeprint.c \
 	evntsave.c \
 	interp.c \
 	script.c \
-	script_parser.c \
-	script_lexer.c \
+	script_parser.tab.c \
+	script_lexer.lex.c \
 	stack.c
 
 LIB=script

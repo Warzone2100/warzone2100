@@ -1,14 +1,20 @@
+%.tab.h %.tab.c: %.y
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
+
+%.lex.c: %.l
+	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
+
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-BUILT_SOURCES = resource_parser.h strres_parser.h
+BUILT_SOURCES = resource_parser.tab.h strres_parser.tab.h
 noinst_LIBRARIES = libframework.a
 AM_CPPFLAGS = -I$(top_srcdir)
 libframework_a_SOURCES = \
     SDL_framerate.c \
-	resource_lexer.l \
-	resource_parser.y \
-	strres_lexer.l \
-	strres_parser.y \
+	resource_lexer.lex.c \
+	resource_parser.tab.c \
+	strres_lexer.lex.c \
+	strres_parser.tab.c \
 	block.c \
 	configfile.c \
 	debug.c \

@@ -8,7 +8,7 @@
 #include "parser.h"
 
 /* Get the Yacc definitions */
-#include "audp_parser.h"
+#include "audp_parser.tab.h"
 
 /* Maximum length for any TEXT value */
 #define YYLMAX	255

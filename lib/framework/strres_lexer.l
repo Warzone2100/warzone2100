@@ -20,7 +20,7 @@
 #include "strresly.h"
 
 /* Get the Yacc definitions */
-#include "strres_parser.h"
+#include "strres_parser.tab.h"
 
 void strres_error(const char *pMessage,...);
 
@@ -122,4 +122,5 @@ int strres_wrap(void)
 
 	return 1;
 }
+
 

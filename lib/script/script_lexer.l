@@ -11,7 +11,7 @@
 #include "script.h"
 
 /* Get the Yacc definitions */
-#include "script_parser.h"
+#include "script_parser.tab.h"
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
