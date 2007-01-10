@@ -13,6 +13,49 @@
 /* For SHGetFolderPath */
 #ifdef WZ_OS_WIN
 # include <shlobj.h>
+# include <shlwapi.h>
+
+#define PACKVERSION(major,minor) MAKELONG(minor,major)
+DWORD GetDllVersion(LPCTSTR lpszDllName)
+{
+	HINSTANCE hinstDll;
+	DWORD dwVersion = 0;
+
+	/* For security purposes, LoadLibrary should be provided with a 
+	   fully-qualified path to the DLL. The lpszDllName variable should be
+	   tested to ensure that it is a fully qualified path before it is used. */
+	hinstDll = LoadLibrary(lpszDllName);
+
+	if(hinstDll)
+	{
+		DLLGETVERSIONPROC pDllGetVersion;
+		pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinstDll, "DllGetVersion");
+
+		/* Because some DLLs might not implement this function, you
+		   must test for it explicitly. Depending on the particular 
+		   DLL, the lack of a DllGetVersion function can be a useful
+		   indicator of the version. */
+
+		if(pDllGetVersion)
+		{
+			DLLVERSIONINFO dvi;
+			HRESULT hr;
+
+			ZeroMemory(&dvi, sizeof(dvi));
+			dvi.cbSize = sizeof(dvi);
+
+			hr = (*pDllGetVersion)(&dvi);
+
+			if(SUCCEEDED(hr))
+			{
+				dwVersion = PACKVERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
+			}
+		}
+
+		FreeLibrary(hinstDll);
+	}
+	return dwVersion;
+}
 #endif // WZ_OS_WIN
 
 #include "lib/framework/configfile.h"
@@ -192,9 +235,8 @@ static void getPlatformUserDir(char * tmpstr)
 	if (!error)
 		strcat( tmpstr, PHYSFS_getDirSeparator() );
 	else
-#else
-		strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
 #endif
+		strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
 }
 
 
