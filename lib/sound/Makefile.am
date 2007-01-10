@@ -3,7 +3,6 @@ AM_CPPFLAGS = -I$(top_srcdir)
 libsound_a_SOURCES = \
 	audio.c \
 	cdaudio.c \
-	mixer_stub.c \
 	openal_track.c \
 	playlist.c \
 	track.c \
