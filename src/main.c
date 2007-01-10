@@ -5,8 +5,52 @@
 #include "lib/framework/frame.h"
 
 /* For SHGetFolderPath */
-#ifdef WIN32
+#if defined(WIN32)
 # include <shlobj.h>
+# include <shlwapi.h>
+
+# define PACKVERSION(major,minor) MAKELONG(minor,major)
+DWORD GetDllVersion(LPCTSTR lpszDllName)
+{
+    HINSTANCE hinstDll;
+    DWORD dwVersion = 0;
+
+    /* For security purposes, LoadLibrary should be provided with a 
+       fully-qualified path to the DLL. The lpszDllName variable should be
+       tested to ensure that it is a fully qualified path before it is used. */
+    hinstDll = LoadLibrary(lpszDllName);
+        
+    if(hinstDll)
+    {
+        DLLGETVERSIONPROC pDllGetVersion;
+        pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinstDll, 
+                          "DllGetVersion");
+
+        /* Because some DLLs might not implement this function, you
+        must test for it explicitly. Depending on the particular 
+        DLL, the lack of a DllGetVersion function can be a useful
+        indicator of the version. */
+
+        if(pDllGetVersion)
+        {
+            DLLVERSIONINFO dvi;
+            HRESULT hr;
+
+            ZeroMemory(&dvi, sizeof(dvi));
+            dvi.cbSize = sizeof(dvi);
+
+            hr = (*pDllGetVersion)(&dvi);
+
+            if(SUCCEEDED(hr))
+            {
+               dwVersion = PACKVERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
+            }
+        }
+
+        FreeLibrary(hinstDll);
+    }
+    return dwVersion;
+}
 #endif // WIN32
 
 #include <SDL/SDL_main.h>
@@ -198,36 +242,22 @@ void printSearchPath( void )
 }
 
 
-/***************************************************************************
-	Initialize the PhysicsFS library.
-***************************************************************************/
-static void initialize_PhysicsFS(void)
+static void getPlatformUserDir(char * tmpstr)
 {
-	PHYSFS_Version compiled;
-	PHYSFS_Version linked;
-	char tmpstr[MAX_PATH] = { '\0' };
-#ifdef __APPLE__
+#if defined(WIN32)
+	if ( GetDllVersion(TEXT("shell32.dll")) >= PACKVERSION(5,0) &&
+			SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) )
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else if ( GetDllVersion(TEXT("shell32.dll")) >= PACKVERSION(4,71) &&
+			SUCCEEDED( SHGetSpecialFolderPath( NULL, tmpstr, CSIDL_PERSONAL, TRUE ) ) )
+		strcat( tmpstr, PHYSFS_getDirSeparator() );
+	else
+#elif defined(__APPLE__)
 	short vol_ref;
 	long dir_id;
 	FSSpec fsspec;
 	FSRef fsref;
-	OSErr error;
-#endif
-
-	PHYSFS_VERSION(&compiled);
-	PHYSFS_getLinkedVersion(&linked);
-
-	debug(LOG_WZ, "Compiled against PhysFS version: %d.%d.%d",
-	      compiled.major, compiled.minor, compiled.patch);
-	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
-	      linked.major, linked.minor, linked.patch);
-
-#if defined(WIN32)
-	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) ) // Use "Documents and Settings\Username\My Documents" ("Personal" data in local lang) if possible
-		strcat( tmpstr, PHYSFS_getDirSeparator() );
-	else
-#elif defined(__APPLE__)
-	error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
+	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
 	if (!error)
 		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
 	if (!error)
@@ -238,7 +268,28 @@ static void initialize_PhysicsFS(void)
 		strcat( tmpstr, PHYSFS_getDirSeparator() );
 	else
 #endif
-	strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+		strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+}
+
+
+/***************************************************************************
+	Initialize the PhysicsFS library.
+***************************************************************************/
+static void initialize_PhysicsFS(void)
+{
+	PHYSFS_Version compiled;
+	PHYSFS_Version linked;
+	char tmpstr[MAX_PATH] = { '\0' };
+
+	PHYSFS_VERSION(&compiled);
+	PHYSFS_getLinkedVersion(&linked);
+
+	debug(LOG_WZ, "Compiled against PhysFS version: %d.%d.%d",
+	      compiled.major, compiled.minor, compiled.patch);
+	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
+	      linked.major, linked.minor, linked.patch);
+
+	getPlatformUserDir(tmpstr);
 
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
 	{
