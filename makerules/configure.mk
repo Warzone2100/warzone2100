@@ -97,6 +97,8 @@ LDFLAGS+=-lSDL -lSDL_net -ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lph
 
 ifeq ($(strip $(PLATFORM)),windows)
 LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
+else ifeq ($(strip $(PLATFORM)),mingw32)
+LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
 else
 LDFLAGS+=-lGLU -lGL -lopenal
 endif
