@@ -84,7 +84,6 @@ def configure(conf):
 	conf.check_library2('jpeg')
 
 	# Common defines
-	conf.env['CCFLAGS'] += ['-Idebug/lib/framework', '-Idebug/lib/script', '-Idebug/src', '-Idefault/lib/framework', '-Idefault/lib/script', '-Idefault/src']
 	conf.add_define('VERSION', VERSION)
 	conf.add_define('DEFAULT_DATADIR', Params.g_options.prefix + 'warzone2100')
 	conf.add_define('YY_STATIC', 1)
@@ -109,6 +108,7 @@ def build(bld):
 	obj = bld.create_obj('cc', 'program')
 	obj.find_sources_in_dirs('lib/framework lib/gamelib lib/netplay lib/ivis_common lib/ivis_opengl lib/script lib/sequence lib/sound lib/widget src')
 	obj.uselib='PNG JPEG MAD OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
+	obj.includes='lib/framework lib/script src'
 	obj.defines='HAVE_CONFIG_H'
 	obj.target='warzone2100'
 
