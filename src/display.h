@@ -187,7 +187,7 @@ BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
 extern BOOL CheckScrollLimits(void);
 //extern BOOL	widgetsOn;
 extern BOOL	rotActive;
-extern float	gammaValue;
+extern int gammaValue;
 //extern BOOL	forceWidgetsOn;
 
 BASE_OBJECT	*mouseTarget( void );

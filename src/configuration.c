@@ -32,7 +32,7 @@
 
 #define DEFAULTFXVOL	80
 #define DEFAULTCDVOL	60
-#define DEFAULTGAMMA	25
+#define DEFAULTGAMMA	20
 #define DEFAULTSCROLL	800
 #define DEFAULTMAPNAME	"Rush"
 
@@ -89,18 +89,20 @@ BOOL loadConfig(BOOL bResourceAvailable)
 
 	// //////////////////////////
 	// gamma
-	if(getWarzoneKeyNumeric("gamma", &val))
+	if (getWarzoneKeyNumeric("gamma", &val))
 	{
-		gammaValue =(float)val/(float)25;
-		if(gammaValue<0.5)gammaValue =(float).5;
-		pie_SetGammaValue(gammaValue);
+		gammaValue = val;
+		if (gammaValue < 10)
+			gammaValue = 10;
+		//pie_SetGammaValue((float)gammaValue / 20.0f);
 	}
 	else
 	{
-		gammaValue =(float)DEFAULTGAMMA/(float)25;
-		pie_SetGammaValue(gammaValue);
-		if(gammaValue<0.5)gammaValue =(float).5;
-		setWarzoneKeyNumeric("gamma", DEFAULTGAMMA);
+		gammaValue = DEFAULTGAMMA;
+		if (gammaValue < 10)
+			gammaValue = 10;
+		//pie_SetGammaValue((float)gammaValue / 20.0f);
+		setWarzoneKeyNumeric("gamma", gammaValue);
 	}
 
 	// //////////////////////////
@@ -500,7 +502,6 @@ BOOL loadRenderMode()
 // ////////////////////////////////////////////////////////////////////////////
 BOOL saveConfig()
 {
-
 	debug( LOG_WZ, "Writing prefs to registry\n" );
 
 	if(!openWarzoneKey())
@@ -525,7 +526,7 @@ BOOL saveConfig()
 		setDifficultyLevel(DL_NORMAL);
 	}
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
-	setWarzoneKeyNumeric("gamma",(DWORD)(gammaValue*25));			// gamma
+	setWarzoneKeyNumeric("gamma", (SDWORD)(gammaValue));
 	setWarzoneKeyNumeric("scroll",(DWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
 	setWarzoneKeyNumeric("barmode",(DWORD)barMode);			//energybars
