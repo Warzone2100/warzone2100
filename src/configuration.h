@@ -6,4 +6,4 @@
 extern BOOL loadConfig				(BOOL bResourceAvailable);
 extern BOOL loadRenderMode			(void);
 extern BOOL saveConfig				(void);
-void closeConfig( void );
+extern void closeConfig( void );

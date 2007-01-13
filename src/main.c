@@ -21,7 +21,7 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 	HINSTANCE hinstDll;
 	DWORD dwVersion = 0;
 
-	/* For security purposes, LoadLibrary should be provided with a 
+	/* For security purposes, LoadLibrary should be provided with a
 	   fully-qualified path to the DLL. The lpszDllName variable should be
 	   tested to ensure that it is a fully qualified path before it is used. */
 	hinstDll = LoadLibrary(lpszDllName);
@@ -32,7 +32,7 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 		pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinstDll, "DllGetVersion");
 
 		/* Because some DLLs might not implement this function, you
-		   must test for it explicitly. Depending on the particular 
+		   must test for it explicitly. Depending on the particular
 		   DLL, the lack of a DllGetVersion function can be a useful
 		   indicator of the version. */
 
@@ -472,6 +472,8 @@ int main(int argc, char *argv[])
 
 init://jump here from the end if re_initialising
 
+	debug(LOG_MAIN, "reinitializing");
+
 	if (!blkInitialise())
 	{
 		return FALSE;
@@ -481,28 +483,30 @@ init://jump here from the end if re_initialising
 
 	bDisableLobby = FALSE;
 
+	loadConfig(FALSE);
+	atexit( closeConfig );
+
 	// parse the command line
 	if (!reInit) {
 		if (!ParseCommandLine(argc, argv)) {
 			return -1;
 		}
-		atexit( closeConfig );
 	}
+
+	saveConfig();
 
 	scanDataDirs();
 
-	debug(LOG_MAIN, "reinitializing");
-
 	// find out if the lobby stuff has been disabled
 	if (!bDisableLobby &&
-		!lobbyInitialise())			// ajl. Init net stuff. Lobby can modify startup conditions like commandline.
+		!lobbyInitialise())// ajl. Init net stuff. Lobby can modify startup conditions like commandline.
 	{
 		return -1;
 	}
 
 	reInit = FALSE;//just so we dont restart again
 
-	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(),pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
+	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{
 		return -1;
 	}
