@@ -39,6 +39,14 @@ else
 $(info FLEX is set to $(FLEX))
 endif
 
+ifneq ($(strip $(INSTALLER)),)
+ifeq ($(strip $(MAKENSIS)),)
+$(error You must set MAKENSIS in $(MAKERULES)/config.mk)
+else
+$(info MAKENSIS is set to $(MAKENSIS))
+endif
+endif
+
 
 # Setup paths and static values
 
@@ -52,12 +60,20 @@ ifeq ($(strip $(MODE)),debug)
 CFLAGS+=-O0 -g2 -DDEBUG -Wall
 else
 CFLAGS+=-O2 -g0 -DNDEBUG
-LDFLAGS+=-Wl,-S
 endif
 
 ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F
+EXEEXT=.exe
+AR=ar
+CC=gcc
+WINDRES=windres
+CFLAGS+=-mwindows -DWIN32
+LDFLAGS+=-lmingw32 -lSDLmain
+else ifeq ($(strip $(PLATFORM)),mingw32)
+DIRSEP=/
+RMF=rm -f
 EXEEXT=.exe
 AR=mingw32-ar
 CC=mingw32-gcc
