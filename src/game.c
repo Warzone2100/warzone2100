@@ -5975,7 +5975,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		}
 		else
 		{
-			endian_uword(&psSaveDroid->sMove.iAttackRuns[0])
+			endian_uword(&psSaveDroid->sMove.iAttackRuns[0]);
 		}
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON */
