@@ -71,7 +71,8 @@ CC=gcc
 WINDRES=windres
 CFLAGS+=-mwindows -DWIN32
 LDFLAGS+=-lmingw32 -lSDLmain
-else ifeq ($(strip $(PLATFORM)),mingw32)
+else
+ifeq ($(strip $(PLATFORM)),mingw32)
 DIRSEP=/
 RMF=rm -f
 EXEEXT=.exe
@@ -88,6 +89,7 @@ AR=ar
 CC=gcc
 WINDRES=
 endif
+endif
 
 # Generic libs
 
@@ -97,10 +99,12 @@ LDFLAGS+=-lSDL -lSDL_net -ljpeg -lpng -lz -lmad -lvorbisfile -lvorbis -logg -lph
 
 ifeq ($(strip $(PLATFORM)),windows)
 LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
-else ifeq ($(strip $(PLATFORM)),mingw32)
+else
+ifeq ($(strip $(PLATFORM)),mingw32)
 LDFLAGS+=-lwsock32 -lwinmm -lglu32 -lopengl32 -lopenal32
 else
 LDFLAGS+=-lGLU -lGL -lopenal
+endif
 endif
 
 include $(MAKERULES)/common.mk
