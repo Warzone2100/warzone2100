@@ -138,7 +138,7 @@ BOOL sound_InitLibrary( void )
 	debug(LOG_SOUND, "OpenAL Extensions : %s",alGetString(AL_EXTENSIONS));
 
 
-	alListener3i( AL_POSITION, 0, 0, 0 );
+	alListener3f( AL_POSITION, 0, 0, 0 );
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
@@ -573,7 +573,7 @@ void sound_SetSampleVolAll( int iVol )
 //
 void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
-	alListener3i( AL_POSITION, iX, iY, iZ );
+	alListener3f( AL_POSITION, iX, iY, iZ );
 }
 
 //
