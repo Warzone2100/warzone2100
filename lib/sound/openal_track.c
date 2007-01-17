@@ -119,12 +119,6 @@ BOOL sound_InitLibrary( void )
 				alcGetString(device, err));
 		return FALSE;
 	}
-	err = alGetError();
-	if (err != AL_NO_ERROR) {
-		PrintOpenALVersion();
-		debug(LOG_ERROR, "Audio error after init: %s", alGetString(err));
-		return FALSE;
-	}
 
 	openal_initialized = TRUE;
 
