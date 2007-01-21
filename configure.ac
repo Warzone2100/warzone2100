@@ -32,7 +32,7 @@ if test x$host_os = xmingw32 ; then
 		if test x$WINDRES = xno ; then
 			AC_MSG_ERROR([windres not found])
 		fi
-		WIN32_LIBS="-lwsock32 -lwinmm"
+		WIN32_LIBS="-lshfolder -lwinmm -lwsock32"
 fi
 
 
