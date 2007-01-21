@@ -32,7 +32,7 @@ endif
 config.status: configure
 	dh_testdir
 
-	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --bindir=\$${prefix}/games --datadir=\$${prefix}/share/games --mandir=\$${prefix}/share/man --with-opengl --with-ogg --with-mp3
+	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --bindir=\$${prefix}/games --datadir=\$${prefix}/share/games --mandir=\$${prefix}/share/man --enable-data
 
 
 build: build-stamp
