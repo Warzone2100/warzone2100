@@ -20,7 +20,7 @@ $(BASEARCHIVE): $(BASELIST)
 	zip -ru0 $@ $(BASELIST) -x *svn*
 	zip -T $@
 
-$(PATCHARCHIVE): $(PATCHLIST)
+$(PATCHARCHIVE): $(PATCHLIST:%=mp/%)
 	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
 	zip -T $@
 
