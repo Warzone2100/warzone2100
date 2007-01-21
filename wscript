@@ -115,4 +115,3 @@ def build(bld):
 	# Use debug environment when --enable-debug is given
 	if Params.g_options.debug:
 		obj.env = bld.env_of_name('debug')
-

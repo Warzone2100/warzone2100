@@ -32,49 +32,6 @@
 /* For SHGetFolderPath */
 #ifdef WZ_OS_WIN
 # include <shlobj.h>
-# include <shlwapi.h>
-
-#define PACKVERSION(major,minor) MAKELONG(minor,major)
-DWORD GetDllVersion(LPCTSTR lpszDllName)
-{
-	HINSTANCE hinstDll;
-	DWORD dwVersion = 0;
-
-	/* For security purposes, LoadLibrary should be provided with a
-	   fully-qualified path to the DLL. The lpszDllName variable should be
-	   tested to ensure that it is a fully qualified path before it is used. */
-	hinstDll = LoadLibrary(lpszDllName);
-
-	if(hinstDll)
-	{
-		DLLGETVERSIONPROC pDllGetVersion;
-		pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinstDll, "DllGetVersion");
-
-		/* Because some DLLs might not implement this function, you
-		   must test for it explicitly. Depending on the particular
-		   DLL, the lack of a DllGetVersion function can be a useful
-		   indicator of the version. */
-
-		if(pDllGetVersion)
-		{
-			DLLVERSIONINFO dvi;
-			HRESULT hr;
-
-			ZeroMemory(&dvi, sizeof(dvi));
-			dvi.cbSize = sizeof(dvi);
-
-			hr = (*pDllGetVersion)(&dvi);
-
-			if(SUCCEEDED(hr))
-			{
-				dwVersion = PACKVERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
-			}
-		}
-
-		FreeLibrary(hinstDll);
-	}
-	return dwVersion;
-}
 #endif // WZ_OS_WIN
 
 #include "lib/framework/configfile.h"
@@ -232,11 +189,7 @@ void printSearchPath( void )
 static void getPlatformUserDir(char * tmpstr)
 {
 #if defined(WZ_OS_WIN)
-	if ( GetDllVersion(TEXT("shell32.dll")) >= PACKVERSION(5,0) &&
-			SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) )
-		strcat( tmpstr, PHYSFS_getDirSeparator() );
-	else if ( GetDllVersion(TEXT("shell32.dll")) >= PACKVERSION(4,71) &&
-			SUCCEEDED( SHGetSpecialFolderPath( NULL, tmpstr, CSIDL_PERSONAL, TRUE ) ) )
+	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) )
 		strcat( tmpstr, PHYSFS_getDirSeparator() );
 	else
 #elif defined(WZ_OS_MAC)
