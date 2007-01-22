@@ -203,6 +203,7 @@ static void removeStructFromMap(STRUCTURE *psStruct);
 static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static void revealAll(UBYTE player);
+static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 
 // last time the maximum units message was displayed
@@ -3802,11 +3803,6 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
 #endif
-		psScrCBNewDroid = psNewDroid;
-		psScrCBNewDroidFact = psStructure;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
-		psScrCBNewDroid = NULL;
-		psScrCBNewDroidFact = NULL;
 	}
 	else
 	{
@@ -4569,6 +4565,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						//nothing more to manufacture - reset the Subject and Tab on HCI Form
 						intManufactureFinished(psStructure);
 						psFactory->psSubject = NULL;
+
+						//script callback, must be called after factory was flagged as idle
+						cbNewDroid(psStructure, psDroid);
 					}
 				}
 				else
@@ -4609,6 +4608,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						//when quantity = 0, reset the Subject and Tab on HCI Form
 						psFactory->psSubject = NULL;
 						intManufactureFinished(psStructure);
+
+						//script callback, must be called after factory was flagged as idle
+						cbNewDroid(psStructure, psDroid);
 					}
 				}
 			}
@@ -9930,6 +9932,16 @@ BOOL lasSatStructSelected(STRUCTURE *psStruct)
 
     return FALSE;
 
+}
+
+/* Call CALL_NEWDROID script callback */
+static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
+{
+	psScrCBNewDroid = psDroid;
+	psScrCBNewDroidFact = psFactory;
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
+	psScrCBNewDroid = NULL;
+	psScrCBNewDroidFact = NULL;
 }
 
 /******************** demo stuff ************************/

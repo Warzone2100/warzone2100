@@ -2179,11 +2179,6 @@ void actionUpdateDroid(DROID *psDroid)
 									&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
 									NULL,FALSE,0);
 		}
-		else
-		{
-			debug( LOG_NEVER, "DACTION_BUILD: done\n");
-			psDroid->action = DACTION_NONE;
-		}
 		break;
 	case DACTION_MOVETODEMOLISH:
 	case DACTION_MOVETOREPAIR:

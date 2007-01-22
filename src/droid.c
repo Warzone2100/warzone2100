@@ -1833,6 +1833,10 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		//update the interface
 		intBuildFinished(psDroid);
+
+		debug( LOG_NEVER, "DACTION_BUILD: done\n");
+		psDroid->action = DACTION_NONE;
+
 		return FALSE;
 	}
 
@@ -1978,7 +1982,8 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 		/* must reset here before the callback, droid must have DACTION_NONE
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
-		psDroid->action = DACTION_NONE;	
+		debug( LOG_NEVER, "DACTION_NONE: done\n");
+		psDroid->action = DACTION_NONE;
 
 		/* Notify scripts we just finished building a structure, pass builder and what was built */
 		psScrCBNewStruct	= psStruct;
