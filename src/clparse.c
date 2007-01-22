@@ -280,12 +280,12 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_setSoundEnabled( FALSE );
 		}
-		else if ( stricmp( tokenType, "--viewport" ) == 0 )
+		else if ( stricmp( tokenType, "--resolution" ) == 0 )
 		{
 			token = argv[++i];
 			if ( sscanf( token, "%ix%i", &width, &height ) != 2 )
 			{
-				debug( LOG_ERROR, "Invalid viewport\n" );
+				debug( LOG_ERROR, "Invalid resolution\n" );
 				abort();
 				return FALSE;
 			}
