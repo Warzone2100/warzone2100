@@ -1749,8 +1749,17 @@ BOOL scrSkDifficultyModifier(void)
 		return FALSE;
 	}
 
+	/* Skip cheats if difficulty modifier slider is set to minimum.
+	 * (0 - player disabled, 20 - max value)
+	 */
+	if(game.skDiff[player] <= 1)
+	{
+		return TRUE;
+	}
+
 	// power modifier
 	amount = game.skDiff[player]*40;		//(0-20)*25
+	
 	if(amount > 0)
 	{
 		addPower(player,amount);
