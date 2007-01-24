@@ -24,8 +24,7 @@
 
 #define SIZE_SINE_TABLE		100
 #define AMPLITUDE_HEIGHT	100
-#define	pi 3.141592657
-#define deg pi/SIZE_SINE_TABLE
+#define deg (M_PI / SIZE_SINE_TABLE)
 #define RESTRICT_iV_ANGLE(x)		((x) & (iV_RMULTP - 1))
 
 typedef struct _t_tri

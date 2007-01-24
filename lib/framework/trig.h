@@ -27,8 +27,8 @@
 #define TRIG_DEGREES	360
 
 /* conversion macros */
-#define DEG_TO_RAD(x)	(x*PI/180.0)
-#define RAD_TO_DEG(x)	(x*180.0/PI)
+#define DEG_TO_RAD(x)	(x * M_PI / 180.0)
+#define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
 
 /* Initialise the Trig tables */
 extern BOOL trigInitialise(void);

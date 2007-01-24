@@ -27,7 +27,7 @@
 
 #define NUM_RAYS		360
 
-#define RAY_ANGLE		((float)(2*PI/NUM_RAYS))
+#define RAY_ANGLE		((float)(2 * M_PI / NUM_RAYS))
 
 #define RAY_LENGTH		(TILE_UNITS * 5)
 

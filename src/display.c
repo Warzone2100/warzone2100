@@ -97,7 +97,6 @@
 
 //#define TEST_EFFECT	// Kick off an effect when left mouse button pressed.
 
-#define pi 3.141592657
 struct	_dragBox dragBox3D,wallDrag;
 
 // control whether the scroll is limited to visible tiles
@@ -1428,7 +1427,7 @@ void scroll(void)
 	direction = (360) - worldAngle;
 
 	/* Convert to radians */
-	radians = (((float)pi/180)*(direction));
+	radians = (((float)M_PI / 180) * (direction));
 	cosine = (float)cos(radians);
 	sine = (float)sin(radians);
 

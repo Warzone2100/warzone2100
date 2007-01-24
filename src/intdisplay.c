@@ -25,8 +25,6 @@
  */
 
 #include <stdio.h>
-#include <math.h>
-#include <assert.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"

@@ -26,7 +26,6 @@
 #define DEFINE_DRIVE_INLINE
 
 #include <stdio.h>
-#include <math.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 

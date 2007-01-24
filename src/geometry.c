@@ -24,10 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-#include <math.h>
-
-
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/geo.h" //ivis matrix code
 
@@ -99,7 +95,7 @@ double	angle;
 	/* Watch out here - should really be y1-y0, but coordinate system is reversed in Y */
 	yDif = (y0-y1);
 	angle = atan2(yDif,xDif);
-	angle = (double) (180*(angle/pi));
+	angle = (double) (180 * (angle / M_PI));
 	angleInt = (SDWORD) angle;
 
 	angleInt+=90;

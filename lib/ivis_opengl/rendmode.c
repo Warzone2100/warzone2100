@@ -19,7 +19,6 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"

@@ -25,7 +25,6 @@
  */
 
 #include <stdio.h>
-#include <math.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"

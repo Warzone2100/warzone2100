@@ -24,7 +24,6 @@
 #include "lib/framework/frame.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/piestate.h" //ivis matrix code
 #include "lib/ivis_common/piefunc.h" //ivis matrix code

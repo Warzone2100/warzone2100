@@ -24,8 +24,6 @@
  *
  */
 
-#include <math.h>
-
 /* Turn on the damage printf's from combExplodeBullet */
 //#define DEBUG_GROUP1
 /* Turn on LOS printf's */
@@ -397,9 +395,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (sinf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictX = (sinf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
 				predictX += psTarget->x;
-				predictY = (cosf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictY = (cosf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
 				predictY += psTarget->y;
 			}
 			else
@@ -448,9 +446,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (sinf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictX = (sinf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
 				predictX += psTarget->x;
-				predictY = (cosf(((float)pi/180)*(((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) /psStats->flightSpeed;
+				predictY = (cosf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
 				predictY += psTarget->y;
 			}
 			else

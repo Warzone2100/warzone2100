@@ -38,7 +38,6 @@
 //#define DEBUG_GROUP6
 
 #include <stdio.h>
-#include <math.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
@@ -883,10 +882,10 @@ void updateDroidOrientation(DROID *psDroid)
 	//dx is atan of angle of elevation along x axis
 	//dx is atan of angle of elevation along y axis
 	//body
-	direction = (PI * psDroid->direction) / 180.0;
+	direction = (M_PI * psDroid->direction) / 180.0;
 	pitch = sin(direction) * dx + cos(direction) * dy;
 	pitch = atan(pitch);
-	newPitch = (SDWORD)((pitch * 180) / PI);
+	newPitch = (SDWORD)((pitch * 180) / M_PI);
 	//limit the rate the front comes down to simulate momentum
 	pitchLimit = PITCH_LIMIT * frameTime/GAME_TICKS_PER_SEC;
 	dPitch = newPitch - psDroid->pitch;
@@ -904,15 +903,15 @@ void updateDroidOrientation(DROID *psDroid)
 	}
 	roll = cos(direction) * dx - sin(direction) * dy;
 	roll = atan(roll);
-	psDroid->roll = (UWORD)((roll * 180) / PI);
+	psDroid->roll = (UWORD)((roll * 180) / M_PI);
 	//turret
 /*	direction = (PI * psDroid->turretDirection) / 180.0;
 	pitch = sin(direction) * dx + cos(direction) * dy;
 	pitch = atan(pitch);
-	psDroid->turretPitch = (UDWORD)((pitch * 180) / PI);
+	psDroid->turretPitch = (UDWORD)((pitch * 180) / M_PI);
 	roll = cos(direction) * dx - sin(direction) * dy;
 	roll = atan(roll);
-	psDroid->turretRoll = (UDWORD)((roll * 180) / PI);
+	psDroid->turretRoll = (UDWORD)((roll * 180) / M_PI);
 */
 	return;
 }
@@ -943,7 +942,7 @@ static FRACT vectorToAngle(FRACT vx, FRACT vy)
 {
 	FRACT	angle;	// Angle in degrees (0->360)
 
-	angle = (float)(TRIG_DEGREES * atan2(-vy,vx) / PI / 2);
+	angle = (float)(TRIG_DEGREES * atan2(-vy,vx) / M_PI / 2);
 	angle += TRIG_DEGREES/4;
 	if (angle < 0)
 	{

@@ -19,7 +19,6 @@
 */
 /*	VISIBILTY.C Pumpkin Studios, Eidos Interactive 1996.	*/
 
-#include <math.h>
 #include <stdio.h>
 #include <string.h>
 

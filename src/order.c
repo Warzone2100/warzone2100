@@ -673,7 +673,7 @@ void orderUpdateDroid(DROID *psDroid)
 					if (xdiff*xdiff + ydiff*ydiff < TILE_UNITS * TILE_UNITS)
 					{
 						//Watermelon:conter-clockwise 30 degree's per action
-						radToAction -= pi * 30 / 180;
+						radToAction -= M_PI * 30 / 180;
 						xoffset = sinf(radToAction) * 1500;
 						yoffset = cosf(radToAction) * 1500;
 						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
@@ -1493,16 +1493,16 @@ void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 		adiff = fsAngle - sensorAngle;
 		if (adiff < 0)
 		{
-			adiff += (FRACT)(PI*2);
+			adiff += (FRACT)(M_PI * 2);
 		}
-		if (adiff > PI)
+		if (adiff > M_PI)
 		{
-			adiff -= (FRACT)(PI);
+			adiff -= (FRACT)(M_PI);
 		}
 
 		// if the angle between the firesupport units and the sensor move is bigger
 		// than 45 degrees don't retreat
-		if (adiff > PI/4)
+		if (adiff > M_PI / 4)
 		{
 			goto done;
 		}

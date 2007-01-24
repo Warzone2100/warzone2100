@@ -34,8 +34,6 @@
 #include "fractions.h"
 #include "trig.h"
 
-#define PI 3.141592654
-
 /* Number of steps between -1 and 1 for the inverse tables */
 #define TRIG_ACCURACY	4096
 #define TRIG_ACCMASK	0x0fff
@@ -97,8 +95,8 @@ BOOL trigInitialise(void)
 	}
 
 	// Initialise the tables
-	// inc = 2*PI/TRIG_DEGREES
-	inc = FRACTmul(FRACTCONST(2,1), FRACTCONST(PI,TRIG_DEGREES));
+	// inc = 2 * M_PI / TRIG_DEGREES
+	inc = FRACTmul(FRACTCONST(2,1), FRACTCONST(M_PI, TRIG_DEGREES));
 	val = FRACTCONST(0,1);
 	for(count = 0; count < TRIG_DEGREES; count++)
 	{
@@ -110,8 +108,8 @@ BOOL trigInitialise(void)
 	val = FRACTCONST(-1,1);
 	for(count =0; count < TRIG_ACCURACY; count++)
 	{
-		aInvSin[count] = FRACTmul( ASINFUNC(val), FRACTCONST(TRIG_DEGREES/2, PI) );
-		aInvCos[count] = FRACTmul( ACOSFUNC(val), FRACTCONST(TRIG_DEGREES/2, PI) );
+		aInvSin[count] = FRACTmul( ASINFUNC(val), FRACTCONST(TRIG_DEGREES/2, M_PI) );
+		aInvCos[count] = FRACTmul( ACOSFUNC(val), FRACTCONST(TRIG_DEGREES/2, M_PI) );
 		val += inc;
 	}
 

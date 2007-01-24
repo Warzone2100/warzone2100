@@ -434,7 +434,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	fR = (FRACT_D) atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
-		fR += (FRACT_D) (2*PI);
+		fR += (FRACT_D) (2 * M_PI);
 	}
 	psObj->direction = (UWORD)( RAD_TO_DEG(fR) );
 
@@ -450,7 +450,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		fR = (FRACT_D) atan2(dz, fR);
 		if ( fR < 0.0 )
 		{
-			fR += (FRACT_D) (2*PI);
+			fR += (FRACT_D) (2 * M_PI);
 		}
 		psObj->pitch = (SWORD)( RAD_TO_DEG(fR) );
 		psObj->pInFlightFunc = proj_InFlightDirectFunc;
@@ -494,7 +494,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			/* make sure angle positive */
 			if ( fT < 0 )
 			{
-				fT += (FRACT_D) (2*PI);
+				fT += (FRACT_D) (2 * M_PI);
 			}
 			iPitchLow = MAKEINT_D(RAD_TO_DEG(fT));
 
@@ -502,7 +502,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			/* make sure angle positive */
 			if ( fT < 0 )
 			{
-				fT += (FRACT_D) (2*PI);
+				fT += (FRACT_D) (2 * M_PI);
 			}
 			iPitchHigh = MAKEINT_D(RAD_TO_DEG(fT));
 
@@ -1382,7 +1382,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 					{
 						xDiff = psObj->startX - psObj->psDest->x;
 						yDiff = psObj->startY - psObj->psDest->y;
-						impact_angle = abs(psObj->psDest->direction - (180 * atan2f((float)xDiff, (float)yDiff) /PI));
+						impact_angle = abs(psObj->psDest->direction - (180 * atan2f((float)xDiff, (float)yDiff) / M_PI));
 						if (impact_angle >= 360)
 						{
 							impact_angle -= 360;
@@ -1586,7 +1586,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								{
 									xDiff = psObj->x - psCurrD->x;
 									yDiff = psObj->y - psCurrD->y;
-									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) /PI));
+									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) / M_PI));
 									if (impact_angle >= 360)
 									{
 										impact_angle -= 360;
@@ -1668,7 +1668,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								{
 									xDiff = psObj->x - psCurrD->x;
 									yDiff = psObj->y - psCurrD->y;
-									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) /PI));
+									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) / M_PI));
 									if (impact_angle >= 360)
 									{
 										impact_angle -= 360;

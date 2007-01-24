@@ -878,7 +878,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    fR = (FRACT_D) atan2(iDx, iDy);
 			    if ( fR < 0.0 )
 			    {
-			    	fR += (FRACT_D) (2*PI);
+			    	fR += (FRACT_D) (2 * M_PI);
 			    }
 			    psTransporter->direction = (UWORD)( RAD_TO_DEG(fR) );
 

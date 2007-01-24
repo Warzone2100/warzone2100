@@ -24,8 +24,6 @@
  *
  */
 
-
-#include <math.h>
 #include <stdio.h>
 
 #include "lib/framework/frame.h"
@@ -395,7 +393,7 @@ UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	ydiff = y1 - y2;
 
 
-	angle = (SDWORD)((NUM_RAYS/2) * atan2(xdiff, ydiff) / PI);
+	angle = (SDWORD)((NUM_RAYS / 2) * atan2(xdiff, ydiff) / M_PI);
 
 
 	angle += NUM_RAYS/2;

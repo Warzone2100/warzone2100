@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <math.h>
 
 // we need BSPIMD defined if we want to read & use the BSP imd files
 

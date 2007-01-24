@@ -487,7 +487,7 @@ void pie_MatInit(void)
 	// sin/cos table
 
 	scsize = SC_TABLESIZE + (SC_TABLESIZE / 4);
-  	conv = (float)(PI / (0.5 * SC_TABLESIZE));
+  	conv = (double)(M_PI / (0.5 * SC_TABLESIZE));
 
 	for (i=0; i<scsize; i++) {
 		v = (double) sin(i * conv) * FP12_MULTIPLIER;
@@ -505,7 +505,3 @@ void pie_MatInit(void)
 
 	iV_DEBUG0("geo[_geo_setup] = setup successful\n");
 }
-
-
-
-
