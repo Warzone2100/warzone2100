@@ -1187,19 +1187,49 @@ void actionUpdateDroid(DROID *psDroid)
 	}
 
 	// clear the target if it has died
-	if (psDroid->psActionTarget[0] && psDroid->psActionTarget[0]->died)
+	// weapon droid
+	if (psDroid->numWeaps > 0)
 	{
-		psDroid->psActionTarget[0] = NULL;
-		if ( (psDroid->action != DACTION_MOVEFIRE) &&
-			 (psDroid->action != DACTION_TRANSPORTIN) &&
-			 (psDroid->action != DACTION_TRANSPORTOUT)   )
+		// clear targets
+		for (i = 0;i < psDroid->numWeaps;i++)
 		{
-			psDroid->action = DACTION_NONE;
-            //if Vtol - return to rearm pad
-            if (vtolDroid(psDroid))
-            {
-                moveToRearm(psDroid);
-            }
+			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
+			{
+				psDroid->psActionTarget[i] = NULL;
+				if (i == 0)
+				{
+					if ( (psDroid->action != DACTION_MOVEFIRE) &&
+						 (psDroid->action != DACTION_TRANSPORTIN) &&
+						 (psDroid->action != DACTION_TRANSPORTOUT)   )
+					{
+						psDroid->action = DACTION_NONE;
+						//if Vtol - return to rearm pad
+						if (vtolDroid(psDroid))
+						{
+							moveToRearm(psDroid);
+						}
+					}
+				}
+			}
+ 		}
+ 	}
+	//utility droid
+	else
+	{
+		if (psDroid->psActionTarget[0] && psDroid->psActionTarget[0]->died)
+		{
+			psDroid->psActionTarget[0] = NULL;
+			if ( (psDroid->action != DACTION_MOVEFIRE) &&
+				 (psDroid->action != DACTION_TRANSPORTIN) &&
+				 (psDroid->action != DACTION_TRANSPORTOUT)   )
+			{
+				psDroid->action = DACTION_NONE;
+				//if Vtol - return to rearm pad
+				if (vtolDroid(psDroid))
+				{
+					moveToRearm(psDroid);
+				}
+			}
 		}
 	}
 
