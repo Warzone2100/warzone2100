@@ -18,7 +18,7 @@ capRange	int		512		//radius that needs to be clear of enemy structures before ca
 lasSat		WEAPON		"LasSat"	//lassat weapon to be fired
 testStat	STRUCTURESTAT	"UplinkCentre"	//increased size so misses better	//"A0HardcreteMk1Wall"	//used to 'miss' (test if can build this = empty tile)
 
-capturedSnd	SOUND		"PCV621.ogg"	//"Objective captured"
-warnSatSnd	SOUND		"Pcv650.ogg"	//"Las Sat firing"
-failedSnd	SOUND		"PCV622.ogg"	//"Objective destroyed"
+capturedSnd	SOUND		"pcv621.ogg"	//"Objective captured"
+warnSatSnd	SOUND		"pcv650.ogg"	//"Las Sat firing"
+failedSnd	SOUND		"pcv622.ogg"	//"Objective destroyed"
 }

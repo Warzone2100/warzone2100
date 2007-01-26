@@ -620,16 +620,16 @@ objectiveRange	int		640				//range to objective 5 Tiles
 wayRange	int		300				//range to waypoint 2ish tiles
 targetRange	int		768				//range for target spotting
 targetMax	int		4				//maximum number of targets to store for each enemy
-lostSnd		SOUND		"PCV470.ogg"		//mission failed
-attackSnd1	SOUND		"PCV337.ogg"	//Base Under Attack
-artSnd1		SOUND		"PCV351.ogg"	//artifact sounds
-artSnd2		SOUND		"PCV352.ogg"
+lostSnd		SOUND		"pcv470.ogg"		//mission failed
+attackSnd1	SOUND		"pcv337.ogg"	//Base Under Attack
+artSnd1		SOUND		"pcv351.ogg"	//artifact sounds
+artSnd2		SOUND		"pcv352.ogg"
 transporter	TEMPLATE	"Transporter"	//for enemy transports
 
 //base WAVs. MAX = 5
-baseSnd[0]	SOUND		"PCV379.ogg"	//Enemy Base Detected
-baseSnd[1]	SOUND		"PCV379.ogg"	//Enemy Base Detected
-baseSnd[2]	SOUND		"PCV379.ogg"	//Enemy Base Detected
-baseSnd[3]	SOUND		"PCV394.ogg"	//Enemy base eradicated
+baseSnd[0]	SOUND		"pcv379.ogg"	//Enemy Base Detected
+baseSnd[1]	SOUND		"pcv379.ogg"	//Enemy Base Detected
+baseSnd[2]	SOUND		"pcv379.ogg"	//Enemy Base Detected
+baseSnd[3]	SOUND		"pcv394.ogg"	//Enemy base eradicated
 
 }

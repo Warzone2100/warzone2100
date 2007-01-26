@@ -23,10 +23,10 @@ numFac			INT			0		//Limit on number of Factory Buildings
 numRes			INT			0		//Limit on number of Research Facility Buildings
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"SUB_1_DS"	
 transporter	TEMPLATE	"Transporter"
 ReinforceTime	INT		600	//(1 min) number of seconds*10 for transport, -1 for no reinforcements
@@ -35,7 +35,7 @@ ReinforceTime	INT		600	//(1 min) number of seconds*10 for transport, -1 for no r
 /* Briefing Stuff */
 MissionBrief		INTMESSAGE		"SB1_7_MSG2"
 MissionBrief2		INTMESSAGE		"SB1_7_MSG3"
-incomingSnd	SOUND		"PCV456.ogg"
+incomingSnd	SOUND		"pcv456.ogg"
 
 endMsg		INTMESSAGE	"END"
 
@@ -43,10 +43,10 @@ endMsg		INTMESSAGE	"END"
 
 LZ_MSG		INTMESSAGE	"C1-7_LZ"
 obj1		INTMESSAGE	"C1-7_OBJ1"
-LZSnd		SOUND		"PCV427.ogg"
+LZSnd		SOUND		"pcv427.ogg"
 RetLZMsg	TEXTSTRING	"LZ_MSG2"
-LZComp		SOUND		"PCV445.ogg"
-LZClear		SOUND		"LZ-Clear.ogg"
+LZComp		SOUND		"pcv445.ogg"
+LZClear		SOUND		"lz-clear.ogg"
 
 /* Transport exit and entry */
 entryX		int		1
@@ -55,7 +55,7 @@ exitX		int		6
 exitY		int		62
 
 transporter	TEMPLATE	"Transporter"	//for enemy transports
-warnSnd		SOUND		"PCV632.ogg"	//enemy escaping	//"PCV395.ogg"	//incoming enemy transport
+warnSnd		SOUND		"pcv632.ogg"	//enemy escaping	//"PCV395.ogg"	//incoming enemy transport
 badMsg		TEXTSTRING	"ADD_MSG20"		//Text "Enemy escaping"
 
 /* Proximity: Artifacts */
@@ -65,7 +65,7 @@ art1ID		FEATURE		325
 art1X		int		1344
 art1Y		int		3904
 //art1Get		STRUCTURE	200		//get this from NP Research Lab/command relay centre
-art1Snd2	SOUND		"PCV352.ogg"
+art1Snd2	SOUND		"pcv352.ogg"
 //art1Msg		INTMESSAGE	"C1-7_ART1"
 art1Comp	RESEARCHSTAT	"R-Wpn-Cannon3Mk1"
 
@@ -86,18 +86,18 @@ enm1cID		STRUCTUREID	311
 
 enm1See		STRUCTURE	284
 enm1Msg		INTMESSAGE	"C1-7_BASE1"
-enm1Snd1	SOUND		"PCV374.ogg"
-enm1Snd2	SOUND		"PCV392.ogg"
+enm1Snd1	SOUND		"pcv374.ogg"
+enm1Snd2	SOUND		"pcv392.ogg"
 
 enm2See		STRUCTURE	198
 enm2Msg		INTMESSAGE	"C1-7_BASE2"
-enm2Snd1	SOUND		"PCV374.ogg"
-enm2Snd2	SOUND		"PCV392.ogg"
+enm2Snd1	SOUND		"pcv374.ogg"
+enm2Snd2	SOUND		"pcv392.ogg"
 
 enm3See		STRUCTURE	311
 enm3Msg		INTMESSAGE	"C1-7_BASE3"
-enm3Snd1	SOUND		"PCV374.ogg"
-enm3Snd2	SOUND		"PCV392.ogg"
+enm3Snd1	SOUND		"pcv374.ogg"
+enm3Snd2	SOUND		"pcv392.ogg"
 
 numWay		int		4
 wayX[0]		int		7744

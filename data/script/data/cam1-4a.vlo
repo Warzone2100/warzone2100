@@ -24,10 +24,10 @@ numFac			INT			0		//Limit on number of Factory Buildings
 numRes			INT			0		//Limit on number of Research Facility Buildings
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"SUB_1_5S"	
 timeLimit		INT			18000	//30mins rest of mission
 
@@ -35,7 +35,7 @@ timeLimit		INT			18000	//30mins rest of mission
 MissionBrief		INTMESSAGE		"SB1_4_MSG"
 MissionBrief2		INTMESSAGE		"SB1_4_B"
 //NewParadigm_MSG1	INTMESSAGE		"SB1_3_MSG3"
-incomingSnd	SOUND		"PCV456.ogg"
+incomingSnd	SOUND		"pcv456.ogg"
 endMsg			INTMESSAGE	"END"
 //winMsg		INTMESSAGE	"WIN"
 
@@ -43,13 +43,13 @@ endMsg			INTMESSAGE	"END"
 
 LZ_MSG		INTMESSAGE	"C1-4_LZ"
 obj1		INTMESSAGE	"C1-4_OBJ1"
-LZSnd		SOUND		"PCV427.ogg"
+LZSnd		SOUND		"pcv427.ogg"
 RetLZMsg	TEXTSTRING	"LZ_MSG2"
 ReinforceMsg	TEXTSTRING	"REINFORCE_MSG"
-ReinforceSnd	SOUND		"PCV440.ogg"
+ReinforceSnd	SOUND		"pcv440.ogg"
 ReinforceTime	INT		900	//(1 min 30 secs) number of seconds*10 for transport, -1 for no reinforcements
-LZComp		SOUND		"PCV445.ogg"
-LZClear		SOUND		"LZ-Clear.ogg"
+LZComp		SOUND		"pcv445.ogg"
+LZClear		SOUND		"lz-clear.ogg"
 
 /* Transport exit and entry */
 entryX		int		6
@@ -65,26 +65,26 @@ crate		FEATURESTAT	"Crate"
 art1X		int		3264
 art1Y		int		1472
 art1Get		STRUCTURE	461	//module added!! 456		//get this from Heavy Factory
-art1Snd2	SOUND		"PCV352.ogg"
+art1Snd2	SOUND		"pcv352.ogg"
 art1Comp	RESEARCHSTAT	"R-Vehicle-Body11"
 */
 
 art2X		int		4416
 art2Y		int		1728
 art2Get		STRUCTURE	216		//get this from NP Command Centre
-art2Snd2	SOUND		"PCV352.ogg"
+art2Snd2	SOUND		"pcv352.ogg"
 art2Comp	RESEARCHSTAT	"R-Vehicle-Metals01"
 
 art3X		int		4416
 art3Y		int		1472
 art3Get		STRUCTURE	458		//get this from NP Research facility
-art3Snd2	SOUND		"PCV352.ogg"
+art3Snd2	SOUND		"pcv352.ogg"
 art3Comp	RESEARCHSTAT	"R-Vehicle-Body04"
 
 art4X		int		3776
 art4Y		int		1728
 art4Get		STRUCTURE	480		//get this from Medium Factory
-art4Snd2	SOUND		"PCV352.ogg"
+art4Snd2	SOUND		"pcv352.ogg"
 art4Comp	RESEARCHSTAT	"R-Wpn-Rocket02-MRL"
 
 //Player Bonus Research Topics given on completion of mission
@@ -104,13 +104,13 @@ enm1bID		STRUCTUREID	374
 
 enm1See		STRUCTURE	97
 enm1Msg		INTMESSAGE	"C1-4_BASE1"
-enm1Snd1	SOUND		"PCV374.ogg"
-enm1Snd2	SOUND		"PCV392.ogg"
+enm1Snd1	SOUND		"pcv374.ogg"
+enm1Snd2	SOUND		"pcv392.ogg"
 
 enm3See		STRUCTURE	376
 enm3Msg		INTMESSAGE	"C1-4_BASE3"
-enm3Snd1	SOUND		"PCV374.ogg"
-enm3Snd2	SOUND		"PCV392.ogg"
+enm3Snd1	SOUND		"pcv374.ogg"
+enm3Snd2	SOUND		"pcv392.ogg"
 
 //New Paradigm
 //base2
@@ -121,8 +121,8 @@ enm2bID		STRUCTUREID	480
 
 enm2See		STRUCTURE	501	//NP base SensorTower  //454
 enm2Msg		INTMESSAGE	"C1-4_BASE2"
-enm2Snd1	SOUND		"PCV379.ogg"
-enm2Snd2	SOUND		"PCV394.ogg"
+enm2Snd1	SOUND		"pcv379.ogg"
+enm2Snd2	SOUND		"pcv394.ogg"
 
 
 

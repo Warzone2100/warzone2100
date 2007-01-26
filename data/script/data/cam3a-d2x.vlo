@@ -28,7 +28,7 @@ playerRes[1]	RESEARCHSTAT	"R-Comp-MissileCodes01"
 playerRes[2]	RESEARCHSTAT	"R-Comp-MissileCodes02"
 playerRes[3]	RESEARCHSTAT	"R-Comp-MissileCodes03"
 
-failedSnd	SOUND		"PCV622.ogg"	//"Objective destroyed"
-warnSatSnd	SOUND		"Pcv650.ogg"	//"Las Sat firing"
+failedSnd	SOUND		"pcv622.ogg"	//"Objective destroyed"
+warnSatSnd	SOUND		"pcv650.ogg"	//"Las Sat firing"
 timeLimit	int		-1	//no time limit (lasSats enforce this automatically!!)	//72000		//2hrs for main timeLimit (5mins extra before this!)
 }

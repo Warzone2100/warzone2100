@@ -38,9 +38,9 @@ droids[12]	DROID	381
 
 MissionBrief1	INTMESSAGE	"MB3_2_MSG3"	//warning about VTOL strike
 MissionBrief2	INTMESSAGE	"MB3_2_MSG4"	//Team Alpha OK, lead to LZ
-incomingSnd	SOUND		"PCV456.ogg"
+incomingSnd	SOUND		"pcv456.ogg"
 
-badSnd		SOUND		"PCV622.ogg"	//"Objective destroyed"
+badSnd		SOUND		"pcv622.ogg"	//"Objective destroyed"
 ReinforceTime	INT		1800	// (3 minute) number of seconds*10 for transport, -1 for no reinforcements
 reinf_msg	TEXTSTRING	"REINFORCE_MSG"
 

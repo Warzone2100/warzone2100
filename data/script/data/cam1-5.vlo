@@ -23,10 +23,10 @@ numFac			INT			0		//Limit on number of Factory Buildings
 numRes			INT			0		//Limit on number of Research Facility Buildings
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"CAM_1A-C"	
 
 /* Briefing Stuff */
@@ -38,13 +38,13 @@ endMsg			INTMESSAGE	"END"
 
 LZ_MSG		INTMESSAGE	"C1-5_LZ"
 obj1		INTMESSAGE	"C1-5_OBJ1"
-LZSnd		SOUND		"PCV427.ogg"
+LZSnd		SOUND		"pcv427.ogg"
 RetLZMsg	TEXTSTRING	"LZ_MSG2"
 ReinforceMsg	TEXTSTRING	"REINFORCE_MSG"
-ReinforceSnd	SOUND		"PCV440.ogg"
+ReinforceSnd	SOUND		"pcv440.ogg"
 ReinforceTime	INT		1800	//number of seconds*10 for transport, -1 for no reinforcements
-LZComp		SOUND		"PCV445.ogg"
-LZClear		SOUND		"LZ-Clear.ogg"
+LZComp		SOUND		"pcv445.ogg"
+LZClear		SOUND		"lz-clear.ogg"
 
 /* Transport exit and entry */
 entryX		int		1
@@ -53,7 +53,7 @@ exitX		int		15
 exitY		int		62
 
 transporter	TEMPLATE	"Transporter"	//for enemy transports
-warnSnd		SOUND		"PCV395.ogg"
+warnSnd		SOUND		"pcv395.ogg"
 
 /* Proximity: Artifacts */
 crate		FEATURESTAT	"Crate"
@@ -70,14 +70,14 @@ numResP0	int		0			//number of topics to enable
 art1X		int		4288
 art1Y		int		4160
 art1Get		STRUCTURE	407		//get this from NP Cyborg Factory
-art1Snd2	SOUND		"PCV352.ogg"
+art1Snd2	SOUND		"pcv352.ogg"
 //art1Msg		INTMESSAGE	"C1-5_ART1"
 art1Comp	RESEARCHSTAT	"R-Struc-Factory-Upgrade03"
 
 art2X		int		5696
 art2Y		int		2368
 art2Get		STRUCTURE	483		//Right factory
-art2Snd2	SOUND		"PCV352.ogg"
+art2Snd2	SOUND		"pcv352.ogg"
 //art2Msg		INTMESSAGE	"C1-5_ART2"
 art2Comp	RESEARCHSTAT	"R-Vehicle-Engine02"
 
@@ -85,21 +85,21 @@ art2Comp	RESEARCHSTAT	"R-Vehicle-Engine02"
 art3X		int		4032
 art3Y		int		3776
 art3Get		STRUCTURE	486		//Repair fac
-art3Snd2	SOUND		"PCV352.ogg"
+art3Snd2	SOUND		"pcv352.ogg"
 //art3Msg		INTMESSAGE	"C1-5_ART3"
 art3Comp	RESEARCHSTAT	"R-Struc-RprFac-Upgrade01"
 
 art4X		int		3264
 art4Y		int		1472
 art4Get		STRUCTURE	216		//get this from NP Command Centre
-art4Snd2	SOUND		"PCV352.ogg"
+art4Snd2	SOUND		"pcv352.ogg"
 //art4Msg		INTMESSAGE	"C1-5_ART4"
 art4Comp	RESEARCHSTAT	"R-Struc-Materials02"
 
 art5X		int		5824
 art5Y		int		2112
 art5Get		STRUCTURE	200		//Command Relay	
-art5Snd2	SOUND		"PCV352.ogg"
+art5Snd2	SOUND		"pcv352.ogg"
 //art5Msg		INTMESSAGE	"C1-5_ART5"
 art5Comp	RESEARCHSTAT	"CAM1RESEARCH" //"R-Sys-SpyTurret"
 */
@@ -107,14 +107,14 @@ art5Comp	RESEARCHSTAT	"CAM1RESEARCH" //"R-Sys-SpyTurret"
 art6X		int		5184
 art6Y		int		2624
 art6Get		STRUCTURE	481		//factory	
-art6Snd2	SOUND		"PCV352.ogg"
+art6Snd2	SOUND		"pcv352.ogg"
 //art6Msg		INTMESSAGE	"C1-5_ART6"
 art6Comp	RESEARCHSTAT	"R-Vehicle-Body08"
 
 art7X		int		5568
 art7Y		int		3136
 art7Get		STRUCTURE	485		//research Fac	MUST BE SYNAPTIC LINK for briefing to hold true	
-art7Snd2	SOUND		"PCV352.ogg"
+art7Snd2	SOUND		"pcv352.ogg"
 //art7Msg		INTMESSAGE	"C1-5_ART7"
 art7Comp	RESEARCHSTAT	"R-Comp-SynapticLink"
 
@@ -133,20 +133,20 @@ enm1cID		STRUCTUREID	279
 
 enm1See		STRUCTURE	207	//388	//guntower
 enm1Msg		INTMESSAGE	"C1-5_BASE1"
-enm1Snd1	SOUND		"PCV374.ogg"
-enm1Snd2	SOUND		"PCV392.ogg"
+enm1Snd1	SOUND		"pcv374.ogg"
+enm1Snd2	SOUND		"pcv392.ogg"
 
 enm2See		STRUCTURE	109
 enm2Msg		INTMESSAGE	"C1-5_BASE2"
-enm2Snd1	SOUND		"PCV374.ogg"
-enm2Snd2	SOUND		"PCV392.ogg"
+enm2Snd1	SOUND		"pcv374.ogg"
+enm2Snd2	SOUND		"pcv392.ogg"
 
 enm3See		STRUCTURE	85	//95
 enm3Msg		INTMESSAGE	"C1-5_BASE3"
-enm3Snd1	SOUND		"PCV374.ogg"
-enm3Snd2	SOUND		"PCV392.ogg"
+enm3Snd1	SOUND		"pcv374.ogg"
+enm3Snd2	SOUND		"pcv392.ogg"
 
-enm4Snd2	SOUND		"PCV394.ogg"	//base eradicated
+enm4Snd2	SOUND		"pcv394.ogg"	//base eradicated
 
 //New Paradigm
 //base2

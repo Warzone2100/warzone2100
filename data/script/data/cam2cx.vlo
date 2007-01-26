@@ -34,9 +34,9 @@ wayY[9]		int		0
 civilian	TEMPLATE	"BaBaCivilian"	//"BaBaPeople"
 cyborg		TEMPLATE	"Cyb-Chain-GROUND"
 transporter	TEMPLATE	"Transporter"	//for enemy transports
-warnSnd		SOUND		"PCV395.ogg"
-rescueSnd		SOUND		"PCV612.ogg"	//"Civilian Rescued"
-badSnd			SOUND		"PCV632.ogg"	//"Enemy escaping"
+warnSnd		SOUND		"pcv395.ogg"
+rescueSnd		SOUND		"pcv612.ogg"	//"Civilian Rescued"
+badSnd			SOUND		"pcv632.ogg"	//"Enemy escaping"
 badMsg		TEXTSTRING	"ADD_MSG20"		//Text "Enemy escaping"
 
 LZX		int		6464
@@ -78,7 +78,7 @@ escCivs		int		59	//35	//number of civilians that need to escape to lose
 groupWayStart	[0]	int	0
 groupWayEnd	[0]	int	6
 
-incomingSnd	SOUND		"PCV455.ogg"
+incomingSnd	SOUND		"pcv455.ogg"
 brief		INTMESSAGE	"MB2_C_MSG2"
 objective	INTMESSAGE	"C2C_OBJ2"	//Transport
 

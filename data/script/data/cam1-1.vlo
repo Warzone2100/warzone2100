@@ -21,10 +21,10 @@ numFac			INT			0		//Limit on number of Factory Buildings
 numRes			INT			0		//Limit on number of Research Facility Buildings
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"SUB_1_2S"	
 
 /* Briefing Stuff */
@@ -37,7 +37,7 @@ endMsg		INTMESSAGE	"END"
 
 LZ_MSG		INTMESSAGE	"C1-1_LZ"
 obj1		INTMESSAGE	"C1-1_OBJ1"
-LZSnd		SOUND		"PCV427.ogg"
+LZSnd		SOUND		"pcv427.ogg"
 RetLZMsg	TEXTSTRING	"LZ_MSG2"
 
 /* Transport exit and entry */
@@ -50,7 +50,7 @@ exitY		int		89
 /*
 res1		FEATURE		70
 res1Msg		INTMESSAGE	"C1-1_RES1"
-res1Snd		SOUND		"PCV344.ogg"
+res1Snd		SOUND		"pcv344.ogg"
 derrick		STRUCTURESTAT	"ResourceExtractor"
 */
 
@@ -60,8 +60,8 @@ crate		FEATURESTAT	"Crate"
 art1X		int		2112
 art1Y		int		1600
 //art1Get		FEATURE		150		//get this out in open!
-art1Snd1	SOUND		"PCV351.ogg"
-art1Snd2	SOUND		"PCV352.ogg"
+art1Snd1	SOUND		"pcv351.ogg"
+art1Snd2	SOUND		"pcv352.ogg"
 //art1Msg		INTMESSAGE	"C1-1_ART1"
 art1Comp	RESEARCHSTAT	"R-Wpn-MG3Mk1" //HMG "R-Wpn-Cannon1Mk1"
 
@@ -73,8 +73,8 @@ resP0[0]	RESEARCHSTAT	"R-Wpn-TUTMG"
 art2X		int		2368
 art2Y		int		1472
 art2Get		FEATURE		151		//get this from warehouse
-art2Snd1	SOUND		"PCV351.ogg"
-art2Snd2	SOUND		"PCV352.ogg"
+art2Snd1	SOUND		"pcv351.ogg"
+art2Snd2	SOUND		"pcv352.ogg"
 //art2Msg		INTMESSAGE	"C1-1_ART2"
 art2Comp	RESEARCHSTAT	"R-Wpn-Cannon1Mk1"	// **DUMMY RESEARCH FOR NOW**
 */
@@ -85,16 +85,16 @@ art2Comp	RESEARCHSTAT	"R-Wpn-Cannon1Mk1"	// **DUMMY RESEARCH FOR NOW**
 enm1		STRUCTURE	19	//base1=factory1
 enm1ID		STRUCTUREID	19
 enm1Msg		INTMESSAGE	"C1-1_BASE1"
-enm1Snd1	SOUND		"PCV375.ogg"
-enm1Snd2	SOUND		"PCV391.ogg"
+enm1Snd1	SOUND		"pcv375.ogg"
+enm1Snd2	SOUND		"pcv391.ogg"
 
 
 //base2
 enm2		STRUCTURE	97	//base2=factory1
 enm2ID		STRUCTUREID	97
 enm2Msg		INTMESSAGE	"C1B_BASE2"
-enm2Snd1	SOUND		"PCV375.ogg"
-enm2Snd2	SOUND		"PCV391.ogg"
+enm2Snd1	SOUND		"pcv375.ogg"
+enm2Snd2	SOUND		"pcv391.ogg"
 */
 
 /* Enemy Tactics */

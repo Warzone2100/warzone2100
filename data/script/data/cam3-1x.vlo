@@ -48,7 +48,7 @@ run
 	secondMissionTime	INT			15000
 
 	// sound for the start of the mext bit of mission
-	missileAbort		SOUND	"LAbort.ogg"
+	missileAbort		SOUND	"labort.ogg"
 
     /* 'get to Mountains' victory condition blip and audio */
     hideLocBlip		INTMESSAGE	"CM31_HIDE_LOC"			//Blip for location
