@@ -10,15 +10,15 @@ file		SMSG		"brief2-6.txt"
 //file		SMSG		"prox2-6.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\text"
+directory       "script/text"
 
 file		SCRIPT		"genbet.slo"
 file		SCRIPT		"cam2daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\data"
+directory       "script/data"
 file            SCRIPTVAL       "cam2-6s.vlo"
 file            SCRIPTVAL       "cam2day.vlo"

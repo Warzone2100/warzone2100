@@ -10,17 +10,17 @@ file		SMSG		"brief2-7.txt"
 file		SMSG		"prox2-7.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\text"
+directory       "script/text"
 
 file		SCRIPT		"genexp.slo"
-file		SCRIPT		"VTOLS2.slo"
+file		SCRIPT		"vtols2.slo"
 file		SCRIPT		"cam2daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\data"
+directory       "script/data"
 file            SCRIPTVAL       "cam2-7.vlo"
-file            SCRIPTVAL       "VTOLS2-7.vlo"
+file            SCRIPTVAL       "vtols2-7.vlo"
 file            SCRIPTVAL       "cam2day.vlo"

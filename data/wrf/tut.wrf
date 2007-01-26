@@ -3,9 +3,9 @@
 /*******************       wrf\tut.wrf      *******************/
 
 
-directory	"messages\strings"
-file		STR_RES	"Strings.txt"
+directory	"messages/strings"
+file		STR_RES	"strings.txt"
 file		STR_RES	"genstrings.txt"
 file		STR_RES	"tutstrings.txt"
-file		STR_RES	"ResStrings.txt"
+file		STR_RES	"resstrings.txt"
 file		STR_RES	"scrstrings.txt"

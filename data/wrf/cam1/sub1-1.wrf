@@ -10,18 +10,18 @@ file		SMSG		"brief1-1.txt"
 file		SMSG		"prox1-1.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\text"
+directory       "script/text"
 
-file		SCRIPT		"Cam1-1.slo"
-file		SCRIPT		"cam1-1-AI.slo"
+file		SCRIPT		"cam1-1.slo"
+file		SCRIPT		"cam1-1-ai.slo"
 file		SCRIPT		"cam1daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\data"
+directory       "script/data"
 
-file            SCRIPTVAL       "Cam1-1.vlo"
+file            SCRIPTVAL       "cam1-1.vlo"
 file            SCRIPTVAL       "cam1-1-ai.vlo"
 file            SCRIPTVAL       "cam1mkday.vlo"

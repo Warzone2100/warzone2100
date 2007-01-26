@@ -6,25 +6,25 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 
-file		SMSG		"brief3A-B.txt"
-file		SMSG		"prox3AB.txt"
+file		SMSG		"brief3a-b.txt"
+file		SMSG		"prox3ab.txt"
 
 /* Directory for uncompiled script files */
-directory       "script\text"
+directory       "script/text"
 
 file		SCRIPT		"setdisk.slo"
 file		SCRIPT		"genexp.slo"
-file		SCRIPT		"cam3A-BX.slo"
-file		SCRIPT		"VTOLS.slo"
+file		SCRIPT		"cam3a-bx.slo"
+file		SCRIPT		"vtols.slo"
 file		SCRIPT		"cam3daynight.slo"
 
 /* Directory for compiled script files*/
-directory       "script\binary"
+directory       "script/binary"
 
 /* Directory for script value files*/
-directory       "script\data"
-file            SCRIPTVAL       "cam3A-B.vlo"
-file            SCRIPTVAL       "cam3A-BX.vlo"
-file            SCRIPTVAL       "VTOLS3A-B.vlo"
+directory       "script/data"
+file            SCRIPTVAL       "cam3a-b.vlo"
+file            SCRIPTVAL       "cam3a-bx.vlo"
+file            SCRIPTVAL       "vtols3a-b.vlo"
 file            SCRIPTVAL       "disk2.vlo"
 file            SCRIPTVAL       "cam3day.vlo"

@@ -1,6 +1,6 @@
 
-directory       "script\text"
+directory       "script/text"
 file			SCRIPT		"cam1daynight.slo"
 
-directory       "script\data"
+directory       "script/data"
 file			SCRIPTVAL	"cam1day.vlo"

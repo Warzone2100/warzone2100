@@ -8,20 +8,20 @@
 
 directory	"texpages"
 file 		TEXPAGE		"page-6-features-rockies.png"
-file		TEXPAGE		"page-7-Barbarians-Kevlar.png"
-file		TEXPAGE		"page-8-player buildings-bases-Rockies.png"
+file		TEXPAGE		"page-7-barbarians-kevlar.png"
+file		TEXPAGE		"page-8-player buildings-bases-rockies.png"
 file		TEXPAGE		"page-9-player-soft buildings-bases-rockies.png"	//needs changing**DONE**
 file		TEXPAGE		"page-9-player-hard buildings-bases-rockies.png"
 file 		HWTERTILES	"tertilesc3hw.png"
 
-directory 	"stats\research\cam3"
-file		RESCH		"Research.txt"
-file		RPREREQ		"PRResearch.txt"
+directory 	"stats/research/cam3"
+file		RESCH		"research.txt"
+file		RPREREQ		"prresearch.txt"
 
-file		RCOMPRED	"RedComponents.txt"
-file		RCOMPRES	"ResultComponent.txt"
-file		RSTRREQ		"ResearchStruct.txt"
-file		RSTRRED		"RedStructure.txt"
-file		RSTRRES		"ResultStructure.txt"
-file		RFUNC		"ResearchFunctions.txt"
+file		RCOMPRED	"redcomponents.txt"
+file		RCOMPRES	"resultcomponent.txt"
+file		RSTRREQ		"researchstruct.txt"
+file		RSTRRED		"redstructure.txt"
+file		RSTRRES		"resultstructure.txt"
+file		RFUNC		"researchfunctions.txt"
 

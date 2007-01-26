@@ -1192,10 +1192,10 @@ BOOL iV_setImagePath(STRING *path)
 	int i;
 	strcpy(imagePath,path);
 	i = strlen(imagePath);
-	if (imagePath[i] != '\\')
+	if (imagePath[i] != '/')
 	{
-		imagePath[i] = '\\';
-		imagePath[i+1] = 0;
+		imagePath[i] = '/';
+		imagePath[i+1] = '\0';
 	}
 	return TRUE;
 }
@@ -1207,7 +1207,7 @@ static char *_imd_get_path(STRING *filename, STRING *path)
 
 	n = strlen(filename);
 
-	for (i=n-1; i>=0 && (filename[i] != '\\'); i--)
+	for (i=n-1; i>=0 && (filename[i] != '/'); i--)
 		;
 
 	if (i<0)

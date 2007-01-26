@@ -1366,7 +1366,7 @@ BOOL loadMissionExtras(STRING *pGameToLoad, SWORD levelType)
 	strcpy(aFileName, pGameToLoad);
 	fileExten = strlen(pGameToLoad) - 3;
 	aFileName[fileExten - 1] = '\0';
-	strcat(aFileName, "\\");
+	strcat(aFileName, "/");
 
 #ifdef SAVE_PROXIMITY
 	if (saveGameVersion >= VERSION_11)
@@ -1379,7 +1379,7 @@ BOOL loadMissionExtras(STRING *pGameToLoad, SWORD levelType)
 		{
 			//load in the proximity list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "proxState.bjo");
+			strcat(aFileName, "proxstate.bjo");
 			// Load in the chosen file data
 			pFileData = DisplayBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -1408,7 +1408,7 @@ BOOL loadMissionExtras(STRING *pGameToLoad, SWORD levelType)
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "mesState.bjo");
+			strcat(aFileName, "messtate.bjo");
 			// Load in the chosen file data
 			pFileData = DisplayBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -1775,12 +1775,12 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		goto error;
 	}
 	//aFileName[fileExten - 1] = '\0';
-	//strcat(aFileName, "\\");
+	//strcat(aFileName, "/");
 */
 	strcpy(aFileName, pGameToLoad);
 	fileExten = strlen(aFileName) - 3;			// hack - !
 	aFileName[fileExten - 1] = '\0';
-	strcat(aFileName, "\\");
+	strcat(aFileName, "/");
 
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
 	//if (freeMem) - this now works for Cam Start and Cam Change
@@ -1790,7 +1790,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the terrain type map
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "TTypes.ttp");
+		strcat(aFileName, "ttypes.ttp");
 		/* Load in the chosen file data */
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -1932,7 +1932,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the features -do before the structures
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "mFeat.bjo");
+		strcat(aFileName, "mfeat.bjo");
 		/* Load in the chosen file data */
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -1950,7 +1950,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 
 		//load in the mission structures
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "mStruct.bjo");
+		strcat(aFileName, "mstruct.bjo");
 		/* Load in the chosen file data */
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -1983,11 +1983,11 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 
 		if (saveGameVersion < VERSION_27)//V27
 		{
-			strcat(aFileName, "mDroid.bjo");
+			strcat(aFileName, "mdroid.bjo");
 		}
 		else
 		{
-			strcat(aFileName, "mUnit.bjo");
+			strcat(aFileName, "munit.bjo");
 		}
 		/* Load in the chosen file data */
 		pFileData = DisplayBuffer;
@@ -2025,7 +2025,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the flag list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "mFlagState.bjo");
+		strcat(aFileName, "mflagstate.bjo");
 		// Load in the chosen file data
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2134,7 +2134,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the research list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "resState.bjo");
+		strcat(aFileName, "resstate.bjo");
 		// Load in the chosen file data
 //#ifndef PSX
 		pFileData = DisplayBuffer;
@@ -2237,11 +2237,11 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 				aFileName[fileExten] = '\0';
 				if (saveGameVersion < VERSION_27)//V27
 				{
-					strcat(aFileName, "mDroid.bjo");
+					strcat(aFileName, "mdroid.bjo");
 				}
 				else
 				{
-					strcat(aFileName, "mUnit.bjo");
+					strcat(aFileName, "munit.bjo");
 				}
 				/* Load in the chosen file data */
 				pFileData = DisplayBuffer;
@@ -2340,7 +2340,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the component list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "compL.bjo");
+		strcat(aFileName, "compl.bjo");
 		/* Load in the chosen file data */
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2362,7 +2362,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the structure type list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "strType.bjo");
+		strcat(aFileName, "strtype.bjo");
 		/* Load in the chosen file data */
 		pFileData = DisplayBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2394,7 +2394,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		{
 			//load in the visibility file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "VisState.bjo");
+			strcat(aFileName, "visstate.bjo");
 			// Load in the chosen file data
 			pFileData = DisplayBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2425,7 +2425,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "prodState.bjo");
+			strcat(aFileName, "prodstate.bjo");
 			// Load in the chosen file data
     		pFileData = DisplayBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2454,7 +2454,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "FXState.bjo");
+			strcat(aFileName, "fxstate.bjo");
 			// Load in the chosen file data
 			pFileData = DisplayBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2484,7 +2484,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "Score.bjo");
+			strcat(aFileName, "score.bjo");
 			// Load in the chosen file data
 			pFileData = DisplayBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2516,7 +2516,7 @@ BOOL loadGame(STRING *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSave
 		{
 			//load in the flag list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "flagState.bjo");
+			strcat(aFileName, "flagstate.bjo");
 			// Load in the chosen file data
 			pFileData = DisplayBuffer;
 			if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -2823,7 +2823,6 @@ error:
 // -----------------------------------------------------------------------------------------
 #ifdef ALLOWSAVE
 
-extern char *unix_path(const char *path);
 // Modified by AlexL , now takes a filename, with no popup....
 BOOL saveGame(STRING *aFileName, SDWORD saveType)
 {
@@ -2853,8 +2852,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	(void) PHYSFS_mkdir(aFileName);
 
 	//save the map file
-	strcat(aFileName, "/");
-	strcat(aFileName, "game.map");
+	strcat(aFileName, "/game.map");
 	/* Write the data to the file */
 	if (!writeMapFile(aFileName))
 	{
@@ -2911,7 +2909,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 	//create the terrain types filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "TTypes.ttp");
+	strcat(aFileName, "ttypes.ttp");
 	/*Write the data to the file*/
 	if (!writeTerrainTypeMapFile(aFileName))
 	{
@@ -2929,7 +2927,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 	//create the component lists filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "CompL.bjo");
+	strcat(aFileName, "compl.bjo");
 	/*Write the data to the file*/
 	if (!writeCompListFile(aFileName))
 	{
@@ -2937,7 +2935,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	}
 	//create the structure type lists filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "StrType.bjo");
+	strcat(aFileName, "strtype.bjo");
 	/*Write the data to the file*/
 	if (!writeStructTypeListFile(aFileName))
 	{
@@ -2946,7 +2944,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 	//create the research filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "ResState.bjo");
+	strcat(aFileName, "resstate.bjo");
 	/*Write the data to the file*/
 	if (!writeResearchFile(aFileName))
 	{
@@ -2956,7 +2954,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 //#ifdef NEW_SAVE //V11 Save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "MesState.bjo");
+	strcat(aFileName, "messtate.bjo");
 	/*Write the data to the file*/
 	if (!writeMessageFile(aFileName))
 	{
@@ -2967,7 +2965,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 //#ifdef NEW_SAVE //V14 Save
 	//create the proximity message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "ProxState.bjo");
+	strcat(aFileName, "proxstate.bjo");
 	/*Write the data to the file*/
 	if (!writeMessageFile(aFileName))
 	{
@@ -2978,7 +2976,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 //#ifdef NEW_SAVE //V11 Save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "VisState.bjo");
+	strcat(aFileName, "visstate.bjo");
 	/*Write the data to the file*/
 	if (!writeVisibilityData(aFileName))
 	{
@@ -2989,7 +2987,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 //#ifdef NEW_SAVE_V13 //V13 Save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "ProdState.bjo");
+	strcat(aFileName, "prodstate.bjo");
 	/*Write the data to the file*/
 	if (!writeProductionFile(aFileName))
 	{
@@ -3001,7 +2999,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 //#ifdef FX_SAVE //added at V13 save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "FXState.bjo");
+	strcat(aFileName, "fxstate.bjo");
 	/*Write the data to the file*/
 	if (!writeFXData(aFileName))
 	{
@@ -3012,7 +3010,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 	//added at V15 save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "Score.bjo");
+	strcat(aFileName, "score.bjo");
 	/*Write the data to the file*/
 	if (!writeScoreData(aFileName))
 	{
@@ -3023,7 +3021,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 //#ifdef NEW_SAVE //V12 Save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "FlagState.bjo");
+	strcat(aFileName, "flagstate.bjo");
 	/*Write the data to the file*/
 	if (!writeFlagFile(aFileName))
 	{
@@ -3065,7 +3063,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 	//create the droids filename
 	aFileName[fileExtension-1] = '\0';
-	strcat(aFileName, "\\mUnit.bjo");
+	strcat(aFileName, "/munit.bjo");
 	/*Write the swapped droid lists to the file*/
 	//ppsCurrentDroidLists = mission.apsDroidLists;
 	if (!writeDroidFile(aFileName, mission.apsDroidLists))
@@ -3127,7 +3125,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 		//create the structures filename
 		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mStruct.bjo");
+		strcat(aFileName, "mstruct.bjo");
 		/*Write the data to the file*/
 		if (!writeStructFile(aFileName))
 		{
@@ -3136,7 +3134,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 		//create the features filename
 		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mFeat.bjo");
+		strcat(aFileName, "mfeat.bjo");
 		/*Write the data to the file*/
 		if (!writeFeatureFile(aFileName))
 		{
@@ -3145,7 +3143,7 @@ BOOL saveGame(STRING *aFileName, SDWORD saveType)
 
 		//create the message filename
 		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mFlagState.bjo");
+		strcat(aFileName, "mflagstate.bjo");
 		/*Write the data to the file*/
 		if (!writeFlagFile(aFileName))
 		{
@@ -11807,7 +11805,7 @@ BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD
 	levFindDataSet(game.map, &psLevel);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "\\struct.bjo");
+	strcat(aFileName, "/struct.bjo");
 
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -11942,7 +11940,7 @@ BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX
 	levFindDataSet(game.map, &psLevel);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "\\struct.bjo");
+	strcat(aFileName, "/struct.bjo");
 
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))

@@ -230,7 +230,7 @@ void loadMapPreview(void)
 	rebuildSearchPath(psLevel->dataDir, FALSE);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "\\game.map");
+	strcat(aFileName, "/game.map");
 
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
@@ -313,7 +313,7 @@ void Show_Map(char *imagedata)
 	pie_image image;
 	image_init(&image);
 //	imagetest=malloc((sizeof(char)*512*512*512));
-	image_load_from_jpg(&image, "texpages\\bdrops\\test1.jpg");
+	image_load_from_jpg(&image, "texpages/bdrops/test1.jpg");
 	glGenTextures(1, &Tex);
 	pie_SetTexturePage(-1);
 	glBindTexture(GL_TEXTURE_2D, Tex);
@@ -597,7 +597,7 @@ VOID runConnectionScreen(void )
 
 		else if(IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &SPGUID_MPLAYER) ) // mplayer
 		{
-			if(system("multiplay\\MplayNow\\mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
+			if(system("multiplay/mplaynow/mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
 			{
 				changeTitleMode(QUIT);									// shut down warzone...
 			}

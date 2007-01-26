@@ -8,20 +8,20 @@
 
 directory	"texpages"
 file 		TEXPAGE		"page-6-features-urban area.png"
-file		TEXPAGE		"page-8-player buildings-bases Urban.png"
+file		TEXPAGE		"page-8-player buildings-bases urban.png"
 file		TEXPAGE		"page-9-player-soft buildings-bases-urban.png"	//need altering to urban**DONE**
 file		TEXPAGE		"page-9-player-hard buildings-bases-urban.png"
-file		TEXPAGE 	"page-7-barbarians-Urban.png"
+file		TEXPAGE 	"page-7-barbarians-urban.png"
 file 		HWTERTILES	"tertilesc2hw.png"
 
-directory 	"stats\research\cam2"
-file		RESCH		"Research.txt"
-file		RPREREQ		"PRResearch.txt"
+directory 	"stats/research/cam2"
+file		RESCH		"research.txt"
+file		RPREREQ		"prresearch.txt"
 
-file		RCOMPRED	"RedComponents.txt"
-file		RCOMPRES	"ResultComponent.txt"
-file		RSTRREQ		"ResearchStruct.txt"
-file		RSTRRED		"RedStructure.txt"
-file		RSTRRES		"ResultStructure.txt"
-file		RFUNC		"ResearchFunctions.txt"
+file		RCOMPRED	"redcomponents.txt"
+file		RCOMPRES	"resultcomponent.txt"
+file		RSTRREQ		"researchstruct.txt"
+file		RSTRRED		"redstructure.txt"
+file		RSTRRES		"resultstructure.txt"
+file		RFUNC		"researchfunctions.txt"
 

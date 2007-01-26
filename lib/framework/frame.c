@@ -32,17 +32,17 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <assert.h>
 #include <SDL/SDL.h>
 #include <physfs.h>
-#include "ignorecase.h"
 
 // window focus messages
 //#define DEBUG_GROUP1
 #include "frame.h"
 #include "frameint.h"
 
+#include "ignorecase.h"
 #include "fractions.h"
-#include <assert.h>
 #ifdef __APPLE__
 #include "cursors16.h"
 #else
@@ -64,22 +64,21 @@ char *unix_path(const char *path)
 	unsigned int i;
 
 	for (i = 0; path[i] != '\0'; ++i) {
-		if (path[i] >= 'A' && path[i] <= 'Z') {
+		if (path[i] >= 'A' && path[i] <= 'Z') { // lowercase
 			returnval[i] = path[i]-'A'+'a';
-		} else if (path[i] == '\\') {
+		} else if (path[i] == '\\') { // PhysFS dirseperators
 			returnval[i] = '/';
 		} else {
 			returnval[i] = path[i];
 		}
 	}
-	for(;returnval[i-1] == '/'; --i);
+	for(;returnval[i-1] == '/'; --i); // Strip trailing slashes
 	returnval[i] = '\0';
 
 	return returnval;
 }
 
 #ifndef WIN32
-
 FILE *unix_fopen(const char *filename, const char *mode)
 {
 // ridiculous kludge because we redefine fopen to unix_fopen
@@ -87,9 +86,7 @@ FILE *unix_fopen(const char *filename, const char *mode)
 	return fopen(unix_path(filename), mode);
 #define fopen unix_fopen
 }
-
 #endif
-
 
 
 /* Handle for the main window */
@@ -120,6 +117,7 @@ static BOOL mouseOn=TRUE;
 
 /* Whether the mouse should be displayed in the app workspace */
 static BOOL displayMouse=TRUE;
+
 
 /************************************************************************************
  *
@@ -507,18 +505,25 @@ static BOOL loadFile2(char *pFileName, char **ppFileData, UDWORD *pFileSize,
 	PHYSFS_sint64 filesize;
 	PHYSFS_sint64 length_read;
 
-	if (PHYSFSEXT_locateCorrectCase(pFileName)) {
+	if (PHYSFSEXT_locateCorrectCase(pFileName) != 0)
+	{
 		if (hard_fail) {
-			debug(LOG_ERROR, "loadFile2: %s not found", pFileName);
+			debug(LOG_ERROR, "loadFile2: file %s could not be found!\n", pFileName);
 			assert(FALSE);
+		} else {
+			debug(LOG_ERROR, "loadFile2: optional file %s could not be found!", pFileName);
 		}
 		return FALSE;
 	}
+
 	pfile = PHYSFS_openRead(pFileName);
 	if (!pfile) {
-		debug(LOG_ERROR, "loadFile2: %s could not be opened: %s", pFileName,
-		      PHYSFS_getLastError());
-		assert(FALSE);
+		if (hard_fail) {
+			debug(LOG_ERROR, "loadFile2: file %s could not be opened: %s", pFileName, PHYSFS_getLastError());
+			assert(FALSE);
+		} else {
+			debug(LOG_ERROR, "loadFile2: optional file %s could not be opened: %s", pFileName, PHYSFS_getLastError());
+		}
 		return FALSE;
 	}
 	filesize = PHYSFS_fileLength(pfile);
@@ -740,7 +745,7 @@ void ScanFilename(char *Fullname, int *PosOfDot, int *PosOfSlash)
 
 	for (Pos=Namelength;Pos>=0;Pos--)
 	{
-		if (Fullname[Pos]=='\\')
+		if (Fullname[Pos]=='/')
 		{
 			SlashPos=Pos;
 			break;
