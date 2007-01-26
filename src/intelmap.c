@@ -1155,28 +1155,28 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 				switch(psResearch->iconID)
 				{
 				case IMAGE_RES_DROIDTECH:
-					audio_PlayStream("sequenceaudio/res_droid.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_droid.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_WEAPONTECH:
-					audio_PlayStream("sequenceaudio/res_weapons.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_weapons.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_COMPUTERTECH:
-					audio_PlayStream("sequenceaudio/res_com.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_com.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_POWERTECH:
-					audio_PlayStream("sequenceaudio/res_power.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_pow.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_SYSTEMTECH:
-					audio_PlayStream("sequenceaudio/res_systech.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_systech.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_STRUCTURETECH:
-					audio_PlayStream("sequenceaudio/res_strutech.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_strutech.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_CYBORGTECH:
-					audio_PlayStream("sequenceaudio/res_droid.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_droid.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 				case IMAGE_RES_DEFENCE:
-					audio_PlayStream("sequenceaudio/res_strutech.wav", AUDIO_VOL_MAX, NULL);
+					audio_PlayStream("sequenceaudio/res_strutech.ogg", AUDIO_VOL_MAX, NULL);
 						break;
 	//				default:
 				}
