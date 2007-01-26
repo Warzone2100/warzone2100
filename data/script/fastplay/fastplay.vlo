@@ -38,26 +38,26 @@ build[2]	TEMPLATE	"BabaJeep"
 
 //briefing
 briefMsg	INTMESSAGE	"FAST_OBJ1"
-briefSnd1	SOUND		"Barbarian Raiders-1.ogg"
-briefSnd2	SOUND		"Barbarian Raiders-2.ogg"
+briefSnd1	SOUND		"barbarian raiders-1.ogg"
+briefSnd2	SOUND		"barbarian raiders-2.ogg"
 
 //bases
 enm1Msg		INTMESSAGE	"FAST_BASE1"
-enm1Snd1	SOUND		"Enemy Detected.ogg"
-enm1Snd2	SOUND		"Barbarian Outpost-2.ogg"
+enm1Snd1	SOUND		"enemy detected.ogg"
+enm1Snd2	SOUND		"barbarian outpost-2.ogg"
 enm2Msg		INTMESSAGE	"FAST_BASE2"
-enm2Snd1	SOUND		"Enemy Detected.ogg"
-enm2Snd2	SOUND		"Barbarian Outpost-2.ogg"
+enm2Snd1	SOUND		"enemy detected.ogg"
+enm2Snd2	SOUND		"barbarian outpost-2.ogg"
 enm3Msg		INTMESSAGE	"FAST_BASE3"
-enm3Snd1	SOUND		"Enemy Detected.ogg"
-enm3Snd2	SOUND		"Barbarian Outpost-2.ogg"
+enm3Snd1	SOUND		"enemy detected.ogg"
+enm3Snd2	SOUND		"barbarian outpost-2.ogg"
 
-briefSnd1	SOUND		"Barbarian Raiders-1.ogg"
-briefSnd2	SOUND		"Barbarian Raiders-2.ogg"
+briefSnd1	SOUND		"barbarian raiders-1.ogg"
+briefSnd2	SOUND		"barbarian raiders-2.ogg"
 
 /* Win or lose */
-wonSnd		SOUND		"Objectives Accomplished.ogg"	//mission done
-lostSnd		SOUND		"You Are Defeated.ogg"			//mision failed
+wonSnd		SOUND		"objectives accomplished.ogg"	//mission done
+lostSnd		SOUND		"you are defeated.ogg"			//mision failed
 
 /* Set Structure Limits */
 powerGen		STRUCTURESTAT		"A0PowerGenerator"

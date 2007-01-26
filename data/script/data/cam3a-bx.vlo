@@ -92,12 +92,12 @@ TEMPLATE	"NX-L-PulseLas-VTOL"			//NEW
 
 
 
-powTransSnd	SOUND		"PCV483.ogg"	//"Power Transferred.ogg"
+powTransSnd	SOUND		"pcv483.ogg"	//"Power Transferred.ogg"
 
 laughChance	int	25	//25% chance of doing laughs when taken over something and every 60 seconds
 numLaughs	int	2
-laughSnd[0]	SOUND	"Laugh1.ogg"
-laughSnd[1]	SOUND	"Laugh3.ogg"
+laughSnd[0]	SOUND	"laugh1.ogg"
+laughSnd[1]	SOUND	"laugh3.ogg"
 
 playerRes	RESEARCHSTAT	"R-Sys-Resistance-Upgrade01"
 }

@@ -59,8 +59,8 @@ strucStat	[10]	STRUCTURESTAT	"A0ComDroidControl"
 strucLimit	[10]	int		1
 
 timeLimit		INT		54000	//1.5hrs for second part (needs to be done if previous misison had a time limit!)
-powTransSnd		SOUND		"PCV483.ogg"	//"Power Transferred.ogg"
+powTransSnd		SOUND		"pcv483.ogg"	//"Power Transferred.ogg"
 powerBoost		INT		10000	//Gamma base power
-rescuedSnd		SOUND		"PCV616.ogg"	//group rescued
+rescuedSnd		SOUND		"pcv616.ogg"	//group rescued
 }
 

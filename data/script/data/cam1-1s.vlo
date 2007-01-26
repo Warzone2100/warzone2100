@@ -25,7 +25,7 @@ exitY		int		32
 /* Win or lose */
 transporter	TEMPLATE	"Transporter"
 NextLev		LEVEL		"SUB_1_1"
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 timeLimit	INT		9000	//(15 mins) number of seconds*10 for mission, -1 for unlimited
 
 /* Set Structure Limits */

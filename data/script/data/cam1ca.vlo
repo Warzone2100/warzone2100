@@ -16,10 +16,10 @@ endMsg			INTMESSAGE	"END"
 //winMsg		INTMESSAGE	"WIN"
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"SUB_1_4AS"
 timeLimit	INT		18000		//(0.5 hours) number of seconds*10 for mission, -1 for unlimited
 
@@ -66,7 +66,7 @@ enemyLZM[3]	INTMESSAGE	"C1CA_LZ4"
 enemyLZX[4]	INT		6848
 enemyLZY[4]	INT		3520
 enemyLZM[4]	INTMESSAGE	"C1CA_LZ5"
-warnSnd		SOUND		"PCV395.ogg"
+warnSnd		SOUND		"pcv395.ogg"
 
 /* Map Targets/Waypoints for New Paradigm */
 numTargets	INT		3

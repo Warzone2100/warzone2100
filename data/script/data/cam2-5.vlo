@@ -692,19 +692,19 @@ objectiveRange	int		640				//range to objective 5 Tiles
 wayRange	int		300				//range to waypoint 2ish tiles
 targetRange	int		768				//range for target spotting
 targetMax	int		4				//maximum number of targets to store for each enemy
-lostSnd		SOUND		"PCV470.ogg"		//mission failed
-attackSnd1	SOUND		"PCV337.ogg"	//Base Under Attack
-artSnd1		SOUND		"PCV351.ogg"	//artifact sounds
-artSnd2		SOUND		"PCV352.ogg"
+lostSnd		SOUND		"pcv470.ogg"		//mission failed
+attackSnd1	SOUND		"pcv337.ogg"	//Base Under Attack
+artSnd1		SOUND		"pcv351.ogg"	//artifact sounds
+artSnd2		SOUND		"pcv352.ogg"
 transporter	TEMPLATE	"Transporter"	//for enemy transports
-LZComp		SOUND		"PCV445.ogg"
-LZClear		SOUND		"LZ-Clear.ogg"
+LZComp		SOUND		"pcv445.ogg"
+LZClear		SOUND		"lz-clear.ogg"
 
 //base WAVs. MAX = 5
-baseSnd[0]	SOUND		"PCV379.ogg"	//Enemy Base Detected
-baseSnd[1]	SOUND		"PCV379.ogg"	//Enemy Base Detected
-baseSnd[2]	SOUND		"PCV379.ogg"	//Enemy Base Detected
-baseSnd[3]	SOUND		"PCV394.ogg"	//Enemy base eradicated
+baseSnd[0]	SOUND		"pcv379.ogg"	//Enemy Base Detected
+baseSnd[1]	SOUND		"pcv379.ogg"	//Enemy Base Detected
+baseSnd[2]	SOUND		"pcv379.ogg"	//Enemy Base Detected
+baseSnd[3]	SOUND		"pcv394.ogg"	//Enemy base eradicated
 
 /* NEW STUFF for trucks */
 trucksOn		BOOL			TRUE		//switch for using trucks (won't work without it!)
@@ -739,7 +739,7 @@ threatRange		int			512	//range to check for enemy and player threats
 
 /* NEW STUFF fro RETURN TO LZ type victory condition blip and audio */
 retLZFlag		BOOL		TRUE				//must be set true to activate
-retLZSnd		SOUND		"PCV427.ogg"		//for victory condition of get all player stuff to region
+retLZSnd		SOUND		"pcv427.ogg"		//for victory condition of get all player stuff to region
 retLZBlip		INTMESSAGE	"C25_LZ"			//Blip for LZ
 retLZMsg		TEXTSTRING	"LZ_MSG2"			//Return to LZ text
 /* end of NEW STUFF */

@@ -13,6 +13,6 @@ failed_msg	TEXTSTRING	"ADD_MSG11"	//objective destroyed
 captured_msg	TEXTSTRING	"ADD_MSG10"	//objective captured
 capRange	int		512		//radius that needs to be clear of enemy structures before capturable
 
-goodSnd		SOUND		"PCV621.ogg"	//"Objective captured"
-badSnd		SOUND		"PCV622.ogg"	//"Objective destroyed"
+goodSnd		SOUND		"pcv621.ogg"	//"Objective captured"
+badSnd		SOUND		"pcv622.ogg"	//"Objective destroyed"
 }

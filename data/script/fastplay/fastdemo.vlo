@@ -511,16 +511,16 @@ objectiveRange	int		640				//range to objective 5 Tiles
 wayRange	int		300				//range to waypoint 2ish tiles
 targetRange	int		768				//range for target spotting
 targetMax	int		4				//maximum number of targets to store for each enemy
-wonSnd		SOUND		"PCV460.ogg"	//mission done
-lostSnd		SOUND		"PCV470.ogg"		//mission failed
-attackSnd1	SOUND		"PCV337.ogg"	//Base Under Attack
-artSnd1		SOUND		"PCV351.ogg"	//artifact sounds
-artSnd2		SOUND		"PCV352.ogg"
+wonSnd		SOUND		"pcv460.ogg"	//mission done
+lostSnd		SOUND		"pcv470.ogg"		//mission failed
+attackSnd1	SOUND		"pcv337.ogg"	//Base Under Attack
+artSnd1		SOUND		"pcv351.ogg"	//artifact sounds
+artSnd2		SOUND		"pcv352.ogg"
 
 //base WAVs. MAX = 5
-baseSnd[0]	SOUND		"PCV379.ogg"		//Enemy Base Detected
-baseSnd[1]	SOUND		"PCV374.ogg"	//threat to project
-baseSnd[2]	SOUND		"PCV374.ogg"	//superior weapons
-baseSnd[3]	SOUND		"PCV392.ogg"	//scavenger outpost eradicated
+baseSnd[0]	SOUND		"pcv379.ogg"		//Enemy Base Detected
+baseSnd[1]	SOUND		"pcv374.ogg"	//threat to project
+baseSnd[2]	SOUND		"pcv374.ogg"	//superior weapons
+baseSnd[3]	SOUND		"pcv392.ogg"	//scavenger outpost eradicated
 
 }

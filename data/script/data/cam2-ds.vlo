@@ -56,6 +56,6 @@ timeLimit	int		45000	//1hrs15mins	//set -1 for no time limit, otherwise time in 
 /* 'Globals' */
 //These should be same in each file, but may need slight alterations
 player		int		0				//player's player number
-lostSnd		SOUND		"PCV470.ogg"		//mission failed
+lostSnd		SOUND		"pcv470.ogg"		//mission failed
 transporter	TEMPLATE	"Transporter"
 }

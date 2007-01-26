@@ -9,7 +9,7 @@ run
 // the human player
 player		int		0
 power		int		5000
-powTransSnd	SOUND		"PCV483.ogg"	//"Power Transferred.ogg"
+powTransSnd	SOUND		"pcv483.ogg"	//"Power Transferred.ogg"
 
 // the two computer players
 enemy[0]	int		3
@@ -33,7 +33,7 @@ droidsInBase	int	1	//4
 
 // the message when gamma base changes player
 gammaMessage		INTMESSAGE	"MB3_B_MSG3"
-incomingSnd		SOUND		"PCV455.ogg"
+incomingSnd		SOUND		"pcv455.ogg"
 secondMissionTime	int		54000	//90 mins
 
 

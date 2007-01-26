@@ -24,17 +24,17 @@ numFac			INT			0		//Limit on number of Factory Buildings
 numRes			INT			0		//Limit on number of Research Facility Buildings
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"CAM_1C"	
 
 /* Briefing Stuff */
 MissionBrief		INTMESSAGE		"SB1_3_MSG"
 NewParadigm_MSG1	INTMESSAGE		"SB1_3_MSG3"
 NewParadigm_MSG2	INTMESSAGE		"SB1_3_MSG4"
-incomingSnd	SOUND		"PCV455.ogg"
+incomingSnd	SOUND		"pcv455.ogg"
 endMsg			INTMESSAGE	"END"
 //winMsg		INTMESSAGE	"WIN"
 
@@ -45,10 +45,10 @@ obj1		INTMESSAGE	"C1-3_OBJ1"
 obj2		INTMESSAGE	"C1-3_OBJ2"
 obj3		INTMESSAGE	"C1-3_OBJ3"
 obj4		INTMESSAGE	"C1-3_OBJ4"
-LZSnd		SOUND		"PCV427.ogg"
-LZComp		SOUND		"PCV445.ogg"
-LZClear		SOUND		"LZ-Clear.ogg"
-reinfSnd	SOUND		"PCV440.ogg"
+LZSnd		SOUND		"pcv427.ogg"
+LZComp		SOUND		"pcv445.ogg"
+LZClear		SOUND		"lz-clear.ogg"
+reinfSnd	SOUND		"pcv440.ogg"
 
 RetLZMsg	TEXTSTRING	"LZ_MSG2"
 ReinforceTime	INT		1200	//(2 min 0 secs) number of seconds*10 for transport, -1 for no reinforcements
@@ -67,28 +67,28 @@ crate		FEATURESTAT	"Crate"
 art1X		int		6464
 art1Y		int		1728
 art1Get		STRUCTURE	528	//109		//get this from NP factory
-art1Snd2	SOUND		"PCV352.ogg"
+art1Snd2	SOUND		"pcv352.ogg"
 //art1Msg		INTMESSAGE	"C1-3_ART1"
 art1Comp	RESEARCHSTAT	"R-Struc-Factory-Module"
 
 art2X		int		6336
 art2Y		int		2240
 art2Get		STRUCTURE	543		//get this from Command Relay centre
-art2Snd2	SOUND		"PCV352.ogg"
+art2Snd2	SOUND		"pcv352.ogg"
 //art2Msg		INTMESSAGE	"C1-3_ART2"
 art2Comp	RESEARCHSTAT	"R-Struc-CommandRelay"
 
 art3X		int		5184
 art3Y		int		4928
 art3Get		STRUCTURE	270		//get this from Scavenger factory
-art3Snd2	SOUND		"PCV352.ogg"
+art3Snd2	SOUND		"pcv352.ogg"
 //art3Msg		INTMESSAGE	"C1-3_ART3"
 art3Comp	RESEARCHSTAT	"R-Wpn-Cannon1Mk1"	//"R-Wpn-Rocket05-MiniPod"
 
 art4X		int		6976
 art4Y		int		832
 art4Get		STRUCTURE	542		//get this from NP HQ
-art4Snd2	SOUND		"PCV352.ogg"
+art4Snd2	SOUND		"pcv352.ogg"
 //art4Msg		INTMESSAGE	"C1-3_ART4"
 art4Comp	RESEARCHSTAT	"R-Defense-HardcreteWall"
 
@@ -101,16 +101,16 @@ resP0[0]	RESEARCHSTAT	"R-Defense-HardcreteWall" //got from NP HQ
 enm1		STRUCTURE	270	//base1=factory1
 enm1ID		STRUCTUREID	270
 enm1Msg		INTMESSAGE	"C1-3_BASE1"
-enm1Snd1	SOUND		"PCV374.ogg"
-enm1Snd2	SOUND		"PCV392.ogg"
+enm1Snd1	SOUND		"pcv374.ogg"
+enm1Snd2	SOUND		"pcv392.ogg"
 
 
 //base2
 enm2		STRUCTURE	528	//109	//base2=factory1 New Paradigm
 enm2ID		STRUCTUREID	528	//109
 enm2Msg		INTMESSAGE	"C1-3_BASE2"
-enm2Snd1	SOUND		"PCV379.ogg"
-enm2Snd2	SOUND		"PCV394.ogg"
+enm2Snd1	SOUND		"pcv379.ogg"
+enm2Snd2	SOUND		"pcv394.ogg"
 /* NO SECOND BASE!!!
 enm22		STRUCTURE	633	//base2=factory2 New Paradigm
 enm22ID		STRUCTUREID	633

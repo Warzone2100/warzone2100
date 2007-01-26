@@ -17,10 +17,10 @@ endMsg			INTMESSAGE	"END"
 //winMsg		INTMESSAGE	"WIN"
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mision failed
+lostSnd		SOUND		"pcv470.ogg"			//mision failed
 NextLev		LEVEL		"SUB_1_7S"
 timeLimit	INT		36000		//(1 hour) number of seconds*10 for mission, -1 for unlimited
 
@@ -86,7 +86,7 @@ enemyLZM[3]	INTMESSAGE	"C1A-C_LZ4"	//need to change
 enemyLZX[4]	INT		5056
 enemyLZY[4]	INT		3264
 enemyLZM[4]	INTMESSAGE	"C1A-C_LZ5"
-warnSnd		SOUND		"PCV395.ogg"
+warnSnd		SOUND		"pcv395.ogg"
 
 
 //new targets (each grouped in 3, near initial LZ)

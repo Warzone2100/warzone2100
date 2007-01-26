@@ -61,7 +61,7 @@ timeLimit	int		18000	       //30mins //45 mins (set -1 for no time limit, otherw
 /* 'Globals' */
 //These should be same in each file, but may need slight alterations
 player		int		0				//player's player number
-lostSnd		SOUND		"PCV470.ogg"		//mission failed
+lostSnd		SOUND		"pcv470.ogg"		//mission failed
 transporter	TEMPLATE	"Transporter"
 
 //Enemy Starting Technology
@@ -405,6 +405,6 @@ factEvery		[2]	int		60		//10 mins .Time in 10s for factory to try to produce aga
 
 /* 'Globals' */
 //These should be same in each file, but may need slight alterations
-transSnd		SOUND		"PCV381.ogg"		//enemy transport landing
+transSnd		SOUND		"pcv381.ogg"		//enemy transport landing
 
 }

@@ -45,6 +45,6 @@ droids	[1]	DROID		4506	//python
 
 //extra briefing for when Player Transport Lands
 brief			INTMESSAGE		"MB2A_MSG2"
-incomingSnd	SOUND		"PCV455.ogg"
+incomingSnd	SOUND		"pcv455.ogg"
 }
 

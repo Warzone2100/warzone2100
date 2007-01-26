@@ -37,13 +37,13 @@ numFac			INT			5		//Limit on number of Factory Buildings
 numRes			INT			5	//1		//Limit on number of Research Facility Buildings
 
 /* Base Under Attack */
-attackSnd1	SOUND		"PCV337.ogg"
+attackSnd1	SOUND		"pcv337.ogg"
 
 /* Briefing Stuff */
 MissionBrief	INTMESSAGE	"CMB1_MSG"
 MissionBrief2	INTMESSAGE	"MB1A_MSG"
 obj1Msg		INTMESSAGE	"C1A_OBJ1"
-incomingSnd	SOUND		"PCV456.ogg"
+incomingSnd	SOUND		"pcv456.ogg"
 endMsg			INTMESSAGE	"END"
 //winMsg		INTMESSAGE	"WIN"
 
@@ -53,28 +53,28 @@ crate		FEATURESTAT	"Crate"
 art1X		int		5184
 art1Y		int		2112
 art1Get		STRUCTURE	8		//get this from base1 factory
-art1Snd2	SOUND		"PCV352.ogg"
+art1Snd2	SOUND		"pcv352.ogg"
 //art1Msg		INTMESSAGE	"C1A_ART1"
 art1Comp	RESEARCHSTAT	"R-Wpn-Flamer01Mk1"
 
 art2X		int		2496
 art2Y		int		4032
 art2Get		STRUCTURE	1256		//get this from base2 southern factory
-art2Snd2	SOUND		"PCV352.ogg"
+art2Snd2	SOUND		"pcv352.ogg"
 //art2Msg		INTMESSAGE	"C1A_ART2"
 art2Comp	RESEARCHSTAT	"R-Sys-Engineering01"
 
 art3X		int		1856
 art3Y		int		1600
 art3Get		STRUCTURE	20		//get this from base2 factory
-art3Snd2	SOUND		"PCV352.ogg"
+art3Snd2	SOUND		"pcv352.ogg"
 //art3Msg		INTMESSAGE	"C1A_ART3"
 art3Comp	RESEARCHSTAT	"R-Defense-Tower01"	//guntowerMG now
 
 art4X		int		3776	//4416
 art4Y		int		4544	//5312
 //art4Get		STRUCTURE	3414		//not req'd, placed in script
-art4Snd2	SOUND		"PCV352.ogg"
+art4Snd2	SOUND		"pcv352.ogg"
 //art4Msg		INTMESSAGE	"C1A_ART4"
 art4Comp	RESEARCHSTAT	"R-Wpn-MG-Damage01"
 
@@ -86,31 +86,31 @@ resP0[0]	RESEARCHSTAT	"R-Wpn-TUTMG"
 //new 1st base
 enm0		STRUCTURE	3418	//base1=factory1
 enm0Msg		INTMESSAGE	"C1A_BASE0"
-enm0Snd1	SOUND		"PCV375.ogg"
-enm0Snd2	SOUND		"PCV391.ogg"
+enm0Snd1	SOUND		"pcv375.ogg"
+enm0Snd2	SOUND		"pcv391.ogg"
 
 //base1
 enm1		STRUCTURE	8	//base1=factory1
 enm1ID		STRUCTUREID	8
 enm1Msg		INTMESSAGE	"C1A_BASE1"
-enm1Snd1	SOUND		"PCV374.ogg"
-enm1Snd2	SOUND		"PCV392.ogg"
+enm1Snd1	SOUND		"pcv374.ogg"
+enm1Snd2	SOUND		"pcv392.ogg"
 
 //base2
 enm2		STRUCTURE	20	//base2=factory1
 enm2ID		STRUCTUREID	20
 enm2Msg		INTMESSAGE	"C1A_BASE2"
-enm2Snd1	SOUND		"PCV374.ogg"
-enm2Snd2	SOUND		"PCV392.ogg"
+enm2Snd1	SOUND		"pcv374.ogg"
+enm2Snd2	SOUND		"pcv392.ogg"
 
 enm22		STRUCTURE	1256	//base2=factory2
 enm22ID		STRUCTUREID	1256
 enm22Msg	INTMESSAGE	"C1A_BASE3"
-enm22Snd1	SOUND		"PCV374.ogg"
-//enm22Snd2	SOUND		"PCV391.ogg"
+enm22Snd1	SOUND		"pcv374.ogg"
+//enm22Snd2	SOUND		"pcv391.ogg"
 
 /* Win or lose */
-lostSnd		SOUND		"PCV470.ogg"			//mission failed
+lostSnd		SOUND		"pcv470.ogg"			//mission failed
 NextLev		LEVEL		"CAM_1B"
 timeLimit	INT		-1		//36000		//(1 hour) number of seconds*10 for mission, -1 for unlimited
 
