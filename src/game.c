@@ -6403,7 +6403,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			/* DROID_SAVE_V20 includes OBJECT_SAVE_V20 */
 			endian_udword(&psSaveDroid->body);
 			endian_udword(&psSaveDroid->saveType);
-			endian_udword(&psSaveDroid->numWeaps);
 			for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 				endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
 				endian_udword(&psSaveDroid->asWeaps[i].ammo);
@@ -6416,6 +6415,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				endian_uword(&psSaveDroid->turretRotation[i]);
 				endian_uword(&psSaveDroid->turretPitch[i]);
 			}
+			endian_udword(&psSaveDroid->numWeaps);
 			endian_sdword(&psSaveDroid->order);
 			endian_uword(&psSaveDroid->orderX);
 			endian_uword(&psSaveDroid->orderY);
@@ -10766,7 +10766,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psSaveflag = (SAVE_FLAG *) pFileData;
 
 		/* SAVE_FLAG */
-		endian_sdword((SDWORD*)psSaveflag->type); /* FIXME: enum may not be this type! */
+		endian_sdword((SDWORD*) &psSaveflag->type); /* FIXME: enum may not be this type! */
 		endian_udword(&psSaveflag->frameNumber);
 		endian_udword(&psSaveflag->screenX);
 		endian_udword(&psSaveflag->screenY);
