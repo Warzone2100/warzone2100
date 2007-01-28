@@ -1000,10 +1000,13 @@ void aiUpdateDroid(DROID *psDroid)
 			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) ==
 				(frameGetFrameNumber() % TARGET_UPD_SKIP_FRAMES))
 			{
-				for (i = 0; i < psDroid->numWeaps; ++i)	//updates all targets
+				// updates all targets
+				i = 0;
 				{
 					(void)updateAttackTarget((BASE_OBJECT*)psDroid, i);
-				}
+					++i;
+				} while (i < psDroid->numWeaps);
+				// This iteration-style ensures updateAttackTarget is always called on weapon-slot 0
 			}
 		}
 	}
