@@ -1000,7 +1000,10 @@ void aiUpdateDroid(DROID *psDroid)
 			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) ==
 				(frameGetFrameNumber() % TARGET_UPD_SKIP_FRAMES))
 			{
-				(void)updateAttackTarget((BASE_OBJECT*)psDroid, 0);
+				for (i = 0; i < psDroid->numWeaps; ++i)	//updates all targets
+				{
+					(void)updateAttackTarget((BASE_OBJECT*)psDroid, i);
+				}
 			}
 		}
 	}
@@ -1176,9 +1179,10 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 		if(psAttacker->type == OBJ_DROID)
 		{
 			psDroid = (DROID *)psAttacker;
-			if( orderState(psDroid, DORDER_NONE) ||
+			if( (orderState(psDroid, DORDER_NONE) ||
 				orderState(psDroid, DORDER_GUARD) ||
-				orderState(psDroid, DORDER_ATTACKTARGET))
+				orderState(psDroid, DORDER_ATTACKTARGET)) &&
+				weapon_slot == 0)	//Watermelon:only primary slot(0) updates affect order
 			{
 				DROID_OACTION_INFO oaInfo = {{psBetterTarget}};
 				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, &oaInfo);
@@ -1186,7 +1190,7 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 			else	//can't override current order
 			{
 				//psDroid->action = DACTION_MOVEFIRE;
-				psDroid->psActionTarget[0] = psBetterTarget;
+				psDroid->psActionTarget[weapon_slot] = psBetterTarget;
 			}
 		}
 		else if (psAttacker->type == OBJ_STRUCTURE)
