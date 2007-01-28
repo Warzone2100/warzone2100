@@ -2336,19 +2336,25 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 {
 	UDWORD		height;
+	UDWORD		utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 	DROID		*psDroid;
+	STRUCTURE_STATS		*psStructureStats;
 
-		//Get absolute ymax+ymin
-		height = abs(psTarget->sDisplay.imd->ymax) + abs(psTarget->sDisplay.imd->ymin);
+	if (psTarget == NULL)
+	{
+		return 0;
+	}
 
 	switch(psTarget->type)
 	{
 		case OBJ_DROID:
+			height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->ymax - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->ymin;
+
 			psDroid = (DROID*)psTarget;
 			// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
 			if (!strcmp(asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") )
 			{
-				return (height);
+				return height;
 			}
 
 			// Commanders don't have pIMD either
@@ -2366,26 +2372,31 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 				case DROID_WEAPON:
 					if ( psDroid->numWeaps > 0 )
 					{
-						height += abs((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->ymax);
-						height += abs((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->ymin);
+						yMax = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->ymax;
+						yMin = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->ymin;
 					}
 					break;
+
 				case DROID_SENSOR:
-					height += abs((asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax);
-					height += abs((asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymin);
+					yMax = (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymax;
+					yMin = (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->ymin;
 					break;
+
 				case DROID_ECM:
-					height += abs((asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->ymax);
-					height += abs((asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->ymin);
+					yMax = (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->ymax;
+					yMin = (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->ymin;
 					break;
+
 				case DROID_CONSTRUCT:
-					height += abs((asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax);
-					height += abs((asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymin);
+					yMax = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymax;
+					yMin = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->ymin;
 					break;
+
 				case DROID_REPAIR:
-					height += abs((asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax);
-					height += abs((asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymin);
+					yMax = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymax;
+					yMin = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->ymin;
 					break;
+
 				case DROID_PERSON:
 					//TODO:add person 'state'checks here(stand, knee, crouch, prone etc)
 				case DROID_CYBORG:
@@ -2397,18 +2408,22 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 				default:
 					break;
 			}
-			break;
-		case OBJ_STRUCTURE:
-		case OBJ_FEATURE:
-			//Just use imd ymax+ymin,since HeightScale is not available atm
-			break;
-		case OBJ_BULLET:
-			//16 for bullet
-			height = 16;
-			break;
-		default:
-			break;
-	}
 
-	return (height);
+			utilityHeight = yMax - yMin;
+			height += utilityHeight;
+
+			return height;
+
+		case OBJ_STRUCTURE:
+			psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
+			return (psStructureStats->pIMD->ymax - psStructureStats->pIMD->ymin);
+		case OBJ_FEATURE:
+			// Just use imd ymax+ymin
+			return (psTarget->sDisplay.imd->ymax - psTarget->sDisplay.imd->ymin);
+		case OBJ_BULLET:
+			// 16 for bullet
+			return 16;
+		default:
+			return 0;
+	}
 }
