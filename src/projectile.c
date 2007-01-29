@@ -2348,9 +2348,9 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 	switch(psTarget->type)
 	{
 		case OBJ_DROID:
+			psDroid = (DROID*)psTarget;
 			height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->ymax - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->ymin;
 
-			psDroid = (DROID*)psTarget;
 			// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
 			if (!strcmp(asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") )
 			{
