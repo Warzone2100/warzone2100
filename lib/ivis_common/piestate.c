@@ -317,7 +317,3 @@ UDWORD pie_GetColour(void)
 {
 	return	rendStates.colour;
 }
-
-void pie_SetSwirlyBoxes( BOOL val ) // FIXME Remove if unused
-{
-}

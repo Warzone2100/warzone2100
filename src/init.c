@@ -1721,46 +1721,6 @@ BOOL stageTwoShutDown(void)
 	return TRUE;
 }
 
-
-/*****************************************************************************/
-/*      Initialise after all data is loaded                                  */
-
-static void SetAllTilesVisible(void)
-{
-	// Make all the tiles visible
-	MAPTILE *psTile = psMapTiles;
-	UDWORD i;
-
-	for( i=0; i < mapWidth*mapHeight; i++ ) {
-		SET_TILE_VISIBLE(selectedPlayer,psTile);
-		psTile++;
-	}
-}
-
-
-/*
-
-	Set all tiles within the scroll limits visible
-	- this is for the playstation, so that at the end of each level everything is set to visible
-	- this means that we don't have to save the visibilty area in the save game (this is good)
-*/
-static void SetScrollLimitsTilesVisible(void)
-{
-	MAPTILE	*psTile;
-	UWORD	MapX,MapY;
-
-	for (MapY=scrollMinY;MapY<scrollMaxY;MapY++)
-	{
-		psTile=mapTile(scrollMinX,MapY);
-		for (MapX=scrollMinX;MapX<scrollMaxX;MapX++)
-		{
-			SET_TILE_VISIBLE(selectedPlayer,psTile);
-			psTile++;
-		}
-	}
-}
-
-
 BOOL stageThreeInitialise(void)
 {
 //MAPTILE	*psTile;

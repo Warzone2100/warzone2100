@@ -1175,7 +1175,6 @@ void intCloseDebugMenuNoAnim(void)
 BOOL addDebugMenu(BOOL bAdd)
 {
 	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
 	UDWORD			i,pos = 0,formHeight=0;
 
 	/* Close */

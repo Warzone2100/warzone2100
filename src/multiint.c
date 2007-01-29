@@ -2659,23 +2659,6 @@ void runMultiOptions(void)
 	}
 
 
-	// NET AUDIO CAPTURE
-	if(ingame.localJoiningInProgress && game.bytesPerSec==IPXBYTESPERSEC )
-	{
-		if(keyPressed(KEY_KP_FULLSTOP)	// start capture
-		   && !NetPlay.bCaptureInUse )	// noone else talking.
-		{
-			NETstartAudioCapture();
-		}
-
-		if(keyReleased(KEY_KP_FULLSTOP))	// stop capture
-		{
-			NETstopAudioCapture();
-		}
-		NETprocessAudioCapture();		// manage the capture buffer
-	}
-
-
 	// update scores and pings if far enough into the game
 	if(ingame.localOptionsReceived && ingame.localJoiningInProgress)
 	{
@@ -3981,9 +3964,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
 	{
-		pie_SetSwirlyBoxes(FALSE);
 		pie_UniTransBoxFill(x,y, x+psWidget->width+psWidget->height ,y+psWidget->height,(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
-		pie_SetSwirlyBoxes(TRUE);
 	}
 
 	AddCursorSnap(&InterfaceSnap,

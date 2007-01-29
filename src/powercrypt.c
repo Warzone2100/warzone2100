@@ -82,17 +82,6 @@ void pwrcSetPlayerCryptPower(UDWORD player, UDWORD power)
 	asPCrypt[player].lastSent = 0;
 }
 
-
-// get the current power value
-static UDWORD pwrcGetPlayerCryptPower(UDWORD player)
-{
-	ASSERT( player < MAX_PLAYERS,
-		"pwrcGetPlayerCryptPower: invalid player number" );
-
-	return 0;
-}
-
-
 // check the current power value
 BOOL pwrcCheckPlayerCryptPower(UDWORD player, UDWORD power)
 {

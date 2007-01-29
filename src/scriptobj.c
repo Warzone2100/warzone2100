@@ -427,9 +427,7 @@ BOOL scrObjToFeature(void)
 
 // cache all the possible values for the last group to try
 // to speed up access
-static DROID_GROUP	*psScrLastGroup;
 static SDWORD		lgX,lgY, lgMembers, lgHealth;
-static UDWORD		lgGameTime;
 
 // Get values from a group
 BOOL scrGroupObjGet(UDWORD index)

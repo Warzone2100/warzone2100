@@ -776,36 +776,6 @@ void addTransporterTimerInterface(void)
 #define OFFSCREEN_RADIUS	600
 #define OFFSCREEN_HEIGHT	600
 
-/* get offscreen point */
-static void missionGetOffScreenPoint( UWORD iX, UWORD iY,
-						UWORD *piOffX, UWORD *piOffY, UWORD *piOffZ )
-{
-//	UDWORD	iMapWidth  = GetWidthOfMap()  << TILE_SHIFT,
-//			iMapHeight = GetHeightOfMap() << TILE_SHIFT;
-	SDWORD	iTestX = ((SDWORD)iX) - OFFSCREEN_RADIUS,
-			iTestY = ((SDWORD)iY) - OFFSCREEN_RADIUS;
-
-	if ( iTestX > 0 )
-	{
-		*piOffX = (UWORD) iTestX;
-	}
-	else
-	{
-		*piOffX = (UWORD) (((SDWORD)iX) - OFFSCREEN_RADIUS);
-	}
-
-	if ( iTestY > 0 )
-	{
-		*piOffY = (UWORD) iTestY;
-	}
-	else
-	{
-		*piOffY = (UWORD) (((SDWORD)iY) - OFFSCREEN_RADIUS);
-	}
-
-	*piOffZ = (UWORD) (map_Height( iX, iY ) + OFFSCREEN_HEIGHT);
-}
-
 #define	EDGE_SIZE	1
 
 /* pick nearest map edge to point */
@@ -2817,22 +2787,6 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 }
 
 
-static void intReAddMissionTimer(void)
-{
-	if (widgGetFromID(psWScreen,IDTIMER_FORM) != NULL) {
-		void *UserData;
-
-		// Need to preserve widgets UserData.
-		UserData = widgGetUserData(psWScreen, IDTRANTIMER_DISPLAY);
-
-		intRemoveMissionTimer();
-		intAddMissionTimer();
-
-   		widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, UserData);
-	}
-}
-
-
 //add the Mission timer into the top  right hand corner of the screen
 BOOL intAddMissionTimer(void)
 {
@@ -3555,11 +3509,6 @@ void intRunMissionResult(void)
 	}
 
 
-}
-
-static void missionCDCancelPressed( void )
-{
-	intAddMissionResult( g_bMissionResult, TRUE );
 }
 
 static void missionContineButtonPressed( void )

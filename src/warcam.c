@@ -141,22 +141,6 @@ void	initWarCam( void )
 	OldViewValid = FALSE;
 }
 
-//-----------------------------------------------------------------------------------
-
-
-// Just turn it off.
-//
-static void CancelWarCam(void)
-{
-   	if(trackingCamera.target->type == OBJ_DROID) {
-		if( bTrackingTransporter && (((DROID*)trackingCamera.target)->droidType == DROID_TRANSPORTER) ) {
-			return;
-		}
-	}
-
-	trackingCamera.status = CAM_INACTIVE;
-}
-
 
 /* Static function that switches off tracking - and might not be desirable? - Jim?*/
 static void camSwitchOff( void )

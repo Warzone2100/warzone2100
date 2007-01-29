@@ -184,7 +184,5 @@ extern void pie_SetColourKeyedBlack(BOOL keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 extern void pie_SetColour(UDWORD val);
 extern UDWORD pie_GetColour(void);
-//mouse states
-extern WZ_DECL_DEPRECATED void	pie_SetSwirlyBoxes( BOOL val );
 
 #endif // _pieState_h

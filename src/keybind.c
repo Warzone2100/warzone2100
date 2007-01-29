@@ -1106,23 +1106,10 @@ void	kf_addMultiMenu(void)
 
 void kf_multiAudioStart(void)
 {
-	if(bMultiPlayer							// multiplayer game
-		&& game.bytesPerSec==IPXBYTESPERSEC	// ipx type
-		&& !NetPlay.bCaptureInUse)			// noone else talking.
-	{
-		NETstartAudioCapture();
-	}
-	return;
 }
 
 void kf_multiAudioStop(void)
 {
-	if(bMultiPlayer
-		&& game.bytesPerSec==IPXBYTESPERSEC)
-	{
-		NETstopAudioCapture();
-	}
-	return;
 }
 
 // --------------------------------------------------------------------------

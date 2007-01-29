@@ -161,16 +161,8 @@ extern WZ_DECL_DEPRECATED BOOL	NETisSpectator(UDWORD dpid);	// check for spectat
 #include "netlog.h"
 
 // from net audio.
-extern WZ_DECL_DEPRECATED BOOL	NETprocessAudioCapture(void);			//capture
-extern WZ_DECL_DEPRECATED BOOL	NETstopAudioCapture(void);
-extern WZ_DECL_DEPRECATED BOOL	NETstartAudioCapture(void);
-extern WZ_DECL_DEPRECATED BOOL	NETshutdownAudioCapture(void);
-extern WZ_DECL_DEPRECATED BOOL	NETinitAudioCapture(void);
-
 extern WZ_DECL_DEPRECATED BOOL	NETinitPlaybackBuffer(void *pSoundBuffer);	// playback
-extern WZ_DECL_DEPRECATED void	NETplayIncomingAudio(NETMSG *pMsg);
 extern WZ_DECL_DEPRECATED BOOL	NETqueueIncomingAudio(void *pSoundData, SDWORD soundBytes,BOOL bStream);
-extern WZ_DECL_DEPRECATED BOOL	NETshutdownAudioPlayback(void);
 
 // encryption
 extern BOOL	NETsetKey(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);

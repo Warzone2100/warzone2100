@@ -352,21 +352,6 @@ BOOL closeLoadSave(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void loadSaveCDOK( void )
-{
-	bRequestLoad = TRUE;
-	closeLoadSave();
-	loadOK();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-static void loadSaveCDCancel( void )
-{
-	bRequestLoad = FALSE;
-	widgReveal(psRequestScreen,LOADSAVE_FORM);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 BOOL runLoadSave(BOOL bResetMissionWidgets)
 {
 	return _runLoadSave(bResetMissionWidgets);

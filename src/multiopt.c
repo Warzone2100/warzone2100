@@ -527,7 +527,6 @@ BOOL lobbyInitialise(void)
 BOOL multiInitialise(void)
 {
 	// NET AUDIO CAPTURE
-	NETinitAudioCapture();
 #ifdef WIN32			//Disabled for now.  (returns FALSE always anyway) --Qamly
 //	NETinitPlaybackBuffer(audio_GetDirectSoundObj());			// pass in a dsound pointer to use.
 #endif
@@ -561,10 +560,8 @@ BOOL multiShutdown(void)
 	FORCE_MEMBER *pF;
 
 	debug(LOG_MAIN, "shutting down audio capture");
-	NETshutdownAudioCapture();
 
 	debug(LOG_MAIN, "shutting down audio playback");
-	NETshutdownAudioPlayback();
 
 	// shut down netplay lib.
 	debug(LOG_MAIN, "shutting down networking");

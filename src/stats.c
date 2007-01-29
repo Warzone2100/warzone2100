@@ -3543,16 +3543,6 @@ BOOL getResourceName(char *pName)
 	return TRUE;
 }
 
-
-static char* getNameFromStat(BASE_STATS* pStat)
-{
-#ifdef HASH_NAMES
-	return(strresGetString(NULL,pStat->NameHash));
-#else
-	return(getName(pStat->pName));
-#endif
-}
-
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
 char* getName(char *pNameID)
 {
