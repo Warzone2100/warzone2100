@@ -3551,8 +3551,8 @@ BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 }
 
 /* Place a newly manufactured droid next to a factory  and then send if off
-to the assembly point*/
-static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
+to the assembly point, returns true if droid was placed successfully */
+static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 							 DROID **ppsDroid)
 {
 	UDWORD			x,y;
@@ -3582,7 +3582,7 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		if (!psNewDroid)
 		{
 			*ppsDroid = NULL;
-			return;
+			return FALSE;
 		}
 
         //set the droids order to that of the factory - AB 22/04/99
@@ -3803,11 +3803,14 @@ static void structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
 #endif
+		return TRUE;
 	}
 	else
 	{
 		*ppsDroid = NULL;
 	}
+
+	return FALSE;
 }
 
 
@@ -3950,7 +3953,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	RESEARCH_FACILITY	*psResFacility;
 	REARM_PAD			*psReArmPad;
 	iVector				iVecEffect;
-	BOOL				bFinishAction;//bFinishRepair;
+	BOOL				bFinishAction,bDroidPlaced;
 	WEAPON_STATS		*psWStats;
 	BASE_OBJECT			*psTarget;
 	SDWORD				xdiff,ydiff, mindist, currdist;
@@ -4544,7 +4547,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				!CheckHaltOnMaxUnitsReached(psStructure))
 			{
 				/* Place the droid on the map */
-				structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
+				bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
 
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
@@ -4567,7 +4570,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						psFactory->psSubject = NULL;
 
 						//script callback, must be called after factory was flagged as idle
-						cbNewDroid(psStructure, psDroid);
+						if(bDroidPlaced)
+						{
+							cbNewDroid(psStructure, psDroid);
+						}
 					}
 				}
 				else
@@ -4610,7 +4616,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						intManufactureFinished(psStructure);
 
 						//script callback, must be called after factory was flagged as idle
-						cbNewDroid(psStructure, psDroid);
+						if(bDroidPlaced)
+						{
+							cbNewDroid(psStructure, psDroid);
+						}
 					}
 				}
 			}
@@ -9937,6 +9946,9 @@ BOOL lasSatStructSelected(STRUCTURE *psStruct)
 /* Call CALL_NEWDROID script callback */
 static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 {
+	ASSERT(psDroid != NULL, 
+		"cbNewDroid: no droid assigned for CALL_NEWDROID callback");
+
 	psScrCBNewDroid = psDroid;
 	psScrCBNewDroidFact = psFactory;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
