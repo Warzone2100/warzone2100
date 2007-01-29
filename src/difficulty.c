@@ -36,14 +36,6 @@ FRACT				fDifPlayerModifier;
 FRACT				fDifEnemyModifier;
 
 
-static void getModifiers(FRACT *Player,FRACT *Enemy)
-{
-	*Player = fDifPlayerModifier;
-	*Enemy = fDifEnemyModifier;
-}
-
-
-
 void setModifiers(FRACT Player,FRACT Enemy)
 {
 	fDifPlayerModifier = Player;

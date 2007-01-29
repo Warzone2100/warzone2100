@@ -258,22 +258,6 @@ UDWORD getStructureSize(STRUCTURE *psStructure)
 	return (size);
 }
 
-static UDWORD getStructureRadius(STRUCTURE *psStructure)
-{
-	iIMDShape *baseImd;
-	SDWORD Radius = GetRadius(psStructure->sDisplay.imd);
-
-	baseImd = psStructure->pStructureType->pBaseIMD;
-	if(baseImd!=NULL) {
-		if(GetRadius(baseImd) > Radius) {
-			Radius = GetRadius(baseImd);
-		}
-	}
-
-	return Radius;
-}
-
-
 UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 {
 	UDWORD size;
@@ -286,22 +270,6 @@ UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 	}
 	return (size);
 }
-
-static UDWORD getStructureStatRadius(STRUCTURE_STATS *Stats,UDWORD Player)
-{
-	iIMDShape *baseImd;
-	SDWORD Radius = GetRadius(Stats->pIMD);
-
-	baseImd = Stats->pBaseIMD;
-	if(baseImd!=NULL) {
-		if(GetRadius(baseImd) > Radius) {
-			Radius = GetRadius(baseImd);
-		}
-	}
-
-	return Radius;
-}
-
 
 UDWORD getStructureHeight(STRUCTURE *psStructure)
 {

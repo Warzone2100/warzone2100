@@ -304,7 +304,6 @@ static BOOL _intAddInGameOptions(void)
 	InGameOpUp	= TRUE;					// inform interface.
 	SetMousePos(INTINGAMEOP_X + INTINGAMEOP_1_X, INTINGAMEOP_Y + INTINGAMEOP_1_Y); // move mouse to resume.
 
-	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);			// reset cursor (hw)
 	frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
 	return TRUE;

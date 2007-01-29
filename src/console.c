@@ -768,12 +768,6 @@ BOOL	getConsoleDisplayStatus( void )
 	return(bConsoleDisplayEnabled);
 }
 
-static void conShowReplayWav( void )
-{
-
-
-}
-
 /* output warnings directly to the in-game console */
 void printf_console(const char *pFormat, ...)
 {

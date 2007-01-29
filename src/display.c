@@ -451,24 +451,6 @@ BOOL dispModeChange(void)
 	return TRUE;
 }
 
-
-static BOOL GetMouseOverRadar(void)
-{
-	return mouseOverRadar;
-}
-
-
-static void ClearMouseOverRadar(void)
-{
-	mouseOverRadar = FALSE;
-}
-
-
-static void SetMouseOverRadar(void)
-{
-	mouseOverRadar = TRUE;
-}
-
 BOOL	bRadarDragging = FALSE;
 
 void ProcessRadarInput(void)
@@ -1189,7 +1171,6 @@ void processMouseClickInput(void)
 				item = MT_BLOCKING;
 			}
 
-			pie_SetMouse(IntImages,MPointerImageIDs[arnMPointers[item][selection]-IDC_DEST]);
 			frameSetCursorFromRes((SWORD)arnMPointers[item][selection]);
 		}
 	}
@@ -1205,19 +1186,16 @@ void processMouseClickInput(void)
             if (item == MT_ENEMYDROID OR item == MT_ENEMYSTR OR item == MT_DAMFEATURE)
             {
                 //display attack cursor
-                pie_SetMouse(IntImages,IMAGE_CURSOR_ATTACK);
                 frameSetCursorFromRes(IDC_ATTACK);
             }
             else
             {
                 //display block cursor
-                pie_SetMouse(IntImages,IMAGE_CURSOR_NOTPOS);
                 frameSetCursorFromRes(IDC_NOTPOSSIBLE);
             }
         }
         else
         {
-    		pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 	    	frameSetCursorFromRes(IDC_DEFAULT);
         }
 	}
@@ -1647,13 +1625,6 @@ void displayWorld(void)
 
 	draw3DScene();
 
-}
-
-
-static void mouseSetMXMY(void)
-{
-	mX = mouseX();
-	mY = mouseY();
 }
 
 BOOL	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)

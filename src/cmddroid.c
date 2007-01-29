@@ -274,18 +274,3 @@ DROID	*psCurr;
 		}
 	}
 }
-
-// set the number of command droids for a player
-static void cmdDroidSetAvailable(SDWORD player, SDWORD num)
-{
-	ASSERT( (player >= 0) && (player < MAX_PLAYERS),
-		"cmdUnitSetAvailable: invalid player number" );
-	ASSERT( (num > 0) && (num < MAX_CMDDROIDS),
-		"cmdUnitSetAvailable: invalid player number" );
-}
-
-
-
-
-
-

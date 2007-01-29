@@ -3530,7 +3530,6 @@ void intRunMissionResult(void)
 {
 
 	processFrontendSnap(FALSE);
-	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 	if(bLoadSaveUp)

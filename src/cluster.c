@@ -104,58 +104,6 @@ void clustInitialise(void)
 	}
 }
 
-
-// check the cluster usage
-static void clustValidateUsage(void)
-{
-	SDWORD		cluster, player, droidUsage, structUsage;
-	STRUCTURE	*psStruct;
-	DROID		*psDroid;
-	SDWORD		found;
-
-	for(cluster=1; cluster<CLUSTER_MAX; cluster++)
-	{
-		found=MAX_PLAYERS;
-		for(player=0; player<MAX_PLAYERS; player++)
-		{
-			droidUsage=0;
-			structUsage=0;
-			for(psDroid=apsDroidLists[player]; psDroid; psDroid=psDroid->psNext)
-			{
-				if (psDroid->cluster == cluster)
-				{
-					ASSERT( (found == MAX_PLAYERS) || (droidUsage != 0),
-						"clustValidateUsage: cluster has mixed players" );
-
-					found = player;
-					droidUsage += 1;
-				}
-			}
-			for(psStruct=apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
-			{
-				if (psStruct->cluster == cluster)
-				{
-					ASSERT( (found == MAX_PLAYERS) || (structUsage != 0),
-						"clustValidateUsage: cluster has mixed players" );
-
-					found = player;
-					structUsage += 1;
-				}
-			}
-
-			if (found == player)
-			{
-				ASSERT( (droidUsage == 0) || (structUsage == 0),
-					"clustValidateUsage: cluster contains both droids and structs" );
-
-				ASSERT( aClusterUsage[cluster] == droidUsage + structUsage,
-					"clustValidateUsage: invalid cluster usage" );
-			}
-		}
-	}
-}
-
-
 // update routine for the cluster system
 void clusterUpdate(void)
 {

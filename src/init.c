@@ -1244,7 +1244,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 	iV_PaletteSelect(iV_PaletteAdd(&gamePal[0]));
 #endif
 
-	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);	// Set the default cursor shape.
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
@@ -1646,7 +1645,6 @@ BOOL stageTwoInitialise(void)
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 
-	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);	// Set the default cursor shape.
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 

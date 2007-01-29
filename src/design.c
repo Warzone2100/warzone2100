@@ -1552,67 +1552,6 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 /* set SHOWTEMPLATENAME to 0 to show template components in edit box */
 #define SHOWTEMPLATENAME	0
 
-
-/*
-	Go through the template for player 0 matching up all the
-	components from SourceTemplate
-
-
-	NULL is returned if no match is found
-
-	= Matches Body,Proulsion & weapon
-
-	- This is used for generating cyborg names
-*/
-//Watermelon:added check against all weapons if numWeaps > 1
-static DROID_TEMPLATE *MatchTemplate(DROID_TEMPLATE *SourceTemplate,UDWORD player)
-{
-	DROID_TEMPLATE *pDroidDesign;
-	BOOL weapons_check;
-	UBYTE i;
-
-	for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL;
-		pDroidDesign = pDroidDesign->psNext)
-	{
-
-		if (pDroidDesign->asParts[COMP_BODY]==SourceTemplate->asParts[COMP_BODY])
-		{
-
-			if (pDroidDesign->asParts[COMP_PROPULSION]==SourceTemplate->asParts[COMP_PROPULSION])
-			{
-
-				if (pDroidDesign->numWeaps > 1)
-				{
-					for(i = 0;i < pDroidDesign->numWeaps;i++)
-					{
-						if (pDroidDesign->asWeaps[i] != SourceTemplate->asWeaps[i])
-						{
-							weapons_check = FALSE;
-							break;
-						}
-					}
-
-					if (weapons_check == FALSE)
-					{
-						return NULL;
-					}
-					return (pDroidDesign);
-				}
-				else
-				{
-					if (pDroidDesign->asWeaps[0]==SourceTemplate->asWeaps[0])
-					{
-						return (pDroidDesign);
-					}
-				}
-			}
-		}
-	}
-	return NULL;
-
-}
-
-
 //Watermelon:added "hydra" prefix to multi-turret droids
 char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
@@ -4240,12 +4179,6 @@ static BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
 	}
 }
 #endif
-
-/* checks whether to update name or has user already changed it */
-static void desUpdateDesignName( DROID_TEMPLATE *psTemplate, char *szCurrName )
-{
-
-}
 
 /* Process return codes from the design screen */
 void intProcessDesign(UDWORD id)

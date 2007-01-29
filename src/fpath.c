@@ -961,26 +961,6 @@ exit:
 }
 #endif
 
-
-// check if the route to a gateway has already been generated
-static BOOL fpathCheckRouteMatch(MOVE_CONTROL *psMoveCntl, SDWORD *pPos, SDWORD gwx,SDWORD gwy)
-{
-	SDWORD	pos = *pPos;
-
-	while (pos < psMoveCntl->numPoints)
-	{
-		if ((psMoveCntl->asPath[pos].x == (gwx >> TILE_SHIFT)) &&
-			(psMoveCntl->asPath[pos].y == (gwy >> TILE_SHIFT)))
-		{
-			*pPos = pos + 1;
-			return TRUE;
-		}
-		pos += 1;
-	}
-
-	return FALSE;
-}
-
 static void fpathBlockGatewayLink(GATEWAY *psLast, GATEWAY *psCurr)
 {
 	SDWORD	link, numLinks;
