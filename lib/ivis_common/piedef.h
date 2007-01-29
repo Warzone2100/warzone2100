@@ -143,7 +143,11 @@
  */
 /***************************************************************************/
 
+#ifdef __BIG_ENDIAN__
+typedef struct {UBYTE a, r, g, b;} PIELIGHTBYTES; //for byte fields in a DWORD
+#else
 typedef struct {UBYTE b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
+#endif
 typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
 typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT;
 typedef struct {SDWORD sx, sy, sz; UWORD tu, tv; PIELIGHT light, specular;} PIEVERTEX;
