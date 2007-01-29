@@ -242,7 +242,6 @@ GAMECODE gameLoop(void)
 					|| (radarOnScreen && CoordInRadar(mouseX(),mouseY()) AND
                     getHQExists(selectedPlayer)) )
 				{
-					pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 					frameSetCursorFromRes(IDC_DEFAULT);
 					//if( (intRetVal != INT_FULLSCREENPAUSE) && (
 					//	intRetVal != INT_INTELPAUSE) )

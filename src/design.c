@@ -1395,47 +1395,6 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 #define SHOWTEMPLATENAME	0
 
 
-/*
-	Go through the template for player 0 matching up all the
-	components from SourceTemplate
-
-
-	NULL is returned if no match is found
-
-	= Matches Body,Proulsion & weapon
-
-	- This is used for generating cyborg names
-*/
-DROID_TEMPLATE *MatchTemplate(DROID_TEMPLATE *SourceTemplate,UDWORD player)
-{
-	DROID_TEMPLATE *pDroidDesign;
-
-	for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL;
-		pDroidDesign = pDroidDesign->psNext)
-	{
-
-		if (pDroidDesign->asParts[COMP_BODY]==SourceTemplate->asParts[COMP_BODY])
-		{
-
-			if (pDroidDesign->asParts[COMP_PROPULSION]==SourceTemplate->asParts[COMP_PROPULSION])
-			{
-
-				if (pDroidDesign->numWeaps)
-				{
-					if (pDroidDesign->asWeaps[0]==SourceTemplate->asWeaps[0])
-					{
-						return (pDroidDesign);
-					}
-				}
-			}
-		}
-	}
-	return NULL;
-
-}
-
-
-
 STRING *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	COMP_BASE_STATS		*psStats;
@@ -4051,12 +4010,6 @@ BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
 	}
 }
 #endif
-
-/* checks whether to update name or has user already changed it */
-void desUpdateDesignName( DROID_TEMPLATE *psTemplate, STRING *szCurrName )
-{
-
-}
 
 /* Process return codes from the design screen */
 void intProcessDesign(UDWORD id)

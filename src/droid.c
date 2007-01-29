@@ -1172,12 +1172,6 @@ static void addNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 static DROID	*CurrentNaybors = NULL;
 static UDWORD	nayborTime = 0;
 
-void droidResetNaybors(void)
-{
-	CurrentNaybors = NULL;
-}
-
-
 //#ifndef PSX
 //
 //void droidGetNaybors(DROID *psDroid)
@@ -5561,78 +5555,6 @@ UDWORD	getBound(UDWORD level)
 	}
 }
 
-/* Calculate the system points used by a template - NOT USED AT PRESENT*/
-UDWORD	calcTemplateSystemPoints(DROID_TEMPLATE *psTemplate)
-{
-	UDWORD system, i;
-
-	//get the component system points
-	system = (asBodyStats + psTemplate->asParts[COMP_BODY])->systemPoints +
-	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->systemPoints +
-	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower +
-	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->systemPoints +
-	(asECMStats + psTemplate->asParts[COMP_ECM])->systemPoints +
-	(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->systemPoints +
-	(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->systemPoints;
-
-	/* propulsion system points are a percentage of the bodys' system points */
-	system += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->systemPoints *
-		(asBodyStats + psTemplate->asParts[COMP_BODY])->systemPoints) / 100);
-
-	//add weapon system
-	for(i=0; i<psTemplate->numWeaps; i++)
-	{
-		system += (asWeaponStats + psTemplate->asWeaps[i])->systemPoints;
-	}
-
-	//add program system
-	/*for(i=0; i<psTemplate->numProgs; i++)
-	{
-		system += (asProgramStats + psTemplate->asProgs[i])->systemPoints;
-	}*/
-
-	return system;
-}
-
-
-/* Calculate the system points used by a droid - NOT USED AT PRESENT*/
-UDWORD	calcDroidSystemPoints(DROID *psDroid)
-{
-	UDWORD      system;//, i;
-
-	//get the component system points
-	system = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->systemPoints +
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->systemPoints +
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->systemPoints +
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->systemPoints +
-	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->systemPoints +
-	(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->systemPoints;
-
-	/* propulsion system points are a percentage of the bodys' system points */
-	system += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->
-		systemPoints * (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->
-		systemPoints) / 100);
-
-	//add weapon system
-	//for(i=0; i<psDroid->numWeaps; i++)
-    if (psDroid->asWeaps[0].nStat > 0)
-	{
-		//system += (asWeaponStats + psDroid->asWeaps[i].nStat)->systemPoints;
-        system += (asWeaponStats + psDroid->asWeaps[0].nStat)->systemPoints;
-	}
-
-	//add program system
-	/*for(i=0; i<psDroid->numProgs; i++)
-	{
-		system += psDroid->asProgs[i].psStats->systemPoints;
-	}*/
-
-	return system;
-}
-
-
-
-
 // Get the name of a droid from it's DROID structure.
 //
 STRING *droidGetName(DROID *psDroid)
@@ -5650,7 +5572,6 @@ STRING *droidGetName(DROID *psDroid)
 		if (DroidName!=NULL) return(DroidName);	// if we found a name then return it...  other wise build the name
 	}
 
-	BuildNameFromDroid(psDroid,ConstructedName);
 	return(ConstructedName);
 
 #endif
@@ -5791,18 +5712,6 @@ BOOL	normalPAT(UDWORD x, UDWORD y)
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
 	if(sensiblePlace(x,y) AND noDroid(x,y) AND gwZoneReachable(gwGetZone(x,y)))
-	{
-		return(TRUE);
-	}
-	else
-	{
-		return(FALSE);
-	}
-}
-// ------------------------------------------------------------------------------------
-BOOL	halfPAT(UDWORD x, UDWORD y)
-{
- 	if(sensiblePlace(x,y) AND oneDroid(x,y))
 	{
 		return(TRUE);
 	}
@@ -6288,13 +6197,6 @@ void setUpBuildModule(DROID *psDroid)
 		psDroid->action = DACTION_NONE;
 	}
 }
-
-
-// not written yet - needs merging with code in Dr Jones' Design.c
-void BuildNameFromDroid(DROID *psDroid, STRING *ConstructedName)
-{
-}
-
 
 // We just need 1 buffer for the current displayed droid (or template) name
 #define MAXCONNAME WIDG_MAXSTR	//(32)

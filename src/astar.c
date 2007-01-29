@@ -132,11 +132,6 @@ void ClearAstarNodes(void)
 	memset(apsNodes, 0, sizeof(FP_NODE *) * FPATH_TABLESIZE);
 }
 
-UDWORD GetApsNodesSize(void)
-{
-	return(sizeof(FP_NODE *) * FPATH_TABLESIZE);
-}
-
 // Initialise the findpath routine
 BOOL astarInitialise(void)
 {

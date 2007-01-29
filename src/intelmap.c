@@ -2230,7 +2230,6 @@ void _displayImmediateMessage(MESSAGE *psMessage)
 	/* so we lied about definately not starting the intelligence screen */
 	addIntelScreen();
 	/* reset mouse cursor, since addIntelScreen() doesn't do that */
-	pie_SetMouse(IntImages,IMAGE_CURSOR_DEFAULT);
 	frameSetCursorFromRes(IDC_DEFAULT);
 	/* addIntelScreen() (via addIntelMap()) actually starts
 	 * playing psCurrentMsg automatically */
