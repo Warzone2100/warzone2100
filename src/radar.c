@@ -1054,22 +1054,21 @@ SDWORD	dif2 = getLengthAdjust();
 UDWORD	colour = 0;
 UDWORD	camNumber;
 
-	shortX = ((visibleXTiles/4)-(dif/3)) * boxSizeH;
-	longX = ((visibleXTiles/2)-(dif/2)) * boxSizeH;
+	shortX = ((visibleXTiles/4)-(dif/6)) * boxSizeH;
+	longX = ((visibleXTiles/2)-(dif/4)) * boxSizeH;
 	yDropVar = ((visibleYTiles/2)-(dif2/3)) * boxSizeV;
 	yDrop = ((visibleYTiles/2)-dif2/3) * boxSizeV;
 
-
- 	v[0].x = -longX; // FIXME -unsigned will remain unsigned!!!
+ 	v[0].x = longX; // FIXME -unsigned will remain unsigned!!!
 	v[0].y = -yDropVar;
 
-	v[1].x = longX;
+	v[1].x = -longX;
 	v[1].y = -yDropVar;
 
-	v[2].x = -shortX;
+	v[2].x = shortX;
 	v[2].y = yDrop;
 
-	v[3].x = shortX;
+	v[3].x = -shortX;
 	v[3].y = yDrop;
 
 	centre.x = RADTLX+x+(visibleXTiles*boxSizeH)/2;
