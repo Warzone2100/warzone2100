@@ -177,22 +177,6 @@ void	initWarCam( void )
 	OldViewValid = FALSE;
 }
 
-//-----------------------------------------------------------------------------------
-
-
-// Just turn it off.
-//
-void CancelWarCam(void)
-{
-   	if(trackingCamera.target->type == OBJ_DROID) {
-		if( bTrackingTransporter && (((DROID*)trackingCamera.target)->droidType == DROID_TRANSPORTER) ) {
-			return;
-		}
-	}
-
-	trackingCamera.status = CAM_INACTIVE;
-}
-
 
 /* Updates the camera position/angle along with the object movement */
 BOOL	processWarCam( void )

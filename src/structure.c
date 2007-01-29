@@ -3810,14 +3810,6 @@ static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={300,300,300,300,
 //static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS]={10,10,10,10,10,10,10,10};
 
 
-UDWORD getMaxStructures(UDWORD PlayerNumber)
-{
-	// PC currently doesn't limit number of structures a player can build, so just
-	// return an absurdly large number.
-	return 99999;
-}
-
-
 BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 {
 	// PC currently doesn't limit number of structures a player can build.
@@ -8232,32 +8224,6 @@ UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player)
 		break;
 	}
 }
-
-//access function for sensor stats
-UDWORD structureSensorRange(STRUCTURE_STATS *psStats)
-{
-	if (psStats->pSensor)
-	{
-		return psStats->pSensor->range;
-	}
-	else
-	{
-		return 0;
-	}
-}
-UDWORD structureSensorPower(STRUCTURE_STATS *psStats)
-{
-	if (psStats->pSensor)
-	{
-		return psStats->pSensor->power;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-
 
 /*gives the attacking player a reward based on the type of structure that has
 been attacked*/

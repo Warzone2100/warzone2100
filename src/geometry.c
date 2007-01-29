@@ -490,17 +490,6 @@ UDWORD		retVal;
 	return(retVal);
 }
 
-void getObjectsOnTile(MAPTILE *psTile)
-{
-/*UDWORD	i;
-FEATURE	*psFeature;
-DROID	*psDroid;
-STRUCTURE	*psStructure;*/
-
-	(void)psTile;
-
-}
-
 // Approximates a square root - never more than 11% out...
 UDWORD	dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {

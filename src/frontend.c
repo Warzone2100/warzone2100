@@ -515,12 +515,14 @@ VOID startSinglePlayerMenu(VOID)
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, STR_FE_RETURN,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 }
 
+#ifdef PSX_DIFFICULTY_MENU
 void endSinglePlayerMenu( void )
 {
 	removeTopForm();
 	removeBottomForm();
 	removeBackdrop();
 }
+#endif
 
 void frontEndNewGame( void )
 {

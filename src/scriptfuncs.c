@@ -710,53 +710,6 @@ BOOL scrDroidHasSeen(void)
 	return TRUE;
 }
 
-
-// -----------------------------------------------------------------------------------------
-// Check for a droid being within range of a position
-BOOL scrDroidInRangeOfPosition(void)
-{
-	SDWORD		range, player;
-	DROID		*psCurr;
-	SDWORD		rangeSquared;
-	SDWORD		dx, dy, dz, iX, iY, iZ;
-	BOOL		found;
-
-	if (!stackPopParams(5, VAL_INT, &range, VAL_INT, &player,
-						VAL_INT, &iX, VAL_INT, &iY, VAL_INT, &iZ ))
-	{
-		return FALSE;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( FALSE, "scrUnitInRangeOfPosition: invalid player number" );
-		return FALSE;
-	}
-
-	// See if there is a droid in range
-	rangeSquared = range * range;
-	found = FALSE;
-	for(psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
-	{
-		dx = (SDWORD)psCurr->x - iX;
-		dy = (SDWORD)psCurr->y - iY;
-		dz = (SDWORD)psCurr->z - iZ;
-
-		if ( (dx*dx + dy*dy + dz*dz) < rangeSquared)
-		{
-			found = TRUE;
-			break;
-		}
-	}
-
-	if (!stackPushResult(VAL_BOOL, (UDWORD)found))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
 // -----------------------------------------------------------------------------------------
 // Enable a component to be researched
 BOOL scrEnableComponent(void)
@@ -5126,13 +5079,6 @@ UDWORD	campaignNumber;
 
 	return(TRUE);
 }
-// -----------------------------------------------------------------------------------------
-
-BOOL	scrGetUnitCount( void )
-{
-	return TRUE;
-}
-
 
 // -----------------------------------------------------------------------------------------
 // Tests whether a structure has a certain module for a player. Tests whether any structure

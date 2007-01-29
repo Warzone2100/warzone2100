@@ -174,12 +174,6 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld);
 static void _intProcessTransporter(UDWORD id);
 
 
-DROID *GetCurrTransporter(void)
-{
-	return psCurrTransporter;
-}
-
-
 //initialises Transporter variables
 void initTransporters(void)
 {

@@ -303,12 +303,6 @@ BOOL multiPlayerLoop(VOID)
 		}
 //	}
 
-	// process network audio
-	if(game.bytesPerSec==IPXBYTESPERSEC)
-	{
-		NETprocessAudioCapture();		// manage the capture buffer
-	}
-
 	recvMessage();						// get queued messages
 
 
@@ -1664,7 +1658,6 @@ BOOL recvDestroyExtra(NETMSG *pMsg)
 // Network Audio packet processor.
 BOOL recvAudioMsg(NETMSG *pMsg)
 {
-	NETplayIncomingAudio(pMsg);
 	return TRUE;
 }
 
