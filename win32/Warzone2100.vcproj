@@ -71,11 +71,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
-				IgnoreDefaultLibraryNames="msvcrt.lib libcmt.lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib,libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -155,7 +155,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib jpeg.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib mad.lib  physfs.lib OpenAL32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
@@ -624,10 +624,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\sound\mixer_stub.c"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\framework\mono.c"
 				>
 			</File>
@@ -760,10 +756,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\piestate.c"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\ivis_opengl\piestate.c"
 				>
 				<FileConfiguration
@@ -784,6 +776,10 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\ivis_common\piestate.c"
+				>
 			</File>
 			<File
 				RelativePath="..\lib\ivis_opengl\pietexture.c"
