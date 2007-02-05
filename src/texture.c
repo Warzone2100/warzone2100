@@ -171,7 +171,6 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
 	tileStorage = MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
-//	texturePage = MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 

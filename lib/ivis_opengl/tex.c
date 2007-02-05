@@ -146,10 +146,6 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 	/* DID come from a resource */
 	_TEX_PAGE[tex_index].bResource = bResource;
 	// Default values
-	_TEX_PAGE[tex_index].tex.bmp = NULL;
-	_TEX_PAGE[tex_index].tex.width = 256;
-	_TEX_PAGE[tex_index].tex.height = 256;
-	_TEX_PAGE[tex_index].tex.xshift = 0;
 	_TEX_PAGE[tex_index].tex.bmp = s->bmp;
 	_TEX_PAGE[tex_index].tex.width = s->width;
 	_TEX_PAGE[tex_index].tex.height = s->height;
@@ -157,7 +153,25 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 	_TEX_PAGE[tex_index].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[tex_index].type = type;
 
+
+	glDeleteTextures(1, &_TEX_PAGE[tex_index].textPage3dfx);
+	glGenTextures(1, &_TEX_PAGE[tex_index].textPage3dfx);
+
 	pie_SetTexturePage(tex_index);
+
+	if (   (s->width & (s->width-1)) == 0
+	    && (s->height & (s->height-1)) == 0) {
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
+			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+	} else {
+		debug(LOG_TEXTURE, "pie_ChangeTexPage: non POT texture %i", tex_index);
+	}
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
 /**************************************************************************
