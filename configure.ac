@@ -279,14 +279,6 @@ else
 fi
 
 
-# Set flex flags. The -olex.yy.c kludge is to ensure that flex
-# generates the kind of filename that automake expects.
-AC_SUBST(LFLAGS, "-olex.yy.c")
-
-# Set bison flags. The -oy.tab.c kludge is to ensure that bison
-# generates the kind of filename that automake expects.
-AC_SUBST(YFLAGS, "-oy.tab.c")
-
 # add some required C flags here
 # -DYY_STATIC is required by flex
 WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""

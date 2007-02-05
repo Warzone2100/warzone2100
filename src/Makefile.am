@@ -6,13 +6,13 @@
 
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
+BUILT_SOURCES = scriptvals_parser.tab.h
 bin_PROGRAMS = warzone2100
 AM_CPPFLAGS = -I$(top_srcdir)
-BUILT_SOURCES = scriptvals_parser.tab.h
 warzone2100_SOURCES = \
-		scriptvals_parser.y \
-		scriptvals_lexer.l \
-		level_lexer.l \
+		scriptvals_parser.tab.c \
+		scriptvals_lexer.lex.c \
+		level_lexer.lex.c \
 		ai.c \
 		aiexperience.c \
 		astar.c \
