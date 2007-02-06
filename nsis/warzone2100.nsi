@@ -30,7 +30,7 @@ VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
 VIAddVersionKey "FileDescription"	"Warzone 2100 Installer"
 VIAddVersionKey "FileVersion"		"${VERSION}"
 VIAddVersionKey "InternalName"		"Warzone 2100"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright Â© 2006 Warzone Resurrection Project"
 VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.exe"
 VIAddVersionKey "ProductName"		"Warzone 2100"
 VIAddVersionKey "ProductVersion"	"${VERSION}"
@@ -93,11 +93,11 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 
 ;--------------------------------
 ;Reserve Files
-  
+
   ;These files should be inserted before other files in the data block
   ;Keep these lines before any File command
   ;Only for solid compression (by default, solid compression is enabled for BZIP2 and LZMA)
-  
+
   !insertmacro MUI_RESERVEFILE_LANGDLL
 
 
@@ -147,18 +147,18 @@ Section $(TEXT_SecBase) SecBase
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    
+
     ;Create shortcuts
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk" "$INSTDIR\warzone2100.exe"
-  
+
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
 
-SectionGroup /e $(TEXT_SecMods) secMods
+SectionGroup /e $(TEXT_SecMods) SecMods
 
 Section $(TEXT_SecGrimMod) SecGrimMod
 
@@ -201,8 +201,8 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
-  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's art update. Replaces campaign 1 textures with more detailed ones. Also includes some other texture and model updates. License: NON GPL: Copyright by Grim. Use is only permited for Warzone 2100 GPL."
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's art update"
+  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's art update"
+  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's art update. Replaces campaign 1 textures with more detailed ones. Also includes some other texture and model updates. License: NON GPL: Copyright by Grim. Use is only permited for Warzone 2100 GPL."
 
 
 
@@ -213,7 +213,7 @@ FunctionEnd
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
   LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik Update. Ersetzt Kampagne 1 Texturen mit Detailieren. Enthält auch einige andere Textur und Model updates. Lizenz: Nicht GPL: Copyright by Grim. Verwendung nur für Warzone 2100 GPL gestattet."
+  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik Update. Ersetzt Kampagne 1 Texturen mit Detailieren. EnthÃ¤lt auch einige andere Textur und Model updates. Lizenz: Nicht GPL: Copyright by Grim. Verwendung nur fÃ¼r Warzone 2100 GPL gestattet."
 
 
 
@@ -257,21 +257,21 @@ Section "Uninstall"
   RMDir "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
-    
+
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\Warzone 2100.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\Warzone 2100 - Grim's GFX.lnk"
-  
+
   ;Delete empty start menu parent diretories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
- 
+
   startMenuDeleteLoop:
 	ClearErrors
     RMDir $MUI_TEMP
     GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
-    
+
     IfErrors startMenuDeleteLoopDone
-  
+
     StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
   startMenuDeleteLoopDone:
 
@@ -290,5 +290,5 @@ SectionEnd
 Function un.onInit
 
   !insertmacro MUI_UNGETLANGUAGE
-  
+
 FunctionEnd
