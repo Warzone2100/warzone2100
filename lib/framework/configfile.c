@@ -33,7 +33,7 @@ typedef struct	regkey_t
 	struct regkey_t *next;
 } regkey_t;
 regkey_t	*registry[REGISTRY_HASH_SIZE] = { NULL };
-char		RegFilePath[MAX_PATH];
+extern char		RegFilePath[MAX_PATH];
 
 //
 // =======================================================================================================================

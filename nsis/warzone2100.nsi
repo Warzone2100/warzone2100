@@ -201,8 +201,8 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
-  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's art update. Replaces campaign 1 textures with more detailed ones. Also includes some other texture and model updates. License: NON GPL: Copyright by Grim. Use is only permited for Warzone 2100 GPL."
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's art update"
+  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's art update"
+  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's art update. Replaces campaign 1 textures with more detailed ones. Also includes some other texture and model updates. License: NON GPL: Copyright by Grim. Use is only permited for Warzone 2100 GPL."
 
 
 
