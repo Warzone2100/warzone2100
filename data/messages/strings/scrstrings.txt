@@ -2,15 +2,15 @@
 CAM1B_RPL			"cam1b.rpl"
 PLAYER_RPL			"cam1c.rpl"
 INGAME_WAV			"Smack My Fish Up-44hz St.ogg"
-TUTORIAL_WAV			"Zone-1 Demo Song.ogg"
+TUTORIAL_WAV			"zone-1 demo song.ogg"
 
 //these ones are definitely required!
 //video and text sequences for end campaign
-CAM1_END_RPL			"CAM1\C001END.RPL"
-CAM1_END_TXT			"CAM1\C001END.TXA"
-CAM2_BEG_RPL			"CAM2\C002.RPL"
-CAM2_BEG_TXT			"CAM2\C002.TXA"
-CAM3_BEG_RPL			"CAM3\C003.RPL"
-CAM3_BEG_TXT			"CAM3\C003.TXA"
+CAM1_END_RPL			"cam1/c001end.rpl"
+CAM1_END_TXT			"cam1/c001end.TXA"
+CAM2_BEG_RPL			"cam2/c002.rpl"
+CAM2_BEG_TXT			"cam2/c002.txa"
+CAM3_BEG_RPL			"cam3/c003.rpl"
+CAM3_BEG_TXT			"cam3/c003.txa"
 
 FACTORY_RPL				"factory.rpl"
