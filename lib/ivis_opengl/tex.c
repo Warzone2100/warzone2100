@@ -226,7 +226,7 @@ int pie_ReloadTexPage(char *filename, char *pBuffer)
 	s.height = _TEX_PAGE[i].tex.height;
 	s.bmp = _TEX_PAGE[i].tex.bmp;
 
-	pie_PNGLoadMem(pBuffer, &s, NULL);
+	pie_PNGLoadMem(pBuffer, &s);
 
 	return i;
 }

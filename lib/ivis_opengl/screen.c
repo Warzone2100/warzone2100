@@ -395,18 +395,21 @@ static GLuint image_create_texture(char* filename) {
 #endif
 //=====================================================================
 
-void screen_SetBackDropFromFile(char* filename) 
+void screen_SetBackDropFromFile(char* filename)
 {
 	pie_image image;
+	iSprite imagePNG;
+	BOOL imageLoaded = FALSE;
+	char * buffer = NULL;
+	unsigned int dummy = 0;
 
 	image_init(&image);
 
-	if (!image_load_from_jpg(&image, filename)) {
+	if (!imageLoaded && !image_load_from_jpg(&image, filename)) {
 		if (~backDropTexture == 0) {
 			glGenTextures(1, &backDropTexture);
 		}
 
-		pie_SetTexturePage(-1);
 		glBindTexture(GL_TEXTURE_2D, backDropTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
 			     image.width, image.height,
@@ -416,9 +419,35 @@ void screen_SetBackDropFromFile(char* filename)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		imageLoaded = TRUE;
 	}
 
 	image_delete(&image);
+
+	// HACK : We should use a resource handler here!
+	if ( !imageLoaded && loadFile( filename, &buffer, &dummy ) && pie_PNGLoadMem( buffer, &imagePNG ) )
+	{
+		FREE(buffer);
+
+		if (~backDropTexture == 0) {
+			glGenTextures(1, &backDropTexture);
+		}
+
+		glBindTexture(GL_TEXTURE_2D, backDropTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+			     imagePNG.width, imagePNG.height,
+			     0, GL_RGBA, GL_UNSIGNED_BYTE, imagePNG.bmp);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		free(imagePNG.bmp);
+
+		imageLoaded = TRUE;
+	}
 }
 //===================================================================
 
@@ -441,38 +470,37 @@ BOOL screen_GetBackDrop(void)
 //bitmap MUST be 512x512 for now.  -Q
 void screen_Upload(UWORD* newBackDropBmp)
 {
-	if(newBackDropBmp!=NULL)
+	if(newBackDropBmp != NULL)
 	{
-	glGenTextures(1, &backDropTexture);
-	pie_SetTexturePage(-1);
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-		   512,512,//backDropWidth, backDropHeight,
+		glGenTextures(1, &backDropTexture);
+		pie_SetTexturePage(-1);
+		glBindTexture(GL_TEXTURE_2D, backDropTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+			512,512,//backDropWidth, backDropHeight,
 			0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
 
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	}
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
-	pie_SetTexturePage(-1);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	glColor3f(1, 1,1);
+	glColor3f(1, 1, 1);
 
 	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
-	glTexCoord2f(255, 0);
-	glVertex2f(screenWidth, 0);
-	glTexCoord2f(0, 255);
-	glVertex2f(0, screenHeight);
-	glTexCoord2f(255, 255);
-	glVertex2f(screenWidth, screenHeight);
+		glTexCoord2f(0, 0);
+		glVertex2f(0, 0);
+		glTexCoord2f(255, 0);
+		glVertex2f(screenWidth, 0);
+		glTexCoord2f(0, 255);
+		glVertex2f(0, screenHeight);
+		glTexCoord2f(255, 255);
+		glVertex2f(screenWidth, screenHeight);
 	glEnd();
 }
 

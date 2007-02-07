@@ -540,21 +540,20 @@ void pie_ResetBackDrop(void)
 }
 
 
-void pie_LoadBackDrop(SCREENTYPE screenType) 
+void pie_LoadBackDrop(SCREENTYPE screenType)
 {
-	UDWORD	chooser0,chooser1;
 	char	backd[128];
 
 	//randomly load in a backdrop piccy.
-	srand((unsigned)time( NULL ) );
-
-	chooser0 = 0;
-	chooser1 = rand()%7;
+	srand( (unsigned)time(NULL) + 17 ); // Use offset since time alone doesn't work very well
 
 	switch (screenType)
 	{
 	case SCREEN_RANDOMBDROP:
-		sprintf(backd,"texpages/bdrops/%d%d-bdrop.jpg", chooser0, chooser1);
+		if ( rand()%2 == 0 )
+			sprintf(backd,"texpages/bdrops/0%i-bdrop.jpg", rand()%7); // Range: 0-6
+		else
+			sprintf(backd,"texpages/bdrops/wzlogo_%i.png", rand()%2 + 3); // Range: 3-4
 		break;
 	case SCREEN_COVERMOUNT:
 		sprintf(backd,"texpages/bdrops/demo-bdrop.jpg");

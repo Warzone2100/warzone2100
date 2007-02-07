@@ -44,9 +44,9 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 	}
 }
 
-BOOL pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal)
+BOOL pie_PNGLoadMem(char *pngimage, iSprite *s)
 {
-	unsigned int PNG_BYTES_TO_CHECK;
+	unsigned int PNG_BYTES_TO_CHECK=4;
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 
@@ -55,8 +55,6 @@ BOOL pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal)
 	assert(pngimage != NULL);
 	buf->buffer = pngimage;
 	buf->length = 10000000;
-
-	PNG_BYTES_TO_CHECK = 4;
 
 	if (png_sig_cmp((png_byte*)pngimage, (png_size_t)0, PNG_BYTES_TO_CHECK)) {
 		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in buffer");

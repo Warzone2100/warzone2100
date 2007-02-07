@@ -203,8 +203,14 @@ extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pP
 extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
 extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 
-// PNG
-BOOL pie_PNGLoadMem(char *pngimage, iSprite *s, iColour *pal);
+/*!
+ * Load a PNG from buffer pngimage into sprite
+ *
+ * \param pngimage Buffer to load from
+ * \param sprite Sprite to read into
+ * \return TRUE on success, FALSE otherwise
+ */
+BOOL pie_PNGLoadMem(char *pngimage, iSprite *sprite);
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 

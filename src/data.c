@@ -745,7 +745,7 @@ BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-	if (!pie_PNGLoadMem(pBuffer, psSprite, NULL))
+	if (!pie_PNGLoadMem(pBuffer, psSprite))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
 		return FALSE;
@@ -770,7 +770,7 @@ BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 	if (bTilesPCXLoaded)
 	{
 		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		if(!pie_PNGLoadMem(pBuffer,&tilesPCX,NULL))
+		if(!pie_PNGLoadMem(pBuffer,&tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES reload failed" );
 			return FALSE;
@@ -779,7 +779,7 @@ BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 	else
 	{
 		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!pie_PNGLoadMem(pBuffer,&tilesPCX,NULL))
+		if(!pie_PNGLoadMem(pBuffer,&tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES load failed" );
 			return FALSE;
@@ -933,7 +933,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 			return FALSE;
 		}
 
-		if (!pie_PNGLoadMem(pBuffer, psSprite, NULL))
+		if (!pie_PNGLoadMem(pBuffer, psSprite))
 		{
 			return FALSE;
 		}
@@ -942,21 +942,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		NewTexturePage->Texture=psSprite;
 		NewTexturePage->Palette=psPal;
 
-//Hack mar8 to load	textures in order
-/*	for(i=0;i<_TEX_INDEX;i++)
-	{
-		if (stricmp(texfile,_TEX_PAGE[i].name) != 0)
-		{
-			bFound = TRUE;
-			break;
-		}
-	}
-	if (!bFound)
-*/
-	{
 		pie_AddBMPtoTexPages(psSprite, texfile, 1, FALSE, TRUE);
-	}
-//Hack end
 
 		*ppData = NewTexturePage;
 	}
