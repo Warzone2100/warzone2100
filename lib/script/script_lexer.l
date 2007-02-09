@@ -257,7 +257,14 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 	BOOL	object;
 
 	// See if this is an object pointer
-	object = asScrTypeTab[psFunc->retType - VAL_USERTYPESTART].accessType == AT_OBJECT;
+	if (!asScrTypeTab || psFunc->retType < VAL_USERTYPESTART)
+	{
+		object = FALSE;
+	}
+	else
+	{
+		object = asScrTypeTab[psFunc->retType - VAL_USERTYPESTART].accessType == AT_OBJECT;
+	}
 
 	if (object)
 	{
