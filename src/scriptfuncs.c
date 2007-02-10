@@ -7842,7 +7842,7 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 	UDWORD				numEnemies = 0;
 
 	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL))
+		VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
 		return FALSE;
@@ -7939,7 +7939,7 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 	UDWORD				numEnemies = 0;
 
 	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL))
+		VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
 		return FALSE;
@@ -10953,6 +10953,29 @@ BOOL scrSetTileHeight(void)
 	psTile = mapTile(tileX,tileY);
 
 	psTile->height = (UBYTE)newHeight;
+
+	return TRUE;
+}
+
+/* Returns structure which placed on provided coordinates.
+ * Returns NULL (NULLOBJECT) if there's no structure.
+ */
+BOOL scrGetTileStructure(void)
+{
+	SDWORD		structureX,structureY;
+
+	if (!stackPopParams(2, VAL_INT, &structureX, VAL_INT, &structureY))
+	{
+		debug(LOG_ERROR, "scrGetTileStructure(): stack failed");
+		return FALSE;
+	}
+
+	scrFunctionResult.v.oval = getTileStructure(structureX, structureY);
+	if (!stackPushResult(ST_STRUCTURE, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrGetTileStructure(): failed to push result");
+		return FALSE;
+	}
 
 	return TRUE;
 }

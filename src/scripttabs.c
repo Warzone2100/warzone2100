@@ -1360,9 +1360,14 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setTileHeight",	scrSetTileHeight,	VAL_VOID,
+	{ "setTileHeight",			scrSetTileHeight,	VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getTileStructure",		scrGetTileStructure,	ST_STRUCTURE,
+		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 
 	/* END new functions */
 

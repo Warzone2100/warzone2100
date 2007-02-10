@@ -81,6 +81,9 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
  */
 static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress);
 
+/* Output script call stack trace */
+static void scrOutputCallTrace(SCRIPT_CODE *psProg, BOOL bEvent, char *sCurEvent);
+
 /* The size of each opcode */
 SDWORD aOpSize[] =
 {
@@ -299,19 +302,18 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 {
 	SDWORD			data;
 	OPCODE			opcode;
-	INTERP_VAL	sVal, *psVar,*InstrPointer;
-	VAL_CHUNK	*psGlobals;
-	UDWORD		numGlobals = 0;
+	INTERP_VAL		sVal, *psVar,*InstrPointer;
+	VAL_CHUNK		*psGlobals;
+	UDWORD			numGlobals = 0;
 	INTERP_VAL		*pCodeStart, *pCodeEnd, *pCodeBase;
 	SCRIPT_FUNC		scriptFunc = 0;
 	SCRIPT_VARFUNC	scriptVarFunc = 0;
 	SCRIPT_CODE		*psProg;
 	SDWORD			instructionCount = 0;
 
-	UDWORD		CurEvent = 0;
-	BOOL		bStop = FALSE, bEvent = FALSE;
-	SDWORD		callDepth = 0;
-	const char	*pTrigLab, *pEventLab;
+	UDWORD			CurEvent = 0;
+	BOOL			bStop = FALSE, bEvent = FALSE;
+	SDWORD			callDepth = 0;
 	BOOL			bTraceOn=FALSE;		//enable to debug function/event calls
 
 	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
@@ -962,27 +964,8 @@ exit_with_error:
 	callDepth = retStackCallDepth();
 	debug(LOG_ERROR,"Call depth : %d", callDepth);
 
-	if(psProg->psDebug != NULL)
-	{
-		debug(LOG_ERROR,"Displaying debug info:");
-
-		if(bEvent)
-		{
-			// find the debug info for the original (caller)  event
-			pEventLab = eventGetEventID(psProg, index);
-			debug(LOG_ERROR,"Original event name: %s", pEventLab);
-
-			pEventLab = eventGetEventID(psProg, CurEvent);
-			debug(LOG_ERROR,"Current event name: %s", pEventLab);
-		}
-		else
-		{
-			// find the debug info for the trigger
-			pTrigLab = eventGetTriggerID(psProg, index);
-			debug(LOG_ERROR,"Trigger: %s", pTrigLab);
-		}
-	}
-
+	/* Output script call trace */
+	scrOutputCallTrace(psProg, bEvent, &(last_called_script_event[0]));
 
 	TRCPRINTF(("*** ERROR EXIT ***\n"));
 	bInterpRunning = FALSE;
@@ -1146,4 +1129,40 @@ static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 	//debug( LOG_SCRIPT, "retStackPop: Event=%i Address=%p", *EventTrigIndex, *ReturnAddress);
 
 	return TRUE;
+}
+
+
+/* Output script call stack trace */
+static void scrOutputCallTrace(SCRIPT_CODE *psProg, BOOL bEvent, char *sCurEvent)
+{
+	SDWORD i;
+	const char *pEvent;
+
+	if(psProg == NULL)
+		return;
+
+	debug(LOG_SCRIPT, "");
+	debug(LOG_SCRIPT, "Script call trace:");
+
+	debug(LOG_SCRIPT,"%d: %s (current event)", retStackPos + 1, sCurEvent);
+
+	if(psProg->psDebug != NULL)
+	{
+		for(i=retStackPos; i>=0; i--)
+		{
+			if(i == 0 && !bEvent){	//if original caller is a trigger
+				pEvent = eventGetTriggerID(psProg, retStack[i].CallerIndex);
+			}else{
+				pEvent = eventGetEventID(psProg, retStack[i].CallerIndex);
+			}
+
+			debug(LOG_SCRIPT,"%d: %s (return address: %d)", i, pEvent, retStack[i].ReturnAddress);
+		}
+	}
+	else
+	{
+		debug(LOG_SCRIPT, "No debug information available.");
+	}
+	
+	debug(LOG_SCRIPT, "");
 }
