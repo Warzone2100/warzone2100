@@ -115,8 +115,7 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 	_TEX_PAGE[i].type = type;
 
 	glGenTextures(1, &_TEX_PAGE[i].textPage3dfx);
-
-	pie_SetTexturePage(i);
+	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].textPage3dfx);
 
 	if (   (s->width & (s->width-1)) == 0
 	    && (s->height & (s->height-1)) == 0) {
@@ -154,10 +153,7 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 	_TEX_PAGE[tex_index].type = type;
 
 
-	glDeleteTextures(1, &_TEX_PAGE[tex_index].textPage3dfx);
-	glGenTextures(1, &_TEX_PAGE[tex_index].textPage3dfx);
-
-	pie_SetTexturePage(tex_index);
+	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].textPage3dfx);
 
 	if (   (s->width & (s->width-1)) == 0
 	    && (s->height & (s->height-1)) == 0) {
