@@ -397,57 +397,69 @@ static GLuint image_create_texture(char* filename) {
 
 void screen_SetBackDropFromFile(char* filename)
 {
-	pie_image image;
-	iSprite imagePNG;
-	BOOL imageLoaded = FALSE;
-	char * buffer = NULL;
-	unsigned int dummy = 0;
+   	// HACK : We should use a resource handler here!
+    char *extension;
 
-	image_init(&image);
-
-	if (!imageLoaded && !image_load_from_jpg(&image, filename)) {
-		if (~backDropTexture == 0) {
-			glGenTextures(1, &backDropTexture);
-		}
-
-		glBindTexture(GL_TEXTURE_2D, backDropTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-			     image.width, image.height,
-			     0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-		imageLoaded = TRUE;
-	}
-
-	image_delete(&image);
-
-	// HACK : We should use a resource handler here!
-	if ( !imageLoaded && loadFile( filename, &buffer, &dummy ) && pie_PNGLoadMem( buffer, &imagePNG ) )
+    // determine the filetype
+    extension = strrchr(filename, '.');
+    if(!extension)
 	{
-		FREE(buffer);
+        debug(LOG_ERROR, "Image without extension: \"%s\"!", filename);
+        return; // filename without extension... don't bother
+    }
 
-		if (~backDropTexture == 0) {
-			glGenTextures(1, &backDropTexture);
-		}
+    if( strcmp(extension,".jpg") == 0 || strcmp(extension,".jpeg") == 0 )
+	{ 
+		pie_image image;
 
-		glBindTexture(GL_TEXTURE_2D, backDropTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-			     imagePNG.width, imagePNG.height,
-			     0, GL_RGBA, GL_UNSIGNED_BYTE, imagePNG.bmp);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	    image_init(&image);
 
-		free(imagePNG.bmp);
+    	if (!image_load_from_jpg(&image, filename)) {
+	    	if (~backDropTexture == 0)
+	    		glGenTextures(1, &backDropTexture);
+    
+	    	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+	    		     image.width, image.height,
+	    		     0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
+	    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	    }
 
-		imageLoaded = TRUE;
-	}
+	    image_delete(&image);
+        return;
+    }
+    else if( strcmp(extension,".png") == 0 )
+	{
+		iSprite imagePNG;
+		char * buffer = NULL;
+		unsigned int dummy = 0;
+
+	    if (loadFile( filename, &buffer, &dummy ) && pie_PNGLoadMem( buffer, &imagePNG ) )
+	    {
+	    	if (~backDropTexture == 0)
+	    		glGenTextures(1, &backDropTexture);
+    
+	    	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+	    		     imagePNG.width, imagePNG.height,
+	    		     0, GL_RGBA, GL_UNSIGNED_BYTE, imagePNG.bmp);
+	    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    
+	    	free(imagePNG.bmp);
+	    }
+    	FREE(buffer);
+        return;
+    }
+	else
+	    debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
 }
 //===================================================================
 
