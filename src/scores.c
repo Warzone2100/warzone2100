@@ -331,7 +331,7 @@ UDWORD	div;
 			iV_DrawText(text, x + width + 16, y + 12);
 
 			/* If we're beyond STAT_ROOKIE, then we're on rankings */
-			if(index>=STAT_GREEN AND index <= STAT_ACE)
+			if(index>=STAT_GREEN && index <= STAT_ACE)
 			{
 				iV_DrawTransImage(IntImages,(UWORD)(IMAGE_LEV_0 + (index - STAT_GREEN)),x-8,y+2);
 			}
@@ -340,7 +340,7 @@ UDWORD	div;
 		}
 		/* Move onto the next bar */
 		index++;
-		if(infoBars[index].topX == 0 AND infoBars[index].topY == 0)
+		if(infoBars[index].topX == 0 && infoBars[index].topY == 0)
 		{
 			bMoreBars = FALSE;
 		}
@@ -603,4 +603,5 @@ MISSION_DATA		*pScoreData;
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------
+
 

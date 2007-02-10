@@ -496,7 +496,7 @@ UDWORD	height;
 	if(clipXY(x,y))
 	{
 		height = map_Height(x,y);
-		if( (height > gHighestHeight) AND (dist >= gHMinDist) )
+		if( (height > gHighestHeight) && (dist >= gHMinDist) )
 		{
 			heightDif = height - gHOrigHeight;
 			gHPitch = RAD_TO_DEG(atan2(MAKEFRACT(heightDif),

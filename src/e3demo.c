@@ -155,7 +155,7 @@ UDWORD	i,numWith;
 				otherPlayer = rand()%MAX_PLAYERS;
 
 				/* Have they got any structures? Make sure it's not their own we're checking! */
-				while(apsStructLists[otherPlayer]==NULL OR otherPlayer==firstPlayer)
+				while(apsStructLists[otherPlayer]==NULL || otherPlayer==firstPlayer)
 				{
 					/* Nope, so choose another one until we get one with droids */
 					otherPlayer = rand()%MAX_PLAYERS;
@@ -164,10 +164,10 @@ UDWORD	i,numWith;
 
 
 				/* Only do this if we've got a droid and an enemy building to attack! */
-				if(psDroid AND apsStructLists[otherPlayer])
+				if(psDroid && apsStructLists[otherPlayer])
 				{
-					if( (orderState(psDroid,DORDER_NONE) == TRUE) OR
-						((orderState(psDroid,DORDER_GUARD) == TRUE) AND (psDroid->action == DACTION_NONE)))
+					if( (orderState(psDroid,DORDER_NONE) == TRUE) ||
+						((orderState(psDroid,DORDER_GUARD) == TRUE) && (psDroid->action == DACTION_NONE)))
 					{
 						/* Make the droid attack the building - it'll indirectly route there too */
 						orderDroidLoc(psDroid,DORDER_SCOUT,
@@ -260,7 +260,7 @@ PROPULSION_STATS	*psPropStats;
 	}
 	/* If they were all empty, then record this fact and only seek locations */
 	/* We need two sides for this to work! */
-	if(numWith<2 OR !bHaveHuman)
+	if(numWith<2 || !bHaveHuman)
 	{
 		bSeekOnlyLocations = TRUE;
 	}
@@ -302,14 +302,14 @@ PROPULSION_STATS	*psPropStats;
 			otherPlayer = rand()%MAX_PLAYERS;
 
 			/* Have they got any structures? Make sure it's not their own we're checking! */
-			while(apsStructLists[otherPlayer]==NULL OR otherPlayer==player)
+			while(apsStructLists[otherPlayer]==NULL || otherPlayer==player)
 			{
 				/* Nope, so choose another one until we get one with droids */
 				otherPlayer = rand()%MAX_PLAYERS;
 			}
 
 			/* If there was a droid last time, deselect it */
-			if(psLastDroid AND !psLastDroid->died)
+			if(psLastDroid && !psLastDroid->died)
 			{
 				psLastDroid->selected = FALSE;
 			}
@@ -317,7 +317,7 @@ PROPULSION_STATS	*psPropStats;
 			/* Jump to droid and track */
 			psDroid = getDroidForDemo(player);
 			/* Only do if we've got a droid and an enemy building to attack */
-			if(psDroid AND apsStructLists[otherPlayer])
+			if(psDroid && apsStructLists[otherPlayer])
 			{
 				psDroid->selected = TRUE;
 			  	selectedPlayer = player;
@@ -416,7 +416,7 @@ STRUCTURE_STATS		*pStructureType;
 				if(psStructure)
 				{
 					pStructureType = psStructure->pStructureType;
-					if(psStructure->player == selectedPlayer AND pStructureType->pBaseIMD)
+					if(psStructure->player == selectedPlayer && pStructureType->pBaseIMD)
 					{
 						SET_TILE_NODRAW(psTile);
 					}
@@ -446,7 +446,7 @@ UDWORD	droidIndex;
 	if(i)
 	{
 		droidIndex = rand()%i;
-		for(psDroid = apsDroidLists[player],i=0; psDroid AND i<droidIndex; i++,psDroid = psDroid->psNext)
+		for(psDroid = apsDroidLists[player],i=0; psDroid && i<droidIndex; i++,psDroid = psDroid->psNext)
 		{
 			/* Find the right one */
 		}
@@ -462,9 +462,9 @@ UDWORD	droidIndex;
 /* Hack! */
 BOOL	tooNearEdge( UDWORD x, UDWORD y )
 {
-	if( (x > ((visibleXTiles/2) * TILE_UNITS)) AND
-		(x < ((mapWidth-(visibleXTiles/2)) * TILE_UNITS)) AND
-		(y > ((visibleYTiles/2) * TILE_UNITS)) AND
+	if( (x > ((visibleXTiles/2) * TILE_UNITS)) &&
+		(x < ((mapWidth-(visibleXTiles/2)) * TILE_UNITS)) &&
+		(y > ((visibleYTiles/2) * TILE_UNITS)) &&
 		(y < ((mapHeight-(visibleYTiles/2)) * TILE_UNITS)) )
 	{
 		return(FALSE);

@@ -56,10 +56,10 @@ BOOL blockingTile(UDWORD x, UDWORD y, UDWORD mask)
 	psTile = mapTile(x,y);
 //	if (!(psTile->type & mask) ||
 
-//psor	if (!(TERRAIN_TYPE(psTile) & mask) OR
+//psor	if (!(TERRAIN_TYPE(psTile) & mask) ||
 //psor		(!(mask & TER_OBJECT) && psTile->psObject))
 
-/*	if (!(TERRAIN_TYPE(psTile) & mask) OR
+/*	if (!(TERRAIN_TYPE(psTile) & mask) ||
 		(!(mask & TER_OBJECT) && TILE_OCCUPIED(psTile)))*/
 	if (mask == 0 &&// TILE_OCCUPIED(psTile))
 		(TILE_OCCUPIED(psTile) || TERRAIN_TYPE(psTile) == TER_CLIFFFACE))
@@ -755,7 +755,7 @@ FRACT		fraction;
 	}
 
 	/* Have we got there? */
-	if (Obj->x == (UDWORD)MoveData->DestinationX AND
+	if (Obj->x == (UDWORD)MoveData->DestinationX &&
 		Obj->y == (UDWORD)MoveData->DestinationY)
 	{
 		MoveData->Status = MOVEINACTIVE;
@@ -849,11 +849,11 @@ UDWORD vect2Follow[COMPASS_POINTS][3]=
 		yVect = NIL;
 
 	i=0;
-	while (!found AND i<8)
+	while (!found && i<8)
 	{
 		xComp = vect2Follow[i][0];
 		yComp = vect2Follow[i][1];
-		if (xComp == xVect AND yComp == yVect)
+		if (xComp == xVect && yComp == yVect)
 		{
 			found = TRUE;
 		}

@@ -137,7 +137,7 @@ extern UDWORD selectedPlayer;
                 break; \
             case MSG_MISSION: \
                 /*add it before the first campaign message */ \
-    		    for(psCurr = list[player]; psCurr->psNext != NULL AND psCurr->type == MSG_CAMPAIGN; \
+    		    for(psCurr = list[player]; psCurr->psNext != NULL && psCurr->type == MSG_CAMPAIGN; \
 	    		    psCurr = psCurr->psNext) \
 		        { \
                     psPrev = psCurr; \
@@ -148,7 +148,7 @@ extern UDWORD selectedPlayer;
             case MSG_RESEARCH: \
             case MSG_PROXIMITY: \
                 /*add it before the first mission message */ \
-    		    for(psCurr = list[player]; psCurr->psNext != NULL AND psCurr->type == MSG_MISSION; \
+    		    for(psCurr = list[player]; psCurr->psNext != NULL && psCurr->type == MSG_MISSION; \
 	    		    psCurr = psCurr->psNext) \
 		        { \
                    psPrev = psCurr; \
@@ -179,8 +179,8 @@ void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
                 /*add it before the first mission/research/prox message */
     		    for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		        {
-                    if (psCurr->type == MSG_MISSION OR
-                        psCurr->type == MSG_RESEARCH OR
+                    if (psCurr->type == MSG_MISSION ||
+                        psCurr->type == MSG_RESEARCH ||
                         psCurr->type == MSG_PROXIMITY)
                     {
                         break;
@@ -204,7 +204,7 @@ void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
                 /*add it before the first research/prox message */
     		    for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		        {
-                    if (psCurr->type == MSG_RESEARCH OR
+                    if (psCurr->type == MSG_RESEARCH ||
                         psCurr->type == MSG_PROXIMITY)
                     {
                         break;
@@ -1060,7 +1060,7 @@ MESSAGE * findMessage(MSG_VIEWDATA *pViewData, MESSAGE_TYPE type, UDWORD player)
 
 	for (psCurr = apsMessages[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		if (psCurr->type == type AND psCurr->pViewData == pViewData)
+		if (psCurr->type == type && psCurr->pViewData == pViewData)
 		{
 			return psCurr;
 		}
@@ -1220,6 +1220,7 @@ void addOilResourceProximities(void)
         }
     }
 }
+
 
 
 

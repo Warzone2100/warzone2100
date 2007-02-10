@@ -108,7 +108,7 @@ UDWORD	adjustDirection(SDWORD present, SDWORD difference)
 SDWORD	sum;
 
 	sum = present+difference;
-	if(sum>=0 AND sum<=360)
+	if(sum>=0 && sum<=360)
 	{
 		return(UDWORD)(sum);
 	}
@@ -915,6 +915,7 @@ SDWORD formationObjRadius(BASE_OBJECT *psObj)
 	return radius;
 #endif
 }
+
 
 
 

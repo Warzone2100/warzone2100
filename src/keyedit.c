@@ -164,7 +164,7 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 
 	// check if bound to a fixed combo.
 	pExist = keyFindMapping(  metakey,  subkey );
-	if(pExist && (pExist->status == KEYMAP_ALWAYS OR pExist->status == KEYMAP_ALWAYS_PROCESS))
+	if(pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
 	{
 		selectedKeyMap = NULL;	// unhighlght selected.
 		return FALSE;
@@ -322,7 +322,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	{
 		pie_BoxFillIndex(x,y,x+w,y+h,COL_GREEN);
 	}
-	else if(psMapping->status == KEYMAP_ALWAYS OR psMapping->status == KEYMAP_ALWAYS_PROCESS)
+	else if(psMapping->status == KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 	{
 		pie_BoxFillIndex(x,y,x+w,y+h,COL_RED);
 	}
@@ -453,7 +453,7 @@ BOOL startKeyMapEditor(BOOL first)
 	bubbleCount = 0;
 	bAtEnd = FALSE;
 	/* Stop when the right number or when aphabetically last - not sure...! */
-	while(bubbleCount<mapcount-1 AND !bAtEnd)
+	while(bubbleCount<mapcount-1 && !bAtEnd)
 	{
 		/* Same test as before for upper limit */
 	 	strcpy(test,"zzzzzzzzzzzzzzzzzzzzz");
@@ -463,7 +463,7 @@ BOOL startKeyMapEditor(BOOL first)
 			if( (psMapping->status!=KEYMAP__DEBUG)&&(psMapping->status!=KEYMAP___HIDE))		// if it's not a debug mapping..
 			{
 				/* If it's alphabetically good but better then next one */
-				if(strcmp(psMapping->pName,test) < 0 AND strcmp(psMapping->pName,psPresent->pName) > 0)
+				if(strcmp(psMapping->pName,test) < 0 && strcmp(psMapping->pName,psPresent->pName) > 0)
 				{
 					/* Keep a record of it */
 					strcpy(test,psMapping->pName);

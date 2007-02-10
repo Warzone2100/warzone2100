@@ -2369,7 +2369,7 @@ static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
 		//if ((aAvailable[i] & AVAILABLE) &&
 		//	intGetLocation(psCurrStats) != LOC_DEFAULT)
 
-		if (psCurrStats->design AND
+		if (psCurrStats->design &&
 			(aAvailable[i] & AVAILABLE))
 		{
 			numButtons++;
@@ -2538,7 +2538,7 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 	numButtons = 0;
     for(i=0; i < numSensor; i++)
 	{
-		if ((aSensor[i] & AVAILABLE) AND
+		if ((aSensor[i] & AVAILABLE) &&
 			intGetLocation((COMP_BASE_STATS *)&asSensorStats[i]) != LOC_DEFAULT)
 		{
 			numButtons++;
@@ -2552,7 +2552,7 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 	{
 		for(i=0; i < numECM; i++)
 		{
-			if ((aECM[i] & AVAILABLE) AND
+			if ((aECM[i] & AVAILABLE) &&
 				intGetLocation((COMP_BASE_STATS *)&asECMStats[i]) != LOC_DEFAULT)
 			{
 				numButtons++;
@@ -2763,7 +2763,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 		}
 
 		/* Skip unavailable entries and non-design ones*/
-		if (!(aAvailable[i] & AVAILABLE) OR !psCurrStats->design)
+		if (!(aAvailable[i] & AVAILABLE) || !psCurrStats->design)
 		{
 			/* Update the stats pointer for the next button */
 			psCurrStats = (COMP_BASE_STATS *)(((UBYTE *)psCurrStats) + size);
@@ -3615,7 +3615,7 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 	//SDWORD				Avail, Used, Total;
 	DROID_TEMPLATE		compTempl;
 
-	if (&sCurrDesign != NULL AND psStats != NULL)
+	if (&sCurrDesign != NULL && psStats != NULL)
 	{
 		//create the comparison Template
 		memcpy(&compTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
@@ -3707,7 +3707,7 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 	UDWORD				type;
 	DROID_TEMPLATE		compTempl;
 
-	if (&sCurrDesign != NULL AND psStats != NULL)
+	if (&sCurrDesign != NULL && psStats != NULL)
 	{
 		//create the comparison Template
 		memcpy(&compTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
@@ -3801,7 +3801,7 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
     //we want the design screen to show zero speed over water for all prop types except Hover and Vtol
     if (type == TER_WATER)
     {
-        if (!(psProp->propulsionType == HOVER OR psProp->propulsionType == LIFT))
+        if (!(psProp->propulsionType == HOVER || psProp->propulsionType == LIFT))
         {
             return 0;
         }
@@ -5624,7 +5624,7 @@ void runTemplateShadowStats(UDWORD id)
 	}
 
 	//if we're over a different template
-	if (psTempl AND psTempl != &sCurrDesign)
+	if (psTempl && psTempl != &sCurrDesign)
 	{
 		/* Now set the bar graphs for the stats */
 		intSetBodyShadowStats(asBodyStats + psTempl->asParts[COMP_BODY]);

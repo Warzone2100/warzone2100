@@ -343,7 +343,7 @@ void	updateConsoleMessages( void )
 	/* Don't do anything for DROP_STATIC */
 
 	/* If there are no messages or we're on permanent then exit */
- 	if(consoleMessages == NULL OR mainConsole.permanent)
+ 	if(consoleMessages == NULL || mainConsole.permanent)
 	{
 		return;
 	}
@@ -424,7 +424,7 @@ UDWORD	clipDepth;
 UDWORD	exceed;
 
 	/* Are there any to display? */
-	if(consoleMessages == NULL AND !bConsoleDropped)
+	if(consoleMessages == NULL && !bConsoleDropped)
 	{
 		/* No point - so get out */
  	return;
@@ -461,7 +461,7 @@ UDWORD	exceed;
 	if(bTextBoxActive)
 	{
 		for(psMessage = consoleMessages,exceed = 0;
-			psMessage AND (numProcessed<consoleVisibleLines) AND (exceed < 4); // ho ho ho!!!
+			psMessage && (numProcessed<consoleVisibleLines) && (exceed < 4); // ho ho ho!!!
 			psMessage = psMessage->psNext)
 		{
 			if((UDWORD)iV_GetTextWidth(psMessage->text) > mainConsole.width)
@@ -525,7 +525,7 @@ UDWORD	MesY;
 		bQuit = FALSE;
 		while(!bQuit)
 		{
-			for(i=0,bGotIt = FALSE; i<MAX_CONSOLE_MESSAGES AND !bGotIt; i++)
+			for(i=0,bGotIt = FALSE; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
 			{
 				if(consoleStorage[i].id == thisIndex-1)
 				{
@@ -613,7 +613,7 @@ UDWORD	MesY;
 	}
 	if(messageId)
 	{
-		for(i=0,bGotIt = FALSE; i<MAX_CONSOLE_MESSAGES AND !bGotIt; i++)
+		for(i=0,bGotIt = FALSE; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
 		{
 			if(consoleStorage[i].id == messageId-1)
 			{
@@ -625,7 +625,7 @@ UDWORD	MesY;
 		{
 			bQuit = FALSE;
 			count = 0;
-			while(!bQuit AND consoleStorage[thisIndex].id AND count<8)
+			while(!bQuit && consoleStorage[thisIndex].id && count<8)
 			{
  				/* Draw the text string */
 				MesY = pie_DrawFormattedText(consoleStorage[thisIndex].text,
@@ -691,7 +691,7 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 /*	Establishes whether the console messages stay there */
 void	setConsolePermanence(BOOL state, BOOL bClearOld)
 {
- 	if(mainConsole.permanent == TRUE AND state == FALSE)
+ 	if(mainConsole.permanent == TRUE && state == FALSE)
 	{
 		if(bClearOld)
 		{
@@ -714,9 +714,9 @@ BOOL	mouseOverConsoleBox( void )
 {
 	if	(
 		((UDWORD)mouseX() > mainConsole.topX)	// condition 1
-		AND ((UDWORD)mouseY() > mainConsole.topY)	// condition 2
-		AND ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)	//condition 3
-		AND ((UDWORD)mouseY() < (mainConsole.topY + iV_GetTextLineSize()*numActiveMessages))	//condition 4
+		&& ((UDWORD)mouseY() > mainConsole.topY)	// condition 2
+		&& ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)	//condition 3
+		&& ((UDWORD)mouseY() < (mainConsole.topY + iV_GetTextLineSize()*numActiveMessages))	//condition 4
 	)
 	{
 		return(TRUE);

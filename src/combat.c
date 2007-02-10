@@ -152,7 +152,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
     }
 
 	/*see if reload-able weapon and out of ammo*/
-	if (psStats->reloadTime AND !psWeap->ammo)
+	if (psStats->reloadTime && !psWeap->ammo)
 	{
 		if (gameTime - psWeap->lastFired < psStats->reloadTime)
 		{
@@ -372,7 +372,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	//Watermelon:dist
 	dist = (SDWORD)sqrt(distSquared);
 	longRange = proj_GetLongRange(psStats, (SDWORD)psAttacker->z-(SDWORD)psTarget->z);
-	if (distSquared <= (psStats->shortRange * psStats->shortRange) AND
+	if (distSquared <= (psStats->shortRange * psStats->shortRange) &&
 		distSquared >= (psStats->minRange * psStats->minRange))
 	{
 		/* note when the weapon fired */
@@ -559,7 +559,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		{
 			psStruct = (STRUCTURE *)psViewer;
 			//check if have a sensor of correct type
-			if (structCBSensor(psStruct) OR structVTOLCBSensor(psStruct))
+			if (structCBSensor(psStruct) || structVTOLCBSensor(psStruct))
 			{
 				sensorRange = psStruct->pStructureType->pSensor->range;
 			}
@@ -569,7 +569,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			psDroid = (DROID *)psViewer;
 			//must be a CB sensor
 			/*if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-				INDIRECT_CB_SENSOR OR asSensorStats[psDroid->asBits[COMP_SENSOR].
+				INDIRECT_CB_SENSOR || asSensorStats[psDroid->asBits[COMP_SENSOR].
 				nStat].type == VTOL_CB_SENSOR)*/
             if (cbSensorDroid(psDroid))
 			{

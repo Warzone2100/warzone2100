@@ -97,7 +97,7 @@ void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 SDWORD	newHeight;
 
 	newHeight = psTile->height + adjust;
-	if (newHeight>=MIN_TILE_HEIGHT AND newHeight<=MAX_TILE_HEIGHT)
+	if (newHeight>=MIN_TILE_HEIGHT && newHeight<=MAX_TILE_HEIGHT)
 	{
 		psTile->height=(unsigned char) newHeight;
 	}
@@ -109,9 +109,9 @@ BOOL	inHighlight(UDWORD realX, UDWORD realY)
 {
 BOOL	retVal = FALSE;
 
-	if (realX>=buildSite.xTL AND realX<=buildSite.xBR)
+	if (realX>=buildSite.xTL && realX<=buildSite.xBR)
 	{
-		if (realY>=buildSite.yTL AND realY<=buildSite.yBR)
+		if (realY>=buildSite.yTL && realY<=buildSite.yBR)
 		{
 			retVal = TRUE;
 		}
@@ -183,7 +183,7 @@ BOOL process3DBuilding(void)
 	}
 
 
-	if (buildState != BUILD3D_FINISHED)// AND buildState != BUILD3D_NONE)
+	if (buildState != BUILD3D_FINISHED)// && buildState != BUILD3D_NONE)
   	{
 		bX = mouseTileX;
 		bY = mouseTileY;

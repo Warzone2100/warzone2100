@@ -192,7 +192,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
                 if (bMultiPlayer)
                 {
                     //if not electronic then valid target
-                    if (!electronic OR (electronic AND ((DROID *)targetInQuestion)->
+                    if (!electronic || (electronic && ((DROID *)targetInQuestion)->
                         droidType != DROID_TRANSPORTER))
                     {
                         //only a valid target if NOT a transporter
@@ -210,7 +210,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				{
 					/*don't want to target structures with resistance of zero if
                     using electronic warfare*/
-//					if (((STRUCTURE *)targetInQuestion)->pStructureType->resistance != 0)// AND
+//					if (((STRUCTURE *)targetInQuestion)->pStructureType->resistance != 0)// &&
 						//((STRUCTURE *)targetInQuestion)->resistance >= (SDWORD)(((STRUCTURE *)
 						//targetInQuestion)->pStructureType->resistance))
 						//((STRUCTURE *)targetInQuestion)->resistance >= (SDWORD)
@@ -741,7 +741,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 					 ((DROID *)psObj)->sensorRange;
 		break;
 	case OBJ_STRUCTURE:
-		if (!(structStandardSensor((STRUCTURE *)psObj) OR
+		if (!(structStandardSensor((STRUCTURE *)psObj) ||
 			structVTOLSensor((STRUCTURE *)psObj)))
 		{
 			// to be used for Standard and VTOL intercept Turret Sensors only
@@ -793,7 +793,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
             for (player = 0; player < MAX_PLAYERS; player++)
             {
                 //ignore the Sensor Structure's objects
-                if ((player == psObj->player) OR (aiCheckAlliances(player,psObj->player)))
+                if ((player == psObj->player) || (aiCheckAlliances(player,psObj->player)))
                 {
                     continue;
                 }
@@ -1152,13 +1152,13 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 		}
 
     //if target is in the air and you can shoot in the air - OK
-    if (bTargetInAir AND (surfaceToAir & SHOOT_IN_AIR))
+    if (bTargetInAir && (surfaceToAir & SHOOT_IN_AIR))
     {
         bValidTarget = TRUE;
     }
 
     //if target is on the ground and can shoot at it - OK
-    if (!bTargetInAir AND (surfaceToAir & SHOOT_ON_GROUND))
+    if (!bTargetInAir && (surfaceToAir & SHOOT_ON_GROUND))
     {
         bValidTarget = TRUE;
     }

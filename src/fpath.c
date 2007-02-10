@@ -161,8 +161,8 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
 /*
 	// THIS CAN'T BE HERE - TESTING ONLY FIXME
-	if( (TILE_HAS_STRUCTURE(psTile)) AND
-		(getTileStructure(x,y)->pStructureType->type == REF_BLASTDOOR) AND	  // slow bit
+	if( (TILE_HAS_STRUCTURE(psTile)) &&
+		(getTileStructure(x,y)->pStructureType->type == REF_BLASTDOOR) &&	  // slow bit
 		(getTileStructure(x,y)->player==selectedPlayer) )
 	{
 		return(FALSE);
@@ -174,7 +174,7 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	{
 		psFeat = getTileFeature(x,y);
 		if ((psFeat != NULL) &&
-			(psFeat->psStats->subType == FEAT_GEN_ARTE OR psFeat->psStats->subType == FEAT_OIL_DRUM))
+			(psFeat->psStats->subType == FEAT_GEN_ARTE || psFeat->psStats->subType == FEAT_OIL_DRUM))
 		{
 			return(FALSE);
 		}

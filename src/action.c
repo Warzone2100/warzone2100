@@ -290,7 +290,7 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	// find a new destination
 	//if (getDroidDestination(psStructStats, psDroid->orderX, psDroid->orderY,pX,pY))
-	if (psDroid->action == DACTION_MOVETOREARM OR psDroid->action == DACTION_MOVETOREPAIR)
+	if (psDroid->action == DACTION_MOVETOREARM || psDroid->action == DACTION_MOVETOREPAIR)
 	{
 		//use action target
 		if (getDroidDestination(psStats, psDroid->actionX, psDroid->actionY, pX, pY))
@@ -864,7 +864,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 	}
 
     //check the target hasn't become one the same player ID - Electronic Warfare
-    if (psDroid->psActionTarget[0] != NULL AND
+    if (psDroid->psActionTarget[0] != NULL &&
         psDroid->player == psDroid->psActionTarget[0]->player)
     {
         psDroid->psActionTarget[0] = NULL;
@@ -1314,7 +1314,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_TRANSPORTWAITTOFLYIN:
         //if we're moving droids to safety and currently waiting to fly back in, see if time is up
-        if (psDroid->player == selectedPlayer AND getDroidsToSafetyFlag())
+        if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag())
         {
 			if ((SDWORD)(mission.ETA - (gameTime - missionGetReinforcementTime())) <= 0)
 			{
@@ -1362,7 +1362,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 			//if vtol and offworld and empty - 'magic' it back home!
 /*			alternatively - lets not - John.
-			if (vtolEmpty(psDroid) AND missionIsOffworld())
+			if (vtolEmpty(psDroid) && missionIsOffworld())
 			{
 				//check has reached LZ
 				xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->actionX;
@@ -2504,7 +2504,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_FIRESUPPORT:
 		//can be either a droid or a structure now - AB 7/10/98
-		ASSERT( (psDroid->psTarget[0]->type == OBJ_DROID OR
+		ASSERT( (psDroid->psTarget[0]->type == OBJ_DROID ||
 			psDroid->psTarget[0]->type == OBJ_STRUCTURE) &&
 				(psDroid->psTarget[0]->player == psDroid->player),
 			"DACTION_FIRESUPPORT: incorrect target type" );
@@ -2851,9 +2851,9 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (electronicDroid(psDroid))
 		{
 			//check for low or zero resistance - just zero resistance!
-			if (psAction->psObj[0]->type == OBJ_STRUCTURE AND (
+			if (psAction->psObj[0]->type == OBJ_STRUCTURE && (
 //				(((STRUCTURE *)psAction->psObj)->pStructureType->resistance == 0)))
-                /* OR (((STRUCTURE *)psAction->psObj)->resistance <
+                /* || (((STRUCTURE *)psAction->psObj)->resistance <
 				(SDWORD)structureResistance(((STRUCTURE *)psAction->psObj)->
 				pStructureType, psAction->psObj->player))))*/
 				//psObj)->resistance < (SDWORD)((STRUCTURE *)psAction->
@@ -2865,7 +2865,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				break;
 			}
             //in multiPlayer cannot electronically attack a tranporter
-            if (bMultiPlayer AND psAction->psObj[0]->type == OBJ_DROID AND
+            if (bMultiPlayer && psAction->psObj[0]->type == OBJ_DROID &&
                 ((DROID *)psAction->psObj[0])->droidType == DROID_TRANSPORTER)
             {
                 psDroid->action = DACTION_NONE;
@@ -3328,7 +3328,7 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 			for(j = startY; j<= endY; j++)
 			{
 				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX OR i==endX OR j==startY OR j==endY)
+				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
 					if(vtolLandingTile(i,j))
@@ -3371,6 +3371,7 @@ exit:
 	return result;
 
 }
+
 
 
 

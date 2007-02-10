@@ -51,7 +51,7 @@ KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
 KEY_MAPPING	*psMapping,*psReturn;
 
 	for(psMapping = keyMappings,psReturn = NULL;
-		psMapping AND !psReturn;
+		psMapping && !psReturn;
 		psMapping = psMapping->psNext)
 		{
 			if(psMapping->function == function)
@@ -569,7 +569,7 @@ KEY_MAPPING	*psCurr;
 	/* See if we can find it */
 	for(psCurr = keyMappings; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			if(psCurr->metaKeyCode == metaCode AND psCurr->subKeyCode == subCode)
+			if(psCurr->metaKeyCode == metaCode && psCurr->subKeyCode == subCode)
 			{
 				return(psCurr);
 			}
@@ -599,7 +599,7 @@ KEY_MAPPING	*psPrev,*psCurr;
 		return(FALSE);
 	}
 
-	if(psToRemove == keyMappings AND keyMappings->psNext == NULL)
+	if(psToRemove == keyMappings && keyMappings->psNext == NULL)
 	{
 		if (keyMappings->pName)	FREE(keyMappings->pName);		// ffs
 		FREE(keyMappings);
@@ -610,7 +610,7 @@ KEY_MAPPING	*psPrev,*psCurr;
 
 	/* See if we can find it */
 	for(psPrev = NULL, psCurr = keyMappings;
-		psCurr != NULL AND psCurr!=psToRemove;
+		psCurr != NULL && psCurr!=psToRemove;
 		psPrev = psCurr, psCurr = psCurr->psNext)
 		{
 		  /*NOP*/
@@ -695,7 +695,7 @@ BOOL		bKeyProcessed;
 SDWORD		i;
 
 	/* Bomb out if there are none */
-	if(!keyMappings OR !numActiveMappings OR !bKeyProcessing)
+	if(!keyMappings || !numActiveMappings || !bKeyProcessing)
 	{
 		return;
 	}
@@ -707,8 +707,8 @@ SDWORD		i;
 
 
 	/* Check for the meta keys */
-	if(keyDown(KEY_LCTRL) OR keyDown(KEY_RCTRL) OR keyDown(KEY_LALT)
-		OR keyDown(KEY_RALT) OR keyDown(KEY_LSHIFT) OR keyDown(KEY_RSHIFT))
+	if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
+		|| keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 	{
 		bMetaKeyDown = TRUE;
 	}
@@ -728,7 +728,7 @@ SDWORD		i;
 			break;
 		}
 		/* Skip innappropriate ones when necessary */
-		if(bExclude AND keyToProcess->status!=KEYMAP_ALWAYS_PROCESS)
+		if(bExclude && keyToProcess->status!=KEYMAP_ALWAYS_PROCESS)
 		{
 			break;
 		}
@@ -739,8 +739,8 @@ SDWORD		i;
 		}
 
 
-		if(keyToProcess->metaKeyCode==KEY_IGNORE AND !bMetaKeyDown AND
-			!(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings == FALSE) )
+		if(keyToProcess->metaKeyCode==KEY_IGNORE && !bMetaKeyDown &&
+			!(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings == FALSE) )
  		{
 			switch(keyToProcess->action)
  			{
@@ -784,11 +784,11 @@ SDWORD		i;
 			}
  		}
 		/* Process the combi ones */
- 		if( (keyToProcess->metaKeyCode!=KEY_IGNORE AND bMetaKeyDown) AND
-			!(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings == FALSE))
+ 		if( (keyToProcess->metaKeyCode!=KEY_IGNORE && bMetaKeyDown) &&
+			!(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings == FALSE))
  		{
  			/* It's a combo keypress - one held down and the other pressed */
- 			if(keyDown(keyToProcess->metaKeyCode) AND keyPressed(keyToProcess->subKeyCode) )
+ 			if(keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode) )
  			{
  				lastMetaKey = keyToProcess->metaKeyCode;
  				lastSubKey = keyToProcess->subKeyCode;
@@ -797,7 +797,7 @@ SDWORD		i;
  			}
 			else if(keyToProcess->altMetaKeyCode!=KEY_IGNORE)
 			{
-				if(keyDown(keyToProcess->altMetaKeyCode) AND keyPressed(keyToProcess->subKeyCode))
+				if(keyDown(keyToProcess->altMetaKeyCode) && keyPressed(keyToProcess->subKeyCode))
 				{
  					lastMetaKey = keyToProcess->metaKeyCode;
  					lastSubKey = keyToProcess->subKeyCode;
@@ -808,7 +808,7 @@ SDWORD		i;
  		}
 		if(bKeyProcessed)
 		{
-			if(keyToProcess->status==KEYMAP__DEBUG AND bDoingDebugMappings)
+			if(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings)
 			{
 				// this got really annoying. what purpose? - Per
 				// CONPRINTF(ConsoleString,(ConsoleString,"DEBUG MAPPING : %s",keyToProcess->pName));
@@ -1050,14 +1050,14 @@ BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 KEY_MAPPING	*psMapping;
 BOOL		bFound;
 
-	for(psMapping = keyMappings,bFound = FALSE; psMapping AND !bFound;
+	for(psMapping = keyMappings,bFound = FALSE; psMapping && !bFound;
 		psMapping = psMapping->psNext)
 	{
 		/* Find the original */
-		if(psMapping->metaKeyCode == origMetaCode AND psMapping->subKeyCode == origSubCode)
+		if(psMapping->metaKeyCode == origMetaCode && psMapping->subKeyCode == origSubCode)
 		{
 			/* Not all can be remapped */
-			if(psMapping->status != KEYMAP_ALWAYS OR psMapping->status == KEYMAP_ALWAYS_PROCESS)
+			if(psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 			{
 				psMapping->metaKeyCode = newMetaCode;
 				psMapping->subKeyCode = newSubCode;
@@ -1077,7 +1077,7 @@ KEY_MAPPING	*psMapping;
 KEY_CODE	origMetaCode,origSubCode;
 BOOL	bReplaced;
 
-  	for(psMapping = keyMappings,bReplaced = FALSE; psMapping AND !bReplaced;
+  	for(psMapping = keyMappings,bReplaced = FALSE; psMapping && !bReplaced;
 		psMapping = psMapping->psNext)
 	{
 		if(strcmp(psMapping->pName,pName) == FALSE)	//negative

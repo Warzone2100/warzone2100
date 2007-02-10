@@ -531,7 +531,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		// we're done. saving.
 		closeLoadSave();
 		bRequestLoad = FALSE;
-        if (bResetMissionWidgets AND widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
+        if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
         {
             resetMissionWidgets();			//reset the mission widgets here if necessary
         }
@@ -544,7 +544,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 failure:
 	closeLoadSave();
 	bRequestLoad = FALSE;
-    if (bResetMissionWidgets AND widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
+    if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
 	{
 		resetMissionWidgets();
 	}
@@ -686,6 +686,7 @@ void drawBlueBox(UDWORD x,UDWORD y, UDWORD w, UDWORD h)
 	pie_BoxFillIndex(x-1,y-1,x+w+1,y+h+1,light);
 	pie_BoxFillIndex(x,y,x+w,y+h,dark);
 }
+
 
 
 

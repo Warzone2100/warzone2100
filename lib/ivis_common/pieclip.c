@@ -417,21 +417,21 @@ int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PI
 	bClipSpecular = bSpecular;
 
 	numPreY = 0;
-	if( (v1->sx > LONG_TEST) OR (v1->sy > LONG_TEST) )
+	if( (v1->sx > LONG_TEST) || (v1->sy > LONG_TEST) )
 	{
 		/* bomb out for out of range points */
 		return(0);
 	}
 	numPreY += pie_ClipXT(v1,v2,&xClip[numPreY]);
 
-	if( (v2->sx > LONG_TEST) OR (v2->sy > LONG_TEST) )
+	if( (v2->sx > LONG_TEST) || (v2->sy > LONG_TEST) )
 	{
 		/* bomb out for out of range points */
 		return(0);
 	}
 	numPreY += pie_ClipXT(v2,v3,&xClip[numPreY]);
 
-	if( (v3->sx > LONG_TEST) OR (v3->sy > LONG_TEST) )
+	if( (v3->sx > LONG_TEST) || (v3->sy > LONG_TEST) )
 	{
 		/* bomb out for out of range points */
 		return(0);

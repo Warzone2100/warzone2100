@@ -167,8 +167,8 @@ int i, j, c = 0;
 
 	for (i = 0, j = 3; i < 4; j = i++)
 	{
-		if ((((quad->coords[i].y<=pt->y) AND (pt->y<quad->coords[j].y)) OR
-             ((quad->coords[j].y<=pt->y) AND (pt->y<quad->coords[i].y))) AND
+		if ((((quad->coords[i].y<=pt->y) && (pt->y<quad->coords[j].y)) ||
+             ((quad->coords[j].y<=pt->y) && (pt->y<quad->coords[i].y))) &&
 			(pt->x < (quad->coords[j].x - quad->coords[i].x) *
 			(pt->y - quad->coords[i].y) / (quad->coords[j].y -
 			quad->coords[i].y) + quad->coords[i].x))
@@ -184,7 +184,7 @@ UDWORD	adjustDirection(SDWORD present, SDWORD difference)
 SDWORD	sum;
 
 	sum = present+difference;
-	if(sum>=0 AND sum<=360)
+	if(sum>=0 && sum<=360)
 	{
 		return(UDWORD)(sum);
 	}
@@ -331,11 +331,11 @@ UDWORD		i;
 	centreY = (y<<TILE_SHIFT)+(TILE_UNITS/2);
 
 	/* Go thru' all players - drop out if match though */
-	for(i=0; i<MAX_PLAYERS AND !psReturn; i++)
+	for(i=0; i<MAX_PLAYERS && !psReturn; i++)
 	{
 		/* Got thru' all structures for this player - again drop out if match */
 		for (psStructure = apsStructLists[i];
-			psStructure AND !psReturn; psStructure = psStructure->psNext)
+			psStructure && !psReturn; psStructure = psStructure->psNext)
 		{
 			/* Get structure coords */
 			strX = psStructure->x;
@@ -346,17 +346,17 @@ UDWORD		i;
 			/* Within x boundary? */
 
 
-			if((centreX > (strX-(width/2))) AND (centreX < (strX+(width/2))) )
+			if((centreX > (strX-(width/2))) && (centreX < (strX+(width/2))) )
 			{
-				if((centreY > (strY-(breadth/2))) AND (centreY < (strY+(breadth/2))) )
+				if((centreY > (strY-(breadth/2))) && (centreY < (strY+(breadth/2))) )
 				{
 					psReturn = psStructure;
 				}
 			}
 
-/*			if((centreX > (strX-width)) AND (centreX < (strX+width)) )
+/*			if((centreX > (strX-width)) && (centreX < (strX+width)) )
 			{
-				if((centreY > (strY-breadth)) AND (centreY < (strY+breadth)) )
+				if((centreY > (strY-breadth)) && (centreY < (strY+breadth)) )
 				{
 					psReturn = psStructure;
 				}
@@ -392,7 +392,7 @@ UDWORD		width,breadth;
 
 	/* Go through all features for this player - again drop out if we get one */
 	for (psFeature = apsFeatureLists[0];
-		psFeature AND !psReturn; psFeature = psFeature->psNext)
+		psFeature && !psReturn; psFeature = psFeature->psNext)
 		{
 			/* Get the features coords */
 			strX = psFeature->x;
@@ -402,10 +402,10 @@ UDWORD		width,breadth;
 			breadth = psFeature->psStats->baseBreadth*TILE_UNITS;
 			/* Does tile centre lie within the area covered by base of feature? */
 			/* First check for x */
-			if((centreX > (strX-(width/2))) AND (centreX < (strX+(width/2))) )
+			if((centreX > (strX-(width/2))) && (centreX < (strX+(width/2))) )
 			{
 				/* Got a match on the x - now try y */
-				if((centreY > (strY-(breadth/2))) AND (centreY < (strY+(breadth/2))) )
+				if((centreY > (strY-(breadth/2))) && (centreY < (strY+(breadth/2))) )
 				{
 					/* Got it! */
 					psReturn = psFeature;
@@ -553,7 +553,7 @@ UDWORD	maxDistance;
 		for(j=tileY; j<tileY+tilesAcross-1; j++)
 		{
 			/* Only process tiles that are on the map */
-			if(tileX < (SDWORD)mapWidth AND tileY<(SDWORD)mapHeight)
+			if(tileX < (SDWORD)mapWidth && tileY<(SDWORD)mapHeight)
 			{
 				xDif = abs(worldX - (i<<TILE_SHIFT));
 				yDif = abs(worldY - (j<<TILE_SHIFT));
@@ -579,6 +579,7 @@ UDWORD	maxDistance;
 		}
 	}
 }
+
 
 
 

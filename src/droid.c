@@ -327,7 +327,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			{
 				scoreUpdateVar(WD_UNITS_KILLED);
 			}
-			if(psDroid->droidType == DROID_PERSON AND weaponClass == WC_HEAT)
+			if(psDroid->droidType == DROID_PERSON && weaponClass == WC_HEAT)
 			{
 				droidBurn(psDroid);
 			}
@@ -355,7 +355,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
 		/* Do one point of damage to body */
 		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
-		if(psDroid->droidType == DROID_PERSON AND weaponClass == WC_HEAT)
+		if(psDroid->droidType == DROID_PERSON && weaponClass == WC_HEAT)
 		{
 			droidBurn(psDroid);
 		}
@@ -447,7 +447,7 @@ void droidRelease(DROID *psDroid)
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDroid->psGroup->psList; psCurr != NULL AND psCurr !=
+			for (psCurr = psDroid->psGroup->psList; psCurr != NULL && psCurr !=
 				psDroid; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
@@ -543,7 +543,7 @@ void	removeDroidBase(DROID *psDel)
 	//tell the power system its gone
 	powerDestroyObject((BASE_OBJECT *)psDel);
 
-	if (psDel->died AND psDel->died != NOT_CURRENT_LIST)
+	if (psDel->died && psDel->died != NOT_CURRENT_LIST)
 	{
 		// droid has already been killed, quit
 		return;
@@ -584,7 +584,7 @@ void	removeDroidBase(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != NULL AND psCurr !=
+			for (psCurr = psDel->psGroup->psList; psCurr != NULL && psCurr !=
 				psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
@@ -649,10 +649,10 @@ void	removeDroidBase(DROID *psDel)
 	}
 
     //check to see if constructor droid currently trying to find a location to build
-    //if (psDel->droidType == DROID_CONSTRUCT AND psDel->player ==
-    if ((psDel->droidType == DROID_CONSTRUCT OR psDel->droidType ==
-        DROID_CYBORG_CONSTRUCT) AND psDel->player ==
-        selectedPlayer AND psDel->selected)
+    //if (psDel->droidType == DROID_CONSTRUCT && psDel->player ==
+    if ((psDel->droidType == DROID_CONSTRUCT || psDel->droidType ==
+        DROID_CYBORG_CONSTRUCT) && psDel->player ==
+        selectedPlayer && psDel->selected)
     {
         //if currently trying to build, kill off the placement
         if (tryingToGetLocation())
@@ -771,7 +771,7 @@ void destroyDroid(DROID *psDel)
 				if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
 				{
 					psTile->illumination /= 2;
-					if(psTile->bMaxed AND psTile->level!=UBYTE_MAX) //only do one's already seen
+					if(psTile->bMaxed && psTile->level!=UBYTE_MAX) //only do one's already seen
 					{
 						psTile->level/=2;
 					}
@@ -895,7 +895,7 @@ void destroyDroid(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != NULL AND psCurr !=
+			for (psCurr = psDel->psGroup->psList; psCurr != NULL && psCurr !=
 				psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
@@ -996,7 +996,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	//tell the power system its gone
 	powerDestroyObject((BASE_OBJECT *)psDroid);
 
-	if (psDroid->died AND psDroid->died != NOT_CURRENT_LIST)
+	if (psDroid->died && psDroid->died != NOT_CURRENT_LIST)
 	{
 		// droid has already been killed, quit
 		return FALSE;
@@ -1018,7 +1018,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	}
 
 	// leave the current group if any - not if its a Transporter droid
-	if (psDroid->droidType != DROID_TRANSPORTER AND psDroid->psGroup)
+	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->psGroup)
 	{
 		grpLeave(psDroid->psGroup, psDroid);
 		psDroid->psGroup = NULL;
@@ -1318,7 +1318,7 @@ void droidUpdate(DROID *psDroid)
     //may need power
     if (droidUsesPower(psDroid))
     {
-//	    if ((asPower[psDroid->player]->currentPower > POWER_PER_CYCLE) OR
+//	    if ((asPower[psDroid->player]->currentPower > POWER_PER_CYCLE) ||
 //		    (!powerCalculated))
 		if (checkPower(psDroid->player, POWER_PER_CYCLE, FALSE))
 	    {
@@ -1347,7 +1347,7 @@ void droidUpdate(DROID *psDroid)
 	moveUpdateDroid(psDroid);
 
 	/* Only add smoke if they're visible */
-	if((psDroid->visible[selectedPlayer]) AND psDroid->droidType != DROID_PERSON)
+	if((psDroid->visible[selectedPlayer]) && psDroid->droidType != DROID_PERSON)
 	{
 		//percentDamage= PERCENT(psDroid->body,(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->bodyPoints );
 		percentDamage= (100-PERCENT(psDroid->body,psDroid->originalBody));
@@ -1379,12 +1379,12 @@ void droidUpdate(DROID *psDroid)
 
 	// -----------------
 	/* Are we a sensor droid or a command droid? */
-	if( (psDroid->droidType == DROID_SENSOR) OR (psDroid->droidType == DROID_COMMAND) )
+	if( (psDroid->droidType == DROID_SENSOR) || (psDroid->droidType == DROID_COMMAND) )
 	{
 		/* Nothing yet... */
 		psBeingTargetted = NULL;
 		/* If we're attacking or sensing (observing), then... */
-		if( (orderStateObj(psDroid,DORDER_ATTACK,&psBeingTargetted)) OR
+		if( (orderStateObj(psDroid,DORDER_ATTACK,&psBeingTargetted)) ||
 			(orderStateObj(psDroid,DORDER_OBSERVE,&psBeingTargetted)) )
 		{
 			/* If it's a structure */
@@ -1392,7 +1392,7 @@ void droidUpdate(DROID *psDroid)
 			{
 				/* And it's your structure or your droid... */
 				if( (((STRUCTURE*)psBeingTargetted)->player == selectedPlayer)
-					OR (psDroid->player == selectedPlayer) )
+					|| (psDroid->player == selectedPlayer) )
 				{
 					/* Highlight the structure in question */
 					((STRUCTURE*)psBeingTargetted)->targetted = 1;
@@ -1404,7 +1404,7 @@ void droidUpdate(DROID *psDroid)
 			{
 				/* And it's your  your droid... */
 	 			if( (((DROID*)psBeingTargetted)->player == selectedPlayer)
- 					OR (psDroid->player == selectedPlayer) )
+ 					|| (psDroid->player == selectedPlayer) )
  				{
  				   	((DROID*)psBeingTargetted)->bTargetted = TRUE;
 
@@ -1475,7 +1475,7 @@ void droidUpdate(DROID *psDroid)
 	if (psDroid->id % 50 == frameGetFrameNumber() % 50)
     {
         //zero resistance means not currently been attacked - ignore these
-	    if (psDroid->resistance AND psDroid->resistance < droidResistance(psDroid))
+	    if (psDroid->resistance && psDroid->resistance < droidResistance(psDroid))
 	    {
 		    //increase over time if low
 		    psDroid->resistance++;
@@ -1696,7 +1696,7 @@ BOOL droidStartBuild(DROID *psDroid)
 			{
 				if (psCurr->psStats->subType == FEAT_OIL_RESOURCE)
 				{
-					if ((psCurr->x == psStruct->x) AND (psCurr->y == psStruct->y))
+					if ((psCurr->x == psStruct->x) && (psCurr->y == psStruct->y))
 					{
 						//see if there is a proximity message at this location
 						psMessage = findMessage(psCurr, MSG_PROXIMITY, psStruct->player);
@@ -1778,7 +1778,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 	iVector		temp;
 
 	//FIXME
-	if((ONEINTEN) AND (psStruct->visible[selectedPlayer]))
+	if((ONEINTEN) && (psStruct->visible[selectedPlayer]))
 	{
 		/* This needs fixing - it's an arse effect! */
 		widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/4;
@@ -1937,7 +1937,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		{
 			capacityUpdate(psStruct);
 		}
-		else if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR OR
+		else if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR ||
 			psStruct->pStructureType->type == REF_HQ)
 		{
 			extractedPowerUpdate(psStruct);
@@ -1992,7 +1992,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		addConstructorEffect(psStruct);
 //		//FIXME
-//		if((ONEINTEN) AND (psStruct->visible[selectedPlayer]))
+//		if((ONEINTEN) && (psStruct->visible[selectedPlayer]))
 //			{
 //				/* This needs fixing - it's an arse effect! */
 //				widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/3;
@@ -2722,7 +2722,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
     {
         //just add the points if the power cost is negligable
         //if these points would make the droid healthy again then just add
-        if (!powerCost OR (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody))
+        if (!powerCost || (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody))
         {
             //anothe HACK but sorts out all the rounding errors when values get small
             psDroidToRepair->body += iPointsToAdd;
@@ -2757,7 +2757,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	//psRepairDroid->actionPoints = iPointsToAdd;
 
 	/* add plasma repair effect whilst being repaired */
-	if ((ONEINFIVE) AND (psDroidToRepair->visible[selectedPlayer]))
+	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))
 	{
 		iVecEffect.x = psDroidToRepair->x + DROID_REPAIR_SPREAD;
 		iVecEffect.y = psDroidToRepair->z + rand()%8;;
@@ -3919,9 +3919,9 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 		return (bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
 			player, DROID_BODY_UPGRADE) * 100) / weight;
 	}*/
-	if (psTemplate->droidType == DROID_CYBORG OR
-		psTemplate->droidType == DROID_CYBORG_SUPER OR
-        psTemplate->droidType == DROID_CYBORG_CONSTRUCT OR
+	if (psTemplate->droidType == DROID_CYBORG ||
+		psTemplate->droidType == DROID_CYBORG_SUPER ||
+        psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
         psTemplate->droidType == DROID_CYBORG_REPAIR)
 	{
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
@@ -4488,7 +4488,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
 		//add transporter launch button if selected player and not a reinforcable situation
-        if ( player == selectedPlayer AND !missionCanReEnforce())
+        if ( player == selectedPlayer && !missionCanReEnforce())
 		{
 			(void)intAddTransporterLaunch(psDroid);
 		}
@@ -4672,7 +4672,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 		psCurr = psCurr->psNext)
 	{
 		//if on offworld mission, then can't build a Command Droid
-		//if (mission.type == LDS_MKEEP OR mission.type == LDS_MCLEAR)
+		//if (mission.type == LDS_MKEEP || mission.type == LDS_MCLEAR)
 /*        if (missionIsOffworld())
 		{
 			if (psCurr->droidType == DROID_COMMAND)
@@ -4705,10 +4705,10 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 		{
             //cyborg templates are available when the body has been research
             //-same for Transporter in multiPlayer
-			if ( psCurr->droidType == DROID_CYBORG OR
-				 psCurr->droidType == DROID_CYBORG_SUPER OR
-                 psCurr->droidType == DROID_CYBORG_CONSTRUCT OR
-                 psCurr->droidType == DROID_CYBORG_REPAIR OR
+			if ( psCurr->droidType == DROID_CYBORG ||
+				 psCurr->droidType == DROID_CYBORG_SUPER ||
+                 psCurr->droidType == DROID_CYBORG_CONSTRUCT ||
+                 psCurr->droidType == DROID_CYBORG_REPAIR ||
                  psCurr->droidType == DROID_TRANSPORTER)
 			{
 				if ( apCompLists[psFactory->player][COMP_BODY]
@@ -4747,7 +4747,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 	else
 	{
 		//Barbarian droids!!
-		if (psDroid->player == DROIDPLAYER1 OR psDroid->player == DROIDPLAYER2)
+		if (psDroid->player == DROIDPLAYER1 || psDroid->player == DROIDPLAYER2)
 		{
 			imdNum = BARBARIANS;
 			if (!strcmp(asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName,
@@ -4856,7 +4856,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 	else
 	{
 		//Barbarian droids!!
-		if (Player == 6 OR Player == 7)
+		if (Player == 6 || Player == 7)
 		{
 			imdNum = BARBARIANS;
 			if (!strcmp(asBodyStats[Template->asParts[COMP_BODY]].pName,
@@ -5003,7 +5003,7 @@ FLAG_POSITION	*psFlagPos;
 		for(psDroid = apsDroidLists[playerNumber]; psDroid!=NULL; psDroid = psDroid->psNext)
 		{
 			/* Wipe out the ones in the wrong group */
-			if(psDroid->selected AND psDroid->group!=groupNumber)
+			if(psDroid->selected && psDroid->group!=groupNumber)
 			{
 //				psDroid->selected = FALSE;
 				DeSelectDroid(psDroid);
@@ -5073,7 +5073,7 @@ FLAG_POSITION	*psFlagPos;
 		for(psDroid = apsDroidLists[playerNumber]; psDroid!=NULL; psDroid = psDroid->psNext)
 		{
 			/* Wipe out the ones in the wrong group */
-			if(psDroid->selected AND psDroid->group!=groupNumber)
+			if(psDroid->selected && psDroid->group!=groupNumber)
 			{
 //				psDroid->selected = FALSE;
 				DeSelectDroid(psDroid);
@@ -5211,7 +5211,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot)
 			pie_MatRotX(DEG(psDroid->turretPitch[weapon_slot]));//+ve up
    			pie_MatRotZ(DEG(0));
 			//matrix = the muzzle mount on turret
-			if( psWeapon AND psWeapon->nconnectors )
+			if( psWeapon && psWeapon->nconnectors )
 			{
 				barrel.x = psWeapon->connectors->x;
 				barrel.y = -psWeapon->connectors->y;
@@ -5240,7 +5240,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot)
 	{
 		psWeapon	  = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD;
 		psWeaponMount = (asWeaponStats[psDroid->asWeaps[0].nStat]).pMountGraphic;
-		if(psShape AND psShape->nconnectors)
+		if(psShape && psShape->nconnectors)
 		{
 			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
 			pie_MatBegin();
@@ -5260,7 +5260,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot)
 			pie_MatRotX(DEG(psDroid->turretPitch[0]));//+ve up
    			pie_MatRotZ(DEG(0));
 			//matrix = the muzzle mount on turret
-			if( psWeapon AND psWeapon->nconnectors )
+			if( psWeapon && psWeapon->nconnectors )
 			{
 				barrel.x = psWeapon->connectors->x;
 				barrel.y = -psWeapon->connectors->y;
@@ -5346,11 +5346,11 @@ DROID_TEMPLATE * getTemplateFromName(char *pName)
                 if (!bMultiPlayer)
 
                 {
-                    //if (player == selectedPlayer AND psCurr->droidType != DROID_CYBORG)
-                    if (player == selectedPlayer AND
-                        !(psCurr->droidType == DROID_CYBORG OR
-						  psCurr->droidType == DROID_CYBORG_SUPER OR
-                          psCurr->droidType == DROID_CYBORG_CONSTRUCT OR
+                    //if (player == selectedPlayer && psCurr->droidType != DROID_CYBORG)
+                    if (player == selectedPlayer &&
+                        !(psCurr->droidType == DROID_CYBORG ||
+						  psCurr->droidType == DROID_CYBORG_SUPER ||
+                          psCurr->droidType == DROID_CYBORG_CONSTRUCT ||
                           psCurr->droidType == DROID_CYBORG_REPAIR))
                     {
                         //ignore
@@ -5543,7 +5543,7 @@ UDWORD	count;
 		psDroid; psDroid = psDroid->psNext)
 	{
 /*		numKills = psDroid->numKills;
-		if(level ? (numKills > lower AND numKills <=upper) : (numKills ==0) )*/
+		if(level ? (numKills > lower && numKills <=upper) : (numKills ==0) )*/
 		if (getDroidLevel(psDroid) == level)
 		{
 			count++;
@@ -5742,7 +5742,7 @@ BOOL sensiblePlace(SDWORD x, SDWORD y)
 // ------------------------------------------------------------------------------------
 BOOL	normalPAT(UDWORD x, UDWORD y)
 {
-	if(sensiblePlace(x,y) AND noDroid(x,y))
+	if(sensiblePlace(x,y) && noDroid(x,y))
 	{
 		return(TRUE);
 	}
@@ -5755,7 +5755,7 @@ BOOL	normalPAT(UDWORD x, UDWORD y)
 // Should stop things being placed in inaccessible areas?
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
-	if(sensiblePlace(x,y) AND noDroid(x,y) AND gwZoneReachable(gwGetZone(x,y)))
+	if(sensiblePlace(x,y) && noDroid(x,y) && gwZoneReachable(gwGetZone(x,y)))
 	{
 		return(TRUE);
 	}
@@ -5774,11 +5774,11 @@ SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
 
-	ASSERT( *x>=0 AND *x<mapWidth,"x coordinate is off-map for pickATileGen" );
-	ASSERT( *y>=0 AND *y<mapHeight,"y coordinate is off-map for pickATileGen" );
+	ASSERT( *x>=0 && *x<mapWidth,"x coordinate is off-map for pickATileGen" );
+	ASSERT( *y>=0 && *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
 	/* Exit if they're fine! */
-	if(sensiblePlace(*x,*y) AND noDroid(*x,*y))
+	if(sensiblePlace(*x,*y) && noDroid(*x,*y))
 	{
 		return(TRUE);
 	}
@@ -5797,7 +5797,7 @@ UDWORD	passes;
 			for(j = startY; j<= endY; j++)
 			{
 				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX OR i==endX OR j==startY OR j==endY)
+				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
 					if(function(i,j))
@@ -5826,8 +5826,8 @@ SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
 
-	ASSERT( *x>=0 AND *x<mapWidth,"x coordinate is off-map for pickATileGen" );
-	ASSERT( *y>=0 AND *y<mapHeight,"y coordinate is off-map for pickATileGen" );
+	ASSERT( *x>=0 && *x<mapWidth,"x coordinate is off-map for pickATileGen" );
+	ASSERT( *y>=0 && *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
 	if(function(*x,*y) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, FALSE))))	//TODO: vtol check really not needed?
 	{
@@ -5846,7 +5846,7 @@ UDWORD	passes;
 			for(j = startY; j<= endY; j++)
 			{
 				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX OR i==endX OR j==startY OR j==endY)
+				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
 					if(function(i,j) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, i << TILE_SHIFT, j << TILE_SHIFT, FALSE))))		//TODO: vtols check really not needed?
@@ -5876,11 +5876,11 @@ SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
 
-	ASSERT( *x>=0 AND *x<mapWidth,"x coordinate is off-map for pickATile" );
-	ASSERT( *y>=0 AND *y<mapHeight,"y coordinate is off-map for pickATile" );
+	ASSERT( *x>=0 && *x<mapWidth,"x coordinate is off-map for pickATile" );
+	ASSERT( *y>=0 && *y<mapHeight,"y coordinate is off-map for pickATile" );
 
 	/* Exit if they're fine! */
-	if(sensiblePlace(*x,*y) AND noDroid(*x,*y))
+	if(sensiblePlace(*x,*y) && noDroid(*x,*y))
 	{
 		return(TRUE);
 	}
@@ -5899,10 +5899,10 @@ UDWORD	passes;
 			for(j = startY; j<= endY; j++)
 			{
 				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX OR i==endX OR j==startY OR j==endY)
+				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if(sensiblePlace(i,j) AND noDroid(i,j))
+					if(sensiblePlace(i,j) && noDroid(i,j))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
@@ -5934,7 +5934,7 @@ UDWORD	passes;
 	}
 
 	/* Exit if they're fine! */
-	if(sensiblePlace(*x,*y) AND oneDroid(*x,*y))
+	if(sensiblePlace(*x,*y) && oneDroid(*x,*y))
 	{
 		return HALF_FREE_TILE;
 	}
@@ -5953,10 +5953,10 @@ UDWORD	passes;
 			for(j = startY; j<= endY; j++)
 			{
 				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX OR i==endX OR j==startY OR j==endY)
+				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if(sensiblePlace(i,j) AND oneDroid(i,j))
+					if(sensiblePlace(i,j) && oneDroid(i,j))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
@@ -5994,7 +5994,7 @@ location isn't found*/
 			y = startY - incY;
 			for(x = startX - incX; x < (SDWORD)(startX + incX); x++)
 			{
-				if (sensiblePlace(x,y) AND noDroid(x,y) )
+				if (sensiblePlace(x,y) && noDroid(x,y) )
 				{
 					found = TRUE;
 					break;
@@ -6006,7 +6006,7 @@ location isn't found*/
 			x = startX + incX;
 			for(y = startY - incY; y < (SDWORD)(startY + incY); y++)
 			{
-				if (sensiblePlace(x,y) AND noDroid(x,y) )
+				if (sensiblePlace(x,y) && noDroid(x,y) )
 				{
 					found = TRUE;
 					break;
@@ -6018,7 +6018,7 @@ location isn't found*/
 			y = startY + incY;
 			for(x = startX + incX; x > (SDWORD)(startX - incX); x--)
 			{
-				if (sensiblePlace(x,y) AND noDroid(x,y) )
+				if (sensiblePlace(x,y) && noDroid(x,y) )
 				{
 					found = TRUE;
 					break;
@@ -6030,7 +6030,7 @@ location isn't found*/
 			x = startX - incX;
 			for(y = startY + incY; y > (SDWORD)(startY - incY); y--)
 			{
-				if (sensiblePlace(x,y) AND noDroid(x,y) )
+				if (sensiblePlace(x,y) && noDroid(x,y) )
 				{
 					found = TRUE;
 					break;
@@ -6370,14 +6370,14 @@ BOOL electronicDroid(DROID *psDroid)
 		"electronicUnit: Invalid unit pointer" );
 
 	//Watermelon:use slot 0 for now
-	//if (psDroid->numWeaps AND asWeaponStats[psDroid->asWeaps[0].nStat].
-    if (psDroid->numWeaps > 0 AND asWeaponStats[psDroid->asWeaps[0].nStat].
+	//if (psDroid->numWeaps && asWeaponStats[psDroid->asWeaps[0].nStat].
+    if (psDroid->numWeaps > 0 && asWeaponStats[psDroid->asWeaps[0].nStat].
 		weaponSubClass == WSC_ELECTRONIC)
 	{
 		return TRUE;
 	}
 
-	if (psDroid->droidType == DROID_COMMAND AND psDroid->psGroup)
+	if (psDroid->droidType == DROID_COMMAND && psDroid->psGroup)
 	{
 		// if a commander has EW units attached it is electronic
 		for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
@@ -6406,10 +6406,10 @@ BOOL droidUnderRepair(DROID *psDroid)
 		//look thru the list of players droids to see if any are repairing this droid
 		for (psCurr = apsDroidLists[psDroid->player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			//if (psCurr->droidType == DROID_REPAIR AND psCurr->action ==
-            if ((psCurr->droidType == DROID_REPAIR OR psCurr->droidType ==
-                DROID_CYBORG_REPAIR) AND psCurr->action ==
-				DACTION_DROIDREPAIR AND psCurr->psTarget[0] == (BASE_OBJECT *)psDroid)
+			//if (psCurr->droidType == DROID_REPAIR && psCurr->action ==
+            if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
+                DROID_CYBORG_REPAIR) && psCurr->action ==
+				DACTION_DROIDREPAIR && psCurr->psTarget[0] == (BASE_OBJECT *)psDroid)
 			{
 				return TRUE;
 			}
@@ -6438,7 +6438,7 @@ UBYTE checkCommandExist(UBYTE player)
 BOOL vtolDroid(DROID *psDroid)
 {
 	return ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].
-		propulsionType == LIFT) AND (psDroid->droidType != DROID_TRANSPORTER));
+		propulsionType == LIFT) && (psDroid->droidType != DROID_TRANSPORTER));
 }
 
 /*returns TRUE if a VTOL Weapon Droid which has completed all runs*/
@@ -6536,9 +6536,9 @@ BOOL vtolRearming(DROID *psDroid)
 		return FALSE;
 	}
 
-	if (psDroid->action == DACTION_MOVETOREARM OR
-		psDroid->action == DACTION_WAITFORREARM OR
-        psDroid->action == DACTION_MOVETOREARMPOINT OR
+	if (psDroid->action == DACTION_MOVETOREARM ||
+		psDroid->action == DACTION_WAITFORREARM ||
+        psDroid->action == DACTION_MOVETOREARMPOINT ||
 		psDroid->action == DACTION_WAITDURINGREARM)
 	{
 		return TRUE;
@@ -6552,7 +6552,7 @@ BOOL droidAttacking(DROID *psDroid)
 {
     //what about cyborgs?
 	//if (psDroid->droidType != DROID_WEAPON)
-    if (!(psDroid->droidType == DROID_WEAPON OR psDroid->droidType == DROID_CYBORG OR
+    if (!(psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_CYBORG ||
         psDroid->droidType == DROID_CYBORG_SUPER))
 	{
 		return FALSE;
@@ -6786,8 +6786,8 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 
 	//check droid is a weapon droid - or Cyborg!!
 	//if (psDroid->droidType != DROID_WEAPON)
-    if (!(psDroid->droidType == DROID_WEAPON OR psDroid->droidType ==
-        DROID_CYBORG OR psDroid->droidType == DROID_CYBORG_SUPER))
+    if (!(psDroid->droidType == DROID_WEAPON || psDroid->droidType ==
+        DROID_CYBORG || psDroid->droidType == DROID_CYBORG_SUPER))
 	{
 		return FALSE;
 	}
@@ -6801,11 +6801,11 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 	}
 
 	//check vtol droid with vtol sensor
-	//if (vtolDroid(psDroid) AND psDroid->numWeaps > 0)
-    if (vtolDroid(psDroid) AND psDroid->asWeaps[0].nStat > 0)
+	//if (vtolDroid(psDroid) && psDroid->numWeaps > 0)
+    if (vtolDroid(psDroid) && psDroid->asWeaps[0].nStat > 0)
 	{
-		if (psStats->type == VTOL_INTERCEPT_SENSOR OR
-			psStats->type == VTOL_CB_SENSOR OR
+		if (psStats->type == VTOL_INTERCEPT_SENSOR ||
+			psStats->type == VTOL_CB_SENSOR ||
             psStats->type == SUPER_SENSOR)
 		{
 			return TRUE;
@@ -6817,8 +6817,8 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
     /*Super Sensor works as any type*/
 	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
 	{
-		if (psStats->type == STANDARD_SENSOR OR
-			psStats->type == INDIRECT_CB_SENSOR OR
+		if (psStats->type == STANDARD_SENSOR ||
+			psStats->type == INDIRECT_CB_SENSOR ||
             psStats->type == SUPER_SENSOR)
 		{
 			return TRUE;
@@ -6838,9 +6838,9 @@ BOOL cbSensorDroid(DROID *psDroid)
 
     /*Super Sensor works as any type*/
 	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		VTOL_CB_SENSOR OR
+		VTOL_CB_SENSOR ||
 		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		INDIRECT_CB_SENSOR OR
+		INDIRECT_CB_SENSOR ||
 		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 		SUPER_SENSOR)
 	{
@@ -6935,7 +6935,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //check through the 'to' players list of droids to see if any are targetting it
         for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
         {
-            if (psCurr->psTarget[0] == (BASE_OBJECT *)psD OR
+            if (psCurr->psTarget[0] == (BASE_OBJECT *)psD ||
                 psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
             {
                 orderDroid(psCurr, DORDER_STOP);
@@ -6999,7 +6999,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
         //if ((psD->player == selectedPlayer) &&
 		//	(psD->player != to))
-        if ((psD->player == selectedPlayer) AND (to != selectedPlayer))
+        if ((psD->player == selectedPlayer) && (to != selectedPlayer))
         {
             scoreUpdateVar(WD_UNITS_LOST);
 
@@ -7021,9 +7021,9 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 			}
             psNewDroid->numKills = numKills;
             psNewDroid->direction = direction;
-    		if(!(psNewDroid->droidType == DROID_PERSON OR
-                //psNewDroid->droidType == DROID_CYBORG OR
-                cyborgDroid(psNewDroid) OR
+    		if(!(psNewDroid->droidType == DROID_PERSON ||
+                //psNewDroid->droidType == DROID_CYBORG ||
+                cyborgDroid(psNewDroid) ||
                 psNewDroid->droidType == DROID_TRANSPORTER))
 	    	{
 		    	updateDroidOrientation(psNewDroid);
@@ -7088,7 +7088,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	{
 		//check weapon stat for indirect
 		//if (!(asWeaponStats + sCurrDesign.asWeaps[0])->direct)
-		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0]) OR
+		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0]) ||
             !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
 		{
 			bValid = FALSE;
@@ -7144,7 +7144,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 				DROID_TEMPLATE      *psNextTemplate = NULL;
 
 				//if template belongs to the production player - check thru the production list (if struct is busy)
-				if (player == productionPlayer AND psFactory->psSubject)
+				if (player == productionPlayer && psFactory->psSubject)
 				{
 					for (inc = 0; inc < MAX_PROD_RUN; inc++)
 					{
@@ -7276,9 +7276,9 @@ BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
 /*returns TRUE if droid type is one of the Cyborg types*/
 BOOL cyborgDroid(DROID *psDroid)
 {
-    if ( psDroid->droidType == DROID_CYBORG OR
-         psDroid->droidType == DROID_CYBORG_CONSTRUCT OR
-         psDroid->droidType == DROID_CYBORG_REPAIR OR
+    if ( psDroid->droidType == DROID_CYBORG ||
+         psDroid->droidType == DROID_CYBORG_CONSTRUCT ||
+         psDroid->droidType == DROID_CYBORG_REPAIR ||
          psDroid->droidType == DROID_CYBORG_SUPER        )
     {
         return TRUE;

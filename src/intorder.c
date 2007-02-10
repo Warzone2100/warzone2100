@@ -1100,7 +1100,7 @@ static BOOL BuildSelectedDroidList(void)
 	DROID *psDroid;
 
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
-//		if(psDroid->selected AND psDroid->sDisplay.frameNumber == currentGameFrame) {
+//		if(psDroid->selected && psDroid->sDisplay.frameNumber == currentGameFrame) {
 		if(psDroid->selected) {
 			if(NumSelectedDroids < MAX_SELECTED_DROIDS) {
 				SelectedDroids[NumSelectedDroids] = psDroid;
@@ -1125,7 +1125,7 @@ static BOOL BuildSelectedDroidList(void)
 
     for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
     {
-        if (psStruct->selected AND StructIsFactory(psStruct))
+        if (psStruct->selected && StructIsFactory(psStruct))
         {
             //found one - set as one to use for the interface
             psSelectedFactory = psStruct;

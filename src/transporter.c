@@ -232,7 +232,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
     multiPlayer where the transporter can be killed*/
     if (bMultiPlayer)
     {
-        if (psCurrTransporter AND psCurrTransporter->died AND
+        if (psCurrTransporter && psCurrTransporter->died &&
             psCurrTransporter->died != NOT_CURRENT_LIST)
         {
             intRemoveTransNoAnim();
@@ -515,7 +515,7 @@ BOOL intAddTransporterLaunch(DROID *psDroid)
 	}
 
     //when full flash the transporter button
-    if (psCurrTransporter AND psCurrTransporter->psGroup)
+    if (psCurrTransporter && psCurrTransporter->psGroup)
     {
 	    capacity = TRANSPORTER_CAPACITY;
 	    for (psCurr = psCurrTransporter->psGroup->psList; psCurr != NULL;
@@ -578,7 +578,7 @@ BOOL intAddTransButtonForm(void)
 	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
 		//only interested in Transporter droids
-		if (  psDroid->droidType == DROID_TRANSPORTER AND
+		if (  psDroid->droidType == DROID_TRANSPORTER &&
 			 (psDroid->action != DACTION_TRANSPORTOUT &&
 			  psDroid->action != DACTION_TRANSPORTIN     ) )
 		{
@@ -635,7 +635,7 @@ BOOL intAddTransButtonForm(void)
 	//transID = 0;
 	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER AND
+		if ( psDroid->droidType == DROID_TRANSPORTER &&
 			 (psDroid->action != DACTION_TRANSPORTOUT &&
 			  psDroid->action != DACTION_TRANSPORTIN     ) )
 		{
@@ -775,7 +775,7 @@ BOOL intAddTransContentsForm(void)
 	//transID = 0;
 	if (psCurrTransporter != NULL)
 	{
-		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
+		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
 			psCurrTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
@@ -1124,7 +1124,7 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 		return 0;
 	}
 
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
+	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid !=
 		psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
@@ -1212,7 +1212,7 @@ static void intSetTransCapacityLabel(char *Label)
 	if (psCurrTransporter)
 	{
 		capacity = calcRemainingCapacity(psCurrTransporter);
-//		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
+//		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
 //				; psDroid = psNext)
 //		{
 //			psNext = psDroid->psGrpNext;
@@ -1251,7 +1251,7 @@ void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
 //	if (psCurrTransporter)
 //	{
 //		capacity = calcRemainingCapacity(psCurrTransporter);
-////		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
+////		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
 ////				; psDroid = psNext)
 ////		{
 ////			psNext = psDroid->psGrpNext;
@@ -1298,7 +1298,7 @@ static void _intProcessTransporter(UDWORD id)
 	else if (id >= IDTRANS_CONTSTART && id <= IDTRANS_CONTEND)
 	{
 		//got to have a current transporter for this to work - and can't be flying
-		if (psCurrTransporter != NULL AND !transporterFlying(psCurrTransporter))
+		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
         {
     		transporterRemoveDroid(id);
 	    	/*refresh the Contents list */
@@ -1327,7 +1327,7 @@ static void _intProcessTransporter(UDWORD id)
 	else if (id >= IDTRANS_DROIDSTART && id <= IDTRANS_DROIDEND)
 	{
 		//got to have a current transporter for this to work - and can't be flying
-		if (psCurrTransporter != NULL AND !transporterFlying(psCurrTransporter))
+		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
 		{
 			intTransporterAddDroid(id);
             /*don't need to explicitly refresh here since intRefreshScreen()
@@ -1470,7 +1470,7 @@ void setCurrentTransporter(UDWORD id)
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER AND
+		if ( psDroid->droidType == DROID_TRANSPORTER &&
 			 (psDroid->action != DACTION_TRANSPORTOUT &&
 			  psDroid->action != DACTION_TRANSPORTIN     ) )
 		{
@@ -1500,7 +1500,7 @@ void transporterRemoveDroid(UDWORD id)
 	ASSERT( psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units" );
 
 	currID = IDTRANS_CONTSTART;
-	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
+	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
 		psCurrTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
@@ -1657,7 +1657,7 @@ BOOL checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL AND psDroid !=
+	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid !=
 		psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
@@ -1827,8 +1827,8 @@ BOOL updateTransporter(DROID *psTransporter)
     /*if the transporter (selectedPlayer only) is moving droids to safety and
     all remaining droids are destoyed then we need to flag the end of mission
     as long as we're not flying out*/
-    if (psTransporter->player == selectedPlayer AND getDroidsToSafetyFlag()
-        AND psTransporter->action != DACTION_TRANSPORTOUT)
+    if (psTransporter->player == selectedPlayer && getDroidsToSafetyFlag()
+        && psTransporter->action != DACTION_TRANSPORTOUT)
     {
         //if there aren't any droids left...
         if (!missionDroidsRemaining(selectedPlayer))
@@ -1853,7 +1853,7 @@ BOOL updateTransporter(DROID *psTransporter)
 	if ( psTransporter->sMove.Status == MOVEINACTIVE ||
 		 psTransporter->sMove.Status == MOVEHOVER ||
 		 (psTransporter->action == DACTION_TRANSPORTOUT && !missionIsOffworld() &&
-			(gameTime>transporterGetLaunchTime()+TRANSPORTOUT_TIME) AND
+			(gameTime>transporterGetLaunchTime()+TRANSPORTOUT_TIME) &&
             !getDroidsToSafetyFlag() ) )
 	{
 		audio_StopObjTrack( psTransporter, ID_SOUND_BLIMP_FLIGHT );
@@ -1865,11 +1865,11 @@ BOOL updateTransporter(DROID *psTransporter)
 
         //DON@T PLAY AUDIO FOR THE FIRST TRANSPORTER LOAD...AB 9/2/99
         //show if selectedPlayer's transporter
-		//if ( onMission && psTransporter->action == DACTION_TRANSPORTIN AND
+		//if ( onMission && psTransporter->action == DACTION_TRANSPORTIN &&
         //    psTransporter->player == selectedPlayer)
         //changed onMission to missionForReInforcements() to cater for cam2A/cam3A - AB 4/2/99
-        if (!bFirstTransporter AND missionForReInforcements() AND
-            psTransporter->action == DACTION_TRANSPORTIN AND
+        if (!bFirstTransporter && missionForReInforcements() &&
+            psTransporter->action == DACTION_TRANSPORTIN &&
             psTransporter->player == selectedPlayer)
 		{
             //play reinforcements have arrived message
@@ -2047,15 +2047,15 @@ BOOL transporterFlying(DROID *psTransporter)
 	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
 		"transporterFlying: Droid is not a Transporter" );
 
-    if (psTransporter->order == DORDER_TRANSPORTOUT OR
-        psTransporter->order == DORDER_TRANSPORTIN OR
-        psTransporter->order == DORDER_TRANSPORTRETURN OR
+    if (psTransporter->order == DORDER_TRANSPORTOUT ||
+        psTransporter->order == DORDER_TRANSPORTIN ||
+        psTransporter->order == DORDER_TRANSPORTRETURN ||
         //in multiPlayer mode the Transporter can be moved around
-        (bMultiPlayer AND psTransporter->order == DORDER_MOVE) OR
+        (bMultiPlayer && psTransporter->order == DORDER_MOVE) ||
         //in multiPlayer mode the Transporter can be moved and emptied!
-        (bMultiPlayer AND psTransporter->order == DORDER_DISEMBARK) OR
+        (bMultiPlayer && psTransporter->order == DORDER_DISEMBARK) ||
         //in multiPlayer, cannot select transporter whilst flying
-        (bMultiPlayer AND psTransporter->order == DORDER_NONE AND
+        (bMultiPlayer && psTransporter->order == DORDER_NONE &&
         psTransporter->sMove.iVertSpeed != 0))
     {
         return TRUE;

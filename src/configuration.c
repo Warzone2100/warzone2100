@@ -559,7 +559,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
 
 	// dont save out the cheat mode.
-	if(getDifficultyLevel()==DL_KILLER OR getDifficultyLevel()== DL_TOUGH)
+	if(getDifficultyLevel()==DL_KILLER || getDifficultyLevel()== DL_TOUGH)
 	{
 		setDifficultyLevel(DL_NORMAL);
 	}

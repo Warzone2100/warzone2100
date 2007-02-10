@@ -968,7 +968,7 @@ void	kf_SelectGrouping( UDWORD	groupNumber)
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid!=NULL; psDroid = psDroid->psNext)
 	{
 		/* Wipe out the ones in the wrong group */
-		if(psDroid->selected AND psDroid->group!=groupNumber)
+		if(psDroid->selected && psDroid->group!=groupNumber)
 		{
 			psDroid->selected = FALSE;
 		}
@@ -993,7 +993,7 @@ void	kf_SelectGrouping( UDWORD	groupNumber)
 	// Tell the driving system that the selection may have changed.
 	driveSelectionChanged();
 	/* play group audio but only if they wern't already selected - AM */
-	if ( Selected AND !bAlreadySelected)
+	if ( Selected && !bAlreadySelected)
 	{
 		audio_QueueTrack( ID_SOUND_GROUP_0+groupNumber );
 		audio_QueueTrack( ID_SOUND_REPORTING );
@@ -1701,7 +1701,7 @@ DROID	*psCDroid,*psNDroid;
 //STRUCTURE	*psCStruct, *psNStruct;
 
 
-	for(player = 0; player<MAX_PLAYERS AND !bMultiPlayer; player++)
+	for(player = 0; player<MAX_PLAYERS && !bMultiPlayer; player++)
 	{
 		if(player!=selectedPlayer)
 		{
@@ -1815,7 +1815,7 @@ void kf_SendTextMessage(void)
 		{
 			// Kill if they hit return - it maxes out console or it's more than one line long
 		   	if((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
-				OR iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
+				|| iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
 		   //	if((ch == INPBUF_CR) || (strlen(sTextToSend)==MAX_TYPING_LENGTH)
 			{
 				bAllowOtherKeyPresses = TRUE;
@@ -1989,7 +1989,7 @@ UDWORD	dX,dY;
 		{
 			dX = psDroid->sDisplay.screenX;
 			dY = psDroid->sDisplay.screenY;
-			if(dX>0 AND dY>0 AND dX<DISP_WIDTH AND dY<DISP_HEIGHT)
+			if(dX>0 && dY>0 && dX<DISP_WIDTH && dY<DISP_HEIGHT)
 			{
 				psDroid->selected = TRUE;
 			}
@@ -2254,7 +2254,7 @@ BOOL	found;
 DROID	*psOther;
 
 	found = FALSE;
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid AND !found;
+	for(psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
 		psDroid = psDroid->psNext)
 		{
 			if(psDroid->selected)
@@ -2287,7 +2287,7 @@ UDWORD		xJump = 0, yJump = 0;
 
 	/* Got through our buildings */
 	for(psStruct = apsStructLists[selectedPlayer],bGotHQ = FALSE;	// start
-	psStruct AND !bGotHQ;											// terminate
+	psStruct && !bGotHQ;											// terminate
 	psStruct = psStruct->psNext)									// iteration
 	{
 		/* Have we got a HQ? */
@@ -2354,9 +2354,9 @@ BOOL	bFound;
 
 
 	for(psDroid = apsDroidLists[selectedPlayer],bFound = FALSE;
-		psDroid AND !bFound; psDroid = psDroid->psNext)
+		psDroid && !bFound; psDroid = psDroid->psNext)
 	{
-		if(psDroid->selected)// AND droidOnScreen(psDroid,0))
+		if(psDroid->selected)// && droidOnScreen(psDroid,0))
 		{
 			bFound = TRUE;
 			psGotOne = psDroid;
@@ -2641,7 +2641,7 @@ void	kf_AddHelpBlip( void )
 	/* check if clicked on radar */
 	x = mouseX();
 	y = mouseY();
-	if(radarOnScreen AND getHQExists(selectedPlayer))
+	if(radarOnScreen && getHQExists(selectedPlayer))
 	{
 		if(CoordInRadar(x,y))
 		{

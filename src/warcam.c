@@ -233,7 +233,7 @@ static void processLeaderSelection( void )
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			/* Is it even on the sscreen? */
-			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != psPresent)
 			{
 				if (psDroid->sDisplay.screenX < psPresent->sDisplay.screenX)
 				{
@@ -252,7 +252,7 @@ static void processLeaderSelection( void )
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			/* Is it even on the sscreen? */
-			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != psPresent)
 			{
 				if (psDroid->sDisplay.screenX > psPresent->sDisplay.screenX)
 				{
@@ -271,7 +271,7 @@ static void processLeaderSelection( void )
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			/* Is it even on the sscreen? */
-			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != psPresent)
 			{
 				if (psDroid->sDisplay.screenY < psPresent->sDisplay.screenY)
 				{
@@ -290,7 +290,7 @@ static void processLeaderSelection( void )
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			/* Is it even on the sscreen? */
-			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) AND psDroid->selected AND psDroid != psPresent)
+			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != psPresent)
 			{
 				if (psDroid->sDisplay.screenY > psPresent->sDisplay.screenY)
 				{
@@ -321,8 +321,8 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	radarTarget.x = x;
 	radarTarget.y = y;
 
-	if ((x < 0) OR (y < 0) OR (x > (SDWORD)((mapWidth - 1) * TILE_UNITS))
-	    OR (y > (SDWORD)((mapHeight - 1) * TILE_UNITS)))
+	if ((x < 0) || (y < 0) || (x > (SDWORD)((mapWidth - 1) * TILE_UNITS))
+	    || (y > (SDWORD)((mapHeight - 1) * TILE_UNITS)))
 	{
 		radarTarget.z = 128 * ELEVATION_SCALE;
 	}
@@ -381,7 +381,7 @@ BOOL Status = TRUE;
 			/* See if we can find the target to follow */
 			foundTarget = camFindTarget();
 
-			if(foundTarget AND !foundTarget->died)
+			if(foundTarget && !foundTarget->died)
 			{
 				/* We've got one, so store away info */
 				camAllignWithTarget(foundTarget);
@@ -417,7 +417,7 @@ BOOL Status = TRUE;
 					no longer selected, so reset to old values
 				*/
 				foundTarget = camFindTarget();
-				if(foundTarget AND !foundTarget->died)
+				if(foundTarget && !foundTarget->died)
 				{
 					trackingCamera.status = CAM_REQUEST;
 				}
@@ -832,7 +832,7 @@ SDWORD	angle;
 	}
 
 	/*	Get these new coordinates */
-	if(getNumDroidsSelected()>2 AND trackingCamera.target->type == OBJ_DROID)
+	if(getNumDroidsSelected()>2 && trackingCamera.target->type == OBJ_DROID)
 	{
 	 	xConcern = trackingCamera.target->x;		  // nb - still NEED to be set
 		yConcern = trackingCamera.target->z;
@@ -856,7 +856,7 @@ SDWORD	angle;
 		zConcern = trackingCamera.target->y;
 	}
 
-	if(trackingCamera.target->type == OBJ_DROID AND getNumDroidsSelected()<=2)
+	if(trackingCamera.target->type == OBJ_DROID && getNumDroidsSelected()<=2)
 	{
 //		getBestPitchToEdgeOfGrid(trackingCamera.target->x,trackingCamera.target->z,
 //			360-((trackingCamera.target->direction+180)%360),&pitch);
@@ -1046,7 +1046,7 @@ SDWORD	xPos,yPos,zPos;
 	{
 		/* Presently only y rotation being calculated - but same idea for other axes */
 		/* Check what we're tracking */
-		if(getNumDroidsSelected()>2 AND trackingCamera.target->type == OBJ_DROID)
+		if(getNumDroidsSelected()>2 && trackingCamera.target->type == OBJ_DROID)
 		{
 			if(trackingCamera.target->selected)
 			{
@@ -1087,7 +1087,7 @@ SDWORD	xPos,yPos,zPos;
 
 	if(update & X_UPDATE)
 	{
-		if(trackingCamera.target->type == OBJ_DROID AND !bGotFlying)
+		if(trackingCamera.target->type == OBJ_DROID && !bGotFlying)
 		{
 			psDroid = (DROID*)trackingCamera.target;
 			getTrackingConcerns(&xPos,&yPos,&zPos);
@@ -1230,7 +1230,7 @@ SDWORD	yPos;
 	xPos = player.p.x +(VISIBLE_XTILES*TILE_UNITS)/2;
 	yPos = player.p.z +(VISIBLE_YTILES*TILE_UNITS)/2;
 
-	if( (abs(xPos-trackingCamera.target->x) <= 256) AND
+	if( (abs(xPos-trackingCamera.target->x) <= 256) &&
 		(abs(yPos-trackingCamera.target->y) <= 256) )
 		{
 			retVal = TRUE;
@@ -1326,7 +1326,7 @@ BOOL	bFlying;
 */
 
 
-	if(bRadarAllign OR trackingCamera.target->type == OBJ_DROID)
+	if(bRadarAllign || trackingCamera.target->type == OBJ_DROID)
 	{
 		if(bFlying)
 		{
@@ -1409,7 +1409,7 @@ BOOL	bFlying;
 		*/
 		if(getRotationMagnitude()<10000)
 		{
-			if(nearEnough() AND getPositionMagnitude() < 60)
+			if(nearEnough() && getPositionMagnitude() < 60)
 			{
 				camToggleStatus();
 			}

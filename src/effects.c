@@ -399,7 +399,7 @@ BOOL	bSmoke;
 
 
 	for(i=freeEffect,essentialCount=0; (asEffectsList[i].control & EFFECT_ESSENTIAL)
-		AND essentialCount<MAX_EFFECTS; i++)
+		&& essentialCount<MAX_EFFECTS; i++)
 	{
 		/* Check for wrap around */
 		if(i>= (MAX_EFFECTS-1))
@@ -436,7 +436,7 @@ BOOL	bSmoke;
 	/* Set when it entered the world */
 	asEffectsList[freeEffect].birthTime = asEffectsList[freeEffect].lastFrame = gameTime;
 
-	if(group == EFFECT_GRAVITON AND (type == GRAVITON_TYPE_GIBLET OR type == GRAVITON_TYPE_EMITTING_DR))
+	if(group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
 	{
 		asEffectsList[freeEffect].frameNumber = lit;
 	}
@@ -521,7 +521,7 @@ BOOL	bSmoke;
 
 	/* Looks like we didn't establish an imd for the effect */
 	/*
-	ASSERT( asEffectsList[freeEffect].imd != NULL OR group == EFFECT_DESTRUCTION OR group == EFFECT_FIRE OR group == EFFECT_SAT_LASER,
+	ASSERT( asEffectsList[freeEffect].imd != NULL || group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER,
 		"null effect imd" );
 	*/
 
@@ -548,7 +548,7 @@ BOOL	validatePie(EFFECT_GROUP group, EFFECT_TYPE type, iIMDShape *pie)
 	/* If we haven't got a pie */
 	if(pie == NULL)
 	{
-		if(group == EFFECT_DESTRUCTION OR group == EFFECT_FIRE OR group == EFFECT_SAT_LASER)
+		if(group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER)
 		{
 			/* Ok in these cases */
 			return(TRUE);
@@ -1010,7 +1010,7 @@ void	updateExplosion(EFFECT *psEffect)
 		light.colour = LIGHT_YELLOW;
 		processLight(&light);
 #endif
-		if(psEffect->size>MAX_SHOCKWAVE_SIZE OR light.range>600)
+		if(psEffect->size>MAX_SHOCKWAVE_SIZE || light.range>600)
 		{
  			/* Kill it off */
 			KILL_EFFECT(psEffect);
@@ -1170,7 +1170,7 @@ LIGHT	light;
 		psEffect->position.z += (psEffect->velocity.z * fraction);
 
 	/* If it's bounced/drifted off the map then kill it */
-	if(((UDWORD)MAKEINT(psEffect->position.x)/TILE_UNITS >= mapWidth) OR
+	if(((UDWORD)MAKEINT(psEffect->position.x)/TILE_UNITS >= mapWidth) ||
 		(UDWORD)MAKEINT(psEffect->position.z)/TILE_UNITS >= mapHeight)
 	{
 		KILL_EFFECT(psEffect);
@@ -1180,7 +1180,7 @@ LIGHT	light;
 	groundHeight = map_Height((UDWORD)MAKEINT(psEffect->position.x),(UDWORD)MAKEINT(psEffect->position.z));
 
 	/* If it's going up and it's still under the landscape, then remove it... */
-	if(psEffect->position.y<groundHeight AND MAKEINT(psEffect->velocity.y)>0)
+	if(psEffect->position.y<groundHeight && MAKEINT(psEffect->velocity.y)>0)
 	{
 		KILL_EFFECT(psEffect);
 		return;
@@ -1207,7 +1207,7 @@ LIGHT	light;
 		}
 	}
 
-	else if(psEffect->type == GRAVITON_TYPE_GIBLET AND (psEffect->position.y>(groundHeight+5)))
+	else if(psEffect->type == GRAVITON_TYPE_GIBLET && (psEffect->position.y>(groundHeight+5)))
 	{
 		/* Time to add another trail 'thing'? */
 		if(gameTime>psEffect->lastFrame+psEffect->frameDelay)
@@ -1233,7 +1233,7 @@ LIGHT	light;
 	psEffect->velocity.y += accel;
 
 	/* If it's bounced/drifted off the map then kill it */
-	if((MAKEINT(psEffect->position.x) <= TILE_UNITS) OR
+	if((MAKEINT(psEffect->position.x) <= TILE_UNITS) ||
 		MAKEINT(psEffect->position.z) <= TILE_UNITS)
 	{
 		KILL_EFFECT(psEffect);
@@ -1254,7 +1254,7 @@ LIGHT	light;
    		if(MAKEINT(psEffect->velocity.y)<0)
 		{
 			/* Has it sufficient energy to keep bouncing? */
-			if(abs(MAKEINT(psEffect->velocity.y))>16 AND psEffect->specific <=2)
+			if(abs(MAKEINT(psEffect->velocity.y))>16 && psEffect->specific <=2)
 			{
 				psEffect->specific++;
 				/* Half it's velocity */
@@ -1563,7 +1563,7 @@ UDWORD	percent;
 //		pos.x = (MAKEINT(psEffect->position.x) + ((rand()%psEffect->radius) - (rand()%(2*psEffect->radius))));
 //		pos.z = (MAKEINT(psEffect->position.z) + ((rand()%psEffect->radius) - (rand()%(2*psEffect->radius))));
 //		pos.y = map_Height(pos.x,pos.z);
-		if(psEffect->type == FIRE_TYPE_SMOKY OR psEffect->type == FIRE_TYPE_SMOKY_BLUE)
+		if(psEffect->type == FIRE_TYPE_SMOKY || psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
 			pos.x = (MAKEINT(psEffect->position.x) + ((rand()%psEffect->radius/2) - (rand()%(2*psEffect->radius/2))));
 			pos.z = (MAKEINT(psEffect->position.z) + ((rand()%psEffect->radius/2) - (rand()%(2*psEffect->radius/2))));
@@ -2086,13 +2086,13 @@ UDWORD brightness, specular;
 
 
 	/* Small smoke - used for the droids */
-//		if(psEffect->type == SMOKE_TYPE_DRIFTING_SMALL OR psEffect->type == SMOKE_TYPE_TRAIL)
+//		if(psEffect->type == SMOKE_TYPE_DRIFTING_SMALL || psEffect->type == SMOKE_TYPE_TRAIL)
 
 	if(TEST_SCALED(psEffect))
 	{
 #ifdef HARDWARE_TEST//test additive
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
-			if(percent<10 AND psEffect->type == SMOKE_TYPE_TRAIL)
+			if(percent<10 && psEffect->type == SMOKE_TYPE_TRAIL)
 			{
 				pie_MatScale((3 * percent/10 * psEffect->baseScale)/100);
 				transparency = (EFFECT_SMOKE_ADDITIVE * (100 - 10))/100;
@@ -2446,7 +2446,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 	}
 
 
-	if ( (psEffect->type!=EXPLOSION_TYPE_NOT_FACING) AND (psEffect->type!=EXPLOSION_TYPE_SHOCKWAVE))
+	if ( (psEffect->type!=EXPLOSION_TYPE_NOT_FACING) && (psEffect->type!=EXPLOSION_TYPE_SHOCKWAVE))
 	{
 		SET_FACING(psEffect);
 	}
@@ -2560,7 +2560,7 @@ void    effectSetupDestruction(EFFECT *psEffect)
 		psEffect->lifeSpan = DROID_DESTRUCTION_DURATION;
 		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY;
 	}
-	else if(psEffect->type == DESTRUCTION_TYPE_WALL_SECTION OR
+	else if(psEffect->type == DESTRUCTION_TYPE_WALL_SECTION ||
 			psEffect->type == DESTRUCTION_TYPE_FEATURE)
 	{
 		psEffect->lifeSpan = STRUCTURE_DESTRUCTION_DURATION/4;
@@ -2728,7 +2728,7 @@ SDWORD	xBehind,yBehind;
 			/* Gets it's group number */
 			partition = psDroid->id % EFFECT_DROID_DIVISION;
 			/* Right frame to process? */
-			if(partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION AND ONEINFOUR)
+			if(partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
 			{
 				/* Sufficent time since last update? - The EQUALS comparison is needed */
 				if(gameTime >= (lastUpdateDroids[partition] + DROID_UPDATE_INTERVAL))
@@ -2787,7 +2787,7 @@ BOOL		active;
 					// -------------------------------------------------------------------------------
 					/* Factories puff out smoke, power stations puff out tesla stuff */
 
-				 	if( (psStructure->pStructureType->type == REF_FACTORY) OR
+				 	if( (psStructure->pStructureType->type == REF_FACTORY) ||
 						(psStructure->pStructureType->type == REF_POWER_GEN) )
 					if( (bMultiPlayer && isHumanPlayer(psStructure->player))
 						|| (psStructure->player == 0) )
@@ -2839,7 +2839,7 @@ BOOL		active;
 							active = FALSE;
 							for (i=0; i < NUM_POWER_MODULES; i++)
 							{
-								if (psPowerGen->apResExtractors[i] AND ((RES_EXTRACTOR *)
+								if (psPowerGen->apResExtractors[i] && ((RES_EXTRACTOR *)
 									psPowerGen->apResExtractors[i]->pFunctionality)->active)
 								{
 									active = TRUE;
@@ -2848,7 +2848,7 @@ BOOL		active;
 							}
 							/*
 							if (((POWER_GEN*)psStructure->pFunctionality)->
-								apResExtractors[0] AND ((RES_EXTRACTOR *)((POWER_GEN*)
+								apResExtractors[0] && ((RES_EXTRACTOR *)((POWER_GEN*)
 								psStructure->pFunctionality)->apResExtractors[0]->
 								pFunctionality)->active)
 							*/
@@ -2909,13 +2909,13 @@ UDWORD	i;
 UDWORD	posX,posY;
 BOOL	bOnFire;
 
-   	for(i=0, bOnFire = FALSE; i<MAX_EFFECTS AND !bOnFire; i++)
+   	for(i=0, bOnFire = FALSE; i<MAX_EFFECTS && !bOnFire; i++)
 	{
-	 	if( (asEffectsList[i].status == ES_ACTIVE) AND asEffectsList[i].group == EFFECT_FIRE)
+	 	if( (asEffectsList[i].status == ES_ACTIVE) && asEffectsList[i].group == EFFECT_FIRE)
 		{
 			posX = MAKEINT(asEffectsList[i].position.x);
 			posY = MAKEINT(asEffectsList[i].position.z);
-			if( (posX == x) AND (posY == y) )
+			if( (posX == x) && (posY == y) )
 			{
 				bOnFire = TRUE;
 			}

@@ -3146,7 +3146,7 @@ void runForceSelect(void)
 	{
 		// MouseOver stuff.
 		id = widgGetMouseOver(psWScreen);
-		if (id >=IDDES_TEMPLSTART  AND id <= IDDES_TEMPLEND)
+		if (id >=IDDES_TEMPLSTART  && id <= IDDES_TEMPLEND)
 		{
 			currID = IDDES_TEMPLSTART;
 			for(psTempl = apsDroidTemplates[selectedPlayer]; psTempl;psTempl = psTempl->psNext)
@@ -3864,7 +3864,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			}
 
 			// medals.
-			if((stat.loses>2)AND(stat.wins>2)AND(stat.wins>(2*stat.loses)) )// bronze requirement.
+			if((stat.loses>2)&&(stat.wins>2)&&(stat.wins>(2*stat.loses)) )// bronze requirement.
 			{
 				if(stat.wins>(4*stat.loses))								// silver requirement.
 				{

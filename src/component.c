@@ -126,7 +126,7 @@ void updateLightLevels(void)
 	{
 	   	droidLightLevel+=lightSpeed;
 		lightLastChanged = gameTime;
-	 	if(droidLightLevel>255 OR droidLightLevel<128)
+	 	if(droidLightLevel>255 || droidLightLevel<128)
 		{
 			if(lightSpeed>0)
 			{
@@ -316,7 +316,7 @@ void displayStructureButton(STRUCTURE *psStructure,
     /*HACK HACK HACK!
     if its a 'tall thin (ie tower)' structure with something on the top - offset the
     position to show the object on top*/
-    if (psStructure->pStructureType->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND
+    if (psStructure->pStructureType->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
         getStructureHeight(psStructure) > TOWER_HEIGHT)
     {
         Position->y -= 20;
@@ -470,7 +470,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
     /*HACK HACK HACK!
     if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
     position to show the object on top*/
-    if (Stats->pIMD->nconnectors AND scale == SMALL_STRUCT_SCALE AND
+    if (Stats->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
         getStructureStatHeight(Stats) > TOWER_HEIGHT)
     {
         Position->y -= 20;
@@ -719,7 +719,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 
 	difference = Rotation->y%360;
 
-	if((difference>0 AND difference <180) OR difference<-180)
+	if((difference>0 && difference <180) || difference<-180)
 	{
 		leftFirst = FALSE;
 	}
@@ -755,7 +755,7 @@ void displayComponentButtonObject(DROID *psDroid,
 // Decide how to sort it.
 	difference = Rotation->y%360;
 
-	if((difference>0 AND difference <180) OR difference<-180)
+	if((difference>0 && difference <180) || difference<-180)
 	{
 		leftFirst = FALSE;
 	}
@@ -796,7 +796,7 @@ MAPTILE	*psTile;
 	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
 	difference = (worldAngle-psObj->direction);
 
-	if((difference>0 AND difference <180) OR difference<-180)
+	if((difference>0 && difference <180) || difference<-180)
 	{
 		leftFirst = FALSE;
 	}
@@ -846,12 +846,12 @@ MAPTILE	*psTile;
 	pie_MatRotX(DEG(rotation.x));
 	pie_MatRotZ(DEG(rotation.z));
 
-	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) AND psDroid->lastHitWeapon == WSC_ELECTRONIC)
+	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
 		objectShimmy( (BASE_OBJECT*) psDroid );
 	}
 
-    if (psDroid->lastHitWeapon == WSC_EMP AND
+    if (psDroid->lastHitWeapon == WSC_EMP &&
         (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
     {
         iVector			position;
@@ -864,7 +864,7 @@ MAPTILE	*psTile;
 		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,FALSE,NULL,0);
     }
 
-	if (godMode || (psDroid->visible[selectedPlayer] == UBYTE_MAX) OR demoGetStatus())
+	if (godMode || (psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
 	{
 		//ingame not button object
 		//Watermelon:should render 3 mounted weapons now
@@ -877,9 +877,9 @@ MAPTILE	*psTile;
 		tileX = psDroid->x/TILE_UNITS;
 		tileY = psDroid->y/TILE_UNITS;
 		// double check it's on map
-		if( (tileX>=0) AND
-			(tileY>=0) AND
-			(tileX<mapWidth) AND
+		if( (tileX>=0) &&
+			(tileY>=0) &&
+			(tileX<mapWidth) &&
 			(tileY<mapHeight) )
 		{
 			psTile = mapTile(tileX,tileY);
@@ -921,7 +921,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 
    	/* Cast the droid pointer */
 	psDroid = (DROID *)psObj;
-	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) AND psDroid->lastHitWeapon == WSC_ELECTRONIC AND !gamePaused())
+	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
 		colour = getPlayerColour(rand()%MAX_PLAYERS);
 		bDarkSide = TRUE;
@@ -1163,7 +1163,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				//if(psDroid->numWeaps)
 				for (i = 0;i < psDroid->numWeaps;i++)
 				{
-					if (psDroid->asWeaps[i].nStat > 0 OR psDroid->droidType == DROID_DEFAULT)
+					if (psDroid->asWeaps[i].nStat > 0 || psDroid->droidType == DROID_DEFAULT)
 					{
 						if ( psShapeTemp->connectors )
 						{
@@ -1472,7 +1472,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				if(psShape)
 				{
 					pie_Draw3DShape(psShape, 0,colour /*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
-					if(psShape->nconnectors AND psDroid->action == DACTION_DROIDREPAIR)
+					if(psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
 						pie_TRANSLATE( psShape->connectors[0].x,
 									   psShape->connectors[0].z,
@@ -1749,6 +1749,7 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
+
 
 
 

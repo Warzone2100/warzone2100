@@ -234,7 +234,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 
 //	ASSERT( !psObj->died,"intUpdateProgressBar: object is dead" );
-	if(psObj->died AND psObj->died != NOT_CURRENT_LIST)
+	if(psObj->died && psObj->died != NOT_CURRENT_LIST)
 	{
 		return;
 	}
@@ -477,8 +477,8 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		Structure = (STRUCTURE*)psObj;
 
-		ASSERT( (Structure->pStructureType->type == REF_FACTORY OR
-			Structure->pStructureType->type == REF_CYBORG_FACTORY OR
+		ASSERT( (Structure->pStructureType->type == REF_FACTORY ||
+			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
 			Structure->pStructureType->type == REF_VTOL_FACTORY),
 			"intAddFactoryInc: structure is not a factory" );
 
@@ -514,12 +514,12 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		psTemplate = (DROID_TEMPLATE *)psStat;
 
 		psObj = getCurrentSelected();
-		if (psObj != NULL AND psObj->type == OBJ_STRUCTURE)
+		if (psObj != NULL && psObj->type == OBJ_STRUCTURE)
 		{
 			psStructure = (STRUCTURE *)psObj;
 		}
 
-		if (psStructure != NULL AND StructIsFactory(psStructure))
+		if (psStructure != NULL && StructIsFactory(psStructure))
 		{
 		    quantity = getProductionQuantity(psStructure, psTemplate);
 		}
@@ -923,7 +923,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		Image = -1;
 		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
 
-		if (psObj && (psObj->died) AND (psObj->died != NOT_CURRENT_LIST))
+		if (psObj && (psObj->died) && (psObj->died != NOT_CURRENT_LIST))
 		{
 			// this may catch this horrible crash bug we've been having,
 			// who knows?.... Shipping tomorrow, la de da :-)
@@ -1144,7 +1144,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		Object = NULL;
 		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
 
-		if (psObj && psObj->died AND psObj->died != NOT_CURRENT_LIST)
+		if (psObj && psObj->died && psObj->died != NOT_CURRENT_LIST)
 		{
 			// this may catch this horrible crash bug we've been having,
 			// who knows?.... Shipping tomorrow, la de da :-)
@@ -1603,7 +1603,7 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
     iV_DrawTransImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
 	//need to flash the timer when < 5 minutes remaining, but > 4 minutes
     flash = UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData);
-	if (flash AND ((gameTime2/250) % 2) == 0)
+	if (flash && ((gameTime2/250) % 2) == 0)
     {
     	iV_DrawTransImage(IntImages,(UWORD)UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData),x,y);
 	}
@@ -1656,7 +1656,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 
 	//need to flash the button if Full Transporter
     flash = UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData);
-	if (flash AND psWidget->id == IDTRANS_LAUNCH)
+	if (flash && psWidget->id == IDTRANS_LAUNCH)
 	{
 		if (((gameTime2/250) % 2) == 0)
 		{
@@ -2896,7 +2896,7 @@ BOOL DroidIsDemolishing(DROID *Droid)
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
-    if (!(droidType(Droid) == DROID_CONSTRUCT OR droidType(Droid) ==
+    if (!(droidType(Droid) == DROID_CONSTRUCT || droidType(Droid) ==
         DROID_CYBORG_CONSTRUCT))
     {
         return FALSE;
@@ -2920,7 +2920,7 @@ BOOL DroidIsRepairing(DROID *Droid)
 	BASE_OBJECT *psObject;
 
     //if(droidType(Droid) != DROID_REPAIR)
-    if (!(droidType(Droid) == DROID_REPAIR OR droidType(Droid) ==
+    if (!(droidType(Droid) == DROID_REPAIR || droidType(Droid) ==
         DROID_CYBORG_REPAIR))
     {
         return FALSE;
@@ -2943,7 +2943,7 @@ BOOL DroidIsBuilding(DROID *Droid)
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
-    if (!(droidType(Droid) == DROID_CONSTRUCT OR
+    if (!(droidType(Droid) == DROID_CONSTRUCT ||
         droidType(Droid) == DROID_CYBORG_CONSTRUCT))
     {
         return FALSE;
@@ -2974,7 +2974,7 @@ BOOL DroidGoingToBuild(DROID *Droid)
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
-    if (!(droidType(Droid) == DROID_CONSTRUCT OR
+    if (!(droidType(Droid) == DROID_CONSTRUCT ||
         droidType(Droid) == DROID_CYBORG_CONSTRUCT))
     {
         return FALSE;
@@ -3079,8 +3079,8 @@ iIMDShape *DroidGetIMD(DROID *Droid)
 
 BOOL StructureIsManufacturing(STRUCTURE *Structure)
 {
-	return ((Structure->pStructureType->type == REF_FACTORY OR
-			Structure->pStructureType->type == REF_CYBORG_FACTORY OR
+	return ((Structure->pStructureType->type == REF_FACTORY ||
+			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
 			Structure->pStructureType->type == REF_VTOL_FACTORY) &&
 			((FACTORY*)Structure->pFunctionality)->psSubject);
 }
@@ -3587,8 +3587,8 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 		iV_DrawTransImage(IntImages,IMAGE_BUT_HILITE,xOffset+Form->x,yOffset+Form->y);
 	}
 
-    //if (psDroid AND missionIsOffworld()) Want this on all reInforcement missions
-    if (psDroid AND missionForReInforcements())
+    //if (psDroid && missionIsOffworld()) Want this on all reInforcement missions
+    if (psDroid && missionForReInforcements())
     {
         //add the experience level for each droid
         gfxId = getDroidRankGraphic(psDroid);
@@ -3656,8 +3656,8 @@ void drawRadarBlips(void)
 		psProxDisp = psProxDisp->psNext)
 	{
 		//check it is within the radar coords
-		if (psProxDisp->radarX > 0 AND psProxDisp->radarX < VisWidth AND
-			psProxDisp->radarY > 0 AND psProxDisp->radarY < VisHeight)
+		if (psProxDisp->radarX > 0 && psProxDisp->radarX < VisWidth &&
+			psProxDisp->radarY > 0 && psProxDisp->radarY < VisHeight)
 		{
 			//pViewProximity = (VIEW_PROXIMITY*)psProxDisp->psMessage->
 			//	pViewData->pData;
@@ -3669,7 +3669,7 @@ void drawRadarBlips(void)
 			else
 			{
 				psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
-				if (psFeature AND psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+				if (psFeature && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 				{
 					proxType = PROX_RESOURCE;
 				}
@@ -3720,8 +3720,8 @@ void drawRadarBlips(void)
 		psBuilding = psBuilding->psNext)
 	{
 		//check it is within the radar coords
-		if (psBuilding->radarX > 0 AND psBuilding->radarX < VisWidth AND
-			psBuilding->radarY > 0 AND psBuilding->radarY < VisHeight)
+		if (psBuilding->radarX > 0 && psBuilding->radarX < VisWidth &&
+			psBuilding->radarY > 0 && psBuilding->radarY < VisHeight)
 		{
 			//check if recently damaged
 			if (psBuilding->timeLastHit)

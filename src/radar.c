@@ -599,7 +599,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 				ASSERT( ((UDWORD)WScr) >= radarBuffer , "WScr Onderflow" );
 				ASSERT( ((UDWORD)WScr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WScr Overrun" );
 #endif
-				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) OR godMode) {
+				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode) {
 					switch(radarDrawMode)
 					{
 						case RADAR_MODE_TERRAIN:
@@ -640,7 +640,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 			for (j=0; j<VisWidth; j+=SizeH)
 			{
 				/* Only draw if discovered or in GOD mode */
-				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) OR godMode)
+				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
 				{
 					UBYTE Val = tileColours[(WTile->texture & TILE_NUMMASK)];
 					Val = iV_SHADE_TABLE[(Val * iV_PALETTE_SHADE_LEVEL+
@@ -770,8 +770,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    			psDroid = psDroid->psNext)
    		{
 			if(psDroid->visible[selectedPlayer]
-				OR godMode
-				OR (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
+				|| godMode
+				|| (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
 				&& aiCheckAlliances(selectedPlayer,psDroid->player))
 				)
 			{
@@ -787,7 +787,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 					if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
 	//
-						if((clan == selectedPlayer) AND (gameTime-psDroid->timeLastHit < HIT_NOTIFICATION))
+						if((clan == selectedPlayer) && (gameTime-psDroid->timeLastHit < HIT_NOTIFICATION))
 						{
 						   	/*
 							if(gameTime%250<125)
@@ -850,8 +850,8 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    			psStruct = psStruct->psNext)
    		{
 			if(psStruct->visible[selectedPlayer]
-				OR godMode
-				OR (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
+				|| godMode
+				|| (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
 				&& aiCheckAlliances(selectedPlayer,psStruct->player))
 				)
 			{
@@ -899,7 +899,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 // And draw it.
 					if((SSizeV > 0) && (SSizeH > 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
-											if((clan == selectedPlayer) AND (gameTime - psStruct->timeLastHit < HIT_NOTIFICATION))
+											if((clan == selectedPlayer) && (gameTime - psStruct->timeLastHit < HIT_NOTIFICATION))
 						{
 							/*
 							if(gameTime%250<125)

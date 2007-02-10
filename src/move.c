@@ -399,7 +399,7 @@ BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	fpathSetDirectRoute(psDroid, (SDWORD)x, (SDWORD)y);
 #else
     //in multiPlayer make Transporter move like the vtols
-	if ( psDroid->droidType == DROID_TRANSPORTER AND game.maxPlayers == 0)
+	if ( psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers == 0)
 	{
 		fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
 		psDroid->sMove.Status = MOVENAVIGATE;
@@ -407,7 +407,7 @@ BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		psDroid->sMove.psFormation = NULL;
 		return TRUE;
 	}
-	else if (vtolDroid(psDroid) OR (game.maxPlayers > 0 AND psDroid->
+	else if (vtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->
         droidType == DROID_TRANSPORTER))
 	{
 		fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
@@ -853,8 +853,8 @@ void updateDroidOrientation(DROID *psDroid)
 		"mapHeight: y coordinate bigger than map height" );
 
 
-	//if(psDroid->droidType == DROID_PERSON OR psDroid->droidType == DROID_CYBORG OR
-    if(psDroid->droidType == DROID_PERSON OR cyborgDroid(psDroid) OR
+	//if(psDroid->droidType == DROID_PERSON || psDroid->droidType == DROID_CYBORG ||
+    if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) ||
         psDroid->droidType == DROID_TRANSPORTER)
 	{
 		/* These guys always stand upright */
@@ -4155,7 +4155,7 @@ BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 	/* check for dead, not moving or invisible to player */
 	if ( psDroid->died || moveDroidStopped( psDroid, 0 ) ||
 		 (psDroid->droidType == DROID_TRANSPORTER && psDroid->order == DORDER_NONE) ||
-		 !(psDroid->visible[selectedPlayer] OR godMode)                                )
+		 !(psDroid->visible[selectedPlayer] || godMode)                                )
 	{
 		psDroid->iAudioID = NO_SOUND;
 		return FALSE;
@@ -4178,7 +4178,7 @@ void movePlayDroidMoveAudio( DROID *psDroid )
 		"movePlayUnitMoveAudio: unit pointer invalid\n" );
 
 	if ( (psDroid != NULL) &&
-		 (psDroid->visible[selectedPlayer] OR godMode) )
+		 (psDroid->visible[selectedPlayer] || godMode) )
 	{
 		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION].nStat].propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
@@ -4304,7 +4304,7 @@ void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, SDWORD i
 	}
 
 	if ( (iAudioID != NO_SOUND) &&
-		 (psDroid->visible[selectedPlayer] OR godMode) )
+		 (psDroid->visible[selectedPlayer] || godMode) )
 	{
 		if ( audio_PlayObjDynamicTrack( psDroid, iAudioID,
 				pAudioCallback ) )
@@ -4917,7 +4917,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 
 
-	if( (psDroid->inFire AND psDroid->type != DROID_PERSON) AND psDroid->visible[selectedPlayer])
+	if( (psDroid->inFire && psDroid->type != DROID_PERSON) && psDroid->visible[selectedPlayer])
 	{
 		pos.x = psDroid->x + (18-rand()%36);
 		pos.z = psDroid->y + (18-rand()%36);

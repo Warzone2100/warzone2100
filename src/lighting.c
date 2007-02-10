@@ -99,7 +99,7 @@ MAPTILE	*psTile;
 	{
 		for(j=0; j<mapHeight; j++)
 		{
-			if(i==0 OR j==0 OR i>=mapWidth-1 OR j>=mapHeight-1)
+			if(i==0 || j==0 || i>=mapWidth-1 || j>=mapHeight-1)
 			{
 //				mapTile(i,j)->height = 0;
 				psTile = mapTile(i,j);
@@ -118,7 +118,7 @@ MAPTILE	*psTile;
 	{
 		for(j=0; j<mapHeight; j++)
 		{
-			if(i<(scrollMinX+4) OR i>(scrollMaxX-4) OR j<(scrollMinY+4) OR j>(scrollMaxY-4))
+			if(i<(scrollMinX+4) || i>(scrollMaxX-4) || j<(scrollMinY+4) || j>(scrollMaxY-4))
 			{
 				mapTile(i,j)->illumination/=3;
 			}
@@ -135,7 +135,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
     MAPTILE	    *psTile;
 
     //quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
-    if (x1 > mapWidth OR x2 > mapWidth OR y1 > mapHeight OR y2 > mapHeight)
+    if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
     {
         ASSERT( FALSE, "initLighting: coords off edge of map" );
         return;
@@ -147,7 +147,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 		{
             psTile = mapTile(i, j);
             //always make the edge tiles dark
-            if (i==0 OR j==0 OR i >= mapWidth-1 OR j >= mapHeight-1)
+            if (i==0 || j==0 || i >= mapWidth-1 || j >= mapHeight-1)
             {
 			    psTile->illumination = 16;
 
@@ -164,8 +164,8 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
         	// Cheers to paul for this idea - works on PC too
     	    //	Basically darkens down the tiles that are outside the scroll
 	        //	limits - thereby emphasising the cannot-go-there-ness of them
-			if((SDWORD)i < (scrollMinX+4) OR (SDWORD)i > (scrollMaxX-4) OR
-                (SDWORD)j < (scrollMinY+4) OR (SDWORD)j > (scrollMaxY-4))
+			if((SDWORD)i < (scrollMinX+4) || (SDWORD)i > (scrollMaxX-4) ||
+                (SDWORD)j < (scrollMinY+4) || (SDWORD)j > (scrollMaxY-4))
 			{
 				psTile->illumination/=3;
 			}
@@ -463,7 +463,7 @@ SDWORD	gridMinX,gridMinY,gridMaxX,gridMaxY;
 				We must make sure that we don't attempt to colour a tile that isn't actually
 				on our grid - say when a light is on the periphery of the grid.
 			*/
-			if(i>gridMinX AND i<gridMaxX AND j>gridMinY AND j<gridMaxY)
+			if(i>gridMinX && i<gridMaxX && j>gridMinY && j<gridMaxY)
 			{
 		 		distToCorner = calcDistToTile(i,j,&psLight->position);
 				/* If we're inside the range of the light */
@@ -564,9 +564,9 @@ UDWORD	percent;
 					xIndex = i - playerXTile;
 					yIndex = j - playerZTile;
 					// Might go off the grid for light ranges > one tile
-//					if(i<visibleXTiles AND j<visibleYTiles AND i>=0 AND j>=0)
-					if(xIndex >= 0 AND yIndex >= 0 AND
-                        xIndex < (SDWORD)visibleXTiles AND
+//					if(i<visibleXTiles && j<visibleYTiles && i>=0 && j>=0)
+					if(xIndex >= 0 && yIndex >= 0 &&
+                        xIndex < (SDWORD)visibleXTiles &&
                         yIndex < (SDWORD)visibleYTiles)
 					{
 						colourTile(xIndex,yIndex,psLight->colour, (UBYTE)(2*percent));
@@ -731,7 +731,7 @@ float	fraction,adjust;
 	tileX = psDroid->x/TILE_UNITS;
 	tileY = psDroid->y/TILE_UNITS;
 	/* Are we at the edge */
-	if(tileX<=1 OR tileX>=mapWidth-2 OR tileY<=1 OR tileY>=mapHeight-2)
+	if(tileX<=1 || tileX>=mapWidth-2 || tileY<=1 || tileY>=mapHeight-2)
 	{
 		lightVal = mapTile(tileX,tileY)->illumination;
 		lightVal += MIN_DROID_LIGHT_LEVEL;

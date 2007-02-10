@@ -394,8 +394,8 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 		case RENDER_PROJECTILE_TRANSPARENT:
 //			((PROJ_OBJECT*)pObject)->psWStats;
 			/* these guys should never be added to the list anyway */
-			if(((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_FLAME OR
-                ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_COMMAND OR
+			if(((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_FLAME ||
+                ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_COMMAND ||
                 ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_EMP)
 			{
 				/* We don't do projectiles from these guys, cos there's an effect instead */
@@ -447,12 +447,12 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
    			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
 
-			//if((objectType == RENDER_STRUCTURE) AND (((STRUCTURE*)pObject)->
-			//	pStructureType->type >= REF_DEFENSE) AND
+			//if((objectType == RENDER_STRUCTURE) && (((STRUCTURE*)pObject)->
+			//	pStructureType->type >= REF_DEFENSE) &&
 			//	(((STRUCTURE*)pObject)->pStructureType->type<=REF_TOWER4))
-			if((objectType == RENDER_STRUCTURE) AND
-				((((STRUCTURE*)pObject)->pStructureType->type == REF_DEFENSE) OR
-				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALL) OR
+			if((objectType == RENDER_STRUCTURE) &&
+				((((STRUCTURE*)pObject)->pStructureType->type == REF_DEFENSE) ||
+				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALL) ||
 				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALLCORNER)))
 			{
 				position.y = psSimpObj->z + 64;

@@ -573,7 +573,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 				}
             }
 			//don't play the sound for a LasSat in multiPlayer
-            else if (!(bMultiPlayer AND psWeapStats->weaponSubClass == WSC_LAS_SAT))
+            else if (!(bMultiPlayer && psWeapStats->weaponSubClass == WSC_LAS_SAT))
 			{
                     audio_PlayObjStaticTrack(psObj, psObj->psWStats->iAudioFireID);
             }
@@ -1328,7 +1328,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		{
 			/*Check for Electronic Warfare damage where we know the subclass
             of the weapon*/
-			if (psStats->weaponSubClass == WSC_ELECTRONIC)// AND psObj->psDest->
+			if (psStats->weaponSubClass == WSC_ELECTRONIC)// && psObj->psDest->
 				//type == OBJ_STRUCTURE)
 			{
 				if (psObj->psSource)
@@ -1729,7 +1729,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						}
 					}
 					// Missed by old method, but maybe in landed within the building's footprint(baseplate)
-					else if(ptInStructure(psCurrS,psObj->x,psObj->y) AND (BASE_OBJECT*)psCurrS!=psObj->psDest)
+					else if(ptInStructure(psCurrS,psObj->x,psObj->y) && (BASE_OBJECT*)psCurrS!=psObj->psDest)
 					{
 						damage = NOMINAL_DAMAGE;
 
@@ -2109,7 +2109,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 			STRUCTURE *)psTarget)->pStructureType->strength] / 100;
 
         //a little fail safe!
-        if (damage == 0 AND baseDamage != 0)
+        if (damage == 0 && baseDamage != 0)
         {
             damage = 1;
         }
@@ -2139,7 +2139,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 			nStat)->propulsionType] / 100;
 
         //a little fail safe!
-        if (damage == 0 AND baseDamage != 0)
+        if (damage == 0 && baseDamage != 0)
         {
             damage = 1;
         }
@@ -2207,7 +2207,7 @@ STRUCTURE	*psStructure;
 	{
 	case OBJ_DROID:
 		psDroid = (DROID*)psObj;
-		if( (gameTime - psDroid->timeLastHit) < HIT_THRESHOLD AND
+		if( (gameTime - psDroid->timeLastHit) < HIT_THRESHOLD &&
             psDroid->lastHitWeapon == WSC_ELECTRONIC)
 			return(TRUE);
 	case OBJ_FEATURE:
@@ -2217,7 +2217,7 @@ STRUCTURE	*psStructure;
 		break;
 	case OBJ_STRUCTURE:
 		psStructure = (STRUCTURE*)psObj;
-		if( (gameTime - psStructure->timeLastHit) < HIT_THRESHOLD AND
+		if( (gameTime - psStructure->timeLastHit) < HIT_THRESHOLD &&
             psStructure->lastHitWeapon == WSC_ELECTRONIC)
 			return(TRUE);
 		break;

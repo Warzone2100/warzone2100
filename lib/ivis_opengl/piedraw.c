@@ -543,7 +543,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	pieCount++;
 
 	// Fix for transparent buildings and features!! */
-	if( (pieFlag & pie_TRANSLUCENT) AND (pieFlagData>220) )
+	if( (pieFlag & pie_TRANSLUCENT) && (pieFlagData>220) )
 	{
 		pieFlag = pieFlagData = 0;	// force to bilinear and non-transparent
 	}

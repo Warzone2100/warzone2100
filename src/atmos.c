@@ -128,7 +128,7 @@ iVector	pos;
 	}
 
 	/* This bit below needs to go into a "precipitation function" */
-	if(!gamePaused() AND weather!=WT_NONE)
+	if(!gamePaused() && weather!=WT_NONE)
 	{
 		numberToAdd = ((weather==WT_SNOWING) ? 2 : 4);
 		/* Temporary stuff - just adds a few particles! */
@@ -142,8 +142,8 @@ iVector	pos;
 			pos.y = 1000;
 
 			/* If we've got one on the grid */
-			if(pos.x>0 AND pos.z>0 AND
-			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) AND
+			if(pos.x>0 && pos.z>0 &&
+			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) &&
 			   pos.z<(SDWORD)((mapHeight-1)*TILE_UNITS) )
 			{
 			   	/* On grid, so which particle shall we add? */
@@ -187,8 +187,8 @@ MAPTILE	*psTile;
 	   	testParticleWrap(psPart);
 
 		/* If it's gone off the WORLD... */
-		if(psPart->position.x<0 OR psPart->position.z<0 OR
-		   psPart->position.x>((mapWidth-1)*TILE_UNITS) OR
+		if(psPart->position.x<0 || psPart->position.z<0 ||
+		   psPart->position.x>((mapWidth-1)*TILE_UNITS) ||
 		   psPart->position.z>((mapHeight-1)*TILE_UNITS) )
 		{
 			/* The kill it */
@@ -203,7 +203,7 @@ MAPTILE	*psTile;
 			groundHeight = map_Height((UDWORD)MAKEINT(psPart->position.x),(UDWORD)MAKEINT(psPart->position.z));
 
 			/* Are we below ground? */
-			if( (MAKEINT(psPart->position.y) < groundHeight) OR (psPart->position.y<0.0f) )
+			if( (MAKEINT(psPart->position.y) < groundHeight) || (psPart->position.y<0.0f) )
 			{
 				/* Kill it and return */
 				psPart->status = APS_INACTIVE;
@@ -212,7 +212,7 @@ MAPTILE	*psTile;
 					x = (MAKEINT(psPart->position.x))>>TILE_SHIFT;
 					y = (MAKEINT(psPart->position.z))>>TILE_SHIFT;
 					psTile = mapTile(x,y);
-					if(TERRAIN_TYPE(psTile) == TER_WATER AND TEST_TILE_VISIBLE(selectedPlayer,psTile))
+					if(TERRAIN_TYPE(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer,psTile))
 					{
 						pos.x = MAKEINT(psPart->position.x);
 						pos.z = MAKEINT(psPart->position.z);
@@ -246,7 +246,7 @@ UDWORD	activeCount;
 UDWORD	i;
 
 	for(i=freeParticle,activeCount=0; (asAtmosParts[i].status==APS_ACTIVE)
-		AND activeCount<MAX_ATMOS_PARTICLES; i++)
+		&& activeCount<MAX_ATMOS_PARTICLES; i++)
 	{
 		activeCount++;
 		/* Check for wrap around */

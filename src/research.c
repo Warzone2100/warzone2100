@@ -469,7 +469,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 
 		//check the tech code is valid
         if (techCode > 1)
-		//if (pResearch->techCode != TC_MAJOR AND pResearch->techCode != TC_MINOR)
+		//if (pResearch->techCode != TC_MAJOR && pResearch->techCode != TC_MINOR)
 		{
 			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
 			abort();
@@ -1071,8 +1071,8 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 		pResearch->storeCount++;
 
         //quick check that haven't reached maxArtes
-        if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED OR numResearchArteRes >=
-            MAX_RESEARCH_ARTE_RES OR numResearchArteRep > MAX_RESEARCH_ARTE_RES)
+        if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED || numResearchArteRes >=
+            MAX_RESEARCH_ARTE_RES || numResearchArteRep > MAX_RESEARCH_ARTE_RES)
         {
             //don't load any more since will write over memory!
             break;
@@ -1239,8 +1239,8 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 		}
 
         //quick check that haven't reached max structs
-        if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR OR
-            numResearchStructRes >= MAX_RESEARCH_STRUCT_RES OR
+        if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR ||
+            numResearchStructRes >= MAX_RESEARCH_STRUCT_RES ||
             numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
         {
             //don't load any more since will write over memory!
@@ -1610,18 +1610,18 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr =
 					psCurr->psNext)
 				{
-					/*if (psCurr->pStructureType->type == REF_FACTORY OR
-						psCurr->pStructureType->type == REF_CYBORG_FACTORY OR
+					/*if (psCurr->pStructureType->type == REF_FACTORY ||
+						psCurr->pStructureType->type == REF_CYBORG_FACTORY ||
 						psCurr->pStructureType->type == REF_VTOL_FACTORY)
 					{
 						//upgrade the Output
 						productionUpgrade(pFunction, psCurr);
 					}*/
-					if ((psCurr->pStructureType->type == REF_FACTORY AND
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) OR
-						(psCurr->pStructureType->type == REF_CYBORG_FACTORY AND
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) OR
-						(psCurr->pStructureType->type == REF_VTOL_FACTORY AND
+					if ((psCurr->pStructureType->type == REF_FACTORY &&
+						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
+						(psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
+						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
+						(psCurr->pStructureType->type == REF_VTOL_FACTORY &&
 						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
 					{
 						//upgrade the Output for the structure
@@ -1643,11 +1643,11 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr =
 					psCurr->psNext)
 				{
-					if ((psCurr->pStructureType->type == REF_FACTORY AND
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) OR
-						(psCurr->pStructureType->type == REF_CYBORG_FACTORY AND
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) OR
-						(psCurr->pStructureType->type == REF_VTOL_FACTORY AND
+					if ((psCurr->pStructureType->type == REF_FACTORY &&
+						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
+						(psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
+						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
+						(psCurr->pStructureType->type == REF_VTOL_FACTORY &&
 						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
 					{
 						//upgrade the Output for the structure
@@ -2132,7 +2132,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
         compInc = vtolCompInc =0;
 	    for (inc = 0; inc < numWeaponStats; inc++)
 	    {
-		    if (apCompLists[selectedPlayer][COMP_WEAPON][inc] == AVAILABLE AND
+		    if (apCompLists[selectedPlayer][COMP_WEAPON][inc] == AVAILABLE &&
                 asWeaponStats[inc].design)
             {
                 if (asWeaponStats[inc].vtolAttackRuns)
@@ -2301,7 +2301,7 @@ void releaseResearch(STRUCTURE *psBuilding)
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
-	if (psResFac->psSubject AND psResFac->timeStartHold)
+	if (psResFac->psSubject && psResFac->timeStartHold)
 	{
 		//adjust the start time for the current subject
 		if (psResFac->timeStarted != ACTION_START_TIME)
@@ -3071,8 +3071,8 @@ BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
 		//set the research reticule button to flash if research facility is free
 		for (psStruct = apsStructLists[selectedPlayer]; psStruct != NULL; psStruct=psStruct->psNext)
 		{
-			if (psStruct->pStructureType->type == REF_RESEARCH AND
-                psStruct->status == SS_BUILT AND
+			if (psStruct->pStructureType->type == REF_RESEARCH &&
+                psStruct->status == SS_BUILT &&
 				((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
 			{
 				resFree = TRUE;
@@ -3341,9 +3341,9 @@ BOOL selfRepairEnabled(UBYTE player)
 /*checks the stat to see if its of type wall or defence*/
 BOOL wallDefenceStruct(STRUCTURE_STATS *psStats)
 {
-	if (psStats->type == REF_DEFENSE OR
-		psStats->type == REF_WALL OR
-		psStats->type == REF_WALLCORNER OR
+	if (psStats->type == REF_DEFENSE ||
+		psStats->type == REF_WALL ||
+		psStats->type == REF_WALLCORNER ||
         psStats->type == REF_BLASTDOOR)
 	{
 		return TRUE;
@@ -3398,7 +3398,7 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 	int			inc;
 
     //if the type is not one we are interested in, then don't bother checking
-    if (!(oldType == COMP_ECM OR oldType == COMP_SENSOR OR oldType == COMP_WEAPON))
+    if (!(oldType == COMP_ECM || oldType == COMP_SENSOR || oldType == COMP_WEAPON))
     {
         return;
     }

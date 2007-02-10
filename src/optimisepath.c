@@ -94,7 +94,7 @@ PATH_POINT	*moveList;
 	while(moveList[index].XCoordinate != -1)
 	{
 		/* If it's not the start point and not the end point */
-		if(index!=0 AND moveList[index+1].XCoordinate != -1	AND moveList[index+1].YCoordinate != -1)
+		if(index!=0 && moveList[index+1].XCoordinate != -1	&& moveList[index+1].YCoordinate != -1)
 		{
 			// ------------------------
 			// IMPORTANT
@@ -163,7 +163,7 @@ PATH_POINT	*moveList;
 				/*
 				xDif = xRec - (x1 + (xAlt*TILE_UNITS));
 				yDif = yRec - (y1 + (yAlt*TILE_UNITS));
-				if(abs(xDif)>128 OR abs(yDif)>128)
+				if(abs(xDif)>128 || abs(yDif)>128)
 				{
 					effectGiveAuxVar(4);
 				}
@@ -183,7 +183,7 @@ PATH_POINT	*moveList;
 				/*
 				xDif = xRec - (x1 + (xAlt*TILE_UNITS));
 				yDif = yRec - (y1 + (yAlt*TILE_UNITS));
-				if(abs(xDif)>128 OR abs(yDif)>128)
+				if(abs(xDif)>128 || abs(yDif)>128)
 				{
 					effectGiveAuxVar(4);
 				}
@@ -246,42 +246,42 @@ UDWORD	retVal = 0;
 
 	ASSERT( angle<360,"Angle's too big!!!" );
 
-	if(accA<=22.5 OR accA>337.0)
+	if(accA<=22.5 || accA>337.0)
 	{
 		retVal = 0;
 	}
-	else if(accA>22.5 AND accA <= 67.5)
+	else if(accA>22.5 && accA <= 67.5)
 	{
 		retVal = 1;
 
 	}
-	else if(accA>67.5 AND accA <= 112.5)
+	else if(accA>67.5 && accA <= 112.5)
 	{
 		retVal = 2;
 
 	}
-	else if(accA>112.5 AND accA <= 157.5)
+	else if(accA>112.5 && accA <= 157.5)
 	{
 		retVal = 3;
 
 	}
-	else if(accA>157.5 AND accA <= 202.5)
+	else if(accA>157.5 && accA <= 202.5)
 	{
 		retVal = 4;
 
 	}
-	else if(accA>202.5 AND accA <= 247.5)
+	else if(accA>202.5 && accA <= 247.5)
 	{
 		retVal = 5;
 
 	}
-	else if(accA>247.5 AND accA <= 292.5)
+	else if(accA>247.5 && accA <= 292.5)
 	{
 		retVal = 6;
 
 	}
 
-	else if(accA>292.5 AND accA <= 337.5)
+	else if(accA>292.5 && accA <= 337.5)
 	{
 		retVal = 7;
 

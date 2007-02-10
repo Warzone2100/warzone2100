@@ -571,7 +571,7 @@ BOOL process2DInput(void)
 
 	quitting = FALSE;
 
-	if(!keyDown(KEY_LCTRL) AND !keyDown(KEY_RCTRL))
+	if(!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
 	{
 		/* Move the map around with the cursor keys */
 		if (keyDown(KEY_LEFTARROW) && (mapX > 0))
@@ -636,7 +636,7 @@ removed cos types are different - am
 	{
 	case MSM_NORMAL:
 		/* See if we are doing a structure position */
-		if (structPosMode == SPM_POS OR structPosMode == SPM_VALID)
+		if (structPosMode == SPM_POS || structPosMode == SPM_VALID)
 		{
 			/* Update the position of structure cursor */
 			if ((sStructPos.width % 2) == 0)
@@ -1284,9 +1284,9 @@ static void display2DMap(void)
 		for(scrY = 0; scrY < pie_GetVideoBufferHeight(); scrY += TILE_SIZE2D)
 		{
 			psTile = mapTile(x,y);
-//			if (psTile->tileVisible[selectedPlayer] OR godMode)
-//			if  ( (psTile->tileVisBits & (1<<selectedPlayer) OR godMode))
-			if ( TEST_TILE_VISIBLE(selectedPlayer,psTile) OR godMode)
+//			if (psTile->tileVisible[selectedPlayer] || godMode)
+//			if  ( (psTile->tileVisBits & (1<<selectedPlayer) || godMode))
+			if ( TEST_TILE_VISIBLE(selectedPlayer,psTile) || godMode)
 			{
 				sSrcRect.left = ((psTile->texture & TILE_NUMMASK)
 									% tilesPerLine) << SCR_TILE_SHIFT;
@@ -1320,7 +1320,7 @@ static void display2DMap(void)
 	}
 
 	/* Display the structure positioning box */
-	if (structPosMode == SPM_VALID OR structPosMode == SPM_POS)
+	if (structPosMode == SPM_VALID || structPosMode == SPM_POS)
 	{
 		disp2DFromWorld(sStructPos.x << TILE_SHIFT, sStructPos.y << TILE_SHIFT, &sx0,&sy0);
 		sx1 = sx0 + (sStructPos.width * TILE_SIZE2D);
@@ -1342,7 +1342,7 @@ static void display2DMap(void)
 	{
 		for(psDroid = apsDroidLists[i]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if ((psDroid->visible[selectedPlayer] OR godMode) &&
+			if ((psDroid->visible[selectedPlayer] || godMode) &&
 				(((psDroid->x - TILE_SIZE2D/2) >> TILE_SHIFT) >= (viewX)) &&
 				(((psDroid->x + TILE_SIZE2D/2) >> TILE_SHIFT) < (viewX + TILES_ACROSS)) &&
 				(((psDroid->y - TILE_SIZE2D/2) >> TILE_SHIFT) >= (viewY)) &&
@@ -1467,7 +1467,7 @@ static void display2DMap(void)
 		{
 	   		width = psStructure->pStructureType->baseWidth;
 	   		breadth = psStructure->pStructureType->baseBreadth;
-			if ((psStructure->visible[selectedPlayer] OR godMode) &&
+			if ((psStructure->visible[selectedPlayer] || godMode) &&
 				(((psStructure->x - width * TILE_SIZE2D/2) >> TILE_SHIFT)
 								>= (viewX)) &&
 				(((psStructure->x + width *  TILE_SIZE2D/2) >> TILE_SHIFT)
@@ -1525,7 +1525,7 @@ static void display2DMap(void)
 	{
 	   	width = psFeature->psStats->baseWidth;
 	   	breadth = psFeature->psStats->baseBreadth;
-		if ((psFeature->visible[selectedPlayer] OR godMode) &&
+		if ((psFeature->visible[selectedPlayer] || godMode) &&
 			(((psFeature->x - width * TILE_SIZE2D/2) >> TILE_SHIFT)
 							>= (viewX)) &&
 			(((psFeature->x + width *  TILE_SIZE2D/2) >> TILE_SHIFT)
@@ -1691,7 +1691,7 @@ static void display2DBullets(void)
 						xDiff = i - tileX;
 						yDiff = j - tileY;
 //						if ((mapTile(i,j)->tileVisible[selectedPlayer] || godMode) &&
-						if ( ((mapTile(i,j)->tileVisBits & 1<<selectedPlayer) OR godMode) AND
+						if ( ((mapTile(i,j)->tileVisBits & 1<<selectedPlayer) || godMode) &&
 						    ((xDiff*xDiff + yDiff*yDiff) < radSquared))
 						{
 							/* We've got us a burning tile - burn baby burn !! */

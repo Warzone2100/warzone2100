@@ -838,7 +838,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 		psStats->rotate = (UBYTE)rotate;
 
 		//set the minElevation
-		if (minElevation > SBYTE_MAX OR minElevation < SBYTE_MIN)
+		if (minElevation > SBYTE_MAX || minElevation < SBYTE_MIN)
 		{
 			ASSERT( FALSE,"loadWeaponStats: minElevation is outside of limits for weapon %s",
 				getStatName(psStats) );
@@ -1529,7 +1529,7 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
     /*since propulsion weight is a multiple of body weight we may need to
     adjust the max component weight value*/
     //check we've loaded them both in
-    if (asBodyStats AND asPropulsionStats)
+    if (asBodyStats && asPropulsionStats)
     {
         //check against each body stat
         for (i = 0; i < numBodyStats; i++)
@@ -3617,18 +3617,18 @@ BOOL setTechLevel(BASE_STATS *psStats, char *pLevel)
 	}
 
 	//store tech level in the appropriate stat
-	if ((psStats->ref >= REF_BODY_START AND psStats->ref <= (REF_WEAPON_START +
-		REF_RANGE)) OR (psStats->ref>= REF_CONSTRUCT_START AND psStats->ref <=
+	if ((psStats->ref >= REF_BODY_START && psStats->ref <= (REF_WEAPON_START +
+		REF_RANGE)) || (psStats->ref>= REF_CONSTRUCT_START && psStats->ref <=
 		(REF_CONSTRUCT_START + REF_RANGE)))
 	{
 		((COMP_BASE_STATS *)psStats)->techLevel = techLevel;
 	}
-	else if (psStats->ref >= REF_STRUCTURE_START AND psStats->ref <= (
+	else if (psStats->ref >= REF_STRUCTURE_START && psStats->ref <= (
 		REF_STRUCTURE_START + REF_RANGE))
 	{
 		((STRUCTURE_STATS *)psStats)->techLevel = techLevel;
 	}
-	else if (psStats->ref >= REF_RESEARCH_START AND psStats->ref <= (
+	else if (psStats->ref >= REF_RESEARCH_START && psStats->ref <= (
 		REF_RESEARCH_START + REF_RANGE))
 	{
 		((RESEARCH *)psStats)->techLevel = techLevel;

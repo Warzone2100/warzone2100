@@ -1851,7 +1851,7 @@ INT_RETVAL intRunWidgets(void)
 		intRunMultiMenu();
 	}
 
-	if (retID >= IDPROX_START AND retID <= IDPROX_END)
+	if (retID >= IDPROX_START && retID <= IDPROX_END)
 	{
 		processProximityButtons(retID);
 		return INT_NONE;
@@ -2087,7 +2087,7 @@ INT_RETVAL intRunWidgets(void)
 #ifdef DISABLE_BUILD_QUEUE
                 if (bReopenBuildMenu)
 #else
-                if (bReopenBuildMenu OR ctrlShiftDown())
+                if (bReopenBuildMenu || ctrlShiftDown())
 #endif
 				{
 				    intAddBuild(NULL);
@@ -2188,7 +2188,7 @@ INT_RETVAL intRunWidgets(void)
 							//initPlayerPower();
 							capacityUpdate(psStructure);
 						}
-						else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR OR
+						else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR ||
 							psStructure->pStructureType->type == REF_HQ)
 						{
 							//initPlayerPower();
@@ -2261,8 +2261,8 @@ INT_RETVAL intRunWidgets(void)
 //		retCode = INT_INTERCEPT;
 //	}
 
-	if(	(testPlayerHasLost() OR (testPlayerHasWon() AND !bMultiPlayer)) AND // yeah yeah yeah - I know....
-        (intMode != INT_MISSIONRES) AND !getDebugMappingStatus())
+	if(	(testPlayerHasLost() || (testPlayerHasWon() && !bMultiPlayer)) && // yeah yeah yeah - I know....
+        (intMode != INT_MISSIONRES) && !getDebugMappingStatus())
 
 	{
 		debug( LOG_ERROR, "PlayerHasLost Or Won\n" );
@@ -2283,7 +2283,7 @@ static void intRunPower(void)
 
 	/* Find out which button was hilited */
 	statID = widgGetMouseOver(psWScreen);
-	if (statID >= IDSTAT_START AND statID <= IDSTAT_END)
+	if (statID >= IDSTAT_START && statID <= IDSTAT_END)
 	{
 		psStat = ppsStatsList[statID - IDSTAT_START];
 		if (psStat->ref >= REF_STRUCTURE_START && psStat->ref <
@@ -2380,7 +2380,7 @@ static void intRunStats(void)
 		{
 			/* Find out which button was hilited */
 			statID = widgGetMouseOver(psWScreen);
-			if (statID >= IDSTAT_START AND statID <= IDSTAT_END)
+			if (statID >= IDSTAT_START && statID <= IDSTAT_END)
 			{
 				//get the template build points
 				Power = calcTemplatePower((DROID_TEMPLATE *)apsTemplateList[statID - IDSTAT_START]);
@@ -2422,7 +2422,7 @@ static void intRunStats(void)
 
 		psFactory = (FACTORY *)psStruct->pFunctionality;
 		//adjust the loop button if necessary
-		if (psFactory->psSubject AND psFactory->quantity)
+		if (psFactory->psSubject && psFactory->quantity)
 		{
 			widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
 		}
@@ -2521,7 +2521,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		{
 			//this can't be assumed cos we've added some more icons and they have higher #define values than QUESTIONMARK!
             //entryIN = asResearch[pList[j]].iconID;
-			//if(entryIN<mapRIDToIcon(RID_ROCKET) OR entryIN>mapRIDToIcon(RID_QUESTIONMARK))
+			//if(entryIN<mapRIDToIcon(RID_ROCKET) || entryIN>mapRIDToIcon(RID_QUESTIONMARK))
             iconNumber = mapIconToRID(asResearch[pList[j]].iconID);
             if (iconNumber < 0)
 			{
@@ -2551,7 +2551,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	    if ( (!psStats) && (widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) )
 	    {
             //only restore if we've still got at least that many tabs
-            if (newStatMajor > statMajor AND newStatMinor > statMinor)
+            if (newStatMajor > statMajor && newStatMinor > statMinor)
             {
 		        widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor, statMinor);
             }
@@ -2651,7 +2651,7 @@ static void intProcessObject(UDWORD id)
 		{
 			psObj->selected = FALSE;
 			widgSetButtonState(psWScreen, statButID, 0);
-			if ((intNumSelectedDroids(DROID_CONSTRUCT) == 0) AND
+			if ((intNumSelectedDroids(DROID_CONSTRUCT) == 0) &&
                 (intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0))
 			{
 				intRemoveStats();
@@ -2696,7 +2696,7 @@ static void intProcessObject(UDWORD id)
 				//if (!offWorldKeepLists)
 				{
 
-					if(psObj->type == OBJ_STRUCTURE AND !offWorldKeepLists)
+					if(psObj->type == OBJ_STRUCTURE && !offWorldKeepLists)
 					{
 						/* Deselect old buildings */
 						for(psStruct = apsStructLists[selectedPlayer];
@@ -2712,7 +2712,7 @@ static void intProcessObject(UDWORD id)
 					if(!driveModeActive())
                     {
                         //don't do this if offWorld and a structure object has been selected
-                        if (!(psObj->type == OBJ_STRUCTURE AND offWorldKeepLists))
+                        if (!(psObj->type == OBJ_STRUCTURE && offWorldKeepLists))
                         {
     						// set the map position - either the object position, or the position jumped from
 	    					butIndex = id - IDOBJ_OBJSTART;
@@ -2926,8 +2926,8 @@ static void intProcessStats(UDWORD id)
 				/* See if this was a click on an already selected stat */
 				psStats = objGetStatsFunc(psObjSelected);
                 //only do the cancel operation if not trying to add to the build list
-				if (psStats == ppsStatsList[id - IDSTAT_START] AND
-                    !(objMode == IOBJ_BUILD AND ctrlShiftDown()))
+				if (psStats == ppsStatsList[id - IDSTAT_START] &&
+                    !(objMode == IOBJ_BUILD && ctrlShiftDown()))
 				{
                     //this needs to be done before the topic is cancelled from the structure
                     //research works differently now! - AB 5/2/99
@@ -3011,12 +3011,12 @@ static void intProcessStats(UDWORD id)
 
 				// Close the object box as well if selecting a location to build- no longer hide/reveal
                 //or if selecting a structure to demolish
-				if (objMode == IOBJ_BUILDSEL OR objMode == IOBJ_DEMOLISHSEL)
+				if (objMode == IOBJ_BUILDSEL || objMode == IOBJ_DEMOLISHSEL)
 				{
 					if(driveModeActive()) {
 						// Make sure weve got a construction droid selected.
 						//if(driveGetDriven()->droidType != DROID_CONSTRUCT) {
-                        if(driveGetDriven()->droidType != DROID_CONSTRUCT AND
+                        if(driveGetDriven()->droidType != DROID_CONSTRUCT &&
                             driveGetDriven()->droidType != DROID_CYBORG_CONSTRUCT) {
 //PD30 							driveSelectionChanged();
 							driveDisableControl();
@@ -3096,7 +3096,7 @@ static void intProcessStats(UDWORD id)
 			{
 				factoryLoopAdjust(psStruct, FALSE);
 			}
-			if (((FACTORY *)psStruct->pFunctionality)->psSubject AND
+			if (((FACTORY *)psStruct->pFunctionality)->psSubject &&
 				((FACTORY *)psStruct->pFunctionality)->quantity)
 			{
 				//lock the button
@@ -3218,8 +3218,8 @@ void intObjectSelected(BASE_OBJECT *psObj)
 
 			if (((STRUCTURE *)psObj)->status == SS_BUILT)
 			{
-				if (((STRUCTURE *)psObj)->pStructureType->type == REF_FACTORY OR
-					((STRUCTURE *)psObj)->pStructureType->type == REF_CYBORG_FACTORY OR
+				if (((STRUCTURE *)psObj)->pStructureType->type == REF_FACTORY ||
+					((STRUCTURE *)psObj)->pStructureType->type == REF_CYBORG_FACTORY ||
 					((STRUCTURE *)psObj)->pStructureType->type == REF_VTOL_FACTORY)
 				{
 
@@ -3388,13 +3388,13 @@ void intDisplayWidgets(void)
 
 
 	// God only knows...
-	if(ReticuleUp AND !bInTutorial) {
+	if(ReticuleUp && !bInTutorial) {
 		intCheckReticuleButtons();
 	}
 
 
 	/*draw the background for the design screen and the Intelligence screen*/
-	if (intMode == INT_DESIGN OR intMode == INT_INTELMAP)
+	if (intMode == INT_DESIGN || intMode == INT_INTELMAP)
 	{
  // When will they ever learn!!!!
 		if (!bMultiPlayer)
@@ -3406,7 +3406,7 @@ void intDisplayWidgets(void)
 	//			DISP_WIDTH, DISP_HEIGHT);
 			/*Add the radar to the design screen - only if player has HQ*/
 			/*bPlayerHasHQ=FALSE;
-			for(psStructure=apsStructLists[selectedPlayer]; psStructure AND !bPlayerHasHQ; psStructure = psStructure->psNext)
+			for(psStructure=apsStructLists[selectedPlayer]; psStructure && !bPlayerHasHQ; psStructure = psStructure->psNext)
 			{
 				if(psStructure->pStructureType->type == REF_HQ)
 				{
@@ -3657,7 +3657,7 @@ static void orderFactories(void)
 			ASSERT( StructIsFactory(psStruct), "orderFactories: structure is not a factory" );
 
 			if (((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryInc == inc
-			    AND ((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryType == type)
+			    && ((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryType == type)
 			{
 				apsObjectList[entry++] = (BASE_OBJECT*)psStruct;
 				//quick check that don't end up with more!
@@ -3693,8 +3693,8 @@ static void orderObjectInterface(void)
 	switch(apsObjectList[0]->type)
 	{
 	case OBJ_STRUCTURE:
-		//if (((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_FACTORY OR
-		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_CYBORG_FACTORY OR
+		//if (((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_FACTORY ||
+		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_CYBORG_FACTORY ||
 		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_VTOL_FACTORY)
         if (StructIsFactory((STRUCTURE *)apsObjectList[0]))
 		{
@@ -4734,7 +4734,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 			case OBJ_DROID:
 	// Get the construction power of a construction droid.. Not convinced this is right.
 				Droid = (DROID*)psObj;
-				if (Droid->droidType == DROID_CONSTRUCT OR
+				if (Droid->droidType == DROID_CONSTRUCT ||
                     Droid->droidType == DROID_CYBORG_CONSTRUCT)
 				{
 			   		ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intUpdateProgressBar: invalid droid type" );
@@ -4833,7 +4833,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 			}
 			// Add the power bar.
 			if (psObj->type != OBJ_DROID ||
-				(((DROID *)psObj)->droidType == DROID_CONSTRUCT OR
+				(((DROID *)psObj)->droidType == DROID_CONSTRUCT ||
                 ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
 			{
 				sBarInit2.formID = sBFormInit.id;
@@ -4940,7 +4940,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 
 			if ( psObj->type != OBJ_DROID ||
-				 (((DROID *)psObj)->droidType == DROID_CONSTRUCT OR
+				 (((DROID *)psObj)->droidType == DROID_CONSTRUCT ||
                  ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
 			{
 				// Set the colour for the production run size text.
@@ -5784,7 +5784,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if ( psOwner != NULL )
 		{
 			psFactory = (FACTORY *)((STRUCTURE *)psOwner)->pFunctionality;
-			if (psFactory->psSubject AND psFactory->quantity)
+			if (psFactory->psSubject && psFactory->quantity)
 			{
 				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
 			}
@@ -5874,7 +5874,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.pUserData = (void*)&StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
     //Build menu can have up to 80 stats - so can research now 13/09/99 AB
-	if (((objMode == IOBJ_BUILD) OR (objMode == IOBJ_RESEARCH)) &&
+	if (((objMode == IOBJ_BUILD) || (objMode == IOBJ_RESEARCH)) &&
 		(sFormInit.numMajor > 4))
 	{
 		sFormInit.pUserData = (void*)&SmallTab;
@@ -6191,7 +6191,7 @@ static BOOL selectConstruction(BASE_OBJECT *psObj)
 
 	//check the droid type
 	//if ( (psDroid->droidType == DROID_CONSTRUCT) && (psDroid->died == 0) )
-    if ( (psDroid->droidType == DROID_CONSTRUCT OR psDroid->droidType ==
+    if ( (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType ==
         DROID_CYBORG_CONSTRUCT) && (psDroid->died == 0) )
 	{
 		return TRUE;
@@ -6220,7 +6220,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 	psDroid = (DROID *)psObj;
 
 	//if(droidType(psDroid) != DROID_CONSTRUCT) return NULL;
-    if (!(droidType(psDroid) == DROID_CONSTRUCT OR droidType(psDroid) ==
+    if (!(droidType(psDroid) == DROID_CONSTRUCT || droidType(psDroid) ==
         DROID_CYBORG_CONSTRUCT))
     {
         return NULL;
@@ -6358,8 +6358,8 @@ static BOOL selectResearch(BASE_OBJECT *psObj)
 
 	/* A Structure is a research facility if its type = REF_RESEARCH and is
 	   completely built*/
-	if (psResFacility->pStructureType->type == REF_RESEARCH AND (psResFacility->
-		status == SS_BUILT) AND (psResFacility->died == 0))
+	if (psResFacility->pStructureType->type == REF_RESEARCH && (psResFacility->
+		status == SS_BUILT) && (psResFacility->died == 0))
 	{
 		return TRUE;
 	}
@@ -6463,10 +6463,10 @@ static BOOL selectManufacture(BASE_OBJECT *psObj)
 
 	/* A Structure is a Factory if its type = REF_FACTORY or REF_CYBORG_FACTORY or
 	REF_VTOL_FACTORY and it is completely built*/
-	if ((psBuilding->pStructureType->type == REF_FACTORY OR
-		  psBuilding->pStructureType->type == REF_CYBORG_FACTORY OR
-		  psBuilding->pStructureType->type == REF_VTOL_FACTORY) AND
-		  (psBuilding->status == SS_BUILT) AND (psBuilding->died == 0))
+	if ((psBuilding->pStructureType->type == REF_FACTORY ||
+		  psBuilding->pStructureType->type == REF_CYBORG_FACTORY ||
+		  psBuilding->pStructureType->type == REF_VTOL_FACTORY) &&
+		  (psBuilding->status == SS_BUILT) && (psBuilding->died == 0))
 	{
 		return TRUE;
 	}
@@ -6814,11 +6814,11 @@ static void intObjectRMBPressed(UDWORD id)
 	if (psObj)
 	{
         //don't jump around when offworld
-		if (psObj->type == OBJ_STRUCTURE AND !offWorldKeepLists)
+		if (psObj->type == OBJ_STRUCTURE && !offWorldKeepLists)
 		{
 			psStructure = (STRUCTURE *)psObj;
-			if (psStructure->pStructureType->type == REF_FACTORY OR
-				psStructure->pStructureType->type == REF_CYBORG_FACTORY OR
+			if (psStructure->pStructureType->type == REF_FACTORY ||
+				psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
 				psStructure->pStructureType->type == REF_VTOL_FACTORY)
 			{
 				//centre the view on the delivery point
@@ -6943,7 +6943,7 @@ void addIntelScreen(void)
 	(void)intAddIntelMap();
 	intMode = INT_INTELMAP;
 
-	/*if (psCurrentMsg AND psCurrentMsg->type == MSG_TUTORIAL)
+	/*if (psCurrentMsg && psCurrentMsg->type == MSG_TUTORIAL)
 	{
 		//just display the message
 		if (psCurrentMsg->pViewData)
@@ -6971,7 +6971,7 @@ void addIntelScreen(void)
 void addTransporterInterface(DROID *psSelected, BOOL onMission)
 {
     //if psSelected = NULL add interface but if psSelected != NULL make sure its not flying
-    if (!psSelected OR (psSelected AND !transporterFlying(psSelected)))
+    if (!psSelected || (psSelected && !transporterFlying(psSelected)))
     {
     	intResetScreen(FALSE);
 	    intAddTransporter(psSelected, onMission);
@@ -7170,8 +7170,8 @@ STRUCTURE* intCheckForStructure(UDWORD structType)
 	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
-		if (psStruct->selected AND psStruct->pStructureType->type ==
-			structType AND psStruct->status == SS_BUILT)
+		if (psStruct->selected && psStruct->pStructureType->type ==
+			structType && psStruct->status == SS_BUILT)
 		{
 			if (psSel != NULL)
 			{
@@ -7198,7 +7198,7 @@ DROID* intCheckForDroid(UDWORD droidType)
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		if (psDroid->selected AND psDroid->droidType == (SDWORD)droidType)
+		if (psDroid->selected && psDroid->droidType == (SDWORD)droidType)
 		{
 			if (psSel != NULL)
 			{
@@ -7206,7 +7206,7 @@ DROID* intCheckForDroid(UDWORD droidType)
 				clearSelection();
 				SelectDroid(psSel);
 */
-				if (droidType != DROID_CONSTRUCT AND
+				if (droidType != DROID_CONSTRUCT &&
                     droidType != DROID_CYBORG_CONSTRUCT)
 				{
 					clearSelection();
@@ -7231,7 +7231,7 @@ SDWORD intNumSelectedDroids(UDWORD droidType)
 	num = 0;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->selected AND psDroid->droidType == (SDWORD)droidType)
+		if (psDroid->selected && psDroid->droidType == (SDWORD)droidType)
 		{
 			num += 1;
 		}
@@ -7342,8 +7342,8 @@ void intCheckResearchButton(void)
 	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
-		if (psStruct->pStructureType->type == REF_RESEARCH AND
-            psStruct->status == SS_BUILT AND
+		if (psStruct->pStructureType->type == REF_RESEARCH &&
+            psStruct->status == SS_BUILT &&
 			((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
 		{
 			resFree = TRUE;
@@ -7426,7 +7426,7 @@ STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDri
 
 	for(; psStruct != NULL; psStruct = psStruct->psNext)
 	{
-		if( ((psStruct->pStructureType->type == structType) || (structType == REF_ANY)) AND
+		if( ((psStruct->pStructureType->type == structType) || (structType == REF_ANY)) &&
 			psStruct->status == SS_BUILT)
 		{
 			if(psStruct != CurrentStruct) {
@@ -7447,7 +7447,7 @@ STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDri
 	if((!Found) && (CurrentStruct != NULL)) {
 		for(psStruct = interfaceStructList(); (psStruct != CurrentStruct) && (psStruct != NULL); psStruct = psStruct->psNext)
 		{
-			if( ((psStruct->pStructureType->type == structType) || (structType == REF_ANY)) AND
+			if( ((psStruct->pStructureType->type == structType) || (structType == REF_ANY)) &&
 				 psStruct->status == SS_BUILT)
 			{
 				if(psStruct != CurrentStruct) {

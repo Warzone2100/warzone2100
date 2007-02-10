@@ -684,7 +684,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	strcpy(currentLevelName,pName);
 
     bCamChangeSaveGame = FALSE;
-    if (pSaveName AND saveType == GTYPE_SAVE_START)
+    if (pSaveName && saveType == GTYPE_SAVE_START)
     {
         if (psNewLevel->psChange != NULL)
         {
@@ -694,7 +694,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 	// select the change dataset if there is one
     psChangeLevel = NULL;
-	if (((psNewLevel->psChange != NULL) && (psCurrLevel != NULL)) OR bCamChangeSaveGame)
+	if (((psNewLevel->psChange != NULL) && (psCurrLevel != NULL)) || bCamChangeSaveGame)
 	{
         //store the level name
 		debug( LOG_WZ, "levLoadData: Found CAMCHANGE dataset\n" );
@@ -916,7 +916,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		{
 			// do some more initialising if necessary
 			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= MULTI_TYPE_START ||
-				(psBaseData != NULL AND !bCamChangeSaveGame))
+				(psBaseData != NULL && !bCamChangeSaveGame))
 			{
 iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 				if (!stageTwoInitialise())
@@ -944,7 +944,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 			}
 
 			// load a savegame if there is one - but not if already done so
-			if (pSaveName != NULL AND !bCamChangeSaveGame)
+			if (pSaveName != NULL && !bCamChangeSaveGame)
 			{
 				// make sure the map gets loaded into the right heap
 				debug( LOG_NEVER, "levLoadData: setting map heap\n" );
@@ -1143,7 +1143,7 @@ iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
 //#ifdef DEBUG
     //this enables us to to start cam2/cam3 without going via a save game and get the extra droids
     //in from the script-controlled Transporters
-    if (!pSaveName AND psNewLevel->type == LDS_CAMSTART)
+    if (!pSaveName && psNewLevel->type == LDS_CAMSTART)
     {
         eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
     }

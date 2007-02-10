@@ -62,7 +62,7 @@ UDWORD	i;
 	yBridge = ( (startY == endY) ? TRUE : FALSE );
 
 	/* At least one axis must be constant */
-	if (!xBridge AND !yBridge)
+	if (!xBridge && !yBridge)
 	{
 		/*	Bridge isn't straight - this shouldn't have been passed
 			in, but better safe than sorry! */
@@ -73,7 +73,7 @@ UDWORD	i;
 	bridgeLength = ( xBridge ? abs(startY-endY) : abs(startX-endX) );
 
 	/* check it's not too long or short */
-	if(bridgeLength<MINIMUM_BRIDGE_SPAN OR bridgeLength>MAXIMUM_BRIDGE_SPAN)
+	if(bridgeLength<MINIMUM_BRIDGE_SPAN || bridgeLength>MAXIMUM_BRIDGE_SPAN)
 	{
 		/* Cry out */
 		return(FALSE);
@@ -120,7 +120,7 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 	iVector			dv;
 
 			/* Bomb out if it's not visible and there's no active god mode */
-			if(!psStructure->visible[selectedPlayer] AND !godMode)
+			if(!psStructure->visible[selectedPlayer] && !godMode)
 			{
 				return(FALSE);
 			}
@@ -312,5 +312,6 @@ iVector	dv;
 
 	}
 }
+
 
 

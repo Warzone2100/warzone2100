@@ -125,9 +125,4 @@ typedef struct
 #define	ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
 #define CAT(a,b) a##b
 
-/* Boolean operators */
-
-#define	AND &&
-#define OR ||
-
 #endif

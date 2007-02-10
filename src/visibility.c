@@ -224,7 +224,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 		}
 
 		// new - ask alex M
-		if( (selectedPlayer!=rayPlayer) AND
+		if( (selectedPlayer!=rayPlayer) &&
 			(bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
 			&& aiCheckAlliances(selectedPlayer,rayPlayer)) )
 		{
@@ -236,7 +236,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 		if(getRevealStatus())
 		{
-			if( ((UDWORD)rayPlayer == selectedPlayer) OR
+			if( ((UDWORD)rayPlayer == selectedPlayer) ||
 				// new - ask AM
 				(bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
 				&& aiCheckAlliances(selectedPlayer,rayPlayer)) // can see opponent moving
@@ -532,9 +532,9 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	/*
 	if(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(psViewer->player,psTarget->player))
 	{
-		if( (psViewer->type == OBJ_DROID) OR (psViewer->type == OBJ_STRUCTURE) )
+		if( (psViewer->type == OBJ_DROID) || (psViewer->type == OBJ_STRUCTURE) )
 			{
-				if( (psTarget->type == OBJ_DROID) OR (psTarget->type == OBJ_STRUCTURE) )
+				if( (psTarget->type == OBJ_DROID) || (psTarget->type == OBJ_STRUCTURE) )
 				{
 					return(TRUE);
 				}
@@ -741,7 +741,7 @@ found:
 	psTile = mapTile(x,y);
 
 	// Is it anything other than grass or sand?
-	if (psTile->type != TER_GRASS AND psTile->type!=TER_SAND)
+	if (psTile->type != TER_GRASS && psTile->type!=TER_SAND)
 		return(TRUE);
 	else
 		return(FALSE);
@@ -947,8 +947,8 @@ void processVisibility(BASE_OBJECT *psObj)
 	/* Make sure all tiles under a feature/structure become visible when you see it */
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
-		if( (psObj->type == OBJ_STRUCTURE OR psObj->type == OBJ_FEATURE) AND
-			(!prevVis[i] AND psObj->visible[i]) )
+		if( (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE) &&
+			(!prevVis[i] && psObj->visible[i]) )
 		{
 			setUnderTilesVis(psObj,i);
 		}

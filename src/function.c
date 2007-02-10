@@ -746,8 +746,8 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	if (modifier > UWORD_MAX OR armourKinetic > UWORD_MAX OR
-		armourHeat > UWORD_MAX OR body > UWORD_MAX)
+	if (modifier > UWORD_MAX || armourKinetic > UWORD_MAX ||
+		armourHeat > UWORD_MAX || body > UWORD_MAX)
 	{
 		ASSERT( FALSE,
 			"loadUnitBodyUpgradeFunction: one or more modifiers too great" );
@@ -812,7 +812,7 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	if (modifier > UWORD_MAX OR range > UWORD_MAX)
+	if (modifier > UWORD_MAX || range > UWORD_MAX)
 	{
 		ASSERT( FALSE,
 			"loadUnitSensorUpgradeFunction: one or more modifiers too great" );
@@ -871,12 +871,12 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 	}
 
 	//check none of the %increases are over UBYTE max
-	if (firePause > UBYTE_MAX OR
-		shortHit > UWORD_MAX OR
-		longHit > UWORD_MAX OR
-		damage > UWORD_MAX OR
-		radiusDamage > UWORD_MAX OR
-		incenDamage > UWORD_MAX OR
+	if (firePause > UBYTE_MAX ||
+		shortHit > UWORD_MAX ||
+		longHit > UWORD_MAX ||
+		damage > UWORD_MAX ||
+		radiusDamage > UWORD_MAX ||
+		incenDamage > UWORD_MAX ||
 		radiusHit > UWORD_MAX)
 	{
 		debug( LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large" );
@@ -933,8 +933,8 @@ BOOL loadStructureUpgradeFunction(char *pData)
 	storeName((FUNCTION *)psFunction, functionName);
 
 	//check none of the %increases are over UWORD max
-	if (armour > UWORD_MAX OR
-		body > UWORD_MAX OR
+	if (armour > UWORD_MAX ||
+		body > UWORD_MAX ||
 		resistance > UWORD_MAX)
 	{
 		debug( LOG_ERROR, "A percentage increase for Structure Upgrade function is too large" );
@@ -984,7 +984,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	storeName((FUNCTION *)psFunction, functionName);
 
 	//check none of the %increases are over UWORD max
-	if (armour > UWORD_MAX OR
+	if (armour > UWORD_MAX ||
 		body > UWORD_MAX)
 	{
 		debug( LOG_ERROR, "A percentage increase for WallDefence Upgrade function is too large" );

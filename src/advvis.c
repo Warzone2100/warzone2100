@@ -62,7 +62,7 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 		upperY = lowerY + visibleYTiles;
 		if(lowerX<0) lowerX = 0;
 		if(lowerY<0) lowerY = 0;
-		if(x>lowerX AND x<upperX AND y>lowerY AND y<upperY)
+		if(x>lowerX && x<upperX && y>lowerY && y<upperY)
 		{
 			/* tile is on grid - so initiate fade up */
 			psTile->level = 0;
@@ -90,7 +90,7 @@ static void processAVTile(UDWORD x, UDWORD y)
 	UDWORD newLevel;
 
 	psTile = mapTile(x, y);
-	if (psTile->level == UBYTE_MAX OR psTile->bMaxed)
+	if (psTile->level == UBYTE_MAX || psTile->bMaxed)
 	{
 		return;
 	}

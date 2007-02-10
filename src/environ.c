@@ -281,7 +281,7 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 	oy = (y & (TILE_UNITS-1));
 
 	/* If this happens, then get quick height */
-	if(!x AND !y)
+	if(!x && !y)
 	{
 		return(map_TileMistValue(tileX,tileY));
 	}

@@ -725,8 +725,8 @@ static BOOL sendStructureCheck(void)
 			NetAdd(m,19,capacity);
 			m.size +=1;
 		}
-		if (pS->pStructureType->type == REF_FACTORY OR
-//			pS->pStructureType->type == REF_CYBORG_FACTORY OR
+		if (pS->pStructureType->type == REF_FACTORY ||
+//			pS->pStructureType->type == REF_CYBORG_FACTORY ||
 			pS->pStructureType->type == REF_VTOL_FACTORY)
 		{
 			capacity = (UBYTE)((FACTORY*)pS->pFunctionality)->capacity;

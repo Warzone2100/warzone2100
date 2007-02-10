@@ -1025,7 +1025,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 		{
 		case OBJ_DROID:
 			psObj = NULL;
-			for (i=0; i<MAX_PLAYERS AND !psObj; i++)
+			for (i=0; i<MAX_PLAYERS && !psObj; i++)
 			{
 				for(pD=apsDroidLists[i];(pD) && (pD->id != destid);pD=pD->psNext);
 				if(pD)
@@ -1381,6 +1381,7 @@ BOOL recvRequestDroid(NETMSG *pMsg)
 
 	return TRUE;
 }
+
 
 
 

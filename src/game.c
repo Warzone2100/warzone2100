@@ -1631,7 +1631,7 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 				aDefaultECM[player]					= saveGameData.aDefaultECM[player];
 				aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
                 //check for self repair having been set
-                if (aDefaultRepair[player] != 0 AND
+                if (aDefaultRepair[player] != 0 &&
                     asRepairStats[aDefaultRepair[player]].location == LOC_DEFAULT)
                 {
                     enableSelfRepair((UBYTE)player);
@@ -1808,7 +1808,7 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 	}
 
 	//clear the player Power structs
-	if ((gameType != GTYPE_SAVE_START) AND (gameType != GTYPE_SAVE_MIDMISSION) AND
+	if ((gameType != GTYPE_SAVE_START) && (gameType != GTYPE_SAVE_MIDMISSION) &&
 		(!keepObjects))
 	{
 		clearPlayerPower();
@@ -2067,9 +2067,9 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
         {
             for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
             {
-            	if(!(psCurr->droidType == DROID_PERSON OR
-                    //psCurr->droidType == DROID_CYBORG OR
-                    cyborgDroid(psCurr) OR
+            	if(!(psCurr->droidType == DROID_PERSON ||
+                    //psCurr->droidType == DROID_CYBORG ||
+                    cyborgDroid(psCurr) ||
                     psCurr->droidType == DROID_TRANSPORTER))
 	            {
 					if(psCurr->x != INVALID_XY)
@@ -2263,9 +2263,9 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
         {
             for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
             {
-            	if(!(psCurr->droidType == DROID_PERSON OR
-                    //psCurr->droidType == DROID_CYBORG OR
-                    cyborgDroid(psCurr) OR
+            	if(!(psCurr->droidType == DROID_PERSON ||
+                    //psCurr->droidType == DROID_CYBORG ||
+                    cyborgDroid(psCurr) ||
                     psCurr->droidType == DROID_TRANSPORTER))
 	            {
 					if(psCurr->x != INVALID_XY)
@@ -2794,7 +2794,7 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 	setDesiredPitch(INITIAL_DESIRED_PITCH);
 
     //check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
-    if (gameType == GTYPE_SAVE_MIDMISSION AND missionLimboExpand())
+    if (gameType == GTYPE_SAVE_MIDMISSION && missionLimboExpand())
     {
         /*when all the units have moved from the mission.apsDroidList then the
         campaign has been reset to an EXPAND type - OK so there should have
@@ -3665,9 +3665,9 @@ BOOL gameLoadV7(char *pFileData, UDWORD filesize)
 		//check to see whether mission automatically starts
 		//shouldn't be able to be any other value at the moment!
 		if (psNewLevel->type == LDS_CAMSTART
-			OR psNewLevel->type == LDS_BETWEEN
-			OR psNewLevel->type == LDS_EXPAND
-			OR psNewLevel->type == LDS_EXPAND_LIMBO
+			|| psNewLevel->type == LDS_BETWEEN
+			|| psNewLevel->type == LDS_EXPAND
+			|| psNewLevel->type == LDS_EXPAND_LIMBO
 		    )
 		{
 			launchMission();
@@ -4222,7 +4222,7 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	    for (inc = 0; inc < MAX_PLAYERS; inc++)
 	    {
             //only overwrite selectedPlayer's power on a startMission save game
-            if (gameType == GTYPE_SAVE_MIDMISSION OR inc == selectedPlayer)
+            if (gameType == GTYPE_SAVE_MIDMISSION || inc == selectedPlayer)
             {
     		    asPower[inc]->currentPower = powerSaved[inc].currentPower;
 	    	    asPower[inc]->extractedPower = powerSaved[inc].extractedPower;
@@ -5198,7 +5198,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		compInc = getCompFromName(i, psSaveDroid->asBits[i].name);
 
         //HACK to get the game to load when ECMs, Sensors or RepairUnits have been deleted
-        if (compInc < 0 AND (i == COMP_ECM OR i == COMP_SENSOR OR i == COMP_REPAIRUNIT))
+        if (compInc < 0 && (i == COMP_ECM || i == COMP_SENSOR || i == COMP_REPAIRUNIT))
         {
             //set the ECM to be the defaultECM ...
             if (i == COMP_ECM)
@@ -6517,7 +6517,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 		for(psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
             //always save transporter droids that are in the mission list with an INVALID_XY
-            if (psCurr->droidType == DROID_TRANSPORTER AND
+            if (psCurr->droidType == DROID_TRANSPORTER &&
                 ppsCurrentDroidLists[player] == mission.apsDroidLists[player])
             {
                 psCurr->x = INVALID_XY;
@@ -6720,7 +6720,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		}
 
         //check not too near the edge
-        /*if (psSaveStructure->x <= TILE_UNITS OR psSaveStructure->y <= TILE_UNITS)
+        /*if (psSaveStructure->x <= TILE_UNITS || psSaveStructure->y <= TILE_UNITS)
         {
 			DBERROR(("Structure being built too near the edge of the map"));
             continue;
@@ -7008,7 +7008,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			}
 		}
         //check not too near the edge
-        /*if (psSaveStructure->x <= TILE_UNITS OR psSaveStructure->y <= TILE_UNITS)
+        /*if (psSaveStructure->x <= TILE_UNITS || psSaveStructure->y <= TILE_UNITS)
         {
 			DBERROR(("Structure being built too near the edge of the map"));
             continue;
@@ -7060,7 +7060,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			{
 				psStructure->visible[i] = psSaveStructure->visible[i];
                 //set the Tile flag if visible for the selectedPlayer
-                if ((i == selectedPlayer) AND (psStructure->visible[i] == UBYTE_MAX))
+                if ((i == selectedPlayer) && (psStructure->visible[i] == UBYTE_MAX))
                 {
                     setStructTileDraw(psStructure);
                 }
@@ -7073,7 +7073,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		}
 
 		//if not a save game, don't want to overwrite any of the stats so continue
-		if ((gameType != GTYPE_SAVE_START) AND
+		if ((gameType != GTYPE_SAVE_START) &&
 			(gameType != GTYPE_SAVE_MIDMISSION))
 		{
 			continue;
@@ -7144,7 +7144,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
                             getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
                         //if the build has started set the powerAccrued =
                         //powerRequired to sync the interface
-                        if (psFactory->timeStarted != ACTION_START_TIME AND
+                        if (psFactory->timeStarted != ACTION_START_TIME &&
                             psFactory->psSubject)
                         {
                             psFactory->powerAccrued = ((DROID_TEMPLATE *)psFactory->
@@ -7194,7 +7194,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 
 				}
                 //if started research, set powerAccrued = powerRequired
-                if (psResearch->timeStarted != ACTION_START_TIME AND psResearch->
+                if (psResearch->timeStarted != ACTION_START_TIME && psResearch->
                     psSubject)
                 {
                     psResearch->powerAccrued = ((RESEARCH *)psResearch->
@@ -7253,7 +7253,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 						psRepair->psObj = getBaseObjFromId(psSaveStructure->subjectInc);
                         //if the build has started set the powerAccrued =
                         //powerRequired to sync the interface
-                        if (psRepair->timeStarted != ACTION_START_TIME AND
+                        if (psRepair->timeStarted != ACTION_START_TIME &&
                             psRepair->psObj)
                         {
                             psRepair->powerAccrued = powerReqForDroidRepair((DROID*)psRepair->psObj);
@@ -7456,7 +7456,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			}
 		}
         //check not too near the edge
-        /*if (psSaveStructure->x <= TILE_UNITS OR psSaveStructure->y <= TILE_UNITS)
+        /*if (psSaveStructure->x <= TILE_UNITS || psSaveStructure->y <= TILE_UNITS)
         {
 			DBERROR(("Structure being built too near the edge of the map"));
             continue;
@@ -7506,7 +7506,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		{
 			psStructure->visible[i] = psSaveStructure->visible[i];
             //set the Tile flag if visible for the selectedPlayer
-            if ((i == selectedPlayer) AND (psStructure->visible[i] == UBYTE_MAX))
+            if ((i == selectedPlayer) && (psStructure->visible[i] == UBYTE_MAX))
             {
                 setStructTileDraw(psStructure);
             }
@@ -7519,7 +7519,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		}
 
 		//if not a save game, don't want to overwrite any of the stats so continue
-		if ((gameType != GTYPE_SAVE_START) AND
+		if ((gameType != GTYPE_SAVE_START) &&
 			(gameType != GTYPE_SAVE_MIDMISSION))
 		{
 			continue;
@@ -7580,7 +7580,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
                         getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
                     //if the build has started set the powerAccrued =
                     //powerRequired to sync the interface
-                    if (psFactory->timeStarted != ACTION_START_TIME AND
+                    if (psFactory->timeStarted != ACTION_START_TIME &&
                         psFactory->psSubject)
                     {
                         psFactory->powerAccrued = ((DROID_TEMPLATE *)psFactory->
@@ -7632,7 +7632,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					}
 				}
                 //if started research, set powerAccrued = powerRequired
-                if (psResearch->timeStarted != ACTION_START_TIME AND psResearch->
+                if (psResearch->timeStarted != ACTION_START_TIME && psResearch->
                     psSubject)
                 {
                     psResearch->powerAccrued = ((RESEARCH *)psResearch->
@@ -8120,7 +8120,7 @@ BOOL loadStructSetPointers(void)
 							psRepair->psObj = getBaseObjFromId((UDWORD)psRepair->psObj);
 							//if the build has started set the powerAccrued =
 							//powerRequired to sync the interface
-							if (psRepair->timeStarted != ACTION_START_TIME AND
+							if (psRepair->timeStarted != ACTION_START_TIME &&
 								psRepair->psObj)
 							{
 								psRepair->powerAccrued = powerReqForDroidRepair((DROID*)psRepair->psObj);
@@ -8253,7 +8253,7 @@ BOOL loadSaveFeatureV2(char *pFileData, UDWORD filesize, UDWORD numFeatures)
 
 			statInc = getStatFromNamePreV7(TRUE, psSaveFeature->name);
 
-			if (statInc < 0 OR statInc > numFeatureStats)
+			if (statInc < 0 || statInc > numFeatureStats)
 			{
 
 				debug( LOG_ERROR, "This feature no longer exists - %s, it will be deleted", psSaveFeature->name );
@@ -8427,7 +8427,7 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 			{
 				pFeature->visible[i] = psSaveFeature->visible[i];
                 //set the Tile flag if visible for the selectedPlayer
-                if ((i == selectedPlayer) AND (pFeature->visible[i] == UBYTE_MAX))
+                if ((i == selectedPlayer) && (pFeature->visible[i] == UBYTE_MAX))
                 {
                     setFeatTileDraw(pFeature);
                 }
@@ -8535,7 +8535,7 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		{
 			pFeature->visible[i] = psSaveFeature->visible[i]	;
             //set the Tile flag if visible for the selectedPlayer
-            if ((i == selectedPlayer) AND (pFeature->visible[i] == UBYTE_MAX))
+            if ((i == selectedPlayer) && (pFeature->visible[i] == UBYTE_MAX))
             {
                 setFeatTileDraw(pFeature);
             }
@@ -9060,7 +9060,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			compInc = getCompFromName(i, psSaveTemplate->asParts[i]);
 
             //HACK to get the game to load when ECMs, Sensors or RepairUnits have been deleted
-            if (compInc < 0 AND (i == COMP_ECM OR i == COMP_SENSOR OR i == COMP_REPAIRUNIT))
+            if (compInc < 0 && (i == COMP_ECM || i == COMP_SENSOR || i == COMP_REPAIRUNIT))
             {
                 //set the ECM to be the defaultECM ...
                 if (i == COMP_ECM)
@@ -9512,8 +9512,8 @@ BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 			//ignore this record
 			continue;
 		}
-		if (psSaveCompList->state != UNAVAILABLE AND psSaveCompList->state !=
-			AVAILABLE AND psSaveCompList->state != FOUND)
+		if (psSaveCompList->state != UNAVAILABLE && psSaveCompList->state !=
+			AVAILABLE && psSaveCompList->state != FOUND)
 		{
 			//ignore this record
 			continue;
@@ -9566,8 +9566,8 @@ BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWO
 			//ignore this record
 			continue;
 		}
-		if (psSaveCompList->state != UNAVAILABLE AND psSaveCompList->state !=
-			AVAILABLE AND psSaveCompList->state != FOUND)
+		if (psSaveCompList->state != UNAVAILABLE && psSaveCompList->state !=
+			AVAILABLE && psSaveCompList->state != FOUND)
 		{
 			//ignore this record
 			continue;
@@ -9833,8 +9833,8 @@ BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 			//ignore this record
 			continue;
 		}
-		if (psSaveStructList->state != UNAVAILABLE AND psSaveStructList->state !=
-			AVAILABLE AND psSaveStructList->state != FOUND)
+		if (psSaveStructList->state != UNAVAILABLE && psSaveStructList->state !=
+			AVAILABLE && psSaveStructList->state != FOUND)
 		{
 			//ignore this record
 			continue;
@@ -9892,8 +9892,8 @@ BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 			//ignore this record
 			continue;
 		}
-		if (psSaveStructList->state != UNAVAILABLE AND psSaveStructList->state !=
-			AVAILABLE AND psSaveStructList->state != FOUND)
+		if (psSaveStructList->state != UNAVAILABLE && psSaveStructList->state !=
+			AVAILABLE && psSaveStructList->state != FOUND)
 		{
 			//ignore this record
 			continue;
@@ -10078,9 +10078,9 @@ BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 		for (playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
 		{
 /* what did this do then ?
-			if (psSaveResearch->researched[playerInc] != 0 AND
-				psSaveResearch->researched[playerInc] != STARTED_RESEARCH AND
-				psSaveResearch->researched[playerInc] != CANCELLED_RESEARCH AND
+			if (psSaveResearch->researched[playerInc] != 0 &&
+				psSaveResearch->researched[playerInc] != STARTED_RESEARCH &&
+				psSaveResearch->researched[playerInc] != CANCELLED_RESEARCH &&
 				psSaveResearch->researched[playerInc] != RESEARCHED)
 			{
 				//ignore this record
@@ -10306,7 +10306,7 @@ BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWO
     else if (gameType == GTYPE_SAVE_START)
     {
         //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
-        if (levelType == LDS_CAMSTART OR levelType == LDS_CAMCHANGE)
+        if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
         {
             return TRUE;
         }
@@ -11680,7 +11680,7 @@ BOOL loadScriptState(char *pFileName)
 static void setMapScroll(void)
 {
 	//if loading in a pre version5 then scroll values will not have been set up so set to max poss
-	if (width == 0 AND height == 0)
+	if (width == 0 && height == 0)
 	{
 		scrollMinX = 0;
 		scrollMaxX = mapWidth;

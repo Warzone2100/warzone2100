@@ -200,7 +200,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
                 /*HACK HACK HACK!
                 if its a 'tall thin (ie tower)' structure stat with something on
                 the top - offset the position to show the object on top*/
-                if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors AND
+                if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors &&
                     getStructureStatHeight((STRUCTURE_STATS*)psResearch->psStat) > TOWER_HEIGHT)
                 {
                     Position.y -= 30;
@@ -278,6 +278,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 	// close matrix context
 	pie_MatEnd();
 }
+
 
 
 

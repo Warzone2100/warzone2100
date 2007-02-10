@@ -400,7 +400,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 		{
 			if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
-				if (psFeature->visible[nPlayer])	//OR godMode)
+				if (psFeature->visible[nPlayer])	//|| godMode)
 				{
 					if(!canRecallOilAt(nPlayer, psFeature->x, psFeature->y))	//already stored?
 					{

@@ -783,7 +783,7 @@ static BOOL cleanMap(UDWORD player)
 		{
 			psD2=psD->psNext;
 			//if(psD->droidType != DROID_CONSTRUCT)
-            if (!(psD->droidType == DROID_CONSTRUCT OR
+            if (!(psD->droidType == DROID_CONSTRUCT ||
                 psD->droidType == DROID_CYBORG_CONSTRUCT))
 			{
 				killDroid(psD);
