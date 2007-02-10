@@ -7535,7 +7535,7 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 	UDWORD				numEnemies = 0;
 
 	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL))
+		VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
 		return FALSE;
@@ -7629,7 +7629,7 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 	UDWORD				numEnemies = 0;
 
 	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL))
+		VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
 		return FALSE;
