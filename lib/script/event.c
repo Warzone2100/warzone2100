@@ -774,9 +774,9 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 		return FALSE;
 	}
 
-	if (psVal->type != data->type)
+	if(!interpCheckEquiv(psVal->type, data->type))
 	{
-		ASSERT( FALSE, "eventSetContextVar: Variable type mismatch (%d/%d)", psVal->type, data->type);
+		ASSERT( FALSE, "eventSetContextVar: Variable type mismatch (var type: %d, data type: %d)", psVal->type, data->type);
 		return FALSE;
 	}
 
