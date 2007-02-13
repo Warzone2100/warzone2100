@@ -3,8 +3,8 @@
 BASELIST = anims audio components effects features \
 	gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script \
 	sequenceaudio stats structs texpages wrf
-PATCHLIST = addon.lev anims audio components effects \
-	messages multiplay stats structs texpages wrf
+PATCHLIST = addon.lev anims components effects \
+	messages multiplay stats structs wrf
 
 BASEARCHIVE=warzone.wz
 PATCHARCHIVE=mp.wz
