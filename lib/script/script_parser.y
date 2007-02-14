@@ -280,7 +280,8 @@ void script_debug(const char *pFormat, ...);
 		FREE((psBlock)); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psBlock)->size = (num)
+	(psBlock)->size = (num); \
+	(psBlock)->debugEntries = 0
 
 /* Macro to free a code block */
 #define FREE_BLOCK(psBlock) \
@@ -2839,7 +2840,6 @@ argument_decl:	'(' ')'
 
 function_declaration:		func_subdecl '(' argument_decl_head ')'	/* function was not declared before */
 				{
-
 					RULE( "function_declaration: func_subdecl '(' argument_decl_head ')'");
 
 					/* remember that local var declaration is over */
@@ -2856,7 +2856,6 @@ function_declaration:		func_subdecl '(' argument_decl_head ')'	/* function was n
 				}
 			|	func_subdecl '(' ')'
 				{
-
 					RULE( "function_declaration: func_subdecl '(' ')'");
 
 					/* remember that local var declaration is over */
@@ -3154,17 +3153,13 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($7);
 						FREE_BLOCK($7);
 
-
 						RULE( "END event_subdecl '(' INACTIVE ')' '{' var_list statement_list '}'");
-
 					}
 
 				/* VOID function that was NOT declared before */
 				|	void_function_declaration  '{' var_list statement_list  '}'
 					{
-
 						RULE( "void_function_declaration  '{' var_list statement_list  '}'");
-
 
 						/* stays the same if no params (just gets copied) */
 						ALLOC_BLOCK(psCurrBlock, $4->size + 1 + $1->numParams); /* statement_list + opcode + numParams */
@@ -3175,11 +3170,9 @@ event_decl:			event_subdecl ';'
 
 						/* Copy the two code blocks */
 						PUT_BLOCK(ip, $4);
-
 						PUT_OPCODE(ip, OP_EXIT);		/* must exit after return */
 
 						ALLOC_DEBUG(psCurrBlock, $4->debugEntries);
-
 						PUT_DEBUG(psCurrBlock, $4);
 
 						if (!scriptDefineEvent($1, psCurrBlock, -1))
@@ -3188,11 +3181,7 @@ event_decl:			event_subdecl ';'
 						}
 
 						FREE_DEBUG($4);
-
-						/* FREE_DEBUG($5); */
-
 						FREE_BLOCK($4);
-
 
 						/* end of event */
 						psCurEvent = NULL;
@@ -3202,16 +3191,13 @@ event_decl:			event_subdecl ';'
 						FREE_BLOCK(psCurrBlock);
 
 						RULE( "END void_function_declaration  '{' var_list statement_list  '}'");
-
 					}
-
 
 					/* void function that was declared before */
 				 |	void_funcbody_var_def '{' var_list statement_list '}'
 					{
 
 						RULE( "void_funcbody_var_def '{' var_list statement_list '}'");
-
 
 						/* stays the same if no params (just gets copied) */
 						//ALLOC_BLOCK(psCurrBlock, $4->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams));
@@ -3235,23 +3221,19 @@ event_decl:			event_subdecl ';'
 						}
 
 						FREE_DEBUG($4);
-						/* FREE_DEBUG($8); */
 						FREE_BLOCK($4);
+						FREE_BLOCK(psCurrBlock);
 
 						/* end of event */
 						psCurEvent = NULL;
 
-
 						RULE( "END void_func_subdecl '(' funcbody_var_def_body ')' '{' var_list statement_list '}'");
-
 					}
 
 				/* function that was NOT declared before (atleast must look like this)!!! */
 				|	function_declaration  '{' var_list statement_list return_statement  '}'
 					{
-
 						RULE( "function_declaration  '{' var_list statement_list return_statement  '}'");
-
 
 						/* stays the same if no params (just gets copied) */
 						//ALLOC_BLOCK(psCurrBlock, $4->size + $5->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams)); /* statement_list + expression + EXIT + numParams */
@@ -3259,7 +3241,6 @@ event_decl:			event_subdecl ';'
 						ip = psCurrBlock->pCode;
 
 						/* pop required number of paramerets passed to this event (if any) */
-
 						popArguments(&ip, $1->numParams);
 
 						/* Copy the two code blocks */
@@ -3279,13 +3260,8 @@ event_decl:			event_subdecl ';'
 						}
 
 						FREE_DEBUG($4);
-
-						/* FREE_DEBUG($5); */
-
 						FREE_BLOCK($4);
-
 						FREE_BLOCK($5);
-
 
 						/* end of event */
 						psCurEvent = NULL;
@@ -3295,15 +3271,12 @@ event_decl:			event_subdecl ';'
 						FREE_BLOCK(psCurrBlock);
 
 						RULE( "END function_declaration  '{' var_list statement_list return_statement  '}'");
-
 					}
 
 				/* function that WAS declared before */
-				 |	funcbody_var_def '{' var_list statement_list return_statement '}'
+				|	funcbody_var_def '{' var_list statement_list return_statement '}'
 					{
-
 						RULE( "func_subdecl '(' funcbody_var_def_body ')' '{' var_list statement_list return_statement '}'");
-
 
 						/* stays the same if no params (just gets copied) */
 						//ALLOC_BLOCK(psCurrBlock, $4->size + $5->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams));
@@ -3322,22 +3295,77 @@ event_decl:			event_subdecl ';'
 						ALLOC_DEBUG(psCurrBlock, $4->debugEntries);
 						PUT_DEBUG(psCurrBlock, $4);
 
+						RULE( "debug entries %d", $4->debugEntries);
+
 						if (!scriptDefineEvent($1, psCurrBlock, -1))
 						{
 							YYABORT;
 						}
 
 						FREE_DEBUG($4);
-						/* FREE_DEBUG($8); */
 						FREE_BLOCK($4);
 						FREE_BLOCK($5);
+						FREE_BLOCK(psCurrBlock);
 
 						/* end of event */
 						psCurEvent = NULL;
 
-
 						RULE( "END func_subdecl '(' funcbody_var_def_body ')' '{' var_list statement_list return_statement '}'");
+					}
 
+				/* function that WAS declared before with a single return statement  */
+				|	funcbody_var_def '{' var_list return_statement '}'
+					{
+						RULE( "funcbody_var_def '{' var_list return_statement '}'");
+
+						/* stays the same if no params (just gets copied) */
+						ALLOC_BLOCK(psCurrBlock, $4->size + 1 + $1->numParams);	/*  return expr + opcode + numParams */
+						ip = psCurrBlock->pCode;
+
+						/* pop required number of paramerets passed to this event (if any) */
+						popArguments(&ip, $1->numParams);
+
+						/* Copy the old (main) code and free it */
+						PUT_BLOCK(ip, $4);
+						PUT_OPCODE(ip, OP_EXIT);		/* must exit after return */
+
+						if (!scriptDefineEvent($1, psCurrBlock, -1))
+						{
+							YYABORT;
+						}
+
+						FREE_BLOCK($4);
+						FREE_BLOCK(psCurrBlock);
+						psCurEvent = NULL;
+
+						RULE( "END funcbody_var_def '{' var_list return_statement '}'");
+					}
+				/* function with a single return statement that was NOT declared before */
+				|	function_declaration '{' var_list return_statement  '}'
+					{
+						RULE( "function_declaration  '{' var_list statement_list return_statement  '}'");
+
+						/* stays the same if no params (just gets copied) */
+						ALLOC_BLOCK(psCurrBlock, $4->size + 1 + $1->numParams); /* return_expr + EXIT opcode + numParams */
+						ip = psCurrBlock->pCode;
+
+						/* pop required number of paramerets passed to this event (if any) */
+						popArguments(&ip, $1->numParams);
+
+						/* Copy code block */
+						PUT_BLOCK(ip, $4);
+						PUT_OPCODE(ip, OP_EXIT);		/* must exit after return */
+
+						if (!scriptDefineEvent($1, psCurrBlock, -1))
+						{
+							YYABORT;
+						}
+
+						FREE_BLOCK($4);
+						psCurEvent = NULL;
+						FREE_BLOCK(psCurrBlock);
+
+						RULE( "END function_declaration  '{' var_list statement_list return_statement  '}'");
 					}
 				;
 
@@ -3405,9 +3433,7 @@ statement:			assignment ';'
 						UDWORD line,paramNumber;
 						char *pDummy;
 
-
 						RULE( "statement: VOID_FUNC_CUST '(' param_list ')'  ';'");
-
 
 						/* allow to call EVENTs to reuse the code only if no actual parameters are specified in function call, like "myEvent();" */
 						if(!$1->bFunction && $3->numParams > 0)
@@ -3429,13 +3455,6 @@ statement:			assignment ';'
 							debug(LOG_ERROR, "Parameter mismatch in function call: '%s'. Mismatch in parameter  %d.", $1->pIdent, paramNumber);
 							YYABORT;
 						}
-
-						/* INT functions can't be a statement */
-						/* if($1->retType != VAL_VOID)
-						{
-							scr_error("Return type mismatch, missing assignment:\n'%s' is not a void function and returns a value", $1->pIdent);
-							return CE_PARSE;
-						} */
 
 						/* Allocate the code block */
 						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
@@ -3483,13 +3502,6 @@ statement:			assignment ';'
 							scr_error("Wrong number of arguments for function call: '%s'. Expected %d parameters instead of  %d.", $1->pIdent, $1->numParams, $3->numParams);
 							return CE_PARSE;
 						}
-
-						/* INT functions can't be a statement */
-						/* if($1->retType != VAL_VOID)
-						{
-							scr_error("Return type mismatch, missing assignment:\n'%s' is not a void function and returns a value", $1->pIdent);
-							return CE_PARSE;
-						} */
 
 						/* Allocate the code block */
 						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
@@ -3645,7 +3657,6 @@ return_exp:		expression
 				}
 		|	stringexp
 				{
-
 					RULE( "return_exp: stringexp");
 
 					/* Just pass the code up the tree */
@@ -3654,7 +3665,6 @@ return_exp:		expression
 				}
 		|	boolexp
 				{
-
 					RULE( "return_exp: boolexp");
 
 					/* Just pass the code up the tree */
@@ -3663,7 +3673,6 @@ return_exp:		expression
 				}
 		|	objexp		/* example: "group", "feature", "structure.health",  "droid.numkills" */
 				{
-
 					RULE( "return_exp: objexp");
 
 					/* Just pass the code up the tree */
@@ -3678,7 +3687,6 @@ return_exp:		expression
 	 */
 assignment:			NUM_VAR '=' expression
 						{
-
 							RULE( "assignment: NUM_VAR '=' expression");
 
 							codeRet = scriptCodeAssignment($1, $3, &psCurrBlock);
@@ -3689,7 +3697,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	BOOL_VAR '=' boolexp
 						{
-
 							RULE( "assignment: BOOL_VAR '=' boolexp");
 
 							codeRet = scriptCodeAssignment($1, $3, &psCurrBlock);
@@ -3700,7 +3707,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	FLOAT_VAR '=' floatexp
 						{
-
 							RULE( "assignment: FLOAT_VAR '=' floatexp");
 
 							codeRet = scriptCodeAssignment($1, $3, &psCurrBlock);
@@ -3736,7 +3742,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	VAR '=' userexp
 						{
-
 							RULE( "assignment: VAR '=' userexp");
 
 							if (!interpCheckEquiv($1->type, $3->type))
@@ -3752,7 +3757,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	num_objvar '=' expression
 						{
-
 							RULE( "assignment: num_objvar '=' expression");
 
 							codeRet = scriptCodeObjAssignment($1, $3, &psCurrBlock);
@@ -3763,7 +3767,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	bool_objvar '=' boolexp
 						{
-
 							RULE( "assignment: bool_objvar '=' boolexp");
 
 							codeRet = scriptCodeObjAssignment($1, $3, &psCurrBlock);
@@ -3774,7 +3777,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	user_objvar '=' userexp
 						{
-
 							RULE( "assignment: user_objvar '=' userexp");
 
 							if (!interpCheckEquiv($1->psObjVar->type,$3->type))
@@ -3790,7 +3792,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	obj_objvar '=' objexp
 						{
-
 							RULE( "assignment: obj_objvar '=' objexp");
 
 							if (!interpCheckEquiv($1->psObjVar->type, $3->type))
@@ -3806,7 +3807,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	num_array_var '=' expression
 						{
-
 							RULE( "assignment: num_array_var '=' expression");
 
 							codeRet = scriptCodeArrayAssignment($1, $3, &psCurrBlock);
@@ -3817,7 +3817,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	bool_array_var '=' boolexp
 						{
-
 							RULE( "assignment: bool_array_var '=' boolexp");
 
 							codeRet = scriptCodeArrayAssignment($1, $3, &psCurrBlock);
@@ -3828,7 +3827,6 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	user_array_var '=' userexp
 						{
-
 							RULE( "assignment: user_array_var '=' userexp");
 
 							if (!interpCheckEquiv($1->psArrayVar->type,$3->type))
@@ -3844,9 +3842,7 @@ assignment:			NUM_VAR '=' expression
 						}
 				|	obj_array_var '=' objexp
 						{
-
 							RULE( "assignment: obj_array_var '=' objexp");
-
 
 							if (!interpCheckEquiv($1->psArrayVar->type, $3->type))
 							{
@@ -3936,7 +3932,6 @@ func_call:		NUM_FUNC '(' param_list ')'
 					}
 			|	FLOAT_FUNC '(' param_list ')'
 					{
-
 						RULE( "func_call: FLOAT_FUNC '(' param_list ')'");
 
 						/* Generate the code for the function call */
@@ -3970,8 +3965,6 @@ param_list:		/* NULL token */
 			|	parameter
 					{
 						RULE("param_list: parameter");
-						//debug(LOG_SCRIPT, "param_list: param 0 type: %d", $1->aParams[0]);
-
 						$$ = $1;
 					}
 			|	param_list ',' parameter
@@ -3995,9 +3988,6 @@ param_list:		/* NULL token */
 						/* Free the old pblocks */
 						FREE_PBLOCK($1);
 						FREE_PBLOCK($3);
-
-						//if(psCurrPBlock->numParams > 0)
-						//	debug(LOG_SCRIPT, "param_list:param %d type: %d", psCurrPBlock->numParams, $3->aParams[0]);
 
 						/* return the pblock */
 						$$ = psCurrPBlock;
@@ -4060,9 +4050,7 @@ parameter:		expression
 					}
 			|	objexp
 					{
-
 						RULE( "parameter: objexp");
-
 
 						/* Generate the code for the parameter */
 						codeRet = scriptCodeParameter($1, $1->type, &psCurrPBlock);
@@ -4222,7 +4210,6 @@ cond_clause_list:	cond_clause
 
 terminal_cond:		'{' statement_list '}'
 					{
-
 						RULE( "terminal_cond: '{' statement_list '}'");
 
 						/* Allocate the block */
@@ -4248,7 +4235,6 @@ cond_clause:		IF '(' boolexp ')'
 
 						RULE( "cond_clause: IF '(' boolexp ')' '{' statement_list '}'");
 
-
 						/* Get the line number for the end of the boolean expression */
 						/* and store it in debugLine.                                 */
 						scriptGetErrorData((SDWORD *)&debugLine, &pDummy);
@@ -4256,10 +4242,6 @@ cond_clause:		IF '(' boolexp ')'
 						'{' statement_list '}'
 					{
 						/* Allocate the block */
-						//ALLOC_CONDBLOCK(psCondBlock, 1,	//1 offset
-						//				$3->size + $7->size +
-						//				sizeof(OPCODE)*2);		//OP_JUMPFALSE + OP_JUMP
-
 						ALLOC_CONDBLOCK(psCondBlock, 1,	//1 offset
 										$3->size + $7->size +
 										1 + 1);		//size + size + OP_JUMPFALSE + OP_JUMP
@@ -4316,10 +4298,6 @@ cond_clause:		IF '(' boolexp ')'
 							statement
 					{
 						/* Allocate the block */
-						//ALLOC_CONDBLOCK(psCondBlock, 1,
-						//				$3->size + $6->size +
-						//				sizeof(OPCODE)*2);
-
 						ALLOC_CONDBLOCK(psCondBlock, 1,
 										$3->size + $6->size +
 										1 + 1);		//size + size + opcode + opcode
@@ -4363,7 +4341,6 @@ cond_clause:		IF '(' boolexp ')'
 						$$ = psCondBlock;
 					}
 				;
-
 
 
 	/*
@@ -4622,7 +4599,6 @@ expression:		expression '+' expression
 				}
 			|	num_objvar
 				{
-
 					RULE( "expression: num_objvar");
 					RULE( "type=%d", $1->psObjVar->type);
 
@@ -4652,7 +4628,6 @@ expression:		expression '+' expression
 					/* Code to store the value on the stack */
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_INT);
 					PUT_DATA_INT(ip, $1);
-
 
 					/* Return the code block */
 					$$ = psCurrBlock;
@@ -4809,7 +4784,6 @@ floatexp:		floatexp '+' floatexp
 				}
 			|	FLOAT_VAR
 				{
-
 					RULE( "floatexp: FLOAT_VAR");
 
 					codeRet = scriptCodeVarGet($1, &psCurrBlock);
@@ -4820,7 +4794,6 @@ floatexp:		floatexp '+' floatexp
 				}
 			|	FLOAT_T
 				{
-
 					RULE( "floatexp: FLOAT_T");
 
 					//ALLOC_BLOCK(psCurrBlock, sizeof(OPCODE) + sizeof(float));
@@ -5017,10 +4990,6 @@ stringexp:
 
 					/* Return the code block */
 					$$ = psCurrBlock;
-
-					/* DEBUG */
-					//sprintf(msg,"[YACC]: PUT_DATA VAL_STRING, val: '%s'\n",yyvsp[0].sval);
-					//debug(LOG_SCRIPT,"[YACC]: PUT_DATA VAL_STRING, val: '%s'",yyvsp[0].sval);
 
 					/* Manage string stack */
 					widgCopyString(STRSTACK[CURSTACKSTR],yyvsp[0].sval);
@@ -6012,7 +5981,6 @@ BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams)
  * If localVariableDef is true a local variable symbol is defined,
  * otherwise a global variable symbol is defined.
  */
-//BOOL scriptAddVariable(char *pIdent, INTERP_TYPE type, STORAGE_TYPE storage, SDWORD elements)
 BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 {
 	VAR_SYMBOL		*psNew;
@@ -6128,8 +6096,6 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 		}
 	}
 
-	//debug(LOG_SCRIPT, "scriptLookUpVariable 1");
-
 	/* See if the symbol is an external variable */
 	if (asScrExternalTab)
 	{
@@ -6144,8 +6110,6 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 		}
 	}
 
-	//debug(LOG_SCRIPT, "scriptLookUpVariable 2");
-
 	/* See if the symbol is in the local variable list */
 	for(psCurr = psLocalVars; psCurr != NULL; psCurr = psCurr->psNext)
 	{
@@ -6156,8 +6120,6 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 			return TRUE;
 		}
 	}
-
-	//debug(LOG_SCRIPT, "scriptLookUpVariable 3");
 
 	/* check local vars if we are inside of an event */
 	if(psCurEvent != NULL)
@@ -6190,7 +6152,6 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 				//debug(LOG_SCRIPT, "comparing %s with %s \n", psCurr->pIdent, pIdent);
 				if (strcmp(psCurr->pIdent, pIdent) == 0)
 				{
-					//debug(LOG_SCRIPT, "4");
 					//debug(LOG_SCRIPT, "scriptLookUpVariable - local var found, type=%d\n", psCurr->type);
 					*ppsSym = psCurr;
 					return TRUE;
@@ -6198,9 +6159,6 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 			}
 		}
 	}
-
-	//debug(LOG_SCRIPT, "scriptLookUpVariable 4");
-
 
 	/* See if the symbol is in the global variable list.
 	 * This is not checked for when local variables are being defined.
@@ -6411,12 +6369,13 @@ BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numA
 // Add the code to a defined event
 BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger)
 {
-	if(psCode->size == 0)
-		debug(LOG_ERROR, "Event '%s' is empty, please add at least 1 statement", psEvent->pIdent);
+	ASSERT(psCode != NULL, "scriptDefineEvent: psCode == NULL");
+	ASSERT(psCode->size > 0,
+		"Event '%s' is empty, please add at least 1 statement", psEvent->pIdent);
 
 	// events with arguments can't have a trigger assigned
-	if(psEvent->numParams > 0 && trigger >= 0)
-		debug(LOG_ERROR, "Events with parameters can't have a trigger assigned, event: '%s' ", psEvent->pIdent);
+	ASSERT(!(psEvent->numParams > 0 && trigger >= 0),
+		"Events with parameters can't have a trigger assigned, event: '%s' ", psEvent->pIdent);
 
 	// Store the event code
 	psEvent->pCode = (INTERP_VAL *)MALLOC(psCode->size * sizeof(INTERP_VAL));
@@ -6430,16 +6389,13 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 	psEvent->size = psCode->size;
 	psEvent->trigger = trigger;
 
-
-
 	// Add debug info
-	if (genDebugInfo)
+	if (genDebugInfo && (psCode->debugEntries > 0))
 	{
 		psEvent->psDebug = MALLOC(sizeof(SCRIPT_DEBUG) * psCode->debugEntries);
 
 		if (!psEvent->psDebug)
 		{
-
 			scr_error("Out of memory");
 			return FALSE;
 		}
