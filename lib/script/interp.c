@@ -81,9 +81,6 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
  */
 static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress);
 
-/* Output script call stack trace */
-static void scrOutputCallTrace(SCRIPT_CODE *psProg, BOOL bEvent, char *sCurEvent);
-
 /* The size of each opcode */
 SDWORD aOpSize[] =
 {
@@ -147,7 +144,10 @@ static TYPE_EQUIV	*asInterpTypeEquiv;
 static BOOL		bInterpRunning = FALSE;
 
 /* Whether to output trace information */
-BOOL	interpTrace;
+static BOOL	interpTrace;
+
+static SCRIPT_CODE *psCurProg = NULL;
+static BOOL bCurCallerIsEvent = FALSE;
 
 /* Print out trace info if tracing is turned on */
 #define TRCPRINTF(x) \
@@ -320,6 +320,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		"interpRunScript: invalid context pointer" );
 
 	psProg = psContext->psCode;
+	psCurProg = psProg;		//remember for future use
 
 	ASSERT( PTRVALID(psProg, sizeof(SCRIPT_CODE)),
 		"interpRunScript: invalid script code pointer" );
@@ -328,9 +329,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	{
 		debug(LOG_ERROR,"interpRunScript: interpreter already running"
 			"                 - callback being called from within a script function?");
-		ASSERT( FALSE,
-			"interpRunScript: interpreter already running"
-			"                 - callback being called from within a script function?" );
 		goto exit_with_error;
 	}
 
@@ -366,6 +364,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		pCodeStart = pCodeBase;
 		pCodeEnd  = psProg->pCode + psProg->pTriggerTab[index+1];
 
+		bCurCallerIsEvent = FALSE;
+
 		// find the debug info for the trigger
 		strcpy(last_called_script_event, eventGetTriggerID(psProg, index));
 
@@ -385,6 +385,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		pCodeEnd  = psProg->pCode + psProg->pEventTab[index+1];
 
 		bEvent = TRUE; //remember it's an event
+		bCurCallerIsEvent = TRUE;
 
 		// remember last called event/function
 		strcpy(last_called_script_event, eventGetEventID(psProg, index));
@@ -421,8 +422,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			if (instructionCount > INTERP_MAXINSTRUCTIONS)
 			{
 				debug( LOG_ERROR, "interpRunScript: max instruction count exceeded - infinite loop ?" );
-				ASSERT( FALSE,
-					"interpRunScript: max instruction count exceeded - infinite loop ?" );
 				goto exit_with_error;
 			}
 			instructionCount++;
@@ -482,7 +481,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCAL: variable index out of range");
-					ASSERT( FALSE, "interpRunScript: OP_PUSHLOCAL: variable index out of range" );
 					goto exit_with_error;
 				}
 
@@ -507,7 +505,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_POPLOCAL: variable index out of range");
-					ASSERT( FALSE, "interpRunScript: variable index out of range" );
 					goto exit_with_error;
 				}
 
@@ -540,7 +537,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (data >= psContext->psCode->numLocalVars[CurEvent])
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCALREF: variable index out of range");
-					ASSERT( FALSE, "interpRunScript: OP_PUSHLOCALREF: variable index out of range" );
 					goto exit_with_error;
 				}
 				/* get local variable */
@@ -578,7 +574,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				{
 					// Eeerk, out of memory
 					debug( LOG_ERROR, "interpRunScript: out of memory!" );
-					ASSERT( FALSE, "interpRunScript: out of memory!" );
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
@@ -597,7 +592,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				{
 					// Eeerk, out of memory
 					debug( LOG_ERROR, "interpRunScript: out of memory!" );
-					ASSERT( FALSE, "interpRunScript: out of memory!" );
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
@@ -610,7 +604,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackPop(&sVal))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do stack pop" );
-					ASSERT( FALSE, "interpRunScript: could not do stack pop" );
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
@@ -623,7 +616,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackBinaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do binary op" );
-					ASSERT( FALSE, "interpRunScript: could not do binary op" );
 					goto exit_with_error;
 				}
 				TRCPRINTSTACKTOP();
@@ -638,7 +630,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackUnaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do unary op" );
-					ASSERT( FALSE, "interpRunScript: could not do unary op" );
 					goto exit_with_error;
 				}
 				TRCPRINTSTACKTOP();
@@ -654,13 +645,11 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (data >= numGlobals)
 				{
 					debug( LOG_ERROR, "interpRunScript: variable index out of range" );
-					ASSERT( FALSE, "interpRunScript: variable index out of range" );
 					goto exit_with_error;
 				}
 				if (!stackPush(interpGetVarData(psGlobals, data)))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do stack push" );
-					ASSERT( FALSE, "interpRunScript: could not do stack push" );
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
@@ -675,13 +664,11 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (data >= numGlobals)
 				{
 					debug( LOG_ERROR, "interpRunScript: variable index out of range" );
-					ASSERT( FALSE, "interpRunScript: variable index out of range" );
 					goto exit_with_error;
 				}
 				if (!stackPopType(interpGetVarData(psGlobals, data)))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do stack pop" );
-					ASSERT( FALSE, "interpRunScript: could not do stack pop" );
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
@@ -694,14 +681,12 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data, CurEvent=%d", CurEvent );
-					ASSERT( FALSE, "interpRunScript: could not get array var data" );
 					goto exit_with_error;
 				}
 				TRCPRINTF(("\n"));
 				if (!stackPush(psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do stack push" );
-					ASSERT( FALSE, "interpRunScript: could not do stack push" );
 					goto exit_with_error;
 				}
 				break;
@@ -713,7 +698,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data" );
-					ASSERT( FALSE, "interpRunScript: could not get array var data" );
 					goto exit_with_error;
 				}
 				TRCPRINTSTACKTOP();
@@ -721,7 +705,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackPopType(psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do pop stack of type" );
-					ASSERT( FALSE, "interpRunScript: could not do pop stack of type" );
 					goto exit_with_error;
 				}
 				break;
@@ -736,7 +719,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!stackPop(&sVal))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do pop of stack" );
-					ASSERT( FALSE, "interpRunScript: could not do pop of stack" );
 					goto exit_with_error;
 				}
 				if (!sVal.v.bval)
@@ -747,7 +729,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					if (InstrPointer < pCodeStart || InstrPointer > pCodeEnd)
 					{
 						debug( LOG_ERROR, "interpRunScript: jump out of range" );
-						ASSERT( FALSE, "interpRunScript: jump out of range" );
 						goto exit_with_error;
 					}
 				}
@@ -768,7 +749,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (InstrPointer < pCodeStart || InstrPointer > pCodeEnd)
 				{
 					debug( LOG_ERROR, "interpRunScript: jump out of range" );
-					ASSERT( FALSE, "interpRunScript: jump out of range" );
 					goto exit_with_error;
 				}
 				break;
@@ -785,7 +765,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!scriptFunc())
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do func" );
-					ASSERT( FALSE, "interpRunScript: could not do func" );
 					goto exit_with_error;
 				}
 				//debug(LOG_SCRIPT, "OP_CALL 2");
@@ -807,7 +786,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!scriptVarFunc(data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do var func" );
-					ASSERT( FALSE, "interpRunScript: could not do var func" );
 					goto exit_with_error;
 				}
 				InstrPointer += aOpSize[opcode];
@@ -832,7 +810,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!eventAddPauseTrigger(psContext, index, InstrPointer - pCodeBase, data))	//only original caller can be paused since we pass index and not CurEvent (not sure if that's what we want)
 				{
 					debug( LOG_ERROR, "interpRunScript: could not add pause trigger" );
-					ASSERT( FALSE, "interpRunScript: could not add pause trigger" );
 					goto exit_with_error;
 				}
 				// now jump out of the event
@@ -861,8 +838,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				InstrPointer += aOpSize[opcode];
 				break;
 			default:
-				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d, type: %d", opcode);
-				ASSERT( FALSE, "interpRunScript: unknown opcode: %d, type: %d", opcode, InstrPointer->type );
+				debug(LOG_ERROR, "interpRunScript: unknown opcode: %d, type: %d", opcode, InstrPointer->type);
 				goto exit_with_error;
 				break;
 			}
@@ -945,7 +921,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	//debug(LOG_SCRIPT, "interpRunScript 3");
 
-
+	psCurProg = NULL;
 	TRCPRINTF(("%-6d  EXIT\n", InstrPointer - psProg->pCode));
 
 	bInterpRunning = FALSE;
@@ -965,9 +941,13 @@ exit_with_error:
 	debug(LOG_ERROR,"Call depth : %d", callDepth);
 
 	/* Output script call trace */
-	scrOutputCallTrace(psProg, bEvent, &(last_called_script_event[0]));
+	scrOutputCallTrace();
+	psCurProg = NULL;
 
 	TRCPRINTF(("*** ERROR EXIT ***\n"));
+
+	ASSERT(FALSE, "interpRunScript: error while executing a script");
+
 	bInterpRunning = FALSE;
 	return FALSE;
 }
@@ -1133,27 +1113,32 @@ static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 
 
 /* Output script call stack trace */
-static void scrOutputCallTrace(SCRIPT_CODE *psProg, BOOL bEvent, char *sCurEvent)
+void scrOutputCallTrace(void)
 {
 	SDWORD i;
 	const char *pEvent;
 
-	if(psProg == NULL)
+	debug(LOG_SCRIPT, " *** Script call trace: ***");
+
+	if(!bInterpRunning){
+		debug(LOG_SCRIPT, "<Interpreter is inactive>");
 		return;
+	}
 
-	debug(LOG_SCRIPT, "");
-	debug(LOG_SCRIPT, "Script call trace:");
+	if(psCurProg == NULL){
+		return;
+	}
 
-	debug(LOG_SCRIPT,"%d: %s (current event)", retStackPos + 1, sCurEvent);
+	debug(LOG_SCRIPT,"%d: %s (current event)", retStackPos + 1, &(last_called_script_event[0]));
 
-	if(psProg->psDebug != NULL)
+	if(psCurProg->psDebug != NULL)
 	{
 		for(i=retStackPos; i>=0; i--)
 		{
-			if(i == 0 && !bEvent){	//if original caller is a trigger
-				pEvent = eventGetTriggerID(psProg, retStack[i].CallerIndex);
+			if(i == 0 && !bCurCallerIsEvent){	//if original caller is a trigger
+				pEvent = eventGetTriggerID(psCurProg, retStack[i].CallerIndex);
 			}else{
-				pEvent = eventGetEventID(psProg, retStack[i].CallerIndex);
+				pEvent = eventGetEventID(psCurProg, retStack[i].CallerIndex);
 			}
 
 			debug(LOG_SCRIPT,"%d: %s (return address: %d)", i, pEvent, retStack[i].ReturnAddress);
@@ -1161,8 +1146,8 @@ static void scrOutputCallTrace(SCRIPT_CODE *psProg, BOOL bEvent, char *sCurEvent
 	}
 	else
 	{
-		debug(LOG_SCRIPT, "No debug information available.");
+		debug(LOG_SCRIPT, "<No debug information available>");
 	}
-	
+
 	debug(LOG_SCRIPT, "");
 }

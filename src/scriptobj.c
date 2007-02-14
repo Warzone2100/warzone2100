@@ -69,14 +69,12 @@ BOOL scrBaseObjGet(UDWORD index)
 	if (psObj == NULL )
 	{
 		debug(LOG_ERROR, "scrBaseObjGet: was passed an invalid pointer");
-		ASSERT( FALSE, "scrBaseObjGet: was passed an invalid pointer" );
 		return FALSE;
 	}
 	// Check this is a valid pointer
 	if (psObj->type != OBJ_DROID && psObj->type != OBJ_STRUCTURE && psObj->type != OBJ_FEATURE)
 	{
 		debug(LOG_ERROR, "scrBaseObjGet: invalid object");
-		ASSERT( FALSE, "scrBaseObjGet: invalid object" );
 		return FALSE;
 	}
 
@@ -111,7 +109,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: order only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: order only valid for a droid" );
 			return FALSE;
 		}
 		type = VAL_INT;
@@ -126,7 +123,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: action only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: action only valid for a droid" );
 			return FALSE;
 		}
 		type = VAL_INT;
@@ -137,7 +133,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: selected only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: selected only valid for a droid" );
 			return FALSE;
 		}
 		type = VAL_BOOL;
@@ -161,7 +156,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: order only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: order only valid for a droid" );
 			return FALSE;
 		}
 		type = VAL_INT;
@@ -171,7 +165,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: order only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: order only valid for a droid" );
 			return FALSE;
 		}
 		type = VAL_INT;
@@ -181,7 +174,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: droidType only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: droidType only valid for a droid" );
 			return FALSE;
 		}
 		type = VAL_INT;
@@ -191,7 +183,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type == OBJ_FEATURE)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: clusterID not valid for features");
-			ASSERT( FALSE,"scrBaseObjGet: clusterID not valid for features" );
 			return FALSE;
 		}
 		type = VAL_INT;
@@ -231,7 +222,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: body only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: body only valid for a droid" );
 			return FALSE;
 		}
 		type = (INTERP_TYPE)ST_BODY;
@@ -241,7 +231,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		if (psObj->type != OBJ_DROID)
 		{
 			debug(LOG_ERROR, "scrBaseObjGet: propulsion only valid for a droid");
-			ASSERT( FALSE,"scrBaseObjGet: propulsion only valid for a droid" );
 			return FALSE;
 		}
 		type = (INTERP_TYPE)ST_PROPULSION;
@@ -268,7 +257,7 @@ BOOL scrBaseObjGet(UDWORD index)
 			}
 			break;
 		default:		//only droids and structures can have a weapon
-			ASSERT( FALSE,"scrBaseObjGet: weapon only valid for droids and structures" );
+			debug(LOG_ERROR, "scrBaseObjGet: weapon only valid for droids and structures" );
 			return FALSE;
 			break;
 		}
@@ -291,7 +280,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		else		//Nothing else supported
 		{
 			debug(LOG_ERROR, "scrBaseObjGet(): .stat only valid for structures and droids");
-			ASSERT( FALSE,"scrBaseObjGet(): .stat only valid for structures and droids" );
 			return FALSE;
 		}
 
@@ -313,7 +301,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		else		//Nothing else supported
 		{
 			debug(LOG_ERROR, "scrBaseObjGet(): .target only valid for structures and droids");
-			ASSERT( FALSE,"scrBaseObjGet(): .target only valid for structures and droids" );
 			return FALSE;
 		}
 
@@ -321,7 +308,6 @@ BOOL scrBaseObjGet(UDWORD index)
 
 	default:
 		debug(LOG_ERROR, "scrBaseObjGet: unknown variable index");
-		ASSERT( FALSE, "scrBaseObjGet: unknown variable index" );
 		return FALSE;
 		break;
 	}

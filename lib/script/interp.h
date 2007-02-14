@@ -281,6 +281,9 @@ extern BOOL interpInitialise(void);
 // TRUE if the interpreter is currently running
 extern BOOL interpProcessorActive(void);
 
+/* Output script call stack trace */
+extern void scrOutputCallTrace(void);
+
 #endif
 
 

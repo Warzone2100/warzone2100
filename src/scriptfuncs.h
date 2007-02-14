@@ -627,6 +627,7 @@ extern BOOL	scrGetChatCmdParam(void);
 extern BOOL scrChatCmdIsPlayerAddressed(void);
 extern BOOL scrSetTileHeight(void);
 extern BOOL scrGetTileStructure(void);
+extern BOOL scrPrintCallStack(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);

@@ -1265,7 +1265,7 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "loadPlayerAIExperience",	scrLoadPlayerAIExperience,	VAL_BOOL,
-	2, { VAL_INT, VAL_BOOL },
+		2, { VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* end of learn functions */
@@ -1360,12 +1360,16 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "setTileHeight",			scrSetTileHeight,	VAL_VOID,
+	{ "setTileHeight",			scrSetTileHeight,			VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getTileStructure",		scrGetTileStructure,	ST_STRUCTURE,
+	{ "getTileStructure",		scrGetTileStructure,		ST_STRUCTURE,
 		2, { VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "printCallStack",		scrPrintCallStack,				VAL_VOID,
+		0, { VAL_VOID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 
