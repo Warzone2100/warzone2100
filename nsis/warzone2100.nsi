@@ -201,8 +201,8 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
-  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's art update"
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's art update. Replaces campaign 1 textures with more detailed ones. Also includes some other texture and model updates. License: NON GPL: Copyright by Grim. Use is only permited for Warzone 2100 GPL."
+  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
+  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for Warzone 2100.
 
 
 
@@ -212,8 +212,8 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
-  LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik Update. Ersetzt Kampagne 1 Texturen mit Detailieren. Enthält auch einige andere Textur und Model updates. Lizenz: Nicht GPL: Copyright by Grim. Verwendung nur für Warzone 2100 GPL gestattet."
+  LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
+  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für Warzone 2100 gestattet."
 
 
 
