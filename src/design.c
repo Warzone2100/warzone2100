@@ -3612,6 +3612,7 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 {
 	UDWORD				type;
+	UDWORD				power, i;
 
 	if (psStats != NULL) {
         COMP_BASE_STATS* bodyStats = asBodyStats + sCurrDesign.asParts[COMP_BODY];
@@ -3684,8 +3685,8 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 		//default:
 			//don't want to draw for unknown comp
 		}
+
 		// this code is from calcTemplatePower
-    	UDWORD power, i;
 
     	//get the component power
     	power = bodyStats->buildPower + brainStats->buildPower + sensorStats->buildPower + ECMStats->buildPower + repairStats->buildPower + constructStats->buildPower;
@@ -3723,6 +3724,7 @@ static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 {
 	UDWORD				type;
+	UDWORD				body, i;
 
 	if (psStats != NULL) {
         COMP_BASE_STATS* bodyStats = asBodyStats + sCurrDesign.asParts[COMP_BODY];
@@ -3795,8 +3797,8 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 		//default:
 			//don't want to draw for unknown comp
 		}
+
 	    // this code is from calcTemplateBody
-    	UDWORD body, i;
 
     	//get the component power
     	body = bodyStats->body + brainStats->body + sensorStats->body + ECMStats->body + repairStats->body + constructStats->body;
