@@ -33,7 +33,6 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
 
-//#include "geo.h"
 #include "display3d.h"
 #include "resource.h"
 #include "map.h"

@@ -27,7 +27,7 @@
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/piestate.h" //ivis matrix code
 #include "lib/ivis_common/piefunc.h" //ivis matrix code
-#include "lib/ivis_common/geo.h" //ivis matrix code
+#include "lib/ivis_opengl/piematrix.h"
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"

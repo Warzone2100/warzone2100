@@ -24,7 +24,7 @@
 #include "display3d.h"
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/piedef.h" //pie render
-#include "lib/ivis_common/geo.h" //ivis matrix code
+#include "lib/ivis_opengl/piematrix.h"
 #include "miscimd.h"
 #include "effects.h"
 #include "bridge.h"

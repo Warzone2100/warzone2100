@@ -35,7 +35,6 @@
 #include "map.h"
 #include "atmos.h"
 #include "loop.h"
-#include "lib/ivis_common/geo.h"
 #include "effects.h"
 #include "lighting.h"
 #include "bucket3d.h"

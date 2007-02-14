@@ -43,7 +43,7 @@
 #include "hci.h"
 #include "text.h"
 #include "miscimd.h"
-#include "lib/ivis_common/geo.h"
+#include "lib/ivis_opengl/piematrix.h"
 #include "display3d.h"
 #include "mission.h"
 #include "game.h"

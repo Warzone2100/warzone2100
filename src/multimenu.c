@@ -35,7 +35,7 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/geo.h"
+#include "lib/ivis_opengl/piematrix.h"
 #include "levels.h"
 #include "objmem.h"		 	//for droid lists.
 #include "component.h"		// for disaplycomponentobj.

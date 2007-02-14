@@ -29,7 +29,7 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/geo.h"//matrix code
+#include "lib/ivis_opengl/piematrix.h"
 /* Includes from PUMPKIN stuff */
 #include "lib/framework/frame.h"
 #include "objectdef.h"

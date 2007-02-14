@@ -53,7 +53,7 @@
 #include "order.h"
 #include "lib/framework/fractions.h"
 #include "move.h"
-#include "lib/ivis_common/geo.h"
+#include "lib/ivis_opengl/piematrix.h"
 #include "anim_id.h"
 #include "lib/gamelib/animobj.h"
 #include "geometry.h"

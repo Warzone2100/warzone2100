@@ -32,7 +32,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/ivis_common/geo.h"
+#include "lib/ivis_opengl/piematrix.h"
 
 #include "anim.h"
 #include "parser.h"

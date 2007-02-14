@@ -32,7 +32,7 @@
 #include "order.h"
 #include "component.h"
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
-#include "lib/ivis_common/geo.h" //ivis matrix code
+#include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piedef.h" //ivis matrix code
 #include "lib/ivis_common/piestate.h" //ivis render code
 #include "lighting.h"
