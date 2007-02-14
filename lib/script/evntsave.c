@@ -85,9 +85,11 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 //not hashed			strcpy(pPos, pScriptID);
 //not hashed			pPos += strlen(pScriptID) + 1;
 			*((UDWORD*)pPos) = (UDWORD)hashedName;
+			endian_udword((UDWORD*)pPos);
 			pPos += sizeof(UDWORD);
 
 			*((SWORD*)pPos) = (SWORD)numVars;
+			endian_sword((SWORD*)pPos);
 			pPos += sizeof(SWORD);
 
 			*pPos = (UBYTE)psCCont->release;
@@ -109,7 +111,10 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 				{
 					ASSERT( psVal->type < SWORD_MAX,
 						"eventSaveContext: variable type number too big" );
+
 					*((SWORD*)pPos) = (SWORD)psVal->type;
+					endian_sword((SWORD*)pPos);
+
 					pPos += sizeof(SWORD);
 				}
 				size += sizeof(SWORD);
@@ -120,7 +125,10 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 					// internal type - just store the DWORD value
 					if (pBuffer != NULL)
 					{
-						*((UDWORD *)pPos) = (UDWORD)psVal->v.ival;	//TODO: make it save strings properly
+/* FIXME: this does not work for VAL_OBJ_GETSET, VAL_FUNC_EXTERN, or VAL_STRING */
+						*((UDWORD *)pPos) = (UDWORD)psVal->v.ival;
+						endian_udword((UDWORD*)pPos);
+						
 						pPos += sizeof(UDWORD);
 					}
 
@@ -152,6 +160,8 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 					if (pBuffer != NULL)
 					{
 						*pValSize = (UWORD)valSize;
+						endian_uword((UWORD*)pValSize);
+
 						pPos += valSize;
 					}
 					size += valSize;
@@ -175,6 +185,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 	if (pBuffer != NULL)
 	{
 		*((SWORD *)pBuffer) = (SWORD)numContext;
+		endian_sword((SWORD*)pBuffer);
 	}
 	*pSize = size;
 
@@ -199,6 +210,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 	pPos = pBuffer;
 
 	// get the number of contexts in the save file
+	endian_sword((SWORD*)pPos);
 	numContext = *((SWORD *)pPos);
 	pPos += sizeof(SWORD);
 	size += sizeof(SWORD);
@@ -213,6 +225,9 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 
 		// check the number of variables
 		numVars = psCode->numGlobals + psCode->arraySize;
+
+		endian_sword((SWORD*)pPos);
+
 		if (numVars != *((SWORD*)pPos))
 		{
 			debug( LOG_ERROR, "eventLoadContext: number of context variables does not match the script code" );
@@ -239,7 +254,8 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 		for(i=0; i < numVars; i+= 1)
 		{
 			// get the variable type
-			type = (INTERP_TYPE)*pPos;
+			endian_sword((SWORD*)pPos);
+			type = (INTERP_TYPE) *((SWORD*)pPos);
 			pPos += sizeof(SWORD);
 			size += sizeof(SWORD);
 
@@ -247,6 +263,8 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 			if (type < VAL_USERTYPESTART)
 			{
 				data.type = type;
+
+				endian_udword((UDWORD*)pPos);
 
 				switch (type) {
 					case VAL_BOOL:
@@ -270,16 +288,19 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 						size += sizeof(UDWORD);
 						break;
 					case VAL_STRING:
+/* FIXME: this would never work */
 						data.v.sval = pPos;
 						pPos += sizeof(char*);
 						size += sizeof(char*);
 						break;
 					case VAL_OBJ_GETSET:
+/* FIXME: saving pointer on disk! */
 						data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
 						pPos += sizeof(SCRIPT_VARFUNC);
 						size += sizeof(SCRIPT_VARFUNC);
 						break;
 					case VAL_FUNC_EXTERN:
+/* FIXME: saving pointer on disk! */
 						data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
 						pPos += sizeof(SCRIPT_FUNC);
 						size += sizeof(SCRIPT_FUNC);
@@ -304,7 +325,9 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize)
 				ASSERT( loadFunc != NULL,
 					"eventLoadContext: no load function for type %d\n", type );
 
+				endian_uword((UWORD*)pPos);
 				valSize = *((UWORD *)pPos);
+
 				pPos += sizeof(UWORD);
 				size += sizeof(UWORD);
 
@@ -340,6 +363,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize;
 	SDWORD				numVars, i, numContext, context;
+	SWORD				savedNumVars;
 	SCRIPT_CONTEXT		*psCCont;
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
@@ -354,6 +378,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 	pPos = pBuffer;
 
 	// get the number of contexts in the save file
+	endian_sword((SWORD *)pPos);
 	numContext = *((SWORD *)pPos);
 	pPos += sizeof(SWORD);
 	size += sizeof(SWORD);
@@ -365,6 +390,7 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 //notHashed		pScriptID = (char *)pPos;
 //notHashed		psCode = resGetData("SCRIPT", pScriptID);
 //notHashed		pPos += strlen(pScriptID) + 1;
+		endian_udword((UDWORD*)pPos);
 		hashedName = *((UDWORD*)pPos);
 		pPos += sizeof(UDWORD);
 		psCode = (SCRIPT_CODE*)resGetDataFromHash("SCRIPT", hashedName);
@@ -372,7 +398,9 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 
 		// check the number of variables
 		numVars = psCode->numGlobals + psCode->arraySize;
-		if (numVars != *((SWORD*)pPos))
+		endian_sword((SWORD*)pPos);
+		savedNumVars = *((SWORD*)pPos);
+		if (numVars != savedNumVars)
 		{
 			debug( LOG_ERROR, "eventLoadContext: number of context variables does not match the script code" );
 			abort();
@@ -398,54 +426,60 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 		for(i=0; i < numVars; i+= 1)
 		{
 			// get the variable type
-			type = (INTERP_TYPE)*pPos;
+			endian_sword((SWORD*)pPos);
+			type = (INTERP_TYPE) *((SWORD*)pPos);
 			pPos += sizeof(SWORD);
 			size += sizeof(SWORD);
 
 			// get the variable value
 			if (type < VAL_USERTYPESTART)
 			{
-        data.type = type;
+				data.type = type;
 
-        switch (type) {
-          case VAL_BOOL:
-            data.v.bval = *((BOOL*)pPos);
-            pPos += sizeof(BOOL);
-            size += sizeof(BOOL);
-            break;
-          case VAL_FLOAT:
-            data.v.fval = *((float*)pPos);
-            pPos += sizeof(float);
-            size += sizeof(float);
-            break;
-          case VAL_INT:
-          case VAL_TRIGGER:
-          case VAL_EVENT:
-          case VAL_VOID:
-          case VAL_OPCODE:
-          case VAL_PKOPCODE:
-            data.v.ival = *((UDWORD *)pPos);
-            pPos += sizeof(UDWORD);
-            size += sizeof(UDWORD);
-            break;
-          case VAL_STRING:
-            data.v.sval = pPos;
-            pPos += sizeof(char*);
-            size += sizeof(char*);
-            break;
-          case VAL_OBJ_GETSET:
-            data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
-            pPos += sizeof(SCRIPT_VARFUNC);
-            size += sizeof(SCRIPT_VARFUNC);
-            break;
-          case VAL_FUNC_EXTERN:
-            data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
-            pPos += sizeof(SCRIPT_FUNC);
-            size += sizeof(SCRIPT_FUNC);
-            break;
-          default:
-            ASSERT( FALSE, "eventLoadContext: invalid internal type" );
-        }
+				endian_udword((UDWORD*)pPos);
+
+				switch (type) {
+				  case VAL_BOOL:
+					data.v.bval = *((BOOL*)pPos);
+					pPos += sizeof(BOOL);
+					size += sizeof(BOOL);
+					break;
+				  case VAL_FLOAT:
+					data.v.fval = *((float*)pPos);
+					pPos += sizeof(float);
+					size += sizeof(float);
+					break;
+				  case VAL_INT:
+				  case VAL_TRIGGER:
+				  case VAL_EVENT:
+				  case VAL_VOID:
+				  case VAL_OPCODE:
+				  case VAL_PKOPCODE:
+					data.v.ival = *((UDWORD *)pPos);
+					pPos += sizeof(UDWORD);
+					size += sizeof(UDWORD);
+					break;
+				  case VAL_STRING:
+/* FIXME: this would never work! */
+					data.v.sval = pPos;
+					pPos += sizeof(char*);
+					size += sizeof(char*);
+					break;
+				  case VAL_OBJ_GETSET:
+/* FIXME: saving pointer on disk! */
+					data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
+					pPos += sizeof(SCRIPT_VARFUNC);
+					size += sizeof(SCRIPT_VARFUNC);
+					break;
+				  case VAL_FUNC_EXTERN:
+/* TODO: saving pointer on disk! */
+					data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
+					pPos += sizeof(SCRIPT_FUNC);
+					size += sizeof(SCRIPT_FUNC);
+					break;
+				  default:
+					ASSERT( FALSE, "eventLoadContext: invalid internal type" );
+				}
 
 				// set the value in the context
 				if (!eventSetContextVar(psCCont, (UDWORD)i, &data))
@@ -463,7 +497,9 @@ static BOOL eventLoadContextHashed(SDWORD version, char *pBuffer, UDWORD *pSize)
 				ASSERT( loadFunc != NULL,
 					"eventLoadContext: no load function for type %d\n", type );
 
+				endian_uword((UWORD*)pPos);
 				valSize = *((UWORD *)pPos);
+
 				pPos += sizeof(UWORD);
 				size += sizeof(UWORD);
 
@@ -557,6 +593,8 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 		if (pBuffer != NULL)
 		{
 			*((UDWORD*)pPos) = psCurr->testTime;
+			endian_udword((UDWORD*)pPos);
+
 			pPos += sizeof(UDWORD);
 			if (!eventGetContextIndex(psCurr->psContext, &context))
 			{
@@ -565,14 +603,19 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 				return FALSE;
 			}
 			*((SWORD*)pPos) = (SWORD)context;
+			endian_sword((SWORD*)pPos);
 			pPos += sizeof(SWORD);
 			*((SWORD*)pPos) = psCurr->type;
+			endian_sword((SWORD*)pPos);
 			pPos += sizeof(SWORD);
 			*((SWORD*)pPos) = psCurr->trigger;
+			endian_sword((SWORD*)pPos);
 			pPos += sizeof(SWORD);
 			*((UWORD*)pPos) = psCurr->event;
+			endian_uword((UWORD*)pPos);
 			pPos += sizeof(UWORD);
 			*((UWORD*)pPos) = psCurr->offset;
+			endian_uword((UWORD*)pPos);
 			pPos += sizeof(UWORD);
 		}
 		size += sizeof(UDWORD) + sizeof(SWORD)*3 + sizeof(UWORD)*2;
@@ -580,6 +623,7 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 	if (pBuffer != NULL)
 	{
 		*((SDWORD*)pBuffer) = numTriggers;
+		endian_sdword((SDWORD*)pBuffer);
 	}
 
 	*pSize = size;
@@ -602,15 +646,18 @@ static BOOL eventLoadTriggerList(SDWORD version, char *pBuffer, UDWORD *pSize)
 	pPos = pBuffer;
 
 	// get the number of triggers
+	endian_sdword((SDWORD*)pPos);
 	numTriggers = *((SDWORD*)pPos);
 	pPos += sizeof(SDWORD);
 	size += sizeof(SDWORD);
 
 	for(i=0; i<numTriggers; i+= 1)
 	{
+		endian_udword((UDWORD*)pPos);
 		time = *((UDWORD*)pPos);
 		pPos += sizeof(UDWORD);
 
+		endian_sword((SWORD*)pPos);
 		context = *((SWORD*)pPos);
 		pPos += sizeof(SWORD);
 		if (!eventFindContext(context, &psContext))
@@ -620,15 +667,19 @@ static BOOL eventLoadTriggerList(SDWORD version, char *pBuffer, UDWORD *pSize)
 			return FALSE;
 		}
 
+		endian_sword((SWORD*)pPos);
 		type = *((SWORD*)pPos);
 		pPos += sizeof(SWORD);
 
+		endian_sword((SWORD*)pPos);
 		trigger = *((SWORD*)pPos);
 		pPos += sizeof(SWORD);
 
+		endian_uword((UWORD*)pPos);
 		event = *((UWORD*)pPos);
 		pPos += sizeof(UWORD);
 
+		endian_uword((UWORD*)pPos);
 		offset = *((UWORD*)pPos);
 		pPos += sizeof(UWORD);
 
@@ -696,6 +747,7 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	psHdr->aFileType[2] = 'n';
 	psHdr->aFileType[3] = 't';
 	psHdr->version = version;
+	endian_udword(&psHdr->version);
 
 	pPos += sizeof(EVENT_SAVE_HDR);
 
@@ -741,6 +793,7 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 
 	// Get the header
 	psHdr = (EVENT_SAVE_HDR *)pPos;
+	endian_udword(&psHdr->version);
 	if (strncmp(psHdr->aFileType, "evnt", 4) != 0)
 	{
 		debug( LOG_ERROR, "eventLoadState: invalid file header" );

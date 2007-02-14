@@ -683,6 +683,8 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 				ASSERT( psObj == (BASE_OBJECT *)psVal->v.oval,"scrValDefSave failed to find object, continue" );
 #endif
 			}
+
+			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
 		break;
@@ -723,6 +725,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			{
 				*((UDWORD*)pBuffer) = ((DROID_TEMPLATE *)psVal->v.oval)->multiPlayerID;
 			}
+			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
 		break;
@@ -737,6 +740,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			{
 				*((UDWORD*)pBuffer) = strresGetIDfromString(psStringRes, psVal->v.sval);
 			}
+			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
 		break;
@@ -793,21 +797,29 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 
 			// store the run data
 			*((SDWORD *)pPos) = psGroup->sRunData.sPos.x;
+			endian_sdword((SDWORD*)pPos);
 			pPos += sizeof(SDWORD);
 			*((SDWORD *)pPos) = psGroup->sRunData.sPos.y;
+			endian_sdword((SDWORD*)pPos);
 			pPos += sizeof(SDWORD);
 			*((SDWORD *)pPos) = psGroup->sRunData.forceLevel;
+			endian_sdword((SDWORD*)pPos);
 			pPos += sizeof(SDWORD);
 			*((SDWORD *)pPos) = psGroup->sRunData.leadership;
+			endian_sdword((SDWORD*)pPos);
 			pPos += sizeof(SDWORD);
 			*((SDWORD *)pPos) = psGroup->sRunData.healthLevel;
+			endian_sdword((SDWORD*)pPos);
 			pPos += sizeof(SDWORD);
 
 			// now store the droids
 			for(psCDroid=((DROID_GROUP *)psVal->v.oval)->psList; psCDroid; psCDroid=psCDroid->psGrpNext)
 			{
 				checkValidId(psCDroid->id);
+
 				*((UDWORD *)pPos) = psCDroid->id;
+				endian_udword((UDWORD*)pPos);
+
 				pPos += sizeof(UDWORD);
 			}
 		}
@@ -828,6 +840,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		if (pBuffer)
 		{
 			*((UDWORD *) pBuffer) = sound_GetTrackHashName((SDWORD)psVal->v.ival);
+			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
 		break;
@@ -837,6 +850,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		if (pBuffer)
 		{
 			*((UDWORD *)pBuffer) = psVal->v.ival;
+			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
 		break;
@@ -879,15 +893,17 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	case ST_STRUCTURE:
 	case ST_FEATURE:
 		id = *((UDWORD *)pBuffer);
+		endian_udword(&id);
+
 		if (id == UDWORD_MAX)
 		{
 			psVal->v.oval = NULL;
 		}
 		else
 		{
-			if (!scrvGetBaseObj(*((UDWORD*)pBuffer), (BASE_OBJECT **)&(psVal->v.oval)))
+			if (!scrvGetBaseObj(id, (BASE_OBJECT **)&(psVal->v.oval)))
 			{
-				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer) );
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", id );
 				abort();
 			}
 		}
@@ -997,6 +1013,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		break;
 	case ST_TEMPLATE:
 		id = *((UDWORD *)pBuffer);
+		endian_udword(&id);
+
 		if (id == UDWORD_MAX)
 		{
 			psVal->v.oval = NULL;
@@ -1006,19 +1024,21 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			psVal->v.oval = (void*)IdToTemplate(id, ANYPLAYER);
 			if ((DROID_TEMPLATE*)(psVal->v.oval) == NULL)
 			{
-				debug( LOG_ERROR, "scrValDefLoad: couldn't find template id %d", *((UDWORD *)pBuffer) );
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find template id %d", id );
 				abort();
 			}
 		}
 		break;
 	case ST_TEXTSTRING:
-		if (*((UDWORD *)pBuffer) == UDWORD_MAX)
+		id = *((UDWORD *)pBuffer);
+		endian_udword(&id);
+		if (id == UDWORD_MAX)
 		{
 			psVal->v.sval = '\0';
 		}
 		else
 		{
-			psVal->v.sval = strresGetString(psStringRes, *((UDWORD *)pBuffer));
+			psVal->v.sval = strresGetString(psStringRes, id);
 		}
 		break;
 	case ST_LEVEL:
@@ -1077,12 +1097,16 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 			// load the retreat data
 			psGroup = (DROID_GROUP*)(psVal->v.oval);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.forceLevel = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
 		}
@@ -1093,14 +1117,19 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 			// load the retreat data
 			psGroup = (DROID_GROUP*)(psVal->v.oval);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.forceLevel = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
 			psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
+			endian_sdword((SDWORD*)pPos);
    			psGroup->sRunData.healthLevel = (UBYTE)(*((SDWORD *)pPos));
     		pPos += sizeof(SDWORD);
 		}
@@ -1108,9 +1137,11 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		// load the droids
 		while (members > 0)
 		{
-			if (!scrvGetBaseObj(*((UDWORD*)pPos), (BASE_OBJECT **)&psCDroid))
+			endian_udword((UDWORD*)pPos);
+			id = *((UDWORD *) pPos);
+			if (!scrvGetBaseObj(id, (BASE_OBJECT **)&psCDroid))
 			{
-				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", *((UDWORD*)pBuffer) );
+				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", id );
 				abort();
 			}
 			else
@@ -1124,7 +1155,9 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		break;
 	case ST_SOUND:
 		// find audio id
-		index = audio_GetTrackIDFromHash( *((UDWORD *)pBuffer) );
+		id = *((UDWORD *) pBuffer);
+		endian_udword(&id);
+		index = audio_GetTrackIDFromHash( id );
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id
@@ -1136,7 +1169,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				break;
 			}
 			// set track vals
-			audio_SetTrackValsHashName( *((UDWORD *)pBuffer), FALSE, index, 100,
+			audio_SetTrackValsHashName( id, FALSE, index, 100,
 									1, 1800 );
 		}
 		psVal->v.ival = index;
@@ -1146,6 +1179,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	default:
 		// just set the contents directly
 		psVal->v.ival = *((UDWORD *)pBuffer);
+		endian_udword(&psVal->v.ival);
 		break;
 	}
 
