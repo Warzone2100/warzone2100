@@ -57,9 +57,9 @@ LDFLAGS+=-L$(DEVDIR)/lib
 # Setup build environment with config values
 
 ifeq ($(strip $(MODE)),debug)
-CFLAGS+=-O0 -g2 -DDEBUG -Wall
+CFLAGS+=-O0 -DDEBUG -Wall
 else
-CFLAGS+=-O2 -g0 -DNDEBUG
+CFLAGS+=-DNDEBUG
 endif
 
 ifeq ($(strip $(PLATFORM)),windows)
