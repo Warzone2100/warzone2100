@@ -103,9 +103,9 @@ AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -g3 -O0 -DDEBUG -Wall -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
+  WZ_CFLAGS="${WZ_CFLAGS} -O0 -DDEBUG -Wall -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -g0 -O2 -DNDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
 
 
