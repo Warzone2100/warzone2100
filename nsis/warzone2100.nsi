@@ -125,6 +125,8 @@ Section $(TEXT_SecBase) SecBase
   File "..\data\warzone.wz"
 
   ; Information/documentation files
+  File "/oname=ChangeLog.txt" "..\ChangeLog"
+  File "/oname=Authors.txt" "..\AUTHORS"
   File "/oname=License.txt" "..\COPYING"
   File "/oname=Readme.txt" "..\README"
 
