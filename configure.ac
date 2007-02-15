@@ -1,11 +1,11 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([Warzone 2100],[2.0.6_pre],[http://wz2100.net/])
+AC_INIT([Warzone 2100],[2.0.6_pre],[http://wz2100.net/],[warzone2100])
 AM_INIT_AUTOMAKE([1.8])
 
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
-AC_CONFIG_HEADER([lib/framework/config.h])
 
 
 # Checks for programs.
@@ -103,7 +103,7 @@ AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -O0 -DDEBUG -Wall"
+  WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall"
 else
   WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
@@ -289,6 +289,7 @@ WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzon
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
+AC_CONFIG_HEADER([lib/framework/config.h])
 AC_CONFIG_FILES([Makefile
 		data/Makefile
 		nsis/Makefile
