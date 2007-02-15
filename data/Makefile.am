@@ -9,6 +9,8 @@ PATCHLIST = addon.lev anims components effects \
 BASEARCHIVE=warzone.wz
 PATCHARCHIVE=mp.wz
 
+CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
+
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)
 
@@ -24,18 +26,14 @@ $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)
 	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
 	zip -T $@
 
-install-data-local:
+install-data-local: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(MKDIR_P) $(DESTDIR)$(datadir)/warzone2100
 	$(INSTALL_DATA) $(srcdir)/$(BASEARCHIVE) $(DESTDIR)$(datadir)/warzone2100/$(BASEARCHIVE)
 	$(INSTALL_DATA) $(srcdir)/$(PATCHARCHIVE) $(DESTDIR)$(datadir)/warzone2100/$(PATCHARCHIVE)
 
 uninstall-local:
-	rm -f $(DESTDIR)$(datadir)/$(BASEARCHIVE)
-	rm -f $(DESTDIR)$(datadir)/$(PATCHARCHIVE)
-
-clean-local:
-	rm -f $(BASEARCHIVE)
-	rm -f $(PATCHARCHIVE)
+	rm -f $(DESTDIR)$(datadir)/warzone2100/$(BASEARCHIVE)
+	rm -f $(DESTDIR)$(datadir)/warzone2100/$(PATCHARCHIVE)
 
 installcheck:
 	[ -f $(BASEARCHIVE) ] && zip -T $(BASEARCHIVE)

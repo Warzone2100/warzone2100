@@ -1,11 +1,11 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/])
+AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/],[warzone2100])
 AM_INIT_AUTOMAKE([1.8])
 
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
-AC_CONFIG_HEADER([lib/framework/config.h])
 
 
 # Checks for programs.
@@ -32,6 +32,7 @@ if test x$host_os = xmingw32 ; then
 		if test x$WINDRES = xno ; then
 			AC_MSG_ERROR([windres not found])
 		fi
+#		WIN32_LIBS="-L\$(srcdir) -ldbghelp -lshfolder -lwinmm -lwsock32"
 		WIN32_LIBS="-lshfolder -lwinmm -lwsock32"
 fi
 
@@ -288,6 +289,7 @@ WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
+AC_CONFIG_HEADER([lib/framework/config.h])
 AC_CONFIG_FILES([Makefile
 		data/Makefile
 		nsis/Makefile
