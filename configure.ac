@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE([1.8])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
+if test "x$docdir" = "x" ; then
+	AC_SUBST(docdir, $(datarootdir)/doc/$(AC_PACKAGE_TARNAME))
+fi
 
 # Checks for programs.
 AC_PROG_CC
@@ -104,7 +107,9 @@ AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
+  WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall"
+# add these when the code is ready for them
+# -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
 else
   WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
