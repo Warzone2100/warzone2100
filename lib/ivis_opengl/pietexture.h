@@ -34,6 +34,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/tex.h"
 
 /***************************************************************************/
 /*
@@ -55,8 +56,5 @@
  */
 /***************************************************************************/
 extern UDWORD pie_GetLastPageDownloaded(void);
-
-extern int pie_AddBMPtoTexPages( 	iSprite* s, const char* filename, int type,
-					iBool bColourKeyed, iBool bResource);
 
 #endif // _pieTexture_h

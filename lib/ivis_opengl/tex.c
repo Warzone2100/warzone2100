@@ -43,25 +43,9 @@
 //*************************************************************************
 
 iTexPage _TEX_PAGE[iV_TEX_MAX];
-
-//*************************************************************************
-
 int _TEX_INDEX;
 
 //*************************************************************************
-
-static int _tex_get_top_bit(uint32 n)
-
-{
-	int i;
-	uint32 mask = 0x80000000;
-
-
-	for (i=31; (n & mask) == 0; mask >>=1, i--)
-		;
-
-	return i;
-}
 
 
 /**************************************************************************
@@ -73,12 +57,12 @@ static int _tex_get_top_bit(uint32 n)
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bColourKeyed,
-                         iBool bResource) {
+int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bResource) 
+{
 	int	i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d col=%d res=%d", filename, type,
-	      bColourKeyed, bResource);
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d col=%d res=%d", filename, 
+	      type, bResource);
 	assert(s != NULL);
 
 	/* Have we already loaded this one? (Should generally not happen here.) */
@@ -109,19 +93,17 @@ int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bColo
 	_TEX_PAGE[i].tex.bmp = s->bmp;
 	_TEX_PAGE[i].tex.width = s->width;
 	_TEX_PAGE[i].tex.height = s->height;
-	_TEX_PAGE[i].tex.xshift = _tex_get_top_bit(s->width);
-	_TEX_PAGE[i].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[i].type = type;
 
 	glGenTextures(1, &_TEX_PAGE[i].textPage3dfx);
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].textPage3dfx);
 
-	if (   (s->width & (s->width-1)) == 0
-	    && (s->height & (s->height-1)) == 0) {
+	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
+	{
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
 			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
 	} else {
-		debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: non POT texture %s", filename);
+		debug(LOG_ERROR, "pie_AddBMPtoTexPages: non POT texture %s.", filename);
 	}
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -137,7 +119,7 @@ int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bColo
 	return i;
 }
 
-void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource)
+void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bResource)
 {
 	assert(s != NULL);
 
@@ -147,18 +129,16 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 	_TEX_PAGE[tex_index].tex.bmp = s->bmp;
 	_TEX_PAGE[tex_index].tex.width = s->width;
 	_TEX_PAGE[tex_index].tex.height = s->height;
-	_TEX_PAGE[tex_index].tex.xshift = _tex_get_top_bit(s->width);
-	_TEX_PAGE[tex_index].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[tex_index].type = type;
 
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].textPage3dfx);
 
-	if (   (s->width & (s->width-1)) == 0
-	    && (s->height & (s->height-1)) == 0) {
+	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
+	{
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
 			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
 	} else {
-		debug(LOG_TEXTURE, "pie_ChangeTexPage: non POT texture %i", tex_index);
+		debug(LOG_ERROR, "pie_ChangeTexPage: non POT texture %i", tex_index);
 	}
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -187,14 +167,14 @@ int iV_GetTexture(char *filename)
 
 	/* This should never happen - by now all textures should have been loaded. */
 	debug(LOG_ERROR, "*** texture %s not loaded! ***", filename);
-  debug(LOG_ERROR, "Available texture pages in memory:");
-  for (i = 0; i < _TEX_INDEX; i++) {
-    debug(LOG_ERROR, "   %02d : %s", i, _TEX_PAGE[i].name);
-  }
-  debug(LOG_ERROR, "This error probably means you did not specify for this texture");
-  debug(LOG_ERROR, "to be preloaded in the appropriate wrf files before referencing");
-  debug(LOG_ERROR, "it in some pie file.  Remember that patches override several");
-  debug(LOG_ERROR, "standard wrf files as well.");
+	debug(LOG_ERROR, "Available texture pages in memory:");
+	for (i = 0; i < _TEX_INDEX; i++) {
+		debug(LOG_ERROR, "   %02d : %s", i, _TEX_PAGE[i].name);
+	}
+	debug(LOG_ERROR, "This error probably means you did not specify for this texture");
+	debug(LOG_ERROR, "to be preloaded in the appropriate wrf files before referencing");
+	debug(LOG_ERROR, "it in some pie file.  Remember that patches override several");
+	debug(LOG_ERROR, "standard wrf files as well.");
 	assert(FALSE);
 	return -1;
 }
@@ -206,7 +186,7 @@ int pie_ReloadTexPage(char *filename, char *pBuffer)
 	iSprite	s;
 
 	// Log call to check validity of deprecation
-	debug( LOG_NEVER, "pie_ReloadTexPage called" );
+	debug( LOG_ERROR, "pie_ReloadTexPage called for %s, tell Per!", filename );
 
 	/* Have we already loaded this one then? */
 	while (strcasecmp(filename,_TEX_PAGE[i].name) != 0) {
@@ -231,7 +211,8 @@ int pie_ReloadTexPage(char *filename, char *pBuffer)
 	handler - this is because the resource handler will deal with freeing it, and in all probability
 	will have already done so by the time this is called, thus avoiding an 'already freed' moan.
 */
-void pie_TexShutDown(void) {
+void pie_TexShutDown(void) 
+{
 	int i,j;
 
 	i = 0;
@@ -253,7 +234,8 @@ void pie_TexShutDown(void) {
 	debug( LOG_NEVER, "pie_TexShutDown successful - freed %d texture pages\n", j );
 }
 
-void pie_TexInit(void) {
+void pie_TexInit(void) 
+{
 	int i;
 
 	i = 0;
@@ -262,7 +244,6 @@ void pie_TexInit(void) {
 		_TEX_PAGE[i].tex.bmp = NULL;
 		_TEX_PAGE[i].tex.width = 0;
 		_TEX_PAGE[i].tex.height = 0;
-		_TEX_PAGE[i].tex.xshift = 0;
 		i++;
 	}
 }

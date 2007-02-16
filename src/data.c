@@ -24,6 +24,7 @@
  *
  */
 #include <string.h>
+#include <ctype.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -942,7 +943,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		NewTexturePage->Texture=psSprite;
 		NewTexturePage->Palette=psPal;
 
-		pie_AddBMPtoTexPages(psSprite, texfile, 1, FALSE, TRUE);
+		pie_AddBMPtoTexPages(psSprite, texfile, 1, TRUE);
 
 		*ppData = NewTexturePage;
 	}

@@ -61,8 +61,8 @@ extern iTexPage	_TEX_PAGE[iV_TEX_MAX];
 
 int iV_GetTexture(char *filename);
 extern int pie_ReloadTexPage(char *filename, char *pBuffer);
-extern int pie_AddBMPtoTexPages(iSprite* s, const char *filename, int type, iBool bColourKeyed, iBool bResource);
-void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource);
+extern int pie_AddBMPtoTexPages(iSprite* s, const char *filename, int type, iBool bResource);
+void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bResource);
 extern void pie_TexInit(void);
 
 //*************************************************************************

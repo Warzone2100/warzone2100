@@ -119,7 +119,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 			/* Have we got all the tiles from the source!? */
 			if((tilesProcessed == tilesPerSource))
 			{
-				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
+				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, FALSE);
 				goto exit;
 			}
 
@@ -130,7 +130,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d",
 				      tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				/* If so, download this one and reset to start again */
-				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, TRUE, FALSE);
+				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, FALSE);
 				sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
@@ -197,7 +197,7 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 			/* Have we got all the tiles from the source!? */
 			if((tilesProcessed == tilesPerSource))// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
 			{
-				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, TRUE, FALSE);
+				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, FALSE);
 				goto exit;
 			}
 
@@ -207,7 +207,7 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 				debug(LOG_TEXTURE, "remakeTileTexturePages: ran out of texture page ...");
 				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d",
 				      tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
-				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, TRUE, FALSE);
+				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, FALSE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
 			}

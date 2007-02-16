@@ -256,7 +256,7 @@ TILE_BUCKET		tileIJ[LAND_YGRD][LAND_XGRD];
 SDWORD		fileSize;
 
 /* Stores the texture for a specific tile */
-static	iTexture texturePage = {6, 64, 64, NULL};
+static	iTexture texturePage = { 64, 64, NULL };
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
 extern POINT 	sP1,sP2,sP3,sP4;
