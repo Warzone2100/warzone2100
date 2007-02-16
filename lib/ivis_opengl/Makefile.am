@@ -1,7 +1,7 @@
 AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LIBRARIES = libivis_opengl.a
-noinst_HEADERS = ivis02.h piematrix.h pietexture.h screen.h
+noinst_HEADERS = piematrix.h pietexture.h screen.h
 
 libivis_opengl_a_SOURCES = bspimd.c ivi.c pieblitfunc.c piedraw.c piefunc.c \
 	piematrix.c piemode.c piepalette.c piestate.c pietexture.c rendfunc.c rendmode.c \
