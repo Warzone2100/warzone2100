@@ -3443,13 +3443,19 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 {
 	UDWORD				type;
-	//SDWORD				Avail, Used, Total;
-	DROID_TEMPLATE		compTempl;
+	UDWORD				power, i;
 
-	if (&sCurrDesign != NULL AND psStats != NULL)
-	{
-		//create the comparison Template
-		memcpy(&compTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
+	if (psStats != NULL) {
+        UDWORD bodyPower        = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->buildPower;
+        UDWORD brainPower       = (asBrainStats + sCurrDesign.asParts[COMP_BRAIN])->buildPower;
+        UDWORD sensorPower      = (asSensorStats + sCurrDesign.asParts[COMP_SENSOR])->buildPower;
+        UDWORD ECMPower         = (asECMStats + sCurrDesign.asParts[COMP_ECM])->buildPower;
+        UDWORD repairPower      = (asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT])->buildPower;
+        UDWORD constructPower   = (asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT])->buildPower;
+        UDWORD propulsionPower  = (asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION])->buildPower;
+        UDWORD weaponPower      = (asWeaponStats + sCurrDesign.asWeaps[0])->buildPower;
+
+
 		type = statType(psStats->ref);
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
@@ -3479,43 +3485,56 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 			}
 			else
 			{
-				type = COMP_UNKNOWN;
+			    // compare it with the current weapon
+				type = COMP_WEAPON;
 			}
 		}
 
 		switch (type)
 		{
 		case COMP_BODY:
-			compTempl.asParts[COMP_BODY] = (BODY_STATS *)psStats - asBodyStats;
+			bodyPower = psStats->buildPower;
 			break;
 		case COMP_PROPULSION:
-			compTempl.asParts[COMP_PROPULSION] = (PROPULSION_STATS *)psStats -
-				asPropulsionStats;
+			propulsionPower = psStats->buildPower;
 			break;
 		case COMP_ECM:
-			compTempl.asParts[COMP_ECM] = (ECM_STATS *)psStats - asECMStats;
+			ECMPower = psStats->buildPower;
 			break;
 		case COMP_SENSOR:
-			compTempl.asParts[COMP_SENSOR] = (SENSOR_STATS *)psStats -
-				asSensorStats;
+			sensorPower = psStats->buildPower;
 			break;
 		case COMP_CONSTRUCT:
-			compTempl.asParts[COMP_CONSTRUCT] = (CONSTRUCT_STATS *)psStats -
-				asConstructStats;
+			constructPower = psStats->buildPower;
 			break;
 		case COMP_REPAIRUNIT:
-			compTempl.asParts[COMP_REPAIRUNIT] = (REPAIR_STATS *)psStats -
-				asRepairStats;
+			repairPower = psStats->buildPower;
 			break;
 		case COMP_WEAPON:
-			compTempl.asWeaps[0] = (WEAPON_STATS *)psStats - asWeaponStats;
+			weaponPower = psStats->buildPower;
 			break;
 		//default:
 			//don't want to draw for unknown comp
 		}
 
-		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
-								calcTemplatePower(&compTempl));
+		// this code is from calcTemplatePower
+
+    	//get the component power
+    	power = bodyPower + brainPower + sensorPower + ECMPower + repairPower + constructPower;
+
+    	/* propulsion power points are a percentage of the bodys' power points */
+    	power += (propulsionPower *
+    		bodyPower) / 100;
+    		
+     	//add weapon power
+        // FIXME: Only takes first weapon into account
+        power += weaponPower;
+    	for(i=1; i<sCurrDesign.numWeaps; i++)
+    	{
+    		power += (asWeaponStats + sCurrDesign.asWeaps[i])->buildPower;
+    	}
+   		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
+								power);
 	}
 	else
 	{
@@ -3536,12 +3555,19 @@ static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 {
 	UDWORD				type;
-	DROID_TEMPLATE		compTempl;
+	UDWORD				body, i;
 
-	if (&sCurrDesign != NULL AND psStats != NULL)
-	{
-		//create the comparison Template
-		memcpy(&compTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
+	if (psStats != NULL) {
+        UDWORD bodyBody        = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->body;
+        UDWORD brainBody       = (asBrainStats + sCurrDesign.asParts[COMP_BRAIN])->body;
+        UDWORD sensorBody      = (asSensorStats + sCurrDesign.asParts[COMP_SENSOR])->body;
+        UDWORD ECMBody         = (asECMStats + sCurrDesign.asParts[COMP_ECM])->body;
+        UDWORD repairBody      = (asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT])->body;
+        UDWORD constructBody   = (asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT])->body;
+        UDWORD propulsionBody  = (asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION])->body;
+        UDWORD weaponBody      = (asWeaponStats + sCurrDesign.asWeaps[0])->body;
+
+
 		type = statType(psStats->ref);
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
@@ -3571,44 +3597,56 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 			}
 			else
 			{
-				type = COMP_UNKNOWN;
+			    // compare it with the current weapon
+				type = COMP_WEAPON;
 			}
 		}
 
 		switch (type)
 		{
 		case COMP_BODY:
-			compTempl.asParts[COMP_BODY] = (BODY_STATS *)psStats - asBodyStats;
+			bodyBody = psStats->body;
 			break;
 		case COMP_PROPULSION:
-			compTempl.asParts[COMP_PROPULSION] = (PROPULSION_STATS *)psStats -
-				asPropulsionStats;
+			propulsionBody = psStats->body;
 			break;
 		case COMP_ECM:
-			compTempl.asParts[COMP_ECM] = (ECM_STATS *)psStats - asECMStats;
+			ECMBody = psStats->body;
 			break;
 		case COMP_SENSOR:
-			compTempl.asParts[COMP_SENSOR] = (SENSOR_STATS *)psStats -
-				asSensorStats;
+			sensorBody = psStats->body;
 			break;
 		case COMP_CONSTRUCT:
-			compTempl.asParts[COMP_CONSTRUCT] = (CONSTRUCT_STATS *)psStats -
-				asConstructStats;
+			constructBody = psStats->body;
 			break;
 		case COMP_REPAIRUNIT:
-			compTempl.asParts[COMP_REPAIRUNIT] = (REPAIR_STATS *)psStats -
-				asRepairStats;
+			repairBody = psStats->body;
 			break;
 		case COMP_WEAPON:
-//			compTempl.asWeaps[COMP_WEAPON] = (WEAPON_STATS *)psStats - asWeaponStats;
-			compTempl.asWeaps[0] = (WEAPON_STATS *)psStats - asWeaponStats;
+			weaponBody = psStats->body;
 			break;
 		//default:
 			//don't want to draw for unknown comp
 		}
+	    // this code is from calcTemplateBody
 
-		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS,
-								calcTemplateBody(&compTempl, (UBYTE)selectedPlayer));
+    	//get the component power
+    	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
+
+    	/* propulsion power points are a percentage of the bodys' power points */
+    	body += (propulsionBody *
+    		bodyBody) / 100;
+    		
+     	//add weapon power
+        // FIXME: Only takes first weapon into account
+        body += weaponBody;
+    	for(i=1; i<sCurrDesign.numWeaps; i++)
+    	{
+    		body += (asWeaponStats + sCurrDesign.asWeaps[i])->body;
+    	}
+    	body += (body * asBodyUpgrade[selectedPlayer]->body / 100);
+   		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS,
+								body);
 	}
 	else
 	{
