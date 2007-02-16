@@ -23,7 +23,6 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/bug.h"
 #include "lib/framework/fractions.h"
 #include "screen.h"
 

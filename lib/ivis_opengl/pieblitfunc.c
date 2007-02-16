@@ -34,7 +34,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/bug.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"

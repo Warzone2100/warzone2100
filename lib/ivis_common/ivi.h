@@ -112,4 +112,13 @@ extern void iV_DisplayLogFile(void);
 
 //*************************************************************************
 
+/* Unused debug functions of dubious design and usefulness */
+
+#define iV_DEBUG0(S)
+#define iV_DEBUG1(S,A)
+#define iV_DEBUG2(S,A,B)
+#define iV_DEBUG3(S,A,B,C)
+#define iV_DEBUG4(S,A,B,C,D)
+#define iV_DEBUG5(S,A,B,C,D,E)
+
 #endif

@@ -41,7 +41,6 @@
 #include "imd.h"	// for imd structures
 #include "rendmode.h"
 #include "ivispatch.h"
-#include "bug.h"
 #include "tex.h"		// texture page loading
 #include "bspfunc.h"	// for imd functions
 

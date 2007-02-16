@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "bug.h"
 #include "piepalette.h"
 #include "tex.h"
 #include "ivispatch.h"

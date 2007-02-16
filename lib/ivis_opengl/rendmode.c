@@ -20,11 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "lib/ivis_common/ivi.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/rendfunc.h"
 #include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/bug.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/ivispatch.h"

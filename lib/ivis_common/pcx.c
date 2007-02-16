@@ -23,7 +23,6 @@
 
 #include "lib/framework/frame.h"
 #include "ivisdef.h"
-#include "bug.h"
 
 #include "ivispatch.h"
 

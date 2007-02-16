@@ -26,7 +26,6 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/bug.h"
 #include "lib/ivis_common/piepalette.h"
 #include "piematrix.h"
 #include "lib/ivis_common/tex.h"

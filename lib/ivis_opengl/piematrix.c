@@ -32,11 +32,11 @@
 #endif
 #include <SDL/SDL_opengl.h>
 
+#include "lib/ivis_common/ivi.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/bug.h"
 
 /***************************************************************************/
 /*

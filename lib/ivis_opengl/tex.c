@@ -38,7 +38,6 @@
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/bug.h"
 #include "lib/ivis_common/ivispatch.h"
 
 //*************************************************************************

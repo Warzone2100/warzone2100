@@ -34,7 +34,6 @@
 
 #include "ivisdef.h"
 #include "imd.h"
-#include "bug.h"
 #include "tex.h"
 #include "ivispatch.h"
 
