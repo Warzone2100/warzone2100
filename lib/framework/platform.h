@@ -48,7 +48,6 @@
 #  if defined(WZ_CC_MSVC)
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
-#    define strlwr _strlwr
 #    define vsnprintf _vsnprintf
 #    define snprintf  _snprintf
 #    define fileno _fileno
