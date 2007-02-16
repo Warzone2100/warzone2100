@@ -2,7 +2,6 @@ MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
 SRC=bitimage.c \
-	bug.c \
 	imd.c \
 	imdload.c \
 	pcx.c \
