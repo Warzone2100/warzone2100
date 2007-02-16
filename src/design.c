@@ -3615,14 +3615,14 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 	UDWORD				power, i;
 
 	if (psStats != NULL) {
-        COMP_BASE_STATS* bodyStats = asBodyStats + sCurrDesign.asParts[COMP_BODY];
-        COMP_BASE_STATS* brainStats = asBrainStats + sCurrDesign.asParts[COMP_BRAIN];
-        COMP_BASE_STATS* sensorStats = asSensorStats + sCurrDesign.asParts[COMP_SENSOR];
-        COMP_BASE_STATS* ECMStats = asECMStats + sCurrDesign.asParts[COMP_ECM];
-        COMP_BASE_STATS* repairStats = asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT];
-        COMP_BASE_STATS* constructStats = asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT];
-        COMP_BASE_STATS* propulsionStats = asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION];
-        COMP_BASE_STATS* weaponStats = asWeaponStats + sCurrDesign.asWeaps[0];
+        UDWORD bodyPower        = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->buildPower;
+        UDWORD brainPower       = (asBrainStats + sCurrDesign.asParts[COMP_BRAIN])->buildPower;
+        UDWORD sensorPower      = (asSensorStats + sCurrDesign.asParts[COMP_SENSOR])->buildPower;
+        UDWORD ECMPower         = (asECMStats + sCurrDesign.asParts[COMP_ECM])->buildPower;
+        UDWORD repairPower      = (asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT])->buildPower;
+        UDWORD constructPower   = (asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT])->buildPower;
+        UDWORD propulsionPower  = (asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION])->buildPower;
+        UDWORD weaponPower      = (asWeaponStats + sCurrDesign.asWeaps[0])->buildPower;
 
 
 		type = statType(psStats->ref);
@@ -3662,25 +3662,25 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 		switch (type)
 		{
 		case COMP_BODY:
-			bodyStats = psStats;
+			bodyPower = psStats->buildPower;
 			break;
 		case COMP_PROPULSION:
-			propulsionStats = psStats;
+			propulsionPower = psStats->buildPower;
 			break;
 		case COMP_ECM:
-			ECMStats = psStats;
+			ECMPower = psStats->buildPower;
 			break;
 		case COMP_SENSOR:
-			sensorStats = psStats;
+			sensorPower = psStats->buildPower;
 			break;
 		case COMP_CONSTRUCT:
-			constructStats = psStats;
+			constructPower = psStats->buildPower;
 			break;
 		case COMP_REPAIRUNIT:
-			repairStats = psStats;
+			repairPower = psStats->buildPower;
 			break;
 		case COMP_WEAPON:
-			weaponStats = psStats;
+			weaponPower = psStats->buildPower;
 			break;
 		//default:
 			//don't want to draw for unknown comp
@@ -3689,15 +3689,15 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 		// this code is from calcTemplatePower
 
     	//get the component power
-    	power = bodyStats->buildPower + brainStats->buildPower + sensorStats->buildPower + ECMStats->buildPower + repairStats->buildPower + constructStats->buildPower;
+    	power = bodyPower + brainPower + sensorPower + ECMPower + repairPower + constructPower;
 
     	/* propulsion power points are a percentage of the bodys' power points */
-    	power += (propulsionStats->buildPower *
-    		bodyStats->buildPower) / 100;
+    	power += (propulsionPower *
+    		bodyPower) / 100;
     		
      	//add weapon power
         // FIXME: Only takes first weapon into account
-        power += weaponStats->buildPower;
+        power += weaponPower;
     	for(i=1; i<sCurrDesign.numWeaps; i++)
     	{
     		power += (asWeaponStats + sCurrDesign.asWeaps[i])->buildPower;
@@ -3727,14 +3727,14 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 	UDWORD				body, i;
 
 	if (psStats != NULL) {
-        COMP_BASE_STATS* bodyStats = asBodyStats + sCurrDesign.asParts[COMP_BODY];
-        COMP_BASE_STATS* brainStats = asBrainStats + sCurrDesign.asParts[COMP_BRAIN];
-        COMP_BASE_STATS* sensorStats = asSensorStats + sCurrDesign.asParts[COMP_SENSOR];
-        COMP_BASE_STATS* ECMStats = asECMStats + sCurrDesign.asParts[COMP_ECM];
-        COMP_BASE_STATS* repairStats = asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT];
-        COMP_BASE_STATS* constructStats = asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT];
-        COMP_BASE_STATS* propulsionStats = asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION];
-        COMP_BASE_STATS* weaponStats = asWeaponStats + sCurrDesign.asWeaps[0];
+        UDWORD bodyBody        = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->body;
+        UDWORD brainBody       = (asBrainStats + sCurrDesign.asParts[COMP_BRAIN])->body;
+        UDWORD sensorBody      = (asSensorStats + sCurrDesign.asParts[COMP_SENSOR])->body;
+        UDWORD ECMBody         = (asECMStats + sCurrDesign.asParts[COMP_ECM])->body;
+        UDWORD repairBody      = (asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT])->body;
+        UDWORD constructBody   = (asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT])->body;
+        UDWORD propulsionBody  = (asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION])->body;
+        UDWORD weaponBody      = (asWeaponStats + sCurrDesign.asWeaps[0])->body;
 
 
 		type = statType(psStats->ref);
@@ -3774,42 +3774,41 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 		switch (type)
 		{
 		case COMP_BODY:
-			bodyStats = psStats;
+			bodyBody = psStats->body;
 			break;
 		case COMP_PROPULSION:
-			propulsionStats = psStats;
+			propulsionBody = psStats->body;
 			break;
 		case COMP_ECM:
-			ECMStats = psStats;
+			ECMBody = psStats->body;
 			break;
 		case COMP_SENSOR:
-			sensorStats = psStats;
+			sensorBody = psStats->body;
 			break;
 		case COMP_CONSTRUCT:
-			constructStats = psStats;
+			constructBody = psStats->body;
 			break;
 		case COMP_REPAIRUNIT:
-			repairStats = psStats;
+			repairBody = psStats->body;
 			break;
 		case COMP_WEAPON:
-			weaponStats = psStats;
+			weaponBody = psStats->body;
 			break;
 		//default:
 			//don't want to draw for unknown comp
 		}
-
 	    // this code is from calcTemplateBody
 
     	//get the component power
-    	body = bodyStats->body + brainStats->body + sensorStats->body + ECMStats->body + repairStats->body + constructStats->body;
+    	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
 
     	/* propulsion power points are a percentage of the bodys' power points */
-    	body += (propulsionStats->body *
-    		bodyStats->body) / 100;
+    	body += (propulsionBody *
+    		bodyBody) / 100;
     		
      	//add weapon power
         // FIXME: Only takes first weapon into account
-        body += weaponStats->body;
+        body += weaponBody;
     	for(i=1; i<sCurrDesign.numWeaps; i++)
     	{
     		body += (asWeaponStats + sCurrDesign.asWeaps[i])->body;
