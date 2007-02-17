@@ -1162,7 +1162,7 @@ BOOL CoordInRadar(int x,int y)
 
 
 
-void	calcRadarColour(UBYTE *tileBitmap, UDWORD tileNumber)
+void	calcRadarColour(iBitmap *tileBitmap, UDWORD tileNumber)
 {
 	UDWORD	i, j;
 	UBYTE	penNumber;

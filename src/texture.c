@@ -30,16 +30,12 @@
 #include "texture.h"
 #include "radar.h"
 
-/* Can fit at most 32 texture pages into a 2meg texture memory */
-#define MAX_TEXTURE_PAGES	32
 #define MAX_TERRAIN_PAGES	20
 #define PAGE_WIDTH		512
 #define PAGE_HEIGHT		512
 // 4 byte depth == 32 bpp
 #define PAGE_DEPTH		4
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
-
-#define NUM_OTHER_PAGES		19
 
 /* Stores the graphics data for the terrain tiles textures (in src/data.c) */
 iSprite tilesPCX;
@@ -54,8 +50,8 @@ TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 
 static UDWORD	getTileXIndex(UDWORD tileNumber);
 static UDWORD	getTileYIndex(UDWORD tileNumber);
-static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest);
-static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
+static void getRectFromPage(UDWORD width, UDWORD height, char *src, UDWORD bufWidth, char *dest);
+static void putRectIntoPage(UDWORD width, UDWORD height, char *dest, UDWORD bufWidth, char *src);
 static void buildTileIndexes(void);
 
 /*
@@ -76,15 +72,15 @@ static void buildTileIndexes(void);
 	We must then make sure that we source in that texture page and set the
 	texture coordinate for a complete tile to be its position.
 */
-void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
+void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
 {
 	UDWORD	i,j;
 	UDWORD	pageNumber;
 	UDWORD	tilesAcross,tilesDown;
 	UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
 	UDWORD	tilesProcessed;
-	unsigned char	*tileStorage;
-	unsigned char	*presentLoc;
+	char	*tileStorage;
+	char	*presentLoc;
 	iSprite	sprite;
 
 	/* This is how many pages are already used on hardware */
@@ -94,7 +90,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = (unsigned char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
+	tileStorage = (char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
 	sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
@@ -153,15 +149,15 @@ exit:
 	return;
 }
 
-void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src)
+void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
 {
 	UDWORD	i,j;
 	UDWORD	pageNumber;
 	UDWORD	tilesAcross,tilesDown;
 	UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
 	UDWORD	tilesProcessed;
-	unsigned char	*tileStorage;
-	unsigned char	*presentLoc;
+	char	*tileStorage;
+	char	*presentLoc;
 	iSprite	sprite;
 	//check enough pages are allocated
 
@@ -170,7 +166,7 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = (unsigned char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
+	tileStorage = (char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 
@@ -307,7 +303,7 @@ static UDWORD	getTileYIndex(UDWORD tileNumber)
 
 /* Extracts a rectangular buffer from a source buffer, storing result in one contiguous
    chunk	*/
-static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest)
+static void getRectFromPage(UDWORD width, UDWORD height, char *src, UDWORD bufWidth, char *dest)
 {
 	UDWORD	i,j;
 
@@ -322,7 +318,7 @@ static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDW
 }
 
 /* Inserts a rectangle into a dest rectangle */
-static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src)
+static void putRectIntoPage(UDWORD width, UDWORD height, char *dest, UDWORD bufWidth, char *src)
 {
 UDWORD	i,j;
 

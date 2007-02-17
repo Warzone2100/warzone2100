@@ -787,17 +787,14 @@ BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 		}
 	}
 
+	getTileRadarColours();
+	if (bTilesPCXLoaded)
 	{
-		getTileRadarColours();
-		// make several 256 * 256 pages
-		if (bTilesPCXLoaded)
-		{
-			remakeTileTexturePages(tilesPCX.width,tilesPCX.height,TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
-		}
-		else
-		{
-			makeTileTexturePages(tilesPCX.width,tilesPCX.height,TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
-		}
+		remakeTileTexturePages(tilesPCX.width,tilesPCX.height,TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
+	}
+	else
+	{
+		makeTileTexturePages(tilesPCX.width,tilesPCX.height,TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
 	}
 
 	if (bTilesPCXLoaded)

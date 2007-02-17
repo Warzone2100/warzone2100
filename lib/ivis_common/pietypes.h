@@ -51,7 +51,7 @@ typedef Uint32 uint32;
 //
 //*************************************************************************
 typedef struct { Sint32 left, top, right, bottom; } iClip;
-typedef Uint8 iBitmap;
+typedef char iBitmap;
 typedef struct { Uint8 r, g, b; } iColour;
 typedef BOOL iBool;
 typedef struct { Sint32 x, y; } iPoint;

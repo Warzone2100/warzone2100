@@ -61,7 +61,7 @@ int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bReso
 {
 	int	i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d col=%d res=%d", filename, 
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d res=%d", filename, 
 	      type, bResource);
 	assert(s != NULL);
 

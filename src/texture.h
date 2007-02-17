@@ -24,8 +24,8 @@ extern iSprite tilesPCX;
 
 int makeTileTextures(void);
 int remakeTileTextures(void);
-void makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src);
-void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, unsigned char *src);
+void makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src);
+void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src);
 BOOL	getTileRadarColours(void);
 void	freeTileTextures( void );
 

@@ -158,7 +158,7 @@ typedef struct _w_forminit
 	WINIT_BASE;
 
 	/* Data for a tabbed form */
-	BOOL			disableChildren; \
+	BOOL			disableChildren;
 	UWORD			majorPos, minorPos;			// Position of the tabs on the form
 	UWORD			majorSize, minorSize;		// Size of the tabs (in pixels)
 	SWORD			majorOffset, minorOffset;	// Tab start offset.
