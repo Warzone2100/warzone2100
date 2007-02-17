@@ -656,7 +656,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 					{
 						aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
 					}
-					pie_DrawTextToSurface(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+					pie_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 							aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 				}
 				else if (aSeqList[currentPlaySeq].bSeqLoop)//if its a looped video always draw the text
@@ -665,7 +665,7 @@ BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 					{
 						aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
 					}
-					pie_DrawTextToSurface(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+					pie_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 							aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 				}
 

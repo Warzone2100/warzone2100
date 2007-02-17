@@ -77,7 +77,6 @@ extern void pie_FillTextExtents(int BorderThickness,UBYTE r,UBYTE g,UBYTE b,BOOL
 extern UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, BOOL DrawBack);
 
 extern void pie_DrawText(char *string,UDWORD x,UDWORD y);
-extern void pie_DrawTextToSurface(char *String, UDWORD XPos, UDWORD YPos);
 extern void pie_DrawText270(char *String,int XPos,int YPos);
 extern void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
 extern void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);

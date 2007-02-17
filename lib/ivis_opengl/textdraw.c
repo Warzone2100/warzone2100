@@ -31,9 +31,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
-extern	void	pie_DrawTextNew(char *string, int x, int y);
-extern SDWORD DisplayXFactor;
-
 /***************************************************************************/
 /*
  *	Global Variables
@@ -353,7 +350,6 @@ UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDW
 		// Parse through the string, adding words until width is achieved.
 		while( (si < strlen((char*)String)) && (WWidth <= Width) && (!NewLine)) {
 			osi = si;
-//DBPRINTF(("[%s] si=%d wwidth=%d width=%d factor=%d\n",FWord,si,WWidth,Width,DisplayXFactor));
 
 			// Get the next word.
    			i = 0;
@@ -437,9 +433,6 @@ UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDW
 			if(FString[t] == ' ') FString[t] = '~';
 		}
 #endif
-
-//DBPRINTF(("end [%s] si=%d wwidth=%d width=%d factor=%d\n",FWord,si,WWidth,Width,DisplayXFactor));
-
 
 		TWidth = iV_GetTextWidth(FString);
 
@@ -643,55 +636,6 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 		bmp += (ow - w);
 		bp += lineSkip;
 	}
-}
-
-//===========================================================
-// Partial fix for rendering text on 'video', you can read it now. -Q
-// --still to do, add 'boxes' under text so you can see it better.
-//===========================================================
-void pie_DrawTextToSurface(char *string, UDWORD x, UDWORD y)
-{
-	int Index;
-	UWORD ImageID;
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
-
-	/* Colour selection */
-	pie_BeginTextRender(Font->FontColourIndex);
-
-	while (*string!=0) {
-
-		Index = *string;
-
-		// Toggle colour mode?
-		if(Index == ASCII_COLOURMODE) {
-			if(TextColourIndex >= 0) {
-				OldTextColourIndex = TextColourIndex;
-				TextColourIndex = -1;
-			} else {
-				if(OldTextColourIndex >= 0) {
-					TextColourIndex = OldTextColourIndex;
-				}
-			}
-		} else if(Index == ASCII_SPACE) {
-			x += Font->FontSpaceSize;
-		} else {
-			ImageID = (UWORD)Font->AsciiTable[Index];
-			pie_TextRender(Font->FontFile,ImageID,x,y);
-			x += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-		}
-
-// Don't use this any more, If the text needs to wrap then use
-// pie_DrawFormattedText() defined above.
-		/* New bit to make text wrap */
-		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
-		{
-			/* Drop it to the next line if we hit screen edge */
-			x = 0;
-			y += iV_GetTextLineSize();
-		}
-		string++;
-	}
-
 }
 
 void pie_DrawText270(char *String,int XPos,int YPos)
