@@ -112,7 +112,7 @@ void		addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt);
 void		addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID);
 
 void		displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -1532,7 +1532,7 @@ void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char
 // drawing functions
 
 // show a background piccy
-void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
     const size_t sTmpSize = 200;
 

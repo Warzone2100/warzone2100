@@ -88,7 +88,7 @@ static IVIS_FONT iVFonts[MAX_IVIS_FONTS];
 /***************************************************************************/
 void pie_BeginTextRender(SWORD ColourIndex);
 void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
-void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y);//prototype
+static void pie_TextRender270( IMAGEFILE *ImageFile, UWORD ImageID, int x, int y );
 
 /***************************************************************************/
 /*
@@ -814,7 +814,7 @@ void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
 	*/
 }
 
-void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
+static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 {
 	UDWORD Red;
 	UDWORD Green;

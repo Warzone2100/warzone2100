@@ -2111,7 +2111,6 @@ SDWORD dpidToPlayer(SDWORD dpid)
 	if(i >= MAX_PLAYERS)
 	{
 		ASSERT(i< MAX_PLAYERS, "dpidToPlayer: failed to find player with dpid %d", dpid);
-		debug(LOG_ERROR, "dpidToPlayer: failed to find player with dpid %d");
 		return -1;
 	}
 

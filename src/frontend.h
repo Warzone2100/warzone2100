@@ -95,7 +95,6 @@ extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID );
 
 extern void	displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 extern void	displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern void loadOK					(void);

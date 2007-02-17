@@ -52,7 +52,8 @@ extern BOOL drawing_interface;
  */
 /***************************************************************************/
 
-static BOOL check_extension(const char* extension_name) {
+static BOOL check_extension(const char* extension_name) 
+{
 	const char *extension_list = (const char *)glGetString(GL_EXTENSIONS);
 	unsigned int extension_name_length = strlen(extension_name);
 	const char *tmp = extension_list;
@@ -89,7 +90,8 @@ typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 
-static BOOL stencil_one_pass(void) {
+static BOOL stencil_one_pass(void) 
+{
 	static BOOL initialised = FALSE;
 	static BOOL return_value;
 
@@ -144,7 +146,8 @@ void DrawTriangleList(BSPPOLYID PolygonNumber);
 static BOOL lighting = FALSE;
 static BOOL shadows = FALSE;
 
-void pie_BeginLighting(float x, float y, float z) {
+void pie_BeginLighting(float x, float y, float z)
+{
 	float pos[4];
 	float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	float ambient[4] = {0.2f, 0.2f, 0.2f, 0.0f};
@@ -168,7 +171,8 @@ void pie_BeginLighting(float x, float y, float z) {
 	shadows = TRUE;
 }
 
-void pie_EndLighting(void) {
+void pie_EndLighting(void)
+{
 	shadows = FALSE;
 	lighting = FALSE;
 }
@@ -183,8 +187,6 @@ static SDWORD BSPObject_Yaw=0,BSPObject_Pitch=0;
 
 void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z)
 {
-
-
 	BSPObject.x=x;
 	BSPObject.y=y;
 	BSPObject.z=z;
@@ -193,8 +195,6 @@ void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z)
 		// these values must be set every time they are used ...
 	BSPObject_Yaw=0;
 	BSPObject_Pitch=0;
-
-
 }
 
 // This MUST be called after SetBSPObjectPos ...
@@ -222,23 +222,27 @@ typedef struct {
 	float z;
 } fVector;
 
-static void fVector_Set(fVector* v, float x, float y, float z) {
+static void fVector_Set(fVector* v, float x, float y, float z)
+{
 	v->x = x;
 	v->y = y;
 	v->z = z;
 }
 
-static void fVector_Sub(fVector* dest, fVector* op1, fVector* op2) {
+static void fVector_Sub(fVector* dest, fVector* op1, fVector* op2)
+{
 	dest->x = op1->x - op2->x;
 	dest->y = op1->y - op2->y;
 	dest->z = op1->z - op2->z;
 }
 
-static float fVector_SP(fVector* op1, fVector* op2) {
+static float fVector_SP(fVector* op1, fVector* op2)
+{
 	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
 }
 
-static void fVector_CP(fVector* dest, fVector* op1, fVector* op2) {
+static void fVector_CP(fVector* dest, fVector* op1, fVector* op2)
+{
 	dest->x = op1->y * op2->z - op1->z * op2->y;
 	dest->y = op1->z * op2->x - op1->x * op2->z;
 	dest->z = op1->x * op2->y - op1->y * op2->x;
@@ -322,9 +326,6 @@ typedef struct {
 	int		flag_data;
 } transluscent_shape_t;
 
-#define MAX_SCSHAPES 500
-#define MAX_TSHAPES 500
-
 static shadowcasting_shape_t* scshapes = NULL;
 static unsigned int scshapes_size = 0;
 static unsigned int nb_scshapes = 0;
@@ -333,7 +334,8 @@ static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
-		      int pieFlag, int pieFlagData) {
+		      int pieFlag, int pieFlagData) 
+{
 	int32		tempY;
 	int i, n;
 	iVector		*pVertices;
@@ -443,7 +445,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) {
+static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) 
+{
 	int32		tempY;
 	int i, n;
 	iVector		*pVertices;
@@ -618,7 +621,8 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 }
 
-static void inverse_matrix(float* src, float * dst) {
+static void inverse_matrix(float* src, float * dst) 
+{
 	float det = src[0]*src[5]*src[10]+src[4]*src[9]*src[2]+src[8]*src[1]*src[6] -src[2]*src[5]*src[8]-src[6]*src[9]*src[0]-src[10]*src[1]*src[4];
 	float invdet = 1.0f/det;
 
@@ -633,13 +637,29 @@ static void inverse_matrix(float* src, float * dst) {
 	dst[8] = invdet*(src[0]*src[5]-src[4]*src[1]);
 }
 
-static void pie_DrawShadows(void) {
+static void pie_ShadowDrawLoop(float pos_lgt0[4]) 
+{
+	float invmat[9];
+	fVector light;
+	int i;
+
+	for (i = 0; i < nb_scshapes; i++)
+	{
+		glLoadIdentity();
+		glMultMatrixf( scshapes[i].matrix );
+		inverse_matrix( scshapes[i].matrix, invmat );
+		light.x = invmat[0] * pos_lgt0[0] + invmat[3] * pos_lgt0[1] + invmat[6] * pos_lgt0[2];
+		light.y = invmat[1] * pos_lgt0[0] + invmat[4] * pos_lgt0[1] + invmat[7] * pos_lgt0[2];
+		light.z = invmat[2] * pos_lgt0[0] + invmat[5] * pos_lgt0[1] + invmat[8] * pos_lgt0[2];
+		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
+	}
+}
+
+static void pie_DrawShadows(void) 
+{
 	static BOOL dlist_defined = FALSE;
 	static GLuint dlist;
-	unsigned int i;
 	float pos_lgt0[4];
-	fVector light;
-	float invmat[9];
 	float width = pie_GetVideoBufferWidth();
 	float height = pie_GetVideoBufferHeight();
 
@@ -667,16 +687,7 @@ static void pie_DrawShadows(void) {
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		for (i = 0; i < nb_scshapes; ++i) {
-			glLoadIdentity();
-			glMultMatrixf(scshapes[i].matrix);
-			inverse_matrix(scshapes[i].matrix, invmat);
-			light.x = invmat[0]*pos_lgt0[0] + invmat[3]*pos_lgt0[1] + invmat[6]*pos_lgt0[2];
-			light.y = invmat[1]*pos_lgt0[0] + invmat[4]*pos_lgt0[1] + invmat[7]*pos_lgt0[2];
-			light.z = invmat[2]*pos_lgt0[0] + invmat[5]*pos_lgt0[1] + invmat[8]*pos_lgt0[2];
-			pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
-		}
-
+		pie_ShadowDrawLoop(&pos_lgt0);
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 
 	} else {
@@ -691,31 +702,14 @@ static void pie_DrawShadows(void) {
 		glCullFace(GL_BACK);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
-		// Compute and draw shadows
-		for (i = 0; i < nb_scshapes; ++i) {
-			glLoadIdentity();
-			glMultMatrixf(scshapes[i].matrix);
-			inverse_matrix(scshapes[i].matrix, invmat);
-			light.x = invmat[0]*pos_lgt0[0] + invmat[3]*pos_lgt0[1] + invmat[6]*pos_lgt0[2];
-			light.y = invmat[1]*pos_lgt0[0] + invmat[4]*pos_lgt0[1] + invmat[7]*pos_lgt0[2];
-			light.z = invmat[2]*pos_lgt0[0] + invmat[5]*pos_lgt0[1] + invmat[8]*pos_lgt0[2];
-			pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
-		}
+		pie_ShadowDrawLoop(&pos_lgt0);
 
 		// Setup stencil for front faces.
 		glCullFace(GL_FRONT);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
 
 		// Draw shadows again
-		for (i = 0; i < nb_scshapes; ++i) {
-			glLoadIdentity();
-			glMultMatrixf(scshapes[i].matrix);
-			inverse_matrix(scshapes[i].matrix, invmat);
-			light.x = invmat[0]*pos_lgt0[0] + invmat[3]*pos_lgt0[1] + invmat[6]*pos_lgt0[2];
-			light.y = invmat[1]*pos_lgt0[0] + invmat[4]*pos_lgt0[1] + invmat[7]*pos_lgt0[2];
-			light.z = invmat[2]*pos_lgt0[0] + invmat[5]*pos_lgt0[1] + invmat[8]*pos_lgt0[2];
-			pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
-		}
+		pie_ShadowDrawLoop(&pos_lgt0);
 	}
 
 	glEnable(GL_CULL_FACE);
@@ -748,10 +742,12 @@ static void pie_DrawShadows(void) {
 	nb_scshapes = 0;
 }
 
-static void pie_DrawRemainingTransShapes(void) {
+static void pie_DrawRemainingTransShapes(void)
+{
 	unsigned int i;
 
-	for (i = 0; i < nb_tshapes; ++i) {
+	for (i = 0; i < nb_tshapes; ++i) 
+	{
 		glPushMatrix();
 		glLoadIdentity();
 		glMultMatrixf(tshapes[i].matrix);
@@ -763,7 +759,8 @@ static void pie_DrawRemainingTransShapes(void) {
 	nb_tshapes = 0;
 }
 
-void pie_RemainingPasses(void) {
+void pie_RemainingPasses(void) 
+{
 	pie_DrawShadows();
 	pie_DrawRemainingTransShapes();
 }
@@ -881,7 +878,6 @@ void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOO
 
 void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOOL bClip)
 {
-//	SDWORD swap;
 	PIELIGHT c;
 	polyCount++;
 
