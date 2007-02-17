@@ -123,7 +123,7 @@ void	pie_DrawViewingWindow(iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y
 	pieVrts[3].sy = v[3].y;
 
 	pie_Set2DClip(x1,y1,x2-1,y2-1);
-	clip = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0], FALSE);
+	clip = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0]);
 	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 
 	if (clip >= 3) {

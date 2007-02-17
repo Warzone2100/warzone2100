@@ -20,7 +20,6 @@
 #include "pieclip.h"
 #include "ivi.h"
 
-static BOOL bClipSpecular = TRUE;
 static UDWORD videoBufferDepth = 32, videoBufferWidth = 640, videoBufferHeight = 480;
 extern iSurface	*psRendSurface;
 
@@ -65,6 +64,17 @@ void pie_Set2DClip(int x0, int y0, int x1, int y1)
 	psRendSurface->clip.bottom = y1;
 }
 
+static void pie_ClipUV(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip, int32 t)
+{
+	clip->tu = s1->tu + ((t * (s2->tu - s1->tu)) >> iV_DIVSHIFT);
+	clip->tv = s1->tv + ((t * (s2->tv - s1->tv)) >> iV_DIVSHIFT);
+	clip->sz = s1->sz + ((t * (s2->sz - s1->sz)) >> iV_DIVSHIFT);
+	clip->light.byte.r = s1->light.byte.r + ((t * (s2->light.byte.r - s1->light.byte.r)) >> iV_DIVSHIFT);
+	clip->light.byte.g = s1->light.byte.g + ((t * (s2->light.byte.g - s1->light.byte.g)) >> iV_DIVSHIFT);
+	clip->light.byte.b = s1->light.byte.b + ((t * (s2->light.byte.b - s1->light.byte.b)) >> iV_DIVSHIFT);
+	clip->light.byte.a = s1->light.byte.a + ((t * (s2->light.byte.a - s1->light.byte.a)) >> iV_DIVSHIFT);
+}
+
 static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 {
 	int n, dx;
@@ -88,22 +98,7 @@ static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 			// clip uv
 			t = ((clip->sx - s1->sx)<<iV_DIVSHIFT) / dx;
-
-			clip->tu = s1->tu + ((t * (s2->tu - s1->tu)) >> iV_DIVSHIFT);
-			clip->tv = s1->tv + ((t * (s2->tv - s1->tv)) >> iV_DIVSHIFT);
-			clip->sz = s1->sz + ((t * (s2->sz - s1->sz)) >> iV_DIVSHIFT);
-			clip->light.byte.r = s1->light.byte.r + ((t * (s2->light.byte.r - s1->light.byte.r)) >> iV_DIVSHIFT);
-			clip->light.byte.g = s1->light.byte.g + ((t * (s2->light.byte.g - s1->light.byte.g)) >> iV_DIVSHIFT);
-			clip->light.byte.b = s1->light.byte.b + ((t * (s2->light.byte.b - s1->light.byte.b)) >> iV_DIVSHIFT);
-			clip->light.byte.a = s1->light.byte.a + ((t * (s2->light.byte.a - s1->light.byte.a)) >> iV_DIVSHIFT);
-			if (bClipSpecular)
-			{
-				clip->specular.byte.r = s1->specular.byte.r + ((t * (s2->specular.byte.r - s1->specular.byte.r)) >> iV_DIVSHIFT);
-				clip->specular.byte.g = s1->specular.byte.g + ((t * (s2->specular.byte.g - s1->specular.byte.g)) >> iV_DIVSHIFT);
-				clip->specular.byte.b = s1->specular.byte.b + ((t * (s2->specular.byte.b - s1->specular.byte.b)) >> iV_DIVSHIFT);
-				clip->specular.byte.a = s1->specular.byte.a + ((t * (s2->specular.byte.a - s1->specular.byte.a)) >> iV_DIVSHIFT);
-			}
-
+			pie_ClipUV(s1, s2, clip, t);
 		} else
 			*clip = *s1;
 
@@ -123,19 +118,7 @@ static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 			// clip uv
 			t = ((clip->sx - s1->sx)<<iV_DIVSHIFT) / dx;
-			clip->tu = s1->tu + ((t * (s2->tu - s1->tu)) >> iV_DIVSHIFT);
-			clip->tv = s1->tv + ((t * (s2->tv - s1->tv)) >> iV_DIVSHIFT);
-			clip->sz = s1->sz + ((t * (s2->sz - s1->sz)) >> iV_DIVSHIFT);
-			clip->light.byte.r = s1->light.byte.r + ((t * (s2->light.byte.r - s1->light.byte.r)) >> iV_DIVSHIFT);
-			clip->light.byte.g = s1->light.byte.g + ((t * (s2->light.byte.g - s1->light.byte.g)) >> iV_DIVSHIFT);
-			clip->light.byte.b = s1->light.byte.b + ((t * (s2->light.byte.b - s1->light.byte.b)) >> iV_DIVSHIFT);
-			clip->light.byte.a = s1->light.byte.a + ((t * (s2->light.byte.a - s1->light.byte.a)) >> iV_DIVSHIFT);
-			if (bClipSpecular) {
-				clip->specular.byte.r = s1->specular.byte.r + ((t * (s2->specular.byte.r - s1->specular.byte.r)) >> iV_DIVSHIFT);
-				clip->specular.byte.g = s1->specular.byte.g + ((t * (s2->specular.byte.g - s1->specular.byte.g)) >> iV_DIVSHIFT);
-				clip->specular.byte.b = s1->specular.byte.b + ((t * (s2->specular.byte.b - s1->specular.byte.b)) >> iV_DIVSHIFT);
-				clip->specular.byte.a = s1->specular.byte.a + ((t * (s2->specular.byte.a - s1->specular.byte.a)) >> iV_DIVSHIFT);
-			}
+			pie_ClipUV(s1, s2, clip, t);
 
 			n = 2;
 		}
@@ -157,25 +140,10 @@ static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 			// clip uv
 			t = ((clip->sx - s1->sx)<<iV_DIVSHIFT) / dx;
-			clip->tu = s1->tu + ((t * (s1->tu - s2->tu)) >> iV_DIVSHIFT);
-			clip->tv = s1->tv + ((t * (s1->tv - s2->tv)) >> iV_DIVSHIFT);
-			clip->sz = s1->sz + ((t * (s1->sz - s2->sz)) >> iV_DIVSHIFT);
-			clip->light.byte.r = s1->light.byte.r + ((t * (s1->light.byte.r - s2->light.byte.r)) >> iV_DIVSHIFT);
-			clip->light.byte.g = s1->light.byte.g + ((t * (s1->light.byte.g - s2->light.byte.g)) >> iV_DIVSHIFT);
-			clip->light.byte.b = s1->light.byte.b + ((t * (s1->light.byte.b - s2->light.byte.b)) >> iV_DIVSHIFT);
-			clip->light.byte.a = s1->light.byte.a + ((t * (s1->light.byte.a - s2->light.byte.a)) >> iV_DIVSHIFT);
-			if (bClipSpecular)
-			{
-				clip->specular.byte.r = s1->specular.byte.r + ((t * (s1->specular.byte.r - s2->specular.byte.r)) >> iV_DIVSHIFT);
-				clip->specular.byte.g = s1->specular.byte.g + ((t * (s1->specular.byte.g - s2->specular.byte.g)) >> iV_DIVSHIFT);
-				clip->specular.byte.b = s1->specular.byte.b + ((t * (s1->specular.byte.b - s2->specular.byte.b)) >> iV_DIVSHIFT);
-				clip->specular.byte.a = s1->specular.byte.a + ((t * (s1->specular.byte.a - s2->specular.byte.a)) >> iV_DIVSHIFT);
-			}
-
-
-		} else
+			pie_ClipUV(s1, s2, clip, t);
+		} else {
 			*clip = *s1;
-
+		}
 
 		if (s2->sx < psRendSurface->clip.left) {
 			if (s1->sx < psRendSurface->clip.left)
@@ -193,20 +161,7 @@ static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 			// clip uv
 			t = ((clip->sx - s1->sx)<<iV_DIVSHIFT) / dx;
-			clip->tu = s1->tu + ((t * (s1->tu - s2->tu)) >> iV_DIVSHIFT);
-			clip->tv = s1->tv + ((t * (s1->tv - s2->tv)) >> iV_DIVSHIFT);
-			clip->sz = s1->sz + ((t * (s1->sz - s2->sz)) >> iV_DIVSHIFT);
-			clip->light.byte.r = s1->light.byte.r + ((t * (s1->light.byte.r - s2->light.byte.r)) >> iV_DIVSHIFT);
-			clip->light.byte.g = s1->light.byte.g + ((t * (s1->light.byte.g - s2->light.byte.g)) >> iV_DIVSHIFT);
-			clip->light.byte.b = s1->light.byte.b + ((t * (s1->light.byte.b - s2->light.byte.b)) >> iV_DIVSHIFT);
-			clip->light.byte.a = s1->light.byte.a + ((t * (s1->light.byte.a - s2->light.byte.a)) >> iV_DIVSHIFT);
-			if (bClipSpecular)
-			{
-				clip->specular.byte.r = s1->specular.byte.r + ((t * (s1->specular.byte.r - s2->specular.byte.r)) >> iV_DIVSHIFT);
-				clip->specular.byte.g = s1->specular.byte.g + ((t * (s1->specular.byte.g - s2->specular.byte.g)) >> iV_DIVSHIFT);
-				clip->specular.byte.b = s1->specular.byte.b + ((t * (s1->specular.byte.b - s2->specular.byte.b)) >> iV_DIVSHIFT);
-				clip->specular.byte.a = s1->specular.byte.a + ((t * (s1->specular.byte.a - s2->specular.byte.a)) >> iV_DIVSHIFT);
-			}
+			pie_ClipUV(s1, s2, clip, t);
 
 			n = 2;
 		}
@@ -238,67 +193,41 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 			// clip uv
 			t = ((clip->sy - s1->sy)<<iV_DIVSHIFT) / dy;
-			clip->tu = s1->tu + ((t * (s2->tu - s1->tu)) >> iV_DIVSHIFT);
-			clip->tv = s1->tv + ((t * (s2->tv - s1->tv)) >> iV_DIVSHIFT);
-			clip->sz = s1->sz + ((t * (s2->sz - s1->sz)) >> iV_DIVSHIFT);
-			clip->light.byte.r = s1->light.byte.r + ((t * (s2->light.byte.r - s1->light.byte.r)) >> iV_DIVSHIFT);
-			clip->light.byte.g = s1->light.byte.g + ((t * (s2->light.byte.g - s1->light.byte.g)) >> iV_DIVSHIFT);
-			clip->light.byte.b = s1->light.byte.b + ((t * (s2->light.byte.b - s1->light.byte.b)) >> iV_DIVSHIFT);
-			clip->light.byte.a = s1->light.byte.a + ((t * (s2->light.byte.a - s1->light.byte.a)) >> iV_DIVSHIFT);
-			if (bClipSpecular)
-			{
-				clip->specular.byte.r = s1->specular.byte.r + ((t * (s2->specular.byte.r - s1->specular.byte.r)) >> iV_DIVSHIFT);
-				clip->specular.byte.g = s1->specular.byte.g + ((t * (s2->specular.byte.g - s1->specular.byte.g)) >> iV_DIVSHIFT);
-				clip->specular.byte.b = s1->specular.byte.b + ((t * (s2->specular.byte.b - s1->specular.byte.b)) >> iV_DIVSHIFT);
-				clip->specular.byte.a = s1->specular.byte.a + ((t * (s2->specular.byte.a - s1->specular.byte.a)) >> iV_DIVSHIFT);
-			}
-
-
-		} else
+			pie_ClipUV(s1, s2, clip, t);
+		} else {
 			*clip = *s1;
+		}
 
+		if (s2->sy > psRendSurface->clip.bottom) 
+		{
+			if (s1->sy > psRendSurface->clip.bottom) 
+			{
+				return 0;
+			}
+			clip++;
 
-			if (s2->sy > psRendSurface->clip.bottom) {
+			dy = s2->sy - s1->sy;
 
-				if (s1->sy > psRendSurface->clip.bottom) return 0;
-
-				clip++;
-
-				dy = s2->sy - s1->sy;
-
-				if (dy != 0)
-					clip->sx = s2->sx - (s2->sx - s1->sx) * (s2->sy - psRendSurface->clip.bottom) / dy;
-				else
-					clip->sx = s2->sx;
-
-				clip->sy = psRendSurface->clip.bottom;
-
-			// clip uv
-				t = ((clip->sy - s1->sy)<<iV_DIVSHIFT) / dy;
-				clip->tu = s1->tu + ((t * (s2->tu - s1->tu)) >> iV_DIVSHIFT);
-				clip->tv = s1->tv + ((t * (s2->tv - s1->tv)) >> iV_DIVSHIFT);
-				clip->sz = s1->sz + ((t * (s2->sz - s1->sz)) >> iV_DIVSHIFT);
-				clip->light.byte.r = s1->light.byte.r + ((t * (s2->light.byte.r - s1->light.byte.r)) >> iV_DIVSHIFT);
-				clip->light.byte.g = s1->light.byte.g + ((t * (s2->light.byte.g - s1->light.byte.g)) >> iV_DIVSHIFT);
-				clip->light.byte.b = s1->light.byte.b + ((t * (s2->light.byte.b - s1->light.byte.b)) >> iV_DIVSHIFT);
-				clip->light.byte.a = s1->light.byte.a + ((t * (s2->light.byte.a - s1->light.byte.a)) >> iV_DIVSHIFT);
-				if (bClipSpecular)
-				{
-					clip->specular.byte.r = s1->specular.byte.r + ((t * (s2->specular.byte.r - s1->specular.byte.r)) >> iV_DIVSHIFT);
-					clip->specular.byte.g = s1->specular.byte.g + ((t * (s2->specular.byte.g - s1->specular.byte.g)) >> iV_DIVSHIFT);
-					clip->specular.byte.b = s1->specular.byte.b + ((t * (s2->specular.byte.b - s1->specular.byte.b)) >> iV_DIVSHIFT);
-					clip->specular.byte.a = s1->specular.byte.a + ((t * (s2->specular.byte.a - s1->specular.byte.a)) >> iV_DIVSHIFT);
-				}
-
-
-				n = 2;
+			if (dy != 0)
+			{
+				clip->sx = s2->sx - (s2->sx - s1->sx) * (s2->sy - psRendSurface->clip.bottom) / dy;
+			} else {
+				clip->sx = s2->sx;
 			}
 
-			return n;
+			clip->sy = psRendSurface->clip.bottom;
+
+			t = ((clip->sy - s1->sy)<<iV_DIVSHIFT) / dy;
+			pie_ClipUV(s1, s2, clip, t);
+
+			n = 2;
+		}
+
+		return n;
 
 	} else {
-		if (s1->sy > psRendSurface->clip.bottom) {
-
+		if (s1->sy > psRendSurface->clip.bottom) 
+		{
 			if (s2->sy >= psRendSurface->clip.bottom) return 0;
 
 			dy = s1->sy - s2->sy;
@@ -312,72 +241,47 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 			// clip uv
 			t = ((clip->sy - s1->sy)<<iV_DIVSHIFT) / dy;
-			clip->tu = s1->tu + ((t * (s1->tu - s2->tu)) >> iV_DIVSHIFT);
-			clip->tv = s1->tv + ((t * (s1->tv - s2->tv)) >> iV_DIVSHIFT);
-			clip->sz = s1->sz + ((t * (s1->sz - s2->sz)) >> iV_DIVSHIFT);
-			clip->light.byte.r = s1->light.byte.r + ((t * (s1->light.byte.r - s2->light.byte.r)) >> iV_DIVSHIFT);
-			clip->light.byte.g = s1->light.byte.g + ((t * (s1->light.byte.g - s2->light.byte.g)) >> iV_DIVSHIFT);
-			clip->light.byte.b = s1->light.byte.b + ((t * (s1->light.byte.b - s2->light.byte.b)) >> iV_DIVSHIFT);
-			clip->light.byte.a = s1->light.byte.a + ((t * (s1->light.byte.a - s2->light.byte.a)) >> iV_DIVSHIFT);
-			if (bClipSpecular)
-			{
-				clip->specular.byte.r = s1->specular.byte.r + ((t * (s1->specular.byte.r - s2->specular.byte.r)) >> iV_DIVSHIFT);
-				clip->specular.byte.g = s1->specular.byte.g + ((t * (s1->specular.byte.g - s2->specular.byte.g)) >> iV_DIVSHIFT);
-				clip->specular.byte.b = s1->specular.byte.b + ((t * (s1->specular.byte.b - s2->specular.byte.b)) >> iV_DIVSHIFT);
-				clip->specular.byte.a = s1->specular.byte.a + ((t * (s1->specular.byte.a - s2->specular.byte.a)) >> iV_DIVSHIFT);
-			}
+			pie_ClipUV(s1, s2, clip, t);
 
-
-		} else
+		} else {
 			*clip = *s1;
+		}
 
-			if (s2->sy < psRendSurface->clip.top) {
-
-				if (s1->sy < psRendSurface->clip.top) return 0;
-
-				clip++;
-
-				dy = s1->sy - s2->sy;
-
-				if (dy != 0)
-					clip->sx = s2->sx + (s1->sx - s2->sx) * (psRendSurface->clip.top - s2->sy) / dy;
-				else
-					clip->sx = s2->sx;
-
-				clip->sy = psRendSurface->clip.top;
-
-			// clip uv
-				t = ((clip->sy - s1->sy)<<iV_DIVSHIFT) / dy;
-				clip->tu = s1->tu + ((t * (s1->tu - s2->tu)) >> iV_DIVSHIFT);
-				clip->tv = s1->tv + ((t * (s1->tv - s2->tv)) >> iV_DIVSHIFT);
-				clip->sz = s1->sz + ((t * (s1->sz - s2->sz)) >> iV_DIVSHIFT);
-				clip->light.byte.r = s1->light.byte.r + ((t * (s1->light.byte.r - s2->light.byte.r)) >> iV_DIVSHIFT);
-				clip->light.byte.g = s1->light.byte.g + ((t * (s1->light.byte.g - s2->light.byte.g)) >> iV_DIVSHIFT);
-				clip->light.byte.b = s1->light.byte.b + ((t * (s1->light.byte.b - s2->light.byte.b)) >> iV_DIVSHIFT);
-				clip->light.byte.a = s1->light.byte.a + ((t * (s1->light.byte.a - s2->light.byte.a)) >> iV_DIVSHIFT);
-				if (bClipSpecular)
-				{
-					clip->specular.byte.r = s1->specular.byte.r + ((t * (s1->specular.byte.r - s2->specular.byte.r)) >> iV_DIVSHIFT);
-					clip->specular.byte.g = s1->specular.byte.g + ((t * (s1->specular.byte.g - s2->specular.byte.g)) >> iV_DIVSHIFT);
-					clip->specular.byte.b = s1->specular.byte.b + ((t * (s1->specular.byte.b - s2->specular.byte.b)) >> iV_DIVSHIFT);
-					clip->specular.byte.a = s1->specular.byte.a + ((t * (s1->specular.byte.a - s2->specular.byte.a)) >> iV_DIVSHIFT);
-				}
-
-				n = 2;
-
+		if (s2->sy < psRendSurface->clip.top) 
+		{
+			if (s1->sy < psRendSurface->clip.top) 
+			{
+				return 0;
 			}
 
-			return n;
+			clip++;
+
+			dy = s1->sy - s2->sy;
+
+			if (dy != 0)
+			{
+				clip->sx = s2->sx + (s1->sx - s2->sx) * (psRendSurface->clip.top - s2->sy) / dy;
+			} else {
+				clip->sx = s2->sx;
+			}
+
+			clip->sy = psRendSurface->clip.top;
+
+			t = ((clip->sy - s1->sy)<<iV_DIVSHIFT) / dy;
+			pie_ClipUV(s1, s2, clip, t);
+
+			n = 2;
+		}
+
+		return n;
 	}
 }
 
-int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip, BOOL bSpecular)
+int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip)
 {
 	static PIEVERTEX xclip[iV_POLY_MAX_POINTS+4];
 	PIEVERTEX *p0, *p1;
 	int n1, n, i;
-
-	bClipSpecular = bSpecular;
 
 	p0 = &points[0];
 	p1 = &points[1];
@@ -405,16 +309,17 @@ int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip, BOOL bSpec
 	return n;
 }
 
+#ifdef NEVER_USED_ANYWHERE
+// I leave this around just for potential inspirational purposes. - Per
+
 //*************************************************************************
 /* Alex - much faster tri clipper - won't clip owt else tho' */
-int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PIEVERTEX *clipped, BOOL bSpecular)
+int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PIEVERTEX *clipped)
 {
 	static	PIEVERTEX	xClip[iV_POLY_MAX_POINTS+4];	// plus 4 hopefully is limit?
 	static	PIEVERTEX	*p0,*p1;
 	UDWORD	numPreY,numAll;
 	UDWORD	i;
-
-	bClipSpecular = bSpecular;
 
 	numPreY = 0;
 	if( (v1->sx > LONG_TEST) || (v1->sy > LONG_TEST) )
@@ -451,3 +356,4 @@ int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PI
 
 	return numAll;
 }
+#endif
