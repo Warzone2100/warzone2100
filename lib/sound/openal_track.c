@@ -262,16 +262,6 @@ BOOL sound_QueueSamplePlaying( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void sound_SaveTrackData( TRACK *psTrack, ALuint buffer )
-{
-	// save buffer name in track
-	psTrack->iBufferName = buffer;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 
 typedef struct {
 	void* buffer;
@@ -344,14 +334,17 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 	static ALuint	data_size;
 	int		result, section;
 
+	// Set some info for the ovbuf_callbacks functions
 	ovbuf.buffer = pBuffer;
 	ovbuf.size = udwSize;
 	ovbuf.pos = 0;
 
+	// Open resource for decoding
 	if (ov_open_callbacks(&ovbuf, &ogg_stream, NULL, 0, ovbuf_callbacks) < 0) {
 		return FALSE;
 	}
 
+	// Aquire some info about the sound data
 	ogg_info = ov_info(&ogg_stream, -1);
 
 	if (ogg_info->channels == 1) {
@@ -359,27 +352,39 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 	} else {
 		format = AL_FORMAT_STEREO16;
 	}
-	freq = ogg_info->rate;
+	freq = ogg_info->rate;	// Sample rate in Hz
 
+	// Allocate an initial buffer to contain the decoded PCM data
 	if (data == NULL) {
 		data_size = 8192;
 		data = malloc(data_size);
 	}
 
+	// Decode PCM data into the buffer until there is nothing to decode left
 	result = ov_read(&ogg_stream, (char *)data+size, data_size-size, OGG_ENDIAN, 2, 1, &section);
 	while( result != 0 ) {
 		size += result;
+
+		// If the PCM buffer has become to small increase it by reallocating double its previous size
 		if (size == data_size) {
 			data_size *= 2;
 			data = realloc(data, data_size);
 		}
+
+		// Decode
 		result = ov_read(&ogg_stream, (char *)data+size, data_size-size, OGG_ENDIAN, 2, 1, &section);
 	}
 
+	// Close the OggVorbis decoding stream
 	ov_clear(&ogg_stream);
+
+	// Create an OpenAL buffer and fill it with the decoded data
 	alGenBuffers(1, &buffer);
 	alBufferData(buffer, format, data, size, freq);
-	sound_SaveTrackData(psTrack, buffer);
+
+	// save buffer name in track
+	psTrack->iBufferName = buffer;
+
 	return TRUE;
 }
 
@@ -389,24 +394,32 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 //
 BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 {
-	PHYSFS_file * f = PHYSFS_openRead(szFileName);
+	// Use PhysicsFS to open the file
+	PHYSFS_file * fileHandle = PHYSFS_openRead(szFileName);
 	static char* buffer = NULL;
 	static unsigned int buffer_size = 0;
 	unsigned int size;
 
-	if (f == NULL) return FALSE;
+	if (fileHandle == NULL) return FALSE;
 
-	size = PHYSFS_fileLength(f);
+	// Aquire size of the file
+	size = PHYSFS_fileLength(fileHandle);
 	assert( size > -1 );
 
+	// If the size of the file to read is larger than that
+	// of the current buffer, then increase the buffer's size.
 	if (size > buffer_size) {
-		if (buffer != NULL) free(buffer);
-		buffer_size = size*2;
+		if (buffer != NULL)
+			free(buffer);
+
+		buffer_size = size;
 		buffer = (char*)malloc(buffer_size);
 	}
 
-	PHYSFS_read(f, buffer, 1, size);
+	// Read the specified entirely into memory
+	PHYSFS_read(fileHandle, buffer, 1, size);
 
+	// Now use sound_ReadTrackFromBuffer to decode the file's contents
 	return sound_ReadTrackFromBuffer(psTrack, buffer, size);
 }
 

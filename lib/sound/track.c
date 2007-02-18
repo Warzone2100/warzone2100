@@ -199,29 +199,27 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 		abort();
 		return NULL;
 	}
-	else
-	{
-		pTrack->bMemBuffer = TRUE;
-		pTrack->pName = (char*)MALLOC( strlen(GetLastResourceFilename()) + 1 );
-		if ( pTrack->pName == NULL )
-		{
-			debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
-			abort();
-			FREE( pTrack );
-			return NULL;
-		}
 
-		strcpy( pTrack->pName, GetLastResourceFilename() );
-		pTrack->resID = GetLastHashName();
-		if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
-		{
-			return NULL;
-		}
-		else
-		{
-			return pTrack;
-		}
+	pTrack->bMemBuffer = TRUE;
+
+	// Set filename in struct
+	pTrack->pName = (char*)MALLOC( strlen(GetLastResourceFilename()) + 1 );
+	if ( pTrack->pName == NULL )
+	{
+		debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
+		abort();
+		FREE( pTrack );
+		return NULL;
 	}
+	strcpy( pTrack->pName, GetLastResourceFilename() );
+
+	// Set HASH of resource in filename
+	pTrack->resID = GetLastHashName();
+
+	if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
+		return NULL;
+
+	return pTrack;
 }
 
 //*
