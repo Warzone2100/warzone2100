@@ -75,6 +75,7 @@ static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 
 static ALvoid	*data = NULL; // Needed for ReadTrackFromBuffer, must be global, so it can be free'd on shutdown
+static UDWORD DataBuffer_size = 16 * 1024;
 
 BOOL openal_initialized = FALSE;
 
@@ -267,16 +268,6 @@ BOOL sound_QueueSamplePlaying( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void sound_SaveTrackData( TRACK *psTrack, ALuint buffer )
-{
-	// save buffer name in track
-	psTrack->iBufferName = buffer;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 
 typedef struct {
 	void* buffer;
@@ -284,7 +275,7 @@ typedef struct {
 	unsigned int pos;
 } ov_buffer_t;
 
-size_t ovbuf_read(void *ptr, size_t size, size_t nmemb, void *datasource) {
+static size_t ovbuf_read(void *ptr, size_t size, size_t nmemb, void *datasource) {
 	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
 	unsigned int read_size = size*nmemb;
 
@@ -297,7 +288,7 @@ size_t ovbuf_read(void *ptr, size_t size, size_t nmemb, void *datasource) {
 	return read_size;
 }
 
-int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
+static int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
 	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
 	int new_pos = 0;
 
@@ -321,11 +312,11 @@ int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
 	}
 }
 
-int ovbuf_close(void *datasource) {
+static int ovbuf_close(void *datasource) {
 	return 0;
 }
 
-long ovbuf_tell(void *datasource) {
+static long ovbuf_tell(void *datasource) {
 	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
 
 	return ovbuf->pos;
@@ -338,54 +329,96 @@ static ov_callbacks ovbuf_callbacks = {
 	ovbuf_tell
 };
 
+static size_t ovPHYSFS_read(void *ptr, size_t size, size_t nmemb, void *datasource)
+{
+    return PHYSFS_read((PHYSFS_file*)datasource, ptr, 1, size*nmemb);
+}
+
+static int ovPHYSFS_seek(void *datasource, ogg_int64_t offset, int whence) {
+    return -1;
+}
+
+static int ovPHYSFS_close(void *datasource) {
+    return 0;
+}
+
+static long ovPHYSFS_tell(void *datasource) {
+    return -1;
+}
+
+static ov_callbacks ovPHYSFS_callbacks = {
+	ovPHYSFS_read,
+	ovPHYSFS_seek,
+	ovPHYSFS_close,
+	ovPHYSFS_tell
+};
+
+static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
+{
+	OggVorbis_File	ogg_stream;
+	vorbis_info*	ogg_info;
+
+	ALenum		format;
+	ALsizei		freq;
+
+	ALuint		buffer;
+	ALsizei		size=0;
+	int		result, section;
+
+
+	if (ov_open_callbacks(datasource, &ogg_stream, NULL, 0, callbackFuncs) < 0)
+		return FALSE;
+
+	// Aquire some info about the sound data
+	ogg_info = ov_info(&ogg_stream, -1);
+
+	// Determine PCM data format and sample rate in Hz
+	format = (ogg_info->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+	freq = ogg_info->rate;
+
+	// Allocate an initial buffer to contain the decoded PCM data
+	if (data == NULL) {
+		data = malloc(DataBuffer_size);
+	}
+
+	// Decode PCM data into the buffer until there is nothing to decode left
+	result = ov_read(&ogg_stream, (char *)data+size, DataBuffer_size-size, OGG_ENDIAN, 2, 1, &section);
+	while( result != 0 ) {
+		size += result;
+
+		// If the PCM buffer has become to small increase it by reallocating double its previous size
+		if (size == DataBuffer_size) {
+			DataBuffer_size *= 2;
+			data = realloc(data, DataBuffer_size);
+		}
+
+		// Decode
+		result = ov_read(&ogg_stream, (char *)data+size, DataBuffer_size-size, OGG_ENDIAN, 2, 1, &section);
+	}
+
+	// Create an OpenAL buffer and fill it with the decoded data
+	alGenBuffers(1, &buffer);
+	alBufferData(buffer, format, data, size, freq);
+
+	// save buffer name in track
+	psTrack->iBufferName = buffer;
+
+	// Close the OggVorbis decoding stream
+	ov_clear(&ogg_stream);
+
+	return TRUE;
+}
+
 BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 {
 	ov_buffer_t	ovbuf;
-	OggVorbis_File	ogg_stream;
-	vorbis_info*	ogg_info;
-	ALuint		buffer;
-	ALsizei		size=0, freq;
-	ALenum		format;
-	static ALuint	data_size;
-	int		result, section;
 
+	// Set some info for the ovbuf_callbacks functions
 	ovbuf.buffer = pBuffer;
 	ovbuf.size = udwSize;
 	ovbuf.pos = 0;
 
-	if (ov_open_callbacks(&ovbuf, &ogg_stream, NULL, 0, ovbuf_callbacks) < 0) {
-		return FALSE;
-	}
-
-	ogg_info = ov_info(&ogg_stream, -1);
-
-	if (ogg_info->channels == 1) {
-		format = AL_FORMAT_MONO16;
-	} else {
-		format = AL_FORMAT_STEREO16;
-	}
-	freq = ogg_info->rate;
-
-	if (data == NULL) {
-		data_size = 8192;
-		data = malloc(data_size);
-	}
-
-	result = ov_read(&ogg_stream, (char *)data+size, data_size-size, OGG_ENDIAN, 2, 1, &section);
-	while( result != 0 ) {
-		size += result;
-		if (size == data_size) {
-			data_size *= 2;
-			data = realloc(data, data_size);
-		}
-		result = ov_read(&ogg_stream, (char *)data+size, data_size-size, OGG_ENDIAN, 2, 1, &section);
-	}
-
-	ov_clear(&ogg_stream);
-	alGenBuffers(1, &buffer);
-	alBufferData(buffer, format, data, size, freq);
-	sound_SaveTrackData(psTrack, buffer);
-	return TRUE;
+	return sound_ReadTrack( psTrack, ovbuf_callbacks, &ovbuf );
 }
 
 //*
@@ -394,28 +427,19 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 //
 BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 {
-	PHYSFS_file * f = PHYSFS_openRead(szFileName);
-	static char* buffer = NULL;
-	static unsigned int buffer_size = 0;
-	unsigned int size;
-	char seekbuf[1];
+	BOOL success;
 
-	if (f == NULL) return FALSE;
+	// Use PhysicsFS to open the file
+	PHYSFS_file * fileHandle = PHYSFS_openRead(szFileName);
 
-	// FIXME Ugly hack because PhysFS doesn't support reporting the filesize, nor seeking to the end
-	while( PHYSFS_read( f, seekbuf, 1, 1 ) );
-	size = PHYSFS_tell( f );
-	PHYSFS_seek( f, 0 );
+	if (fileHandle == NULL)
+		return FALSE;
 
-	if (size > buffer_size) {
-		if (buffer != NULL) free(buffer);
-		buffer_size = size*2;
-		buffer = (char*)malloc(buffer_size);
-	}
+	// Now use sound_ReadTrackFromBuffer to decode the file's contents
+	success = sound_ReadTrack( psTrack, ovPHYSFS_callbacks, fileHandle);
 
-	PHYSFS_read(f, buffer, 1, size);
-
-	return sound_ReadTrackFromBuffer(psTrack, buffer, size);
+	PHYSFS_close(fileHandle);
+	return success;
 }
 
 //*

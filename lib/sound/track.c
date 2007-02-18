@@ -268,36 +268,44 @@ void *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 		abort();
 		return NULL;
 	}
-	else
-	{
-		pTrack->bMemBuffer = TRUE;
-		pTrack->pName = MALLOC( strlen(GetLastResourceFilename()) + 1 );
-		if ( pTrack->pName == NULL )
-		{
-			debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
-			abort();
-			FREE( pTrack );
-			return NULL;
-		}
 
-		strcpy( pTrack->pName, GetLastResourceFilename() );
-		pTrack->resID = GetLastHashName();
-		if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
-		{
-			return NULL;
-		}
-		else
-		{
-#ifdef USE_COMPRESSED_SPEECH
-			// flag compressed audio load
-			if ( pTrack->bCompressed == TRUE )
-			{
-				debug( LOG_NEVER, "sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName );
-			}
-#endif
-			return pTrack;
-		}
+	pTrack->bMemBuffer = TRUE;
+
+	// Set filename in struct
+	pTrack->pName = MALLOC( strlen(GetLastResourceFilename()) + 1 );
+	if ( pTrack->pName == NULL )
+	{
+		debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
+		abort();
+		FREE( pTrack );
+		return NULL;
 	}
+	strcpy( pTrack->pName, GetLastResourceFilename() );
+
+	// Set HASH of resource in filename
+	pTrack->resID = GetLastHashName();
+
+	if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
+		return NULL;
+
+#ifdef USE_COMPRESSED_SPEECH
+	// flag compressed audio load
+	if ( pTrack->bCompressed == TRUE )
+	{
+		debug( LOG_NEVER, "sound_LoadTrackFromBuffer: %s is compressed!\n", pTrack->pName );
+	}
+#endif
+	return pTrack;
+
+	strcpy( pTrack->pName, GetLastResourceFilename() );
+
+	// Set HASH of resource in filename
+	pTrack->resID = GetLastHashName();
+
+	if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
+		return NULL;
+
+	return pTrack;
 }
 
 //*
