@@ -291,10 +291,8 @@ static FRACT vectorToAngle(FRACT vx, FRACT vy);
 // Abbreviate some of the FRACT defines
 #define MKF(x)		MAKEFRACT(x)
 #define MKI(x)		MAKEINT(x)
-#define FCONST(x,y)	FRACTCONST(x,y)
 #define Fmul(x,y)	FRACTmul(x,y)
 #define Fdiv(x,y)	FRACTdiv(x,y)
-#define Fabs(x)		FRACTabs(x)
 
 //typedef enum MOVESOUNDTYPE	{ MOVESOUNDSTART, MOVESOUNDIDLE, MOVESOUNDMOVEOFF,
 //								MOVESOUNDMOVE, MOVESOUNDSTOPHISS, MOVESOUNDSHUTDOWN };
