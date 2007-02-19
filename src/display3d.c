@@ -1982,7 +1982,7 @@ void displayDynamicObjects( void )
 } // end Fn
 
 /* Sets the player's position and view angle - defaults player rotations as well */
-void setViewPos( UDWORD x, UDWORD y, __attribute__((unused)) BOOL Pan )
+void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 {
 	SDWORD midX,midY;
 

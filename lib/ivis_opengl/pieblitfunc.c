@@ -413,7 +413,7 @@ void pie_ImageFileIDStretch(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int Width,
 
 /* FIXME: WTF is this supposed to do? Looks like some other functionality
  * was retrofitted onto something else. - Per */
-void pie_UploadDisplayBuffer( __attribute__((unused)) char *DisplayBuffer )
+void pie_UploadDisplayBuffer( WZ_DECL_UNUSED char *DisplayBuffer )
 {
 	screen_Upload(NULL);
 }

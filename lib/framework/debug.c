@@ -119,7 +119,7 @@ static int code_part_from_str(const char *str)
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_stderr( __attribute__((unused)) void ** data, const char * outputBuffer )
+void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuffer )
 {
 	if ( !strchr( outputBuffer, '\n' ) ) {
 		fprintf( stderr, "%s\n", outputBuffer );
