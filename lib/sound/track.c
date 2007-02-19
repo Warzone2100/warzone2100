@@ -262,7 +262,7 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_ReleaseTrack( TRACK *psTrack )
+void sound_ReleaseTrack( TRACK *psTrack )
 {
 	//~~~~~~~~~~~
 	SDWORD	iTrack;
@@ -282,7 +282,7 @@ BOOL sound_ReleaseTrack( TRACK *psTrack )
 	}
 
 	sound_FreeTrack( psTrack );
-	return TRUE;
+	FREE( psTrack );
 }
 
 //*

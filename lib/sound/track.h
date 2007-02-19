@@ -117,7 +117,7 @@ BOOL	sound_LoadTrackFromFile(char szFileName[]);
 TRACK *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
 			SDWORD iVol, SDWORD iPriority, SDWORD iAudibleRadius);
-BOOL	sound_ReleaseTrack( TRACK * psTrack );
+void	sound_ReleaseTrack( TRACK * psTrack );
 
 void	sound_StopTrack( AUDIO_SAMPLE *psSample );
 void	sound_PauseTrack( AUDIO_SAMPLE *psSample );

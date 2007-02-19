@@ -989,36 +989,23 @@ void dataTexPageRelease(void *pData)
 /* Load an audio file */
 BOOL dataAudioLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	TRACK	*psTrack;
+	// If audio is disabled or a track can't be constructed the return value will be NULL
+	*ppData = audio_LoadTrackFromBuffer( pBuffer, size );
 
-	if ( audio_Disabled() == TRUE )
-	{
-		*ppData = NULL;
-		return TRUE;
-	}
-	else if ( (psTrack = audio_LoadTrackFromBuffer( pBuffer, size )) == NULL )
-	{
+	if (*ppData == NULL)
 		return FALSE;
-	}
-
-	/* save track data */
-	*ppData = psTrack;
 
 	return TRUE;
 }
 
 void dataAudioRelease( void *pData )
 {
-	if (audio_Disabled() == FALSE)
-	{
-		TRACK	*psTrack = (TRACK *) pData;
+	TRACK	*psTrack = (TRACK *) pData;
 
-		ASSERT( PTRVALID(psTrack, sizeof(TRACK)),
-				"dataAudioRelease: invalid track pointer" );
+	ASSERT( PTRVALID(psTrack, sizeof(TRACK)),
+			"dataAudioRelease: invalid track pointer" );
 
-		audio_ReleaseTrack( psTrack );
-		FREE( psTrack );
-	}
+	audio_ReleaseTrack( psTrack );
 }
 
 
@@ -1294,6 +1281,3 @@ BOOL dataInitLoadFuncs(void)
 
 	return TRUE;
 }
-
-
-
