@@ -58,9 +58,6 @@ extern void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
 // local prototypes
 static iIMDShape *_imd_load_level(char **FileData, char *FileDataEnd, int nlevels,
                                   int texpage);
-static char *_imd_get_path(char *filename, char *path);
-BOOL CheckColourKey(iIMDShape *psShape);
-
 
 static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 {
@@ -77,70 +74,6 @@ static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 	}
 }
 
-
-//*************************************************************************
-//*** load IMD shape
-//*
-//* params	filename = IMD file to load (including extention)
-//*
-//* returns	pointer to imd shape def
-//*
-//******
-BOOL TESTDEBUG = FALSE;
-// load the polygon level ... then load the texture     .... Gareths code
-#define POST_LEVEL_TEXTURELOAD
-iIMDShape *iV_IMDLoad(char *filename, iBool palkeep)
-{
-	iIMDShape *pIMD;
-	char *pFileData,*pFileDataStart;
-	UDWORD FileSize;
-	BOOL res;
-	char path[MAX_FILE_PATH];
-	UDWORD *tp;
-	UDWORD tt;
-
-
-
-	iV_DEBUG1("imd[IMDLoad] = loading shape file '%s':",filename);
-
-	strcpy(_IMD_NAME,filename);
-
-	_imd_get_path(filename,path);
-
-	if (strlen(path) != 0) {
-		if (strlen(imagePath) != 0) {
-			if ((strlen(path) + strlen(imagePath)) > MAX_FILE_PATH) {
-				iV_Error(0xff,"(iv_IMDLoad) image path too long for load file");
-				return NULL;
-			}
-			strcat(imagePath,path);
-		}
-	}
-
-	res = loadFile(_IMD_NAME,&pFileData, &FileSize);
-	if (res == FALSE) {
-		iV_Error(0xff,"(iv_IMDLoad) unable to load file");
-		return NULL;
-	}
-
-
-
-	tp = (UDWORD *)pFileData;
-
-	tt = *tp;
-	//         'BPIE'
-	if (tt == 0x45495042) {
-		FREE(pFileData);	// free the file up
-		return NULL;
-	}
-
-	pFileDataStart = pFileData;
-	pIMD = iV_ProcessIMD(&pFileData, pFileData + FileSize, path, imagePath, palkeep);
-
-	FREE(pFileDataStart);	// free the file up
-	return (pIMD);
-}
-
 static UDWORD IMDcount = 0;
 static UDWORD IMDPolycount = 0;
 static UDWORD IMDVertexcount = 0;
@@ -151,15 +84,13 @@ static UDWORD IMDConnectors = 0;
 static char texfile[64];	//Last loaded texture page filename
 
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd, char *IMDpath,
-                         char *PCXpath,iBool palkeep)
+iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 {
 	char		*pFileData = *ppFileData;
 	int 		cnt;
 	char		buffer[MAX_FILE_PATH],  texType[MAX_FILE_PATH], ch; //, *str;
 	int			i, nlevels, ptype, pwidth, pheight, texpage;
 	iIMDShape	*s, *psShape;
-	BOOL		bColourKey = TRUE;
 	BOOL		bTextured = FALSE;
 #ifdef BSPIMD
 	UDWORD		level;
@@ -299,11 +230,9 @@ iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd, char *IMDpath,
 
 	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
 
-#ifdef POST_LEVEL_TEXTURELOAD
 	// load texture page if specified
-	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX)) {
-		bColourKey = FALSE;// CheckColourKey( s );//TRUE not the only imd using this texture
-
+	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX)) 
+	{
 		if(bTextured) {
 			texpage = iV_GetTexture(texfile);
 			if (texpage < 0) {
@@ -320,7 +249,6 @@ iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd, char *IMDpath,
 			psShape = psShape->next;
 		}
 	}
-#endif
 
 	if (s == NULL) {
 		debug(LOG_ERROR, "iV_ProcessIMD: unsuccessful (%s)", buffer);
@@ -343,7 +271,7 @@ iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd, char *IMDpath,
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******
-static iBool _imd_load_polys(char **ppFileData, char *FileDataEnd, iIMDShape *s)
+static iBool _imd_load_polys( char **ppFileData, iIMDShape *s )
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -501,7 +429,7 @@ static iBool _imd_load_polys(char **ppFileData, char *FileDataEnd, iIMDShape *s)
 
 #define GETBSPTRIANGLE(polyid) (&(s->polys[(polyid)]))
 
-static iBool _imd_load_bsp(char **ppFileData, char *FileDataEnd, iIMDShape *s, UWORD BSPNodeCount)
+static iBool _imd_load_bsp( char **ppFileData, iIMDShape *s, UWORD BSPNodeCount )
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -645,7 +573,7 @@ static iBool _imd_load_bsp(char **ppFileData, char *FileDataEnd, iIMDShape *s, U
 #endif
 
 
-static BOOL ReadPoints(char **ppFileData, char *FileDataEnd, iIMDShape *s)
+static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -721,7 +649,7 @@ static BOOL ReadPoints(char **ppFileData, char *FileDataEnd, iIMDShape *s)
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******
-static iBool _imd_load_points(char **ppFileData, char *FileDataEnd, iIMDShape *s)
+static iBool _imd_load_points( char **ppFileData, iIMDShape *s )
 {
 	int i ;
 	iVector *p;
@@ -743,7 +671,10 @@ static iBool _imd_load_points(char **ppFileData, char *FileDataEnd, iIMDShape *s
 	}
 
 	// Read in points and remove duplicates (!)
-	if (ReadPoints(ppFileData,FileDataEnd, s)==FALSE) return FALSE;
+	if ( ReadPoints( ppFileData, s ) == FALSE )
+	{
+		return FALSE;
+	}
 
 	s->xmax = s->ymax = s->zmax = tempXMax = tempZMax = -FP12_MULTIPLIER;
 	s->xmin = s->ymin = s->zmin = tempXMin = tempZMin = FP12_MULTIPLIER;
@@ -943,7 +874,7 @@ static iBool _imd_load_points(char **ppFileData, char *FileDataEnd, iIMDShape *s
 }
 
 
-static iBool _imd_load_connectors(char **ppFileData, char *FileDataEnd, iIMDShape *s)
+static iBool _imd_load_connectors(char **ppFileData, iIMDShape *s)
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -1064,7 +995,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 		// There was no check / error handling!
 		//
 
-		_imd_load_points(&pFileData,FileDataEnd,s);
+		_imd_load_points( &pFileData, s );
 
 		if (sscanf(pFileData,"%s %d%n",buffer,&npolys,&cnt) != 2) {
 			debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
@@ -1080,7 +1011,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 		}
 
 //			DBPRINTF(("loading polygons - %d\n",s->npolys));
-		_imd_load_polys(&pFileData,FileDataEnd,s);
+		_imd_load_polys( &pFileData, s );
 
 
 //NOW load optional stuff
@@ -1124,14 +1055,14 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 #ifdef BSPIMD
 				else if (strcmp(buffer,"BSP") == 0)
 				{
-					_imd_load_bsp(&pFileData,FileDataEnd,s,(UWORD)n);
+					_imd_load_bsp( &pFileData, s, (UWORD)n );
 				}
 #endif
 				else if (strcmp(buffer,"CONNECTORS") == 0)
 				{
 					//load connector stuff
 					s->nconnectors = n;
-					_imd_load_connectors(&pFileData,FileDataEnd,s);
+					_imd_load_connectors( &pFileData, s );
 				}
 				else
 				{
@@ -1163,59 +1094,4 @@ BOOL iV_setImagePath(char *path)
 		imagePath[i+1] = '\0';
 	}
 	return TRUE;
-}
-
-
-static char *_imd_get_path(char *filename, char *path)
-{
-	int n, i;
-
-	n = strlen(filename);
-
-	for (i=n-1; i>=0 && (filename[i] != '/'); i--)
-		;
-
-	if (i<0)
-		path[0] = '\0';
-	else {
-		memcpy(path,filename,i+1);
-		path[i+1] = '\0';
-	}
-
-	return path;
-}
-
-
-/***************************************************************************/
-
-BOOL CheckColourKey( iIMDShape *psShape ) {
-	iIMDShape	*psShapeLevel;
-	int			i;
-
-	if ( rendSurface.usr >= REND_D3D_RGB &&
-		 rendSurface.usr <= REND_D3D_REF )
-	{
-		/* check model override flags else check all polys for colorkey flag */
-		if ( _IMD_FLAGS & iV_IMD_XTRANS ) {
-			return TRUE;
-		} else {
-			psShapeLevel = psShape;
-
-			/* loop over levels in model */
-			while ( psShape != NULL ) {
-				/* loop over polys in level */
-				for ( i=0; i<psShape->npolys; i++ ) {
-					/* break if transparent poly found */
-					if ( psShape->polys[i].flags & PIE_COLOURKEYED ) {
-						return TRUE;
-					}
-				}
-
-				/* next level */
-				psShape = psShape->next;
-			}
-		}
-	}
-
-	return FALSE;
 }

@@ -93,8 +93,7 @@
 
 extern BOOL iV_setImagePath(char *path);
 extern iIMDShape *iV_IMDLoad(char *filename, iBool palkeep);
-extern iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd,
-                                char *IMDpath, char *PCXpath, iBool palkeep);
+extern iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd );
 iIMDShape *iV_ProcessBPIE(iIMDShape *, UDWORD size);
 
 extern iBool iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
