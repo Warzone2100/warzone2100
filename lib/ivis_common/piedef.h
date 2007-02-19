@@ -189,13 +189,9 @@ typedef struct {
 /***************************************************************************/
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
-extern void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
+extern void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest );
 
-//PIEVERTEX line draw for all hardware modes
-extern void pie_DrawLine(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour, BOOL bclip);
-//iVetrex triangle draw for software modes
-extern void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint *offset);
-//PIEVERTEX poly draw for all hardware modes
+void pie_DrawTriangle( iVertex *pv );
 extern void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);

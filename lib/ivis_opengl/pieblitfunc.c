@@ -157,7 +157,7 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 	light.byte.g = psPalette[colour].g;
 	light.byte.b = psPalette[colour].b;
 	light.byte.a = MAX_UB_LIGHT;
-	pie_DrawRect(x0, y0, x1, y1, light.argb, FALSE);
+	pie_DrawRect( x0, y0, x1, y1, light.argb );
 }
 
 void pie_BoxFill(int x0,int y0, int x1, int y1, uint32 colour)
@@ -178,7 +178,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, uint32 colour)
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
-	pie_DrawRect(x0, y0, x1, y1, colour, FALSE);
+	pie_DrawRect( x0, y0, x1, y1, colour );
 
 }
 /***************************************************************************/
@@ -216,7 +216,7 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, 
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_FLAT);
 	light = (rgb & 0x00ffffff) + (transparency << 24);
-	pie_DrawRect(x0, y0, x1, y1, light, FALSE);
+	pie_DrawRect( x0, y0, x1, y1, light );
 }
 
 /***************************************************************************/
@@ -411,38 +411,11 @@ void pie_ImageFileIDStretch(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int Width,
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
 }
 
-void pie_ImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,BOOL bBilinear)
-{
-	PIEIMAGE pieImage;
-	PIERECT dest;
-
-	pie_SetBilinear(bBilinear);	//changed by alex 19 oct 98
-	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColour(COLOURINTENSITY);
-	pie_SetColourKeyedBlack(TRUE);
-
-	pieImage.texPage = Image->TPageID;
-	pieImage.tu = Image->Tu;
-	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width;
-	pieImage.th = Image->Height;
-	dest.x = x+Image->XOffset;
-	dest.y = y+Image->YOffset;
-	dest.w = Image->Width;
-	dest.h = Image->Height;
-	pie_DrawImage(&pieImage, &dest, &rendStyle);
-
-	pie_SetBilinear(FALSE);	//changed by alex 19 oct 98
-}
-
-void pie_UploadDisplayBuffer(char *DisplayBuffer)
+/* FIXME: WTF is this supposed to do? Looks like some other functionality
+ * was retrofitted onto something else. - Per */
+void pie_UploadDisplayBuffer( __attribute__((unused)) char *DisplayBuffer )
 {
 	screen_Upload(NULL);
-}
-
-void pie_DownloadDisplayBuffer(char *DisplayBuffer)
-{
-	/* Not implemented */
 }
 
 UDWORD radarTexture;
@@ -461,7 +434,7 @@ BOOL pie_ShutdownRadar(void)
 }
 
 
-void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID)
+void pie_DownLoadRadar( unsigned char *buffer )
 {
 	unsigned int i, j;
 	iColour* psPalette = pie_GetGamePal();
@@ -486,30 +459,7 @@ void pie_DownLoadRadar(unsigned char *buffer, UDWORD texPageID)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
-void pie_RenderRadar(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y)
-{
-	PIEIMAGE pieImage;
-	PIERECT dest;
-
-	pie_SetBilinear(TRUE);
-	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColour(COLOURINTENSITY);
-	pie_SetColourKeyedBlack(TRUE);
-	//special case function because texture is held outside of texture list
-	pieImage.texPage = radarTexture;
-	pieImage.tu = 0;
-	pieImage.tv = 0;
-	pieImage.tw = 256;
-	pieImage.th = 256;
-	dest.x = x;
-	dest.y = y;
-	dest.w = 128;
-	dest.h = 128;
-	pie_DrawImage(&pieImage, &dest, &rendStyle);
-}
-
-
-void pie_RenderRadarRotated(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int angle)
+void pie_RenderRadar( int x, int y )
 {
 	PIEIMAGE pieImage;
 	PIERECT dest;

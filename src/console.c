@@ -496,7 +496,7 @@ UDWORD	exceed;
 		MesY = pie_DrawFormattedText(psMessage->text,
 									mainConsole.topX,MesY,
 									mainConsole.width,
-									psMessage->JustifyType,FALSE);
+									psMessage->JustifyType);
 		/* Move on */
 		numProcessed++;
 	}
@@ -594,13 +594,13 @@ UDWORD	MesY;
 		MesY = pie_DrawFormattedText(consoleStorage[history[i]].text,
 									mainConsole.topX,MesY,
 									mainConsole.width,
-									consoleStorage[history[i]].JustifyType,FALSE);
+									consoleStorage[history[i]].JustifyType);
 	}
 	/* Draw the top one */
 	(void) pie_DrawFormattedText(consoleStorage[history[0]].text,
 									mainConsole.topX,MesY,
 									mainConsole.width,
-									consoleStorage[history[0]].JustifyType,FALSE);
+									consoleStorage[history[0]].JustifyType);
 
 	/* Return how much to drop the existing console by... Fix this for lines>screenWIDTH */
 	if(count)
@@ -631,7 +631,7 @@ UDWORD	MesY;
 				MesY = pie_DrawFormattedText(consoleStorage[thisIndex].text,
 											mainConsole.topX,MesY,
 											mainConsole.width,
-											consoleStorage[thisIndex].JustifyType,FALSE);
+											consoleStorage[thisIndex].JustifyType);
 				count++;
 				if(thisIndex) thisIndex--;
 				else thisIndex = MAX_CONSOLE_MESSAGES-1;

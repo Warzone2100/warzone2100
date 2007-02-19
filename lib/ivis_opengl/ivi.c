@@ -37,7 +37,7 @@ iError	_iVERROR;
 
 //*************************************************************************
 // pass in true to reset the palette too.
-void iV_Reset(int bPalReset)
+void iV_Reset(void)
 {
 	_TEX_INDEX = 0;
 	iV_ClearFonts();		// Initialise the IVIS font module.

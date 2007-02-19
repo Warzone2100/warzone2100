@@ -149,7 +149,6 @@ void	buildTileTextures(void);
 void	draw3dLine(iVector *src, iVector *dest, UBYTE col);
 UDWORD	getSuggestedPitch			( void );
 void	drawDragBox					( void );
-void    setViewPos					( UDWORD x, UDWORD y,BOOL Pan );
 void	calcScreenCoords			( DROID *psDroid );
 void	calcFlagPosScreenCoords		( SDWORD *pX, SDWORD *pY, SDWORD *pR);
 BOOL	clipDroid					( DROID *psDroid );
@@ -254,9 +253,6 @@ TILE_BUCKET		tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* File size - used for any loads. Move to another specific file handling module? */
 SDWORD		fileSize;
-
-/* Stores the texture for a specific tile */
-static	iTexture texturePage = { 64, 64, NULL };
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
 extern POINT 	sP1,sP2,sP3,sP4;
@@ -1525,7 +1521,6 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 void	drawTexturedTile(UDWORD	i, UDWORD j)
 {
 UDWORD	tileNumber;
-UDWORD	renderFlag;
 //UDWORD	n;
 iVertex p[4];
 //iVertex clip[iV_POLY_MAX_POINTS];
@@ -1533,7 +1528,6 @@ MAPTILE	*psTile;
 BOOL	tileOutlined = FALSE;
 UDWORD	realX,realY;
 UDWORD		topL,botL,topR,botR;
-iPoint	offset;
 BOOL	bEdgeTile;
 
 	bEdgeTile = FALSE;
@@ -1542,10 +1536,7 @@ BOOL	bEdgeTile;
 	realY = playerZTile+i;
 
 	/* Get a pointer to the tile we're going to render */
-	if( (realX<0) ||
-		(realY<0) ||
-		(realX>mapWidth-2) ||
-		(realY>mapHeight-2) )
+	if ( realX > mapWidth - 2 || realY > mapHeight - 2 )
 	{
 		psTile = &edgeTile;
 		bEdgeTile = TRUE;
@@ -1640,8 +1631,7 @@ BOOL	bEdgeTile;
 
 			}
 
-			renderFlag = 0;
-			pie_DrawTriangle(p, &texturePage, renderFlag, &offset);
+			pie_DrawTriangle( p );
 
 			if(TRI_FLIPPED(psTile))
 			{
@@ -1679,7 +1669,7 @@ BOOL	bEdgeTile;
 
 			}
 
-			pie_DrawTriangle(p, &texturePage, renderFlag, &offset);
+			pie_DrawTriangle( p );
 			// end tile-draw
 
 			// -------------------------------------------------------------------------
@@ -1992,16 +1982,13 @@ void displayDynamicObjects( void )
 } // end Fn
 
 /* Sets the player's position and view angle - defaults player rotations as well */
-void setViewPos(UDWORD x, UDWORD y,BOOL Pan)
+void setViewPos( UDWORD x, UDWORD y, __attribute__((unused)) BOOL Pan )
 {
-//BOOL	changed = FALSE;
-SDWORD midX,midY;
-
+	SDWORD midX,midY;
 
 	/* Find centre of grid thats actually DRAWN */
 	midX = x-(visibleXTiles/2);
 	midY = y-(visibleYTiles/2);
-
 
 	player.p.x = midX*TILE_UNITS;
 	player.p.z = midY*TILE_UNITS;
@@ -2163,7 +2150,7 @@ BOOL		bForceDraw;
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 {
 	UDWORD			msgX = 0, msgY = 0;
-	iVector			dv = { 0 };
+	iVector			dv = { 0, 0, 0 };
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r;
 	iIMDShape		*proxImd = NULL;
@@ -5000,7 +4987,6 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	MAPTILE *psTile;
 	BOOL bOutlined;
 	UDWORD tileNumber;
-	UDWORD renderFlag;
 	iPoint offset;
 	PIEVERTEX aVrts[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
@@ -5170,7 +5156,6 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
 	/* set up the texture size info */
-	renderFlag = 0;
 	offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64);
 	offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64);
 
@@ -5262,7 +5247,6 @@ static void drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	MAPTILE	*psTile;
 	//BOOL	bOutlined;
 	UDWORD	tileNumber;
-	UDWORD	renderFlag;
 	iPoint	offset;
 	PIEVERTEX aVrts[3];
 
@@ -5272,10 +5256,7 @@ static void drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 	actualY = playerZTile + i;
 
 	/* Let's just get out now if we're not supposed to draw it */
-	if( (actualX<0) ||
-		(actualY<0) ||
-		(actualX>mapWidth-1) ||
-		(actualY>mapHeight-1) )
+	if ( actualX > mapWidth - 1 || actualY > mapHeight - 1 )
 	{
 		psTile = &edgeTile;
 		CLEAR_TILE_HIGHLIGHT(psTile);
@@ -5293,7 +5274,6 @@ static void drawTerrainWEdgeTile(UDWORD i, UDWORD j)
 
 
 	/* set up the texture size info */
-	renderFlag = 0;
 	offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64);
 	offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64);
 
@@ -5390,7 +5370,6 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	MAPTILE	*psTile;
 	//BOOL	bOutlined;
 	UDWORD	tileNumber;
-	//UDWORD	renderFlag;
 	iPoint	offset;
 	PIEVERTEX aVrts[3];
 
@@ -5400,10 +5379,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	actualY = playerZTile + i;
 
 	/* Let's just get out now if we're not supposed to draw it */
-	if( (actualX<0) ||
-		(actualY<0) ||
-		(actualX>mapWidth-1) ||
-		(actualY>mapHeight-1) )
+	if ( actualX > mapWidth - 1 || actualY > mapHeight - 1 )
 	{
 		return;
 //		psTile = &edgeTile;
@@ -6255,9 +6231,6 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 	SDWORD	rx,rz;
 	UDWORD	colour;
 	UDWORD	specular;
-	UDWORD	trans;
-
-	trans = 0; //Defining the variable trans to eleminate a runtime debug error
 
 	null.x = null.y = null.z = 0;
 	each.x = psDroid->x;
@@ -6342,5 +6315,5 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 	pts[2].specular.argb = 0;
 
 
-	pie_TransColouredTriangle((PIEVERTEX*)&pts,colour,trans);
+	pie_TransColouredTriangle( (PIEVERTEX*)&pts, colour );
 }

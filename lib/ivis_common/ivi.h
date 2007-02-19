@@ -102,7 +102,7 @@ extern iError	_iVERROR;
 
 //*************************************************************************
 
-extern void iV_Reset(int bResetPal );
+extern void iV_Reset( void );
 extern void iV_ShutDown(void);
 extern void iV_Stop(char *string, ...);
 extern void iV_Abort(char *string, ...);

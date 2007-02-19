@@ -69,25 +69,6 @@ static UBYTE		aByteScale[256][256];
  */
 /***************************************************************************/
 
-void pie_DownLoadBufferToScreen(void *pSrcData, UDWORD destX, UDWORD destY,UDWORD srcWidth,UDWORD srcHeight,UDWORD srcStride)
-{
-	/* Originally used to show video from seqdisp.c */
-	return;
-}
-
-/***************************************************************************/
-/*
- *	void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour)
- *
- * Draws rectangular filter to screen ivis mode defaults to
- *
- */
-/***************************************************************************/
-void pie_RectFilter(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour)
-{
-	iV_TransBoxFill(x0, y0, x1, y1);
-}
-
 /* ---------------------------------------------------------------------------------- */
 
 void	pie_DrawViewingWindow(iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD colour)
@@ -147,7 +128,7 @@ void	pie_DrawViewingWindow(iVector *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y
 }
 
 /* ---------------------------------------------------------------------------------- */
-void pie_TransColouredTriangle(PIEVERTEX *vrt, UDWORD rgb, UDWORD trans)
+void pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb )
 {
         PIELIGHT c;
 	UDWORD i;

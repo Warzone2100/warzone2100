@@ -569,7 +569,7 @@ void screenDoDumpToDiskIfRequired(void)
 	struct jpeg_error_mgr jerr;
 	my_jpeg_destination_mgr jdest;
 	JSAMPROW row_pointer[1];
-	int row_stride;
+	unsigned int row_stride;
 
 	if (!screendump_required) return;
 

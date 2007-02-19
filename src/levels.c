@@ -918,7 +918,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= MULTI_TYPE_START ||
 				(psBaseData != NULL && !bCamChangeSaveGame))
 			{
-iV_Reset(FALSE);//unload font, to avoid crash on 8th load... ajl 15/sep/99
+				iV_Reset();	//unload font, to avoid crash on 8th load... ajl 15/sep/99
 				if (!stageTwoInitialise())
 				{
 					return FALSE;

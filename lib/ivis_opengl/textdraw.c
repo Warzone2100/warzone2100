@@ -306,7 +306,7 @@ UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 //
 // Returns y coord of next text line.
 //
-UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, BOOL DrawBack)
+UDWORD pie_DrawFormattedText( char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify )
 {
 	int i,osi;
 	UDWORD si, Len = strlen(String);
@@ -702,62 +702,6 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 	pie_SetColourKeyedBlack(FALSE);
 }
 
-void TextRender270(IMAGEFILE *ImageFile, UWORD ImageID,int x,int y)
-{
-	/*
-	int w,h,i,j,Modulus;
-	uint8 *srcbp, *bp;
-	IMAGEDEF *Image;
-	iBitmap *Bmp;
-	UBYTE	present;
-	UDWORD	width;
-
-	assert(ImageID < ImageFile->Header.NumImages);				// setup the image
-	Image = &ImageFile->ImageDefs[ImageID];
-	Modulus = ImageFile->TexturePages[Image->TPageID].width;
-
-	Bmp = ImageFile->TexturePages[Image->TPageID].bmp;
-	Bmp += ((UDWORD)Image->Tu) + ((UDWORD)Image->Tv) * Modulus;
-
-	// ideally i would just call
-	//	iV_ppBitmapRot270(Bmp,
-	//			   	x+Image->YOffset,
-	//				y+Image->XOffset,
-	//			   	Image->Width,
-	//				Image->Height,Modulus);
-	// but we want a transparant image. Instead of creating a load
-	// of blank drawing functions I've just provided the one for 4101.
-	// if we need other modes I'll arrange it nicely in the library.
-	// note 3dfx uses a different method (gl_textrender270).
-
-	x = x+Image->YOffset;										// sort the position
-	y = y+Image->XOffset;
-	w = Image->Width;
-	h = Image->Height;
-
-//	y -= iV_GetImageWidth(ImageFile,ImageID);					// since drawing 'upside down'
-
-	srcbp = bp = (uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y+h-1];
-	width = pie_GetVideoBufferWidth();
-	for (j=0; j<h; j++)
-	{
-		bp = srcbp;
-		for (i=0; i<w; i++)
-		{
-			if(*Bmp++)
-			{
-				present =  *bp;							// What colour is there at the moment?
-				*bp = aTransTable2[present];			// Write in the new version (brite?)
-				//	*bp = (UBYTE)TextColourIndex;		// old
-			}
-			bp -= width;		// goto previous line.
-		}
-		srcbp++;
-		Bmp += (Modulus - w);
-	}
-	*/
-}
-
 static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 {
 	UDWORD Red;
@@ -767,7 +711,6 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	IMAGEDEF *Image;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-	PIESTYLE rendStyle;
 	iColour* psPalette;
 
 	Image = &(ImageFile->ImageDefs[ImageID]);
@@ -796,7 +739,7 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	dest.w = Image->Width;
 	dest.h = Image->Height;
 	pie_SetColourKeyedBlack(TRUE);
-	pie_DrawImage270(&pieImage, &dest, &rendStyle);
+	pie_DrawImage270( &pieImage, &dest );
 	pie_SetColourKeyedBlack(FALSE);
 }
 
