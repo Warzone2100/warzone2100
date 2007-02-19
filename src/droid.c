@@ -406,11 +406,9 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		psDroid->armour -= armourDamage;
 	}*/
 
-	debug( LOG_ATTACK, "        body left: %d armour left: %d\n",
-		psDroid->body, psDroid->armour);
-
 	/* now check for auto return on droid's secondary orders */
 	secondaryCheckDamageLevel(psDroid);
+
     /* now check for scripted run-away based on health */
     orderHealthCheck(psDroid);
 

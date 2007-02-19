@@ -126,8 +126,8 @@ BOOL pie_PNGLoadMem(char *pngimage, iSprite *s)
 
 		{
 			png_bytep* row_pointers = (png_bytep*)malloc(s->height*sizeof(png_bytep));
-			unsigned char* pdata;
-			unsigned int i;
+			char* pdata;
+			int i;
 			const unsigned int line_size = s->width*info_ptr->channels;
 
 			for (i = 0, pdata = s->bmp;

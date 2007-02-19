@@ -311,6 +311,14 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 		/* See if this type of a droid should be prioritized */
 		switch (targetDroid->droidType)
 		{
+			case DROID_SENSOR:
+			case DROID_ECM:
+			case DROID_PERSON:
+			case DROID_TRANSPORTER:
+			case DROID_DEFAULT:
+			case DROID_ANY:
+				break;
+
 			case DROID_CYBORG:
 			case DROID_WEAPON:
 			case DROID_CYBORG_SUPER:

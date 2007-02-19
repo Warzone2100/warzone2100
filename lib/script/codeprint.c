@@ -154,7 +154,7 @@ void cpPrintPackedVal(INTERP_VAL *ip)
 	{
 		debug( LOG_NEVER, "type: " );
 		cpPrintType(type);
-		debug( LOG_NEVER, " value: %x", data );
+		debug( LOG_NEVER, " value: %x", data.type );
 		return;
 	}
 
@@ -186,7 +186,7 @@ void cpPrintPackedVal(INTERP_VAL *ip)
 			{
 				if (asScrTypeTab[i].typeID == type)
 				{
-					debug( LOG_NEVER, "type: %s value: %x", asScrTypeTab[i].pIdent, data.v.oval );
+					debug( LOG_NEVER, "type: %s value: %x", asScrTypeTab[i].pIdent, data.v.ival );
 					return;
 				}
 			}
@@ -577,7 +577,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			ip += aOpSize[opcode];
 			break;
 		default:
-			ASSERT( FALSE,"cpPrintProgram: Unknown opcode: %x", *ip );
+			ASSERT( FALSE,"cpPrintProgram: Unknown opcode: %x", ip->type );
 			break;
 		}
 

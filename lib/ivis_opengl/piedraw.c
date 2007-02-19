@@ -687,7 +687,7 @@ static void pie_DrawShadows(void)
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		pie_ShadowDrawLoop(&pos_lgt0);
+		pie_ShadowDrawLoop(pos_lgt0);
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 
 	} else {
@@ -702,14 +702,14 @@ static void pie_DrawShadows(void)
 		glCullFace(GL_BACK);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
-		pie_ShadowDrawLoop(&pos_lgt0);
+		pie_ShadowDrawLoop(pos_lgt0);
 
 		// Setup stencil for front faces.
 		glCullFace(GL_FRONT);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
 
 		// Draw shadows again
-		pie_ShadowDrawLoop(&pos_lgt0);
+		pie_ShadowDrawLoop(pos_lgt0);
 	}
 
 	glEnable(GL_CULL_FACE);

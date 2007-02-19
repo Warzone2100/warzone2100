@@ -26,6 +26,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <ctype.h>
 #include "frame.h"
 #include "frameresource.h"
 #include "resly.h"

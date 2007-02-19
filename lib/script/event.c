@@ -1294,9 +1294,11 @@ BOOL eventSetTrigger(void)
 		return FALSE;
 	}
 
+#ifdef REALLY_DEBUG_THIS
 	DB_TRACE(("eventSetTrigger %s %s\n",
 		eventGetEventID(psFiringTrigger->psContext->psCode, event),
 		eventGetTriggerID(psFiringTrigger->psContext->psCode, trigger)),2);
+#endif
 
 	// See if this is the event that is running
 	psContext = psFiringTrigger->psContext;

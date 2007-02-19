@@ -33,8 +33,7 @@
 
 /***************************************************************************/
 
-void *
-anim_GetShapeFunc( char * pStr )
+iIMDShape *anim_GetShapeFunc( char * pStr )
 {
 	return resGetData( "IMD", pStr );
 }

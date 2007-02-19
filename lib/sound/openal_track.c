@@ -611,8 +611,8 @@ void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 	//~~~~~~~~~~~
 
 	// convert params to rad
-	float pitch = (float)iX * M_PI / 180;
-	float roll = (float)iY * M_PI / 180;
+	// float pitch = (float)iX * M_PI / 180;
+	// float roll = (float)iY * M_PI / 180;
 	float yaw = (float)iZ * M_PI / 180;
 
 	ori[0] = -sin( yaw );

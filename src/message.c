@@ -852,15 +852,17 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			if (psViewData->pData == NULL)
 			{
 				debug( LOG_ERROR, "Unable to allocate memory" );
-				abort();
+				assert( FALSE );
 				return NULL;
+			} else {
+				int tmp;
+
+				audioName[0] = '\0';
+				sscanf( pViewMsgData, ", %d,%d,%d,%[^','],%d%n", &LocX, &LocY, &LocZ,
+				        audioName, &tmp, &cnt);
+				proxType = tmp;
 			}
-
-
-			audioName[0] = '\0';
-			sscanf(pViewMsgData, ",%d,%d,%d,%[^','],%d%n", &LocX, &LocY, &LocZ,
-				audioName,&proxType,&cnt);
-                        pViewMsgData += cnt;
+			pViewMsgData += cnt;
 
 			//allocate audioID
 			if ( strcmp( audioName, "0" ) == 0 )

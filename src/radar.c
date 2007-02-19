@@ -457,8 +457,6 @@ void drawRadar(void)
 	scrollMaxY = scrollMinY+127;
 #endif
 
-
-
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
 
@@ -474,14 +472,11 @@ void drawRadar(void)
 
 	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 
-	pie_RenderRadar(&RadarImage,radarBuffer,RadarWidth,RADTLX,RADTLY);
-
+	pie_RenderRadar( &RadarImage, (char*)radarBuffer, RadarWidth, RADTLX, RADTLY );
 	DrawRadarExtras(boxSizeH,boxSizeV);
-
 	UpdateRadar(boxSizeH,boxSizeV);
 
 	RadarRedraw = FALSE;
-
 }
 
 void	downloadAtStartOfFrame( void )

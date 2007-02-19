@@ -630,7 +630,6 @@ void script_debug(const char *pFormat, ...);
 /* Macro to combine the debugging information in two blocks into a third block */
 static UDWORD		_dbEntry;
 static SCRIPT_DEBUG	*_psCurr;
-static UDWORD		_baseOffset;
 #define COMBINE_DEBUG(psFinal, psBlock1, psBlock2) \
 	if (genDebugInfo) \
 	{ \
@@ -841,6 +840,7 @@ static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function bei
 	return 0;	//all ok
 }
 
+#ifdef UNUSED
 /*
  *  function call
  */
@@ -881,7 +881,7 @@ static CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The functio
 
 	return CE_OK;
 }
-
+#endif
 
 /* Generate the code for a parameter callback, checking the parameter
  * types match.
@@ -1624,7 +1624,7 @@ static CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variab
 	return CE_OK;
 }
 
-
+#ifdef UNUSED
 /* Generate the code for a trigger and store it in the trigger list */
 static CODE_ERROR scriptCodeTrigger(char *pIdent, CODE_BLOCK *psCode)
 {
@@ -1664,8 +1664,9 @@ static CODE_ERROR scriptCodeTrigger(char *pIdent, CODE_BLOCK *psCode)
 
 	return CE_OK;
 }
+#endif
 
-
+#ifdef UNUSED
 /* Generate the code for an event and store it in the event list */
 static CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_BLOCK *psCode)
 {
@@ -1703,7 +1704,7 @@ static CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig,
 
 	return CE_OK;
 }
-
+#endif
 
 /* Store the types of a list of variables into a code block.
  * The order of the list is reversed so that the type of the

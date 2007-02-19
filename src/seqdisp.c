@@ -367,7 +367,7 @@ void seq_SetVideoPath(void)
 	if (!bHardPath)
 	{
 		strcpy(aHardPath, "sequences/");
-/*#ifdef WIN32
+#ifdef WAS_WIN32_NOW_UNUSED
 		fileHandle = FindFirstFile("sequences/*.rpl",&findData);
 		if (fileHandle == INVALID_HANDLE_VALUE)
 		{
@@ -382,10 +382,8 @@ void seq_SetVideoPath(void)
 			return;
 		}
 #else
-*/
 		bHardPath=TRUE;			//yes, always true, as it should be on windows ALSO.
-
-//#endif
+#endif
 	}
 }
 

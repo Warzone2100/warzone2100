@@ -224,11 +224,8 @@ var_init_list:	/* NULL token */
 var_init:		var_entry TYPE var_value
 				{
 					INTERP_VAL		data;	/* structure to to hold all types */
-					DROID_TEMPLATE	*psTemplate;
 					BASE_OBJECT *psObj;
-					VIEWDATA		*psViewData;
 					char			*pString;
-					RESEARCH		*psResearch;
 					SDWORD   compIndex;
 
 					/* set type */

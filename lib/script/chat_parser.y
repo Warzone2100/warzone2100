@@ -38,12 +38,6 @@
 /* Holds information about a processed player chat message */
 CHAT_MSG chat_msg;
 
-// The current script code
-static SCRIPT_CODE *psCurrScript;
-
-// The current script context
-static SCRIPT_CONTEXT	*psCurrContext;
-
 // Parameter variable
 static INTERP_VAL scrParameter;
 

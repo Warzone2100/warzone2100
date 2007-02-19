@@ -1227,7 +1227,7 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 			WeaponName[j][0] = '\0';
 		}
 
-		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%[^','],%*d", StructureName, &WeaponName[0], &WeaponName[1], &WeaponName[2], &WeaponName[3]);
+		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%[^','],%*d", StructureName, WeaponName[0], WeaponName[1], WeaponName[2], WeaponName[3]);
 
 		if (!getResourceName(StructureName))
 		{

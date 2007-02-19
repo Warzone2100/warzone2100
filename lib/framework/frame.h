@@ -23,6 +23,8 @@
 #ifndef _frame_h
 #define _frame_h
 
+#include <string.h>
+
 #include "platform.h"
 #include "macros.h"
 

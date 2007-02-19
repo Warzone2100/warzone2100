@@ -278,7 +278,7 @@ static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 	return psFound;
 }*/
 
-
+#if OPEN_LIST == 0 || OPEN_LIST == 1
 // Remove a node from the hash table
 static FP_NODE *fpathHashRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 {
@@ -311,7 +311,9 @@ static FP_NODE *fpathHashRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 
 	return psFound;
 }
+#endif
 
+#if OPEN_LIST == 0 || OPEN_LIST == 1
 // Remove a node from the hash table
 static FP_NODE *fpathHashCondRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y, SDWORD dist)
 {
@@ -349,7 +351,7 @@ static FP_NODE *fpathHashCondRemove(FP_NODE *apsTable[], SDWORD x, SDWORD y, SDW
 
 	return psFound;
 }
-
+#endif
 
 // Reset the hash tables
 static void fpathHashReset(void)
@@ -714,7 +716,7 @@ static FP_NODE *fpathOpenGet(void)
 
 #endif
 
-#if OPEN_LIST == 1 || OPEN_LIST == 2
+#if OPEN_LIST == 0 || OPEN_LIST == 1
 // Remove a node from the open list
 static void fpathOpenRemove(FP_NODE *psNode)
 {
@@ -750,7 +752,6 @@ static void fpathOpenRemove(FP_NODE *psNode)
 		}
 	}
 }
-
 #endif
 
 

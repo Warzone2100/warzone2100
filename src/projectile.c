@@ -957,6 +957,19 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	{
 		switch(psStats->weaponSubClass)
 		{
+			case WSC_MGUN:
+			case WSC_CANNON:
+			case WSC_MORTARS:
+			case WSC_ENERGY:
+			case WSC_GAUSS:
+			case WSC_HOWITZERS:
+			case WSC_AAGUN:
+			case WSC_LAS_SAT:
+			case WSC_BOMB:
+			case WSC_COUNTER:
+			case NUM_WEAPON_SUBCLASS:
+			case INVALID_SUBCLASS:
+				break;
 			case WSC_FLAME:
 				effectGiveAuxVar(PERCENT(iDist,iRad));
 				pos.x = psObj->x;

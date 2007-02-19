@@ -231,7 +231,7 @@ BOOL getTileRadarColours(void)
 {
 	UDWORD x, y, i, j, w, h, t;
 	iBitmap *b, *s;
-	UBYTE tempBMP[TILE_WIDTH * TILE_HEIGHT];
+	char tempBMP[TILE_WIDTH * TILE_HEIGHT];
 
 	w = tilesPCX.width / TILE_WIDTH;
 	h = tilesPCX.height / TILE_HEIGHT;

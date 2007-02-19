@@ -45,16 +45,11 @@
 #define YYLMAX	255
 #endif
 
-/* Store for any string values */
-static char aText[TEXT_BUFFERS][YYLMAX];
-static UDWORD currText=0;
-
 /* Pointer to the input buffer */
 static char *pInputBuffer = NULL;
 static char *pEndBuffer = NULL;
 
 static SDWORD playerIndex;
-static INTERP_VAL parameter;
 
 #define YY_INPUT(buf,result,max_size) \
       if (pInputBuffer != pEndBuffer) { \
