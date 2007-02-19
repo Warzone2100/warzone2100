@@ -305,8 +305,9 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 /* Look up defined macro and return new define buffer */
 BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 {
-	UDWORD i;
-	for(i=0;i<scr_num_macros;i++)
+	int i;
+
+	for ( i = 0; i < scr_num_macros; i++ )
 	{
 		if(strcmp(pMacro, &(scr_macro[i].scr_define_macro[0]) ) == 0)
 		{

@@ -299,7 +299,7 @@ BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOffset, S
 	}
 	else
 	{
-		pie_DownLoadBufferToScreen(pVideoBuffer, xOffset, yOffset,width,height,(2*width));
+		/* pie_DownLoadBufferToScreen(pVideoBuffer, xOffset, yOffset,width,height,(2*width)); no longer exists */
 	}
 	return TRUE;
 }

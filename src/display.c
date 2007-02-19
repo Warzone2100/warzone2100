@@ -1744,7 +1744,7 @@ void displayInitVars(void)
 
 // Start repositioning a delivery point.
 //
-void StartDeliveryPosition(OBJECT_POSITION	*psLocation,BOOL driveActive)
+void StartDeliveryPosition( OBJECT_POSITION *psLocation )
 {
 	FLAG_POSITION	*psFlagPos;
 	/* clear the selection */
@@ -2509,7 +2509,7 @@ DROID_OACTION_INFO oaInfo = {{NULL}};
 			case POS_DELIVERY:
 				if(psLocation->player == selectedPlayer)
 				{
-					StartDeliveryPosition(psLocation,FALSE);
+					StartDeliveryPosition( psLocation );
 					/* We've clicked on one of our own DP */
  //					addConsoleMessage("Clicked on your delivery point",DEFAULT_JUSTIFY);
 

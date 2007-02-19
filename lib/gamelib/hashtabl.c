@@ -314,11 +314,6 @@ hashTable_FindElement( HASHTABLE *psTable, int iKey1, int iKey2 )
 	/* get hashed index */
 	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
 
-	/* check hash index within bounds */
-	ASSERT( udwHashIndex>=0 && udwHashIndex<psTable->udwTableSize,
-		"hashTable_GetElement: hash value %i too large for table size %i\n",
-		udwHashIndex, psTable->udwTableSize );
-
 	psNode = psTable->ppsNode[udwHashIndex];
 
 	/* loop through node list to find element match */

@@ -212,7 +212,7 @@ void CancelObjectOrbit(void);
 
 extern void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData);
 extern void CancelDeliveryRepos(void);
-extern void StartDeliveryPosition(OBJECT_POSITION *psLocation,BOOL driveActive);
+extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
 extern BOOL GetDeliveryRepos(UDWORD *xPos,UDWORD *yPos);
 extern BOOL DeliveryReposValid(void);
 

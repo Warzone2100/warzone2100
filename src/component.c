@@ -877,10 +877,7 @@ MAPTILE	*psTile;
 		tileX = psDroid->x/TILE_UNITS;
 		tileY = psDroid->y/TILE_UNITS;
 		// double check it's on map
-		if( (tileX>=0) &&
-			(tileY>=0) &&
-			(tileX<mapWidth) &&
-			(tileY<mapHeight) )
+		if ( tileX < mapWidth && tileY < mapHeight )
 		{
 			psTile = mapTile(tileX,tileY);
 			if(TERRAIN_TYPE(psTile) != TER_WATER)

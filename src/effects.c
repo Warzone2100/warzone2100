@@ -185,7 +185,7 @@ static void effectSetupDestruction  ( EFFECT *psEffect );
 static void	effectSetupFire			( EFFECT *psEffect );
 static void	effectSetUpSatLaser		( EFFECT *psEffect );
 static void effectSetUpFirework		( EFFECT *psEffect );
-BOOL	validatePie(EFFECT_GROUP group, EFFECT_TYPE type, iIMDShape *pie);
+static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
 // ----------------------------------------------------------------------------------------
 //void	initPerimeterSmoke			( EFFECT *psEffect );
 void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
@@ -225,7 +225,7 @@ static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 		break;
 	}
 }
-static BOOL	utterlyReject(EFFECT_GROUP group, EFFECT_TYPE type)
+static BOOL utterlyReject( EFFECT_GROUP group )
 {
 	switch(group)
 	{
@@ -372,7 +372,7 @@ BOOL	bSmoke;
 	  	if(!essentialEffect(group,type) )
 		{
 			/* Some we can get rid of right away */
-			if(utterlyReject(group,type))
+			if ( utterlyReject( group ) )
 			{
 				skipped++;
 				return;
@@ -526,7 +526,7 @@ BOOL	bSmoke;
 	*/
 
 #ifdef DEBUG
-	if(validatePie(group,type,asEffectsList[freeEffect].imd) == FALSE)
+	if ( validatePie( group, asEffectsList[freeEffect].imd ) == FALSE )
 	{
 		ASSERT( FALSE,"No PIE found or specified for an effect" );
 	}
@@ -542,7 +542,7 @@ BOOL	bSmoke;
 
 #ifdef DEBUG
 // ----------------------------------------------------------------------------------------
-BOOL	validatePie(EFFECT_GROUP group, EFFECT_TYPE type, iIMDShape *pie)
+static BOOL validatePie( EFFECT_GROUP group, iIMDShape *pie )
 {
 
 	/* If we haven't got a pie */

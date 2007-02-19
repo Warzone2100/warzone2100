@@ -109,8 +109,8 @@ if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
   # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
   WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall -Wno-unused-label -Werror"
-# add these when the code is ready for them
-# -Wextra -Wwrite-strings -Wcast-qual -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition"
+  # add these later for stricter checking
+  # -Wextra -Wmissing-declarations -Wstrict-prototypes"
 else
   WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
