@@ -189,7 +189,7 @@ void *memMalloc(const char *pFileName, SDWORD LineNumber, size_t Size)
 
 
 		ASSERT( FALSE, "Warning: malloc returning NULL - [%s - %d]",pFileName,LineNumber );
-		debug( LOG_NEVER, "[%s - %d] %d bytes\n", pFileName, LineNumber, Size );
+		debug( LOG_NEVER, "[%s - %d] %zu bytes\n", pFileName, LineNumber, Size );
 		return NULL;
 	}
 

@@ -267,7 +267,7 @@ static void my_error_exit(j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-METHODDEF(void) init_source(j_decompress_ptr cinfo) {}
+METHODDEF(void) init_source( WZ_DECL_UNUSED j_decompress_ptr cinfo ) {}
 
 METHODDEF(boolean) fill_input_buffer(j_decompress_ptr cinfo)
 {
@@ -280,7 +280,7 @@ METHODDEF(boolean) fill_input_buffer(j_decompress_ptr cinfo)
   return TRUE;
 }
 
-METHODDEF(void) skip_input_data(j_decompress_ptr cinfo, long num_bytes)
+METHODDEF(void) skip_input_data( j_decompress_ptr cinfo, long num_bytes )
 {
 	if (num_bytes > 0) {
 		while (num_bytes > (long) cinfo->src->bytes_in_buffer) {
@@ -292,7 +292,7 @@ METHODDEF(void) skip_input_data(j_decompress_ptr cinfo, long num_bytes)
 	}
 }
 
-METHODDEF(void) term_source(j_decompress_ptr cinfo) {}
+METHODDEF(void) term_source( WZ_DECL_UNUSED j_decompress_ptr cinfo ) {}
 
 BOOL image_load_from_jpg(pie_image* image, const char* filename)
 {

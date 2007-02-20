@@ -98,19 +98,22 @@ if test "x$installer" = "xyes" ; then
 		AC_SUBST(INSTALLER_LIBDIR, $installer_libdir)
 	fi
 fi
-  
 
+
+# -O0 turns off all optimizations; this is necessary for accurate debugging
+# -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
+# Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
-[AS_HELP_STRING([--enable-debug],[Compile debug version])],
+[AS_HELP_STRING([--enable-debug[=strict/yes/relaxed/no]],[Compile debug version [no]])],
 [ debug=$enableval ], [ debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
-  # -O0 turns off all optimizations; this is necessary for accurate debugging
-  # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
+  WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall -Wno-unused-label"
+elif test "x$debug" = "xstrict" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall -Wno-unused-label -Werror"
-  # add these later for stricter checking
-  # -Wextra -Wmissing-declarations -Wstrict-prototypes"
+elif test "x$debug" = "xrelaxed" ; then
+  WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -DDEBUG -Wall -Wno-unused-label -Wextra"
 else
   WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
