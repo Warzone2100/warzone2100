@@ -500,6 +500,12 @@ void screen_Upload(UWORD* newBackDropBmp)
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
+
+	// This function calls glDisable(GL_TEXTURE_2D);
+	// and more importantly prevents the next call with (-1) as param to call glDisable as well
+	// When/If removing this call, you should be sure to check wether this bug doesn't reappear: https://gna.org/bugs/index.php?8514
+	pie_SetTexturePage(-1);
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
 	glColor3f(1, 1, 1);
