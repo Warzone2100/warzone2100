@@ -124,6 +124,7 @@
 			/>
 			<Tool
 				Name="BisonParser"
+				Defines="true"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
