@@ -1239,7 +1239,7 @@ void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 	radius = 22;
 
 	/* Pop matrices and get the screen coordinates for last point*/
-	pie_ROTATE_PROJECT(centX,centY,centZ,cX,cY);
+	pie_RotateProject( centX, centY, centZ, &cX, &cY );
 
 	/*store the coords*/
 	*pX = cX;
@@ -1483,16 +1483,15 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		//brightness and fog calculation
 		if (psParentObj->type == OBJ_STRUCTURE)
 		{
+			SDWORD sX,sY;
+
 			psStructure = (STRUCTURE*)psParentObj;
 			brightness = 200 - (100-PERCENT( psStructure->body ,
 			//		psStructure->baseBodyPoints ));
 					structureBody(psStructure)));
-			{
-				SDWORD sX,sY;
-				pie_ROTATE_PROJECT(0,0,0,sX,sY);
-				psStructure->sDisplay.screenX = sX;
-				psStructure->sDisplay.screenY = sY;
-			}
+			pie_RotateProject( 0, 0, 0, &sX, &sY );
+			psStructure->sDisplay.screenX = sX;
+			psStructure->sDisplay.screenY = sY;
 			targetAdd((BASE_OBJECT*)psStructure);
 		}
 		else
@@ -2064,6 +2063,8 @@ BOOL		bForceDraw;
 
 	if (psFeature->visible[selectedPlayer] || godMode || demoGetStatus() || bForceDraw)
 	{
+		SDWORD sX,sY;
+
 		psFeature->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		featX = psFeature->x;
@@ -2131,13 +2132,10 @@ BOOL		bForceDraw;
 			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, specular, 0,0);//pie_TRANSLUCENT, psFeature->visible[selectedPlayer]);
 		}
 
-		{
-			SDWORD sX,sY;
-			pie_ROTATE_PROJECT(0,0,0,sX,sY);
-			psFeature->sDisplay.screenX = sX;
-			psFeature->sDisplay.screenY = sY;
-			targetAdd((BASE_OBJECT*)psFeature);
-		}
+		pie_RotateProject( 0, 0, 0, &sX, &sY );
+		psFeature->sDisplay.screenX = sX;
+		psFeature->sDisplay.screenY = sY;
+		targetAdd((BASE_OBJECT*)psFeature);
 
 		iV_MatrixEnd();
 	}
@@ -2972,7 +2970,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 		}
 
 		imd->points = temp;
-		pie_ROTATE_PROJECT(0,0,0,sX,sY);
+		pie_RotateProject( 0, 0, 0, &sX, &sY );
 		psStructure->sDisplay.screenX = sX;
 		psStructure->sDisplay.screenY = sY;
 		iV_MatrixEnd();
@@ -4127,7 +4125,7 @@ void	calcScreenCoords(DROID *psDroid)
 	}
 
 	/* Pop matrices and get the screen corrdinates */
-	cZ = pie_ROTATE_PROJECT(centX, centY, centZ, cX, cY);
+	cZ = pie_RotateProject( centX, centY, centZ, &cX, &cY );
 
 	//Watermelon:added a crash protection hack...
 	if (cZ != 0)
