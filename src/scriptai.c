@@ -1803,9 +1803,9 @@ BOOL scrSkDifficultyModifier(void)
 }
 
 // ********************************************************************************************
-// return a good place to build a defence, given a starting point
 
-BOOL scrSkDefenseLocation(void)
+// not a direct script function but a helper for scrSkDefenseLocation and scrSkDefenseLocationB
+static BOOL defenseLocation(BOOL variantB)
 {
 	SDWORD		*pX,*pY,statIndex,statIndex2;
 	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
@@ -1814,6 +1814,9 @@ BOOL scrSkDefenseLocation(void)
 	BASE_STATS	*psStats,*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	BOOL		noWater;
+	UDWORD      minCount;
+    UDWORD      offset;
+
 
 	if (!stackPopParams(6,
 						VAL_REF|VAL_INT, &pX,
@@ -1823,12 +1826,13 @@ BOOL scrSkDefenseLocation(void)
 						ST_DROID, &psDroid,
 						VAL_INT, &player) )
 	{
+		debug(LOG_ERROR,"defenseLocation: failed to pop");
 		return FALSE;
 	}
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( FALSE, "scrSkDefenseLocation:player number is too high" );
+		ASSERT( FALSE, "defenseLocation:player number is too high" );
 		return FALSE;
 	}
 
@@ -1858,6 +1862,11 @@ BOOL scrSkDefenseLocation(void)
 		// does it have >1 tile unoccupied.
 		if(psGate->x1 == psGate->x2)
 		{// vert
+			//skip gates that are too short
+			if(variantB && (psGate->y2 - psGate->y1) <= 2)
+			{
+				continue;
+			}
 			gX = psGate->x1;
 			for(gY=psGate->y1;gY <= psGate->y2; gY++)
 			{
@@ -1873,6 +1882,11 @@ BOOL scrSkDefenseLocation(void)
 		}
 		else
 		{// horiz
+			//skip gates that are too short
+			if(variantB && (psGate->x2 - psGate->x1) <= 2)
+			{
+				continue;
+			}
 			gY = psGate->y1;
 			for(gX=psGate->x1;gX <= psGate->x2; gX++)
 			{
@@ -1886,224 +1900,12 @@ BOOL scrSkDefenseLocation(void)
 				}
 			}
 		}
-		if(count > 1 && noWater)
-		{	// ok it's free. Is it the nearest one yet?
-			/* Get gateway midpoint */
-			gX = (psGate->x1 + psGate->x2)/2;
-			gY = (psGate->y1 + psGate->y2)/2;
-			/* Estimate the distance to it */
-			dist = dirtySqrt(x,y,gX,gY);
-			/* Is it best we've found? */
-			if(dist<nearestSoFar && dist<30)
-			{
-				/* Yes, then keep a record of it */
-				nearestSoFar = dist;
-				psChosenGate = psGate;
-			}
+		if(variantB) {
+		    minCount = 2;
+		} else {
+		    minCount = 1;
 		}
-	}
-
-	if(!psChosenGate)	// we have a gateway.
-	{
-		goto failed;
-	}
-
-	// find an unnocupied tile on that gateway.
-	if(psChosenGate->x1 == psChosenGate->x2)
-	{// vert
-		gX = psChosenGate->x1;
-		for(gY=psChosenGate->y1;gY <= psChosenGate->y2; gY++)
-		{
-			if(! TILE_OCCUPIED(mapTile(gX,gY) ))
-			{
-				y = gY;
-				x = gX;
-				break;
-			}
-		}
-	}
-	else
-	{// horiz
-		gY = psChosenGate->y1;
-		for(gX=psChosenGate->x1;gX <= psChosenGate->x2; gX++)
-		{
-			if(! TILE_OCCUPIED(mapTile(gX,gY) ))
-			{
-				y = gY;
-				x = gX;
-				break;
-			}
-		}
-	}
-
-	// back to world coords and store result.
-	*pX = (x << TILE_SHIFT) + (TILE_UNITS/2);		// return centre of tile.
-	*pY = (y << TILE_SHIFT) + (TILE_UNITS/2);
-
-	scrFunctionResult.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// success
-	{
-		return FALSE;
-	}
-
-
-	// order the droid to build two walls, one either side of the gateway.
-	// or one in the case of a 2 size gateway.
-
-	x = (psChosenGate->x1 + psChosenGate->x2)/2;
-	y = (psChosenGate->y1 + psChosenGate->y2)/2;
-
-	x1 = (psChosenGate->x1 << TILE_SHIFT) + (TILE_UNITS/2);
-	y1 = (psChosenGate->y1 << TILE_SHIFT) + (TILE_UNITS/2);
-
-	if(psChosenGate->x1 == psChosenGate->x2)
-	{
-		x2 = x1;
-		y2 = ((y-1) << TILE_SHIFT) + (TILE_UNITS/2);
-		x3 = x1;
-		y3 = ((y+1) << TILE_SHIFT) + (TILE_UNITS/2);
-	}
-	else
-	{
-		x2 = ((x-1) << TILE_SHIFT) + (TILE_UNITS/2);
-		y2 = y1;
-		x3 = ((x+1) << TILE_SHIFT) + (TILE_UNITS/2);
-		y3 = y1;
-
-	}
-	x4 = (psChosenGate->x2 << TILE_SHIFT) + (TILE_UNITS/2);
-	y4 = (psChosenGate->y2 << TILE_SHIFT) + (TILE_UNITS/2);
-
-
-	// first section.
-	if(x1 == x2 && y1 == y2)
-	{
-		orderDroidStatsLoc(psDroid, DORDER_BUILD, psWStats, x1, y1);
-	}
-	else
-	{
-		orderDroidStatsTwoLoc(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1,x2,y2);
-	}
-
-	// second section
-	if(x3 == x4 && y3 == y4)
-	{
-		orderDroidStatsLocAdd(psDroid, DORDER_BUILD, psWStats, x3, y3);
-	}
-	else
-	{
-		orderDroidStatsTwoLocAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3,x4,y4);
-	}
-
-	return TRUE;
-
-failed:
-	scrFunctionResult.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// failed!
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-
-// return a good place to build a defence with a min number of clear tiles
-BOOL scrSkDefenseLocationB(void)
-{
-	SDWORD		*pX,*pY,statIndex,statIndex2;
-	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
-	GATEWAY		*psGate,*psChosenGate;
-	DROID		*psDroid;
-	BASE_STATS	*psStats,*psWStats;
-	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
-	BOOL		noWater;
-
-	if (!stackPopParams(6,
-						VAL_REF|VAL_INT, &pX,
-						VAL_REF|VAL_INT, &pY,
-						ST_STRUCTURESTAT, &statIndex,
-						ST_STRUCTURESTAT, &statIndex2,
-						ST_DROID, &psDroid,
-						VAL_INT, &player) )
-	{
-		debug(LOG_ERROR,"scrSkDefenseLocationB: failed to pop");
-		return FALSE;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( FALSE, "scrSkDefenseLocationB:player number is too high" );
-		return FALSE;
-	}
-
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
-	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
-
-    // check for wacky coords.
-	if(		*pX < 0
-		||	*pX > (SDWORD)(mapWidth<<TILE_SHIFT)
-		||	*pY < 0
-		||	*pY > (SDWORD)(mapHeight<<TILE_SHIFT)
-	  )
-	{
-		goto failed;
-	}
-
-	x = *pX >> TILE_SHIFT;					// change to tile coords.
-	y = *pY >> TILE_SHIFT;
-
-	// go down the gateways, find the nearest gateway with >1 empty tiles
-	nearestSoFar = UDWORD_MAX;
-	psChosenGate = NULL;
-	for(psGate= psGateways; psGate; psGate= psGate->psNext)
-	{
-		count = 0;
-		noWater = TRUE;
-		// does it have >1 tile unoccupied.
-		if(psGate->x1 == psGate->x2)
-		{// vert
-
-			//skip gates that are too short
-			if((psGate->y2 - psGate->y1) <= 2)
-			{
-				continue;
-			}
-
-			gX = psGate->x1;
-			for(gY=psGate->y1;gY <= psGate->y2; gY++)
-			{
-				if(! TILE_OCCUPIED(mapTile(gX,gY) ))
-				{
-					count++;
-				}
-				if(TERRAIN_TYPE(mapTile(gX,gY)) == TER_WATER)
-				{
-					noWater = FALSE;
-				}
-			}
-		}
-		else
-		{// horiz
-
-			//skip gates that are too short
-			if((psGate->x2 - psGate->x1) <= 2)
-			{
-				continue;
-			}
-
-			gY = psGate->y1;
-			for(gX=psGate->x1;gX <= psGate->x2; gX++)
-			{
-				if(! TILE_OCCUPIED(mapTile(gX,gY) ))
-				{
-					count++;
-				}
-				if(TERRAIN_TYPE(mapTile(gX,gY)) == TER_WATER)
-				{
-					noWater = FALSE;
-				}
-			}
-		}
-		if(count > 2 && noWater)	//<NEW> min 2 tiles
+		if(count > minCount && noWater)	//<NEW> min 2 tiles
 		{
 			// ok it's free. Is it the nearest one yet?
 			/* Get gateway midpoint */
@@ -2176,18 +1978,23 @@ BOOL scrSkDefenseLocationB(void)
 	x1 = (psChosenGate->x1 << TILE_SHIFT) + (TILE_UNITS/2);
 	y1 = (psChosenGate->y1 << TILE_SHIFT) + (TILE_UNITS/2);
 
+	if(variantB) {
+	    offset = 2;
+	} else {
+	    offset = 1;
+	}
 	if(psChosenGate->x1 == psChosenGate->x2)	//vert
 	{
 		x2 = x1;	//vert: end x pos of the first section = start x pos
 		y2 = ((y-1) << TILE_SHIFT) + (TILE_UNITS/2);	//start y loc of the first sec
 		x3 = x1;
-		y3 = ((y+2) << TILE_SHIFT) + (TILE_UNITS/2);	//<NEW>	//start y loc of the second sec
+		y3 = ((y+offset) << TILE_SHIFT) + (TILE_UNITS/2);
 	}
 	else		//hor
 	{
 		x2 = ((x-1) << TILE_SHIFT) + (TILE_UNITS/2);
 		y2 = y1;
-		x3 = ((x+2) << TILE_SHIFT) + (TILE_UNITS/2);	//<NEW>
+		x3 = ((x+offset) << TILE_SHIFT) + (TILE_UNITS/2);
 		y3 = y1;
 
 	}
@@ -2198,26 +2005,25 @@ BOOL scrSkDefenseLocationB(void)
 	//some temp checks
 	if(x2 < x1)
 	{
-		debug(LOG_ERROR,"scrSkDefenseLocationB: x2 < x1");
+		debug(LOG_ERROR,"defenseLocation: x2 < x1");
 		return FALSE;
 	}
 	if(x3 > x4)
 	{
-		debug(LOG_ERROR,"scrSkDefenseLocationB: x2 < x1");
+		debug(LOG_ERROR,"defenseLocation: x2 < x1");
 		return FALSE;
 	}
 
 	if(y2 < y1)
 	{
-		debug(LOG_ERROR,"scrSkDefenseLocationB: y2 < y1");
+		debug(LOG_ERROR,"defenseLocation: y2 < y1");
 		return FALSE;
 	}
 	if(y3 > y4)
 	{
-		debug(LOG_ERROR,"scrSkDefenseLocationB: y3 > y4");
+		debug(LOG_ERROR,"defenseLocation: y3 > y4");
 		return FALSE;
 	}
-
 
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
@@ -2248,6 +2054,19 @@ failed:
 		return FALSE;
 	}
 	return TRUE;
+}
+
+
+// return a good place to build a defence, given a starting point
+BOOL scrSkDefenseLocation(void)
+{
+    return defenseLocation(FALSE);
+}
+
+// return a good place to build a defence with a min number of clear tiles
+BOOL scrSkDefenseLocationB(void)
+{
+    return defenseLocation(TRUE);
 }
 
 

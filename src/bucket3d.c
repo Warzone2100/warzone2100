@@ -295,7 +295,7 @@ extern BOOL bucketRenderCurrentList(void)
 #endif
 				break;
 				case RENDER_TILE:
-					drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
+					drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j, FALSE);
 				break;
 
 				case RENDER_WATERTILE:

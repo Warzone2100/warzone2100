@@ -3297,89 +3297,9 @@ BOOL gameLoad(char *pFileData, UDWORD filesize)
 	return TRUE;
 }
 
-
-
-
-// -----------------------------------------------------------------------------------------
-// Get campaign number stuff is not needed in this form on the PSX (thank you very much)
-static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
-{
-	SAVE_GAME		*psSaveGame;
-	UDWORD			sizeOfSaveGame = 0;
-	UDWORD			campaign;
-	int			i, j;
-
-	debug(LOG_WZ, "getCampaignV: version=%d", version);
-
-	psSaveGame = (SAVE_GAME *) pFileData;
-
-
-	//size is now variable so only check old save games
-	if (version < VERSION_14)
-	{
-		return 0;
-	}
-	else if (version <= VERSION_16)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V16);
-	}
-	else if (version <= VERSION_17)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V17);
-	}
-	else if (version <= VERSION_18)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V18);
-	}
-	else if (version <= VERSION_19)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V19);
-	}
-	else if (version <= VERSION_21)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V20);
-	}
-	else if (version <= VERSION_23)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V22);
-	}
-	else if (version <= VERSION_26)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V24);
-	}
-	else if (version <= VERSION_28)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V27);
-	}
-    else if (version <= VERSION_29)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V29);
-    }
-    else if (version <= VERSION_30)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V30);
-    }
-	else if (version <= VERSION_32)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V31);
-    }
-	else if (version <= VERSION_33)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V33);
-    }
-	else if (version <= CURRENT_VERSION_NUM)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME);
-	}
-
-	if ((sizeOfSaveGame + GAME_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "getCampaign: unexpected end of file (expected %d, have %d)" ,
-			(sizeOfSaveGame + GAME_HEADER_SIZE) , filesize);
-		abort();
-		return FALSE;
-	}
-
+// Fix endianness of a savegame
+static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version) {
+    UDWORD i,j;
 	/* SAVE_GAME is GAME_SAVE_V33 */
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
 	if(version >= VERSION_33) {
@@ -3514,6 +3434,88 @@ static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
 		endian_udword(&psSaveGame->ScrollMaxX);
 		endian_udword(&psSaveGame->ScrollMaxY);
 	}
+}
+
+// -----------------------------------------------------------------------------------------
+// Get campaign number stuff is not needed in this form on the PSX (thank you very much)
+static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
+{
+	SAVE_GAME		*psSaveGame;
+	UDWORD			sizeOfSaveGame = 0;
+	UDWORD			campaign;
+
+	debug(LOG_WZ, "getCampaignV: version=%d", version);
+
+	psSaveGame = (SAVE_GAME *) pFileData;
+
+
+	//size is now variable so only check old save games
+	if (version < VERSION_14)
+	{
+		return 0;
+	}
+	else if (version <= VERSION_16)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V16);
+	}
+	else if (version <= VERSION_17)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V17);
+	}
+	else if (version <= VERSION_18)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V18);
+	}
+	else if (version <= VERSION_19)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V19);
+	}
+	else if (version <= VERSION_21)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V20);
+	}
+	else if (version <= VERSION_23)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V22);
+	}
+	else if (version <= VERSION_26)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V24);
+	}
+	else if (version <= VERSION_28)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME_V27);
+	}
+    else if (version <= VERSION_29)
+    {
+        sizeOfSaveGame = sizeof(SAVE_GAME_V29);
+    }
+    else if (version <= VERSION_30)
+    {
+        sizeOfSaveGame = sizeof(SAVE_GAME_V30);
+    }
+	else if (version <= VERSION_32)
+    {
+        sizeOfSaveGame = sizeof(SAVE_GAME_V31);
+    }
+	else if (version <= VERSION_33)
+    {
+        sizeOfSaveGame = sizeof(SAVE_GAME_V33);
+    }
+	else if (version <= CURRENT_VERSION_NUM)
+	{
+		sizeOfSaveGame = sizeof(SAVE_GAME);
+	}
+
+	if ((sizeOfSaveGame + GAME_HEADER_SIZE) > filesize)
+	{
+		debug( LOG_ERROR, "getCampaign: unexpected end of file (expected %d, have %d)" ,
+			(sizeOfSaveGame + GAME_HEADER_SIZE) , filesize);
+		abort();
+		return FALSE;
+	}
+
+	endian_SaveGameV(psSaveGame, version);
 
 //	savedGameTime = psSaveGame->gameTime;
 
@@ -3783,142 +3785,7 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 		abort();
 		return FALSE;
 	}
-
-	/* SAVE_GAME is GAME_SAVE_V33 */
-	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
-	if(version >= VERSION_33) {
-		endian_udword(&psSaveGame->sGame.power);
-		endian_uword(&psSaveGame->sGame.bytesPerSec);
-		for(i = 0; i < MaxGames; i++) {
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
-		}
-		for(i = 0; i < MaxNumberOfPlayers; i++)
-			endian_sdword(&psSaveGame->sNetPlay.players[i].dpid);
-		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_sdword(&psSaveGame->sNetPlay.dpidPlayer);
-		for(i = 0; i < 4; i++)
-			endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
-		endian_udword(&psSaveGame->savePlayer);
-		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_sdword(&psSaveGame->sPlayer2dpid[i]);
-	}
-	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
-	if(version >= VERSION_31) {
-		endian_sdword(&psSaveGame->missionCheatTime);
-	}
-	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
-	if(version >= VERSION_30) {
-		endian_sdword(&psSaveGame->scrGameLevel);
-	}
-	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
-	if(version >= VERSION_29) {
-		endian_uword(&psSaveGame->missionScrollMinX);
-		endian_uword(&psSaveGame->missionScrollMinY);
-		endian_uword(&psSaveGame->missionScrollMaxX);
-		endian_uword(&psSaveGame->missionScrollMaxY);
-	}
-	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
-	if(version >= VERSION_27) {
-		for(i = 0; i < MAX_PLAYERS; i++)
-			for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
-				endian_uword(&psSaveGame->awDroidExperience[i][j]);
-	}
-	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
-	if(version >= VERSION_24) {
-		endian_udword(&psSaveGame->reinforceTime);
-	}
-	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
-	if(version >= VERSION_22) {
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_sdword(&psSaveGame->asRunData[i].sPos.x);
-			endian_sdword(&psSaveGame->asRunData[i].sPos.y);
-		}
-	}
-	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
-	if(version >= VERSION_20) {
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
-			endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
-		}
-	}
-	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
-	if(version >= VERSION_19) {
-	}
-	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
-	if(version >= VERSION_18) {
-		endian_udword(&psSaveGame->oldestVersion);
-		endian_udword(&psSaveGame->validityKey);
-	}
-	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
-	if(version >= VERSION_17) {
-		endian_udword(&psSaveGame->objId);
-	}
-	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
-	if(version >= VERSION_16) {
-	}
-	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
-	if(version >= VERSION_15) {
-		endian_udword(&psSaveGame->RubbleTile);
-		endian_udword(&psSaveGame->WaterTile);
-		endian_udword(&psSaveGame->fogColour);
-		endian_udword(&psSaveGame->fogState);
-	}
-	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
-	if(version >= VERSION_14) {
-		endian_sdword(&psSaveGame->missionOffTime);
-		endian_sdword(&psSaveGame->missionETA);
-		endian_uword(&psSaveGame->missionHomeLZ_X);
-		endian_uword(&psSaveGame->missionHomeLZ_Y);
-		endian_sdword(&psSaveGame->missionPlayerX);
-		endian_sdword(&psSaveGame->missionPlayerY);
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_uword(&psSaveGame->iTranspEntryTileX[i]);
-			endian_uword(&psSaveGame->iTranspEntryTileY[i]);
-			endian_uword(&psSaveGame->iTranspExitTileX[i]);
-			endian_uword(&psSaveGame->iTranspExitTileY[i]);
-			endian_udword(&psSaveGame->aDefaultSensor[i]);
-			endian_udword(&psSaveGame->aDefaultECM[i]);
-			endian_udword(&psSaveGame->aDefaultRepair[i]);
-		}
-	}
-	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
-	if(version >= VERSION_12) {
-		endian_udword(&psSaveGame->missionTime);
-		endian_udword(&psSaveGame->saveKey);
-	}
-	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
-	if(version >= VERSION_11) {
-		endian_sdword(&psSaveGame->currentPlayerPos.p.x);
-		endian_sdword(&psSaveGame->currentPlayerPos.p.y);
-		endian_sdword(&psSaveGame->currentPlayerPos.p.z);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.x);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.y);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.z);
-	}
-	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
-	if(version >= VERSION_10) {
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_udword(&psSaveGame->power[i].currentPower);
-			endian_udword(&psSaveGame->power[i].extractedPower);
-		}
-	}
-	/* GAME_SAVE_V7 */
-	if(version >= VERSION_7) {
-		endian_udword(&psSaveGame->gameTime);
-		endian_udword(&psSaveGame->GameType);
-		endian_sdword(&psSaveGame->ScrollMinX);
-		endian_sdword(&psSaveGame->ScrollMinY);
-		endian_udword(&psSaveGame->ScrollMaxX);
-		endian_udword(&psSaveGame->ScrollMaxY);
-	}
-
+    endian_SaveGameV(psSaveGame, version);
 
 	savedGameTime = psSaveGame->gameTime;
 

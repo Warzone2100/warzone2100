@@ -2107,7 +2107,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	intSetSystemStats(psStats);
 
 	/* Lock the form down if necessary */
-	if (desCompMode == IDES_SYSTEM)
+	if ( desCompMode == IDES_SYSTEM )
 	{
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 	}
@@ -3608,6 +3608,25 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 	widgSetBarSize(psWScreen, IDDES_POWERBAR, calcTemplatePower(psTemplate));
 }
 
+// work out current system component
+static UDWORD getSystemType(DROID_TEMPLATE* template) 
+{
+	if (template->asParts[COMP_ECM]) {
+		return COMP_ECM;
+	} else if (template->asParts[COMP_SENSOR]) {
+		return COMP_SENSOR;
+	} else if (template->asParts[COMP_CONSTRUCT]) {
+		return COMP_CONSTRUCT;
+	} else if (template->asParts[COMP_REPAIRUNIT]) {
+		return COMP_REPAIRUNIT;
+	} else if (template->asWeaps[0]) {
+		return COMP_WEAPON;
+	} else {
+	    // compare it with the current weapon
+		return COMP_WEAPON;
+	}
+}
+
 /* Set the shadow bar graphs for the template power points - psStats is new hilited stats*/
 static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 {
@@ -3629,34 +3648,9 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
 		comparison is meaningful*/
-		if (desCompMode == IDES_SYSTEM)
+		if (desCompMode == IDES_SYSTEM) 
 		{
-			//work out current system component
-			if (sCurrDesign.asParts[COMP_ECM])
-			{
-				type = COMP_ECM;
-			}
-			else if (sCurrDesign.asParts[COMP_SENSOR])
-			{
-				type = COMP_SENSOR;
-			}
-			else if (sCurrDesign.asParts[COMP_CONSTRUCT])
-			{
-				type = COMP_CONSTRUCT;
-			}
-			else if (sCurrDesign.asParts[COMP_REPAIRUNIT])
-			{
-				type = COMP_REPAIRUNIT;
-			}
-			else if (sCurrDesign.asWeaps[0])
-			{
-				type = COMP_WEAPON;
-			}
-			else
-			{
-			    // compare it with the current weapon
-				type = COMP_WEAPON;
-			}
+			type = getSystemType(&sCurrDesign);
 		}
 
 		switch (type)
@@ -3741,34 +3735,9 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
 		comparison is meaningful*/
-		if (desCompMode == IDES_SYSTEM)
+		if ( desCompMode == IDES_SYSTEM )
 		{
-			//work out current system component
-			if (sCurrDesign.asParts[COMP_ECM])
-			{
-				type = COMP_ECM;
-			}
-			else if (sCurrDesign.asParts[COMP_SENSOR])
-			{
-				type = COMP_SENSOR;
-			}
-			else if (sCurrDesign.asParts[COMP_CONSTRUCT])
-			{
-				type = COMP_CONSTRUCT;
-			}
-			else if (sCurrDesign.asParts[COMP_REPAIRUNIT])
-			{
-				type = COMP_REPAIRUNIT;
-			}
-			else if (sCurrDesign.asWeaps[0])
-			{
-				type = COMP_WEAPON;
-			}
-			else
-			{
-			    // compare it with the current weapon
-				type = COMP_WEAPON;
-			}
+			type = getSystemType( &sCurrDesign );
 		}
 
 		switch (type)

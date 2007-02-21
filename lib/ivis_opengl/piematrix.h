@@ -55,8 +55,6 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#define pie_SETUP_ROTATE_PROJECT
-
 #define pie_ROTATE_PROJECT(x, y, z, sx, sy) pie_RotateProject(x, y, z, &(sx), &(sy))
 
 
