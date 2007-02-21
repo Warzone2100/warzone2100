@@ -138,7 +138,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..&quot;;&quot;__DEVPKG__\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -286,10 +286,6 @@
 			</File>
 			<File
 				RelativePath="..\src\bucket3d.c"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\bug.c"
 				>
 			</File>
 			<File
@@ -1117,10 +1113,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\bug.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\buildpos.h"
 				>
 			</File>
@@ -1446,10 +1438,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\ivis_common\ivi.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_opengl\ivis02.h"
 				>
 			</File>
 			<File
