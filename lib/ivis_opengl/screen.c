@@ -93,7 +93,8 @@ BOOL screenInitialise(
 			)
 {
 	static int video_flags = 0;
-	int bpp = 0;
+	int bpp = 0, value;
+	GLint glval;
 
 	/* Store the screen information */
 	screenWidth = width;
@@ -170,9 +171,21 @@ BOOL screenInitialise(
 	}
 
 	screen = SDL_SetVideoMode(width, height, bpp, video_flags);
-	if (!screen) {
-		debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).\n", SDL_GetError() );
+	if ( !screen ) {
+		debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).", SDL_GetError() );
 		return FALSE;
+	}
+	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1) 
+	{
+		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
+	}
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
+	debug( LOG_TEXTURE, "Maximum texture size: %dx%d", (int)glval, (int)glval );
+	if ( glval < 512 ) // FIXME: Replace by a define that gives us the real maximum
+	{
+		debug( LOG_ERROR, "OpenGL reports a texture size (%d) that is less than required!", (int)glval );
+		debug( LOG_ERROR, "This is either a bug in OpenGL or your graphics card is really old!" );
+		debug( LOG_ERROR, "Trying to run the game anyway..." );
 	}
 
 	glViewport(0, 0, width, height);
