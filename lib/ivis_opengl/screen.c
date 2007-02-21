@@ -397,69 +397,71 @@ static GLuint image_create_texture(char* filename) {
 
 void screen_SetBackDropFromFile(char* filename)
 {
-   	// HACK : We should use a resource handler here!
-    char *extension;
+	// HACK : We should use a resource handler here!
+	char *extension = strrchr(filename, '.');// determine the filetype
 
-    // determine the filetype
-    extension = strrchr(filename, '.');
-    if(!extension)
+	if(!extension)
 	{
-        debug(LOG_ERROR, "Image without extension: \"%s\"!", filename);
-        return; // filename without extension... don't bother
-    }
+		debug(LOG_ERROR, "Image without extension: \"%s\"!", filename);
+		return; // filename without extension... don't bother
+	}
 
-    if( strcmp(extension,".jpg") == 0 || strcmp(extension,".jpeg") == 0 )
-	{ 
+	// Make sure the current texture page is reloaded after we are finished
+	// Otherwise WZ will think it is still loaded and not load it again
+	pie_SetTexturePage(-1);
+
+	if( strcmp(extension,".jpg") == 0 || strcmp(extension,".jpeg") == 0 )
+	{
 		pie_image image;
 
-	    image_init(&image);
+		image_init(&image);
 
-    	if (!image_load_from_jpg(&image, filename)) {
-	    	if (~backDropTexture == 0)
-	    		glGenTextures(1, &backDropTexture);
-    
-	    	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-	    		     image.width, image.height,
-	    		     0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
-	    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	    }
+		if (!image_load_from_jpg(&image, filename)) {
+			if (~backDropTexture == 0)
+				glGenTextures(1, &backDropTexture);
 
-	    image_delete(&image);
-        return;
-    }
-    else if( strcmp(extension,".png") == 0 )
+			glBindTexture(GL_TEXTURE_2D, backDropTexture);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+					image.width, image.height,
+					0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		}
+
+		image_delete(&image);
+		return;
+	}
+	else if( strcmp(extension,".png") == 0 )
 	{
 		iSprite imagePNG;
 		char * buffer = NULL;
 		unsigned int dummy = 0;
 
-	    if (loadFile( filename, &buffer, &dummy ) && pie_PNGLoadMem( buffer, &imagePNG ) )
-	    {
-	    	if (~backDropTexture == 0)
-	    		glGenTextures(1, &backDropTexture);
-    
-	    	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-	    		     imagePNG.width, imagePNG.height,
-	    		     0, GL_RGBA, GL_UNSIGNED_BYTE, imagePNG.bmp);
-	    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    
-	    	free(imagePNG.bmp);
-	    }
-    	FREE(buffer);
-        return;
-    }
+		if (loadFile( filename, &buffer, &dummy ) && pie_PNGLoadMem( buffer, &imagePNG ) )
+		{
+			if (~backDropTexture == 0)
+				glGenTextures(1, &backDropTexture);
+
+			glBindTexture(GL_TEXTURE_2D, backDropTexture);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					imagePNG.width, imagePNG.height,
+					0, GL_RGBA, GL_UNSIGNED_BYTE, imagePNG.bmp);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+			free(imagePNG.bmp);
+		}
+		FREE(buffer);
+		return;
+	}
 	else
-	    debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
+		debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
 }
 //===================================================================
 
@@ -501,9 +503,8 @@ void screen_Upload(UWORD* newBackDropBmp)
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 
-	// This function calls glDisable(GL_TEXTURE_2D);
-	// and more importantly prevents the next call with (-1) as param to call glDisable as well
-	// When/If removing this call, you should be sure to check wether this bug doesn't reappear: https://gna.org/bugs/index.php?8514
+	// Make sure the current texture page is reloaded after we are finished
+	// Otherwise WZ will think it is still loaded and not load it again
 	pie_SetTexturePage(-1);
 
 	glEnable(GL_TEXTURE_2D);
