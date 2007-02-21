@@ -614,21 +614,6 @@ BOOL audio_LoadTrackFromFile( char szFileName[] )
 }
 
 //*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-TRACK *audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
-{
-	// if audio not enabled return TRUE to carry on game without audio
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return NULL;
-	}
-
-	return sound_LoadTrackFromBuffer( pBuffer, udwSize );
-}
-
-//*
 //
 
 // Routine to convert wav filename into a track number
