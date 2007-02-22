@@ -4812,7 +4812,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 			aVrts[2].sy = tileScreenInfo[i + 1][j + 0].water_height;
 			aVrts[2].sz = tileScreenInfo[i + 1][j + 0].z;
 		}
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 	else
 	{
@@ -4830,7 +4830,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 			aVrts[2].sy = tileScreenInfo[i + 1][j + 1].water_height;
 			aVrts[2].sz = tileScreenInfo[i + 1][j + 1].z;
 		}
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 
 	/* The second triangle */
@@ -4851,7 +4851,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 			aVrts[2].sy = tileScreenInfo[i + 1][j + 0].water_height;
 			aVrts[2].sz = tileScreenInfo[i + 1][j + 0].z;
 		}
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 	else
 	{
@@ -4870,7 +4870,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 			aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
 			aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
 		}
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 
 	/* Outline the tile if necessary */
@@ -4976,7 +4976,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		aVrts[2].light = tileScreenInfo[i+1][j+1].wlight;
 		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
+		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
 		memcpy(&aVrts[1],&aVrts[2],sizeof(PIEVERTEX));
 
@@ -4987,7 +4987,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		aVrts[2].light = tileScreenInfo[i+1][j+0].wlight;
 		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
+		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
 		if( (psTile->texture & TILE_NUMMASK) != WaterTileID) {
 			drawTerrainTile(i,j, TRUE);

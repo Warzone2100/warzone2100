@@ -40,8 +40,6 @@
 
 #ifdef BSPIMD		// covers the whole file
 
-#define BSP_BACKFACECULL	// if defined we perform the backface cull in the BSP (we get this for free (!))
-
 //#define BSP_MAXDEBUG		// define this if you want max debug options (runs very slow)
 
 #include "lib/ivis_common/bspimd.h"

@@ -958,9 +958,10 @@ void pie_DrawTriangle( iVertex *pv )
 	glEnd();
 }
 
-void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
+void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
 {
-	FRACT		offset = 0;
+	GLfloat	offset = 0;
+	int i;
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the
 		polygons.
@@ -968,22 +969,29 @@ void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffe
 	tileCount++;
 	pie_SetTexturePage(texPage);
 	pie_SetFogStatus(TRUE);
-	if (psEffects == NULL)//jps 15apr99 translucent water code
+	if (psEffects == NULL)
 	{
-		pie_SetRendMode(REND_GOURAUD_TEX);//jps 15apr99 old solid water code
+		/* Solid terrain */
+		pie_SetRendMode(REND_GOURAUD_TEX);
 		pie_SetColourKeyedBlack(TRUE);
 	}
-	else//jps 15apr99 translucent water code
+	else
 	{
-		pie_SetRendMode(REND_ALPHA_TEX);//jps 15apr99 old solid water code
+		/* Translucent water with animation */
+		pie_SetRendMode(REND_ALPHA_TEX);
 		pie_SetColourKeyedBlack(FALSE);
-		offset = *((float*)psEffects);
+		offset = *((GLfloat*)psEffects);
 	}
 	pie_SetBilinear(TRUE);
 
-	if (numVrts >= 3) {
-		pie_Polygon(numVrts, aVrts, offset, FALSE);
+	glBegin(GL_TRIANGLE_FAN);
+	for ( i = 0; i < 3; i++ )
+	{
+		glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
+		glTexCoord2f( aVrts[i].tu, aVrts[i].tv + offset );
+		glVertex3f( aVrts[i].sx, aVrts[i].sy, aVrts[i].sz );
 	}
+	glEnd();
 }
 
 void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount)

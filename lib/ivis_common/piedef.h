@@ -192,7 +192,7 @@ extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 extern void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest );
 
 void pie_DrawTriangle( iVertex *pv );
-extern void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects);
+extern void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
 
