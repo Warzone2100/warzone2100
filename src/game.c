@@ -3316,14 +3316,14 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version) {
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
 		}
 		for(i = 0; i < MaxNumberOfPlayers; i++)
-			endian_sdword(&psSaveGame->sNetPlay.players[i].dpid);
+			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_sdword(&psSaveGame->sNetPlay.dpidPlayer);
+		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
 		for(i = 0; i < 4; i++)
 			endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_sdword(&psSaveGame->sPlayer2dpid[i]);
+			endian_udword(&psSaveGame->sPlayer2dpid[i]);
 	}
 	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
 	if(version >= VERSION_31) {
@@ -4320,14 +4320,14 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
 	}
 	for(i = 0; i < MaxNumberOfPlayers; i++)
-		endian_sdword(&psSaveGame->sNetPlay.players[i].dpid);
+		endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 	endian_udword(&psSaveGame->sNetPlay.playercount);
-	endian_sdword(&psSaveGame->sNetPlay.dpidPlayer);
+	endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
 	for(i = 0; i < 4; i++)
 		endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
 	endian_udword(&psSaveGame->savePlayer);
 	for(i = 0; i < MAX_PLAYERS; i++)
-		endian_sdword(&psSaveGame->sPlayer2dpid[i]);
+		endian_udword(&psSaveGame->sPlayer2dpid[i]);
 	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
 	endian_sdword(&psSaveGame->missionCheatTime);
 	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
