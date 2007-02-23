@@ -120,12 +120,36 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 				size += sizeof(SWORD);
 
 				// store the variable value
-				if (psVal->type < VAL_USERTYPESTART)
+				if (psVal->type == VAL_STRING)
 				{
-					// internal type - just store the DWORD value
+					UDWORD stringLen = 0;
+
+					if(psVal->v.sval != NULL && strlen(psVal->v.sval) > 0)
+					{
+						stringLen = strlen(psVal->v.sval) + 1;
+					}
+
 					if (pBuffer != NULL)
 					{
-/* FIXME: this does not work for VAL_OBJ_GETSET, VAL_FUNC_EXTERN, or VAL_STRING */
+						*((UDWORD *)pPos) = stringLen;
+						endian_udword((UDWORD *)pPos);
+						pPos += sizeof(UDWORD);
+
+						if(stringLen > 0)
+						{
+							strcpy((char *)pPos, psVal->v.sval);
+						}
+						pPos += stringLen;
+					}
+
+					size += sizeof(UDWORD) + stringLen;
+				}
+				else if (psVal->type < VAL_USERTYPESTART)
+				{
+					// internal type
+					if (pBuffer != NULL)
+					{
+/* FIXME: this does not work for VAL_OBJ_GETSET, VAL_FUNC_EXTERN */
 						*((UDWORD *)pPos) = (UDWORD)psVal->v.ival;
 						endian_udword((UDWORD*)pPos);
 						
@@ -195,7 +219,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 // load the context information for the script system
 static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL bHashed)
 {
-	UDWORD				size, valSize;
+	UDWORD				size, valSize,stringLen;
 	SDWORD				numVars, i, numContext, context;
 	SCRIPT_CONTEXT		*psCCont;
 	INTERP_TYPE			type;
@@ -277,46 +301,57 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 				endian_udword((UDWORD*)pPos);
 
 				switch (type) {
-					case VAL_BOOL:
-						data.v.bval = *((BOOL*)pPos);
-						pPos += sizeof(BOOL);
-						size += sizeof(BOOL);
-						break;
-					case VAL_FLOAT:
-						data.v.fval = *((float*)pPos);
-						pPos += sizeof(float);
-						size += sizeof(float);
-						break;
-					case VAL_INT:
-					case VAL_TRIGGER:
-					case VAL_EVENT:
-					case VAL_VOID:
-					case VAL_OPCODE:
-					case VAL_PKOPCODE:
-						data.v.ival = *((UDWORD *)pPos);
-						pPos += sizeof(UDWORD);
-						size += sizeof(UDWORD);
-						break;
-					case VAL_STRING:
-/* FIXME: this would never work */
-						data.v.sval = pPos;
-						pPos += sizeof(char*);
-						size += sizeof(char*);
-						break;
-					case VAL_OBJ_GETSET:
+				case VAL_BOOL:
+					data.v.bval = *((BOOL*)pPos);
+					pPos += sizeof(BOOL);
+					size += sizeof(BOOL);
+					break;
+				case VAL_FLOAT:
+					data.v.fval = *((float*)pPos);
+					pPos += sizeof(float);
+					size += sizeof(float);
+					break;
+				case VAL_INT:
+				case VAL_TRIGGER:
+				case VAL_EVENT:
+				case VAL_VOID:
+				case VAL_OPCODE:
+				case VAL_PKOPCODE:
+					data.v.ival = *((UDWORD *)pPos);
+					pPos += sizeof(UDWORD);
+					size += sizeof(UDWORD);
+					break;
+				case VAL_STRING:
+					data.v.sval = (char*)MALLOC(MAXSTRLEN);
+					strcpy(data.v.sval, "\0");
+
+					stringLen = *((UDWORD *)pPos);	//read string length
+					
+					pPos += sizeof(UDWORD);
+					size += sizeof(UDWORD);
+
+					//load string
+					if(stringLen > 0)
+					{
+						strncpy(data.v.sval, (char *)pPos, stringLen);
+						pPos += stringLen;
+						size += stringLen;
+					}
+					break;
+				case VAL_OBJ_GETSET:
 /* FIXME: saving pointer on disk! */
-						data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
-						pPos += sizeof(SCRIPT_VARFUNC);
-						size += sizeof(SCRIPT_VARFUNC);
-						break;
-					case VAL_FUNC_EXTERN:
+					data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
+					pPos += sizeof(SCRIPT_VARFUNC);
+					size += sizeof(SCRIPT_VARFUNC);
+					break;
+				case VAL_FUNC_EXTERN:
 /* FIXME: saving pointer on disk! */
-						data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
-						pPos += sizeof(SCRIPT_FUNC);
-						size += sizeof(SCRIPT_FUNC);
-						break;
-					default:
-						ASSERT( FALSE, "eventLoadContext: invalid internal type" );
+					data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
+					pPos += sizeof(SCRIPT_FUNC);
+					size += sizeof(SCRIPT_FUNC);
+					break;
+				default:
+					ASSERT( FALSE, "eventLoadContext: invalid internal type" );
 				}
 
 				// set the value in the context
