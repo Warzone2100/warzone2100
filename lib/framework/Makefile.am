@@ -14,6 +14,6 @@ noinst_HEADERS = block.h configfile.h cursors.h cursors16.h debug.h font.h fract
 	frameint.h frameresource.h heap.h input.h listmacs.h mem.h memint.h mono.h resly.h \
 	strres.h strresly.h treap.h treapint.h trig.h types.h
 
-libframework_a_SOURCES = SDL_framerate.c block.c configfile.c debug.c frame.c \
+libframework_a_SOURCES = SDL_framerate.c block.c configfile.c debug.c exceptionhandler.c frame.c \
 	frameresource.c heap.c input.c mem.c mono.c resource_lexer.lex.c resource_parser.tab.c \
 	strres.c strres_lexer.lex.c strres_parser.tab.c treap.c trig.c

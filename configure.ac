@@ -35,8 +35,7 @@ if test x$host_os = xmingw32 ; then
 		if test x$WINDRES = xno ; then
 			AC_MSG_ERROR([windres not found])
 		fi
-#		WIN32_LIBS="-L\$(srcdir) -ldbghelp -lshfolder -lwinmm -lwsock32"
-		WIN32_LIBS="-lshfolder -lwinmm -lwsock32"
+		WIN32_LIBS="-L\$(srcdir) -ldbghelp -lshfolder -lwinmm -lwsock32"
 fi
 
 
@@ -115,7 +114,7 @@ elif test "x$debug" = "xstrict" ; then
 elif test "x$debug" = "xrelaxed" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -DDEBUG -Wall -Wno-unused-label -Wextra"
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -DNDEBUG"
 fi
 
 
