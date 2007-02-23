@@ -32,7 +32,7 @@ if test x$host_os = xmingw32 ; then
 		if test x$WINDRES = xno ; then
 			AC_MSG_ERROR([windres not found])
 		fi
-		WIN32_LIBS="-lshfolder -lwinmm -lwsock32"
+		WIN32_LIBS="-L\$(srcdir) -ldbghelp -lshfolder -lwinmm -lwsock32"
 fi
 
 
@@ -105,7 +105,7 @@ if test "x$debug" = "xyes" ; then
   # -O0 turns off all optimizations; this is necessary for accurate debugging
   WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall"
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -DNDEBUG"
 fi
 
 
