@@ -1033,24 +1033,14 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 /*Load the Body stats from the file exported from Access*/
 BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
 	BODY_STATS		sStats, *psStats, *psStartStats;
 	UDWORD			NumBody = 0,i,designable;
 	char			BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
                     flameIMD[MAX_NAME_SIZE];
 
-
-	//keep the start so we can release it at the end
-	//pData = pBodyData;
-
 	psStats = &sStats;
-/*	psStats = (BODY_STATS *)MALLOC(sizeof(BODY_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Body Stats - Out of memory"));
-		return FALSE;
-	}*/
+
 	//reserve the start of the data
 	psStartStats = psStats;
 
@@ -1069,7 +1059,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 		techLevel[0] = '\0';
 		size[0] = '\0';
 		GfxFile[0] = '\0';
-        flameIMD[0] = '\0';
+		flameIMD[0] = '\0';
 		//Watermelon:added 10 %d to store FRONT,REAR,LEFT,RIGHT,TOP,BOTTOM armour values
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pBodyData,"%[^','],%[^','],%[^','],%d,%d,%d,%d,%[^','],\
@@ -1145,7 +1135,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 			psStats->pIMD = NULL;
 		}
 
-        //get the flame graphic
+		//get the flame graphic
 		if (strcmp(flameIMD, "0"))
 		{
 			psStats->pFlameIMD = (iIMDShape *) resGetData("IMD", flameIMD);
@@ -1161,48 +1151,37 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 			psStats->pFlameIMD = NULL;
 		}
 
-        //save the stats
+		//save the stats
 		statsSetBody(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->design)
-        {
+		//set the max stat values for the design screen
+		if (psStats->design)
+		{
 			//use front armour value to prevent bodyStats corrupt problems
-            setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
-            setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT]);
-            setMaxBodyPower(psStats->powerOutput);
-            setMaxBodyPoints(psStats->body);
-		    setMaxComponentWeight(psStats->weight);
-        }
+			setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
+			setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT]);
+			setMaxBodyPower(psStats->powerOutput);
+			setMaxBodyPoints(psStats->body);
+			setMaxComponentWeight(psStats->weight);
+		}
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pBodyData = strchr(pBodyData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
 	return TRUE;
 }
 
 /*Load the Brain stats from the file exported from Access*/
 BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 {
-	//SBYTE		*pData;
 	BRAIN_STATS	sStats, *psStats, *psStartStats;
 	UDWORD		NumBrain = 0,i, incW;
 	char		BrainName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 				weaponName[MAX_NAME_SIZE];
 
-	//keep the start so we can release it at the end
-	//pData = pBrainData;
-
 	psStats = &sStats;
-/*	psStats = (BRAIN_STATS *)MALLOC(sizeof(BRAIN_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Brain Stats - Out of memory"));
-		return FALSE;
-	}*/
+
 	//reserve the start of the data
 	psStartStats = psStats;
 
@@ -1283,8 +1262,6 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pBrainData = strchr(pBrainData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
 	return TRUE;
 }
 
@@ -1417,22 +1394,13 @@ PROPULSION_TYPE	getPropulsionType(char *pType)
 /*Load the Propulsion stats from the file exported from Access*/
 BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 {
-	//SBYTE				*pData;
 	PROPULSION_STATS	sStats, *psStats, *psStartStats;
 	UDWORD				NumPropulsion = 0,i,designable;
 	char				PropulsionName[MAX_NAME_SIZE], imdName[MAX_NAME_SIZE],
 						techLevel[MAX_NAME_SIZE], type[MAX_NAME_SIZE];
 
-	//keep the start so we release it at the end
-	//pData = pPropulsionData;
-
 	psStats = &sStats;
-/*	psStats = (PROPULSION_STATS *)MALLOC(sizeof(PROPULSION_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Propulsion Stats - Out of memory"));
-		return FALSE;
-	}*/
+
 	//reserve the start of the data
 	psStartStats = psStats;
 
@@ -1512,45 +1480,43 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 		//save the stats
 		statsSetPropulsion(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->design)
-        {
-            setMaxPropulsionSpeed(psStats->maxSpeed);
-            //setMaxComponentWeight(psStats->weight);
-        }
+		//set the max stat values for the design screen
+		if (psStats->design)
+		{
+			setMaxPropulsionSpeed(psStats->maxSpeed);
+			//setMaxComponentWeight(psStats->weight);
+		}
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pPropulsionData = strchr(pPropulsionData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
 
-    /*since propulsion weight is a multiple of body weight we may need to
-    adjust the max component weight value*/
-    //check we've loaded them both in
-    if (asBodyStats && asPropulsionStats)
-    {
-        //check against each body stat
-        for (i = 0; i < numBodyStats; i++)
-        {
-            //check stat is designable
-            if (asBodyStats[i].design)
-            {
-                //check against each propulsion stat
-                for (NumPropulsion = 0; NumPropulsion < numPropulsionStats;
-                    NumPropulsion++)
-                {
-                    //check stat is designable
-                    if (asPropulsionStats[NumPropulsion].design)
-                    {
-                        setMaxComponentWeight(asPropulsionStats[NumPropulsion].weight *
-                            asBodyStats[i].weight / 100);
-                    }
-                }
-            }
-        }
-    }
+	/*since propulsion weight is a multiple of body weight we may need to
+	adjust the max component weight value*/
+	//check we've loaded them both in
+	if (asBodyStats && asPropulsionStats)
+	{
+		//check against each body stat
+		for (i = 0; i < numBodyStats; i++)
+		{
+			//check stat is designable
+			if (asBodyStats[i].design)
+			{
+				//check against each propulsion stat
+				for (NumPropulsion = 0; NumPropulsion < numPropulsionStats;
+				     NumPropulsion++)
+				{
+					//check stat is designable
+					if (asPropulsionStats[NumPropulsion].design)
+					{
+						setMaxComponentWeight(asPropulsionStats[NumPropulsion].weight 
+						                      * asBodyStats[i].weight / 100);
+					}
+				}
+			}
+		}
+	}
 
 	return TRUE;
 }
@@ -1558,7 +1524,6 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 /*Load the Sensor stats from the file exported from Access*/
 BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
 	SENSOR_STATS	sStats, *psStats, *psStartStats;
 	UDWORD			NumSensor = 0,i,designable;
 	char			SensorName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
@@ -1569,12 +1534,7 @@ BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 	//pData = pSensorData;
 
 	psStats = &sStats;
-/*	psStats = (SENSOR_STATS *)MALLOC(sizeof(SENSOR_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Sensor Stats - Out of memory"));
-		return FALSE;
-	}*/
+
 	//reserve the start of the data
 	psStartStats = psStats;
 
@@ -1716,8 +1676,6 @@ BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pSensorData = strchr(pSensorData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
 	return TRUE;
 }
 
@@ -3735,24 +3693,24 @@ WEAPON_SUBCLASS	getWeaponSubClass(char *pSubClass)
 	{
 		return WSC_SLOWROCKET;
 	}
-    if (!strcmp(pSubClass, "LAS_SAT"))
-    {
-        return WSC_LAS_SAT;
-    }
-    if (!strcmp(pSubClass, "BOMB"))
-    {
-        return WSC_BOMB;
-    }
-    if (!strcmp(pSubClass, "COMMAND"))
-    {
-        return WSC_COMMAND;
-    }
-    if (!strcmp(pSubClass, "EMP"))
-    {
-        return WSC_EMP;
-    }
+	if (!strcmp(pSubClass, "LAS_SAT"))
+	{
+		return WSC_LAS_SAT;
+	}
+	if (!strcmp(pSubClass, "BOMB"))
+	{
+		return WSC_BOMB;
+	}
+	if (!strcmp(pSubClass, "COMMAND"))
+	{
+		return WSC_COMMAND;
+	}
+	if (!strcmp(pSubClass, "EMP"))
+	{
+		return WSC_EMP;
+	}
 
-    //problem if we've got to here
+	//problem if we've got to here
 	ASSERT( FALSE, "Invalid weapon sub class - %s", pSubClass );
 	return INVALID_SUBCLASS;
 }
@@ -4313,5 +4271,4 @@ void adjustMaxDesignStats(void)
     updateMaxECMStats(ecmPower);
     updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
     updateMaxConstStats(constPoints);
-
 }
