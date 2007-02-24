@@ -117,6 +117,7 @@ BOOL war_getFullscreen(void) {
 /***************************************************************************/
 void war_SetFog(BOOL val)
 {
+	debug(LOG_FOG, "Fog of war turned %s", val ? "ON" : "OFF");
 	if (warGlobs.bFog != val)
 	{
 		warGlobs.bFog = val;
@@ -141,7 +142,6 @@ BOOL war_GetFog(void)
 /***************************************************************************/
 void war_SetTranslucent(BOOL val)
 {
-	pie_SetTranslucent(val);
 	if (warGlobs.bTranslucent != val)
 	{
 		warGlobs.bTranslucent = val;

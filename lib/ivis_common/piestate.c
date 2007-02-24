@@ -40,7 +40,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
 	//set render mode
-	pie_SetTranslucent(TRUE);
 	pie_SetAdditive(TRUE);
 
 	//basic gouraud textured rendering
@@ -62,23 +61,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetBilinear(TRUE);
 }
 
-//***************************************************************************
-//
-// pie_SetTranslucent(BOOL val);
-//
-// Global enable/disable Translucent effects
-//
-//***************************************************************************
-
-void pie_SetTranslucent(BOOL val)
-{
-	rendStates.translucent = val;
-}
-
-BOOL pie_Translucent(void)
-{
-	return rendStates.translucent;
-}
 
 //***************************************************************************
 //
@@ -129,10 +111,13 @@ void pie_EnableFog(BOOL val)
 {
 	if (rendStates.fogCap == FOG_CAP_NO)
 	{
+		debug(LOG_FOG, "pie_EnableFog: Trying to fog set fog to %s, but global fog disabled",
+		      val ? "ON" : "OFF");
 		val = FALSE;
 	}
 	if (rendStates.fogEnabled != val)
 	{
+		debug(LOG_FOG, "pie_EnableFog: Setting fog to %s", val ? "ON" : "OFF");
 		rendStates.fogEnabled = val;
 		if (val == TRUE)
 		{

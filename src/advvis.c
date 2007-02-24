@@ -45,6 +45,7 @@ static BOOL bRevealActive = FALSE;
 // ------------------------------------------------------------------------------------
 void	avSetStatus(BOOL var)
 {
+	debug(LOG_FOG, "avSetStatus: Setting visual fog %s", var ? "ON" : "OFF");
 	bRevealActive = var;
 }
 
@@ -195,6 +196,7 @@ BOOL	getRevealStatus( void )
 // ------------------------------------------------------------------------------------
 void	setRevealStatus( BOOL val )
 {
+	debug(LOG_FOG, "avSetRevealStatus: Setting reveal to %s", val ? "ON" : "OFF");
 	bRevealActive = val;
 }
 // ------------------------------------------------------------------------------------

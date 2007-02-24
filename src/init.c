@@ -978,7 +978,6 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
-	pie_SetTranslucent(war_GetTranslucent());
 	pie_SetAdditive(war_GetAdditive());
 	pie_SetGammaValue((float)gammaValue / 20.0f);
 

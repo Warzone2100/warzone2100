@@ -79,7 +79,6 @@ typedef	enum	FOG_CAP
 				{
 					FOG_CAP_NO,
 					FOG_CAP_GREY,
-					FOG_CAP_COLOURED,
 					FOG_CAP_UNDEFINED
 				}
 				FOG_CAP;
@@ -119,7 +118,6 @@ typedef	enum	ALPHA_MODE
 
 typedef struct	RENDER_STATE
 				{
-					BOOL				translucent;
 					BOOL				additive;
 					FOG_CAP				fogCap;
 					BOOL				fogEnabled;
@@ -160,8 +158,6 @@ extern void pie_SetDefaultStates(void);//Sets all states
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern void pie_SetGammaValue(float val);
 //renderer capability
-extern void pie_SetTranslucent(BOOL val);
-extern BOOL pie_Translucent(void);
 extern void pie_SetAdditive(BOOL val);
 extern BOOL pie_Additive(void);
 extern void pie_SetFogCap(FOG_CAP val);

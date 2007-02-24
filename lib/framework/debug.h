@@ -105,6 +105,7 @@ typedef enum {
   LOG_SCRIPT,
   LOG_MOVEMENT,
   LOG_ATTACK,
+  LOG_FOG,
   LOG_LAST /* _must_ be last! */
 } code_part;
 
