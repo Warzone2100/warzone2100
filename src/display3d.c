@@ -425,6 +425,7 @@ BOOL		bPlayerHasHQ = FALSE;
 	}
 
 	pie_Begin3DScene();
+	renderSky();
    	displayTerrain();
 	pie_BeginInterface();
 	updateLightLevels();
@@ -609,7 +610,6 @@ BOOL		bPlayerHasHQ = FALSE;
 
 /* Draws the 3D textured terrain */
 void displayTerrain(void)
-
 {
 //	SDWORD	x,y;
 	tileZ = 8000;
@@ -4432,60 +4432,22 @@ BOOL	bWaterTile;
 
 }
 
-/*
-HACK for IAN VISIT, but works....
-FIXME: This is function is not used. Should it be? - Per
-*/
-void renderSky(void)
+// Render a skybox
+void renderSky()
 {
-	const int texPage = 0;
-	SDWORD	skyShift=2; // Initialized with 2 because former +=2 below
+	static float wind = 0;
 
-	SDWORD index=0,width=0;
-	//skyShift += 2;
-
-	index= (player.r.y + skyShift)/ 20;
-
-	while (index > 0)
+	// Let the winds blow!
+	if(!gamePaused())
 	{
-		index -=256;
+		wind += 0.5*frameTime2/GAME_TICKS_PER_SEC;
+   		if(wind >= 360)
+   		{
+   			wind = 0;
+   		}
 	}
-
-	while (index < 640)
-	{
-		if(index >=384)
-		{
-			width = 640-index;
-		}
-		else
-		{
-			width = 256;
-		}
-		iV_UniBitmapDepth(texPage,0,0,width,128,index,0,width,192,200,65000);
-		index += 256;
-	}
-
-	index= (player.r.y+(skyShift/2))/ 15;
-
-	while (index > 0)
-	{
-		index -=256;
-	}
-
-	while (index < 640)
-	{
-		if(index >=384)
-		{
-			width = 640-index;
-		}
-		else
-		{
-			width = 256;
-		}
-		iV_UniBitmapDepth(texPage,0,128,width,127,index,0,width,192,200,64000);
-		index += 256;
-	}
-}
+	pie_DrawSkybox(player, camera, wind, 30, 0, 128, 256, 128);
+};
 
 /* Flattens an imd to the landscape and handles 4 different rotations */
 iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)

@@ -40,6 +40,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "piematrix.h"
 #include "pietexture.h"
+#include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/pieclip.h"
 
 /***************************************************************************/
@@ -146,6 +147,99 @@ void pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb )
 	}
         glEnd();}
 
+/* ---------------------------------------------------------------------------------- */
+
+void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int u, int v, int w, int h)
+{
+	const int scale = 10000;
+	const float r = 1.0f; // just because it is shorter than 1.0f
+
+	// save previous states
+	BOOL oldFogState = glIsEnabled(GL_FOG);
+	BOOL oldAlphaTestState = glIsEnabled(GL_ALPHA_TEST);
+
+	// set up matrices and textures
+	//pie_SetGeometricOffset((iV_SCREEN_WIDTH >> 1), geoOffset);
+	pie_PerspectiveBegin();
+
+	// Push identity matrix onto stack
+	pie_MatBegin();
+
+	// Now, scale the world according to what resolution we're running in
+	pie_MatScale(pie_GetResScalingFactor());
+
+	// Set the camera position
+	pie_MATTRANS(camera.p.x, camera.p.y, camera.p.z);
+
+	// Rotate for the player and for the wind
+	pie_MatRotZ(player.r.z);
+	pie_MatRotX(player.r.x);
+	pie_MatRotY(player.r.y + DEG(1) * rotation);
+
+	// Apply scale matrix
+	glScalef(scale,scale / 2.0,scale);
+
+	// move it somewhat below ground level for the blending effect
+	glTranslatef(0, -1 * r / 4, 0);
+
+	// Standard color/alpha for texturing
+	glColor4f(1.0, 1.0, 1.0, 1.0f);
+
+	// Set the texture page
+	pie_SetTexturePage(texpage);
+
+	// the texture wraps over at the edges (repeat)
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	// fog should not affect the sky
+	glDisable(GL_FOG);
+
+	// enable alpha
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// for the nice blend of the sky with the fog
+	glDisable(GL_ALPHA_TEST);
+
+	// It is behind everything
+	glDisable(GL_DEPTH_TEST);
+
+	glBegin(GL_QUAD_STRIP);
+		// Front
+		glTexCoord2i(u, v + h);		glVertex3f(-r, 0, r); // bottom left
+		glTexCoord2i(u, v); 			glVertex3f(-r, r, r); // top left
+		glTexCoord2i(u + w * 2, v + h);	glVertex3f( r, 0, r); // bottom right
+		glTexCoord2i(u + w * 2, v); 	glVertex3f( r, r, r); // top right
+
+		// Right
+		glTexCoord2i(u + w * 4, v + h);	glVertex3f( r, 0,-r); // bottom r
+		glTexCoord2i(u + w * 4, v); 	glVertex3f( r, r,-r); // top r
+
+		// Back
+		glTexCoord2i(u + w * 6, v + h);	glVertex3f(-r, 0, -r); // bottom right
+		glTexCoord2i(u + w * 6, v); 	glVertex3f(-r, r, -r); // top right
+
+		// Left	
+		glTexCoord2i(u + w * 8, v + h);	glVertex3f(-r, 0, r); // bottom r
+		glTexCoord2i(u + w * 8, v); 	glVertex3f(-r, r, r); // top r
+	glEnd();
+ 	
+	// Load Saved State
+	pie_MatEnd();
+	pie_PerspectiveEnd();
+
+	if (oldFogState)
+	{
+		glEnable(GL_FOG); 
+	}
+	if (oldAlphaTestState)
+	{
+		glEnable(GL_ALPHA_TEST);
+	}
+	glDisable (GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+}
 
 /* ---------------------------------------------------------------------------------- */
 
