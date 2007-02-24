@@ -858,7 +858,6 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	iSprite		*psSprite;
 	char		texfile[255];
 	SDWORD		i, id;
-//	BOOL		bFound = FALSE;
 
 	// generate a texture page name in "page-xx" format
 	strncpy(texfile, GetLastResourceFilename(), 254);
@@ -867,27 +866,13 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	debug(LOG_TEXTURE, "bufferTexPageLoad: %s texturepage ...", texfile);
 
-	if (war_GetAdditive())//(war_GetTranslucent())
+	//hardware
+	if (strstr(texfile, "soft") != NULL) // and this is a software textpage
 	{
-		//hardware
-		if (strstr(texfile,"soft") != NULL)//and this is a software textpage
-		{
-			//so dont load it
-			*ppData = NULL;
-			return TRUE;
-		}
+		//so dont load it
+		*ppData = NULL;
+		return TRUE;
 	}
-	else
-	{
-		//software or old d3d card
-		if (strstr(texfile,"hard") != NULL)//and this is a hardware textpage
-		{
-			//so dont load it
-			*ppData = NULL;
-			return TRUE;
-		}
-	}
-
 
 	if (strncmp(texfile, "page-", 5) == 0)
 	{

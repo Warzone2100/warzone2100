@@ -180,7 +180,7 @@ void	processDestinationTarget( void );
 UDWORD	getWaterTileNum( void );
 BOOL	eitherSelected(DROID *psDroid);
 BOOL bRender3DOnly;
-void	testEffect( void );
+static void testEffect( void );
 void	showDroidSensorRanges(void);
 void	showSensorRange1(DROID *psDroid);
 void	showSensorRange2(BASE_OBJECT *psObj);
@@ -5390,13 +5390,10 @@ static void testEffect2( UDWORD player )
 }
 
 
-void	testEffect( void )
+static void testEffect( void )
 {
 	UDWORD	i;
 
-	/* Hardware only effect, and then only if you've got additive! */
-	// if ( RODZ && war_GetAdditive() ) )
-	{
 		/* Only do for player 0 power stations */
 
 		if(bMultiPlayer)
@@ -5414,7 +5411,6 @@ void	testEffect( void )
 		{
 			testEffect2(0);
 		}
-	}
 }
 
 

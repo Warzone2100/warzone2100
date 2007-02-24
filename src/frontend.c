@@ -808,22 +808,6 @@ BOOL startGameOptions2Menu(void)
 		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, strresGetString(psStringRes,STR_SEQ_MINIMAL),TRUE,FALSE);
 	}
 
-//	////////////
-//	//translucency mode.
-//	addTextButton(FRONTEND_TRANSPARENCY,	FRONTEND_POS5X-15,FRONTEND_POS5Y, strresGetString(psStringRes, STR_FE_TRANSPARENCY),TRUE,FALSE);
-//	if (!war_GetTranslucent())
-//	{
-//		addTextButton(FRONTEND_TRANSPARENCY_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_OFF),TRUE,FALSE);
-//	}
-//	else if (!war_GetAdditive())
-//	{
-//	addTextButton(FRONTEND_TRANSPARENCY_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_COMPATIBLE),TRUE,FALSE);
-//	}
-//	else
-//	{
-//	addTextButton(FRONTEND_TRANSPARENCY_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, strresGetString(psStringRes,STR_FE_ON),TRUE,FALSE);
-//	}
-
 	////////////
 	//subtitle mode.
 	if(war_GetAllowSubtitles())
@@ -932,27 +916,6 @@ BOOL runGameOptions2Menu(void)
 		}
 		break;
 
-//	case FRONTEND_TRANSPARENCY:
-//	case FRONTEND_TRANSPARENCY_R:
-//		if (!war_GetTranslucent())
-//		{
-//			war_SetTranslucent(TRUE);
-//			war_SetAdditive(FALSE);
-//			widgSetString(psWScreen,FRONTEND_TRANSPARENCY_R, strresGetString(psStringRes,STR_COMPATIBLE));
-//		}
-//		else if (!war_GetAdditive())
-//		{
-//			war_SetTranslucent(TRUE);
-//			war_SetAdditive(TRUE);
-//			widgSetString(psWScreen,FRONTEND_TRANSPARENCY_R,strresGetString(psStringRes,STR_FE_ON));
-//		}
-//		else
-//		{
-//			war_SetTranslucent(FALSE);
-//			war_SetAdditive(FALSE);
-//			widgSetString(psWScreen,FRONTEND_TRANSPARENCY_R,strresGetString(psStringRes,STR_FE_OFF));
-//		}
-//		break;
 	case FRONTEND_SEQUENCE:
 	case FRONTEND_SEQUENCE_R:
 		if( war_GetSeqMode() == SEQ_FULL )

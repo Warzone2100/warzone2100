@@ -325,10 +325,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_SetTranslucent(FALSE);
 		}
-		else if ( strcasecmp( tokenType,"--noAdditive") == 0)
-		{
-			war_SetAdditive(FALSE);
-		}
 		else if ( strcasecmp( tokenType,"--noFog") == 0 )
 		{
 			pie_SetFogCap(FOG_CAP_NO);

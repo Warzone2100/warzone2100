@@ -118,7 +118,6 @@ typedef	enum	ALPHA_MODE
 
 typedef struct	RENDER_STATE
 				{
-					BOOL				additive;
 					FOG_CAP				fogCap;
 					BOOL				fogEnabled;
 					BOOL				fog;
@@ -158,8 +157,6 @@ extern void pie_SetDefaultStates(void);//Sets all states
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern void pie_SetGammaValue(float val);
 //renderer capability
-extern void pie_SetAdditive(BOOL val);
-extern BOOL pie_Additive(void);
 extern void pie_SetFogCap(FOG_CAP val);
 extern FOG_CAP pie_GetFogCap(void);
 extern void pie_SetTexCap(TEX_CAP val);

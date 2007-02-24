@@ -54,8 +54,6 @@ extern void war_SetFog(BOOL val);
 extern BOOL war_GetFog(void);
 extern void war_SetTranslucent(BOOL val);
 extern BOOL war_GetTranslucent(void);
-extern void war_SetAdditive(BOOL val);
-extern BOOL war_GetAdditive(void);
 extern void war_SetSeqMode(SEQ_MODE mode);
 extern SEQ_MODE war_GetSeqMode(void);
 extern void war_SetPlayAudioCDs(BOOL b);

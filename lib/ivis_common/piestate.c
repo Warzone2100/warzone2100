@@ -39,9 +39,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
-	//set render mode
-	pie_SetAdditive(TRUE);
-
 	//basic gouraud textured rendering
 	rendStates.texCombine = TEX_NONE;//to force reset to GOURAUD_TEX
 	pie_SetTexCombine(TEX_LOCAL);
@@ -61,24 +58,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetBilinear(TRUE);
 }
 
-
-//***************************************************************************
-//
-// pie_SetAdditive(BOOL val);
-//
-// Global enable/disable Additive effects
-//
-//***************************************************************************
-
-void pie_SetAdditive(BOOL val)
-{
-	rendStates.additive = val;
-}
-
-BOOL pie_Additive(void)
-{
-	return rendStates.additive;
-}
 
 //***************************************************************************
 //

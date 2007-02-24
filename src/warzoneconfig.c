@@ -49,7 +49,6 @@ typedef struct _warzoneGlobals
 	SEQ_MODE	seqMode;
 	BOOL		bFog;
 	BOOL		bTranslucent;
-	BOOL		bAdditive;
 	SWORD		effectsLevel;
 	BOOL		allowSubtitles;
 	BOOL		playAudioCDs;
@@ -82,7 +81,6 @@ void war_SetDefaultStates(void)//Sets all states
 	pie_SetFogCap(FOG_CAP_UNDEFINED);
 	war_SetFog(FALSE);
 	war_SetTranslucent(TRUE);	// SHURCOOL: These two should be true (ie. enabled) by default; not false
-	war_SetAdditive(TRUE);		// SHURCOOL: It means that the renderer should be allowed to use translucency/additive rendering modes
 
 	war_SetPlayAudioCDs(TRUE);
 
@@ -151,22 +149,6 @@ void war_SetTranslucent(BOOL val)
 BOOL war_GetTranslucent(void)
 {
 	return  warGlobs.bTranslucent;
-}
-
-/***************************************************************************/
-/***************************************************************************/
-void war_SetAdditive(BOOL val)
-{
-	pie_SetAdditive(val);
-	if (warGlobs.bAdditive != val)
-	{
-		warGlobs.bAdditive = val;
-	}
-}
-
-BOOL war_GetAdditive(void)
-{
-	return  warGlobs.bAdditive;
 }
 
 /***************************************************************************/
