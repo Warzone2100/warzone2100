@@ -94,8 +94,6 @@ void pie_SetFogStatus(BOOL val)
 		if (rendStates.fog != val)
 		{
 			rendStates.fog = val;
-			debug(LOG_FOG, "pie_SetFogStatus set %s", val ? "ON" : "OFF");
-
 			if (rendStates.fog) {
 				fog.argb = pie_GetFogColour();
 				fog_colour[0] = fog.byte.r/255.0f;
@@ -120,7 +118,6 @@ void pie_SetFogStatus(BOOL val)
 		//fog disabled so turn it off if not off already
 		if (rendStates.fog != FALSE)
 		{
-			debug(LOG_FOG, "pie_SetFogStatus(%s) but fog disabled", val ? "ON" : "OFF");
 			rendStates.fog = FALSE;
 		}
 	}
