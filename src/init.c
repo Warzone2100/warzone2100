@@ -1231,8 +1231,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 		return FALSE;
 	}
 
-	loadConfig(TRUE);// get favourite settings from the registry
-
 	// keymappings
 	// clear out any existing mappings
 	keyClearMappings();

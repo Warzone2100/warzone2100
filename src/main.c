@@ -456,7 +456,7 @@ init://jump here from the end if re_initialising
 
 	bDisableLobby = FALSE;
 
-	loadConfig(FALSE);
+	loadConfig();
 	atexit( closeConfig );
 
 	// parse the command line

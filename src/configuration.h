@@ -22,7 +22,7 @@
  * load and save favourites to the registry.
  */
 
-extern BOOL loadConfig				(BOOL bResourceAvailable);
-extern BOOL loadRenderMode			(void);
-extern BOOL saveConfig				(void);
+extern BOOL loadConfig(void);
+extern BOOL loadRenderMode(void);
+extern BOOL saveConfig(void);
 extern void closeConfig( void );

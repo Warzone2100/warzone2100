@@ -160,31 +160,6 @@ TITLECODE titleLoop(void)
 
 			changeTitleMode(QUIT);
 		}
-		else if(gameSpy.bGameSpy)
-		{
-			// set host
-			if (NetPlay.bHost)
-			{
-				ingame.bHostSetup = TRUE;
-			}
-			else
-			{
-				ingame.bHostSetup = FALSE;
-			}
-			// set protocol
-			// set address
-			// if host goto options.
-			// if client goto game find.
-			if(NetPlay.bHost)
-			{
-				changeTitleMode(MULTIOPTION);
-			}
-			else
-			{
-				changeTitleMode(GAMEFIND);
-			}
-		}
-
 	}
 
 	switch(titleMode)								// run relevant title screen code.

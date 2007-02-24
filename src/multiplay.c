@@ -77,8 +77,6 @@ SDWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each
 BOOL						openchannels[MAX_PLAYERS]={TRUE};
 UBYTE						bDisplayMultiJoiningStatus;
 
-GAMESPY						gameSpy;
-
 MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
 

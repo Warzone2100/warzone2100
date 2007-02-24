@@ -2795,7 +2795,6 @@ BOOL startMultiOptions(BOOL bReenter)
 
 	if(!bReenter)
 	{
-		loadConfig(TRUE);				 // get favourite options
 		initPlayerColours();			 // force a colour clearout.
 
 		for(i=0;i<MAX_PLAYERS;i++)

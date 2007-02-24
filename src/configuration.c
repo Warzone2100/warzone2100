@@ -62,7 +62,7 @@ extern	UBYTE	sPlayer[128];
 extern void registry_clear(void); // from configfile.c
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL loadConfig(BOOL bResourceAvailable)
+BOOL loadConfig(void)
 {
 	SDWORD	val;
 	char	sBuf[255];
@@ -313,35 +313,26 @@ BOOL loadConfig(BOOL bResourceAvailable)
 	//  multiplayer stuff.
 	// /////////////////////////
 
-	if(bResourceAvailable)
+	// game name
+	if (getWarzoneKeyString("gameName",(char*)&sBuf))
 	{
-		// game name
-		if(!NetPlay.bLobbyLaunched && !gameSpy.bGameSpy)
-		{
-			if(getWarzoneKeyString("gameName",(char*)&sBuf))
-			{
-				strcpy(game.name, sBuf);
-			}
-			else
-			{
-				strcpy(game.name, strresGetString(psStringRes, STR_GAME_NAME));
-				setWarzoneKeyString("gameName", game.name);
-			}
-		}
+		strcpy(game.name, sBuf);
+	}
+	else
+	{
+		strcpy(game.name, strresGetString(psStringRes, STR_GAME_NAME));
+		setWarzoneKeyString("gameName", game.name);
+	}
 
-		// player name
-		if(!NetPlay.bLobbyLaunched && !gameSpy.bGameSpy)// name will be set for us.
-		{
-			if(getWarzoneKeyString("playerName",(char*)&sBuf))
-			{
-				strcpy((char*)sPlayer, sBuf);
-			}
-			else
-			{
-				strcpy((char*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
-				setWarzoneKeyString("playerName",(char*)sPlayer);
-			}
-		}
+	// player name
+	if (getWarzoneKeyString("playerName",(char*)&sBuf))
+	{
+		strcpy((char*)sPlayer, sBuf);
+	}
+	else
+	{
+		strcpy((char*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
+		setWarzoneKeyString("playerName",(char*)sPlayer);
 	}
 
 	// map name
@@ -354,19 +345,6 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		strcpy(game.map, DEFAULTMAPNAME);
 		setWarzoneKeyString("mapName", game.map);
 	}
-
-
-	// modem to use.
-	if(getWarzoneKeyNumeric("modemId", &val))
-	{
-		ingame.modem= val;
-	}
-	else
-	{
-		ingame.modem= 0;
-		setWarzoneKeyNumeric("modemId", ingame.modem);
-	}
-
 
 	// power
 	if(getWarzoneKeyNumeric("power", &val))
@@ -602,7 +580,6 @@ BOOL saveConfig(void)
 		setWarzoneKeyNumeric("maxPlay", game.maxPlayers);		// max no of players
 		setWarzoneKeyNumeric("compPlay", game.bComputerPlayers);	// allow pc players
 		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
-		setWarzoneKeyNumeric("modemId", ingame.modem);			// modem to use.
 		setWarzoneKeyString("forceName", sForceName);			// force
 		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
 		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
