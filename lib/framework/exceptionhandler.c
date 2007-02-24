@@ -92,7 +92,10 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 #include <sys/utsname.h>
 
 
-static sighandler_t oldHandler[NSIG] = {SIG_DFL};
+typedef void(*SigHandler)(int);
+
+
+static SigHandler oldHandler[NSIG] = {SIG_DFL};
 
 static struct utsname sysInfo;
 static uint32_t sysInfoValid = 0, programNameSize = 0, programVersionSize = 0;
@@ -101,7 +104,7 @@ static const uint32_t gdmpVersion = 1;
 static const uint32_t sizeOfVoidP = sizeof(void*), sizeOfUtsname = sizeof(struct utsname), sizeOfChar = sizeof(char);
 
 
-static void setErrorHandler(sighandler_t signalHandler)
+static void setErrorHandler(SigHandler signalHandler)
 {
 	sysInfoValid = (uname(&sysInfo) == 0);
 	programNameSize = strlen(programName);
