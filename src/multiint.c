@@ -207,8 +207,6 @@ static void		CurrentForce		(void);				// draw the current force
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
-extern UWORD backDropBmp[];
-
 #define mywidth 512		//pow2 textures!
 #define myheight 512		//must match what we got now.
 void loadMapPreview(void)

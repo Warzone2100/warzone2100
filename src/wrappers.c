@@ -353,8 +353,6 @@ void initLoadingScreen( BOOL drawbdrop )
 		return;
 	}
 
-	pie_ResetBackDrop();
-
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 	pie_ScreenFlip(CLEAR_BLACK);//init loading

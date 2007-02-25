@@ -52,7 +52,6 @@ extern SDWORD dtm_GetRadarTexImageSize(void);
  *	Local Definitions
  */
 /***************************************************************************/
-UWORD	backDropBmp[BACKDROP_WIDTH * BACKDROP_HEIGHT * 4];
 SDWORD gSurfaceOffsetX;
 SDWORD gSurfaceOffsetY;
 UWORD* pgSrcData = NULL;
@@ -480,14 +479,6 @@ void pie_RenderRadar( int x, int y )
 	dest.h = 128;
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
 }
-
-
-void pie_ResetBackDrop(void)
-{
-	screen_SetBackDrop(backDropBmp, BACKDROP_WIDTH, BACKDROP_HEIGHT);
-	return;
-}
-
 
 void pie_LoadBackDrop(SCREENTYPE screenType)
 {

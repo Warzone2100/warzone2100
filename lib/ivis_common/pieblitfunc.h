@@ -91,6 +91,5 @@ typedef enum _screenType
 } SCREENTYPE;
 
 extern void pie_LoadBackDrop(SCREENTYPE screenType);
-extern void pie_ResetBackDrop(void);
 
 #endif //
