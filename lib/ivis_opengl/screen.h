@@ -74,7 +74,7 @@ extern void screen_SetBackDropFromFile(char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern BOOL screen_GetBackDrop(void);
-extern void screen_Upload(UWORD* newBackDropBmp);
+extern void screen_Upload(char *newBackDropBmp);
 
 /* screendump */
 char* screenDumpToDisk(char* path);

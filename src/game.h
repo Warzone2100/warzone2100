@@ -154,6 +154,7 @@ extern UDWORD getSaveGameType(void);
 
 UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
+BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY);
 
 #endif
 

@@ -493,8 +493,8 @@ BOOL screen_GetBackDrop(void)
 }
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
-//bitmap MUST be 512x512 for now.  -Q
-void screen_Upload(UWORD* newBackDropBmp)
+//bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
+void screen_Upload(char *newBackDropBmp)
 {
 	if(newBackDropBmp != NULL)
 	{
@@ -502,7 +502,7 @@ void screen_Upload(UWORD* newBackDropBmp)
 		pie_SetTexturePage(-1);
 		glBindTexture(GL_TEXTURE_2D, backDropTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-			512,512,//backDropWidth, backDropHeight,
+			BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,
 			0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
 
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

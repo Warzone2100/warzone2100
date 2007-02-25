@@ -11944,7 +11944,7 @@ BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD
 }
 //======================================================
 //draws stuff into our newer bitmap.
-BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY)
+BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY)
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
 	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
@@ -12272,9 +12272,10 @@ BOOL plotStructurePreview16(unsigned char*backDropSprite,UBYTE scale,UDWORD offX
 		{
 			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
 			{
-				backDropSprite[3*(( (offY+y)*512)+x+offX)]=0xff;//COL_RED;	//512 is forced, since we using 512*512
-				backDropSprite[3*(( (offY+y)*512)+x+offX)+1]=0x0;//COL_RED;	//0xff0000 =red...
-				backDropSprite[3*(( (offY+y)*512)+x+offX)+2]=0x0;//COL_RED;	//
+				// 0xff0000 = red. use COL_LIGHTRED instead?
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = 0xff;
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = 0x0;
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = 0x0;
 			}
 		}
 	}

@@ -77,6 +77,7 @@
 #include "data.h"
 #include "lib/script/script.h"
 #include "keymap.h"
+#include "game.h"
 
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
@@ -100,8 +101,6 @@ extern char	MultiPlayersPath[255];
 extern BOOL				bSendingMap;
 
 extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
-extern BOOL plotStructurePreview16(unsigned char *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY);
 
 extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
@@ -158,7 +157,6 @@ void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 void		displayTeamChooser				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayForceDroid			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void Show_Map(char *imagedata); //added to show map -Q
 void		setLockedTeamsMode			(void);
 
 // find games
@@ -207,8 +205,6 @@ static void		CurrentForce		(void);				// draw the current force
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
-#define mywidth 512		//pow2 textures!
-#define myheight 512		//must match what we got now.
 void loadMapPreview(void)
 {
 	char			aFileName[256];
@@ -216,17 +212,15 @@ void loadMapPreview(void)
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 
-//	iBitmap
 	UDWORD			i, j, x, y, height, offX2, offY2;
 	UBYTE			scale,col;
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
-	unsigned char  *ptr, *imageData;
+	char  *ptr, *imageData;
 
 	if(psMapTiles)
 	{
 		mapShutdown();
-//		gwShutDown();
 	}
 
 	levFindDataSet(game.map, &psLevel);
@@ -238,11 +232,12 @@ void loadMapPreview(void)
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
-		debug( LOG_NEVER, "loadgame: Fail5\n" );
+		debug(LOG_NEVER, "loadMapPreview: Failed to load file");
+		return;
 	}
 	if (!mapLoad(pFileData, fileSize))
 	{
-		debug( LOG_NEVER, "loadgame: Fail7\n" );
+		debug(LOG_NEVER, "loadMapPreview: Failed to load map");
 		return;
 	}
 	gwShutDown();
@@ -264,52 +259,47 @@ void loadMapPreview(void)
 	{
 		scale = 5;
 	}
-	oursize=sizeof(unsigned char) *mywidth*myheight;
-  imageData = (unsigned char*)malloc(oursize *3);
-  ptr=imageData;
-  memset(ptr,0x45,sizeof(unsigned char) *mywidth*myheight*3 );	//dunno about background color
-  psTile = psMapTiles;
-	offX2 = (mywidth/2 ) - ((scale*mapWidth)/2);
-	offY2 =(myheight/2 )  - ((scale*mapHeight)/2);
+	oursize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
+	imageData = (char*)malloc(oursize * 3);
+	ptr = imageData;
+	memset(ptr, 0x45, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
+	psTile = psMapTiles;
+	offX2 = (BACKDROP_HACK_WIDTH / 2) - ((scale * mapWidth) / 2);
+	offY2 = (BACKDROP_HACK_HEIGHT / 2 )  - ((scale * mapHeight) / 2);
 
-      for (i = 0; i < mapHeight; i++)
-      {
-	  		WTile = psTile;
-        for (j = 0; j <mapWidth ; j++)
-        {
+	for (i = 0; i < mapHeight; i++)
+	{
+		WTile = psTile;
+		for (j = 0; j < mapWidth; j++)
+		{
 			height = WTile->height;
-			col =height;// coltab[height/16];
+			col = height;
 
-
-			for(x = (j*scale);x < (j*scale)+scale ;x++)
+			for (x = (j * scale); x < (j * scale) + scale; x++)
 			{
-				for(y = (i*scale);y< (i*scale)+scale ;y++)
+				for (y = (i * scale); y < (i * scale) + scale; y++)
 				{
-          imageData[3*((offY2+y) * mywidth + (x+offX2))]	//+0 though not needed.  -Q
-		  =col;
-         imageData[3*((offY2+y) * mywidth + (x+offX2))+1]
-		  =col;
-        imageData[3*((offY2+y) * mywidth + (x+offX2))+2]
-		  =col;
+					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2))] = col;
+					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)) + 1] = col;
+					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)) + 2] = col;
 				}
 			}
-		  WTile+=1;
-        }
+			WTile += 1;
+		}
 		psTile += mapWidth;
-      }
-  	plotStructurePreview16(imageData,scale,offX2,offY2);
-//	  Show_Map(imageData);//imageData		//Don't get rid of this yes!
-	screen_Upload((UWORD*)imageData);//backDropBmp) ;
+	}
+	plotStructurePreview16(imageData, scale, offX2, offY2);
+	screen_Upload(imageData);
 	free(imageData);
 
 	hideTime = gameTime;
 	mapShutdown();
-	return;
 }
 
+#ifdef REMOVE_WHEN_NOBODY_FINDS_THIS_INTERESTING_ANYMORE
 // leave alone for now please -Q
 // I know this don't belong here, but I am using this for testing.
-void Show_Map(char *imagedata)
+static void Show_Map(char *imagedata)
 {
 	GLuint Tex;
 //		SDL_GL_SwapBuffers();
@@ -400,12 +390,10 @@ void displayMapPreview()
 		}
 		psTile += mapWidth*2;
 	}
-
-
-
-
 }
 */
+#endif
+
 // ////////////////////////////////////////////////////////////////////////////
 // helper func
 
