@@ -344,63 +344,6 @@ void iV_DrawMousePointer(int x,int y)
 
 
 //*************************************************************************
-
-// Upload the current display back buffer into system memory.
-//
-void UploadDisplayBuffer(char *DisplayBuffer)
-{
-
-	UDWORD *Source = (UDWORD*) rendSurface.buffer;
-	UDWORD *Dest = (UDWORD*)DisplayBuffer;
-	UDWORD Size = rendSurface.size / 4;
-	UDWORD i;
-
-	for(i=0; i<Size; i++) {
-		*Dest = *Source;
-		Source++;
-		Dest++;
-	}
-
-}
-
-
-//*************************************************************************
-
-void	DownloadDisplayBuffer(char *DisplayBuffer)
-{
-	UDWORD *Source = (UDWORD*)DisplayBuffer;
-	UDWORD *Dest = (UDWORD*) rendSurface.buffer;
-	UDWORD depth,width,modulo,drop;
-	UDWORD	srcWidth,srcDepth;
-	UDWORD	i,j;
-
-	depth = pie_GetVideoBufferHeight();
-	width = pie_GetVideoBufferWidth();
-
-//always full screen
-	modulo = 0;//width - BACKDROP_WIDTH;
-
-	drop = 0;//(depth - BACKDROP_HEIGHT)/2;
-
-	Dest += ((drop*width) + (modulo))/4;		// dealing with dwords
-
-//always full screen
-	srcDepth = depth;//BACKDROP_HEIGHT;
-	srcWidth = width;//BACKDROP_WIDTH;
-	for(i=0; i<srcDepth; i++)
-	{
-		for(j=0; j<srcWidth/4; j++)
-		{
-			*Dest = *Source;
-			Source++;
-			Dest++;
-		}
-		Dest+=(modulo/4);		// dest is in dwords ... !
-	}
-}
-
-
-//*************************************************************************
 //
 // local functions
 //

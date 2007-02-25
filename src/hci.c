@@ -3400,19 +3400,8 @@ void intDisplayWidgets(void)
 		if (!bMultiPlayer)
 		{
 			screen_RestartBackDrop();
-			// Download buffer in system memory to the display back buffer.
-			/* pie_DownloadDisplayBuffer(DisplayBuffer); -- did nothing. removed. what gives? - Per */
 
-	//			DISP_WIDTH, DISP_HEIGHT);
 			/*Add the radar to the design screen - only if player has HQ*/
-			/*bPlayerHasHQ=FALSE;
-			for(psStructure=apsStructLists[selectedPlayer]; psStructure && !bPlayerHasHQ; psStructure = psStructure->psNext)
-			{
-				if(psStructure->pStructureType->type == REF_HQ)
-				{
-					bPlayerHasHQ = TRUE;
-				}
-			}*/
 			bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
 
 

@@ -69,12 +69,7 @@
 #define REND_SURFACE_SCREEN		1
 #define REND_SURFACE_USR		2
 
-#define REND_MAX_X			pie_GetVideoBufferWidth()
-#define iV_SCREEN_Y_MAX			pie_GetVideoBufferHeight()
-#define iV_SCREEN_SIZE_MAX		(iV_SCREEN_X_MAX * iV_SCREEN_Y_MAX)
 #define iV_SCREEN_WIDTH			(rendSurface.width)
-#define iV_SCREEN_HEIGHT		(rendSurface.height)
-#define iV_SCREEN_BUFFER		(rendSurface.buffer)
 
 //*************************************************************************
 

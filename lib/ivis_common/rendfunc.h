@@ -67,8 +67,6 @@ extern void DrawTransImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
 extern void DrawTransImageRect(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0,int Width,int Height);
 extern void iV_SetMousePointer(IMAGEFILE *ImageFile,UWORD ImageID);
 extern void iV_DrawMousePointer(int x,int y);
-extern void UploadDisplayBuffer(char *DisplayBuffer);
-extern void DownloadDisplayBuffer(char *DisplayBuffer);
 extern void ScaleBitmapRGB(char *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB);
 
 

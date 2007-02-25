@@ -847,9 +847,6 @@ void dataIMGRelease(void *pData)
 }
 
 
-#define TEXTUREWIDTH (256)
-#define TEXTUREHEIGHT (256)
-
 /* Load a texturepage into memory */
 BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 {

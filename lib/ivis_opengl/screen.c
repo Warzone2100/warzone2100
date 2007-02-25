@@ -54,6 +54,7 @@ extern "C" {
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "screen.h"
 
 /* The Current screen size and bit depth */
@@ -64,8 +65,6 @@ UDWORD		screenDepth = 0;
 SDL_Surface     *screen;
 
 //backDrop
-#define BACKDROP_WIDTH	640
-#define BACKDROP_HEIGHT	480
 UWORD*  pBackDropData = NULL;
 BOOL    bBackDrop = FALSE;
 BOOL    bUpload = FALSE;
