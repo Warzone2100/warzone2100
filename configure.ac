@@ -36,6 +36,25 @@ if test x$host_os = xmingw32 ; then
 fi
 
 
+ # Installation directories
+
+AC_ARG_WITH(icondir,
+[AS_HELP_STRING([--with-icondir=DIR],[icon files [DATADIR/icons]])],
+[ icondir=$withval ], [ icondir=$datadir/icons ])
+
+
+AC_ARG_WITH(applicationdir,
+[AS_HELP_STRING([--with-applicationdir=DIR],[application files [DATADIR/applications]])],
+[ applicationdir=$withval ], [ applicationdir=$datadir/applications ])
+
+
+AC_SUBST(icondir, $icondir)
+AC_SUBST(applicationdir, $applicationdir)
+if test "x$docdir" = "x" ; then
+	AC_SUBST(docdir, $(datarootdir)/doc/$(AC_PACKAGE_TARNAME))
+fi
+
+
 # Commandline options:
 
 AC_ARG_WITH(makensis,
