@@ -46,6 +46,7 @@ AC_ARG_WITH(applicationdir,
 [AS_HELP_STRING([--with-applicationdir=DIR],[application files [DATADIR/applications]])],
 [ applicationdir=$withval ], [ applicationdir=$datadir/applications ])
 
+
 AC_SUBST(icondir, $icondir)
 AC_SUBST(applicationdir, $applicationdir)
 if test "x$docdir" = "x" ; then
@@ -304,10 +305,8 @@ fi
 # -DYY_STATIC is required by flex
 WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
-# only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
-# strange error messages when something is wrong
-LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
-CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
+CFLAGS="${WZ_CFLAGS} ${CFLAGS}"
+LIBS="${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])
 AC_CONFIG_FILES([Makefile
