@@ -7,10 +7,6 @@ AM_INIT_AUTOMAKE([1.8])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
-if test "x$docdir" = "x" ; then
-	AC_SUBST(docdir, $(datarootdir)/doc/$(AC_PACKAGE_TARNAME))
-fi
-
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
@@ -36,6 +32,24 @@ if test x$host_os = xmingw32 ; then
 			AC_MSG_ERROR([windres not found])
 		fi
 		WIN32_LIBS="-L\$(srcdir) -ldbghelp -lshfolder -lwinmm -lwsock32"
+fi
+
+
+# Installation directories
+
+AC_ARG_WITH(icondir,
+[AS_HELP_STRING([--with-icondir=DIR],[icon files [DATADIR/icons]])],
+[ icondir=$withval ], [ icondir=$datadir/icons ])
+
+
+AC_ARG_WITH(applicationdir,
+[AS_HELP_STRING([--with-applicationdir=DIR],[application files [DATADIR/applications]])],
+[ applicationdir=$withval ], [ applicationdir=$datadir/applications ])
+
+AC_SUBST(icondir, $icondir)
+AC_SUBST(applicationdir, $applicationdir)
+if test "x$docdir" = "x" ; then
+	AC_SUBST(docdir, $datarootdir/doc/$AC_PACKAGE_TARNAME)
 fi
 
 
@@ -196,7 +210,6 @@ AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = "xyes" ; then
 	AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
 	WZ_LIBS="${WZ_LIBS} ${GLLIB} ${GLULIB}"
-	AC_SUBST(RENDERER, "ivis_opengl")
 	AC_MSG_RESULT([yes])
 else
 	AC_MSG_RESULT([no])

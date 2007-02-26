@@ -27,13 +27,13 @@ $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)
 	zip -T $@
 
 install-data-local: $(BASEARCHIVE) $(PATCHARCHIVE)
-	$(MKDIR_P) $(DESTDIR)$(datadir)/warzone2100
-	$(INSTALL_DATA) $(srcdir)/$(BASEARCHIVE) $(DESTDIR)$(datadir)/warzone2100/$(BASEARCHIVE)
-	$(INSTALL_DATA) $(srcdir)/$(PATCHARCHIVE) $(DESTDIR)$(datadir)/warzone2100/$(PATCHARCHIVE)
+	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)
+	$(INSTALL_DATA) $(srcdir)/$(BASEARCHIVE) $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
+	$(INSTALL_DATA) $(srcdir)/$(PATCHARCHIVE) $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
 
 uninstall-local:
-	rm -f $(DESTDIR)$(datadir)/warzone2100/$(BASEARCHIVE)
-	rm -f $(DESTDIR)$(datadir)/warzone2100/$(PATCHARCHIVE)
+	rm -f $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
+	rm -f $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
 
 installcheck:
 	[ -f $(BASEARCHIVE) ] && zip -T $(BASEARCHIVE)
