@@ -303,10 +303,8 @@ fi
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
 WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
-# only now set the LIBS/CFLAGS/CPPFLAGS lines, if set earlier it will give
-# strange error messages when something is wrong
-LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
-CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
+CFLAGS="${WZ_CFLAGS} ${CFLAGS}"
+LIBS="${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])
 AC_CONFIG_FILES([Makefile
