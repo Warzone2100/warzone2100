@@ -304,7 +304,7 @@ fi
 WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
 CFLAGS="${WZ_CFLAGS} ${CFLAGS}"
-LIBS="${WZ_LIBS} ${WIN32_LIBS}"
+LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])
 AC_CONFIG_FILES([Makefile
