@@ -200,6 +200,6 @@ static inline void endian_fract(FRACT *fract) {
 # define endian_fract(x)
 #endif
 
-void setupExceptionHandler(char * programCommand, char * programVersion, char * compileDate);
+void setupExceptionHandler(char * programCommand);
 
 #endif
