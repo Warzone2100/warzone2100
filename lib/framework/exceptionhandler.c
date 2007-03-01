@@ -20,7 +20,7 @@
 #include "frame.h"
 
 
-static char * programName = NULL, * programVersion = NULL;
+static char * programCommand = NULL, * programVersion = NULL, * compileDate = NULL;
 
 
 #ifdef WIN32
@@ -84,9 +84,9 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 #else
-#include <stdio.h>
 #include <stdint.h>
-#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <execinfo.h>
 #include <sys/utsname.h>
@@ -98,7 +98,7 @@ typedef void(*SigHandler)(int);
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
 
 static struct utsname sysInfo;
-static uint32_t sysInfoValid = 0, programNameSize = 0, programVersionSize = 0;
+static uint32_t sysInfoValid = 0, programCommandSize = 0, programVersionSize = 0, compileDateSize = 0;
 
 static const uint32_t gdmpVersion = 1;
 static const uint32_t sizeOfVoidP = sizeof(void*), sizeOfUtsname = sizeof(struct utsname), sizeOfChar = sizeof(char);
@@ -107,8 +107,9 @@ static const uint32_t sizeOfVoidP = sizeof(void*), sizeOfUtsname = sizeof(struct
 static void setErrorHandler(SigHandler signalHandler)
 {
 	sysInfoValid = (uname(&sysInfo) == 0);
-	programNameSize = strlen(programName);
+	programCommandSize = strlen(programCommand);
 	programVersionSize = strlen(programVersion);
+	compileDateSize = strlen(compileDate);
 
 	// Save previous signal handler, eg. SDL parachute
 	oldHandler[SIGFPE] = signal(SIGFPE, signalHandler);
@@ -149,7 +150,7 @@ static void errorHandler(int sig)
 	char * gDumpPath = "/tmp/warzone2100.gdmp";
 	uint32_t btSize = backtrace(btBuffer, 128), signum = sig;
 
-	FILE * dumpFile = fopen(gDumpPath, "w");
+	int dumpFile = open(gDumpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
 
 	if (!dumpFile)
 	{
@@ -157,26 +158,31 @@ static void errorHandler(int sig)
 		return;
 	}
 
-	fwrite(&gdmpVersion, sizeof(uint32_t), 1, dumpFile);
+	write(dumpFile, &gdmpVersion, sizeof(uint32_t));
 
-	fwrite(&sizeOfChar, sizeof(uint32_t), 1, dumpFile);
-	fwrite(&sizeOfVoidP, sizeof(uint32_t), 1, dumpFile);
-	fwrite(&sizeOfUtsname, sizeof(uint32_t), 1, dumpFile);
+	write(dumpFile, &sizeOfChar, sizeof(uint32_t));
+	write(dumpFile, &sizeOfVoidP, sizeof(uint32_t));
+	write(dumpFile, &sizeOfUtsname, sizeof(uint32_t));
 
-	fwrite(&sysInfoValid, sizeof(uint32_t), 1, dumpFile);
-	fwrite(&sysInfo, sizeOfUtsname, 1, dumpFile);
+	write(dumpFile, &programCommandSize, sizeof(uint32_t));
+	write(dumpFile, programCommand, sizeOfChar*programCommandSize);
 
-	fwrite(&programNameSize, sizeof(uint32_t), 1, dumpFile);
-	fwrite(programName, sizeOfChar, programNameSize, dumpFile);
-	fwrite(&programVersionSize, sizeof(uint32_t), 1, dumpFile);
-	fwrite(programVersion, sizeOfChar, programVersionSize, dumpFile);
+	write(dumpFile, &programVersionSize, sizeof(uint32_t));
+	write(dumpFile, programVersion, sizeOfChar*programVersionSize);
 
-	fwrite(&signum, sizeof(uint32_t), 1, dumpFile);
+	write(dumpFile, &compileDateSize, sizeof(uint32_t));
+	write(dumpFile, compileDate, sizeOfChar*compileDateSize);
 
-	fwrite(&btSize, sizeof(uint32_t), 1, dumpFile);
-	fwrite(btBuffer, sizeOfVoidP, btSize, dumpFile);
+	write(dumpFile, &sysInfoValid, sizeof(uint32_t));
+	write(dumpFile, &sysInfo, sizeOfUtsname);
 
-	fclose(dumpFile);
+	write(dumpFile, &signum, sizeof(uint32_t));
+
+	write(dumpFile, &btSize, sizeof(uint32_t));
+	write(dumpFile, btBuffer, sizeOfVoidP*btSize);
+
+	fsync(dumpFile);
+	close(dumpFile);
 
 	printf("Saved dump file to '%s'\n", gDumpPath);
 
@@ -186,10 +192,11 @@ static void errorHandler(int sig)
 #endif // WIN32
 
 
-void setupExceptionHandler(char * programName_x, char * programVersion_x)
+void setupExceptionHandler(char * programCommand_x, char * programVersion_x, char * compileDate_x)
 {
-	programName = programName_x;
+	programCommand = programCommand_x;
 	programVersion = programVersion_x;
+	compileDate = compileDate_x;
 
 #ifdef WIN32
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
