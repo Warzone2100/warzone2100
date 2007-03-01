@@ -434,7 +434,7 @@ int main(int argc, char *argv[])
 # endif //DEBUG
 #endif // _MSC_VER
 
-	setupExceptionHandler(argv[0], VERSION);
+	setupExceptionHandler(argv[0]);
 
 	debug_init();
 	atexit( debug_exit );
