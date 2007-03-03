@@ -134,6 +134,10 @@ void pie_ScreenFlip(CLEAR_MODE clearMode) {
 		case CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD:
 			break;
 		case CLEAR_BLACK:
+			glDepthMask(GL_TRUE);
+			glClearColor(0.0f,0.0f,0.0f,0.0f);
+			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+			break;
 		default:
 			glDepthMask(GL_TRUE);
 			fog_colour.argb = pie_GetFogColour();
