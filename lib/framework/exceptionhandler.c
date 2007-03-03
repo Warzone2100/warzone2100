@@ -23,8 +23,10 @@
 static char * programCommand = NULL;
 
 
-#ifdef WIN32
+#if defined(WZ_OS_WIN)
+
 # include "dbghelp.h"
+
 static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 {
 	LPCSTR applicationName = "Warzone 2100", resultMessage = NULL;
@@ -48,7 +50,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
-			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(programVersion), programVersion };
+			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(VERSION), VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
 			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, FALSE };
 
@@ -83,13 +85,20 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 	return EXCEPTION_CONTINUE_SEARCH;
 }
-#else
+
+#elif defined(WZ_OS_LINUX)
+
+// C99 headers:
 #include <stdint.h>
+#include <signal.h>
+
+// POSIX headers:
 #include <unistd.h>
 #include <fcntl.h>
-#include <signal.h>
-#include <execinfo.h>
 #include <sys/utsname.h>
+
+// GNU header:
+#include <execinfo.h>
 
 
 #define MAX_BACKTRACE 20
@@ -160,6 +169,12 @@ static void errorHandler(int sig)
 	write(dumpFile, VERSION, sizeof(char)*strlen(VERSION));
 	write(dumpFile, "\n", sizeof(char));
 
+# if defined(DEBUG)
+	write(dumpFile, "Type: Debug\n", strlen("Type: Debug\n"));
+# else
+	write(dumpFile, "Type: Release\n", strlen("Type: Release\n"));
+# endif
+
 	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
 	write(dumpFile, __DATE__, sizeof(char)*strlen(__DATE__));
 	write(dumpFile, "\n\n", sizeof(char)*2);
@@ -207,16 +222,17 @@ static void errorHandler(int sig)
 	signal(sig, oldHandler[sig]);
 	raise(sig);
 }
-#endif // WIN32
+
+#endif // WZ_OS_*
 
 
 void setupExceptionHandler(char * programCommand_x)
 {
 	programCommand = programCommand_x;
 
-#ifdef WIN32
+#if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
-#else
+#elif defined(WZ_OS_LINUX)
 	setErrorHandler(errorHandler);
-#endif // WIN32
+#endif // WZ_OS_*
 }
