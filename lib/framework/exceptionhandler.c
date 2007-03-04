@@ -113,45 +113,88 @@ typedef void(*SigHandler)(int);
 
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
 static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'};
-static const char * signalDescriptions[NSIG] = {
-"SIGHUP, Hangup",
-"SIGINT, Interrupt",
-"SIGQUIT, Quit",
-"SIGILL, Illegal instruction",
-"SIGTRAP, Trace trap",
-"SIGABRT, Abort",
-"SIGBUS, BUS error",
-"SIGFPE, Floating-point exception",
-"SIGKILL, Kill",
-"SIGUSR1, User-defined signal 1",
-"SIGSEGV, Segmentation fault",
-"SIGUSR2, User-defined signal 2",
-"SIGPIPE, Broken pipe",
-"SIGALRM, Alarm clock",
-"SIGTERM, Termination",
-"SIGSTKFLT, Stack fault",
-"SIGCHLD, Child status has changed",
-"SIGCONT, Continue",
-"SIGSTOP, Stop",
-"SIGTSTP, Keyboard stop",
-"SIGTTIN, Background read from tty",
-"SIGTTOU, Background write to tty",
-"SIGURG, Urgent condition on socket",
-"SIGXCPU, CPU limit exceeded",
-"SIGXFSZ, File size limit exceeded"
-"SIGVTALRM, Virtual alarm clock",
-"SIGPROF, Profiling alarm clock",
-"SIGWINCH, Window size change",
-"SIGIO, I/O now possible",
-"SIGPWR, Power failure restart",
-"SIGSYS, Bad system call",
-""
-};
 
+/* Ugly, but arguably correct */
 const char * wz_strsignal(int signum)
 {
-	assert(signum > 0 && signum < NSIG);
-	return signalDescriptions[signum-1];
+	switch (signum)
+	{
+	/* Standard signals */
+	case SIGHUP : return "SIGHUP, Hangup";
+	case SIGINT : return "SIGINT, Interrupt";
+	case SIGQUIT : return "SIGQUIT, Quit";
+	case SIGILL : return "SIGILL, Illegal instruction";
+	case SIGTRAP : return "SIGTRAP, Trace trap";
+	case SIGABRT : return "SIGABRT, Abort";
+	case SIGBUS : return "SIGBUS, BUS error";
+	case SIGFPE : return "SIGFPE, Floating-point exception";
+	case SIGKILL : return "SIGKILL, Kill";
+	case SIGUSR1 : return "SIGUSR1, User-defined signal 1";
+	case SIGUSR2 : return "SIGUSR2, User-defined signal 2";
+	case SIGSEGV : return "SIGSEGV, Segmentation fault";
+	case SIGPIPE : return "SIGPIPE, Broken pipe";
+	case SIGALRM : return "SIGALRM, Alarm clock";
+	case SIGTERM : return "SIGTERM, Termination";
+	/* Less standard signals */
+#ifdef SIGSTKFLT
+	case SIGSTKFLT : return "SIGSTKFLT, Stack fault";
+#endif
+#ifdef SIGCHLD
+	case SIGCHLD : return "SIGCHLD, Child status has changed";
+#else
+#ifdef SIGCLD
+	case SIGCLD : return "SIGCLD, Child status has changed";
+#endif
+#endif
+#ifdef SIGCONT
+	case SIGCONT : return "SIGCONT, Continue";
+#endif
+#ifdef SIGSTOP
+	case SIGSTOP : return "SIGSTOP, Stop";
+#endif
+#ifdef SIGTSTP
+	case SIGTSTP : return "SIGTSTP, Keyboard stop";
+#endif
+#ifdef SIGTTIN
+	case SIGTTIN : return "SIGTTIN, Background read from tty";
+#endif
+#ifdef SIGTTOU
+	case SIGTTOU : return "SIGTTOU, Background write to tty";
+#endif
+#ifdef SIGURG
+	case SIGURG : return "SIGURG, Urgent condition on socket";
+#endif
+#ifdef SIGXCPU
+	case SIGXCPU : return "SIGXCPU, CPU limit exceeded";
+#endif
+#ifdef SIGXFSZ
+	case SIGXFSZ : return "SIGXFSZ, File size limit exceeded";
+#endif
+#ifdef SIGVTALRM
+	case SIGVTALRM : return "SIGVTALRM, Virtual alarm clock";
+#endif
+#ifdef SIGPROF
+	case SIGPROF : return "SIGPROF, Profiling alarm clock";
+#endif
+#ifdef SIGWINCH
+	case SIGWINCH : return "SIGWINCH, Window size change";
+#endif
+#ifdef SIGIO
+	case SIGIO : return "SIGIO, I/O now possible";
+#else
+#ifdef SIGPOLL
+	case SIGPOLL : return "SIGPOLL, I/O now possible";
+#endif
+#endif
+#ifdef SIGPWR
+	case SIGPWR : return "SIGPWR, Power failure restart";
+#endif
+#ifdef SIGSYS
+	case SIGSYS : return "SIGSYS, Bad system call";
+#endif
+	}
+
+	return "Unknown signal";
 }
 
 static void setErrorHandler(SigHandler signalHandler)
