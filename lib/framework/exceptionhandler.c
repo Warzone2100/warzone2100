@@ -17,13 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#define _GNU_SOURCE
 #include "frame.h"
 
-#define MAX_PID_STRING 16
-
 static char * programCommand = NULL;
-static char programPID[MAX_PID_STRING] = {'\0'};
 
 
 #if defined(WZ_OS_WIN)
@@ -107,13 +103,16 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 // GNU header:
 #include <execinfo.h>
 
+
 #define MAX_BACKTRACE 20
+#define MAX_PID_STRING 16
 
 
 typedef void(*SigHandler)(int);
 
 
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
+static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'};
 
 
 static void setErrorHandler(SigHandler signalHandler)
@@ -235,13 +234,13 @@ static void errorHandler(int sig)
 			dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
 			dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
 
-			execlp("gdb", "gdb", programCommand, programPID, NULL);
+			execle(gdbPath, gdbPath, programCommand, programPID, NULL, NULL);
 
 			fsync(dumpFile);
 			close(dumpFile);
 			close(gdbPipe[0]);
 		}
-		else if (pid > (pid_t)0 )
+		else if ( pid > (pid_t)0 )
 		{
 			close(dumpFile); // No output to dumpFile
 			close(gdbPipe[0]); // No input from pipe
@@ -275,11 +274,18 @@ static void errorHandler(int sig)
 void setupExceptionHandler(char * programCommand_x)
 {
 	programCommand = programCommand_x;
-	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
 
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
 #elif defined(WZ_OS_LINUX)
+	// Get full path to 'gdb'
+	FILE * whichStream = popen("which gdb", "r");
+	fread(gdbPath, sizeof(char), MAX_PATH, whichStream);
+	pclose(whichStream);
+
+	*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses execle
+	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
+
 	setErrorHandler(errorHandler);
 #endif // WZ_OS_*
 }
