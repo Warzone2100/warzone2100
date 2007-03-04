@@ -17,12 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#define _GNU_SOURCE
 #include "frame.h"
 
-#define MAX_STRING 256
+#define MAX_PID_STRING 16
 
 static char * programCommand = NULL;
-static char programPID[MAX_STRING] = {'\0'};
+static char programPID[MAX_PID_STRING] = {'\0'};
 
 
 #if defined(WZ_OS_WIN)
@@ -93,16 +94,18 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 // C99 headers:
 #include <stdint.h>
 #include <signal.h>
+#include <string.h>
 
 // POSIX headers:
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/utsname.h>
 
 // GNU header:
 #include <execinfo.h>
-
 
 #define MAX_BACKTRACE 20
 
@@ -272,7 +275,7 @@ static void errorHandler(int sig)
 void setupExceptionHandler(char * programCommand_x)
 {
 	programCommand = programCommand_x;
-	snprintf( programPID, MAX_STRING, "%i", getpid() );
+	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
 
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
