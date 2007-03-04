@@ -113,7 +113,46 @@ typedef void(*SigHandler)(int);
 
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
 static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'};
+static const char * signalDescriptions[NSIG] = {
+"SIGHUP, Hangup",
+"SIGINT, Interrupt",
+"SIGQUIT, Quit",
+"SIGILL, Illegal instruction",
+"SIGTRAP, Trace trap",
+"SIGABRT, Abort",
+"SIGBUS, BUS error",
+"SIGFPE, Floating-point exception",
+"SIGKILL, Kill",
+"SIGUSR1, User-defined signal 1",
+"SIGSEGV, Segmentation fault",
+"SIGUSR2, User-defined signal 2",
+"SIGPIPE, Broken pipe",
+"SIGALRM, Alarm clock",
+"SIGTERM, Termination",
+"SIGSTKFLT, Stack fault",
+"SIGCHLD, Child status has changed",
+"SIGCONT, Continue",
+"SIGSTOP, Stop",
+"SIGTSTP, Keyboard stop",
+"SIGTTIN, Background read from tty",
+"SIGTTOU, Background write to tty",
+"SIGURG, Urgent condition on socket",
+"SIGXCPU, CPU limit exceeded",
+"SIGXFSZ, File size limit exceeded"
+"SIGVTALRM, Virtual alarm clock",
+"SIGPROF, Profiling alarm clock",
+"SIGWINCH, Window size change",
+"SIGIO, I/O now possible",
+"SIGPWR, Power failure restart",
+"SIGSYS, Bad system call",
+""
+};
 
+const char * wz_strsignal(int signum)
+{
+	assert(signum > 0 && signum < NSIG);
+	return signalDescriptions[signum-1];
+}
 
 static void setErrorHandler(SigHandler signalHandler)
 {
@@ -214,7 +253,7 @@ static void errorHandler(int sig)
 
 	write(dumpFile, "Dump caused by signal: ",
 		  strlen("Dump caused by signal: "));
-	write(dumpFile, strsignal(sig), strlen(strsignal(sig)));
+	write(dumpFile, wz_strsignal(sig), strlen(wz_strsignal(sig)));
 	write(dumpFile, "\n\n", sizeof(char)*2);
 
 
