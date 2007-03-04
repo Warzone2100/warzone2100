@@ -19,8 +19,10 @@
 */
 #include "frame.h"
 
+#define MAX_STRING 256
 
 static char * programCommand = NULL;
+static char programPID[MAX_STRING] = {'\0'};
 
 
 #if defined(WZ_OS_WIN)
@@ -95,6 +97,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 // POSIX headers:
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 #include <sys/utsname.h>
 
 // GNU header:
@@ -151,8 +154,10 @@ static void errorHandler(int sig)
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
 	char * gDumpPath = "/tmp/warzone2100.gdmp";
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
+	pid_t pid = 0;
 
-	int dumpFile = open(gDumpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+	int gdbPipe[2] = {0}, dumpFile = open(gDumpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+
 
 	if (!dumpFile)
 	{
@@ -215,9 +220,47 @@ static void errorHandler(int sig)
 
 
 	fsync(dumpFile);
-	close(dumpFile);
 
-	printf("Saved dump file to '%s'\n", gDumpPath);
+
+	if (pipe(gdbPipe) == 0)
+	{
+		pid = fork();
+		if ( pid == (pid_t)0 )
+		{
+			close(gdbPipe[1]); // No output to pipe
+
+			dup2(gdbPipe[0], 0); // Input from pipe
+			dup2(dumpFile, 1); // Output to dumpFile
+
+			execlp("gdb", "gdb", programCommand, programPID, NULL);
+
+			fsync(dumpFile);
+			close(dumpFile);
+			close(gdbPipe[0]);
+		}
+		else if (pid > (pid_t)0 )
+		{
+			close(dumpFile); // No output to dumpFile
+			close(gdbPipe[0]); // No input from pipe
+
+			write(gdbPipe[1], "backtrace full\n", strlen("backtrace full\n"));
+			write(gdbPipe[1], "quit\n", strlen("quit\n"));
+
+			waitpid(pid, NULL, 0);
+
+			close(gdbPipe[1]);
+
+			printf("Saved dump file to '%s'\n", gDumpPath);
+		}
+		else
+		{
+			printf("Fork failed\n");
+		}
+	}
+	else
+	{
+		printf("Pipe failed\n");
+	}
 
 	signal(sig, oldHandler[sig]);
 	raise(sig);
@@ -229,6 +272,7 @@ static void errorHandler(int sig)
 void setupExceptionHandler(char * programCommand_x)
 {
 	programCommand = programCommand_x;
+	snprintf( programPID, MAX_STRING, "%i", getpid() );
 
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
