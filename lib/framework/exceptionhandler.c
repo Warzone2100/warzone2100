@@ -229,8 +229,8 @@ static void errorHandler(int sig)
 		{
 			close(gdbPipe[1]); // No output to pipe
 
-			dup2(gdbPipe[0], 0); // Input from pipe
-			dup2(dumpFile, 1); // Output to dumpFile
+			dup2(gdbPipe[0], 0); // STDIN from pipe
+			dup2(dumpFile, 1); // STDOUT to dumpFile
 
 			execlp("gdb", "gdb", programCommand, programPID, NULL);
 
