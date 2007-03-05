@@ -88,31 +88,32 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 #elif defined(WZ_OS_LINUX)
 
 // C99 headers:
-#include <stdint.h>
-#include <signal.h>
-#include <string.h>
+# include <stdint.h>
+# include <signal.h>
+# include <string.h>
 
 // POSIX headers:
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <sys/utsname.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <sys/utsname.h>
 
 // GNU header:
-#include <execinfo.h>
+# include <execinfo.h>
 
 
-#define MAX_BACKTRACE 20
-#define MAX_PID_STRING 16
+# define MAX_BACKTRACE 20
+# define MAX_PID_STRING 16
 
 
 typedef void(*SigHandler)(int);
 
 
+static BOOL gdbIsAvailable = FALSE;
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
-static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'};
+static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, gdmpPath[MAX_PATH] = {'\0'};
 
 /* Ugly, but arguably correct */
 const char * wz_strsignal(int signum)
@@ -135,63 +136,75 @@ const char * wz_strsignal(int signum)
 	case SIGPIPE : return "SIGPIPE, Broken pipe";
 	case SIGALRM : return "SIGALRM, Alarm clock";
 	case SIGTERM : return "SIGTERM, Termination";
+
 	/* Less standard signals */
-#ifdef SIGSTKFLT
+# if defined(SIGSTKFLT)
 	case SIGSTKFLT : return "SIGSTKFLT, Stack fault";
-#endif
-#ifdef SIGCHLD
+# endif
+
+# if defined(SIGCHLD)
 	case SIGCHLD : return "SIGCHLD, Child status has changed";
-#else
-#ifdef SIGCLD
+# elif defined(SIGCLD)
 	case SIGCLD : return "SIGCLD, Child status has changed";
-#endif
-#endif
-#ifdef SIGCONT
+# endif
+
+# if defined(SIGCONT)
 	case SIGCONT : return "SIGCONT, Continue";
-#endif
-#ifdef SIGSTOP
+# endif
+
+# if defined(SIGSTOP)
 	case SIGSTOP : return "SIGSTOP, Stop";
-#endif
-#ifdef SIGTSTP
+# endif
+
+# if defined(SIGTSTP)
 	case SIGTSTP : return "SIGTSTP, Keyboard stop";
-#endif
-#ifdef SIGTTIN
+# endif
+
+# if defined(SIGTTIN)
 	case SIGTTIN : return "SIGTTIN, Background read from tty";
-#endif
-#ifdef SIGTTOU
+# endif
+
+# if defined(SIGTTOU)
 	case SIGTTOU : return "SIGTTOU, Background write to tty";
-#endif
-#ifdef SIGURG
+# endif
+
+# if defined(SIGURG)
 	case SIGURG : return "SIGURG, Urgent condition on socket";
-#endif
-#ifdef SIGXCPU
+# endif
+
+# if defined(SIGXCPU)
 	case SIGXCPU : return "SIGXCPU, CPU limit exceeded";
-#endif
-#ifdef SIGXFSZ
+# endif
+
+# if defined(SIGXFSZ)
 	case SIGXFSZ : return "SIGXFSZ, File size limit exceeded";
-#endif
-#ifdef SIGVTALRM
+# endif
+
+# if defined(SIGVTALRM)
 	case SIGVTALRM : return "SIGVTALRM, Virtual alarm clock";
-#endif
-#ifdef SIGPROF
+# endif
+
+# if defined(SIGPROF)
 	case SIGPROF : return "SIGPROF, Profiling alarm clock";
-#endif
-#ifdef SIGWINCH
+# endif
+
+# if defined(SIGWINCH)
 	case SIGWINCH : return "SIGWINCH, Window size change";
-#endif
-#ifdef SIGIO
+# endif
+
+# if defined(SIGIO)
 	case SIGIO : return "SIGIO, I/O now possible";
-#else
-#ifdef SIGPOLL
+# elif defined(SIGPOLL)
 	case SIGPOLL : return "SIGPOLL, I/O now possible";
-#endif
-#endif
-#ifdef SIGPWR
+# endif
+
+# if defined(SIGPWR)
 	case SIGPWR : return "SIGPWR, Power failure restart";
-#endif
-#ifdef SIGSYS
+# endif
+
+# if defined(SIGSYS)
 	case SIGSYS : return "SIGSYS, Bad system call";
-#endif
+# endif
 	}
 
 	return "Unknown signal";
@@ -234,29 +247,28 @@ static void errorHandler(int sig)
 		raise(sig);
 	allreadyRunning = 1;
 
+	pid_t pid = 0;
 	struct utsname sysInfo;
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
-	char * gDumpPath = "/tmp/warzone2100.gdmp";
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
-	pid_t pid = 0;
 
-	int gdbPipe[2] = {0}, dumpFile = open(gDumpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
 
 
 	if (!dumpFile)
 	{
-		printf("Failed to create dump file '%s'", gDumpPath);
+		printf("Failed to create dump file '%s'", gdmpPath);
 		return;
 	}
 
 
 	write(dumpFile, "Program command: ", strlen("Program command: "));
-	write(dumpFile, programCommand, sizeof(char)*strlen(programCommand));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, programCommand, strlen(programCommand));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Version: ", strlen("Version: "));
-	write(dumpFile, VERSION, sizeof(char)*strlen(VERSION));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, VERSION, strlen(VERSION));
+	write(dumpFile, "\n", 1);
 
 # if defined(DEBUG)
 	write(dumpFile, "Type: Debug\n", strlen("Type: Debug\n"));
@@ -265,8 +277,8 @@ static void errorHandler(int sig)
 # endif
 
 	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
-	write(dumpFile, __DATE__, sizeof(char)*strlen(__DATE__));
-	write(dumpFile, "\n\n", sizeof(char)*2);
+	write(dumpFile, __DATE__, strlen(__DATE__));
+	write(dumpFile, "\n\n", 2);
 
 
 	if (uname(&sysInfo) != 0)
@@ -275,76 +287,89 @@ static void errorHandler(int sig)
 
 	write(dumpFile, "Operating system: ", strlen("Operating system: "));
 	write(dumpFile, sysInfo.sysname, strlen(sysInfo.sysname));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Node name: ", strlen("Node name: "));
 	write(dumpFile, sysInfo.nodename, strlen(sysInfo.nodename));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Release: ", strlen("Release: "));
 	write(dumpFile, sysInfo.release, strlen(sysInfo.release));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Version: ", strlen("Version: "));
 	write(dumpFile, sysInfo.version, strlen(sysInfo.version));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Machine: ", strlen("Machine: "));
 	write(dumpFile, sysInfo.machine, strlen(sysInfo.machine));
-	write(dumpFile, "\n\n", sizeof(char)*2);
+	write(dumpFile, "\n\n", 2);
 
 
 	write(dumpFile, "Dump caused by signal: ",
 		  strlen("Dump caused by signal: "));
 	write(dumpFile, wz_strsignal(sig), strlen(wz_strsignal(sig)));
-	write(dumpFile, "\n\n", sizeof(char)*2);
+	write(dumpFile, "\n\n", 2);
 
 
 	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
+	write(dumpFile, "\n", 1);
 
 
 	fsync(dumpFile);
 
 
-	if (pipe(gdbPipe) == 0)
+	if (gdbIsAvailable)
 	{
-		pid = fork();
-		if ( pid == (pid_t)0 )
+		if (pipe(gdbPipe) == 0)
 		{
-			close(gdbPipe[1]); // No output to pipe
+			pid = fork();
+			if (pid == (pid_t)0)
+			{
+				char * gdbArgv[] = { gdbPath, programCommand, programPID, NULL },
+				     * gdbEnv[] = {NULL};
 
-			dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
-			dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
+				close(gdbPipe[1]); // No output to pipe
 
-			execle(gdbPath, gdbPath, programCommand, programPID, NULL, NULL);
+				dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
+				dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
 
-			fsync(dumpFile);
-			close(dumpFile);
-			close(gdbPipe[0]);
-		}
-		else if ( pid > (pid_t)0 )
-		{
-			close(dumpFile); // No output to dumpFile
-			close(gdbPipe[0]); // No input from pipe
+				execve(gdbPath, gdbArgv, gdbEnv);
+			}
+			else if (pid > (pid_t)0)
+			{
+				close(gdbPipe[0]); // No input from pipe
 
-			write(gdbPipe[1], "backtrace full\n", strlen("backtrace full\n"));
-			write(gdbPipe[1], "quit\n", strlen("quit\n"));
+				write(gdbPipe[1], "backtrace full\n" "quit\n",
+					strlen("backtrace full\n" "quit\n"));
 
-			waitpid(pid, NULL, 0);
+				if (waitpid(pid, NULL, 0) < 0)
+				{
+					printf("GDB failed\n");
+				}
 
-			close(gdbPipe[1]);
-
-			printf("Saved dump file to '%s'\n", gDumpPath);
+				close(gdbPipe[1]);
+			}
+			else
+			{
+				printf("Fork failed\n");
+			}
 		}
 		else
 		{
-			printf("Fork failed\n");
+			printf("Pipe failed\n");
 		}
 	}
 	else
 	{
-		printf("Pipe failed\n");
+		write(dumpFile, "GDB not available, no extended backtrace created\n",
+			  strlen("GDB not available, no extended backtrace created\n"));
 	}
+
+
+	printf("Saved dump file to '%s'\n", gdmpPath);
+	close(dumpFile);
+
 
 	signal(sig, oldHandler[sig]);
 	raise(sig);
@@ -362,11 +387,21 @@ void setupExceptionHandler(char * programCommand_x)
 #elif defined(WZ_OS_LINUX)
 	// Get full path to 'gdb'
 	FILE * whichStream = popen("which gdb", "r");
-	fread(gdbPath, sizeof(char), MAX_PATH, whichStream);
+	fread(gdbPath, 1, MAX_PATH, whichStream);
 	pclose(whichStream);
 
-	*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses execle
+	if (strlen(gdbPath) > 0)
+	{
+		gdbIsAvailable = TRUE;
+		*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
+	}
+	else
+	{
+		debug(LOG_WARNING, "GDB not available, will not create extended backtrace\n");
+	}
+
 	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
+	snprintf( gdmpPath, MAX_PATH, "/tmp/warzone2100.gdmp" );
 
 	setErrorHandler(errorHandler);
 #endif // WZ_OS_*
