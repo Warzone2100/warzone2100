@@ -19,9 +19,6 @@
 */
 #include "frame.h"
 
-static char * programCommand = NULL;
-
-
 #if defined(WZ_OS_WIN)
 
 # include "dbghelp.h"
@@ -111,12 +108,14 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 typedef void(*SigHandler)(int);
 
 
-static BOOL gdbIsAvailable = FALSE;
+static struct utsname sysInfo;
+static BOOL gdbIsAvailable = FALSE, sysInfoValid = FALSE;
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
-static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, gdmpPath[MAX_PATH] = {'\0'};
+static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * gdmpPath = NULL, * programCommand = NULL;
+
 
 /* Ugly, but arguably correct */
-const char * wz_strsignal(int signum)
+static const char * wz_strsignal(int signum)
 {
 	switch (signum)
 	{
@@ -248,7 +247,6 @@ static void errorHandler(int sig)
 	allreadyRunning = 1;
 
 	pid_t pid = 0;
-	struct utsname sysInfo;
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 
@@ -281,7 +279,7 @@ static void errorHandler(int sig)
 	write(dumpFile, "\n\n", 2);
 
 
-	if (uname(&sysInfo) != 0)
+	if (!sysInfoValid)
 		write(dumpFile, "System information may be invalid!\n",
 			  strlen("System information may be invalid!\n\n"));
 
@@ -312,10 +310,12 @@ static void errorHandler(int sig)
 	write(dumpFile, "\n\n", 2);
 
 
+	// Dump raw backtrace in case GDB is not available or fails
 	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
 	write(dumpFile, "\n", 1);
 
 
+	// Make sure everything is written before letting GDB write to it
 	fsync(dumpFile);
 
 
@@ -380,8 +380,6 @@ static void errorHandler(int sig)
 
 void setupExceptionHandler(char * programCommand_x)
 {
-	programCommand = programCommand_x;
-
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
 #elif defined(WZ_OS_LINUX)
@@ -390,6 +388,7 @@ void setupExceptionHandler(char * programCommand_x)
 	fread(gdbPath, 1, MAX_PATH, whichStream);
 	pclose(whichStream);
 
+	// Did we find GDB?
 	if (strlen(gdbPath) > 0)
 	{
 		gdbIsAvailable = TRUE;
@@ -400,8 +399,11 @@ void setupExceptionHandler(char * programCommand_x)
 		debug(LOG_WARNING, "GDB not available, will not create extended backtrace\n");
 	}
 
+	sysInfoValid = (uname(&sysInfo) == 0);
+
 	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
-	snprintf( gdmpPath, MAX_PATH, "/tmp/warzone2100.gdmp" );
+	programCommand = programCommand_x;
+	gdmpPath = "/tmp/warzone2100.gdmp";
 
 	setErrorHandler(errorHandler);
 #endif // WZ_OS_*
