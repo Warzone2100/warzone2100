@@ -19,22 +19,18 @@
 */
 #include "frame.h"
 
-
-static char * programCommand = NULL;
-
-
 #if defined(__WIN32__)
 
 # include "dbghelp.h"
 
 static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 {
-	LPCSTR applicationName = "Warzone 2100", resultMessage = NULL;
+	LPCSTR applicationName = "Warzone 2100";
 
-	char miniDumpPath[MAX_PATH], buffer[MAX_PATH];
+	char miniDumpPath[MAX_PATH], resultMessage[MAX_PATH];
 
 	// Write to temp dir, to support unprivileged users
-	if (!GetTempPath( MAX_PATH, miniDumpPath ))
+	if (!GetTempPathA( MAX_PATH, miniDumpPath ))
 		strcpy( miniDumpPath, "c:\\temp\\" );
 	strcat( miniDumpPath, "warzone2100.mdmp" );
 
@@ -44,9 +40,9 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	strcat( miniDumpPath, ".mdmp" );
 	*/
 
-	if ( MessageBox( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
+	if ( MessageBoxA( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
 	{
-		HANDLE miniDumpFile = CreateFile( miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
+		HANDLE miniDumpFile = CreateFileA( miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
@@ -63,25 +59,22 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 					&uInfo,
 					NULL ) )
 			{
-				sprintf( buffer, "Saved dump file to '%s'", miniDumpPath );
-				resultMessage = buffer;
+				sprintf( resultMessage, "Saved dump file to '%s'", miniDumpPath );
+				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 			}
 			else
 			{
-				sprintf( buffer, "Failed to save dump file to '%s' (error %d)", miniDumpPath, GetLastError() );
-				resultMessage = buffer;
+				sprintf( resultMessage, "Failed to save dump file to '%s' (error %d)", miniDumpPath, GetLastError() );
+				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 			}
 			CloseHandle(miniDumpFile);
 		}
 		else
 		{
-			sprintf( buffer, "Failed to create dump file '%s' (error %d)", miniDumpPath, GetLastError() );
-			resultMessage = buffer;
+			sprintf( resultMessage, "Failed to create dump file '%s' (error %d)", miniDumpPath, GetLastError() );
+			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 		}
 	}
-
-	if (resultMessage)
-		MessageBox( NULL, resultMessage, applicationName, MB_OK );
 
 	return EXCEPTION_CONTINUE_SEARCH;
 }
@@ -89,26 +82,129 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 #elif defined(__LINUX__)
 
 // C99 headers:
-#include <stdint.h>
-#include <signal.h>
+# include <stdint.h>
+# include <signal.h>
+# include <string.h>
 
 // POSIX headers:
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/utsname.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <sys/utsname.h>
 
 // GNU header:
-#include <execinfo.h>
+# include <execinfo.h>
 
 
-#define MAX_BACKTRACE 20
+# define MAX_BACKTRACE 20
+# define MAX_PID_STRING 16
 
 
 typedef void(*SigHandler)(int);
 
 
+static struct utsname sysInfo;
+static BOOL gdbIsAvailable = FALSE, sysInfoValid = FALSE;
 static SigHandler oldHandler[NSIG] = {SIG_DFL};
+static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * gdmpPath = NULL, * programCommand = NULL;
 
+
+/* Ugly, but arguably correct */
+static const char * wz_strsignal(int signum)
+{
+	switch (signum)
+	{
+	/* Standard signals */
+	case SIGHUP : return "SIGHUP, Hangup";
+	case SIGINT : return "SIGINT, Interrupt";
+	case SIGQUIT : return "SIGQUIT, Quit";
+	case SIGILL : return "SIGILL, Illegal instruction";
+	case SIGTRAP : return "SIGTRAP, Trace trap";
+	case SIGABRT : return "SIGABRT, Abort";
+	case SIGBUS : return "SIGBUS, BUS error";
+	case SIGFPE : return "SIGFPE, Floating-point exception";
+	case SIGKILL : return "SIGKILL, Kill";
+	case SIGUSR1 : return "SIGUSR1, User-defined signal 1";
+	case SIGUSR2 : return "SIGUSR2, User-defined signal 2";
+	case SIGSEGV : return "SIGSEGV, Segmentation fault";
+	case SIGPIPE : return "SIGPIPE, Broken pipe";
+	case SIGALRM : return "SIGALRM, Alarm clock";
+	case SIGTERM : return "SIGTERM, Termination";
+
+	/* Less standard signals */
+# if defined(SIGSTKFLT)
+	case SIGSTKFLT : return "SIGSTKFLT, Stack fault";
+# endif
+
+# if defined(SIGCHLD)
+	case SIGCHLD : return "SIGCHLD, Child status has changed";
+# elif defined(SIGCLD)
+	case SIGCLD : return "SIGCLD, Child status has changed";
+# endif
+
+# if defined(SIGCONT)
+	case SIGCONT : return "SIGCONT, Continue";
+# endif
+
+# if defined(SIGSTOP)
+	case SIGSTOP : return "SIGSTOP, Stop";
+# endif
+
+# if defined(SIGTSTP)
+	case SIGTSTP : return "SIGTSTP, Keyboard stop";
+# endif
+
+# if defined(SIGTTIN)
+	case SIGTTIN : return "SIGTTIN, Background read from tty";
+# endif
+
+# if defined(SIGTTOU)
+	case SIGTTOU : return "SIGTTOU, Background write to tty";
+# endif
+
+# if defined(SIGURG)
+	case SIGURG : return "SIGURG, Urgent condition on socket";
+# endif
+
+# if defined(SIGXCPU)
+	case SIGXCPU : return "SIGXCPU, CPU limit exceeded";
+# endif
+
+# if defined(SIGXFSZ)
+	case SIGXFSZ : return "SIGXFSZ, File size limit exceeded";
+# endif
+
+# if defined(SIGVTALRM)
+	case SIGVTALRM : return "SIGVTALRM, Virtual alarm clock";
+# endif
+
+# if defined(SIGPROF)
+	case SIGPROF : return "SIGPROF, Profiling alarm clock";
+# endif
+
+# if defined(SIGWINCH)
+	case SIGWINCH : return "SIGWINCH, Window size change";
+# endif
+
+# if defined(SIGIO)
+	case SIGIO : return "SIGIO, I/O now possible";
+# elif defined(SIGPOLL)
+	case SIGPOLL : return "SIGPOLL, I/O now possible";
+# endif
+
+# if defined(SIGPWR)
+	case SIGPWR : return "SIGPWR, Power failure restart";
+# endif
+
+# if defined(SIGSYS)
+	case SIGSYS : return "SIGSYS, Bad system call";
+# endif
+	}
+
+	return "Unknown signal";
+}
 
 static void setErrorHandler(SigHandler signalHandler)
 {
@@ -147,27 +243,27 @@ static void errorHandler(int sig)
 		raise(sig);
 	allreadyRunning = 1;
 
-	struct utsname sysInfo;
+	pid_t pid = 0;
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
-	char * gDumpPath = "/tmp/warzone2100.gdmp";
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 
-	int dumpFile = open(gDumpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+
 
 	if (!dumpFile)
 	{
-		printf("Failed to create dump file '%s'", gDumpPath);
+		printf("Failed to create dump file '%s'", gdmpPath);
 		return;
 	}
 
 
 	write(dumpFile, "Program command: ", strlen("Program command: "));
-	write(dumpFile, programCommand, sizeof(char)*strlen(programCommand));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, programCommand, strlen(programCommand));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Version: ", strlen("Version: "));
-	write(dumpFile, VERSION, sizeof(char)*strlen(VERSION));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, VERSION, strlen(VERSION));
+	write(dumpFile, "\n", 1);
 
 # if defined(DEBUG)
 	write(dumpFile, "Type: Debug\n", strlen("Type: Debug\n"));
@@ -176,48 +272,101 @@ static void errorHandler(int sig)
 # endif
 
 	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
-	write(dumpFile, __DATE__, sizeof(char)*strlen(__DATE__));
-	write(dumpFile, "\n\n", sizeof(char)*2);
+	write(dumpFile, __DATE__, strlen(__DATE__));
+	write(dumpFile, "\n\n", 2);
 
 
-	if (uname(&sysInfo) != 0)
+	if (!sysInfoValid)
 		write(dumpFile, "System information may be invalid!\n",
 			  strlen("System information may be invalid!\n\n"));
 
 	write(dumpFile, "Operating system: ", strlen("Operating system: "));
 	write(dumpFile, sysInfo.sysname, strlen(sysInfo.sysname));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Node name: ", strlen("Node name: "));
 	write(dumpFile, sysInfo.nodename, strlen(sysInfo.nodename));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Release: ", strlen("Release: "));
 	write(dumpFile, sysInfo.release, strlen(sysInfo.release));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Version: ", strlen("Version: "));
 	write(dumpFile, sysInfo.version, strlen(sysInfo.version));
-	write(dumpFile, "\n", sizeof(char));
+	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Machine: ", strlen("Machine: "));
 	write(dumpFile, sysInfo.machine, strlen(sysInfo.machine));
-	write(dumpFile, "\n\n", sizeof(char)*2);
+	write(dumpFile, "\n\n", 2);
 
 
 	write(dumpFile, "Dump caused by signal: ",
 		  strlen("Dump caused by signal: "));
-	write(dumpFile, strsignal(sig), strlen(strsignal(sig)));
-	write(dumpFile, "\n\n", sizeof(char)*2);
+	write(dumpFile, wz_strsignal(sig), strlen(wz_strsignal(sig)));
+	write(dumpFile, "\n\n", 2);
 
 
+	// Dump raw backtrace in case GDB is not available or fails
 	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
+	write(dumpFile, "\n", 1);
 
 
+	// Make sure everything is written before letting GDB write to it
 	fsync(dumpFile);
+
+
+	if (gdbIsAvailable)
+	{
+		if (pipe(gdbPipe) == 0)
+		{
+			pid = fork();
+			if (pid == (pid_t)0)
+			{
+				char * gdbArgv[] = { gdbPath, programCommand, programPID, NULL },
+				     * gdbEnv[] = {NULL};
+
+				close(gdbPipe[1]); // No output to pipe
+
+				dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
+				dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
+
+				execve(gdbPath, gdbArgv, gdbEnv);
+			}
+			else if (pid > (pid_t)0)
+			{
+				close(gdbPipe[0]); // No input from pipe
+
+				write(gdbPipe[1], "backtrace full\n" "quit\n",
+					strlen("backtrace full\n" "quit\n"));
+
+				if (waitpid(pid, NULL, 0) < 0)
+				{
+					printf("GDB failed\n");
+				}
+
+				close(gdbPipe[1]);
+			}
+			else
+			{
+				printf("Fork failed\n");
+			}
+		}
+		else
+		{
+			printf("Pipe failed\n");
+		}
+	}
+	else
+	{
+		write(dumpFile, "GDB not available, no extended backtrace created\n",
+			  strlen("GDB not available, no extended backtrace created\n"));
+	}
+
+
+	printf("Saved dump file to '%s'\n", gdmpPath);
 	close(dumpFile);
 
-	printf("Saved dump file to '%s'\n", gDumpPath);
 
 	signal(sig, oldHandler[sig]);
 	raise(sig);
@@ -228,11 +377,31 @@ static void errorHandler(int sig)
 
 void setupExceptionHandler(char * programCommand_x)
 {
-	programCommand = programCommand_x;
-
 #if defined(__WIN32__)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
 #elif defined(__LINUX__)
+	// Get full path to 'gdb'
+	FILE * whichStream = popen("which gdb", "r");
+	fread(gdbPath, 1, MAX_PATH, whichStream);
+	pclose(whichStream);
+
+	// Did we find GDB?
+	if (strlen(gdbPath) > 0)
+	{
+		gdbIsAvailable = TRUE;
+		*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
+	}
+	else
+	{
+		debug(LOG_WZ, "GDB not available, will not create extended backtrace\n");
+	}
+
+	sysInfoValid = (uname(&sysInfo) == 0);
+
+	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
+	programCommand = programCommand_x;
+	gdmpPath = "/tmp/warzone2100.gdmp";
+
 	setErrorHandler(errorHandler);
 #endif // WZ_OS_*
 }
