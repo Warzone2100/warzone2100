@@ -25,12 +25,12 @@
 
 static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 {
-	LPCSTR applicationName = "Warzone 2100", resultMessage = NULL;
+	LPCSTR applicationName = "Warzone 2100";
 
-	char miniDumpPath[MAX_PATH], buffer[MAX_PATH];
+	char miniDumpPath[MAX_PATH], resultMessage[MAX_PATH];
 
 	// Write to temp dir, to support unprivileged users
-	if (!GetTempPath( MAX_PATH, miniDumpPath ))
+	if (!GetTempPathA( MAX_PATH, miniDumpPath ))
 		strcpy( miniDumpPath, "c:\\temp\\" );
 	strcat( miniDumpPath, "warzone2100.mdmp" );
 
@@ -40,9 +40,9 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	strcat( miniDumpPath, ".mdmp" );
 	*/
 
-	if ( MessageBox( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
+	if ( MessageBoxA( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
 	{
-		HANDLE miniDumpFile = CreateFile( miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
+		HANDLE miniDumpFile = CreateFileA( miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
@@ -59,25 +59,22 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 					&uInfo,
 					NULL ) )
 			{
-				sprintf( buffer, "Saved dump file to '%s'", miniDumpPath );
-				resultMessage = buffer;
+				sprintf( resultMessage, "Saved dump file to '%s'", miniDumpPath );
+				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 			}
 			else
 			{
-				sprintf( buffer, "Failed to save dump file to '%s' (error %d)", miniDumpPath, GetLastError() );
-				resultMessage = buffer;
+				sprintf( resultMessage, "Failed to save dump file to '%s' (error %d)", miniDumpPath, GetLastError() );
+				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 			}
 			CloseHandle(miniDumpFile);
 		}
 		else
 		{
-			sprintf( buffer, "Failed to create dump file '%s' (error %d)", miniDumpPath, GetLastError() );
-			resultMessage = buffer;
+			sprintf( resultMessage, "Failed to create dump file '%s' (error %d)", miniDumpPath, GetLastError() );
+			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 		}
 	}
-
-	if (resultMessage)
-		MessageBox( NULL, resultMessage, applicationName, MB_OK );
 
 	return EXCEPTION_CONTINUE_SEARCH;
 }
