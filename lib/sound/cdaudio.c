@@ -68,6 +68,7 @@ static unsigned char	mp3_buffer[MP3_BUFFER_SIZE + MAD_BUFFER_GUARD];
 static unsigned int	mp3_buffer_length;
 static unsigned int	mp3_size;
 static unsigned int	mp3_pos_in_frame;
+#endif
 
 #ifndef WZ_NOOGG
 static OggVorbis_File	ogg_stream;
@@ -90,7 +91,6 @@ static ALuint		music_source;
 static ALenum		music_format;
 static unsigned int	music_rate;
 
-#endif
 
 
 //*
