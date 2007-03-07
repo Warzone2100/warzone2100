@@ -931,7 +931,6 @@ GAMECODE gameLoop(void)
 GAMECODE videoLoop(void)
 {
 	BOOL	bVolKilled = FALSE;
-	CLEAR_MODE bClear;
 
 	// There is something really odd here. - Per
 	static BOOL bActiveBackDrop = FALSE;
@@ -943,11 +942,9 @@ GAMECODE videoLoop(void)
 
 	pie_GlobalRenderBegin();
 
-	bClear = CLEAR_OFF;
-
 	if (video)
 	{
-		bQuitVideo = !seq_UpdateFullScreenVideo(&bClear);
+		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
 	}
 
 	if ( (keyPressed(KEY_ESC) || bQuitVideo) && !seq_AnySeqLeft() )
@@ -1051,7 +1048,6 @@ GAMECODE videoLoop(void)
 
 	if( clearCount < 1)
 	{
-		bClear = CLEAR_BLACK;
 		if ((void*)screen_GetBackDrop() != NULL)
 		{
 			bActiveBackDrop = TRUE;
@@ -1063,14 +1059,10 @@ GAMECODE videoLoop(void)
 			screen_StopBackDrop();
 		}
 	}
-	else if( clearCount < 2)
-	{
-		bClear = CLEAR_BLACK;
-	}
 
 	clearCount++;
 
-	pie_ScreenFlip(bClear);// videoloopflip
+	pie_ScreenFlip(CLEAR_BLACK);// videoloopflip
 
 	/* restore volume after video quit */
 	if ( bVolKilled == TRUE )

@@ -1006,22 +1006,16 @@ void dataTexPageRelease(void *pData)
 /* Load an audio file */
 BOOL dataAudioLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	TRACK	*psTrack;
-
 	if ( audio_Disabled() == TRUE )
 	{
 		*ppData = NULL;
+		// No error occurred (sound is just disabled), so we return TRUE
 		return TRUE;
 	}
-	else if ( (psTrack = audio_LoadTrackFromBuffer( pBuffer, size )) == NULL )
-	{
-		return FALSE;
-	}
+	// Load the track from a file
+	*ppData = sound_LoadTrackFromBuffer( pBuffer, size );
 
-	/* save track data */
-	*ppData = psTrack;
-
-	return TRUE;
+	return *ppData != NULL;
 }
 
 void dataAudioRelease( void *pData )

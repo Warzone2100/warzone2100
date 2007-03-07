@@ -7,6 +7,7 @@
    * Fix: Various crashes
  * Graphics:
    * New: Translucent selection-box from version 1.x restored
+   * Change: Make cutscene texts more easily readable
    * Fix: Wrongly displayed tileset in Campaign 2 Mission 1 and Campaign 3 Mission 1 properly fixed
    * Fix: Camera now properly displayed on radar
    * Fix: Gamma control support improved
@@ -21,7 +22,7 @@
    * New: MSVC project file now supports automated building of lexers/parsers
    * Change: Generation of lexers/parsers changed
    * Change: Data is now build by default
-   * Change: Automated building of NSIS installer is now supported on Linux and Windows 
+   * Change: Automated building of NSIS installer is now supported on Linux and Windows
              (You will have to set --with-makensis --with-installer-libdir and --with-installer-version)
    * Fix: Autotool build: Cleaning and uninstallation has been fixed (and generally Automake's features are used better)
 

@@ -665,23 +665,6 @@ BOOL audio_LoadTrackFromFile( char szFileName[] )
 	return sound_LoadTrackFromFile( szFileName );
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void *audio_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
-{
-	// if audio not enabled return TRUE to carry on game without audio
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return NULL;
-	}
-
-	return sound_LoadTrackFromBuffer( pBuffer, udwSize );
-}
-
-//*
-//
 
 // Routine to convert wav filename into a track number
 // ... This is really not going to be practical on the PSX is it?
