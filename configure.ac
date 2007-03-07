@@ -7,6 +7,7 @@ AM_INIT_AUTOMAKE([1.8])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
@@ -72,7 +73,7 @@ AC_ARG_WITH(installer_version,
 
 
 AC_ARG_ENABLE(data,
-[AS_HELP_STRING([--disable-data],[Do not build data packages])],
+[AS_HELP_STRING([--enable-data],[Build data packages])],
 [ data="$enableval" ], [ data=no ])
 AM_CONDITIONAL(DATA, test "x$data" = "xyes" )
 AC_MSG_CHECKING([whether to build data packages])
@@ -124,10 +125,10 @@ AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label"
-  WZ_OVERRIDE="-O0"
+  WZ_CFLAGS_OVERRIDE="-O0"
 elif test "x$debug" = "xstrict" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label -Werror"
-  WZ_OVERRIDE="-O0"
+  WZ_CFLAGS_OVERRIDE="-O0"
 elif test "x$debug" = "xrelaxed" ; then
   WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label -Wextra"
 else
@@ -303,11 +304,12 @@ else
   AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support])
 fi
 
+
 # add some required C flags here
 # -DYY_STATIC is required by flex
 WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
-CFLAGS="${WZ_CFLAGS} ${CFLAGS} ${WZ_OVERRIDE}"
+CFLAGS="${WZ_CFLAGS} ${CFLAGS} ${WZ_CFLAGS_OVERRIDE}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])

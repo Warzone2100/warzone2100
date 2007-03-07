@@ -13,6 +13,33 @@
    * New: Units and structures will constantly look for a better target taking into consideration
           targets of the friendly units nearby - won't lock on one target forever anymore.
 
+0000-00-00: Version 2.0.6
+ * General:
+   * New: New exceptionhandler allows better bugreports by saving memory dumps (On Windows and Linux)
+   * Fix: Windows 98 is supported again
+   * Fix: Saving of config should work correctly for all settings again
+   * Fix: Missing transport in Campaign 2 Mission 1 and Campaign 3 Mission 1 arrives again
+   * Fix: Various crashes
+ * Graphics:
+   * New: Translucent selection-box from version 1.x restored
+   * Fix: Wrongly displayed tileset in Campaign 2 Mission 1 and Campaign 3 Mission 1 properly fixed
+   * Fix: Camera now properly displayed on radar
+   * Fix: Gamma control support improved
+   * Fix: Colors on Mac corrected
+ * Sound:
+   * Fix: No more invalid OpenAL errors
+ * Commandline options:
+   * Fix: --resolution works as expect now
+ * Build system:
+   * New: Docs can now be installed in Autotools builds
+   * New: You can now control the installation dir for the icon and .desktop file by passing --icondir and --applicationdir to configure
+   * New: MSVC project file now supports automated building of lexers/parsers
+   * Change: Generation of lexers/parsers changed
+   * Change: Data is now build by default
+   * Change: Automated building of NSIS installer is now supported on Linux and Windows
+             (You will have to set --with-makensis --with-installer-libdir and --with-installer-version)
+   * Fix: Autotool build: Cleaning and uninstallation has been fixed (and generally Automake's features are used better)
+
 2006-09-07: Version 2.0.5
  * General:
    * New: Added beacons for skirmish and multiplayer, can be placed on map and radar, default key combination: Alt+H
