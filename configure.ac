@@ -36,7 +36,7 @@ if test x$host_os = xmingw32 ; then
 fi
 
 
- # Installation directories
+# Installation directories
 
 AC_ARG_WITH(icondir,
 [AS_HELP_STRING([--with-icondir=DIR],[icon files [DATADIR/icons]])],
@@ -51,7 +51,7 @@ AC_ARG_WITH(applicationdir,
 AC_SUBST(icondir, $icondir)
 AC_SUBST(applicationdir, $applicationdir)
 if test "x$docdir" = "x" ; then
-	AC_SUBST(docdir, $(datarootdir)/doc/$(AC_PACKAGE_TARNAME))
+	AC_SUBST(docdir, $datarootdir/doc/$AC_PACKAGE_TARNAME)
 fi
 
 
@@ -73,7 +73,7 @@ AC_ARG_WITH(installer_version,
 
 
 AC_ARG_ENABLE(data,
-[AS_HELP_STRING([--disable-data],[Do not build data packages])],
+[AS_HELP_STRING([--enable-data],[Build data packages])],
 [ data="$enableval" ], [ data=no ])
 AM_CONDITIONAL(DATA, test "x$data" = "xyes" )
 AC_MSG_CHECKING([whether to build data packages])
@@ -113,18 +113,21 @@ if test "x$installer" = "xyes" ; then
 		AC_SUBST(INSTALLER_LIBDIR, $installer_libdir)
 	fi
 fi
-  
 
+
+# -O0 turns off all optimizations; this is necessary for accurate debugging
+# -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
+# Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING([--enable-debug],[Compile debug version])],
 [ debug=$enableval ], [ debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$debug])
 if test "x$debug" = "xyes" ; then
-  # -O0 turns off all optimizations; this is necessary for accurate debugging
-  WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -Wall"
+  WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label"
+  WZ_CFLAGS_OVERRIDE="-O0"
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -DNDEBUG"
+  WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG"
 fi
 
 
@@ -206,7 +209,6 @@ AC_MSG_CHECKING([OpenGL])
 if test "x$opengl" = "xyes" ; then
 	AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
 	WZ_LIBS="${WZ_LIBS} ${GLLIB} ${GLULIB}"
-	AC_SUBST(RENDERER, "ivis_opengl")
 	AC_MSG_RESULT([yes])
 else
 	AC_MSG_RESULT([no])
@@ -303,7 +305,7 @@ fi
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
 WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
-CFLAGS="${WZ_CFLAGS} ${CFLAGS}"
+CFLAGS="${WZ_CFLAGS} ${CFLAGS} ${WZ_CFLAGS_OVERRIDE}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])
