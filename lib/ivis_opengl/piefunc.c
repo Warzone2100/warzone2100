@@ -159,7 +159,6 @@ void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int
 	BOOL oldAlphaTestState = glIsEnabled(GL_ALPHA_TEST);
 
 	// set up matrices and textures
-	//pie_SetGeometricOffset((iV_SCREEN_WIDTH >> 1), geoOffset);
 	pie_PerspectiveBegin();
 
 	// Push identity matrix onto stack

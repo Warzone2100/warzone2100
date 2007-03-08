@@ -425,8 +425,13 @@ BOOL		bPlayerHasHQ = FALSE;
 	}
 
 	pie_Begin3DScene();
+	/* Set 3D world origins */
+	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
+	// draw skybox
 	renderSky();
+	// draw terrain
    	displayTerrain();
+   	
 	pie_BeginInterface();
 	updateLightLevels();
 	drawDroidSelections();
@@ -626,8 +631,6 @@ void displayTerrain(void)
 	/* SetUpClipping window - to below the backdrop */
 	pie_Set2DClip(xOffset,yOffset,psRendSurface->width-xOffset,psRendSurface->height-yOffset);
 
-	/* Set 3D world origins */
-	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
 	pie_PerspectiveBegin();
 
 	/* We haven't yet located which tile mouse is over */
