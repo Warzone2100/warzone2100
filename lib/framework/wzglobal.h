@@ -95,6 +95,10 @@
 #  define WZ_OS_UNIX
 #endif /* WZ_OS_WIN */
 
+#if defined(WZ_OS_UNIX) && (_XOPEN_SOURCE - 0 >= 500)
+#  define WZ_OS_POSIX
+#endif /* WZ_OS_UNIX */
+
 
 /*
    The compiler, must be one of: (WZ_CC_x)
@@ -164,10 +168,10 @@
 #  define WZ_DECL_DEPRECATED
 #endif
 
-#ifdef __GNUC__
-#define WZ_DECL_UNUSED __attribute__((unused))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ - 0 > 3 || (__GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2))
+#  define WZ_DECL_UNUSED __attribute__((unused))
 #else
-#define WZ_DECL_UNUSED 
+#  define WZ_DECL_UNUSED
 #endif
 
 #endif /* WZGLOBAL_H */

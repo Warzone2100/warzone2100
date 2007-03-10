@@ -27,7 +27,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 {
 	LPCSTR applicationName = "Warzone 2100";
 
-	char miniDumpPath[MAX_PATH], resultMessage[MAX_PATH];
+	char miniDumpPath[MAX_PATH] = {'\0'}, resultMessage[MAX_PATH] = {'\0'};
 
 	// Write to temp dir, to support unprivileged users
 	if (!GetTempPathA( MAX_PATH, miniDumpPath ))
@@ -79,7 +79,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-#elif defined(WZ_OS_LINUX)
+#elif defined(WZ_OS_POSIX)
 
 // C99 headers:
 # include <stdint.h>
@@ -94,11 +94,13 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # include <sys/wait.h>
 # include <sys/utsname.h>
 
-// GNU header:
-# include <execinfo.h>
+// GNU extension for backtrace():
+# if defined(__GLIBC__)
+#  include <execinfo.h>
+#  define MAX_BACKTRACE 20
+# endif
 
 
-# define MAX_BACKTRACE 20
 # define MAX_PID_STRING 16
 
 
@@ -235,7 +237,7 @@ static void setErrorHandler(SigHandler signalHandler)
 }
 
 
-static void errorHandler(int sig)
+static void posixErrorHandler(int sig)
 {
 	static sig_atomic_t allreadyRunning = 0;
 
@@ -244,8 +246,11 @@ static void errorHandler(int sig)
 	allreadyRunning = 1;
 
 	pid_t pid = 0;
+
+# if defined(__GLIBC__)
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
+# endif
 
 	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
 
@@ -307,9 +312,15 @@ static void errorHandler(int sig)
 	write(dumpFile, "\n\n", 2);
 
 
+# if defined(__GLIBC__)
 	// Dump raw backtrace in case GDB is not available or fails
+	write(dumpFile, "GLIBC raw backtrace:\n", strlen("GLIBC raw backtrace:\n"));
 	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
 	write(dumpFile, "\n", 1);
+# else
+	write(dumpFile, "GLIBC not available, no raw backtrace dumped\n\n",
+		  strlen("GLIBC not available, no raw backtrace dumped\n\n"));
+# endif
 
 
 	// Make sure everything is written before letting GDB write to it
@@ -331,6 +342,9 @@ static void errorHandler(int sig)
 				dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
 				dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
 
+				write(dumpFile, "GDB extended backtrace:\n",
+					  strlen("GDB extended backtrace:\n"));
+
 				execve(gdbPath, gdbArgv, gdbEnv);
 			}
 			else if (pid > (pid_t)0)
@@ -338,7 +352,7 @@ static void errorHandler(int sig)
 				close(gdbPipe[0]); // No input from pipe
 
 				write(gdbPipe[1], "backtrace full\n" "quit\n",
-					strlen("backtrace full\n" "quit\n"));
+					  strlen("backtrace full\n" "quit\n"));
 
 				if (waitpid(pid, NULL, 0) < 0)
 				{
@@ -359,8 +373,8 @@ static void errorHandler(int sig)
 	}
 	else
 	{
-		write(dumpFile, "GDB not available, no extended backtrace created\n",
-			  strlen("GDB not available, no extended backtrace created\n"));
+		write(dumpFile, "GDB not available, no extended backtrace dumped\n",
+			  strlen("GDB not available, no extended backtrace dumped\n"));
 	}
 
 
@@ -379,7 +393,7 @@ void setupExceptionHandler(char * programCommand_x)
 {
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
-#elif defined(WZ_OS_LINUX)
+#elif defined(WZ_OS_POSIX)
 	// Get full path to 'gdb'
 	FILE * whichStream = popen("which gdb", "r");
 	fread(gdbPath, 1, MAX_PATH, whichStream);
@@ -402,6 +416,6 @@ void setupExceptionHandler(char * programCommand_x)
 	programCommand = programCommand_x;
 	gdmpPath = "/tmp/warzone2100.gdmp";
 
-	setErrorHandler(errorHandler);
+	setErrorHandler(posixErrorHandler);
 #endif // WZ_OS_*
 }
