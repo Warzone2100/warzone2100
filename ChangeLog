@@ -6,6 +6,7 @@
    * Fix: Missing transport in Campaign 2 Mission 1 and Campaign 3 Mission 1 arrives again
    * Fix: Various crashes
  * Graphics:
+   * New: Skybox
    * New: Translucent selection-box from version 1.x restored
    * Change: Make cutscene texts more easily readable
    * Fix: Wrongly displayed tileset in Campaign 2 Mission 1 and Campaign 3 Mission 1 properly fixed

@@ -407,7 +407,7 @@ void setupExceptionHandler(char * programCommand_x)
 	}
 	else
 	{
-		debug(LOG_WARNING, "GDB not available, will not create extended backtrace\n");
+		debug(LOG_WZ, "GDB not available, will not create extended backtrace\n");
 	}
 
 	sysInfoValid = (uname(&sysInfo) == 0);
