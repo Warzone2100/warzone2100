@@ -104,154 +104,249 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # define MAX_PID_STRING 16
 
 
-typedef void(*SigHandler)(int);
+typedef void(*SigActionHandler)(int, siginfo_t *, void *);
+
+
+static struct sigaction oldAction[NSIG];
 
 
 static struct utsname sysInfo;
 static BOOL gdbIsAvailable = FALSE, sysInfoValid = FALSE;
-static SigHandler oldHandler[NSIG] = {SIG_DFL};
 static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * gdmpPath = NULL, * programCommand = NULL;
 
 
-/* Ugly, but arguably correct */
-static const char * wz_strsignal(int signum)
+static const char * wz_strsignal(int signum, int sigcode)
 {
 	switch (signum)
 	{
-	/* Standard signals */
-	case SIGHUP : return "SIGHUP, Hangup";
-	case SIGINT : return "SIGINT, Interrupt";
-	case SIGQUIT : return "SIGQUIT, Quit";
-	case SIGILL : return "SIGILL, Illegal instruction";
-	case SIGTRAP : return "SIGTRAP, Trace trap";
-	case SIGABRT : return "SIGABRT, Abort";
-	case SIGBUS : return "SIGBUS, BUS error";
-	case SIGFPE : return "SIGFPE, Floating-point exception";
-	case SIGKILL : return "SIGKILL, Kill";
-	case SIGUSR1 : return "SIGUSR1, User-defined signal 1";
-	case SIGUSR2 : return "SIGUSR2, User-defined signal 2";
-	case SIGSEGV : return "SIGSEGV, Segmentation fault";
-	case SIGPIPE : return "SIGPIPE, Broken pipe";
-	case SIGALRM : return "SIGALRM, Alarm clock";
-	case SIGTERM : return "SIGTERM, Termination";
-
-	/* Less standard signals */
-# if defined(SIGSTKFLT)
-	case SIGSTKFLT : return "SIGSTKFLT, Stack fault";
-# endif
-
-# if defined(SIGCHLD)
-	case SIGCHLD : return "SIGCHLD, Child status has changed";
-# elif defined(SIGCLD)
-	case SIGCLD : return "SIGCLD, Child status has changed";
-# endif
-
-# if defined(SIGCONT)
-	case SIGCONT : return "SIGCONT, Continue";
-# endif
-
-# if defined(SIGSTOP)
-	case SIGSTOP : return "SIGSTOP, Stop";
-# endif
-
-# if defined(SIGTSTP)
-	case SIGTSTP : return "SIGTSTP, Keyboard stop";
-# endif
-
-# if defined(SIGTTIN)
-	case SIGTTIN : return "SIGTTIN, Background read from tty";
-# endif
-
-# if defined(SIGTTOU)
-	case SIGTTOU : return "SIGTTOU, Background write to tty";
-# endif
-
-# if defined(SIGURG)
-	case SIGURG : return "SIGURG, Urgent condition on socket";
-# endif
-
-# if defined(SIGXCPU)
-	case SIGXCPU : return "SIGXCPU, CPU limit exceeded";
-# endif
-
-# if defined(SIGXFSZ)
-	case SIGXFSZ : return "SIGXFSZ, File size limit exceeded";
-# endif
-
-# if defined(SIGVTALRM)
-	case SIGVTALRM : return "SIGVTALRM, Virtual alarm clock";
-# endif
-
-# if defined(SIGPROF)
-	case SIGPROF : return "SIGPROF, Profiling alarm clock";
-# endif
-
-# if defined(SIGWINCH)
-	case SIGWINCH : return "SIGWINCH, Window size change";
-# endif
-
-# if defined(SIGIO)
-	case SIGIO : return "SIGIO, I/O now possible";
-# elif defined(SIGPOLL)
-	case SIGPOLL : return "SIGPOLL, I/O now possible";
-# endif
-
-# if defined(SIGPWR)
-	case SIGPWR : return "SIGPWR, Power failure restart";
-# endif
-
-# if defined(SIGSYS)
-	case SIGSYS : return "SIGSYS, Bad system call";
-# endif
+		case SIGABRT:
+			return "SIGABRT: Process abort signal";
+		case SIGALRM:
+			return "SIGALRM: Alarm clock";
+		case SIGBUS:
+			switch (sigcode)
+			{
+				case BUS_ADRALN:
+					return "SIGBUS: Access to an undefined portion of a memory object: Invalid address alignment";
+				case BUS_ADRERR:
+					return "SIGBUS: Access to an undefined portion of a memory object: Nonexistent physical address";
+				case BUS_OBJERR:
+					return "SIGBUS: Access to an undefined portion of a memory object: Object-specific hardware error";
+				default:
+					return "SIGBUS: Access to an undefined portion of a memory object";
+			}
+		case SIGCHLD:
+			switch (sigcode)
+			{
+				case CLD_EXITED:
+					return "SIGCHLD: Child process terminated, stopped, or continued: Child has exited";
+				case CLD_KILLED:
+					return "SIGCHLD: Child process terminated, stopped, or continued: Child has terminated abnormally and did not create a core file";
+				case CLD_DUMPED:
+					return "SIGCHLD: Child process terminated, stopped, or continued: Child has terminated abnormally and created a core file";
+				case CLD_TRAPPED:
+					return "SIGCHLD: Child process terminated, stopped, or continued: Traced child has trapped";
+				case CLD_STOPPED:
+					return "SIGCHLD: Child process terminated, stopped, or continued: Child has stopped";
+				case CLD_CONTINUED:
+					return "SIGCHLD: Child process terminated, stopped, or continued: Stopped child has continued";
+			}
+		case SIGCONT:
+			return "SIGCONT: Continue executing, if stopped";
+		case SIGFPE:
+			switch (sigcode)
+			{
+				case FPE_INTDIV:
+					return "SIGFPE: Erroneous arithmetic operation: Integer divide by zero";
+				case FPE_INTOVF:
+					return "SIGFPE: Erroneous arithmetic operation: Integer overflow";
+				case FPE_FLTDIV:
+					return "SIGFPE: Erroneous arithmetic operation: Floating-point divide by zero";
+				case FPE_FLTOVF:
+					return "SIGFPE: Erroneous arithmetic operation: Floating-point overflow";
+				case FPE_FLTUND:
+					return "SIGFPE: Erroneous arithmetic operation: Floating-point underflow";
+				case FPE_FLTRES:
+					return "SIGFPE: Erroneous arithmetic operation: Floating-point inexact result";
+				case FPE_FLTINV:
+					return "SIGFPE: Erroneous arithmetic operation: Invalid floating-point operation";
+				case FPE_FLTSUB:
+					return "SIGFPE: Erroneous arithmetic operation: Subscript out of range";
+				default:
+					return "SIGFPE: Erroneous arithmetic operation";
+			};
+		case SIGHUP:
+			return "SIGHUP: Hangup";
+		case SIGILL:
+			switch (sigcode)
+			{
+				case ILL_ILLOPC:
+					return "SIGILL: Illegal instruction: Illegal opcode";
+				case ILL_ILLOPN:
+					return "SIGILL: Illegal instruction: Illegal operand";
+				case ILL_ILLADR:
+					return "SIGILL: Illegal instruction: Illegal addressing mode";
+				case ILL_ILLTRP:
+					return "SIGILL: Illegal instruction: Illegal trap";
+				case ILL_PRVOPC:
+					return "SIGILL: Illegal instruction: Privileged opcode";
+				case ILL_PRVREG:
+					return "SIGILL: Illegal instruction: Privileged register";
+				case ILL_COPROC:
+					return "SIGILL: Illegal instruction: Coprocessor error";
+				case ILL_BADSTK:
+					return "SIGILL: Illegal instruction: Internal stack error";
+				default:
+					return "SIGILL: Illegal instruction";
+			}
+		case SIGINT:
+			return "SIGINT: Terminal interrupt signal";
+		case SIGKILL:
+			return "SIGKILL: Kill";
+		case SIGPIPE:
+			return "SIGPIPE: Write on a pipe with no one to read it";
+		case SIGQUIT:
+			return "SIGQUIT: Terminal quit signal";
+		case SIGSEGV:
+			switch (sigcode)
+			{
+				case SEGV_MAPERR:
+					return "SIGSEGV: Invalid memory reference: Address not mapped to object";
+				case SEGV_ACCERR:
+					return "SIGSEGV: Invalid memory reference: Invalid permissions for mapped object";
+				default:
+					return "SIGSEGV: Invalid memory reference";
+			}
+		case SIGSTOP:
+			return "SIGSTOP: Stop executing";
+		case SIGTERM:
+			return "SIGTERM: Termination signal";
+		case SIGTSTP:
+			return "SIGTSTP: Terminal stop signal";
+		case SIGTTIN:
+			return "SIGTTIN: Background process attempting read";
+		case SIGTTOU:
+			return "SIGTTOU: Background process attempting write";
+		case SIGUSR1:
+			return "SIGUSR1: User-defined signal 1";
+		case SIGUSR2:
+			return "SIGUSR2: User-defined signal 2";
+#if _XOPEN_UNIX
+		case SIGPOLL:
+			switch (sigcode)
+			{
+				case POLL_IN:
+					return "SIGPOLL: Pollable event: Data input available";
+				case POLL_OUT:
+					return "SIGPOLL: Pollable event: Output buffers available";
+				case POLL_MSG:
+					return "SIGPOLL: Pollable event: Input message available";
+				case POLL_ERR:
+					return "SIGPOLL: Pollable event: I/O error";
+				case POLL_PRI:
+					return "SIGPOLL: Pollable event: High priority input available";
+				case POLL_HUP:
+					return "SIGPOLL: Pollable event: Device disconnected.";
+				default:
+					return "SIGPOLL: Pollable event";
+			}
+		case SIGPROF:
+			return "SIGPROF: Profiling timer expired";
+		case SIGSYS:
+			return "SIGSYS: Bad system call";
+		case SIGTRAP:
+			switch (sigcode)
+			{
+				case TRAP_BRKPT:
+					return "SIGTRAP: Trace/breakpoint trap: Process breakpoint";
+				case TRAP_TRACE:
+					return "SIGTRAP: Trace/breakpoint trap: Process trace trap";
+				default:
+					return "SIGTRAP: Trace/breakpoint trap";
+			}
+#endif // _XOPEN_UNIX
+		case SIGURG:
+			return "SIGURG: High bandwidth data is available at a socket";
+#if _XOPEN_UNIX
+		case SIGVTALRM:
+			return "SIGVTALRM: Virtual timer expired";
+		case SIGXCPU:
+			return "SIGXCPU: CPU time limit exceeded";
+		case SIGXFSZ:
+			return "SIGXFSZ: File size limit exceeded";
+#endif // _XOPEN_UNIX
+		default:
+			return "Unknown signal";
 	}
-
-	return "Unknown signal";
 }
 
-static void setErrorHandler(SigHandler signalHandler)
+
+static void setFatalSignalHandler(SigActionHandler signalHandler)
 {
-	// Save previous signal handler, eg. SDL parachute
-	oldHandler[SIGFPE] = signal(SIGFPE, signalHandler);
-	if ( oldHandler[SIGFPE] == SIG_IGN )
-		signal(SIGFPE, SIG_IGN);
+	struct sigaction new_handler;
 
-	oldHandler[SIGILL] = signal(SIGILL, signalHandler);
-	if ( oldHandler[SIGILL] == SIG_IGN )
-		signal(SIGILL, SIG_IGN);
+	new_handler.sa_sigaction = signalHandler;
+	sigemptyset(&new_handler.sa_mask);
+	new_handler.sa_flags = SA_SIGINFO;
 
-	oldHandler[SIGSEGV] = signal(SIGSEGV, signalHandler);
-	if ( oldHandler[SIGSEGV] == SIG_IGN )
-		signal(SIGSEGV, SIG_IGN);
+	sigaction(SIGABRT, NULL, &oldAction[SIGABRT]);
+	if (oldAction[SIGABRT].sa_handler != SIG_IGN)
+		sigaction(SIGABRT, &new_handler, NULL);
 
-	oldHandler[SIGBUS] = signal(SIGBUS, signalHandler);
-	if ( oldHandler[SIGBUS] == SIG_IGN )
-		signal(SIGBUS, SIG_IGN);
+	sigaction(SIGBUS, NULL, &oldAction[SIGBUS]);
+	if (oldAction[SIGBUS].sa_handler != SIG_IGN)
+		sigaction(SIGBUS, &new_handler, NULL);
 
-	oldHandler[SIGABRT] = signal(SIGABRT, signalHandler);
-	if ( oldHandler[SIGABRT] == SIG_IGN )
-		signal(SIGABRT, SIG_IGN);
+	sigaction(SIGFPE, NULL, &oldAction[SIGFPE]);
+	if (oldAction[SIGFPE].sa_handler != SIG_IGN)
+		sigaction(SIGFPE, &new_handler, NULL);
 
-	oldHandler[SIGSYS] = signal(SIGSYS, signalHandler);
-	if ( oldHandler[SIGSYS] == SIG_IGN )
-		signal(SIGSYS, SIG_IGN);
+	sigaction(SIGILL, NULL, &oldAction[SIGILL]);
+	if (oldAction[SIGILL].sa_handler != SIG_IGN)
+		sigaction(SIGILL, &new_handler, NULL);
+
+	sigaction(SIGQUIT, NULL, &oldAction[SIGQUIT]);
+	if (oldAction[SIGQUIT].sa_handler != SIG_IGN)
+		sigaction(SIGQUIT, &new_handler, NULL);
+
+	sigaction(SIGSEGV, NULL, &oldAction[SIGSEGV]);
+	if (oldAction[SIGSEGV].sa_handler != SIG_IGN)
+		sigaction(SIGSEGV, &new_handler, NULL);
+
+#if _XOPEN_UNIX
+	sigaction(SIGSYS, NULL, &oldAction[SIGSYS]);
+	if (oldAction[SIGSYS].sa_handler != SIG_IGN)
+		sigaction(SIGSYS, &new_handler, NULL);
+
+	sigaction(SIGTRAP, NULL, &oldAction[SIGTRAP]);
+	if (oldAction[SIGTRAP].sa_handler != SIG_IGN)
+		sigaction(SIGTRAP, &new_handler, NULL);
+
+	sigaction(SIGXCPU, NULL, &oldAction[SIGXCPU]);
+	if (oldAction[SIGXCPU].sa_handler != SIG_IGN)
+		sigaction(SIGXCPU, &new_handler, NULL);
+
+	sigaction(SIGXFSZ, NULL, &oldAction[SIGXFSZ]);
+	if (oldAction[SIGXFSZ].sa_handler != SIG_IGN)
+		sigaction(SIGXFSZ, &new_handler, NULL);
+#endif // _XOPEN_UNIX
 }
 
 
-static void posixErrorHandler(int sig)
+static void posixExceptionHandler(int x, siginfo_t * siginfo, void * xx)
 {
 	static sig_atomic_t allreadyRunning = 0;
 
 	if (allreadyRunning)
-		raise(sig);
+		raise(siginfo->si_signo);
 	allreadyRunning = 1;
-
-	pid_t pid = 0;
 
 # if defined(__GLIBC__)
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 # endif
 
+	pid_t pid = 0;
 	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
 
 
@@ -308,7 +403,8 @@ static void posixErrorHandler(int sig)
 
 	write(dumpFile, "Dump caused by signal: ",
 		  strlen("Dump caused by signal: "));
-	write(dumpFile, wz_strsignal(sig), strlen(wz_strsignal(sig)));
+	write(dumpFile, wz_strsignal(siginfo->si_signo, siginfo->si_code),
+		  strlen(wz_strsignal(siginfo->si_signo, siginfo->si_code)));
 	write(dumpFile, "\n\n", 2);
 
 
@@ -382,8 +478,8 @@ static void posixErrorHandler(int sig)
 	close(dumpFile);
 
 
-	signal(sig, oldHandler[sig]);
-	raise(sig);
+	sigaction(siginfo->si_signo, &oldAction[siginfo->si_signo], NULL);
+	raise(siginfo->si_signo);
 }
 
 #endif // WZ_OS_*
@@ -416,6 +512,6 @@ void setupExceptionHandler(char * programCommand_x)
 	programCommand = programCommand_x;
 	gdmpPath = "/tmp/warzone2100.gdmp";
 
-	setErrorHandler(posixErrorHandler);
+	setFatalSignalHandler(posixExceptionHandler);
 #endif // WZ_OS_*
 }
