@@ -65,6 +65,9 @@ extern BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOf
 //extern BOOL seq_StartFullScreenVideo(char* sequenceFile, char* audioFile);//start videos through seqList
 
 extern BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *bClear);
+// play the text without the movie (it isn't there anyway)
+// returns TRUE if it wants to keep running
+extern BOOL seq_UpdateText();
 
 extern BOOL seq_StopFullScreenVideo(void);
 //control

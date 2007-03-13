@@ -130,7 +130,7 @@ static	UDWORD	numCommandDroids[MAX_PLAYERS];
 static	UDWORD	numConstructorDroids[MAX_PLAYERS];
 // flag to signal a quick exit from the game
 static BOOL fastExit;
-static SDWORD videoMode;
+static SDWORD videoMode = 0;
 
 static SDWORD	g_iGlobalVol;
 
@@ -550,10 +550,6 @@ GAMECODE gameLoop(void)
 	else//paused
 	{
 		intRetVal = INT_NONE;
-		if (video)
-		{
-			bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
-		}
 		if(dragBox3D.status != DRAG_DRAGGING)
 		{
 			scroll();
@@ -944,10 +940,14 @@ GAMECODE videoLoop(void)
 
 	if (video)
 	{
+#ifdef VIDEO
 		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
+#else
+		bQuitVideo = !seq_UpdateText();
+#endif
 	}
 
-	if ( (keyPressed(KEY_ESC) || bQuitVideo) && !seq_AnySeqLeft() )
+	if ( (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB) || bQuitVideo) && !seq_AnySeqLeft() )
 	{
 		/* zero volume before video quit - restore later */
 		g_iGlobalVol = mixer_GetWavVolume();
@@ -957,7 +957,7 @@ GAMECODE videoLoop(void)
 
 	//toggling display mode disabled in video mode
 	// Check for quit
-	if (keyPressed(KEY_ESC))
+	if (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
 	{
 		seq_StopFullScreenVideo();
 		bQuitVideo = FALSE;

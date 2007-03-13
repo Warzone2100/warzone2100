@@ -871,7 +871,7 @@ BOOL intInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-
+#ifdef VIDEO
 	/*Initialise the video playback buffer*/
 	if (!seq_SetupVideoBuffers())
 	{
@@ -879,6 +879,7 @@ BOOL intInitialise(void)
 		abort();
 		return FALSE;
 	}
+#endif
 
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();

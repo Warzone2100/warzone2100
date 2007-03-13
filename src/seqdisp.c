@@ -511,6 +511,130 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	return TRUE;
 }
 
+BOOL seq_UpdateText()
+{
+	SDWORD i, x, y, w, h;
+	UDWORD subMin, subMax;
+	BOOL bMoreThanOneSequenceLine = FALSE;
+	int totText = 0;
+	BOOL found = FALSE;
+
+	static unsigned int waitUntil = 0;
+	static int currentFrame = 0;
+	static int endFrame = 0;
+
+	if (seq_GetCurrentFrame() == 0)
+	{
+		waitUntil = 0;
+		currentFrame = -1;
+		endFrame = 0;
+		// look for the last text frame in the sequence
+		for(i=0;i<MAX_TEXT_OVERLAYS;i++)
+		{
+			if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
+			{
+				if(aSeqList[currentPlaySeq].aText[i].startFrame>endFrame)
+				{
+					endFrame = aSeqList[currentPlaySeq].aText[i].startFrame;
+				}
+			}
+		}
+		endFrame++;
+
+		// to prevent this if from firing until a new video is started
+		seq_RenderOneFrame(0, subMin, subMax);
+
+	}
+
+	subMin = SUBTITLE_BOX_MAX + D_H;
+	subMax = SUBTITLE_BOX_MIN + D_H;
+
+	if(SDL_GetTicks() > waitUntil)
+	{
+		// skip until we get new text
+		for(currentFrame++;currentFrame<endFrame && !found;currentFrame++)
+		{
+			for(i=0;i<MAX_TEXT_OVERLAYS;i++)
+			{
+				if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
+				{
+					if(aSeqList[currentPlaySeq].aText[i].startFrame == currentFrame)
+					{
+						found = TRUE;
+						totText += strlen(aSeqList[currentPlaySeq].aText[i].pText);
+					}
+				}
+			}
+		}
+		if(!found)
+		{
+			// no more text to display
+			return FALSE;
+		}
+		waitUntil = SDL_GetTicks()+totText*100;
+	}
+
+	// pass one of the text drawing
+	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
+	{
+		if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
+		{
+			if (aSeqList[currentPlaySeq].aText[i].bSubtitle == TRUE)
+			{
+				if ((currentFrame >= aSeqList[currentPlaySeq].aText[i].startFrame) && (currentFrame <= aSeqList[currentPlaySeq].aText[i].endFrame))
+				{
+					if (subMin > aSeqList[currentPlaySeq].aText[i].y)
+					{
+						if (aSeqList[currentPlaySeq].aText[i].y > SUBTITLE_BOX_MIN)
+						{
+							subMin = aSeqList[currentPlaySeq].aText[i].y;
+						}
+					}
+					if (subMax < aSeqList[currentPlaySeq].aText[i].y)
+					{
+						subMax = aSeqList[currentPlaySeq].aText[i].y;
+					}
+				}
+			}
+		}
+	}
+	// pass two of the text drawing
+	subMin -= D_H;//adjust video window here because text is already ofset for big screens
+	subMax -= D_H;
+
+	if (subMin < SUBTITLE_BOX_MIN)
+	{
+		subMin = SUBTITLE_BOX_MIN;
+	}
+	if (subMax > SUBTITLE_BOX_MAX)
+	{
+		subMax = SUBTITLE_BOX_MAX;
+	}
+
+	if (subMax > subMin)
+	{
+		bMoreThanOneSequenceLine = TRUE;
+	}
+	//print any text over the video
+	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
+	{
+		if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
+		{
+			if (((currentFrame >= aSeqList[currentPlaySeq].aText[i].startFrame) && (currentFrame <= aSeqList[currentPlaySeq].aText[i].endFrame)))
+			{
+				if (bMoreThanOneSequenceLine)
+				{
+					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
+				}
+				pie_DrawText(aSeqList[currentPlaySeq].aText[i].pText,
+						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
+			}
+		}
+	}
+	// continue with the "movie"
+	return TRUE;
+}
+
 BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
 {
 	SDWORD i, x, y, w, h;
