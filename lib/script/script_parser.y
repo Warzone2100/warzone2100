@@ -1985,6 +1985,7 @@ script:			header var_list
 					//store local vars
 					//allocate array for holding an array of local vars for each event
 					psFinalProg->ppsLocalVars = (INTERP_TYPE **)MALLOC(sizeof(INTERP_TYPE*) * numEvents);
+					psFinalProg->ppsLocalVarVal = NULL;
 					psFinalProg->numLocalVars = (UDWORD *)MALLOC(sizeof(UDWORD) * numEvents);	//how many local vars each event has
 					psFinalProg->numParams = (UDWORD *)MALLOC(sizeof(UDWORD) * numEvents);	//how many arguments each event has
 

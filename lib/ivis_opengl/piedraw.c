@@ -52,7 +52,7 @@ extern BOOL drawing_interface;
  */
 /***************************************************************************/
 
-static BOOL check_extension(const char* extension_name) 
+static BOOL check_extension(const char* extension_name)
 {
 	const char *extension_list = (const char *)glGetString(GL_EXTENSIONS);
 	unsigned int extension_name_length = strlen(extension_name);
@@ -91,7 +91,7 @@ typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 
 /// Check if we can use one-pass stencil in the shadow draw code
-static BOOL stencil_one_pass(void) 
+static BOOL stencil_one_pass(void)
 {
 	// tribool, -1: uninitialized, 0: FALSE, 1: TRUE
 	static int can_do_stencil_one_pass = -1;
@@ -343,7 +343,7 @@ static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
-		      int pieFlag, int pieFlagData) 
+		      int pieFlag, int pieFlagData)
 {
 	int32		tempY;
 	int i, n;
@@ -454,7 +454,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light) 
+static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light)
 {
 	int32		tempY;
 	int i, n;
@@ -630,7 +630,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 }
 
-static void inverse_matrix(float* src, float * dst) 
+static void inverse_matrix(float* src, float * dst)
 {
 	float det = src[0]*src[5]*src[10]+src[4]*src[9]*src[2]+src[8]*src[1]*src[6] -src[2]*src[5]*src[8]-src[6]*src[9]*src[0]-src[10]*src[1]*src[4];
 	float invdet = 1.0f/det;
@@ -646,7 +646,7 @@ static void inverse_matrix(float* src, float * dst)
 	dst[8] = invdet*(src[0]*src[5]-src[4]*src[1]);
 }
 
-static void pie_ShadowDrawLoop(float pos_lgt0[4]) 
+static void pie_ShadowDrawLoop(float pos_lgt0[4])
 {
 	float invmat[9];
 	fVector light;
@@ -664,7 +664,7 @@ static void pie_ShadowDrawLoop(float pos_lgt0[4])
 	}
 }
 
-static void pie_DrawShadows(void) 
+static void pie_DrawShadows(void)
 {
 	static BOOL dlist_defined = FALSE;
 	static GLuint dlist;
@@ -755,7 +755,7 @@ static void pie_DrawRemainingTransShapes(void)
 {
 	unsigned int i;
 
-	for (i = 0; i < nb_tshapes; ++i) 
+	for (i = 0; i < nb_tshapes; ++i)
 	{
 		glPushMatrix();
 		glLoadIdentity();
@@ -768,7 +768,7 @@ static void pie_DrawRemainingTransShapes(void)
 	nb_tshapes = 0;
 }
 
-void pie_RemainingPasses(void) 
+void pie_RemainingPasses(void)
 {
 	pie_DrawShadows();
 	pie_DrawRemainingTransShapes();

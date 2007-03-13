@@ -335,10 +335,10 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 		}
 
 		/* Now calculate the overall weight */
-		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType]		//Weapon effect
-						- (WEIGHT_DIST_TILE_DROID * (dirtySqrt(psAttacker->x, psAttacker->y,targetDroid->x,targetDroid->y) >> TILE_SHIFT) )								//substract WEIGHT_DIST_TILE_DROID per tile, 128 world units in a tile
-						+ (damage * 10 / targetDroid->originalBody ) * WEIGHT_HEALTH_DROID																//we prefer damaged droids
-						+ targetTypeBonus;																												//some droid types have higher priority
+		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType]//Weapon effect
+				- ( WEIGHT_DIST_TILE_DROID * ( dirtySqrt(psAttacker->x, psAttacker->y, targetDroid->x, targetDroid->y) >> TILE_SHIFT ) )//substract WEIGHT_DIST_TILE_DROID per tile, 128 world units in a tile
+				+ ( damage * 10 / targetDroid->originalBody ) * WEIGHT_HEALTH_DROID//we prefer damaged droids
+				+ targetTypeBonus;//some droid types have higher priority
 	}
 	else if(psTarget->type == OBJ_STRUCTURE)
 	{
