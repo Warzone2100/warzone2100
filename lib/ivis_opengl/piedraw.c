@@ -90,21 +90,30 @@ typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 
+/// Check if we can use one-pass stencil in the shadow draw code
 static BOOL stencil_one_pass(void) 
 {
-	static BOOL initialised = FALSE;
-	static BOOL return_value;
+	// tribool, -1: uninitialized, 0: FALSE, 1: TRUE
+	static int can_do_stencil_one_pass = -1;
 
-	if (!initialised) {
-		return_value =    check_extension("GL_EXT_stencil_two_side")
-			       && check_extension("GL_EXT_stencil_wrap");
-#ifndef __APPLE__
-		glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC) SDL_GL_GetProcAddress("glActiveStencilFaceEXT");
-#endif
-		initialised = TRUE;
+	if (can_do_stencil_one_pass < 0) {
+		can_do_stencil_one_pass = 0; // can't use it until we decide otherwise
+		
+		// let's check if we have the needed extensions
+		if( check_extension("GL_EXT_stencil_two_side")
+		 && check_extension("GL_EXT_stencil_wrap"))
+		{
+			// retrieve the function pointer
+			glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC) SDL_GL_GetProcAddress("glActiveStencilFaceEXT");
+			if(glActiveStencilFaceEXT)
+			{
+				// all went well
+				can_do_stencil_one_pass = 1;
+			}
+		}
 	}
 
-	return return_value;
+	return (1 == can_do_stencil_one_pass); // to get the types right
 }
 
 /***************************************************************************/
