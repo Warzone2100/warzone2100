@@ -189,10 +189,19 @@ extern MAPTILE *psMapTiles;
 /* The shift on the y coord when calculating into the map */
 extern UDWORD	mapShift;
 
+/*
+ * Note:
+ * TILE_UNITS = (1 << TILE_SHIFT)
+ *
+ * Usage-Example:
+ * tile_coordinate = (world_coordinate / TILE_UNITS) = (world_coordinate >> TILE_SHIFT)
+ * world_coordinate = (tile_coordinate * TILE_UNITS) = (tile_coordinate << TILE_SHIFT)
+ */
+
 /* The number of units accross a tile */
 #define TILE_UNITS	128
 
-/* The shift on a coordinate to get the tile coordinate */
+/* The shift on a world coordinate to get the tile coordinate */
 #define TILE_SHIFT	7
 
 /* The mask to get internal tile coords from a full coordinate */

@@ -277,7 +277,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 /* Calculates attack priority for a certain target */
 SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
 {
-	SDWORD			targetTypeBonus,damage,attackWeight=0,noTarget=-1;
+	SDWORD			targetTypeBonus=0, damageRatio=0, attackWeight=0, noTarget=-1;
 	DROID			*targetDroid;
 	STRUCTURE		*targetStructure;
 	WEAPON_EFFECT	weaponEffect;
@@ -306,7 +306,7 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 		targetDroid = (DROID *)psTarget;
 
 		/* Calculate damage this target suffered */
-		damage = targetDroid->originalBody - targetDroid->body;
+		damageRatio = 1 - targetDroid->body / targetDroid->originalBody;
 
 		/* See if this type of a droid should be prioritized */
 		switch (targetDroid->droidType)
@@ -335,17 +335,17 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 		}
 
 		/* Now calculate the overall weight */
-		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType]//Weapon effect
-				- ( WEIGHT_DIST_TILE_DROID * ( dirtySqrt(psAttacker->x, psAttacker->y, targetDroid->x, targetDroid->y) >> TILE_SHIFT ) )//substract WEIGHT_DIST_TILE_DROID per tile, 128 world units in a tile
-				+ ( damage * 10 / targetDroid->originalBody ) * WEIGHT_HEALTH_DROID//we prefer damaged droids
-				+ targetTypeBonus;//some droid types have higher priority
+		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType] // Our weapon's effect against target
+				- WEIGHT_DIST_TILE_DROID * ( dirtySqrt(psAttacker->x, psAttacker->y, targetDroid->x, targetDroid->y) >> TILE_SHIFT ) // farer droids are less attractive
+				+ WEIGHT_HEALTH_DROID * damageRatio // we prefer damaged droids
+				+ targetTypeBonus; // some droid types have higher priority
 	}
 	else if(psTarget->type == OBJ_STRUCTURE)
 	{
 		targetStructure = (STRUCTURE *)psTarget;
 
 		/* Calculate damage this target suffered */
-		damage = structureBody(targetStructure) - targetStructure->body;
+		damageRatio = 1 - targetStructure->body / structureBody(targetStructure);
 
 		/* See if this type of a structure should be prioritized */
 		switch(targetStructure->pStructureType->type)
@@ -366,10 +366,10 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 		}
 
 		/* Now calculate the overall weight */
-		attackWeight = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength]						//Weapon effect
-						- (WEIGHT_DIST_TILE_STRUCT * (dirtySqrt(psAttacker->x, psAttacker->y,targetStructure->x,targetStructure->y) >> TILE_SHIFT) )		//substract WEIGHT_DIST_TILE_STRUCT per tile, 128 world units in a tile
-						+ (damage * 10 / structureBody(targetStructure) ) * WEIGHT_HEALTH_STRUCT											//we prefer damaged structures
-						+ targetTypeBonus;																											//some structure types have higher priority
+		attackWeight = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] // Our weapon's effect against target
+				- WEIGHT_DIST_TILE_STRUCT * ( dirtySqrt(psAttacker->x, psAttacker->y, targetStructure->x, targetStructure->y) >> TILE_SHIFT ) // farer structs are less attractive
+				+ WEIGHT_HEALTH_STRUCT * damageRatio // we prefer damaged structures
+				+ targetTypeBonus; // some structure types have higher priority
 
 		/* Go for unfinished structures only if nothing else found (same for non-visible structures) */
 		if(targetStructure->status != SS_BUILT)			//a decoy?
