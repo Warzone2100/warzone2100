@@ -92,14 +92,14 @@ def configure(conf):
 	conf.set_env_name('debug', conf.env.deepcopy())
 
 	# Configure non debug variant
-	conf.env['CCFLAGS'] += ['-g0', '-O2']
+	conf.env['CCFLAGS'] += ['-DNDEBUG', '-g', '-O2']
 	conf.add_define('NDEBUG', 1)
 	conf.write_config_header()
 
 	# Configure debug variant
 	conf.setenv('debug')
 	conf.env.set_variant('debug')
-	conf.env['CCFLAGS'] += ['-g2', '-O0', '-Wall', '-Wextra', '-Wwrite-strings', '-Wcast-qual', '-Wmissing-declarations', '-Wstrict-prototypes', '-Wold-style-definition']
+	conf.env['CCFLAGS'] += ['-DDEBUG', '-g', '-O0', '-Wall', '-Wextra']
 	conf.add_define('DEBUG', 1)
 	conf.write_config_header()
 

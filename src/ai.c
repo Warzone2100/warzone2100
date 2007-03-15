@@ -306,7 +306,18 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 		targetDroid = (DROID *)psTarget;
 
 		/* Calculate damage this target suffered */
-		damageRatio = 1 - targetDroid->body / targetDroid->originalBody;
+		if (targetDroid->originalBody == 0) // FIXME Somewhere we get 0HP droids from
+		{
+			damageRatio = 0;
+			debug(LOG_ERROR, "targetAttackWeight: 0HP droid detected!");
+			debug(LOG_ERROR, "  Type: %i Name: \"%s\" Owner: %i \"%s\")",
+				  targetDroid->droidType, targetDroid->aName, targetDroid->player, getPlayerName(targetDroid->player));
+		}
+		else
+		{
+			damageRatio = 1 - targetDroid->body / targetDroid->originalBody;
+		}
+		assert(targetDroid->originalBody != 0); // Assert later so we get the info from above
 
 		/* See if this type of a droid should be prioritized */
 		switch (targetDroid->droidType)
