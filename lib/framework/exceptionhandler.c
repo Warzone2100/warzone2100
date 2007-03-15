@@ -401,6 +401,14 @@ static void posixExceptionHandler(int x, siginfo_t * siginfo, void * xx)
 	write(dumpFile, "\n\n", 2);
 
 
+	if (sizeof(void*) == 4)
+		write(dumpFile, "Pointers: 32bit\n\n", strlen("Pointers: 32bit\n\n"));
+	else if (sizeof(void*) == 8)
+		write(dumpFile, "Pointers: 64bit\n\n", strlen("Pointers: 64bit\n\n"));
+	else
+		write(dumpFile, "Pointers: Unknown\n\n", strlen("Pointers: Unknown\n\n"));
+
+
 	write(dumpFile, "Dump caused by signal: ",
 		  strlen("Dump caused by signal: "));
 	write(dumpFile, wz_strsignal(siginfo->si_signo, siginfo->si_code),
