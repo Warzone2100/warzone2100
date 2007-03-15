@@ -10,7 +10,6 @@ SRC=block.c \
 	heap.c \
 	input.c \
 	mem.c \
-	mono.c \
 	resource_parser.tab.c \
 	resource_lexer.lex.c \
 	strres.c \
