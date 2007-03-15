@@ -1329,7 +1329,7 @@ static CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for firs
 
 /* check if the arguments in the function definition body match the argument types
 and names from function declaration (if there was any) */
-static BOOL checkFuncParamType(SDWORD argIndex, SDWORD argType)
+static BOOL checkFuncParamType(UDWORD argIndex, SDWORD argType)
 {
 	VAR_SYMBOL		*psCurr;
 	SDWORD			i,j;

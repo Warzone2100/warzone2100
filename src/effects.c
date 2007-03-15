@@ -185,7 +185,7 @@ static void effectSetupDestruction  ( EFFECT *psEffect );
 static void	effectSetupFire			( EFFECT *psEffect );
 static void	effectSetUpSatLaser		( EFFECT *psEffect );
 static void effectSetUpFirework		( EFFECT *psEffect );
-// static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
+static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
 // ----------------------------------------------------------------------------------------
 //void	initPerimeterSmoke			( EFFECT *psEffect );
 void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
@@ -717,7 +717,7 @@ void	updateFirework(EFFECT *psEffect)
 UDWORD	height;
 UDWORD	xDif,yDif,radius,val;
 iVector	dv;
-UDWORD	dif;
+SDWORD	dif;
 UDWORD	drop;
 
 
@@ -1341,7 +1341,7 @@ UDWORD	height;
 	if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 	{
 
-		if((gameTime - psEffect->birthTime) > ((9*psEffect->lifeSpan)/10))
+		if((gameTime - psEffect->birthTime) > (unsigned int)((9*psEffect->lifeSpan)/10))
 		{
 			pos.x = MAKEINT(psEffect->position.x);
 			pos.z = MAKEINT(psEffect->position.z);
@@ -1505,7 +1505,7 @@ void	updateConstruction(EFFECT *psEffect)
 	if(TEST_CYCLIC(psEffect))
 	{
 		/* Has it hit the ground */
-		if((UDWORD)MAKEINT(psEffect->position.y) <=
+		if(MAKEINT(psEffect->position.y) <=
 			map_Height((UDWORD)MAKEINT(psEffect->position.x),(UDWORD)MAKEINT(psEffect->position.z)))
 		{
 			KILL_EFFECT(psEffect);

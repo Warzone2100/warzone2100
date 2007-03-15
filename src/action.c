@@ -316,7 +316,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 {
 	UDWORD				rotation;
 	//Watermelon:multiple temp tRot, tPitch
-	UWORD				nearest;
+	UWORD				nearest = 0;
 	UWORD				tRot;
 	UWORD				tPitch;
 
@@ -1126,7 +1126,7 @@ done:
 		{
 			psDroid->order = DORDER_SCOUT_ATTACKWALL;
 		}
-		for (i = 0;i < psDroid->numWeaps;i++)
+		for (i = 0;(unsigned int)i < psDroid->numWeaps;i++)
 		{
 			psDroid->psTarget[i] = (BASE_OBJECT *)psWall;
 		}

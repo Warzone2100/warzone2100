@@ -225,7 +225,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
 	char				*pPos;
-	char				*pScriptID;
+	char				*pScriptID = NULL;
 	UDWORD				hashedName;
 	SCRIPT_CODE			*psCode;
 	CONTEXT_RELEASE			release;

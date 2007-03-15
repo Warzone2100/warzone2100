@@ -772,7 +772,7 @@ BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 
 SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
-	SDWORD	i,range;
+	UDWORD	i,range;
 
 	range  = SAME_LOC_RANGE << TILE_SHIFT;		//in world units
 
@@ -923,7 +923,7 @@ BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 
 SDWORD GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
-	SDWORD	i,range;
+	UDWORD	i,range;
 
 	range  = SAME_LOC_RANGE << TILE_SHIFT;		//in world units
 

@@ -171,7 +171,7 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 	{
 #ifdef DEBUG
 		/* Where does this constant come from, though? - Per */
-		if ((UDWORD)psFrames==0xcdcdcdcd)
+		if (psFrames==(void*)0xcdcdcdcd)
 		{
 			debug( LOG_ERROR, "bad pointer in Create 3D !!!!  -[%s]\n", szPieFileName );
 		}

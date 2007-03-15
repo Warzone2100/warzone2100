@@ -38,7 +38,7 @@
 // array to store release functions
 static VAL_CREATE_FUNC		*asCreateFuncs;
 static VAL_RELEASE_FUNC		*asReleaseFuncs;
-static SDWORD		numFuncs;
+static UDWORD		numFuncs;
 
 // Heap for value chunks
 static OBJ_HEAP		*psValHeap;
@@ -1013,11 +1013,11 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 	//this can be called from eventProcessTriggers and so will wipe out all the current added ones
 	//psAddedTriggers = NULL;
 	psPrev = NULL;
-	for(psCurr = psCallbackList; psCurr && psCurr->type <= callback;
+	for(psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback;
 		psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		if (psCurr->type == callback)
+		if (psCurr->type == (int)callback)
 		{
 			// see if the callback should be fired
 			fired = FALSE;

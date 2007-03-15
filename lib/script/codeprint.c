@@ -400,7 +400,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			psCurrVar = psProg->psVarDebug;
 			for(i=0; i<psProg->numGlobals; i++)
 			{
-				debug( LOG_NEVER, "%-6d %s  %-4d %s\n", psCurrVar - psProg->psVarDebug, psCurrVar->storage == ST_PUBLIC ? "Public " : "Private", psProg->pGlobals[i], psCurrVar->pIdent );
+				debug( LOG_NEVER, "%-6d %s  %-4d %s\n", (int)(psCurrVar - psProg->psVarDebug), psCurrVar->storage == ST_PUBLIC ? "Public " : "Private", psProg->pGlobals[i], psCurrVar->pIdent );
 				psCurrVar++;
 			}
 		}
@@ -501,7 +501,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		}
 
 		// Display the code offset
-		debug( LOG_NEVER, "%-6d", ip - psProg->pCode );
+		debug( LOG_NEVER, "%-6d", (int)(ip - psProg->pCode) );
 		switch (opcode)
 		{
 		case OP_PUSH:
@@ -551,15 +551,15 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			ip += aOpSize[opcode];
 			break;
 		case OP_JUMP:
-			debug( LOG_NEVER, "JUMP       %d (%d)\n", (SWORD)data, ip - psProg->pCode + (SWORD)data );
+			debug( LOG_NEVER, "JUMP       %d (%d)\n", (SWORD)data, (int)(ip - psProg->pCode + (SWORD)data) );
 			ip += aOpSize[opcode];
 			break;
 		case OP_JUMPTRUE:
-			debug( LOG_NEVER, "JUMPTRUE   %d (%d)\n", (SWORD)data, ip - psProg->pCode + (SWORD)data );
+			debug( LOG_NEVER, "JUMPTRUE   %d (%d)\n", (SWORD)data, (int)(ip - psProg->pCode + (SWORD)data) );
 			ip += aOpSize[opcode];
 			break;
 		case OP_JUMPFALSE:
-			debug( LOG_NEVER, "JUMPFALSE  %d (%d)\n", (SWORD)data, ip - psProg->pCode + (SWORD)data );
+			debug( LOG_NEVER, "JUMPFALSE  %d (%d)\n", (SWORD)data, (int)(ip - psProg->pCode + (SWORD)data) );
 			ip += aOpSize[opcode];
 			break;
 		case OP_BINARYOP:

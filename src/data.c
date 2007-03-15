@@ -885,7 +885,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	SetLastResourceFilename(texfile);
 
 	debug(LOG_TEXTURE, "bufferTexPageLoad: %s texturepage added (length=%d)",
-	      texfile, strlen(texfile));
+	      texfile, (int)strlen(texfile));
 
 	// see if this texture page has already been loaded
 	if (resPresent("TEXPAGE", texfile))
@@ -1185,54 +1185,54 @@ typedef struct
 
 static RES_TYPE_MIN ResourceTypes[]=
 {
-	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SBODY", bufferSBODYLoad, dataReleaseStats},
-	{"SBRAIN", bufferSBRAINLoad, NULL},
-	{"SPROP", bufferSPROPLoad, NULL},
-	{"SSENSOR", bufferSSENSORLoad, NULL},
-	{"SECM", bufferSECMLoad, NULL},
-	{"SREPAIR", bufferSREPAIRLoad, NULL},
-	{"SCONSTR", bufferSCONSTRLoad, NULL},
-	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
-	{"SPROPSND", bufferSPROPSNDLoad, NULL},
-	{"STERRTABLE", bufferSTERRTABLELoad, NULL},
-	{"SSPECABIL", bufferSSPECABILLoad, NULL},
-	{"SBPIMD", bufferSBPIMDLoad, NULL},
-	{"SWEAPSND", bufferSWEAPSNDLoad, NULL},
-	{"SWEAPMOD", bufferSWEAPMODLoad, NULL},
-	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},	//template and associated files
-	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL},
-	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},		//structure stats and associated files
-	{"SSTRFUNC", bufferSSTRFUNCLoad, NULL},
-	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL},
-	{"SSTRMOD", bufferSSTRMODLoad, NULL},
-	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},	//feature stats file
-	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease},	//function stats file
-	{"RESCH", bufferRESCHLoad, dataRESCHRelease},	//research stats files
-	{"RPREREQ", bufferRPREREQLoad, NULL},
-	{"RCOMPRED", bufferRCOMPREDLoad, NULL},
-	{"RCOMPRES", bufferRCOMPRESLoad, NULL},
-	{"RSTRREQ", bufferRSTRREQLoad, NULL},
-	{"RSTRRED", bufferRSTRREDLoad, NULL},
-	{"RSTRRES", bufferRSTRRESLoad, NULL},
-	{"RFUNC", bufferRFUNCLoad, NULL},
-	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
-	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
-	{"SCRIPTVAL", dataScriptLoadVals, NULL},
-	{"STR_RES", dataStrResLoad, dataStrResRelease},
-	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
-	{"TERTILES", NULL, NULL},	// This version was used when running with the software renderer.
-	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},	// freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
-	{"AUDIOCFG", dataAudioCfgLoad, NULL},
-	{"WAV", dataAudioLoad, dataAudioRelease},
-	{"ANI", dataAnimLoad, dataAnimRelease},
-	{"ANIMCFG", dataAnimCfgLoad, NULL},
-	{"IMG", dataIMGLoad, dataIMGRelease},
-	{"TEXPAGE", bufferTexPageLoad, dataTexPageRelease},
-	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
+	{"SWEAPON", bufferSWEAPONLoad, NULL, NULL, 0},
+	{"SBODY", bufferSBODYLoad, dataReleaseStats, NULL, 0},
+	{"SBRAIN", bufferSBRAINLoad, NULL, NULL, 0},
+	{"SPROP", bufferSPROPLoad, NULL, NULL, 0},
+	{"SSENSOR", bufferSSENSORLoad, NULL, NULL, 0},
+	{"SECM", bufferSECMLoad, NULL, NULL, 0},
+	{"SREPAIR", bufferSREPAIRLoad, NULL, NULL, 0},
+	{"SCONSTR", bufferSCONSTRLoad, NULL, NULL, 0},
+	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL, NULL, 0},
+	{"SPROPSND", bufferSPROPSNDLoad, NULL, NULL, 0},
+	{"STERRTABLE", bufferSTERRTABLELoad, NULL, NULL, 0},
+	{"SSPECABIL", bufferSSPECABILLoad, NULL, NULL, 0},
+	{"SBPIMD", bufferSBPIMDLoad, NULL, NULL, 0},
+	{"SWEAPSND", bufferSWEAPSNDLoad, NULL, NULL, 0},
+	{"SWEAPMOD", bufferSWEAPMODLoad, NULL, NULL, 0},
+	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease, NULL, 0},	//template and associated files
+	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL, NULL, 0},
+	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease, NULL, 0},		//structure stats and associated files
+	{"SSTRFUNC", bufferSSTRFUNCLoad, NULL, NULL, 0},
+	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL, NULL, 0},
+	{"SSTRMOD", bufferSSTRMODLoad, NULL, NULL, 0},
+	{"SFEAT", bufferSFEATLoad, dataSFEATRelease, NULL, 0},	//feature stats file
+	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease, NULL, 0},	//function stats file
+	{"RESCH", bufferRESCHLoad, dataRESCHRelease, NULL, 0},	//research stats files
+	{"RPREREQ", bufferRPREREQLoad, NULL, NULL, 0},
+	{"RCOMPRED", bufferRCOMPREDLoad, NULL, NULL, 0},
+	{"RCOMPRES", bufferRCOMPRESLoad, NULL, NULL, 0},
+	{"RSTRREQ", bufferRSTRREQLoad, NULL, NULL, 0},
+	{"RSTRRED", bufferRSTRREDLoad, NULL, NULL, 0},
+	{"RSTRRES", bufferRSTRRESLoad, NULL, NULL, 0},
+	{"RFUNC", bufferRFUNCLoad, NULL, NULL, 0},
+	{"SMSG", bufferSMSGLoad, dataSMSGRelease, NULL, 0},
+	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode, NULL, 0},
+	{"SCRIPTVAL", dataScriptLoadVals, NULL, NULL, 0},
+	{"STR_RES", dataStrResLoad, dataStrResRelease, NULL, 0},
+	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease, NULL, 0},
+	{"TERTILES", NULL, NULL, NULL, 0},	// This version was used when running with the software renderer.
+	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease, NULL, 0},	// freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
+	{"AUDIOCFG", dataAudioCfgLoad, NULL, NULL, 0},
+	{"WAV", dataAudioLoad, dataAudioRelease, NULL, 0},
+	{"ANI", dataAnimLoad, dataAnimRelease, NULL, 0},
+	{"ANIMCFG", dataAnimCfgLoad, NULL, NULL, 0},
+	{"IMG", dataIMGLoad, dataIMGRelease, NULL, 0},
+	{"TEXPAGE", bufferTexPageLoad, dataTexPageRelease, NULL, 0},
+	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease, NULL, 0},
 
 
-	{NULL,NULL,NULL}		// indicates end of list
+	{NULL,NULL,NULL, NULL, 0}		// indicates end of list
 };
 
 

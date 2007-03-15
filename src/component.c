@@ -146,7 +146,7 @@ void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXY
 
 
 	iVector BSPCameraPos;
-	OBJPOS Camera = {0,0,0};
+	OBJPOS Camera = {0,0,0,0,0,0};
 
 	Camera.pitch=-45;
 	Camera.yaw=0;

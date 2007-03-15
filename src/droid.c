@@ -3606,7 +3606,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 					pTemplate->asWeaps[pTemplate->storeCount] = incW[j];
 					//check not allocating more than allowed
 					if (pTemplate->storeCount >
-									(SDWORD)pTemplate->numWeaps)
+									pTemplate->numWeaps)
 					{
 						debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Template - %s", TemplateName );
 						abort();
@@ -5772,8 +5772,8 @@ SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
 
-	ASSERT( *x>=0 && *x<mapWidth,"x coordinate is off-map for pickATileGen" );
-	ASSERT( *y>=0 && *y<mapHeight,"y coordinate is off-map for pickATileGen" );
+	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATileGen" );
+	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
 	/* Exit if they're fine! */
 	if(sensiblePlace(*x,*y) && noDroid(*x,*y))
@@ -5824,8 +5824,8 @@ SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
 
-	ASSERT( *x>=0 && *x<mapWidth,"x coordinate is off-map for pickATileGen" );
-	ASSERT( *y>=0 && *y<mapHeight,"y coordinate is off-map for pickATileGen" );
+	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATileGen" );
+	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
 	if(function(*x,*y) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, FALSE))))	//TODO: vtol check really not needed?
 	{
@@ -5874,8 +5874,8 @@ SDWORD	startX,endX,startY,endY;
 UDWORD	passes;
 
 
-	ASSERT( *x>=0 && *x<mapWidth,"x coordinate is off-map for pickATile" );
-	ASSERT( *y>=0 && *y<mapHeight,"y coordinate is off-map for pickATile" );
+	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATile" );
+	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATile" );
 
 	/* Exit if they're fine! */
 	if(sensiblePlace(*x,*y) && noDroid(*x,*y))

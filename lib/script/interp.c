@@ -298,7 +298,7 @@ BOOL interpInitialise(void)
 /* Run a compiled script */
 BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
 {
-	SDWORD			data;
+	UDWORD			data;
 	OPCODE			opcode;
 	INTERP_VAL		sVal, *psVar,*InstrPointer;
 	VAL_CHUNK		*psGlobals;
@@ -424,7 +424,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			}
 			instructionCount++;
 
-			TRCPRINTF( "%-6d  ", InstrPointer - psProg->pCode );
+			TRCPRINTF( "%-6d  ", (int)(InstrPointer - psProg->pCode) );
 			opcode = (OPCODE)(InstrPointer->v.ival >> OPCODE_SHIFT);			//get opcode
 			data = (SDWORD)(InstrPointer->v.ival & OPCODE_DATAMASK);		//get data - only used with packed opcodes
 			switch (opcode)
@@ -712,7 +712,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					"wrong value type passed for OP_JUMPFALSE: %d", InstrPointer->type);
 
 				TRCPRINTF( "JUMPFALSE   %d (%d)",
-				           (SWORD)data, InstrPointer - psProg->pCode + (SWORD)data );
+				           (SWORD)data, (int)(InstrPointer - psProg->pCode + (SWORD)data) );
 
 				if (!stackPop(&sVal))
 				{
@@ -741,7 +741,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					"wrong value type passed for OP_JUMP: %d", InstrPointer->type);
 
 				TRCPRINTF( "JUMP        %d (%d)\n",
-				           (SWORD)data, InstrPointer - psProg->pCode + (SWORD)data );
+				           (SWORD)data, (int)(InstrPointer - psProg->pCode + (SWORD)data) );
 				// Do the jump
 				InstrPointer += (SWORD)data;
 				if (InstrPointer < pCodeStart || InstrPointer > pCodeEnd)
@@ -920,7 +920,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	//debug(LOG_SCRIPT, "interpRunScript 3");
 
 	psCurProg = NULL;
-	TRCPRINTF( "%-6d  EXIT\n", InstrPointer - psProg->pCode );
+	TRCPRINTF( "%-6d  EXIT\n", (int)(InstrPointer - psProg->pCode) );
 
 	bInterpRunning = FALSE;
 	return TRUE;
