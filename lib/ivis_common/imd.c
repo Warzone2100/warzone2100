@@ -270,7 +270,7 @@ void _imd_save_connectors(FILE *fp, iIMDShape *s)
 //* returns TRUE -> ok, FLASE -> error
 //*
 //******
-iBool iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
+BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 {
 	FILE *fp;
 	iIMDShape *sp;

@@ -231,7 +231,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
 
 	// load texture page if specified
-	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX)) 
+	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX))
 	{
 		if(bTextured) {
 			texpage = iV_GetTexture(texfile);
@@ -271,7 +271,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******
-static iBool _imd_load_polys( char **ppFileData, iIMDShape *s )
+static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -429,7 +429,7 @@ static iBool _imd_load_polys( char **ppFileData, iIMDShape *s )
 
 #define GETBSPTRIANGLE(polyid) (&(s->polys[(polyid)]))
 
-static iBool _imd_load_bsp( char **ppFileData, iIMDShape *s, UWORD BSPNodeCount )
+static BOOL _imd_load_bsp( char **ppFileData, iIMDShape *s, UWORD BSPNodeCount )
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -649,7 +649,7 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******
-static iBool _imd_load_points( char **ppFileData, iIMDShape *s )
+static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 {
 	int i ;
 	iVector *p;
@@ -874,7 +874,7 @@ static iBool _imd_load_points( char **ppFileData, iIMDShape *s )
 }
 
 
-static iBool _imd_load_connectors(char **ppFileData, iIMDShape *s)
+static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 {
 	char *pFileData = *ppFileData;
 	int cnt;

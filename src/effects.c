@@ -185,7 +185,7 @@ static void effectSetupDestruction  ( EFFECT *psEffect );
 static void	effectSetupFire			( EFFECT *psEffect );
 static void	effectSetUpSatLaser		( EFFECT *psEffect );
 static void effectSetUpFirework		( EFFECT *psEffect );
-static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
+// static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
 // ----------------------------------------------------------------------------------------
 //void	initPerimeterSmoke			( EFFECT *psEffect );
 void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);

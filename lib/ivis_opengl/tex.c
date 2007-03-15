@@ -57,11 +57,11 @@ int _TEX_INDEX;
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bResource) 
+int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, BOOL bResource)
 {
 	int	i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d res=%d", filename, 
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d res=%d", filename,
 	      type, bResource);
 	assert(s != NULL);
 
@@ -119,7 +119,7 @@ int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, iBool bReso
 	return i;
 }
 
-void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bResource)
+void pie_ChangeTexPage(int tex_index, iSprite* s, int type, BOOL bResource)
 {
 	assert(s != NULL);
 
@@ -211,7 +211,7 @@ int pie_ReloadTexPage(char *filename, char *pBuffer)
 	handler - this is because the resource handler will deal with freeing it, and in all probability
 	will have already done so by the time this is called, thus avoiding an 'already freed' moan.
 */
-void pie_TexShutDown(void) 
+void pie_TexShutDown(void)
 {
 	int i,j;
 
@@ -234,7 +234,7 @@ void pie_TexShutDown(void)
 	debug( LOG_NEVER, "pie_TexShutDown successful - freed %d texture pages\n", j );
 }
 
-void pie_TexInit(void) 
+void pie_TexInit(void)
 {
 	int i;
 
