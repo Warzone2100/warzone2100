@@ -23,6 +23,13 @@
 
 # include "dbghelp.h"
 
+/**
+ * Exception handling on Windows.
+ * Ask the user whether he wants to safe a Minidump and then dump it into the temp directory.
+ *
+ * \param pExceptionInfo Information on the exception, passed from Windows
+ * \return whether further exception handlers (i.e. the Windows internal one) should be invoked
+ */
 static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 {
 	LPCSTR applicationName = "Warzone 2100";
@@ -115,6 +122,14 @@ static BOOL gdbIsAvailable = FALSE, sysInfoValid = FALSE;
 static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * gdmpPath = NULL, * programCommand = NULL;
 
 
+/**
+ * Signal number to string mapper.
+ * Also takes into account the signal code with details about the signal.
+ *
+ * \param signum Signal number
+ * \param sigcode Signal code
+ * \return String with the description of the signal. "Unknown signal" when no description is available.
+ */
 static const char * wz_strsignal(int signum, int sigcode)
 {
 	switch (signum)
@@ -281,6 +296,11 @@ static const char * wz_strsignal(int signum, int sigcode)
 }
 
 
+/**
+ * Set signal handlers for fatal signals on POSIX systems
+ *
+ * \param signalHandler Pointer to the signal handler function
+ */
 static void setFatalSignalHandler(SigActionHandler signalHandler)
 {
 	struct sigaction new_handler;
@@ -333,12 +353,20 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 }
 
 
-static void posixExceptionHandler(int x, siginfo_t * siginfo, void * xx)
+/**
+ * Exception (signal) handling on POSIX systems.
+ * Dumps info about the system incl. backtrace (when GLibC or GDB is present) to /tmp/warzone2100.gdmp
+ *
+ * \param signum Signal number
+ * \param siginfo Signal info
+ * \param sigcontext Signal context
+ */
+static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcontext)
 {
 	static sig_atomic_t allreadyRunning = 0;
 
 	if (allreadyRunning)
-		raise(siginfo->si_signo);
+		raise(signum);
 	allreadyRunning = 1;
 
 # if defined(__GLIBC__)
@@ -486,13 +514,18 @@ static void posixExceptionHandler(int x, siginfo_t * siginfo, void * xx)
 	close(dumpFile);
 
 
-	sigaction(siginfo->si_signo, &oldAction[siginfo->si_signo], NULL);
-	raise(siginfo->si_signo);
+	sigaction(signum, &oldAction[signum], NULL);
+	raise(signum);
 }
 
 #endif // WZ_OS_*
 
 
+/**
+ * Setup the exception handler responsible for target OS.
+ *
+ * \param programCommand_x Command used to launch this program. Only used for POSIX handler.
+ */
 void setupExceptionHandler(char * programCommand_x)
 {
 #if defined(WZ_OS_WIN)
