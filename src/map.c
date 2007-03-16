@@ -772,19 +772,18 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 {
 	UDWORD	i;
-	MAP_SAVEHEADER	*psHeader;
-	MAP_SAVETILE	*psTileData;
-	MAPTILE	*psTile;
-	GATEWAY *psCurrGate;
-	GATEWAY_SAVEHEADER *psGateHeader;
-	GATEWAY_SAVE *psGate;
-	ZONEMAP_SAVEHEADER *psZoneHeader;
-	UBYTE *psZone;
-	UBYTE *psLastZone;
-	SDWORD	numGateways;
+	MAP_SAVEHEADER	*psHeader = NULL;
+	MAP_SAVETILE	*psTileData = NULL;
+	MAPTILE	*psTile = NULL;
+	GATEWAY *psCurrGate = NULL;
+	GATEWAY_SAVEHEADER *psGateHeader = NULL;
+	GATEWAY_SAVE *psGate = NULL;
+	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
+	UBYTE *psZone = NULL;
+	UBYTE *psLastZone = NULL;
+	SDWORD	numGateways = 0;
 
 	// find the number of non water gateways
-	numGateways = 0;
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
 		if (!(psCurrGate->flags & GWR_WATERLINK))

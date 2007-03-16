@@ -97,7 +97,7 @@ void		tileLayouts(int texture);
 /* ----------------------------------------------------------------------------------------- */
 
 SDWORD	elevation;
-iVector mapPos, mapView;
+Vector3i mapPos, mapView;
 //static	iVector	oldPos, oldView;
 POINT  sP1,sP2,sP3,sP4;
 POINT  *psP1,*psP2,*psP3,*psP4,*psPTemp;
@@ -158,7 +158,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 
     BASE_STATS      *psResGraphic;
     UDWORD          compID, IMDType;
-	iVector         Rotation,Position;
+	Vector3i Rotation,Position;
 	UDWORD          basePlateSize, Radius;
     SDWORD          scale = 0;
 

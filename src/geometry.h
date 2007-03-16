@@ -49,8 +49,8 @@ extern FEATURE		*getTileFeature(UDWORD x, UDWORD y);
 //extern	UDWORD	screenShakeLength;
 //extern	void	attemptScreenShake(void);
 
-extern	void			baseObjScreenCoords(BASE_OBJECT *baseObj, iPoint *pt);
-extern	void			WorldPointToScreen( iPoint *worldPt, iPoint *screenPt );
+extern	void			baseObjScreenCoords(BASE_OBJECT *baseObj, Vector2i *pt);
+extern	void			WorldPointToScreen( Vector2i *worldPt, Vector2i *screenPt );
 extern	UDWORD			adjustDirection	( SDWORD present, SDWORD difference );
 extern	SDWORD			calcDirection	( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
 extern	void			initBulletTable	( void );

@@ -102,7 +102,7 @@ extern UDWORD scroll_speed_accel;			// now user modifyable.
 
 #define BOX_PULSE_SPEED	50
 
-struct	_dragBox 
+struct	_dragBox
 {
 UDWORD	x1;
 UDWORD	y1;

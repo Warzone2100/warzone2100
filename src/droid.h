@@ -37,7 +37,7 @@
 #define	DROID_EXPLOSION_SPREAD_Y	(rand()%TILE_UNITS)
 #define	DROID_EXPLOSION_SPREAD_Z	(TILE_UNITS/2 - (rand()%TILE_UNITS))
 
-/*defines the % to decrease the illumination of a tile when building - gets set 
+/*defines the % to decrease the illumination of a tile when building - gets set
 back when building is destroyed*/
 //#define FOUNDATION_ILLUMIN		50
 
@@ -98,7 +98,7 @@ extern BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize);
 extern void initTemplatePoints(void);
 
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
-extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, 
+extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y,
 						 UDWORD player, BOOL onMission);
 
 /* Set the asBits in a DROID structure given it's template. */
@@ -110,7 +110,7 @@ extern SDWORD droidCalcExp(DROID *psDroid);
 /* Calculate the weight of a droid from it's template */
 extern UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate);
 
-/* Calculate the power points required to build/maintain a droid */			
+/* Calculate the power points required to build/maintain a droid */
 extern UDWORD calcDroidPower(DROID *psDroid);
 
 /* Calculate the body points of a droid from it's template */
@@ -131,7 +131,7 @@ extern UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate);
 /* Calculate the points required to build the droid */
 //UDWORD calcDroidBuild(DROID *psDroid);
 
-/* Calculate the power points required to build/maintain the droid */			
+/* Calculate the power points required to build/maintain the droid */
 extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);
 
 // return whether a template is for an IDF droid
@@ -158,14 +158,14 @@ extern BOOL droidStartFoundation(DROID *psDroid);
 /* Sets a droid to start demolishing - returns true if successful */
 extern BOOL	droidStartDemolishing( DROID *psDroid );
 
-/* Update a construction droid while it is demolishing 
+/* Update a construction droid while it is demolishing
    returns TRUE while demolishing */
 extern BOOL	droidUpdateDemolishing( DROID *psDroid );
 
 /* Sets a droid to start repairing - returns true if successful */
 extern BOOL	droidStartRepair( DROID *psDroid );
 
-/* Update a construction droid while it is repairing 
+/* Update a construction droid while it is repairing
    returns TRUE while repairing */
 extern BOOL	droidUpdateRepair( DROID *psDroid );
 
@@ -178,7 +178,7 @@ extern BOOL droidUpdateDroidRepair(DROID *psRepairDroid);
 /*checks a droids current body points to see if need to self repair*/
 extern void droidSelfRepair(DROID *psDroid);
 
-/* Update a construction droid while it is building 
+/* Update a construction droid while it is building
    returns TRUE while building continues */
 extern BOOL droidUpdateBuild(DROID *psDroid);
 
@@ -219,7 +219,7 @@ extern DROID_TYPE droidType(DROID *psDroid);
 
 /* Return the type of a droid from it's template */
 extern DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
- 
+
 //fills the list with Templates that can be manufactured in the Factory - based on size
 extern UDWORD fillTemplateList(DROID_TEMPLATE **pList, STRUCTURE *psFactory, UDWORD limit);
 
@@ -234,7 +234,7 @@ extern UDWORD	getNumDroidsForLevel(UDWORD	level);
 
 extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
-extern BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot);
+extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE* getTemplateFromName(char *pName);
@@ -272,20 +272,20 @@ extern PICKTILE pickHalfATile		(UDWORD *x, UDWORD *y, UBYTE numIterations);
 extern BOOL	pickATile2				(UDWORD *x, UDWORD *y, UDWORD numIterations);
 extern	BOOL	normalPAT(UDWORD x, UDWORD y);
 extern	BOOL	zonedPAT(UDWORD x, UDWORD y);
-extern	BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations, 
+extern	BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 BOOL (*function)(UDWORD x, UDWORD y));
-extern	BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange, 
+extern	BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y));
 
 
 //initialises the droid movement model
 extern void initDroidMovement(DROID *psDroid);
 
-/* Looks through the players list of droids to see if any of them are 
+/* Looks through the players list of droids to see if any of them are
 building the specified structure - returns TRUE if finds one*/
 extern BOOL checkDroidsBuilding(STRUCTURE *psStructure);
 
-/* Looks through the players list of droids to see if any of them are 
+/* Looks through the players list of droids to see if any of them are
 demolishing the specified structure - returns TRUE if finds one*/
 extern BOOL checkDroidsDemolishing(STRUCTURE *psStructure);
 
@@ -294,13 +294,13 @@ a module if it can - returns TRUE if order is set */
 extern BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower);
 
 /*Deals with building a module - checking if any droid is currently doing this
- - if so, helping to build the current one*/  
+ - if so, helping to build the current one*/
 extern void setUpBuildModule(DROID *psDroid);
 
 /*return the name to display for the interface given a DROID structure*/
 extern char* getDroidName(DROID *psDroid);
 
-/*return the name to display for the interface - we don't know if this is 
+/*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
 extern char* getTemplateName(DROID_TEMPLATE *psTemplate);
 
@@ -328,11 +328,11 @@ extern UBYTE checkCommandExist(UBYTE player);
 
 /* Set up a droid to clear a wrecked building feature - returns true if successful */
 extern BOOL droidStartClearing( DROID *psDroid );
-/* Update a construction droid while it is clearing 
+/* Update a construction droid while it is clearing
    returns TRUE while continues */
 extern BOOL droidUpdateClearing( DROID *psDroid );
 
-/*For a given repair droid, check if there are any damaged droids within 
+/*For a given repair droid, check if there are any damaged droids within
 a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
@@ -340,7 +340,7 @@ extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 extern BOOL vtolDroid(DROID *psDroid);
 /*returns TRUE if a VTOL Weapon Droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
-/*Checks a vtol for being fully armed and fully repaired to see if ready to 
+/*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 extern BOOL  vtolHappy(DROID *psDroid);
 /*this mends the VTOL when it has been returned to home base whilst on an
@@ -365,7 +365,7 @@ extern BOOL droidAttacking(DROID *psDroid);
 // but still rearming
 extern BOOL allVtolsRearmed(DROID *psDroid);
 
-/*compares the droid sensor type with the droid weapon type to see if the 
+/*compares the droid sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
 extern BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid);
 
@@ -377,8 +377,8 @@ extern DROID * giftSingleDroid(DROID *psD, UDWORD to);
 /*calculates the electronic resistance of a droid based on its experience level*/
 extern SWORD   droidResistance(DROID *psDroid);
 
-/*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is 
-direct fire. Also check numVTOLattackRuns for the weapon is not zero - return 
+/*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is
+direct fire. Also check numVTOLattackRuns for the weapon is not zero - return
 TRUE if valid weapon*/
 extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 

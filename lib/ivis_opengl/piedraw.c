@@ -98,7 +98,7 @@ static BOOL stencil_one_pass(void)
 
 	if (can_do_stencil_one_pass < 0) {
 		can_do_stencil_one_pass = 0; // can't use it until we decide otherwise
-		
+
 		// let's check if we have the needed extensions
 		if( check_extension("GL_EXT_stencil_two_side")
 		 && check_extension("GL_EXT_stencil_wrap"))
@@ -189,8 +189,8 @@ void pie_EndLighting(void)
 #ifdef BSPIMD
 
 // BSP object position
-static iVector BSPObject;
-static iVector BSPCamera;
+static Vector3i BSPObject;
+static Vector3i BSPCamera;
 static SDWORD BSPObject_Yaw=0,BSPObject_Pitch=0;
 
 
@@ -225,32 +225,26 @@ void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z)
 
 #endif
 
-typedef struct {
-	float x;
-	float y;
-	float z;
-} fVector;
-
-static void fVector_Set(fVector* v, float x, float y, float z)
+static void Vector3f_Set(Vector3f* v, float x, float y, float z)
 {
 	v->x = x;
 	v->y = y;
 	v->z = z;
 }
 
-static void fVector_Sub(fVector* dest, fVector* op1, fVector* op2)
+static void Vector3f_Sub(Vector3f* dest, Vector3f* op1, Vector3f* op2)
 {
 	dest->x = op1->x - op2->x;
 	dest->y = op1->y - op2->y;
 	dest->z = op1->z - op2->z;
 }
 
-static float fVector_SP(fVector* op1, fVector* op2)
+static float Vector3f_SP(Vector3f* op1, Vector3f* op2)
 {
 	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
 }
 
-static void fVector_CP(fVector* dest, fVector* op1, fVector* op2)
+static void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
 {
 	dest->x = op1->y * op2->z - op1->z * op2->y;
 	dest->y = op1->z * op2->x - op1->x * op2->z;
@@ -285,15 +279,15 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 		}
 		glBegin(GL_TRIANGLE_FAN);
 		if (light) {
-			fVector p1, p2, p3, v1, v2, n;
+			Vector3f p1, p2, p3, v1, v2, n;
 			float l;
 
-			fVector_Set(&p1, pVrts[0].sx, pVrts[0].sy, pVrts[0].sz);
-			fVector_Set(&p2, pVrts[1].sx, pVrts[1].sy, pVrts[1].sz);
-			fVector_Set(&p3, pVrts[2].sx, pVrts[2].sy, pVrts[2].sz);
-			fVector_Sub(&v1, &p3, &p1);
-			fVector_Sub(&v2, &p2, &p1);
-			fVector_CP(&n, &v1, &v2);
+			Vector3f_Set(&p1, pVrts[0].sx, pVrts[0].sy, pVrts[0].sz);
+			Vector3f_Set(&p2, pVrts[1].sx, pVrts[1].sy, pVrts[1].sz);
+			Vector3f_Set(&p3, pVrts[2].sx, pVrts[2].sy, pVrts[2].sz);
+			Vector3f_Sub(&v1, &p3, &p1);
+			Vector3f_Sub(&v2, &p2, &p1);
+			Vector3f_CP(&n, &v1, &v2);
 			l = 1.0;
 
 			glNormal3f(n.x*l, n.y*l, n.z*l);
@@ -345,9 +339,9 @@ static unsigned int nb_tshapes = 0;
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
 		      int pieFlag, int pieFlagData)
 {
-	int32		tempY;
+	Sint32		tempY;
 	int i, n;
-	iVector		*pVertices;
+	Vector3i		*pVertices;
 	PIEPIXEL	*pPixels;
 	iIMDPoly	*pPolys;
 	PIEPOLY		piePoly;
@@ -454,11 +448,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* light)
+static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
 {
-	int32		tempY;
+	Sint32		tempY;
 	int i, n;
-	iVector		*pVertices;
+	Vector3i		*pVertices;
 	PIEPIXEL	*pPixels;
 	iIMDPoly	*pPolys;
 	VERTEXID	*index;
@@ -483,18 +477,18 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, fVector* l
 
 	pPolys = shape->polys;
 	for (i = 0; i < shape->npolys; ++i, ++pPolys) {
-		fVector p1, p2, p3, v1, v2, normal;
+		Vector3f p1, p2, p3, v1, v2, normal;
 
 		index = pPolys->pindex;
-		fVector_Set(&p1, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		Vector3f_Set(&p1, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
 		++index;
-		fVector_Set(&p2, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		Vector3f_Set(&p2, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
 		++index;
-		fVector_Set(&p3, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-		fVector_Sub(&v1, &p3, &p1);
-		fVector_Sub(&v2, &p2, &p1);
-		fVector_CP(&normal, &v1, &v2);
-		if (fVector_SP(&normal, light) > 0) {
+		Vector3f_Set(&p3, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
+		Vector3f_Sub(&v1, &p3, &p1);
+		Vector3f_Sub(&v2, &p2, &p1);
+		Vector3f_CP(&normal, &v1, &v2);
+		if (Vector3f_SP(&normal, light) > 0) {
 			if (   pPolys->flags & PIE_COLOURKEYED
 			    && pPolys->flags & PIE_NO_CULL) {
 				VERTEXID i;
@@ -649,7 +643,7 @@ static void inverse_matrix(float* src, float * dst)
 static void pie_ShadowDrawLoop(float pos_lgt0[4])
 {
 	float invmat[9];
-	fVector light;
+	Vector3f light;
 	unsigned int i;
 
 	for (i = 0; i < nb_scshapes; i++)

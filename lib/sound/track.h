@@ -87,8 +87,7 @@ typedef struct AUDIO_SAMPLE
 	void				*psObj;
 	struct AUDIO_SAMPLE	*psPrev;
 	struct AUDIO_SAMPLE	*psNext;
-}
-AUDIO_SAMPLE;
+} AUDIO_SAMPLE;
 
 typedef struct TRACK
 {

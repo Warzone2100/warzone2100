@@ -64,7 +64,7 @@ void pie_Set2DClip(int x0, int y0, int x1, int y1)
 	psRendSurface->clip.bottom = y1;
 }
 
-static void pie_ClipUV(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip, int32 t)
+static void pie_ClipUV(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip, Sint32 t)
 {
 	clip->tu = s1->tu + ((t * (s2->tu - s1->tu)) >> iV_DIVSHIFT);
 	clip->tv = s1->tv + ((t * (s2->tv - s1->tv)) >> iV_DIVSHIFT);
@@ -77,10 +77,8 @@ static void pie_ClipUV(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip, int32 t)
 
 static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 {
-	int n, dx;
-	int32 t;
-
-	n = 1;
+	int n = 1, dx;
+	Sint32 t;
 
 	if (s2->sx >= s1->sx) {
 		if (s1->sx < psRendSurface->clip.left) {
@@ -171,10 +169,8 @@ static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 
 static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 {
-	int n, dy;
-	int32 t;
-
-	n = 1;
+	int n = 1, dy;
+	Sint32 t;
 
 	if (s2->sy >= s1->sy) {
 
@@ -198,9 +194,9 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 			*clip = *s1;
 		}
 
-		if (s2->sy > psRendSurface->clip.bottom) 
+		if (s2->sy > psRendSurface->clip.bottom)
 		{
-			if (s1->sy > psRendSurface->clip.bottom) 
+			if (s1->sy > psRendSurface->clip.bottom)
 			{
 				return 0;
 			}
@@ -226,7 +222,7 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 		return n;
 
 	} else {
-		if (s1->sy > psRendSurface->clip.bottom) 
+		if (s1->sy > psRendSurface->clip.bottom)
 		{
 			if (s2->sy >= psRendSurface->clip.bottom) return 0;
 
@@ -247,9 +243,9 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 			*clip = *s1;
 		}
 
-		if (s2->sy < psRendSurface->clip.top) 
+		if (s2->sy < psRendSurface->clip.top)
 		{
-			if (s1->sy < psRendSurface->clip.top) 
+			if (s1->sy < psRendSurface->clip.top)
 			{
 				return 0;
 			}

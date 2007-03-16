@@ -81,10 +81,11 @@
 // screen surface structure
 //
 //*************************************************************************
+typedef struct { Sint32 left, top, right, bottom; } iClip;
 
 typedef struct iSurface {
 	int usr;
-	uint32 flags;
+	Uint32 flags;
 	int xcentre;
 	int ycentre;
 	int xpshift;
@@ -92,11 +93,11 @@ typedef struct iSurface {
 	iClip clip;
 
 	UBYTE *buffer;
-	int32 scantable[iV_SCANTABLE_MAX];	// currently uses 4k per structure (!)
+	Sint32 scantable[iV_SCANTABLE_MAX];	// currently uses 4k per structure (!)
 
 	int width;
 	int height;
-	int32 size;
+	Sint32 size;
 } iSurface;
 
 //*************************************************************************
@@ -106,7 +107,7 @@ typedef struct iSurface {
 //*************************************************************************
 typedef struct {
 	int npoints;
-	iPoint frame[iV_IMD_ANIM_FRAMES];
+	Vector2i frame[iV_IMD_ANIM_FRAMES];
 } iTexAnimFrame;
 
 
@@ -124,7 +125,7 @@ typedef struct {
 //
 //*************************************************************************
 #ifdef BSPIMD
-typedef uint16 BSPPOLYID;			// lets hope this can work as a byte ... that will limit it to 255 polygons in 1 imd
+typedef Uint16 BSPPOLYID;			// lets hope this can work as a byte ... that will limit it to 255 polygons in 1 imd
 #endif
 #include "bspimd.h" //structure defintions only
 
@@ -132,10 +133,10 @@ typedef uint16 BSPPOLYID;			// lets hope this can work as a byte ... that will l
 typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
 
 typedef struct {
-	uint32 flags;
-	int32 zcentre;
+	Uint32 flags;
+	Sint32 zcentre;
 	int npnts;
-	iVector normal;
+	Vector3i normal;
 	VERTEXID *pindex;
 	iVertex *vrt;
 	iTexAnim *pTexAnim;		// warning.... this is not used on the playstation version !
@@ -145,20 +146,20 @@ typedef struct {
 } iIMDPoly;
 
 typedef struct iIMDShape {
-	uint32 flags;
-	int32 texpage;
-	int32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
+	Uint32 flags;
+	Sint32 texpage;
+	Sint32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
 
-	iVector ocen;
+	Vector3i ocen;
 	UWORD	numFrames;
 	UWORD	animInterval;
 	int npoints;
 	int npolys;					// After BSP this number is not updated - it stays the number of pre-bsp polys
 	int nconnectors;			// After BSP this number is not updated - it stays the number of pre-bsp polys
 
-   iVector *points;
+   Vector3i *points;
    iIMDPoly *polys;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
-   iVector *connectors;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
+   Vector3i *connectors;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
 
 	int ntexanims;
 	iTexAnim **texanims;
@@ -210,7 +211,7 @@ typedef struct {
 
 typedef struct {
 	IMAGEHEADER Header;
-	iSprite *TexturePages;
+	iTexture *TexturePages;
 	UWORD NumCluts;
 	UWORD TPageIDs[16];
 	UWORD ClutIDs[48];

@@ -108,7 +108,7 @@ extern BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD buffer
 
 extern BOOL	structureStatsShutDown(void);
 
-extern BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, 
+extern BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage,
                             UDWORD weaponClass, UDWORD weaponSubClass);
 
 /* Set the type of droid for a factory to build */
@@ -122,7 +122,7 @@ extern void createTestStructures(void);
 extern void setStructTileDraw(STRUCTURE *psStruct);
 
 //builds a specified structure at a given location
-extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, 
+extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 						  UDWORD player,BOOL FromSave);
 
 /* The main update routine for all Structures */
@@ -140,20 +140,20 @@ extern BOOL destroyStruct(STRUCTURE *psDel);
 BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy);
 
 //fills the list with Structures that can be built
-extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, 
+extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer,
 						 UDWORD limit);
 /* checks that the location is a valid one to build on and sets the outline colour
 x and y in tile-coords*/
-extern BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player, 
+extern BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
                           BOOL bCheckBuildQueue);
 
 /* for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid */
-//extern BOOL getDroidDestination(STRUCTURE_STATS *psPositionStats, UDWORD structX, 
+//extern BOOL getDroidDestination(STRUCTURE_STATS *psPositionStats, UDWORD structX,
 //	UDWORD structY, UDWORD * pDroidX, UDWORD *pDroidY);
 /*for a structure or feature, find a location along an edge which the droid can get
 to and return this as the destination for the droid*/
-extern BOOL getDroidDestination(BASE_STATS *psPositionStats, UDWORD structX, 
+extern BOOL getDroidDestination(BASE_STATS *psPositionStats, UDWORD structX,
 	UDWORD structY, UDWORD * pDroidX, UDWORD *pDroidY);
 /* check along the width of a structure for an empty space */
 extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
@@ -174,14 +174,14 @@ extern BOOL  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */
 extern BOOL checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
-extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, 
+extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
                              UDWORD player, BOOL bCheck);
 //extern void createAssemblyPoint(STRUCTURE* psStruct);
 
 /* consider delivery points when selected by player*/
 extern void processDeliveryPoint(UDWORD player, UDWORD x, UDWORD y);
 
-/*called when a structure has been built - checks through the list of callbacks 
+/*called when a structure has been built - checks through the list of callbacks
 for the scripts*/
 extern void structureCompletedCallback(STRUCTURE_STATS *psStructType);
 
@@ -215,7 +215,7 @@ extern void setLasSatExists(BOOL state, UDWORD player);
 extern BOOL getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
-extern BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle, int weapon_slot);
+extern BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
 extern void buildingComplete(STRUCTURE *psBuilding);
@@ -243,14 +243,14 @@ is available*/
 extern void releaseResExtractor(STRUCTURE *psRelease);
 
 /*called when a Power Gen is destroyed or is disconnected
-adjusts the associated Res Extractors so that they can link to different Power 
+adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
 extern void releasePowerGen(STRUCTURE *psRelease);
 
 //print some info at the top of the screen dependant on the structure
 extern void printStructureInfo(STRUCTURE *psStructure);
 
-/*Checks the template type against the factory type - returns FALSE 
+/*Checks the template type against the factory type - returns FALSE
 if not a good combination!*/
 extern BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory);
 
@@ -262,7 +262,7 @@ extern BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackP
 /* EW works differently in multiplayer mode compared with single player.*/
 extern BOOL validStructResistance(STRUCTURE *psStruct);
 
-/*checks to see if a specific structure type exists -as opposed to a structure 
+/*checks to see if a specific structure type exists -as opposed to a structure
 stat type*/
 extern BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
@@ -287,7 +287,7 @@ extern FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct);
 //Find the factory associated with the delivery point - returns NULL if none exist
 extern STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint);
 
-/*this is called when a factory produces a droid. The Template returned is the next 
+/*this is called when a factory produces a droid. The Template returned is the next
 one to build - if any*/
 extern DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
@@ -296,7 +296,7 @@ extern void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate
 
 //returns the quantity of a specific template in the production list
 extern UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
-/*returns the quantity of a specific template in the production list that 
+/*returns the quantity of a specific template in the production list that
 have already been built*/
 extern UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
@@ -309,7 +309,7 @@ extern void checkDeliveryPoints(UDWORD version);
 //adjust the loop quantity for this factory
 extern void factoryLoopAdjust(STRUCTURE *psStruct, BOOL add);
 
-/*cancels the production run for the factory and returns any power that was 
+/*cancels the production run for the factory and returns any power that was
 accrued but not used*/
 extern void cancelProduction(STRUCTURE *psBuilding);
 
@@ -319,7 +319,7 @@ extern void holdProduction(STRUCTURE *psBuilding);
 /*release a factory's production run from hold*/
 extern void releaseProduction(STRUCTURE *psBuilding);
 
-/*This function is called after a game is loaded so that any resource extractors 
+/*This function is called after a game is loaded so that any resource extractors
 that are active are initialised for when to start*/
 extern void checkResExtractorsActive(void);
 
@@ -329,22 +329,22 @@ extern UWORD countAssignableFactories(UBYTE player,UWORD FactoryType);
 /*Used for determining how much of the structure to draw as being built or demolished*/
 extern FRACT structHeightScale(STRUCTURE *psStruct);
 
-/*compares the structure sensor type with the droid weapon type to see if the 
+/*compares the structure sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
 extern BOOL structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
 
-/*checks if the structure has a Counter Battery sensor attached - returns 
+/*checks if the structure has a Counter Battery sensor attached - returns
 TRUE if it has*/
 extern BOOL structCBSensor(STRUCTURE *psStruct);
-/*checks if the structure has a Standard Turret sensor attached - returns 
+/*checks if the structure has a Standard Turret sensor attached - returns
 TRUE if it has*/
 extern BOOL structStandardSensor(STRUCTURE *psStruct);
 
-/*checks if the structure has a VTOL Intercept sensor attached - returns 
+/*checks if the structure has a VTOL Intercept sensor attached - returns
 TRUE if it has*/
 extern BOOL structVTOLSensor(STRUCTURE *psStruct);
 
-/*checks if the structure has a VTOL Counter Battery sensor attached - returns 
+/*checks if the structure has a VTOL Counter Battery sensor attached - returns
 TRUE if it has*/
 extern BOOL structVTOLCBSensor(STRUCTURE *psStruct);
 
@@ -375,7 +375,7 @@ extern void changeProductionPlayer(UBYTE player);
 // La!
 extern BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats);
 
-/*checks that the structure stats have loaded up as expected - must be done after 
+/*checks that the structure stats have loaded up as expected - must be done after
 all StructureStats parts have been loaded*/
 extern BOOL checkStructureStats(void);
 
@@ -389,7 +389,7 @@ extern BOOL checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 
 extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 
-/*checks the structure passed in is a Las Sat structure which is currently 
+/*checks the structure passed in is a Las Sat structure which is currently
 selected - returns TRUE if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 

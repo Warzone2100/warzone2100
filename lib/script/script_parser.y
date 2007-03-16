@@ -1329,7 +1329,7 @@ static CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for firs
 
 /* check if the arguments in the function definition body match the argument types
 and names from function declaration (if there was any) */
-static BOOL checkFuncParamType(UDWORD argIndex, SDWORD argType)
+static BOOL checkFuncParamType(UDWORD argIndex, UDWORD argType)
 {
 	VAR_SYMBOL		*psCurr;
 	SDWORD			i,j;
@@ -1345,7 +1345,7 @@ static BOOL checkFuncParamType(UDWORD argIndex, SDWORD argType)
 		/* find the argument by the index */
 		i=psCurEvent->index;
 		j=0;
-		for(psCurr =psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
+		for(psCurr = psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
 			if((psCurEvent->numParams - j - 1)==argIndex)	/* got to the right argument */
 			{

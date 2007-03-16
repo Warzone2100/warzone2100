@@ -259,7 +259,7 @@ void useTheForce(BOOL bAddTempl)//Luke
 {
 	DROID			*pDr;
 	DROID_TEMPLATE	*pTempl;
-	iVector			position;
+	Vector3i position;
 	UDWORD			x1,y1,x,y;
 	DROID_TEMPLATE *psTempl;
 

@@ -53,14 +53,14 @@ void DrawTriangleList(BSPPOLYID PolygonNumber);
 
 
 // Local prototypes
-static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP );
-static iVector *IMDvec(int Vertex);
+static inline int IsPointOnPlane( PSPLANE psPlane, Vector3i * vP );
+static Vector3i *IMDvec(int Vertex);
 
 iIMDShape *BSPimd=NULL;		// This is a global ... it is used in imddraw.c (for speed)
 
 
 // Local static variables
-static iVector *CurrentVertexList=NULL;
+static Vector3i *CurrentVertexList=NULL;
 //static int CurrentVertexListCount=0;
 
 
@@ -79,9 +79,9 @@ extern BOOL NoCullBSP;	// Oh yes... a global externaly referenced variable....
  * - psPlane structure containing the plane equation
  */
 /***************************************************************************/
-static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
+static inline int IsPointOnPlane( PSPLANE psPlane, Vector3i * vP )
 {
-	iVectorf	vecP;
+	Vector3f	vecP;
 	FRACT Dot;
 
 	/* validate input */
@@ -116,16 +116,16 @@ static inline int IsPointOnPlane( PSPLANE psPlane, iVector * vP )
 */
 typedef iIMDPoly * PSTRIANGLE;
 
-static iVectorf *iNormalise(iVectorf * v);
-static iVectorf * iCrossProduct( iVectorf * psD, iVectorf * psA, iVectorf * psB );
-static void GetTriangleNormal( PSTRIANGLE psTri, iVectorf * psN,int pA, int pB, int pC );
+static Vector3f *iNormalise(Vector3f * v);
+static Vector3f * iCrossProduct( Vector3f * psD, Vector3f * psA, Vector3f * psB );
+static void GetTriangleNormal( PSTRIANGLE psTri, Vector3f * psN, int pA, int pB, int pC );
 PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode);
 
 
 static FRACT GetDist( PSTRIANGLE psTri, int pA, int pB );
 
 // little routine for getting an imd vector structure in the IMD from the vertex ID
-static inline iVector *IMDvec(int Vertex)
+static inline Vector3i *IMDvec(int Vertex)
 {
 #ifdef BSP_MAXDEBUG
 	assert((Vertex>=0)&&(Vertex<CurrentVertexListCount));
@@ -146,7 +146,7 @@ in practise mathematically inacurraceys mean that  you need the three points tha
 void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane )
 {
 
-	iVectorf Result;
+	Vector3f Result;
 	iIMDPoly *psTri;
 	/* validate input */
 	ASSERT( PTRVALID(psPlane,sizeof(PLANE)),
@@ -211,7 +211,7 @@ void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane )
 	/* store first triangle vertex as point on plane for later point /
 	 * plane classification in IsPointOnPlane
 	 */
-	memcpy( &psPlane->vP, IMDvec(psTri->pindex[0]), sizeof(iVector) );
+	memcpy( &psPlane->vP, IMDvec(psTri->pindex[0]), sizeof(Vector3i) );
 }
 
 
@@ -223,7 +223,7 @@ void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane )
  */
 /***************************************************************************/
 
-static iVectorf * iCrossProduct( iVectorf * psD, iVectorf * psA, iVectorf * psB )
+static Vector3f * iCrossProduct( Vector3f * psD, Vector3f * psA, Vector3f * psB )
 {
     psD->x = FRACTmul(psA->y , psB->z) - FRACTmul(psA->z ,psB->y);
     psD->y = FRACTmul(psA->z , psB->x) - FRACTmul(psA->x ,psB->z);
@@ -250,9 +250,9 @@ static FRACT GetDist( PSTRIANGLE psTri, int pA, int pB )
 }
 
 
-static void GetTriangleNormal( PSTRIANGLE psTri, iVectorf * psN,int pA, int pB, int pC )
+static void GetTriangleNormal( PSTRIANGLE psTri, Vector3f * psN,int pA, int pB, int pC )
 {
-	iVectorf vecA, vecB;
+	Vector3f vecA, vecB;
 
 	/* validate input */
 	ASSERT( PTRVALID(psTri,sizeof(iIMDPoly)),
@@ -279,7 +279,7 @@ static void GetTriangleNormal( PSTRIANGLE psTri, iVectorf * psN,int pA, int pB, 
  */
 /***************************************************************************/
 
-static iVectorf *iNormalise(iVectorf * v)
+static Vector3f *iNormalise(Vector3f * v)
 {
     FRACT vx, vy, vz, mod, sum_square;
 
@@ -324,7 +324,7 @@ PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode)
 
 // Calculate the real camera position based on the coordinates of the camera and the camera
 // distance - the result is stores in CameraLoc ,,  up is +ve Y
-void GetRealCameraPos(OBJPOS *Camera,SDWORD Distance, iVector *CameraLoc)
+void GetRealCameraPos(OBJPOS *Camera, SDWORD Distance, Vector3i *CameraLoc)
 {
 	int Yinc;
 

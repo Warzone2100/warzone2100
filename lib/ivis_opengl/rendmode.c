@@ -41,7 +41,7 @@ iSurface	*psRendSurface;
 //*
 //******
 
-iSurface *iV_SurfaceCreate(uint32 flags, int width, int height, int xp, int yp, UBYTE *buffer)
+iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, UBYTE *buffer)
 {
 	iSurface *s;
 	int i;

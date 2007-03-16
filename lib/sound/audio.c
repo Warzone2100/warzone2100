@@ -28,6 +28,7 @@
 #include "lib/gamelib/priority.h"
 #include "aud.h"
 #include "lib/framework/trig.h"
+#include "lib/ivis_common/pietypes.h"
 
 //*
 //
@@ -38,19 +39,6 @@
 #define MAX_SAME_SAMPLES		2
 #define AUDIO_QUEUE_SIZE		30
 #define LOWERED_VOL				AUDIO_VOL_MAX / 4
-
-//*
-//
-
-//
-// -----------------------------------------------------------------------------------------------------------------------
-// *  structs
-// -----------------------------------------------------------------------------------------------------------------------
-//
-typedef struct	SDWVEC3D
-{
-	SDWORD	x, y, z;
-} SDWVEC3D;
 
 //*
 //
@@ -67,11 +55,10 @@ static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static BOOL			g_bAudioEnabled = FALSE;
 static BOOL			g_bAudioPaused = FALSE;
 static BOOL			g_bStopAll = FALSE;
-static AUDIO_SAMPLE g_sPreviousSample =
-{
+static AUDIO_SAMPLE g_sPreviousSample = {
 	NO_SAMPLE, SAMPLE_COORD_INVALID, SAMPLE_COORD_INVALID, SAMPLE_COORD_INVALID
 };
-static SDWORD		g_i3DVolume = AUDIO_VOL_MAX;
+static SDWORD g_i3DVolume = AUDIO_VOL_MAX;
 
 
 //*
@@ -528,7 +515,7 @@ static void audio_UpdateQueue( void )
 BOOL audio_Update( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SDWVEC3D		vecPlayer;
+	Vector3i		vecPlayer;
 	SDWORD			iA;
 	AUDIO_SAMPLE	*psSample, *psSampleTemp;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

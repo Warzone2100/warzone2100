@@ -131,7 +131,7 @@ BOOL	isHumanPlayer		(UDWORD player);				// determine if human
 BOOL	myResponsibility	(UDWORD player);				// this pc has comms responsibility
 BOOL	responsibleFor		(UDWORD player,UDWORD player2);	// has player responsibility for player2
 UDWORD	whosResponsible		(UDWORD player);				// returns player responsible for 'player'
-iVector	cameraToHome		(UDWORD player,BOOL scroll);
+Vector3i	cameraToHome		(UDWORD player,BOOL scroll);
 BOOL	DirectPlaySystemMessageHandler(void * msg);			// interpret DP messages
 BOOL	recvMessage			(void);							// process an incoming message
 BOOL	SendResearch		(UBYTE player,UDWORD index);	// send/recv Research issues
@@ -193,8 +193,8 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 // throw a pary when you win!
 BOOL multiplayerWinSequence(BOOL firstCall)
 {
-	static		iVector pos;
-	iVector		pos2;
+	static Vector3i pos;
+	Vector3i pos2;
 	static UDWORD last=0;
 	FRACT		fraction;
 	FRACT		rotAmount;
@@ -608,9 +608,9 @@ BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
-iVector cameraToHome(UDWORD player,BOOL scroll)
+Vector3i cameraToHome(UDWORD player,BOOL scroll)
 {
-	iVector res;
+	Vector3i res;
 	UDWORD x,y;
 	STRUCTURE	*psBuilding;
 
@@ -1336,7 +1336,7 @@ BOOL recvTextMessage(NETMSG *pMsg)
 		}
 	}
 
-	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid); 
+	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
 
 	//sprintf(msg, "%d", i);
 	strcpy(msg,NetPlay.players[i].name);

@@ -78,7 +78,7 @@ void	atmosInitSystem			( void );
 void	atmosUpdateSystem		( void );
 void	atmosDrawParticles		( void );
 void	processParticle			( ATPART *psPart );
-void	atmosAddParticle		( iVector *pos, AP_TYPE type );
+void	atmosAddParticle		( Vector3i *pos, AP_TYPE type );
 void	renderParticle			( ATPART *psPart );
 void	testParticleWrap		( ATPART *psPart );
 void	atmosSetWeatherType		( WT_CLASS type );
@@ -105,9 +105,9 @@ UDWORD	i;
 /* Move the particles */
 void	atmosUpdateSystem( void )
 {
-UDWORD	i;
-UDWORD	numberToAdd;
-iVector	pos;
+	UDWORD	i;
+	UDWORD	numberToAdd;
+	Vector3i pos;
 
 	/* Establish how long the last game frame took */
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
@@ -168,11 +168,10 @@ iVector	pos;
 /* Moves one of the particles */
 void	processParticle( ATPART *psPart )
 {
-SDWORD	groundHeight;
-iVector	pos;
-UDWORD	x,y;
-MAPTILE	*psTile;
-
+	SDWORD	groundHeight;
+	Vector3i pos;
+	UDWORD	x,y;
+	MAPTILE	*psTile;
 
 	/* Only move if the game isn't paused */
 	if(!gamePaused())
@@ -239,10 +238,10 @@ MAPTILE	*psTile;
 
 // -----------------------------------------------------------------------------
 /* Adds a particle to the system if it can */
-void	atmosAddParticle( iVector *pos, AP_TYPE type )
+void atmosAddParticle( Vector3i *pos, AP_TYPE type )
 {
-UDWORD	activeCount;
-UDWORD	i;
+	UDWORD	activeCount;
+	UDWORD	i;
 
 	for(i=freeParticle,activeCount=0; (asAtmosParts[i].status==APS_ACTIVE)
 		&& activeCount<MAX_ATMOS_PARTICLES; i++)
@@ -342,7 +341,7 @@ UDWORD	i;
 // -----------------------------------------------------------------------------
 void	renderParticle( ATPART *psPart )
 {
-	iVector	dv;
+	Vector3i dv;
 	UDWORD brightness, specular;
 	SDWORD centreX, centreZ;
 	SDWORD x, y, z;

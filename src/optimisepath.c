@@ -75,16 +75,16 @@ void	optimisePathForDroid(DROID *psDroid)
 #if 0
 	// didn't bother to get this to compile when I changed the PATH_POINT structure
 	// I'll sort it out later - John.
-UDWORD	index,stepIndex;
-UDWORD	angleA,angleB;
-SDWORD	x1,y1,x2,y2;
-UDWORD	bisectingAngle;
-SDWORD	xAlt,yAlt;
-UDWORD	tileX,tileY;
-iVector	pos;
-SDWORD	xDif,yDif;
-SDWORD	xRec,yRec;
-PATH_POINT	*moveList;
+	UDWORD	index,stepIndex;
+	UDWORD	angleA,angleB;
+	SDWORD	x1,y1,x2,y2;
+	UDWORD	bisectingAngle;
+	SDWORD	xAlt,yAlt;
+	UDWORD	tileX,tileY;
+	Vector3i pos;
+	SDWORD	xDif,yDif;
+	SDWORD	xRec,yRec;
+	PATH_POINT	*moveList;
 
 	index = 0;
 	/* Get a pointer to the movement list */

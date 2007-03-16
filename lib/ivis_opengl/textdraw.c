@@ -589,11 +589,11 @@ void pie_DrawText(char *string, UDWORD x, UDWORD y)
 void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow)
 {
 	int i, j, lineSkip;
-	uint8 *bp;
-	uint8 present;
+	Uint8 *bp;
+	Uint8 present;
 
 
-	bp = (uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y];
+	bp = (Uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y];
 
 	lineSkip = psRendSurface->width - w;
 	for (i=0; i<h; i++)
@@ -615,11 +615,11 @@ void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow
 void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow)
 {
 	int i, j, lineSkip;
-	uint8 *bp;
-	uint8 present;
+	Uint8 *bp;
+	Uint8 present;
 
 
-	bp = (uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y];
+	bp = (Uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y];
 
 	lineSkip = psRendSurface->width - w;
 	for (i=0; i<h; i++)

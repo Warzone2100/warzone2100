@@ -57,8 +57,8 @@ void	iVBlitPixelTransRect(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1);
 static void pie_BuildTransTable(UDWORD tableNo);
 
 // dummy prototypes for pointer build functions
-void (*iV_pBox)(int x0, int y0, int x1, int y1, uint32 colour);
-void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
+void (*iV_pBox)(int x0, int y0, int x1, int y1, Uint32 colour);
+void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, Uint32 colour);
 
 //*************************************************************************
 //*************************************************************************

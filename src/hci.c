@@ -7184,10 +7184,9 @@ DROID* intCheckForDroid(UDWORD droidType)
 	DROID	*psDroid, *psSel = NULL;
 
 //	clearSelection();
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-		psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if (psDroid->selected && psDroid->droidType == (SDWORD)droidType)
+		if (psDroid->selected && psDroid->droidType == droidType)
 		{
 			if (psSel != NULL)
 			{
@@ -7220,7 +7219,7 @@ SDWORD intNumSelectedDroids(UDWORD droidType)
 	num = 0;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->selected && psDroid->droidType == (SDWORD)droidType)
+		if (psDroid->selected && psDroid->droidType == droidType)
 		{
 			num += 1;
 		}

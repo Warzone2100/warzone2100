@@ -20,7 +20,7 @@
 #ifndef _texture_h
 #define _texture_h
 
-extern iSprite tilesPCX;
+extern iTexture tilesPCX;
 
 int makeTileTextures(void);
 int remakeTileTextures(void);

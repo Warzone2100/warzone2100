@@ -58,10 +58,10 @@
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Line(int x0, int y0, int x1, int y1, uint32 colour);
-extern void pie_Box(int x0,int y0, int x1, int y1, uint32 colour);
+extern void pie_Line(int x0, int y0, int x1, int y1, Uint32 colour);
+extern void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour);
 extern void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour);
-extern void pie_BoxFill(int x0,int y0, int x1, int y1, uint32 colour);
+extern void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour);
 extern void pie_DrawImageFileID(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
 extern void pie_ImageFileID(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
 extern void pie_ImageFileIDTile(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0,int Width,int Height);

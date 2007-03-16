@@ -2835,7 +2835,7 @@ BOOL bOrderEffectDisplayed = FALSE;
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 
-	iVector		position;
+	Vector3i position;
 
 	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
 		"orderUnitAdd: invalid unit pointer" );

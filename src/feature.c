@@ -964,7 +964,7 @@ void removeFeature(FEATURE *psDel)
 	UDWORD		mapX, mapY, width,breadth, player;
 	MAPTILE		*psTile;
 	MESSAGE		*psMessage;
-	iVector		pos;
+	Vector3i pos;
 
 //	iVector		dv;
 //	UWORD		uwFlameCycles, uwFlameAnims, i;
@@ -1064,7 +1064,7 @@ void destroyFeature(FEATURE *psDel)
 {
 	UDWORD			widthScatter,breadthScatter,heightScatter, i;
 	EFFECT_TYPE		explosionSize;
-	iVector			pos;
+	Vector3i pos;
 	UDWORD			width,breadth;
 	UDWORD			mapX,mapY;
 	MAPTILE			*psTile;

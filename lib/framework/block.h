@@ -19,7 +19,7 @@
 */
 /*! \file block.h
  * \brief Routines to allocate memory from one large block.
- * 
+ *
  * Any memory allocated is only available to be reallocated after
  * the whole block has been reset.
  */
@@ -28,11 +28,6 @@
 
 #include "mem.h"
 #include "memint.h"
-
-// control whether the debugging block malloc is used
-#if DEBUG_MALLOC
-#define DEBUG_BLOCK
-#endif
 
 /**********************************************************************************/
 /*                    type definitions                                            */
@@ -51,13 +46,13 @@ typedef struct _block_heap
 {
 	SDWORD		init, ext;		// initial and extension block sizes
 	BLOCK_HEAP_MEM	*psBlocks;
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	const char	*pFileName;
 	SDWORD		line;
 	MEM_NODE	*psMemTreap;	// treap of the memory blocks
 	BOOL		free;			// whether free has been called for this block
 	const char	*pFreeFile;		// where the last free was called from
-	SDWORD		freeLine;	
+	SDWORD		freeLine;
 	UDWORD		TotalAllocated;	// Total amount of bytes used in the block (sum of all alloc's)
 #endif
 
@@ -113,7 +108,7 @@ void blockUnsuspendUsage(void);
 /*                    macro definitions                                           */
 
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 
 #define BLOCK_CREATE(ppsHeap, init, ext) \
 	(blkCallPos(__FILE__, __LINE__), \

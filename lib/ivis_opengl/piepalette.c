@@ -31,7 +31,7 @@
 #define BLUE_CHROMATICITY	1
 
 
-uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b);
+Uint8 pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
 void pie_SetColourDefines(void);
 /*
 	This is how far from the end you want the drawn as the artist intended shades
@@ -41,9 +41,9 @@ void pie_SetColourDefines(void);
 #define COLOUR_BALANCE	6		// 3 from the end. (two brighter shades!)
 
 iColour*			psGamePal = NULL;
-uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
+Uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 BOOL	bPaletteInitialised = FALSE;
-uint8	colours[16];
+Uint8	colours[16];
 
 
 //*************************************************************************
@@ -122,11 +122,11 @@ void pal_ShutDown(void)
 	}
 }
 
-uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
+Uint8 pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b)
 {
 	int c ;
-	int32 distance_r, distance_g, distance_b, squared_distance;
-	int32 best_colour = 0, best_squared_distance;
+	Sint32 distance_r, distance_g, distance_b, squared_distance;
+	Sint32 best_colour = 0, best_squared_distance;
 
 	ASSERT( bPaletteInitialised,"pal_GetNearestColour, palette not initialised." );
 
@@ -150,7 +150,7 @@ uint8 pal_GetNearestColour(uint8 r, uint8 g, uint8 b)
 	{
 		best_colour = 1;
 	}
-	return ((uint8) best_colour);
+	return ((Uint8) best_colour);
 }
 
 void pal_BuildAdjustedShadeTable( void )
@@ -179,7 +179,7 @@ int		numShades;
 			if(seekBlue >255) seekBlue = 255;
 
 			palShades[(numColours * PALETTE_SHADE_LEVEL) + (numShades-COLOUR_BALANCE)] =
-				pal_GetNearestColour((uint8) seekRed, (uint8) seekGreen, (uint8) seekBlue);
+				pal_GetNearestColour((Uint8) seekRed, (Uint8) seekGreen, (Uint8) seekBlue);
 		}
 	}
 }

@@ -1155,7 +1155,7 @@ typedef struct _save_flag_v18
 	UDWORD			screenR;
 	UDWORD			player;				/*which player the Position belongs to*/
 	BOOL			selected;			/*flag to indicate whether the Position */
-	iVector		coords;							//the world coords of the Position
+	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
 	UBYTE		dummyNOTUSED;						//sub value. needed to order production points.
@@ -1171,7 +1171,7 @@ typedef struct _save_flag
 	UDWORD			screenR;
 	UDWORD			player;				/*which player the Position belongs to*/
 	BOOL			selected;			/*flag to indicate whether the Position */
-	iVector		coords;							//the world coords of the Position
+	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
 	UBYTE		dummyNOTUSED;						//sub value. needed to order production points.
@@ -4973,7 +4973,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		else
 	 	{
 			id = getStructStatFromName(psSaveDroidV14->tarStatName);
-			if (id != -1)
+			if (id != (UDWORD)-1)
 			{
 				psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
 			}
@@ -5009,7 +5009,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		else
 		{
 			id = getStructStatFromName(psSaveDroid->tarStatName);
-			if (id != -1)
+			if (id != (UDWORD)-1)
 			{
 				psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
 			}
@@ -5236,7 +5236,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	else
 	{
 		id = getStructStatFromName(psSaveDroid->tarStatName);
-		if (id != -1)
+		if (id != (UDWORD)-1)
 		{
 			psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
 		}
@@ -6595,14 +6595,14 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
         //check not trying to build too near the edge
     	if(((psSaveStructure->x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->x >> TILE_SHIFT) > (SDWORD)(mapWidth - TOO_NEAR_EDGE)))
+            psSaveStructure->x >> TILE_SHIFT) > (mapWidth - TOO_NEAR_EDGE)))
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
             continue;
         }
     	if(((psSaveStructure->y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->y >> TILE_SHIFT) > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
+            psSaveStructure->y >> TILE_SHIFT) > (mapHeight - TOO_NEAR_EDGE)))
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
@@ -6682,7 +6682,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 				((RESEARCH_FACILITY *)psStructure->pFunctionality)->researchPoints =
 					psSaveStructure->output;
 				((RESEARCH_FACILITY *)psStructure->pFunctionality)->timeStarted = (psSaveStructure->timeStarted);
-				if (psSaveStructure->subjectInc != -1)
+				if (psSaveStructure->subjectInc != (UDWORD)-1)
 				{
 					((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject = (BASE_STATS *)
 						(asResearch + psSaveStructure->subjectInc);
@@ -6882,14 +6882,14 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
         }*/
         //check not trying to build too near the edge
     	if(((psSaveStructure->x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->x >> TILE_SHIFT) > (SDWORD)(mapWidth - TOO_NEAR_EDGE)))
+            psSaveStructure->x >> TILE_SHIFT) > (mapWidth - TOO_NEAR_EDGE)))
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
             continue;
         }
     	if(((psSaveStructure->y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->y >> TILE_SHIFT) > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
+            psSaveStructure->y >> TILE_SHIFT) > (mapHeight - TOO_NEAR_EDGE)))
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
@@ -7330,14 +7330,14 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
         }*/
         //check not trying to build too near the edge
     	if(((psSaveStructure->x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->x >> TILE_SHIFT) > (SDWORD)(mapWidth - TOO_NEAR_EDGE)))
+            psSaveStructure->x >> TILE_SHIFT) > (mapWidth - TOO_NEAR_EDGE)))
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
 			abort();
             continue;
         }
     	if(((psSaveStructure->y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->y >> TILE_SHIFT) > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
+            psSaveStructure->y >> TILE_SHIFT) > (mapHeight - TOO_NEAR_EDGE)))
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
 			abort();
@@ -11809,7 +11809,7 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 
 
 // draws the structures onto a completed map preview sprite.
-BOOL plotStructurePreview(iSprite *backDropSprite,UBYTE scale,UDWORD offX,UDWORD offY)
+BOOL plotStructurePreview(iTexture *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY)
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
 	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...

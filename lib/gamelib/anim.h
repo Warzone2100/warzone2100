@@ -65,7 +65,7 @@ struct BASEANIM;
 /* ensure ANIM2D/3D structs same size */
 #define ANIM_2D_ELEMENTS						\
 	ANIM_BASE_ELEMENTS							\
-	iSprite		*psFrames;						\
+	iTexture		*psFrames;						\
 	UWORD		uwBmapWidth;	/* width of container bitmap */
 
 /* ensure ANIM2D/3D structs same size */

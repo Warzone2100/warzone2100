@@ -673,7 +673,7 @@ void addLoserGifts(void)
 {
 //	DROID			*psD;
 //	DROID_TEMPLATE	*psTempl;
-//	iVector			position;
+//	Vector3i			position;
 	static UDWORD	lastgift=0;
 	UDWORD			i,x,y,quantity,count;
 	UWORD			nx,ny;
@@ -933,7 +933,7 @@ void processMultiPlayerArtifacts(void)
 	static UDWORD lastCall;
 	FEATURE	*pF,*pFN;
 	UDWORD	x,y,pl;
-	iVector position;
+	Vector3i position;
 	BOOL	found=FALSE;
 
 	// only do this every now and again.

@@ -38,27 +38,22 @@
  *	Global Type Definitions
  */
 /***************************************************************************/
-typedef Sint32 int32;
-typedef Uint8 uint8;
-typedef Uint16 uint16;
-typedef Uint32 uint32;
-
 //*************************************************************************
 //
 // Simple derived types
 //
 //*************************************************************************
-typedef struct { Sint32 left, top, right, bottom; } iClip;
-typedef char iBitmap;
+typedef struct { Sint32 x, y; } Vector2i;
+typedef struct { Sint32 x, y, z; } Vector3i;
+typedef struct { float x, y, z; } Vector3f;
+
+typedef struct { Vector3i p, r; } iView;
+typedef struct { Sint32 x, y, z, u, v; Uint8 g; } iVertex;
+
 typedef struct { Uint8 r, g, b; } iColour;
 typedef iColour iPalette[256];
-typedef struct { Sint32 x, y; } iPoint;
-typedef struct { Sint32 x, y, z; } iVector;
-typedef struct { double x, y, z; } iVectorf;
+
+typedef char iBitmap;
 typedef struct { Sint32 width, height; iBitmap *bmp; } iTexture;
-typedef iTexture iSprite;
-typedef struct { Sint32 x, y, z, u, v; uint8 g; } iVertex;
-typedef struct { float x, y, z; } PIEVECTORF;
-typedef struct { iVector p, r; } iView;
 
 #endif // _pieTypes_h

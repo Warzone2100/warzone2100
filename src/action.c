@@ -444,7 +444,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	FRACT	fR;
 	SDWORD	pitchLowerLimit, pitchUpperLimit;
 	DROID	*psDroid = NULL;
-//	iVector	muzzle;
+//	Vector3i	muzzle;
 
     //these are constants now and can be set up at the start of the function
     rotRate = ACTION_TURRET_ROTATION_RATE;

@@ -52,11 +52,10 @@ SDMATRIX *psMatrix = &aMatrixStack[0];
 
 BOOL drawing_interface = TRUE;
 
-void pie_VectorNormalise(iVector *v)
-
+void pie_VectorNormalise(Vector3i *v)
 {
-	int32 size;
-	iVector av;
+	Sint32 size;
+	Vector3i av;
 
 	av.x = pie_ABS(v->x);
 	av.y = pie_ABS(v->y);
@@ -92,10 +91,9 @@ void pie_VectorNormalise(iVector *v)
 //*
 //******
 
-void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v)
-
+void pie_SurfaceNormal(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
 {
-	iVector a, b;
+	Vector3i a, b;
 
 	a.x = p3->x - p1->x;
 	a.y = p3->y - p1->y;
@@ -356,10 +354,10 @@ void pie_MatRotX(int x)
 //*
 //******
 
-int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
+Sint32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
 {
-	int32 zfx, zfy;
-	int32 zz, _x, _y, _z;
+	Sint32 zfx, zfy;
+	Sint32 zz, _x, _y, _z;
 
 
 	_x = x * psMatrix->a+y * psMatrix->d+z * psMatrix->g + psMatrix->j;
@@ -390,7 +388,7 @@ int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
 	return zz;
 }
 
-int32 pie_RotProj(iVector *v3d, iPoint *v2d)
+Sint32 pie_RotProj(Vector3i *v3d, Vector2i *v2d)
 {
 	return pie_RotateProject(v3d->x, v3d->y, v3d->z, &(v2d->x), &(v2d->y));
 }
@@ -463,9 +461,9 @@ BOOL pie_PieClockwise(PIEVERTEX *s)
 //*
 //******
 
-void pie_VectorInverseRotate0(iVector *v1, iVector *v2)
+void pie_VectorInverseRotate0(Vector3i *v1, Vector3i *v2)
 {
-	int32 x, y, z;
+	Sint32 x, y, z;
 
 	x = v1->x; y = v1->y; z = v1->z;
 
@@ -493,9 +491,9 @@ void pie_MatInit(void)
 		v = (double) sin(i * conv) * FP12_MULTIPLIER;
 
 		if (v >= 0.0)
-			aSinTable[i] = (int32)(v + 0.5);
+			aSinTable[i] = (Sint32)(v + 0.5);
 		else
-			aSinTable[i] = (int32)(v - 0.5);
+			aSinTable[i] = (Sint32)(v - 0.5);
 	}
 
 	// init matrix/quat stack

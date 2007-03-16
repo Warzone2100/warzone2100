@@ -741,7 +741,7 @@ BOOL dataIMDBufferLoad(char *pBuffer, UDWORD size, void **ppData)
 
 BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	iSprite *psSprite = (iSprite*) MALLOC(sizeof(iSprite));
+	iTexture *psSprite = (iTexture*) MALLOC(sizeof(iTexture));
 	if (!psSprite)	{
 		return FALSE;
 	}
@@ -760,7 +760,7 @@ BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
 
 void dataIMGPAGERelease(void *pData)
 {
-	iSprite *psSprite = (iSprite*) pData;
+	iTexture *psSprite = (iTexture*) pData;
 	dataISpriteRelease(psSprite);
 }
 
@@ -812,7 +812,7 @@ BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 
 void dataHWTERTILESRelease(void *pData)
 {
-	iSprite *psSprite = (iSprite*) pData;
+	iTexture *psSprite = (iTexture*) pData;
 
 	freeTileTextures();
 	if( psSprite->bmp )
@@ -852,7 +852,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	TEXTUREPAGE *NewTexturePage;
 	iPalette	*psPal;
-	iSprite		*psSprite;
+	iTexture *psSprite;
 	char		texfile[255];
 	SDWORD		i, id;
 
@@ -907,7 +907,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		psPal = (iPalette*)MALLOC(sizeof(iPalette));
 		if (!psPal) return FALSE;
 
-		psSprite = (iSprite*)MALLOC(sizeof(iSprite));
+		psSprite = (iTexture*)MALLOC(sizeof(iTexture));
 		if (!psSprite)
 		{
 			return FALSE;
@@ -934,7 +934,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 /* Release an iSprite */
 void dataISpriteRelease(void *pData)
 {
-	iSprite *psSprite = (iSprite*) pData;
+	iTexture *psSprite = (iTexture*) pData;
 
 	if( psSprite )
 	{

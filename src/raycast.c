@@ -490,9 +490,10 @@ UDWORD getTileTallObj(UDWORD x, UDWORD y)
 //-----------------------------------------------------------------------------------
 static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
-SDWORD	heightDif;
-UDWORD	height;
-//iVector	pos;
+	SDWORD	heightDif;
+	UDWORD	height;
+	//Vector3i	pos;
+
 	if(clipXY(x,y))
 	{
 		height = map_Height(x,y);
@@ -520,15 +521,15 @@ UDWORD	height;
 /* Will return false when we've hit the edge of the grid */
 static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
-SDWORD	height,heightDif;
-FRACT	newPitch;
-BOOL HasTallStructure = FALSE;
+	SDWORD	height,heightDif;
+	FRACT	newPitch;
+	BOOL HasTallStructure = FALSE;
 #ifdef TEST_RAY
-iVector	pos;
+	Vector3i pos;
 #endif
 
 	/* Are we still on the grid? */
-   	if(clipXY(x,y))
+	if(clipXY(x,y))
 	{
 		HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT));
 

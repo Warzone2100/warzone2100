@@ -174,7 +174,7 @@ BOOL screenInitialise(
 		debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).", SDL_GetError() );
 		return FALSE;
 	}
-	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1) 
+	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
 	}
@@ -448,7 +448,7 @@ void screen_SetBackDropFromFile(char* filename)
 	}
 	else if( strcmp(extension,".png") == 0 )
 	{
-		iSprite imagePNG;
+		iTexture imagePNG;
 		char * buffer = NULL;
 		unsigned int dummy = 0;
 

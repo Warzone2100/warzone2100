@@ -203,10 +203,10 @@ UBYTE			frameNumber;	// what frame number is the imd on?
 UWORD			size;			// Size in terms of percent of original imd.
 UBYTE			baseScale;		// if scaled, what's bottom line?
 UBYTE			specific;		// how many times has it bounced?
-PIEVECTORF		position;		// world coordinates of the effect - floats on the PC.
-PIEVECTORF		velocity;		// movement values per update
-iVector			rotation;		// current rotation - only for gravitons
-iVector			spin;			// rotation info for spinning things.
+Vector3f		position;		// world coordinates of the effect - floats on the PC.
+Vector3f		velocity;		// movement values per update
+Vector3i			rotation;		// current rotation - only for gravitons
+Vector3i			spin;			// rotation info for spinning things.
 UDWORD			birthTime;		// what time was it introduced into the world?
 UDWORD			lastFrame;		// when did we last update the frame?
 UWORD			frameDelay;		// how many game ticks between each frame?
@@ -225,9 +225,9 @@ extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
 
 extern void	initEffectsSystem		( void );
 extern void	processEffects			( void );
-extern void	addEffect				( iVector *pos, EFFECT_GROUP group,
+extern void	addEffect				( Vector3i *pos, EFFECT_GROUP group,
 										EFFECT_TYPE type, BOOL specified, struct iIMDShape *imd, BOOL lit );
-extern void	addMultiEffect			( iVector *basePos, iVector *scatter,EFFECT_GROUP group,
+extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP group,
 									EFFECT_TYPE type,BOOL specified, struct iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
 
 extern void drawEffects				( void );

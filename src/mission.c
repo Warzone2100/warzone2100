@@ -3906,7 +3906,7 @@ void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 
 void addLandingLights( UDWORD x, UDWORD y)
 {
-iVector	pos;
+	Vector3i pos;
 
 	pos.x = x;
 	pos.z = y;

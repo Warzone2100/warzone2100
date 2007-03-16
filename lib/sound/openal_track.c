@@ -72,7 +72,7 @@ static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 
 static ALvoid	*data = NULL; // Needed for ReadTrackFromBuffer, must be global, so it can be free'd on shutdown
-static UDWORD DataBuffer_size = 16 * 1024;
+static ALsizei DataBuffer_size = 16 * 1024;
 
 BOOL openal_initialized = FALSE;
 
@@ -206,7 +206,7 @@ void sound_Update( void )
 
 			default:
 				sound_FinishedCallback( i->curr );
-				if (i->curr->iSample != AL_INVALID) {
+				if (i->curr->iSample != (ALuint)AL_INVALID) {
 					alDeleteSources( 1, &(i->curr->iSample) );
 					i->curr->iSample = AL_INVALID;
 				}
@@ -232,7 +232,7 @@ void sound_Update( void )
 //
 BOOL sound_QueueSamplePlaying( void )
 {
-	if ( current_queue_sample == -1 )
+	if ( current_queue_sample == (ALuint)AL_INVALID )
 	{
 		return FALSE;
 	}
@@ -249,7 +249,7 @@ BOOL sound_QueueSamplePlaying( void )
 		}
 		else
 		{
-			if (current_queue_sample != AL_INVALID) {
+			if (current_queue_sample != (ALuint)AL_INVALID) {
 				alDeleteSources( 1, &current_queue_sample );
 				current_queue_sample = AL_INVALID;
 			}
@@ -718,10 +718,11 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 	}
 	else
 	{
-				if (psSample->iSample != AL_INVALID) {
-					alDeleteSources( 1, &(psSample->iSample) );
-					psSample->iSample = AL_INVALID;
-				}
+		if (psSample->iSample != (ALuint)AL_INVALID)
+		{
+			alDeleteSources( 1, &(psSample->iSample) );
+			psSample->iSample = AL_INVALID;
+		}
 		return TRUE;
 	}
 }

@@ -132,7 +132,7 @@ BOOL blkCreate(BLOCK_HEAP **ppsHeap, SDWORD init, SDWORD ext)
 	(*ppsHeap)->psBlocks->pFree = (*ppsHeap)->psBlocks->pMem;
 	(*ppsHeap)->psBlocks->psNext = NULL;
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	(*ppsHeap)->pFileName = pCallFileName;
 	(*ppsHeap)->line = callLine;
 	(*ppsHeap)->psMemTreap = NULL;
@@ -150,7 +150,7 @@ void blkDestroy(BLOCK_HEAP *psHeap)
 {
 	BLOCK_HEAP_MEM	*psCurr, *psNext;
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	if (psHeap->psMemTreap != NULL)
 	{
 		debug( LOG_NEVER, "blkDestroy: %s at %d: memory allocated :\n", psHeap->pFileName, psHeap->line );
@@ -171,15 +171,16 @@ void blkDestroy(BLOCK_HEAP *psHeap)
 	RFREE(psHeap);
 }
 
-void memMemoryDump(MEM_NODE *Node);
 
+#ifdef DEBUG_MALLOC
+void memMemoryDump(MEM_NODE *Node);
+#endif
 
 void blkPrintDetails(BLOCK_HEAP *psHeap)
 {
 	if (psHeap!=NULL)
 	{
-
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 		UDWORD Left = (UDWORD)((psHeap->psBlocks->pMem)+(psHeap->psBlocks->size)-(psHeap->psBlocks->pFree));
 		debug( LOG_NEVER, "ptr=%p init=%d ext=%d used=%d (Start=$%p Free=$%p Left=%d)\n", psHeap,psHeap->init, psHeap->ext,psHeap->TotalAllocated, psHeap->psBlocks->pMem, psHeap->psBlocks->pFree, Left );
 		memMemoryDump(psHeap->psMemTreap);
@@ -243,7 +244,7 @@ BOOL blkSpecialFree(BLOCK_HEAP *psHeap, void *Ptr)
 
 		if ((UDWORD)psCurr->pLastAllocated == RequestedFreeMem)
 		{
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 
 			UDWORD BlockSize=((UDWORD)psCurr->pFree)-RequestedFreeMem;
 			debug( LOG_NEVER, "FREED %d block bytes\n", BlockSize ); // del me now !
@@ -268,16 +269,13 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 	void			*pAlloc;
 	BLOCK_HEAP_MEM	*psCurr, *psNew;
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	SDWORD			allocSize;
 	MEM_NODE		*psNode;
 #endif
 
-
-
 	// Round up to nearest 4 bytes ( 32 bit align ).. Neaded for Playstation.. PD.
 	size = (size + 3) & 0xfffffffc;
-
 
 	// can't allocate 0 bytes
 	if (size <= 0)
@@ -286,7 +284,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 		return NULL;
 	}
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	// see if free has been called for this block
 	if (psHeap->free)
 	{
@@ -353,7 +351,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 		psCurr->psNext = psNew;
 	}
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	if (!pAlloc)
 	{
 		// failed to allocate the memory
@@ -403,7 +401,7 @@ void *blkAlloc(BLOCK_HEAP *psHeap, SDWORD size)
 // this only does anything whith DEBUG_BLOCK defined
 void blkFree(BLOCK_HEAP *psHeap, void *pMemToFree)
 {
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	MEM_NODE	sNode, *psDeleted;
 	SDWORD		i, InvalidBottom, InvalidTop;
 	UBYTE		*pMemBase;
@@ -508,7 +506,7 @@ void blkReset(BLOCK_HEAP *psHeap)
 	SDWORD		block=0, alloc=0;
 #endif
 
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	if (psHeap->psMemTreap != NULL)
 	{
 		debug( LOG_NEVER, "blkReset: %s at %d: memory allocated :\n", psHeap->pFileName, psHeap->line );
@@ -533,7 +531,7 @@ void blkReset(BLOCK_HEAP *psHeap)
 		alloc += psCurr->pFree - psCurr->pMem;
 		block += psCurr->size;
 #endif
-#if defined(DEBUG_BLOCK) && MEMORY_SET
+#if defined(DEBUG_MALLOC) && MEMORY_SET
 		memset(psCurr->pMem, FREE_BYTE, psCurr->size);
 #endif
 		psCurr->pFree = psCurr->pMem;
@@ -569,7 +567,7 @@ BLOCK_HEAP *blkFind(void *pPtr)
 // check if a pointer is valid in a block
 BOOL blkPointerValid(BLOCK_HEAP *psHeap, void *pData, SDWORD size)
 {
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	MEM_NODE	sNode;
 	void *Tmp;
 
@@ -606,7 +604,7 @@ BOOL blkPointerValid(BLOCK_HEAP *psHeap, void *pData, SDWORD size)
 // check if a pointer is valid in any currently allocated block
 BOOL blkPointerValidAll(void *pData, SDWORD size)
 {
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	BLOCK_HEAP	*psCurr;
 
 	for(psCurr=psBlockList; psCurr; psCurr=psCurr->psNext)

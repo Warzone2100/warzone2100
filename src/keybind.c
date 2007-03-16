@@ -2385,13 +2385,13 @@ void kf_ScriptTest( void )
 // --------------------------------------------------------------------------
 void kf_TriggerShockWave( void )
 {
-iVector	pos;
+	Vector3i pos;
 
-		pos.x = mouseTileX*TILE_UNITS + TILE_UNITS/2;
-		pos.z = mouseTileY*TILE_UNITS + TILE_UNITS/2;
-		pos.y = map_Height(pos.x,pos.z) + SHOCK_WAVE_HEIGHT;
+	pos.x = mouseTileX*TILE_UNITS + TILE_UNITS/2;
+	pos.z = mouseTileY*TILE_UNITS + TILE_UNITS/2;
+	pos.y = map_Height(pos.x,pos.z) + SHOCK_WAVE_HEIGHT;
 
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,FALSE,NULL,0);
+	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,FALSE,NULL,0);
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleMouseInvert( void )

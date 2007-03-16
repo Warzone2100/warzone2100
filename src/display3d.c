@@ -146,7 +146,7 @@ void	preprocessTiles(void);
 //void	postprocessTiles(void);
 BOOL	renderWallSection(STRUCTURE *psStructure);
 void	buildTileTextures(void);
-void	draw3dLine(iVector *src, iVector *dest, UBYTE col);
+void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
 UDWORD	getSuggestedPitch			( void );
 void	drawDragBox					( void );
 void	calcScreenCoords			( DROID *psDroid );
@@ -160,9 +160,9 @@ void	flipsAndRots				( int texture );
 void	displayTerrain				( void );
 void	draw3DScene					( void );
 iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
-void	RenderCompositeDroid		( UDWORD Index,iVector *Rotation,
-									  iVector *Position,
-									  iVector *TurretRotation,
+void	RenderCompositeDroid		( UDWORD Index, Vector3i *Rotation,
+									  Vector3i *Position,
+									  Vector3i *TurretRotation,
 									  DROID *psDroid,BOOL RotXYZ );
 void	drawTiles					( iView *camera, iView *player );
 void	display3DProjectiles		( void );
@@ -236,7 +236,7 @@ BOOL	selectAttempt = FALSE;
 iView	player, camera;
 
 /* Temporary rotation vectors to store rotations for droids etc */
-iVector	imdRot,imdRot2;
+Vector3i	imdRot,imdRot2;
 
 /* How far away are we from the terrain */
 UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
@@ -276,7 +276,7 @@ BOOL	radarOnScreen=FALSE;
 BOOL  rangeOnScreen = FALSE;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
 /* Temporary values for the terrain render - top left corner of grid to be rendered */
-int32 playerXTile, playerZTile, rx, rz;
+Sint32 playerXTile, playerZTile, rx, rz;
 
 /* Have we located the mouse? */
 BOOL	mouseLocated = TRUE;
@@ -293,7 +293,7 @@ UDWORD	cameraHeight = 400;
 
 // The maximum number of points for flattenImd
 #define MAX_FLATTEN_POINTS	 255
-static iVector	alteredPoints[MAX_FLATTEN_POINTS];
+static Vector3i	alteredPoints[MAX_FLATTEN_POINTS];
 
 //number of tiles visible
 UDWORD	visibleXTiles;
@@ -332,7 +332,9 @@ static UDWORD	destTileX=0,destTileY=0;
 #define FOUNDATION_TEXTURE		22
 #define EFFECT_DELIVERY_POINT_TRANSPARENCY		128
 
+#ifdef DEBUG
 static char buildInfo[255];
+#endif
 
 typedef struct	_defaultColours
 {
@@ -431,7 +433,7 @@ BOOL		bPlayerHasHQ = FALSE;
 	renderSky();
 	// draw terrain
    	displayTerrain();
-   	
+
 	pie_BeginInterface();
 	updateLightLevels();
 	drawDroidSelections();
@@ -514,7 +516,7 @@ BOOL		bPlayerHasHQ = FALSE;
 		{
 			if(apsDroidLists[0])
 			{
-				iVector	pos;
+				Vector3i	pos;
 				UDWORD	i;
 				pos.x = apsDroidLists[0]->x;
 				pos.z = apsDroidLists[0]->y;
@@ -658,7 +660,7 @@ void displayTerrain(void)
 
 
 // Parameter is the vector to store the camera position
-static void CalcBSPCameraPos(iVector *NewBSPCamera)
+static void CalcBSPCameraPos(Vector3i *NewBSPCamera)
 {
 		OBJPOS Camera;
 
@@ -700,7 +702,7 @@ void drawTiles(iView *camera, iView *player)
 {
 	SDWORD	i,j;
 	SDWORD	zMax;
-	iVector BSPCamera;
+	Vector3i BSPCamera;
 	MAPTILE	*psTile;
 	UDWORD	specular;
 	UDWORD	tilesRejected;
@@ -806,7 +808,7 @@ void drawTiles(iView *camera, iView *player)
 				tileScreenInfo[i][j].x = ((j-terrainMidX)<<TILE_SHIFT);
 				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
 				tileScreenInfo[i][j].z = ((terrainMidY-i)<<TILE_SHIFT);
-				tileScreenInfo[i][j].sz = pie_RotProj((iVector*)&tileScreenInfo[i][j].x,(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
 
 			   	if (pie_GetFogEnabled())
 			  	{
@@ -898,7 +900,7 @@ void drawTiles(iView *camera, iView *player)
 						TileIllum = (UBYTE)((TileIllum*3)/4);
 					}
 
-				tileScreenInfo[i][j].sz = pie_RotProj((iVector*)&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].sx);
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum,rx-tileScreenInfo[i][j].x,rz - ((i-terrainMidY)<<TILE_SHIFT),&specular);
 
@@ -914,7 +916,7 @@ void drawTiles(iView *camera, iView *player)
 						}
 
 						// Transform it into the wx,wy mesh members.
-						tileScreenInfo[i][j].wz = pie_RotProj((iVector*)&tileScreenInfo[i][j],(iPoint *)&tileScreenInfo[i][j].wx);
+						tileScreenInfo[i][j].wz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].wx);
 						tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
 							TileIllum, rx-tileScreenInfo[i][j].x,		  // cos altval can go to 20
 							rz - ((i-terrainMidY)<<TILE_SHIFT), &specular);
@@ -1318,7 +1320,7 @@ void display3DProjectiles( void )
 void	renderProjectile(PROJ_OBJECT *psCurr)
 {
 	WEAPON_STATS	*psStats;
-	iVector			dv;
+	Vector3i			dv;
 	iIMDShape		*pIMD;
 	UDWORD			brightness, specular;
 //	SDWORD		centreX, centreZ;
@@ -1397,7 +1399,7 @@ void	renderProjectile(PROJ_OBJECT *psCurr)
 void
 renderAnimComponent( COMPONENT_OBJECT *psObj )
 {
-	iVector		dv;
+	Vector3i		dv;
 	SDWORD		posX, posY, posZ, iPlayer;
 	BASE_OBJECT	*psParentObj = (BASE_OBJECT *) psObj->psParent;
 	DROID		*psDroid;
@@ -2052,8 +2054,8 @@ UDWORD		featX,featY;
 SDWORD		rotation;
 //SDWORD		centreX,centreZ;
 UDWORD		brightness, specular;
-iVector		dv;
-iVector		*vecTemp;
+Vector3i dv;
+Vector3i *vecTemp;
 BOOL		bForceDraw;
 
 
@@ -2147,7 +2149,7 @@ BOOL		bForceDraw;
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 {
 	UDWORD			msgX = 0, msgY = 0;
-	iVector			dv = { 0, 0, 0 };
+	Vector3i			dv = { 0, 0, 0 };
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r;
 	iIMDShape		*proxImd = NULL;
@@ -2272,29 +2274,29 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 // FIXME: this function is not completely multiple weapons compatible
 void	renderStructure(STRUCTURE *psStructure)
 {
-SDWORD			structX,structY;
-SDWORD			sX,sY;
-iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd,*flashImd;
-iIMDShape		*mountImd[STRUCT_MAXWEAPS];
-iIMDShape		*weaponImd[STRUCT_MAXWEAPS];
-iIMDShape		*flashImd[STRUCT_MAXWEAPS];
-SDWORD			rotation;
-SDWORD			frame;
-SDWORD			playerFrame;
-SDWORD			animFrame;
-UDWORD			nWeaponStat;
-UDWORD			buildingBrightness, specular;
-iVector			dv;
-SDWORD			i;
-iIMDShape		*lImd,*imd;
-iVector			*temp = NULL;
-SDWORD			brightVar;
-BOOL			bHitByElectronic = FALSE;
-SDWORD			yVar;
-iIMDShape		*pRepImd;
-REPAIR_FACILITY		*psRepairFac = NULL;
-BOOL            defensive = FALSE;
-SDWORD			pointHeight,strHeight,shift;
+	SDWORD			structX,structY;
+	SDWORD			sX,sY;
+	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd,*flashImd;
+	iIMDShape		*mountImd[STRUCT_MAXWEAPS];
+	iIMDShape		*weaponImd[STRUCT_MAXWEAPS];
+	iIMDShape		*flashImd[STRUCT_MAXWEAPS];
+	SDWORD			rotation;
+	SDWORD			frame;
+	SDWORD			playerFrame;
+	SDWORD			animFrame;
+	UDWORD			nWeaponStat;
+	UDWORD			buildingBrightness, specular;
+	Vector3i dv;
+	SDWORD			i;
+	iIMDShape *lImd = NULL, *imd = NULL;
+	Vector3i *temp = NULL;
+	SDWORD			brightVar;
+	BOOL			bHitByElectronic = FALSE;
+	SDWORD			yVar;
+	iIMDShape		*pRepImd;
+	REPAIR_FACILITY		*psRepairFac = NULL;
+	BOOL            defensive = FALSE;
+	SDWORD			pointHeight,strHeight,shift;
 
 	if(psStructure->pStructureType->type == REF_WALL ||
 		psStructure->pStructureType->type == REF_WALLCORNER)
@@ -2346,14 +2348,14 @@ SDWORD			pointHeight,strHeight,shift;
 		structX = psStructure->x;
 		structY = psStructure->y;
 
-		if ( defensive ) 
+		if ( defensive )
 		{
 			// Play with the imd so its flattened
 			imd = psStructure->sDisplay.imd;
 			if ( imd != NULL )
 			{
 				// Get a copy of the points
-				memcpy( alteredPoints, imd->points, imd->npoints * sizeof( iVector ) );
+				memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3i) );
 
 				// Get the height of the centre point for reference
 				strHeight = psStructure->z;//map_Height(structX,structY) + 64;
@@ -2398,7 +2400,7 @@ SDWORD			pointHeight,strHeight,shift;
 
 		rotation = DEG(psStructure->direction);
 		iV_MatrixRotateY(-rotation);
-    		if( !defensive 
+    		if( !defensive
 		    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
 		    && psStructure->lastHitWeapon == WSC_ELECTRONIC )
     		{
@@ -2447,7 +2449,7 @@ SDWORD			pointHeight,strHeight,shift;
     	   	if(imd!=NULL && bHitByElectronic)
     		{
     			// Get a copy of the points
-    			memcpy(alteredPoints,imd->points,imd->npoints*sizeof(iVector));
+    			memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
     			for(i=0; i<imd->npoints; i++)
     			{
     				yVar = (10-rand()%20);
@@ -2779,9 +2781,9 @@ SDWORD			pointHeight,strHeight,shift;
 /*draw the delivery points */
 void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 {
-	iVector			dv;
+	Vector3i dv;
 	SDWORD			x, y, r;
-	iVector			*temp = NULL;
+	Vector3i *temp = NULL;
 //	SDWORD			centreX, centreZ;
 	SDWORD			buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
@@ -2853,11 +2855,11 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 	UDWORD			brightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
-	iVector			dv;
+	Vector3i			dv;
 	UDWORD			i;
 	UDWORD			centreHeight;
 	UDWORD			pointHeight;
-	iVector			*temp;
+	Vector3i			*temp;
 	SDWORD			shift;
 	UDWORD			buildingBrightness, specular;
 	SDWORD			sX,sY;
@@ -2909,7 +2911,7 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 		if(imd!=NULL)
 		{
 			// Get a copy of the points
-			memcpy(alteredPoints,imd->points,imd->npoints*sizeof(iVector));
+			memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
 			// Get the height of the centre point for reference
 			centreHeight = map_Height(structX,structY);
 		   //	 Now we got through the shape looking for vertices on the edge
@@ -2986,8 +2988,8 @@ BOOL	renderWallSection(STRUCTURE *psStructure)
 /* renderShadow: draws shadow under droid */
 void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 {
-	iVector			dv;
-	iVector			*pVecTemp;
+	Vector3i			dv;
+	Vector3i			*pVecTemp;
 	SDWORD			shadowScale;
 	UDWORD brightness, specular;
 //	SDWORD centreX, centreZ;
@@ -3569,8 +3571,8 @@ void	showDroidSelection( DROID *psDroid )
 
 void	drawDeliveryPointSelection(void)
 {
-FLAG_POSITION	*psDelivPoint;
-SDWORD			scrX,scrY,scrR;
+	FLAG_POSITION	*psDelivPoint;
+	UDWORD			scrX,scrY,scrR;
 
 	//draw the selected Delivery Point if any
 	for(psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint; psDelivPoint =
@@ -3592,19 +3594,19 @@ SDWORD			scrX,scrY,scrR;
 
 void	drawDroidSelections( void )
 {
-SDWORD			scrX,scrY,scrR;
-DROID			*psDroid;
-UDWORD			damage;
-UDWORD			longPowerCol = 0;
-UBYTE			boxCol;
-UDWORD			longBoxCol;
-BASE_OBJECT		*psClickedOn;
-BOOL			bMouseOverDroid = FALSE;
-BOOL			bMouseOverOwnDroid = FALSE;
-BOOL			bBeingTracked;
-UDWORD			i,index;
-FEATURE			*psFeature;
-FRACT			mulH;
+	UDWORD			scrX,scrY,scrR;
+	DROID			*psDroid;
+	UDWORD			damage;
+	UDWORD			longPowerCol = 0;
+	UBYTE			boxCol;
+	UDWORD			longBoxCol;
+	BASE_OBJECT		*psClickedOn;
+	BOOL			bMouseOverDroid = FALSE;
+	BOOL			bMouseOverOwnDroid = FALSE;
+	BOOL			bBeingTracked;
+	UDWORD			i,index;
+	FEATURE			*psFeature;
+	FRACT			mulH;
 
 	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_DROID)
@@ -3757,7 +3759,6 @@ FRACT			mulH;
 						drawDroidGroupNumber(psDroid);
 					}
 				}
-
 			}
 
 			if (bReloadBars)
@@ -3768,7 +3769,6 @@ FRACT			mulH;
 					drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
 				}
 			}
-
 		}
 	}
 
@@ -3782,44 +3782,44 @@ FRACT			mulH;
 			if(psClickedOn->player!=selectedPlayer && psClickedOn->sDisplay.frameNumber == currentGameFrame)
 			{
 				psDroid = (DROID*)psClickedOn;
-                //show resistance values if CTRL/SHIFT depressed
-                if (ctrlShiftDown())
-                {
-                    if (psDroid->resistance)
-                    {
-                        damage = PERCENT(psDroid->resistance, droidResistance(psDroid));
-                    }
-                    else
-                    {
-                        damage = 100;
-                    }
-                }
-                else
-                {
-	    			damage = PERCENT(psDroid->body,psDroid->originalBody);
-                }
+				//show resistance values if CTRL/SHIFT depressed
+				if (ctrlShiftDown())
+				{
+					if (psDroid->resistance)
+					{
+						damage = PERCENT(psDroid->resistance, droidResistance(psDroid));
+					}
+					else
+					{
+						damage = 100;
+					}
+				}
+				else
+				{
+					damage = PERCENT(psDroid->body,psDroid->originalBody);
+				}
 
-			 	if (damage > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
+				if (damage > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
 				else if(damage > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
 				else longPowerCol = 0x00ff0000; //red
 
-		  	    //show resistance values if CTRL/SHIFT depressed
-                if (ctrlShiftDown())
-                {
-                    if (psDroid->resistance)
-                    {
-                        mulH = MAKEFRACT(psDroid->resistance) / MAKEFRACT(droidResistance(psDroid));
-                    }
-                    else
-                    {
-                        mulH = 100;
-                    }
-                }
-                else
-                {
-    				mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
-                }
-			    damage = MAKEINT(mulH*MAKEFRACT(psDroid->sDisplay.screenR));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+				//show resistance values if CTRL/SHIFT depressed
+				if (ctrlShiftDown())
+				{
+					if (psDroid->resistance)
+					{
+						mulH = MAKEFRACT(psDroid->resistance) / MAKEFRACT(droidResistance(psDroid));
+					}
+					else
+					{
+						mulH = 100;
+					}
+				}
+				else
+				{
+					mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
+				}
+				damage = MAKEINT(mulH*MAKEFRACT(psDroid->sDisplay.screenR));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 //			    damage = MAKEINT(MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 //				damage = (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 				if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
@@ -3892,9 +3892,9 @@ FRACT			mulH;
 /* ---------------------------------------------------------------------------- */
 void	drawBuildingLines( void )
 {
-iVector	first,second;
+	Vector3i first, second;
 
-if(buildState == BUILD3D_VALID || buildState == BUILD3D_POS)
+	if(buildState == BUILD3D_VALID || buildState == BUILD3D_POS)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(FALSE);
@@ -3910,7 +3910,6 @@ if(buildState == BUILD3D_VALID || buildState == BUILD3D_POS)
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}
-
 }
 /* ---------------------------------------------------------------------------- */
 #define GN_X_OFFSET	(28)
@@ -4054,10 +4053,10 @@ SDWORD	xShift,yShift, index;
 
 
 /* ---------------------------------------------------------------------------- */
-void	draw3dLine(iVector *src, iVector *dest, UBYTE col)
+void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 {
-iVector	null,vec;
-iPoint	srcS,destS;
+	Vector3i null, vec;
+	Vector2i srcS, destS;
 
 	null.x = null.y = null.z = 0;
 	vec.x = (src->x - player.p.x) - terrainMidX*TILE_UNITS;
@@ -4217,107 +4216,107 @@ SDWORD  order;
 		}
     }
 
-    //don't display until we're releasing this feature in an update!
+	//don't display until we're releasing this feature in an update!
 #ifndef DISABLE_BUILD_QUEUE
-    if (intBuildSelectMode())
-    {
-        //and there may be multiple building sites that need highlighting - AB 26/04/99
-        if (ctrlShiftDown())
-        {
-            //this just highlights the current interface selected unit
-            //psObj = getCurrentSelected();
-            //if (psObj && psObj->type == OBJ_DROID)
+	if (intBuildSelectMode())
+	{
+		//and there may be multiple building sites that need highlighting - AB 26/04/99
+		if (ctrlShiftDown())
+		{
+			//this just highlights the current interface selected unit
+			//psObj = getCurrentSelected();
+			//if (psObj && psObj->type == OBJ_DROID)
 
-            //this highlights ALL constructor units' build sites
-            for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-            {
-                //psDroid = (DROID *)psObj;
-                if (psDroid->droidType == DROID_CONSTRUCT ||
-                    psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-                {
-                    //draw the current build site if its a line of structures
-                    if (psDroid->order == DORDER_LINEBUILD)
-                    {
-                            left = psDroid->orderX >> TILE_SHIFT;
-                            right = (psDroid->orderX2 >> TILE_SHIFT) + 1;
-                            if (left > right)
-                            {
-                                size = left;
-                                left = right;
-                                right = size;
-                            }
-                            up = psDroid->orderY >> TILE_SHIFT;
-                            down = (psDroid->orderY2 >> TILE_SHIFT) + 1;
-                            if (up > down)
-                            {
-                                size = up;
-                                up = down;
-                                down = size;
-                            }
-                            //hilight the tiles
-    		                for(i=left; i<right; i++)
-	    	                {
-		    	                for(j=up; j<down; j++)
-			                    {
-				                    SET_TILE_HIGHLIGHT(mapTile(i,j));
-			                    }
-                            }
-                    }
-                    //now look thru' the list of orders to see if more building sites
-                    for (order = 0; order < psDroid->listSize; order++)
-                    {
-                        if (psDroid->asOrderList[order].order == DORDER_BUILD)
-                        {
-                            //set up coords for tiles
-                            size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
-                                psOrderTarget)->baseWidth;
-                            left = ((psDroid->asOrderList[order].x) >> TILE_SHIFT) - size/2;
-                            right = left + size;
-                            size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
-                                psOrderTarget)->baseBreadth;
-                            up = ((psDroid->asOrderList[order].y) >> TILE_SHIFT) - size/2;
-                            down = up + size;
-                            //hilight the tiles
-    		                for(i=left; i<right; i++)
-	    	                {
-		    	                for(j=up; j<down; j++)
-			                    {
-				                    SET_TILE_HIGHLIGHT(mapTile(i,j));
-			                    }
-                            }
-		                }
-                        else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
-                        {
-                            //need to highlight the length of the wall
-                            left = psDroid->asOrderList[order].x >> TILE_SHIFT;
-                            right = psDroid->asOrderList[order].x2 >> TILE_SHIFT;
-                            if (left > right)
-                            {
-                                size = left;
-                                left = right;
-                                right = size;
-                            }
-                            up = psDroid->asOrderList[order].y >> TILE_SHIFT;
-                            down = psDroid->asOrderList[order].y2 >> TILE_SHIFT;
-                            if (up > down)
-                            {
-                                size = up;
-                                up = down;
-                                down = size;
-                            }
-                            //hilight the tiles
-    		                for(i=left; i<=right; i++)
-	    	                {
-		    	                for(j=up; j<=down; j++)
-			                    {
-				                    SET_TILE_HIGHLIGHT(mapTile(i,j));
-			                    }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+			//this highlights ALL constructor units' build sites
+			for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+			{
+				//psDroid = (DROID *)psObj;
+				if (psDroid->droidType == DROID_CONSTRUCT ||
+					psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+				{
+					//draw the current build site if its a line of structures
+					if (psDroid->order == DORDER_LINEBUILD)
+					{
+							left = psDroid->orderX >> TILE_SHIFT;
+							right = (psDroid->orderX2 >> TILE_SHIFT) + 1;
+							if (left > right)
+							{
+								size = left;
+								left = right;
+								right = size;
+							}
+							up = psDroid->orderY >> TILE_SHIFT;
+							down = (psDroid->orderY2 >> TILE_SHIFT) + 1;
+							if (up > down)
+							{
+								size = up;
+								up = down;
+								down = size;
+							}
+							//hilight the tiles
+							for(i=left; i<right; i++)
+							{
+								for(j=up; j<down; j++)
+								{
+									SET_TILE_HIGHLIGHT(mapTile(i,j));
+								}
+							}
+					}
+					//now look thru' the list of orders to see if more building sites
+					for (order = 0; order < psDroid->listSize; order++)
+					{
+						if (psDroid->asOrderList[order].order == DORDER_BUILD)
+						{
+							//set up coords for tiles
+							size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
+								psOrderTarget)->baseWidth;
+							left = ((psDroid->asOrderList[order].x) >> TILE_SHIFT) - size/2;
+							right = left + size;
+							size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
+								psOrderTarget)->baseBreadth;
+							up = ((psDroid->asOrderList[order].y) >> TILE_SHIFT) - size/2;
+							down = up + size;
+							//hilight the tiles
+							for(i=left; i<right; i++)
+							{
+								for(j=up; j<down; j++)
+								{
+									SET_TILE_HIGHLIGHT(mapTile(i,j));
+								}
+							}
+						}
+						else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
+						{
+							//need to highlight the length of the wall
+							left = psDroid->asOrderList[order].x >> TILE_SHIFT;
+							right = psDroid->asOrderList[order].x2 >> TILE_SHIFT;
+							if (left > right)
+							{
+								size = left;
+								left = right;
+								right = size;
+							}
+							up = psDroid->asOrderList[order].y >> TILE_SHIFT;
+							down = psDroid->asOrderList[order].y2 >> TILE_SHIFT;
+							if (up > down)
+							{
+								size = up;
+								up = down;
+								down = size;
+							}
+							//hilight the tiles
+							for(i=left; i<=right; i++)
+							{
+								for(j=up; j<=down; j++)
+								{
+									SET_TILE_HIGHLIGHT(mapTile(i,j));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 #endif
 //	if(tileCount)
@@ -4376,13 +4375,13 @@ MAPTILE	*psTile;
 
 void	locateMouse(void)
 {
-UDWORD	i,j;
-POINT	pt;
-QUAD	quad;
-SDWORD	nearestZ = SDWORD_MAX;
-SDWORD	tileZ;
-BOOL	bWaterTile;
-//UDWORD	bX,bY;
+	UDWORD	i,j;
+	POINT	pt;
+	QUAD	quad;
+	SDWORD	nearestZ = SDWORD_MAX;
+	SDWORD	tileZ;
+	BOOL	bWaterTile;
+	//UDWORD	bX,bY;
 
 	pt.x = mX;
 	pt.y = mY;
@@ -4413,9 +4412,9 @@ BOOL	bWaterTile;
 					mouseTileX = playerXTile+j;
 					mouseTileY = playerZTile+i;
 					if(mouseTileX<0) mouseTileX = 0;
-					if(mouseTileX>mapWidth-1) mouseTileX = mapWidth-1;
+					if(mouseTileX > mapWidth-1) mouseTileX = mapWidth-1;
 					if(mouseTileY<0) mouseTileY = 0;
-					if(mouseTileY>mapHeight-1) mouseTileY = mapHeight-1;
+					if(mouseTileY > mapHeight-1) mouseTileY = mapHeight-1;
 
  					tile3dX = playerXTile+j;
 					tile3dY = playerZTile+i;
@@ -4465,7 +4464,7 @@ SDWORD	shift;
 		"flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
-   	memcpy(alteredPoints,imd->points,imd->npoints*sizeof(iVector));
+   	memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
    	/* Get the height of the centre point for reference */
    	centreHeight = map_Height(structX,structY);
   	/* Now we go through the shape looking for vertices on the edge */
@@ -4578,7 +4577,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	MAPTILE *psTile;
 	BOOL bOutlined;
 	UDWORD tileNumber;
-	iPoint offset;
+	Vector2i offset;
 	PIEVERTEX aVrts[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
@@ -4596,8 +4595,8 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* Let's just get out now if we're not supposed to draw it */
 	if( (actualX<0) ||
 		(actualY<0) ||
-		(actualX>mapWidth-1) ||
-		(actualY>mapHeight-1) )
+		(actualX > mapWidth-1) ||
+		(actualY > mapHeight-1) )
 	{
 		psTile = &edgeTile;
 		CLEAR_TILE_HIGHLIGHT(psTile);
@@ -4879,7 +4878,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	MAPTILE	*psTile;
 	//BOOL	bOutlined;
 	UDWORD	tileNumber;
-	iPoint	offset;
+	Vector2i offset;
 	PIEVERTEX aVrts[3];
 
 	/* Get the correct tile index for the x coordinate */
@@ -5227,7 +5226,7 @@ static void testEffect2( UDWORD player )
 	UDWORD	angle;
 	STRUCTURE	*psStructure;
 	SDWORD	xDif,yDif;
-	iVector	pos;
+	Vector3i	pos;
 	UDWORD	numConnected;
 	POWER_GEN	*psPowerGen;
 	DROID	*psDroid;
@@ -5406,12 +5405,12 @@ STRUCTURE	*psStruct;
 
 void	showSensorRange1(DROID *psDroid)		//this one doesn't do a circle, it displays 30 or so units at a time
 {
-SDWORD	val;
-SDWORD	radius;
-UDWORD	angle;
-SDWORD	xDif,yDif;
-UDWORD	sensorRange;
-iVector	pos;
+	SDWORD	val;
+	SDWORD	radius;
+	UDWORD	angle;
+	SDWORD	xDif,yDif;
+	UDWORD	sensorRange;
+	Vector3i pos;
 
 	angle = gameTime%3600;
 	val = angle/10;
@@ -5431,14 +5430,14 @@ iVector	pos;
 
 void	showSensorRange2(BASE_OBJECT *psObj)
 {
-SDWORD	radius;
-SDWORD	xDif,yDif;
-UDWORD	sensorRange;
-iVector	pos;
-UDWORD	i;
-DROID	*psDroid;
-STRUCTURE	*psStruct;
-BOOL	bBuilding=FALSE;
+	SDWORD	radius;
+	SDWORD	xDif,yDif;
+	UDWORD	sensorRange;
+	Vector3i pos;
+	UDWORD	i;
+	DROID	*psDroid;
+	STRUCTURE	*psStruct;
+	BOOL	bBuilding=FALSE;
 
 	for(i=0; i<360; i++)
 	{
@@ -5478,7 +5477,7 @@ BOOL	bBuilding=FALSE;
 void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
 	SDWORD	xDif,yDif;
-	iVector	pos;
+	Vector3i	pos;
 	UDWORD	i;
 
 	for(i=0; i<360; i++)
@@ -5728,11 +5727,11 @@ UDWORD	i;
 static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 {
 	PIEVERTEX	pts[3];
-	iVector each;
-	iVector	*point;
+	Vector3i each;
+	Vector3i *point;
 	UDWORD	pointIndex;
 	SDWORD	realY;
-	iVector	null,vec;
+	Vector3i null, vec;
 	SDWORD	rx,rz;
 	UDWORD	colour;
 	UDWORD	specular;

@@ -107,7 +107,7 @@ DROID *psDrivenDroid = NULL;		// The droid that's being driven.
 static BOOL bDriveMode = FALSE;
 static SDWORD driveDir;					// Driven droid's direction.
 static SDWORD driveSpeed;				// Driven droid's speed.
-static int driveBumpTime;				// Time that followers get a kick up the ass.
+static UDWORD driveBumpTime;				// Time that followers get a kick up the ass.
 static BOOL	DoFollowRangeCheck = TRUE;
 static BOOL AllInRange = TRUE;
 static BOOL	ClearFollowRangeCheck = FALSE;
@@ -634,8 +634,6 @@ void driveUpdate(void)
 
 	if(DirectControl) {
 		if(psDrivenDroid != NULL) {
-
-
 			if(bMultiPlayer && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
 				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->x,psDrivenDroid->y, NULL);

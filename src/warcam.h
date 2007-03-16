@@ -57,12 +57,6 @@ CAM_TRACK_OBJECT,
 CAM_TRACK_LOCATION
 };
 
-// We define and use this struct instead of iVector because iVector is 32 bit on pc
-// but only 16 bit on Playstation and we definitly need 32 bits for the war camera stuff.
-typedef struct {
-	int32 x,y,z;
-} iVector32;
-
 /* Storage for old viewnagles etc */
 typedef struct _warcam
 {
@@ -71,13 +65,13 @@ UDWORD	trackClass;
 UDWORD	lastUpdate;
 iView	oldView;
 
-PIEVECTORF	acceleration;
-PIEVECTORF	velocity;
-PIEVECTORF	position;
+Vector3f	acceleration;
+Vector3f	velocity;
+Vector3f	position;
 
-PIEVECTORF	rotation;
-PIEVECTORF	rotVel;
-PIEVECTORF	rotAccel;
+Vector3f	rotation;
+Vector3f	rotVel;
+Vector3f	rotAccel;
 
 UDWORD	oldDistance;
 BASE_OBJECT *target;
@@ -95,7 +89,7 @@ extern void	requestRadarTrack	( SDWORD x, SDWORD y );
 extern BOOL	getRadarTrackingStatus( void );
 extern void	dispWarCamLogo		( void );
 extern void	toggleRadarAllignment( void );
-extern void	camInformOfRotation			( iVector *rotation );
+extern void	camInformOfRotation ( Vector3i *rotation );
 extern BASE_OBJECT *camFindDroidTarget(void);
 extern DROID *getTrackingDroid( void );
 extern SDWORD	getPresAngle( void );

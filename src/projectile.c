@@ -316,7 +316,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
 	FRACT_D			fR, fA, fS, fT, fC;
-	iVector			muzzle;
+	Vector3i muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
 	UDWORD			heightVariance;
 	WEAPON_STATS	*psWeapStats = &asWeaponStats[psWeap->nStat];
@@ -600,7 +600,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	//Watermelon: make zdiff always positive
 	UDWORD			zdiff;
 	SDWORD			rad;
-	iVector			pos;
+	Vector3i pos;
 	//Watermelon:int i
 	UDWORD			i;
 	//Watermelon:2 temp BASE_OBJECT pointer
@@ -896,7 +896,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			iTime, iRad, iDist, dx, dy, dz, iX, iY;
-	iVector			pos;
+	Vector3i pos;
 	FRACT			fVVert;
 	BOOL			bOver = FALSE;
 	//Watermelon:psTempObj,psNewTarget,i,xdiff,ydiff,zdiff
@@ -1152,7 +1152,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	SDWORD			tarX0,tarY0, tarX1,tarY1;
 	SDWORD			radSquared, xDiff,yDiff;
 	BOOL			bKilled;//,bMultiTemp;
-	iVector			position,scatter;
+	Vector3i position,scatter;
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
 	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
 	SDWORD			tarZ0,tarZ1,zDiff;

@@ -43,7 +43,7 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 	}
 }
 
-BOOL pie_PNGLoadMem(char *pngimage, iSprite *s)
+BOOL pie_PNGLoadMem(char *pngimage, iTexture *s)
 {
 	unsigned int PNG_BYTES_TO_CHECK=4;
 	png_structp png_ptr = NULL;
@@ -127,7 +127,7 @@ BOOL pie_PNGLoadMem(char *pngimage, iSprite *s)
 		{
 			png_bytep* row_pointers = (png_bytep*)malloc(s->height*sizeof(png_bytep));
 			char* pdata;
-			unsigned int i;
+			int i;
 			const unsigned int line_size = s->width*info_ptr->channels;
 
 			for (i = 0, pdata = s->bmp;

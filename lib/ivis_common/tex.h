@@ -46,7 +46,7 @@
 typedef struct
 {
 	iTexture	tex;
-	uint8		type;
+	Uint8		type;
 	char		name[80];
 	unsigned int textPage3dfx;
 	int		bResource;	// Was page provided by resource handler?
@@ -61,8 +61,8 @@ extern iTexPage	_TEX_PAGE[iV_TEX_MAX];
 
 int iV_GetTexture(char *filename);
 extern int pie_ReloadTexPage(char *filename, char *pBuffer);
-extern int pie_AddBMPtoTexPages(iSprite* s, const char *filename, int type, BOOL bResource);
-void pie_ChangeTexPage(int tex_index, iSprite* s, int type, BOOL bResource);
+extern int pie_AddBMPtoTexPages(iTexture* s, const char *filename, int type, BOOL bResource);
+void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource);
 extern void pie_TexInit(void);
 
 //*************************************************************************

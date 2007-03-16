@@ -439,8 +439,7 @@ void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-extern void RenderCompositeDroid(UDWORD Index,iVector *Rotation,iVector *Position,iVector *TurretRotation,
-								 DROID *psDroid,BOOL RotXYZ);
+extern void RenderCompositeDroid(UDWORD Index, Vector3i *Rotation, Vector3i *Position, Vector3i *TurretRotation, DROID *psDroid, BOOL RotXYZ);
 
 extern BOOL bRender3DOnly;
 
@@ -3609,7 +3608,7 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 }
 
 // work out current system component
-static UDWORD getSystemType(DROID_TEMPLATE* template) 
+static UDWORD getSystemType(DROID_TEMPLATE* template)
 {
 	if (template->asParts[COMP_ECM]) {
 		return COMP_ECM;
@@ -3648,7 +3647,7 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
 		comparison is meaningful*/
-		if (desCompMode == IDES_SYSTEM) 
+		if (desCompMode == IDES_SYSTEM)
 		{
 			type = getSystemType(&sCurrDesign);
 		}
@@ -3688,7 +3687,7 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
     	/* propulsion power points are a percentage of the bodys' power points */
     	power += (propulsionPower *
     		bodyPower) / 100;
-    		
+
      	//add weapon power
         // FIXME: Only takes first weapon into account
         power += weaponPower;
@@ -3774,7 +3773,7 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
     	/* propulsion power points are a percentage of the bodys' power points */
     	body += (propulsionBody *
     		bodyBody) / 100;
-    		
+
      	//add weapon power
         // FIXME: Only takes first weapon into account
         body += weaponBody;
@@ -5334,7 +5333,7 @@ void intRunDesign(void)
 }*/
 
 
-extern void BoxBlueWash(UWORD x,UWORD y,UWORD w,UWORD h,BOOL Animate);
+extern void BoxBlueWash(UWORD x, UWORD y, UWORD w, UWORD h, BOOL Animate);
 
 void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
@@ -5343,7 +5342,7 @@ void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	static UDWORD	iRY = 45;
 //	BOOL			Hilight = FALSE;
 	BASE_STATS		*psStats;
-	iVector			Rotation,Position;
+	Vector3i			Rotation,Position;
 	SWORD			templateRadius;
 	SDWORD			falseScale;
 
@@ -5398,7 +5397,7 @@ void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	W_FORM			*Form = (W_FORM*)psWidget;
 	UDWORD			x0,y0,x1,y1;
 	static UDWORD	iRY = 45;
-	iVector			Rotation,Position;
+	Vector3i			Rotation, Position;
 	SWORD			templateRadius;
 	SDWORD			falseScale;
 

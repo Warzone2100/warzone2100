@@ -40,8 +40,8 @@
 enum
 {
 REF_HQ,
-REF_FACTORY,	
-REF_FACTORY_MODULE,//draw as factory 2	
+REF_FACTORY,
+REF_FACTORY_MODULE,//draw as factory 2
 REF_POWER_GEN,
 REF_POWER_MODULE,
 REF_RESOURCE_EXTRACTOR,
@@ -49,8 +49,8 @@ REF_DEFENSE,
 REF_WALL,
 REF_WALLCORNER,				//corner wall - no gun
 REF_BLASTDOOR,
-REF_RESEARCH,	
-REF_RESEARCH_MODULE,	
+REF_RESEARCH,
+REF_RESEARCH_MODULE,
 REF_REPAIR_FACILITY,
 REF_COMMAND_CONTROL,		//control centre for command droids
 REF_BRIDGE,
@@ -63,7 +63,7 @@ REF_MISSILE_SILO,
 REF_SAT_UPLINK,         //added for updates - AB 8/6/99
 
 //REF_WALLH,     //the following are needed for the demo
-//REF_WALLV,		
+//REF_WALLV,
 //REF_CORNER1,
 //REF_CORNER2,
 //REF_CORNER3,
@@ -100,7 +100,7 @@ typedef enum _position_type
 	UDWORD			screenY; \
 	UDWORD			screenR; \
 	UDWORD			player;				/*which player the Position belongs to*/ \
-	BOOL			selected			/*flag to indicate whether the Position 
+	BOOL			selected			/*flag to indicate whether the Position
 										is to be highlighted*/
 
 typedef struct _object_position
@@ -111,11 +111,11 @@ typedef struct _object_position
 typedef struct _flag_position
 {
 	POSITION_OBJ;
-	iVector		coords;							//the world coords of the Position
+	Vector3i		coords;							//the world coords of the Position
 	//UDWORD		frameNumber;					//when the Position was last drawn
 	//UDWORD		screenX, screenY, screenR;		//screen coords and radius of Position imd
 	//UDWORD		player;							//which player the Position belongs to
-	//BOOL		selected;						//flag to indicate whether the 
+	//BOOL		selected;						//flag to indicate whether the
 												//Position is to be highlighted
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
@@ -129,7 +129,7 @@ typedef struct _flag_position
 #define NUM_DEMO_STRUCTS	12
 #endif
 
-//only allowed one weapon per structure (more memory for Tim) 
+//only allowed one weapon per structure (more memory for Tim)
 //Watermelon:only allowed 4 weapons per structure(sorry Tim...)
 #define STRUCT_MAXWEAPS		4
 
@@ -150,11 +150,11 @@ typedef UWORD STRUCTSTRENGTH_MODIFIER;
 //this structure is used to hold the permenant stats for each type of building
 typedef struct _structure_stats
 {
-	STATS_BASE;						/* basic stats */ 
+	STATS_BASE;						/* basic stats */
 	UDWORD		type;				/* the type of structure */
 	TECH_LEVEL	techLevel;			/* technology level of the structure */
 	STRUCT_STRENGTH	strength;		/* strength against the weapon effects */
-	UDWORD		terrainType;		/*The type of terrain the structure has to be 
+	UDWORD		terrainType;		/*The type of terrain the structure has to be
 									  built next to - may be none*/
 	UDWORD		baseWidth;			/*The width of the base in tiles*/
 	UDWORD		baseBreadth;		/*The breadth of the base in tiles*/
@@ -163,29 +163,29 @@ typedef struct _structure_stats
 									  the structure*/
 	UDWORD		height;				/*The height above/below the terrain - negative
 									  values denote below the terrain*/
-	UDWORD		armourValue;		/*The armour value for the structure - can be 
+	UDWORD		armourValue;		/*The armour value for the structure - can be
 									  upgraded */
 	UDWORD		bodyPoints;			/*The structure's body points - A structure goes
 									  off-line when 50% of its body points are lost*/
 	UDWORD		repairSystem;		/*The repair system points are added to the body
-									  points until fully restored . The points are 
+									  points until fully restored . The points are
 									  then added to the Armour Points*/
-	UDWORD		powerToBuild;		/*How much power the structure requires to build*/ 
+	UDWORD		powerToBuild;		/*How much power the structure requires to build*/
     //NOT USED ANYMORE - AB 24/01/99
 	/*UDWORD		minimumPower;		The minimum power requirement to start building
 								      the structure*/
-	UDWORD		resistance;			/*The number used to determine whether a 
-									  structure can resist an enemy takeover - 
+	UDWORD		resistance;			/*The number used to determine whether a
+									  structure can resist an enemy takeover -
 									  0 = cannot be attacked electrically*/
     //NOT USED ANYMORE - AB 24/01/99
-	/*UDWORD		quantityLimit;		The maximum number that a player can have - 
+	/*UDWORD		quantityLimit;		The maximum number that a player can have -
 									  0 = no limit 1 = only 1 allowed etc*/
 	UDWORD		sizeModifier;		/*The larger the target, the easier to hit*/
 	struct 	iIMDShape	*pIMD;		/*The IMD to draw for this structure */
 	struct 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
-	struct _ecm_stats	*pECM;		/*Which ECM is standard for the structure - 
+	struct _ecm_stats	*pECM;		/*Which ECM is standard for the structure -
 									  if any*/
-	struct _sensor_stats *pSensor;	/*Which Sensor is standard for the structure - 
+	struct _sensor_stats *pSensor;	/*Which Sensor is standard for the structure -
 									  if any*/
     //NOT USED ANYMORE - AB 24/01/99
 	//Watermelon:pfft
@@ -193,7 +193,7 @@ typedef struct _structure_stats
 									  building*/
 	UDWORD		numWeaps;			/*Number of weapons for default */
 	//SDWORD		defaultWeap;		/The default weapon/
-    
+
 	//struct _weapon_stats **asWeapList;		/*List of pointers to default weapons*/
 
 	//Watermelon:can only have STRUCT_MAXWEAPS now...
@@ -201,7 +201,7 @@ typedef struct _structure_stats
 
 	UDWORD		numFuncs;			/*Number of functions for default*/
 	SDWORD		defaultFunc;		/*The default function*/
-	struct _function	**asFuncList;		/*List of pointers to allowable functions - 
+	struct _function	**asFuncList;		/*List of pointers to allowable functions -
 									  unalterable*/
 } STRUCTURE_STATS;
 
@@ -219,9 +219,9 @@ typedef struct _research_facility
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	UDWORD		timeToResearch;			/* Time taken to research the topic*/
-	struct _base_stats	*psBestTopic;	/* The topic with the most research points 
+	struct _base_stats	*psBestTopic;	/* The topic with the most research points
 										   that was last performed*/
-	UDWORD		powerAccrued;			/* used to keep track of power before 
+	UDWORD		powerAccrued;			/* used to keep track of power before
 										   researching a topic*/
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
 
@@ -230,15 +230,15 @@ typedef struct _research_facility
 typedef struct _factory
 {
 
-	UBYTE				capacity;			/* The max size of body the factory 
+	UBYTE				capacity;			/* The max size of body the factory
 											   can produce*/
-	UBYTE				quantity;			/* The number of droids to produce OR for 
+	UBYTE				quantity;			/* The number of droids to produce OR for
 											   selectedPlayer, how many loops to perform*/
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
-	//struct _propulsion_types*	propulsionType;		
-	//UBYTE				propulsionType;		/* The type of propulsion the facility 
+	//struct _propulsion_types*	propulsionType;
+	//UBYTE				propulsionType;		/* The type of propulsion the facility
 	//										   can produce*/
-	UBYTE				productionOutput;	/* Droid Build Points Produced Per 
+	UBYTE				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
 	UDWORD				powerAccrued;		/* used to keep track of power before building a droid*/
 	BASE_STATS			*psSubject;			/* the subject the structure is working on */
@@ -250,7 +250,7 @@ typedef struct _factory
 	struct _droid		*psCommander;	    // command droid to produce droids for (if any)
     UDWORD              secondaryOrder;     // secondary order state for all units coming out of the factory
                                             // added AB 22/04/99
-	
+
     //these are no longer required - yipee!
 	// The group the droids produced by this factory belong to - used for Missions
 	//struct _droid_group		*psGroup;
@@ -288,7 +288,7 @@ typedef struct REPAIR_FACILITY
 	UDWORD				power;				/* Power used in repairing */
 	UDWORD				timeStarted;		/* Time repair started on current object */
 	BASE_OBJECT			*psObj;				/* Object being repaired */
-	UDWORD				powerAccrued;		/* used to keep track of power before 
+	UDWORD				powerAccrued;		/* used to keep track of power before
 											   repairing a droid */
 	FLAG_POSITION		*psDeliveryPoint;	/* Place for the repaired droids to assemble
                                                at */
@@ -317,12 +317,12 @@ typedef struct _structure
 	BASE_ELEMENTS(struct _structure);
 
 //	UDWORD		ref;
-	STRUCTURE_STATS*	pStructureType;		/* pointer to the structure stats for this 
-											   type of building */	
-	UBYTE		status;						/* defines whether the structure is being 
+	STRUCTURE_STATS*	pStructureType;		/* pointer to the structure stats for this
+											   type of building */
+	UBYTE		status;						/* defines whether the structure is being
 											   built, doing nothing or performing a function*/
-	//SDWORD		currentBuildPts;			/* the build points currently assigned to this 
-    SWORD		currentBuildPts;			/* the build points currently assigned to this 
+	//SDWORD		currentBuildPts;			/* the build points currently assigned to this
+    SWORD		currentBuildPts;			/* the build points currently assigned to this
 											   structure */
     SWORD       currentPowerAccrued;        /* the power accrued for building this structure*/
 	UWORD		body;						/* current body points */
@@ -330,8 +330,8 @@ typedef struct _structure
 	//UDWORD		baseBodyPoints;				/* undamaged body points */
 	UWORD		armour;						/* current armour points */
 	//UDWORD		armour;						/* current armour points */
-	//SDWORD		resistance;					/* current resistance points 
-	SWORD		resistance;					/* current resistance points 
+	//SDWORD		resistance;					/* current resistance points
+	SWORD		resistance;					/* current resistance points
 											   0 = cannot be attacked electrically*/
 	UDWORD		lastResistance;				/* time the resistance was last increased*/
 	//UDWORD		repair;						/* current repair points */
@@ -361,7 +361,7 @@ typedef struct _structure
 	UWORD		radarY;
 	//the ecm power needs to be stored since the actual ecm stat can change with research
 	UWORD		ecmPower;
-	//FRACT		heightScale;	
+	//FRACT		heightScale;
 
 	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
 											   necessary for functionality */
@@ -382,7 +382,7 @@ typedef struct _structure
 typedef struct _structure_limits
 {
 	UBYTE		limit;				/* the number allowed to be built */
-	UBYTE		currentQuantity;	/* the number of the type currently 
+	UBYTE		currentQuantity;	/* the number of the type currently
 												   built per player*/
 
 	UBYTE		globalLimit;		// multiplayer only. sets the max value selectable (limits changed by player)

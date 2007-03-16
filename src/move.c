@@ -4389,7 +4389,7 @@ void moveUpdateDroid(DROID *psDroid)
 	UBYTE				oldStatus = psDroid->sMove.Status;
 	SDWORD				moveSpeed, moveDir;
 	PROPULSION_STATS	*psPropStats;
-	iVector				pos;
+	Vector3i pos;
 	BOOL				bStarted = FALSE, bStopped;
 //	UDWORD				landX,landY;
 

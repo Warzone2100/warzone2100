@@ -361,7 +361,7 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
  * \param siginfo Signal info
  * \param sigcontext Signal context
  */
-static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcontext)
+static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSED void * sigcontext)
 {
 	static sig_atomic_t allreadyRunning = 0;
 

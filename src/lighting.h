@@ -39,7 +39,7 @@ LIGHT_WHITE
 
 typedef struct _light
 {
-iVector	position;
+Vector3i	position;
 UBYTE	type;
 UDWORD	range;
 LIGHT_COLOUR	colour;
@@ -51,7 +51,7 @@ extern void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
 extern void	calcTileIllum(UDWORD tileX, UDWORD tileY);
 extern void	doBuildingLights( void );
-extern iVector	theSun;
+extern Vector3i	theSun;
 extern UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular);
 extern void	calcDroidIllumination(DROID *psDroid);
 //darkens down the tiles that are outside the scroll limits

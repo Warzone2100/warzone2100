@@ -39,21 +39,21 @@
 #include "arrow.h"
 
 /*	The vector that holds the sun's lighting direction - planar */
-iVector	theSun;
+Vector3i	theSun;
 UDWORD	fogStatus = 0;
 /*	Module function Prototypes */
 
 UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular);
 void	doBuildingLights( void );
 void	processLight(LIGHT *psLight);
-UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, iVector *pos);
+UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 void	colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
 //void	initLighting( void );
 void	calcTileIllum(UDWORD tileX, UDWORD tileY);
 void	normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant);
 UDWORD	numNormals;		// How many normals have we got?
-iVector normals[8];		// Maximum 8 possible normals
-extern void	draw3dLine(iVector *src, iVector *dest, UBYTE col);
+Vector3i normals[8];		// Maximum 8 possible normals
+extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
 
 
 
@@ -176,10 +176,10 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 
 void	calcTileIllum(UDWORD tileX, UDWORD tileY)
 {
-iVector	finalVector;
-SDWORD	dotProduct;
-UDWORD	i;
-UDWORD	val;
+	Vector3i finalVector;
+	SDWORD	dotProduct;
+	UDWORD	i;
+	UDWORD	val;
 
 	numNormals = 0;
 	/* Quadrants look like:-
@@ -240,9 +240,9 @@ UDWORD	val;
 
 void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 {
-iVector	corner1,corner2,corner3;
-MAPTILE	*psTile, *tileRight, *tileDownRight, *tileDown;
-SDWORD	rMod,drMod,dMod,nMod;
+	Vector3i corner1, corner2, corner3;
+	MAPTILE	*psTile, *tileRight, *tileDownRight, *tileDown;
+	SDWORD	rMod,drMod,dMod,nMod;
 
 	/* Get a pointer to our tile */
 	psTile			= mapTile(tileX,tileY);
@@ -599,12 +599,12 @@ UDWORD	total;
 	return((UDWORD)sqrt(total));
 }
 */
- UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, iVector *pos)
+UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 {
-UDWORD	x1,y1,z1;
-UDWORD	x2,y2,z2;
-UDWORD	xDif,yDif,zDif;
-UDWORD	total;
+	UDWORD	x1,y1,z1;
+	UDWORD	x2,y2,z2;
+	UDWORD	xDif,yDif,zDif;
+	UDWORD	total;
 
 	/* The coordinates of the tile corner */
 	x1 = tileX * TILE_UNITS;
@@ -997,24 +997,21 @@ UDWORD	i;
 	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun Z Vector : %d",theSun.z));
    }
 
-void	showSunOnTile(UDWORD x, UDWORD y)
+void showSunOnTile(UDWORD x, UDWORD y)
 {
-iVector	a,b;
+	Vector3i a, b;
 
+	a.x = (x<<TILE_SHIFT)+(TILE_UNITS/2);
+	a.z = (y<<TILE_SHIFT)+(TILE_UNITS/2);
+	a.y = map_Height(a.x,a.z);
 
-	{
-		a.x = (x<<TILE_SHIFT)+(TILE_UNITS/2);
-		a.z = (y<<TILE_SHIFT)+(TILE_UNITS/2);
-		a.y = map_Height(a.x,a.z);
+	b.x = a.x + theSun.x/64;
+	b.y = a.y + theSun.y/64;
+	b.z = a.z + theSun.z/64;
 
-		b.x = a.x + theSun.x/64;
-		b.y = a.y + theSun.y/64;
-		b.z = a.z + theSun.z/64;
-
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-		pie_SetFogStatus(FALSE);
-		draw3dLine(&a,&b,mapTile(x,y)->illumination);
-  		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	}
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+	pie_SetFogStatus(FALSE);
+	draw3dLine(&a,&b,mapTile(x,y)->illumination);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 #endif

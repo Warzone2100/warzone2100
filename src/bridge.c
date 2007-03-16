@@ -117,7 +117,7 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 	SDWORD			structX,structY,structZ;
 	SDWORD			rx,rz;
 	//iIMDShape		*imd;
-	iVector			dv;
+	Vector3i dv;
 
 			/* Bomb out if it's not visible and there's no active god mode */
 			if(!psStructure->visible[selectedPlayer] && !godMode)
@@ -240,11 +240,11 @@ BOOL	startHigher;
 	}
 }
 
-void	testBuildBridge(UDWORD startX,UDWORD startY,UDWORD endX,UDWORD endY)
+void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 {
-BRIDGE_INFO	bridge;
-UDWORD	i;
-iVector	dv;
+	BRIDGE_INFO	bridge;
+	UDWORD	i;
+	Vector3i dv;
 
 	if(bridgeValid(startX,startY,endX,endY))
 	{

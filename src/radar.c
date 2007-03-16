@@ -976,15 +976,15 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 
 // Rotate an array of 2d vectors about a given angle, also translates them after rotating.
 //
-static void RotateVector2D(iVector *Vector,iVector *TVector,iVector *Pos,int Angle,int Count)
+static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, int Angle, int Count)
 {
 	int Cos = COS(Angle);
 	int Sin = SIN(Angle);
 	int ox = 0;
 	int oy = 0;
 	int i;
-	iVector *Vec = Vector;
-	iVector *TVec = TVector;
+	Vector3i *Vec = Vector;
+	Vector3i *TVec = TVector;
 
 	if(Pos) {
 		ox = Pos->x;
@@ -1040,14 +1040,14 @@ SDWORD	dif;
 
 
 /* Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH,UDWORD boxSizeV )
+static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSizeV )
 {
-iVector	v[4],tv[4],centre;
-UDWORD	shortX,longX,yDrop,yDropVar;
-SDWORD	dif = getDistanceAdjust();
-SDWORD	dif2 = getLengthAdjust();
-UDWORD	colour = 0;
-UDWORD	camNumber;
+	Vector3i v[4], tv[4], centre;
+	UDWORD	shortX,longX,yDrop,yDropVar;
+	SDWORD	dif = getDistanceAdjust();
+	SDWORD	dif2 = getLengthAdjust();
+	UDWORD	colour = 0;
+	UDWORD	camNumber;
 
 	shortX = ((visibleXTiles/4)-(dif/6)) * boxSizeH;
 	longX = ((visibleXTiles/2)-(dif/4)) * boxSizeH;

@@ -25,8 +25,8 @@
 
 /***************************************************************************/
 
-void GetRealCameraPos(OBJPOS *Camera,SDWORD Distance, iVector *CameraLoc);
-void DrawBSPIMD(iIMDShape *IMDdef, iVector *pPos);
+void GetRealCameraPos(OBJPOS *Camera, SDWORD Distance, Vector3i *CameraLoc);
+void DrawBSPIMD(iIMDShape *IMDdef, Vector3i *pPos);
 PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode);
 void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane );
 

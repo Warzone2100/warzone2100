@@ -75,8 +75,8 @@ extern UDWORD iV_GetMouseFrame(void);
 //*************************************************************************
 // functions accessed indirectly from rendmode
 //*************************************************************************
-extern void (*iV_pBox)(int x0, int y0, int x1, int y1, uint32 colour);
-extern void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, uint32 colour);
+extern void (*iV_pBox)(int x0, int y0, int x1, int y1, Uint32 colour);
+extern void (*iV_pBoxFill)(int x0, int y0, int x1, int y1, Uint32 colour);
 
 
 //*************************************************************************

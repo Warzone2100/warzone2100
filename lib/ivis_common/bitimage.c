@@ -28,7 +28,7 @@
 #include "lib/framework/frameresource.h"
 
 
-static BOOL LoadTextureFile(char *FileName, iSprite *TPage, int *TPageID);
+static BOOL LoadTextureFile(char *FileName, iTexture *TPage, int *TPageID);
 
 UWORD iV_GetImageWidth(IMAGEFILE *ImageFile, UWORD ID)
 {
@@ -91,7 +91,7 @@ IMAGEFILE *iV_LoadImageFile(char *FileData, WZ_DECL_UNUSED UDWORD FileSize)
 	}
 
 
-	ImageFile->TexturePages = (iSprite*)MALLOC(sizeof(iSprite)*Header->NumTPages);
+	ImageFile->TexturePages = (iTexture*)MALLOC(sizeof(iTexture)*Header->NumTPages);
 	if(ImageFile->TexturePages == NULL) {
 		debug( LOG_ERROR, "Out of memory" );
 		return NULL;
@@ -107,7 +107,7 @@ IMAGEFILE *iV_LoadImageFile(char *FileData, WZ_DECL_UNUSED UDWORD FileSize)
 
 	// Load the texture pages.
 	for (i = 0; i < Header->NumTPages; i++) {
-		int tmp;	/* Workaround for MacOS gcc 4.0.0 bug. */
+		int tmp=0;	/* Workaround for MacOS gcc 4.0.0 bug. */
 		LoadTextureFile((char*)Header->TPageFiles[i],
 				&ImageFile->TexturePages[i],
 				&tmp);
@@ -151,7 +151,7 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 }
 
 
-static BOOL LoadTextureFile(char *FileName, iSprite *pSprite, int *texPageID)
+static BOOL LoadTextureFile(char *FileName, iTexture *pSprite, int *texPageID)
 {
 	int i=0;
 
@@ -162,7 +162,7 @@ static BOOL LoadTextureFile(char *FileName, iSprite *pSprite, int *texPageID)
 		assert(FALSE);
 		return FALSE;
 	} else {
-		*pSprite = *(iSprite*)resGetData("IMGPAGE", FileName);
+		*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
 		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
 		      FileName, pSprite->width, pSprite->height);
 	}

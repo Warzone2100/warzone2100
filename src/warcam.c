@@ -112,7 +112,7 @@ static  FRACT	 radarX,radarY;
 
 /*	Where we were up to (pos and rot) last update - allows us to see whether
 	we are sufficently near our target to disable further tracking */
-static	iVector	oldPosition,oldRotation;
+static	Vector3i	oldPosition, oldRotation;
 
 /* The fraction of a second that the last game frame took */
 static	FRACT	fraction;
@@ -1242,7 +1242,7 @@ SDWORD	yPos;
 /* Returns how far away we are from our goal in a radar track */
 static UDWORD getPositionMagnitude( void )
 {
-	iVector dif;
+	Vector3i dif;
 	UDWORD val;
 
 	dif.x = abs(player.p.x - oldPosition.x);
@@ -1255,7 +1255,7 @@ static UDWORD getPositionMagnitude( void )
 
 static UDWORD getRotationMagnitude( void )
 {
-	iVector dif;
+	Vector3i dif;
 	UDWORD val;
 
 	dif.x = abs(player.r.x - oldRotation.x);
@@ -1561,7 +1561,7 @@ BOOL	retVal;
 /* Displays a spinning MTV style logo in the top right of the screen */
 void	dispWarCamLogo( void )
 {
-//iVector		dv;
+//Vecotr3i		dv;
 //
 //	if(gamePaused())
 //	{
@@ -1588,7 +1588,7 @@ void	toggleRadarAllignment( void )
 	bRadarAllign = !bRadarAllign;
 }
 
-void	camInformOfRotation( iVector *rotation )
+void	camInformOfRotation( Vector3i *rotation )
 {
 	trackingCamera.rotation.x = rotation->x;
 	trackingCamera.rotation.y = rotation->y;

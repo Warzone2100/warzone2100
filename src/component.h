@@ -24,8 +24,8 @@
 #include "structuredef.h"
 
 /*
-	Header file for component.c 
-	Pumpkin Studios, EIDOS Interactive. 
+	Header file for component.c
+	Pumpkin Studios, EIDOS Interactive.
 */
 
 extern UBYTE PlayerColour[MAX_PLAYERS];// = {0,1,2,3,4,5,6,7}
@@ -54,20 +54,13 @@ extern UDWORD getStructureStatSize(STRUCTURE_STATS *Stats);
 #define TOWER_HEIGHT    100
 extern UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat);
 
-extern void displayIMDButton(iIMDShape *IMDShape,
-					     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-extern void displayStructureButton(STRUCTURE *psStructure,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-extern void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-extern void displayComponentButton(BASE_STATS *Stat,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-extern void displayResearchButton(BASE_STATS *Stat,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-extern void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
-									iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
-extern void displayComponentButtonObject(DROID *psDroid,
-								  iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale);
+extern void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+extern void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+extern void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+extern void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+extern void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+extern void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+extern void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
 extern void	displayComponentObject(BASE_OBJECT *psObj);
 
 extern void	compPersonToBits(DROID *psDroid);

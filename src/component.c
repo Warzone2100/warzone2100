@@ -57,7 +57,7 @@
 #include "projectile.h"
 
 void unsetMatrix(void);
-void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ);
+void setMatrix(Vector3i *Position, Vector3i *Rotation, Vector3i *CameraPos, BOOL RotXYZ);
 
 #define MAX_GROUP_SIZE	10
 
@@ -141,11 +141,9 @@ void updateLightLevels(void)
 }
 
 
-void setMatrix(iVector *Position,iVector *Rotation,iVector *CameraPos,BOOL RotXYZ)
+void setMatrix(Vector3i *Position, Vector3i *Rotation, Vector3i *CameraPos, BOOL RotXYZ)
 {
-
-
-	iVector BSPCameraPos;
+	Vector3i BSPCameraPos;
 	OBJPOS Camera = {0,0,0,0,0,0};
 
 	Camera.pitch=-45;
@@ -286,10 +284,9 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 }
 
 
-void displayIMDButton(iIMDShape *IMDShape,
-					     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
+void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
-	iVector TmpCamPos = {0,0,0};
+	Vector3i TmpCamPos = {0,0,0};
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
@@ -303,14 +300,13 @@ void displayIMDButton(iIMDShape *IMDShape,
 
 
 //Watermelon:changed it to loop thru and draw all weapons
-void displayStructureButton(STRUCTURE *psStructure,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape *baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
 	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
 	UDWORD			nWeaponStat;
-	iVector TmpCamPos = {0,0,0};
+	Vector3i TmpCamPos = {0,0,0};
 	int		i;
 
     /*HACK HACK HACK!
@@ -457,13 +453,12 @@ void displayStructureButton(STRUCTURE *psStructure,
 	unsetMatrix();
 }
 
-void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
+void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
 	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
-	iVector TmpCamPos = {0,0,0};
+	Vector3i TmpCamPos = {0,0,0};
 	//UDWORD			nWeaponStat;
 	UBYTE	i;
 
@@ -626,13 +621,13 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player,
 
 // Render a component given a BASE_STATS structure.
 //
-void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Position,
+void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position,
                             BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
 	SDWORD compID;
-	iVector TmpCamPos = {0,0,0};
+	Vector3i TmpCamPos = {0,0,0};
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
@@ -674,12 +669,11 @@ void displayComponentButton(BASE_STATS *Stat, iVector *Rotation,iVector *Positio
 
 // Render a research item given a BASE_STATS structure.
 //
-void displayResearchButton(BASE_STATS *Stat,
-						     iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
+void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
-	iVector TmpCamPos = {0,0,0};
+	Vector3i TmpCamPos = {0,0,0};
 
 
 	if(ResearchIMD)
@@ -702,12 +696,11 @@ void displayResearchButton(BASE_STATS *Stat,
 
 // Render a composite droid given a DROID_TEMPLATE structure.
 //
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
-									iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	static DROID Droid;	// Made static to reduce stack usage.
 	SDWORD difference;
- 	iVector TmpCamPos = {0,0,0};
+ 	Vector3i TmpCamPos = {0,0,0};
 
 	/* init to NULL */
 	memset( &Droid, 0, sizeof(DROID) );
@@ -743,11 +736,10 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate,
 
 // Render a composite droid given a DROID structure.
 //
-void displayComponentButtonObject(DROID *psDroid,
-								  iVector *Rotation,iVector *Position,BOOL RotXYZ, SDWORD scale)
+void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	SDWORD		difference;
- 	iVector		TmpCamPos = {0,0,0};
+ 	Vector3i TmpCamPos = {0,0,0};
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
@@ -779,10 +771,10 @@ void displayComponentObject(BASE_OBJECT *psObj)
 {
 DROID		*psDroid;
 //iIMDShape	*psShape;
-iVector		position,rotation;	//,null;
+Vector3i		position, rotation;	//,null;
 //iPoint		screenCoords;
 //SDWORD		dummyZ;
-int32		xShift,zShift;
+Sint32		xShift,zShift;
 UDWORD		worldAngle;
 SDWORD		difference;
 SDWORD		frame;
@@ -854,7 +846,7 @@ MAPTILE	*psTile;
     if (psDroid->lastHitWeapon == WSC_EMP &&
         (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
     {
-        iVector			position;
+        Vector3i position;
 
         //add an effect on the droid
 		position.x = psDroid->x + DROID_EMP_SPREAD;
@@ -903,8 +895,8 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	DROID				*psDroid;
 	//Watermelon:I need another temp pointer to Shape
 	iIMDShape			*psShape, *psJet, *psShapeTemp = NULL;
-	iVector				null;
-	iPoint				screenCoords;
+	Vector3i				null;
+	Vector2i				screenCoords;
 	SDWORD				dummyZ, iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				frame;
@@ -1172,7 +1164,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 							if ( iConnector < VTOL_CONNECTOR_START )
 							{
 								//Watermelon:midpoint for heavybody with only 1 weapon
-								if ( psDroid->numWeaps == 1 && 
+								if ( psDroid->numWeaps == 1 &&
 									((asBodyStats[psDroid->asBits[COMP_BODY].nStat]).weaponSlots == 3 ||
 									(asBodyStats[psDroid->asBits[COMP_BODY].nStat]).size >= SIZE_HEAVY))
 								{
@@ -1555,12 +1547,12 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 }
 
 
-void	destroyFXDroid(DROID	*psDroid)
+void destroyFXDroid(DROID	*psDroid)
 {
 UDWORD	i;
 iIMDShape	*psImd = NULL;
 SDWORD	widthScatter,breadthScatter,heightScatter;
-iVector	pos;
+Vector3i pos;
 
  	widthScatter = TILE_UNITS/4;
 	breadthScatter = TILE_UNITS/4;
@@ -1662,7 +1654,7 @@ iVector	pos;
 
 void	compPersonToBits(DROID *psDroid)
 {
-	iVector		position;	//,rotation,velocity;
+	Vector3i position;	//,rotation,velocity;
 	iIMDShape	*headImd, *legsImd, *armImd, *bodyImd;
 	UDWORD		groundHeight;
 	UDWORD		col;

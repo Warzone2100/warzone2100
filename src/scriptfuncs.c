@@ -8561,11 +8561,11 @@ BOOL scrChooseValidLoc(void)
 BOOL scrGetClosestEnemy(void)
 {
 	SDWORD				x,y,tx,ty, player, range,i;
-	UDWORD				dist,bestDist;
+	UDWORD				dist, bestDist;
 	BOOL				weaponOnly, bVTOLs, bFound = FALSE;	//only military objects?
-	BASE_OBJECT			*psObj;
-	STRUCTURE			*psStruct;
-	DROID				*psDroid;
+	BASE_OBJECT			*psObj = NULL;
+	STRUCTURE			*psStruct = NULL;
+	DROID				*psDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
 		 VAL_INT, &range,  VAL_BOOL, &weaponOnly, VAL_BOOL, &bVTOLs, VAL_INT, &player))
@@ -8968,7 +8968,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 	UDWORD				dist,bestDist;
 	BOOL				bFound = FALSE;	//only military objects?
 	BOOL				bVTOLs;
-	DROID				*psDroid,*foundDroid;
+	DROID				*psDroid = NULL, *foundDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
 		 VAL_INT, &range,  VAL_INT, &type, VAL_BOOL, &bVTOLs, VAL_INT, &player))
@@ -9056,7 +9056,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 	SDWORD				x,y,tx,ty, player, range,i,type,dist;
 	UDWORD				bestDist;
 	BOOL				bFound = FALSE;	//only military objects?
-	STRUCTURE			*psStruct,*foundStruct;
+	STRUCTURE			*psStruct = NULL, *foundStruct = NULL;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
 		 VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))

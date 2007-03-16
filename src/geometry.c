@@ -44,7 +44,7 @@ void	processImpact(UDWORD worldX, UDWORD worldY, UBYTE severity,UDWORD tilesAcro
 //BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y);
 //STRUCTURE	*getTileStructure(UDWORD x, UDWORD y);
 //FEATURE		*getTileFeature(UDWORD x, UDWORD y);
-void	baseObjScreenCoords	( BASE_OBJECT *baseObj, iPoint *pt				);
+void	baseObjScreenCoords	( BASE_OBJECT *baseObj, Vector2i *pt				);
 SDWORD	calcDirection		( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1	);
 UDWORD	adjustDirection		( SDWORD present, SDWORD difference				);
 
@@ -222,13 +222,14 @@ SDWORD directionDiff(SDWORD a, SDWORD b)
 
 
 
-void WorldPointToScreen( iPoint *worldPt, iPoint *screenPt )
+void WorldPointToScreen( Vector2i *worldPt, Vector2i *screenPt )
 {
-iVector vec,null;
-//MAPTILE	*psTile;
-UDWORD	worldX,worldY;
-SDWORD	xShift,zShift;
-int32	rx,rz;
+	Vector3i vec, null;
+	//MAPTILE	*psTile;
+	UDWORD	worldX,worldY;
+	SDWORD	xShift,zShift;
+	Sint32	rx,rz;
+
 	/* Get into game context */
 	/* Get the x,z translation components */
 	rx = player.p.x & (TILE_UNITS-1);
@@ -298,9 +299,9 @@ int32	rx,rz;
 	implies a movement DOWN the screen, and NOT up. */
 
 void
-baseObjScreenCoords(BASE_OBJECT *baseObj, iPoint *pt)
+baseObjScreenCoords(BASE_OBJECT *baseObj, Vector2i *pt)
 {
-	iPoint	worldPt;
+	Vector2i worldPt;
 
 	worldPt.x = baseObj->x;
 	worldPt.y = baseObj->y;

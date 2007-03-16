@@ -800,7 +800,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	UDWORD			x					= xOffset+psWidget->x;
 	UDWORD			y					= yOffset+psWidget->y;
 	UDWORD			player;//,pl2;
-	iVector			Rotation,Position;
+	Vector3i Rotation, Position;
 
 	player = (int)psWidget->pUserData;	//get the in game player number.
 

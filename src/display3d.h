@@ -28,9 +28,9 @@
 #include "objectdef.h"
 #include "message.h"
 
-extern BOOL	xInOrder,yInOrder,yBeforeX,spinScene;
+extern BOOL xInOrder, yInOrder, yBeforeX, spinScene;
 
-extern UDWORD	mapX,mapY;
+extern UDWORD mapX,mapY;
 extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);
 extern void	setViewDistance(UDWORD dist);
@@ -79,18 +79,16 @@ extern BOOL	clipXY ( SDWORD x, SDWORD y);
 extern BOOL init3DView(void);
 extern void initViewPosition(void);
 extern iView player,camera;
-extern iVector	imdRot;
+extern Vector3i	imdRot;
 extern UDWORD	distance;
 extern UDWORD  terrainOutline;
-extern SDWORD mouseTileX;
-extern SDWORD mouseTileY;
 extern UDWORD xOffset,yOffset;
 extern BOOL	selectAttempt;
 extern BOOL draggingTile;
 extern struct iIMDShape *g_imd;
 extern BOOL	droidSelected;
 extern UDWORD terrainMidX,terrainMidY;
-extern int32 playerXTile, playerZTile, rx, rz;
+extern Sint32 playerXTile, playerZTile, rx, rz;
 
 extern SDWORD scrollSpeed;
 extern iBitmap	**tilesRAW;
@@ -110,7 +108,7 @@ extern SDWORD	getCentreX( void );
 extern SDWORD	getCentreZ( void );
 
 
-extern SDWORD	mouseTileX,mouseTileY;
+extern SDWORD mouseTileX, mouseTileY;
 extern BOOL	yBeforeX;
 extern UDWORD numDroidsSelected;
 extern UDWORD	intensity1,intensity2,intensity3;

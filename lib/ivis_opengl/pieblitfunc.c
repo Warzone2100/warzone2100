@@ -80,7 +80,7 @@ POINT		rectVerts[4];
  *	Source
  */
 /***************************************************************************/
-void pie_Line(int x0, int y0, int x1, int y1, uint32 colour)
+void pie_Line(int x0, int y0, int x1, int y1, Uint32 colour)
 {
 //	PIELIGHT light;
 
@@ -96,7 +96,7 @@ void pie_Line(int x0, int y0, int x1, int y1, uint32 colour)
 }
 /***************************************************************************/
 
-void pie_Box(int x0,int y0, int x1, int y1, uint32 colour)
+void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour)
 {
 //	PIELIGHT light;
 //	iColour* psPalette;
@@ -159,7 +159,7 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 	pie_DrawRect( x0, y0, x1, y1, light.argb );
 }
 
-void pie_BoxFill(int x0,int y0, int x1, int y1, uint32 colour)
+void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour)
 {
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);

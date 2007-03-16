@@ -481,7 +481,7 @@ void recycleDroid(DROID *psDroid)
 {
 	UDWORD		numKills, minKills;
 	SDWORD		i, cost, storeIndex;
-	iVector		position;
+	Vector3i position;
 
 	// store the droids kills
 	numKills = psDroid->numKills;
@@ -690,7 +690,7 @@ UDWORD	droidRemoveKills=0;
 */
 static void removeDroidFX(DROID *psDel)
 {
- 	iVector	pos;
+	Vector3i pos;
 
 	// only display anything if the droid is visible
 	if (!psDel->visible[selectedPlayer])
@@ -793,7 +793,7 @@ void	vanishDroid(DROID *psDel)
 /* Remove a droid and free it's memory */
 void destroyDroid(DROID *psDel)
 {
-	iVector	pos;
+	Vector3i pos;
 	UDWORD	widthScatter,breadthScatter,heightScatter;
 	UDWORD	i;
 	DROID	*psCurr, *psNext;
@@ -1286,7 +1286,7 @@ void droidGetNaybors(DROID *psDroid)
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {
-	iVector	dv;
+	Vector3i dv;
 	UDWORD	percentDamage, emissionInterval;
 	BASE_OBJECT	*psBeingTargetted = NULL;
 	SDWORD	damageToDo;
@@ -1759,13 +1759,11 @@ BOOL droidStartBuild(DROID *psDroid)
 	return TRUE;
 }
 
-static void droidAddWeldSound( iVector iVecEffect )
+static void droidAddWeldSound( Vector3i iVecEffect )
 {
 	SDWORD		iAudioID;
 
-
 	iAudioID = ID_SOUND_CONSTRUCTION_1 + (rand()%4);
-
 
 	audio_PlayStaticTrack( iVecEffect.x, iVecEffect.z, iAudioID );
 }
@@ -1773,7 +1771,7 @@ static void droidAddWeldSound( iVector iVecEffect )
 static void addConstructorEffect(STRUCTURE *psStruct)
 {
 	UDWORD		widthRange,breadthRange;
-	iVector		temp;
+	Vector3i temp;
 
 	//FIXME
 	if((ONEINTEN) && (psStruct->visible[selectedPlayer]))
@@ -2637,7 +2635,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 {
 	DROID		*psDroidToRepair;
 	UDWORD		iPointsToAdd, iRepairPoints, powerCost;
-	iVector		iVecEffect;
+	Vector3i iVecEffect;
 
 	ASSERT( psRepairDroid->action == DACTION_DROIDREPAIR,
 		"unitUpdateUnitRepair: unit does not have unit repair order" );
@@ -3902,7 +3900,7 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
 	UDWORD	speed;
-	//Watermelon:engine output bonus? 150% 
+	//Watermelon:engine output bonus? 150%
 	float eoBonus = 1.5f;
 
 	//return ((asBodyStats + psTemplate->asParts[COMP_BODY])->
@@ -4546,7 +4544,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	//Watermelon:Re-enabled this one,cause I need numWeaps in psDroid
 	if (pTemplate->numWeaps > 0)
 	{
-		
+
         //can only have one weapon now
 		//Watermelon:re-enabled this for loop
         for (inc=0; inc < pTemplate->numWeaps; inc++)
@@ -5172,15 +5170,15 @@ void	setSelectedCommander(UDWORD commander)
 	selectedCommander = commander;
 }
 
-/* calculate muzzle tip location in 3d world 
+/* calculate muzzle tip location in 3d world
  * Watermelon:note:only the 1st muzzleLocation is calculated,since WEAPON_IMD and WEAPON_MOUNT_IMD
  * are #define pointing to asWeaps[0]...
 */
-BOOL calcDroidMuzzleLocation(DROID *psDroid, iVector *muzzle, int weapon_slot)
+BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
 //	UDWORD turretType;
 //	UDWORD bodyType;
-	iVector			barrel;
+	Vector3i barrel;
  	iIMDShape		*psShape, *psWeapon, *psWeaponMount;
 
 	psShape       = BODY_IMD(psDroid,psDroid->player);

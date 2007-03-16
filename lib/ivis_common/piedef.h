@@ -159,12 +159,12 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of te
 typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, scale, height;} PIESTYLE; //render style for pie draw functions
 
 typedef struct {long n; char msge[240];} iError;
-typedef int32 fixed;
+typedef Sint32 fixed;
 
 // This is the new resource loaded structure (TEXPAGE)
 typedef struct
 {
-	iSprite *Texture;
+	iTexture *Texture;
 	iPalette *Palette;
 } TEXTUREPAGE;
 
@@ -206,7 +206,7 @@ extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
  * \param sprite Sprite to read into
  * \return TRUE on success, FALSE otherwise
  */
-BOOL pie_PNGLoadMem(char *pngimage, iSprite *sprite);
+BOOL pie_PNGLoadMem(char *pngimage, iTexture *sprite);
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 

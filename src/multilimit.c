@@ -428,7 +428,7 @@ void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 	UDWORD	w = psWidget->width;
 	UDWORD	h = psWidget->height;
 	STRUCTURE_STATS	*stat = asStructureStats+(UDWORD)psWidget->pUserData;
-	iVector	Rotation,Position;
+	Vector3i Rotation, Position;
 	char	str[3];
 
 	UDWORD scale,Radius;

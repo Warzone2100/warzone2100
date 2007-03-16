@@ -48,15 +48,15 @@
 
 //*************************************************************************
 
-extern uint8		colours[];
-extern uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
+extern Uint8		colours[];
+extern Uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 
 
 //*************************************************************************
 extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
 extern void		pal_BuildAdjustedShadeTable( void );
-extern uint8	pal_GetNearestColour(uint8 r, uint8 g, uint8 b);
+extern Uint8	pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
 extern int		pal_AddNewPalette(iColour *pal);
 extern void		pal_PaletteSet(void);
 extern iColour*	pie_GetGamePal(void);

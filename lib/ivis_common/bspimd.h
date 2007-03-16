@@ -20,12 +20,6 @@
 #ifndef i_BSPIMD
 #define i_BSPIMD
 
-#ifdef PIETOOL				// only needed when generating the tree
-typedef double HDVAL;
-typedef struct {HDVAL x, y, z;} iVectorHD;
-#endif
-
-
 typedef UDWORD WORLDCOORD;
 typedef SWORD ANGLE;
 
@@ -84,7 +78,7 @@ typedef struct PLANE
 	FRACT		b;
 	FRACT		c;
 	FRACT		d;
-	iVector	vP;	// a point on the plane - in normal non-fract format
+	Vector3i	vP;	// a point on the plane - in normal non-fract format
 }
 PLANE, *PSPLANE;
 
@@ -97,13 +91,12 @@ enum BINTREEORDER	{ PREORDER, INORDER, POSTORDER };
 typedef struct HDPLANE
 {
 	// These 1st three entries can NOT NOW be cast into a iVectorf *   (iVectorf on PC are doubles)
-	HDVAL		a;	// these values form the plane equation ax+by+cz=d
-	HDVAL		b;
-	HDVAL		c;
-	HDVAL		d;
-	iVectorHD	vP;	// a point on the plane - in normal non-fract format
-}
-HDPLANE;
+	float		a;	// these values form the plane equation ax+by+cz=d
+	float		b;
+	float		c;
+	float		d;
+	Vector3f	vP;	// a point on the plane - in normal non-fract format
+} HDPLANE;
 
 
 typedef int	(*COMPFUNC) ( void *node1, void *node2 );
@@ -132,7 +125,7 @@ typedef struct BSPTREENODE
 	BSPPOLYID		TriSameDir;	// id of the first polygon in the list ... or BSPPOLYID_TERMINATE for none
 	BSPPOLYID		TriOppoDir;	// id of the first polygon in the list ... or BSPPOLYID_TERMINATE for none
 #ifdef PIETOOL				// only needed when generating the tree
-	HDPLANE		*psPlane;		// High def version of the plane equation 
+	HDPLANE		*psPlane;		// High def version of the plane equation
 	PSBSPPTRLIST	psTriSameDir;
 	PSBSPPTRLIST	psTriOppoDir;
 #endif

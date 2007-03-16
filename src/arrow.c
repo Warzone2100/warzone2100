@@ -33,8 +33,8 @@
 
 typedef struct ARROW
 {
-	iVector			vecBase;
-	iVector			vecHead;
+	Vector3i			vecBase;
+	Vector3i			vecHead;
 	UBYTE			iColour;
 	struct ARROW	*psNext;
 }

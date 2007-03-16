@@ -49,8 +49,8 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#define SIN(X)					aSinTable[(uint16)(X) >> 4]
-#define COS(X)					aSinTable[((uint16)(X) >> 4) + 1024]
+#define SIN(X)					aSinTable[(Uint16)(X) >> 4]
+#define COS(X)					aSinTable[((Uint16)(X) >> 4) + 1024]
 
 
 //*************************************************************************
@@ -91,8 +91,8 @@ extern void pie_MatScale( UDWORD percent );
 extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);
-extern int32 pie_RotProj(iVector *v3d, iPoint *v2d);
-extern int32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys);
+extern Sint32 pie_RotProj(Vector3i *v3d, Vector2i *v2d);
+extern Sint32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys);
 
 //*************************************************************************
 
@@ -101,9 +101,9 @@ extern void pie_PerspectiveEnd(void);
 
 //*************************************************************************
 
-extern void pie_VectorNormalise(iVector *v);
-extern void pie_VectorInverseRotate0(iVector *v1, iVector *v2);
-extern void pie_SurfaceNormal(iVector *p1, iVector *p2, iVector *p3, iVector *v);
+extern void pie_VectorNormalise(Vector3i *v);
+extern void pie_VectorInverseRotate0(Vector3i *v1, Vector3i *v2);
+extern void pie_SurfaceNormal(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
 extern BOOL pie_Clockwise(iVertex *s);
 extern void pie_SetGeometricOffset(int x, int y);
 

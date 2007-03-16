@@ -351,7 +351,7 @@ BOOL seq_SetupVideoBuffers(void)
 		{
 			for(b = 0 ; b < 32 ; b++)
 			{
-				pVideoPalette[(SDWORD)c] = (char)pal_GetNearestColour((uint8)(r<<3),(uint8)(g<<3),(uint8)(b<<3));
+				pVideoPalette[(SDWORD)c] = (char)pal_GetNearestColour((Uint8)(r<<3),(Uint8)(g<<3),(Uint8)(b<<3));
 				c++;
 			}
 		}

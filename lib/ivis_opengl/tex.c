@@ -57,7 +57,7 @@ int _TEX_INDEX;
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, BOOL bResource)
+int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bResource)
 {
 	int	i = 0;
 
@@ -119,7 +119,7 @@ int pie_AddBMPtoTexPages(iSprite* s, const char* filename, int type, BOOL bResou
 	return i;
 }
 
-void pie_ChangeTexPage(int tex_index, iSprite* s, int type, BOOL bResource)
+void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 {
 	assert(s != NULL);
 
@@ -183,7 +183,7 @@ int iV_GetTexture(char *filename)
 int pie_ReloadTexPage(char *filename, char *pBuffer)
 {
 	int i = 0;
-	iSprite	s;
+	iTexture s;
 
 	// Log call to check validity of deprecation
 	debug( LOG_ERROR, "pie_ReloadTexPage called for %s, tell Per!", filename );

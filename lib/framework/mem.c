@@ -71,7 +71,6 @@ static MEM_NODE		*psMemRoot = NULL;
 
 /* The current block heap to use instead of MALLOC */
 static BLOCK_HEAP	*psCurrBlockHeap;
-void memMemoryDump(MEM_NODE *Node);
 
 /* Initialise the memory system */
 BOOL memInitialise(void)
@@ -382,7 +381,7 @@ BOOL memPointerValid(void *pPtr, size_t size)
 	}
 
 	// check the block heaps as well (if the code is there)
-#ifdef DEBUG_BLOCK
+#ifdef DEBUG_MALLOC
 	return blkPointerValidAll(pPtr, size);
 #else
 	return FALSE;
@@ -430,10 +429,10 @@ static UDWORD MemTotalModules;
 static UDWORD MemTotalAllocated;
 #endif
 
+#ifdef DEBUG_MALLOC
 /* Recursive function to total up the amount of mem allocated */
 static void memSummary(MEM_NODE *psRoot)
 {
-#ifdef DEBUG_MALLOC
 
 						// bsort
 	if (psRoot)
@@ -463,22 +462,18 @@ static void memSummary(MEM_NODE *psRoot)
 				MemModuleInfo[MemTotalModules].Total=psRoot->size;
 				MemTotalModules++;
 			}
-
 		}
-
-
 
 		memSummary((MEM_NODE *)psRoot->psLeft);
 		memSummary((MEM_NODE *)psRoot->psRight);
 	}
 	return ;
-#endif
 }
+#endif
 
 void memMemoryDump(MEM_NODE *Node)
 {
 #ifdef DEBUG_MALLOC
-
 	int i;
 
 	MemTotalEntries=0;

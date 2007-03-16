@@ -1556,7 +1556,7 @@ BOOL CheckScrollLimits(void)
 /* Do the 3D display */
 void displayWorld(void)
 {
-	iVector	pos;
+	Vector3i pos;
 	shakeUpdate();
 
 	if(mouseDown(MOUSE_RMB) &&	rotActive)
@@ -2540,7 +2540,7 @@ DROID_OACTION_INFO oaInfo = {{NULL}};
 		{
 #ifdef TEST_EFFECT
 // Code to test an effect when left mouse button pressed
-			iVector Pos;
+			Vector3i Pos;
 			Pos.x = mouseTileX*TILE_UNITS+TILE_UNITS/2;
 			Pos.z = mouseTileY*TILE_UNITS+TILE_UNITS/2;
 			Pos.y = 100;

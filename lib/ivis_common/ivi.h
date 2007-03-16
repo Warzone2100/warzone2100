@@ -39,7 +39,7 @@
 #define iV_DIVMULTP_2			(1<<(iV_DIVSHIFT-1))
 
 // Simple derived types
-typedef union {uint32 *dp; uint8 *bp; uint16 *wp;} iPointer;
+typedef union {Uint32 *dp; Uint8 *bp; Uint16 *wp;} iPointer;
 
 extern void iV_Error(long n, const char *msge, ...);
 
@@ -89,8 +89,8 @@ extern void iV_Error(long n, const char *msge, ...);
 /***************************************************************************/
 // Basic type (replace with framework definitions)
 typedef unsigned char uchar;
-typedef uint32 ufixed;
-typedef struct {int32 w, x, y, z;} iQuat;
+typedef Uint32 ufixed;
+typedef struct {Sint32 w, x, y, z;} iQuat;
 typedef struct {int x0, y0, x1, y1;} iBox;
 
 

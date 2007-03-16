@@ -38,7 +38,7 @@
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
 
 /* Stores the graphics data for the terrain tiles textures (in src/data.c) */
-iSprite tilesPCX;
+iTexture tilesPCX;
 
 /* How many pages have we loaded */
 SDWORD	firstTexturePage;
@@ -81,7 +81,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 	UDWORD	tilesProcessed;
 	char	*tileStorage;
 	char	*presentLoc;
-	iSprite	sprite;
+	iTexture sprite;
 
 	/* This is how many pages are already used on hardware */
 	firstTexturePage = pie_GetLastPageDownloaded() + 1;
@@ -158,7 +158,7 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 	UDWORD	tilesProcessed;
 	char	*tileStorage;
 	char	*presentLoc;
-	iSprite	sprite;
+	iTexture sprite;
 	//check enough pages are allocated
 
 	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", srcWidth,

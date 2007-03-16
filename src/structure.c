@@ -3562,7 +3562,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 	SDWORD			apx,apy;
 	FLAG_POSITION	*psFlag;
 //	UDWORD			i;
-	iVector			iVecEffect;
+	Vector3i iVecEffect;
 	UBYTE			factoryType;
 	BOOL			assignCommander;
     //STRUCTURE       *psReArmPad;
@@ -3944,7 +3944,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	RESEARCH_FACILITY	*psResFacility;
 	REARM_PAD			*psReArmPad;
-	iVector				iVecEffect;
+	Vector3i iVecEffect;
 	BOOL				bFinishAction,bDroidPlaced;
 	WEAPON_STATS		*psWStats;
 	BASE_OBJECT			*psTarget;
@@ -5052,9 +5052,9 @@ static BOOL canSmoke(STRUCTURE *psStruct)
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding)
 {
-UDWORD			widthScatter,breadthScatter;
-UDWORD			percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
-iVector			dv;
+	UDWORD			widthScatter,breadthScatter;
+	UDWORD			percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
+	Vector3i dv;
 
 	ASSERT( PTRVALID(psBuilding, sizeof(STRUCTURE)),
 		"structureUpdate: Invalid Structure pointer" );
@@ -5181,7 +5181,7 @@ iVector			dv;
             //add the blue flashing effect for multiPlayer
             if(bMultiPlayer && ONEINTEN)
 	        {
-                iVector position, *point;
+                Vector3i position, *point;
                 SDWORD	realY;
                 UDWORD	pointIndex;
 
@@ -6520,7 +6520,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 	UDWORD			mapX, mapY, width,breadth;
 	UDWORD			i;
 	UDWORD			widthScatter,breadthScatter,heightScatter;
-	iVector			pos;
+	Vector3i pos;
 	BOOL			resourceFound = FALSE;
 	MAPTILE			*psTile;
 	BOOL			bMinor;
@@ -7345,9 +7345,9 @@ BOOL getLasSatExists(UDWORD player)
 
 
 /* calculate muzzle tip location in 3d world */
-BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, iVector *muzzle, int weapon_slot)
+BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	iVector			barrel;
+	Vector3i barrel;
  	iIMDShape		*psShape, *psWeaponImd;
 
 	psShape       = psStructure->pStructureType->pIMD;
@@ -7985,7 +7985,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
     BOOL        bCompleted = TRUE;
 
 	NETMSG	m;
-	iVector		pos;
+	Vector3i pos;
 	UDWORD		i;
 
 
@@ -9912,7 +9912,7 @@ BOOL lasSatStructSelected(STRUCTURE *psStruct)
 /* Call CALL_NEWDROID script callback */
 static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 {
-	ASSERT(psDroid != NULL, 
+	ASSERT(psDroid != NULL,
 		"cbNewDroid: no droid assigned for CALL_NEWDROID callback");
 
 	psScrCBNewDroid = psDroid;

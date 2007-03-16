@@ -246,7 +246,7 @@ int GetBSPPolyCount(PSBSPTREENODE psNode, int *NodeCount)
 // new code the write out the connectors !
 void _imd_save_connectors(FILE *fp, iIMDShape *s)
 {
-	iVector *p;
+	Vector3i *p;
 	int i;
 
 	if (s->nconnectors != 0) {
@@ -457,10 +457,10 @@ void iV_IMDRelease(iIMDShape *s)
 		}
 
 		if (s->points) {
-			iV_HeapFree(s->points,s->npoints * sizeof(iVector));
+			iV_HeapFree(s->points,s->npoints * sizeof(Vector3i));
 		}
 		if (s->connectors) {
-			iV_HeapFree(s->connectors,s->nconnectors * sizeof(iVector));
+			iV_HeapFree(s->connectors,s->nconnectors * sizeof(Vector3i));
 		}
 		if (s->BSPNode) {
 				FREE(s->BSPNode);	// I used MALLOC() so i'm going to use FREE()

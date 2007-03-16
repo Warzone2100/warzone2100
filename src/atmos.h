@@ -25,9 +25,9 @@ typedef struct _atmosParticle
 UBYTE		status;
 UBYTE		type;
 UDWORD		size;
-PIEVECTORF	position;
-PIEVECTORF	velocity; 
-iIMDShape	*imd;	
+Vector3f	position;
+Vector3f	velocity;
+iIMDShape	*imd;
 } ATPART;
 
 typedef	enum
