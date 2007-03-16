@@ -17,7 +17,7 @@ noinst_HEADERS = action.h advvis.h ai.h aidef.h aiexperience.h anim_id.h \
 	deliverance.h design.h difficulty.h disp2d.h display.h display3d.h display3ddef.h \
 	displaydef.h drive.h droid.h droiddef.h e3demo.h edit2d.h edit3d.h effects.h \
 	environ.h feature.h featuredef.h findpath.h formation.h formationdef.h fpath.h \
-	frend.h frontend.h function.h functiondef.h game.h gamedefs.h gateway.h \
+	frend.h frontend.h function.h functiondef.h game.h gateway.h \
 	gatewaydef.h gatewayroute.h geometry.h group.h hci.h ingameop.h init.h intdisplay.h \
 	intelmap.h intfac.h intimage.h intorder.h keybind.h keyedit.h keymap.h levelint.h \
 	levels.h lighting.h loadsave.h loop.h map.h mapdisplay.h mapgrid.h mechanics.h \
