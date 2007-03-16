@@ -618,7 +618,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 {
 	VIEWDATA	*psIntMessage;
-	char		*pName;
+	const char	*pName;
 	RESEARCH	*psResearch;
 	char		*pPos;
 	DROID		*psCDroid;
@@ -812,23 +812,17 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		*pSize = sizeof(UDWORD) * members + sizeof(SDWORD) * 5;
 		break;
 	case ST_SOUND:
-/*		pName = sound_GetTrackName((SDWORD)data);
+		pName = sound_GetTrackName((UDWORD)psVal->v.ival);
 		if (pName == NULL)
 		{
-			DBERROR(("scrValDefSave: couldn't get sound track name"));
+			debug(LOG_ERROR, "scrValDefSave: couldn't get sound track name");
 			return FALSE;
 		}
 		if (pBuffer)
 		{
-			strcpy((char *)pBuffer, pName);
+			strcpy(pBuffer, pName);
 		}
-		*pSize = strlen((char *)pName) + 1;*/
-		if (pBuffer)
-		{
-			*((UDWORD *) pBuffer) = sound_GetTrackHashName((SDWORD)psVal->v.ival);
-			endian_udword((UDWORD*)pBuffer);
-		}
-		*pSize = sizeof(UDWORD);
+		*pSize = strlen(pName) + 1;
 		break;
 	case ST_STRUCTUREID:
 	case ST_DROIDID:

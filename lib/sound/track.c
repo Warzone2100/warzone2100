@@ -213,9 +213,6 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 	}
 	strcpy( pTrack->pName, GetLastResourceFilename() );
 
-	// Set HASH of resource in filename
-	pTrack->resID = GetLastHashName();
-
 	if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
 		return NULL;
 
@@ -246,7 +243,6 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 		}
 
 		strcpy( pTrack->pName, (char*) szFileName );
-		pTrack->resID = HashStringIgnoreCase( (char*) szFileName );
 		if ( sound_ReadTrackFromFile(pTrack, szFileName) == FALSE )
 		{
 			return FALSE;
@@ -413,18 +409,6 @@ const char *sound_GetTrackName( SDWORD iTrack )
 	if ( iTrack == SAMPLE_NOT_FOUND ) return NULL;
 	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-UDWORD sound_GetTrackHashName( SDWORD iTrack )
-{
-	if (iTrack == 0 || iTrack == SAMPLE_NOT_FOUND)
-		return 0;
-	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
-	return g_apTrack[iTrack] ? g_apTrack[iTrack]->resID : 0;
 }
 
 //*

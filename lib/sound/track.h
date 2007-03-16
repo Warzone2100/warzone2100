@@ -101,8 +101,6 @@ typedef struct TRACK
 	BOOL		bMemBuffer;				/* memory buffer flag       */
 	ALuint		iBufferName;				/* name of the openal buffer */
 	char		*pName;					// resource name of the track
-	UDWORD		resID;					// hashed name of the WAV
-
 } TRACK;
 
 /***************************************************************************/
@@ -130,7 +128,6 @@ SDWORD	sound_GetTrackPriority( SDWORD iTrack );
 SDWORD	sound_GetTrackAudibleRadius( SDWORD iTrack );
 SDWORD	sound_GetTrackVolume( SDWORD iTrack );
 const char *	sound_GetTrackName( SDWORD iTrack );
-UDWORD	sound_GetTrackHashName( SDWORD iTrack );
 
 BOOL	sound_TrackLooped( SDWORD iTrack );
 SDWORD	sound_TrackAudibleRadius( SDWORD iTrack );
