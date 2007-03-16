@@ -32,9 +32,6 @@
 
 //*************************************************************************
 
-#define iV_TEXTEX(i)	((iTexture *) (&_TEX_PAGE[(i)].tex))
-#define iV_TEXPAGE(i)	((iTexPage *) (&_TEX_PAGE[(i)]))
-#define iV_TEXBMP(i)	((iBitmap *) (&_TEX_PAGE[(i)].tex.bmp))
 #define iV_TEXWIDTH(i)	(_TEX_PAGE[(i)].tex.width)
 #define iV_TEXHEIGHT(i) (_TEX_PAGE[(i)].tex.height)
 #define iV_TEXNAME(i)	((char *) (&_TEX_PAGE[(i)].name))

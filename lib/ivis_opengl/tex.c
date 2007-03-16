@@ -61,8 +61,8 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 {
 	int	i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d res=%d", filename,
-	      type, bResource);
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d resource=%s page=%d", filename, 
+	      type, bResource ? "true" : "false", _TEX_INDEX);
 	assert(s != NULL);
 
 	/* Have we already loaded this one? (Should generally not happen here.) */
@@ -157,8 +157,8 @@ int iV_GetTexture(char *filename)
 {
 	int i  = 0;
 
-	/* Have we already loaded this one then? (Yes. Always.) */
-	while (i < _TEX_INDEX) {
+	/* Have we already loaded this one then? */
+	while (i < iV_TEX_MAX) {
 		if (strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
 			return i;
 		}
@@ -167,41 +167,33 @@ int iV_GetTexture(char *filename)
 
 	/* This should never happen - by now all textures should have been loaded. */
 	debug(LOG_ERROR, "*** texture %s not loaded! ***", filename);
-	debug(LOG_ERROR, "Available texture pages in memory:");
-	for (i = 0; i < _TEX_INDEX; i++) {
+	debug(LOG_ERROR, "Available texture pages in memory (%d out of %d max):", _TEX_INDEX, iV_TEX_MAX);
+	for (i = 0; i < iV_TEX_MAX; i++) {
 		debug(LOG_ERROR, "   %02d : %s", i, _TEX_PAGE[i].name);
 	}
 	debug(LOG_ERROR, "This error probably means you did not specify for this texture");
 	debug(LOG_ERROR, "to be preloaded in the appropriate wrf files before referencing");
 	debug(LOG_ERROR, "it in some pie file.  Remember that patches override several");
 	debug(LOG_ERROR, "standard wrf files as well.");
-	assert(FALSE);
+
 	return -1;
 }
 
-// According to logfile not used, deprecating
 int pie_ReloadTexPage(char *filename, char *pBuffer)
 {
-	int i = 0;
-	iTexture s;
+	int i = iV_GetTexture(filename);
 
-	// Log call to check validity of deprecation
-	debug( LOG_ERROR, "pie_ReloadTexPage called for %s, tell Per!", filename );
-
-	/* Have we already loaded this one then? */
-	while (strcasecmp(filename,_TEX_PAGE[i].name) != 0) {
-		i++;
-		if (i >= _TEX_INDEX) {
-			debug(LOG_TEXTURE, "Texture %s not in resources", filename);
-			return -1;
-		}
+	if (i == -1)
+	{
+		return -1;
 	}
-	//got the old texture page so load bmp straight in
-	s.width = _TEX_PAGE[i].tex.width;
-	s.height = _TEX_PAGE[i].tex.height;
-	s.bmp = _TEX_PAGE[i].tex.bmp;
+	debug(LOG_TEXTURE, "Reloading texture %s from index %d, max is %d", filename, i, _TEX_INDEX);
 
-	pie_PNGLoadMem(pBuffer, &s);
+	if (_TEX_PAGE[i].tex.bmp)
+	{
+		free(_TEX_PAGE[i].tex.bmp);
+	}
+	pie_PNGLoadMem(pBuffer, &_TEX_PAGE[i].tex);
 
 	return i;
 }
@@ -213,10 +205,7 @@ int pie_ReloadTexPage(char *filename, char *pBuffer)
 */
 void pie_TexShutDown(void)
 {
-	int i,j;
-
-	i = 0;
-	j = 0;
+	int i = 0, j = 0;
 
 	while (i < _TEX_INDEX) {
 		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already
@@ -231,19 +220,19 @@ void pie_TexShutDown(void)
 		i++;
 	}
 
-	debug( LOG_NEVER, "pie_TexShutDown successful - freed %d texture pages\n", j );
+	debug(LOG_TEXTURE, "pie_TexShutDown successful - did free %d texture pages\n", j);
 }
 
 void pie_TexInit(void)
 {
-	int i;
+	int i = 0;
 
-	i = 0;
-
-	while (i < _TEX_INDEX) {
+	while (i < iV_TEX_MAX) {
+		_TEX_PAGE[i].name[0] = '\0';
 		_TEX_PAGE[i].tex.bmp = NULL;
 		_TEX_PAGE[i].tex.width = 0;
 		_TEX_PAGE[i].tex.height = 0;
 		i++;
 	}
+	debug(LOG_TEXTURE, "pie_TexInit successful - initialized %d texture pages\n", i);
 }

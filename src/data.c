@@ -850,18 +850,14 @@ void dataIMGRelease(void *pData)
 /* Load a texturepage into memory */
 BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	TEXTUREPAGE *NewTexturePage;
-	iPalette	*psPal;
-	iTexture *psSprite;
 	char		texfile[255];
+	char		texpage[255];
 	SDWORD		i, id;
 
 	// generate a texture page name in "page-xx" format
 	strncpy(texfile, GetLastResourceFilename(), 254);
 	texfile[254]=0;
 	resToLower(texfile);
-
-	debug(LOG_TEXTURE, "bufferTexPageLoad: %s texturepage ...", texfile);
 
 	//hardware
 	if (strstr(texfile, "soft") != NULL) // and this is a software textpage
@@ -871,6 +867,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		return TRUE;
 	}
 
+	strncpy(texpage, texfile, 254);
 	if (strncmp(texfile, "page-", 5) == 0)
 	{
 		for(i=5; i<(SDWORD)strlen(texfile); i++)
@@ -880,24 +877,28 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 				break;
 			}
 		}
-		texfile[i] = 0;
+		
+		texpage[i] = 0;
 	}
-	SetLastResourceFilename(texfile);
-
-	debug(LOG_TEXTURE, "bufferTexPageLoad: %s texturepage added (length=%d)",
-	      texfile, (int)strlen(texfile));
+	SetLastResourceFilename(texpage);
 
 	// see if this texture page has already been loaded
-	if (resPresent("TEXPAGE", texfile))
+	if (resPresent("TEXPAGE", texpage))
 	{
 		// replace the old texture page with the new one
-		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing old");
-		id = pie_ReloadTexPage(texfile, pBuffer);
+		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing %s with new texture %s", texpage, texfile);
+		id = pie_ReloadTexPage(texpage, pBuffer);
 		ASSERT( id >=0,"pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
 	else
 	{
+		TEXTUREPAGE *NewTexturePage;
+		iPalette	*psPal;
+		iTexture	*psSprite;
+
+		debug(LOG_TEXTURE, "bufferTexPageLoad: adding page %s with texture %s", texpage, texfile);
+
 		NewTexturePage = (TEXTUREPAGE*)MALLOC(sizeof(TEXTUREPAGE));
 		if (!NewTexturePage) return FALSE;
 
@@ -918,11 +919,10 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 			return FALSE;
 		}
 
-
 		NewTexturePage->Texture=psSprite;
 		NewTexturePage->Palette=psPal;
 
-		pie_AddBMPtoTexPages(psSprite, texfile, 1, TRUE);
+		pie_AddBMPtoTexPages(psSprite, texpage, 1, TRUE);
 
 		*ppData = NewTexturePage;
 	}
