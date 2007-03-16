@@ -126,82 +126,52 @@
 #define WATER_DEPTH	127			// Amount to push terrain below water.
 
 /********************  Prototypes  ********************/
-// TODO: Declare as many static as possible.
 
+static UDWORD	getTargettingGfx(void);
+static void	drawDroidGroupNumber(DROID *psDroid);
+static void	trackHeight(SDWORD desiredHeight);
+static void	getDefaultColours(void);
+static void	renderSky(void);
+static void	locateMouse(void);
+static void	preprocessTiles(void);
+static BOOL	renderWallSection(STRUCTURE *psStructure);
+static void	drawDragBox(void);
+static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
+static void	flipsAndRots(int texture);
+static void	displayTerrain(void);
+static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
+static void	drawTiles(iView *camera, iView *player);
+static void	display3DProjectiles(void);
 
-UDWORD	getTargettingGfx( void );
-void	drawDroidGroupNumber(DROID *psDroid);
-void	toggleEnergyBars( void );
-void	toggleReloadBarDisplay( void );
-void	trackHeight( SDWORD desiredHeight );
-void	setViewAngle(SDWORD angle);
-void	setViewDistance(UDWORD dist);
-void	getDefaultColours( void );
-void	renderSky(void);
-void	showShadePalette( void );
-void	pie_MatScale( UDWORD percent );
-void	screenSlideDown( void );
-void	locateMouse(void);
-void	preprocessTiles(void);
-//void	postprocessTiles(void);
-BOOL	renderWallSection(STRUCTURE *psStructure);
-void	buildTileTextures(void);
-void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
-UDWORD	getSuggestedPitch			( void );
-void	drawDragBox					( void );
-void	calcScreenCoords			( DROID *psDroid );
-void	calcFlagPosScreenCoords		( SDWORD *pX, SDWORD *pY, SDWORD *pR);
-BOOL	clipDroid					( DROID *psDroid );
-BOOL	clipXY						( SDWORD x, SDWORD y);
-void	moveDroids					( void );
-void	adjustTileHeight			( MAPTILE *psTile, SDWORD adjust );
-BOOL	init3DView					( void );
-void	flipsAndRots				( int texture );
-void	displayTerrain				( void );
-void	draw3DScene					( void );
-iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
-void	RenderCompositeDroid		( UDWORD Index, Vector3i *Rotation,
-									  Vector3i *Position,
-									  Vector3i *TurretRotation,
-									  DROID *psDroid,BOOL RotXYZ );
-void	drawTiles					( iView *camera, iView *player );
-void	display3DProjectiles		( void );
+static void	drawDroidSelections(void);
+static void	drawStructureSelections(void);
+WZ_DECL_UNUSED static void	drawBuildingLines(void);
 
-void	displaySprites				( void );
-void	drawDroidSelections			( void );
-void	drawStructureSelections		( void );
-void	drawBuildingLines			( void );
+static void	displayAnimation(ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame);
+static void	processSensorTarget(void);
+static void	processDestinationTarget(void);
+static BOOL	eitherSelected(DROID *psDroid);
+static void	testEffect(void);
+static void	showDroidSensorRanges(void);
+WZ_DECL_UNUSED static void	showSensorRange1(DROID *psDroid);
+static void	showSensorRange2(BASE_OBJECT *psObj);
+static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
+static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure);
+static void	doConstructionLines(void);
+WZ_DECL_UNUSED static void	showDroidSelection(DROID *psDroid);
+WZ_DECL_UNUSED static void	drawDeliveryPointSelection(void);
 
-void	displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame );
-//void	assignSensorTarget( DROID *psDroid );
-void	assignDestTarget( void );
-void	processSensorTarget( void );
-void	processDestinationTarget( void );
-UDWORD	getWaterTileNum( void );
-BOOL	eitherSelected(DROID *psDroid);
-BOOL bRender3DOnly;
-static void testEffect( void );
-void	showDroidSensorRanges(void);
-void	showSensorRange1(DROID *psDroid);
-void	showSensorRange2(BASE_OBJECT *psObj);
-void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
-void	debugToggleSensorDisplay( void );
+BOOL	bRender3DOnly;
 BOOL	bSensorDisplay = TRUE;		//was FALSE	**COUGH and I spend 2 days making my own. LOL -Q 5-10-05
 BOOL	bRangeDisplay = FALSE;
-SDWORD rangeCenterX,rangeCenterY,rangeRadius;
-BOOL	doWeDrawRadarBlips( void );
-BOOL	doWeDrawProximitys( void );
+SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
+BOOL	doWeDrawRadarBlips(void);
+BOOL	doWeDrawProximitys(void);
 void	drawDroidRank(DROID *psDroid);
 void	drawDroidSensorLock(DROID *psDroid);
 void	drawDroidCmndNo(DROID *psDroid);
-static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure);
-static	void	doConstructionLines( void );
-void	showDroidSelection( DROID *psDroid );
-void	drawDeliveryPointSelection(void);
 BOOL	bDrawBlips=TRUE;
 BOOL	bDrawProximitys=TRUE;
-void	setBlipDraw(BOOL val);
-void	setProximityDraw(BOOL val);
 BOOL	godMode;
 
 
@@ -616,7 +586,7 @@ BOOL		bPlayerHasHQ = FALSE;
 }
 
 /* Draws the 3D textured terrain */
-void displayTerrain(void)
+static void displayTerrain(void)
 {
 //	SDWORD	x,y;
 	tileZ = 8000;
@@ -698,7 +668,7 @@ void	setProximityDraw(BOOL val)
 /***************************************************************************/
 
 
-void drawTiles(iView *camera, iView *player)
+static void drawTiles(iView *camera, iView *player)
 {
 	SDWORD	i,j;
 	SDWORD	zMax;
@@ -1139,7 +1109,7 @@ void disp3d_getView(iView *newView)
 
 /* John's routine - deals with flipping around the vertex ordering for source textures
    when flips and rotations are being done */
-void	flipsAndRots(int texture)
+static void	flipsAndRots(int texture)
 {
 
 /* Store the source rect as four points */
@@ -1206,18 +1176,6 @@ void	flipsAndRots(int texture)
 }
 
 
-
-
-/* Establishes whether it's worth trying to render a droid - is it actually on the grid? */
-BOOL clipDroid(DROID *psDroid)
-{
-	if (psDroid->x>=(UDWORD)player.p.x && psDroid->x<(UDWORD)player.p.x+(visibleXTiles*TILE_UNITS) &&
-		psDroid->y>=(UDWORD)player.p.z && psDroid->y<(UDWORD)player.p.z+(visibleYTiles*TILE_UNITS))
-		return(TRUE);
-	else
-		return(FALSE);
-}
-
 /* Clips anything - not necessarily a droid */
 BOOL clipXY(SDWORD x, SDWORD y)
 {
@@ -1232,7 +1190,7 @@ BOOL clipXY(SDWORD x, SDWORD y)
 
 /*	Get the onscreen corrdinates of a Object Position so we can draw a 'button' in
 the Intelligence screen.  VERY similar to above function*/
-void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
+static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 {
 	SDWORD	centX,centY,centZ;
 	SDWORD	cX,cY;
@@ -1254,7 +1212,7 @@ void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 
 
 /* Renders the bullets and their effects in 3D */
-void display3DProjectiles( void )
+static void display3DProjectiles( void )
 {
 	PROJ_OBJECT		*psObj;
 
@@ -1888,8 +1846,7 @@ void displayProximityMsgs( void )
 	}
 }
 
-void
-displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
+static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 {
 	UWORD				i,uwFrame;
 	VECTOR3D			vecPos, vecRot, vecScale;
@@ -2848,7 +2805,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	iV_MatrixEnd();
 }
 
-BOOL	renderWallSection(STRUCTURE *psStructure)
+static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX,structY;
 //	SDWORD			centreX,centreZ;
@@ -3075,7 +3032,7 @@ void renderDroid( DROID *psDroid )
 
 
 /* Draws the strobing 3D drag box that is used for multiple selection */
-void	drawDragBox( void )
+static void	drawDragBox( void )
 {
 	int minX, maxX;		// SHURCOOL: These 4 ints will hold the corners of the selection box
 	int minY, maxY;
@@ -3257,7 +3214,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 }
 
 
-void	drawStructureSelections( void )
+static void	drawStructureSelections( void )
 {
 STRUCTURE	*psStruct;
 SDWORD		scrX,scrY,scrR;
@@ -3472,7 +3429,7 @@ FRACT		mulH;
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
-UDWORD	getTargettingGfx( void )
+static UDWORD	getTargettingGfx( void )
 {
 UDWORD	index;
 
@@ -3550,7 +3507,7 @@ static BOOL doHighlight( DROID *psDroid )
 	return(TRUE);
 }
 
-void	showDroidSelection( DROID *psDroid )
+static void	showDroidSelection( DROID *psDroid )
 {
 	/* First, let's see if we need to - Get out if it's not selected and no appropriate to highlight */
 	if(!psDroid->selected && !doHighlight(psDroid))
@@ -3569,7 +3526,7 @@ void	showDroidSelection( DROID *psDroid )
 	drawDroidReloadBar(psDroid);
 }
 
-void	drawDeliveryPointSelection(void)
+static void	drawDeliveryPointSelection(void)
 {
 	FLAG_POSITION	*psDelivPoint;
 	UDWORD			scrX,scrY,scrR;
@@ -3592,7 +3549,7 @@ void	drawDeliveryPointSelection(void)
 	}
 }
 
-void	drawDroidSelections( void )
+static void	drawDroidSelections( void )
 {
 	UDWORD			scrX,scrY,scrR;
 	DROID			*psDroid;
@@ -3890,7 +3847,7 @@ void	drawDroidSelections( void )
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 /* ---------------------------------------------------------------------------- */
-void	drawBuildingLines( void )
+static void	drawBuildingLines( void )
 {
 	Vector3i first, second;
 
@@ -3914,7 +3871,7 @@ void	drawBuildingLines( void )
 /* ---------------------------------------------------------------------------- */
 #define GN_X_OFFSET	(28)
 #define GN_Y_OFFSET (17)
-void	drawDroidGroupNumber(DROID *psDroid)
+static void	drawDroidGroupNumber(DROID *psDroid)
 {
 UWORD	id;
 UDWORD	id2;
@@ -4164,7 +4121,7 @@ void	calcScreenCoords(DROID *psDroid)
 	psDroid->sDisplay.screenR = radius;
 }
 
-void	preprocessTiles(void)
+static void	preprocessTiles(void)
 {
 UDWORD	i,j;
 UDWORD	left,right,up,down, size;
@@ -4373,7 +4330,7 @@ MAPTILE	*psTile;
 
 /* This is slow - speed it up */
 
-void	locateMouse(void)
+static void	locateMouse(void)
 {
 	UDWORD	i,j;
 	POINT	pt;
@@ -4435,7 +4392,7 @@ void	locateMouse(void)
 }
 
 // Render a skybox
-void renderSky(void)
+static void renderSky(void)
 {
 	static float wind = 0;
 
@@ -4452,7 +4409,7 @@ void renderSky(void)
 };
 
 /* Flattens an imd to the landscape and handles 4 different rotations */
-iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)
+static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)
 {
 UDWORD	i;
 UDWORD	pointHeight,centreHeight;
@@ -4551,7 +4508,7 @@ SDWORD	shift;
 			return(imd);
 }
 
-void	getDefaultColours( void )
+static void	getDefaultColours( void )
 {
 defaultColours.red = iV_PaletteNearestColour(255,0,0);
 defaultColours.green = iV_PaletteNearestColour(0,255,0);
@@ -4983,7 +4940,7 @@ SDWORD	pitch;
 	return(pitch);
 }
 // -------------------------------------------------------------------------------------
-void	trackHeight( SDWORD desiredHeight )
+static void	trackHeight( SDWORD desiredHeight )
 {
 FRACT	fraction;
 UDWORD	pitch;
@@ -5091,7 +5048,7 @@ void	assignDestTarget( void )
 	destTileY = mouseTileY;
 }
 // -------------------------------------------------------------------------------------
-void	processSensorTarget( void )
+static void	processSensorTarget( void )
 {
 	SWORD x,y;
 	SWORD offset;
@@ -5151,7 +5108,7 @@ void	processSensorTarget( void )
 
 }
 // -------------------------------------------------------------------------------------
-void	processDestinationTarget( void )
+static void	processDestinationTarget( void )
 {
 	SWORD x,y;
 	SWORD offset;
@@ -5378,7 +5335,7 @@ static void testEffect( void )
 }
 
 
-void	showDroidSensorRanges(void)
+static void	showDroidSensorRanges(void)
 {
 DROID		*psDroid;
 STRUCTURE	*psStruct;
@@ -5403,7 +5360,8 @@ STRUCTURE	*psStruct;
 	}//end if we want to display...
 }
 
-void	showSensorRange1(DROID *psDroid)		//this one doesn't do a circle, it displays 30 or so units at a time
+//this one doesn't do a circle, it displays 30 or so units at a time
+static void	showSensorRange1(DROID *psDroid)
 {
 	SDWORD	val;
 	SDWORD	radius;
@@ -5428,7 +5386,7 @@ void	showSensorRange1(DROID *psDroid)		//this one doesn't do a circle, it displa
 	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 }
 
-void	showSensorRange2(BASE_OBJECT *psObj)
+static void	showSensorRange2(BASE_OBJECT *psObj)
 {
 	SDWORD	radius;
 	SDWORD	xDif,yDif;
@@ -5474,7 +5432,7 @@ void	showSensorRange2(BASE_OBJECT *psObj)
 	}
 }
 
-void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
+static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
 	SDWORD	xDif,yDif;
 	Vector3i	pos;

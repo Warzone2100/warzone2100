@@ -97,7 +97,6 @@ extern iPalette	gamePal;
 //extern void	assignSensorTarget( DROID *psDroid );
 extern void	assignSensorTarget( BASE_OBJECT *psObj );
 extern void	assignDestTarget( void );
-extern void	processSensorTarget( void );
 extern void	setEnergyBarDisplay( BOOL val );
 extern UDWORD getWaterTileNum( void);
 extern void	setUnderwaterTile(UDWORD num);
@@ -169,6 +168,8 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 #define BAR_NONE	3
 
 extern UDWORD	barMode;
-
 extern UDWORD	geoOffset;
+
+extern void     draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
+
 #endif

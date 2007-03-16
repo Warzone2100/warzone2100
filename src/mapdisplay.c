@@ -64,41 +64,12 @@ extern UWORD ButYPos;
 extern UWORD ButWidth,ButHeight;
 extern BOOL		godMode;
 
-#define MAX_MAP_GRID	32
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
 
-/* ----------------------------------------------------------------------------------------- */
-/* Function prototypes */
-
-/*	Sets up the intelligence map by allocating the necessary memory and assigning world
-	variables for the renderer to work with */
-//void		setUpIntelMap		(UDWORD width, UDWORD height);
-/* Draws the intelligence map to the already setup buffer */
-//void		renderIntelMap		(iVector *location, iVector *viewVector, UDWORD elevation);
-
-/* Frees up the memory we've used */
-//void		releaseIntelMap		( void );
-
-/* Draw a tile on the grid */
-//void		drawMapTile				(SDWORD i, SDWORD j);//line draw nolonger used
-
-/* Clears the map buffer prior to drawing in it */
-//static	void	clearMapBuffer(iSurface *surface);
-//clear text message background with gray fill
-//static void clearIntelText(iSurface *pSurface);
-
-/*fills the map buffer with intelColours prior to drawing in it*/
-//static	void	fillMapBuffer(iSurface *surface);
-
-void		tileLayouts(int texture);
-
-//fill the intelColours array with the colours used for the background
-//static void setUpIntelColours(void);
 /* ----------------------------------------------------------------------------------------- */
 
 SDWORD	elevation;
 Vector3i mapPos, mapView;
-//static	iVector	oldPos, oldView;
 POINT  sP1,sP2,sP3,sP4;
 POINT  *psP1,*psP2,*psP3,*psP4,*psPTemp;
 
@@ -112,42 +83,6 @@ BOOL	doBucket = TRUE;
 
 //colours used to 'paint' the background of 3D view
 UDWORD	intelColours[MAX_INTEL_SHADES];
-
-/* ----------------------------------------------------------------------------------------- */
-/* Functions */
-void	tileLayouts(int texture)
-{
-	/* Store the source rect as four points */
-	sP1.x = 0; sP1.y = 0;
-	sP2.x = 63; sP2.y = 0;
-	sP3.x = 63; sP3.y = 63;
-	sP4.x = 0; sP4.y = 63;
-
-	/* Store pointers to the points */
-	psP1 = &sP1; psP2 = &sP2; psP3 = &sP3; psP4 = &sP4;
-
-	if (texture & TILE_XFLIP)
-	{
-		psPTemp = psP1; psP1 = psP2; psP2 = psPTemp; psPTemp = psP3; psP3 = psP4; psP4 = psPTemp;
-	}
-	if (texture & TILE_YFLIP)
-	{
- 		psPTemp = psP1;	psP1 = psP4; psP4 = psPTemp; psPTemp = psP2; psP2 = psP3; psP3 = psPTemp;
-	}
-
-	switch ((texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
-	{
-	case 1:
- 		psPTemp = psP1; psP1 = psP4; psP4 = psP3; psP3 = psP2; 	psP2 = psPTemp;
-		break;
-	case 2:
-		psPTemp = psP1; psP1 = psP3; psP3 = psPTemp; psPTemp = psP4; psP4 = psP2; psP2 = psPTemp;
-		break;
-	case 3:
-		psPTemp = psP1; psP1 = psP2; psP2 = psP3; psP3 = psP4; psP4 = psPTemp;
-		break;
-	}
-}
 
 /* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */
@@ -278,20 +213,3 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 	// close matrix context
 	pie_MatEnd();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
