@@ -50,7 +50,6 @@ static Uint32 	_IMD_FLAGS;
 static char		_IMD_NAME[MAX_FILE_PATH];
 static Sint32 	_IMD_VER;
 static VERTEXID 	vertexTable[iV_IMD_MAX_POINTS];
-static char		imagePath[MAX_FILE_PATH] = {""};
 
 // kludge
 extern void pie_SurfaceNormal(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
@@ -1083,15 +1082,3 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 }
 
 
-BOOL iV_setImagePath(char *path)
-{
-	int i;
-	strcpy(imagePath,path);
-	i = strlen(imagePath);
-	if (imagePath[i] != '/')
-	{
-		imagePath[i] = '/';
-		imagePath[i+1] = '\0';
-	}
-	return TRUE;
-}

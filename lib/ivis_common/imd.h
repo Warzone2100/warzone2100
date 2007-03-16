@@ -91,8 +91,6 @@
 
 //*************************************************************************
 
-extern BOOL iV_setImagePath(char *path);
-extern iIMDShape *iV_IMDLoad(char *filename, BOOL palkeep);
 extern iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd );
 iIMDShape *iV_ProcessBPIE(iIMDShape *, UDWORD size);
 
