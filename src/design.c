@@ -4090,13 +4090,6 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	return TRUE;
 }
 
-
-// ajl. above function is static. A quick wrapper for the net stuff
-static BOOL  MultiPlayValidTemplate(DROID_TEMPLATE *psTempl)
-{
-	return(intValidTemplate(psTempl) );
-}
-
 void desCreateDefaultTemplate( void )
 {
 	/* set current design to default */

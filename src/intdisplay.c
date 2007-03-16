@@ -2416,20 +2416,6 @@ SDWORD GetObjectBuffer(void)
 	return -1;
 }
 
-static SDWORD GetTopicBuffer(void)
-{
-	SDWORD i;
-
-	for(i=0; i<NUM_TOPICBUFFERS; i++) {
-		if( IsBufferInUse(&TopicBuffers[i])==FALSE )
-		{
-			return i;
-		}
-	}
-
-	return -1;
-}
-
 void ClearStatBuffers(void)
 {
 	UDWORD i;

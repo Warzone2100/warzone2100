@@ -468,26 +468,6 @@ FRACT	gHPitch;
 
 
 //-----------------------------------------------------------------------------------
-static UDWORD getTileTallObj(UDWORD x, UDWORD y)
-{
-	UDWORD	i, j;
-	UDWORD	TallObj = 0;
-
-	x = x >> TILE_SHIFT;
-	y = y >> TILE_SHIFT;
-
-	for (j=y; j < y+2; j++)
-	{
-		for (i=x; i < x+2; i++)
-		{
-			TallObj |= TILE_HAS_TALLSTRUCTURE(mapTile(i,j));
-		}
-	}
-
-	return TallObj;
-}
-
-//-----------------------------------------------------------------------------------
 static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	heightDif;

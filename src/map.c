@@ -310,56 +310,6 @@ BOOL mapNew(UDWORD width, UDWORD height)
 }
 
 /* load the map data - for version 1 */
-static BOOL mapLoadV1(char *pFileData, UDWORD fileSize)
-{
-	UDWORD				i,j;
-	MAP_SAVETILEV1		*psTileData;
-
-	/* Load in the map data */
-	psTileData = (MAP_SAVETILEV1 *)(pFileData + SAVE_HEADER_SIZE);
-	for(i=0; i<mapWidth * mapHeight; i++)
-	{
-
-		UDWORD DataTexture;
-
-		/* MAP_SAVETILEV1 */
-		endian_udword(&psTileData->texture);
-
-		DataTexture= GETTILE_TEXTURE(psTileData);
-		// get the texture number
-		psMapTiles[i].texture = (UWORD)(DataTexture&0xffff);
-		// get the flip bits
-		psMapTiles[i].texture |= (UWORD)((DataTexture & 0xff000000) >> 16);
-//		psMapTiles[i].type = psTileData->type;
-		psMapTiles[i].height = psTileData->height;
-//		psMapTiles[i].onFire = 0;
-		// Changed line - alex
-//		psMapTiles[i].rippleIndex = (UBYTE) (i%RIP_SIZE);
-		//end of change - alex
-		for (j=0; j<MAX_PLAYERS; j++)
-		{
-//			psMapTiles[i].tileVisible[j]=FALSE;
-			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
-
-		}
-		psTileData = (MAP_SAVETILEV1 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZEV1);
-	}
-	if ((char *)psTileData - pFileData > fileSize)
-	{
-		debug( LOG_ERROR, "mapLoad: unexpected end of file" );
-		abort();
-		return FALSE;
-	}
-
-	if (!gwCreateNULLZoneMap())
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-/* load the map data - for version 1 */
 static BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;

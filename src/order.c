@@ -1434,8 +1434,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 
 // check the position of units giving fire support to this unit and tell
 // them to pull back if the sensor is going to move through them
-
-static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
+WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
 	FRACT		sensorAngle, fsAngle, adiff;

@@ -230,25 +230,6 @@ static BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
 }
 
 
-// Given a widget form id, make the snap that matches it the current one next frame.
-//
-static void SetCurrentSnapFormID(CURSORSNAP *SnapBuffer,UDWORD FormID)
-{
-	{
-		int x,y,w,h;
-		SnapBuffer->NewCurrentFormID = FormID;
-
-		if(FormID) {
-			// Get the screen extents of the specified form and move the mouse there.
-			if(widgGetScreenExtents(FormID,&x,&y,&w,&h) == TRUE) {
-		//		DBPRINTF(("%d %d,%d %d\n",x,y,w,h);
-				SetMousePos(x + w / 2, y + h / 2);
-			}
-		}
-	}
-}
-
-
 // Given a widget id, make the snap that matches it the current one next frame.
 //
 void SetCurrentSnapID(CURSORSNAP *SnapBuffer,UDWORD ID)
