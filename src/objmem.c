@@ -134,7 +134,6 @@ void embalm(BASE_OBJECT *psDead)
 	psSlot->died = psDead->died;
 
 	pName = NULL;
-#ifndef HASH_NAMES
 	switch (psDead->type)
 	{
 	case OBJ_BULLET:
@@ -152,7 +151,6 @@ void embalm(BASE_OBJECT *psDead)
 		pName = ((FEATURE *)psDead)->psStats->pName;
 		break;
 	}
-#endif
 
 	if (pName != NULL)
 	{

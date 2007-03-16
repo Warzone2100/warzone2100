@@ -4773,19 +4773,11 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 						ASSERT( FALSE, "intAddObject: invalid structure type" );
 				}
 
-	#ifdef HASH_NAMES
-				sBFormInit.pTip = strresGetString(NULL,(((STRUCTURE *)psObj)->pStructureType->NameHash));
-	#else
 				sBFormInit.pTip = getName(((STRUCTURE *)psObj)->pStructureType->pName);
-	#endif
 				break;
 
 			case OBJ_FEATURE:
-	#ifdef HASH_NAMES
-				sBFormInit.pTip = strresGetString(NULL,(((FEATURE *)psObj)->psStats->NameHash));
-	#else
 				sBFormInit.pTip = getName(((FEATURE *)psObj)->psStats->pName);
-	#endif
 				break;
 
 			default:
@@ -4874,11 +4866,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				}
 				else
 				{
-	#ifdef HASH_NAMES
-					sBFormInit2.pTip = strresGetString(NULL,psStats->NameHash);
-	#else
 					sBFormInit2.pTip = getName(psStats->pName);
-	#endif
 				}
 
 
@@ -5499,11 +5487,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		}
 		else
 		{
-#ifdef HASH_NAMES
-			sFormInit.pTip = strresGetString(NULL,psStats->NameHash);
-#else
 			sFormInit.pTip = getName(psStats->pName);
-#endif
 		}
 
 		BufferID = (sFormInit.id-IDOBJ_STATSTART)*2+1;
@@ -5930,11 +5914,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		}
 		else
 		{
-#ifdef HASH_NAMES
-			sBFormInit.pTip = strresGetString(NULL,ppsStatsList[i]->NameHash);
-#else
 			sBFormInit.pTip = getName(ppsStatsList[i]->pName);
-#endif
 		}
 		BufferID = i;
 		ASSERT( BufferID < NUM_STATBUFFERS,"BufferID > NUM_STATBUFFERS" );

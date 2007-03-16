@@ -4357,11 +4357,7 @@ BOOL scrStructureBuiltInRange(void)
 		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
 		{
 
-#ifdef HASH_NAMES
-			if( psCurr->pStructureType->NameHash == psTarget->NameHash )
-#else
 			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
-#endif
 			{
 				if (psCurr->status == SS_BUILT)
 				{
@@ -8168,12 +8164,7 @@ BOOL scrNumStructsByStatInRange(void)
 		ydiff = (SDWORD)psCurr->y - y;
 		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
 		{
-
-#ifdef HASH_NAMES
-			if( psCurr->pStructureType->NameHash == psTarget->NameHash )
-#else
 			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
-#endif
 			{
 				if(psCurr->visible[lookingPlayer])		//can we see it?
 				{

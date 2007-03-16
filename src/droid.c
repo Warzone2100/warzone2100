@@ -2784,9 +2784,6 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
         int cnt;
 	UDWORD				NumDroids = 0, i, player;
 	char				componentName[MAX_NAME_SIZE];
-#ifdef HASH_NAMES
-	char droidName[MAX_NAME_SIZE];
-#endif
 	BOOL				found = FALSE; //,EndOfFile;
 	DROID_TEMPLATE		*pDroidDesign;
 	COMP_BASE_STATS		*pStats;
@@ -2795,14 +2792,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 #ifdef STORE_RESOURCE_ID
 //	char				*pDroidName = droidName;
 #endif
-#ifdef RESOURCE_NAMES
 	UDWORD				id;
-#endif
-#ifdef HASH_NAMES
-	UDWORD				HashedName;
-#else
-	UDWORD				id;
-#endif
 
 
 	/* init default template */
@@ -2822,23 +2812,15 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		}
 		memset(pDroidDesign, 0, sizeof(DROID_TEMPLATE));
 
-#ifndef HASH_NAMES
 		//pDroidDesign->pName = pDroidDesign->aName;
 		//only fill in aName now
 		pDroidDesign->pName = NULL;
-#endif
 
 		//read the data into the storage - the data is delimited using comma's
 		componentName[0] = '\0';
 		sscanf(pDroidData, "%[^','],%d,%n", componentName, &templateID, &cnt);
                 pDroidData += cnt;
 
-// Hideous mishmash of ifdef's ... sorry about that
-#ifdef HASH_NAMES
-		HashedName=HashString(componentName);
-		pDroidDesign->NameHash=HashedName;
-		strcpy(droidName,strresGetString(NULL,HashedName));
-#else
 
 	//We ain't EVER going back to the way it was so..just store the long (translated) name in aName
 /*#ifdef RESOURCE_NAMES
@@ -2883,7 +2865,6 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		//get the string from the id and copy into the Name space
 		strcpy(pDroidDesign->aName,strresGetString(psStringRes, id));
 		pDroidDesign->aName[DROID_MAXNAME-1] = 0;
-#endif
 
 		//store the unique template id
 
@@ -2910,17 +2891,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 				return FALSE;
 			}
 
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
 			for (inc=0; inc < numBodyStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_BODY] = inc;
 					found = TRUE;
@@ -2955,17 +2929,11 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
+
 			for (inc=0; inc < numBrainStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_BRAIN] = inc;
 					found = TRUE;
@@ -3001,17 +2969,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
 			for (inc=0; inc < numConstructStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_CONSTRUCT] = inc;
 					found = TRUE;
@@ -3046,17 +3007,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
 			for (inc=0; inc < numECMStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_ECM] = inc;
 					found = TRUE;
@@ -3098,17 +3052,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
 			for (inc=0; inc < numPropulsionStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_PROPULSION] = inc;
 					found = TRUE;
@@ -3143,17 +3090,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
 			for (inc=0; inc < numRepairStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_REPAIRUNIT] = inc;
 					found = TRUE;
@@ -3224,18 +3164,10 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 				return FALSE;
 			}
 
-#ifdef HASH_NAMES
-			HashedName=HashString(componentName);
-#endif
-
 			for (inc=0; inc < numSensorStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pStats->NameHash==HashedName)
-#else
 				if (!strcmp(componentName, pStats->pName))
-#endif
 				{
 					pDroidDesign->asParts[COMP_SENSOR] = inc;
 					found = TRUE;
@@ -3245,11 +3177,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			}
 			if (!found)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "Sensor not found for droid Template: %s", strresGetString( NULL, pDroidDesign->NameHash ) );
-#else
 				debug( LOG_ERROR, "Sensor not found for droid Template: %s", pDroidDesign->aName );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3265,13 +3193,8 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			 pDroidDesign->numWeaps) || */
 		if (pDroidDesign->numWeaps > DROID_MAXWEAPS)
 		{
-#ifdef HASH_NAMES
-			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s (%x)", strresGetString( NULL, pDroidDesign->NameHash ), pDroidDesign->NameHash );
-#else
 			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName );
-#endif
 			abort();
-
 			return FALSE;
 		}
 		//check that not allocating more programs than allowed
@@ -3279,11 +3202,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			 pDroidDesign->numProgs) ||
 			pDroidDesign->numProgs > DROID_MAXPROGS)
 		{
-#ifdef HASH_NAMES
-			DBERROR(("Too many programs have been allocated for droid Template: %s",strresGetString(NULL,pDroidDesign->NameHash)));
-#else
 			DBERROR(("Too many programs have been allocated for droid Template: %s",getName(pDroidDesign->pName)));
-#endif
 			return FALSE;
 		}*/
 
@@ -3493,9 +3412,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	BOOL				recFound;
 	UWORD				SkippedWeaponCount=0;
 	SDWORD				incW[DROID_MAXWEAPS];
-#ifdef HASH_NAMES
-	UDWORD				HashedName;
-#endif
+
 	//initialise the store count variable
 	for (player=0; player < MAX_PLAYERS; player++)
 	{
@@ -3538,21 +3455,12 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 			return FALSE;
 		}
 
-#ifdef HASH_NAMES
-		HashedName=HashString(TemplateName);
-#endif
-
 		if (player < MAX_PLAYERS)
 		{
 			for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate =
 				pTemplate->psNext)
 			{
-#ifdef HASH_NAMES
-				if (pTemplate->NameHash==HashedName)
-#else
-				//if (!(strcmp(TemplateName, pTemplate->pName)))
 				if (!(strcmp(TemplateName, pTemplate->aName)))
-#endif
 				{
 					//Template found
 					recFound = TRUE;
@@ -3563,12 +3471,7 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 			if (!recFound)
 			{
 				pTemplate = &sDefaultDesignTemplate;
-#ifdef HASH_NAMES
-				if (pTemplate->NameHash!=HashedName)
-#else
-				//if ( strcmp(TemplateName, pTemplate->pName) )
 				if ( strcmp(TemplateName, pTemplate->aName) )
-#endif
 				{
 					debug( LOG_ERROR, "Unable to find Template - %s", TemplateName );
 					abort();
@@ -3656,10 +3559,6 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	BOOL				recFound;
 	UWORD				SkippedProgramCount=0;
 
-#ifdef HASH_NAMES
-	UDWORD				HashedTemplateName,HashedProgramName;
-#endif
-
 	//initialise the store count variable
 	for (player=0; player < MAX_PLAYERS; player++)
 	{
@@ -3695,10 +3594,6 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 		{
 			return FALSE;
 		}
-#ifdef HASH_NAMES
-		HashedTemplateName=HashString(TemplateName);
-		HashedProgramName=HashString(ProgramName);
-#endif
 
 		if (player < MAX_PLAYERS)
 		{
@@ -3707,22 +3602,13 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 				pTemplate->psNext)
 			{
 
-#ifdef HASH_NAMES
-				if (pTemplate->NameHash==HashedTemplateName)
-#else
-				//if (!(strcmp(TemplateName, pTemplate->pName)))
 				if (!(strcmp(TemplateName, pTemplate->aName)))
-#endif
 				{
 
 					//Template found
 					for (incP=0; incP < numProgramStats; incP++)
 					{
-#ifdef HASH_NAMES
-						if (pPrograms[incP].NameHash==HashedProgramName)
-#else
 						if (!(strcmp(ProgramName, pPrograms[incP].pName)))
-#endif
 						{
 							//Program found, alloc this to the current Template
 							pTemplate->asProgs[pTemplate->storeCount] = incP;
@@ -4187,13 +4073,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	//fill in other details
 	//psDroid->pTemplate = pTemplate;
 
-#ifdef HASH_NAMES
-	psDroid->HashedDroidName=pTemplate->NameHash;
-	droidSetName(psDroid,strresGetString(NULL,pTemplate->NameHash));
-#else
-	//droidSetName(psDroid,pTemplate->pName);
 	droidSetName(psDroid,pTemplate->aName);
-#endif
+
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);
 
@@ -5294,17 +5175,11 @@ DROID_TEMPLATE * getTemplateFromName(char *pName)
 	UDWORD			player;
 	DROID_TEMPLATE	*psCurr;
 
-#ifdef HASH_NAMES
-	UDWORD			HashedName=HashString(pName);
-#endif
-
 #ifdef RESOURCE_NAMES
-
 	if (!getResourceName(pName))
 	{
 		return NULL;
 	}
-
 #endif
 
 	/*all droid and template names are now stored as the translated
@@ -5330,12 +5205,7 @@ DROID_TEMPLATE * getTemplateFromName(char *pName)
 */
 		for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-#ifdef HASH_NAMES
-			if (psCurr->NameHash==HashedName)
-#else
-			//if (!strcmp(psCurr->pName, pName))
 			if (!strcmp(psCurr->aName, pName))
-#endif
 			{
                 //if template is selectedPlayers' it must be a CYBORG or we ignore it
 
@@ -5599,22 +5469,7 @@ UDWORD	getBound(UDWORD level)
 //
 char *droidGetName(DROID *psDroid)
 {
-#ifndef HASH_NAMES
 	return (psDroid->aName);
-#else
-	const char ConstructedName[]="Body Mk XXIV";	// dummy name
-
-	// if the hashed name is 0 - it must be a user created droid so we construct its name
-	if (psDroid->HashedDroidName!=0x0)
-	{
-		char *DroidName;
-		DroidName=strresGetString(NULL,psDroid->HashedDroidName);
-		if (DroidName!=NULL) return(DroidName);	// if we found a name then return it...  other wise build the name
-	}
-
-	return(ConstructedName);
-
-#endif
 }
 
 
@@ -5626,10 +5481,8 @@ char *droidGetName(DROID *psDroid)
 //
 void droidSetName(DROID *psDroid,const char *pName)
 {
-#ifndef HASH_NAMES
 	strncpy(psDroid->aName,pName, DROID_MAXNAME);
 	psDroid->aName[DROID_MAXNAME-1] = 0;
-#endif
 }
 
 
@@ -6240,10 +6093,6 @@ void setUpBuildModule(DROID *psDroid)
 
 // We just need 1 buffer for the current displayed droid (or template) name
 #define MAXCONNAME WIDG_MAXSTR	//(32)
-#ifdef HASH_NAMES
-static char ConstructedName[MAXCONNAME+1]="Body Mk XXIV";	// dummy name
-#endif
-
 
 char *getDroidName(DROID *psDroid)
 {
@@ -6260,41 +6109,6 @@ char *getDroidName(DROID *psDroid)
 a string ID or something the user types in*/
 char* getTemplateName(DROID_TEMPLATE *psTemplate)
 {
-#ifdef HASH_NAMES
-	char *TempName;
-
-	char *NewName;
-/*  - Performed in 	GetDefaultTemplateName   - with other droids
-
-	// We only want database name if it's a cyborg.
-	if(psTemplate->droidType == DROID_CYBORG) {
-		if (psTemplate->NameHash!=NULL)
-		{
-			TempName=(strresGetString(psStringRes, psTemplate->NameHash));
-			if (TempName!=NULL)
-			{
-//				DBPRINTF(("name1 [%s]\n",TempName));
-				return(TempName);
-			}
-		}
-	}
-*/
-	// If the above failed or it's not a cyborg then construct the name from the components.
-	NewName=GetDefaultTemplateName(psTemplate);
-
-	if (NewName==NULL || NewName[0]==0)
-	{
-		// No name ... we assume its the NEW VEHICLE BUTTON
-		strcpy(ConstructedName, strresGetString(psStringRes, STR_DES_NEWVEH));
-	}
-	else
-	{
-		strncpy(ConstructedName,NewName,MAXCONNAME);
-	}
-	return(ConstructedName);
-
-#else
-	//char *pNameID=psTemplate->pName;
 	char *pNameID = psTemplate->aName;
 #ifdef STORE_RESOURCE_ID
 	UDWORD			id;
@@ -6316,13 +6130,12 @@ char* getTemplateName(DROID_TEMPLATE *psTemplate)
 	{
 		return pNameID;
 	}
+	return NULL;
 
 #else
 	//just return the name passed in
 	return pNameID;
 #endif
-#endif
-	return NULL;
 }
 
 /* Just returns true if the droid's present body points aren't as high as the original*/

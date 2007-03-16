@@ -70,17 +70,11 @@ enum FUNCTION_TYPES
 
 /*Common stats for all Structure Functions*/
 
-#ifdef HASH_NAMES
-#define FUNCTION_STATS \
-	UDWORD		ref;			/* Unique ID of the item */ \
-	UDWORD		NameHash;	/* Hashed version of Text name of the component */ \
-	UBYTE		type			/* The type of Function */
-#else
 #define FUNCTION_STATS \
 	UDWORD		ref;			/* Unique ID of the item */ \
 	char*		pName;			/* Text name of the component */ \
 	UBYTE		type			/* The type of Function */
-#endif
+
 /*Common struct for all functions*/
 typedef struct _function
 {	
@@ -120,11 +114,7 @@ typedef struct _wall_function
 {
 	//common stats
 	FUNCTION_STATS;
-#ifdef HASH_NAMES
-	UDWORD						StructNameHash;
-#else
 	char						*pStructName;		//storage space for the name so can work out
-#endif
 													//which stat when structs are loaded in
 	struct _structure_stats		*pCornerStat;		//pointer to which stat to use as a corner wall
 } WALL_FUNCTION;

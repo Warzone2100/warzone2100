@@ -509,11 +509,7 @@ static void structureType(STRUCTURE_STATS *pStructure, char *pType)
 
 static char *getStructName(STRUCTURE_STATS	 *psStruct)
 {
-#ifdef HASH_NAMES
-	return(	strresGetString(NULL,psStruct->NameHash));
-#else
 	return(	getName(psStruct->pName));
-#endif
 }
 
 /*returns the structure strength based on the string name passed in */
@@ -772,16 +768,11 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 	STRUCTURE_STATS		*psStructure, *pStartStats;
 	ECM_STATS*			pECMType;
 	SENSOR_STATS*		pSensorType;
-    UDWORD				module;
+	UDWORD				module;
 	//UDWORD				length, module;
 	//char				charNum[2];
 	UDWORD				iID;
-    UDWORD              dummyVal;
-
-
-#ifdef HASH_NAMES
-	UDWORD				HashedType;
-#endif
+	UDWORD              dummyVal;
 
 #if (MAX_PLAYERS != 8)
 	char NotUsedString[MAX_NAME_SIZE];
@@ -888,14 +879,10 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			return FALSE;
 		}
 		strcpy(psStructure->pName,StructureName);*/
-#ifdef HASH_NAMES
-		psStructure->NameHash=HashString(StructureName);
-#else
 		if (!allocateName(&psStructure->pName, StructureName))
 		{
 			return FALSE;
 		}
-#endif
 
 		psStructure->ref = REF_STRUCTURE_START + i;
 
@@ -929,18 +916,11 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-#ifdef HASH_NAMES
-			HashedType=HashString(ecmType);
-#endif
 
 			for (inc=0; inc < numECMStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pECMType->NameHash==HashedType)
-#else
 				if (!strcmp(ecmType, pECMType->pName))
-#endif
 				{
 					psStructure->pECM = pECMType;
 					break;
@@ -960,17 +940,10 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 				return FALSE;
 			}
 			pSensorType = asSensorStats;
-#ifdef HASH_NAMES
-			HashedType=HashString(sensorType);
-#endif
 			for (inc=0; inc < numSensorStats; inc++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (pSensorType->NameHash==HashedType)
-#else
 				if (!strcmp(sensorType, pSensorType->pName))
-#endif
 				{
 					psStructure->pSensor = pSensorType;
 					break;
@@ -980,8 +953,7 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			//check not allocating a turret sensor if have weapons attached
 			ASSERT( psStructure->pSensor != NULL,
 				"loadStructureStats: should have a sensor attached to %s!", StructureName );
-			//if (psStructure->pSensor->location == LOC_TURRET && psStructure->numWeaps)
-            if (psStructure->pSensor->location == LOC_TURRET && numWeaps)
+			if (psStructure->pSensor->location == LOC_TURRET && numWeaps)
 			{
 				debug( LOG_ERROR, "loadStructureStats: a Turret Sensor and weapon \
 					have been assigned to %s", StructureName );
@@ -1208,12 +1180,6 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 	BOOL				weaponFound, structureFound;
 	UBYTE				j;
 
-#ifdef HASH_NAMES
-	UDWORD				StructureHash;
-	UDWORD				WeaponHash;
-#endif
-
-
 	pStartWeaponData = pWeaponData;
 
 	NumToAlloc = numCR(pWeaponData, bufferSize);
@@ -1240,19 +1206,10 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 		weaponFound = structureFound = FALSE;
 		//loop through each Structure_Stat to compare the name
 
-#ifdef HASH_NAMES
-		StructureHash=HashString(StructureName);
-		WeaponHash=HashString(WeaponName);
-#endif
-
 		for (incS=0; incS < numStructureStats; incS++)
 		{
 
-#ifdef HASH_NAMES
-			if (pStructure[incS].NameHash==StructureHash)
-#else
 			if (!(strcmp(StructureName, pStructure[incS].pName)))
-#endif
 			{
 				//Structure found, so loop through each weapon
 				structureFound = TRUE;
@@ -1260,11 +1217,7 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 				{
 					for (incW=0; incW < numWeaponStats; incW++)
 					{
-	#ifdef HASH_NAMES
-						if (pWeapon[incW].NameHash==WeaponHash)
-	#else
 						if (!(strcmp(WeaponName[j], pWeapon[incW].pName)))
-	#endif
 						{
 							weaponFound = TRUE;
 							//weapon found alloc this weapon to the current Structure
@@ -1322,10 +1275,6 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	FUNCTION			*pFunction, **pStartFunctions = asFunctions;
 	BOOL				functionFound, structureFound;
-#ifdef HASH_NAMES
-	UDWORD				StructureHash;
-	UDWORD				FunctionHash;
-#endif
 
 	pStartFunctionData = pFunctionData;
 
@@ -1347,19 +1296,11 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 		{
 			return FALSE;
 		}*/
-#ifdef HASH_NAMES
-		StructureHash=HashString(StructureName);
-		FunctionHash=HashString(FunctionName);
-#endif
 
 		//loop through each Structure_Stat to compare the name
 		for (incS=0; incS < numStructureStats; incS++)
 		{
-#ifdef HASH_NAMES
-			if (pStructure[incS].NameHash==StructureHash)
-#else
 			if (!(strcmp(StructureName, pStructure[incS].pName)))
-#endif
 			{
 				//Structure found, so loop through each Function
 				structureFound = TRUE;
@@ -1367,11 +1308,7 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 				for (incF=0; incF < numFunctions; incF++)
 				{
 					pFunction = *pStartFunctions;
-#ifdef HASH_NAMES
-					if (pFunction->NameHash==FunctionHash)
-#else
 					if (!(strcmp(FunctionName, pFunction->pName)))
-#endif
 					{
 						//function found alloc this function to the current Structure
 						functionFound = TRUE;
@@ -1426,11 +1363,7 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 			for (i=0; i < numStructureStats; i++)
 			{
 				//compare the names
-#ifdef HASH_NAMES
-				if (((WALL_FUNCTION *)pFunction)->StructNameHash == pStructure->NameHash)
-#else
 				if (!strcmp(((WALL_FUNCTION *)pFunction)->pStructName, pStructure->pName))
-#endif
 				{
 					((WALL_FUNCTION *)pFunction)->pCornerStat = pStructure;
 					break;
@@ -1440,11 +1373,7 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 			//if haven't found the STRUCTURE STAT, then problem
 			if (!((WALL_FUNCTION *)pFunction)->pCornerStat)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "Unknown Corner Wall stat for function %x", pFunction->NameHash );
-#else
 				debug( LOG_ERROR, "Unknown Corner Wall stat for function %s", pFunction->pName );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -2831,11 +2760,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %x", psBuilding );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -2953,11 +2878,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3023,11 +2944,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3064,11 +2981,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3107,11 +3020,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3124,11 +3033,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat - this is just a check!
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3139,11 +3044,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -3205,11 +3106,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//this structure must have a function assigned to the stat
 			if (psBuilding->pStructureType->numFuncs == 0)
 			{
-#ifdef HASH_NAMES
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", strresGetString( NULL, psBuilding->pStructureType->NameHash ) );
-#else
 				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-#endif
 				abort();
 				return FALSE;
 			}
@@ -6786,28 +6683,6 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 
 /* gets a structure stat from its name - relies on the name being unique (or it will
    return the first one it finds!! */
-#ifdef HASH_NAMES
-SDWORD getStructStatFromName(char *pName)
-{
-	UDWORD				inc;
-	STRUCTURE_STATS		*psStat;
-	UDWORD	HashValue;
-
-	HashValue=HashString(pName);
-
-
-	for (inc = 0; inc < numStructureStats; inc++)
-	{
-		psStat = &asStructureStats[inc];
-		if (psStat->NameHash==HashValue)
-		{
-			return inc;
-		}
-	}
-	return -1;
-}
-
-#else
 SDWORD getStructStatFromName(char *pName)
 {
 	UDWORD				inc;
@@ -6831,7 +6706,6 @@ SDWORD getStructStatFromName(char *pName)
 	}
 	return -1;
 }
-#endif
 
 /*check to see if the structure is 'doing' anything  - return TRUE if idle*/
 BOOL  structureIdle(STRUCTURE *psBuilding)

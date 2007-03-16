@@ -17,9 +17,6 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
-	ALL PSX, HASH_NAMES AND WIN32 excluded stuff removed - Alex M.
-*/
 
 /* Standard library headers */
 #include <physfs.h>
@@ -5938,11 +5935,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			//psSaveDroid->numWeaps = psCurr->numWeaps;
 			/*for (i=0; i < psCurr->numWeaps; i++)
 			{
-#ifdef HASH_NAMES
-				if (!getHashFromComp(COMP_WEAPON, &psSaveDroid->asWeaps[i].NameHash, psCurr->asWeaps[i].nStat))
-#else
 				if (!getNameFromComp(COMP_WEAPON, psSaveDroid->asWeaps[i].name, psCurr->asWeaps[i].nStat))
-#endif
 				{
 					//ignore this record
 					//continue;
@@ -6128,11 +6121,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->numProgs = psCurr->numProgs;
 			for (i=0; i < psCurr->numProgs; i++)
 			{
-#ifdef HASH_NAMES
-				if (!getHashFromComp(COMP_PROGRAM, & psSaveDroid->HashProgs[i], psCurr->asProgs[i].psStats - asProgramStats))
-#else
 				if (!getNameFromComp(COMP_PROGRAM, psSaveDroid->asProgs[i], psCurr->asProgs[i].psStats - asProgramStats))
-#endif
 				{
 					//ignore this record
 					continue;
@@ -9554,11 +9543,7 @@ static BOOL writeCompListFile(char *pFileName)
 		/*for(i = 0; i < numProgramStats; i++)
 		{
 			psStats = (COMP_BASE_STATS *)(asProgramStats + i);
-#ifdef HASH_NAMES
-			psSaveCompList->NameHash=psStats->NameHash;
-#else
 			strcpy(psSaveCompList->name, psStats->pName);
-#endif
 			psSaveCompList->type = COMP_PROGRAM;
 			psSaveCompList->player = (UBYTE)player;
 			psSaveCompList->state = apCompLists[player][COMP_PROGRAM][i];

@@ -301,9 +301,6 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 // Allocate storage for the name
 BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
 {
-#ifdef HASH_NAMES
-	pFunction->NameHash=HashString(pNameToStore);
-#else
 	pFunction->pName = (char *)MALLOC(strlen(pNameToStore)+1);
 	if (pFunction->pName == NULL)
 	{
@@ -312,7 +309,6 @@ BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
 		return FALSE;
 	}
 	strcpy(pFunction->pName,pNameToStore);
-#endif
 	return TRUE;
 }
 
@@ -368,10 +364,8 @@ BOOL loadProduction(char *pData)
 	UDWORD					productionOutput;
 	//char					propulsionType[MAX_NAME_SIZE];
 	//PROPULSION_TYPES*		pPropulsionType;
-/*#ifdef HASH_NAMES
-	UDWORD	HashedName;
-#endif*/
 	//allocate storage
+
 	psFunction = (PRODUCTION_FUNCTION *)MALLOC(sizeof(PRODUCTION_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -403,17 +397,10 @@ BOOL loadProduction(char *pData)
 	//get the propulsion stats pointer
 /*	pPropulsionType = asPropulsionTypes;
 	psFunction->propulsionType = 0;
-#ifdef HASH_NAMES
-	HashedName=HashString(propulsionType);
-#endif
 	for (i=0; i < numPropulsionTypes; i++)
 	{
 		//compare the names
-#ifdef HASH_NAMES
-		if (HashedName== pPropulsionType->NameHash)
-#else
 		if (!strcmp(propulsionType, pPropulsionType->pName))
-#endif
 		{
 			psFunction->propulsionType = pPropulsionType;
 			break;
@@ -1433,9 +1420,6 @@ BOOL loadRepairDroidFunction(char *pData)
 	char						repairType[MAX_NAME_SIZE];
 	REPAIR_STATS*				pRepairType;
 
-#ifdef HASH_NAMES
-	UDWORD	HashedName;
-#endif
 	//allocate storage
 	psFunction = (REPAIR_UPGRADE_FUNCTION *)MALLOC(sizeof(REPAIR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
@@ -1472,19 +1456,11 @@ BOOL loadRepairDroidFunction(char *pData)
 	//get the repair stats pointer
 	pRepairType = asRepairStats;
 	psFunction->pRepair = NULL;
-#ifdef HASH_NAMES
-	HashedName=HashString(repairType);
-#endif
-
 
 	for (i=0; i < numRepairStats; i++)
 	{
 		//compare the names
-#ifdef HASH_NAMES
-		if (HashedName== pRepairType->NameHash)
-#else
 		if (!strcmp(repairType, pRepairType->pName))
-#endif
 		{
 			psFunction->pRepair = pRepairType;
 			break;
@@ -1586,16 +1562,12 @@ BOOL loadWallFunction(char *pData)
 		return FALSE;
 	}
 	strcpy(psFunction->pStructName,structureName);*/
-#ifdef HASH_NAMES
-	psFunction->StructNameHash=HashString(structureName);
-#else
 	if (!allocateName(&psFunction->pStructName, structureName))
 	{
 		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
 		abort();
 		return FALSE;
 	}
-#endif
 	psFunction->pCornerStat = NULL;
 
 	return TRUE;
@@ -2258,9 +2230,7 @@ BOOL FunctionShutDown(void)
 	for (inc=0; inc < numFunctions; inc++)
 	{
 		pFunction = *asFunctions;
-#ifndef HASH_NAMES
 		FREE(pFunction->pName);
-#endif
 
 //#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
