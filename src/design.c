@@ -1551,7 +1551,6 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 /* set SHOWTEMPLATENAME to 0 to show template components in edit box */
 #define SHOWTEMPLATENAME	0
 
-//Watermelon:added "hydra" prefix to multi-turret droids
 char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	COMP_BASE_STATS		*psStats;
@@ -1561,7 +1560,7 @@ char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	*/
 	if(psTemplate->droidType == DROID_TRANSPORTER)
 	{
-		return strresGetString(NULL,HashString("Transporter"));
+		return _("Transporter");
 	}
 	/*
 		Now get the normal default droid name based on its components
