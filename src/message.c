@@ -159,7 +159,7 @@ extern UDWORD selectedPlayer;
         } \
 	}
 
-void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
+static void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
 {
 	ASSERT( PTRVALID((msg), sizeof(MESSAGE)),
 		"addMessage: Invalid message pointer" );
@@ -534,7 +534,7 @@ BOOL initMessage(void)
 	return TRUE;
 }
 
-BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
+static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 {
 	VIEWDATA_LIST		*psAdd;
 

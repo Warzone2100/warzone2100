@@ -271,14 +271,14 @@ BOOL StartDriverMode(DROID *psOldDroid)
 	return FALSE;
 }
 
-void StopEngineNoise(void)
+static void StopEngineNoise(void)
 {
 
 	DrivingAudioTrack=-1;
 }
 
 
-void ChangeDriver(void)
+static void ChangeDriver(void)
 {
 	DROID *psDroid;
 
@@ -421,7 +421,7 @@ BOOL driveDroidKilled(DROID *psDroid)
 
 
 
-BOOL driveDroidIsBusy(DROID *psDroid)
+static BOOL driveDroidIsBusy(DROID *psDroid)
 {
 	if( DroidIsBuilding(psDroid) ||
 		DroidGoingToBuild(psDroid) ||
@@ -789,7 +789,7 @@ void driveDisableInterface(void)
 
 // Get rid of the reticule.
 //
-void driveDisableInterface2(void)
+static void driveDisableInterface2(void)
 {
 
 	DriveInterfaceEnabled = FALSE;
@@ -837,7 +837,7 @@ void driveStartBuild(void)
 }
 
 
-void driveStartDemolish(void)
+static void driveStartDemolish(void)
 {
 
 	intRemoveReticule();
@@ -848,7 +848,7 @@ void driveStartDemolish(void)
 
 // Stop structure placement for drive mode.
 //
-void driveStopBuild(void)
+static void driveStopBuild(void)
 {
 }
 

@@ -1046,7 +1046,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
     return TRUE;
 }
 
-void droidFlameFallCallback( ANIM_OBJECT * psObj )
+static void droidFlameFallCallback( ANIM_OBJECT * psObj )
 {
 	DROID	*psDroid;
 
@@ -1061,7 +1061,7 @@ void droidFlameFallCallback( ANIM_OBJECT * psObj )
 	destroyDroid( psDroid );
 }
 
-void droidBurntCallback( ANIM_OBJECT * psObj )
+static void droidBurntCallback( ANIM_OBJECT * psObj )
 {
 	DROID	*psDroid;
 

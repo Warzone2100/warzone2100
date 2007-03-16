@@ -232,7 +232,7 @@ static BOOL widgGetScreenExtents(UDWORD ID,int *sx,int *sy,int *sw,int *sh)
 
 // Given a widget form id, make the snap that matches it the current one next frame.
 //
-void SetCurrentSnapFormID(CURSORSNAP *SnapBuffer,UDWORD FormID)
+static void SetCurrentSnapFormID(CURSORSNAP *SnapBuffer,UDWORD FormID)
 {
 	{
 		int x,y,w,h;

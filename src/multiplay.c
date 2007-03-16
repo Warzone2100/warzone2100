@@ -108,8 +108,6 @@ SDWORD msgStackPos = -1;				//top element pointer
 
 // ////////////////////////////////////////////////////////////////////////////
 // Remote Prototypes
-extern BOOL MultiPlayValidTemplate(DROID_TEMPLATE *psTempl);	// for templates.
-
 extern RESEARCH*			asResearch;							//list of possible research items.
 extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 

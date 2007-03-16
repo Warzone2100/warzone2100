@@ -468,7 +468,7 @@ FRACT	gHPitch;
 
 
 //-----------------------------------------------------------------------------------
-UDWORD getTileTallObj(UDWORD x, UDWORD y)
+static UDWORD getTileTallObj(UDWORD x, UDWORD y)
 {
 	UDWORD	i, j;
 	UDWORD	TallObj = 0;

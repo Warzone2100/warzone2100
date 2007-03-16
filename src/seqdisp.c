@@ -389,7 +389,7 @@ void seq_SetVideoPath(void)
 
 
 
-BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
+static BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
 {
 //	psSample;
 	bAudioPlaying = FALSE;

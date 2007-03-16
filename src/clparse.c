@@ -65,7 +65,7 @@ BOOL	clIntroVideo;
 BOOL	bAllowDebugMode = FALSE;
 
 //! Print usage info
-void printUsage(void)
+static void printUsage(void)
 {
 	fprintf( stdout,
 		"Usage:\n"
@@ -76,7 +76,7 @@ void printUsage(void)
 }
 
 //! Print help and usage info
-void printHelp(void)
+static void printHelp(void)
 {
 	// Show help
 	fprintf( stdout,

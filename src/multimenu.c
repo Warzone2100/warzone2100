@@ -163,7 +163,7 @@ char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 // enumerates maps in the gamedesc file.
 // returns only maps that are valid the right 'type'
 
-BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
+static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
 {
 	static LEVEL_DATASET *lev;
 	UBYTE cam;
@@ -334,7 +334,7 @@ void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 
 #define NBTIPS 512
 
-unsigned int check_tip_index(unsigned int i) {
+static unsigned int check_tip_index(unsigned int i) {
 	if (i < NBTIPS) {
 		return i;
 	} else {
@@ -648,7 +648,7 @@ void addMultiRequest(char *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 
 }
 
-void closeMultiRequester(void)
+static void closeMultiRequester(void)
 {
 	widgDelete(psRScreen,M_REQUEST);
 	multiRequestUp = FALSE;
@@ -1378,7 +1378,7 @@ BOOL intRunMultiMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
+static BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
 {
 	UBYTE	i, iAlliances, iHumanPlayers;
 

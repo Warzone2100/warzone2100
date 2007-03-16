@@ -344,7 +344,7 @@ typedef struct {
 static NET_PLAYER_DATA	local_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
 static NET_PLAYER_DATA	global_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
 
-void resize_local_player_data(unsigned int i, unsigned int size) {
+static void resize_local_player_data(unsigned int i, unsigned int size) {
 	if (local_player_data[i].buffer_size < size) {
 		if (local_player_data[i].data != NULL) {
 			free(local_player_data[i].data);
@@ -354,7 +354,7 @@ void resize_local_player_data(unsigned int i, unsigned int size) {
 	}
 }
 
-void resize_global_player_data(unsigned int i, unsigned int size) {
+static void resize_global_player_data(unsigned int i, unsigned int size) {
 	if (global_player_data[i].buffer_size < size) {
 		if (global_player_data[i].data != NULL) {
 			free(global_player_data[i].data);

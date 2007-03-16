@@ -393,7 +393,7 @@ static SDWORD	clearX,clearY;
 static BOOL		obstruction;
 
 // callback to find the first clear tile before an obstructed target
-BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	vx,vy;
 

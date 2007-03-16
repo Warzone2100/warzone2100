@@ -372,7 +372,7 @@ void moveUpdateBaseSpeed(void)
 /* Set a target location for a droid to move to */
 // Now returns a BOOL based on the success of the routing
 // returns TRUE if the routing was successful ... if FALSE then the calling code should not try to route here again for a while
-BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
+static BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 {
 	FPATH_RETVAL		retVal = FPR_OK;
 	SDWORD				fmx1,fmy1, fmx2,fmy2;
@@ -546,7 +546,7 @@ BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 // Shame about this but the find path code uses too much stack space
 // so we can't safely run it in the dcache.
 //
-BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
+static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 {
 
 	return _moveDroidToBase(psDroid,x,y,bFormation);
@@ -599,7 +599,7 @@ void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y)
 }
 
 // get the difference in direction
-SDWORD moveDirDiff(SDWORD start, SDWORD end)
+static SDWORD moveDirDiff(SDWORD start, SDWORD end)
 {
 	SDWORD retval, diff;
 
@@ -659,7 +659,7 @@ SDWORD moveDirDiff(SDWORD start, SDWORD end)
 }*/
 
 // Tell a droid to move out the way for a shuffle
-void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDWORD sy)
+static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDWORD sy)
 {
 	FRACT	shuffleDir, droidDir;
 	DROID	*psCurr;
@@ -1326,7 +1326,7 @@ static SDWORD moveObjRadius(BASE_OBJECT *psObj)
 
 
 // see if a Droid has run over a person
-void moveCheckSquished(DROID *psDroid, FRACT mx,FRACT my)
+static void moveCheckSquished(DROID *psDroid, FRACT mx,FRACT my)
 {
 	SDWORD		i, droidR, rad, radSq;
 	SDWORD		objR;
@@ -1378,7 +1378,7 @@ void moveCheckSquished(DROID *psDroid, FRACT mx,FRACT my)
 
 
 // See if the droid has been stopped long enough to give up on the move
-BOOL moveBlocked(DROID *psDroid)
+static BOOL moveBlocked(DROID *psDroid)
 {
 	SDWORD	xdiff,ydiff, diffSq;
 	UDWORD	blockTime;
@@ -1448,7 +1448,7 @@ BOOL moveBlocked(DROID *psDroid)
 
 
 // See if an object is on a droids target
-BOOL moveObjOnTarget(DROID *psDroid, BASE_OBJECT *psObst)
+static BOOL moveObjOnTarget(DROID *psDroid, BASE_OBJECT *psObst)
 {
 	SDWORD	xdiff, ydiff;
 	SDWORD	radius;
@@ -1506,7 +1506,7 @@ BOOL moveObjOnTarget(DROID *psDroid, BASE_OBJECT *psObst)
 
 
 // Calculate the actual movement to slide around
-void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, FRACT *pMx, FRACT *pMy)
+static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, FRACT *pMx, FRACT *pMy)
 {
 	SDWORD		obstX, obstY;
 	SDWORD		absX, absY;
@@ -1558,7 +1558,7 @@ void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, FRACT *pMx, FR
 
 
 // see if a droid has run into a blocking tile
-void moveCalcBlockingSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy, SDWORD tarDir, SDWORD *pSlideDir)
+static void moveCalcBlockingSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy, SDWORD tarDir, SDWORD *pSlideDir)
 {
 	FRACT	mx = *pmx,my = *pmy, nx,ny;
 	SDWORD	tx,ty, ntx,nty;		// current tile x,y and new tile x,y
@@ -1964,7 +1964,7 @@ void moveCalcBlockingSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy, SDWORD tarDir
 
 // see if a droid has run into another droid
 // Only consider stationery droids
-void moveCalcDroidSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy)
+static void moveCalcDroidSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy)
 {
 	SDWORD		i, droidR, rad, radSq;
 	SDWORD		objR;
@@ -2206,7 +2206,7 @@ void moveCalcDroidSlide(DROID *psDroid, FRACT *pmx, FRACT *pmy)
 
 
 // Get the distance to a tile if it is on the map
-BOOL moveGetTileObst(SDWORD cx,SDWORD cy, SDWORD ox,SDWORD oy, SDWORD *pDist)
+static BOOL moveGetTileObst(SDWORD cx,SDWORD cy, SDWORD ox,SDWORD oy, SDWORD *pDist)
 {
 	SDWORD	absx, absy;
 
@@ -2231,7 +2231,7 @@ BOOL moveGetTileObst(SDWORD cx,SDWORD cy, SDWORD ox,SDWORD oy, SDWORD *pDist)
 
 
 // Get a charged particle vector from all nearby objects
-void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
+static void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 {
 	SDWORD		xdiff,ydiff, absX,absY, mag, minMag;
 	FRACT		ox,oy, normX,normY, ratio;
@@ -2393,7 +2393,7 @@ void moveGetObstVector2(DROID *psDroid, FRACT *pX, FRACT *pY)
 
 
 // get an obstacle avoidance vector
-void moveGetObstVector3(DROID *psDroid, FRACT *pX, FRACT *pY)
+static void moveGetObstVector3(DROID *psDroid, FRACT *pX, FRACT *pY)
 {
 	SDWORD		i,xdiff,ydiff;
 	BASE_OBJECT	*psObj;
@@ -2497,7 +2497,7 @@ void moveGetObstVector3(DROID *psDroid, FRACT *pX, FRACT *pY)
 #define REDARROW		179
 
 // get an obstacle avoidance vector
-void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
+static void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 {
 	SDWORD				i,xdiff,ydiff, absx,absy, dist;
 	BASE_OBJECT			*psObj;
@@ -2723,7 +2723,7 @@ void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 }*/
 
 
-void moveUpdateRepulsiveVector( FRACT fVObstX, FRACT fVObstY, FRACT fVTarX, FRACT fVTarY,
+static void moveUpdateRepulsiveVector( FRACT fVObstX, FRACT fVObstY, FRACT fVTarX, FRACT fVTarY,
 					FRACT *pfVRepX, FRACT *pfVRepY, FRACT *pfDistTot )
 {
 	FRACT	fDistObjSq, fDistObj;
@@ -2756,7 +2756,7 @@ void moveUpdateRepulsiveVector( FRACT fVObstX, FRACT fVObstY, FRACT fVTarX, FRAC
 }
 
 // get an obstacle avoidance vector
-void moveGetObstVector5(DROID *psDroid, FRACT *pX, FRACT *pY)
+static void moveGetObstVector5(DROID *psDroid, FRACT *pX, FRACT *pY)
 {
 	SDWORD				i,xdiff,ydiff, numObst;
 	BASE_OBJECT			*psObj;
@@ -3062,7 +3062,7 @@ void moveCalcBoundary(DROID *psDroid)
 
 
 // Check if a droid has got to a way point
-BOOL moveReachedWayPoint(DROID *psDroid)
+static BOOL moveReachedWayPoint(DROID *psDroid)
 {
 	SDWORD	droidX,droidY, iRange;
 
@@ -3221,7 +3221,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	return speed;
 }
 
-BOOL moveDroidStopped( DROID *psDroid, SDWORD speed )
+static BOOL moveDroidStopped( DROID *psDroid, SDWORD speed )
 {
 	if ((psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEROUTE) &&
 		speed == 0 && psDroid->sMove.speed == MKF(0))
@@ -3234,7 +3234,7 @@ BOOL moveDroidStopped( DROID *psDroid, SDWORD speed )
 	}
 }
 
-void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD direction,
+static void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD direction,
 		SDWORD iSpinAngle, SDWORD iSpinSpeed, SDWORD iTurnSpeed, SDWORD *pDroidDir,
 		FRACT *pfSpeed )
 {
@@ -3279,7 +3279,7 @@ void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD direction,
 
 
 // Calculate current speed perpendicular to droids direction
-FRACT moveCalcPerpSpeed( DROID *psDroid, SDWORD iDroidDir, SDWORD iSkidDecel )
+static FRACT moveCalcPerpSpeed( DROID *psDroid, SDWORD iDroidDir, SDWORD iSkidDecel )
 {
 	SDWORD		adiff;
 	FRACT		perpSpeed;
@@ -3298,7 +3298,7 @@ FRACT moveCalcPerpSpeed( DROID *psDroid, SDWORD iDroidDir, SDWORD iSkidDecel )
 }
 
 
-void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
+static void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
 										FRACT fPerpSpeed, SDWORD iDroidDir )
 {
 	SDWORD		finalDir, adiff;
@@ -3361,7 +3361,7 @@ void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
 
 
 // Calculate the current speed in the droids normal direction
-FRACT moveCalcNormalSpeed( DROID *psDroid, FRACT fSpeed, SDWORD iDroidDir,
+static FRACT moveCalcNormalSpeed( DROID *psDroid, FRACT fSpeed, SDWORD iDroidDir,
 							SDWORD iAccel, SDWORD iDecel )
 {
 	SDWORD		adiff;
@@ -3393,7 +3393,7 @@ FRACT moveCalcNormalSpeed( DROID *psDroid, FRACT fSpeed, SDWORD iDroidDir,
 }
 
 
-void moveGetDroidPosDiffs( DROID *psDroid, FRACT *pDX, FRACT *pDY )
+static void moveGetDroidPosDiffs( DROID *psDroid, FRACT *pDX, FRACT *pDY )
 {
 	FRACT	move;
 
@@ -3406,7 +3406,7 @@ void moveGetDroidPosDiffs( DROID *psDroid, FRACT *pDX, FRACT *pDY )
 }
 
 // see if the droid is close to the final way point
-void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
+static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 {
 	SDWORD		xdiff,ydiff, distSq;
 	SDWORD		minEndSpeed = psDroid->baseSpeed/3;
@@ -3439,7 +3439,7 @@ void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 	}
 }
 
-void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
+static void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 {
 	SDWORD	iX = 0, iY = 0;
 
@@ -3494,7 +3494,7 @@ void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 }
 
 /* Update a tracked droids position and speed given target values */
-void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction)
+static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT				fPerpSpeed, fNormalSpeed, dx, dy, fSpeed, bx,by;
 	SDWORD				iDroidDir, slideDir;
@@ -3721,7 +3721,7 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 #define	VTOL_VERTICAL_SPEED		((((SDWORD)psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
 
 /* primitive 'bang-bang' vtol height controller */
-void moveAdjustVtolHeight( DROID * psDroid, UDWORD iMapHeight )
+static void moveAdjustVtolHeight( DROID * psDroid, UDWORD iMapHeight )
 {
 	UDWORD	iMinHeight, iMaxHeight, iLevelHeight;
 
@@ -3765,7 +3765,7 @@ void moveMakeVtolHover( DROID *psDroid )
 	psDroid->z = (UWORD)(map_Height(psDroid->x,psDroid->y) + VTOL_HEIGHT_LEVEL);
 }
 
-void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
+static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
 	SDWORD	iDroidDir, iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
@@ -3852,7 +3852,7 @@ void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 
 #ifndef FINALBUILD
 
-void moveGetStatusStr( UBYTE status, char *szStr )
+static void moveGetStatusStr( UBYTE status, char *szStr )
 {
 	switch ( status )
 	{
@@ -3898,7 +3898,7 @@ void moveGetStatusStr( UBYTE status, char *szStr )
 
 #define CYBORG_VERTICAL_SPEED	((SDWORD)psDroid->baseSpeed/2)
 
-void
+static void
 moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 {
 	DROID	*psDroid = psObj->psParent;
@@ -3913,7 +3913,7 @@ moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 	psDroid->psCurAnim = NULL;
 }
 
-void
+static void
 moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 {
 	DROID	*psDroid = psObj->psParent;
@@ -3926,7 +3926,7 @@ moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 }
 
 
-void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, SDWORD direction)
+static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
 	SDWORD	iDroidDir;
@@ -3953,7 +3953,7 @@ void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	moveUpdateDroidPos( psDroid, dx, dy );
 }
 
-void
+static void
 moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE oldStatus )
 {
 	PROPULSION_STATS	*psPropStats;
@@ -4104,7 +4104,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	psDroid->roll  = 0;
 }
 
-BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
+static BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
 {
 
 	if ( psDroid->z > iMapHeight )
@@ -4166,7 +4166,7 @@ BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 
 
 
-void movePlayDroidMoveAudio( DROID *psDroid )
+static void movePlayDroidMoveAudio( DROID *psDroid )
 {
 	SDWORD				iAudioID = NO_SOUND;
 	PROPULSION_TYPES	*psPropType;
@@ -4213,7 +4213,7 @@ void movePlayDroidMoveAudio( DROID *psDroid )
 
 
 
-BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
+static BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 {
 	DROID				*psDroid;
 
@@ -4241,7 +4241,7 @@ BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 
 
 
-void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, SDWORD iMoveSpeed )
+static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, SDWORD iMoveSpeed )
 {
 	UBYTE				propType;
 	PROPULSION_STATS	*psPropStats;

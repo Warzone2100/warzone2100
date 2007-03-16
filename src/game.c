@@ -11565,7 +11565,7 @@ UDWORD getSaveGameType(void)
 }
 
 // -----------------------------------------------------------------------------------------
-SDWORD getCompFromNamePreV7(UDWORD compType, char *pName)
+static SDWORD getCompFromNamePreV7(UDWORD compType, char *pName)
 {
 
 #ifndef RESOURCE_NAMES
@@ -11660,7 +11660,7 @@ SDWORD getCompFromNamePreV7(UDWORD compType, char *pName)
 }
 
 // -----------------------------------------------------------------------------------------
-SDWORD getStatFromNamePreV7(BOOL isFeature, char *pName)
+static SDWORD getStatFromNamePreV7(BOOL isFeature, char *pName)
 {
 
 #ifndef RESOURCE_NAMES

@@ -2416,7 +2416,7 @@ SDWORD GetObjectBuffer(void)
 	return -1;
 }
 
-SDWORD GetTopicBuffer(void)
+static SDWORD GetTopicBuffer(void)
 {
 	SDWORD i;
 

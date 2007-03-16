@@ -4435,7 +4435,7 @@ void	locateMouse(void)
 }
 
 // Render a skybox
-void renderSky()
+void renderSky(void)
 {
 	static float wind = 0;
 

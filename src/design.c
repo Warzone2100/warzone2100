@@ -1543,7 +1543,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 /* set SHOWTEMPLATENAME to 0 to show template components in edit box */
 #define SHOWTEMPLATENAME	0
 
-char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
+static char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	COMP_BASE_STATS		*psStats;
 	char				*pStr;
@@ -4092,7 +4092,7 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 
 
 // ajl. above function is static. A quick wrapper for the net stuff
-BOOL  MultiPlayValidTemplate(DROID_TEMPLATE *psTempl)
+static BOOL  MultiPlayValidTemplate(DROID_TEMPLATE *psTempl)
 {
 	return(intValidTemplate(psTempl) );
 }

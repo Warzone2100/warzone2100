@@ -333,7 +333,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 }
 
 /* load the map data - for version 1 */
-BOOL mapLoadV1(char *pFileData, UDWORD fileSize)
+static BOOL mapLoadV1(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
 	MAP_SAVETILEV1		*psTileData;
@@ -383,7 +383,7 @@ BOOL mapLoadV1(char *pFileData, UDWORD fileSize)
 }
 
 /* load the map data - for version 1 */
-BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
+static BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
 	MAP_SAVETILEV2		*psTileData;
@@ -431,7 +431,7 @@ BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
 
 
 /* load the map data - for version 3 */
-BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
+static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
 	MAP_SAVETILEV2		*psTileData;
