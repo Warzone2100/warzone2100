@@ -4713,26 +4713,15 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		return NULL;
 	}
 	psTemplate->numWeaps = psSaveDroid->numWeaps;
-
-	found = TRUE;
 	for (i=0; i < psSaveDroid->numWeaps; i++)
 	{
-
-		psTemplate->asWeaps[i] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-
-		if (psTemplate->asWeaps[i] < 0)
+		int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
+		if( weapon < 0)
 		{
-
-			debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[i].name );
-			abort();
-			found = FALSE;
-			break;
-		}
-	}
-	if (!found)
-	{
-		//ignore this record
-		return NULL;
+			ASSERT(FALSE, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
+			return NULL;
+		}			
+		psTemplate->asWeaps[i] = weapon;
 	}
 
 	psTemplate->buildPoints = calcTemplateBuild(psTemplate);
@@ -4836,27 +4825,19 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		return NULL;
 	}
 	psTemplate->numWeaps = psSaveDroid->numWeaps;
-	found = TRUE;
+
 	if (psSaveDroid->numWeaps > 0)
 	{
 		for(i = 0;i < psTemplate->numWeaps;i++)
 		{
-			psTemplate->asWeaps[i] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-
-			if (psTemplate->asWeaps[i] < 0)
+			int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
+			if( weapon < 0)
 			{
-
-				debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[i].name );
-				abort();
-				found = FALSE;
-			}
+				ASSERT(FALSE, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
+				return NULL;
+			}			
+			psTemplate->asWeaps[i] = weapon;
 		}
-	}
-	if (!found)
-	{
-		//ignore this record
-		ASSERT( found,"buildUnitFromSavedUnit; failed to find weapon" );
-		return NULL;
 	}
 
 	psTemplate->buildPoints = calcTemplateBuild(psTemplate);
@@ -5099,26 +5080,18 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		return NULL;
 	}
 	psTemplate->numWeaps = psSaveDroid->numWeaps;
-	found = TRUE;
 	if (psSaveDroid->numWeaps > 0)
 	{
 		for(i = 0;i < psTemplate->numWeaps;i++)
 		{
-			psTemplate->asWeaps[i] = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-
-			if (psTemplate->asWeaps[i] < 0)
+			int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
+			if( weapon < 0)
 			{
-				debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asWeaps[i].name );
-				abort();
-				found = FALSE;
-			}
+				ASSERT(FALSE, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
+				return NULL;
+			}			
+			psTemplate->asWeaps[i] = weapon;
 		}
-	}
-	if (!found)
-	{
-		//ignore this record
-		ASSERT( found,"buildUnitFromSavedUnit; failed to find weapon" );
-		return NULL;
 	}
 
 	psTemplate->buildPoints = calcTemplateBuild(psTemplate);

@@ -2044,13 +2044,13 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 		y = ((pStructureType->baseBreadth % 2) == 0) ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
 
         //check not trying to build too near the edge
-    	if(((x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((x >> TILE_SHIFT) > (SDWORD)(
+    	if(((x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((x >> TILE_SHIFT) > (
             mapWidth - TOO_NEAR_EDGE)))
         {
             ASSERT( FALSE, "buildStructure: x coord too near edge" );
 	    	return NULL;
         }
-	    if(((y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((y >> TILE_SHIFT) > (SDWORD)(
+	    if(((y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((y >> TILE_SHIFT) > (
             mapHeight - TOO_NEAR_EDGE)))
         {
             ASSERT( FALSE, "buildStructure: y coord too near edge" );

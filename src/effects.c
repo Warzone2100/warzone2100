@@ -2990,6 +2990,7 @@ iIMDShape		*psOrig;
 			if(asEffectsList[i].imd)
 			{
 				psOrig = asEffectsList[i].imd;
+				// Gerard: FIXME: not 64bit compatible
 				resGetHashfromData("IMD",psOrig,&imdHashedNumber);
 				endian_udword(&imdHashedNumber);
 				pFXData->imd = (iIMDShape*)imdHashedNumber;
@@ -3102,6 +3103,7 @@ EFFECT				*pFXData;
 		if(asEffectsList[i].imd)
 		{
 			/* Restore the pointer from the hashed ID */
+			// Gerard: FIXME: not 64bit compatible
 			endian_udword((UDWORD*)&asEffectsList[i].imd);
 			asEffectsList[i].imd = (iIMDShape*)resGetDataFromHash("IMD",(UDWORD)asEffectsList[i].imd);
 		}

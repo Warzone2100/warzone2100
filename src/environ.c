@@ -136,7 +136,7 @@ FRACT	value,newValue;
 FRACT	increment = 0;
 FRACT	lowest = 0;
 FRACT	highest = 0;
-SDWORD	startX,startY,endX,endY;
+UDWORD	startX,startY,endX,endY;
 FRACT	fraction;
 
 	//at the moment this function is getting called between levels and so crashes - quick check here for now
@@ -168,8 +168,6 @@ FRACT	fraction;
 	endY = startY + visibleYTiles;
 
 	/* Clip, as we may be off map */
-	if(startX<0) startX = 0;
-	if(startY<0) startY = 0;
 	if(endX>mapWidth-1) endX = mapWidth-1;
 	if(endY>mapHeight-1) endY = mapHeight-1;
 

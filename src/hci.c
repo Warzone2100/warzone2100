@@ -5245,7 +5245,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDOBJ_FORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDOBJ_FORM);
 				ClosingObject = FALSE;
 			}
@@ -5258,7 +5258,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDSTAT_FORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDSTAT_FORM);
 				ClosingStats = FALSE;
 			}
@@ -5270,7 +5270,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDINTMAP_MSGVIEW);
 				ClosingMessageView = FALSE;
 			}
@@ -5282,7 +5282,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDINTMAP_FORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDINTMAP_FORM);
 				ClosingIntelMap = FALSE;
 			}
@@ -5295,7 +5295,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDORDER_FORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDORDER_FORM);
 				ClosingOrder = FALSE;
 			}
@@ -5307,7 +5307,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDTRANS_FORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDTRANS_FORM);
 				ClosingTrans = FALSE;
 			}
@@ -5319,7 +5319,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDTRANS_CONTENTFORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDTRANS_CONTENTFORM);
 				ClosingTransCont = FALSE;
 			}
@@ -5331,7 +5331,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,IDTRANS_DROIDS);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, IDTRANS_DROIDS);
 				ClosingTransDroids = FALSE;
 			}
@@ -5344,7 +5344,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,INTINGAMEOP);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, INTINGAMEOP);
 				ClosingInGameOp = FALSE;
 			}
@@ -5373,7 +5373,7 @@ void HandleClosingWindows(void)
 		Widg = widgGetFromID(psWScreen,MULTIMENU_FORM);
 		if(Widg) {
 // Has the window finished closing?
-			if( ((UDWORD)Widg->pUserData) ) {
+			if( Widg->pUserData ) {
 				widgDelete(psWScreen, MULTIMENU_FORM);
 				ClosingMultiMenu = FALSE;
 			}

@@ -1723,7 +1723,7 @@ BOOL stageThreeInitialise(void)
 //UDWORD	i,j;
 
 	STRUCTURE *psStr;
-	SDWORD i;
+	UDWORD i;
 	DROID		*psDroid;
 
 	debug(LOG_MAIN, "stageThreeInitalise");

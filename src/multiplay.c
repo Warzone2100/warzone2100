@@ -242,9 +242,9 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 		pos2.x +=  (rand()%(8<<TILE_SHIFT))-(4<<TILE_SHIFT);
 		pos2.z +=  (rand()%(8<<TILE_SHIFT))-(4<<TILE_SHIFT);
 		if(pos2.x <0) pos2.x =128;
-		if(pos2.x >mapWidth<<TILE_SHIFT) pos2.x =mapWidth<<TILE_SHIFT;
+		if((unsigned)pos2.x > mapWidth<<TILE_SHIFT) pos2.x =mapWidth<<TILE_SHIFT;
 		if(pos2.z <0) pos2.z =128;
-		if(pos2.z >mapHeight<<TILE_SHIFT) pos2.z =mapHeight<<TILE_SHIFT;
+		if((unsigned)pos2.z >mapHeight<<TILE_SHIFT) pos2.z =mapHeight<<TILE_SHIFT;
 
 		addEffect(&pos2,EFFECT_FIREWORK,FIREWORK_TYPE_LAUNCHER,FALSE,NULL,0);	// throw up some fire works.
 	}
@@ -483,7 +483,7 @@ char *getPlayerName(UDWORD player)
 {
 	UDWORD i;
 
-	ASSERT((player >= 0) && (player < MAX_PLAYERS), "getPlayerName: wrong player index: %d", player);
+	ASSERT( player < MAX_PLAYERS , "getPlayerName: wrong player index: %d", player);
 
 	//Try NetPlay.playerName first (since supports AIs)
 	if(game.type != CAMPAIGN)
@@ -493,7 +493,7 @@ char *getPlayerName(UDWORD player)
 	//Use the ordinary way if failed
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
-		if(player2dpid[player] == NetPlay.players[i].dpid)
+		if(player2dpid[player] == (unsigned int)NetPlay.players[i].dpid)
 		{
 			if(strcmp(NetPlay.players[i].name,"") == 0)
 			{
@@ -510,7 +510,7 @@ char *getPlayerName(UDWORD player)
 
 BOOL setPlayerName(UDWORD player, char *sName)
 {
-	if(player < 0 || player > MAX_PLAYERS)
+	if(player > MAX_PLAYERS)
 	{
 		ASSERT(FALSE, "setPlayerName: wrong player index (%d)", player);
 		return FALSE;
@@ -525,7 +525,7 @@ BOOL setPlayerName(UDWORD player, char *sName)
 // to determine human/computer players and responsibilities of each..
 BOOL isHumanPlayer(UDWORD player)
 {
-	if (player < 0 || player >= MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 		return FALSE;
 
 	return (BOOL) (player2dpid[player] != 0);
@@ -1318,7 +1318,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 // Write a message to the console.
 BOOL recvTextMessage(NETMSG *pMsg)
 {
-	UDWORD	dpid;
+	SDWORD	dpid;
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	UDWORD  player=MAX_PLAYERS,j;		//console callback - player who sent the message
