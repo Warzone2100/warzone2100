@@ -26,7 +26,7 @@
 
 #ifdef WIN32
 /* We need this kludge to avoid a redefinition of INT32 in a jpeglib header */
-#define XMD_H
+# define XMD_H
 #endif
 
 #include <stdio.h>

@@ -209,16 +209,11 @@ typedef struct _droid
 	// The group the droid belongs to
 	struct		_droid_group	*psGroup;
 	struct		_droid			*psGrpNext;
-
     struct      _structure      *psBaseStruct;      //a structure that this droid might be associated with
                                                     //for vtols its the rearming pad
-
 	// queued orders
-
 	SDWORD			listSize;
 	ORDER_LIST		asOrderList[ORDER_LIST_MAX];
-
-
 
 	/* Order data */
 	SDWORD				order;
@@ -230,7 +225,6 @@ typedef struct _droid
 	UDWORD				timeLastHit;
 	BOOL				bTargetted;
 
-
 	//Watermelon:pfft DROID_MAXWEAPS targets
 	struct _base_object	*psTarget[DROID_MAXWEAPS];
 	struct _base_stats	*psTarStats[DROID_MAXWEAPS];
@@ -238,9 +232,7 @@ typedef struct _droid
 	// secondary order data
 	UDWORD				secondaryOrder;
 
-
 	UDWORD				lastSync;			// multiplayer synchronization value.
-
 
 	/* Action data */
 	SDWORD				action;
@@ -257,7 +249,6 @@ typedef struct _droid
 	UBYTE				illumination;
 	UBYTE				updateFlags;
 
-
 	/* Movement control data */
 	MOVE_CONTROL		sMove;
 //	void				*lastTile;
@@ -265,12 +256,8 @@ typedef struct _droid
 //	AI_DATA				sAI;
 	/* anim data */
 	ANIM_OBJECT			*psCurAnim;
-
-
 	SDWORD				iAudioID;
-
-}
-DROID;
+} DROID;
 
 
 #endif

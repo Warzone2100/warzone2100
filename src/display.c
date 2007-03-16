@@ -1778,7 +1778,7 @@ void StartDeliveryPosition( OBJECT_POSITION *psLocation )
   	buildSite.yBR = (UWORD)(buildSite.yTL-1);
 
 
-	init3DBuilding((BASE_STATS *)&ReposStats,FinishDeliveryPosition,psLocation);
+	init3DBuilding((BASE_STATS *)&ReposStats, FinishDeliveryPosition, psLocation);
 }
 
 

@@ -1027,10 +1027,6 @@ void audio_StopTrack( int iTrack )
 	{
 		return;
 	}
-
-	//
-	// iTrack;
-	//
 }
 
 //*
@@ -1044,13 +1040,6 @@ void audio_SetTrackPan( int iTrack, int iPan )
 	{
 		return;
 	}
-
-	//
-	// iTrack;
-	//
-	//
-	// iPan;
-	//
 }
 
 //*
@@ -1064,13 +1053,6 @@ void audio_SetTrackVol( int iTrack, int iVol )
 	{
 		return;
 	}
-
-	//
-	// iTrack;
-	//
-	//
-	// iVol;
-	//
 }
 
 //*
@@ -1084,13 +1066,6 @@ void audio_SetTrackFreq( int iTrack, int iFreq )
 	{
 		return;
 	}
-
-	//
-	// iTrack;
-	//
-	//
-	// iFreq;
-	//
 }
 
 //*
