@@ -987,9 +987,7 @@ void removeFeature(FEATURE *psDel)
 	{
 		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
 		{
-	 //psor		mapTile(mapX+width, mapY+breadth)->psObject = NULL;
 			psTile = mapTile(mapX+width, mapY+breadth);
-		  //	psTile->tileInfoBits = (UBYTE)(psTile->tileInfoBits & BITS_STRUCTURE_MASK);
 			/* Don't need to worry about clearing structure bits - they should not be there! */
 			SET_TILE_EMPTY(psTile);
 			CLEAR_TILE_NODRAW(psTile);

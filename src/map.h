@@ -30,16 +30,6 @@
 #include "lib/framework/frame.h"
 #include "objects.h"
 
-
-#define	TIB_VIS0		=	0x1,	// Visibility bits - can also be accessed as a byte (as a whole).
-#define TIB_VIS1		=	0x2,
-#define TIB_VIS2		=	0x4,
-#define	TIB_VIS3		=	0x8,
-#define	TIB_VIS4		=	0x10,
-#define	TIB_VIS5		=	0x20,
-#define	TIB_VIS6		=	0x40,
-#define	TIB_VIS7		=	0x80,
-
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
 {
@@ -61,14 +51,6 @@ typedef enum _terrain_type
 
 /* change these if you change above - maybe wrap up in enumerate? */
 #define	TERRAIN_TYPES	TER_MAX
-
-typedef enum _tts
-{
-TILE_TYPE,
-SPEED,
-MARKER,
-} TYPE_SPEEDS;
-extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(200)
@@ -96,10 +78,6 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
 
-#define BITS_STRUCTURE_MASK	0xfe
-#define BITS_FEATURE_MASK	0xfd
-#define BITS_OCCUPIED_MASK	0xfc
-
 #define TILE_IS_NOTBLOCKING(x)	(x->texture & TILE_NOTBLOCKING)
 
 #define TILE_IMPOSSIBLE(x)		((TILE_HAS_STRUCTURE(x)) && (TILE_HAS_FEATURE(x)))
@@ -108,7 +86,6 @@ extern UDWORD	relativeSpeeds[TERRAIN_TYPES][MARKER];
 #define TILE_HAS_STRUCTURE(x)	(x->tileInfoBits & BITS_STRUCTURE)
 #define TILE_HAS_FEATURE(x)		(x->tileInfoBits & BITS_FEATURE)
 #define TILE_DRAW(x)			(!((x)->tileInfoBits & BITS_NODRAWTILE))
-//#define TILE_HIGHLIGHT(x)		(x->tileInfoBits & BITS_TILE_HIGHLIGHT)
 #define TILE_HIGHLIGHT(x)		(x->texture & TILE_HILIGHT)
 #define TILE_HAS_TALLSTRUCTURE(x)	(x->tileInfoBits & BITS_TALLSTRUCTURE)
 #define TILE_HAS_SMALLSTRUCTURE(x)	(x->tileInfoBits & BITS_SMALLSTRUCTURE)
@@ -186,9 +163,6 @@ typedef struct _maptile
 extern UDWORD	mapWidth, mapHeight;
 extern MAPTILE *psMapTiles;
 
-/* The shift on the y coord when calculating into the map */
-extern UDWORD	mapShift;
-
 /*
  * Note:
  * TILE_UNITS = (1 << TILE_SHIFT)
@@ -232,7 +206,6 @@ static inline MAPTILE *mapTile(UDWORD x, UDWORD y)
 	ASSERT( y < mapHeight,
 		"mapTile: y coordinate bigger than map height" );
 
-	//return psMapTiles + x + (y << mapShift); //width no longer a power of 2
 	return psMapTiles + x + (y * mapWidth);
 }
 
@@ -254,21 +227,8 @@ static inline void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 	ASSERT( y < mapHeight,
 		"mapTile: y coordinate bigger than map height" );
 
-	//psMapTiles[x + (y << mapShift)].height = height;//width no longer a power of 2
 	psMapTiles[x + (y * mapWidth)].height = (UBYTE) (height / ELEVATION_SCALE);
 }
-
-/*increases the tile height by one */
-/*static inline void incTileHeight(UDWORD x, UDWORD y)
-{
-	psMapTiles[x + (y << mapShift)].height++;
-}*/
-
-/*decreases the tile height by one */
-/*static inline void decTileHeight(UDWORD x, UDWORD y)
-{
-	psMapTiles[x + (y << mapShift)].height--;
-}*/
 
 /* Return whether a tile coordinate is on the map */
 static inline BOOL tileOnMap(SDWORD x, SDWORD y)
@@ -307,7 +267,6 @@ extern void mapCalcAALine(SDWORD X1, SDWORD Y1,
 				   UDWORD *pNumPoints);
 
 /* Return height of x,y */
-//extern SDWORD map_Height(UDWORD x, UDWORD y);
 extern SWORD map_Height(UDWORD x, UDWORD y);
 
 /* returns TRUE if object is above ground */
@@ -326,6 +285,5 @@ extern void	mapFreeTilesAndStrips( void );
 
 //scroll min and max values
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
-extern BOOL	bDoneWater;
 
 #endif
