@@ -65,6 +65,8 @@
 #define RADAR_TRIANGLE_HEIGHT	RADAR_TRIANGLE_SIZE
 #define RADAR_TRIANGLE_WIDTH	(RADAR_TRIANGLE_SIZE/2)
 
+#define RADAR_FRAME_SKIP 10
+
 static UDWORD	sweep;
 static UBYTE	colBlack,colWhite,colRadarBorder,colGrey;
 static UBYTE	colRadarAlly[NUM_RADAR_MODES-1],colRadarMe[NUM_RADAR_MODES-1],
@@ -448,6 +450,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 void drawRadar(void)
 {
 	UWORD	boxSizeH,boxSizeV;
+	static int frameSkip = 0;
 
 #ifdef TESTRADAR
 	godMode = TRUE;
@@ -468,7 +471,12 @@ void drawRadar(void)
 	DrawRadarTiles(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
 	DrawRadarObjects(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
 
-	pie_DownLoadRadar( radarBuffer );
+	if(frameSkip<=0)
+	{
+		pie_DownLoadRadar( radarBuffer );
+		frameSkip=RADAR_FRAME_SKIP;
+	}
+	frameSkip--;
 
 	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 
@@ -477,11 +485,6 @@ void drawRadar(void)
 	UpdateRadar(boxSizeH,boxSizeV);
 
 	RadarRedraw = FALSE;
-}
-
-void	downloadAtStartOfFrame( void )
-{
-	pie_DownLoadRadar( radarBuffer );
 }
 
 static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)

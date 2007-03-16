@@ -889,7 +889,7 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	linePitch += 6;
 	ty += 3;
 
-	iV_SetTextColour(iV_PaletteNearestColour(255, 255, 255));
+	iV_SetTextColour(PIE_TEXT_WHITE);
 
 	cur_y = 0;
 

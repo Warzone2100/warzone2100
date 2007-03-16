@@ -684,7 +684,6 @@ GAMECODE gameLoop(void)
 						//}
 					}
 // 					debug( LOG_NEVER, "loop: display3D\n");
-					downloadAtStartOfFrame();
 					displayWorld();
 				}
 				else
