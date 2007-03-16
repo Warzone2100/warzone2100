@@ -119,7 +119,8 @@ static struct sigaction oldAction[NSIG];
 
 static struct utsname sysInfo;
 static BOOL gdbIsAvailable = FALSE, sysInfoValid = FALSE;
-static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * gdmpPath = NULL, * programCommand = NULL;
+static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * programCommand = NULL;
+static const char *gdmpPath;
 
 
 /**

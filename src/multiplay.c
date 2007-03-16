@@ -506,7 +506,7 @@ char *getPlayerName(UDWORD player)
 	return NetPlay.players[0].name;
 }
 
-BOOL setPlayerName(UDWORD player, char *sName)
+BOOL setPlayerName(UDWORD player, const char *sName)
 {
 	if(player > MAX_PLAYERS)
 	{

@@ -234,7 +234,7 @@ extern DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
 extern DROID_TEMPLATE	*NameToTemplate(const char *sName,UDWORD player);
 
 extern char *getPlayerName	(UDWORD player);
-extern BOOL setPlayerName		(UDWORD player, char *sName);
+extern BOOL setPlayerName		(UDWORD player, const char *sName);
 extern char *getPlayerColourName(SDWORD player);
 extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a computer or not.
 extern BOOL myResponsibility	(UDWORD player);
