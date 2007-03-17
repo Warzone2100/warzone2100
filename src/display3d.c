@@ -160,23 +160,29 @@ static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure);
 static void	doConstructionLines(void);
 WZ_DECL_UNUSED static void	showDroidSelection(DROID *psDroid);
 WZ_DECL_UNUSED static void	drawDeliveryPointSelection(void);
+static void	drawDroidCmndNo(DROID *psDroid);
+static void	drawDroidRank(DROID *psDroid);
+static void	drawDroidSensorLock(DROID *psDroid);
+BOOL	doWeDrawRadarBlips(void);
+BOOL	doWeDrawProximitys(void);
+
+
+/********************  Variables  ********************/
+// Should be cleaned up properly and be put in structures.
 
 BOOL	bRender3DOnly;
 BOOL	bSensorDisplay = TRUE;		//was FALSE	**COUGH and I spend 2 days making my own. LOL -Q 5-10-05
 BOOL	bRangeDisplay = FALSE;
 SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
-BOOL	doWeDrawRadarBlips(void);
-BOOL	doWeDrawProximitys(void);
-void	drawDroidRank(DROID *psDroid);
-void	drawDroidSensorLock(DROID *psDroid);
-void	drawDroidCmndNo(DROID *psDroid);
-BOOL	bDrawBlips=TRUE;
-BOOL	bDrawProximitys=TRUE;
+static BOOL	bDrawBlips=TRUE;
+static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
-
-/********************  Variables  ********************/
-// Should be cleaned up properly and be put in structures.
+/*Flag to switch code for bucket sorting in renderFeatures etc
+  for the renderMapToBuffer code */
+  /*This is no longer used but may be useful for testing so I've left it in - maybe
+  get rid of it eventually? - AB 1/4/98*/
+BOOL    doBucket = TRUE;
 
 static UWORD WaterTileID = WATER_TILE;
 static UWORD RiverBedTileID = BED_TILE;
@@ -206,7 +212,7 @@ BOOL	selectAttempt = FALSE;
 iView	player, camera;
 
 /* Temporary rotation vectors to store rotations for droids etc */
-Vector3i	imdRot,imdRot2;
+static Vector3i	imdRot,imdRot2;
 
 /* How far away are we from the terrain */
 UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
@@ -218,14 +224,11 @@ UDWORD		terrainOutline = FALSE;
 SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Stores the tilepointers for rendered tiles */
-TILE_BUCKET		tileIJ[LAND_YGRD][LAND_XGRD];
-
-/* File size - used for any loads. Move to another specific file handling module? */
-SDWORD		fileSize;
+static TILE_BUCKET	tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
-extern POINT 	sP1,sP2,sP3,sP4;
-extern POINT	*psP1,*psP2,*psP3,*psP4,*psPTemp;
+static POINT  sP1, sP2, sP3, sP4;
+static POINT  *psP1, *psP2, *psP3, *psP4, *psPTemp;
 
 /* Pointer to which tile the mouse is currently over */
 MAPTILE	*tile3dOver = NULL;
@@ -234,7 +237,7 @@ MAPTILE	*tile3dOver = NULL;
 SDWORD	mouseTileX,mouseTileY;
 
 /* World coordinates that the mouse is over */
-UDWORD	tile3dX,tile3dY;
+static UDWORD	tile3dX,tile3dY;
 
 /* Offsets for the screen being shrunk/expanded - how far in, how far down */
 UDWORD	xOffset=CLIP_BORDER,yOffset=CLIP_BORDER;
@@ -249,7 +252,7 @@ BOOL  rangeOnScreen = FALSE;  // For now, most likely will change later!  -Q 5-1
 Sint32 playerXTile, playerZTile, rx, rz;
 
 /* Have we located the mouse? */
-BOOL	mouseLocated = TRUE;
+static BOOL	mouseLocated = TRUE;
 
 /* The box used for multiple selection - present screen coordinates */
 /* The game palette */
@@ -258,7 +261,6 @@ UDWORD	currentGameFrame;
 static UDWORD	numTiles = 0;
 static SDWORD	tileZ = 8000;
 static QUAD	dragQuad;
-UDWORD	cameraHeight = 400;
 //UDWORD	averageHeight;
 
 // The maximum number of points for flattenImd
@@ -313,10 +315,8 @@ typedef struct	_defaultColours
 
 /* Colour strobe values for the strobing drag selection box */
 UBYTE	boxPulseColours[BOX_PULSE_SIZE] = {233,232,231,230,229,228,227,226,225,224};
-UDWORD	lightLevel=12;
-UDWORD	tCon,tIgn,tCal;
-DEF_COLOURS	defaultColours;
-SDWORD	pitch;
+//UDWORD	tCon,tIgn,tCal;
+static DEF_COLOURS	defaultColours;
 
 
 /********************  Functions  ********************/
@@ -3941,7 +3941,7 @@ SDWORD	xShift,yShift;
 	}
 }
 /* ---------------------------------------------------------------------------- */
-void	drawDroidCmndNo(DROID *psDroid)
+static void	drawDroidCmndNo(DROID *psDroid)
 {
 UWORD	id;
 UDWORD	id2;
@@ -5602,7 +5602,7 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 	Will render a graphic depiction of the droid's present rank.
 	BY : Alex McLean.
 */
-void	drawDroidRank(DROID *psDroid)
+static void	drawDroidRank(DROID *psDroid)
 {
 //UDWORD	droidLevel;
 UDWORD	gfxId;
@@ -5620,7 +5620,7 @@ UDWORD	gfxId;
 /*	DOES : Assumes matrix context set and that z-buffer write is force enabled (Always).
 	Will render a graphic depiction of the droid's present rank.
 */
-void	drawDroidSensorLock(DROID *psDroid)
+static void	drawDroidSensorLock(DROID *psDroid)
 {
 	//if on fire support duty - must be locked to a Sensor Droid/Structure
 	if (orderState(psDroid, DORDER_FIRESUPPORT))

@@ -59,25 +59,9 @@
 #include "texture.h"
 #include "intdisplay.h"
 
-extern UWORD ButXPos;	// From intDisplay.c
-extern UWORD ButYPos;
-extern UWORD ButWidth,ButHeight;
-extern BOOL		godMode;
-
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
 
 /* ----------------------------------------------------------------------------------------- */
-
-SDWORD	elevation;
-Vector3i mapPos, mapView;
-POINT  sP1,sP2,sP3,sP4;
-POINT  *psP1,*psP2,*psP3,*psP4,*psPTemp;
-
-/*Flag to switch code for bucket sorting in renderFeatures etc
-  for the renderMapToBuffer code */
-  /*This is no longer used but may be useful for testing so I've left it in - maybe
-  get rid of it eventually? - AB 1/4/98*/
-BOOL	doBucket = TRUE;
 
 #define MAX_INTEL_SHADES		20
 
