@@ -150,6 +150,8 @@ extern BOOL statsAllocProgram(UDWORD numEntries);
 /*Allocate Construct Stats*/
 extern BOOL statsAllocConstruct(UDWORD numEntries);
 
+extern UWORD weaponROF(WEAPON_STATS *psStat);
+
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
@@ -315,6 +317,7 @@ extern PROPULSION_TYPE	getPropulsionType(char *pType);
 /*returns the weapon effect based on the string name passed in */
 extern WEAPON_EFFECT	getWeaponEffect(char *pWeaponEffect);
 
+extern UWORD weaponROF(WEAPON_STATS *psStat);
 /*Access functions for the upgradeable stats of a weapon*/
 extern UDWORD	weaponFirePause(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponShortHit(WEAPON_STATS *psStats, UBYTE player);
@@ -336,6 +339,7 @@ extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
 extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
 extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, 
 				   WEAPON_CLASS weaponClass, int side);
+
 /*dummy function for John*/
 extern void brainAvailable(BRAIN_STATS *psStat);
 

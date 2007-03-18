@@ -100,8 +100,6 @@
 /***************************************************************************************/
 /*                  Max values for the design bar graphs                               */
 
-#define DBAR_WEAPMAXROF				240 //700//3500	// maximum shots per minute???
-
 //these are calculated now when the game gets loaded up
 //#define DBAR_MAXWEIGHT				3500			// maximum weight for a component
 //#define DBAR_SENSORMAXRANGE			(30*TILE_UNITS)	// maximum sensor range
@@ -5679,29 +5677,3 @@ void reverseTemplateList(DROID_TEMPLATE **ppsList)
     *ppsList = psPrev;
 }
 
-//calculates the weapons ROF based on the fire pause and the salvos
-UWORD weaponROF(WEAPON_STATS *psStat)
-{
-    UWORD   rof = 0;
-
-    //if there are salvos
-    if (psStat->numRounds)
-    {
-        if (psStat->reloadTime != 0)
-        {
-            rof = (UWORD)(60 * GAME_TICKS_PER_SEC / psStat->reloadTime);
-            //multiply by the number of salvos/shot
-            rof = (UWORD)(rof * psStat->numRounds);
-        }
-    }
-    if (!rof)
-    {
-        rof = (UWORD)weaponFirePause(psStat, (UBYTE)selectedPlayer);
-        if (rof != 0)
-        {
-            rof = (UWORD)(60 * GAME_TICKS_PER_SEC / rof);
-        }
-        //else leave it at 0
-    }
-    return rof;
-}

@@ -28,6 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
+#include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "stats.h"
 #include "map.h"
@@ -3864,6 +3865,32 @@ UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
 	return 0;	// Should never get here.
 }
 
+//calculates the weapons ROF based on the fire pause and the salvos
+UWORD weaponROF(WEAPON_STATS *psStat)
+{
+    UWORD   rof = 0;
+
+    //if there are salvos
+    if (psStat->numRounds)
+    {
+        if (psStat->reloadTime != 0)
+        {
+            rof = (UWORD)(60 * GAME_TICKS_PER_SEC / psStat->reloadTime);
+            //multiply by the number of salvos/shot
+            rof = (UWORD)(rof * psStat->numRounds);
+        }
+    }
+    if (!rof)
+    {
+        rof = (UWORD)weaponFirePause(psStat, (UBYTE)selectedPlayer);
+        if (rof != 0)
+        {
+            rof = (UWORD)(60 * GAME_TICKS_PER_SEC / rof);
+        }
+        //else leave it at 0
+    }
+    return rof;
+}
 
 //Access functions for the max values to be used in the Design Screen
 void setMaxComponentWeight(UDWORD weight)
