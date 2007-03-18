@@ -158,5 +158,6 @@ extern void resetDesignPauseState(void);
 
 extern void reverseTemplateList(DROID_TEMPLATE **ppsList);
 
+extern UWORD weaponROF(WEAPON_STATS *psStat);
 
 #endif

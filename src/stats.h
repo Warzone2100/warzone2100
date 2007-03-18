@@ -353,6 +353,7 @@ extern UDWORD getMaxConstPoints(void);
 extern UDWORD getMaxRepairPoints(void);
 extern UDWORD getMaxWeaponRange(void);
 extern UDWORD getMaxWeaponDamage(void);
+extern UDWORD getMaxWeaponROF(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
 #endif

@@ -395,8 +395,6 @@ static BOOL intCheckValidWeaponForProp(void);
 
 static BOOL checkTemplateIsVtol(DROID_TEMPLATE *psTemplate);
 
-static UWORD weaponROF(WEAPON_STATS *psStat);
-
 /* save the current Template if valid. Return TRUE if stored */
 BOOL saveTemplate(void);
 
@@ -2008,7 +2006,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 		}
 		sBarInit.id = IDDES_WEAPROF;
 		sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
-		sBarInit.iRange = DBAR_WEAPMAXROF;
+		sBarInit.iRange = getMaxWeaponROF();
 		sBarInit.pTip = strresGetString(psStringRes, STR_DES_ROF);
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
@@ -3409,8 +3407,6 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 /* Set the bar graphs for the Weapon stats */
 static void intSetWeaponStats(WEAPON_STATS *psStats)
 {
-	UDWORD	size;
-
 	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
 		"intSetWeaponStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_WEAPON_START) &&
@@ -3420,25 +3416,8 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats,0));
 	/* rate of fire */
-	/*size = (DBAR_WEAPMAXROF - (psStats->firePause + (psStats->
-		firePause *	asWeaponUpgrade[selectedPlayer][psStats->weaponSubClass].
-		firePause)/100));*/
-	//size = DBAR_WEAPMAXROF - weaponFirePause(psStats, (UBYTE)selectedPlayer);
-	//size = weaponFirePause(psStats, (UBYTE)selectedPlayer);
-    size = weaponROF(psStats);
-	/*if (size != 0)
-	{
-		size = ONEMIN / size;
-	}*/
-    //This Hack not needed anymore!!!
-	/* Hack to set the ROF to zero for the NULL weapon */
-	/*if (psStats == asWeaponStats)
-	{
-		size = 0;
-	}*/
-	widgSetBarSize(psWScreen, IDDES_WEAPROF, size);
+	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats));
 	/* damage */
-	//widgSetBarSize(psWScreen, IDDES_WEAPDAMAGE, psStats->damage);
 	widgSetBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(psStats,
 		(UBYTE)selectedPlayer));
 	/* weight */
@@ -3448,8 +3427,6 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 /* Set the shadow bar graphs for the Weapon stats */
 static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 {
-	UDWORD	size;
-
 	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(WEAPON_STATS)),
 		"intSetWeaponShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
@@ -3462,26 +3439,8 @@ static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 		/* range */
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats,0));
 		/* rate of fire */
-		/*size = (DBAR_WEAPMAXROF - (psStats->firePause + (psStats->
-			firePause *	asWeaponUpgrade[selectedPlayer][psStats->weaponSubClass].
-			firePause)/100));*/
-		//size = DBAR_WEAPMAXROF - weaponFirePause(psStats, (UBYTE)selectedPlayer);
-		//widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, size);
-		/*size = weaponFirePause(psStats, (UBYTE)selectedPlayer);
-		if (size != 0)
-		{
-			size = ONEMIN / size;
-		}*/
-        size = weaponROF(psStats);
-        //This Hack not needed anymore!!!
-    	/* Hack to set the ROF to zero for the NULL weapon */
-	    /*if (psStats == asWeaponStats)
-	    {
-		    size = 0;
-	    }*/
-		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, size);
+		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats));
 		/* damage */
-		//widgSetMinorBarSize(psWScreen, IDDES_WEAPDAMAGE, psStats->damage);
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(
 			psStats, (UBYTE)selectedPlayer));
 		/* weight */
@@ -5721,7 +5680,7 @@ void reverseTemplateList(DROID_TEMPLATE **ppsList)
 }
 
 //calculates the weapons ROF based on the fire pause and the salvos
-static UWORD weaponROF(WEAPON_STATS *psStat)
+UWORD weaponROF(WEAPON_STATS *psStat)
 {
     UWORD   rof = 0;
 

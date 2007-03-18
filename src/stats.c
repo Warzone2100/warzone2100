@@ -114,6 +114,7 @@ UDWORD      maxConstPoints;
 UDWORD      maxRepairPoints;
 UDWORD      maxWeaponRange;
 UDWORD      maxWeaponDamage;
+UDWORD      maxWeaponROF;
 UDWORD      maxPropulsionSpeed;
 
 
@@ -138,6 +139,7 @@ static void setMaxConstPoints(UDWORD points);
 static void setMaxRepairPoints(UDWORD repair);
 static void setMaxWeaponRange(UDWORD range);
 static void setMaxWeaponDamage(UDWORD damage);
+static void setMaxWeaponROF(UDWORD rof);
 static void setMaxPropulsionSpeed(UDWORD speed);
 
 //determine the effect this upgrade would have on the max values
@@ -921,6 +923,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
         {
             setMaxWeaponRange(psStats->longRange);
             setMaxWeaponDamage(psStats->damage);
+            setMaxWeaponROF(weaponROF(psStats));
             setMaxComponentWeight(psStats->weight);
         }
 
@@ -3993,6 +3996,18 @@ void setMaxWeaponDamage(UDWORD damage)
 UDWORD getMaxWeaponDamage(void)
 {
     return maxWeaponDamage;
+}
+
+void setMaxWeaponROF(UDWORD rof)
+{
+    if (rof > maxWeaponROF)
+    {
+        maxWeaponROF = rof;
+    }
+}
+UDWORD getMaxWeaponROF(void)
+{
+    return maxWeaponROF;
 }
 
 void setMaxPropulsionSpeed(UDWORD speed)
