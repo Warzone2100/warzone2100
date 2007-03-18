@@ -311,7 +311,7 @@ static void initialize_PhysicsFS(void)
  */
 void scanDataDirs( void )
 {
-	char tmpstr[MAX_PATH], prefix[MAX_PATH] = { '\0' };
+	char tmpstr[MAX_PATH] = {'\0'}, prefix[MAX_PATH] = {'\0'};
 
 	// Find out which PREFIX we are in...
 	strcpy( tmpstr, PHYSFS_getBaseDir() );
