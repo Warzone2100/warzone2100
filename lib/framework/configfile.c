@@ -191,7 +191,7 @@ static BOOL registry_load( const char *filename )
 
 	debug(LOG_WZ, "Parsing the registry from %s", filename);
 	if (filesize == 0 || strlen(bptr) == 0) {
-		debug(LOG_ERROR, "Registry file %s is empty!", filename);
+		debug(LOG_WARNING, "Registry file %s is empty!", filename);
 		return FALSE;
 	}
 	bufstart = bptr;
