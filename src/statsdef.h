@@ -403,7 +403,7 @@ typedef struct _weapon_stats
 	UDWORD			longHit;			// Chance to hit at long range
 	UDWORD			firePause;			// Time between each weapon fire
 	UDWORD			numExplosions;		// The number of explosions per shot
-	UBYTE			numRounds;			// The number of rounds per salvo
+	UBYTE			numRounds;			// The number of rounds per salvo(magazine)
 	UDWORD			reloadTime;			// Time to reload the round of ammo (salvo fire)
 	UDWORD			damage;				// How much damage the weapon causes
 	UDWORD			radius;				// Basic blast radius of weapon

@@ -67,7 +67,7 @@ BOOL loadConfig(void)
 	SDWORD	val;
 	char	sBuf[255];
 
-	if(!openWarzoneKey())
+	if(!openWarzoneKey()) // FIXME Allways succeeds!
 	{
 		return FALSE;
 	}
