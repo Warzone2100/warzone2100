@@ -313,7 +313,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 			}
 			else
 			{
-				strcpy(game.name, strresGetString(psStringRes, STR_GAME_NAME));
+				//strcpy(game.name, strresGetString(psStringRes, STR_GAME_NAME));
 				setWarzoneKeyString("gameName", game.name);
 			}
 		}
@@ -327,7 +327,7 @@ BOOL loadConfig(BOOL bResourceAvailable)
 			}
 			else
 			{
-				strcpy((STRING*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
+				//strcpy((STRING*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
 				setWarzoneKeyString("playerName",(STRING*)sPlayer);
 			}
 		}

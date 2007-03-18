@@ -485,12 +485,12 @@ init://jump here from the end if re_initialising
 		return FALSE;
 	}
 
-	loadRenderMode(); //get the registry entry for clRendMode
-
 	bDisableLobby = FALSE;
 
 	loadConfig(FALSE);
 	atexit( closeConfig );
+
+	loadRenderMode(); //get the registry entry for clRendMode
 
 	// parse the command line
 	if (!reInit) {
