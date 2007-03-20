@@ -38,6 +38,17 @@
 #include "console.h"
 #include "arrow.h"
 
+// These values determine the fog when fully zoomed in
+// Determine these when fully zoomed in
+#define FOG_END 3500
+#define FOG_DEPTH 800
+
+// These values are multiplied by the camera distance
+// to obtain the optimal settings when fully zoomed out
+// Determine these when fully zoomed out
+#define FOG_BEGIN_SCALE 0.3
+#define FOG_END_SCALE 0.6
+
 /*	The vector that holds the sun's lighting direction - planar */
 Vector3i	theSun;
 UDWORD	fogStatus = 0;
@@ -701,6 +712,14 @@ void	colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent
 			ASSERT( FALSE,"Weirdy colour of light attempted" );
 			break;
 	}
+}
+
+/// Sets the begin and end distance for the distance fog (mist)
+/// It should provide maximum visiblitiy and minimum
+/// "popping" tiles
+void UpdateFogDistance(float distance)
+{
+	pie_UpdateFogDistance(FOG_END-FOG_DEPTH+distance*FOG_BEGIN_SCALE, FOG_END+distance*FOG_END_SCALE);
 }
 
 

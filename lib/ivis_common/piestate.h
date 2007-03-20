@@ -169,6 +169,7 @@ extern void pie_SetFogStatus(BOOL val);
 extern BOOL pie_GetFogStatus(void);
 extern void pie_SetFogColour(UDWORD colour);
 extern UDWORD pie_GetFogColour(void);
+extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
 extern void pie_SetBilinear(BOOL bilinearOn);

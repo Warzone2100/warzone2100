@@ -75,6 +75,13 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode) {
 	}
 }
 
+/// Set the OpenGL fog start and end
+void pie_UpdateFogDistance(float begin, float end)
+{
+	glFogf(GL_FOG_START, begin);
+	glFogf(GL_FOG_END, end);
+}
+
 //***************************************************************************
 //
 // pie_SetFogStatus(BOOL val)
@@ -105,8 +112,6 @@ void pie_SetFogStatus(BOOL val)
 				glFogfv(GL_FOG_COLOR, fog_colour);
 				glFogf(GL_FOG_DENSITY, 0.35f);
 				glHint(GL_FOG_HINT, GL_DONT_CARE);
-				glFogf(GL_FOG_START, 5000.0f);
-				glFogf(GL_FOG_END, 7000.0f);
 				glEnable(GL_FOG);
 			} else {
 				glDisable(GL_FOG);

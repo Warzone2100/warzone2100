@@ -1016,7 +1016,7 @@ BOOL	init3DView(void)
 	// the world centre - used for decaying lighting etc
 	gridCentreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 	gridCentreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
-
+	
 	edgeTile.texture = 0;
 
 	bEnergyBars = TRUE;
@@ -1056,6 +1056,9 @@ BOOL	init3DView(void)
   //	initEffectsSystem();
 
 	atmosInitSystem();
+
+	// Set the initial fog distance
+	UpdateFogDistance(distance);
 
 	initDemoCamera();
 

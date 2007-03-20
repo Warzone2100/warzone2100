@@ -27,6 +27,7 @@
 #define FOG_ENABLED		8
 
 extern UDWORD	fogStatus;
+extern Vector3i	theSun;
 
 typedef enum _lightcols
 {
@@ -51,7 +52,7 @@ extern void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
 extern void	calcTileIllum(UDWORD tileX, UDWORD tileY);
 extern void	doBuildingLights( void );
-extern Vector3i	theSun;
+extern void UpdateFogDistance(float distance);
 extern UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular);
 extern void	calcDroidIllumination(DROID *psDroid);
 //darkens down the tiles that are outside the scroll limits
