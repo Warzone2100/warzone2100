@@ -183,8 +183,9 @@ GAMECODE gameLoop(void)
 #endif
 
 //JPS 24 feb???
-	if (fogStatus & FOG_BACKGROUND)
+	if (war_GetFog())
 	{
+        // Mist
 		clearMode = CLEAR_FOG;//screen clear to fog colour D3D
 		if (loopMissionState == LMS_SAVECONTINUE)
 		{
@@ -194,6 +195,7 @@ GAMECODE gameLoop(void)
 	}
 	else
 	{
+        // Fog of War
 		clearMode = CLEAR_BLACK;//force to black 3DFX
 	}
 	pie_ScreenFlip(clearMode);//gameloopflip

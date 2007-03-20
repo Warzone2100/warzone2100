@@ -1975,6 +1975,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,0);
 			game.fog = TRUE;
+            war_SetFog(FALSE); // FIXME: multiplayer FOG_ON means fog of war active
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1985,6 +1986,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,0);
 			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,WBUT_LOCK);
 			game.fog = FALSE;
+            war_SetFog(TRUE);
 			if(bHosted)
 			{
 				sendOptions(0,0);
