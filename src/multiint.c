@@ -2290,6 +2290,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		// set the fog correctly..
 		setRevealStatus(game.fog);
+		war_SetFog(!game.fog);
 
 	if(bWhiteBoardUp)
 	{
@@ -2457,6 +2458,7 @@ void frontendMultiMessages(void)
 
 				// set the fog correctly..
 				setRevealStatus(game.fog);
+				war_SetFog(!game.fog);
 
 				bMultiPlayer = TRUE;
 				if(bWhiteBoardUp)

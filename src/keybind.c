@@ -718,18 +718,11 @@ FRACT	zoomInterval;
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	zoomInterval = fraction * MAP_ZOOM_RATE;
 	distance += MAKEINT(zoomInterval);
-	/* If we're debugging, limit to a bit more */
-
-
-#ifndef JOHN
+	if(distance>MAXDISTANCE)
 	{
-		if(distance>MAXDISTANCE)
-		{
-			distance = MAXDISTANCE;
-		}
+		distance = MAXDISTANCE;
 	}
-#endif
-
+	UpdateFogDistance(distance);
 }
 
 // --------------------------------------------------------------------------
@@ -777,7 +770,7 @@ FRACT	zoomInterval;
 	{
 		distance = MINDISTANCE;
 	}
-
+	UpdateFogDistance(distance);
 }
 
 // --------------------------------------------------------------------------
