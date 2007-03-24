@@ -166,6 +166,9 @@ typedef struct iIMDShape {
 
 	struct iIMDShape *next;		// next pie in multilevel pies (NULL for non multilevel !)
 
+	void *shadowEdgeList;
+	unsigned int nShadowEdges;
+
 #ifdef BSPIMD
 	PSBSPTREENODE BSPNode;	// Start of the BSP tree;
 #endif

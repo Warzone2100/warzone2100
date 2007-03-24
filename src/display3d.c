@@ -744,7 +744,8 @@ static void drawTiles(iView *camera, iView *player)
 	angle += 0.01f;
 	// RODZ uncomment the following line to see an OpenGL lighting demo
 	if (getDrawShadows()) {
-		pie_BeginLighting(50, -300, -300);
+		// this also detemines the length of the shadows
+		pie_BeginLighting(225, -600, 450);
 	}
 
 	/* ---------------------------------------------------------------- */
@@ -1471,7 +1472,7 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		}
 		brightness = (UDWORD)lightDoFogAndIllumination((UBYTE)brightness,getCentreX()-posX,getCentreZ()-posY, &specular);
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, specular, pie_NO_BILINEAR, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, specular, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
 		iV_MatrixEnd();
@@ -2010,13 +2011,14 @@ void	setViewDistance(UDWORD dist)
 
 void	renderFeature(FEATURE *psFeature)
 {
-UDWORD		featX,featY;
-SDWORD		rotation;
-//SDWORD		centreX,centreZ;
-UDWORD		brightness, specular;
-Vector3i dv;
-Vector3i *vecTemp;
-BOOL		bForceDraw;
+	UDWORD		featX,featY;
+	SDWORD		rotation;
+	//SDWORD		centreX,centreZ;
+	UDWORD		brightness, specular;
+	Vector3i dv;
+	Vector3i *vecTemp;
+	BOOL		bForceDraw;
+	int shadowFlags = 0;
 
 
 //	if(psFeature->psStats->subType == FEAT_BUILD_WRECK)
@@ -2084,6 +2086,13 @@ BOOL		bForceDraw;
 		}
 
 		brightness = lightDoFogAndIllumination(brightness,getCentreX()-featX,getCentreZ()-featY, &specular);
+		if(psFeature->psStats->subType == FEAT_BUILDING ||
+		   psFeature->psStats->subType == FEAT_SKYSCRAPER ||
+		   psFeature->psStats->subType == FEAT_OIL_DRUM)
+		{
+			// these cast a shadow
+			shadowFlags = pie_STATIC_SHADOW;
+		}
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			vecTemp = psFeature->sDisplay.imd->points;
@@ -2094,7 +2103,7 @@ BOOL		bForceDraw;
 		}
 		else
 		{
-			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, specular, 0,0);//pie_TRANSLUCENT, psFeature->visible[selectedPlayer]);
+			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, specular, shadowFlags,0);
 		}
 
 		pie_RotateProject( 0, 0, 0, &sX, &sY );
@@ -2432,7 +2441,7 @@ void	renderStructure(STRUCTURE *psStructure)
     				imd->points = alteredPoints;
     			}
 			pie_Draw3DShape(imd, 0, playerFrame,
-			buildingBrightness, specular, pie_HEIGHT_SCALED,
+			buildingBrightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
 			(SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
 			if(bHitByElectronic || defensive) {
 				imd->points = temp;
@@ -2445,7 +2454,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				temp = imd->points;
 		    		imd->points = alteredPoints;
 	    		}
-			pie_Draw3DShape(imd, animFrame, 0, buildingBrightness, specular, 0,0);
+			pie_Draw3DShape(imd, animFrame, 0, buildingBrightness, specular, pie_STATIC_SHADOW,0);
 			if(bHitByElectronic || defensive) {
 				imd->points = temp;
 			}
@@ -2525,7 +2534,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							{
 								pie_TRANSLATE(0,0,psStructure->asWeaps[i].recoilValue/3);
 
-								pie_Draw3DShape(mountImd[i], animFrame, 0, buildingBrightness, specular, 0,0);
+								pie_Draw3DShape(mountImd[i], animFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
 								if(mountImd[i]->nconnectors)
 								{
 									iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
@@ -2534,7 +2543,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							iV_MatrixRotateX(DEG(psStructure->turretPitch[i]));
 							pie_TRANSLATE(0,0,psStructure->asWeaps[i].recoilValue);
 
-							pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, specular, 0,0);
+							pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
 				 			if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 							{
 								psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
@@ -2600,7 +2609,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						{
 							pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue/3);
 
-							pie_Draw3DShape(mountImd[0], animFrame, 0, buildingBrightness, specular, 0,0);
+							pie_Draw3DShape(mountImd[0], animFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
 							if(mountImd[0]->nconnectors)
 							{
 								iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
@@ -2609,7 +2618,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
 						pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue);
 
-						pie_Draw3DShape(weaponImd[0], playerFrame, 0, buildingBrightness, specular, 0,0);
+						pie_Draw3DShape(weaponImd[0], playerFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
 				 		if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 						{
 							psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
@@ -2824,6 +2833,11 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	UDWORD			buildingBrightness, specular;
 	SDWORD			sX,sY;
 	SDWORD			brightVar;
+	// HACK to be able to use static shadows for walls
+	// We just store a separate IMD for each direction
+	static iIMDShape otherDirections[3];
+	static BOOL directionSet[3] = {FALSE, FALSE, FALSE};
+	iIMDShape *originalDirection;
 
 
 	if(psStructure->visible[selectedPlayer] || godMode || demoGetStatus())
@@ -2918,6 +2932,21 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		imd = psStructure->sDisplay.imd;
 		temp = imd->points;
 
+		// now check if we need to apply the wall hack
+		if(psStructure->direction > 0 && psStructure->pStructureType->type == REF_WALL)
+		{
+			// switch them
+			originalDirection = imd;
+			imd = &otherDirections[psStructure->direction/90-1];
+			if(!directionSet[psStructure->direction/90-1])
+			{
+				// not yet initialised, so do that now
+				*imd = *originalDirection;
+				imd->shadowEdgeList = NULL;
+				directionSet[psStructure->direction/90-1] = TRUE;
+			}
+		}
+
 		flattenImd(imd,structX,structY,psStructure->direction);
 
 		/* Actually render it */
@@ -2926,15 +2955,21 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			 (psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
 		{
 			pie_Draw3DShape( psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
-			                 brightness, specular, pie_HEIGHT_SCALED,
+			                 brightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
 			                 (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE) );
 		}
 		else if(psStructure->status == SS_BUILT)
 		{
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, 0, 0);
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, pie_STATIC_SHADOW, 0);
+		}
+		imd->points = temp;
+
+		if(psStructure->direction > 0 && psStructure->pStructureType->type == REF_WALL)
+		{
+			// switch back
+			imd = originalDirection;
 		}
 
-		imd->points = temp;
 		pie_RotateProject( 0, 0, 0, &sX, &sY );
 		psStructure->sDisplay.screenX = sX;
 		psStructure->sDisplay.screenY = sY;

@@ -44,6 +44,12 @@
 
 #define MIST
 
+/// Stores the from and to verticles from an edge
+typedef struct edge_
+{
+	int from, to;
+} EDGE;
+
 extern BOOL drawing_interface;
 
 /***************************************************************************/
@@ -141,8 +147,8 @@ static SDWORD		polyCount = 0;
 /***************************************************************************/
 
 //pievertex draw poly (low level) //all modes from PIEVERTEX data
-static void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
-static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
+static inline void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
+static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
 
 void DrawTriangleList(BSPPOLYID PolygonNumber);
 
@@ -225,33 +231,33 @@ void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z)
 
 #endif
 
-static void Vector3f_Set(Vector3f* v, float x, float y, float z)
+static inline void Vector3f_Set(Vector3f* v, float x, float y, float z)
 {
 	v->x = x;
 	v->y = y;
 	v->z = z;
 }
 
-static void Vector3f_Sub(Vector3f* dest, Vector3f* op1, Vector3f* op2)
+static inline void Vector3f_Sub(Vector3f* dest, Vector3f* op1, Vector3f* op2)
 {
 	dest->x = op1->x - op2->x;
 	dest->y = op1->y - op2->y;
 	dest->z = op1->z - op2->z;
 }
 
-static float Vector3f_SP(Vector3f* op1, Vector3f* op2)
+static inline float Vector3f_SP(Vector3f* op1, Vector3f* op2)
 {
 	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
 }
 
-static void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
+static inline void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
 {
 	dest->x = op1->y * op2->z - op1->z * op2->y;
 	dest->y = op1->z * op2->x - op1->x * op2->z;
 	dest->z = op1->x * op2->y - op1->y * op2->x;
 }
 
-static void
+static inline void
 pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
 {
 	SDWORD i;
@@ -448,91 +454,200 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
+/// returns true if both vectors are equal
+static inline BOOL compare_point (Vector3i *A, Vector3i *B)
+{
+	return A->x == B->x && A->y == B->y && A->z == B->z;
+}
+
+/// returns true if the edges are adjacent
+static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
+{
+	if(A->from == B->to)
+	{
+		if(A->to == B->from)
+		{
+			return TRUE;
+		}
+		return compare_point(&pVertices[A->to], &pVertices[B->from]);
+	}
+	BOOL same = compare_point(&pVertices[A->from], &pVertices[B->to]);
+	if(!same)
+		return FALSE;
+	if(A->to == B->from)
+	{
+		return TRUE;
+	}
+	return compare_point(&pVertices[A->to], &pVertices[B->from]);
+
+}
+
+/// Add an edge to an edgelist
+/// Makes sure only silhouette edges are present
+static void addToEdgeList(int a, int b, EDGE *edgelist, int *edge_count, Vector3i *pVertices)
+{
+	EDGE newEdge;
+	int i;
+	BOOL foundMatching = FALSE;
+
+	newEdge.from = a;
+	newEdge.to = b;
+	for(i=0;i<*edge_count;i++)
+	{
+		if(edgelist[i].from < 0)
+		{
+			// does not exist anymore
+			continue;
+		}
+		if(compare_edge(&newEdge, &edgelist[i], pVertices)) {
+			// remove the other too
+			edgelist[i].from = -1;
+			foundMatching = TRUE;
+			break;
+		}
+	}
+	if(!foundMatching)
+	{
+		edgelist[*edge_count] = newEdge;
+		(*edge_count)++;
+	}
+}
+
+/// scale the height according to the flags
+static inline float scale_y(float y, int flag, int flag_data)
+{
+	float tempY = y;
+	if (flag & pie_RAISE) {
+		tempY = y - flag_data;
+		if (y - flag_data < 0) tempY = 0;
+	} else if (flag & pie_HEIGHT_SCALED) {
+		if(y>0) {
+			tempY = (y * flag_data)/pie_RAISE_SCALE;
+		}
+	}
+	return tempY;
+}
+
+/// Draw the shadow for a shape
 static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
 {
-	Sint32		tempY;
-	int i, n;
+	int i,j, n;
 	Vector3i		*pVertices;
-	PIEPIXEL	*pPixels;
 	iIMDPoly	*pPolys;
-	VERTEXID	*index;
+	unsigned int edge_count = 0;
+	static EDGE *edgelist = NULL;
+	static unsigned int edgelistsize = 256;
 
+	EDGE *drawlist = NULL;
+
+	if(!edgelist)
+	{
+		edgelist = MALLOC(sizeof(EDGE)*edgelistsize);
+	}
 	pVertices = shape->points;
-	pPixels = scrPoints;
-	for (i = 0; i < shape->npoints; i++, pVertices++, pPixels++) {
-		tempY = pVertices->y;
-		if (flag & pie_RAISE) {
-			tempY = pVertices->y - flag_data;
-			if (tempY < 0) tempY = 0;
+	if( flag & pie_STATIC_SHADOW && shape->shadowEdgeList )
+	{
+		drawlist = shape->shadowEdgeList;
+		edge_count = shape->nShadowEdges;
+	}
+	else
+	{
+		pPolys = shape->polys;
+		for (i = 0; i < shape->npolys; ++i, ++pPolys) {
+			Vector3f p[3], v[2], normal;
+			VERTEXID current, first;
+			for(j=0;j<3;j++)
+			{
+				current = pPolys->pindex[j];
+				Vector3f_Set(&p[j], pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
+			}
 
-		} else if (flag & pie_HEIGHT_SCALED) {
-			if(pVertices->y>0) {
-				tempY = (pVertices->y * flag_data)/pie_RAISE_SCALE;
+			Vector3f_Sub(&v[0], &p[2], &p[0]);
+			Vector3f_Sub(&v[1], &p[1], &p[0]);
+			Vector3f_CP(&normal, &v[0], &v[1]);
+			if (Vector3f_SP(&normal, light) > 0)
+			{
+				first = pPolys->pindex[0];
+				for (n = 1; n < pPolys->npnts; n++) {
+					// link to the previous vertex
+					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist, &edge_count, pVertices);
+					// check if the edgelist is still large enough
+					if(edge_count >= edgelistsize-1)
+					{
+						// enlarge
+						EDGE *newstack = MALLOC(sizeof(EDGE)*edgelistsize*2);
+						memcpy(newstack, edgelist, sizeof(EDGE)*edgelistsize);
+						FREE(edgelist);
+						edgelistsize*=2;
+						edgelist = newstack;
+						debug(LOG_WARNING, "new edge list size: %i", edgelistsize);
+					}
+				}
+				// back to the first
+				addToEdgeList(pPolys->pindex[ pPolys->npnts-1 ], first, edgelist, &edge_count, pVertices);
 			}
 		}
-		pPixels->d3dx = pVertices->x;
-		pPixels->d3dy = tempY;
-		pPixels->d3dz = pVertices->z;
-	}
+		//debug(LOG_WARNING, "we have %i edges", edge_count);
+		drawlist = edgelist;
 
-	pPolys = shape->polys;
-	for (i = 0; i < shape->npolys; ++i, ++pPolys) {
-		Vector3f p1, p2, p3, v1, v2, normal;
-
-		index = pPolys->pindex;
-		Vector3f_Set(&p1, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-		++index;
-		Vector3f_Set(&p2, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-		++index;
-		Vector3f_Set(&p3, scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-		Vector3f_Sub(&v1, &p3, &p1);
-		Vector3f_Sub(&v2, &p2, &p1);
-		Vector3f_CP(&normal, &v1, &v2);
-		if (Vector3f_SP(&normal, light) > 0) {
-			if (   pPolys->flags & PIE_COLOURKEYED
-			    && pPolys->flags & PIE_NO_CULL) {
-				VERTEXID i;
-
-				glBegin(GL_TRIANGLE_FAN);
-				index = pPolys->pindex;
-				glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-				for (n = pPolys->npnts-1; n > 0; --n) {
-					i = pPolys->pindex[n];
-					glVertex3f(scrPoints[i].d3dx, scrPoints[i].d3dy, scrPoints[i].d3dz);
+		if(flag & pie_STATIC_SHADOW)
+		{
+			// first compact the current edgelist
+			j = 0;
+			for(i=0;i<edge_count;i++)
+			{
+				if(edgelist[i].from<0)
+				{
+					continue;
 				}
-				glEnd();
+				edgelist[j] = edgelist[i];
+				j++;
 			}
-			index = pPolys->pindex;
-			glBegin(GL_TRIANGLE_STRIP);
-			for (n = 0; n < pPolys->npnts; ++n, ++index) {
-				glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
-				glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-			}
-			index = pPolys->pindex;
-			glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
-			glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-		} else {
-			if (   pPolys->flags & PIE_COLOURKEYED
-			    && pPolys->flags & PIE_NO_CULL) {
-				glBegin(GL_TRIANGLE_FAN);
-				index = pPolys->pindex;
-				for (n = 0; n < pPolys->npnts; ++n, ++index) {
-					glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-				}
-				glEnd();
-			}
-			index = pPolys->pindex;
-			glBegin(GL_TRIANGLE_STRIP);
-			for (n = 0; n < pPolys->npnts; ++n, ++index) {
-				glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-				glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
-			}
-			index = pPolys->pindex;
-			glVertex3f(scrPoints[*index].d3dx, scrPoints[*index].d3dy, scrPoints[*index].d3dz);
-			glVertex3f(scrPoints[*index].d3dx+light->x, scrPoints[*index].d3dy+light->y, scrPoints[*index].d3dz+light->z);
+			edge_count = j;
+			// then store it in the imd
+			shape->shadowEdgeList = malloc(sizeof(EDGE)*edge_count);
+			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE)*edge_count);
+			shape->nShadowEdges = edge_count;
 		}
-		glEnd();
 	}
+
+	// draw the shadow volume
+	glBegin(GL_QUADS);
+	for(i=0;i<edge_count;i++)
+	{
+		int a,b;
+		a = drawlist[i].from;
+		if(a < 0)
+		{
+			continue;
+		}
+		b = drawlist[i].to;
+
+		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
+		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
+		glVertex3f(pVertices[a].x+light->x, scale_y(pVertices[a].y, flag, flag_data)+light->y, pVertices[a].z+light->z);
+		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
+	}
+	glEnd();
+
+#ifdef SHOW_SHADOW_EDGES
+	glDisable(GL_DEPTH_TEST);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+	glColor4ub(0xFF,0,0,0xFF);
+	glBegin(GL_LINES);
+	for(i=0;i<edge_count;i++)
+	{
+		int a = drawlist[i].from;
+		if(a<0) continue;
+		int b = drawlist[i].to;
+		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
+		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
+	}
+	glEnd();
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glEnable(GL_DEPTH_TEST);
+#endif
 }
 
 void pie_CleanUp( void )
@@ -551,7 +666,9 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	// Fix for transparent buildings and features!! */
 	if( (pieFlag & pie_TRANSLUCENT) && (pieFlagData>220) )
 	{
-		pieFlag = pieFlagData = 0;	// force to bilinear and non-transparent
+		// force to bilinear and non-transparent
+		pieFlag = pieFlag & ~pie_TRANSLUCENT;
+		pieFlagData = 0;
 	}
 	// Fix for transparent buildings and features!! */
 
@@ -596,28 +713,32 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 			tshapes[nb_tshapes].flag_data = pieFlagData;
 			nb_tshapes++;
 		} else {
-			if (scshapes_size <= nb_scshapes) {
-				if (scshapes_size == 0) {
-					scshapes_size = 64;
-					scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
-					memset( scshapes, 0, scshapes_size*sizeof(shadowcasting_shape_t) );
-				} else {
-					unsigned int old_size = scshapes_size;
-					scshapes_size <<= 1;
-					scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
-					memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
+			if(pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW)
+			{
+				// draw a shadow
+				if (scshapes_size <= nb_scshapes) {
+					if (scshapes_size == 0) {
+						scshapes_size = 64;
+						scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
+						memset( scshapes, 0, scshapes_size*sizeof(shadowcasting_shape_t) );
+					} else {
+						unsigned int old_size = scshapes_size;
+						scshapes_size <<= 1;
+						scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
+						memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
+					}
 				}
-			}
-			glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
-			distance = scshapes[nb_scshapes].matrix[12]*scshapes[nb_scshapes].matrix[12];
-			distance += scshapes[nb_scshapes].matrix[13]*scshapes[nb_scshapes].matrix[13];
-			distance += scshapes[nb_scshapes].matrix[14]*scshapes[nb_scshapes].matrix[14];
-			// if object is too far in the fog don't generate a shadow.
-			if (distance < 6000*6000) {
-				scshapes[nb_scshapes].shape = shape;
-				scshapes[nb_scshapes].flag = pieFlag;
-				scshapes[nb_scshapes].flag_data = pieFlagData;
-				nb_scshapes++;
+				glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
+				distance = scshapes[nb_scshapes].matrix[12]*scshapes[nb_scshapes].matrix[12];
+				distance += scshapes[nb_scshapes].matrix[13]*scshapes[nb_scshapes].matrix[13];
+				distance += scshapes[nb_scshapes].matrix[14]*scshapes[nb_scshapes].matrix[14];
+				// if object is too far in the fog don't generate a shadow.
+				if (distance < 6000*6000) {
+					scshapes[nb_scshapes].shape = shape;
+					scshapes[nb_scshapes].flag = pieFlag;
+					scshapes[nb_scshapes].flag_data = pieFlagData;
+					nb_scshapes++;
+				}
 			}
 			pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
 		}
@@ -903,7 +1024,7 @@ static void pie_PiePoly(PIEPOLY *poly, BOOL light)
 	}
 }
 
-static void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
+static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 {
 int	uFrame, vFrame, j, framesPerLine;
 

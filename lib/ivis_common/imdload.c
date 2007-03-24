@@ -949,6 +949,9 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 		s->texanims = NULL;
 		s->next=NULL;
 
+		s->shadowEdgeList = NULL;
+		s->nShadowEdges = NULL;
+
 // if we can be sure that there is no bsp ... the we check for level number at this point
 #ifndef BSPIMD
 		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {

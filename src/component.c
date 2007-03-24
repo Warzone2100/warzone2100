@@ -930,11 +930,12 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 		pieFlag = 0;
 	}
 
-	if(!pieFlag)
+	if(!bButton)
 	{
    //		centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
    //		centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 		brightness = lightDoFogAndIllumination(psDroid->illumination,getCentreX() - psDroid->x,getCentreZ() - psDroid->y, &specular);
+		pieFlag = pie_SHADOW;
 	}
 	else
 	{

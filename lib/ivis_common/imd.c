@@ -479,6 +479,11 @@ void iV_IMDRelease(iIMDShape *s)
 			}
 			iV_HeapFree(s->polys,s->npolys * sizeof(iIMDPoly));
 		}
+		if (s->shadowEdgeList)
+		{
+			free(s->shadowEdgeList);
+			s->shadowEdgeList = NULL;
+		}
 		iV_DEBUG0("imd[IMDRelease] = release successful\n");
 		d = s->next;
 		iV_HeapFree(s,sizeof(iIMDShape));
