@@ -1093,13 +1093,7 @@ void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
 	tileCount++;
 	pie_SetTexturePage(texPage);
 	pie_SetFogStatus(TRUE);
-	if (psEffects == NULL)
-	{
-		/* Solid terrain */
-		pie_SetRendMode(REND_GOURAUD_TEX);
-		pie_SetColourKeyedBlack(TRUE);
-	}
-	else
+	if (psEffects != NULL)
 	{
 		/* Translucent water with animation */
 		pie_SetRendMode(REND_ALPHA_TEX);
@@ -1116,6 +1110,12 @@ void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
 		glVertex3f( aVrts[i].sx, aVrts[i].sy, aVrts[i].sz );
 	}
 	glEnd();
+	if (psEffects != NULL)
+	{
+		/* Solid terrain */
+		pie_SetRendMode(REND_GOURAUD_TEX);
+		pie_SetColourKeyedBlack(TRUE);
+	}
 }
 
 void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount)

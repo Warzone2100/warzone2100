@@ -930,20 +930,12 @@ static void drawTiles(iView *camera, iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Draw all the tiles or add them to bucket sort                     */
 	/* ---------------------------------------------------------------- */
-	tilesRejected = 0;
 	for (i= 0; i < (SDWORD)visibleYTiles; i++)
-
 	{
 		for (j= 0; j < (SDWORD)visibleXTiles; j++)
 		{
-#ifndef BUCKET
-//bucket?
-		drawTexturedTile(i,j);
-#else
-
-		if(tileScreenInfo[i][j].drawInfo == TRUE)
+			if(tileScreenInfo[i][j].drawInfo == TRUE)
 			{
-
 				tileIJ[i][j].i = i;
 				tileIJ[i][j].j = j;
 				//get distance of furthest corner
@@ -955,14 +947,14 @@ static void drawTiles(iView *camera, iView *player)
 				{
 					ASSERT( FALSE,"Weirdy tile coords" );
 				}
-				bucketAddTypeToList(RENDER_TILE, &tileIJ[i][j]);
-				bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
+				if(zMax<0)
+				{
+					// clipped
+					continue;
+				}
+				drawTerrainTile(i,j, FALSE);
+				drawTerrainWaterTile(i,j);
 			}
-			else
-			{
-				tilesRejected++;
-			}
-#endif //bucket
 		}
 	}
 
@@ -981,7 +973,8 @@ static void drawTiles(iView *camera, iView *player)
 	displayDelivPoints();	//bucket render implemented
 	display3DProjectiles();//bucket render implemented
 
-	drawEffects();
+	// Gerard: Now done in processEffects
+	// drawEffects();
 	atmosDrawParticles();
 #ifdef BUCKET
 	bucketRenderCurrentList();

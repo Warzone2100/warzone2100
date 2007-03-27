@@ -81,7 +81,8 @@
 extern UWORD OffScreenEffects;
 
 /* Our list of all game world effects */
-static EFFECT	asEffectsList[MAX_EFFECTS];
+static EFFECT        asEffectsList[MAX_EFFECTS];
+static EFFECT_STATUS effectStatus[MAX_EFFECTS];
 
 #define FIREWORK_EXPLODE_HEIGHT			400
 #define STARBURST_RADIUS				150
@@ -199,6 +200,12 @@ UDWORD IMDGetNumFrames(iIMDShape *Shape);
 /* The fraction of a second that the last game frame took */
 static	FRACT	fraction;
 
+static void killEffect(EFFECT *e)
+{
+	effectStatus[e-asEffectsList] = ES_INACTIVE;
+	e->control = (UBYTE) 0;
+}
+
 // ----------------------------------------------------------------------------------------
 static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 {
@@ -270,7 +277,7 @@ EFFECT	*psEffect;
 		/* Clear all the control bits */
 		psEffect->control = (UBYTE)0;
 		/* All effects are initially inactive */
-		asEffectsList[i].status = ES_INACTIVE;
+		effectStatus[i] = ES_INACTIVE;
 	}
 }
 
@@ -509,7 +516,7 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Make the effect active */
-	asEffectsList[freeEffect].status = ES_ACTIVE;
+	effectStatus[freeEffect] = ES_ACTIVE;
 
 	/* As of yet, it hasn't bounced (or whatever)... */
 	if(type!=EXPLOSION_TYPE_LAND_LIGHT)
@@ -569,25 +576,27 @@ UDWORD	num;
 
 	/* Establish how long the last game frame took */
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
-	num=0;
 	missCount = 0;
 
+	/* Reset counter */
+	numEffects = 0;
+
+	/* Traverse the list */
 	for(i=0; i<MAX_EFFECTS; i++)
 	{
-		/* Is it active */
-		switch(asEffectsList[i].status)
+		/* Don't bother unless it's active */
+		if(effectStatus[i] == ES_ACTIVE)
 		{
-		/* The effect is active */
-		case ES_ACTIVE:
-			/* So process it */
 			updateEffect(&asEffectsList[i]);
-			num++;
-			break;
-		case ES_DORMANT:
-			/* Might be useful? */
-			break;
-		default:
-			break;
+			/* One more is active */
+			numEffects++;
+			/* Is it on the grid */
+			if(clipXY((UDWORD)MAKEINT(asEffectsList[i].position.x),(UDWORD)MAKEINT(asEffectsList[i].position.z)))
+			{
+				/* Add it to the bucket */
+				bucketAddTypeToList(RENDER_EFFECT,&asEffectsList[i]);
+			}
+
 		}
 	}
 
@@ -597,7 +606,7 @@ UDWORD	num;
 	/* Add any structure effects */
 	effectStructureUpdates();
 
-	activeEffects = num;
+	activeEffects = numEffects;
 	skippedEffects = skipped;
 }
 
@@ -611,31 +620,7 @@ void	drawEffects( void )
 {
 UDWORD	i;
 
-	/* Reset counter */
-	numEffects = 0;
 
-	/* Traverse the list */
-	for(i=0; i<MAX_EFFECTS; i++)
-	{
-		/* Don't bother unless it's active */
-		if(asEffectsList[i].status == ES_ACTIVE)
-		{
-			/* One more is active */
-			numEffects++;
-			/* Is it on the grid */
-			if(clipXY((UDWORD)MAKEINT(asEffectsList[i].position.x),(UDWORD)MAKEINT(asEffectsList[i].position.z)))
-			{
-#ifndef BUCKET
-				/* Draw it right now */
-				renderEffect(&asEffectsList[i]);
-#else
-				/* Add it to the bucket */
-				bucketAddTypeToList(RENDER_EFFECT,&asEffectsList[i]);
-#endif
-			}
-
-		}
-	}
 }
 
 
@@ -703,7 +688,7 @@ void	updateWaypoint(EFFECT *psEffect)
 	if(!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) ||
 	     keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
 	{
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 	}
 }
 
@@ -780,7 +765,7 @@ void	updateFirework(EFFECT *psEffect)
 	//   			addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
 				}
 			}
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 
 		}
 		else
@@ -813,7 +798,7 @@ void	updateFirework(EFFECT *psEffect)
 				else
 				{
 					/* Kill it off */
- 					KILL_EFFECT(psEffect);
+ 					killEffect(psEffect);
 					return;
 				}
 			}
@@ -826,7 +811,7 @@ void	updateFirework(EFFECT *psEffect)
 			if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
 			{
 				/* Kill it */
-				KILL_EFFECT(psEffect);
+				killEffect(psEffect);
 			}
 		}
 
@@ -933,7 +918,7 @@ void	updateSatLaser(EFFECT *psEffect)
 	}
 	else
 	{
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 	}
 }
 // ----------------------------------------------------------------------------------------
@@ -1009,7 +994,7 @@ void	updateExplosion(EFFECT *psEffect)
 		if(psEffect->size>MAX_SHOCKWAVE_SIZE || light.range>600)
 		{
  			/* Kill it off */
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 			return;
 
 		}
@@ -1027,7 +1012,7 @@ void	updateExplosion(EFFECT *psEffect)
 		 		if(psEffect->type!=EXPLOSION_TYPE_LAND_LIGHT)
 				{
 		 			/* Kill it off */
-					KILL_EFFECT(psEffect);
+					killEffect(psEffect);
 					return;
 				}
 				else
@@ -1060,7 +1045,7 @@ void	updateBlood(EFFECT *psEffect)
 		if(++psEffect->frameNumber >= EffectGetNumFrames(psEffect))
 		{
 			/* Kill it off */
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 			return;
 		}
 	}
@@ -1104,7 +1089,7 @@ void	updatePolySmoke(EFFECT *psEffect)
 			else
 			{
 				/* Kill it off */
- 				KILL_EFFECT(psEffect);
+ 				killEffect(psEffect);
 				return;
 			}
 		}
@@ -1124,7 +1109,7 @@ void	updatePolySmoke(EFFECT *psEffect)
 		if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
 			/* Kill it */
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 		}
 	}
 }
@@ -1169,7 +1154,7 @@ void	updateGraviton(EFFECT *psEffect)
 	if(((UDWORD)MAKEINT(psEffect->position.x)/TILE_UNITS >= mapWidth) ||
 		(UDWORD)MAKEINT(psEffect->position.z)/TILE_UNITS >= mapHeight)
 	{
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 		return;
 	}
 
@@ -1178,7 +1163,7 @@ void	updateGraviton(EFFECT *psEffect)
 	/* If it's going up and it's still under the landscape, then remove it... */
 	if(psEffect->position.y<groundHeight && MAKEINT(psEffect->velocity.y)>0)
 	{
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 		return;
 	}
 
@@ -1232,7 +1217,7 @@ void	updateGraviton(EFFECT *psEffect)
 	if((MAKEINT(psEffect->position.x) <= TILE_UNITS) ||
 		MAKEINT(psEffect->position.z) <= TILE_UNITS)
 	{
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 		return;
 	}
 
@@ -1242,7 +1227,7 @@ void	updateGraviton(EFFECT *psEffect)
 		psTile = mapTile((MAKEINT(psEffect->position.x))>>TILE_SHIFT,(MAKEINT(psEffect->position.z))>>TILE_SHIFT);
 	   	if(TERRAIN_TYPE(psTile) == TER_WATER)
 		{
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 			return;
 		}
 		else
@@ -1273,7 +1258,7 @@ void	updateGraviton(EFFECT *psEffect)
 					dv.z = MAKEINT(psEffect->position.z);
 					addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_VERY_SMALL,FALSE,NULL,0);
 				}
-				KILL_EFFECT(psEffect);
+				killEffect(psEffect);
 				return;
 			}
 		}
@@ -1330,7 +1315,7 @@ void	updateDestruction(EFFECT *psEffect)
 	if(gameTime > (psEffect->birthTime + psEffect->lifeSpan))
 	{
 		/* Kill it - it's too old */
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 		return;
 	}
 
@@ -1343,7 +1328,7 @@ void	updateDestruction(EFFECT *psEffect)
 			pos.z = MAKEINT(psEffect->position.z);
 			pos.y = MAKEINT(psEffect->position.y);
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,FALSE,NULL,0);
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 			return;
 		}
 
@@ -1484,7 +1469,7 @@ void	updateConstruction(EFFECT *psEffect)
 			}
 			else
 			{
-				KILL_EFFECT(psEffect);
+				killEffect(psEffect);
 				return;
 			}
 		}
@@ -1504,13 +1489,13 @@ void	updateConstruction(EFFECT *psEffect)
 		if(MAKEINT(psEffect->position.y) <=
 			map_Height((UDWORD)MAKEINT(psEffect->position.x),(UDWORD)MAKEINT(psEffect->position.z)))
 		{
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 			return;
 		}
 
 		if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
-			KILL_EFFECT(psEffect);
+			killEffect(psEffect);
 			return;
 		}
 	}
@@ -1587,7 +1572,7 @@ void	updateFire(EFFECT *psEffect)
 
 	if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
 	{
-		KILL_EFFECT(psEffect);
+		killEffect(psEffect);
 		return;
 	}
 }
@@ -2898,7 +2883,7 @@ BOOL	bOnFire;
 
    	for(i=0, bOnFire = FALSE; i<MAX_EFFECTS && !bOnFire; i++)
 	{
-	 	if( (asEffectsList[i].status == ES_ACTIVE) && asEffectsList[i].group == EFFECT_FIRE)
+	 	if( (effectStatus[i] == ES_ACTIVE) && asEffectsList[i].group == EFFECT_FIRE)
 		{
 			posX = MAKEINT(asEffectsList[i].position.x);
 			posY = MAKEINT(asEffectsList[i].position.z);
@@ -2926,7 +2911,7 @@ iIMDShape		*psOrig;
 	/* How many FX do we write out data from? Only write active ones! */
 	for(i=0,fxEntries = 0; i<MAX_EFFECTS; i++)
 	{
-		if(asEffectsList[i].status == ES_ACTIVE)
+		if(effectStatus[i] == ES_ACTIVE)
 		{
 			fxEntries++;
 		}
@@ -2967,7 +2952,7 @@ iIMDShape		*psOrig;
 
 	for(i=0; i<MAX_EFFECTS; i++)
 	{
-		if(asEffectsList[i].status == ES_ACTIVE)
+		if(effectStatus[i] == ES_ACTIVE)
 		{
 			/*
 			restore = FALSE;

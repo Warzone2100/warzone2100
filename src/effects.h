@@ -120,7 +120,7 @@ typedef enum
 }LAND_LIGHT_SPEC;
 
 
-#define MAX_EFFECTS	2500
+#define MAX_EFFECTS	500
 
 #define	GRAVITON_GRAVITY	((FRACT)-800)
 #define	EFFECT_X_FLIP		0x1
@@ -195,7 +195,6 @@ typedef enum
 
 typedef struct	_effect_def
 {
-UBYTE			status;			// what status is the present effect - active/inactive/dormant
 UBYTE			control;		// Controls the bits above - essential,flips etc
 UBYTE			group;			// what	group is it - explosion, building effect etc....
 UBYTE			type;			// what type is it within the group?
@@ -214,9 +213,6 @@ UWORD			lifeSpan;		// what is it's life expectancy?
 UWORD			radius;			// Used for area effects
 struct iIMDShape		*imd;			// pointer to the imd the effect uses.
 } EFFECT;
-
-#define KILL_EFFECT(x)	(x)->status = ES_INACTIVE; \
-						(x)->control = (UBYTE) 0
 
 /* Maximum number of effects in the world - need to investigate what this should be */
 /* EXTERNAL REFERENCES */
