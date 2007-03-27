@@ -2,6 +2,7 @@ MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
 SRC=audio.c \
+	audio_id.c \
 	cdaudio.c \
 	openal_track.c \
 	playlist.c \

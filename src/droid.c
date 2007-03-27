@@ -48,7 +48,7 @@
 #include "effects.h"
 #include "feature.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "action.h"
 #include "order.h"
 #include "lib/framework/fractions.h"

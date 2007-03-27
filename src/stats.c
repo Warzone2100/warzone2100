@@ -33,7 +33,7 @@
 #include "stats.h"
 #include "map.h"
 #include "winmain.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "projectile.h"
 #include "text.h"
 #define WEAPON_TIME		100
@@ -2530,7 +2530,7 @@ statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 	}
 	else
 	{
-		if ( audioID_GetIDFromStr( szWavName, piWavID ) == FALSE )
+		if ( (*piWavID = audio_GetIDFromStr(szWavName)) == NO_SOUND )
 		{
 			debug( LOG_ERROR, "statsGetAudioIDFromString: couldn't get ID %d for sound %s", *piWavID, szWavName );
 			abort();

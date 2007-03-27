@@ -33,7 +33,7 @@
 #include "text.h"
 #include "console.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "hci.h"
 #include "lib/ivis_common/piedef.h"
 #include "objmem.h"
@@ -871,7 +871,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			}
 			else
 			{
-				if ( audioID_GetIDFromStr( audioName, &audioID ) == FALSE )
+				if ( (audioID = audio_GetIDFromStr( audioName )) == NO_SOUND )
 				{
 					debug( LOG_ERROR, "loadViewData: couldn't get ID %d for weapon sound %s", audioID, audioName );
 					abort();

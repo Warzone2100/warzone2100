@@ -92,7 +92,6 @@ SRC=ai.c \
 	ani.c \
 	arrow.c \
 	aud.c \
-	audio_id.c \
 	bucket3d.c \
 	clparse.c \
 	configuration.c \

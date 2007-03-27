@@ -34,7 +34,6 @@
 #include "lib/ivis_common/pieclip.h"
 
 #include "csnap.h"
-#include "audio_id.h"
 
 #define V_BIAS 8
 #define H_BIAS 8

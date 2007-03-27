@@ -17,12 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
 #ifndef _AUDIO_ID_H_
 #define _AUDIO_ID_H_
 
-/***************************************************************************/
 /* INGAME AUDIO */
 
 typedef enum
@@ -497,13 +495,6 @@ typedef enum
 }
 INGAME_AUDIO;
 
-/***************************************************************************/
-
-extern BOOL	audioID_GetIDFromStr( const char *pWavStr, SDWORD *piID );
-
-/***************************************************************************/
+INGAME_AUDIO audio_GetIDFromStr(const char *pWavStr);
 
 #endif	// _AUDIO_ID_H_
-
-/***************************************************************************/
-

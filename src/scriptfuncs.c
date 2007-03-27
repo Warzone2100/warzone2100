@@ -46,7 +46,7 @@
 #include "research.h"
 #include "lib/sound/audio.h"
 #include "text.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "power.h"
 #include "console.h"
 #include "scriptfuncs.h"

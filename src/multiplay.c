@@ -46,7 +46,7 @@
 #include "component.h"
 #include "frontend.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "levels.h"
 #include "selection.h"
 

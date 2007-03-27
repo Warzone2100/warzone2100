@@ -35,7 +35,7 @@
 #include "keybind.h"
 #include "mechanics.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "lighting.h"
 #include "power.h"
 #include "hci.h"

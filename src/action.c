@@ -30,7 +30,7 @@
 #include "lib/script/script.h"
 
 #include "action.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "combat.h"
 #include "formation.h"
 #include "geometry.h"

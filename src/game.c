@@ -51,7 +51,7 @@
 #include "init.h"
 #include "mission.h"
 #include "scores.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "anim_id.h"
 #include "design.h"
 #include "lighting.h"

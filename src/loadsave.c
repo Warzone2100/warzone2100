@@ -37,7 +37,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "game.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "frontend.h"
 #include "winmain.h"
 #include "display3d.h"

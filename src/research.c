@@ -34,7 +34,7 @@
 #include "message.h"
 #include "text.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "hci.h"

@@ -41,7 +41,7 @@
 #include "lib/gamelib/gtime.h"
 #include "effects.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"			// for samples.
+#include "lib/sound/audio_id.h"			// for samples.
 #include "wrappers.h"			// for gameover..
 #include "lib/script/script.h"
 #include "scripttabs.h"

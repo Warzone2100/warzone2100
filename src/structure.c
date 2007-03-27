@@ -43,7 +43,7 @@
 #include "effects.h"
 #include "combat.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "stats.h"
 #include "lib/framework/fractions.h"
 #include "edit3d.h"

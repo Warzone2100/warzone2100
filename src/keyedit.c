@@ -46,7 +46,7 @@
 #include "intimage.h"
 #include "lib/ivis_common/bitimage.h"
 #include "intdisplay.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "lib/ivis_common/pieblitfunc.h"
 #include "multiint.h"
 

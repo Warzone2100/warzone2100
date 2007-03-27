@@ -91,7 +91,7 @@
 #include "transporter.h"
 #include "warzoneconfig.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "action.h"
 #include "keybind.h"
 #include "combat.h"

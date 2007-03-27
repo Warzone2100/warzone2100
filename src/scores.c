@@ -48,7 +48,7 @@
 #include "mission.h"
 #include "game.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "intimage.h"
 
 #define	BAR_CRAWL_TIME	(GAME_TICKS_PER_SEC*3)

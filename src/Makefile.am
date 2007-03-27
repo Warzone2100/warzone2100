@@ -11,7 +11,7 @@ BUILT_SOURCES = scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aidef.h aiexperience.h anim_id.h \
-	arrow.h astar.h atmos.h audio_id.h base.h bridge.h bucket3d.h buildpos.h \
+	arrow.h astar.h atmos.h base.h bridge.h bucket3d.h buildpos.h \
 	bullet.h bulletdef.h cdspan.h cheat.h clparse.h cluster.h cmddroid.h \
 	cmddroiddef.h combat.h component.h configuration.h console.h csnap.h data.h \
 	deliverance.h design.h difficulty.h disp2d.h display.h display3d.h display3ddef.h \
@@ -42,7 +42,7 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	objmem.c objects.c optimisepath.c order.c player.c powercrypt.c radar.c \
 	raycast.c research.c scores.c scriptai.c scriptcb.c scriptextern.c scriptfuncs.c \
 	scriptobj.c scripttabs.c scriptvals.c selection.c stats.c text.c texture.c \
-	transporter.c visibility.c warcam.c wrappers.c ani.c arrow.c aud.c audio_id.c \
+	transporter.c visibility.c warcam.c wrappers.c ani.c arrow.c aud.c \
 	bucket3d.c clparse.c configuration.c csnap.c display3d.c drive.c function.c game.c \
 	ingameop.c keyedit.c loadsave.c mission.c multigifts.c multijoin.c multilimit.c \
 	multiplay.c multistruct.c oprint.c power.c projectile.c seqdisp.c structure.c \

@@ -54,7 +54,7 @@
 #include "loop.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "geometry.h"
 #include "lib/gamelib/animobj.h"
 #include "anim_id.h"

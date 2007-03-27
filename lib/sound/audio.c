@@ -27,6 +27,7 @@
 #include "tracklib.h"
 #include "lib/gamelib/priority.h"
 #include "aud.h"
+#include "audio_id.h"
 #include "lib/framework/trig.h"
 #include "lib/ivis_common/pietypes.h"
 
@@ -650,7 +651,7 @@ BOOL audio_SetTrackVals
 	else
 	{
 		// get current ID or spare one
-		if ( audio_GetIDFromStr(szFileName, piID) == FALSE )
+		if ( (*piID = audio_GetIDFromStr(szFileName)) == NO_SOUND )
 		{
 			*piID = sound_GetAvailableID();
 		}

@@ -37,7 +37,6 @@
 
 #include "cluster.h"
 #include "lib/sound/aud.h"
-#include "audio_id.h"
 
 /***************************************************************************/
 
@@ -330,14 +329,6 @@ audio_GetClusterIDFromObj( void *psClusterObj )
 {
 	/* clustGetClusterID returns 0 if cluster is empty */
 	return clustGetClusterID( (BASE_OBJECT*)psClusterObj );
-}
-
-/***************************************************************************/
-
-BOOL
-audio_GetIDFromStr( char *pWavStr, SDWORD *piID )
-{
-	return audioID_GetIDFromStr( pWavStr, piID );
 }
 
 /***************************************************************************/

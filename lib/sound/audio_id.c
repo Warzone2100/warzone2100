@@ -32,7 +32,7 @@
 
 typedef struct AUDIO_ID
 {
-	SDWORD	iID;
+	INGAME_AUDIO	iID;
 	const char	*pWavStr;
 }
 AUDIO_ID;
@@ -499,25 +499,22 @@ static AUDIO_ID asAudioID[] =
 
 /***************************************************************************/
 
-BOOL
-audioID_GetIDFromStr( const char *pWavStr, SDWORD *piID )
+INGAME_AUDIO audio_GetIDFromStr(const char *pWavStr)
 {
 	SDWORD		i;
 
-	for ( i=0; i<ID_MAX_SOUND; i++ )
+	for ( i=0; i != ID_MAX_SOUND; i++ )
 	{
 		if ( strcasecmp( pWavStr, asAudioID[i].pWavStr ) == 0 )
 		{
 			ASSERT( i == asAudioID[i].iID,
 				"audioID_GetIDFromStr: %s stored IDs don't match", pWavStr );
 
-			*piID = asAudioID[i].iID;
-			return TRUE;
+			return asAudioID[i].iID;
 		}
 	}
 
-	*piID = NO_SOUND;
-	return FALSE;
+	return NO_SOUND;
 }
 
 /***************************************************************************/

@@ -56,7 +56,7 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "cmddroid.h"
 #include "warcam.h"
 #include "wrappers.h"

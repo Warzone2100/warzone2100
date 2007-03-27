@@ -44,7 +44,6 @@
 #include "miscimd.h"
 #include "projectile.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
 #include "geometry.h"
 #include "cmddroid.h"
 #include "mapgrid.h"

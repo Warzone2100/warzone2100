@@ -52,7 +52,7 @@
 #include "component.h"
 #include "research.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "wrappers.h"
 #include "intimage.h"
 #include "data.h"

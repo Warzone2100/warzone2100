@@ -61,7 +61,7 @@
 #include "miscimd.h"
 #include "effects.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "hci.h"
 #include "lighting.h"
 #include "console.h"

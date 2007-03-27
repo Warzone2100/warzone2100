@@ -37,7 +37,7 @@
 #include "lib/gamelib/gtime.h"
 #include "power.h"
 #include "lib/sound/audio.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "objects.h"
 #include "display.h"
 #include "console.h"

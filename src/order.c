@@ -61,7 +61,7 @@
 #include "display.h"
 #include "ai.h"
 #include "warcam.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "fpath.h"
 #include "display3d.h"
 #include "combat.h"

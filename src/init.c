@@ -44,7 +44,7 @@
 #include "advvis.h"
 #include "astar.h"
 #include "atmos.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 #include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"

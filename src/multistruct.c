@@ -44,7 +44,7 @@
 #include "multiplay.h"
 #include "multigifts.h"
 #include "multirecv.h"
-#include "audio_id.h"
+#include "lib/sound/audio_id.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
