@@ -87,6 +87,8 @@
 #include "multirecv.h"
 #include "multimenu.h"
 
+#include "warzoneconfig.h"
+
 #include "init.h"
 #include "levels.h"
 

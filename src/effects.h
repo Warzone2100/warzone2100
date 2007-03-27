@@ -226,7 +226,6 @@ extern void	addEffect				( Vector3i *pos, EFFECT_GROUP group,
 extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP group,
 									EFFECT_TYPE type,BOOL specified, struct iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
 
-extern void drawEffects				( void );
 extern void	renderEffect			( EFFECT *psEffect );
 extern UDWORD getNumEffects			( void );
 extern UDWORD	getFreeEffect		( void );

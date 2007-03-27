@@ -675,7 +675,6 @@ static void drawTiles(iView *camera, iView *player)
 	Vector3i BSPCamera;
 	MAPTILE	*psTile;
 	UDWORD	specular;
-	UDWORD	tilesRejected;
 	UDWORD	edgeX,edgeY;
 	BOOL IsWaterTile = FALSE;
 	BOOL PushedDown = FALSE;
@@ -973,8 +972,6 @@ static void drawTiles(iView *camera, iView *player)
 	displayDelivPoints();	//bucket render implemented
 	display3DProjectiles();//bucket render implemented
 
-	// Gerard: Now done in processEffects
-	// drawEffects();
 	atmosDrawParticles();
 #ifdef BUCKET
 	bucketRenderCurrentList();

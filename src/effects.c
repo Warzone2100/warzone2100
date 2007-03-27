@@ -139,7 +139,6 @@ void	effectGiveAuxVarSec		( UDWORD var);
 UDWORD	getFreeEffect			( void );
 
 void	initEffectsSystem		( void );
-void	drawEffects				( void );
 void	processEffects			( void );
 void	addEffect				( Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, BOOL specified, iIMDShape *imd, BOOL lit );
 void	addMultiEffect(Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size);
@@ -571,8 +570,7 @@ static BOOL validatePie( EFFECT_GROUP group, iIMDShape *pie )
 /* Calls all the update functions for each different currently active effect */
 void	processEffects(void)
 {
-UDWORD	i;
-UDWORD	num;
+	UDWORD	i;
 
 	/* Establish how long the last game frame took */
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
@@ -608,19 +606,6 @@ UDWORD	num;
 
 	activeEffects = numEffects;
 	skippedEffects = skipped;
-}
-
-// ----------------------------------------------------------------------------------------
-/*
-drawEffects:-
-This will either draw all the effects that are on the grid in a oner or
-more likely add them to the bucket.
-*/
-void	drawEffects( void )
-{
-UDWORD	i;
-
-
 }
 
 

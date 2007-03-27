@@ -94,6 +94,8 @@
 #include "wrappers.h"
 #include "powercrypt.h"
 
+#include "warzoneconfig.h"
+
 #ifdef DEBUG
 #include "objmem.h"
 #endif
