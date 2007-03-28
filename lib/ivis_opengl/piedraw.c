@@ -471,26 +471,6 @@ static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
 		}
 		return compare_point(&pVertices[A->to], &pVertices[B->from]);
 	}
-	BOOL same = compare_point(&pVertices[A->from], &pVertices[B->to]);
-	if(!same)
-		return FALSE;
-	if(A->to == B->from)
-	{
-		return TRUE;
-	}
-	return compare_point(&pVertices[A->to], &pVertices[B->from]);
-
-}/// returns true if the edges are adjacent
-static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
-{
-	if(A->from == B->to)
-	{
-		if(A->to == B->from)
-		{
-			return TRUE;
-		}
-		return compare_point(&pVertices[A->to], &pVertices[B->from]);
-	}
  
 	if(!compare_point(&pVertices[A->from], &pVertices[B->to]))
 	{
