@@ -64,6 +64,9 @@ UDWORD		screenDepth = 0;
 
 SDL_Surface     *screen;
 
+/* global used to indicate preferred internal OpenGL format */
+int wz_texture_compression;
+
 //backDrop
 UWORD*  pBackDropData = NULL;
 BOOL    bBackDrop = FALSE;

@@ -20,7 +20,7 @@
 /*
  * Screen.h
  *
- * Interface to the Direct Draw double buffered display.
+ * Interface to the OpenGL double buffered display.
  *
  */
 #ifndef _screen_h
@@ -81,5 +81,10 @@ char* screenDumpToDisk(char* path);
 
 /* Toggle the display between full screen or windowed */
 extern void	screenToggleMode(void);
+
+extern int wz_texture_compression;
+
+/* defined in piedraw.c */
+BOOL check_extension(const char* extension_name);
 
 #endif

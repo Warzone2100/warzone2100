@@ -58,7 +58,7 @@ extern BOOL drawing_interface;
  */
 /***************************************************************************/
 
-static BOOL check_extension(const char* extension_name)
+BOOL check_extension(const char* extension_name)
 {
 	const char *extension_list = (const char *)glGetString(GL_EXTENSIONS);
 	unsigned int extension_name_length = strlen(extension_name);

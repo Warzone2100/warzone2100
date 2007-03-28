@@ -40,6 +40,8 @@
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/ivispatch.h"
 
+#include "screen.h"
+
 //*************************************************************************
 
 iTexPage _TEX_PAGE[iV_TEX_MAX];
@@ -100,7 +102,7 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height,
 			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
 	} else {
 		debug(LOG_ERROR, "pie_AddBMPtoTexPages: non POT texture %s.", filename);
@@ -135,7 +137,7 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height,
 			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
 	} else {
 		debug(LOG_ERROR, "pie_ChangeTexPage: non POT texture %i", tex_index);

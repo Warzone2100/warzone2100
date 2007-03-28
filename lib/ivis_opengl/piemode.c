@@ -49,6 +49,7 @@
  */
 /***************************************************************************/
 #define DIVIDE_TABLE_SIZE		1024
+
 /***************************************************************************/
 /*
  *	Local Variables
@@ -89,6 +90,16 @@ BOOL pie_Initialise(void)
 	for (i=1; i<DIVIDE_TABLE_SIZE; i++)
 	{
 		_iVPRIM_DIVTABLE[i-0] = MAKEINT ( FRACTdiv(MAKEFRACT(1),MAKEFRACT(i)) *  iV_DIVMULTP);
+	}
+
+	/* Find texture compression extension */
+	if (check_extension("GL_ARB_texture_compression")) 
+	{
+		debug(LOG_TEXTURE, "Texture compression: Yes");
+		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
+	} else {
+		debug(LOG_TEXTURE, "Texture compression: No");
+		wz_texture_compression = GL_RGBA;
 	}
 
 	pie_MatInit();
