@@ -4,6 +4,7 @@
 DIE=0
 SRCDIR=`dirname $0`
 BUILDDIR=`pwd`
+ACLOCAL_FLAGS='-I m4'
 srcfile=src/action.c
 
 debug ()
@@ -98,9 +99,6 @@ cd $SRCDIR
   echo "Are you sure $SRCDIR is a valid source directory?"
   exit 1
 }
-
-echo "+ creating acinclude.m4"
-cat m4/*.m4 > acinclude.m4
 
 echo "+ running aclocal ..."
 aclocal $ACLOCAL_FLAGS || {

@@ -8,6 +8,7 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 AM_CPPFLAGS = -I$(top_srcdir)
 BUILT_SOURCES = audp_parser.tab.h
+CLEANFILES = audp_parser.tab.h
 
 noinst_LIBRARIES = libgamelib.a
 noinst_HEADERS = ani.h anim.h animobj.h gtime.h hashtabl.h maxpidef.h parser.h \
