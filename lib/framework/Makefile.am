@@ -8,6 +8,7 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 AM_CPPFLAGS = -I$(top_srcdir)
 BUILT_SOURCES = resource_parser.tab.h strres_parser.tab.h
+CLEANFILES = resource_parser.tab.h strres_parser.tab.h
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = block.h configfile.h cursors.h cursors16.h debug.h font.h fractions.h frame.h \
