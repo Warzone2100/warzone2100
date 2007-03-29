@@ -19,9 +19,11 @@
 */
 #include "frame.h"
 
+
 #if defined(WZ_OS_WIN)
 
 # include "dbghelp.h"
+
 
 /**
  * Exception handling on Windows.
@@ -86,7 +88,9 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
+
 #elif defined(WZ_OS_POSIX)
+
 
 // C99 headers:
 # include <stdint.h>
@@ -119,8 +123,8 @@ static struct sigaction oldAction[NSIG];
 
 static struct utsname sysInfo;
 static BOOL gdbIsAvailable = FALSE, sysInfoValid = FALSE;
-static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'}, * programCommand = NULL;
-static const char *gdmpPath;
+static char programPID[MAX_PID_STRING] = {'\0'}, gdbPath[MAX_PATH] = {'\0'};
+static const char * gdmpPath, * programCommand;
 
 
 /**
@@ -467,8 +471,8 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 			pid = fork();
 			if (pid == (pid_t)0)
 			{
-				char * gdbArgv[] = { gdbPath, programCommand, programPID, NULL },
-				     * gdbEnv[] = {NULL};
+				const char * gdbArgv[] = { gdbPath, programCommand, programPID, NULL },
+				           * gdbEnv[] = {NULL};
 
 				close(gdbPipe[1]); // No output to pipe
 
@@ -478,7 +482,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 				write(dumpFile, "GDB extended backtrace:\n",
 					  strlen("GDB extended backtrace:\n"));
 
-				execve(gdbPath, gdbArgv, gdbEnv);
+				execve(gdbPath, (char**)gdbArgv, (char**)gdbEnv);
 			}
 			else if (pid > (pid_t)0)
 			{
@@ -519,6 +523,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	raise(signum);
 }
 
+
 #endif // WZ_OS_*
 
 
@@ -527,7 +532,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
  *
  * \param programCommand_x Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(char * programCommand_x)
+void setupExceptionHandler(const char * programCommand_x)
 {
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);

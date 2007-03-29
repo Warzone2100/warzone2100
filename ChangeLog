@@ -21,15 +21,22 @@
    * Fix: Missing transport in Campaign 2 Mission 1 and Campaign 3 Mission 1 arrives again
    * Fix: Various crashes
  * Graphics:
+   * New: Skybox
    * New: Translucent selection-box from version 1.x restored
+   * Fix: Better fog
    * Fix: Wrongly displayed tileset in Campaign 2 Mission 1 and Campaign 3 Mission 1 properly fixed
    * Fix: Camera now properly displayed on radar
    * Fix: Gamma control support improved
    * Fix: Colors on Mac corrected
  * Sound:
    * Fix: No more invalid OpenAL errors
+   * Fix: Properly startup without sound
+ * Cutscenes (still text only):
+   * Change: Make texts more easily readable
+   * Change: Proceed faster so it does not look as if Warzone hangs
+   * Change: Exit by pressing left mouse button
  * Commandline options:
-   * Fix: --resolution works as expect now
+   * Fix: --resolution works as expected now
  * Build system:
    * New: Docs can now be installed in Autotools builds
    * New: You can now control the installation dir for the icon and .desktop file by passing --icondir and --applicationdir to configure
