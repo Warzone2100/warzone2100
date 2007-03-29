@@ -23,6 +23,7 @@ import Params
 
 def set_options(opt):
 	#add option for additional/external includes and library dirs for MinGW on Windows
+	opt.tool_options('compiler_cc')
 	opt.add_option('--debug',
 		action='store_true',
 		default=False,
@@ -31,12 +32,8 @@ def set_options(opt):
 
 
 def configure(conf):
-	# Use either GCC or MSVC, not both (will fail)
-	if not conf.check_tool('gcc'):
-		conf.check_tool('msvc')
-
-	# Check for the Lexer/Parser tools and get the checks module for checkEndian
-	conf.check_tool('flex bison checks')
+	# Check for C-Compiler, the Lexer/Parser tools and get the checks module for checkEndian
+	conf.check_tool('compiler_cc flex bison checks')
 
 	# Big or little endian?
 	conf.checkEndian()
@@ -108,7 +105,7 @@ def build(bld):
 	obj = bld.create_obj('cc', 'program')
 	obj.find_sources_in_dirs('lib/framework lib/gamelib lib/netplay lib/ivis_common lib/ivis_opengl lib/script lib/sequence lib/sound lib/widget src')
 	obj.uselib='PNG JPEG MAD OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
-	obj.includes='lib/framework lib/script src'
+	obj.includes='lib/framework lib/gamelib lib/script src'
 	obj.defines='HAVE_CONFIG_H'
 	obj.target='warzone2100'
 
