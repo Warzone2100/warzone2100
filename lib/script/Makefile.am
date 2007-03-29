@@ -6,12 +6,10 @@
 
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
+AM_CFLAGS = -Wno-nonnull
 AM_CPPFLAGS = -I$(top_srcdir)
 BUILT_SOURCES = script_parser.tab.h chat_parser.tab.h
 CLEANFILES = script_parser.tab.h chat_parser.tab.h
-
-# This is necessary for -Werror to parse script_parser.y
-CFLAGS += -Wno-nonnull
 
 noinst_LIBRARIES = libscript.a
 noinst_HEADERS = chat_processing.h codeprint.h event.h evntsave.h interp.h \
