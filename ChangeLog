@@ -21,7 +21,7 @@
    * Change: Proceed faster so it does not look as if Warzone hangs
    * Change: Exit by pressing left mouse button
  * Commandline options:
-   * Fix: --resolution works as expect now
+   * Fix: --resolution works as expected now
  * Build system:
    * New: Docs can now be installed in Autotools builds
    * New: You can now control the installation dir for the icon and .desktop file by passing --icondir and --applicationdir to configure
