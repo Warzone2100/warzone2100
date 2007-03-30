@@ -201,10 +201,11 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 	fog_colour.argb = pie_GetFogColour();
 	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
 	
+	pie_SetRendMode(REND_FLAT);
+
 	glPushAttrib(GL_ENABLE_BIT | GL_FOG_BIT);
 	glDepthMask(GL_FALSE);
 	glDisable(GL_FOG);
-	pie_SetRendMode(REND_FLAT);
 	glBegin(GL_QUAD_STRIP);
 		// Front
 		glVertex3f(-left, 0, front); // bottom left
@@ -225,7 +226,6 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 		glVertex3f(-left-wider, height, front+wider); // top r
 	glEnd();
 	glPopAttrib();
-
 }
 
 /* ---------------------------------------------------------------------------------- */
