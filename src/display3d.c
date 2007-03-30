@@ -373,7 +373,10 @@ BOOL		bPlayerHasHQ = FALSE;
 	// the world centre - used for decaying lighting etc
    	gridCentreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 	gridCentreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
-
+	
+	camera.p.z = distance;
+	camera.p.y = 0;
+	camera.p.x = 0;
 
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
@@ -398,11 +401,11 @@ BOOL		bPlayerHasHQ = FALSE;
 	/* Set 3D world origins */
 	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
 
-	// draw terrain
-   	displayTerrain();
-
 	// draw sky and fogbox
 	renderSurroundings();
+	
+	// draw terrain
+   	displayTerrain();
 
 	pie_BeginInterface();
 	updateLightLevels();
@@ -596,9 +599,6 @@ static void displayTerrain(void)
 
 //	x += player.p.x;
 //	y += player.p.z;
-	camera.p.z = distance;
-	camera.p.y = 0;
-	camera.p.x = 0;
 
 	/* SetUpClipping window - to below the backdrop */
 	pie_Set2DClip(xOffset,yOffset,psRendSurface->width-xOffset,psRendSurface->height-yOffset);

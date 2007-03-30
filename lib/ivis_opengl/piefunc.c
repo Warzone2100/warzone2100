@@ -153,7 +153,10 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 {
 	const float r = 1.0f; // just because it is shorter than 1.0f
 
-	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
+	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
+	// no use in updating the depth buffer
+	glDepthMask(GL_FALSE);
+	
 	// fog should not affect the sky
 	glDisable(GL_FOG);
 		
@@ -203,7 +206,8 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 	
 	pie_SetRendMode(REND_FLAT);
 
-	glPushAttrib(GL_ENABLE_BIT | GL_FOG_BIT);
+	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
+	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
 	glDisable(GL_FOG);
 	glBegin(GL_QUAD_STRIP);
