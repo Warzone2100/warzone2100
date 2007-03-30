@@ -7964,8 +7964,8 @@ BOOL scrNumPlayerWeapDroidsInRange(void)
 	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	BOOL		bVTOLs;
 
-	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, 
+		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapDroidsInRange(): stack failed");
 		return FALSE;
@@ -7986,8 +7986,8 @@ BOOL scrNumPlayerWeapStructsInRange(void)
 {
 	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range))
+	if (!stackPopParams(5, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
+		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapStructsInRange(): stack failed");
 		return FALSE;
@@ -8006,19 +8006,19 @@ BOOL scrNumPlayerWeapStructsInRange(void)
 
 BOOL scrNumPlayerWeapObjInRange(void)
 {
-	SDWORD				player,lookingPlayer,range,rangeX,rangeY;
+	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	UDWORD				numEnemies = 0;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
+		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapObjInRange(): stack failed");
 		return FALSE;
 	}
 
-	numEnemies = numEnemies + numPlayerWeapDroidsInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-	numEnemies = numEnemies + numPlayerWeapStructsInRange(player, lookingPlayer, range, rangeX, rangeY);
+	numEnemies = numEnemies + numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+	numEnemies = numEnemies + numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY);
 
 	scrFunctionResult.v.ival = numEnemies;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -8032,17 +8032,17 @@ BOOL scrNumPlayerWeapObjInRange(void)
 
 BOOL scrNumEnemyObjInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY;
+	SDWORD				lookingPlayer,range,rangeX,rangeY;
 	BOOL				bVTOLs;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): stack failed");
 		return FALSE;
 	}
 
-	scrFunctionResult.v.ival = numEnemyObjInRange(player, range, rangeX, rangeY, bVTOLs);;
+	scrFunctionResult.v.ival = numEnemyObjInRange(lookingPlayer, range, rangeX, rangeY, bVTOLs);;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): failed to push result");
@@ -9244,13 +9244,13 @@ BOOL scrNumAllies(void)
 //num aa defenses in range
 BOOL scrNumAAinRange(void)
 {
-	SDWORD				player,lookingPlayer,range,rangeX,rangeY;
+	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	SDWORD				tx,ty;
 	UDWORD				numFound = 0;
 	STRUCTURE	*psStruct;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range))
+	if (!stackPopParams(5, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
+		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR,"scrNumAAinRange(): stack failed");
 		return FALSE;
@@ -9262,7 +9262,7 @@ BOOL scrNumAAinRange(void)
 	numFound = 0;
 
 	//check structures
-	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
+	for(psStruct = apsStructLists[targetPlayer]; psStruct; psStruct=psStruct->psNext)
 	{
 		if(psStruct->visible[lookingPlayer])	//if can see it
 		{
@@ -10085,27 +10085,27 @@ BOOL scrDropBeacon(void)
 	return sendBeaconToPlayer(locX, locY, forPlayer, sender, ssval2);
 }
 
-/* Remove help message from the map */
-BOOL scrRemoveHelpMessage(void)
+/* Remove beacon from the map */
+BOOL scrRemoveBeacon(void)
 {
 	MESSAGE			*psMessage;
 	SDWORD			player, sender;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_INT, &sender))
 	{
-		debug(LOG_ERROR,"scrRemoveMessage: failed to pop parameters");
+		debug(LOG_ERROR,"scrRemoveBeacon: failed to pop parameters");
 		return FALSE;
 	}
 
 	if (player >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR,"scrRemoveMessage:player number is too high");
+		debug(LOG_ERROR,"scrRemoveBeacon:player number is too high");
 		return FALSE;
 	}
 
 	if (sender >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR,"scrRemoveMessage:sender number is too high");
+		debug(LOG_ERROR,"scrRemoveBeacon:sender number is too high");
 		return FALSE;
 	}
 
@@ -10116,12 +10116,6 @@ BOOL scrRemoveHelpMessage(void)
 		//delete it
 		removeMessage(psMessage, player);
 	}
-	//else
-	//{
-	//	ASSERT((FALSE, "scrRemoveMessage:cannot find message - %s",
-	//		psViewData->pName));
-	//	return FALSE;
-	//}
 
 	return TRUE;
 }

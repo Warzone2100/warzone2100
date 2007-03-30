@@ -605,7 +605,7 @@ extern BOOL scrSelectDroid(void);
 extern BOOL scrSelectGroup(void);
 extern BOOL scrModulo(void);
 extern BOOL scrPlayerLoaded(void);
-extern BOOL scrRemoveHelpMessage(void);
+extern BOOL scrRemoveBeacon(void);
 extern BOOL scrDropBeacon(void);
 extern BOOL scrClosestDamagedGroupDroid(void);
 extern BOOL scrMsgBox(void);

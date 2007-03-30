@@ -987,7 +987,7 @@ FUNC_SYMBOL asFuncTable[] =
 		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "removeHelpMessage",	scrRemoveHelpMessage,		VAL_VOID,
+	{ "removeBeacon",	scrRemoveBeacon,		VAL_VOID,
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
@@ -1305,10 +1305,6 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "getStructureType",		scrGetStructureType,		VAL_INT,
 		1, { (INTERP_TYPE)ST_STRUCTURE },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "playerName",				scrGetPlayerName,			VAL_STRING,
-		1, { VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getPlayerName",			scrGetPlayerName,			VAL_STRING,
