@@ -149,50 +149,16 @@ void pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb )
 
 /* ---------------------------------------------------------------------------------- */
 
-void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int u, int v, int w, int h)
+void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 {
-	const int scale = 10000;
 	const float r = 1.0f; // just because it is shorter than 1.0f
 
-	// save previous states
-	BOOL oldFogState = glIsEnabled(GL_FOG);
-	BOOL oldAlphaTestState = glIsEnabled(GL_ALPHA_TEST);
-
-	// set up matrices and textures
-	pie_PerspectiveBegin();
-
-	// Push identity matrix onto stack
-	pie_MatBegin();
-
-	// Now, scale the world according to what resolution we're running in
-	pie_MatScale(pie_GetResScalingFactor());
-
-	// Set the camera position
-	pie_MATTRANS(camera.p.x, camera.p.y, camera.p.z);
-
-	// Rotate for the player and for the wind
-	pie_MatRotZ(player.r.z);
-	pie_MatRotX(player.r.x);
-	pie_MatRotY(player.r.y + DEG(1) * rotation);
-
-	// Apply scale matrix
-	glScalef(scale,scale / 2.0,scale);
-
-	// move it somewhat below ground level for the blending effect
-	glTranslatef(0, -1 * r / 4, 0);
-
-	// Standard color/alpha for texturing
-	glColor4f(1.0, 1.0, 1.0, 1.0f);
-
-	// Set the texture page
-	pie_SetTexturePage(texpage);
-
-	// the texture wraps over at the edges (repeat)
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
+	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// fog should not affect the sky
 	glDisable(GL_FOG);
+		
+	// So we have realistic colors
+	glColor4ub(0xFF,0xFF,0xFF,0xFF);
 
 	// enable alpha
 	glEnable(GL_BLEND);
@@ -200,9 +166,9 @@ void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int
 
 	// for the nice blend of the sky with the fog
 	glDisable(GL_ALPHA_TEST);
-
-	// It is behind everything
-	glDisable(GL_DEPTH_TEST);
+		
+	// Apply scale matrix
+	glScalef(scale,scale / 2.0,scale);
 
 	glBegin(GL_QUAD_STRIP);
 		// Front
@@ -224,20 +190,42 @@ void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int
 		glTexCoord2i(u + w * 8, v); 	glVertex3f(-r, r, r); // top r
 	glEnd();
 
-	// Load Saved State
-	pie_MatEnd();
-	pie_PerspectiveEnd();
+	glPopAttrib();
+}
 
-	if (oldFogState)
-	{
-		glEnable(GL_FOG);
-	}
-	if (oldAlphaTestState)
-	{
-		glEnable(GL_ALPHA_TEST);
-	}
-	glDisable (GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
+/// Draws a fog colored box which is wider at the top
+void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider)
+{
+	PIELIGHT fog_colour;
+
+	fog_colour.argb = pie_GetFogColour();
+	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
+	
+	glPushAttrib(GL_ENABLE_BIT | GL_FOG_BIT);
+	glDepthMask(GL_FALSE);
+	glDisable(GL_FOG);
+	pie_SetRendMode(REND_FLAT);
+	glBegin(GL_QUAD_STRIP);
+		// Front
+		glVertex3f(-left, 0, front); // bottom left
+		glVertex3f(-left-wider, height, front+wider); // top left
+		glVertex3f( right, 0, front); // bottom right
+		glVertex3f( right+wider, height, front+wider); // top right
+
+		// Right
+		glVertex3f( right, 0,-back); // bottom r
+		glVertex3f( right+wider, height,-back-wider); // top r
+
+		// Back
+		glVertex3f(-left, 0, -back); // bottom right
+		glVertex3f(-left-wider, height, -back-wider); // top right
+
+		// Left
+		glVertex3f(-left, 0, front); // bottom r
+		glVertex3f(-left-wider, height, front+wider); // top r
+	glEnd();
+	glPopAttrib();
+
 }
 
 /* ---------------------------------------------------------------------------------- */

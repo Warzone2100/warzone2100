@@ -39,15 +39,14 @@
  *	Global Definitions
  */
 /***************************************************************************/
-typedef	enum	CLEAR_MODE
-				{
-					CLEAR_OFF,
-					CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD,
-					CLEAR_BLACK,
-					CLEAR_FOG,
-				}
-				CLEAR_MODE;
+#define CLEAR_MODE_MASK                   0x03
+#define CLEAR_OFF                         0x00
+#define CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD  0x01
+#define CLEAR_BLACK                       0x02
+#define CLEAR_FOG                         0x03
 
+#define CLEAR_SHADOW_MASK                 0x04
+#define CLEAR_SHADOW                      0x04
 
 /***************************************************************************/
 /*
@@ -64,7 +63,7 @@ extern Sint32	_iVPRIM_DIVTABLE[];
 /***************************************************************************/
 extern BOOL pie_Initialise(void);
 extern void pie_ShutDown(void);
-extern void pie_ScreenFlip(CLEAR_MODE ClearMode);
+extern void pie_ScreenFlip(int ClearMode);
 extern UDWORD	pie_GetResScalingFactor( void );
 
 #endif

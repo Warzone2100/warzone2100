@@ -41,7 +41,8 @@ extern UBYTE pie_ByteScale(UBYTE a, UBYTE b);
 extern void	pie_CornerBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour,
 					  UBYTE a, UBYTE b, UBYTE c, UBYTE d);
 extern void	pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb );
-extern void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int u, int v, int w, int h);
+extern void pie_DrawSkybox(float scale, int u, int v, int w, int h);
+extern void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider);
 extern void	pie_DrawViewingWindow( Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD colour);
 
 #endif // _piedef_h

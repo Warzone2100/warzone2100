@@ -511,7 +511,7 @@ static BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 	return TRUE;
 }
 
-BOOL seq_UpdateFullScreenVideo(CLEAR_MODE *pbClear)
+BOOL seq_UpdateFullScreenVideo(int *pbClear)
 {
 	SDWORD i, x, y, w, h;
 	SDWORD frame, frameLag;

@@ -175,7 +175,7 @@ GAMECODE gameLoop(void)
 	UDWORD		i,widgval;
 	BOOL		quitting=FALSE;
 	INT_RETVAL	intRetVal;
-	CLEAR_MODE	clearMode;
+	int	        clearMode;
 //	DumpVRAM();	// use mouse to scroll through vram
 
 //	dumpimdpoints();
@@ -184,25 +184,23 @@ GAMECODE gameLoop(void)
 	heapIntegrityCheck(psDroidHeap);
 #endif
 
-//JPS 24 feb???
-	if (war_GetFog())
+	clearMode = CLEAR_FOG;
+	if (!war_GetFog())
 	{
-        // Mist
-		clearMode = CLEAR_FOG;//screen clear to fog colour D3D
-		if (loopMissionState == LMS_SAVECONTINUE)
-		{
-			pie_SetFogStatus(FALSE);
-			clearMode = CLEAR_BLACK;
-		}
+		// set the fog color to black (RGB)
+		// the fogbox will get this color
+		pie_SetFogColour(0x000000);
 	}
-	else
+	if(getDrawShadows())
 	{
-        // Fog of War
-		clearMode = CLEAR_BLACK;//force to black 3DFX
+		clearMode |= CLEAR_SHADOW;
+	}
+	if (loopMissionState == LMS_SAVECONTINUE)
+	{
+		pie_SetFogStatus(FALSE);
+		clearMode = CLEAR_BLACK;
 	}
 	pie_ScreenFlip(clearMode);//gameloopflip
-//JPS 24 feb???
-
 
 	fastExit = FALSE;
 

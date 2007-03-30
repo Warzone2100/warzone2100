@@ -131,7 +131,7 @@ static UDWORD	getTargettingGfx(void);
 static void	drawDroidGroupNumber(DROID *psDroid);
 static void	trackHeight(SDWORD desiredHeight);
 static void	getDefaultColours(void);
-static void	renderSky(void);
+static void	renderSurroundings(void);
 static void	locateMouse(void);
 static void	preprocessTiles(void);
 static BOOL	renderWallSection(STRUCTURE *psStructure);
@@ -359,8 +359,6 @@ SDWORD	getCentreZ( void )
 	return(gridCentreZ);
 }
 
-
-
 /* Render the 3D world */
 void draw3DScene( void )
 {
@@ -399,10 +397,12 @@ BOOL		bPlayerHasHQ = FALSE;
 	pie_Begin3DScene();
 	/* Set 3D world origins */
 	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
-	// draw skybox
-	renderSky();
+
 	// draw terrain
    	displayTerrain();
+
+	// draw sky and fogbox
+	renderSurroundings();
 
 	pie_BeginInterface();
 	updateLightLevels();
@@ -4419,12 +4419,57 @@ static void	locateMouse(void)
 
 }
 
-// Render a skybox
-static void renderSky(void)
+// Render the sky and surroundings
+static void renderSurroundings(void)
 {
 	static float wind = 0;
+	const float height = 10*TILE_UNITS;
+	const float wider  = 2*(visibleXTiles*TILE_UNITS);
+	int left, right, front, back;
+	const float scale = 10000.0f;
+		
+	// set up matrices and textures
+	pie_PerspectiveBegin();
 
-	// Let the winds blow!
+	// Push identity matrix onto stack
+	pie_MatBegin();
+
+	// Now, scale the world according to what resolution we're running in
+	pie_MatScale(pie_GetResScalingFactor());
+
+	// Set the camera position
+	pie_MATTRANS(camera.p.x, camera.p.y, camera.p.z);
+
+	// Rotate for the player and for the wind
+	pie_MatRotZ(player.r.z);
+	pie_MatRotX(player.r.x);
+	pie_MatRotY(player.r.y);
+
+	// Fogbox //
+ 	rx = (player.p.x) & (TILE_UNITS-1);
+ 	rz = (player.p.z) & (TILE_UNITS-1);
+	pie_TRANSLATE(-rx,-player.p.y,rz);
+
+	left  = TILE_UNITS * min(visibleXTiles/2, playerXTile+visibleXTiles/2+1);
+	right = TILE_UNITS * min(visibleXTiles/2, mapWidth-playerXTile-visibleXTiles/2);
+	front = TILE_UNITS * min(visibleYTiles/2, playerZTile+visibleYTiles/2+1);
+	back  = TILE_UNITS * min(visibleYTiles/2, mapHeight-playerZTile-visibleYTiles/2);
+
+	pie_DrawFogBox(left, right, front, back, height, wider);
+
+	// undo the translation
+	pie_TRANSLATE(rx,player.p.y,-rz);
+
+	// Skybox //
+	// rotate it
+	pie_MatRotY(DEG(1) * wind);
+
+	// move it somewhat below ground level for the blending effect
+	pie_TRANSLATE(0, -scale / 8, 0);
+
+	// Set the texture page
+	pie_SetTexturePage(SKY_TEXPAGE);
+
 	if(!gamePaused())
 	{
 		wind += 0.5*frameTime2/GAME_TICKS_PER_SEC;
@@ -4433,8 +4478,12 @@ static void renderSky(void)
    			wind = 0;
    		}
 	}
-	pie_DrawSkybox(player, camera, wind, 30, 0, 128, 256, 128);
-};
+	pie_DrawSkybox(scale, 0, 128, 256, 128);
+
+	// Load Saved State
+	pie_MatEnd();
+	pie_PerspectiveEnd();
+}
 
 /* Flattens an imd to the landscape and handles 4 different rotations */
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)

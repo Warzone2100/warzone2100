@@ -800,7 +800,6 @@ static void pie_DrawShadows(void)
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_FALSE);
 	glEnable(GL_STENCIL_TEST);
-	glClear(GL_STENCIL_BUFFER_BIT);
 
 	if (stencil_one_pass()) {
 		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
@@ -887,7 +886,10 @@ static void pie_DrawRemainingTransShapes(void)
 
 void pie_RemainingPasses(void)
 {
-	pie_DrawShadows();
+	if(shadows)
+	{
+		pie_DrawShadows();
+	}
 	pie_DrawRemainingTransShapes();
 }
 
