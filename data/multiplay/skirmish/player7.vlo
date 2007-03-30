@@ -6,7 +6,7 @@
 script "player7.slo"
 run
 {
-	player			INT					7			// this player is player x.
+	me				INT					7			// this player is player x.
 
 	numScouts		INT					3			// min number of droids in group to aim for.
 	numDefenders	INT					3
