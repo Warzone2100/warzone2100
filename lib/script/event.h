@@ -163,8 +163,6 @@ extern void eventTimeReset(UDWORD initTime);
 extern const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
 extern const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
 
-extern BOOL resetLocalVars(SCRIPT_CODE *psCode, UDWORD EventIndex);
-
 #endif
 
 

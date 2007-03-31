@@ -37,6 +37,9 @@
 // the maximum number of instructions to execute before assuming
 // an infinite loop
 #define INTERP_MAXINSTRUCTIONS		200000
+#define MAX_FUNC_CALLS 300
+
+static INTERP_VAL	*varEnvironment[MAX_FUNC_CALLS];		//environments for local variables of events/functions
 
 typedef struct
 {
@@ -80,6 +83,14 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
  * \return False on failure (stack empty)
  */
 static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress);
+
+/* Creates a new local var environment for a new function call */
+static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventIndex);
+
+/* Destroy all created variable environments */
+static void cleanupVarEnvironments(void);
+
+static inline void destroyVarEnvironment(UDWORD envIndex);
 
 /* The size of each opcode */
 SDWORD aOpSize[] =
@@ -311,7 +322,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	UDWORD			CurEvent = 0;
 	BOOL			bStop = FALSE, bEvent = FALSE;
-	SDWORD			callDepth = 0;
+	UDWORD			callDepth = 0;
 	BOOL			bTraceOn=FALSE;		//enable to debug function/event calls
 
 	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
@@ -412,6 +423,12 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	CurEvent = index;
 	bStop = FALSE;
 
+	// create new variable environment for this call
+	if (bEvent)
+	{
+		createVarEnvironment(psContext, CurEvent);
+	}
+
 	while(!bStop)
 	{
 		// Run the code
@@ -442,6 +459,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 					ASSERT(((INTERP_VAL *)(InstrPointer+1))->type == VAL_EVENT, "wrong value type passed for OP_FUNC: %d", ((INTERP_VAL *)(InstrPointer+1))->type);
 
+					// get index of the new event
 					CurEvent = ((INTERP_VAL *)(InstrPointer+1))->v.ival; //Current event = event to jump to
 
 					if (CurEvent > psProg->numEvents)
@@ -449,6 +467,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 						debug( LOG_ERROR, "interpRunScript: trigger index out of range");
 						goto exit_with_error;
 					}
+
+					// create new variable environment for this call
+					createVarEnvironment(psContext, CurEvent);
 
 					//Set new code execution boundaries
 					//----------------------------------
@@ -465,7 +486,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 						debug(LOG_SCRIPT,"Called: '%s'", last_called_script_event);
 
 					//debug( LOG_SCRIPT, "-OP_FUNC: jumped to event %d; ip=%d, numLocalVars: %d", CurEvent, ip, psContext->psCode->numLocalVars[CurEvent] );
-
 					//debug( LOG_SCRIPT, "-END OP_FUNC" );
 
 					break;
@@ -482,16 +502,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 
-				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 2");
 				//debug(LOG_SCRIPT, "OP_PUSHLOCAL type: %d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type);
 
-				if (!stackPush( &(psContext->psCode->ppsLocalVarVal[CurEvent][data]) ))
+				if (!stackPush( &(varEnvironment[retStackCallDepth()][data]) ))
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCAL: push failed");
 					goto exit_with_error;
 				}
-
-				//debug( LOG_SCRIPT, "OP_PUSHLOCAL 3");
 
 				InstrPointer += aOpSize[opcode];
 				break;
@@ -506,17 +523,16 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					goto exit_with_error;
 				}
 
-				//debug( LOG_SCRIPT, "OP_POPLOCAL 2");
 				//DbgMsg("OP_POPLOCAL type: %d, CurEvent=%d, data=%d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type, CurEvent, data);
 
-				if (!stackPopType( &(psContext->psCode->ppsLocalVarVal[CurEvent][data]) ))
+				if ( !stackPopType( &(varEnvironment[retStackCallDepth()][data]) ) )
 				{
 					debug(LOG_ERROR, "interpRunScript: OP_POPLOCAL: pop failed");
 					goto exit_with_error;
 				}
+
 				//debug(LOG_SCRIPT, "OP_POPLOCAL: type=%d, val=%d", psContext->psCode->ppsLocalVarVal[CurEvent][data].type, psContext->psCode->ppsLocalVarVal[CurEvent][data].v.ival);
 
-				//debug( LOG_SCRIPT, "OP_POPLOCAL 3");
 				InstrPointer += aOpSize[opcode];
 
 				break;
@@ -537,8 +553,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					debug(LOG_ERROR, "interpRunScript: OP_PUSHLOCALREF: variable index out of range");
 					goto exit_with_error;
 				}
+
 				/* get local variable */
-				sVal.v.oval = &(psContext->psCode->ppsLocalVarVal[CurEvent][data]);
+				sVal.v.oval = &(varEnvironment[retStackCallDepth()][data]);
 
 				TRCPRINTF( "PUSHREF     " );
 				TRCPRINTVAL(&sVal);
@@ -805,7 +822,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 				InstrPointer += aOpSize[opcode];
 				// tell the event system to reschedule this event
-				if (!eventAddPauseTrigger(psContext, index, InstrPointer - pCodeBase, data))	//only original caller can be paused since we pass index and not CurEvent (not sure if that's what we want)
+				if (!eventAddPauseTrigger(psContext, index, (UDWORD)(InstrPointer - pCodeBase), data))	//only original caller can be paused since we pass index and not CurEvent (not sure if that's what we want)
 				{
 					debug( LOG_ERROR, "interpRunScript: could not add pause trigger" );
 					goto exit_with_error;
@@ -841,21 +858,14 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				break;
 			}
 		}
-
 		else	//End of the event reached, see if we have to jump back to the caller function or just exit
 		{
 			//debug(LOG_SCRIPT, "End of event reached");
 
 			if(!retStackIsEmpty())		//There was a caller function before this one
 			{
-				//debug(LOG_SCRIPT, "GetCallDepth = %d", GetCallDepth());
-
-				//reset local vars (since trigger can't be called, only local vars of an event can be reset here)
-				if(!resetLocalVars(psProg, CurEvent))
-				{
-					debug( LOG_ERROR, "interpRunScript: could not reset local vars for event %d", CurEvent );
-					goto exit_with_error;
-				}
+				// destroy current variable environment
+				destroyVarEnvironment(retStackCallDepth());
 
 				//pop caller function index and return address
 				if (!retStackPop(&CurEvent, &InstrPointer))
@@ -903,11 +913,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				//reset local vars only if original caller was an event, not a trigger
 				if(bEvent)
 				{
-					if(!resetLocalVars(psProg, index))
-					{
-						debug( LOG_ERROR, "interpRunScript: could not reset local vars" );
-						goto exit_with_error;
-					}
+					// destroy current variable environment
+					destroyVarEnvironment(retStackCallDepth());
 				}
 
 				bStop = TRUE;		//Stop execution of this event here, no more calling functions stored
@@ -915,9 +922,6 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		}
 
 	}
-
-
-	//debug(LOG_SCRIPT, "interpRunScript 3");
 
 	psCurProg = NULL;
 	TRCPRINTF( "%-6d  EXIT\n", (int)(InstrPointer - psProg->pCode) );
@@ -929,10 +933,17 @@ exit_with_error:
 	// Deal with the script crashing or running out of memory
 	debug(LOG_ERROR,"interpRunScript: *** ERROR EXIT *** (CurEvent=%d)", CurEvent);
 
+	/* Free all memory allocated for variable environments */
+	cleanupVarEnvironments();
+
 	if(bEvent)
+	{
 		debug(LOG_ERROR,"Original event ID: %d (of %d)", index, psProg->numEvents);
+	}
 	else
+	{
 		debug(LOG_ERROR,"Original trigger ID: %d (of %d)", index, psProg->numTriggers);
+	}
 
 	debug(LOG_ERROR,"Current event ID: %d (of %d)", CurEvent, psProg->numEvents);
 	callDepth = retStackCallDepth();
@@ -1042,14 +1053,15 @@ BOOL interpTraceOff(void)
 
 
 /* Call stack stuff */
-#define RETSTACK_SIZE 100
-
-static ReturnAddressStack_t retStack[RETSTACK_SIZE]; // Primitive stack of return addresses
-static Sint8 retStackPos = -1; // Current Position, always points to the last valid element
+static ReturnAddressStack_t retStack[MAX_FUNC_CALLS]; // Primitive stack of return addresses
+static SDWORD retStackPos = -1; // Current Position, always points to the last valid element
 
 
-Sint8 retStackCallDepth(void)
+UDWORD retStackCallDepth(void)
 {
+	ASSERT(retStackPos + 1 >= 0 && retStackPos + 1 < MAX_FUNC_CALLS,
+		"retStackCallDepth: wrong call depth: %d", retStackPos + 1);
+
 	return (retStackPos + 1);
 }
 
@@ -1069,7 +1081,7 @@ static inline BOOL retStackIsEmpty(void)
 
 static inline BOOL retStackIsFull(void)
 {
-	if(retStackPos >= RETSTACK_SIZE) return TRUE;
+	if(retStackPos >= MAX_FUNC_CALLS) return TRUE;
 	return FALSE;
 }
 
@@ -1145,5 +1157,44 @@ void scrOutputCallTrace(void)
 	else
 	{
 		debug(LOG_SCRIPT, "<No debug information available>");
+	}
+}
+
+/* create a new local var environment for a new function call */
+static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventIndex)
+{
+	UDWORD callDepth = retStackCallDepth();
+	SDWORD numEventVars = psContext->psCode->numLocalVars[eventIndex];
+
+	if (numEventVars > 0)
+	{
+		// alloc memory
+		varEnvironment[callDepth] = (INTERP_VAL *)MALLOC(sizeof(INTERP_VAL) * numEventVars);
+
+		// create environment
+		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVarVal[eventIndex], sizeof(INTERP_VAL) * numEventVars);
+	}
+	else
+	{
+		varEnvironment[callDepth] = NULL;
+	}
+}
+
+static inline void destroyVarEnvironment(UDWORD envIndex)
+{
+	if (varEnvironment[envIndex] != NULL)
+	{
+		FREE( varEnvironment[envIndex] );
+	}
+}
+
+/* Destroy all created variable environments */
+static void cleanupVarEnvironments(void)
+{
+	UDWORD i;
+	
+	for (i = 0; i < retStackCallDepth(); i++)
+	{
+		destroyVarEnvironment(i);
 	}
 }
