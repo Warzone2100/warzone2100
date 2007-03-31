@@ -39,6 +39,7 @@
 #include "fractions.h"
 #include "trig.h"
 
+#include "gettext.h"
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(

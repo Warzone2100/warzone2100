@@ -1,0 +1,5 @@
+2007-03-29  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.in.in: New file, from gettext-0.16.1.
+	* remove-potcdate.sin: New file, from gettext-0.16.1.
+	* POTFILES.in: New file.

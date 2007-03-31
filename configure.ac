@@ -17,10 +17,14 @@ if test "x$YACC" != "xbison -y" ; then
 	AC_MSG_ERROR([Bison is not installed])
 fi
 
-AM_PROG_LEX
+AC_PROG_LEX
 if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
+
+AC_GNU_SOURCE
+AM_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION([0.16.1])
 
 
 # Check for Windows.
@@ -317,6 +321,8 @@ LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])
 AC_CONFIG_FILES([Makefile
+		po/Makefile.in
+		intl/Makefile
 		data/Makefile
 		nsis/Makefile
 		win32/Makefile
