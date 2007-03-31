@@ -8,12 +8,13 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 AM_CPPFLAGS = -I$(top_srcdir)
 BUILT_SOURCES = script_parser.tab.h
+CLEANFILES = script_parser.tab.h
 
 noinst_LIBRARIES = libscript.a
 noinst_HEADERS = codeprint.h event.h evntsave.h interp.h \
-  parse.h script.h stack.h
+	parse.h script.h stack.h
 
 libscript_a_SOURCES = script_lexer.lex.c script_parser.tab.c \
-  codeprint.c event.c evntsave.c interp.c script.c stack.c
+	codeprint.c event.c evntsave.c interp.c script.c stack.c
 
 libscript_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

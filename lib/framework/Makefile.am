@@ -12,9 +12,9 @@ CLEANFILES = resource_parser.tab.h strres_parser.tab.h
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = block.h configfile.h cursors.h cursors16.h debug.h font.h fractions.h frame.h \
-  frameint.h frameresource.h heap.h input.h listmacs.h mem.h memint.h mono.h resly.h \
-  strres.h strresly.h treap.h treapint.h trig.h types.h
+	frameint.h frameresource.h heap.h input.h listmacs.h mem.h memint.h mono.h resly.h \
+	strres.h strresly.h treap.h treapint.h trig.h types.h
 
 libframework_a_SOURCES = SDL_framerate.c block.c configfile.c debug.c exceptionhandler.c frame.c \
-  frameresource.c heap.c ignorecase.c input.c mem.c mono.c resource_lexer.lex.c resource_parser.tab.c \
-  strres.c strres_lexer.lex.c strres_parser.tab.c treap.c trig.c
+	frameresource.c heap.c ignorecase.c input.c mem.c mono.c resource_lexer.lex.c resource_parser.tab.c \
+	strres.c strres_lexer.lex.c strres_parser.tab.c treap.c trig.c
