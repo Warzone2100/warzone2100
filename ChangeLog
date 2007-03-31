@@ -12,7 +12,14 @@
    * New: Multi-criteria target selection routine to automatically choose the best suitable target.
    * New: Units and structures will constantly look for a better target taking into consideration
           targets of the friendly units nearby - won't lock on one target forever anymore.
-
+ * Skirmish/Multiplayer AI:
+   * New: Enabled basic level of Human-AI cooperation, for more information visit: http://wz2100.net/wiki/gameplay:cooperative_ai
+   * New: AI units now return to defend its own base when it's in trouble.
+   * Improved: AI is faster at producing units, upgrading structures and oil capturing.
+   * Several other omprovements.
+   * Fix: AI doesn't get free units when playing in 'Advanced Bases' mode anymore.
+   * Fix: AI won't preferably attack humans anymore.
+   
 0000-00-00: Version 2.0.6
  * General:
    * New: New exceptionhandler allows better bugreports by saving memory dumps (On Windows and Linux)
