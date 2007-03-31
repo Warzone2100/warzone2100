@@ -120,6 +120,10 @@ Section $(TEXT_SecBase) SecBase
   File "${LIBDIR}\OpenAL32.dll"
   File "${LIBDIR}\wrap_oal.dll"
 
+  ; Windows dbghelp library
+  File "${LIBDIR}\dbghelp.dll.license.txt"
+  File "${LIBDIR}\dbghelp.dll"
+
   ; Data files
   File "..\data\mp.wz"
   File "..\data\warzone.wz"
@@ -160,7 +164,7 @@ Section $(TEXT_SecBase) SecBase
 SectionEnd
 
 
-SectionGroup /e $(TEXT_SecMods) SecMods
+SectionGroup /e $(TEXT_SecMods) secMods
 
 Section $(TEXT_SecGrimMod) SecGrimMod
 
@@ -242,8 +246,13 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\warzone2100.exe"
+
   Delete "$INSTDIR\OpenAL32.dll"
   Delete "$INSTDIR\wrap_oal.dll"
+
+  Delete "$INSTDIR\dbghelp.dll.license.txt"
+  Delete "$INSTDIR\dbghelp.dll"
+
   Delete "$INSTDIR\warzone.wz"
   Delete "$INSTDIR\mp.wz"
 
