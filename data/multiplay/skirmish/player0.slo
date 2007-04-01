@@ -21,6 +21,7 @@
 #define M_AFFIRMATIVE_ROGER		"roger"
 #define M_ANNOYED				"bug off"
 #define M_HELPERS_KILLED		"that was all I had.."
+#define M_HELP_NO_UNITS			"I don't have anything"
 
 // Base threat range in world units
 #define	W_BASE_THREAT_RANGE		((17 + (mapWidth + mapHeight) / 2 / 35) * TILE)
@@ -206,7 +207,8 @@ function bool helpAllyTimeout();
 function void requestHelp(int _helpX, int _helpY);
 function void doRequestHelp(int _helpX, int _helpY);
 function bool allyBaseAtLoc(int _ally, int _x, int _y);
-function void messageAlly(int _playerToMessage, string _message);
+function void messagePlayer(int _playerToMessage, string _message);
+function void messagePlayerAddressed(int _playerToMessage, int _playersToAddress, string _message);
 function bool canSeeAllies();
 function bool baseInTrouble();
 function string m_affirmative();
@@ -222,6 +224,7 @@ function int numAlliesInBase(bool _bVtols);
 function int numEnemiesInBase(bool _bVtols);
 function bool defendingOwnBase();
 function INT targetTypeValue(BASEOBJ _target);
+function INT numBitsSet(INT _integer);
 #endregion triggers
 
 /////////////////////////////////////////////////////////////////////
@@ -2382,7 +2385,7 @@ event multiMsgEv(multiMsgTr)
 /* Process multiplayer messages */
 function void processCommand(string _message, int _sender, bool _bBlipMessage)
 {
-	local	int 		_numMsgs,_curMsg,_players,_x,_y;
+	local	int 		_numMsgs,_curMsg,_addressedPlayers,_x,_y;
 	local	string		_msg,_processedString;
 
 	/* Extract semantic information */
@@ -2415,13 +2418,14 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 					if(attemptToHelp(_sender, _x, _y))
 					{
-						messageAlly(_sender, m_affirmative());
+						messagePlayer(ALL_ALLIES, m_affirmative());
 					}
 				}
 				else
 				{
 					/* Ask player to drop a beacon so we would know where to help */
-					messageAlly(_sender, R_REQUEST_BEACON);
+					_addressedPlayers = setBit(0, _sender, TRUE);
+					messagePlayerAddressed(ALL_ALLIES, _addressedPlayers, R_REQUEST_BEACON);
 				}
 			}
 			/* Someone requested a beacon from us -
@@ -2442,7 +2446,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 				if(helpingAlly() and (lastHelpPlayer == _sender))
 				{
 					stopHelpingAlly();
-					messageAlly(_sender, m_affirmative());
+					messagePlayer(ALL_ALLIES, m_affirmative());
 				}
 				else if(defendingOwnBase())	//if we are in trouble re-request help
 				{
@@ -2500,14 +2504,18 @@ function bool attemptToHelp(int _playerToHelp, int _x, int _y)
 			else if( random(10) < 5)
 			{
 				dbg("ally needs no help", me);
-				messageAlly(_playerToHelp, M_ANNOYED);
+				messagePlayer(ALL_ALLIES, M_ANNOYED);
 			}
+		}
+		else
+		{
+			messagePlayer(ALL_ALLIES, M_HELP_NO_UNITS);
 		}
 	}
 	else if((lastHelpPlayer >= 0) and (lastHelpPlayer < MAX_PLAYERS))
 	{
 		if(!_bHelpingMyself){
-			messageAlly(_playerToHelp, "helping " & getPlayerName(lastHelpPlayer) & " already");
+			messagePlayer(ALL_ALLIES, "helping " & getPlayerName(lastHelpPlayer) & " already");
 		}
 	}
 
@@ -2606,7 +2614,7 @@ event manageAllyHelp(manageAllyHelpTr)
 		//	{
 		//		if(random(4) == 0)
 		//		{
-		//			messageAlly(lastHelpPlayer, M_HELPERS_KILLED);
+		//			messagePlayer(lastHelpPlayer, M_HELPERS_KILLED);
 		//		}
 
 		//		if(not attemptToHelp(lastHelpPlayer, helpX, helpY))
@@ -2713,12 +2721,12 @@ function void stopHelpingAlly()
 }
 
 /* Send a multiplayer message to an ally */
-function void messageAlly(int _playerToMessage, string _message)
+function void messagePlayer(int _playerToMessage, string _message)
 {
 	local int	_player;
 
 	ASSERT(_playerToMessage >= -1 && _playerToMessage < MAX_PLAYERS,
-		"messageAlly: player out of bounds: " & _playerToMessage, me);
+		"messagePlayer: player out of bounds: " & _playerToMessage, me);
 
 	_player = 0;
 	if(_playerToMessage == ALL_ALLIES)	//everyone
@@ -2740,6 +2748,69 @@ function void messageAlly(int _playerToMessage, string _message)
 			msg(_message, me, _playerToMessage);
 		}
 	}
+}
+
+function INT numBitsSet(INT _integer)
+{
+	local	INT		_position,_result;
+	
+	_position = 0;
+	_result = 0;
+	while(_position < 8)
+	{
+		if(bitSet(_integer, _position))
+		{
+			_result++;
+		}
+		_position++;
+	}
+	
+	return _result;
+}
+
+/* Send a multiplayer message, addressing some player(s) */
+function void messagePlayerAddressed(int _playerToMessage, int _playersToAddress, string _message)
+{
+	local	INT		_player,_totalAddressed,_curAddressed;
+	local	STRING	_adrMessage;
+	
+	_totalAddressed = numBitsSet(_playersToAddress);
+	
+	ASSERT(_totalAddressed > 0, "messagePlayerAddressed: no players addressed", me);
+
+	_adrMessage = " ";
+	
+	_player = 0;
+	_curAddressed = 0;
+	while(_player < MAX_PLAYERS)
+	{
+		if(bitSet(_playersToAddress, _player))
+		{
+			_curAddressed++;
+			
+			_adrMessage = _adrMessage & getPlayerName(_player);
+
+			//if(_totalAddressed == 1){	//one only
+			//	_adrMessage = getPlayerName(_player);
+			//}else 
+			
+			if(_totalAddressed > 1)
+			{
+				if(_curAddressed == _totalAddressed){		//end
+					_adrMessage = _adrMessage & " and " & getPlayerName(_player);
+				}else{
+					_adrMessage = _adrMessage & ", " & getPlayerName(_player); 
+				}
+			}
+
+		}
+		_player++;
+	}
+	
+	_message = _adrMessage &  " " & _message;
+	
+	//Now send the message to all players addressed
+	messagePlayer(_playerToMessage, _message);
 }
 
 /* Returns true if we can see our allies on the map */
@@ -2793,7 +2864,7 @@ event watchBaseThreat(watchBaseThreatTr)
 			stopHelpingAlly();	//stop defending our own base
 			
 			/* Let allies know we don't need their help anymore */
-			messageAlly(ALL_ALLIES, R_REPORT_SAFETY);
+			messagePlayer(ALL_ALLIES, R_REPORT_SAFETY);
 			exit;
 		}
 	}
@@ -2895,7 +2966,7 @@ function void doRequestHelp(int _helpX, int _helpY)
 	}
 
 	/* Now send message with help request */
-	messageAlly(ALL_ALLIES, M_REQUEST_HELP);
+	messagePlayer(ALL_ALLIES, M_REQUEST_HELP);
 }
 
 function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, int _defendRadius, bool _bMove)
