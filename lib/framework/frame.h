@@ -40,6 +40,7 @@
 #include "trig.h"
 
 #include "gettext.h"
+#define _(string) gettext(string)
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(

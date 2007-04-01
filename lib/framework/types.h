@@ -102,10 +102,6 @@ typedef struct
 #define FALSE	(0)
 #endif
 
-/* Preparation for gettextization of the source code. 
- * Use this for all new strings that may need translation. */
-#define _(x) x
-
 /* defines for ONEINX - use
 
    if (ONEINX)
