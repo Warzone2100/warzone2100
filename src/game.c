@@ -9314,8 +9314,7 @@ static BOOL writeCompListFile(char *pFileName)
 
 	// Calculate the file size
 	totalComp = (numBodyStats + numWeaponStats + numConstructStats + numECMStats +
-		numPropulsionStats + numSensorStats + numRepairStats + numBrainStats +
-		numProgramStats) * MAX_PLAYERS;
+		numPropulsionStats + numSensorStats + numRepairStats + numBrainStats) * MAX_PLAYERS;
 	fileSize = COMPLIST_HEADER_SIZE + (sizeof(SAVE_COMPLIST) * totalComp);
 	//allocate the buffer space
 	pFileData = (char*)MALLOC(fileSize);
@@ -9428,15 +9427,6 @@ static BOOL writeCompListFile(char *pFileName)
 			psSaveCompList->state = apCompLists[player][COMP_BRAIN][i];
 			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
 		}
-		/*for(i = 0; i < numProgramStats; i++)
-		{
-			psStats = (COMP_BASE_STATS *)(asProgramStats + i);
-			strcpy(psSaveCompList->name, psStats->pName);
-			psSaveCompList->type = COMP_PROGRAM;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_PROGRAM][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
-		}*/
 	}
 
 	/* COMPLIST_SAVEHEADER */

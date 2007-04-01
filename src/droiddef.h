@@ -37,9 +37,8 @@
 /* The number of components in the asParts / asBits arrays */
 #define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)
 
-/* The maximum number of droid weapons and programs */
+/* The maximum number of droid weapons */
 #define DROID_MAXWEAPS		3//Watermelon:its 3 again now
-//#define DROID_MAXPROGS		3
 #define	DROID_DAMAGE_SCALING	400
 // This should really be logarithmic
 #define	CALC_DROID_SMOKE_INTERVAL(x) ((((100-x)+10)/10) * DROID_DAMAGE_SCALING)
@@ -86,12 +85,6 @@ typedef struct _component
 	 */
 } COMPONENT;
 
-typedef struct _program
-{
-	struct _program_stats	*psStats;
-} PROGRAM;
-
-
 // maximum number of queued orders
 #define ORDER_LIST_MAX		10
 
@@ -135,10 +128,6 @@ typedef struct _droid_template
 	UDWORD			numWeaps;					/* Number of weapons*/
 	UDWORD			asWeaps[DROID_MAXWEAPS];	/* weapon indices */
 
-	/* The programs */
-	//UDWORD			numProgs;					/* Number of programs*/
-	//UDWORD			asProgs[DROID_MAXPROGS];	/* program indices*/
-
 	DROID_TYPE		droidType;					// The type of droid
 	UDWORD			multiPlayerID;				// multiplayer unique descriptor(cant use id's for templates)
 												// used for save games as well now - AB 29/10/98
@@ -169,7 +158,7 @@ typedef struct _droid
 
 	/* Holds the specifics for the component parts - allows damage
 	 * per part to be calculated. Indexed by COMPONENT_TYPE.
-	 * Weapons and Programs need to be dealt with separately.
+	 * Weapons need to be dealt with separately.
 	 * COMP_BRAIN is an index into the asCommandDroids array NOT asBrainStats
 	 */
 	COMPONENT		asBits[DROID_MAXCOMP];
@@ -201,10 +190,6 @@ typedef struct _droid
 //	SDWORD		activeWeapon;		// The currently selected weapon
 	UDWORD		numWeaps;		// Watermelon:Re-enabled this,I need this one in droid.c
 	WEAPON		asWeaps[DROID_MAXWEAPS];
-
-	//SDWORD		activeProg;			// The currently running program
-	//UDWORD		numProgs;
-	//PROGRAM		asProgs[DROID_MAXPROGS];
 
 	// The group the droid belongs to
 	struct		_droid_group	*psGroup;

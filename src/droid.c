@@ -659,14 +659,6 @@ void	removeDroidBase(DROID *psDel)
         }
     }
 
-	// kill the command droid if any
-/*	- no seperate COMMAND_DROID structure now
-	if (psDel->asBits[COMP_BRAIN].nStat != 0)
-	{
-		destroyCommandDroid((SDWORD)psDel->player,
-							(SDWORD)psDel->asBits[COMP_BRAIN].nStat);
-	}*/
-
 	// remove the droid from the grid
 	gridRemoveObject((BASE_OBJECT *)psDel);
 
@@ -954,14 +946,6 @@ void destroyDroid(DROID *psDel)
 
 		}
 	}
-
-	// kill the command droid if any
-/*	- no seperate COMMAND_DROID structure now
-	if (psDel->asBits[COMP_BRAIN].nStat != 0)
-	{
-		destroyCommandDroid((SDWORD)psDel->player,
-							(SDWORD)psDel->asBits[COMP_BRAIN].nStat);
-	}*/
 
 	// remove the droid from the grid
 	gridRemoveObject((BASE_OBJECT *)psDel);
@@ -3155,14 +3139,6 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 			abort();
 			return FALSE;
 		}
-		//check that not allocating more programs than allowed
-		/*if (((asBrainStats + pDroidDesign->asParts[COMP_BRAIN])->progCap <
-			 pDroidDesign->numProgs) ||
-			pDroidDesign->numProgs > DROID_MAXPROGS)
-		{
-			DBERROR(("Too many programs have been allocated for droid Template: %s",getName(pDroidDesign->pName)));
-			return FALSE;
-		}*/
 
 
 		pDroidDesign->ref = REF_TEMPLATE_START + i;
@@ -3262,25 +3238,6 @@ BOOL templateIsIDF(DROID_TEMPLATE *psTemplate)
 /* Return the type of a droid */
 DROID_TYPE droidType(DROID *psDroid)
 {
-/*	DROID_TYPE	type;
-
-	if ((asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->location == LOC_TURRET)
-	{
-		type = DROID_SENSOR;
-	}
-	else if ((asECMStats + psDroid->asBits[COMP_ECM].nStat)->location == LOC_TURRET)
-	{
-		type = DROID_ECM;
-	}
-	else if (psDroid->asBits[COMP_CONSTRUCT].nStat != 0)
-	{
-		type = DROID_CONSTRUCT;
-	}
-	else
-	{
-		type = DROID_WEAPON;
-	}*/
-
 	return psDroid->droidType;
 }
 
@@ -3506,120 +3463,6 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	return TRUE;
 }
 
-//Load the programs assigned to Droids in the Access database
-/*BOOL loadDroidPrograms(char *pProgramData, UDWORD bufferSize)
-{
-	char				*pStartProgramData;
-	UDWORD				NumPrograms = 0, i, incP, player;
-	char				ProgramName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
-	DROID_TEMPLATE		*pTemplate;
-	PROGRAM_STATS		*pPrograms = asProgramStats;
-	BOOL				recFound;
-	UWORD				SkippedProgramCount=0;
-
-	//initialise the store count variable
-	for (player=0; player < MAX_PLAYERS; player++)
-	{
-		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL;
-			pTemplate = pTemplate->psNext)
-		{
-			//clear the storage flags
-			pTemplate->storeCount = 0;
-		}
-	}
-
-	pStartProgramData = pProgramData;
-
-	NumPrograms = numCR(pProgramData, bufferSize);
-
-	for (i=0; i < NumPrograms; i++)
-	{
-		recFound = FALSE;
-		//read the data into the storage - the data is delimeted using comma's
-		TemplateName[0] = '\0';
-		ProgramName[0] = '\0';
-		sscanf(pProgramData,"%[^','],%[^','],%d", &TemplateName, &ProgramName, &player);
-
-		//if (!getResourceName(TemplateName))
-		//{
-		//	return FALSE;
-		//}
-		if (!getDroidResourceName(TemplateName))
-		{
-			return FALSE;
-		}
-		if (!getResourceName(ProgramName))
-		{
-			return FALSE;
-		}
-
-		if (player < MAX_PLAYERS)
-		{
-			//loop through each droid to compare the name
-			for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate =
-				pTemplate->psNext)
-			{
-
-				if (!(strcmp(TemplateName, pTemplate->aName)))
-				{
-
-					//Template found
-					for (incP=0; incP < numProgramStats; incP++)
-					{
-						if (!(strcmp(ProgramName, pPrograms[incP].pName)))
-						{
-							//Program found, alloc this to the current Template
-							pTemplate->asProgs[pTemplate->storeCount] = incP;
-							recFound = TRUE;
-							//check not allocating more than allowed
-							if (pTemplate->storeCount > (SDWORD)pTemplate->numProgs)
-							{
-								DBERROR(("Trying to allocate more programs than allowed for Template"));
-								return FALSE;
-							}
-							pTemplate->storeCount++;
-							break;
-						}
-					}
-					//if program not found - error
-					if (!recFound)
-					{
-						DBERROR(("Unable to find Program"));
-						return FALSE;
-					}
-					else
-					{
-						break;
-					}
-				}
-			}
-
-			//if Template not found - error
-			if (!recFound)
-			{
-				DBERROR(("Unable to allocate all Template programs"));
-				return FALSE;
-			}
-
-		}
-		else
-		{
-			SkippedProgramCount++;
-		}
-
-		//increment the pointer to the start of the next record
-		pProgramData = strchr(pProgramData,'\n') + 1;
-	}
-
-	if (SkippedProgramCount>0)
-	{
-		DBERROR(("Illegal player number in %d droid programs",SkippedProgramCount));
-	}
-
-//	FREE(pStartProgramData);
-	return TRUE;
-}*/
-
 //free the storage for the droid templates
 BOOL droidTemplateShutDown(void)
 {
@@ -3844,44 +3687,9 @@ UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 		build += (asWeaponStats + psTemplate->asWeaps[i])->buildPoints;
 	}
 
-	//add program power
-	/*for(i=0; i<psTemplate->numProgs; i++)
-	{
-		ASSERT( psTemplate->asProgs[i]<numProgramStats,
-			//"Invalid Template program for %s", psTemplate->pName );
-			"Invalid Template program for %s", getTemplateName(psTemplate)));
-		build += (asProgramStats + psTemplate->asProgs[i])->buildPoints;
-	}*/
-
 	return build;
 }
 
-/* Calculate the points required to build the droid */
-/*UDWORD calcDroidBuild(DROID *psDroid)
-{
-	UDWORD	build, i;
-
-	build = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPoints +
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPoints +
-	(asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPoints +
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPoints +
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPoints +
-	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->buildPoints;
-
-	//add weapon power
-	for(i=0; i<psDroid->numWeaps; i++)
-	{
-		build += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPoints;
-	}
-
-	//add program power
-	for(i=0; i<psDroid->numProgs; i++)
-	{
-		build += psDroid->asProgs[i].psStats->buildPoints;
-	}
-
-	return build;
-}*/
 
 /* Calculate the power points required to build/maintain a template */
 UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
@@ -3906,12 +3714,6 @@ UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
 	{
 		power += (asWeaponStats + psTemplate->asWeaps[i])->buildPower;
 	}
-
-	//add program power
-	/*for(i=0; i<psTemplate->numProgs; i++)
-	{
-		power += (asProgramStats + psTemplate->asProgs[i])->buildPower;
-	}*/
 
 	return power;
 }
@@ -3945,12 +3747,6 @@ UDWORD	calcDroidPower(DROID *psDroid)
 			power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
 		}
 	}
-
-	//add program power
-/*	for(i=0; i<psDroid->numProgs; i++)
-	{
-		power += (asProgramStats + psDroid->asProgs[i])->buildPower;
-	}*/
 
 	return power;
 }
@@ -4130,20 +3926,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		psDroid->numKills = 0;
 	}
 
-//	//create the droids weapons	- done in droidSetBits()
-
-	//create the droids programs
-	/*psDroid->numProgs = pTemplate->numProgs;
-	if (pTemplate->numProgs > 0)
-	{
-		for (inc=0; inc < pTemplate->numProgs; inc++)
-		{
-			psDroid->asProgs[inc].psStats = asProgramStats + pTemplate->asProgs[inc];
-		}
-		//set the first program to be the current one
-		psDroid->activeProg = 0;
-	}*/
-
 	droidSetBits(pTemplate,psDroid);
 
 	//calculate the droids total weight
@@ -4275,13 +4057,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	// create the command droid if necessary
 	if (pTemplate->asParts[COMP_BRAIN] != 0)
 	{
-//		if (!buildCommandDroid((SDWORD)player, (SDWORD)pTemplate->asParts[COMP_BRAIN], psDroid))
-//		{
-//			droidRelease(psDroid);
-//			HEAP_FREE(psDroidHeap, psDroid);
-//	7		return NULL;
-//		}
-
 		//DON'T DO THIS ANYMORE - CAN HAVE 5 OF ONE TYPE ONLY!
 		// now delete the template - can't build this twice
 		/*psPrevTempl = NULL;

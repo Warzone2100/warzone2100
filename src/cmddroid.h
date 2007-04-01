@@ -29,12 +29,6 @@
 #include "cmddroiddef.h"
 #include "droiddef.h"
 
-// The number of available command droids for each player
-//extern SWORD	numCommandDroids[MAX_PLAYERS];
-
-// The command droids for each player
-//extern COMMAND_DROID	asCommandDroids[MAX_PLAYERS][MAX_CMDDROIDS];
-
 // Initialise the command droids
 extern BOOL cmdDroidInit(void);
 
@@ -43,12 +37,6 @@ extern void cmdDroidShutDown(void);
 
 // Make new command droids available
 extern void cmdDroidAvailable(BRAIN_STATS *psBrainStats, SDWORD player);
-
-// create a command droid
-//extern BOOL buildCommandDroid(SDWORD player, SDWORD droid, DROID *psDroid);
-
-// destroy a command droid
-//extern void destroyCommandDroid(SDWORD player, SDWORD droid);
 
 // update the command droids
 extern void cmdDroidUpdate(void);

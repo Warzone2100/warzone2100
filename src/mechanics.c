@@ -109,7 +109,6 @@ void freeComponentLists(void)
 		FREE(apCompLists[inc][COMP_REPAIRUNIT]);
 		FREE(apCompLists[inc][COMP_CONSTRUCT]);
 		FREE(apCompLists[inc][COMP_WEAPON]);
-		//FREE(apCompLists[inc][COMP_PROGRAM]);
 	}
 }
 
@@ -199,10 +198,6 @@ void makeAllAvailable(void)
 		{
 			apCompLists[i][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		}
-		/*for (comp=i; comp <numProgramStats; comp++)
-		{
-			apCompLists[i][COMP_PROGRAM][comp] = AVAILABLE;
-		}*/
 
 		//make all the structures available
 		for (comp=0; comp < numStructureStats; comp++)

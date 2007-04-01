@@ -50,7 +50,6 @@ SENSOR_STATS		*asSensorStats;
 ECM_STATS			*asECMStats;
 //ARMOUR_STATS		*asArmourStats;
 REPAIR_STATS		*asRepairStats;
-//PROGRAM_STATS		*asProgramStats;
 WEAPON_STATS		*asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
 
@@ -79,7 +78,6 @@ UDWORD		numSensorStats = 0;
 UDWORD		numECMStats = 0;
 //UDWORD		numArmourStats = 0;
 UDWORD		numRepairStats = 0;
-UDWORD		numProgramStats = 0;
 UDWORD		numWeaponStats = 0;
 UDWORD		numConstructStats = 0;
 
@@ -95,7 +93,6 @@ UDWORD		numSensorStats;
 UDWORD		numECMStats;
 //UDWORD		numArmourStats;
 UDWORD		numRepairStats;
-UDWORD		numProgramStats;
 UDWORD		numWeaponStats;
 UDWORD		numConstructStats;
 
@@ -190,7 +187,6 @@ void statsInitVars(void)
 	asSensorStats = NULL;
 	asECMStats = NULL;
 	asRepairStats = NULL;
-	//asProgramStats = NULL;
 	asWeaponStats = NULL;
 	asConstructStats = NULL;
 	asPropulsionTypes = NULL;
@@ -204,7 +200,6 @@ void statsInitVars(void)
 	numSensorStats = 0;
 	numECMStats = 0;
 	numRepairStats = 0;
-	//numProgramStats = 0;
 	numWeaponStats = 0;
 	numConstructStats = 0;
 //	numPropulsionTypes = 0;
@@ -302,7 +297,6 @@ BOOL statsShutDown(void)
 	STATS_DEALLOC(asSensorStats, numSensorStats, SENSOR_STATS);
 	STATS_DEALLOC(asECMStats, numECMStats, ECM_STATS);
 	STATS_DEALLOC(asRepairStats, numRepairStats, REPAIR_STATS);
-//	STATS_DEALLOC(asProgramStats, numProgramStats, PROGRAM_STATS);
 	STATS_DEALLOC(asConstructStats, numConstructStats, CONSTRUCT_STATS);
 	deallocPropulsionTypes();
 	deallocTerrainTable();
@@ -387,12 +381,6 @@ BOOL statsAllocRepair(UDWORD	numStats)
 {
 	ALLOC_STATS(numStats, asRepairStats, numRepairStats, REPAIR_STATS);
 }
-
-/* Allocate Program Stats */
-/*BOOL statsAllocProgram(UDWORD	numStats)
-{
-	ALLOC_STATS(numStats, asProgramStats, numProgramStats, PROGRAM_STATS);
-}*/
 
 /* Allocate Construct Stats */
 BOOL statsAllocConstruct(UDWORD	numStats)
@@ -1887,69 +1875,6 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 	return TRUE;
 }
 
-/*Load the Program stats from the file exported from Access*/
-/*BOOL loadProgramStats(char *pProgramData, UDWORD bufferSize)
-{
-	//SBYTE			*pData;
-	PROGRAM_STATS	sStats, *psStats, *psStartStats;
-	UDWORD			NumProgram = 0,i;
-	char			ProgramName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
-
-	//keep the start so we can release it at the end
-	//pData = pProgramData;
-
-	psStats = &sStats;
-//	psStats = (PROGRAM_STATS *)MALLOC(sizeof(PROGRAM_STATS));
-//	if (psStats == NULL)
-//	{
-//		DBERROR(("Program Stats - Out of memory"));
-//		return FALSE;
-//	}
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumProgram = numCR(pProgramData, bufferSize);
-	if (!statsAllocProgram(NumProgram))
-	{
-		return FALSE;
-	}
-
-	for (i=0; i < NumProgram; i++)
-	{
-		memset(psStats, 0, sizeof(PROGRAM_STATS));
-
-		ProgramName[0] = '\0';
-		techLevel[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pProgramData,"%[^','],%[^','],%d,%d,%d,%d,%d",
-			&ProgramName, &techLevel, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->slots, &psStats->order, &psStats->special);
-
-		if (!allocateStatName((BASE_STATS *)psStats, ProgramName))
-		{
-			return FALSE;
-		}
-
-		psStats->ref = REF_PROGRAM_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return FALSE;
-		}
-
-		//save the stats
-		statsSetProgram(psStats, i);
-
-		psStats = psStartStats;
-		//increment the pointer to the start of the next record
-		pProgramData = strchr(pProgramData,'\n') + 1;
-	}
-//	FREE(pData);
-//	FREE(psStats);
-	return TRUE;
-}*/
-
 /*Load the Construct stats from the file exported from Access*/
 BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
 {
@@ -2726,11 +2651,6 @@ void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index)
 {
 	SET_STATS(psStats, asRepairStats, index, REPAIR_STATS, REF_REPAIR_START);
 }
-/* Set the stats for a particular program type */
-/*void statsSetProgram(PROGRAM_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asProgramStats, index, PROGRAM_STATS, REF_PROGRAM_START);
-}*/
 /* Set the stats for a particular construct type */
 void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index)
 {
@@ -2892,22 +2812,6 @@ REPAIR_STATS *statsGetRepair(UDWORD ref)
 	return NULL;	// should never get here, but this stops the compiler complaining.
 }
 
-/*PROGRAM_STATS *statsGetProgram(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_PROGRAM_START) && (ref < REF_PROGRAM_START + REF_RANGE),
-		"statsGetProgram: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numProgramStats; index++)
-	{
-		if (asProgramStats[index].ref == ref)
-		{
-			return &asProgramStats[index];
-		}
-	}
-	ASSERT( FALSE, "statsGetProgram: Reference number not found in list: %x", ref );
-}*/
-
 CONSTRUCT_STATS *statsGetConstruct(UDWORD ref)
 {
 	UDWORD index;
@@ -3066,11 +2970,6 @@ UDWORD statType(UDWORD ref)
 	{
 		return COMP_REPAIRUNIT;
 	}
-	/*if (ref >=REF_PROGRAM_START && ref < REF_PROGRAM_START +
-		REF_RANGE)
-	{
-		return COMP_PROGRAM;
-	}*/
 	if (ref >=REF_WEAPON_START && ref < REF_WEAPON_START +
 		REF_RANGE)
 	{
@@ -3138,11 +3037,6 @@ UDWORD statRefStart(UDWORD stat)
 			start = REF_WEAPON_START;
 			break;
 		}
-		/*case COMP_PROGRAM:
-		{
-			start = REF_PROGRAM_START;
-			break;
-		}*/
 		case COMP_CONSTRUCT:
 		{
 			start = REF_CONSTRUCT_START;
@@ -3187,10 +3081,6 @@ UDWORD componentType(char* pType)
 	{
 		return COMP_SENSOR;
 	}
-	/*if (!strcmp(pType,"PROGRAM"))
-	{
-		return COMP_PROGRAM;
-	}*/
 	if (!strcmp(pType,"WEAPON"))
 	{
 		return COMP_WEAPON;
@@ -3280,11 +3170,6 @@ static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnum
 		*pnumStats = numConstructStats;
 		*pstatSize = sizeof(CONSTRUCT_STATS);
 		break;
-	/*case COMP_PROGRAM:
-		psStats = (BASE_STATS*)asProgramStats;
-		numStats = numProgramStats;
-		statSize = sizeof(PROGRAM_STATS);
-		break;*/
 	case COMP_WEAPON:
 		*ppsStats = (BASE_STATS*)asWeaponStats;
 		*pnumStats = numWeaponStats;

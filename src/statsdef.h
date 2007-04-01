@@ -54,7 +54,6 @@ typedef enum _component_type
 	COMP_ECM,
 	COMP_SENSOR,
 	COMP_CONSTRUCT,
-	//COMP_PROGRAM,		//this needs to be removed when save games changes
 	COMP_WEAPON,
 
 	COMP_NUMCOMPONENTS
@@ -237,8 +236,6 @@ typedef struct _brain_stats
 	COMPONENT_STATS;
 
 	UDWORD		progCap;			// Program capacity
-	//UDWORD		AICap;				// AI capacity
-	//UDWORD		AISpeed;			// AI Learning Speed
 	struct _weapon_stats	*psWeaponStat;	//weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
 
@@ -352,34 +349,6 @@ typedef struct _repair_stats
 	UDWORD				time;				// time delay for repair cycle
 	struct	iIMDShape	*pMountGraphic;		// The turret mount to use
 } REPAIR_STATS;
-
-
-//no longer used 7/8/98
-/*typedef struct _program_stats
-{
-	// Common stats - This structure doesn't actually need all the stats
-	COMPONENT_STATS;
-	UDWORD		slots;				// How many brain slots the program takes
-	UDWORD		order;				// The order activated by the program if any
-	UDWORD		special;			// The special ability that the droid can perform
-									// with this program
-} PROGRAM_STATS;*/
-
-/*these are defined in Access database - if you change them in there,
-  then change them here! (and the rest of the code)
-  They are made up values for now - defined when Jim does it!*/
-/*typedef enum _program_orders
-{
-	ORDER_STOP,
-	ORDER_SCAVANGE,
-	ORDER_ATTACK,
-	ORDER_GUARD,
-	ORDER_AID,
-	ORDER_BUILD,
-	ORDER_DEMOLISH,
-	ORDER_REPAIR,
-} PROGRAM_ORDERS;*/
-
 
 typedef enum _fireonmove
 {

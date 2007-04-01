@@ -2635,13 +2635,6 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 			quantity = numSensorStats;
 			break;
 		}
-		/*case COMP_PROGRAM:
-		{
-			pArtefact = (COMP_BASE_STATS*)asProgramStats;
-			size = sizeof(PROGRAM_STATS);
-			quantity = numProgramStats;
-			break;
-		}*/
 		case COMP_WEAPON:
 		{
 			pArtefact = (COMP_BASE_STATS*)asWeaponStats;
@@ -2754,15 +2747,6 @@ static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pO
 					psTemplates->asParts[oldType] = newCompInc;
 				}
 				break;
-			//case COMP_PROGRAM:
-			//	for (inc=0; inc < psTemplates->numProgs; inc++)
-			//	{
-			//		if (psTemplates->asProgs[inc] == oldCompInc)
-			//		{
-			//			psTemplates->asProgs[inc] = newCompInc;
-			//		}
-			//	}
-			//	break;
 			case COMP_WEAPON:
 				for (inc=0; inc < psTemplates->numWeaps; inc++)
 				{
@@ -3228,16 +3212,6 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 				psDroid->asBits[oldType].nStat = (UBYTE)newCompInc;
 			}
 			break;
-		/*case COMP_PROGRAM:
-			for (inc=0; inc < psDroid->numProgs; inc++)
-			{
-				if ((psDroid->asProgs[inc].psStats->ref - REF_PROGRAM_START) ==
-					oldCompInc)
-				{
-					psDroid->asProgs[inc].psStats = (asProgramStats + newCompInc);
-				}
-			}
-			break;*/
 		case COMP_WEAPON:
             //can only be one weapon now
 			//for (inc=0; inc < psDroid->numWeaps; inc++)

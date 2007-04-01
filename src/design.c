@@ -3913,28 +3913,6 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 }
 
 
-/* Return a program for a specific order */
-/*static UDWORD intGetProgram(PROGRAM_ORDERS order)
-{
-	UDWORD		index;
-
-	for (index = 0; index < numProgramStats; index++)
-	{
-		if (asProgramStats[index].order == (UDWORD)order)
-		{
-			break;
-		}
-	}
-
-	if (index == numProgramStats)
-	{
-		return 0;
-	}
-
-	return index;
-}*/
-
-
 /* Check whether a droid template is valid */
 static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 {
@@ -3944,9 +3922,7 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	if (psTempl->asParts[COMP_BRAIN] != 0)
 	{
 		psTempl->numWeaps = 1;
-		psTempl->asWeaps[0] =
-			asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat - asWeaponStats;
-//			asCommandDroids[selectedPlayer][psTempl->asParts[COMP_BRAIN]].nWeapStat;
+		psTempl->asWeaps[0] = asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat - asWeaponStats;
 	}
 
 	/* Check all the components have been set */
@@ -4007,31 +3983,6 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	}
 
 	psTempl->ref = REF_TEMPLATE_START;
-
-	/* Set a default program */
-	/*psTempl->numProgs = 1;
-	psTempl->droidType = droidTemplateType(psTempl);
-	switch ( psTempl->droidType )
-	{
-	case DROID_WEAPON:
-	case DROID_PERSON:
-	case DROID_CYBORG:
-	case DROID_DEFAULT:
-		psTempl->asProgs[0] = intGetProgram(ORDER_ATTACK);
-		break;
-	case DROID_SENSOR:
-		psTempl->asProgs[0] = intGetProgram(ORDER_GUARD);
-		break;
-	case DROID_ECM:
-		psTempl->asProgs[0] = intGetProgram(ORDER_GUARD);
-		break;
-	case DROID_CONSTRUCT:
-		psTempl->asProgs[0] = intGetProgram(ORDER_BUILD);
-		break;
-	case DROID_REPAIR:
-		psTempl->asProgs[0] = intGetProgram(ORDER_REPAIR);
-		break;
-	}*/
 
 	/* Calculate build points */
 	psTempl->buildPoints = calcTemplateBuild(psTempl);

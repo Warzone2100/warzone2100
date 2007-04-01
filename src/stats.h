@@ -41,7 +41,6 @@ extern SENSOR_STATS			*asSensorStats;
 extern ECM_STATS			*asECMStats;
 //extern ARMOUR_STATS			*asArmourStats;
 extern REPAIR_STATS			*asRepairStats;
-//extern PROGRAM_STATS		*asProgramStats;
 extern WEAPON_STATS			*asWeaponStats;
 extern CONSTRUCT_STATS		*asConstructStats;
 
@@ -73,7 +72,6 @@ extern UDWORD		numSensorStats;
 extern UDWORD		numECMStats;
 //extern UDWORD		numArmourStats;
 extern UDWORD		numRepairStats;
-extern UDWORD		numProgramStats;
 extern UDWORD		numWeaponStats;
 extern UDWORD		numConstructStats;
 
@@ -90,7 +88,6 @@ extern UDWORD		numSpecialAbility;
 #define REF_ECM_START			0x060000
 //#define REF_ARMOUR_START		0x070000
 #define REF_REPAIR_START		0x080000
-//#define REF_PROGRAM_START		0x090000
 #define REF_WEAPON_START		0x0a0000
 #define REF_RESEARCH_START		0x0b0000
 #define REF_TEMPLATE_START		0x0c0000
@@ -144,9 +141,6 @@ extern BOOL statsAllocECM(UDWORD numEntries);
 /*Allocate Repair Stats*/
 extern BOOL statsAllocRepair(UDWORD numEntries);
 
-/*Allocate Program Stats*/
-extern BOOL statsAllocProgram(UDWORD numEntries);
-
 /*Allocate Construct Stats*/
 extern BOOL statsAllocConstruct(UDWORD numEntries);
 
@@ -184,9 +178,6 @@ extern BOOL loadECMStats(char *pECMData, UDWORD bufferSize);
 
 /*Load the repair stats from the file exported from Access*/
 extern BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize);
-
-/*Load the program stats from the file exported from Access*/
-extern BOOL loadProgramStats(char *pProgramData, UDWORD bufferSize);
 
 /*Load the construct stats from the file exported from Access*/
 extern BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize);
@@ -244,9 +235,6 @@ extern void statsSetECM(ECM_STATS	*psStats, UDWORD index);
 /*Set the stats for a particular repair type*/
 extern void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index);
 
-/*Set the stats for a particular program type*/
-//extern void statsSetProgram(PROGRAM_STATS	*psStats, UDWORD index);
-
 /*Set the stats for a particular construct type*/
 extern void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index);
 
@@ -262,7 +250,6 @@ extern PROPULSION_STATS *statsGetPropulsion(UDWORD ref);
 extern SENSOR_STATS *statsGetSensor(UDWORD ref);
 extern ECM_STATS *statsGetECM(UDWORD ref);
 extern REPAIR_STATS *statsGetRepair(UDWORD ref);
-//extern PROGRAM_STATS *statsGetProgram(UDWORD ref);
 extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 
 /*******************************************************************************
