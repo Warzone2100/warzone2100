@@ -2758,7 +2758,7 @@ function INT numBitsSet(INT _integer)
 	_result = 0;
 	while(_position < 8)
 	{
-		if(bitSet(_integer, _position))
+		if(getBit(_integer, _position))
 		{
 			_result++;
 		}
@@ -2784,7 +2784,7 @@ function void messagePlayerAddressed(int _playerToMessage, int _playersToAddress
 	_curAddressed = 0;
 	while(_player < MAX_PLAYERS)
 	{
-		if(bitSet(_playersToAddress, _player))
+		if(getBit(_playersToAddress, _player))
 		{
 			_curAddressed++;
 			

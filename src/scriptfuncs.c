@@ -10584,11 +10584,11 @@ BOOL scrGetBit(void)
 
 	if (!stackPopParams(2, VAL_INT, &val1, VAL_INT, &val2))
 	{
-		debug(LOG_ERROR, "scrBitSet(): failed to pop");
+		debug(LOG_ERROR, "scrGetBit(): failed to pop");
 		return FALSE;
 	}
 
-	ASSERT(val2 < MAX_PLAYERS && val2 >= 0, "scrBitSet(): wrong player index (%d)", val2);
+	ASSERT(val2 < MAX_PLAYERS && val2 >= 0, "scrGetBit(): wrong player index (%d)", val2);
 
 	scrFunctionResult.v.bval = ((val1 & bitMask[val2]) != 0);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
