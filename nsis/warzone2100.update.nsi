@@ -7,12 +7,16 @@
 
   !include "MUI.nsh"
 
+;Include VPatch
+
+  !include "VPatchLib.nsh"
+
 ;--------------------------------
 ;General
 
   ;Name and file
   Name "Warzone 2100"
-  OutFile "warzone2100-${VERSION}.exe"
+  OutFile "warzone2100-${VERSION}.update.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Warzone 2100"
@@ -27,11 +31,11 @@
 
 VIProductVersion "${VERSIONNUM}"
 VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
-VIAddVersionKey "FileDescription"	"Warzone 2100 Installer"
+VIAddVersionKey "FileDescription"	"Warzone 2100 Updater"
 VIAddVersionKey "FileVersion"		"${VERSION}"
 VIAddVersionKey "InternalName"		"Warzone 2100"
 VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
-VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.exe"
+VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.update.exe"
 VIAddVersionKey "ProductName"		"Warzone 2100"
 VIAddVersionKey "ProductVersion"	"${VERSION}"
 
@@ -114,25 +118,36 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "..\src\warzone2100.exe"
+;  File "..\src\warzone2100.exe"
+  !insertmacro VPatchFile "warzone2100.exe.vpatch" "$INSTDIR\warzone2100.exe" "$INSTDIR\warzone2100.exe.tmp"
 
   ; Required runtime libs
-  File "${LIBDIR}\OpenAL32.dll"
-  File "${LIBDIR}\wrap_oal.dll"
+;  File "${LIBDIR}\OpenAL32.dll"
+;  File "${LIBDIR}\wrap_oal.dll"
+;  !insertmacro VPatchFile "openal32.dll.vpatch" "$INSTDIR\OpenAL32.dll" "$INSTDIR\OpenAL32.dll.tmp"
+;  !insertmacro VPatchFile "wrap_oal.dll.vpatch" "$INSTDIR\wrap_oal.dll" "$INSTDIR\wrap_oal.dll.tmp"
 
   ; Windows dbghelp library
   File "${LIBDIR}\dbghelp.dll.license.txt"
   File "${LIBDIR}\dbghelp.dll"
+;  !insertmacro VPatchFile "dbghelp.dll.license.txt.vpatch" "$INSTDIR\dbghelp.dll.license.txt" "$INSTDIR\dbghelp.dll.license.txt.tmp"
+;  !insertmacro VPatchFile "dbghelp.dll.vpatch" "$INSTDIR\dbghelp.dll" "$INSTDIR\dbghelp.dll.tmp"
 
   ; Data files
-  File "..\data\mp.wz"
-  File "..\data\warzone.wz"
+;  File "..\data\mp.wz"
+;  File "..\data\warzone.wz"
+  !insertmacro VPatchFile "mp.wz.vpatch" "$INSTDIR\mp.wz" "$INSTDIR\mp.wz.tmp"
+  !insertmacro VPatchFile "warzone.wz.vpatch" "$INSTDIR\warzone.wz" "$INSTDIR\warzone.wz.tmp"
 
   ; Information/documentation files
   File "/oname=ChangeLog.txt" "..\ChangeLog"
   File "/oname=Authors.txt" "..\AUTHORS"
   File "/oname=License.txt" "..\COPYING"
   File "/oname=Readme.txt" "..\README"
+;  !insertmacro VPatchFile "changelog.txt.vpatch" "$INSTDIR\ChangeLog.txt" "$INSTDIR\ChangeLog.txt.tmp"
+;  !insertmacro VPatchFile "authors.txt.vpatch" "$INSTDIR\Authors.txt" "$INSTDIR\Authors.txt.tmp"
+;  !insertmacro VPatchFile "license.txt.vpatch" "$INSTDIR\License.txt" "$INSTDIR\License.txt.tmp"
+;  !insertmacro VPatchFile "readme.txt.vpatch" "$INSTDIR\Readme.txt" "$INSTDIR\Readme.txt.tmp"
 
 
   ;Store installation folder
@@ -170,7 +185,8 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "..\data\grim.wz"
+;  File "..\data\grim.wz"
+  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
 
   SetOutPath "$INSTDIR"
 
