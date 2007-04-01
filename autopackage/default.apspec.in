@@ -45,8 +45,7 @@ removeOwningPackage $PREFIX/share/warzone2100
 [Install]
 # Put your installation script here
 installExe bin/warzone2100
-installData share/warzone2100
-installData share/doc
+installData share/warzone2100 share/doc
 installIcon share/icons/warzone2100.png
 installMenuItem "Games/TacticStrategy" share/applications/warzone2100.desktop
 

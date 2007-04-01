@@ -6,4 +6,4 @@ noinst_HEADERS = aud.h audio.h cdaudio.h mixer.h track.h tracklib.h
 libsound_a_SOURCES = audio.c cdaudio.c mixer_stub.c openal_track.c playlist.c track.c
 
 libsound_a_LIBADD = $(top_builddir)/lib/gamelib/libgamelib.a \
-  $(top_builddir)/lib/framework/libframework.a
+	$(top_builddir)/lib/framework/libframework.a

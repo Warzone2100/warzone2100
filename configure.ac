@@ -17,7 +17,7 @@ if test "x$YACC" != "xbison -y" ; then
 	AC_MSG_ERROR([Bison is not installed])
 fi
 
-AM_PROG_LEX
+AC_PROG_LEX
 if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
@@ -35,20 +35,20 @@ case $host_os in
 		host_os_darwin=yes
 		;;
 esac
-AM_CONDITIONAL([MINGW32], [test "x$host_os_mingw32" = "xyes"])
-AM_CONDITIONAL([DARWIN], [test "x$host_os_darwin" = "xyes"])
+AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
+AM_CONDITIONAL([DARWIN], test "x$host_os_darwin" = "xyes")
 
 
 # Installation directories
 
 AC_ARG_WITH(icondir,
 	AS_HELP_STRING([--with-icondir=DIR],[icon files [DATADIR/icons]]),
-	[], [ with_icondir=$datadir/icons ])
+	[ with_icondir=$withval ], [ with_icondir=$datadir/icons ])
 
 
 AC_ARG_WITH(applicationdir,
 	AS_HELP_STRING([--with-applicationdir=DIR],[application files [DATADIR/applications]]),
-	[], [ with_applicationdir=$datadir/applications ])
+	[ with_applicationdir=$withval ], [ with_applicationdir=$datadir/applications ])
 
 
 AC_SUBST(icondir, $with_icondir)
@@ -59,6 +59,22 @@ fi
 
 
 # Commandline options:
+
+AC_ARG_ENABLE([data],
+	AS_HELP_STRING([--enable-data],[Build data packages [no]]),
+	[ enable_data=$enableval ], [ enable_data=no ])
+AM_CONDITIONAL(DATA, test "x$enable_data" = "xyes")
+AC_MSG_CHECKING([whether to build data packages])
+AC_MSG_RESULT([$enable_data])
+
+
+AC_ARG_ENABLE([installer],
+	AS_HELP_STRING([--enable-installer],[Build NSIS installer [no]]),
+	[ enable_installer=$enableval ], [ enable_installer=no ])
+AM_CONDITIONAL(INSTALLER, test "x$enable_installer" = "xyes")
+AC_MSG_CHECKING([whether to build NSIS installer])
+AC_MSG_RESULT([$enable_installer])
+
 
 AC_ARG_WITH(makensis,
 	AS_HELP_STRING([--with-makensis],[Path to makensis]))
@@ -71,21 +87,6 @@ AC_ARG_WITH(installer_libdir,
 AC_ARG_WITH(installer_version,
 	AS_HELP_STRING([--with-installer-version],[Version of the installer. i.e. 1.2.3.4]))
 
-
-AC_ARG_ENABLE([data],
-	AS_HELP_STRING([--enable-data],[Build data packages])
-	[], [ enable_data=no ])
-AM_CONDITIONAL(DATA, test "x$enable_data" = "xyes")
-AC_MSG_CHECKING([whether to build data packages])
-AC_MSG_RESULT([$enable_data])
-
-
-AC_ARG_ENABLE([installer],
-	AS_HELP_STRING([--enable-installer],[Build NSIS installer])
-	[], [ enable_installer=no ])
-AM_CONDITIONAL(INSTALLER, test "x$enable_installer" = "xyes")
-AC_MSG_CHECKING([whether to build NSIS installer])
-AC_MSG_RESULT([$enable_installer])
 
 if test "x$enable_installer" = "xyes" ; then
 	if test "x$with_makensis" = "x" ; then
@@ -119,28 +120,25 @@ fi
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
-	AS_HELP_STRING([--enable-debug],[Compile debug version]),
-	[], [ enable_debug=no ])
+	AS_HELP_STRING([--enable-debug[=strict/yes/relaxed/no]],[Compile debug version [no]]),
+	[ enable_debug=$enableval ], [ enable_debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-  WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label"
-  WZ_CFLAGS_OVERRIDE="-O0"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label"
+	WZ_CFLAGS_OVERRIDE="-O0"
 else
-  WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG"
 fi
 
 
 #   --disable-ogg will build without Ogg Vorbis support
 AC_ARG_ENABLE(ogg,
-[AS_HELP_STRING([--disable-ogg],[Do not built support for Ogg files])],
-[ ogg=$enableval ], [ ogg=maybe ])
+	AS_HELP_STRING([--disable-ogg],[Do not built support for Ogg files]))
 
 #   --disable-mp3 will build without Mp3 support
 AC_ARG_ENABLE(mp3,
-[AS_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files])],
-[ mp3=$enableval ], [ mp3=maybe ])
-
+	AS_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files]))
 
 
 # Checks for libraries:
@@ -216,6 +214,7 @@ else
 	AC_MSG_RESULT([no])
 	AC_MSG_ERROR([OpenGL is currently mandatory])
 fi
+
 
 if test "x$enable_openal" != "xno" ; then
 	if test "x$host_os_darwin" = "xyes" ; then
