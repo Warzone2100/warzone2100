@@ -22,8 +22,6 @@ if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
 
-ALL_LINGUAS="nb"
-
 AC_GNU_SOURCE
 AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.16.1])
@@ -60,6 +58,9 @@ AC_SUBST(icondir, $with_icondir)
 AC_SUBST(applicationdir, $with_applicationdir)
 if test "x$docdir" = "x" ; then
 	AC_SUBST(docdir, $datarootdir/doc/$AC_PACKAGE_TARNAME)
+fi
+if test "x$localedir" = "x" ; then
+	AC_SUBST(localedir, $datadir/locale)
 fi
 
 
@@ -312,13 +313,6 @@ else
 	AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support])
 fi
 
-dnl Autoconf >= 2.60 defines localedir. For older versions of autoconf, we
-dnl have to define it here, so that it can be used in po/Makefile.
-dnl You cannot use localedir above this line or it will fail for old ac's.
-if test -z "$localedir"; then
-  localedir="$datadir/locale"
-  AC_SUBST(localedir)
-fi
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
