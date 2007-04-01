@@ -979,7 +979,7 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { VAL_STRING },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "bitSet",				scrBitSet,					VAL_BOOL,
+	{ "bitSet",				scrGetBit,					VAL_BOOL,
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 

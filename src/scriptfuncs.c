@@ -7964,7 +7964,7 @@ BOOL scrNumPlayerWeapDroidsInRange(void)
 	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	BOOL		bVTOLs;
 
-	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, 
+	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapDroidsInRange(): stack failed");
@@ -10578,7 +10578,7 @@ SDWORD getPlayerFromString(char *playerName)
 }
 
 /* Checks if a particular bit is set in an integer */
-BOOL scrBitSet(void)
+BOOL scrGetBit(void)
 {
 	SDWORD				val1,val2;
 
@@ -10605,7 +10605,7 @@ BOOL scrSetBit(void)
 	SDWORD				base,position;
 	BOOL				bSet;
 
-	if (!stackPopParams(3, VAL_INT, &base, 
+	if (!stackPopParams(3, VAL_INT, &base,
 		VAL_INT, &position, VAL_BOOL, &bSet))
 	{
 		debug(LOG_ERROR, "scrSetBit(): failed to pop");
