@@ -2794,7 +2794,6 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 #endif
 	UDWORD				id;
 
-
 	/* init default template */
 	memset( &sDefaultDesignTemplate, 0, sizeof(DROID_TEMPLATE) );
 
@@ -2806,14 +2805,11 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 	{
 		if (!HEAP_ALLOC(psTemplateHeap, (void**) &pDroidDesign))
 		{
-			debug( LOG_ERROR, "Out of memory - Droid Templates" );
-			abort();
+			debug(LOG_ERROR, "Out of memory - Droid Templates");
 			return FALSE;
 		}
 		memset(pDroidDesign, 0, sizeof(DROID_TEMPLATE));
 
-		//pDroidDesign->pName = pDroidDesign->aName;
-		//only fill in aName now
 		pDroidDesign->pName = NULL;
 
 		//read the data into the storage - the data is delimited using comma's
@@ -2821,44 +2817,11 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		sscanf(pDroidData, "%[^','],%d,%n", componentName, &templateID, &cnt);
                 pDroidData += cnt;
 
-
-	//We ain't EVER going back to the way it was so..just store the long (translated) name in aName
-/*#ifdef RESOURCE_NAMES
-		//get the name associated with the resource
-		if (!strresGetIDNum(psStringRes, componentName, &id))
-		{
-			DBERROR(("Unable to find string resource for %s", componentName));
-			return FALSE;
-		}
-
-		//get the string from the id and copy into the MALLOC'ed area
-		strcpy(droidName,strresGetString(psStringRes, id));
-
-#elif defined STORE_RESOURCE_ID
-		//find the pointer where the string ID is stored
-		if (!strresGetIDString(psStringRes, componentName, &pDroidName))
-		{
-			DBERROR(("Unable to find string resource for %s", componentName));
-			return FALSE;
-		}
-		strcpy(droidName,pDroidName);
-#else
-		strcpy(droidName,componentName);
-#endif
-		//get the string from the id and copy into the MALLOC'ed area
-		strcpy(droidName,strresGetString(psStringRes, id));
-
-		//allocate storage for the name - constant array now (aName)
-		strncpy(pDroidDesign->pName,droidName, DROID_MAXNAME);
-		pDroidDesign->pName[DROID_MAXNAME-1]=0;*/
-
-
 		/*ALWAYS get the name associated with the resource for PC regardless
 		of STORE_RESOURCE_ID or RESOURCE_NAMES! - 25/06/98 AB*/
 		if (!strresGetIDNum(psStringRes, componentName, &id))
 		{
-			debug( LOG_ERROR, "Unable to find string resource for %s", componentName );
-			abort();
+			debug(LOG_ERROR, "Unable to find string resource for %s", componentName);
 			return FALSE;
 		}
 
@@ -2867,9 +2830,7 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		pDroidDesign->aName[DROID_MAXNAME-1] = 0;
 
 		//store the unique template id
-
 		pDroidDesign->multiPlayerID = templateID;
-
 
 		//read in Body Name
 		componentName[0] = '\0';
@@ -3029,9 +2990,6 @@ BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
 		//read in player id - Access decides the order -crap hey?
 		sscanf(pDroidData, "%d,%n", &player,&cnt);
                 pDroidData += cnt;
-
-
-
 
 		//read in Propulsion Name
 		found = FALSE;

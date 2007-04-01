@@ -337,78 +337,6 @@ UDWORD numCR(char *pFileBuffer, UDWORD fileSize)
 	return lines;
 }
 
-/*Load the stats from the Access database*/
-//BOOL loadStats(void)
-//{
-	/*if (!loadWeaponStats())
-	{
-		DBERROR(("Unable to load weapon stats"));
-		return FALSE;
-	}*/
-	/*if (!loadBodyStats())
-	{
-		DBERROR(("Unable to load body stats"));
-		return FALSE;
-	}*/
-	/*if (!loadBrainStats())
-	{
-		DBERROR(("Unable to load brain stats"));
-		return FALSE;
-	}*/
-	/*if (!loadPropulsionStats())
-	{
-		DBERROR(("Unable to load propulsion stats"));
-		return FALSE;
-	}*/
-	/*if (!loadSensorStats())
-	{
-		DBERROR(("Unable to load sensor stats"));
-		return FALSE;
-	}*/
-	/*if (!loadECMStats())
-	{
-		DBERROR(("Unable to load ecm stats"));
-		return FALSE;
-	}*/
-	/*if (!loadRepairStats())
-	{
-		DBERROR(("Unable to load repair stats"));
-		return FALSE;
-	}*/
-	/*if (!loadProgramStats())
-	{
-		DBERROR(("Unable to load program stats"));
-		return FALSE;
-	}*/
-	/*if(!loadConstructStats())
-	{
-		DBERROR(("Unable to load construct stats"));
-		return FALSE;
-	}*/
-	/*if (!loadPropulsionTypes())
-	{
-		DBERROR(("Unable to load propulsion types"));
-		return FALSE;
-	}*/
-	/*if (!loadTerrainTable())
-	{
-		DBERROR(("Unable to load terrain table"));
-		return FALSE;
-	}*/
-	/*if (!loadSpecialAbility())
-	{
-		DBERROR(("Unable to load special ability stats"));
-		return FALSE;
-	}*/
-
-	/*if (!loadFeatureStats())
-	{
-		DBERROR(("Unable to load feature stats"));
-		return FALSE;
-	}*/
-
-//	return TRUE;
-//}
 
 /*******************************************************************************
 *		Allocate stats functions
@@ -725,7 +653,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 		else if (!strcmp(weaponClass,"EXPLOSIVE"))
 		{
 			//psStats->weaponClass = WC_EXPLOSIVE;
-            psStats->weaponClass = WC_KINETIC;
+			psStats->weaponClass = WC_KINETIC; 	// explosives were removed from release version of Warzone
 		}
 		else if (!strcmp(weaponClass,"HEAT"))
 		{
@@ -734,7 +662,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 		else if (!strcmp(weaponClass,"MISC"))
 		{
 			//psStats->weaponClass = WC_MISC;
-            psStats->weaponClass = WC_HEAT;
+			psStats->weaponClass = WC_HEAT;		// removed from release version of Warzone
 		}
 		else
 		{

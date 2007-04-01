@@ -38,9 +38,6 @@
 #include "research.h"
 #include "visibility.h"
 
-/* Initialise the mechanics system */
-//extern BOOL mechInitialise(void);
-
 /* Shutdown the mechanics system */
 extern BOOL mechShutdown(void);
 

@@ -268,8 +268,6 @@ extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 /*******************************************************************************
 *		Generic stats functions
 *******************************************************************************/
-/*Load the stats from the Access database*/
-//extern BOOL loadStats(void);
 
 /*calls the STATS_DEALLOC macro for each set of stats*/
 extern BOOL statsShutDown(void);
