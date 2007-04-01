@@ -330,7 +330,7 @@ BOOL intAddIntelMap(void)
 			sLabInit.y = INTMAP_LABELY+PAUSEMESSAGE_YOFFSET;
 			sLabInit.width = INTMAP_LABELWIDTH;
 			sLabInit.height = INTMAP_LABELHEIGHT;
-			sLabInit.pText = strresGetString(psStringRes, STR_MISC_PAUSED);
+			sLabInit.pText = _("PAUSED");
 			sLabInit.FontID = WFont;
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
@@ -497,14 +497,14 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 				else
 
 				{
-					sBFormInit.pTip = strresGetString(psStringRes, STR_INT_RESMESSAGE);
+					sBFormInit.pTip = _("Research Update");
 				}
 				break;
 			case MSG_CAMPAIGN:
-				sBFormInit.pTip = strresGetString(psStringRes, STR_INT_GENMESSAGE);
+				sBFormInit.pTip = _("Project Goals");
 				break;
 			case MSG_MISSION:
-				sBFormInit.pTip = strresGetString(psStringRes, STR_INT_MISMESSAGE);
+				sBFormInit.pTip = _("Current Objective");
 				break;
 			default:
 				break;
@@ -661,7 +661,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))

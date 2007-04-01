@@ -160,8 +160,8 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	RenderWindowFrame(&FrameNormal, x, y ,w, h);		// draw a wee blu box.
 
 	// display how far done..
-	pie_DrawText(strresGetString(psStringRes, STR_GAM_JOINING),
-					x+(w/2)-(iV_GetTextWidth(strresGetString(psStringRes,STR_GAM_JOINING))/2),
+	pie_DrawText(_("Players Still Joining"),
+					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
 					y+(h/2)-8 );
 	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
 	pie_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
@@ -281,7 +281,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 	{
 		NETlogEntry("Player Unexpectedly leaving, came from directplay...",0,dp);
 
-		sprintf( buf,strresGetString(psStringRes, STR_MUL_LEAVE),getPlayerName(i) );
+		sprintf( buf,_("%s has Left the Game"),getPlayerName(i) );
 
 		turnOffMultiMsg(TRUE);
 		clearPlayer(i,FALSE,FALSE);
@@ -399,7 +399,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 
 	setMultiStats(player2dpid[player],getMultiStats(player,FALSE),TRUE);  // get the players score from the ether.
 
-	sprintf( buf,strresGetString(psStringRes, STR_MUL_JOINING),getPlayerName(player) );
+	sprintf( buf,_("%s is Joining the Game"),getPlayerName(player) );
 	addConsoleMessage(buf,DEFAULT_JUSTIFY);
 }
 

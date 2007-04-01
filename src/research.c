@@ -2011,7 +2011,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_MAJOR_RESEARCH);
 			//add console text message
-            addConsoleMessage(strresGetString(psStringRes, STR_INT_RESCOMPLETED), LEFT_JUSTIFY);
+            addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY);
 		}
 
 		//check there is viewdata for the research topic - just don't add message if not!
@@ -2030,7 +2030,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
 			//add console text message
-            addConsoleMessage(strresGetString(psStringRes, STR_INT_RESCOMPLETED), LEFT_JUSTIFY);
+            addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY);
 		}
 	}
 
@@ -2889,18 +2889,18 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		researchResult(rewardID, rewardPlayer, TRUE);
 		if (rewardPlayer == selectedPlayer)
 		{
-			//addConsoleMessage(strresGetString(psStringRes,STR_GAM_RESREWARD), DEFAULT_JUSTIFY);
+			//addConsoleMessage(_("Research Award"), DEFAULT_JUSTIFY);
             //name the actual reward
             //addConsoleMessage(asResearch[rewardID].pName, DEFAULT_JUSTIFY);
            	CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-        	    strresGetString(psStringRes,STR_GAM_RESREWARD),
+        	    _("Research Award"),
                 getName(asResearch[rewardID].pName)));
 		}
 	}
 	/* Not worth mentioning if nothing useful to gain?
     if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_RESREWARD), DEFAULT_JUSTIFY);
+		addConsoleMessage(_("Research Award"), DEFAULT_JUSTIFY);
 	}*/
 }
 

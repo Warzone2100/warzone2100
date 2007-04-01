@@ -317,7 +317,6 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		//strcpy(game.name, strresGetString(psStringRes, STR_GAME_NAME));
 		setWarzoneKeyString("gameName", "My Game");
 	}
 
@@ -328,7 +327,6 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		//strcpy((char*)sPlayer, strresGetString(psStringRes, STR_PLAYER_NAME));
 		setWarzoneKeyString("playerName","Player");
 	}
 

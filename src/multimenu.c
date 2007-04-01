@@ -464,7 +464,7 @@ void addMultiRequest(char *ToFindb,UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -768,9 +768,9 @@ void displayExtraGubbins(UDWORD height)
 	iV_SetFont(WFont);											// font
 	iV_SetTextColour(-1);										//colour
 
-	iV_DrawText(strresGetString(psStringRes, STR_MUL_ALLIANCES), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText(strresGetString(psStringRes, STR_MUL_SCORE), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-	iV_DrawText(strresGetString(psStringRes, STR_MUL_KILLS), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(_("Alliances"), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(_("Score"), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(_("Kills"), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 
 	if(getDebugMappingStatus())
 	{
@@ -779,8 +779,8 @@ void displayExtraGubbins(UDWORD height)
 	}
 	else
 	{
-		iV_DrawText(strresGetString(psStringRes, STR_MUL_PING), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-		iV_DrawText(strresGetString(psStringRes, STR_MUL_PLAY), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		iV_DrawText(_("Ping"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		iV_DrawText(_("Played"), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	}
 
 #ifdef DEBUG
@@ -1094,7 +1094,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.height = 24;
 		sButInit.FontID = WFont;
 		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
-		sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_STATE);
+		sButInit.pTip	= _("Toggle Alliance State");
 		sButInit.pDisplay = displayAllianceState;
 		sButInit.pUserData = (void*)player;
 
@@ -1111,25 +1111,25 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 
 			sButInit.id		= MULTIMENU_GIFT_RAD+ player;
 			sButInit.x		= MULTIMENU_C4;
-			sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_VIS);
+			sButInit.pTip	= _("Give Visibility Report");
 			sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MULTI_VIS_HI, IMAGE_MULTI_VIS);
 			widgAddButton(psWScreen, &sButInit);
 
 			sButInit.id		= MULTIMENU_GIFT_RES + player;
 			sButInit.x		= MULTIMENU_C5;
-			sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_TEC);
+			sButInit.pTip	= _("Leak Technology Documents");
 			sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MULTI_TEK_HI , IMAGE_MULTI_TEK);
 			widgAddButton(psWScreen, &sButInit);
 
 			sButInit.id		= MULTIMENU_GIFT_DRO + player;
 			sButInit.x		= MULTIMENU_C6;
-			sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_DRO);
+			sButInit.pTip	= _("Hand Over Selected Units");
 			sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MULTI_DRO_HI , IMAGE_MULTI_DRO);
 			widgAddButton(psWScreen, &sButInit);
 
 			sButInit.id		= MULTIMENU_GIFT_POW + player;
 			sButInit.x		= MULTIMENU_C7;
-			sButInit.pTip	= strresGetString(psStringRes,STR_ALLI_POW);
+			sButInit.pTip	= _("Give Power To Player");
 			sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MULTI_POW_HI , IMAGE_MULTI_POW);
 			widgAddButton(psWScreen, &sButInit);
 
@@ -1243,7 +1243,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -1321,7 +1321,7 @@ BOOL intAddMultiMenu(void)
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);

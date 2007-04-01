@@ -25,6 +25,7 @@
 #include <SDL/SDL_main.h>
 #include <physfs.h>
 #include <string.h>
+#include <locale.h>
 
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
@@ -421,6 +422,10 @@ int main(int argc, char *argv[])
 #else
 	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", VERSION, __DATE__ );
 #endif
+	/*** Initialize translations ***/
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
 
 	/*** Initialize PhysicsFS ***/
 
@@ -888,6 +893,3 @@ void SetGameMode(UDWORD status)
 
 	gameStatus = status;
 }
-
-
-

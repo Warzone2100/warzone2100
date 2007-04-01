@@ -240,7 +240,7 @@ static void recvGiftDroids(UDWORD from,UDWORD to,NETMSG *pMsg)
 
 	if(to == selectedPlayer)
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GIFT_DRO),getPlayerName(from) ));
+		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You Units"),getPlayerName(from) ));
 	}
 }
 
@@ -337,7 +337,7 @@ static void giftResearch(UDWORD from,UDWORD to,BOOL send)
 	{
 		if(to == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GIFT_TEC),getPlayerName(from) ));
+			CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You Technology Documents"),getPlayerName(from) ));
 		}
 	}
 
@@ -377,7 +377,7 @@ void giftPower(UDWORD from,UDWORD to,BOOL send)
 	{
 		if(to == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GIFT_POW),getPlayerName(from) ));
+			CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You Power"),getPlayerName(from) ));
 		}
 	}
 }
@@ -398,7 +398,7 @@ void requestAlliance(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio)
 
 	if(to == selectedPlayer)
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_ALLI_REQ),getPlayerName(from) ));
+		CONPRINTF(ConsoleString,(ConsoleString,_("%s Requests An Alliance With You"),getPlayerName(from) ));
 		if(allowAudio)
 		{
 			audio_QueueTrack(ID_ALLIANCE_OFF);
@@ -406,7 +406,7 @@ void requestAlliance(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio)
 	}
 	if(from == selectedPlayer)
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_ALLI_OFF),getPlayerName(to) ));
+		CONPRINTF(ConsoleString,(ConsoleString,_("You Invite %s To Form An Alliance"),getPlayerName(to) ));
 		if(allowAudio)
 		{
 			audio_QueueTrack(ID_ALLIANCE_OFF);
@@ -425,7 +425,7 @@ void breakAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	if(alliances[p1][p2] == ALLIANCE_FORMED)
 	{
 		strcpy(tm1,getPlayerName(p1));
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_ALLI_BRK),tm1,getPlayerName(p2) ));
+		CONPRINTF(ConsoleString,(ConsoleString,_("%s Breaks The Alliance With %s"),tm1,getPlayerName(p2) ));
 		if(allowAudio && (p1 == selectedPlayer || p2 == selectedPlayer))
 		{
 			audio_QueueTrack(ID_ALLIANCE_BRO);
@@ -451,7 +451,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 	if(bMultiPlayer && !(alliances[p1][p2] == ALLIANCE_FORMED) && allowNotification )
 	{
 		strcpy(tm1,getPlayerName(p1));
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_ALLI_FRM),tm1,getPlayerName(p2) ));
+		CONPRINTF(ConsoleString,(ConsoleString,_("%s Forms An Alliance With %s"),tm1,getPlayerName(p2) ));
 	}
 
 	alliances[p1][p2] = ALLIANCE_FORMED;

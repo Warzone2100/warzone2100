@@ -78,6 +78,7 @@
 #include "lib/script/script.h"
 #include "keymap.h"
 #include "game.h"
+#include "warzoneconfig.h"
 
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
@@ -457,7 +458,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	sLabInit.y		= 10;
 	sLabInit.width	= CON_SETTINGSWIDTH;
 	sLabInit.height = 20;
-	sLabInit.pText	= strresGetString(psStringRes, STR_MUL_IPADDR);
+	sLabInit.pText	= _("IP Address or Machine Name");
 	sLabInit.FontID = WFont;
 	widgAddLabel(psConScreen, &sLabInit);
 
@@ -470,7 +471,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	sEdInit.y = CON_IPY;
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
-	sEdInit.pText = "";									//strresGetString(psStringRes, STR_MUL_IPADDR);
+	sEdInit.pText = "";									//_("IP Address or Machine Name");
 	sEdInit.FontID = WFont;
 //	sEdInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EDITBOXLEFTH , IMAGE_DES_EDITBOXLEFT);
 //	sEdInit.pBoxDisplay = intDisplayButtonHilight;
@@ -497,7 +498,7 @@ BOOL startConnectionScreen(void)
 
 	NETuseNetwork(TRUE);								// don't pretend!!
 
-	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,strresGetString(psStringRes,STR_MUL_SIDECONNECTION));
+	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("CONNECTION"));
 
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
 		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
@@ -511,7 +512,7 @@ BOOL startConnectionScreen(void)
 static void addConnections(UDWORD begin)
 {
 	UDWORD	pos = 50;
-	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, strresGetString(psStringRes,STR_CON_INTERNET),FALSE,FALSE);
+	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, _("Internet"),FALSE,FALSE);
 }
 
 void runConnectionScreen(void )
@@ -750,7 +751,7 @@ FAIL:
 	if(safeSearch)
 	{
 		iV_SetFont(FEFont);
-		pie_DrawText(strresGetString(psStringRes, STR_MUL_SEARCHING), D_W+260, D_H+460);
+		pie_DrawText(_("Searching"), D_W+260, D_H+460);
 	}
 }
 
@@ -761,7 +762,7 @@ void startGameFind(void)
 	addTopForm();										// logo
 	addBottomForm();
 
-	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,strresGetString(psStringRes,STR_GAMES_GAMES));
+	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("GAMES"));
 
 	// cancel
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,5,MULTIOP_OKW,MULTIOP_OKH,STR_MUL_CANCEL,
@@ -846,7 +847,7 @@ static void addGameOptions(BOOL bRedo)
 	sFormInit.pDisplay = intDisplayPlainForm;
 	widgAddForm(psWScreen, &sFormInit);
 
-	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,strresGetString(psStringRes,STR_MUL_SIDEOPTIONS));
+	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,_("OPTIONS"));
 
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_GNAME,MCOL0,MROW2,STR_MUL_GAMEIC, game.name ,IMAGE_EDIT_GAME,MULTIOP_GNAME_ICON);
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_MAP  ,MCOL0,MROW3,STR_MUL_MAPIC, game.map ,IMAGE_EDIT_MAP,MULTIOP_MAP_ICON);
@@ -855,7 +856,7 @@ static void addGameOptions(BOOL bRedo)
 	// buttons.
 
 	// game type
-	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,strresGetString(psStringRes,STR_LABEL_TYPE),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
+	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Game"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
 //	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_ARENA,	MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 //				STR_MUL_ARENA,   IMAGE_ARENA,   IMAGE_ARENA_HI,TRUE);		//arena
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_CAMPAIGN,MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
@@ -901,7 +902,7 @@ static void addGameOptions(BOOL bRedo)
 
 
 	// Fog type
-	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,strresGetString(psStringRes,STR_LABEL_FOG),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
+	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,_("Fog"),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
 
 	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_ON ,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,STR_MUL_FOG_ON, IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI,TRUE);//black stuff
 	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_OFF,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,STR_MUL_FOG_OFF,IMAGE_FOG_ON,IMAGE_FOG_ON_HI,TRUE);
@@ -920,11 +921,11 @@ static void addGameOptions(BOOL bRedo)
 		// alliances
 //		if(game.type == DMATCH)
 //		{
-//			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,strresGetString(psStringRes,STR_LABEL_ALLI),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
+//			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,_("Alliances"),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
 //		}
 //		else
 //		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,strresGetString(psStringRes,STR_LABEL_ALLI),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
+			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,_("Alliances"),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 //		}
 
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -967,7 +968,7 @@ static void addGameOptions(BOOL bRedo)
 	{
 
 		// limit options
-		addBlueForm(MULTIOP_OPTIONS,MULTIOP_LIMIT,strresGetString(psStringRes,STR_LABEL_LIMIT) ,MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
+		addBlueForm(MULTIOP_OPTIONS,MULTIOP_LIMIT,_("Limits") ,MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_NOLIMIT,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 			STR_MUL_NOLIM,IMAGE_NOLIMIT,IMAGE_NOLIMIT_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_FRAGLIMIT,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -1002,7 +1003,7 @@ static void addGameOptions(BOOL bRedo)
 	{
 
 		// pow levels
-		addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,strresGetString(psStringRes,STR_INT_POWER),MCOL0,MROW9,MULTIOP_BLUEFORMW,27);
+		addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW9,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 			STR_MUL_POWLO,IMAGE_POWLO,IMAGE_POWLO_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -1026,7 +1027,7 @@ static void addGameOptions(BOOL bRedo)
 		}
 
 		//type clean/base/defence
-		addBlueForm(MULTIOP_OPTIONS,MULTIOP_BASETYPE,strresGetString(psStringRes,STR_LABEL_BASE),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
+		addBlueForm(MULTIOP_OPTIONS,MULTIOP_BASETYPE,_("Base"),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				STR_MUL_CAMPCLEAN,IMAGE_NOBASE,IMAGE_NOBASE_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -1056,11 +1057,11 @@ static void addGameOptions(BOOL bRedo)
 		//type opposition/no computer opposition
 		if(game.type == CAMPAIGN)
 		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,strresGetString(psStringRes,STR_MUL_COMP),MCOL0,MROW10,MULTIOP_BLUEFORMW,27);
+			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,_("Computer"),MCOL0,MROW10,MULTIOP_BLUEFORMW,27);
 		}
 		else
 		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,strresGetString(psStringRes,STR_MUL_COMP),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
+			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,_("Computer"),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 		}
 
 		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_Y,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -1497,7 +1498,7 @@ UDWORD addPlayerBox(BOOL players)
 	sFormInit.pDisplay = intDisplayPlainForm;
 	widgAddForm(psWScreen, &sFormInit);
 
-	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX-3, MULTIOP_PLAYERSY,strresGetString(psStringRes,STR_MUL_SIDEPLAYERS));
+	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX-3, MULTIOP_PLAYERSY,_("PLAYERS"));
 
 	if(players)
 	{
@@ -1646,7 +1647,7 @@ static void addChatBox(void)
 	sFormInit.pDisplay = intOpenPlainForm;//intDisplayPlainForm;
 	widgAddForm(psWScreen, &sFormInit);
 
-	addSideText(FRONTEND_SIDETEXT4,MULTIOP_CHATBOXX-3,MULTIOP_CHATBOXY,strresGetString(psStringRes, STR_MUL_CHAT));
+	addSideText(FRONTEND_SIDETEXT4,MULTIOP_CHATBOXX-3,MULTIOP_CHATBOXY,_("CHAT"));
 
 	flushConsoleMessages();											// add the chatbox.
 	initConsoleMessages();
@@ -2327,7 +2328,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		if(NetPlay.bHost)
 		{
-			sendTextMessage(strresGetString(psStringRes, STR_MUL_STARTING),TRUE);
+			sendTextMessage(_("Host is Starting Game"),TRUE);
 		}
 		return;
 		break;
@@ -2386,7 +2387,7 @@ static void processMultiopWidgets(UDWORD id)
 		{
 			setLockedTeamsMode();		//update GUI
 
-			sprintf( msg,"'%s' mode enabled", strresGetString(psStringRes, STR_MUL_ALLIANCE_TEAMS) );
+			sprintf( msg,"'%s' mode enabled", _("Locked Teams") );
 			addConsoleMessage(msg,DEFAULT_JUSTIFY);
 		}
 	}
@@ -2935,7 +2936,7 @@ static void CurrentForce(void)
 	sFormInit.pDisplay = intDisplayPlainForm;
 	widgAddForm(psWScreen, &sFormInit);
 
-	addSideText(FRONTEND_SIDETEXT3,FORCE_CURRENTX-1,FORCE_CURRENTY,strresGetString(psStringRes,STR_MUL_SIDEFORCE));
+	addSideText(FRONTEND_SIDETEXT3,FORCE_CURRENTX-1,FORCE_CURRENTY,_("FORCE"));
 
 	/* Add the design templates form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -3058,7 +3059,7 @@ static void AvailableForces(void)
 
 	widgAddForm(psWScreen, &sFormInit);
 
-	addSideText(FRONTEND_SIDETEXT1,FORCE_AVAILABLEX-1,FORCE_AVAILABLEY,strresGetString(psStringRes, STR_MUL_SIDETEMPLATES));
+	addSideText(FRONTEND_SIDETEXT1,FORCE_AVAILABLEX-1,FORCE_AVAILABLEY,_("TEMPLATES"));
 
 	/* Add the design templates form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -3222,11 +3223,11 @@ void runForceSelect(void)
 			break;
 
 		case FORCE_LOAD:
-			addLoadSave(LOAD_FORCE,MultiForcesPath,"for",strresGetString(psStringRes,STR_MUL_LOAD) );
+			addLoadSave(LOAD_FORCE,MultiForcesPath,"for",_("Load Force") );
 			break;
 
 		case FORCE_SAVE:
-			addLoadSave(SAVE_FORCE,MultiForcesPath,"for",strresGetString(psStringRes,STR_MUL_SAVE) );
+			addLoadSave(SAVE_FORCE,MultiForcesPath,"for",_("Save Force") );
 			break;
 
 		default:
@@ -3291,7 +3292,7 @@ BOOL startForceSelect(void)
 	sFormInit.pDisplay = intDisplayPlainForm;
 	widgAddForm(psWScreen, &sFormInit);
 
-	addSideText(FRONTEND_SIDETEXT2,FORCE_STATSX-1,FORCE_STATSY,strresGetString(psStringRes, STR_MUL_SIDEINFO));
+	addSideText(FRONTEND_SIDETEXT2,FORCE_STATSX-1,FORCE_STATSY,_("CONTROL"));
 
 	sFormInit.formID		= FORCE_STATS;							// stats box
 	sFormInit.id			= FORCE_DROID;
@@ -3627,7 +3628,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	}
 	else
 	{
-		iV_DrawText(strresGetString(psStringRes, STR_MUL_PLAYERS), x + 5, y + 18);
+		iV_DrawText(_("Players"), x + 5, y + 18);
 		sprintf(tmp,"%d/%d",NetPlay.games[i].desc.dwCurrentPlayers,NetPlay.games[i].desc.dwMaxPlayers);
 		iV_DrawText(tmp, x + 17, y + 33);
 	}

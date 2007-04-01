@@ -436,16 +436,16 @@ void intProcessInGameOptions(UDWORD id)
 //		{
 //			loopMissionState = LMS_LOADGAME;
 //			strcpy(saveGameName, "replay/replay.gam");
-//			addConsoleMessage(strresGetString(psStringRes, STR_GAME_SAVED), LEFT_JUSTIFY);
+//			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
 //		}
 //		break;
 	case INTINGAMEOP_LOAD:
 		intCloseInGameOptions(TRUE, FALSE);
-		addLoadSave(LOAD_INGAME,SaveGamePath,"gam",strresGetString(psStringRes,STR_MR_LOAD_GAME));	// change mode when loadsave returns//		if(runLoadSave())// check for file name.
+		addLoadSave(LOAD_INGAME,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns//		if(runLoadSave())// check for file name.
 		break;
 	case INTINGAMEOP_SAVE:
 		intCloseInGameOptions(TRUE, FALSE);
-		addLoadSave(SAVE_INGAME,SaveGamePath,"gam", strresGetString(psStringRes,STR_MR_SAVE_GAME) );
+		addLoadSave(SAVE_INGAME,SaveGamePath,"gam", _("Save Game") );
 		break;
 
 

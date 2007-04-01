@@ -2018,7 +2018,7 @@ void BeepMessage(UDWORD StringID)
 
 void AddDerrickBurningMessage(void)
 {
-	addConsoleMessage(strresGetString(psStringRes,STR_GAM_DERRICK_BURNING),DEFAULT_JUSTIFY);
+	addConsoleMessage(_("Cannot Build. Oil Resource Burning."),DEFAULT_JUSTIFY);
 	audio_PlayTrack( ID_SOUND_BUILD_FAIL );
 }
 
@@ -2176,7 +2176,7 @@ DROID_OACTION_INFO oaInfo = {{NULL}};
 						if(!psDroid->selected)
 						{
 							CONPRINTF(ConsoleString, (ConsoleString,
-								strresGetString(psStringRes,STR_GAM_DROIDSTATE),
+								_("%s - Damage %d%% - Kills %d, %s"),
 							/*	"%s - Damage %d%% - Kills %d, %s",*/
 							droidGetName(psDroid), 100 - PERCENT(psDroid->body,
 							psDroid->originalBody),psDroid->numKills,
@@ -2421,7 +2421,7 @@ DROID_OACTION_INFO oaInfo = {{NULL}};
                                         (BASE_STATS*) &asStructureStats[i],
                                         psFeature->x, psFeature->y);
                                 }
-								addConsoleMessage(strresGetString(psStringRes,STR_GAM_DERRICK),DEFAULT_JUSTIFY);
+								addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY);
 					//				"Construction vehicle ordered to build a Derrick.",DEFAULT_JUSTIFY);
 								FeedbackOrderGiven();
 							}

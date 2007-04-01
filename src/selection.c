@@ -121,7 +121,7 @@ char	selInfo[255];
 	}
 
 	/* Send back the return value */
-	sprintf(selInfo,strresGetString(psStringRes,STR_GAM_UNITSEL),retVal);
+	sprintf(selInfo,_("%d Unit(s) Selected"),retVal);
 	addConsoleMessage(selInfo,RIGHT_JUSTIFY);
 	return(retVal);
 }
@@ -438,16 +438,16 @@ BOOL	bLaterInList, bMatch;
 		switch(unitType)
 		{
 		case	DROID_REPAIR:
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_REPNOTFOUND),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY);
 			break;
 		case	DROID_CONSTRUCT:
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_CONNOTFOUND),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any Trucks!"),LEFT_JUSTIFY);
 			break;
 		case	DROID_SENSOR:
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_SENNOTFOUND),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any Sensor Units!"),LEFT_JUSTIFY);
 			break;
 		case	DROID_COMMAND:
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_COMNOTFOUND),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any Commanders!"),LEFT_JUSTIFY);
 			break;
 		}
 	}
@@ -527,7 +527,7 @@ BOOL	bLaterInList;
 	}
 	else
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_REPNOTFOUND),LEFT_JUSTIFY);
+		addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY);
 	}
 }
 // ---------------------------------------------------------------------
@@ -605,7 +605,7 @@ BOOL	bLaterInList;
 	}
 	else
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_REPNOTFOUND),LEFT_JUSTIFY);
+		addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY);
 	}
 }
 // ---------------------------------------------------------------------

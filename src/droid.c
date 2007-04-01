@@ -317,7 +317,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			debug( LOG_ATTACK, "        DESTROYED\n");
 			if(psDroid->player == selectedPlayer)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_UNITLOST)));
+				CONPRINTF(ConsoleString,(ConsoleString, _("Unit Lost!")));
 				scoreUpdateVar(WD_UNITS_LOST);
 				audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
 											psDroid->x, psDroid->y, psDroid->z );
@@ -373,7 +373,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
             if(psDroid->player == selectedPlayer)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_UNITLOST)));
+				CONPRINTF(ConsoleString,(ConsoleString,_("Unit Lost!")));
 				scoreUpdateVar(WD_UNITS_LOST);
 				audio_QueueTrackMinDelayPos( ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
 											psDroid->x, psDroid->y, psDroid->z );
@@ -2507,7 +2507,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	}
 	else
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_STRREST) ,DEFAULT_JUSTIFY);
+		addConsoleMessage(_("Structure Restored") ,DEFAULT_JUSTIFY);
 		//psStruct->resistance = psStruct->pStructureType->resistance;
 		psStruct->resistance = (UWORD)structureResistance(psStruct->pStructureType,
 			psStruct->player);
@@ -4951,7 +4951,7 @@ void	groupConsoleInformOfSelection( UDWORD groupNumber )
 char	groupInfo[255];
 //	if(!getWarCamStatus())
 //	{
-		sprintf(groupInfo,strresGetString(psStringRes,STR_GP_SELECTED),groupNumber,selNumSelected(selectedPlayer));
+		sprintf(groupInfo,_("Group %d Selected - %d Unit(s)"),groupNumber,selNumSelected(selectedPlayer));
 		addConsoleMessage(groupInfo,RIGHT_JUSTIFY);
 //	}
 
@@ -4963,7 +4963,7 @@ void	groupConsoleInformOfCreation( UDWORD groupNumber )
 char	groupInfo[255];
 	if(!getWarCamStatus())
 	{
-		sprintf(groupInfo,strresGetString(psStringRes,STR_GP_ASSIGNED),selNumSelected(selectedPlayer),groupNumber);
+		sprintf(groupInfo,_("%d Unit(s) Assigned to Group %d"),selNumSelected(selectedPlayer),groupNumber);
 		addConsoleMessage(groupInfo,RIGHT_JUSTIFY);
 	}
 
@@ -4975,11 +4975,11 @@ void	groupConsoleInformOfCentering( UDWORD groupNumber )
 char	groupInfo[255];
 	if(!getWarCamStatus())
 	{
-		sprintf(groupInfo,strresGetString(psStringRes,STR_GP_CENTERED),groupNumber,selNumSelected(selectedPlayer));
+		sprintf(groupInfo,_("Centered on Group %d - %d Unit(s)"),groupNumber,selNumSelected(selectedPlayer));
 	}
 	else
 	{
-		sprintf(groupInfo,strresGetString(psStringRes,STR_GP_ALLIGN),groupNumber,selNumSelected(selectedPlayer));
+		sprintf(groupInfo,_("Alligning with Group %d - %d Unit(s)"),groupNumber,selNumSelected(selectedPlayer));
 	}
 		addConsoleMessage(groupInfo,RIGHT_JUSTIFY);
 
@@ -5296,23 +5296,23 @@ char	*getDroidNameForRank(UDWORD rank)
 switch(rank)
 {
 	case 0:
-		return strresGetString(psStringRes, STR_DL_LEVEL_ROOKIE);
+		return _("Rookie");
 	case 1:
-		return strresGetString(psStringRes, STR_DL_LEVEL_GREEN);
+		return _("Green");
 	case 2:
-		return strresGetString(psStringRes, STR_DL_LEVEL_TRAINED);
+		return _("Trained");
 	case 3:
-		return strresGetString(psStringRes, STR_DL_LEVEL_REGULAR);
+		return _("Regular");
 	case 4:
-		return strresGetString(psStringRes, STR_DL_LEVEL_VETERAN);
+		return _("Professional");
 	case 5:
-		return strresGetString(psStringRes, STR_DL_LEVEL_CRACK);
+		return _("Veteran");
 	case 6:
-		return strresGetString(psStringRes, STR_DL_LEVEL_ELITE);
+		return _("Elite");
 	case 7:
-		return strresGetString(psStringRes, STR_DL_LEVEL_SPECIAL);
+		return _("Special");
 	case 8:
-		return strresGetString(psStringRes, STR_DL_LEVEL_ACE);
+		return _("Hero");
 	}
 
 	return NULL;
@@ -5325,23 +5325,23 @@ char	*getDroidLevelName(DROID *psDroid)
 	switch (getDroidLevel(psDroid))
 	{
 	case 0:
-		return strresGetString(psStringRes, STR_DL_LEVEL_ROOKIE);
+		return _("Rookie");
 	case 1:
-		return strresGetString(psStringRes, STR_DL_LEVEL_GREEN);
+		return _("Green");
 	case 2:
-		return strresGetString(psStringRes, STR_DL_LEVEL_TRAINED);
+		return _("Trained");
 	case 3:
-		return strresGetString(psStringRes, STR_DL_LEVEL_REGULAR);
+		return _("Regular");
 	case 4:
-		return strresGetString(psStringRes, STR_DL_LEVEL_VETERAN);
+		return _("Professional");
 	case 5:
-		return strresGetString(psStringRes, STR_DL_LEVEL_CRACK);
+		return _("Veteran");
 	case 6:
-		return strresGetString(psStringRes, STR_DL_LEVEL_ELITE);
+		return _("Elite");
 	case 7:
-		return strresGetString(psStringRes, STR_DL_LEVEL_SPECIAL);
+		return _("Special");
 	case 8:
-		return strresGetString(psStringRes, STR_DL_LEVEL_ACE);
+		return _("Hero");
 	}
 	*/
 }

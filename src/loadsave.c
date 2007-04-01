@@ -255,7 +255,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 
 	sButInit.id = LOADSAVE_CANCEL;
 	sButInit.style = WBUT_PLAIN;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);

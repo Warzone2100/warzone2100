@@ -1135,7 +1135,7 @@ BOOL sendPing(void)
 	{
 		if( isHumanPlayer(i) && PingSend[i] && ingame.PingTimes[i] && (i!= selectedPlayer) )
 		{
-	//		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_MUL_RESPOND),getPlayerName(i) ));
+	//		CONPRINTF(ConsoleString,(ConsoleString,_("%s is Not Respoding"),getPlayerName(i) ));
 			ingame.PingTimes[i] = PING_LIMIT;
 		}
 		else if( !isHumanPlayer(i) && PingSend[i] && ingame.PingTimes[i] && (i!= selectedPlayer) )

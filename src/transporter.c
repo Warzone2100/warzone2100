@@ -293,7 +293,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -382,7 +382,7 @@ BOOL intAddTransporterContents(void)
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -432,7 +432,7 @@ BOOL intAddTransporterContents(void)
 
 		sButFInit.width = iV_GetImageWidth(IntImages,IMAGE_LAUNCHUP);
 		sButFInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
-		sButFInit.pTip = strresGetString(psStringRes, STR_INT_TRANSLAUNCH);
+		sButFInit.pTip = _("Launch Transport");
 		//sButInit.pText = "Launch";
 //		sButFInit.FontID = WFont;
 		sButFInit.pDisplay = intDisplayImageHilight;
@@ -489,7 +489,7 @@ BOOL intAddTransporterLaunch(DROID *psDroid)
 	sButInit.y = (SWORD)TIMER_Y;
 	sButInit.width = (UWORD)(10 + iV_GetImageWidth(IntImages,IMAGE_LAUNCHUP));
 	sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
-	sButInit.pTip = strresGetString(psStringRes, STR_INT_TRANSLAUNCH);
+	sButInit.pTip = _("Launch Transport");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
 	if (!widgAddForm(psWScreen, &sButInit))
@@ -883,7 +883,7 @@ BOOL intAddDroidsAvailForm(void)
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -1875,7 +1875,7 @@ BOOL updateTransporter(DROID *psTransporter)
             //play reinforcements have arrived message
 			audio_QueueTrackPos( ID_SOUND_TRANSPORT_LANDING,
 					psTransporter->x, psTransporter->y, psTransporter->z );
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_REINF),LEFT_JUSTIFY);
+			addConsoleMessage(_("Reinforcements landing"),LEFT_JUSTIFY);
 			//reset the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)NULL);
 			return TRUE;

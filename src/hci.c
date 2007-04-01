@@ -1135,7 +1135,7 @@ static BOOL intAddEdit(void)
 	sButInit.height = CLOSE_SIZE;
 	sButInit.FontID = WFont;
 	sButInit.pText = pCloseText;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -1781,7 +1781,7 @@ INT_RETVAL intRunWidgets(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
-						addConsoleMessage(strresGetString(psStringRes, STR_GAME_SAVED), LEFT_JUSTIFY);
+						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
 
 						if(widgGetFromID(psWScreen,IDMISSIONRES_SAVE))
 						{
@@ -3872,7 +3872,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 19+RETXOFFSET;
 //		sButInit.y = 35+RETYOFFSET;
 	//	sButInit.pText = "O";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_COMMAND);
+		sButInit.pTip = _("Commanders");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_COMMANDDROID_UP;
 
@@ -3888,7 +3888,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 19+RETXOFFSET;
 //		sButInit.y = 70+RETYOFFSET;
 	//	sButInit.pText = "S";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_INTELLIGENCE);
+		sButInit.pTip = _("Intelligence Display");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_INTELMAP_UP;
 
@@ -3904,7 +3904,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 53+RETXOFFSET;
 //		sButInit.y = 17+RETYOFFSET;
 	//	sButInit.pText = "M";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_MANUFACTURE);
+		sButInit.pTip = _("Manufacture");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_MANUFACTURE_UP;
 
@@ -3920,7 +3920,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 53+RETXOFFSET;
 //		sButInit.y = 88+RETYOFFSET;
 	//	sButInit.pText = "D";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_DESIGN);
+		sButInit.pTip = _("Design");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_DESIGN_UP;
 
@@ -3936,7 +3936,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 87+RETXOFFSET;
 //		sButInit.y = 35+RETYOFFSET;
 	//	sButInit.pText = "R";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_RESEARCH);
+		sButInit.pTip = _("Research");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_RESEARCH_UP;
 
@@ -3952,7 +3952,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 87+RETXOFFSET;
 //		sButInit.y = 70+RETYOFFSET;
 	//	sButInit.pText = "B";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_BUILD);
+		sButInit.pTip = _("Build");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_BUILD_UP;
 
@@ -3970,7 +3970,7 @@ BOOL intAddReticule(void)
 		sButInit.width = RET_BUTWIDTH + 10;
 		sButInit.height = RET_BUTHEIGHT + 8;
 	//	sButInit.pText = "C";
-		sButInit.pTip = strresGetString(psStringRes, STR_RET_CLOSE);
+		sButInit.pTip = _("Close");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.pUserData = (void*)IMAGE_CANCEL_UP;
 		if (!widgAddButton(psWScreen, &sButInit))
@@ -4032,7 +4032,7 @@ BOOL intAddPower(void)
 	sBarInit.pDisplay = intDisplayPowerBar;
 	sBarInit.iRange = POWERBAR_SCALE;
 
-	sBarInit.pTip = strresGetString(psStringRes, STR_INT_POWER);
+	sBarInit.pTip = _("Power");
 
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
 	{
@@ -4124,7 +4124,7 @@ BOOL intAddOptions(void)
 	sButInit.height = CLOSE_SIZE;
 	sButInit.FontID = WFont;
 	sButInit.pText = pCloseText;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4194,7 +4194,7 @@ BOOL intAddOptions(void)
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_LOADY;
 	sButInit.pText = "Load";
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_LOADGAME);
+	sButInit.pTip = _("Load Game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4202,7 +4202,7 @@ BOOL intAddOptions(void)
 	sButInit.id = IDOPT_SAVEGAME;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sButInit.pText = "Save";
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_SAVEGAME);
+	sButInit.pTip = _("Save Game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4286,7 +4286,7 @@ BOOL intAddOptions(void)
 	sButInit.width = OPT_WIDTH - OPT_GAP*2;
 	sButInit.height = OPT_BUTHEIGHT;
 	sButInit.pText = "Quit";
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_QUIT);
+	sButInit.pTip = _("Exit Game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4570,7 +4570,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -4646,7 +4646,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBarInit.sMinorCol.red = STAT_PROGBARMINORRED;
 	sBarInit.sMinorCol.green = STAT_PROGBARMINORGREEN;
 	sBarInit.sMinorCol.blue = STAT_PROGBARMINORBLUE;
-	sBarInit.pTip = strresGetString(psStringRes, STR_INT_BLDPROGRESS);
+	sBarInit.pTip = _("Progress Bar");
 
     //object output bar ie manuf power o/p, research power o/p
 	memcpy(&sBarInit2,&sBarInit,sizeof(W_BARINIT));
@@ -4656,7 +4656,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBarInit2.y = STAT_POWERBARY;
 	sBarInit2.size = 50;
     //don't set the tip cos we haven't got a suitable text string at this point - 2/2/99
-	//sBarInit2.pTip = strresGetString(psStringRes, STR_INT_BLDSPEED);
+	//sBarInit2.pTip = _("Build Speed");
     sBarInit2.pTip = NULL;
 
 	memset(&sLabInit,0,sizeof(W_LABINIT));
@@ -5724,7 +5724,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.y = STAT_SLDY;
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_FDP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_FDP_DOWN);
-		sButInit.pTip = strresGetString(psStringRes, STR_INT_DPOINT);
+		sButInit.pTip = _("Factory Delivery Point");
 		sButInit.FontID = WFont;
 		sButInit.pDisplay = intDisplayDPButton;
 		sButInit.pUserData = (void*)psOwner;
@@ -5743,7 +5743,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.y = STAT_SLDY;
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LOOP_DOWN);
-		sButInit.pTip = strresGetString(psStringRes, STR_INT_LOOP);
+		sButInit.pTip = _("Loop Production");
 		sButInit.FontID = WFont;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.pUserData = (void*)PACKDWORD_TRI(IMAGE_LOOP_DOWN,
@@ -5810,7 +5810,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = strresGetString(psStringRes, STR_MISC_CLOSE);
+	sButInit.pTip = _("Close");
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -5890,7 +5890,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sBarInit.sMinorCol.red = STAT_PROGBARMINORRED;
 	sBarInit.sMinorCol.green = STAT_PROGBARMINORGREEN;
 	sBarInit.sMinorCol.blue = STAT_PROGBARMINORBLUE;
-	//sBarInit.pTip = strresGetString(psStringRes, STR_INT_PWRUSAGE);
+	//sBarInit.pTip = _("Power Usage");
 
 	statID = 0;
 	statForm = 0;
@@ -5935,7 +5935,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if (Stat->ref >= REF_STRUCTURE_START &&
 			Stat->ref < REF_STRUCTURE_START + REF_RANGE) {		// It's a structure.
 
-			//sBarInit.pTip = strresGetString(psStringRes, STR_INT_BLDSPEED);
+			//sBarInit.pTip = _("Build Speed");
 			//sBarInit.size = (UWORD)(((STRUCTURE_STATS*)Stat)->buildPoints / BUILDPOINTS_STRUCTDIV);
 			sBarInit.size = (UWORD)(((STRUCTURE_STATS*)Stat)->powerToBuild /
 				POWERPOINTS_DROIDDIV);
@@ -5954,7 +5954,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			//sBarInit.size = (UWORD)(((DROID_TEMPLATE*)Stat)->buildPoints  / BUILDPOINTS_DROIDDIV);
 			sBarInit.size = (UWORD)(((DROID_TEMPLATE*)Stat)->powerPoints /
 				POWERPOINTS_DROIDDIV);
-			//sBarInit.pTip = strresGetString(psStringRes, STR_INT_PWRUSAGE);
+			//sBarInit.pTip = _("Power Usage");
 			if(sBarInit.size > 100) sBarInit.size = 100;
 
 			sBarInit.formID = sBFormInit.id;
@@ -5995,7 +5995,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			//add power bar as well
 			sBarInit.size = (UWORD)(((RESEARCH *)Stat)->researchPower /
 				POWERPOINTS_DROIDDIV);
-			//sBarInit.pTip = strresGetString(psStringRes, STR_INT_PWRUSAGE);
+			//sBarInit.pTip = _("Power Usage");
 			if(sBarInit.size > 100) sBarInit.size = 100;
 
 

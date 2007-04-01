@@ -1236,7 +1236,7 @@ void	kf_SeekNorth( void )
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORTH)));
+	CONPRINTF(ConsoleString,(ConsoleString,_("View Aligned to North")));
 }
 
 // --------------------------------------------------------------------------
@@ -1260,7 +1260,7 @@ void	kf_TogglePauseMode( void )
 		setAudioPause(TRUE);
 		/* And stop the clock */
 		gameTimeStop();
-		addConsoleMessage(strresGetString(psStringRes,STR_MISC_PAUSED),CENTRE_JUSTIFY);
+		addConsoleMessage(_("PAUSED"),CENTRE_JUSTIFY);
 
 	}
 	else
@@ -1306,7 +1306,7 @@ void	kf_ToggleEnergyBars( void )
 {
 
 	toggleEnergyBars();
-	CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_ENERGY ) ));
+	CONPRINTF(ConsoleString,(ConsoleString, _("Energy bars display toggled") ));
 
 }
 // --------------------------------------------------------------------------
@@ -1314,7 +1314,7 @@ void	kf_ToggleReloadBars( void )
 {
 
 	toggleReloadBarDisplay();
-	CONPRINTF(ConsoleString,(ConsoleString, strresGetString(psStringRes,STR_GAM_ENERGY ) ));
+	CONPRINTF(ConsoleString,(ConsoleString, _("Energy bars display toggled") ));
 
 }
 // --------------------------------------------------------------------------
@@ -1380,7 +1380,7 @@ SDWORD	xJump,yJump;
 	}
 	else
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_RESNOTFOUND),LEFT_JUSTIFY);
+		addConsoleMessage(_("Unable to locate any resource extractors!"),LEFT_JUSTIFY);
 	}
 
 }
@@ -2295,7 +2295,7 @@ UDWORD		xJump = 0, yJump = 0;
 	/* If we found it, then jump to it! */
 	if(bGotHQ)
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_GOHQ),LEFT_JUSTIFY);
+		addConsoleMessage(_("Centered on player HQ, direction NORTH"),LEFT_JUSTIFY);
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
@@ -2307,7 +2307,7 @@ UDWORD		xJump = 0, yJump = 0;
 	}
 	else
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_NOHQ),LEFT_JUSTIFY);
+		addConsoleMessage(_("Unable to locate HQ!"),LEFT_JUSTIFY);
 	}
 }
 
@@ -2323,11 +2323,11 @@ void kf_ToggleFormationSpeedLimiting( void )
 
 	if ( moveFormationSpeedLimitingOn() )
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_FORMATION_OFF),LEFT_JUSTIFY);
+		addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY);
 	}
 	else
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_FORMATION_ON),LEFT_JUSTIFY);
+		addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY);
 	}
 	moveToggleFormationSpeedLimiting();
 }
@@ -2457,9 +2457,9 @@ void kf_SpeedUp( void )
 				mod = available_speed[i];
 
 				if (mod == FRACTCONST(1, 1)) {
-					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
+					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 				} else {
-					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SPEED_UP),mod));
+					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Increased to %3.1f"),mod));
 				}
 				gameTimeSetMod(mod);
 				break;
@@ -2484,9 +2484,9 @@ void kf_SlowDown( void )
 				mod = available_speed[i];
 
 				if (mod == FRACTCONST(1, 1)) {
-					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
+					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 				} else {
-					CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_SLOW_DOWN),mod));
+					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reduced to %3.1f"),mod));
 				}
 				gameTimeSetMod(mod);
 				break;
@@ -2499,7 +2499,7 @@ void kf_NormalSpeed( void )
 {
 	if ( (!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_NORMAL_SPEED)));
+		CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 		gameTimeResetMod();
 	}
 }
@@ -2512,11 +2512,11 @@ void kf_ToggleReopenBuildMenu( void )
 
 	if (intGetReopenBuild())
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_BUILD_REOPEN)));
+		CONPRINTF(ConsoleString,(ConsoleString,_("Build menu will reopen")));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_BUILD_NO_REOPEN)));
+		CONPRINTF(ConsoleString,(ConsoleString,_("Build menu will not reopen")));
 	}
 }
 

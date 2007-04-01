@@ -3807,7 +3807,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 		if ((psStructure->player == selectedPlayer) &&
 			(lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime))
 		{
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_MAXUNITSREACHED),DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Command Control Limit Reached - Production Halted"),DEFAULT_JUSTIFY);
 			lastMaxUnitMessage = gameTime;
 		}
 		/*
@@ -7741,7 +7741,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			getStatName(psStructure->pStructureType), ((RES_EXTRACTOR *)psStructure->
 			pFunctionality)->power,psStructure->id));
 #else
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_RESREM),
+		CONPRINTF(ConsoleString,(ConsoleString,_("%s - Resource Remaining %d"),
 			getStatName(psStructure->pStructureType), ((RES_EXTRACTOR *)psStructure->
 			pFunctionality)->power));
 #endif*/
@@ -7767,7 +7767,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
 			psStructure->id));
 #else
-		CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,STR_GAM_POWCON),
+		CONPRINTF(ConsoleString,(ConsoleString,_("%s - Connected %d of %d"),
 			getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
 #endif
 		break;
@@ -7959,7 +7959,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
                 //add a console message for the selected Player
 		        if (psDroid->player == selectedPlayer)
 		        {
-    			    CONPRINTF(ConsoleString, (ConsoleString, strresGetString(psStringRes, STR_GAM_ELECDAM), "Unit"));
+    			    CONPRINTF(ConsoleString, (ConsoleString, _("%s - Electronically Damaged"), "Unit"));
                     //tell the scripts if selectedPlayer has lost a droid
                     eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
@@ -8233,7 +8233,7 @@ BOOL electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 		hqReward(psStructure->player,attackPlayer);
 		if (attackPlayer == selectedPlayer)
 		{
-			addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWELEC),	DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Electronic Reward - Visibility Report"),	DEFAULT_JUSTIFY);
 		}
         bRewarded = TRUE;
 		break;
@@ -8273,9 +8273,9 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_PROPULSION][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			//addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWPROP), DEFAULT_JUSTIFY);
+			//addConsoleMessage(_("Factory Reward - Propulsion"), DEFAULT_JUSTIFY);
            	CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-        	    strresGetString(psStringRes,STR_GAM_REWPROP),
+        	    _("Factory Reward - Propulsion"),
                 getName(asPropulsionStats[comp].pName)));
 		}
 		return;
@@ -8298,9 +8298,9 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_BODY][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			//addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWBODY), DEFAULT_JUSTIFY);
+			//addConsoleMessage(_("Factory Reward - Body"), DEFAULT_JUSTIFY);
            	CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-        	    strresGetString(psStringRes,STR_GAM_REWBODY),
+        	    _("Factory Reward - Body"),
                 getName(asBodyStats[comp].pName)));
 		}
 		return;
@@ -8323,9 +8323,9 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_WEAPON][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			//addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWWEAP), DEFAULT_JUSTIFY);
+			//addConsoleMessage(_("Factory Reward - Weapon"), DEFAULT_JUSTIFY);
            	CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-        	    strresGetString(psStringRes,STR_GAM_REWWEAP),
+        	    _("Factory Reward - Weapon"),
                 getName(asWeaponStats[comp].pName)));
 		}
 		return;
@@ -8334,7 +8334,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//losing Player hasn't got anything better so don't gain anything!
 	if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWNOWT), DEFAULT_JUSTIFY);
+		addConsoleMessage(_("Factory Reward - Nothing"), DEFAULT_JUSTIFY);
 	}
 }
 
@@ -8361,16 +8361,16 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			//addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWREPA), DEFAULT_JUSTIFY);
+			//addConsoleMessage(_("Repair Facility Award - Repair"), DEFAULT_JUSTIFY);
            	CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-        	    strresGetString(psStringRes,STR_GAM_REWREPA),
+        	    _("Repair Facility Award - Repair"),
                 getName(asRepairStats[comp].pName)));
 		}
 		return;
 	}
 	if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(strresGetString(psStringRes,STR_GAM_REWREPN), DEFAULT_JUSTIFY);
+		addConsoleMessage(_("Repair Facility Award - Nothing"), DEFAULT_JUSTIFY);
 	}
 }
 

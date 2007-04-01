@@ -356,7 +356,7 @@ BOOL startKeyMapEditor(BOOL first)
 	KEY_MAPPING	*psPresent = NULL, *psNext;
 	char		test[255];
 	addBackdrop();
-	addSideText	(FRONTEND_SIDETEXT ,KM_X-2,KM_Y,strresGetString(psStringRes, STR_KM_KEYMAP_SIDE));
+	addSideText	(FRONTEND_SIDETEXT ,KM_X-2,KM_Y,_("KEY MAPPING"));
 
 	if (first)
 	{

@@ -261,7 +261,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					    //set the colour of the bar to green
 					    BarGraph->majorCol = COL_LIGHTGREEN;
 					    //and change the tool tip
-					    BarGraph->pTip = strresGetString(psStringRes, STR_INT_POWERACCRUED);
+					    BarGraph->pTip = _("Power Accrued");
 				    }
 				    else
 				    {
@@ -271,7 +271,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					    //set the colour of the bar to yellow
 					    BarGraph->majorCol = COL_YELLOW;
 					    //and change the tool tip
-					    BarGraph->pTip = strresGetString(psStringRes, STR_INT_BLDPROGRESS);
+					    BarGraph->pTip = _("Progress Bar");
 				    }
 					if (BuildPoints > Range)
 					{
@@ -306,7 +306,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					//set the colour of the bar to green
 					BarGraph->majorCol = COL_LIGHTGREEN;
 					//and change the tool tip
-					BarGraph->pTip = strresGetString(psStringRes, STR_INT_POWERACCRUED);
+					BarGraph->pTip = _("Power Accrued");
 				}
 				else
 				{
@@ -314,7 +314,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					//set the colour of the bar to yellow
 					BarGraph->majorCol = COL_YELLOW;
 					//and change the tool tip
-					BarGraph->pTip = strresGetString(psStringRes, STR_INT_BLDPROGRESS);
+					BarGraph->pTip = _("Progress Bar");
 					//if on hold need to take it into account
 					if (Manufacture->timeStartHold)
 					{
@@ -352,14 +352,14 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					//set the colour of the bar to green
 					BarGraph->majorCol = COL_LIGHTGREEN;
 					//and change the tool tip
-					BarGraph->pTip = strresGetString(psStringRes, STR_INT_POWERACCRUED);
+					BarGraph->pTip = _("Power Accrued");
 				}
 				else
 				{
 					//set the colour of the bar to yellow
 					BarGraph->majorCol = COL_YELLOW;
 					//and change the tool tip
-					BarGraph->pTip = strresGetString(psStringRes, STR_INT_BLDPROGRESS);
+					BarGraph->pTip = _("Progress Bar");
 					//if on hold need to take it into account
 					if (Research->timeStartHold)
 					{

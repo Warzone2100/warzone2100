@@ -22,13 +22,14 @@ if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
 
+ALL_LINGUAS="nb"
+
 AC_GNU_SOURCE
 AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.16.1])
 
 
 # Check for Windows.
-AC_CANONICAL_HOST
 case $host_os in
 	mingw32)
 		host_os_mingw32=yes
@@ -311,11 +312,19 @@ else
 	AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support])
 fi
 
+dnl Autoconf >= 2.60 defines localedir. For older versions of autoconf, we
+dnl have to define it here, so that it can be used in po/Makefile.
+dnl You cannot use localedir above this line or it will fail for old ac's.
+if test -z "$localedir"; then
+  localedir="$datadir/locale"
+  AC_SUBST(localedir)
+fi
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
 WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
 
+CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\"\\\"$localedir\\\"\""
 CFLAGS="${WZ_CFLAGS} ${CFLAGS} ${WZ_CFLAGS_OVERRIDE}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 

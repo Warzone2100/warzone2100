@@ -417,7 +417,7 @@ BOOL displayGameOver(BOOL bDidit)
 //	flushConsoleMessages( );
 
 //	addConsoleMessage(" ", CENTRE_JUSTIFY );
-//	addConsoleMessage(strresGetString(psStringRes,STR_GAM_GAMEOVER), CENTRE_JUSTIFY );
+//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY );
 //	addConsoleMessage(" ", CENTRE_JUSTIFY );
 
     //set this for debug mode too - what gets displayed then depends on whether we

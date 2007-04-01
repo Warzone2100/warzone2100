@@ -2039,28 +2039,28 @@ char *getPlayerColourName(SDWORD player)
 	switch(getPlayerColour(player))
 	{
 	case 0:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_GREEN));
+		strcpy(tempString,_("Green"));
 		break;
 	case 1:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_ORANGE));
+		strcpy(tempString,_("Orange"));
 		break;
 	case 2:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_GREY));
+		strcpy(tempString,_("Grey"));
 		break;
 	case 3:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_BLACK));
+		strcpy(tempString,_("Black"));
 		break;
 	case 4:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_RED));
+		strcpy(tempString,_("Red"));
 		break;
 	case 5:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_BLUE));
+		strcpy(tempString,_("Blue"));
 		break;
 	case 6:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_PINK));
+		strcpy(tempString,_("Pink"));
 		break;
 	case 7:
-		strcpy(tempString,strresGetString(psStringRes, STR_FE_CYAN));
+		strcpy(tempString,_("Cyan"));
 		break;
 	}
 

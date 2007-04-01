@@ -269,9 +269,9 @@ UDWORD	div;
 	pie_UniTransBoxFill( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 0x00000088, 128 );
 	iV_Box( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 1);
 
-	iV_DrawText( strresGetString(psStringRes,STR_MR_UNIT_LOSSES), LC_X + D_W, 80 + 16 + D_H );
-	iV_DrawText( strresGetString(psStringRes,STR_MR_STRUCTURE_LOSSES), LC_X + D_W, 140 + 16 + D_H );
-	iV_DrawText( strresGetString(psStringRes,STR_MR_FORCE_INFO), LC_X + D_W, 200 + 16 + D_H );
+	iV_DrawText( _("Unit Losses"), LC_X + D_W, 80 + 16 + D_H );
+	iV_DrawText( _("Structure Losses"), LC_X + D_W, 140 + 16 + D_H );
+	iV_DrawText( _("Force Information"), LC_X + D_W, 200 + 16 + D_H );
 
 
 	index = 0;
@@ -356,17 +356,17 @@ void	dispAdditionalInfo( void )
 		average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
-	sprintf( text, strresGetString(psStringRes,STR_MR_ARTEFACTS_FOUND), missionData.artefactsFound );
+	sprintf( text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound );
 	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 300 + D_H );
 
 	/* Get the mission result time in a string - and write it out */
 	getAsciiTime( (char*)&text2, gameTime - missionData.missionStarted );
-	sprintf( text, strresGetString(psStringRes,STR_MR_MISSION_TIME), text2 );
+	sprintf( text, _("Mission Time - %s"), text2 );
 	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 320 + D_H);
 
 	/* Write out total game time so far */
 	getAsciiTime( (char*)&text2, gameTime );
-	sprintf( text, strresGetString(psStringRes,STR_MR_GAME_TIME), text2 );
+	sprintf( text, _("Total Game Time - %s"), text2 );
 	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 340 + D_H );
 }
 

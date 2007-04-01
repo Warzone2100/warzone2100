@@ -92,7 +92,6 @@ extern void droidGetNaybors(DROID *psDroid);
 
 extern BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize);
 extern BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize);
-//extern BOOL loadDroidPrograms(car *pProgramData, UDWORD bufferSize);
 
 /*initialise the template build and power points */
 extern void initTemplatePoints(void);
@@ -127,9 +126,6 @@ extern UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIn
 
 /* Calculate the points required to build the template */
 extern UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate);
-
-/* Calculate the points required to build the droid */
-//UDWORD calcDroidBuild(DROID *psDroid);
 
 /* Calculate the power points required to build/maintain the droid */
 extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);

@@ -608,7 +608,6 @@ void	processEffects(void)
 	skippedEffects = skipped;
 }
 
-
 // ----------------------------------------------------------------------------------------
 /* The general update function for all effects - calls a specific one for each */
 void	updateEffect(EFFECT *psEffect)
