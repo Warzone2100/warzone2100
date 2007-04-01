@@ -102,7 +102,7 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 // If this is defined then check max number of units not reached before adding more.
 #define SCRIPT_CHECK_MAX_UNITS
 
-static SDWORD	playerFlag[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
 // -----------------------------------------------------------------------------------------
@@ -10590,8 +10590,41 @@ BOOL scrBitSet(void)
 
 	ASSERT(val2 < MAX_PLAYERS && val2 >= 0, "scrBitSet(): wrong player index (%d)", val2);
 
-	scrFunctionResult.v.bval = ((val1 & playerFlag[val2]) != 0);
+	scrFunctionResult.v.bval = ((val1 & bitMask[val2]) != 0);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Sets a particular bit in an integer */
+BOOL scrSetBit(void)
+{
+	SDWORD				base,position;
+	BOOL				bSet;
+
+	if (!stackPopParams(3, VAL_INT, &base, 
+		VAL_INT, &position, VAL_BOOL, &bSet))
+	{
+		debug(LOG_ERROR, "scrSetBit(): failed to pop");
+		return FALSE;
+	}
+
+	ASSERT(position < MAX_PLAYERS && position >= 0, "scrSetBit(): wrong position index (%d)", position);
+
+	if(bSet)
+	{
+		base |= bitMask[position];
+	}
+	else
+	{
+		base &= bitMask[position];
+	}
+
+	scrFunctionResult.v.ival = base;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}

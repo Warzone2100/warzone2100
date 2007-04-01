@@ -90,7 +90,7 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 /* Destroy all created variable environments */
 static void cleanupVarEnvironments(void);
 
-static inline void destroyVarEnvironment(UDWORD envIndex);
+static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIndex, UDWORD eventIndex);
 
 /* The size of each opcode */
 SDWORD aOpSize[] =
@@ -865,7 +865,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 			if(!retStackIsEmpty())		//There was a caller function before this one
 			{
 				// destroy current variable environment
-				destroyVarEnvironment(retStackCallDepth());
+				destroyVarEnvironment(psContext, retStackCallDepth(), CurEvent);
 
 				//pop caller function index and return address
 				if (!retStackPop(&CurEvent, &InstrPointer))
@@ -914,7 +914,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if(bEvent)
 				{
 					// destroy current variable environment
-					destroyVarEnvironment(retStackCallDepth());
+					destroyVarEnvironment(psContext, retStackCallDepth(), CurEvent);
 				}
 
 				bStop = TRUE;		//Stop execution of this event here, no more calling functions stored
@@ -1163,8 +1163,8 @@ void scrOutputCallTrace(void)
 /* create a new local var environment for a new function call */
 static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventIndex)
 {
-	UDWORD callDepth = retStackCallDepth();
-	SDWORD numEventVars = psContext->psCode->numLocalVars[eventIndex];
+	UDWORD i, callDepth = retStackCallDepth();
+	UDWORD numEventVars = psContext->psCode->numLocalVars[eventIndex];
 
 	if (numEventVars > 0)
 	{
@@ -1173,6 +1173,16 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 
 		// create environment
 		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVarVal[eventIndex], sizeof(INTERP_VAL) * numEventVars);
+
+		// allocate new space for strings to preserve original ones
+		for (i = 0; i < numEventVars; i++)
+		{
+			if (varEnvironment[callDepth][i].type == VAL_STRING)
+			{
+				varEnvironment[callDepth][i].v.sval = (char*)MALLOC(MAXSTRLEN);
+				strcpy( varEnvironment[callDepth][i].v.sval, "" );	//initialize
+			}
+		}
 	}
 	else
 	{
@@ -1180,10 +1190,28 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 	}
 }
 
-static inline void destroyVarEnvironment(UDWORD envIndex)
+static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIndex, UDWORD eventIndex)
 {
+	UDWORD i;
+	UDWORD numEventVars = 0;
+
+	if(psContext != NULL)
+	{
+		numEventVars = psContext->psCode->numLocalVars[eventIndex];
+	}
+
 	if (varEnvironment[envIndex] != NULL)
 	{
+		// deallocate string space
+		for (i = 0; i < numEventVars; i++)
+		{
+			if (varEnvironment[envIndex][i].type == VAL_STRING)
+			{
+				FREE( varEnvironment[envIndex][i].v.sval );
+				varEnvironment[envIndex][i].v.sval = NULL;
+			}
+		}
+
 		FREE( varEnvironment[envIndex] );
 	}
 }
@@ -1195,6 +1223,6 @@ static void cleanupVarEnvironments(void)
 	
 	for (i = 0; i < retStackCallDepth(); i++)
 	{
-		destroyVarEnvironment(i);
+		destroyVarEnvironment(NULL, i, 0);
 	}
 }

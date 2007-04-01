@@ -614,6 +614,7 @@ extern BOOL scrGetPlayerName(void);
 extern BOOL scrSetPlayerName(void);
 
 extern BOOL scrBitSet(void);
+extern BOOL scrSetBit(void);
 extern BOOL scrAlliancesLocked(void);
 extern BOOL scrASSERT(void);
 extern BOOL scrShowRangeAtPos(void);

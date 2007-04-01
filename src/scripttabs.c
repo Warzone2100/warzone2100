@@ -983,6 +983,10 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "setBit",				scrSetBit,					VAL_INT,
+		3, { VAL_INT, VAL_INT, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	{ "dropBeacon",			scrDropBeacon,				VAL_VOID,
 		6, { VAL_STRING, VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
