@@ -812,11 +812,20 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		*pSize = sizeof(UDWORD) * members + sizeof(SDWORD) * 5;
 		break;
 	case ST_SOUND:
-		pName = sound_GetTrackName((UDWORD)psVal->v.ival);
+		if(psVal->v.ival)
+		{
+			// can also return NULL
+			pName = sound_GetTrackName((UDWORD)psVal->v.ival);
+		}
+		else
+		{
+			pName = NULL;
+		}
 		if (pName == NULL)
 		{
-			debug(LOG_ERROR, "scrValDefSave: couldn't get sound track name");
-			return FALSE;
+			debug(LOG_WARNING, "scrValDefSave: couldn't get sound track name");
+			// just save an empty string
+			pName = "";
 		}
 		if (pBuffer)
 		{
