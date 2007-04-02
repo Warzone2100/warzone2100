@@ -4,21 +4,7 @@
 DIE=0
 SRCDIR=`dirname $0`
 BUILDDIR=`pwd`
-ACLOCAL_FLAGS='-I m4'
 srcfile=src/action.c
-WZ_USE_NLS=yes
-
-# Leave out NLS checks
-for NAME in $@ ; do
-  if [ "x$NAME" = "x--help" ]; then
-    FC_HELP=yes
-  fi
-  if [ "x$NAME" = "x--disable-nls" ]; then
-    echo "! nls checks disabled"
-    WZ_USE_NLS=no
-  fi
-  FC_NEWARGLINE="$FC_NEWARGLINE $NAME"
-done
 
 debug ()
 # print out a debug message if DEBUG is a defined variable
@@ -96,24 +82,10 @@ version_check ()
   fi
 }
 
-version_check 1 "autoconf" "ftp://ftp.gnu.org/pub/gnu/autoconf/" 2 56 || DIE=1
-version_check 1 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 8 || DIE=1
 version_check 1 "bison" "ftp://ftp.gnu.org/pub/gnu/bison/" 1 31 || DIE=1
 version_check 1 "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 4 2 || DIE=1
 if [ "$DIE" -eq 1 ]; then
   exit 1
-fi
-
-if [ "$WZ_USE_NLS" = "yes" ]; then
-  DIE2=0
-  version_check 1 "xgettext" "ftp://ftp.gnu.org/pub/gnu/gettext/" 0 10 36 || DIE2=1
-  version_check 1 "msgfmt" "ftp://ftp.gnu.org/pub/gnu/gettext/" 0 10 36 || DIE2=1
-  if [ "$DIE2" -eq 1 ]; then
-    echo
-    echo "You may want to use --disable-nls to disable NLS."
-    echo "This will also remove the dependency for xgettext and msgfmt."
-    DIE=1
-  fi
 fi
 
 # Chdir to the srcdir, then run auto* tools.
@@ -124,8 +96,14 @@ cd $SRCDIR
   exit 1
 }
 
+echo "+ running autopoint ... "
+autopoint || {
+  echo
+  echo "autopoint failed"
+  exit 1
+}
 echo "+ running aclocal ..."
-aclocal $ACLOCAL_FLAGS || {
+aclocal -I m4 || {
   echo
   echo "aclocal failed - check that all needed development files are present on system"
   exit 1

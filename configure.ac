@@ -131,15 +131,13 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label"
-	WZ_CFLAGS_OVERRIDE="-O0"
+	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-unused-label"
 elif test "x$enable_debug" = "xstrict" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label -Werror"
-	WZ_CFLAGS_OVERRIDE="-O0"
+	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-unused-label -Werror"
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label -Wextra"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG"
+	WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
 
 
@@ -316,10 +314,8 @@ fi
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
-
-CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\"\\\"$localedir\\\"\""
-CFLAGS="${WZ_CFLAGS} ${CFLAGS} ${WZ_CFLAGS_OVERRIDE}"
+CPPFLAGS="-I\$(top_srcdir) -DYY_STATIC -DLOCALEDIR=\\\"${localedir}\\\" -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
+CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([lib/framework/config.h])

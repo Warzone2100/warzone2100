@@ -1,5 +1,3 @@
-AM_CPPFLAGS = -I$(top_srcdir)
-
 noinst_LIBRARIES = libnetplay.a
 noinst_HEADERS = netlog.h netplay.h
 
