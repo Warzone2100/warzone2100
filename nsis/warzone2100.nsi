@@ -258,6 +258,8 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Readme.txt"
   Delete "$INSTDIR\License.txt"
+  Delete "$INSTDIR\Authors.txt"
+  Delete "$INSTDIR\ChangeLog.txt"
 
   Delete "$INSTDIR\uninstall.exe"
 
