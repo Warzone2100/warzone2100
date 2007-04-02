@@ -3261,8 +3261,8 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
         }
 	}
 	// else default to attack if the droid has a weapon
-	//else if (psDroid->numWeaps > 0
-    else if (psDroid->asWeaps[0].nStat > 0
+	else if (psDroid->numWeaps > 0
+    //else if (psDroid->asWeaps[0].nStat > 0
 			&& psObj->player != psDroid->player
 			&& !aiCheckAlliances(psObj->player , psDroid->player) )
 	{
