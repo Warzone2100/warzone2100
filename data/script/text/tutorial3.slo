@@ -878,6 +878,9 @@ event	droidDesigned(CALL_DROIDDESIGNED)
 	// 'to finalise your design'
 	playSound(SND_TUT37,0);
 
+	// flash the close button
+	flashOn(IDRET_CANCEL);
+
 	setEventTrigger(droidCreated,designScreenQuitted);
 
 	setEventTrigger(droidDesigned,inactive);
@@ -893,6 +896,8 @@ event	droidCreated(inactive)
 	// Allow 'em to build factories.
 	enableStructure(factory,0);
 
+	// turn off the flashing
+	flashOff(IDRET_CANCEL);
 
 	// Wait for a bit
 	pause(30);
