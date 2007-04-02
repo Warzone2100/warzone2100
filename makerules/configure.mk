@@ -50,7 +50,7 @@ endif
 
 # Setup paths and static values
 
-CFLAGS+=-DVERSION=\"$(VERSION)\" -DYY_STATIC -I.. -I../.. -I$(DEVDIR)/include
+CFLAGS+=-DVERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include
 LDFLAGS+=-L$(DEVDIR)/lib
 
 
