@@ -101,143 +101,110 @@ static void checkMessages(MSG_VIEWDATA *psViewData);
 // ajl modified for netgames
 extern UDWORD selectedPlayer;
 
-#define CREATE_MSG(heap, new, msgType) \
-	if (HEAP_ALLOC(heap, ((void**) new))) \
-	{ \
-		(*(new))->type = msgType; \
-		(*(new))->id = (msgID<<3)|selectedPlayer; \
-		msgID++; \
-	}
+//void HEAP_ALLOC(OBJ_HEAP* psHeap, void** ppObject)
+inline MESSAGE* createMessage(OBJ_HEAP *heap, MESSAGE_TYPE msgType)
+{
+	MESSAGE *newMsg;
 
+	// Allocate memory for the message, and on failure return a NULL pointer
+	if ( !HEAP_ALLOC(heap, ((void**) &newMsg)) )
+		return NULL;
+
+	newMsg->type = msgType;
+	newMsg->id = (msgID << 3) | selectedPlayer;
+	msgID++;
+
+	return newMsg;
+}
 
 /* Add the message to the BOTTOM of the list
  * list is a pointer to the message list
  * Order is now CAMPAIGN, MISSION, RESEARCH/PROXIMITY
  */
-#define ADD_MSG(list, msg, player) \
-	ASSERT( msg != NULL, \
-		"addMessage: Invalid message pointer" ); \
-	if (list[player] == NULL) \
-	{ \
-		list[player] = msg; \
-	} \
-	else \
-	{ \
-		MESSAGE *psCurr, *psPrev; \
-        switch (msg->type) \
-        { \
-            case MSG_CAMPAIGN: \
-                /*add to bottom of the list*/ \
-    		    for(psCurr = list[player]; psCurr->psNext != NULL; \
-	    		    psCurr = psCurr->psNext) \
-		        { \
-		        } \
-		        psCurr->psNext = msg; \
-                msg->psNext = NULL; \
-                break; \
-            case MSG_MISSION: \
-                /*add it before the first campaign message */ \
-    		    for(psCurr = list[player]; psCurr->psNext != NULL && psCurr->type == MSG_CAMPAIGN; \
-	    		    psCurr = psCurr->psNext) \
-		        { \
-                    psPrev = psCurr; \
-		        } \
-                psPrev->psNext = msg; \
-                msg->psNext = psCurr; \
-                break; \
-            case MSG_RESEARCH: \
-            case MSG_PROXIMITY: \
-                /*add it before the first mission message */ \
-    		    for(psCurr = list[player]; psCurr->psNext != NULL && psCurr->type == MSG_MISSION; \
-	    		    psCurr = psCurr->psNext) \
-		        { \
-                   psPrev = psCurr; \
-		        } \
-		        psPrev->psNext = msg; \
-                msg->psNext = psCurr; \
-                break; \
-        } \
-	}
-
-static void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
+inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
 {
+	MESSAGE *psCurr = NULL, *psPrev = NULL;
+
 	ASSERT( msg != NULL,
-		"addMessage: Invalid message pointer" );
+		"addMessageToList: Invalid message pointer" );
+
+	// If there is no message list, create one
 	if (list[player] == NULL)
 	{
 		list[player] = msg;
-        msg->psNext = NULL;
-	}
-	else
-	{
-		MESSAGE *psCurr, *psPrev;
+		msg->psNext = NULL;
 
-        psCurr = psPrev = NULL;
-        switch (msg->type)
-        {
-            case MSG_CAMPAIGN:
-                /*add it before the first mission/research/prox message */
-    		    for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
-		        {
-                    if (psCurr->type == MSG_MISSION ||
-                        psCurr->type == MSG_RESEARCH ||
-                        psCurr->type == MSG_PROXIMITY)
-                    {
-                        break;
-                    }
-                    psPrev = psCurr;
-		        }
-                if (psPrev)
-                {
-                    psPrev->psNext = msg;
-                    msg->psNext = psCurr;
-                }
-                else
-                {
-                    //must be top of list
-                    psPrev = list[player];
-                    list[player] = msg;
-                    msg->psNext = psPrev;
-                }
-                break;
-            case MSG_MISSION:
-                /*add it before the first research/prox message */
-    		    for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
-		        {
-                    if (psCurr->type == MSG_RESEARCH ||
-                        psCurr->type == MSG_PROXIMITY)
-                    {
-                        break;
-                    }
-                    psPrev = psCurr;
-		        }
-                if (psPrev)
-                {
-                    psPrev->psNext = msg;
-                    msg->psNext = psCurr;
-                }
-                else
-                {
-                    //must be top of list
-                    psPrev = list[player];
-                    list[player] = msg;
-                    msg->psNext = psPrev;
-                }
-                break;
-            case MSG_RESEARCH:
-            case MSG_PROXIMITY:
-                /*add it to the bottom of the list */
-    		    for(psCurr = list[player]; psCurr->psNext != NULL;
-                psCurr = psCurr->psNext)
-		        {
-		        }
-		        psCurr->psNext = msg;
-                msg->psNext = NULL;
-                break;
-	default:
-		debug(LOG_ERROR, "add_msg: unknown message type");
-		break;
-        }
+		return;
+	}
+
+	switch (msg->type)
+       	{
+		case MSG_CAMPAIGN:
+			/*add it before the first mission/research/prox message */
+			for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->type == MSG_MISSION ||
+				    psCurr->type == MSG_RESEARCH ||
+				    psCurr->type == MSG_PROXIMITY)
+					break;
+
+				psPrev = psCurr;
+			}
+
+			if (psPrev)
+			{
+				psPrev->psNext = msg;
+				msg->psNext = psCurr;
+			}
+			else
+			{
+				//must be top of list
+				psPrev = list[player];
+				list[player] = msg;
+				msg->psNext = psPrev;
+			}
+
+			break;
+		case MSG_MISSION:
+			/*add it before the first research/prox message */
+			for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->type == MSG_RESEARCH ||
+				    psCurr->type == MSG_PROXIMITY)
+					break;
+
+				psPrev = psCurr;
+			}
+
+			if (psPrev)
+			{
+				psPrev->psNext = msg;
+				msg->psNext = psCurr;
+			}
+			else
+			{
+				//must be top of list
+				psPrev = list[player];
+				list[player] = msg;
+				msg->psNext = psPrev;
+			}
+
+			break;
+		case MSG_RESEARCH:
+		case MSG_PROXIMITY:
+			/*add it to the bottom of the list */
+
+			// Iterate to the last item in the list
+			for(psCurr = list[player]; psCurr->psNext != NULL; psCurr = psCurr->psNext);
+
+			// Append the new message to the end of the list
+			psCurr->psNext = msg;
+			msg->psNext = NULL;
+
+			break;
+		default:
+			debug(LOG_ERROR, "addMessageToList: unknown message type");
+			break;
 	}
 }
 
@@ -247,46 +214,55 @@ static void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
  * list is a pointer to the message list
  * del is a pointer to the message to remove
 */
-#define REMOVEMSG(list, heap, del, player) \
-	ASSERT( del != NULL, \
-		"removeMessage: Invalid message pointer" ); \
-	if (list[player] == del) \
-	{ \
-		list[player] = list[player]->psNext; \
-		HEAP_FREE(heap, del); \
-	} \
-	else \
-	{ \
-		MESSAGE *psPrev = NULL, *psCurr; \
-		for(psCurr = list[player]; (psCurr != del) && (psCurr != NULL); \
-			psCurr = psCurr->psNext) \
-		{ \
-			psPrev = psCurr; \
-		} \
-		ASSERT( psCurr != NULL, \
-			"removeMessage: message not found" ); \
-		if (psCurr != NULL) \
-		{ \
-			psPrev->psNext = psCurr->psNext; \
-			HEAP_FREE(heap, del); \
-		} \
+inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAGE *del, UDWORD player)
+{
+	MESSAGE *psPrev = NULL, *psCurr;
+
+	ASSERT( del != NULL,
+		"removeMessageFromList: Invalid message pointer" );
+
+	// If the message to remove is the first one in the list then mark the next one as the first
+	if (list[player] == del)
+	{
+		list[player] = list[player]->psNext;
+		HEAP_FREE(heap, del);
 	}
 
-#define RELEASEALLMSG(list, heap) \
-	{ \
-		UDWORD	i; \
-		MESSAGE	*psCurr, *psNext; \
-		for(i=0; i<MAX_PLAYERS; i++) \
-		{ \
-			for(psCurr = list[i]; psCurr != NULL; psCurr = psNext) \
-			{ \
-		 		psNext = psCurr->psNext; \
-				HEAP_FREE(heap, psCurr); \
-			} \
-			list[i] = NULL; \
-		} \
+	// Iterate through the list and find the item before the message to delete
+	for(psCurr = list[player]; (psCurr != del) && (psCurr != NULL);	psCurr = psCurr->psNext)
+	{
+		psPrev = psCurr;
 	}
 
+	ASSERT( psCurr != NULL,
+		"removeMessage: message not found in list" );
+
+	if (psCurr != NULL)
+	{
+		// Modify the "next" pointer of the previous item to
+		// point to the "next" item of the item to delete.
+		psPrev->psNext = psCurr->psNext;
+		HEAP_FREE(heap, del);
+	}
+}
+
+inline void releaseAllMessages(MESSAGE *list[], OBJ_HEAP *heap)
+{
+	UDWORD	i;
+	MESSAGE	*psCurr, *psNext;
+
+	// Iterate through all players' message lists
+	for(i=0; i < MAX_PLAYERS; i++)
+	{
+		// Iterate through all messages in list
+		for(psCurr = list[i]; psCurr != NULL; psCurr = psNext)
+		{
+	 		psNext = psCurr->psNext;
+			HEAP_FREE(heap, psCurr);
+		}
+		list[i] = NULL;
+	}
+}
 
 BOOL messageInitVars(void)
 {
@@ -326,44 +302,42 @@ void viewDataHeapShutDown(void)
 }
 
 /*Add a message to the list */
- MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
- {
-	 MESSAGE *psMsgToAdd = NULL;
+MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
+{
+	//first create a message of the required type
+	MESSAGE* psMsgToAdd = createMessage(psMsgHeap, msgType);
 
-	 debug(LOG_WZ, "addMessage: adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
+	debug(LOG_WZ, "addMessage: adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
 
-	 //first create a message of the required type
-	 CREATE_MSG(psMsgHeap, &psMsgToAdd, msgType);
-	 if (!psMsgToAdd)
-	 {
-		 debug(LOG_ERROR, "addMessage: CREATE_MSG failed");
-		 return NULL;
-	 }
-	 //then add to the players' list
-	 //ADD_MSG(apsMessages, psMsgToAdd, player);
-     add_msg(apsMessages, psMsgToAdd, player);
+	if (!psMsgToAdd)
+	{
+		debug(LOG_ERROR, "addMessage: createMessage failed");
+		return NULL;
+	}
+	//then add to the players' list
+	addMessageToList(apsMessages, psMsgToAdd, player);
 
-	 //initialise the message data
-	 psMsgToAdd->player = player;
-	 psMsgToAdd->pViewData = NULL;
-	 //psMsgToAdd->frameNumber = 0;
-	 psMsgToAdd->read = FALSE;
+	//initialise the message data
+	psMsgToAdd->player = player;
+	psMsgToAdd->pViewData = NULL;
+	//psMsgToAdd->frameNumber = 0;
+	psMsgToAdd->read = FALSE;
 
-	 //add a proximity display
-	 if (msgType == MSG_PROXIMITY)
-	 {
-		 addProximityDisplay(psMsgToAdd, proxPos, player);
-	 }
-//	 else
-//	 {
-//		 //make the reticule button flash as long as not prox msg or multiplayer game.
+	//add a proximity display
+	if (msgType == MSG_PROXIMITY)
+	{
+		addProximityDisplay(psMsgToAdd, proxPos, player);
+	}
+//	else
+//	{
+//		//make the reticule button flash as long as not prox msg or multiplayer game.
 //		if (player == selectedPlayer && !bMultiPlayer)
 //		{
 //			flashReticuleButton(IDRET_INTEL_MAP);
 //		}
-//	 }
+//	}
 
-	 return psMsgToAdd;
+	return psMsgToAdd;
 }
 
 /* adds a proximity display - holds varaibles that enable the message to be
@@ -416,7 +390,7 @@ void removeMessage(MESSAGE *psDel, UDWORD player)
 	{
 		removeProxDisp(psDel, player);
 	}
-	REMOVEMSG(apsMessages, psMsgHeap, psDel, player);
+	removeMessageFromList(apsMessages, psMsgHeap, psDel, player);
 }
 
 /* remove a proximity display */
@@ -456,7 +430,7 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 void freeMessages(void)
 {
 	releaseAllProxDisp();
-	RELEASEALLMSG(apsMessages, psMsgHeap);
+	releaseAllMessages(apsMessages, psMsgHeap);
 }
 
 /* removes all the proximity displays */

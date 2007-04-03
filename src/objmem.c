@@ -335,145 +335,167 @@ void objmemUpdate(void)
 
 /**************************************************************************************
  *
- * Macros for the object memory functions
+ * Inlines for the object memory functions
  * The code is the same for the different object types only the pointer types
  * change.
  */
 
 /* Creating a new object
- * new is a pointer to a pointer to the new object
- * type is the type of the object
  */
+inline BASE_OBJECT* createObject(UDWORD player, OBJ_HEAP *heap, OBJECT_TYPE objType)
+{
+	BASE_OBJECT* newObject;
 
-// ajl modified for netplaying..
+	ASSERT(player < MAX_PLAYERS,
+	       "createObject: invalid player number");
 
-#define CREATE(plyr, heap, new, objType, structType) \
-	ASSERT( plyr<MAX_PLAYERS, "addObject: invalid player number" ); \
-	if (!HEAP_ALLOC(heap, (void**)new)) \
-	{ \
-		return FALSE; \
-	} \
-	(*(new))->type = objType; \
-	(*(new))->id = ((objID<<3)|plyr); \
-	objID++; \
-	(*(new))->player = (UBYTE)plyr; \
-	(*(new))->died = 0; \
-	return TRUE
+	if (!HEAP_ALLOC(heap, ((void**) &newObject)))
+		return NULL;
 
+	newObject->type = objType;
+	newObject->id = (objID << 3) | player;
+	objID++;
+	newObject->player = (UBYTE)player;
+	newObject->died = 0;
+
+	return newObject;
+}
 
 /* Add the object to its list
- * list is a pointer to the object list
+ * \param list is a pointer to the object list
  */
-#define ADD(list, objType, type) \
-	ASSERT( objType != NULL, \
-		"addObject: Invalid " #type " pointer" ); \
-	(objType)->psNext = list[(objType)->player]; \
-	list[(objType)->player] = (objType)
+inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
+{
+	ASSERT(object != NULL,
+	       "addObjectToList: Invalid pointer");
 
-
+	// Prepend the object to the top of the list
+	object->psNext = list[object->player];
+	list[object->player] = object;
+}
 
 /* Move an object from the active list to the destroyed list.
- * list is a pointer to the object list
- * del is a pointer to the object to remove
- * type is the type of the object
+ * \param list is a pointer to the object list
+ * \param del is a pointer to the object to remove
  */
-#define _DESTROY(list, del, type) \
-	ASSERT( del != NULL, \
-		"destroyObject: Invalid " #type " pointer" ); \
-	if (list[(del)->player] == (del)) \
-	{ \
-		list[(del)->player] = list[(del)->player]->psNext; \
-		((BASE_OBJECT *)(del))->psNext = psDestroyedObj; \
-		psDestroyedObj = (BASE_OBJECT *)(del); \
-		(del)->died = gameTime; \
-	} \
-	else \
-	{ \
-		type *psPrev=NULL, *psCurr; \
-		for(psCurr = list[(del)->player]; (psCurr != (del)) && (psCurr != NULL); \
-			psCurr = psCurr->psNext) \
-		{ \
-			psPrev = psCurr; \
-		} \
-		ASSERT( psCurr != NULL, \
-			"destroyObject:" #type " object not found" ); \
-		if (psCurr != NULL) \
-		{ \
-			psPrev->psNext = psCurr->psNext; \
-			((BASE_OBJECT *)(del))->psNext = psDestroyedObj; \
-			psDestroyedObj = (BASE_OBJECT *)(del); \
-			(del)->died = gameTime; \
-		} \
+inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
+{
+	BASE_OBJECT *psPrev = NULL, *psCurr;
+
+	ASSERT(object != NULL,
+	       "destroyObject: Invalid pointer");
+
+	// If the message to remove is the first one in the list then mark the next one as the first
+	if (list[object->player] == object)
+	{
+		list[object->player] = list[object->player]->psNext;
+		((BASE_OBJECT *)object)->psNext = psDestroyedObj;
+		psDestroyedObj = (BASE_OBJECT *)object;
+		object->died = gameTime;
+		return;
 	}
 
-// turn off the list integrity check for all builds
-//#ifdef DEBUG
-#if 0
-#define DESTROY(list, del, type) \
-	_DESTROY(list, del, type); \
-	objListIntegCheck()
-#else
-#define DESTROY(list, del, type) \
-	_DESTROY(list, del, type)
-#endif
+	// Iterate through the list and find the item before the object to delete
+	for(psCurr = list[object->player]; (psCurr != object) && (psCurr != NULL); psCurr = psCurr->psNext)
+	{
+		psPrev = psCurr;
+	}
+
+	ASSERT(psCurr != NULL,
+	       "destroyObject: object not found in list");
+
+	if (psCurr != NULL)
+	{
+		// Modify the "next" pointer of the previous item to
+		// point to the "next" item of the item to delete.
+		psPrev->psNext = psCurr->psNext;
+
+		// Prepend the object to the destruction list
+		((BASE_OBJECT *)object)->psNext = psDestroyedObj;
+		psDestroyedObj = (BASE_OBJECT *)object;
+
+		// Set destruction time
+		object->died = gameTime;
+	}
+}
 
 /* Remove an object from the active list
- * list is a pointer to the object list
- * remove is a pointer to the object to remove
- * type is the type of the object
+ * \param list is a pointer to the object list
+ * \param remove is a pointer to the object to remove
+ * \param type is the type of the object
  */
-#define REMOVE(list, remove, type) \
-	ASSERT( remove != NULL, \
-		"removeObject: Invalid " #type " pointer" ); \
-	if (list[(remove)->player] == (remove)) \
-	{ \
-		list[(remove)->player] = list[(remove)->player]->psNext; \
-	} \
-	else \
-	{ \
-		type *psPrev=NULL, *psCurr; \
-		for(psCurr = list[(remove)->player]; (psCurr != (remove)) && (psCurr != NULL); \
-			psCurr = psCurr->psNext) \
-		{ \
-			psPrev = psCurr; \
-		} \
-		ASSERT( psCurr != NULL, \
-			"removeObject:" #type " object not found" ); \
-		if (psCurr != NULL) \
-		{ \
-			psPrev->psNext = psCurr->psNext; \
-		} \
+inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object)
+{
+	BASE_OBJECT *psPrev = NULL, *psCurr;
+
+	ASSERT( object != NULL,
+		"removeObjectFromList: Invalid pointer" );
+
+	// If the message to remove is the first one in the list then mark the next one as the first
+	if (list[object->player] == object)
+	{
+		list[object->player] = list[object->player]->psNext;
+		
+		return;
+	}
+	
+	// Iterate through the list and find the item before the object to delete
+	for(psCurr = list[object->player]; (psCurr != object) && (psCurr != NULL); psCurr = psCurr->psNext)
+	{
+		psPrev = psCurr;
 	}
 
+	ASSERT( psCurr != NULL,
+		"removeObjectFromList: object not found in list" );
 
-#define FIND(list, idNum, type) \
-	{ \
-		type *psCurr; \
-		for(psCurr = (list); psCurr != NULL; psCurr = psCurr->psNext) \
-		{ \
-			if (psCurr->id == (idNum)) \
-			{ \
-				return psCurr; \
-			} \
-		} \
-		return NULL; \
+	if (psCurr != NULL)
+	{
+		// Modify the "next" pointer of the previous item to
+		// point to the "next" item of the item to delete.
+		psPrev->psNext = psCurr->psNext;
+	}
+}
+
+inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
+{
+	BASE_OBJECT *psCurr;
+	for(psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		if (psCurr->id == (idNum))
+		{
+			return psCurr;
+		}
 	}
 
-#define RELEASEALL(list, heap, freeFunc, type) \
-	{ \
-		UDWORD	i; \
-		type	*psCurr, *psNext; \
-		for(i=0; i<MAX_PLAYERS; i++) \
-		{ \
-			for(psCurr = list[i]; psCurr != NULL; psCurr = psNext) \
-			{ \
-		 		psNext = psCurr->psNext; \
-				freeFunc(psCurr); \
-				HEAP_FREE(heap, psCurr); \
-			} \
-			list[i] = NULL; \
-		} \
+	return NULL;
+}
+
+// Necessary for a nice looking cast in calls to releaseAllObjectsInList
+typedef void (*OBJECT_DESTRUCTOR)(BASE_OBJECT*);
+
+inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJ_HEAP *heap, OBJECT_DESTRUCTOR objectDestructor)
+{
+	UDWORD i;
+	BASE_OBJECT *psCurr, *psNext;
+
+	// Iterate through all players' object lists
+	for(i=0; i<MAX_PLAYERS; i++)
+	{
+		// Iterate through all objects in list
+		for(psCurr = list[i]; psCurr != NULL; psCurr = psNext)
+		{
+	 		psNext = psCurr->psNext;
+
+			// Call a specialized destruction function
+			// (will do all cleanup except for releasing memory of object)
+			objectDestructor(psCurr);
+
+			// Release object's memory
+			HEAP_FREE(heap, psCurr);
+		}
+		list[i] = NULL;
 	}
+}
 
 /***************************************************************************************
  *
@@ -485,7 +507,12 @@ void objmemUpdate(void)
 /* Create a new droid */
 BOOL createDroid(UDWORD player, DROID **ppsNew)
 {
-	CREATE(player, psDroidHeap, ppsNew, OBJ_DROID, DROID);
+	*ppsNew = (DROID*)createObject(player, psDroidHeap, OBJ_DROID);
+
+	if (*ppsNew == NULL)
+		return FALSE;
+
+	return TRUE;
 }
 
 /* add the droid to the Droid Lists */
@@ -493,7 +520,7 @@ BOOL createDroid(UDWORD player, DROID **ppsNew)
  {
 	 DROID_GROUP	*psGroup;
 
-	 ADD(pList, psDroidToAdd, DROID);
+	 addObjectToList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToAdd);
      /*whenever a droid gets added to a list other than the current list
      its died flag is set to NOT_CURRENT_LIST so that anything targetting
      it will cancel itself - HACK?!*/
@@ -520,13 +547,13 @@ void killDroid(DROID *psDel)
 		"killUnit: pointer is not a unit" );
 	ASSERT( psDel->player < MAX_PLAYERS,
 		"killUnit: invalid player for unit" );
-	DESTROY(apsDroidLists, psDel, DROID);
+	destroyObject((BASE_OBJECT**)apsDroidLists, (BASE_OBJECT*)psDel);
 }
 
 /* Remove all droids */
 void freeAllDroids(void)
 {
-	RELEASEALL(apsDroidLists, psDroidHeap, droidRelease, DROID);
+	releaseAllObjectsInList((BASE_OBJECT**)apsDroidLists, psDroidHeap, (OBJECT_DESTRUCTOR)droidRelease);
 }
 
 /*Remove a single Droid from a list*/
@@ -536,7 +563,7 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 		"removeUnit: pointer is not a unit" );
 	ASSERT( psDroidToRemove->player < MAX_PLAYERS,
 		"removeUnit: invalid player for unit" );
-	REMOVE(pList, psDroidToRemove, DROID);
+	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToRemove);
 
     /*whenever a droid is removed from the current list its died
     flag is set to NOT_CURRENT_LIST so that anything targetting
@@ -550,13 +577,13 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids(void)
 {
-	RELEASEALL(mission.apsDroidLists, psDroidHeap, droidRelease, DROID);
+	releaseAllObjectsInList((BASE_OBJECT**)mission.apsDroidLists, psDroidHeap, (OBJECT_DESTRUCTOR)droidRelease);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids(void)
 {
-	RELEASEALL(apsLimboDroids, psDroidHeap, droidRelease, DROID);
+	releaseAllObjectsInList((BASE_OBJECT**)apsLimboDroids, psDroidHeap, (OBJECT_DESTRUCTOR)droidRelease);
 }
 
 /**************************  STRUCTURE  *******************************/
@@ -564,13 +591,18 @@ void freeAllLimboDroids(void)
 /* Create a new structure */
 BOOL createStruct(UDWORD player, STRUCTURE **ppsNew)
 {
-	CREATE(player, psStructHeap, ppsNew, OBJ_STRUCTURE, STRUCTURE);
+	*ppsNew = (STRUCTURE*)createObject(player, psStructHeap, OBJ_STRUCTURE);
+
+	if (*ppsNew == NULL)
+		return FALSE;
+
+	return TRUE;
 }
 
 /* add the structure to the Structure Lists */
 void addStructure(STRUCTURE *psStructToAdd)
 {
-    ADD(apsStructLists, psStructToAdd, STRUCTURE);
+    addObjectToList((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psStructToAdd);
 }
 
 /* Destroy a structure */
@@ -580,13 +612,13 @@ void killStruct(STRUCTURE *psDel)
 		"killStruct: pointer is not a droid" );
 	ASSERT( psDel->player < MAX_PLAYERS,
 		"killStruct: invalid player for stucture" );
-	DESTROY(apsStructLists, psDel, STRUCTURE);
+	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psDel);
 }
 
 /* Remove heapall structures */
 void freeAllStructs(void)
 {
-	RELEASEALL(apsStructLists, psStructHeap, structureRelease, STRUCTURE);
+	releaseAllObjectsInList((BASE_OBJECT**)apsStructLists, psStructHeap, (OBJECT_DESTRUCTOR)structureRelease);
 }
 
 /*Remove a single Structure from a list*/
@@ -596,7 +628,7 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 		"removeStructureFromList: pointer is not a structure" );
 	ASSERT( psStructToRemove->player < MAX_PLAYERS,
 		"removeStructureFromList: invalid player for structure" );
-	REMOVE(pList, psStructToRemove, STRUCTURE);
+	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psStructToRemove);
 }
 
 /**************************  FEATURE  *********************************/
@@ -604,30 +636,35 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 /* Create a new Feature */
 BOOL createFeature(FEATURE **ppsNew)
 {
-	CREATE(0, psFeatureHeap, ppsNew, OBJ_FEATURE, FEATURE);
+	*ppsNew = (FEATURE*)createObject(0, psFeatureHeap, OBJ_FEATURE);
+
+	if (*ppsNew == NULL)
+		return FALSE;
+
+	return TRUE;
 }
 
 /* add the feature to the Feature Lists */
  void addFeature(FEATURE *psFeatureToAdd)
  {
-	 ADD(apsFeatureLists, psFeatureToAdd, FEATURE);
+	 addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd);
  }
 
 /* Destroy a feature */
-// set the player to 0 since features have player = maxplayers+1. This screws up DESTROY
+// set the player to 0 since features have player = maxplayers+1. This screws up destroyObject
 // it's a bit of a hack, but hey, it works
 void killFeature(FEATURE *psDel)
 {
 	ASSERT( psDel->type == OBJ_FEATURE,
 		"killFeature: pointer is not a feature" );
 	psDel->player = 0;
-	DESTROY(apsFeatureLists, psDel, FEATURE);
+	destroyObject((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psDel);
 }
 
 /* Remove all features */
 void freeAllFeatures(void)
 {
-	RELEASEALL(apsFeatureLists, psFeatureHeap, featureRelease, FEATURE);
+	releaseAllObjectsInList((BASE_OBJECT**)apsFeatureLists, psFeatureHeap, (OBJECT_DESTRUCTOR)featureRelease);
 }
 
 /**************************  FLAG_POSITION ********************************/
