@@ -324,13 +324,61 @@ static ov_callbacks ovbuf_callbacks = {
 	ovbuf_tell
 };
 
+typedef struct
+{
+    // Internal identifier towards PhysicsFS
+    PHYSFS_file* fileHandle;
+
+    // Wether to allow seeking or not
+    BOOL         allowSeeking;
+} fileInfo;
+
 static size_t ovPHYSFS_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
-    return PHYSFS_read((PHYSFS_file*)datasource, ptr, 1, size*nmemb);
+    PHYSFS_file* fileHandle = ((fileInfo*)datasource)->fileHandle;
+    return PHYSFS_read(fileHandle, ptr, 1, size*nmemb);
 }
 
 static int ovPHYSFS_seek(void *datasource, ogg_int64_t offset, int whence) {
-    return -1;
+    PHYSFS_file* fileHandle = ((fileInfo*)datasource)->fileHandle;
+    BOOL allowSeeking = ((fileInfo*)datasource)->allowSeeking;
+
+    int curPos, fileSize, newPos;
+
+    if (!allowSeeking)
+        return -1;
+
+    switch (whence)
+    {
+        // Seek to absolute position
+        case SEEK_SET:
+            newPos = offset;
+            break;
+
+        // Seek `offset` ahead
+        case SEEK_CUR:
+            curPos = PHYSFS_tell(fileHandle);
+            if (curPos == -1)
+                return -1;
+
+            newPos = curPos + offset;
+            break;
+
+        // Seek backwards from the end of the file
+        case SEEK_END:
+            fileSize = PHYSFS_fileLength(fileHandle);
+            if (fileSize == -1)
+                return -1;
+
+            newPos = fileSize - 1 - offset;
+            break;
+    }
+
+    // PHYSFS_seek return value of non-zero means success
+    if (PHYSFS_seek(fileHandle, newPos) != 0)
+        return newPos;   // success
+    else
+        return -1;  // failure
 }
 
 static int ovPHYSFS_close(void *datasource) {
@@ -338,14 +386,15 @@ static int ovPHYSFS_close(void *datasource) {
 }
 
 static long ovPHYSFS_tell(void *datasource) {
-    return -1;
+    PHYSFS_file* fileHandle = ((fileInfo*)datasource)->fileHandle;
+    return PHYSFS_tell(fileHandle);
 }
 
 static ov_callbacks ovPHYSFS_callbacks = {
-	ovPHYSFS_read,
-	ovPHYSFS_seek,
-	ovPHYSFS_close,
-	ovPHYSFS_tell
+    ovPHYSFS_read,
+    ovPHYSFS_seek,
+    ovPHYSFS_close,
+    ovPHYSFS_tell
 };
 
 static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
@@ -424,16 +473,20 @@ BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 {
 	BOOL success;
 
-	// Use PhysicsFS to open the file
-	PHYSFS_file * fileHandle = PHYSFS_openRead(szFileName);
+	fileInfo fileHandle;
 
-	if (fileHandle == NULL)
+	fileHandle.allowSeeking = TRUE;
+
+	// Use PhysicsFS to open the file
+	fileHandle.fileHandle = PHYSFS_openRead(szFileName);
+
+	if (fileHandle.fileHandle == NULL)
 		return FALSE;
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
-	success = sound_ReadTrack( psTrack, ovPHYSFS_callbacks, fileHandle);
+	success = sound_ReadTrack( psTrack, ovPHYSFS_callbacks, &fileHandle);
 
-	PHYSFS_close(fileHandle);
+	PHYSFS_close(fileHandle.fileHandle);
 	return success;
 }
 
