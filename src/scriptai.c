@@ -2002,29 +2002,6 @@ static BOOL defenseLocation(BOOL variantB)
 	x4 = (psChosenGate->x2 << TILE_SHIFT) + (TILE_UNITS/2);
 	y4 = (psChosenGate->y2 << TILE_SHIFT) + (TILE_UNITS/2);
 
-	//some temp checks
-	if(x2 < x1)
-	{
-		debug(LOG_ERROR,"defenseLocation: x2 < x1");
-		return FALSE;
-	}
-	if(x3 > x4)
-	{
-		debug(LOG_ERROR,"defenseLocation: x2 < x1");
-		return FALSE;
-	}
-
-	if(y2 < y1)
-	{
-		debug(LOG_ERROR,"defenseLocation: y2 < y1");
-		return FALSE;
-	}
-	if(y3 > y4)
-	{
-		debug(LOG_ERROR,"defenseLocation: y3 > y4");
-		return FALSE;
-	}
-
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
 	{
