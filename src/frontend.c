@@ -1579,20 +1579,9 @@ static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, U
 }
 
 
-//// Given a string id, set a text buttons dimensions.
-////
-//void SetTextButtonExt(W_BUTINIT *psButInit,UWORD x,UWORD y,UDWORD StringID)
-//{
-//	psButInit->x = x;
-//	psButInit->y = y;
-//	psButInit->width = iV_GetTextWidth(strresGetString(psStringRes,StringID));
-//	psButInit->height = iV_GetTextLineSize();
-//}
-
-
 // Placed here to avoid automatic inlining in InGameOp.c by the Playstation compiler.
 //
-BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
+BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style)
 {
 	W_BUTINIT sButInit;
 
@@ -1602,7 +1591,6 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
 	sButInit.formID		= INTINGAMEOP;
 	sButInit.id			= id;
 	sButInit.style		= Style;
-//	SetTextButtonExt(&sButInit,INTINGAMEOP_1_X,y,StringID);
 
 
 	sButInit.x			= INTINGAMEOP_1_X;
@@ -1612,7 +1600,7 @@ BOOL addIGTextButton(UDWORD id,UWORD y,UDWORD StringID,UDWORD Style)
 
 	sButInit.FontID		= WFont;
 	sButInit.pDisplay	= displayTextOption;
-	sButInit.pText		= strresGetString(psStringRes,StringID);
+	sButInit.pText		= string;
 	widgAddButton(psWScreen, &sButInit);
 
 	return TRUE;

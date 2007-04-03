@@ -207,8 +207,8 @@ void giftRadar(UDWORD from, UDWORD to,BOOL send)
 	{
 		if(to == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,
-				STR_GIFT_VIS),getPlayerName(from)));
+			CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You A Visibility Report"),
+				getPlayerName(from)));
 		}
 	}
 }
@@ -919,8 +919,8 @@ void giftArtifact(UDWORD owner,UDWORD x,UDWORD y)
 			if( (IsResearchCompleted(&pO[topic]) ) && (IsResearchPossible(&pR[topic])==FALSE )  )
 			{
 				MakeResearchPossible(&pR[topic]);
-				CONPRINTF(ConsoleString,(ConsoleString,strresGetString(psStringRes,
-					STR_MUL_ARTIF),getName(asResearch[topic].pName)));
+				CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"),
+					getName(asResearch[topic].pName)));
 				return;
 			}
 		}

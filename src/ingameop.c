@@ -65,12 +65,6 @@ BOOL	InGameOpUp		= FALSE;
 // ////////////////////////////////////////////////////////////////////////////
 
 
-void AddMaxStringWidth(STR_RES *psRes, UDWORD StringID);
-UDWORD GetMaxStringWidth(void);
-void ResetMaxStringWidth(void);
-
-
-
 static BOOL addQuitOptions(void)
 {
 	W_FORMINIT		sFormInit;
@@ -102,13 +96,13 @@ static BOOL addQuitOptions(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	//resume
-	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_1_Y,STR_GAME_RESUME,OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, _("Resume Game"), OPALIGN);
 
 
 	SetCurrentSnapID(&InterfaceSnap,INTINGAMEOP_RESUME);
 
 	//  quit
-	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM,INTINGAMEOP_2_Y,STR_GAME_QUIT,OPALIGN);
+	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, _("Quit"), OPALIGN);
 
 	SetMousePos(INTINGAMEOP3_X + INTINGAMEOP_1_X, INTINGAMEOP3_Y + INTINGAMEOP_1_Y); // move mouse to resume.
 
@@ -143,20 +137,20 @@ static BOOL _addSlideOptions(void)
 
 	widgAddForm(psWScreen, &sFormInit);
 
-	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_4_Y,STR_GAME_RESUME,WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_4_Y, _("Resume Game"), WBUT_PLAIN);
 
 	// fx vol
-	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, STR_FE_FX, WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, _("Voice Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
 				AUDIO_VOL_MAX, mixer_GetWavVolume(), INTINGAMEOP_FXVOL);
 
 	// fx vol
-	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, STR_FE_3D_FX, WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, _("FX Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
 				AUDIO_VOL_MAX, mixer_Get3dWavVolume(), INTINGAMEOP_3DFXVOL);
 
 	// cd vol
-	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, STR_FE_MUSIC, WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX, mixer_GetCDVolume(), INTINGAMEOP_CDVOL);
 
@@ -166,7 +160,7 @@ static BOOL _addSlideOptions(void)
 	// gamma
 	if (pie_GetRenderEngine() == ENGINE_GLIDE)
 	{
-		addIGTextButton(INTINGAMEOP_GAMMA,INTINGAMEOP_3_Y,STR_FE_GAMMA,WBUT_PLAIN);
+		addIGTextButton(INTINGAMEOP_GAMMA, INTINGAMEOP_3_Y, _("Gamma"), WBUT_PLAIN);
 
 		if(gammaValue>3)	   gammaValue = (float)2.9;
 		if(gammaValue<0.5)  gammaValue = (float).5;
@@ -187,27 +181,6 @@ static BOOL addSlideOptions(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-
-static UDWORD MaxStringWidth;
-
-void ResetMaxStringWidth(void)
-{
-	MaxStringWidth=0;
-}
-
-void AddMaxStringWidth(STR_RES *psRes, UDWORD StringID)
-{
-	UDWORD StringWidth;
-	StringWidth=iV_GetTextWidth(strresGetString(psRes,StringID));
-	if (StringWidth>MaxStringWidth) MaxStringWidth=StringWidth;
-
-}
-UDWORD GetMaxStringWidth(void)
-{
-	return MaxStringWidth;
-}
-
-
 
 static BOOL _intAddInGameOptions(void)
 {
@@ -275,28 +248,28 @@ static BOOL _intAddInGameOptions(void)
 
     if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
-		addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_5_Y,STR_GAME_QUIT,OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_5_Y, _("Quit"), OPALIGN);
 
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_QUIT,INTINGAMEOP_3_Y,STR_GAME_QUIT,OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_3_Y, _("Quit"), OPALIGN);
 	}
 
 	// add 'resume'
-	addIGTextButton(INTINGAMEOP_RESUME,INTINGAMEOP_1_Y,STR_GAME_RESUME,OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, _("Resume Game"), OPALIGN);
 
 	SetCurrentSnapID(&InterfaceSnap,INTINGAMEOP_RESUME);
 
 	// add 'options'
-	addIGTextButton(INTINGAMEOP_OPTIONS,INTINGAMEOP_2_Y,STR_FE_OPTIONS,OPALIGN);
+	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, _("Options"), OPALIGN);
 
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{		// add 'load'
-		addIGTextButton(INTINGAMEOP_LOAD,INTINGAMEOP_3_Y,STR_MISC_LOADGAME,OPALIGN);
+		addIGTextButton(INTINGAMEOP_LOAD, INTINGAMEOP_3_Y, _("Load Game"), OPALIGN);
 		// add 'save'
-		addIGTextButton(INTINGAMEOP_SAVE,INTINGAMEOP_4_Y,STR_MISC_SAVEGAME,OPALIGN);
+		addIGTextButton(INTINGAMEOP_SAVE, INTINGAMEOP_4_Y, _("Save Game"), OPALIGN);
 	}
 
 

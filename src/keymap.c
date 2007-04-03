@@ -376,7 +376,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_SetDroidAttackReturn,	_("Return Fire"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F,KEYMAP_PRESSED,kf_SetDroidAttackAtWill,	_("Fire at Will"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_H,KEYMAP_PRESSED,kf_SetDroidReturnToBase,	_("Return to HQ"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_SetDroidRangeDefault,	strresGetString(psStringRes,STR_BIND_DEFR));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_SetDroidRangeDefault,	_("Optimum Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_O,KEYMAP_PRESSED,kf_SetDroidRangeShort,		_("Short Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_P,KEYMAP_PRESSED,kf_SetDroidMovePursue ,		_("Pursue"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SetDroidMovePatrol ,		_("Patrol"));
