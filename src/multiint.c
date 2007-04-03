@@ -208,6 +208,9 @@ static void		CurrentForce		(void);				// draw the current force
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
+/// This function is a HACK
+/// Loads the entire map (including calculating gateways) just to show
+/// a picture of it
 void loadMapPreview(void)
 {
 	char			aFileName[256];
@@ -226,16 +229,36 @@ void loadMapPreview(void)
 		mapShutdown();
 	}
 
+	// load the terrain types
 	levFindDataSet(game.map, &psLevel);
 	rebuildSearchPath(psLevel->dataDir, FALSE);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "/game.map");
-
+	strcat(aFileName, "/ttypes.ttp");
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
-		debug(LOG_NEVER, "loadMapPreview: Failed to load file");
+		debug(LOG_NEVER, "loadMapPreview: Failed to load terrain types file");
+		return;
+	}
+	if (pFileData)
+	{
+		if (!loadTerrainTypeMap(pFileData, fileSize))
+		{
+			debug(LOG_NEVER, "loadMapPreview: Failed to load terrain types");
+			return;
+		}
+	}
+
+	// load the map data
+	ptr = strrchr(aFileName, '/');
+	ASSERT(ptr, "this string was supposed to contain a /");
+	strcpy(ptr, "/game.map");
+	debug(LOG_WARNING, "loading %s", aFileName);
+	pFileData = DisplayBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	{
+		debug(LOG_NEVER, "loadMapPreview: Failed to load map file");
 		return;
 	}
 	if (!mapLoad(pFileData, fileSize))

@@ -135,6 +135,9 @@ extern BOOL loadMissionExtras(char *pGameToLoad, SWORD levelType);
 // load the script state given a .gam name
 extern BOOL loadScriptState(char *pFileName);
 
+/// Load the terrain types
+extern BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize);
+
 //direct access for forceloader
 extern BOOL gameLoad(char *pFileData, UDWORD filesize);
 
