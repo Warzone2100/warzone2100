@@ -1084,16 +1084,11 @@ static void dataStrResRelease(void *pData)
 static BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	SCRIPT_CODE		*psProg=NULL;
-	BLOCK_HEAP		*psHeap;
 	BOOL			printHack = FALSE;
 
 	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s",GetLastResourceFilename());
-	// make sure the memory system uses normal malloc for a compile
-	psHeap = memGetBlockHeap();
-	memSetBlockHeap(NULL);
-
 	scr_lineno = 1;
 
 	if (!scriptCompile(pBuffer, size, &psProg, SCRIPTTYPE))		// see script.h
@@ -1101,7 +1096,6 @@ static BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
 		return FALSE;
 	}
-	memSetBlockHeap(psHeap);
 
 	if (printHack)
 	{

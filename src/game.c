@@ -1783,12 +1783,9 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 			}
 			if(bMultiPlayer)
 			{
-				blockSuspendUsage();
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
 				setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
 				setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
-				blockUnsuspendUsage();
-
 			}
         }
 
@@ -1929,7 +1926,6 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 	if (saveGameOnMission && UserSaveGame)
 	{
 		LOADBARCALLBACK();	//		loadingScreenCallback();
-		memSetBlockHeap(psMapHeap);//should be set
 
         //the scroll limits for the mission map have already been written
         if (saveGameVersion >= VERSION_29)
@@ -1974,9 +1970,6 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 				}
 			}
 		}
-
-		//set mission heap
-		memSetBlockHeap(psMissionHeap);
 
 	// reload the objects that were in the mission list
 //except droids these are always loaded directly to the mission.apsDroidList
@@ -2868,13 +2861,9 @@ error:
 BOOL saveGame(char *aFileName, SDWORD saveType)
 {
 	UDWORD			fileExtension;
-	BLOCK_HEAP		*psHeap;
 	DROID			*psDroid, *psNext;
 
 	debug(LOG_WZ, "saveGame: %s", aFileName);
-
-	psHeap = memGetBlockHeap();
-	memSetBlockHeap(NULL);
 
 	fileExtension = strlen(aFileName) - 3;
 	gameTimeStop();
@@ -3195,15 +3184,11 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		swapMissionPointers();
 	}
 
-
-	memSetBlockHeap(psHeap);
-
 	/* Start the game clock */
 	gameTimeStart();
 	return TRUE;
 
 error:
-	memSetBlockHeap(psHeap);
 	/* Start the game clock */
 	gameTimeStart();
 
@@ -4058,11 +4043,9 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 			}
 			if(bMultiPlayer)
 			{
-				blockSuspendUsage();
 				loadMultiStats(psSaveGame->sPName,&playerStats);				// stats stuff
 				setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
 				setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
-				blockUnsuspendUsage();
 			}
 		}
 

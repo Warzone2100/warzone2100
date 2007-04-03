@@ -117,12 +117,10 @@ void resSetBaseDir(char *pResDir)
 
 /* Parse the res file */
 BOOL resLoad(const char *pResFile, SDWORD blockID,
-             char *pLoadBuffer, SDWORD bufferSize,
-             BLOCK_HEAP *psMemHeap)
+             char *pLoadBuffer, SDWORD bufferSize)
 {
 	char *pBuffer;
 	UDWORD	size;
-	BLOCK_HEAP *psOldHeap;
 
 	strcpy(aCurrResDir, aResDir);
 
@@ -135,18 +133,11 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 
 	debug(LOG_WZ, "resLoad: loading %s", pResFile);
 
-	// make sure the WRF doesn't get loaded into a block heap
-	psOldHeap = memGetBlockHeap();
-	memSetBlockHeap(NULL);
-
 	// Load the RES file; allocate memory for a wrf, and load it
 	if (!loadFile(pResFile, &pBuffer, &size)) {
 		debug(LOG_ERROR, "resLoad: failed to load %s", pResFile);
 		return FALSE;
 	}
-
-	// now set the memory system to use the block heap
-	memSetBlockHeap(psMemHeap);
 
 	// and parse it
 	resSetInputBuffer(pBuffer, size);
@@ -154,9 +145,6 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 		debug(LOG_ERROR, "resLoad: failed to parse %s", pResFile);
 		return FALSE;
 	}
-
-	// reset the memory system
-	memSetBlockHeap(psOldHeap);
 
 	FREE(pBuffer);
 
@@ -357,15 +345,11 @@ static BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 		return(TRUE);
 	}
 
-	blockSuspendUsage();
-
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
 	if (!loadFile(ResourceName, &pBuffer, &size))
 	{
 		return FALSE;
 	}
-
-	blockUnsuspendUsage();
 
 	ResData->type=RESFILETYPE_LOADED;
 	ResData->size=size;

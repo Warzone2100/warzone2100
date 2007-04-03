@@ -60,9 +60,6 @@ static STACK_CHUNK		*psCurrChunk=NULL;
 /* The current free entry on the current stack chunk */
 static UDWORD			currEntry=0;
 
-/* The block heap the stack was created in */
-static BLOCK_HEAP		*psStackBlock;
-
 /* Get rid of the top value without returning it */
 static inline BOOL stackRemoveTop(void);
 
@@ -77,8 +74,6 @@ BOOL stackEmpty(void)
 /* Allocate a new chunk for the stack */
 static BOOL stackNewChunk(UDWORD size)
 {
-	BLOCK_HEAP		*psHeap;
-
 	/* see if a chunk has already been allocated */
 	if (psCurrChunk->psNext != NULL)
 	{
@@ -87,9 +82,6 @@ static BOOL stackNewChunk(UDWORD size)
 	}
 	else
 	{
-		psHeap = memGetBlockHeap();
-		memSetBlockHeap(psStackBlock);
-
 		/* Allocate a new chunk */
 		psCurrChunk->psNext = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
 		if (!psCurrChunk->psNext)
@@ -112,8 +104,6 @@ static BOOL stackNewChunk(UDWORD size)
 		/* initialize pointers
 		   note: 0 means type == VAL_BOOL */
 		memset(psCurrChunk->psNext->aVals, 0, sizeof(INTERP_VAL) * size);
-
-		memSetBlockHeap(psHeap);
 	}
 
 	return TRUE;
@@ -983,8 +973,6 @@ BOOL castTop(INTERP_TYPE neededType)
 /* Initialise the stack */
 BOOL stackInitialise(void)
 {
-	psStackBlock = memGetBlockHeap();
-
 	psStackBase = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
 	if (psStackBase == NULL)
 	{

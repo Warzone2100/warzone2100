@@ -130,10 +130,10 @@ animObj_HashFreeElementFunc( void * psElement )
 {
 #ifdef DEBUG
 	ANIM_OBJECT	*psObj = (ANIM_OBJECT *) psElement;
-#endif
 
 	ASSERT( PTRVALID(psObj, sizeof(ANIM_OBJECT)),
 		"animObj_HashFreeElementFunc: object pointer invalid\n" );
+#endif
 }
 
 /***************************************************************************/

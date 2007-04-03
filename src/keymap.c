@@ -500,10 +500,7 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status,KEY_CODE metaCode, KEY_CODE subCode
 					  void (*pKeyMapFunc)(void), const char *name)
 {
 KEY_MAPPING	*newMapping;
-BLOCK_HEAP  *psHeap;
 
-	psHeap = memGetBlockHeap();
-	memSetBlockHeap(NULL);
 	/* Get some memory for our binding */
 	newMapping = (KEY_MAPPING*)MALLOC(sizeof(KEY_MAPPING));
 
@@ -512,8 +509,6 @@ BLOCK_HEAP  *psHeap;
 	/* Plus one for the terminator */
 	newMapping->pName = (char*)MALLOC(strlen(name)+1);
 	ASSERT( newMapping->pName != NULL, "Couldn't allocate the memory for the string in a mapping" );
-
-	memSetBlockHeap(psHeap);
 
 	/* Copy over the name */
 	strcpy(newMapping->pName,name);

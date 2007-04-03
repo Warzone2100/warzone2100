@@ -63,8 +63,6 @@ typedef struct _obj_heap
 	UDWORD		initAlloc;		// The initial number of objects allocated
 	UDWORD		extAlloc;		// The number of objects to allocate after the initial
 								// allocation is used up
-	struct _block_heap	*psBlkHeap;		// which block heap (if any) this object heap was allocated from
-
 	FREE_OBJECT		*psFree;	// The currently free objects
 
 	UBYTE		*pMemory;		// The main memory heap

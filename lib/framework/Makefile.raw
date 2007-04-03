@@ -1,15 +1,13 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
-SRC=block.c \
-	configfile.c \
+SRC=configfile.c \
 	debug.c \
 	exceptionhandler.c \
 	frame.c \
 	frameresource.c \
 	heap.c \
 	input.c \
-	mem.c \
 	resource_parser.tab.c \
 	resource_lexer.lex.c \
 	strres.c \

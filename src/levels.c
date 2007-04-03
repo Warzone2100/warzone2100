@@ -466,18 +466,11 @@ BOOL levReleaseMissionData(void)
 			return FALSE;
 		}
 
-		if ((psCurrLevel->type == LDS_COMPLETE ||
-			 psCurrLevel->type >= MULTI_TYPE_START) && psCurrLevel->game == -1)
-		{
-			BLOCK_RESET(psMissionHeap);
-		}
-
 		// free up the old data
 		for(i=LEVEL_MAXFILES-1; i >= 0; i--)
 		{
 			if (i == psCurrLevel->game)
 			{
-				BLOCK_RESET(psMissionHeap);
 				if (psCurrLevel->psBaseData == NULL)
 				{
 					if (!stageTwoShutDown())
@@ -491,10 +484,6 @@ BOOL levReleaseMissionData(void)
 
 				resReleaseBlockData(i + CURRENT_DATAID);
 			}
-		}
-		if (psCurrLevel->type == LDS_BETWEEN)
-		{
-			BLOCK_RESET(psMissionHeap);
 		}
 	}
 	return TRUE;
@@ -539,8 +528,6 @@ BOOL levReleaseAll(void)
 		{
 			return FALSE;
 		}
-
-		BLOCK_RESET(psGameHeap);
 	}
 
 	psCurrLevel=NULL;
@@ -563,19 +550,13 @@ static BOOL levLoadSingleWRF(char *pName)
 	{
 		return FALSE;
 	}
-	BLOCK_RESET(psGameHeap);
-	memSetBlockHeap(psGameHeap);
+
 	// load the data
 	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", pName);
-	if (!resLoad(pName, 0,
-				 DisplayBuffer, displayBufferSize,
-				 psGameHeap))
+	if (!resLoad(pName, 0, DisplayBuffer, displayBufferSize))
 	{
 		return FALSE;
 	}
-
-	BLOCK_RESET(psMissionHeap);
-	memSetBlockHeap(psMissionHeap);
 
 	if (!stageThreeInitialise())
 	{
@@ -620,11 +601,7 @@ BOOL levLoadBaseData(char *pName)
 	// clear all the old data
 	levReleaseAll();
 
-	// basic game data is loaded in the game heap
-	memSetBlockHeap(psGameHeap);
-
 	// initialise
-	BLOCK_RESET(psGameHeap);
 	if (!stageOneInitialise())
 	{
 		return FALSE;
@@ -639,8 +616,7 @@ BOOL levLoadBaseData(char *pName)
 			// load the data
 			debug(LOG_WZ, "levLoadBaseData: Loading %s", psBaseData->apDataFiles[i]);
 			if (!resLoad(psBaseData->apDataFiles[i], i,
-						 DisplayBuffer, displayBufferSize,
-						 psGameHeap))
+						 DisplayBuffer, displayBufferSize))
 			{
 				return FALSE;
 			}
@@ -663,7 +639,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
-	BLOCK_HEAP		*psCurrHeap;
     BOOL            bCamChangeSaveGame;
 
 	debug(LOG_WZ, "Loading level %s", pName);
@@ -767,16 +742,10 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	}
 
 
-	// basic game data is loaded in the game heap
-	debug( LOG_NEVER, "levLoadData: Setting game heap\n" );
-	memSetBlockHeap(psGameHeap);
-
 	// initialise if necessary
 	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= MULTI_TYPE_START ||
 		psBaseData != NULL)
 	{
-		debug( LOG_NEVER, "levLoadData: reset game heap\n" );
-		BLOCK_RESET(psGameHeap);
 		if (!stageOneInitialise())
 		{
 			return FALSE;
@@ -794,8 +763,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				// load the data
 				debug(LOG_WZ, "levLoadData: Loading %s ...", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i,
-							 DisplayBuffer, displayBufferSize,
-							 psGameHeap))
+							 DisplayBuffer, displayBufferSize))
 				{
 					return FALSE;
 				}
@@ -823,10 +791,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					return FALSE;
 				}
 			}
-
-			debug( LOG_NEVER, "levLoadData: setting map heap\n" );
-			BLOCK_RESET(psMapHeap);
-			memSetBlockHeap(psMapHeap);
 
             //set the mission type before the saveGame data is loaded
 			if (saveType == GTYPE_SAVE_MIDMISSION)
@@ -862,10 +826,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				return FALSE;
 			}
 		}
-
-		debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
-		BLOCK_RESET(psMissionHeap);
-		memSetBlockHeap(psMissionHeap);
 	}
 
     //we need to load up the save game data here for a camchange
@@ -881,10 +841,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					return FALSE;
 				}
 			}
-
-			debug( LOG_NEVER, "levLoadData: setting map heap\n" );
-			BLOCK_RESET(psMapHeap);
-			memSetBlockHeap(psMapHeap);
 
 			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
 			if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
@@ -902,14 +858,12 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
             //psChangeLevel = NULL;
 
             //stageTwoShutDown??
-            //block_reset??
         }
     }
 
 
 	// load the new data
 	debug( LOG_NEVER, "levLoadData: loading mission dataset: %s\n", psNewLevel->pName );
-	psCurrHeap = memGetBlockHeap();
 	for(i=0; i<LEVEL_MAXFILES; i++)
 	{
 		if (psNewLevel->game == i)
@@ -923,35 +877,11 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				{
 					return FALSE;
 				}
-
-				debug( LOG_NEVER, "levLoadData: setting map heap\n" );
-				BLOCK_RESET(psMapHeap);
-				memSetBlockHeap(psMapHeap);
-				psCurrHeap = psMapHeap;
-			}
-
-			// missions with a seperate map have to use the mission heap now
-			if ((psNewLevel->type == LDS_MKEEP
-				 ||psNewLevel->type == LDS_MCLEAR
-                 ||psNewLevel->type == LDS_MKEEP_LIMBO
-				  ) &&
-				pSaveName == NULL)
-			{
-				debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
-				BLOCK_RESET(psMissionHeap);
-				memSetBlockHeap(psMissionHeap);
-				psCurrHeap = psMissionHeap;
 			}
 
 			// load a savegame if there is one - but not if already done so
 			if (pSaveName != NULL && !bCamChangeSaveGame)
 			{
-				// make sure the map gets loaded into the right heap
-				debug( LOG_NEVER, "levLoadData: setting map heap\n" );
-				BLOCK_RESET(psMapHeap);
-				memSetBlockHeap(psMapHeap);
-				psCurrHeap = psMapHeap;
-
                 //set the mission type before the saveGame data is loaded
 				if (saveType == GTYPE_SAVE_MIDMISSION)
 				{
@@ -1078,23 +1008,13 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					return FALSE;
 				}
 			}
-
-			// set the mission heap now if it isn't already being used
-			if (memGetBlockHeap() != psMissionHeap)
-			{
-				debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
-				BLOCK_RESET(psMissionHeap);
-				memSetBlockHeap(psMissionHeap);
-			}
-			psCurrHeap = psMissionHeap;
 		}
 		else if (psNewLevel->apDataFiles[i])
 		{
 			// load the data
 			debug(LOG_WZ, "levLoadData: Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID,
-						 DisplayBuffer, displayBufferSize,
-						 psCurrHeap))
+						 DisplayBuffer, displayBufferSize))
 			{
 				return FALSE;
 			}
@@ -1102,16 +1022,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	}
 
 	dataClearSaveFlag();
-
-	// set the mission heap now if it isn't already being used
-	if (memGetBlockHeap() != psMissionHeap)
-	{
-		debug( LOG_NEVER, "levLoadData: setting mission heap\n" );
-		BLOCK_RESET(psMissionHeap);
-		memSetBlockHeap(psMissionHeap);
-		psCurrHeap = psMissionHeap;
-	}
-
 
 	//if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
     if (pSaveName != NULL)

@@ -405,12 +405,6 @@ void frameShutDown(void)
 
 	// Shutdown the resource stuff
 	resShutDown();
-
-	// shutdown the block memory heap
-	blkShutDown();
-
-	/* Shutdown the memory system */
-	memShutDown();
 }
 
 /***************************************************************************

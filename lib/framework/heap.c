@@ -37,7 +37,6 @@
 #include "heap.h"
 #include "treap.h"
 #include "treapint.h"
-#include "block.h"
 
 // Control whether a heap usage report is printed out when a heap is destroyed
 #define HEAP_USAGE_REPORT	FALSE
@@ -185,7 +184,6 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 	(*ppsHeap)->initAlloc = init;
 	(*ppsHeap)->extAlloc = ext;
 	(*ppsHeap)->psExt = NULL;
-	(*ppsHeap)->psBlkHeap = memGetBlockHeap();
 #if DEBUG_HEAP
 	(*ppsHeap)->maxUsage = 0;
 	(*ppsHeap)->currUsage = 0;
@@ -251,7 +249,6 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 	UDWORD		i;
 	FREE_OBJECT	*psCurr = NULL;
 	UBYTE		*pBase;
-	BLOCK_HEAP	*psCurrBlk;
 #if DEBUG_HEAP
 	HEAP_OBJHDR	*psHdr;
 	FREE_OBJECT		*psFree;
@@ -273,10 +270,6 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 			return FALSE;
 		}
 
-		/* No objects left - need to add a heap extension */
-		psCurrBlk = memGetBlockHeap();
-		memSetBlockHeap(psHeap->psBlkHeap);
-
 #ifdef REALLY_DEBUG_HEAP
 		debug(LOG_MEMORY, "heapAlloc: Heap %s, line %d extended. Max use: %d\n", psHeap->pFile, psHeap->line, psHeap->maxUsage);
 #endif
@@ -296,7 +289,6 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 			FREE(psNew);
 			return FALSE;
 		}
-		memSetBlockHeap(psCurrBlk);
 
 #if DEBUG_HEAP
 		/* Initialise the memory to check for overwrites */

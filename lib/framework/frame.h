@@ -34,7 +34,6 @@
 
 #include "heap.h"
 #include "treap.h"
-#include "block.h"
 
 #include "fractions.h"
 #include "trig.h"

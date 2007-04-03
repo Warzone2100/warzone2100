@@ -108,31 +108,6 @@ extern char * global_mods[];
 extern char * campaign_mods[];
 extern char * multiplay_mods[];
 
-
- // the sizes for the game block heap
- #define GAMEBLOCK_INIT		(2*1024*1024)
- #define GAMEBLOCK_EXT		(1024*1024)
- // the sizes for the campaign map block heap
- #define MAPBLOCK_INIT		(1024*1024)
- #define MAPBLOCK_EXT		(32*1024)
- // the sizes for the mission block heap
- #define MISSIONBLOCK_INIT		(2*1024*1024)
- #define MISSIONBLOCK_EXT		(512*1024)
-
-
-// the block heap for the game data
-BLOCK_HEAP	*psGameHeap;
-
-// the block heap for the campaign map
-BLOCK_HEAP	*psMapHeap;
-
-// the block heap for the pre WRF data
-BLOCK_HEAP	*psMissionHeap;
-
-// the block id for the game data
-#define GAME_BLOCKID	100
-
-
 // Ascii to font image id lookup table for frontend font.
 //
 
@@ -1031,24 +1006,6 @@ BOOL systemInitialise(void)
 		return FALSE;
 	}
 
-	// create a block heap for the game data
-	if (!BLOCK_CREATE(&psGameHeap, GAMEBLOCK_INIT, GAMEBLOCK_EXT))
-	{
-		return FALSE;
-	}
-
-	// create a block heap for the campaign map
-	if (!BLOCK_CREATE(&psMapHeap, MAPBLOCK_INIT, MAPBLOCK_EXT))
-	{
-		return FALSE;
-	}
-
-	// create a block heap for the pre WRF data
-	if (!BLOCK_CREATE(&psMissionHeap, MISSIONBLOCK_INIT, MISSIONBLOCK_EXT))
-	{
-		return FALSE;
-	}
-
 #ifdef ARROWS
 	arrowInit();
 #endif
@@ -1083,12 +1040,6 @@ BOOL systemShutdown(void)
 	}
 	free( data_dirs );
 */
-
-	// release the block heaps
-	BLOCK_DESTROY(psGameHeap);
-	BLOCK_DESTROY(psMapHeap);
-	BLOCK_DESTROY(psMissionHeap);
-
 
 	if (!bDisableLobby &&	!multiShutdown())		// ajl. init net stuff
 	{
@@ -1161,9 +1112,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 {
 	debug(LOG_MAIN, "Initialising frontend : %s", ResourceFile);
 
-	// allocate memory from the pre data heap
-	memSetBlockHeap(psGameHeap);
-
 	if(!InitialiseGlobals())				// Initialise all globals and statics everywhere.
 	{
 		return FALSE;
@@ -1202,10 +1150,9 @@ BOOL frontendInitialise(const char *ResourceFile)
 	}
 
 	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
-	if (!resLoad(ResourceFile, 0,
-				 DisplayBuffer, displayBufferSize,
-				 psGameHeap))	//need the object heaps to have been set up before loading in the save game
+	if (!resLoad(ResourceFile, 0, DisplayBuffer, displayBufferSize))
 	{
+		//need the object heaps to have been set up before loading in the save game
 		return FALSE;
 	}
 
@@ -1243,8 +1190,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
-
-	memSetBlockHeap(NULL);
 
 	initMiscVars();
 
@@ -1304,15 +1249,8 @@ BOOL frontendShutdown(void)
 */
 	pie_TexShutDown();
 
-
-
-	// reset the block heap
-	BLOCK_RESET(psGameHeap);
-
 	return TRUE;
 }
-
-
 
 
 
@@ -1324,9 +1262,6 @@ BOOL frontendShutdown(void)
 
 BOOL stageOneInitialise(void)
 {
-	BLOCK_HEAP	*psHeap;
-
-
 	debug(LOG_MAIN, "stageOneInitalise");
 
 	// Initialise all globals and statics everwhere.
@@ -1367,17 +1302,12 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-	// debug mode only so use normal MALLOC
-	psHeap = memGetBlockHeap();
-	memSetBlockHeap(NULL);
 #ifdef DISP2D
 	if (!disp2DInitialise())
 	{
 		return FALSE;
 	}
 #endif
-	memSetBlockHeap(psHeap);
-
 
 	if ( !anim_Init( anim_GetShapeFunc ) )
 	{
