@@ -102,7 +102,7 @@ static void checkMessages(MSG_VIEWDATA *psViewData);
 extern UDWORD selectedPlayer;
 
 //void HEAP_ALLOC(OBJ_HEAP* psHeap, void** ppObject)
-inline MESSAGE* createMessage(OBJ_HEAP *heap, MESSAGE_TYPE msgType)
+static inline MESSAGE* createMessage(OBJ_HEAP *heap, MESSAGE_TYPE msgType)
 {
 	MESSAGE *newMsg;
 
@@ -121,7 +121,7 @@ inline MESSAGE* createMessage(OBJ_HEAP *heap, MESSAGE_TYPE msgType)
  * list is a pointer to the message list
  * Order is now CAMPAIGN, MISSION, RESEARCH/PROXIMITY
  */
-inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
+static inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
 {
 	MESSAGE *psCurr = NULL, *psPrev = NULL;
 
@@ -214,7 +214,7 @@ inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD pl
  * list is a pointer to the message list
  * del is a pointer to the message to remove
 */
-inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAGE *del, UDWORD player)
+static inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAGE *del, UDWORD player)
 {
 	MESSAGE *psPrev = NULL, *psCurr;
 
@@ -246,7 +246,7 @@ inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAGE *del,
 	}
 }
 
-inline void releaseAllMessages(MESSAGE *list[], OBJ_HEAP *heap)
+static inline void releaseAllMessages(MESSAGE *list[], OBJ_HEAP *heap)
 {
 	UDWORD	i;
 	MESSAGE	*psCurr, *psNext;

@@ -342,7 +342,7 @@ void objmemUpdate(void)
 
 /* Creating a new object
  */
-inline BASE_OBJECT* createObject(UDWORD player, OBJ_HEAP *heap, OBJECT_TYPE objType)
+static inline BASE_OBJECT* createObject(UDWORD player, OBJ_HEAP *heap, OBJECT_TYPE objType)
 {
 	BASE_OBJECT* newObject;
 
@@ -364,7 +364,7 @@ inline BASE_OBJECT* createObject(UDWORD player, OBJ_HEAP *heap, OBJECT_TYPE objT
 /* Add the object to its list
  * \param list is a pointer to the object list
  */
-inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
+static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
 {
 	ASSERT(object != NULL,
 	       "addObjectToList: Invalid pointer");
@@ -378,7 +378,7 @@ inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
  * \param list is a pointer to the object list
  * \param del is a pointer to the object to remove
  */
-inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
+static inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
 
@@ -424,7 +424,7 @@ inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
  * \param remove is a pointer to the object to remove
  * \param type is the type of the object
  */
-inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object)
+static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object)
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
 
@@ -456,7 +456,7 @@ inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object)
 	}
 }
 
-inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
+static inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
 {
 	BASE_OBJECT *psCurr;
 	for(psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
@@ -473,7 +473,7 @@ inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
 // Necessary for a nice looking cast in calls to releaseAllObjectsInList
 typedef void (*OBJECT_DESTRUCTOR)(BASE_OBJECT*);
 
-inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJ_HEAP *heap, OBJECT_DESTRUCTOR objectDestructor)
+static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJ_HEAP *heap, OBJECT_DESTRUCTOR objectDestructor)
 {
 	UDWORD i;
 	BASE_OBJECT *psCurr, *psNext;
