@@ -67,9 +67,6 @@ extern void screenFlipToGDI(void);
  */
 extern void inputNewFrame(void);
 
-/* Release all the allocated surfaces */
-extern void surfShutDown(void);
-
 /* The Current screen size and bit depth */
 extern UDWORD		screenWidth;
 extern UDWORD		screenHeight;
