@@ -45,6 +45,8 @@
 #include "scripttabs.h"
 
 
+static UDWORD asciiKeyCodeToTable( KEY_CODE code );
+
 // ----------------------------------------------------------------------------------
 KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
 {
@@ -660,6 +662,7 @@ static BOOL checkQwertyKeys( void )
 		{
 			tableEntry = asciiKeyCodeToTable(qKey);
 			/* We're assigning something to the key */
+			debug(LOG_WARNING, "tableEntry: %i", tableEntry);
 			if (qwertyKeyMappings[tableEntry].psMapping)
 			{
 				/* Get rid of the old mapping on this key if there was one */
@@ -953,6 +956,7 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
+			debug(LOG_WARNING, "%i pressed (KEY_Q: %i, KEY_P: %i)", i, KEY_Q, KEY_P);
 			return(i);	// top row key pressed
 		}
 	}
@@ -961,6 +965,7 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
+			debug(LOG_WARNING, "%i pressed (KEY_A: %i, KEY_L: %i)", i, KEY_A, KEY_L);
 			return(i);	// middle row key pressed
 		}
 	}
@@ -969,6 +974,7 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
+			debug(LOG_WARNING, "%i pressed (KEY_Z: %i, KEY_M: %i)", i, KEY_Z, KEY_M);
 			return(i);	// bottomw row key pressed
 		}
 	}
@@ -981,20 +987,20 @@ UDWORD	i;
 */
 UDWORD	asciiKeyCodeToTable(KEY_CODE code)
 {
-	if(code<=KEY_P)
+	if( code >= KEY_Q && code<=KEY_P )
 	{
 		return code - KEY_Q;  // q is the first of the ascii scan codes
 	}
-	else if(code <=KEY_L)
+	if( code >= KEY_A && code <=KEY_L )
 	{
 		return (code - KEY_A) + 10;	// ten keys from q to p
 	}
-	else if(code<=KEY_M)
+	if( code >= KEY_Z && code<=KEY_M )
 	{
 		return (code - KEY_Z) + 19;	// 19 keys before, the 10 from q..p and the 9 from a..l
 	}
-
-	return((UDWORD) code);
+	ASSERT(FALSE, "only pass nonzero key codes from getQwertyKey to this function");
+	return 0;
 }
 
 // ----------------------------------------------------------------------------------

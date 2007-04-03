@@ -86,8 +86,6 @@ extern	KEY_MAPPING	*getKeyMapFromName(char *pName);
 
 extern KEY_CODE	getQwertyKey		( void );
 
-
-extern UDWORD	asciiKeyCodeToTable		( KEY_CODE code );
 extern UDWORD	getMarkerX				( KEY_CODE code );
 extern UDWORD	getMarkerY				( KEY_CODE code );
 extern SDWORD	getMarkerSpin			( KEY_CODE code );
