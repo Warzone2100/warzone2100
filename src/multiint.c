@@ -254,7 +254,6 @@ void loadMapPreview(void)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	debug(LOG_WARNING, "loading %s", aFileName);
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
 	{
