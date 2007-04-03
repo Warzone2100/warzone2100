@@ -4499,7 +4499,7 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		}
 		else
 		{
-			ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+			ASSERT( psTemplate != NULL,
 				"loadSaveUnitInitV2: Invalid template pointer" );
 
 // Need to set apCompList[pDroidInit->player][componenttype][compid] = AVAILABLE for each droid.

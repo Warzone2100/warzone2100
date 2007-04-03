@@ -28,6 +28,5 @@
 
 #define MALLOC(size)		malloc(size)
 #define FREE(ptr)		do { free(ptr); ptr = NULL; } while(0)
-#define PTRVALID(ptr, size)	(ptr != NULL)
 
 #endif

@@ -321,7 +321,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	UDWORD			heightVariance;
 	WEAPON_STATS	*psWeapStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT( PTRVALID(psWeapStats,sizeof(WEAPON_STATS)),
+	ASSERT( psWeapStats != NULL,
 			"proj_SendProjectile: invalid weapon stats" );
 
 	/* get unused projectile object from hashtable*/
@@ -618,11 +618,11 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
 
-	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
+	ASSERT( psObj != NULL,
 		"proj_InFlightDirectFunc: invalid projectile pointer" );
 
 	psStats = psObj->psWStats;
-	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
+	ASSERT( psStats != NULL,
 		"proj_InFlightDirectFunc: Invalid weapon stats pointer" );
 
 	bPenetrate = psStats->penetrate;
@@ -909,12 +909,12 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
 
-	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
+	ASSERT( psObj != NULL,
 		"proj_InFlightIndirectFunc: invalid projectile pointer" );
 
 	psStats = psObj->psWStats;
 	bPenetrate = psStats->penetrate;
-	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
+	ASSERT( psStats != NULL,
 		"proj_InFlightIndirectFunc: Invalid weapon stats pointer" );
 
 	iTime = gameTime - psObj->born;
@@ -1159,11 +1159,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	int				impact_angle;
 
 
-	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
+	ASSERT( psObj != NULL,
 		"proj_ImpactFunc: invalid projectile pointer" );
 
 	psStats = psObj->psWStats;
-	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
+	ASSERT( psStats != NULL,
 		"proj_ImpactFunc: Invalid weapon stats pointer" );
 
 	/* play impact audio */
@@ -1229,7 +1229,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	bKilled = FALSE;
 	if ( psObj->psDest != NULL )
 	{
-		ASSERT( PTRVALID(psObj->psDest, sizeof(BASE_OBJECT)),
+		ASSERT( psObj->psDest != NULL,
 			"proj_ImpactFunc: Invalid destination object pointer" );
 	}
 
@@ -1827,11 +1827,11 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 	SDWORD			i, age;
 	FIRE_BOX		flame;
 
-	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
+	ASSERT( psObj != NULL,
 		"proj_PostImpactFunc: invalid projectile pointer" );
 
 	psStats = psObj->psWStats;
-	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
+	ASSERT( psStats != NULL,
 		"proj_PostImpactFunc: Invalid weapon stats pointer" );
 
 	age = (SDWORD)gameTime - (SDWORD)psObj->born;
@@ -1876,7 +1876,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 static void
 proj_Update( PROJ_OBJECT *psObj )
 {
-	ASSERT( PTRVALID(psObj, sizeof(PROJ_OBJECT)),
+	ASSERT( psObj != NULL,
 		"proj_Update: Invalid bullet pointer" );
 
 	/* See if any of the stored objects have died

@@ -287,7 +287,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 	s->numFrames = 0;
 	s->animInterval = 0;
 
-	s->polys = (iIMDPoly *) iV_HeapAlloc(sizeof(iIMDPoly) * s->npolys);
+	s->polys = (iIMDPoly *) MALLOC(sizeof(iIMDPoly) * s->npolys);
 
 	if (s->polys) {
 		poly = s->polys;
@@ -310,9 +310,9 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 
 			IMDVertexcount+= poly->npnts;
 
-			poly->pindex = (VERTEXID *) iV_HeapAlloc(sizeof(VERTEXID) * poly->npnts);
+			poly->pindex = (VERTEXID *) MALLOC(sizeof(VERTEXID) * poly->npnts);
 
-			if ((poly->vrt = (iVertex *)	iV_HeapAlloc(sizeof(iVertex) * poly->npnts)) == NULL) {
+			if ((poly->vrt = (iVertex *)	MALLOC(sizeof(iVertex) * poly->npnts)) == NULL) {
 				iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (vertex struct)",i);
 				return FALSE;
 			}
@@ -357,7 +357,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			if (poly->flags & iV_IMD_TEXANIM) {
 				IMDTexAnims++;
 
-				if ((poly->pTexAnim = (iTexAnim *)iV_HeapAlloc(sizeof(iTexAnim))) == NULL) {
+				if ((poly->pTexAnim = (iTexAnim *)MALLOC(sizeof(iTexAnim))) == NULL) {
 					iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)",i);
 					return FALSE;
 				}
@@ -664,7 +664,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 
 	IMDPoints+=s->npoints;
 
-	s->points = p = (Vector3i *) iV_HeapAlloc(sizeof(Vector3i) * s->npoints);
+	s->points = p = (Vector3i *) MALLOC(sizeof(Vector3i) * s->npoints);
 	if (p == NULL) {
 		return FALSE;
 	}
@@ -883,9 +883,9 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 
 	IMDConnectors+=s->nconnectors;
 
-	if ((s->connectors = (Vector3i *) iV_HeapAlloc(sizeof(Vector3i) * s->nconnectors)) == NULL)
+	if ((s->connectors = (Vector3i *) MALLOC(sizeof(Vector3i) * s->nconnectors)) == NULL)
 	{
-		iV_Error(0xff,"(_load_connectors) iV_HeapAlloc fail");
+		iV_Error(0xff,"(_load_connectors) MALLOC fail");
 		return FALSE;
 	}
 
@@ -940,7 +940,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 	if (nlevels == 0)
 		return NULL;
 
-	s = (iIMDShape *) iV_HeapAlloc(sizeof(iIMDShape));
+	s = (iIMDShape *) MALLOC(sizeof(iIMDShape));
 
 	if (s) {
 		s->points = NULL;

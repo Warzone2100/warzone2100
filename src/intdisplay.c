@@ -469,7 +469,7 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+		ASSERT( psObj != NULL,
 			"intAddFactoryInc: invalid structure pointer" );
 
 		ASSERT( !psObj->died,"intAddFactoryInc: object is dead" );
@@ -507,7 +507,7 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	psStat = (BASE_STATS *)Label->pUserData;
 	if (psStat != NULL)
 	{
-		ASSERT( PTRVALID(psStat, sizeof(DROID_TEMPLATE)),
+		ASSERT( psStat != NULL,
 			"intAddProdQuantity: invalid template pointer" );
 
 		psTemplate = (DROID_TEMPLATE *)psStat;
@@ -590,7 +590,7 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+		ASSERT( psObj != NULL,
 			"intUpdateCommandSize: invalid droid pointer" );
 
 		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
@@ -622,7 +622,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+		ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 			"intUpdateCommandSize: invalid droid pointer" );
 
 		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
@@ -660,7 +660,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 	psObj = (BASE_OBJECT*)Label->pUserData;
 	if (psObj != NULL)
 	{
-		ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+		ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 			"intUpdateCommandSize: invalid droid pointer" );
 
 		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
@@ -3532,7 +3532,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
     //allocate this outside of the if so the rank icons are always draw
     psDroid = (DROID*)Buffer->Data;
     //there should always be a droid associated with the button
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"intDisplayTransportButton: invalid droid pointer" );
 
 	{
@@ -3550,7 +3550,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 		//psDroid = (DROID*)Buffer->Data;
 
 		//there should always be a droid associated with the button
-		//ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		//ASSERT( psDroid != NULL,
 		//	"intDisplayTransportButton: invalid droid pointer" );
 
 		if (psDroid)

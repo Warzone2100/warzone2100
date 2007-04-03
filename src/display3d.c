@@ -1359,7 +1359,7 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 	UDWORD		brightness, specular;
 //	SDWORD		centreX, centreZ;
 
-	ASSERT( PTRVALID(psParentObj, sizeof(SIMPLE_OBJECT)),
+	ASSERT( psParentObj != NULL,
 		"renderAnimComponent: invalid parent object pointer" );
 
 	/* only draw visible bits */
@@ -3040,7 +3040,7 @@ void renderDroid( DROID *psDroid )
 
 
    //	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-   //	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+   //	ASSERT( psPropStats != NULL,
 	//		"moveUpdateDroid: invalid propulsion stats pointer" );
 
 	/*

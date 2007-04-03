@@ -962,7 +962,7 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		return;
 	}
 
-	ASSERT( PTRVALID(psMessage->pViewData, sizeof(VIEWDATA)),
+	ASSERT( psMessage->pViewData != NULL,
 		"StartMessageSequences: invalid ViewData pointer" );
 
 	if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)

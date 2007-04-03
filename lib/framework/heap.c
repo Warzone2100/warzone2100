@@ -162,7 +162,7 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 	(*ppsHeap)->pMemory = (UBYTE *)MALLOC(size * init);
 
 /*
-	if (PTRVALID((*ppsHeap)->pMemory,size*init)==FALSE)
+	if ((*ppsHeap)->pMemory == NULL)
 	{
 		DBPRINTF(("Allocated heap memory is not valid!\n"));
 	}
@@ -211,7 +211,7 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 	// Now create the free object list
 	heapCreateFreeList(*ppsHeap);
 /*
-	if (PTRVALID((*ppsHeap)->pMemory,10)==FALSE)
+	if ((*ppsHeap)->pMemory == NULL)
 	{
 		DBPRINTF(("Allocated heap memory is not valid!\n"));
 	}
@@ -256,7 +256,7 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 	UBYTE			*pStart, *pEnd;
 #endif
 
-	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
+	ASSERT( psHeap != NULL,
 		"heapAlloc: Invalid heap pointer" );
 
 	if (psHeap->psFree == NULL)
@@ -376,7 +376,7 @@ BOOL heapFree(OBJ_HEAP *psHeap, void *pObject)
 #endif
 	FREE_OBJECT		*psFree;
 
-	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
+	ASSERT( psHeap != NULL,
 		"heapFree: Invalid heap pointer" );
 
 #if DEBUG_HEAP
@@ -465,7 +465,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 	int 			Heap;
 #endif
 
-	ASSERT( PTRVALID(psHeap, sizeof(OBJ_HEAP)),
+	ASSERT( psHeap != NULL,
 		"heapDestroy: invalid heap pointer" );
 
 #if DEBUG_HEAP

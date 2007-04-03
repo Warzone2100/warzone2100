@@ -901,7 +901,7 @@ BOOL structUsesPower(STRUCTURE *psStruct)
 {
     BOOL    bUsesPower = FALSE;
 
-	ASSERT( PTRVALID(psStruct, sizeof(STRUCTURE)),
+	ASSERT( psStruct != NULL,
 		"structUsesPower: Invalid Structure pointer" );
 
     switch(psStruct->pStructureType->type)
@@ -926,7 +926,7 @@ BOOL droidUsesPower(DROID *psDroid)
 {
     BOOL    bUsesPower = FALSE;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitUsesPower: Invalid unit pointer" );
 
     switch(psDroid->droidType)

@@ -147,7 +147,7 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 /* Free the memory used by a barGraph */
 void barGraphFree(W_BARGRAPH *psWidget)
 {
-	ASSERT( PTRVALID(psWidget, sizeof(W_BARGRAPH)),
+	ASSERT( psWidget != NULL,
 		"barGraphFree: Invalid widget pointer" );
 
 #if W_USE_STRHEAP
@@ -177,7 +177,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 	W_BARGRAPH		*psBGraph;
 	UDWORD			size;
 
-	ASSERT( PTRVALID(psScreen, sizeof(W_SCREEN)),
+	ASSERT( psScreen != NULL,
 		"widgSetBarSize: Invalid screen pointer" );
 
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
@@ -208,7 +208,7 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
 	W_BARGRAPH		*psBGraph;
 	UDWORD			size;
 
-	ASSERT( PTRVALID(psScreen, sizeof(W_SCREEN)),
+	ASSERT( psScreen != NULL,
 		"widgSetBarSize: Invalid screen pointer" );
 
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);

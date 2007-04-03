@@ -86,10 +86,6 @@
 //#define iV_PolyClipTex2D			pie_PolyClipTex2D
 //#define iV_PolyClip2D				pie_PolyClip2D
 
-//heap crash
-#define iV_HeapAlloc(size) MALLOC(size)
-#define iV_HeapFree(pointer,size) FREE(pointer)
-
 /***************************************************************************/
 /*
  *	Global Macros

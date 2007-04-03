@@ -1767,7 +1767,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	if (psStats->ref >= REF_SENSOR_START &&
 		psStats->ref < REF_SENSOR_START + REF_RANGE)
 	{
-		ASSERT( PTRVALID(psStats, sizeof(SENSOR_STATS)),
+		ASSERT( psStats != NULL,
 			"intAddSystemForm: Invalid sensor stats pointer" );
 		psSensor = (SENSOR_STATS *)psStats;
 
@@ -1836,7 +1836,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	else if (psStats->ref >= REF_ECM_START &&
 			 psStats->ref < REF_ECM_START + REF_RANGE)
 	{
-		ASSERT( PTRVALID(psStats, sizeof(ECM_STATS)),
+		ASSERT( psStats != NULL,
 			"intAddSystemForm: Invalid ecm stats pointer" );
 		psECM = (ECM_STATS *)psStats;
 
@@ -1887,7 +1887,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	else if (psStats->ref >= REF_CONSTRUCT_START &&
 			 psStats->ref < REF_CONSTRUCT_START + REF_RANGE)
 	{
-		ASSERT( PTRVALID(psStats, sizeof(CONSTRUCT_STATS)),
+		ASSERT( psStats != NULL,
 			"intAddSystemForm: Invalid constructor stats pointer" );
 		psConst = (CONSTRUCT_STATS *)psStats;
 
@@ -1938,7 +1938,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	else if (psStats->ref >= REF_REPAIR_START &&
 			 psStats->ref < REF_REPAIR_START + REF_RANGE)
 	{
-		ASSERT( PTRVALID(psStats, sizeof(REPAIR_STATS)),
+		ASSERT( psStats != NULL,
 			"intAddSystemForm: Invalid repair stats pointer" );
 		psRepair = (REPAIR_STATS *)psStats;
 
@@ -1981,7 +1981,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	else if (psStats->ref >= REF_WEAPON_START &&
 			 psStats->ref < REF_WEAPON_START + REF_RANGE)
 	{
-		ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
+		ASSERT( psStats != NULL,
 			"intAddSystemForm: Invalid ecm stats pointer" );
 		psWeapon = (WEAPON_STATS *)psStats;
 
@@ -2110,7 +2110,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 //	W_LABINIT		sTitleInit;
 	DES_PROPMODE	newPropMode=(DES_PROPMODE)0;
 
-	ASSERT( PTRVALID(psStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psStats != NULL,
 		"intAddPropulsionForm: Invalid propulsion stats pointer" );
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -2724,7 +2724,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 		{
 			psPropStats = asPropulsionStats + sCurrDesign.
 				asParts[COMP_PROPULSION];
-			ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+			ASSERT( psPropStats != NULL,
 				"intAddComponentButtons: invalid propulsion stats pointer" );
 			if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 			{
@@ -3084,7 +3084,7 @@ static void intSetSystemStats(COMP_BASE_STATS *psStats)
 {
 	W_FORM	*psForm;
 
-	ASSERT( PTRVALID(psStats, sizeof(COMP_BASE_STATS)),
+	ASSERT( psStats != NULL,
 //			 (((UBYTE *)psStats >= (UBYTE *)asCommandDroids) &&
 //			  ((UBYTE *)psStats < (UBYTE *)asCommandDroids + sizeof(asCommandDroids))),
 		"intSetSystemStats: Invalid stats pointer" );
@@ -3214,7 +3214,7 @@ static void intSetSystemShadowStats(COMP_BASE_STATS *psStats)
 /* Set the bar graphs for the sensor stats */
 static void intSetSensorStats(SENSOR_STATS *psStats)
 {
-	ASSERT( PTRVALID(psStats, sizeof(SENSOR_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetSensorStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_SENSOR_START) &&
 			(psStats->ref < REF_SENSOR_START + REF_RANGE),
@@ -3235,8 +3235,6 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 /* Set the shadow bar graphs for the sensor stats */
 static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 {
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(SENSOR_STATS)),
-		"intSetSensorShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_SENSOR_START) &&
 			 (psStats->ref < REF_SENSOR_START + REF_RANGE)),
@@ -3268,7 +3266,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 /* Set the bar graphs for the ECM stats */
 static void intSetECMStats(ECM_STATS *psStats)
 {
-	ASSERT( PTRVALID(psStats, sizeof(ECM_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetECMStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_ECM_START) &&
 			(psStats->ref < REF_ECM_START + REF_RANGE),
@@ -3285,8 +3283,6 @@ static void intSetECMStats(ECM_STATS *psStats)
 /* Set the shadow bar graphs for the ECM stats */
 static void intSetECMShadowStats(ECM_STATS *psStats)
 {
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(ECM_STATS)),
-		"intSetECMShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_ECM_START) &&
 			 (psStats->ref < REF_ECM_START + REF_RANGE)),
@@ -3313,10 +3309,10 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 /* Set the bar graphs for the Constructor stats */
 static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT( PTRVALID(psStats, sizeof(CONSTRUCT_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetConstructStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_CONSTRUCT_START) &&
-			(psStats->ref < REF_CONSTRUCT_START + REF_RANGE),
+		(psStats->ref < REF_CONSTRUCT_START + REF_RANGE),
 		"intSetConstructStats: stats ref is out of range" );
 
 	/* power */
@@ -3331,8 +3327,6 @@ static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 /* Set the shadow bar graphs for the Constructor stats */
 static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(CONSTRUCT_STATS)),
-		"intSetConstructShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 		    ((psStats->ref >= REF_CONSTRUCT_START) &&
 			 (psStats->ref < REF_CONSTRUCT_START + REF_RANGE)),
@@ -3358,7 +3352,7 @@ static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 /* Set the bar graphs for the Repair stats */
 static void intSetRepairStats(REPAIR_STATS *psStats)
 {
-	ASSERT( PTRVALID(psStats, sizeof(REPAIR_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetRepairStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_REPAIR_START) &&
 			(psStats->ref < REF_REPAIR_START + REF_RANGE),
@@ -3376,8 +3370,6 @@ static void intSetRepairStats(REPAIR_STATS *psStats)
 /* Set the shadow bar graphs for the Repair stats */
 static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 {
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(REPAIR_STATS)),
-		"intSetRepairShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 		    ((psStats->ref >= REF_REPAIR_START) &&
 			 (psStats->ref < REF_REPAIR_START + REF_RANGE)),
@@ -3404,7 +3396,7 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 /* Set the bar graphs for the Weapon stats */
 static void intSetWeaponStats(WEAPON_STATS *psStats)
 {
-	ASSERT( PTRVALID(psStats, sizeof(WEAPON_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetWeaponStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_WEAPON_START) &&
 			(psStats->ref < REF_WEAPON_START + REF_RANGE),
@@ -3424,8 +3416,6 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 /* Set the shadow bar graphs for the Weapon stats */
 static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 {
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(WEAPON_STATS)),
-		"intSetWeaponShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_WEAPON_START) &&
 			 (psStats->ref < REF_WEAPON_START + REF_RANGE)),
@@ -3458,7 +3448,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 {
 	W_FORM	*psForm;
 
-	ASSERT( PTRVALID(psStats, sizeof(BODY_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetBodyStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_BODY_START) &&
 			(psStats->ref < REF_BODY_START + REF_RANGE),
@@ -3503,8 +3493,6 @@ static void intSetBodyStats(BODY_STATS *psStats)
 /* Set the shadow bar graphs for the Body stats */
 static void intSetBodyShadowStats(BODY_STATS *psStats)
 {
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(BODY_STATS)),
-		"intSetBodyShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_BODY_START) &&
 			 (psStats->ref < REF_BODY_START + REF_RANGE)),
@@ -3772,7 +3760,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	W_FORM	    *psForm;
     UDWORD      weight;
 
-	ASSERT( PTRVALID(psStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psStats != NULL,
 		"intSetPropulsionStats: Invalid stats pointer" );
 	ASSERT( (psStats->ref >= REF_PROPULSION_START) &&
 			(psStats->ref < REF_PROPULSION_START + REF_RANGE),
@@ -3830,8 +3818,6 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
     UDWORD      weight;
 
 
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(PROPULSION_STATS)),
-		"intSetPropulsionShadowStats: Invalid stats pointer" );
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_PROPULSION_START) &&
 			 (psStats->ref < REF_PROPULSION_START + REF_RANGE)),

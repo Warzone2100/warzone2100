@@ -144,7 +144,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 /* Free the memory used by a slider */
 void sliderFree(W_SLIDER *psWidget)
 {
-	ASSERT( PTRVALID(psWidget, sizeof(W_SLIDER)),
+	ASSERT( psWidget != NULL,
 		"sliderFree: Invalid widget pointer" );
 
 #if W_USE_STRHEAP
@@ -166,7 +166,7 @@ void sliderFree(W_SLIDER *psWidget)
 /* Initialise a slider widget before running it */
 void sliderInitialise(W_SLIDER *psWidget)
 {
-	ASSERT( PTRVALID(psWidget, sizeof(W_SLIDER)),
+	ASSERT( psWidget != NULL,
 		"sliderInitialise: Invalid slider pointer" );
 
 	psWidget->state = 0;
@@ -180,7 +180,7 @@ UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT( PTRVALID(psWidget, sizeof(W_SLIDER)),
+	ASSERT( psWidget != NULL,
 		"widgGetSliderPos: couldn't find widget from id" );
 	if (psWidget)
 	{
@@ -196,7 +196,7 @@ void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT( PTRVALID(psWidget, sizeof(W_SLIDER)),
+	ASSERT( psWidget != NULL,
 		"widgGetSliderPos: couldn't find widget from id" );
 	if (psWidget)
 	{

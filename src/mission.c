@@ -2023,7 +2023,7 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 
-	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
+	ASSERT( psStructure != NULL,
 		"aiUpdateMissionStructure: invalid Structure pointer" );
 
 	ASSERT( (psStructure->pStructureType->type == REF_FACTORY  ||
@@ -2290,7 +2290,7 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 void missionStructureUpdate(STRUCTURE *psBuilding)
 {
 
-	ASSERT( PTRVALID(psBuilding, sizeof(STRUCTURE)),
+	ASSERT( psBuilding != NULL,
 		"structureUpdate: Invalid Structure pointer" );
 
 	//update the manufacture/research of the building
@@ -2312,7 +2312,7 @@ void missionStructureUpdate(STRUCTURE *psBuilding)
 Only interested in Transporters at present*/
 void missionDroidUpdate(DROID *psDroid)
 {
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitUpdate: Invalid unit pointer" );
 
     /*This is required for Transporters that are moved offWorld so the
@@ -3156,7 +3156,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	psTransporter = (DROID *)Label->pUserData;
 	if (psTransporter != NULL)
 	{
-		ASSERT( PTRVALID(psTransporter, sizeof(DROID)),
+		ASSERT( psTransporter != NULL,
 			"intUpdateTransporterTimer: invalid Droid pointer" );
 
 		if (psTransporter->action == DACTION_TRANSPORTIN ||

@@ -173,7 +173,7 @@ UDWORD	count;
 		{
 			/* Get the propulsion type */
 			psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-			ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+			ASSERT( psPropStats != NULL,
 				"moveUpdateUnit: invalid propulsion stats pointer" );
 			/* Same as that asked for - don't want Transporters*/
 			if ( psPropStats->propulsionType == propType && psDroid->droidType != DROID_TRANSPORTER)

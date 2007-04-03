@@ -228,9 +228,9 @@ BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	SDWORD		iLiftHeight, iBlockingHeight;
 	DROID		*psDroid = (DROID *) g_psObjRoute;
 
-	ASSERT( PTRVALID(g_psObjRoute, sizeof(BASE_OBJECT)),
+	ASSERT( g_psObjRoute != NULL,
 		"fpathLiftBlockingTile: invalid object pointer" );
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"fpathLiftBlockingTile: invalid droid pointer" );
 
 	if (psDroid->droidType == DROID_TRANSPORTER )
@@ -425,7 +425,7 @@ void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
 {
 	MOVE_CONTROL *psMoveCntl;
 
-	ASSERT( PTRVALID(psObj, sizeof(BASE_OBJECT)),
+	ASSERT( psObj != NULL,
 			"fpathSetDirectRoute: invalid object pointer\n" );
 
 	if ( psObj->type == OBJ_DROID )
@@ -1346,7 +1346,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	{
 		psDroid = (DROID *)psObj;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+		ASSERT( psPropStats != NULL,
 			"fpathRoute: invalid propulsion stats pointer" );
 
 		fpathSetBlockingTile( psPropStats->propulsionType );

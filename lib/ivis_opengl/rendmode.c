@@ -48,7 +48,7 @@ iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, 
 
 	assert(buffer!=NULL);	// on playstation this MUST be null
 
-	if ((s = (iSurface *) iV_HeapAlloc(sizeof(iSurface))) == NULL)
+	if ((s = (iSurface *) malloc(sizeof(iSurface))) == NULL)
 		return NULL;
 
 	s->flags = flags;
@@ -83,7 +83,7 @@ void iV_SurfaceDestroy(iSurface *s)
 		psRendSurface = NULL;
 
 	if (s)
-		iV_HeapFree(s,sizeof(iSurface));
+		FREE(s);
 }
 
 //*************************************************************************

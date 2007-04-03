@@ -644,7 +644,7 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	/* this is ignored for features */
 	//(void)weaponClass;
 
-	ASSERT( PTRVALID(psFeature, sizeof(FEATURE)),
+	ASSERT( psFeature != NULL,
 		"featureDamage: Invalid feature pointer" );
 
 	debug( LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d\n",
@@ -962,7 +962,7 @@ void removeFeature(FEATURE *psDel)
 //	UWORD		uwFlameCycles, uwFlameAnims, i;
 //	UDWORD		x, y, udwFlameDelay;
 
-	ASSERT( PTRVALID(psDel, sizeof(FEATURE)),
+	ASSERT( psDel != NULL,
 		"removeFeature: invalid feature pointer\n" );
 
 	if (psDel->died)
@@ -1061,7 +1061,7 @@ void destroyFeature(FEATURE *psDel)
 	UDWORD			texture;
 
 
-	ASSERT( PTRVALID(psDel, sizeof(FEATURE)),
+	ASSERT( psDel != NULL,
 		"destroyFeature: invalid feature pointer\n" );
 
 //---------------------------------------------------------------------------------------

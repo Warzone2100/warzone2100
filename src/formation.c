@@ -258,7 +258,7 @@ void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj)
 {
 	SDWORD	rankDist, size;
 
-	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
+	ASSERT( psFormation != NULL,
 		"formationJoin: invalid formation" );
 
 // 	debug( LOG_NEVER, "formationJoin: %p, obj %d\n", psFormation, psObj->id );
@@ -289,7 +289,7 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 	F_MEMBER	*asMembers;
 	FORMATION	*psCurr, *psPrev;
 
-	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
+	ASSERT( psFormation != NULL,
 		"formationLeave: invalid formation" );
 	ASSERT( psFormation->refCount > 0,
 		"formationLeave: refcount is zero" );
@@ -768,7 +768,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	SDWORD		member, x,y;
 	F_MEMBER	*asMembers;
 
-	ASSERT( PTRVALID(psFormation, sizeof(FORMATION)),
+	ASSERT( psFormation != NULL,
 		"formationGetPos: invalid formation pointer" );
 
 /*	if (psFormation->refCount == 1)

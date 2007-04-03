@@ -122,7 +122,7 @@ void strresReleaseIDStrings(STR_RES *psRes)
 {
 	STR_ID		*psID;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	for(psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap); psID;
@@ -144,7 +144,7 @@ void strresDestroy(STR_RES *psRes)
 	STR_BLOCK	*psBlock, *psNext = NULL;
 	UDWORD		i;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	// Free the string id's
@@ -192,7 +192,7 @@ BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID)
 {
 	UDWORD	i;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	for (i=0; i<numID; i++)
@@ -221,7 +221,7 @@ BOOL strresGetIDNum(STR_RES *psRes, char *pIDStr, UDWORD *pIDNum)
 {
 	STR_ID	*psID;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
@@ -248,7 +248,7 @@ BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID)
 {
 	STR_ID	*psID;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
@@ -272,7 +272,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 	STR_BLOCK	*psBlock;
 	UDWORD		id;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	// Find the id for the string
@@ -354,7 +354,7 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 {
 	STR_BLOCK	*psBlock;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresLoadFixedID: Invalid string res pointer" );
 
 	// find the block the string is in
@@ -429,7 +429,7 @@ UDWORD strresGetIDfromString(STR_RES *psRes, char *pString)
 	STR_BLOCK	*psBlock, *psNext = NULL;
 	UDWORD		i;
 
-	ASSERT( PTRVALID(psRes, sizeof(STR_RES)),
+	ASSERT( psRes != NULL,
 		"strresGetID: Invalid string res pointer" );
 
 	// Search through all the blocks to find the string

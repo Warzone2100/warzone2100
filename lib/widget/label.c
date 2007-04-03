@@ -47,7 +47,7 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 		return FALSE;
 	}
 
-//	ASSERT( PTRVALID(psInit->psFont, sizeof(PROP_FONT)),
+//	ASSERT( psInit->psFont != NULL,
 //		"labelCreate: Invalid font pointer" );
 
 	/* Allocate the required memory */
@@ -127,7 +127,7 @@ void labelFree(W_LABEL *psWidget)
 	}
 #endif
 
-	ASSERT( PTRVALID(psWidget, sizeof(W_LABEL)),
+	ASSERT( psWidget != NULL,
 		"labelFree: Invalid label pointer" );
 
 #if W_USE_MALLOC

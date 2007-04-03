@@ -173,7 +173,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	SDWORD		level, cmdLevel;
 	DROID_HIT_SIDE	impact_side;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitDamage: Invalid Unit pointer" );
 
     //EMP cannons do not do body damage
@@ -1034,10 +1034,10 @@ static void droidFlameFallCallback( ANIM_OBJECT * psObj )
 {
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psObj, sizeof(ANIM_OBJECT)),
+	ASSERT( psObj != NULL,
 		"unitFlameFallCallback: invalid anim object pointer\n" );
 	psDroid = (DROID *) psObj->psParent;
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitFlameFallCallback: invalid Unit pointer\n" );
 
 	psDroid->psCurAnim = NULL;
@@ -1049,10 +1049,10 @@ static void droidBurntCallback( ANIM_OBJECT * psObj )
 {
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psObj, sizeof(ANIM_OBJECT)),
+	ASSERT( psObj != NULL,
 		"unitBurntCallback: invalid anim object pointer\n" );
 	psDroid = (DROID *) psObj->psParent;
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitBurntCallback: invalid Unit pointer\n" );
 
 	/* add falling anim */
@@ -1072,7 +1072,7 @@ void droidBurn( DROID * psDroid )
 {
 	BOOL	bRet;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitBurn: invalid Unit pointer\n" );
 
 	if ( psDroid->droidType != DROID_PERSON )
@@ -1276,7 +1276,7 @@ void droidUpdate(DROID *psDroid)
 	SDWORD	damageToDo;
 
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitUpdate: Invalid unit pointer" );
 
 //	ASSERT( psDroid->x != 0 && psDroid->y != 0,
@@ -1554,7 +1554,7 @@ BOOL droidStartFoundation(DROID *psDroid)
 {
 //	SDWORD	height;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitStartFoundation: invalid unit pointer" );
 
 	/* See if we are starting a new structure */
@@ -1583,7 +1583,7 @@ droidCheckBuildStillInProgress( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)),
+	ASSERT( psSample != NULL,
 		"unitCheckBuildStillInProgress: audio sample pointer invalid\n" );
 
 	if ( psSample->psObj == NULL )
@@ -1593,7 +1593,7 @@ droidCheckBuildStillInProgress( AUDIO_SAMPLE *psSample )
 	else
 	{
 		psDroid = (DROID*)psSample->psObj;
-		ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		ASSERT( psDroid != NULL,
 			"unitCheckBuildStillInProgress: unit pointer invalid\n" );
 	}
 
@@ -1612,14 +1612,14 @@ droidBuildStartAudioCallback( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)),
+	ASSERT( psSample != NULL,
 		"unitBuildStartAudioCallback: audio sample pointer invalid\n" );
 
 	psDroid = (DROID*)psSample->psObj;
 
 	if ( psDroid != NULL )
 	{
-		ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		ASSERT( psDroid != NULL,
 			"unitBuildStartAudioCallback: unit pointer invalid\n" );
 
 		if ( psDroid->visible[selectedPlayer] )
@@ -1641,7 +1641,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	STRUCTURE_STATS		*psStructStat;
 	//MESSAGE				*psMessage;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitStartBuild: invalid unit pointer" );
 
 	/* See if we are starting a new structure */
@@ -5687,9 +5687,9 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 	BOOL	order;
 	UDWORD	i=0;
 
-//	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+//	ASSERT( psDroid != NULL,
 //		"buildModule: Invalid droid pointer" );
-	ASSERT( PTRVALID(psStruct, sizeof(STRUCTURE)),
+	ASSERT( psStruct != NULL,
 		"buildModule: Invalid structure pointer" );
 
 	order = FALSE;
@@ -5908,7 +5908,7 @@ BOOL electronicDroid(DROID *psDroid)
 {
 	DROID	*psCurr;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"electronicUnit: Invalid unit pointer" );
 
 	//Watermelon:use slot 0 for now
@@ -5939,7 +5939,7 @@ BOOL droidUnderRepair(DROID *psDroid)
 {
 	DROID		*psCurr;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"unitUnderRepair: Invalid unit pointer" );
 
 	//droid must be damaged
@@ -6624,7 +6624,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	bValid = TRUE;
 	//check propulsion stat for vtol
 	psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 		"checkValidWeaponForProp: invalid propulsion stats pointer" );
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
@@ -6796,7 +6796,7 @@ BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)),
+	ASSERT( psSample != NULL,
 		"unitAudioTrackStopped: audio sample pointer invalid\n" );
 
 	if ( psSample->psObj != NULL )
@@ -6805,7 +6805,7 @@ BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
 
         if ( psDroid->type == OBJ_DROID && !psDroid->died )
 		{
-            ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+            ASSERT( psDroid != NULL,
                     "unitAudioTrackStopped: unit pointer invalid\n" );
 			psDroid->iAudioID = NO_SOUND;
 		}

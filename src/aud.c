@@ -60,7 +60,7 @@ audio_ObjectDead( void * psObj )
 	PROJ_OBJECT		*psProj;
 
 	/* check is valid simple object pointer */
-	if ( !PTRVALID(psSimpleObj, sizeof(SIMPLE_OBJECT)) )
+	if ( psSimpleObj == NULL )
 	{
 		debug( LOG_NEVER, "audio_ObjectDead: simple object pointer invalid\n" );
 		return TRUE;
@@ -70,7 +70,7 @@ audio_ObjectDead( void * psObj )
 	if ( psSimpleObj->type == OBJ_BULLET )
 	{
 		psProj = (PROJ_OBJECT *) psSimpleObj;
-		if ( !PTRVALID(psProj, sizeof(PROJ_OBJECT)) )
+		if ( psProj == NULL )
 		{
 			debug( LOG_NEVER, "audio_ObjectDead: projectile object pointer invalid\n" );
 			return TRUE;
@@ -93,7 +93,7 @@ audio_ObjectDead( void * psObj )
 		psBaseObj = (BASE_OBJECT *) psObj;
 
 		/* check is valid pointer */
-		if ( !PTRVALID(psBaseObj, sizeof(BASE_OBJECT)) )
+		if ( psBaseObj == NULL )
 		{
 			debug( LOG_NEVER, "audio_ObjectDead: base object pointer invalid\n" );
 			return TRUE;
@@ -188,7 +188,7 @@ audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
 
 	/* check is valid pointer */
-	ASSERT( PTRVALID(psBaseObj, sizeof(BASE_OBJECT)),
+	ASSERT( psBaseObj != NULL,
 			"audio_GetObjectPos: game object pointer invalid\n" );
 
 	*piX = psBaseObj->x;
@@ -215,7 +215,7 @@ audio_GetClusterCentre( void *psClusterObj, SDWORD *piX, SDWORD *piY, SDWORD *pi
 	BOOL	bDroidInClusterMoving = FALSE;
 
 	/* check valid pointer */
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 			"audio_GetClusterCentre: game object pointer invalid\n" );
 
 	iNumObj = *piX = *piY = *piZ = 0;
@@ -273,7 +273,7 @@ audio_GetNewClusterObject( void **psClusterObj, SDWORD iClusterID )
 	DROID	*psDroid = (DROID *) *psClusterObj;
 
 	/* check valid pointer */
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 			"audio_GetNewClusterObject: game object pointer invalid\n" );
 
 	/* return if droid not dead */

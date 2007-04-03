@@ -115,7 +115,7 @@ extern UDWORD selectedPlayer;
  * Order is now CAMPAIGN, MISSION, RESEARCH/PROXIMITY
  */
 #define ADD_MSG(list, msg, player) \
-	ASSERT( PTRVALID((msg), sizeof(MESSAGE)), \
+	ASSERT( msg != NULL, \
 		"addMessage: Invalid message pointer" ); \
 	if (list[player] == NULL) \
 	{ \
@@ -161,7 +161,7 @@ extern UDWORD selectedPlayer;
 
 static void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
 {
-	ASSERT( PTRVALID((msg), sizeof(MESSAGE)),
+	ASSERT( msg != NULL,
 		"addMessage: Invalid message pointer" );
 	if (list[player] == NULL)
 	{
@@ -248,7 +248,7 @@ static void add_msg(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UDWORD player)
  * del is a pointer to the message to remove
 */
 #define REMOVEMSG(list, heap, del, player) \
-	ASSERT( PTRVALID(del, sizeof(MESSAGE)), \
+	ASSERT( del != NULL, \
 		"removeMessage: Invalid message pointer" ); \
 	if (list[player] == del) \
 	{ \

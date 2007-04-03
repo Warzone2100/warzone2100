@@ -377,7 +377,7 @@ static BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation
 	FPATH_RETVAL		retVal = FPR_OK;
 	SDWORD				fmx1,fmy1, fmx2,fmy2;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"moveUnitTo: Invalid unit pointer" );
 
 
@@ -569,7 +569,7 @@ BOOL moveDroidToNoFormation(DROID *psDroid, UDWORD x,UDWORD y)
 // move a droid directly to a location (used by vtols only)
 void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 {
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)) && vtolDroid(psDroid),
+	ASSERT( psDroid != NULL && vtolDroid(psDroid),
 		"moveUnitToDirect: only valid for a vtol unit" );
 
 	fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
@@ -808,11 +808,11 @@ void moveStopDroid(DROID *psDroid)
 {
 	PROPULSION_STATS	*psPropStats;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"moveStopUnit: Invalid unit pointer" );
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 
 	if ( psPropStats->propulsionType == LIFT )
@@ -828,7 +828,7 @@ void moveStopDroid(DROID *psDroid)
 /*Stops a droid dead in its tracks - doesn't allow for any little skidding bits*/
 void moveReallyStopDroid(DROID *psDroid)
 {
-    ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+    ASSERT( psDroid != NULL,
         "moveReallyStopUnit: invalid unit pointer" );
 
     psDroid->sMove.Status = MOVEINACTIVE;
@@ -1905,7 +1905,7 @@ static void moveGetObstVector4(DROID *psDroid, FRACT *pX, FRACT *pY)
 	PROPULSION_STATS	*psPropStats;
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 
 	numObst = 0;
@@ -3062,7 +3062,7 @@ moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 {
 	DROID	*psDroid = psObj->psParent;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 			"moveCyborgLaunchAnimDone: invalid cyborg pointer" );
 
 	/* raise cyborg a little bit so flying - terrible hack - GJ */
@@ -3077,7 +3077,7 @@ moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 {
 	DROID	*psDroid = psObj->psParent;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 			"moveCyborgTouchDownAnimDone: invalid cyborg pointer" );
 
 	psDroid->psCurAnim = NULL;
@@ -3138,7 +3138,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	}
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 			"moveUpdateCyborgModel: invalid propulsion stats pointer" );
 
 	/* do vertical movement */
@@ -3295,7 +3295,7 @@ BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)),
+	ASSERT( psSample != NULL,
 		"moveCheckUnitMovingAndVisible: audio sample pointer invalid\n" );
 
 	if ( psSample->psObj == NULL )
@@ -3305,7 +3305,7 @@ BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 	else
 	{
 		psDroid = psSample->psObj;
-		ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		ASSERT( psDroid != NULL,
 			"moveCheckUnitMovingAndVisible: unit pointer invalid\n" );
 	}
 
@@ -3331,7 +3331,7 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 	PROPULSION_TYPES	*psPropType;
 	UBYTE				iPropType = 0;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"movePlayUnitMoveAudio: unit pointer invalid\n" );
 
 	if ( (psDroid != NULL) &&
@@ -3376,7 +3376,7 @@ static BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 {
 	DROID				*psDroid;
 
-	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)),
+	ASSERT( psSample != NULL,
 		"moveUnitStartCallback: audio sample pointer invalid\n" );
 
 	if ( psSample->psObj == NULL )
@@ -3386,7 +3386,7 @@ static BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
 	else
 	{
 		psDroid = psSample->psObj;
-		ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+		ASSERT( psDroid != NULL,
 			"moveDroidStartCallback: unit pointer invalid\n" );
 	}
 
@@ -3411,7 +3411,7 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 
 	/* get prop stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 	propType = psPropStats->propulsionType;
 	psPropType = &asPropulsionTypes[propType];
@@ -3556,7 +3556,7 @@ void moveUpdateDroid(DROID *psDroid)
 //		"moveUpdateUnit: unit at (0,0)" );
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 
 //	if(driveModeActive()) {

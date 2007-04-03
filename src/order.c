@@ -999,10 +999,10 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			/* get repair facility pointer */
 			psStruct = (STRUCTURE *) psDroid->psTarget[0];
-			ASSERT( PTRVALID(psStruct, sizeof(STRUCTURE)),
+			ASSERT( psStruct != NULL,
 				"orderUpdateUnit: invalid structure pointer" );
 			psRepairFac = (REPAIR_FACILITY *) psStruct->pFunctionality;
-			ASSERT( PTRVALID(psRepairFac, sizeof(REPAIR_FACILITY)),
+			ASSERT( psRepairFac != NULL,
 				"orderUpdateUnit: invalid repair facility pointer" );
 
 			xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->psTarget[0]->x;
@@ -1387,7 +1387,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	DROID	*psCurr, *psChosen;
 	SDWORD	xdiff,ydiff, currdist, mindist;
 
-	ASSERT( PTRVALID(psGroup, sizeof(DROID_GROUP)),
+	ASSERT( psGroup != NULL,
 		"cmdUnitOrderGroupBase: invalid unit group" );
 
 
@@ -1549,7 +1549,7 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 	{
 		case OBJ_DROID:
 			psDroid = (DROID *) psObj;
-			ASSERT( PTRVALID(psObj, sizeof(DROID)),
+			ASSERT( psObj != NULL,
 					"orderPlayFireSupportAudio: invalid droid pointer" );
 			if ( psDroid->droidType == DROID_COMMAND )
 			{
@@ -1562,7 +1562,7 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 			break;
 
 		case OBJ_STRUCTURE:
-			ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)),
+			ASSERT( psObj != NULL,
 					"orderPlayFireSupportAudio: invalid structure pointer" );
 			psStruct = (STRUCTURE *) psObj;
             //check for non-CB first
@@ -1922,7 +1922,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			break;
 		}
-		ASSERT( PTRVALID(psOrder->psStats, sizeof(STRUCTURE_STATS)),
+		ASSERT( psOrder->psStats != NULL,
 			"orderUnitBase: invalid structure stats pointer" );
 #if 0
 		// quick hack to get the droid to choose the location itself
@@ -1998,7 +1998,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			break;
 		}
-		ASSERT( PTRVALID(psOrder->psStats, sizeof(STRUCTURE_STATS)),
+		ASSERT( psOrder->psStats != NULL,
 			"orderUnitBase: invalid structure stats pointer" );
 
 		psDroid->order = DORDER_LINEBUILD;
@@ -2421,7 +2421,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnit: Invalid unit pointer" );
 	ASSERT( order == DORDER_NONE ||
 			order == DORDER_RETREAT ||
@@ -2471,7 +2471,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 //	DBPRINTF(("droid=%p\n",psDroid);
 //	memMemoryReport(NULL);
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitLoc: Invalid unit pointer" );
 	ASSERT( order == DORDER_NONE ||
 			order == DORDER_MOVE ||
@@ -2539,7 +2539,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, DROID_OACTION_INFO *psObj)
 	DROID_ORDER_DATA	sOrder;
 	UBYTE i;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitObj: Invalid unit pointer" );
 	ASSERT( order == DORDER_NONE ||
 			order == DORDER_HELPBUILD ||
@@ -2683,7 +2683,7 @@ void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order,
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitStatsLoc: Invalid unit pointer" );
 	ASSERT( order == DORDER_BUILD,
 		"orderUnitStatsLoc: Invalid order for location" );
@@ -2711,7 +2711,7 @@ void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order,
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitStatsLoc: Invalid unit pointer" );
 
 	// can only queue build orders with this function
@@ -2735,7 +2735,7 @@ void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order,
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitStatsTwoLoc: Invalid unit pointer" );
 	ASSERT( order == DORDER_LINEBUILD,
 		"orderUnitStatsTwoLoc: Invalid order for location" );
@@ -2760,7 +2760,7 @@ void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitStatsTwoLocAdd: Invalid unit pointer" );
 	ASSERT( order == DORDER_LINEBUILD,
 		"orderUnitStatsTwoLocAdd: Invalid order for location" );
@@ -2836,7 +2836,7 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 	Vector3i position;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"orderUnitAdd: invalid unit pointer" );
 
 	if (psDroid->listSize >= ORDER_LIST_MAX)
@@ -3216,7 +3216,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 			  psObj->type == OBJ_STRUCTURE)
             {
 		        psStruct = (STRUCTURE *) psObj;
-		        ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)),
+		        ASSERT( psObj != NULL,
 				        "chooseOrderObj: invalid structure pointer" );
 			    if ( psStruct->pStructureType->type == REF_REPAIR_FACILITY &&
 				     psStruct->status == SS_BUILT)
@@ -3352,7 +3352,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 			  psObj->type == OBJ_STRUCTURE )
 	{
 		psStruct = (STRUCTURE *) psObj;
-		ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)),
+		ASSERT( psObj != NULL,
 				"chooseOrderObj: invalid structure pointer" );
 
 		/* check whether construction droid */
@@ -3471,7 +3471,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
         psObj->type == OBJ_FEATURE )
 	{
 		psFeature = (FEATURE *) psObj;
-		ASSERT( PTRVALID(psObj, sizeof(FEATURE)),
+		ASSERT( psObj != NULL,
 				"chooseOrderObj: invalid feature pointer" );
 		if (psFeature->psStats->subType == FEAT_BUILD_WRECK)
 		{

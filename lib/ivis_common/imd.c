@@ -452,15 +452,15 @@ void iV_IMDRelease(iIMDShape *s)
    if (s) {
 
 		if (s->flags & iV_IMD_BINARY) {
-			iV_HeapFree(s,0);
+			FREE(s);
 			return;
 		}
 
 		if (s->points) {
-			iV_HeapFree(s->points,s->npoints * sizeof(Vector3i));
+			FREE(s->points);
 		}
 		if (s->connectors) {
-			iV_HeapFree(s->connectors,s->nconnectors * sizeof(Vector3i));
+			FREE(s->connectors);
 		}
 		if (s->BSPNode) {
 				FREE(s->BSPNode);	// I used MALLOC() so i'm going to use FREE()
@@ -468,16 +468,16 @@ void iV_IMDRelease(iIMDShape *s)
 		if (s->polys) {
 			for (i = 0; i < s->npolys; i++) {
 				if (s->polys[i].pindex) {
-					iV_HeapFree(s->polys[i].pindex,s->polys[i].npnts * sizeof(int));
+					FREE(s->polys[i].pindex);
 				}
 				if (s->polys[i].pTexAnim) {
-					iV_HeapFree(s->polys[i].pTexAnim,sizeof(iTexAnim));
+					FREE(s->polys[i].pTexAnim);
 				}
 				if (s->polys[i].vrt) {
-					iV_HeapFree(s->polys[i].vrt,s->polys[i].npnts * sizeof(iVertex));
+					FREE(s->polys[i].vrt);
 				}
 			}
-			iV_HeapFree(s->polys,s->npolys * sizeof(iIMDPoly));
+			FREE(s->polys);
 		}
 		if (s->shadowEdgeList)
 		{
@@ -486,7 +486,7 @@ void iV_IMDRelease(iIMDShape *s)
 		}
 		iV_DEBUG0("imd[IMDRelease] = release successful\n");
 		d = s->next;
-		iV_HeapFree(s,sizeof(iIMDShape));
+		FREE(s);
 		iV_IMDRelease(d);
 	}
 }

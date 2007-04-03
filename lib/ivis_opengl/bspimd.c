@@ -86,7 +86,7 @@ static inline int IsPointOnPlane( PSPLANE psPlane, Vector3i * vP )
 
 	/* validate input */
 #ifdef BSP_MAXDEBUG
-	ASSERT( PTRVALID(psPlane,sizeof(PLANE)),
+	ASSERT( psPlane != NULL,
 			"IsPointOnPlane: invalid plane\n" );
 #endif
 
@@ -149,7 +149,7 @@ void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane )
 	Vector3f Result;
 	iIMDPoly *psTri;
 	/* validate input */
-	ASSERT( PTRVALID(psPlane,sizeof(PLANE)),
+	ASSERT( psPlane != NULL,
 			"GetPlane: invalid plane\n" );
 
 	psTri=&(s->polys[PolygonID]);
@@ -255,7 +255,7 @@ static void GetTriangleNormal( PSTRIANGLE psTri, Vector3f * psN,int pA, int pB, 
 	Vector3f vecA, vecB;
 
 	/* validate input */
-	ASSERT( PTRVALID(psTri,sizeof(iIMDPoly)),
+	ASSERT( psTri != NULL,
 			"GetTriangleNormal: invalid triangle\n" );
 
 	/* get triangle edge vectors */

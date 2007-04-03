@@ -3029,8 +3029,7 @@ BOOL checkResearchStats(void)
 		{
 			for (inc=0; inc < asResearch[resInc].numArteResults; inc++)
 			{
-				ASSERT( PTRVALID(asResearch[resInc].pArtefactResults[inc],
-					sizeof(COMP_BASE_STATS*)),
+				ASSERT( asResearch[resInc].pArtefactResults[inc] != NULL,
 					"checkResearchStats: Invalid Comp Result for topic %s",
 					getResearchName(asResearch[resInc]) );
 			}
@@ -3049,8 +3048,7 @@ BOOL checkResearchStats(void)
 		{
 			for (inc=0; inc < asResearch[resInc].numRedArtefacts; inc++)
 			{
-				ASSERT( PTRVALID(asResearch[resInc].pRedArtefacts[inc],
-					sizeof(COMP_BASE_STATS*)),
+				ASSERT( asResearch[resInc].pRedArtefacts[inc] != NULL,
 					"checkResearchStats: Invalid Redundant Comp for topic %s",
 					getResearchName(asResearch[resInc]) );
 			}
@@ -3195,7 +3193,7 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                             UDWORD newCompInc)
 {
 
-    ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+    ASSERT( psDroid != NULL,
         "switchComponent:invalid droid pointer" );
 
 	switch(oldType)

@@ -123,11 +123,11 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	//Watermelon:dist
 	SDWORD			dist;
 
-	ASSERT( PTRVALID(psWeap, sizeof(WEAPON)),
+	ASSERT( psWeap != NULL,
 		"combFire: Invalid weapon pointer" );
-	ASSERT( PTRVALID(psAttacker, sizeof(BASE_OBJECT)),
+	ASSERT( psAttacker != NULL,
 		"combFire: Invalid attacker pointer" );
-	ASSERT( PTRVALID(psTarget, sizeof(BASE_OBJECT)),
+	ASSERT( psTarget != NULL,
 		"combFire: Invalid target pointer" );
 
 	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */

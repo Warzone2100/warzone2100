@@ -325,13 +325,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	UDWORD			callDepth = 0;
 	BOOL			bTraceOn=FALSE;		//enable to debug function/event calls
 
-	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
+	ASSERT( psContext != NULL,
 		"interpRunScript: invalid context pointer" );
 
 	psProg = psContext->psCode;
 	psCurProg = psProg;		//remember for future use
 
-	ASSERT( PTRVALID(psProg, sizeof(SCRIPT_CODE)),
+	ASSERT( psProg != NULL,
 		"interpRunScript: invalid script code pointer" );
 
 	if (bInterpRunning)

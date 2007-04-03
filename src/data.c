@@ -987,7 +987,7 @@ static void dataAudioRelease( void *pData )
 {
 	TRACK	*psTrack = (TRACK *) pData;
 
-	ASSERT( PTRVALID(psTrack, sizeof(TRACK)),
+	ASSERT( psTrack != NULL,
 			"dataAudioRelease: invalid track pointer" );
 
 	audio_ReleaseTrack( psTrack );

@@ -285,7 +285,7 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 		return FALSE;
 		break;
 	}
-	//ASSERT( PTRVALID(psStructStats, sizeof(STRUCTURE_STATS)),
+	//ASSERT( psStructStats != NULL,
 	//	"actionNewBuildPos: invalid structure stats pointer" );
 
 	// find a new destination
@@ -809,7 +809,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 			if (psDroid->asWeaps[i].nStat != 0)
 			{
 				psWeapStats[i] = asWeaponStats + psDroid->asWeaps[i].nStat;
-				ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
+				ASSERT( psWeapStats != NULL,
 				"actionUpdateVtolAttack: invalid weapon stats pointer" );
 				break;
 			}
@@ -820,7 +820,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 		if (psDroid->asWeaps[0].nStat > 0)
 		{
 			psWeapStats[0] = asWeaponStats + psDroid->asWeaps[0].nStat;
-			ASSERT( PTRVALID(psWeapStats, sizeof(WEAPON_STATS)),
+			ASSERT( psWeapStats != NULL,
 				"actionUpdateVtolAttack: invalid weapon stats pointer" );
 		}
 	}
@@ -1168,7 +1168,7 @@ void actionUpdateDroid(DROID *psDroid)
 	BOOL	bHasTarget;
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( PTRVALID(psPropStats, sizeof(PROPULSION_STATS)),
+	ASSERT( psPropStats != NULL,
 			"actionUpdateUnit: invalid propulsion stats pointer" );
 
 	ASSERT( psDroid->turretRotation[i] < 360, "turretRotation out of range" );
@@ -2792,7 +2792,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	//Watermelon:added MinRangeResult;
 	UBYTE	i;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"actionUnitBase: Invalid Unit pointer" );
 	ASSERT( psDroid->type == OBJ_DROID,
 		"actionUnitBase: Unit pointer does not reference a unit" );

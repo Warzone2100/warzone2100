@@ -2862,9 +2862,9 @@ static void intProcessStats(UDWORD id)
 			{
 				//get the stats
 				psStats = ppsStatsList[id - IDSTAT_START];
-				ASSERT( PTRVALID(psObjSelected, sizeof(STRUCTURE)),
+				ASSERT( psObjSelected != NULL,
 					"intProcessStats: Invalid structure pointer" );
-				ASSERT( PTRVALID(psStats, sizeof(DROID_TEMPLATE)),
+				ASSERT( psStats != NULL,
 					"intProcessStats: Invalid template pointer" );
                 if (productionPlayer == (SBYTE)selectedPlayer)
                 {
@@ -3496,7 +3496,7 @@ void intBuildFinished(DROID *psDroid)
 	UDWORD	droidID;
 	DROID	*psCurr;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"intBuildFinished: Invalid droid pointer" );
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
@@ -3526,7 +3526,7 @@ void intBuildStarted(DROID *psDroid)
 	UDWORD	droidID;
 	DROID	*psCurr;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"intBuildStarted: Invalid droid pointer" );
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
@@ -3711,7 +3711,7 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 	STRUCTURE       *psCurr;
     BASE_OBJECT     *psObj;
 
-	ASSERT( PTRVALID(psBuilding, sizeof(STRUCTURE)),
+	ASSERT( psBuilding != NULL,
 		"intManufactureFinished: Invalid structure pointer" );
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
@@ -3765,7 +3765,7 @@ void intResearchFinished(STRUCTURE *psBuilding)
 	//STRUCTURE       *psCurr;
     //BASE_OBJECT     *psObj;
 
-	ASSERT( PTRVALID(psBuilding, sizeof(STRUCTURE)),
+	ASSERT( psBuilding != NULL,
 		"intResearchFinished: Invalid structure pointer" );
 
 	// just do a screen refresh
@@ -4384,9 +4384,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	BOOL			IsFactory;
 	BOOL			Animate = TRUE;
 	UWORD           FormX,FormY;
-
-	ASSERT( psSelected == NULL || PTRVALID(psSelected, sizeof(BASE_OBJECT)),
-		"intAddObject: Invalid object pointer" );
 
 // Is the form already up?
 	if(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) {
@@ -6116,7 +6113,7 @@ static BOOL selectCommand(BASE_OBJECT *psObj)
 //	UDWORD	i;
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 		"selectConstruction: invalid droid pointer" );
 	psDroid = (DROID *)psObj;
 
@@ -6154,7 +6151,7 @@ static BOOL selectConstruction(BASE_OBJECT *psObj)
 //	UDWORD	i;
 	DROID	*psDroid;
 
-	ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 		"selectConstruction: invalid droid pointer" );
 	psDroid = (DROID *)psObj;
 
@@ -6184,7 +6181,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 	STRUCTURE *Structure;
 	UDWORD x,y;
 
-	ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 		"getConstructionStats: invalid droid pointer" );
 	psDroid = (DROID *)psObj;
 
@@ -6221,11 +6218,9 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	//UDWORD				i;
 	DROID				*psDroid;
 
-	ASSERT( PTRVALID(psObj, sizeof(DROID)) && psObj->type == OBJ_DROID,
+	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 		"setConstructionStats: invalid droid pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(STRUCTURE_STATS)),
-		"setConstructionStats: invalid stats pointer" );
 
 	if (psStats != NULL)
 	{
@@ -6320,7 +6315,7 @@ static BOOL selectResearch(BASE_OBJECT *psObj)
 {
 	STRUCTURE	*psResFacility;
 
-	ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"selectResearch: invalid Structure pointer" );
 
 	psResFacility = (STRUCTURE *)psObj;
@@ -6340,7 +6335,7 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 {
 	STRUCTURE	*psBuilding;
 
-	ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"getResearchTip: invalid Structure pointer" );
 	psBuilding = (STRUCTURE *)psObj;
 
@@ -6357,11 +6352,9 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	UDWORD				count;
 	RESEARCH_FACILITY	*psResFacilty;
 
-	ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"setResearchStats: invalid Structure pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(RESEARCH)),
-		"setResearchStats: invalid stats pointer" );
 	psBuilding = (STRUCTURE *)psObj;
 
 	psResFacilty = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
@@ -6426,7 +6419,7 @@ static BOOL selectManufacture(BASE_OBJECT *psObj)
 {
 	STRUCTURE		*psBuilding;
 
-	ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"selectManufacture: invalid Structure pointer" );
 	psBuilding = (STRUCTURE *)psObj;
 
@@ -6448,7 +6441,7 @@ static BASE_STATS *getManufactureStats(BASE_OBJECT *psObj)
 {
 	STRUCTURE	*psBuilding;
 
-	ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"getManufactureTip: invalid Structure pointer" );
 	psBuilding = (STRUCTURE *)psObj;
 
@@ -6461,11 +6454,9 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	STRUCTURE		*Structure;
 
-	ASSERT( PTRVALID(psObj, sizeof(STRUCTURE)) && psObj->type == OBJ_STRUCTURE,
+	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"setManufactureStats: invalid Structure pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
-	ASSERT( psStats == NULL || PTRVALID(psStats, sizeof(DROID_TEMPLATE)),
-		"setManufactureStats: invalid stats pointer" );
 
 #ifdef INCLUDE_FACTORYLISTS
 	Structure = (STRUCTURE*)psObj;
@@ -6680,9 +6671,9 @@ static void intStatsRMBPressed(UDWORD id)
 		//this now causes the production run to be decreased by one
 #ifdef INCLUDE_FACTORYLISTS
 
-		ASSERT( PTRVALID(psObjSelected, sizeof(STRUCTURE)),
+		ASSERT( psObjSelected != NULL,
 			"intStatsRMBPressed: Invalid structure pointer" );
-		ASSERT( PTRVALID(psStats, sizeof(DROID_TEMPLATE)),
+		ASSERT( psStats != NULL,
 			"intStatsRMBPressed: Invalid template pointer" );
         if (productionPlayer == (SBYTE)selectedPlayer)
         {

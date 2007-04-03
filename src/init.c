@@ -1078,7 +1078,7 @@ init_ObjectDead( void * psObj )
 	STRUCTURE	*psStructure;
 
 	/* check is valid pointer */
-	ASSERT( PTRVALID(psBaseObj, sizeof(BASE_OBJECT)),
+	ASSERT( psBaseObj != NULL,
 			"init_ObjectDead: game object pointer invalid\n" );
 
 	if ( psBaseObj->died == TRUE )

@@ -874,7 +874,7 @@ BOOL scrAddDroidToMissionList(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+	ASSERT( psTemplate != NULL,
 		"scrAddUnitToMissionList: Invalid template pointer" );
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
@@ -927,7 +927,7 @@ BOOL scrAddDroid(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+	ASSERT( psTemplate != NULL,
 		"scrAddUnit: Invalid template pointer" );
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
@@ -978,9 +978,9 @@ BOOL scrAddDroidToTransporter(void)
         return TRUE;
     }
 
-	ASSERT( PTRVALID(psTransporter, sizeof(DROID)),
+	ASSERT( psTransporter != NULL,
 			"scrAddUnitToTransporter: invalid transporter pointer" );
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 			"scrAddUnitToTransporter: invalid unit pointer" );
 	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
 			"scrAddUnitToTransporter: invalid transporter type" );
@@ -1488,13 +1488,13 @@ BOOL scrBuildDroid(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psFactory, sizeof(STRUCTURE)),
+	ASSERT( psFactory != NULL,
 		"scrBuildUnit: Invalid structure pointer" );
 	ASSERT( (psFactory->pStructureType->type == REF_FACTORY ||
 		psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
 		psFactory->pStructureType->type == REF_VTOL_FACTORY),
 		"scrBuildUnit: structure is not a factory" );
-	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+	ASSERT( psTemplate != NULL,
 		"scrBuildUnit: Invalid template pointer" );
 
 	//check building the right sort of droid for the factory
@@ -1619,7 +1619,7 @@ BOOL scrDestroyFeature(void)
 
 	if (psFeature == NULL)
 	{
-		ASSERT( PTRVALID(psFeature, sizeof(FEATURE)),
+		ASSERT( psFeature != NULL,
 			"scrDestroyFeature: Invalid feature pointer" );
 	}
 
@@ -1867,7 +1867,7 @@ BOOL scrAddFeature(void)
 
 	psStat = (FEATURE_STATS *)(asFeatureStats + iFeat);
 
-	ASSERT( PTRVALID(psStat, sizeof(FEATURE_STATS)),
+	ASSERT( psStat != NULL,
 			"scrAddFeature: Invalid feature pointer" );
 
 	if ( psStat != NULL )
@@ -1926,7 +1926,7 @@ BOOL scrAddStructure(void)
 
 	psStat = (STRUCTURE_STATS *)(asStructureStats + iStruct);
 
-	ASSERT( PTRVALID(psStat, sizeof(STRUCTURE_STATS)),
+	ASSERT( psStat != NULL,
 			"scrAddStructure: Invalid feature pointer" );
 
 	if ( psStat != NULL )
@@ -1993,7 +1993,7 @@ BOOL scrDestroyStructure(void)
 
 	if (psStruct == NULL)
 	{
-		ASSERT( PTRVALID(psStruct, sizeof(STRUCTURE)),
+		ASSERT( psStruct != NULL,
 			"scrDestroyStructure: Invalid structure pointer" );
 	}
 
@@ -5570,7 +5570,7 @@ BOOL scrAddTemplate(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),"scrAddTemplate: Invalid template pointer" );
+	ASSERT( psTemplate != NULL, "scrAddTemplate: Invalid template pointer" );
 
 	if(	addTemplate(player,psTemplate))
 	{
@@ -6039,7 +6039,7 @@ BOOL scrTakeOverSingleDroid(void)
         return FALSE;
     }
 
-	ASSERT( PTRVALID(psDroidToTake, sizeof(DROID)),
+	ASSERT( psDroidToTake != NULL,
 		"scrTakeOverSingleUnit: Invalid unit pointer" );
 
     psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
@@ -6155,7 +6155,7 @@ BOOL scrTakeOverSingleStructure(void)
         return FALSE;
     }
 
-	ASSERT( PTRVALID(psStructToTake, sizeof(STRUCTURE)),
+	ASSERT( psStructToTake != NULL,
 		"scrTakeOverSingleStructure: Invalid structure pointer" );
 
     structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
@@ -6801,7 +6801,7 @@ BOOL scrFactoryGetTemplate(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psStructure, sizeof(STRUCTURE)),
+	ASSERT( psStructure != NULL,
 		"scrFactoryGetTemplate: Invalid structure pointer" );
 	ASSERT( (psStructure->pStructureType->type == REF_FACTORY ||
 		psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
@@ -6816,7 +6816,7 @@ BOOL scrFactoryGetTemplate(void)
 
 	psTemplate = (DROID_TEMPLATE *)((FACTORY*)psStructure->pFunctionality)->psSubject;
 
-	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+	ASSERT( psTemplate != NULL,
 		"scrFactoryGetTemplate: Invalid template pointer" );
 
 	scrFunctionResult.v.oval = psTemplate;
@@ -6850,7 +6850,7 @@ BOOL scrNumTemplatesInProduction(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psTemplate, sizeof(DROID_TEMPLATE)),
+	ASSERT( psTemplate != NULL,
 		"scrNumTemplatesInProduction: Invalid template pointer" );
 
 	psBaseStats = (BASE_STATS *)psTemplate; //Convert
@@ -8215,7 +8215,7 @@ BOOL scrNumStructsByStatInArea(void)
 
 	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 
-	ASSERT( PTRVALID(psStats, sizeof(STRUCTURE_STATS)),
+	ASSERT( psStats != NULL,
 			"scrNumStructsByStatInArea: Invalid structure pointer" );
 
 	NumStruct = 0;

@@ -223,7 +223,7 @@ void pie_TexShutDown(void)
 		{
 			if(_TEX_PAGE[i].tex.bmp) {
 				j++;
-				iV_HeapFree(_TEX_PAGE[i].tex.bmp,_TEX_PAGE[i].tex.width * _TEX_PAGE[i].tex.height);
+				FREE(_TEX_PAGE[i].tex.bmp);
 			}
 		}
 		i++;

@@ -897,7 +897,7 @@ void aiUpdateDroid(DROID *psDroid)
 //	BOOL		bTemp;
 	UBYTE		i,targetResult = 1;
 
-	ASSERT( PTRVALID(psDroid, sizeof(DROID)),
+	ASSERT( psDroid != NULL,
 		"updateUnitAI: invalid Unit pointer" );
 
 	lookForTarget = TRUE;

@@ -392,7 +392,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	INTERP_TYPE	type;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
 
-	ASSERT( PTRVALID(psCode, sizeof(SCRIPT_CODE)),
+	ASSERT( psCode != NULL,
 		"eventNewContext: Invalid code pointer" );
 
 	// Get a new context
@@ -562,7 +562,7 @@ BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
 	SDWORD			val;
 	VAL_CHUNK		*psChunk, *psOChunk;
 
-	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
+	ASSERT( psContext,
 		"eventCopyContext: Invalid context pointer" );
 
 	// Get a new context
@@ -599,7 +599,7 @@ BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
 	TRIGGER_DATA	*psData;
 	SCRIPT_CODE		*psCode;
 
-	ASSERT( PTRVALID(psContext, sizeof(SCRIPT_CONTEXT)),
+	ASSERT( psContext != NULL,
 		"eventNewObject: Invalid context pointer" );
 
 	// Now setup all the triggers

@@ -365,7 +365,7 @@ void objmemUpdate(void)
  * list is a pointer to the object list
  */
 #define ADD(list, objType, type) \
-	ASSERT( PTRVALID((objType), sizeof(type)), \
+	ASSERT( objType != NULL, \
 		"addObject: Invalid " #type " pointer" ); \
 	(objType)->psNext = list[(objType)->player]; \
 	list[(objType)->player] = (objType)
@@ -378,7 +378,7 @@ void objmemUpdate(void)
  * type is the type of the object
  */
 #define _DESTROY(list, del, type) \
-	ASSERT( PTRVALID((del), sizeof(type)), \
+	ASSERT( del != NULL, \
 		"destroyObject: Invalid " #type " pointer" ); \
 	if (list[(del)->player] == (del)) \
 	{ \
@@ -423,7 +423,7 @@ void objmemUpdate(void)
  * type is the type of the object
  */
 #define REMOVE(list, remove, type) \
-	ASSERT( PTRVALID((remove), sizeof(type)), \
+	ASSERT( remove != NULL, \
 		"removeObject: Invalid " #type " pointer" ); \
 	if (list[(remove)->player] == (remove)) \
 	{ \
@@ -651,7 +651,7 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 /* add the Flag Position to the Flag Position Lists */
  void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
  {
-	ASSERT( PTRVALID((psFlagPosToAdd), sizeof(FLAG_POSITION)),
+	ASSERT( psFlagPosToAdd != NULL,
 		"addFlagPosition: Invalid FlagPosition pointer" );
 
 	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
@@ -663,7 +663,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 {
 	FLAG_POSITION		*psPrev=NULL, *psCurr;
 
-	ASSERT( PTRVALID((psDel), sizeof(FLAG_POSITION)),
+	ASSERT( psDel != NULL,
 		"removeFlagPosition: Invalid Flag Positionpointer" );
 
 	if (apsFlagPosLists[psDel->player] == psDel)

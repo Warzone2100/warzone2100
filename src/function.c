@@ -1761,11 +1761,11 @@ void structureProductionUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the Output
 	pFact = (FACTORY*)psBuilding->pFunctionality;
-	ASSERT( PTRVALID(pFact, sizeof(FACTORY)),
+	ASSERT( pFact != NULL,
 		"structureProductionUpgrade: invalid Factory pointer" );
 
 	pFactFunc = (PRODUCTION_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT( PTRVALID(pFactFunc, sizeof(PRODUCTION_FUNCTION)),
+	ASSERT( pFactFunc != NULL,
 		"structureProductionUpgrade: invalid Function pointer" );
 
     //current base value depends on whether there are modules attached to the structure
@@ -1792,11 +1792,11 @@ void structureResearchUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the research points
 	pRes = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
-	ASSERT( PTRVALID(pRes, sizeof(RESEARCH_FACILITY)),
+	ASSERT( pRes != NULL,
 		"structureResearchUpgrade: invalid Research pointer" );
 
 	pResFunc = (RESEARCH_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT( PTRVALID(pResFunc, sizeof(RESEARCH_FUNCTION)),
+	ASSERT( pResFunc != NULL,
 		"structureResearchUpgrade: invalid Function pointer" );
 
     //current base value depends on whether there are modules attached to the structure
@@ -1820,11 +1820,11 @@ void structureReArmUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the reArm points
 	pPad = (REARM_PAD*)psBuilding->pFunctionality;
-	ASSERT( PTRVALID(pPad, sizeof(REARM_PAD)),
+	ASSERT( pPad != NULL,
 		"structureReArmUpgrade: invalid ReArm pointer" );
 
 	pPadFunc = (REARM_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT( PTRVALID(pPadFunc, sizeof(REARM_FUNCTION)),
+	ASSERT( pPadFunc != NULL,
 		"structureReArmUpgrade: invalid Function pointer" );
 
 	pPad->reArmPoints = pPadFunc->reArmPoints + (pPadFunc->reArmPoints *
@@ -1840,11 +1840,11 @@ void structurePowerUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the research points
 	pPowerGen = (POWER_GEN*)psBuilding->pFunctionality;
-	ASSERT( PTRVALID(pPowerGen, sizeof(POWER_GEN)),
+	ASSERT( pPowerGen != NULL,
 		"structurePowerUpgrade: invalid Power Gen pointer" );
 
 	pPGFunc = (POWER_GEN_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT( PTRVALID(pPGFunc, sizeof(POWER_GEN_FUNCTION)),
+	ASSERT( pPGFunc != NULL,
 		"structurePowerUpgrade: invalid Function pointer" );
 
     //current base value depends on whether there are modules attached to the structure
@@ -1868,11 +1868,11 @@ void structureRepairUpgrade(STRUCTURE *psBuilding)
 
 	//upgrade the research points
 	pRepair = (REPAIR_FACILITY*)psBuilding->pFunctionality;
-	ASSERT( PTRVALID(pRepair, sizeof(REPAIR_FACILITY)),
+	ASSERT( pRepair != NULL,
 		"structureRepairUpgrade: invalid Repair pointer" );
 
 	pRepairFunc = (REPAIR_DROID_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT( PTRVALID(pRepairFunc, sizeof(REPAIR_DROID_FUNCTION)),
+	ASSERT( pRepairFunc != NULL,
 		"structureRepairUpgrade: invalid Function pointer" );
 
 	pRepair->power = pRepairFunc->repairPoints + (pRepairFunc->repairPoints *

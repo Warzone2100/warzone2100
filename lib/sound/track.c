@@ -333,7 +333,7 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 //
 static void sound_CheckSample( AUDIO_SAMPLE *psSample )
 {
-	ASSERT( PTRVALID(psSample, sizeof(AUDIO_SAMPLE)), "sound_CheckSample: sample pointer invalid\n" );
+	ASSERT( psSample != NULL, "sound_CheckSample: sample pointer invalid\n" );
 	ASSERT( psSample->iSample >= 0 || psSample->iSample == (ALuint)SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->iSample );
 	// FIXME iSample always >= 0 !
 	// FIXME Leaving as is because if this is not always true it asserts too often

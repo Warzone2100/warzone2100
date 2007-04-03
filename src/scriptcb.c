@@ -311,7 +311,7 @@ BOOL scrCBDroidSelected(void)
 		return FALSE;
 	}
 
-	ASSERT( PTRVALID(psCBSelectedDroid, sizeof(DROID)),
+	ASSERT( psCBSelectedDroid != NULL,
 		"scrSCUnitSelected: invalid unit pointer" );
 
 	*ppsDroid = psCBSelectedDroid;
