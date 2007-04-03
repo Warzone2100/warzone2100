@@ -282,7 +282,6 @@ W_SCREEN		*psWScreen;
 
 
 /* the widget font */
-//PROP_FONT	*psWFont;
 int WFont;	// Ivis Font ID.
 
 
@@ -576,8 +575,6 @@ extern UWORD AsciiLookup[256];
 /* Initialise the in game interface */
 BOOL intInitialise(void)
 {
-//	UBYTE			*pFileBuffer;
-//	UDWORD			fileSize;
 	UDWORD			comp, inc;
 
 	AllocateSnapBuffer(&InterfaceSnap,MAX_INTERFACE_SNAPS);
@@ -716,19 +713,6 @@ BOOL intInitialise(void)
 	}
 #endif
 
-//	/* Load a font */
-//	if (!loadFile("Serif.FNT", &pFileBuffer, &fileSize))
-//	{
-//		return FALSE;
-//	}
-//
-//	if (!fontLoad(pFileBuffer, fileSize, &psWFont))
-//	{
-//		FREE(pFileBuffer);
-//		return FALSE;
-//	}
-//	FREE(pFileBuffer);
-
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	intInitialiseGraphics();
@@ -849,8 +833,6 @@ void intShutDown(void)
 {
 //	widgEndScreen(psWScreen);
 	widgReleaseScreen(psWScreen);
-
-//	fontFree(psWFont);
 
 
 #ifdef DISP2D

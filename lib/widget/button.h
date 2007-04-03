@@ -49,7 +49,6 @@ typedef struct _w_button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
-//	PROP_FONT	*psFont;			// button font
 	int FontID;
 } W_BUTTON;
 

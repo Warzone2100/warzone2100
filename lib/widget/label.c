@@ -47,9 +47,6 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 		return FALSE;
 	}
 
-//	ASSERT( psInit->psFont != NULL,
-//		"labelCreate: Invalid font pointer" );
-
 	/* Allocate the required memory */
 #if W_USE_MALLOC
 	*ppsWidget = (W_LABEL *)MALLOC(sizeof(W_LABEL));
@@ -101,7 +98,6 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 	(*ppsWidget)->callback = psInit->pCallback;
 	(*ppsWidget)->pUserData = psInit->pUserData;
 	(*ppsWidget)->UserData = psInit->UserData;
-//	(*ppsWidget)->psFont = psInit->psFont;
 	(*ppsWidget)->FontID = psInit->FontID;
 
 	if (psInit->pText)
@@ -143,15 +139,12 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCol
 {
 	SDWORD		fx,fy, fw;
 	W_LABEL		*psLabel;
-//	PROP_FONT	*psFont;
 	int			FontID;
 
 	psLabel = (W_LABEL *)psWidget;
-//	psFont = psLabel->psFont;
 	FontID = psLabel->FontID;
 
 	iV_SetFont(FontID);
-//	fontSetCacheColour(*(pColours + WCOL_TEXT));
 	iV_SetTextColour((UWORD)*(pColours + WCOL_TEXT));
 	if (psLabel->style & WLAB_ALIGNCENTRE)
 	{
@@ -168,10 +161,7 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCol
 		fx = xOffset + psLabel->x;
 	}
   	fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
-//	fy = yOffset + psLabel->y + (psLabel->height -
-//			psFont->height + psFont->baseLine) / 2;
 	iV_DrawText(psLabel->aText,fx,fy);
-//	fontPrint(fx,fy, psLabel->aText);
 }
 
 /* Respond to a mouse moving over a label */

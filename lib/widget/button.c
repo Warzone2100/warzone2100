@@ -53,14 +53,6 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 		return FALSE;
 	}
 
-//#ifdef DEBUG
-//	if (psInit->pText)
-//	{
-//		ASSERT( psInit->psFont != NULL,
-//			"buttonCreate: Invalid font pointer" );
-//	}
-//#endif
-
 	/* Allocate the required memory */
 #if W_USE_MALLOC
 	*ppsWidget = (W_BUTTON *)MALLOC(sizeof(W_BUTTON));
@@ -138,7 +130,6 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	{
 		(*ppsWidget)->display = buttonDisplay;
 	}
-//	(*ppsWidget)->psFont = psInit->psFont;
 	(*ppsWidget)->FontID = psInit->FontID;
 
 	buttonInitialise(*ppsWidget);
@@ -351,14 +342,12 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 {
 	W_BUTTON	*psButton;
 	SDWORD		x0,y0,x1,y1, fx,fy,fw;
-//	PROP_FONT	*psCurrFont;
 	int			CurrFontID;
 
 	ASSERT( psWidget != NULL,
 		"buttonDisplay: Invalid widget pointer" );
 
 	psButton = (W_BUTTON *)psWidget;
-//	psCurrFont = psButton->psFont;
 	CurrFontID = psButton->FontID;
 
 	x0=psButton->x + xOffset;

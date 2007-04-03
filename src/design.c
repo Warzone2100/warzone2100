@@ -297,7 +297,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 extern W_SCREEN		*psWScreen;
 
 /* the widget font */
-//extern PROP_FONT	*psWFont;
 extern int WFont;
 
 extern	UDWORD				objID;					// unique ID creation thing..

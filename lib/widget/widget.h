@@ -186,7 +186,6 @@ typedef struct _w_labinit
 
 	char		*pText;			// label text
 	char		*pTip;			// Tool tip for the label.
-//	PROP_FONT	*psFont;		// label font
 	int			FontID;			// ID of the IVIS font to use for this widget.
 } W_LABINIT;
 
@@ -198,7 +197,6 @@ typedef struct _w_butinit
 
 	char		*pText;			// button text
 	char		*pTip;			// Tool tip text
-//	PROP_FONT	*psFont;		// button font
 	int			FontID;			// ID of the IVIS font to use for this widget.
 } W_BUTINIT;
 
@@ -209,7 +207,6 @@ typedef struct _w_edbinit
 	WINIT_BASE;
 
 	char		*pText;			// initial contents of the edit box
-//	PROP_FONT	*psFont;		// edit box font
 	int			FontID;			// ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY	pBoxDisplay;		// Optional callback to display the form.
 	FONT_DISPLAY pFontDisplay;	// Optional callback to display a string.

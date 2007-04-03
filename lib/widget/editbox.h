@@ -43,7 +43,6 @@ typedef struct _w_editbox
 
 	UDWORD		state;						// The current edit box state
 	char		aText[WIDG_MAXSTR];			// The text in the edit box
-//	PROP_FONT	*psFont;					// The font for the edit box
 	int FontID;
 	UWORD		insPos;						// The insertion point in the buffer
 	UWORD		printStart;					// Where in the string appears at the far left of the box

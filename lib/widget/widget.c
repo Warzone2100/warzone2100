@@ -367,16 +367,6 @@ static BOOL widgCheckID(W_SCREEN *psScreen, UDWORD id)
 #endif
 
 
-///* Set the tool tip font for a screen */
-//void widgSetTipFont(W_SCREEN *psScreen, PROP_FONT *psFont)
-//{
-//	ASSERT( psScreen != NULL,
-//		"widgSetTipFont: Invalid screen pointer" );
-//
-//	psScreen->psTipFont = psFont;
-//}
-
-
 /* Set the tool tip font for a screen */
 void widgSetTipFont(W_SCREEN *psScreen, int FontID)
 {

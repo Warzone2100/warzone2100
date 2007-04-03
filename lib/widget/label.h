@@ -38,7 +38,6 @@ typedef struct _w_label
 
 	UDWORD		state;					// The current button state
 	char		aText[WIDG_MAXSTR];		// Text on the label
-//	PROP_FONT	*psFont;				// Font for the label
 	int FontID;
 	char		*pTip;					// The tool tip for the button
 } W_LABEL;
