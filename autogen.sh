@@ -91,11 +91,7 @@ version_check 1 "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 4 2 || DIE=1
 if [ "$DIE" -eq 1 ]; then
   exit 1
 fi
-version_check 1 "autopoint" "ftp://ftp.gnu.org/pub/gnu/gettext/" 0 14 || DIE=1
-if [ "$DIE" -eq 1 ]; then
-  echo "You may need to install the gettext development package (usually \"gettext-devel\")"
-  exit 1
-fi
+
 
 # Chdir to the srcdir, then run auto* tools.
 cd $SRCDIR
@@ -105,12 +101,6 @@ cd $SRCDIR
   exit 1
 }
 
-echo "+ running autopoint ... "
-autopoint --force || {
-  echo
-  echo "autopoint failed"
-  exit 1
-}
 echo "+ running aclocal ..."
 aclocal -I m4 || {
   echo

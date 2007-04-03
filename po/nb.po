@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-02 20:52+0200\n"
+"POT-Creation-Date: 2007-04-03 15:46+0200\n"
 "PO-Revision-Date: 2007-03-24 17:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -96,7 +96,7 @@ msgstr "%s Breaks The Alliance With %s"
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Forms An Alliance With %s"
 
-#: src/hci.c:1138 src/hci.c:3973 src/hci.c:4127 src/hci.c:4573 src/hci.c:5813
+#: src/hci.c:1138 src/hci.c:3973 src/hci.c:4127 src/hci.c:4570 src/hci.c:5810
 #: src/transporter.c:296 src/transporter.c:385 src/transporter.c:886
 #: src/intorder.c:606 src/loadsave.c:258 src/intelmap.c:664
 #: src/multimenu.c:467 src/multimenu.c:1324
@@ -131,7 +131,7 @@ msgstr "Forskning"
 msgid "Build"
 msgstr "Bygg"
 
-#: src/hci.c:4035 src/multiint.c:1006
+#: src/hci.c:4035 src/multiint.c:1029
 msgid "Power"
 msgstr "Power"
 
@@ -147,16 +147,16 @@ msgstr "Save Game"
 msgid "Exit Game"
 msgstr "Exit Game"
 
-#: src/hci.c:4649 src/intdisplay.c:274 src/intdisplay.c:317
+#: src/hci.c:4646 src/intdisplay.c:274 src/intdisplay.c:317
 #: src/intdisplay.c:362
 msgid "Progress Bar"
 msgstr "Progress Bar"
 
-#: src/hci.c:5727
+#: src/hci.c:5724
 msgid "Factory Delivery Point"
 msgstr "Factory Delivery Point"
 
-#: src/hci.c:5746
+#: src/hci.c:5743
 msgid "Loop Production"
 msgstr "Loop Production"
 
@@ -252,87 +252,87 @@ msgstr "Special"
 msgid "Hero"
 msgstr "Hero"
 
-#: src/multiint.c:461
+#: src/multiint.c:484
 msgid "IP Address or Machine Name"
 msgstr "IP Address or Machine Name"
 
-#: src/multiint.c:501
+#: src/multiint.c:524
 msgid "CONNECTION"
 msgstr "CONNECTION"
 
-#: src/multiint.c:515
+#: src/multiint.c:538
 msgid "Internet"
 msgstr "Internet"
 
-#: src/multiint.c:754
+#: src/multiint.c:777
 msgid "Searching"
 msgstr "Searching"
 
-#: src/multiint.c:765
+#: src/multiint.c:788
 msgid "GAMES"
 msgstr "GAMES"
 
-#: src/multiint.c:850
+#: src/multiint.c:873
 msgid "OPTIONS"
 msgstr "ALTERNATIVER"
 
-#: src/multiint.c:859
+#: src/multiint.c:882
 msgid "Game"
 msgstr "Game"
 
-#: src/multiint.c:905 src/frontend.c:786
+#: src/multiint.c:928 src/frontend.c:786
 msgid "Fog"
 msgstr "Fog"
 
-#: src/multiint.c:928 src/multimenu.c:771
+#: src/multiint.c:951 src/multimenu.c:771
 msgid "Alliances"
 msgstr "Alliances"
 
-#: src/multiint.c:1030
+#: src/multiint.c:1053
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1060 src/multiint.c:1064
+#: src/multiint.c:1083 src/multiint.c:1087
 msgid "Computer"
 msgstr "Computer"
 
-#: src/multiint.c:1501
+#: src/multiint.c:1524
 msgid "PLAYERS"
 msgstr "PLAYERS"
 
-#: src/multiint.c:1650
+#: src/multiint.c:1673
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2331
+#: src/multiint.c:2354
 msgid "Host is Starting Game"
 msgstr "Host is Starting Game"
 
-#: src/multiint.c:2390
+#: src/multiint.c:2413
 msgid "Locked Teams"
 msgstr "Locked Teams"
 
-#: src/multiint.c:2939
+#: src/multiint.c:2962
 msgid "FORCE"
 msgstr "FORCE"
 
-#: src/multiint.c:3062
+#: src/multiint.c:3085
 msgid "TEMPLATES"
 msgstr "TEMPLATES"
 
-#: src/multiint.c:3226
+#: src/multiint.c:3249
 msgid "Load Force"
 msgstr "Load Force"
 
-#: src/multiint.c:3230
+#: src/multiint.c:3253
 msgid "Save Force"
 msgstr "Save Force"
 
-#: src/multiint.c:3295
+#: src/multiint.c:3318
 msgid "CONTROL"
 msgstr "KONTROLL"
 
-#: src/multiint.c:3631
+#: src/multiint.c:3654
 msgid "Players"
 msgstr "Players"
 
@@ -394,45 +394,45 @@ msgstr "Build menu will not reopen"
 msgid "Power Accrued"
 msgstr "Power Accrued"
 
-#: src/structure.c:3810
+#: src/structure.c:3808
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Command Control Limit Reached - Production Halted"
 
-#: src/structure.c:7770
+#: src/structure.c:7768
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr "%s - Connected %d of %d"
 
-#: src/structure.c:7962
+#: src/structure.c:7960
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Electronically Damaged"
 
-#: src/structure.c:8236
+#: src/structure.c:8234
 msgid "Electronic Reward - Visibility Report"
 msgstr "Electronic Reward - Visibility Report"
 
-#: src/structure.c:8278
+#: src/structure.c:8276
 msgid "Factory Reward - Propulsion"
 msgstr "Factory Reward - Propulsion"
 
-#: src/structure.c:8303
+#: src/structure.c:8301
 msgid "Factory Reward - Body"
 msgstr "Factory Reward - Body"
 
-#: src/structure.c:8328
+#: src/structure.c:8326
 msgid "Factory Reward - Weapon"
 msgstr "Factory Reward - Weapon"
 
-#: src/structure.c:8337
+#: src/structure.c:8335
 msgid "Factory Reward - Nothing"
 msgstr "Factory Reward - Nothing"
 
-#: src/structure.c:8366
+#: src/structure.c:8364
 msgid "Repair Facility Award - Repair"
 msgstr "Repair Facility Award - Repair"
 
-#: src/structure.c:8373
+#: src/structure.c:8371
 msgid "Repair Facility Award - Nothing"
 msgstr "Repair Facility Award - Nothing"
 
@@ -496,7 +496,7 @@ msgstr "Mission Time - %s"
 msgid "Total Game Time - %s"
 msgstr "Total Game Time - %s"
 
-#: src/design.c:508 src/design.c:530 src/design.c:4103
+#: src/design.c:508 src/design.c:530 src/design.c:4089
 msgid "New Vehicle"
 msgstr "New Vehicle"
 

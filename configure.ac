@@ -23,7 +23,7 @@ if test "x$LEX" != "xflex" ; then
 fi
 
 AC_GNU_SOURCE
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.14])
 
 
@@ -318,10 +318,9 @@ CPPFLAGS="-I\$(top_srcdir) -DYY_STATIC -DLOCALEDIR=\\\"${localedir}\\\" -DDATADI
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
-AC_CONFIG_HEADER([lib/framework/config.h])
+AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
-		intl/Makefile
 		data/Makefile
 		nsis/Makefile
 		win32/Makefile

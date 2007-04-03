@@ -84,6 +84,8 @@ def configure(conf):
 	conf.add_define('VERSION', VERSION)
 	conf.add_define('DEFAULT_DATADIR', Params.g_options.prefix + 'warzone2100')
 	conf.add_define('YY_STATIC', 1)
+	conf.add_define('LOCALEDIR', '')
+	conf.add_define('PACKAGE', 'warzone2100')
 
 	# Split off debug variant before adding variant specific defines
 	conf.set_env_name('debug', conf.env.deepcopy())
