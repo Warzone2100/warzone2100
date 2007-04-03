@@ -1,7 +1,6 @@
 # List of source files which contain translatable strings.
 lib/framework/debug.c
 lib/framework/configfile.c
-lib/framework/mem.c
 lib/framework/SDL_framerate.c
 lib/framework/frameresource.c
 lib/framework/frame.c
@@ -9,7 +8,6 @@ lib/framework/heap.c
 lib/framework/treap.c
 lib/framework/exceptionhandler.c
 lib/framework/trig.c
-lib/framework/block.c
 lib/framework/input.c
 lib/framework/strres.c
 lib/sound/openal_track.c
@@ -186,7 +184,6 @@ src/multimenu.c
 # List of source files which contain translatable strings.
 lib/framework/debug.c
 lib/framework/configfile.c
-lib/framework/mem.c
 lib/framework/SDL_framerate.c
 lib/framework/frameresource.c
 lib/framework/frame.c
@@ -194,7 +191,6 @@ lib/framework/heap.c
 lib/framework/treap.c
 lib/framework/exceptionhandler.c
 lib/framework/trig.c
-lib/framework/block.c
 lib/framework/input.c
 lib/framework/strres.c
 lib/sound/openal_track.c
