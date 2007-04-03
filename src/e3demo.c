@@ -289,13 +289,13 @@ PROPULSION_STATS	*psPropStats;
 		case DROID_SEEK:
 		case TAR_SEEK:
 			/* Choose a player at random */
-			player = rand()%MAX_PLAYERS-2;
+			player = rand()%MAX_PLAYERS;
 
 			/* Have they got any droids? */
 			while(apsDroidLists[player]==NULL)
 			{
 				/* Nope, so choose another one until we get one with droids */
-				player = rand()%MAX_PLAYERS-2;
+				player = rand()%MAX_PLAYERS;
 			}
 
 			/* Choose a player at random */
