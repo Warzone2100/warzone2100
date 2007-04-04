@@ -3244,6 +3244,8 @@ BOOL scrGameOverMessage(void)
 		return FALSE;
 	}
 
+	// stop the game time??
+	
 	//create the message
 	psMessage = addMessage(msgType, FALSE, player);
 
@@ -3267,8 +3269,9 @@ BOOL scrGameOverMessage(void)
 		}*/
 	}
 
-    //this now called when the video Quit is processed
-	//displayGameOver(gameOver);
+    // this should be called when the video Quit is processed
+    // not always is tough, so better be sure
+	displayGameOver(gameOver);
 
 	return TRUE;
 }

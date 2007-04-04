@@ -425,6 +425,7 @@ BOOL displayGameOver(BOOL bDidit)
 
 	// this bit decides whether to auto quit to front end.
 	//if(!getDebugMappingStatus())
+	if(!bMultiPlayer)
 	{
 		if(bDidit)
 		{
@@ -446,6 +447,8 @@ BOOL displayGameOver(BOOL bDidit)
 		else
 		{
 			updateMultiStatsLoses();
+			clearMissionWidgets();
+			intAddMissionResult(bDidit, TRUE);
 		}
 	}
 

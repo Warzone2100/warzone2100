@@ -3371,12 +3371,12 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sButInit.pTip		= NULL;
 	sButInit.pDisplay	= displayTextOption;
     //if won or in debug mode
-	if(result || getDebugMappingStatus())
+	if(result || getDebugMappingStatus() || bMultiPlayer)
 	{
 		//continue
 		sButInit.x			= MISSION_2_X;
         // Won the game, so display "Quit to main menu"
-		if(testPlayerHasWon())
+		if(testPlayerHasWon() && !bMultiPlayer)
         {
 			sButInit.id			= IDMISSIONRES_QUIT;
 			sButInit.y			= MISSION_2_Y-8;
@@ -3397,7 +3397,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		/* Only add save option if in the game for real, ie, not fastplay.
         And the player hasn't just completed the whole game
         Don't add save option if just lost and in debug mode*/
-		if (!testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
+		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
 		{
 			//save
 			sButInit.id			= IDMISSIONRES_SAVE;
@@ -3534,18 +3534,10 @@ static void missionContineButtonPressed( void )
 	}*/
 //	intRemoveMissionResultNoAnim();
 
-
-    //just being paranoid here - definately don't want this in the final build
-#ifdef DEBUG
-    //in the final build we won't be able to get here beciase the CONTINUE button will not be available
-    //if we're in debug mode and we've lost it is preferred if we just return to the game
-    if (getDebugMappingStatus() && testPlayerHasLost())
+    if (bMultiPlayer)
     {
         intRemoveMissionResultNoAnim();
     }
-#endif
-
-
 }
 
 void intProcessMissionResult(UDWORD id)

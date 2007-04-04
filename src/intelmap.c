@@ -1054,6 +1054,12 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 	ASSERT( proxMsg != TRUE,
 		"intIntelButtonPressed: Shouldn't be able to get a proximity message!" );
 
+	if(id == 0)
+	{
+		intRemoveIntelMap();
+		return;
+	}
+
 	/* message button has been pressed - clear the old button and messageView*/
 	if (messageID != 0)
 	{
@@ -1257,12 +1263,12 @@ void intRemoveIntelMap(void)
 
 	// Start the window close animation.
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_FORM);
-
-	ASSERT(Form != NULL, "intRemoveIntelMap: Form is NULL");
-
-	Form->display = intClosePlainForm;
-	Form->disableChildren = TRUE;
-	Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+	if(Form)
+	{
+		Form->display = intClosePlainForm;
+		Form->disableChildren = TRUE;
+		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+	}
 	ClosingIntelMap = TRUE;
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);

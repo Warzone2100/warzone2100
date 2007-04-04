@@ -956,7 +956,6 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
-			debug(LOG_WARNING, "%i pressed (KEY_Q: %i, KEY_P: %i)", i, KEY_Q, KEY_P);
 			return(i);	// top row key pressed
 		}
 	}
@@ -965,7 +964,6 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
-			debug(LOG_WARNING, "%i pressed (KEY_A: %i, KEY_L: %i)", i, KEY_A, KEY_L);
 			return(i);	// middle row key pressed
 		}
 	}
@@ -974,7 +972,6 @@ UDWORD	i;
 	{
 		if(keyPressed(i))
 		{
-			debug(LOG_WARNING, "%i pressed (KEY_Z: %i, KEY_M: %i)", i, KEY_Z, KEY_M);
 			return(i);	// bottomw row key pressed
 		}
 	}
