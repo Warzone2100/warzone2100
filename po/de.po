@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2007-04-03 15:46+0200\n"
-"PO-Revision-Date: 2007-04-02 21:37+0200\n"
+"PO-Revision-Date: 2007-04-05 20:28+0200\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
@@ -1186,7 +1186,7 @@ msgstr "Punktzahl"
 
 #: src/multimenu.c:773
 msgid "Kills"
-msgstr ""
+msgstr "Abschüsse"
 
 #: src/multimenu.c:782
 msgid "Ping"
@@ -1215,3 +1215,4 @@ msgstr ""
 #: src/multimenu.c:1132
 msgid "Give Power To Player"
 msgstr ""
+
