@@ -514,7 +514,7 @@ BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
 BOOL seq_UpdateText()
 {
 	SDWORD i, x, y, w, h;
-	UDWORD subMin, subMax;
+	UDWORD subMin = SUBTITLE_BOX_MAX + D_H, subMax = SUBTITLE_BOX_MIN + D_H;
 	BOOL bMoreThanOneSequenceLine = FALSE;
 	int totText = 0;
 	BOOL found = FALSE;
@@ -543,11 +543,7 @@ BOOL seq_UpdateText()
 
 		// to prevent this if from firing until a new video is started
 		seq_RenderOneFrame(0, subMin, subMax);
-
 	}
-
-	subMin = SUBTITLE_BOX_MAX + D_H;
-	subMax = SUBTITLE_BOX_MIN + D_H;
 
 	if(SDL_GetTicks() > waitUntil)
 	{

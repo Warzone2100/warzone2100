@@ -4974,7 +4974,7 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 	VAR_SYMBOL		*psNew;
 	SDWORD			i;//, size;
 
-	VAR_SYMBOL **ppsVarSym;
+	VAR_SYMBOL **ppsVarSym = NULL;
 
 	if(psStorage->storage == ST_LOCAL)
 	{

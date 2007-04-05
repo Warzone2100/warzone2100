@@ -1337,10 +1337,10 @@ BOOL recvTextMessage(NETMSG *pMsg)
 	}
 
 	//sprintf(msg, "%d", i);
-	strcpy(msg,NetPlay.players[i].name);
-	strcat(msg," : ");								// seperator
-	//strcat(msg, &(pMsg->body[4]));					// add message
-	strncat(msg, &(pMsg->body[4]), MAX_CONSOLE_STRING_LENGTH);					// add message
+	strcpy(msg, NetPlay.players[i].name);
+	strcat(msg, " : "); // seperator
+	//strcat(msg, &(pMsg->body[4])); // add message
+	strncat(msg, &(pMsg->body[4]), MAX_CONSOLE_STRING_LENGTH-strlen(msg)-1);// add message
 	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);
 
 	//multiplayer message callback
@@ -1935,7 +1935,7 @@ BOOL msgStackFireTop()
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
 			eventFireCallbackTrigger(CALL_VIDEO_QUIT);
 			break;
-		
+
 		case CALL_BEACON:
 
 			if(!msgStackGetXY(&beaconX, &beaconY))
@@ -1985,19 +1985,19 @@ BOOL msgStackFireTop()
 BOOL recvBeacon(NETMSG *pMsg)
 {
 	SDWORD	sender, receiver,locX, locY;
-	
+
 	STRING	msg[MAX_CONSOLE_STRING_LENGTH];
 
 	NetGet(pMsg,0,sender);
 	NetGet(pMsg,4,receiver);
 	NetGet(pMsg,8,locX);
 	NetGet(pMsg,12,locY);
-	
+
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
 
 	strcpy(msg, &(pMsg->body[16]));
 	strcat(msg, NetPlay.players[sender].name);		// name
-	
+
 	strcpy(beaconReceiveMsg[sender], msg);
 
 	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
