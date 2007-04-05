@@ -126,34 +126,32 @@ BOOL sound_SetTrackVals
 {
 	ASSERT( iPriority >= LOW_PRIORITY && iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority );
 
-	// add to sound array
-	if ( iTrack < MAX_TRACKS )
+	if ( !(iTrack < MAX_TRACKS) )
+		return FALSE;
+
+	if ( g_apTrack[iTrack] != NULL )
 	{
-		if ( g_apTrack[iTrack] != NULL )
-		{
-			debug( LOG_ERROR, "sound_SetTrackVals: track %i already set\n", iTrack );
-			abort();
-			return FALSE;
-		}
-
-		// set track members
-		psTrack->bLoop = bLoop;
-		psTrack->iVol = iVol;
-		psTrack->iPriority = iPriority;
-		psTrack->iAudibleRadius = iAudibleRadius;
-		psTrack->iTime =0;			//added, since they really should init all the values. -Q
-		psTrack->iTimeLastFinished = 0;
-		psTrack->iNumPlaying = 0;
-
-		// set global
-		g_apTrack[iTrack] = psTrack;
-
-		// increment current sound
-		g_iCurTracks++;
-		return TRUE;
+		debug( LOG_ERROR, "sound_SetTrackVals: track %i already set\n", iTrack );
+		abort();
+		return FALSE;
 	}
 
-	return FALSE;
+	// set track members
+	psTrack->bLoop = bLoop;
+	psTrack->iVol = iVol;
+	psTrack->iPriority = iPriority;
+	psTrack->iAudibleRadius = iAudibleRadius;
+	psTrack->iTime =0;			//added, since they really should init all the values. -Q
+	psTrack->iTimeLastFinished = 0;
+	psTrack->iNumPlaying = 0;
+
+	// set global
+	g_apTrack[iTrack] = psTrack;
+
+	// increment current sound
+	g_iCurTracks++;
+
+	return TRUE;
 }
 
 //*
@@ -162,22 +160,21 @@ BOOL sound_SetTrackVals
 //
 static BOOL sound_AddTrack( TRACK *pTrack )
 {
-	// add to sound array
-	if ( g_iCurTracks < MAX_TRACKS )
-	{
-		// set pointer in table
-		g_apTrack[g_iCurTracks] = pTrack;
-
-		// increment current sound
-		g_iCurTracks++;
-		return TRUE;
-	}
-	else
+	if ( !(g_iCurTracks < MAX_TRACKS) )
 	{
 		debug( LOG_ERROR, "sound_AddTrack: all tracks used: increase MAX_TRACKS\n" );
 		abort();
 		return FALSE;
 	}
+
+	// add to sound array
+	// set pointer in table
+	g_apTrack[g_iCurTracks] = pTrack;
+
+	// increment current sound
+	g_iCurTracks++;
+
+	return TRUE;
 }
 
 //*
@@ -231,27 +228,25 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 
 	// allocate track
 	pTrack = (TRACK *) MALLOC( sizeof(TRACK) );
-	if ( pTrack != NULL )
+	if ( pTrack == NULL )
+		return FALSE;
+
+	pTrack->bMemBuffer = FALSE;
+	pTrack->pName = (char*)MALLOC( strlen((char*) szFileName) + 1 );
+	if ( pTrack->pName == NULL )
 	{
-		pTrack->bMemBuffer = FALSE;
-		pTrack->pName = (char*)MALLOC( strlen((char*) szFileName) + 1 );
-		if ( pTrack->pName == NULL )
-		{
-			debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );
-			abort();
-			return FALSE;
-		}
-
-		strcpy( pTrack->pName, (char*) szFileName );
-		if ( sound_ReadTrackFromFile(pTrack, szFileName) == FALSE )
-		{
-			return FALSE;
-		}
-
-		return sound_AddTrack( pTrack );
+		debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );
+		abort();
+		return FALSE;
 	}
 
-	return FALSE;
+	strcpy( pTrack->pName, (char*) szFileName );
+	if ( sound_ReadTrackFromFile(pTrack, szFileName) == FALSE )
+	{
+		return FALSE;
+	}
+
+	return sound_AddTrack( pTrack );
 }
 
 //*
