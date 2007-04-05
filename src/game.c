@@ -6150,6 +6150,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->id = psCurr->id;
 			psSaveDroid->x = psCurr->x;
 			psSaveDroid->y = psCurr->y;
+			ASSERT(worldOnMap(psSaveDroid->x,psSaveDroid->y), "the saved droid if off the map");
 			psSaveDroid->z = psCurr->z;
 			psSaveDroid->direction = psCurr->direction;
 			psSaveDroid->player = psCurr->player;

@@ -410,6 +410,7 @@ BOOL recvDroidDisEmbark(NETMSG *pMsg)
         //add it back into the world at the x/y
         psDroid->x = x;
         psDroid->y = y;
+        ASSERT(worldOnMap(x,y), "droid not disembarked on map");
 	    updateDroidOrientation(psDroid);
 		//initialise the movement data
     	initDroidMovement(psDroid);
@@ -1132,6 +1133,12 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	UDWORD	asWeaps[DROID_MAXWEAPS];
 	int		i;
 	BOOL	bNoTarget;
+	
+	// these asserts are done on the receiving side too
+	ASSERT( pD->x < (mapWidth << TILE_SHIFT),
+		"sendWholeDroid: x coordinate bigger than map width" );
+	ASSERT( pD->y < (mapHeight<< TILE_SHIFT),
+		"sendWholeDroid: y coordinate bigger than map height" );
 
 	//Watermelon:pfft
 	if (pD->numWeaps == 0)

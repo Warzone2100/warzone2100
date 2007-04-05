@@ -3766,7 +3766,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 //	BOOL			gotPos;
 //	UDWORD			numIts;
 	DROID_HIT_SIDE	impact_side;
-
+	
+	ASSERT(worldOnMap(x,y), "the build locations are not on the map");
 
 	/*
 	if(bMultiPlayer)

@@ -178,12 +178,6 @@ static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
-/*Flag to switch code for bucket sorting in renderFeatures etc
-  for the renderMapToBuffer code */
-  /*This is no longer used but may be useful for testing so I've left it in - maybe
-  get rid of it eventually? - AB 1/4/98*/
-BOOL    doBucket = TRUE;
-
 static UWORD WaterTileID = WATER_TILE;
 static UWORD RiverBedTileID = BED_TILE;
 static FRACT waterRealValue = (FRACT)0;
@@ -984,11 +978,11 @@ static void drawTiles(iView *camera, iView *player)
 	display3DProjectiles();//bucket render implemented
 
 	atmosDrawParticles();
-#ifdef BUCKET
+
 	bucketRenderCurrentList();
 	pie_RemainingPasses();
 	pie_EndLighting();
-#endif
+
 #ifdef ARROWS
 	arrowDrawAll();
 #endif
@@ -1243,9 +1237,6 @@ static void display3DProjectiles( void )
 										psObj->y for Z coord
 										whatever for Y (height) coord - arcing ?
 					*/
-	#ifndef BUCKET
-					renderProjectile(psObj);
-	#else
 					/* these guys get drawn last */
 					if(psObj->psWStats->weaponSubClass == WSC_ROCKET ||
 						psObj->psWStats->weaponSubClass == WSC_MISSILE ||
@@ -1259,9 +1250,8 @@ static void display3DProjectiles( void )
 					}
 					else
 					{
-						bucketAddTypeToList(RENDER_PROJECTILE, psObj);
+						renderProjectile(psObj);
 					}
-	#endif
 				}
 			}
 			break;
@@ -1683,6 +1673,9 @@ void displayStaticObjects( void )
 	UDWORD		test = 0;
 	ANIM_OBJECT	*psAnimObj;
 
+	// to solve the flickering edges of baseplates
+	pie_SetDepthOffset(-1.0f);
+
 	/* Go through all the players */
 	for (clan = 0; clan < MAX_PLAYERS; clan++)
 	{
@@ -1694,63 +1687,55 @@ void displayStaticObjects( void )
 			/* Worth rendering the structure? */
 			if(clipXY(psStructure->x,psStructure->y))
 			{
-				//don't use #ifndef BUCKET for now - need to do it this way for renderMapToBuffer
-				if (!doBucket)
+				if ( psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR &&
+					psStructure->psCurAnim == NULL &&
+					(psStructure->currentBuildPts > (SDWORD)psStructure->pStructureType->buildPoints) )
 				{
-					//over-ride the BUCKET def
+					psStructure->psCurAnim = animObj_Add( psStructure, ID_ANIM_DERIK, 0, 0 );
+				}
+
+				if ( psStructure->psCurAnim == NULL ||
+						psStructure->psCurAnim->bVisible == FALSE ||
+						(psAnimObj = animObj_Find( psStructure,
+						psStructure->psCurAnim->uwID )) == NULL )
+				{
 					renderStructure(psStructure);
 				}
 				else
 				{
-					if ( psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR &&
-						psStructure->psCurAnim == NULL &&
-						(psStructure->currentBuildPts > (SDWORD)psStructure->pStructureType->buildPoints) )
+					if ( psStructure->visible[selectedPlayer] || godMode )
 					{
-						psStructure->psCurAnim = animObj_Add( psStructure, ID_ANIM_DERIK, 0, 0 );
-					}
-
-					if ( psStructure->psCurAnim == NULL ||
-							psStructure->psCurAnim->bVisible == FALSE ||
-							(psAnimObj = animObj_Find( psStructure,
-							psStructure->psCurAnim->uwID )) == NULL )
-					{
-						bucketAddTypeToList(RENDER_STRUCTURE, psStructure);
-					}
-					else
-					{
-						if ( psStructure->visible[selectedPlayer] || godMode )
+						//check not a resource extractors
+						if (psStructure->pStructureType->type !=
+							REF_RESOURCE_EXTRACTOR)
 						{
-							//check not a resource extractors
-							if (psStructure->pStructureType->type !=
-								REF_RESOURCE_EXTRACTOR)
-							{
-								displayAnimation( psAnimObj, FALSE );
-							}
-							//check that a power gen exists before animationg res extrac
-							//else if (getPowerGenExists(psStructure->player))
-							/*check the building is active*/
-							else if (((RES_EXTRACTOR *)psStructure->
-								pFunctionality)->active)
-							{
-								displayAnimation( psAnimObj, FALSE );
-								if(selectedPlayer == psStructure->player)
-								{
-									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
-								}
-							}
-							else
-							{
-								/* hold anim on first frame */
-								displayAnimation( psAnimObj, TRUE );
-								audio_StopObjTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
-							}
-
+							displayAnimation( psAnimObj, FALSE );
 						}
+						//check that a power gen exists before animationg res extrac
+						//else if (getPowerGenExists(psStructure->player))
+						/*check the building is active*/
+						else if (((RES_EXTRACTOR *)psStructure->
+							pFunctionality)->active)
+						{
+							displayAnimation( psAnimObj, FALSE );
+							if(selectedPlayer == psStructure->player)
+							{
+								audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
+							}
+						}
+						else
+						{
+							/* hold anim on first frame */
+							displayAnimation( psAnimObj, TRUE );
+							audio_StopObjTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
+						}
+
 					}
 				}
 			}
 		}
 	}
+	pie_SetDepthOffset(0.0f);
 }
 
 //draw Factory Delivery Points
@@ -1765,14 +1750,7 @@ void displayDelivPoints(void)
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
 		{
-			if (!doBucket)
-			{
-				renderDeliveryPoint(psDelivPoint);
-			}
-			else
-			{
-				bucketAddTypeToList(RENDER_DELIVPOINT, psDelivPoint);
-			}
+			renderDeliveryPoint(psDelivPoint);
 		}
 	}
 }
@@ -1793,16 +1771,7 @@ UDWORD		clan;
 			/* Is the feature worth rendering? */
 			if(clipXY(psFeature->x,psFeature->y))
 			{
-				//don't use #ifndef BUCKET for now - need to do it this way for renderMapToBuffer
-				if (!doBucket)
-				{
-					//over-ride the BUCKET def
-					renderFeature(psFeature);
-				}
-				else
-				{
-					bucketAddTypeToList(RENDER_FEATURE, psFeature);
-				}
+				renderFeature(psFeature);
 	 		}
 		}
  }
@@ -1836,16 +1805,7 @@ void displayProximityMsgs( void )
 			//if(clipXY(pViewProximity->x,pViewProximity->y))
 			if(clipXY(x,y))
 			{
-				//don't use #ifndef BUCKET for now - need to do it this way for renderMapToBuffer
-				if (!doBucket)
-				{
-					//over-ride the BUCKET def
-					renderProximityMsg(psProxDisp);
-				}
-				else
-				{
-					bucketAddTypeToList(RENDER_PROXMSG, psProxDisp);
-				}
+				renderProximityMsg(psProxDisp);
 			}
 		}
 	}
@@ -1891,7 +1851,7 @@ static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 			psComp->orientation.y = vecRot.y;
 			psComp->orientation.z = vecRot.z;
 
-			bucketAddTypeToList( RENDER_ANIMATION, psComp );
+			renderAnimComponent( psComp );
 		}
 	}
 }
@@ -1916,28 +1876,15 @@ void displayDynamicObjects( void )
 					if(psDroid->visible[selectedPlayer] || godMode || demoGetStatus())
 					{
 					 	psDroid->sDisplay.frameNumber = currentGameFrame;
-						//don't use #ifndef BUCKET for now - need to do it this way for renderMapToBuffer
-						if (!doBucket)
+						renderDroid( (DROID *) psDroid);
+						/* draw anim if visible */
+						if ( psDroid->psCurAnim != NULL &&
+							 psDroid->psCurAnim->bVisible == TRUE &&
+							 (psAnimObj = animObj_Find( psDroid,
+							  psDroid->psCurAnim->uwID )) != NULL )
 						{
-							//over-ride the BUCKET def
-							renderDroid( (DROID *) psDroid);
+							displayAnimation( psAnimObj, FALSE );
 						}
-						else
-						{
-							/* draw droid even if animating (still need to draw weapons) */
-							bucketAddTypeToList(RENDER_DROID, psDroid);
-//							bucketAddTypeToList(RENDER_SHADOW, psDroid);
-
-							/* draw anim if visible */
-							if ( psDroid->psCurAnim != NULL &&
-								 psDroid->psCurAnim->bVisible == TRUE &&
-								 (psAnimObj = animObj_Find( psDroid,
-								  psDroid->psCurAnim->uwID )) != NULL )
-							{
-								displayAnimation( psAnimObj, FALSE );
-							}
-						}
-						//showDroidSelection(psDroid);
 					}
 				} // end clipDroid
 		} // end for

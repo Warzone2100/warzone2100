@@ -326,13 +326,7 @@ UDWORD	i;
 			/* Is it on the grid */
 			if(clipXY((UDWORD)MAKEINT(asAtmosParts[i].position.x),(UDWORD)MAKEINT(asAtmosParts[i].position.z)))
 			{
-#ifndef BUCKET
-				/* Draw it right now */
 				renderParticle(&asAtmosParts[i]);
-#else
-				/* Add it to the bucket */
-				bucketAddTypeToList(RENDER_PARTICLE,&asAtmosParts[i]);
-#endif
 			}
 		}
 	}

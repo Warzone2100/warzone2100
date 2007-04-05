@@ -2601,6 +2601,11 @@ static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 static void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 {
 	SDWORD	iX = 0, iY = 0;
+	
+	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
+		"moveUpdateDroidPos: droid is already off the map in the x direction" );
+	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
+		"moveUpdateDroidPos: droid is already off the map in the y direction" );
 
 	if (psDroid->sMove.Status == MOVEPAUSE)
 	{
@@ -2650,6 +2655,12 @@ static void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 			psDroid->y = 1;
 		}
 	}
+	
+	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
+		"moveUpdateDroidPos: droid just moved off the map in the x direction" );
+	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
+		"moveUpdateDroidPos: droid just moved off the map in the y direction" );
+
 }
 
 /* Update a tracked droids position and speed given target values */
