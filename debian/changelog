@@ -1,3 +1,13 @@
+warzone2100 (2.0.6-0svn1) unstable; urgency=low
+
+  * Commented out dh_installdocs in order to prevent warzone2100 and 
+    warzone2100-data to contain the same doc files, the docs gets
+    installed anyway.
+  * Added --enable-data to the configure script parameters in order
+    to make the data package contain any game data.
+
+ -- Joakim Soderlund <joakim.soderlund@gmail.com>  Thu,  5 Apr 2007 18:43:38 +0200
+
 warzone2100 (2.0.5-0svn1) unstable; urgency=low
 
   * Bump upstream version number again.
