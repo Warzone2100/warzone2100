@@ -41,7 +41,6 @@ static TRACK			**g_apTrack;
 
 // number of tracks loaded
 static SDWORD			g_iCurTracks = 0;
-static SDWORD			g_iSamples = 0;
 
 //
 // static SDWORD g_iMaxSamples;
@@ -63,9 +62,7 @@ static void sound_CheckSample( AUDIO_SAMPLE *psSample );
 //
 BOOL sound_Init( SDWORD iMaxSameSamples )
 {
-	//~~~~~~~~~~~~~
 	SDWORD	i;
-	//~~~~~~~~~~~~~
 
 	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
@@ -127,7 +124,9 @@ BOOL sound_SetTrackVals
 	ASSERT( iPriority >= LOW_PRIORITY && iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority );
 
 	if ( !(iTrack < MAX_TRACKS) )
+	{
 		return FALSE;
+	}
 
 	if ( g_apTrack[iTrack] != NULL )
 	{
@@ -222,14 +221,14 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 //
 BOOL sound_LoadTrackFromFile(char szFileName[])
 {
-	//~~~~~~~~~~~~
 	TRACK	*pTrack;
-	//~~~~~~~~~~~~
 
 	// allocate track
 	pTrack = (TRACK *) MALLOC( sizeof(TRACK) );
 	if ( pTrack == NULL )
+	{
 		return FALSE;
+	}
 
 	pTrack->bMemBuffer = FALSE;
 	pTrack->pName = (char*)MALLOC( strlen((char*) szFileName) + 1 );
@@ -255,9 +254,7 @@ BOOL sound_LoadTrackFromFile(char szFileName[])
 //
 void sound_ReleaseTrack( TRACK *psTrack )
 {
-	//~~~~~~~~~~~
 	SDWORD	iTrack;
-	//~~~~~~~~~~~
 
 	if ( psTrack->pName != NULL )
 	{
@@ -282,9 +279,7 @@ void sound_ReleaseTrack( TRACK *psTrack )
 //
 void sound_CheckAllUnloaded( void )
 {
-	//~~~~~~~~~~~
 	SDWORD	iTrack;
-	//~~~~~~~~~~~
 
 	for ( iTrack = 0; iTrack < MAX_TRACKS; iTrack++ )
 	{
@@ -329,9 +324,7 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 static void sound_CheckSample( AUDIO_SAMPLE *psSample )
 {
 	ASSERT( psSample != NULL, "sound_CheckSample: sample pointer invalid\n" );
-	ASSERT( psSample->iSample >= 0 || psSample->iSample == (ALuint)SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %i out of range\n", psSample->iSample );
-	// FIXME iSample always >= 0 !
-	// FIXME Leaving as is because if this is not always true it asserts too often
+	ASSERT( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %u out of range", psSample->iSample );
 }
 
 //*
@@ -401,7 +394,10 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 //
 const char *sound_GetTrackName( SDWORD iTrack )
 {
-	if ( iTrack == SAMPLE_NOT_FOUND ) return NULL;
+	if ( iTrack == SAMPLE_NOT_FOUND ) 
+	{
+		return NULL;
+	}
 	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
 }
@@ -412,12 +408,12 @@ const char *sound_GetTrackName( SDWORD iTrack )
 //
 BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 {
-	//~~~~~~~~~~~~~
 	TRACK	*psTrack;
-	//~~~~~~~~~~~~~
 
 	if (!sound_CheckTrack(psSample->iTrack))
+	{
 	  return FALSE;
+	}
 
 	psTrack = g_apTrack[psSample->iTrack];
 
@@ -432,12 +428,12 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 //
 BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 {
-	//~~~~~~~~~~~~~
 	TRACK	*psTrack;
-	//~~~~~~~~~~~~~
 
 	if (!sound_CheckTrack(psSample->iTrack))
-	  return FALSE;
+	{
+		return FALSE;
+	}
 
 	psTrack = g_apTrack[psSample->iTrack];
 	return sound_Play3DSample( psTrack, psSample );
@@ -460,9 +456,6 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 	{
 		( g_pStopTrackCallback ) ( psSample );
 	}
-
-	// update number of samples playing
-	g_iSamples--;
 }
 
 //*
