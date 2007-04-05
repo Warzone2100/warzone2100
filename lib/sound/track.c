@@ -402,7 +402,6 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 	{
 		return FALSE;
 	}
-	}
 
 	psTrack = g_apTrack[psSample->iTrack];
 
