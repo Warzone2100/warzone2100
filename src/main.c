@@ -66,8 +66,8 @@
 
 #include "modding.h"
 
-#ifndef DEFAULT_DATADIR
-# define DEFAULT_DATADIR "/usr/share/warzone2100/"
+#ifndef DATADIR
+# define DATADIR "/usr/share/warzone2100/"
 #endif
 
 #if defined(WIN32)
@@ -301,9 +301,9 @@ static void initialize_PhysicsFS(void)
  *
  * Priority:
  * Lower loads first. Current:
- * -datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
+ * --datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
  *
- * Only -datadir and home dir are allways examined. Others only if data still not found.
+ * Only --datadir and home dir are allways examined. Others only if data still not found.
  *
  * We need ParseCommandLine, before we can add any mods...
  *
@@ -355,7 +355,7 @@ void scanDataDirs( void )
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
-					registerSearchPath( DEFAULT_DATADIR, 6 );
+					registerSearchPath( DATADIR, 6 );
 					rebuildSearchPath( mod_multiplay, TRUE );
 				}
 			}

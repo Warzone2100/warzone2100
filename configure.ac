@@ -120,15 +120,14 @@ fi
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
-	AS_HELP_STRING([--enable-debug[=strict/yes/relaxed/no]],[Compile debug version [no]]),
+	AS_HELP_STRING([--enable-debug],[Compile debug version [no]]),
 	[ enable_debug=$enableval ], [ enable_debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label"
-	WZ_CFLAGS_OVERRIDE="-O0"
+	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-unused-label"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG"
+	WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
 
 
@@ -306,12 +305,13 @@ fi
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
-WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDEFAULT_DATADIR=\\\"${datadir}/warzone2100\\\""
+WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
 
-CFLAGS="${WZ_CFLAGS} ${CFLAGS} ${WZ_CFLAGS_OVERRIDE}"
+CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
+CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
-AC_CONFIG_HEADER([lib/framework/config.h])
+AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		data/Makefile
 		nsis/Makefile
