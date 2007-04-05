@@ -61,13 +61,6 @@ the number of Proximity Messages for a mission*/
 //array of pointers for the view data
 VIEWDATA_LIST			*apsViewData;
 
-/* The memory heaps for the messages and viewData*/
-OBJ_HEAP		*psMsgHeap;
-OBJ_HEAP		*psViewDataHeap;
-
-/* The memory heap for the proximity displays */
-OBJ_HEAP		*psProxDispHeap;
-
 /* The id number for the next message allocated
  * Each message will have a unique id number irrespective of type
  */
@@ -101,13 +94,13 @@ static void checkMessages(MSG_VIEWDATA *psViewData);
 // ajl modified for netgames
 extern UDWORD selectedPlayer;
 
-//void HEAP_ALLOC(OBJ_HEAP* psHeap, void** ppObject)
-static inline MESSAGE* createMessage(OBJ_HEAP *heap, MESSAGE_TYPE msgType)
+static inline MESSAGE* createMessage(MESSAGE_TYPE msgType)
 {
 	MESSAGE *newMsg;
 
 	// Allocate memory for the message, and on failure return a NULL pointer
-	if ( !HEAP_ALLOC(heap, ((void**) &newMsg)) )
+	newMsg = malloc(sizeof(MESSAGE));
+	if ( !newMsg )
 		return NULL;
 
 	newMsg->type = msgType;
@@ -214,7 +207,7 @@ static inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UD
  * list is a pointer to the message list
  * del is a pointer to the message to remove
 */
-static inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAGE *del, UDWORD player)
+static inline void removeMessageFromList(MESSAGE *list[], MESSAGE *del, UDWORD player)
 {
 	MESSAGE *psPrev = NULL, *psCurr;
 
@@ -225,7 +218,8 @@ static inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAG
 	if (list[player] == del)
 	{
 		list[player] = list[player]->psNext;
-		HEAP_FREE(heap, del);
+		free(del);
+		return;
 	}
 
 	// Iterate through the list and find the item before the message to delete
@@ -242,11 +236,11 @@ static inline void removeMessageFromList(MESSAGE *list[], OBJ_HEAP *heap, MESSAG
 		// Modify the "next" pointer of the previous item to
 		// point to the "next" item of the item to delete.
 		psPrev->psNext = psCurr->psNext;
-		HEAP_FREE(heap, del);
+		free(del);
 	}
 }
 
-static inline void releaseAllMessages(MESSAGE *list[], OBJ_HEAP *heap)
+static inline void releaseAllMessages(MESSAGE *list[])
 {
 	UDWORD	i;
 	MESSAGE	*psCurr, *psNext;
@@ -258,7 +252,7 @@ static inline void releaseAllMessages(MESSAGE *list[], OBJ_HEAP *heap)
 		for(psCurr = list[i]; psCurr != NULL; psCurr = psNext)
 		{
 	 		psNext = psCurr->psNext;
-			HEAP_FREE(heap, psCurr);
+			free(psCurr);
 		}
 		list[i] = NULL;
 	}
@@ -268,9 +262,6 @@ BOOL messageInitVars(void)
 {
 	int i;
 
-	psMsgHeap = NULL;
-	psProxDispHeap = NULL;
-	psViewDataHeap = NULL;
 	msgID = 0;
 	currentNumProxDisplays = 0;
 
@@ -287,25 +278,19 @@ BOOL messageInitVars(void)
 //allocates the viewdata heap
 BOOL initViewData(void)
 {
-	//initialise the viewData heap - needs to be done before the data is loaded
-	if (!HEAP_CREATE(&psViewDataHeap, sizeof(VIEWDATA), VIEWDATA_INIT, VIEWDATA_EXT))
-	{
-		return FALSE;
-	}
 	return TRUE;
 }
 
 //destroys the viewdata heap
 void viewDataHeapShutDown(void)
 {
-	HEAP_DESTROY(psViewDataHeap);
 }
 
 /*Add a message to the list */
 MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 {
 	//first create a message of the required type
-	MESSAGE* psMsgToAdd = createMessage(psMsgHeap, msgType);
+	MESSAGE* psMsgToAdd = createMessage(msgType);
 
 	debug(LOG_WZ, "addMessage: adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
 
@@ -347,7 +332,8 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	PROXIMITY_DISPLAY *psToAdd;
 
 	//create the proximity display
-	if (HEAP_ALLOC(psProxDispHeap, (void**) &psToAdd))
+	psToAdd = malloc(sizeof(PROXIMITY_DISPLAY));
+	if(psToAdd)
 	{
 		if (proxPos)
 		{
@@ -369,7 +355,7 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	}
 	else
 	{
-		debug(LOG_ERROR, "addProximityDisplay() - HEAP_ALLOC failed");
+		debug(LOG_ERROR, "addProximityDisplay() - malloc failed");
 	}
 
 	//now add it to the top of the list
@@ -390,7 +376,7 @@ void removeMessage(MESSAGE *psDel, UDWORD player)
 	{
 		removeProxDisp(psDel, player);
 	}
-	removeMessageFromList(apsMessages, psMsgHeap, psDel, player);
+	removeMessageFromList(apsMessages, psDel, player);
 }
 
 /* remove a proximity display */
@@ -405,7 +391,7 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 
 		apsProxDisp[player] = apsProxDisp[player]->psNext;
 		intRemoveProximityButton(psCurr);
-		HEAP_FREE(psProxDispHeap, psCurr);
+		free(psCurr);
 	}
 	else
 	{
@@ -418,7 +404,7 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 			{
 				psPrev->psNext = psCurr->psNext;
 				intRemoveProximityButton(psCurr);
-				HEAP_FREE(psProxDispHeap, psCurr);
+				free(psCurr);
 				break;
 			}
 			psPrev = psCurr;
@@ -430,7 +416,7 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 void freeMessages(void)
 {
 	releaseAllProxDisp();
-	releaseAllMessages(apsMessages, psMsgHeap);
+	releaseAllMessages(apsMessages);
 }
 
 /* removes all the proximity displays */
@@ -478,17 +464,6 @@ BOOL initMessage(void)
 	tutorialMessage.player = MAX_PLAYERS + 1;
 	tutorialMessage.psNext = NULL;*/
 
-	if (!HEAP_CREATE(&psMsgHeap, sizeof(MESSAGE), MESSAGE_INIT, MESSAGE_EXT))
-	{
-		return FALSE;
-	}
-
-	//initialise the proximity display heap
-	if (!HEAP_CREATE(&psProxDispHeap, sizeof(PROXIMITY_DISPLAY), PROXDISP_INIT, PROXDISP_EXT))
-	{
-		return FALSE;
-	}
-
 	//JPS add message to get on screen video
 #ifdef VIDEO_TEST
     //mission
@@ -511,8 +486,8 @@ BOOL initMessage(void)
 static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 {
 	VIEWDATA_LIST		*psAdd;
-
-	if (HEAP_ALLOC(psViewDataHeap, (void**)&psAdd))
+	psAdd = malloc(sizeof(VIEWDATA_LIST));
+	if(psAdd)
 	{
 		psAdd->psViewData = psViewData;
 		psAdd->numViewData = numData;
@@ -550,7 +525,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 	}
 
 	//allocate space for the data
-	psViewData = (VIEWDATA *)MALLOC(numData * sizeof(VIEWDATA));
+	psViewData = (VIEWDATA *)malloc(numData * sizeof(VIEWDATA));
 	if (psViewData == NULL)
 	{
 		debug( LOG_ERROR, "Unable to allocate memory for viewdata" );
@@ -587,7 +562,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		psViewData->numText=(UBYTE)numText;
 
 		//allocate storage for the name
- 		psViewData->pName = (char *)MALLOC((strlen(name))+1);
+ 		psViewData->pName = (char *)malloc((strlen(name))+1);
 		if (psViewData->pName == NULL)
 		{
 			debug( LOG_ERROR, "ViewData Name - Out of memory" );
@@ -942,8 +917,6 @@ VIEWDATA * getViewData(char *pName)
 BOOL messageShutdown(void)
 {
 	freeMessages();
-	HEAP_DESTROY(psMsgHeap);
-	HEAP_DESTROY(psProxDispHeap);
 
 	return TRUE;
 }
@@ -1015,12 +988,12 @@ void viewDataShutDown(VIEWDATA *psViewData)
 			if (psList == apsViewData)
 			{
 				apsViewData = psList->psNext;
-				HEAP_FREE(psViewDataHeap, psList);
+				free(psList);
 			}
 			else
 			{
 				psPrev->psNext = psList->psNext;
-				HEAP_FREE(psViewDataHeap, psList);
+				free(psList);
 			}
 			break;
 		}
