@@ -75,6 +75,21 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode) {
 	}
 }
 
+/// Set the depth (z) offset
+/// Negative values are closer to the screen
+void pie_SetDepthOffset(float offset)
+{
+	if(offset == 0.0f)
+	{
+		glDisable (GL_POLYGON_OFFSET_FILL);
+	}
+	else
+	{
+		glPolygonOffset(offset, offset);
+		glEnable (GL_POLYGON_OFFSET_FILL);
+	}
+}
+
 /// Set the OpenGL fog start and end
 void pie_UpdateFogDistance(float begin, float end)
 {

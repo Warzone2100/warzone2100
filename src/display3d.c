@@ -952,7 +952,18 @@ static void drawTiles(iView *camera, iView *player)
 					continue;
 				}
 				drawTerrainTile(i,j, FALSE);
-				drawTerrainWaterTile(i,j);
+				if(tileScreenInfo[i][j].bWater)
+				{
+					// add the (possibly) transparent water to the bucket sort
+					bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
+					// check if we need to draw a water edge
+					if((mapTile(playerXTile + j, playerZTile + i)->texture & TILE_NUMMASK) != WaterTileID) {
+						// the edge is in front of the water (which is drawn at z-index -1)
+						pie_SetDepthOffset(-2.0);
+						drawTerrainTile(i,j, TRUE);
+						pie_SetDepthOffset(0.0);
+					}
+				}
 			}
 		}
 	}
@@ -4974,6 +4985,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		aVrts[2].light = tileScreenInfo[i+1][j+1].wlight;
 		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
+		pie_SetDepthOffset(-1.0);
 		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
 		memcpy(&aVrts[1],&aVrts[2],sizeof(PIEVERTEX));
@@ -4987,9 +4999,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
-		if( (psTile->texture & TILE_NUMMASK) != WaterTileID) {
-			drawTerrainTile(i,j, TRUE);
-		}
+		pie_SetDepthOffset(0.0);
 	}
 }
 

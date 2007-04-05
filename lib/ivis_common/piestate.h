@@ -156,6 +156,7 @@ extern SDWORD	pieStateCount;
 /***************************************************************************/
 extern void pie_SetDefaultStates(void);//Sets all states
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
+extern void pie_SetDepthOffset(float offset);
 extern void pie_SetGammaValue(float val);
 //renderer capability
 extern void pie_SetFogCap(FOG_CAP val);
