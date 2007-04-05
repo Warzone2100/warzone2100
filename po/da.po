@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-03 20:26+0200\n"
+"POT-Creation-Date: 2007-04-05 20:56+0200\n"
 "PO-Revision-Date: 2007-04-03 22:35+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -590,10 +590,8 @@ msgstr "Transportskib"
 msgid "Sensor Range"
 msgstr "Rækkevide"
 
-#: src/design.c:1809
-
-
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
+#: src/design.c:1809
 msgid "Sensor Power"
 msgstr "Watt"
 
@@ -1241,4 +1239,3 @@ msgstr "Forær enheder"
 #: src/multimenu.c:1132
 msgid "Give Power To Player"
 msgstr "Forær energi"
-
