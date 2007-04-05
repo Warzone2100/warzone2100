@@ -601,26 +601,15 @@ BOOL audio_LoadTrackFromFile( char szFileName[] )
 	return sound_LoadTrackFromFile( szFileName );
 }
 
-//*
-//
-
-// Routine to convert wav filename into a track number
-// ... This is really not going to be practical on the PSX is it?
-//
-// What is the point of all the scripts storing .WAV file names like: "Incoming
-// Intelligence Report-22hz Mon.wav"
-//
-//
-// when all that is required is a single byte saying which sound effect is
-// required.
-//
-// A typical example of using 50 times the amount of memory that is needed.
-
-//
-// =======================================================================================================================
-// *  ... bloody PC programmers they're spoiled !
-// =======================================================================================================================
-//
+/** Loads audio files and constructs a TRACK from them and returns their respective ID numbers
+ *  \param szFileName the filename of the track
+ *  \param bLoop whether the track should be looped until explicitly stopped
+ *  \param piID[out] the track id number is returned into the variable this pointer points to
+ *  \param iVol the volume this track should be played on (range is 0-100)
+ *  \param iPriority ????
+ *  \param iAudibleRadius the radius from the source of sound where it can be heard
+ *  \return TRUE when succesfull or audio is disabled, FALSE when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+ */
 BOOL audio_SetTrackVals
 	(
 		char	szFileName[],
@@ -648,24 +637,20 @@ BOOL audio_SetTrackVals
 		debug( LOG_NEVER, "audio_SetTrackVals: track %s resource not found\n", szFileName );
 		return FALSE;
 	}
-	else
-	{
-		// get current ID or spare one
-		if ( (*piID = audio_GetIDFromStr(szFileName)) == NO_SOUND )
-		{
-			*piID = sound_GetAvailableID();
-		}
 
-		if ( *piID == SAMPLE_NOT_ALLOCATED )
-		{
-			debug( LOG_NEVER, "audio_SetTrackVals: couldn't get spare track ID\n" );
-			return FALSE;
-		}
-		else
-		{
-			return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius );	//now psTrack should be fully set. -Q
-		}
+	// get current ID or spare one
+	if ( (*piID = audio_GetIDFromStr(szFileName)) == NO_SOUND )
+	{
+		*piID = sound_GetAvailableID();
 	}
+
+	if ( *piID == SAMPLE_NOT_ALLOCATED )
+	{
+		debug( LOG_NEVER, "audio_SetTrackVals: couldn't get spare track ID\n" );
+		return FALSE;
+	}
+
+	return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius );	//now psTrack should be fully set. -Q
 }
 
 //*
