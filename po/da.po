@@ -1,0 +1,1244 @@
+# translation of da.po to Dansk
+# Copyright (C) YEAR Warzone Resurrection Project
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Christian Vest Hansen <karmazilla@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: da\n"
+"Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
+"POT-Creation-Date: 2007-04-03 20:26+0200\n"
+"PO-Revision-Date: 2007-04-03 22:35+0200\n"
+"Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
+"Language-Team: Dansk <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: src/multiplay.c:2042 src/droid.c:5076
+msgid "Green"
+msgstr "Grøn"
+
+#: src/multiplay.c:2045
+msgid "Orange"
+msgstr "Orange"
+
+#: src/multiplay.c:2048
+msgid "Grey"
+msgstr "Grå"
+
+#: src/multiplay.c:2051
+msgid "Black"
+msgstr "Sort"
+
+#: src/multiplay.c:2054
+msgid "Red"
+msgstr "Rød"
+
+#: src/multiplay.c:2057
+msgid "Blue"
+msgstr "Blå"
+
+#: src/multiplay.c:2060
+msgid "Pink"
+msgstr "Pink"
+
+#: src/multiplay.c:2063
+msgid "Cyan"
+msgstr "Cyan"
+
+#: src/display.c:2021
+msgid "Cannot Build. Oil Resource Burning."
+msgstr "Kan ikke bygge på brændende oilebrøn."
+
+#: src/display.c:2179
+#, c-format
+msgid "%s - Damage %d%% - Kills %d, %s"
+msgstr "%s - Skade %d%% - Drab %d, %s"
+
+#: src/display.c:2424
+msgid "Truck ordered to build Oil Derrick"
+msgstr "Truck beordret til at bygge oliebrøn."
+
+#: src/multigifts.c:210
+#, c-format
+msgid "%s Gives You A Visibility Report"
+msgstr "%s Giver dig en rekonniseringsrapport"
+
+#: src/multigifts.c:243
+#, c-format
+msgid "%s Gives You Units"
+msgstr "%s Giver dig enheder"
+
+#: src/multigifts.c:340
+#, c-format
+msgid "%s Gives You Technology Documents"
+msgstr "%s Giver dig teknologi"
+
+#: src/multigifts.c:380
+#, c-format
+msgid "%s Gives You Power"
+msgstr "%s Giver dig energi"
+
+#: src/multigifts.c:401
+#, c-format
+msgid "%s Requests An Alliance With You"
+msgstr "%s Vil indgå en aliance med dig"
+
+#: src/multigifts.c:409
+#, c-format
+msgid "You Invite %s To Form An Alliance"
+msgstr "Du inviterede %s til at danne en aliance"
+
+#: src/multigifts.c:428
+#, c-format
+msgid "%s Breaks The Alliance With %s"
+msgstr "%s Bryder aliancen med %s"
+
+#: src/multigifts.c:454
+#, c-format
+msgid "%s Forms An Alliance With %s"
+msgstr "%s Danner aliance med %s"
+
+#: src/multigifts.c:922
+#, c-format
+msgid "You Discover Blueprints For %s"
+msgstr "Du opdager plantegninger for %s"
+
+#: src/hci.c:1120 src/hci.c:3955 src/hci.c:4109 src/hci.c:4552 src/hci.c:5792
+#: src/transporter.c:296 src/transporter.c:385 src/transporter.c:886
+#: src/intorder.c:606 src/loadsave.c:258 src/intelmap.c:664
+#: src/multimenu.c:467 src/multimenu.c:1324
+msgid "Close"
+msgstr "Luk"
+
+#: src/hci.c:1766 src/mission.c:3503 src/loop.c:599 src/loop.c:611
+msgid "GAME SAVED!"
+msgstr "SPIL GEMT!"
+
+#: src/hci.c:3857 src/keymap.c:292
+msgid "Commanders"
+msgstr "Kommandører"
+
+#: src/hci.c:3873 src/keymap.c:291
+msgid "Intelligence Display"
+msgstr "Kommando Pult"
+
+#: src/hci.c:3889 src/keymap.c:287
+msgid "Manufacture"
+msgstr "Fabrikering"
+
+#: src/hci.c:3905 src/keymap.c:290
+msgid "Design"
+msgstr "Design"
+
+#: src/hci.c:3921 src/keymap.c:288
+msgid "Research"
+msgstr "Forskning"
+
+#: src/hci.c:3937 src/keymap.c:289
+msgid "Build"
+msgstr "Konstruktion"
+
+#: src/hci.c:4017 src/multiint.c:1028
+msgid "Power"
+msgstr "Energi"
+
+#: src/hci.c:4179 src/ingameop.c:270
+msgid "Load Game"
+msgstr "Indlæs spil"
+
+#: src/hci.c:4187 src/mission.c:3406 src/mission.c:3564 src/ingameop.c:272
+#: src/ingameop.c:421
+msgid "Save Game"
+msgstr "Gem spil"
+
+#: src/hci.c:4271
+msgid "Exit Game"
+msgstr "Luk spillet"
+
+#: src/hci.c:4628 src/intdisplay.c:274 src/intdisplay.c:317
+#: src/intdisplay.c:362
+msgid "Progress Bar"
+msgstr "Proces bar"
+
+#: src/hci.c:5706
+msgid "Factory Delivery Point"
+msgstr "Leveringspunkt"
+
+#: src/hci.c:5725
+msgid "Loop Production"
+msgstr "Gentag produktion"
+
+#: src/transporter.c:435 src/transporter.c:492
+msgid "Launch Transport"
+msgstr "Afsend transportskib"
+
+#: src/transporter.c:1878
+msgid "Reinforcements landing"
+msgstr "Forstærkninger er ankommet"
+
+#: src/mission.c:2870
+msgid "Load Transport"
+msgstr "Fyld transportskib"
+
+#: src/mission.c:3351
+msgid "OBJECTIVE ACHIEVED"
+msgstr "MISSIONEN LYKKEDES"
+
+#: src/mission.c:3357
+msgid "OBJECTIVE FAILED"
+msgstr "MISSIONEN FEJLEDE"
+
+#: src/mission.c:3383 src/mission.c:3424 src/mission.c:3580
+msgid "Quit To Main Menu"
+msgstr "Tilbage til hovedmenu"
+
+#: src/mission.c:3392
+msgid "Continue Game"
+msgstr "Fortsæt"
+
+#: src/mission.c:3417 src/mission.c:3561 src/ingameop.c:417 src/frontend.c:540
+msgid "Load Saved Game"
+msgstr "Indlæs gemt spil"
+
+#: src/droid.c:320 src/droid.c:376
+msgid "Unit Lost!"
+msgstr "Enhed tabt!"
+
+#: src/droid.c:2494
+msgid "Structure Restored"
+msgstr "Bygning restoreret"
+
+#: src/droid.c:4729
+#, c-format
+msgid "Group %d Selected - %d Unit(s)"
+msgstr "Gruppe %d valgt - %d Enheder"
+
+#: src/droid.c:4741
+#, c-format
+msgid "%d Unit(s) Assigned to Group %d"
+msgstr "%d Enheder tildelt gruppe %d"
+
+#: src/droid.c:4753
+#, c-format
+msgid "Centered on Group %d - %d Unit(s)"
+msgstr "Fokuseret på gruppe %d - %d Enheder"
+
+#: src/droid.c:4757
+#, c-format
+msgid "Alligning with Group %d - %d Unit(s)"
+msgstr "Korigerede med gruppe %d - %d Enheder"
+
+#: src/droid.c:5074
+msgid "Rookie"
+msgstr "Menig"
+
+#: src/droid.c:5078
+msgid "Trained"
+msgstr "Sasjant"
+
+#: src/droid.c:5080
+msgid "Regular"
+msgstr "Oversasjant"
+
+#: src/droid.c:5082
+msgid "Professional"
+msgstr "Løjtnant"
+
+#: src/droid.c:5084
+msgid "Veteran"
+msgstr "Kaptajn"
+
+#: src/droid.c:5086
+msgid "Elite"
+msgstr "Major"
+
+#: src/droid.c:5088
+msgid "Special"
+msgstr "Oberst"
+
+#: src/droid.c:5090
+msgid "Hero"
+msgstr "General"
+
+#: src/multiint.c:483
+msgid "IP Address or Machine Name"
+msgstr "IP adressse eller computernavn"
+
+#: src/multiint.c:523
+msgid "CONNECTION"
+msgstr "FORBINDELSE"
+
+#: src/multiint.c:537
+msgid "Internet"
+msgstr "Internet"
+
+#: src/multiint.c:776
+msgid "Searching"
+msgstr "Søger"
+
+#: src/multiint.c:787
+msgid "GAMES"
+msgstr "SPIL"
+
+#: src/multiint.c:872
+msgid "OPTIONS"
+msgstr "INDSTILLINGER"
+
+#: src/multiint.c:881
+msgid "Game"
+msgstr "Spil"
+
+#: src/multiint.c:927 src/frontend.c:786
+msgid "Fog"
+msgstr "Tåge"
+
+#: src/multiint.c:950 src/multimenu.c:771
+msgid "Alliances"
+msgstr "Aliancer"
+
+#: src/multiint.c:1052
+msgid "Base"
+msgstr "Base"
+
+#: src/multiint.c:1082 src/multiint.c:1086
+msgid "Computer"
+msgstr "Computer"
+
+#: src/multiint.c:1523
+msgid "PLAYERS"
+msgstr "SPILLERE"
+
+#: src/multiint.c:1672
+msgid "CHAT"
+msgstr "BESKEDER"
+
+#: src/multiint.c:2353
+msgid "Host is Starting Game"
+msgstr "Værten starter spillet"
+
+#: src/multiint.c:2412
+msgid "Locked Teams"
+msgstr "Låste hold"
+
+#: src/multiint.c:2961
+msgid "FORCE"
+msgstr "STYRKE"
+
+#: src/multiint.c:3084
+msgid "TEMPLATES"
+msgstr "SKABELONER"
+
+#: src/multiint.c:3248
+msgid "Load Force"
+msgstr "Indlæs styrke"
+
+#: src/multiint.c:3252
+msgid "Save Force"
+msgstr "Gem styrke"
+
+#: src/multiint.c:3317
+msgid "CONTROL"
+msgstr "KONTROL"
+
+#: src/multiint.c:3653
+msgid "Players"
+msgstr "Spillere"
+
+#: src/keybind.c:1239
+msgid "View Aligned to North"
+msgstr "Indret kamera til nordlig retning"
+
+#: src/keybind.c:1263 src/intelmap.c:333
+msgid "PAUSED"
+msgstr "PAUSE"
+
+#: src/keybind.c:1309 src/keybind.c:1317
+msgid "Energy bars display toggled"
+msgstr "Energibar slået til/fra"
+
+#: src/keybind.c:1383
+msgid "Unable to locate any resource extractors!"
+msgstr "Kan ikke lokalisere resourcer"
+
+#: src/keybind.c:2298
+msgid "Centered on player HQ, direction NORTH"
+msgstr "Centreret på spiller HQ, nordlig retning"
+
+#: src/keybind.c:2310
+msgid "Unable to locate HQ!"
+msgstr "Kan ikke lokalisere HQ!"
+
+#: src/keybind.c:2326
+msgid "Formation speed limiting OFF"
+msgstr "Formation FRA"
+
+#: src/keybind.c:2330
+msgid "Formation speed limiting ON"
+msgstr "Formation TIL"
+
+#: src/keybind.c:2460 src/keybind.c:2487 src/keybind.c:2502
+msgid "Game Speed Reset"
+msgstr "Nulstillet spilhastighed"
+
+#: src/keybind.c:2462
+#, c-format
+msgid "Game Speed Increased to %3.1f"
+msgstr "Spillehastighed forøget til %3.1f"
+
+#: src/keybind.c:2489
+#, c-format
+msgid "Game Speed Reduced to %3.1f"
+msgstr "Spillehastighed reduceret til %3.1f"
+
+#: src/keybind.c:2515
+msgid "Build menu will reopen"
+msgstr "Konstruktionsmenuen vil genåbne"
+
+#: src/keybind.c:2519
+msgid "Build menu will not reopen"
+msgstr "Konstruktionsmenuen vil ikke genåbne"
+
+#: src/intdisplay.c:264 src/intdisplay.c:309 src/intdisplay.c:355
+msgid "Power Accrued"
+msgstr "Indsalmet energi"
+
+#: src/structure.c:3808
+msgid "Command Control Limit Reached - Production Halted"
+msgstr "Kommandobegrænsning nået - indstiller produktion"
+
+#: src/structure.c:7768
+#, c-format
+msgid "%s - Connected %d of %d"
+msgstr "%s - Forbundet %d af %d"
+
+#: src/structure.c:7903 src/structure.c:7960
+#, c-format
+msgid "%s - Electronically Damaged"
+msgstr "%s - Elektronisk beskadiget"
+
+#: src/structure.c:8234
+msgid "Electronic Reward - Visibility Report"
+msgstr "Elektronisk gevinst - Rekonniseringsrapport"
+
+#: src/structure.c:8276
+msgid "Factory Reward - Propulsion"
+msgstr "Fabriksgevinst - Fremdrift"
+
+#: src/structure.c:8301
+msgid "Factory Reward - Body"
+msgstr "Fabriksgevinst - Skrog"
+
+#: src/structure.c:8326
+msgid "Factory Reward - Weapon"
+msgstr "Frabriskgevinst - Våben"
+
+#: src/structure.c:8335
+msgid "Factory Reward - Nothing"
+msgstr "Fabriksgevinst - Ingen"
+
+#: src/structure.c:8364
+msgid "Repair Facility Award - Repair"
+msgstr "Reperationsgevinst - Reperation"
+
+#: src/structure.c:8371
+msgid "Repair Facility Award - Nothing"
+msgstr "Reperationsgevinst - Ingen"
+
+#: src/keyedit.c:359
+msgid "KEY MAPPING"
+msgstr "TASTATUR MAPPING"
+
+#: src/selection.c:124
+#, c-format
+msgid "%d Unit(s) Selected"
+msgstr "%d Enheder valgt"
+
+#: src/selection.c:441 src/selection.c:530 src/selection.c:608
+msgid "Unable to locate any repair units!"
+msgstr "Kan ikke finde nogle reperationsenheder!"
+
+#: src/selection.c:444
+msgid "Unable to locate any Trucks!"
+msgstr "Kan ikke finde nogle trucks!"
+
+#: src/selection.c:447
+msgid "Unable to locate any Sensor Units!"
+msgstr "Kan ikke finde nogle rekonniseringsenheder!"
+
+#: src/selection.c:450
+msgid "Unable to locate any Commanders!"
+msgstr "Kan ikke finde nogle kommandører!"
+
+#: src/research.c:2014 src/research.c:2033
+msgid "Research Completed"
+msgstr "Forskning fuldendt"
+
+#: src/research.c:2880
+msgid "Research Award"
+msgstr "Forskningsgevinst"
+
+#: src/scores.c:272
+msgid "Unit Losses"
+msgstr "Tabte enheder"
+
+#: src/scores.c:273
+msgid "Structure Losses"
+msgstr "Tabte bygninger"
+
+#: src/scores.c:274
+msgid "Force Information"
+msgstr "Styrke Information"
+
+#: src/scores.c:359
+#, c-format
+msgid "ARTIFACTS RECOVERED: %d"
+msgstr "FUNDNE ARTEFAKTER: %d"
+
+#: src/scores.c:364
+#, c-format
+msgid "Mission Time - %s"
+msgstr "Anvendt tid: %s"
+
+#: src/scores.c:369
+#, c-format
+msgid "Total Game Time - %s"
+msgstr "Total anvendt tid: %s"
+
+#: src/ingameop.c:99 src/ingameop.c:140 src/ingameop.c:260
+msgid "Resume Game"
+msgstr "Fortsæt spil"
+
+#: src/ingameop.c:105 src/ingameop.c:251 src/ingameop.c:256
+msgid "Quit"
+msgstr "Afbryd"
+
+#: src/ingameop.c:143 src/frontend.c:964
+msgid "Voice Volume"
+msgstr "Stemme volume"
+
+#: src/ingameop.c:148 src/frontend.c:968
+msgid "FX Volume"
+msgstr "Effekt volume"
+
+#: src/ingameop.c:153 src/frontend.c:972
+msgid "Music Volume"
+msgstr "Musik volume"
+
+#: src/ingameop.c:265 src/frontend.c:326
+msgid "Options"
+msgstr "Indstillinger"
+
+#: src/design.c:507 src/design.c:529 src/design.c:4088
+msgid "New Vehicle"
+msgstr "Nyt design"
+
+#: src/design.c:576
+msgid "Vehicle Body"
+msgstr "Skrog"
+
+#: src/design.c:598
+msgid "Vehicle Propulsion"
+msgstr "Fremdrift"
+
+#: src/design.c:621 src/design.c:646 src/design.c:672
+msgid "Vehicle Turret"
+msgstr "Tårn"
+
+#: src/design.c:693
+msgid "Delete Design"
+msgstr "Slet design"
+
+#: src/design.c:747 src/design.c:796
+msgid "Kinetic Armour"
+msgstr "Kinetisk panser"
+
+#: src/design.c:756 src/design.c:808
+msgid "Thermal Armour"
+msgstr "Termisk panser"
+
+#: src/design.c:772 src/design.c:829
+msgid "Engine Output"
+msgstr "Hestekrafter"
+
+#: src/design.c:780 src/design.c:839 src/design.c:1819 src/design.c:1870
+#: src/design.c:1903 src/design.c:1921 src/design.c:1954 src/design.c:1972
+#: src/design.c:2014 src/design.c:2053 src/design.c:2211 src/design.c:2228
+#: src/design.c:2271 src/design.c:2307
+msgid "Weight"
+msgstr "Vægt"
+
+#: src/design.c:870 src/design.c:890
+msgid "Total Power Required"
+msgstr "Produktionsomkostninger"
+
+#: src/design.c:903 src/design.c:924
+msgid "Total Body Points"
+msgstr "Total pansring"
+
+#: src/design.c:1109 src/design.c:1141
+msgid "Power Usage"
+msgstr "Energi forbrug"
+
+#: src/design.c:1549
+msgid "Transporter"
+msgstr "Transportskib"
+
+#: src/design.c:1799
+msgid "Sensor Range"
+msgstr "Rækkevide"
+
+#: src/design.c:1809
+
+
+# This is always 1000 ingame... any reason to have this at all? is it ever used?
+msgid "Sensor Power"
+msgstr "Watt"
+
+#: src/design.c:1860
+msgid "ECM Power"
+msgstr "ECM Effekt"
+
+#: src/design.c:1895 src/design.c:1912 src/design.c:1946 src/design.c:1963
+msgid "Build Points"
+msgstr "Effektivitet"
+
+#: src/design.c:1990 src/design.c:2023
+msgid "Range"
+msgstr "Rækkevide"
+
+#: src/design.c:1998 src/design.c:2033
+msgid "Damage"
+msgstr "Skade"
+
+#: src/design.c:2006 src/design.c:2043
+msgid "Rate-of-Fire"
+msgstr "Kadance"
+
+#: src/design.c:2203 src/design.c:2219
+msgid "Air Speed"
+msgstr "Luft hastighed"
+
+#: src/design.c:2247 src/design.c:2280
+msgid "Road Speed"
+msgstr "Hastighed på vej"
+
+#: src/design.c:2255 src/design.c:2289
+msgid "Off-Road Speed"
+msgstr "Hastighed i terræn"
+
+#: src/design.c:2263 src/design.c:2298
+msgid "Water Speed"
+msgstr "Sø hastighed"
+
+#: src/design.c:2586
+msgid "Weapons"
+msgstr "Våben"
+
+#: src/design.c:2610
+msgid "Systems"
+msgstr "Elektronik"
+
+#: src/design.c:2629
+msgid "Command Turrets"
+msgstr "Kommandotårn"
+
+#: src/frontend.c:318
+msgid "Single Player Campaign"
+msgstr "Solokampange"
+
+#: src/frontend.c:321 src/frontend.c:323
+#, fuzzy
+msgid "Multi Player Game"
+msgstr "Flerbruger spil"
+
+#: src/frontend.c:325 src/frontend.c:385
+msgid "Tutorial"
+msgstr "Tutorial"
+
+#: src/frontend.c:328
+msgid "Quit Game"
+msgstr "Afslut spil"
+
+#: src/frontend.c:330
+msgid "MAIN MENU"
+msgstr "HOVED MENU"
+
+#: src/frontend.c:386
+msgid "Fast Play"
+msgstr "Hurtgigt spil"
+
+#: src/frontend.c:387
+msgid "TUTORIALS"
+msgstr "TUTORIALS"
+
+#: src/frontend.c:446
+msgid "Load Campaign"
+msgstr "Indlæs kampange"
+
+#: src/frontend.c:447
+msgid "New Campaign"
+msgstr "Ny kampange"
+
+#: src/frontend.c:449
+msgid "SINGLE PLAYER"
+msgstr "SOLO SPILLER"
+
+#: src/frontend.c:583
+msgid "MULTI PLAYER"
+msgstr "FLER SPILLER"
+
+#: src/frontend.c:585
+msgid "Host Game"
+msgstr "Udbyd spil"
+
+#: src/frontend.c:586
+msgid "Join Game"
+msgstr "Forbind til vært"
+
+#: src/frontend.c:588
+msgid "Force Editor"
+msgstr "Redigér styrke"
+
+#: src/frontend.c:589
+msgid "One Player Skirmish"
+msgstr "Spil mod computeren"
+
+#: src/frontend.c:683 src/frontend.c:979 src/frontend.c:1088
+msgid "GAME OPTIONS"
+msgstr "SPIL INDSTILLINGER"
+
+#: src/frontend.c:684
+msgid "Game Options"
+msgstr "Spil indstillinger"
+
+#: src/frontend.c:685
+msgid "Graphics Options"
+msgstr "Grafik indstillinger"
+
+#: src/frontend.c:686
+msgid "Audio Options"
+msgstr "Lyd indstillinger"
+
+#: src/frontend.c:687
+msgid "Key Mappings"
+msgstr "Tastatur indstillinger"
+
+#: src/frontend.c:762
+msgid "Reverse Mouse"
+msgstr "Omvendt mus"
+
+#: src/frontend.c:765 src/frontend.c:777 src/frontend.c:830 src/frontend.c:865
+#: src/frontend.c:879 src/frontend.c:915
+msgid "On"
+msgstr "Til"
+
+#: src/frontend.c:769 src/frontend.c:781 src/frontend.c:826 src/frontend.c:835
+#: src/frontend.c:860 src/frontend.c:874 src/frontend.c:910
+msgid "Off"
+msgstr "Fra"
+
+#: src/frontend.c:774
+msgid "Screen Shake"
+msgstr "Ryst skærm"
+
+#: src/frontend.c:789 src/frontend.c:897
+msgid "Mist"
+msgstr "Afstandståge"
+
+#: src/frontend.c:793 src/frontend.c:890
+msgid "Fog Of War"
+msgstr "Krigståge"
+
+#: src/frontend.c:798
+msgid "Video Playback"
+msgstr ""
+
+#: src/frontend.c:801 src/frontend.c:934
+msgid "Full"
+msgstr "Fuldskærm"
+
+#: src/frontend.c:805 src/frontend.c:924
+msgid "Windowed"
+msgstr "Vindue"
+
+#: src/frontend.c:808 src/frontend.c:929
+msgid "Minimal"
+msgstr "Minimal"
+
+#: src/frontend.c:815 src/frontend.c:819
+msgid "Subtitles"
+msgstr "Undertekster"
+
+#: src/frontend.c:1050
+msgid "Difficulty"
+msgstr "Sværhedsgræd"
+
+#: src/frontend.c:1054 src/frontend.c:1139
+msgid "Easy"
+msgstr "Begynder"
+
+#: src/frontend.c:1057 src/frontend.c:1131
+msgid "Normal"
+msgstr "Øvet"
+
+#: src/frontend.c:1061 src/frontend.c:1135
+msgid "Hard"
+msgstr "Svær"
+
+#: src/frontend.c:1066
+msgid "Scroll Speed"
+msgstr "Kamera hastighed"
+
+#: src/frontend.c:1082
+msgid "Unit Colour"
+msgstr "Holdfarve"
+
+#: src/intelmap.c:500
+msgid "Research Update"
+msgstr "Forskningsopdatering"
+
+#: src/intelmap.c:504
+msgid "Project Goals"
+msgstr "Målsætninger"
+
+#: src/intelmap.c:507
+msgid "Current Objective"
+msgstr "Denne mission"
+
+#: src/keymap.c:293
+msgid "Toggle Radar"
+msgstr "Slå radar til/fra"
+
+#: src/keymap.c:294
+msgid "Toggle Console Display"
+msgstr "Slå konsol display til/fra"
+
+#: src/keymap.c:295
+msgid "Toggle Damage Bars On/Off"
+msgstr "Slå helbredsindikatorer til/fra"
+
+#: src/keymap.c:296
+msgid "Take Screen Shot"
+msgstr "Tag skærmdump"
+
+#: src/keymap.c:297
+msgid "Toggle Formation Speed Limiting"
+msgstr "Slå formation til/fra"
+
+#: src/keymap.c:298
+msgid "View Location of Previous Message"
+msgstr "Find lokation for sidste besked"
+
+#: src/keymap.c:303
+msgid "Assign Group 1"
+msgstr "Tildel gruppe 1"
+
+#: src/keymap.c:304
+msgid "Assign Group 2"
+msgstr "Tildel gruppe 2"
+
+#: src/keymap.c:305
+msgid "Assign Group 3"
+msgstr "Tildel gruppe 3"
+
+#: src/keymap.c:306
+msgid "Assign Group 4"
+msgstr "Tildel gruppe 4"
+
+#: src/keymap.c:307
+msgid "Assign Group 5"
+msgstr "Tildel gruppe 5"
+
+#: src/keymap.c:308
+msgid "Assign Group 6"
+msgstr "Tildel gruppe 6"
+
+#: src/keymap.c:309
+msgid "Assign Group 7"
+msgstr "Tildel gruppe 7"
+
+#: src/keymap.c:310
+msgid "Assign Group 8"
+msgstr "Tildel gruppe 8"
+
+#: src/keymap.c:311
+msgid "Assign Group 9"
+msgstr "Tildel gruppe 9"
+
+#: src/keymap.c:315
+msgid "Select Group 1"
+msgstr "Vælg gruppe 1"
+
+#: src/keymap.c:316
+msgid "Select Group 2"
+msgstr "Vælg gruppe 2"
+
+#: src/keymap.c:317
+msgid "Select Group 3"
+msgstr "Vælg gruppe 3"
+
+#: src/keymap.c:318
+msgid "Select Group 4"
+msgstr "Vælg gruppe 4"
+
+#: src/keymap.c:319
+msgid "Select Group 5"
+msgstr "Vælg gruppe 5"
+
+#: src/keymap.c:320
+msgid "Select Group 6"
+msgstr "Vælg gruppe 6"
+
+#: src/keymap.c:321
+msgid "Select Group 7"
+msgstr "Vælg gruppe 7"
+
+#: src/keymap.c:322
+msgid "Select Group 8"
+msgstr "Vælg gruppe 8"
+
+#: src/keymap.c:323
+msgid "Select Group 9"
+msgstr "Vælg gruppe 9"
+
+#: src/keymap.c:327
+msgid "Select Commander 1"
+msgstr "Vælg kommandør 1"
+
+#: src/keymap.c:328
+msgid "Select Commander 2"
+msgstr "Vælg kommandør 2"
+
+#: src/keymap.c:329
+msgid "Select Commander 3"
+msgstr "Vælg kommandør 3"
+
+#: src/keymap.c:330
+msgid "Select Commander 4"
+msgstr "Vælg kommandør 4"
+
+#: src/keymap.c:331
+msgid "Select Commander 5"
+msgstr "Vælg kommandør 5"
+
+#: src/keymap.c:332
+msgid "Select Commander 6"
+msgstr "Vælg kommandør 6"
+
+#: src/keymap.c:333
+msgid "Select Commander 7"
+msgstr "Vælg kommandør 7"
+
+#: src/keymap.c:334
+msgid "Select Commander 8"
+msgstr "Vælg kommandør 8"
+
+#: src/keymap.c:335
+msgid "Select Commander 9"
+msgstr "Vælg kommandør 9"
+
+#: src/keymap.c:339
+msgid "Multiplayer Options"
+msgstr "Flerbruger indstillinger"
+
+#: src/keymap.c:340
+msgid "Start Multiplayer Audio"
+msgstr "Start flerbruger lyd"
+
+#: src/keymap.c:341
+msgid "Stop Multiplayer Audio"
+msgstr "Stop flerbruger lyd"
+
+#: src/keymap.c:344
+msgid "Snap View to North"
+msgstr "Slå kameraet i nordlig retning"
+
+#: src/keymap.c:345
+msgid "Toggle Tracking Camera"
+msgstr "Forfølgelseskamera"
+
+#: src/keymap.c:346
+msgid "Display In-Game Options"
+msgstr "Vis spillemenu"
+
+#: src/keymap.c:347
+msgid "Zoom Radar Out"
+msgstr "Zoom radaen ud"
+
+#: src/keymap.c:348
+msgid "Zoom Radar In"
+msgstr "Zoom radaen ind "
+
+#: src/keymap.c:349
+msgid "Zoom In"
+msgstr "Zoom ind"
+
+#: src/keymap.c:350
+msgid "Zoom Out"
+msgstr "Zoom ud"
+
+#: src/keymap.c:351
+msgid "Pitch Forward"
+msgstr "Hæld forover"
+
+#: src/keymap.c:352
+msgid "Rotate Left"
+msgstr "Drej til venstre"
+
+#: src/keymap.c:353
+msgid "Reset Pitch"
+msgstr "Nulstil hældning"
+
+#: src/keymap.c:354
+msgid "Rotate Right"
+msgstr "Drej til højre"
+
+#: src/keymap.c:355
+msgid "Pitch Back"
+msgstr "Hæld bagover"
+
+#: src/keymap.c:356
+msgid "Orders Menu"
+msgstr "Ordre menu"
+
+#: src/keymap.c:357
+msgid "Decrease Game Speed"
+msgstr "Reducér spillehastighed"
+
+#: src/keymap.c:358
+msgid "Increase Game Speed"
+msgstr "Forøg spillehastighed"
+
+#: src/keymap.c:359
+msgid "Reset Game Speed"
+msgstr "Nulstil spillehastighed"
+
+#: src/keymap.c:360
+msgid "View North"
+msgstr "Kig mod nord"
+
+#: src/keymap.c:361
+msgid "View South"
+msgstr "Kig mod syd"
+
+#: src/keymap.c:362
+msgid "View East"
+msgstr "Kig mod øst"
+
+#: src/keymap.c:363
+msgid "View West"
+msgstr "Kig mod vest"
+
+#: src/keymap.c:364
+msgid "View next Oil Derrick"
+msgstr "Find næste oliebrøn"
+
+#: src/keymap.c:365
+msgid "View next Repair Unit"
+msgstr "Find næste reperationsenhed"
+
+#: src/keymap.c:366
+msgid "View next Truck"
+msgstr "Find næste truck"
+
+#: src/keymap.c:367
+msgid "View next Sensor Unit"
+msgstr "Find næste rekonniseringsenhed"
+
+#: src/keymap.c:368
+msgid "View next Commander"
+msgstr "Find næste kommandør"
+
+#: src/keymap.c:369
+msgid "Toggle Overlays"
+msgstr "Slå interface til/fra"
+
+#: src/keymap.c:370
+msgid "Console On/Off"
+msgstr "Slå konsol til/fra"
+
+#: src/keymap.c:373
+msgid "Center View on HQ"
+msgstr "Centrer kamera på HQ"
+
+#: src/keymap.c:374
+msgid "Hold Fire"
+msgstr "Indstil skydning"
+
+#: src/keymap.c:375
+msgid "View Unassigned Units"
+msgstr "Find utildelte enheder"
+
+#: src/keymap.c:376
+msgid "Return Fire"
+msgstr "Besvar ild"
+
+#: src/keymap.c:377
+msgid "Fire at Will"
+msgstr "Angrib alt"
+
+#: src/keymap.c:378
+msgid "Return to HQ"
+msgstr "Tilbagetrækning til HQ"
+
+#: src/keymap.c:379
+msgid "Optimum Range"
+msgstr "Optimal rækkevide"
+
+#: src/keymap.c:380
+msgid "Short Range"
+msgstr "Kort rækkevide"
+
+#: src/keymap.c:381
+msgid "Pursue"
+msgstr "Forfølg"
+
+#: src/keymap.c:382
+msgid "Patrol"
+msgstr "Patrolje"
+
+#: src/keymap.c:383
+msgid "Return For Repair"
+msgstr "Tilbagetrækning for reperation"
+
+#: src/keymap.c:384
+msgid "Hold Position"
+msgstr "Hold position"
+
+#: src/keymap.c:385
+msgid "Send Text Message"
+msgstr "Send tekst besked"
+
+#: src/keymap.c:386
+msgid "Long Range"
+msgstr "Lang rækkevide"
+
+#: src/keymap.c:399
+msgid "Retreat at Medium Damage"
+msgstr "Tilbagetræk ved mellem skade"
+
+#: src/keymap.c:400
+msgid "Retreat at Heavy Damage"
+msgstr "Tilbagetræk ved sværd skade "
+
+#: src/keymap.c:401
+msgid "Do or Die!"
+msgstr "Kæmp til døden!"
+
+#: src/keymap.c:405
+msgid "Select all Combat Units"
+msgstr "Vælg alle kommando enheder"
+
+#: src/keymap.c:406
+msgid "Select all Heavily Damaged Units"
+msgstr "Vælg alle svært skadet enheder"
+
+#: src/keymap.c:408
+msgid "Select all Half-tracks"
+msgstr "Vælg alle halv-bælter"
+
+#: src/keymap.c:409
+msgid "Select all Hovers"
+msgstr "Vælg alle amfibre"
+
+#: src/keymap.c:410
+msgid "Return for Recycling"
+msgstr "Send til skrotning"
+
+#: src/keymap.c:411
+msgid "Select all Units on Screen"
+msgstr "Vælg alle enheder på skærmen"
+
+#: src/keymap.c:412
+msgid "Select all Tracks"
+msgstr "Vælg alle bæltekøretøjer"
+
+#: src/keymap.c:413
+msgid "Select EVERY unit"
+msgstr "Vælg alle enheder"
+
+#: src/keymap.c:414
+msgid "Select all VTOLs"
+msgstr "Vælg alle VTOL"
+
+#: src/keymap.c:415
+msgid "Select all Wheels"
+msgstr "Vælg alle hjulkøretøjer"
+
+#: src/keymap.c:417
+msgid "Select all Similiar Units"
+msgstr "Vælg alle lignende enheder"
+
+#: src/keymap.c:421
+msgid "Select next Factory"
+msgstr "Find næste fabrik"
+
+#: src/keymap.c:422
+msgid "Select next Research Facility"
+msgstr "Find næste forskningscenter"
+
+#: src/keymap.c:423
+msgid "Select next Power Generator"
+msgstr "Find næste kraftværk"
+
+#: src/keymap.c:424
+msgid "Select next Cyborg Factory"
+msgstr "Find næste cyborg fabrik"
+
+#: src/keymap.c:425
+msgid "Toggle reopening the build menu"
+msgstr "Slå genåbning af konstruktionsmenuen til/fra"
+
+#: src/multijoin.c:163 src/multijoin.c:164
+msgid "Players Still Joining"
+msgstr "Spillere tilkobler stadig"
+
+#: src/multijoin.c:284
+#, c-format
+msgid "%s has Left the Game"
+msgstr "%s har forladt spillet"
+
+#: src/multijoin.c:402
+#, c-format
+msgid "%s is Joining the Game"
+msgstr "%s kom med i spillet"
+
+#: src/multimenu.c:772
+msgid "Score"
+msgstr "Score"
+
+#: src/multimenu.c:773
+msgid "Kills"
+msgstr "Drabte"
+
+#: src/multimenu.c:782
+msgid "Ping"
+msgstr "Ping"
+
+#: src/multimenu.c:783
+msgid "Played"
+msgstr "Antal spil"
+
+#: src/multimenu.c:1097
+msgid "Toggle Alliance State"
+msgstr "Slå aliance status til/fra"
+
+#: src/multimenu.c:1114
+msgid "Give Visibility Report"
+msgstr "Send rekonniseringsrapport"
+
+#: src/multimenu.c:1120
+msgid "Leak Technology Documents"
+msgstr "Send forskningsresultater"
+
+#: src/multimenu.c:1126
+msgid "Hand Over Selected Units"
+msgstr "Forær enheder"
+
+#: src/multimenu.c:1132
+msgid "Give Power To Player"
+msgstr "Forær energi"
+
