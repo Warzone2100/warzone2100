@@ -314,7 +314,9 @@ fi
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
-CPPFLAGS="-I\$(top_srcdir) -DYY_STATIC -DLOCALEDIR=\\\"${localedir}\\\" -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DLOCALEDIR=\\\"${localedir}\\\" -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
+
+CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 
