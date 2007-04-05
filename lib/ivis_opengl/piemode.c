@@ -137,7 +137,6 @@ void pie_ShutDown(void) {
 /***************************************************************************/
 
 void pie_ScreenFlip(int clearMode) {
-	PIELIGHT fog_colour;
 	GLbitfield clearFlags = 0;
 
 	screenDoDumpToDiskIfRequired();

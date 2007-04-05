@@ -26,7 +26,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "tracklib.h"
-#include "lib/gamelib/priority.h"
 
 //*
 //
@@ -117,12 +116,9 @@ BOOL sound_SetTrackVals
 		BOOL	bLoop,
 		SDWORD	iTrack,
 		SDWORD	iVol,
-		SDWORD	iPriority,
 		SDWORD	iAudibleRadius
 	)
 {
-	ASSERT( iPriority >= LOW_PRIORITY && iPriority <= HIGH_PRIORITY, "sound_CreateTrack: priority %i out of bounds\n", iPriority );
-
 	if ( !(iTrack < MAX_TRACKS) )
 	{
 		return FALSE;
@@ -138,7 +134,6 @@ BOOL sound_SetTrackVals
 	// set track members
 	psTrack->bLoop = bLoop;
 	psTrack->iVol = iVol;
-	psTrack->iPriority = iPriority;
 	psTrack->iAudibleRadius = iAudibleRadius;
 	psTrack->iTime =0;			//added, since they really should init all the values. -Q
 	psTrack->iTimeLastFinished = 0;
@@ -210,7 +205,9 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 	strcpy( pTrack->pName, GetLastResourceFilename() );
 
 	if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
+	{
 		return NULL;
+	}
 
 	return pTrack;
 }
@@ -362,16 +359,6 @@ SDWORD sound_GetTrackTime( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetTrackPriority( SDWORD iTrack )
-{
-	sound_CheckTrack( iTrack );
-	return g_apTrack[iTrack]->iPriority;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 SDWORD sound_GetTrackVolume( SDWORD iTrack )
 {
 	sound_CheckTrack( iTrack );
@@ -394,10 +381,11 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 //
 const char *sound_GetTrackName( SDWORD iTrack )
 {
-	if ( iTrack == SAMPLE_NOT_FOUND ) 
+	if ( iTrack == SAMPLE_NOT_FOUND )
 	{
 		return NULL;
 	}
+
 	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
 }
@@ -412,12 +400,16 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 
 	if (!sound_CheckTrack(psSample->iTrack))
 	{
-	  return FALSE;
+		return FALSE;
+	}
 	}
 
 	psTrack = g_apTrack[psSample->iTrack];
 
-	if (psTrack == NULL) return FALSE;
+	if (psTrack == NULL)
+	{
+		return FALSE;
+	}
 
 	return sound_Play2DSample( psTrack, psSample, bQueued );
 }
@@ -512,14 +504,12 @@ SDWORD sound_GetTrackID( TRACK *psTrack )
 	}
 
 	// if matching track found return it else find empty track
-	if ( i < MAX_TRACKS )
-	{
-		return i;
-	}
-	else
+	if ( i >= MAX_TRACKS )
 	{
 		return SAMPLE_NOT_FOUND;
 	}
+
+	return i;
 }
 
 //*
@@ -541,14 +531,12 @@ SDWORD sound_GetAvailableID( void )
 	}
 
 	ASSERT( i < MAX_TRACKS, "sound_GetTrackID: unused track not found!\n" );
-	if ( i < MAX_TRACKS )
-	{
-		return i;
-	}
-	else
+	if ( i >= MAX_TRACKS )
 	{
 		return SAMPLE_NOT_ALLOCATED;
 	}
+
+	return i;
 }
 
 //*

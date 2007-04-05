@@ -25,7 +25,6 @@
 #include "lib/framework/frameresource.h"
 #include "lib/gamelib/gtime.h"
 #include "tracklib.h"
-#include "lib/gamelib/priority.h"
 #include "aud.h"
 #include "audio_id.h"
 #include "lib/framework/trig.h"
@@ -38,7 +37,6 @@
 #define AUDIO_SAMPLE_HEAP_INIT	1000
 #define AUDIO_SAMPLE_HEAP_EXT	10
 #define MAX_SAME_SAMPLES		2
-#define AUDIO_QUEUE_SIZE		30
 #define LOWERED_VOL				AUDIO_VOL_MAX / 4
 
 //*
@@ -159,19 +157,18 @@ void audio_PlayPreviousQueueTrack( void )
 //
 BOOL audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 {
-	if ( g_sPreviousSample.x != SAMPLE_COORD_INVALID && g_sPreviousSample.y != SAMPLE_COORD_INVALID
-	 && g_sPreviousSample.z != SAMPLE_COORD_INVALID )
-	{
-		*iX = g_sPreviousSample.x;
-		*iY = g_sPreviousSample.y;
-		*iZ = g_sPreviousSample.z;
-		return TRUE;
-	}
-	else
+	if ( g_sPreviousSample.x == SAMPLE_COORD_INVALID || g_sPreviousSample.y == SAMPLE_COORD_INVALID
+	 || g_sPreviousSample.z == SAMPLE_COORD_INVALID )
 	{
 		*iX = *iY = *iZ;
 		return FALSE;
 	}
+
+	*iX = g_sPreviousSample.x;
+	*iY = g_sPreviousSample.y;
+	*iZ = g_sPreviousSample.z;
+
+	return TRUE;
 }
 
 //*
@@ -202,19 +199,18 @@ static void audio_AddSampleToTail( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *p
 	if ( (*ppsSampleList) == NULL )
 	{
 		( *ppsSampleList ) = psSample;
+		return;
 	}
-	else
-	{
-		psSampleTail = ( *ppsSampleList );
-		while ( psSampleTail->psNext != NULL )
-		{
-			psSampleTail = psSampleTail->psNext;
-		}
 
-		psSampleTail->psNext = psSample;
-		psSample->psPrev = psSampleTail;
-		psSample->psNext = NULL;
+	psSampleTail = ( *ppsSampleList );
+	while ( psSampleTail->psNext != NULL )
+	{
+		psSampleTail = psSampleTail->psNext;
 	}
+
+	psSampleTail->psNext = psSample;
+	psSample->psPrev = psSampleTail;
+	psSample->psNext = NULL;
 }
 
 //*
@@ -237,17 +233,15 @@ static void audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSa
 		// first sample in list
 		( *ppsSampleList ) = psSample->psNext;
 	}
-	else
-	{
-		if ( psSample->psPrev != NULL )
-		{
-			psSample->psPrev->psNext = psSample->psNext;
-		}
 
-		if ( psSample->psNext != NULL )
-		{
-			psSample->psNext->psPrev = psSample->psPrev;
-		}
+	if ( psSample->psPrev != NULL )
+	{
+		psSample->psPrev->psNext = psSample->psNext;
+	}
+
+	if ( psSample->psNext != NULL )
+	{
+		psSample->psNext->psPrev = psSample->psPrev;
 	}
 
 	// set sample pointers NULL for safety
@@ -473,38 +467,36 @@ static void audio_UpdateQueue( void )
 	{
 		// lower volume whilst playing queue audio
 		audio_Set3DVolume( LOWERED_VOL );
+		return;
 	}
-	else
+
+	// set full global volume
+	audio_Set3DVolume( AUDIO_VOL_MAX );
+
+	// check queue for members
+	if ( g_psSampleQueue != NULL )
 	{
-		// set full global volume
-		audio_Set3DVolume( AUDIO_VOL_MAX );
+		// remove queue head
+		psSample = g_psSampleQueue;
+		audio_RemoveSample( &g_psSampleQueue, psSample );
 
-		// check queue for members
-		if ( g_psSampleQueue != NULL )
+		// add sample to list if able to play
+		if ( !sound_Play2DTrack(psSample, TRUE) )
 		{
-			// remove queue head
-			psSample = g_psSampleQueue;
-			audio_RemoveSample( &g_psSampleQueue, psSample );
+			debug( LOG_NEVER, "audio_UpdateQueue: couldn't play sample\n" );
+			HEAP_FREE( g_psSampleHeap, psSample );
+			return;
+		}
 
-			// add sample to list if able to play
-			if ( sound_Play2DTrack(psSample, TRUE) == TRUE )
-			{
-				audio_AddSampleToHead( &g_psSampleList, psSample );
+		audio_AddSampleToHead( &g_psSampleList, psSample );
 
-				// update last queue sound coords
-				if ( psSample->x != SAMPLE_COORD_INVALID && psSample->y != SAMPLE_COORD_INVALID
-				 && psSample->z != SAMPLE_COORD_INVALID )
-				{
-					g_sPreviousSample.x = psSample->x;
-					g_sPreviousSample.y = psSample->y;
-					g_sPreviousSample.z = psSample->z;
-				}
-			}
-			else
-			{
-				debug( LOG_NEVER, "audio_UpdateQueue: couldn't play sample\n" );
-				HEAP_FREE( g_psSampleHeap, psSample );
-			}
+		// update last queue sound coords
+		if ( psSample->x != SAMPLE_COORD_INVALID && psSample->y != SAMPLE_COORD_INVALID
+		 && psSample->z != SAMPLE_COORD_INVALID )
+		{
+			g_sPreviousSample.x = psSample->x;
+			g_sPreviousSample.y = psSample->y;
+			g_sPreviousSample.z = psSample->z;
 		}
 	}
 }
@@ -614,9 +606,8 @@ BOOL audio_SetTrackVals
 	(
 		char	szFileName[],
 		BOOL	bLoop,
-		int		*piID,
+		int		*iTrack,
 		int		iVol,
-		int		iPriority,
 		int		iAudibleRadius
 	)
 {
@@ -639,18 +630,18 @@ BOOL audio_SetTrackVals
 	}
 
 	// get current ID or spare one
-	if ( (*piID = audio_GetIDFromStr(szFileName)) == NO_SOUND )
+	if ( (*iTrack = audio_GetIDFromStr(szFileName)) == NO_SOUND )
 	{
-		*piID = sound_GetAvailableID();
+		*iTrack = sound_GetAvailableID();
 	}
 
-	if ( *piID == SAMPLE_NOT_ALLOCATED )
+	if ( *iTrack == SAMPLE_NOT_ALLOCATED )
 	{
 		debug( LOG_NEVER, "audio_SetTrackVals: couldn't get spare track ID\n" );
 		return FALSE;
 	}
 
-	return sound_SetTrackVals( psTrack, bLoop, *piID, iVol, iPriority, iAudibleRadius );	//now psTrack should be fully set. -Q
+	return sound_SetTrackVals( psTrack, bLoop, *iTrack, iVol, iAudibleRadius );	//now psTrack should be fully set. -Q
 }
 
 //*
@@ -663,7 +654,6 @@ BOOL audio_SetTrackValsHashName
 		BOOL	bLoop,
 		int		iTrack,
 		int		iVol,
-		int		iPriority,
 		int		iAudibleRadius
 	)
 {
@@ -683,10 +673,8 @@ BOOL audio_SetTrackValsHashName
 	{
 		return FALSE;
 	}
-	else
-	{
-		return sound_SetTrackVals( psTrack, bLoop, iTrack, iVol, iPriority, iAudibleRadius );
-	}
+
+	return sound_SetTrackVals( psTrack, bLoop, iTrack, iVol, iAudibleRadius );
 }
 
 //*
@@ -787,31 +775,27 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	{
 		return FALSE;
 	}
-	else
-	{
-		// setup sample
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );						// [check] -Q
-		psSample->iTrack = iTrack;
-		psSample->x = iX;
-		psSample->y = iY;
-		psSample->z = iZ;
-		psSample->bRemove = FALSE;
-		psSample->psObj = psObj;
-		psSample->pCallback = pUserCallback;
 
-		// add sample to list if able to play
-		if ( sound_Play3DTrack(psSample) == TRUE )
-		{
-			audio_AddSampleToHead( &g_psSampleList, psSample );
-			return TRUE;
-		}
-		else
-		{
-			debug( LOG_NEVER, "audio_Play3DTrack: couldn't play sample\n" );
-			HEAP_FREE( g_psSampleHeap, psSample );
-			return FALSE;
-		}
+	// setup sample
+	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );						// [check] -Q
+	psSample->iTrack = iTrack;
+	psSample->x = iX;
+	psSample->y = iY;
+	psSample->z = iZ;
+	psSample->bRemove = FALSE;
+	psSample->psObj = psObj;
+	psSample->pCallback = pUserCallback;
+
+	// add sample to list if able to play
+	if ( !sound_Play3DTrack(psSample) )
+	{
+		debug( LOG_NEVER, "audio_Play3DTrack: couldn't play sample\n" );
+		HEAP_FREE( g_psSampleHeap, psSample );
+		return FALSE;
 	}
+
+	audio_AddSampleToHead( &g_psSampleList, psSample );
+	return TRUE;
 }
 
 //*
@@ -990,15 +974,14 @@ void audio_PlayTrack( int iTrack )
 		psSample->bRemove = FALSE;
 
 		// add sample to list if able to play
-		if ( sound_Play2DTrack(psSample, FALSE) == TRUE )
-		{
-			audio_AddSampleToHead( &g_psSampleList, psSample );
-		}
-		else
+		if ( !sound_Play2DTrack(psSample, FALSE) )
 		{
 			debug( LOG_NEVER, "audio_PlayTrack: couldn't play sample\n" );
 			HEAP_FREE( g_psSampleHeap, psSample );
+			return;
 		}
+
+		audio_AddSampleToHead( &g_psSampleList, psSample );
 	}
 }
 
@@ -1147,7 +1130,6 @@ SDWORD audio_GetTrackID( char szFileName[] )
 {
 	//~~~~~~~~~~~~~
 	TRACK	*psTrack;
-	SDWORD	iID;
 	//~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -1155,19 +1137,14 @@ SDWORD audio_GetTrackID( char szFileName[] )
 	{
 		return SAMPLE_NOT_FOUND;
 	}
-	else
+
+	psTrack = (TRACK*)resGetData( "WAV", szFileName );
+	if ( psTrack == NULL )
 	{
-		psTrack = (TRACK*)resGetData( "WAV", szFileName );
-		if ( psTrack == NULL )
-		{
-			return SAMPLE_NOT_FOUND;
-		}
-		else
-		{
-			iID = sound_GetTrackID( psTrack );
-			return iID;
-		}
+		return SAMPLE_NOT_FOUND;
 	}
+
+	return sound_GetTrackID( psTrack );
 }
 
 //*
@@ -1178,7 +1155,6 @@ SDWORD audio_GetTrackIDFromHash( UDWORD hash )
 {
 	//~~~~~~~~~~~~~
 	TRACK	*psTrack;
-	SDWORD	iID;
 	//~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -1186,19 +1162,14 @@ SDWORD audio_GetTrackIDFromHash( UDWORD hash )
 	{
 		return SAMPLE_NOT_FOUND;
 	}
-	else
+
+	psTrack = (TRACK*)resGetDataFromHash( "WAV", hash );
+	if ( psTrack == NULL )
 	{
-		psTrack = (TRACK*)resGetDataFromHash( "WAV", hash );
-		if ( psTrack == NULL )
-		{
-			return SAMPLE_NOT_FOUND;
-		}
-		else
-		{
-			iID = sound_GetTrackID( psTrack );
-			return iID;
-		}
+		return SAMPLE_NOT_FOUND;
 	}
+
+	return sound_GetTrackID( psTrack );
 }
 
 //*
@@ -1212,10 +1183,8 @@ SDWORD audio_GetAvailableID( void )
 	{
 		return 0;
 	}
-	else
-	{
-		return sound_GetAvailableID();
-	}
+
+	return sound_GetAvailableID();
 }
 
 //*

@@ -7,7 +7,6 @@ SRC=anim.c \
 	audp_lexer.lex.c \
 	gtime.c \
 	hashtabl.c \
-	pqueue.c \
 	ptrlist.c
 
 LIB=gamelib

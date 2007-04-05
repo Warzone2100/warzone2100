@@ -92,7 +92,6 @@ BOOL	gameInitialised = FALSE;
 BOOL	frontendInitialised = FALSE;
 BOOL	reInit = FALSE;
 BOOL	bDisableLobby;
-BOOL pQUEUE=TRUE;			//This is used to control our pQueue list. Always ON except for SP games! -Q
 char	SaveGamePath[MAX_PATH];
 char	ScreenDumpPath[MAX_PATH];
 char	MultiForcesPath[MAX_PATH];

@@ -1158,8 +1158,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				break;
 			}
 			// set track vals
-			audio_SetTrackValsHashName( id, FALSE, index, 100,
-									1, 1800 );
+			audio_SetTrackValsHashName( id, FALSE, index, 100, 1800 );
 		}
 		psVal->v.ival = index;
 		break;

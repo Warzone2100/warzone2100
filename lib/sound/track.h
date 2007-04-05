@@ -86,7 +86,6 @@ typedef struct TRACK
 {
 	BOOL		bLoop;
 	SDWORD		iVol;
-	SDWORD		iPriority;
 	SDWORD		iAudibleRadius;
 	SDWORD		iTime;					/* duration in milliseconds */
 	UDWORD		iTimeLastFinished;		/* time last finished in ms */
@@ -106,7 +105,7 @@ BOOL	sound_Shutdown(void);
 BOOL	sound_LoadTrackFromFile(char szFileName[]);
 TRACK *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
-			SDWORD iVol, SDWORD iPriority, SDWORD iAudibleRadius);
+			SDWORD iVol, SDWORD iAudibleRadius);
 void	sound_ReleaseTrack( TRACK * psTrack );
 
 void	sound_StopTrack( AUDIO_SAMPLE *psSample );
@@ -117,7 +116,6 @@ void	sound_CheckAllUnloaded( void );
 BOOL	sound_CheckTrack( SDWORD iTrack );
 
 SDWORD	sound_GetTrackTime( SDWORD iTrack );
-SDWORD	sound_GetTrackPriority( SDWORD iTrack );
 SDWORD	sound_GetTrackAudibleRadius( SDWORD iTrack );
 SDWORD	sound_GetTrackVolume( SDWORD iTrack );
 const char *	sound_GetTrackName( SDWORD iTrack );
