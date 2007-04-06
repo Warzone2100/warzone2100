@@ -1,0 +1,24 @@
+MAKERULES=../makerules
+include $(MAKERULES)/configure.mk
+
+.PHONY: all clean update-po po-files
+
+all:
+ifdef USE_GETTEXT
+all: po-files
+endif
+
+po-files: nb.po de.po da.po nl.po la.po
+
+update-po: clean po-files
+
+$(PACKAGE).pot: POTFILES.in
+	xgettext --default-domain=$(PACKAGE) --directory=.. --add-comments=TRANSLATORS: --keyword=_ --keyword=N_ --files-from=$< --copyright-holder="Warzone Resurrection Project" --msgid-bugs-address="warzone-dev@gna.org"
+	mv $(PACKAGE).po $@
+
+%.po: $(PACKAGE).pot
+	msgmerge $@ $(PACKAGE).pot -o $@.new
+	mv $@.new $@
+
+clean:
+	$(RM) $(PACKAGE).pot
