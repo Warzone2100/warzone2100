@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2007-04-06 01:14+0200\n"
-"PO-Revision-Date: 2007-04-06 02:02+0100\n"
+"PO-Revision-Date: 2007-04-06 02:33+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -982,75 +982,75 @@ msgstr ""
 
 #: src/keymap.c:315
 msgid "Select Group 1"
-msgstr ""
+msgstr "Selecteer Groep 1"
 
 #: src/keymap.c:316
 msgid "Select Group 2"
-msgstr ""
+msgstr "Selecteer Groep 2"
 
 #: src/keymap.c:317
 msgid "Select Group 3"
-msgstr ""
+msgstr "Selecteer Groep 3"
 
 #: src/keymap.c:318
 msgid "Select Group 4"
-msgstr ""
+msgstr "Selecteer Groep 4"
 
 #: src/keymap.c:319
 msgid "Select Group 5"
-msgstr ""
+msgstr "Selecteer Groep 5"
 
 #: src/keymap.c:320
 msgid "Select Group 6"
-msgstr ""
+msgstr "Selecteer Groep 6"
 
 #: src/keymap.c:321
 msgid "Select Group 7"
-msgstr ""
+msgstr "Selecteer Groep 7"
 
 #: src/keymap.c:322
 msgid "Select Group 8"
-msgstr ""
+msgstr "Selecteer Groep 8"
 
 #: src/keymap.c:323
 msgid "Select Group 9"
-msgstr ""
+msgstr "Selecteer Groep 9"
 
 #: src/keymap.c:327
 msgid "Select Commander 1"
-msgstr ""
+msgstr "Selecteer Commandant 1"
 
 #: src/keymap.c:328
 msgid "Select Commander 2"
-msgstr ""
+msgstr "Selecteer Commandant 2"
 
 #: src/keymap.c:329
 msgid "Select Commander 3"
-msgstr ""
+msgstr "Selecteer Commandant 3"
 
 #: src/keymap.c:330
 msgid "Select Commander 4"
-msgstr ""
+msgstr "Selecteer Commandant 4"
 
 #: src/keymap.c:331
 msgid "Select Commander 5"
-msgstr ""
+msgstr "Selecteer Commandant 5"
 
 #: src/keymap.c:332
 msgid "Select Commander 6"
-msgstr ""
+msgstr "Selecteer Commandant 6"
 
 #: src/keymap.c:333
 msgid "Select Commander 7"
-msgstr ""
+msgstr "Selecteer Commandant 7"
 
 #: src/keymap.c:334
 msgid "Select Commander 8"
-msgstr ""
+msgstr "Selecteer Commandant 8"
 
 #: src/keymap.c:335
 msgid "Select Commander 9"
-msgstr ""
+msgstr "Selecteer Commandant 9"
 
 #: src/keymap.c:339
 msgid "Multiplayer Options"
@@ -1286,11 +1286,11 @@ msgstr ""
 
 #: src/keymap.c:421
 msgid "Select next Factory"
-msgstr ""
+msgstr "Selecteer de volgende Fabriek"
 
 #: src/keymap.c:422
 msgid "Select next Research Facility"
-msgstr ""
+msgstr "Selecteer het volgende Onderzoekscentrum"
 
 #: src/keymap.c:423
 msgid "Select next Power Generator"
