@@ -26,7 +26,6 @@ lib/gamelib/hashtabl.c
 lib/gamelib/anim.c
 lib/gamelib/ptrlist.c
 lib/gamelib/gtime.c
-lib/gamelib/pqueue.c
 lib/gamelib/animobj.c
 lib/netplay/netusers_stub.c
 lib/netplay/netplay.c
@@ -209,7 +208,6 @@ lib/gamelib/hashtabl.c
 lib/gamelib/anim.c
 lib/gamelib/ptrlist.c
 lib/gamelib/gtime.c
-lib/gamelib/pqueue.c
 lib/gamelib/animobj.c
 lib/netplay/netusers_stub.c
 lib/netplay/netplay.c

@@ -1,0 +1,1357 @@
+# Dutch translations for Warzone 2100 package.
+# Copyright (C) 2007 Warzone Resurrection Project
+# This file is distributed under the same license as the Warzone 2100 package.
+# Giel van Schijndel <me@mortis.eu>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Warzone 2100 TRUNK\n"
+"Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
+"POT-Creation-Date: 2007-04-06 01:14+0200\n"
+"PO-Revision-Date: 2007-04-06 02:02+0100\n"
+"Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/multiplay.c:2042
+#: src/droid.c:5077
+msgid "Green"
+msgstr "Groen"
+
+#: src/multiplay.c:2045
+msgid "Orange"
+msgstr "Oranje"
+
+#: src/multiplay.c:2048
+msgid "Grey"
+msgstr "Grijs"
+
+#: src/multiplay.c:2051
+msgid "Black"
+msgstr "Zwart"
+
+#: src/multiplay.c:2054
+msgid "Red"
+msgstr "Rood"
+
+#: src/multiplay.c:2057
+msgid "Blue"
+msgstr "Blauw"
+
+#: src/multiplay.c:2060
+msgid "Pink"
+msgstr "Roze"
+
+#: src/multiplay.c:2063
+msgid "Cyan"
+msgstr "Cyaan"
+
+#: src/display.c:2021
+msgid "Cannot Build. Oil Resource Burning."
+msgstr "Kan niet bouwen. Oliebron brand."
+
+#: src/display.c:2179
+#, c-format
+msgid "%s - Damage %d%% - Kills %d, %s"
+msgstr ""
+
+#: src/display.c:2424
+msgid "Truck ordered to build Oil Derrick"
+msgstr ""
+
+#: src/multigifts.c:210
+#, c-format
+msgid "%s Gives You A Visibility Report"
+msgstr ""
+
+#: src/multigifts.c:243
+#, c-format
+msgid "%s Gives You Units"
+msgstr ""
+
+#: src/multigifts.c:340
+#, c-format
+msgid "%s Gives You Technology Documents"
+msgstr ""
+
+#: src/multigifts.c:380
+#, c-format
+msgid "%s Gives You Power"
+msgstr ""
+
+#: src/multigifts.c:401
+#, c-format
+msgid "%s Requests An Alliance With You"
+msgstr ""
+
+#: src/multigifts.c:409
+#, c-format
+msgid "You Invite %s To Form An Alliance"
+msgstr ""
+
+#: src/multigifts.c:428
+#, c-format
+msgid "%s Breaks The Alliance With %s"
+msgstr ""
+
+#: src/multigifts.c:454
+#, c-format
+msgid "%s Forms An Alliance With %s"
+msgstr ""
+
+#: src/multigifts.c:922
+#, c-format
+msgid "You Discover Blueprints For %s"
+msgstr ""
+
+#: src/hci.c:1120
+#: src/hci.c:3955
+#: src/hci.c:4109
+#: src/hci.c:4552
+#: src/hci.c:5792
+#: src/transporter.c:296
+#: src/transporter.c:385
+#: src/transporter.c:886
+#: src/intorder.c:606
+#: src/loadsave.c:258
+#: src/intelmap.c:664
+#: src/multimenu.c:467
+#: src/multimenu.c:1324
+msgid "Close"
+msgstr "Sluiten"
+
+#: src/hci.c:1766
+#: src/mission.c:3505
+#: src/loop.c:599
+#: src/loop.c:611
+msgid "GAME SAVED!"
+msgstr "SPEL OPGESLAGEN!"
+
+#: src/hci.c:3857
+#: src/keymap.c:292
+msgid "Commanders"
+msgstr ""
+
+#: src/hci.c:3873
+#: src/keymap.c:291
+msgid "Intelligence Display"
+msgstr ""
+
+#: src/hci.c:3889
+#: src/keymap.c:287
+msgid "Manufacture"
+msgstr "Produceren"
+
+#: src/hci.c:3905
+#: src/keymap.c:290
+msgid "Design"
+msgstr "Ontwerp"
+
+#: src/hci.c:3921
+#: src/keymap.c:288
+msgid "Research"
+msgstr "Onderzoek"
+
+#: src/hci.c:3937
+#: src/keymap.c:289
+msgid "Build"
+msgstr "Bouw"
+
+#: src/hci.c:4017
+#: src/multiint.c:1028
+msgid "Power"
+msgstr "Energie"
+
+#: src/hci.c:4179
+#: src/ingameop.c:270
+msgid "Load Game"
+msgstr "Laad Spel"
+
+#: src/hci.c:4187
+#: src/mission.c:3408
+#: src/mission.c:3558
+#: src/ingameop.c:272
+#: src/ingameop.c:421
+msgid "Save Game"
+msgstr "Spel opslaan"
+
+#: src/hci.c:4271
+msgid "Exit Game"
+msgstr "Spel Verlaten"
+
+#: src/hci.c:4628
+#: src/intdisplay.c:274
+#: src/intdisplay.c:317
+#: src/intdisplay.c:362
+#, fuzzy
+msgid "Progress Bar"
+msgstr "Vooruitgangsbalk"
+
+#: src/hci.c:5706
+msgid "Factory Delivery Point"
+msgstr ""
+
+#: src/hci.c:5725
+#, fuzzy
+msgid "Loop Production"
+msgstr "Productie Herhalen"
+
+#: src/transporter.c:435
+#: src/transporter.c:492
+msgid "Launch Transport"
+msgstr ""
+
+#: src/transporter.c:1878
+msgid "Reinforcements landing"
+msgstr ""
+
+#: src/mission.c:2872
+msgid "Load Transport"
+msgstr ""
+
+#: src/mission.c:3353
+msgid "OBJECTIVE ACHIEVED"
+msgstr "DOEL BEHAALD"
+
+#: src/mission.c:3359
+msgid "OBJECTIVE FAILED"
+msgstr "DOEL MISLUKT"
+
+#: src/mission.c:3385
+#: src/mission.c:3426
+#: src/mission.c:3574
+#, fuzzy
+msgid "Quit To Main Menu"
+msgstr "Afsluiten Naar Hoofdmenu"
+
+#: src/mission.c:3394
+msgid "Continue Game"
+msgstr "Ga door met Spel"
+
+#: src/mission.c:3419
+#: src/mission.c:3555
+#: src/ingameop.c:417
+#: src/frontend.c:540
+#, fuzzy
+msgid "Load Saved Game"
+msgstr "Laden Opgeslagen Spel"
+
+#: src/droid.c:320
+#: src/droid.c:376
+#, fuzzy
+msgid "Unit Lost!"
+msgstr "Eenheid verloren!"
+
+#: src/droid.c:2494
+msgid "Structure Restored"
+msgstr ""
+
+#: src/droid.c:4730
+#, c-format
+msgid "Group %d Selected - %d Unit(s)"
+msgstr "Groep %d geselecteerd - %d eenhe(e)d(en)"
+
+#: src/droid.c:4742
+#, c-format
+msgid "%d Unit(s) Assigned to Group %d"
+msgstr ""
+
+#: src/droid.c:4754
+#, c-format
+msgid "Centered on Group %d - %d Unit(s)"
+msgstr ""
+
+#: src/droid.c:4758
+#, c-format
+msgid "Alligning with Group %d - %d Unit(s)"
+msgstr ""
+
+#: src/droid.c:5075
+msgid "Rookie"
+msgstr "Groentje"
+
+#: src/droid.c:5079
+msgid "Trained"
+msgstr ""
+
+#: src/droid.c:5081
+msgid "Regular"
+msgstr ""
+
+#: src/droid.c:5083
+msgid "Professional"
+msgstr ""
+
+#: src/droid.c:5085
+msgid "Veteran"
+msgstr "Veteraan"
+
+#: src/droid.c:5087
+msgid "Elite"
+msgstr "Elite"
+
+#: src/droid.c:5089
+#, fuzzy
+msgid "Special"
+msgstr "Speciaal"
+
+#: src/droid.c:5091
+msgid "Hero"
+msgstr "Held"
+
+#: src/multiint.c:483
+#, fuzzy
+msgid "IP Address or Machine Name"
+msgstr "IP Adres of Computer Naam"
+
+#: src/multiint.c:523
+msgid "CONNECTION"
+msgstr "VERBINDING"
+
+#: src/multiint.c:537
+msgid "Internet"
+msgstr "Internet"
+
+#: src/multiint.c:776
+#, fuzzy
+msgid "Searching"
+msgstr "Zoeken"
+
+#: src/multiint.c:787
+msgid "GAMES"
+msgstr "SPELLEN"
+
+#: src/multiint.c:872
+msgid "OPTIONS"
+msgstr "INSTELLINGEN"
+
+#: src/multiint.c:881
+msgid "Game"
+msgstr "Spel"
+
+#: src/multiint.c:927
+#: src/frontend.c:786
+msgid "Fog"
+msgstr "Mist"
+
+#: src/multiint.c:950
+#: src/multimenu.c:771
+msgid "Alliances"
+msgstr "Allianties"
+
+#: src/multiint.c:1052
+msgid "Base"
+msgstr "Basis"
+
+#: src/multiint.c:1082
+#: src/multiint.c:1086
+msgid "Computer"
+msgstr "Computer"
+
+#: src/multiint.c:1523
+msgid "PLAYERS"
+msgstr "SPELERS"
+
+#: src/multiint.c:1672
+msgid "CHAT"
+msgstr "CHAT"
+
+#: src/multiint.c:2353
+msgid "Host is Starting Game"
+msgstr ""
+
+#: src/multiint.c:2412
+msgid "Locked Teams"
+msgstr "Vergrendelde Teams"
+
+#: src/multiint.c:2961
+msgid "FORCE"
+msgstr ""
+
+#: src/multiint.c:3084
+msgid "TEMPLATES"
+msgstr "SJABLONEN"
+
+#: src/multiint.c:3248
+msgid "Load Force"
+msgstr "Laad Strijdkracht"
+
+#: src/multiint.c:3252
+msgid "Save Force"
+msgstr "Strijdkracht opslaan"
+
+#: src/multiint.c:3317
+msgid "CONTROL"
+msgstr ""
+
+#: src/multiint.c:3653
+msgid "Players"
+msgstr "Spelers"
+
+#: src/keybind.c:1239
+msgid "View Aligned to North"
+msgstr ""
+
+#: src/keybind.c:1263
+#: src/intelmap.c:333
+msgid "PAUSED"
+msgstr "GEPAUZEERD"
+
+#: src/keybind.c:1309
+#: src/keybind.c:1317
+msgid "Energy bars display toggled"
+msgstr ""
+
+#: src/keybind.c:1383
+msgid "Unable to locate any resource extractors!"
+msgstr ""
+
+#: src/keybind.c:2298
+msgid "Centered on player HQ, direction NORTH"
+msgstr ""
+
+#: src/keybind.c:2310
+msgid "Unable to locate HQ!"
+msgstr ""
+
+#: src/keybind.c:2326
+msgid "Formation speed limiting OFF"
+msgstr ""
+
+#: src/keybind.c:2330
+msgid "Formation speed limiting ON"
+msgstr ""
+
+#: src/keybind.c:2460
+#: src/keybind.c:2487
+#: src/keybind.c:2502
+msgid "Game Speed Reset"
+msgstr ""
+
+#: src/keybind.c:2462
+#, c-format
+msgid "Game Speed Increased to %3.1f"
+msgstr ""
+
+#: src/keybind.c:2489
+#, c-format
+msgid "Game Speed Reduced to %3.1f"
+msgstr ""
+
+#: src/keybind.c:2515
+msgid "Build menu will reopen"
+msgstr "Bouwmenu zal opnieuw openen"
+
+#: src/keybind.c:2519
+msgid "Build menu will not reopen"
+msgstr "Bouwmenu zal niet opnieuw openen"
+
+#: src/intdisplay.c:264
+#: src/intdisplay.c:309
+#: src/intdisplay.c:355
+msgid "Power Accrued"
+msgstr "Energie Toegenomen"
+
+#: src/structure.c:3808
+msgid "Command Control Limit Reached - Production Halted"
+msgstr ""
+
+#: src/structure.c:7768
+#, c-format
+msgid "%s - Connected %d of %d"
+msgstr ""
+
+#: src/structure.c:7903
+#: src/structure.c:7960
+#, c-format
+msgid "%s - Electronically Damaged"
+msgstr ""
+
+#: src/structure.c:8234
+msgid "Electronic Reward - Visibility Report"
+msgstr ""
+
+#: src/structure.c:8276
+msgid "Factory Reward - Propulsion"
+msgstr ""
+
+#: src/structure.c:8301
+msgid "Factory Reward - Body"
+msgstr ""
+
+#: src/structure.c:8326
+msgid "Factory Reward - Weapon"
+msgstr ""
+
+#: src/structure.c:8335
+msgid "Factory Reward - Nothing"
+msgstr ""
+
+#: src/structure.c:8364
+msgid "Repair Facility Award - Repair"
+msgstr ""
+
+#: src/structure.c:8371
+msgid "Repair Facility Award - Nothing"
+msgstr ""
+
+#: src/keyedit.c:359
+msgid "KEY MAPPING"
+msgstr ""
+
+#: src/selection.c:124
+#, c-format
+msgid "%d Unit(s) Selected"
+msgstr ""
+
+#: src/selection.c:441
+#: src/selection.c:530
+#: src/selection.c:608
+msgid "Unable to locate any repair units!"
+msgstr ""
+
+#: src/selection.c:444
+msgid "Unable to locate any Trucks!"
+msgstr ""
+
+#: src/selection.c:447
+msgid "Unable to locate any Sensor Units!"
+msgstr ""
+
+#: src/selection.c:450
+msgid "Unable to locate any Commanders!"
+msgstr ""
+
+#: src/research.c:2014
+#: src/research.c:2033
+msgid "Research Completed"
+msgstr "Onderzoek Voltooid"
+
+#: src/research.c:2880
+msgid "Research Award"
+msgstr ""
+
+#: src/scores.c:272
+msgid "Unit Losses"
+msgstr ""
+
+#: src/scores.c:273
+msgid "Structure Losses"
+msgstr ""
+
+#: src/scores.c:274
+msgid "Force Information"
+msgstr ""
+
+#: src/scores.c:359
+#, c-format
+msgid "ARTIFACTS RECOVERED: %d"
+msgstr ""
+
+#: src/scores.c:364
+#, c-format
+msgid "Mission Time - %s"
+msgstr "Missie Tijd - %s"
+
+#: src/scores.c:369
+#, c-format
+msgid "Total Game Time - %s"
+msgstr "Totale Speel Tijd - %s"
+
+#: src/ingameop.c:99
+#: src/ingameop.c:140
+#: src/ingameop.c:260
+msgid "Resume Game"
+msgstr "Hervat Spel"
+
+#: src/ingameop.c:105
+#: src/ingameop.c:251
+#: src/ingameop.c:256
+msgid "Quit"
+msgstr "Afsluiten"
+
+#: src/ingameop.c:143
+#: src/frontend.c:964
+msgid "Voice Volume"
+msgstr "Stem Volume"
+
+#: src/ingameop.c:148
+#: src/frontend.c:968
+msgid "FX Volume"
+msgstr "Effecten Volume"
+
+#: src/ingameop.c:153
+#: src/frontend.c:972
+msgid "Music Volume"
+msgstr "Muziek Volume"
+
+#: src/ingameop.c:265
+#: src/frontend.c:326
+msgid "Options"
+msgstr "Instellingen"
+
+#: src/design.c:507
+#: src/design.c:529
+#: src/design.c:4088
+msgid "New Vehicle"
+msgstr "Nieuw Voertuig"
+
+#: src/design.c:576
+msgid "Vehicle Body"
+msgstr ""
+
+#: src/design.c:598
+msgid "Vehicle Propulsion"
+msgstr "Voertuig Aandrijving"
+
+#: src/design.c:621
+#: src/design.c:646
+#: src/design.c:672
+msgid "Vehicle Turret"
+msgstr "Voertuig Geschutkoepel"
+
+#: src/design.c:693
+msgid "Delete Design"
+msgstr "Verwijder Ontwerp"
+
+#: src/design.c:747
+#: src/design.c:796
+msgid "Kinetic Armour"
+msgstr "Kinetisch Pantser"
+
+#: src/design.c:756
+#: src/design.c:808
+msgid "Thermal Armour"
+msgstr "Hitte Schild"
+
+#: src/design.c:772
+#: src/design.c:829
+msgid "Engine Output"
+msgstr ""
+
+#: src/design.c:780
+#: src/design.c:839
+#: src/design.c:1819
+#: src/design.c:1870
+#: src/design.c:1903
+#: src/design.c:1921
+#: src/design.c:1954
+#: src/design.c:1972
+#: src/design.c:2014
+#: src/design.c:2053
+#: src/design.c:2211
+#: src/design.c:2228
+#: src/design.c:2271
+#: src/design.c:2307
+msgid "Weight"
+msgstr "Gewicht"
+
+#: src/design.c:870
+#: src/design.c:890
+msgid "Total Power Required"
+msgstr ""
+
+#: src/design.c:903
+#: src/design.c:924
+msgid "Total Body Points"
+msgstr ""
+
+#: src/design.c:1109
+#: src/design.c:1141
+msgid "Power Usage"
+msgstr "Energie Verbruik"
+
+#: src/design.c:1549
+msgid "Transporter"
+msgstr ""
+
+#: src/design.c:1799
+msgid "Sensor Range"
+msgstr "Sensor Bereik"
+
+#: src/design.c:1809
+msgid "Sensor Power"
+msgstr "Sensor Vermogen"
+
+#: src/design.c:1860
+msgid "ECM Power"
+msgstr ""
+
+#: src/design.c:1895
+#: src/design.c:1912
+#: src/design.c:1946
+#: src/design.c:1963
+msgid "Build Points"
+msgstr ""
+
+#: src/design.c:1990
+#: src/design.c:2023
+msgid "Range"
+msgstr "Bereik"
+
+#: src/design.c:1998
+#: src/design.c:2033
+msgid "Damage"
+msgstr "Schade"
+
+#: src/design.c:2006
+#: src/design.c:2043
+#, fuzzy
+msgid "Rate-of-Fire"
+msgstr "Vuursnelheid"
+
+#: src/design.c:2203
+#: src/design.c:2219
+msgid "Air Speed"
+msgstr "Luchtsnelheid"
+
+#: src/design.c:2247
+#: src/design.c:2280
+#, fuzzy
+msgid "Road Speed"
+msgstr "Wegsnelheid"
+
+#: src/design.c:2255
+#: src/design.c:2289
+msgid "Off-Road Speed"
+msgstr ""
+
+#: src/design.c:2263
+#: src/design.c:2298
+msgid "Water Speed"
+msgstr "Watersnelheid"
+
+#: src/design.c:2586
+msgid "Weapons"
+msgstr "Wapens"
+
+#: src/design.c:2610
+msgid "Systems"
+msgstr ""
+
+#: src/design.c:2629
+msgid "Command Turrets"
+msgstr ""
+
+#: src/frontend.c:318
+msgid "Single Player Campaign"
+msgstr ""
+
+#: src/frontend.c:321
+#: src/frontend.c:323
+msgid "Multi Player Game"
+msgstr ""
+
+#: src/frontend.c:325
+#: src/frontend.c:385
+msgid "Tutorial"
+msgstr ""
+
+#: src/frontend.c:328
+msgid "Quit Game"
+msgstr "Spel Afsluiten"
+
+#: src/frontend.c:330
+msgid "MAIN MENU"
+msgstr "HOOFDMENU"
+
+#: src/frontend.c:386
+msgid "Fast Play"
+msgstr "Snel Spelen"
+
+#: src/frontend.c:387
+msgid "TUTORIALS"
+msgstr ""
+
+#: src/frontend.c:446
+msgid "Load Campaign"
+msgstr ""
+
+#: src/frontend.c:447
+msgid "New Campaign"
+msgstr ""
+
+#: src/frontend.c:449
+msgid "SINGLE PLAYER"
+msgstr ""
+
+#: src/frontend.c:583
+msgid "MULTI PLAYER"
+msgstr ""
+
+#: src/frontend.c:585
+msgid "Host Game"
+msgstr ""
+
+#: src/frontend.c:586
+msgid "Join Game"
+msgstr ""
+
+#: src/frontend.c:588
+msgid "Force Editor"
+msgstr "Strijdkrachten Bewerker"
+
+#: src/frontend.c:589
+msgid "One Player Skirmish"
+msgstr ""
+
+#: src/frontend.c:683
+#: src/frontend.c:979
+#: src/frontend.c:1088
+msgid "GAME OPTIONS"
+msgstr "SPEL INSTELLINGEN"
+
+#: src/frontend.c:684
+msgid "Game Options"
+msgstr "Spel Instellingen"
+
+#: src/frontend.c:685
+msgid "Graphics Options"
+msgstr "Grafische Instellingen"
+
+#: src/frontend.c:686
+msgid "Audio Options"
+msgstr "Geluid Instellingen"
+
+#: src/frontend.c:687
+msgid "Key Mappings"
+msgstr ""
+
+#: src/frontend.c:762
+msgid "Reverse Mouse"
+msgstr "Muisknoppen Omwisselen"
+
+#: src/frontend.c:765
+#: src/frontend.c:777
+#: src/frontend.c:830
+#: src/frontend.c:865
+#: src/frontend.c:879
+#: src/frontend.c:915
+msgid "On"
+msgstr "Aan"
+
+#: src/frontend.c:769
+#: src/frontend.c:781
+#: src/frontend.c:826
+#: src/frontend.c:835
+#: src/frontend.c:860
+#: src/frontend.c:874
+#: src/frontend.c:910
+msgid "Off"
+msgstr "Uit"
+
+#: src/frontend.c:774
+msgid "Screen Shake"
+msgstr ""
+
+#: src/frontend.c:789
+#: src/frontend.c:897
+msgid "Mist"
+msgstr "Nevel"
+
+#: src/frontend.c:793
+#: src/frontend.c:890
+msgid "Fog Of War"
+msgstr ""
+
+#: src/frontend.c:798
+msgid "Video Playback"
+msgstr ""
+
+#: src/frontend.c:801
+#: src/frontend.c:934
+msgid "Full"
+msgstr ""
+
+#: src/frontend.c:805
+#: src/frontend.c:924
+msgid "Windowed"
+msgstr ""
+
+#: src/frontend.c:808
+#: src/frontend.c:929
+msgid "Minimal"
+msgstr ""
+
+#: src/frontend.c:815
+#: src/frontend.c:819
+msgid "Subtitles"
+msgstr "Ondertitels"
+
+#: src/frontend.c:1050
+msgid "Difficulty"
+msgstr "Moeilijkheidsgraad"
+
+#: src/frontend.c:1054
+#: src/frontend.c:1139
+msgid "Easy"
+msgstr "Makkelijk"
+
+#: src/frontend.c:1057
+#: src/frontend.c:1131
+msgid "Normal"
+msgstr "Normaal"
+
+#: src/frontend.c:1061
+#: src/frontend.c:1135
+msgid "Hard"
+msgstr "Moeilijk"
+
+#: src/frontend.c:1066
+msgid "Scroll Speed"
+msgstr ""
+
+#: src/frontend.c:1082
+msgid "Unit Colour"
+msgstr ""
+
+#: src/intelmap.c:500
+msgid "Research Update"
+msgstr ""
+
+#: src/intelmap.c:504
+msgid "Project Goals"
+msgstr ""
+
+#: src/intelmap.c:507
+msgid "Current Objective"
+msgstr ""
+
+#: src/keymap.c:293
+msgid "Toggle Radar"
+msgstr ""
+
+#: src/keymap.c:294
+msgid "Toggle Console Display"
+msgstr ""
+
+#: src/keymap.c:295
+msgid "Toggle Damage Bars On/Off"
+msgstr ""
+
+#: src/keymap.c:296
+msgid "Take Screen Shot"
+msgstr ""
+
+#: src/keymap.c:297
+msgid "Toggle Formation Speed Limiting"
+msgstr ""
+
+#: src/keymap.c:298
+msgid "View Location of Previous Message"
+msgstr ""
+
+#: src/keymap.c:303
+msgid "Assign Group 1"
+msgstr ""
+
+#: src/keymap.c:304
+msgid "Assign Group 2"
+msgstr ""
+
+#: src/keymap.c:305
+msgid "Assign Group 3"
+msgstr ""
+
+#: src/keymap.c:306
+msgid "Assign Group 4"
+msgstr ""
+
+#: src/keymap.c:307
+msgid "Assign Group 5"
+msgstr ""
+
+#: src/keymap.c:308
+msgid "Assign Group 6"
+msgstr ""
+
+#: src/keymap.c:309
+msgid "Assign Group 7"
+msgstr ""
+
+#: src/keymap.c:310
+msgid "Assign Group 8"
+msgstr ""
+
+#: src/keymap.c:311
+msgid "Assign Group 9"
+msgstr ""
+
+#: src/keymap.c:315
+msgid "Select Group 1"
+msgstr ""
+
+#: src/keymap.c:316
+msgid "Select Group 2"
+msgstr ""
+
+#: src/keymap.c:317
+msgid "Select Group 3"
+msgstr ""
+
+#: src/keymap.c:318
+msgid "Select Group 4"
+msgstr ""
+
+#: src/keymap.c:319
+msgid "Select Group 5"
+msgstr ""
+
+#: src/keymap.c:320
+msgid "Select Group 6"
+msgstr ""
+
+#: src/keymap.c:321
+msgid "Select Group 7"
+msgstr ""
+
+#: src/keymap.c:322
+msgid "Select Group 8"
+msgstr ""
+
+#: src/keymap.c:323
+msgid "Select Group 9"
+msgstr ""
+
+#: src/keymap.c:327
+msgid "Select Commander 1"
+msgstr ""
+
+#: src/keymap.c:328
+msgid "Select Commander 2"
+msgstr ""
+
+#: src/keymap.c:329
+msgid "Select Commander 3"
+msgstr ""
+
+#: src/keymap.c:330
+msgid "Select Commander 4"
+msgstr ""
+
+#: src/keymap.c:331
+msgid "Select Commander 5"
+msgstr ""
+
+#: src/keymap.c:332
+msgid "Select Commander 6"
+msgstr ""
+
+#: src/keymap.c:333
+msgid "Select Commander 7"
+msgstr ""
+
+#: src/keymap.c:334
+msgid "Select Commander 8"
+msgstr ""
+
+#: src/keymap.c:335
+msgid "Select Commander 9"
+msgstr ""
+
+#: src/keymap.c:339
+msgid "Multiplayer Options"
+msgstr ""
+
+#: src/keymap.c:340
+msgid "Start Multiplayer Audio"
+msgstr ""
+
+#: src/keymap.c:341
+msgid "Stop Multiplayer Audio"
+msgstr ""
+
+#: src/keymap.c:344
+msgid "Snap View to North"
+msgstr ""
+
+#: src/keymap.c:345
+msgid "Toggle Tracking Camera"
+msgstr ""
+
+#: src/keymap.c:346
+msgid "Display In-Game Options"
+msgstr ""
+
+#: src/keymap.c:347
+msgid "Zoom Radar Out"
+msgstr ""
+
+#: src/keymap.c:348
+msgid "Zoom Radar In"
+msgstr ""
+
+#: src/keymap.c:349
+msgid "Zoom In"
+msgstr ""
+
+#: src/keymap.c:350
+msgid "Zoom Out"
+msgstr ""
+
+#: src/keymap.c:351
+msgid "Pitch Forward"
+msgstr ""
+
+#: src/keymap.c:352
+msgid "Rotate Left"
+msgstr ""
+
+#: src/keymap.c:353
+msgid "Reset Pitch"
+msgstr ""
+
+#: src/keymap.c:354
+msgid "Rotate Right"
+msgstr ""
+
+#: src/keymap.c:355
+msgid "Pitch Back"
+msgstr ""
+
+#: src/keymap.c:356
+msgid "Orders Menu"
+msgstr ""
+
+#: src/keymap.c:357
+msgid "Decrease Game Speed"
+msgstr "Verlaag Speel Snelheid"
+
+#: src/keymap.c:358
+msgid "Increase Game Speed"
+msgstr "Verhoog Speel Snelheid"
+
+#: src/keymap.c:359
+msgid "Reset Game Speed"
+msgstr "Zet Speel Snelheid Terug"
+
+#: src/keymap.c:360
+msgid "View North"
+msgstr ""
+
+#: src/keymap.c:361
+msgid "View South"
+msgstr ""
+
+#: src/keymap.c:362
+msgid "View East"
+msgstr ""
+
+#: src/keymap.c:363
+msgid "View West"
+msgstr ""
+
+#: src/keymap.c:364
+msgid "View next Oil Derrick"
+msgstr ""
+
+#: src/keymap.c:365
+msgid "View next Repair Unit"
+msgstr ""
+
+#: src/keymap.c:366
+msgid "View next Truck"
+msgstr ""
+
+#: src/keymap.c:367
+msgid "View next Sensor Unit"
+msgstr ""
+
+#: src/keymap.c:368
+msgid "View next Commander"
+msgstr ""
+
+#: src/keymap.c:369
+msgid "Toggle Overlays"
+msgstr ""
+
+#: src/keymap.c:370
+msgid "Console On/Off"
+msgstr "Console Aan/Uit"
+
+#: src/keymap.c:373
+msgid "Center View on HQ"
+msgstr ""
+
+#: src/keymap.c:374
+msgid "Hold Fire"
+msgstr "Niet Schieten"
+
+#: src/keymap.c:375
+msgid "View Unassigned Units"
+msgstr ""
+
+#: src/keymap.c:376
+msgid "Return Fire"
+msgstr "Terug Schieten"
+
+#: src/keymap.c:377
+msgid "Fire at Will"
+msgstr ""
+
+#: src/keymap.c:378
+msgid "Return to HQ"
+msgstr ""
+
+#: src/keymap.c:379
+msgid "Optimum Range"
+msgstr ""
+
+#: src/keymap.c:380
+msgid "Short Range"
+msgstr ""
+
+#: src/keymap.c:381
+msgid "Pursue"
+msgstr "Achtervolgen"
+
+#: src/keymap.c:382
+msgid "Patrol"
+msgstr ""
+
+#: src/keymap.c:383
+msgid "Return For Repair"
+msgstr ""
+
+#: src/keymap.c:384
+msgid "Hold Position"
+msgstr ""
+
+#: src/keymap.c:385
+msgid "Send Text Message"
+msgstr "Stuur Tekst Bericht"
+
+#: src/keymap.c:386
+msgid "Long Range"
+msgstr ""
+
+#: src/keymap.c:399
+msgid "Retreat at Medium Damage"
+msgstr ""
+
+#: src/keymap.c:400
+msgid "Retreat at Heavy Damage"
+msgstr ""
+
+#: src/keymap.c:401
+msgid "Do or Die!"
+msgstr ""
+
+#: src/keymap.c:405
+msgid "Select all Combat Units"
+msgstr ""
+
+#: src/keymap.c:406
+msgid "Select all Heavily Damaged Units"
+msgstr ""
+
+#: src/keymap.c:408
+msgid "Select all Half-tracks"
+msgstr ""
+
+#: src/keymap.c:409
+msgid "Select all Hovers"
+msgstr ""
+
+#: src/keymap.c:410
+msgid "Return for Recycling"
+msgstr ""
+
+#: src/keymap.c:411
+msgid "Select all Units on Screen"
+msgstr ""
+
+#: src/keymap.c:412
+msgid "Select all Tracks"
+msgstr ""
+
+#: src/keymap.c:413
+msgid "Select EVERY unit"
+msgstr ""
+
+#: src/keymap.c:414
+msgid "Select all VTOLs"
+msgstr ""
+
+#: src/keymap.c:415
+msgid "Select all Wheels"
+msgstr ""
+
+#: src/keymap.c:417
+msgid "Select all Similiar Units"
+msgstr ""
+
+#: src/keymap.c:421
+msgid "Select next Factory"
+msgstr ""
+
+#: src/keymap.c:422
+msgid "Select next Research Facility"
+msgstr ""
+
+#: src/keymap.c:423
+msgid "Select next Power Generator"
+msgstr ""
+
+#: src/keymap.c:424
+msgid "Select next Cyborg Factory"
+msgstr ""
+
+#: src/keymap.c:425
+msgid "Toggle reopening the build menu"
+msgstr ""
+
+#: src/multijoin.c:163
+#: src/multijoin.c:164
+msgid "Players Still Joining"
+msgstr ""
+
+#: src/multijoin.c:284
+#, c-format
+msgid "%s has Left the Game"
+msgstr "%s heeft het spel verlaten"
+
+#: src/multijoin.c:402
+#, c-format
+msgid "%s is Joining the Game"
+msgstr ""
+
+#: src/multimenu.c:772
+msgid "Score"
+msgstr "Score"
+
+#: src/multimenu.c:773
+msgid "Kills"
+msgstr ""
+
+#: src/multimenu.c:782
+msgid "Ping"
+msgstr "Ping"
+
+#: src/multimenu.c:783
+msgid "Played"
+msgstr "Gespeeld"
+
+#: src/multimenu.c:1097
+msgid "Toggle Alliance State"
+msgstr ""
+
+#: src/multimenu.c:1114
+msgid "Give Visibility Report"
+msgstr ""
+
+#: src/multimenu.c:1120
+msgid "Leak Technology Documents"
+msgstr ""
+
+#: src/multimenu.c:1126
+msgid "Hand Over Selected Units"
+msgstr ""
+
+#: src/multimenu.c:1132
+msgid "Give Power To Player"
+msgstr "Geef Energie Aan Speler"
+
