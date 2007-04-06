@@ -228,8 +228,8 @@ FunctionEnd
 
 
 
-  LangString TEXT_SecBase ${LANG_GERMAN} "Standard installation"
-  LangString DESC_SecBase ${LANG_GERMAN} "Standard installation."
+  LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
+  LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
