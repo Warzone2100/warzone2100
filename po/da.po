@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-05 20:56+0200\n"
+"POT-Creation-Date: 2007-04-06 02:42+0200\n"
 "PO-Revision-Date: 2007-04-03 22:35+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/multiplay.c:2042 src/droid.c:5076
+#: src/multiplay.c:2042 src/droid.c:5077
 msgid "Green"
 msgstr "Grøn"
 
@@ -113,7 +113,7 @@ msgstr "Du opdager plantegninger for %s"
 msgid "Close"
 msgstr "Luk"
 
-#: src/hci.c:1766 src/mission.c:3503 src/loop.c:599 src/loop.c:611
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:599 src/loop.c:611
 msgid "GAME SAVED!"
 msgstr "SPIL GEMT!"
 
@@ -149,7 +149,7 @@ msgstr "Energi"
 msgid "Load Game"
 msgstr "Indlæs spil"
 
-#: src/hci.c:4187 src/mission.c:3406 src/mission.c:3564 src/ingameop.c:272
+#: src/hci.c:4187 src/mission.c:3408 src/mission.c:3558 src/ingameop.c:272
 #: src/ingameop.c:421
 msgid "Save Game"
 msgstr "Gem spil"
@@ -179,27 +179,27 @@ msgstr "Afsend transportskib"
 msgid "Reinforcements landing"
 msgstr "Forstærkninger er ankommet"
 
-#: src/mission.c:2870
+#: src/mission.c:2872
 msgid "Load Transport"
 msgstr "Fyld transportskib"
 
-#: src/mission.c:3351
+#: src/mission.c:3353
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSIONEN LYKKEDES"
 
-#: src/mission.c:3357
+#: src/mission.c:3359
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONEN FEJLEDE"
 
-#: src/mission.c:3383 src/mission.c:3424 src/mission.c:3580
+#: src/mission.c:3385 src/mission.c:3426 src/mission.c:3574
 msgid "Quit To Main Menu"
 msgstr "Tilbage til hovedmenu"
 
-#: src/mission.c:3392
+#: src/mission.c:3394
 msgid "Continue Game"
 msgstr "Fortsæt"
 
-#: src/mission.c:3417 src/mission.c:3561 src/ingameop.c:417 src/frontend.c:540
+#: src/mission.c:3419 src/mission.c:3555 src/ingameop.c:417 src/frontend.c:540
 msgid "Load Saved Game"
 msgstr "Indlæs gemt spil"
 
@@ -211,55 +211,55 @@ msgstr "Enhed tabt!"
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:4729
+#: src/droid.c:4730
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr "Gruppe %d valgt - %d Enheder"
 
-#: src/droid.c:4741
+#: src/droid.c:4742
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr "%d Enheder tildelt gruppe %d"
 
-#: src/droid.c:4753
+#: src/droid.c:4754
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr "Fokuseret på gruppe %d - %d Enheder"
 
-#: src/droid.c:4757
+#: src/droid.c:4758
 #, c-format
 msgid "Alligning with Group %d - %d Unit(s)"
 msgstr "Korigerede med gruppe %d - %d Enheder"
 
-#: src/droid.c:5074
+#: src/droid.c:5075
 msgid "Rookie"
 msgstr "Menig"
 
-#: src/droid.c:5078
+#: src/droid.c:5079
 msgid "Trained"
 msgstr "Sasjant"
 
-#: src/droid.c:5080
+#: src/droid.c:5081
 msgid "Regular"
 msgstr "Oversasjant"
 
-#: src/droid.c:5082
+#: src/droid.c:5083
 msgid "Professional"
 msgstr "Løjtnant"
 
-#: src/droid.c:5084
+#: src/droid.c:5085
 msgid "Veteran"
 msgstr "Kaptajn"
 
-#: src/droid.c:5086
+#: src/droid.c:5087
 msgid "Elite"
 msgstr "Major"
 
-#: src/droid.c:5088
+#: src/droid.c:5089
 msgid "Special"
 msgstr "Oberst"
 
-#: src/droid.c:5090
+#: src/droid.c:5091
 msgid "Hero"
 msgstr "General"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-05 20:56+0200\n"
+"POT-Creation-Date: 2007-04-06 02:42+0200\n"
 "PO-Revision-Date: 2007-04-05 21:02+0200\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: src/multiplay.c:2042 src/droid.c:5076
+#: src/multiplay.c:2042 src/droid.c:5077
 msgid "Green"
 msgstr "Grün"
 
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Close"
 msgstr "Schließen"
 
-#: src/hci.c:1766 src/mission.c:3503 src/loop.c:599 src/loop.c:611
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:599 src/loop.c:611
 msgid "GAME SAVED!"
 msgstr "Spiel gespeichert"
 
@@ -150,7 +150,7 @@ msgstr "Energie"
 msgid "Load Game"
 msgstr "Spiel laden"
 
-#: src/hci.c:4187 src/mission.c:3406 src/mission.c:3564 src/ingameop.c:272
+#: src/hci.c:4187 src/mission.c:3408 src/mission.c:3558 src/ingameop.c:272
 #: src/ingameop.c:421
 msgid "Save Game"
 msgstr "Spiel speichern"
@@ -180,27 +180,27 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr ""
 
-#: src/mission.c:2870
+#: src/mission.c:2872
 msgid "Load Transport"
 msgstr ""
 
-#: src/mission.c:3351
+#: src/mission.c:3353
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:3357
+#: src/mission.c:3359
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:3383 src/mission.c:3424 src/mission.c:3580
+#: src/mission.c:3385 src/mission.c:3426 src/mission.c:3574
 msgid "Quit To Main Menu"
 msgstr "Zurück zum Hauptmenu"
 
-#: src/mission.c:3392
+#: src/mission.c:3394
 msgid "Continue Game"
 msgstr "Spiel fortsetzen"
 
-#: src/mission.c:3417 src/mission.c:3561 src/ingameop.c:417 src/frontend.c:540
+#: src/mission.c:3419 src/mission.c:3555 src/ingameop.c:417 src/frontend.c:540
 msgid "Load Saved Game"
 msgstr "Speicherstand laden"
 
@@ -212,55 +212,55 @@ msgstr "Einheit verloren!"
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:4729
+#: src/droid.c:4730
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr "Gruppe %d ausgewählt - %d Einheiten(s)"
 
-#: src/droid.c:4741
+#: src/droid.c:4742
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr ""
 
-#: src/droid.c:4753
+#: src/droid.c:4754
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:4757
+#: src/droid.c:4758
 #, c-format
 msgid "Alligning with Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:5074
+#: src/droid.c:5075
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:5078
+#: src/droid.c:5079
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:5080
+#: src/droid.c:5081
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:5082
+#: src/droid.c:5083
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:5084
+#: src/droid.c:5085
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:5086
+#: src/droid.c:5087
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:5088
+#: src/droid.c:5089
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:5090
+#: src/droid.c:5091
 msgid "Hero"
 msgstr "Help"
 
