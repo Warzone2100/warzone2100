@@ -385,6 +385,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	else
 	{
 		psObj->psSource = psAttacker;
+		psObj->psDamaged = NULL;
 	}
 
 	if (psTarget)

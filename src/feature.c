@@ -735,6 +735,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	{
 		return NULL;
 	}
+	// features are not in the cluster system
+	// this will cause an assert when they still end up there
+	psFeature->cluster = ~0;
 	//add the feature to the list - this enables it to be drawn whilst being built
 	addFeature(psFeature);
 
@@ -802,8 +805,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	psFeature->bTargetted = FALSE;
 	psFeature->timeLastHit = 0;
 
-
-
+	// it has never been drawn
+	psFeature->sDisplay.frameNumber = 0;
 
 	if(getRevealStatus())
 	{

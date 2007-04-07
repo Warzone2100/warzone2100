@@ -873,7 +873,11 @@ void processVisibility(BASE_OBJECT *psObj)
 				{
 					psObj->visible[psViewer->player] = 1;
 				}
-				clustObjectSeen(psObj, psViewer);
+				if(psObj->type != OBJ_FEATURE)
+				{
+					// features are not in the cluster system
+					clustObjectSeen(psObj, psViewer);
+				}
 			}
 
  		}

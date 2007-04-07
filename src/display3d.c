@@ -1924,8 +1924,8 @@ void setPlayerPos(SDWORD x, SDWORD y)
 	SDWORD midX,midY;
 
 
-	ASSERT( (x > 0) && (x < (SDWORD)(mapWidth*TILE_UNITS)) &&
-			(y > 0) && (y < (SDWORD)(mapHeight*TILE_UNITS)),
+	ASSERT( (x >= 0) && (x < (SDWORD)(mapWidth*TILE_UNITS)) &&
+			(y >= 0) && (y < (SDWORD)(mapHeight*TILE_UNITS)),
 		"setPlayerPos: position off map" );
 
 	// Find centre of grid thats actually DRAWN

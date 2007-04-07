@@ -647,7 +647,7 @@ BOOL createFeature(FEATURE **ppsNew)
 /* add the feature to the Feature Lists */
  void addFeature(FEATURE *psFeatureToAdd)
  {
-	 addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd);
+	addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd);
  }
 
 /* Destroy a feature */
@@ -682,6 +682,9 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	(*ppsNew)->player = player;
 	(*ppsNew)->frameNumber = 0;
 	(*ppsNew)->selected = FALSE;
+	(*ppsNew)->coords.x = ~0;
+	(*ppsNew)->coords.y = ~0;
+	(*ppsNew)->coords.z = ~0;
 	return TRUE;
 }
 
@@ -690,6 +693,7 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
  {
 	ASSERT( psFlagPosToAdd != NULL,
 		"addFlagPosition: Invalid FlagPosition pointer" );
+	ASSERT(psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
 
 	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
 	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;

@@ -338,12 +338,14 @@ static BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 	ResData= &LoadedResourceFiles[ResID];
 	*NewResource=ResData;
 
+#if 0
 	if (pFileBuffer && loadFile(ResourceName, &pBuffer, &size)) {
 		ResData->type=RESFILETYPE_PC_SBL;
 		ResData->size=size;
 		ResData->pBuffer=pBuffer;
 		return(TRUE);
 	}
+#endif
 
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
 	if (!loadFile(ResourceName, &pBuffer, &size))
@@ -366,6 +368,8 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 		case RESFILETYPE_LOADED:
 			FREE(OldResource->pBuffer);
 			break;
+		default:
+			debug(LOG_WARNING, "resource not freed");
 	  }
 
 

@@ -84,7 +84,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 	iTexture sprite;
 
 	/* This is how many pages are already used on hardware */
-	firstTexturePage = pie_GetLastPageDownloaded() + 1;
+	firstTexturePage = pie_GetLastPageDownloaded();
 
 	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", srcWidth, srcHeight, tileWidth, tileHeight, firstTexturePage);
 
@@ -140,10 +140,9 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 		}
 		src+=( (tileHeight-1) * srcWidth)*PAGE_DEPTH;
 	}
-
-	numTexturePages = pageNumber;
-
+	ASSERT(FALSE, "we should have exited the loop using the goto");
 exit:
+	numTexturePages = pageNumber+1;
 	FREE(tileStorage);
 	buildTileIndexes();
 	return;

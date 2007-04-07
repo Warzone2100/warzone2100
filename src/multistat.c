@@ -686,6 +686,8 @@ BOOL saveMultiStats(char *sFileName, char *sPlayerName,PLAYERSTATS *playerStats)
 	strcat(fileName,sFileName);
 	strcat(fileName,".sta");
 
+	// we write some uninitialised bytes here (the last of the struct)
+	// this is caused by struct sizes getting rounded up to a nice value
 	// FIXME: ugly cast
 	saveFile(fileName, (char *)&codedst, sizeof(SAVEDPLAYERSTATS));
 

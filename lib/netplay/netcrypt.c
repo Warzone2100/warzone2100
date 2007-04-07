@@ -116,7 +116,7 @@ UDWORD	NEThashBuffer(char *pData, UDWORD size)
 	hashval =0;
 	pt =0;
 
-	while(pt < size)
+	while(pt <= size-4) // remember that we read 4 bytes at once
 	{
 		val = (UDWORD*)(pData+pt);
 		hashval = hashval ^ *val;

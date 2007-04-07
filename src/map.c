@@ -1316,19 +1316,15 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 {
 	SDWORD	retVal;
 	UDWORD tileX, tileY, tileYOffset;
+	UDWORD tileX2, tileY2Offset;
 	SDWORD h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
 	//SDWORD	lowerHeightOffset,upperHeightOffset;
 	SDWORD dx, dy, ox, oy;
 	BOOL	bWaterTile = FALSE;
-/*	ASSERT( x < (mapWidth << TILE_SHIFT),
+	ASSERT( x < (mapWidth << TILE_SHIFT),
 		"mapHeight: x coordinate bigger than map width" );
 	ASSERT( y < (mapHeight<< TILE_SHIFT),
 		"mapHeight: y coordinate bigger than map height" );
-*/
-    x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
-    x = x >= (mapWidth << TILE_SHIFT) ? ((mapWidth-1) << TILE_SHIFT) : x;
-    y = y > SDWORD_MAX ? 0 : y;//negative SDWORD passed as UDWORD
-	y = y >= (mapHeight << TILE_SHIFT) ? ((mapHeight-1) << TILE_SHIFT) : y;
 
 	/* Tile comp */
 	tileX = x >> TILE_SHIFT;
@@ -1357,8 +1353,24 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		*/
 	}
 
-
+	// to account for the border of the map
+	if(tileX + 1 < mapWidth)
+	{
+		tileX2 = tileX + 1;
+	}
+	else
+	{
+		tileX2 = tileX;
+	}
 	tileYOffset = (tileY * mapWidth);
+	if(tileY + 1 < mapHeight)
+	{
+		tileY2Offset = tileYOffset + mapWidth;
+	}
+	else
+	{
+		tileY2Offset = tileYOffset;
+	}
 
 //	ox = (SDWORD)x - (SDWORD)(tileX << TILE_SHIFT);
 //	oy = (SDWORD)y - (SDWORD)(tileY << TILE_SHIFT);
@@ -1377,9 +1389,9 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		{
 			ox = TILE_UNITS - ox;
 			oy = TILE_UNITS - oy;
-			hy = psMapTiles[tileX + tileYOffset + mapWidth].height;
-			hx = psMapTiles[tileX + 1 + tileYOffset].height;
-			hxy= psMapTiles[tileX + 1 + tileYOffset + mapWidth].height;
+			hy = psMapTiles[tileX + tileY2Offset].height;
+			hx = psMapTiles[tileX2 + tileYOffset].height;
+			hxy= psMapTiles[tileX2 + tileY2Offset].height;
 			if(bWaterTile)
 			{
 				hy+=wBL;
@@ -1397,8 +1409,8 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		else //tile split top right to bottom left object if in top left half
 		{
 			h0 = psMapTiles[tileX + tileYOffset].height;
-			hy = psMapTiles[tileX + tileYOffset + mapWidth].height;
-			hx = psMapTiles[tileX + 1 + tileYOffset].height;
+			hy = psMapTiles[tileX + tileY2Offset].height;
+			hx = psMapTiles[tileX2 + tileYOffset].height;
 
 			if(bWaterTile)
 			{
@@ -1419,8 +1431,9 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		if (ox > oy) //tile split topleft to bottom right object if in top right half
 		{
 			h0 = psMapTiles[tileX + tileYOffset].height;
-			hx = psMapTiles[tileX + 1 + tileYOffset].height;
-			hxy= psMapTiles[tileX + 1 + tileYOffset + mapWidth].height;
+			hx = psMapTiles[tileX2 + tileYOffset].height;
+			ASSERT( tileX2 + tileY2Offset < mapWidth*mapHeight, "array out of bounds");
+			hxy= psMapTiles[tileX2 + tileY2Offset].height;
 
 			if(bWaterTile)
 			{
@@ -1437,8 +1450,8 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		else //tile split topleft to bottom right object if in bottom left half
 		{
 			h0 = psMapTiles[tileX + tileYOffset].height;
-			hy = psMapTiles[tileX + tileYOffset + mapWidth].height;
-			hxy = psMapTiles[tileX + 1 + tileYOffset + mapWidth].height;
+			hy = psMapTiles[tileX + tileY2Offset].height;
+			hxy = psMapTiles[tileX2 + tileY2Offset].height;
 
 			if(bWaterTile)
 			{

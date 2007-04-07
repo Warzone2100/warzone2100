@@ -675,6 +675,7 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 
 	for(player=0; player<MAX_PLAYERS; player++)
 	{
+		ASSERT(psObj->cluster != (UBYTE)~0, "object not in a cluster");
 		if ( (player != (SDWORD)psObj->player) &&
 			 psObj->visible[player] &&
 			!(aClusterVisibility[psObj->cluster] & (1 << player)))

@@ -199,6 +199,7 @@ audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 	*piY = (GetHeightOfMap() << TILE_SHIFT) - psBaseObj->y;
 }
 
+#if 0
 /***************************************************************************/
 /*
  * audio_GetClusterCentre
@@ -330,7 +331,7 @@ audio_GetClusterIDFromObj( void *psClusterObj )
 	/* clustGetClusterID returns 0 if cluster is empty */
 	return clustGetClusterID( (BASE_OBJECT*)psClusterObj );
 }
-
+#endif
 /***************************************************************************/
 
 UDWORD

@@ -3342,6 +3342,8 @@ BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
 	pStartWeaponData = pWeaponData;
 
 	NumWeapons = numCR(pWeaponData, bufferSize);
+	
+	ASSERT(NumWeapons>0, "template without weapons");
 
 	for (i=0; i < NumWeapons; i++)
 	{
@@ -3966,6 +3968,9 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->bTargetted = FALSE;
 	psDroid->timeLastHit = UDWORD_MAX;
 	psDroid->lastHitWeapon = UDWORD_MAX;	// no such weapon
+	
+	// it was never drawn before
+	psDroid->sDisplay.frameNumber = 0;
 
 	//allocate 'easy-access' data!
 	//psDroid->sensorRange = (asSensorStats + pTemplate->asParts
@@ -4176,6 +4181,12 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		}
 		//set the first weapon to be the current one
 //		psDroid->activeWeapon = 0;
+	}
+	else
+	{
+		// no weapon (could be a construction droid for example)
+		// this is also used to check if a droid has a weapon, so zero it
+		psDroid->asWeaps[0].nStat = 0;
 	}
 	//allocate the components hit points
 	psDroid->asBits[COMP_BODY].nStat = (UBYTE)pTemplate->asParts[COMP_BODY];

@@ -936,11 +936,16 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
-	for (page = 0; page < Form->majorT; page++)
+	if(Form->style & WFORM_TABBED)
 	{
-		intDisplaySeqTextViewPage(psViewReplay, x0, y0,
-					  Form->width, Form->height,
-					  FALSE, &cur_seq, &cur_seqpage);
+		// Gerard 2007-04-07: dead code?
+		ASSERT(FALSE,"the form is tabbed?");
+		for (page = 0; page < Form->majorT; page++)
+		{
+			intDisplaySeqTextViewPage(psViewReplay, x0, y0,
+						  Form->width, Form->height,
+						  FALSE, &cur_seq, &cur_seqpage);
+		}
 	}
 
 	intDisplaySeqTextViewPage(psViewReplay, x0, y0,

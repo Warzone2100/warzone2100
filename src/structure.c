@@ -2800,6 +2800,14 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 //			psFactory->psAssemblyPoint->primary= TRUE;		// set prim. point.
 
+			//initialise the assembly point position
+			x = (psBuilding->x+256) >> TILE_SHIFT;
+			y = (psBuilding->y+256) >> TILE_SHIFT;
+			// Belt and braces - shouldn't be able to build too near edge
+			//getNearestBestValidTile(&x,&y);
+			setAssemblyPoint( psFactory->psAssemblyPoint, x << TILE_SHIFT,
+				y << TILE_SHIFT, psBuilding->player, TRUE);
+			// add it to the list
 			addFlagPosition(psFactory->psAssemblyPoint);
 			switch(functionType)
 			{
@@ -2815,13 +2823,6 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			default:
 				ASSERT( FALSE, "setFunctionality: Invalid factory type" );
 			}
-			//initialise the assembly point position
-			x = (psBuilding->x+256) >> TILE_SHIFT;
-			y = (psBuilding->y+256) >> TILE_SHIFT;
-			// Belt and braces - shouldn't be able to build too near edge
-			//getNearestBestValidTile(&x,&y);
-			setAssemblyPoint( psFactory->psAssemblyPoint, x << TILE_SHIFT,
-				y << TILE_SHIFT, psBuilding->player, TRUE);
 
 			psFactory->psFormation = NULL;
 
@@ -3088,8 +3089,6 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 
-			addFlagPosition(psRepairFac->psDeliveryPoint);
-			setFlagPositionInc(psRepairFac, psBuilding->player, REPAIR_FLAG);
 			//initialise the assembly point position
 			x = (psBuilding->x+256) >> TILE_SHIFT;
 			y = (psBuilding->y+256) >> TILE_SHIFT;
@@ -3097,6 +3096,9 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//getNearestBestValidTile(&x,&y);
 			setAssemblyPoint( psRepairFac->psDeliveryPoint, x << TILE_SHIFT,
 				y << TILE_SHIFT, psBuilding->player, TRUE);
+				
+			addFlagPosition(psRepairFac->psDeliveryPoint);
+			setFlagPositionInc(psRepairFac, psBuilding->player, REPAIR_FLAG);
 			break;
 		}
 		case REF_REARM_PAD:
@@ -5511,8 +5513,11 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			for (j = site.yTL; j <= site.yBR && valid; j++) {
 				if( ((psCurrFlag->coords.x)>>TILE_SHIFT == (SDWORD)i) &&
 					((psCurrFlag->coords.y)>>TILE_SHIFT == (SDWORD)j) ) */
+		// valgrind: psCurrFlag->coords.x and psCurrFlag->coords.y are uninitialised!
+		ASSERT(psCurrFlag->coords.x != ~0, "flag has invalid position");
 		i = psCurrFlag->coords.x >>TILE_SHIFT;
 		j = psCurrFlag->coords.y >>TILE_SHIFT;
+
 		if (i >= site.xTL && i <= site.xBR &&
 			j >= site.yTL && j <= site.yBR)
 		{
