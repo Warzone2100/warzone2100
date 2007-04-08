@@ -453,6 +453,8 @@ return					return	RET;
 function				return	FUNCTION;
 "("int")"				{ RULE("(int)"); return TO_INT_CAST; }
 "("float")"				{ RULE("(float)"); return TO_FLOAT_CAST; }
+"("INT")"				{ RULE("(INT)"); return TO_INT_CAST; }
+"("FLOAT")"				{ RULE("(FLOAT)"); return TO_FLOAT_CAST; }
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 private					{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
 local					{ scr_lval.stype = ST_LOCAL; return STORAGE; }

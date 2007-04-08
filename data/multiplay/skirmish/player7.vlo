@@ -6,14 +6,14 @@
 script "player7.slo"
 run
 {
-	me				INT					7			// this player is player x.
+	me				int					7			// this player is player x.
 
-	numScouts		INT					3			// min number of droids in group to aim for.
-	numDefenders	INT					3
-	numAttackers	INT					6	
-	numCyborgs		INT					8			// build cyborgs until scouts contains x droids
+	numScouts		int					3			// min number of droids in group to aim for.
+	numDefenders	int					3
+	numAttackers	int					6	
+	numCyborgs		int					8			// build cyborgs until scouts contains x droids
 
-	tileExpand		INT					12			// approx minutes to expand over the map.
+	tileExpand		int					12			// approx minutes to expand over the map.
 
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ run
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	// incendry emplacements.
-	numIncendrys	INT					8
+	numIncendrys	int					8
 	incendrys[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
 	incendrys[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
 	incendrys[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incenediary"
@@ -59,7 +59,7 @@ run
 	resModule		STRUCTURESTAT		"A0ResearchModule1"
 
  	// Essential structs.
-	numStructs		INT					13
+	numStructs		int					13
 	structs[0]		STRUCTURESTAT		"A0PowerGenerator"
 	structs[1]		STRUCTURESTAT		"A0LightFactory"	
 	structs[2]		STRUCTURESTAT		"A0CommandCentre"
@@ -77,7 +77,7 @@ run
 	structs[12]		STRUCTURESTAT		"X-Super-Missile"
 
 	/* Base structures */
-	numBaseStruct	INT					8
+	numBaseStruct	int					8
 	baseStruct[0]	STRUCTURESTAT		"A0PowerGenerator"
 	baseStruct[1]	STRUCTURESTAT		"A0LightFactory"	
 	baseStruct[2]	STRUCTURESTAT		"A0CommandCentre"
@@ -88,7 +88,7 @@ run
 	baseStruct[7]	STRUCTURESTAT		"A0VTolFactory1"
 
 	// defensive structs.
-	numDefStructs	INT					22
+	numDefStructs	int					22
 	defStructs[0]	STRUCTURESTAT		"PillBox1"
 	defStructs[1]	STRUCTURESTAT		"Pillbox-RotMG"
 	defStructs[2]	STRUCTURESTAT		"PillBox1"		//MG
@@ -115,7 +115,7 @@ run
 	defStructs[21]	STRUCTURESTAT		"WallTower-Rail3"
 
 	// wall structs (4)
-	numWallWeaps	INT					10
+	numWallWeaps	int					10
 	wallStruct		STRUCTURESTAT		"A0HardcreteMk1Wall"
 	wallWeaps[0]	STRUCTURESTAT		"WallTower01"
 	wallWeaps[1]	STRUCTURESTAT		"WallTower02"
@@ -130,7 +130,7 @@ run
 
 
 	// extra structs
-	numExtraStructs	INT					5
+	numExtraStructs	int					5
 	extraStructs[0]	STRUCTURESTAT		"A0LightFactory"
 	extraStructs[1]	STRUCTURESTAT		"A0RepairCentre3"
 	extraStructs[2]	STRUCTURESTAT		"A0LightFactory"
@@ -143,7 +143,7 @@ run
 	
 	// COMBAT TEMPLATES
 
-	numTemplates	INT		56
+	numTemplates	int		56
 
 	tmpl[0]		TEMPLATE	"ViperMG01Wheels"
 	tmpl[1]		TEMPLATE	"ViperMG02Wheels"
@@ -217,7 +217,7 @@ run
 	constructor	TEMPLATE	"ConstructorDroid"
 	repairUnit	TEMPLATE	"ViperRepairHalftrack"
 
-	numSenseTemplates		INT		10
+	numSenseTemplates		int		10
 
 	//Campaign 1
 	sense[0]	TEMPLATE	"ViperRepairWheels"
@@ -249,7 +249,7 @@ run
 	/////////////////////////////////////////////////////////////////////
 	// VTOL TEMPLATES
 
-	numVtolTemplates		INT		17
+	numVtolTemplates		int		17
 
 	//Campaign 1
 	vtols[0]	TEMPLATE	"P6-L-Bomb1-V"

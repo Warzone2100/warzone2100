@@ -60,55 +60,55 @@
 #define	OIL_TARGET_VALUE		6
 #define	FACTORY_TARGET_VALUE	7
 
-public	INT				me;			// player for this instance.
-public	INT				tileExpand;			// rate of exploration
+public	int				me;			// player for this instance.
+public	int				tileExpand;			// rate of exploration
 
-public	INT				numScouts;			// aim for...
-public	INT				numDefenders;
-public	INT				numAttackers;
+public	int				numScouts;			// aim for...
+public	int				numDefenders;
+public	int				numAttackers;
 
 // structures
-private INT				baseX,baseY,minx,miny,maxx,maxy;
-public	INT				numStructs,numIncendrys,numDefStructs,numExtraStructs,numWallWeaps,numBaseStruct;
+private int				baseX,baseY,minx,miny,maxx,maxy;
+public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs,numWallWeaps,numBaseStruct;
 public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[6],structChoice[5],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wallStruct,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
 						vtolDefStruct[5],vtolPad,vtolFactory,repairFacility,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
-public	INT				extraStruct;
+public	int				extraStruct;
 
 // unit templates
-public	INT				numTemplates;
+public	int				numTemplates;
 public	TEMPLATE		tmpl[80];
 private	TEMPLATE		tmplChoice[5];
 
 public	TEMPLATE		cybTempl[4],superCyb[4];
 
 public	TEMPLATE		vtols[18];
-public	INT				numVtolTemplates;
+public	int				numVtolTemplates;
 
 public	TEMPLATE		sense[11];
-public	INT				numSenseTemplates;
+public	int				numSenseTemplates;
 
 public	TEMPLATE		constructor,repairUnit;
-public	INT				numCyborgs,numRepairUnits;
-private INT				currentCyborgs,currentCyborgTemplate;
+public	int				numCyborgs,numRepairUnits;
+private int				currentCyborgs,currentCyborgTemplate;
 
 //defend
 private GROUP			defendGroup;
-private BOOL			defendbusy;
+private bool			defendbusy;
 private BASEOBJ			defendObj;
 
 public  RESEARCHSTAT	nexusDefence;
 
 //build
 private GROUP			buildGroup;
-private INT				buildX,buildY,buildX2,buildY2;
+private int				buildX,buildY,buildX2,buildY2;
 public	FEATURESTAT		oilRes;
 
 // scout
 private GROUP			scoutGroup;
-private INT				scoutX,scoutY;
-private INT				scoutTLX,scoutTLY,scoutW,scoutH;
+private int				scoutX,scoutY;
+private int				scoutTLX,scoutTLY,scoutW,scoutH;
 
 // attack
 private GROUP			attackGroup;
@@ -122,12 +122,12 @@ private STRUCTURE		structure,structure2;
 private DROID			droid;
 private FEATURE			feature;
 private BASEOBJ			baseobj,baseobj2;
-private INT				count,count2,result,result2,tempx,tempy;
-private BOOL			boolResult,boolResult2;
+private int				count,count2,result,result2,tempx,tempy;
+private bool			boolResult,boolResult2;
 
-private BOOL			powerSave,_DEBUG;
-private	INT				allianceTime[8];
-private INT				sender,x,y,beaconX[8],beaconY[8],tBeacon[8],
+private bool			powerSave,_DEBUG;
+private	int				allianceTime[8];
+private int				sender,x,y,beaconX[8],beaconY[8],tBeacon[8],
 						tLastHelpRequest,lastHelpPlayer,tHelp,tHelpTimeout,helpX,helpY;
 private string			message;
 
@@ -223,8 +223,8 @@ function FEATURE closestOil(int _x, int _y, bool _bAvoidThreat);
 function int numAlliesInBase(bool _bVtols);
 function int numEnemiesInBase(bool _bVtols);
 function bool defendingOwnBase();
-function INT targetTypeValue(BASEOBJ _target);
-function INT numBitsSet(INT _integer);
+function int targetTypeValue(BASEOBJ _target);
+function int numBitsSet(int _integer);
 #endregion triggers
 
 /////////////////////////////////////////////////////////////////////
@@ -1497,7 +1497,7 @@ event newObjectReport(newObjectReportTr)
 	}
 }
 
-function INT targetTypeValue(BASEOBJ _target)
+function int targetTypeValue(BASEOBJ _target)
 {
 	local STRUCTURE _strTarget;
 
@@ -2750,9 +2750,9 @@ function void messagePlayer(int _playerToMessage, string _message)
 	}
 }
 
-function INT numBitsSet(INT _integer)
+function int numBitsSet(int _integer)
 {
-	local	INT		_position,_result;
+	local	int		_position,_result;
 	
 	_position = 0;
 	_result = 0;
@@ -2771,8 +2771,8 @@ function INT numBitsSet(INT _integer)
 /* Send a multiplayer message, addressing some player(s) */
 function void messagePlayerAddressed(int _playerToMessage, int _playersToAddress, string _message)
 {
-	local	INT		_player,_totalAddressed,_curAddressed;
-	local	STRING	_adrMessage;
+	local	int		_player,_totalAddressed,_curAddressed;
+	local	string	_adrMessage;
 	
 	_totalAddressed = numBitsSet(_playersToAddress);
 	

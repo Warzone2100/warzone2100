@@ -27,9 +27,9 @@ public	int				numBaseRes;
 public	RESEARCHSTAT	baseRes[10];		
 
 //	Other Stuff
-private	INT				count;
-private INT				playnum;
-private	BOOL			gamewon,gameLost;
+private	int				count;
+private int				playnum;
+private	bool			gamewon,gameLost;
 
 // Base Under Attack  
 private	STRUCTURE		hitStruc;
