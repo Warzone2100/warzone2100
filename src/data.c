@@ -969,7 +969,7 @@ static void dataTexPageRelease(void *pData)
 
 
 /* Load an audio file */
-static BOOL dataAudioLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataAudioLoadFile(const char* fileName, void **ppData)
 {
 	if ( audio_Disabled() == TRUE )
 	{
@@ -977,22 +977,12 @@ static BOOL dataAudioLoad(char *pBuffer, UDWORD size, void **ppData)
 		// No error occurred (sound is just disabled), so we return TRUE
 		return TRUE;
 	}
-    // Load the track from a file
-	*ppData = sound_LoadTrackFromBuffer( pBuffer, size );
+
+	// Load the track from a file
+	*ppData = sound_LoadTrackFromFile( fileName );
 
 	return *ppData != NULL;
 }
-
-static void dataAudioRelease( void *pData )
-{
-	TRACK	*psTrack = (TRACK *) pData;
-
-	ASSERT( psTrack != NULL,
-			"dataAudioRelease: invalid track pointer" );
-
-	audio_ReleaseTrack( psTrack );
-}
-
 
 /* Load an audio file */
 static BOOL dataAudioCfgLoad(char *pBuffer, UDWORD size, void **ppData)
@@ -1184,7 +1174,6 @@ static const RES_TYPE_MIN ResourceTypes[] =
 	{"TERTILES", NULL, NULL},                                      // This version was used when running with the software renderer.
 	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
-	{"WAV", dataAudioLoad, dataAudioRelease},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
@@ -1211,6 +1200,11 @@ BOOL dataInitLoadFuncs(void)
 		{
 			return FALSE;	// error whilst adding a buffer load
 		}
+	}
+
+	if(!resAddFileLoad("WAV", dataAudioLoadFile, (RES_FREE)sound_ReleaseTrack))
+	{
+		return FALSE;
 	}
 
 	return TRUE;

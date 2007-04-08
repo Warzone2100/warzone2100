@@ -50,13 +50,7 @@ static void ResetResourceFile(void);
 
 // callback to resload screen.
 static RESLOAD_CALLBACK resLoadCallback=NULL;
-static RESPRELOAD_CALLBACK resPreLoadCallback=NULL;
 
-
-void resSetPreLoadCallback(RESPRELOAD_CALLBACK funcToCall)
-{
-	resPreLoadCallback=funcToCall;
-}
 
 /* set the callback function for the res loader*/
 void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
@@ -65,7 +59,7 @@ void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
 }
 
 /* do the callback for the resload display function */
-void resDoResLoadCallback(void)
+static inline void resDoResLoadCallback(void)
 {
 	if(resLoadCallback)
 	{
@@ -82,7 +76,6 @@ BOOL resInitialise(void)
 	psResTypes = NULL;
 	resBlockID = 0;
 	resLoadCallback = NULL;
-	resPreLoadCallback = NULL;
 
 	ResetResourceFile();
 
@@ -191,6 +184,29 @@ BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 	}
 
 	psT->buffLoad = buffLoad;
+	psT->fileLoad = NULL;
+	psT->release = release;
+
+	psT->psNext = psResTypes;
+	psResTypes = psT;
+
+	return TRUE;
+}
+
+
+/* Add a file name load function for a file type */
+BOOL resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
+					RES_FREE release)
+{
+	RES_TYPE	*psT = resAlloc(pType);
+
+	if (!psT)
+	{
+		return FALSE;
+	}
+
+	psT->buffLoad = NULL;
+	psT->fileLoad = fileLoad;
 	psT->release = release;
 
 	psT->psNext = psResTypes;
@@ -342,116 +358,128 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 }
 
 
-static void resDataInit(RES_DATA* psRes, char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
+static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
+	RES_DATA* psRes = (RES_DATA*)malloc(sizeof(RES_DATA) + strlen(DebugName) + 1);
+	char* fileName = (char*)psRes + sizeof(RES_DATA);
+
+	if (!psRes)
+	{
+		debug(LOG_ERROR, "resDataInit: Out of memory");
+		return NULL;
+	}
+
 	psRes->pData = pData;
 	psRes->blockID = BlockID;
-	psRes->HashedID=DataIDHash;
+	psRes->HashedID = DataIDHash;
 
-	strcpy(psRes->aID, DebugName);
+	strcpy(fileName, DebugName);
+	psRes->aID = fileName;
+
 	psRes->usage = 0;
+
+	return psRes;
 }
 
 
 /* Call the load function for a file */
-BOOL resLoadFile(char *pType, char *pFile)
+BOOL resLoadFile(const char *pType, const char *pFile)
 {
 	RES_TYPE	*psT;
 	void		*pData;
 	RES_DATA	*psRes;
 	char		aFileName[FILE_MAXCHAR];
-	BOOL loadresource;
-	UDWORD HashedName;
+	UDWORD          HashedName, HashedType = HashString(pType);
 
-	loadresource=TRUE;
-	if(resPreLoadCallback)
+	// Find the resource-type
+	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
-		loadresource=resPreLoadCallback(pType,pFile,aCurrResDir);
+		if (psT->HashedType == HashedType)
+		{
+			break;
+		}
 	}
 
-	if (loadresource==TRUE)
+	if (psT == NULL) {
+		debug(LOG_WZ, "resLoadFile: Unknown type: %s", pType);
+		return FALSE;
+	}
+
+	// Check for duplicates
+	HashedName = HashStringIgnoreCase(pFile);
+	for (psRes = psT->psRes; psRes; psRes = psRes->psNext) {
+		if(psRes->HashedID == HashedName) {
+			debug(LOG_WZ, "resLoadFile: Duplicate file name: %s (hash %x) for type %s",
+			      pFile, HashedName, psT->aType);
+			// assume that they are actually both the same and silently fail
+			// lovely little hack to allow some files to be loaded from disk (believe it or not!).
+			return TRUE;
+		}
+	}
+
+	// Create the file name
+	if (strlen(aCurrResDir) + strlen(pFile) + 1 >= FILE_MAXCHAR) {
+		debug(LOG_ERROR, "resLoadFile: Filename too long!! %s%s", aCurrResDir, pFile);
+		return FALSE;
+	}
+	strcpy(aFileName, aCurrResDir);
+	strcat(aFileName, pFile);
+
+	strcpy(LastResourceFilename,pFile);	// Save the filename in case any routines need it
+	SetLastHashName(HashStringIgnoreCase(LastResourceFilename));
+
+	// load the resource
+	if (psT->buffLoad)
 	{
-		UDWORD HashedType=HashString(pType);
+		RESOURCEFILE *Resource;
 
-		for(psT = psResTypes; psT != NULL; psT = psT->psNext )
+		// Load the file in a buffer
+		if (!RetreiveResourceFile(aFileName,&Resource)) {
+			debug(LOG_ERROR, "resLoadFile: Unable to retreive resource - %s", aFileName);
+			return(FALSE);
+		}
+
+		// Now process the buffer data
+		if (!psT->buffLoad(Resource->pBuffer, Resource->size, &pData))
 		{
-			if (psT->HashedType==HashedType)
-			{
-				break;
-			}
-		}
-
-		if (psT == NULL) {
-			debug(LOG_WZ, "resLoadFile: Unknown type: %s", pType);
-			return FALSE;
-		}
-
-		HashedName = HashStringIgnoreCase(pFile);
-		for (psRes = psT->psRes; psRes; psRes = psRes->psNext) {
-			if(psRes->HashedID == HashedName) {
-				debug(LOG_WZ, "resLoadFile: Duplicate file name: %s (hash %x) for type %s",
-				      pFile, HashedName, psT->aType);
-				// assume that they are actually both the same and silently fail
-				// lovely little hack to allow some files to be loaded from disk (believe it or not!).
-				return TRUE;
-			}
-		}
-
-		// Create the file name
-		if (strlen(aCurrResDir) + strlen(pFile) + 1 >= FILE_MAXCHAR) {
-			debug(LOG_ERROR, "resLoadFile: Filename too long!! %s%s", aCurrResDir, pFile);
-			return FALSE;
-		}
-		strcpy(aFileName, aCurrResDir);
-		strcat(aFileName, pFile);
-
-		strcpy(LastResourceFilename,pFile);	// Save the filename in case any routines need it
-		resToLower(LastResourceFilename);
-		SetLastHashName(HashStringIgnoreCase(LastResourceFilename));
-
-		// load the resource
-		if (psT->buffLoad) {
-			RESOURCEFILE *Resource;
-			BOOL Result;
-
-			Result=RetreiveResourceFile(aFileName,&Resource);
-			if (Result == FALSE) {
-				debug(LOG_ERROR, "resLoadFile: Unable to retreive resource - %s", aFileName);
-				return(FALSE);
-			}
-
-			// Now process the buffer data
-			if (!psT->buffLoad(Resource->pBuffer, Resource->size, &pData))
-			{
-				FreeResourceFile(Resource);
-				psT->release( pData );
-				return FALSE;
-			}
-
 			FreeResourceFile(Resource);
-			resDoResLoadCallback();		// do callback.
-		} else {
-			debug(LOG_ERROR, "resLoadFile:  No load functions for this type (%s)", pType);
+			psT->release( pData );
 			return FALSE;
 		}
 
-		// Set up the resource structure if there is something to store
-		if (pData != NULL)
+		FreeResourceFile(Resource);
+	}
+	else if(psT->fileLoad)
+	{
+		// Process data directly from file
+		if (!psT->fileLoad(aFileName, &pData))
 		{
-			psRes = (RES_DATA*)MALLOC(sizeof(RES_DATA));
-			if (!psRes)
-			{
-				debug(LOG_ERROR, "resLoadFile: Out of memory");
-				psT->release(pData);
-				return FALSE;
-			}
-			// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
-			resDataInit( psRes, LastResourceFilename, HashStringIgnoreCase(LastResourceFilename), pData, resBlockID );
-
-			// Add the resource to the list
-			psRes->psNext = psT->psRes;
-			psT->psRes = psRes;
+			psT->release( pData );
+			return FALSE;
 		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "resLoadFile:  No load functions for this type (%s)", pType);
+		return FALSE;
+	}
+
+	resDoResLoadCallback();		// do callback.
+
+	// Set up the resource structure if there is something to store
+	if (pData != NULL)
+	{
+		// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
+		psRes = resDataInit( LastResourceFilename, HashStringIgnoreCase(LastResourceFilename), pData, resBlockID );
+		if (!psRes)
+		{
+			psT->release(pData);
+			return FALSE;
+		}
+
+		// Add the resource to the list
+		psRes->psNext = psT->psRes;
+		psT->psRes = psRes;
 	}
 	return TRUE;
 }

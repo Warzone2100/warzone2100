@@ -472,14 +472,14 @@ TRACK* sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize 
 // =======================================================================================================================
 // =======================================================================================================================
 //
-TRACK* sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
+TRACK* sound_ReadTrackFromFile(TRACK *psTrack, const char *fileName)
 {
 	fileInfo fileHandle;
 
 	fileHandle.allowSeeking = TRUE;
 
 	// Use PhysicsFS to open the file
-	fileHandle.fileHandle = PHYSFS_openRead(szFileName);
+	fileHandle.fileHandle = PHYSFS_openRead(fileName);
 
 	if (fileHandle.fileHandle == NULL)
 	{

@@ -148,34 +148,11 @@ BOOL sound_SetTrackVals
 	return TRUE;
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static BOOL sound_AddTrack( TRACK *pTrack )
-{
-	if ( !(g_iCurTracks < MAX_TRACKS) )
-	{
-		debug( LOG_ERROR, "sound_AddTrack: all tracks used: increase MAX_TRACKS\n" );
-		abort();
-		return FALSE;
-	}
-
-	// add to sound array
-	// set pointer in table
-	g_apTrack[g_iCurTracks] = pTrack;
-
-	// increment current sound
-	g_iCurTracks++;
-
-	return TRUE;
-}
-
-static inline TRACK *sound_ConstructTrack(char *fileName)
+static inline TRACK *sound_ConstructTrack(const char *fileName)
 {
 	// allocate track, plus the memory required to contain the filename
 	// one malloc call ensures only one free call is required
-	TRACK* pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(fileName));
+	TRACK* pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(fileName) + 1);
 
 	if (pTrack == NULL)
 	{
@@ -189,7 +166,7 @@ static inline TRACK *sound_ConstructTrack(char *fileName)
 	
 	// Set filename pointer and copy the filename into struct
 	pTrack->pName = (char*)pTrack + sizeof(TRACK);
-	strcpy( pTrack->pName, GetLastResourceFilename() );
+	strcpy( pTrack->pName, fileName );
 
 	return pTrack;
 }
@@ -218,7 +195,7 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-TRACK* sound_LoadTrackFromFile(char *fileName)
+TRACK* sound_LoadTrackFromFile(const char *fileName)
 {
 	TRACK	*pTrack = sound_ConstructTrack(fileName);
 
@@ -229,21 +206,7 @@ TRACK* sound_LoadTrackFromFile(char *fileName)
 
 	pTrack->bMemBuffer = FALSE;
 
-	pTrack = sound_ReadTrackFromFile(pTrack, fileName);
-
-	if (pTrack == NULL)
-	{
-		return NULL;
-	}
-
-	if (!sound_AddTrack( pTrack ))
-	{
-		sound_FreeTrack(pTrack);
-		free(pTrack);
-		return NULL;
-	}
-
-	return pTrack;
+	return sound_ReadTrackFromFile(pTrack, fileName);
 }
 
 //*
@@ -253,6 +216,9 @@ TRACK* sound_LoadTrackFromFile(char *fileName)
 void sound_ReleaseTrack( TRACK *psTrack )
 {
 	SDWORD	iTrack;
+
+	if (!psTrack)
+		return;
 
 	for ( iTrack = 0; iTrack < g_iCurTracks; iTrack++ )
 	{
