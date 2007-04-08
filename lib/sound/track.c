@@ -148,11 +148,11 @@ BOOL sound_SetTrackVals
 	return TRUE;
 }
 
-static inline TRACK *sound_ConstructTrack(const char *fileName)
+static inline TRACK *sound_ConstructTrack()
 {
 	// allocate track, plus the memory required to contain the filename
 	// one malloc call ensures only one free call is required
-	TRACK* pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(fileName) + 1);
+	TRACK* pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(GetLastResourceFilename()) + 1);
 
 	if (pTrack == NULL)
 	{
@@ -166,7 +166,7 @@ static inline TRACK *sound_ConstructTrack(const char *fileName)
 	
 	// Set filename pointer and copy the filename into struct
 	pTrack->pName = (char*)pTrack + sizeof(TRACK);
-	strcpy( pTrack->pName, fileName );
+	strcpy( pTrack->pName, GetLastResourceFilename() );
 
 	return pTrack;
 }
@@ -178,7 +178,7 @@ static inline TRACK *sound_ConstructTrack(const char *fileName)
 TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 {
 	//~~~~~~~~~~~~
-	TRACK	*pTrack = sound_ConstructTrack(GetLastResourceFilename());
+	TRACK	*pTrack = sound_ConstructTrack();
 	//~~~~~~~~~~~~
 
 	if (pTrack == NULL)
@@ -197,7 +197,7 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 //
 TRACK* sound_LoadTrackFromFile(const char *fileName)
 {
-	TRACK	*pTrack = sound_ConstructTrack(fileName);
+	TRACK	*pTrack = sound_ConstructTrack();
 
 	if ( pTrack == NULL )
 	{

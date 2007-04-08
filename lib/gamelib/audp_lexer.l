@@ -20,6 +20,7 @@
 %{
 
 #include <stdio.h>
+#include <physfs.h>
 
 /* include framework */
 #include "lib/framework/frame.h"
@@ -40,12 +41,31 @@ static	FILE	*g_fpOld;
 static char *pInputBuffer = NULL;
 static char *pEndBuffer = NULL;
 
+static PHYSFS_file* pReadFile = NULL;
+
 #define YY_INPUT(buf,result,max_size) \
+		if (pReadFile == NULL) \
+		{ \
 			if (pInputBuffer != pEndBuffer) { \
 				buf[0] = *(pInputBuffer++); result = 1; \
 			} else { \
 				buf[0] = EOF; result = YY_NULL; \
-			}
+			} \
+		} \
+		else \
+		{ \
+			if (PHYSFS_eof(pReadFile)) \
+			{ \
+				buf[0] = EOF; result = YY_NULL; \
+			} \
+			else { \
+				result = PHYSFS_read(pReadFile, buf, 1, max_size); \
+				if (result == -1) \
+				{ \
+					buf[0] = EOF; result = YY_NULL; \
+				} \
+			} \
+		}
 
 void audp_error(char *pMessage,...);
 
@@ -146,6 +166,15 @@ void parserSetInputBuffer(char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;
+
+	pReadFile = NULL;
+}
+
+void parserSetInputFile(PHYSFS_file* fileHandle)
+{
+	pReadFile = fileHandle;
+
+	pInputBuffer = pEndBuffer = NULL;
 }
 
 /***************************************************************************/

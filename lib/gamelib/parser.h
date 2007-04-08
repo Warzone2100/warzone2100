@@ -25,6 +25,7 @@
 /***************************************************************************/
 
 #include <stdio.h>
+#include <physfs.h>
 
 /***************************************************************************/
 
@@ -32,7 +33,9 @@ extern void		IncludeFile( char szFileName[] );
 extern BOOL		ParseFile( char szFileName[] );
 extern void		IncludeFile( char szFileName[] );
 extern void		parserSetInputBuffer(char *pBuffer, UDWORD size);
-extern BOOL		ParseResourceFile(char *pData, UDWORD fileSize);
+extern void		parserSetInputFile(PHYSFS_file* fileHandle);
+extern BOOL		ParseResourceBuffer(char *pData, UDWORD fileSize);
+extern BOOL		ParseResourceFile(PHYSFS_file* fileHandle);
 extern BOOL		ParsingBuffer( void );
 extern void		parseGetErrorData(int *pLine, char **ppText);
 

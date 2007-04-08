@@ -969,7 +969,7 @@ static void dataTexPageRelease(void *pData)
 
 
 /* Load an audio file */
-static BOOL dataAudioLoadFile(const char* fileName, void **ppData)
+static BOOL dataAudioLoad(const char* fileName, void **ppData)
 {
 	if ( audio_Disabled() == TRUE )
 	{
@@ -985,21 +985,31 @@ static BOOL dataAudioLoadFile(const char* fileName, void **ppData)
 }
 
 /* Load an audio file */
-static BOOL dataAudioCfgLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 {
 	*ppData = NULL;
 
-	if ( audio_Disabled() == FALSE &&
-		 ParseResourceFile( pBuffer, size ) == FALSE )
-	{
-		return FALSE;
-	}
-	else
+	BOOL success;
+	PHYSFS_file* fileHandle;
+
+	if ( audio_Disabled() == TRUE )
 	{
 		return TRUE;
 	}
-}
 
+	fileHandle = PHYSFS_openRead(fileName);
+
+	if (fileHandle == NULL)
+	{
+		return FALSE;
+	}
+
+	success = ParseResourceFile(fileHandle);
+
+	PHYSFS_close(fileHandle);
+
+	return success;
+}
 
 /* Load an anim file */
 static BOOL dataAnimLoad(char *pBuffer, UDWORD size, void **ppData)
@@ -1024,7 +1034,7 @@ static BOOL dataAnimLoad(char *pBuffer, UDWORD size, void **ppData)
 static BOOL dataAnimCfgLoad(char *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
-	if ( ParseResourceFile( pBuffer, size ) == FALSE )
+	if ( ParseResourceBuffer( pBuffer, size ) == FALSE )
 	{
 		return FALSE;
 	}
@@ -1131,9 +1141,9 @@ typedef struct
 	const char *aType;                      // points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
 	RES_BUFFERLOAD buffLoad;                // routine to process the data for this type
 	RES_FREE release;                       // routine to release the data (NULL indicates none)
-} RES_TYPE_MIN;
+} RES_TYPE_MIN_BUF;
 
-static const RES_TYPE_MIN ResourceTypes[] =
+static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
@@ -1173,7 +1183,6 @@ static const RES_TYPE_MIN ResourceTypes[] =
 	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
 	{"TERTILES", NULL, NULL},                                      // This version was used when running with the software renderer.
 	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
-	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
@@ -1181,30 +1190,52 @@ static const RES_TYPE_MIN ResourceTypes[] =
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
+typedef struct
+{
+	const char *aType;                      // points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
+	RES_FILELOAD fileLoad;                  // routine to process the data for this type
+	RES_FREE release;                       // routine to release the data (NULL indicates none)
+} RES_TYPE_MIN_FILE;
+
+static const RES_TYPE_MIN_FILE FileResourceTypes[] =
+{
+	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
+	{"AUDIOCFG", dataAudioCfgLoad, NULL},
+};
 
 /* Pass all the data loading functions to the framework library */
 BOOL dataInitLoadFuncs(void)
 {
-	const RES_TYPE_MIN *CurrentType;
-	// Points just past the last item in the list
-	const RES_TYPE_MIN *EndType = &ResourceTypes[sizeof(ResourceTypes) / sizeof(RES_TYPE_MIN)];
-
 	// init the cheat system;
 	resetCheatHash();
 
 	// Using iterator style: begin iterator (ResourceTypes),
 	// end iterator (EndType), and current iterator (CurrentType)
-	for (CurrentType = ResourceTypes; CurrentType != EndType; ++CurrentType)
-	{
-		if(!resAddBufferLoad(CurrentType->aType,CurrentType->buffLoad,CurrentType->release))
+	{  // iterate through buffer load functions
+		const RES_TYPE_MIN_BUF *CurrentType;
+		// Points just past the last item in the list
+		const RES_TYPE_MIN_BUF *EndType = &BufferResourceTypes[sizeof(BufferResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
+
+		for (CurrentType = BufferResourceTypes; CurrentType != EndType; ++CurrentType)
 		{
-			return FALSE;	// error whilst adding a buffer load
+			if(!resAddBufferLoad(CurrentType->aType,CurrentType->buffLoad,CurrentType->release))
+			{
+				return FALSE;	// error whilst adding a buffer load
+			}
 		}
 	}
+	{  // iterate through file load functions
+		const RES_TYPE_MIN_FILE *CurrentType;
+		// Points just past the last item in the list
+		const RES_TYPE_MIN_FILE *EndType = &FileResourceTypes[sizeof(FileResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
 
-	if(!resAddFileLoad("WAV", dataAudioLoadFile, (RES_FREE)sound_ReleaseTrack))
-	{
-		return FALSE;
+		for (CurrentType = FileResourceTypes; CurrentType != EndType; ++CurrentType)
+		{
+			if(!resAddFileLoad(CurrentType->aType,CurrentType->fileLoad,CurrentType->release))
+			{
+				return FALSE;	// error whilst adding a buffer load
+			}
+		}
 	}
 
 	return TRUE;

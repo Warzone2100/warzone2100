@@ -335,7 +335,7 @@ anim_SetVals( char szFileName[], UWORD uwAnimID )
 // the playstation version uses sscanf's ... see animload.c
 BASEANIM *anim_LoadFromBuffer(char *pBuffer, UDWORD size)
 {
-	if ( ParseResourceFile( pBuffer, size ) == FALSE )
+	if ( ParseResourceBuffer( pBuffer, size ) == FALSE )
 	{
 		debug( LOG_ERROR, "anim_LoadFromBuffer: couldn't parse file\n" );
 		abort();
