@@ -34,15 +34,6 @@
 // Local prototypes
 static RES_TYPE *psResTypes=NULL;
 
-// check to see if RES_TYPE entry is valid
-// this is a NULL check (ie linked list)
-#define resValidType(Type) (Type)
-
-// linked list macros
-#define resNextType(Type)  (Type->psNext)
-#define resGetResDataPointer(psRes) (psRes->pData)
-#define resGetResBlockID(psRes) (psRes->blockID)
-
 /* The initial resource directory and the current resource directory */
 char	aResDir[FILE_MAXCHAR];
 char	aCurrResDir[FILE_MAXCHAR];
@@ -409,7 +400,7 @@ BOOL resLoadFile(char *pType, char *pFile)
 	{
 		UDWORD HashedType=HashString(pType);
 
-		for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
+		for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 		{
 			if (psT->HashedType==HashedType)
 			{
@@ -503,28 +494,26 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 	// Find the correct type
 	HashedType=HashString(pType);	// la da la
 
-	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
+	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
 		if (psT->HashedType==HashedType)
 		{
 			break;
 		}
 	}
+
 	if (psT == NULL)
 	{
 		ASSERT( FALSE, "resGetData: Unknown type: %s", pType );
 		return NULL;
 	}
 
+	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
-//		UDWORD HashedID=HashStringIgnoreCase(pID);
-		for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+		if (psRes->HashedID == HashedID)
 		{
-			if (psRes->HashedID==HashedID)
-			{
-				/* We found it */
-				break;
-			}
+			/* We found it */
+			break;
 		}
 	}
 
@@ -536,7 +525,7 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 
 	psRes->usage += 1;
 
-	return resGetResDataPointer(psRes);
+	return psRes->pData;
 }
 
 
@@ -551,7 +540,7 @@ void *resGetData(const char *pType, const char *pID)
 	HashedType=HashString(pType);	// la da la
 //printf("[resGetData] entering with %s / %s  = %0x\n",pID,pType,HashedType);
 
-	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
+	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
 		if (psT->HashedType==HashedType)
 		{
@@ -587,7 +576,7 @@ void *resGetData(const char *pType, const char *pID)
 
 	psRes->usage += 1;
 
-	return resGetResDataPointer(psRes);
+	return psRes->pData;
 }
 
 
@@ -599,7 +588,7 @@ BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 	// Find the correct type
 	UDWORD	HashedType=HashString(pType);
 
-	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
+	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
 		if (psT->HashedType==HashedType)
 		{
@@ -617,7 +606,7 @@ BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
 
-		if (resGetResDataPointer(psRes) == pData)
+		if (psRes->pData == pData)
 		{
 			break;
 		}
@@ -644,7 +633,7 @@ BOOL resPresent(const char *pType, const char *pID)
 	// Find the correct type
 	UDWORD HashedType=HashString(pType);
 
-	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
+	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
 		if (psT->HashedType==HashedType)
 		{
@@ -689,7 +678,7 @@ void resReleaseAll(void)
 	RES_TYPE	*psT, *psNT;
 	RES_DATA	*psRes, *psNRes;
 
-	for(psT = psResTypes; resValidType(psT); psT = psNT)
+	for(psT = psResTypes; psT != NULL; psT = psNT)
 	{
 		for(psRes = psT->psRes; psRes; psRes = psNRes) {
 			if (psRes->usage == 0) {
@@ -697,14 +686,14 @@ void resReleaseAll(void)
 				      psRes->aID, psRes->HashedID);
 			}
 			if(psT->release != NULL) {
-				psT->release( resGetResDataPointer(psRes) );
+				psT->release( psRes->pData );
 			} else {
 				ASSERT( FALSE,"resReleaseAll: NULL release function" );
 			}
 			psNRes = psRes->psNext;
 			FREE(psRes);
 		}
-		psNT = resNextType(psT);
+		psNT = psT->psNext;
 
 		FREE(psT);
 	}
@@ -719,21 +708,21 @@ void resReleaseBlockData(SDWORD blockID)
 	RES_TYPE	*psT, *psNT;
 	RES_DATA	*psPRes, *psRes, *psNRes;
 
-	for(psT = psResTypes; resValidType(psT); psT = psNT)
+	for(psT = psResTypes; psT != NULL; psT = psNT)
 	{
 		psPRes = NULL;
 		for(psRes = psT->psRes; psRes; psRes = psNRes)
 		{
 			ASSERT( psRes != NULL,"resReleaseBlockData: null pointer passed into loop" );
 
-			if (resGetResBlockID(psRes) == blockID) {
+			if (psRes->blockID == blockID) {
 				if (psRes->usage == 0) {
 					debug(LOG_WZ, "resReleaseBlockData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
 					      psRes->HashedID);
 				}
 				if(psT->release != NULL)
 				{
-					psT->release( resGetResDataPointer(psRes) );
+					psT->release( psRes->pData );
 				}
 				else
 				{
@@ -759,7 +748,7 @@ void resReleaseBlockData(SDWORD blockID)
 			}
 			ASSERT( psNRes != (RES_DATA *)0xdddddddd,"resReleaseBlockData: next data (next pointer) already freed" );
 		}
-		psNT = resNextType(psT);
+		psNT = psT->psNext;
 		ASSERT( psNT != (RES_TYPE *)0xdddddddd,"resReleaseBlockData: next data (next pointer) already freed" );
 	}
 }
@@ -771,14 +760,14 @@ void resReleaseAllData(void)
 	RES_TYPE	*psT, *psNT;
 	RES_DATA	*psRes, *psNRes;
 
-	for (psT = psResTypes; resValidType(psT); psT = psNT) {
+	for (psT = psResTypes; psT != NULL; psT = psNT) {
 		for (psRes = psT->psRes; psRes; psRes = psNRes) {
 			if (psRes->usage == 0) {
 				debug(LOG_WZ, "resReleaseAllData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
 				      psRes->HashedID);
 			}
 			if(psT->release != NULL) {
-				psT->release( resGetResDataPointer(psRes) );
+				psT->release( psRes->pData );
 			} else {
 				ASSERT( FALSE,"resReleaseAllData: NULL release function" );
 			}
@@ -787,6 +776,6 @@ void resReleaseAllData(void)
 			FREE(psRes);
 		}
 		psT->psRes = NULL;
-		psNT = resNextType(psT);
+		psNT = psT->psNext;
 	}
 }
