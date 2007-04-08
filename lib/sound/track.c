@@ -171,6 +171,29 @@ static BOOL sound_AddTrack( TRACK *pTrack )
 	return TRUE;
 }
 
+static inline TRACK *sound_ConstructTrack(char *fileName)
+{
+	// allocate track, plus the memory required to contain the filename
+	// one malloc call ensures only one free call is required
+	TRACK* pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(fileName));
+
+	if (pTrack == NULL)
+	{
+		debug( LOG_ERROR, "sound_ConstructTrack: couldn't allocate memory\n" );
+		abort();
+		return NULL;
+	}
+
+	// Initialize everyting (except for the filename) to zero
+	memset(pTrack, 0, sizeof(TRACK));
+	
+	// Set filename pointer and copy the filename into struct
+	pTrack->pName = (char*)pTrack + sizeof(TRACK);
+	strcpy( pTrack->pName, GetLastResourceFilename() );
+
+	return pTrack;
+}
+
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -178,34 +201,45 @@ static BOOL sound_AddTrack( TRACK *pTrack )
 TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 {
 	//~~~~~~~~~~~~
-	TRACK	*pTrack;
+	TRACK	*pTrack = sound_ConstructTrack(GetLastResourceFilename());
 	//~~~~~~~~~~~~
 
-	// allocate track
-	pTrack = (TRACK *) MALLOC( sizeof(TRACK) );
-	memset(pTrack, 0, sizeof(TRACK));
-	if ( pTrack == NULL )
+	if (pTrack == NULL)
 	{
-		debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
-		abort();
 		return NULL;
 	}
 
 	pTrack->bMemBuffer = TRUE;
 
-	// Set filename in struct
-	pTrack->pName = (char*)MALLOC( strlen(GetLastResourceFilename()) + 1 );
-	if ( pTrack->pName == NULL )
+	return sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize);
+}
+
+//*
+// =======================================================================================================================
+// =======================================================================================================================
+//
+TRACK* sound_LoadTrackFromFile(char *fileName)
+{
+	TRACK	*pTrack = sound_ConstructTrack(fileName);
+
+	if ( pTrack == NULL )
 	{
-		debug( LOG_ERROR, "sound_LoadTrackFromBuffer: couldn't allocate memory\n" );
-		abort();
-		FREE( pTrack );
 		return NULL;
 	}
-	strcpy( pTrack->pName, GetLastResourceFilename() );
 
-	if ( sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize) == FALSE )
+	pTrack->bMemBuffer = FALSE;
+
+	pTrack = sound_ReadTrackFromFile(pTrack, fileName)
+
+	if (pTrack == NULL)
 	{
+		return NULL;
+	}
+
+	if (sound_AddTrack( pTrack ) == FALSE)
+	{
+		sound_FreeTrack(pTrack);
+		FREE(pTrack);
 		return NULL;
 	}
 
@@ -216,47 +250,9 @@ TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_LoadTrackFromFile(char szFileName[])
-{
-	TRACK	*pTrack;
-
-	// allocate track
-	pTrack = (TRACK *) MALLOC( sizeof(TRACK) );
-	if ( pTrack == NULL )
-	{
-		return FALSE;
-	}
-
-	pTrack->bMemBuffer = FALSE;
-	pTrack->pName = (char*)MALLOC( strlen((char*) szFileName) + 1 );
-	if ( pTrack->pName == NULL )
-	{
-		debug( LOG_ERROR, "sound_LoadTrackFromFile: Out of memory" );
-		abort();
-		return FALSE;
-	}
-
-	strcpy( pTrack->pName, (char*) szFileName );
-	if ( sound_ReadTrackFromFile(pTrack, szFileName) == FALSE )
-	{
-		return FALSE;
-	}
-
-	return sound_AddTrack( pTrack );
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 void sound_ReleaseTrack( TRACK *psTrack )
 {
 	SDWORD	iTrack;
-
-	if ( psTrack->pName != NULL )
-	{
-		FREE( psTrack->pName );
-	}
 
 	for ( iTrack = 0; iTrack < g_iCurTracks; iTrack++ )
 	{

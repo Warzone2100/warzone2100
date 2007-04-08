@@ -578,27 +578,12 @@ BOOL audio_Update( void )
 	return TRUE;
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-BOOL audio_LoadTrackFromFile( char szFileName[] )
-{
-	// if audio not enabled return TRUE to carry on game without audio
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return TRUE;
-	}
-
-	return sound_LoadTrackFromFile( szFileName );
-}
 
 /** Loads audio files and constructs a TRACK from them and returns their respective ID numbers
  *  \param szFileName the filename of the track
  *  \param bLoop whether the track should be looped until explicitly stopped
  *  \param piID[out] the track id number is returned into the variable this pointer points to
  *  \param iVol the volume this track should be played on (range is 0-100)
- *  \param iPriority ????
  *  \param iAudibleRadius the radius from the source of sound where it can be heard
  *  \return TRUE when succesfull or audio is disabled, FALSE when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */

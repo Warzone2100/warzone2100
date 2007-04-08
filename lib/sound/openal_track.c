@@ -397,7 +397,7 @@ static ov_callbacks ovPHYSFS_callbacks = {
     ovPHYSFS_tell
 };
 
-static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
+static TRACK* sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
 {
 	OggVorbis_File	ogg_stream;
 	vorbis_info*	ogg_info;
@@ -411,7 +411,10 @@ static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* d
 
 
 	if (ov_open_callbacks(datasource, &ogg_stream, NULL, 0, callbackFuncs) < 0)
-		return FALSE;
+	{
+		FREE(psTrack);
+		return NULL;
+	}
 
 	// Aquire some info about the sound data
 	ogg_info = ov_info(&ogg_stream, -1);
@@ -450,10 +453,10 @@ static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* d
 	// Close the OggVorbis decoding stream
 	ov_clear(&ogg_stream);
 
-	return TRUE;
+	return psTrack;
 }
 
-BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
+TRACK* sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 {
 	ov_buffer_t	ovbuf;
 
@@ -469,10 +472,8 @@ BOOL sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
+TRACK* sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 {
-	BOOL success;
-
 	fileInfo fileHandle;
 
 	fileHandle.allowSeeking = TRUE;
@@ -481,13 +482,16 @@ BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 	fileHandle.fileHandle = PHYSFS_openRead(szFileName);
 
 	if (fileHandle.fileHandle == NULL)
-		return FALSE;
+	{
+		FREE(psTrack);
+		return NULL;
+	}
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
-	success = sound_ReadTrack( psTrack, ovPHYSFS_callbacks, &fileHandle);
+	psTrack = sound_ReadTrack( psTrack, ovPHYSFS_callbacks, &fileHandle);
 
 	PHYSFS_close(fileHandle.fileHandle);
-	return success;
+	return psTrack;
 }
 
 //*
@@ -496,9 +500,7 @@ BOOL sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 //
 void sound_FreeTrack( TRACK *psTrack )
 {
-	ALuint buffer = psTrack->iBufferName;
-
-	alDeleteBuffers( 1, &buffer );
+	alDeleteBuffers( 1, &psTrack->iBufferName );
 }
 
 //*
