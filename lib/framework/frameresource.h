@@ -32,8 +32,6 @@
 
 /* Function pointer for a function that loads from a memory buffer */
 typedef BOOL (*RES_BUFFERLOAD)(char *pBuffer, UDWORD size, void **pData);
-/* Function pointer for a function that loads from a filename */
-typedef BOOL (*RES_FILELOAD)(char *pFile, void **pData);
 
 /* Function pointer for releasing a resource loaded by the above functions */
 typedef void (*RES_FREE)(void *pData);
@@ -68,7 +66,6 @@ typedef struct _res_type
 	RES_DATA		*psRes;		// Linked list of data items of this type
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
 
-	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
 	struct _res_type	*psNext;
 } RES_TYPE;
 
@@ -110,10 +107,6 @@ extern void resReleaseAllData(void);
 /* Add a buffer load and release function for a file type */
 extern BOOL	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 							 RES_FREE release);
-
-/* Add a file name load and release function for a file type */
-extern BOOL	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
-						   RES_FREE release);
 
 /* Call the load function for a file */
 extern BOOL resLoadFile(char *pType, char *pFile);

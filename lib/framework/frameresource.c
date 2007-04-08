@@ -144,7 +144,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 
 
 /* Allocate a RES_TYPE structure */
-static BOOL resAlloc(const char *pType, RES_TYPE **ppsFunc)
+static RES_TYPE* resAlloc(const char *pType)
 {
 	RES_TYPE	*psT;
 
@@ -163,7 +163,7 @@ static BOOL resAlloc(const char *pType, RES_TYPE **ppsFunc)
 	{
 		debug( LOG_ERROR, "resAlloc: Out of memory" );
 		abort();
-		return FALSE;
+		return NULL;
 	}
 
 	// setup the structure
@@ -174,9 +174,7 @@ static BOOL resAlloc(const char *pType, RES_TYPE **ppsFunc)
 
 	psT->psRes = NULL;
 
-	*ppsFunc = psT;
-
-	return TRUE;
+	return psT;
 }
 
 
@@ -185,15 +183,14 @@ static BOOL resAlloc(const char *pType, RES_TYPE **ppsFunc)
 BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 					  RES_FREE release)
 {
-	RES_TYPE	*psT;
+	RES_TYPE	*psT = resAlloc(pType);
 
-	if (!resAlloc(pType, &psT))
+	if (!psT)
 	{
 		return FALSE;
 	}
 
 	psT->buffLoad = buffLoad;
-	psT->fileLoad = NULL;
 	psT->release = release;
 
 	psT->psNext = psResTypes;
@@ -201,30 +198,6 @@ BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 	return TRUE;
 }
-
-
-/* Add a file name load function for a file type */
-BOOL resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
-					RES_FREE release)
-{
-	RES_TYPE	*psT;
-
-	if (!resAlloc(pType, &psT))
-	{
-		return FALSE;
-	}
-
-	psT->buffLoad = NULL;
-	psT->fileLoad = fileLoad;
-	psT->release = release;
-
-	psT->psNext = psResTypes;
-	psResTypes = psT;
-
-	return TRUE;
-}
-
-
 
 // Make a string lower case
 void resToLower(char *pStr)
@@ -519,7 +492,7 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 
 	if (psRes == NULL)
 	{
-		ASSERT( FALSE, "resGetDataFromHash: Unknown ID:" );
+		ASSERT( psRes != NULL, "resGetDataFromHash: Unknown ID:" );
 		return NULL;
 	}
 
