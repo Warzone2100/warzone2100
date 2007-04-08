@@ -412,7 +412,7 @@ static TRACK* sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void*
 
 	if (ov_open_callbacks(datasource, &ogg_stream, NULL, 0, callbackFuncs) < 0)
 	{
-		FREE(psTrack);
+		free(psTrack);
 		return NULL;
 	}
 
@@ -483,7 +483,7 @@ TRACK* sound_ReadTrackFromFile(TRACK *psTrack, char szFileName[])
 
 	if (fileHandle.fileHandle == NULL)
 	{
-		FREE(psTrack);
+		free(psTrack);
 		return NULL;
 	}
 

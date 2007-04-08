@@ -72,7 +72,7 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 	}
 
 	// init audio array
-	g_apTrack = (TRACK **) MALLOC( sizeof(TRACK* ) * MAX_TRACKS);
+	g_apTrack = (TRACK **) malloc( sizeof(TRACK*) * MAX_TRACKS);
 	for ( i = 0; i < MAX_TRACKS; i++ )
 	{
 		g_apTrack[i] = NULL;
@@ -89,7 +89,7 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 //
 BOOL sound_Shutdown( void )
 {
-	FREE( g_apTrack );
+	free( g_apTrack );
 
 	// set inactive flag to prevent callbacks coming after shutdown
 	g_bSystemActive = FALSE;
@@ -229,17 +229,17 @@ TRACK* sound_LoadTrackFromFile(char *fileName)
 
 	pTrack->bMemBuffer = FALSE;
 
-	pTrack = sound_ReadTrackFromFile(pTrack, fileName)
+	pTrack = sound_ReadTrackFromFile(pTrack, fileName);
 
 	if (pTrack == NULL)
 	{
 		return NULL;
 	}
 
-	if (sound_AddTrack( pTrack ) == FALSE)
+	if (!sound_AddTrack( pTrack ))
 	{
 		sound_FreeTrack(pTrack);
-		FREE(pTrack);
+		free(pTrack);
 		return NULL;
 	}
 
@@ -263,7 +263,7 @@ void sound_ReleaseTrack( TRACK *psTrack )
 	}
 
 	sound_FreeTrack( psTrack );
-	FREE( psTrack );
+	free( psTrack );
 }
 
 //*
