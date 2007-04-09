@@ -226,17 +226,6 @@ void audp_error(char *pMessage,...)
 
 /***************************************************************************/
 /* Read a resource file */
-
-BOOL ParseResourceBuffer(char *pData, UDWORD fileSize)
-{
-	// Tell lex about the input buffer
-	parserSetInputBuffer( pData, fileSize );
-
-	audp_parse();
-
-	return TRUE;
-}
-
 BOOL ParseResourceFile(PHYSFS_file* fileHandle)
 {
 	// Tell lex about the input file

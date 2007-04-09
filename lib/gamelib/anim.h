@@ -30,6 +30,8 @@
 
 /***************************************************************************/
 
+#include <physfs.h>
+
 #include "lib/framework/types.h"
 #include "lib/ivis_common/imd.h"
 #include "maxpidef.h"
@@ -129,6 +131,7 @@ ANIMGLOBALS;
 BOOL		anim_Init( GETSHAPEFUNC  );
 BOOL		anim_Shutdown( void );
 BASEANIM *	anim_LoadFromBuffer(char *pBuffer, UDWORD size);
+BASEANIM *	anim_LoadFromFile(PHYSFS_file* fileHandle);
 void		anim_ReleaseAnim( BASEANIM *psAnim );
 BOOL		anim_Create3D( char szPieFileName[], UWORD uwFrames,
 							UWORD uwFrameRate, UWORD uwObj,

@@ -1012,34 +1012,39 @@ static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 }
 
 /* Load an anim file */
-static BOOL dataAnimLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataAnimLoad(const char *fileName, void **ppData)
 {
-	BASEANIM	*psAnim;
-
-	if ( (psAnim = anim_LoadFromBuffer( pBuffer, size )) == NULL )
+	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == NULL)
 	{
+		*ppData = NULL;
 		return FALSE;
 	}
 
-	/* copy anim for return */
-	*ppData = psAnim;
+	*ppData = anim_LoadFromFile(fileHandle);
 
+	PHYSFS_close(fileHandle);
 
-
-	return TRUE;
+	return *ppData != NULL;
 }
 
-
 /* Load an audio config file */
-static BOOL dataAnimCfgLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataAnimCfgLoad(const char *fileName, void **ppData)
 {
+	BOOL success;
+	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	*ppData = NULL;
-	if ( ParseResourceBuffer( pBuffer, size ) == FALSE )
+
+	if (fileHandle == NULL)
 	{
 		return FALSE;
 	}
 
-	return TRUE;
+	success = ParseResourceFile(fileHandle);
+
+	PHYSFS_close(fileHandle);
+
+	return success;
 }
 
 
@@ -1183,8 +1188,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
 	{"TERTILES", NULL, NULL},                                      // This version was used when running with the software renderer.
 	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
-	{"ANI", dataAnimLoad, dataAnimRelease},
-	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", bufferTexPageLoad, dataTexPageRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
@@ -1201,6 +1204,8 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
+	{"ANI", dataAnimLoad, dataAnimRelease},
+	{"ANIMCFG", dataAnimCfgLoad, NULL},
 };
 
 /* Pass all the data loading functions to the framework library */

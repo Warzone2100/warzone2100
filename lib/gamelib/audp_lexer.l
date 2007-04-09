@@ -37,33 +37,19 @@
 static	BOOL	g_bParsingSubFile;
 static	FILE	*g_fpOld;
 
-/* Pointer to the input buffer */
-static char *pInputBuffer = NULL;
-static char *pEndBuffer = NULL;
-
+/* Handle to the input file */
 static PHYSFS_file* pReadFile = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
-		if (pReadFile == NULL) \
+		if (PHYSFS_eof(pReadFile)) \
 		{ \
-			if (pInputBuffer != pEndBuffer) { \
-				buf[0] = *(pInputBuffer++); result = 1; \
-			} else { \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
+			buf[0] = EOF; result = YY_NULL; \
 		} \
-		else \
-		{ \
-			if (PHYSFS_eof(pReadFile)) \
+		else { \
+			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
+			if (result == -1) \
 			{ \
 				buf[0] = EOF; result = YY_NULL; \
-			} \
-			else { \
-				result = PHYSFS_read(pReadFile, buf, 1, max_size); \
-				if (result == -1) \
-				{ \
-					buf[0] = EOF; result = YY_NULL; \
-				} \
 			} \
 		}
 
@@ -159,22 +145,12 @@ audp_wrap( void )
 }
 
 /***************************************************************************/
-/* Set the current input buffer for the lexer */
+/* Set the current input file for the lexer */
 /***************************************************************************/
-
-void parserSetInputBuffer(char *pBuffer, UDWORD size)
-{
-	pInputBuffer = pBuffer;
-	pEndBuffer = pBuffer + size;
-
-	pReadFile = NULL;
-}
 
 void parserSetInputFile(PHYSFS_file* fileHandle)
 {
 	pReadFile = fileHandle;
-
-	pInputBuffer = pEndBuffer = NULL;
 }
 
 /***************************************************************************/
