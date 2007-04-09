@@ -90,7 +90,6 @@ typedef struct TRACK
 	SDWORD		iTime;					/* duration in milliseconds */
 	UDWORD		iTimeLastFinished;		/* time last finished in ms */
 	UDWORD		iNumPlaying;
-	BOOL		bMemBuffer;				/* memory buffer flag       */
 	ALuint		iBufferName;				/* name of the openal buffer */
 	char		*pName;					// resource name of the track
 } TRACK;
@@ -103,7 +102,6 @@ BOOL	sound_Init( SDWORD iMaxSameSamples );
 BOOL	sound_Shutdown(void);
 
 TRACK *	sound_LoadTrackFromFile(const char *fileName);
-TRACK *	sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
 			SDWORD iVol, SDWORD iAudibleRadius);
 void	sound_ReleaseTrack( TRACK * psTrack );

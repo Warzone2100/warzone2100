@@ -25,6 +25,7 @@
 
 // this has to be first
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 
 #ifdef WZ_OPENAL_MAC_H
 #include <openal/al.h>
@@ -264,66 +265,6 @@ BOOL sound_QueueSamplePlaying( void )
 // =======================================================================================================================
 //
 
-typedef struct {
-	void* buffer;
-	unsigned int size;
-	unsigned int pos;
-} ov_buffer_t;
-
-static size_t ovbuf_read(void *ptr, size_t size, size_t nmemb, void *datasource) {
-	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
-	unsigned int read_size = size*nmemb;
-
-	if (ovbuf->pos + read_size > ovbuf->size) {
-		read_size = ovbuf->size - ovbuf->pos;
-	}
-	memcpy((char *)ptr,(char *) ovbuf->buffer+ovbuf->pos, read_size);
-	ovbuf->pos += read_size;
-
-	return read_size;
-}
-
-static int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
-	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
-	int new_pos = 0;
-
-	switch (whence) {
-		case SEEK_SET:
-			new_pos = offset;
-			break;
-		case SEEK_CUR:
-			new_pos = ovbuf->pos+offset;
-			break;
-		case SEEK_END:
-			new_pos = ovbuf->size-offset-1;
-			break;
-	}
-
-	if (new_pos >= 0 && new_pos < ovbuf->size) {
-		ovbuf->pos = new_pos;
-		return new_pos;
-	} else {
-		return -1;
-	}
-}
-
-static int ovbuf_close(void *datasource) {
-	return 0;
-}
-
-static long ovbuf_tell(void *datasource) {
-	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
-
-	return ovbuf->pos;
-}
-
-static ov_callbacks ovbuf_callbacks = {
-	ovbuf_read,
-	ovbuf_seek,
-	ovbuf_close,
-	ovbuf_tell
-};
-
 typedef struct
 {
     // Internal identifier towards PhysicsFS
@@ -397,7 +338,7 @@ static ov_callbacks ovPHYSFS_callbacks = {
     ovPHYSFS_tell
 };
 
-static TRACK* sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
+static inline TRACK* sound_DecodeTrack( TRACK *psTrack, fileInfo* fileHandle )
 {
 	OggVorbis_File	ogg_stream;
 	vorbis_info*	ogg_info;
@@ -410,7 +351,7 @@ static TRACK* sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void*
 	int		result, section;
 
 
-	if (ov_open_callbacks(datasource, &ogg_stream, NULL, 0, callbackFuncs) < 0)
+	if (ov_open_callbacks(fileHandle, &ogg_stream, NULL, 0, ovPHYSFS_callbacks) < 0)
 	{
 		free(psTrack);
 		return NULL;
@@ -456,42 +397,46 @@ static TRACK* sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void*
 	return psTrack;
 }
 
-TRACK* sound_ReadTrackFromBuffer( TRACK *psTrack, void *pBuffer, UDWORD udwSize )
-{
-	ov_buffer_t	ovbuf;
-
-	// Set some info for the ovbuf_callbacks functions
-	ovbuf.buffer = pBuffer;
-	ovbuf.size = udwSize;
-	ovbuf.pos = 0;
-
-	return sound_ReadTrack( psTrack, ovbuf_callbacks, &ovbuf );
-}
-
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-TRACK* sound_ReadTrackFromFile(TRACK *psTrack, const char *fileName)
+TRACK* sound_LoadTrackFromFile(const char *fileName)
 {
+	TRACK* pTrack;
 	fileInfo fileHandle;
-
-	fileHandle.allowSeeking = TRUE;
 
 	// Use PhysicsFS to open the file
 	fileHandle.fileHandle = PHYSFS_openRead(fileName);
-
 	if (fileHandle.fileHandle == NULL)
 	{
-		free(psTrack);
 		return NULL;
 	}
 
+	fileHandle.allowSeeking = TRUE;
+       	
+	// allocate track, plus the memory required to contain the filename
+	// one malloc call ensures only one free call is required
+	pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(GetLastResourceFilename()) + 1);
+	if (pTrack == NULL)
+	{
+		debug( LOG_ERROR, "sound_ConstructTrack: couldn't allocate memory\n" );
+		abort();
+		return NULL;
+	}
+
+	// Initialize everyting (except for the filename) to zero
+	memset(pTrack, 0, sizeof(TRACK));
+	
+	// Set filename pointer and copy the filename into struct
+	pTrack->pName = (char*)pTrack + sizeof(TRACK);
+	strcpy( pTrack->pName, GetLastResourceFilename() );
+
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
-	psTrack = sound_ReadTrack( psTrack, ovPHYSFS_callbacks, &fileHandle);
+	pTrack = sound_DecodeTrack( pTrack, &fileHandle);
 
 	PHYSFS_close(fileHandle.fileHandle);
-	return psTrack;
+	return pTrack;
 }
 
 //*

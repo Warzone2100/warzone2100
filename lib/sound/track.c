@@ -148,67 +148,6 @@ BOOL sound_SetTrackVals
 	return TRUE;
 }
 
-static inline TRACK *sound_ConstructTrack()
-{
-	// allocate track, plus the memory required to contain the filename
-	// one malloc call ensures only one free call is required
-	TRACK* pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(GetLastResourceFilename()) + 1);
-
-	if (pTrack == NULL)
-	{
-		debug( LOG_ERROR, "sound_ConstructTrack: couldn't allocate memory\n" );
-		abort();
-		return NULL;
-	}
-
-	// Initialize everyting (except for the filename) to zero
-	memset(pTrack, 0, sizeof(TRACK));
-	
-	// Set filename pointer and copy the filename into struct
-	pTrack->pName = (char*)pTrack + sizeof(TRACK);
-	strcpy( pTrack->pName, GetLastResourceFilename() );
-
-	return pTrack;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-TRACK *sound_LoadTrackFromBuffer(char *pBuffer, UDWORD udwSize)
-{
-	//~~~~~~~~~~~~
-	TRACK	*pTrack = sound_ConstructTrack();
-	//~~~~~~~~~~~~
-
-	if (pTrack == NULL)
-	{
-		return NULL;
-	}
-
-	pTrack->bMemBuffer = TRUE;
-
-	return sound_ReadTrackFromBuffer(pTrack, pBuffer, udwSize);
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-TRACK* sound_LoadTrackFromFile(const char *fileName)
-{
-	TRACK	*pTrack = sound_ConstructTrack();
-
-	if ( pTrack == NULL )
-	{
-		return NULL;
-	}
-
-	pTrack->bMemBuffer = FALSE;
-
-	return sound_ReadTrackFromFile(pTrack, fileName);
-}
-
 //*
 // =======================================================================================================================
 // =======================================================================================================================
