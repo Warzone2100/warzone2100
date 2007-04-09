@@ -51,11 +51,6 @@ static BOOL				g_bSystemActive = FALSE;
 static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
 
 //*
-//
-// Function prototypes
-static void sound_CheckSample( AUDIO_SAMPLE *psSample );
-
-//*
 // =======================================================================================================================
 // =======================================================================================================================
 //
@@ -219,16 +214,6 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void sound_CheckSample( AUDIO_SAMPLE *psSample )
-{
-	ASSERT( psSample != NULL, "sound_CheckSample: sample pointer invalid\n" );
-	ASSERT( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED, "sound_CheckSample: sample %u out of range", psSample->iSample );
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 BOOL sound_CheckTrack( SDWORD iTrack )
 {
 	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
@@ -337,10 +322,16 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 //
 void sound_StopTrack( AUDIO_SAMPLE *psSample )
 {
-	sound_CheckSample( psSample );
+	ASSERT( psSample != NULL, "sound_StopTrack: sample pointer invalid\n" );
+	ASSERT( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED, "sound_StopTrack: sample %u out of range", psSample->iSample );
+
 	if ( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED )
 	{
 		sound_StopSample( psSample->iSample );
+	}
+	else
+	{
+		debug( LOG_SOUND, "sound_StopTrack: sample %u out of range\n", psSample->iSample );
 	}
 
 	// do stopped callback
@@ -368,7 +359,9 @@ void sound_PauseTrack( AUDIO_SAMPLE *psSample )
 //
 void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 {
-	sound_CheckSample( psSample );
+	ASSERT( psSample != NULL, "sound_FinishedCallback: sample pointer invalid\n" );
+	ASSERT( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED, "sound_FinishedCallback: sample %u out of range", psSample->iSample );
+
 	if ( g_apTrack[psSample->iTrack] != NULL )
 	{
 		g_apTrack[psSample->iTrack]->iTimeLastFinished = sound_GetGameTime();
