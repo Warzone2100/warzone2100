@@ -88,15 +88,13 @@ audio_list:				audio_list audio_track |
 	 *					int iAudibleRadius )
 	 */
 
-// Giel: TODO: The middle of the three integers should be removed
-// I'm however leaving this since I don't know whether it will affect scripts in an unintended way (i.e. break them)
-audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER INTEGER
+audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, TRUE, &g_iDummy, $4, $6 );
+							audio_SetTrackVals( $2, TRUE, &g_iDummy, $4, $5 );
 						}
-						| AUDIO QTEXT ONESHOT INTEGER INTEGER INTEGER
+						| AUDIO QTEXT ONESHOT INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, FALSE, &g_iDummy, $4, $6 );
+							audio_SetTrackVals( $2, FALSE, &g_iDummy, $4, $5 );
 						}
 						;
 
