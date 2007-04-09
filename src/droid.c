@@ -3768,7 +3768,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 //	BOOL			gotPos;
 //	UDWORD			numIts;
 	DROID_HIT_SIDE	impact_side;
-	
+
 	ASSERT(worldOnMap(x,y), "the build locations are not on the map");
 
 	/*
@@ -6803,7 +6803,10 @@ UWORD repairPowerPoint(DROID *psDroid)
         REPAIR_POWER_FACTOR);
 }
 
-
+/** Callback function for stopped audio tracks
+ *  Sets the droid's current track id to NO_SOUND
+ *  \return TRUE on success, FALSE on failure
+ */
 BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
 {
 	DROID	*psDroid;
@@ -6811,18 +6814,19 @@ BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
 	ASSERT( psSample != NULL,
 		"unitAudioTrackStopped: audio sample pointer invalid\n" );
 
-	if ( psSample->psObj != NULL )
+	psDroid = (DROID*)psSample->psObj;
+	if (psDroid == NULL)
 	{
-		psDroid = (DROID*)psSample->psObj;
-
-        if ( psDroid->type == OBJ_DROID && !psDroid->died )
-		{
-            ASSERT( psDroid != NULL,
-                    "unitAudioTrackStopped: unit pointer invalid\n" );
-			psDroid->iAudioID = NO_SOUND;
-		}
+		debug( LOG_ERROR, "droidAudioTrackStopped: droid pointer invalid\n" );
+		return FALSE;
 	}
 
+	if ( psDroid->type != OBJ_DROID || psDroid->died )
+	{
+		return FALSE;
+	}
+
+	psDroid->iAudioID = NO_SOUND;
 	return TRUE;
 }
 

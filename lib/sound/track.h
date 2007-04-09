@@ -71,27 +71,27 @@ typedef BOOL (* AUDIO_CALLBACK)  ( struct AUDIO_SAMPLE *psSample );
 
 typedef struct AUDIO_SAMPLE
 {
-	SDWORD				iTrack;
-	ALuint				iSample;
-	SDWORD				x, y, z;
-	SDWORD				iLoops;
-	BOOL				bRemove;
-	AUDIO_CALLBACK		pCallback;
-	void				*psObj;
-	struct AUDIO_SAMPLE	*psPrev;
-	struct AUDIO_SAMPLE	*psNext;
+	SDWORD                  iTrack;
+	ALuint                  iSample;        // OpenAL name of the sound source
+	SDWORD                  x, y, z;
+	SDWORD                  iLoops;
+	BOOL                    bRemove;
+	AUDIO_CALLBACK          pCallback;
+	void                    *psObj;
+	struct AUDIO_SAMPLE     *psPrev;
+	struct AUDIO_SAMPLE     *psNext;
 } AUDIO_SAMPLE;
 
 typedef struct TRACK
 {
-	BOOL		bLoop;
-	SDWORD		iVol;
-	SDWORD		iAudibleRadius;
-	SDWORD		iTime;					/* duration in milliseconds */
-	UDWORD		iTimeLastFinished;		/* time last finished in ms */
-	UDWORD		iNumPlaying;
-	ALuint		iBufferName;				/* name of the openal buffer */
-	char		*pName;					// resource name of the track
+	BOOL            bLoop;
+	SDWORD          iVol;
+	SDWORD          iAudibleRadius;
+	SDWORD          iTime;                  // duration in milliseconds
+	UDWORD          iTimeLastFinished;      // time last finished in ms
+	UDWORD          iNumPlaying;
+	ALuint          iBufferName;            // OpenAL name of the buffer
+	char            *pName;                 // resource name of the track
 } TRACK;
 
 /***************************************************************************/
@@ -103,7 +103,7 @@ BOOL	sound_Shutdown(void);
 
 TRACK *	sound_LoadTrackFromFile(const char *fileName);
 BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
-			SDWORD iVol, SDWORD iAudibleRadius);
+	                    SDWORD iVol, SDWORD iAudibleRadius);
 void	sound_ReleaseTrack( TRACK * psTrack );
 
 void	sound_StopTrack( AUDIO_SAMPLE *psSample );
@@ -124,8 +124,7 @@ void	sound_SetCallbackFunction( void * fn );
 
 BOOL	sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued );
 BOOL	sound_Play3DTrack( AUDIO_SAMPLE *psSample );
-void	sound_PlayWithCallback( AUDIO_SAMPLE *psSample, SDWORD iCurTime,
-									AUDIO_CALLBACK pDoneFunc );
+void	sound_PlayWithCallback( AUDIO_SAMPLE *psSample, SDWORD iCurTime, AUDIO_CALLBACK pDoneFunc );
 void	sound_FinishedCallback( AUDIO_SAMPLE *psSample );
 
 BOOL	sound_GetSystemActive( void );
