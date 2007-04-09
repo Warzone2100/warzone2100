@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-06 02:42+0200\n"
+"POT-Creation-Date: 2007-04-09 16:43+0200\n"
 "PO-Revision-Date: 2007-04-06 02:33+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/multiplay.c:2042 src/droid.c:5077
+#: src/multiplay.c:2042 src/droid.c:5088
 msgid "Green"
 msgstr "Groen"
 
@@ -216,56 +216,56 @@ msgstr "Eenheid verloren!"
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:4730
+#: src/droid.c:4741
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr "Groep %d geselecteerd - %d eenhe(e)d(en)"
 
-#: src/droid.c:4742
+#: src/droid.c:4753
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr ""
 
-#: src/droid.c:4754
+#: src/droid.c:4765
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:4758
+#: src/droid.c:4769
 #, c-format
-msgid "Alligning with Group %d - %d Unit(s)"
+msgid "Aligning with Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:5075
+#: src/droid.c:5086
 msgid "Rookie"
 msgstr "Groentje"
 
-#: src/droid.c:5079
+#: src/droid.c:5090
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:5081
+#: src/droid.c:5092
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:5083
+#: src/droid.c:5094
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:5085
+#: src/droid.c:5096
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:5087
+#: src/droid.c:5098
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:5089
+#: src/droid.c:5100
 #, fuzzy
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:5091
+#: src/droid.c:5102
 msgid "Hero"
 msgstr "Held"
 
@@ -413,45 +413,45 @@ msgstr "Bouwmenu zal niet opnieuw openen"
 msgid "Power Accrued"
 msgstr "Energie Toegenomen"
 
-#: src/structure.c:3808
+#: src/structure.c:3810
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:7768
+#: src/structure.c:7773
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr ""
 
-#: src/structure.c:7903 src/structure.c:7960
+#: src/structure.c:7908 src/structure.c:7965
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:8234
+#: src/structure.c:8239
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:8276
+#: src/structure.c:8281
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:8301
+#: src/structure.c:8306
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:8326
+#: src/structure.c:8331
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:8335
+#: src/structure.c:8340
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:8364
+#: src/structure.c:8369
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:8371
+#: src/structure.c:8376
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 

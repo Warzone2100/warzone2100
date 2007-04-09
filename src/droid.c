@@ -4766,7 +4766,7 @@ char	groupInfo[255];
 	}
 	else
 	{
-		sprintf(groupInfo,_("Alligning with Group %d - %d Unit(s)"),groupNumber,selNumSelected(selectedPlayer));
+		sprintf(groupInfo,_("Aligning with Group %d - %d Unit(s)"),groupNumber,selNumSelected(selectedPlayer));
 	}
 		addConsoleMessage(groupInfo,RIGHT_JUSTIFY);
 

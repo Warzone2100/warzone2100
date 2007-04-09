@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-06 02:42+0200\n"
+"POT-Creation-Date: 2007-04-09 16:43+0200\n"
 "PO-Revision-Date: 2007-04-03 22:35+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/multiplay.c:2042 src/droid.c:5077
+#: src/multiplay.c:2042 src/droid.c:5088
 msgid "Green"
 msgstr "Grøn"
 
@@ -211,55 +211,55 @@ msgstr "Enhed tabt!"
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:4730
+#: src/droid.c:4741
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr "Gruppe %d valgt - %d Enheder"
 
-#: src/droid.c:4742
+#: src/droid.c:4753
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr "%d Enheder tildelt gruppe %d"
 
-#: src/droid.c:4754
+#: src/droid.c:4765
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr "Fokuseret på gruppe %d - %d Enheder"
 
-#: src/droid.c:4758
+#: src/droid.c:4769
 #, c-format
-msgid "Alligning with Group %d - %d Unit(s)"
+msgid "Aligning with Group %d - %d Unit(s)"
 msgstr "Korigerede med gruppe %d - %d Enheder"
 
-#: src/droid.c:5075
+#: src/droid.c:5086
 msgid "Rookie"
 msgstr "Menig"
 
-#: src/droid.c:5079
+#: src/droid.c:5090
 msgid "Trained"
 msgstr "Sasjant"
 
-#: src/droid.c:5081
+#: src/droid.c:5092
 msgid "Regular"
 msgstr "Oversasjant"
 
-#: src/droid.c:5083
+#: src/droid.c:5094
 msgid "Professional"
 msgstr "Løjtnant"
 
-#: src/droid.c:5085
+#: src/droid.c:5096
 msgid "Veteran"
 msgstr "Kaptajn"
 
-#: src/droid.c:5087
+#: src/droid.c:5098
 msgid "Elite"
 msgstr "Major"
 
-#: src/droid.c:5089
+#: src/droid.c:5100
 msgid "Special"
 msgstr "Oberst"
 
-#: src/droid.c:5091
+#: src/droid.c:5102
 msgid "Hero"
 msgstr "General"
 
@@ -405,45 +405,45 @@ msgstr "Konstruktionsmenuen vil ikke genåbne"
 msgid "Power Accrued"
 msgstr "Indsalmet energi"
 
-#: src/structure.c:3808
+#: src/structure.c:3810
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:7768
+#: src/structure.c:7773
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr "%s - Forbundet %d af %d"
 
-#: src/structure.c:7903 src/structure.c:7960
+#: src/structure.c:7908 src/structure.c:7965
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:8234
+#: src/structure.c:8239
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:8276
+#: src/structure.c:8281
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:8301
+#: src/structure.c:8306
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:8326
+#: src/structure.c:8331
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:8335
+#: src/structure.c:8340
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:8364
+#: src/structure.c:8369
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:8371
+#: src/structure.c:8376
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
