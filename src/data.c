@@ -987,10 +987,10 @@ static BOOL dataAudioLoad(const char* fileName, void **ppData)
 /* Load an audio file */
 static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 {
-	*ppData = NULL;
-
 	BOOL success;
 	PHYSFS_file* fileHandle;
+
+	*ppData = NULL;
 
 	if ( audio_Disabled() == TRUE )
 	{
