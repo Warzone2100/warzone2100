@@ -131,11 +131,11 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-unused-label"
+	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wextra"
 elif test "x$enable_debug" = "xstrict" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-unused-label -Werror"
+	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-nonnull -Werror"
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wno-unused-label -Wextra"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wextra"
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi

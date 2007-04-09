@@ -57,7 +57,7 @@ static SDWORD		mx,my;				// Last mouse coords
 static SDWORD		wx,wy,ww,wh;		// Position and size of button to place tip by
 static SDWORD		tx,ty,tw,th;		// Position and size of the tip box
 static SDWORD		fx,fy;				// Position of the text
-static char		*pTip;				// Tip text
+static const char *pTip;				// Tip text
 static UDWORD		*pColours;			// The colours for the tool tip
 static WIDGET		*psWidget;			// The button the tip is for
 static int FontID = 0;	// ID for the Ivis Font.
@@ -88,7 +88,7 @@ void widgSetTipColour(W_SCREEN *psScreen, UBYTE red, UBYTE green, UBYTE blue)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, char *pNewTip, int NewFontID,
+void tipStart(WIDGET *psSource, const char *pNewTip, int NewFontID,
 					 UDWORD *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
 {
 	ASSERT( psSource != NULL,

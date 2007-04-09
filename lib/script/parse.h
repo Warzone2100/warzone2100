@@ -364,7 +364,7 @@ extern BOOL scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym
 
 extern BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams);
 
-extern void widgCopyString(char *pDest, char *pSrc);
+extern void widgCopyString(char *pDest, const char *pSrc); // FIXME Duplicate declaration of internal widget function
 
 extern void script_debug(const char *pFormat, ...);
 

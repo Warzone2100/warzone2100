@@ -50,7 +50,7 @@ extern BOOL widgAllocCopyString(char **ppDest, char *pSrc);
 /* Copy one string to another
  * The string to copy will be truncated if it is longer than WIDG_MAXSTR.
  */
-extern void widgCopyString(char *pDest, char *pSrc);
+extern void widgCopyString(char *pDest, const char *pSrc);
 
 /* Return a string to the string heap */
 extern void widgFreeString(char *pStr);

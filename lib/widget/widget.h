@@ -195,9 +195,9 @@ typedef struct _w_butinit
 	/* The basic init entries */
 	WINIT_BASE;
 
-	char		*pText;			// button text
-	char		*pTip;			// Tool tip text
-	int			FontID;			// ID of the IVIS font to use for this widget.
+	const char *pText; // button text
+	const char *pTip; // Tool tip text
+	int FontID; // ID of the IVIS font to use for this widget.
 } W_BUTINIT;
 
 /* Edit box initialisation structure */
@@ -206,9 +206,9 @@ typedef struct _w_edbinit
 	/* The basic init entries */
 	WINIT_BASE;
 
-	char		*pText;			// initial contents of the edit box
-	int			FontID;			// ID of the IVIS font to use for this widget.
-	WIDGET_DISPLAY	pBoxDisplay;		// Optional callback to display the form.
+	const char *pText; // initial contents of the edit box
+	int FontID; // ID of the IVIS font to use for this widget.
+	WIDGET_DISPLAY pBoxDisplay;		// Optional callback to display the form.
 	FONT_DISPLAY pFontDisplay;	// Optional callback to display a string.
 } W_EDBINIT;
 

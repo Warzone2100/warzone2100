@@ -175,7 +175,7 @@ BOOL widgAllocString(char **ppStr)
 /* Copy one string to another
  * The string to copy will be truncated if it is longer than WIDG_MAXSTR.
  */
-void widgCopyString(char *pDest, char *pSrc)
+void widgCopyString(char *pDest, const char *pSrc)
 {
 	/* See if we need to clip the string, then copy */
 	if (strlen(pSrc) >= WIDG_MAXSTR)

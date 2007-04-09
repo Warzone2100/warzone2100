@@ -6,7 +6,6 @@
 
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-AM_CFLAGS = -Wno-nonnull
 BUILT_SOURCES = script_parser.tab.h chat_parser.tab.h
 CLEANFILES = script_parser.tab.h chat_parser.tab.h
 

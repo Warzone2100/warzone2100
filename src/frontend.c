@@ -1585,7 +1585,7 @@ BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style)
 {
 	W_BUTINIT sButInit;
 
-	memset(&sButInit, 0, sizeof(W_BUTINIT ));
+	memset( &sButInit, 0, sizeof(W_BUTINIT) );
 
 	//resume
 	sButInit.formID		= INTINGAMEOP;

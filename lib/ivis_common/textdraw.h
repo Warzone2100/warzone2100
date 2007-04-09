@@ -40,8 +40,8 @@ extern void iV_GetTextExtents(char *String,int *Width,int *y0,int *y1);
 extern int iV_GetTextAboveBase(void);
 extern int iV_GetTextBelowBase(void);
 extern int iV_GetTextLineSize(void);
-extern int iV_GetTextWidth(char *String);
-extern int iV_GetCharWidth(char Char);
+extern int iV_GetTextWidth(const char *String);
+extern int iV_GetCharWidth(const char Char);
 extern void iV_SetTextColour(SWORD Index);
 
 #define ASCII_SPACE			(32)
@@ -76,14 +76,14 @@ extern void pie_StartTextExtents(void);
 extern void pie_FillTextExtents(int BorderThickness,UBYTE r,UBYTE g,UBYTE b,BOOL Alpha);
 extern UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify );
 
-extern void pie_DrawText(char *string,UDWORD x,UDWORD y);
-extern void pie_DrawText270(char *String,int XPos,int YPos);
+extern void pie_DrawText(const char *string, UDWORD x, UDWORD y);
+extern void pie_DrawText270(const char *String, int XPos, int YPos);
 extern void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
 extern void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
 
 void	InitClut24(UWORD *InputClut);
 
-typedef void (*RENDERTEXT_CALLBACK)(char *String, UDWORD X, UDWORD Y);
+typedef void (*RENDERTEXT_CALLBACK)(const char *String, UDWORD X, UDWORD Y);
 // routines used for textdraw
 void SetIndirectDrawTextCallback(RENDERTEXT_CALLBACK routine);
 RENDERTEXT_CALLBACK GetIndirectDrawTextCallback(void);

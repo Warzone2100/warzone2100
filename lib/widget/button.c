@@ -321,7 +321,7 @@ void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext)
 		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
 				 psContext->psForm->aColours,
 				 psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-				 psWidget->width,psWidget->height);
+				 psWidget->width, psWidget->height);
 	}
 }
 
@@ -404,9 +404,9 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			fx = x0 + (psButton->width - fw) / 2;
 			fy = y0 + (psButton->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 			iV_SetTextColour((UWORD)*(pColours + WCOL_LIGHT));
-			iV_DrawText(psButton->pText,fx+1,fy+1);
+			iV_DrawText(psButton->pText, fx+1, fy+1);
 			iV_SetTextColour((UWORD)*(pColours + WCOL_DISABLE));
-			iV_DrawText(psButton->pText,fx,fy);
+			iV_DrawText(psButton->pText, fx, fy);
 		}
 
 		if (psButton->state & WBUTS_HILITE)
@@ -435,7 +435,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			fw = iV_GetTextWidth(psButton->pText);
 			fx = x0 + (psButton->width - fw) / 2;
 			fy = y0 + (psButton->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
-			iV_DrawText(psButton->pText,fx,fy);
+			iV_DrawText(psButton->pText, fx, fy);
 		}
 
 		if (psButton->state & WBUTS_HILITE)

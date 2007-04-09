@@ -179,7 +179,7 @@ int iV_GetTextBelowBase(void)
 
 
 
-int iV_GetTextWidth(char *String)
+int iV_GetTextWidth(const char *String)
 {
 	int Index;
 	int MaxX = 0;
@@ -190,17 +190,13 @@ int iV_GetTextWidth(char *String)
 		Index = *String;
 
 		if(Index != ASCII_COLOURMODE) {
-			if(Index != ASCII_SPACE) {
+			if(Index != ASCII_SPACE) { // FIXME Culprit for images in UTF-8 strings?
 				ImageID = (UWORD)Font->AsciiTable[Index];
-				MaxX += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
-
+				MaxX += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 			} else {
-
 				MaxX += Font->FontSpaceSize;
 			}
 		}
-
-//		DBPRINTF(("letter[%c] currentwidth=%d\n",Index,MaxX));
 		String++;
 	}
 
@@ -208,7 +204,7 @@ int iV_GetTextWidth(char *String)
 }
 
 
-int iV_GetCharWidth(char Char)
+int iV_GetCharWidth(const char Char)
 {
 	int Index;
 	UWORD ImageID;
@@ -220,7 +216,7 @@ int iV_GetCharWidth(char Char)
 	if(Index != ASCII_COLOURMODE) {
 		if(Index != ASCII_SPACE) {
 			ImageID = (UWORD)Font->AsciiTable[Index];
-			Width = iV_GetImageWidth(Font->FontFile,ImageID) + 1;
+			Width = iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 		} else {
 			Width = Font->FontSpaceSize;
 		}
@@ -541,7 +537,7 @@ UDWORD pie_DrawFormattedText( char *String, UDWORD x, UDWORD y, UDWORD Width, UD
 
 static SWORD OldTextColourIndex = -1;
 
-void pie_DrawText(char *string, UDWORD x, UDWORD y)
+void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 {
 	int Index;
 	UWORD ImageID;
@@ -551,7 +547,6 @@ void pie_DrawText(char *string, UDWORD x, UDWORD y)
 	pie_BeginTextRender(Font->FontColourIndex);
 
 	while (*string!=0) {
-
 		Index = *string;
 
 		// Toggle colour mode?
@@ -566,14 +561,14 @@ void pie_DrawText(char *string, UDWORD x, UDWORD y)
 			}
 		} else if(Index == ASCII_SPACE) {
 			x += Font->FontSpaceSize;
-		} else {
+		} else { // FIXME Culprit for images in UTF-8 strings?
 			ImageID = (UWORD)Font->AsciiTable[Index];
-			pie_TextRender(Font->FontFile,ImageID,x,y);
-			x += iV_GetImageWidth(Font->FontFile,ImageID) + 1;
+			pie_TextRender(Font->FontFile, ImageID, x, y);
+			x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 		}
 
-// Don't use this any more, If the text needs to wrap then use
-// pie_DrawFormattedText() defined above.
+		// Don't use this any more, If the text needs to wrap then use
+		// pie_DrawFormattedText() defined above.
 		/* New bit to make text wrap */
 		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
 		{
@@ -638,7 +633,7 @@ void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, in
 	}
 }
 
-void pie_DrawText270(char *String,int XPos,int YPos)
+void pie_DrawText270(const char *String, int XPos, int YPos)
 {
 	int Index;
 	UWORD ImageID;
