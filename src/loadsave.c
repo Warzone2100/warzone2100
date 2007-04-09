@@ -91,7 +91,7 @@ void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
 BOOL closeLoadSave				(void);
 BOOL runLoadSave				(BOOL bResetMissionWidgets);
 BOOL displayLoadSave			(void);
-static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, char *title);
+static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
 static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -127,7 +127,7 @@ BOOL saveMidMission(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, char *title)
+BOOL addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, const char *title)
 {
 BOOL bLoad;
 
@@ -154,7 +154,7 @@ BOOL bLoad;
 //****************************************************************************************
 // Load menu/save menu?
 //*****************************************************************************************
-static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExtension, char *title)
+static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;

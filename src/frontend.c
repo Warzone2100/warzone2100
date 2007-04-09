@@ -74,46 +74,22 @@ BOOL			bUsingSlider   = FALSE;
 // ////////////////////////////////////////////////////////////////////////////
 // Function Definitions
 
-void		processFrontendSnap		(BOOL bHideCursor);
-void		changeTitleMode			(tMode mode);
 BOOL		startTitleMenu			(void);
-BOOL		runTitleMenu			(void);
 void		startSinglePlayerMenu	(void);
-BOOL		runSinglePlayerMenu		(void);
-//BOOL		runDemoMenu				(void);
-//BOOL		startDemoMenu			(void);
 BOOL		startTutorialMenu		(void);
-BOOL		runTutorialMenu			(void);
 BOOL		startMultiPlayerMenu	(void);
-BOOL		runMultiPlayerMenu		(void);
 BOOL		startOptionsMenu		(void);
-BOOL		runOptionsMenu			(void);
 BOOL		startGameOptionsMenu	(void);
-BOOL		runGameOptionsMenu		(void);
 BOOL		startGameOptions2Menu	(void);
-BOOL		runGameOptions2Menu		(void);
 BOOL		startGameOptions3Menu	(void);
-BOOL		runGameOptions3Menu		(void);
-//BOOL		startVideoOptionsMenu	(void);
-//BOOL		runVideoOptionsMenu		(void);
-//BOOL		startGraphicsOptionsMenu(void);
-//BOOL		runGraphicsptionsMenu	(void);
 
-void		addTopForm				(void);
 void		removeTopForm			(void);
-void		addBottomForm			(void);
 void		removeBottomForm		(void);
-void		addBackdrop				(void);
 void		removeBackdrop			(void);
 
-void		addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt,BOOL bAlignLeft,BOOL bGrey);
 void 		addText					(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State);
-void		addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt);
-void		addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID);
 
-void		displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
@@ -1332,7 +1308,7 @@ void removeTopForm( void )
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt,BOOL bAlign,BOOL bGrey)
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bAlign,BOOL bGrey)
 {
 	W_BUTINIT		sButInit;
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -1396,7 +1372,7 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt)
+void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 {
 	W_LABINIT	sLabInit;
 	memset(&sLabInit, 0, sizeof(W_LABINIT));

@@ -38,7 +38,7 @@
 #include "visibility.h"
 #include "map.h"
 #include "drive.h"
-//#include "droid.h"
+#include "droid.h"
 //#include "objmem.h"
 #include "hci.h"
 #include "lib/gamelib/gtime.h"
@@ -134,15 +134,8 @@ DROID	*psLastDroidHit;
 void	groupConsoleInformOfSelection( UDWORD groupNumber );
 void	groupConsoleInformOfCreation( UDWORD groupNumber );
 void	groupConsoleInformOfCentering( UDWORD groupNumber );
-void	setSelectedGroup(UDWORD groupNumber);
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
 void	droidUpdateRecoil( DROID *psDroid );
-BOOL activateGroup(UDWORD playerNumber, UDWORD groupNumber);
-BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
-void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid);
-BOOL	pickATile2(UDWORD *x, UDWORD *y, UDWORD numIterations);
 UDWORD	getBound(UDWORD level);
-char	*getDroidNameForRank(UDWORD rank);
 
 
 /*time to move to a new location (when building foundation) */
@@ -2762,9 +2755,9 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 }
 
 /* load the Droid stats for the components from the Access database */
-BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize)
+BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 {
-	char				*pStartDroidData;
+	const char				*pStartDroidData;
         int cnt;
 	UDWORD				NumDroids = 0, i, player;
 	char				componentName[MAX_NAME_SIZE];
@@ -3315,9 +3308,9 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 
 //Load the weapons assigned to Droids in the Access database
 //Watermelon:reads 3 WeaponName for now?
-BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize)
+BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
-	char				*pStartWeaponData;
+	const char			*pStartWeaponData;
 	UDWORD				NumWeapons = 0, i, player;
 	char				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
 	//Watermelon:TODO:fix this temp naming one day,WeaponName[DROID_MAXWEAPS][MAX_NAME_SIZE] causes stack corruption
@@ -5030,107 +5023,64 @@ BOOL selectDroidByID(UDWORD id, UDWORD player)
 	return FALSE;
 }
 
+typedef struct
+{
+	UDWORD      kills;  // required minimum amount of kills to reach this rank
+	const char* name;   // name of this rank
+} RANK_MAP;
+
+static const RANK_MAP arrRank[] =
+{
+	{0,   _("Rookie")},
+	{4,   _("Green")},
+	{8,   _("Trained")},
+	{16,  _("Regular")},
+	{32,  _("Professional")},
+	{64,  _("Veteran")},
+	{128, _("Elite")},
+	{256, _("Special")},
+	{512, _("Hero")},
+};
+
 UDWORD	getDroidLevel(DROID *psDroid)
 {
+	UDWORD i;
+	static const UDWORD end = sizeof(arrRank) / sizeof(RANK_MAP);
+
 	if (psDroid->droidType == DROID_COMMAND ||
 		psDroid->droidType == DROID_SENSOR)
 	{
 		return cmdDroidGetLevel(psDroid);
 	}
-	else if(psDroid->numKills <4)
+
+	// Search through the array of ranks until one is found
+	// which requires more kills than the droid has.
+	// Then fall back to the previous rank.
+	for (i = 1; i != end; ++i)
 	{
-		return(0);
+		if (psDroid->numKills < arrRank[i].kills)
+		{
+			return i - 1;
+		}
 	}
-	else if(psDroid->numKills<8)
-	{
-		return(1);
-	}
-	else if(psDroid->numKills<16)
-	{
-		return(2);
-	}
-	else if(psDroid->numKills<32)
-	{
-		return(3);
-	}
-	else if(psDroid->numKills<64)
-	{
-		return(4);
-	}
-	else if(psDroid->numKills<128)
-	{
-		return(5);
-	}
-	else if(psDroid->numKills<256)
-	{
-		return(6);
-	}
-	else if(psDroid->numKills<512)
-	{
-		return(7);
-	}
-	else
-	{
-		return(8);
-	}
+
+	// If the criteria of the last rank are met, then select the last one
+	return end - 1;
 }
 
 
 
-char	*getDroidNameForRank(UDWORD rank)
+const char *getDroidNameForRank(UDWORD rank)
 {
-
-switch(rank)
-{
-	case 0:
-		return _("Rookie");
-	case 1:
-		return _("Green");
-	case 2:
-		return _("Trained");
-	case 3:
-		return _("Regular");
-	case 4:
-		return _("Professional");
-	case 5:
-		return _("Veteran");
-	case 6:
-		return _("Elite");
-	case 7:
-		return _("Special");
-	case 8:
-		return _("Hero");
-	}
-
-	return NULL;
+	ASSERT( rank < (sizeof(arrRank) / sizeof(RANK_MAP)),
+	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %d ranks\n", rank, (sizeof(arrRank) / sizeof(RANK_MAP)) );
+	
+	return arrRank[rank].name;
 }
 
-char	*getDroidLevelName(DROID *psDroid)
+const char *getDroidLevelName(DROID *psDroid)
 {
 	return(getDroidNameForRank(getDroidLevel(psDroid)));
-	/*
-	switch (getDroidLevel(psDroid))
-	{
-	case 0:
-		return _("Rookie");
-	case 1:
-		return _("Green");
-	case 2:
-		return _("Trained");
-	case 3:
-		return _("Regular");
-	case 4:
-		return _("Professional");
-	case 5:
-		return _("Veteran");
-	case 6:
-		return _("Elite");
-	case 7:
-		return _("Special");
-	case 8:
-		return _("Hero");
-	}
-	*/
 }
 
 UDWORD	getNumDroidsForLevel(UDWORD	level)

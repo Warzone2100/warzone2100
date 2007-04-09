@@ -217,7 +217,7 @@ BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID)
 
 
 /* Return the ID number for an ID string */
-BOOL strresGetIDNum(STR_RES *psRes, char *pIDStr, UDWORD *pIDNum)
+BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 {
 	STR_ID	*psID;
 

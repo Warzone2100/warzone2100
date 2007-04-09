@@ -90,8 +90,8 @@ extern void	removeDroidBase(DROID *psDel);
 // this only does anything if the naybor list is out of date
 extern void droidGetNaybors(DROID *psDroid);
 
-extern BOOL loadDroidTemplates(char *pDroidData, UDWORD bufferSize);
-extern BOOL loadDroidWeapons(char *pWeaponData, UDWORD bufferSize);
+extern BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
+extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
 
 /*initialise the template build and power points */
 extern void initTemplatePoints(void);
@@ -244,7 +244,7 @@ extern BOOL selectDroidByID(UDWORD id, UDWORD player);
 
 /* Droid experience stuff */
 extern UDWORD	getDroidLevel(DROID *psDroid);
-char	*getDroidLevelName(DROID *psDroid);
+extern const char *getDroidLevelName(DROID *psDroid);
 
 // Get a droid's name.
 extern char *droidGetName(DROID *psDroid);
@@ -378,7 +378,7 @@ direct fire. Also check numVTOLattackRuns for the weapon is not zero - return
 TRUE if valid weapon*/
 extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 
-extern char	*getDroidNameForRank(UDWORD rank);
+extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
 extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);

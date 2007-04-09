@@ -1537,7 +1537,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 /* set SHOWTEMPLATENAME to 0 to show template components in edit box */
 #define SHOWTEMPLATENAME	0
 
-static char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
+static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	COMP_BASE_STATS		*psStats;
 	char				*pStr;

@@ -316,9 +316,9 @@ BOOL statsShutDown(void)
 
 
 /* Return the number of newlines in a file buffer */
-UDWORD numCR(char *pFileBuffer, UDWORD fileSize)
+UDWORD numCR(const char *pFileBuffer, UDWORD fileSize)
 {
-	UDWORD  lines=0;//, filePos=0;
+	UDWORD  lines=0;
 
 	while (fileSize-- > 0)
 	{

@@ -581,7 +581,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 
 
 /* Set the current string for the edit box */
-void editBoxSetString(W_EDITBOX *psWidget, char *pText)
+void editBoxSetString(W_EDITBOX *psWidget, const char *pText)
 {
 	ASSERT( psWidget != NULL,
 		"editBoxSetString: Invalid edit box pointer" );

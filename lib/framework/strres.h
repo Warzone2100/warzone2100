@@ -71,7 +71,7 @@ extern void strresReleaseIDStrings(STR_RES *psRes);
 extern BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID);
 
 /* Return the ID number for an ID string */
-extern BOOL strresGetIDNum(STR_RES *psRes, char *pIDStr, UDWORD *pIDNum);
+extern BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum);
 
 /* Return the stored ID string that matches the string passed in */
 extern BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID);

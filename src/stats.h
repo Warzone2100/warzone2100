@@ -150,7 +150,7 @@ extern UWORD weaponROF(WEAPON_STATS *psStat);
 *		Load stats functions
 *******************************************************************************/
 /* Return the number of newlines in a file buffer */
-extern UDWORD numCR(char *pFileBuffer, UDWORD fileSize);
+extern UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
 
 /*Load the weapon stats from the file exported from Access*/
 extern BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize);

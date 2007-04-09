@@ -148,7 +148,7 @@ static UDWORD hideTime=0;
 // widget functions
 BOOL		addMultiBut					(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD width, UDWORD height,UDWORD tipres,UDWORD norm, UDWORD hi,BOOL showmouseover);
 BOOL		addMultiEditBox				(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD tip, char tipres[128],UDWORD icon,UDWORD iconid);
-static void addBlueForm					(UDWORD parent,UDWORD id,char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
+static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
 void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
@@ -807,7 +807,7 @@ void startGameFind(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void addBlueForm(UDWORD parent,UDWORD id,char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
+static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
 {
 	W_FORMINIT	sFormInit;
 	W_LABINIT	sLabInit;

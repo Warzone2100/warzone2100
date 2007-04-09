@@ -1292,7 +1292,7 @@ char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 
 
 /* Set the text in a widget */
-void widgSetString(W_SCREEN *psScreen, UDWORD id, char *pText)
+void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 {
 	WIDGET	*psWidget;
 
