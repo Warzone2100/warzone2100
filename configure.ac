@@ -123,16 +123,13 @@ fi
 
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
-# -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
-	AS_HELP_STRING([--enable-debug[=strict/yes/relaxed/no]],[Compile debug version [no]]),
+	AS_HELP_STRING([--enable-debug[=yes/relaxed/no]],[Compile debug version [no]]),
 	[ enable_debug=$enableval ], [ enable_debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wextra -Werror-implicit-function-declaration"
-elif test "x$enable_debug" = "xstrict" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-nonnull -Werror"
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wextra"
