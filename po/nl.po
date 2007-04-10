@@ -241,10 +241,9 @@ msgid "Rookie"
 msgstr "Groentje"
 
 #: src/droid.c:5028
-#, fuzzy
 msgctxt "rank"
 msgid "Green"
-msgstr "Groen"
+msgstr ""
 
 #: src/droid.c:5029
 msgid "Trained"
