@@ -2034,34 +2034,32 @@ BOOL recvBeacon(NETMSG *pMsg)
 	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
 }
 
+static const char* playerColors[] =
+{
+	N_("Green"),
+	N_("Orange"),
+	N_("Grey"),
+	N_("Black"),
+	N_("Red"),
+	N_("Blue"),
+	N_("Pink"),
+	N_("Cyan"),
+};
+
 char *getPlayerColourName(SDWORD player)
 {
-	switch(getPlayerColour(player))
+	static const unsigned int end = sizeof(playerColors) / sizeof(const char*);
+
+	ASSERT(player < end,
+	       "getPlayerColourName: player number (%d) exceeds maximum (%d)\n", player, end - 1);
+
+	if (player < end)
 	{
-	case 0:
-		strcpy(tempString,_("Green"));
-		break;
-	case 1:
-		strcpy(tempString,_("Orange"));
-		break;
-	case 2:
-		strcpy(tempString,_("Grey"));
-		break;
-	case 3:
-		strcpy(tempString,_("Black"));
-		break;
-	case 4:
-		strcpy(tempString,_("Red"));
-		break;
-	case 5:
-		strcpy(tempString,_("Blue"));
-		break;
-	case 6:
-		strcpy(tempString,_("Pink"));
-		break;
-	case 7:
-		strcpy(tempString,_("Cyan"));
-		break;
+		strcpy(tempString, gettext(playerColors[player]));
+	}
+	else
+	{
+		tempString[0] = '0';
 	}
 
 	return tempString;

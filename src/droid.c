@@ -5031,15 +5031,15 @@ typedef struct
 
 static const RANK_MAP arrRank[] =
 {
-	{0,   _("Rookie")},
-	{4,   _("Green")},
-	{8,   _("Trained")},
-	{16,  _("Regular")},
-	{32,  _("Professional")},
-	{64,  _("Veteran")},
-	{128, _("Elite")},
-	{256, _("Special")},
-	{512, _("Hero")},
+	{0,   N_("Rookie")},
+	{4,   N_("Green")},
+	{8,   N_("Trained")},
+	{16,  N_("Regular")},
+	{32,  N_("Professional")},
+	{64,  N_("Veteran")},
+	{128, N_("Elite")},
+	{256, N_("Special")},
+	{512, N_("Hero")},
 };
 
 UDWORD	getDroidLevel(DROID *psDroid)
@@ -5074,8 +5074,8 @@ const char *getDroidNameForRank(UDWORD rank)
 {
 	ASSERT( rank < (sizeof(arrRank) / sizeof(RANK_MAP)),
 	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %d ranks\n", rank, (sizeof(arrRank) / sizeof(RANK_MAP)) );
-	
-	return arrRank[rank].name;
+
+	return gettext(arrRank[rank].name);
 }
 
 const char *getDroidLevelName(DROID *psDroid)

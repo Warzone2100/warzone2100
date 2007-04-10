@@ -40,6 +40,11 @@
 
 #include "gettext.h"
 #define _(string) gettext(string)
+#ifdef gettext_noop
+# define N_(String) gettext_noop (String)
+#else
+# define N_(String) (String)
+#endif
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(
