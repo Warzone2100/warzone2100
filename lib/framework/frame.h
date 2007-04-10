@@ -27,9 +27,21 @@
 
 /* This one must be invoked *after* platform.h to get _GNU_SOURCE! */
 #include <string.h>
+#include <locale.h>
+
+#include "gettext.h"
+#define _(String) gettext(String)
+#define N_(String) gettext_noop(String)
+
+// Context sensitive strings
+#define P_(Context, String) pgettext(Context, String)
+// Non literal context sensitive strings
+#define PE_(Context, String) pgettext_expr(Context, String)
+// Make xgettext recognize the context
+#define NP_(Context, String) gettext_noop(String)
+
 
 #include "macros.h"
-
 #include "types.h"
 #include "debug.h"
 #include "mem.h"
@@ -40,22 +52,6 @@
 #include "fractions.h"
 #include "trig.h"
 
-/** gettext stuff
- */
-#include "gettext.h"
-#define _(string) gettext(string)
-#define N_(String) gettext_noop (String)
-
-extern const char *skip_intl_qualifier_prefix(const char *str);
-
-#define Q_(String) skip_intl_qualifier_prefix(gettext(String))
-/* This provides an untranslated version of Q_ that allows the caller to
- * get access to the original string.  This may be needed for comparisons,
- * for instance. */
-#define Qn_(String) skip_intl_qualifier_prefix(gettext_noop(String))
-
-/** End of gettext stuff
- */
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(

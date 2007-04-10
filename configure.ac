@@ -24,7 +24,7 @@ fi
 
 AC_GNU_SOURCE
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.14])
+AM_GNU_GETTEXT_VERSION([0.15])
 
 
 # Check for Windows.

@@ -2,7 +2,6 @@
 lib/framework/debug.c
 lib/framework/configfile.c
 lib/framework/SDL_framerate.c
-lib/framework/fcintl.c
 lib/framework/frameresource.c
 lib/framework/frame.c
 lib/framework/heap.c

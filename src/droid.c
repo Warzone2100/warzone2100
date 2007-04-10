@@ -25,11 +25,7 @@
  */
 
 #include <stdio.h>
-#include <string.h>
 
-/* Droid damage printf's */
-//#define DEBUG_GROUP1
-//#include <assert.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 
@@ -39,7 +35,6 @@
 #include "map.h"
 #include "drive.h"
 #include "droid.h"
-//#include "objmem.h"
 #include "hci.h"
 #include "lib/gamelib/gtime.h"
 #include "game.h"
@@ -63,9 +58,7 @@
 #include "function.h"
 #include "lighting.h"
 #include "gateway.h"
-
-#include "multiplay.h"		//ajl
-
+#include "multiplay.h"
 #include "formationdef.h"
 #include "formation.h"
 #include "warcam.h"
@@ -5032,20 +5025,14 @@ typedef struct
 static const RANK_MAP arrRank[] =
 {
 	{0,   N_("Rookie")},
-
-	// TRANSLATORS: We are using a markup of
-	// "?qualifier:TRANSLATEABLE STRING" here. "qualifier" here is an
-	// additional hint to the translator (i.e. you), as to how to best
-	// translate this.
-	{4,   N_("?rank:Green")},
-
+	{4,   NP_("rank", "Green")},
 	{8,   N_("Trained")},
 	{16,  N_("Regular")},
 	{32,  N_("Professional")},
 	{64,  N_("Veteran")},
 	{128, N_("Elite")},
 	{256, N_("Special")},
-	{512, N_("Hero")},
+	{512, N_("Hero")}
 };
 
 UDWORD	getDroidLevel(DROID *psDroid)
@@ -5081,7 +5068,7 @@ const char *getDroidNameForRank(UDWORD rank)
 	ASSERT( rank < (sizeof(arrRank) / sizeof(RANK_MAP)),
 	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %d ranks\n", rank, (sizeof(arrRank) / sizeof(RANK_MAP)) );
 
-	return Q_(arrRank[rank].name);
+	return PE_("rank", arrRank[rank].name);
 }
 
 const char *getDroidLevelName(DROID *psDroid)

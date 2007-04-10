@@ -1,13 +1,13 @@
 # translation of da.po to Dansk
 # Copyright (C) YEAR Warzone Resurrection Project
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Christian Vest Hansen <karmazilla@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-10 16:01+0200\n"
+"POT-Creation-Date: 2007-04-10 19:19+0200\n"
 "PO-Revision-Date: 2007-04-03 22:35+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -48,16 +48,16 @@ msgstr "Pink"
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:2021
+#: src/display.c:2019
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrøn."
 
-#: src/display.c:2179
+#: src/display.c:2177
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/display.c:2424
+#: src/display.c:2422
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
@@ -203,71 +203,69 @@ msgstr "Fortsæt"
 msgid "Load Saved Game"
 msgstr "Indlæs gemt spil"
 
-#: src/droid.c:313 src/droid.c:369
+#: src/droid.c:306 src/droid.c:362
 msgid "Unit Lost!"
 msgstr "Enhed tabt!"
 
-#: src/droid.c:2487
+#: src/droid.c:2480
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:4734
+#: src/droid.c:4727
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr "Gruppe %d valgt - %d Enheder"
 
-#: src/droid.c:4746
+#: src/droid.c:4739
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr "%d Enheder tildelt gruppe %d"
 
-#: src/droid.c:4758
+#: src/droid.c:4751
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr "Fokuseret på gruppe %d - %d Enheder"
 
-#: src/droid.c:4762
+#: src/droid.c:4755
 #, c-format
 msgid "Aligning with Group %d - %d Unit(s)"
 msgstr "Korigerede med gruppe %d - %d Enheder"
 
-#: src/droid.c:5034
+#: src/droid.c:5027
 msgid "Rookie"
 msgstr "Menig"
 
-#. TRANSLATORS: We are using a markup of
-#. "?qualifier:TRANSLATEABLE STRING" here. "qualifier" here is an
-#. additional hint to the translator (i.e. you), as to how to best
-#. translate this.
-#: src/droid.c:5040
-msgid "?rank:Green"
-msgstr ""
+#: src/droid.c:5028
+#, fuzzy
+msgctxt "rank"
+msgid "Green"
+msgstr "Grøn"
 
-#: src/droid.c:5042
+#: src/droid.c:5029
 msgid "Trained"
 msgstr "Sasjant"
 
-#: src/droid.c:5043
+#: src/droid.c:5030
 msgid "Regular"
 msgstr "Oversasjant"
 
-#: src/droid.c:5044
+#: src/droid.c:5031
 msgid "Professional"
 msgstr "Løjtnant"
 
-#: src/droid.c:5045
+#: src/droid.c:5032
 msgid "Veteran"
 msgstr "Kaptajn"
 
-#: src/droid.c:5046
+#: src/droid.c:5033
 msgid "Elite"
 msgstr "Major"
 
-#: src/droid.c:5047
+#: src/droid.c:5034
 msgid "Special"
 msgstr "Oberst"
 
-#: src/droid.c:5048
+#: src/droid.c:5035
 msgid "Hero"
 msgstr "General"
 

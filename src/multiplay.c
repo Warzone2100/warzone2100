@@ -2043,7 +2043,7 @@ static const char* playerColors[] =
 	N_("Red"),
 	N_("Blue"),
 	N_("Pink"),
-	N_("Cyan"),
+	N_("Cyan")
 };
 
 char *getPlayerColourName(SDWORD player)

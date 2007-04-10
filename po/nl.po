@@ -2,12 +2,12 @@
 # Copyright (C) 2007 Warzone Resurrection Project
 # This file is distributed under the same license as the Warzone 2100 package.
 # Giel van Schijndel <me@mortis.eu>, 2007.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-10 16:01+0200\n"
+"POT-Creation-Date: 2007-04-10 19:19+0200\n"
 "PO-Revision-Date: 2007-04-06 02:33+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -48,16 +48,16 @@ msgstr "Roze"
 msgid "Cyan"
 msgstr "Cyaan"
 
-#: src/display.c:2021
+#: src/display.c:2019
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan niet bouwen. Oliebron brand."
 
-#: src/display.c:2179
+#: src/display.c:2177
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr ""
 
-#: src/display.c:2424
+#: src/display.c:2422
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -207,73 +207,71 @@ msgstr "Ga door met Spel"
 msgid "Load Saved Game"
 msgstr "Laden Opgeslagen Spel"
 
-#: src/droid.c:313 src/droid.c:369
+#: src/droid.c:306 src/droid.c:362
 #, fuzzy
 msgid "Unit Lost!"
 msgstr "Eenheid verloren!"
 
-#: src/droid.c:2487
+#: src/droid.c:2480
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:4734
+#: src/droid.c:4727
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr "Groep %d geselecteerd - %d eenhe(e)d(en)"
 
-#: src/droid.c:4746
+#: src/droid.c:4739
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr ""
 
-#: src/droid.c:4758
+#: src/droid.c:4751
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:4762
+#: src/droid.c:4755
 #, c-format
 msgid "Aligning with Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:5034
+#: src/droid.c:5027
 msgid "Rookie"
 msgstr "Groentje"
 
-#. TRANSLATORS: We are using a markup of
-#. "?qualifier:TRANSLATEABLE STRING" here. "qualifier" here is an
-#. additional hint to the translator (i.e. you), as to how to best
-#. translate this.
-#: src/droid.c:5040
-msgid "?rank:Green"
-msgstr ""
+#: src/droid.c:5028
+#, fuzzy
+msgctxt "rank"
+msgid "Green"
+msgstr "Groen"
 
-#: src/droid.c:5042
+#: src/droid.c:5029
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:5043
+#: src/droid.c:5030
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:5044
+#: src/droid.c:5031
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:5045
+#: src/droid.c:5032
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:5046
+#: src/droid.c:5033
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:5047
+#: src/droid.c:5034
 #, fuzzy
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:5048
+#: src/droid.c:5035
 msgid "Hero"
 msgstr "Held"
 
