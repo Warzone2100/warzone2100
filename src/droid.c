@@ -3335,7 +3335,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 	pStartWeaponData = pWeaponData;
 
 	NumWeapons = numCR(pWeaponData, bufferSize);
-	
+
 	ASSERT(NumWeapons>0, "template without weapons");
 
 	for (i=0; i < NumWeapons; i++)
@@ -3961,7 +3961,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->bTargetted = FALSE;
 	psDroid->timeLastHit = UDWORD_MAX;
 	psDroid->lastHitWeapon = UDWORD_MAX;	// no such weapon
-	
+
 	// it was never drawn before
 	psDroid->sDisplay.frameNumber = 0;
 
@@ -5031,21 +5031,15 @@ typedef struct
 
 static const RANK_MAP arrRank[] =
 {
-	{0,   N_("Rookie")},
-
-	// TRANSLATORS: We are using a markup of
-	// "?qualifier:TRANSLATEABLE STRING" here. "qualifier" here is an
-	// additional hint to the translator (i.e. you), as to how to best
-	// translate this.
-	{4,   N_("?rank:Green")},
-
-	{8,   N_("Trained")},
-	{16,  N_("Regular")},
-	{32,  N_("Professional")},
-	{64,  N_("Veteran")},
-	{128, N_("Elite")},
-	{256, N_("Special")},
-	{512, N_("Hero")},
+	{0,   "Rookie"},
+	{4,   "?rank:Green"},
+	{8,   "Trained"},
+	{16,  "Regular"},
+	{32,  "Professional"},
+	{64,  "Veteran"},
+	{128, "Elite"},
+	{256, "Special"},
+	{512, "Hero"},
 };
 
 UDWORD	getDroidLevel(DROID *psDroid)

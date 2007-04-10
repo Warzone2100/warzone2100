@@ -16,16 +16,12 @@
 	You should have received a copy of the GNU General Public License
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
-
-	$Revision$
-	$Id$
-	$HeadURL$
 */
 
 #include "frame.h"
 #include <string.h>
 
-/********************************************************************** 
+/**********************************************************************
 Some strings are ambiguous for translation.  For example, "Game" is
 something you play (like Freeciv!) or animals that can be hunted.
 To distinguish strings for translation, we qualify them with a prefix
