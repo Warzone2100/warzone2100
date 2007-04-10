@@ -177,7 +177,6 @@ extern UDWORD	NEThashBuffer(char *pData, UDWORD size);
 extern WZ_DECL_DEPRECATED BOOL NETcheckRegistryEntries	(char *name,char *guid);
 extern WZ_DECL_DEPRECATED BOOL NETsetRegistryEntries	(char *name,char *guid,char *file,char *cline,char *path,char *cdir);
 extern WZ_DECL_DEPRECATED BOOL NETconnectToLobby		(LPNETPLAY lpNetPlay);
-//#include "netlobby.h"	// more functions to provide lobby facilities.
 
 // Some shortcuts to help you along!
 /* FIXME: This is _not_ portable! Bad, Pumpkin, bad! - Per */
