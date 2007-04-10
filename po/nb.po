@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-10 14:35+0200\n"
+"POT-Creation-Date: 2007-04-10 16:01+0200\n"
 "PO-Revision-Date: 2007-03-24 17:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -235,12 +235,12 @@ msgstr ""
 msgid "Rookie"
 msgstr ""
 
-#. TRANSLATORS: "Green" here indicates a rank name, not the color.
-#. Please translate without the "_rank" suffix.
-#. This combined with the code in getDroidNameForRank is a hack
-#. to solve the ambiguity of the word "Green".
+#. TRANSLATORS: We are using a markup of
+#. "?qualifier:TRANSLATEABLE STRING" here. "qualifier" here is an
+#. additional hint to the translator (i.e. you), as to how to best
+#. translate this.
 #: src/droid.c:5040
-msgid "Green_rank"
+msgid "?rank:Green"
 msgstr ""
 
 #: src/droid.c:5042

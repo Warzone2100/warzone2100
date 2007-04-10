@@ -73,14 +73,14 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 			}
 			else
 			{
-				sprintf( resultMessage, "Failed to save dump file to '%s' (error %d)", miniDumpPath, GetLastError() );
+				sprintf( resultMessage, "Failed to save dump file to '%s' (error %d)", miniDumpPath, (int)GetLastError() );
 				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 			}
 			CloseHandle(miniDumpFile);
 		}
 		else
 		{
-			sprintf( resultMessage, "Failed to create dump file '%s' (error %d)", miniDumpPath, GetLastError() );
+			sprintf( resultMessage, "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError() );
 			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 		}
 	}

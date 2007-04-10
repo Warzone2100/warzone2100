@@ -4,6 +4,7 @@ include $(MAKERULES)/configure.mk
 SRC=configfile.c \
 	debug.c \
 	exceptionhandler.c \
+	fcintl.c \
 	frame.c \
 	frameresource.c \
 	heap.c \

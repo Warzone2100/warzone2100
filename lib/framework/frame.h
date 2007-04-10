@@ -40,6 +40,8 @@
 #include "fractions.h"
 #include "trig.h"
 
+/** gettext stuff
+ */
 #include "gettext.h"
 #define _(string) gettext(string)
 #ifdef gettext_noop
@@ -47,6 +49,17 @@
 #else
 # define N_(String) (String)
 #endif
+
+extern const char *skip_intl_qualifier_prefix(const char *str);
+
+#define Q_(String) skip_intl_qualifier_prefix(gettext(String))
+/* This provides an untranslated version of Q_ that allows the caller to
+ * get access to the original string.  This may be needed for comparisons,
+ * for instance. */
+#define Qn_(String) skip_intl_qualifier_prefix(gettext_noop(String))
+
+/** End of gettext stuff
+ */
 
 /* Initialise the frame work library */
 extern BOOL frameInitialise(

@@ -5033,11 +5033,11 @@ static const RANK_MAP arrRank[] =
 {
 	{0,   N_("Rookie")},
 
-	// TRANSLATORS: "Green" here indicates a rank name, not the color.
-	//              Please translate without the "_rank" suffix.
-	// This combined with the code in getDroidNameForRank is a hack 
-	// to solve the ambiguity of the word "Green".
-	{4,   N_("Green_rank")},
+	// TRANSLATORS: We are using a markup of
+	// "?qualifier:TRANSLATEABLE STRING" here. "qualifier" here is an
+	// additional hint to the translator (i.e. you), as to how to best
+	// translate this.
+	{4,   N_("?rank:Green")},
 
 	{8,   N_("Trained")},
 	{16,  N_("Regular")},
@@ -5081,21 +5081,7 @@ const char *getDroidNameForRank(UDWORD rank)
 	ASSERT( rank < (sizeof(arrRank) / sizeof(RANK_MAP)),
 	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %d ranks\n", rank, (sizeof(arrRank) / sizeof(RANK_MAP)) );
 
-	// Hack to circumvent ambiguity of the word "Green" (which is being used as a rank name as well as the color)
-	if (rank == 1)
-	{
-		const char* gettextString = gettext(arrRank[rank].name);
-		if (strcmp("Green_rank", gettextString) == 0)
-		{
-			return "Green";
-		}
-		else
-		{
-			return gettextString;
-		}
-	}
-
-	return gettext(arrRank[rank].name);
+	return Q_(arrRank[rank].name);
 }
 
 const char *getDroidLevelName(DROID *psDroid)
