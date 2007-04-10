@@ -22,8 +22,6 @@
 
 extern iTexture tilesPCX;
 
-int makeTileTextures(void);
-int remakeTileTextures(void);
 void makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src);
 void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src);
 BOOL	getTileRadarColours(void);
