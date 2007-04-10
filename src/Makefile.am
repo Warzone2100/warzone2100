@@ -10,7 +10,7 @@ BUILT_SOURCES = scriptvals_parser.tab.h
 CLEANFILES = scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
-noinst_HEADERS = action.h advvis.h ai.h aidef.h aiexperience.h anim_id.h \
+noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	arrow.h astar.h atmos.h base.h bridge.h bucket3d.h buildpos.h \
 	bullet.h bulletdef.h cdspan.h cheat.h clparse.h cluster.h cmddroid.h \
 	cmddroiddef.h combat.h component.h configuration.h console.h csnap.h data.h \

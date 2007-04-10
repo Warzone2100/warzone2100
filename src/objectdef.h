@@ -30,7 +30,6 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/pietypes.h"
 
-#include "aidef.h"
 #include "functiondef.h"
 #include "movedef.h"
 #include "statsdef.h"

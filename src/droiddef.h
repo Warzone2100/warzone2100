@@ -237,8 +237,6 @@ typedef struct _droid
 	/* Movement control data */
 	MOVE_CONTROL		sMove;
 //	void				*lastTile;
-	/* AI data */
-//	AI_DATA				sAI;
 	/* anim data */
 	ANIM_OBJECT			*psCurAnim;
 	SDWORD				iAudioID;
