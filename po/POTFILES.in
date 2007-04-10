@@ -123,7 +123,6 @@ src/game.c
 src/visibility.c
 src/levels.c
 src/intimage.c
-src/buildpos.c
 src/lighting.c
 src/warcam.c
 src/init.c
