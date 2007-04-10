@@ -300,8 +300,6 @@ SDWORD	screenShakeTable[100] =
 1,0,-1,-1,-2,-1,1,0,1,0
 };
 
-PALETTEENTRY	gamePalette[255];		// another game palette (yawn)
-
 #define TESTLEVEL_ID (0)
 
 #define	METAKEY_DOWN	(keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT) )

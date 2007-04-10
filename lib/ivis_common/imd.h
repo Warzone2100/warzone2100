@@ -92,7 +92,6 @@
 //*************************************************************************
 
 extern iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd );
-iIMDShape *iV_ProcessBPIE(iIMDShape *, UDWORD size);
 
 extern BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
 extern void iV_IMDDebug(iIMDShape *s);

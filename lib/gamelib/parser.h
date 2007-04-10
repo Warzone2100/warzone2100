@@ -34,7 +34,6 @@ extern BOOL		ParseFile( char szFileName[] );
 extern void		IncludeFile( char szFileName[] );
 extern void		parserSetInputFile(PHYSFS_file* fileHandle);
 extern BOOL		ParseResourceFile(PHYSFS_file* fileHandle);
-extern BOOL		ParsingBuffer( void );
 extern void		parseGetErrorData(int *pLine, char **ppText);
 
 /***************************************************************************/

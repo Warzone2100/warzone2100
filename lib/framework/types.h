@@ -62,13 +62,6 @@ typedef Sint32 SDWORD;
 
 typedef int BOOL;
 
-typedef struct {
-  UBYTE peRed;
-  UBYTE peGreen;
-  UBYTE peBlue;
-  UBYTE peFlags;
-} PALETTEENTRY;
-
 typedef struct
 {
   int  x;

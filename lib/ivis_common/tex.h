@@ -65,6 +65,5 @@ extern void pie_TexInit(void);
 //*************************************************************************
 
 extern void pie_TexShutDown(void);
-BOOL FindTextureNumber(UDWORD TexNum,int* TexPage);
 
 #endif

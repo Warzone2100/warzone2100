@@ -75,10 +75,6 @@ void gameTimeSetMod(FRACT mod);
 // get the current time modifier
 void gameTimeGetMod(FRACT *pMod);
 
-
-// get the current time modifier
-void gameTimeGetModifier(UDWORD *pMod, UDWORD *pFactor);
-
 /* Useful for periodical stuff */
 /* Will return a number that climbs over tickFrequency game ticks and ends up in the required range. */
 /*	

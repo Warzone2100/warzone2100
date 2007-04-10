@@ -205,8 +205,6 @@ extern int gammaValue;
 
 BASE_OBJECT	*mouseTarget( void );
 
-extern PALETTEENTRY	gamePalette[255];
-
 BOOL StartObjectOrbit(BASE_OBJECT *psObj);
 void CancelObjectOrbit(void);
 

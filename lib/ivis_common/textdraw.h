@@ -81,8 +81,6 @@ extern void pie_DrawText270(const char *String, int XPos, int YPos);
 extern void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
 extern void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
 
-void	InitClut24(UWORD *InputClut);
-
 typedef void (*RENDERTEXT_CALLBACK)(const char *String, UDWORD X, UDWORD Y);
 // routines used for textdraw
 void SetIndirectDrawTextCallback(RENDERTEXT_CALLBACK routine);

@@ -59,15 +59,12 @@
 //*************************************************************************
 extern void	SetTransFilter(UDWORD rgb,UDWORD tablenumber);
 extern void	TransBoxFill(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1);
-extern void DrawImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y);
-extern void DrawSemiTransImageDef(IMAGEDEF *Image,iBitmap *Bmp,UDWORD Modulus,int x,int y,int TransRate);
 extern void DrawImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
 extern void DrawImageRect(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0,int Width,int Height);
 extern void DrawTransImage(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
 extern void DrawTransImageRect(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0,int Width,int Height);
 extern void iV_SetMousePointer(IMAGEFILE *ImageFile,UWORD ImageID);
 extern void iV_DrawMousePointer(int x,int y);
-extern void ScaleBitmapRGB(char *DisplayBuffer,int Width,int Height,int ScaleR,int ScaleG,int ScaleB);
 
 
 extern UDWORD iV_GetMouseFrame(void);

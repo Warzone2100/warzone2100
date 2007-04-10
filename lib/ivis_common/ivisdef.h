@@ -184,14 +184,6 @@ typedef struct iIMDShape {
 typedef struct {
 	UBYTE Type[4];
 	UWORD Version;
-	UWORD ClutSize;
-	UWORD NumCluts;
-	UWORD Pad;
-} CLUTHEADER;
-
-typedef struct {
-	UBYTE Type[4];
-	UWORD Version;
 	UWORD NumImages;
 	UWORD BitDepth;
 	UWORD NumTPages;

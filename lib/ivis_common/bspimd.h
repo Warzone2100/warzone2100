@@ -138,12 +138,7 @@ BSPTREENODE, *PSBSPTREENODE;
 #define		OPPOSITE_SIDE						0
 #define		IN_PLANE							1
 #define		SAME_SIDE							2
-#define		SPLIT_BY_PLANE						3
-#define		INTERSECTION_INSIDE_LINE_SEGMENT	4
-#define		INTERSECTION_OUTSIDE_LINE_SEGMENT	5
 
-
-#define SPLITTING_ERROR (-1)
 
 
 /***************************************************************************/
