@@ -134,7 +134,7 @@ static BOOL stencil_one_pass(void)
  */
 /***************************************************************************/
 
-static PIEPIXEL		scrPoints[pie_MAX_POINTS];
+static Vector3f		scrPoints[pie_MAX_POINTS];
 static PIEVERTEX	pieVrts[pie_MAX_POLY_VERTS];
 static SDWORD		pieCount = 0;
 static SDWORD		tileCount = 0;
@@ -348,7 +348,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	Sint32		tempY;
 	int i, n;
 	Vector3i		*pVertices;
-	PIEPIXEL	*pPixels;
+	Vector3f	*pPixels;
 	iIMDPoly	*pPolys;
 	PIEPOLY		piePoly;
 	VERTEXID	*index;
@@ -413,9 +413,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			}
 			//if (tempY < 0) tempY = 0;
 		}
-		pPixels->d3dx = pVertices->x;
-		pPixels->d3dy = tempY;
-		pPixels->d3dz = pVertices->z;
+		pPixels->x = pVertices->x;
+		pPixels->y = tempY;
+		pPixels->z = pVertices->z;
 	}
 
 	pPolys = shape->polys;
@@ -432,9 +432,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		}
 		for (n=0; n<pPolys->npnts; n++, index++)
 		{
-			pieVrts[n].sx = MAKEINT(scrPoints[*index].d3dx);
-			pieVrts[n].sy = MAKEINT(scrPoints[*index].d3dy);
-			pieVrts[n].sz = MAKEINT(scrPoints[*index].d3dz);
+			pieVrts[n].sx = MAKEINT(scrPoints[*index].x);
+			pieVrts[n].sy = MAKEINT(scrPoints[*index].y);
+			pieVrts[n].sz = MAKEINT(scrPoints[*index].z);
 			pieVrts[n].tu = pPolys->vrt[n].u;
 			pieVrts[n].tv = pPolys->vrt[n].v;
 			pieVrts[n].light.argb = colour.argb;
