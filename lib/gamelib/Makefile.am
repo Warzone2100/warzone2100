@@ -10,7 +10,7 @@ BUILT_SOURCES = audp_parser.tab.h
 CLEANFILES = audp_parser.tab.h
 
 noinst_LIBRARIES = libgamelib.a
-noinst_HEADERS = ani.h anim.h animobj.h gtime.h hashtabl.h maxpidef.h parser.h
+noinst_HEADERS = anim.h animobj.h gtime.h hashtabl.h maxpidef.h parser.h
 
 libgamelib_a_SOURCES = anim.c animobj.c audp_lexer.lex.c audp_parser.tab.c \
 	gtime.c hashtabl.c

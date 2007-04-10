@@ -31,7 +31,6 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
-#include "lib/gamelib/ani.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -1104,6 +1103,11 @@ init_ObjectDead( void * psObj )
 	return psBaseObj->died;
 }
 
+static iIMDShape *anim_GetShapeFunc( char * pStr )
+{
+	return resGetData( "IMD", pStr );
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
@@ -1935,3 +1939,4 @@ void	initMiscVars( void )
 	setSelectedGroup(UBYTE_MAX);
 	processDebugMappings(FALSE);
 }
+

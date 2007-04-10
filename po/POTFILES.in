@@ -82,7 +82,6 @@ src/csnap.c
 src/multisync.c
 src/component.c
 src/multigifts.c
-src/ani.c
 src/aud.c
 src/hci.c
 src/map.c
