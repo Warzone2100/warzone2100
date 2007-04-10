@@ -28,8 +28,6 @@
 
 #define MAX_PLAYERS 8		/*Utterly arbitrary at the moment!! */
 
-#define UNITS_PER_PLAYER	5
-
 /* TC said I could do this - GJ */
 #define MAX_NAME_SIZE		60
 
