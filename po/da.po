@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-10 00:05+0200\n"
+"POT-Creation-Date: 2007-04-10 14:35+0200\n"
 "PO-Revision-Date: 2007-04-03 22:35+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -16,35 +16,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/multiplay.c:2042 src/droid.c:5035
+#: src/multiplay.c:2039
 msgid "Green"
 msgstr "Grøn"
 
-#: src/multiplay.c:2045
+#: src/multiplay.c:2040
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:2048
+#: src/multiplay.c:2041
 msgid "Grey"
 msgstr "Grå"
 
-#: src/multiplay.c:2051
+#: src/multiplay.c:2042
 msgid "Black"
 msgstr "Sort"
 
-#: src/multiplay.c:2054
+#: src/multiplay.c:2043
 msgid "Red"
 msgstr "Rød"
 
-#: src/multiplay.c:2057
+#: src/multiplay.c:2044
 msgid "Blue"
 msgstr "Blå"
 
-#: src/multiplay.c:2060
+#: src/multiplay.c:2045
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:2063
+#: src/multiplay.c:2046
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -235,31 +235,39 @@ msgstr "Korigerede med gruppe %d - %d Enheder"
 msgid "Rookie"
 msgstr "Menig"
 
-#: src/droid.c:5036
+#. TRANSLATORS: "Green" here indicates a rank name, not the color.
+#. Please translate without the "_rank" suffix.
+#. This combined with the code in getDroidNameForRank is a hack
+#. to solve the ambiguity of the word "Green".
+#: src/droid.c:5040
+msgid "Green_rank"
+msgstr ""
+
+#: src/droid.c:5042
 msgid "Trained"
 msgstr "Sasjant"
 
-#: src/droid.c:5037
+#: src/droid.c:5043
 msgid "Regular"
 msgstr "Oversasjant"
 
-#: src/droid.c:5038
+#: src/droid.c:5044
 msgid "Professional"
 msgstr "Løjtnant"
 
-#: src/droid.c:5039
+#: src/droid.c:5045
 msgid "Veteran"
 msgstr "Kaptajn"
 
-#: src/droid.c:5040
+#: src/droid.c:5046
 msgid "Elite"
 msgstr "Major"
 
-#: src/droid.c:5041
+#: src/droid.c:5047
 msgid "Special"
 msgstr "Oberst"
 
-#: src/droid.c:5042
+#: src/droid.c:5048
 msgid "Hero"
 msgstr "General"
 

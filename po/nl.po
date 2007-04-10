@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-10 00:05+0200\n"
+"POT-Creation-Date: 2007-04-10 14:35+0200\n"
 "PO-Revision-Date: 2007-04-06 02:33+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -16,35 +16,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/multiplay.c:2042 src/droid.c:5035
+#: src/multiplay.c:2039
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:2045
+#: src/multiplay.c:2040
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:2048
+#: src/multiplay.c:2041
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:2051
+#: src/multiplay.c:2042
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:2054
+#: src/multiplay.c:2043
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:2057
+#: src/multiplay.c:2044
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:2060
+#: src/multiplay.c:2045
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:2063
+#: src/multiplay.c:2046
 msgid "Cyan"
 msgstr "Cyaan"
 
@@ -240,32 +240,40 @@ msgstr ""
 msgid "Rookie"
 msgstr "Groentje"
 
-#: src/droid.c:5036
+#. TRANSLATORS: "Green" here indicates a rank name, not the color.
+#. Please translate without the "_rank" suffix.
+#. This combined with the code in getDroidNameForRank is a hack
+#. to solve the ambiguity of the word "Green".
+#: src/droid.c:5040
+msgid "Green_rank"
+msgstr ""
+
+#: src/droid.c:5042
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:5037
+#: src/droid.c:5043
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:5038
+#: src/droid.c:5044
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:5039
+#: src/droid.c:5045
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:5040
+#: src/droid.c:5046
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:5041
+#: src/droid.c:5047
 #, fuzzy
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:5042
+#: src/droid.c:5048
 msgid "Hero"
 msgstr "Held"
 
