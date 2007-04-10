@@ -21,6 +21,7 @@
  * \brief load and save favourites to the registry.
  */
 
+extern void registry_clear(void);
 extern BOOL openWarzoneKey(void);
 extern BOOL closeWarzoneKey(void);
 extern BOOL getWarzoneKeyNumeric(const char *pName, SDWORD *val);
