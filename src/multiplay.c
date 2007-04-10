@@ -2036,14 +2036,14 @@ BOOL recvBeacon(NETMSG *pMsg)
 
 static const char* playerColors[] =
 {
-	"Green",
-	"Orange",
-	"Grey",
-	"Black",
-	"Red",
-	"Blue",
-	"Pink",
-	"Cyan",
+	N_("Green"),
+	N_("Orange"),
+	N_("Grey"),
+	N_("Black"),
+	N_("Red"),
+	N_("Blue"),
+	N_("Pink"),
+	N_("Cyan"),
 };
 
 char *getPlayerColourName(SDWORD player)

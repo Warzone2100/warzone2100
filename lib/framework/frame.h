@@ -44,11 +44,7 @@
  */
 #include "gettext.h"
 #define _(string) gettext(string)
-#ifdef gettext_noop
-# define N_(String) gettext_noop (String)
-#else
-# define N_(String) (String)
-#endif
+#define N_(String) gettext_noop (String)
 
 extern const char *skip_intl_qualifier_prefix(const char *str);
 
